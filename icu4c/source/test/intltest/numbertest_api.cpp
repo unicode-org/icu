@@ -42,6 +42,7 @@ NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode &status)
     SQUARE_MILE = *LocalPointer<MeasureUnit>(MeasureUnit::createSquareMile(status));
     JOULE = *LocalPointer<MeasureUnit>(MeasureUnit::createJoule(status));
     FURLONG = *LocalPointer<MeasureUnit>(MeasureUnit::createFurlong(status));
+    KELVIN = *LocalPointer<MeasureUnit>(MeasureUnit::createKelvin(status));
 
     MATHSANB = *LocalPointer<NumberingSystem>(NumberingSystem::createInstanceByName("mathsanb", status));
     LATN = *LocalPointer<NumberingSystem>(NumberingSystem::createInstanceByName("latn", status));
@@ -464,6 +465,25 @@ void NumberFormatterApiTest::unitMeasure() {
             Locale("es-US"),
             5.43,
             u"5.43 °F");
+
+    assertFormatSingle(
+            u"MeasureUnit form without {0} in CLDR pattern",
+            NumberFormatter::with()
+                    .unit(KELVIN)
+                    .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("es-MX"),
+            1,
+            u"kelvin");
+
+    assertFormatSingle(
+            u"MeasureUnit form without {0} in CLDR pattern and wide base form",
+            NumberFormatter::with()
+                    .rounding(Rounder::fixedFraction(20))
+                    .unit(KELVIN)
+                    .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("es-MX"),
+            1,
+            u"kelvin");
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {

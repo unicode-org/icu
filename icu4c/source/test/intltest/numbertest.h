@@ -81,6 +81,7 @@ class NumberFormatterApiTest : public IntlTest {
     MeasureUnit SQUARE_MILE;
     MeasureUnit JOULE;
     MeasureUnit FURLONG;
+    MeasureUnit KELVIN;
 
     NumberingSystem MATHSANB;
     NumberingSystem LATN;
@@ -161,6 +162,7 @@ class PatternStringTest : public IntlTest {
 class NumberStringBuilderTest : public IntlTest {
   public:
     void testInsertAppendUnicodeString();
+    void testSplice();
     void testInsertAppendCodePoint();
     void testCopy();
     void testFields();

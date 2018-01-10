@@ -74,19 +74,29 @@ bool ConstantAffixModifier::isStrong() const {
 
 SimpleModifier::SimpleModifier(const SimpleFormatter &simpleFormatter, Field field, bool strong)
         : fCompiledPattern(simpleFormatter.compiledPattern), fField(field), fStrong(strong) {
-    U_ASSERT(1 ==
-             SimpleFormatter::getArgumentLimit(fCompiledPattern.getBuffer(), fCompiledPattern.length()));
-    if (fCompiledPattern.charAt(1) != 0) {
+    int32_t argLimit = SimpleFormatter::getArgumentLimit(
+            fCompiledPattern.getBuffer(), fCompiledPattern.length());
+    if (argLimit == 0) {
+        // No arguments in compiled pattern
         fPrefixLength = fCompiledPattern.charAt(1) - ARG_NUM_LIMIT;
-        fSuffixOffset = 3 + fPrefixLength;
-    } else {
-        fPrefixLength = 0;
-        fSuffixOffset = 2;
-    }
-    if (3 + fPrefixLength < fCompiledPattern.length()) {
-        fSuffixLength = fCompiledPattern.charAt(fSuffixOffset) - ARG_NUM_LIMIT;
-    } else {
+        U_ASSERT(2 + fPrefixLength == fCompiledPattern.length());
+        // Set suffixOffset = -1 to indicate no arguments in compiled pattern.
+        fSuffixOffset = -1;
         fSuffixLength = 0;
+    } else {
+        U_ASSERT(argLimit == 1);
+        if (fCompiledPattern.charAt(1) != 0) {
+            fPrefixLength = fCompiledPattern.charAt(1) - ARG_NUM_LIMIT;
+            fSuffixOffset = 3 + fPrefixLength;
+        } else {
+            fPrefixLength = 0;
+            fSuffixOffset = 2;
+        }
+        if (3 + fPrefixLength < fCompiledPattern.length()) {
+            fSuffixLength = fCompiledPattern.charAt(fSuffixOffset) - ARG_NUM_LIMIT;
+        } else {
+            fSuffixLength = 0;
+        }
     }
 }
 
@@ -123,19 +133,24 @@ bool SimpleModifier::isStrong() const {
 int32_t
 SimpleModifier::formatAsPrefixSuffix(NumberStringBuilder &result, int32_t startIndex, int32_t endIndex,
                                      Field field, UErrorCode &status) const {
-    if (fPrefixLength > 0) {
-        result.insert(startIndex, fCompiledPattern, 2, 2 + fPrefixLength, field, status);
+    if (fSuffixOffset == -1) {
+        // There is no argument for the inner number; overwrite the entire segment with our string.
+        return result.splice(startIndex, endIndex, fCompiledPattern, 2, 2 + fPrefixLength, field, status);
+    } else {
+        if (fPrefixLength > 0) {
+            result.insert(startIndex, fCompiledPattern, 2, 2 + fPrefixLength, field, status);
+        }
+        if (fSuffixLength > 0) {
+            result.insert(
+                    endIndex + fPrefixLength,
+                    fCompiledPattern,
+                    1 + fSuffixOffset,
+                    1 + fSuffixOffset + fSuffixLength,
+                    field,
+                    status);
+        }
+        return fPrefixLength + fSuffixLength;
     }
-    if (fSuffixLength > 0) {
-        result.insert(
-                endIndex + fPrefixLength,
-                fCompiledPattern,
-                1 + fSuffixOffset,
-                1 + fSuffixOffset + fSuffixLength,
-                field,
-                status);
-    }
-    return fPrefixLength + fSuffixLength;
 }
 
 int32_t ConstantMultiFieldModifier::apply(NumberStringBuilder &output, int leftIndex, int rightIndex,
