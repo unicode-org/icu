@@ -17,6 +17,8 @@
 
 #include "utrie.h" /* for utrie3_fromUTrie() and utrie_swap() */
 
+using icu::LocalMemory;
+
 /* Implementation notes ----------------------------------------------------- */
 
 /*
@@ -58,15 +60,7 @@ enum {
     UNEWTRIE3_DATA_NULL_OFFSET=UTRIE3_DATA_START_OFFSET,
 
     /** The start of allocated data blocks. */
-    UNEWTRIE3_DATA_START_OFFSET=UNEWTRIE3_DATA_NULL_OFFSET+UTRIE3_DATA_BLOCK_LENGTH,
-
-    /**
-     * The start of data blocks for U+0800 and above.
-     * Below, compaction uses a block length of 64 for 2-byte UTF-8.
-     * From here on, compaction uses UTRIE3_DATA_BLOCK_LENGTH.
-     * Data values for 0x780 code points beyond ASCII.
-     */
-    UNEWTRIE3_DATA_0800_OFFSET=UNEWTRIE3_DATA_START_OFFSET+0x780
+    UNEWTRIE3_DATA_START_OFFSET=UNEWTRIE3_DATA_NULL_OFFSET+UTRIE3_DATA_BLOCK_LENGTH
 };
 
 /* Start with allocation of 16k data entries. */
@@ -138,15 +132,9 @@ utrie3_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
      * Reference counts for the null data block: all blocks except for the ASCII blocks.
      * Plus 1 so that we don't drop this block during compaction.
      */
-    /* i==newTrie->dataNullOffset */
-    newTrie->map[i++]=
-        (0x110000>>UTRIE3_SHIFT_2)-
-        (0x80>>UTRIE3_SHIFT_2)+
-        1;
-    j+=UTRIE3_DATA_BLOCK_LENGTH;
-    for(; j<UNEWTRIE3_DATA_START_OFFSET; ++i, j+=UTRIE3_DATA_BLOCK_LENGTH) {
-        newTrie->map[i]=0;
-    }
+    U_ASSERT(i==newTrie->dataNullOffset>>UTRIE3_SHIFT_2);
+    newTrie->map[i++]=(0x110000>>UTRIE3_SHIFT_2)-(0x80>>UTRIE3_SHIFT_2)+1;
+    U_ASSERT(i==UNEWTRIE3_DATA_START_OFFSET>>UTRIE3_SHIFT_2);
 
     /*
      * set the remaining indexes in the BMP index-2 block
@@ -184,6 +172,7 @@ utrie3_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
         newTrie->index1[i]=UNEWTRIE3_INDEX_2_NULL_OFFSET;
     }
 
+#if 0  // TODO
     /*
      * Preallocate and reset data for U+0080..U+07ff,
      * for 2-byte UTF-8 which will be compacted in 64-blocks
@@ -192,6 +181,7 @@ utrie3_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
     for(i=0x80; i<0x800; i+=UTRIE3_DATA_BLOCK_LENGTH) {
         utrie3_set32(trie, i, initialValue, pErrorCode);
     }
+#endif
 
     return trie;
 }
@@ -710,10 +700,10 @@ utrie3_setRange32(UTrie3 *trie,
         block=newTrie->index2[i2];
         if(isWritableBlock(newTrie, block)) {
             /* already allocated */
-            if(overwrite && block>=UNEWTRIE3_DATA_0800_OFFSET) {
+            if(overwrite && block>=UNEWTRIE3_DATA_START_OFFSET) {
                 /*
                  * We overwrite all values, and it's not a
-                 * protected (ASCII-linear or 2-byte UTF-8) block:
+                 * protected (ASCII-linear or null) block:
                  * replace with the repeatBlock.
                  */
                 setRepeatBlock=TRUE;
@@ -811,13 +801,13 @@ findSameIndex2Block(const int32_t *idx, int32_t index2Length, int32_t otherBlock
 }
 
 static int32_t
-findSameDataBlock(const uint32_t *data, int32_t dataLength, int32_t otherBlock) {
+findSameDataBlock(const uint32_t *data, int32_t dataLength, int32_t otherBlock, int32_t granularity) {
     int32_t block;
 
     /* ensure that we do not even partially get past dataLength */
     dataLength-=UTRIE3_DATA_BLOCK_LENGTH;
 
-    for(block=0; block<=dataLength; block+=UTRIE3_DATA_GRANULARITY) {
+    for(block=0; block<=dataLength; block+=granularity) {
         if(equal_uint32(data+block, data+otherBlock, UTRIE3_DATA_BLOCK_LENGTH)) {
             return block;
         }
@@ -903,6 +893,40 @@ findHighStart(UNewTrie3 *trie, uint32_t highValue) {
     return 0;
 }
 
+namespace {
+
+constexpr int32_t BMP_DATA=0x1000000;
+constexpr int32_t SUPP_DATA=0x2000000;
+//nstexpr int32_t DATA_FLAGS=0x3000000;
+//nstexpr int32_t OFFSET_MASK=0xffffff;
+
+/**
+ * Sets flags for which data blocks are used from BMP vs. supplementary code points.
+ * The data array must not have been compacted yet.
+ */
+void markDataBlocks(UNewTrie3 *trie) {
+    int32_t flag=BMP_DATA;
+    int32_t i1Limit= trie->highStart<=0x10000 ?
+        UTRIE3_OMITTED_BMP_INDEX_1_LENGTH : trie->highStart>>UTRIE3_SHIFT_1;
+    for(int32_t i1=0; i1<i1Limit; ++i1) {
+        if(i1==UTRIE3_OMITTED_BMP_INDEX_1_LENGTH) {
+            flag=SUPP_DATA;
+        }
+        int32_t i2Block=trie->index1[i1];
+        if(i2Block==trie->index2NullOffset) {
+            trie->map[trie->dataNullOffset>>UTRIE3_SHIFT_2]|=flag;
+        } else {
+            for(int32_t i2=0; i2<UTRIE3_INDEX_2_BLOCK_LENGTH; ++i2) {
+                int32_t start=trie->index2[i2Block+i2];
+                U_ASSERT(trie->map[start>>UTRIE3_SHIFT_2]>0);
+                trie->map[start>>UTRIE3_SHIFT_2]|=flag;
+            }
+        }
+    }
+}
+
+}  // namespace
+
 /*
  * Compact a build-time trie.
  *
@@ -918,8 +942,16 @@ findHighStart(UNewTrie3 *trie, uint32_t highValue) {
 static void
 compactData(UNewTrie3 *trie) {
 #ifdef UTRIE3_DEBUG
-    int32_t countSame=0, sumOverlaps=0;
+    int32_t countSame=0, sumOverlaps=0, padding=0;
 #endif
+
+    // Variable data block granularity:
+    // Data blocks that are only used for BMP code points use granularity 1
+    // and no index shift.
+    // Data blocks that are used for supplementary code points use UTRIE3_DATA_GRANULARITY.
+    // TODO: Write BMP data blocks first, to make sure their unshifted indexes fit into 16 bits.
+    // TODO: First de-duplicate data blocks without overlaps.
+    markDataBlocks(trie);
 
     /* do not compact linear-ASCII data */
     int32_t start=0;
@@ -937,14 +969,27 @@ compactData(UNewTrie3 *trie) {
          *           (right after current end of already-compacted data)
          */
 
+        int32_t mapValue=trie->map[start>>UTRIE3_SHIFT_2];  // refCount with flags
         /* skip blocks that are not used */
-        if(trie->map[start>>UTRIE3_SHIFT_2]<=0) {
+        if(mapValue<=0) {
             /* leave newStart with the previous block! */
             continue;
         }
 
+        int32_t granularity;
+        if((mapValue&SUPP_DATA)==0) {
+            granularity=1;
+        } else {
+            granularity=UTRIE3_DATA_GRANULARITY;
+            while((newStart&(UTRIE3_DATA_GRANULARITY-1))!=0) {
+                ++padding;
+                trie->data[newStart++]=trie->initialValue;
+            }
+            // TODO: Consider writing all BMP data blocks to newData then remaining blocks. Avoid internal padding.
+        }
+
         /* search for an identical block */
-        int32_t movedStart=findSameDataBlock(trie->data, newStart, start);
+        int32_t movedStart=findSameDataBlock(trie->data, newStart, start, granularity);
         if(movedStart>=0) {
 #ifdef UTRIE3_DEBUG
             ++countSame;
@@ -959,9 +1004,9 @@ compactData(UNewTrie3 *trie) {
         /* see if the beginning of this block can be overlapped with the end of the previous block */
         /* look for maximum overlap (modulo granularity) with the previous, adjacent block */
         int32_t overlap;
-        for(overlap=UTRIE3_DATA_BLOCK_LENGTH-UTRIE3_DATA_GRANULARITY;
+        for(overlap=UTRIE3_DATA_BLOCK_LENGTH-granularity;
             overlap>0 && !equal_uint32(trie->data+(newStart-overlap), trie->data+start, overlap);
-            overlap-=UTRIE3_DATA_GRANULARITY) {}
+            overlap-=granularity) {}
 
 #ifdef UTRIE3_DEBUG
             sumOverlaps+=overlap;
@@ -999,8 +1044,8 @@ compactData(UNewTrie3 *trie) {
 
 #ifdef UTRIE3_DEBUG
     /* we saved some space */
-    printf("compacting UTrie3: count of 32-bit data words %lu->%lu  countSame=%ld  sumOverlaps=%ld\n",
-            (long)trie->dataLength, (long)newStart, (long)countSame, (long)sumOverlaps);
+    printf("compacting UTrie3: count of 32-bit data words %lu->%lu  countSame=%ld  sumOverlaps=%ld  padding=%ld\n",
+            (long)trie->dataLength, (long)newStart, (long)countSame, (long)sumOverlaps, (long)padding);
 #endif
 
     trie->dataLength=newStart;
@@ -1018,7 +1063,7 @@ compactIndex2(UNewTrie3 *trie) {
 
     /* Reduce the index table gap to what will be needed at runtime. */
     U_ASSERT(trie->highStart>0x10000);
-    newStart+=UTRIE3_UTF8_2B_INDEX_2_LENGTH+((trie->highStart-0x10000)>>UTRIE3_SHIFT_1);
+    newStart+=(trie->highStart-0x10000)>>UTRIE3_SHIFT_1;
 
     for(start=UNEWTRIE3_INDEX_2_NULL_OFFSET; start<trie->index2Length; start+=UTRIE3_INDEX_2_BLOCK_LENGTH) {
         /*
@@ -1144,7 +1189,7 @@ compactTrie(UTrie3 *trie, UErrorCode *pErrorCode) {
  * Maximum length of the runtime index array.
  * Limited by its own 16-bit index values, and by uint16_t UTrie3Header.indexLength.
  * (The actual maximum length is lower,
- * (0x110000>>UTRIE3_SHIFT_2)+UTRIE3_UTF8_2B_INDEX_2_LENGTH+UTRIE3_MAX_INDEX_1_LENGTH.)
+ * (0x110000>>UTRIE3_SHIFT_2)+UTRIE3_MAX_INDEX_1_LENGTH.)
  */
 #define UTRIE3_MAX_INDEX_LENGTH 0xffff
 
@@ -1213,13 +1258,20 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
         allIndexesLength>UTRIE3_MAX_INDEX_LENGTH ||
         /* for unshifted dataNullOffset */
         (dataMove+newTrie->dataNullOffset)>0xffff ||
-        /* for unshifted 2-byte UTF-8 index-2 values */
-        (dataMove+UNEWTRIE3_DATA_0800_OFFSET)>0xffff ||
         /* for shiftedDataLength */
         (dataMove+newTrie->dataLength)>UTRIE3_MAX_DATA_LENGTH
     ) {
         *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
         return;
+    }
+    // Are all unshifted BMP indexes within limits?
+    const int32_t *index2=newTrie->index2;
+    for(i=UTRIE3_INDEX_2_BMP_LENGTH; i>0; --i) {
+        int32_t bmpIndex=dataMove + *index2++;
+        if(bmpIndex>0xffff) {
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return;
+        }
     }
 
     /* calculate the total serialized length */
@@ -1265,23 +1317,14 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
     dest16=(uint16_t *)(header+1);
     trie->index=dest16;
 
-    /* write the index-2 array values shifted right by UTRIE3_INDEX_SHIFT, after adding dataMove */
+    /* write BMP index-2 array values, not right-shifted, after adding dataMove */
     p=(uint32_t *)newTrie->index2;
     for(i=UTRIE3_INDEX_2_BMP_LENGTH; i>0; --i) {
-        *dest16++=(uint16_t)((dataMove + *p++)>>UTRIE3_INDEX_SHIFT);
-    }
-
-    /* write UTF-8 2-byte index-2 values, not right-shifted */
-    for(i=0; i<(0xc2-0xc0); ++i) {                                  /* C0..C1 */
-        *dest16++=trie->dataNullOffset;
-    }
-    for(; i<(0xe0-0xc0); ++i) {                                     /* C2..DF */
-        *dest16++=(uint16_t)(dataMove+newTrie->index2[i]);
+        *dest16++=(uint16_t)(dataMove + *p++);
     }
 
     if(highStart>0x10000) {
         int32_t index1Length=(highStart-0x10000)>>UTRIE3_SHIFT_1;
-        int32_t index2Offset=UTRIE3_INDEX_2_BMP_LENGTH+UTRIE3_UTF8_2B_INDEX_2_LENGTH+index1Length;
 
         /* write 16-bit index-1 values for supplementary code points */
         p=(uint32_t *)newTrie->index1+UTRIE3_OMITTED_BMP_INDEX_1_LENGTH;
@@ -1293,6 +1336,7 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
          * write the index-2 array values for supplementary code points,
          * shifted right by UTRIE3_INDEX_SHIFT, after adding dataMove
          */
+        int32_t index2Offset=UTRIE3_INDEX_2_BMP_LENGTH+index1Length;
         p=(uint32_t *)newTrie->index2+index2Offset;
         for(i=newTrie->index2Length-index2Offset; i>0; --i) {
             *dest16++=(uint16_t)((dataMove + *p++)>>UTRIE3_INDEX_SHIFT);

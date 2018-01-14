@@ -18,9 +18,13 @@
 U_CAPI uint32_t U_EXPORT2
 utrie3_get32(const UTrie3 *trie, UChar32 c) {
     if(trie->data16!=NULL) {
-        return UTRIE3_GET16(trie, c);
+        uint32_t result;
+        UTRIE3_GET16(trie, c, result);
+        return result;
     } else if(trie->data32!=NULL) {
-        return UTRIE3_GET32(trie, c);
+        uint32_t result;
+        UTRIE3_GET32(trie, c, result);
+        return result;
     } else if((uint32_t)c>0x10ffff) {
         return trie->errorValue;
     } else if(c>=trie->highStart) {
@@ -32,6 +36,13 @@ utrie3_get32(const UTrie3 *trie, UChar32 c) {
         int32_t block=newTrie->index2[i2];
         return newTrie->data[block+(c&UTRIE3_DATA_MASK)];
     }
+}
+
+U_CAPI int32_t U_EXPORT2
+utrie3_internalIndexFromSuppPieces(const uint16_t *trieIndex, int32_t c1, int32_t c2, int32_t c3) {
+    int32_t dataIndex;
+    _UTRIE3_INDEX_FROM_SUPP_PIECES(trieIndex, c1, c2, c3, dataIndex);
+    return dataIndex;
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -54,7 +65,7 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
         } else if(c>=trie->highStart) {
             return -16|i;  // for highValue
         } else {
-            idx=_UTRIE3_INDEX_FROM_SUPP(trie->index, c);
+            _UTRIE3_INDEX_FROM_SUPP(trie->index, c, idx);
         }
         return (idx<<3)|i;
     } else {
@@ -232,15 +243,10 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
     uint16_t *dest16=(uint16_t *)(header+1);
     trie->index=dest16;
 
-    /* write the index-2 array values shifted right by UTRIE3_INDEX_SHIFT */
+    /* write BMP index-2 array values, not right-shifted */
     int32_t i;
     for(i=0; i<UTRIE3_INDEX_2_BMP_LENGTH; ++i) {
-        *dest16++=(uint16_t)(dataMove>>UTRIE3_INDEX_SHIFT);  /* null data block */
-    }
-
-    /* write UTF-8 2-byte index-2 values, not right-shifted */
-    for(i=0; i<(0xe0-0xc0); ++i) {  // C0..DF
-        *dest16++=(uint16_t)dataMove;
+        *dest16++=(uint16_t)dataMove;  /* null data block */
     }
 
     /* write the 16/32-bit data array */
@@ -561,7 +567,10 @@ enumEitherTrie(const UTrie3 *trie,
             }
             for(; i2<i2Limit; ++i2) {
                 if(idx!=NULL) {
-                    block=(int32_t)idx[i2Block+i2]<<UTRIE3_INDEX_SHIFT;
+                    block=(int32_t)idx[i2Block+i2];
+                    if(i2Block>=UTRIE3_INDEX_2_BMP_LENGTH) {
+                        block<<=UTRIE3_INDEX_SHIFT;
+                    }
                 } else {
                     block=trie->newTrie->index2[i2Block+i2];
                 }

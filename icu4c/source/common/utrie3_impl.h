@@ -78,14 +78,11 @@ enum {
 enum {
     /**
      * At build time, leave a gap in the index-2 table,
-     * at least as long as the maximum lengths of the 2-byte UTF-8 index-2 table
-     * and the supplementary index-1 table.
+     * at least as long as the maximum length of the supplementary index-1 table.
      * Round up to UTRIE3_INDEX_2_BLOCK_LENGTH for proper compacting.
      */
     UNEWTRIE3_INDEX_GAP_OFFSET=UTRIE3_INDEX_2_BMP_LENGTH,
-    UNEWTRIE3_INDEX_GAP_LENGTH=
-        ((UTRIE3_UTF8_2B_INDEX_2_LENGTH+UTRIE3_MAX_INDEX_1_LENGTH)+UTRIE3_INDEX_2_MASK)&
-        ~UTRIE3_INDEX_2_MASK,
+    UNEWTRIE3_INDEX_GAP_LENGTH=(UTRIE3_MAX_INDEX_1_LENGTH+UTRIE3_INDEX_2_MASK)&~UTRIE3_INDEX_2_MASK,
 
     /**
      * Maximum length of the build-time index-2 array.

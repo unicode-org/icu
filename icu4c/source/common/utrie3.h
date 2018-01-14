@@ -360,7 +360,7 @@ utrie3_fromUTrie(const UTrie *trie1, uint32_t errorValue, UErrorCode *pErrorCode
  * @param c (UChar32, in) the input code point
  * @return (uint16_t) The code point's trie value.
  */
-#define UTRIE3_GET16(trie, c) _UTRIE3_GET((trie), index, (trie)->indexLength, (c))
+#define UTRIE3_GET16(trie, c, result) _UTRIE3_GET((trie), index, (trie)->indexLength, (c), (result))  // TODO: docs
 
 /**
  * Return a 32-bit trie value from a code point, with range checking.
@@ -370,7 +370,7 @@ utrie3_fromUTrie(const UTrie *trie1, uint32_t errorValue, UErrorCode *pErrorCode
  * @param c (UChar32, in) the input code point
  * @return (uint32_t) The code point's trie value.
  */
-#define UTRIE3_GET32(trie, c) _UTRIE3_GET((trie), data32, 0, (c))
+#define UTRIE3_GET32(trie, c, result) _UTRIE3_GET((trie), data32, 0, (c), (result))  // TODO: docs
 
 /**
  * UTF-16: Get the next code point (UChar32 c, out), post-increment src,
@@ -549,7 +549,7 @@ utrie3_enumForLeadSurrogate(const UTrie3 *trie, UChar32 lead,
  * @param c (UChar32, in) the input code point, must be U+10000<=c<=U+10ffff
  * @return (uint16_t) The code point's trie value.
  */
-#define UTRIE3_GET16_FROM_SUPP(trie, c) _UTRIE3_GET_FROM_SUPP((trie), index, c)
+#define UTRIE3_GET16_FROM_SUPP(trie, c, result) _UTRIE3_GET_FROM_SUPP((trie), index, c, (result))  // TODO: docs
 
 /**
  * Return a 32-bit trie value from a supplementary code point (U+10000..U+10ffff).
@@ -558,7 +558,7 @@ utrie3_enumForLeadSurrogate(const UTrie3 *trie, UChar32 lead,
  * @param c (UChar32, in) the input code point, must be U+10000<=c<=U+10ffff
  * @return (uint32_t) The code point's trie value.
  */
-#define UTRIE3_GET32_FROM_SUPP(trie, c) _UTRIE3_GET_FROM_SUPP((trie), data32, c)
+#define UTRIE3_GET32_FROM_SUPP(trie, c, result) _UTRIE3_GET_FROM_SUPP((trie), data32, c, (result))  // TODO: docs
 
 U_CDECL_END
 
@@ -700,6 +700,7 @@ enum {
      * Increases possible data size with 16-bit index values at the cost
      * of compactability.
      * This requires data blocks to be aligned by UTRIE3_DATA_GRANULARITY.
+     * TODO: not for BMP
      */
     UTRIE3_INDEX_SHIFT=2,
 
@@ -715,14 +716,7 @@ enum {
     UTRIE3_INDEX_2_BMP_LENGTH=0x10000>>UTRIE3_SHIFT_2,
 
     /**
-     * The 2-byte UTF-8 version of the index-2 table follows at offset 1024=0x400.
-     * Length 32=0x20 for lead bytes C0..DF, regardless of UTRIE3_SHIFT_2.
-     */
-    UTRIE3_UTF8_2B_INDEX_2_OFFSET=UTRIE3_INDEX_2_BMP_LENGTH,
-    UTRIE3_UTF8_2B_INDEX_2_LENGTH=0x800>>6,  /* U+0800 is the first code point after 2-byte UTF-8 */
-
-    /**
-     * The index-1 table, only used for supplementary code points, at offset 1056=0x420.
+     * The index-1 table, only used for supplementary code points, at offset 1024=0x400.
      * Variable length, for code points up to highStart, where the last single-value range starts.
      * Maximum length 256=0x100=0x100000>>UTRIE3_SHIFT_1.
      * (For 0x100000 supplementary code points U+10000..U+10ffff.)
@@ -733,7 +727,7 @@ enum {
      * Both the index-1 table and the following part of the index-2 table
      * are omitted completely if there is only BMP data.
      */
-    UTRIE3_INDEX_1_OFFSET=UTRIE3_UTF8_2B_INDEX_2_OFFSET+UTRIE3_UTF8_2B_INDEX_2_LENGTH,
+    UTRIE3_INDEX_1_OFFSET=UTRIE3_INDEX_2_BMP_LENGTH,
     UTRIE3_MAX_INDEX_1_LENGTH=0x100000>>UTRIE3_SHIFT_1,
 
     /*
@@ -748,6 +742,16 @@ enum {
 /* Internal functions and macros -------------------------------------------- */
 
 /**
+ * Internal trie getter from pieces of a supplementary code point below highStart.
+ * Returns the dataIndex.
+ * Function equivalent of _UTRIE3_INDEX_FROM_SUPP_PIECES().
+ * Do not call directly.
+ * @internal
+ */
+U_INTERNAL int32_t U_EXPORT2
+utrie3_internalIndexFromSuppPieces(const uint16_t *trieIndex, int32_t c1, int32_t c2, int32_t c3);
+
+/**
  * Internal function for part of the UTRIE3_U8_PREVxx() macro implementations.
  * Do not call directly.
  * @internal
@@ -759,36 +763,50 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
 
 /** Internal trie getter from a BMP code point. Returns the data index. */
 #define _UTRIE3_INDEX_FROM_BMP(trieIndex, c) \
-    (((int32_t)((trieIndex)[(c)>>UTRIE3_SHIFT_2])<<UTRIE3_INDEX_SHIFT)+ \
+    (((int32_t)(trieIndex)[(c)>>UTRIE3_SHIFT_2])+ \
         ((c)&UTRIE3_DATA_MASK))
 
-/** Internal trie getter from a supplementary code point below highStart. Returns the data index. */
-#define _UTRIE3_INDEX_FROM_SUPP(trieIndex, c) \
-    (((int32_t)((trieIndex)[ \
-        (trieIndex)[(UTRIE3_INDEX_1_OFFSET-UTRIE3_OMITTED_BMP_INDEX_1_LENGTH)+ \
-                      ((c)>>UTRIE3_SHIFT_1)]+ \
-        (((c)>>UTRIE3_SHIFT_2)&UTRIE3_INDEX_2_MASK)]) \
-    <<UTRIE3_INDEX_SHIFT)+ \
-    ((c)&UTRIE3_DATA_MASK))
+/** Internal trie getter from pieces of a supplementary code point below highStart. Sets the dataIndex. */
+#define _UTRIE3_INDEX_FROM_SUPP_PIECES(trieIndex, c1, c2, c3, dataIndex) { \
+    int32_t __i2Block=(trieIndex)[(UTRIE3_INDEX_1_OFFSET-UTRIE3_OMITTED_BMP_INDEX_1_LENGTH)+(c1)]; \
+    int32_t __di=(trieIndex)[__i2Block+(c2)]; \
+    if(__i2Block>=UTRIE3_INDEX_2_BMP_LENGTH) { __di<<=UTRIE3_INDEX_SHIFT; } \
+    (dataIndex)=__di+(c3); \
+}
+
+/** Internal trie getter from a supplementary code point below highStart. Sets the dataIndex. */
+#define _UTRIE3_INDEX_FROM_SUPP(trieIndex, c, dataIndex) \
+    _UTRIE3_INDEX_FROM_SUPP_PIECES(trieIndex, (c)>>UTRIE3_SHIFT_1, \
+        ((c)>>UTRIE3_SHIFT_2)&UTRIE3_INDEX_2_MASK, (c)&UTRIE3_DATA_MASK, dataIndex)
 
 /** Internal trie getter from a UTF-16 single/lead code unit. Returns the data. */
 #define _UTRIE3_GET_FROM_BMP(trie, data, c) \
     (trie)->data[_UTRIE3_INDEX_FROM_BMP((trie)->index, c)]
 
-/** Internal trie getter from a supplementary code point. Returns the data. */
-#define _UTRIE3_GET_FROM_SUPP(trie, data, c) \
-    ((c)>=(trie)->highStart ? (trie)->highValue : (trie)->data[_UTRIE3_INDEX_FROM_SUPP((trie)->index, c)])
+/** Internal trie getter from a supplementary code point. Sets result to the data value. */
+#define _UTRIE3_GET_FROM_SUPP(trie, data, c, result) { \
+    if((c)>=(trie)->highStart) { \
+        (result)=(trie)->highValue; \
+    } else { \
+        int32_t __dataIndex; \
+        _UTRIE3_INDEX_FROM_SUPP((trie)->index, c, __dataIndex); \
+        (result)=(trie)->data[__dataIndex]; \
+    } \
+}
 
 /**
  * Internal trie getter from a code point, with checking that c is in 0..10FFFF.
- * Returns the data.
+ * Sets result to the data value.
  */
-#define _UTRIE3_GET(trie, data, asciiOffset, c) \
-    ((uint32_t)(c)<=0xffff ? \
-        _UTRIE3_GET_FROM_BMP(trie, data, c) : \
-        (uint32_t)(c)>0x10ffff ? \
-            (trie)->errorValue : \
-            _UTRIE3_GET_FROM_SUPP(trie, data, c))
+#define _UTRIE3_GET(trie, data, asciiOffset, c, result) { \
+    if((uint32_t)(c)<=0xffff) { \
+        (result)=_UTRIE3_GET_FROM_BMP(trie, data, c); \
+    } else if((uint32_t)(c)<=0x10ffff) { \
+        _UTRIE3_GET_FROM_SUPP(trie, data, c, result); \
+    } else { \
+        (result)=(trie)->errorValue; \
+    } \
+}
 
 /** Internal next-post-increment: get the next code point (c) and its data. */
 #define _UTRIE3_U16_NEXT(trie, data, src, limit, c, result) { \
@@ -800,7 +818,7 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
         if(U16_IS_SURROGATE_LEAD(c) && (src)!=(limit) && U16_IS_TRAIL(__c2=*(src))) { \
             ++(src); \
             (c)=U16_GET_SUPPLEMENTARY((c), __c2); \
-            (result)=_UTRIE3_GET_FROM_SUPP((trie), data, (c)); \
+            _UTRIE3_GET_FROM_SUPP((trie), data, (c), (result)); \
         } else { \
             (result)=(trie)->errorValue; \
         } \
@@ -817,7 +835,7 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
         if(U16_IS_SURROGATE_TRAIL(c) && (src)!=(start) && U16_IS_LEAD(__c2=*((src)-1))) { \
             --(src); \
             (c)=U16_GET_SUPPLEMENTARY(__c2, (c)); \
-            (result)=_UTRIE3_GET_FROM_SUPP((trie), data, (c)); \
+            _UTRIE3_GET_FROM_SUPP((trie), data, (c), (result)); \
         } else { \
             (result)=(trie)->errorValue; \
         } \
@@ -837,25 +855,19 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
                     U8_LEAD3_T1_BITS[__lead&=0xf]&(1<<((__t1=*(src))>>5)) && ++(src)!=(limit) && \
                     (__t2=*(src)-0x80)<=0x3f && \
                     ((result)=(trie)->data[ \
-                        ((int32_t)((trie)->index[(__lead<<(12-UTRIE3_SHIFT_2))+(__t1&0x3f)]) \
-                        <<UTRIE3_INDEX_SHIFT)+ \
+                        ((int32_t)(trie)->index[(__lead<<(12-UTRIE3_SHIFT_2))+(__t1&0x3f)])+ \
                         __t2], 1) \
                 :  /* U+10000..U+10FFFF */ \
                     (__lead-=0xf0)<=4 && \
                     U8_LEAD4_T1_BITS[(__t1=*(src))>>4]&(1<<__lead) && \
                     (__lead=(__lead<<6)|(__t1&0x3f), ++(src)!=(limit)) && \
                     (__t2=*(src)-0x80)<=0x3f && ++(src)!=(limit) && (__t3=*(src)-0x80)<=0x3f && \
-                    (result= __lead>=(trie)->shiftedHighStart ? (trie)->highValue : \
+                    ((result)= __lead>=(trie)->shiftedHighStart ? (trie)->highValue : \
                         (trie)->data[ \
-                            ((int32_t)((trie)->index[ \
-                                (trie)->index[(UTRIE3_INDEX_1_OFFSET-UTRIE3_OMITTED_BMP_INDEX_1_LENGTH)+__lead]+ \
-                                __t2]) \
-                            <<UTRIE3_INDEX_SHIFT)+ \
-                            __t3], 1) \
+                            utrie3_internalIndexFromSuppPieces((trie)->index, __lead, __t2, __t3)], 1) \
             :  /* U+0080..U+07FF */ \
                 __lead>=0xc2 && (__t1=*(src)-0x80)<=0x3f && \
-                ((result)=(trie)->data[ \
-                    (trie)->index[(UTRIE3_UTF8_2B_INDEX_2_OFFSET-0xc0)+__lead]+__t1], 1))) { \
+                ((result)=(trie)->data[(trie)->index[__lead&0x1f]+__t1], 1))) { \
             ++(src); \
         } else { \
             (result)=(trie)->errorValue;  /* ill-formed*/ \

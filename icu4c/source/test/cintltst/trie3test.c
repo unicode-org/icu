@@ -130,9 +130,9 @@ testTrieGetters(const char *testName,
                     }
                 } else {
                     if(valueBits==UTRIE3_16_VALUE_BITS) {
-                        value2=UTRIE3_GET16_FROM_SUPP(trie, start);
+                        UTRIE3_GET16_FROM_SUPP(trie, start, value2);
                     } else {
-                        value2=UTRIE3_GET32_FROM_SUPP(trie, start);
+                        UTRIE3_GET32_FROM_SUPP(trie, start, value2);
                     }
                     if(value!=value2) {
                         log_err("error: %s(%s).fromSupp(U+%04lx)==0x%lx instead of 0x%lx\n",
@@ -141,9 +141,9 @@ testTrieGetters(const char *testName,
                     }
                 }
                 if(valueBits==UTRIE3_16_VALUE_BITS) {
-                    value2=UTRIE3_GET16(trie, start);
+                    UTRIE3_GET16(trie, start, value2);
                 } else {
-                    value2=UTRIE3_GET32(trie, start);
+                    UTRIE3_GET32(trie, start, value2);
                 }
                 if(value!=value2) {
                     log_err("error: %s(%s).get(U+%04lx)==0x%lx instead of 0x%lx\n",
@@ -193,11 +193,11 @@ testTrieGetters(const char *testName,
     /* test errorValue */
     if(isFrozen) {
         if(valueBits==UTRIE3_16_VALUE_BITS) {
-            value=UTRIE3_GET16(trie, -1);
-            value2=UTRIE3_GET16(trie, 0x110000);
+            UTRIE3_GET16(trie, -1, value);
+            UTRIE3_GET16(trie, 0x110000, value2);
         } else {
-            value=UTRIE3_GET32(trie, -1);
-            value2=UTRIE3_GET32(trie, 0x110000);
+            UTRIE3_GET32(trie, -1, value);
+            UTRIE3_GET32(trie, 0x110000, value2);
         }
         if(value!=errorValue || value2!=errorValue) {
             log_err("error: %s(%s).get(out of range) != errorValue\n",
