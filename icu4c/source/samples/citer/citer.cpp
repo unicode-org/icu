@@ -23,6 +23,11 @@
 
 static UFILE *out;
 
+using icu::CharacterIterator;
+using icu::StringCharacterIterator;
+using icu::UCharCharacterIterator;
+using icu::UnicodeString;
+
 void printUnicodeString(const UnicodeString &s)
 {
     u_fprintf(out, "%S", &s);
