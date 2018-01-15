@@ -107,8 +107,6 @@ utrie3_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
     newTrie->data=data;
     newTrie->dataCapacity=UNEWTRIE3_INITIAL_DATA_LENGTH;
     newTrie->initialValue=initialValue;
-    newTrie->errorValue=errorValue;
-    newTrie->highStart=0x110000;
     newTrie->firstFreeBlock=0;  /* no free block in the list */
     newTrie->isCompacted=FALSE;
 
@@ -221,8 +219,6 @@ cloneBuilder(const UNewTrie3 *other) {
     }
 
     trie->initialValue=other->initialValue;
-    trie->errorValue=other->errorValue;
-    trie->highStart=other->highStart;
     trie->isCompacted=other->isCompacted;
 
     return trie;
@@ -703,7 +699,7 @@ utrie3_setRange32(UTrie3 *trie,
             if(overwrite && block>=UNEWTRIE3_DATA_START_OFFSET) {
                 /*
                  * We overwrite all values, and it's not a
-                 * protected (ASCII-linear or null) block:
+                 * protected (ASCII-linear) block:
                  * replace with the repeatBlock.
                  */
                 setRepeatBlock=TRUE;
@@ -904,10 +900,10 @@ constexpr int32_t SUPP_DATA=0x2000000;
  * Sets flags for which data blocks are used from BMP vs. supplementary code points.
  * The data array must not have been compacted yet.
  */
-void markDataBlocks(UNewTrie3 *trie) {
+void markDataBlocks(UNewTrie3 *trie, UChar32 highStart) {
+    U_ASSERT(highStart>=0x10000);
     int32_t flag=BMP_DATA;
-    int32_t i1Limit= trie->highStart<=0x10000 ?
-        UTRIE3_OMITTED_BMP_INDEX_1_LENGTH : trie->highStart>>UTRIE3_SHIFT_1;
+    int32_t i1Limit=highStart>>UTRIE3_SHIFT_1;
     for(int32_t i1=0; i1<i1Limit; ++i1) {
         if(i1==UTRIE3_OMITTED_BMP_INDEX_1_LENGTH) {
             flag=SUPP_DATA;
@@ -940,7 +936,7 @@ void markDataBlocks(UNewTrie3 *trie) {
  * - try to move and overlap blocks that are not already adjacent
  */
 static void
-compactData(UNewTrie3 *trie) {
+compactData(UNewTrie3 *trie, UChar32 highStart) {
 #ifdef UTRIE3_DEBUG
     int32_t countSame=0, sumOverlaps=0, padding=0;
 #endif
@@ -951,7 +947,7 @@ compactData(UNewTrie3 *trie) {
     // Data blocks that are used for supplementary code points use UTRIE3_DATA_GRANULARITY.
     // TODO: Write BMP data blocks first, to make sure their unshifted indexes fit into 16 bits.
     // TODO: First de-duplicate data blocks without overlaps.
-    markDataBlocks(trie);
+    markDataBlocks(trie, highStart);
 
     /* do not compact linear-ASCII data */
     int32_t start=0;
@@ -1052,7 +1048,7 @@ compactData(UNewTrie3 *trie) {
 }
 
 static void
-compactIndex2(UNewTrie3 *trie) {
+compactIndex2(UNewTrie3 *trie, UChar32 highStart) {
     /* do not compact linear-BMP index-2 blocks */
     int32_t start=0;
     int32_t newStart=UTRIE3_INDEX_2_BMP_LENGTH;
@@ -1062,8 +1058,8 @@ compactIndex2(UNewTrie3 *trie) {
     }
 
     /* Reduce the index table gap to what will be needed at runtime. */
-    U_ASSERT(trie->highStart>0x10000);
-    newStart+=(trie->highStart-0x10000)>>UTRIE3_SHIFT_1;
+    U_ASSERT(highStart>0x10000);
+    newStart+=(highStart-0x10000)>>UTRIE3_SHIFT_1;
 
     for(start=UNEWTRIE3_INDEX_2_NULL_OFFSET; start<trie->index2Length; start+=UTRIE3_INDEX_2_BLOCK_LENGTH) {
         /*
@@ -1133,15 +1129,11 @@ compactIndex2(UNewTrie3 *trie) {
 
 static void
 compactTrie(UTrie3 *trie, UErrorCode *pErrorCode) {
-    UNewTrie3 *newTrie;
-    UChar32 highStart, suppHighStart;
-    uint32_t highValue;
-
-    newTrie=trie->newTrie;
+    UNewTrie3 *newTrie=trie->newTrie;
 
     /* find highStart and round it up */
-    highValue=utrie3_get32(trie, 0x10ffff);
-    highStart=findHighStart(newTrie, highValue);
+    uint32_t highValue=utrie3_get32(trie, 0x10ffff);
+    UChar32 highStart=findHighStart(newTrie, highValue);
     highStart=(highStart+(UTRIE3_CP_PER_INDEX_1_ENTRY-1))&~(UTRIE3_CP_PER_INDEX_1_ENTRY-1);
     if(highStart==0x110000) {
         highValue=trie->errorValue;
@@ -1152,27 +1144,27 @@ compactTrie(UTrie3 *trie, UErrorCode *pErrorCode) {
      * Set trie->highStart only after utrie3_get32(trie, highStart).
      * Otherwise utrie3_get32(trie, highStart) would try to read the highValue.
      */
-    trie->highStart=newTrie->highStart=highStart;
-    trie->highStartLead16=U16_LEAD(newTrie->highStart);
-    trie->shiftedHighStart=newTrie->highStart>>UTRIE3_SHIFT_1;
+    trie->highStart=highStart;
+    trie->highStartLead16=U16_LEAD(highStart);
+    trie->shiftedHighStart=highStart>>UTRIE3_SHIFT_1;
 
 #ifdef UTRIE3_DEBUG
     printf("UTrie3: highStart U+%06lx  highValue 0x%lx  initialValue 0x%lx\n",
             (long)highStart, (long)highValue, (long)trie->initialValue);
 #endif
 
+    UChar32 suppHighStart= highStart<=0x10000 ? 0x10000 : highStart;
     if(highStart<0x110000) {
         /* Blank out [highStart..10ffff] to release associated data blocks. */
-        suppHighStart= highStart<=0x10000 ? 0x10000 : highStart;
         utrie3_setRange32(trie, suppHighStart, 0x10ffff, trie->initialValue, TRUE, pErrorCode);
         if(U_FAILURE(*pErrorCode)) {
             return;
         }
     }
 
-    compactData(newTrie);
+    compactData(newTrie, suppHighStart);
     if(highStart>0x10000) {
-        compactIndex2(newTrie);
+        compactIndex2(newTrie, highStart);
 #ifdef UTRIE3_DEBUG
     } else {
         printf("UTrie3: highStart U+%04lx  count of 16-bit index-2 words %lu->%lu\n",

@@ -123,11 +123,10 @@ struct UNewTrie3 {
     int32_t index2[UNEWTRIE3_MAX_INDEX_2_LENGTH];
     uint32_t *data;
 
-    uint32_t initialValue, errorValue;
+    uint32_t initialValue;
     int32_t index2Length, dataCapacity, dataLength;
     int32_t firstFreeBlock;
     int32_t index2NullOffset, dataNullOffset;
-    UChar32 highStart;
     UBool isCompacted;
 
     /**
