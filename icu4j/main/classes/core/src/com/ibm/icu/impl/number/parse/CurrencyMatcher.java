@@ -15,14 +15,16 @@ public class CurrencyMatcher implements NumberParseMatcher {
     private final String currency1;
     private final String currency2;
 
-    public static NumberParseMatcher getInstance(Currency currency, ULocale loc) {
-        return new CurrencyMatcher(currency, loc);
+    public static NumberParseMatcher getInstance(Currency currency, ULocale loc, int setupFlags) {
+        return new CurrencyMatcher(currency.getSubtype(),
+                ParsingUtils.maybeFold(currency.getSymbol(loc), setupFlags),
+                ParsingUtils.maybeFold(currency.getCurrencyCode(), setupFlags));
     }
 
-    private CurrencyMatcher(Currency currency, ULocale loc) {
-        isoCode = currency.getSubtype();
-        currency1 = currency.getSymbol(loc);
-        currency2 = currency.getCurrencyCode();
+    private CurrencyMatcher(String isoCode, String currency1, String currency2) {
+        this.isoCode = isoCode;
+        this.currency1 = currency1;
+        this.currency2 = currency2;
     }
 
     @Override
@@ -49,11 +51,11 @@ public class CurrencyMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadChars(boolean ignoreCase) {
-        UnicodeSet leadChars = new UnicodeSet();
-        ParsingUtils.putLeadingChar(currency1, leadChars, ignoreCase);
-        ParsingUtils.putLeadingChar(currency2, leadChars, ignoreCase);
-        return leadChars.freeze();
+    public UnicodeSet getLeadCodePoints() {
+        UnicodeSet leadCodePoints = new UnicodeSet();
+        ParsingUtils.putLeadCodePoint(currency1, leadCodePoints);
+        ParsingUtils.putLeadCodePoint(currency2, leadCodePoints);
+        return leadCodePoints.freeze();
     }
 
     @Override

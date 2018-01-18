@@ -17,6 +17,7 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.TextTrieMap;
+import com.ibm.icu.text.UnicodeSet;
 
 @RunWith(JUnit4.class)
 public class TextTrieMapTest extends TestFmwk {
@@ -33,6 +34,7 @@ public class TextTrieMapTest extends TestFmwk {
     private static final Integer SUP2 = new Integer(9);
     private static final Integer SUP3 = new Integer(10);
     private static final Integer SUP4 = new Integer(11);
+    private static final Integer SUP5 = new Integer(12);
 
     private static final Integer FOO = new Integer(-1);
     private static final Integer BAR = new Integer(-2);
@@ -63,6 +65,9 @@ public class TextTrieMapTest extends TestFmwk {
         {"L📺1", SUP2}, // L, 0xD83D, 0xDCFA, 1
         {"L📻", SUP3}, // L, 0xD83D, 0xDCFB
         {"L🃏", SUP4}, // L, 0xD83C, 0xDCCF
+        {"📺", SUP5}, // 0xD83D, 0xDCFA
+        {"📻", SUP5}, // 0xD83D, 0xDCFB
+        {"🃏", SUP5}, // 0xD83C, 0xDCCF
     };
 
     private static final Object[][] TESTCASES = {
@@ -174,6 +179,30 @@ public class TextTrieMapTest extends TestFmwk {
             checkParse(map, test, expecteds, true);
         }
 
+        logln("Test for partial match");
+        for (Object[] cas : TESTDATA) {
+            String str = (String) cas[0];
+            for (int i = 0; i < str.length() - 1; i++) {
+                TextTrieMap.Output output = new TextTrieMap.Output();
+                map.get(str.substring(0, i), 0, output);
+                assertTrue("Partial string means partial match", output.partialMatch);
+            }
+            String bad = str + "x";
+            TextTrieMap.Output output = new TextTrieMap.Output();
+            map.get(bad, 0, output);
+            assertFalse("No partial match on bad string", output.partialMatch);
+        }
+        TextTrieMap.Output output = new TextTrieMap.Output();
+        map.get("Sunday", 0, output);
+        assertFalse("No partial match on string with no continuation", output.partialMatch);
+
+        logln("Test for LeadCodePoints");
+        // Note: The 📺 and 📻 have the same lead surrogate
+        UnicodeSet expectedLeadCodePoints = new UnicodeSet("[SMTWFL📺📻🃏]");
+        UnicodeSet actualLeadCodePoints = new UnicodeSet();
+        map.putLeadCodePoints(actualLeadCodePoints);
+        assertEquals("leadCodePoints", expectedLeadCodePoints, actualLeadCodePoints);
+
         // Add duplicated entry
         map.put("Sunday", FOO);
         // Add duplicated entry with different casing
@@ -216,6 +245,29 @@ public class TextTrieMapTest extends TestFmwk {
             Object[] expecteds = (Object[]) TESTCASES_PARSE[i][1];
             checkParse(map, test, expecteds, false);
         }
+
+        logln("Test for partial match");
+        for (Object[] cas : TESTDATA) {
+            String str = (String) cas[0];
+            for (int i = 0; i < str.length() - 1; i++) {
+                TextTrieMap.Output output = new TextTrieMap.Output();
+                map.get(str.substring(0, i), 0, output);
+                assertTrue("Partial string means partial match", output.partialMatch);
+            }
+            String bad = str + "x";
+            TextTrieMap.Output output = new TextTrieMap.Output();
+            map.get(bad, 0, output);
+            assertFalse("No partial match on bad string", output.partialMatch);
+        }
+        TextTrieMap.Output output = new TextTrieMap.Output();
+        map.get("Sunday", 0, output);
+        assertFalse("No partial match on string with no continuation", output.partialMatch);
+
+        logln("Test for LeadCodePoints");
+        UnicodeSet expectedLeadCodePoints = new UnicodeSet("[smtwfl📺📻🃏]");
+        UnicodeSet actualLeadCodePoints = new UnicodeSet();
+        map.putLeadCodePoints(actualLeadCodePoints);
+        assertEquals("leadCodePoints", expectedLeadCodePoints, actualLeadCodePoints);
 
         // Add duplicated entry
         map.put("Sunday", FOO);

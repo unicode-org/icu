@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
+import com.ibm.icu.number.Grouper;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
 
@@ -14,13 +15,19 @@ public class ScientificMatcher implements NumberParseMatcher {
     private final String exponentSeparatorString;
     private final DecimalMatcher exponentMatcher;
 
-    public ScientificMatcher(DecimalFormatSymbols symbols) {
-        exponentSeparatorString = symbols.getExponentSeparator();
-        exponentMatcher = new DecimalMatcher();
-        exponentMatcher.isScientific = true;
-        exponentMatcher.groupingEnabled = false;
-        exponentMatcher.decimalEnabled = false;
-        exponentMatcher.freeze(symbols, false, false);
+    public static ScientificMatcher getInstance(
+            DecimalFormatSymbols symbols,
+            Grouper grouper,
+            int parseFlags) {
+        // TODO: Static-initialize most common instances?
+        return new ScientificMatcher(symbols, grouper, parseFlags);
+    }
+
+    private ScientificMatcher(DecimalFormatSymbols symbols, Grouper grouper, int parseFlags) {
+        exponentSeparatorString = ParsingUtils.maybeFold(symbols.getExponentSeparator(), parseFlags);
+        exponentMatcher = DecimalMatcher.getInstance(symbols,
+                grouper,
+                ParsingUtils.PARSE_FLAG_DECIMAL_SCIENTIFIC | ParsingUtils.PARSE_FLAG_INTEGER_ONLY);
     }
 
     @Override
@@ -76,10 +83,15 @@ public class ScientificMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadChars(boolean ignoreCase) {
-        UnicodeSet leadChars = new UnicodeSet();
-        ParsingUtils.putLeadingChar(exponentSeparatorString, leadChars, ignoreCase);
-        return leadChars.freeze();
+    public UnicodeSet getLeadCodePoints() {
+        int cp = exponentSeparatorString.codePointAt(0);
+        if (cp == 'E') {
+            return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.CAPITAL_E);
+        } else if (cp == 'e') {
+            return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.FOLDED_E);
+        } else {
+            return new UnicodeSet().add(cp).freeze();
+        }
     }
 
     @Override

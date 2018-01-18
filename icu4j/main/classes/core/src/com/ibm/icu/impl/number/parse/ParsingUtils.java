@@ -3,7 +3,6 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSet.EntryRange;
 
@@ -12,50 +11,40 @@ import com.ibm.icu.text.UnicodeSet.EntryRange;
  */
 public class ParsingUtils {
 
-    /**
-     * Adds all chars and lead surrogates from input into output.
-     */
-    public static void putLeadSurrogates(UnicodeSet input, UnicodeSet output) {
-        if (input.isEmpty()) {
-            return;
-        }
+    public static final int PARSE_FLAG_IGNORE_CASE = 0x0001;
+    public static final int PARSE_FLAG_MONETARY_SEPARATORS = 0x0002;
+    public static final int PARSE_FLAG_STRICT_SEPARATORS = 0x0004;
+    public static final int PARSE_FLAG_STRICT_GROUPING_SIZE = 0x0008;
+    public static final int PARSE_FLAG_INTEGER_ONLY = 0x0010;
+    public static final int PARSE_FLAG_GROUPING_DISABLED = 0x0020;
+    public static final int PARSE_FLAG_DECIMAL_SCIENTIFIC = 0x0040;
+    public static final int PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES = 0x0080;
+
+    public static void putLeadCodePoints(UnicodeSet input, UnicodeSet output) {
         for (EntryRange range : input.ranges()) {
-            if (range.codepointEnd <= 0xFFFF) {
-                // All BMP chars
-                output.add(range.codepoint, range.codepointEnd);
-            } else {
-                // Need to get the lead surrogates
-                // TODO: Make this more efficient?
-                if (range.codepoint <= 0xFFFF) {
-                    output.add(range.codepoint, 0xFFFF);
-                }
-                for (int cp = Math.max(0x10000, range.codepoint); cp <= range.codepointEnd; cp++) {
-                    output.add(UTF16.getLeadSurrogate(cp));
-                }
-            }
+            output.add(range.codepoint, range.codepointEnd);
+        }
+        for (String str : input.strings()) {
+            output.add(str.codePointAt(0));
         }
     }
+
+    public static void putLeadCodePoint(String input, UnicodeSet output) {
+        if (!input.isEmpty()) {
+            output.add(input.codePointAt(0));
+        }
+    }
+
+    private static final UnicodeSet LETTERS = new UnicodeSet("[:letter:]").freeze();
 
     /**
-     * Adds the first char of the given string to leadChars, performing case-folding if necessary.
+     * Case-folds the string if IGNORE_CASE flag is set; otherwise, returns the same string.
      */
-    public static void putLeadingChar(String str, UnicodeSet leadChars, boolean ignoreCase) {
-        if (str.isEmpty()) {
-            return;
-        }
-        if (ignoreCase) {
-            leadChars.add(getCaseFoldedLeadingChar(str));
+    public static String maybeFold(String input, int parseFlags) {
+        if (0 != (parseFlags & PARSE_FLAG_IGNORE_CASE) && LETTERS.containsSome(input)) {
+            return UCharacter.foldCase(input, true);
         } else {
-            leadChars.add(str.charAt(0));
-        }
-    }
-
-    public static char getCaseFoldedLeadingChar(CharSequence str) {
-        int cp = UCharacter.foldCase(Character.codePointAt(str, 0), true);
-        if (cp <= 0xFFFF) {
-            return (char) cp;
-        } else {
-            return UTF16.getLeadSurrogate(cp);
+            return input;
         }
     }
 

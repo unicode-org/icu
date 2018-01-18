@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
 
@@ -11,23 +12,34 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class NanMatcher extends SymbolMatcher {
 
-    private static final NanMatcher DEFAULT = new NanMatcher();
+    private static final NanMatcher DEFAULT = new NanMatcher("NaN");
+    private static final NanMatcher DEFAULT_FOLDED = new NanMatcher(UCharacter.foldCase("NaN", true));
 
-    public static NanMatcher getInstance(DecimalFormatSymbols symbols) {
-        String symbolString = symbols.getNaN();
+    public static NanMatcher getInstance(DecimalFormatSymbols symbols, int parseFlags) {
+        String symbolString = ParsingUtils.maybeFold(symbols.getNaN(), parseFlags);
         if (DEFAULT.string.equals(symbolString)) {
             return DEFAULT;
+        } else if (DEFAULT_FOLDED.string.equals(symbolString)) {
+            return DEFAULT_FOLDED;
         } else {
             return new NanMatcher(symbolString);
         }
     }
 
     private NanMatcher(String symbolString) {
-        super(symbolString, DEFAULT.uniSet);
+        super(symbolString, UnicodeSet.EMPTY);
     }
 
-    private NanMatcher() {
-        super("NaN", UnicodeSet.EMPTY);
+    @Override
+    public UnicodeSet getLeadCodePoints() {
+        // Overriding this here to allow use of statically allocated sets
+        if (this == DEFAULT) {
+            return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.CAPITAL_N);
+        } else if (this == DEFAULT_FOLDED) {
+            return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.FOLDED_N);
+        } else {
+            return super.getLeadCodePoints();
+        }
     }
 
     @Override

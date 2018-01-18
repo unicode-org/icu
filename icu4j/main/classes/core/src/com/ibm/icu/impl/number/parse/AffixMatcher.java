@@ -44,7 +44,7 @@ public class AffixMatcher implements NumberParseMatcher {
             AffixPatternProvider patternInfo,
             NumberParserImpl output,
             IgnorablesMatcher ignorables,
-            boolean includeUnpaired) {
+            int parseFlags) {
         // Lazy-initialize the StringBuilder.
         StringBuilder sb = null;
 
@@ -53,9 +53,11 @@ public class AffixMatcher implements NumberParseMatcher {
         ArrayList<AffixMatcher> matchers = new ArrayList<AffixMatcher>(6);
 
         sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_POS_PREFIX, ignorables.getSet(), sb);
-        String posPrefix = toStringOrEmpty(sb);
+        String posPrefix = ParsingUtils.maybeFold(toStringOrEmpty(sb), parseFlags);
         sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_POS_SUFFIX, ignorables.getSet(), sb);
-        String posSuffix = toStringOrEmpty(sb);
+        String posSuffix = ParsingUtils.maybeFold(toStringOrEmpty(sb), parseFlags);
+
+        boolean includeUnpaired = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES);
 
         if (!posPrefix.isEmpty() || !posSuffix.isEmpty()) {
             matchers.add(getInstance(posPrefix, posSuffix, 0));
@@ -67,9 +69,9 @@ public class AffixMatcher implements NumberParseMatcher {
 
         if (patternInfo.hasNegativeSubpattern()) {
             sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_NEG_PREFIX, ignorables.getSet(), sb);
-            String negPrefix = toStringOrEmpty(sb);
+            String negPrefix = ParsingUtils.maybeFold(toStringOrEmpty(sb), parseFlags);
             sb = getCleanAffix(patternInfo, AffixPatternProvider.FLAG_NEG_SUFFIX, ignorables.getSet(), sb);
-            String negSuffix = toStringOrEmpty(sb);
+            String negSuffix = ParsingUtils.maybeFold(toStringOrEmpty(sb), parseFlags);
 
             if (negPrefix.equals(posPrefix) && negSuffix.equals(posSuffix)) {
                 // No-op: favor the positive AffixMatcher
@@ -115,6 +117,8 @@ public class AffixMatcher implements NumberParseMatcher {
     }
 
     private AffixMatcher(String prefix, String suffix, int flags) {
+        assert prefix != null;
+        assert suffix != null;
         this.prefix = prefix;
         this.suffix = suffix;
         this.flags = flags;
@@ -157,11 +161,11 @@ public class AffixMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadChars(boolean ignoreCase) {
-        UnicodeSet leadChars = new UnicodeSet();
-        ParsingUtils.putLeadingChar(prefix, leadChars, ignoreCase);
-        ParsingUtils.putLeadingChar(suffix, leadChars, ignoreCase);
-        return leadChars.freeze();
+    public UnicodeSet getLeadCodePoints() {
+        UnicodeSet leadCodePoints = new UnicodeSet();
+        ParsingUtils.putLeadCodePoint(prefix, leadCodePoints);
+        ParsingUtils.putLeadCodePoint(suffix, leadCodePoints);
+        return leadCodePoints.freeze();
     }
 
     @Override

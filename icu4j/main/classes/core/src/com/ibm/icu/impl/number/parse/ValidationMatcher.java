@@ -15,7 +15,7 @@ public abstract class ValidationMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadChars(boolean ignoreCase) {
+    public UnicodeSet getLeadCodePoints() {
         return UnicodeSet.EMPTY;
     }
 
