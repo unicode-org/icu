@@ -25,6 +25,8 @@ public class CurrencyTrieMatcher implements NumberParseMatcher {
     }
 
     private CurrencyTrieMatcher(ULocale locale) {
+        // TODO: Currency trie does not currently have an option for case folding.  It defaults to use
+        // case folding on long-names but not symbols.
         longNameTrie = Currency.getParsingTrie(locale, Currency.LONG_NAME);
         symbolTrie = Currency.getParsingTrie(locale, Currency.SYMBOL_NAME);
     }
@@ -49,11 +51,11 @@ public class CurrencyTrieMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadChars(boolean ignoreCase) {
-        UnicodeSet leadChars = new UnicodeSet();
-        longNameTrie.putLeadChars(leadChars);
-        symbolTrie.putLeadChars(leadChars);
-        return leadChars.freeze();
+    public UnicodeSet getLeadCodePoints() {
+        UnicodeSet leadCodePoints = new UnicodeSet();
+        longNameTrie.putLeadCodePoints(leadCodePoints);
+        symbolTrie.putLeadCodePoints(leadCodePoints);
+        return leadCodePoints.freeze();
     }
 
     @Override

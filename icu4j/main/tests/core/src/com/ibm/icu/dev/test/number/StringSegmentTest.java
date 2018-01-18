@@ -3,8 +3,6 @@
 package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -19,7 +17,7 @@ public class StringSegmentTest {
 
     @Test
     public void testOffset() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING, false);
+        StringSegment segment = new StringSegment(SAMPLE_STRING);
         assertEquals(0, segment.getOffset());
         segment.adjustOffset(3);
         assertEquals(3, segment.getOffset());
@@ -31,7 +29,7 @@ public class StringSegmentTest {
 
     @Test
     public void testLength() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING, false);
+        StringSegment segment = new StringSegment(SAMPLE_STRING);
         assertEquals(11, segment.length());
         segment.adjustOffset(3);
         assertEquals(8, segment.length());
@@ -45,7 +43,7 @@ public class StringSegmentTest {
 
     @Test
     public void testCharAt() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING, false);
+        StringSegment segment = new StringSegment(SAMPLE_STRING);
         assertCharSequenceEquals(SAMPLE_STRING, segment);
         segment.adjustOffset(3);
         assertCharSequenceEquals("radio 📻", segment);
@@ -55,7 +53,7 @@ public class StringSegmentTest {
 
     @Test
     public void testGetCodePoint() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING, false);
+        StringSegment segment = new StringSegment(SAMPLE_STRING);
         assertEquals(0x1F4FB, segment.getCodePoint());
         segment.setLength(1);
         assertEquals(-1, segment.getCodePoint());
@@ -67,19 +65,8 @@ public class StringSegmentTest {
     }
 
     @Test
-    public void testIsLeadingSurrogate() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING, false);
-        assertFalse(segment.isLeadingSurrogate());
-        segment.setLength(1);
-        assertTrue(segment.isLeadingSurrogate());
-        segment.adjustOffset(1);
-        segment.setLength(1);
-        assertFalse(segment.isLeadingSurrogate()); // trail, not lead
-    }
-
-    @Test
     public void testCommonPrefixLength() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING, false);
+        StringSegment segment = new StringSegment(SAMPLE_STRING);
         assertEquals(11, segment.getCommonPrefixLength(SAMPLE_STRING));
         assertEquals(4, segment.getCommonPrefixLength("📻 r"));
         assertEquals(3, segment.getCommonPrefixLength("📻 x"));
@@ -99,15 +86,6 @@ public class StringSegmentTest {
         segment.resetLength();
         segment.setOffset(11); // end of string
         assertEquals(0, segment.getCommonPrefixLength("foo"));
-    }
-
-    @Test
-    public void testIgnoreCase() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING, true);
-        assertEquals(11, segment.getCommonPrefixLength(SAMPLE_STRING));
-        assertEquals(0, segment.getCommonPrefixLength("x"));
-        segment.setOffset(3);
-        assertEquals(5, segment.getCommonPrefixLength("RAdiO"));
     }
 
     private static void assertCharSequenceEquals(CharSequence a, CharSequence b) {

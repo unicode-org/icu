@@ -11,7 +11,6 @@ import com.ibm.icu.text.UnicodeSet;
 public abstract class SymbolMatcher implements NumberParseMatcher {
     protected final String string;
     protected final UnicodeSet uniSet;
-    protected final UnicodeSet leadChars;
 
     // TODO: Implement this class using only UnicodeSet and not String?
     // How to deal with case folding?
@@ -19,13 +18,11 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
     protected SymbolMatcher(String symbolString, UnicodeSet symbolUniSet) {
         string = symbolString;
         uniSet = symbolUniSet;
-        leadChars = null;
     }
 
     protected SymbolMatcher(UnicodeSetStaticCache.Key key) {
         string = "";
         uniSet = UnicodeSetStaticCache.get(key);
-        leadChars = UnicodeSetStaticCache.getLeadChars(key);
     }
 
     @Override
@@ -43,7 +40,7 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
         }
 
         if (string.isEmpty()) {
-            return segment.isLeadingSurrogate();
+            return false;
         }
         int overlap = segment.getCommonPrefixLength(string);
         if (overlap == string.length()) {
@@ -51,19 +48,20 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
             accept(segment, result);
             return false;
         }
-        return overlap == segment.length() || segment.isLeadingSurrogate();
+        return overlap == segment.length();
     }
 
     @Override
-    public UnicodeSet getLeadChars(boolean ignoreCase) {
-        if (leadChars != null) {
-            return leadChars;
+    public UnicodeSet getLeadCodePoints() {
+        if (string == null || string.isEmpty()) {
+            // Assumption: for sets from UnicodeSetStaticCache, uniSet == leadCodePoints.
+            return uniSet;
         }
 
-        UnicodeSet leadChars = new UnicodeSet();
-        ParsingUtils.putLeadSurrogates(uniSet, leadChars);
-        ParsingUtils.putLeadingChar(string, leadChars, ignoreCase);
-        return leadChars.freeze();
+        UnicodeSet leadCodePoints = new UnicodeSet();
+        ParsingUtils.putLeadCodePoints(uniSet, leadCodePoints);
+        ParsingUtils.putLeadCodePoint(string, leadCodePoints);
+        return leadCodePoints.freeze();
     }
 
     @Override

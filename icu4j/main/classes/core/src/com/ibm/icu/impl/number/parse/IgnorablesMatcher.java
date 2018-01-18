@@ -26,13 +26,13 @@ public class IgnorablesMatcher extends RangeMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadChars(boolean ignoreCase) {
+    public UnicodeSet getLeadCodePoints() {
         if (this == DEFAULT) {
-            return UnicodeSetStaticCache.getLeadChars(UnicodeSetStaticCache.Key.DEFAULT_IGNORABLES);
+            return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.DEFAULT_IGNORABLES);
         } else if (this == STRICT) {
-            return UnicodeSetStaticCache.getLeadChars(UnicodeSetStaticCache.Key.STRICT_IGNORABLES);
+            return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.STRICT_IGNORABLES);
         } else {
-            return super.getLeadChars(ignoreCase);
+            return super.getLeadCodePoints();
         }
     }
 

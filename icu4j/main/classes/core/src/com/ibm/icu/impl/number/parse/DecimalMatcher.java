@@ -5,6 +5,7 @@ package com.ibm.icu.impl.number.parse;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.Key;
 import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.number.Grouper;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
 
@@ -14,48 +15,57 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class DecimalMatcher implements NumberParseMatcher {
 
-    public boolean requireGroupingMatch = false;
-    public boolean decimalEnabled = true;
-    public boolean groupingEnabled = true;
-    public int grouping1 = 3;
-    public int grouping2 = 3;
-    public boolean integerOnly = false;
-    public boolean isScientific = false;
+    private final boolean requireGroupingMatch;
+    private final boolean groupingDisabled;
+    private final int grouping1;
+    private final int grouping2;
+    private final boolean integerOnly;
+    private final boolean isScientific;
 
-    private UnicodeSet groupingUniSet = null;
-    private UnicodeSet decimalUniSet = null;
-    private UnicodeSet separatorSet = null;
-    private UnicodeSet separatorLeadChars = null;
-    private String[] digitStrings = null;
-    private boolean frozen;
+    // Assumption: these sets all consist of single code points. If this assumption needs to be broken,
+    // fix getLeadCodePoints() as well as matching logic. Be careful of the performance impact.
+    private final UnicodeSet groupingUniSet;
+    private final UnicodeSet decimalUniSet;
+    private final UnicodeSet separatorSet;
+    private final UnicodeSet leadSet;
+    private final String[] digitStrings;
 
-    public DecimalMatcher() {
-        frozen = false;
+    public static DecimalMatcher getInstance(
+            DecimalFormatSymbols symbols,
+            Grouper grouper,
+            int parseFlags) {
+        // TODO: Cache popular instances?
+        return new DecimalMatcher(symbols, grouper, parseFlags);
     }
 
-    public void freeze(DecimalFormatSymbols symbols, boolean monetarySeparators, boolean isStrict) {
-        assert !frozen;
-        frozen = true;
-
-        String groupingSeparator = monetarySeparators ? symbols.getMonetaryGroupingSeparatorString()
-                : symbols.getGroupingSeparatorString();
-        String decimalSeparator = monetarySeparators ? symbols.getMonetaryDecimalSeparatorString()
-                : symbols.getDecimalSeparatorString();
+    private DecimalMatcher(DecimalFormatSymbols symbols, Grouper grouper, int parseFlags) {
         Key groupingKey, decimalKey;
+        String groupingSeparator, decimalSeparator;
+        if (0 != (parseFlags & ParsingUtils.PARSE_FLAG_MONETARY_SEPARATORS)) {
+            groupingSeparator = symbols.getMonetaryGroupingSeparatorString();
+            decimalSeparator = symbols.getMonetaryDecimalSeparatorString();
+        } else {
+            groupingSeparator = symbols.getGroupingSeparatorString();
+            decimalSeparator = symbols.getDecimalSeparatorString();
+        }
 
         // Attempt to find values in the static cache
-        if (isStrict) {
-            decimalKey = UnicodeSetStaticCache.chooseFrom(decimalSeparator, Key.STRICT_COMMA, Key.STRICT_PERIOD);
+        if (0 != (parseFlags & ParsingUtils.PARSE_FLAG_STRICT_SEPARATORS)) {
+            decimalKey = UnicodeSetStaticCache
+                    .chooseFrom(decimalSeparator, Key.STRICT_COMMA, Key.STRICT_PERIOD);
             if (decimalKey == Key.STRICT_COMMA) {
                 // Decimal is comma; grouping should be period or custom
-                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator, Key.STRICT_PERIOD_OR_OTHER);
+                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator,
+                        Key.STRICT_PERIOD_OR_OTHER);
             } else if (decimalKey == Key.STRICT_PERIOD) {
                 // Decimal is period; grouping should be comma or custom
-                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator, Key.STRICT_COMMA_OR_OTHER);
+                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator,
+                        Key.STRICT_COMMA_OR_OTHER);
             } else {
                 // Decimal is custom; grouping can be either comma or period or custom
-                groupingKey = UnicodeSetStaticCache
-                        .chooseFrom(groupingSeparator, Key.STRICT_COMMA_OR_OTHER, Key.STRICT_PERIOD_OR_OTHER);
+                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator,
+                        Key.STRICT_COMMA_OR_OTHER,
+                        Key.STRICT_PERIOD_OR_OTHER);
             }
         } else {
             decimalKey = UnicodeSetStaticCache.chooseFrom(decimalSeparator, Key.COMMA, Key.PERIOD);
@@ -73,35 +83,46 @@ public class DecimalMatcher implements NumberParseMatcher {
         }
 
         // Get the sets from the static cache if they were found
+        UnicodeSet _groupingUniSet = null, _decimalUniSet = null, _separatorSet = null, _leadSet = null;
         if (groupingKey != null && decimalKey != null) {
-            groupingUniSet = UnicodeSetStaticCache.get(groupingKey);
-            decimalUniSet = UnicodeSetStaticCache.get(decimalKey);
+            _groupingUniSet = UnicodeSetStaticCache.get(groupingKey);
+            _decimalUniSet = UnicodeSetStaticCache.get(decimalKey);
             Key separatorKey = UnicodeSetStaticCache.unionOf(groupingKey, decimalKey);
             if (separatorKey != null) {
-                separatorSet = UnicodeSetStaticCache.get(separatorKey);
-                separatorLeadChars = UnicodeSetStaticCache.getLeadChars(separatorKey);
+                _separatorSet = UnicodeSetStaticCache.get(separatorKey);
+                Key leadKey = UnicodeSetStaticCache.unionOf(Key.DIGITS, separatorKey);
+                if (leadKey != null) {
+                    _leadSet = UnicodeSetStaticCache.get(leadKey);
+                }
             }
         } else if (groupingKey != null) {
-            groupingUniSet = UnicodeSetStaticCache.get(groupingKey);
+            _groupingUniSet = UnicodeSetStaticCache.get(groupingKey);
         } else if (decimalKey != null) {
-            decimalUniSet = UnicodeSetStaticCache.get(decimalKey);
+            _decimalUniSet = UnicodeSetStaticCache.get(decimalKey);
         }
 
-        // Resolve fallbacks if we don't have sets from the static cache
-        if (groupingUniSet == null) {
-            groupingUniSet = new UnicodeSet().add(groupingSeparator).freeze();
-        }
-        if (decimalUniSet == null) {
-            decimalUniSet = new UnicodeSet().add(decimalSeparator).freeze();
-        }
-        if (separatorSet == null) {
-            separatorSet = new UnicodeSet().addAll(groupingUniSet).addAll(decimalUniSet).freeze();
-        }
+        // Finish resolving fallbacks
+        groupingUniSet = _groupingUniSet != null ? _groupingUniSet
+                : new UnicodeSet().add(groupingSeparator.codePointAt(0)).freeze();
+        decimalUniSet = _decimalUniSet != null ? _decimalUniSet
+                : new UnicodeSet().add(decimalSeparator.codePointAt(0)).freeze();
+        separatorSet = _separatorSet != null ? _separatorSet
+                : new UnicodeSet().addAll(groupingUniSet).addAll(decimalUniSet).freeze();
+        leadSet = _leadSet; // null if not available
 
         int cpZero = symbols.getCodePointZero();
         if (cpZero == -1 || !UCharacter.isDigit(cpZero) || UCharacter.digit(cpZero) != 0) {
-            digitStrings = symbols.getDigitStrings();
+            digitStrings = symbols.getDigitStringsLocal();
+        } else {
+            digitStrings = null;
         }
+
+        requireGroupingMatch = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_STRICT_GROUPING_SIZE);
+        groupingDisabled = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_GROUPING_DISABLED);
+        grouping1 = grouper.getPrimary();
+        grouping2 = grouper.getSecondary();
+        integerOnly = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_INTEGER_ONLY);
+        isScientific = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_DECIMAL_SCIENTIFIC);
     }
 
     @Override
@@ -110,7 +131,6 @@ public class DecimalMatcher implements NumberParseMatcher {
     }
 
     public boolean match(StringSegment segment, ParsedNumber result, boolean negativeExponent) {
-        assert frozen;
         if (result.seenNumber() && !isScientific) {
             // A number has already been consumed.
             return false;
@@ -177,16 +197,18 @@ public class DecimalMatcher implements NumberParseMatcher {
                 if (separator == -1) {
                     // First separator; could be either grouping or decimal.
                     separator = cp;
-                    if (groupingEnabled && requireGroupingMatch && groupingUniSet.contains(cp)
+                    if (!groupingDisabled
+                            && requireGroupingMatch
+                            && groupingUniSet.contains(cp)
                             && (currGroup == 0 || currGroup > grouping2)) {
                         break;
                     }
-                } else if (groupingEnabled && separator == cp && groupingUniSet.contains(cp)) {
+                } else if (!groupingDisabled && separator == cp && groupingUniSet.contains(cp)) {
                     // Second or later grouping separator.
                     if (requireGroupingMatch && currGroup != grouping2) {
                         break;
                     }
-                } else if (groupingEnabled && separator != cp && decimalUniSet.contains(cp)) {
+                } else if (!groupingDisabled && separator != cp && decimalUniSet.contains(cp)) {
                     // Decimal separator after a grouping separator.
                     if (requireGroupingMatch && currGroup != grouping1) {
                         break;
@@ -234,13 +256,15 @@ public class DecimalMatcher implements NumberParseMatcher {
                 result.quantity.truncate();
                 segment.setOffset(lastSeparatorOffset);
             }
-        } else if (separator != -1 && !groupingEnabled) {
+        } else if (separator != -1 && groupingDisabled) {
             // The final separator was a grouping separator, but we aren't accepting grouping.
             // Reset the offset to immediately before that grouping separator.
             result.quantity.adjustMagnitude(-currGroup);
             result.quantity.truncate();
             segment.setOffset(lastSeparatorOffset);
-        } else if (separator != -1 && requireGroupingMatch && groupingUniSet.contains(separator)
+        } else if (separator != -1
+                && requireGroupingMatch
+                && groupingUniSet.contains(separator)
                 && currGroup != grouping1) {
             // The final separator was a grouping separator, and we have a mismatched grouping size.
             // Reset the offset to the beginning of the number.
@@ -252,24 +276,25 @@ public class DecimalMatcher implements NumberParseMatcher {
             // segment.setOffset(initialOffset);
         }
 
-        return segment.length() == 0 || hasPartialPrefix || segment.isLeadingSurrogate();
+        return segment.length() == 0 || hasPartialPrefix;
     }
 
     @Override
-    public UnicodeSet getLeadChars(boolean ignoreCase) {
-        UnicodeSet leadChars = new UnicodeSet();
-        leadChars.addAll(UnicodeSetStaticCache.getLeadChars(Key.DIGITS));
+    public UnicodeSet getLeadCodePoints() {
+        if (digitStrings == null && leadSet != null) {
+            return leadSet;
+        }
+
+        UnicodeSet leadCodePoints = new UnicodeSet();
+        // Assumption: the sets are all single code points.
+        leadCodePoints.addAll(UnicodeSetStaticCache.get(Key.DIGITS));
+        leadCodePoints.addAll(separatorSet);
         if (digitStrings != null) {
             for (int i = 0; i < digitStrings.length; i++) {
-                ParsingUtils.putLeadingChar(digitStrings[i], leadChars, ignoreCase);
+                ParsingUtils.putLeadCodePoint(digitStrings[i], leadCodePoints);
             }
         }
-        if (separatorLeadChars != null) {
-            leadChars.addAll(separatorLeadChars);
-        } else {
-            ParsingUtils.putLeadSurrogates(separatorSet, leadChars);
-        }
-        return leadChars.freeze();
+        return leadCodePoints.freeze();
     }
 
     @Override

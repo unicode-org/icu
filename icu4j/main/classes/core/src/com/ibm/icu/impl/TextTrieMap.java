@@ -90,11 +90,11 @@ public class TextTrieMap<V> {
     }
 
     public void find(CharSequence text, ResultHandler<V> handler) {
-        find(text, 0, handler, new Output());
+        find(text, 0, handler, null);
     }
 
     public void find(CharSequence text, int offset, ResultHandler<V> handler) {
-        find(text, offset, handler, new Output());
+        find(text, offset, handler, null);
     }
 
     private void find(CharSequence text, int offset, ResultHandler<V> handler, Output output) {
@@ -116,8 +116,8 @@ public class TextTrieMap<V> {
         }
     }
 
-    public void putLeadChars(UnicodeSet output) {
-        _root.putLeadChars(output);
+    public void putLeadCodePoints(UnicodeSet output) {
+        _root.putLeadCodePoints(output);
     }
 
     /**
@@ -363,7 +363,9 @@ public class TextTrieMap<V> {
                 return null;
             }
             if (!chitr.hasNext()) {
-                output.partialMatch = true;
+                if (output != null) {
+                    output.partialMatch = true;
+                }
                 return null;
             }
             Node match = null;
@@ -382,12 +384,24 @@ public class TextTrieMap<V> {
             return match;
         }
 
-        public void putLeadChars(UnicodeSet output) {
+        public void putLeadCodePoints(UnicodeSet output) {
             if (_children == null) {
                 return;
             }
             for (Node child : _children) {
-                output.add(child._text[0]);
+                char c0 = child._text[0];
+                if (!UCharacter.isHighSurrogate(c0)) {
+                    output.add(c0);
+                } else if (child.charCount() >= 2) {
+                    output.add(Character.codePointAt(child._text, 0));
+                } else if (child._children != null) {
+                    // Construct all possible code points from grandchildren.
+                    for (Node grandchild : child._children) {
+                        char c1 = grandchild._text[0];
+                        int cp = Character.toCodePoint(c0, c1);
+                        output.add(cp);
+                    }
+                }
             }
         }
 
@@ -465,7 +479,9 @@ public class TextTrieMap<V> {
             int idx = 1;
             while (idx < _text.length) {
                 if(!chitr.hasNext()) {
-                    output.partialMatch = true;
+                    if (output != null) {
+                        output.partialMatch = true;
+                    }
                     matched = false;
                     break;
                 }

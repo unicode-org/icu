@@ -29,7 +29,7 @@ public interface NumberParseMatcher {
      * this matcher unless a segment begins with a char in this set. To make this matcher always run, return
      * {@link UnicodeSet#ALL_CODE_POINTS}.
      */
-    public UnicodeSet getLeadChars(boolean ignoreCase);
+    public UnicodeSet getLeadCodePoints();
 
     /**
      * Method called at the end of a parse, after all matchers have failed to consume any more chars. Allows a matcher

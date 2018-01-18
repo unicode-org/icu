@@ -35,7 +35,7 @@ public abstract class RangeMatcher implements NumberParseMatcher {
             }
 
             // If we get here, the code point didn't match the uniSet.
-            return segment.isLeadingSurrogate();
+            return false;
         }
 
         // If we get here, we consumed the entire string segment.
@@ -43,10 +43,10 @@ public abstract class RangeMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadChars(boolean ignoreCase) {
-        UnicodeSet leadChars = new UnicodeSet();
-        ParsingUtils.putLeadSurrogates(uniSet, leadChars);
-        return leadChars.freeze();
+    public UnicodeSet getLeadCodePoints() {
+        UnicodeSet leadCodePoints = new UnicodeSet();
+        ParsingUtils.putLeadCodePoints(uniSet, leadCodePoints);
+        return leadCodePoints.freeze();
     }
 
     @Override

@@ -193,14 +193,7 @@ final class NumberPropertyMapper {
         // GROUPING STRATEGY //
         ///////////////////////
 
-        int grouping1 = properties.getGroupingSize();
-        int grouping2 = properties.getSecondaryGroupingSize();
-        int minGrouping = properties.getMinimumGroupingDigits();
-        assert grouping1 >= -2; // value of -2 means to forward no grouping information
-        grouping1 = grouping1 > 0 ? grouping1 : grouping2 > 0 ? grouping2 : grouping1;
-        grouping2 = grouping2 > 0 ? grouping2 : grouping1;
-        // TODO: Is it important to handle minGrouping > 2?
-        macros.grouper = Grouper.getInstance((byte) grouping1, (byte) grouping2, minGrouping == 2);
+        macros.grouper = Grouper.defaults().withProperties(properties);
 
         /////////////
         // PADDING //

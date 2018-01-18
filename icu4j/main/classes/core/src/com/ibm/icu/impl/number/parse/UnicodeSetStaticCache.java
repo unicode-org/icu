@@ -8,8 +8,14 @@ import java.util.Map;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
- * @author sffc
+ * This class statically initializes UnicodeSets useful for number parsing. Microbenchmarks show this to
+ * bring a very sizeable performance boost.
  *
+ * IMPORTANT ASSUMPTION: All of the sets contain code points (no strings) and they are all case-folded.
+ * If this assumption were ever broken, logic in classes such as SymbolMatcher would need to be updated
+ * in order to return well-formed sets upon calls to getLeadCodePoints().
+ *
+ * @author sffc
  */
 public class UnicodeSetStaticCache {
     public static enum Key {
@@ -42,17 +48,24 @@ public class UnicodeSetStaticCache {
 
         // Other
         DIGITS,
+        CAPITAL_N,
+        FOLDED_N,
+        CAPITAL_E,
+        FOLDED_E,
+
+        // Combined Separators with Digits (for lead code points)
+        DIGITS_OR_COMMA_OR_OTHER,
+        DIGITS_OR_PERIOD_OR_OTHER,
+        DIGITS_OR_COMMA_OR_PERIOD_OR_OTHER,
+        DIGITS_OR_STRICT_COMMA_OR_OTHER,
+        DIGITS_OR_STRICT_PERIOD_OR_OTHER,
+        DIGITS_OR_STRICT_COMMA_OR_PERIOD_OR_OTHER,
     };
 
     private static final Map<Key, UnicodeSet> unicodeSets = new EnumMap<Key, UnicodeSet>(Key.class);
-    private static final Map<Key, UnicodeSet> leadCharsSets = new EnumMap<Key, UnicodeSet>(Key.class);
 
     public static UnicodeSet get(Key key) {
         return unicodeSets.get(key);
-    }
-
-    public static UnicodeSet getLeadChars(Key key) {
-        return leadCharsSets.get(key);
     }
 
     public static Key chooseFrom(String str, Key key1) {
@@ -107,6 +120,23 @@ public class UnicodeSetStaticCache {
             // Strict 1'234.567
             return Key.STRICT_PERIOD_OR_OTHER;
 
+        } else if (key1 == Key.COMMA_OR_OTHER && key2 == Key.DIGITS) {
+            return Key.DIGITS_OR_COMMA_OR_OTHER;
+
+        } else if (key1 == Key.PERIOD_OR_OTHER && key2 == Key.DIGITS) {
+            return Key.DIGITS_OR_PERIOD_OR_OTHER;
+
+        } else if (key1 == Key.COMMA_OR_PERIOD_OR_OTHER && key2 == Key.DIGITS) {
+            return Key.DIGITS_OR_COMMA_OR_PERIOD_OR_OTHER;
+
+        } else if (key1 == Key.STRICT_COMMA_OR_OTHER && key2 == Key.DIGITS) {
+            return Key.DIGITS_OR_STRICT_COMMA_OR_OTHER;
+
+        } else if (key1 == Key.STRICT_PERIOD_OR_OTHER && key2 == Key.DIGITS) {
+            return Key.DIGITS_OR_STRICT_PERIOD_OR_OTHER;
+
+        } else if (key1 == Key.STRICT_COMMA_OR_PERIOD_OR_OTHER && key2 == Key.DIGITS) {
+            return Key.DIGITS_OR_STRICT_COMMA_OR_PERIOD_OR_OTHER;
         }
 
         return null;
@@ -143,8 +173,10 @@ public class UnicodeSetStaticCache {
         unicodeSets.put(Key.PERIOD_OR_OTHER, computeUnion(Key.PERIOD, Key.OTHER_GROUPING_SEPARATORS));
         unicodeSets.put(Key.COMMA_OR_PERIOD_OR_OTHER,
                 computeUnion(Key.COMMA, Key.PERIOD, Key.OTHER_GROUPING_SEPARATORS));
-        unicodeSets.put(Key.STRICT_COMMA_OR_OTHER, computeUnion(Key.STRICT_COMMA, Key.OTHER_GROUPING_SEPARATORS));
-        unicodeSets.put(Key.STRICT_PERIOD_OR_OTHER, computeUnion(Key.STRICT_PERIOD, Key.OTHER_GROUPING_SEPARATORS));
+        unicodeSets.put(Key.STRICT_COMMA_OR_OTHER,
+                computeUnion(Key.STRICT_COMMA, Key.OTHER_GROUPING_SEPARATORS));
+        unicodeSets.put(Key.STRICT_PERIOD_OR_OTHER,
+                computeUnion(Key.STRICT_PERIOD, Key.OTHER_GROUPING_SEPARATORS));
         unicodeSets.put(Key.STRICT_COMMA_OR_PERIOD_OR_OTHER,
                 computeUnion(Key.STRICT_COMMA, Key.STRICT_PERIOD, Key.OTHER_GROUPING_SEPARATORS));
 
@@ -157,11 +189,20 @@ public class UnicodeSetStaticCache {
         unicodeSets.put(Key.INFINITY, new UnicodeSet("[∞]").freeze());
 
         unicodeSets.put(Key.DIGITS, new UnicodeSet("[:digit:]").freeze());
+        unicodeSets.put(Key.CAPITAL_N, new UnicodeSet("[N]").freeze());
+        unicodeSets.put(Key.FOLDED_N, new UnicodeSet("[n]").freeze());
+        unicodeSets.put(Key.CAPITAL_E, new UnicodeSet("[E]").freeze());
+        unicodeSets.put(Key.FOLDED_E, new UnicodeSet("[e]").freeze());
 
-        for (Key key : Key.values()) {
-            UnicodeSet leadChars = new UnicodeSet();
-            ParsingUtils.putLeadSurrogates(get(key), leadChars);
-            leadCharsSets.put(key, leadChars.freeze());
-        }
+        unicodeSets.put(Key.DIGITS_OR_COMMA_OR_OTHER, computeUnion(Key.DIGITS, Key.COMMA_OR_OTHER));
+        unicodeSets.put(Key.DIGITS_OR_PERIOD_OR_OTHER, computeUnion(Key.DIGITS, Key.PERIOD_OR_OTHER));
+        unicodeSets.put(Key.DIGITS_OR_COMMA_OR_PERIOD_OR_OTHER,
+                computeUnion(Key.DIGITS, Key.COMMA_OR_PERIOD_OR_OTHER));
+        unicodeSets.put(Key.DIGITS_OR_STRICT_COMMA_OR_OTHER,
+                computeUnion(Key.DIGITS, Key.STRICT_COMMA_OR_OTHER));
+        unicodeSets.put(Key.DIGITS_OR_STRICT_PERIOD_OR_OTHER,
+                computeUnion(Key.DIGITS, Key.STRICT_PERIOD_OR_OTHER));
+        unicodeSets.put(Key.DIGITS_OR_STRICT_COMMA_OR_PERIOD_OR_OTHER,
+                computeUnion(Key.DIGITS, Key.STRICT_COMMA_OR_PERIOD_OR_OTHER));
     }
 }
