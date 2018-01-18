@@ -496,36 +496,37 @@ public class DecimalQuantityTest extends TestFmwk {
         assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 98766E-2>");
     }
 
-  @Test
-  public void testFitsInLong() {
-      DecimalQuantity_DualStorageBCD quantity = new DecimalQuantity_DualStorageBCD();
-      quantity.setToInt(0);
-      assertTrue("Zero should fit", quantity.fitsInLong());
-      quantity.setToInt(42);
-      assertTrue("Small int should fit", quantity.fitsInLong());
-      quantity.setToDouble(0.1);
-      assertFalse("Fraction should not fit", quantity.fitsInLong());
-      quantity.setToDouble(42.1);
-      assertFalse("Fraction should not fit", quantity.fitsInLong());
-      quantity.setToLong(1000000);
-      assertTrue("Large low-precision int should fit", quantity.fitsInLong());
-      quantity.setToLong(1000000000000000000L);
-      assertTrue("10^19 should fit", quantity.fitsInLong());
-      quantity.setToLong(1234567890123456789L);
-      assertTrue("A number between 10^19 and max long should fit", quantity.fitsInLong());
-      quantity.setToLong(9223372026854775808L);
-      assertTrue("A number less than max long but with similar digits should fit", quantity.fitsInLong());
-      quantity.setToLong(9223372036854775806L);
-      assertTrue("One less than max long should fit", quantity.fitsInLong());
-      quantity.setToLong(9223372036854775807L);
-      assertTrue("Max long should fit", quantity.fitsInLong());
-      quantity.setToBigInteger(new BigInteger("9223372036854775808"));
-      assertFalse("One greater than max long long should not fit", quantity.fitsInLong());
-      quantity.setToBigInteger(new BigInteger("9223372046854775806"));
-      assertFalse("A number between max long and 10^20 should not fit", quantity.fitsInLong());
-      quantity.setToBigInteger(new BigInteger("10000000000000000000"));
-      assertFalse("10^20 should not fit", quantity.fitsInLong());
-  }
+    @Test
+    public void testFitsInLong() {
+        DecimalQuantity_DualStorageBCD quantity = new DecimalQuantity_DualStorageBCD();
+        quantity.setToInt(0);
+        assertTrue("Zero should fit", quantity.fitsInLong());
+        quantity.setToInt(42);
+        assertTrue("Small int should fit", quantity.fitsInLong());
+        quantity.setToDouble(0.1);
+        assertFalse("Fraction should not fit", quantity.fitsInLong());
+        quantity.setToDouble(42.1);
+        assertFalse("Fraction should not fit", quantity.fitsInLong());
+        quantity.setToLong(1000000);
+        assertTrue("Large low-precision int should fit", quantity.fitsInLong());
+        quantity.setToLong(1000000000000000000L);
+        assertTrue("10^19 should fit", quantity.fitsInLong());
+        quantity.setToLong(1234567890123456789L);
+        assertTrue("A number between 10^19 and max long should fit", quantity.fitsInLong());
+        quantity.setToLong(9223372026854775808L);
+        assertTrue("A number less than max long but with similar digits should fit",
+                quantity.fitsInLong());
+        quantity.setToLong(9223372036854775806L);
+        assertTrue("One less than max long should fit", quantity.fitsInLong());
+        quantity.setToLong(9223372036854775807L);
+        assertTrue("Max long should fit", quantity.fitsInLong());
+        quantity.setToBigInteger(new BigInteger("9223372036854775808"));
+        assertFalse("One greater than max long long should not fit", quantity.fitsInLong());
+        quantity.setToBigInteger(new BigInteger("9223372046854775806"));
+        assertFalse("A number between max long and 10^20 should not fit", quantity.fitsInLong());
+        quantity.setToBigInteger(new BigInteger("10000000000000000000"));
+        assertFalse("10^20 should not fit", quantity.fitsInLong());
+    }
 
     static void assertDoubleEquals(String message, double d1, double d2) {
         boolean equal = (Math.abs(d1 - d2) < 1e-6) || (Math.abs((d1 - d2) / d1) < 1e-6);

@@ -209,27 +209,26 @@ public class AffixUtilsTest {
         assertEquals("Symbol provider into middle", "abcd123efg", sb.toString());
     }
 
-  @Test
-  public void testWithoutSymbolsOrIgnorables() {
-    String[][] cases = {
-        {"", ""},
-        {"-", ""},
-        {" ", ""},
-        {"'-'", "-"},
-        {" a + b ", "a  b"},
-        {"-a+b%c‰d¤e¤¤f¤¤¤g¤¤¤¤h¤¤¤¤¤i", "abcdefghi"},
-    };
+    @Test
+    public void testWithoutSymbolsOrIgnorables() {
+        String[][] cases = {
+                { "", "" },
+                { "-", "" },
+                { " ", "" },
+                { "'-'", "-" },
+                { " a + b ", "a  b" },
+                { "-a+b%c‰d¤e¤¤f¤¤¤g¤¤¤¤h¤¤¤¤¤i", "abcdefghi" }, };
 
-    UnicodeSet ignorables = new UnicodeSet("[:whitespace:]");
-    StringBuilder sb = new StringBuilder();
-    for (String[] cas : cases) {
-      String input = cas[0];
-      String expected = cas[1];
-      sb.setLength(0);
-      AffixUtils.trimSymbolsAndIgnorables(input, ignorables, sb);
-      assertEquals("Removing symbols from: " + input, expected, sb.toString());
+        UnicodeSet ignorables = new UnicodeSet("[:whitespace:]");
+        StringBuilder sb = new StringBuilder();
+        for (String[] cas : cases) {
+            String input = cas[0];
+            String expected = cas[1];
+            sb.setLength(0);
+            AffixUtils.trimSymbolsAndIgnorables(input, ignorables, sb);
+            assertEquals("Removing symbols from: " + input, expected, sb.toString());
+        }
     }
-  }
 
     private static String unescapeWithDefaults(String input) {
         NumberStringBuilder nsb = new NumberStringBuilder();
