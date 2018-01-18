@@ -60,7 +60,8 @@ final class NumberPropertyMapper {
      * @param symbols
      *            The symbols associated with the property bag.
      * @param exportedProperties
-     *            A property bag in which to store validated properties. Used by some DecimalFormat getters.
+     *            A property bag in which to store validated properties. Used by some DecimalFormat
+     *            getters.
      * @return A new MacroProps containing all of the information in the Properties.
      */
     public static MacroProps oldToNew(
