@@ -33,11 +33,12 @@ typedef struct UTrie3Header {
     uint32_t signature;
 
     /**
-     * options bit field:
-     * 15.. 4   reserved (0)
-     *  3.. 0   UTrie3ValueBits valueBits
+     * Options bit field:
+     * Bits 31..12: Data null block offset, not shifted (0xfffff if none).
+     * Bits 11..4: Reserved (0).
+     * Bits 3..0: UTrie3ValueBits valueBits
      */
-    uint16_t options;
+    uint32_t options;
 
     /** UTRIE3_INDEX_1_OFFSET..UTRIE3_MAX_INDEX_LENGTH */
     uint16_t indexLength;
@@ -45,8 +46,8 @@ typedef struct UTrie3Header {
     /** (UTRIE3_DATA_START_OFFSET..UTRIE3_MAX_DATA_LENGTH)>>UTRIE3_INDEX_SHIFT */
     uint16_t shiftedDataLength;
 
-    /** Null index and data blocks, not shifted. */
-    uint16_t index2NullOffset, dataNullOffset;
+    /** Index-2 null block offset, not shifted. */
+    uint16_t index2NullOffset;
 
     /**
      * First code point of the single-value range ending with U+10ffff,
@@ -65,7 +66,9 @@ typedef struct UTrie3Header {
  */
 enum {
     /** Mask to get the UTrie3ValueBits valueBits from options. */
-    UTRIE3_OPTIONS_VALUE_BITS_MASK=0xf
+    UTRIE3_OPTIONS_VALUE_BITS_MASK=0xf,  // TODO: 7? 3??
+    UTRIE3_NO_INDEX2_NULL_OFFSET = 0xffff,  // TODO: doc anything > max index length
+    UTRIE3_NO_DATA_NULL_OFFSET = 0xfffff  // TODO: doc always granularity if real
 };
 
 /* Building a trie ---------------------------------------------------------- */
@@ -118,33 +121,16 @@ enum {
  * preallocated anyway (unlike the growable data array).
  * Just allocating multiple index-2 blocks as needed.
  */
-struct UNewTrie3 {
-    int32_t index1[UNEWTRIE3_INDEX_1_LENGTH];
-    int32_t index2[UNEWTRIE3_MAX_INDEX_2_LENGTH];
+struct UNewTrie3 {  // TODO: move to .cpp?
     uint32_t *data;
+    int32_t dataCapacity, dataLength;
+    int32_t dataNullIndex;
 
-    uint32_t initialValue;
-    int32_t index2Length, dataCapacity, dataLength;
-    int32_t firstFreeBlock;
-    int32_t index2NullOffset, dataNullOffset;
-    UBool isCompacted;
-
-    /**
-     * Multi-purpose per-data-block table.
-     *
-     * Before compacting:
-     *
-     * Per-data-block reference counters/free-block list.
-     *  0: unused
-     * >0: reference counter (number of index-2 entries pointing here)
-     * <0: next free data block in free-block list
-     *
-     * While compacting:
-     *
-     * Map of adjusted indexes, used in compactData() and compactIndex2().
-     * Maps from original indexes to new ones.
-     */
-    int32_t map[UNEWTRIE3_MAX_DATA_LENGTH>>UTRIE3_SHIFT_2];
+    uint8_t flags[0x110000>>UTRIE3_SHIFT_2];
+    uint32_t index[0x110000>>UTRIE3_SHIFT_2];
 };
+
+U_CFUNC uint32_t  // TODO: back to utrie3.cpp? or utrie3_get32() to builder.cpp?
+utrie3_get32FromBuilder(const UTrie3 *trie, UChar32 c);
 
 #endif

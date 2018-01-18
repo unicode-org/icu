@@ -25,16 +25,8 @@ utrie3_get32(const UTrie3 *trie, UChar32 c) {
         uint32_t result;
         UTRIE3_GET32(trie, c, result);
         return result;
-    } else if((uint32_t)c>0x10ffff) {
-        return trie->errorValue;
-    } else if(c>=trie->highStart) {
-        return trie->highValue;
     } else {
-        const UNewTrie3 *newTrie=trie->newTrie;
-        int32_t i2=newTrie->index1[c>>UTRIE3_SHIFT_1]+
-            ((c>>UTRIE3_SHIFT_2)&UTRIE3_INDEX_2_MASK);
-        int32_t block=newTrie->index2[i2];
-        return newTrie->data[block+(c&UTRIE3_DATA_MASK)];
+        return utrie3_get32FromBuilder(trie, c);
     }
 }
 
@@ -112,8 +104,8 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
     uprv_memset(&tempTrie, 0, sizeof(tempTrie));
     tempTrie.indexLength=header->indexLength;
     tempTrie.dataLength=header->shiftedDataLength<<UTRIE3_INDEX_SHIFT;
-    tempTrie.index2NullOffset=header->index2NullOffset;
-    tempTrie.dataNullOffset=header->dataNullOffset;
+    tempTrie.index2NullOffset = header->index2NullOffset;
+    tempTrie.dataNullOffset = header->options >> 12;
 
     tempTrie.highStart=header->shiftedHighStart<<UTRIE3_SHIFT_1;
     tempTrie.highStartLead16=U16_LEAD(tempTrie.highStart);
@@ -155,12 +147,20 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
     case UTRIE3_16_VALUE_BITS:
         trie->data16=p16;
         trie->data32=NULL;
-        trie->initialValue=trie->index[trie->dataNullOffset];
+        if (trie->dataNullOffset < (trie->indexLength + trie->dataLength)) {
+            trie->initialValue = trie->index[trie->dataNullOffset];
+        } else {
+            trie->initialValue = trie->highValue;
+        }
         break;
     case UTRIE3_32_VALUE_BITS:
         trie->data16=NULL;
         trie->data32=(const uint32_t *)p16;
-        trie->initialValue=trie->data32[trie->dataNullOffset];
+        if (trie->dataNullOffset < trie->dataLength) {
+            trie->initialValue=trie->data32[trie->dataNullOffset];
+        } else {
+            trie->initialValue = trie->highValue;
+        }
         break;
     default:
         *pErrorCode=U_INVALID_FORMAT_ERROR;
@@ -217,8 +217,8 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
 
     trie->indexLength=indexLength;
     trie->dataLength=dataLength;
-    trie->index2NullOffset=UTRIE3_INDEX_2_OFFSET;
-    trie->dataNullOffset=(uint16_t)dataMove;
+    trie->index2NullOffset = UTRIE3_NO_INDEX2_NULL_OFFSET;
+    trie->dataNullOffset = dataMove;
     trie->initialValue=initialValue;
     trie->errorValue=errorValue;
     trie->highStart=0;
@@ -231,12 +231,11 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
     UTrie3Header *header=(UTrie3Header *)trie->memory;
 
     header->signature=UTRIE3_SIG; /* "Tri2" */
-    header->options=(uint16_t)valueBits;
+    header->options = ((uint32_t)dataMove << 12) | valueBits;  // dataNullOffset = dataMove
 
     header->indexLength=(uint16_t)indexLength;
     header->shiftedDataLength=(uint16_t)(dataLength>>UTRIE3_INDEX_SHIFT);
-    header->index2NullOffset=(uint16_t)UTRIE3_INDEX_2_OFFSET;
-    header->dataNullOffset=(uint16_t)dataMove;
+    header->index2NullOffset = UTRIE3_NO_INDEX2_NULL_OFFSET;
     header->shiftedHighStart=0;
 
     /* fill the index and data arrays */
@@ -444,9 +443,10 @@ utrie3_swap(const UDataSwapper *ds,
     return size;
 }
 
-// utrie3_swapAnyVersion() should be defined here but lives in utrie3_builder.c
-// to avoid a dependency from utrie3.cpp on utrie.c.
+// utrie3_swapAnyVersion() should be defined here but lives in utrie3_builder.cpp
+// to avoid a dependency from utrie3.cpp on utrie.cpp.
 
+#if 0  // TODO
 /* enumeration -------------------------------------------------------------- */
 
 #define MIN_VALUE(a, b) ((a)<(b) ? (a) : (b))
@@ -592,6 +592,7 @@ enumEitherTrie(const UTrie3 *trie,
                     c+=UTRIE3_DATA_BLOCK_LENGTH;
                 } else {
                     for(j=0; j<UTRIE3_DATA_BLOCK_LENGTH; ++j) {
+                        // TODO: do not call enumValue() if the raw values are the same
                         value=enumValue(context, data32!=NULL ? data32[block+j] : idx[block+j]);
                         if(value!=prevValue) {
                             if(prev<c && !enumRange(context, prev, c-1, prevValue)) {
@@ -642,6 +643,7 @@ utrie3_enumForLeadSurrogate(const UTrie3 *trie, UChar32 lead,
     lead=(lead-0xd7c0)<<10;   /* start code point */
     enumEitherTrie(trie, lead, lead+0x400, enumValue, enumRange, context);
 }
+#endif
 
 /* C++ convenience wrappers ------------------------------------------------- */
 

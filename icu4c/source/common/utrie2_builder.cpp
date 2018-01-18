@@ -1201,7 +1201,7 @@ compactIndex2(UNewTrie2 *trie) {
 
 #ifdef UTRIE2_DEBUG
     /* we saved some space */
-    printf("compacting UTrie2: count of 16-bit index-2 words %lu->%lu\n",
+    printf("compacting UTrie2: count of 16-bit index words %lu->%lu\n",
             (long)trie->index2Length, (long)newStart);
 #endif
 
@@ -1249,7 +1249,7 @@ compactTrie(UTrie2 *trie, UErrorCode *pErrorCode) {
         compactIndex2(newTrie);
 #ifdef UTRIE2_DEBUG
     } else {
-        printf("UTrie2: highStart U+%04lx  count of 16-bit index-2 words %lu->%lu\n",
+        printf("UTrie2: highStart U+%04lx  count of 16-bit index words %lu->%lu\n",
                 (long)highStart, (long)trie->newTrie->index2Length, (long)UTRIE2_INDEX_1_OFFSET);
 #endif
     }

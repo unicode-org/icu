@@ -43,7 +43,7 @@ enum UTrie3ValueBits {
     /** 32 bits per UTrie3 data value. */
     UTRIE3_32_VALUE_BITS,
     /** Number of selectors for the width of UTrie3 data values. */
-    UTRIE3_COUNT_VALUE_BITS
+    UTRIE3_COUNT_VALUE_BITS  // TODO: remove
 };
 typedef enum UTrie3ValueBits UTrie3ValueBits;
 
@@ -122,7 +122,7 @@ utrie3_get32(const UTrie3 *trie, UChar32 c);
  */
 typedef uint32_t U_CALLCONV
 UTrie3EnumValue(const void *context, uint32_t value);
-
+#if 0  // TODO
 /**
  * Callback from utrie3_enum(), is called for each contiguous range
  * of code points with the same value as retrieved from the trie and
@@ -160,6 +160,7 @@ UTrie3EnumRange(const void *context, UChar32 start, UChar32 end, uint32_t value)
 U_CAPI void U_EXPORT2
 utrie3_enum(const UTrie3 *trie,
             UTrie3EnumValue *enumValue, UTrie3EnumRange *enumRange, const void *context);
+#endif
 
 /* Building a trie ---------------------------------------------------------- */
 
@@ -491,7 +492,7 @@ utrie3_fromUTrie(const UTrie *trie1, uint32_t errorValue, UErrorCode *pErrorCode
  * can often skip them. For example, in normalization or case mapping
  * all characters that do not have any mappings are simply copied as is.
  */
-
+#if 0  // TODO
 /**
  * Enumerate the trie values for the 1024=0x400 code points
  * corresponding to a given lead surrogate.
@@ -521,7 +522,7 @@ U_CAPI void U_EXPORT2
 utrie3_enumForLeadSurrogate(const UTrie3 *trie, UChar32 lead,
                             UTrie3EnumValue *enumValue, UTrie3EnumRange *enumRange,
                             const void *context);
-
+#endif
 /**
  * Returns a 16-bit trie value from a BMP code point or UTF-16 code unit (0..U+ffff).
  * Same as UTRIE3_GET16() if c is a BMP code point, but smaller and faster.
@@ -633,8 +634,16 @@ struct UTrie3 {
     const uint32_t *data32;     /* NULL if 16b data is used via index */
 
     int32_t indexLength, dataLength;
-    uint16_t index2NullOffset;  /* 0xffff if there is no dedicated index-2 null block */
-    uint16_t dataNullOffset;
+    /**
+     * Index-2 null block offset.
+     * Set to an impossibly high value (e.g., 0xffff) if there is no dedicated index-2 null block.
+     */
+    uint16_t index2NullOffset;
+    /**
+     * Data null block offset, not shifted.
+     * Set to an impossibly high value (e.g., 0xfffff) if there is no dedicated data null block.
+     */
+    int32_t dataNullOffset;
     uint32_t initialValue;
     /** Value returned for out-of-range code points and ill-formed UTF-8/16. */
     uint32_t errorValue;
@@ -656,10 +665,8 @@ struct UTrie3 {
 };
 
 /**
- * Trie constants, defining shift widths, index array lengths, etc.
- *
- * These are needed for the runtime macros but users can treat these as
- * implementation details and skip to the actual public API further below.
+ * Implementation constants.
+ * These are needed for the runtime macros, but users should not use these directly.
  */
 enum {
     /** Shift size for getting the index-1 table offset. */
@@ -710,7 +717,7 @@ enum {
     /* Fixed layout of the first part of the index array. ------------------- */
 
     /** The BMP part of the index-2 table is fixed and linear and starts at offset 0. */
-    UTRIE3_INDEX_2_OFFSET=0,
+    UTRIE3_INDEX_2_OFFSET=0,  // TODO: remove
 
     /** The length of the BMP part of the index-2 table. 1024=0x400 */
     UTRIE3_INDEX_2_BMP_LENGTH=0x10000>>UTRIE3_SHIFT_2,
