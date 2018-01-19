@@ -48,10 +48,9 @@ public class UnicodeSetStaticCache {
 
         // Other
         DIGITS,
-        CAPITAL_N,
-        FOLDED_N,
-        CAPITAL_E,
-        FOLDED_E,
+        NAN_LEAD,
+        SCIENTIFIC_LEAD,
+        CWCF,
 
         // Combined Separators with Digits (for lead code points)
         DIGITS_OR_COMMA_OR_OTHER,
@@ -189,10 +188,12 @@ public class UnicodeSetStaticCache {
         unicodeSets.put(Key.INFINITY, new UnicodeSet("[∞]").freeze());
 
         unicodeSets.put(Key.DIGITS, new UnicodeSet("[:digit:]").freeze());
-        unicodeSets.put(Key.CAPITAL_N, new UnicodeSet("[N]").freeze());
-        unicodeSets.put(Key.FOLDED_N, new UnicodeSet("[n]").freeze());
-        unicodeSets.put(Key.CAPITAL_E, new UnicodeSet("[E]").freeze());
-        unicodeSets.put(Key.FOLDED_E, new UnicodeSet("[e]").freeze());
+        // Note: locale fi translation of NaN starts with 'e' (conflicts with scientific?)
+        unicodeSets.put(Key.NAN_LEAD,
+                new UnicodeSet("[NnТтmeՈոс¤НнчTtsҳ\u975e\u1002\u0e9a\u10d0\u0f68\u0644\u0646]")
+                        .freeze());
+        unicodeSets.put(Key.SCIENTIFIC_LEAD, new UnicodeSet("[Ee×·е\u0627]").freeze());
+        unicodeSets.put(Key.CWCF, new UnicodeSet("[:CWCF:]").freeze());
 
         unicodeSets.put(Key.DIGITS_OR_COMMA_OR_OTHER, computeUnion(Key.DIGITS, Key.COMMA_OR_OTHER));
         unicodeSets.put(Key.DIGITS_OR_PERIOD_OR_OTHER, computeUnion(Key.DIGITS, Key.PERIOD_OR_OTHER));

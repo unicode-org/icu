@@ -35,13 +35,12 @@ public class ParsingUtils {
         }
     }
 
-    private static final UnicodeSet LETTERS = new UnicodeSet("[:letter:]").freeze();
-
     /**
      * Case-folds the string if IGNORE_CASE flag is set; otherwise, returns the same string.
      */
     public static String maybeFold(String input, int parseFlags) {
-        if (0 != (parseFlags & PARSE_FLAG_IGNORE_CASE) && LETTERS.containsSome(input)) {
+        UnicodeSet cwcf = UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.CWCF);
+        if (0 != (parseFlags & PARSE_FLAG_IGNORE_CASE) && cwcf.containsSome(input)) {
             return UCharacter.foldCase(input, true);
         } else {
             return input;

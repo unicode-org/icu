@@ -32,7 +32,8 @@ import com.ibm.icu.util.ULocale;
  */
 public class NumberParserImpl {
     @Deprecated
-    public static NumberParserImpl createParserFromPattern(String pattern, boolean strictGrouping) {
+    public static NumberParserImpl createParserFromPattern(
+            ULocale locale, String pattern, boolean strictGrouping) {
         // Temporary frontend for testing.
 
         int parseFlags = ParsingUtils.PARSE_FLAG_IGNORE_CASE
@@ -42,7 +43,6 @@ public class NumberParserImpl {
         }
 
         NumberParserImpl parser = new NumberParserImpl(parseFlags, true);
-        ULocale locale = new ULocale("en_IN");
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
         IgnorablesMatcher ignorables = IgnorablesMatcher.DEFAULT;
 
@@ -54,6 +54,7 @@ public class NumberParserImpl {
         parser.addMatcher(ignorables);
         parser.addMatcher(DecimalMatcher.getInstance(symbols, grouper, parseFlags));
         parser.addMatcher(MinusSignMatcher.getInstance(symbols));
+        parser.addMatcher(NanMatcher.getInstance(symbols, parseFlags));
         parser.addMatcher(ScientificMatcher.getInstance(symbols, grouper, parseFlags));
         parser.addMatcher(CurrencyTrieMatcher.getInstance(locale));
         parser.addMatcher(new RequireNumberMatcher());

@@ -4,11 +4,13 @@ package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import com.ibm.icu.impl.number.parse.NumberParserImpl;
 import com.ibm.icu.impl.number.parse.ParsedNumber;
+import com.ibm.icu.util.ULocale;
 
 /**
  * @author sffc
@@ -69,7 +71,7 @@ public class NumberParserTest {
                 { 3, "𝟱.𝟭𝟰𝟮E-𝟯", "0", 13, 0.005142 },
                 { 3, "𝟱.𝟭𝟰𝟮e-𝟯", "0", 13, 0.005142 },
                 { 7, "5,142.50 Canadian dollars", "#,##,##0", 25, 5142.5 },
-                // { 3, "a$  b5", "a ¤ b0", 6, 5.0 }, // TODO: Does not work
+                // { 3, "a$ b5", "a ¤ b0", 6, 5.0 }, // TODO: Does not work
                 { 3, "📺1.23", "📺0;📻0", 6, 1.23 },
                 { 3, "📻1.23", "📺0;📻0", 6, -1.23 },
                 { 3, ".00", "0", 3, 0.0 },
@@ -81,7 +83,8 @@ public class NumberParserTest {
             String pattern = (String) cas[2];
             int expectedCharsConsumed = (Integer) cas[3];
             double resultDouble = (Double) cas[4];
-            NumberParserImpl parser = NumberParserImpl.createParserFromPattern(pattern, false);
+            NumberParserImpl parser = NumberParserImpl
+                    .createParserFromPattern(ULocale.ENGLISH, pattern, false);
             String message = "Input <" + input + "> Parser " + parser;
 
             if (0 != (flags & 0x01)) {
@@ -104,7 +107,7 @@ public class NumberParserTest {
 
             if (0 != (flags & 0x04)) {
                 // Test with strict separators
-                parser = NumberParserImpl.createParserFromPattern(pattern, true);
+                parser = NumberParserImpl.createParserFromPattern(ULocale.ENGLISH, pattern, true);
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, true, resultObject);
                 assertNotNull(message, resultObject.quantity);
@@ -112,5 +115,22 @@ public class NumberParserTest {
                 assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
             }
         }
+    }
+
+    @Test
+    public void testLocaleFi() {
+        // This case is interesting because locale fi has NaN starting with 'e', the same as scientific
+        NumberParserImpl parser = NumberParserImpl
+                .createParserFromPattern(new ULocale("fi"), "0", false);
+
+        ParsedNumber resultObject = new ParsedNumber();
+        parser.parse("epäluku", false, resultObject);
+        assertTrue(resultObject.success());
+        assertEquals(Double.NaN, resultObject.getNumber().doubleValue(), 0.0);
+
+        resultObject = new ParsedNumber();
+        parser.parse("1.2e3", false, resultObject);
+        assertTrue(resultObject.success());
+        assertEquals(12000.0, resultObject.getNumber().doubleValue(), 0.0);
     }
 }
