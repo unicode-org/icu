@@ -760,7 +760,7 @@ utrie2_setRange32(UTrie2 *trie,
             return;
         }
 
-        nextStart=(start+UTRIE2_DATA_BLOCK_LENGTH)&~UTRIE2_DATA_MASK;
+        nextStart=(start+UTRIE2_DATA_MASK)&~UTRIE2_DATA_MASK;
         if(nextStart<=limit) {
             fillBlock(newTrie->data+block, start&UTRIE2_DATA_MASK, UTRIE2_DATA_BLOCK_LENGTH,
                       value, newTrie->initialValue, overwrite);

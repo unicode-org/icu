@@ -101,12 +101,6 @@ enum {
     UNEWTRIE3_INDEX_1_LENGTH=0x110000>>UTRIE3_SHIFT_1
 };
 
-/**
- * Maximum length of the build-time data array.
- * One entry per 0x110000 code points, plus the null block.
- */
-#define UNEWTRIE3_MAX_DATA_LENGTH (0x110000+0x40)
-
 /*
  * Build-time trie structure.
  *
