@@ -33,10 +33,10 @@ public class NanMatcher extends SymbolMatcher {
     @Override
     public UnicodeSet getLeadCodePoints() {
         // Overriding this here to allow use of statically allocated sets
-        if (this == DEFAULT) {
-            return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.CAPITAL_N);
-        } else if (this == DEFAULT_FOLDED) {
-            return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.FOLDED_N);
+        int leadCp = string.codePointAt(0);
+        UnicodeSet s = UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.NAN_LEAD);
+        if (s.contains(leadCp)) {
+            return s;
         } else {
             return super.getLeadCodePoints();
         }

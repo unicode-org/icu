@@ -84,13 +84,12 @@ public class ScientificMatcher implements NumberParseMatcher {
 
     @Override
     public UnicodeSet getLeadCodePoints() {
-        int cp = exponentSeparatorString.codePointAt(0);
-        if (cp == 'E') {
-            return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.CAPITAL_E);
-        } else if (cp == 'e') {
-            return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.FOLDED_E);
+        int leadCp = exponentSeparatorString.codePointAt(0);
+        UnicodeSet s = UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.SCIENTIFIC_LEAD);
+        if (s.contains(leadCp)) {
+            return s;
         } else {
-            return new UnicodeSet().add(cp).freeze();
+            return new UnicodeSet().add(leadCp).freeze();
         }
     }
 

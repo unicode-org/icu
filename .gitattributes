@@ -6452,6 +6452,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/NumberStringBuilderTest.ja
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/PatternStringTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/PropertiesTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/StringSegmentTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/UnicodeSetStaticCacheTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/AbstractBreakIteratorTests.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/BreakIteratorRegTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/BreakIteratorRules_en_US_TEST.java svneol=native#text/plain%3Bcharset%3Dutf-8
