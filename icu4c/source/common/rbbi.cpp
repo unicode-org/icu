@@ -64,7 +64,9 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedBreakIterator)
  * Constructs a RuleBasedBreakIterator that uses the already-created
  * tables object that is passed in as a parameter.
  */
-RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status) {
+RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status)
+ : fSCharIter(UnicodeString())
+{
     init(status);
     fData = new RBBIDataWrapper(data, status); // status checked in constructor
     if (U_FAILURE(status)) {return;}
@@ -80,7 +82,9 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode 
 //
 RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
                        uint32_t       ruleLength,
-                       UErrorCode     &status) {
+                       UErrorCode     &status)
+ : fSCharIter(UnicodeString())
+{
     init(status);
     if (U_FAILURE(status)) {
         return;
@@ -110,6 +114,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
 //
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &status)
+ : fSCharIter(UnicodeString())
 {
     init(status);
     fData = new RBBIDataWrapper(udm, status); // status checked in constructor
@@ -130,6 +135,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &sta
 RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
                                                 UParseError          &parseError,
                                                 UErrorCode           &status)
+ : fSCharIter(UnicodeString())
 {
     init(status);
     if (U_FAILURE(status)) {return;}
@@ -152,7 +158,9 @@ RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
 //                           Used when creating a RuleBasedBreakIterator from a set
 //                           of rules.
 //-------------------------------------------------------------------------------
-RuleBasedBreakIterator::RuleBasedBreakIterator() {
+RuleBasedBreakIterator::RuleBasedBreakIterator()
+ : fSCharIter(UnicodeString())
+{
     UErrorCode status = U_ZERO_ERROR;
     init(status);
 }
@@ -165,7 +173,8 @@ RuleBasedBreakIterator::RuleBasedBreakIterator() {
 //
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& other)
-: BreakIterator(other)
+: BreakIterator(other),
+  fSCharIter(UnicodeString())
 {
     UErrorCode status = U_ZERO_ERROR;
     this->init(status);
@@ -177,15 +186,11 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& oth
  * Destructor
  */
 RuleBasedBreakIterator::~RuleBasedBreakIterator() {
-    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+    if (fCharIter != &fSCharIter) {
         // fCharIter was adopted from the outside.
         delete fCharIter;
     }
     fCharIter = NULL;
-    delete fSCharIter;
-    fSCharIter = NULL;
-    delete fDCharIter;
-    fDCharIter = NULL;
 
     utext_close(fText);
 
@@ -226,16 +231,20 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     UErrorCode status = U_ZERO_ERROR;
     fText = utext_clone(fText, that.fText, FALSE, TRUE, &status);
 
-    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+    if (fCharIter != &fSCharIter) {
         delete fCharIter;
     }
     fCharIter = NULL;
 
-    if (that.fCharIter != NULL ) {
+    if (that.fCharIter != NULL && that.fCharIter != &that.fSCharIter) {
         // This is a little bit tricky - it will intially appear that
         //  this->fCharIter is adopted, even if that->fCharIter was
         //  not adopted.  That's ok.
         fCharIter = that.fCharIter->clone();
+    }
+    fSCharIter = that.fSCharIter;
+    if (fCharIter == NULL) {
+        fCharIter = &fSCharIter;
     }
 
     if (fData != NULL) {
@@ -271,8 +280,6 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
 void RuleBasedBreakIterator::init(UErrorCode &status) {
     fText                 = NULL;
     fCharIter             = NULL;
-    fSCharIter            = NULL;
-    fDCharIter            = NULL;
     fData                 = NULL;
     fPosition             = 0;
     fRuleStatusIndex      = 0;
@@ -393,20 +400,13 @@ void RuleBasedBreakIterator::setText(UText *ut, UErrorCode &status) {
     //   Return one over an empty string instead - this is the closest
     //   we can come to signaling a failure.
     //   (GetText() is obsolete, this failure is sort of OK)
-    if (fDCharIter == NULL) {
-        static const UChar c = 0;
-        fDCharIter = new UCharCharacterIterator(&c, 0);
-        if (fDCharIter == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-    }
+    fSCharIter.setText(UnicodeString());
 
-    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+    if (fCharIter != &fSCharIter) {
         // existing fCharIter was adopted from the outside.  Delete it now.
         delete fCharIter;
     }
-    fCharIter = fDCharIter;
+    fCharIter = &fSCharIter;
 
     this->first();
 }
@@ -439,7 +439,7 @@ void
 RuleBasedBreakIterator::adoptText(CharacterIterator* newText) {
     // If we are holding a CharacterIterator adopted from a
     //   previous call to this function, delete it now.
-    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+    if (fCharIter != &fSCharIter) {
         delete fCharIter;
     }
 
@@ -473,17 +473,13 @@ RuleBasedBreakIterator::setText(const UnicodeString& newText) {
     //   Needed in case someone calls getText().
     //  Can not, unfortunately, do this lazily on the (probably never)
     //  call to getText(), because getText is const.
-    if (fSCharIter == NULL) {
-        fSCharIter = new StringCharacterIterator(newText);
-    } else {
-        fSCharIter->setText(newText);
-    }
+    fSCharIter.setText(newText);
 
-    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+    if (fCharIter != &fSCharIter) {
         // old fCharIter was adopted from the outside.  Delete it.
         delete fCharIter;
     }
-    fCharIter = fSCharIter;
+    fCharIter = &fSCharIter;
 
     this->first();
 }

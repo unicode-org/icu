@@ -29,7 +29,6 @@
 #include "unicode/udata.h"
 #include "unicode/parseerr.h"
 #include "unicode/schriter.h"
-#include "unicode/uchriter.h"
 
 U_NAMESPACE_BEGIN
 
@@ -72,14 +71,7 @@ private:
      *    a characterIterator that wraps that data.  Needed only for the
      *    implementation of getText(), a backwards compatibility issue.
      */
-    StringCharacterIterator *fSCharIter;
-
-    /**
-     *  When the input text is provided by a UText, this
-     *    dummy CharacterIterator over an empty string will
-     *    be returned from getText()
-     */
-    UCharCharacterIterator *fDCharIter;
+    StringCharacterIterator fSCharIter;
 
     /**
      * The rule data for this BreakIterator instance
