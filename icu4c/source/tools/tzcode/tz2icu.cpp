@@ -830,7 +830,7 @@ struct FinalRulePart {
         if (mode != DOM && (dow < 0 || dow >= 7)) {
             os << "Invalid input day of week " << dow;
         }
-        if (offset < 0 || offset > (2 * HOUR)) {
+        if (offset < (-1 * HOUR) || offset > (2 * HOUR)) {
             os << "Invalid input offset " << offset;
         }
         if (isgmt && !isstd) {
@@ -1430,6 +1430,9 @@ void FinalRule::print(ostream& os) const {
     os << part[whichpart].offset << endl;
 }
 
+#define ICU_ZONE_OVERRIDE_SUFFIX "--ICU"
+#define ICU_ZONE_OVERRIDE_SUFFIX_LEN 5
+
 int main(int argc, char *argv[]) {
     string rootpath, zonetab, version;
     bool validArgs = FALSE;
@@ -1492,6 +1495,54 @@ int main(int argc, char *argv[]) {
     cout << "Finished reading " << ZONEINFO.size() << " zoneinfo files ["
          << (ZONEINFO.begin())->first << ".."
          << (--ZONEINFO.end())->first << "]" << endl;
+
+    // Overrides TZ database zones with ICU custom zone definition.
+    // These ICU zone overrides are defined in icuzones, with suffix --ICU.
+    // If there is a matching TZ database zone, the zoneinfo is replaced
+    // with the ICU definition. Then, the zone ID with --ICU suffix
+    // will be deleted from the final list.
+    // For example, zoneinfo for Europe/Dublin imported from the TZ database
+    // will be replaced with the zone definition for Europe/Dublin--ICU
+    // in icuzones.
+
+    // Collect zone IDs to be modified with ICU definition.
+    vector<string> customZones;
+    for (ZoneMapIter i = ZONEINFO.begin(); i != ZONEINFO.end(); ++i) {
+        string id = i->first;
+        size_t idx = id.rfind(ICU_ZONE_OVERRIDE_SUFFIX);
+        if (idx != string::npos && idx == id.length() - ICU_ZONE_OVERRIDE_SUFFIX_LEN) {
+            cout << "ICU zone override: " << id << endl;
+            customZones.push_back(id.substr(0, idx));
+        }
+    }
+
+    // Replace zoneinfo with ICU definition, then remove ICU zone ID with
+    // the special suffix.
+    for (vector<string>::iterator i = customZones.begin(); i < customZones.end(); i++) {
+        string origId = *i;
+        string custId = origId + ICU_ZONE_OVERRIDE_SUFFIX;
+
+        map<string,ZoneInfo>::iterator origZi = ZONEINFO.find(origId);
+        map<string,ZoneInfo>::iterator custZi = ZONEINFO.find(custId);
+        if (origZi != ZONEINFO.end() && custZi != ZONEINFO.end()) {
+            // replace original zone info with custom override,
+            // then delete one custom ID
+            cout << "Replacing ZoneInfo " << origId << " with " << custId << endl;
+            origZi->second = custZi->second;
+            ZONEINFO.erase(custZi);
+        }
+
+        // Also replace final rule
+        map<string,FinalZone>::iterator origFz = finalZones.find(origId);
+        map<string,FinalZone>::iterator custFz = finalZones.find(custId);
+        if (origFz != finalZones.end() && custFz != finalZones.end()) {
+            // replace original final zone with custom override,
+            // then delete one for custom ID
+            cout << "Replacing FinalZone for " << origId << " with " << custId << endl;
+            origFz->second = custFz->second;
+            finalZones.erase(custFz);
+        }
+    }
 
     try {
         for_each(finalZones.begin(), finalZones.end(), mergeFinalZone);
