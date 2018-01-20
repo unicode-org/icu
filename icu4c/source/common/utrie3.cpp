@@ -31,13 +31,6 @@ utrie3_get32(const UTrie3 *trie, UChar32 c) {
 }
 
 U_CAPI int32_t U_EXPORT2
-utrie3_internalIndexFromSuppPieces(const uint16_t *trieIndex, int32_t c1, int32_t c2, int32_t c3) {
-    int32_t dataIndex;
-    _UTRIE3_INDEX_FROM_SUPP_PIECES(trieIndex, c1, c2, c3, dataIndex);
-    return dataIndex;
-}
-
-U_CAPI int32_t U_EXPORT2
 utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
                            const uint8_t *start, const uint8_t *src) {
     int32_t i, length;
@@ -57,7 +50,8 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
         } else if(c>=trie->highStart) {
             return -16|i;  // for highValue
         } else {
-            _UTRIE3_INDEX_FROM_SUPP(trie->index, c, idx);
+            int32_t i2Block, dataBlock;
+            idx = _UTRIE3_INDEX_FROM_SUPP(trie->index, c, i2Block, dataBlock);
         }
         return (idx<<3)|i;
     } else {
