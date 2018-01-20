@@ -50,6 +50,11 @@ public abstract class RangeMatcher implements NumberParseMatcher {
     }
 
     @Override
+    public boolean matchesEmpty() {
+        return true;
+    }
+
+    @Override
     public void postProcess(ParsedNumber result) {
         // No-op
     }

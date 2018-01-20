@@ -19,6 +19,8 @@ public class ParsingUtils {
     public static final int PARSE_FLAG_GROUPING_DISABLED = 0x0020;
     public static final int PARSE_FLAG_DECIMAL_SCIENTIFIC = 0x0040;
     public static final int PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES = 0x0080;
+    public static final int PARSE_FLAG_USE_FULL_AFFIXES = 0x0100;
+    public static final int PARSE_FLAG_EXACT_AFFIX = 0x0200;
 
     public static void putLeadCodePoints(UnicodeSet input, UnicodeSet output) {
         for (EntryRange range : input.ranges()) {

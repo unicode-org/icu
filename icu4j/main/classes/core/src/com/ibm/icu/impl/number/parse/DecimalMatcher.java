@@ -15,12 +15,20 @@ import com.ibm.icu.text.UnicodeSet;
  */
 public class DecimalMatcher implements NumberParseMatcher {
 
+    /** If true, only accept strings whose grouping sizes match the locale */
     private final boolean requireGroupingMatch;
+
+    /** If true, do not accept grouping separators at all */
     private final boolean groupingDisabled;
+
+    /** If true, do not accept numbers in the fraction */
+    private final boolean integerOnly;
+
+    /** If true, save the result as an exponent instead of a quantity in the ParsedNumber */
+    private final boolean isScientific;
+
     private final int grouping1;
     private final int grouping2;
-    private final boolean integerOnly;
-    private final boolean isScientific;
 
     // Assumption: these sets all consist of single code points. If this assumption needs to be broken,
     // fix getLeadCodePoints() as well as matching logic. Be careful of the performance impact.
@@ -119,10 +127,10 @@ public class DecimalMatcher implements NumberParseMatcher {
 
         requireGroupingMatch = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_STRICT_GROUPING_SIZE);
         groupingDisabled = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_GROUPING_DISABLED);
-        grouping1 = grouper.getPrimary();
-        grouping2 = grouper.getSecondary();
         integerOnly = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_INTEGER_ONLY);
         isScientific = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_DECIMAL_SCIENTIFIC);
+        grouping1 = grouper.getPrimary();
+        grouping2 = grouper.getSecondary();
     }
 
     @Override
@@ -136,13 +144,21 @@ public class DecimalMatcher implements NumberParseMatcher {
             return false;
         }
 
-        int initialOffset = segment.getOffset();
+        ParsedNumber backup = null;
+        if (requireGroupingMatch) {
+            backup = new ParsedNumber();
+            backup.copyFrom(result);
+        }
+
+        int firstGroup = 0;
+        int prevGroup = 0;
         int currGroup = 0;
         int separator = -1;
-        int lastSeparatorOffset = segment.getOffset();
+        int initialOffset = segment.getOffset();
         int exponent = 0;
         boolean hasPartialPrefix = false;
         boolean seenBothSeparators = false;
+        boolean illegalGrouping = false;
         while (segment.length() > 0) {
             hasPartialPrefix = false;
 
@@ -196,22 +212,35 @@ public class DecimalMatcher implements NumberParseMatcher {
             if (!seenBothSeparators && cp != -1 && separatorSet.contains(cp)) {
                 if (separator == -1) {
                     // First separator; could be either grouping or decimal.
-                    separator = cp;
-                    if (!groupingDisabled
-                            && requireGroupingMatch
-                            && groupingUniSet.contains(cp)
-                            && (currGroup == 0 || currGroup > grouping2)) {
+                    if (groupingDisabled && !decimalUniSet.contains(cp)) {
                         break;
+                    }
+                    if (integerOnly && !groupingUniSet.contains(cp)) {
+                        break;
+                    }
+                    separator = cp;
+                    firstGroup = currGroup;
+                    if (requireGroupingMatch && currGroup == 0 && !decimalUniSet.contains(cp)) {
+                        illegalGrouping = true;
                     }
                 } else if (!groupingDisabled && separator == cp && groupingUniSet.contains(cp)) {
                     // Second or later grouping separator.
-                    if (requireGroupingMatch && currGroup != grouping2) {
+                    prevGroup = currGroup;
+                    if (requireGroupingMatch && currGroup == 0) {
                         break;
                     }
-                } else if (!groupingDisabled && separator != cp && decimalUniSet.contains(cp)) {
+                    if (requireGroupingMatch && currGroup != grouping2) {
+                        if (currGroup == grouping1) {
+                            break;
+                        } else {
+                            illegalGrouping = true;
+                            break;
+                        }
+                    }
+                } else if (!integerOnly && separator != cp && decimalUniSet.contains(cp)) {
                     // Decimal separator after a grouping separator.
                     if (requireGroupingMatch && currGroup != grouping1) {
-                        break;
+                        illegalGrouping = true;
                     }
                     seenBothSeparators = true;
                 } else {
@@ -219,7 +248,6 @@ public class DecimalMatcher implements NumberParseMatcher {
                     break;
                 }
                 currGroup = 0;
-                lastSeparatorOffset = segment.getOffset();
                 segment.adjustOffset(Character.charCount(cp));
                 continue;
             }
@@ -227,7 +255,31 @@ public class DecimalMatcher implements NumberParseMatcher {
             break;
         }
 
-        if (isScientific) {
+        // Unless the first group directly precedes the grouping separator, check it for validity
+        if (seenBothSeparators || (separator != -1 && !decimalUniSet.contains(separator))) {
+            if (currGroup > 0 && firstGroup > grouping2) {
+                illegalGrouping = true;
+            }
+        }
+
+        // Check the final grouping size for validity
+        if (requireGroupingMatch
+                && separator != -1
+                && !seenBothSeparators
+                && !decimalUniSet.contains(separator)) {
+            if (currGroup > 0 && currGroup != grouping1) {
+                illegalGrouping = true;
+            }
+            if (currGroup == 0 && prevGroup > 0 && prevGroup != grouping1) {
+                illegalGrouping = true;
+            }
+        }
+
+        if (requireGroupingMatch && illegalGrouping) {
+            result.copyFrom(backup);
+            segment.setOffset(initialOffset);
+
+        } else if (isScientific) {
             boolean overflow = (exponent == Integer.MAX_VALUE);
             if (!overflow) {
                 try {
@@ -246,34 +298,18 @@ public class DecimalMatcher implements NumberParseMatcher {
                     result.flags |= ParsedNumber.FLAG_INFINITY;
                 }
             }
-        } else if (result.quantity == null) {
-            // No-op: strings that start with a separator without any other digits
+
+        } else if (result.quantity == null && segment.getOffset() != initialOffset) {
+            // Strings that start with a separator but have no digits.
+            // We don't need a backup of ParsedNumber because no changes could have been made to it.
+            segment.setOffset(initialOffset);
+            hasPartialPrefix = true;
+
         } else if (seenBothSeparators || (separator != -1 && decimalUniSet.contains(separator))) {
             // The final separator was a decimal separator.
+            result.quantity.adjustMagnitude(-currGroup);
             result.flags |= ParsedNumber.FLAG_HAS_DECIMAL_SEPARATOR;
-            result.quantity.adjustMagnitude(-currGroup);
-            if (integerOnly) {
-                result.quantity.truncate();
-                segment.setOffset(lastSeparatorOffset);
-            }
-        } else if (separator != -1 && groupingDisabled) {
-            // The final separator was a grouping separator, but we aren't accepting grouping.
-            // Reset the offset to immediately before that grouping separator.
-            result.quantity.adjustMagnitude(-currGroup);
-            result.quantity.truncate();
-            segment.setOffset(lastSeparatorOffset);
-        } else if (separator != -1
-                && requireGroupingMatch
-                && groupingUniSet.contains(separator)
-                && currGroup != grouping1) {
-            // The final separator was a grouping separator, and we have a mismatched grouping size.
-            // Reset the offset to the beginning of the number.
-            // TODO
-            result.quantity.adjustMagnitude(-currGroup);
-            result.quantity.truncate();
-            segment.setOffset(lastSeparatorOffset);
-            // result.quantity = null;
-            // segment.setOffset(initialOffset);
+
         }
 
         return segment.length() == 0 || hasPartialPrefix;
@@ -295,6 +331,11 @@ public class DecimalMatcher implements NumberParseMatcher {
             }
         }
         return leadCodePoints.freeze();
+    }
+
+    @Override
+    public boolean matchesEmpty() {
+        return false;
     }
 
     @Override
