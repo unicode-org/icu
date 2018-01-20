@@ -46,8 +46,15 @@ public class NumberParserImpl {
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
         IgnorablesMatcher ignorables = IgnorablesMatcher.DEFAULT;
 
+        MatcherFactory factory = new MatcherFactory();
+        factory.currency = Currency.getInstance("USD");
+        factory.symbols = symbols;
+        factory.ignorables = ignorables;
+        factory.locale = locale;
+        factory.parseFlags = parseFlags;
+
         ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(pattern);
-        AffixMatcher.generateFromAffixPatternProvider(patternInfo, parser, ignorables, parseFlags);
+        AffixMatcher.newGenerate(patternInfo, parser, factory, ignorables, parseFlags);
 
         Grouper grouper = Grouper.defaults().withLocaleData(patternInfo);
 
@@ -136,6 +143,7 @@ public class NumberParserImpl {
         }
         if (isStrict) {
             parseFlags |= ParsingUtils.PARSE_FLAG_STRICT_GROUPING_SIZE;
+            parseFlags |= ParsingUtils.PARSE_FLAG_STRICT_SEPARATORS;
         } else {
             parseFlags |= ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;
         }
@@ -149,12 +157,19 @@ public class NumberParserImpl {
 
         NumberParserImpl parser = new NumberParserImpl(parseFlags, optimize);
 
+        MatcherFactory factory = new MatcherFactory();
+        factory.currency = currency;
+        factory.symbols = symbols;
+        factory.ignorables = ignorables;
+        factory.locale = locale;
+        factory.parseFlags = parseFlags;
+
         //////////////////////
         /// AFFIX MATCHERS ///
         //////////////////////
 
         // Set up a pattern modifier with mostly defaults to generate AffixMatchers.
-        AffixMatcher.generateFromAffixPatternProvider(patternInfo, parser, ignorables, parseFlags);
+        AffixMatcher.newGenerate(patternInfo, parser, factory, ignorables, parseFlags);
 
         ////////////////////////
         /// CURRENCY MATCHER ///

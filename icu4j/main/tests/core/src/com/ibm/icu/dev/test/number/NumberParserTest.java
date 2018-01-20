@@ -3,13 +3,23 @@
 package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.ibm.icu.impl.number.parse.IgnorablesMatcher;
+import com.ibm.icu.impl.number.parse.MinusSignMatcher;
 import com.ibm.icu.impl.number.parse.NumberParserImpl;
 import com.ibm.icu.impl.number.parse.ParsedNumber;
+import com.ibm.icu.impl.number.parse.PercentMatcher;
+import com.ibm.icu.impl.number.parse.PlusSignMatcher;
+import com.ibm.icu.impl.number.parse.SeriesMatcher;
+import com.ibm.icu.impl.number.parse.StringSegment;
+import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache;
+import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.Key;
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -39,7 +49,6 @@ public class NumberParserTest {
                 { 3, "𝟱𝟭𝟰𝟮𝟯 ", "0", 10, 51423. },
                 { 7, "𝟱𝟭,𝟰𝟮𝟯", "#,##,##0", 11, 51423. },
                 { 7, "𝟳,𝟴𝟵,𝟱𝟭,𝟰𝟮𝟯", "#,##,##0", 19, 78951423. },
-                { 4, "𝟳𝟴,𝟵𝟱𝟭,𝟰𝟮𝟯", "#,##,##0", 11, 78951. },
                 { 7, "𝟳𝟴,𝟵𝟱𝟭.𝟰𝟮𝟯", "#,##,##0", 18, 78951.423 },
                 { 7, "𝟳𝟴,𝟬𝟬𝟬", "#,##,##0", 11, 78000. },
                 { 7, "𝟳𝟴,𝟬𝟬𝟬.𝟬𝟬𝟬", "#,##,##0", 18, 78000. },
@@ -71,7 +80,7 @@ public class NumberParserTest {
                 { 3, "𝟱.𝟭𝟰𝟮E-𝟯", "0", 13, 0.005142 },
                 { 3, "𝟱.𝟭𝟰𝟮e-𝟯", "0", 13, 0.005142 },
                 { 7, "5,142.50 Canadian dollars", "#,##,##0", 25, 5142.5 },
-                // { 3, "a$ b5", "a ¤ b0", 6, 5.0 }, // TODO: Does not work
+                { 3, "a$ b5", "a ¤ b0", 5, 5.0 },
                 { 3, "📺1.23", "📺0;📻0", 6, 1.23 },
                 { 3, "📻1.23", "📺0;📻0", 6, -1.23 },
                 { 3, ".00", "0", 3, 0.0 },
@@ -91,7 +100,7 @@ public class NumberParserTest {
                 // Test greedy code path
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, true, resultObject);
-                assertNotNull(message, resultObject.quantity);
+                assertNotNull("Greedy Parse failed: " + message, resultObject.quantity);
                 assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
                 assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
             }
@@ -100,7 +109,7 @@ public class NumberParserTest {
                 // Test slow code path
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, false, resultObject);
-                assertNotNull(message, resultObject.quantity);
+                assertNotNull("Non-Greedy Parse failed: " + message, resultObject.quantity);
                 assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
                 assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
             }
@@ -110,7 +119,7 @@ public class NumberParserTest {
                 parser = NumberParserImpl.createParserFromPattern(ULocale.ENGLISH, pattern, true);
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, true, resultObject);
-                assertNotNull(message, resultObject.quantity);
+                assertNotNull("Strict Parse failed: " + message, resultObject.quantity);
                 assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
                 assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
             }
@@ -132,5 +141,50 @@ public class NumberParserTest {
         parser.parse("1.2e3", false, resultObject);
         assertTrue(resultObject.success());
         assertEquals(12000.0, resultObject.getNumber().doubleValue(), 0.0);
+    }
+
+    @Test
+    public void testSeriesMatcher() {
+        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        SeriesMatcher series = new SeriesMatcher();
+        series.addMatcher(IgnorablesMatcher.DEFAULT);
+        series.addMatcher(PlusSignMatcher.getInstance(symbols));
+        series.addMatcher(MinusSignMatcher.getInstance(symbols));
+        series.addMatcher(IgnorablesMatcher.DEFAULT);
+        series.addMatcher(PercentMatcher.getInstance(symbols));
+        series.addMatcher(IgnorablesMatcher.DEFAULT);
+        series.freeze();
+
+        assertEquals(UnicodeSetStaticCache.get(Key.DEFAULT_IGNORABLES).cloneAsThawed()
+                .addAll(UnicodeSetStaticCache.get(Key.PLUS_SIGN)), series.getLeadCodePoints());
+        assertFalse(series.matchesEmpty());
+
+        Object[][] cases = new Object[][] {
+                { "", 0, true },
+                { " ", 0, true },
+                { "$", 0, false },
+                { "+", 0, true },
+                { " +", 0, true },
+                { " + ", 0, false },
+                { "+-", 0, true },
+                { "+ -", 0, false },
+                { "+-  ", 0, true },
+                { "+-  $", 0, false },
+                { "+-%", 3, true },
+                { "  +-  %  ", 9, true },
+                { "+-%$", 3, false } };
+        for (Object[] cas : cases) {
+            String input = (String) cas[0];
+            int expectedOffset = (Integer) cas[1];
+            boolean expectedMaybeMore = (Boolean) cas[2];
+
+            StringSegment segment = new StringSegment(input);
+            ParsedNumber result = new ParsedNumber();
+            boolean actualMaybeMore = series.match(segment, result);
+            int actualOffset = segment.getOffset();
+
+            assertEquals("'" + input + "'", expectedOffset, actualOffset);
+            assertEquals("'" + input + "'", expectedMaybeMore, actualMaybeMore);
+        }
     }
 }

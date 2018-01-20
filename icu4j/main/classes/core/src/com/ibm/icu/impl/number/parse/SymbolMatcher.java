@@ -32,6 +32,17 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
             return false;
         }
 
+        // Test the string first in order to consume trailing chars greedily.
+        int overlap = 0;
+        if (!string.isEmpty()) {
+            overlap = segment.getCommonPrefixLength(string);
+            if (overlap == string.length()) {
+                segment.adjustOffset(string.length());
+                accept(segment, result);
+                return false;
+            }
+        }
+
         int cp = segment.getCodePoint();
         if (cp != -1 && uniSet.contains(cp)) {
             segment.adjustOffset(Character.charCount(cp));
@@ -39,15 +50,6 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
             return false;
         }
 
-        if (string.isEmpty()) {
-            return false;
-        }
-        int overlap = segment.getCommonPrefixLength(string);
-        if (overlap == string.length()) {
-            segment.adjustOffset(string.length());
-            accept(segment, result);
-            return false;
-        }
         return overlap == segment.length();
     }
 
@@ -62,6 +64,11 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
         ParsingUtils.putLeadCodePoints(uniSet, leadCodePoints);
         ParsingUtils.putLeadCodePoint(string, leadCodePoints);
         return leadCodePoints.freeze();
+    }
+
+    @Override
+    public boolean matchesEmpty() {
+        return false;
     }
 
     @Override

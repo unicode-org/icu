@@ -19,7 +19,7 @@ public class CurrencyTrieMatcher implements NumberParseMatcher {
     private final TextTrieMap<CurrencyStringInfo> longNameTrie;
     private final TextTrieMap<CurrencyStringInfo> symbolTrie;
 
-    public static NumberParseMatcher getInstance(ULocale locale) {
+    public static CurrencyTrieMatcher getInstance(ULocale locale) {
         // TODO: Pre-compute some of the more popular locales?
         return new CurrencyTrieMatcher(locale);
     }
@@ -56,6 +56,11 @@ public class CurrencyTrieMatcher implements NumberParseMatcher {
         longNameTrie.putLeadCodePoints(leadCodePoints);
         symbolTrie.putLeadCodePoints(leadCodePoints);
         return leadCodePoints.freeze();
+    }
+
+    @Override
+    public boolean matchesEmpty() {
+        return false;
     }
 
     @Override

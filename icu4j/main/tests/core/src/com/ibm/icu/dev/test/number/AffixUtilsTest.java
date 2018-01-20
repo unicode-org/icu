@@ -227,6 +227,9 @@ public class AffixUtilsTest {
             sb.setLength(0);
             AffixUtils.trimSymbolsAndIgnorables(input, ignorables, sb);
             assertEquals("Removing symbols from: " + input, expected, sb.toString());
+            assertEquals("Contains only symbols and ignorables: " + input,
+                    sb.length() == 0,
+                    AffixUtils.containsOnlySymbolsAndIgnorables(input, ignorables));
         }
     }
 

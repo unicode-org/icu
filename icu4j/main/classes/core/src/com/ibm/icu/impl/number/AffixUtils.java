@@ -109,6 +109,10 @@ public class AffixUtils {
         public CharSequence getSymbol(int type);
     }
 
+    public static interface TokenConsumer {
+        public void consumeToken(int typeOrCp);
+    }
+
     /**
      * Estimates the number of code points present in an unescaped version of the affix pattern string
      * (one that would be returned by {@link #unescape}), assuming that all interpolated symbols consume
@@ -461,6 +465,37 @@ public class AffixUtils {
             sb.setLength(sb.length() - trailingIgnorables);
         }
         return sb;
+    }
+
+    /**
+     * Returns whether the given affix pattern contains only symbols and ignorables as defined by the
+     * given ignorables set.
+     */
+    public static boolean containsOnlySymbolsAndIgnorables(
+            CharSequence affixPattern,
+            UnicodeSet ignorables) {
+        if (affixPattern == null) {
+            return true;
+        }
+        long tag = 0L;
+        while (hasNext(tag, affixPattern)) {
+            tag = nextToken(tag, affixPattern);
+            int typeOrCp = getTypeOrCp(tag);
+            if (typeOrCp >= 0 && !ignorables.contains(typeOrCp)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void iterateWithConsumer(CharSequence affixPattern, TokenConsumer consumer) {
+        assert affixPattern != null;
+        long tag = 0L;
+        while (hasNext(tag, affixPattern)) {
+            tag = nextToken(tag, affixPattern);
+            int typeOrCp = getTypeOrCp(tag);
+            consumer.consumeToken(typeOrCp);
+        }
     }
 
     /**

@@ -852,11 +852,11 @@ parse	output	breaks
 // have no separators at all.
 +12,345.67	12345.67
 // JDK doesn't require separators to be in the right place.
-// P stops after reading an unexpected grouping separator instead of failing.
-+1,23,4567.8901	fail	KP
+// In some, but not all, cases, P stops early.
++1,23,4567.8901	fail	K
 +1,234,567.8901	fail	KP
-+1234,567.8901	fail	KP
-+1,234567.8901	fail	KP
++1234,567.8901	fail	K
++1,234567.8901	fail	K
 +1234567.8901	1234567.8901
 // Minimum grouping is not satisfied below, but that's ok
 // because minimum grouping is optional.
@@ -1188,16 +1188,16 @@ USD 53.45	53.45	USD	J
 53.45USD	53.45	USD	CJ
 USD53.45	53.45	USD
 // S fails these because '(' is an incomplete prefix.
-(7.92) USD	-7.92	USD	CJS
-(7.92) GBP	-7.92	GBP	CJS
-(7.926) USD	-7.926	USD	CJS
-(7.926 USD)	-7.926	USD	CJS
+(7.92) USD	-7.92	USD	CJSP
+(7.92) GBP	-7.92	GBP	CJSP
+(7.926) USD	-7.926	USD	CJSP
+(7.926 USD)	-7.926	USD	CJSP
 (USD 7.926)	-7.926	USD	J
-USD (7.926)	-7.926	USD	CJS
-USD (7.92)	-7.92	USD	CJS
-(7.92)USD	-7.92	USD	CJS
-USD(7.92)	-7.92	USD	CJS
-(8) USD	-8	USD	CJS
+USD (7.926)	-7.926	USD	CJSP
+USD (7.92)	-7.92	USD	CJSP
+(7.92)USD	-7.92	USD	CJSP
+USD(7.92)	-7.92	USD	CJSP
+(8) USD	-8	USD	CJSP
 -8 USD	-8	USD	C
 67 USD	67	USD	C
 53.45$	fail	USD
@@ -1470,12 +1470,12 @@ set negativeSuffix i jk
 begin
 parse	output	breaks
 x a‎b56c df 	56
-x  a‎b56c df 	56	KP
-x ab56c df 	56	KP
-x ab56c df	56	JKP
-x ab56c df  	56	KP
-x ab56	56	JKP
-x a b56	56	JKP
+x  a‎b56c df 	56	K
+x ab56c df 	56	K
+x ab56c df	56	JK
+x ab56c df  	56	K
+x ab56	56	JK
+x a b56	56	JK
 56cdf	56	JK
 56c df	56	JK
 56cd f	56	JK
@@ -1484,19 +1484,20 @@ x a b56	56	JKP
 56c d‎f 	56	JK
 56‎c df 	56	JK
 y g‎h56i jk 	-56
-y  g‎h56i jk 	-56	KP
-y gh56i jk 	-56	KP
-y gh56i jk	-56	JKP
-y gh56i jk  	-56	KP
-y gh56	-56	JKP
-y g h56	-56	JKP
+y  g‎h56i jk 	-56	K
+y gh56i jk 	-56	K
+y gh56i jk	-56	JK
+y gh56i jk  	-56	K
+y gh56	-56	JK
+y g h56	-56	JK
 // S stops parsing after the 'i' for these and returns -56
 // C stops before the 'i' and gets 56
-56ijk	-56	CJKP
+// P does not allow ignorables between the 'j' and the 'k'
+56ijk	-56	CJK
 56i jk	-56	CJK
 56ij k	-56	CJKP
 56i‎j‎k	-56	CJKP
-56ijk 	-56	CJKP
+56ijk 	-56	CJK
 56i j‎k 	-56	CJKP
 56‎i jk 	-56	CJK
 // S and C get 56 (accepts ' ' gs grouping); J and K get null

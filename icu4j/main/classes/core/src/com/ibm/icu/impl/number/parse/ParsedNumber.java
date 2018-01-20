@@ -16,9 +16,9 @@ public class ParsedNumber {
     public DecimalQuantity_DualStorageBCD quantity;
 
     /**
-     * The number of chars accepted during parsing. This is NOT necessarily the same as the StringSegment offset; "weak"
-     * chars, like whitespace, change the offset, but the charsConsumed is not touched until a "strong" char is
-     * encountered.
+     * The number of chars accepted during parsing. This is NOT necessarily the same as the StringSegment
+     * offset; "weak" chars, like whitespace, change the offset, but the charsConsumed is not touched
+     * until a "strong" char is encountered.
      */
     public int charsConsumed;
 
@@ -28,12 +28,12 @@ public class ParsedNumber {
     public int flags;
 
     /**
-     * The prefix string that got consumed.
+     * The pattern string corresponding to the prefix that got consumed.
      */
     public String prefix;
 
     /**
-     * The suffix string that got consumed.
+     * The pattern string corresponding to the suffix that got consumed.
      */
     public String suffix;
 
@@ -77,7 +77,8 @@ public class ParsedNumber {
     }
 
     public void copyFrom(ParsedNumber other) {
-        quantity = other.quantity == null ? null : (DecimalQuantity_DualStorageBCD) other.quantity.createCopy();
+        quantity = other.quantity == null ? null
+                : (DecimalQuantity_DualStorageBCD) other.quantity.createCopy();
         charsConsumed = other.charsConsumed;
         flags = other.flags;
         prefix = other.prefix;
@@ -90,8 +91,8 @@ public class ParsedNumber {
     }
 
     /**
-     * Returns whether this the parse was successful.  To be successful, at least one char must have been consumed,
-     * and the failure flag must not be set.
+     * Returns whether this the parse was successful. To be successful, at least one char must have been
+     * consumed, and the failure flag must not be set.
      */
     public boolean success() {
         return charsConsumed > 0 && 0 == (flags & FLAG_FAIL);
@@ -112,17 +113,17 @@ public class ParsedNumber {
 
         // Check for NaN, infinity, and -0.0
         if (sawNaN) {
-          return Double.NaN;
+            return Double.NaN;
         }
         if (sawInfinity) {
-          if (sawNegative) {
-            return Double.NEGATIVE_INFINITY;
-          } else {
-            return Double.POSITIVE_INFINITY;
-          }
+            if (sawNegative) {
+                return Double.NEGATIVE_INFINITY;
+            } else {
+                return Double.POSITIVE_INFINITY;
+            }
         }
         if (quantity.isZero() && sawNegative) {
-          return -0.0;
+            return -0.0;
         }
 
         if (quantity.fitsInLong() && !forceBigDecimal) {

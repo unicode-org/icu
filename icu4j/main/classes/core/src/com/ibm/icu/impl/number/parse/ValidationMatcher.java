@@ -15,6 +15,11 @@ public abstract class ValidationMatcher implements NumberParseMatcher {
     }
 
     @Override
+    public boolean matchesEmpty() {
+        return false;
+    }
+
+    @Override
     public UnicodeSet getLeadCodePoints() {
         return UnicodeSet.EMPTY;
     }

@@ -15,7 +15,7 @@ public class CurrencyMatcher implements NumberParseMatcher {
     private final String currency1;
     private final String currency2;
 
-    public static NumberParseMatcher getInstance(Currency currency, ULocale loc, int setupFlags) {
+    public static CurrencyMatcher getInstance(Currency currency, ULocale loc, int setupFlags) {
         return new CurrencyMatcher(currency.getSubtype(),
                 ParsingUtils.maybeFold(currency.getSymbol(loc), setupFlags),
                 ParsingUtils.maybeFold(currency.getCurrencyCode(), setupFlags));
@@ -56,6 +56,11 @@ public class CurrencyMatcher implements NumberParseMatcher {
         ParsingUtils.putLeadCodePoint(currency1, leadCodePoints);
         ParsingUtils.putLeadCodePoint(currency2, leadCodePoints);
         return leadCodePoints.freeze();
+    }
+
+    @Override
+    public boolean matchesEmpty() {
+        return false;
     }
 
     @Override
