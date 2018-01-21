@@ -63,15 +63,15 @@ enum {
     UNEWTRIE3_DATA_START_OFFSET=UNEWTRIE3_DATA_NULL_OFFSET+UTRIE3_DATA_BLOCK_LENGTH
 };
 
-constexpr int32_t MAX_UNICODE=0x10ffff;
+constexpr int32_t MAX_UNICODE = 0x10ffff;
 
-constexpr int32_t UNICODE_LIMIT=0x110000;
-constexpr int32_t BMP_LIMIT=0x10000;
-constexpr int32_t ASCII_LIMIT=0x80;
+constexpr int32_t UNICODE_LIMIT = 0x110000;
+constexpr int32_t BMP_LIMIT = 0x10000;
+constexpr int32_t ASCII_LIMIT = 0x80;
 
-//nstexpr int32_t I_LIMIT=UNICODE_LIMIT>>UTRIE3_SHIFT_2;
-constexpr int32_t BMP_I_LIMIT=BMP_LIMIT>>UTRIE3_SHIFT_2;  // TODO: = UTRIE3_INDEX_2_BMP_LENGTH?
-constexpr int32_t ASCII_I_LIMIT=ASCII_LIMIT>>UTRIE3_SHIFT_2;
+constexpr int32_t I_LIMIT = UNICODE_LIMIT >> UTRIE3_SHIFT_2;
+constexpr int32_t BMP_I_LIMIT = BMP_LIMIT >> UTRIE3_SHIFT_2;  // TODO: = UTRIE3_INDEX_2_BMP_LENGTH?
+constexpr int32_t ASCII_I_LIMIT = ASCII_LIMIT >> UTRIE3_SHIFT_2;
 
 constexpr uint8_t ALL_SAME=0;
 constexpr uint8_t MIXED=1;
@@ -714,7 +714,84 @@ findHighStart(UNewTrie3 *newTrie, int32_t highStart, uint32_t highValue) {
     return 0;
 }
 
-int32_t compactWholeDataBlocks(UNewTrie3 *newTrie, uint32_t initialValue, UChar32 highStart) {
+class AllSameBlocks {
+public:
+    static constexpr int32_t NEW_UNIQUE = -1;
+    static constexpr int32_t OVERFLOW = -2;
+
+    AllSameBlocks() : length(0), mostRecent(-1) {}
+
+    int32_t findOrAdd(int32_t index, uint32_t value) {
+        if (mostRecent >= 0 && values[mostRecent] == value) {
+            ++refCounts[mostRecent];
+            return indexes[mostRecent];
+        }
+        for (int32_t i = 0; i < length; ++i) {
+            if (values[i] == value) {
+                mostRecent = i;
+                ++refCounts[i];
+                return indexes[i];
+            }
+        }
+        if (length == CAPACITY) {
+            return OVERFLOW;
+        }
+        mostRecent = length;
+        indexes[length] = index;
+        values[length] = value;
+        refCounts[length++] = 1;
+        return NEW_UNIQUE;
+    }
+
+    /** Replaces the block which has the lowest reference count. */
+    void add(int32_t index, uint32_t value) {
+        U_ASSERT(length == CAPACITY);
+        int32_t least = -1;
+        int32_t leastCount = I_LIMIT;
+        for (int32_t i = 0; i < length; ++i) {
+            U_ASSERT(values[i] != value);
+            if (refCounts[i] < leastCount) {
+                least = i;
+                leastCount = refCounts[i];
+            }
+        }
+        U_ASSERT(least >= 0);
+        mostRecent = least;
+        indexes[least] = index;
+        values[least] = value;
+        refCounts[least] = 1;
+    }
+
+    int32_t findMostUsed() const {
+        if (length == 0) { return -1; }
+        int32_t max = -1;
+        int32_t maxCount = 0;
+        for (int32_t i = 0; i < length; ++i) {
+            if (refCounts[i] > maxCount) {
+                max = i;
+                maxCount = refCounts[i];
+            }
+        }
+        return indexes[max];
+    }
+
+private:
+    static constexpr int32_t CAPACITY = 32;
+
+    int32_t length;
+    int32_t mostRecent;
+
+    int32_t indexes[CAPACITY];
+    uint32_t values[CAPACITY];
+    int32_t refCounts[CAPACITY];
+};
+
+int32_t compactWholeDataBlocks(UNewTrie3 *newTrie, UChar32 highStart) {
+    AllSameBlocks allSameBlocks;
+#ifdef UTRIE3_DEBUG
+    bool overflow = false;
+#endif
+
     int32_t newDataLength=0;
     int32_t iLimit=highStart>>UTRIE3_SHIFT_2;
     for(int32_t i=0; i<iLimit; ++i) {
@@ -752,25 +829,40 @@ int32_t compactWholeDataBlocks(UNewTrie3 *newTrie, uint32_t initialValue, UChar3
             U_ASSERT(flags==ALL_SAME);
         }
         // Is there another ALL_SAME block with the same value?
-        for(int32_t j=0;; ++j) {
-            if(j==i) {
-                if (value == initialValue) {
-                    newTrie->dataNullIndex = i;
-                }
-                // Unique same-value block.
-                newDataLength+=UTRIE3_DATA_BLOCK_LENGTH;
-                break;
+        int32_t other = allSameBlocks.findOrAdd(i, value);
+        if (other == AllSameBlocks::OVERFLOW) {
+            // The fixed-size array overflowed. Slow check for a duplicate block.
+#ifdef UTRIE3_DEBUG
+            if (!overflow) {
+                puts("UTrie3 AllSameBlocks overflow");
+                overflow = true;
             }
-            if((newTrie->flags[j]&TYPE_MASK)==ALL_SAME && newTrie->index[j]==value) {
-                if(i>=BMP_I_LIMIT) {
-                    newTrie->flags[j]|=SUPP_DATA;
+#endif
+            for (other = 0;; ++other) {
+                if (other == i) {
+                    other = AllSameBlocks::NEW_UNIQUE;
+                    allSameBlocks.add(i, value);
+                    break;
                 }
-                newTrie->flags[i]=SAME_AS;
-                newTrie->index[i]=j;
-                break;
+                if ((newTrie->flags[other] & TYPE_MASK) == ALL_SAME &&
+                        newTrie->index[other] == value) {
+                    allSameBlocks.add(other, value);
+                    break;
+                }
             }
         }
+        if (other >= 0) {
+            if (i >= BMP_I_LIMIT) {
+                newTrie->flags[other] |= SUPP_DATA;
+            }
+            newTrie->flags[i] = SAME_AS;
+            newTrie->index[i] = other;
+        } else {
+            // New unique same-value block.
+            newDataLength += UTRIE3_DATA_BLOCK_LENGTH;
+        }
     }
+    newTrie->dataNullIndex = allSameBlocks.findMostUsed();
     return newDataLength;
 }
 
@@ -791,9 +883,37 @@ int32_t compactWholeDataBlocks(UNewTrie3 *newTrie, uint32_t initialValue, UChar3
  * It does not try to find an optimal order of writing, deduplicating, and overlapping blocks.
  */
 void
-compactData(UTrie3 *trie, UChar32 highStart, uint32_t *newData) {
-    // TODO: allocate newData here? at the end, release data, replace with newData.
+compactData(UTrie3 *trie, UChar32 highStart, UErrorCode *pErrorCode) {
     UNewTrie3 *newTrie = trie->newTrie;
+    uint32_t asciiData[ASCII_LIMIT];
+    for(int32_t i=0; i<ASCII_LIMIT; ++i) {
+        asciiData[i]=utrie3_get32FromBuilder(trie, i);
+    }
+
+    // First we look for which data blocks have the same value repeated over the whole block,
+    // deduplicate whole blocks, and get an upper bound for the necessary data array length.
+    // We deduplicate whole blocks first so that ones shared between BMP and supplementary
+    // code points are found before different granularity alignment may prevent
+    // sharing in the following code.
+    int32_t newDataLength = compactWholeDataBlocks(newTrie, highStart);
+    newDataLength += ASCII_LIMIT;
+    uint32_t *newData = (uint32_t *)uprv_malloc(newDataLength * 4);
+    if (newData == nullptr) {
+        *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    uprv_memcpy(newData, asciiData, sizeof(asciiData));
+
+    if (newTrie->dataNullIndex >= 0) {
+#ifdef UTRIE3_DEBUG
+        if (newTrie->index[newTrie->dataNullIndex] != trie->initialValue) {
+            printf("UTrie3 initialValue %lx -> more common %lx\n",
+                   (long)trie->initialValue, (long)newTrie->index[newTrie->dataNullIndex]);
+        }
+        trie->initialValue = newTrie->index[newTrie->dataNullIndex];
+#endif
+    }
+
 #ifdef UTRIE3_DEBUG
     int32_t countSame=0, sumOverlaps=0;
 #endif
@@ -820,7 +940,11 @@ compactData(UTrie3 *trie, UChar32 highStart, uint32_t *newData) {
                 // Padding here also ensures that the final dataLength is
                 // a multiple of the shifted granularity.
                 while((newStart&(UTRIE3_DATA_GRANULARITY-1))!=0) {
-                    newData[newStart++]=0xaaaa5555;  // TODO: initialValue
+                    // We could use any value for padding.
+                    // Repeat the last data value to increase chances for
+                    // overlap across this padding.
+                    newData[newStart] = newData[newStart - 1];
+                    ++newStart;
                 }
                 granularity=UTRIE3_DATA_GRANULARITY;
 
@@ -869,10 +993,10 @@ compactData(UTrie3 *trie, UChar32 highStart, uint32_t *newData) {
             newTrie->flags[i]=MOVED;
         }
     }
+    U_ASSERT(newStart <= newDataLength);
 
     for(int32_t i=ASCII_I_LIMIT; i<iLimit; ++i) {
         if(newTrie->flags[i]==SAME_AS) {
-            DEBUG_DO(++countSame);
             uint32_t j=newTrie->index[i];
             U_ASSERT(newTrie->flags[j]==MOVED);
             newTrie->flags[i]=MOVED;
@@ -894,7 +1018,10 @@ compactData(UTrie3 *trie, UChar32 highStart, uint32_t *newData) {
             (long)newTrie->dataLength, (long)newStart, (long)countSame, (long)sumOverlaps);
 #endif
 
-    trie->dataLength=newStart;
+    uprv_free(newTrie->data);
+    newTrie->data = newData;
+    newTrie->dataCapacity = newDataLength;
+    trie->dataLength = newTrie->dataLength = newStart;
 }
 
 void
@@ -950,6 +1077,8 @@ compactIndex2(UTrie3 *trie, UChar32 highStart, uint16_t index1[]) {
                         while (n < UTRIE3_INDEX_2_BLOCK_LENGTH) {
                             index[newStart++] = index[start + n++];
                         }
+                    } else {
+                        newStart += UTRIE3_INDEX_2_BLOCK_LENGTH;
                     }
                 }
             }
@@ -990,7 +1119,7 @@ compactIndex2(UTrie3 *trie, UChar32 highStart, uint16_t index1[]) {
 }
 
 void
-compactTrie(UTrie3 *trie, uint16_t index1[], LocalMemory<uint32_t> &newData, UErrorCode *pErrorCode) {
+compactTrie(UTrie3 *trie, uint16_t index1[], UErrorCode *pErrorCode) {
     UNewTrie3 *newTrie=trie->newTrie;
 
     // Find highStart and round it up.
@@ -1032,22 +1161,8 @@ compactTrie(UTrie3 *trie, uint16_t index1[], LocalMemory<uint32_t> &newData, UEr
         suppHighStart = highStart;
     }
 
-    uint32_t asciiData[ASCII_LIMIT];
-    for(int32_t i=0; i<ASCII_LIMIT; ++i) {
-        asciiData[i]=utrie3_get32FromBuilder(trie, i);
-    }
-
-    int32_t newDataLength=compactWholeDataBlocks(newTrie, trie->initialValue, suppHighStart);
-    newDataLength+=ASCII_LIMIT;
-    uint32_t *p=newData.allocateInsteadAndCopy(newDataLength);
-    if(p==nullptr) {
-        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    uprv_memcpy(p, asciiData, sizeof(asciiData));
-
-    compactData(trie, suppHighStart, p);
-    U_ASSERT(trie->dataLength<=newDataLength);
+    compactData(trie, suppHighStart, pErrorCode);
+    if(U_FAILURE(*pErrorCode)) { return; }
     compactIndex2(trie, suppHighStart, index1);
 }
 
@@ -1078,8 +1193,7 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
     }
 
     uint16_t index1[UTRIE3_MAX_INDEX_1_LENGTH];
-    LocalMemory<uint32_t> newData;
-    compactTrie(trie, index1, newData, pErrorCode);
+    compactTrie(trie, index1, pErrorCode);
     if(U_FAILURE(*pErrorCode)) {
         // TODO: at every exit delete newTrie?!
         return;
@@ -1165,7 +1279,7 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
     }
 
     /* write the 16/32-bit data array */
-    p = newData.getAlias();
+    p = newTrie->data;
     switch(valueBits) {
     case UTRIE3_16_VALUE_BITS:
         /* write 16-bit data values */

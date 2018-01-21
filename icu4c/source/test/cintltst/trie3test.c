@@ -6,6 +6,8 @@
 
 #include <stdio.h>
 #include "unicode/utypes.h"
+#include "unicode/utf.h"
+#include "unicode/utf16.h"
 #include "unicode/utf8.h"
 #include "utrie3.h"
 #include "utrie.h"
@@ -212,12 +214,14 @@ testTrieGetters(const char *testName,
     }
 }
 
+#define ACCIDENTAL_SURROGATE_PAIR(s, length, cp) (length > 0 && U16_IS_LEAD(s[length-1]) && U_IS_TRAIL(cp))
+
 static void
 testTrieUTF16(const char *testName,
               const UTrie3 *trie, UTrie3ValueBits valueBits,
               const CheckRange checkRanges[], int32_t countCheckRanges) {
-    UChar s[200];
-    uint32_t values[100];
+    UChar s[2000];
+    uint32_t values[1000];
 
     const UChar *p, *limit;
 
@@ -231,18 +235,32 @@ testTrieUTF16(const char *testName,
     for(i=skipSpecialValues(checkRanges, countCheckRanges); i<countCheckRanges; ++i) {
         value=checkRanges[i].value;
         /* write three code points */
-        U16_APPEND_UNSAFE(s, length, prevCP);   /* start of the range */
-        values[countValues++]=value;
+        if(!ACCIDENTAL_SURROGATE_PAIR(s, length, prevCP)) {
+            U16_APPEND_UNSAFE(s, length, prevCP);   /* start of the range */
+            values[countValues++]=value;
+        }
         c=checkRanges[i].limit;
         prevCP=(prevCP+c)/2;                    /* middle of the range */
-        U16_APPEND_UNSAFE(s, length, prevCP);
-        values[countValues++]=value;
+        if(!ACCIDENTAL_SURROGATE_PAIR(s, length, prevCP)) {
+            U16_APPEND_UNSAFE(s, length, prevCP);
+            values[countValues++]=value;
+        }
         prevCP=c;
         --c;                                    /* end of the range */
-        U16_APPEND_UNSAFE(s, length, c);
-        values[countValues++]=value;
+        if(!ACCIDENTAL_SURROGATE_PAIR(s, length, c)) {
+            U16_APPEND_UNSAFE(s, length, c);
+            values[countValues++]=value;
+        }
     }
     limit=s+length;
+    if(length>UPRV_LENGTHOF(s)) {
+        log_err("UTF-16 test string length %d > capacity %d\n", (int)length, (int)UPRV_LENGTHOF(s));
+        return;
+    }
+    if(countValues>UPRV_LENGTHOF(values)) {
+        log_err("UTF-16 test values length %d > capacity %d\n", (int)countValues, (int)UPRV_LENGTHOF(values));
+        return;
+    }
 
     /* try forward */
     p=s;
@@ -321,8 +339,8 @@ testTrieUTF8(const char *testName,
         0xfe,
         0xff
     };
-    uint8_t s[600];
-    uint32_t values[200];
+    uint8_t s[6000];
+    uint32_t values[2000];
 
     const uint8_t *p, *limit;
 
@@ -395,6 +413,14 @@ testTrieUTF8(const char *testName,
         values[countValues++]=errorValue;
     }
     limit=s+length;
+    if(length>UPRV_LENGTHOF(s)) {
+        log_err("UTF-8 test string length %d > capacity %d\n", (int)length, (int)UPRV_LENGTHOF(s));
+        return;
+    }
+    if(countValues>UPRV_LENGTHOF(values)) {
+        log_err("UTF-8 test values length %d > capacity %d\n", (int)countValues, (int)UPRV_LENGTHOF(values));
+        return;
+    }
 
     /* try forward */
     p=s;
@@ -533,12 +559,13 @@ testNewTrie(const char *testName, const UTrie3 *trie,
 #endif
 }
 
+static uint32_t storage[120000];
+
 static void
 testTrieSerialize(const char *testName,
                   UTrie3 *trie, UTrie3ValueBits valueBits,
                   UBool withSwap,
                   const CheckRange checkRanges[], int32_t countCheckRanges) {
-    uint32_t storage[10000];
     int32_t length1, length2, length3;
     UTrie3ValueBits otherValueBits;
     UErrorCode errorCode;
@@ -1258,6 +1285,45 @@ GrowDataArrayTest(void) {
     utrie3_close(trie);
 }
 
+static void
+ManyAllSameBlocksTest(void) {
+    static const char *const testName="many-all-same";
+
+    UTrie3 *trie;
+    int32_t i;
+    UErrorCode errorCode;
+    CheckRange checkRanges[(0x110000 >> 12) + 1];
+
+    errorCode = U_ZERO_ERROR;
+    trie = utrie3_open(0xff33, 0xbad, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_err("error: utrie3_open(%s) failed: %s\n", testName, u_errorName(errorCode));
+        return;
+    }
+    checkRanges[0].limit = 0;
+    checkRanges[0].value = 0xff33;  // initialValue
+
+    // Many all-same-value blocks.
+    for (i = 0; i < 0x110000; i += 0x1000) {
+        uint32_t value = i >> 12;
+        utrie3_setRange32(trie, i, i + 0xfff, value, TRUE, &errorCode);
+        checkRanges[value + 1].limit = i + 0x1000;
+        checkRanges[value + 1].value = value;
+    }
+    for (i = 0; i < 0x110000; i += 0x1000) {
+        uint32_t expected = i >> 12;
+        uint32_t v0 = utrie3_get32(trie, i);
+        uint32_t vfff = utrie3_get32(trie, i + 0xfff);
+        if (v0 != expected || vfff != expected) {
+            log_err("error: UTrie3 builder U+%04lx unexpected value\n", (long)i);
+        }
+    }
+
+    trie=testTrieSerializeAllValueBits(testName, trie, FALSE,
+                                          checkRanges, UPRV_LENGTHOF(checkRanges));
+    utrie3_close(trie);
+}
+
 /* versions 1 and 2 --------------------------------------------------------- */
 
 static void
@@ -1453,6 +1519,7 @@ addTrie3Test(TestNode** root) {
     addTest(root, &DummyTrieTest, "tsutil/trie3test/DummyTrieTest");
     addTest(root, &FreeBlocksTest, "tsutil/trie3test/FreeBlocksTest");
     addTest(root, &GrowDataArrayTest, "tsutil/trie3test/GrowDataArrayTest");
+    addTest(root, &ManyAllSameBlocksTest, "tsutil/trie3test/ManyAllSameBlocksTest");
     addTest(root, &GetVersionTest, "tsutil/trie3test/GetVersionTest");
     addTest(root, &Trie12ConversionTest, "tsutil/trie3test/Trie12ConversionTest");
 }
