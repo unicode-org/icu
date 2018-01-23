@@ -76,7 +76,7 @@ static void  U_CALLCONV ucnv_toUnicode_UTF8 (UConverterToUnicodeArgs * args,
     int32_t i, inBytes;
 
     /* Restore size of current sequence */
-    if (cnv->toUnicodeStatus && myTarget < targetLimit)
+    if (cnv->toULength > 0 && myTarget < targetLimit)
     {
         inBytes = cnv->mode;            /* restore # of bytes to consume */
         i = cnv->toULength;             /* restore # of bytes consumed */
@@ -194,7 +194,7 @@ static void  U_CALLCONV ucnv_toUnicode_UTF8_OFFSETS_LOGIC (UConverterToUnicodeAr
     int32_t i, inBytes;
 
     /* Restore size of current sequence */
-    if (cnv->toUnicodeStatus && myTarget < targetLimit)
+    if (cnv->toULength > 0 && myTarget < targetLimit)
     {
         inBytes = cnv->mode;            /* restore # of bytes to consume */
         i = cnv->toULength;             /* restore # of bytes consumed */
@@ -670,12 +670,13 @@ ucnv_UTF8FromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
     targetCapacity=(int32_t)(pFromUArgs->targetLimit-pFromUArgs->target);
 
     /* get the converter state from the UTF-8 UConverter */
-    c=(UChar32)utf8->toUnicodeStatus;
-    if(c!=0) {
+    if(utf8->toULength > 0) {
         toULength=oldToULength=utf8->toULength;
         toULimit=(int8_t)utf8->mode;
+        c=(UChar32)utf8->toUnicodeStatus;
     } else {
         toULength=oldToULength=toULimit=0;
+        c = 0;
     }
 
     count=(int32_t)(sourceLimit-source)+oldToULength;
