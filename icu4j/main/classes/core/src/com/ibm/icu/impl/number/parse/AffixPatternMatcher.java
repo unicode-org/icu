@@ -59,12 +59,17 @@ public class AffixPatternMatcher extends SeriesMatcher implements AffixUtils.Tok
     @Override
     public void consumeToken(int typeOrCp) {
         // This is called by AffixUtils.iterateWithConsumer() for each token.
+
+        // Add an ignorables matcher between tokens except between two literals, and don't put two
+        // ignorables matchers in a row.
+        if (ignorables != null
+                && length() > 0
+                && (lastTypeOrCp < 0 || !ignorables.getSet().contains(lastTypeOrCp))) {
+            addMatcher(ignorables);
+        }
+
         if (typeOrCp < 0) {
-            // Don't add more than two ignorables matchers in a row
-            if (ignorables != null
-                    && (lastTypeOrCp < 0 || !ignorables.getSet().contains(lastTypeOrCp))) {
-                addMatcher(ignorables);
-            }
+            // Case 1: the token is a symbol.
             switch (typeOrCp) {
             case AffixUtils.TYPE_MINUS_SIGN:
                 addMatcher(factory.minusSign());
@@ -89,16 +94,13 @@ public class AffixPatternMatcher extends SeriesMatcher implements AffixUtils.Tok
             default:
                 throw new AssertionError();
             }
+
         } else if (ignorables != null && ignorables.getSet().contains(typeOrCp)) {
-            // Don't add more than two ignorables matchers in a row
-            if (lastTypeOrCp < 0 || !ignorables.getSet().contains(lastTypeOrCp)) {
-                addMatcher(ignorables);
-            }
+            // Case 2: the token is an ignorable literal.
+            // No action necessary: the ignorables matcher has already been added.
+
         } else {
-            // Start of a literal: add ignorables matcher if the previous token was a symbol
-            if (ignorables != null && lastTypeOrCp < 0) {
-                addMatcher(ignorables);
-            }
+            // Case 3: the token is a non-ignorable literal.
             addMatcher(CodePointMatcher.getInstance(typeOrCp));
         }
         lastTypeOrCp = typeOrCp;

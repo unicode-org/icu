@@ -8,13 +8,14 @@ import com.ibm.icu.text.UnicodeSet;
  * @author sffc
  *
  */
-public class PaddingMatcher extends RangeMatcher {
+public class PaddingMatcher extends SymbolMatcher implements NumberParseMatcher.Flexible {
 
-    /**
-     * @param uniSet
-     */
-    protected PaddingMatcher(String padString) {
-        super(new UnicodeSet().add(padString).freeze());
+    public static PaddingMatcher getInstance(String padString) {
+        return new PaddingMatcher(padString);
+    }
+
+    private PaddingMatcher(String symbolString) {
+        super(symbolString, UnicodeSet.EMPTY);
     }
 
     @Override
@@ -29,6 +30,6 @@ public class PaddingMatcher extends RangeMatcher {
 
     @Override
     public String toString() {
-        return "<PaddingMatcher " + uniSet + ">";
+        return "<PaddingMatcher>";
     }
 }

@@ -1492,13 +1492,12 @@ y gh56	-56	JK
 y g h56	-56	JK
 // S stops parsing after the 'i' for these and returns -56
 // C stops before the 'i' and gets 56
-// P does not allow ignorables between the 'j' and the 'k'
 56ijk	-56	CJK
 56i jk	-56	CJK
-56ij k	-56	CJKP
-56i‎j‎k	-56	CJKP
+56ij k	-56	CJK
+56i‎j‎k	-56	CJK
 56ijk 	-56	CJK
-56i j‎k 	-56	CJKP
+56i j‎k 	-56	CJK
 56‎i jk 	-56	CJK
 // S and C get 56 (accepts ' ' gs grouping); J and K get null
 5 6	fail	CSP

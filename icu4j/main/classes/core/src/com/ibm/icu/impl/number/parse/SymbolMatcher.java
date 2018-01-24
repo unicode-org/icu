@@ -25,6 +25,10 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
         uniSet = UnicodeSetStaticCache.get(key);
     }
 
+    public UnicodeSet getSet() {
+        return uniSet;
+    }
+
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
         // Smoke test first; this matcher might be disabled.
@@ -55,7 +59,7 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
 
     @Override
     public UnicodeSet getLeadCodePoints() {
-        if (string == null || string.isEmpty()) {
+        if (string.isEmpty()) {
             // Assumption: for sets from UnicodeSetStaticCache, uniSet == leadCodePoints.
             return uniSet;
         }
@@ -64,11 +68,6 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
         ParsingUtils.putLeadCodePoints(uniSet, leadCodePoints);
         ParsingUtils.putLeadCodePoint(string, leadCodePoints);
         return leadCodePoints.freeze();
-    }
-
-    @Override
-    public boolean matchesEmpty() {
-        return false;
     }
 
     @Override

@@ -8,7 +8,7 @@ import com.ibm.icu.text.UnicodeSet;
  * @author sffc
  *
  */
-public class IgnorablesMatcher extends RangeMatcher {
+public class IgnorablesMatcher extends SymbolMatcher implements NumberParseMatcher.Flexible {
 
     public static final IgnorablesMatcher DEFAULT = new IgnorablesMatcher(
             UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.DEFAULT_IGNORABLES));
@@ -22,18 +22,7 @@ public class IgnorablesMatcher extends RangeMatcher {
     }
 
     private IgnorablesMatcher(UnicodeSet ignorables) {
-        super(ignorables);
-    }
-
-    @Override
-    public UnicodeSet getLeadCodePoints() {
-        if (this == DEFAULT) {
-            return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.DEFAULT_IGNORABLES);
-        } else if (this == STRICT) {
-            return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.STRICT_IGNORABLES);
-        } else {
-            return super.getLeadCodePoints();
-        }
+        super("", ignorables);
     }
 
     @Override

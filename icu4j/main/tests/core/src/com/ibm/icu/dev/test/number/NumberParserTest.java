@@ -3,7 +3,6 @@
 package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -84,6 +83,7 @@ public class NumberParserTest {
                 { 3, "📺1.23", "📺0;📻0", 6, 1.23 },
                 { 3, "📻1.23", "📺0;📻0", 6, -1.23 },
                 { 3, ".00", "0", 3, 0.0 },
+                { 3, "                              0", "a0", 31, 0.0}, // should not hang
                 { 3, "0", "0", 1, 0.0 } };
 
         for (Object[] cas : cases) {
@@ -147,7 +147,6 @@ public class NumberParserTest {
     public void testSeriesMatcher() {
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
         SeriesMatcher series = new SeriesMatcher();
-        series.addMatcher(IgnorablesMatcher.DEFAULT);
         series.addMatcher(PlusSignMatcher.getInstance(symbols));
         series.addMatcher(MinusSignMatcher.getInstance(symbols));
         series.addMatcher(IgnorablesMatcher.DEFAULT);
@@ -155,23 +154,21 @@ public class NumberParserTest {
         series.addMatcher(IgnorablesMatcher.DEFAULT);
         series.freeze();
 
-        assertEquals(UnicodeSetStaticCache.get(Key.DEFAULT_IGNORABLES).cloneAsThawed()
-                .addAll(UnicodeSetStaticCache.get(Key.PLUS_SIGN)), series.getLeadCodePoints());
-        assertFalse(series.matchesEmpty());
+        assertEquals(UnicodeSetStaticCache.get(Key.PLUS_SIGN), series.getLeadCodePoints());
 
         Object[][] cases = new Object[][] {
                 { "", 0, true },
-                { " ", 0, true },
+                { " ", 0, false },
                 { "$", 0, false },
                 { "+", 0, true },
-                { " +", 0, true },
-                { " + ", 0, false },
+                { " +", 0, false },
                 { "+-", 0, true },
                 { "+ -", 0, false },
                 { "+-  ", 0, true },
                 { "+-  $", 0, false },
                 { "+-%", 3, true },
-                { "  +-  %  ", 9, true },
+                { "  +-  %  ", 0, false },
+                { "+-  %  ", 7, true },
                 { "+-%$", 3, false } };
         for (Object[] cas : cases) {
             String input = (String) cas[0];

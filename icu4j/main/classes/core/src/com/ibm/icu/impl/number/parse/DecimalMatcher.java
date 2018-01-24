@@ -334,11 +334,6 @@ public class DecimalMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public boolean matchesEmpty() {
-        return false;
-    }
-
-    @Override
     public void postProcess(ParsedNumber result) {
         // No-op
     }
