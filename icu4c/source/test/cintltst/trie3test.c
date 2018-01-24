@@ -61,41 +61,105 @@ getSpecialValues(const CheckRange checkRanges[], int32_t countCheckRanges,
     }
     return i;
 }
-#if 0  // TODO
+
 /* utrie3_enum() callback, modifies a value */
 static uint32_t U_CALLCONV
-testEnumValue(const void *context, uint32_t value) {
-    return value^0x5555;
+testHandleValue(const void *context, uint32_t value) {
+    return value ^ 0x5555;
 }
 
-/* utrie3_enum() callback, verifies a range */
-static UBool U_CALLCONV
-testEnumRange(const void *context, UChar32 start, UChar32 end, uint32_t value) {
-    const CheckRange **pb=(const CheckRange **)context;
-    const CheckRange *b=(*pb)++;
-    UChar32 limit=end+1;
-    
-    value^=0x5555;
-    if(start!=(b-1)->limit || limit!=b->limit || value!=b->value) {
-        log_err("error: utrie3_enum() delivers wrong range [U+%04lx..U+%04lx].0x%lx instead of [U+%04lx..U+%04lx].0x%lx\n",
-            (long)start, (long)end, (long)value,
-            (long)(b-1)->limit, (long)b->limit-1, (long)b->value);
+static UBool
+doCheckRange(const char *name, const char *variant,
+             UChar32 start, UChar32 end, uint32_t value,
+             UChar32 expEnd, uint32_t expValue) {
+    if (end < 0) {
+        if (expEnd >= 0) {
+            log_err("error: %s getRanges (%s) fails to deliver range [U+%04lx..U+%04lx].0x%lx\n",
+                    name, variant, (long)start, (long)expEnd, (long)expValue);
+        }
+        return FALSE;
+    }
+    if (expEnd < 0) {
+        log_err("error: %s getRanges (%s) delivers unexpected range [U+%04lx..U+%04lx].0x%lx\n",
+                name, variant, (long)start, (long)end, (long)value);
+        return FALSE;
+    }
+    if (end != expEnd || value != expValue) {
+        log_err("error: %s getRanges (%s) delivers wrong range [U+%04lx..U+%04lx].0x%lx "
+                "instead of [U+%04lx..U+%04lx].0x%lx\n",
+                name, variant, (long)start, (long)end, (long)value,
+                (long)start, (long)expEnd, (long)expValue);
+        return FALSE;
     }
     return TRUE;
 }
 
+static UChar32 iterStarts[] = { 0, 0xdddd, 0x10000, 0x12345, 0x110000 };
+
 static void
-testTrieEnum(const char *testName,
-             const UTrie3 *trie,
-             const CheckRange checkRanges[], int32_t countCheckRanges) {
-    /* skip over special values */
-    while(countCheckRanges>0 && checkRanges[0].limit<=0) {
-        ++checkRanges;
-        --countCheckRanges;
+testTrieGetRanges(const char *testName, const UTrie3 *trie,
+                  const CheckRange checkRanges[], int32_t countCheckRanges) {
+    UBool isFrozen = utrie3_isFrozen(trie);
+    const char *const typeName = isFrozen ? "frozen trie" : "newTrie";
+    char name[80];
+    int32_t s;
+    for (s = 0; s < UPRV_LENGTHOF(iterStarts); ++s) {
+        UChar32 start = iterStarts[s];
+        int32_t i, i0;
+        UChar32 end, expEnd;
+        uint32_t value, expValue;
+
+        sprintf(name, "%s(%s) min=U+%04lx", typeName, testName, (long)start);
+
+        // Skip over special values and low ranges.
+        for (i = 0; i < countCheckRanges && checkRanges[i].limit <= start; ++i) {}
+        i0 = i;
+        // without value handler
+        for (;; ++i, start = end + 1) {
+            if (i < countCheckRanges) {
+                expEnd = checkRanges[i].limit - 1;
+                expValue = checkRanges[i].value;
+            } else {
+                expEnd = -1;
+                expValue = value = 0x5005;
+            }
+            end = isFrozen ? utrie3_getRange(trie, start, NULL, NULL, &value) :
+                utrie3bld_getRange(trie, start, NULL, NULL, &value);
+            if (!doCheckRange(name, "without value handler", start, end, value, expEnd, expValue)) {
+                break;
+            }
+        }
+        // with value handler
+        for (i = i0, start = iterStarts[s];; ++i, start = end + 1) {
+            if (i < countCheckRanges) {
+                expEnd = checkRanges[i].limit - 1;
+                expValue = checkRanges[i].value ^ 0x5555;
+            } else {
+                expEnd = -1;
+                expValue = value = 0x5005;
+            }
+            end = isFrozen ? utrie3_getRange(trie, start, testHandleValue, NULL, &value) :
+                utrie3bld_getRange(trie, start, testHandleValue, NULL, &value);
+            if (!doCheckRange(name, "with value handler", start, end, value, expEnd, expValue)) {
+                break;
+            }
+        }
+        // without value
+        for (i = i0, start = iterStarts[s];; ++i, start = end + 1) {
+            if (i < countCheckRanges) {
+                expEnd = checkRanges[i].limit - 1;
+            } else {
+                expEnd = -1;
+            }
+            end = isFrozen ? utrie3_getRange(trie, start, NULL, NULL, NULL) :
+                utrie3bld_getRange(trie, start, NULL, NULL, NULL);
+            if (!doCheckRange(name, "without value", start, end, 0, expEnd, 0)) {
+                break;
+            }
+        }
     }
-    utrie3_enum(trie, testEnumValue, testEnumRange, &checkRanges);
 }
-#endif
+
 /* verify all expected values via UTRIE3_GETxx() */
 static void
 testTrieGetters(const char *testName,
@@ -523,9 +587,7 @@ testFrozenTrie(const char *testName,
     }
 
     testTrieGetters(testName, trie, valueBits, checkRanges, countCheckRanges);
-#if 0  // TODO
-    testTrieEnum(testName, trie, checkRanges, countCheckRanges);
-#endif
+    testTrieGetRanges(testName, trie, checkRanges, countCheckRanges);
     testTrieUTF16(testName, trie, valueBits, checkRanges, countCheckRanges);
     testTrieUTF8(testName, trie, valueBits, checkRanges, countCheckRanges);
 
@@ -554,9 +616,7 @@ testNewTrie(const char *testName, const UTrie3 *trie,
             const CheckRange checkRanges[], int32_t countCheckRanges) {
     /* The valueBits are ignored for an unfrozen trie. */
     testTrieGetters(testName, trie, UTRIE3_COUNT_VALUE_BITS, checkRanges, countCheckRanges);
-#if 0  // TODO
-    testTrieEnum(testName, trie, checkRanges, countCheckRanges);
-#endif
+    testTrieGetRanges(testName, trie, checkRanges, countCheckRanges);
 }
 
 static uint32_t storage[120000];
@@ -971,38 +1031,6 @@ checkRanges2[]={
     { 0x110000, 0 }
 };
 
-static const CheckRange
-checkRanges2_d800[]={
-    { 0x10000,  0 },
-    { 0x10400,  0 }
-};
-
-static const CheckRange
-checkRanges2_d87e[]={
-    { 0x2f800,  6 },
-    { 0x2f883,  0 },
-    { 0x2f987,  0x7a },
-    { 0x2fa98,  5 },
-    { 0x2fc00,  0x7a }
-};
-
-static const CheckRange
-checkRanges2_d87f[]={
-    { 0x2fc00,  0 },
-    { 0x2fedc,  0x7a },
-    { 0x2ffaa,  1 },
-    { 0x2ffab,  2 },
-    { 0x2ffbb,  0 },
-    { 0x2ffc0,  7 },
-    { 0x30000,  0 }
-};
-
-static const CheckRange
-checkRanges2_dbff[]={
-    { 0x10fc00, 0 },
-    { 0x110000, 0 }
-};
-
 /* use a non-zero initial value */
 static const SetRange
 setRanges3[]={
@@ -1093,48 +1121,6 @@ TrieTestSet2OverlapWithClone(void) {
     testTrieRanges("set2-overlap.withClone", TRUE,
         setRanges2, UPRV_LENGTHOF(setRanges2),
         checkRanges2, UPRV_LENGTHOF(checkRanges2));
-}
-
-static void
-EnumNewTrieForLeadSurrogateTest(void) {
-#if 0  // TODO
-    static const char *const testName="enum-for-lead";
-    UTrie3 *trie=makeTrieWithRanges(testName, FALSE,
-                                    setRanges2, UPRV_LENGTHOF(setRanges2),
-                                    checkRanges2, UPRV_LENGTHOF(checkRanges2));
-    while(trie!=NULL) {
-        const CheckRange *checkRanges;
-
-        checkRanges=checkRanges2_d800+1;
-        utrie3_enumForLeadSurrogate(trie, 0xd800,
-                                    testEnumValue, testEnumRange,
-                                    &checkRanges);
-        checkRanges=checkRanges2_d87e+1;
-        utrie3_enumForLeadSurrogate(trie, 0xd87e,
-                                    testEnumValue, testEnumRange,
-                                    &checkRanges);
-        checkRanges=checkRanges2_d87f+1;
-        utrie3_enumForLeadSurrogate(trie, 0xd87f,
-                                    testEnumValue, testEnumRange,
-                                    &checkRanges);
-        checkRanges=checkRanges2_dbff+1;
-        utrie3_enumForLeadSurrogate(trie, 0xdbff,
-                                    testEnumValue, testEnumRange,
-                                    &checkRanges);
-        if(!utrie3_isFrozen(trie)) {
-            UErrorCode errorCode=U_ZERO_ERROR;
-            utrie3_freeze(trie, UTRIE3_16_VALUE_BITS, &errorCode);
-            if(U_FAILURE(errorCode)) {
-                log_err("error: utrie3_freeze(%s) failed\n", testName);
-                utrie3_close(trie);
-                return;
-            }
-        } else {
-            utrie3_close(trie);
-            break;
-        }
-    }
-#endif
 }
 
 /* test utrie3_openDummy() -------------------------------------------------- */
@@ -1514,8 +1500,6 @@ addTrie3Test(TestNode** root) {
     addTest(root, &TrieTestSetEmpty, "tsutil/trie3test/TrieTestSetEmpty");
     addTest(root, &TrieTestSetSingleValue, "tsutil/trie3test/TrieTestSetSingleValue");
     addTest(root, &TrieTestSet2OverlapWithClone, "tsutil/trie3test/TrieTestSet2OverlapWithClone");
-    addTest(root, &EnumNewTrieForLeadSurrogateTest,
-                  "tsutil/trie3test/EnumNewTrieForLeadSurrogateTest");
     addTest(root, &DummyTrieTest, "tsutil/trie3test/DummyTrieTest");
     addTest(root, &FreeBlocksTest, "tsutil/trie3test/FreeBlocksTest");
     addTest(root, &GrowDataArrayTest, "tsutil/trie3test/GrowDataArrayTest");

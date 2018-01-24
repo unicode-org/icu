@@ -317,88 +317,84 @@ utrie3_get32FromBuilder(const UTrie3 *trie, UChar32 c) {
     }
 }
 
-// TODO: move to utrie3.cpp
-U_CFUNC int32_t
-utrie3_getRange32FromBuilder(const UTrie3 *trie, UChar32 start,
-                             UTrie3EnumValue *enumValue, const void *context, uint32_t *pValue) {
-    if((uint32_t)start>MAX_UNICODE) {
+namespace {
+
+inline uint32_t maybeHandleValue(uint32_t value, uint32_t initialValue, uint32_t nullValue,
+                                 UTrie3HandleValue *handleValue, const void *context) {
+    if (value == initialValue) {
+        value = nullValue;
+    } else if (handleValue != nullptr) {
+        value = handleValue(context, value);
+    }
+    return value;
+}
+
+}  // namespace
+
+U_CAPI int32_t U_EXPORT2
+utrie3bld_getRange(const UTrie3 *trie, UChar32 start,
+                   UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue) {
+    if ((uint32_t)start > MAX_UNICODE) {
         return U_SENTINEL;
     }
-    if(start>=trie->highStart) {
-        if(pValue!=nullptr) { *pValue=trie->highValue; }
+    if (start >= trie->highStart) {
+        if (pValue != nullptr) {
+            uint32_t value = trie->highValue;
+            if (handleValue != nullptr) { value = handleValue(context, value); }
+            *pValue = value;
+        }
         return MAX_UNICODE;
     }
-    uint32_t initialValue=trie->initialValue;
-    if(enumValue!=nullptr) { initialValue=enumValue(context, initialValue); }
-    const UNewTrie3 *newTrie=trie->newTrie;
-    UChar32 c=start;
+    uint32_t nullValue = trie->initialValue;
+    if (handleValue != nullptr) { nullValue = handleValue(context, nullValue); }
+    const UNewTrie3 *newTrie = trie->newTrie;
+    UChar32 c = start;
     uint32_t value;
-    int32_t i=c>>UTRIE3_SHIFT_2;
-    uint8_t flags=newTrie->flags[i];
-    if(flags==ALL_SAME) {
-        value=newTrie->index[i];
-        if(value==trie->initialValue) {
-            value=initialValue;
-        } else if(enumValue!=nullptr) {
-            value=enumValue(context, value);
-        }
-        if(pValue!=nullptr) { *pValue=value; }
-        c=(c+UTRIE3_DATA_MASK)&~UTRIE3_DATA_MASK;
-    } else /* MIXED */ {
-        uint32_t di=newTrie->index[i] + (c&UTRIE3_DATA_MASK);
-        value=newTrie->data[di];
-        if(value==trie->initialValue) {
-            value=initialValue;
-        } else if(enumValue!=nullptr) {
-            value=enumValue(context, value);
-        }
-        if(pValue!=nullptr) { *pValue=value; }
-        while((++c&UTRIE3_DATA_MASK)!=0) {
-            uint32_t value2=newTrie->data[++di];
-            if(value2==trie->initialValue) {
-                value2=initialValue;
-            } else if(enumValue!=nullptr) {
-                value2=enumValue(context, value2);
+    bool haveValue = false;
+    int32_t i = c >> UTRIE3_SHIFT_2;
+    do {
+        uint8_t flags = newTrie->flags[i];
+        if (flags == ALL_SAME) {
+            uint32_t value2 = maybeHandleValue(newTrie->index[i], trie->initialValue, nullValue,
+                                               handleValue, context);
+            if (haveValue) {
+                if (value2 != value) {
+                    return c - 1;
+                }
+            } else {
+                value = value2;
+                if (pValue != nullptr) { *pValue = value; }
+                haveValue = true;
             }
-            if(value2!=value) {
-                return c-1;
-            }
-        }
-    }
-    ++i;
-    while(c<trie->highStart) {
-        flags=newTrie->flags[i];
-        if(flags==ALL_SAME) {
-            uint32_t value2=newTrie->index[i];
-            if(value2==trie->initialValue) {
-                value2=initialValue;
-            } else if(enumValue!=nullptr) {
-                value2=enumValue(context, value2);
-            }
-            if(value2!=value) {
-                break;
-            }
-            c+=UTRIE3_DATA_BLOCK_LENGTH;
+            c = (c + UTRIE3_DATA_BLOCK_LENGTH) & ~UTRIE3_DATA_MASK;
         } else /* MIXED */ {
-            uint32_t di=newTrie->index[i];
-            do {
-                uint32_t value2=newTrie->data[di++];
-                if(value2==trie->initialValue) {
-                    value2=initialValue;
-                } else if(enumValue!=nullptr) {
-                    value2=enumValue(context, value2);
+            int32_t di = newTrie->index[i] + (c & UTRIE3_DATA_MASK);
+            uint32_t value2 = maybeHandleValue(newTrie->data[di], trie->initialValue, nullValue,
+                                               handleValue, context);
+            if (haveValue) {
+                if (value2 != value) {
+                    return c - 1;
                 }
-                if(value2!=value) {
-                    return c-1;
+            } else {
+                value = value2;
+                if (pValue != nullptr) { *pValue = value; }
+                haveValue = true;
+            }
+            while ((++c & UTRIE3_DATA_MASK) != 0) {
+                if (maybeHandleValue(newTrie->data[++di], trie->initialValue, nullValue,
+                                     handleValue, context) != value) {
+                    return c - 1;
                 }
-            } while((++c&UTRIE3_DATA_MASK)!=0);
+            }
         }
         ++i;
-    }
-    if(value==initialValue) {
-        return MAX_UNICODE;
+    } while (c < trie->highStart);
+    U_ASSERT(haveValue);
+    if (maybeHandleValue(trie->highValue, trie->initialValue, nullValue,
+                         handleValue, context) != value) {
+        return c - 1;
     } else {
-        return c-1;
+        return MAX_UNICODE;
     }
 }
 
@@ -1243,7 +1239,13 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
     UTrie3Header *header=(UTrie3Header *)trie->memory;
 
     header->signature=UTRIE3_SIG;  // "Tri3"
-    header->options = ((uint32_t)trie->dataNullOffset << 12) | valueBits;
+
+    uint32_t options = trie->dataNullOffset;
+    if (options != UTRIE3_NO_DATA_NULL_OFFSET) {
+        options += dataMove;
+    }
+    options = (options << 12) | valueBits;
+    header->options = options;
 
     header->indexLength=(uint16_t)trie->indexLength;
     header->shiftedDataLength=(uint16_t)(trie->dataLength>>UTRIE3_INDEX_SHIFT);

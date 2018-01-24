@@ -110,57 +110,51 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
 U_CAPI uint32_t U_EXPORT2
 utrie3_get32(const UTrie3 *trie, UChar32 c);
 
-/* enumeration callback types */
-
 /**
- * Callback from utrie3_enum(), extracts a uint32_t value from a
- * trie value. This value will be passed on to the UTrie3EnumRange function.
+ * Callback function type: Modifies a trie value.
+ * Optionally called by utrie3_getRange() or utrie3bld_getRange().
+ * The modified value will be returned by the getRange function.
  *
- * @param context an opaque pointer, as passed into utrie3_enum()
+ * Can be used to ignore some of the value bits, return a value index by the trie value, etc.
+ *
+ * @param context an opaque pointer, as passed into the getRange function
  * @param value a value from the trie
- * @return the value that is to be passed on to the UTrie3EnumRange function
+ * @return the modified value
  */
 typedef uint32_t U_CALLCONV
-UTrie3EnumValue(const void *context, uint32_t value);
-#if 0  // TODO
-/**
- * Callback from utrie3_enum(), is called for each contiguous range
- * of code points with the same value as retrieved from the trie and
- * transformed by the UTrie3EnumValue function.
- *
- * The callback function can stop the enumeration by returning FALSE.
- *
- * @param context an opaque pointer, as passed into utrie3_enum()
- * @param start the first code point in a contiguous range with value
- * @param end the last code point in a contiguous range with value (inclusive)
- * @param value the value that is set for all code points in [start..end]
- * @return FALSE to stop the enumeration
- */
-typedef UBool U_CALLCONV
-UTrie3EnumRange(const void *context, UChar32 start, UChar32 end, uint32_t value);
+UTrie3HandleValue(const void *context, uint32_t value);
 
 /**
- * Enumerate efficiently all values in a trie.
- * Do not modify the trie during the enumeration.
+ * Returns the last code point such that all those from start to there have the same value.
+ * Can be used to efficiently iterate over all same-value ranges in a trie.
+ * Do not modify the trie during the enumeration.  TODO
  *
  * For each entry in the trie, the value to be delivered is passed through
- * the UTrie3EnumValue function.
+ * the UTrie3HandleValue function.
  * The value is unchanged if that function pointer is NULL.
  *
- * For each contiguous range of code points with a given (transformed) value,
- * the UTrie3EnumRange function is called.
+ * Example:
+ * \code
+ * UChar32 start = 0, end;
+ * uint32_t value;
+ * while ((end = utrie3_getRange(trie, start, NULL, NULL, &value)) >= 0) {
+ *     // Work with the range start..end and its value.
+ *     start = end + 1;
+ * }
+ * \endcode
  *
- * @param trie a pointer to the trie
- * @param enumValue a pointer to a function that may transform the trie entry value,
- *                  or NULL if the values from the trie are to be used directly
- * @param enumRange a pointer to a function that is called for each contiguous range
- *                  of code points with the same (transformed) value
- * @param context an opaque pointer that is passed on to the callback functions
+ * @param trie a pointer to a frozen trie
+ * @param start range start
+ * @param handleValue a pointer to a function that may modify the trie entry value,
+ *     or NULL if the values from the trie are to be used directly
+ * @param context an opaque pointer that is passed on to the handleValue function
+ * @param pValue if not NULL, receives the value that every code point start..end has;
+ *     optionally modified by handleValue(context, trie value)
+ * @return the range end code point, or -1 if start is not a valid code point
  */
-U_CAPI void U_EXPORT2
-utrie3_enum(const UTrie3 *trie,
-            UTrie3EnumValue *enumValue, UTrie3EnumRange *enumRange, const void *context);
-#endif
+U_CAPI int32_t U_EXPORT2
+utrie3_getRange(const UTrie3 *trie, UChar32 start,
+                UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue);
 
 /* Building a trie ---------------------------------------------------------- */
 
@@ -475,7 +469,7 @@ utrie3_fromUTrie(const UTrie *trie1, uint32_t errorValue, UErrorCode *pErrorCode
  * assembling supplementary code points only when there is non-trivial data
  * available.
  *
- * At build-time, use utrie3_enumForLeadSurrogate() to see if there
+ * At build-time, use utrie3bld_getRange() starting from U+10000 to see if there
  * is non-trivial (non-initialValue) data for any of the supplementary
  * code points associated with a lead surrogate.
  * If so, then set a special (application-specific) value for the
@@ -492,37 +486,30 @@ utrie3_fromUTrie(const UTrie *trie1, uint32_t errorValue, UErrorCode *pErrorCode
  * can often skip them. For example, in normalization or case mapping
  * all characters that do not have any mappings are simply copied as is.
  */
-#if 0  // TODO
+
 /**
- * Enumerate the trie values for the 1024=0x400 code points
- * corresponding to a given lead surrogate.
- * For example, for the lead surrogate U+D87E it will enumerate the values
- * for [U+2F800..U+2FC00[.
- * Used by data builder code that sets special lead surrogate code unit values
- * for optimized UTF-16 string processing.
+ * Returns the last code point such that all those from start to there have the same value.
+ * Can be used to efficiently iterate over all same-value ranges in a trie.
  *
- * Do not modify the trie during the enumeration.
- *
- * Except for the limited code point range, this functions just like utrie3_enum():
  * For each entry in the trie, the value to be delivered is passed through
- * the UTrie3EnumValue function.
+ * the UTrie3HandleValue function.
  * The value is unchanged if that function pointer is NULL.
  *
- * For each contiguous range of code points with a given (transformed) value,
- * the UTrie3EnumRange function is called.
+ * See the same-signature utrie3_getRange() for a code sample.
  *
- * @param trie a pointer to the trie
- * @param enumValue a pointer to a function that may transform the trie entry value,
- *                  or NULL if the values from the trie are to be used directly
- * @param enumRange a pointer to a function that is called for each contiguous range
- *                  of code points with the same (transformed) value
- * @param context an opaque pointer that is passed on to the callback functions
+ * @param trie a pointer to a trie builder
+ * @param start range start
+ * @param handleValue a pointer to a function that may modify the trie entry value,
+ *     or NULL if the values from the trie are to be used directly
+ * @param context an opaque pointer that is passed on to the handleValue function
+ * @param pValue if not NULL, receives the value that every code point start..end has;
+ *     optionally modified by handleValue(context, trie value)
+ * @return the range end code point, or -1 if start is not a valid code point
  */
-U_CAPI void U_EXPORT2
-utrie3_enumForLeadSurrogate(const UTrie3 *trie, UChar32 lead,
-                            UTrie3EnumValue *enumValue, UTrie3EnumRange *enumRange,
-                            const void *context);
-#endif
+U_CAPI int32_t U_EXPORT2
+utrie3bld_getRange(const UTrie3 *trie, UChar32 start,
+                   UTrie3HandleValue *enumValue, const void *context, uint32_t *pValue);
+
 /**
  * Returns a 16-bit trie value from a BMP code point or UTF-16 code unit (0..U+ffff).
  * Same as UTRIE3_GET16() if c is a BMP code point, but smaller and faster.
