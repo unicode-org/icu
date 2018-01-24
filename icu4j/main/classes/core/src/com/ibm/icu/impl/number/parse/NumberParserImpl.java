@@ -33,7 +33,9 @@ import com.ibm.icu.util.ULocale;
 public class NumberParserImpl {
     @Deprecated
     public static NumberParserImpl createParserFromPattern(
-            ULocale locale, String pattern, boolean strictGrouping) {
+            ULocale locale,
+            String pattern,
+            boolean strictGrouping) {
         // Temporary frontend for testing.
 
         int parseFlags = ParsingUtils.PARSE_FLAG_IGNORE_CASE
@@ -196,7 +198,7 @@ public class NumberParserImpl {
         parser.addMatcher(InfinityMatcher.getInstance(symbols));
         String padString = properties.getPadString();
         if (padString != null && !ignorables.getSet().contains(padString)) {
-            parser.addMatcher(new PaddingMatcher(padString));
+            parser.addMatcher(PaddingMatcher.getInstance(padString));
         }
         parser.addMatcher(ignorables);
         parser.addMatcher(DecimalMatcher.getInstance(symbols, grouper, parseFlags));
@@ -366,6 +368,7 @@ public class NumberParserImpl {
         int initialOffset = segment.getOffset();
         for (int i = 0; i < matchers.size(); i++) {
             NumberParseMatcher matcher = matchers.get(i);
+
             // In a non-greedy parse, we attempt all possible matches and pick the best.
             for (int charsToConsume = 0; charsToConsume < segment.length();) {
                 charsToConsume += Character.charCount(Character.codePointAt(segment, charsToConsume));

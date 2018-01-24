@@ -5547,8 +5547,7 @@ public class NumberFormatTest extends TestFmwk {
         ParsePosition ppos = new ParsePosition(0);
         Number result = df.parse("42\u200E%\u200E ", ppos);
         assertEquals("Should parse as percentage", new BigDecimal("0.42"), result);
-        // TODO: The following line breaks in ICU 61.
-        //assertEquals("Should consume the trailing bidi since it is in the symbol", 5, ppos.getIndex());
+        assertEquals("Should consume the trailing bidi since it is in the symbol", 5, ppos.getIndex());
         ppos.setIndex(0);
         result = df.parse("-42a\u200E ", ppos);
         assertEquals("Should not parse as percent", new Long(-42), result);

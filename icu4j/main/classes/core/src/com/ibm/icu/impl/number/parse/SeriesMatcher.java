@@ -31,6 +31,10 @@ public class SeriesMatcher implements NumberParseMatcher {
         frozen = true;
     }
 
+    public int length() {
+        return matchers == null ? 0 : matchers.size();
+    }
+
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
         assert frozen;
@@ -44,7 +48,7 @@ public class SeriesMatcher implements NumberParseMatcher {
 
         int initialOffset = segment.getOffset();
         boolean maybeMore = true;
-        for (int i = 0; i < matchers.size(); i++) {
+        for (int i = 0; i < matchers.size();) {
             NumberParseMatcher matcher = matchers.get(i);
             int matcherOffset = segment.getOffset();
             if (segment.length() != 0) {
@@ -53,8 +57,19 @@ public class SeriesMatcher implements NumberParseMatcher {
                 // Nothing for this matcher to match; ask for more.
                 maybeMore = true;
             }
-            if (segment.getOffset() == matcherOffset && !matcher.matchesEmpty()) {
-                // Match failed.
+
+            boolean success = (segment.getOffset() != matcherOffset);
+            boolean isFlexible = matcher instanceof NumberParseMatcher.Flexible;
+            if (success && isFlexible) {
+                // Match succeeded, and this is a flexible matcher. Re-run it.
+            } else if (success) {
+                // Match succeeded, and this is NOT a flexible matcher. Proceed to the next matcher.
+                i++;
+            } else if (isFlexible) {
+                // Match failed, and this is a flexible matcher. Try again with the next matcher.
+                i++;
+            } else {
+                // Match failed, and this is NOT a flexible matcher. Exit.
                 segment.setOffset(initialOffset);
                 result.copyFrom(backup);
                 return maybeMore;
@@ -72,35 +87,9 @@ public class SeriesMatcher implements NumberParseMatcher {
             return UnicodeSet.EMPTY;
         }
 
-        if (!matchers.get(0).matchesEmpty()) {
-            return matchers.get(0).getLeadCodePoints();
-        }
-
-        UnicodeSet leadCodePoints = new UnicodeSet();
-        for (int i = 0; i < matchers.size(); i++) {
-            NumberParseMatcher matcher = matchers.get(i);
-            leadCodePoints.addAll(matcher.getLeadCodePoints());
-            if (!matcher.matchesEmpty()) {
-                break;
-            }
-        }
-        return leadCodePoints.freeze();
-    }
-
-    @Override
-    public boolean matchesEmpty() {
-        assert frozen;
-        if (matchers == null) {
-            return true;
-        }
-
-        for (int i = 0; i < matchers.size(); i++) {
-            NumberParseMatcher matcher = matchers.get(i);
-            if (!matcher.matchesEmpty()) {
-                return false;
-            }
-        }
-        return true;
+        // SeriesMatchers are never allowed to start with a Flexible matcher.
+        assert !(matchers.get(0) instanceof NumberParseMatcher.Flexible);
+        return matchers.get(0).getLeadCodePoints();
     }
 
     @Override

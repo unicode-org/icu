@@ -5916,7 +5916,6 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/ParsingUtils.java svne
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/PercentMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/PermilleMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/PlusSignMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RangeMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireAffixMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireCurrencyMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireDecimalSeparatorMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8

@@ -177,12 +177,6 @@ public class AffixMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public boolean matchesEmpty() {
-        // This is a stub implementation.
-        throw new AssertionError();
-    }
-
-    @Override
     public void postProcess(ParsedNumber result) {
         // Check to see if our affix is the one that was matched. If so, set the flags in the result.
         if (matched(prefix, result.prefix) && matched(suffix, result.suffix)) {

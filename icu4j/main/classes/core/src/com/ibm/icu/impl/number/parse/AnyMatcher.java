@@ -8,7 +8,8 @@ import java.util.List;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
- * Composes a number of matchers, and succeeds if any of the matchers succeed.
+ * Composes a number of matchers, and succeeds if any of the matchers succeed. Always greedily chooses
+ * the first matcher in the list to succeed.
  *
  * @author sffc
  * @see SeriesMatcher
@@ -37,20 +38,17 @@ public class AnyMatcher implements NumberParseMatcher {
             return false;
         }
 
-        // TODO: Give a nice way to reset ParsedNumber to avoid the copy here.
-        ParsedNumber backup = new ParsedNumber();
-        backup.copyFrom(result);
-
         int initialOffset = segment.getOffset();
         boolean maybeMore = false;
         for (int i = 0; i < matchers.size(); i++) {
             NumberParseMatcher matcher = matchers.get(i);
             maybeMore = maybeMore || matcher.match(segment, result);
             if (segment.getOffset() != initialOffset) {
-                // Match succeeded. Return true here to be safe.
-                // TODO: Better would be to run each matcher and return true only if at least one of the
-                // matchers returned true.
-                return true;
+                // Match succeeded.
+                // NOTE: Except for a couple edge cases, if a matcher accepted string A, then it will
+                // accept any string starting with A. Therefore, there is no possibility that matchers
+                // later in the list may be evaluated on longer strings, and we can exit the loop here.
+                break;
             }
         }
 
@@ -65,28 +63,16 @@ public class AnyMatcher implements NumberParseMatcher {
             return UnicodeSet.EMPTY;
         }
 
+        if (matchers.size() == 1) {
+            return matchers.get(0).getLeadCodePoints();
+        }
+
         UnicodeSet leadCodePoints = new UnicodeSet();
         for (int i = 0; i < matchers.size(); i++) {
             NumberParseMatcher matcher = matchers.get(i);
             leadCodePoints.addAll(matcher.getLeadCodePoints());
         }
         return leadCodePoints.freeze();
-    }
-
-    @Override
-    public boolean matchesEmpty() {
-        assert frozen;
-        if (matchers == null) {
-            return true;
-        }
-
-        for (int i = 0; i < matchers.size(); i++) {
-            NumberParseMatcher matcher = matchers.get(i);
-            if (matcher.matchesEmpty()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -104,7 +90,7 @@ public class AnyMatcher implements NumberParseMatcher {
 
     @Override
     public String toString() {
-        return "<SeriesMatcher " + matchers + ">";
+        return "<AnyMatcher " + matchers + ">";
     }
 
 }
