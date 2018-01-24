@@ -903,7 +903,6 @@ map<string,FinalRule> finalRules;
 
 map<string, set<string> > links;
 map<string, string> reverseLinks;
-map<string, string> linkSource; // id => "Olson link" or "ICU alias"
 
 /**
  * Predicate used to find FinalRule objects that do not have both
@@ -975,9 +974,6 @@ void readFinalZonesAndRules(istream& in) {
 
             links[fromid].insert(toid);
             reverseLinks[toid] = fromid;
-
-            linkSource[fromid] = "Olson link";
-            linkSource[toid] = "Olson link";
         } else if (token.length() > 0 && token[0] == '#') {
             consumeLine(in);
         } else {
@@ -1508,7 +1504,7 @@ int main(int argc, char *argv[]) {
     // Collect zone IDs to be modified with ICU definition.
     vector<string> customZones;
     for (ZoneMapIter i = ZONEINFO.begin(); i != ZONEINFO.end(); ++i) {
-        string id = i->first;
+        const string& id = i->first;
         size_t idx = id.rfind(ICU_ZONE_OVERRIDE_SUFFIX);
         if (idx != string::npos && idx == id.length() - ICU_ZONE_OVERRIDE_SUFFIX_LEN) {
             cout << "ICU zone override: " << id << endl;
@@ -1516,10 +1512,14 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    //
+    // BEGIN ICU Custom ZoneInfo Override Handling
+    //
+
     // Replace zoneinfo with ICU definition, then remove ICU zone ID with
     // the special suffix.
-    for (vector<string>::iterator i = customZones.begin(); i < customZones.end(); i++) {
-        string origId = *i;
+    for (vector<string>::iterator i = customZones.begin(); i != customZones.end(); i++) {
+        string& origId = *i;
         string custId = origId + ICU_ZONE_OVERRIDE_SUFFIX;
 
         map<string,ZoneInfo>::iterator origZi = ZONEINFO.find(origId);
@@ -1544,6 +1544,30 @@ int main(int argc, char *argv[]) {
         }
     }
 
+    // Also remove aliases for ICU custom zoneinfo overrides.
+    for (map<string,set<string>>::const_iterator i = links.begin(); i != links.end(); ) {
+        const string& id = i->first;
+        size_t idx = id.rfind(ICU_ZONE_OVERRIDE_SUFFIX);
+        if (idx != string::npos && idx == id.length() - ICU_ZONE_OVERRIDE_SUFFIX_LEN) {
+            const set<string>& aliases = i->second;
+            // Also remove all revserse links
+            for (set<string>::const_iterator j = aliases.begin(); j != aliases.end(); j++) {
+                const string& alias = *j;
+                cout << "Removing alias " << alias << endl;
+                reverseLinks.erase(alias);
+            }
+
+            links.erase(i++);
+        } else {
+            i++;
+        }
+    }
+
+
+    //
+    // END ICU Custom ZoneInfo Override Handling
+    //
+
     try {
         for_each(finalZones.begin(), finalZones.end(), mergeFinalZone);
     } catch (const exception& error) {
@@ -1561,7 +1585,7 @@ int main(int argc, char *argv[]) {
         const string& olson = i->first;
         const set<string>& aliases = i->second;
         if (ZONEINFO.find(olson) == ZONEINFO.end()) {
-            cerr << "Error: Invalid " << linkSource[olson] << " to non-existent \""
+            cerr << "Error: Invalid 'Link' to non-existent \""
                  << olson << "\"" << endl;
             return 1;
         }
