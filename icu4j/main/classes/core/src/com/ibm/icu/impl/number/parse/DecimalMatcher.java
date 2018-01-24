@@ -30,6 +30,9 @@ public class DecimalMatcher implements NumberParseMatcher {
     private final int grouping1;
     private final int grouping2;
 
+    private final String groupingSeparator;
+    private final String decimalSeparator;
+
     // Assumption: these sets all consist of single code points. If this assumption needs to be broken,
     // fix getLeadCodePoints() as well as matching logic. Be careful of the performance impact.
     private final UnicodeSet groupingUniSet;
@@ -47,8 +50,6 @@ public class DecimalMatcher implements NumberParseMatcher {
     }
 
     private DecimalMatcher(DecimalFormatSymbols symbols, Grouper grouper, int parseFlags) {
-        Key groupingKey, decimalKey;
-        String groupingSeparator, decimalSeparator;
         if (0 != (parseFlags & ParsingUtils.PARSE_FLAG_MONETARY_SEPARATORS)) {
             groupingSeparator = symbols.getMonetaryGroupingSeparatorString();
             decimalSeparator = symbols.getMonetaryDecimalSeparatorString();
@@ -56,67 +57,30 @@ public class DecimalMatcher implements NumberParseMatcher {
             groupingSeparator = symbols.getGroupingSeparatorString();
             decimalSeparator = symbols.getDecimalSeparatorString();
         }
+        boolean strictSeparators = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_STRICT_SEPARATORS);
+        Key groupingKey = strictSeparators ? Key.STRICT_ALL_SEPARATORS : Key.ALL_SEPARATORS;
 
-        // Attempt to find values in the static cache
-        if (0 != (parseFlags & ParsingUtils.PARSE_FLAG_STRICT_SEPARATORS)) {
-            decimalKey = UnicodeSetStaticCache
-                    .chooseFrom(decimalSeparator, Key.STRICT_COMMA, Key.STRICT_PERIOD);
-            if (decimalKey == Key.STRICT_COMMA) {
-                // Decimal is comma; grouping should be period or custom
-                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator,
-                        Key.STRICT_PERIOD_OR_OTHER);
-            } else if (decimalKey == Key.STRICT_PERIOD) {
-                // Decimal is period; grouping should be comma or custom
-                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator,
-                        Key.STRICT_COMMA_OR_OTHER);
-            } else {
-                // Decimal is custom; grouping can be either comma or period or custom
-                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator,
-                        Key.STRICT_COMMA_OR_OTHER,
-                        Key.STRICT_PERIOD_OR_OTHER);
-            }
+        // Attempt to find separators in the static cache
+
+        groupingUniSet = UnicodeSetStaticCache.get(groupingKey);
+        Key decimalKey = UnicodeSetStaticCache.chooseFrom(decimalSeparator,
+                strictSeparators ? Key.STRICT_COMMA : Key.COMMA,
+                strictSeparators ? Key.STRICT_PERIOD : Key.PERIOD);
+        if (decimalKey != null) {
+            decimalUniSet = UnicodeSetStaticCache.get(decimalKey);
         } else {
-            decimalKey = UnicodeSetStaticCache.chooseFrom(decimalSeparator, Key.COMMA, Key.PERIOD);
-            if (decimalKey == Key.COMMA) {
-                // Decimal is comma; grouping should be period or custom
-                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator, Key.PERIOD_OR_OTHER);
-            } else if (decimalKey == Key.PERIOD) {
-                // Decimal is period; grouping should be comma or custom
-                groupingKey = UnicodeSetStaticCache.chooseFrom(groupingSeparator, Key.COMMA_OR_OTHER);
-            } else {
-                // Decimal is custom; grouping can be either comma or period or custom
-                groupingKey = UnicodeSetStaticCache
-                        .chooseFrom(groupingSeparator, Key.COMMA_OR_OTHER, Key.PERIOD_OR_OTHER);
-            }
+            decimalUniSet = new UnicodeSet().add(decimalSeparator.codePointAt(0)).freeze();
         }
 
-        // Get the sets from the static cache if they were found
-        UnicodeSet _groupingUniSet = null, _decimalUniSet = null, _separatorSet = null, _leadSet = null;
         if (groupingKey != null && decimalKey != null) {
-            _groupingUniSet = UnicodeSetStaticCache.get(groupingKey);
-            _decimalUniSet = UnicodeSetStaticCache.get(decimalKey);
-            Key separatorKey = UnicodeSetStaticCache.unionOf(groupingKey, decimalKey);
-            if (separatorKey != null) {
-                _separatorSet = UnicodeSetStaticCache.get(separatorKey);
-                Key leadKey = UnicodeSetStaticCache.unionOf(Key.DIGITS, separatorKey);
-                if (leadKey != null) {
-                    _leadSet = UnicodeSetStaticCache.get(leadKey);
-                }
-            }
-        } else if (groupingKey != null) {
-            _groupingUniSet = UnicodeSetStaticCache.get(groupingKey);
-        } else if (decimalKey != null) {
-            _decimalUniSet = UnicodeSetStaticCache.get(decimalKey);
+            // Everything is available in the static cache
+            separatorSet = groupingUniSet;
+            leadSet = UnicodeSetStaticCache.get(strictSeparators ? Key.DIGITS_OR_ALL_SEPARATORS
+                    : Key.DIGITS_OR_STRICT_ALL_SEPARATORS);
+        } else {
+            separatorSet = new UnicodeSet().addAll(groupingUniSet).addAll(decimalUniSet).freeze();
+            leadSet = null;
         }
-
-        // Finish resolving fallbacks
-        groupingUniSet = _groupingUniSet != null ? _groupingUniSet
-                : new UnicodeSet().add(groupingSeparator.codePointAt(0)).freeze();
-        decimalUniSet = _decimalUniSet != null ? _decimalUniSet
-                : new UnicodeSet().add(decimalSeparator.codePointAt(0)).freeze();
-        separatorSet = _separatorSet != null ? _separatorSet
-                : new UnicodeSet().addAll(groupingUniSet).addAll(decimalUniSet).freeze();
-        leadSet = _leadSet; // null if not available
 
         int cpZero = symbols.getCodePointZero();
         if (cpZero == -1 || !UCharacter.isDigit(cpZero) || UCharacter.digit(cpZero) != 0) {
@@ -144,21 +108,25 @@ public class DecimalMatcher implements NumberParseMatcher {
             return false;
         }
 
-        ParsedNumber backup = null;
+        ParsedNumber backupResult = null;
         if (requireGroupingMatch) {
-            backup = new ParsedNumber();
-            backup.copyFrom(result);
+            backupResult = new ParsedNumber();
+            backupResult.copyFrom(result);
         }
 
-        int firstGroup = 0;
-        int prevGroup = 0;
-        int currGroup = 0;
-        int separator = -1;
+        // strict parsing
+        boolean strictFail = false; // did we exit with a strict parse failure?
+        String actualGroupingString = groupingSeparator;
+        String actualDecimalString = decimalSeparator;
+        int groupedDigitCount = 0; // tracking count of digits delimited by grouping separator
+        int backupOffset = -1; // used for preserving the last confirmed position
+        boolean afterFirstGrouping = false;
+        boolean seenGrouping = false;
+        boolean seenDecimal = false;
+        int digitsAfterDecimal = 0;
         int initialOffset = segment.getOffset();
         int exponent = 0;
         boolean hasPartialPrefix = false;
-        boolean seenBothSeparators = false;
-        boolean illegalGrouping = false;
         while (segment.length() > 0) {
             hasPartialPrefix = false;
 
@@ -187,8 +155,27 @@ public class DecimalMatcher implements NumberParseMatcher {
                 }
             }
 
-            // If found, save it in the DecimalQuantity or scientific adjustment.
             if (digit >= 0) {
+                // Digit was found.
+                // Check for grouping size violation
+                if (backupOffset != -1) {
+                    if (requireGroupingMatch) {
+                        // comma followed by digit, so group before comma is a secondary
+                        // group. If there was a group separator before that, the group
+                        // must == the secondary group length, else it can be <= the the
+                        // secondary group length.
+                        if ((afterFirstGrouping && groupedDigitCount != grouping2)
+                                || (!afterFirstGrouping && groupedDigitCount > grouping2)) {
+                            strictFail = true;
+                            break;
+                        }
+                    }
+                    afterFirstGrouping = true;
+                    backupOffset = -1;
+                    groupedDigitCount = 0;
+                }
+
+                // Save the digit in the DecimalQuantity or scientific adjustment.
                 if (isScientific) {
                     int nextExponent = digit + exponent * 10;
                     if (nextExponent < exponent) {
@@ -204,82 +191,109 @@ public class DecimalMatcher implements NumberParseMatcher {
                     result.quantity.appendDigit(digit, 0, true);
                 }
                 result.setCharsConsumed(segment);
-                currGroup++;
+                groupedDigitCount++;
+                if (seenDecimal) {
+                    digitsAfterDecimal++;
+                }
                 continue;
             }
 
-            // Attempt to match a separator.
-            if (!seenBothSeparators && cp != -1 && separatorSet.contains(cp)) {
-                if (separator == -1) {
-                    // First separator; could be either grouping or decimal.
-                    if (groupingDisabled && !decimalUniSet.contains(cp)) {
+            // Attempt to match a literal grouping or decimal separator
+            int decimalOverlap = segment.getCommonPrefixLength(actualDecimalString);
+            boolean decimalStringMatch = decimalOverlap == actualDecimalString.length();
+            int groupingOverlap = segment.getCommonPrefixLength(actualGroupingString);
+            boolean groupingStringMatch = groupingOverlap == actualGroupingString.length();
+
+            hasPartialPrefix = (decimalOverlap == segment.length())
+                    || (groupingOverlap == segment.length());
+
+            if (!seenDecimal
+                    && !groupingStringMatch
+                    && (decimalStringMatch || (!seenDecimal && decimalUniSet.contains(cp)))) {
+                // matched a decimal separator
+                if (requireGroupingMatch) {
+                    if (backupOffset != -1 || (seenGrouping && groupedDigitCount != grouping1)) {
+                        strictFail = true;
                         break;
                     }
-                    if (integerOnly && !groupingUniSet.contains(cp)) {
-                        break;
-                    }
-                    separator = cp;
-                    firstGroup = currGroup;
-                    if (requireGroupingMatch && currGroup == 0 && !decimalUniSet.contains(cp)) {
-                        illegalGrouping = true;
-                    }
-                } else if (!groupingDisabled && separator == cp && groupingUniSet.contains(cp)) {
-                    // Second or later grouping separator.
-                    prevGroup = currGroup;
-                    if (requireGroupingMatch && currGroup == 0) {
-                        break;
-                    }
-                    if (requireGroupingMatch && currGroup != grouping2) {
-                        if (currGroup == grouping1) {
-                            break;
-                        } else {
-                            illegalGrouping = true;
-                            break;
-                        }
-                    }
-                } else if (!integerOnly && separator != cp && decimalUniSet.contains(cp)) {
-                    // Decimal separator after a grouping separator.
-                    if (requireGroupingMatch && currGroup != grouping1) {
-                        illegalGrouping = true;
-                    }
-                    seenBothSeparators = true;
-                } else {
-                    // Invalid separator.
+                }
+
+                // If we're only parsing integers, then don't parse this one.
+                if (integerOnly) {
                     break;
                 }
-                currGroup = 0;
-                segment.adjustOffset(Character.charCount(cp));
+
+                seenDecimal = true;
+                if (!decimalStringMatch) {
+                    actualDecimalString = UCharacter.toString(cp);
+                }
+                segment.adjustOffset(actualDecimalString.length());
+                result.setCharsConsumed(segment);
+                result.flags |= ParsedNumber.FLAG_HAS_DECIMAL_SEPARATOR;
                 continue;
             }
 
+            if (!groupingDisabled
+                    && !decimalStringMatch
+                    && (groupingStringMatch || (!seenGrouping && groupingUniSet.contains(cp)))) {
+                // matched a grouping separator
+                if (requireGroupingMatch) {
+                    if (groupedDigitCount == 0) {
+                        // leading group
+                        strictFail = true;
+                        break;
+                    } else if (backupOffset != -1) {
+                        // two group separators in a row
+                        break;
+                    }
+                }
+
+                seenGrouping = true;
+                if (!groupingStringMatch) {
+                    actualGroupingString = UCharacter.toString(cp);
+                }
+                backupOffset = segment.getOffset();
+                segment.adjustOffset(actualGroupingString.length());
+                // Note: do NOT set charsConsumed
+                continue;
+            }
+
+            // Not a digit and not a separator
             break;
         }
 
-        // Unless the first group directly precedes the grouping separator, check it for validity
-        if (seenBothSeparators || (separator != -1 && !decimalUniSet.contains(separator))) {
-            if (currGroup > 0 && firstGroup > grouping2) {
-                illegalGrouping = true;
-            }
-        }
+        // if (backupOffset != -1) {
+        // segment.setOffset(backupOffset);
+        // hasPartialPrefix = true;
+        // }
 
-        // Check the final grouping size for validity
+        // Check the final grouping for validity
         if (requireGroupingMatch
-                && separator != -1
-                && !seenBothSeparators
-                && !decimalUniSet.contains(separator)) {
-            if (currGroup > 0 && currGroup != grouping1) {
-                illegalGrouping = true;
-            }
-            if (currGroup == 0 && prevGroup > 0 && prevGroup != grouping1) {
-                illegalGrouping = true;
-            }
+                && !seenDecimal
+                && seenGrouping
+                && afterFirstGrouping
+                && groupedDigitCount != grouping1) {
+            strictFail = true;
         }
 
-        if (requireGroupingMatch && illegalGrouping) {
-            result.copyFrom(backup);
+        if (requireGroupingMatch && strictFail) {
+            result.copyFrom(backupResult);
             segment.setOffset(initialOffset);
+        }
 
-        } else if (isScientific) {
+        if (result.quantity == null && segment.getOffset() != initialOffset) {
+            // Strings that start with a separator but have no digits.
+            // We don't need a backup of ParsedNumber because no changes could have been made to it.
+            segment.setOffset(initialOffset);
+            hasPartialPrefix = true;
+        }
+
+        if (result.quantity != null) {
+            // The final separator was a decimal separator.
+            result.quantity.adjustMagnitude(-digitsAfterDecimal);
+        }
+
+        if (isScientific && segment.getOffset() != initialOffset) {
             boolean overflow = (exponent == Integer.MAX_VALUE);
             if (!overflow) {
                 try {
@@ -298,18 +312,6 @@ public class DecimalMatcher implements NumberParseMatcher {
                     result.flags |= ParsedNumber.FLAG_INFINITY;
                 }
             }
-
-        } else if (result.quantity == null && segment.getOffset() != initialOffset) {
-            // Strings that start with a separator but have no digits.
-            // We don't need a backup of ParsedNumber because no changes could have been made to it.
-            segment.setOffset(initialOffset);
-            hasPartialPrefix = true;
-
-        } else if (seenBothSeparators || (separator != -1 && decimalUniSet.contains(separator))) {
-            // The final separator was a decimal separator.
-            result.quantity.adjustMagnitude(-currGroup);
-            result.flags |= ParsedNumber.FLAG_HAS_DECIMAL_SEPARATOR;
-
         }
 
         return segment.length() == 0 || hasPartialPrefix;

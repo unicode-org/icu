@@ -26,17 +26,18 @@ public class UnicodeSetStaticCache {
         STRICT_IGNORABLES,
 
         // Separators
+        // Notes:
+        // - COMMA is a superset of STRICT_COMMA
+        // - PERIOD is a superset of SCRICT_PERIOD
+        // - ALL_SEPARATORS is the union of COMMA, PERIOD, and OTHER_GROUPING_SEPARATORS
+        // - STRICT_ALL_SEPARATORS is the union of STRICT_COMMA, STRICT_PERIOD, and OTHER_GRP_SEPARATORS
         COMMA,
         PERIOD,
-        OTHER_GROUPING_SEPARATORS,
-        COMMA_OR_OTHER,
-        PERIOD_OR_OTHER,
-        COMMA_OR_PERIOD_OR_OTHER,
         STRICT_COMMA,
         STRICT_PERIOD,
-        STRICT_COMMA_OR_OTHER,
-        STRICT_PERIOD_OR_OTHER,
-        STRICT_COMMA_OR_PERIOD_OR_OTHER,
+        OTHER_GROUPING_SEPARATORS,
+        ALL_SEPARATORS,
+        STRICT_ALL_SEPARATORS,
 
         // Symbols
         // TODO: NaN?
@@ -53,12 +54,8 @@ public class UnicodeSetStaticCache {
         CWCF,
 
         // Combined Separators with Digits (for lead code points)
-        DIGITS_OR_COMMA_OR_OTHER,
-        DIGITS_OR_PERIOD_OR_OTHER,
-        DIGITS_OR_COMMA_OR_PERIOD_OR_OTHER,
-        DIGITS_OR_STRICT_COMMA_OR_OTHER,
-        DIGITS_OR_STRICT_PERIOD_OR_OTHER,
-        DIGITS_OR_STRICT_COMMA_OR_PERIOD_OR_OTHER,
+        DIGITS_OR_ALL_SEPARATORS,
+        DIGITS_OR_STRICT_ALL_SEPARATORS,
     };
 
     private static final Map<Key, UnicodeSet> unicodeSets = new EnumMap<Key, UnicodeSet>(Key.class);
@@ -77,68 +74,6 @@ public class UnicodeSetStaticCache {
 
     public static Key chooseFrom(String str, Key key1, Key key2, Key key3) {
         return get(key1).contains(str) ? key1 : chooseFrom(str, key2, key3);
-    }
-
-    public static Key unionOf(Key key1, Key key2) {
-        // Make sure key1 < key2
-        if (key2.ordinal() < key1.ordinal()) {
-            Key temp = key1;
-            key1 = key2;
-            key2 = temp;
-        }
-
-        if (key1 == Key.COMMA && key2 == Key.PERIOD_OR_OTHER) {
-            // 1.234,567
-            return Key.COMMA_OR_PERIOD_OR_OTHER;
-
-        } else if (key1 == Key.COMMA && key2 == Key.OTHER_GROUPING_SEPARATORS) {
-            // 1'234,567
-            return Key.COMMA_OR_OTHER;
-
-        } else if (key1 == Key.PERIOD && key2 == Key.COMMA_OR_OTHER) {
-            // 1,234.567
-            return Key.COMMA_OR_PERIOD_OR_OTHER;
-
-        } else if (key1 == Key.PERIOD && key2 == Key.OTHER_GROUPING_SEPARATORS) {
-            // 1'234.567
-            return Key.PERIOD_OR_OTHER;
-
-        } else if (key1 == Key.STRICT_COMMA && key2 == Key.STRICT_PERIOD_OR_OTHER) {
-            // Strict 1.234,567
-            return Key.STRICT_COMMA_OR_PERIOD_OR_OTHER;
-
-        } else if (key1 == Key.STRICT_COMMA && key2 == Key.OTHER_GROUPING_SEPARATORS) {
-            // Strict 1'234,567
-            return Key.STRICT_COMMA_OR_OTHER;
-
-        } else if (key1 == Key.STRICT_PERIOD && key2 == Key.STRICT_COMMA_OR_OTHER) {
-            // Strict 1,234.567
-            return Key.STRICT_COMMA_OR_PERIOD_OR_OTHER;
-
-        } else if (key1 == Key.STRICT_PERIOD && key2 == Key.OTHER_GROUPING_SEPARATORS) {
-            // Strict 1'234.567
-            return Key.STRICT_PERIOD_OR_OTHER;
-
-        } else if (key1 == Key.COMMA_OR_OTHER && key2 == Key.DIGITS) {
-            return Key.DIGITS_OR_COMMA_OR_OTHER;
-
-        } else if (key1 == Key.PERIOD_OR_OTHER && key2 == Key.DIGITS) {
-            return Key.DIGITS_OR_PERIOD_OR_OTHER;
-
-        } else if (key1 == Key.COMMA_OR_PERIOD_OR_OTHER && key2 == Key.DIGITS) {
-            return Key.DIGITS_OR_COMMA_OR_PERIOD_OR_OTHER;
-
-        } else if (key1 == Key.STRICT_COMMA_OR_OTHER && key2 == Key.DIGITS) {
-            return Key.DIGITS_OR_STRICT_COMMA_OR_OTHER;
-
-        } else if (key1 == Key.STRICT_PERIOD_OR_OTHER && key2 == Key.DIGITS) {
-            return Key.DIGITS_OR_STRICT_PERIOD_OR_OTHER;
-
-        } else if (key1 == Key.STRICT_COMMA_OR_PERIOD_OR_OTHER && key2 == Key.DIGITS) {
-            return Key.DIGITS_OR_STRICT_COMMA_OR_PERIOD_OR_OTHER;
-        }
-
-        return null;
     }
 
     private static UnicodeSet computeUnion(Key k1, Key k2) {
@@ -167,16 +102,9 @@ public class UnicodeSetStaticCache {
         unicodeSets.put(Key.STRICT_PERIOD, new UnicodeSet("[.․﹒．｡]").freeze());
         unicodeSets.put(Key.OTHER_GROUPING_SEPARATORS,
                 new UnicodeSet("['٬‘’＇\\u0020\\u00A0\\u2000-\\u200A\\u202F\\u205F\\u3000]").freeze());
-
-        unicodeSets.put(Key.COMMA_OR_OTHER, computeUnion(Key.COMMA, Key.OTHER_GROUPING_SEPARATORS));
-        unicodeSets.put(Key.PERIOD_OR_OTHER, computeUnion(Key.PERIOD, Key.OTHER_GROUPING_SEPARATORS));
-        unicodeSets.put(Key.COMMA_OR_PERIOD_OR_OTHER,
+        unicodeSets.put(Key.ALL_SEPARATORS,
                 computeUnion(Key.COMMA, Key.PERIOD, Key.OTHER_GROUPING_SEPARATORS));
-        unicodeSets.put(Key.STRICT_COMMA_OR_OTHER,
-                computeUnion(Key.STRICT_COMMA, Key.OTHER_GROUPING_SEPARATORS));
-        unicodeSets.put(Key.STRICT_PERIOD_OR_OTHER,
-                computeUnion(Key.STRICT_PERIOD, Key.OTHER_GROUPING_SEPARATORS));
-        unicodeSets.put(Key.STRICT_COMMA_OR_PERIOD_OR_OTHER,
+        unicodeSets.put(Key.STRICT_ALL_SEPARATORS,
                 computeUnion(Key.STRICT_COMMA, Key.STRICT_PERIOD, Key.OTHER_GROUPING_SEPARATORS));
 
         unicodeSets.put(Key.MINUS_SIGN, new UnicodeSet("[-⁻₋−➖﹣－]").freeze());
@@ -188,22 +116,14 @@ public class UnicodeSetStaticCache {
         unicodeSets.put(Key.INFINITY, new UnicodeSet("[∞]").freeze());
 
         unicodeSets.put(Key.DIGITS, new UnicodeSet("[:digit:]").freeze());
-        // Note: locale fi translation of NaN starts with 'e' (conflicts with scientific?)
         unicodeSets.put(Key.NAN_LEAD,
                 new UnicodeSet("[NnТтmeՈոс¤НнчTtsҳ\u975e\u1002\u0e9a\u10d0\u0f68\u0644\u0646]")
                         .freeze());
         unicodeSets.put(Key.SCIENTIFIC_LEAD, new UnicodeSet("[Ee×·е\u0627]").freeze());
         unicodeSets.put(Key.CWCF, new UnicodeSet("[:CWCF:]").freeze());
 
-        unicodeSets.put(Key.DIGITS_OR_COMMA_OR_OTHER, computeUnion(Key.DIGITS, Key.COMMA_OR_OTHER));
-        unicodeSets.put(Key.DIGITS_OR_PERIOD_OR_OTHER, computeUnion(Key.DIGITS, Key.PERIOD_OR_OTHER));
-        unicodeSets.put(Key.DIGITS_OR_COMMA_OR_PERIOD_OR_OTHER,
-                computeUnion(Key.DIGITS, Key.COMMA_OR_PERIOD_OR_OTHER));
-        unicodeSets.put(Key.DIGITS_OR_STRICT_COMMA_OR_OTHER,
-                computeUnion(Key.DIGITS, Key.STRICT_COMMA_OR_OTHER));
-        unicodeSets.put(Key.DIGITS_OR_STRICT_PERIOD_OR_OTHER,
-                computeUnion(Key.DIGITS, Key.STRICT_PERIOD_OR_OTHER));
-        unicodeSets.put(Key.DIGITS_OR_STRICT_COMMA_OR_PERIOD_OR_OTHER,
-                computeUnion(Key.DIGITS, Key.STRICT_COMMA_OR_PERIOD_OR_OTHER));
+        unicodeSets.put(Key.DIGITS_OR_ALL_SEPARATORS, computeUnion(Key.DIGITS, Key.ALL_SEPARATORS));
+        unicodeSets.put(Key.DIGITS_OR_STRICT_ALL_SEPARATORS,
+                computeUnion(Key.DIGITS, Key.STRICT_ALL_SEPARATORS));
     }
 }
