@@ -182,8 +182,8 @@ public class NumberParserImpl {
         ////////////////////////
 
         if (parseCurrency || patternInfo.hasCurrencySign()) {
-            parser.addMatcher(CurrencyTrieMatcher.getInstance(locale));
             parser.addMatcher(CurrencyMatcher.getInstance(currency, locale, parseFlags));
+            parser.addMatcher(CurrencyTrieMatcher.getInstance(locale));
         }
 
         ///////////////////////////////
