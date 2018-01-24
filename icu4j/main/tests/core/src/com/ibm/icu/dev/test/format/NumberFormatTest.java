@@ -832,18 +832,14 @@ public class NumberFormatTest extends TestFmwk {
             private final String localeString;
             private final String descrip;
             private final String currStr;
-            private final int    numExpectPos;
-            private final int    numExpectVal;
             private final int    curExpectPos;
             private final int    curExpectVal;
             private final String curExpectCurr;
 
-            ParseCurrencyItem(String locStr, String desc, String curr, int numExPos, int numExVal, int curExPos, int curExVal, String curExCurr) {
+            ParseCurrencyItem(String locStr, String desc, String curr, int curExPos, int curExVal, String curExCurr) {
                 localeString  = locStr;
                 descrip       = desc;
                 currStr       = curr;
-                numExpectPos  = numExPos;
-                numExpectVal  = numExVal;
                 curExpectPos  = curExPos;
                 curExpectVal  = curExVal;
                 curExpectCurr = curExCurr;
@@ -851,8 +847,6 @@ public class NumberFormatTest extends TestFmwk {
             public String getLocaleString()  { return localeString; }
             public String getDescrip()       { return descrip; }
             public String getCurrStr()       { return currStr; }
-            public int    getNumExpectPos()  { return numExpectPos; }
-            public int    getNumExpectVal()  { return numExpectVal; }
             public int    getCurExpectPos()  { return curExpectPos; }
             public int    getCurExpectVal()  { return curExpectVal; }
             public String getCurExpectCurr() { return curExpectCurr; }
@@ -860,27 +854,27 @@ public class NumberFormatTest extends TestFmwk {
         // Note: In cases where the number occurs before the currency sign, non-currency mode will parse the number
         // and stop when it reaches the currency symbol.
         final ParseCurrencyItem[] parseCurrencyItems = {
-                new ParseCurrencyItem( "en_US", "dollars2", "$2.00",            5,  2,  5,  2,  "USD" ),
-                new ParseCurrencyItem( "en_US", "dollars4", "$4",               2,  4,  2,  4,  "USD" ),
-                new ParseCurrencyItem( "en_US", "dollars9", "9\u00A0$",         1,  9,  3,  9,  "USD" ),
-                new ParseCurrencyItem( "en_US", "pounds3",  "\u00A33.00",       0,  0,  5,  3,  "GBP" ),
-                new ParseCurrencyItem( "en_US", "pounds5",  "\u00A35",          0,  0,  2,  5,  "GBP" ),
-                new ParseCurrencyItem( "en_US", "pounds7",  "7\u00A0\u00A3",    1,  7,  3,  7,  "GBP" ),
-                new ParseCurrencyItem( "en_US", "euros8",   "\u20AC8",          0,  0,  2,  8,  "EUR" ),
+                new ParseCurrencyItem( "en_US", "dollars2", "$2.00",            5,  2,  "USD" ),
+                new ParseCurrencyItem( "en_US", "dollars4", "$4",               2,  4,  "USD" ),
+                new ParseCurrencyItem( "en_US", "dollars9", "9\u00A0$",         3,  9,  "USD" ),
+                new ParseCurrencyItem( "en_US", "pounds3",  "\u00A33.00",       5,  3,  "GBP" ),
+                new ParseCurrencyItem( "en_US", "pounds5",  "\u00A35",          2,  5,  "GBP" ),
+                new ParseCurrencyItem( "en_US", "pounds7",  "7\u00A0\u00A3",    3,  7,  "GBP" ),
+                new ParseCurrencyItem( "en_US", "euros8",   "\u20AC8",          2,  8,  "EUR" ),
 
-                new ParseCurrencyItem( "en_GB", "pounds3",  "\u00A33.00",       5,  3,  5,  3,  "GBP" ),
-                new ParseCurrencyItem( "en_GB", "pounds5",  "\u00A35",          2,  5,  2,  5,  "GBP" ),
-                new ParseCurrencyItem( "en_GB", "pounds7",  "7\u00A0\u00A3",    1,  7,  3,  7,  "GBP" ),
-                new ParseCurrencyItem( "en_GB", "euros4",   "4,00\u00A0\u20AC", 4,400,  6,400,  "EUR" ),
-                new ParseCurrencyItem( "en_GB", "euros6",   "6\u00A0\u20AC",    1,  6,  3,  6,  "EUR" ),
-                new ParseCurrencyItem( "en_GB", "euros8",   "\u20AC8",          0,  0,  2,  8,  "EUR" ),
-                new ParseCurrencyItem( "en_GB", "dollars4", "US$4",             0,  0,  4,  4,  "USD" ),
+                new ParseCurrencyItem( "en_GB", "pounds3",  "\u00A33.00",       5,  3,  "GBP" ),
+                new ParseCurrencyItem( "en_GB", "pounds5",  "\u00A35",          2,  5,  "GBP" ),
+                new ParseCurrencyItem( "en_GB", "pounds7",  "7\u00A0\u00A3",    3,  7,  "GBP" ),
+                new ParseCurrencyItem( "en_GB", "euros4",   "4,00\u00A0\u20AC", 6,400,  "EUR" ),
+                new ParseCurrencyItem( "en_GB", "euros6",   "6\u00A0\u20AC",    3,  6,  "EUR" ),
+                new ParseCurrencyItem( "en_GB", "euros8",   "\u20AC8",          2,  8,  "EUR" ),
+                new ParseCurrencyItem( "en_GB", "dollars4", "US$4",             0,  0,  "USD" ),
 
-                new ParseCurrencyItem( "fr_FR", "euros4",   "4,00\u00A0\u20AC", 6,  4,  6,  4,  "EUR" ),
-                new ParseCurrencyItem( "fr_FR", "euros6",   "6\u00A0\u20AC",    3,  6,  3,  6,  "EUR" ),
-                new ParseCurrencyItem( "fr_FR", "euros8",   "\u20AC8",          0,  0,  2,  8,  "EUR" ),
-                new ParseCurrencyItem( "fr_FR", "dollars2", "$2.00",            0,  0,  0,  0,  ""    ),
-                new ParseCurrencyItem( "fr_FR", "dollars4", "$4",               0,  0,  0,  0,  ""    ),
+                new ParseCurrencyItem( "fr_FR", "euros4",   "4,00\u00A0\u20AC", 6,  4,  "EUR" ),
+                new ParseCurrencyItem( "fr_FR", "euros6",   "6\u00A0\u20AC",    3,  6,  "EUR" ),
+                new ParseCurrencyItem( "fr_FR", "euros8",   "\u20AC8",          2,  8,  "EUR" ),
+                new ParseCurrencyItem( "fr_FR", "dollars2", "$2.00",            0,  0,  ""    ),
+                new ParseCurrencyItem( "fr_FR", "dollars4", "$4",               0,  0,  ""    ),
         };
         for (ParseCurrencyItem item: parseCurrencyItems) {
             String localeString = item.getLocaleString();
@@ -896,14 +890,14 @@ public class NumberFormatTest extends TestFmwk {
             ParsePosition parsePos = new ParsePosition(0);
 
             Number numVal = fmt.parse(currStr, parsePos);
-            if ( parsePos.getIndex() != item.getNumExpectPos() || (numVal != null && numVal.intValue() != item.getNumExpectVal()) ) {
+            if ( parsePos.getIndex() != item.getCurExpectPos() || (numVal != null && numVal.intValue() != item.getCurExpectVal()) ) {
                 if (numVal != null) {
                     errln("NumberFormat.getCurrencyInstance parse " + localeString + "/" + item.getDescrip() +
-                            ", expect pos/val " + item.getNumExpectPos() + "/" + item.getNumExpectVal() +
+                            ", expect pos/val " + item.getCurExpectPos() + "/" + item.getCurExpectVal() +
                             ", get " + parsePos.getIndex() + "/" + numVal.intValue() );
                 } else {
                     errln("NumberFormat.getCurrencyInstance parse " + localeString + "/" + item.getDescrip() +
-                            ", expect pos/val " + item.getNumExpectPos() + "/" + item.getNumExpectVal() +
+                            ", expect pos/val " + item.getCurExpectPos() + "/" + item.getCurExpectVal() +
                             ", get " + parsePos.getIndex() + "/(NULL)" );
                 }
             }
