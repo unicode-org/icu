@@ -754,9 +754,10 @@ parse	output	breaks
 +3.52EE4	3.52
 +1,234,567.8901	1234567.8901
 +1,23,4567.8901	1234567.8901
-+1,23,4567.89,01	1234567.89
+// P supports grouping separators in the fraction; none of the others do.
++1,23,4567.89,01	1234567.8901	CJK
 +1,23,456.78.9	123456.78
-+12.34,56	12.34
++12.34,56	12.3456	CJK
 +79,,20,3	79203
 +79  20 3	79203	K
 // Parsing stops at comma as it is different from other separators
@@ -852,17 +853,17 @@ parse	output	breaks
 // have no separators at all.
 +12,345.67	12345.67
 // JDK doesn't require separators to be in the right place.
-// In some, but not all, cases, P stops early.
 +1,23,4567.8901	fail	K
-+1,234,567.8901	fail	KP
++1,234,567.8901	fail	K
 +1234,567.8901	fail	K
 +1,234567.8901	fail	K
 +1234567.8901	1234567.8901
 // Minimum grouping is not satisfied below, but that's ok
 // because minimum grouping is optional.
 +1,234.5	1234.5
-// Comma after decimal means parse to a comma
-+1,23,456.78,9	123456.78
+// Comma after decimal means a fractional grouping separator
+// P fails since it finds an invalid grouping size
++1,23,456.78,9	123456.789	P
 // C and J fail upon seeing the second decimal point
 +1,23,456.78.9	123456.78	CJ
 +79	79
@@ -996,8 +997,9 @@ begin
 parse	output	breaks
 123.456	123456
 123,456	123.456
-987,654.321	987.654
-987,654 321	987.654
+// The separator after the comma can be inrepreted as a fractional grouping
+987,654.321	987.654321	CJK
+987,654 321	987.654321	CJK
 987.654,321	987654.321
 
 test select

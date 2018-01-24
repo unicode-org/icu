@@ -2807,7 +2807,7 @@ public class NumberFormatTest extends TestFmwk {
                 "0,",          // single zero before comma (not group separator) is not leading
                 "0.0",         // single zero before decimal followed by digit is not leading
                 "0. ",         // same as above before period (or decimal) is not leading
-                "0.100,5",     // comma stops parse of decimal (no grouping)
+                "0.100,,5",    // two commas stop parse of decimal
                 ".00",         // leading decimal is ok, even with zeros
                 "1234567",     // group separators are not required
                 "12345, ",     // comma not followed by digit is not a group separator, but end of number
@@ -2828,7 +2828,6 @@ public class NumberFormatTest extends TestFmwk {
                 ",1",        // leading group separator before digit
                 ",.02",      // leading group separator before decimal
                 "1,.02",     // group separator before decimal
-                //"1,,200",    // multiple group separators
                 "1,45",      // wrong number of digits in primary group
                 "1,45 that", // wrong number of digits in primary group
                 "1,45.34",   // wrong number of digits in primary group
@@ -4784,13 +4783,12 @@ public class NumberFormatTest extends TestFmwk {
         fmt.applyPattern("@@@E0");
         expect2(fmt, 1230000, "(1).(2)(3)E(6)");
 
-        // Grouping and decimal with multiple code points are not supported during parsing.
+        // Grouping and decimal with multiple code points (supported in parsing since ICU 61)
         symbols.setDecimalSeparatorString("~~");
         symbols.setGroupingSeparatorString("^^");
         fmt.setDecimalFormatSymbols(symbols);
         fmt.applyPattern("#,##0.0#");
-        assertEquals("Custom decimal and grouping separator string with multiple characters",
-                "(1)^^(2)(3)(4)^^(5)(6)(7)~~(8)(9)", fmt.format(1234567.89));
+        expect2(fmt, 1234567.89, "(1)^^(2)(3)(4)^^(5)(6)(7)~~(8)(9)");
 
         // Digits starting at U+1D7CE MATHEMATICAL BOLD DIGIT ZERO
         // These are all single code points, so parsing will work.

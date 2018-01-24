@@ -83,7 +83,7 @@ public class NumberParserTest {
                 { 3, "📺1.23", "📺0;📻0", 6, 1.23 },
                 { 3, "📻1.23", "📺0;📻0", 6, -1.23 },
                 { 3, ".00", "0", 3, 0.0 },
-                { 3, "                              0", "a0", 31, 0.0}, // should not hang
+                { 3, "                              0", "a0", 31, 0.0 }, // should not hang
                 { 3, "0", "0", 1, 0.0 } };
 
         for (Object[] cas : cases) {
@@ -101,8 +101,13 @@ public class NumberParserTest {
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, true, resultObject);
                 assertNotNull("Greedy Parse failed: " + message, resultObject.quantity);
-                assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
-                assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
+                assertEquals("Greedy Parse failed: " + message,
+                        expectedCharsConsumed,
+                        resultObject.charsConsumed);
+                assertEquals("Greedy Parse failed: " + message,
+                        resultDouble,
+                        resultObject.getNumber().doubleValue(),
+                        0.0);
             }
 
             if (0 != (flags & 0x02)) {
@@ -110,8 +115,13 @@ public class NumberParserTest {
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, false, resultObject);
                 assertNotNull("Non-Greedy Parse failed: " + message, resultObject.quantity);
-                assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
-                assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
+                assertEquals("Non-Greedy Parse failed: " + message,
+                        expectedCharsConsumed,
+                        resultObject.charsConsumed);
+                assertEquals("Non-Greedy Parse failed: " + message,
+                        resultDouble,
+                        resultObject.getNumber().doubleValue(),
+                        0.0);
             }
 
             if (0 != (flags & 0x04)) {
@@ -120,8 +130,13 @@ public class NumberParserTest {
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, true, resultObject);
                 assertNotNull("Strict Parse failed: " + message, resultObject.quantity);
-                assertEquals(message, expectedCharsConsumed, resultObject.charsConsumed);
-                assertEquals(message, resultDouble, resultObject.getNumber().doubleValue(), 0.0);
+                assertEquals("Strict Parse failed: " + message,
+                        expectedCharsConsumed,
+                        resultObject.charsConsumed);
+                assertEquals("Strict Parse failed: " + message,
+                        resultDouble,
+                        resultObject.getNumber().doubleValue(),
+                        0.0);
             }
         }
     }
@@ -138,9 +153,9 @@ public class NumberParserTest {
         assertEquals(Double.NaN, resultObject.getNumber().doubleValue(), 0.0);
 
         resultObject = new ParsedNumber();
-        parser.parse("1.2e3", false, resultObject);
+        parser.parse("1,2e3", false, resultObject);
         assertTrue(resultObject.success());
-        assertEquals(12000.0, resultObject.getNumber().doubleValue(), 0.0);
+        assertEquals(1200.0, resultObject.getNumber().doubleValue(), 0.0);
     }
 
     @Test

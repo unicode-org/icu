@@ -135,12 +135,16 @@ public class NumberParserImpl {
                 ? (properties.getDecimalSeparatorAlwaysShown()
                         || properties.getMaximumFractionDigits() != 0)
                 : false;
+        boolean decimalSeparatorForbidden = properties.getDecimalPatternMatchRequired()
+                ? (!properties.getDecimalSeparatorAlwaysShown()
+                        && properties.getMaximumFractionDigits() == 0)
+                : false;
         Grouper grouper = Grouper.defaults().withProperties(properties);
         int parseFlags = 0;
         if (!properties.getParseCaseSensitive()) {
             parseFlags |= ParsingUtils.PARSE_FLAG_IGNORE_CASE;
         }
-        if (properties.getParseIntegerOnly()) {
+        if (properties.getParseIntegerOnly() || decimalSeparatorForbidden) {
             parseFlags |= ParsingUtils.PARSE_FLAG_INTEGER_ONLY;
         }
         if (isStrict) {
