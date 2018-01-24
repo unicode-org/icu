@@ -605,6 +605,23 @@ utrie3_setRange32(UTrie3 *trie,
 
 namespace {
 
+void maskValues(UTrie3 *trie, uint32_t mask) {
+    UNewTrie3 *newTrie = trie->newTrie;
+    trie->initialValue &= mask;
+    trie->highValue &= mask;
+    // Leave the errorValue as is: It is not stored in the data array,
+    // and an error value outside the normal value range might be useful.
+    int32_t iLimit = trie->highStart >> UTRIE3_SHIFT_2;
+    for (int32_t i = 0; i < iLimit; ++i) {
+        if (newTrie->flags[i] == ALL_SAME) {
+            newTrie->index[i] &= mask;
+        }
+    }
+    for (int32_t i = 0; i < newTrie->dataLength; ++i) {
+        newTrie->data[i] &= mask;
+    }
+}
+
 inline UBool
 equal_uint32(const uint32_t *s, const uint32_t *t, int32_t length) {
     while(length>0 && *s==*t) {
@@ -1186,6 +1203,13 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
             *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         }
         return;
+    }
+
+    // The builder always stores 32-bit values.
+    // When we build a UTrie3 for a smaller value width, we first mask off unused bits
+    // before compacting the data.
+    if (valueBits != UTRIE3_32_VALUE_BITS) {
+        maskValues(trie, 0xffff);
     }
 
     uint16_t index1[UTRIE3_MAX_INDEX_1_LENGTH];
