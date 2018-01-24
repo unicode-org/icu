@@ -98,7 +98,7 @@ constexpr int32_t UNEWTRIE3_MAX_DATA_LENGTH = UNICODE_LIMIT;
 constexpr uint8_t SUPP_DATA=0x10;
 
 U_CAPI UTrie3 * U_EXPORT2
-utrie3_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) {
+utrie3bld_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) {
     UTrie3 *trie;
     UNewTrie3 *newTrie;
     uint32_t *data;
@@ -162,13 +162,13 @@ cloneBuilder(const UNewTrie3 *other, int32_t highStart) {
 }
 
 U_CAPI UTrie3 * U_EXPORT2
-utrie3_clone(const UTrie3 *other, UErrorCode *pErrorCode) {
+utrie3bld_clone(const UTrie3 *other, UErrorCode *pErrorCode) {
     UTrie3 *trie;
 
     if(U_FAILURE(*pErrorCode)) {
         return NULL;
     }
-    if(other==NULL || (other->memory==NULL && other->newTrie==NULL)) {
+    if(other==NULL || other->memory!=NULL || other->newTrie==NULL) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
@@ -179,30 +179,24 @@ utrie3_clone(const UTrie3 *other, UErrorCode *pErrorCode) {
     }
     uprv_memcpy(trie, other, sizeof(UTrie3));
 
-    if(other->memory!=NULL) {
-        trie->memory=uprv_malloc(other->length);
-        if(trie->memory!=NULL) {
-            trie->isMemoryOwned=TRUE;
-            uprv_memcpy(trie->memory, other->memory, other->length);
+    trie->newTrie=cloneBuilder(other->newTrie, trie->highStart);
 
-            /* make the clone's pointers point to its own memory */
-            trie->index=(uint16_t *)trie->memory+(other->index-(uint16_t *)other->memory);
-            if(other->data16!=NULL) {
-                trie->data16=(uint16_t *)trie->memory+(other->data16-(uint16_t *)other->memory);
-            }
-            if(other->data32!=NULL) {
-                trie->data32=(uint32_t *)trie->memory+(other->data32-(uint32_t *)other->memory);
-            }
-        }
-    } else /* other->newTrie!=NULL */ {
-        trie->newTrie=cloneBuilder(other->newTrie, trie->highStart);
-    }
-
-    if(trie->memory==NULL && trie->newTrie==NULL) {
+    if(trie->newTrie==NULL) {
         uprv_free(trie);
         trie=NULL;
     }
     return trie;
+}
+
+U_CAPI void U_EXPORT2
+utrie3bld_close(UTrie3 *trie) {
+    if(trie!=NULL) {
+        U_ASSERT(trie->newTrie!=nullptr);
+        U_ASSERT(trie->memory==nullptr);
+        uprv_free(trie->newTrie->data);
+        uprv_free(trie->newTrie);
+        uprv_free(trie);
+    }
 }
 
 namespace {
@@ -300,8 +294,9 @@ utrie3_cloneAsThawed(const UTrie3 *other, UErrorCode *pErrorCode) {
 }
 #endif
 
-U_CFUNC uint32_t
-utrie3_get32FromBuilder(const UTrie3 *trie, UChar32 c) {
+U_CAPI uint32_t U_EXPORT2
+utrie3bld_get(const UTrie3 *trie, UChar32 c) {
+    U_ASSERT(trie->newTrie != nullptr);
     if((uint32_t)c>MAX_UNICODE) {
         return trie->errorValue;
     }
@@ -477,7 +472,7 @@ getDataBlock(UNewTrie3 *newTrie, UChar32 c) {
 }  // namespace
 
 U_CAPI void U_EXPORT2
-utrie3_set32(UTrie3 *trie, UChar32 c, uint32_t value, UErrorCode *pErrorCode) {
+utrie3bld_set(UTrie3 *trie, UChar32 c, uint32_t value, UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return;
     }
@@ -526,10 +521,10 @@ fillBlock(uint32_t *block, UChar32 start, UChar32 limit,
 }
 
 U_CAPI void U_EXPORT2
-utrie3_setRange32(UTrie3 *trie,
-                  UChar32 start, UChar32 end,
-                  uint32_t value, UBool overwrite,
-                  UErrorCode *pErrorCode) {
+utrie3bld_setRange(UTrie3 *trie,
+                   UChar32 start, UChar32 end,
+                   uint32_t value, UBool overwrite,
+                   UErrorCode *pErrorCode) {
     if(U_FAILURE(*pErrorCode)) {
         return;
     }
@@ -900,7 +895,7 @@ compactData(UTrie3 *trie, UChar32 highStart, UErrorCode *pErrorCode) {
     UNewTrie3 *newTrie = trie->newTrie;
     uint32_t asciiData[ASCII_LIMIT];
     for(int32_t i=0; i<ASCII_LIMIT; ++i) {
-        asciiData[i]=utrie3_get32FromBuilder(trie, i);
+        asciiData[i]=utrie3bld_get(trie, i);
     }
 
     // First we look for which data blocks have the same value repeated over the whole block,
@@ -1136,7 +1131,7 @@ compactTrie(UTrie3 *trie, uint16_t index1[], UErrorCode *pErrorCode) {
     UNewTrie3 *newTrie=trie->newTrie;
 
     // Find highStart and round it up.
-    uint32_t highValue=utrie3_get32FromBuilder(trie, MAX_UNICODE);
+    uint32_t highValue=utrie3bld_get(trie, MAX_UNICODE);
     UChar32 highStart=findHighStart(newTrie, trie->highStart, highValue);
     if((highStart&(UTRIE3_CP_PER_INDEX_1_ENTRY-1))!=0) {
         int32_t i=highStart>>UTRIE3_SHIFT_2;
@@ -1185,7 +1180,7 @@ compactTrie(UTrie3 *trie, uint16_t index1[], UErrorCode *pErrorCode) {
 
 /* Compact and internally serialize the trie. */
 U_CAPI void U_EXPORT2
-utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
+utrie3bld_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
     /* argument check */
     if(U_FAILURE(*pErrorCode)) {
         return;
@@ -1336,9 +1331,14 @@ utrie3_freeze(UTrie3 *trie, UTrie3ValueBits valueBits, UErrorCode *pErrorCode) {
 #endif
 }
 
+U_CAPI UBool U_EXPORT2
+utrie3bld_isFrozen(const UTrie3 *trie) {
+    return (UBool)(trie->newTrie==NULL);
+}
+
 /*
- * This is here to avoid a dependency from utrie3.cpp on utrie.c.
- * This file already depends on utrie.c.
+ * This is here to avoid a dependency from utrie3.cpp on utrie.cpp.
+ * This file already depends on utrie.cpp.
  * Otherwise, this should be in utrie3.cpp right after utrie3_swap().
  * TODO: find a better place
  */

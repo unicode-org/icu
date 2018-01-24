@@ -124,7 +124,4 @@ struct UNewTrie3 {  // TODO: move to .cpp?
     uint32_t index[0x110000>>UTRIE3_SHIFT_2];
 };
 
-U_CFUNC uint32_t  // TODO: back to utrie3.cpp? or utrie3_get32() to builder.cpp?
-utrie3_get32FromBuilder(const UTrie3 *trie, UChar32 c);
-
 #endif

@@ -16,17 +16,16 @@
 /* Public UTrie3 API implementation ----------------------------------------- */
 
 U_CAPI uint32_t U_EXPORT2
-utrie3_get32(const UTrie3 *trie, UChar32 c) {
+utrie3_get(const UTrie3 *trie, UChar32 c) {
+    U_ASSERT(trie->newTrie == nullptr);
     if(trie->data16!=NULL) {
         uint32_t result;
         UTRIE3_GET16(trie, c, result);
         return result;
-    } else if(trie->data32!=NULL) {
+    } else /* trie->data32!=NULL */ {
         uint32_t result;
         UTRIE3_GET32(trie, c, result);
         return result;
-    } else {
-        return utrie3_get32FromBuilder(trie, c);
     }
 }
 
@@ -270,16 +269,51 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
     return trie;
 }
 
+U_CAPI UTrie3 * U_EXPORT2
+utrie3_clone(const UTrie3 *other, UErrorCode *pErrorCode) {
+    if(U_FAILURE(*pErrorCode)) {
+        return NULL;
+    }
+    if(other==NULL || other->memory==NULL || other->newTrie!=NULL) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
+    UTrie3 *trie=(UTrie3 *)uprv_malloc(sizeof(UTrie3));
+    if(trie==NULL) {
+        return NULL;
+    }
+    uprv_memcpy(trie, other, sizeof(UTrie3));
+
+    trie->memory=uprv_malloc(other->length);
+    if(trie->memory!=NULL) {
+        trie->isMemoryOwned=TRUE;
+        uprv_memcpy(trie->memory, other->memory, other->length);
+
+        /* make the clone's pointers point to its own memory */
+        trie->index=(uint16_t *)trie->memory+(other->index-(uint16_t *)other->memory);
+        if(other->data16!=NULL) {
+            trie->data16=(uint16_t *)trie->memory+(other->data16-(uint16_t *)other->memory);
+        }
+        if(other->data32!=NULL) {
+            trie->data32=(uint32_t *)trie->memory+(other->data32-(uint32_t *)other->memory);
+        }
+    }
+
+    if(trie->memory==NULL) {
+        uprv_free(trie);
+        trie=NULL;
+    }
+    return trie;
+}
+
 U_CAPI void U_EXPORT2
 utrie3_close(UTrie3 *trie) {
     if(trie!=NULL) {
         if(trie->isMemoryOwned) {
             uprv_free(trie->memory);
         }
-        if(trie->newTrie!=NULL) {
-            uprv_free(trie->newTrie->data);
-            uprv_free(trie->newTrie);
-        }
+        U_ASSERT(trie->newTrie==NULL);
         uprv_free(trie);
     }
 }
@@ -318,11 +352,6 @@ utrie3_getVersion(const void *data, int32_t length, UBool anyEndianOk) {
         return 1;
     }
     return 0;
-}
-
-U_CAPI UBool U_EXPORT2
-utrie3_isFrozen(const UTrie3 *trie) {
-    return (UBool)(trie->newTrie==NULL);
 }
 
 U_CAPI int32_t U_EXPORT2
