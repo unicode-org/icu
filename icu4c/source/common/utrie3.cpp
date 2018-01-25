@@ -4,6 +4,11 @@
 // utrie3.cpp (modified from utrie2.cpp)
 // created: 2017dec29 Markus W. Scherer
 
+#define UTRIE3_DEBUG  // TODO
+#ifdef UTRIE3_DEBUG
+#   include <stdio.h>
+#endif
+
 #include "unicode/utypes.h"
 #include "unicode/utf.h"
 #include "unicode/utf8.h"
@@ -15,49 +20,6 @@
 
 /* Public UTrie3 API implementation ----------------------------------------- */
 
-U_CAPI uint32_t U_EXPORT2
-utrie3_get(const UTrie3 *trie, UChar32 c) {
-    U_ASSERT(trie->newTrie == nullptr);
-    if(trie->data16!=NULL) {
-        uint32_t result;
-        UTRIE3_GET16(trie, c, result);
-        return result;
-    } else /* trie->data32!=NULL */ {
-        uint32_t result;
-        UTRIE3_GET32(trie, c, result);
-        return result;
-    }
-}
-
-U_CAPI int32_t U_EXPORT2
-utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
-                           const uint8_t *start, const uint8_t *src) {
-    int32_t i, length;
-    /* support 64-bit pointers by avoiding cast of arbitrary difference */
-    if((src-start)<=7) {
-        i=length=(int32_t)(src-start);
-    } else {
-        i=length=7;
-        start=src-7;
-    }
-    c=utf8_prevCharSafeBody(start, 0, &i, c, -1);
-    i=length-i;  /* number of bytes read backward from src */
-    if(c>=0) {
-        int32_t idx;
-        if(c<=0xffff) {
-            idx=_UTRIE3_INDEX_FROM_BMP(trie->index, c);
-        } else if(c>=trie->highStart) {
-            return -16|i;  // for highValue
-        } else {
-            int32_t i2Block, dataBlock;
-            idx = _UTRIE3_INDEX_FROM_SUPP(trie->index, c, i2Block, dataBlock);
-        }
-        return (idx<<3)|i;
-    } else {
-        return -8|i;  // for errorValue
-    }
-}
-
 U_CAPI UTrie3 * U_EXPORT2
 utrie3_openFromSerialized(UTrie3ValueBits valueBits,
                           const void *data, int32_t length, int32_t *pActualLength,
@@ -67,7 +29,7 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
     }
 
     if( length<=0 || (U_POINTER_MASK_LSB(data, 3)!=0) ||
-        valueBits<0 || UTRIE3_COUNT_VALUE_BITS<=valueBits
+        valueBits < 0 || UTRIE3_32_VALUE_BITS < valueBits
     ) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
@@ -125,9 +87,6 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
         return 0;
     }
     uprv_memcpy(trie, &tempTrie, sizeof(tempTrie));
-    trie->memory=(uint32_t *)data;
-    trie->length=actualLength;
-    trie->isMemoryOwned=FALSE;
     trie->name="fromSerialized";
 
     /* set the pointers to its index and data arrays */
@@ -174,7 +133,7 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
         return nullptr;
     }
 
-    if(valueBits<0 || UTRIE3_COUNT_VALUE_BITS<=valueBits) {
+    if (valueBits < 0 || UTRIE3_32_VALUE_BITS < valueBits) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
@@ -182,25 +141,22 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
     /* calculate the total length of the dummy trie data */
     int32_t indexLength=UTRIE3_INDEX_1_OFFSET;
     int32_t dataLength=UTRIE3_DATA_START_OFFSET;
-    int32_t length=(int32_t)sizeof(UTrie3Header)+indexLength*2;
-    if(valueBits==UTRIE3_16_VALUE_BITS) {
-        length+=dataLength*2;
+    int32_t length = indexLength * 2;
+    if (valueBits == UTRIE3_16_VALUE_BITS) {
+        length += dataLength * 2;
     } else {
-        length+=dataLength*4;
+        length += dataLength * 4;
     }
 
-    /* allocate the trie */
-    char *bytes=(char *)uprv_malloc(sizeof(UTrie3)+length);
-    if(bytes==nullptr) {
-        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+    char *bytes = (char *)uprv_malloc(sizeof(UTrie3) + length);
+    if (bytes == nullptr) {
+        *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
-    UTrie3 *trie=(UTrie3 *)bytes;
+    UTrie3 *trie = (UTrie3 *)bytes;
     uprv_memset(trie, 0, sizeof(UTrie3));
-    trie->memory=bytes+sizeof(UTrie3);
-    trie->length=length;
+    bytes += sizeof(UTrie3);
 
-    /* set the UTrie3 fields */
     int32_t dataMove;  // >0 if the data is moved to the end of the index array
     if(valueBits==UTRIE3_16_VALUE_BITS) {
         dataMove=indexLength;
@@ -220,19 +176,8 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
     trie->highValue=initialValue;
     trie->name="dummy";
 
-    /* set the header fields */
-    UTrie3Header *header=(UTrie3Header *)trie->memory;
-
-    header->signature=UTRIE3_SIG; /* "Tri2" */
-    header->options = ((uint32_t)dataMove << 12) | valueBits;  // dataNullOffset = dataMove
-
-    header->indexLength=(uint16_t)indexLength;
-    header->shiftedDataLength=(uint16_t)(dataLength>>UTRIE3_INDEX_SHIFT);
-    header->index2NullOffset = UTRIE3_NO_INDEX2_NULL_OFFSET;
-    header->shiftedHighStart=0;
-
     /* fill the index and data arrays */
-    uint16_t *dest16=(uint16_t *)(header+1);
+    uint16_t *dest16 = (uint16_t *)bytes;
     trie->index=dest16;
 
     /* write BMP index-2 array values, not right-shifted */
@@ -240,6 +185,7 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
     for(i=0; i<UTRIE3_INDEX_2_BMP_LENGTH; ++i) {
         *dest16++=(uint16_t)dataMove;  /* null data block */
     }
+    bytes += UTRIE3_INDEX_2_BMP_LENGTH * 2;
 
     /* write the 16/32-bit data array */
     switch(valueBits) {
@@ -253,7 +199,7 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
         break;
     case UTRIE3_32_VALUE_BITS: {
         /* write 32-bit data values */
-        uint32_t *p=(uint32_t *)dest16;
+        uint32_t *p = (uint32_t *)bytes;
         trie->data16=NULL;
         trie->data32=p;
         for(i=0; i<0x80; ++i) {
@@ -271,205 +217,62 @@ utrie3_openDummy(UTrie3ValueBits valueBits,
 
 U_CAPI UTrie3 * U_EXPORT2
 utrie3_clone(const UTrie3 *other, UErrorCode *pErrorCode) {
-    if(U_FAILURE(*pErrorCode)) {
-        return NULL;
+    if (U_FAILURE(*pErrorCode)) {
+        return nullptr;
     }
-    if(other==NULL || other->memory==NULL || other->newTrie!=NULL) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+    if (other == nullptr) {
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
     }
 
-    UTrie3 *trie=(UTrie3 *)uprv_malloc(sizeof(UTrie3));
-    if(trie==NULL) {
-        return NULL;
+    int32_t length = other->indexLength * 2;
+    if (other->data16 != nullptr) {
+        length += other->dataLength * 2;
+    } else {
+        length += other->dataLength * 4;
     }
+
+    char *bytes = (char *)uprv_malloc(sizeof(UTrie3) + length);
+    if (bytes == nullptr) {
+        *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    UTrie3 *trie = (UTrie3 *)bytes;
     uprv_memcpy(trie, other, sizeof(UTrie3));
+    bytes += sizeof(UTrie3);
 
-    trie->memory=uprv_malloc(other->length);
-    if(trie->memory!=NULL) {
-        trie->isMemoryOwned=TRUE;
-        uprv_memcpy(trie->memory, other->memory, other->length);
+    // Make the clone's pointers point to its own memory.
+    trie->index = (uint16_t *)bytes;
+    uprv_memcpy(bytes, other->index, trie->indexLength * 2);
+    bytes += trie->indexLength * 2;
 
-        /* make the clone's pointers point to its own memory */
-        trie->index=(uint16_t *)trie->memory+(other->index-(uint16_t *)other->memory);
-        if(other->data16!=NULL) {
-            trie->data16=(uint16_t *)trie->memory+(other->data16-(uint16_t *)other->memory);
-        }
-        if(other->data32!=NULL) {
-            trie->data32=(uint32_t *)trie->memory+(other->data32-(uint32_t *)other->memory);
-        }
-    }
-
-    if(trie->memory==NULL) {
-        uprv_free(trie);
-        trie=NULL;
+    if (other->data16 != nullptr) {
+        trie->data16 = (uint16_t *)bytes;
+        uprv_memcpy(bytes, other->data16, trie->dataLength * 2);
+    } else {
+        trie->data32 = (uint32_t *)bytes;
+        uprv_memcpy(bytes, other->data32, trie->dataLength * 4);
     }
     return trie;
 }
 
 U_CAPI void U_EXPORT2
 utrie3_close(UTrie3 *trie) {
-    if(trie!=NULL) {
-        if(trie->isMemoryOwned) {
-            uprv_free(trie->memory);
-        }
-        U_ASSERT(trie->newTrie==NULL);
-        uprv_free(trie);
-    }
+    uprv_free(trie);
 }
 
-// UTrie and UTrie2 signature values,
-// in platform endianness and opposite endianness.
-#define UTRIE_SIG       0x54726965
-#define UTRIE_OE_SIG    0x65697254
-
-#define UTRIE2_SIG      0x54726932
-#define UTRIE2_OE_SIG   0x32697254
-
-U_CAPI int32_t U_EXPORT2
-utrie3_getVersion(const void *data, int32_t length, UBool anyEndianOk) {
-    uint32_t signature;
-    if(length<16 || data==NULL || (U_POINTER_MASK_LSB(data, 3)!=0)) {
-        return 0;
+U_CAPI uint32_t U_EXPORT2
+utrie3_get(const UTrie3 *trie, UChar32 c) {
+    uint32_t result;
+    if(trie->data16!=NULL) {
+        UTRIE3_GET16(trie, c, result);
+    } else /* trie->data32!=NULL */ {
+        UTRIE3_GET32(trie, c, result);
     }
-    signature=*(const uint32_t *)data;
-    if(signature==UTRIE3_SIG) {
-        return 3;
-    }
-    if(anyEndianOk && signature==UTRIE3_OE_SIG) {
-        return 3;
-    }
-    if(signature==UTRIE2_SIG) {
-        return 2;
-    }
-    if(anyEndianOk && signature==UTRIE2_OE_SIG) {
-        return 2;
-    }
-    if(signature==UTRIE_SIG) {
-        return 1;
-    }
-    if(anyEndianOk && signature==UTRIE_OE_SIG) {
-        return 1;
-    }
-    return 0;
+    return result;
 }
 
-U_CAPI int32_t U_EXPORT2
-utrie3_serialize(const UTrie3 *trie,
-                 void *data, int32_t capacity,
-                 UErrorCode *pErrorCode) {
-    /* argument check */
-    if(U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-
-    if( trie==NULL || trie->memory==NULL || trie->newTrie!=NULL ||
-        capacity<0 || (capacity>0 && (data==NULL || (U_POINTER_MASK_LSB(data, 3)!=0)))
-    ) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    if(capacity>=trie->length) {
-        uprv_memcpy(data, trie->memory, trie->length);
-    } else {
-        *pErrorCode=U_BUFFER_OVERFLOW_ERROR;
-    }
-    return trie->length;
-}
-
-U_CAPI int32_t U_EXPORT2
-utrie3_swap(const UDataSwapper *ds,
-            const void *inData, int32_t length, void *outData,
-            UErrorCode *pErrorCode) {
-    const UTrie3Header *inTrie;
-    UTrie3Header trie;
-    int32_t dataLength, size;
-    UTrie3ValueBits valueBits;
-
-    if(U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-    if(ds==NULL || inData==NULL || (length>=0 && outData==NULL)) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    /* setup and swapping */
-    if(length>=0 && length<(int32_t)sizeof(UTrie3Header)) {
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        return 0;
-    }
-
-    inTrie=(const UTrie3Header *)inData;
-    trie.signature=ds->readUInt32(inTrie->signature);
-    trie.options=ds->readUInt16(inTrie->options);
-    trie.indexLength=ds->readUInt16(inTrie->indexLength);
-    trie.shiftedDataLength=ds->readUInt16(inTrie->shiftedDataLength);
-
-    valueBits=(UTrie3ValueBits)(trie.options&UTRIE3_OPTIONS_VALUE_BITS_MASK);
-    dataLength=(int32_t)trie.shiftedDataLength<<UTRIE3_INDEX_SHIFT;
-
-    if( trie.signature!=UTRIE3_SIG ||
-        valueBits<0 || UTRIE3_COUNT_VALUE_BITS<=valueBits ||
-        trie.indexLength<UTRIE3_INDEX_1_OFFSET ||
-        dataLength<UTRIE3_DATA_START_OFFSET
-    ) {
-        *pErrorCode=U_INVALID_FORMAT_ERROR; /* not a UTrie */
-        return 0;
-    }
-
-    size=sizeof(UTrie3Header)+trie.indexLength*2;
-    switch(valueBits) {
-    case UTRIE3_16_VALUE_BITS:
-        size+=dataLength*2;
-        break;
-    case UTRIE3_32_VALUE_BITS:
-        size+=dataLength*4;
-        break;
-    default:
-        *pErrorCode=U_INVALID_FORMAT_ERROR;
-        return 0;
-    }
-
-    if(length>=0) {
-        UTrie3Header *outTrie;
-
-        if(length<size) {
-            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-            return 0;
-        }
-
-        outTrie=(UTrie3Header *)outData;
-
-        /* swap the header */
-        ds->swapArray32(ds, &inTrie->signature, 4, &outTrie->signature, pErrorCode);
-        ds->swapArray16(ds, &inTrie->options, 12, &outTrie->options, pErrorCode);
-        ds->swapArray32(ds, &inTrie->highValue, 8, &outTrie->highValue, pErrorCode);
-
-        /* swap the index and the data */
-        switch(valueBits) {
-        case UTRIE3_16_VALUE_BITS:
-            ds->swapArray16(ds, inTrie+1, (trie.indexLength+dataLength)*2, outTrie+1, pErrorCode);
-            break;
-        case UTRIE3_32_VALUE_BITS:
-            ds->swapArray16(ds, inTrie+1, trie.indexLength*2, outTrie+1, pErrorCode);
-            ds->swapArray32(ds, (const uint16_t *)(inTrie+1)+trie.indexLength, dataLength*4,
-                                     (uint16_t *)(outTrie+1)+trie.indexLength, pErrorCode);
-            break;
-        default:
-            *pErrorCode=U_INVALID_FORMAT_ERROR;
-            return 0;
-        }
-    }
-
-    return size;
-}
-
-// utrie3_swapAnyVersion() should be defined here but lives in utrie3_builder.cpp
-// to avoid a dependency from utrie3.cpp on utrie.cpp.
-
-/* enumeration -------------------------------------------------------------- */
+namespace {
 
 constexpr int32_t MAX_UNICODE = 0x10ffff;
 
@@ -482,6 +285,8 @@ inline uint32_t maybeHandleValue(uint32_t value, uint32_t initialValue, uint32_t
     }
     return value;
 }
+
+}  // namespace
 
 U_CAPI int32_t U_EXPORT2
 utrie3_getRange(const UTrie3 *trie, UChar32 start,
@@ -598,6 +403,244 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
         return MAX_UNICODE;
     }
 }
+
+U_CAPI int32_t U_EXPORT2
+utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
+                           const uint8_t *start, const uint8_t *src) {
+    int32_t i, length;
+    /* support 64-bit pointers by avoiding cast of arbitrary difference */
+    if((src-start)<=7) {
+        i=length=(int32_t)(src-start);
+    } else {
+        i=length=7;
+        start=src-7;
+    }
+    c=utf8_prevCharSafeBody(start, 0, &i, c, -1);
+    i=length-i;  /* number of bytes read backward from src */
+    if(c>=0) {
+        int32_t idx;
+        if(c<=0xffff) {
+            idx=_UTRIE3_INDEX_FROM_BMP(trie->index, c);
+        } else if(c>=trie->highStart) {
+            return -16|i;  // for highValue
+        } else {
+            int32_t i2Block, dataBlock;
+            idx = _UTRIE3_INDEX_FROM_SUPP(trie->index, c, i2Block, dataBlock);
+        }
+        return (idx<<3)|i;
+    } else {
+        return -8|i;  // for errorValue
+    }
+}
+
+U_CAPI int32_t U_EXPORT2
+utrie3_serialize(const UTrie3 *trie,
+                 void *data, int32_t capacity,
+                 UErrorCode *pErrorCode) {
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+
+    if(trie == nullptr || capacity < 0 ||
+            (capacity > 0 && (data == nullptr || (U_POINTER_MASK_LSB(data, 3) != 0)))) {
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    UTrie3ValueBits valueBits;
+    int32_t length = (int32_t)sizeof(UTrie3Header) + trie->indexLength * 2;
+    if (trie->data16 != nullptr) {
+        valueBits = UTRIE3_16_VALUE_BITS;
+        length += trie->dataLength * 2;
+    } else {
+        valueBits = UTRIE3_32_VALUE_BITS;
+        length += trie->dataLength * 4;
+    }
+    if (capacity < length) {
+        *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
+        return length;
+    }
+
+    char *bytes = (char *)data;
+    UTrie3Header *header = (UTrie3Header *)bytes;
+    header->signature = UTRIE3_SIG;  // "Tri3"
+    header->options = ((uint32_t)trie->dataNullOffset << 12) | valueBits;
+    header->indexLength = (uint16_t)trie->indexLength;
+    header->shiftedDataLength = (uint16_t)(trie->dataLength >> UTRIE3_INDEX_SHIFT);
+    header->index2NullOffset = trie->index2NullOffset;
+    header->shiftedHighStart = trie->shiftedHighStart;
+    header->highValue = trie->highValue;
+    header->errorValue = trie->errorValue;
+    bytes += sizeof(UTrie3Header);
+
+    uprv_memcpy(bytes, trie->index, trie->indexLength * 2);
+    bytes += trie->indexLength * 2;
+
+    if (trie->data16 != nullptr) {
+        uprv_memcpy(bytes, trie->data16, trie->dataLength * 2);
+    } else {
+        uprv_memcpy(bytes, trie->data32, trie->dataLength * 4);
+    }
+    return length;
+}
+
+// UTrie and UTrie2 signature values,
+// in platform endianness and opposite endianness.
+#define UTRIE_SIG       0x54726965
+#define UTRIE_OE_SIG    0x65697254
+
+#define UTRIE2_SIG      0x54726932
+#define UTRIE2_OE_SIG   0x32697254
+
+U_CAPI int32_t U_EXPORT2
+utrie3_getVersion(const void *data, int32_t length, UBool anyEndianOk) {
+    uint32_t signature;
+    if(length<16 || data==NULL || (U_POINTER_MASK_LSB(data, 3)!=0)) {
+        return 0;
+    }
+    signature=*(const uint32_t *)data;
+    if(signature==UTRIE3_SIG) {
+        return 3;
+    }
+    if(anyEndianOk && signature==UTRIE3_OE_SIG) {
+        return 3;
+    }
+    if(signature==UTRIE2_SIG) {
+        return 2;
+    }
+    if(anyEndianOk && signature==UTRIE2_OE_SIG) {
+        return 2;
+    }
+    if(signature==UTRIE_SIG) {
+        return 1;
+    }
+    if(anyEndianOk && signature==UTRIE_OE_SIG) {
+        return 1;
+    }
+    return 0;
+}
+
+namespace {
+
+#ifdef UTRIE3_DEBUG
+long countInitial(const UTrie3 *trie) {
+    uint32_t initialValue=trie->initialValue;
+    int32_t length=trie->dataLength;
+    long count=0;
+    if(trie->data16!=nullptr) {
+        for(int32_t i=0; i<length; ++i) {
+            if(trie->data16[i]==initialValue) { ++count; }
+        }
+    } else {
+        for(int32_t i=0; i<length; ++i) {
+            if(trie->data32[i]==initialValue) { ++count; }
+        }
+    }
+    return count;
+}
+
+U_CFUNC void
+utrie3_printLengths(const UTrie3 *trie, const char *which) {
+    long indexLength=trie->indexLength;
+    long dataLength=(long)trie->dataLength;
+    long totalLength=(long)sizeof(UTrie3Header)+indexLength*2+dataLength*(trie->data32!=NULL ? 4 : 2);
+    printf("**UTrie3Lengths(%s %s)** index:%6ld  data:%6ld  countInitial:%6ld  serialized:%6ld\n",
+           which, trie->name, indexLength, dataLength, countInitial(trie), totalLength);
+}
+#endif
+
+}  // namespace
+
+U_CAPI int32_t U_EXPORT2
+utrie3_swap(const UDataSwapper *ds,
+            const void *inData, int32_t length, void *outData,
+            UErrorCode *pErrorCode) {
+    const UTrie3Header *inTrie;
+    UTrie3Header trie;
+    int32_t dataLength, size;
+    UTrie3ValueBits valueBits;
+
+    if(U_FAILURE(*pErrorCode)) {
+        return 0;
+    }
+    if(ds==NULL || inData==NULL || (length>=0 && outData==NULL)) {
+        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+
+    /* setup and swapping */
+    if(length>=0 && length<(int32_t)sizeof(UTrie3Header)) {
+        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0;
+    }
+
+    inTrie=(const UTrie3Header *)inData;
+    trie.signature=ds->readUInt32(inTrie->signature);
+    trie.options=ds->readUInt16(inTrie->options);
+    trie.indexLength=ds->readUInt16(inTrie->indexLength);
+    trie.shiftedDataLength=ds->readUInt16(inTrie->shiftedDataLength);
+
+    valueBits=(UTrie3ValueBits)(trie.options&UTRIE3_OPTIONS_VALUE_BITS_MASK);
+    dataLength=(int32_t)trie.shiftedDataLength<<UTRIE3_INDEX_SHIFT;
+
+    if( trie.signature!=UTRIE3_SIG ||
+        valueBits < 0 || UTRIE3_32_VALUE_BITS < valueBits ||
+        trie.indexLength<UTRIE3_INDEX_1_OFFSET ||
+        dataLength<UTRIE3_DATA_START_OFFSET
+    ) {
+        *pErrorCode=U_INVALID_FORMAT_ERROR; /* not a UTrie */
+        return 0;
+    }
+
+    size=sizeof(UTrie3Header)+trie.indexLength*2;
+    switch(valueBits) {
+    case UTRIE3_16_VALUE_BITS:
+        size+=dataLength*2;
+        break;
+    case UTRIE3_32_VALUE_BITS:
+        size+=dataLength*4;
+        break;
+    default:
+        *pErrorCode=U_INVALID_FORMAT_ERROR;
+        return 0;
+    }
+
+    if(length>=0) {
+        UTrie3Header *outTrie;
+
+        if(length<size) {
+            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
+            return 0;
+        }
+
+        outTrie=(UTrie3Header *)outData;
+
+        /* swap the header */
+        ds->swapArray32(ds, &inTrie->signature, 4, &outTrie->signature, pErrorCode);
+        ds->swapArray16(ds, &inTrie->options, 12, &outTrie->options, pErrorCode);
+        ds->swapArray32(ds, &inTrie->highValue, 8, &outTrie->highValue, pErrorCode);
+
+        /* swap the index and the data */
+        switch(valueBits) {
+        case UTRIE3_16_VALUE_BITS:
+            ds->swapArray16(ds, inTrie+1, (trie.indexLength+dataLength)*2, outTrie+1, pErrorCode);
+            break;
+        case UTRIE3_32_VALUE_BITS:
+            ds->swapArray16(ds, inTrie+1, trie.indexLength*2, outTrie+1, pErrorCode);
+            ds->swapArray32(ds, (const uint16_t *)(inTrie+1)+trie.indexLength, dataLength*4,
+                                     (uint16_t *)(outTrie+1)+trie.indexLength, pErrorCode);
+            break;
+        default:
+            *pErrorCode=U_INVALID_FORMAT_ERROR;
+            return 0;
+        }
+    }
+
+    return size;
+}
+
+// utrie3_swapAnyVersion() should be defined here but lives in utrie3_builder.cpp
+// to avoid a dependency from utrie3.cpp on utrie.cpp.
 
 /* C++ convenience wrappers ------------------------------------------------- */
 

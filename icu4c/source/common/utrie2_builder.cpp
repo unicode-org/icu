@@ -33,7 +33,9 @@
 #include "cmemory.h"
 #include "utrie2.h"
 #include "utrie2_impl.h"
+#include "utrie3.h"  // TODO
 #include "utrie3builder.h"  // TODO
+U_CFUNC void utrie3bld_setName(UTrie3Builder *builder, const char *name);
 
 #include "utrie.h" /* for utrie2_fromUTrie() and utrie_swap() */
 
@@ -1453,8 +1455,8 @@ utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
     utrie2_printLengths(trie, "");
 #endif
 
-    newTrie->t3->name=trie->name;
-    utrie3bld_freeze(newTrie->t3, (UTrie3ValueBits)valueBits, pErrorCode);
+    utrie3bld_setName(newTrie->t3, trie->name);
+    utrie3_close(utrie3bld_build(newTrie->t3, (UTrie3ValueBits)valueBits, pErrorCode));
     /* Delete the UNewTrie2. */
     uprv_free(newTrie->data);
     uprv_free(newTrie);

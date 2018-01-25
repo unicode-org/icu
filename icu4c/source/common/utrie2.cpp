@@ -32,7 +32,7 @@
 #include "utrie2.h"
 #include "utrie2_impl.h"
 #include "uassert.h"
-#include "utrie3.h"  // TODO
+#include "utrie3builder.h"  // TODO
 
 /* Public UTrie2 API implementation ----------------------------------------- */
 
@@ -372,7 +372,7 @@ utrie2_close(UTrie2 *trie) {
         }
         if(trie->newTrie!=NULL) {
             uprv_free(trie->newTrie->data);
-            utrie3_close(trie->newTrie->t3);
+            utrie3bld_close(trie->newTrie->t3);
             uprv_free(trie->newTrie);
         }
         uprv_free(trie);

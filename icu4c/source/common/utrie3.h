@@ -41,9 +41,7 @@ enum UTrie3ValueBits {
     /** 16 bits per UTrie3 data value. */
     UTRIE3_16_VALUE_BITS,
     /** 32 bits per UTrie3 data value. */
-    UTRIE3_32_VALUE_BITS,
-    /** Number of selectors for the width of UTrie3 data values. */
-    UTRIE3_COUNT_VALUE_BITS  // TODO: remove
+    UTRIE3_32_VALUE_BITS
 };
 typedef enum UTrie3ValueBits UTrie3ValueBits;
 
@@ -473,10 +471,6 @@ U_NAMESPACE_END
 
 U_CDECL_BEGIN
 
-/** Build-time trie structure. */
-struct UNewTrie3;
-typedef struct UNewTrie3 UNewTrie3;
-
 /*
  * Trie structure definition.
  *
@@ -513,14 +507,7 @@ struct UTrie3 {
     uint16_t shiftedHighStart;  // highStart>>12
     uint32_t highValue;
 
-    /* private: used by builder and unserialization functions */
-    void *memory;           /* serialized bytes; NULL if not frozen yet */
-    int32_t length;         /* number of serialized bytes at memory; 0 if not frozen yet */
-    UBool isMemoryOwned;    /* TRUE if the trie owns the memory */
-    UBool padding1;
-    int16_t padding2;
-    UNewTrie3 *newTrie;     /* builder object; NULL when frozen */
-    const char *name;
+    const char *name;  // TODO
 };
 
 /**

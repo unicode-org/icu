@@ -23,7 +23,7 @@
 #define __UTRIE2_IMPL_H__
 
 #include "utrie2.h"
-#include "utrie3.h"  // TODO
+#include "utrie3builder.h"  // TODO
 
 /* Public UTrie2 API implementation ----------------------------------------- */
 
@@ -146,7 +146,7 @@ struct UNewTrie2 {
     int32_t index1[UNEWTRIE2_INDEX_1_LENGTH];
     int32_t index2[UNEWTRIE2_MAX_INDEX_2_LENGTH];
     uint32_t *data;
-    UTrie3 *t3;
+    UTrie3Builder *t3;
 
     uint32_t initialValue, errorValue;
     int32_t index2Length, dataCapacity, dataLength;

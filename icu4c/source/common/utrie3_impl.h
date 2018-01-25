@@ -9,13 +9,6 @@
 
 #include "utrie3.h"
 
-/* Public UTrie3 API implementation ----------------------------------------- */
-
-/*
- * These definitions are mostly needed by utrie3.c,
- * but also by utrie3_serialize() and utrie3_swap().
- */
-
 // UTrie3 signature values, in platform endianness and opposite endianness.
 #define UTRIE3_SIG      0x54726933
 #define UTRIE3_OE_SIG   0x33697254
@@ -71,57 +64,7 @@ enum {
     UTRIE3_NO_DATA_NULL_OFFSET = 0xfffff  // TODO: doc always granularity if real
 };
 
-/* Building a trie ---------------------------------------------------------- */
-
-/*
- * These definitions are mostly needed by utrie3_builder.cpp, but also by
- * utrie3_get32() and utrie3_enum().
- */
-
-enum {
-    /**
-     * At build time, leave a gap in the index-2 table,
-     * at least as long as the maximum length of the supplementary index-1 table.
-     * Round up to UTRIE3_INDEX_2_BLOCK_LENGTH for proper compacting.
-     */
-    UNEWTRIE3_INDEX_GAP_OFFSET=UTRIE3_INDEX_2_BMP_LENGTH,
-    UNEWTRIE3_INDEX_GAP_LENGTH=(UTRIE3_MAX_INDEX_1_LENGTH+UTRIE3_INDEX_2_MASK)&~UTRIE3_INDEX_2_MASK,
-
-    /**
-     * Maximum length of the build-time index-2 array.
-     * Maximum number of Unicode code points (0x110000) shifted right by UTRIE3_SHIFT_2,
-     * plus the build-time index gap,
-     * plus the null index-2 block.
-     */
-    UNEWTRIE3_MAX_INDEX_2_LENGTH=
-        (0x110000>>UTRIE3_SHIFT_2)+
-        UNEWTRIE3_INDEX_GAP_LENGTH+
-        UTRIE3_INDEX_2_BLOCK_LENGTH,
-
-    UNEWTRIE3_INDEX_1_LENGTH=0x110000>>UTRIE3_SHIFT_1
-};
-
-/*
- * Build-time trie structure.
- *
- * Just using a boolean flag for "repeat use" could lead to data array overflow
- * because we would not be able to detect when a data block becomes unused.
- * It also leads to orphan data blocks that are kept through serialization.
- *
- * Need to use reference counting for data blocks,
- * and allocDataBlock() needs to look for a free block before increasing dataLength.
- *
- * This scheme seems like overkill for index-2 blocks since the whole index array is
- * preallocated anyway (unlike the growable data array).
- * Just allocating multiple index-2 blocks as needed.
- */
-struct UNewTrie3 {  // TODO: move to .cpp?
-    uint32_t *data;
-    int32_t dataCapacity, dataLength;
-    int32_t dataNullIndex;
-
-    uint8_t flags[0x110000>>UTRIE3_SHIFT_2];
-    uint32_t index[0x110000>>UTRIE3_SHIFT_2];
-};
+U_CFUNC void
+utrie3_printLengths(const UTrie3 *trie, const char *which);
 
 #endif

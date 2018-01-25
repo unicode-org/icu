@@ -98,10 +98,9 @@ doCheckRange(const char *name, const char *variant,
 static UChar32 iterStarts[] = { 0, 0xdddd, 0x10000, 0x12345, 0x110000 };
 
 static void
-testTrieGetRanges(const char *testName, const UTrie3 *trie,
+testTrieGetRanges(const char *testName, const UTrie3 *trie, const UTrie3Builder *builder,
                   const CheckRange checkRanges[], int32_t countCheckRanges) {
-    UBool isFrozen = utrie3bld_isFrozen(trie);
-    const char *const typeName = isFrozen ? "frozen trie" : "newTrie";
+    const char *const typeName = trie != NULL ? "trie" : "builder";
     char name[80];
     int32_t s;
     for (s = 0; s < UPRV_LENGTHOF(iterStarts); ++s) {
@@ -124,8 +123,8 @@ testTrieGetRanges(const char *testName, const UTrie3 *trie,
                 expEnd = -1;
                 expValue = value = 0x5005;
             }
-            end = isFrozen ? utrie3_getRange(trie, start, NULL, NULL, &value) :
-                utrie3bld_getRange(trie, start, NULL, NULL, &value);
+            end = trie != NULL ? utrie3_getRange(trie, start, NULL, NULL, &value) :
+                utrie3bld_getRange(builder, start, NULL, NULL, &value);
             if (!doCheckRange(name, "without value handler", start, end, value, expEnd, expValue)) {
                 break;
             }
@@ -139,8 +138,8 @@ testTrieGetRanges(const char *testName, const UTrie3 *trie,
                 expEnd = -1;
                 expValue = value = 0x5005;
             }
-            end = isFrozen ? utrie3_getRange(trie, start, testHandleValue, NULL, &value) :
-                utrie3bld_getRange(trie, start, testHandleValue, NULL, &value);
+            end = trie != NULL ? utrie3_getRange(trie, start, testHandleValue, NULL, &value) :
+                utrie3bld_getRange(builder, start, testHandleValue, NULL, &value);
             if (!doCheckRange(name, "with value handler", start, end, value, expEnd, expValue)) {
                 break;
             }
@@ -152,8 +151,8 @@ testTrieGetRanges(const char *testName, const UTrie3 *trie,
             } else {
                 expEnd = -1;
             }
-            end = isFrozen ? utrie3_getRange(trie, start, NULL, NULL, NULL) :
-                utrie3bld_getRange(trie, start, NULL, NULL, NULL);
+            end = trie != NULL ? utrie3_getRange(trie, start, NULL, NULL, NULL) :
+                utrie3bld_getRange(builder, start, NULL, NULL, NULL);
             if (!doCheckRange(name, "without value", start, end, 0, expEnd, 0)) {
                 break;
             }
@@ -161,7 +160,6 @@ testTrieGetRanges(const char *testName, const UTrie3 *trie,
     }
 }
 
-/* verify all expected values via UTRIE3_GETxx() */
 static void
 testTrieGetters(const char *testName,
                 const UTrie3 *trie, UTrie3ValueBits valueBits,
@@ -172,8 +170,7 @@ testTrieGetters(const char *testName,
     int32_t i, countSpecials;
     int32_t countErrors=0;
 
-    UBool isFrozen=utrie3bld_isFrozen(trie);
-    const char *const typeName= isFrozen ? "frozen trie" : "newTrie";
+    const char *const typeName = "trie";
 
     countSpecials=getSpecialValues(checkRanges, countCheckRanges, &initialValue, &errorValue);
 
@@ -183,53 +180,44 @@ testTrieGetters(const char *testName,
         value=checkRanges[i].value;
 
         while(start<limit) {
-            if(isFrozen) {
-                if(start<=0xffff) {
-                    if(valueBits==UTRIE3_16_VALUE_BITS) {
-                        value2=UTRIE3_GET16_FROM_BMP(trie, start);
-                    } else {
-                        value2=UTRIE3_GET32_FROM_BMP(trie, start);
-                    }
-                    if(value!=value2) {
-                        log_err("error: %s(%s).fromBMP(U+%04lx)==0x%lx instead of 0x%lx\n",
-                                typeName, testName, (long)start, (long)value2, (long)value);
-                        ++countErrors;
-                    }
-                } else {
-                    if(valueBits==UTRIE3_16_VALUE_BITS) {
-                        UTRIE3_GET16_FROM_SUPP(trie, start, value2);
-                    } else {
-                        UTRIE3_GET32_FROM_SUPP(trie, start, value2);
-                    }
-                    if(value!=value2) {
-                        log_err("error: %s(%s).fromSupp(U+%04lx)==0x%lx instead of 0x%lx\n",
-                                typeName, testName, (long)start, (long)value2, (long)value);
-                        ++countErrors;
-                    }
-                }
+            if(start<=0xffff) {
                 if(valueBits==UTRIE3_16_VALUE_BITS) {
-                    UTRIE3_GET16(trie, start, value2);
+                    value2=UTRIE3_GET16_FROM_BMP(trie, start);
                 } else {
-                    UTRIE3_GET32(trie, start, value2);
+                    value2=UTRIE3_GET32_FROM_BMP(trie, start);
                 }
                 if(value!=value2) {
-                    log_err("error: %s(%s).get(U+%04lx)==0x%lx instead of 0x%lx\n",
-                            typeName, testName, (long)start, (long)value2, (long)value);
-                    ++countErrors;
-                }
-                value2=utrie3_get(trie, start);
-                if(value!=value2) {
-                    log_err("error: %s(%s).get(U+%04lx)==0x%lx instead of 0x%lx\n",
+                    log_err("error: %s(%s).fromBMP(U+%04lx)==0x%lx instead of 0x%lx\n",
                             typeName, testName, (long)start, (long)value2, (long)value);
                     ++countErrors;
                 }
             } else {
-                value2=utrie3bld_get(trie, start);
+                if(valueBits==UTRIE3_16_VALUE_BITS) {
+                    UTRIE3_GET16_FROM_SUPP(trie, start, value2);
+                } else {
+                    UTRIE3_GET32_FROM_SUPP(trie, start, value2);
+                }
                 if(value!=value2) {
-                    log_err("error: %s(%s).get(U+%04lx)==0x%lx instead of 0x%lx\n",
+                    log_err("error: %s(%s).fromSupp(U+%04lx)==0x%lx instead of 0x%lx\n",
                             typeName, testName, (long)start, (long)value2, (long)value);
                     ++countErrors;
                 }
+            }
+            if(valueBits==UTRIE3_16_VALUE_BITS) {
+                UTRIE3_GET16(trie, start, value2);
+            } else {
+                UTRIE3_GET32(trie, start, value2);
+            }
+            if(value!=value2) {
+                log_err("error: %s(%s).get(U+%04lx)==0x%lx instead of 0x%lx\n",
+                        typeName, testName, (long)start, (long)value2, (long)value);
+                ++countErrors;
+            }
+            value2=utrie3_get(trie, start);
+            if(value!=value2) {
+                log_err("error: %s(%s).get(U+%04lx)==0x%lx instead of 0x%lx\n",
+                        typeName, testName, (long)start, (long)value2, (long)value);
+                ++countErrors;
             }
             ++start;
             if(countErrors>10) {
@@ -238,58 +226,88 @@ testTrieGetters(const char *testName,
         }
     }
 
-    if(isFrozen) {
-        /* test linear ASCII range from the data array pointer (access to "internal" field) */
-        start=0;
-        for(i=countSpecials; i<countCheckRanges && start<=0x7f; ++i) {
-            limit=checkRanges[i].limit;
-            value=checkRanges[i].value;
+    /* test linear ASCII range from the data array pointer (access to "internal" field) */
+    start=0;
+    for(i=countSpecials; i<countCheckRanges && start<=0x7f; ++i) {
+        limit=checkRanges[i].limit;
+        value=checkRanges[i].value;
 
-            while(start<limit && start<=0x7f) {
-                if(valueBits==UTRIE3_16_VALUE_BITS) {
-                    value2=trie->data16[start];
-                } else {
-                    value2=trie->data32[start];
-                }
-                if(value!=value2) {
-                    log_err("error: %s(%s).asciiData[U+%04lx]==0x%lx instead of 0x%lx\n",
-                            typeName, testName, (long)start, (long)value2, (long)value);
-                    ++countErrors;
-                }
-                ++start;
-                if(countErrors>10) {
-                    return;
-                }
+        while(start<limit && start<=0x7f) {
+            if(valueBits==UTRIE3_16_VALUE_BITS) {
+                value2=trie->data16[start];
+            } else {
+                value2=trie->data32[start];
+            }
+            if(value!=value2) {
+                log_err("error: %s(%s).asciiData[U+%04lx]==0x%lx instead of 0x%lx\n",
+                        typeName, testName, (long)start, (long)value2, (long)value);
+                ++countErrors;
+            }
+            ++start;
+            if(countErrors>10) {
+                return;
             }
         }
     }
 
     /* test errorValue */
-    if(isFrozen) {
-        if(valueBits==UTRIE3_16_VALUE_BITS) {
-            UTRIE3_GET16(trie, -1, value);
-            UTRIE3_GET16(trie, 0x110000, value2);
-        } else {
-            UTRIE3_GET32(trie, -1, value);
-            UTRIE3_GET32(trie, 0x110000, value2);
-        }
-        if(value!=errorValue || value2!=errorValue) {
-            log_err("error: %s(%s).get(out of range) != errorValue\n",
-                    typeName, testName);
-        }
-        value=utrie3_get(trie, -1);
-        value2=utrie3_get(trie, 0x110000);
-        if(value!=errorValue || value2!=errorValue) {
-            log_err("error: %s(%s).get(out of range) != errorValue\n",
-                    typeName, testName);
-        }
+    if(valueBits==UTRIE3_16_VALUE_BITS) {
+        UTRIE3_GET16(trie, -1, value);
+        UTRIE3_GET16(trie, 0x110000, value2);
     } else {
-        value=utrie3bld_get(trie, -1);
-        value2=utrie3bld_get(trie, 0x110000);
-        if(value!=errorValue || value2!=errorValue) {
-            log_err("error: %s(%s).get(out of range) != errorValue\n",
-                    typeName, testName);
+        UTRIE3_GET32(trie, -1, value);
+        UTRIE3_GET32(trie, 0x110000, value2);
+    }
+    if(value!=errorValue || value2!=errorValue) {
+        log_err("error: %s(%s).get(out of range) != errorValue\n",
+                typeName, testName);
+    }
+    value=utrie3_get(trie, -1);
+    value2=utrie3_get(trie, 0x110000);
+    if(value!=errorValue || value2!=errorValue) {
+        log_err("error: %s(%s).get(out of range) != errorValue\n",
+                typeName, testName);
+    }
+}
+
+static void
+testBuilderGetters(const char *testName, const UTrie3Builder *builder,
+                   const CheckRange checkRanges[], int32_t countCheckRanges) {
+    uint32_t initialValue, errorValue;
+    uint32_t value, value2;
+    UChar32 start, limit;
+    int32_t i, countSpecials;
+    int32_t countErrors=0;
+
+    const char *const typeName = "builder";
+
+    countSpecials=getSpecialValues(checkRanges, countCheckRanges, &initialValue, &errorValue);
+
+    start=0;
+    for(i=countSpecials; i<countCheckRanges; ++i) {
+        limit=checkRanges[i].limit;
+        value=checkRanges[i].value;
+
+        while(start<limit) {
+            value2=utrie3bld_get(builder, start);
+            if(value!=value2) {
+                log_err("error: %s(%s).get(U+%04lx)==0x%lx instead of 0x%lx\n",
+                        typeName, testName, (long)start, (long)value2, (long)value);
+                ++countErrors;
+            }
+            ++start;
+            if(countErrors>10) {
+                return;
+            }
         }
+    }
+
+    /* test errorValue */
+    value=utrie3bld_get(builder, -1);
+    value2=utrie3bld_get(builder, 0x110000);
+    if(value!=errorValue || value2!=errorValue) {
+        log_err("error: %s(%s).get(out of range) != errorValue\n",
+                typeName, testName);
     }
 }
 
@@ -589,67 +607,37 @@ testTrieUTF8(const char *testName,
 }
 
 static void
-testFrozenTrie(const char *testName,
-               UTrie3 *trie, UTrie3ValueBits valueBits,
-               const CheckRange checkRanges[], int32_t countCheckRanges) {
-    UErrorCode errorCode;
-    uint32_t value, value2;
-
-    if(!utrie3bld_isFrozen(trie)) {
-        log_err("error: utrie3bld_isFrozen(frozen %s) returned FALSE (not frozen)\n",
-                testName);
-        return;
-    }
-
+testTrie(const char *testName, const UTrie3 *trie, UTrie3ValueBits valueBits,
+         const CheckRange checkRanges[], int32_t countCheckRanges) {
     testTrieGetters(testName, trie, valueBits, checkRanges, countCheckRanges);
-    testTrieGetRanges(testName, trie, checkRanges, countCheckRanges);
+    testTrieGetRanges(testName, trie, NULL, checkRanges, countCheckRanges);
     testTrieUTF16(testName, trie, valueBits, checkRanges, countCheckRanges);
     testTrieUTF8(testName, trie, valueBits, checkRanges, countCheckRanges);
-
-    errorCode=U_ZERO_ERROR;
-    value=utrie3_get(trie, 1);
-    utrie3bld_set(trie, 1, 234, &errorCode);
-    value2=utrie3_get(trie, 1);
-    if(errorCode!=U_NO_WRITE_PERMISSION || value2!=value) {
-        log_err("error: utrie3bld_set(frozen %s) failed: it set %s != U_NO_WRITE_PERMISSION\n",
-                testName, u_errorName(errorCode));
-        return;
-    }
-
-    errorCode=U_ZERO_ERROR;
-    utrie3bld_setRange(trie, 1, 5, 234, TRUE, &errorCode);
-    value2=utrie3_get(trie, 1);
-    if(errorCode!=U_NO_WRITE_PERMISSION || value2!=value) {
-        log_err("error: utrie3bld_setRange(frozen %s) failed: it set %s != U_NO_WRITE_PERMISSION\n",
-                testName, u_errorName(errorCode));
-        return;
-    }
 }
 
 static void
-testNewTrie(const char *testName, const UTrie3 *trie,
+testBuilder(const char *testName, const UTrie3Builder *builder,
             const CheckRange checkRanges[], int32_t countCheckRanges) {
-    /* The valueBits are ignored for an unfrozen trie. */
-    testTrieGetters(testName, trie, UTRIE3_COUNT_VALUE_BITS, checkRanges, countCheckRanges);
-    testTrieGetRanges(testName, trie, checkRanges, countCheckRanges);
+    testBuilderGetters(testName, builder, checkRanges, countCheckRanges);
+    testTrieGetRanges(testName, NULL, builder, checkRanges, countCheckRanges);
 }
 
 static uint32_t storage[120000];
 
 static void
 testTrieSerialize(const char *testName,
-                  UTrie3 *trie, UTrie3ValueBits valueBits,
+                  UTrie3Builder *builder, UTrie3ValueBits valueBits,
                   UBool withSwap,
                   const CheckRange checkRanges[], int32_t countCheckRanges) {
+    UTrie3 *trie;
     int32_t length1, length2, length3;
-    UTrie3ValueBits otherValueBits;
     UErrorCode errorCode;
 
     /* clone the trie so that the caller can reuse the original */
     errorCode=U_ZERO_ERROR;
-    trie=utrie3bld_clone(trie, &errorCode);
+    builder = utrie3bld_clone(builder, &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("error: utrie3bld_clone(unfrozen %s) failed - %s\n",
+        log_err("error: utrie3bld_clone(%s) failed - %s\n",
                 testName, u_errorName(errorCode));
         return;
     }
@@ -660,33 +648,17 @@ testTrieSerialize(const char *testName,
      */
     do {
         errorCode=U_ZERO_ERROR;
-        utrie3_serialize(trie, storage, sizeof(storage), &errorCode);
-        if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
-            log_err("error: utrie3_serialize(unfrozen %s) set %s != U_ILLEGAL_ARGUMENT_ERROR\n",
-                    testName, u_errorName(errorCode));
-            break;
-        }
-        errorCode=U_ZERO_ERROR;
-        utrie3bld_freeze(trie, valueBits, &errorCode);
-        if(U_FAILURE(errorCode) || !utrie3bld_isFrozen(trie)) {
-            log_err("error: utrie3bld_freeze(%s) failed: %s isFrozen: %d\n",
-                    testName, u_errorName(errorCode), utrie3bld_isFrozen(trie));
-            break;
-        }
-        otherValueBits= valueBits==UTRIE3_16_VALUE_BITS ? UTRIE3_32_VALUE_BITS : UTRIE3_16_VALUE_BITS;
-        utrie3bld_freeze(trie, otherValueBits, &errorCode);
-        if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
-            log_err("error: utrie3bld_freeze(already-frozen with other valueBits %s) "
-                    "set %s != U_ILLEGAL_ARGUMENT_ERROR\n",
+        trie = utrie3bld_build(builder, valueBits, &errorCode);
+        if (U_FAILURE(errorCode)) {
+            log_err("error: utrie3bld_build(%s) failed: %s\n",
                     testName, u_errorName(errorCode));
             break;
         }
         errorCode=U_ZERO_ERROR;
         if(withSwap) {
-            /* clone a frozen trie */
             UTrie3 *clone=utrie3_clone(trie, &errorCode);
             if(U_FAILURE(errorCode)) {
-                log_err("error: cloning a frozen UTrie3 failed (%s) - %s\n",
+                log_err("error: cloning a UTrie3 failed (%s) - %s\n",
                         testName, u_errorName(errorCode));
                 errorCode=U_ZERO_ERROR;  /* continue with the original */
             } else {
@@ -716,7 +688,7 @@ testTrieSerialize(const char *testName,
             break;
         }
 
-        testFrozenTrie(testName, trie, valueBits, checkRanges, countCheckRanges);
+        testTrie(testName, trie, valueBits, checkRanges, countCheckRanges);
         utrie3_close(trie);
         trie=NULL;
 
@@ -784,19 +756,6 @@ testTrieSerialize(const char *testName,
         /* overwrite the storage that is not supposed to be needed */
         uprv_memset((char *)storage+length3, 0xfa, (int32_t)(sizeof(storage)-length3));
 
-        utrie3bld_freeze(trie, valueBits, &errorCode);
-        if(U_FAILURE(errorCode) || !utrie3bld_isFrozen(trie)) {
-            log_err("error: utrie3bld_freeze(unserialized %s) failed: %s isFrozen: %d\n",
-                    testName, u_errorName(errorCode), utrie3bld_isFrozen(trie));
-            break;
-        }
-        utrie3bld_freeze(trie, otherValueBits, &errorCode);
-        if(errorCode!=U_ILLEGAL_ARGUMENT_ERROR) {
-            log_err("error: utrie3bld_freeze(unserialized with other valueBits %s) "
-                    "set %s != U_ILLEGAL_ARGUMENT_ERROR\n",
-                    testName, u_errorName(errorCode));
-            break;
-        }
         errorCode=U_ZERO_ERROR;
         if(withSwap) {
             /* clone a deserialized trie */
@@ -812,15 +771,14 @@ testTrieSerialize(const char *testName,
                 uprv_memset(storage, 0, sizeof(storage));
             }
         }
-        testFrozenTrie(testName, trie, valueBits, checkRanges, countCheckRanges);
+        testTrie(testName, trie, valueBits, checkRanges, countCheckRanges);
 #if 0  // TODO
         {
             /* clone-as-thawed an unserialized trie */
             UTrie3 *clone=utrie3bld_cloneAsThawed(trie, &errorCode);
-            if(U_FAILURE(errorCode) || utrie3bld_isFrozen(clone)) {
-                log_err("error: utrie3bld_cloneAsThawed(unserialized %s) failed - "
-                        "%s (isFrozen: %d)\n",
-                        testName, u_errorName(errorCode), clone!=NULL && utrie3bld_isFrozen(trie));
+            if(U_FAILURE(errorCode)) {
+                log_err("error: utrie3bld_cloneAsThawed(unserialized %s) failed - %s\n",
+                        testName, u_errorName(errorCode));
                 break;
             } else {
                 utrie3_close(trie);
@@ -839,21 +797,20 @@ testTrieSerialize(const char *testName,
                         testName, u_errorName(errorCode));
             }
         }
-        testNewTrie(testName, trie, checkRanges, countCheckRanges);
+        testBuilder(testName, trie, checkRanges, countCheckRanges);
 #endif
     } while(0);
 
     utrie3_close(trie);
 }
 
-static UTrie3 *
+static UTrie3Builder *
 testTrieSerializeAllValueBits(const char *testName,
-                              UTrie3 *trie, UBool withClone,
+                              UTrie3Builder *builder, UBool withClone,
                               const CheckRange checkRanges[], int32_t countCheckRanges) {
     char name[40];
 
-    /* verify that all the expected values are in the unfrozen trie */
-    testNewTrie(testName, trie, checkRanges, countCheckRanges);
+    testBuilder(testName, builder, checkRanges, countCheckRanges);
 
     /*
      * Test with both valueBits serializations,
@@ -861,7 +818,7 @@ testTrieSerializeAllValueBits(const char *testName,
      */
     uprv_strcpy(name, testName);
     uprv_strcat(name, ".16");
-    testTrieSerialize(name, trie,
+    testTrieSerialize(name, builder,
                       UTRIE3_16_VALUE_BITS, withClone,
                       checkRanges, countCheckRanges);
 
@@ -869,7 +826,7 @@ testTrieSerializeAllValueBits(const char *testName,
 #if 0  // TODO
         /*
          * try cloning after the first serialization;
-         * clone-as-thawed just to sometimes try it on an unfrozen trie
+         * clone-as-thawed just to sometimes try it on a builder
          */
         UErrorCode errorCode=U_ZERO_ERROR;
         UTrie3 *clone=utrie3bld_cloneAsThawed(trie, &errorCode);
@@ -880,25 +837,25 @@ testTrieSerializeAllValueBits(const char *testName,
             utrie3_close(trie);
             trie=clone;
 
-            testNewTrie(testName, trie, checkRanges, countCheckRanges);
+            testBuilder(testName, builder, checkRanges, countCheckRanges);
         }
 #endif
     }
 
     uprv_strcpy(name, testName);
     uprv_strcat(name, ".32");
-    testTrieSerialize(name, trie,
+    testTrieSerialize(name, builder,
                       UTRIE3_32_VALUE_BITS, withClone,
                       checkRanges, countCheckRanges);
 
-    return trie; /* could be the clone */
+    return builder; /* could be the clone */
 }
 
-static UTrie3 *
+static UTrie3Builder *
 makeTrieWithRanges(const char *testName, UBool withClone,
                    const SetRange setRanges[], int32_t countSetRanges,
                    const CheckRange checkRanges[], int32_t countCheckRanges) {
-    UTrie3 *trie;
+    UTrie3Builder *builder;
     uint32_t initialValue, errorValue;
     uint32_t value;
     UChar32 start, limit;
@@ -909,7 +866,7 @@ makeTrieWithRanges(const char *testName, UBool withClone,
     log_verbose("\ntesting Trie '%s'\n", testName);
     errorCode=U_ZERO_ERROR;
     getSpecialValues(checkRanges, countCheckRanges, &initialValue, &errorValue);
-    trie=utrie3bld_open(initialValue, errorValue, &errorCode);
+    builder = utrie3bld_open(initialValue, errorValue, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("error: utrie3bld_open(%s) failed: %s\n", testName, u_errorName(errorCode));
         return NULL;
@@ -919,14 +876,14 @@ makeTrieWithRanges(const char *testName, UBool withClone,
     for(i=0; i<countSetRanges; ++i) {
         if(withClone && i==countSetRanges/2) {
             /* switch to a clone in the middle of setting values */
-            UTrie3 *clone=utrie3bld_clone(trie, &errorCode);
+            UTrie3Builder *clone = utrie3bld_clone(builder, &errorCode);
             if(U_FAILURE(errorCode)) {
                 log_err("error: utrie3bld_clone(%s) failed - %s\n",
                         testName, u_errorName(errorCode));
                 errorCode=U_ZERO_ERROR;  /* continue with the original */
             } else {
-                utrie3bld_close(trie);
-                trie=clone;
+                utrie3bld_close(builder);
+                builder = clone;
             }
         }
         start=setRanges[i].start;
@@ -934,18 +891,18 @@ makeTrieWithRanges(const char *testName, UBool withClone,
         value=setRanges[i].value;
         overwrite=setRanges[i].overwrite;
         if((limit-start)==1 && overwrite) {
-            utrie3bld_set(trie, start, value, &errorCode);
+            utrie3bld_set(builder, start, value, &errorCode);
         } else {
-            utrie3bld_setRange(trie, start, limit-1, value, overwrite, &errorCode);
+            utrie3bld_setRange(builder, start, limit-1, value, overwrite, &errorCode);
         }
     }
 
     if(U_SUCCESS(errorCode)) {
-        return trie;
+        return builder;
     } else {
-        log_err("error: setting values into a trie (%s) failed - %s\n",
+        log_err("error: setting values into a trie builder (%s) failed - %s\n",
                 testName, u_errorName(errorCode));
-        utrie3bld_close(trie);
+        utrie3bld_close(builder);
         return NULL;
     }
 }
@@ -954,13 +911,12 @@ static void
 testTrieRanges(const char *testName, UBool withClone,
                const SetRange setRanges[], int32_t countSetRanges,
                const CheckRange checkRanges[], int32_t countCheckRanges) {
-    UTrie3 *trie=makeTrieWithRanges(testName, withClone,
-                                    setRanges, countSetRanges,
-                                    checkRanges, countCheckRanges);
-    if(trie!=NULL) {
-        trie=testTrieSerializeAllValueBits(testName, trie, withClone,
-                                           checkRanges, countCheckRanges);
-        utrie3bld_close(trie);
+    UTrie3Builder *builder = makeTrieWithRanges(
+        testName, withClone, setRanges, countSetRanges, checkRanges, countCheckRanges);
+    if (builder != NULL) {
+        builder = testTrieSerializeAllValueBits(testName, builder, withClone,
+                                                checkRanges, countCheckRanges);
+        utrie3bld_close(builder);
     }
 }
 
@@ -1174,7 +1130,7 @@ dummyTest(UTrie3ValueBits valueBits) {
         return;
     }
 
-    testFrozenTrie(testName, trie, valueBits, checkRanges, UPRV_LENGTHOF(checkRanges));
+    testTrie(testName, trie, valueBits, checkRanges, UPRV_LENGTHOF(checkRanges));
     utrie3_close(trie);
 }
 
@@ -1198,12 +1154,12 @@ FreeBlocksTest(void) {
     };
     static const char *const testName="free-blocks";
 
-    UTrie3 *trie;
+    UTrie3Builder *builder;
     int32_t i;
     UErrorCode errorCode;
 
     errorCode=U_ZERO_ERROR;
-    trie=utrie3bld_open(1, 0xbad, &errorCode);
+    builder=utrie3bld_open(1, 0xbad, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("error: utrie3bld_open(%s) failed: %s\n", testName, u_errorName(errorCode));
         return;
@@ -1214,25 +1170,25 @@ FreeBlocksTest(void) {
      * If it fails, it will overflow the data array.
      */
     for(i=0; i<(0x120000>>UTRIE3_SHIFT_2)/2; ++i) {
-        utrie3bld_setRange(trie, 0x740, 0x840-1, 1, TRUE, &errorCode);
-        utrie3bld_setRange(trie, 0x780, 0x880-1, 1, TRUE, &errorCode);
-        utrie3bld_setRange(trie, 0x740, 0x840-1, 2, TRUE, &errorCode);
-        utrie3bld_setRange(trie, 0x780, 0x880-1, 3, TRUE, &errorCode);
+        utrie3bld_setRange(builder, 0x740, 0x840-1, 1, TRUE, &errorCode);
+        utrie3bld_setRange(builder, 0x780, 0x880-1, 1, TRUE, &errorCode);
+        utrie3bld_setRange(builder, 0x740, 0x840-1, 2, TRUE, &errorCode);
+        utrie3bld_setRange(builder, 0x780, 0x880-1, 3, TRUE, &errorCode);
     }
     /* make blocks that will be free during compaction */
-    utrie3bld_setRange(trie, 0x1000, 0x3000-1, 2, TRUE, &errorCode);
-    utrie3bld_setRange(trie, 0x2000, 0x4000-1, 3, TRUE, &errorCode);
-    utrie3bld_setRange(trie, 0x1000, 0x4000-1, 1, TRUE, &errorCode);
+    utrie3bld_setRange(builder, 0x1000, 0x3000-1, 2, TRUE, &errorCode);
+    utrie3bld_setRange(builder, 0x2000, 0x4000-1, 3, TRUE, &errorCode);
+    utrie3bld_setRange(builder, 0x1000, 0x4000-1, 1, TRUE, &errorCode);
     if(U_FAILURE(errorCode)) {
-        log_err("error: setting lots of ranges into a trie (%s) failed - %s\n",
+        log_err("error: setting lots of ranges into a builder (%s) failed - %s\n",
                 testName, u_errorName(errorCode));
-        utrie3bld_close(trie);
+        utrie3bld_close(builder);
         return;
     }
 
-    trie=testTrieSerializeAllValueBits(testName, trie, FALSE,
-                                       checkRanges, UPRV_LENGTHOF(checkRanges));
-    utrie3bld_close(trie);
+    builder = testTrieSerializeAllValueBits(testName, builder, FALSE,
+                                            checkRanges, UPRV_LENGTHOF(checkRanges));
+    utrie3bld_close(builder);
 }
 
 static void
@@ -1247,12 +1203,12 @@ GrowDataArrayTest(void) {
     };
     static const char *const testName="grow-data";
 
-    UTrie3 *trie;
+    UTrie3Builder *builder;
     int32_t i;
     UErrorCode errorCode;
 
     errorCode=U_ZERO_ERROR;
-    trie=utrie3bld_open(1, 0xbad, &errorCode);
+    builder=utrie3bld_open(1, 0xbad, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("error: utrie3bld_open(%s) failed: %s\n", testName, u_errorName(errorCode));
         return;
@@ -1263,40 +1219,40 @@ GrowDataArrayTest(void) {
      * Should grow/reallocate the data array to a sufficient length.
      */
     for(i=0; i<0x1000; ++i) {
-        utrie3bld_set(trie, i, 2, &errorCode);
+        utrie3bld_set(builder, i, 2, &errorCode);
     }
     for(i=0x720; i<0x1100; ++i) { /* some overlap */
-        utrie3bld_set(trie, i, 3, &errorCode);
+        utrie3bld_set(builder, i, 3, &errorCode);
     }
     for(i=0x7a0; i<0x900; ++i) {
-        utrie3bld_set(trie, i, 4, &errorCode);
+        utrie3bld_set(builder, i, 4, &errorCode);
     }
     for(i=0x8a0; i<0x110000; ++i) {
-        utrie3bld_set(trie, i, 5, &errorCode);
+        utrie3bld_set(builder, i, 5, &errorCode);
     }
     if(U_FAILURE(errorCode)) {
-        log_err("error: setting lots of values into a trie (%s) failed - %s\n",
+        log_err("error: setting lots of values into a builder (%s) failed - %s\n",
                 testName, u_errorName(errorCode));
-        utrie3bld_close(trie);
+        utrie3bld_close(builder);
         return;
     }
 
-    trie=testTrieSerializeAllValueBits(testName, trie, FALSE,
-                                          checkRanges, UPRV_LENGTHOF(checkRanges));
-    utrie3bld_close(trie);
+    builder = testTrieSerializeAllValueBits(testName, builder, FALSE,
+                                            checkRanges, UPRV_LENGTHOF(checkRanges));
+    utrie3bld_close(builder);
 }
 
 static void
 ManyAllSameBlocksTest(void) {
     static const char *const testName="many-all-same";
 
-    UTrie3 *trie;
+    UTrie3Builder *builder;
     int32_t i;
     UErrorCode errorCode;
     CheckRange checkRanges[(0x110000 >> 12) + 1];
 
     errorCode = U_ZERO_ERROR;
-    trie = utrie3bld_open(0xff33, 0xbad, &errorCode);
+    builder = utrie3bld_open(0xff33, 0xbad, &errorCode);
     if (U_FAILURE(errorCode)) {
         log_err("error: utrie3bld_open(%s) failed: %s\n", testName, u_errorName(errorCode));
         return;
@@ -1307,22 +1263,22 @@ ManyAllSameBlocksTest(void) {
     // Many all-same-value blocks.
     for (i = 0; i < 0x110000; i += 0x1000) {
         uint32_t value = i >> 12;
-        utrie3bld_setRange(trie, i, i + 0xfff, value, TRUE, &errorCode);
+        utrie3bld_setRange(builder, i, i + 0xfff, value, TRUE, &errorCode);
         checkRanges[value + 1].limit = i + 0x1000;
         checkRanges[value + 1].value = value;
     }
     for (i = 0; i < 0x110000; i += 0x1000) {
         uint32_t expected = i >> 12;
-        uint32_t v0 = utrie3bld_get(trie, i);
-        uint32_t vfff = utrie3bld_get(trie, i + 0xfff);
+        uint32_t v0 = utrie3bld_get(builder, i);
+        uint32_t vfff = utrie3bld_get(builder, i + 0xfff);
         if (v0 != expected || vfff != expected) {
             log_err("error: UTrie3 builder U+%04lx unexpected value\n", (long)i);
         }
     }
 
-    trie=testTrieSerializeAllValueBits(testName, trie, FALSE,
-                                          checkRanges, UPRV_LENGTHOF(checkRanges));
-    utrie3bld_close(trie);
+    builder = testTrieSerializeAllValueBits(testName, builder, FALSE,
+                                            checkRanges, UPRV_LENGTHOF(checkRanges));
+    utrie3bld_close(builder);
 }
 
 /* versions 1 and 2 --------------------------------------------------------- */
@@ -1368,145 +1324,6 @@ GetVersionTest(void) {
     }
 }
 
-#if 0  // TODO
-static UNewTrie *
-makeNewTrie1WithRanges(const char *testName,
-                       const SetRange setRanges[], int32_t countSetRanges,
-                       const CheckRange checkRanges[], int32_t countCheckRanges) {
-    UNewTrie *newTrie;
-    uint32_t initialValue, errorValue;
-    uint32_t value;
-    UChar32 start, limit;
-    int32_t i;
-    UErrorCode errorCode;
-    UBool overwrite, ok;
-
-    log_verbose("\ntesting Trie '%s'\n", testName);
-    errorCode=U_ZERO_ERROR;
-    getSpecialValues(checkRanges, countCheckRanges, &initialValue, &errorValue);
-    newTrie=utrie_open(NULL, NULL, 2000,
-                       initialValue, initialValue,
-                       FALSE);
-    if(U_FAILURE(errorCode)) {
-        log_err("error: utrie_open(%s) failed: %s\n", testName, u_errorName(errorCode));
-        return NULL;
-    }
-
-    /* set values from setRanges[] */
-    ok=TRUE;
-    for(i=0; i<countSetRanges; ++i) {
-        start=setRanges[i].start;
-        limit=setRanges[i].limit;
-        value=setRanges[i].value;
-        overwrite=setRanges[i].overwrite;
-        if((limit-start)==1 && overwrite) {
-            ok&=utrie_set32(newTrie, start, value);
-        } else {
-            ok&=utrie_setRange32(newTrie, start, limit, value, overwrite);
-        }
-    }
-    if(ok) {
-        return newTrie;
-    } else {
-        log_err("error: setting values into a trie1 (%s) failed\n", testName);
-        utrie_close(newTrie);
-        return NULL;
-    }
-}
-#endif
-
-static void
-testTrie2FromTrie1(const char *testName,
-                   const SetRange setRanges[], int32_t countSetRanges,
-                   const CheckRange checkRanges[], int32_t countCheckRanges) {
-#if 0  // TODO
-    uint32_t memory1_16[3000], memory1_32[3000];
-    int32_t length16, length32;
-    UChar lead;
-
-    char name[40];
-
-    UNewTrie *newTrie1_16, *newTrie1_32;
-    UTrie trie1_16, trie1_32;
-    UTrie3 *trie2;
-    uint32_t initialValue, errorValue;
-    UErrorCode errorCode;
-
-    newTrie1_16=makeNewTrie1WithRanges(testName,
-                                       setRanges, countSetRanges,
-                                       checkRanges, countCheckRanges);
-    if(newTrie1_16==NULL) {
-        return;
-    }
-    newTrie1_32=utrie_clone(NULL, newTrie1_16, NULL, 0);
-    if(newTrie1_32==NULL) {
-        utrie_close(newTrie1_16);
-        return;
-    }
-    errorCode=U_ZERO_ERROR;
-    length16=utrie_serialize(newTrie1_16, memory1_16, sizeof(memory1_16),
-                             NULL, TRUE, &errorCode);
-    length32=utrie_serialize(newTrie1_32, memory1_32, sizeof(memory1_32),
-                             NULL, FALSE, &errorCode);
-    utrie_unserialize(&trie1_16, memory1_16, length16, &errorCode);
-    utrie_unserialize(&trie1_32, memory1_32, length32, &errorCode);
-    utrie_close(newTrie1_16);
-    utrie_close(newTrie1_32);
-    if(U_FAILURE(errorCode)) {
-        log_err("error: utrie_serialize or unserialize(%s) failed: %s\n",
-                testName, u_errorName(errorCode));
-        return;
-    }
-
-    getSpecialValues(checkRanges, countCheckRanges, &initialValue, &errorValue);
-
-    uprv_strcpy(name, testName);
-    uprv_strcat(name, ".16");
-    trie2=utrie3_fromUTrie(&trie1_16, errorValue, &errorCode);
-    if(U_SUCCESS(errorCode)) {
-        testFrozenTrie(name, trie2, UTRIE3_16_VALUE_BITS, checkRanges, countCheckRanges);
-        for(lead=0xd800; lead<0xdc00; ++lead) {
-            uint32_t value1, value2;
-            value1=UTRIE_GET16_FROM_LEAD(&trie1_16, lead);
-            value2=UTRIE3_GET16_FROM_BMP(trie2, lead);
-            if(value1!=value2) {
-                log_err("error: utrie3_fromUTrie(%s) wrong value %ld!=%ld "
-                        "from lead surrogate code unit U+%04lx\n",
-                        name, (long)value2, (long)value1, (long)lead);
-                break;
-            }
-        }
-    }
-    utrie3_close(trie2);
-
-    uprv_strcpy(name, testName);
-    uprv_strcat(name, ".32");
-    trie2=utrie3_fromUTrie(&trie1_32, errorValue, &errorCode);
-    if(U_SUCCESS(errorCode)) {
-        testFrozenTrie(name, trie2, UTRIE3_32_VALUE_BITS, checkRanges, countCheckRanges);
-        for(lead=0xd800; lead<0xdc00; ++lead) {
-            uint32_t value1, value2;
-            value1=UTRIE_GET32_FROM_LEAD(&trie1_32, lead);
-            value2=UTRIE3_GET32_FROM_BMP(trie2, lead);
-            if(value1!=value2) {
-                log_err("error: utrie3_fromUTrie(%s) wrong value %ld!=%ld "
-                        "from lead surrogate code unit U+%04lx\n",
-                        name, (long)value2, (long)value1, (long)lead);
-                break;
-            }
-        }
-    }
-    utrie3_close(trie2);
-#endif
-}
-
-static void
-Trie12ConversionTest(void) {
-    testTrie2FromTrie1("trie1->trie2",
-                       setRanges2, UPRV_LENGTHOF(setRanges2),
-                       checkRanges2, UPRV_LENGTHOF(checkRanges2));
-}
-
 void
 addTrie3Test(TestNode** root) {
     addTest(root, &TrieTestSet1, "tsutil/trie3test/TrieTestSet1");
@@ -1520,5 +1337,4 @@ addTrie3Test(TestNode** root) {
     addTest(root, &GrowDataArrayTest, "tsutil/trie3test/GrowDataArrayTest");
     addTest(root, &ManyAllSameBlocksTest, "tsutil/trie3test/ManyAllSameBlocksTest");
     addTest(root, &GetVersionTest, "tsutil/trie3test/GetVersionTest");
-    addTest(root, &Trie12ConversionTest, "tsutil/trie3test/Trie12ConversionTest");
 }
