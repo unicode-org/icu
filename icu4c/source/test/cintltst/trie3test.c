@@ -772,33 +772,27 @@ testTrieSerialize(const char *testName,
             }
         }
         testTrie(testName, trie, valueBits, checkRanges, countCheckRanges);
-#if 0  // TODO
         {
-            /* clone-as-thawed an unserialized trie */
-            UTrie3 *clone=utrie3bld_cloneAsThawed(trie, &errorCode);
+            /* make a builder from an unserialized trie */
+            uint32_t value, value2;
+            UTrie3Builder *builder2 = utrie3bld_fromUTrie3(trie, &errorCode);
             if(U_FAILURE(errorCode)) {
-                log_err("error: utrie3bld_cloneAsThawed(unserialized %s) failed - %s\n",
+                log_err("error: utrie3bld_fromUTrie3(unserialized %s) failed - %s\n",
                         testName, u_errorName(errorCode));
                 break;
-            } else {
-                utrie3_close(trie);
-                trie=clone;
             }
-        }
-        {
-            uint32_t value, value2;
 
-            value=utrie3bld_get(trie, 0xa1);
-            utrie3bld_set(trie, 0xa1, 789, &errorCode);
-            value2=utrie3bld_get(trie, 0xa1);
-            utrie3bld_set(trie, 0xa1, value, &errorCode);
+            value=utrie3bld_get(builder2, 0xa1);
+            utrie3bld_set(builder2, 0xa1, 789, &errorCode);
+            value2=utrie3bld_get(builder2, 0xa1);
+            utrie3bld_set(builder2, 0xa1, value, &errorCode);
             if(U_FAILURE(errorCode) || value2!=789) {
-                log_err("error: modifying a cloneAsThawed UTrie3 (%s) failed - %s\n",
+                log_err("error: modifying a builder-from-UTrie3 (%s) failed - %s\n",
                         testName, u_errorName(errorCode));
             }
+            testBuilder(testName, builder2, checkRanges, countCheckRanges);
+            utrie3bld_close(builder2);
         }
-        testBuilder(testName, trie, checkRanges, countCheckRanges);
-#endif
     } while(0);
 
     utrie3_close(trie);
@@ -821,26 +815,6 @@ testTrieSerializeAllValueBits(const char *testName,
     testTrieSerialize(name, builder,
                       UTRIE3_16_VALUE_BITS, withClone,
                       checkRanges, countCheckRanges);
-
-    if(withClone) {
-#if 0  // TODO
-        /*
-         * try cloning after the first serialization;
-         * clone-as-thawed just to sometimes try it on a builder
-         */
-        UErrorCode errorCode=U_ZERO_ERROR;
-        UTrie3 *clone=utrie3bld_cloneAsThawed(trie, &errorCode);
-        if(U_FAILURE(errorCode)) {
-            log_err("error: utrie3bld_cloneAsThawed(%s) after serialization failed - %s\n",
-                    testName, u_errorName(errorCode));
-        } else {
-            utrie3_close(trie);
-            trie=clone;
-
-            testBuilder(testName, builder, checkRanges, countCheckRanges);
-        }
-#endif
-    }
 
     uprv_strcpy(name, testName);
     uprv_strcat(name, ".32");

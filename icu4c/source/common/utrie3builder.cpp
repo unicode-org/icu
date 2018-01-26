@@ -64,6 +64,8 @@ public:
 
     Trie3Builder &operator=(const Trie3Builder &other) = delete;
 
+    static Trie3Builder *fromUTrie3(const UTrie3 *trie, UErrorCode &errorCode);
+
     uint32_t get(UChar32 c) const;
     int32_t getRange(UChar32 start, UTrie3HandleValue *handleValue, const void *context,
                      uint32_t *pValue) const;
@@ -137,6 +139,34 @@ Trie3Builder::Trie3Builder(const Trie3Builder &other, UErrorCode &errorCode) :
 
 Trie3Builder::~Trie3Builder() {
     uprv_free(data);
+}
+
+Trie3Builder *Trie3Builder::fromUTrie3(const UTrie3 *trie, UErrorCode &errorCode) {
+    // Use the highValue as the initialValue to reduce the highStart.
+    uint32_t initialValue = trie->highValue;
+    Trie3Builder *builder = new Trie3Builder(initialValue, trie->errorValue, errorCode);
+    if (U_FAILURE(errorCode)) {
+        delete builder;
+        return nullptr;
+    }
+    UChar32 start = 0, end;
+    uint32_t value;
+    while ((end = utrie3_getRange(trie, start, nullptr, nullptr, &value)) >= 0) {
+        if (value != initialValue) {
+            if (start == end) {
+                builder->set(start, value, errorCode);
+            } else {
+                builder->setRange(start, end, value, TRUE, errorCode);
+            }
+        }
+        start = end + 1;
+    }
+    if (U_SUCCESS(errorCode)) {
+        return builder;
+    } else {
+        delete builder;
+        return nullptr;
+    }
 }
 
 void Trie3Builder::clear() {
@@ -971,14 +1001,6 @@ UTrie3 *Trie3Builder::build(UTrie3ValueBits valueBits, UErrorCode &errorCode) {
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
-#if 0
-        /* already frozen */  // TODO
-        UTrie3ValueBits frozenValueBits=
-            trie->data16!=NULL ? UTRIE3_16_VALUE_BITS : UTRIE3_32_VALUE_BITS;
-        if(valueBits!=frozenValueBits) {
-            errorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        }
-#endif
 
     // The builder always stores 32-bit values.
     // When we build a UTrie3 for a smaller value width, we first mask off unused bits
@@ -1154,68 +1176,17 @@ utrie3bld_close(UTrie3Builder *builder) {
     delete reinterpret_cast<Trie3Builder *>(builder);
 }
 
-#if 0  // TODO
-typedef struct NewTrieAndStatus {
-    UTrie3 *trie;
-    UErrorCode errorCode;
-    UBool exclusiveLimit;  /* rather than inclusive range end */  // TODO: remove
-} NewTrieAndStatus;
-
-UBool U_CALLCONV
-copyEnumRange(const void *context, UChar32 start, UChar32 end, uint32_t value) {
-    NewTrieAndStatus *nt=(NewTrieAndStatus *)context;
-    if(value!=nt->trie->initialValue) {
-        if(nt->exclusiveLimit) {
-            --end;
-        }
-        if(end >= nt->trie->highStart) {
-            end = nt->trie->highStart - 1;
-            if(start > end) {
-                return TRUE;
-            }
-        }
-        if(start==end) {
-            utrie3_set32(nt->trie, start, value, &nt->errorCode);
-        } else {
-            utrie3_setRange32(nt->trie, start, end, value, TRUE, &nt->errorCode);
-        }
-        return U_SUCCESS(nt->errorCode);
-    } else {
-        return TRUE;
+U_CAPI UTrie3Builder * U_EXPORT2
+utrie3bld_fromUTrie3(const UTrie3 *trie, UErrorCode *pErrorCode) {
+    if (U_FAILURE(*pErrorCode)) {
+        return nullptr;
     }
+    if (trie == nullptr) {
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
+    }
+    return reinterpret_cast<UTrie3Builder *>(Trie3Builder::fromUTrie3(trie, *pErrorCode));
 }
-
-U_CAPI UTrie3 * U_EXPORT2
-utrie3_cloneAsThawed(const UTrie3 *other, UErrorCode *pErrorCode) {
-    NewTrieAndStatus context;
-
-    if(U_FAILURE(*pErrorCode)) {
-        return NULL;
-    }
-    if(other==NULL || (other->memory==NULL && other->newTrie==NULL)) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
-    }
-    if(other->newTrie!=NULL) {
-        return utrie3_clone(other, pErrorCode);  /* clone an unfrozen trie */
-    }
-
-    /* Clone the frozen trie by enumerating it and building a new one. */
-    context.trie=utrie3_open(other->highValue, other->errorValue, pErrorCode);
-    if(U_FAILURE(*pErrorCode)) {
-        return NULL;
-    }
-    context.exclusiveLimit=FALSE;
-    context.errorCode=*pErrorCode;
-    utrie3_enum(other, NULL, copyEnumRange, &context);
-    *pErrorCode=context.errorCode;
-    if(U_FAILURE(*pErrorCode)) {
-        utrie3_close(context.trie);
-        context.trie=NULL;
-    }
-    return context.trie;
-}
-#endif
 
 U_CAPI uint32_t U_EXPORT2
 utrie3bld_get(const UTrie3Builder *builder, UChar32 c) {

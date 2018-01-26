@@ -78,6 +78,14 @@ U_CAPI UTrie3Builder * U_EXPORT2
 utrie3bld_clone(const UTrie3Builder *other, UErrorCode *pErrorCode);
 
 /**
+ * Closes a trie builder and release associated memory.
+ *
+ * @param builder the builder
+ */
+U_CAPI void U_EXPORT2
+utrie3bld_close(UTrie3Builder *builder);
+
+/**
  * Creates a trie builder with the same contents as the input trie.
  * You must utrie3bld_close() the builder once you are done using it.
  *
@@ -87,14 +95,6 @@ utrie3bld_clone(const UTrie3Builder *other, UErrorCode *pErrorCode);
  */
 U_CAPI UTrie3Builder * U_EXPORT2
 utrie3bld_fromUTrie3(const UTrie3 *trie, UErrorCode *pErrorCode);
-
-/**
- * Closes a trie builder and release associated memory.
- *
- * @param builder the builder
- */
-U_CAPI void U_EXPORT2
-utrie3bld_close(UTrie3Builder *builder);
 
 /**
  * Get a value from a code point as stored in the trie builder.
