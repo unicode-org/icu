@@ -754,9 +754,9 @@ parse	output	breaks
 +1,234,567.8901	1234567.8901
 +1,23,4567.8901	1234567.8901
 // P supports grouping separators in the fraction; none of the others do.
-+1,23,4567.89,01	1234567.8901	CJKS
++1,23,4567.89,01	1234567.8901	CJK
 +1,23,456.78.9	123456.78
-+12.34,56	12.3456	CJKS
++12.34,56	12.3456	CJK
 +79,,20,3	79203
 +79  20 3	79203	K
 // Parsing stops at comma as it is different from other separators
@@ -862,7 +862,7 @@ parse	output	breaks
 +1,234.5	1234.5
 // Comma after decimal means a fractional grouping separator
 // P fails since it finds an invalid grouping size
-+1,23,456.78,9	123456.789	JKPS
++1,23,456.78,9	123456.789	JKP
 // C and J fail upon seeing the second decimal point
 +1,23,456.78.9	123456.78	CJ
 +79	79
@@ -997,8 +997,8 @@ parse	output	breaks
 123.456	123456
 123,456	123.456
 // The separator after the comma can be inrepreted as a fractional grouping
-987,654.321	987.654321	CJKS
-987,654 321	987.654321	CJKS
+987,654.321	987.654321	CJK
+987,654 321	987.654321	CJK
 987.654,321	987654.321
 
 test select
@@ -1188,17 +1188,17 @@ $53.45	fail	USD	J
 USD 53.45	53.45	USD	J
 53.45USD	53.45	USD	CJ
 USD53.45	53.45	USD
-// S fails these because '(' is an incomplete prefix.
-(7.92) USD	-7.92	USD	CJSP
-(7.92) GBP	-7.92	GBP	CJSP
-(7.926) USD	-7.926	USD	CJSP
-(7.926 USD)	-7.926	USD	CJSP
+// P fails these because '(' is an incomplete prefix.
+(7.92) USD	-7.92	USD	CJP
+(7.92) GBP	-7.92	GBP	CJP
+(7.926) USD	-7.926	USD	CJP
+(7.926 USD)	-7.926	USD	CJP
 (USD 7.926)	-7.926	USD	J
-USD (7.926)	-7.926	USD	CJSP
-USD (7.92)	-7.92	USD	CJSP
-(7.92)USD	-7.92	USD	CJSP
-USD(7.92)	-7.92	USD	CJSP
-(8) USD	-8	USD	CJSP
+USD (7.926)	-7.926	USD	CJP
+USD (7.92)	-7.92	USD	CJP
+(7.92)USD	-7.92	USD	CJP
+USD(7.92)	-7.92	USD	CJP
+(8) USD	-8	USD	CJP
 -8 USD	-8	USD	C
 67 USD	67	USD	C
 53.45$	fail	USD
@@ -1429,8 +1429,8 @@ NaN	NaN	K
 1E2147483646	1E2147483646
 1E-2147483649	0
 1E-2147483648	0
-// S and P return zero here
-1E-2147483647	1E-2147483647	SP
+// P returns zero here
+1E-2147483647	1E-2147483647	P
 1E-2147483646	1E-2147483646
 
 test format push limits
@@ -1460,7 +1460,7 @@ set pattern #,##0
 begin
 parse	output	breaks
 // K and J return null; S, C, and P return 99
- 9 9	9	CJKSP
+ 9 9	9	CJKP
 // K returns null
  9 999	9999	K
 
@@ -1504,7 +1504,7 @@ y g h56	-56	JK
 56i j‎k 	-56	CJK
 56‎i jk 	-56	CJK
 // S and C get 56 (accepts ' ' gs grouping); J and K get null
-5 6	fail	CSP
+5 6	fail	CP
 5‎6	5	JK
 
 test parse spaces in grouping
@@ -1515,8 +1515,8 @@ set pattern #,##0
 begin
 parse	output	breaks
 // C, J, S, and P get "12" here
-1 2	1	CJSP
-1 23	1	CJSP
+1 2	1	CJP
+1 23	1	CJP
 // K gets 1 here; doesn't pick up the grouping separator
 1 234	1234	K
 

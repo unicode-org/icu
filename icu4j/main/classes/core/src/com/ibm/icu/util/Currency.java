@@ -756,21 +756,6 @@ public class Currency extends MeasureUnit {
         }
     }
 
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static TextTrieMap<CurrencyStringInfo>.ParseState openParseState(
-        ULocale locale, int startingCp, int type) {
-        List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = getCurrencyTrieVec(locale);
-        if (type == Currency.LONG_NAME) {
-            return currencyTrieVec.get(1).openParseState(startingCp);
-        } else {
-            return currencyTrieVec.get(0).openParseState(startingCp);
-        }
-    }
-
     private static List<TextTrieMap<CurrencyStringInfo>> getCurrencyTrieVec(ULocale locale) {
         List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = CURRENCY_NAME_CACHE.get(locale);
         if (currencyTrieVec == null) {
