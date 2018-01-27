@@ -85,67 +85,6 @@ public class TextTrieMapTest extends TestFmwk {
         {"l📺", null, SUP1},
     };
 
-    private static final Object[][] TESTCASES_PARSE = {
-            {
-                "Sunday",
-                new Object[]{
-                        new Object[]{SAT,SUN}, new Object[]{SAT,SUN}, // matches on "S"
-                        null, null, // matches on "Su"
-                        SUN, SUN, // matches on "Sun"
-                        null, null, // matches on "Sund"
-                        null, null, // matches on "Sunda"
-                        SUN, SUN, // matches on "Sunday"
-                }
-            },
-            {
-                "sunday",
-                new Object[]{
-                        null, new Object[]{SAT,SUN}, // matches on "s"
-                        null, null, // matches on "su"
-                        null, SUN, // matches on "sun"
-                        null, null, // matches on "sund"
-                        null, null, // matches on "sunda"
-                        null, SUN, // matches on "sunday"
-                }
-            },
-            {
-                "MMM",
-                new Object[]{
-                        MON, MON, // matches on "M"
-                        // no more matches in data
-                }
-            },
-            {
-                "BBB",
-                new Object[]{
-                        // no matches in data
-                }
-            },
-            {
-                "l📺12",
-                new Object[]{
-                        null, null, // matches on "L"
-                        null, SUP1, // matches on "L📺"
-                        null, SUP2, // matches on "L📺1"
-                        // no more matches in data
-                }
-            },
-            {
-                "L📻",
-                new Object[] {
-                        null, null, // matches on "L"
-                        SUP3, SUP3, // matches on "L📻"
-                }
-            },
-            {
-                "L🃏",
-                new Object[] {
-                        null, null, // matches on "L"
-                        SUP4, SUP4, // matches on "L🃏"
-                }
-            }
-    };
-
     @Test
     public void TestCaseSensitive() {
         Iterator itr = null;
@@ -170,13 +109,6 @@ public class TextTrieMapTest extends TestFmwk {
             textBuf.append(TESTCASES[i][0]);
             itr = map.get(textBuf.toString(), i);
             checkResult("get(String, int) case " + i, itr, TESTCASES[i][1]);
-        }
-
-        logln("Test for ParseState");
-        for (int i = 0; i < TESTCASES_PARSE.length; i++) {
-            String test = (String) TESTCASES_PARSE[i][0];
-            Object[] expecteds = (Object[]) TESTCASES_PARSE[i][1];
-            checkParse(map, test, expecteds, true);
         }
 
         logln("Test for partial match");
@@ -239,13 +171,6 @@ public class TextTrieMapTest extends TestFmwk {
             checkResult("get(String, int) case " + i, itr, TESTCASES[i][2]);
         }
 
-        logln("Test for ParseState");
-        for (int i = 0; i < TESTCASES_PARSE.length; i++) {
-            String test = (String) TESTCASES_PARSE[i][0];
-            Object[] expecteds = (Object[]) TESTCASES_PARSE[i][1];
-            checkParse(map, test, expecteds, false);
-        }
-
         logln("Test for partial match");
         for (Object[] cas : TESTDATA) {
             String str = (String) cas[0];
@@ -277,54 +202,6 @@ public class TextTrieMapTest extends TestFmwk {
         // Make sure the all entries are returned
         itr = map.get("Sunday");
         checkResult("Get Sunday", itr, new Object[]{SUN, FOO, BAR});
-    }
-
-    private void checkParse(TextTrieMap map, String text, Object[] rawExpecteds, boolean caseSensitive) {
-        // rawExpecteds has even-valued indices for case sensitive and odd-valued indicies for case insensitive
-        // Get out only the values that we want.
-        Object[] expecteds = null;
-        for (int i=rawExpecteds.length/2-1; i>=0; i--) {
-            int j = i*2+(caseSensitive?0:1);
-            if (rawExpecteds[j] != null) {
-                if (expecteds == null) {
-                    expecteds = new Object[i+1];
-                }
-                expecteds[i] = rawExpecteds[j];
-            }
-        }
-        if (expecteds == null) {
-            expecteds = new Object[0];
-        }
-
-        TextTrieMap.ParseState state = null;
-        for (int charOffset=0, cpOffset=0; charOffset < text.length(); cpOffset++) {
-            int cp = Character.codePointAt(text, charOffset);
-            if (state == null) {
-                state = map.openParseState(cp);
-            }
-            if (state == null) {
-                assertEquals("Expected matches, but no matches are available", 0, expecteds.length);
-                break;
-            }
-            state.accept(cp);
-            if (cpOffset < expecteds.length - 1) {
-                assertFalse(
-                        "In middle of parse sequence, but atEnd() is true: '" + text + "' offset " + charOffset,
-                        state.atEnd());
-            } else if (cpOffset == expecteds.length) {
-                // Note: it possible for atEnd() to be either true or false at expecteds.length - 1;
-                // if true, we are at the end of the input string; if false, there is still input string
-                // left to be consumed, but we don't know if there are remaining matches.
-                assertTrue(
-                        "At end of parse sequence, but atEnd() is false: '" + text + "' offset " + charOffset,
-                        state.atEnd());
-                break;
-            }
-            Object expected = expecteds[cpOffset];
-            Iterator actual = state.getCurrentMatches();
-            checkResult("ParseState '" + text + "' offset " + charOffset, actual, expected);
-            charOffset += Character.charCount(cp);
-        }
     }
 
     private boolean eql(Object o1, Object o2) {

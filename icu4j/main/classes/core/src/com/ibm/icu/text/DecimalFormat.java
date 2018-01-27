@@ -15,10 +15,10 @@ import java.text.ParsePosition;
 import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.Padder.PadPosition;
-import com.ibm.icu.impl.number.Parse;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.impl.number.parse.NumberParserImpl;
+import com.ibm.icu.impl.number.parse.NumberParserImpl.ParseMode;
 import com.ibm.icu.impl.number.parse.ParsedNumber;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
@@ -2162,7 +2162,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized boolean isParseStrict() {
-    return properties.getParseMode() == Parse.ParseMode.STRICT;
+    return properties.getParseMode() == ParseMode.STRICT;
   }
 
   /**
@@ -2173,7 +2173,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized void setParseStrict(boolean parseStrict) {
-    Parse.ParseMode mode = parseStrict ? Parse.ParseMode.STRICT : Parse.ParseMode.LENIENT;
+    ParseMode mode = parseStrict ? ParseMode.STRICT : ParseMode.LENIENT;
     properties.setParseMode(mode);
     refreshFormatter();
   }
