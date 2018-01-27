@@ -61,7 +61,13 @@ public class AffixMatcher implements NumberParseMatcher {
                 && AffixUtils.containsOnlySymbolsAndIgnorables(posPrefixString, ignorables.getSet())
                 && AffixUtils.containsOnlySymbolsAndIgnorables(posSuffixString, ignorables.getSet())
                 && AffixUtils.containsOnlySymbolsAndIgnorables(negPrefixString, ignorables.getSet())
-                && AffixUtils.containsOnlySymbolsAndIgnorables(negSuffixString, ignorables.getSet())) {
+                && AffixUtils.containsOnlySymbolsAndIgnorables(negSuffixString, ignorables.getSet())
+                // HACK: Plus and minus sign are a special case: we accept them trailing only if they are
+                // trailing in the pattern string.
+                && !AffixUtils.containsType(posSuffixString, AffixUtils.TYPE_PLUS_SIGN)
+                && !AffixUtils.containsType(posSuffixString, AffixUtils.TYPE_MINUS_SIGN)
+                && !AffixUtils.containsType(negSuffixString, AffixUtils.TYPE_PLUS_SIGN)
+                && !AffixUtils.containsType(negSuffixString, AffixUtils.TYPE_MINUS_SIGN)) {
             // The affixes contain only symbols and ignorables.
             // No need to generate affix matchers.
             return;

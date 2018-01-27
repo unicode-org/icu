@@ -72,10 +72,10 @@ public class AffixPatternMatcher extends SeriesMatcher implements AffixUtils.Tok
             // Case 1: the token is a symbol.
             switch (typeOrCp) {
             case AffixUtils.TYPE_MINUS_SIGN:
-                addMatcher(factory.minusSign());
+                addMatcher(factory.minusSign(true));
                 break;
             case AffixUtils.TYPE_PLUS_SIGN:
-                addMatcher(factory.plusSign());
+                addMatcher(factory.plusSign(true));
                 break;
             case AffixUtils.TYPE_PERCENT:
                 addMatcher(factory.percent());

@@ -97,7 +97,7 @@ public class Grouper {
         byte grouping1 = (byte) properties.getGroupingSize();
         byte grouping2 = (byte) properties.getSecondaryGroupingSize();
         int minGrouping = properties.getMinimumGroupingDigits();
-        grouping1 = grouping1 > 0 ? grouping1 : grouping2 > 0 ? grouping2 : -1;
+        grouping1 = grouping1 > 0 ? grouping1 : grouping2 > 0 ? grouping2 : grouping1;
         grouping2 = grouping2 > 0 ? grouping2 : grouping1;
         // TODO: Is it important to handle minGrouping > 2?
         return getInstance(grouping1, grouping2, minGrouping == 2);

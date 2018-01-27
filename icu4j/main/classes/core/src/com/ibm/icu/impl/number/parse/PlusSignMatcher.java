@@ -10,28 +10,33 @@ import com.ibm.icu.text.DecimalFormatSymbols;
  */
 public class PlusSignMatcher extends SymbolMatcher {
 
-    private static final PlusSignMatcher DEFAULT = new PlusSignMatcher();
+    private static final PlusSignMatcher DEFAULT = new PlusSignMatcher(false);
+    private static final PlusSignMatcher DEFAULT_ALLOW_TRAILING = new PlusSignMatcher(true);
 
-    public static PlusSignMatcher getInstance(DecimalFormatSymbols symbols) {
+    public static PlusSignMatcher getInstance(DecimalFormatSymbols symbols, boolean allowTrailing) {
         String symbolString = symbols.getPlusSignString();
         if (DEFAULT.uniSet.contains(symbolString)) {
-            return DEFAULT;
+            return allowTrailing ? DEFAULT_ALLOW_TRAILING : DEFAULT;
         } else {
-            return new PlusSignMatcher(symbolString);
+            return new PlusSignMatcher(symbolString, allowTrailing);
         }
     }
 
-    private PlusSignMatcher(String symbolString) {
+    private final boolean allowTrailing;
+
+    private PlusSignMatcher(String symbolString, boolean allowTrailing) {
         super(symbolString, DEFAULT.uniSet);
+        this.allowTrailing = allowTrailing;
     }
 
-    private PlusSignMatcher() {
+    private PlusSignMatcher(boolean allowTrailing) {
         super(UnicodeSetStaticCache.Key.PLUS_SIGN);
+        this.allowTrailing = allowTrailing;
     }
 
     @Override
     protected boolean isDisabled(ParsedNumber result) {
-        return false;
+        return allowTrailing ? false : result.seenNumber();
     }
 
     @Override

@@ -796,6 +796,13 @@ public class DecimalFormat extends NumberFormat {
       if (parsePosition == null) {
           parsePosition = new ParsePosition(0);
       }
+      if (parsePosition.getIndex() < 0) {
+          throw new IllegalArgumentException("Cannot start parsing at a negative offset");
+      }
+      if (parsePosition.getIndex() >= text.length()) {
+          // For backwards compatibility, this is not an exception, just an empty result.
+          return null;
+      }
 
       ParsedNumber result = new ParsedNumber();
       // Note: if this is a currency instance, currencies will be matched despite the fact that we are not in the
@@ -803,7 +810,7 @@ public class DecimalFormat extends NumberFormat {
       int startIndex = parsePosition.getIndex();
       parser.parse(text, startIndex, true, result);
       if (result.success()) {
-          parsePosition.setIndex(startIndex + result.charsConsumed);
+          parsePosition.setIndex(result.charEnd);
           // TODO: Accessing properties here is technically not thread-safe
           Number number = result.getNumber(properties.getParseToBigDecimal());
           // Backwards compatibility: return com.ibm.icu.math.BigDecimal
@@ -812,7 +819,7 @@ public class DecimalFormat extends NumberFormat {
           }
           return number;
       } else {
-          parsePosition.setErrorIndex(startIndex + result.charsConsumed);
+          parsePosition.setErrorIndex(startIndex + result.charEnd);
           return null;
       }
   }
@@ -830,12 +837,19 @@ public class DecimalFormat extends NumberFormat {
       if (parsePosition == null) {
           parsePosition = new ParsePosition(0);
       }
+      if (parsePosition.getIndex() < 0) {
+          throw new IllegalArgumentException("Cannot start parsing at a negative offset");
+      }
+      if (parsePosition.getIndex() >= text.length()) {
+          // For backwards compatibility, this is not an exception, just an empty result.
+          return null;
+      }
 
       ParsedNumber result = new ParsedNumber();
       int startIndex = parsePosition.getIndex();
       parserWithCurrency.parse(text.toString(), startIndex, true, result);
       if (result.success()) {
-          parsePosition.setIndex(startIndex + result.charsConsumed);
+          parsePosition.setIndex(result.charEnd);
           // TODO: Accessing properties here is technically not thread-safe
           Number number = result.getNumber(properties.getParseToBigDecimal());
           // Backwards compatibility: return com.ibm.icu.math.BigDecimal
@@ -845,7 +859,7 @@ public class DecimalFormat extends NumberFormat {
           Currency currency = Currency.getInstance(result.currencyCode);
           return new CurrencyAmount(number, currency);
       } else {
-          parsePosition.setErrorIndex(startIndex + result.charsConsumed);
+          parsePosition.setErrorIndex(startIndex + result.charEnd);
           return null;
       }
   }

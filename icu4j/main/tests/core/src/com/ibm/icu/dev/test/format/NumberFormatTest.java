@@ -5939,4 +5939,38 @@ public class NumberFormatTest extends TestFmwk {
         // expect(currencyFormat, 0.08, "CA$0.1");  // ICU 58 and down
         expect(currencyFormat, 0.08, "CA$0.10");  // ICU 59 and up
     }
+
+    @Test
+    public void testParsePositionIncrease() {
+        String input = "123\n456\n$789";
+        ParsePosition ppos = new ParsePosition(0);
+        DecimalFormat df = new DecimalFormat();
+        df.parse(input, ppos);
+        assertEquals("Should stop after first entry", 3, ppos.getIndex());
+        ppos.setIndex(ppos.getIndex() + 1);
+        df.parse(input, ppos);
+        assertEquals("Should stop after second entry", 7, ppos.getIndex());
+        ppos.setIndex(ppos.getIndex() + 1);
+        df.parseCurrency(input, ppos); // test parseCurrency API as well
+        assertEquals("Should stop after third entry", 12, ppos.getIndex());
+    }
+
+    @Test
+    public void testTrailingMinusSign() {
+        String input = "52-";
+        DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(ULocale.ENGLISH);
+        ParsePosition ppos = new ParsePosition(0);
+        Number result = df.parse(input, ppos);
+        assertEquals("Trailing sign should NOT be accepted after the number in English by default",
+                52.0,
+                result.doubleValue(),
+                0.0);
+        df.applyPattern("#;#-");
+        ppos.setIndex(0);
+        result = df.parse(input, ppos);
+        assertEquals("Trailing sign SHOULD be accepted if there is one in the pattern",
+                -52.0,
+                result.doubleValue(),
+                0.0);
+    }
 }
