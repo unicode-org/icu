@@ -57,21 +57,7 @@ private:
      * The UText through which this BreakIterator accesses the text
      * @internal
      */
-    UText  *fText;
-
-    /**
-     *   A character iterator that refers to the same text as the UText, above.
-     *   Only included for compatibility with old API, which was based on CharacterIterators.
-     *   Value may be adopted from outside, or one of fSCharIter or fDCharIter, below.
-     */
-    CharacterIterator  *fCharIter;
-
-    /**
-     *   When the input text is provided by a UnicodeString, this will point to
-     *    a characterIterator that wraps that data.  Needed only for the
-     *    implementation of getText(), a backwards compatibility issue.
-     */
-    StringCharacterIterator fSCharIter;
+    UText  fText;
 
     /**
      * The rule data for this BreakIterator instance
@@ -98,23 +84,10 @@ private:
     int32_t         fRuleStatusIndex;
 
     /**
-      * True when iteration has run off the end, and iterator functions should return UBRK_DONE.
-      */
-    UBool           fDone;
-
-    /**
      *   Cache of previously determined boundary positions.
      */
-  public:    // TODO: debug, return to private.
     class BreakCache;
     BreakCache         *fBreakCache;
-  private:
-    /**
-     * Counter for the number of characters encountered with the "dictionary"
-     *   flag set.
-     * @internal
-     */
-    uint32_t            fDictionaryCharCount;
 
     /**
      *  Cache of boundary positions within a region of text that has been
@@ -147,6 +120,32 @@ private:
      * @internal
      */
     int32_t             fBreakType;
+
+    /**
+     * Counter for the number of characters encountered with the "dictionary"
+     *   flag set.
+     * @internal
+     */
+    uint32_t            fDictionaryCharCount;
+
+    /**
+     *   A character iterator that refers to the same text as the UText, above.
+     *   Only included for compatibility with old API, which was based on CharacterIterators.
+     *   Value may be adopted from outside, or one of fSCharIter or fDCharIter, below.
+     */
+    CharacterIterator  *fCharIter;
+
+    /**
+     *   When the input text is provided by a UnicodeString, this will point to
+     *    a characterIterator that wraps that data.  Needed only for the
+     *    implementation of getText(), a backwards compatibility issue.
+     */
+    StringCharacterIterator fSCharIter;
+
+    /**
+      * True when iteration has run off the end, and iterator functions should return UBRK_DONE.
+      */
+    UBool           fDone;
 
     //=======================================================================
     // constructors
