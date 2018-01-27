@@ -138,7 +138,7 @@ void RuleBasedBreakIterator::DictionaryCache::populateDictionary(int32_t startPo
     int32_t     current;
     UErrorCode  status = U_ZERO_ERROR;
     int32_t     foundBreakCount = 0;
-    UText      *text = fBI->fText;
+    UText      *text = &fBI->fText;
 
     // Loop through the text, looking for ranges of dictionary characters.
     // For each span, find the appropriate break engine, and ask it to find
