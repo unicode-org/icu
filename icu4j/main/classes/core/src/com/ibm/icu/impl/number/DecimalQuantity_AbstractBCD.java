@@ -603,7 +603,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         // Hard case: the magnitude is 10^18.
         // The largest int64 is: 9,223,372,036,854,775,807
         for (int p = 0; p < precision; p++) {
-            byte digit = getDigitPos(18 - p);
+            byte digit = getDigit(18 - p);
             if (digit < INT64_BCD[p]) {
                 return true;
             } else if (digit > INT64_BCD[p]) {

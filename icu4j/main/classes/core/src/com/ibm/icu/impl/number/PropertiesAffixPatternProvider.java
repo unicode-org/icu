@@ -126,4 +126,18 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
         return AffixUtils.containsType(posPrefix, type) || AffixUtils.containsType(posSuffix, type)
                 || AffixUtils.containsType(negPrefix, type) || AffixUtils.containsType(negSuffix, type);
     }
+
+    @Override
+    public String toString() {
+        return super.toString()
+                + " {"
+                + posPrefix
+                + "#"
+                + posSuffix
+                + ";"
+                + negPrefix
+                + "#"
+                + negSuffix
+                + "}";
+    }
 }

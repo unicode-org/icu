@@ -62,7 +62,7 @@ public class NumberParserImpl {
 
         parser.addMatcher(ignorables);
         parser.addMatcher(DecimalMatcher.getInstance(symbols, grouper, parseFlags));
-        parser.addMatcher(MinusSignMatcher.getInstance(symbols));
+        parser.addMatcher(MinusSignMatcher.getInstance(symbols, false));
         parser.addMatcher(NanMatcher.getInstance(symbols, parseFlags));
         parser.addMatcher(ScientificMatcher.getInstance(symbols, grouper, parseFlags));
         parser.addMatcher(CurrencyTrieMatcher.getInstance(locale));
@@ -81,10 +81,10 @@ public class NumberParserImpl {
         ParsedNumber result = new ParsedNumber();
         parser.parse(input, true, result);
         if (result.success()) {
-            ppos.setIndex(result.charsConsumed);
+            ppos.setIndex(result.charEnd);
             return result.getNumber();
         } else {
-            ppos.setErrorIndex(result.charsConsumed);
+            ppos.setErrorIndex(result.charEnd);
             return null;
         }
     }
@@ -98,7 +98,7 @@ public class NumberParserImpl {
         ParsedNumber result = new ParsedNumber();
         parser.parse(input, true, result);
         if (result.success()) {
-            ppos.setIndex(result.charsConsumed);
+            ppos.setIndex(result.charEnd);
             // TODO: Clean this up
             Currency currency;
             if (result.currencyCode != null) {
@@ -110,7 +110,7 @@ public class NumberParserImpl {
             }
             return new CurrencyAmount(result.getNumber(), currency);
         } else {
-            ppos.setErrorIndex(result.charsConsumed);
+            ppos.setErrorIndex(result.charEnd);
             return null;
         }
     }
@@ -153,7 +153,7 @@ public class NumberParserImpl {
         } else {
             parseFlags |= ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;
         }
-        if (grouper.getPrimary() == -1) {
+        if (grouper.getPrimary() <= 0) {
             parseFlags |= ParsingUtils.PARSE_FLAG_GROUPING_DISABLED;
         }
         if (parseCurrency || patternInfo.hasCurrencySign()) {
@@ -193,9 +193,9 @@ public class NumberParserImpl {
         if (!isStrict
                 || patternInfo.containsSymbolType(AffixUtils.TYPE_PLUS_SIGN)
                 || properties.getSignAlwaysShown()) {
-            parser.addMatcher(PlusSignMatcher.getInstance(symbols));
+            parser.addMatcher(PlusSignMatcher.getInstance(symbols, false));
         }
-        parser.addMatcher(MinusSignMatcher.getInstance(symbols));
+        parser.addMatcher(MinusSignMatcher.getInstance(symbols, false));
         parser.addMatcher(NanMatcher.getInstance(symbols, parseFlags));
         parser.addMatcher(PercentMatcher.getInstance(symbols));
         parser.addMatcher(PermilleMatcher.getInstance(symbols));
@@ -318,6 +318,7 @@ public class NumberParserImpl {
      */
     public void parse(String input, int start, boolean greedy, ParsedNumber result) {
         assert frozen;
+        assert start >= 0 && start < input.length();
         StringSegment segment = new StringSegment(ParsingUtils.maybeFold(input, parseFlags));
         segment.adjustOffset(start);
         if (greedy) {

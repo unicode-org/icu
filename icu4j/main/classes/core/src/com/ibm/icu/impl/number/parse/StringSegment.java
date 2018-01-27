@@ -28,6 +28,14 @@ public class StringSegment implements CharSequence {
         this.start = start;
     }
 
+    /**
+     * Equivalent to <code>setOffset(getOffset()+delta)</code>.
+     *
+     * <p>
+     * This method is usually called by a Matcher to register that a char was consumed. If the char is
+     * strong (it usually is, except for things like whitespace), follow this with a call to
+     * {@link ParsedNumber#setCharsConsumed}. For more information on strong chars, see that method.
+     */
     public void adjustOffset(int delta) {
         assert start + delta >= 0;
         assert start + delta <= end;

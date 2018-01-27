@@ -513,6 +513,8 @@ public class DecimalQuantityTest extends TestFmwk {
         assertTrue("10^19 should fit", quantity.fitsInLong());
         quantity.setToLong(1234567890123456789L);
         assertTrue("A number between 10^19 and max long should fit", quantity.fitsInLong());
+        quantity.setToLong(1234567890000000000L);
+        assertTrue("A number with trailing zeros less than max long should fit", quantity.fitsInLong());
         quantity.setToLong(9223372026854775808L);
         assertTrue("A number less than max long but with similar digits should fit",
                 quantity.fitsInLong());
@@ -524,6 +526,8 @@ public class DecimalQuantityTest extends TestFmwk {
         assertFalse("One greater than max long long should not fit", quantity.fitsInLong());
         quantity.setToBigInteger(new BigInteger("9223372046854775806"));
         assertFalse("A number between max long and 10^20 should not fit", quantity.fitsInLong());
+        quantity.setToBigInteger(new BigInteger("9223372046800000000"));
+        assertFalse("A large 10^19 number with trailing zeros should not fit", quantity.fitsInLong());
         quantity.setToBigInteger(new BigInteger("10000000000000000000"));
         assertFalse("10^20 should not fit", quantity.fitsInLong());
     }

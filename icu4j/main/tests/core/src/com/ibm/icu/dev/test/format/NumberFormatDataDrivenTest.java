@@ -7,7 +7,6 @@ import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.ParsePosition;
 
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestUtil;
@@ -834,7 +833,6 @@ public class NumberFormatDataDrivenTest {
     };
 
   @Test
-  @Ignore
   public void TestDataDrivenICU58() {
     // Android can't access DecimalFormat_ICU58 for testing (ticket #13283).
     if (TestUtil.getJavaVendor() == TestUtil.JavaVendor.Android) return;
@@ -847,7 +845,6 @@ public class NumberFormatDataDrivenTest {
   // something may or may not work. However the test data assumes a specific
   // Java runtime version. We should probably disable this test case - #13372
   @Test
-  @Ignore
   public void TestDataDrivenJDK() {
     // Android implements java.text.DecimalFormat with ICU4J (ticket #13322).
     // Oracle/OpenJDK 9's behavior is not exactly same with Oracle/OpenJDK 8.
@@ -862,7 +859,6 @@ public class NumberFormatDataDrivenTest {
   }
 
   @Test
-  @Ignore
   public void TestDataDrivenICULatest_Format() {
     DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
         "numberformattestspecification.txt", ICU60);
@@ -875,7 +871,6 @@ public class NumberFormatDataDrivenTest {
   }
 
   @Test
-  @Ignore
   public void TestDataDrivenICULatest_Other() {
     DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
         "numberformattestspecification.txt", ICU59_Other);

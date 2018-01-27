@@ -10,28 +10,34 @@ import com.ibm.icu.text.DecimalFormatSymbols;
  */
 public class MinusSignMatcher extends SymbolMatcher {
 
-    private static final MinusSignMatcher DEFAULT = new MinusSignMatcher();
+    private static final MinusSignMatcher DEFAULT = new MinusSignMatcher(false);
+    private static final MinusSignMatcher DEFAULT_ALLOW_TRAILING = new MinusSignMatcher(true);
 
-    public static MinusSignMatcher getInstance(DecimalFormatSymbols symbols) {
+    public static MinusSignMatcher getInstance(DecimalFormatSymbols symbols, boolean allowTrailing) {
         String symbolString = symbols.getMinusSignString();
         if (DEFAULT.uniSet.contains(symbolString)) {
-            return DEFAULT;
+            return allowTrailing ? DEFAULT_ALLOW_TRAILING : DEFAULT;
         } else {
-            return new MinusSignMatcher(symbolString);
+            return new MinusSignMatcher(symbolString, allowTrailing);
         }
     }
 
-    private MinusSignMatcher(String symbolString) {
+    private final boolean allowTrailing;
+
+    private MinusSignMatcher(String symbolString, boolean allowTrailing) {
         super(symbolString, DEFAULT.uniSet);
+        this.allowTrailing = allowTrailing;
     }
 
-    private MinusSignMatcher() {
+    private MinusSignMatcher(boolean allowTrailing) {
         super(UnicodeSetStaticCache.Key.MINUS_SIGN);
+        this.allowTrailing = allowTrailing;
     }
 
     @Override
     protected boolean isDisabled(ParsedNumber result) {
-        return 0 != (result.flags & ParsedNumber.FLAG_NEGATIVE);
+        return 0 != (result.flags & ParsedNumber.FLAG_NEGATIVE)
+                || (allowTrailing ? false : result.seenNumber());
     }
 
     @Override

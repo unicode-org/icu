@@ -17,12 +17,12 @@ public class MatcherFactory {
     ULocale locale;
     int parseFlags;
 
-    public MinusSignMatcher minusSign() {
-        return MinusSignMatcher.getInstance(symbols);
+    public MinusSignMatcher minusSign(boolean allowTrailing) {
+        return MinusSignMatcher.getInstance(symbols, allowTrailing);
     }
 
-    public PlusSignMatcher plusSign() {
-        return PlusSignMatcher.getInstance(symbols);
+    public PlusSignMatcher plusSign(boolean allowTrailing) {
+        return PlusSignMatcher.getInstance(symbols, allowTrailing);
     }
 
     public PercentMatcher percent() {

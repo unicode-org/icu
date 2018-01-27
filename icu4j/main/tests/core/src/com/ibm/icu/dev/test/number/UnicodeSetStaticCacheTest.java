@@ -3,12 +3,10 @@
 package com.ibm.icu.dev.test.number;
 
 import static com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.get;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache;
 import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.Key;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -64,22 +62,6 @@ public class UnicodeSetStaticCacheTest {
     public void testFrozen() {
         for (Key key : Key.values()) {
             assertTrue(get(key).isFrozen());
-        }
-    }
-
-    @Test
-    public void testUnions() {
-        for (Key key1 : Key.values()) {
-            for (Key key2 : Key.values()) {
-                Key key3 = UnicodeSetStaticCache.unionOf(key1, key2);
-                if (key3 != null) {
-                    UnicodeSet s1 = get(key1);
-                    UnicodeSet s2 = get(key2);
-                    UnicodeSet s3 = get(key3);
-                    UnicodeSet s1_s2 = s1.cloneAsThawed().addAll(s2);
-                    assertEquals(key1 + "/" + key2 + "/" + key3, s1_s2, s3);
-                }
-            }
         }
     }
 

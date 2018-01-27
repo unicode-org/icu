@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.parse.IgnorablesMatcher;
 import com.ibm.icu.impl.number.parse.MinusSignMatcher;
 import com.ibm.icu.impl.number.parse.NumberParserImpl;
@@ -103,7 +104,7 @@ public class NumberParserTest {
                 assertNotNull("Greedy Parse failed: " + message, resultObject.quantity);
                 assertEquals("Greedy Parse failed: " + message,
                         expectedCharsConsumed,
-                        resultObject.charsConsumed);
+                        resultObject.charEnd);
                 assertEquals("Greedy Parse failed: " + message,
                         resultDouble,
                         resultObject.getNumber().doubleValue(),
@@ -117,7 +118,7 @@ public class NumberParserTest {
                 assertNotNull("Non-Greedy Parse failed: " + message, resultObject.quantity);
                 assertEquals("Non-Greedy Parse failed: " + message,
                         expectedCharsConsumed,
-                        resultObject.charsConsumed);
+                        resultObject.charEnd);
                 assertEquals("Non-Greedy Parse failed: " + message,
                         resultDouble,
                         resultObject.getNumber().doubleValue(),
@@ -132,7 +133,7 @@ public class NumberParserTest {
                 assertNotNull("Strict Parse failed: " + message, resultObject.quantity);
                 assertEquals("Strict Parse failed: " + message,
                         expectedCharsConsumed,
-                        resultObject.charsConsumed);
+                        resultObject.charEnd);
                 assertEquals("Strict Parse failed: " + message,
                         resultDouble,
                         resultObject.getNumber().doubleValue(),
@@ -162,8 +163,8 @@ public class NumberParserTest {
     public void testSeriesMatcher() {
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
         SeriesMatcher series = new SeriesMatcher();
-        series.addMatcher(PlusSignMatcher.getInstance(symbols));
-        series.addMatcher(MinusSignMatcher.getInstance(symbols));
+        series.addMatcher(PlusSignMatcher.getInstance(symbols, false));
+        series.addMatcher(MinusSignMatcher.getInstance(symbols, false));
         series.addMatcher(IgnorablesMatcher.DEFAULT);
         series.addMatcher(PercentMatcher.getInstance(symbols));
         series.addMatcher(IgnorablesMatcher.DEFAULT);
@@ -198,5 +199,20 @@ public class NumberParserTest {
             assertEquals("'" + input + "'", expectedOffset, actualOffset);
             assertEquals("'" + input + "'", expectedMaybeMore, actualMaybeMore);
         }
+    }
+
+    @Test
+    public void testGroupingDisabled() {
+        DecimalFormatProperties properties = new DecimalFormatProperties();
+        properties.setGroupingSize(0);
+        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        NumberParserImpl parser = NumberParserImpl
+                .createParserFromProperties(properties, symbols, false, true);
+        ParsedNumber result = new ParsedNumber();
+        parser.parse("12,345.678", true, result);
+        assertEquals("Should not parse with grouping separator",
+                12.0,
+                result.getNumber().doubleValue(),
+                0.0);
     }
 }
