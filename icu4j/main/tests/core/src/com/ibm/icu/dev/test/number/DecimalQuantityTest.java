@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.number;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.text.ParseException;
@@ -175,6 +176,7 @@ public class DecimalQuantityTest extends TestFmwk {
 
     private static final MathContext MATH_CONTEXT_HALF_EVEN = new MathContext(0, RoundingMode.HALF_EVEN);
     private static final MathContext MATH_CONTEXT_CEILING = new MathContext(0, RoundingMode.CEILING);
+    private static final MathContext MATH_CONTEXT_FLOOR = new MathContext(0, RoundingMode.FLOOR);
     private static final MathContext MATH_CONTEXT_PRECISION = new MathContext(3, RoundingMode.HALF_UP);
 
     private static void testDecimalQuantityRounding(DecimalQuantity rq0, DecimalQuantity rq1) {
@@ -492,6 +494,42 @@ public class DecimalQuantityTest extends TestFmwk {
         assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 987655E-3>");
         fq.roundToMagnitude(-2, MATH_CONTEXT_HALF_EVEN);
         assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 98766E-2>");
+    }
+
+    @Test
+    public void testFitsInLong() {
+        DecimalQuantity_DualStorageBCD quantity = new DecimalQuantity_DualStorageBCD();
+        quantity.setToInt(0);
+        assertTrue("Zero should fit", quantity.fitsInLong());
+        quantity.setToInt(42);
+        assertTrue("Small int should fit", quantity.fitsInLong());
+        quantity.setToDouble(0.1);
+        assertFalse("Fraction should not fit", quantity.fitsInLong());
+        quantity.setToDouble(42.1);
+        assertFalse("Fraction should not fit", quantity.fitsInLong());
+        quantity.setToLong(1000000);
+        assertTrue("Large low-precision int should fit", quantity.fitsInLong());
+        quantity.setToLong(1000000000000000000L);
+        assertTrue("10^19 should fit", quantity.fitsInLong());
+        quantity.setToLong(1234567890123456789L);
+        assertTrue("A number between 10^19 and max long should fit", quantity.fitsInLong());
+        quantity.setToLong(1234567890000000000L);
+        assertTrue("A number with trailing zeros less than max long should fit", quantity.fitsInLong());
+        quantity.setToLong(9223372026854775808L);
+        assertTrue("A number less than max long but with similar digits should fit",
+                quantity.fitsInLong());
+        quantity.setToLong(9223372036854775806L);
+        assertTrue("One less than max long should fit", quantity.fitsInLong());
+        quantity.setToLong(9223372036854775807L);
+        assertTrue("Max long should fit", quantity.fitsInLong());
+        quantity.setToBigInteger(new BigInteger("9223372036854775808"));
+        assertFalse("One greater than max long long should not fit", quantity.fitsInLong());
+        quantity.setToBigInteger(new BigInteger("9223372046854775806"));
+        assertFalse("A number between max long and 10^20 should not fit", quantity.fitsInLong());
+        quantity.setToBigInteger(new BigInteger("9223372046800000000"));
+        assertFalse("A large 10^19 number with trailing zeros should not fit", quantity.fitsInLong());
+        quantity.setToBigInteger(new BigInteger("10000000000000000000"));
+        assertFalse("10^20 should not fit", quantity.fitsInLong());
     }
 
     static void assertDoubleEquals(String message, double d1, double d2) {

@@ -1848,4 +1848,19 @@ public final class Utility {
     public static String toString(Object o) {
         return o == null ? "null" : o.toString();
     }
+
+    /**
+     * This implementation is equivalent to Java 8+ {@link Math#addExact(int, int)}
+     * @param x the first value
+     * @param y the second value
+     * @return the result
+     */
+    public static int addExact(int x, int y) {
+        int r = x + y;
+        // HD 2-12 Overflow iff both arguments have the opposite sign of the result
+        if (((x ^ r) & (y ^ r)) < 0) {
+            throw new ArithmeticException("integer overflow");
+        }
+        return r;
+    }
 }

@@ -10,6 +10,7 @@ import org.junit.Test;
 import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.AffixUtils.SymbolProvider;
 import com.ibm.icu.impl.number.NumberStringBuilder;
+import com.ibm.icu.text.UnicodeSet;
 
 public class AffixUtilsTest {
 
@@ -75,6 +76,7 @@ public class AffixUtilsTest {
         Object[][] cases = {
                 { "", false, 0, "" },
                 { "abc", false, 3, "abc" },
+                { "📺", false, 1, "📺" },
                 { "-", false, 1, "−" },
                 { "-!", false, 2, "−!" },
                 { "+", false, 1, "\u061C+" },
@@ -119,8 +121,13 @@ public class AffixUtilsTest {
             String actual = unescapeWithDefaults(input);
             assertEquals("Output on <" + input + ">", output, actual);
 
-            int ulength = AffixUtils.unescapedCodePointCount(input, DEFAULT_SYMBOL_PROVIDER);
+            int ulength = AffixUtils.unescapedCount(input, true, DEFAULT_SYMBOL_PROVIDER);
             assertEquals("Unescaped length on <" + input + ">", output.length(), ulength);
+
+            int ucpcount = AffixUtils.unescapedCount(input, false, DEFAULT_SYMBOL_PROVIDER);
+            assertEquals("Unescaped length on <" + input + ">",
+                    output.codePointCount(0, output.length()),
+                    ucpcount);
         }
     }
 
@@ -206,6 +213,26 @@ public class AffixUtilsTest {
         sb.append("abcdefg", null);
         AffixUtils.unescape("-+%", sb, 4, provider);
         assertEquals("Symbol provider into middle", "abcd123efg", sb.toString());
+    }
+
+    @Test
+    public void testWithoutSymbolsOrIgnorables() {
+        Object[][] cases = {
+                { "", true },
+                { "-", true },
+                { " ", true },
+                { "'-'", false },
+                { " a + b ", false },
+                { "-a+b%c‰d¤e¤¤f¤¤¤g¤¤¤¤h¤¤¤¤¤i", false }, };
+
+        UnicodeSet ignorables = new UnicodeSet("[:whitespace:]");
+        for (Object[] cas : cases) {
+            String input = (String) cas[0];
+            boolean expected = (Boolean) cas[1];
+            assertEquals("Contains only symbols and ignorables: " + input,
+                    expected,
+                    AffixUtils.containsOnlySymbolsAndIgnorables(input, ignorables));
+        }
     }
 
     private static String unescapeWithDefaults(String input) {

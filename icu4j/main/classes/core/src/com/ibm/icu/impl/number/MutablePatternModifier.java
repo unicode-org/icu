@@ -30,8 +30,7 @@ import com.ibm.icu.util.Currency;
  * pattern modifier by calling {@link MutablePatternModifier#createImmutable}, in effect treating this
  * instance as a builder for the immutable variant.
  */
-public class MutablePatternModifier
-        implements Modifier, SymbolProvider, CharSequence, MicroPropsGenerator {
+public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPropsGenerator {
 
     // Modifier details
     final boolean isStrong;
@@ -54,12 +53,8 @@ public class MutablePatternModifier
     // QuantityChain details
     MicroPropsGenerator parent;
 
-    // Transient CharSequence fields
-    boolean inCharSequenceMode;
-    int flags;
-    int length;
-    boolean prependSign;
-    boolean plusReplacesMinusSign;
+    // Transient fields for rendering
+    StringBuilder currentAffix;
 
     /**
      * @param isStrong
@@ -287,22 +282,19 @@ public class MutablePatternModifier
 
     @Override
     public int getPrefixLength() {
-        // Enter and exit CharSequence Mode to get the length.
-        enterCharSequenceMode(true);
-        int result = AffixUtils.unescapedCodePointCount(this, this); // prefix length
-        exitCharSequenceMode();
+        // Render the affix to get the length
+        prepareAffix(true);
+        int result = AffixUtils.unescapedCount(currentAffix, true, this); // prefix length
         return result;
     }
 
     @Override
     public int getCodePointCount() {
-        // Enter and exit CharSequence Mode to get the length.
-        enterCharSequenceMode(true);
-        int result = AffixUtils.unescapedCodePointCount(this, this); // prefix length
-        exitCharSequenceMode();
-        enterCharSequenceMode(false);
-        result += AffixUtils.unescapedCodePointCount(this, this); // suffix length
-        exitCharSequenceMode();
+        // Render the affixes to get the length
+        prepareAffix(true);
+        int result = AffixUtils.unescapedCount(currentAffix, false, this); // prefix length
+        prepareAffix(false);
+        result += AffixUtils.unescapedCount(currentAffix, false, this); // suffix length
         return result;
     }
 
@@ -312,17 +304,35 @@ public class MutablePatternModifier
     }
 
     private int insertPrefix(NumberStringBuilder sb, int position) {
-        enterCharSequenceMode(true);
-        int length = AffixUtils.unescape(this, sb, position, this);
-        exitCharSequenceMode();
+        prepareAffix(true);
+        int length = AffixUtils.unescape(currentAffix, sb, position, this);
         return length;
     }
 
     private int insertSuffix(NumberStringBuilder sb, int position) {
-        enterCharSequenceMode(false);
-        int length = AffixUtils.unescape(this, sb, position, this);
-        exitCharSequenceMode();
+        prepareAffix(false);
+        int length = AffixUtils.unescape(currentAffix, sb, position, this);
         return length;
+    }
+
+    /**
+     * Pre-processes the prefix or suffix into the currentAffix field, creating and mutating that field
+     * if necessary.  Calls down to {@link PatternStringUtils#affixPatternProviderToStringBuilder}.
+     *
+     * @param isPrefix
+     *            true to prepare the prefix; false to prepare the suffix.
+     */
+    private void prepareAffix(boolean isPrefix) {
+        if (currentAffix == null) {
+            currentAffix = new StringBuilder();
+        }
+        PatternStringUtils.patternInfoToStringBuilder(patternInfo,
+                isPrefix,
+                signum,
+                signDisplay,
+                plural,
+                perMilleReplacesPercent,
+                currentAffix);
     }
 
     /**
@@ -366,87 +376,5 @@ public class MutablePatternModifier
         default:
             throw new AssertionError();
         }
-    }
-
-    /** This method contains the heart of the logic for rendering LDML affix strings. */
-    private void enterCharSequenceMode(boolean isPrefix) {
-        assert !inCharSequenceMode;
-        inCharSequenceMode = true;
-
-        // Should the output render '+' where '-' would normally appear in the pattern?
-        plusReplacesMinusSign = signum != -1
-                && (signDisplay == SignDisplay.ALWAYS
-                        || signDisplay == SignDisplay.ACCOUNTING_ALWAYS
-                        || (signum == 1
-                                && (signDisplay == SignDisplay.EXCEPT_ZERO
-                                        || signDisplay == SignDisplay.ACCOUNTING_EXCEPT_ZERO)))
-                && patternInfo.positiveHasPlusSign() == false;
-
-        // Should we use the affix from the negative subpattern? (If not, we will use the positive
-        // subpattern.)
-        boolean useNegativeAffixPattern = patternInfo.hasNegativeSubpattern()
-                && (signum == -1 || (patternInfo.negativeHasMinusSign() && plusReplacesMinusSign));
-
-        // Resolve the flags for the affix pattern.
-        flags = 0;
-        if (useNegativeAffixPattern) {
-            flags |= AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN;
-        }
-        if (isPrefix) {
-            flags |= AffixPatternProvider.Flags.PREFIX;
-        }
-        if (plural != null) {
-            assert plural.ordinal() == (AffixPatternProvider.Flags.PLURAL_MASK & plural.ordinal());
-            flags |= plural.ordinal();
-        }
-
-        // Should we prepend a sign to the pattern?
-        if (!isPrefix || useNegativeAffixPattern) {
-            prependSign = false;
-        } else if (signum == -1) {
-            prependSign = signDisplay != SignDisplay.NEVER;
-        } else {
-            prependSign = plusReplacesMinusSign;
-        }
-
-        // Finally, compute the length of the affix pattern.
-        length = patternInfo.length(flags) + (prependSign ? 1 : 0);
-    }
-
-    private void exitCharSequenceMode() {
-        assert inCharSequenceMode;
-        inCharSequenceMode = false;
-    }
-
-    @Override
-    public int length() {
-        assert inCharSequenceMode;
-        return length;
-    }
-
-    @Override
-    public char charAt(int index) {
-        assert inCharSequenceMode;
-        char candidate;
-        if (prependSign && index == 0) {
-            candidate = '-';
-        } else if (prependSign) {
-            candidate = patternInfo.charAt(flags, index - 1);
-        } else {
-            candidate = patternInfo.charAt(flags, index);
-        }
-        if (plusReplacesMinusSign && candidate == '-') {
-            return '+';
-        }
-        if (perMilleReplacesPercent && candidate == '%') {
-            return '‰';
-        }
-        return candidate;
-    }
-
-    @Override
-    public CharSequence subSequence(int start, int end) {
-        // Never called by AffixUtils
-        throw new AssertionError();
     }
 }

@@ -4,7 +4,9 @@ package com.ibm.icu.impl.number;
 
 import java.math.BigDecimal;
 
+import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.Padder.PadPosition;
+import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.text.DecimalFormatSymbols;
 
 /**
@@ -396,6 +398,81 @@ public class PatternStringUtils {
             throw new IllegalArgumentException("Malformed localized pattern: unterminated quote");
         }
         return result.toString();
+    }
+
+    /**
+     * This method contains the heart of the logic for rendering LDML affix strings. It handles
+     * sign-always-shown resolution, whether to use the positive or negative subpattern, permille
+     * substitution, and plural forms for CurrencyPluralInfo.
+     */
+    public static void patternInfoToStringBuilder(
+            AffixPatternProvider patternInfo,
+            boolean isPrefix,
+            int signum,
+            SignDisplay signDisplay,
+            StandardPlural plural,
+            boolean perMilleReplacesPercent,
+            StringBuilder output) {
+
+        // Should the output render '+' where '-' would normally appear in the pattern?
+        boolean plusReplacesMinusSign = signum != -1
+                && (signDisplay == SignDisplay.ALWAYS
+                        || signDisplay == SignDisplay.ACCOUNTING_ALWAYS
+                        || (signum == 1
+                                && (signDisplay == SignDisplay.EXCEPT_ZERO
+                                        || signDisplay == SignDisplay.ACCOUNTING_EXCEPT_ZERO)))
+                && patternInfo.positiveHasPlusSign() == false;
+
+        // Should we use the affix from the negative subpattern? (If not, we will use the positive
+        // subpattern.)
+        boolean useNegativeAffixPattern = patternInfo.hasNegativeSubpattern()
+                && (signum == -1 || (patternInfo.negativeHasMinusSign() && plusReplacesMinusSign));
+
+        // Resolve the flags for the affix pattern.
+        int flags = 0;
+        if (useNegativeAffixPattern) {
+            flags |= AffixPatternProvider.Flags.NEGATIVE_SUBPATTERN;
+        }
+        if (isPrefix) {
+            flags |= AffixPatternProvider.Flags.PREFIX;
+        }
+        if (plural != null) {
+            assert plural.ordinal() == (AffixPatternProvider.Flags.PLURAL_MASK & plural.ordinal());
+            flags |= plural.ordinal();
+        }
+
+        // Should we prepend a sign to the pattern?
+        boolean prependSign;
+        if (!isPrefix || useNegativeAffixPattern) {
+            prependSign = false;
+        } else if (signum == -1) {
+            prependSign = signDisplay != SignDisplay.NEVER;
+        } else {
+            prependSign = plusReplacesMinusSign;
+        }
+
+        // Compute the length of the affix pattern.
+        int length = patternInfo.length(flags) + (prependSign ? 1 : 0);
+
+        // Finally, set the result into the StringBuilder.
+        output.setLength(0);
+        for (int index = 0; index < length; index++) {
+            char candidate;
+            if (prependSign && index == 0) {
+                candidate = '-';
+            } else if (prependSign) {
+                candidate = patternInfo.charAt(flags, index - 1);
+            } else {
+                candidate = patternInfo.charAt(flags, index);
+            }
+            if (plusReplacesMinusSign && candidate == '-') {
+                candidate = '+';
+            }
+            if (perMilleReplacesPercent && candidate == '%') {
+                candidate = '‰';
+            }
+            output.append(candidate);
+        }
     }
 
 }

@@ -31,9 +31,8 @@ import org.junit.Test;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.Padder.PadPosition;
-import com.ibm.icu.impl.number.Parse.GroupingMode;
-import com.ibm.icu.impl.number.Parse.ParseMode;
 import com.ibm.icu.impl.number.PatternStringParser;
+import com.ibm.icu.impl.number.parse.NumberParserImpl.ParseMode;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
@@ -250,12 +249,6 @@ public class PropertiesTest {
             if (seed == 0)
                 return null;
             CurrencyUsage[] values = CurrencyUsage.values();
-            return values[seed % values.length];
-
-        } else if (type == GroupingMode.class) {
-            if (seed == 0)
-                return null;
-            GroupingMode[] values = GroupingMode.values();
             return values[seed % values.length];
 
         } else if (type == FormatWidth.class) {

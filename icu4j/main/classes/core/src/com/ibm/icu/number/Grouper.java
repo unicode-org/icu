@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.number;
 
+import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 
@@ -84,7 +85,30 @@ public class Grouper {
         }
     }
 
-    Grouper withLocaleData(ParsedPatternInfo patternInfo) {
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public Grouper withProperties(DecimalFormatProperties properties) {
+        if (grouping1 != -2) {
+            return this;
+        }
+        byte grouping1 = (byte) properties.getGroupingSize();
+        byte grouping2 = (byte) properties.getSecondaryGroupingSize();
+        int minGrouping = properties.getMinimumGroupingDigits();
+        grouping1 = grouping1 > 0 ? grouping1 : grouping2 > 0 ? grouping2 : grouping1;
+        grouping2 = grouping2 > 0 ? grouping2 : grouping1;
+        // TODO: Is it important to handle minGrouping > 2?
+        return getInstance(grouping1, grouping2, minGrouping == 2);
+    }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public Grouper withLocaleData(ParsedPatternInfo patternInfo) {
         if (grouping1 != -2) {
             return this;
         }
@@ -111,5 +135,23 @@ public class Grouper {
         return position >= 0
                 && (position % grouping2) == 0
                 && value.getUpperDisplayMagnitude() - grouping1 + 1 >= (min2 ? 2 : 1);
+    }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public byte getPrimary() {
+        return grouping1;
+    }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public byte getSecondary() {
+        return grouping2;
     }
 }
