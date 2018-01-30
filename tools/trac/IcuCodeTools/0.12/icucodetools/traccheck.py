@@ -18,7 +18,7 @@ from trac.resource import ResourceNotFound
 from trac.ticket.model import Ticket
 from trac.util.text import exception_to_unicode
 
-okstatus = ['new','accepted','reviewing']
+okstatus = ['design','new','accepted','reviewing','reviewfeedback']
 
 def run(args=None):
     """trac check script"""

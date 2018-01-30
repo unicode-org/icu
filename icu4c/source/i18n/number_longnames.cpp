@@ -233,7 +233,7 @@ void LongNameHandler::simpleFormatsToModifiers(const UnicodeString *simpleFormat
     for (int32_t i = 0; i < StandardPlural::Form::COUNT; i++) {
         UnicodeString simpleFormat = getWithPlural(simpleFormats, i, status);
         if (U_FAILURE(status)) { return; }
-        SimpleFormatter compiledFormatter(simpleFormat, 1, 1, status);
+        SimpleFormatter compiledFormatter(simpleFormat, 0, 1, status);
         if (U_FAILURE(status)) { return; }
         output[i] = SimpleModifier(compiledFormatter, field, false);
     }
@@ -249,7 +249,7 @@ void LongNameHandler::multiSimpleFormatsToModifiers(const UnicodeString *leadFor
         UnicodeString compoundFormat;
         trailCompiled.format(leadFormat, compoundFormat, status);
         if (U_FAILURE(status)) { return; }
-        SimpleFormatter compoundCompiled(compoundFormat, 1, 1, status);
+        SimpleFormatter compoundCompiled(compoundFormat, 0, 1, status);
         if (U_FAILURE(status)) { return; }
         output[i] = SimpleModifier(compoundCompiled, field, false);
     }
