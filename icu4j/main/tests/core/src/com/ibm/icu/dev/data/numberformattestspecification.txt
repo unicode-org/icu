@@ -831,7 +831,7 @@ parse	output	breaks
 // JDK does allow separators in the wrong place and parses as -5347.25
 (53,47.25)	fail	K
 // strict requires prefix or suffix, except in C
-65,347.25	fail	P
+65,347.25	fail
 +3.52E4	35200
 (34.8E-3)	-0.0348
 (3425E-1)	-342.5
@@ -1310,11 +1310,11 @@ set locale en_US
 set lenient 0
 begin
 parse	output	outputCurrency	breaks
-$53.45	53.45	USD
+$53.45	53.45	USD	P
 53.45 USD	53.45	USD
 USD 53.45	fail	USD
 53.45USD	fail	USD
-USD53.45	53.45	USD
+USD53.45	53.45	USD	P
 (7.92) USD	-7.92	USD
 (7.92) EUR	-7.92	EUR
 (7.926) USD	-7.926	USD
@@ -1332,9 +1332,9 @@ US Dollars 53.45	fail	USD
 53.45 US Dollars	53.45	USD
 US Dollar 53.45	fail	USD
 53.45 US Dollar	53.45	USD
-US Dollars53.45	53.45	USD
+US Dollars53.45	53.45	USD	P
 53.45US Dollars	fail	USD
-US Dollar53.45	53.45	USD
+US Dollar53.45	53.45	USD	P
 US Dollat53.45	fail	USD
 53.45US Dollar	fail	USD
 US Dollars (53.45)	fail	USD
@@ -1362,13 +1362,12 @@ set decimalPatternMatchRequired 1
 begin
 pattern	parse	output	breaks
 // K doesn't support this feature.
-// P stops parsing when it sees the decimal separator, but doesn't fail.
 0	123	123
-0	123.	fail	CJKP
-0	1.23	fail	CJKP
+0	123.	fail	CJK
+0	1.23	fail	CJK
 0	-513	-513
-0	-513.	fail	CJKP
-0	-5.13	fail	CJKP
+0	-513.	fail	CJK
+0	-5.13	fail	CJK
 0.0	123	fail	K
 0.0	123.	123	C
 0.0	1.23	1.23	C
@@ -1580,6 +1579,34 @@ set pattern 0%
 begin
 parse	output	breaks
 9223372036854775807%	92233720368547758.07
+
+test sign always shown
+set locale en
+set pattern 0
+set signAlwaysShown 1
+begin
+format	output	breaks
+// J and K do not support this feature
+42	+42	JK
+0	+0	JK
+-42	-42
+
+test parse strict with plus sign
+set locale en
+set pattern 0
+set signAlwaysShown 1
+begin
+lenient	parse	output	breaks
+1	42	42
+1	-42	-42
+1	+42	42	JK
+1	0	0
+1	+0	0	JK
+0	42	fail	CJK
+0	-42	-42
+0	+42	42	JK
+0	0	fail	CJK
+0	+0	0	JK
 
 
 

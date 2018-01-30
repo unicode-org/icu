@@ -108,6 +108,7 @@ public class DataDrivenNumberFormatTestData {
     public String positiveSuffix = null;
     public String negativePrefix = null;
     public String negativeSuffix = null;
+    public Integer signAlwaysShown = null;
     public String localizedPattern = null;
     public String toPattern = null;
     public String toLocalizedPattern = null;
@@ -213,6 +214,7 @@ public class DataDrivenNumberFormatTestData {
         "positiveSuffix",
         "negativePrefix",
         "negativeSuffix",
+        "signAlwaysShown",
         "localizedPattern",
         "toPattern",
         "toLocalizedPattern",
@@ -376,6 +378,10 @@ public class DataDrivenNumberFormatTestData {
 
     public void setNegativeSuffix(String value) {
         negativeSuffix = value;
+    }
+
+    public void setSignAlwaysShown(String value) {
+        signAlwaysShown = Integer.valueOf(value);
     }
 
     public void setLocalizedPattern(String value) {

@@ -273,7 +273,7 @@ public class DataDrivenNumberFormatTestUtility extends TestFmwk {
             tuple.setField(name,  Utility.unescape(value));
             return true;
         } catch (Exception e) {
-            showError("No such field: " + name + ", or bad value: " + value);
+            showError("No such field: " + name + ", or bad value: " + value + ": " + e);
             return false;
         }
     }
