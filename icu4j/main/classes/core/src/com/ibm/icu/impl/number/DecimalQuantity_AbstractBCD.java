@@ -8,6 +8,7 @@ import java.math.MathContext;
 import java.text.FieldPosition;
 
 import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.text.UFieldPosition;
@@ -30,8 +31,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     protected int scale;
 
     /**
-     * The number of digits in the BCD. For example, "1007" has BCD "0x1007" and precision 4. The maximum
-     * precision is 16 since a long can hold only 16 digits.
+     * The number of digits in the BCD. For example, "1007" has BCD "0x1007" and precision 4. A long
+     * cannot represent precisions greater than 16.
      *
      * <p>
      * This value must be re-calculated whenever the value in bcd changes by using
@@ -204,8 +205,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     @Override
     public void adjustMagnitude(int delta) {
         if (precision != 0) {
-            scale += delta;
-            origDelta += delta;
+            scale = Utility.addExact(scale, delta);
+            origDelta = Utility.addExact(origDelta, delta);
         }
     }
 
@@ -561,7 +562,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      *
      * @return A double representation of the internal BCD.
      */
-    protected long toLong() {
+    public long toLong() {
         long result = 0L;
         for (int magnitude = scale + precision - 1; magnitude >= 0; magnitude--) {
             result = result * 10 + getDigitPos(magnitude - scale);
@@ -574,7 +575,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      * For example, if we represent the number "1.20" (including optional and required digits), then this
      * function returns "20" if includeTrailingZeros is true or "2" if false.
      */
-    protected long toFractionLong(boolean includeTrailingZeros) {
+    public long toFractionLong(boolean includeTrailingZeros) {
         long result = 0L;
         int magnitude = -1;
         for (; (magnitude >= scale || (includeTrailingZeros && magnitude >= rReqPos))
@@ -582,6 +583,40 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             result = result * 10 + getDigitPos(magnitude - scale);
         }
         return result;
+    }
+
+    static final byte[] INT64_BCD = { 9, 2, 2, 3, 3, 7, 2, 0, 3, 6, 8, 5, 4, 7, 7, 5, 8, 0, 7 };
+
+    /**
+     * Returns whether or not a Long can fully represent the value stored in this DecimalQuantity.
+     * Assumes that the DecimalQuantity is positive.
+     */
+    public boolean fitsInLong() {
+        if (isZero()) {
+            return true;
+        }
+        if (scale < 0) {
+            return false;
+        }
+        int magnitude = getMagnitude();
+        if (magnitude < 18) {
+            return true;
+        }
+        if (magnitude > 18) {
+            return false;
+        }
+        // Hard case: the magnitude is 10^18.
+        // The largest int64 is: 9,223,372,036,854,775,807
+        for (int p = 0; p < precision; p++) {
+            byte digit = getDigit(18 - p);
+            if (digit < INT64_BCD[p]) {
+                return true;
+            } else if (digit > INT64_BCD[p]) {
+                return false;
+            }
+        }
+        // Exactly equal to max long.
+        return true;
     }
 
     /**
@@ -922,6 +957,13 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      */
     protected abstract void shiftLeft(int numDigits);
 
+    /**
+     * Removes digits from the end of the BCD list. This may result in an invalid BCD representation; it
+     * is the caller's responsibility to follow-up with a call to {@link #compact}.
+     *
+     * @param numDigits
+     *            The number of zeros to add.
+     */
     protected abstract void shiftRight(int numDigits);
 
     /**

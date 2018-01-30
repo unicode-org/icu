@@ -5,16 +5,15 @@ package com.ibm.icu.number;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.AffixPatternProvider;
-import com.ibm.icu.impl.number.AffixUtils;
+import com.ibm.icu.impl.number.CurrencyPluralInfoAffixProvider;
 import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.MultiplierImpl;
 import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.PatternStringParser;
-import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
+import com.ibm.icu.impl.number.PropertiesAffixPatternProvider;
 import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -22,7 +21,6 @@ import com.ibm.icu.number.Rounder.FractionRounderImpl;
 import com.ibm.icu.number.Rounder.IncrementRounderImpl;
 import com.ibm.icu.number.Rounder.SignificantRounderImpl;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
-import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
@@ -62,7 +60,8 @@ final class NumberPropertyMapper {
      * @param symbols
      *            The symbols associated with the property bag.
      * @param exportedProperties
-     *            A property bag in which to store validated properties.
+     *            A property bag in which to store validated properties. Used by some DecimalFormat
+     *            getters.
      * @return A new MacroProps containing all of the information in the Properties.
      */
     public static MacroProps oldToNew(
@@ -194,14 +193,7 @@ final class NumberPropertyMapper {
         // GROUPING STRATEGY //
         ///////////////////////
 
-        int grouping1 = properties.getGroupingSize();
-        int grouping2 = properties.getSecondaryGroupingSize();
-        int minGrouping = properties.getMinimumGroupingDigits();
-        assert grouping1 >= -2; // value of -2 means to forward no grouping information
-        grouping1 = grouping1 > 0 ? grouping1 : grouping2 > 0 ? grouping2 : grouping1;
-        grouping2 = grouping2 > 0 ? grouping2 : grouping1;
-        // TODO: Is it important to handle minGrouping > 2?
-        macros.grouper = Grouper.getInstance((byte) grouping1, (byte) grouping2, minGrouping == 2);
+        macros.grouper = Grouper.defaults().withProperties(properties);
 
         /////////////
         // PADDING //
@@ -345,188 +337,5 @@ final class NumberPropertyMapper {
         }
 
         return macros;
-    }
-
-    private static class PropertiesAffixPatternProvider implements AffixPatternProvider {
-        private final String posPrefix;
-        private final String posSuffix;
-        private final String negPrefix;
-        private final String negSuffix;
-
-        public PropertiesAffixPatternProvider(DecimalFormatProperties properties) {
-            // There are two ways to set affixes in DecimalFormat: via the pattern string (applyPattern),
-            // and via the
-            // explicit setters (setPositivePrefix and friends). The way to resolve the settings is as
-            // follows:
-            //
-            // 1) If the explicit setting is present for the field, use it.
-            // 2) Otherwise, follows UTS 35 rules based on the pattern string.
-            //
-            // Importantly, the explicit setters affect only the one field they override. If you set the
-            // positive
-            // prefix, that should not affect the negative prefix. Since it is impossible for the user of
-            // this class
-            // to know whether the origin for a string was the override or the pattern, we have to say
-            // that we always
-            // have a negative subpattern and perform all resolution logic here.
-
-            // Convenience: Extract the properties into local variables.
-            // Variables are named with three chars: [p/n][p/s][o/p]
-            // [p/n] => p for positive, n for negative
-            // [p/s] => p for prefix, s for suffix
-            // [o/p] => o for escaped custom override string, p for pattern string
-            String ppo = AffixUtils.escape(properties.getPositivePrefix());
-            String pso = AffixUtils.escape(properties.getPositiveSuffix());
-            String npo = AffixUtils.escape(properties.getNegativePrefix());
-            String nso = AffixUtils.escape(properties.getNegativeSuffix());
-            String ppp = properties.getPositivePrefixPattern();
-            String psp = properties.getPositiveSuffixPattern();
-            String npp = properties.getNegativePrefixPattern();
-            String nsp = properties.getNegativeSuffixPattern();
-
-            if (ppo != null) {
-                posPrefix = ppo;
-            } else if (ppp != null) {
-                posPrefix = ppp;
-            } else {
-                // UTS 35: Default positive prefix is empty string.
-                posPrefix = "";
-            }
-
-            if (pso != null) {
-                posSuffix = pso;
-            } else if (psp != null) {
-                posSuffix = psp;
-            } else {
-                // UTS 35: Default positive suffix is empty string.
-                posSuffix = "";
-            }
-
-            if (npo != null) {
-                negPrefix = npo;
-            } else if (npp != null) {
-                negPrefix = npp;
-            } else {
-                // UTS 35: Default negative prefix is "-" with positive prefix.
-                // Important: We prepend the "-" to the pattern, not the override!
-                negPrefix = ppp == null ? "-" : "-" + ppp;
-            }
-
-            if (nso != null) {
-                negSuffix = nso;
-            } else if (nsp != null) {
-                negSuffix = nsp;
-            } else {
-                // UTS 35: Default negative prefix is the positive prefix.
-                negSuffix = psp == null ? "" : psp;
-            }
-        }
-
-        @Override
-        public char charAt(int flags, int i) {
-            return getStringForFlags(flags).charAt(i);
-        }
-
-        @Override
-        public int length(int flags) {
-            return getStringForFlags(flags).length();
-        }
-
-        private String getStringForFlags(int flags) {
-            boolean prefix = (flags & Flags.PREFIX) != 0;
-            boolean negative = (flags & Flags.NEGATIVE_SUBPATTERN) != 0;
-            if (prefix && negative) {
-                return negPrefix;
-            } else if (prefix) {
-                return posPrefix;
-            } else if (negative) {
-                return negSuffix;
-            } else {
-                return posSuffix;
-            }
-        }
-
-        @Override
-        public boolean positiveHasPlusSign() {
-            return AffixUtils.containsType(posPrefix, AffixUtils.TYPE_PLUS_SIGN)
-                    || AffixUtils.containsType(posSuffix, AffixUtils.TYPE_PLUS_SIGN);
-        }
-
-        @Override
-        public boolean hasNegativeSubpattern() {
-            // See comments in the constructor for more information on why this is always true.
-            return true;
-        }
-
-        @Override
-        public boolean negativeHasMinusSign() {
-            return AffixUtils.containsType(negPrefix, AffixUtils.TYPE_MINUS_SIGN)
-                    || AffixUtils.containsType(negSuffix, AffixUtils.TYPE_MINUS_SIGN);
-        }
-
-        @Override
-        public boolean hasCurrencySign() {
-            return AffixUtils.hasCurrencySymbols(posPrefix)
-                    || AffixUtils.hasCurrencySymbols(posSuffix)
-                    || AffixUtils.hasCurrencySymbols(negPrefix)
-                    || AffixUtils.hasCurrencySymbols(negSuffix);
-        }
-
-        @Override
-        public boolean containsSymbolType(int type) {
-            return AffixUtils.containsType(posPrefix, type)
-                    || AffixUtils.containsType(posSuffix, type)
-                    || AffixUtils.containsType(negPrefix, type)
-                    || AffixUtils.containsType(negSuffix, type);
-        }
-    }
-
-    private static class CurrencyPluralInfoAffixProvider implements AffixPatternProvider {
-        private final AffixPatternProvider[] affixesByPlural;
-
-        public CurrencyPluralInfoAffixProvider(CurrencyPluralInfo cpi) {
-            affixesByPlural = new ParsedPatternInfo[StandardPlural.COUNT];
-            for (StandardPlural plural : StandardPlural.VALUES) {
-                affixesByPlural[plural.ordinal()] = PatternStringParser
-                        .parseToPatternInfo(cpi.getCurrencyPluralPattern(plural.getKeyword()));
-            }
-        }
-
-        @Override
-        public char charAt(int flags, int i) {
-            int pluralOrdinal = (flags & Flags.PLURAL_MASK);
-            return affixesByPlural[pluralOrdinal].charAt(flags, i);
-        }
-
-        @Override
-        public int length(int flags) {
-            int pluralOrdinal = (flags & Flags.PLURAL_MASK);
-            return affixesByPlural[pluralOrdinal].length(flags);
-        }
-
-        @Override
-        public boolean positiveHasPlusSign() {
-            return affixesByPlural[StandardPlural.OTHER.ordinal()].positiveHasPlusSign();
-        }
-
-        @Override
-        public boolean hasNegativeSubpattern() {
-            return affixesByPlural[StandardPlural.OTHER.ordinal()].hasNegativeSubpattern();
-        }
-
-        @Override
-        public boolean negativeHasMinusSign() {
-            return affixesByPlural[StandardPlural.OTHER.ordinal()].negativeHasMinusSign();
-        }
-
-        @Override
-        public boolean hasCurrencySign() {
-            return affixesByPlural[StandardPlural.OTHER.ordinal()].hasCurrencySign();
-        }
-
-        @Override
-        public boolean containsSymbolType(int type) {
-            return affixesByPlural[StandardPlural.OTHER.ordinal()].containsSymbolType(type);
-        }
     }
 }

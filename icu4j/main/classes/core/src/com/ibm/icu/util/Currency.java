@@ -546,7 +546,7 @@ public class Currency extends MeasureUnit {
      * @stable ICU 3.4
      */
     public String getSymbol(ULocale uloc) {
-        return getName(uloc, SYMBOL_NAME, new boolean[1]);
+        return getName(uloc, SYMBOL_NAME, null);
     }
 
     /**
@@ -747,18 +747,12 @@ public class Currency extends MeasureUnit {
         return isoResult;
     }
 
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public static TextTrieMap<CurrencyStringInfo>.ParseState openParseState(
-        ULocale locale, int startingCp, int type) {
+    public static TextTrieMap<CurrencyStringInfo> getParsingTrie(ULocale locale, int type) {
         List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = getCurrencyTrieVec(locale);
         if (type == Currency.LONG_NAME) {
-            return currencyTrieVec.get(0).openParseState(startingCp);
+            return currencyTrieVec.get(1);
         } else {
-            return currencyTrieVec.get(1).openParseState(startingCp);
+            return currencyTrieVec.get(0);
         }
     }
 

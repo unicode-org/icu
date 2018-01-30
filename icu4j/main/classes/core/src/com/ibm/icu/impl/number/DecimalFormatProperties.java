@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import com.ibm.icu.impl.number.Padder.PadPosition;
-import com.ibm.icu.impl.number.Parse.GroupingMode;
-import com.ibm.icu.impl.number.Parse.ParseMode;
+import com.ibm.icu.impl.number.parse.NumberParserImpl.ParseMode;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.PluralRules;
@@ -73,7 +72,6 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
     private transient PadPosition padPosition;
     private transient String padString;
     private transient boolean parseCaseSensitive;
-    private transient GroupingMode parseGroupingMode;
     private transient boolean parseIntegerOnly;
     private transient ParseMode parseMode;
     private transient boolean parseNoExponent;
@@ -145,7 +143,6 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
         padPosition = null;
         padString = null;
         parseCaseSensitive = false;
-        parseGroupingMode = null;
         parseIntegerOnly = false;
         parseMode = null;
         parseNoExponent = false;
@@ -191,7 +188,6 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
         padPosition = other.padPosition;
         padString = other.padString;
         parseCaseSensitive = other.parseCaseSensitive;
-        parseGroupingMode = other.parseGroupingMode;
         parseIntegerOnly = other.parseIntegerOnly;
         parseMode = other.parseMode;
         parseNoExponent = other.parseNoExponent;
@@ -238,7 +234,6 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
         eq = eq && _equalsHelper(padPosition, other.padPosition);
         eq = eq && _equalsHelper(padString, other.padString);
         eq = eq && _equalsHelper(parseCaseSensitive, other.parseCaseSensitive);
-        eq = eq && _equalsHelper(parseGroupingMode, other.parseGroupingMode);
         eq = eq && _equalsHelper(parseIntegerOnly, other.parseIntegerOnly);
         eq = eq && _equalsHelper(parseMode, other.parseMode);
         eq = eq && _equalsHelper(parseNoExponent, other.parseNoExponent);
@@ -301,7 +296,6 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
         hashCode ^= _hashCodeHelper(padPosition);
         hashCode ^= _hashCodeHelper(padString);
         hashCode ^= _hashCodeHelper(parseCaseSensitive);
-        hashCode ^= _hashCodeHelper(parseGroupingMode);
         hashCode ^= _hashCodeHelper(parseIntegerOnly);
         hashCode ^= _hashCodeHelper(parseMode);
         hashCode ^= _hashCodeHelper(parseNoExponent);
@@ -482,10 +476,6 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
 
     public boolean getParseCaseSensitive() {
         return parseCaseSensitive;
-    }
-
-    public GroupingMode getParseGroupingMode() {
-        return parseGroupingMode;
     }
 
     public boolean getParseIntegerOnly() {
@@ -1083,34 +1073,6 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
     }
 
     /**
-     * Sets the strategy used during parsing when a code point needs to be interpreted as either a
-     * decimal separator or a grouping separator.
-     *
-     * <p>
-     * The comma, period, space, and apostrophe have different meanings in different locales. For
-     * example, in <em>en-US</em> and most American locales, the period is used as a decimal separator,
-     * but in <em>es-PY</em> and most European locales, it is used as a grouping separator.
-     *
-     * <p>
-     * Suppose you are in <em>fr-FR</em> the parser encounters the string "1.234". In <em>fr-FR</em>, the
-     * grouping is a space and the decimal is a comma. The <em>grouping mode</em> is a mechanism to let
-     * you specify whether to accept the string as 1234 (GroupingMode.DEFAULT) or whether to reject it
-     * since the separators don't match (GroupingMode.RESTRICTED).
-     *
-     * <p>
-     * When resolving grouping separators, it is the <em>equivalence class</em> of separators that is
-     * considered. For example, a period is seen as equal to a fixed set of other period-like characters.
-     *
-     * @param parseGroupingMode
-     *            The {@link GroupingMode} to use; either DEFAULT or RESTRICTED.
-     * @return The property bag, for chaining.
-     */
-    public DecimalFormatProperties setParseGroupingMode(GroupingMode parseGroupingMode) {
-        this.parseGroupingMode = parseGroupingMode;
-        return this;
-    }
-
-    /**
      * Whether to ignore the fractional part of numbers. For example, parses "123.4" to "123" instead of
      * "123.4".
      *
@@ -1150,8 +1112,8 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
     }
 
     /**
-     * Whether to always return a BigDecimal from {@link Parse#parse} and all other parse methods. By
-     * default, a Long or a BigInteger are returned when possible.
+     * Whether to always return a BigDecimal from parse methods. By default, a Long or a BigInteger are
+     * returned when possible.
      *
      * @param parseToBigDecimal
      *            true to always return a BigDecimal; false to return a Long or a BigInteger when
