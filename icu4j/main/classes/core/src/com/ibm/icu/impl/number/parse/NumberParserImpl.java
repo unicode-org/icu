@@ -34,37 +34,36 @@ public class NumberParserImpl {
     // TODO: Find a better place for this enum.
     /** Controls the set of rules for parsing a string. */
     public static enum ParseMode {
-      /**
-       * Lenient mode should be used if you want to accept malformed user input. It will use
-       * heuristics to attempt to parse through typographical errors in the string.
-       */
-      LENIENT,
+        /**
+         * Lenient mode should be used if you want to accept malformed user input. It will use heuristics
+         * to attempt to parse through typographical errors in the string.
+         */
+        LENIENT,
 
-      /**
-       * Strict mode should be used if you want to require that the input is well-formed. More
-       * specifically, it differs from lenient mode in the following ways:
-       *
-       * <ul>
-       *   <li>Grouping widths must match the grouping settings. For example, "12,3,45" will fail if
-       *       the grouping width is 3, as in the pattern "#,##0".
-       *   <li>The string must contain a complete prefix and suffix. For example, if the pattern is
-       *       "{#};(#)", then "{123}" or "(123)" would match, but "{123", "123}", and "123" would all
-       *       fail. (The latter strings would be accepted in lenient mode.)
-       *   <li>Whitespace may not appear at arbitrary places in the string. In lenient mode,
-       *       whitespace is allowed to occur arbitrarily before and after prefixes and exponent
-       *       separators.
-       *   <li>Leading grouping separators are not allowed, as in ",123".
-       *   <li>Minus and plus signs can only appear if specified in the pattern. In lenient mode, a
-       *       plus or minus sign can always precede a number.
-       *   <li>The set of characters that can be interpreted as a decimal or grouping separator is
-       *       smaller.
-       *   <li><strong>If currency parsing is enabled,</strong> currencies must only appear where
-       *       specified in either the current pattern string or in a valid pattern string for the
-       *       current locale. For example, if the pattern is "¤0.00", then "$1.23" would match, but
-       *       "1.23$" would fail to match.
-       * </ul>
-       */
-      STRICT,
+        /**
+         * Strict mode should be used if you want to require that the input is well-formed. More
+         * specifically, it differs from lenient mode in the following ways:
+         *
+         * <ul>
+         * <li>Grouping widths must match the grouping settings. For example, "12,3,45" will fail if the
+         * grouping width is 3, as in the pattern "#,##0".
+         * <li>The string must contain a complete prefix and suffix. For example, if the pattern is
+         * "{#};(#)", then "{123}" or "(123)" would match, but "{123", "123}", and "123" would all fail.
+         * (The latter strings would be accepted in lenient mode.)
+         * <li>Whitespace may not appear at arbitrary places in the string. In lenient mode, whitespace
+         * is allowed to occur arbitrarily before and after prefixes and exponent separators.
+         * <li>Leading grouping separators are not allowed, as in ",123".
+         * <li>Minus and plus signs can only appear if specified in the pattern. In lenient mode, a plus
+         * or minus sign can always precede a number.
+         * <li>The set of characters that can be interpreted as a decimal or grouping separator is
+         * smaller.
+         * <li><strong>If currency parsing is enabled,</strong> currencies must only appear where
+         * specified in either the current pattern string or in a valid pattern string for the current
+         * locale. For example, if the pattern is "¤0.00", then "$1.23" would match, but "1.23$" would
+         * fail to match.
+         * </ul>
+         */
+        STRICT,
     }
 
     @Deprecated
@@ -167,20 +166,12 @@ public class NumberParserImpl {
         AffixPatternProvider patternInfo = new PropertiesAffixPatternProvider(properties);
         Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
         boolean isStrict = properties.getParseMode() == ParseMode.STRICT;
-        boolean decimalSeparatorRequired = properties.getDecimalPatternMatchRequired()
-                ? (properties.getDecimalSeparatorAlwaysShown()
-                        || properties.getMaximumFractionDigits() != 0)
-                : false;
-        boolean decimalSeparatorForbidden = properties.getDecimalPatternMatchRequired()
-                ? (!properties.getDecimalSeparatorAlwaysShown()
-                        && properties.getMaximumFractionDigits() == 0)
-                : false;
         Grouper grouper = Grouper.defaults().withProperties(properties);
         int parseFlags = 0;
         if (!properties.getParseCaseSensitive()) {
             parseFlags |= ParsingUtils.PARSE_FLAG_IGNORE_CASE;
         }
-        if (properties.getParseIntegerOnly() || decimalSeparatorForbidden) {
+        if (properties.getParseIntegerOnly()) {
             parseFlags |= ParsingUtils.PARSE_FLAG_INTEGER_ONLY;
         }
         if (isStrict) {
@@ -260,8 +251,10 @@ public class NumberParserImpl {
         if (parseCurrency) {
             parser.addMatcher(new RequireCurrencyMatcher());
         }
-        if (decimalSeparatorRequired) {
-            parser.addMatcher(new RequireDecimalSeparatorMatcher());
+        if (properties.getDecimalPatternMatchRequired()) {
+            boolean patternHasDecimalSeparator = properties.getDecimalSeparatorAlwaysShown()
+                    || properties.getMaximumFractionDigits() != 0;
+            parser.addMatcher(RequireDecimalSeparatorMatcher.getInstance(patternHasDecimalSeparator));
         }
         if (properties.getMultiplier() != null) {
             // We need to use a math context in order to prevent non-terminating decimal expansions.
