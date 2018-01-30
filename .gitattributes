@@ -7282,33 +7282,8 @@ tools/release/java/src/com/ibm/icu/dev/tools/docs/dumpAllCppFunc_xml.xslt -text
 tools/release/java/src/com/ibm/icu/dev/tools/docs/genreport_xml.xslt -text
 tools/scripts/icurun -text
 tools/scripts/reticket -text
-tools/trac/IcuCodeTools/0.11/icucodetools/__init__.py -text
-tools/trac/IcuCodeTools/0.11/icucodetools/dcut.py -text
-tools/trac/IcuCodeTools/0.11/icucodetools/htdocs/css/icuxtn.css -text svneol=unset#text/css
-tools/trac/IcuCodeTools/0.11/icucodetools/htdocs/js/review.js -text
-tools/trac/IcuCodeTools/0.11/icucodetools/review.py -text
-tools/trac/IcuCodeTools/0.11/icucodetools/templates/nothing.html -text svneol=unset#text/html
-tools/trac/IcuCodeTools/0.11/icucodetools/templates/review.html -text svneol=unset#text/html
-tools/trac/IcuCodeTools/0.11/icucodetools/ticketmgr.py -text
-tools/trac/IcuCodeTools/0.11/icucodetools/tktlist.py -text
-tools/trac/IcuCodeTools/0.11/license.html -text svneol=unset#text/html
-tools/trac/IcuCodeTools/0.11/readme.txt -text
-tools/trac/IcuCodeTools/0.11/setup.cfg -text
-tools/trac/IcuCodeTools/0.11/setup.py -text
-tools/trac/IcuCodeTools/0.12/icucodetools/__init__.py -text
-tools/trac/IcuCodeTools/0.12/icucodetools/dcut.py -text
-tools/trac/IcuCodeTools/0.12/icucodetools/htdocs/css/icuxtn.css -text svneol=unset#text/css
-tools/trac/IcuCodeTools/0.12/icucodetools/htdocs/js/review.js -text
-tools/trac/IcuCodeTools/0.12/icucodetools/review.py -text
-tools/trac/IcuCodeTools/0.12/icucodetools/templates/nothing.html -text svneol=unset#text/html
-tools/trac/IcuCodeTools/0.12/icucodetools/templates/review.html -text svneol=unset#text/html
-tools/trac/IcuCodeTools/0.12/icucodetools/ticketmgr.py -text
-tools/trac/IcuCodeTools/0.12/icucodetools/tktlist.py -text
-tools/trac/IcuCodeTools/0.12/icucodetools/traccheck.py -text
-tools/trac/IcuCodeTools/0.12/license.html -text svneol=unset#text/html
-tools/trac/IcuCodeTools/0.12/readme.txt -text
-tools/trac/IcuCodeTools/0.12/setup.cfg -text
-tools/trac/IcuCodeTools/0.12/setup.py -text
+tools/trac/IcuCodeTools/0.11/readme.txt svneol=native#text/plain
+tools/trac/IcuCodeTools/0.12/readme.txt svneol=native#text/plain
 tools/unicode/c/genprops/pnames_data.h svneol=native#text/plain%3Bcharset%3Dutf-8
 tools/unicode/c/genregexcasing/readme.txt svneol=native#text/plain
 tools/unicodetools/com/ibm/rbm/docs/RBReporter.html svneol=native#text/html
