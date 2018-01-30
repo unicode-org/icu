@@ -10,6 +10,7 @@ import com.ibm.icu.impl.StandardPlural;
  */
 public class ParameterizedModifier {
     private final Modifier positive;
+    private final Modifier zero;
     private final Modifier negative;
     final Modifier[] mods;
     boolean frozen;
@@ -20,8 +21,9 @@ public class ParameterizedModifier {
      * <p>
      * If this constructor is used, a plural form CANNOT be passed to {@link #getModifier}.
      */
-    public ParameterizedModifier(Modifier positive, Modifier negative) {
+    public ParameterizedModifier(Modifier positive, Modifier zero, Modifier negative) {
         this.positive = positive;
+        this.zero = zero;
         this.negative = negative;
         this.mods = null;
         this.frozen = true;
@@ -36,33 +38,34 @@ public class ParameterizedModifier {
      */
     public ParameterizedModifier() {
         this.positive = null;
+        this.zero = null;
         this.negative = null;
-        this.mods = new Modifier[2 * StandardPlural.COUNT];
+        this.mods = new Modifier[3 * StandardPlural.COUNT];
         this.frozen = false;
     }
 
-    public void setModifier(boolean isNegative, StandardPlural plural, Modifier mod) {
+    public void setModifier(int signum, StandardPlural plural, Modifier mod) {
         assert !frozen;
-        mods[getModIndex(isNegative, plural)] = mod;
+        mods[getModIndex(signum, plural)] = mod;
     }
 
     public void freeze() {
         frozen = true;
     }
 
-    public Modifier getModifier(boolean isNegative) {
+    public Modifier getModifier(int signum) {
         assert frozen;
         assert mods == null;
-        return isNegative ? negative : positive;
+        return signum == 0 ? zero : signum < 0 ? negative : positive;
     }
 
-    public Modifier getModifier(boolean isNegative, StandardPlural plural) {
+    public Modifier getModifier(int signum, StandardPlural plural) {
         assert frozen;
         assert positive == null;
-        return mods[getModIndex(isNegative, plural)];
+        return mods[getModIndex(signum, plural)];
     }
 
-    private static int getModIndex(boolean isNegative, StandardPlural plural) {
-        return plural.ordinal() * 2 + (isNegative ? 1 : 0);
+    private static int getModIndex(int signum, StandardPlural plural) {
+        return plural.ordinal() * 3 + (signum + 1);
     }
 }

@@ -297,6 +297,11 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     @Override
+    public int signum() {
+        return isNegative() ? -1 : isZero() ? 0 : 1;
+    }
+
+    @Override
     public boolean isInfinite() {
         return (flags & INFINITY_FLAG) != 0;
     }

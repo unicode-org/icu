@@ -1478,6 +1478,14 @@ public class NumberFormatterApiTest {
                 "-444,444");
 
         assertFormatSingle(
+                "Sign Auto Zero",
+                "",
+                NumberFormatter.with().sign(SignDisplay.AUTO),
+                ULocale.ENGLISH,
+                0,
+                "0");
+
+        assertFormatSingle(
                 "Sign Always Positive",
                 "sign=ALWAYS",
                 NumberFormatter.with().sign(SignDisplay.ALWAYS),
@@ -1492,6 +1500,14 @@ public class NumberFormatterApiTest {
                 ULocale.ENGLISH,
                 -444444,
                 "-444,444");
+
+        assertFormatSingle(
+                "Sign Always Zero",
+                "",
+                NumberFormatter.with().sign(SignDisplay.ALWAYS),
+                ULocale.ENGLISH,
+                0,
+                "+0");
 
         assertFormatSingle(
                 "Sign Never Positive",
@@ -1510,6 +1526,14 @@ public class NumberFormatterApiTest {
                 "444,444");
 
         assertFormatSingle(
+                "Sign Never Zero",
+                "",
+                NumberFormatter.with().sign(SignDisplay.NEVER),
+                ULocale.ENGLISH,
+                0,
+                "0");
+
+        assertFormatSingle(
                 "Sign Accounting Positive",
                 "$USD sign=ACCOUNTING",
                 NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD),
@@ -1526,6 +1550,14 @@ public class NumberFormatterApiTest {
                 "($444,444.00)");
 
         assertFormatSingle(
+                "Sign Accounting Zero",
+                "",
+                NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD),
+                ULocale.ENGLISH,
+                0,
+                "$0.00");
+
+        assertFormatSingle(
                 "Sign Accounting-Always Positive",
                 "$USD sign=ACCOUNTING_ALWAYS",
                 NumberFormatter.with().sign(SignDisplay.ACCOUNTING_ALWAYS).unit(USD),
@@ -1540,6 +1572,62 @@ public class NumberFormatterApiTest {
                 ULocale.ENGLISH,
                 -444444,
                 "($444,444.00)");
+
+        assertFormatSingle(
+                "Sign Accounting-Always Zero",
+                "",
+                NumberFormatter.with().sign(SignDisplay.ACCOUNTING_ALWAYS).unit(USD),
+                ULocale.ENGLISH,
+                0,
+                "+$0.00");
+
+        assertFormatSingle(
+                "Sign Except-Zero Positive",
+                "",
+                NumberFormatter.with().sign(SignDisplay.EXCEPT_ZERO),
+                ULocale.ENGLISH,
+                444444,
+                "+444,444");
+
+        assertFormatSingle(
+                "Sign Always Negative",
+                "",
+                NumberFormatter.with().sign(SignDisplay.EXCEPT_ZERO),
+                ULocale.ENGLISH,
+                -444444,
+                "-444,444");
+
+        assertFormatSingle(
+                "Sign Except-Zero Zero",
+                "",
+                NumberFormatter.with().sign(SignDisplay.EXCEPT_ZERO),
+                ULocale.ENGLISH,
+                0,
+                "0");
+
+        assertFormatSingle(
+                "Sign Accounting-Except-Zero Positive",
+                "$USD sign=ACCOUNTING_ALWAYS",
+                NumberFormatter.with().sign(SignDisplay.ACCOUNTING_EXCEPT_ZERO).unit(USD),
+                ULocale.ENGLISH,
+                444444,
+                "+$444,444.00");
+
+        assertFormatSingle(
+                "Sign Accounting-Except-Zero Negative",
+                "$USD sign=ACCOUNTING_ALWAYS",
+                NumberFormatter.with().sign(SignDisplay.ACCOUNTING_EXCEPT_ZERO).unit(USD),
+                ULocale.ENGLISH,
+                -444444,
+                "($444,444.00)");
+
+        assertFormatSingle(
+                "Sign Accounting-Except-Zero Zero",
+                "",
+                NumberFormatter.with().sign(SignDisplay.ACCOUNTING_EXCEPT_ZERO).unit(USD),
+                ULocale.ENGLISH,
+                0,
+                "$0.00");
 
         assertFormatSingle(
                 "Sign Accounting Negative Hidden",
