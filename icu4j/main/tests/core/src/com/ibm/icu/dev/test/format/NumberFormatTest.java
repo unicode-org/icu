@@ -4250,7 +4250,6 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
-    @Ignore
     public void TestParseRequiredDecimalPoint() {
 
         String[] testPattern = { "00.####", "00.0", "00" };
@@ -5466,7 +5465,6 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
-    @Ignore
     public void testParseSubtraction() {
         // TODO: Is this a case we need to support? It prevents us from automatically parsing
         // minus signs that appear after the number, like  in "12-" vs "-12".
@@ -5499,6 +5497,7 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("Quote should be escapable in padding syntax", "a''12b", result);
     }
 
+    // TODO: Investigate this test and re-enable if appropriate.
     @Test
     @Ignore
     public void testParseAmbiguousAffixes() {
@@ -5645,89 +5644,6 @@ public class NumberFormatTest extends TestFmwk {
             fail("NullPointerException not thrown in 4-parameter constructor");
         } catch (NullPointerException e) {
             // Expected
-        }
-    }
-
-    @Test
-    @Ignore
-    public void testParseGroupingMode() {
-        ULocale[] locales = {         // GROUPING   DECIMAL
-                new ULocale("en-US"), // comma      period
-                new ULocale("fr-FR"), // space      comma
-                new ULocale("de-CH"), // apostrophe period
-                new ULocale("es-PY")  // period     comma
-        };
-        String[] inputs = {
-                "12,345.67",
-                "12 345,67",
-                "12'345.67",
-                "12.345,67",
-                "12,345",
-                "12 345",
-                "12'345",
-                "12.345"
-        };
-        BigDecimal[] outputs = {
-                new BigDecimal("12345.67"),
-                new BigDecimal("12345.67"),
-                new BigDecimal("12345.67"),
-                new BigDecimal("12345.67"),
-                new BigDecimal("12345"),
-                new BigDecimal("12345"),
-                new BigDecimal("12345"),
-                new BigDecimal("12345")
-        };
-        int[][] expecteds = {
-                // 0 => works in neither default nor restricted
-                // 1 => works in default but not restricted
-                // 2 => works in restricted but not default (should not happen)
-                // 3 => works in both default and restricted
-                //
-                // C=comma, P=period, S=space, A=apostrophe
-                // C+P    S+C    A+P    P+C    C-only  S-only   A-only   P-only
-                {  3,     0,     1,     0,     3,      1,       1,       0  }, // => en-US
-                {  0,     3,     0,     1,     0,      3,       3,       1  }, // => fr-FR
-                {  1,     0,     3,     0,     1,      3,       3,       0  }, // => de-CH
-                {  0,     1,     0,     3,     0,      1,       1,       3  }  // => es-PY
-        };
-
-        for (int i=0; i<locales.length; i++) {
-            ULocale loc = locales[i];
-            DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(loc);
-            df.setParseBigDecimal(true);
-            for (int j=0; j<inputs.length; j++) {
-                String input = inputs[j];
-                BigDecimal output = outputs[j];
-                int expected = expecteds[i][j];
-
-                // TODO(sffc): Uncomment after ICU 60 API proposal
-                //df.setParseGroupingMode(null);
-                //assertEquals("Getter should return null", null, df.getParseGroupingMode());
-                ParsePosition ppos = new ParsePosition(0);
-                Number result = df.parse(input, ppos);
-                boolean actualNull = output.equals(result) && (ppos.getIndex() == input.length());
-                assertEquals("Locale " + loc + ", string \"" + input + "\", DEFAULT, "
-                        + "actual result: " + result + " (ppos: " + ppos.getIndex() + ")",
-                        (expected & 1) != 0, actualNull);
-
-                // TODO(sffc): Uncomment after ICU 60 API proposal
-                //df.setParseGroupingMode(GroupingMode.DEFAULT);
-                //assertEquals("Getter should return new value", GroupingMode.DEFAULT, df.getParseGroupingMode());
-                //ppos = new ParsePosition(0);
-                //result = df.parse(input, ppos);
-                //boolean actualDefault = output.equals(result) && (ppos.getIndex() == input.length());
-                //assertEquals("Result from null should be the same as DEFAULT", actualNull, actualDefault);
-
-                // TODO(sffc): Uncomment after ICU 60 API proposal
-                //df.setParseGroupingMode(GroupingMode.RESTRICTED);
-                //assertEquals("Getter should return new value", GroupingMode.RESTRICTED, df.getParseGroupingMode());
-                //ppos = new ParsePosition(0);
-                //result = df.parse(input, ppos);
-                //boolean actualRestricted = output.equals(result) && (ppos.getIndex() == input.length());
-                //assertEquals("Locale " + loc + ", string \"" + input + "\", RESTRICTED, "
-                //        + "actual result: " + result + " (ppos: " + ppos.getIndex() + ")",
-                //        (expected & 2) != 0, actualRestricted);
-            }
         }
     }
 
