@@ -22,6 +22,7 @@ public class ParsingUtils {
     public static final int PARSE_FLAG_USE_FULL_AFFIXES = 0x0100;
     public static final int PARSE_FLAG_EXACT_AFFIX = 0x0200;
     public static final int PARSE_FLAG_PLUS_SIGN_ALLOWED = 0x0400;
+    public static final int PARSE_FLAG_FRACTION_GROUPING_DISABLED = 0x0800;
 
     public static void putLeadCodePoints(UnicodeSet input, UnicodeSet output) {
         for (EntryRange range : input.ranges()) {

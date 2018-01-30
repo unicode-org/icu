@@ -870,7 +870,7 @@ public class NumberRegressionTests extends TestFmwk {
         DecimalFormatSymbols(java.util.Locale.US));
         String text = "1.222,111";
         Number num = df.parse(text,new ParsePosition(0));
-        if (!num.toString().equals("1.222111"))
+        if (!num.toString().equals("1.222"))
             errln("\"" + text + "\"  is parsed as " + num);
         text = "1.222x111";
         num = df.parse(text,new ParsePosition(0));

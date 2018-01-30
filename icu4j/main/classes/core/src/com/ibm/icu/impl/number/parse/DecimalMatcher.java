@@ -21,6 +21,9 @@ public class DecimalMatcher implements NumberParseMatcher {
     /** If true, do not accept grouping separators at all */
     private final boolean groupingDisabled;
 
+    /** If true, do not accept fraction grouping separators */
+    private final boolean fractionGroupingDisabled;
+
     /** If true, do not accept numbers in the fraction */
     private final boolean integerOnly;
 
@@ -91,6 +94,8 @@ public class DecimalMatcher implements NumberParseMatcher {
 
         requireGroupingMatch = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_STRICT_GROUPING_SIZE);
         groupingDisabled = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_GROUPING_DISABLED);
+        fractionGroupingDisabled = 0 != (parseFlags
+                & ParsingUtils.PARSE_FLAG_FRACTION_GROUPING_DISABLED);
         integerOnly = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_INTEGER_ONLY);
         isScientific = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_DECIMAL_SCIENTIFIC);
         grouping1 = grouper.getPrimary();
@@ -246,6 +251,11 @@ public class DecimalMatcher implements NumberParseMatcher {
                         // two group separators in a row
                         break;
                     }
+                }
+
+                if (fractionGroupingDisabled && seenDecimal) {
+                    // Stop parsing here.
+                    break;
                 }
 
                 seenGrouping = true;

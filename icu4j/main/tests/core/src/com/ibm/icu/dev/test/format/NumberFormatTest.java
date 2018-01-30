@@ -2801,7 +2801,8 @@ public class NumberFormatTest extends TestFmwk {
                 "0,",          // single zero before comma (not group separator) is not leading
                 "0.0",         // single zero before decimal followed by digit is not leading
                 "0. ",         // same as above before period (or decimal) is not leading
-                "0.100,,5",    // two commas stop parse of decimal
+                "0.100,5",     // comma stops parse of decimal (no grouping)
+                "0.100,,5",    // two commas also stops parse
                 ".00",         // leading decimal is ok, even with zeros
                 "1234567",     // group separators are not required
                 "12345, ",     // comma not followed by digit is not a group separator, but end of number
@@ -2957,7 +2958,7 @@ public class NumberFormatTest extends TestFmwk {
             try {
                 Number n = nf.parse(defaultNonLong[i]);
                 if (n instanceof Long) {
-                    errln("FAIL: parse returned a Long or a BigDecimal");
+                    errln("FAIL: parse returned a Long");
                 }
             } catch (ParseException e) {
                 errln("parse of '" + defaultNonLong[i] + "' threw exception: " + e);
