@@ -161,8 +161,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps &macros, bool safe,
     bool isPercent = isNoUnit && unitIsPercent(macros.unit);
     bool isPermille = isNoUnit && unitIsPermille(macros.unit);
     bool isCldrUnit = !isCurrency && !isNoUnit;
-    bool isAccounting =
-            macros.sign == UNUM_SIGN_ACCOUNTING || macros.sign == UNUM_SIGN_ACCOUNTING_ALWAYS;
+    bool isAccounting = macros.sign == UNUM_SIGN_ACCOUNTING
+            || macros.sign == UNUM_SIGN_ACCOUNTING_ALWAYS
+            || macros.sign == UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO;
     CurrencyUnit currency(kDefaultCurrency, status);
     if (isCurrency) {
         currency = CurrencyUnit(macros.unit, status); // Restore CurrencyUnit from MeasureUnit

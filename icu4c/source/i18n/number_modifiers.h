@@ -216,31 +216,33 @@ class U_I18N_API ParameterizedModifier : public UMemory {
         }
     }
 
-    void adoptPositiveNegativeModifiers(const Modifier *positive, const Modifier *negative) {
-        mods[0] = positive;
-        mods[1] = negative;
+    void adoptPositiveNegativeModifiers(
+            const Modifier *positive, const Modifier *zero, const Modifier *negative) {
+        mods[2] = positive;
+        mods[1] = zero;
+        mods[0] = negative;
     }
 
     /** The modifier is ADOPTED. */
-    void adoptSignPluralModifier(bool isNegative, StandardPlural::Form plural, const Modifier *mod) {
-        mods[getModIndex(isNegative, plural)] = mod;
+    void adoptSignPluralModifier(int8_t signum, StandardPlural::Form plural, const Modifier *mod) {
+        mods[getModIndex(signum, plural)] = mod;
     }
 
     /** Returns a reference to the modifier; no ownership change. */
-    const Modifier *getModifier(bool isNegative) const {
-        return mods[isNegative ? 1 : 0];
+    const Modifier *getModifier(int8_t signum) const {
+        return mods[signum + 1];
     }
 
     /** Returns a reference to the modifier; no ownership change. */
-    const Modifier *getModifier(bool isNegative, StandardPlural::Form plural) const {
-        return mods[getModIndex(isNegative, plural)];
+    const Modifier *getModifier(int8_t signum, StandardPlural::Form plural) const {
+        return mods[getModIndex(signum, plural)];
     }
 
   private:
-    const Modifier *mods[2 * StandardPlural::COUNT];
+    const Modifier *mods[3 * StandardPlural::COUNT];
 
-    inline static int32_t getModIndex(bool isNegative, StandardPlural::Form plural) {
-        return static_cast<int32_t>(plural) * 2 + (isNegative ? 1 : 0);
+    inline static int32_t getModIndex(int8_t signum, StandardPlural::Form plural) {
+        return static_cast<int32_t>(plural) * 3 + (signum + 1);
     }
 };
 

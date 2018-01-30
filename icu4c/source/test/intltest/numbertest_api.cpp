@@ -1381,6 +1381,13 @@ void NumberFormatterApiTest::sign() {
             u"-444,444");
 
     assertFormatSingle(
+            u"Sign Auto Zero",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_AUTO),
+            Locale::getEnglish(),
+            0,
+            u"0");
+
+    assertFormatSingle(
             u"Sign Always Positive",
             NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ALWAYS),
             Locale::getEnglish(),
@@ -1393,6 +1400,13 @@ void NumberFormatterApiTest::sign() {
             Locale::getEnglish(),
             -444444,
             u"-444,444");
+
+    assertFormatSingle(
+            u"Sign Always Zero",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ALWAYS),
+            Locale::getEnglish(),
+            0,
+            u"+0");
 
     assertFormatSingle(
             u"Sign Never Positive",
@@ -1409,6 +1423,13 @@ void NumberFormatterApiTest::sign() {
             u"444,444");
 
     assertFormatSingle(
+            u"Sign Never Zero",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_NEVER),
+            Locale::getEnglish(),
+            0,
+            u"0");
+
+    assertFormatSingle(
             u"Sign Accounting Positive",
             NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING).unit(USD),
             Locale::getEnglish(),
@@ -1423,6 +1444,13 @@ void NumberFormatterApiTest::sign() {
             u"($444,444.00)");
 
     assertFormatSingle(
+            u"Sign Accounting Zero",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING).unit(USD),
+            Locale::getEnglish(),
+            0,
+            u"$0.00");
+
+    assertFormatSingle(
             u"Sign Accounting-Always Positive",
             NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_ALWAYS).unit(USD),
             Locale::getEnglish(),
@@ -1435,6 +1463,55 @@ void NumberFormatterApiTest::sign() {
             Locale::getEnglish(),
             -444444,
             u"($444,444.00)");
+
+    assertFormatSingle(
+            u"Sign Accounting-Always Zero",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_ALWAYS).unit(USD),
+            Locale::getEnglish(),
+            0,
+            u"+$0.00");
+
+    assertFormatSingle(
+            u"Sign Except-Zero Positive",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_EXCEPT_ZERO),
+            Locale::getEnglish(),
+            444444,
+            u"+444,444");
+
+    assertFormatSingle(
+            u"Sign Except-Zero Negative",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_EXCEPT_ZERO),
+            Locale::getEnglish(),
+            -444444,
+            u"-444,444");
+
+    assertFormatSingle(
+            u"Sign Except-Zero Zero",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_EXCEPT_ZERO),
+            Locale::getEnglish(),
+            0,
+            u"0");
+
+    assertFormatSingle(
+            u"Sign Accounting-Except-Zero Positive",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO).unit(USD),
+            Locale::getEnglish(),
+            444444,
+            u"+$444,444.00");
+
+    assertFormatSingle(
+            u"Sign Accounting-Except-Zero Negative",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO).unit(USD),
+            Locale::getEnglish(),
+            -444444,
+            u"($444,444.00)");
+
+    assertFormatSingle(
+            u"Sign Accounting-Except-Zero Zero",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO).unit(USD),
+            Locale::getEnglish(),
+            0,
+            u"$0.00");
 
     assertFormatSingle(
             u"Sign Accounting Negative Hidden",
