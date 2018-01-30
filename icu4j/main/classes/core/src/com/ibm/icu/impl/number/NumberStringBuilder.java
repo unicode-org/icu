@@ -172,6 +172,39 @@ public class NumberStringBuilder implements CharSequence {
     }
 
     /**
+     * Replaces the chars between startThis and endThis with the chars between startOther and endOther of
+     * the given CharSequence. Calling this method with startThis == endThis is equivalent to calling
+     * insert.
+     *
+     * @return The number of chars added, which may be negative if the removed segment is longer than the
+     *         length of the CharSequence segment that was inserted.
+     */
+    public int splice(
+            int startThis,
+            int endThis,
+            CharSequence sequence,
+            int startOther,
+            int endOther,
+            Field field) {
+        int thisLength = endThis - startThis;
+        int otherLength = endOther - startOther;
+        int count = otherLength - thisLength;
+        int position;
+        if (count > 0) {
+            // Overall, chars need to be added.
+            position = prepareForInsert(startThis, count);
+        } else {
+            // Overall, chars need to be removed or kept the same.
+            position = remove(startThis, -count);
+        }
+        for (int i = 0; i < otherLength; i++) {
+            chars[position + i] = sequence.charAt(startOther + i);
+            fields[position + i] = field;
+        }
+        return count;
+    }
+
+    /**
      * Appends the chars in the specified char array to the end of the string, and associates them with
      * the fields in the specified field array, which must have the same length as chars.
      *
@@ -311,6 +344,18 @@ public class NumberStringBuilder implements CharSequence {
             length += count;
         }
         return zero + index;
+    }
+
+    /**
+     * Removes the "count" chars starting at "index". Returns the position at which the chars were
+     * removed.
+     */
+    private int remove(int index, int count) {
+        int position = index + zero;
+        System.arraycopy(chars, position + count, chars, position, length - index - count);
+        System.arraycopy(fields, position + count, fields, position, length - index - count);
+        length -= count;
+        return position;
     }
 
     private int getCapacity() {

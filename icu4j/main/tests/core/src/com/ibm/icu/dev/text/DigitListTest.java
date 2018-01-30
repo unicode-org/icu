@@ -1,7 +1,7 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 
-package com.ibm.icu.text;
+package com.ibm.icu.dev.text;
 
 import org.junit.Before;
 import org.junit.Test;

@@ -6,9 +6,12 @@
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
-package com.ibm.icu.text;
+package com.ibm.icu.dev.text;
 
 import java.math.BigInteger;
+
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.NumberFormat;
 
 /**
  * <code>DigitList</code> handles the transcoding between numeric values and

@@ -64,7 +64,9 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedBreakIterator)
  * Constructs a RuleBasedBreakIterator that uses the already-created
  * tables object that is passed in as a parameter.
  */
-RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status) {
+RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status)
+ : fSCharIter(UnicodeString())
+{
     init(status);
     fData = new RBBIDataWrapper(data, status); // status checked in constructor
     if (U_FAILURE(status)) {return;}
@@ -80,7 +82,9 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode 
 //
 RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
                        uint32_t       ruleLength,
-                       UErrorCode     &status) {
+                       UErrorCode     &status)
+ : fSCharIter(UnicodeString())
+{
     init(status);
     if (U_FAILURE(status)) {
         return;
@@ -110,6 +114,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
 //
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &status)
+ : fSCharIter(UnicodeString())
 {
     init(status);
     fData = new RBBIDataWrapper(udm, status); // status checked in constructor
@@ -130,6 +135,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &sta
 RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
                                                 UParseError          &parseError,
                                                 UErrorCode           &status)
+ : fSCharIter(UnicodeString())
 {
     init(status);
     if (U_FAILURE(status)) {return;}
@@ -152,7 +158,9 @@ RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
 //                           Used when creating a RuleBasedBreakIterator from a set
 //                           of rules.
 //-------------------------------------------------------------------------------
-RuleBasedBreakIterator::RuleBasedBreakIterator() {
+RuleBasedBreakIterator::RuleBasedBreakIterator()
+ : fSCharIter(UnicodeString())
+{
     UErrorCode status = U_ZERO_ERROR;
     init(status);
 }
@@ -165,7 +173,8 @@ RuleBasedBreakIterator::RuleBasedBreakIterator() {
 //
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& other)
-: BreakIterator(other)
+: BreakIterator(other),
+  fSCharIter(UnicodeString())
 {
     UErrorCode status = U_ZERO_ERROR;
     this->init(status);
@@ -177,17 +186,13 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& oth
  * Destructor
  */
 RuleBasedBreakIterator::~RuleBasedBreakIterator() {
-    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+    if (fCharIter != &fSCharIter) {
         // fCharIter was adopted from the outside.
         delete fCharIter;
     }
     fCharIter = NULL;
-    delete fSCharIter;
-    fSCharIter = NULL;
-    delete fDCharIter;
-    fDCharIter = NULL;
 
-    utext_close(fText);
+    utext_close(&fText);
 
     if (fData != NULL) {
         fData->removeReference();
@@ -224,18 +229,22 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     }
     // TODO: clone fLanguageBreakEngines from "that"
     UErrorCode status = U_ZERO_ERROR;
-    fText = utext_clone(fText, that.fText, FALSE, TRUE, &status);
+    utext_clone(&fText, &that.fText, FALSE, TRUE, &status);
 
-    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+    if (fCharIter != &fSCharIter) {
         delete fCharIter;
     }
-    fCharIter = NULL;
+    fCharIter = &fSCharIter;
 
-    if (that.fCharIter != NULL ) {
+    if (that.fCharIter != NULL && that.fCharIter != &that.fSCharIter) {
         // This is a little bit tricky - it will intially appear that
         //  this->fCharIter is adopted, even if that->fCharIter was
         //  not adopted.  That's ok.
         fCharIter = that.fCharIter->clone();
+    }
+    fSCharIter = that.fSCharIter;
+    if (fCharIter == NULL) {
+        fCharIter = &fSCharIter;
     }
 
     if (fData != NULL) {
@@ -269,10 +278,8 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
 //
 //-----------------------------------------------------------------------------
 void RuleBasedBreakIterator::init(UErrorCode &status) {
-    fText                 = NULL;
+    fText                 = UTEXT_INITIALIZER;
     fCharIter             = NULL;
-    fSCharIter            = NULL;
-    fDCharIter            = NULL;
     fData                 = NULL;
     fPosition             = 0;
     fRuleStatusIndex      = 0;
@@ -292,10 +299,10 @@ void RuleBasedBreakIterator::init(UErrorCode &status) {
         return;
     }
 
-    fText            = utext_openUChars(NULL, NULL, 0, &status);
+    utext_openUChars(&fText, NULL, 0, &status);
     fDictionaryCache = new DictionaryCache(this, status);
     fBreakCache      = new BreakCache(this, status);
-    if (U_SUCCESS(status) && (fText == NULL || fDictionaryCache == NULL || fBreakCache == NULL)) {
+    if (U_SUCCESS(status) && (fDictionaryCache == NULL || fBreakCache == NULL)) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
 
@@ -344,7 +351,7 @@ RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
 
     const RuleBasedBreakIterator& that2 = (const RuleBasedBreakIterator&) that;
 
-    if (!utext_equals(fText, that2.fText)) {
+    if (!utext_equals(&fText, &that2.fText)) {
         // The two break iterators are operating on different text,
         //   or have a different iteration position.
         //   Note that fText's position is always the same as the break iterator's position.
@@ -385,7 +392,7 @@ void RuleBasedBreakIterator::setText(UText *ut, UErrorCode &status) {
     }
     fBreakCache->reset();
     fDictionaryCache->reset();
-    fText = utext_clone(fText, ut, FALSE, TRUE, &status);
+    utext_clone(&fText, ut, FALSE, TRUE, &status);
 
     // Set up a dummy CharacterIterator to be returned if anyone
     //   calls getText().  With input from UText, there is no reasonable
@@ -393,27 +400,20 @@ void RuleBasedBreakIterator::setText(UText *ut, UErrorCode &status) {
     //   Return one over an empty string instead - this is the closest
     //   we can come to signaling a failure.
     //   (GetText() is obsolete, this failure is sort of OK)
-    if (fDCharIter == NULL) {
-        static const UChar c = 0;
-        fDCharIter = new UCharCharacterIterator(&c, 0);
-        if (fDCharIter == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-    }
+    fSCharIter.setText(UnicodeString());
 
-    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+    if (fCharIter != &fSCharIter) {
         // existing fCharIter was adopted from the outside.  Delete it now.
         delete fCharIter;
     }
-    fCharIter = fDCharIter;
+    fCharIter = &fSCharIter;
 
     this->first();
 }
 
 
 UText *RuleBasedBreakIterator::getUText(UText *fillIn, UErrorCode &status) const {
-    UText *result = utext_clone(fillIn, fText, FALSE, TRUE, &status);
+    UText *result = utext_clone(fillIn, &fText, FALSE, TRUE, &status);
     return result;
 }
 
@@ -439,7 +439,7 @@ void
 RuleBasedBreakIterator::adoptText(CharacterIterator* newText) {
     // If we are holding a CharacterIterator adopted from a
     //   previous call to this function, delete it now.
-    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+    if (fCharIter != &fSCharIter) {
         delete fCharIter;
     }
 
@@ -450,9 +450,9 @@ RuleBasedBreakIterator::adoptText(CharacterIterator* newText) {
     if (newText==NULL || newText->startIndex() != 0) {
         // startIndex !=0 wants to be an error, but there's no way to report it.
         // Make the iterator text be an empty string.
-        fText = utext_openUChars(fText, NULL, 0, &status);
+        utext_openUChars(&fText, NULL, 0, &status);
     } else {
-        fText = utext_openCharacterIterator(fText, newText, &status);
+        utext_openCharacterIterator(&fText, newText, &status);
     }
     this->first();
 }
@@ -467,23 +467,19 @@ RuleBasedBreakIterator::setText(const UnicodeString& newText) {
     UErrorCode status = U_ZERO_ERROR;
     fBreakCache->reset();
     fDictionaryCache->reset();
-    fText = utext_openConstUnicodeString(fText, &newText, &status);
+    utext_openConstUnicodeString(&fText, &newText, &status);
 
     // Set up a character iterator on the string.
     //   Needed in case someone calls getText().
     //  Can not, unfortunately, do this lazily on the (probably never)
     //  call to getText(), because getText is const.
-    if (fSCharIter == NULL) {
-        fSCharIter = new StringCharacterIterator(newText);
-    } else {
-        fSCharIter->setText(newText);
-    }
+    fSCharIter.setText(newText);
 
-    if (fCharIter!=fSCharIter && fCharIter!=fDCharIter) {
+    if (fCharIter != &fSCharIter) {
         // old fCharIter was adopted from the outside.  Delete it.
         delete fCharIter;
     }
-    fCharIter = fSCharIter;
+    fCharIter = &fSCharIter;
 
     this->first();
 }
@@ -503,14 +499,14 @@ RuleBasedBreakIterator &RuleBasedBreakIterator::refreshInputText(UText *input, U
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return *this;
     }
-    int64_t pos = utext_getNativeIndex(fText);
+    int64_t pos = utext_getNativeIndex(&fText);
     //  Shallow read-only clone of the new UText into the existing input UText
-    fText = utext_clone(fText, input, FALSE, TRUE, &status);
+    utext_clone(&fText, input, FALSE, TRUE, &status);
     if (U_FAILURE(status)) {
         return *this;
     }
-    utext_setNativeIndex(fText, pos);
-    if (utext_getNativeIndex(fText) != pos) {
+    utext_setNativeIndex(&fText, pos);
+    if (utext_getNativeIndex(&fText) != pos) {
         // Sanity check.  The new input utext is supposed to have the exact same
         // contents as the old.  If we can't set to the same position, it doesn't.
         // The contents underlying the old utext might be invalid at this point,
@@ -540,7 +536,7 @@ int32_t RuleBasedBreakIterator::first(void) {
  * @return The text's past-the-end offset.
  */
 int32_t RuleBasedBreakIterator::last(void) {
-    int32_t endPos = (int32_t)utext_nativeLength(fText);
+    int32_t endPos = (int32_t)utext_nativeLength(&fText);
     UBool endShouldBeBoundary = isBoundary(endPos);      // Has side effect of setting iterator position.
     (void)endShouldBeBoundary;
     U_ASSERT(endShouldBeBoundary);
@@ -611,8 +607,8 @@ int32_t RuleBasedBreakIterator::following(int32_t startPos) {
 
     // Move requested offset to a code point start. It might be on a trail surrogate,
     // or on a trail byte if the input is UTF-8. Or it may be beyond the end of the text.
-    utext_setNativeIndex(fText, startPos);
-    startPos = (int32_t)utext_getNativeIndex(fText);
+    utext_setNativeIndex(&fText, startPos);
+    startPos = (int32_t)utext_getNativeIndex(&fText);
 
     UErrorCode status = U_ZERO_ERROR;
     fBreakCache->following(startPos, status);
@@ -626,15 +622,15 @@ int32_t RuleBasedBreakIterator::following(int32_t startPos) {
  * @return The position of the last boundary before the starting position.
  */
 int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
-    if (fText == NULL || offset > utext_nativeLength(fText)) {
+    if (offset > utext_nativeLength(&fText)) {
         return last();
     }
 
     // Move requested offset to a code point start. It might be on a trail surrogate,
     // or on a trail byte if the input is UTF-8.
 
-    utext_setNativeIndex(fText, offset);
-    int32_t adjustedOffset = utext_getNativeIndex(fText);
+    utext_setNativeIndex(&fText, offset);
+    int32_t adjustedOffset = utext_getNativeIndex(&fText);
 
     UErrorCode status = U_ZERO_ERROR;
     fBreakCache->preceding(adjustedOffset, status);
@@ -660,8 +656,8 @@ UBool RuleBasedBreakIterator::isBoundary(int32_t offset) {
     // Note that isBoundary() is always be false for offsets that are not on code point boundaries.
     // But we still need the side effect of leaving iteration at the following boundary.
 
-    utext_setNativeIndex(fText, offset);
-    int32_t adjustedOffset = utext_getNativeIndex(fText);
+    utext_setNativeIndex(&fText, offset);
+    int32_t adjustedOffset = utext_getNativeIndex(&fText);
 
     bool result = false;
     UErrorCode status = U_ZERO_ERROR;
@@ -669,7 +665,7 @@ UBool RuleBasedBreakIterator::isBoundary(int32_t offset) {
         result = (fBreakCache->current() == offset);
     }
 
-    if (result && adjustedOffset < offset && utext_char32At(fText, offset) == U_SENTINEL) {
+    if (result && adjustedOffset < offset && utext_char32At(&fText, offset) == U_SENTINEL) {
         // Original offset is beyond the end of the text. Return FALSE, it's not a boundary,
         // but the iteration position remains set to the end of the text, which is a boundary.
         return FALSE;
@@ -789,9 +785,9 @@ int32_t RuleBasedBreakIterator::handleNext() {
 
     // if we're already at the end of the text, return DONE.
     initialPosition = fPosition;
-    UTEXT_SETNATIVEINDEX(fText, initialPosition);
+    UTEXT_SETNATIVEINDEX(&fText, initialPosition);
     result          = initialPosition;
-    c               = UTEXT_NEXT32(fText);
+    c               = UTEXT_NEXT32(&fText);
     if (c==U_SENTINEL) {
         fDone = TRUE;
         return UBRK_DONE;
@@ -854,7 +850,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
 
        #ifdef RBBI_DEBUG
             if (gTrace) {
-                RBBIDebugPrintf("             %4ld   ", utext_getNativeIndex(fText));
+                RBBIDebugPrintf("             %4ld   ", utext_getNativeIndex(&fText));
                 if (0x20<=c && c<0x7f) {
                     RBBIDebugPrintf("\"%c\"  ", c);
                 } else {
@@ -878,7 +874,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
         if (row->fAccepting == -1) {
             // Match found, common case.
             if (mode != RBBI_START) {
-                result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
+                result = (int32_t)UTEXT_GETNATIVEINDEX(&fText);
             }
             fRuleStatusIndex = row->fTagIdx;   // Remember the break status (tag) values.
         }
@@ -896,7 +892,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
         int16_t rule = row->fLookAhead;
         if (rule != 0) {
             // At the position of a '/' in a look-ahead match. Record it.
-            int32_t  pos = (int32_t)UTEXT_GETNATIVEINDEX(fText);
+            int32_t  pos = (int32_t)UTEXT_GETNATIVEINDEX(&fText);
             lookAheadMatches.setPosition(rule, pos);
         }
 
@@ -912,7 +908,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
         //    the input position.  The next iteration will be processing the
         //    first real input character.
         if (mode == RBBI_RUN) {
-            c = UTEXT_NEXT32(fText);
+            c = UTEXT_NEXT32(&fText);
         } else {
             if (mode == RBBI_START) {
                 mode = RBBI_RUN;
@@ -926,9 +922,9 @@ int32_t RuleBasedBreakIterator::handleNext() {
     //   (This really indicates a defect in the break rules.  They should always match
     //    at least one character.)
     if (result == initialPosition) {
-        utext_setNativeIndex(fText, initialPosition);
-        utext_next32(fText);
-        result = (int32_t)utext_getNativeIndex(fText);
+        utext_setNativeIndex(&fText, initialPosition);
+        utext_next32(&fText);
+        result = (int32_t)utext_getNativeIndex(&fText);
         fRuleStatusIndex = 0;
     }
 
@@ -963,7 +959,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(int32_t fromPosition) {
     int32_t             initialPosition = 0;
 
     const RBBIStateTable *stateTable = fData->fSafeRevTable;
-    UTEXT_SETNATIVEINDEX(fText, fromPosition);
+    UTEXT_SETNATIVEINDEX(&fText, fromPosition);
     #ifdef RBBI_DEBUG
         if (gTrace) {
             RBBIDebugPuts("Handle Previous   pos   char  state category");
@@ -971,14 +967,14 @@ int32_t RuleBasedBreakIterator::handlePrevious(int32_t fromPosition) {
     #endif
 
     // if we're already at the start of the text, return DONE.
-    if (fText == NULL || fData == NULL || UTEXT_GETNATIVEINDEX(fText)==0) {
+    if (fData == NULL || UTEXT_GETNATIVEINDEX(&fText)==0) {
         return BreakIterator::DONE;
     }
 
     //  Set up the starting char.
-    initialPosition = (int32_t)UTEXT_GETNATIVEINDEX(fText);
+    initialPosition = (int32_t)UTEXT_GETNATIVEINDEX(&fText);
     result          = initialPosition;
-    c               = UTEXT_PREVIOUS32(fText);
+    c               = UTEXT_PREVIOUS32(&fText);
 
     //  Set the initial state for the state machine
     state = START_STATE;
@@ -1026,7 +1022,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(int32_t fromPosition) {
 
         #ifdef RBBI_DEBUG
             if (gTrace) {
-                RBBIDebugPrintf("             %4d   ", (int32_t)utext_getNativeIndex(fText));
+                RBBIDebugPrintf("             %4d   ", (int32_t)utext_getNativeIndex(&fText));
                 if (0x20<=c && c<0x7f) {
                     RBBIDebugPrintf("\"%c\"  ", c);
                 } else {
@@ -1047,7 +1043,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(int32_t fromPosition) {
 
         if (row->fAccepting == -1) {
             // Match found, common case.
-            result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
+            result = (int32_t)UTEXT_GETNATIVEINDEX(&fText);
         }
 
         int16_t completedRule = row->fAccepting;
@@ -1055,14 +1051,14 @@ int32_t RuleBasedBreakIterator::handlePrevious(int32_t fromPosition) {
             // Lookahead match is completed.
             int32_t lookaheadResult = lookAheadMatches.getPosition(completedRule);
             if (lookaheadResult >= 0) {
-                UTEXT_SETNATIVEINDEX(fText, lookaheadResult);
+                UTEXT_SETNATIVEINDEX(&fText, lookaheadResult);
                 return lookaheadResult;
             }
         }
         int16_t rule = row->fLookAhead;
         if (rule != 0) {
             // At the position of a '/' in a look-ahead match. Record it.
-            int32_t  pos = (int32_t)UTEXT_GETNATIVEINDEX(fText);
+            int32_t  pos = (int32_t)UTEXT_GETNATIVEINDEX(&fText);
             lookAheadMatches.setPosition(rule, pos);
         }
 
@@ -1078,7 +1074,7 @@ int32_t RuleBasedBreakIterator::handlePrevious(int32_t fromPosition) {
         //    the input position.  The next iteration will be processing the
         //    first real input character.
         if (mode == RBBI_RUN) {
-            c = UTEXT_PREVIOUS32(fText);
+            c = UTEXT_PREVIOUS32(&fText);
         } else {
             if (mode == RBBI_START) {
                 mode = RBBI_RUN;
@@ -1092,9 +1088,9 @@ int32_t RuleBasedBreakIterator::handlePrevious(int32_t fromPosition) {
     //   (This really indicates a defect in the break rules.  They should always match
     //    at least one character.)
     if (result == initialPosition) {
-        UTEXT_SETNATIVEINDEX(fText, initialPosition);
-        UTEXT_PREVIOUS32(fText);
-        result = (int32_t)UTEXT_GETNATIVEINDEX(fText);
+        UTEXT_SETNATIVEINDEX(&fText, initialPosition);
+        UTEXT_PREVIOUS32(&fText);
+        result = (int32_t)UTEXT_GETNATIVEINDEX(&fText);
     }
 
     #ifdef RBBI_DEBUG

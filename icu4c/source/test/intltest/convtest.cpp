@@ -733,6 +733,7 @@ ConversionTest::TestUTF8ToUTF8Overflow() {
     UChar *pivotSource = buffer16;
     UChar *pivotTarget = buffer16;
     const UChar *pivotLimit = buffer16 + UPRV_LENGTHOF(buffer16);
+    int32_t length;
 
     // Convert with insufficient target capacity.
     result[2] = 5;
@@ -741,7 +742,7 @@ ConversionTest::TestUTF8ToUTF8Overflow() {
                    buffer16, &pivotSource, &pivotTarget, pivotLimit,
                    FALSE, FALSE, errorCode);
     assertEquals("overflow", U_BUFFER_OVERFLOW_ERROR, errorCode.reset());
-    int32_t length = (int32_t)(target - result);
+    length = (int32_t)(target - result);
     assertEquals("number of bytes written", 2, length);
     assertEquals("next byte not clobbered", 5, result[2]);
 
@@ -789,6 +790,52 @@ ConversionTest::TestUTF8ToUTF8Overflow() {
     assertEquals("text2 5 bytes", 5, length);
     if (length == 5) {
         assertTrue("text2 result same as input", memcmp(text2, result, length) == 0);
+    }
+
+    ucnv_reset(cnv1.getAlias());
+    ucnv_reset(cnv2.getAlias());
+    memset(result, 0, sizeof(result));
+    static const char *illFormed = "\xf1\x91\x93\x96\x91\x94";  // U+514D6 + two more trail bytes
+    source = illFormed;
+    sourceLimit = illFormed + strlen(illFormed);
+    target = result;
+    pivotSource = pivotTarget = buffer16;
+
+    ucnv_setToUCallBack(cnv1.getAlias(), UCNV_TO_U_CALLBACK_STOP, nullptr, nullptr, nullptr, errorCode);
+
+    // Convert only two bytes and flush (but expect failure).
+    char errorBytes[10];
+    int8_t errorLength;
+    result[0] = 5;
+    ucnv_convertEx(cnv2.getAlias(), cnv1.getAlias(),
+                   &target, targetLimit, &source, source + 2,
+                   buffer16, &pivotSource, &pivotTarget, pivotLimit,
+                   FALSE, TRUE, errorCode);
+    assertEquals("illFormed truncated", U_TRUNCATED_CHAR_FOUND, errorCode.reset());
+    length = (int32_t)(target - result);
+    assertEquals("illFormed number of bytes written", 0, length);
+    errorLength = UPRV_LENGTHOF(errorBytes);
+    ucnv_getInvalidChars(cnv1.getAlias(), errorBytes, &errorLength, errorCode);
+    assertEquals("illFormed truncated errorLength", 2, (int32_t)errorLength);
+    if (errorLength == 2) {
+        assertEquals("illFormed truncated errorBytes", 0xf191, 
+                     ((int32_t)(uint8_t)errorBytes[0] << 8) | (uint8_t)errorBytes[1]);
+    }
+
+    // Continue conversion starting with a trail byte.
+    ucnv_convertEx(cnv2.getAlias(), cnv1.getAlias(),
+                   &target, targetLimit, &source, sourceLimit,
+                   buffer16, &pivotSource, &pivotTarget, pivotLimit,
+                   FALSE, TRUE, errorCode);
+
+    assertEquals("illFormed trail byte", U_ILLEGAL_CHAR_FOUND, errorCode.reset());
+    length = (int32_t)(target - result);
+    assertEquals("illFormed trail byte number of bytes written", 0, length);
+    errorLength = UPRV_LENGTHOF(errorBytes);
+    ucnv_getInvalidChars(cnv1.getAlias(), errorBytes, &errorLength, errorCode);
+    assertEquals("illFormed trail byte errorLength", 1, (int32_t)errorLength);
+    if (errorLength == 1) {
+        assertEquals("illFormed trail byte errorBytes", 0x93, (int32_t)(uint8_t)errorBytes[0]);
     }
 }
 

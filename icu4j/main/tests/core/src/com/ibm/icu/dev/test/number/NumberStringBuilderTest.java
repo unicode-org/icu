@@ -69,6 +69,50 @@ public class NumberStringBuilderTest {
     }
 
     @Test
+    public void testSplice() {
+        Object[][] cases = {
+                { "", 0, 0 },
+                { "abc", 0, 0 },
+                { "abc", 1, 1 },
+                { "abc", 1, 2 },
+                { "abc", 0, 2 },
+                { "abc", 0, 3 },
+                { "lorem ipsum dolor sit amet", 8, 8 },
+                { "lorem ipsum dolor sit amet", 8, 11 }, // 3 chars, equal to replacement "xyz"
+                { "lorem ipsum dolor sit amet", 8, 18 } }; // 10 chars, larger than several replacements
+
+        StringBuilder sb1 = new StringBuilder();
+        NumberStringBuilder sb2 = new NumberStringBuilder();
+        for (Object[] cas : cases) {
+            String input = (String) cas[0];
+            int startThis = (Integer) cas[1];
+            int endThis = (Integer) cas[2];
+            for (String replacement : EXAMPLE_STRINGS) {
+                // Test replacement with full string
+                sb1.setLength(0);
+                sb1.append(input);
+                sb1.replace(startThis, endThis, replacement);
+                sb2.clear();
+                sb2.append(input, null);
+                sb2.splice(startThis, endThis, replacement, 0, replacement.length(), null);
+                assertCharSequenceEquals(sb1, sb2);
+
+                // Test replacement with partial string
+                if (replacement.length() <= 2) {
+                    continue;
+                }
+                sb1.setLength(0);
+                sb1.append(input);
+                sb1.replace(startThis, endThis, replacement.substring(1, 3));
+                sb2.clear();
+                sb2.append(input, null);
+                sb2.splice(startThis, endThis, replacement, 1, 3, null);
+                assertCharSequenceEquals(sb1, sb2);
+            }
+        }
+    }
+
+    @Test
     public void testInsertAppendCodePoint() {
         int[] cases = { 0, 1, 60, 127, 128, 0x7fff, 0x8000, 0xffff, 0x10000, 0x1f000, 0x10ffff };
 
