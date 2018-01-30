@@ -125,13 +125,13 @@ class U_I18N_API MutablePatternModifier
     /**
      * Sets attributes of the current number being processed.
      *
-     * @param isNegative
-     *            Whether the number is negative.
+     * @param signum
+     *            -1 if negative; +1 if positive; or 0 if zero.
      * @param plural
-     *            The plural form of the number, required only if the pattern contains the triple currency sign, "¤¤¤"
-     *            (and as indicated by {@link #needsPlurals()}).
+     *            The plural form of the number, required only if the pattern contains the triple
+     *            currency sign, "¤¤¤" (and as indicated by {@link #needsPlurals()}).
      */
-    void setNumberProperties(bool isNegative, StandardPlural::Form plural);
+    void setNumberProperties(int8_t signum, StandardPlural::Form plural);
 
     /**
      * Returns true if the pattern represented by this MurkyModifier requires a plural keyword in order to localize.
@@ -211,7 +211,7 @@ class U_I18N_API MutablePatternModifier
     const PluralRules *rules;
 
     // Number details (initialized in setNumberProperties)
-    bool isNegative;
+    int8_t signum;
     StandardPlural::Form plural;
 
     // QuantityChain details (initialized in addToChain)

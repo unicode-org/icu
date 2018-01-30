@@ -191,7 +191,8 @@ public final class NumberFormatter {
         AUTO,
 
         /**
-         * Show the minus sign on negative numbers and the plus sign on positive numbers.
+         * Show the minus sign on negative numbers and the plus sign on positive numbers, including zero.
+         * To hide the sign on zero, see {@link #EXCEPT_ZERO}.
          *
          * @draft ICU 60
          * @provisional This API might change or be removed in a future release.
@@ -229,14 +230,36 @@ public final class NumberFormatter {
 
         /**
          * Use the locale-dependent accounting format on negative numbers, and show the plus sign on
-         * positive numbers. For more information on the accounting format, see the ACCOUNTING sign
-         * display strategy.
+         * positive numbers, including zero. For more information on the accounting format, see the
+         * ACCOUNTING sign display strategy. To hide the sign on zero, see
+         * {@link #ACCOUNTING_EXCEPT_ZERO}.
          *
          * @draft ICU 60
          * @provisional This API might change or be removed in a future release.
          * @see NumberFormatter
          */
         ACCOUNTING_ALWAYS,
+
+        /**
+         * Show the minus sign on negative numbers and the plus sign on positive numbers. Do not show a
+         * sign on zero.
+         *
+         * @draft ICU 61
+         * @provisional This API might change or be removed in a future release.
+         * @see NumberFormatter
+         */
+        EXCEPT_ZERO,
+
+        /**
+         * Use the locale-dependent accounting format on negative numbers, and show the plus sign on
+         * positive numbers. Do not show a sign on zero. For more information on the accounting format,
+         * see the ACCOUNTING sign display strategy.
+         *
+         * @draft ICU 61
+         * @provisional This API might change or be removed in a future release.
+         * @see NumberFormatter
+         */
+        ACCOUNTING_EXCEPT_ZERO,
     }
 
     /**

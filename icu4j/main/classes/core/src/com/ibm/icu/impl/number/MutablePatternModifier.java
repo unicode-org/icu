@@ -48,7 +48,7 @@ public class MutablePatternModifier
     PluralRules rules;
 
     // Number details
-    boolean isNegative;
+    int signum;
     StandardPlural plural;
 
     // QuantityChain details
@@ -121,15 +121,15 @@ public class MutablePatternModifier
     /**
      * Sets attributes of the current number being processed.
      *
-     * @param isNegative
-     *            Whether the number is negative.
+     * @param signum
+     *            -1 if negative; +1 if positive; or 0 if zero.
      * @param plural
      *            The plural form of the number, required only if the pattern contains the triple
      *            currency sign, "¤¤¤" (and as indicated by {@link #needsPlurals()}).
      */
-    public void setNumberProperties(boolean isNegative, StandardPlural plural) {
+    public void setNumberProperties(int signum, StandardPlural plural) {
         assert (plural != null) == needsPlurals();
-        this.isNegative = isNegative;
+        this.signum = signum;
         this.plural = plural;
     }
 
@@ -172,20 +172,24 @@ public class MutablePatternModifier
             // Slower path when we require the plural keyword.
             ParameterizedModifier pm = new ParameterizedModifier();
             for (StandardPlural plural : StandardPlural.VALUES) {
-                setNumberProperties(false, plural);
-                pm.setModifier(false, plural, createConstantModifier(a, b));
-                setNumberProperties(true, plural);
-                pm.setModifier(true, plural, createConstantModifier(a, b));
+                setNumberProperties(1, plural);
+                pm.setModifier(1, plural, createConstantModifier(a, b));
+                setNumberProperties(0, plural);
+                pm.setModifier(0, plural, createConstantModifier(a, b));
+                setNumberProperties(-1, plural);
+                pm.setModifier(-1, plural, createConstantModifier(a, b));
             }
             pm.freeze();
             return new ImmutablePatternModifier(pm, rules, parent);
         } else {
             // Faster path when plural keyword is not needed.
-            setNumberProperties(false, null);
+            setNumberProperties(1, null);
             Modifier positive = createConstantModifier(a, b);
-            setNumberProperties(true, null);
+            setNumberProperties(0, null);
+            Modifier zero = createConstantModifier(a, b);
+            setNumberProperties(-1, null);
             Modifier negative = createConstantModifier(a, b);
-            ParameterizedModifier pm = new ParameterizedModifier(positive, negative);
+            ParameterizedModifier pm = new ParameterizedModifier(positive, zero, negative);
             return new ImmutablePatternModifier(pm, null, parent);
         }
     }
@@ -236,13 +240,13 @@ public class MutablePatternModifier
 
         public void applyToMicros(MicroProps micros, DecimalQuantity quantity) {
             if (rules == null) {
-                micros.modMiddle = pm.getModifier(quantity.isNegative());
+                micros.modMiddle = pm.getModifier(quantity.signum());
             } else {
                 // TODO: Fix this. Avoid the copy.
                 DecimalQuantity copy = quantity.createCopy();
                 copy.roundToInfinity();
                 StandardPlural plural = copy.getStandardPlural(rules);
-                micros.modMiddle = pm.getModifier(quantity.isNegative(), plural);
+                micros.modMiddle = pm.getModifier(quantity.signum(), plural);
             }
         }
     }
@@ -260,9 +264,9 @@ public class MutablePatternModifier
             // TODO: Fix this. Avoid the copy.
             DecimalQuantity copy = fq.createCopy();
             micros.rounding.apply(copy);
-            setNumberProperties(fq.isNegative(), copy.getStandardPlural(rules));
+            setNumberProperties(fq.signum(), copy.getStandardPlural(rules));
         } else {
-            setNumberProperties(fq.isNegative(), null);
+            setNumberProperties(fq.signum(), null);
         }
         micros.modMiddle = this;
         return micros;
@@ -370,14 +374,18 @@ public class MutablePatternModifier
         inCharSequenceMode = true;
 
         // Should the output render '+' where '-' would normally appear in the pattern?
-        plusReplacesMinusSign = !isNegative
-                && (signDisplay == SignDisplay.ALWAYS || signDisplay == SignDisplay.ACCOUNTING_ALWAYS)
+        plusReplacesMinusSign = signum != -1
+                && (signDisplay == SignDisplay.ALWAYS
+                        || signDisplay == SignDisplay.ACCOUNTING_ALWAYS
+                        || (signum == 1
+                                && (signDisplay == SignDisplay.EXCEPT_ZERO
+                                        || signDisplay == SignDisplay.ACCOUNTING_EXCEPT_ZERO)))
                 && patternInfo.positiveHasPlusSign() == false;
 
         // Should we use the affix from the negative subpattern? (If not, we will use the positive
         // subpattern.)
         boolean useNegativeAffixPattern = patternInfo.hasNegativeSubpattern()
-                && (isNegative || (patternInfo.negativeHasMinusSign() && plusReplacesMinusSign));
+                && (signum == -1 || (patternInfo.negativeHasMinusSign() && plusReplacesMinusSign));
 
         // Resolve the flags for the affix pattern.
         flags = 0;
@@ -395,7 +403,7 @@ public class MutablePatternModifier
         // Should we prepend a sign to the pattern?
         if (!isPrefix || useNegativeAffixPattern) {
             prependSign = false;
-        } else if (isNegative) {
+        } else if (signum == -1) {
             prependSign = signDisplay != SignDisplay.NEVER;
         } else {
             prependSign = plusReplacesMinusSign;

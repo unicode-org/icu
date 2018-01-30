@@ -503,6 +503,11 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
     return (flags & NEGATIVE_FLAG) != 0;
   }
 
+  @Override
+  public int signum() {
+      return isNegative() ? -1 : isZero() ? 0 : 1;
+  }
+
   private void setNegative(boolean isNegative) {
     flags = (flags & (~NEGATIVE_FLAG)) | (isNegative ? NEGATIVE_FLAG : 0);
   }
