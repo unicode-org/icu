@@ -174,9 +174,14 @@ public class NumberParserImpl {
         if (properties.getParseIntegerOnly()) {
             parseFlags |= ParsingUtils.PARSE_FLAG_INTEGER_ONLY;
         }
+        if (properties.getSignAlwaysShown()) {
+            parseFlags |= ParsingUtils.PARSE_FLAG_PLUS_SIGN_ALLOWED;
+        }
         if (isStrict) {
             parseFlags |= ParsingUtils.PARSE_FLAG_STRICT_GROUPING_SIZE;
             parseFlags |= ParsingUtils.PARSE_FLAG_STRICT_SEPARATORS;
+            parseFlags |= ParsingUtils.PARSE_FLAG_USE_FULL_AFFIXES;
+            parseFlags |= ParsingUtils.PARSE_FLAG_EXACT_AFFIX;
         } else {
             parseFlags |= ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;
         }
@@ -217,15 +222,17 @@ public class NumberParserImpl {
         /// OTHER STANDARD MATCHERS ///
         ///////////////////////////////
 
-        if (!isStrict
-                || patternInfo.containsSymbolType(AffixUtils.TYPE_PLUS_SIGN)
-                || properties.getSignAlwaysShown()) {
-            parser.addMatcher(PlusSignMatcher.getInstance(symbols, false));
+        if (!isStrict) {
+            if (!isStrict
+                    || patternInfo.containsSymbolType(AffixUtils.TYPE_PLUS_SIGN)
+                    || properties.getSignAlwaysShown()) {
+                parser.addMatcher(PlusSignMatcher.getInstance(symbols, false));
+            }
+            parser.addMatcher(MinusSignMatcher.getInstance(symbols, false));
+            parser.addMatcher(NanMatcher.getInstance(symbols, parseFlags));
+            parser.addMatcher(PercentMatcher.getInstance(symbols));
+            parser.addMatcher(PermilleMatcher.getInstance(symbols));
         }
-        parser.addMatcher(MinusSignMatcher.getInstance(symbols, false));
-        parser.addMatcher(NanMatcher.getInstance(symbols, parseFlags));
-        parser.addMatcher(PercentMatcher.getInstance(symbols));
-        parser.addMatcher(PermilleMatcher.getInstance(symbols));
         parser.addMatcher(InfinityMatcher.getInstance(symbols));
         String padString = properties.getPadString();
         if (padString != null && !ignorables.getSet().contains(padString)) {

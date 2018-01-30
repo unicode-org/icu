@@ -7,8 +7,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Objects;
 
+import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.AffixUtils;
+import com.ibm.icu.impl.number.PatternStringUtils;
+import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -41,13 +44,10 @@ public class AffixMatcher implements NumberParseMatcher {
         }
     };
 
-    public static void newGenerate(
+    private static boolean isInteresting(
             AffixPatternProvider patternInfo,
-            NumberParserImpl output,
-            MatcherFactory factory,
             IgnorablesMatcher ignorables,
             int parseFlags) {
-
         String posPrefixString = patternInfo.getString(AffixPatternProvider.FLAG_POS_PREFIX);
         String posSuffixString = patternInfo.getString(AffixPatternProvider.FLAG_POS_SUFFIX);
         String negPrefixString = null;
@@ -70,44 +70,78 @@ public class AffixMatcher implements NumberParseMatcher {
                 && !AffixUtils.containsType(negSuffixString, AffixUtils.TYPE_MINUS_SIGN)) {
             // The affixes contain only symbols and ignorables.
             // No need to generate affix matchers.
+            return false;
+        }
+        return true;
+    }
+
+    public static void newGenerate(
+            AffixPatternProvider patternInfo,
+            NumberParserImpl output,
+            MatcherFactory factory,
+            IgnorablesMatcher ignorables,
+            int parseFlags) {
+        if (!isInteresting(patternInfo, ignorables, parseFlags)) {
             return;
         }
 
         // The affixes have interesting characters, or we are in strict mode.
         // Use initial capacity of 6, the highest possible number of AffixMatchers.
+        StringBuilder sb = new StringBuilder();
         ArrayList<AffixMatcher> matchers = new ArrayList<AffixMatcher>(6);
         boolean includeUnpaired = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES);
+        SignDisplay signDisplay = (0 != (parseFlags & ParsingUtils.PARSE_FLAG_PLUS_SIGN_ALLOWED))
+                ? SignDisplay.ALWAYS
+                : SignDisplay.NEVER;
 
-        AffixPatternMatcher posPrefix = AffixPatternMatcher
-                .fromAffixPattern(posPrefixString, factory, parseFlags);
-        AffixPatternMatcher posSuffix = AffixPatternMatcher
-                .fromAffixPattern(posSuffixString, factory, parseFlags);
+        AffixPatternMatcher posPrefix = null;
+        AffixPatternMatcher posSuffix = null;
 
-        // Note: it is indeed possible for posPrefix and posSuffix to both be null.
-        // We still need to add that matcher for strict mode to work.
-        matchers.add(getInstance(posPrefix, posSuffix, 0));
-        if (includeUnpaired && posPrefix != null && posSuffix != null) {
-            matchers.add(getInstance(posPrefix, null, 0));
-            matchers.add(getInstance(null, posSuffix, 0));
-        }
+        // Pre-process the affix strings to resolve LDML rules like sign display.
+        for (int signum = 1; signum >= -1; signum--) {
+            // Generate Prefix
+            PatternStringUtils.patternInfoToStringBuilder(patternInfo,
+                    true,
+                    signum,
+                    signDisplay,
+                    StandardPlural.OTHER,
+                    false,
+                    sb);
+            AffixPatternMatcher prefix = AffixPatternMatcher
+                    .fromAffixPattern(sb.toString(), factory, parseFlags);
 
-        if (patternInfo.hasNegativeSubpattern()) {
-            AffixPatternMatcher negPrefix = AffixPatternMatcher
-                    .fromAffixPattern(negPrefixString, factory, parseFlags);
-            AffixPatternMatcher negSuffix = AffixPatternMatcher
-                    .fromAffixPattern(negSuffixString, factory, parseFlags);
+            // Generate Suffix
+            PatternStringUtils.patternInfoToStringBuilder(patternInfo,
+                    false,
+                    signum,
+                    signDisplay,
+                    StandardPlural.OTHER,
+                    false,
+                    sb);
+            AffixPatternMatcher suffix = AffixPatternMatcher
+                    .fromAffixPattern(sb.toString(), factory, parseFlags);
 
-            if (Objects.equals(negPrefix, posPrefix) && Objects.equals(negSuffix, posSuffix)) {
-                // No-op: favor the positive AffixMatcher
-            } else {
-                matchers.add(getInstance(negPrefix, negSuffix, ParsedNumber.FLAG_NEGATIVE));
-                if (includeUnpaired && negPrefix != null && negSuffix != null) {
-                    if (!negPrefix.equals(posPrefix)) {
-                        matchers.add(getInstance(negPrefix, null, ParsedNumber.FLAG_NEGATIVE));
-                    }
-                    if (!negSuffix.equals(posSuffix)) {
-                        matchers.add(getInstance(null, negSuffix, ParsedNumber.FLAG_NEGATIVE));
-                    }
+            if (signum == 1) {
+                posPrefix = prefix;
+                posSuffix = suffix;
+            } else if (Objects.equals(prefix, posPrefix) && Objects.equals(suffix, posSuffix)) {
+                // Skip adding these matchers (we already have equivalents)
+                continue;
+            }
+
+            // Flags for setting in the ParsedNumber
+            int flags = (signum == -1) ? ParsedNumber.FLAG_NEGATIVE : 0;
+
+            // Note: it is indeed possible for posPrefix and posSuffix to both be null.
+            // We still need to add that matcher for strict mode to work.
+            matchers.add(getInstance(prefix, suffix, flags));
+            if (includeUnpaired && prefix != null && suffix != null) {
+                // The following if statements are designed to prevent adding two identical matchers.
+                if (signum == 1 || !Objects.equals(prefix, posPrefix)) {
+                    matchers.add(getInstance(prefix, null, flags));
+                }
+                if (signum == 1 || !Objects.equals(suffix, posSuffix)) {
+                    matchers.add(getInstance(null, suffix, flags));
                 }
             }
         }

@@ -225,6 +225,9 @@ public class NumberFormatDataDrivenTest {
           if (tuple.negativeSuffix != null) {
             fmt.setNegativeSuffix(tuple.negativeSuffix);
           }
+          if (tuple.signAlwaysShown != null) {
+            // Not supported.
+          }
           if (tuple.localizedPattern != null) {
             fmt.applyLocalizedPattern(tuple.localizedPattern);
           }
@@ -406,6 +409,9 @@ public class NumberFormatDataDrivenTest {
           if (tuple.negativeSuffix != null) {
             fmt.setNegativeSuffix(tuple.negativeSuffix);
           }
+          if (tuple.signAlwaysShown != null) {
+            // Not supported.
+          }
           if (tuple.localizedPattern != null) {
             fmt.applyLocalizedPattern(tuple.localizedPattern);
           }
@@ -509,6 +515,9 @@ public class NumberFormatDataDrivenTest {
     }
     if (tuple.negativeSuffix != null) {
       properties.setNegativeSuffix(tuple.negativeSuffix);
+    }
+    if (tuple.signAlwaysShown != null) {
+      properties.setSignAlwaysShown(tuple.signAlwaysShown != 0);
     }
     if (tuple.localizedPattern != null) {
       DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(tuple.locale);
