@@ -106,7 +106,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
             Currency currency,
             UnitWidth unitWidth,
             PluralRules rules) {
-        // assert (rules != null) == needsPlurals();
+        assert (rules != null) == needsPlurals();
         this.symbols = symbols;
         this.currency = currency;
         this.unitWidth = unitWidth;
@@ -282,19 +282,19 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
 
     @Override
     public int getPrefixLength() {
-        // Enter and exit CharSequence Mode to get the length.
+        // Render the affix to get the length
         prepareAffix(true);
-        int result = AffixUtils.unescapedCodePointCount(currentAffix, this); // prefix length
+        int result = AffixUtils.unescapedCount(currentAffix, true, this); // prefix length
         return result;
     }
 
     @Override
     public int getCodePointCount() {
-        // Enter and exit CharSequence Mode to get the length.
+        // Render the affixes to get the length
         prepareAffix(true);
-        int result = AffixUtils.unescapedCodePointCount(currentAffix, this); // prefix length
+        int result = AffixUtils.unescapedCount(currentAffix, false, this); // prefix length
         prepareAffix(false);
-        result += AffixUtils.unescapedCodePointCount(currentAffix, this); // suffix length
+        result += AffixUtils.unescapedCount(currentAffix, false, this); // suffix length
         return result;
     }
 

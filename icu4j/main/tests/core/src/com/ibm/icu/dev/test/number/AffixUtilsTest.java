@@ -76,6 +76,7 @@ public class AffixUtilsTest {
         Object[][] cases = {
                 { "", false, 0, "" },
                 { "abc", false, 3, "abc" },
+                { "📺", false, 1, "📺" },
                 { "-", false, 1, "−" },
                 { "-!", false, 2, "−!" },
                 { "+", false, 1, "\u061C+" },
@@ -120,8 +121,13 @@ public class AffixUtilsTest {
             String actual = unescapeWithDefaults(input);
             assertEquals("Output on <" + input + ">", output, actual);
 
-            int ulength = AffixUtils.unescapedCodePointCount(input, DEFAULT_SYMBOL_PROVIDER);
+            int ulength = AffixUtils.unescapedCount(input, true, DEFAULT_SYMBOL_PROVIDER);
             assertEquals("Unescaped length on <" + input + ">", output.length(), ulength);
+
+            int ucpcount = AffixUtils.unescapedCount(input, false, DEFAULT_SYMBOL_PROVIDER);
+            assertEquals("Unescaped length on <" + input + ">",
+                    output.codePointCount(0, output.length()),
+                    ucpcount);
         }
     }
 
@@ -211,24 +217,20 @@ public class AffixUtilsTest {
 
     @Test
     public void testWithoutSymbolsOrIgnorables() {
-        String[][] cases = {
-                { "", "" },
-                { "-", "" },
-                { " ", "" },
-                { "'-'", "-" },
-                { " a + b ", "a  b" },
-                { "-a+b%c‰d¤e¤¤f¤¤¤g¤¤¤¤h¤¤¤¤¤i", "abcdefghi" }, };
+        Object[][] cases = {
+                { "", true },
+                { "-", true },
+                { " ", true },
+                { "'-'", false },
+                { " a + b ", false },
+                { "-a+b%c‰d¤e¤¤f¤¤¤g¤¤¤¤h¤¤¤¤¤i", false }, };
 
         UnicodeSet ignorables = new UnicodeSet("[:whitespace:]");
-        StringBuilder sb = new StringBuilder();
-        for (String[] cas : cases) {
-            String input = cas[0];
-            String expected = cas[1];
-            sb.setLength(0);
-            AffixUtils.trimSymbolsAndIgnorables(input, ignorables, sb);
-            assertEquals("Removing symbols from: " + input, expected, sb.toString());
+        for (Object[] cas : cases) {
+            String input = (String) cas[0];
+            boolean expected = (Boolean) cas[1];
             assertEquals("Contains only symbols and ignorables: " + input,
-                    sb.length() == 0,
+                    expected,
                     AffixUtils.containsOnlySymbolsAndIgnorables(input, ignorables));
         }
     }

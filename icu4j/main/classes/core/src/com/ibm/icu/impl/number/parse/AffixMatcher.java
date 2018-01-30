@@ -5,9 +5,9 @@ package com.ibm.icu.impl.number.parse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Objects;
 
 import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.PatternStringUtils;
@@ -124,7 +124,7 @@ public class AffixMatcher implements NumberParseMatcher {
             if (signum == 1) {
                 posPrefix = prefix;
                 posSuffix = suffix;
-            } else if (Objects.equals(prefix, posPrefix) && Objects.equals(suffix, posSuffix)) {
+            } else if (Utility.equals(prefix, posPrefix) && Utility.equals(suffix, posSuffix)) {
                 // Skip adding these matchers (we already have equivalents)
                 continue;
             }
@@ -137,10 +137,10 @@ public class AffixMatcher implements NumberParseMatcher {
             matchers.add(getInstance(prefix, suffix, flags));
             if (includeUnpaired && prefix != null && suffix != null) {
                 // The following if statements are designed to prevent adding two identical matchers.
-                if (signum == 1 || !Objects.equals(prefix, posPrefix)) {
+                if (signum == 1 || !Utility.equals(prefix, posPrefix)) {
                     matchers.add(getInstance(prefix, null, flags));
                 }
-                if (signum == 1 || !Objects.equals(suffix, posSuffix)) {
+                if (signum == 1 || !Utility.equals(suffix, posSuffix)) {
                     matchers.add(getInstance(null, suffix, flags));
                 }
             }
@@ -255,14 +255,14 @@ public class AffixMatcher implements NumberParseMatcher {
             return false;
         }
         AffixMatcher other = (AffixMatcher) _other;
-        return Objects.equals(prefix, other.prefix)
-                && Objects.equals(suffix, other.suffix)
+        return Utility.equals(prefix, other.prefix)
+                && Utility.equals(suffix, other.suffix)
                 && flags == other.flags;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(prefix) ^ Objects.hashCode(suffix) ^ flags;
+        return Utility.hashCode(prefix) ^ Utility.hashCode(suffix) ^ flags;
     }
 
     @Override
