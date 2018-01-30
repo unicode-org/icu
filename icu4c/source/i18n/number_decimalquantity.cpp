@@ -265,6 +265,10 @@ bool DecimalQuantity::isNegative() const {
     return (flags & NEGATIVE_FLAG) != 0;
 }
 
+int8_t DecimalQuantity::signum() const {
+    return isNegative() ? -1 : isZero() ? 0 : 1;
+}
+
 bool DecimalQuantity::isInfinite() const {
     return (flags & INFINITY_FLAG) != 0;
 }

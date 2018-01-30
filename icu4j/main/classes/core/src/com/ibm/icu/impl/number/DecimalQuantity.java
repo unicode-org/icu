@@ -108,6 +108,9 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
     /** @return Whether the value represented by this {@link DecimalQuantity} is less than zero. */
     public boolean isNegative();
 
+    /** @return -1 if the value is negative; 1 if positive; or 0 if zero. */
+    public int signum();
+
     /** @return Whether the value represented by this {@link DecimalQuantity} is infinite. */
     @Override
     public boolean isInfinite();

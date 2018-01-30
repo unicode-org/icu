@@ -32,13 +32,19 @@ public class MutablePatternModifierTest {
                 UnitWidth.SHORT,
                 null);
 
-        mod.setNumberProperties(false, null);
+        mod.setNumberProperties(1, null);
         assertEquals("a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
         mod.setPatternAttributes(SignDisplay.ALWAYS, false);
         assertEquals("+a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
-        mod.setNumberProperties(true, null);
+        mod.setNumberProperties(0, null);
+        assertEquals("+a", getPrefix(mod));
+        assertEquals("b", getSuffix(mod));
+        mod.setPatternAttributes(SignDisplay.EXCEPT_ZERO, false);
+        assertEquals("a", getPrefix(mod));
+        assertEquals("b", getSuffix(mod));
+        mod.setNumberProperties(-1, null);
         assertEquals("-a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
         mod.setPatternAttributes(SignDisplay.NEVER, false);
@@ -47,13 +53,19 @@ public class MutablePatternModifierTest {
 
         mod.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b;c-0d"));
         mod.setPatternAttributes(SignDisplay.AUTO, false);
-        mod.setNumberProperties(false, null);
+        mod.setNumberProperties(1, null);
         assertEquals("a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
         mod.setPatternAttributes(SignDisplay.ALWAYS, false);
         assertEquals("c+", getPrefix(mod));
         assertEquals("d", getSuffix(mod));
-        mod.setNumberProperties(true, null);
+        mod.setNumberProperties(0, null);
+        assertEquals("c+", getPrefix(mod));
+        assertEquals("d", getSuffix(mod));
+        mod.setPatternAttributes(SignDisplay.EXCEPT_ZERO, false);
+        assertEquals("a", getPrefix(mod));
+        assertEquals("b", getSuffix(mod));
+        mod.setNumberProperties(-1, null);
         assertEquals("c-", getPrefix(mod));
         assertEquals("d", getSuffix(mod));
         mod.setPatternAttributes(SignDisplay.NEVER, false);

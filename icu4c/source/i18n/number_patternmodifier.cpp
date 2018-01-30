@@ -38,8 +38,8 @@ MutablePatternModifier::setSymbols(const DecimalFormatSymbols *symbols, const Cu
     this->rules = rules;
 }
 
-void MutablePatternModifier::setNumberProperties(bool isNegative, StandardPlural::Form plural) {
-    this->isNegative = isNegative;
+void MutablePatternModifier::setNumberProperties(int8_t signum, StandardPlural::Form plural) {
+    this->signum = signum;
     this->plural = plural;
 }
 
@@ -74,10 +74,12 @@ MutablePatternModifier::createImmutableAndChain(const MicroPropsGenerator *paren
     if (needsPlurals()) {
         // Slower path when we require the plural keyword.
         for (StandardPlural::Form plural : STANDARD_PLURAL_VALUES) {
-            setNumberProperties(false, plural);
-            pm->adoptSignPluralModifier(false, plural, createConstantModifier(status));
-            setNumberProperties(true, plural);
-            pm->adoptSignPluralModifier(true, plural, createConstantModifier(status));
+            setNumberProperties(1, plural);
+            pm->adoptSignPluralModifier(1, plural, createConstantModifier(status));
+            setNumberProperties(0, plural);
+            pm->adoptSignPluralModifier(0, plural, createConstantModifier(status));
+            setNumberProperties(-1, plural);
+            pm->adoptSignPluralModifier(-1, plural, createConstantModifier(status));
         }
         if (U_FAILURE(status)) {
             delete pm;
@@ -86,11 +88,13 @@ MutablePatternModifier::createImmutableAndChain(const MicroPropsGenerator *paren
         return new ImmutablePatternModifier(pm, rules, parent);  // adopts pm
     } else {
         // Faster path when plural keyword is not needed.
-        setNumberProperties(false, StandardPlural::Form::COUNT);
+        setNumberProperties(1, StandardPlural::Form::COUNT);
         Modifier *positive = createConstantModifier(status);
-        setNumberProperties(true, StandardPlural::Form::COUNT);
+        setNumberProperties(0, StandardPlural::Form::COUNT);
+        Modifier *zero = createConstantModifier(status);
+        setNumberProperties(-1, StandardPlural::Form::COUNT);
         Modifier *negative = createConstantModifier(status);
-        pm->adoptPositiveNegativeModifiers(positive, negative);
+        pm->adoptPositiveNegativeModifiers(positive, zero, negative);
         if (U_FAILURE(status)) {
             delete pm;
             return nullptr;
@@ -123,13 +127,13 @@ void ImmutablePatternModifier::processQuantity(DecimalQuantity &quantity, MicroP
 
 void ImmutablePatternModifier::applyToMicros(MicroProps &micros, DecimalQuantity &quantity) const {
     if (rules == nullptr) {
-        micros.modMiddle = pm->getModifier(quantity.isNegative());
+        micros.modMiddle = pm->getModifier(quantity.signum());
     } else {
         // TODO: Fix this. Avoid the copy.
         DecimalQuantity copy(quantity);
         copy.roundToInfinity();
         StandardPlural::Form plural = copy.getStandardPlural(rules);
-        micros.modMiddle = pm->getModifier(quantity.isNegative(), plural);
+        micros.modMiddle = pm->getModifier(quantity.signum(), plural);
     }
 }
 
@@ -149,9 +153,9 @@ void MutablePatternModifier::processQuantity(DecimalQuantity &fq, MicroProps &mi
         // TODO: Fix this. Avoid the copy.
         DecimalQuantity copy(fq);
         micros.rounding.apply(copy, status);
-        nonConstThis->setNumberProperties(fq.isNegative(), copy.getStandardPlural(rules));
+        nonConstThis->setNumberProperties(fq.signum(), copy.getStandardPlural(rules));
     } else {
-        nonConstThis->setNumberProperties(fq.isNegative(), StandardPlural::Form::COUNT);
+        nonConstThis->setNumberProperties(fq.signum(), StandardPlural::Form::COUNT);
     }
     micros.modMiddle = this;
 }
@@ -278,14 +282,17 @@ void MutablePatternModifier::enterCharSequenceMode(bool isPrefix) {
     inCharSequenceMode = true;
 
     // Should the output render '+' where '-' would normally appear in the pattern?
-    plusReplacesMinusSign = !isNegative && (
-            signDisplay == UNUM_SIGN_ALWAYS ||
-            signDisplay == UNUM_SIGN_ACCOUNTING_ALWAYS) &&
-                            patternInfo->positiveHasPlusSign() == false;
+    plusReplacesMinusSign = signum != -1
+            && (signDisplay == UNUM_SIGN_ALWAYS
+                    || signDisplay == UNUM_SIGN_ACCOUNTING_ALWAYS
+                    || (signum == 1
+                            && (signDisplay == UNUM_SIGN_EXCEPT_ZERO
+                                    || signDisplay == UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO)))
+            && patternInfo->positiveHasPlusSign() == false;
 
     // Should we use the affix from the negative subpattern? (If not, we will use the positive subpattern.)
     bool useNegativeAffixPattern = patternInfo->hasNegativeSubpattern() && (
-            isNegative || (patternInfo->negativeHasMinusSign() && plusReplacesMinusSign));
+            signum == -1 || (patternInfo->negativeHasMinusSign() && plusReplacesMinusSign));
 
     // Resolve the flags for the affix pattern.
     fFlags = 0;
@@ -303,7 +310,7 @@ void MutablePatternModifier::enterCharSequenceMode(bool isPrefix) {
     // Should we prepend a sign to the pattern?
     if (!isPrefix || useNegativeAffixPattern) {
         prependSign = false;
-    } else if (isNegative) {
+    } else if (signum == -1) {
         prependSign = signDisplay != UNUM_SIGN_NEVER;
     } else {
         prependSign = plusReplacesMinusSign;

@@ -115,7 +115,8 @@ class NumberFormatterImpl {
         boolean isPermille = isNoUnit && unitIsPermille(macros.unit);
         boolean isCldrUnit = !isCurrency && !isNoUnit;
         boolean isAccounting = macros.sign == SignDisplay.ACCOUNTING
-                || macros.sign == SignDisplay.ACCOUNTING_ALWAYS;
+                || macros.sign == SignDisplay.ACCOUNTING_ALWAYS
+                || macros.sign == SignDisplay.ACCOUNTING_EXCEPT_ZERO;
         Currency currency = isCurrency ? (Currency) macros.unit : DEFAULT_CURRENCY;
         UnitWidth unitWidth = UnitWidth.SHORT;
         if (macros.unitWidth != null) {

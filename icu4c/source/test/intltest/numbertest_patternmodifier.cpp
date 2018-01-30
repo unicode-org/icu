@@ -31,13 +31,19 @@ void PatternModifierTest::testBasic() {
     assertSuccess("Spot 2", status);
     mod.setSymbols(&symbols, currency, UNUM_UNIT_WIDTH_SHORT, nullptr);
 
-    mod.setNumberProperties(false, StandardPlural::Form::COUNT);
+    mod.setNumberProperties(1, StandardPlural::Form::COUNT);
     assertEquals("Pattern a0b", u"a", getPrefix(mod, status));
     assertEquals("Pattern a0b", u"b", getSuffix(mod, status));
     mod.setPatternAttributes(UNUM_SIGN_ALWAYS, false);
     assertEquals("Pattern a0b", u"+a", getPrefix(mod, status));
     assertEquals("Pattern a0b", u"b", getSuffix(mod, status));
-    mod.setNumberProperties(true, StandardPlural::Form::COUNT);
+    mod.setNumberProperties(0, StandardPlural::Form::COUNT);
+    assertEquals("Pattern a0b", u"+a", getPrefix(mod, status));
+    assertEquals("Pattern a0b", u"b", getSuffix(mod, status));
+    mod.setPatternAttributes(UNUM_SIGN_EXCEPT_ZERO, false);
+    assertEquals("Pattern a0b", u"a", getPrefix(mod, status));
+    assertEquals("Pattern a0b", u"b", getSuffix(mod, status));
+    mod.setNumberProperties(-1, StandardPlural::Form::COUNT);
     assertEquals("Pattern a0b", u"-a", getPrefix(mod, status));
     assertEquals("Pattern a0b", u"b", getSuffix(mod, status));
     mod.setPatternAttributes(UNUM_SIGN_NEVER, false);
@@ -50,20 +56,24 @@ void PatternModifierTest::testBasic() {
     assertSuccess("Spot 4", status);
     mod.setPatternInfo(&patternInfo2);
     mod.setPatternAttributes(UNUM_SIGN_AUTO, false);
-    mod.setNumberProperties(false, StandardPlural::Form::COUNT);
+    mod.setNumberProperties(1, StandardPlural::Form::COUNT);
     assertEquals("Pattern a0b;c-0d", u"a", getPrefix(mod, status));
     assertEquals("Pattern a0b;c-0d", u"b", getSuffix(mod, status));
     mod.setPatternAttributes(UNUM_SIGN_ALWAYS, false);
     assertEquals("Pattern a0b;c-0d", u"c+", getPrefix(mod, status));
     assertEquals("Pattern a0b;c-0d", u"d", getSuffix(mod, status));
-    mod.setNumberProperties(true, StandardPlural::Form::COUNT);
+    mod.setNumberProperties(0, StandardPlural::Form::COUNT);
+    assertEquals("Pattern a0b;c-0d", u"c+", getPrefix(mod, status));
+    assertEquals("Pattern a0b;c-0d", u"d", getSuffix(mod, status));
+    mod.setPatternAttributes(UNUM_SIGN_EXCEPT_ZERO, false);
+    assertEquals("Pattern a0b;c-0d", u"a", getPrefix(mod, status));
+    assertEquals("Pattern a0b;c-0d", u"b", getSuffix(mod, status));
+    mod.setNumberProperties(-1, StandardPlural::Form::COUNT);
     assertEquals("Pattern a0b;c-0d", u"c-", getPrefix(mod, status));
     assertEquals("Pattern a0b;c-0d", u"d", getSuffix(mod, status));
     mod.setPatternAttributes(UNUM_SIGN_NEVER, false);
-    assertEquals(
-            "Pattern a0b;c-0d",
-            u"c-",
-            getPrefix(mod, status)); // TODO: What should this behavior be?
+    // TODO: What should this behavior be?
+    assertEquals("Pattern a0b;c-0d", u"c-", getPrefix(mod, status));
     assertEquals("Pattern a0b;c-0d", u"d", getSuffix(mod, status));
     assertSuccess("Spot 5", status);
 }
