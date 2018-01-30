@@ -948,13 +948,6 @@ tools/release/java/APIChangeReport*
 tools/release/java/Makefile.local
 tools/release/java/classes
 tools/release/java/lib
-tools/trac/IcuCodeTools/0.11/*.egg-info
-tools/trac/IcuCodeTools/0.11/build
-tools/trac/IcuCodeTools/0.11/icucodetools/*.pyc
-tools/trac/IcuCodeTools/0.12/*.egg-info
-tools/trac/IcuCodeTools/0.12/build
-tools/trac/IcuCodeTools/0.12/dist
-tools/trac/IcuCodeTools/0.12/icucodetools/*.pyc
 tools/unicode/c/genprops/*.d
 tools/unicode/c/genprops/*.ncb
 tools/unicode/c/genprops/*.o
