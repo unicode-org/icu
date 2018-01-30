@@ -9,7 +9,6 @@ import java.text.FieldPosition;
 
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.DecimalQuantity;
-import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.text.UFieldPosition;
@@ -411,11 +410,6 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
   @Override
   public void roundToInfinity() {
     // noop
-  }
-
-  @Override
-  public void truncate() {
-      roundToMagnitude(0, RoundingUtils.mathContextUnlimited(RoundingMode.FLOOR));
   }
 
   /**

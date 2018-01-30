@@ -8,6 +8,7 @@ import java.math.MathContext;
 import java.text.FieldPosition;
 
 import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.Operand;
 import com.ibm.icu.text.UFieldPosition;
@@ -204,9 +205,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     @Override
     public void adjustMagnitude(int delta) {
         if (precision != 0) {
-            // TODO: Math.addExact is not in 1.6 or 1.7
-            scale = Math.addExact(scale, delta);
-            origDelta = Math.addExact(origDelta, delta);
+            scale = Utility.addExact(scale, delta);
+            origDelta = Utility.addExact(origDelta, delta);
         }
     }
 
@@ -855,15 +855,6 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     public void roundToInfinity() {
         if (isApproximate) {
             convertToAccurateDouble();
-        }
-    }
-
-    @Override
-    public void truncate() {
-        if (scale < 0) {
-            shiftRight(-scale);
-            scale = 0;
-            compact();
         }
     }
 

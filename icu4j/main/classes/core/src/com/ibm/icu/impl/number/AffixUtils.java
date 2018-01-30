@@ -331,28 +331,35 @@ public class AffixUtils {
     }
 
     /**
-     * Sames as {@link #unescape}, but only calculates the code point count. More efficient than
-     * {@link #unescape} if you only need the length but not the string itself.
+     * Sames as {@link #unescape}, but only calculates the length or code point count. More efficient
+     * than {@link #unescape} if you only need the length but not the string itself.
      *
      * @param affixPattern
      *            The original string to be unescaped.
+     * @param lengthOrCount
+     *            true to count length (UTF-16 code units); false to count code points
      * @param provider
      *            An object to generate locale symbols.
      * @return The number of code points in the unescaped string.
      */
-    public static int unescapedCodePointCount(CharSequence affixPattern, SymbolProvider provider) {
+    public static int unescapedCount(
+            CharSequence affixPattern,
+            boolean lengthOrCount,
+            SymbolProvider provider) {
         int length = 0;
         long tag = 0L;
         while (hasNext(tag, affixPattern)) {
             tag = nextToken(tag, affixPattern);
             int typeOrCp = getTypeOrCp(tag);
             if (typeOrCp == TYPE_CURRENCY_OVERFLOW) {
+                // U+FFFD is one char
                 length += 1;
             } else if (typeOrCp < 0) {
                 CharSequence symbol = provider.getSymbol(typeOrCp);
-                length += Character.codePointCount(symbol, 0, symbol.length());
+                length += lengthOrCount ? symbol.length()
+                        : Character.codePointCount(symbol, 0, symbol.length());
             } else {
-                length += 1;
+                length += lengthOrCount ? Character.charCount(typeOrCp) : 1;
             }
         }
         return length;
@@ -430,44 +437,6 @@ public class AffixUtils {
     }
 
     /**
-     * Appends a new affix pattern with all symbols and code points in the given "ignorables" UnicodeSet
-     * trimmed from the beginning and end. Similar to calling unescape with a symbol provider that always
-     * returns the empty string.
-     *
-     * <p>
-     * Accepts and returns a StringBuilder, allocating it only if necessary.
-     */
-    public static StringBuilder trimSymbolsAndIgnorables(
-            CharSequence affixPattern,
-            UnicodeSet ignorables,
-            StringBuilder sb) {
-        assert affixPattern != null;
-        long tag = 0L;
-        int trailingIgnorables = 0;
-        while (hasNext(tag, affixPattern)) {
-            tag = nextToken(tag, affixPattern);
-            int typeOrCp = getTypeOrCp(tag);
-            if (typeOrCp >= 0) {
-                if (!ignorables.contains(typeOrCp)) {
-                    if (sb == null) {
-                        // Lazy-initialize the StringBuilder
-                        sb = new StringBuilder();
-                    }
-                    sb.appendCodePoint(typeOrCp);
-                    trailingIgnorables = 0;
-                } else if (sb != null && sb.length() > 0) {
-                    sb.appendCodePoint(typeOrCp);
-                    trailingIgnorables += Character.charCount(typeOrCp);
-                }
-            }
-        }
-        if (trailingIgnorables > 0) {
-            sb.setLength(sb.length() - trailingIgnorables);
-        }
-        return sb;
-    }
-
-    /**
      * Returns whether the given affix pattern contains only symbols and ignorables as defined by the
      * given ignorables set.
      */
@@ -488,6 +457,9 @@ public class AffixUtils {
         return true;
     }
 
+    /**
+     * Iterates over the affix pattern, calling the TokenConsumer for each token.
+     */
     public static void iterateWithConsumer(CharSequence affixPattern, TokenConsumer consumer) {
         assert affixPattern != null;
         long tag = 0L;
@@ -510,7 +482,7 @@ public class AffixUtils {
      *         (never negative), or -1 if there were no more tokens in the affix pattern.
      * @see #hasNext
      */
-    public static long nextToken(long tag, CharSequence patternString) {
+    private static long nextToken(long tag, CharSequence patternString) {
         int offset = getOffset(tag);
         int state = getState(tag);
         for (; offset < patternString.length();) {
@@ -662,7 +634,7 @@ public class AffixUtils {
      *            The affix pattern.
      * @return true if there are more tokens to consume; false otherwise.
      */
-    public static boolean hasNext(long tag, CharSequence string) {
+    private static boolean hasNext(long tag, CharSequence string) {
         assert tag >= 0;
         int state = getState(tag);
         int offset = getOffset(tag);
@@ -688,7 +660,7 @@ public class AffixUtils {
      * @return If less than zero, a symbol type corresponding to one of the <code>TYPE_</code> constants,
      *         such as {@link #TYPE_MINUS_SIGN}. If greater than or equal to zero, a literal code point.
      */
-    public static int getTypeOrCp(long tag) {
+    private static int getTypeOrCp(long tag) {
         assert tag >= 0;
         int type = getType(tag);
         return (type == TYPE_CODEPOINT) ? getCodePoint(tag) : -type;
@@ -715,19 +687,19 @@ public class AffixUtils {
         return tag;
     }
 
-    static int getOffset(long tag) {
+    private static int getOffset(long tag) {
         return (int) (tag & 0xffffffff);
     }
 
-    static int getType(long tag) {
+    private static int getType(long tag) {
         return (int) ((tag >>> 32) & 0xf);
     }
 
-    static int getState(long tag) {
+    private static int getState(long tag) {
         return (int) ((tag >>> 36) & 0xf);
     }
 
-    static int getCodePoint(long tag) {
+    private static int getCodePoint(long tag) {
         return (int) (tag >>> 40);
     }
 }
