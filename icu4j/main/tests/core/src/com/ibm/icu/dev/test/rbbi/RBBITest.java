@@ -548,4 +548,18 @@ public class RBBITest extends TestFmwk {
         assertEquals("", t1.fExpectedBoundaries, t1.fBoundaries);
         assertEquals("", t2.fExpectedBoundaries, t2.fBoundaries);
     }
+
+    @Test
+    public void TestBug12677() {
+        // Check that stripping of comments from rules for getRules() is not confused by
+        // the presence of '#' characters in the rules that do not introduce comments.
+        String rules = "!!forward; \n"
+                     + "$x = [ab#];  # a set with a # literal. \n"
+                     + " # .;        # a comment that looks sort of like a rule.   \n"
+                     + " '#' '?';    # a rule with a quoted #   \n";
+
+        RuleBasedBreakIterator bi  = new RuleBasedBreakIterator(rules);
+        String rtRules = bi.toString();        // getRules() in C++
+        assertEquals("Break Iterator rule stripping test", "!!forward; $x = [ab#]; '#' '?'; ",  rtRules);
+    }
 }

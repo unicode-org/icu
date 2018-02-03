@@ -105,6 +105,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug12932);
     TESTCASE_AUTO(TestEmoji);
     TESTCASE_AUTO(TestBug12519);
+    TESTCASE_AUTO(TestBug12677);
     TESTCASE_AUTO_END;
 }
 
@@ -4434,6 +4435,23 @@ void RBBITest::TestBug12519() {
     assertTrue(WHERE "before assignment of \"biDe = biFr\", they should be different, but are equal.", *biFr != *biDe);
     *biDe = *biFr;
     assertTrue(WHERE "after assignment of \"biDe = biFr\", they should be equal, but are not.", *biFr == *biDe);
+}
+
+void RBBITest::TestBug12677() {
+    // Check that stripping of comments from rules for getRules() is not confused by
+    // the presence of '#' characters in the rules that do not introduce comments.
+    UnicodeString rules(u"!!forward; \n"
+                         "$x = [ab#];  # a set with a # literal. \n"
+                         " # .;        # a comment that looks sort of like a rule.   \n"
+                         " '#' '?';    # a rule with a quoted #   \n"
+                       );
+    
+    UErrorCode status = U_ZERO_ERROR;
+    UParseError pe;
+    RuleBasedBreakIterator bi (rules, pe, status);
+    assertSuccess(WHERE, status);
+    UnicodeString rtRules = bi.getRules();
+    assertEquals(WHERE, UnicodeString(u"!!forward; $x = [ab#]; '#' '?'; "),  rtRules); 
 }
 
 //

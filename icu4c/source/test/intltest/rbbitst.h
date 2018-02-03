@@ -74,6 +74,7 @@ public:
     void TestBug12932();
     void TestEmoji();
     void TestBug12519();
+    void TestBug12677();
 
     void TestDebug();
     void TestProperties();

@@ -1035,7 +1035,7 @@ void RBBIAPITest::RoundtripRule(const char *dataFile) {
 
     builtRules = (const uint8_t *)udata_getMemory(data.getAlias());
     builtSource = (const UChar *)(builtRules + ((RBBIDataHeader*)builtRules)->fRuleSource);
-    RuleBasedBreakIterator *brkItr = new RuleBasedBreakIterator(builtSource, parseError, status);
+    LocalPointer<RuleBasedBreakIterator> brkItr (new RuleBasedBreakIterator(builtSource, parseError, status));
     if (U_FAILURE(status)) {
         errln("%s:%d createRuleBasedBreakIterator: ICU Error \"%s\"  at line %d, column %d\n",
                 __FILE__, __LINE__, u_errorName(status), parseError.line, parseError.offset);
@@ -1048,7 +1048,6 @@ void RBBIAPITest::RoundtripRule(const char *dataFile) {
         errln("%s:%d Built rules and rebuilt rules are different %s", __FILE__, __LINE__, dataFile);
         return;
     }
-    delete brkItr;
 }
 
 void RBBIAPITest::TestRoundtripRules() {

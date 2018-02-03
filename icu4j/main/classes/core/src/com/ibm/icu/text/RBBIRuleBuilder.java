@@ -28,6 +28,7 @@ class RBBIRuleBuilder {
 
     String fDebugEnv;              // controls debug trace output
     String fRules;                 // The rule string that we are compiling
+    StringBuilder fStrippedRules;  // The rule string, with comments stripped.
     RBBIRuleScanner fScanner;      // The scanner.
 
 
@@ -142,6 +143,7 @@ class RBBIRuleBuilder {
         fDebugEnv       = ICUDebug.enabled("rbbi") ?
                             ICUDebug.value("rbbi") : null;
         fRules          = rules;
+        fStrippedRules  = new StringBuilder(rules);
         fUSetNodes      = new ArrayList<RBBINode>();
         fRuleStatusVals = new ArrayList<Integer>();
         fScanner        = new RBBIRuleScanner(this);
@@ -165,8 +167,9 @@ class RBBIRuleBuilder {
         DataOutputStream dos = new DataOutputStream(os);
         int i;
 
-        //  Remove comments and whitespace from the rules to make it smaller.
-        String strippedRules = RBBIRuleScanner.stripRules(fRules);
+        //  Remove whitespace from the rules to make it smaller.
+        //  The rule parser has already removed comments.
+        String strippedRules = RBBIRuleScanner.stripRules(fStrippedRules.toString());
 
         // Calculate the size of each section in the data in bytes.
         //   Sizes here are padded up to a multiple of 8 for better memory alignment.
