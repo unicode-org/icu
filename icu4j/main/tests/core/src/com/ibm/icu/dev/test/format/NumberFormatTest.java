@@ -2018,6 +2018,7 @@ public class NumberFormatTest extends TestFmwk {
     };
 
     @SuppressWarnings("resource")  // InputStream is will be closed by the ResourceReader.
+    @Ignore("TODO: http://bugs.icu-project.org/trac/ticket/13571")
     @Test
     public void TestCases() {
         String caseFileName = "NumberFormatTestCases.txt";
