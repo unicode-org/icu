@@ -304,6 +304,7 @@ public class DecimalMatcher implements NumberParseMatcher {
         }
 
         if (isScientific && segment.getOffset() != initialOffset) {
+            assert result.quantity != null; // scientific notation always comes after the number
             boolean overflow = (exponent == Integer.MAX_VALUE);
             if (!overflow) {
                 try {

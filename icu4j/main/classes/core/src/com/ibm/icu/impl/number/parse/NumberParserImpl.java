@@ -9,7 +9,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.ibm.icu.impl.number.AffixPatternProvider;
-import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.PatternStringParser;
@@ -225,11 +224,7 @@ public class NumberParserImpl {
         ///////////////////////////////
 
         if (!isStrict) {
-            if (!isStrict
-                    || patternInfo.containsSymbolType(AffixUtils.TYPE_PLUS_SIGN)
-                    || properties.getSignAlwaysShown()) {
-                parser.addMatcher(PlusSignMatcher.getInstance(symbols, false));
-            }
+            parser.addMatcher(PlusSignMatcher.getInstance(symbols, false));
             parser.addMatcher(MinusSignMatcher.getInstance(symbols, false));
             parser.addMatcher(NanMatcher.getInstance(symbols, parseFlags));
             parser.addMatcher(PercentMatcher.getInstance(symbols));
