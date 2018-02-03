@@ -161,6 +161,12 @@ public class LongNameHandler implements MicroPropsGenerator {
         this.parent = parent;
     }
 
+    public static String getUnitDisplayName(ULocale locale, MeasureUnit unit, UnitWidth width) {
+        String[] measureData = new String[ARRAY_LENGTH];
+        getMeasureData(locale, unit, width, measureData);
+        return measureData[DNAM_INDEX];
+    }
+
     public static LongNameHandler forCurrencyLongNames(
             ULocale locale,
             Currency currency,

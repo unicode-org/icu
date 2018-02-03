@@ -1676,9 +1676,11 @@ public class MeasureUnitTest extends TestFmwk {
         assertEquals("numeric currency", "$2.00", mf.format(USD_2));
 
         mf = MeasureFormat.getInstance(ULocale.JAPAN, FormatWidth.WIDE);
-        assertEquals("Wide currency", "-1.00 \u7C73\u30C9\u30EB", mf.format(USD_NEG_1));
-        assertEquals("Wide currency", "1.00 \u7C73\u30C9\u30EB", mf.format(USD_1));
-        assertEquals("Wide currency", "2.00 \u7C73\u30C9\u30EB", mf.format(USD_2));
+        // Locale jp does NOT put a space between the number and the currency long name:
+        // https://unicode.org/cldr/trac/browser/tags/release-32-0-1/common/main/ja.xml?rev=13805#L7046
+        assertEquals("Wide currency", "-1.00\u7C73\u30C9\u30EB", mf.format(USD_NEG_1));
+        assertEquals("Wide currency", "1.00\u7C73\u30C9\u30EB", mf.format(USD_1));
+        assertEquals("Wide currency", "2.00\u7C73\u30C9\u30EB", mf.format(USD_2));
 
         Measure CAD_1 = new Measure(1.0, Currency.getInstance("CAD"));
         mf = MeasureFormat.getInstance(ULocale.CANADA, FormatWidth.SHORT);
@@ -1912,7 +1914,7 @@ public class MeasureUnitTest extends TestFmwk {
                         new Measure(5.3, MeasureUnit.INCH)));
         assertEquals("getLocale", ULocale.ENGLISH, mf.getLocale());
         assertEquals("getNumberFormat", ULocale.ENGLISH, mf.getNumberFormat().getLocale(ULocale.VALID_LOCALE));
-        assertEquals("getWidth", MeasureFormat.FormatWidth.WIDE, mf.getWidth());
+        assertEquals("getWidth", MeasureFormat.FormatWidth.DEFAULT_CURRENCY, mf.getWidth());
     }
 
     @Test

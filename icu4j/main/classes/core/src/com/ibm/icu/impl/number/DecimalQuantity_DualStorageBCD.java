@@ -64,6 +64,8 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
             setToLong(number.longValue());
         } else if (number instanceof Integer) {
             setToInt(number.intValue());
+        } else if (number instanceof Float) {
+            setToDouble(number.doubleValue());
         } else if (number instanceof Double) {
             setToDouble(number.doubleValue());
         } else if (number instanceof BigInteger) {
