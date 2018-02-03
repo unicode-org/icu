@@ -150,7 +150,7 @@ public class TimeUnitFormat extends MeasureFormat {
     @Deprecated
     public TimeUnitFormat(ULocale locale, int style) {
         super(locale, style == FULL_NAME ? FormatWidth.WIDE : FormatWidth.SHORT);
-        format = super.getNumberFormat();
+        format = super.getNumberFormatInternal();
         if (style < FULL_NAME || style >= TOTAL_STYLES) {
             throw new IllegalArgumentException("style should be either FULL_NAME or ABBREVIATED_NAME style");
         }
@@ -225,6 +225,11 @@ public class TimeUnitFormat extends MeasureFormat {
 
     @Override
     public NumberFormat getNumberFormat() {
+        return (NumberFormat) format.clone();
+    }
+
+    @Override
+    NumberFormat getNumberFormatInternal() {
         return format;
     }
 
