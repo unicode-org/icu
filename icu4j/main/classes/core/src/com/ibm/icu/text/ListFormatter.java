@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.text;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,6 +20,7 @@ import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
+import com.ibm.icu.util.ICUUncheckedIOException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -36,7 +38,7 @@ final public class ListFormatter {
     private final String middle;
     private final String end;
     private final ULocale locale;
-    
+
     /**
      * Indicates the style of Listformatter
      * @internal
@@ -72,9 +74,9 @@ final public class ListFormatter {
          */
         @Deprecated
         DURATION_NARROW("unit-narrow");
-        
+
         private final String name;
-        
+
         Style(String name) {
             this.name = name;
         }
@@ -86,7 +88,7 @@ final public class ListFormatter {
         public String getName() {
             return name;
         }
-        
+
     }
 
     /**
@@ -153,7 +155,7 @@ final public class ListFormatter {
     public static ListFormatter getInstance(Locale locale) {
         return getInstance(ULocale.forLocale(locale), Style.STANDARD);
     }
-    
+
     /**
      * Create a list formatter that is appropriate for a locale and style.
      *
@@ -201,7 +203,7 @@ final public class ListFormatter {
     public String format(Collection<?> items) {
         return format(items, -1).toString();
     }
-    
+
     // Formats a collection of objects and returns the formatted string plus the offset
     // in the string where the index th element appears. index is zero based. If index is
     // negative or greater than or equal to the size of items then this function returns -1 for
@@ -224,7 +226,7 @@ final public class ListFormatter {
         }
         return builder.append(end, it.next(), index == count - 1);
     }
-    
+
     /**
      * Returns the pattern to use for a particular item count.
      * @param count the item count.
@@ -243,7 +245,7 @@ final public class ListFormatter {
         }
         return format(list);
     }
-    
+
     /**
      * Returns the locale of this object.
      * @internal
@@ -253,19 +255,19 @@ final public class ListFormatter {
     public ULocale getLocale() {
         return locale;
     }
-    
+
     // Builds a formatted list
     static class FormattedListBuilder {
         private StringBuilder current;
         private int offset;
-        
+
         // Start is the first object in the list; If recordOffset is true, records the offset of
         // this first object.
         public FormattedListBuilder(Object start, boolean recordOffset) {
             this.current = new StringBuilder(start.toString());
             this.offset = recordOffset ? 0 : -1;
         }
-        
+
         // Appends additional object. pattern is a template indicating where the new object gets
         // added in relation to the rest of the list. {0} represents the rest of the list; {1}
         // represents the new object in pattern. next is the object to be added. If recordOffset
@@ -288,16 +290,24 @@ final public class ListFormatter {
             return this;
         }
 
+        public void appendTo(Appendable appendable) {
+            try {
+                appendable.append(current);
+            } catch(IOException e) {
+                throw new ICUUncheckedIOException(e);
+            }
+        }
+
         @Override
         public String toString() {
             return current.toString();
         }
-        
+
         // Gets the last recorded offset or -1 if no offset recorded.
         public int getOffset() {
             return offset;
         }
-        
+
         private boolean offsetRecorded() {
             return offset >= 0;
         }
