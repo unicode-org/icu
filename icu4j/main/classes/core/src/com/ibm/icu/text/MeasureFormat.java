@@ -494,7 +494,7 @@ public class MeasureFormat extends UFormat {
         // A very slow but safe implementation.
         return getWidth() == rhs.getWidth()
                 && getLocale().equals(rhs.getLocale())
-                && getNumberFormat().equals(rhs.getNumberFormat());
+                && getNumberFormatInternal().equals(rhs.getNumberFormatInternal());
     }
 
     /**
@@ -505,7 +505,7 @@ public class MeasureFormat extends UFormat {
     @Override
     public final int hashCode() {
         // A very slow but safe implementation.
-        return (getLocale().hashCode() * 31 + getNumberFormat().hashCode()) * 31 + getWidth().hashCode();
+        return (getLocale().hashCode() * 31 + getNumberFormatInternal().hashCode()) * 31 + getWidth().hashCode();
     }
 
     /**
@@ -533,6 +533,13 @@ public class MeasureFormat extends UFormat {
      */
     public NumberFormat getNumberFormat() {
         return (NumberFormat) numberFormat.clone();
+    }
+
+    /**
+     * Get a copy of the number format without cloning. Internal method.
+     */
+    NumberFormat getNumberFormatInternal() {
+        return numberFormat;
     }
 
     /**
@@ -954,15 +961,15 @@ public class MeasureFormat extends UFormat {
     }
 
     Object toTimeUnitProxy() {
-        return new MeasureProxy(getLocale(), formatWidth, getNumberFormat(), TIME_UNIT_FORMAT);
+        return new MeasureProxy(getLocale(), formatWidth, getNumberFormatInternal(), TIME_UNIT_FORMAT);
     }
 
     Object toCurrencyProxy() {
-        return new MeasureProxy(getLocale(), formatWidth, getNumberFormat(), CURRENCY_FORMAT);
+        return new MeasureProxy(getLocale(), formatWidth, getNumberFormatInternal(), CURRENCY_FORMAT);
     }
 
     private Object writeReplace() throws ObjectStreamException {
-        return new MeasureProxy(getLocale(), formatWidth, getNumberFormat(), MEASURE_FORMAT);
+        return new MeasureProxy(getLocale(), formatWidth, getNumberFormatInternal(), MEASURE_FORMAT);
     }
 
     static class MeasureProxy implements Externalizable {

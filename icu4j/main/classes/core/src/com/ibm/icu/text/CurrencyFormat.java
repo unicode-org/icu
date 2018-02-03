@@ -58,7 +58,7 @@ class CurrencyFormat extends MeasureFormat {
      */
     @Override
     public CurrencyAmount parseObject(String source, ParsePosition pos) {
-        return getNumberFormat().parseCurrency(source, pos);
+        return getNumberFormatInternal().parseCurrency(source, pos);
     }
 
     // Serialization
