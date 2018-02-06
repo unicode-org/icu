@@ -19,17 +19,20 @@ import java.util.Set;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.ibm.icu.impl.number.Grouper;
+import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.PatternStringParser;
+import com.ibm.icu.number.CompactNotation;
 import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.FractionRounder;
-import com.ibm.icu.number.Grouper;
 import com.ibm.icu.number.IntegerWidth;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.Notation;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
+import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.number.Rounder;
@@ -51,6 +54,8 @@ public class NumberFormatterApiTest {
     private static final Currency GBP = Currency.getInstance("GBP");
     private static final Currency CZK = Currency.getInstance("CZK");
     private static final Currency CAD = Currency.getInstance("CAD");
+    private static final Currency ESP = Currency.getInstance("ESP");
+    private static final Currency PTE = Currency.getInstance("PTE");
 
     @Test
     public void notationSimple() {
@@ -354,6 +359,19 @@ public class NumberFormatterApiTest {
                 ULocale.ENGLISH,
                 9990000,
                 "10M");
+
+        Map<String, Map<String, String>> compactCustomData = new HashMap<String, Map<String, String>>();
+        Map<String, String> entry = new HashMap<String, String>();
+        entry.put("one", "Kun");
+        entry.put("other", "0KK");
+        compactCustomData.put("1000", entry);
+        assertFormatSingle(
+                "Compact Somali No Figure",
+                "",
+                NumberFormatter.with().notation(CompactNotation.forCustomData(compactCustomData)),
+                ULocale.ENGLISH,
+                1000,
+                "Kun");
     }
 
     @Test
@@ -645,9 +663,59 @@ public class NumberFormatterApiTest {
                 "Currency Difference between Narrow and Short (Short Version)",
                 "",
                 NumberFormatter.with().unit(USD).unitWidth(UnitWidth.SHORT),
-                ULocale.forLanguageTag("en_CA"),
+                ULocale.forLanguageTag("en-CA"),
                 5.43,
-                "US$ 5.43");
+                "US$5.43");
+
+        assertFormatSingle(
+                "Currency-dependent format (Control)",
+                "",
+                NumberFormatter.with().unit(USD).unitWidth(UnitWidth.SHORT),
+                ULocale.forLanguageTag("ca"),
+                444444.55,
+                "444.444,55 USD");
+
+        assertFormatSingle(
+                "Currency-dependent format (Test)",
+                "",
+                NumberFormatter.with().unit(ESP).unitWidth(UnitWidth.SHORT),
+                ULocale.forLanguageTag("ca"),
+                444444.55,
+                "₧ 444.445");
+
+        assertFormatSingle(
+                "Currency-dependent symbols (Control)",
+                "",
+                NumberFormatter.with().unit(USD).unitWidth(UnitWidth.SHORT),
+                ULocale.forLanguageTag("pt-PT"),
+                444444.55,
+                "444 444,55 US$");
+
+        // NOTE: This is a bit of a hack on CLDR's part. They set the currency symbol to U+200B (zero-
+        // width space), and they set the decimal separator to the $ symbol.
+        assertFormatSingle(
+                "Currency-dependent symbols (Test)",
+                "",
+                NumberFormatter.with().unit(PTE).unitWidth(UnitWidth.SHORT),
+                ULocale.forLanguageTag("pt-PT"),
+                444444.55,
+                "444,444$55 \u200B");
+
+        assertFormatSingle(
+                "Currency-dependent symbols (Test)",
+                "",
+                NumberFormatter.with().unit(PTE).unitWidth(UnitWidth.NARROW),
+                ULocale.forLanguageTag("pt-PT"),
+                444444.55,
+                "444,444$55 PTE");
+
+        assertFormatSingle(
+                "Currency-dependent symbols (Test)",
+                "",
+                NumberFormatter.with().unit(PTE).unitWidth(UnitWidth.ISO_CODE),
+                ULocale.forLanguageTag("pt-PT"),
+                444444.55,
+                "444,444$55 PTE");
     }
 
     @Test
@@ -889,6 +957,22 @@ public class NumberFormatterApiTest {
                 "0.09",
                 "0.01",
                 "0.00");
+
+        assertFormatSingle(
+                "FracSig with trailing zeros A",
+                "",
+                NumberFormatter.with().rounding(Rounder.fixedFraction(2).withMinDigits(3)),
+                ULocale.ENGLISH,
+                0.1,
+                "0.10");
+
+        assertFormatSingle(
+                "FracSig with trailing zeros B",
+                "",
+                NumberFormatter.with().rounding(Rounder.fixedFraction(2).withMinDigits(3)),
+                ULocale.ENGLISH,
+                0.0999999,
+                "0.10");
     }
 
     @Test
@@ -1020,7 +1104,7 @@ public class NumberFormatterApiTest {
         assertFormatDescendingBig(
                 "Western Grouping",
                 "grouping=defaults",
-                NumberFormatter.with().grouping(Grouper.defaults()),
+                NumberFormatter.with().grouping(GroupingStrategy.AUTO),
                 ULocale.ENGLISH,
                 "87,650,000",
                 "8,765,000",
@@ -1035,7 +1119,7 @@ public class NumberFormatterApiTest {
         assertFormatDescendingBig(
                 "Indic Grouping",
                 "grouping=defaults",
-                NumberFormatter.with().grouping(Grouper.defaults()),
+                NumberFormatter.with().grouping(GroupingStrategy.AUTO),
                 new ULocale("en-IN"),
                 "8,76,50,000",
                 "87,65,000",
@@ -1050,7 +1134,7 @@ public class NumberFormatterApiTest {
         assertFormatDescendingBig(
                 "Western Grouping, Min 2",
                 "grouping=min2",
-                NumberFormatter.with().grouping(Grouper.minTwoDigits()),
+                NumberFormatter.with().grouping(GroupingStrategy.MIN2),
                 ULocale.ENGLISH,
                 "87,650,000",
                 "8,765,000",
@@ -1065,7 +1149,7 @@ public class NumberFormatterApiTest {
         assertFormatDescendingBig(
                 "Indic Grouping, Min 2",
                 "grouping=min2",
-                NumberFormatter.with().grouping(Grouper.minTwoDigits()),
+                NumberFormatter.with().grouping(GroupingStrategy.MIN2),
                 new ULocale("en-IN"),
                 "8,76,50,000",
                 "87,65,000",
@@ -1080,10 +1164,106 @@ public class NumberFormatterApiTest {
         assertFormatDescendingBig(
                 "No Grouping",
                 "grouping=none",
-                NumberFormatter.with().grouping(Grouper.none()),
+                NumberFormatter.with().grouping(GroupingStrategy.OFF),
                 new ULocale("en-IN"),
                 "87650000",
                 "8765000",
+                "876500",
+                "87650",
+                "8765",
+                "876.5",
+                "87.65",
+                "8.765",
+                "0");
+
+        // NOTE: Hungarian is interesting because it has minimumGroupingDigits=4 in locale data
+        // If this test breaks due to data changes, find another locale that has minimumGroupingDigits.
+        assertFormatDescendingBig(
+                "Hungarian Grouping",
+                "",
+                NumberFormatter.with().grouping(GroupingStrategy.AUTO),
+                new ULocale("hu"),
+                "87 650 000",
+                "8 765 000",
+                "876500",
+                "87650",
+                "8765",
+                "876,5",
+                "87,65",
+                "8,765",
+                "0");
+
+        assertFormatDescendingBig(
+                "Hungarian Grouping, Min 2",
+                "",
+                NumberFormatter.with().grouping(GroupingStrategy.MIN2),
+                new ULocale("hu"),
+                "87 650 000",
+                "8 765 000",
+                "876500",
+                "87650",
+                "8765",
+                "876,5",
+                "87,65",
+                "8,765",
+                "0");
+
+        assertFormatDescendingBig(
+                "Hungarian Grouping, Always",
+                "",
+                NumberFormatter.with().grouping(GroupingStrategy.ON_ALIGNED),
+                new ULocale("hu"),
+                "87 650 000",
+                "8 765 000",
+                "876 500",
+                "87 650",
+                "8 765",
+                "876,5",
+                "87,65",
+                "8,765",
+                "0");
+
+        // NOTE: Bulgarian is interesting because it has no grouping in the default currency format.
+        // If this test breaks due to data changes, find another locale that has no default grouping.
+        assertFormatDescendingBig(
+                "Bulgarian Currency Grouping",
+                "",
+                NumberFormatter.with().grouping(GroupingStrategy.AUTO).unit(USD),
+                new ULocale("bg"),
+                "87650000,00 щ.д.",
+                "8765000,00 щ.д.",
+                "876500,00 щ.д.",
+                "87650,00 щ.д.",
+                "8765,00 щ.д.",
+                "876,50 щ.д.",
+                "87,65 щ.д.",
+                "8,76 щ.д.",
+                "0,00 щ.д.");
+
+        assertFormatDescendingBig(
+                "Bulgarian Currency Grouping, Always",
+                "",
+                NumberFormatter.with().grouping(GroupingStrategy.ON_ALIGNED).unit(USD),
+                new ULocale("bg"),
+                "87 650 000,00 щ.д.",
+                "8 765 000,00 щ.д.",
+                "876 500,00 щ.д.",
+                "87 650,00 щ.д.",
+                "8 765,00 щ.д.",
+                "876,50 щ.д.",
+                "87,65 щ.д.",
+                "8,76 щ.д.",
+                "0,00 щ.д.");
+
+        MacroProps macros = new MacroProps();
+        macros.grouping = Grouper.getInstance((short) 4, (short) 1, (short) 3);
+        assertFormatDescendingBig(
+                "Custom Grouping via Internal API",
+                "",
+                NumberFormatter.with().macros(macros),
+                ULocale.ENGLISH,
+                "8,7,6,5,0000",
+                "8,7,6,5000",
                 "876500",
                 "87650",
                 "8765",

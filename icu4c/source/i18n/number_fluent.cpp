@@ -73,9 +73,11 @@ Derived NumberFormatterSettings<Derived>::rounding(const Rounder &rounder) const
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::grouping(const Grouper &grouper) const {
+Derived NumberFormatterSettings<Derived>::grouping(const UGroupingStrategy &strategy) const {
     Derived copy(*this);
-    copy.fMacros.grouper = grouper;
+    // NOTE: This is slightly different than how the setting is stored in Java
+    // because we want to put it on the stack.
+    copy.fMacros.grouper = Grouper::forStrategy(strategy);
     return copy;
 }
 

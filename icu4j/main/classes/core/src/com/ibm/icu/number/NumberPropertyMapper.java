@@ -9,6 +9,7 @@ import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.CurrencyPluralInfoAffixProvider;
 import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.MultiplierImpl;
 import com.ibm.icu.impl.number.Padder;
@@ -193,7 +194,7 @@ final class NumberPropertyMapper {
         // GROUPING STRATEGY //
         ///////////////////////
 
-        macros.grouper = Grouper.defaults().withProperties(properties);
+        macros.grouping = Grouper.forProperties(properties);
 
         /////////////
         // PADDING //

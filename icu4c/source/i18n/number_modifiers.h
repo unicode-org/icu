@@ -103,8 +103,15 @@ class U_I18N_API SimpleModifier : public Modifier, public UMemory {
  */
 class U_I18N_API ConstantMultiFieldModifier : public Modifier, public UMemory {
   public:
-    ConstantMultiFieldModifier(const NumberStringBuilder &prefix, const NumberStringBuilder &suffix,
-                               bool strong) : fPrefix(prefix), fSuffix(suffix), fStrong(strong) {}
+    ConstantMultiFieldModifier(
+            const NumberStringBuilder &prefix,
+            const NumberStringBuilder &suffix,
+            bool overwrite,
+            bool strong)
+      : fPrefix(prefix),
+        fSuffix(suffix),
+        fOverwrite(overwrite),
+        fStrong(strong) {}
 
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
                   UErrorCode &status) const U_OVERRIDE;
@@ -120,6 +127,7 @@ class U_I18N_API ConstantMultiFieldModifier : public Modifier, public UMemory {
     // value and is treated internally as immutable.
     NumberStringBuilder fPrefix;
     NumberStringBuilder fSuffix;
+    bool fOverwrite;
     bool fStrong;
 };
 
@@ -127,8 +135,13 @@ class U_I18N_API ConstantMultiFieldModifier : public Modifier, public UMemory {
 class U_I18N_API CurrencySpacingEnabledModifier : public ConstantMultiFieldModifier {
   public:
     /** Safe code path */
-    CurrencySpacingEnabledModifier(const NumberStringBuilder &prefix, const NumberStringBuilder &suffix,
-                                   bool strong, const DecimalFormatSymbols &symbols, UErrorCode &status);
+    CurrencySpacingEnabledModifier(
+            const NumberStringBuilder &prefix,
+            const NumberStringBuilder &suffix,
+            bool overwrite,
+            bool strong,
+            const DecimalFormatSymbols &symbols,
+            UErrorCode &status);
 
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
                   UErrorCode &status) const U_OVERRIDE;

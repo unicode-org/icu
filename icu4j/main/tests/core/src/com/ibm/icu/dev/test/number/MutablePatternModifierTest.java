@@ -103,6 +103,32 @@ public class MutablePatternModifierTest {
         assertFalse(nsb1 + " vs. " + nsb3, nsb1.contentEquals(nsb3));
     }
 
+    @Test
+    public void patternWithNoPlaceholder() {
+        MutablePatternModifier mod = new MutablePatternModifier(false);
+        mod.setPatternInfo(PatternStringParser.parseToPatternInfo("abc"));
+        mod.setPatternAttributes(SignDisplay.AUTO, false);
+        mod.setSymbols(DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
+                Currency.getInstance("USD"),
+                UnitWidth.SHORT,
+                null);
+        mod.setNumberProperties(1, null);
+
+        // Unsafe Code Path
+        NumberStringBuilder nsb = new NumberStringBuilder();
+        nsb.append("x123y", null);
+        mod.apply(nsb, 1, 4);
+        assertEquals("Unsafe Path", "xabcy", nsb.toString());
+
+        // Safe Code Path
+        nsb.clear();
+        nsb.append("x123y", null);
+        MicroProps micros = new MicroProps(false);
+        mod.createImmutable().applyToMicros(micros, new DecimalQuantity_DualStorageBCD());
+        micros.modMiddle.apply(nsb, 1, 4);
+        assertEquals("Safe Path", "xabcy", nsb.toString());
+    }
+
     private static String getPrefix(MutablePatternModifier mod) {
         NumberStringBuilder nsb = new NumberStringBuilder();
         mod.apply(nsb, 0, 0);

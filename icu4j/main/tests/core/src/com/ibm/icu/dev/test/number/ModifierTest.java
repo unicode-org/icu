@@ -31,12 +31,12 @@ public class ModifierTest {
     public void testConstantMultiFieldModifier() {
         NumberStringBuilder prefix = new NumberStringBuilder();
         NumberStringBuilder suffix = new NumberStringBuilder();
-        Modifier mod1 = new ConstantMultiFieldModifier(prefix, suffix, true);
+        Modifier mod1 = new ConstantMultiFieldModifier(prefix, suffix, false, true);
         assertModifierEquals(mod1, 0, true, "|", "n");
 
         prefix.append("a📻", NumberFormat.Field.PERCENT);
         suffix.append("b", NumberFormat.Field.CURRENCY);
-        Modifier mod2 = new ConstantMultiFieldModifier(prefix, suffix, true);
+        Modifier mod2 = new ConstantMultiFieldModifier(prefix, suffix, false, true);
         assertModifierEquals(mod2, 3, true, "a📻|b", "%%%n$");
 
         // Make sure the first modifier is still the same (that it stayed constant)
@@ -91,11 +91,11 @@ public class ModifierTest {
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
         NumberStringBuilder prefix = new NumberStringBuilder();
         NumberStringBuilder suffix = new NumberStringBuilder();
-        Modifier mod1 = new CurrencySpacingEnabledModifier(prefix, suffix, true, symbols);
+        Modifier mod1 = new CurrencySpacingEnabledModifier(prefix, suffix, false, true, symbols);
         assertModifierEquals(mod1, 0, true, "|", "n");
 
         prefix.append("USD", NumberFormat.Field.CURRENCY);
-        Modifier mod2 = new CurrencySpacingEnabledModifier(prefix, suffix, true, symbols);
+        Modifier mod2 = new CurrencySpacingEnabledModifier(prefix, suffix, false, true, symbols);
         assertModifierEquals(mod2, 3, true, "USD|", "$$$n");
 
         // Test the default currency spacing rules
@@ -116,7 +116,7 @@ public class ModifierTest {
                 true,
                 "[|]");
         suffix.append("XYZ", NumberFormat.Field.CURRENCY);
-        Modifier mod3 = new CurrencySpacingEnabledModifier(prefix, suffix, true, symbols);
+        Modifier mod3 = new CurrencySpacingEnabledModifier(prefix, suffix, false, true, symbols);
         assertModifierEquals(mod3, 3, true, "USD|\u00A0XYZ", "$$$nn$$$");
     }
 

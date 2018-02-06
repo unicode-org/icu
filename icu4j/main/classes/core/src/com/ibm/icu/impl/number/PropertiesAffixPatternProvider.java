@@ -128,6 +128,11 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
     }
 
     @Override
+    public boolean hasBody() {
+        return true;
+    }
+
+    @Override
     public String toString() {
         return super.toString()
                 + " {"
