@@ -29,7 +29,6 @@ public class CurrencyData {
         public abstract Map<String, String> getUnitPatterns();
         public abstract CurrencyFormatInfo getFormatInfo(String isoCode);
         public abstract CurrencySpacingInfo getSpacingInfo();
-        public abstract String getNarrowSymbol(String isoCode);
     }
 
     public static final class CurrencyFormatInfo {

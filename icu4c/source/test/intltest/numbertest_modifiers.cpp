@@ -38,13 +38,13 @@ void ModifiersTest::testConstantMultiFieldModifier() {
     UErrorCode status = U_ZERO_ERROR;
     NumberStringBuilder prefix;
     NumberStringBuilder suffix;
-    ConstantMultiFieldModifier mod1(prefix, suffix, true);
+    ConstantMultiFieldModifier mod1(prefix, suffix, false, true);
     assertModifierEquals(mod1, 0, true, u"|", u"n", status);
     assertSuccess("Spot 1", status);
 
     prefix.append(u"a📻", UNUM_PERCENT_FIELD, status);
     suffix.append(u"b", UNUM_CURRENCY_FIELD, status);
-    ConstantMultiFieldModifier mod2(prefix, suffix, true);
+    ConstantMultiFieldModifier mod2(prefix, suffix, false, true);
     assertModifierEquals(mod2, 3, true, u"a📻|b", u"%%%n$", status);
     assertSuccess("Spot 2", status);
 
@@ -105,14 +105,14 @@ void ModifiersTest::testCurrencySpacingEnabledModifier() {
 
     NumberStringBuilder prefix;
     NumberStringBuilder suffix;
-    CurrencySpacingEnabledModifier mod1(prefix, suffix, true, symbols, status);
+    CurrencySpacingEnabledModifier mod1(prefix, suffix, false, true, symbols, status);
     assertSuccess("Spot 2", status);
     assertModifierEquals(mod1, 0, true, u"|", u"n", status);
     assertSuccess("Spot 3", status);
 
     prefix.append(u"USD", UNUM_CURRENCY_FIELD, status);
     assertSuccess("Spot 4", status);
-    CurrencySpacingEnabledModifier mod2(prefix, suffix, true, symbols, status);
+    CurrencySpacingEnabledModifier mod2(prefix, suffix, false, true, symbols, status);
     assertSuccess("Spot 5", status);
     assertModifierEquals(mod2, 3, true, u"USD|", u"$$$n", status);
     assertSuccess("Spot 6", status);
@@ -138,7 +138,7 @@ void ModifiersTest::testCurrencySpacingEnabledModifier() {
     symbols.setPatternForCurrencySpacing(UNUM_CURRENCY_SURROUNDING_MATCH, true, u"[|]");
     suffix.append("XYZ", UNUM_CURRENCY_FIELD, status);
     assertSuccess("Spot 11", status);
-    CurrencySpacingEnabledModifier mod3(prefix, suffix, true, symbols, status);
+    CurrencySpacingEnabledModifier mod3(prefix, suffix, false, true, symbols, status);
     assertSuccess("Spot 12", status);
     assertModifierEquals(mod3, 3, true, u"USD|\u00A0XYZ", u"$$$nn$$$", status);
     assertSuccess("Spot 13", status);

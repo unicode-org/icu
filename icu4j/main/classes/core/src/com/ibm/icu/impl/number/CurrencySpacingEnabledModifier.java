@@ -30,9 +30,10 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
     public CurrencySpacingEnabledModifier(
             NumberStringBuilder prefix,
             NumberStringBuilder suffix,
+            boolean overwrite,
             boolean strong,
             DecimalFormatSymbols symbols) {
-        super(prefix, suffix, strong);
+        super(prefix, suffix, overwrite, strong);
 
         // Check for currency spacing. Do not build the UnicodeSets unless there is
         // a currency code point at a boundary.

@@ -5,6 +5,7 @@ package com.ibm.icu.number;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
+import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -31,7 +32,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     static final int KEY_NOTATION = 2;
     static final int KEY_UNIT = 3;
     static final int KEY_ROUNDER = 4;
-    static final int KEY_GROUPER = 5;
+    static final int KEY_GROUPING = 5;
     static final int KEY_PADDER = 6;
     static final int KEY_INTEGER = 7;
     static final int KEY_SYMBOLS = 8;
@@ -220,25 +221,24 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      * The exact grouping widths will be chosen based on the locale.
      *
      * <p>
-     * Pass this method the return value of one of the factory methods on {@link Grouper}. For example:
+     * Pass this method an element from the {@link GroupingStrategy} enum. For example:
      *
      * <pre>
-     * NumberFormatter.with().grouping(Grouper.min2())
+     * NumberFormatter.with().grouping(GroupingStrategy.MIN2)
      * </pre>
      *
-     * The default is to perform grouping without concern for the minimum grouping digits.
+     * The default is to perform grouping according to locale data; most locales, but not all locales,
+     * enable it by default.
      *
-     * @param grouper
+     * @param strategy
      *            The grouping strategy to use.
      * @return The fluent chain.
-     * @see Grouper
-     * @see Notation
-     * @internal
-     * @deprecated ICU 60 This API is technical preview; see #7861.
+     * @see GroupingStrategy
+     * @draft ICU 61
+     * @provisional This API might change or be removed in a future release.
      */
-    @Deprecated
-    public T grouping(Grouper grouper) {
-        return create(KEY_GROUPER, grouper);
+    public T grouping(GroupingStrategy strategy) {
+        return create(KEY_GROUPING, strategy);
     }
 
     /**
@@ -512,9 +512,9 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
                     macros.rounder = (Rounder) current.value;
                 }
                 break;
-            case KEY_GROUPER:
-                if (macros.grouper == null) {
-                    macros.grouper = (Grouper) current.value;
+            case KEY_GROUPING:
+                if (macros.grouping == null) {
+                    macros.grouping = /* (Object) */ current.value;
                 }
                 break;
             case KEY_PADDER:

@@ -3,7 +3,6 @@
 package com.ibm.icu.impl.number;
 
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.number.Grouper;
 import com.ibm.icu.number.IntegerWidth;
 import com.ibm.icu.number.Notation;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
@@ -19,7 +18,7 @@ public class MacroProps implements Cloneable {
     public MeasureUnit unit;
     public MeasureUnit perUnit;
     public Rounder rounder;
-    public Grouper grouper;
+    public Object grouping;
     public Padder padder;
     public IntegerWidth integerWidth;
     public Object symbols;
@@ -47,8 +46,8 @@ public class MacroProps implements Cloneable {
             perUnit = fallback.perUnit;
         if (rounder == null)
             rounder = fallback.rounder;
-        if (grouper == null)
-            grouper = fallback.grouper;
+        if (grouping == null)
+            grouping = fallback.grouping;
         if (padder == null)
             padder = fallback.padder;
         if (integerWidth == null)
@@ -77,7 +76,7 @@ public class MacroProps implements Cloneable {
                 unit,
                 perUnit,
                 rounder,
-                grouper,
+                grouping,
                 padder,
                 integerWidth,
                 symbols,
@@ -103,7 +102,7 @@ public class MacroProps implements Cloneable {
                 && Utility.equals(unit, other.unit)
                 && Utility.equals(perUnit, other.perUnit)
                 && Utility.equals(rounder, other.rounder)
-                && Utility.equals(grouper, other.grouper)
+                && Utility.equals(grouping, other.grouping)
                 && Utility.equals(padder, other.padder)
                 && Utility.equals(integerWidth, other.integerWidth)
                 && Utility.equals(symbols, other.symbols)

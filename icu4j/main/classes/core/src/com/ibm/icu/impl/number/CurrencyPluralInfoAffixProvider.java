@@ -59,4 +59,9 @@ public class CurrencyPluralInfoAffixProvider implements AffixPatternProvider {
     public boolean containsSymbolType(int type) {
         return affixesByPlural[StandardPlural.OTHER.ordinal()].containsSymbolType(type);
     }
+
+    @Override
+    public boolean hasBody() {
+        return affixesByPlural[StandardPlural.OTHER.ordinal()].hasBody();
+    }
 }

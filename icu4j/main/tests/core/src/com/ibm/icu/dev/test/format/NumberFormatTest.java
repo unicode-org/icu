@@ -5332,6 +5332,33 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test11035_FormatCurrencyAmount() {
+        double amount = 12345.67;
+        String expected = "12,345$67 ​";
+        Currency cur = Currency.getInstance("PTE");
+
+        // Test three ways to set currency via API
+
+        ULocale loc1 = new ULocale("pt_PT");
+        NumberFormat fmt1 = NumberFormat.getCurrencyInstance(loc1);
+        fmt1.setCurrency(cur);
+        String actualSetCurrency = fmt1.format(amount);
+
+        ULocale loc2 = new ULocale("pt_PT@currency=PTE");
+        NumberFormat fmt2 = NumberFormat.getCurrencyInstance(loc2);
+        String actualLocaleString = fmt2.format(amount);
+
+        ULocale loc3 = new ULocale("pt_PT");
+        NumberFormat fmt3 = NumberFormat.getCurrencyInstance(loc3);
+        CurrencyAmount curAmt = new CurrencyAmount(amount, cur);
+        String actualCurrencyAmount = fmt3.format(curAmt);
+
+        assertEquals("Custom Currency Pattern, Set Currency", expected, actualSetCurrency);
+        assertEquals("Custom Currency Pattern, Locale String", expected, actualCurrencyAmount);
+        assertEquals("Custom Currency Pattern, CurrencyAmount", expected, actualLocaleString);
+    }
+
+    @Test
     public void testPercentZero() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getPercentInstance();
         String actual = df.format(0);

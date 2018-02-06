@@ -161,15 +161,119 @@ public final class NumberFormatter {
     }
 
     /**
-     * An enum declaring how to denote positive and negative numbers. Example outputs when formatting 123
-     * and -123 in <em>en-US</em>:
+     * An enum declaring the strategy for when and how to display grouping separators (i.e., the
+     * separator, often a comma or period, after every 2-3 powers of ten). The choices are several
+     * pre-built strategies for different use cases that employ locale data whenever possible. Example
+     * outputs for 1234 and 1234567 in <em>en-IN</em>:
      *
      * <ul>
-     * <li>AUTO: "123" and "-123"
-     * <li>ALWAYS: "+123" and "-123"
-     * <li>NEVER: "123" and "123"
-     * <li>ACCOUNTING: "$123" and "($123)"
-     * <li>ACCOUNTING_ALWAYS: "+$123" and "($123)"
+     * <li>OFF: 1234 and 12345
+     * <li>MIN2: 1234 and 12,34,567
+     * <li>AUTO: 1,234 and 12,34,567
+     * <li>ON_ALIGNED: 1,234 and 12,34,567
+     * <li>WESTERN: 1,234 and 1,234,567
+     * </ul>
+     *
+     * <p>
+     * The default is AUTO, which displays grouping separators unless the locale data says that grouping
+     * is not customary. To force grouping for all numbers greater than 1000 consistently across locales,
+     * use ON_ALIGNED. On the other hand, to display grouping less frequently than the default, use MIN2
+     * or OFF. See the docs of each option for details.
+     *
+     * <p>
+     * Note: This enum specifies the strategy for grouping sizes. To set which character to use as the
+     * grouping separator, use the "symbols" setter.
+     *
+     * @draft ICU 61
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberFormatter
+     */
+    public static enum GroupingStrategy {
+        /**
+         * Do not display grouping separators in any locale.
+         *
+         * @draft ICU 61
+         * @provisional This API might change or be removed in a future release.
+         * @see NumberFormatter
+         */
+        OFF,
+
+        /**
+         * Display grouping using locale defaults, except do not show grouping on values smaller than
+         * 10000 (such that there is a <em>minimum of two digits</em> before the first separator).
+         *
+         * <p>
+         * Note that locales may restrict grouping separators to be displayed only on 1 million or
+         * greater (for example, ee and hu) or disable grouping altogether (for example, bg currency).
+         *
+         * <p>
+         * Locale data is used to determine whether to separate larger numbers into groups of 2
+         * (customary in South Asia) or groups of 3 (customary in Europe and the Americas).
+         *
+         * @draft ICU 61
+         * @provisional This API might change or be removed in a future release.
+         * @see NumberFormatter
+         */
+        MIN2,
+
+        /**
+         * Display grouping using the default strategy for all locales. This is the default behavior.
+         *
+         * <p>
+         * Note that locales may restrict grouping separators to be displayed only on 1 million or
+         * greater (for example, ee and hu) or disable grouping altogether (for example, bg currency).
+         *
+         * <p>
+         * Locale data is used to determine whether to separate larger numbers into groups of 2
+         * (customary in South Asia) or groups of 3 (customary in Europe and the Americas).
+         *
+         * @draft ICU 61
+         * @provisional This API might change or be removed in a future release.
+         * @see NumberFormatter
+         */
+        AUTO,
+
+        /**
+         * Always display the grouping separator on values of at least 1000.
+         *
+         * <p>
+         * This option ignores the locale data that restricts or disables grouping, described in MIN2 and
+         * AUTO. This option may be useful to normalize the alignment of numbers, such as in a
+         * spreadsheet.
+         *
+         * <p>
+         * Locale data is used to determine whether to separate larger numbers into groups of 2
+         * (customary in South Asia) or groups of 3 (customary in Europe and the Americas).
+         *
+         * @draft ICU 61
+         * @provisional This API might change or be removed in a future release.
+         * @see NumberFormatter
+         */
+        ON_ALIGNED,
+
+        /**
+         * Use the Western defaults: groups of 3 and enabled for all numbers 1000 or greater. Do not use
+         * locale data for determining the grouping strategy.
+         *
+         * @draft ICU 61
+         * @provisional This API might change or be removed in a future release.
+         * @see NumberFormatter
+         */
+        WESTERN
+    }
+
+    /**
+     * An enum declaring how to denote positive and negative numbers. Example outputs when formatting
+     * 123, 0, and -123 in <em>en-US</em>:
+     *
+     * <ul>
+     * <li>AUTO: "123", "0", and "-123"
+     * <li>ALWAYS: "+123", "+0", and "-123"
+     * <li>NEVER: "123", "0", and "123"
+     * <li>ACCOUNTING: "$123", "$0", and "($123)"
+     * <li>ACCOUNTING_ALWAYS: "+$123", "+$0", and "($123)"
+     * <li>EXCEPT_ZERO: "+123", "0", and "-123"
+     * <li>ACCOUNTING_EXCEPT_ZERO: "+$123", "$0", and "($123)"
      * </ul>
      *
      * <p>

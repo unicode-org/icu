@@ -465,9 +465,8 @@ output	grouping	breaks	grouping2	minGroupingDigits
 1,2345,6789	4
 1,23,45,6789	4	K	2
 1,23,45,6789	4	K	2	2
-// Q only supports minGrouping<=2
 123,456789	6		6	3
-123456789	6	JKQ	6	4
+123456789	6	JK	6	4
 
 test multiplier setters
 set locale en_US
