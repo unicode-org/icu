@@ -155,9 +155,15 @@ SimpleModifier::formatAsPrefixSuffix(NumberStringBuilder &result, int32_t startI
 
 int32_t ConstantMultiFieldModifier::apply(NumberStringBuilder &output, int leftIndex, int rightIndex,
                                           UErrorCode &status) const {
-    // Insert the suffix first since inserting the prefix will change the rightIndex
-    int32_t length = output.insert(rightIndex, fSuffix, status);
-    length += output.insert(leftIndex, fPrefix, status);
+    int32_t length = output.insert(leftIndex, fPrefix, status);
+    if (fOverwrite) {
+        length += output.splice(
+            leftIndex + length,
+            rightIndex + length,
+            UnicodeString(), 0, 0,
+            UNUM_FIELD_COUNT, status);
+    }
+    length += output.insert(rightIndex + length, fSuffix, status);
     return length;
 }
 
@@ -177,10 +183,11 @@ bool ConstantMultiFieldModifier::isStrong() const {
 
 CurrencySpacingEnabledModifier::CurrencySpacingEnabledModifier(const NumberStringBuilder &prefix,
                                                                const NumberStringBuilder &suffix,
+                                                               bool overwrite,
                                                                bool strong,
                                                                const DecimalFormatSymbols &symbols,
                                                                UErrorCode &status)
-        : ConstantMultiFieldModifier(prefix, suffix, strong) {
+        : ConstantMultiFieldModifier(prefix, suffix, overwrite, strong) {
     // Check for currency spacing. Do not build the UnicodeSets unless there is
     // a currency code point at a boundary.
     if (prefix.length() > 0 && prefix.fieldAt(prefix.length() - 1) == UNUM_CURRENCY_FIELD) {

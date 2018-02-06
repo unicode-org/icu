@@ -22,6 +22,7 @@ NumberFormatterApiTest::NumberFormatterApiTest()
 NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode &status)
               : USD(u"USD", status), GBP(u"GBP", status),
                 CZK(u"CZK", status), CAD(u"CAD", status),
+                ESP(u"ESP", status), PTE(u"PTE", status),
                 FRENCH_SYMBOLS(Locale::getFrench(), status),
                 SWISS_SYMBOLS(Locale("de-CH"), status),
                 MYANMAR_SYMBOLS(Locale("my"), status) {
@@ -349,6 +350,9 @@ void NumberFormatterApiTest::notationCompact() {
             Locale::getEnglish(),
             9990000,
             u"10M");
+
+    // NOTE: There is no API for compact custom data in C++
+    // and thus no "Compact Somali No Figure" test
 }
 
 void NumberFormatterApiTest::unitMeasure() {
@@ -608,6 +612,66 @@ void NumberFormatterApiTest::unitCurrency() {
             Locale::getEnglish(),
             -9876543.21,
             u"-£9,876,543.21");
+
+    // The full currency symbol is not shown in NARROW format.
+    // NOTE: This example is in the documentation.
+    assertFormatSingle(
+            u"Currency Difference between Narrow and Short (Narrow Version)",
+            NumberFormatter::with().unit(USD).unitWidth(UNUM_UNIT_WIDTH_NARROW),
+            Locale("en-CA"),
+            5.43,
+            u"$5.43");
+
+    assertFormatSingle(
+            u"Currency Difference between Narrow and Short (Short Version)",
+            NumberFormatter::with().unit(USD).unitWidth(UNUM_UNIT_WIDTH_SHORT),
+            Locale("en-CA"),
+            5.43,
+            u"US$5.43");
+
+    assertFormatSingle(
+            u"Currency-dependent format (Control)",
+            NumberFormatter::with().unit(USD).unitWidth(UNUM_UNIT_WIDTH_SHORT),
+            Locale("ca"),
+            444444.55,
+            u"444.444,55 USD");
+
+    assertFormatSingle(
+            u"Currency-dependent format (Test)",
+            NumberFormatter::with().unit(ESP).unitWidth(UNUM_UNIT_WIDTH_SHORT),
+            Locale("ca"),
+            444444.55,
+            u"₧ 444.445");
+
+    assertFormatSingle(
+            u"Currency-dependent symbols (Control)",
+            NumberFormatter::with().unit(USD).unitWidth(UNUM_UNIT_WIDTH_SHORT),
+            Locale("pt-PT"),
+            444444.55,
+            u"444 444,55 US$");
+
+    // NOTE: This is a bit of a hack on CLDR's part. They set the currency symbol to U+200B (zero-
+    // width space), and they set the decimal separator to the $ symbol.
+    assertFormatSingle(
+            u"Currency-dependent symbols (Test Short)",
+            NumberFormatter::with().unit(PTE).unitWidth(UNUM_UNIT_WIDTH_SHORT),
+            Locale("pt-PT"),
+            444444.55,
+            u"444,444$55 \u200B");
+
+    assertFormatSingle(
+            u"Currency-dependent symbols (Test Narrow)",
+            NumberFormatter::with().unit(PTE).unitWidth(UNUM_UNIT_WIDTH_NARROW),
+            Locale("pt-PT"),
+            444444.55,
+            u"444,444$55 PTE");
+
+    assertFormatSingle(
+            u"Currency-dependent symbols (Test ISO Code)",
+            NumberFormatter::with().unit(PTE).unitWidth(UNUM_UNIT_WIDTH_ISO_CODE),
+            Locale("pt-PT"),
+            444444.55,
+            u"444,444$55 PTE");
 }
 
 void NumberFormatterApiTest::unitPercent() {
@@ -826,6 +890,20 @@ void NumberFormatterApiTest::roundingFractionFigures() {
             u"0.09",
             u"0.01",
             u"0.00");
+
+    assertFormatSingle(
+            "FracSig with trailing zeros A",
+            NumberFormatter::with().rounding(Rounder::fixedFraction(2).withMinDigits(3)),
+            Locale::getEnglish(),
+            0.1,
+            u"0.10");
+
+    assertFormatSingle(
+            "FracSig with trailing zeros B",
+            NumberFormatter::with().rounding(Rounder::fixedFraction(2).withMinDigits(3)),
+            Locale::getEnglish(),
+            0.0999999,
+            u"0.10");
 }
 
 void NumberFormatterApiTest::roundingOther() {
@@ -950,7 +1028,7 @@ void NumberFormatterApiTest::roundingOther() {
 void NumberFormatterApiTest::grouping() {
     assertFormatDescendingBig(
             u"Western Grouping",
-            NumberFormatter::with().grouping(Grouper::defaults()),
+            NumberFormatter::with().grouping(UNUM_GROUPING_AUTO),
             Locale::getEnglish(),
             u"87,650,000",
             u"8,765,000",
@@ -964,7 +1042,7 @@ void NumberFormatterApiTest::grouping() {
 
     assertFormatDescendingBig(
             u"Indic Grouping",
-            NumberFormatter::with().grouping(Grouper::defaults()),
+            NumberFormatter::with().grouping(UNUM_GROUPING_AUTO),
             Locale("en-IN"),
             u"8,76,50,000",
             u"87,65,000",
@@ -978,7 +1056,7 @@ void NumberFormatterApiTest::grouping() {
 
     assertFormatDescendingBig(
             u"Western Grouping, Wide",
-            NumberFormatter::with().grouping(Grouper::minTwoDigits()),
+            NumberFormatter::with().grouping(UNUM_GROUPING_MIN2),
             Locale::getEnglish(),
             u"87,650,000",
             u"8,765,000",
@@ -992,7 +1070,7 @@ void NumberFormatterApiTest::grouping() {
 
     assertFormatDescendingBig(
             u"Indic Grouping, Wide",
-            NumberFormatter::with().grouping(Grouper::minTwoDigits()),
+            NumberFormatter::with().grouping(UNUM_GROUPING_MIN2),
             Locale("en-IN"),
             u"8,76,50,000",
             u"87,65,000",
@@ -1006,7 +1084,7 @@ void NumberFormatterApiTest::grouping() {
 
     assertFormatDescendingBig(
             u"No Grouping",
-            NumberFormatter::with().grouping(Grouper::none()),
+            NumberFormatter::with().grouping(UNUM_GROUPING_OFF),
             Locale("en-IN"),
             u"87650000",
             u"8765000",
@@ -1017,6 +1095,97 @@ void NumberFormatterApiTest::grouping() {
             u"87.65",
             u"8.765",
             u"0");
+
+    // NOTE: Hungarian is interesting because it has minimumGroupingDigits=4 in locale data
+    // If this test breaks due to data changes, find another locale that has minimumGroupingDigits.
+    assertFormatDescendingBig(
+            u"Hungarian Grouping",
+            NumberFormatter::with().grouping(UNUM_GROUPING_AUTO),
+            Locale("hu"),
+            u"87 650 000",
+            u"8 765 000",
+            u"876500",
+            u"87650",
+            u"8765",
+            u"876,5",
+            u"87,65",
+            u"8,765",
+            u"0");
+
+    assertFormatDescendingBig(
+            u"Hungarian Grouping, Min 2",
+            NumberFormatter::with().grouping(UNUM_GROUPING_MIN2),
+            Locale("hu"),
+            u"87 650 000",
+            u"8 765 000",
+            u"876500",
+            u"87650",
+            u"8765",
+            u"876,5",
+            u"87,65",
+            u"8,765",
+            u"0");
+
+    assertFormatDescendingBig(
+            u"Hungarian Grouping, Always",
+            NumberFormatter::with().grouping(UNUM_GROUPING_ON_ALIGNED),
+            Locale("hu"),
+            u"87 650 000",
+            u"8 765 000",
+            u"876 500",
+            u"87 650",
+            u"8 765",
+            u"876,5",
+            u"87,65",
+            u"8,765",
+            u"0");
+
+    // NOTE: Bulgarian is interesting because it has no grouping in the default currency format.
+    // If this test breaks due to data changes, find another locale that has no default grouping.
+    assertFormatDescendingBig(
+            u"Bulgarian Currency Grouping",
+            NumberFormatter::with().grouping(UNUM_GROUPING_AUTO).unit(USD),
+            Locale("bg"),
+            u"87650000,00 щ.д.",
+            u"8765000,00 щ.д.",
+            u"876500,00 щ.д.",
+            u"87650,00 щ.д.",
+            u"8765,00 щ.д.",
+            u"876,50 щ.д.",
+            u"87,65 щ.д.",
+            u"8,76 щ.д.",
+            u"0,00 щ.д.");
+
+    assertFormatDescendingBig(
+            u"Bulgarian Currency Grouping, Always",
+            NumberFormatter::with().grouping(UNUM_GROUPING_ON_ALIGNED).unit(USD),
+            Locale("bg"),
+            u"87 650 000,00 щ.д.",
+            u"8 765 000,00 щ.д.",
+            u"876 500,00 щ.д.",
+            u"87 650,00 щ.д.",
+            u"8 765,00 щ.д.",
+            u"876,50 щ.д.",
+            u"87,65 щ.д.",
+            u"8,76 щ.д.",
+            u"0,00 щ.д.");
+
+    // TODO: Enable this test when macro-setter is available in C++
+    // MacroProps macros;
+    // macros.grouping = Grouper(4, 1, 3);
+    // assertFormatDescendingBig(
+    //         u"Custom Grouping via Internal API",
+    //         NumberFormatter::with().macros(macros),
+    //         Locale::getEnglish(),
+    //         u"8,7,6,5,0000",
+    //         u"8,7,6,5000",
+    //         u"876500",
+    //         u"87650",
+    //         u"8765",
+    //         u"876.5",
+    //         u"87.65",
+    //         u"8.765",
+    //         u"0");
 }
 
 void NumberFormatterApiTest::padding() {

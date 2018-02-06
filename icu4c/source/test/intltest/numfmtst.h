@@ -219,6 +219,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test13391_chakmaParsing();
 
     void checkExceptionIssue11735();
+    void Test11035_FormatCurrencyAmount();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);

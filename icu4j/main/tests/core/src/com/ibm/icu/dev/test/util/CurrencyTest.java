@@ -190,17 +190,54 @@ public class CurrencyTest extends TestFmwk {
         // Do a basic check of getName()
         // USD { "US$", "US Dollar"            } // 04/04/1792-
         ULocale en = ULocale.ENGLISH;
+        ULocale en_CA = ULocale.forLanguageTag("en-CA");
+        ULocale en_US = ULocale.forLanguageTag("en-US");
+        ULocale en_NZ = ULocale.forLanguageTag("en-NZ");
         boolean[] isChoiceFormat = new boolean[1];
-        Currency usd = Currency.getInstance("USD");
+        Currency USD = Currency.getInstance("USD");
+        Currency CAD = Currency.getInstance("CAD");
+        Currency USX = Currency.getInstance("USX");
         // Warning: HARD-CODED LOCALE DATA in this test.  If it fails, CHECK
         // THE LOCALE DATA before diving into the code.
-        assertEquals("USD.getName(SYMBOL_NAME)",
+        assertEquals("USD.getName(SYMBOL_NAME, en)",
                 "$",
-                usd.getName(en, Currency.SYMBOL_NAME, isChoiceFormat));
-        assertEquals("USD.getName(LONG_NAME)",
+                USD.getName(en, Currency.SYMBOL_NAME, isChoiceFormat));
+        assertEquals("USD.getName(NARROW_SYMBOL_NAME, en)",
+                "$",
+                USD.getName(en, Currency.NARROW_SYMBOL_NAME, isChoiceFormat));
+        assertEquals("USD.getName(LONG_NAME, en)",
                 "US Dollar",
-                usd.getName(en, Currency.LONG_NAME, isChoiceFormat));
-        // TODO add more tests later
+                USD.getName(en, Currency.LONG_NAME, isChoiceFormat));
+        assertEquals("CAD.getName(SYMBOL_NAME, en)",
+                "CA$",
+                CAD.getName(en, Currency.SYMBOL_NAME, isChoiceFormat));
+        assertEquals("CAD.getName(NARROW_SYMBOL_NAME, en)",
+                "$",
+                CAD.getName(en, Currency.NARROW_SYMBOL_NAME, isChoiceFormat));
+        assertEquals("CAD.getName(SYMBOL_NAME, en_CA)",
+                "$",
+                CAD.getName(en_CA, Currency.SYMBOL_NAME, isChoiceFormat));
+        assertEquals("USD.getName(SYMBOL_NAME, en_CA)",
+                "US$",
+                USD.getName(en_CA, Currency.SYMBOL_NAME, isChoiceFormat));
+        assertEquals("USD.getName(NARROW_SYMBOL_NAME, en_CA)",
+                "$",
+                USD.getName(en_CA, Currency.NARROW_SYMBOL_NAME, isChoiceFormat));
+        assertEquals("USD.getName(SYMBOL_NAME) in en_NZ",
+                "US$",
+                USD.getName(en_NZ, Currency.SYMBOL_NAME, isChoiceFormat));
+        assertEquals("CAD.getName(SYMBOL_NAME)",
+                "CA$",
+                CAD.getName(en_NZ, Currency.SYMBOL_NAME, isChoiceFormat));
+        assertEquals("USX.getName(SYMBOL_NAME)",
+                "USX",
+                USX.getName(en_US, Currency.SYMBOL_NAME, isChoiceFormat));
+        assertEquals("USX.getName(NARROW_SYMBOL_NAME)",
+                "USX",
+                USX.getName(en_US, Currency.NARROW_SYMBOL_NAME, isChoiceFormat));
+        assertEquals("USX.getName(LONG_NAME)",
+                "USX",
+                USX.getName(en_US, Currency.LONG_NAME, isChoiceFormat));
     }
 
     @Test

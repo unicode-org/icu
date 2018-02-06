@@ -206,9 +206,9 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
         insertPrefix(a.clear(), 0);
         insertSuffix(b.clear(), 0);
         if (patternInfo.hasCurrencySign()) {
-            return new CurrencySpacingEnabledModifier(a, b, isStrong, symbols);
+            return new CurrencySpacingEnabledModifier(a, b, !patternInfo.hasBody(), isStrong, symbols);
         } else {
-            return new ConstantMultiFieldModifier(a, b, isStrong);
+            return new ConstantMultiFieldModifier(a, b, !patternInfo.hasBody(), isStrong);
         }
     }
 
@@ -271,13 +271,18 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     public int apply(NumberStringBuilder output, int leftIndex, int rightIndex) {
         int prefixLen = insertPrefix(output, leftIndex);
         int suffixLen = insertSuffix(output, rightIndex + prefixLen);
+        // If the pattern had no decimal stem body (like #,##0.00), overwrite the value.
+        int overwriteLen = 0;
+        if (!patternInfo.hasBody()) {
+            overwriteLen = output.splice(leftIndex + prefixLen, rightIndex + prefixLen, "", 0, 0, null);
+        }
         CurrencySpacingEnabledModifier.applyCurrencySpacing(output,
                 leftIndex,
                 prefixLen,
-                rightIndex + prefixLen,
+                rightIndex + prefixLen + overwriteLen,
                 suffixLen,
                 symbols);
-        return prefixLen + suffixLen;
+        return prefixLen + overwriteLen + suffixLen;
     }
 
     @Override
@@ -317,7 +322,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
 
     /**
      * Pre-processes the prefix or suffix into the currentAffix field, creating and mutating that field
-     * if necessary.  Calls down to {@link PatternStringUtils#affixPatternProviderToStringBuilder}.
+     * if necessary. Calls down to {@link PatternStringUtils#affixPatternProviderToStringBuilder}.
      *
      * @param isPrefix
      *            true to prepare the prefix; false to prepare the suffix.
@@ -355,10 +360,10 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
                 return currency.getCurrencyCode();
             } else if (unitWidth == UnitWidth.HIDDEN) {
                 return "";
-            } else if (unitWidth == UnitWidth.NARROW) {
-                return currency.getName(symbols.getULocale(), Currency.NARROW_SYMBOL_NAME, null);
             } else {
-                return currency.getName(symbols.getULocale(), Currency.SYMBOL_NAME, null);
+                int selector = unitWidth == UnitWidth.NARROW ? Currency.NARROW_SYMBOL_NAME
+                        : Currency.SYMBOL_NAME;
+                return currency.getName(symbols.getULocale(), selector, null);
             }
         case AffixUtils.TYPE_CURRENCY_DOUBLE:
             return currency.getCurrencyCode();

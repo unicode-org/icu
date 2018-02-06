@@ -2,9 +2,12 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.number;
 
+import com.ibm.icu.impl.CurrencyData;
+import com.ibm.icu.impl.CurrencyData.CurrencyFormatInfo;
 import com.ibm.icu.impl.number.CompactData.CompactType;
 import com.ibm.icu.impl.number.ConstantAffixModifier;
 import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.impl.number.LongNameHandler;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.MicroProps;
@@ -15,6 +18,7 @@ import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
+import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -134,34 +138,48 @@ class NumberFormatterImpl {
         }
         String nsName = ns.getName();
 
-        // Load and parse the pattern string. It is used for grouping sizes and affixes only.
-        int patternStyle;
-        if (isPercent || isPermille) {
-            patternStyle = NumberFormat.PERCENTSTYLE;
-        } else if (!isCurrency || unitWidth == UnitWidth.FULL_NAME) {
-            patternStyle = NumberFormat.NUMBERSTYLE;
-        } else if (isAccounting) {
-            // NOTE: Although ACCOUNTING and ACCOUNTING_ALWAYS are only supported in currencies right
-            // now,
-            // the API contract allows us to add support to other units in the future.
-            patternStyle = NumberFormat.ACCOUNTINGCURRENCYSTYLE;
-        } else {
-            patternStyle = NumberFormat.CURRENCYSTYLE;
-        }
-        String pattern = NumberFormat
-                .getPatternForStyleAndNumberingSystem(macros.loc, nsName, patternStyle);
-        ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(pattern);
-
-        /////////////////////////////////////////////////////////////////////////////////////
-        /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
-        /////////////////////////////////////////////////////////////////////////////////////
-
-        // Symbols
+        // Resolve the symbols. Do this here because currency may need to customize them.
         if (macros.symbols instanceof DecimalFormatSymbols) {
             micros.symbols = (DecimalFormatSymbols) macros.symbols;
         } else {
             micros.symbols = DecimalFormatSymbols.forNumberingSystem(macros.loc, ns);
         }
+
+        // Load and parse the pattern string. It is used for grouping sizes and affixes only.
+        // If we are formatting currency, check for a currency-specific pattern.
+        String pattern = null;
+        if (isCurrency) {
+            CurrencyFormatInfo info = CurrencyData.provider.getInstance(macros.loc, true)
+                    .getFormatInfo(currency.getCurrencyCode());
+            if (info != null) {
+                pattern = info.currencyPattern;
+                // It's clunky to clone an object here, but this code is not frequently executed.
+                micros.symbols = (DecimalFormatSymbols) micros.symbols.clone();
+                micros.symbols.setMonetaryDecimalSeparatorString(info.monetaryDecimalSeparator);
+                micros.symbols.setMonetaryGroupingSeparatorString(info.monetaryGroupingSeparator);
+            }
+        }
+        if (pattern == null) {
+            int patternStyle;
+            if (isPercent || isPermille) {
+                patternStyle = NumberFormat.PERCENTSTYLE;
+            } else if (!isCurrency || unitWidth == UnitWidth.FULL_NAME) {
+                patternStyle = NumberFormat.NUMBERSTYLE;
+            } else if (isAccounting) {
+                // NOTE: Although ACCOUNTING and ACCOUNTING_ALWAYS are only supported in currencies
+                // right now, the API contract allows us to add support to other units in the future.
+                patternStyle = NumberFormat.ACCOUNTINGCURRENCYSTYLE;
+            } else {
+                patternStyle = NumberFormat.CURRENCYSTYLE;
+            }
+            pattern = NumberFormat
+                    .getPatternForStyleAndNumberingSystem(macros.loc, nsName, patternStyle);
+        }
+        ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(pattern);
+
+        /////////////////////////////////////////////////////////////////////////////////////
+        /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
+        /////////////////////////////////////////////////////////////////////////////////////
 
         // Multiplier (compatibility mode value).
         if (macros.multiplier != null) {
@@ -181,15 +199,17 @@ class NumberFormatterImpl {
         micros.rounding = micros.rounding.withLocaleData(currency);
 
         // Grouping strategy
-        if (macros.grouper != null) {
-            micros.grouping = macros.grouper;
+        if (macros.grouping instanceof Grouper) {
+            micros.grouping = (Grouper) macros.grouping;
+        } else if (macros.grouping instanceof GroupingStrategy) {
+            micros.grouping = Grouper.forStrategy((GroupingStrategy) macros.grouping);
         } else if (macros.notation instanceof CompactNotation) {
             // Compact notation uses minGrouping by default since ICU 59
-            micros.grouping = Grouper.minTwoDigits();
+            micros.grouping = Grouper.forStrategy(GroupingStrategy.MIN2);
         } else {
-            micros.grouping = Grouper.defaults();
+            micros.grouping = Grouper.forStrategy(GroupingStrategy.AUTO);
         }
-        micros.grouping = micros.grouping.withLocaleData(patternInfo);
+        micros.grouping = micros.grouping.withLocaleData(macros.loc, patternInfo);
 
         // Padding strategy
         if (macros.padder != null) {
