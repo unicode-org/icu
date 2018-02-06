@@ -35,7 +35,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
 
     DecimalQuantity();
 
-    ~DecimalQuantity();
+    ~DecimalQuantity() override;
 
     /**
      * Sets this instance to be equal to another instance.
@@ -127,6 +127,12 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     int64_t toLong() const;
 
     int64_t toFractionLong(bool includeTrailingZeros) const;
+
+    /**
+     * Returns whether or not a Long can fully represent the value stored in this DecimalQuantity.
+     * Assumes that the DecimalQuantity is positive.
+     */
+    bool fitsInLong() const;
 
     /** @return The value contained in this {@link DecimalQuantity} approximated as a double. */
     double toDouble() const;
@@ -234,6 +240,11 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
 
     /** Visible for testing */
     inline bool isExplicitExactDouble() { return explicitExactDouble; };
+
+    /**
+     * Bogus flag for when a DecimalQuantity is stored on the stack.
+     */
+    bool bogus = false;
 
   private:
     /**

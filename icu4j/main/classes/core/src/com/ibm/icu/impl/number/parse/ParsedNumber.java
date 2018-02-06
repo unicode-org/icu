@@ -8,11 +8,15 @@ import java.util.Comparator;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 
 /**
- * @author sffc
+ * Struct-like class to hold the results of a parsing routine.
  *
+ * @author sffc
  */
 public class ParsedNumber {
 
+    /**
+     * The numerical value that was parsed.
+     */
     public DecimalQuantity_DualStorageBCD quantity;
 
     /**

@@ -42,6 +42,8 @@
 
 U_NAMESPACE_BEGIN
 
+using namespace icu::pluralimpl;
+
 static const UChar PLURAL_KEYWORD_OTHER[]={LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,0};
 static const UChar PLURAL_DEFAULT_RULE[]={LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,COLON,SPACE,LOW_N,0};
 static const UChar PK_IN[]={LOW_I,LOW_N,0};

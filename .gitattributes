@@ -4373,6 +4373,7 @@ icu4c/source/i18n/number_stringbuilder.h svneol=native#text/plain%3Bcharset%3Dut
 icu4c/source/i18n/number_types.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/number_utils.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/numfmt.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/i18n/numparse_parsednumber.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/numparse_stringsegment.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/numparse_stringsegment.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/numparse_types.h svneol=native#text/plain%3Bcharset%3Dutf-8

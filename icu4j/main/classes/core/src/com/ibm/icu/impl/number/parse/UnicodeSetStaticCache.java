@@ -72,10 +72,6 @@ public class UnicodeSetStaticCache {
         return get(key1).contains(str) ? key1 : chooseFrom(str, key2);
     }
 
-    public static Key chooseFrom(String str, Key key1, Key key2, Key key3) {
-        return get(key1).contains(str) ? key1 : chooseFrom(str, key2, key3);
-    }
-
     private static UnicodeSet computeUnion(Key k1, Key k2) {
         return new UnicodeSet().addAll(get(k1)).addAll(get(k2)).freeze();
     }
@@ -110,7 +106,6 @@ public class UnicodeSetStaticCache {
         unicodeSets.put(Key.MINUS_SIGN, new UnicodeSet("[-⁻₋−➖﹣－]").freeze());
         unicodeSets.put(Key.PLUS_SIGN, new UnicodeSet("[+⁺₊➕﬩﹢＋]").freeze());
 
-        // TODO: Fill in the next three sets.
         unicodeSets.put(Key.PERCENT_SIGN, new UnicodeSet("[%٪]").freeze());
         unicodeSets.put(Key.PERMILLE_SIGN, new UnicodeSet("[‰؉]").freeze());
         unicodeSets.put(Key.INFINITY, new UnicodeSet("[∞]").freeze());
