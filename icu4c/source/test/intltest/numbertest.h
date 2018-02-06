@@ -9,9 +9,13 @@
 #include "number_stringbuilder.h"
 #include "intltest.h"
 #include "number_affixutils.h"
+#include "numparse_stringsegment.h"
+#include "unicode/locid.h"
 
 using namespace icu::number;
 using namespace icu::number::impl;
+using namespace icu::numparse;
+using namespace icu::numparse::impl;
 
 ////////////////////////////////////////////////////////////////////////////////////////
 // INSTRUCTIONS:                                                                      //
@@ -178,6 +182,30 @@ class NumberStringBuilderTest : public IntlTest {
     void assertEqualsImpl(const UnicodeString &a, const NumberStringBuilder &b);
 };
 
+class StringSegmentTest : public IntlTest {
+  public:
+    void testOffset();
+    void testLength();
+    void testCharAt();
+    void testGetCodePoint();
+    void testCommonPrefixLength();
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+};
+
+class UniSetsTest : public IntlTest {
+  public:
+    void testSetCoverage();
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+
+  private:
+    void assertInSet(const UnicodeString& localeName, const UnicodeString &setName,
+                     const UnicodeSet& set, const UnicodeString& str);
+    void assertInSet(const UnicodeString& localeName, const UnicodeString &setName,
+                     const UnicodeSet& set, UChar32 cp);
+};
+
 
 // NOTE: This macro is identical to the one in itformat.cpp
 #define TESTCLASS(id, TestClass)          \
@@ -206,6 +234,8 @@ class NumberTest : public IntlTest {
         TESTCLASS(4, PatternModifierTest);
         TESTCLASS(5, PatternStringTest);
         TESTCLASS(6, NumberStringBuilderTest);
+        TESTCLASS(7, StringSegmentTest);
+        TESTCLASS(8, UniSetsTest);
         default: name = ""; break; // needed to end loop
         }
     }
