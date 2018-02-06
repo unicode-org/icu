@@ -66,18 +66,10 @@ public class NumberParserImpl {
         STRICT,
     }
 
-    @Deprecated
-    public static NumberParserImpl createParserFromPattern(
+    public static NumberParserImpl createSimpleParser(
             ULocale locale,
             String pattern,
-            boolean strictGrouping) {
-        // Temporary frontend for testing.
-
-        int parseFlags = ParsingUtils.PARSE_FLAG_IGNORE_CASE
-                | ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;
-        if (strictGrouping) {
-            parseFlags |= ParsingUtils.PARSE_FLAG_STRICT_GROUPING_SIZE;
-        }
+            int parseFlags) {
 
         NumberParserImpl parser = new NumberParserImpl(parseFlags, true);
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
@@ -91,7 +83,7 @@ public class NumberParserImpl {
         factory.parseFlags = parseFlags;
 
         ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(pattern);
-        AffixMatcher.newGenerate(patternInfo, parser, factory, ignorables, parseFlags);
+        AffixMatcher.createMatchers(patternInfo, parser, factory, ignorables, parseFlags);
 
         Grouper grouper = Grouper.forStrategy(GroupingStrategy.AUTO).withLocaleData(locale, patternInfo);
 
@@ -209,7 +201,7 @@ public class NumberParserImpl {
         //////////////////////
 
         // Set up a pattern modifier with mostly defaults to generate AffixMatchers.
-        AffixMatcher.newGenerate(patternInfo, parser, factory, ignorables, parseFlags);
+        AffixMatcher.createMatchers(patternInfo, parser, factory, ignorables, parseFlags);
 
         ////////////////////////
         /// CURRENCY MATCHER ///

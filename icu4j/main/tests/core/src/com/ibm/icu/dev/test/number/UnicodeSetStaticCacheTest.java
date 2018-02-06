@@ -75,7 +75,7 @@ public class UnicodeSetStaticCacheTest {
 
     static void assertInSet(ULocale locale, UnicodeSet set, int cp) {
         // If this test case fails, add the specified code point to the corresponding set in
-        // UnicodeSetStaticCache.java
+        // UnicodeSetStaticCache.java and numparse_unisets.cpp
         assertTrue(
                 locale
                         + " U+"

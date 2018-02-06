@@ -13,6 +13,7 @@ import com.ibm.icu.impl.number.parse.IgnorablesMatcher;
 import com.ibm.icu.impl.number.parse.MinusSignMatcher;
 import com.ibm.icu.impl.number.parse.NumberParserImpl;
 import com.ibm.icu.impl.number.parse.ParsedNumber;
+import com.ibm.icu.impl.number.parse.ParsingUtils;
 import com.ibm.icu.impl.number.parse.PercentMatcher;
 import com.ibm.icu.impl.number.parse.PlusSignMatcher;
 import com.ibm.icu.impl.number.parse.SeriesMatcher;
@@ -58,8 +59,8 @@ public class NumberParserTest {
                 { 3, "-𝟱𝟭𝟰𝟮𝟯-", "0", 11, -51423. },
                 { 3, "a51423US dollars", "a0¤¤¤", 16, 51423. },
                 { 3, "a 51423 US dollars", "a0¤¤¤", 18, 51423. },
-                { 3, "514.23 USD", "0", 10, 514.23 },
-                { 3, "514.23 GBP", "0", 10, 514.23 },
+                { 3, "514.23 USD", "¤0", 10, 514.23 },
+                { 3, "514.23 GBP", "¤0", 10, 514.23 },
                 { 3, "a 𝟱𝟭𝟰𝟮𝟯 b", "a0b", 14, 51423. },
                 { 3, "-a 𝟱𝟭𝟰𝟮𝟯 b", "a0b", 15, -51423. },
                 { 3, "a -𝟱𝟭𝟰𝟮𝟯 b", "a0b", 15, -51423. },
@@ -79,7 +80,7 @@ public class NumberParserTest {
                 { 3, "𝟱.𝟭𝟰𝟮E𝟯", "0", 12, 5142. },
                 { 3, "𝟱.𝟭𝟰𝟮E-𝟯", "0", 13, 0.005142 },
                 { 3, "𝟱.𝟭𝟰𝟮e-𝟯", "0", 13, 0.005142 },
-                { 7, "5,142.50 Canadian dollars", "#,##,##0", 25, 5142.5 },
+                { 7, "5,142.50 Canadian dollars", "#,##,##0 ¤¤¤", 25, 5142.5 },
                 { 3, "a$ b5", "a ¤ b0", 5, 5.0 },
                 { 3, "📺1.23", "📺0;📻0", 6, 1.23 },
                 { 3, "📻1.23", "📺0;📻0", 6, -1.23 },
@@ -87,6 +88,8 @@ public class NumberParserTest {
                 { 3, "                              0", "a0", 31, 0.0 }, // should not hang
                 { 3, "0", "0", 1, 0.0 } };
 
+        int parseFlags = ParsingUtils.PARSE_FLAG_IGNORE_CASE
+                | ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;
         for (Object[] cas : cases) {
             int flags = (Integer) cas[0];
             String input = (String) cas[1];
@@ -94,7 +97,7 @@ public class NumberParserTest {
             int expectedCharsConsumed = (Integer) cas[3];
             double resultDouble = (Double) cas[4];
             NumberParserImpl parser = NumberParserImpl
-                    .createParserFromPattern(ULocale.ENGLISH, pattern, false);
+                    .createSimpleParser(ULocale.ENGLISH, pattern, parseFlags);
             String message = "Input <" + input + "> Parser " + parser;
 
             if (0 != (flags & 0x01)) {
@@ -127,7 +130,9 @@ public class NumberParserTest {
 
             if (0 != (flags & 0x04)) {
                 // Test with strict separators
-                parser = NumberParserImpl.createParserFromPattern(ULocale.ENGLISH, pattern, true);
+                parser = NumberParserImpl.createSimpleParser(ULocale.ENGLISH,
+                        pattern,
+                        parseFlags | ParsingUtils.PARSE_FLAG_STRICT_GROUPING_SIZE);
                 ParsedNumber resultObject = new ParsedNumber();
                 parser.parse(input, true, resultObject);
                 assertNotNull("Strict Parse failed: " + message, resultObject.quantity);
@@ -146,7 +151,7 @@ public class NumberParserTest {
     public void testLocaleFi() {
         // This case is interesting because locale fi has NaN starting with 'e', the same as scientific
         NumberParserImpl parser = NumberParserImpl
-                .createParserFromPattern(new ULocale("fi"), "0", false);
+                .createSimpleParser(new ULocale("fi"), "0", ParsingUtils.PARSE_FLAG_IGNORE_CASE);
 
         ParsedNumber resultObject = new ParsedNumber();
         parser.parse("epäluku", false, resultObject);

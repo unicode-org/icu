@@ -75,7 +75,7 @@ public class AffixMatcher implements NumberParseMatcher {
         return true;
     }
 
-    public static void newGenerate(
+    public static void createMatchers(
             AffixPatternProvider patternInfo,
             NumberParserImpl output,
             MatcherFactory factory,

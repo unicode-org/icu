@@ -5,6 +5,8 @@ package com.ibm.icu.impl.number.parse;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
+ * The core interface implemented by all matchers used for number parsing.
+ *
  * Given a string, there should NOT be more than one way to consume the string with the same matcher
  * applied multiple times. If there is, the non-greedy parsing algorithm will be unhappy and may enter an
  * exponential-time loop. For example, consider the "A Matcher" that accepts "any number of As". Given
