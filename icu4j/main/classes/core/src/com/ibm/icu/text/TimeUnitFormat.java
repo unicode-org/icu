@@ -84,18 +84,11 @@ public class TimeUnitFormat extends MeasureFormat {
 
     private static final long serialVersionUID = -3707773153184971529L;
 
-    // These fields are supposed to be the same as the fields in mf. They
-    // are here for serialization backward compatibility and to support parsing.
+    // Unlike MeasureFormat, this class is mutable and allows a new NumberFormat to be set after
+    // initialization. Keep a second copy of NumberFormat and use it instead of the one from the parent.
     private NumberFormat format;
     private ULocale locale;
     private int style;
-
-    // We use this field in lieu of the super class because the super class
-    // is immutable while this class is mutable. The contents of the super class
-    // is an empty shell. Every public method of the super class is overridden to
-    // delegate to this field. Each time this object mutates, it replaces this field with
-    // a new immutable instance.
-//    private transient MeasureFormat mf;
 
     private transient Map<TimeUnit, Map<String, Object[]>> timeUnitToCountToPatterns;
     private transient PluralRules pluralRules;
