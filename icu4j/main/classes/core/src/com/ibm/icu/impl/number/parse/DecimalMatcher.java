@@ -3,9 +3,9 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
+import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.Key;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.number.Grouper;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
 

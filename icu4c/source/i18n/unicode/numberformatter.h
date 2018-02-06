@@ -88,10 +88,6 @@
  * </ul>
  *
  * <p>
- * * The narrow format for currencies is not currently supported; this is a known issue that will be fixed in a
- * future version. See #11666 for more information.
- *
- * <p>
  * This enum is similar to {@link com.ibm.icu.text.MeasureFormat.FormatWidth}.
  *
  * @draft ICU 60
@@ -164,6 +160,97 @@ typedef enum UNumberUnitWidth {
      */
             UNUM_UNIT_WIDTH_COUNT
 } UNumberUnitWidth;
+
+/**
+ * An enum declaring the strategy for when and how to display grouping separators (i.e., the
+ * separator, often a comma or period, after every 2-3 powers of ten). The choices are several
+ * pre-built strategies for different use cases that employ locale data whenever possible. Example
+ * outputs for 1234 and 1234567 in <em>en-IN</em>:
+ *
+ * <ul>
+ * <li>OFF: 1234 and 12345
+ * <li>MIN2: 1234 and 12,34,567
+ * <li>AUTO: 1,234 and 12,34,567
+ * <li>ON_ALIGNED: 1,234 and 12,34,567
+ * <li>WESTERN: 1,234 and 1,234,567
+ * </ul>
+ *
+ * <p>
+ * The default is AUTO, which displays grouping separators unless the locale data says that grouping
+ * is not customary. To force grouping for all numbers greater than 1000 consistently across locales,
+ * use ON_ALIGNED. On the other hand, to display grouping less frequently than the default, use MIN2
+ * or OFF. See the docs of each option for details.
+ *
+ * <p>
+ * Note: This enum specifies the strategy for grouping sizes. To set which character to use as the
+ * grouping separator, use the "symbols" setter.
+ *
+ * @draft ICU 61
+ */
+typedef enum UGroupingStrategy {
+    /**
+     * Do not display grouping separators in any locale.
+     *
+     * @draft ICU 61
+     */
+    UNUM_GROUPING_OFF,
+
+    /**
+     * Display grouping using locale defaults, except do not show grouping on values smaller than
+     * 10000 (such that there is a <em>minimum of two digits</em> before the first separator).
+     *
+     * <p>
+     * Note that locales may restrict grouping separators to be displayed only on 1 million or
+     * greater (for example, ee and hu) or disable grouping altogether (for example, bg currency).
+     *
+     * <p>
+     * Locale data is used to determine whether to separate larger numbers into groups of 2
+     * (customary in South Asia) or groups of 3 (customary in Europe and the Americas).
+     *
+     * @draft ICU 61
+     */
+    UNUM_GROUPING_MIN2,
+
+    /**
+     * Display grouping using the default strategy for all locales. This is the default behavior.
+     *
+     * <p>
+     * Note that locales may restrict grouping separators to be displayed only on 1 million or
+     * greater (for example, ee and hu) or disable grouping altogether (for example, bg currency).
+     *
+     * <p>
+     * Locale data is used to determine whether to separate larger numbers into groups of 2
+     * (customary in South Asia) or groups of 3 (customary in Europe and the Americas).
+     *
+     * @draft ICU 61
+     */
+    UNUM_GROUPING_AUTO,
+
+    /**
+     * Always display the grouping separator on values of at least 1000.
+     *
+     * <p>
+     * This option ignores the locale data that restricts or disables grouping, described in MIN2 and
+     * AUTO. This option may be useful to normalize the alignment of numbers, such as in a
+     * spreadsheet.
+     *
+     * <p>
+     * Locale data is used to determine whether to separate larger numbers into groups of 2
+     * (customary in South Asia) or groups of 3 (customary in Europe and the Americas).
+     *
+     * @draft ICU 61
+     */
+    UNUM_GROUPING_ON_ALIGNED,
+
+    /**
+     * Use the Western defaults: groups of 3 and enabled for all numbers 1000 or greater. Do not use
+     * locale data for determining the grouping strategy.
+     *
+     * @draft ICU 61
+     */
+    UNUM_GROUPING_WESTERN
+
+} UGroupingStrategy;
 
 /**
  * An enum declaring how to denote positive and negative numbers. Example outputs when formatting 123 and -123 in
@@ -303,7 +390,6 @@ class Rounder;
 class FractionRounder;
 class CurrencyRounder;
 class IncrementRounder;
-class Grouper;
 class IntegerWidth;
 
 namespace impl {
@@ -1037,53 +1123,6 @@ class U_I18N_API IncrementRounder : public Rounder {
 };
 
 /**
- * @internal This API is a technical preview.  It is likely to change in an upcoming release.
- */
-class U_I18N_API Grouper : public UMemory {
-  public:
-    /**
-     * @internal This API is a technical preview.  It is likely to change in an upcoming release.
-     */
-    static Grouper defaults();
-
-    /**
-     * @internal This API is a technical preview.  It is likely to change in an upcoming release.
-     */
-    static Grouper minTwoDigits();
-
-    /**
-     * @internal This API is a technical preview.  It is likely to change in an upcoming release.
-     */
-    static Grouper none();
-
-  private:
-    int8_t fGrouping1; // -3 means "bogus"; -2 means "needs locale data"; -1 means "no grouping"
-    int8_t fGrouping2;
-    bool fMin2;
-
-    Grouper(int8_t grouping1, int8_t grouping2, bool min2)
-            : fGrouping1(grouping1), fGrouping2(grouping2), fMin2(min2) {}
-
-    Grouper() : fGrouping1(-3) {};
-
-    bool isBogus() const {
-        return fGrouping1 == -3;
-    }
-
-    /** NON-CONST: mutates the current instance. */
-    void setLocaleData(const impl::ParsedPatternInfo &patternInfo);
-
-    bool groupAtPosition(int32_t position, const impl::DecimalQuantity &value) const;
-
-    // To allow MacroProps/MicroProps to initialize empty instances:
-    friend struct impl::MacroProps;
-    friend struct impl::MicroProps;
-
-    // To allow NumberFormatterImpl to access isBogus() and perform other operations:
-    friend class impl::NumberFormatterImpl;
-};
-
-/**
  * A class that defines the strategy for padding and truncating integers before the decimal separator.
  *
  * <p>
@@ -1250,6 +1289,58 @@ class U_I18N_API SymbolsWrapper : public UMemory {
     void doCopyFrom(const SymbolsWrapper &other);
 
     void doCleanup();
+};
+
+/** @internal */
+class U_I18N_API Grouper : public UMemory {
+  public:
+    /** @internal */
+    static Grouper forStrategy(UGroupingStrategy grouping);
+
+    // Future: static Grouper forProperties(DecimalFormatProperties& properties);
+
+    /** @internal */
+    Grouper(int16_t grouping1, int16_t grouping2, int16_t minGrouping)
+            : fGrouping1(grouping1), fGrouping2(grouping2), fMinGrouping(minGrouping) {}
+
+  private:
+    /**
+     * The grouping sizes, with the following special values:
+     * <ul>
+     * <li>-1 = no grouping
+     * <li>-2 = needs locale data
+     * <li>-4 = fall back to Western grouping if not in locale
+     * </ul>
+     */
+    int16_t fGrouping1;
+    int16_t fGrouping2;
+
+    /**
+     * The minimum gropuing size, with the following special values:
+     * <ul>
+     * <li>-2 = needs locale data
+     * <li>-3 = no less than 2
+     * </ul>
+     */
+    int16_t fMinGrouping;
+
+    Grouper() : fGrouping1(-3) {};
+
+    bool isBogus() const {
+        return fGrouping1 == -3;
+    }
+
+    /** NON-CONST: mutates the current instance. */
+    void setLocaleData(const impl::ParsedPatternInfo &patternInfo, const Locale& locale);
+
+    bool groupAtPosition(int32_t position, const impl::DecimalQuantity &value) const;
+
+    // To allow MacroProps/MicroProps to initialize empty instances:
+    friend struct MacroProps;
+    friend struct MicroProps;
+
+    // To allow NumberFormatterImpl to access isBogus() and perform other operations:
+    friend class NumberFormatterImpl;
 };
 
 /** @internal */
@@ -1531,8 +1622,6 @@ class U_I18N_API NumberFormatterSettings {
      */
     Derived rounding(const Rounder &rounder) const;
 
-#ifndef U_HIDE_INTERNAL_API
-
     /**
      * Specifies the grouping strategy to use when formatting numbers.
      *
@@ -1546,25 +1635,21 @@ class U_I18N_API NumberFormatterSettings {
      * The exact grouping widths will be chosen based on the locale.
      *
      * <p>
-     * Pass this method the return value of one of the factory methods on {@link Grouper}. For example:
+     * Pass this method an element from the {@link UGroupingStrategy} enum. For example:
      *
      * <pre>
-     * NumberFormatter::with().grouping(Grouper::min2())
+     * NumberFormatter::with().grouping(UNUM_GROUPING_MIN2)
      * </pre>
      *
-     * The default is to perform grouping without concern for the minimum grouping digits.
+     * The default is to perform grouping according to locale data; most locales, but not all locales,
+     * enable it by default.
      *
-     * @param grouper
+     * @param strategy
      *            The grouping strategy to use.
      * @return The fluent chain.
-     * @see Grouper
-     * @see Notation
-     * @internal
-     * @internal ICU 60: This API is technical preview.
+     * @draft ICU 61
      */
-    Derived grouping(const Grouper &grouper) const;
-
-#endif  /* U_HIDE_INTERNAL_API */
+    Derived grouping(const UGroupingStrategy &strategy) const;
 
     /**
      * Specifies the minimum and maximum number of digits to render before the decimal mark.

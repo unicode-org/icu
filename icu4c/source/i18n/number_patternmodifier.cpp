@@ -109,9 +109,9 @@ ConstantMultiFieldModifier *MutablePatternModifier::createConstantModifier(UErro
     insertPrefix(a, 0, status);
     insertSuffix(b, 0, status);
     if (patternInfo->hasCurrencySign()) {
-        return new CurrencySpacingEnabledModifier(a, b, fStrong, *symbols, status);
+        return new CurrencySpacingEnabledModifier(a, b, !patternInfo->hasBody(), fStrong, *symbols, status);
     } else {
-        return new ConstantMultiFieldModifier(a, b, fStrong);
+        return new ConstantMultiFieldModifier(a, b, !patternInfo->hasBody(), fStrong);
     }
 }
 
@@ -167,9 +167,23 @@ int32_t MutablePatternModifier::apply(NumberStringBuilder &output, int32_t leftI
     auto nonConstThis = const_cast<MutablePatternModifier *>(this);
     int32_t prefixLen = nonConstThis->insertPrefix(output, leftIndex, status);
     int32_t suffixLen = nonConstThis->insertSuffix(output, rightIndex + prefixLen, status);
+    // If the pattern had no decimal stem body (like #,##0.00), overwrite the value.
+    int32_t overwriteLen = 0;
+    if (!patternInfo->hasBody()) {
+        overwriteLen = output.splice(
+            leftIndex + prefixLen, rightIndex + prefixLen,
+            UnicodeString(), 0, 0, UNUM_FIELD_COUNT,
+            status);
+    }
     CurrencySpacingEnabledModifier::applyCurrencySpacing(
-            output, leftIndex, prefixLen, rightIndex + prefixLen, suffixLen, *symbols, status);
-    return prefixLen + suffixLen;
+            output,
+            leftIndex,
+            prefixLen,
+            rightIndex + overwriteLen + prefixLen,
+            suffixLen,
+            *symbols,
+            status);
+    return prefixLen + overwriteLen + suffixLen;
 }
 
 int32_t MutablePatternModifier::getPrefixLength(UErrorCode &status) const {
@@ -234,13 +248,16 @@ UnicodeString MutablePatternModifier::getSymbol(AffixPatternType type) const {
             } else if (unitWidth == UNumberUnitWidth::UNUM_UNIT_WIDTH_HIDDEN) {
                 return UnicodeString();
             } else {
+                UCurrNameStyle selector = (unitWidth == UNumberUnitWidth::UNUM_UNIT_WIDTH_NARROW)
+                        ? UCurrNameStyle::UCURR_NARROW_SYMBOL_NAME
+                        : UCurrNameStyle::UCURR_SYMBOL_NAME;
                 UErrorCode status = U_ZERO_ERROR;
                 UBool isChoiceFormat = FALSE;
                 int32_t symbolLen = 0;
                 const char16_t *symbol = ucurr_getName(
                         currencyCode,
                         symbols->getLocale().getName(),
-                        UCurrNameStyle::UCURR_SYMBOL_NAME,
+                        selector,
                         &isChoiceFormat,
                         &symbolLen,
                         &status);

@@ -31,4 +31,11 @@ public interface AffixPatternProvider {
     public boolean negativeHasMinusSign();
 
     public boolean containsSymbolType(int type);
+
+    /**
+     * True if the pattern has a number placeholder like "0" or "#,##0.00"; false if the pattern does not
+     * have one. This is used in cases like compact notation, where the pattern replaces the entire
+     * number instead of rendering the number.
+     */
+    public boolean hasBody();
 }

@@ -11,11 +11,12 @@ import java.util.List;
 import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.impl.number.PropertiesAffixPatternProvider;
 import com.ibm.icu.impl.number.RoundingUtils;
-import com.ibm.icu.number.Grouper;
+import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
@@ -92,7 +93,7 @@ public class NumberParserImpl {
         ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(pattern);
         AffixMatcher.newGenerate(patternInfo, parser, factory, ignorables, parseFlags);
 
-        Grouper grouper = Grouper.defaults().withLocaleData(patternInfo);
+        Grouper grouper = Grouper.forStrategy(GroupingStrategy.AUTO).withLocaleData(locale, patternInfo);
 
         parser.addMatcher(ignorables);
         parser.addMatcher(DecimalMatcher.getInstance(symbols, grouper, parseFlags));
@@ -165,7 +166,7 @@ public class NumberParserImpl {
         AffixPatternProvider patternInfo = new PropertiesAffixPatternProvider(properties);
         Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
         boolean isStrict = properties.getParseMode() == ParseMode.STRICT;
-        Grouper grouper = Grouper.defaults().withProperties(properties);
+        Grouper grouper = Grouper.forProperties(properties);
         int parseFlags = 0;
         // Fraction grouping is disabled by default because it has never been supported in DecimalFormat
         parseFlags |= ParsingUtils.PARSE_FLAG_FRACTION_GROUPING_DISABLED;

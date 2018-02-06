@@ -24,7 +24,6 @@ import java.util.MissingResourceException;
 import java.util.Set;
 
 import com.ibm.icu.impl.CacheBase;
-import com.ibm.icu.impl.CurrencyData.CurrencyDisplayInfo;
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUDebug;
@@ -92,15 +91,11 @@ public class Currency extends MeasureUnit {
      * Selector for getName() indicating the narrow currency symbol.
      * The narrow currency symbol is similar to the regular currency
      * symbol, but it always takes the shortest form: for example,
-     * "$" instead of "US$".
+     * "$" instead of "US$" for USD in en-CA.
      *
-     * This method assumes that the currency data provider is the ICU4J
-     * built-in data provider. If it is not, an exception is thrown.
-     *
-     * @internal
-     * @deprecated ICU 60: This API is ICU internal only.
+     * @draft ICU 61
+     * @provisional This API might change or be removed in a future release.
      */
-    @Deprecated
     public static final int NARROW_SYMBOL_NAME = 3;
 
     private static final EquivalenceRelation<String> EQUIVALENT_CURRENCY_SYMBOLS =
@@ -568,8 +563,8 @@ public class Currency extends MeasureUnit {
      * currency object in the en_US locale is "$".
      * @param locale locale in which to display currency
      * @param nameStyle selector for which kind of name to return.
-     *                  The nameStyle should be either SYMBOL_NAME or
-     *                  LONG_NAME. Otherwise, throw IllegalArgumentException.
+     *                  The nameStyle should be SYMBOL_NAME, NARROW_SYMBOL_NAME,
+     *                  or LONG_NAME. Otherwise, throw IllegalArgumentException.
      * @param isChoiceFormat fill-in; isChoiceFormat[0] is set to true
      * if the returned value is a ChoiceFormat pattern; otherwise it
      * is set to false
@@ -597,13 +592,7 @@ public class Currency extends MeasureUnit {
         case SYMBOL_NAME:
             return names.getSymbol(subType);
         case NARROW_SYMBOL_NAME:
-            // CurrencyDisplayNames is the public interface.
-            // CurrencyDisplayInfo is ICU's standard implementation.
-            if (!(names instanceof CurrencyDisplayInfo)) {
-                throw new UnsupportedOperationException(
-                        "Cannot get narrow symbol from custom currency display name provider");
-            }
-            return ((CurrencyDisplayInfo) names).getNarrowSymbol(subType);
+            return names.getNarrowSymbol(subType);
         case LONG_NAME:
             return names.getName(subType);
         default:

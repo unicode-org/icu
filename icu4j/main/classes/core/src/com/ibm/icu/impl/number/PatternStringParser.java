@@ -169,6 +169,11 @@ public class PatternStringParser {
         public boolean containsSymbolType(int type) {
             return AffixUtils.containsType(pattern, type);
         }
+
+        @Override
+        public boolean hasBody() {
+            return positive.integerTotal > 0;
+        }
     }
 
     public static class ParsedSubpatternInfo {

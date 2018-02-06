@@ -71,6 +71,8 @@ class NumberFormatterApiTest : public IntlTest {
     CurrencyUnit GBP;
     CurrencyUnit CZK;
     CurrencyUnit CAD;
+    CurrencyUnit ESP;
+    CurrencyUnit PTE;
 
     MeasureUnit METER;
     MeasureUnit DAY;
@@ -139,6 +141,7 @@ class ModifiersTest : public IntlTest {
 class PatternModifierTest : public IntlTest {
   public:
     void testBasic();
+    void testPatternWithNoPlaceholder();
     void testMutableEqualsImmutable();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
