@@ -5332,6 +5332,23 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test13453_AffixContent() {
+        DecimalFormat df = (DecimalFormat) DecimalFormat.getScientificInstance();
+        assertEquals("Scientific should NOT be included", "", df.getPositiveSuffix());
+
+        df = CompactDecimalFormat.getInstance(ULocale.ENGLISH, CompactDecimalFormat.CompactStyle.SHORT);
+        assertEquals("Compact should NOT be included", "", df.getPositiveSuffix());
+
+        df = (DecimalFormat) DecimalFormat.getInstance(NumberFormat.ISOCURRENCYSTYLE);
+        df.setCurrency(Currency.getInstance("GBP"));
+        assertEquals("ISO currency SHOULD be included", "GBP", df.getPositivePrefix());
+
+        df = (DecimalFormat) DecimalFormat.getInstance(NumberFormat.PLURALCURRENCYSTYLE);
+        df.setCurrency(Currency.getInstance("GBP"));
+        assertEquals("Plural name SHOULD be included", " British pounds", df.getPositiveSuffix());
+    }
+
+    @Test
     public void Test11035_FormatCurrencyAmount() {
         double amount = 12345.67;
         String expected = "12,345$67 ​";

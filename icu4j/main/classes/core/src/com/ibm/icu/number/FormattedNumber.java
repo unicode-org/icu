@@ -138,31 +138,29 @@ public class FormattedNumber {
 
     /**
      * @internal
-     * @deprecated This API is ICU internal only.
+     * @deprecated This API is ICU internal only. Use {@link #populateFieldPosition} or
+     *             {@link #getFieldIterator} for similar functionality.
      */
     @Deprecated
     public String getPrefix() {
         NumberStringBuilder temp = new NumberStringBuilder();
-        int length = micros.modOuter.apply(temp, 0, 0);
-        length += micros.modMiddle.apply(temp, 0, length);
-        /* length += */ micros.modInner.apply(temp, 0, length);
-        int prefixLength = micros.modOuter.getPrefixLength() + micros.modMiddle.getPrefixLength()
-                + micros.modInner.getPrefixLength();
+        // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle).
+        micros.modMiddle.apply(temp, 0, 0);
+        int prefixLength = micros.modMiddle.getPrefixLength();
         return temp.subSequence(0, prefixLength).toString();
     }
 
     /**
      * @internal
-     * @deprecated This API is ICU internal only.
+     * @deprecated This API is ICU internal only. Use {@link #populateFieldPosition} or
+     *             {@link #getFieldIterator} for similar functionality.
      */
     @Deprecated
     public String getSuffix() {
         NumberStringBuilder temp = new NumberStringBuilder();
-        int length = micros.modOuter.apply(temp, 0, 0);
-        length += micros.modMiddle.apply(temp, 0, length);
-        length += micros.modInner.apply(temp, 0, length);
-        int prefixLength = micros.modOuter.getPrefixLength() + micros.modMiddle.getPrefixLength()
-                + micros.modInner.getPrefixLength();
+        // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle).
+        int length = micros.modMiddle.apply(temp, 0, 0);
+        int prefixLength = micros.modMiddle.getPrefixLength();
         return temp.subSequence(prefixLength, length).toString();
     }
 
@@ -206,7 +204,7 @@ public class FormattedNumber {
         // #equals() or #hashCode() on them directly.
         FormattedNumber _other = (FormattedNumber) other;
         return Arrays.equals(nsb.toCharArray(), _other.nsb.toCharArray())
-                ^ Arrays.equals(nsb.toFieldArray(), _other.nsb.toFieldArray())
-                ^ fq.toBigDecimal().equals(_other.fq.toBigDecimal());
+                && Arrays.equals(nsb.toFieldArray(), _other.nsb.toFieldArray())
+                && fq.toBigDecimal().equals(_other.fq.toBigDecimal());
     }
 }
