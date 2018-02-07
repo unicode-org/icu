@@ -25,7 +25,6 @@ import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.number.CompactNotation;
-import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.FractionRounder;
 import com.ibm.icu.number.IntegerWidth;
 import com.ibm.icu.number.LocalizedNumberFormatter;
@@ -1858,29 +1857,6 @@ public class NumberFormatterApiTest {
         assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.withLocale(ULocale.ENGLISH));
         assertEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.withLocale(Locale.ENGLISH));
         assertNotEquals(NumberFormatter.with().locale(ULocale.ENGLISH), NumberFormatter.with().locale(Locale.FRENCH));
-    }
-
-    @Test
-    public void getPrefixSuffix() {
-        Object[][] cases = {
-                { NumberFormatter.withLocale(ULocale.ENGLISH).unit(GBP).unitWidth(UnitWidth.ISO_CODE), "GBP", "",
-                        "-GBP", "" },
-                { NumberFormatter.withLocale(ULocale.ENGLISH).unit(GBP).unitWidth(UnitWidth.FULL_NAME), "",
-                        " British pounds", "-", " British pounds" } };
-
-        for (Object[] cas : cases) {
-            LocalizedNumberFormatter f = (LocalizedNumberFormatter) cas[0];
-            String posPrefix = (String) cas[1];
-            String posSuffix = (String) cas[2];
-            String negPrefix = (String) cas[3];
-            String negSuffix = (String) cas[4];
-            FormattedNumber positive = f.format(1);
-            FormattedNumber negative = f.format(-1);
-            assertEquals(posPrefix, positive.getPrefix());
-            assertEquals(posSuffix, positive.getSuffix());
-            assertEquals(negPrefix, negative.getPrefix());
-            assertEquals(negSuffix, negative.getSuffix());
-        }
     }
 
     @Test
