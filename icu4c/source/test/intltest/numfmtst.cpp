@@ -8931,12 +8931,15 @@ void NumberFormatTest::Test11035_FormatCurrencyAmount() {
 
     Locale loc1 = Locale("pt_PT");
     NumberFormat* fmt1 = NumberFormat::createCurrencyInstance(loc1, status);
+    assertSuccess("Creating fmt1", status);
     fmt1->setCurrency(u"PTE", status);
+    assertSuccess("Setting currency on fmt1", status);
     UnicodeString actualSetCurrency;
     fmt1->format(amount, actualSetCurrency);
 
     Locale loc2 = Locale("pt_PT@currency=PTE");
     NumberFormat* fmt2 = NumberFormat::createCurrencyInstance(loc2, status);
+    assertSuccess("Creating fmt2", status);
     UnicodeString actualLocaleString;
     fmt2->format(amount, actualLocaleString);
 
