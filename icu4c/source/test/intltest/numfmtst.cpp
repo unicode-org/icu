@@ -8923,7 +8923,7 @@ void NumberFormatTest::checkExceptionIssue11735() {
 }
 
 void NumberFormatTest::Test11035_FormatCurrencyAmount() {
-    UErrorCode status;
+    UErrorCode status = U_ZERO_ERROR;
     double amount = 12345.67;
     const char16_t* expected = u"12,345$67 ​";
 
@@ -8931,10 +8931,6 @@ void NumberFormatTest::Test11035_FormatCurrencyAmount() {
 
     Locale loc1 = Locale("pt_PT");
     NumberFormat* fmt1 = NumberFormat::createCurrencyInstance(loc1, status);
-    if (U_FAILURE(status)) {
-        errln("Fail: could not create currency instance: %s\n", u_errorName(status));
-        return;
-    }
     fmt1->setCurrency(u"PTE", status);
     UnicodeString actualSetCurrency;
     fmt1->format(amount, actualSetCurrency);
