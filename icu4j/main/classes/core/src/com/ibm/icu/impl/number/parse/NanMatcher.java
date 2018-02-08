@@ -2,7 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
-import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
 
@@ -13,14 +12,11 @@ import com.ibm.icu.text.UnicodeSet;
 public class NanMatcher extends SymbolMatcher {
 
     private static final NanMatcher DEFAULT = new NanMatcher("NaN");
-    private static final NanMatcher DEFAULT_FOLDED = new NanMatcher(UCharacter.foldCase("NaN", true));
 
     public static NanMatcher getInstance(DecimalFormatSymbols symbols, int parseFlags) {
-        String symbolString = ParsingUtils.maybeFold(symbols.getNaN(), parseFlags);
+        String symbolString = symbols.getNaN();
         if (DEFAULT.string.equals(symbolString)) {
             return DEFAULT;
-        } else if (DEFAULT_FOLDED.string.equals(symbolString)) {
-            return DEFAULT_FOLDED;
         } else {
             return new NanMatcher(symbolString);
         }

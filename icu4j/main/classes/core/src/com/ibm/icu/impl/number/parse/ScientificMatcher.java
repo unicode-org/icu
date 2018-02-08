@@ -15,16 +15,13 @@ public class ScientificMatcher implements NumberParseMatcher {
     private final String exponentSeparatorString;
     private final DecimalMatcher exponentMatcher;
 
-    public static ScientificMatcher getInstance(
-            DecimalFormatSymbols symbols,
-            Grouper grouper,
-            int parseFlags) {
+    public static ScientificMatcher getInstance(DecimalFormatSymbols symbols, Grouper grouper) {
         // TODO: Static-initialize most common instances?
-        return new ScientificMatcher(symbols, grouper, parseFlags);
+        return new ScientificMatcher(symbols, grouper);
     }
 
-    private ScientificMatcher(DecimalFormatSymbols symbols, Grouper grouper, int parseFlags) {
-        exponentSeparatorString = ParsingUtils.maybeFold(symbols.getExponentSeparator(), parseFlags);
+    private ScientificMatcher(DecimalFormatSymbols symbols, Grouper grouper) {
+        exponentSeparatorString = symbols.getExponentSeparator();
         exponentMatcher = DecimalMatcher.getInstance(symbols,
                 grouper,
                 ParsingUtils.PARSE_FLAG_INTEGER_ONLY);
@@ -49,19 +46,14 @@ public class ScientificMatcher implements NumberParseMatcher {
             if (segment.length() == 0) {
                 return true;
             }
-            int leadCp = segment.getCodePoint();
-            if (leadCp == -1) {
-                // Partial code point match
-                return true;
-            }
 
             // Allow a sign, and then try to match digits.
             int exponentSign = 1;
-            if (UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.MINUS_SIGN).contains(leadCp)) {
+            if (segment.matches(UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.MINUS_SIGN))) {
                 exponentSign = -1;
-                segment.adjustOffset(Character.charCount(leadCp));
-            } else if (UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.PLUS_SIGN).contains(leadCp)) {
-                segment.adjustOffset(Character.charCount(leadCp));
+                segment.adjustOffsetByCodePoint();
+            } else if (segment.matches(UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.PLUS_SIGN))) {
+                segment.adjustOffsetByCodePoint();
             }
 
             int digitsOffset = segment.getOffset();

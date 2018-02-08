@@ -868,7 +868,7 @@ public class NumberFormatTest extends TestFmwk {
                 new ParseCurrencyItem( "en_GB", "euros4",   "4,00\u00A0\u20AC", 6,400,  "EUR" ),
                 new ParseCurrencyItem( "en_GB", "euros6",   "6\u00A0\u20AC",    3,  6,  "EUR" ),
                 new ParseCurrencyItem( "en_GB", "euros8",   "\u20AC8",          2,  8,  "EUR" ),
-                new ParseCurrencyItem( "en_GB", "dollars4", "US$4",             0,  0,  "USD" ),
+                new ParseCurrencyItem( "en_GB", "dollars4", "US$4",             4,  4,  "USD" ),
 
                 new ParseCurrencyItem( "fr_FR", "euros4",   "4,00\u00A0\u20AC", 6,  4,  "EUR" ),
                 new ParseCurrencyItem( "fr_FR", "euros6",   "6\u00A0\u20AC",    3,  6,  "EUR" ),
@@ -2018,7 +2018,6 @@ public class NumberFormatTest extends TestFmwk {
     };
 
     @SuppressWarnings("resource")  // InputStream is will be closed by the ResourceReader.
-    @Ignore("TODO: http://bugs.icu-project.org/trac/ticket/13571")
     @Test
     public void TestCases() {
         String caseFileName = "NumberFormatTestCases.txt";
