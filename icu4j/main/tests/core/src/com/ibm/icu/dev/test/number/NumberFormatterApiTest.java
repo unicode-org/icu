@@ -1897,12 +1897,12 @@ public class NumberFormatterApiTest {
                 Rounder.class.getDeclaredMethod("minMaxFraction", Integer.TYPE, Integer.TYPE),
                 Rounder.class.getDeclaredMethod("minMaxDigits", Integer.TYPE, Integer.TYPE), };
 
-        final int EXPECTED_MAX_INT_FRAC_SIG = 100;
-        final String expectedSubstring0 = "between 0 and 100 (inclusive)";
-        final String expectedSubstring1 = "between 1 and 100 (inclusive)";
-        final String expectedSubstringN1 = "between -1 and 100 (inclusive)";
+        final int EXPECTED_MAX_INT_FRAC_SIG = 999;
+        final String expectedSubstring0 = "between 0 and 999 (inclusive)";
+        final String expectedSubstring1 = "between 1 and 999 (inclusive)";
+        final String expectedSubstringN1 = "between -1 and 999 (inclusive)";
 
-        // We require that the upper bounds all be 100 inclusive.
+        // We require that the upper bounds all be 999 inclusive.
         // The lower bound may be either -1, 0, or 1.
         Set<String> methodsWithLowerBound1 = new HashSet();
         methodsWithLowerBound1.add("fixedDigits");
@@ -1912,6 +1912,12 @@ public class NumberFormatterApiTest {
         methodsWithLowerBound1.add("withMinDigits");
         methodsWithLowerBound1.add("withMaxDigits");
         methodsWithLowerBound1.add("withMinExponentDigits");
+        // Methods with lower bound 0:
+        // fixedFraction
+        // minFraction
+        // maxFraction
+        // minMaxFraction
+        // zeroFillTo
         Set<String> methodsWithLowerBoundN1 = new HashSet();
         methodsWithLowerBoundN1.add("truncateAt");
 

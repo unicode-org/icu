@@ -63,6 +63,7 @@ class NumberFormatterApiTest : public IntlTest {
     void locale();
     void formatTypes();
     void errors();
+    void validRanges();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
