@@ -31,30 +31,6 @@ import com.ibm.icu.util.ULocale;
  */
 public class NumberParserImpl {
 
-    @Deprecated
-    public static NumberParserImpl removeMeWhenMerged(ULocale locale, String pattern, int parseFlags) {
-        NumberParserImpl parser = new NumberParserImpl(parseFlags);
-        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
-        IgnorablesMatcher ignorables = IgnorablesMatcher.DEFAULT;
-
-        MatcherFactory factory = new MatcherFactory();
-        factory.currency = Currency.getInstance("USD");
-        factory.symbols = symbols;
-        factory.ignorables = ignorables;
-        factory.locale = locale;
-
-        ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(pattern);
-        AffixMatcher.newGenerate(patternInfo, parser, factory, ignorables, parseFlags);
-
-        Grouper grouper = Grouper.forStrategy(GroupingStrategy.AUTO).withLocaleData(locale, patternInfo);
-        parser.addMatcher(DecimalMatcher.getInstance(symbols, grouper, parseFlags));
-        parser.addMatcher(CurrencyTrieMatcher.getInstance(locale));
-        parser.addMatcher(NanMatcher.getInstance(symbols, parseFlags));
-
-        parser.freeze();
-        return parser;
-    }
-
     // TODO: Find a better place for this enum.
     /** Controls the set of rules for parsing a string. */
     public static enum ParseMode {
@@ -300,16 +276,11 @@ public class NumberParserImpl {
      *
      * @param parseFlags
      *            Settings for constructing the parser.
-     * @param computeLeads
-     *            If true, compute "lead chars" UnicodeSets for the matchers. This reduces parsing
-     *            runtime but increases construction runtime. If the parser is going to be used only once
-     *            or twice, set this to false; if it is going to be used hundreds of times, set it to
-     *            true.
      */
     public NumberParserImpl(int parseFlags) {
         matchers = new ArrayList<NumberParseMatcher>();
         if (0 != (parseFlags & ParsingUtils.PARSE_FLAG_OPTIMIZE)) {
-            leadCodePointses = new ArrayList<UnicodeSet>();
+            leads = new ArrayList<UnicodeSet>();
         } else {
             leads = null;
         }
@@ -344,7 +315,7 @@ public class NumberParserImpl {
             leadCodePoints = leadCodePoints.cloneAsThawed().closeOver(UnicodeSet.ADD_CASE_MAPPINGS)
                     .freeze();
         }
-        this.leadCodePointses.add(leadCodePoints);
+        this.leads.add(leadCodePoints);
     }
 
     public void setComparator(Comparator<ParsedNumber> comparator) {
