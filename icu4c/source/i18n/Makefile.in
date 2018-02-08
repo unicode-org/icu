@@ -108,7 +108,8 @@ number_decimfmtprops.o number_fluent.o number_formatimpl.o number_grouping.o \
 number_integerwidth.o number_longnames.o number_modifiers.o number_notation.o \
 number_padding.o number_patternmodifier.o number_patternstring.o \
 number_rounding.o number_scientific.o number_stringbuilder.o \
-numparse_stringsegment.o numparse_unisets.o numparse_parsednumber.o
+numparse_stringsegment.o numparse_unisets.o numparse_parsednumber.o \
+numparse_impl.o numparse_symbols.o numparse_decimal.o
 
 
 ## Header files to install

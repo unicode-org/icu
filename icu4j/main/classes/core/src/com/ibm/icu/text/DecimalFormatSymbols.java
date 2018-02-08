@@ -1654,13 +1654,13 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * represents a sequence of ten code points in order.
      *
      * <p>If the value stored here is positive, it means that the code point stored in this value
-     * corresponds to the digitStrings array, and zeroCodePoint can be used instead of the
+     * corresponds to the digitStrings array, and codePointZero can be used instead of the
      * digitStrings array for the purposes of efficient formatting; if -1, then digitStrings does
      * *not* contain a sequence of code points, and it must be used directly.
      *
-     * <p>It is assumed that zeroCodePoint always shadows the value in digitStrings. zeroCodePoint
+     * <p>It is assumed that codePointZero always shadows the value in digitStrings. codePointZero
      * should never be set directly; rather, it should be updated only when digitStrings mutates.
-     * That is, the flow of information is digitStrings -> zeroCodePoint, not the other way.
+     * That is, the flow of information is digitStrings -> codePointZero, not the other way.
      */
     private transient int codePointZero;
 

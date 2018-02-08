@@ -378,7 +378,18 @@ typedef enum UNumberDecimalSeparatorDisplay {
             UNUM_DECIMAL_SEPARATOR_COUNT
 } UNumberDecimalMarkDisplay;
 
-U_NAMESPACE_BEGIN namespace number {  // icu::number
+U_NAMESPACE_BEGIN
+
+namespace numparse {
+namespace impl {
+
+// Forward declarations:
+class NumberParserImpl;
+
+}
+}
+
+namespace number {  // icu::number
 
 // Forward declarations:
 class UnlocalizedNumberFormatter;
@@ -1311,6 +1322,12 @@ class U_I18N_API Grouper : public UMemory {
     Grouper(int16_t grouping1, int16_t grouping2, int16_t minGrouping)
             : fGrouping1(grouping1), fGrouping2(grouping2), fMinGrouping(minGrouping) {}
 
+    /** @internal */
+    int16_t getPrimary() const;
+
+    /** @internal */
+    int16_t getSecondary() const;
+
   private:
     /**
      * The grouping sizes, with the following special values:
@@ -1349,6 +1366,9 @@ class U_I18N_API Grouper : public UMemory {
 
     // To allow NumberFormatterImpl to access isBogus() and perform other operations:
     friend class NumberFormatterImpl;
+
+    // To allow NumberParserImpl to perform setLocaleData():
+    friend class ::icu::numparse::impl::NumberParserImpl;
 };
 
 /** @internal */

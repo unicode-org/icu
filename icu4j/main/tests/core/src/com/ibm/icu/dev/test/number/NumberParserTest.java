@@ -3,7 +3,6 @@
 package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -86,30 +85,32 @@ public class NumberParserTest {
                 { 3, "📻1.23", "📺0;📻0", 6, -1.23 },
                 { 3, ".00", "0", 3, 0.0 },
                 { 3, "                              0", "a0", 31, 0.0 }, // should not hang
+                { 3, "NaN", "0", 3, Double.NaN },
+                { 3, "NaN E5", "0", 3, Double.NaN },
                 { 3, "0", "0", 1, 0.0 } };
 
         int parseFlags = ParsingUtils.PARSE_FLAG_IGNORE_CASE
                 | ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;
         for (Object[] cas : cases) {
             int flags = (Integer) cas[0];
-            String input = (String) cas[1];
-            String pattern = (String) cas[2];
+            String inputString = (String) cas[1];
+            String patternString = (String) cas[2];
             int expectedCharsConsumed = (Integer) cas[3];
-            double resultDouble = (Double) cas[4];
+            double expectedResultDouble = (Double) cas[4];
             NumberParserImpl parser = NumberParserImpl
-                    .createSimpleParser(ULocale.ENGLISH, pattern, parseFlags);
-            String message = "Input <" + input + "> Parser " + parser;
+                    .createSimpleParser(ULocale.ENGLISH, patternString, parseFlags);
+            String message = "Input <" + inputString + "> Parser " + parser;
 
             if (0 != (flags & 0x01)) {
                 // Test greedy code path
                 ParsedNumber resultObject = new ParsedNumber();
-                parser.parse(input, true, resultObject);
-                assertNotNull("Greedy Parse failed: " + message, resultObject.quantity);
+                parser.parse(inputString, true, resultObject);
+                assertTrue("Greedy Parse failed: " + message, resultObject.success());
                 assertEquals("Greedy Parse failed: " + message,
                         expectedCharsConsumed,
                         resultObject.charEnd);
                 assertEquals("Greedy Parse failed: " + message,
-                        resultDouble,
+                        expectedResultDouble,
                         resultObject.getNumber().doubleValue(),
                         0.0);
             }
@@ -117,13 +118,13 @@ public class NumberParserTest {
             if (0 != (flags & 0x02)) {
                 // Test slow code path
                 ParsedNumber resultObject = new ParsedNumber();
-                parser.parse(input, false, resultObject);
-                assertNotNull("Non-Greedy Parse failed: " + message, resultObject.quantity);
+                parser.parse(inputString, false, resultObject);
+                assertTrue("Non-Greedy Parse failed: " + message, resultObject.success());
                 assertEquals("Non-Greedy Parse failed: " + message,
                         expectedCharsConsumed,
                         resultObject.charEnd);
                 assertEquals("Non-Greedy Parse failed: " + message,
-                        resultDouble,
+                        expectedResultDouble,
                         resultObject.getNumber().doubleValue(),
                         0.0);
             }
@@ -131,16 +132,16 @@ public class NumberParserTest {
             if (0 != (flags & 0x04)) {
                 // Test with strict separators
                 parser = NumberParserImpl.createSimpleParser(ULocale.ENGLISH,
-                        pattern,
+                        patternString,
                         parseFlags | ParsingUtils.PARSE_FLAG_STRICT_GROUPING_SIZE);
                 ParsedNumber resultObject = new ParsedNumber();
-                parser.parse(input, true, resultObject);
-                assertNotNull("Strict Parse failed: " + message, resultObject.quantity);
+                parser.parse(inputString, true, resultObject);
+                assertTrue("Strict Parse failed: " + message, resultObject.success());
                 assertEquals("Strict Parse failed: " + message,
                         expectedCharsConsumed,
                         resultObject.charEnd);
                 assertEquals("Strict Parse failed: " + message,
-                        resultDouble,
+                        expectedResultDouble,
                         resultObject.getNumber().doubleValue(),
                         0.0);
             }

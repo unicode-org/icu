@@ -86,4 +86,12 @@ bool Grouper::groupAtPosition(int32_t position, const impl::DecimalQuantity &val
            && value.getUpperDisplayMagnitude() - fGrouping1 + 1 >= fMinGrouping;
 }
 
+int16_t Grouper::getPrimary() const {
+    return fGrouping1;
+}
+
+int16_t Grouper::getSecondary() const {
+    return fGrouping2;
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */

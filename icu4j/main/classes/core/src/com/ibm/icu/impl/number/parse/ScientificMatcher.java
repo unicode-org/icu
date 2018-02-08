@@ -27,13 +27,15 @@ public class ScientificMatcher implements NumberParseMatcher {
         exponentSeparatorString = ParsingUtils.maybeFold(symbols.getExponentSeparator(), parseFlags);
         exponentMatcher = DecimalMatcher.getInstance(symbols,
                 grouper,
-                ParsingUtils.PARSE_FLAG_DECIMAL_SCIENTIFIC | ParsingUtils.PARSE_FLAG_INTEGER_ONLY);
+                ParsingUtils.PARSE_FLAG_INTEGER_ONLY);
     }
 
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
         // Only accept scientific notation after the mantissa.
-        if (!result.seenNumber()) {
+        // Most places use result.hasNumber(), but we need a stronger condition here (i.e., exponent is
+        // not well-defined after NaN or infinity).
+        if (result.quantity == null) {
             return false;
         }
 
@@ -54,16 +56,16 @@ public class ScientificMatcher implements NumberParseMatcher {
             }
 
             // Allow a sign, and then try to match digits.
-            boolean minusSign = false;
+            int exponentSign = 1;
             if (UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.MINUS_SIGN).contains(leadCp)) {
-                minusSign = true;
+                exponentSign = -1;
                 segment.adjustOffset(Character.charCount(leadCp));
             } else if (UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.PLUS_SIGN).contains(leadCp)) {
                 segment.adjustOffset(Character.charCount(leadCp));
             }
 
             int digitsOffset = segment.getOffset();
-            boolean digitsReturnValue = exponentMatcher.match(segment, result, minusSign);
+            boolean digitsReturnValue = exponentMatcher.match(segment, result, exponentSign);
             if (segment.getOffset() != digitsOffset) {
                 // At least one exponent digit was matched.
                 result.flags |= ParsedNumber.FLAG_HAS_EXPONENT;

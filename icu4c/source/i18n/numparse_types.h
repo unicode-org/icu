@@ -17,6 +17,42 @@ namespace impl {
 class StringSegment;
 class ParsedNumber;
 
+typedef int32_t result_flags_t;
+typedef int32_t parse_flags_t;
+
+/** Flags for the type result_flags_t */
+enum ResultFlags {
+    FLAG_NEGATIVE = 0x0001,
+    FLAG_PERCENT = 0x0002,
+    FLAG_PERMILLE = 0x0004,
+    FLAG_HAS_EXPONENT = 0x0008,
+    FLAG_HAS_DEFAULT_CURRENCY = 0x0010,
+    FLAG_HAS_DECIMAL_SEPARATOR = 0x0020,
+    FLAG_NAN = 0x0040,
+    FLAG_INFINITY = 0x0080,
+    FLAG_FAIL = 0x0100,
+};
+
+/** Flags for the type parse_flags_t */
+enum ParseFlags {
+    PARSE_FLAG_IGNORE_CASE = 0x0001,
+    PARSE_FLAG_MONETARY_SEPARATORS = 0x0002,
+    PARSE_FLAG_STRICT_SEPARATORS = 0x0004,
+    PARSE_FLAG_STRICT_GROUPING_SIZE = 0x0008,
+    PARSE_FLAG_INTEGER_ONLY = 0x0010,
+    PARSE_FLAG_GROUPING_DISABLED = 0x0020,
+    PARSE_FLAG_FRACTION_GROUPING_DISABLED = 0x0040,
+    PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES = 0x0080,
+    PARSE_FLAG_USE_FULL_AFFIXES = 0x0100,
+    PARSE_FLAG_EXACT_AFFIX = 0x0200,
+    PARSE_FLAG_PLUS_SIGN_ALLOWED = 0x0400,
+};
+
+//template<typename T>
+//struct MaybeNeedsAdoption {
+//    T* ptr;
+//    bool needsAdoption;
+//};
 
 /**
  * Struct-like class to hold the results of a parsing routine.
@@ -25,17 +61,6 @@ class ParsedNumber;
  */
 class ParsedNumber {
   public:
-    enum ParsedNumberFlags {
-        FLAG_NEGATIVE = 0x0001,
-        FLAG_PERCENT = 0x0002,
-        FLAG_PERMILLE = 0x0004,
-        FLAG_HAS_EXPONENT = 0x0008,
-        FLAG_HAS_DEFAULT_CURRENCY = 0x0010,
-        FLAG_HAS_DECIMAL_SEPARATOR = 0x0020,
-        FLAG_NAN = 0x0040,
-        FLAG_INFINITY = 0x0080,
-        FLAG_FAIL = 0x0100,
-    };
 
     /**
      * The numerical value that was parsed.
@@ -51,9 +76,9 @@ class ParsedNumber {
     int32_t charEnd;
 
     /**
-     * Boolean flags (see constants below).
+     * Boolean flags (see constants above).
      */
-    int32_t flags;
+    result_flags_t flags;
 
     /**
      * The pattern string corresponding to the prefix that got consumed.
@@ -204,15 +229,17 @@ class NumberParseMatcher {
      * @return Whether this matcher thinks there may be more interesting chars beyond the end of the
      *         string segment.
      */
-    virtual bool match(StringSegment& segment, ParsedNumber& result) const = 0;
+    virtual bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const = 0;
 
     /**
      * Should return a set representing all possible chars (UTF-16 code units) that could be the first
      * char that this matcher can consume. This method is only called during construction phase, and its
      * return value is used to skip this matcher unless a segment begins with a char in this set. To make
      * this matcher always run, return {@link UnicodeSet#ALL_CODE_POINTS}.
+     *
+     * The returned UnicodeSet needs adoption!
      */
-    virtual UnicodeSet getLeadCodePoints() const = 0;
+    virtual const UnicodeSet* getLeadCodePoints() const = 0;
 
     /**
      * Method called at the end of a parse, after all matchers have failed to consume any more chars.
@@ -222,7 +249,9 @@ class NumberParseMatcher {
      * @param result
      *            The data structure to store results.
      */
-    virtual void postProcess(ParsedNumber& result) const = 0;
+    virtual void postProcess(ParsedNumber&) const {
+        // Default implementation: no-op
+    };
 };
 
 
