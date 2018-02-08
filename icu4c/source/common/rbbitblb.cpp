@@ -22,6 +22,7 @@
 #include "rbbidata.h"
 #include "cstring.h"
 #include "uassert.h"
+#include "uvectr32.h"
 #include "cmemory.h"
 
 U_NAMESPACE_BEGIN
@@ -1077,6 +1078,49 @@ void RBBITableBuilder::printPosSets(RBBINode *n) {
 }
 #endif
 
+//
+//    findDuplCharClassFrom()
+//
+bool RBBITableBuilder::findDuplCharClassFrom(int32_t &baseCategory, int32_t &duplCategory) {
+    int32_t numStates = fDStates->size();
+    int32_t numCols = fRB->fSetBuilder->getNumCharCategories();
+
+    U_ASSERT(baseCategory < duplCategory);
+
+    uint16_t table_base;
+    uint16_t table_dupl;
+    for (; baseCategory < numCols-1; ++baseCategory) {
+        for (; duplCategory < numCols; ++duplCategory) {
+             for (int32_t state=0; state<numStates; state++) {
+                 RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(state);
+                 table_base = (uint16_t)sd->fDtran->elementAti(baseCategory);
+                 table_dupl = (uint16_t)sd->fDtran->elementAti(duplCategory);
+                 if (table_base != table_dupl) {
+                     break;
+                 }
+             }
+             if (table_base == table_dupl) {
+                 return true;
+             }
+        }
+    }
+    return false;
+}
+
+
+//
+//    removeColumn()
+//
+void RBBITableBuilder::removeColumn(int32_t column) {
+    int32_t numStates = fDStates->size();
+    for (int32_t state=0; state<numStates; state++) {
+        RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(state);
+        U_ASSERT(column < sd->fDtran->size());
+        sd->fDtran->removeElementAt(column);
+    }
+}
+
+
 
 
 //-----------------------------------------------------------------------------
@@ -1104,7 +1148,6 @@ int32_t  RBBITableBuilder::getTableSize() const {
     size   += numRows * rowSize;
     return size;
 }
-
 
 
 //-----------------------------------------------------------------------------
@@ -1256,7 +1299,7 @@ RBBIStateDescriptor::RBBIStateDescriptor(int lastInputSymbol, UErrorCode *fStatu
     fPositions = NULL;
     fDtran     = NULL;
 
-    fDtran     = new UVector(lastInputSymbol+1, *fStatus);
+    fDtran     = new UVector32(lastInputSymbol+1, *fStatus);
     if (U_FAILURE(*fStatus)) {
         return;
     }
@@ -1264,7 +1307,7 @@ RBBIStateDescriptor::RBBIStateDescriptor(int lastInputSymbol, UErrorCode *fStatu
         *fStatus = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    fDtran->setSize(lastInputSymbol+1, *fStatus);    // fDtran needs to be pre-sized.
+    fDtran->setSize(lastInputSymbol+1);    // fDtran needs to be pre-sized.
                                            //   It is indexed by input symbols, and will
                                            //   hold  the next state number for each
                                            //   symbol.

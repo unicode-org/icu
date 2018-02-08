@@ -24,6 +24,7 @@ U_NAMESPACE_BEGIN
 
 class RBBIRuleScanner;
 class RBBIRuleBuilder;
+class UVector32;
 
 //
 //  class RBBITableBuilder is part of the RBBI rule compiler.
@@ -42,9 +43,23 @@ public:
     void     build();
     int32_t  getTableSize() const;      // Return the runtime size in bytes of
                                         //     the built state table
-    void     exportTable(void *where);  // fill in the runtime state table.
-                                        //     Sufficient memory must exist at
-                                        //     the specified location.
+
+    /** Fill in the runtime state table. Sufficient memory must exist at the specified location.
+     */
+    void     exportTable(void *where);
+
+    /** Find duplicate (redundant) character classes, beginning after the specifed
+     *  pair, within this state table. This is an iterator-like function, used to
+     *  identify char classes (state table columns) that can be eliminated.
+     */
+    bool     findDuplCharClassFrom(int &baseClass, int &duplClass);
+
+    /** Remove a column from the state table. Used when two character categories
+     *  have been found equivalent, and merged together, to eliminate the uneeded table column.
+     */
+    void     removeColumn(int32_t column);
+
+
 
 
 private:
@@ -59,6 +74,12 @@ private:
     void     flagLookAheadStates();
     void     flagTaggedStates();
     void     mergeRuleStatusVals();
+
+    /**
+     * Merge redundant state table columns, eliminating character classes with identical behavior.
+     * Done after the state tables are generated, just before converting to their run-time format.
+     */
+    int32_t  mergeColumns();
 
     void     addRuleRootNodes(UVector *dest, RBBINode *node);
 
@@ -112,7 +133,7 @@ public:
                                            //   with this state.  Unordered (it's a set).
                                            //   UVector contents are RBBINode *
 
-    UVector          *fDtran;              // Transitions out of this state.
+    UVector32        *fDtran;              // Transitions out of this state.
                                            //   indexed by input character
                                            //   contents is int index of dest state
                                            //   in RBBITableBuilder.fDStates
