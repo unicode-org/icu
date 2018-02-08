@@ -394,6 +394,21 @@ class IntegerWidth;
 
 namespace impl {
 
+/**
+ * Datatype for minimum/maximum fraction digits. Must be able to hold kMaxIntFracSig.
+ *
+ * @internal
+ */
+typedef int16_t digits_t;
+
+/**
+ * Use a default threshold of 3. This means that the third time .format() is called, the data structures get built
+ * using the "safe" code path. The first two calls to .format() will trigger the unsafe code path.
+ *
+ * @internal
+ */
+static constexpr int32_t DEFAULT_THRESHOLD = 3;
+
 // Forward declarations:
 class Padder;
 struct MacroProps;
@@ -577,7 +592,7 @@ class U_I18N_API Notation : public UMemory {
         struct ScientificSettings {
             int8_t fEngineeringInterval;
             bool fRequireMinInt;
-            int8_t fMinExponentDigits;
+            impl::digits_t fMinExponentDigits;
             UNumberSignDisplay fExponentSignDisplay;
         } scientific;
 
@@ -892,14 +907,14 @@ class U_I18N_API Rounder : public UMemory {
     union RounderUnion {
         struct FractionSignificantSettings {
             // For RND_FRACTION, RND_SIGNIFICANT, and RND_FRACTION_SIGNIFICANT
-            int8_t fMinFrac;
-            int8_t fMaxFrac;
-            int8_t fMinSig;
-            int8_t fMaxSig;
+            impl::digits_t fMinFrac;
+            impl::digits_t fMaxFrac;
+            impl::digits_t fMinSig;
+            impl::digits_t fMaxSig;
         } fracSig;
         struct IncrementSettings {
             double fIncrement;
-            int32_t fMinFrac;
+            impl::digits_t fMinFrac;
         } increment; // For RND_INCREMENT
         UCurrencyUsage currencyUsage; // For RND_CURRENCY
         UErrorCode errorCode; // For RND_ERROR
@@ -1153,7 +1168,8 @@ class U_I18N_API IntegerWidth : public UMemory {
      * For example, with maxInt=3, the number 1234 will get printed as "234".
      *
      * @param maxInt
-     *            The maximum number of places before the decimal separator.
+     *            The maximum number of places before the decimal separator. maxInt == -1 means no
+     *            truncation.
      * @return An IntegerWidth for passing to the NumberFormatter integerWidth() setter.
      * @draft ICU 60
      * @see NumberFormatter
@@ -1163,14 +1179,14 @@ class U_I18N_API IntegerWidth : public UMemory {
   private:
     union {
         struct {
-            int8_t fMinInt;
-            int8_t fMaxInt;
+            impl::digits_t fMinInt;
+            impl::digits_t fMaxInt;
         } minMaxInt;
         UErrorCode errorCode;
     } fUnion;
     bool fHasError = false;
 
-    IntegerWidth(int8_t minInt, int8_t maxInt);
+    IntegerWidth(impl::digits_t minInt, impl::digits_t maxInt);
 
     IntegerWidth(UErrorCode errorCode) { // NOLINT
         fUnion.errorCode = errorCode;
@@ -1204,14 +1220,6 @@ class U_I18N_API IntegerWidth : public UMemory {
 };
 
 namespace impl {
-
-/**
- * Use a default threshold of 3. This means that the third time .format() is called, the data structures get built
- * using the "safe" code path. The first two calls to .format() will trigger the unsafe code path.
- *
- * @internal
- */
-static constexpr int32_t DEFAULT_THRESHOLD = 3;
 
 /** @internal */
 class U_I18N_API SymbolsWrapper : public UMemory {
