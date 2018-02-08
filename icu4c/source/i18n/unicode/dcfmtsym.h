@@ -552,6 +552,8 @@ DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, const UnicodeString 
         } else {
             fCodePointZero = -1;
         }
+    } else if (symbol >= kOneDigitSymbol && symbol <= kNineDigitSymbol) {
+        fCodePointZero = -1;
     }
 }
 
