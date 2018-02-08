@@ -411,11 +411,21 @@ public:
      *
      * @param symbol Constant to indicate a number format symbol.
      * @return the format symbol by the param 'symbol'
-     * @internal
+     * @draft ICU 61
      */
-    inline const UnicodeString &getConstSymbol(ENumberFormatSymbol symbol) const;
+    inline const UnicodeString& getConstSymbol(ENumberFormatSymbol symbol) const;
 
 #ifndef U_HIDE_INTERNAL_API
+    /**
+     * Returns the const UnicodeString reference, like getConstSymbol,
+     * corresponding to the digit with the given value.  This is equivalent
+     * to accessing the symbol from getConstSymbol with the corresponding
+     * key, such as kZeroDigitSymbol or kOneDigitSymbol.
+     *
+     * @internal This API is currently for ICU use only.
+     */
+    inline const UnicodeString& getConstDigitSymbol(int32_t digit);
+
     /**
      * Returns that pattern stored in currecy info. Internal API for use by NumberFormat API.
      * @internal
@@ -498,6 +508,17 @@ DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
         strPtr = &fNoSymbol;
     }
     return *strPtr;
+}
+
+inline const UnicodeString& DecimalFormatSymbols::getConstDigitSymbol(int32_t digit) {
+    if (digit < 0 || digit > 9) {
+        digit = 0;
+    }
+    if (digit == 0) {
+        return fSymbols[kZeroDigitSymbol];
+    }
+    ENumberFormatSymbol key = static_cast<ENumberFormatSymbol>(kOneDigitSymbol + digit - 1);
+    return fSymbols[key];
 }
 
 // -------------------------------------

@@ -252,7 +252,7 @@ void IntlTestDecimalFormatSymbols::testLastResortData() {
 
 void IntlTestDecimalFormatSymbols::testDigitSymbols() {
     // This test does more in ICU4J than in ICU4C right now.
-    // In ICU4C, it is basically just a test for codePointZero.
+    // In ICU4C, it is basically just a test for codePointZero and getConstDigitSymbol.
     UChar defZero = u'0';
     UChar32 osmanyaZero = U'\U000104A0';
     static const UChar* osmanyaDigitStrings[] = {
@@ -266,19 +266,29 @@ void IntlTestDecimalFormatSymbols::testDigitSymbols() {
     if (defZero != symbols.getCodePointZero()) {
         errln("ERROR: Code point zero be ASCII 0");
     }
+    for (int32_t i=0; i<=9; i++) {
+        assertEquals(UnicodeString("i. ASCII Digit at index ") + Int64ToUnicodeString(i),
+            UnicodeString(u'0' + i),
+            symbols.getConstDigitSymbol(i));
+    }
 
     for (int32_t i=0; i<=9; i++) {
         DecimalFormatSymbols::ENumberFormatSymbol key =
             i == 0
             ? DecimalFormatSymbols::kZeroDigitSymbol
             : static_cast<DecimalFormatSymbols::ENumberFormatSymbol>
-                (DecimalFormatSymbols::kOneDigitSymbol + i);
+                (DecimalFormatSymbols::kOneDigitSymbol + i - 1);
         symbols.setSymbol(key, UnicodeString(osmanyaDigitStrings[i]), FALSE);
     }
     // NOTE: in ICU4J, the calculation of codePointZero is smarter;
     // in ICU4C, it is more conservative and is only set if propogateDigits is true.
     if (-1 != symbols.getCodePointZero()) {
         errln("ERROR: Code point zero be invalid");
+    }
+    for (int32_t i=0; i<=9; i++) {
+        assertEquals(UnicodeString("ii. Osmanya digit at index ") + Int64ToUnicodeString(i),
+            UnicodeString(osmanyaDigitStrings[i]),
+            symbols.getConstDigitSymbol(i));
     }
 
     // Check Osmanya codePointZero
@@ -288,6 +298,11 @@ void IntlTestDecimalFormatSymbols::testDigitSymbols() {
     if (osmanyaZero != symbols.getCodePointZero()) {
         errln("ERROR: Code point zero be Osmanya code point zero");
     }
+    for (int32_t i=0; i<=9; i++) {
+        assertEquals(UnicodeString("iii. Osmanya digit at index ") + Int64ToUnicodeString(i),
+            UnicodeString(osmanyaDigitStrings[i]),
+            symbols.getConstDigitSymbol(i));
+    }
 
     // Reset digits to Latin
     symbols.setSymbol(
@@ -295,6 +310,11 @@ void IntlTestDecimalFormatSymbols::testDigitSymbols() {
         UnicodeString(defZero));
     if (defZero != symbols.getCodePointZero()) {
         errln("ERROR: Code point zero be ASCII 0");
+    }
+    for (int32_t i=0; i<=9; i++) {
+        assertEquals(UnicodeString("iv. ASCII Digit at index ") + Int64ToUnicodeString(i),
+            UnicodeString(u'0' + i),
+            symbols.getConstDigitSymbol(i));
     }
 }
 
