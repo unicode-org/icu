@@ -19,7 +19,7 @@ namespace impl {
 
 class UnicodeStringCharSequence : public CharSequence {
   public:
-    explicit UnicodeStringCharSequence(const UnicodeString &other) {
+    explicit UnicodeStringCharSequence(const UnicodeString& other) {
         fStr = other;
     }
 
@@ -62,10 +62,10 @@ struct MicroProps : public MicroPropsGenerator {
     bool useCurrency;
 
     // Note: This struct has no direct ownership of the following pointers.
-    const DecimalFormatSymbols *symbols;
-    const Modifier *modOuter;
-    const Modifier *modMiddle;
-    const Modifier *modInner;
+    const DecimalFormatSymbols* symbols;
+    const Modifier* modOuter;
+    const Modifier* modMiddle;
+    const Modifier* modInner;
 
     // The following "helper" fields may optionally be used during the MicroPropsGenerator.
     // They live here to retain memory.
@@ -78,12 +78,12 @@ struct MicroProps : public MicroPropsGenerator {
 
     MicroProps() = default;
 
-    MicroProps(const MicroProps &other) = default;
+    MicroProps(const MicroProps& other) = default;
 
-    MicroProps &operator=(const MicroProps &other) = default;
+    MicroProps& operator=(const MicroProps& other) = default;
 
-    void processQuantity(DecimalQuantity &, MicroProps &micros, UErrorCode &status) const U_OVERRIDE {
-        (void)status;
+    void processQuantity(DecimalQuantity&, MicroProps& micros, UErrorCode& status) const U_OVERRIDE {
+        (void) status;
         if (this == &micros) {
             // Unsafe path: no need to perform a copy.
             U_ASSERT(!exhausted);
@@ -111,14 +111,13 @@ struct NumberFormatterResults : public UMemory {
     NumberStringBuilder string;
 };
 
-inline const UnicodeString getDigitFromSymbols(int8_t digit, const DecimalFormatSymbols &symbols) {
-    // TODO: Implement DecimalFormatSymbols.getCodePointZero()?
-    if (digit == 0) {
-        return symbols.getSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kZeroDigitSymbol);
-    } else {
-        return symbols.getSymbol(static_cast<DecimalFormatSymbols::ENumberFormatSymbol>(
-                                         DecimalFormatSymbols::ENumberFormatSymbol::kOneDigitSymbol + digit - 1));
+inline int32_t insertDigitFromSymbols(NumberStringBuilder& output, int32_t index, int8_t digit,
+                                      const DecimalFormatSymbols& symbols, Field field,
+                                      UErrorCode& status) {
+    if (symbols.getCodePointZero() != -1) {
+        return output.insertCodePoint(index, symbols.getCodePointZero() + digit, field, status);
     }
+    return output.insert(index, symbols.getConstDigitSymbol(digit), field, status);
 }
 
 } // namespace impl

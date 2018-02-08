@@ -77,7 +77,7 @@ void NumberStringBuilderTest::testInsertAppendUnicodeString() {
 }
 
 void NumberStringBuilderTest::testSplice() {
-    const struct TestCase {
+    static const struct TestCase {
         const char16_t* input;
         const int32_t startThis;
         const int32_t endThis;

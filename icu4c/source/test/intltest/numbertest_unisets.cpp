@@ -9,9 +9,6 @@
 #include "numparse_unisets.h"
 #include "unicode/dcfmtsym.h"
 
-#include <iostream>
-#include <cstr.h>
-
 using icu::numparse::impl::unisets::get;
 
 void UniSetsTest::runIndexedTest(int32_t index, UBool exec, const char*&name, char*) {

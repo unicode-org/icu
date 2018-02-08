@@ -266,28 +266,27 @@ public class NumberParserImpl {
 
     private final int parseFlags;
     private final List<NumberParseMatcher> matchers;
-    private final List<UnicodeSet> leadCodePointses;
+    private final List<UnicodeSet> leads;
     private Comparator<ParsedNumber> comparator;
     private boolean frozen;
 
     /**
      * Creates a new, empty parser.
      *
-     * @param ignoreCase
-     *            If true, perform case-folding. This parameter needs to go into the constructor because
-     *            its value is used during the construction of the matcher chain.
-     * @param optimize
+     * @param parseFlags
+     *            Settings for constructing the parser.
+     * @param computeLeads
      *            If true, compute "lead chars" UnicodeSets for the matchers. This reduces parsing
      *            runtime but increases construction runtime. If the parser is going to be used only once
      *            or twice, set this to false; if it is going to be used hundreds of times, set it to
      *            true.
      */
-    public NumberParserImpl(int parseFlags, boolean optimize) {
+    public NumberParserImpl(int parseFlags, boolean computeLeads) {
         matchers = new ArrayList<NumberParseMatcher>();
-        if (optimize) {
-            leadCodePointses = new ArrayList<UnicodeSet>();
+        if (computeLeads) {
+            leads = new ArrayList<UnicodeSet>();
         } else {
-            leadCodePointses = null;
+            leads = null;
         }
         comparator = ParsedNumber.COMPARATOR; // default value
         this.parseFlags = parseFlags;
@@ -297,21 +296,21 @@ public class NumberParserImpl {
     public void addMatcher(NumberParseMatcher matcher) {
         assert !frozen;
         this.matchers.add(matcher);
-        if (leadCodePointses != null) {
+        if (leads != null) {
             UnicodeSet leadCodePoints = matcher.getLeadCodePoints();
             assert leadCodePoints.isFrozen();
-            this.leadCodePointses.add(leadCodePoints);
+            this.leads.add(leadCodePoints);
         }
     }
 
     public void addMatchers(Collection<? extends NumberParseMatcher> matchers) {
         assert !frozen;
         this.matchers.addAll(matchers);
-        if (leadCodePointses != null) {
+        if (leads != null) {
             for (NumberParseMatcher matcher : matchers) {
                 UnicodeSet leadCodePoints = matcher.getLeadCodePoints();
                 assert leadCodePoints.isFrozen();
-                this.leadCodePointses.add(leadCodePoints);
+                this.leads.add(leadCodePoints);
             }
         }
     }
@@ -366,7 +365,7 @@ public class NumberParserImpl {
         int initialOffset = segment.getOffset();
         int leadCp = segment.getCodePoint();
         for (int i = 0; i < matchers.size(); i++) {
-            if (leadCodePointses != null && !leadCodePointses.get(i).contains(leadCp)) {
+            if (leads != null && !leads.get(i).contains(leadCp)) {
                 continue;
             }
             NumberParseMatcher matcher = matchers.get(i);

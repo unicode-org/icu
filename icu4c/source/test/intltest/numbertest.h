@@ -207,6 +207,16 @@ class UniSetsTest : public IntlTest {
                      const UnicodeSet& set, UChar32 cp);
 };
 
+class NumberParserTest : public IntlTest {
+  public:
+    void testBasic();
+    void testLocaleFi();
+    void testSeriesMatcher();
+    void testGroupingDisabled();
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+};
+
 
 // NOTE: This macro is identical to the one in itformat.cpp
 #define TESTCLASS(id, TestClass)          \
@@ -237,6 +247,7 @@ class NumberTest : public IntlTest {
         TESTCLASS(6, NumberStringBuilderTest);
         TESTCLASS(7, StringSegmentTest);
         TESTCLASS(8, UniSetsTest);
+        TESTCLASS(9, NumberParserTest);
         default: name = ""; break; // needed to end loop
         }
     }

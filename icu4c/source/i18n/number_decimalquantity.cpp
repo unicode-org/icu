@@ -190,6 +190,7 @@ int32_t DecimalQuantity::getMagnitude() const {
 
 void DecimalQuantity::adjustMagnitude(int32_t delta) {
     if (precision != 0) {
+        // TODO: How to handle overflow cases?
         scale += delta;
         origDelta += delta;
     }
