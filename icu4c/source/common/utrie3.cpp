@@ -48,9 +48,10 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
         return 0;
     }
 
-    /* get the options */
-    if(valueBits!=(UTrie3ValueBits)(header->options&UTRIE3_OPTIONS_VALUE_BITS_MASK)) {
-        *pErrorCode=U_INVALID_FORMAT_ERROR;
+    uint32_t options = header->options;
+    if (valueBits != (UTrie3ValueBits)(options & UTRIE3_OPTIONS_VALUE_BITS_MASK) ||
+            (options & UTRIE3_OPTIONS_RESERVED_MASK) != 0) {
+        *pErrorCode = U_INVALID_FORMAT_ERROR;
         return 0;
     }
 
@@ -60,10 +61,9 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
     tempTrie.indexLength=header->indexLength;
     tempTrie.dataLength=header->shiftedDataLength<<UTRIE3_INDEX_SHIFT;
     tempTrie.index2NullOffset = header->index2NullOffset;
-    tempTrie.dataNullOffset = header->options >> 12;
+    tempTrie.dataNullOffset = options >> 12;
 
     tempTrie.highStart=header->shiftedHighStart<<UTRIE3_SHIFT_1;
-    tempTrie.highStartLead16=U16_LEAD(tempTrie.highStart);
     tempTrie.shiftedHighStart=header->shiftedHighStart;
     tempTrie.highValue=header->highValue;
     tempTrie.errorValue=header->errorValue;
@@ -126,96 +126,6 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
 }
 
 U_CAPI UTrie3 * U_EXPORT2
-utrie3_openDummy(UTrie3ValueBits valueBits,
-                 uint32_t initialValue, uint32_t errorValue,
-                 UErrorCode *pErrorCode) {
-    if(U_FAILURE(*pErrorCode)) {
-        return nullptr;
-    }
-
-    if (valueBits < 0 || UTRIE3_32_VALUE_BITS < valueBits) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return nullptr;
-    }
-
-    /* calculate the total length of the dummy trie data */
-    int32_t indexLength=UTRIE3_INDEX_1_OFFSET;
-    int32_t dataLength=UTRIE3_DATA_START_OFFSET;
-    int32_t length = indexLength * 2;
-    if (valueBits == UTRIE3_16_VALUE_BITS) {
-        length += dataLength * 2;
-    } else {
-        length += dataLength * 4;
-    }
-
-    char *bytes = (char *)uprv_malloc(sizeof(UTrie3) + length);
-    if (bytes == nullptr) {
-        *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-    UTrie3 *trie = (UTrie3 *)bytes;
-    uprv_memset(trie, 0, sizeof(UTrie3));
-    bytes += sizeof(UTrie3);
-
-    int32_t dataMove;  // >0 if the data is moved to the end of the index array
-    if(valueBits==UTRIE3_16_VALUE_BITS) {
-        dataMove=indexLength;
-    } else {
-        dataMove=0;
-    }
-
-    trie->indexLength=indexLength;
-    trie->dataLength=dataLength;
-    trie->index2NullOffset = UTRIE3_NO_INDEX2_NULL_OFFSET;
-    trie->dataNullOffset = dataMove;
-    trie->initialValue=initialValue;
-    trie->errorValue=errorValue;
-    trie->highStart=0;
-    trie->highStartLead16=0xd7c0;  // U16_LEAD(0) (below lead surrogates)
-    trie->shiftedHighStart=0;
-    trie->highValue=initialValue;
-    trie->name="dummy";
-
-    /* fill the index and data arrays */
-    uint16_t *dest16 = (uint16_t *)bytes;
-    trie->index=dest16;
-
-    /* write BMP index-2 array values, not right-shifted */
-    int32_t i;
-    for(i=0; i<UTRIE3_INDEX_2_BMP_LENGTH; ++i) {
-        *dest16++=(uint16_t)dataMove;  /* null data block */
-    }
-    bytes += UTRIE3_INDEX_2_BMP_LENGTH * 2;
-
-    /* write the 16/32-bit data array */
-    switch(valueBits) {
-    case UTRIE3_16_VALUE_BITS:
-        /* write 16-bit data values */
-        trie->data16=dest16;
-        trie->data32=NULL;
-        for(i=0; i<0x80; ++i) {
-            *dest16++=(uint16_t)initialValue;
-        }
-        break;
-    case UTRIE3_32_VALUE_BITS: {
-        /* write 32-bit data values */
-        uint32_t *p = (uint32_t *)bytes;
-        trie->data16=NULL;
-        trie->data32=p;
-        for(i=0; i<0x80; ++i) {
-            *p++=initialValue;
-        }
-        break;
-    }
-    default:
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return nullptr;
-    }
-
-    return trie;
-}
-
-U_CAPI UTrie3 * U_EXPORT2
 utrie3_clone(const UTrie3 *other, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return nullptr;
@@ -263,13 +173,31 @@ utrie3_close(UTrie3 *trie) {
 
 U_CAPI uint32_t U_EXPORT2
 utrie3_get(const UTrie3 *trie, UChar32 c) {
-    uint32_t result;
-    if(trie->data16!=NULL) {
-        UTRIE3_GET16(trie, c, result);
-    } else /* trie->data32!=NULL */ {
-        UTRIE3_GET32(trie, c, result);
+    if ((uint32_t)c <= 0x7f) {
+        // linear ASCII
+        if (trie->data16 != nullptr) {
+            return trie->data16[c];
+        } else {
+            return trie->data32[c];
+        }
     }
-    return result;
+
+    int32_t dataIndex;
+    if ((uint32_t)c <= 0xffff) {
+        dataIndex = _UTRIE3_INDEX_FROM_BMP(trie->index, c);
+    } else if ((uint32_t)c > 0x10ffff) {
+        return trie->errorValue;
+    } else if (c >= trie->highStart) {
+        return trie->highValue;
+    } else {
+        int32_t i2Block, dataBlock;
+        dataIndex = _UTRIE3_INDEX_FROM_SUPP(trie->index, c, i2Block, dataBlock);
+    }
+    if (trie->data32 == nullptr) {
+        return trie->index[dataIndex];
+    } else {
+        return trie->data32[dataIndex];
+    }
 }
 
 namespace {
@@ -576,7 +504,7 @@ utrie3_swap(const UDataSwapper *ds,
 
     inTrie=(const UTrie3Header *)inData;
     trie.signature=ds->readUInt32(inTrie->signature);
-    trie.options=ds->readUInt16(inTrie->options);
+    trie.options=ds->readUInt32(inTrie->options);
     trie.indexLength=ds->readUInt16(inTrie->indexLength);
     trie.shiftedDataLength=ds->readUInt16(inTrie->shiftedDataLength);
 
@@ -585,6 +513,7 @@ utrie3_swap(const UDataSwapper *ds,
 
     if( trie.signature!=UTRIE3_SIG ||
         valueBits < 0 || UTRIE3_32_VALUE_BITS < valueBits ||
+        (trie.options & UTRIE3_OPTIONS_RESERVED_MASK) != 0 ||
         trie.indexLength<UTRIE3_INDEX_1_OFFSET ||
         dataLength<UTRIE3_DATA_START_OFFSET
     ) {
@@ -616,8 +545,8 @@ utrie3_swap(const UDataSwapper *ds,
         outTrie=(UTrie3Header *)outData;
 
         /* swap the header */
-        ds->swapArray32(ds, &inTrie->signature, 4, &outTrie->signature, pErrorCode);
-        ds->swapArray16(ds, &inTrie->options, 12, &outTrie->options, pErrorCode);
+        ds->swapArray32(ds, &inTrie->signature, 8, &outTrie->signature, pErrorCode);
+        ds->swapArray16(ds, &inTrie->indexLength, 8, &outTrie->indexLength, pErrorCode);
         ds->swapArray32(ds, &inTrie->highValue, 8, &outTrie->highValue, pErrorCode);
 
         /* swap the index and the data */

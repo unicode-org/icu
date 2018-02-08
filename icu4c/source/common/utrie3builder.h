@@ -182,6 +182,13 @@ utrie3bld_setRange(UTrie3Builder *builder,
 U_CAPI UTrie3 * U_EXPORT2
 utrie3bld_build(UTrie3Builder *builder, UTrie3ValueBits valueBits, UErrorCode *pErrorCode);
 
+#ifdef UTRIE3_DEBUG
+U_CFUNC void
+utrie3_printLengths(const UTrie3 *trie, const char *which);
+
+U_CFUNC void utrie3bld_setName(UTrie3Builder *builder, const char *name);
+#endif
+
 U_CDECL_END
 
 #endif

@@ -70,32 +70,6 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
                           UErrorCode *pErrorCode);
 
 /**
- * Open a frozen, empty "dummy" trie.
- * A dummy trie is an empty trie, used when a real data trie cannot
- * be loaded. Equivalent to calling utrie3_open() and utrie3_freeze(),
- * but without internally creating and compacting/serializing the
- * builder data structure.
- *
- * The trie always returns the initialValue,
- * or the errorValue for out-of-range code points and ill-formed UTF-8/16.
- *
- * You must utrie3_close() the trie once you are done using it.
- *
- * @param valueBits selects the data entry size
- * @param initialValue the initial value that is set for all code points
- * @param errorValue the value for out-of-range code points and ill-formed UTF-8/16
- * @param pErrorCode an in/out ICU UErrorCode
- * @return the dummy trie
- *
- * @see utrie3_openFromSerialized
- * @see utrie3_open
- */
-U_CAPI UTrie3 * U_EXPORT2
-utrie3_openDummy(UTrie3ValueBits valueBits,
-                 uint32_t initialValue, uint32_t errorValue,
-                 UErrorCode *pErrorCode);
-
-/**
  * Clone a trie.
  * You must utrie3_close() the clone once you are done using it.
  *
@@ -233,11 +207,6 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
                       UErrorCode *pErrorCode);
 
 /* Public UTrie3 API macros ------------------------------------------------- */
-
-/*
- * These macros provide fast data lookup from a frozen trie.
- * They will crash when used on an unfrozen trie.
- */
 
 /**
  * Return a 16-bit trie value from a code point, with range checking.
@@ -503,7 +472,6 @@ struct UTrie3 {
 
     /* Start of the last range which ends at U+10ffff, and its value. */
     UChar32 highStart;
-    uint16_t highStartLead16;  // U16_LEAD(highStart)
     uint16_t shiftedHighStart;  // highStart>>12
     uint32_t highValue;
 

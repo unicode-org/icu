@@ -86,8 +86,8 @@ private:
     UChar32 findHighStart() const;
     int32_t compactWholeDataBlocks(UChar32 suppHighStart);
     void compactData(UChar32 suppHighStart, UErrorCode &errorCode);
-    int32_t compactIndex2(UChar32 suppHighStart, uint16_t index1[]);
-    int32_t compactTrie(uint16_t index1[], UErrorCode &errorCode);
+    int32_t compactIndex2(UTrie3ValueBits valueBits, UChar32 suppHighStart, uint16_t index1[]);
+    int32_t compactTrie(UTrie3ValueBits valueBits, uint16_t index1[], UErrorCode &errorCode);
 
     uint32_t *data;
     int32_t dataCapacity, dataLength;
@@ -98,8 +98,10 @@ private:
     uint32_t errorValue;
     UChar32 highStart;
     uint32_t highValue;
+#ifdef UTRIE3_DEBUG
 public:
     const char *name;  // TODO
+#endif
 private:
     uint8_t flags[0x110000>>UTRIE3_SHIFT_2];
     uint32_t index[0x110000>>UTRIE3_SHIFT_2];
@@ -724,6 +726,44 @@ int32_t Trie3Builder::compactWholeDataBlocks(UChar32 suppHighStart) {
 #   define DEBUG_DO(expr)
 #endif
 
+#ifdef UTRIE3_DEBUG
+// Braille symbols: U+28xx = UTF-8 E2 A0 80..E2 A3 BF
+int32_t appendValue(char s[], int32_t length, uint32_t value) {
+    value ^= value >> 16;
+    value ^= value >> 8;
+    s[length] = 0xE2;
+    s[length + 1] = (char)(0xA0 + ((value >> 6) & 3));
+    s[length + 2] = (char)(0x80 + (value & 0x3F));
+    return length + 3;
+}
+
+void printBlock(const uint32_t *block, uint32_t value, UChar32 start, int32_t overlap, uint32_t initialValue) {
+    char s[UTRIE3_DATA_BLOCK_LENGTH * 3 + 3];
+    int32_t length = 0;
+    int32_t i;
+    for (i = 0; i < overlap; ++i) {
+        length = appendValue(s, length, 0);  // Braille blank
+    }
+    s[length++] = '|';
+    for (; i < UTRIE3_DATA_BLOCK_LENGTH; ++i) {
+        if (block != nullptr) {
+            value = block[i];
+        }
+        if (value == initialValue) {
+            value = 0x40;  // Braille lower left dot
+        }
+        length = appendValue(s, length, value);
+    }
+    s[length] = 0;
+    start += overlap;
+    if (start <= 0xffff) {
+        printf("    %04lX  %s|\n", (long)start, s);
+    } else {
+        printf("  %6lX  %s|\n", (long)start, s);
+    }
+}
+#endif
+
 /**
  * Compacts a build-time trie.
  *
@@ -766,6 +806,9 @@ void Trie3Builder::compactData(UChar32 suppHighStart, UErrorCode &errorCode) {
 
 #ifdef UTRIE3_DEBUG
     int32_t countSame=0, sumOverlaps=0;
+    bool printData = dataLength == 34304 /* line.brk */ ||
+        dataLength == 36160 /* CanonIterData */ ||
+        dataLength == 68224 /* zh.txt~stroke */;
 #endif
 
     // linear ASCII data
@@ -774,6 +817,11 @@ void Trie3Builder::compactData(UChar32 suppHighStart, UErrorCode &errorCode) {
     for(int32_t i=0; start<newStart; start+=UTRIE3_DATA_BLOCK_LENGTH, ++i) {
         flags[i]=MOVED;
         index[i]=start;
+#ifdef UTRIE3_DEBUG
+        if (printData) {
+            printBlock(newData + start, 0, start, 0, initialValue);
+        }
+#endif
     }
     U_ASSERT(start==newStart);
 
@@ -789,6 +837,13 @@ void Trie3Builder::compactData(UChar32 suppHighStart, UErrorCode &errorCode) {
                 // so that more than 64k values are supported.
                 // Padding here also ensures that the final dataLength is
                 // a multiple of the shifted granularity.
+#ifdef UTRIE3_DEBUG
+                if (printData && (newStart & (UTRIE3_DATA_GRANULARITY - 1)) != 0) {
+                    int32_t overlap = UTRIE3_DATA_BLOCK_LENGTH - UTRIE3_DATA_GRANULARITY +
+                        (newStart & (UTRIE3_DATA_GRANULARITY - 1));
+                    printBlock(nullptr, newData[newStart - 1], 0, overlap, initialValue);
+                }
+#endif
                 while((newStart&(UTRIE3_DATA_GRANULARITY-1))!=0) {
                     // We could use any value for padding.
                     // Repeat the last data value to increase chances for
@@ -819,6 +874,11 @@ void Trie3Builder::compactData(UChar32 suppHighStart, UErrorCode &errorCode) {
             } else {
                 n=getAllSameOverlap(newData, newStart, value, UTRIE3_DATA_BLOCK_LENGTH, granularity);
                 DEBUG_DO(sumOverlaps+=n);
+#ifdef UTRIE3_DEBUG
+                if (printData) {
+                    printBlock(nullptr, value, i << UTRIE3_SHIFT_2, n, initialValue);
+                }
+#endif
                 index[i]=newStart-n;
                 while(n<UTRIE3_DATA_BLOCK_LENGTH) {
                     newData[newStart++]=value;
@@ -835,6 +895,11 @@ void Trie3Builder::compactData(UChar32 suppHighStart, UErrorCode &errorCode) {
             } else {
                 n=getOverlap(newData, newStart, block, UTRIE3_DATA_BLOCK_LENGTH, granularity);
                 DEBUG_DO(sumOverlaps+=n);
+#ifdef UTRIE3_DEBUG
+                if (printData) {
+                    printBlock(block, 0, i << UTRIE3_SHIFT_2, n, initialValue);
+                }
+#endif
                 index[i]=newStart-n;
                 while(n<UTRIE3_DATA_BLOCK_LENGTH) {
                     newData[newStart++]=block[n++];
@@ -868,7 +933,8 @@ void Trie3Builder::compactData(UChar32 suppHighStart, UErrorCode &errorCode) {
     dataLength = newStart;
 }
 
-int32_t Trie3Builder::compactIndex2(UChar32 suppHighStart, uint16_t index1[]) {
+int32_t Trie3Builder::compactIndex2(UTrie3ValueBits valueBits, UChar32 suppHighStart,
+                                    uint16_t index1[]) {
     // The BMP index is linear, and the index-1 table is used only for supplementary code points.
     if (suppHighStart <= BMP_LIMIT) {
         return BMP_I_LIMIT;
@@ -937,8 +1003,20 @@ int32_t Trie3Builder::compactIndex2(UChar32 suppHighStart, uint16_t index1[]) {
     // Needs to be granularity-aligned for a 16-bit trie
     // (so that dataMove will be down-shiftable),
     // and 2-aligned for uint32_t data.
+    int32_t alignMask;
+    switch(valueBits) {
+    case UTRIE3_16_VALUE_BITS:
+        alignMask = UTRIE3_DATA_GRANULARITY - 1;
+        break;
+    case UTRIE3_32_VALUE_BITS:
+        alignMask = 1;
+        break;
+    default:
+        alignMask = 0;
+        break;
+    }
     int32_t length = newStart + offset;
-    while ((length & ((UTRIE3_DATA_GRANULARITY - 1) | 1)) != 0) {
+    while ((length & alignMask) != 0) {
         // Arbitrary value: 0x3fffc not possible for real data.
         index[newStart++] = (int32_t)0xffff << UTRIE3_INDEX_SHIFT;
         ++length;
@@ -953,7 +1031,8 @@ int32_t Trie3Builder::compactIndex2(UChar32 suppHighStart, uint16_t index1[]) {
     return length;
 }
 
-int32_t Trie3Builder::compactTrie(uint16_t index1[], UErrorCode &errorCode) {
+int32_t Trie3Builder::compactTrie(UTrie3ValueBits valueBits, uint16_t index1[],
+                                  UErrorCode &errorCode) {
     // Find the real highStart and round it up.
     highValue = get(MAX_UNICODE);
     highStart = findHighStart();
@@ -990,7 +1069,7 @@ int32_t Trie3Builder::compactTrie(uint16_t index1[], UErrorCode &errorCode) {
 
     compactData(suppHighStart, errorCode);
     if(U_FAILURE(errorCode)) { return 0; }
-    return compactIndex2(suppHighStart, index1);
+    return compactIndex2(valueBits, suppHighStart, index1);
 }
 
 UTrie3 *Trie3Builder::build(UTrie3ValueBits valueBits, UErrorCode &errorCode) {
@@ -1010,7 +1089,7 @@ UTrie3 *Trie3Builder::build(UTrie3ValueBits valueBits, UErrorCode &errorCode) {
     }
 
     uint16_t index1[UTRIE3_MAX_INDEX_1_LENGTH];
-    int32_t indexLength = compactTrie(index1, errorCode);
+    int32_t indexLength = compactTrie(valueBits, index1, errorCode);
     if(U_FAILURE(errorCode)) {
         clear();
         return nullptr;
@@ -1070,7 +1149,6 @@ UTrie3 *Trie3Builder::build(UTrie3ValueBits valueBits, UErrorCode &errorCode) {
     trie->errorValue = errorValue;
 
     trie->highStart = highStart;
-    trie->highStartLead16 = U16_LEAD(highStart);
     trie->shiftedHighStart = highStart >> UTRIE3_SHIFT_1;
     trie->highValue = highValue;
     bytes += sizeof(UTrie3);

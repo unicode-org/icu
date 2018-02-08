@@ -1068,52 +1068,6 @@ TrieTestSet2OverlapWithClone(void) {
         checkRanges2, UPRV_LENGTHOF(checkRanges2));
 }
 
-/* test utrie3_openDummy() -------------------------------------------------- */
-
-static void
-dummyTest(UTrie3ValueBits valueBits) {
-    CheckRange
-    checkRanges[]={
-        { -1,       0 },
-        { 0,        0 },
-        { 0x110000, 0 }
-    };
-
-    UTrie3 *trie;
-    UErrorCode errorCode;
-
-    const char *testName;
-    uint32_t initialValue, errorValue;
-
-    if(valueBits==UTRIE3_16_VALUE_BITS) {
-        testName="dummy.16";
-        initialValue=0x313;
-        errorValue=0xaffe;
-    } else {
-        testName="dummy.32";
-        initialValue=0x01234567;
-        errorValue=0x89abcdef;
-    }
-    checkRanges[0].value=errorValue;
-    checkRanges[1].value=checkRanges[2].value=initialValue;
-
-    errorCode=U_ZERO_ERROR;
-    trie=utrie3_openDummy(valueBits, initialValue, errorValue, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        log_err("utrie3_openDummy(valueBits=%d) failed - %s\n", valueBits, u_errorName(errorCode));
-        return;
-    }
-
-    testTrie(testName, trie, valueBits, checkRanges, UPRV_LENGTHOF(checkRanges));
-    utrie3_close(trie);
-}
-
-static void
-DummyTrieTest(void) {
-    dummyTest(UTRIE3_16_VALUE_BITS);
-    dummyTest(UTRIE3_32_VALUE_BITS);
-}
-
 /* test builder memory management ------------------------------------------- */
 
 static void
@@ -1306,7 +1260,6 @@ addTrie3Test(TestNode** root) {
     addTest(root, &TrieTestSetEmpty, "tsutil/trie3test/TrieTestSetEmpty");
     addTest(root, &TrieTestSetSingleValue, "tsutil/trie3test/TrieTestSetSingleValue");
     addTest(root, &TrieTestSet2OverlapWithClone, "tsutil/trie3test/TrieTestSet2OverlapWithClone");
-    addTest(root, &DummyTrieTest, "tsutil/trie3test/DummyTrieTest");
     addTest(root, &FreeBlocksTest, "tsutil/trie3test/FreeBlocksTest");
     addTest(root, &GrowDataArrayTest, "tsutil/trie3test/GrowDataArrayTest");
     addTest(root, &ManyAllSameBlocksTest, "tsutil/trie3test/ManyAllSameBlocksTest");

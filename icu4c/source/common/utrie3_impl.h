@@ -27,9 +27,10 @@ typedef struct UTrie3Header {
 
     /**
      * Options bit field:
-     * Bits 31..12: Data null block offset, not shifted (0xfffff if none).
-     * Bits 11..4: Reserved (0).
-     * Bits 3..0: UTrie3ValueBits valueBits
+     * Bits 31..30: Reserved (0).
+     * Bits 29..12: Data null block offset, not shifted (0x3ffff if none).
+     * Bits 11..3: Reserved (0).
+     * Bits 2..0: UTrie3ValueBits valueBits
      */
     uint32_t options;
 
@@ -59,12 +60,10 @@ typedef struct UTrie3Header {
  */
 enum {
     /** Mask to get the UTrie3ValueBits valueBits from options. */
-    UTRIE3_OPTIONS_VALUE_BITS_MASK=0xf,  // TODO: 7? 3??
+    UTRIE3_OPTIONS_RESERVED_MASK = 0xc0000ff8,
+    UTRIE3_OPTIONS_VALUE_BITS_MASK = 7,
     UTRIE3_NO_INDEX2_NULL_OFFSET = 0xffff,  // TODO: doc anything > max index length
     UTRIE3_NO_DATA_NULL_OFFSET = 0xfffff  // TODO: doc always granularity if real
 };
-
-U_CFUNC void
-utrie3_printLengths(const UTrie3 *trie, const char *which);
 
 #endif
