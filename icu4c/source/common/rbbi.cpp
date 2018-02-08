@@ -1338,6 +1338,10 @@ void RuleBasedBreakIterator::dumpCache() {
     fBreakCache->dumpCache();
 }
 
+void RuleBasedBreakIterator::dumpTables() {
+    fData->printData();
+}
+
 /**
  * Returns the description used to create this iterator
  */

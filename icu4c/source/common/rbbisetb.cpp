@@ -91,7 +91,7 @@ RBBISetBuilder::~RBBISetBuilder()
 //                  from the Unicode Sets.
 //
 //------------------------------------------------------------------------
-void RBBISetBuilder::build() {
+void RBBISetBuilder::buildRanges() {
     RBBINode        *usetNode;
     RangeDescriptor *rlRange;
 
@@ -245,11 +245,16 @@ void RBBISetBuilder::build() {
 
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "rgroup")) {printRangeGroups();}
     if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "esets")) {printSets();}
+}
 
-    //
-    // Build the Trie table for mapping UChar32 values to the corresponding
-    //   range group number
-    //
+
+//
+// Build the Trie table for mapping UChar32 values to the corresponding
+// range group number.
+//
+void RBBISetBuilder::buildTrie() {
+    RangeDescriptor *rlRange;
+
     fTrie = utrie2_open(0,       //  Initial value for all code points.
                         0,       //  Error value for out-of-range input.
                         fStatus);
@@ -262,6 +267,20 @@ void RBBISetBuilder::build() {
                           TRUE,                    // Overwrite previously written values
                           fStatus);
     }
+}
+
+
+void RBBISetBuilder::mergeCategories(int32_t left, int32_t right) {
+    U_ASSERT(left >= 1);
+    U_ASSERT(right > left);
+    for (RangeDescriptor *rd = fRangeList; rd != nullptr; rd = rd->fNext) {
+        if (rd->fNum == right) {
+            rd->fNum = left;
+        } else if (rd->fNum > right) {
+            rd->fNum--;
+        }
+    }
+    --fGroupCount;
 }
 
 

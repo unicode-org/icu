@@ -126,6 +126,14 @@ public:
         );
 
     virtual    ~RBBIRuleBuilder();
+
+    /**
+     * Fold together redundant character classes (table columns) and
+     * redundant states (table rows). Done after initial table generation,
+     * before serializing the result.
+     */
+    void optimizeTables();
+
     char                          *fDebugEnv;        // controls debug trace output
     UErrorCode                    *fStatus;          // Error reporting.  Keeping status
     UParseError                   *fParseError;      //   here avoids passing it everywhere.

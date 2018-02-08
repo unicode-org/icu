@@ -165,13 +165,8 @@ public:
     UBool                 operator ==(const RBBIDataWrapper &other) const;
     int32_t               hashCode();
     const UnicodeString  &getRuleSourceString() const;
-#ifdef RBBI_DEBUG
     void                  printData();
     void                  printTable(const char *heading, const RBBIStateTable *table);
-#else
-    #define printData()
-    #define printTable(heading, table)
-#endif
 
     /*                                     */
     /*   Pointers to items within the data */
