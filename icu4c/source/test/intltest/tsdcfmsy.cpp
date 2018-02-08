@@ -304,6 +304,34 @@ void IntlTestDecimalFormatSymbols::testDigitSymbols() {
             symbols.getConstDigitSymbol(i));
     }
 
+    // Check after copy
+    DecimalFormatSymbols copy(symbols);
+    if (osmanyaZero != copy.getCodePointZero()) {
+        errln("ERROR: Code point zero be Osmanya code point zero");
+    }
+    for (int32_t i=0; i<=9; i++) {
+        assertEquals(UnicodeString("iv. After copy at index ") + Int64ToUnicodeString(i),
+            UnicodeString(osmanyaDigitStrings[i]),
+            copy.getConstDigitSymbol(i));
+    }
+
+    // Check when loaded from resource bundle
+    DecimalFormatSymbols fromData(Locale("en@numbers=osma"), status);
+    if (osmanyaZero != fromData.getCodePointZero()) {
+        errln("ERROR: Code point zero be Osmanya code point zero");
+    }
+    for (int32_t i=0; i<=9; i++) {
+        assertEquals(UnicodeString("v. Resource bundle at index ") + Int64ToUnicodeString(i),
+            UnicodeString(osmanyaDigitStrings[i]),
+            fromData.getConstDigitSymbol(i));
+    }
+
+    // Setting a digit somewhere in the middle should invalidate codePointZero
+    symbols.setSymbol(DecimalFormatSymbols::kOneDigitSymbol, u"foo", FALSE);
+    if (-1 != symbols.getCodePointZero()) {
+        errln("ERROR: Code point zero be invalid");
+    }
+
     // Reset digits to Latin
     symbols.setSymbol(
         DecimalFormatSymbols::kZeroDigitSymbol,
@@ -312,7 +340,7 @@ void IntlTestDecimalFormatSymbols::testDigitSymbols() {
         errln("ERROR: Code point zero be ASCII 0");
     }
     for (int32_t i=0; i<=9; i++) {
-        assertEquals(UnicodeString("iv. ASCII Digit at index ") + Int64ToUnicodeString(i),
+        assertEquals(UnicodeString("vi. ASCII Digit at index ") + Int64ToUnicodeString(i),
             UnicodeString(u'0' + i),
             symbols.getConstDigitSymbol(i));
     }
