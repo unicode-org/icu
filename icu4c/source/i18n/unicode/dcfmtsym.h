@@ -392,6 +392,13 @@ public:
     inline UBool isCustomIntlCurrencySymbol() const {
         return fIsCustomIntlCurrencySymbol;
     }
+
+    /**
+     * @internal For ICU use only
+     */
+    inline UChar32 getCodePointZero() const {
+        return fCodePointZero;
+    }
 #endif  /* U_HIDE_INTERNAL_API */
 
     /**
@@ -439,6 +446,22 @@ private:
      * @internal
      */
     UnicodeString fNoSymbol;
+
+    /**
+     * Dealing with code points is faster than dealing with strings when formatting. Because of
+     * this, we maintain a value containing the zero code point that is used whenever digitStrings
+     * represents a sequence of ten code points in order.
+     *
+     * <p>If the value stored here is positive, it means that the code point stored in this value
+     * corresponds to the digitStrings array, and codePointZero can be used instead of the
+     * digitStrings array for the purposes of efficient formatting; if -1, then digitStrings does
+     * *not* contain a sequence of code points, and it must be used directly.
+     *
+     * <p>It is assumed that codePointZero always shadows the value in digitStrings. codePointZero
+     * should never be set directly; rather, it should be updated only when digitStrings mutates.
+     * That is, the flow of information is digitStrings -> codePointZero, not the other way.
+     */
+    UChar32 fCodePointZero;
 
     Locale locale;
 
@@ -493,13 +516,17 @@ DecimalFormatSymbols::setSymbol(ENumberFormatSymbol symbol, const UnicodeString 
 
     // If the zero digit is being set to a known zero digit according to Unicode,
     // then we automatically set the corresponding 1-9 digits
-    if ( propogateDigits && symbol == kZeroDigitSymbol && value.countChar32() == 1 ) {
+    // Also record updates to fCodePointZero. Be conservative if in doubt.
+    if (symbol == kZeroDigitSymbol) {
         UChar32 sym = value.char32At(0);
-        if ( u_charDigitValue(sym) == 0 ) {
+        if ( propogateDigits && u_charDigitValue(sym) == 0 && value.countChar32() == 1 ) {
+            fCodePointZero = sym;
             for ( int8_t i = 1 ; i<= 9 ; i++ ) {
                 sym++;
                 fSymbols[(int)kOneDigitSymbol+i-1] = UnicodeString(sym);
             }
+        } else {
+            fCodePointZero = -1;
         }
     }
 }
