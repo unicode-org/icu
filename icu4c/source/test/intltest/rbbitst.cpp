@@ -4461,9 +4461,24 @@ void RBBITest::TestBug12677() {
 
 void RBBITest::TestTableRedundancies() {
     UErrorCode status = U_ZERO_ERROR;
+    
+    UnicodeString rules {u"$s0=[;,*]; \n"
+                "$s1=[a-z]; \n"
+                "$s2=[i-n]; \n"
+                "$s3=[x-z]; \n"
+                "!!forward; \n"
+                "($s0 | '?')*; \n"
+                "($s1 | $s2 | $s3)*; \n" };
+    RuleBasedBreakIterator *lbi = 
+        (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status);
+    rules = lbi->getRules();
+    UParseError pe {};
     RuleBasedBreakIterator *bi =
-            (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status);
-    // bi->dumpTables();
+    //         (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status);
+           new RuleBasedBreakIterator(rules, pe, status);
+    assertSuccess(WHERE, status);
+    if (U_FAILURE(status)) return;
+    bi->dumpTables();
 
     RBBIDataWrapper *dw = bi->fData;
     const RBBIStateTable *fwtbl = dw->fForwardTable;

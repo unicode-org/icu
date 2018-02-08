@@ -1090,7 +1090,7 @@ bool RBBITableBuilder::findDuplCharClassFrom(int32_t &baseCategory, int32_t &dup
     uint16_t table_base;
     uint16_t table_dupl;
     for (; baseCategory < numCols-1; ++baseCategory) {
-        for (; duplCategory < numCols; ++duplCategory) {
+        for (duplCategory=baseCategory+1; duplCategory < numCols; ++duplCategory) {
              for (int32_t state=0; state<numStates; state++) {
                  RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(state);
                  table_base = (uint16_t)sd->fDtran->elementAti(baseCategory);
