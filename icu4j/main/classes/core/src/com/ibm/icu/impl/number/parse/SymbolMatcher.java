@@ -47,9 +47,8 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
             }
         }
 
-        int cp = segment.getCodePoint();
-        if (cp != -1 && uniSet.contains(cp)) {
-            segment.adjustOffset(Character.charCount(cp));
+        if (segment.matches(uniSet)) {
+            segment.adjustOffsetByCodePoint();
             accept(segment, result);
             return false;
         }

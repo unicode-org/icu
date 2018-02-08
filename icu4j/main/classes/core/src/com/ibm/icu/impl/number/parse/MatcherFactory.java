@@ -15,7 +15,6 @@ public class MatcherFactory {
     DecimalFormatSymbols symbols;
     IgnorablesMatcher ignorables;
     ULocale locale;
-    int parseFlags;
 
     public MinusSignMatcher minusSign(boolean allowTrailing) {
         return MinusSignMatcher.getInstance(symbols, allowTrailing);
@@ -35,7 +34,7 @@ public class MatcherFactory {
 
     public AnyMatcher currency() {
         AnyMatcher any = new AnyMatcher();
-        any.addMatcher(CurrencyMatcher.getInstance(currency, locale, parseFlags));
+        any.addMatcher(CurrencyMatcher.getInstance(currency, locale));
         any.addMatcher(CurrencyTrieMatcher.getInstance(locale));
         any.freeze();
         return any;

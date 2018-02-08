@@ -17,7 +17,7 @@ public class StringSegmentTest {
 
     @Test
     public void testOffset() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING);
+        StringSegment segment = new StringSegment(SAMPLE_STRING, 0);
         assertEquals(0, segment.getOffset());
         segment.adjustOffset(3);
         assertEquals(3, segment.getOffset());
@@ -29,7 +29,7 @@ public class StringSegmentTest {
 
     @Test
     public void testLength() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING);
+        StringSegment segment = new StringSegment(SAMPLE_STRING, 0);
         assertEquals(11, segment.length());
         segment.adjustOffset(3);
         assertEquals(8, segment.length());
@@ -43,7 +43,7 @@ public class StringSegmentTest {
 
     @Test
     public void testCharAt() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING);
+        StringSegment segment = new StringSegment(SAMPLE_STRING, 0);
         assertCharSequenceEquals(SAMPLE_STRING, segment);
         segment.adjustOffset(3);
         assertCharSequenceEquals("radio 📻", segment);
@@ -53,7 +53,7 @@ public class StringSegmentTest {
 
     @Test
     public void testGetCodePoint() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING);
+        StringSegment segment = new StringSegment(SAMPLE_STRING, 0);
         assertEquals(0x1F4FB, segment.getCodePoint());
         segment.setLength(1);
         assertEquals(-1, segment.getCodePoint());
@@ -66,7 +66,7 @@ public class StringSegmentTest {
 
     @Test
     public void testCommonPrefixLength() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING);
+        StringSegment segment = new StringSegment(SAMPLE_STRING, 0);
         assertEquals(11, segment.getCommonPrefixLength(SAMPLE_STRING));
         assertEquals(4, segment.getCommonPrefixLength("📻 r"));
         assertEquals(3, segment.getCommonPrefixLength("📻 x"));
