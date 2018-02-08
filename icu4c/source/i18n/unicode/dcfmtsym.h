@@ -80,10 +80,6 @@ U_NAMESPACE_BEGIN
  * If you supply a pattern with multiple grouping characters, the interval
  * between the last one and the end of the integer is the one that is
  * used. So "#,##,###,####" == "######,####" == "##,####,####".
- * <P>
- * This class only handles localized digits where the 10 digits are
- * contiguous in Unicode, from 0 to 9. Other digits sets (such as
- * superscripts) would need a different subclass.
  */
 class U_I18N_API DecimalFormatSymbols : public UObject {
 public:
