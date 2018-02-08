@@ -74,6 +74,10 @@ public class StringSegment implements CharSequence {
         return str.charAt(index + start);
     }
 
+    public int codePointAt(int index) {
+        return str.codePointAt(index + start);
+    }
+
     @Override
     public CharSequence subSequence(int start, int end) {
         throw new AssertionError(); // Never used

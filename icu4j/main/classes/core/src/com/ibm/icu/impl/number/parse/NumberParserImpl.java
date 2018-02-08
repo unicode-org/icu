@@ -5,7 +5,6 @@ package com.ibm.icu.impl.number.parse;
 import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
 
 import com.ibm.icu.impl.number.AffixPatternProvider;
@@ -268,7 +267,6 @@ public class NumberParserImpl {
     private final int parseFlags;
     private final List<NumberParseMatcher> matchers;
     private final List<UnicodeSet> leads;
-    private Comparator<ParsedNumber> comparator;
     private boolean frozen;
 
     /**
@@ -284,7 +282,6 @@ public class NumberParserImpl {
         } else {
             leads = null;
         }
-        comparator = ParsedNumber.COMPARATOR; // default value
         this.parseFlags = parseFlags;
         frozen = false;
     }
@@ -316,11 +313,6 @@ public class NumberParserImpl {
                     .freeze();
         }
         this.leads.add(leadCodePoints);
-    }
-
-    public void setComparator(Comparator<ParsedNumber> comparator) {
-        assert !frozen;
-        this.comparator = comparator;
     }
 
     public void freeze() {
@@ -400,11 +392,12 @@ public class NumberParserImpl {
 
         int initialOffset = segment.getOffset();
         for (int i = 0; i < matchers.size(); i++) {
+            // TODO: Check leadChars here?
             NumberParseMatcher matcher = matchers.get(i);
 
             // In a non-greedy parse, we attempt all possible matches and pick the best.
             for (int charsToConsume = 0; charsToConsume < segment.length();) {
-                charsToConsume += Character.charCount(Character.codePointAt(segment, charsToConsume));
+                charsToConsume += Character.charCount(segment.codePointAt(charsToConsume));
 
                 // Run the matcher on a segment of the current length.
                 candidate.copyFrom(initial);
@@ -415,7 +408,7 @@ public class NumberParserImpl {
                 // If the entire segment was consumed, recurse.
                 if (segment.getOffset() - initialOffset == charsToConsume) {
                     parseLongestRecursive(segment, candidate);
-                    if (comparator.compare(candidate, result) > 0) {
+                    if (candidate.isBetterThan(result)) {
                         result.copyFrom(candidate);
                     }
                 }

@@ -130,6 +130,8 @@ class ParsedNumber {
     bool seenNumber() const;
 
     double getDouble() const;
+
+    bool isBetterThan(const ParsedNumber& other);
 };
 
 
@@ -141,7 +143,7 @@ class ParsedNumber {
  */
 class StringSegment : public UMemory, public ::icu::number::impl::CharSequence {
   public:
-    explicit StringSegment(const UnicodeString& str);
+    explicit StringSegment(const UnicodeString& str, parse_flags_t parseFlags);
 
     int32_t getOffset() const;
 
@@ -156,6 +158,11 @@ class StringSegment : public UMemory, public ::icu::number::impl::CharSequence {
      * {@link ParsedNumber#setCharsConsumed}. For more information on strong chars, see that method.
      */
     void adjustOffset(int32_t delta);
+
+    /**
+     * Adjusts the offset by the width of the current code point, either 1 or 2 chars.
+     */
+    void adjustOffsetByCodePoint();
 
     void setLength(int32_t length);
 
@@ -172,20 +179,51 @@ class StringSegment : public UMemory, public ::icu::number::impl::CharSequence {
     /**
      * Returns the first code point in the string segment, or -1 if the string starts with an invalid
      * code point.
+     *
+     * <p>
+     * <strong>Important:</strong> Most of the time, you should use {@link #matches}, which handles case
+     * folding logic, instead of this method.
      */
     UChar32 getCodePoint() const;
+
+    /**
+     * Returns true if the first code point of this StringSegment equals the given code point.
+     *
+     * <p>
+     * This method will perform case folding if case folding is enabled for the parser.
+     */
+    bool matches(UChar32 otherCp) const;
+
+    /**
+     * Returns true if the first code point of this StringSegment is in the given UnicodeSet.
+     */
+    bool matches(const UnicodeSet& uniset) const;
 
     /**
      * Returns the length of the prefix shared by this StringSegment and the given CharSequence. For
      * example, if this string segment is "aab", and the char sequence is "aac", this method returns 2,
      * since the first 2 characters are the same.
+     *
+     * <p>
+     * This method will perform case folding if case folding is enabled for the parser.
      */
     int32_t getCommonPrefixLength(const UnicodeString& other);
+
+    /**
+     * Like {@link #getCommonPrefixLength}, but never performs case folding, even if case folding is
+     * enabled for the parser.
+     */
+    int32_t getCaseSensitivePrefixLength(const UnicodeString& other);
 
   private:
     const UnicodeString fStr;
     int32_t fStart;
     int32_t fEnd;
+    bool fFoldCase;
+
+    int32_t getPrefixLengthInternal(const UnicodeString& other, bool foldCase);
+
+    static bool codePointsEqual(UChar32 cp1, UChar32 cp2, bool foldCase);
 };
 
 
