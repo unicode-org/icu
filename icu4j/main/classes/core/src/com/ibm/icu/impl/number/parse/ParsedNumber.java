@@ -166,4 +166,8 @@ public class ParsedNumber {
         return d;
 
     }
+
+    boolean isBetterThan(ParsedNumber other) {
+        return COMPARATOR.compare(this, other) > 0;
+    }
 }

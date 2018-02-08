@@ -13,6 +13,8 @@
 #include "numparse_decimal.h"
 #include "unicode/numberformatter.h"
 
+#include <typeinfo>
+
 using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
@@ -92,22 +94,121 @@ void NumberParserImpl::freeze() {
     fFrozen = true;
 }
 
-//void
-//NumberParserImpl::parse(const UnicodeString& input, int32_t start, bool greedy, ParsedNumber& result,
-//                        UErrorCode& status) const {
-//    U_ASSERT(frozen);
-//    // TODO: Check start >= 0 and start < input.length()
-//    StringSegment segment(utils::maybeFold(input, parseFlags));
-//    segment.adjustOffset(start);
-//    if (greedy) {
-//        parseGreedyRecursive(segment, result);
-//    } else {
-//        parseLongestRecursive(segment, result);
-//    }
-//    for (NumberParseMatcher matcher : matchers) {
-//        matcher.postProcess(result);
-//    }
-//}
+void NumberParserImpl::parse(const UnicodeString& input, bool greedy, ParsedNumber& result,
+                             UErrorCode& status) const {
+    return parse(input, 0, greedy, result, status);
+}
+
+void
+NumberParserImpl::parse(const UnicodeString& input, int32_t start, bool greedy, ParsedNumber& result,
+                        UErrorCode& status) const {
+    U_ASSERT(fFrozen);
+    // TODO: Check start >= 0 and start < input.length()
+    StringSegment segment(input, fParseFlags);
+    segment.adjustOffset(start);
+    if (greedy) {
+        parseGreedyRecursive(segment, result, status);
+    } else {
+        parseLongestRecursive(segment, result, status);
+    }
+    for (int32_t i = 0; i < fNumMatchers; i++) {
+        fMatchers[i]->postProcess(result);
+    }
+}
+
+void NumberParserImpl::parseGreedyRecursive(StringSegment& segment, ParsedNumber& result,
+                                            UErrorCode& status) const {
+    // Base Case
+    if (segment.length() == 0) {
+        return;
+    }
+
+    int initialOffset = segment.getOffset();
+    int leadCp = segment.getCodePoint();
+    for (int32_t i = 0; i < fNumMatchers; i++) {
+        if (fComputeLeads && !fLeads[i]->contains(leadCp)) {
+            continue;
+        }
+        const NumberParseMatcher* matcher = fMatchers[i];
+        matcher->match(segment, result, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        if (segment.getOffset() != initialOffset) {
+            // In a greedy parse, recurse on only the first match.
+            parseGreedyRecursive(segment, result, status);
+            // The following line resets the offset so that the StringSegment says the same across
+            // the function
+            // call boundary. Since we recurse only once, this line is not strictly necessary.
+            segment.setOffset(initialOffset);
+            return;
+        }
+    }
+
+    // NOTE: If we get here, the greedy parse completed without consuming the entire string.
+}
+
+void NumberParserImpl::parseLongestRecursive(StringSegment& segment, ParsedNumber& result,
+                                             UErrorCode& status) const {
+    // Base Case
+    if (segment.length() == 0) {
+        return;
+    }
+
+    // TODO: Give a nice way for the matcher to reset the ParsedNumber?
+    ParsedNumber initial(result);
+    ParsedNumber candidate;
+
+    int initialOffset = segment.getOffset();
+    for (int32_t i = 0; i < fNumMatchers; i++) {
+        // TODO: Check leadChars here?
+        const NumberParseMatcher* matcher = fMatchers[i];
+
+        // In a non-greedy parse, we attempt all possible matches and pick the best.
+        for (int32_t charsToConsume = 0; charsToConsume < segment.length();) {
+            charsToConsume += U16_LENGTH(segment.codePointAt(charsToConsume));
+
+            // Run the matcher on a segment of the current length.
+            candidate = initial;
+            segment.setLength(charsToConsume);
+            bool maybeMore = matcher->match(segment, candidate, status);
+            segment.resetLength();
+            if (U_FAILURE(status)) {
+                return;
+            }
+
+            // If the entire segment was consumed, recurse.
+            if (segment.getOffset() - initialOffset == charsToConsume) {
+                parseLongestRecursive(segment, candidate, status);
+                if (U_FAILURE(status)) {
+                    return;
+                }
+                if (candidate.isBetterThan(result)) {
+                    result = candidate;
+                }
+            }
+
+            // Since the segment can be re-used, reset the offset.
+            // This does not have an effect if the matcher did not consume any chars.
+            segment.setOffset(initialOffset);
+
+            // Unless the matcher wants to see the next char, continue to the next matcher.
+            if (!maybeMore) {
+                break;
+            }
+        }
+    }
+}
+
+UnicodeString NumberParserImpl::toString() const {
+    UnicodeString result(u"<NumberParserImpl matchers:[");
+    for (int32_t i = 0; i < fNumMatchers; i++) {
+        result.append(u' ');
+        result.append(UnicodeString(typeid(*fMatchers[i]).name()));
+    }
+    result.append(u" ]>", -1);
+    return result;
+}
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

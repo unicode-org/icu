@@ -42,9 +42,9 @@ class NumberParserImpl {
 
     ~NumberParserImpl();
 
-    void parseGreedyRecursive(StringSegment& segment, ParsedNumber& result) const;
+    void parseGreedyRecursive(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const;
 
-    void parseLongestRecursive(StringSegment& segment, ParsedNumber& result) const;
+    void parseLongestRecursive(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const;
 };
 
 

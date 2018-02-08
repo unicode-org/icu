@@ -70,6 +70,11 @@ double ParsedNumber::getDouble() const {
     return quantity.toDouble();
 }
 
+bool ParsedNumber::isBetterThan(const ParsedNumber& other) {
+    // Favor results with strictly more characters consumed.
+    return charEnd > other.charEnd;
+}
+
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
