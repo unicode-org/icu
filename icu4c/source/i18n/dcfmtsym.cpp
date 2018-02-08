@@ -38,6 +38,7 @@
 #include "uresimp.h"
 #include "ureslocs.h"
 #include "charstr.h"
+#include "uassert.h"
 
 // *****************************************************************************
 // class DecimalFormatSymbols
@@ -530,6 +531,8 @@ DecimalFormatSymbols::initialize() {
     fSymbols[kExponentMultiplicationSymbol] = (UChar)0xd7; // 'x' multiplication symbol for exponents
     fIsCustomCurrencySymbol = FALSE; 
     fIsCustomIntlCurrencySymbol = FALSE;
+    fCodePointZero = 0x30;
+    U_ASSERT(fCodePointZero == fSymbols[kZeroDigitSymbol].char32At(0));
 
 }
 
