@@ -2030,6 +2030,25 @@ UBool IntlTest::assertEquals(const char* message,
     return TRUE;
 }
 
+
+UBool IntlTest::assertEquals(const char* message,
+                             UErrorCode expected,
+                             UErrorCode actual) {
+    if (expected != actual) {
+        errln((UnicodeString)"FAIL: " + message + "; got " +
+              u_errorName(actual) + 
+              "; expected " + u_errorName(expected));
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString)"Ok: " + message + "; got " + u_errorName(actual));
+    }
+#endif
+    return TRUE;
+}
+
+
 #if !UCONFIG_NO_FORMATTING
 UBool IntlTest::assertEquals(const char* message,
                              const Formattable& expected,
@@ -2103,6 +2122,16 @@ UBool IntlTest::assertEquals(const UnicodeString& message,
 UBool IntlTest::assertEquals(const UnicodeString& message,
                              int64_t expected,
                              int64_t actual) {
+    return assertEquals(extractToAssertBuf(message), expected, actual);
+}
+UBool IntlTest::assertEquals(const UnicodeString& message,
+                             double expected,
+                             double actual) {
+    return assertEquals(extractToAssertBuf(message), expected, actual);
+}
+UBool IntlTest::assertEquals(const UnicodeString& message,
+                             UErrorCode expected,
+                             UErrorCode actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
 }
 

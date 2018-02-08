@@ -76,6 +76,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(locale);
         TESTCASE_AUTO(formatTypes);
         TESTCASE_AUTO(errors);
+        TESTCASE_AUTO(validRanges);
     TESTCASE_AUTO_END;
 }
 
@@ -1748,25 +1749,81 @@ void NumberFormatterApiTest::errors() {
         UErrorCode status2 = U_ZERO_ERROR;
         FormattedNumber fn = lnf.formatInt(1, status1);
         assertEquals(
-                "Should fail with U_ILLEGAL_ARGUMENT_ERROR since rounder is not legal",
-                U_ILLEGAL_ARGUMENT_ERROR,
-                status1);
+                "Should fail since rounder is not legal",
+                (UBool) TRUE,
+                (UBool) U_FAILURE(status1));
         FieldPosition fp;
         fn.populateFieldPosition(fp, status2);
         assertEquals(
-                "Should fail with U_ILLEGAL_ARGUMENT_ERROR on terminal method",
-                U_ILLEGAL_ARGUMENT_ERROR,
-                status2);
+                "Should fail on terminal method",
+                (UBool) TRUE,
+                (UBool) U_FAILURE(status2));
     }
 
     {
         UErrorCode status = U_ZERO_ERROR;
         lnf.copyErrorTo(status);
         assertEquals(
-                "Should fail with U_ILLEGAL_ARGUMENT_ERROR since rounder is not legal",
-                U_ILLEGAL_ARGUMENT_ERROR,
-                status);
+                "Should fail since rounder is not legal",
+                (UBool) TRUE,
+                (UBool) U_FAILURE(status));
     }
+}
+
+void NumberFormatterApiTest::validRanges() {
+
+#define EXPECTED_MAX_INT_FRAC_SIG 999
+
+#define VALID_RANGE_ASSERT(status, method, lowerBound, argument) { \
+    UErrorCode expectedStatus = ((lowerBound <= argument) && (argument <= EXPECTED_MAX_INT_FRAC_SIG)) \
+        ? U_ZERO_ERROR \
+        : U_NUMBER_ARG_OUTOFBOUNDS_ERROR; \
+    assertEquals( \
+        UnicodeString(u"Incorrect status for " #method " on input ") \
+            + Int64ToUnicodeString(argument), \
+        expectedStatus, \
+        status); \
+}
+
+#define VALID_RANGE_ONEARG(setting, method, lowerBound) { \
+    for (int32_t argument = -2; argument <= EXPECTED_MAX_INT_FRAC_SIG + 2; argument++) { \
+        UErrorCode status = U_ZERO_ERROR; \
+        NumberFormatter::with().setting(method(argument)).copyErrorTo(status); \
+        VALID_RANGE_ASSERT(status, method, lowerBound, argument); \
+    } \
+}
+
+#define VALID_RANGE_TWOARGS(setting, method, lowerBound) { \
+    for (int32_t argument = -2; argument <= EXPECTED_MAX_INT_FRAC_SIG + 2; argument++) { \
+        UErrorCode status = U_ZERO_ERROR; \
+        /* Pass EXPECTED_MAX_INT_FRAC_SIG as the second argument so arg1 <= arg2 in expected cases */ \
+        NumberFormatter::with().setting(method(argument, EXPECTED_MAX_INT_FRAC_SIG)).copyErrorTo(status); \
+        VALID_RANGE_ASSERT(status, method, lowerBound, argument); \
+        status = U_ZERO_ERROR; \
+        /* Pass lowerBound as the first argument so arg1 <= arg2 in expected cases */ \
+        NumberFormatter::with().setting(method(lowerBound, argument)).copyErrorTo(status); \
+        VALID_RANGE_ASSERT(status, method, lowerBound, argument); \
+        /* Check that first argument must be less than or equal to second argument */ \
+        NumberFormatter::with().setting(method(argument, argument - 1)).copyErrorTo(status); \
+        assertEquals("Incorrect status for " #method " on max < min input", \
+            U_NUMBER_ARG_OUTOFBOUNDS_ERROR, \
+            status); \
+    } \
+}
+
+    VALID_RANGE_ONEARG(rounding, Rounder::fixedFraction, 0);
+    VALID_RANGE_ONEARG(rounding, Rounder::minFraction, 0);
+    VALID_RANGE_ONEARG(rounding, Rounder::maxFraction, 0);
+    VALID_RANGE_TWOARGS(rounding, Rounder::minMaxFraction, 0);
+    VALID_RANGE_ONEARG(rounding, Rounder::fixedDigits, 1);
+    VALID_RANGE_ONEARG(rounding, Rounder::minDigits, 1);
+    VALID_RANGE_ONEARG(rounding, Rounder::maxDigits, 1);
+    VALID_RANGE_TWOARGS(rounding, Rounder::minMaxDigits, 1);
+    VALID_RANGE_ONEARG(rounding, Rounder::fixedFraction(1).withMinDigits, 1);
+    VALID_RANGE_ONEARG(rounding, Rounder::fixedFraction(1).withMaxDigits, 1);
+    VALID_RANGE_ONEARG(notation, Notation::scientific().withMinExponentDigits, 1);
+    VALID_RANGE_ONEARG(integerWidth, IntegerWidth::zeroFillTo, 0);
+    VALID_RANGE_ONEARG(integerWidth, IntegerWidth::zeroFillTo(0).truncateAt, -1);
 }
 
 

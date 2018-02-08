@@ -22,7 +22,7 @@ public class RoundingUtils {
      * The maximum number of fraction places, integer numerals, or significant digits. TODO: This does
      * not feel like the best home for this value.
      */
-    public static final int MAX_INT_FRAC_SIG = 100;
+    public static final int MAX_INT_FRAC_SIG = 999;
 
     /**
      * Converts a rounding mode and metadata about the quantity being rounded to a boolean determining
