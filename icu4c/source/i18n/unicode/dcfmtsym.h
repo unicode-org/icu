@@ -422,9 +422,12 @@ public:
      * to accessing the symbol from getConstSymbol with the corresponding
      * key, such as kZeroDigitSymbol or kOneDigitSymbol.
      *
+     * @param digit The digit, an integer between 0 and 9 inclusive.
+     *              If outside the range 0 to 9, the zero digit is returned.
+     * @return the format symbol for the given digit.
      * @internal This API is currently for ICU use only.
      */
-    inline const UnicodeString& getConstDigitSymbol(int32_t digit);
+    inline const UnicodeString& getConstDigitSymbol(int32_t digit) const;
 
     /**
      * Returns that pattern stored in currecy info. Internal API for use by NumberFormat API.
@@ -510,7 +513,7 @@ DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
     return *strPtr;
 }
 
-inline const UnicodeString& DecimalFormatSymbols::getConstDigitSymbol(int32_t digit) {
+inline const UnicodeString& DecimalFormatSymbols::getConstDigitSymbol(int32_t digit) const {
     if (digit < 0 || digit > 9) {
         digit = 0;
     }
