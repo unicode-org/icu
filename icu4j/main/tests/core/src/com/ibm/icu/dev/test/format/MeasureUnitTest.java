@@ -16,6 +16,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.text.FieldPosition;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -42,6 +43,7 @@ import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.NoUnit;
@@ -1923,6 +1925,15 @@ public class MeasureUnitTest extends TestFmwk {
         MeasureFormat mfj = MeasureFormat.getCurrencyFormat(Locale.FRANCE);
 
         assertEquals("getCurrencyFormat ULocale/Locale", mfu, mfj);
+    }
+
+    @Test
+    public void testCurrencyFormatParseIsoCode() throws ParseException {
+        MeasureFormat mf = MeasureFormat.getCurrencyFormat(ULocale.ENGLISH);
+        CurrencyAmount result = (CurrencyAmount) mf.parseObject("GTQ 34.56");
+        assertEquals("Parse should succeed", result.getNumber().doubleValue(), 34.56, 0.0);
+        assertEquals("Should parse ISO code GTQ even though the currency is USD",
+                "GTQ", result.getCurrency().getCurrencyCode());
     }
 
     @Test

@@ -24,8 +24,8 @@ public class CodePointMatcher implements NumberParseMatcher {
 
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
-        if (segment.getCodePoint() == cp) {
-            segment.adjustOffset(Character.charCount(cp));
+        if (segment.matches(cp)) {
+            segment.adjustOffsetByCodePoint();
             result.setCharsConsumed(segment);
         }
         return false;
