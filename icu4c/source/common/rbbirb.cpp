@@ -357,11 +357,17 @@ void RBBIRuleBuilder::optimizeTables() {
     int32_t leftClass;
     int32_t rightClass;
 
-    leftClass = 1;
-    rightClass = 2;
+    leftClass = 3;
+    rightClass = 4;
+    printf("Optimizing tables ...\n");
     while (fForwardTables->findDuplCharClassFrom(leftClass, rightClass)) {
+        printf("Merging duplicate columns (%d, %d)\n", leftClass, rightClass);
+        
         fSetBuilder->mergeCategories(leftClass, rightClass);
         fForwardTables->removeColumn(rightClass);
+        fReverseTables->removeColumn(rightClass);
+        fSafeFwdTables->removeColumn(rightClass);
+        fSafeRevTables->removeColumn(rightClass);
     }
 
 
