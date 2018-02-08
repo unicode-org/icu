@@ -238,15 +238,16 @@ public class NumberParserTest {
             int expectedCaseSensitiveChars = (Integer) cas[2];
             int expectedCaseFoldingChars = (Integer) cas[3];
 
-            NumberParserImpl caseSensitiveParser = NumberParserImpl
-                    .removeMeWhenMerged(ULocale.ENGLISH, patternString, ParsingUtils.PARSE_FLAG_OPTIMIZE);
+            NumberParserImpl caseSensitiveParser = NumberParserImpl.createSimpleParser(ULocale.ENGLISH,
+                    patternString,
+                    ParsingUtils.PARSE_FLAG_OPTIMIZE);
             ParsedNumber result = new ParsedNumber();
             caseSensitiveParser.parse(inputString, true, result);
             assertEquals("Case-Sensitive: " + inputString + " on " + patternString,
                     expectedCaseSensitiveChars,
                     result.charEnd);
 
-            NumberParserImpl caseFoldingParser = NumberParserImpl.removeMeWhenMerged(ULocale.ENGLISH,
+            NumberParserImpl caseFoldingParser = NumberParserImpl.createSimpleParser(ULocale.ENGLISH,
                     patternString,
                     ParsingUtils.PARSE_FLAG_IGNORE_CASE | ParsingUtils.PARSE_FLAG_OPTIMIZE);
             result = new ParsedNumber();
