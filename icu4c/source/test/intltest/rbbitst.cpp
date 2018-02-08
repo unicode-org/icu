@@ -4445,13 +4445,13 @@ void RBBITest::TestBug12677() {
                          " # .;        # a comment that looks sort of like a rule.   \n"
                          " '#' '?';    # a rule with a quoted #   \n"
                        );
-    
+
     UErrorCode status = U_ZERO_ERROR;
     UParseError pe;
-    RuleBasedBreakIterator bi (rules, pe, status);
+    RuleBasedBreakIterator bi(rules, pe, status);
     assertSuccess(WHERE, status);
     UnicodeString rtRules = bi.getRules();
-    assertEquals(WHERE, UnicodeString(u"!!forward; $x = [ab#]; '#' '?'; "),  rtRules); 
+    assertEquals(WHERE, UnicodeString(u"!!forward; $x = [ab#]; '#' '?'; "),  rtRules);
 }
 
 //

@@ -4,39 +4,76 @@
 #include <stdio.h>
 #include <string>
 #include <stdlib.h>
-#include <unistd.h>
 #include <errno.h>
 #include <string.h>
 #include <iostream>
 #include <fstream>
 
-// with caution:
+// Include this even though we aren't linking against it.
 #include "unicode/utf8.h"
+
+// Include this here, to avoid needing to compile and link part of common lib
+// (bootstrapping problem)
+#include "utf_impl.cpp"
+
+/**
+ * What is this?
+ *  or even:
+ * what IS this??
+ * 
+ * "This" is a preprocessor that makes an attempt to convert fully valid C++11 source code
+ * in utf-8 into.. something else. Something consumable by certain compilers (Solaris, xlC)
+ * which aren't quite there.
+ *
+ * - u"<unicode>" or u'<unicode>' gets converted to u"\uNNNN" or u'\uNNNN'
+ * - u8"<unicode>" gets converted to "\xAA\xBB\xCC\xDD" etc.
+ * - if the system is EBCDIC-based, well, that's taken into account.
+ *
+ * Usage:
+ *   escapesrc infile.cpp outfile.cpp
+ * Normally this is invoked by the build stage, with a rule such as:
+ *
+ * _%.cpp: $(srcdir)/%.cpp
+ *       @$(BINDIR)/escapesrc$(EXEEXT) $< $@
+ * %.o: _%.cpp
+ *       $(COMPILE.cc) ... $@ $<
+ *
+ * Naturally, 'escapesrc' has to be excluded from said build rule.
+
+ */
+
 
 static const char
   kSPACE   = 0x20,
   kTAB     = 0x09,
   kLF      = 0x0A,
   kCR      = 0x0D;
-  // kHASH    = 0x23,
-  // kSLASH   = 0x2f,
-  // kSTAR    = 0x2A,
 
+// This contains a codepage and ISO 14882:1998 illegality table.
+// Use "make gen-table" to rebuild it.
 # include "cptbl.h"
 
+// For convenience
 # define cp1047_to_8859(c) cp1047_8859_1[c]
 
+// Our app's name
 std::string prog;
 
+/**
+ * Give the usual 1-line documentation and exit
+ */
 void usage() {
   fprintf(stderr, "%s: usage: %s infile.cpp outfile.cpp\n", prog.c_str(), prog.c_str());
 }
 
-
+/**
+ * Delete the output file (if any)
+ * We want to delete even if we didn't generate, because it might be stale.
+ */
 int cleanup(const std::string &outfile) {
   const char *outstr = outfile.c_str();
   if(outstr && *outstr) {
-    int rc = unlink(outstr);
+    int rc = std::remove(outstr);
     if(rc == 0) {
       fprintf(stderr, "%s: deleted %s\n", prog.c_str(), outstr);
       return 0;
@@ -44,7 +81,7 @@ int cleanup(const std::string &outfile) {
       if( errno == ENOENT ) {
         return 0; // File did not exist - no error.
       } else {
-        perror("unlink");
+        perror("std::remove");
         return 1;
       }
     }
@@ -52,16 +89,12 @@ int cleanup(const std::string &outfile) {
   return 0;
 }
 
-// inline bool hasNonAscii(const char *line, size_t len) {
-//   const unsigned char *uline = reinterpret_cast<const unsigned char*>(line);
-//   for(size_t i=0;i<len; i++) {
-//     if( uline[i] > 0x7F) {
-//       return true;
-//     }
-//   }
-//   return false;
-// }
-
+/**
+ * Skip across any known whitespace.
+ * @param p startpoint
+ * @param e limit
+ * @return first non-whitespace char
+ */
 inline const char *skipws(const char *p, const char *e) {
   for(;p<e;p++) {
     switch(*p) {
@@ -77,30 +110,11 @@ inline const char *skipws(const char *p, const char *e) {
   return p;
 }
 
-// inline bool isCommentOrEmpty(const char* line, size_t len) {
-//   const char *p = line;
-//   const char *e = line+len;
-//   p = skipws(p,e);
-//   if(p==e) {
-//     return true; // whitespace only
-//   }
-//   p++;
-//   switch(*p) {
-//   case kHASH: return true; // #directive
-//   case kSLASH:
-//     p++;
-//     if(p==e) return false; // single slash
-//     switch(*p) {
-//     case kSLASH: // '/ /'
-//     case kSTAR: // '/ *'
-//       return true; // start of comment
-//     default: return false; // something else
-//     }
-//   default: return false; // something else
-//   }
-//   /*NOTREACHED*/
-// }
-
+/**
+ * Append a byte, hex encoded
+ * @param outstr sstring to append to
+ * @param byte the byte to append
+ */
 void appendByte(std::string &outstr,
                 uint8_t byte) {
     char tmp2[5];
@@ -109,6 +123,11 @@ void appendByte(std::string &outstr,
 }
 
 /**
+ * Append the bytes from 'linestr' into outstr, with escaping
+ * @param outstr the output buffer
+ * @param linestr the input buffer
+ * @param pos in/out: the current char under consideration
+ * @param chars the number of chars to consider
  * @return true on failure
  */
 bool appendUtf8(std::string &outstr,
@@ -141,6 +160,7 @@ bool appendUtf8(std::string &outstr,
 }
 
 /**
+ * Fixup u8"x"
  * @param linestr string to mutate. Already escaped into \u format.
  * @param origpos beginning, points to 'u8"'
  * @param pos end, points to "
@@ -184,9 +204,11 @@ bool fixu8(std::string &linestr, size_t origpos, size_t &endpos) {
 }
 
 /**
- * fix the string at the position
- * false = no err
- * true = had err
+ * fix the u"x"/u'x'/u8"x" string at the position
+ * u8'x' is not supported, sorry.
+ * @param linestr the input string
+ * @param pos the position
+ * @return false = no err, true = had err
  */
 bool fixAt(std::string &linestr, size_t pos) {
   size_t origpos = pos;
@@ -292,8 +314,12 @@ bool fixAt(std::string &linestr, size_t pos) {
 }
 
 /**
+ * Fixup an entire line
  * false = no err
  * true = had err
+ * @param no the line number (not used)
+ * @param linestr the string to fix
+ * @return true if any err, else false
  */
 bool fixLine(int /*no*/, std::string &linestr) {
   const char *line = linestr.c_str();
@@ -303,17 +329,6 @@ bool fixLine(int /*no*/, std::string &linestr) {
   if(!strstr(line, "u'") && !strstr(line, "u\"") && !strstr(line, "u8\"")) {
     return false; // Nothing to do. No u' or u" detected
   }
-
-  // lines such as u8"\u0308" are all ASCII.
-  // // Quick Check: all ascii?
-  // if(!hasNonAscii(line, len)) {
-  //   return false; // ASCII
-  // }
-
-  // // comment or empty line?
-  // if(isCommentOrEmpty(line, len)) {
-  //   return false; // Comment or just empty
-  // }
 
   // start from the end and find all u" cases
   size_t pos = len = linestr.size();
@@ -345,6 +360,12 @@ bool fixLine(int /*no*/, std::string &linestr) {
   return false;
 }
 
+/**
+ * Convert a whole file
+ * @param infile
+ * @param outfile
+ * @return 1 on err, 0 otherwise
+ */
 int convert(const std::string &infile, const std::string &outfile) {
   fprintf(stderr, "escapesrc: %s -> %s\n", infile.c_str(), outfile.c_str());
 
@@ -386,6 +407,9 @@ int convert(const std::string &infile, const std::string &outfile) {
   return 0;
 }
 
+/**
+ * Main function
+ */
 int main(int argc, const char *argv[]) {
   prog = argv[0];
 
@@ -399,6 +423,3 @@ int main(int argc, const char *argv[]) {
 
   return convert(infile, outfile);
 }
-
-
-#include "utf_impl.cpp"

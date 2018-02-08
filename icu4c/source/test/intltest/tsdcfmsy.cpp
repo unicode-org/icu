@@ -23,6 +23,7 @@ void IntlTestDecimalFormatSymbols::runIndexedTest( int32_t index, UBool exec, co
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testSymbols);
     TESTCASE_AUTO(testLastResortData);
+    TESTCASE_AUTO(testDigitSymbols);
     TESTCASE_AUTO(testNumberingSystem);
     TESTCASE_AUTO_END;
 }
@@ -247,6 +248,54 @@ void IntlTestDecimalFormatSymbols::testLastResortData() {
     // Also, the CurrencySpacing patterns are empty in the last resort instance,
     // but not in root.
     Verify(1234567.25, "#,##0.##", *lastResort, "1,234,567.25");
+}
+
+void IntlTestDecimalFormatSymbols::testDigitSymbols() {
+    // This test does more in ICU4J than in ICU4C right now.
+    // In ICU4C, it is basically just a test for codePointZero.
+    UChar defZero = u'0';
+    UChar32 osmanyaZero = U'\U000104A0';
+    static const UChar* osmanyaDigitStrings[] = {
+        u"\U000104A0", u"\U000104A1", u"\U000104A2", u"\U000104A3", u"\U000104A4",
+        u"\U000104A5", u"\U000104A6", u"\U000104A7", u"\U000104A8", u"\U000104A9"
+    };
+
+    IcuTestErrorCode status(*this, "testDigitSymbols()");
+    DecimalFormatSymbols symbols(Locale("en"), status);
+
+    if (defZero != symbols.getCodePointZero()) {
+        errln("ERROR: Code point zero be ASCII 0");
+    }
+
+    for (int32_t i=0; i<=9; i++) {
+        DecimalFormatSymbols::ENumberFormatSymbol key =
+            i == 0
+            ? DecimalFormatSymbols::kZeroDigitSymbol
+            : static_cast<DecimalFormatSymbols::ENumberFormatSymbol>
+                (DecimalFormatSymbols::kOneDigitSymbol + i);
+        symbols.setSymbol(key, UnicodeString(osmanyaDigitStrings[i]), FALSE);
+    }
+    // NOTE: in ICU4J, the calculation of codePointZero is smarter;
+    // in ICU4C, it is more conservative and is only set if propogateDigits is true.
+    if (-1 != symbols.getCodePointZero()) {
+        errln("ERROR: Code point zero be invalid");
+    }
+
+    // Check Osmanya codePointZero
+    symbols.setSymbol(
+        DecimalFormatSymbols::kZeroDigitSymbol,
+        UnicodeString(osmanyaDigitStrings[0]), TRUE);
+    if (osmanyaZero != symbols.getCodePointZero()) {
+        errln("ERROR: Code point zero be Osmanya code point zero");
+    }
+
+    // Reset digits to Latin
+    symbols.setSymbol(
+        DecimalFormatSymbols::kZeroDigitSymbol,
+        UnicodeString(defZero));
+    if (defZero != symbols.getCodePointZero()) {
+        errln("ERROR: Code point zero be ASCII 0");
+    }
 }
 
 void IntlTestDecimalFormatSymbols::testNumberingSystem() {
