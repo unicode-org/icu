@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cmath>
 
 #include "unicode/ctest.h" // for str_timeDelta
 #include "unicode/curramt.h"
@@ -1998,7 +1999,8 @@ UBool IntlTest::assertEquals(const char* message,
 UBool IntlTest::assertEquals(const char* message,
                              double expected,
                              double actual) {
-    if (expected != actual) {
+    bool bothNaN = std::isnan(expected) && std::isnan(actual);
+    if (expected != actual && !bothNaN) {
         errln((UnicodeString)"FAIL: " + message + "; got " +
               actual + 
               "; expected " + expected);

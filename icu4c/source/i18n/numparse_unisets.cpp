@@ -58,6 +58,8 @@ void U_CALLCONV initNumberParseUniSets(UErrorCode &status) {
     ucln_i18n_registerCleanup(UCLN_I18N_NUMPARSE_UNISETS, cleanupNumberParseUnitSets);
 #define NEW_UNISET(pattern, status) new UnicodeSet(UnicodeString(pattern), status)
 
+    gUnicodeSets[EMPTY] = new UnicodeSet();
+
     // BiDi characters are skipped over and ignored at any point in the string, even in strict mode.
     gUnicodeSets[BIDI] = NEW_UNISET(u"[[\\u200E\\u200F\\u061C]]", status);
 

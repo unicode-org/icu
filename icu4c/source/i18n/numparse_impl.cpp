@@ -29,8 +29,8 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     auto* parser = new NumberParserImpl(parseFlags, true);
     DecimalFormatSymbols symbols(locale, status);
 
-//    IgnorablesMatcher* ignorables = IgnorablesMatcher.getDefault();
-//
+    IgnorablesMatcher* ignorables = new IgnorablesMatcher(unisets::DEFAULT_IGNORABLES);
+
 //    MatcherFactory factory = new MatcherFactory();
 //    factory.currency = Currency.getInstance("USD");
 //    factory.symbols = symbols;
@@ -45,10 +45,13 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     Grouper grouper = Grouper::forStrategy(UNUM_GROUPING_AUTO);
     grouper.setLocaleData(patternInfo, locale);
 
-//    parser.addMatcher({ignorables, false});
+    parser->addAndAdoptMatcher(ignorables);
     parser->addAndAdoptMatcher(new DecimalMatcher(symbols, grouper, parseFlags));
     parser->addAndAdoptMatcher(new MinusSignMatcher(symbols, false));
-//    parser.addMatcher(NanMatcher.getInstance(symbols, parseFlags));
+    parser->addAndAdoptMatcher(new PlusSignMatcher(symbols, false));
+    parser->addAndAdoptMatcher(new PercentMatcher(symbols));
+    parser->addAndAdoptMatcher(new PermilleMatcher(symbols));
+    parser->addAndAdoptMatcher(new NanMatcher(symbols));
 //    parser.addMatcher(ScientificMatcher.getInstance(symbols, grouper, parseFlags));
 //    parser.addMatcher(CurrencyTrieMatcher.getInstance(locale));
 //    parser.addMatcher(new RequireNumberMatcher());
