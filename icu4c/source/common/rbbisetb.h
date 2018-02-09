@@ -99,6 +99,8 @@ public:
      */
     void     mergeCategories(int32_t left, int32_t right);
 
+    static constexpr int32_t DICT_BIT = 0x4000;
+
 #ifdef RBBI_DEBUG
     void     printSets();
     void     printRanges();
