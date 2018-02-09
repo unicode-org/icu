@@ -592,12 +592,15 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * If the offset points to a UTF-8 trail byte,
  * then the offset is moved backward to the corresponding lead byte.
  * Otherwise, it is not modified.
+ *
  * "Safe" macro, checks for illegal sequences and for string boundaries.
+ * Unlike U8_TRUNCATE_IF_INCOMPLETE(), this macro always reads s[i].
  *
  * @param s const uint8_t * string
  * @param start int32_t starting string offset (usually 0)
  * @param i int32_t string offset, must be start<=i
  * @see U8_SET_CP_START_UNSAFE
+ * @see U8_TRUNCATE_IF_INCOMPLETE
  * @stable ICU 2.4
  */
 #define U8_SET_CP_START(s, start, i) { \
@@ -605,6 +608,51 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
         (i)=utf8_back1SafeBody(s, start, (i)); \
     } \
 }
+
+/**
+ * If the string ends with a UTF-8 byte sequence that is valid so far
+ * but incomplete, then reduce the length of the string to end before
+ * the lead byte of that incomplete sequence.
+ * For example, if the string ends with E1 80, the length is reduced by 2.
+ *
+ * Useful for processing text split across multiple buffers
+ * (save the incomplete sequence for later)
+ * and for optimizing iteration
+ * (check for string length only once per character).
+ *
+ * "Safe" macro, checks for illegal sequences and for string boundaries.
+ * Unlike U8_SET_CP_START(), this macro never reads s[length].
+ *
+ * (In UTF-16, simply check for U16_IS_LEAD(last code unit).)
+ *
+ * @param s const uint8_t * string
+ * @param start int32_t starting string offset (usually 0)
+ * @param length int32_t string length, must be start<=length
+ * @see U8_SET_CP_START
+ * @draft ICU 61
+ */
+#define U8_TRUNCATE_IF_INCOMPLETE(s, start, length) \
+    if((length)>(start)) { \
+        uint8_t __b1=s[(length)-1]; \
+        if(U8_IS_SINGLE(__b1)) { \
+            /* common ASCII character */ \
+        } else if(U8_IS_LEAD(__b1)) { \
+            --(length); \
+        } else if(U8_IS_TRAIL(__b1) && ((length)-2)>=(start)) { \
+            uint8_t __b2=s[(length)-2]; \
+            if(0xe0<=__b2 && __b2<=0xf4) { \
+                if(__b2<0xf0 ? U8_IS_VALID_LEAD3_AND_T1(__b2, __b1) : \
+                        U8_IS_VALID_LEAD4_AND_T1(__b2, __b1)) { \
+                    (length)-=2; \
+                } \
+            } else if(U8_IS_TRAIL(__b2) && ((length)-3)>=(start)) { \
+                uint8_t __b3=s[(length)-3]; \
+                if(0xf0<=__b3 && __b3<=0xf4 && U8_IS_VALID_LEAD4_AND_T1(__b3, __b2)) { \
+                    (length)-=3; \
+                } \
+            } \
+        } \
+    }
 
 /* definitions with backward iteration -------------------------------------- */
 
