@@ -29,7 +29,7 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     auto* parser = new NumberParserImpl(parseFlags, true);
     DecimalFormatSymbols symbols(locale, status);
 
-    IgnorablesMatcher* ignorables = new IgnorablesMatcher(unisets::DEFAULT_IGNORABLES);
+    parser->fLocalMatchers.ignorables = {unisets::DEFAULT_IGNORABLES};
 
 //    MatcherFactory factory = new MatcherFactory();
 //    factory.currency = Currency.getInstance("USD");
@@ -45,13 +45,13 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     Grouper grouper = Grouper::forStrategy(UNUM_GROUPING_AUTO);
     grouper.setLocaleData(patternInfo, locale);
 
-    parser->addAndAdoptMatcher(ignorables);
-    parser->addAndAdoptMatcher(new DecimalMatcher(symbols, grouper, parseFlags));
-    parser->addAndAdoptMatcher(new MinusSignMatcher(symbols, false));
-    parser->addAndAdoptMatcher(new PlusSignMatcher(symbols, false));
-    parser->addAndAdoptMatcher(new PercentMatcher(symbols));
-    parser->addAndAdoptMatcher(new PermilleMatcher(symbols));
-    parser->addAndAdoptMatcher(new NanMatcher(symbols));
+    parser->addMatcher(parser->fLocalMatchers.ignorables);
+    parser->addMatcher(parser->fLocalMatchers.decimal = {symbols, grouper, parseFlags});
+    parser->addMatcher(parser->fLocalMatchers.minusSign = {symbols, false});
+    parser->addMatcher(parser->fLocalMatchers.plusSign = {symbols, false});
+    parser->addMatcher(parser->fLocalMatchers.percent = {symbols});
+    parser->addMatcher(parser->fLocalMatchers.permille = {symbols});
+    parser->addMatcher(parser->fLocalMatchers.nan = {symbols});
 //    parser.addMatcher(ScientificMatcher.getInstance(symbols, grouper, parseFlags));
 //    parser.addMatcher(CurrencyTrieMatcher.getInstance(locale));
 //    parser.addMatcher(new RequireNumberMatcher());
@@ -65,16 +65,15 @@ NumberParserImpl::NumberParserImpl(parse_flags_t parseFlags, bool computeLeads)
 }
 
 NumberParserImpl::~NumberParserImpl() {
-    for (int32_t i = 0; i < fNumMatchers; i++) {
-        delete (fMatchers[i]);
-        if (fComputeLeads) {
+    if (fComputeLeads) {
+        for (int32_t i = 0; i < fNumMatchers; i++) {
             delete (fLeads[i]);
         }
     }
     fNumMatchers = 0;
 }
 
-void NumberParserImpl::addAndAdoptMatcher(const NumberParseMatcher* matcher) {
+void NumberParserImpl::addMatcher(const NumberParseMatcher& matcher) {
     if (fNumMatchers + 1 > fMatchers.getCapacity()) {
         fMatchers.resize(fNumMatchers * 2, fNumMatchers);
         if (fComputeLeads) {
@@ -84,10 +83,10 @@ void NumberParserImpl::addAndAdoptMatcher(const NumberParseMatcher* matcher) {
         }
     }
 
-    fMatchers[fNumMatchers] = matcher;
+    fMatchers[fNumMatchers] = &matcher;
 
     if (fComputeLeads) {
-        fLeads[fNumMatchers] = matcher->getLeadCodePoints();
+        fLeads[fNumMatchers] = matcher.getLeadCodePoints();
     }
 
     fNumMatchers++;
@@ -102,9 +101,8 @@ void NumberParserImpl::parse(const UnicodeString& input, bool greedy, ParsedNumb
     return parse(input, 0, greedy, result, status);
 }
 
-void
-NumberParserImpl::parse(const UnicodeString& input, int32_t start, bool greedy, ParsedNumber& result,
-                        UErrorCode& status) const {
+void NumberParserImpl::parse(const UnicodeString& input, int32_t start, bool greedy, ParsedNumber& result,
+                             UErrorCode& status) const {
     U_ASSERT(fFrozen);
     // TODO: Check start >= 0 and start < input.length()
     StringSegment segment(input, fParseFlags);

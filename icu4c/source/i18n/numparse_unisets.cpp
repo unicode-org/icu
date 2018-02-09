@@ -19,7 +19,7 @@ using namespace icu::numparse::impl::unisets;
 
 namespace {
 
-UnicodeSet* gUnicodeSets[COUNT] = {};
+static UnicodeSet* gUnicodeSets[COUNT] = {};
 
 UnicodeSet* computeUnion(Key k1, Key k2) {
     UnicodeSet* result = new UnicodeSet();
@@ -46,7 +46,7 @@ UnicodeSet* computeUnion(Key k1, Key k2, Key k3) {
 
 icu::UInitOnce gNumberParseUniSetsInitOnce = U_INITONCE_INITIALIZER;
 
-UBool U_CALLCONV cleanupNumberParseUnitSets() {
+UBool U_CALLCONV cleanupNumberParseUniSets() {
     for (int32_t i = 0; i < COUNT; i++) {
         delete gUnicodeSets[i];
         gUnicodeSets[i] = nullptr;
@@ -54,8 +54,8 @@ UBool U_CALLCONV cleanupNumberParseUnitSets() {
     return TRUE;
 }
 
-void U_CALLCONV initNumberParseUniSets(UErrorCode &status) {
-    ucln_i18n_registerCleanup(UCLN_I18N_NUMPARSE_UNISETS, cleanupNumberParseUnitSets);
+void U_CALLCONV initNumberParseUniSets(UErrorCode& status) {
+    ucln_i18n_registerCleanup(UCLN_I18N_NUMPARSE_UNISETS, cleanupNumberParseUniSets);
 #define NEW_UNISET(pattern, status) new UnicodeSet(UnicodeString(pattern), status)
 
     gUnicodeSets[EMPTY] = new UnicodeSet();
@@ -68,7 +68,7 @@ void U_CALLCONV initNumberParseUniSets(UErrorCode &status) {
     gUnicodeSets[WHITESPACE] = NEW_UNISET(u"[[:Zs:][\\u0009]]", status);
 
     gUnicodeSets[DEFAULT_IGNORABLES] = computeUnion(BIDI, WHITESPACE);
-    gUnicodeSets[STRICT_IGNORABLES] = gUnicodeSets[BIDI];
+    gUnicodeSets[STRICT_IGNORABLES] = new UnicodeSet(*gUnicodeSets[BIDI]);
 
     // TODO: Re-generate these sets from the UCD. They probably haven't been updated in a while.
     gUnicodeSets[COMMA] = NEW_UNISET(u"[,،٫、︐︑﹐﹑，､]", status);
@@ -76,7 +76,8 @@ void U_CALLCONV initNumberParseUniSets(UErrorCode &status) {
     gUnicodeSets[PERIOD] = NEW_UNISET(u"[.․。︒﹒．｡]", status);
     gUnicodeSets[STRICT_PERIOD] = NEW_UNISET(u"[.․﹒．｡]", status);
     gUnicodeSets[OTHER_GROUPING_SEPARATORS] = NEW_UNISET(
-            u"['٬‘’＇\\u0020\\u00A0\\u2000-\\u200A\\u202F\\u205F\\u3000]", status);
+            u"['٬‘’＇\\u0020\\u00A0\\u2000-\\u200A\\u202F\\u205F\\u3000]",
+            status);
     gUnicodeSets[ALL_SEPARATORS] = computeUnion(COMMA, PERIOD, OTHER_GROUPING_SEPARATORS);
     gUnicodeSets[STRICT_ALL_SEPARATORS] = computeUnion(
             STRICT_COMMA, STRICT_PERIOD, OTHER_GROUPING_SEPARATORS);
@@ -89,8 +90,8 @@ void U_CALLCONV initNumberParseUniSets(UErrorCode &status) {
     gUnicodeSets[INFINITY] = NEW_UNISET(u"[∞]", status);
 
     gUnicodeSets[DIGITS] = NEW_UNISET(u"[:digit:]", status);
-    gUnicodeSets[NAN_LEAD] = NEW_UNISET(
-            u"[NnТтmeՈոс¤НнчTtsҳ\u975e\u1002\u0e9a\u10d0\u0f68\u0644\u0646]", status);
+    gUnicodeSets[NAN_LEAD] = NEW_UNISET(u"[NnТтmeՈոс¤НнчTtsҳ\u975e\u1002\u0e9a\u10d0\u0f68\u0644\u0646]",
+            status);
     gUnicodeSets[SCIENTIFIC_LEAD] = NEW_UNISET(u"[Ee×·е\u0627]", status);
     gUnicodeSets[CWCF] = NEW_UNISET(u"[:CWCF:]", status);
 

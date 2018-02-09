@@ -17,6 +17,8 @@ using ::icu::number::impl::Grouper;
 
 class DecimalMatcher : public NumberParseMatcher, public UMemory {
   public:
+    DecimalMatcher() = default;  // WARNING: Leaves the object in an unusable state
+
     DecimalMatcher(const DecimalFormatSymbols& symbols, const Grouper& grouper,
                    parse_flags_t parseFlags);
 

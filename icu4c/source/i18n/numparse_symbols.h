@@ -17,6 +17,8 @@ namespace impl {
 
 class SymbolMatcher : public NumberParseMatcher, public UMemory {
   public:
+    SymbolMatcher() = default;  // WARNING: Leaves the object in an unusable state
+
     const UnicodeSet* getSet();
 
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
@@ -37,7 +39,9 @@ class SymbolMatcher : public NumberParseMatcher, public UMemory {
 
 class IgnorablesMatcher : public SymbolMatcher {
   public:
-    explicit IgnorablesMatcher(unisets::Key key);
+    IgnorablesMatcher() = default;  // WARNING: Leaves the object in an unusable state
+
+    IgnorablesMatcher(unisets::Key key);
 
     bool isFlexible() const override;
 
@@ -50,6 +54,8 @@ class IgnorablesMatcher : public SymbolMatcher {
 
 class MinusSignMatcher : public SymbolMatcher {
   public:
+    MinusSignMatcher() = default;  // WARNING: Leaves the object in an unusable state
+
     MinusSignMatcher(const DecimalFormatSymbols& dfs, bool allowTrailing);
 
   protected:
@@ -64,7 +70,9 @@ class MinusSignMatcher : public SymbolMatcher {
 
 class NanMatcher : public SymbolMatcher {
   public:
-    explicit NanMatcher(const DecimalFormatSymbols& dfs);
+    NanMatcher() = default;  // WARNING: Leaves the object in an unusable state
+
+    NanMatcher(const DecimalFormatSymbols& dfs);
 
     const UnicodeSet* getLeadCodePoints() const override;
 
@@ -77,7 +85,9 @@ class NanMatcher : public SymbolMatcher {
 
 class PercentMatcher : public SymbolMatcher {
   public:
-    explicit PercentMatcher(const DecimalFormatSymbols& dfs);
+    PercentMatcher() = default;  // WARNING: Leaves the object in an unusable state
+
+    PercentMatcher(const DecimalFormatSymbols& dfs);
 
     void postProcess(ParsedNumber& result) const override;
 
@@ -90,7 +100,9 @@ class PercentMatcher : public SymbolMatcher {
 
 class PermilleMatcher : public SymbolMatcher {
   public:
-    explicit PermilleMatcher(const DecimalFormatSymbols& dfs);
+    PermilleMatcher() = default;  // WARNING: Leaves the object in an unusable state
+
+    PermilleMatcher(const DecimalFormatSymbols& dfs);
 
     void postProcess(ParsedNumber& result) const override;
 
@@ -103,6 +115,8 @@ class PermilleMatcher : public SymbolMatcher {
 
 class PlusSignMatcher : public SymbolMatcher {
   public:
+    PlusSignMatcher() = default;  // WARNING: Leaves the object in an unusable state
+
     PlusSignMatcher(const DecimalFormatSymbols& dfs, bool allowTrailing);
 
   protected:
