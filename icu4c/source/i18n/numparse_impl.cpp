@@ -5,6 +5,9 @@
 
 #if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
 
+// Allow implicit conversion from char16_t* to UnicodeString for this file
+#define UNISTR_FROM_STRING_EXPLICIT
+
 #include "number_types.h"
 #include "number_patternstring.h"
 #include "numparse_types.h"
@@ -52,6 +55,8 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     parser->addMatcher(parser->fLocalMatchers.percent = {symbols});
     parser->addMatcher(parser->fLocalMatchers.permille = {symbols});
     parser->addMatcher(parser->fLocalMatchers.nan = {symbols});
+    parser->addMatcher(parser->fLocalMatchers.infinity = {symbols});
+    parser->addMatcher(parser->fLocalMatchers.padding = {u"@"});
 //    parser.addMatcher(ScientificMatcher.getInstance(symbols, grouper, parseFlags));
 //    parser.addMatcher(CurrencyTrieMatcher.getInstance(locale));
 //    parser.addMatcher(new RequireNumberMatcher());

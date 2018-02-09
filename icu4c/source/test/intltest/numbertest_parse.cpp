@@ -61,6 +61,10 @@ void NumberParserTest::testBasic() {
                  {3, u"‰51423", u"0", 6, 51.423},
                  {3, u"51423‰", u"0", 6, 51.423},
                  {3, u"51423‰‰", u"0", 6, 51.423},
+                 {3, u"∞", u"0", 1, INFINITY},
+                 {3, u"-∞", u"0", 2, -INFINITY},
+                 {3, u"@@@123  @@", u"0", 6, 123.}, // TODO: Should padding be strong instead of weak?
+                 {3, u"@@@123@@  ", u"0", 6, 123.}, // TODO: Should padding be strong instead of weak?
 //                 {3, u"a51423US dollars", u"a0¤¤¤", 16, 51423.},
 //                 {3, u"a 51423 US dollars", u"a0¤¤¤", 18, 51423.},
 //                 {3, u"514.23 USD", u"¤0", 10, 514.23},

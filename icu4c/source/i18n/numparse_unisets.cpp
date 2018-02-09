@@ -5,6 +5,10 @@
 
 #if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
 
+// Allow implicit conversion from char16_t* to UnicodeString for this file
+// (useful for UnicodeSet constructor)
+#define UNISTR_FROM_STRING_EXPLICIT
+
 #include "numparse_unisets.h"
 #include "numparse_types.h"
 #include "umutex.h"
@@ -56,44 +60,42 @@ UBool U_CALLCONV cleanupNumberParseUniSets() {
 
 void U_CALLCONV initNumberParseUniSets(UErrorCode& status) {
     ucln_i18n_registerCleanup(UCLN_I18N_NUMPARSE_UNISETS, cleanupNumberParseUniSets);
-#define NEW_UNISET(pattern, status) new UnicodeSet(UnicodeString(pattern), status)
 
     gUnicodeSets[EMPTY] = new UnicodeSet();
 
     // BiDi characters are skipped over and ignored at any point in the string, even in strict mode.
-    gUnicodeSets[BIDI] = NEW_UNISET(u"[[\\u200E\\u200F\\u061C]]", status);
+    gUnicodeSets[BIDI] = new UnicodeSet(u"[[\\u200E\\u200F\\u061C]]", status);
 
     // This set was decided after discussion with icu-design@. See ticket #13309.
     // Zs+TAB is "horizontal whitespace" according to UTS #18 (blank property).
-    gUnicodeSets[WHITESPACE] = NEW_UNISET(u"[[:Zs:][\\u0009]]", status);
+    gUnicodeSets[WHITESPACE] = new UnicodeSet(u"[[:Zs:][\\u0009]]", status);
 
     gUnicodeSets[DEFAULT_IGNORABLES] = computeUnion(BIDI, WHITESPACE);
     gUnicodeSets[STRICT_IGNORABLES] = new UnicodeSet(*gUnicodeSets[BIDI]);
 
     // TODO: Re-generate these sets from the UCD. They probably haven't been updated in a while.
-    gUnicodeSets[COMMA] = NEW_UNISET(u"[,،٫、︐︑﹐﹑，､]", status);
-    gUnicodeSets[STRICT_COMMA] = NEW_UNISET(u"[,٫︐﹐，]", status);
-    gUnicodeSets[PERIOD] = NEW_UNISET(u"[.․。︒﹒．｡]", status);
-    gUnicodeSets[STRICT_PERIOD] = NEW_UNISET(u"[.․﹒．｡]", status);
-    gUnicodeSets[OTHER_GROUPING_SEPARATORS] = NEW_UNISET(
-            u"['٬‘’＇\\u0020\\u00A0\\u2000-\\u200A\\u202F\\u205F\\u3000]",
-            status);
+    gUnicodeSets[COMMA] = new UnicodeSet(u"[,،٫、︐︑﹐﹑，､]", status);
+    gUnicodeSets[STRICT_COMMA] = new UnicodeSet(u"[,٫︐﹐，]", status);
+    gUnicodeSets[PERIOD] = new UnicodeSet(u"[.․。︒﹒．｡]", status);
+    gUnicodeSets[STRICT_PERIOD] = new UnicodeSet(u"[.․﹒．｡]", status);
+    gUnicodeSets[OTHER_GROUPING_SEPARATORS] = new UnicodeSet(
+            u"['٬‘’＇\\u0020\\u00A0\\u2000-\\u200A\\u202F\\u205F\\u3000]", status);
     gUnicodeSets[ALL_SEPARATORS] = computeUnion(COMMA, PERIOD, OTHER_GROUPING_SEPARATORS);
     gUnicodeSets[STRICT_ALL_SEPARATORS] = computeUnion(
             STRICT_COMMA, STRICT_PERIOD, OTHER_GROUPING_SEPARATORS);
 
-    gUnicodeSets[MINUS_SIGN] = NEW_UNISET(u"[-⁻₋−➖﹣－]", status);
-    gUnicodeSets[PLUS_SIGN] = NEW_UNISET(u"[+⁺₊➕﬩﹢＋]", status);
+    gUnicodeSets[MINUS_SIGN] = new UnicodeSet(u"[-⁻₋−➖﹣－]", status);
+    gUnicodeSets[PLUS_SIGN] = new UnicodeSet(u"[+⁺₊➕﬩﹢＋]", status);
 
-    gUnicodeSets[PERCENT_SIGN] = NEW_UNISET(u"[%٪]", status);
-    gUnicodeSets[PERMILLE_SIGN] = NEW_UNISET(u"[‰؉]", status);
-    gUnicodeSets[INFINITY] = NEW_UNISET(u"[∞]", status);
+    gUnicodeSets[PERCENT_SIGN] = new UnicodeSet(u"[%٪]", status);
+    gUnicodeSets[PERMILLE_SIGN] = new UnicodeSet(u"[‰؉]", status);
+    gUnicodeSets[INFINITY] = new UnicodeSet(u"[∞]", status);
 
-    gUnicodeSets[DIGITS] = NEW_UNISET(u"[:digit:]", status);
-    gUnicodeSets[NAN_LEAD] = NEW_UNISET(u"[NnТтmeՈոс¤НнчTtsҳ\u975e\u1002\u0e9a\u10d0\u0f68\u0644\u0646]",
-            status);
-    gUnicodeSets[SCIENTIFIC_LEAD] = NEW_UNISET(u"[Ee×·е\u0627]", status);
-    gUnicodeSets[CWCF] = NEW_UNISET(u"[:CWCF:]", status);
+    gUnicodeSets[DIGITS] = new UnicodeSet(u"[:digit:]", status);
+    gUnicodeSets[NAN_LEAD] = new UnicodeSet(
+            u"[NnТтmeՈոс¤НнчTtsҳ\u975e\u1002\u0e9a\u10d0\u0f68\u0644\u0646]", status);
+    gUnicodeSets[SCIENTIFIC_LEAD] = new UnicodeSet(u"[Ee×·е\u0627]", status);
+    gUnicodeSets[CWCF] = new UnicodeSet(u"[:CWCF:]", status);
 
     gUnicodeSets[DIGITS_OR_ALL_SEPARATORS] = computeUnion(DIGITS, ALL_SEPARATORS);
     gUnicodeSets[DIGITS_OR_STRICT_ALL_SEPARATORS] = computeUnion(DIGITS, STRICT_ALL_SEPARATORS);

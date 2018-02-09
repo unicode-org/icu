@@ -15,6 +15,11 @@ U_NAMESPACE_BEGIN namespace numparse {
 namespace impl {
 
 
+/**
+ * A base class for many matchers that performs a simple match against a UnicodeString and/or UnicodeSet.
+ *
+ * @author sffc
+ */
 class SymbolMatcher : public NumberParseMatcher, public UMemory {
   public:
     SymbolMatcher() = default;  // WARNING: Leaves the object in an unusable state
@@ -52,6 +57,19 @@ class IgnorablesMatcher : public SymbolMatcher {
 };
 
 
+class InfinityMatcher : public SymbolMatcher {
+  public:
+    InfinityMatcher() = default;  // WARNING: Leaves the object in an unusable state
+
+    InfinityMatcher(const DecimalFormatSymbols& dfs);
+
+  protected:
+    bool isDisabled(const ParsedNumber& result) const override;
+
+    void accept(StringSegment& segment, ParsedNumber& result) const override;
+};
+
+
 class MinusSignMatcher : public SymbolMatcher {
   public:
     MinusSignMatcher() = default;  // WARNING: Leaves the object in an unusable state
@@ -75,6 +93,21 @@ class NanMatcher : public SymbolMatcher {
     NanMatcher(const DecimalFormatSymbols& dfs);
 
     const UnicodeSet* getLeadCodePoints() const override;
+
+  protected:
+    bool isDisabled(const ParsedNumber& result) const override;
+
+    void accept(StringSegment& segment, ParsedNumber& result) const override;
+};
+
+
+class PaddingMatcher : public SymbolMatcher {
+  public:
+    PaddingMatcher() = default;  // WARNING: Leaves the object in an unusable state
+
+    PaddingMatcher(const UnicodeString& padString);
+
+    bool isFlexible() const override;
 
   protected:
     bool isDisabled(const ParsedNumber& result) const override;

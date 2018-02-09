@@ -85,6 +85,20 @@ void IgnorablesMatcher::accept(StringSegment&, ParsedNumber&) const {
 }
 
 
+InfinityMatcher::InfinityMatcher(const DecimalFormatSymbols& dfs)
+        : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kNaNSymbol), unisets::INFINITY) {
+}
+
+bool InfinityMatcher::isDisabled(const ParsedNumber& result) const {
+    return 0 != (result.flags & FLAG_INFINITY);
+}
+
+void InfinityMatcher::accept(StringSegment& segment, ParsedNumber& result) const {
+    result.flags |= FLAG_INFINITY;
+    result.setCharsConsumed(segment);
+}
+
+
 MinusSignMatcher::MinusSignMatcher(const DecimalFormatSymbols& dfs, bool allowTrailing)
         : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol), unisets::MINUS_SIGN),
           fAllowTrailing(allowTrailing) {
@@ -122,6 +136,22 @@ bool NanMatcher::isDisabled(const ParsedNumber& result) const {
 void NanMatcher::accept(StringSegment& segment, ParsedNumber& result) const {
     result.flags |= FLAG_NAN;
     result.setCharsConsumed(segment);
+}
+
+
+PaddingMatcher::PaddingMatcher(const UnicodeString& padString)
+        : SymbolMatcher(padString, unisets::EMPTY) {}
+
+bool PaddingMatcher::isFlexible() const {
+    return true;
+}
+
+bool PaddingMatcher::isDisabled(const ParsedNumber& result) const {
+    return false;
+}
+
+void PaddingMatcher::accept(StringSegment& segment, ParsedNumber& result) const {
+    // No-op
 }
 
 
