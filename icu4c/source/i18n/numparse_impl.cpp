@@ -57,7 +57,7 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     parser->addMatcher(parser->fLocalMatchers.nan = {symbols});
     parser->addMatcher(parser->fLocalMatchers.infinity = {symbols});
     parser->addMatcher(parser->fLocalMatchers.padding = {u"@"});
-//    parser.addMatcher(ScientificMatcher.getInstance(symbols, grouper, parseFlags));
+    parser->addMatcher(parser->fLocalMatchers.scientific = {symbols, grouper});
 //    parser.addMatcher(CurrencyTrieMatcher.getInstance(locale));
 //    parser.addMatcher(new RequireNumberMatcher());
 

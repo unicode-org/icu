@@ -10,6 +10,7 @@
 #include "numparse_types.h"
 #include "numparse_decimal.h"
 #include "numparse_symbols.h"
+#include "numparse_scientific.h"
 #include "unicode/uniset.h"
 
 U_NAMESPACE_BEGIN namespace numparse {
@@ -54,6 +55,7 @@ class NumberParserImpl {
         PermilleMatcher permille;
         PlusSignMatcher plusSign;
         DecimalMatcher decimal;
+        ScientificMatcher scientific;
     } fLocalMatchers;
 
     NumberParserImpl(parse_flags_t parseFlags, bool computeLeads);
