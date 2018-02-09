@@ -46,8 +46,10 @@ class NumberParserImpl {
     // You must use an assignment operator on them before using.
     struct {
         IgnorablesMatcher ignorables;
+        InfinityMatcher infinity;
         MinusSignMatcher minusSign;
         NanMatcher nan;
+        PaddingMatcher padding;
         PercentMatcher percent;
         PermilleMatcher permille;
         PlusSignMatcher plusSign;

@@ -5,8 +5,9 @@ package com.ibm.icu.impl.number.parse;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
- * @author sffc
+ * A base class for many matchers that performs a simple match against a UnicodeString and/or UnicodeSet.
  *
+ * @author sffc
  */
 public abstract class SymbolMatcher implements NumberParseMatcher {
     protected final String string;

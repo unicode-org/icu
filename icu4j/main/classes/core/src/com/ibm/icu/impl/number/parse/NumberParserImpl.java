@@ -92,6 +92,8 @@ public class NumberParserImpl {
         parser.addMatcher(PercentMatcher.getInstance(symbols));
         parser.addMatcher(PermilleMatcher.getInstance(symbols));
         parser.addMatcher(NanMatcher.getInstance(symbols, parseFlags));
+        parser.addMatcher(InfinityMatcher.getInstance(symbols));
+        parser.addMatcher(PaddingMatcher.getInstance("@"));
         parser.addMatcher(ScientificMatcher.getInstance(symbols, grouper));
         parser.addMatcher(CurrencyTrieMatcher.getInstance(locale));
         parser.addMatcher(new RequireNumberMatcher());

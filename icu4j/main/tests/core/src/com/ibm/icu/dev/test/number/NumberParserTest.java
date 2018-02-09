@@ -67,6 +67,10 @@ public class NumberParserTest {
                 { 3, "‰51423", "0", 6, 51.423 },
                 { 3, "51423‰", "0", 6, 51.423 },
                 { 3, "51423‰‰", "0", 6, 51.423 },
+                { 3, "∞", "0", 1, Double.POSITIVE_INFINITY },
+                { 3, "-∞", "0", 2, Double.NEGATIVE_INFINITY },
+                { 3, "@@@123  @@", "0", 6, 123. }, // TODO: Should padding be strong instead of weak?
+                { 3, "@@@123@@  ", "0", 6, 123. }, // TODO: Should padding be strong instead of weak?
                 { 3, "a51423US dollars", "a0¤¤¤", 16, 51423. },
                 { 3, "a 51423 US dollars", "a0¤¤¤", 18, 51423. },
                 { 3, "514.23 USD", "¤0", 10, 514.23 },
