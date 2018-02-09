@@ -253,16 +253,17 @@ typedef enum UGroupingStrategy {
 } UGroupingStrategy;
 
 /**
- * An enum declaring how to denote positive and negative numbers. Example outputs when formatting 123 and -123 in
- * <em>en-US</em>:
+ * An enum declaring how to denote positive and negative numbers. Example outputs when formatting
+ * 123, 0, and -123 in <em>en-US</em>:
  *
- * <p>
  * <ul>
- * <li>AUTO: "123", "-123"
- * <li>ALWAYS: "+123", "-123"
- * <li>NEVER: "123", "123"
- * <li>ACCOUNTING: "$123", "($123)"
- * <li>ACCOUNTING_ALWAYS: "+$123", "($123)"
+ * <li>AUTO: "123", "0", and "-123"
+ * <li>ALWAYS: "+123", "+0", and "-123"
+ * <li>NEVER: "123", "0", and "123"
+ * <li>ACCOUNTING: "$123", "$0", and "($123)"
+ * <li>ACCOUNTING_ALWAYS: "+$123", "+$0", and "($123)"
+ * <li>EXCEPT_ZERO: "+123", "0", and "-123"
+ * <li>ACCOUNTING_EXCEPT_ZERO: "+$123", "$0", and "($123)"
  * </ul>
  *
  * <p>
