@@ -98,8 +98,9 @@ void NumberParserTest::testBasic() {
     for (auto cas : cases) {
         UnicodeString inputString(cas.inputString);
         UnicodeString patternString(cas.patternString);
-        const NumberParserImpl* parser = NumberParserImpl::createSimpleParser(
-                Locale("en"), patternString, parseFlags, status);
+        LocalPointer<const NumberParserImpl> parser(
+                NumberParserImpl::createSimpleParser(
+                        Locale("en"), patternString, parseFlags, status));
         UnicodeString message =
                 UnicodeString("Input <") + inputString + UnicodeString("> Parser ") + parser->toString();
 
@@ -111,9 +112,7 @@ void NumberParserTest::testBasic() {
             assertEquals(
                     "Greedy Parse failed: " + message, cas.expectedCharsConsumed, resultObject.charEnd);
             assertEquals(
-                    "Greedy Parse failed: " + message,
-                    cas.expectedResultDouble,
-                    resultObject.getDouble());
+                    "Greedy Parse failed: " + message, cas.expectedResultDouble, resultObject.getDouble());
         }
 
         if (0 != (cas.flags & 0x02)) {
@@ -133,17 +132,19 @@ void NumberParserTest::testBasic() {
 
         if (0 != (cas.flags & 0x04)) {
             // Test with strict separators
-            parser = NumberParserImpl::createSimpleParser(
-                    Locale("en"), patternString, parseFlags | PARSE_FLAG_STRICT_GROUPING_SIZE, status);
+            parser.adoptInstead(
+                    NumberParserImpl::createSimpleParser(
+                            Locale("en"),
+                            patternString,
+                            parseFlags | PARSE_FLAG_STRICT_GROUPING_SIZE,
+                            status));
             ParsedNumber resultObject;
             parser->parse(inputString, true, resultObject, status);
             assertTrue("Strict Parse failed: " + message, resultObject.success());
             assertEquals(
                     "Strict Parse failed: " + message, cas.expectedCharsConsumed, resultObject.charEnd);
             assertEquals(
-                    "Strict Parse failed: " + message,
-                    cas.expectedResultDouble,
-                    resultObject.getDouble());
+                    "Strict Parse failed: " + message, cas.expectedResultDouble, resultObject.getDouble());
         }
     }
 }

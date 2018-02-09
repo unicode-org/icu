@@ -8,6 +8,8 @@
 #define __NUMPARSE_IMPL_H__
 
 #include "numparse_types.h"
+#include "numparse_decimal.h"
+#include "numparse_symbols.h"
 #include "unicode/uniset.h"
 
 U_NAMESPACE_BEGIN namespace numparse {
@@ -15,10 +17,12 @@ namespace impl {
 
 class NumberParserImpl {
   public:
+    ~NumberParserImpl();
+
     static NumberParserImpl* createSimpleParser(const Locale& locale, const UnicodeString& patternString,
                                                 parse_flags_t parseFlags, UErrorCode& status);
 
-    void addAndAdoptMatcher(const NumberParseMatcher* matcher);
+    void addMatcher(const NumberParseMatcher& matcher);
 
     void freeze();
 
@@ -38,9 +42,19 @@ class NumberParserImpl {
     bool fComputeLeads;
     bool fFrozen = false;
 
-    NumberParserImpl(parse_flags_t parseFlags, bool computeLeads);
+    // WARNING: All of these matchers start in an uninitialized state.
+    // You must use an assignment operator on them before using.
+    struct {
+        IgnorablesMatcher ignorables;
+        MinusSignMatcher minusSign;
+        NanMatcher nan;
+        PercentMatcher percent;
+        PermilleMatcher permille;
+        PlusSignMatcher plusSign;
+        DecimalMatcher decimal;
+    } fLocalMatchers;
 
-    ~NumberParserImpl();
+    NumberParserImpl(parse_flags_t parseFlags, bool computeLeads);
 
     void parseGreedyRecursive(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const;
 
