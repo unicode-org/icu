@@ -17,8 +17,6 @@ namespace impl {
 
 class SymbolMatcher : public NumberParseMatcher, public UMemory {
   public:
-    ~SymbolMatcher() override;
-
     const UnicodeSet* getSet();
 
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
@@ -31,16 +29,81 @@ class SymbolMatcher : public NumberParseMatcher, public UMemory {
 
   protected:
     UnicodeString fString;
-    const UnicodeSet* fUniSet;
-    bool fOwnsUniSet;
+    const UnicodeSet* fUniSet; // a reference from numparse_unisets.h; never owned
 
     SymbolMatcher(const UnicodeString& symbolString, unisets::Key key);
+};
+
+
+class IgnorablesMatcher : public SymbolMatcher {
+  public:
+    explicit IgnorablesMatcher(unisets::Key key);
+
+    bool isFlexible() const override;
+
+  protected:
+    bool isDisabled(const ParsedNumber& result) const override;
+
+    void accept(StringSegment& segment, ParsedNumber& result) const override;
 };
 
 
 class MinusSignMatcher : public SymbolMatcher {
   public:
     MinusSignMatcher(const DecimalFormatSymbols& dfs, bool allowTrailing);
+
+  protected:
+    bool isDisabled(const ParsedNumber& result) const override;
+
+    void accept(StringSegment& segment, ParsedNumber& result) const override;
+
+  private:
+    bool fAllowTrailing;
+};
+
+
+class NanMatcher : public SymbolMatcher {
+  public:
+    explicit NanMatcher(const DecimalFormatSymbols& dfs);
+
+    const UnicodeSet* getLeadCodePoints() const override;
+
+  protected:
+    bool isDisabled(const ParsedNumber& result) const override;
+
+    void accept(StringSegment& segment, ParsedNumber& result) const override;
+};
+
+
+class PercentMatcher : public SymbolMatcher {
+  public:
+    explicit PercentMatcher(const DecimalFormatSymbols& dfs);
+
+    void postProcess(ParsedNumber& result) const override;
+
+  protected:
+    bool isDisabled(const ParsedNumber& result) const override;
+
+    void accept(StringSegment& segment, ParsedNumber& result) const override;
+};
+
+
+class PermilleMatcher : public SymbolMatcher {
+  public:
+    explicit PermilleMatcher(const DecimalFormatSymbols& dfs);
+
+    void postProcess(ParsedNumber& result) const override;
+
+  protected:
+    bool isDisabled(const ParsedNumber& result) const override;
+
+    void accept(StringSegment& segment, ParsedNumber& result) const override;
+};
+
+
+class PlusSignMatcher : public SymbolMatcher {
+  public:
+    PlusSignMatcher(const DecimalFormatSymbols& dfs, bool allowTrailing);
 
   protected:
     bool isDisabled(const ParsedNumber& result) const override;

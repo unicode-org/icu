@@ -15,6 +15,8 @@ namespace impl {
 namespace unisets {
 
 enum Key {
+    EMPTY,
+
     // Ignorables
             BIDI,
     WHITESPACE,

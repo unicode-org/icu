@@ -16,18 +16,10 @@ using namespace icu::numparse::impl;
 
 SymbolMatcher::SymbolMatcher(const UnicodeString& symbolString, unisets::Key key) {
     fUniSet = unisets::get(key);
-    fOwnsUniSet = false;
     if (fUniSet->contains(symbolString)) {
         fString.setToBogus();
     } else {
         fString = symbolString;
-    }
-}
-
-SymbolMatcher::~SymbolMatcher() {
-    if (fOwnsUniSet) {
-        delete fUniSet;
-        fUniSet = nullptr;
     }
 }
 
@@ -76,18 +68,115 @@ const UnicodeSet* SymbolMatcher::getLeadCodePoints() const {
 }
 
 
-MinusSignMatcher::MinusSignMatcher(const DecimalFormatSymbols& dfs, bool allowTrailing) : SymbolMatcher(
-        dfs.getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol),
-        unisets::MINUS_SIGN), fAllowTrailing(allowTrailing) {
+IgnorablesMatcher::IgnorablesMatcher(unisets::Key key)
+        : SymbolMatcher({}, key) {
+}
+
+bool IgnorablesMatcher::isFlexible() const {
+    return true;
+}
+
+bool IgnorablesMatcher::isDisabled(const ParsedNumber&) const {
+    return false;
+}
+
+void IgnorablesMatcher::accept(StringSegment&, ParsedNumber&) const {
+    // No-op
+}
+
+
+MinusSignMatcher::MinusSignMatcher(const DecimalFormatSymbols& dfs, bool allowTrailing)
+        : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol), unisets::MINUS_SIGN),
+          fAllowTrailing(allowTrailing) {
 }
 
 bool MinusSignMatcher::isDisabled(const ParsedNumber& result) const {
-    return 0 != (result.flags & FLAG_NEGATIVE) ||
-           (fAllowTrailing ? false : result.seenNumber());
+    return 0 != (result.flags & FLAG_NEGATIVE) || (fAllowTrailing ? false : result.seenNumber());
 }
 
 void MinusSignMatcher::accept(StringSegment& segment, ParsedNumber& result) const {
     result.flags |= FLAG_NEGATIVE;
+    result.setCharsConsumed(segment);
+}
+
+
+NanMatcher::NanMatcher(const DecimalFormatSymbols& dfs)
+        : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kNaNSymbol), unisets::EMPTY) {
+}
+
+const UnicodeSet* NanMatcher::getLeadCodePoints() const {
+    // Overriding this here to allow use of statically allocated sets
+    int leadCp = fString.char32At(0);
+    const UnicodeSet* s = unisets::get(unisets::NAN_LEAD);
+    if (s->contains(leadCp)) {
+        return new UnicodeSet(*s);
+    } else {
+        return SymbolMatcher::getLeadCodePoints();
+    }
+}
+
+bool NanMatcher::isDisabled(const ParsedNumber& result) const {
+    return result.seenNumber();
+}
+
+void NanMatcher::accept(StringSegment& segment, ParsedNumber& result) const {
+    result.flags |= FLAG_NAN;
+    result.setCharsConsumed(segment);
+}
+
+
+PercentMatcher::PercentMatcher(const DecimalFormatSymbols& dfs)
+        : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kPercentSymbol), unisets::PERCENT_SIGN) {
+}
+
+void PercentMatcher::postProcess(ParsedNumber& result) const {
+    SymbolMatcher::postProcess(result);
+    if (0 != (result.flags & FLAG_PERCENT) && !result.quantity.bogus) {
+        result.quantity.adjustMagnitude(-2);
+    }
+}
+
+bool PercentMatcher::isDisabled(const ParsedNumber& result) const {
+    return 0 != (result.flags & FLAG_PERCENT);
+}
+
+void PercentMatcher::accept(StringSegment& segment, ParsedNumber& result) const {
+    result.flags |= FLAG_PERCENT;
+    result.setCharsConsumed(segment);
+}
+
+
+PermilleMatcher::PermilleMatcher(const DecimalFormatSymbols& dfs)
+        : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kPerMillSymbol), unisets::PERMILLE_SIGN) {
+}
+
+void PermilleMatcher::postProcess(ParsedNumber& result) const {
+    SymbolMatcher::postProcess(result);
+    if (0 != (result.flags & FLAG_PERMILLE) && !result.quantity.bogus) {
+        result.quantity.adjustMagnitude(-3);
+    }
+}
+
+bool PermilleMatcher::isDisabled(const ParsedNumber& result) const {
+    return 0 != (result.flags & FLAG_PERMILLE);
+}
+
+void PermilleMatcher::accept(StringSegment& segment, ParsedNumber& result) const {
+    result.flags |= FLAG_PERMILLE;
+    result.setCharsConsumed(segment);
+}
+
+
+PlusSignMatcher::PlusSignMatcher(const DecimalFormatSymbols& dfs, bool allowTrailing)
+        : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol), unisets::PLUS_SIGN),
+          fAllowTrailing(allowTrailing) {
+}
+
+bool PlusSignMatcher::isDisabled(const ParsedNumber& result) const {
+    return fAllowTrailing ? false : result.seenNumber();
+}
+
+void PlusSignMatcher::accept(StringSegment& segment, ParsedNumber& result) const {
     result.setCharsConsumed(segment);
 }
 
