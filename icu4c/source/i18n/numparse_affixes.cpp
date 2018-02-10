@@ -40,16 +40,16 @@ void AffixPatternMatcherBuilder::consumeToken(AffixPatternType type, UChar32 cp,
         // Case 1: the token is a symbol.
         switch (type) {
             case TYPE_MINUS_SIGN:
-                addMatcher(fWarehouse.minusSign = {fWarehouse.dfs, true});
+                addMatcher(fWarehouse.minusSign());
                 break;
             case TYPE_PLUS_SIGN:
-                addMatcher(fWarehouse.plusSign = {fWarehouse.dfs, true});
+                addMatcher(fWarehouse.plusSign());
                 break;
             case TYPE_PERCENT:
-                addMatcher(fWarehouse.percent = {fWarehouse.dfs});
+                addMatcher(fWarehouse.percent());
                 break;
             case TYPE_PERMILLE:
-                addMatcher(fWarehouse.permille = {fWarehouse.dfs});
+                addMatcher(fWarehouse.permille());
                 break;
             case TYPE_CURRENCY_SINGLE:
             case TYPE_CURRENCY_DOUBLE:
@@ -57,13 +57,7 @@ void AffixPatternMatcherBuilder::consumeToken(AffixPatternType type, UChar32 cp,
             case TYPE_CURRENCY_QUAD:
             case TYPE_CURRENCY_QUINT:
                 // All currency symbols use the same matcher
-                addMatcher(
-                        fWarehouse.currency = {
-                                CurrencyNamesMatcher(
-                                        fWarehouse.locale, status), CurrencyCustomMatcher(
-                                        fWarehouse.currencyCode,
-                                        fWarehouse.currency1,
-                                        fWarehouse.currency2)});
+                addMatcher(fWarehouse.currency(status));
                 break;
             default:
                 U_ASSERT(FALSE);
@@ -109,12 +103,32 @@ AffixTokenMatcherWarehouse::AffixTokenMatcherWarehouse(const UChar* currencyCode
 
 AffixTokenMatcherWarehouse::~AffixTokenMatcherWarehouse() {
     // Delete the variable number of batches of code point matchers
-    for (int32_t i=0; i<codePointNumBatches; i++) {
+    for (int32_t i = 0; i < codePointNumBatches; i++) {
         delete[] codePointsOverflow[i];
     }
 }
 
-CodePointMatcher& AffixTokenMatcherWarehouse::nextCodePointMatcher(UChar32 cp) {
+NumberParseMatcher& AffixTokenMatcherWarehouse::minusSign() {
+    return fMinusSign = {dfs, true};
+}
+
+NumberParseMatcher& AffixTokenMatcherWarehouse::plusSign() {
+    return fPlusSign = {dfs, true};
+}
+
+NumberParseMatcher& AffixTokenMatcherWarehouse::percent() {
+    return fPercent = {dfs};
+}
+
+NumberParseMatcher& AffixTokenMatcherWarehouse::permille() {
+    return fPermille = {dfs};
+}
+
+NumberParseMatcher& AffixTokenMatcherWarehouse::currency(UErrorCode& status) {
+    return fCurrency = {{locale, status}, {currencyCode, currency1, currency2}};
+}
+
+NumberParseMatcher& AffixTokenMatcherWarehouse::nextCodePointMatcher(UChar32 cp) {
     if (codePointCount < CODE_POINT_STACK_CAPACITY) {
         return codePoints[codePointCount++] = {cp};
     }
@@ -129,7 +143,7 @@ CodePointMatcher& AffixTokenMatcherWarehouse::nextCodePointMatcher(UChar32 cp) {
         codePointsOverflow[codePointNumBatches++] = nextBatch;
     }
     return codePointsOverflow[codePointNumBatches - 1][(codePointCount++ - CODE_POINT_STACK_CAPACITY) %
-                                                        CODE_POINT_BATCH_SIZE] = {cp};
+                                                       CODE_POINT_BATCH_SIZE] = {cp};
 }
 
 

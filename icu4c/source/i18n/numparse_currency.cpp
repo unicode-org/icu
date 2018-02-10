@@ -119,6 +119,19 @@ CurrencyAnyMatcher::CurrencyAnyMatcher(CurrencyNamesMatcher namesMatcher,
     fMatcherArray[1] = &fCustomMatcher;
 }
 
+CurrencyAnyMatcher::CurrencyAnyMatcher(CurrencyAnyMatcher&& src) U_NOEXCEPT
+        : fNamesMatcher(std::move(src.fNamesMatcher)), fCustomMatcher(std::move(src.fCustomMatcher)) {
+    fMatcherArray[0] = &fNamesMatcher;
+    fMatcherArray[1] = &fCustomMatcher;
+}
+
+CurrencyAnyMatcher& CurrencyAnyMatcher::operator=(CurrencyAnyMatcher&& src) U_NOEXCEPT {
+    fNamesMatcher = std::move(src.fNamesMatcher);
+    fCustomMatcher = std::move(src.fCustomMatcher);
+    // Note: do NOT move fMatcherArray
+    return *this;
+}
+
 const UnicodeSet& CurrencyAnyMatcher::getLeadCodePoints() {
     if (fLocalLeadCodePoints.isNull()) {
         auto* leadCodePoints = new UnicodeSet();

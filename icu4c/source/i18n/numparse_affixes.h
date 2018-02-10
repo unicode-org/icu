@@ -57,7 +57,17 @@ class AffixTokenMatcherWarehouse {
 
     ~AffixTokenMatcherWarehouse();
 
-    CodePointMatcher& nextCodePointMatcher(UChar32 cp);
+    NumberParseMatcher& minusSign();
+
+    NumberParseMatcher& plusSign();
+
+    NumberParseMatcher& percent();
+
+    NumberParseMatcher& permille();
+
+    NumberParseMatcher& currency(UErrorCode& status);
+
+    NumberParseMatcher& nextCodePointMatcher(UChar32 cp);
 
   private:
     UChar currencyCode[4];
@@ -68,11 +78,11 @@ class AffixTokenMatcherWarehouse {
     const Locale locale;
 
     // NOTE: These are default-constructed and should not be used until initialized.
-    MinusSignMatcher minusSign;
-    PlusSignMatcher plusSign;
-    PercentMatcher percent;
-    PermilleMatcher permille;
-    CurrencyAnyMatcher currency;
+    MinusSignMatcher fMinusSign;
+    PlusSignMatcher fPlusSign;
+    PercentMatcher fPercent;
+    PermilleMatcher fPermille;
+    CurrencyAnyMatcher fCurrency;
 
     CodePointMatcher codePoints[CODE_POINT_STACK_CAPACITY]; // By value
     MaybeStackArray<CodePointMatcher*, 3> codePointsOverflow; // On heap in "batches"

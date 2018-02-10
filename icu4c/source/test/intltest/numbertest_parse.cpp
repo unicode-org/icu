@@ -23,6 +23,7 @@ void NumberParserTest::runIndexedTest(int32_t index, UBool exec, const char*& na
     TESTCASE_AUTO_BEGIN;
         TESTCASE_AUTO(testBasic);
         TESTCASE_AUTO(testSeriesMatcher);
+        TESTCASE_AUTO(testCurrencyAnyMatcher);
         TESTCASE_AUTO(testAffixPatternMatcher);
     TESTCASE_AUTO_END;
 }
@@ -211,6 +212,39 @@ void NumberParserTest::testSeriesMatcher() {
     }
 }
 
+void NumberParserTest::testCurrencyAnyMatcher() {
+    IcuTestErrorCode status(*this, "testCurrencyAnyMatcher");
+
+    IgnorablesMatcher ignorables(unisets::DEFAULT_IGNORABLES);
+    AffixTokenMatcherWarehouse warehouse(u"ICU", u"IU$", u"ICU", {"en",status}, &ignorables, "en");
+    NumberParseMatcher& matcher = warehouse.currency(status);
+
+    static const struct TestCase{
+        const char16_t* input;
+        const char16_t* expectedCurrencyCode;
+    } cases[] {
+            { u"", u"\x00" },
+            { u"FOO", u"\x00" },
+            { u"USD", u"USD" },
+            { u"$", u"USD" },
+            { u"US dollars", u"USD" },
+            { u"eu", u"\x00" },
+            { u"euros", u"EUR" },
+            { u"ICU", u"ICU" },
+            { u"IU$", u"ICU" } };
+    for (auto& cas : cases) {
+        UnicodeString input(cas.input);
+
+        StringSegment segment(input, 0);
+        ParsedNumber result;
+        matcher.match(segment, result, status);
+        assertEquals("Parsing " + input, cas.expectedCurrencyCode, result.currencyCode);
+        assertEquals("Whole string on " + input,
+                cas.expectedCurrencyCode[0] == 0 ? 0 : input.length(),
+                result.charEnd);
+    }
+}
+
 void NumberParserTest::testAffixPatternMatcher() {
     IcuTestErrorCode status(*this, "testAffixPatternMatcher");
 
@@ -227,7 +261,7 @@ void NumberParserTest::testAffixPatternMatcher() {
                  {true, u"+-%", 3, u"+-%"},
                  {false, u"ab c", 5, u"a    bc"},
                  {true, u"abc", 3, u"abc"},
-                 //{false, u"hello-to+this%very¤long‰string", 59, u"hello-to+this%very USD long‰string"}
+                 {false, u"hello-to+this%very¤long‰string", 59, u"hello-to+this%very USD long‰string"}
     };
 
     for (auto& cas : cases) {

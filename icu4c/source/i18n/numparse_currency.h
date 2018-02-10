@@ -67,6 +67,12 @@ class CurrencyAnyMatcher : public AnyMatcher, public UMemory {
 
     CurrencyAnyMatcher(CurrencyNamesMatcher namesMatcher, CurrencyCustomMatcher customMatcher);
 
+    // Needs custom move constructor/operator since constructor is nontrivial
+
+    CurrencyAnyMatcher(CurrencyAnyMatcher&& src) U_NOEXCEPT;
+
+    CurrencyAnyMatcher& operator=(CurrencyAnyMatcher&& src) U_NOEXCEPT;
+
     const UnicodeSet& getLeadCodePoints() override;
 
   protected:
