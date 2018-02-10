@@ -327,6 +327,17 @@ class NumberParseMatcher {
 };
 
 
+/**
+ * Interface for use in arguments.
+ */
+class MutableMatcherCollection {
+  public:
+    virtual ~MutableMatcherCollection() = default;
+
+    virtual void addMatcher(NumberParseMatcher& matcher) = 0;
+};
+
+
 } // namespace impl
 } // namespace numparse
 U_NAMESPACE_END

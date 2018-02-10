@@ -60,7 +60,7 @@ class AffixTokenMatcherWarehouse {
                                const UnicodeString* currency2, const DecimalFormatSymbols* dfs,
                                IgnorablesMatcher* ignorables, const Locale* locale);
 
-    AffixTokenMatcherWarehouse(AffixTokenMatcherWarehouse&& src) = default;
+    AffixTokenMatcherWarehouse(AffixTokenMatcherWarehouse&& src) U_NOEXCEPT;
 
     ~AffixTokenMatcherWarehouse();
 
@@ -102,7 +102,7 @@ class AffixTokenMatcherWarehouse {
 };
 
 
-class AffixPatternMatcherBuilder : public TokenConsumer {
+class AffixPatternMatcherBuilder : public TokenConsumer, public MutableMatcherCollection {
   public:
     AffixPatternMatcherBuilder(const UnicodeString& pattern, AffixTokenMatcherWarehouse& warehouse,
                                IgnorablesMatcher* ignorables);
@@ -121,7 +121,7 @@ class AffixPatternMatcherBuilder : public TokenConsumer {
     AffixTokenMatcherWarehouse& fWarehouse;
     IgnorablesMatcher* fIgnorables;
 
-    void addMatcher(NumberParseMatcher& matcher);
+    void addMatcher(NumberParseMatcher& matcher) override;
 };
 
 
@@ -153,25 +153,18 @@ class AffixMatcher : public NumberParseMatcher, public UMemory {
 
     AffixMatcher(AffixPatternMatcher* prefix, AffixPatternMatcher* suffix, result_flags_t flags);
 
-    // static void createMatchers() is the constructor for AffixMatcherWarehouse in C++
-
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
     void postProcess(ParsedNumber& result) const override;
 
     const UnicodeSet& getLeadCodePoints() override;
 
+    int8_t compareTo(const AffixMatcher& rhs) const;
+
   private:
     AffixPatternMatcher* fPrefix;
     AffixPatternMatcher* fSuffix;
     result_flags_t fFlags;
-
-    /**
-     * Helper method to return whether the given AffixPatternMatcher equals the given pattern string.
-     * Either both arguments must be null or the pattern string inside the AffixPatternMatcher must equal
-     * the given pattern string.
-     */
-    static bool matched(const AffixPatternMatcher* affix, const UnicodeString& patternString);
 };
 
 
@@ -182,10 +175,15 @@ class AffixMatcherWarehouse {
   public:
     AffixMatcherWarehouse() = default;  // WARNING: Leaves the object in an unusable state
 
-    // in Java, this is AffixMatcher#createMatchers()
-    AffixMatcherWarehouse(const AffixPatternProvider& patternInfo, NumberParserImpl& output,
-                          AffixTokenMatcherWarehouse& warehouse, const IgnorablesMatcher& ignorables,
-                          parse_flags_t parseFlags, UErrorCode& status);
+    AffixMatcherWarehouse(AffixTokenMatcherWarehouse& warehouse);
+
+    AffixMatcherWarehouse& operator=(AffixMatcherWarehouse&& src);
+
+    static AffixMatcherWarehouse createAffixMatchers(const AffixPatternProvider& patternInfo,
+                                                     MutableMatcherCollection& output,
+                                                     AffixTokenMatcherWarehouse tokenWarehouse,
+                                                     const IgnorablesMatcher& ignorables,
+                                                     parse_flags_t parseFlags, UErrorCode& status);
 
   private:
     // 9 is the limit: positive, zero, and negative, each with prefix, suffix, and prefix+suffix
@@ -195,14 +193,10 @@ class AffixMatcherWarehouse {
     // Store all the tokens used by the AffixPatternMatchers
     AffixTokenMatcherWarehouse fAffixTokenMatcherWarehouse;
 
+    friend class AffixMatcher;
+
     static bool isInteresting(const AffixPatternProvider& patternInfo, const IgnorablesMatcher& ignorables,
                               parse_flags_t parseFlags, UErrorCode& status);
-
-    /**
-     * Helper method to return whether (1) both lhs and rhs are null/invalid, or (2) if they are both
-     * valid, whether they are equal according to operator==.  Similar to Java Objects.equals()
-     */
-    static bool equals(const AffixPatternMatcher* lhs, const AffixPatternMatcher* rhs);
 };
 
 

@@ -13,18 +13,19 @@
 #include "numparse_scientific.h"
 #include "unicode/uniset.h"
 #include "numparse_currency.h"
+#include "numparse_affixes.h"
 
 U_NAMESPACE_BEGIN namespace numparse {
 namespace impl {
 
-class NumberParserImpl {
+class NumberParserImpl : public MutableMatcherCollection {
   public:
-    ~NumberParserImpl();
+    virtual ~NumberParserImpl();
 
     static NumberParserImpl* createSimpleParser(const Locale& locale, const UnicodeString& patternString,
                                                 parse_flags_t parseFlags, UErrorCode& status);
 
-    void addMatcher(NumberParseMatcher& matcher);
+    void addMatcher(NumberParseMatcher& matcher) override;
 
     void freeze();
 
@@ -58,6 +59,7 @@ class NumberParserImpl {
         DecimalMatcher decimal;
         ScientificMatcher scientific;
         CurrencyNamesMatcher currencyNames;
+        AffixMatcherWarehouse affixMatcherWarehouse;
     } fLocalMatchers;
 
     NumberParserImpl(parse_flags_t parseFlags, bool computeLeads);
