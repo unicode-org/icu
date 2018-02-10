@@ -54,17 +54,20 @@ bool SymbolMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCo
     return overlap == segment.length();
 }
 
-const UnicodeSet* SymbolMatcher::getLeadCodePoints() const {
+const UnicodeSet& SymbolMatcher::getLeadCodePoints() {
     if (fString.isEmpty()) {
         // Assumption: for sets from UnicodeSetStaticCache, uniSet == leadCodePoints.
-        return new UnicodeSet(*fUniSet);
+        return *fUniSet;
     }
 
-    UnicodeSet* leadCodePoints = new UnicodeSet();
-    utils::putLeadCodePoints(fUniSet, leadCodePoints);
-    utils::putLeadCodePoint(fString, leadCodePoints);
-    leadCodePoints->freeze();
-    return leadCodePoints;
+    if (fLocalLeadCodePoints.isNull()) {
+        auto* leadCodePoints = new UnicodeSet();
+        utils::putLeadCodePoints(fUniSet, leadCodePoints);
+        utils::putLeadCodePoint(fString, leadCodePoints);
+        leadCodePoints->freeze();
+        fLocalLeadCodePoints.adoptInstead(leadCodePoints);
+    }
+    return *fLocalLeadCodePoints;
 }
 
 
@@ -86,7 +89,7 @@ void IgnorablesMatcher::accept(StringSegment&, ParsedNumber&) const {
 
 
 InfinityMatcher::InfinityMatcher(const DecimalFormatSymbols& dfs)
-        : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kNaNSymbol), unisets::INFINITY) {
+        : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kInfinitySymbol), unisets::INFINITY) {
 }
 
 bool InfinityMatcher::isDisabled(const ParsedNumber& result) const {
@@ -118,15 +121,15 @@ NanMatcher::NanMatcher(const DecimalFormatSymbols& dfs)
         : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kNaNSymbol), unisets::EMPTY) {
 }
 
-const UnicodeSet* NanMatcher::getLeadCodePoints() const {
+const UnicodeSet& NanMatcher::getLeadCodePoints() {
     // Overriding this here to allow use of statically allocated sets
     int leadCp = fString.char32At(0);
     const UnicodeSet* s = unisets::get(unisets::NAN_LEAD);
     if (s->contains(leadCp)) {
-        return new UnicodeSet(*s);
-    } else {
-        return SymbolMatcher::getLeadCodePoints();
+        return *s;
     }
+
+    return SymbolMatcher::getLeadCodePoints();
 }
 
 bool NanMatcher::isDisabled(const ParsedNumber& result) const {
@@ -146,11 +149,11 @@ bool PaddingMatcher::isFlexible() const {
     return true;
 }
 
-bool PaddingMatcher::isDisabled(const ParsedNumber& result) const {
+bool PaddingMatcher::isDisabled(const ParsedNumber&) const {
     return false;
 }
 
-void PaddingMatcher::accept(StringSegment& segment, ParsedNumber& result) const {
+void PaddingMatcher::accept(StringSegment&, ParsedNumber&) const {
     // No-op
 }
 

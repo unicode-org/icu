@@ -67,17 +67,20 @@ bool ScientificMatcher::match(StringSegment& segment, ParsedNumber& result, UErr
     return false;
 }
 
-const UnicodeSet* ScientificMatcher::getLeadCodePoints() const {
+const UnicodeSet& ScientificMatcher::getLeadCodePoints() {
     UChar32 leadCp = fExponentSeparatorString.char32At(0);
     const UnicodeSet* s = unisets::get(unisets::SCIENTIFIC_LEAD);
     if (s->contains(leadCp)) {
-        return new UnicodeSet(*s);
-    } else {
-        UnicodeSet* leadCodePoints = new UnicodeSet();
+        return *s;
+    }
+
+    if (fLocalLeadCodePoints.isNull()) {
+        auto* leadCodePoints = new UnicodeSet();
         leadCodePoints->add(leadCp);
         leadCodePoints->freeze();
-        return leadCodePoints;
+        fLocalLeadCodePoints.adoptInstead(leadCodePoints);
     }
+    return *fLocalLeadCodePoints;
 }
 
 

@@ -21,6 +21,7 @@ void NumberParserTest::runIndexedTest(int32_t index, UBool exec, const char*& na
     }
     TESTCASE_AUTO_BEGIN;
         TESTCASE_AUTO(testBasic);
+        TESTCASE_AUTO(testSeriesMatcher);
     TESTCASE_AUTO_END;
 }
 
@@ -99,7 +100,7 @@ void NumberParserTest::testBasic() {
                  {3, u"0", u"0", 1, 0.0}};
 
     parse_flags_t parseFlags = PARSE_FLAG_IGNORE_CASE | PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;
-    for (auto cas : cases) {
+    for (auto& cas : cases) {
         UnicodeString inputString(cas.inputString);
         UnicodeString patternString(cas.patternString);
         LocalPointer<const NumberParserImpl> parser(
@@ -150,6 +151,55 @@ void NumberParserTest::testBasic() {
             assertEquals(
                     "Strict Parse failed: " + message, cas.expectedResultDouble, resultObject.getDouble());
         }
+    }
+}
+
+void NumberParserTest::testSeriesMatcher() {
+    IcuTestErrorCode status(*this, "testSeriesMatcher");
+
+    DecimalFormatSymbols symbols("en", status);
+
+    PlusSignMatcher m0(symbols, false);
+    MinusSignMatcher m1(symbols, false);
+    IgnorablesMatcher m2(unisets::DEFAULT_IGNORABLES);
+    PercentMatcher m3(symbols);
+    IgnorablesMatcher m4(unisets::DEFAULT_IGNORABLES);
+
+    ArraySeriesMatcher series(new NumberParseMatcher* [5]{&m0, &m1, &m2, &m3, &m4}, 5);
+
+    assertEquals(
+            "Lead set should be equal to lead set of lead matcher",
+            *unisets::get(unisets::PLUS_SIGN),
+            series.getLeadCodePoints());
+
+    static const struct TestCase {
+        const char16_t* input;
+        int32_t expectedOffset;
+        bool expectedMaybeMore;
+    } cases[] = {{u"", 0, true},
+                 {u" ", 0, false},
+                 {u"$", 0, false},
+                 {u"+", 0, true},
+                 {u" +", 0, false},
+                 {u"+-", 0, true},
+                 {u"+ -", 0, false},
+                 {u"+-  ", 0, true},
+                 {u"+-  $", 0, false},
+                 {u"+-%", 3, true},
+                 {u"  +-  %  ", 0, false},
+                 {u"+-  %  ", 7, true},
+                 {u"+-%$", 3, false}};
+
+    for (auto& cas : cases) {
+        UnicodeString input(cas.input);
+
+        StringSegment segment(input, 0);
+        ParsedNumber result;
+        bool actualMaybeMore = series.match(segment, result, status);
+        int actualOffset = segment.getOffset();
+
+        assertEquals("'" + input + "'", cas.expectedOffset, actualOffset);
+        assertEquals("'" + input + "'", cas.expectedMaybeMore, actualMaybeMore);
     }
 }
 

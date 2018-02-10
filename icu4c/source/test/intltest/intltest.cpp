@@ -238,6 +238,12 @@ UnicodeString toString(UBool b) {
   return b ? UnicodeString("TRUE"):UnicodeString("FALSE");
 }
 
+UnicodeString toString(const UnicodeSet& uniset, UErrorCode& status) {
+    UnicodeString result;
+    uniset.toPattern(result, status);
+    return result;
+}
+
 // stephen - cleaned up 05/05/99
 UnicodeString operator+(const UnicodeString& left, char num)
 { return left + (long)num; }
@@ -2050,6 +2056,24 @@ UBool IntlTest::assertEquals(const char* message,
     return TRUE;
 }
 
+UBool IntlTest::assertEquals(const char* message,
+                             const UnicodeSet& expected,
+                             const UnicodeSet& actual) {
+    IcuTestErrorCode status(*this, "assertEqualsUniSet");
+    if (expected != actual) {
+        errln((UnicodeString)"FAIL: " + message + "; got " +
+              toString(actual, status) +
+              "; expected " + toString(expected, status));
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString)"Ok: " + message + "; got " + toString(actual, status));
+    }
+#endif
+    return TRUE;
+}
+
 
 #if !UCONFIG_NO_FORMATTING
 UBool IntlTest::assertEquals(const char* message,
@@ -2134,6 +2158,11 @@ UBool IntlTest::assertEquals(const UnicodeString& message,
 UBool IntlTest::assertEquals(const UnicodeString& message,
                              UErrorCode expected,
                              UErrorCode actual) {
+    return assertEquals(extractToAssertBuf(message), expected, actual);
+}
+UBool IntlTest::assertEquals(const UnicodeString& message,
+                             const UnicodeSet& expected,
+                             const UnicodeSet& actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
 }
 

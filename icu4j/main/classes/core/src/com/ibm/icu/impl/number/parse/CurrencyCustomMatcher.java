@@ -9,19 +9,19 @@ import com.ibm.icu.util.ULocale;
 /**
  * A matcher for a single currency instance (not the full trie).
  */
-public class CurrencyMatcher implements NumberParseMatcher {
+public class CurrencyCustomMatcher implements NumberParseMatcher {
 
     private final String isoCode;
     private final String currency1;
     private final String currency2;
 
-    public static CurrencyMatcher getInstance(Currency currency, ULocale loc) {
-        return new CurrencyMatcher(currency.getSubtype(),
+    public static CurrencyCustomMatcher getInstance(Currency currency, ULocale loc) {
+        return new CurrencyCustomMatcher(currency.getSubtype(),
                 currency.getSymbol(loc),
                 currency.getCurrencyCode());
     }
 
-    private CurrencyMatcher(String isoCode, String currency1, String currency2) {
+    private CurrencyCustomMatcher(String isoCode, String currency1, String currency2) {
         this.isoCode = isoCode;
         this.currency1 = currency1;
         this.currency2 = currency2;
