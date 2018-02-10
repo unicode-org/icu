@@ -5921,6 +5921,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/number/RoundingUtils.java svneol=na
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/SimpleModifier.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/AffixMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/AffixPatternMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/AffixTokenMatcherFactory.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/AnyMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/CodePointMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/CurrencyCustomMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -5928,7 +5929,6 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/CurrencyNamesMatcher.j
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/DecimalMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/IgnorablesMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/InfinityMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/MatcherFactory.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/MinusSignMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/MultiplierHandler.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/NanMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8

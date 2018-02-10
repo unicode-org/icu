@@ -63,6 +63,8 @@ class SeriesMatcher : public CompositionMatcher {
 
     void postProcess(ParsedNumber& result) const override;
 
+    virtual int32_t length() const = 0;
+
   protected:
     // No construction except by subclasses!
     SeriesMatcher() = default;
@@ -76,10 +78,16 @@ class SeriesMatcher : public CompositionMatcher {
  */
 class ArraySeriesMatcher : public SeriesMatcher {
   public:
-    /** The array is adopted, but NOT the matchers inside the array. */
-    ArraySeriesMatcher(NumberParseMatcher** matchers, int32_t matchersLen);
+    ArraySeriesMatcher();  // WARNING: Leaves the object in an unusable state
+
+    typedef MaybeStackArray<NumberParseMatcher*, 3> MatcherArray;
+
+    /** The array is std::move'd */
+    ArraySeriesMatcher(MatcherArray& matchers, int32_t matchersLen);
 
     const UnicodeSet& getLeadCodePoints() override;
+
+    int32_t length() const override;
 
   protected:
     const NumberParseMatcher* const* begin() const override;
@@ -87,7 +95,7 @@ class ArraySeriesMatcher : public SeriesMatcher {
     const NumberParseMatcher* const* end() const override;
 
   private:
-    LocalArray<NumberParseMatcher*> fMatchers;
+    MatcherArray fMatchers;
     int32_t fMatchersLen;
 };
 

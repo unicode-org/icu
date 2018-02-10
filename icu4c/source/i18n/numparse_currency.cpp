@@ -16,16 +16,6 @@ using namespace icu::numparse;
 using namespace icu::numparse::impl;
 
 
-namespace {
-
-inline void copyCurrencyCode(UChar* dest, const UChar* src) {
-    uprv_memcpy(dest, src, sizeof(UChar) * 3);
-    dest[3] = 0;
-}
-
-}
-
-
 CurrencyNamesMatcher::CurrencyNamesMatcher(const Locale& locale, UErrorCode& status)
         : fLocaleName(locale.getName(), -1, status) {}
 
@@ -80,7 +70,7 @@ const UnicodeSet& CurrencyNamesMatcher::getLeadCodePoints() {
 CurrencyCustomMatcher::CurrencyCustomMatcher(const char16_t* currencyCode, const UnicodeString& currency1,
                                              const UnicodeString& currency2)
         : fCurrency1(currency1), fCurrency2(currency2) {
-    copyCurrencyCode(fCurrencyCode, currencyCode);
+    utils::copyCurrencyCode(fCurrencyCode, currencyCode);
 }
 
 bool CurrencyCustomMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCode&) const {
@@ -90,14 +80,14 @@ bool CurrencyCustomMatcher::match(StringSegment& segment, ParsedNumber& result, 
 
     int overlap1 = segment.getCommonPrefixLength(fCurrency1);
     if (overlap1 == fCurrency1.length()) {
-        copyCurrencyCode(result.currencyCode, fCurrencyCode);
+        utils::copyCurrencyCode(result.currencyCode, fCurrencyCode);
         segment.adjustOffset(overlap1);
         result.setCharsConsumed(segment);
     }
 
     int overlap2 = segment.getCommonPrefixLength(fCurrency2);
     if (overlap2 == fCurrency2.length()) {
-        copyCurrencyCode(result.currencyCode, fCurrencyCode);
+        utils::copyCurrencyCode(result.currencyCode, fCurrencyCode);
         segment.adjustOffset(overlap2);
         result.setCharsConsumed(segment);
     }
@@ -116,6 +106,11 @@ const UnicodeSet& CurrencyCustomMatcher::getLeadCodePoints() {
     return *fLocalLeadCodePoints;
 }
 
+
+CurrencyAnyMatcher::CurrencyAnyMatcher() {
+    fMatcherArray[0] = &fNamesMatcher;
+    fMatcherArray[1] = &fCustomMatcher;
+}
 
 CurrencyAnyMatcher::CurrencyAnyMatcher(CurrencyNamesMatcher namesMatcher,
                                        CurrencyCustomMatcher customMatcher)

@@ -42,6 +42,8 @@ class CurrencyNamesMatcher : public NumberParseMatcher, public UMemory {
 
 class CurrencyCustomMatcher : public NumberParseMatcher, public UMemory {
   public:
+    CurrencyCustomMatcher() = default;  // WARNING: Leaves the object in an unusable state
+
     CurrencyCustomMatcher(const char16_t* currencyCode, const UnicodeString& currency1,
                           const UnicodeString& currency2);
 
@@ -61,7 +63,8 @@ class CurrencyCustomMatcher : public NumberParseMatcher, public UMemory {
  */
 class CurrencyAnyMatcher : public AnyMatcher, public UMemory {
   public:
-    /** Calls std::move on the two arguments. */
+    CurrencyAnyMatcher();  // WARNING: Leaves the object in an unusable state
+
     CurrencyAnyMatcher(CurrencyNamesMatcher namesMatcher, CurrencyCustomMatcher customMatcher);
 
     const UnicodeSet& getLeadCodePoints() override;

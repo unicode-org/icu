@@ -12,6 +12,7 @@
 #include "unicode/testlog.h"
 
 #include <cmath>
+#include <numparse_affixes.h>
 
 using icu::numparse::impl::unisets::get;
 
@@ -22,6 +23,7 @@ void NumberParserTest::runIndexedTest(int32_t index, UBool exec, const char*& na
     TESTCASE_AUTO_BEGIN;
         TESTCASE_AUTO(testBasic);
         TESTCASE_AUTO(testSeriesMatcher);
+        TESTCASE_AUTO(testAffixPatternMatcher);
     TESTCASE_AUTO_END;
 }
 
@@ -165,7 +167,13 @@ void NumberParserTest::testSeriesMatcher() {
     PercentMatcher m3(symbols);
     IgnorablesMatcher m4(unisets::DEFAULT_IGNORABLES);
 
-    ArraySeriesMatcher series(new NumberParseMatcher* [5]{&m0, &m1, &m2, &m3, &m4}, 5);
+    ArraySeriesMatcher::MatcherArray matchers(5);
+    matchers[0] = &m0;
+    matchers[1] = &m1;
+    matchers[2] = &m2;
+    matchers[3] = &m3;
+    matchers[4] = &m4;
+    ArraySeriesMatcher series(matchers, 5);
 
     assertEquals(
             "Lead set should be equal to lead set of lead matcher",
@@ -200,6 +208,46 @@ void NumberParserTest::testSeriesMatcher() {
 
         assertEquals("'" + input + "'", cas.expectedOffset, actualOffset);
         assertEquals("'" + input + "'", cas.expectedMaybeMore, actualMaybeMore);
+    }
+}
+
+void NumberParserTest::testAffixPatternMatcher() {
+    IcuTestErrorCode status(*this, "testAffixPatternMatcher");
+
+    IgnorablesMatcher ignorables(unisets::DEFAULT_IGNORABLES);
+    AffixTokenMatcherFactory factory(u"EUR", u"foo", u"bar", {"en", status}, &ignorables, "en");
+
+    static const struct TestCase {
+        bool exactMatch;
+        const char16_t* affixPattern;
+        int32_t expectedMatcherLength;
+        const char16_t* sampleParseableString;
+    } cases[] = {{false, u"-", 1, u"-"},
+                 {false, u"+-%", 5, u"+-%"},
+                 {true, u"+-%", 3, u"+-%"},
+                 {false, u"ab c", 5, u"a    bc"},
+                 {true, u"abc", 3, u"abc"},
+                 //{false, u"hello-to+this%very¤long‰string", 59, u"hello-to+this%very USD long‰string"}
+    };
+
+    for (auto& cas : cases) {
+        UnicodeString affixPattern(cas.affixPattern);
+        UnicodeString sampleParseableString(cas.sampleParseableString);
+        int parseFlags = cas.exactMatch ? PARSE_FLAG_EXACT_AFFIX : 0;
+
+        bool success;
+        AffixPatternMatcher matcher = AffixPatternMatcher::fromAffixPattern(
+                affixPattern, factory, parseFlags, &success, status);
+        assertTrue("Creation should be successful", success);
+
+        // Check that the matcher has the expected number of children
+        assertEquals(affixPattern + " " + cas.exactMatch, cas.expectedMatcherLength, matcher.length());
+
+        // Check that the matcher works on a sample string
+        StringSegment segment(sampleParseableString, 0);
+        ParsedNumber result;
+        matcher.match(segment, result, status);
+        assertEquals(affixPattern + " " + cas.exactMatch, sampleParseableString.length(), result.charEnd);
     }
 }
 

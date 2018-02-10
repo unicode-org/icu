@@ -46,6 +46,11 @@ struct AffixTag {
         {}
 };
 
+class TokenConsumer {
+  public:
+    virtual void consumeToken(AffixPatternType type, UChar32 cp, UErrorCode& status) = 0;
+};
+
 // Exported as U_I18N_API because it is a base class for other exported types
 class U_I18N_API SymbolProvider {
   public:
@@ -179,6 +184,12 @@ class U_I18N_API AffixUtils {
     static UnicodeString
     replaceType(const CharSequence &affixPattern, AffixPatternType type, char16_t replacementChar,
                 UErrorCode &status);
+
+    /**
+     * Iterates over the affix pattern, calling the TokenConsumer for each token.
+     */
+    static void iterateWithConsumer(const CharSequence& affixPattern, TokenConsumer& consumer,
+                                    UErrorCode& status);
 
     /**
      * Returns the next token from the affix pattern.
