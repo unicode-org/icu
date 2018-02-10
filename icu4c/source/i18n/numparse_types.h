@@ -93,7 +93,7 @@ class ParsedNumber {
     /**
      * The currency that got consumed.
      */
-    UnicodeString currencyCode;
+    UChar currencyCode[4];
 
     ParsedNumber();
 

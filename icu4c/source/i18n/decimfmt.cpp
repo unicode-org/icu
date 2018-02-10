@@ -2171,10 +2171,11 @@ int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
                 // determine our locale.
                 const char* loc = fCurrencyPluralInfo->getLocale().getName();
                 ParsePosition ppos(pos);
+                int32_t currMatchLen = 0;
                 UChar curr[4];
                 UErrorCode ec = U_ZERO_ERROR;
                 // Delegate parse of display name => ISO code to Currency
-                uprv_parseCurrency(loc, text, ppos, type, curr, ec);
+                uprv_parseCurrency(loc, text, ppos, type, &currMatchLen, curr, ec);
 
                 // If parse succeeds, populate currency[0]
                 if (U_SUCCESS(ec) && ppos.getIndex() != pos) {
