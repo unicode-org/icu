@@ -48,11 +48,35 @@ enum ParseFlags {
     PARSE_FLAG_PLUS_SIGN_ALLOWED = 0x0400,
 };
 
-//template<typename T>
-//struct MaybeNeedsAdoption {
-//    T* ptr;
-//    bool needsAdoption;
-//};
+
+// TODO: Is this class worthwhile?
+template<int32_t stackCapacity>
+class CompactUnicodeString {
+  public:
+    CompactUnicodeString() {
+        static_assert(stackCapacity > 0, "cannot have zero space on stack");
+        fBuffer[0] = 0;
+    }
+
+    CompactUnicodeString(const UnicodeString& text)
+            : fBuffer(text.length() + 1) {
+        memcpy(fBuffer.getAlias(), text.getBuffer(), sizeof(UChar) * text.length());
+        fBuffer[text.length()] = 0;
+    }
+
+    inline UnicodeString toAliasedUnicodeString() const {
+        return UnicodeString(TRUE, fBuffer.getAlias(), -1);
+    }
+
+    bool operator==(const CompactUnicodeString& other) const {
+        // Use the alias-only constructor and then call UnicodeString operator==
+        return toAliasedUnicodeString() == other.toAliasedUnicodeString();
+    }
+
+  private:
+    MaybeStackArray<UChar, stackCapacity> fBuffer;
+};
+
 
 /**
  * Struct-like class to hold the results of a parsing routine.

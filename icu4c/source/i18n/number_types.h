@@ -16,8 +16,7 @@
 #include "uassert.h"
 #include "unicode/platform.h"
 
-U_NAMESPACE_BEGIN
-namespace number {
+U_NAMESPACE_BEGIN namespace number {
 namespace impl {
 
 // Typedef several enums for brevity and for easier comparison to Java.
@@ -87,15 +86,14 @@ enum AffixPatternType {
 };
 
 enum CompactType {
-    TYPE_DECIMAL,
-    TYPE_CURRENCY
+    TYPE_DECIMAL, TYPE_CURRENCY
 };
 
 
 // TODO: Should this be moved somewhere else, maybe where other ICU classes can use it?
 // Exported as U_I18N_API because it is a base class for other exported types
 class U_I18N_API CharSequence {
-public:
+  public:
     virtual ~CharSequence() = default;
 
     virtual int32_t length() const = 0;
@@ -123,11 +121,19 @@ class U_I18N_API AffixPatternProvider {
     static const int32_t AFFIX_NEGATIVE_SUBPATTERN = 0x200;
     static const int32_t AFFIX_PADDING = 0x400;
 
+    // Convenience compound flags
+    static const int32_t AFFIX_POS_PREFIX = AFFIX_PREFIX;
+    static const int32_t AFFIX_POS_SUFFIX = 0;
+    static const int32_t AFFIX_NEG_PREFIX = AFFIX_PREFIX | AFFIX_NEGATIVE_SUBPATTERN;
+    static const int32_t AFFIX_NEG_SUFFIX = AFFIX_NEGATIVE_SUBPATTERN;
+
     virtual ~AffixPatternProvider() = default;
 
     virtual char16_t charAt(int flags, int i) const = 0;
 
     virtual int length(int flags) const = 0;
+
+    virtual UnicodeString getString(int flags) const = 0;
 
     virtual bool hasCurrencySign() const = 0;
 
@@ -137,7 +143,7 @@ class U_I18N_API AffixPatternProvider {
 
     virtual bool negativeHasMinusSign() const = 0;
 
-    virtual bool containsSymbolType(AffixPatternType, UErrorCode &) const = 0;
+    virtual bool containsSymbolType(AffixPatternType, UErrorCode&) const = 0;
 
     /**
      * True if the pattern has a number placeholder like "0" or "#,##0.00"; false if the pattern does not
@@ -173,8 +179,8 @@ class U_I18N_API Modifier {
      *            formatted.
      * @return The number of characters (UTF-16 code units) that were added to the string builder.
      */
-    virtual int32_t
-    apply(NumberStringBuilder &output, int leftIndex, int rightIndex, UErrorCode &status) const = 0;
+    virtual int32_t apply(NumberStringBuilder& output, int leftIndex, int rightIndex,
+                          UErrorCode& status) const = 0;
 
     /**
      * Gets the length of the prefix. This information can be used in combination with {@link #apply} to extract the
@@ -187,7 +193,7 @@ class U_I18N_API Modifier {
     /**
      * Returns the number of code points in the modifier, prefix plus suffix.
      */
-    virtual int32_t getCodePointCount(UErrorCode &status) const = 0;
+    virtual int32_t getCodePointCount(UErrorCode& status) const = 0;
 
     /**
      * Whether this modifier is strong. If a modifier is strong, it should always be applied immediately and not allowed
@@ -230,7 +236,8 @@ class U_I18N_API MicroPropsGenerator {
      *            The MicroProps instance to populate.
      * @return A MicroProps instance resolved for the quantity.
      */
-    virtual void processQuantity(DecimalQuantity& quantity, MicroProps& micros, UErrorCode& status) const = 0;
+    virtual void processQuantity(DecimalQuantity& quantity, MicroProps& micros,
+                                 UErrorCode& status) const = 0;
 };
 
 /**
@@ -255,24 +262,25 @@ class MultiplierProducer {
 template<typename T>
 class U_I18N_API NullableValue {
   public:
-    NullableValue() : fNull(true) {}
+    NullableValue()
+            : fNull(true) {}
 
-    NullableValue(const NullableValue<T> &other) = default;
+    NullableValue(const NullableValue<T>& other) = default;
 
-    explicit NullableValue(const T &other) {
+    explicit NullableValue(const T& other) {
         fValue = other;
         fNull = false;
     }
 
-    NullableValue<T> &operator=(const NullableValue<T> &other) = default;
+    NullableValue<T>& operator=(const NullableValue<T>& other) = default;
 
-    NullableValue<T> &operator=(const T &other) {
+    NullableValue<T>& operator=(const T& other) {
         fValue = other;
         fNull = false;
         return *this;
     }
 
-    bool operator==(const NullableValue &other) const {
+    bool operator==(const NullableValue& other) const {
         // "fValue == other.fValue" returns UBool, not bool (causes compiler warnings)
         return fNull ? other.fNull : (other.fNull ? false : static_cast<bool>(fValue == other.fValue));
     }
@@ -286,7 +294,7 @@ class U_I18N_API NullableValue {
         return fNull;
     }
 
-    T get(UErrorCode &status) const {
+    T get(UErrorCode& status) const {
         if (fNull) {
             status = U_UNDEFINED_VARIABLE;
         }

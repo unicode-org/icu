@@ -215,8 +215,12 @@ void NumberParserTest::testSeriesMatcher() {
 void NumberParserTest::testCurrencyAnyMatcher() {
     IcuTestErrorCode status(*this, "testCurrencyAnyMatcher");
 
+    UnicodeString currency1(u"IU$");
+    UnicodeString currency2(u"ICU");
+    DecimalFormatSymbols symbols("en", status);
     IgnorablesMatcher ignorables(unisets::DEFAULT_IGNORABLES);
-    AffixTokenMatcherWarehouse warehouse(u"ICU", u"IU$", u"ICU", {"en",status}, &ignorables, "en");
+    Locale locale("en");
+    AffixTokenMatcherWarehouse warehouse(u"ICU", &currency1, &currency2, &symbols, &ignorables, &locale);
     NumberParseMatcher& matcher = warehouse.currency(status);
 
     static const struct TestCase{
@@ -248,8 +252,12 @@ void NumberParserTest::testCurrencyAnyMatcher() {
 void NumberParserTest::testAffixPatternMatcher() {
     IcuTestErrorCode status(*this, "testAffixPatternMatcher");
 
+    UnicodeString currency1(u"foo");
+    UnicodeString currency2(u"bar");
+    DecimalFormatSymbols symbols("en", status);
     IgnorablesMatcher ignorables(unisets::DEFAULT_IGNORABLES);
-    AffixTokenMatcherWarehouse warehouse(u"EUR", u"foo", u"bar", {"en", status}, &ignorables, "en");
+    Locale locale("en");
+    AffixTokenMatcherWarehouse warehouse(u"EUR", &currency1, &currency2, &symbols, &ignorables, &locale);
 
     static const struct TestCase {
         bool exactMatch;
