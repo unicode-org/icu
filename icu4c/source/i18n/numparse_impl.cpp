@@ -32,18 +32,27 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     auto* parser = new NumberParserImpl(parseFlags, true);
     DecimalFormatSymbols symbols(locale, status);
 
-    parser->fLocalMatchers.ignorables = std::move(IgnorablesMatcher(unisets::DEFAULT_IGNORABLES));
+    parser->fLocalMatchers.ignorables = {unisets::DEFAULT_IGNORABLES};
+    IgnorablesMatcher& ignorables = parser->fLocalMatchers.ignorables;
 
-//    MatcherFactory factory = new MatcherFactory();
-//    factory.currency = Currency.getInstance("USD");
-//    factory.symbols = symbols;
-//    factory.ignorables = ignorables;
-//    factory.locale = locale;
-//    factory.parseFlags = parseFlags;
+    UnicodeString currency1(u"IU$");
+    UnicodeString currency2(u"ICU");
 
     ParsedPatternInfo patternInfo;
     PatternParser::parseToPatternInfo(patternString, patternInfo, status);
-//    AffixMatcher.createMatchers(patternInfo, parser, factory, ignorables, parseFlags);
+
+    // The following statement sets up the affix matchers.
+//    AffixMatcherWarehouse warehouse = ;
+
+    parser->fLocalMatchers.affixMatcherWarehouse = std::move(AffixMatcherWarehouse::createAffixMatchers(
+            patternInfo,
+            *parser,
+            AffixTokenMatcherWarehouse(
+                    u"USD", &currency1, &currency2, &symbols, &ignorables, &locale),
+            ignorables,
+            parseFlags,
+            status));
+
 
     Grouper grouper = Grouper::forStrategy(UNUM_GROUPING_AUTO);
     grouper.setLocaleData(patternInfo, locale);

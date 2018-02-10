@@ -29,15 +29,15 @@ public class AffixMatcher implements NumberParseMatcher {
      */
     public static final Comparator<AffixMatcher> COMPARATOR = new Comparator<AffixMatcher>() {
         @Override
-        public int compare(AffixMatcher o1, AffixMatcher o2) {
-            if (length(o1.prefix) != length(o2.prefix)) {
-                return length(o1.prefix) > length(o2.prefix) ? -1 : 1;
-            } else if (length(o1.suffix) != length(o2.suffix)) {
-                return length(o1.suffix) > length(o2.suffix) ? -1 : 1;
-            } else if (!o1.equals(o2)) {
+        public int compare(AffixMatcher lhs, AffixMatcher rhs) {
+            if (length(lhs.prefix) != length(rhs.prefix)) {
+                return length(lhs.prefix) > length(rhs.prefix) ? -1 : 1;
+            } else if (length(lhs.suffix) != length(rhs.suffix)) {
+                return length(lhs.suffix) > length(rhs.suffix) ? -1 : 1;
+            } else if (!lhs.equals(rhs)) {
                 // If the prefix and suffix are the same length, arbitrarily break ties.
                 // We can't return zero unless the elements are equal.
-                return o1.hashCode() > o2.hashCode() ? -1 : 1;
+                return lhs.hashCode() > rhs.hashCode() ? -1 : 1;
             } else {
                 return 0;
             }

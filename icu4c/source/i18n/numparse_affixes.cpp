@@ -17,6 +17,42 @@ using namespace icu::number;
 using namespace icu::number::impl;
 
 
+namespace {
+
+/**
+ * Helper method to return whether the given AffixPatternMatcher equals the given pattern string.
+ * Either both arguments must be null or the pattern string inside the AffixPatternMatcher must equal
+ * the given pattern string.
+ */
+static bool matched(const AffixPatternMatcher* affix, const UnicodeString& patternString) {
+    return (affix == nullptr && patternString.isBogus()) ||
+           (affix != nullptr && affix->getPattern() == patternString);
+}
+
+/**
+ * Helper method to return the length of the given AffixPatternMatcher. Returns 0 for null.
+ */
+static int32_t length(const AffixPatternMatcher* matcher) {
+    return matcher == nullptr ? 0 : matcher->getPattern().length();
+}
+
+/**
+ * Helper method to return whether (1) both lhs and rhs are null/invalid, or (2) if they are both
+ * valid, whether they are equal according to operator==.  Similar to Java Objects.equals()
+ */
+static bool equals(const AffixPatternMatcher* lhs, const AffixPatternMatcher* rhs) {
+    if (lhs == nullptr && rhs == nullptr) {
+        return true;
+    }
+    if (lhs == nullptr || rhs == nullptr) {
+        return false;
+    }
+    return *lhs == *rhs;
+}
+
+}
+
+
 AffixPatternMatcherBuilder::AffixPatternMatcherBuilder(const UnicodeString& pattern,
                                                        AffixTokenMatcherWarehouse& warehouse,
                                                        IgnorablesMatcher* ignorables)
@@ -100,6 +136,9 @@ AffixTokenMatcherWarehouse::AffixTokenMatcherWarehouse(const UChar* currencyCode
           codePointNumBatches(0) {
     utils::copyCurrencyCode(this->currencyCode, currencyCode);
 }
+
+AffixTokenMatcherWarehouse::AffixTokenMatcherWarehouse(
+        AffixTokenMatcherWarehouse&& src) U_NOEXCEPT = default;
 
 AffixTokenMatcherWarehouse::~AffixTokenMatcherWarehouse() {
     // Delete the variable number of batches of code point matchers
@@ -204,79 +243,10 @@ bool AffixPatternMatcher::operator==(const AffixPatternMatcher& other) const {
 }
 
 
-AffixMatcherWarehouse::AffixMatcherWarehouse(const AffixPatternProvider& patternInfo,
-                                             NumberParserImpl& output,
-                                             AffixTokenMatcherWarehouse& warehouse,
-                                             const IgnorablesMatcher& ignorables, parse_flags_t parseFlags,
-                                             UErrorCode& status)
-        : fAffixTokenMatcherWarehouse(std::move(warehouse)) {
-    if (!isInteresting(patternInfo, ignorables, parseFlags, status)) {
-        return;
-    }
+AffixMatcherWarehouse::AffixMatcherWarehouse(AffixTokenMatcherWarehouse& warehouse)
+        : fAffixTokenMatcherWarehouse(std::move(warehouse)) {}
 
-    // The affixes have interesting characters, or we are in strict mode.
-    // Use initial capacity of 6, the highest possible number of AffixMatchers.
-    UnicodeString sb;
-    bool includeUnpaired = 0 != (parseFlags & PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES);
-    UNumberSignDisplay signDisplay = (0 != (parseFlags & PARSE_FLAG_PLUS_SIGN_ALLOWED)) ? UNUM_SIGN_ALWAYS
-                                                                                        : UNUM_SIGN_NEVER;
-
-    int32_t numAffixMatchers = 0;
-    int32_t numAffixPatternMatchers = 0;
-
-    AffixPatternMatcher* posPrefix = nullptr;
-    AffixPatternMatcher* posSuffix = nullptr;
-
-    // Pre-process the affix strings to resolve LDML rules like sign display.
-    for (int8_t signum = 1; signum >= -1; signum--) {
-        // Generate Prefix
-        bool hasPrefix = false;
-        PatternStringUtils::patternInfoToStringBuilder(
-                patternInfo, true, signum, signDisplay, StandardPlural::OTHER, false, sb);
-        fAffixPatternMatchers[numAffixPatternMatchers] = AffixPatternMatcher::fromAffixPattern(
-                sb, warehouse, parseFlags, &hasPrefix, status);
-        AffixPatternMatcher* prefix = hasPrefix ? &fAffixPatternMatchers[numAffixPatternMatchers++]
-                                                : nullptr;
-
-        // Generate Suffix
-        bool hasSuffix = false;
-        PatternStringUtils::patternInfoToStringBuilder(
-                patternInfo, false, signum, signDisplay, StandardPlural::OTHER, false, sb);
-        fAffixPatternMatchers[numAffixPatternMatchers] = AffixPatternMatcher::fromAffixPattern(
-                sb, warehouse, parseFlags, &hasSuffix, status);
-        AffixPatternMatcher* suffix = hasSuffix ? &fAffixPatternMatchers[numAffixPatternMatchers++]
-                                                : nullptr;
-
-        if (signum == 1) {
-            posPrefix = prefix;
-            posSuffix = suffix;
-        } else if (equals(prefix, posPrefix) && equals(suffix, posSuffix)) {
-            // Skip adding these matchers (we already have equivalents)
-            continue;
-        }
-
-        // Flags for setting in the ParsedNumber
-        int flags = (signum == -1) ? FLAG_NEGATIVE : 0;
-
-        // Note: it is indeed possible for posPrefix and posSuffix to both be null.
-        // We still need to add that matcher for strict mode to work.
-        fAffixMatchers[numAffixMatchers++] = {prefix, suffix, flags};
-        if (includeUnpaired && prefix != nullptr && suffix != nullptr) {
-            // The following if statements are designed to prevent adding two identical matchers.
-            if (signum == 1 || equals(prefix, posPrefix)) {
-                fAffixMatchers[numAffixMatchers++] = {prefix, nullptr, flags};
-            }
-            if (signum == 1 || equals(suffix, posSuffix)) {
-                fAffixMatchers[numAffixMatchers++] = {nullptr, suffix, flags};
-            }
-        }
-    }
-
-    // Put the AffixMatchers in order, and then add them to the output.
-    // TODO
-//    Collections.sort(matchers, COMPARATOR);
-//    output.addMatchers(matchers);
-}
+AffixMatcherWarehouse& AffixMatcherWarehouse::operator=(AffixMatcherWarehouse&& src) = default;
 
 bool AffixMatcherWarehouse::isInteresting(const AffixPatternProvider& patternInfo,
                                           const IgnorablesMatcher& ignorables, parse_flags_t parseFlags,
@@ -308,14 +278,97 @@ bool AffixMatcherWarehouse::isInteresting(const AffixPatternProvider& patternInf
     return true;
 }
 
-bool AffixMatcherWarehouse::equals(const AffixPatternMatcher* lhs, const AffixPatternMatcher* rhs) {
-    if (lhs == nullptr && rhs == nullptr) {
-        return true;
+AffixMatcherWarehouse AffixMatcherWarehouse::createAffixMatchers(const AffixPatternProvider& patternInfo,
+                                                                 MutableMatcherCollection& output,
+                                                                 AffixTokenMatcherWarehouse tokenWarehouse,
+                                                                 const IgnorablesMatcher& ignorables,
+                                                                 parse_flags_t parseFlags,
+                                                                 UErrorCode& status) {
+    if (!isInteresting(patternInfo, ignorables, parseFlags, status)) {
+        return {};
     }
-    if (lhs == nullptr || rhs == nullptr) {
-        return false;
+
+    AffixMatcherWarehouse warehouse(tokenWarehouse);
+
+    // The affixes have interesting characters, or we are in strict mode.
+    // Use initial capacity of 6, the highest possible number of AffixMatchers.
+    UnicodeString sb;
+    bool includeUnpaired = 0 != (parseFlags & PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES);
+    UNumberSignDisplay signDisplay = (0 != (parseFlags & PARSE_FLAG_PLUS_SIGN_ALLOWED)) ? UNUM_SIGN_ALWAYS
+                                                                                        : UNUM_SIGN_NEVER;
+
+    int32_t numAffixMatchers = 0;
+    int32_t numAffixPatternMatchers = 0;
+
+    AffixPatternMatcher* posPrefix = nullptr;
+    AffixPatternMatcher* posSuffix = nullptr;
+
+    // Pre-process the affix strings to resolve LDML rules like sign display.
+    for (int8_t signum = 1; signum >= -1; signum--) {
+        // Generate Prefix
+        bool hasPrefix = false;
+        PatternStringUtils::patternInfoToStringBuilder(
+                patternInfo, true, signum, signDisplay, StandardPlural::OTHER, false, sb);
+        warehouse.fAffixPatternMatchers[numAffixPatternMatchers] = AffixPatternMatcher::fromAffixPattern(
+                sb, tokenWarehouse, parseFlags, &hasPrefix, status);
+        AffixPatternMatcher* prefix = hasPrefix
+                                      ? &warehouse.fAffixPatternMatchers[numAffixPatternMatchers++]
+                                      : nullptr;
+
+        // Generate Suffix
+        bool hasSuffix = false;
+        PatternStringUtils::patternInfoToStringBuilder(
+                patternInfo, false, signum, signDisplay, StandardPlural::OTHER, false, sb);
+        warehouse.fAffixPatternMatchers[numAffixPatternMatchers] = AffixPatternMatcher::fromAffixPattern(
+                sb, tokenWarehouse, parseFlags, &hasSuffix, status);
+        AffixPatternMatcher* suffix = hasSuffix
+                                      ? &warehouse.fAffixPatternMatchers[numAffixPatternMatchers++]
+                                      : nullptr;
+
+        if (signum == 1) {
+            posPrefix = prefix;
+            posSuffix = suffix;
+        } else if (equals(prefix, posPrefix) && equals(suffix, posSuffix)) {
+            // Skip adding these matchers (we already have equivalents)
+            continue;
+        }
+
+        // Flags for setting in the ParsedNumber
+        int flags = (signum == -1) ? FLAG_NEGATIVE : 0;
+
+        // Note: it is indeed possible for posPrefix and posSuffix to both be null.
+        // We still need to add that matcher for strict mode to work.
+        warehouse.fAffixMatchers[numAffixMatchers++] = {prefix, suffix, flags};
+        if (includeUnpaired && prefix != nullptr && suffix != nullptr) {
+            // The following if statements are designed to prevent adding two identical matchers.
+            if (signum == 1 || equals(prefix, posPrefix)) {
+                warehouse.fAffixMatchers[numAffixMatchers++] = {prefix, nullptr, flags};
+            }
+            if (signum == 1 || equals(suffix, posSuffix)) {
+                warehouse.fAffixMatchers[numAffixMatchers++] = {nullptr, suffix, flags};
+            }
+        }
     }
-    return *lhs == *rhs;
+
+    // Put the AffixMatchers in order, and then add them to the output.
+    // Since there are at most 9 elements, do a simple-to-implement bubble sort.
+    bool madeChanges;
+    do {
+        madeChanges = false;
+        for (int32_t i = 1; i < numAffixMatchers; i++) {
+            if (warehouse.fAffixMatchers[i - 1].compareTo(warehouse.fAffixMatchers[i]) > 0) {
+                madeChanges = true;
+                AffixMatcher temp = std::move(warehouse.fAffixMatchers[i - 1]);
+                warehouse.fAffixMatchers[i - 1] = std::move(warehouse.fAffixMatchers[i]);
+                warehouse.fAffixMatchers[i] = std::move(temp);
+            }
+        }
+    } while (madeChanges);
+    for (int32_t i = 0; i < numAffixMatchers; i++) {
+        output.addMatcher(warehouse.fAffixMatchers[i]);
+    }
+
+    return warehouse;
 }
 
 
@@ -390,9 +443,15 @@ void AffixMatcher::postProcess(ParsedNumber& result) const {
     }
 }
 
-bool AffixMatcher::matched(const AffixPatternMatcher* affix, const UnicodeString& patternString) {
-    return (affix == nullptr && patternString.isBogus()) ||
-           (affix != nullptr && affix->getPattern() == patternString);
+int8_t AffixMatcher::compareTo(const AffixMatcher& rhs) const {
+    const AffixMatcher& lhs = *this;
+    if (length(lhs.fPrefix) != length(rhs.fPrefix)) {
+        return length(lhs.fPrefix) > length(rhs.fPrefix) ? -1 : 1;
+    } else if (length(lhs.fSuffix) != length(rhs.fSuffix)) {
+        return length(lhs.fSuffix) > length(rhs.fSuffix) ? -1 : 1;
+    } else {
+        return 0;
+    }
 }
 
 
