@@ -78,7 +78,7 @@ public class AffixMatcher implements NumberParseMatcher {
     public static void createMatchers(
             AffixPatternProvider patternInfo,
             NumberParserImpl output,
-            MatcherFactory factory,
+            AffixTokenMatcherFactory factory,
             IgnorablesMatcher ignorables,
             int parseFlags) {
         if (!isInteresting(patternInfo, ignorables, parseFlags)) {

@@ -239,6 +239,20 @@ UnicodeString AffixUtils::replaceType(const CharSequence &affixPattern, AffixPat
     return output;
 }
 
+void AffixUtils::iterateWithConsumer(const CharSequence& affixPattern, TokenConsumer& consumer,
+                                     UErrorCode& status) {
+    if (affixPattern.length() == 0) {
+        return;
+    };
+    AffixTag tag;
+    while (hasNext(tag, affixPattern)) {
+        tag = nextToken(tag, affixPattern, status);
+        if (U_FAILURE(status)) { return; }
+        consumer.consumeToken(tag.type, tag.codePoint, status);
+        if (U_FAILURE(status)) { return; }
+    }
+}
+
 AffixTag AffixUtils::nextToken(AffixTag tag, const CharSequence &patternString, UErrorCode &status) {
     int32_t offset = tag.offset;
     int32_t state = tag.state;

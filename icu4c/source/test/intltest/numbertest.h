@@ -213,6 +213,7 @@ class NumberParserTest : public IntlTest {
     void testLocaleFi();
     void testSeriesMatcher();
     void testCurrencyAnyMatcher();
+    void testAffixPatternMatcher();
     void testGroupingDisabled();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);

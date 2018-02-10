@@ -9,9 +9,10 @@ import org.junit.Test;
 
 import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.parse.AffixPatternMatcher;
+import com.ibm.icu.impl.number.parse.AffixTokenMatcherFactory;
 import com.ibm.icu.impl.number.parse.AnyMatcher;
 import com.ibm.icu.impl.number.parse.IgnorablesMatcher;
-import com.ibm.icu.impl.number.parse.MatcherFactory;
 import com.ibm.icu.impl.number.parse.MinusSignMatcher;
 import com.ibm.icu.impl.number.parse.NumberParserImpl;
 import com.ibm.icu.impl.number.parse.ParsedNumber;
@@ -23,6 +24,7 @@ import com.ibm.icu.impl.number.parse.StringSegment;
 import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache;
 import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.Key;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -227,7 +229,7 @@ public class NumberParserTest {
 
     @Test
     public void testCurrencyAnyMatcher() {
-        MatcherFactory factory = new MatcherFactory();
+        AffixTokenMatcherFactory factory = new AffixTokenMatcherFactory();
         factory.locale = ULocale.ENGLISH;
         CustomSymbolCurrency currency = new CustomSymbolCurrency("ICU", "IU$", "ICU");
         factory.currency = currency;
@@ -253,6 +255,45 @@ public class NumberParserTest {
             assertEquals("Parsing " + input, expectedCurrencyCode, result.currencyCode);
             assertEquals("Whole string on " + input,
                     expectedCurrencyCode == null ? 0 : input.length(),
+                    result.charEnd);
+        }
+    }
+
+    @Test
+    public void testAffixPatternMatcher() {
+        AffixTokenMatcherFactory factory = new AffixTokenMatcherFactory();
+        factory.currency = Currency.getInstance("EUR");
+        factory.symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        factory.ignorables = IgnorablesMatcher.DEFAULT;
+        factory.locale = ULocale.ENGLISH;
+
+        Object[][] cases = {
+                { false, "-", 1, "-" },
+                { false, "+-%", 5, "+-%" },
+                { true, "+-%", 3, "+-%" },
+                { false, "ab c", 5, "a    bc" },
+                { true, "abc", 3, "abc" },
+                { false, "hello-to+this%very¤long‰string", 59, "hello-to+this%very USD long‰string" } };
+
+        for (Object[] cas : cases) {
+            boolean exactMatch = (Boolean) cas[0];
+            String affixPattern = (String) cas[1];
+            int expectedMatcherLength = (Integer) cas[2];
+            String sampleParseableString = (String) cas[3];
+            int parseFlags = exactMatch ? ParsingUtils.PARSE_FLAG_EXACT_AFFIX : 0;
+
+            AffixPatternMatcher matcher = AffixPatternMatcher
+                    .fromAffixPattern(affixPattern, factory, parseFlags);
+
+            // Check that the matcher has the expected number of children
+            assertEquals(affixPattern + " " + exactMatch, expectedMatcherLength, matcher.length());
+
+            // Check that the matcher works on a sample string
+            StringSegment segment = new StringSegment(sampleParseableString, 0);
+            ParsedNumber result = new ParsedNumber();
+            matcher.match(segment, result);
+            assertEquals(affixPattern + " " + exactMatch,
+                    sampleParseableString.length(),
                     result.charEnd);
         }
     }

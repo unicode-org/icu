@@ -74,7 +74,7 @@ public class NumberParserImpl {
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
         IgnorablesMatcher ignorables = IgnorablesMatcher.DEFAULT;
 
-        MatcherFactory factory = new MatcherFactory();
+        AffixTokenMatcherFactory factory = new AffixTokenMatcherFactory();
         factory.currency = Currency.getInstance("USD");
         factory.symbols = symbols;
         factory.ignorables = ignorables;
@@ -195,7 +195,7 @@ public class NumberParserImpl {
 
         NumberParserImpl parser = new NumberParserImpl(parseFlags);
 
-        MatcherFactory factory = new MatcherFactory();
+        AffixTokenMatcherFactory factory = new AffixTokenMatcherFactory();
         factory.currency = currency;
         factory.symbols = symbols;
         factory.ignorables = ignorables;

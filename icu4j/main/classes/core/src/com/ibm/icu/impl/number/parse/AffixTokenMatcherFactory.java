@@ -11,18 +11,18 @@ import com.ibm.icu.util.ULocale;
  *
  * @author sffc
  */
-public class MatcherFactory {
+public class AffixTokenMatcherFactory {
     public Currency currency;
     public DecimalFormatSymbols symbols;
     public IgnorablesMatcher ignorables;
     public ULocale locale;
 
-    public MinusSignMatcher minusSign(boolean allowTrailing) {
-        return MinusSignMatcher.getInstance(symbols, allowTrailing);
+    public MinusSignMatcher minusSign() {
+        return MinusSignMatcher.getInstance(symbols, true);
     }
 
-    public PlusSignMatcher plusSign(boolean allowTrailing) {
-        return PlusSignMatcher.getInstance(symbols, allowTrailing);
+    public PlusSignMatcher plusSign() {
+        return PlusSignMatcher.getInstance(symbols, true);
     }
 
     public PercentMatcher percent() {

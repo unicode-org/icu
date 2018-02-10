@@ -28,7 +28,6 @@ class SymbolMatcher : public NumberParseMatcher, public UMemory {
 
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
-    /** NOTE: This method is not guaranteed to be thread-safe. */
     const UnicodeSet& getLeadCodePoints() override;
 
     virtual bool isDisabled(const ParsedNumber& result) const = 0;

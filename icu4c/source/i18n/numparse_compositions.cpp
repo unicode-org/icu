@@ -87,13 +87,22 @@ void SeriesMatcher::postProcess(ParsedNumber& result) const {
 }
 
 
-ArraySeriesMatcher::ArraySeriesMatcher(NumberParseMatcher** matchers, int32_t matchersLen)
-        : fMatchers(matchers), fMatchersLen(matchersLen) {}
+ArraySeriesMatcher::ArraySeriesMatcher()
+        : fMatchersLen(0) {
+}
+
+ArraySeriesMatcher::ArraySeriesMatcher(MatcherArray& matchers, int32_t matchersLen)
+        : fMatchers(std::move(matchers)), fMatchersLen(matchersLen) {
+}
 
 const UnicodeSet& ArraySeriesMatcher::getLeadCodePoints() {
     // SeriesMatchers are never allowed to start with a Flexible matcher.
     U_ASSERT(!fMatchers[0]->isFlexible());
     return fMatchers[0]->getLeadCodePoints();
+}
+
+int32_t ArraySeriesMatcher::length() const {
+    return fMatchersLen;
 }
 
 const NumberParseMatcher* const* ArraySeriesMatcher::begin() const {
