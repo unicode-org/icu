@@ -1120,8 +1120,79 @@ void RBBITableBuilder::removeColumn(int32_t column) {
     }
 }
 
+/*
+ * findDuplicateState
+ */
+bool RBBITableBuilder::findDuplicateState(int32_t &firstState, int32_t &duplState) {
+    int32_t numStates = fDStates->size();
+    int32_t numCols = fRB->fSetBuilder->getNumCharCategories();
+
+    for (; firstState<numStates-1; ++firstState) {
+        RBBIStateDescriptor *firstSD = (RBBIStateDescriptor *)fDStates->elementAt(firstState);
+        for (duplState=firstState+1; duplState<numStates; ++duplState) {
+            RBBIStateDescriptor *duplSD = (RBBIStateDescriptor *)fDStates->elementAt(duplState);
+            if (firstSD->fAccepting != duplSD->fAccepting ||
+                firstSD->fLookAhead != duplSD->fLookAhead ||
+                firstSD->fTagsIdx   != duplSD->fTagsIdx) {
+                continue;
+            }
+            bool rowsMatch = true;
+            for (int32_t col=0; col < numCols; ++col) {
+                int32_t firstVal = firstSD->fDtran->elementAti(col);
+                int32_t duplVal = duplSD->fDtran->elementAti(col);
+                if (!((firstVal == duplVal) ||
+                        ((firstVal == firstState || firstVal == duplState) &&
+                        (duplVal  == firstState || duplVal  == duplState)))) {
+                    rowsMatch = false;
+                    break;
+                }
+            }
+            if (rowsMatch) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void RBBITableBuilder::removeState(int32_t keepState, int32_t duplState) {
+    U_ASSERT(keepState < duplState);
+    U_ASSERT(duplState < fDStates->size());
+
+    RBBIStateDescriptor *duplSD = (RBBIStateDescriptor *)fDStates->elementAt(duplState);
+    fDStates->removeElementAt(duplState);
+    delete duplSD;
+
+    int32_t numStates = fDStates->size();
+    int32_t numCols = fRB->fSetBuilder->getNumCharCategories();
+    for (int32_t state=0; state<numStates; ++state) {
+        RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(state);
+        for (int32_t col=0; col<numCols; col++) {
+            int32_t existingVal = sd->fDtran->elementAti(col);
+            int32_t newVal = existingVal;
+            if (existingVal == duplState) {
+                existingVal = keepState;
+            } else if (existingVal > duplState) {
+                newVal = existingVal - 1;
+            }
+            sd->fDtran->setElementAt(newVal, col);
+        }
+    }
+}
 
 
+/*
+ * RemoveDuplicateStates
+ */
+void RBBITableBuilder::removeDuplicateStates() {
+    int32_t firstState = 0;
+    int32_t duplicateState = 0;
+    while (findDuplicateState(firstState, duplicateState)) {
+        printf("Removing duplicate states (%d, %d)\n", firstState, duplicateState);
+        removeState(firstState, duplicateState);
+    }
+
+}
 
 //-----------------------------------------------------------------------------
 //

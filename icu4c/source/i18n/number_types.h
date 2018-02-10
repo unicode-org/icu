@@ -31,7 +31,7 @@ typedef UNumberFormatPadPosition PadPosition;
 typedef UNumberCompactStyle CompactStyle;
 
 // ICU4J Equivalent: RoundingUtils.MAX_INT_FRAC_SIG
-static constexpr int32_t kMaxIntFracSig = 100;
+static constexpr int32_t kMaxIntFracSig = 999;
 
 // ICU4J Equivalent: RoundingUtils.DEFAULT_ROUNDING_MODE
 static constexpr RoundingMode kDefaultMode = RoundingMode::UNUM_FOUND_HALFEVEN;
@@ -41,10 +41,6 @@ static constexpr char16_t kFallbackPaddingString[] = u" ";
 
 // ICU4J Equivalent: NumberFormatterImpl.DEFAULT_CURRENCY
 static constexpr char16_t kDefaultCurrency[] = u"XXX";
-
-// FIXME: New error codes:
-static constexpr UErrorCode U_NUMBER_DIGIT_WIDTH_OUTOFBOUNDS_ERROR = U_ILLEGAL_ARGUMENT_ERROR;
-static constexpr UErrorCode U_NUMBER_PADDING_WIDTH_OUTOFBOUNDS_ERROR = U_ILLEGAL_ARGUMENT_ERROR;
 
 // Forward declarations:
 

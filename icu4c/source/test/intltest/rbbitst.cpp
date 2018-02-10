@@ -4469,16 +4469,15 @@ void RBBITest::TestTableRedundancies() {
                 "!!forward; \n"
                 "($s0 | '?')*; \n"
                 "($s1 | $s2 | $s3)*; \n" };
-    RuleBasedBreakIterator *lbi = 
+
+    RuleBasedBreakIterator *lbi =
         (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status);
     //lbi->dumpTables();
-    rules = lbi->getRules();
+    UnicodeString lbRules = lbi->getRules();
     delete lbi;
 
     UParseError pe {};
-    RuleBasedBreakIterator *bi =
-    //         (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status);
-           new RuleBasedBreakIterator(rules, pe, status);
+    RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(lbRules, pe, status);
     assertSuccess(WHERE, status);
     if (U_FAILURE(status)) return;
     bi->dumpTables();

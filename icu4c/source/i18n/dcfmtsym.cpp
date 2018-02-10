@@ -38,6 +38,7 @@
 #include "uresimp.h"
 #include "ureslocs.h"
 #include "charstr.h"
+#include "uassert.h"
 
 // *****************************************************************************
 // class DecimalFormatSymbols
@@ -165,6 +166,7 @@ DecimalFormatSymbols::operator=(const DecimalFormatSymbols& rhs)
         uprv_strcpy(actualLocale, rhs.actualLocale);
         fIsCustomCurrencySymbol = rhs.fIsCustomCurrencySymbol; 
         fIsCustomIntlCurrencySymbol = rhs.fIsCustomIntlCurrencySymbol; 
+        fCodePointZero = rhs.fCodePointZero;
     }
     return *this;
 }
@@ -196,6 +198,7 @@ DecimalFormatSymbols::operator==(const DecimalFormatSymbols& that) const
             return FALSE;
         }
     }
+    // No need to check fCodePointZero since it is based on fSymbols
     return locale == that.locale &&
         uprv_strcmp(validLocale, that.validLocale) == 0 &&
         uprv_strcmp(actualLocale, that.actualLocale) == 0;
@@ -433,6 +436,20 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
     // Let the monetary number separators equal the default number separators if necessary.
     sink.resolveMissingMonetarySeparators(fSymbols);
 
+    // Resolve codePointZero
+    const UnicodeString& stringZero = getConstDigitSymbol(0);
+    UChar32 tempCodePointZero = stringZero.char32At(0);
+    if (u_isdigit(tempCodePointZero) && stringZero.countChar32() == 1) {
+        for (int32_t i=0; i<=9; i++) {
+            const UnicodeString& stringDigit = getConstDigitSymbol(i);
+            if (stringDigit.char32At(0) != tempCodePointZero + i || stringDigit.countChar32() != 1) {
+                tempCodePointZero = -1;
+                break;
+            }
+        }
+    }
+    fCodePointZero = tempCodePointZero;
+
     // Obtain currency data from the currency API.  This is strictly
     // for backward compatibility; we don't use DecimalFormatSymbols
     // for currency data anymore.
@@ -530,6 +547,8 @@ DecimalFormatSymbols::initialize() {
     fSymbols[kExponentMultiplicationSymbol] = (UChar)0xd7; // 'x' multiplication symbol for exponents
     fIsCustomCurrencySymbol = FALSE; 
     fIsCustomIntlCurrencySymbol = FALSE;
+    fCodePointZero = 0x30;
+    U_ASSERT(fCodePointZero == fSymbols[kZeroDigitSymbol].char32At(0));
 
 }
 
