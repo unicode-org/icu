@@ -7,14 +7,15 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
 /**
- * @author sffc
+ * Small helper class that generates matchers for SeriesMatcher.
  *
+ * @author sffc
  */
 public class MatcherFactory {
-    Currency currency;
-    DecimalFormatSymbols symbols;
-    IgnorablesMatcher ignorables;
-    ULocale locale;
+    public Currency currency;
+    public DecimalFormatSymbols symbols;
+    public IgnorablesMatcher ignorables;
+    public ULocale locale;
 
     public MinusSignMatcher minusSign(boolean allowTrailing) {
         return MinusSignMatcher.getInstance(symbols, allowTrailing);
@@ -34,8 +35,8 @@ public class MatcherFactory {
 
     public AnyMatcher currency() {
         AnyMatcher any = new AnyMatcher();
-        any.addMatcher(CurrencyMatcher.getInstance(currency, locale));
-        any.addMatcher(CurrencyTrieMatcher.getInstance(locale));
+        any.addMatcher(CurrencyCustomMatcher.getInstance(currency, locale));
+        any.addMatcher(CurrencyNamesMatcher.getInstance(locale));
         any.freeze();
         return any;
     }

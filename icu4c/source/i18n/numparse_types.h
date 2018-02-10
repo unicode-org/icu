@@ -244,8 +244,6 @@ class StringSegment : public UMemory, public ::icu::number::impl::CharSequence {
  */
 class NumberParseMatcher {
   public:
-    virtual ~NumberParseMatcher() = default;
-
     /**
      * Matchers can override this method to return true to indicate that they are optional and can be run
      * repeatedly. Used by SeriesMatcher, primarily in the context of IgnorablesMatcher.
@@ -258,6 +256,8 @@ class NumberParseMatcher {
      * Runs this matcher starting at the beginning of the given StringSegment. If this matcher finds
      * something interesting in the StringSegment, it should update the offset of the StringSegment
      * corresponding to how many chars were matched.
+     *
+     * This method is thread-safe.
      *
      * @param segment
      *            The StringSegment to match against. Matches always start at the beginning of the
@@ -275,9 +275,12 @@ class NumberParseMatcher {
      * return value is used to skip this matcher unless a segment begins with a char in this set. To make
      * this matcher always run, return {@link UnicodeSet#ALL_CODE_POINTS}.
      *
-     * The returned UnicodeSet needs adoption!
+     * The returned UnicodeSet does not need adoption and is guaranteed to be alive for as long as the
+     * object that returned it.
+     *
+     * This method is NOT thread-safe.
      */
-    virtual const UnicodeSet* getLeadCodePoints() const = 0;
+    virtual const UnicodeSet& getLeadCodePoints() = 0;
 
     /**
      * Method called at the end of a parse, after all matchers have failed to consume any more chars.
@@ -290,6 +293,13 @@ class NumberParseMatcher {
     virtual void postProcess(ParsedNumber&) const {
         // Default implementation: no-op
     };
+
+  protected:
+    // No construction except by subclasses!
+    NumberParseMatcher() = default;
+
+    // Optional ownership of the leadCodePoints set
+    LocalPointer<const UnicodeSet> fLocalLeadCodePoints;
 };
 
 

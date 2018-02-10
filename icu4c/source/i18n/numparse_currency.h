@@ -8,6 +8,7 @@
 #define __NUMPARSE_CURRENCY_H__
 
 #include "numparse_types.h"
+#include "numparse_compositions.h"
 #include "charstr.h"
 
 U_NAMESPACE_BEGIN namespace numparse {
@@ -29,13 +30,52 @@ class CurrencyNamesMatcher : public NumberParseMatcher, public UMemory {
 
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
-    const UnicodeSet* getLeadCodePoints() const override;
+    const UnicodeSet& getLeadCodePoints() override;
 
   private:
     // We could use Locale instead of CharString here, but
     // Locale has a non-trivial default constructor.
     CharString fLocaleName;
 
+};
+
+
+class CurrencyCustomMatcher : public NumberParseMatcher, public UMemory {
+  public:
+    CurrencyCustomMatcher(const char16_t* currencyCode, const UnicodeString& currency1,
+                          const UnicodeString& currency2);
+
+    bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
+
+    const UnicodeSet& getLeadCodePoints() override;
+
+  private:
+    UChar fCurrencyCode[4];
+    UnicodeString fCurrency1;
+    UnicodeString fCurrency2;
+};
+
+
+/**
+ * An implementation of AnyMatcher, allowing for either currency data or locale currency matches.
+ */
+class CurrencyAnyMatcher : public AnyMatcher, public UMemory {
+  public:
+    /** Calls std::move on the two arguments. */
+    CurrencyAnyMatcher(CurrencyNamesMatcher namesMatcher, CurrencyCustomMatcher customMatcher);
+
+    const UnicodeSet& getLeadCodePoints() override;
+
+  protected:
+    const NumberParseMatcher* const* begin() const override;
+
+    const NumberParseMatcher* const* end() const override;
+
+  private:
+    CurrencyNamesMatcher fNamesMatcher;
+    CurrencyCustomMatcher fCustomMatcher;
+
+    const NumberParseMatcher* fMatcherArray[2];
 };
 
 

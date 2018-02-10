@@ -32,7 +32,7 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     auto* parser = new NumberParserImpl(parseFlags, true);
     DecimalFormatSymbols symbols(locale, status);
 
-    parser->fLocalMatchers.ignorables = {unisets::DEFAULT_IGNORABLES};
+    parser->fLocalMatchers.ignorables = std::move(IgnorablesMatcher(unisets::DEFAULT_IGNORABLES));
 
 //    MatcherFactory factory = new MatcherFactory();
 //    factory.currency = Currency.getInstance("USD");
@@ -78,7 +78,7 @@ NumberParserImpl::~NumberParserImpl() {
     fNumMatchers = 0;
 }
 
-void NumberParserImpl::addMatcher(const NumberParseMatcher& matcher) {
+void NumberParserImpl::addMatcher(NumberParseMatcher& matcher) {
     if (fNumMatchers + 1 > fMatchers.getCapacity()) {
         fMatchers.resize(fNumMatchers * 2, fNumMatchers);
         if (fComputeLeads) {
@@ -97,17 +97,17 @@ void NumberParserImpl::addMatcher(const NumberParseMatcher& matcher) {
     fNumMatchers++;
 }
 
-void NumberParserImpl::addLeadCodePointsForMatcher(const NumberParseMatcher& matcher) {
-    const UnicodeSet* leadCodePoints = matcher.getLeadCodePoints();
+void NumberParserImpl::addLeadCodePointsForMatcher(NumberParseMatcher& matcher) {
+    const UnicodeSet& leadCodePoints = matcher.getLeadCodePoints();
     // TODO: Avoid the clone operation here.
     if (0 != (fParseFlags & PARSE_FLAG_IGNORE_CASE)) {
-        UnicodeSet* copy = static_cast<UnicodeSet*>(leadCodePoints->cloneAsThawed());
-        delete leadCodePoints;
+        auto* copy = dynamic_cast<UnicodeSet*>(leadCodePoints.cloneAsThawed());
         copy->closeOver(USET_ADD_CASE_MAPPINGS);
         copy->freeze();
         fLeads[fNumMatchers] = copy;
     } else {
-        fLeads[fNumMatchers] = leadCodePoints;
+        // FIXME: new here because we still take ownership
+        fLeads[fNumMatchers] = new UnicodeSet(leadCodePoints);
     }
 }
 

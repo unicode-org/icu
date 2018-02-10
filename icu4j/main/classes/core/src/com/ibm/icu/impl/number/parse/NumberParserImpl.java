@@ -95,7 +95,7 @@ public class NumberParserImpl {
         parser.addMatcher(InfinityMatcher.getInstance(symbols));
         parser.addMatcher(PaddingMatcher.getInstance("@"));
         parser.addMatcher(ScientificMatcher.getInstance(symbols, grouper));
-        parser.addMatcher(CurrencyTrieMatcher.getInstance(locale));
+        parser.addMatcher(CurrencyNamesMatcher.getInstance(locale));
         parser.addMatcher(new RequireNumberMatcher());
 
         parser.freeze();
@@ -213,8 +213,8 @@ public class NumberParserImpl {
         ////////////////////////
 
         if (parseCurrency || patternInfo.hasCurrencySign()) {
-            parser.addMatcher(CurrencyMatcher.getInstance(currency, locale));
-            parser.addMatcher(CurrencyTrieMatcher.getInstance(locale));
+            parser.addMatcher(CurrencyCustomMatcher.getInstance(currency, locale));
+            parser.addMatcher(CurrencyNamesMatcher.getInstance(locale));
         }
 
         ///////////////////////////////

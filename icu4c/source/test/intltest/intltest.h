@@ -16,6 +16,7 @@
 // The following includes utypes.h, uobject.h and unistr.h
 #include "unicode/fmtable.h"
 #include "unicode/testlog.h"
+#include "unicode/uniset.h"
 
 U_NAMESPACE_USE
 
@@ -295,6 +296,7 @@ public:
     UBool assertEquals(const char* message, int64_t expected, int64_t actual);
     UBool assertEquals(const char* message, double expected, double actual);
     UBool assertEquals(const char* message, UErrorCode expected, UErrorCode actual);
+    UBool assertEquals(const char* message, const UnicodeSet& expected, const UnicodeSet& actual);
 #if !UCONFIG_NO_FORMATTING
     UBool assertEquals(const char* message, const Formattable& expected,
                        const Formattable& actual, UBool possibleDataError=FALSE);
@@ -312,6 +314,7 @@ public:
     UBool assertEquals(const UnicodeString& message, int64_t expected, int64_t actual);
     UBool assertEquals(const UnicodeString& message, double expected, double actual);
     UBool assertEquals(const UnicodeString& message, UErrorCode expected, UErrorCode actual);
+    UBool assertEquals(const UnicodeString& message, const UnicodeSet& expected, const UnicodeSet& actual);
 
     virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ); // overide !
 

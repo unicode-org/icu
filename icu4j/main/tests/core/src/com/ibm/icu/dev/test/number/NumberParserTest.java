@@ -7,8 +7,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.parse.AnyMatcher;
 import com.ibm.icu.impl.number.parse.IgnorablesMatcher;
+import com.ibm.icu.impl.number.parse.MatcherFactory;
 import com.ibm.icu.impl.number.parse.MinusSignMatcher;
 import com.ibm.icu.impl.number.parse.NumberParserImpl;
 import com.ibm.icu.impl.number.parse.ParsedNumber;
@@ -219,6 +222,38 @@ public class NumberParserTest {
 
             assertEquals("'" + input + "'", expectedOffset, actualOffset);
             assertEquals("'" + input + "'", expectedMaybeMore, actualMaybeMore);
+        }
+    }
+
+    @Test
+    public void testCurrencyAnyMatcher() {
+        MatcherFactory factory = new MatcherFactory();
+        factory.locale = ULocale.ENGLISH;
+        CustomSymbolCurrency currency = new CustomSymbolCurrency("ICU", "IU$", "ICU");
+        factory.currency = currency;
+        AnyMatcher matcher = factory.currency();
+
+        Object[][] cases = new Object[][] {
+                { "", null },
+                { "FOO", null },
+                { "USD", "USD" },
+                { "$", "USD" },
+                { "US dollars", "USD" },
+                { "eu", null },
+                { "euros", "EUR" },
+                { "ICU", "ICU" },
+                { "IU$", "ICU" } };
+        for (Object[] cas : cases) {
+            String input = (String) cas[0];
+            String expectedCurrencyCode = (String) cas[1];
+
+            StringSegment segment = new StringSegment(input, 0);
+            ParsedNumber result = new ParsedNumber();
+            matcher.match(segment, result);
+            assertEquals("Parsing " + input, expectedCurrencyCode, result.currencyCode);
+            assertEquals("Whole string on " + input,
+                    expectedCurrencyCode == null ? 0 : input.length(),
+                    result.charEnd);
         }
     }
 

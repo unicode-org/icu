@@ -27,7 +27,7 @@ class DecimalMatcher : public NumberParseMatcher, public UMemory {
     bool
     match(StringSegment& segment, ParsedNumber& result, int8_t exponentSign, UErrorCode& status) const;
 
-    const UnicodeSet* getLeadCodePoints() const override;
+    const UnicodeSet& getLeadCodePoints() override;
 
   private:
     /** If true, only accept strings whose grouping sizes match the locale */
@@ -56,7 +56,7 @@ class DecimalMatcher : public NumberParseMatcher, public UMemory {
     const UnicodeSet* leadSet;
 
     // Make this class the owner of a few objects that could be allocated.
-    // The first two LocalPointers are used for assigning ownership only.
+    // The first three LocalPointers are used for assigning ownership only.
     LocalPointer<const UnicodeSet> fLocalDecimalUniSet;
     LocalPointer<const UnicodeSet> fLocalSeparatorSet;
     LocalArray<const UnicodeString> fLocalDigitStrings;

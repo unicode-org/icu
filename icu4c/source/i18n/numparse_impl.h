@@ -24,7 +24,7 @@ class NumberParserImpl {
     static NumberParserImpl* createSimpleParser(const Locale& locale, const UnicodeString& patternString,
                                                 parse_flags_t parseFlags, UErrorCode& status);
 
-    void addMatcher(const NumberParseMatcher& matcher);
+    void addMatcher(NumberParseMatcher& matcher);
 
     void freeze();
 
@@ -62,7 +62,7 @@ class NumberParserImpl {
 
     NumberParserImpl(parse_flags_t parseFlags, bool computeLeads);
 
-    void addLeadCodePointsForMatcher(const NumberParseMatcher& matcher);
+    void addLeadCodePointsForMatcher(NumberParseMatcher& matcher);
 
     void parseGreedyRecursive(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const;
 

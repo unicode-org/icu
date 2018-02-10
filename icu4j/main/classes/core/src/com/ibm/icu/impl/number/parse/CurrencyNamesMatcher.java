@@ -11,21 +11,24 @@ import com.ibm.icu.util.Currency.CurrencyStringInfo;
 import com.ibm.icu.util.ULocale;
 
 /**
- * @author sffc
+ * Matches currencies according to all available strings in locale data.
  *
+ * The implementation of this class is different between J and C. See #13584 for a follow-up.
+ *
+ * @author sffc
  */
-public class CurrencyTrieMatcher implements NumberParseMatcher {
+public class CurrencyNamesMatcher implements NumberParseMatcher {
 
     private final TextTrieMap<CurrencyStringInfo> longNameTrie;
     private final TextTrieMap<CurrencyStringInfo> symbolTrie;
 
-    public static CurrencyTrieMatcher getInstance(ULocale locale) {
+    public static CurrencyNamesMatcher getInstance(ULocale locale) {
         // TODO: Pre-compute some of the more popular locales?
-        return new CurrencyTrieMatcher(locale);
+        return new CurrencyNamesMatcher(locale);
     }
 
-    private CurrencyTrieMatcher(ULocale locale) {
-        // TODO: Currency trie does not currently have an option for case folding.  It defaults to use
+    private CurrencyNamesMatcher(ULocale locale) {
+        // TODO: Currency trie does not currently have an option for case folding. It defaults to use
         // case folding on long-names but not symbols.
         longNameTrie = Currency.getParsingTrie(locale, Currency.LONG_NAME);
         symbolTrie = Currency.getParsingTrie(locale, Currency.SYMBOL_NAME);
@@ -55,6 +58,8 @@ public class CurrencyTrieMatcher implements NumberParseMatcher {
         UnicodeSet leadCodePoints = new UnicodeSet();
         longNameTrie.putLeadCodePoints(leadCodePoints);
         symbolTrie.putLeadCodePoints(leadCodePoints);
+        // Always apply case mapping closure for currencies
+        leadCodePoints.closeOver(UnicodeSet.ADD_CASE_MAPPINGS);
         return leadCodePoints.freeze();
     }
 

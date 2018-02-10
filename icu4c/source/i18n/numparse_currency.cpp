@@ -9,10 +9,21 @@
 #include "numparse_currency.h"
 #include "ucurrimp.h"
 #include "unicode/errorcode.h"
+#include "numparse_utils.h"
 
 using namespace icu;
 using namespace icu::numparse;
 using namespace icu::numparse::impl;
+
+
+namespace {
+
+inline void copyCurrencyCode(UChar* dest, const UChar* src) {
+    uprv_memcpy(dest, src, sizeof(UChar) * 3);
+    dest[3] = 0;
+}
+
+}
 
 
 CurrencyNamesMatcher::CurrencyNamesMatcher(const Locale& locale, UErrorCode& status)
@@ -52,15 +63,84 @@ bool CurrencyNamesMatcher::match(StringSegment& segment, ParsedNumber& result, U
     return partialMatch;
 }
 
-const UnicodeSet* CurrencyNamesMatcher::getLeadCodePoints() const {
-    ErrorCode status;
-    UnicodeSet* leadCodePoints = new UnicodeSet();
-    uprv_currencyLeads(fLocaleName.data(), *leadCodePoints, status);
-    // Always apply case mapping closure for currencies
-    leadCodePoints->closeOver(USET_ADD_CASE_MAPPINGS);
-    leadCodePoints->freeze();
+const UnicodeSet& CurrencyNamesMatcher::getLeadCodePoints() {
+    if (fLocalLeadCodePoints.isNull()) {
+        ErrorCode status;
+        auto* leadCodePoints = new UnicodeSet();
+        uprv_currencyLeads(fLocaleName.data(), *leadCodePoints, status);
+        // Always apply case mapping closure for currencies
+        leadCodePoints->closeOver(USET_ADD_CASE_MAPPINGS);
+        leadCodePoints->freeze();
+        fLocalLeadCodePoints.adoptInstead(leadCodePoints);
+    }
+    return *fLocalLeadCodePoints;
+}
 
-    return leadCodePoints;
+
+CurrencyCustomMatcher::CurrencyCustomMatcher(const char16_t* currencyCode, const UnicodeString& currency1,
+                                             const UnicodeString& currency2)
+        : fCurrency1(currency1), fCurrency2(currency2) {
+    copyCurrencyCode(fCurrencyCode, currencyCode);
+}
+
+bool CurrencyCustomMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCode&) const {
+    if (result.currencyCode[0] != 0) {
+        return false;
+    }
+
+    int overlap1 = segment.getCommonPrefixLength(fCurrency1);
+    if (overlap1 == fCurrency1.length()) {
+        copyCurrencyCode(result.currencyCode, fCurrencyCode);
+        segment.adjustOffset(overlap1);
+        result.setCharsConsumed(segment);
+    }
+
+    int overlap2 = segment.getCommonPrefixLength(fCurrency2);
+    if (overlap2 == fCurrency2.length()) {
+        copyCurrencyCode(result.currencyCode, fCurrencyCode);
+        segment.adjustOffset(overlap2);
+        result.setCharsConsumed(segment);
+    }
+
+    return overlap1 == segment.length() || overlap2 == segment.length();
+}
+
+const UnicodeSet& CurrencyCustomMatcher::getLeadCodePoints() {
+    if (fLocalLeadCodePoints.isNull()) {
+        auto* leadCodePoints = new UnicodeSet();
+        utils::putLeadCodePoint(fCurrency1, leadCodePoints);
+        utils::putLeadCodePoint(fCurrency2, leadCodePoints);
+        leadCodePoints->freeze();
+        fLocalLeadCodePoints.adoptInstead(leadCodePoints);
+    }
+    return *fLocalLeadCodePoints;
+}
+
+
+CurrencyAnyMatcher::CurrencyAnyMatcher(CurrencyNamesMatcher namesMatcher,
+                                       CurrencyCustomMatcher customMatcher)
+        : fNamesMatcher(std::move(namesMatcher)), fCustomMatcher(std::move(customMatcher)) {
+    fMatcherArray[0] = &fNamesMatcher;
+    fMatcherArray[1] = &fCustomMatcher;
+}
+
+const UnicodeSet& CurrencyAnyMatcher::getLeadCodePoints() {
+    if (fLocalLeadCodePoints.isNull()) {
+        auto* leadCodePoints = new UnicodeSet();
+        leadCodePoints->addAll(fNamesMatcher.getLeadCodePoints());
+        leadCodePoints->addAll(fCustomMatcher.getLeadCodePoints());
+        leadCodePoints->freeze();
+        fLocalLeadCodePoints.adoptInstead(leadCodePoints);
+    }
+    return *fLocalLeadCodePoints;
+}
+
+const NumberParseMatcher* const* CurrencyAnyMatcher::begin() const {
+    return fMatcherArray;
+}
+
+const NumberParseMatcher* const* CurrencyAnyMatcher::end() const {
+    return fMatcherArray + 2;
 }
 
 

@@ -291,22 +291,25 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
     return segment.length() == 0 || hasPartialPrefix;
 }
 
-const UnicodeSet* DecimalMatcher::getLeadCodePoints() const {
+const UnicodeSet& DecimalMatcher::getLeadCodePoints() {
     if (fLocalDigitStrings.isNull() && leadSet != nullptr) {
-        return new UnicodeSet(*leadSet);
+        return *leadSet;
     }
 
-    auto* leadCodePoints = new UnicodeSet();
-    // Assumption: the sets are all single code points.
-    leadCodePoints->addAll(*unisets::get(unisets::DIGITS));
-    leadCodePoints->addAll(*separatorSet);
-    if (!fLocalDigitStrings.isNull()) {
-        for (int i = 0; i < 10; i++) {
-            utils::putLeadCodePoint(fLocalDigitStrings[i], leadCodePoints);
+    if (fLocalLeadCodePoints.isNull()) {
+        auto* leadCodePoints = new UnicodeSet();
+        // Assumption: the sets are all single code points.
+        leadCodePoints->addAll(*unisets::get(unisets::DIGITS));
+        leadCodePoints->addAll(*separatorSet);
+        if (!fLocalDigitStrings.isNull()) {
+            for (int i = 0; i < 10; i++) {
+                utils::putLeadCodePoint(fLocalDigitStrings[i], leadCodePoints);
+            }
         }
+        leadCodePoints->freeze();
+        fLocalLeadCodePoints.adoptInstead(leadCodePoints);
     }
-    leadCodePoints->freeze();
-    return leadCodePoints;
+    return *fLocalLeadCodePoints;
 }
 
 
