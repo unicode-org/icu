@@ -215,7 +215,7 @@ void NumberParserTest::testAffixPatternMatcher() {
     IcuTestErrorCode status(*this, "testAffixPatternMatcher");
 
     IgnorablesMatcher ignorables(unisets::DEFAULT_IGNORABLES);
-    AffixTokenMatcherFactory factory(u"EUR", u"foo", u"bar", {"en", status}, &ignorables, "en");
+    AffixTokenMatcherWarehouse warehouse(u"EUR", u"foo", u"bar", {"en", status}, &ignorables, "en");
 
     static const struct TestCase {
         bool exactMatch;
@@ -237,7 +237,7 @@ void NumberParserTest::testAffixPatternMatcher() {
 
         bool success;
         AffixPatternMatcher matcher = AffixPatternMatcher::fromAffixPattern(
-                affixPattern, factory, parseFlags, &success, status);
+                affixPattern, warehouse, parseFlags, &success, status);
         assertTrue("Creation should be successful", success);
 
         // Check that the matcher has the expected number of children

@@ -19,31 +19,6 @@ namespace impl {
 class AffixPatternMatcherBuilder;
 class AffixPatternMatcher;
 
-class AffixTokenMatcherFactory {
-  public:
-    AffixTokenMatcherFactory(const UChar* currencyCode, const UnicodeString& currency1,
-                             const UnicodeString& currency2, const DecimalFormatSymbols& dfs,
-                             IgnorablesMatcher* ignorables, const Locale& locale);
-
-  private:
-    UChar currencyCode[4];
-    const UnicodeString& currency1;
-    const UnicodeString& currency2;
-    const DecimalFormatSymbols& dfs;
-    IgnorablesMatcher* ignorables;
-    const Locale locale;
-
-    // NOTE: These are default-constructed and should not be used until initialized.
-    MinusSignMatcher minusSign;
-    PlusSignMatcher plusSign;
-    PercentMatcher percent;
-    PermilleMatcher permille;
-    CurrencyAnyMatcher currency;
-
-    friend class AffixPatternMatcherBuilder;
-    friend class AffixPatternMatcher;
-};
-
 
 class CodePointMatcher : public NumberParseMatcher, public UMemory {
   public:
@@ -60,9 +35,58 @@ class CodePointMatcher : public NumberParseMatcher, public UMemory {
 };
 
 
+/**
+ * Small helper class that generates matchers for individual tokens for AffixPatternMatcher.
+ *
+ * In Java, this is called AffixTokenMatcherFactory (a "factory"). However, in C++, it is called a
+ * "warehouse", because in addition to generating the matchers, it also retains ownership of them. The
+ * warehouse must stay in scope for the whole lifespan of the AffixPatternMatcher that uses matchers from
+ * the warehouse.
+ *
+ * @author sffc
+ */
+class AffixTokenMatcherWarehouse {
+  private:
+    static constexpr int32_t CODE_POINT_STACK_CAPACITY = 5; // Number of entries directly on the stack
+    static constexpr int32_t CODE_POINT_BATCH_SIZE = 10; // Number of entries per heap allocation
+
+  public:
+    AffixTokenMatcherWarehouse(const UChar* currencyCode, const UnicodeString& currency1,
+                               const UnicodeString& currency2, const DecimalFormatSymbols& dfs,
+                               IgnorablesMatcher* ignorables, const Locale& locale);
+
+    ~AffixTokenMatcherWarehouse();
+
+    CodePointMatcher& nextCodePointMatcher(UChar32 cp);
+
+  private:
+    UChar currencyCode[4];
+    const UnicodeString& currency1;
+    const UnicodeString& currency2;
+    const DecimalFormatSymbols& dfs;
+    IgnorablesMatcher* ignorables;
+    const Locale locale;
+
+    // NOTE: These are default-constructed and should not be used until initialized.
+    MinusSignMatcher minusSign;
+    PlusSignMatcher plusSign;
+    PercentMatcher percent;
+    PermilleMatcher permille;
+    CurrencyAnyMatcher currency;
+
+    CodePointMatcher codePoints[CODE_POINT_STACK_CAPACITY]; // By value
+    MaybeStackArray<CodePointMatcher*, 3> codePointsOverflow; // On heap in "batches"
+    int32_t codePointCount; // Total for both the ones by value and on heap
+    int32_t codePointNumBatches; // Number of batches in codePointsOverflow
+
+    friend class AffixPatternMatcherBuilder;
+    friend class AffixPatternMatcher;
+};
+
+
 class AffixPatternMatcherBuilder : public ::icu::number::impl::TokenConsumer {
   public:
-    AffixPatternMatcherBuilder(const UnicodeString& pattern, AffixTokenMatcherFactory& factory,
+    AffixPatternMatcherBuilder(const UnicodeString& pattern, AffixTokenMatcherWarehouse& warehouse,
                                IgnorablesMatcher* ignorables);
 
     void consumeToken(::icu::number::impl::AffixPatternType type, UChar32 cp, UErrorCode& status) override;
@@ -75,11 +99,8 @@ class AffixPatternMatcherBuilder : public ::icu::number::impl::TokenConsumer {
     int32_t fMatchersLen;
     int32_t fLastTypeOrCp;
 
-    LocalArray<CodePointMatcher> fCodePointMatchers;
-    int32_t fCodePointMatchersLen;
-
     const UnicodeString& fPattern;
-    AffixTokenMatcherFactory& fFactory;
+    AffixTokenMatcherWarehouse& fWarehouse;
     IgnorablesMatcher* fIgnorables;
 
     void addMatcher(NumberParseMatcher& matcher);
@@ -89,20 +110,16 @@ class AffixPatternMatcherBuilder : public ::icu::number::impl::TokenConsumer {
 class AffixPatternMatcher : public ArraySeriesMatcher {
   public:
     static AffixPatternMatcher fromAffixPattern(const UnicodeString& affixPattern,
-                                                AffixTokenMatcherFactory& factory,
+                                                AffixTokenMatcherWarehouse& warehouse,
                                                 parse_flags_t parseFlags, bool* success,
                                                 UErrorCode& status);
 
   private:
     UnicodeString fPattern;
 
-    // We need to own the variable number of CodePointMatchers.
-    LocalArray<CodePointMatcher> fCodePointMatchers;
-
     AffixPatternMatcher() = default;  // WARNING: Leaves the object in an unusable state
 
-    AffixPatternMatcher(MatcherArray& matchers, int32_t matchersLen, const UnicodeString& pattern,
-                        CodePointMatcher* codePointMatchers);
+    AffixPatternMatcher(MatcherArray& matchers, int32_t matchersLen, const UnicodeString& pattern);
 
     friend class AffixPatternMatcherBuilder;
 };
