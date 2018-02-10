@@ -12,6 +12,7 @@
 #include "numparse_symbols.h"
 #include "numparse_scientific.h"
 #include "unicode/uniset.h"
+#include "numparse_currency.h"
 
 U_NAMESPACE_BEGIN namespace numparse {
 namespace impl {
@@ -43,7 +44,7 @@ class NumberParserImpl {
     bool fComputeLeads;
     bool fFrozen = false;
 
-    // WARNING: All of these matchers start in an uninitialized state.
+    // WARNING: All of these matchers start in an undefined state (default-constructed).
     // You must use an assignment operator on them before using.
     struct {
         IgnorablesMatcher ignorables;
@@ -56,9 +57,12 @@ class NumberParserImpl {
         PlusSignMatcher plusSign;
         DecimalMatcher decimal;
         ScientificMatcher scientific;
+        CurrencyNamesMatcher currencyNames;
     } fLocalMatchers;
 
     NumberParserImpl(parse_flags_t parseFlags, bool computeLeads);
+
+    void addLeadCodePointsForMatcher(const NumberParseMatcher& matcher);
 
     void parseGreedyRecursive(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const;
 

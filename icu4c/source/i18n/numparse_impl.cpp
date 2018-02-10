@@ -58,7 +58,7 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     parser->addMatcher(parser->fLocalMatchers.infinity = {symbols});
     parser->addMatcher(parser->fLocalMatchers.padding = {u"@"});
     parser->addMatcher(parser->fLocalMatchers.scientific = {symbols, grouper});
-//    parser.addMatcher(CurrencyTrieMatcher.getInstance(locale));
+    parser->addMatcher(parser->fLocalMatchers.currencyNames = {locale, status});
 //    parser.addMatcher(new RequireNumberMatcher());
 
     parser->freeze();
@@ -91,10 +91,24 @@ void NumberParserImpl::addMatcher(const NumberParseMatcher& matcher) {
     fMatchers[fNumMatchers] = &matcher;
 
     if (fComputeLeads) {
-        fLeads[fNumMatchers] = matcher.getLeadCodePoints();
+        addLeadCodePointsForMatcher(matcher);
     }
 
     fNumMatchers++;
+}
+
+void NumberParserImpl::addLeadCodePointsForMatcher(const NumberParseMatcher& matcher) {
+    const UnicodeSet* leadCodePoints = matcher.getLeadCodePoints();
+    // TODO: Avoid the clone operation here.
+    if (0 != (fParseFlags & PARSE_FLAG_IGNORE_CASE)) {
+        UnicodeSet* copy = static_cast<UnicodeSet*>(leadCodePoints->cloneAsThawed());
+        delete leadCodePoints;
+        copy->closeOver(USET_ADD_CASE_MAPPINGS);
+        copy->freeze();
+        fLeads[fNumMatchers] = copy;
+    } else {
+        fLeads[fNumMatchers] = leadCodePoints;
+    }
 }
 
 void NumberParserImpl::freeze() {

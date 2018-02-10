@@ -23,7 +23,7 @@ void ParsedNumber::clear() {
     flags = 0;
     prefix.setToBogus();
     suffix.setToBogus();
-    currencyCode.setToBogus();
+    currencyCode[0] = 0;
 }
 
 void ParsedNumber::setCharsConsumed(const StringSegment& segment) {
