@@ -14,25 +14,27 @@ using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
 
-void PatternParser::parseToPatternInfo(const UnicodeString& patternString, ParsedPatternInfo& patternInfo, UErrorCode &status) {
+void PatternParser::parseToPatternInfo(const UnicodeString& patternString, ParsedPatternInfo& patternInfo,
+                                       UErrorCode& status) {
     patternInfo.consumePattern(patternString, status);
 }
 
 DecimalFormatProperties
 PatternParser::parseToProperties(const UnicodeString& pattern, IgnoreRounding ignoreRounding,
-                                 UErrorCode &status) {
+                                 UErrorCode& status) {
     DecimalFormatProperties properties;
     parseToExistingPropertiesImpl(pattern, properties, ignoreRounding, status);
     return properties;
 }
 
-void PatternParser::parseToExistingProperties(const UnicodeString& pattern, DecimalFormatProperties& properties,
-                                              IgnoreRounding ignoreRounding, UErrorCode &status) {
+void
+PatternParser::parseToExistingProperties(const UnicodeString& pattern, DecimalFormatProperties& properties,
+                                         IgnoreRounding ignoreRounding, UErrorCode& status) {
     parseToExistingPropertiesImpl(pattern, properties, ignoreRounding, status);
 }
 
 char16_t ParsedPatternInfo::charAt(int32_t flags, int32_t index) const {
-    const Endpoints &endpoints = getEndpoints(flags);
+    const Endpoints& endpoints = getEndpoints(flags);
     if (index < 0 || index >= endpoints.end - endpoints.start) {
         U_ASSERT(false);
     }
@@ -43,12 +45,12 @@ int32_t ParsedPatternInfo::length(int32_t flags) const {
     return getLengthFromEndpoints(getEndpoints(flags));
 }
 
-int32_t ParsedPatternInfo::getLengthFromEndpoints(const Endpoints &endpoints) {
+int32_t ParsedPatternInfo::getLengthFromEndpoints(const Endpoints& endpoints) {
     return endpoints.end - endpoints.start;
 }
 
 UnicodeString ParsedPatternInfo::getString(int32_t flags) const {
-    const Endpoints &endpoints = getEndpoints(flags);
+    const Endpoints& endpoints = getEndpoints(flags);
     if (endpoints.start == endpoints.end) {
         return UnicodeString();
     }
@@ -56,7 +58,7 @@ UnicodeString ParsedPatternInfo::getString(int32_t flags) const {
     return UnicodeString(pattern, endpoints.start, endpoints.end - endpoints.start);
 }
 
-const Endpoints &ParsedPatternInfo::getEndpoints(int32_t flags) const {
+const Endpoints& ParsedPatternInfo::getEndpoints(int32_t flags) const {
     bool prefix = (flags & AFFIX_PREFIX) != 0;
     bool isNegative = (flags & AFFIX_NEGATIVE_SUBPATTERN) != 0;
     bool padding = (flags & AFFIX_PADDING) != 0;
@@ -91,7 +93,7 @@ bool ParsedPatternInfo::hasCurrencySign() const {
     return positive.hasCurrencySign || (fHasNegativeSubpattern && negative.hasCurrencySign);
 }
 
-bool ParsedPatternInfo::containsSymbolType(AffixPatternType type, UErrorCode &status) const {
+bool ParsedPatternInfo::containsSymbolType(AffixPatternType type, UErrorCode& status) const {
     return AffixUtils::containsType(UnicodeStringCharSequence(pattern), type, status);
 }
 
@@ -117,7 +119,7 @@ UChar32 ParsedPatternInfo::ParserState::next() {
     return codePoint;
 }
 
-void ParsedPatternInfo::consumePattern(const UnicodeString& patternString, UErrorCode &status) {
+void ParsedPatternInfo::consumePattern(const UnicodeString& patternString, UErrorCode& status) {
     if (U_FAILURE(status)) { return; }
     this->pattern = patternString;
 
@@ -141,7 +143,7 @@ void ParsedPatternInfo::consumePattern(const UnicodeString& patternString, UErro
     }
 }
 
-void ParsedPatternInfo::consumeSubpattern(UErrorCode &status) {
+void ParsedPatternInfo::consumeSubpattern(UErrorCode& status) {
     // subpattern := literals? number exponent? literals?
     consumePadding(PadPosition::UNUM_PAD_BEFORE_PREFIX, status);
     if (U_FAILURE(status)) { return; }
@@ -161,7 +163,7 @@ void ParsedPatternInfo::consumeSubpattern(UErrorCode &status) {
     if (U_FAILURE(status)) { return; }
 }
 
-void ParsedPatternInfo::consumePadding(PadPosition paddingLocation, UErrorCode &status) {
+void ParsedPatternInfo::consumePadding(PadPosition paddingLocation, UErrorCode& status) {
     if (state.peek() != u'*') {
         return;
     }
@@ -177,7 +179,7 @@ void ParsedPatternInfo::consumePadding(PadPosition paddingLocation, UErrorCode &
     currentSubpattern->paddingEndpoints.end = state.offset;
 }
 
-void ParsedPatternInfo::consumeAffix(Endpoints &endpoints, UErrorCode &status) {
+void ParsedPatternInfo::consumeAffix(Endpoints& endpoints, UErrorCode& status) {
     // literals := { literal }
     endpoints.start = state.offset;
     while (true) {
@@ -233,7 +235,7 @@ void ParsedPatternInfo::consumeAffix(Endpoints &endpoints, UErrorCode &status) {
     endpoints.end = state.offset;
 }
 
-void ParsedPatternInfo::consumeLiteral(UErrorCode &status) {
+void ParsedPatternInfo::consumeLiteral(UErrorCode& status) {
     if (state.peek() == -1) {
         state.toParseException(u"Expected unquoted literal but found EOL");
         status = U_PATTERN_SYNTAX_ERROR;
@@ -256,7 +258,7 @@ void ParsedPatternInfo::consumeLiteral(UErrorCode &status) {
     }
 }
 
-void ParsedPatternInfo::consumeFormat(UErrorCode &status) {
+void ParsedPatternInfo::consumeFormat(UErrorCode& status) {
     consumeIntegerFormat(status);
     if (U_FAILURE(status)) { return; }
     if (state.peek() == u'.') {
@@ -268,9 +270,9 @@ void ParsedPatternInfo::consumeFormat(UErrorCode &status) {
     }
 }
 
-void ParsedPatternInfo::consumeIntegerFormat(UErrorCode &status) {
+void ParsedPatternInfo::consumeIntegerFormat(UErrorCode& status) {
     // Convenience reference:
-    ParsedSubpatternInfo &result = *currentSubpattern;
+    ParsedSubpatternInfo& result = *currentSubpattern;
 
     while (true) {
         switch (state.peek()) {
@@ -359,9 +361,9 @@ void ParsedPatternInfo::consumeIntegerFormat(UErrorCode &status) {
     }
 }
 
-void ParsedPatternInfo::consumeFractionFormat(UErrorCode &status) {
+void ParsedPatternInfo::consumeFractionFormat(UErrorCode& status) {
     // Convenience reference:
-    ParsedSubpatternInfo &result = *currentSubpattern;
+    ParsedSubpatternInfo& result = *currentSubpattern;
 
     int32_t zeroCounter = 0;
     while (true) {
@@ -407,9 +409,9 @@ void ParsedPatternInfo::consumeFractionFormat(UErrorCode &status) {
     }
 }
 
-void ParsedPatternInfo::consumeExponent(UErrorCode &status) {
+void ParsedPatternInfo::consumeExponent(UErrorCode& status) {
     // Convenience reference:
-    ParsedSubpatternInfo &result = *currentSubpattern;
+    ParsedSubpatternInfo& result = *currentSubpattern;
 
     if (state.peek() != u'E') {
         return;
@@ -437,9 +439,9 @@ void ParsedPatternInfo::consumeExponent(UErrorCode &status) {
 /// END RECURSIVE DESCENT PARSER IMPLEMENTATION ///
 ///////////////////////////////////////////////////
 
-void
-PatternParser::parseToExistingPropertiesImpl(const UnicodeString& pattern, DecimalFormatProperties &properties,
-                                             IgnoreRounding ignoreRounding, UErrorCode &status) {
+void PatternParser::parseToExistingPropertiesImpl(const UnicodeString& pattern,
+                                                  DecimalFormatProperties& properties,
+                                                  IgnoreRounding ignoreRounding, UErrorCode& status) {
     if (pattern.length() == 0) {
         // Backwards compatibility requires that we reset to the default values.
         // TODO: Only overwrite the properties that "saveToProperties" normally touches?
@@ -453,13 +455,13 @@ PatternParser::parseToExistingPropertiesImpl(const UnicodeString& pattern, Decim
     patternInfoToProperties(properties, patternInfo, ignoreRounding, status);
 }
 
-void PatternParser::patternInfoToProperties(DecimalFormatProperties &properties,
-                                            ParsedPatternInfo& patternInfo,
-                                            IgnoreRounding _ignoreRounding, UErrorCode &status) {
+void
+PatternParser::patternInfoToProperties(DecimalFormatProperties& properties, ParsedPatternInfo& patternInfo,
+                                       IgnoreRounding _ignoreRounding, UErrorCode& status) {
     // Translate from PatternParseResult to Properties.
     // Note that most data from "negative" is ignored per the specification of DecimalFormat.
 
-    const ParsedSubpatternInfo &positive = patternInfo.positive;
+    const ParsedSubpatternInfo& positive = patternInfo.positive;
 
     bool ignoreRounding;
     if (_ignoreRounding == IGNORE_ROUNDING_NEVER) {
@@ -508,8 +510,7 @@ void PatternParser::patternInfoToProperties(DecimalFormatProperties &properties,
         properties.maximumFractionDigits = -1;
         properties.roundingIncrement = 0.0;
         properties.minimumSignificantDigits = positive.integerAtSigns;
-        properties.maximumSignificantDigits =
-                positive.integerAtSigns + positive.integerTrailingHashSigns;
+        properties.maximumSignificantDigits = positive.integerAtSigns + positive.integerTrailingHashSigns;
     } else if (!positive.rounding.isZero()) {
         if (!ignoreRounding) {
             properties.minimumFractionDigits = minFrac;
@@ -570,9 +571,9 @@ void PatternParser::patternInfoToProperties(DecimalFormatProperties &properties,
     // Padding settings
     if (!positive.paddingLocation.isNull()) {
         // The width of the positive prefix and suffix templates are included in the padding
-        int paddingWidth =
-                positive.widthExceptAffixes + AffixUtils::estimateLength(UnicodeStringCharSequence(posPrefix), status) +
-                AffixUtils::estimateLength(UnicodeStringCharSequence(posSuffix), status);
+        int paddingWidth = positive.widthExceptAffixes +
+                           AffixUtils::estimateLength(UnicodeStringCharSequence(posPrefix), status) +
+                           AffixUtils::estimateLength(UnicodeStringCharSequence(posSuffix), status);
         properties.formatWidth = paddingWidth;
         UnicodeString rawPaddingString = patternInfo.getString(AffixPatternProvider::AFFIX_PADDING);
         if (rawPaddingString.length() == 1) {
@@ -622,8 +623,8 @@ void PatternParser::patternInfoToProperties(DecimalFormatProperties &properties,
 /// End PatternStringParser.java; begin PatternStringUtils.java ///
 ///////////////////////////////////////////////////////////////////
 
-UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatProperties &properties,
-                                                            UErrorCode &status) {
+UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatProperties& properties,
+                                                            UErrorCode& status) {
     UnicodeString sb;
 
     // Convenience references
@@ -632,7 +633,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
     int groupingSize = uprv_min(properties.secondaryGroupingSize, dosMax);
     int firstGroupingSize = uprv_min(properties.groupingSize, dosMax);
     int paddingWidth = uprv_min(properties.formatWidth, dosMax);
-    NullableValue<PadPosition> paddingLocation = properties.padPosition;
+    NullableValue <PadPosition> paddingLocation = properties.padPosition;
     UnicodeString paddingString = properties.padString;
     int minInt = uprv_max(uprv_min(properties.minimumIntegerDigits, dosMax), 0);
     int maxInt = uprv_min(properties.maximumIntegerDigits, dosMax);
@@ -809,8 +810,8 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
 }
 
 int PatternStringUtils::escapePaddingString(UnicodeString input, UnicodeString& output, int startIndex,
-                                            UErrorCode &status) {
-    (void)status;
+                                            UErrorCode& status) {
+    (void) status;
     if (input.length() == 0) {
         input.setTo(kFallbackPaddingString, -1);
     }
@@ -838,6 +839,71 @@ int PatternStringUtils::escapePaddingString(UnicodeString input, UnicodeString& 
         output.insert(startIndex + offset, u'\'');
     }
     return output.length() - startLength;
+}
+
+void PatternStringUtils::patternInfoToStringBuilder(const AffixPatternProvider& patternInfo, bool isPrefix,
+                                                    int8_t signum, UNumberSignDisplay signDisplay,
+                                                    StandardPlural::Form plural,
+                                                    bool perMilleReplacesPercent, UnicodeString& output) {
+
+    // Should the output render '+' where '-' would normally appear in the pattern?
+    bool plusReplacesMinusSign = signum != -1 && (
+            signDisplay == UNUM_SIGN_ALWAYS || signDisplay == UNUM_SIGN_ACCOUNTING_ALWAYS || (
+                    signum == 1 && (
+                            signDisplay == UNUM_SIGN_EXCEPT_ZERO ||
+                            signDisplay == UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO))) &&
+                                 patternInfo.positiveHasPlusSign() == false;
+
+    // Should we use the affix from the negative subpattern? (If not, we will use the positive
+    // subpattern.)
+    bool useNegativeAffixPattern = patternInfo.hasNegativeSubpattern() && (
+            signum == -1 || (patternInfo.negativeHasMinusSign() && plusReplacesMinusSign));
+
+    // Resolve the flags for the affix pattern.
+    int flags = 0;
+    if (useNegativeAffixPattern) {
+        flags |= AffixPatternProvider::AFFIX_NEGATIVE_SUBPATTERN;
+    }
+    if (isPrefix) {
+        flags |= AffixPatternProvider::AFFIX_PREFIX;
+    }
+    if (plural != StandardPlural::Form::COUNT) {
+        U_ASSERT(plural == (AffixPatternProvider::AFFIX_PLURAL_MASK & plural));
+        flags |= plural;
+    }
+
+    // Should we prepend a sign to the pattern?
+    bool prependSign;
+    if (!isPrefix || useNegativeAffixPattern) {
+        prependSign = false;
+    } else if (signum == -1) {
+        prependSign = signDisplay != UNUM_SIGN_NEVER;
+    } else {
+        prependSign = plusReplacesMinusSign;
+    }
+
+    // Compute the length of the affix pattern.
+    int length = patternInfo.length(flags) + (prependSign ? 1 : 0);
+
+    // Finally, set the result into the StringBuilder.
+    output.remove();
+    for (int index = 0; index < length; index++) {
+        char16_t candidate;
+        if (prependSign && index == 0) {
+            candidate = u'-';
+        } else if (prependSign) {
+            candidate = patternInfo.charAt(flags, index - 1);
+        } else {
+            candidate = patternInfo.charAt(flags, index);
+        }
+        if (plusReplacesMinusSign && candidate == u'-') {
+            candidate = u'+';
+        }
+        if (perMilleReplacesPercent && candidate == u'%') {
+            candidate = u'‰';
+        }
+        output.append(candidate);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

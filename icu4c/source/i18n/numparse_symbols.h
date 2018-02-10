@@ -24,7 +24,7 @@ class SymbolMatcher : public NumberParseMatcher, public UMemory {
   public:
     SymbolMatcher() = default;  // WARNING: Leaves the object in an unusable state
 
-    const UnicodeSet* getSet();
+    const UnicodeSet* getSet() const;
 
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 

@@ -7,6 +7,7 @@
 
 #include "number_affixutils.h"
 #include "unicode/utf16.h"
+#include "unicode/uniset.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -237,6 +238,22 @@ UnicodeString AffixUtils::replaceType(const CharSequence &affixPattern, AffixPat
         }
     }
     return output;
+}
+
+bool AffixUtils::containsOnlySymbolsAndIgnorables(const CharSequence& affixPattern,
+                                                  const UnicodeSet& ignorables, UErrorCode& status) {
+    if (affixPattern.length() == 0) {
+        return true;
+    };
+    AffixTag tag;
+    while (hasNext(tag, affixPattern)) {
+        tag = nextToken(tag, affixPattern, status);
+        if (U_FAILURE(status)) { return false; }
+        if (tag.type == TYPE_CODEPOINT && !ignorables.contains(tag.codePoint)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 void AffixUtils::iterateWithConsumer(const CharSequence& affixPattern, TokenConsumer& consumer,

@@ -23,7 +23,7 @@ SymbolMatcher::SymbolMatcher(const UnicodeString& symbolString, unisets::Key key
     }
 }
 
-const UnicodeSet* SymbolMatcher::getSet() {
+const UnicodeSet* SymbolMatcher::getSet() const {
     return fUniSet;
 }
 
