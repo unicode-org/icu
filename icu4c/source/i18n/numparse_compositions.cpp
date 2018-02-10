@@ -19,7 +19,7 @@ bool AnyMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCode&
     bool maybeMore = false;
 
     // NOTE: The range-based for loop calls the virtual begin() and end() methods.
-    for (auto* matcher : *this) {
+    for (auto& matcher : *this) {
         maybeMore = maybeMore || matcher->match(segment, result, status);
         if (segment.getOffset() != initialOffset) {
             // Match succeeded.
