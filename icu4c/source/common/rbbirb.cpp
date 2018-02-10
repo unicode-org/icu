@@ -367,6 +367,9 @@ void RBBIRuleBuilder::optimizeTables() {
         fSafeRevTables->removeColumn(rightClass);
     }
 
+    fForwardTables->removeDuplicateStates();
+
+
 
 }
 

@@ -28,6 +28,7 @@ private:
      */
     void testSymbols(/*char *par*/);
     void testLastResortData();
+    void testDigitSymbols();
     void testNumberingSystem();
 
      /** helper functions**/

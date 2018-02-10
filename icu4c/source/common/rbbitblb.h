@@ -59,7 +59,8 @@ public:
      */
     void     removeColumn(int32_t column);
 
-
+    /** Check for, and remove dupicate states (table rows). */
+    void     removeDuplicateStates();
 
 
 private:
@@ -82,6 +83,21 @@ private:
     int32_t  mergeColumns();
 
     void     addRuleRootNodes(UVector *dest, RBBINode *node);
+
+    /** Find the next duplicate state. An iterator function.
+     * @param firstState (in/out) begin looking at this state, return the first of the
+     *                   pair of duplicates.
+     * @param duplicateState returns the duplicate state of fistState
+     * @return true if a duplicate pair of states was found.
+     */
+    bool findDuplicateState(int32_t &firstState, int32_t &duplicateState);
+
+    /** Remove a duplicate state/
+     * @param keepState First of the duplicate pair. Keep it.
+     * @param duplState Duplicate state. Remove it. Redirect all references to the duplicate state
+     *                  to refer to keepState instead.
+     */
+    void removeState(int32_t keepState, int32_t duplState);
 
     // Set functions for UVector.
     //   TODO:  make a USet subclass of UVector
