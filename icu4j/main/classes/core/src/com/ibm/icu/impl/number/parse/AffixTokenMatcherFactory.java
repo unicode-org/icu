@@ -7,7 +7,7 @@ import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
 /**
- * Small helper class that generates matchers for SeriesMatcher.
+ * Small helper class that generates matchers for individual tokens for AffixPatternMatcher.
  *
  * @author sffc
  */

@@ -18,14 +18,12 @@ using namespace icu::number::impl;
 
 
 AffixPatternMatcherBuilder::AffixPatternMatcherBuilder(const UnicodeString& pattern,
-                                                       AffixTokenMatcherFactory& factory,
+                                                       AffixTokenMatcherWarehouse& warehouse,
                                                        IgnorablesMatcher* ignorables)
         : fMatchersLen(0),
           fLastTypeOrCp(0),
-          fCodePointMatchers(new CodePointMatcher[100]),
-          fCodePointMatchersLen(0),
           fPattern(pattern),
-          fFactory(factory),
+          fWarehouse(warehouse),
           fIgnorables(ignorables) {}
 
 void AffixPatternMatcherBuilder::consumeToken(AffixPatternType type, UChar32 cp, UErrorCode& status) {
@@ -42,16 +40,16 @@ void AffixPatternMatcherBuilder::consumeToken(AffixPatternType type, UChar32 cp,
         // Case 1: the token is a symbol.
         switch (type) {
             case TYPE_MINUS_SIGN:
-                addMatcher(fFactory.minusSign = {fFactory.dfs, true});
+                addMatcher(fWarehouse.minusSign = {fWarehouse.dfs, true});
                 break;
             case TYPE_PLUS_SIGN:
-                addMatcher(fFactory.plusSign = {fFactory.dfs, true});
+                addMatcher(fWarehouse.plusSign = {fWarehouse.dfs, true});
                 break;
             case TYPE_PERCENT:
-                addMatcher(fFactory.percent = {fFactory.dfs});
+                addMatcher(fWarehouse.percent = {fWarehouse.dfs});
                 break;
             case TYPE_PERMILLE:
-                addMatcher(fFactory.permille = {fFactory.dfs});
+                addMatcher(fWarehouse.permille = {fWarehouse.dfs});
                 break;
             case TYPE_CURRENCY_SINGLE:
             case TYPE_CURRENCY_DOUBLE:
@@ -60,10 +58,12 @@ void AffixPatternMatcherBuilder::consumeToken(AffixPatternType type, UChar32 cp,
             case TYPE_CURRENCY_QUINT:
                 // All currency symbols use the same matcher
                 addMatcher(
-                        fFactory.currency = {
+                        fWarehouse.currency = {
                                 CurrencyNamesMatcher(
-                                        fFactory.locale, status), CurrencyCustomMatcher(
-                                        fFactory.currencyCode, fFactory.currency1, fFactory.currency2)});
+                                        fWarehouse.locale, status), CurrencyCustomMatcher(
+                                        fWarehouse.currencyCode,
+                                        fWarehouse.currency1,
+                                        fWarehouse.currency2)});
                 break;
             default:
                 U_ASSERT(FALSE);
@@ -75,10 +75,7 @@ void AffixPatternMatcherBuilder::consumeToken(AffixPatternType type, UChar32 cp,
 
     } else {
         // Case 3: the token is a non-ignorable literal.
-        // TODO: This is really clunky. Just trying to get something that works.
-        fCodePointMatchers[fCodePointMatchersLen] = {cp};
-        addMatcher(fCodePointMatchers[fCodePointMatchersLen]);
-        fCodePointMatchersLen++;
+        addMatcher(fWarehouse.nextCodePointMatcher(cp));
     }
     fLastTypeOrCp = type != TYPE_CODEPOINT ? type : cp;
 }
@@ -91,17 +88,48 @@ void AffixPatternMatcherBuilder::addMatcher(NumberParseMatcher& matcher) {
 }
 
 AffixPatternMatcher AffixPatternMatcherBuilder::build() {
-    return AffixPatternMatcher(fMatchers, fMatchersLen, fPattern, fCodePointMatchers.orphan());
+    return AffixPatternMatcher(fMatchers, fMatchersLen, fPattern);
 }
 
 
-AffixTokenMatcherFactory::AffixTokenMatcherFactory(const UChar* currencyCode,
-                                                   const UnicodeString& currency1,
-                                                   const UnicodeString& currency2,
-                                                   const DecimalFormatSymbols& dfs,
-                                                   IgnorablesMatcher* ignorables, const Locale& locale)
-        : currency1(currency1), currency2(currency2), dfs(dfs), ignorables(ignorables), locale(locale) {
+AffixTokenMatcherWarehouse::AffixTokenMatcherWarehouse(const UChar* currencyCode,
+                                                       const UnicodeString& currency1,
+                                                       const UnicodeString& currency2,
+                                                       const DecimalFormatSymbols& dfs,
+                                                       IgnorablesMatcher* ignorables, const Locale& locale)
+        : currency1(currency1),
+          currency2(currency2),
+          dfs(dfs),
+          ignorables(ignorables),
+          locale(locale),
+          codePointCount(0),
+          codePointNumBatches(0) {
     utils::copyCurrencyCode(this->currencyCode, currencyCode);
+}
+
+AffixTokenMatcherWarehouse::~AffixTokenMatcherWarehouse() {
+    // Delete the variable number of batches of code point matchers
+    for (int32_t i=0; i<codePointNumBatches; i++) {
+        delete[] codePointsOverflow[i];
+    }
+}
+
+CodePointMatcher& AffixTokenMatcherWarehouse::nextCodePointMatcher(UChar32 cp) {
+    if (codePointCount < CODE_POINT_STACK_CAPACITY) {
+        return codePoints[codePointCount++] = {cp};
+    }
+    int32_t totalCapacity = CODE_POINT_STACK_CAPACITY + codePointNumBatches * CODE_POINT_BATCH_SIZE;
+    if (codePointCount >= totalCapacity) {
+        // Need a new batch
+        auto* nextBatch = new CodePointMatcher[CODE_POINT_BATCH_SIZE];
+        if (codePointNumBatches >= codePointsOverflow.getCapacity()) {
+            // Need more room for storing pointers to batches
+            codePointsOverflow.resize(codePointNumBatches * 2, codePointNumBatches);
+        }
+        codePointsOverflow[codePointNumBatches++] = nextBatch;
+    }
+    return codePointsOverflow[codePointNumBatches - 1][(codePointCount++ - CODE_POINT_STACK_CAPACITY) %
+                                                        CODE_POINT_BATCH_SIZE] = {cp};
 }
 
 
@@ -127,9 +155,10 @@ const UnicodeSet& CodePointMatcher::getLeadCodePoints() {
 }
 
 
-AffixPatternMatcher
-AffixPatternMatcher::fromAffixPattern(const UnicodeString& affixPattern, AffixTokenMatcherFactory& factory,
-                                      parse_flags_t parseFlags, bool* success, UErrorCode& status) {
+AffixPatternMatcher AffixPatternMatcher::fromAffixPattern(const UnicodeString& affixPattern,
+                                                          AffixTokenMatcherWarehouse& warehouse,
+                                                          parse_flags_t parseFlags, bool* success,
+                                                          UErrorCode& status) {
     if (affixPattern.isEmpty()) {
         *success = false;
         return {};
@@ -140,19 +169,17 @@ AffixPatternMatcher::fromAffixPattern(const UnicodeString& affixPattern, AffixTo
     if (0 != (parseFlags & PARSE_FLAG_EXACT_AFFIX)) {
         ignorables = nullptr;
     } else {
-        ignorables = factory.ignorables;
+        ignorables = warehouse.ignorables;
     }
 
-    AffixPatternMatcherBuilder builder(affixPattern, factory, ignorables);
+    AffixPatternMatcherBuilder builder(affixPattern, warehouse, ignorables);
     AffixUtils::iterateWithConsumer(UnicodeStringCharSequence(affixPattern), builder, status);
     return builder.build();
 }
 
 AffixPatternMatcher::AffixPatternMatcher(MatcherArray& matchers, int32_t matchersLen,
-                                         const UnicodeString& pattern, CodePointMatcher* codePointMatchers)
-        : ArraySeriesMatcher(matchers, matchersLen),
-          fPattern(pattern),
-          fCodePointMatchers(codePointMatchers) {
+                                         const UnicodeString& pattern)
+        : ArraySeriesMatcher(matchers, matchersLen), fPattern(pattern) {
 }
 
 
