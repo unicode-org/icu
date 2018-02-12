@@ -380,7 +380,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 #define U8_INTERNAL_NEXT_OR_SUB(s, i, length, c, sub) { \
     (c)=(uint8_t)(s)[(i)++]; \
     if(!U8_IS_SINGLE(c)) { \
-        uint8_t __t; \
+        uint8_t __t = 0; \
         if((i)!=(length) && \
             /* fetch/validate/assemble all but last trail byte */ \
             ((c)>=0xe0 ? \
