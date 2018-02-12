@@ -307,14 +307,8 @@ public class NumberParserImpl {
     /**
      * Creates a new, empty parser.
      *
-     * @param ignoreCase
-     *            If true, perform case-folding. This parameter needs to go into the constructor because
-     *            its value is used during the construction of the matcher chain.
-     * @param optimize
-     *            If true, compute "lead chars" UnicodeSets for the matchers. This reduces parsing
-     *            runtime but increases construction runtime. If the parser is going to be used only once
-     *            or twice, set this to false; if it is going to be used hundreds of times, set it to
-     *            true.
+     * @param parseFlags
+     *            The parser settings defined in the PARSE_FLAG_* fields.
      */
     public NumberParserImpl(int parseFlags) {
         matchers = new ArrayList<NumberParseMatcher>();

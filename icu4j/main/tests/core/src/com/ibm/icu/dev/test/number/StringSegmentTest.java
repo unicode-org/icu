@@ -56,10 +56,10 @@ public class StringSegmentTest {
         StringSegment segment = new StringSegment(SAMPLE_STRING, 0);
         assertEquals(0x1F4FB, segment.getCodePoint());
         segment.setLength(1);
-        assertEquals(-1, segment.getCodePoint());
+        assertEquals(0xD83D, segment.getCodePoint());
         segment.resetLength();
         segment.adjustOffset(1);
-        assertEquals(-1, segment.getCodePoint());
+        assertEquals(0xDCFB, segment.getCodePoint());
         segment.adjustOffset(1);
         assertEquals(0x20, segment.getCodePoint());
     }
