@@ -229,6 +229,9 @@ static void adjustDecimalFormat(
     if (tuple.negativeSuffixFlag) {
         fmt.setNegativeSuffix(tuple.negativeSuffix);
     }
+    if (tuple.signAlwaysShownFlag) {
+        // Not currently supported
+    }
     if (tuple.localizedPatternFlag) {
         UErrorCode status = U_ZERO_ERROR;
         fmt.applyLocalizedPattern(tuple.localizedPattern, status);
