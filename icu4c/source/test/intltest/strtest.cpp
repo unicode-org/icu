@@ -551,6 +551,28 @@ StringTest::TestCharString() {
     if (chStr.length() != 0) {
         errln("%s:%d expected length() = 0, got %d", __FILE__, __LINE__, chStr.length());
     }
+
+    {
+        CharString s1("Short string", errorCode);
+        CharString s2(std::move(s1));
+        assertEquals("s2 should have content of s1", "Short string", s2.data());
+        CharString s3("Dummy", errorCode);
+        s3 = std::move(s2);
+        assertEquals("s3 should have content of s2", "Short string", s3.data());
+    }
+
+    {
+        CharString s1("Long string over 40 characters to trigger heap allocation", errorCode);
+        CharString s2(std::move(s1));
+        assertEquals("s2 should have content of s1",
+                "Long string over 40 characters to trigger heap allocation",
+                s2.data());
+        CharString s3("Dummy string with over 40 characters to trigger heap allocation", errorCode);
+        s3 = std::move(s2);
+        assertEquals("s3 should have content of s2",
+                "Long string over 40 characters to trigger heap allocation",
+                s3.data());
+    }
 }
 
 void
