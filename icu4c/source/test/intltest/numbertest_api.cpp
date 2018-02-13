@@ -1097,6 +1097,20 @@ void NumberFormatterApiTest::grouping() {
             u"8.765",
             u"0");
 
+    assertFormatDescendingBig(
+            u"Indic locale with THOUSANDS grouping",
+            NumberFormatter::with().grouping(UNUM_GROUPING_THOUSANDS),
+            Locale("en-IN"),
+            u"87,650,000",
+            u"8,765,000",
+            u"876,500",
+            u"87,650",
+            u"8,765",
+            u"876.5",
+            u"87.65",
+            u"8.765",
+            u"0");
+
     // NOTE: Hungarian is interesting because it has minimumGroupingDigits=4 in locale data
     // If this test breaks due to data changes, find another locale that has minimumGroupingDigits.
     assertFormatDescendingBig(

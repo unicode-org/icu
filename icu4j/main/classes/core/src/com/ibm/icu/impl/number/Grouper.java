@@ -37,7 +37,7 @@ public class Grouper {
             return GROUPER_AUTO;
         case ON_ALIGNED:
             return GROUPER_ON_ALIGNED;
-        case WESTERN:
+        case THOUSANDS:
             return GROUPER_WESTERN;
         default:
             throw new AssertionError();

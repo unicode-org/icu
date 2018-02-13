@@ -98,13 +98,13 @@ public class StringSegment implements CharSequence {
     public int getCodePoint() {
         assert start < end;
         char lead = str.charAt(start);
-        if (Character.isHighSurrogate(lead) && start + 1 < end) {
-            return Character.toCodePoint(lead, str.charAt(start + 1));
-        } else if (Character.isSurrogate(lead)) {
-            return -1;
-        } else {
-            return lead;
+        char trail;
+        if (Character.isHighSurrogate(lead)
+                && start + 1 < end
+                && Character.isLowSurrogate(trail = str.charAt(start + 1))) {
+            return Character.toCodePoint(lead, trail);
         }
+        return lead;
     }
 
     /**

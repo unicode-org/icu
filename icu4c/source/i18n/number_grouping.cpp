@@ -44,7 +44,7 @@ Grouper Grouper::forStrategy(UGroupingStrategy grouping) {
         return {-2, -2, -3};
     case UNUM_GROUPING_ON_ALIGNED:
         return {-4, -4, 1};
-    case UNUM_GROUPING_WESTERN:
+    case UNUM_GROUPING_THOUSANDS:
         return {3, 3, 1};
     default:
         U_ASSERT(FALSE);

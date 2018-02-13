@@ -278,7 +278,7 @@ public class NumberParserImpl {
      * Creates a new, empty parser.
      *
      * @param parseFlags
-     *            Settings for constructing the parser.
+     *            The parser settings defined in the PARSE_FLAG_* fields.
      */
     public NumberParserImpl(int parseFlags) {
         matchers = new ArrayList<NumberParseMatcher>();

@@ -171,7 +171,7 @@ public final class NumberFormatter {
      * <li>MIN2: 1234 and 12,34,567
      * <li>AUTO: 1,234 and 12,34,567
      * <li>ON_ALIGNED: 1,234 and 12,34,567
-     * <li>WESTERN: 1,234 and 1,234,567
+     * <li>THOUSANDS: 1,234 and 1,234,567
      * </ul>
      *
      * <p>
@@ -259,7 +259,7 @@ public final class NumberFormatter {
          * @provisional This API might change or be removed in a future release.
          * @see NumberFormatter
          */
-        WESTERN
+        THOUSANDS
     }
 
     /**
