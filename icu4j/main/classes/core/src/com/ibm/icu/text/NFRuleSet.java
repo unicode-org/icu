@@ -748,7 +748,7 @@ final class NFRuleSet {
      * this function returns new Long(0), and the parse position is
      * left unchanged.
      */
-    public Number parse(String text, ParsePosition parsePosition, double upperBound) {
+    public Number parse(String text, ParsePosition parsePosition, double upperBound, int nonNumericalExecutedRuleMask) {
         // try matching each rule in the rule set against the text being
         // parsed.  Whichever one matches the most characters is the one
         // that determines the value we return.
@@ -763,9 +763,13 @@ final class NFRuleSet {
         }
 
         // Try each of the negative rules, fraction rules, infinity rules and NaN rules
-        for (NFRule fractionRule : nonNumericalRules) {
-            if (fractionRule != null) {
-                tempResult = fractionRule.doParse(text, parsePosition, false, upperBound);
+        for (int nonNumericalRuleIdx = 0; nonNumericalRuleIdx < nonNumericalRules.length; nonNumericalRuleIdx++) {
+            NFRule nonNumericalRule = nonNumericalRules[nonNumericalRuleIdx];
+            if (nonNumericalRule != null && ((nonNumericalExecutedRuleMask >> nonNumericalRuleIdx) & 1) == 0) {
+                // Mark this rule as being executed so that we don't try to execute it again.
+                nonNumericalExecutedRuleMask |= 1 << nonNumericalRuleIdx;
+
+                tempResult = nonNumericalRule.doParse(text, parsePosition, false, upperBound, nonNumericalExecutedRuleMask);
                 if (parsePosition.getIndex() > highWaterMark.getIndex()) {
                     result = tempResult;
                     highWaterMark.setIndex(parsePosition.getIndex());
@@ -792,7 +796,7 @@ final class NFRuleSet {
                 continue;
             }
 
-            tempResult = rules[i].doParse(text, parsePosition, isFractionRuleSet, upperBound);
+            tempResult = rules[i].doParse(text, parsePosition, isFractionRuleSet, upperBound, nonNumericalExecutedRuleMask);
             if (parsePosition.getIndex() > highWaterMark.getIndex()) {
                 result = tempResult;
                 highWaterMark.setIndex(parsePosition.getIndex());
