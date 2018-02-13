@@ -91,8 +91,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             CaseMap.toTitle().wholeString().noLowercase();
 
     private static String toTitleWholeStringNoLowercase(ULocale locale, String s) {
-        return TO_TITLE_WHOLE_STRING_NO_LOWERCASE.apply(
-                locale.toLocale(), null, s, new StringBuilder(), null).toString();
+        return TO_TITLE_WHOLE_STRING_NO_LOWERCASE.apply(locale.toLocale(), null, s);
     }
 
     public static LocaleDisplayNames getInstance(ULocale locale, DialectHandling dialectHandling) {
