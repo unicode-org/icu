@@ -27,6 +27,8 @@ class ScientificMatcher : public NumberParseMatcher, public UMemory {
 
     const UnicodeSet& getLeadCodePoints() override;
 
+    UnicodeString toString() const override;
+
   private:
     UnicodeString fExponentSeparatorString;
     DecimalMatcher fExponentMatcher;

@@ -318,6 +318,9 @@ class NumberParseMatcher {
         // Default implementation: no-op
     };
 
+    // String for debugging
+    virtual UnicodeString toString() const = 0;
+
   protected:
     // No construction except by subclasses!
     NumberParseMatcher() = default;

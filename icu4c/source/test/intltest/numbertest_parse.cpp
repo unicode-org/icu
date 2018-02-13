@@ -69,33 +69,33 @@ void NumberParserTest::testBasic() {
                  {3, u"-∞", u"0", 2, -INFINITY},
                  {3, u"@@@123  @@", u"0", 6, 123.}, // TODO: Should padding be strong instead of weak?
                  {3, u"@@@123@@  ", u"0", 6, 123.}, // TODO: Should padding be strong instead of weak?
-//                 {3, u"a51423US dollars", u"a0¤¤¤", 16, 51423.},
-//                 {3, u"a 51423 US dollars", u"a0¤¤¤", 18, 51423.},
+                 {3, u"a51423US dollars", u"a0¤¤¤", 16, 51423.},
+                 {3, u"a 51423 US dollars", u"a0¤¤¤", 18, 51423.},
                  {3, u"514.23 USD", u"¤0", 10, 514.23},
                  {3, u"514.23 GBP", u"¤0", 10, 514.23},
-//                 {3, u"a 𝟱𝟭𝟰𝟮𝟯 b", u"a0b", 14, 51423.},
-//                 {3, u"-a 𝟱𝟭𝟰𝟮𝟯 b", u"a0b", 15, -51423.},
-//                 {3, u"a -𝟱𝟭𝟰𝟮𝟯 b", u"a0b", 15, -51423.},
+                 {3, u"a 𝟱𝟭𝟰𝟮𝟯 b", u"a0b", 14, 51423.},
+                 {3, u"-a 𝟱𝟭𝟰𝟮𝟯 b", u"a0b", 15, -51423.},
+                 {3, u"a -𝟱𝟭𝟰𝟮𝟯 b", u"a0b", 15, -51423.},
                  {3, u"𝟱𝟭𝟰𝟮𝟯", u"[0];(0)", 10, 51423.},
                  {3, u"[𝟱𝟭𝟰𝟮𝟯", u"[0];(0)", 11, 51423.},
                  {3, u"𝟱𝟭𝟰𝟮𝟯]", u"[0];(0)", 11, 51423.},
                  {3, u"[𝟱𝟭𝟰𝟮𝟯]", u"[0];(0)", 12, 51423.},
-//                 {3, u"(𝟱𝟭𝟰𝟮𝟯", u"[0];(0)", 11, -51423.},
-//                 {3, u"𝟱𝟭𝟰𝟮𝟯)", u"[0];(0)", 11, -51423.},
-//                 {3, u"(𝟱𝟭𝟰𝟮𝟯)", u"[0];(0)", 12, -51423.},
-//                 {3, u"𝟱𝟭𝟰𝟮𝟯", u"{0};{0}", 10, 51423.},
-//                 {3, u"{𝟱𝟭𝟰𝟮𝟯", u"{0};{0}", 11, 51423.},
-//                 {3, u"𝟱𝟭𝟰𝟮𝟯}", u"{0};{0}", 11, 51423.},
-//                 {3, u"{𝟱𝟭𝟰𝟮𝟯}", u"{0};{0}", 12, 51423.},
-//                 {1, u"a40b", u"a0'0b'", 3, 40.}, // greedy code path thinks "40" is the number
-//                 {2, u"a40b", u"a0'0b'", 4, 4.}, // slow code path finds the suffix "0b"
+                 {3, u"(𝟱𝟭𝟰𝟮𝟯", u"[0];(0)", 11, -51423.},
+                 {3, u"𝟱𝟭𝟰𝟮𝟯)", u"[0];(0)", 11, -51423.},
+                 {3, u"(𝟱𝟭𝟰𝟮𝟯)", u"[0];(0)", 12, -51423.},
+                 {3, u"𝟱𝟭𝟰𝟮𝟯", u"{0};{0}", 10, 51423.},
+                 {3, u"{𝟱𝟭𝟰𝟮𝟯", u"{0};{0}", 11, 51423.},
+                 {3, u"𝟱𝟭𝟰𝟮𝟯}", u"{0};{0}", 11, 51423.},
+                 {3, u"{𝟱𝟭𝟰𝟮𝟯}", u"{0};{0}", 12, 51423.},
+                 {1, u"a40b", u"a0'0b'", 3, 40.}, // greedy code path thinks "40" is the number
+                 {2, u"a40b", u"a0'0b'", 4, 4.}, // slow code path finds the suffix "0b"
                  {3, u"𝟱.𝟭𝟰𝟮E𝟯", u"0", 12, 5142.},
                  {3, u"𝟱.𝟭𝟰𝟮E-𝟯", u"0", 13, 0.005142},
                  {3, u"𝟱.𝟭𝟰𝟮e-𝟯", u"0", 13, 0.005142},
                  {7, u"5,142.50 Canadian dollars", u"#,##,##0 ¤¤¤", 25, 5142.5},
-//                 {3, u"a$ b5", u"a ¤ b0", 5, 5.0},
-//                 {3, u"📺1.23", u"📺0;📻0", 6, 1.23},
-//                 {3, u"📻1.23", u"📺0;📻0", 6, -1.23},
+                 {3, u"a$ b5", u"a ¤ b0", 5, 5.0},
+                 {3, u"📺1.23", u"📺0;📻0", 6, 1.23},
+                 {3, u"📻1.23", u"📺0;📻0", 6, -1.23},
                  {3, u".00", u"0", 3, 0.0},
                  {3, u"                              1,234", u"a0", 35, 1234.}, // should not hang
                  {3, u"NaN", u"0", 3, NAN},
@@ -215,27 +215,29 @@ void NumberParserTest::testSeriesMatcher() {
 void NumberParserTest::testCurrencyAnyMatcher() {
     IcuTestErrorCode status(*this, "testCurrencyAnyMatcher");
 
-    UnicodeString currency1(u"IU$");
-    UnicodeString currency2(u"ICU");
-    DecimalFormatSymbols symbols("en", status);
     IgnorablesMatcher ignorables(unisets::DEFAULT_IGNORABLES);
-    Locale locale("en");
-    AffixTokenMatcherWarehouse warehouse(u"ICU", &currency1, &currency2, &symbols, &ignorables, &locale);
+    AffixTokenMatcherSetupData affixSetupData = {
+            u"ICU",
+            u"IU$",
+            u"ICU",
+            {"en", status},
+            ignorables,
+            "en"};
+    AffixTokenMatcherWarehouse warehouse(&affixSetupData);
     NumberParseMatcher& matcher = warehouse.currency(status);
 
-    static const struct TestCase{
+    static const struct TestCase {
         const char16_t* input;
         const char16_t* expectedCurrencyCode;
-    } cases[] {
-            { u"", u"\x00" },
-            { u"FOO", u"\x00" },
-            { u"USD", u"USD" },
-            { u"$", u"USD" },
-            { u"US dollars", u"USD" },
-            { u"eu", u"\x00" },
-            { u"euros", u"EUR" },
-            { u"ICU", u"ICU" },
-            { u"IU$", u"ICU" } };
+    } cases[]{{u"", u"\x00"},
+              {u"FOO", u"\x00"},
+              {u"USD", u"USD"},
+              {u"$", u"USD"},
+              {u"US dollars", u"USD"},
+              {u"eu", u"\x00"},
+              {u"euros", u"EUR"},
+              {u"ICU", u"ICU"},
+              {u"IU$", u"ICU"}};
     for (auto& cas : cases) {
         UnicodeString input(cas.input);
 
@@ -243,7 +245,8 @@ void NumberParserTest::testCurrencyAnyMatcher() {
         ParsedNumber result;
         matcher.match(segment, result, status);
         assertEquals("Parsing " + input, cas.expectedCurrencyCode, result.currencyCode);
-        assertEquals("Whole string on " + input,
+        assertEquals(
+                "Whole string on " + input,
                 cas.expectedCurrencyCode[0] == 0 ? 0 : input.length(),
                 result.charEnd);
     }
@@ -251,13 +254,15 @@ void NumberParserTest::testCurrencyAnyMatcher() {
 
 void NumberParserTest::testAffixPatternMatcher() {
     IcuTestErrorCode status(*this, "testAffixPatternMatcher");
-
-    UnicodeString currency1(u"foo");
-    UnicodeString currency2(u"bar");
-    DecimalFormatSymbols symbols("en", status);
     IgnorablesMatcher ignorables(unisets::DEFAULT_IGNORABLES);
-    Locale locale("en");
-    AffixTokenMatcherWarehouse warehouse(u"EUR", &currency1, &currency2, &symbols, &ignorables, &locale);
+    AffixTokenMatcherSetupData affixSetupData = {
+            u"USD",
+            u"foo",
+            u"bar",
+            {"en", status},
+            ignorables,
+            "en"};
+    AffixTokenMatcherWarehouse warehouse(&affixSetupData);
 
     static const struct TestCase {
         bool exactMatch;
@@ -269,8 +274,7 @@ void NumberParserTest::testAffixPatternMatcher() {
                  {true, u"+-%", 3, u"+-%"},
                  {false, u"ab c", 5, u"a    bc"},
                  {true, u"abc", 3, u"abc"},
-                 {false, u"hello-to+this%very¤long‰string", 59, u"hello-to+this%very USD long‰string"}
-    };
+                 {false, u"hello-to+this%very¤long‰string", 59, u"hello-to+this%very USD long‰string"}};
 
     for (auto& cas : cases) {
         UnicodeString affixPattern(cas.affixPattern);

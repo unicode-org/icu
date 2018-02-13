@@ -5,6 +5,10 @@
 
 #if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
 
+// Allow implicit conversion from char16_t* to UnicodeString for this file:
+// Helpful in toString methods and elsewhere.
+#define UNISTR_FROM_STRING_EXPLICIT
+
 #include "numparse_types.h"
 #include "numparse_currency.h"
 #include "ucurrimp.h"
@@ -66,6 +70,10 @@ const UnicodeSet& CurrencyNamesMatcher::getLeadCodePoints() {
     return *fLocalLeadCodePoints;
 }
 
+UnicodeString CurrencyNamesMatcher::toString() const {
+    return u"<CurrencyNames>";
+}
+
 
 CurrencyCustomMatcher::CurrencyCustomMatcher(const char16_t* currencyCode, const UnicodeString& currency1,
                                              const UnicodeString& currency2)
@@ -104,6 +112,10 @@ const UnicodeSet& CurrencyCustomMatcher::getLeadCodePoints() {
         fLocalLeadCodePoints.adoptInstead(leadCodePoints);
     }
     return *fLocalLeadCodePoints;
+}
+
+UnicodeString CurrencyCustomMatcher::toString() const {
+    return u"<CurrencyCustom>";
 }
 
 
@@ -149,6 +161,10 @@ const NumberParseMatcher* const* CurrencyAnyMatcher::begin() const {
 
 const NumberParseMatcher* const* CurrencyAnyMatcher::end() const {
     return fMatcherArray + 2;
+}
+
+UnicodeString CurrencyAnyMatcher::toString() const {
+    return u"<CurrencyAny>";
 }
 
 

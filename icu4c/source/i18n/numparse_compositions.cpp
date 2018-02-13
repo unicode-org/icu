@@ -5,6 +5,10 @@
 
 #if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
 
+// Allow implicit conversion from char16_t* to UnicodeString for this file:
+// Helpful in toString methods and elsewhere.
+#define UNISTR_FROM_STRING_EXPLICIT
+
 #include "numparse_types.h"
 #include "numparse_compositions.h"
 #include "unicode/uniset.h"
@@ -111,6 +115,10 @@ const NumberParseMatcher* const* ArraySeriesMatcher::begin() const {
 
 const NumberParseMatcher* const* ArraySeriesMatcher::end() const {
     return fMatchers.getAlias() + fMatchersLen;
+}
+
+UnicodeString ArraySeriesMatcher::toString() const {
+    return u"<ArraySeries>";
 }
 
 

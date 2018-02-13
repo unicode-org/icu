@@ -29,6 +29,8 @@ class DecimalMatcher : public NumberParseMatcher, public UMemory {
 
     const UnicodeSet& getLeadCodePoints() override;
 
+    UnicodeString toString() const override;
+
   private:
     /** If true, only accept strings whose grouping sizes match the locale */
     bool requireGroupingMatch;

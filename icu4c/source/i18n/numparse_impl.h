@@ -60,6 +60,7 @@ class NumberParserImpl : public MutableMatcherCollection {
         ScientificMatcher scientific;
         CurrencyNamesMatcher currencyNames;
         AffixMatcherWarehouse affixMatcherWarehouse;
+        AffixTokenMatcherWarehouse affixTokenMatcherWarehouse;
     } fLocalMatchers;
 
     NumberParserImpl(parse_flags_t parseFlags, bool computeLeads);

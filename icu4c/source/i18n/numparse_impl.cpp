@@ -5,7 +5,8 @@
 
 #if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
 
-// Allow implicit conversion from char16_t* to UnicodeString for this file
+// Allow implicit conversion from char16_t* to UnicodeString for this file:
+// Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
 #include "number_types.h"
@@ -17,6 +18,9 @@
 #include "unicode/numberformatter.h"
 
 #include <typeinfo>
+#include <array>
+#include <iostream>
+#include "cstr.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -35,24 +39,20 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     parser->fLocalMatchers.ignorables = {unisets::DEFAULT_IGNORABLES};
     IgnorablesMatcher& ignorables = parser->fLocalMatchers.ignorables;
 
+    const UChar currencyCode[] = u"USD";
     UnicodeString currency1(u"IU$");
     UnicodeString currency2(u"ICU");
 
     ParsedPatternInfo patternInfo;
     PatternParser::parseToPatternInfo(patternString, patternInfo, status);
 
-    // The following statement sets up the affix matchers.
-//    AffixMatcherWarehouse warehouse = ;
-
-    parser->fLocalMatchers.affixMatcherWarehouse = std::move(AffixMatcherWarehouse::createAffixMatchers(
-            patternInfo,
-            *parser,
-            AffixTokenMatcherWarehouse(
-                    u"USD", &currency1, &currency2, &symbols, &ignorables, &locale),
-            ignorables,
-            parseFlags,
-            status));
-
+    // The following statements set up the affix matchers.
+    AffixTokenMatcherSetupData affixSetupData = {
+            currencyCode, currency1, currency2, symbols, ignorables, locale};
+    parser->fLocalMatchers.affixTokenMatcherWarehouse = {&affixSetupData};
+    parser->fLocalMatchers.affixMatcherWarehouse = {&parser->fLocalMatchers.affixTokenMatcherWarehouse};
+    parser->fLocalMatchers.affixMatcherWarehouse.createAffixMatchers(
+            patternInfo, *parser, ignorables, parseFlags, status);
 
     Grouper grouper = Grouper::forStrategy(UNUM_GROUPING_AUTO);
     grouper.setLocaleData(patternInfo, locale);
@@ -233,7 +233,7 @@ UnicodeString NumberParserImpl::toString() const {
     UnicodeString result(u"<NumberParserImpl matchers:[");
     for (int32_t i = 0; i < fNumMatchers; i++) {
         result.append(u' ');
-        result.append(UnicodeString(typeid(*fMatchers[i]).name()));
+        result.append(fMatchers[i]->toString());
     }
     result.append(u" ]>", -1);
     return result;

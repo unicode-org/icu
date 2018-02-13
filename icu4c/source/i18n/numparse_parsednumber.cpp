@@ -5,6 +5,10 @@
 
 #if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
 
+// Allow implicit conversion from char16_t* to UnicodeString for this file:
+// Helpful in toString methods and elsewhere.
+#define UNISTR_FROM_STRING_EXPLICIT
+
 #include "numparse_types.h"
 #include <cmath>
 
@@ -67,7 +71,11 @@ double ParsedNumber::getDouble() const {
     }
 
     // TODO: MIN_LONG
-    return quantity.toDouble();
+    double d = quantity.toDouble();
+    if (0 != (flags & FLAG_NEGATIVE)) {
+        d *= -1;
+    }
+    return d;
 }
 
 bool ParsedNumber::isBetterThan(const ParsedNumber& other) {

@@ -12,6 +12,8 @@
 #include "numparse_currency.h"
 #include "number_affixutils.h"
 
+#include <array>
+
 U_NAMESPACE_BEGIN namespace numparse {
 namespace impl {
 
@@ -33,8 +35,54 @@ class CodePointMatcher : public NumberParseMatcher, public UMemory {
 
     const UnicodeSet& getLeadCodePoints() override;
 
+    UnicodeString toString() const override;
+
   private:
     UChar32 fCp;
+};
+
+
+/**
+ * A warehouse to retain ownership of CodePointMatchers.
+ */
+class CodePointMatcherWarehouse : public UMemory {
+  private:
+    static constexpr int32_t CODE_POINT_STACK_CAPACITY = 5; // Number of entries directly on the stack
+    static constexpr int32_t CODE_POINT_BATCH_SIZE = 10; // Number of entries per heap allocation
+
+  public:
+    CodePointMatcherWarehouse();
+
+    // A custom destructor is needed to free the memory from MaybeStackArray.
+    // A custom move constructor and move assignment seem to be needed because of the custom destructor.
+
+    ~CodePointMatcherWarehouse();
+
+    CodePointMatcherWarehouse(CodePointMatcherWarehouse&& src) U_NOEXCEPT;
+
+    CodePointMatcherWarehouse& operator=(CodePointMatcherWarehouse&& src) U_NOEXCEPT;
+
+    NumberParseMatcher& nextCodePointMatcher(UChar32 cp);
+
+  private:
+    std::array<CodePointMatcher, CODE_POINT_STACK_CAPACITY> codePoints; // By value
+    MaybeStackArray<CodePointMatcher*, 3> codePointsOverflow; // On heap in "batches"
+    int32_t codePointCount; // Total for both the ones by value and on heap
+    int32_t codePointNumBatches; // Number of batches in codePointsOverflow
+};
+
+
+struct AffixTokenMatcherSetupData {
+    const UChar* currencyCode;
+    const UnicodeString& currency1;
+    const UnicodeString& currency2;
+    const DecimalFormatSymbols& dfs;
+    IgnorablesMatcher& ignorables;
+    const Locale& locale;
+
+//    const UChar* currencyCode, const UnicodeString* currency1,
+//    const UnicodeString* currency2, const DecimalFormatSymbols* dfs,
+//            IgnorablesMatcher* ignorables, const Locale* locale
 };
 
 
@@ -48,21 +96,11 @@ class CodePointMatcher : public NumberParseMatcher, public UMemory {
  *
  * @author sffc
  */
-class AffixTokenMatcherWarehouse {
-  private:
-    static constexpr int32_t CODE_POINT_STACK_CAPACITY = 5; // Number of entries directly on the stack
-    static constexpr int32_t CODE_POINT_BATCH_SIZE = 10; // Number of entries per heap allocation
-
+class AffixTokenMatcherWarehouse : public UMemory {
   public:
     AffixTokenMatcherWarehouse() = default;  // WARNING: Leaves the object in an unusable state
 
-    AffixTokenMatcherWarehouse(const UChar* currencyCode, const UnicodeString* currency1,
-                               const UnicodeString* currency2, const DecimalFormatSymbols* dfs,
-                               IgnorablesMatcher* ignorables, const Locale* locale);
-
-    AffixTokenMatcherWarehouse(AffixTokenMatcherWarehouse&& src) U_NOEXCEPT;
-
-    ~AffixTokenMatcherWarehouse();
+    AffixTokenMatcherWarehouse(const AffixTokenMatcherSetupData* setupData);
 
     NumberParseMatcher& minusSign();
 
@@ -74,16 +112,13 @@ class AffixTokenMatcherWarehouse {
 
     NumberParseMatcher& currency(UErrorCode& status);
 
+    IgnorablesMatcher& ignorables();
+
     NumberParseMatcher& nextCodePointMatcher(UChar32 cp);
 
   private:
-    // NOTE: The following fields may be unsafe to access after construction is done!
-    UChar currencyCode[4];
-    const UnicodeString* currency1;
-    const UnicodeString* currency2;
-    const DecimalFormatSymbols* dfs;
-    IgnorablesMatcher* ignorables;
-    const Locale* locale;
+    // NOTE: The following field may be unsafe to access after construction is done!
+    const AffixTokenMatcherSetupData* fSetupData;
 
     // NOTE: These are default-constructed and should not be used until initialized.
     MinusSignMatcher fMinusSign;
@@ -92,10 +127,8 @@ class AffixTokenMatcherWarehouse {
     PermilleMatcher fPermille;
     CurrencyAnyMatcher fCurrency;
 
-    CodePointMatcher codePoints[CODE_POINT_STACK_CAPACITY]; // By value
-    MaybeStackArray<CodePointMatcher*, 3> codePointsOverflow; // On heap in "batches"
-    int32_t codePointCount; // Total for both the ones by value and on heap
-    int32_t codePointNumBatches; // Number of batches in codePointsOverflow
+    // Use a child class for code point matchers, since it requires non-default operators.
+    CodePointMatcherWarehouse fCodePoints;
 
     friend class AffixPatternMatcherBuilder;
     friend class AffixPatternMatcher;
@@ -161,6 +194,8 @@ class AffixMatcher : public NumberParseMatcher, public UMemory {
 
     int8_t compareTo(const AffixMatcher& rhs) const;
 
+    UnicodeString toString() const override;
+
   private:
     AffixPatternMatcher* fPrefix;
     AffixPatternMatcher* fSuffix;
@@ -175,23 +210,19 @@ class AffixMatcherWarehouse {
   public:
     AffixMatcherWarehouse() = default;  // WARNING: Leaves the object in an unusable state
 
-    AffixMatcherWarehouse(AffixTokenMatcherWarehouse& warehouse);
+    AffixMatcherWarehouse(AffixTokenMatcherWarehouse* tokenWarehouse);
 
-    AffixMatcherWarehouse& operator=(AffixMatcherWarehouse&& src);
-
-    static AffixMatcherWarehouse createAffixMatchers(const AffixPatternProvider& patternInfo,
-                                                     MutableMatcherCollection& output,
-                                                     AffixTokenMatcherWarehouse tokenWarehouse,
-                                                     const IgnorablesMatcher& ignorables,
-                                                     parse_flags_t parseFlags, UErrorCode& status);
+    void createAffixMatchers(const AffixPatternProvider& patternInfo, MutableMatcherCollection& output,
+                             const IgnorablesMatcher& ignorables, parse_flags_t parseFlags,
+                             UErrorCode& status);
 
   private:
     // 9 is the limit: positive, zero, and negative, each with prefix, suffix, and prefix+suffix
     AffixMatcher fAffixMatchers[9];
     // 6 is the limit: positive, zero, and negative, a prefix and a suffix for each
     AffixPatternMatcher fAffixPatternMatchers[6];
-    // Store all the tokens used by the AffixPatternMatchers
-    AffixTokenMatcherWarehouse fAffixTokenMatcherWarehouse;
+    // Reference to the warehouse for tokens used by the AffixPatternMatchers
+    AffixTokenMatcherWarehouse* fTokenWarehouse;
 
     friend class AffixMatcher;
 

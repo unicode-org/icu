@@ -30,6 +30,8 @@ class SymbolMatcher : public NumberParseMatcher, public UMemory {
 
     const UnicodeSet& getLeadCodePoints() override;
 
+    UnicodeString toString() const override;
+
     virtual bool isDisabled(const ParsedNumber& result) const = 0;
 
     virtual void accept(StringSegment& segment, ParsedNumber& result) const = 0;
@@ -49,6 +51,8 @@ class IgnorablesMatcher : public SymbolMatcher {
     IgnorablesMatcher(unisets::Key key);
 
     bool isFlexible() const override;
+
+    UnicodeString toString() const override;
 
   protected:
     bool isDisabled(const ParsedNumber& result) const override;

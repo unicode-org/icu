@@ -5,6 +5,10 @@
 
 #if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
 
+// Allow implicit conversion from char16_t* to UnicodeString for this file:
+// Helpful in toString methods and elsewhere.
+#define UNISTR_FROM_STRING_EXPLICIT
+
 #include "numparse_types.h"
 #include "numparse_symbols.h"
 #include "numparse_utils.h"
@@ -70,6 +74,11 @@ const UnicodeSet& SymbolMatcher::getLeadCodePoints() {
     return *fLocalLeadCodePoints;
 }
 
+UnicodeString SymbolMatcher::toString() const {
+    // TODO: Customize output for each symbol
+    return u"<Symbol>";
+}
+
 
 IgnorablesMatcher::IgnorablesMatcher(unisets::Key key)
         : SymbolMatcher({}, key) {
@@ -77,6 +86,10 @@ IgnorablesMatcher::IgnorablesMatcher(unisets::Key key)
 
 bool IgnorablesMatcher::isFlexible() const {
     return true;
+}
+
+UnicodeString IgnorablesMatcher::toString() const {
+    return u"<Ignorables>";
 }
 
 bool IgnorablesMatcher::isDisabled(const ParsedNumber&) const {
