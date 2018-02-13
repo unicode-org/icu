@@ -9,6 +9,8 @@ import com.ibm.icu.text.UnicodeSet;
  * A mutable class allowing for a String with a variable offset and length. The charAt, length, and
  * subSequence methods all operate relative to the fixed offset into the String.
  *
+ * TODO: Make sure that this operates only on code point boundaries.
+ *
  * @author sffc
  */
 public class StringSegment implements CharSequence {

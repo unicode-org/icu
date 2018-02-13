@@ -32,6 +32,8 @@ class CurrencyNamesMatcher : public NumberParseMatcher, public UMemory {
 
     const UnicodeSet& getLeadCodePoints() override;
 
+    UnicodeString toString() const override;
+
   private:
     // We could use Locale instead of CharString here, but
     // Locale has a non-trivial default constructor.
@@ -50,6 +52,8 @@ class CurrencyCustomMatcher : public NumberParseMatcher, public UMemory {
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
     const UnicodeSet& getLeadCodePoints() override;
+
+    UnicodeString toString() const override;
 
   private:
     UChar fCurrencyCode[4];
@@ -74,6 +78,8 @@ class CurrencyAnyMatcher : public AnyMatcher, public UMemory {
     CurrencyAnyMatcher& operator=(CurrencyAnyMatcher&& src) U_NOEXCEPT;
 
     const UnicodeSet& getLeadCodePoints() override;
+
+    UnicodeString toString() const override;
 
   protected:
     const NumberParseMatcher* const* begin() const override;

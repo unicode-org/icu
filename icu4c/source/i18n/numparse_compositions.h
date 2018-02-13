@@ -87,6 +87,8 @@ class ArraySeriesMatcher : public SeriesMatcher {
 
     const UnicodeSet& getLeadCodePoints() override;
 
+    UnicodeString toString() const override;
+
     int32_t length() const override;
 
   protected:
