@@ -762,7 +762,7 @@ void     RBBITableBuilder::flagAcceptingStates() {
                 // if sd->fAccepting already had a value other than 0 or -1, leave it be.
 
                 // If the end marker node is from a look-ahead rule, set
-                //   the fLookAhead field or this state also.
+                //   the fLookAhead field for this state also.
                 if (endMarker->fLookAheadEnd) {
                     // TODO:  don't change value if already set?
                     // TODO:  allow for more than one active look-ahead rule in engine.
@@ -1085,8 +1085,6 @@ bool RBBITableBuilder::findDuplCharClassFrom(int32_t &baseCategory, int32_t &dup
     int32_t numStates = fDStates->size();
     int32_t numCols = fRB->fSetBuilder->getNumCharCategories();
 
-    U_ASSERT(baseCategory < duplCategory);
-
     uint16_t table_base;
     uint16_t table_dupl;
     for (; baseCategory < numCols-1; ++baseCategory) {
@@ -1171,11 +1169,21 @@ void RBBITableBuilder::removeState(int32_t keepState, int32_t duplState) {
             int32_t existingVal = sd->fDtran->elementAti(col);
             int32_t newVal = existingVal;
             if (existingVal == duplState) {
-                existingVal = keepState;
+                newVal = keepState;
             } else if (existingVal > duplState) {
                 newVal = existingVal - 1;
             }
             sd->fDtran->setElementAt(newVal, col);
+        }
+        if (sd->fAccepting == duplState) {
+            sd->fAccepting = keepState;
+        } else if (sd->fAccepting > duplState) {
+            sd->fAccepting--;
+        }
+        if (sd->fLookAhead == duplState) {
+            sd->fLookAhead = keepState;
+        } else if (sd->fLookAhead > duplState) {
+            sd->fLookAhead--;
         }
     }
 }
@@ -1185,13 +1193,12 @@ void RBBITableBuilder::removeState(int32_t keepState, int32_t duplState) {
  * RemoveDuplicateStates
  */
 void RBBITableBuilder::removeDuplicateStates() {
-    int32_t firstState = 0;
+    int32_t firstState = 3;
     int32_t duplicateState = 0;
     while (findDuplicateState(firstState, duplicateState)) {
-        printf("Removing duplicate states (%d, %d)\n", firstState, duplicateState);
+        // printf("Removing duplicate states (%d, %d)\n", firstState, duplicateState);
         removeState(firstState, duplicateState);
     }
-
 }
 
 //-----------------------------------------------------------------------------
