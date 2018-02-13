@@ -1582,9 +1582,9 @@ set pattern 0
 set signAlwaysShown 1
 begin
 format	output	breaks
-// J and K do not support this feature
-42	+42	JK
-0	+0	JK
+// C, J and K do not support this feature
+42	+42	CJK
+0	+0	CJK
 -42	-42
 
 test parse strict with plus sign
@@ -1595,14 +1595,14 @@ begin
 lenient	parse	output	breaks
 1	42	42
 1	-42	-42
-1	+42	42	JK
+1	+42	42	CJK
 1	0	0
-1	+0	0	JK
+1	+0	0	CJK
 0	42	fail	CJK
 0	-42	-42
-0	+42	42	JK
+0	+42	42	CJK
 0	0	fail	CJK
-0	+0	0	JK
+0	+0	0	CJK
 
 
 
