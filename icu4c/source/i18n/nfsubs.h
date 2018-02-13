@@ -191,6 +191,7 @@ public:
         double baseValue,
         double upperBound, 
         UBool lenientParse,
+        int32_t nonNumericalExecutedRuleMask,
         Formattable& result) const;
     
     /**

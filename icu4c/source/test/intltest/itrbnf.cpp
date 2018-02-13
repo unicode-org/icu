@@ -75,6 +75,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(23, TestVariableDecimalPoint);
         TESTCASE(24, TestLargeNumbers);
         TESTCASE(25, TestCompactDecimalFormatStyle);
+        TESTCASE(26, TestParseFailure);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2281,6 +2282,25 @@ void IntlTestRBNF::TestCompactDecimalFormatStyle() {
             { NULL, NULL }
     };
     doTest(&rbnf, enTestFullData, false);
+}
+
+void IntlTestRBNF::TestParseFailure() {
+    UErrorCode status = U_ZERO_ERROR;
+    RuleBasedNumberFormat rbnf(URBNF_SPELLOUT, Locale::getJapanese(), status);
+    static const char* testData[][1] = {
+        { "\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB" },
+        { NULL }
+    };
+    for (int i = 0; testData[i][0]; ++i) {
+        const char* spelledNumber = testData[i][0]; // spelled-out number
+        
+        UnicodeString spelledNumberString = UnicodeString(spelledNumber).unescape();
+        Formattable actualNumber;
+        rbnf.parse(spelledNumberString, actualNumber, status);
+        if (status != U_INVALID_FORMAT_ERROR) { // I would have expected U_PARSE_ERROR, but NumberFormat::parse gives U_INVALID_FORMAT_ERROR
+            errln("FAIL: string should be unparseable %s %s", spelledNumber, u_errorName(status));
+        }
+    }
 }
 
 void 

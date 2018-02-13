@@ -635,6 +635,8 @@ icu4c/source/tools/ctestfw/libsicutest*
 icu4c/source/tools/ctestfw/release
 icu4c/source/tools/ctestfw/x64
 icu4c/source/tools/ctestfw/x86
+icu4c/source/tools/escapesrc/*.d
+icu4c/source/tools/escapesrc/Makefile
 icu4c/source/tools/genbrk/*.d
 icu4c/source/tools/genbrk/*.o
 icu4c/source/tools/genbrk/*.pdb
