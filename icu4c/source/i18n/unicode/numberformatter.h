@@ -172,7 +172,7 @@ typedef enum UNumberUnitWidth {
  * <li>MIN2: 1234 and 12,34,567
  * <li>AUTO: 1,234 and 12,34,567
  * <li>ON_ALIGNED: 1,234 and 12,34,567
- * <li>WESTERN: 1,234 and 1,234,567
+ * <li>THOUSANDS: 1,234 and 1,234,567
  * </ul>
  *
  * <p>
@@ -248,21 +248,22 @@ typedef enum UGroupingStrategy {
      *
      * @draft ICU 61
      */
-    UNUM_GROUPING_WESTERN
+    UNUM_GROUPING_THOUSANDS
 
 } UGroupingStrategy;
 
 /**
- * An enum declaring how to denote positive and negative numbers. Example outputs when formatting 123 and -123 in
- * <em>en-US</em>:
+ * An enum declaring how to denote positive and negative numbers. Example outputs when formatting
+ * 123, 0, and -123 in <em>en-US</em>:
  *
- * <p>
  * <ul>
- * <li>AUTO: "123", "-123"
- * <li>ALWAYS: "+123", "-123"
- * <li>NEVER: "123", "123"
- * <li>ACCOUNTING: "$123", "($123)"
- * <li>ACCOUNTING_ALWAYS: "+$123", "($123)"
+ * <li>AUTO: "123", "0", and "-123"
+ * <li>ALWAYS: "+123", "+0", and "-123"
+ * <li>NEVER: "123", "0", and "123"
+ * <li>ACCOUNTING: "$123", "$0", and "($123)"
+ * <li>ACCOUNTING_ALWAYS: "+$123", "+$0", and "($123)"
+ * <li>EXCEPT_ZERO: "+123", "0", and "-123"
+ * <li>ACCOUNTING_EXCEPT_ZERO: "+$123", "$0", and "($123)"
  * </ul>
  *
  * <p>
@@ -1534,7 +1535,8 @@ class U_I18N_API NumberFormatterSettings {
      * All units will be properly localized with locale data, and all units are compatible with notation styles,
      * rounding strategies, and other number formatter settings.
      *
-     * Pass this method any instance of {@link MeasureUnit}. For units of measure:
+     * Pass this method any instance of {@link MeasureUnit}. For units of measure (which often involve the
+     * factory methods that return a pointer):
      *
      * <pre>
      * NumberFormatter::with().adoptUnit(MeasureUnit::createMeter(status))
@@ -1569,7 +1571,11 @@ class U_I18N_API NumberFormatterSettings {
 
     /**
      * Like unit(), but takes ownership of a pointer.  Convenient for use with the MeasureFormat factory
-     * methods, which return pointers that need ownership.
+     * methods, which return pointers that need ownership.  Example:
+     *
+     * <pre>
+     * NumberFormatter::with().adoptUnit(MeasureUnit::createMeter(status))
+     * </pre>
      *
      * @param unit
      *            The unit to render.
@@ -1578,19 +1584,14 @@ class U_I18N_API NumberFormatterSettings {
      * @see MeasureUnit
      * @draft ICU 60
      */
-    Derived adoptUnit(const icu::MeasureUnit *unit) const;
+    Derived adoptUnit(icu::MeasureUnit *unit) const;
 
     /**
      * Sets a unit to be used in the denominator. For example, to format "3 m/s", pass METER to the unit and SECOND to
      * the perUnit.
      *
-     * Pass this method any instance of {@link MeasureUnit}. For example:
-     *
-     * <pre>
-     * NumberFormatter::with()
-     *      .adoptUnit(MeasureUnit::createMeter(status))
-     *      .adoptPerUnit(MeasureUnit::createSecond(status))
-     * </pre>
+     * Pass this method any instance of {@link MeasureUnit}.  Since MeasureUnit factory methods return pointers, the
+     * {@link #adoptPerUnit} version of this method is often more useful.
      *
      * The default is not to display any unit in the denominator.
      *
@@ -1606,7 +1607,13 @@ class U_I18N_API NumberFormatterSettings {
 
     /**
      * Like perUnit(), but takes ownership of a pointer.  Convenient for use with the MeasureFormat factory
-     * methods, which return pointers that need ownership.
+     * methods, which return pointers that need ownership.  Example:
+     *
+     * <pre>
+     * NumberFormatter::with()
+     *      .adoptUnit(MeasureUnit::createMeter(status))
+     *      .adoptPerUnit(MeasureUnit::createSecond(status))
+     * </pre>
      *
      * @param perUnit
      *            The unit to render in the denominator.
@@ -1615,7 +1622,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see MeasureUnit
      * @draft ICU 61
      */
-    Derived adoptPerUnit(const icu::MeasureUnit *perUnit) const;
+    Derived adoptPerUnit(icu::MeasureUnit *perUnit) const;
 
     /**
      * Specifies the rounding strategy to use when formatting numbers.
@@ -1780,7 +1787,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see NumberingSystem
      * @draft ICU 60
      */
-    Derived adoptSymbols(const NumberingSystem *symbols) const;
+    Derived adoptSymbols(NumberingSystem *symbols) const;
 
     /**
      * Sets the width of the unit (measure unit or currency).  Most common values:

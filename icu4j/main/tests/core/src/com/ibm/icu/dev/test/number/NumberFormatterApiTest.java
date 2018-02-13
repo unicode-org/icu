@@ -1175,6 +1175,21 @@ public class NumberFormatterApiTest {
                 "8.765",
                 "0");
 
+        assertFormatDescendingBig(
+                "Indic locale with THOUSANDS grouping",
+                "",
+                NumberFormatter.with().grouping(GroupingStrategy.THOUSANDS),
+                new ULocale("en-IN"),
+                "87,650,000",
+                "8,765,000",
+                "876,500",
+                "87,650",
+                "8,765",
+                "876.5",
+                "87.65",
+                "8.765",
+                "0");
+
         // NOTE: Hungarian is interesting because it has minimumGroupingDigits=4 in locale data
         // If this test breaks due to data changes, find another locale that has minimumGroupingDigits.
         assertFormatDescendingBig(
