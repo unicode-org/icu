@@ -305,6 +305,10 @@ class RBBISetBuilder {
         }
     }
 
+    /**
+     * Merge two character categories that have been identified as having equivalent behavior.
+     * The ranges belonging to the right category (table column) will be added to the left.
+     */
     void mergeCategories(int left, int right) {
         assert(left >= 1);
         assert(right > left);
@@ -319,6 +323,7 @@ class RBBISetBuilder {
         }
         --fGroupCount;
     }
+
     //-----------------------------------------------------------------------------------
     //
     //          getTrieSize()    Return the size that will be required to serialize the Trie.

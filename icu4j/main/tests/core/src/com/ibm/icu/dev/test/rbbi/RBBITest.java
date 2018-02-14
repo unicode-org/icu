@@ -590,10 +590,10 @@ public class RBBITest extends TestFmwk {
         // Ignore column (char class) 0 while checking; it's special, and may have duplicates.
         for (int c1=1; c1<numCharClasses; c1++) {
             for (int c2 = c1+1; c2 < numCharClasses; c2++) {
-                // assertFalse(String.format("Duplicate columns (%d, %d)", c1, c2), columns.get(c1).equals(columns.get(c2)));
-                if (columns.get(c1).equals(columns.get(c2))) {
-                    System.out.printf("Duplicate columns (%d, %d)\n", c1, c2);
-                }
+                assertFalse(String.format("Duplicate columns (%d, %d)", c1, c2), columns.get(c1).equals(columns.get(c2)));
+                // if (columns.get(c1).equals(columns.get(c2))) {
+                //    System.out.printf("Duplicate columns (%d, %d)\n", c1, c2);
+                // }
             }
         }
 
@@ -615,10 +615,10 @@ public class RBBITest extends TestFmwk {
 
         for (int r1=0; r1 < dw.getStateTableNumStates(fwtbl); r1++) {
             for (int r2= r1+1; r2 < dw.getStateTableNumStates(fwtbl); r2++) {
-                // assertFalse(String.format("Duplicate states (%d, %d)", r1, r2), rows.get(r1).equals(rows.get(r2)));
-                if (rows.get(r1).equals(rows.get(r2))) {
-                    System.out.printf("Duplicate states (%d, %d)\n", r1, r2);
-                }
+                assertFalse(String.format("Duplicate states (%d, %d)", r1, r2), rows.get(r1).equals(rows.get(r2)));
+                // if (rows.get(r1).equals(rows.get(r2))) {
+                //     System.out.printf("Duplicate states (%d, %d)\n", r1, r2);
+                // }
             }
         }
     }
