@@ -1044,7 +1044,7 @@ public class MeasureFormat extends UFormat {
             case TIME_UNIT_FORMAT:
                 return createTimeUnitFormat();
             case CURRENCY_FORMAT:
-                return new CurrencyFormat(locale);
+                return MeasureFormat.getCurrencyFormat(locale);
             default:
                 throw new InvalidObjectException("Unknown subclass: " + subClass);
             }

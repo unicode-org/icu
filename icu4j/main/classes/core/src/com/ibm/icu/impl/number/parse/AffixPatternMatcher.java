@@ -35,7 +35,6 @@ public class AffixPatternMatcher extends SeriesMatcher implements AffixUtils.Tok
             return null;
         }
 
-        affixPattern = ParsingUtils.maybeFold(affixPattern, parseFlags);
         AffixPatternMatcher series = new AffixPatternMatcher(affixPattern);
         series.factory = factory;
         series.ignorables = (0 != (parseFlags & ParsingUtils.PARSE_FLAG_EXACT_AFFIX)) ? null

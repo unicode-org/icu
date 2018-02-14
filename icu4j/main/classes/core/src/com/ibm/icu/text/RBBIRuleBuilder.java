@@ -342,10 +342,10 @@ class RBBIRuleBuilder {
         //
         // UnicodeSet processing.
         //    Munge the Unicode Sets to create a set of character categories.
-        //    Generate the mapping tables (TRIE) from input 32-bit characters to
+        //    Generate the mapping tables (TRIE) from input code points to
         //    the character categories.
         //
-        builder.fSetBuilder.build();
+        builder.fSetBuilder.buildRanges();
 
         //
         //   Generate the DFA state transition table.
@@ -363,10 +363,34 @@ class RBBIRuleBuilder {
             builder.fForwardTables.printRuleStatusTable();
         }
 
+        builder.optimizeTables();
+        builder.fSetBuilder.buildTrie();
         //
         //   Package up the compiled data, writing it to an output stream
         //      in the serialization format.  This is the same as the ICU4C runtime format.
         //
         builder.flattenData(os);
     }
+
+    static class ClassPair {
+        int left = 3;
+        int right = 0;
+    }
+
+    void optimizeTables() {
+        ClassPair duplPair = new ClassPair();
+
+        while (fForwardTables.findDuplCharClassFrom(duplPair)) {
+            fSetBuilder.mergeCategories(duplPair);
+            fForwardTables.removeColumn(duplPair.right);
+            fReverseTables.removeColumn(duplPair.right);
+            fSafeFwdTables.removeColumn(duplPair.right);
+            fSafeRevTables.removeColumn(duplPair.right);
+        }
+
+        fForwardTables.removeDuplicateStates();
+        fReverseTables.removeDuplicateStates();
+        fSafeFwdTables.removeDuplicateStates();
+        fSafeRevTables.removeDuplicateStates();
+
 }

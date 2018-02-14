@@ -51,7 +51,7 @@ public class UnicodeSetStaticCache {
         DIGITS,
         NAN_LEAD,
         SCIENTIFIC_LEAD,
-        CWCF,
+        CWCF, // TODO: Check if this is being used and remove it if not.
 
         // Combined Separators with Digits (for lead code points)
         DIGITS_OR_ALL_SEPARATORS,

@@ -868,7 +868,7 @@ public class NumberFormatTest extends TestFmwk {
                 new ParseCurrencyItem( "en_GB", "euros4",   "4,00\u00A0\u20AC", 6,400,  "EUR" ),
                 new ParseCurrencyItem( "en_GB", "euros6",   "6\u00A0\u20AC",    3,  6,  "EUR" ),
                 new ParseCurrencyItem( "en_GB", "euros8",   "\u20AC8",          2,  8,  "EUR" ),
-                new ParseCurrencyItem( "en_GB", "dollars4", "US$4",             0,  0,  "USD" ),
+                new ParseCurrencyItem( "en_GB", "dollars4", "US$4",             4,  4,  "USD" ),
 
                 new ParseCurrencyItem( "fr_FR", "euros4",   "4,00\u00A0\u20AC", 6,  4,  "EUR" ),
                 new ParseCurrencyItem( "fr_FR", "euros6",   "6\u00A0\u20AC",    3,  6,  "EUR" ),
@@ -2018,7 +2018,6 @@ public class NumberFormatTest extends TestFmwk {
     };
 
     @SuppressWarnings("resource")  // InputStream is will be closed by the ResourceReader.
-    @Ignore("TODO: http://bugs.icu-project.org/trac/ticket/13571")
     @Test
     public void TestCases() {
         String caseFileName = "NumberFormatTestCases.txt";
@@ -5329,6 +5328,23 @@ public class NumberFormatTest extends TestFmwk {
         df.setGroupingUsed(false);
         assertEquals("Grouping size should now be zero", 0, df.getGroupingSize());
         assertEquals("Grouping should be off", false, df.isGroupingUsed());
+    }
+
+    @Test
+    public void Test13453_AffixContent() {
+        DecimalFormat df = (DecimalFormat) DecimalFormat.getScientificInstance();
+        assertEquals("Scientific should NOT be included", "", df.getPositiveSuffix());
+
+        df = CompactDecimalFormat.getInstance(ULocale.ENGLISH, CompactDecimalFormat.CompactStyle.SHORT);
+        assertEquals("Compact should NOT be included", "", df.getPositiveSuffix());
+
+        df = (DecimalFormat) DecimalFormat.getInstance(NumberFormat.ISOCURRENCYSTYLE);
+        df.setCurrency(Currency.getInstance("GBP"));
+        assertEquals("ISO currency SHOULD be included", "GBP", df.getPositivePrefix());
+
+        df = (DecimalFormat) DecimalFormat.getInstance(NumberFormat.PLURALCURRENCYSTYLE);
+        df.setCurrency(Currency.getInstance("GBP"));
+        assertEquals("Plural name SHOULD be included", " British pounds", df.getPositiveSuffix());
     }
 
     @Test

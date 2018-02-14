@@ -655,7 +655,7 @@ class RBBITableBuilder {
                         // if sd.fAccepting already had a value other than 0 or -1, leave it be.
 
                        // If the end marker node is from a look-ahead rule, set
-                       //   the fLookAhead field or this state also.
+                       //   the fLookAhead field for this state also.
                        if (endMarker.fLookAheadEnd) {
                         // TODO:  don't change value if already set?
                         // TODO:  allow for more than one active look-ahead rule in engine.
@@ -831,6 +831,129 @@ class RBBITableBuilder {
        }
 
 
+
+//
+//    findDuplCharClassFrom()
+//
+boolean findDuplCharClassFrom(RBBIRuleBuilder.ClassPair classPair) {
+    int numStates = fDStates.size();
+    int numCols = fRB.fSetBuilder.getNumCharCategories();
+
+    uint16_t table_base;
+    uint16_t table_dupl;
+    for (; baseCategory < numCols-1; ++baseCategory) {
+        for (duplCategory=baseCategory+1; duplCategory < numCols; ++duplCategory) {
+             for (int state=0; state<numStates; state++) {
+                 RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates.elementAt(state);
+                 table_base = (uint16_t)sd.fDtran.elementAti(baseCategory);
+                 table_dupl = (uint16_t)sd.fDtran.elementAti(duplCategory);
+                 if (table_base != table_dupl) {
+                     break;
+                 }
+             }
+             if (table_base == table_dupl) {
+                 return true;
+             }
+        }
+    }
+    return false;
+}
+
+
+//
+//    removeColumn()
+//
+void removeColumn(int column) {
+    int numStates = fDStates.size();
+    for (int state=0; state<numStates; state++) {
+        RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates.elementAt(state);
+        U_ASSERT(column < sd.fDtran.size());
+        sd.fDtran.removeElementAt(column);
+    }
+}
+
+/*
+ * findDuplicateState
+ */
+bool findDuplicateState(int &firstState, int &duplState) {
+    int numStates = fDStates.size();
+    int numCols = fRB.fSetBuilder.getNumCharCategories();
+
+    for (; firstState<numStates-1; ++firstState) {
+        RBBIStateDescriptor *firstSD = (RBBIStateDescriptor *)fDStates.elementAt(firstState);
+        for (duplState=firstState+1; duplState<numStates; ++duplState) {
+            RBBIStateDescriptor *duplSD = (RBBIStateDescriptor *)fDStates.elementAt(duplState);
+            if (firstSD.fAccepting != duplSD.fAccepting ||
+                firstSD.fLookAhead != duplSD.fLookAhead ||
+                firstSD.fTagsIdx   != duplSD.fTagsIdx) {
+                continue;
+            }
+            bool rowsMatch = true;
+            for (int col=0; col < numCols; ++col) {
+                int firstVal = firstSD.fDtran.elementAti(col);
+                int duplVal = duplSD.fDtran.elementAti(col);
+                if (!((firstVal == duplVal) ||
+                        ((firstVal == firstState || firstVal == duplState) &&
+                        (duplVal  == firstState || duplVal  == duplState)))) {
+                    rowsMatch = false;
+                    break;
+                }
+            }
+            if (rowsMatch) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void removeState(int keepState, int duplState) {
+    U_ASSERT(keepState < duplState);
+    U_ASSERT(duplState < fDStates.size());
+
+    RBBIStateDescriptor *duplSD = (RBBIStateDescriptor *)fDStates.elementAt(duplState);
+    fDStates.removeElementAt(duplState);
+    delete duplSD;
+
+    int numStates = fDStates.size();
+    int numCols = fRB.fSetBuilder.getNumCharCategories();
+    for (int state=0; state<numStates; ++state) {
+        RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates.elementAt(state);
+        for (int col=0; col<numCols; col++) {
+            int existingVal = sd.fDtran.elementAti(col);
+            int newVal = existingVal;
+            if (existingVal == duplState) {
+                newVal = keepState;
+            } else if (existingVal > duplState) {
+                newVal = existingVal - 1;
+            }
+            sd.fDtran.setElementAt(newVal, col);
+        }
+        if (sd.fAccepting == duplState) {
+            sd.fAccepting = keepState;
+        } else if (sd.fAccepting > duplState) {
+            sd.fAccepting--;
+        }
+        if (sd.fLookAhead == duplState) {
+            sd.fLookAhead = keepState;
+        } else if (sd.fLookAhead > duplState) {
+            sd.fLookAhead--;
+        }
+    }
+}
+
+
+/*
+ * RemoveDuplicateStates
+ */
+void removeDuplicateStates() {
+    int firstState = 3;
+    int duplicateState = 0;
+    while (findDuplicateState(firstState, duplicateState)) {
+        // printf("Removing duplicate states (%d, %d)\n", firstState, duplicateState);
+        removeState(firstState, duplicateState);
+    }
+}
 
 
        //-----------------------------------------------------------------------------

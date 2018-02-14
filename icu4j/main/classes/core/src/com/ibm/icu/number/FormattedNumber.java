@@ -15,8 +15,8 @@ import com.ibm.icu.text.PluralRules.IFixedDecimal;
 import com.ibm.icu.util.ICUUncheckedIOException;
 
 /**
- * The result of a number formatting operation. This class allows the result to be exported in several data types,
- * including a String, an AttributedCharacterIterator, and a BigDecimal.
+ * The result of a number formatting operation. This class allows the result to be exported in several
+ * data types, including a String, an AttributedCharacterIterator, and a BigDecimal.
  *
  * @draft ICU 60
  * @provisional This API might change or be removed in a future release.
@@ -47,12 +47,12 @@ public class FormattedNumber {
     }
 
     /**
-     * Append the formatted number to an Appendable, such as a StringBuilder. This may be slightly more efficient than
-     * creating a String.
+     * Append the formatted number to an Appendable, such as a StringBuilder. This may be slightly more
+     * efficient than creating a String.
      *
      * <p>
-     * If an IOException occurs when appending to the Appendable, an unchecked {@link ICUUncheckedIOException} is thrown
-     * instead.
+     * If an IOException occurs when appending to the Appendable, an unchecked
+     * {@link ICUUncheckedIOException} is thrown instead.
      *
      * @param appendable
      *            The Appendable to which to append the formatted number string.
@@ -73,16 +73,18 @@ public class FormattedNumber {
     }
 
     /**
-     * Determine the start and end indices of the first occurrence of the given <em>field</em> in the output string.
-     * This allows you to determine the locations of the integer part, fraction part, and sign.
+     * Determine the start and end indices of the first occurrence of the given <em>field</em> in the
+     * output string. This allows you to determine the locations of the integer part, fraction part, and
+     * sign.
      *
      * <p>
-     * If multiple different field attributes are needed, this method can be called repeatedly, or if <em>all</em> field
-     * attributes are needed, consider using getFieldIterator().
+     * If multiple different field attributes are needed, this method can be called repeatedly, or if
+     * <em>all</em> field attributes are needed, consider using getFieldIterator().
      *
      * <p>
-     * If a field occurs multiple times in an output string, such as a grouping separator, this method will only ever
-     * return the first occurrence. Use getFieldIterator() to access all occurrences of an attribute.
+     * If a field occurs multiple times in an output string, such as a grouping separator, this method
+     * will only ever return the first occurrence. Use getFieldIterator() to access all occurrences of an
+     * attribute.
      *
      * @param fieldPosition
      *            The FieldPosition to populate with the start and end indices of the desired field.
@@ -106,13 +108,15 @@ public class FormattedNumber {
     }
 
     /**
-     * Export the formatted number as an AttributedCharacterIterator. This allows you to determine which characters in
-     * the output string correspond to which <em>fields</em>, such as the integer part, fraction part, and sign.
+     * Export the formatted number as an AttributedCharacterIterator. This allows you to determine which
+     * characters in the output string correspond to which <em>fields</em>, such as the integer part,
+     * fraction part, and sign.
      *
      * <p>
      * If information on only one field is needed, consider using populateFieldPosition() instead.
      *
-     * @return An AttributedCharacterIterator, containing information on the field attributes of the number string.
+     * @return An AttributedCharacterIterator, containing information on the field attributes of the
+     *         number string.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      * @see com.ibm.icu.text.NumberFormat.Field
@@ -124,8 +128,9 @@ public class FormattedNumber {
     }
 
     /**
-     * Export the formatted number as a BigDecimal. This endpoint is useful for obtaining the exact number being printed
-     * after scaling and rounding have been applied by the number formatting pipeline.
+     * Export the formatted number as a BigDecimal. This endpoint is useful for obtaining the exact
+     * number being printed after scaling and rounding have been applied by the number formatting
+     * pipeline.
      *
      * @return A BigDecimal representation of the formatted number.
      * @draft ICU 60
@@ -138,31 +143,29 @@ public class FormattedNumber {
 
     /**
      * @internal
-     * @deprecated This API is ICU internal only.
+     * @deprecated This API is ICU internal only. Use {@link #populateFieldPosition} or
+     *             {@link #getFieldIterator} for similar functionality.
      */
     @Deprecated
     public String getPrefix() {
         NumberStringBuilder temp = new NumberStringBuilder();
-        int length = micros.modOuter.apply(temp, 0, 0);
-        length += micros.modMiddle.apply(temp, 0, length);
-        /* length += */ micros.modInner.apply(temp, 0, length);
-        int prefixLength = micros.modOuter.getPrefixLength() + micros.modMiddle.getPrefixLength()
-                + micros.modInner.getPrefixLength();
+        // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle).
+        micros.modMiddle.apply(temp, 0, 0);
+        int prefixLength = micros.modMiddle.getPrefixLength();
         return temp.subSequence(0, prefixLength).toString();
     }
 
     /**
      * @internal
-     * @deprecated This API is ICU internal only.
+     * @deprecated This API is ICU internal only. Use {@link #populateFieldPosition} or
+     *             {@link #getFieldIterator} for similar functionality.
      */
     @Deprecated
     public String getSuffix() {
         NumberStringBuilder temp = new NumberStringBuilder();
-        int length = micros.modOuter.apply(temp, 0, 0);
-        length += micros.modMiddle.apply(temp, 0, length);
-        length += micros.modInner.apply(temp, 0, length);
-        int prefixLength = micros.modOuter.getPrefixLength() + micros.modMiddle.getPrefixLength()
-                + micros.modInner.getPrefixLength();
+        // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle).
+        int length = micros.modMiddle.apply(temp, 0, 0);
+        int prefixLength = micros.modMiddle.getPrefixLength();
         return temp.subSequence(prefixLength, length).toString();
     }
 
@@ -185,7 +188,9 @@ public class FormattedNumber {
     public int hashCode() {
         // NumberStringBuilder and BigDecimal are mutable, so we can't call
         // #equals() or #hashCode() on them directly.
-        return Arrays.hashCode(nsb.toCharArray()) ^ Arrays.hashCode(nsb.toFieldArray()) ^ fq.toBigDecimal().hashCode();
+        return Arrays.hashCode(nsb.toCharArray())
+                ^ Arrays.hashCode(nsb.toFieldArray())
+                ^ fq.toBigDecimal().hashCode();
     }
 
     /**
@@ -206,7 +211,7 @@ public class FormattedNumber {
         // #equals() or #hashCode() on them directly.
         FormattedNumber _other = (FormattedNumber) other;
         return Arrays.equals(nsb.toCharArray(), _other.nsb.toCharArray())
-                ^ Arrays.equals(nsb.toFieldArray(), _other.nsb.toFieldArray())
-                ^ fq.toBigDecimal().equals(_other.fq.toBigDecimal());
+                && Arrays.equals(nsb.toFieldArray(), _other.nsb.toFieldArray())
+                && fq.toBigDecimal().equals(_other.fq.toBigDecimal());
     }
 }
