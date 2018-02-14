@@ -425,7 +425,7 @@ abstract class NFSubstitution {
      * is left unchanged.
      */
     public Number doParse(String text, ParsePosition parsePosition, double baseValue,
-                          double upperBound, boolean lenientParse) {
+                          double upperBound, boolean lenientParse, int nonNumericalExecutedRuleMask) {
         Number tempResult;
 
         // figure out the highest base value a rule can have and match
@@ -443,7 +443,7 @@ abstract class NFSubstitution {
         // on), then also try parsing the text using a default-
         // constructed NumberFormat
         if (ruleSet != null) {
-            tempResult = ruleSet.parse(text, parsePosition, upperBound);
+            tempResult = ruleSet.parse(text, parsePosition, upperBound, nonNumericalExecutedRuleMask);
             if (lenientParse && !ruleSet.isFractionSet() && parsePosition.getIndex() == 0) {
                 tempResult = ruleSet.owner.getDecimalFormat().parse(text, parsePosition);
             }
@@ -995,17 +995,17 @@ class ModulusSubstitution extends NFSubstitution {
      */
     @Override
   public Number doParse(String text, ParsePosition parsePosition, double baseValue,
-                        double upperBound, boolean lenientParse) {
+                        double upperBound, boolean lenientParse, int nonNumericalExecutedRuleMask) {
         // if this isn't a >>> substitution, we can just use the
         // inherited parse() routine to do the parsing
         if (ruleToUse == null) {
-            return super.doParse(text, parsePosition, baseValue, upperBound, lenientParse);
+            return super.doParse(text, parsePosition, baseValue, upperBound, lenientParse, nonNumericalExecutedRuleMask);
 
         } else {
             // but if it IS a >>> substitution, we have to do it here: we
             // use the specific rule's doParse() method, and then we have to
             // do some of the other work of NFRuleSet.parse()
-            Number tempResult = ruleToUse.doParse(text, parsePosition, false, upperBound);
+            Number tempResult = ruleToUse.doParse(text, parsePosition, false, upperBound, nonNumericalExecutedRuleMask);
 
             if (parsePosition.getIndex() != 0) {
                 double result = tempResult.doubleValue();
@@ -1300,11 +1300,11 @@ class FractionalPartSubstitution extends NFSubstitution {
      */
     @Override
   public Number doParse(String text, ParsePosition parsePosition, double baseValue,
-                        double upperBound, boolean lenientParse) {
+                        double upperBound, boolean lenientParse, int nonNumericalExecutedRuleMask) {
         // if we're not in byDigits mode, we can just use the inherited
         // doParse()
         if (!byDigits) {
-            return super.doParse(text, parsePosition, baseValue, 0, lenientParse);
+            return super.doParse(text, parsePosition, baseValue, 0, lenientParse, nonNumericalExecutedRuleMask);
         }
         else {
             // if we ARE in byDigits mode, parse the text one digit at a time
@@ -1320,7 +1320,7 @@ class FractionalPartSubstitution extends NFSubstitution {
             int leadingZeros = 0;
             while (workText.length() > 0 && workPos.getIndex() != 0) {
                 workPos.setIndex(0);
-                digit = ruleSet.parse(workText, workPos, 10).intValue();
+                digit = ruleSet.parse(workText, workPos, 10, nonNumericalExecutedRuleMask).intValue();
                 if (lenientParse && workPos.getIndex() == 0) {
                     Number n = ruleSet.owner.getDecimalFormat().parse(workText, workPos);
                     if (n != null) {
@@ -1626,7 +1626,7 @@ class NumeratorSubstitution extends NFSubstitution {
      */
     @Override
   public Number doParse(String text, ParsePosition parsePosition, double baseValue,
-                        double upperBound, boolean lenientParse) {
+                        double upperBound, boolean lenientParse, int nonNumericalExecutedRuleMask) {
         // we don't have to do anything special to do the parsing here,
         // but we have to turn lenient parsing off-- if we leave it on,
         // it SERIOUSLY messes up the algorithm
@@ -1641,7 +1641,7 @@ class NumeratorSubstitution extends NFSubstitution {
 
             while (workText.length() > 0 && workPos.getIndex() != 0) {
                 workPos.setIndex(0);
-                /*digit = */ruleSet.parse(workText, workPos, 1).intValue(); // parse zero or nothing at all
+                /*digit = */ruleSet.parse(workText, workPos, 1, nonNumericalExecutedRuleMask).intValue(); // parse zero or nothing at all
                 if (workPos.getIndex() == 0) {
                     // we failed, either there were no more zeros, or the number was formatted with digits
                     // either way, we're done
@@ -1662,7 +1662,7 @@ class NumeratorSubstitution extends NFSubstitution {
         }
 
         // we've parsed off the zeros, now let's parse the rest from our current position
-        Number result =  super.doParse(text, parsePosition, withZeros ? 1 : baseValue, upperBound, false);
+        Number result =  super.doParse(text, parsePosition, withZeros ? 1 : baseValue, upperBound, false, nonNumericalExecutedRuleMask);
 
         if (withZeros) {
             // any base value will do in this case.  is there a way to
