@@ -79,6 +79,7 @@ public:
     void TestT9452(void);
     void TestT11632(void);
     void TestPersianCalOverflow(void);
+    void TestIslamicCalOverflow(void);
 
     void printdate(GregorianCalendar *cal, const char *string);
     void dowTest(UBool lenient) ;

@@ -94,6 +94,7 @@ static void TestFwdBack(void);
 static void TestFwdBackUnsafe(void);
 static void TestSetChar(void);
 static void TestSetCharUnsafe(void);
+static void TestTruncateIfIncomplete(void);
 static void TestAppendChar(void);
 static void TestAppend(void);
 static void TestSurrogates(void);
@@ -114,6 +115,7 @@ addUTF8Test(TestNode** root)
     addTest(root, &TestFwdBackUnsafe,           "utf8tst/TestFwdBackUnsafe");
     addTest(root, &TestSetChar,                 "utf8tst/TestSetChar");
     addTest(root, &TestSetCharUnsafe,           "utf8tst/TestSetCharUnsafe");
+    addTest(root, &TestTruncateIfIncomplete,    "utf8tst/TestTruncateIfIncomplete");
     addTest(root, &TestAppendChar,              "utf8tst/TestAppendChar");
     addTest(root, &TestAppend,                  "utf8tst/TestAppend");
     addTest(root, &TestSurrogates,              "utf8tst/TestSurrogates");
@@ -924,6 +926,64 @@ static void TestSetCharUnsafe() {
         }
 
         i++;
+    }
+}
+
+static void TestTruncateIfIncomplete() {
+    // Difference from U8_SET_CP_START():
+    // U8_TRUNCATE_IF_INCOMPLETE() does not look at s[length].
+    // Therefore, if the last byte is a lead byte, then this macro truncates
+    // even if the byte at the input index cannot continue a valid sequence
+    // (including when that is not a trail byte).
+    // On the other hand, if the last byte is a trail byte, then the two macros behave the same.
+    static const struct {
+        const char *s;
+        int32_t expected;
+    } cases[] = {
+        { "", 0 },
+        { "a", 1 },
+        { "\x80", 1 },
+        { "\xC1", 1 },
+        { "\xC2", 0 },
+        { "\xE0", 0 },
+        { "\xF4", 0 },
+        { "\xF5", 1 },
+        { "\x80\x80", 2 },
+        { "\xC2\xA0", 2 },
+        { "\xE0\x9F", 2 },
+        { "\xE0\xA0", 0 },
+        { "\xED\x9F", 0 },
+        { "\xED\xA0", 2 },
+        { "\xF0\x8F", 2 },
+        { "\xF0\x90", 0 },
+        { "\xF4\x8F", 0 },
+        { "\xF4\x90", 2 },
+        { "\xF5\x80", 2 },
+        { "\x80\x80\x80", 3 },
+        { "\xC2\xA0\x80", 3 },
+        { "\xE0\xA0\x80", 3 },
+        { "\xF0\x8F\x80", 3 },
+        { "\xF0\x90\x80", 0 },
+        { "\xF4\x8F\x80", 0 },
+        { "\xF4\x90\x80", 3 },
+        { "\xF5\x80\x80", 3 },
+        { "\x80\x80\x80\x80", 4 },
+        { "\xC2\xA0\x80\x80", 4 },
+        { "\xE0\xA0\x80\x80", 4 },
+        { "\xF0\x90\x80\x80", 4 },
+        { "\xF5\x80\x80\x80", 4 }
+    };
+    int32_t i;
+    for (i = 0; i < UPRV_LENGTHOF(cases); ++i) {
+        const char *s = cases[i].s;
+        int32_t expected = cases[i].expected;
+        int32_t length = (int32_t)strlen(s);
+        int32_t adjusted = length;
+        U8_TRUNCATE_IF_INCOMPLETE(s, 0, adjusted);
+        if (adjusted != expected) {
+            log_err("ERROR: U8_TRUNCATE_IF_INCOMPLETE failed for i=%d, length=%d. Expected:%d Got:%d\n",
+                    (int)i, (int)length, (int)expected, (int)adjusted);
+        }
     }
 }
 
