@@ -2,7 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
-import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSet.EntryRange;
 
@@ -23,6 +22,7 @@ public class ParsingUtils {
     public static final int PARSE_FLAG_EXACT_AFFIX = 0x0200;
     public static final int PARSE_FLAG_PLUS_SIGN_ALLOWED = 0x0400;
     public static final int PARSE_FLAG_FRACTION_GROUPING_DISABLED = 0x0800;
+    public static final int PARSE_FLAG_OPTIMIZE = 0x1000;
 
     public static void putLeadCodePoints(UnicodeSet input, UnicodeSet output) {
         for (EntryRange range : input.ranges()) {
@@ -36,18 +36,6 @@ public class ParsingUtils {
     public static void putLeadCodePoint(String input, UnicodeSet output) {
         if (!input.isEmpty()) {
             output.add(input.codePointAt(0));
-        }
-    }
-
-    /**
-     * Case-folds the string if IGNORE_CASE flag is set; otherwise, returns the same string.
-     */
-    public static String maybeFold(String input, int parseFlags) {
-        UnicodeSet cwcf = UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.CWCF);
-        if (0 != (parseFlags & PARSE_FLAG_IGNORE_CASE) && cwcf.containsSome(input)) {
-            return UCharacter.foldCase(input, true);
-        } else {
-            return input;
         }
     }
 

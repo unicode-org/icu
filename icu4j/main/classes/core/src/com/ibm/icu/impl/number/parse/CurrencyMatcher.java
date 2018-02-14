@@ -15,10 +15,10 @@ public class CurrencyMatcher implements NumberParseMatcher {
     private final String currency1;
     private final String currency2;
 
-    public static CurrencyMatcher getInstance(Currency currency, ULocale loc, int setupFlags) {
+    public static CurrencyMatcher getInstance(Currency currency, ULocale loc) {
         return new CurrencyMatcher(currency.getSubtype(),
-                ParsingUtils.maybeFold(currency.getSymbol(loc), setupFlags),
-                ParsingUtils.maybeFold(currency.getCurrencyCode(), setupFlags));
+                currency.getSymbol(loc),
+                currency.getCurrencyCode());
     }
 
     private CurrencyMatcher(String isoCode, String currency1, String currency2) {

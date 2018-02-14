@@ -2521,5 +2521,25 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
- }
+
+    @Test
+    public void TestIslamicCalOverflow() {
+        String localeID = "ar@calendar=islamic-civil";
+        Calendar cal = Calendar.getInstance(new ULocale(localeID));
+        int maxMonth = cal.getMaximum(Calendar.MONTH);
+        int maxDayOfMonth = cal.getMaximum(Calendar.DATE);
+        int jd, year, month, dayOfMonth;
+        for (jd = 73530872; jd <= 73530876; jd++) { // year 202002, int32_t overflow if jd >= 73530874
+            cal.clear();
+            cal.set(Calendar.JULIAN_DAY, jd);
+            year = cal.get(Calendar.YEAR);
+            month = cal.get(Calendar.MONTH);
+            dayOfMonth = cal.get(Calendar.DATE);
+            if (month > maxMonth || dayOfMonth > maxDayOfMonth) {
+                errln("Error: localeID " + localeID + ", julianDay " + jd + "; got year " + year + "; maxMonth " + maxMonth +
+                        ", got month " + month + "; maxDayOfMonth " + maxDayOfMonth + ", got dayOfMonth " + dayOfMonth);
+            }
+        }
+    }
+}
 //eof

@@ -25,7 +25,6 @@ import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.number.CompactNotation;
-import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.FractionRounder;
 import com.ibm.icu.number.IntegerWidth;
 import com.ibm.icu.number.LocalizedNumberFormatter;
@@ -1176,6 +1175,21 @@ public class NumberFormatterApiTest {
                 "8.765",
                 "0");
 
+        assertFormatDescendingBig(
+                "Indic locale with THOUSANDS grouping",
+                "",
+                NumberFormatter.with().grouping(GroupingStrategy.THOUSANDS),
+                new ULocale("en-IN"),
+                "87,650,000",
+                "8,765,000",
+                "876,500",
+                "87,650",
+                "8,765",
+                "876.5",
+                "87.65",
+                "8.765",
+                "0");
+
         // NOTE: Hungarian is interesting because it has minimumGroupingDigits=4 in locale data
         // If this test breaks due to data changes, find another locale that has minimumGroupingDigits.
         assertFormatDescendingBig(
@@ -1861,29 +1875,6 @@ public class NumberFormatterApiTest {
     }
 
     @Test
-    public void getPrefixSuffix() {
-        Object[][] cases = {
-                { NumberFormatter.withLocale(ULocale.ENGLISH).unit(GBP).unitWidth(UnitWidth.ISO_CODE), "GBP", "",
-                        "-GBP", "" },
-                { NumberFormatter.withLocale(ULocale.ENGLISH).unit(GBP).unitWidth(UnitWidth.FULL_NAME), "",
-                        " British pounds", "-", " British pounds" } };
-
-        for (Object[] cas : cases) {
-            LocalizedNumberFormatter f = (LocalizedNumberFormatter) cas[0];
-            String posPrefix = (String) cas[1];
-            String posSuffix = (String) cas[2];
-            String negPrefix = (String) cas[3];
-            String negSuffix = (String) cas[4];
-            FormattedNumber positive = f.format(1);
-            FormattedNumber negative = f.format(-1);
-            assertEquals(posPrefix, positive.getPrefix());
-            assertEquals(posSuffix, positive.getSuffix());
-            assertEquals(negPrefix, negative.getPrefix());
-            assertEquals(negSuffix, negative.getSuffix());
-        }
-    }
-
-    @Test
     public void plurals() {
         // TODO: Expand this test.
 
@@ -1921,12 +1912,12 @@ public class NumberFormatterApiTest {
                 Rounder.class.getDeclaredMethod("minMaxFraction", Integer.TYPE, Integer.TYPE),
                 Rounder.class.getDeclaredMethod("minMaxDigits", Integer.TYPE, Integer.TYPE), };
 
-        final int EXPECTED_MAX_INT_FRAC_SIG = 100;
-        final String expectedSubstring0 = "between 0 and 100 (inclusive)";
-        final String expectedSubstring1 = "between 1 and 100 (inclusive)";
-        final String expectedSubstringN1 = "between -1 and 100 (inclusive)";
+        final int EXPECTED_MAX_INT_FRAC_SIG = 999;
+        final String expectedSubstring0 = "between 0 and 999 (inclusive)";
+        final String expectedSubstring1 = "between 1 and 999 (inclusive)";
+        final String expectedSubstringN1 = "between -1 and 999 (inclusive)";
 
-        // We require that the upper bounds all be 100 inclusive.
+        // We require that the upper bounds all be 999 inclusive.
         // The lower bound may be either -1, 0, or 1.
         Set<String> methodsWithLowerBound1 = new HashSet();
         methodsWithLowerBound1.add("fixedDigits");
@@ -1936,6 +1927,12 @@ public class NumberFormatterApiTest {
         methodsWithLowerBound1.add("withMinDigits");
         methodsWithLowerBound1.add("withMaxDigits");
         methodsWithLowerBound1.add("withMinExponentDigits");
+        // Methods with lower bound 0:
+        // fixedFraction
+        // minFraction
+        // maxFraction
+        // minMaxFraction
+        // zeroFillTo
         Set<String> methodsWithLowerBoundN1 = new HashSet();
         methodsWithLowerBoundN1.add("truncateAt");
 

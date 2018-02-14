@@ -37,7 +37,7 @@ public class Grouper {
             return GROUPER_AUTO;
         case ON_ALIGNED:
             return GROUPER_ON_ALIGNED;
-        case WESTERN:
+        case THOUSANDS:
             return GROUPER_WESTERN;
         default:
             throw new AssertionError();
@@ -63,9 +63,9 @@ public class Grouper {
             return GROUPER_WESTERN;
         } else if (grouping1 == 3 && grouping2 == 2 && minGrouping == 1) {
             return GROUPER_INDIC;
-        } else if (grouping1 == 3 && grouping2 == 3 && minGrouping == 1) {
+        } else if (grouping1 == 3 && grouping2 == 3 && minGrouping == 2) {
             return GROUPER_WESTERN_MIN2;
-        } else if (grouping1 == 3 && grouping2 == 2 && minGrouping == 1) {
+        } else if (grouping1 == 3 && grouping2 == 2 && minGrouping == 2) {
             return GROUPER_INDIC_MIN2;
         } else {
             return new Grouper(grouping1, grouping2, minGrouping);

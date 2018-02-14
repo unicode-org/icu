@@ -311,6 +311,36 @@ public class IntlTestDecimalFormatSymbols extends TestFmwk
             errln("ERROR: Char digits should be Latin digits");
         }
 
+        // Check on copy
+        DecimalFormatSymbols copy = (DecimalFormatSymbols) symbols.clone();
+        if (!Arrays.equals(copy.getDigitStrings(), osmanyaDigitStrings)) {
+            errln("ERROR: Osmanya digits (supplementary) should be set");
+        }
+        if (Character.codePointAt(osmanyaDigitStrings[0], 0) != copy.getCodePointZero()) {
+            errln("ERROR: Code point zero be Osmanya code point zero");
+        }
+        if (defZero != copy.getZeroDigit()) {
+            errln("ERROR: Zero digit should be 0");
+        }
+        if (!Arrays.equals(copy.getDigits(), defDigits)) {
+            errln("ERROR: Char digits should be Latin digits");
+        }
+
+        // Check on resource bundle
+        DecimalFormatSymbols fromData = DecimalFormatSymbols.getInstance(new ULocale("en@numbers=osma"));
+        if (!Arrays.equals(fromData.getDigitStrings(), osmanyaDigitStrings)) {
+            errln("ERROR: Osmanya digits (supplementary) should be set");
+        }
+        if (Character.codePointAt(osmanyaDigitStrings[0], 0) != fromData.getCodePointZero()) {
+            errln("ERROR: Code point zero be Osmanya code point zero");
+        }
+        if (defZero != fromData.getZeroDigit()) {
+            errln("ERROR: Zero digit should be 0");
+        }
+        if (!Arrays.equals(fromData.getDigits(), defDigits)) {
+            errln("ERROR: Char digits should be Latin digits");
+        }
+
         symbols.setDigitStrings(differentDigitStrings);
         if (!Arrays.equals(symbols.getDigitStrings(), differentDigitStrings)) {
             errln("ERROR: Different digits should be set");

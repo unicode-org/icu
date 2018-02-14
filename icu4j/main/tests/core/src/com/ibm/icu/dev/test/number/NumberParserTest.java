@@ -13,6 +13,7 @@ import com.ibm.icu.impl.number.parse.IgnorablesMatcher;
 import com.ibm.icu.impl.number.parse.MinusSignMatcher;
 import com.ibm.icu.impl.number.parse.NumberParserImpl;
 import com.ibm.icu.impl.number.parse.ParsedNumber;
+import com.ibm.icu.impl.number.parse.ParsingUtils;
 import com.ibm.icu.impl.number.parse.PercentMatcher;
 import com.ibm.icu.impl.number.parse.PlusSignMatcher;
 import com.ibm.icu.impl.number.parse.SeriesMatcher;
@@ -191,7 +192,7 @@ public class NumberParserTest {
             int expectedOffset = (Integer) cas[1];
             boolean expectedMaybeMore = (Boolean) cas[2];
 
-            StringSegment segment = new StringSegment(input);
+            StringSegment segment = new StringSegment(input, 0);
             ParsedNumber result = new ParsedNumber();
             boolean actualMaybeMore = series.match(segment, result);
             int actualOffset = segment.getOffset();
@@ -214,5 +215,40 @@ public class NumberParserTest {
                 12.0,
                 result.getNumber().doubleValue(),
                 0.0);
+    }
+
+    @Test
+    public void testCaseFolding() {
+        Object[][] cases = new Object[][] {
+                // pattern, input string, case sensitive chars, case insensitive chars
+                { "0", "JP¥3456", 7, 7 },
+                { "0", "jp¥3456", 0, 0 }, // not to be accepted, even in case insensitive mode
+                { "A0", "A5", 2, 2 },
+                { "A0", "a5", 0, 2 },
+                { "0", "NaN", 3, 3 },
+                { "0", "nan", 0, 3 } };
+        for (Object[] cas : cases) {
+            String patternString = (String) cas[0];
+            String inputString = (String) cas[1];
+            int expectedCaseSensitiveChars = (Integer) cas[2];
+            int expectedCaseFoldingChars = (Integer) cas[3];
+
+            NumberParserImpl caseSensitiveParser = NumberParserImpl
+                    .removeMeWhenMerged(ULocale.ENGLISH, patternString, ParsingUtils.PARSE_FLAG_OPTIMIZE);
+            ParsedNumber result = new ParsedNumber();
+            caseSensitiveParser.parse(inputString, true, result);
+            assertEquals("Case-Sensitive: " + inputString + " on " + patternString,
+                    expectedCaseSensitiveChars,
+                    result.charEnd);
+
+            NumberParserImpl caseFoldingParser = NumberParserImpl.removeMeWhenMerged(ULocale.ENGLISH,
+                    patternString,
+                    ParsingUtils.PARSE_FLAG_IGNORE_CASE | ParsingUtils.PARSE_FLAG_OPTIMIZE);
+            result = new ParsedNumber();
+            caseFoldingParser.parse(inputString, true, result);
+            assertEquals("Folded: " + inputString + " on " + patternString,
+                    expectedCaseFoldingChars,
+                    result.charEnd);
+        }
     }
 }
