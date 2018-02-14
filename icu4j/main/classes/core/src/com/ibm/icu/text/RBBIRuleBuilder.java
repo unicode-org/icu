@@ -372,25 +372,29 @@ class RBBIRuleBuilder {
         builder.flattenData(os);
     }
 
-    static class ClassPair {
-        int left = 3;
-        int right = 0;
+    static class IntPair {
+        int first = 0;
+        int second = 0;
+        IntPair() {};
+        IntPair(int f, int s) {
+            first = f;
+            second = s;
+        }
     }
 
     void optimizeTables() {
-        ClassPair duplPair = new ClassPair();
-
+        IntPair duplPair = new IntPair(3, 0);
         while (fForwardTables.findDuplCharClassFrom(duplPair)) {
-            fSetBuilder.mergeCategories(duplPair);
-            fForwardTables.removeColumn(duplPair.right);
-            fReverseTables.removeColumn(duplPair.right);
-            fSafeFwdTables.removeColumn(duplPair.right);
-            fSafeRevTables.removeColumn(duplPair.right);
+            fSetBuilder.mergeCategories(duplPair.first, duplPair.second);
+            fForwardTables.removeColumn(duplPair.second);
+            fReverseTables.removeColumn(duplPair.second);
+            fSafeFwdTables.removeColumn(duplPair.second);
+            fSafeRevTables.removeColumn(duplPair.second);
         }
 
         fForwardTables.removeDuplicateStates();
         fReverseTables.removeDuplicateStates();
         fSafeFwdTables.removeDuplicateStates();
         fSafeRevTables.removeDuplicateStates();
-
+    }
 }

@@ -10,6 +10,7 @@
 package com.ibm.icu.text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.TreeSet;
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.text.RBBIRuleBuilder.IntPair;
 
 //
 //  class RBBITableBuilder is part of the RBBI rule compiler.
@@ -832,128 +834,148 @@ class RBBITableBuilder {
 
 
 
-//
-//    findDuplCharClassFrom()
-//
-boolean findDuplCharClassFrom(RBBIRuleBuilder.ClassPair classPair) {
-    int numStates = fDStates.size();
-    int numCols = fRB.fSetBuilder.getNumCharCategories();
+       /**
+        *  Find duplicate (redundant) character classes, beginning at the specified
+        *  pair, within this state table. This is an iterator-like function, used to
+        *  identify character classes (state table columns) that can be eliminated.
+        *  @param categories in/out parameter, specifies where to start looking for duplicates,
+        *                and returns the first pair of duplicates found, if any.
+        *  @return true if duplicate char classes were found, false otherwise.
+        *  @internal
+        */
+       boolean findDuplCharClassFrom(RBBIRuleBuilder.IntPair categories) {
+           int numStates = fDStates.size();
+           int numCols = fRB.fSetBuilder.getNumCharCategories();
 
-    uint16_t table_base;
-    uint16_t table_dupl;
-    for (; baseCategory < numCols-1; ++baseCategory) {
-        for (duplCategory=baseCategory+1; duplCategory < numCols; ++duplCategory) {
-             for (int state=0; state<numStates; state++) {
-                 RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates.elementAt(state);
-                 table_base = (uint16_t)sd.fDtran.elementAti(baseCategory);
-                 table_dupl = (uint16_t)sd.fDtran.elementAti(duplCategory);
-                 if (table_base != table_dupl) {
-                     break;
-                 }
-             }
-             if (table_base == table_dupl) {
-                 return true;
-             }
-        }
-    }
-    return false;
-}
+           int table_base = 0;
+           int table_dupl = 0;
+           for (; categories.first < numCols-1; ++categories.first) {
+               for (categories.second=categories.first+1; categories.second < numCols; ++categories.second) {
+                   for (int state=0; state<numStates; state++) {
+                       RBBIStateDescriptor sd = fDStates.get(state);
+                       table_base = sd.fDtran[categories.first];
+                       table_dupl = sd.fDtran[categories.second];
+                       if (table_base != table_dupl) {
+                           break;
+                       }
+                   }
+                   if (table_base == table_dupl) {
+                       return true;
+                   }
+               }
+           }
+           return false;
+       }
 
-
-//
-//    removeColumn()
-//
-void removeColumn(int column) {
-    int numStates = fDStates.size();
-    for (int state=0; state<numStates; state++) {
-        RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates.elementAt(state);
-        U_ASSERT(column < sd.fDtran.size());
-        sd.fDtran.removeElementAt(column);
-    }
-}
-
-/*
- * findDuplicateState
- */
-bool findDuplicateState(int &firstState, int &duplState) {
-    int numStates = fDStates.size();
-    int numCols = fRB.fSetBuilder.getNumCharCategories();
-
-    for (; firstState<numStates-1; ++firstState) {
-        RBBIStateDescriptor *firstSD = (RBBIStateDescriptor *)fDStates.elementAt(firstState);
-        for (duplState=firstState+1; duplState<numStates; ++duplState) {
-            RBBIStateDescriptor *duplSD = (RBBIStateDescriptor *)fDStates.elementAt(duplState);
-            if (firstSD.fAccepting != duplSD.fAccepting ||
-                firstSD.fLookAhead != duplSD.fLookAhead ||
-                firstSD.fTagsIdx   != duplSD.fTagsIdx) {
-                continue;
-            }
-            bool rowsMatch = true;
-            for (int col=0; col < numCols; ++col) {
-                int firstVal = firstSD.fDtran.elementAti(col);
-                int duplVal = duplSD.fDtran.elementAti(col);
-                if (!((firstVal == duplVal) ||
-                        ((firstVal == firstState || firstVal == duplState) &&
-                        (duplVal  == firstState || duplVal  == duplState)))) {
-                    rowsMatch = false;
-                    break;
-                }
-            }
-            if (rowsMatch) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
-void removeState(int keepState, int duplState) {
-    U_ASSERT(keepState < duplState);
-    U_ASSERT(duplState < fDStates.size());
-
-    RBBIStateDescriptor *duplSD = (RBBIStateDescriptor *)fDStates.elementAt(duplState);
-    fDStates.removeElementAt(duplState);
-    delete duplSD;
-
-    int numStates = fDStates.size();
-    int numCols = fRB.fSetBuilder.getNumCharCategories();
-    for (int state=0; state<numStates; ++state) {
-        RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates.elementAt(state);
-        for (int col=0; col<numCols; col++) {
-            int existingVal = sd.fDtran.elementAti(col);
-            int newVal = existingVal;
-            if (existingVal == duplState) {
-                newVal = keepState;
-            } else if (existingVal > duplState) {
-                newVal = existingVal - 1;
-            }
-            sd.fDtran.setElementAt(newVal, col);
-        }
-        if (sd.fAccepting == duplState) {
-            sd.fAccepting = keepState;
-        } else if (sd.fAccepting > duplState) {
-            sd.fAccepting--;
-        }
-        if (sd.fLookAhead == duplState) {
-            sd.fLookAhead = keepState;
-        } else if (sd.fLookAhead > duplState) {
-            sd.fLookAhead--;
-        }
-    }
-}
+       /**
+        * Remove a column from the state table. Used when two character categories
+        * have been found equivalent, and merged together, to eliminate the unneeded table column.
+        */
+       void removeColumn(int column) {
+           int numStates = fDStates.size();
+           for (int state=0; state<numStates; state++) {
+               RBBIStateDescriptor sd = fDStates.get(state);
+               assert(column < sd.fDtran.length);
+               int[] newArray = Arrays.copyOf(sd.fDtran, sd.fDtran.length - 1);
+               System.arraycopy(sd.fDtran, column+1, newArray, column, newArray.length - column);
+               sd.fDtran = newArray;
+           }
+       }
 
 
-/*
- * RemoveDuplicateStates
- */
-void removeDuplicateStates() {
-    int firstState = 3;
-    int duplicateState = 0;
-    while (findDuplicateState(firstState, duplicateState)) {
-        // printf("Removing duplicate states (%d, %d)\n", firstState, duplicateState);
-        removeState(firstState, duplicateState);
-    }
-}
+       /**
+        *  Find duplicate (redundant) states, beginning at the specified pair,
+        *  within this state table. This is an iterator-like function, used to
+        *  identify states (state table rows) that can be eliminated.
+        *  @param states in/out parameter, specifies where to start looking for duplicates,
+        *                and returns the first pair of duplicates found, if any.
+        *  @return true if duplicate states were found, false otherwise.
+        *  @internal
+        */
+       boolean findDuplicateState(RBBIRuleBuilder.IntPair states) {
+           int numStates = fDStates.size();
+           int numCols = fRB.fSetBuilder.getNumCharCategories();
+
+           for (; states.first<numStates-1; ++states.first) {
+               RBBIStateDescriptor firstSD = fDStates.get(states.first);
+               for (states.second=states.first+1; states.second<numStates; ++states.second) {
+                   RBBIStateDescriptor duplSD = fDStates.get(states.second);
+                   if (firstSD.fAccepting != duplSD.fAccepting ||
+                           firstSD.fLookAhead != duplSD.fLookAhead ||
+                           firstSD.fTagsIdx   != duplSD.fTagsIdx) {
+                       continue;
+                   }
+                   boolean rowsMatch = true;
+                   for (int col=0; col < numCols; ++col) {
+                       int firstVal = firstSD.fDtran[col];
+                       int duplVal = duplSD.fDtran[col];
+                       if (!((firstVal == duplVal) ||
+                               ((firstVal == states.first || firstVal == states.second) &&
+                                       (duplVal  == states.first || duplVal  == states.second)))) {
+                           rowsMatch = false;
+                           break;
+                       }
+                   }
+                   if (rowsMatch) {
+                       return true;
+                   }
+               }
+           }
+           return false;
+       }
+
+       /**
+        * Remove a duplicate state (row) from the state table. All references to the deleted state are
+        * redirected to "keepState", the first encountered of the duplicated pair of states.
+        * @param keepState The first of the duplicate pair of states, the one to be kept.
+        * @param duplState The second of the duplicate pair, the one to be removed.
+        * @internal
+        */
+       void removeState(int keepState, int duplState) {
+           assert(keepState < duplState);
+           assert(duplState < fDStates.size());
+
+           fDStates.remove(duplState);
+
+           int numStates = fDStates.size();
+           int numCols = fRB.fSetBuilder.getNumCharCategories();
+           for (int state=0; state<numStates; ++state) {
+               RBBIStateDescriptor sd = fDStates.get(state);
+               for (int col=0; col<numCols; col++) {
+                   int existingVal = sd.fDtran[col];
+                   int newVal = existingVal;
+                   if (existingVal == duplState) {
+                       newVal = keepState;
+                   } else if (existingVal > duplState) {
+                       newVal = existingVal - 1;
+                   }
+                   sd.fDtran[col] = newVal;
+               }
+               if (sd.fAccepting == duplState) {
+                   sd.fAccepting = keepState;
+               } else if (sd.fAccepting > duplState) {
+                   sd.fAccepting--;
+               }
+               if (sd.fLookAhead == duplState) {
+                   sd.fLookAhead = keepState;
+               } else if (sd.fLookAhead > duplState) {
+                   sd.fLookAhead--;
+               }
+           }
+       }
+
+
+       /**
+        *  Check for, and remove duplicate states (table rows).
+        *  @internal
+        */
+       void removeDuplicateStates() {
+           IntPair dupls = new IntPair(3, 0);
+           while (findDuplicateState(dupls)) {
+               // System.out.printf("Removing duplicate states (%d, %d)\n", dupls.first, dupls.second);
+               removeState(dupls.first, dupls.second);
+           }
+       }
 
 
        //-----------------------------------------------------------------------------
