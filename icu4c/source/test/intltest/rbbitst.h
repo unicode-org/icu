@@ -75,6 +75,7 @@ public:
     void TestEmoji();
     void TestBug12519();
     void TestBug12677();
+    void TestTableRedundancies();
 
     void TestDebug();
     void TestProperties();

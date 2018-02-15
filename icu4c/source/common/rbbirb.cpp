@@ -282,10 +282,10 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     //
     // UnicodeSet processing.
     //    Munge the Unicode Sets to create a set of character categories.
-    //    Generate the mapping tables (TRIE) from input 32-bit characters to
+    //    Generate the mapping tables (TRIE) from input code points to
     //    the character categories.
     //
-    builder.fSetBuilder->build();
+    builder.fSetBuilder->buildRanges();
 
 
     //
@@ -317,6 +317,11 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
     }
 #endif
 
+    builder.optimizeTables();
+    builder.fSetBuilder->buildTrie();
+
+
+
     //
     //   Package up the compiled data into a memory image
     //      in the run-time format.
@@ -346,6 +351,29 @@ RBBIRuleBuilder::createRuleBasedBreakIterator( const UnicodeString    &rules,
         status = U_MEMORY_ALLOCATION_ERROR;
     }
     return This;
+}
+
+void RBBIRuleBuilder::optimizeTables() {
+    int32_t leftClass;
+    int32_t rightClass;
+
+    leftClass = 3;
+    rightClass = 0;
+    while (fForwardTables->findDuplCharClassFrom(leftClass, rightClass)) {
+        fSetBuilder->mergeCategories(leftClass, rightClass);
+        fForwardTables->removeColumn(rightClass);
+        fReverseTables->removeColumn(rightClass);
+        fSafeFwdTables->removeColumn(rightClass);
+        fSafeRevTables->removeColumn(rightClass);
+    }
+
+    fForwardTables->removeDuplicateStates();
+    fReverseTables->removeDuplicateStates();
+    fSafeFwdTables->removeDuplicateStates();
+    fSafeRevTables->removeDuplicateStates();
+
+
+
 }
 
 U_NAMESPACE_END

@@ -60,10 +60,13 @@ private:
     UText  fText;
 
     /**
-     * The rule data for this BreakIterator instance
+     * The rule data for this BreakIterator instance.
+     * Not for general use; Public only for testing purposes.
      * @internal
      */
+public:
     RBBIDataWrapper    *fData;
+private:
 
     /** 
      *  The iteration state - current position, rule status for the current position,
@@ -683,6 +686,13 @@ private:
      *   @internal
      */
      void dumpCache();
+
+    /**
+     * Debugging function only.
+     * @internal
+     */
+    void dumpTables();
+
 #endif  /* U_HIDE_INTERNAL_API */
 };
 
