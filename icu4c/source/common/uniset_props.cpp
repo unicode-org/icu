@@ -231,7 +231,7 @@ void U_CALLCONV UnicodeSet_initInclusion(int32_t src, UErrorCode &status) {
         ucase_addPropertyStarts(&sa, &status);
         break;
     case UPROPS_SRC_BIDI:
-        ubidi_addPropertyStarts(ubidi_getSingleton(), &sa, &status);
+        ubidi_addPropertyStarts(&sa, &status);
         break;
     default:
         status = U_INTERNAL_PROGRAM_ERROR;
