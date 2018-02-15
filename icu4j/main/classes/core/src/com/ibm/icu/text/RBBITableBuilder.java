@@ -1046,7 +1046,7 @@ class RBBITableBuilder {
 
            // Size of table size in shorts.
            //  the "4" is the size of struct RBBIStateTableRow, the row header part only.
-           int rowLen = 4 + fRB.fSetBuilder.getNumCharCategories();
+           int rowLen = 4 + fRB.fSetBuilder.getNumCharCategories();   // Row Length in shorts.
            int tableSize = getTableSize() / 2;
 
 
@@ -1060,9 +1060,10 @@ class RBBITableBuilder {
            table[RBBIDataWrapper.NUMSTATES]   = (short)(numStates >>> 16);
            table[RBBIDataWrapper.NUMSTATES+1] = (short)(numStates & 0x0000ffff);
 
-           // RBBIStateTable.fRowLen
-           table[RBBIDataWrapper.ROWLEN]   = (short)(rowLen >>> 16);
-           table[RBBIDataWrapper.ROWLEN+1] = (short)(rowLen & 0x0000ffff);
+           // RBBIStateTable.fRowLen. In bytes.
+           int rowLenInBytes = rowLen * 2;
+           table[RBBIDataWrapper.ROWLEN]   = (short)(rowLenInBytes >>> 16);
+           table[RBBIDataWrapper.ROWLEN+1] = (short)(rowLenInBytes & 0x0000ffff);
 
            // RBBIStateTable.fFlags
            int flags = 0;
