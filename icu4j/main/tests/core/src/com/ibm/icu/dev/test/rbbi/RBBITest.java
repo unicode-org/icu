@@ -18,6 +18,7 @@ package com.ibm.icu.dev.test.rbbi;
 //            or simply retired if it is no longer interesting.
 import java.text.CharacterIterator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -620,6 +621,27 @@ public class RBBITest extends TestFmwk {
                 //     System.out.printf("Duplicate states (%d, %d)\n", r1, r2);
                 // }
             }
+        }
+    }
+
+    @Test
+    public void TestTableRebuild() {
+        // Test to verify that rebuilding the state tables from rule source for the standard
+        // break iterator types yields the same tables as are imported from ICU4C as part of the default data.
+        List<RuleBasedBreakIterator> breakIterators = new ArrayList<RuleBasedBreakIterator>();
+        breakIterators.add((RuleBasedBreakIterator)BreakIterator.getCharacterInstance(Locale.ENGLISH));
+        breakIterators.add((RuleBasedBreakIterator)BreakIterator.getWordInstance(Locale.ENGLISH));
+        breakIterators.add((RuleBasedBreakIterator)BreakIterator.getSentenceInstance(Locale.ENGLISH));
+        breakIterators.add((RuleBasedBreakIterator)BreakIterator.getLineInstance(Locale.ENGLISH));
+
+        for (RuleBasedBreakIterator bi: breakIterators) {
+            String rules = bi.toString();
+            RuleBasedBreakIterator bi2 = new RuleBasedBreakIterator(rules);
+
+            assertTrue("Forward Table",      Arrays.equals(bi.fRData.fFTable, bi2.fRData.fFTable));
+            assertTrue("Reverse Table",      Arrays.equals(bi.fRData.fRTable, bi2.fRData.fRTable));
+            assertTrue("Safe Forward Table", Arrays.equals(bi.fRData.fSFTable, bi2.fRData.fSFTable));
+            assertTrue("SafeForward Table",  Arrays.equals(bi.fRData.fSRTable, bi2.fRData.fSRTable));
         }
     }
 }

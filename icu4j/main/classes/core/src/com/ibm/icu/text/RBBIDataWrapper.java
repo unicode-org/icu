@@ -30,10 +30,10 @@ public final class RBBIDataWrapper {
     //   read from the file.
     //
     public RBBIDataHeader fHeader;
-    public short          fFTable[];
-    short          fRTable[];
-    short          fSFTable[];
-    short          fSRTable[];
+    public short   fFTable[];
+    public short   fRTable[];
+    public short   fSFTable[];
+    public short   fSRTable[];
     Trie2          fTrie;
     String         fRuleSource;
     int            fStatusTable[];
@@ -339,7 +339,7 @@ public final class RBBIDataWrapper {
 
     ///CLOVER:OFF
     /* Debug function to display the break iterator data. */
-    void dump(java.io.PrintStream out) {
+    public void dump(java.io.PrintStream out) {
         if (fFTable.length == 0) {
             // There is no table. Fail early for testing purposes.
             throw new NullPointerException();
