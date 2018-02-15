@@ -222,9 +222,11 @@ public class RuleBasedBreakIterator extends BreakIterator {
     private CharacterIterator   fText = new java.text.StringCharacterIterator("");
 
     /**
-     * The rule data for this BreakIterator instance. Package private.
+     * The rule data for this BreakIterator instance.
+     * Not intended for public use. Declared public for testing purposes only.
+     * @internal
      */
-    RBBIDataWrapper             fRData;
+    public RBBIDataWrapper    fRData;
 
     /**
      *  The iteration state - current position, rule status for the current position,
