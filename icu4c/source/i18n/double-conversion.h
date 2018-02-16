@@ -280,9 +280,7 @@ class DoubleToStringConverter {
                    StringBuilder* result_builder) const;
 #endif // not needed for ICU
 
-// ICU PATCH: Export these as U_I18N_API for unit tests.
-
-  enum U_I18N_API DtoaMode {
+  enum DtoaMode {
     // Produce the shortest correct representation.
     // For example the output of 0.299999999999999988897 is (the less accurate
     // but correct) 0.3.
@@ -303,7 +301,7 @@ class DoubleToStringConverter {
   // kBase10MaximalLength.
   // Note that DoubleToAscii null-terminates its input. So the given buffer
   // should be at least kBase10MaximalLength + 1 characters long.
-  static const int U_I18N_API kBase10MaximalLength = 17;
+  static const int kBase10MaximalLength = 17;
 
   // Converts the given double 'v' to ascii. 'v' must not be NaN, +Infinity, or
   // -Infinity. In SHORTEST_SINGLE-mode this restriction also applies to 'v'
@@ -343,6 +341,7 @@ class DoubleToStringConverter {
   // terminating null-character when computing the maximal output size.
   // The given length is only used in debug mode to ensure the buffer is big
   // enough.
+  // ICU PATCH: Export this as U_I18N_API for unit tests.
   static void U_I18N_API DoubleToAscii(double v,
                             DtoaMode mode,
                             int requested_digits,
