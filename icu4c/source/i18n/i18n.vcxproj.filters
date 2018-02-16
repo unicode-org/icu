@@ -725,6 +725,30 @@
     <ClInclude Include="digitlst.h">
       <Filter>formatting</Filter>
     </ClInclude>
+    <ClInclude Include="double-conversion-bignum-dtoa.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="double-conversion-bignum.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="double-conversion-cached-powers.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="double-conversion-diy-fp.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="double-conversion-fast-dtoa.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="double-conversion-ieee.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="double-conversion-utils.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="double-conversion.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
     <ClInclude Include="dt_impl.h">
       <Filter>formatting</Filter>
     </ClInclude>
