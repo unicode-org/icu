@@ -217,13 +217,22 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
             UResource.Table itemsTable = value.getTable();
             for (int i = 0; itemsTable.getKeyAndValue(i, key, value); ++i) {
-                int field = getCLDRFieldNumber(key);
-                if (field == -1) { continue; }
+                if (value.getType() != UResourceBundle.TABLE) {
+                    // Typically get either UResourceBundle.TABLE = 2 or ICUResourceBundle.ALIAS = 3.
+                    // Currently fillInMissing() is being used instead of following the ALIAS, so
+                    // skip ALIAS entries which cause UResourceTypeMismatchException in the line
+                    // UResource.Table detailsTable = value.getTable()
+                    continue;
+                }
+                int fieldAndWidth = getCLDRFieldAndWidthNumber(key);
+                if (fieldAndWidth == -1) { continue; }
+                int field = fieldAndWidth / DisplayWidth.COUNT;
+                DisplayWidth width = CLDR_FIELD_WIDTH[fieldAndWidth % DisplayWidth.COUNT];
                 UResource.Table detailsTable = value.getTable();
                 for (int j = 0; detailsTable.getKeyAndValue(j, key, value); ++j) {
                     if (!key.contentEquals("dn")) continue;
-                    if (getAppendItemName(field) == null) {
-                        setAppendItemName(field, value.toString());
+                    if (getFieldDisplayName(field, width) == null) {
+                        setFieldDisplayName(field, width, value.toString());
                     }
                     break;
                 }
@@ -236,10 +245,16 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             if (getAppendItemFormat(i) == null) {
                 setAppendItemFormat(i, "{0} \u251C{2}: {1}\u2524");
             }
-            if (getAppendItemName(i) == null) {
-                setAppendItemName(i, "F" + i);
+            if (getFieldDisplayName(i, DisplayWidth.WIDE) == null) {
+                setFieldDisplayName(i, DisplayWidth.WIDE, "F" + i);
             }
-        }
+            if (getFieldDisplayName(i, DisplayWidth.ABBREVIATED) == null) {
+                setFieldDisplayName(i, DisplayWidth.ABBREVIATED, getFieldDisplayName(i, DisplayWidth.WIDE));
+            }
+            if (getFieldDisplayName(i, DisplayWidth.NARROW) == null) {
+                setFieldDisplayName(i, DisplayWidth.NARROW, getFieldDisplayName(i, DisplayWidth.ABBREVIATED));
+            }
+       }
     }
 
     private class AvailableFormatsSink extends UResource.Sink {
@@ -505,10 +520,13 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         return -1;
     }
 
-    private static int getCLDRFieldNumber(UResource.Key key) {
+    private static int getCLDRFieldAndWidthNumber(UResource.Key key) {
         for (int i = 0; i < CLDR_FIELD_NAME.length; ++i) {
-            if (key.contentEquals(CLDR_FIELD_NAME[i])) {
-                return i;
+            for (int j = 0; j < DisplayWidth.COUNT; ++j) {
+                String fullKey = CLDR_FIELD_NAME[i].concat(CLDR_FIELD_WIDTH[j].cldrKey());
+                if (key.contentEquals(fullKey)) {
+                    return i * DisplayWidth.COUNT + j;
+                }
             }
         }
         return -1;
@@ -1102,6 +1120,51 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     @Deprecated
     public static final int TYPE_LIMIT = 16;
 
+    /**
+     * Field display name width constants for getFieldDisplayName
+     * @draft ICU 61
+     */
+    public enum DisplayWidth {
+        /**
+         * The full field name
+         * @draft ICU 61
+         */
+        WIDE(""),
+        /**
+         * An abbreviated field name
+         * (may be the same as the wide version, if short enough)
+         * @draft ICU 61
+         */
+        ABBREVIATED("-short"),
+        /**
+         * The shortest possible field name
+         * (may be the same as the abbreviated version)
+         * @draft ICU 61
+         */
+        NARROW("-narrow");
+        /**
+         * The count of available widths
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        private static int COUNT = DisplayWidth.values().length;
+        private final String cldrKey;
+        DisplayWidth(String cldrKey) {
+            this.cldrKey = cldrKey;
+        }
+        private String cldrKey() {
+            return cldrKey;
+        }
+    }
+    
+    /**
+     * The field name width for use in appendItems
+     */
+    private static final DisplayWidth APPENDITEM_WIDTH = DisplayWidth.WIDE;
+    private static final int APPENDITEM_WIDTH_INT = APPENDITEM_WIDTH.ordinal();
+    private static final DisplayWidth[] CLDR_FIELD_WIDTH = DisplayWidth.values();
+
+
     // Option masks for getBestPattern, replaceFieldTypes (individual masks may be ORed together)
 
     /**
@@ -1192,20 +1255,54 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @stable ICU 3.6
      */
     public void setAppendItemName(int field, String value) {
-        checkFrozen();
-        appendItemNames[field] = value;
+        setFieldDisplayName(field, APPENDITEM_WIDTH, value);
     }
 
     /**
-     * Getter corresponding to setAppendItemNames. Values below 0 or at or above
-     * TYPE_LIMIT are illegal arguments.
+     * Getter corresponding to setAppendItemName. Values below 0 or at or above
+     * TYPE_LIMIT are illegal arguments. Note: The more general method
+     * for getting date/time field display names is getFieldDisplayName.
      *
      * @param field The index to get the append item name.
      * @return name for field
+     * @see getFieldDisplayName
      * @stable ICU 3.6
      */
     public String getAppendItemName(int field) {
-        return appendItemNames[field];
+        return getFieldDisplayName(field, APPENDITEM_WIDTH);
+    }
+
+    /**
+     * The private interface to set a display name for a particular date/time field,
+     * in one of several possible display widths.
+     *
+     * @param field The field type, such as ERA.
+     * @param width The desired DisplayWidth, such as DisplayWidth.ABBREVIATED.
+     * @param value The display name to set
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    private void setFieldDisplayName(int field, DisplayWidth width, String value) {
+        checkFrozen();
+        if (field < TYPE_LIMIT && field >= 0) {
+            fieldDisplayNames[field][width.ordinal()] = value;
+        }
+    }
+
+    /**
+     * The general interface to get a display name for a particular date/time field,
+     * in one of several possible display widths.
+     *
+     * @param field The field type, such as ERA.
+     * @param width The desired DisplayWidth, such as DisplayWidth.ABBREVIATED.
+     * @return.     The display name for the field
+     * @draft ICU 61
+     */
+    public String getFieldDisplayName(int field, DisplayWidth width) {
+        if (field >= TYPE_LIMIT || field < 0) {
+            return "";
+        }
+        return fieldDisplayNames[field][width.ordinal()];
     }
 
     /**
@@ -1294,7 +1391,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             result.skeleton2pattern = (TreeMap<DateTimeMatcher, PatternWithSkeletonFlag>) skeleton2pattern.clone();
             result.basePattern_pattern = (TreeMap<String, PatternWithSkeletonFlag>) basePattern_pattern.clone();
             result.appendItemFormats = appendItemFormats.clone();
-            result.appendItemNames = appendItemNames.clone();
+            result.fieldDisplayNames = fieldDisplayNames.clone();
             result.current = new DateTimeMatcher();
             result.fp = new FormatParser();
             result._distanceInfo = new DistanceInfo();
@@ -1796,7 +1893,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     private String decimal = "?";
     private String dateTimeFormat = "{1} {0}";
     private String[] appendItemFormats = new String[TYPE_LIMIT];
-    private String[] appendItemNames = new String[TYPE_LIMIT];
+    private String[][] fieldDisplayNames = new String[TYPE_LIMIT][DisplayWidth.COUNT];
     private char defaultHourFormatChar = 'H';
     //private boolean chineseMonthHack = false;
     //private boolean isComplete = false;
@@ -1857,7 +1954,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     private String getAppendName(int foundMask) {
-        return "'" + appendItemNames[foundMask] + "'";
+        return "'" + fieldDisplayNames[foundMask][APPENDITEM_WIDTH_INT] + "'";
     }
     private String getAppendFormat(int foundMask) {
         return appendItemFormats[foundMask];
