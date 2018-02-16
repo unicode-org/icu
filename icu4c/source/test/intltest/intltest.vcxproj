@@ -327,6 +327,7 @@
     <ClCompile Include="numbertest_affixutils.cpp" />
     <ClCompile Include="numbertest_api.cpp" />
     <ClCompile Include="numbertest_decimalquantity.cpp" />
+    <ClCompile Include="numbertest_doubleconversion.cpp" />
     <ClCompile Include="numbertest_modifiers.cpp" />
     <ClCompile Include="numbertest_patternmodifier.cpp" />
     <ClCompile Include="numbertest_patternstring.cpp" />

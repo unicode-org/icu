@@ -156,6 +156,24 @@
     <ClCompile Include="digitlst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="double-conversion-bignum-dtoa.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="double-conversion-bignum.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="double-conversion-cached-powers.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="double-conversion-diy-fp.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="double-conversion-fast-dtoa.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="double-conversion.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="dtfmtsym.cpp">
       <Filter>formatting</Filter>
     </ClCompile>

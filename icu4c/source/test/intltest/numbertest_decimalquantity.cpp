@@ -20,6 +20,7 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
         TESTCASE_AUTO(testAppend);
         TESTCASE_AUTO(testConvertToAccurateDouble);
         TESTCASE_AUTO(testUseApproximateDoubleWhenAble);
+        TESTCASE_AUTO(testHardDoubleConversion);
     TESTCASE_AUTO_END;
 }
 
@@ -233,7 +234,7 @@ void DecimalQuantityTest::testConvertToAccurateDouble() {
 }
 
 void DecimalQuantityTest::testUseApproximateDoubleWhenAble() {
-    struct TestCase {
+    static const struct TestCase {
         double d;
         int32_t maxFrac;
         RoundingMode roundingMode;
@@ -261,6 +262,35 @@ void DecimalQuantityTest::testUseApproximateDoubleWhenAble() {
         if (cas.usesExact != fq.isExplicitExactDouble()) {
             errln(UnicodeString(u"Using approximate double after rounding: ") + fq.toString());
         }
+    }
+}
+
+void DecimalQuantityTest::testHardDoubleConversion() {
+    static const struct TestCase {
+        double input;
+        const char16_t* expectedOutput;
+    } cases[] = {
+            { 512.0000000000017, u"512.0000000000017" },
+            { 4095.9999999999977, u"4095.9999999999977" },
+            { 4095.999999999998, u"4095.999999999998" },
+            { 4095.9999999999986, u"4095.9999999999986" },
+            { 4095.999999999999, u"4095.999999999999" },
+            { 4095.9999999999995, u"4095.9999999999995" },
+            { 4096.000000000001, u"4096.000000000001" },
+            { 4096.000000000002, u"4096.000000000002" },
+            { 4096.000000000003, u"4096.000000000003" },
+            { 4096.000000000004, u"4096.000000000004" },
+            { 4096.000000000005, u"4096.000000000005" },
+            { 4096.0000000000055, u"4096.0000000000055" },
+            { 4096.000000000006, u"4096.000000000006" },
+            { 4096.000000000007, u"4096.000000000007" } };
+
+    for (auto& cas : cases) {
+        DecimalQuantity q;
+        q.setToDouble(cas.input);
+        q.roundToInfinity();
+        UnicodeString actualOutput = q.toPlainString();
+        assertEquals("", cas.expectedOutput, actualOutput);
     }
 }
 

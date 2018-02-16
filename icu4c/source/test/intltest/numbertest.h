@@ -110,6 +110,7 @@ class DecimalQuantityTest : public IntlTest {
     void testAppend();
     void testConvertToAccurateDouble();
     void testUseApproximateDoubleWhenAble();
+    void testHardDoubleConversion();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
@@ -118,6 +119,13 @@ class DecimalQuantityTest : public IntlTest {
     void assertHealth(const DecimalQuantity &fq);
     void assertToStringAndHealth(const DecimalQuantity &fq, const UnicodeString &expected);
     void checkDoubleBehavior(double d, bool explicitRequired);
+};
+
+class DoubleConversionTest : public IntlTest {
+  public:
+    void testDoubleConversionApi();
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 };
 
 class ModifiersTest : public IntlTest {
@@ -207,6 +215,7 @@ class NumberTest : public IntlTest {
         TESTCLASS(4, PatternModifierTest);
         TESTCLASS(5, PatternStringTest);
         TESTCLASS(6, NumberStringBuilderTest);
+        TESTCLASS(7, DoubleConversionTest);
         default: name = ""; break; // needed to end loop
         }
     }
