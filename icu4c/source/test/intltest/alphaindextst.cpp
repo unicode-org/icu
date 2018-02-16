@@ -22,6 +22,7 @@
 #include "unicode/localpointer.h"
 #include "unicode/tblcoll.h"
 #include "unicode/uniset.h"
+#include "unicode/uscript.h"
 
 #if !UCONFIG_NO_COLLATION && !UCONFIG_NO_NORMALIZATION
 
@@ -66,6 +67,7 @@ void AlphabeticIndexTest::runIndexedTest( int32_t index, UBool exec, const char*
     TESTCASE_AUTO(TestChineseZhuyin);
     TESTCASE_AUTO(TestJapaneseKanji);
     TESTCASE_AUTO(TestChineseUnihan);
+    TESTCASE_AUTO(testHasBuckets);
     TESTCASE_AUTO_END;
 }
 
@@ -722,6 +724,25 @@ void AlphabeticIndexTest::TestChineseUnihan() {
     // radical 100, and there is a 90' since Unicode 8
     bucketIndex = index.getBucketIndex(UnicodeString((UChar)0x7527), status);
     assertEquals("getBucketIndex(U+7527)", 101, bucketIndex);
+}
+
+void AlphabeticIndexTest::testHasBuckets() {
+    checkHasBuckets(Locale("am"), USCRIPT_ETHIOPIC);
+    checkHasBuckets(Locale("haw"), USCRIPT_LATIN);
+    checkHasBuckets(Locale("hy"), USCRIPT_ARMENIAN);
+    checkHasBuckets(Locale("vai"), USCRIPT_VAI);
+}
+
+void AlphabeticIndexTest::checkHasBuckets(const Locale &locale, UScriptCode script) {
+    IcuTestErrorCode errorCode(*this, "checkHasBuckets");
+    AlphabeticIndex aindex(locale, errorCode);
+    LocalPointer<AlphabeticIndex::ImmutableIndex> index(aindex.buildImmutableIndex(errorCode));
+    UnicodeString loc = locale.getName();
+    assertTrue(loc + u" at least 3 buckets", index->getBucketCount() >= 3);
+    const AlphabeticIndex::Bucket *bucket = index->getBucket(1);
+    assertEquals(loc + u" real bucket", U_ALPHAINDEX_NORMAL, bucket->getLabelType());
+    assertEquals(loc + u" expected script", script,
+            uscript_getScript(bucket->getLabel().char32At(0), errorCode));
 }
 
 #endif
