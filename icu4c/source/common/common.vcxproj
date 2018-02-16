@@ -253,35 +253,22 @@
     <ClCompile Include="ubidiwrt.cpp" />
     <ClCompile Include="uloc_keytype.cpp" />
     <ClCompile Include="ushape.cpp" />
-    <ClCompile Include="brkeng.cpp">
-    </ClCompile>
-    <ClCompile Include="brkiter.cpp">
-    </ClCompile>
+    <ClCompile Include="brkeng.cpp" />
+    <ClCompile Include="brkiter.cpp" />
     <ClCompile Include="dictbe.cpp" />
     <ClCompile Include="pluralmap.cpp" />
-    <ClCompile Include="rbbi.cpp">
-    </ClCompile>
-    <ClCompile Include="rbbidata.cpp">
-    </ClCompile>
+    <ClCompile Include="rbbi.cpp" />
+    <ClCompile Include="rbbidata.cpp" />
     <ClCompile Include="rbbinode.cpp" />
-    <ClCompile Include="rbbirb.cpp">
-    </ClCompile>
+    <ClCompile Include="rbbirb.cpp" />
     <ClCompile Include="rbbiscan.cpp" />
     <ClCompile Include="rbbisetb.cpp" />
-    <ClCompile Include="rbbistbl.cpp">
-    </ClCompile>
-    <ClCompile Include="rbbitblb.cpp">
-    </ClCompile>
-    <ClCompile Include="rbbi_cache.cpp">
-    </ClCompile>
+    <ClCompile Include="rbbistbl.cpp" />
+    <ClCompile Include="rbbitblb.cpp" />
+    <ClCompile Include="rbbi_cache.cpp" />
     <ClCompile Include="dictionarydata.cpp" />
     <ClCompile Include="ubrk.cpp" />
-    <ClCompile Include="ucol_swp.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
+    <ClCompile Include="ucol_swp.cpp" />
     <ClCompile Include="propsvec.cpp" />
     <ClCompile Include="uarrsort.cpp" />
     <ClCompile Include="uenum.cpp" />
@@ -298,44 +285,22 @@
     <ClCompile Include="uvectr64.cpp" />
     <ClCompile Include="errorcode.cpp" />
     <ClCompile Include="icudataver.cpp" />
-    <ClCompile Include="locmap.cpp">
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="putil.cpp">
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="locmap.cpp" />
+    <ClCompile Include="putil.cpp" />
     <ClCompile Include="umath.cpp" />
-    <ClCompile Include="umutex.cpp">
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="umutex.cpp" />
     <ClCompile Include="utrace.cpp" />
     <ClCompile Include="utypes.cpp" />
-    <ClCompile Include="wintz.cpp">
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="wintz.cpp" />
     <ClCompile Include="ucnv.cpp" />
     <ClCompile Include="ucnv2022.cpp" />
-    <ClCompile Include="ucnv_bld.cpp">
-    </ClCompile>
+    <ClCompile Include="ucnv_bld.cpp" />
     <ClCompile Include="ucnv_cb.cpp" />
     <ClCompile Include="ucnv_cnv.cpp" />
     <ClCompile Include="ucnv_ct.cpp" />
     <ClCompile Include="ucnv_err.cpp" />
     <ClCompile Include="ucnv_ext.cpp" />
-    <ClCompile Include="ucnv_io.cpp">
-    </ClCompile>
+    <ClCompile Include="ucnv_io.cpp" />
     <ClCompile Include="ucnv_lmb.cpp" />
     <ClCompile Include="ucnv_set.cpp" />
     <ClCompile Include="ucnv_u16.cpp" />
@@ -349,25 +314,15 @@
     <ClCompile Include="ucnvlat1.cpp" />
     <ClCompile Include="ucnvmbcs.cpp" />
     <ClCompile Include="ucnvscsu.cpp" />
-    <ClCompile Include="ucnvsel.cpp">
-    </ClCompile>
+    <ClCompile Include="ucnvsel.cpp" />
     <ClCompile Include="cmemory.cpp" />
-    <ClCompile Include="ucln_cmn.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="ucln_cmn.cpp" />
     <ClCompile Include="ucmndata.cpp" />
     <ClCompile Include="udata.cpp" />
     <ClCompile Include="udatamem.cpp" />
     <ClCompile Include="udataswp.cpp" />
-    <ClCompile Include="uinit.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="umapfile.cpp">
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="uinit.cpp" />
+    <ClCompile Include="umapfile.cpp" />
     <ClCompile Include="uobject.cpp" />
     <ClCompile Include="dtintrv.cpp" />
     <ClCompile Include="parsepos.cpp" />
@@ -377,19 +332,15 @@
     <ClCompile Include="punycode.cpp" />
     <ClCompile Include="uidna.cpp" />
     <ClCompile Include="uts46.cpp" />
-    <ClCompile Include="locavailable.cpp">
-    </ClCompile>
+    <ClCompile Include="locavailable.cpp" />
     <ClCompile Include="locbased.cpp" />
     <ClCompile Include="locdispnames.cpp" />
     <ClCompile Include="locdspnm.cpp" />
-    <ClCompile Include="locid.cpp">
-    </ClCompile>
+    <ClCompile Include="locid.cpp" />
     <ClCompile Include="loclikely.cpp" />
     <ClCompile Include="locresdata.cpp" />
-    <ClCompile Include="locutil.cpp">
-    </ClCompile>
-    <ClCompile Include="resbund.cpp">
-    </ClCompile>
+    <ClCompile Include="locutil.cpp" />
+    <ClCompile Include="resbund.cpp" />
     <ClCompile Include="resbund_cnv.cpp" />
     <ClCompile Include="ucat.cpp" />
     <ClCompile Include="uloc.cpp" />
@@ -399,28 +350,22 @@
     <ClCompile Include="uresdata.cpp" />
     <ClCompile Include="resource.cpp" />
     <ClCompile Include="ucurr.cpp" />
-    <ClCompile Include="caniter.cpp">
-    </ClCompile>
+    <ClCompile Include="caniter.cpp" />
     <ClCompile Include="filterednormalizer2.cpp" />
     <ClCompile Include="loadednormalizer2impl.cpp" />
     <ClCompile Include="normalizer2.cpp" />
     <ClCompile Include="normalizer2impl.cpp" />
-    <ClCompile Include="normlzr.cpp">
-    </ClCompile>
+    <ClCompile Include="normlzr.cpp" />
     <ClCompile Include="unorm.cpp" />
     <ClCompile Include="unormcmp.cpp" />
     <ClCompile Include="bmpset.cpp" />
     <ClCompile Include="patternprops.cpp" />
-    <ClCompile Include="propname.cpp">
-    </ClCompile>
+    <ClCompile Include="propname.cpp" />
     <ClCompile Include="ruleiter.cpp" />
-    <ClCompile Include="ucase.cpp">
-    </ClCompile>
+    <ClCompile Include="ucase.cpp" />
     <ClCompile Include="uchar.cpp" />
     <ClCompile Include="unames.cpp" />
-    <ClCompile Include="unifiedcache.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="unifiedcache.cpp" />
     <ClCompile Include="unifilt.cpp" />
     <ClCompile Include="unifunct.cpp" />
     <ClCompile Include="uniset.cpp" />
@@ -435,20 +380,13 @@
     <ClCompile Include="uset_props.cpp" />
     <ClCompile Include="usetiter.cpp" />
     <ClCompile Include="icuplug.cpp" />
-    <ClCompile Include="serv.cpp">
-    </ClCompile>
-    <ClCompile Include="servlk.cpp">
-    </ClCompile>
-    <ClCompile Include="servlkf.cpp">
-    </ClCompile>
-    <ClCompile Include="servls.cpp">
-    </ClCompile>
-    <ClCompile Include="servnotf.cpp">
-    </ClCompile>
-    <ClCompile Include="servrbf.cpp">
-    </ClCompile>
-    <ClCompile Include="servslkf.cpp">
-    </ClCompile>
+    <ClCompile Include="serv.cpp" />
+    <ClCompile Include="servlk.cpp" />
+    <ClCompile Include="servlkf.cpp" />
+    <ClCompile Include="servls.cpp" />
+    <ClCompile Include="servnotf.cpp" />
+    <ClCompile Include="servrbf.cpp" />
+    <ClCompile Include="servslkf.cpp" />
     <ClCompile Include="usprep.cpp" />
     <ClCompile Include="appendable.cpp" />
     <ClCompile Include="bytesinkutil.cpp" />
