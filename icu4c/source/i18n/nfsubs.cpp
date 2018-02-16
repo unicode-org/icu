@@ -155,7 +155,7 @@ public:
         double baseValue,
         double upperBound,
         UBool lenientParse,
-        int32_t nonNumericalExecutedRuleMask,
+        uint32_t nonNumericalExecutedRuleMask,
         Formattable& result) const;
 
     virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const {
@@ -222,7 +222,7 @@ public:
         double baseValue,
         double upperBound,
         UBool lenientParse,
-        int32_t nonNumericalExecutedRuleMask,
+        uint32_t nonNumericalExecutedRuleMask,
         Formattable& result) const;
 
     virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue + oldRuleValue; }
@@ -294,7 +294,7 @@ public:
         double baseValue,
         double upperBound,
         UBool /*lenientParse*/,
-        int32_t nonNumericalExecutedRuleMask,
+        uint32_t nonNumericalExecutedRuleMask,
         Formattable& result) const;
 
     virtual double composeRuleValue(double newRuleValue, double oldRuleValue) const { return newRuleValue / oldRuleValue; }
@@ -692,7 +692,7 @@ NFSubstitution::doParse(const UnicodeString& text,
                         double baseValue,
                         double upperBound,
                         UBool lenientParse,
-                        int32_t nonNumericalExecutedRuleMask,
+                        uint32_t nonNumericalExecutedRuleMask,
                         Formattable& result) const
 {
 #ifdef RBNF_DEBUG
@@ -935,7 +935,7 @@ ModulusSubstitution::doParse(const UnicodeString& text,
                              double baseValue,
                              double upperBound,
                              UBool lenientParse,
-                             int32_t nonNumericalExecutedRuleMask,
+                             uint32_t nonNumericalExecutedRuleMask,
                              Formattable& result) const
 {
     // if this isn't a >>> substitution, we can just use the
@@ -1123,7 +1123,7 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
                 double baseValue,
                 double /*upperBound*/,
                 UBool lenientParse,
-                int32_t nonNumericalExecutedRuleMask,
+                uint32_t nonNumericalExecutedRuleMask,
                 Formattable& resVal) const
 {
     // if we're not in byDigits mode, we can just use the inherited
@@ -1255,7 +1255,7 @@ NumeratorSubstitution::doParse(const UnicodeString& text,
                                double baseValue,
                                double upperBound,
                                UBool /*lenientParse*/,
-                               int32_t nonNumericalExecutedRuleMask,
+                               uint32_t nonNumericalExecutedRuleMask,
                                Formattable& result) const
 {
     // we don't have to do anything special to do the parsing here,

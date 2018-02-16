@@ -2287,18 +2287,15 @@ void IntlTestRBNF::TestCompactDecimalFormatStyle() {
 void IntlTestRBNF::TestParseFailure() {
     UErrorCode status = U_ZERO_ERROR;
     RuleBasedNumberFormat rbnf(URBNF_SPELLOUT, Locale::getJapanese(), status);
-    static const char* testData[][1] = {
-        { "\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB" },
-        { NULL }
+    static const UChar* testData[] = {
+        u"・・・・・・・・・・・・・・・・・・・・・・・・"
     };
-    for (int i = 0; testData[i][0]; ++i) {
-        const char* spelledNumber = testData[i][0]; // spelled-out number
-        
-        UnicodeString spelledNumberString = UnicodeString(spelledNumber).unescape();
+    for (int i = 0; i < UPRV_LENGTHOF(testData); ++i) {
+        UnicodeString spelledNumberString = UnicodeString(testData[i]).unescape();
         Formattable actualNumber;
         rbnf.parse(spelledNumberString, actualNumber, status);
         if (status != U_INVALID_FORMAT_ERROR) { // I would have expected U_PARSE_ERROR, but NumberFormat::parse gives U_INVALID_FORMAT_ERROR
-            errln("FAIL: string should be unparseable %s %s", spelledNumber, u_errorName(status));
+            errln("FAIL: string should be unparseable index=%d %s", i, u_errorName(status));
         }
     }
 }

@@ -900,7 +900,7 @@ NFRule::doParse(const UnicodeString& text,
                 ParsePosition& parsePosition,
                 UBool isFractionRule,
                 double upperBound,
-                int32_t nonNumericalExecutedRuleMask,
+                uint32_t nonNumericalExecutedRuleMask,
                 Formattable& resVal) const
 {
     // internally we operate on a copy of the string being parsed
@@ -1161,7 +1161,7 @@ NFRule::matchToDelimiter(const UnicodeString& text,
                          const UnicodeString& delimiter,
                          ParsePosition& pp,
                          const NFSubstitution* sub,
-                         int32_t nonNumericalExecutedRuleMask,
+                         uint32_t nonNumericalExecutedRuleMask,
                          double upperBound) const
 {
 	UErrorCode status = U_ZERO_ERROR;
