@@ -6,19 +6,20 @@
 # Date: 2017-04-14
 #-------------------------
 #
-# This builds a zipfile containing the *64 bit* Windows binary
+# This builds a zipfile containing the *64 bit* Windows binaries.
+# (Note: The zipfile does not include the UWP binaries.)
 #
 # Usage: (after building ICU using MSVC) 
 #  (bring up Powershell ISE)
 #    cd C:\icu\icu4c\
-#    Set-ExecutionPolicy -Scope Process AllSigned
+#    Set-ExecutionPolicy -Scope Process Unrestricted
 #    .\packaging\distrelease.ps1
 #
 # Will emit: c:\icu4c\icu\source\dist\icu-windows.zip
 #
 #
 # You will get warnings from the execution policy and the script itself.
-#  see https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-5.1&viewFallbackFrom=powershell-Microsoft.PowerShell.Core 
+#  see https://docs.microsoft.com/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-5.1&viewFallbackFrom=powershell-Microsoft.PowerShell.Core 
 #    for more about execution policies.
 
 
