@@ -864,7 +864,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
             DateTimePatternGenerator.getInstance();
         } catch(Exception e){
             errln("DateTimePatternGenerator.getInstance() was not suppose to " +
-                    "return an exception.");
+                    "return an exception, got: " + e.toString());
+            //e.printStackTrace();
         }
     }
 
@@ -1625,5 +1626,46 @@ public class DateTimeGeneratorTest extends TestFmwk {
         assertEquals(message, "d-MM-y ├'F0': G┤", dtpg.getBestPattern(skeleton));
         dtpg.setAppendItemFormat(DateTimePatternGenerator.ERA, "{0}, {1}");
         assertEquals(message, "d-MM-y, G", dtpg.getBestPattern(skeleton));
+    }
+
+    private final class FieldDisplayNameData {
+        public String       locale;
+        public int          field;
+        public DateTimePatternGenerator.DisplayWidth width;
+        public String       expected;
+        // Simple constructor
+        public FieldDisplayNameData(String locale, int field, DateTimePatternGenerator.DisplayWidth width, String expected) {
+            this.locale   = locale;
+            this.field    = field;
+            this.width    = width;
+            this.expected = expected;
+        }
+    }
+    @Test
+    public void TestGetFieldDisplayNames() {
+        final FieldDisplayNameData[] testNamesData = {
+                new FieldDisplayNameData( "de",    DateTimePatternGenerator.QUARTER,              DateTimePatternGenerator.DisplayWidth.WIDE,        "Quartal" ),
+                new FieldDisplayNameData( "de",    DateTimePatternGenerator.QUARTER,              DateTimePatternGenerator.DisplayWidth.ABBREVIATED, "Quart." ),
+                new FieldDisplayNameData( "de",    DateTimePatternGenerator.QUARTER,              DateTimePatternGenerator.DisplayWidth.NARROW,      "Q" ),
+                new FieldDisplayNameData( "en",    DateTimePatternGenerator.DAY_OF_WEEK_IN_MONTH, DateTimePatternGenerator.DisplayWidth.WIDE,        "weekday of the month" ),
+                new FieldDisplayNameData( "en",    DateTimePatternGenerator.DAY_OF_WEEK_IN_MONTH, DateTimePatternGenerator.DisplayWidth.ABBREVIATED, "wkday. of mo." ),
+                new FieldDisplayNameData( "en",    DateTimePatternGenerator.DAY_OF_WEEK_IN_MONTH, DateTimePatternGenerator.DisplayWidth.NARROW,      "wkday. of mo." ),
+                new FieldDisplayNameData( "en_GB", DateTimePatternGenerator.DAY_OF_WEEK_IN_MONTH, DateTimePatternGenerator.DisplayWidth.WIDE,        "weekday of the month" ),
+                new FieldDisplayNameData( "en_GB", DateTimePatternGenerator.DAY_OF_WEEK_IN_MONTH, DateTimePatternGenerator.DisplayWidth.ABBREVIATED, "wkday of mo" ),
+                new FieldDisplayNameData( "en_GB", DateTimePatternGenerator.DAY_OF_WEEK_IN_MONTH, DateTimePatternGenerator.DisplayWidth.NARROW,      "wkday of mo" ),
+                new FieldDisplayNameData( "it",    DateTimePatternGenerator.SECOND,               DateTimePatternGenerator.DisplayWidth.WIDE,        "secondo" ),
+                new FieldDisplayNameData( "it",    DateTimePatternGenerator.SECOND,               DateTimePatternGenerator.DisplayWidth.ABBREVIATED, "s" ),
+                new FieldDisplayNameData( "it",    DateTimePatternGenerator.SECOND,               DateTimePatternGenerator.DisplayWidth.NARROW,      "s" ),
+        };
+
+        for (int i = 0; i < testNamesData.length; ++i) {
+            ULocale uloc = new ULocale(testNamesData[i].locale);
+            DateTimePatternGenerator dtpgen = DateTimePatternGenerator.getInstance(uloc);
+            String getName = dtpgen.getFieldDisplayName(testNamesData[i].field, testNamesData[i].width);
+            if (getName.compareTo(testNamesData[i].expected) != 0) {
+                errln("Locale " + testNamesData[i].locale + ", field " + testNamesData[i].field +
+                        ", width " + testNamesData[i].width + ", expected " + testNamesData[i].expected + ", got " + getName);
+            }
+        }
     }
 }

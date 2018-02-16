@@ -3912,7 +3912,8 @@ public class DateFormatTest extends TestFmwk {
             df = DateFormat.getPatternInstance("", new Locale("en_US"));
             df = DateFormat.getPatternInstance(null, "", new Locale("en_US"));
         } catch(Exception e) {
-            errln("DateFormat.getPatternInstance is not suppose to return an exception.");
+            errln("DateFormat.getPatternInstance is not suppose to return an exception, got: " + e.toString());
+            //e.printStackTrace();
         }
     }
 
