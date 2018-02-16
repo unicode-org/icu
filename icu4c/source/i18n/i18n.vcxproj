@@ -423,30 +423,13 @@
     <ClCompile Include="utmscale.cpp" />
     <ClCompile Include="vtzone.cpp" />
     <ClCompile Include="vzone.cpp" />
-    <ClCompile Include="windtfmt.cpp">
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="winnmfmt.cpp">
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
-    </ClCompile>
-    <ClCompile Include="wintzimpl.cpp">
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</DisableLanguageExtensions>
-      <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="windtfmt.cpp" />
+    <ClCompile Include="winnmfmt.cpp" />
+    <ClCompile Include="wintzimpl.cpp" />
     <ClCompile Include="zonemeta.cpp" />
     <ClCompile Include="zrule.cpp" />
     <ClCompile Include="ztrans.cpp" />
-    <ClCompile Include="ucln_in.cpp">
-      <DisableLanguageExtensions>false</DisableLanguageExtensions>
-    </ClCompile>
+    <ClCompile Include="ucln_in.cpp" />
     <ClCompile Include="regexcmp.cpp" />
     <ClCompile Include="regeximp.cpp" />
     <ClCompile Include="regexst.cpp" />

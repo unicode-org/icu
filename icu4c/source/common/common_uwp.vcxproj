@@ -302,9 +302,7 @@
     <ClCompile Include="rbbi_cache.cpp" />
     <ClCompile Include="dictionarydata.cpp" />
     <ClCompile Include="ubrk.cpp" />
-    <ClCompile Include="ucol_swp.cpp">
-      <AdditionalIncludeDirectories>..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
+    <ClCompile Include="ucol_swp.cpp" />
     <ClCompile Include="propsvec.cpp" />
     <ClCompile Include="uarrsort.cpp" />
     <ClCompile Include="uenum.cpp" />
