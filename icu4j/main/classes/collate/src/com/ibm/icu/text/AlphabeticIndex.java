@@ -523,7 +523,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     private void addIndexExemplars(ULocale locale) {
         UnicodeSet exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_INDEX);
-        if (exemplars != null) {
+        if (exemplars != null && !exemplars.isEmpty()) {
             initialLabels.addAll(exemplars);
             return;
         }
@@ -534,7 +534,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
         exemplars = exemplars.cloneAsThawed();
         // question: should we add auxiliary exemplars?
-        if (exemplars.containsSome('a', 'z') || exemplars.size() == 0) {
+        if (exemplars.containsSome('a', 'z') || exemplars.isEmpty()) {
             exemplars.addAll('a', 'z');
         }
         if (exemplars.containsSome(0xAC00, 0xD7A3)) {  // Hangul syllables
@@ -549,13 +549,9 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             // cut down to small list
             // make use of the fact that Ethiopic is allocated in 8's, where
             // the base is 0 mod 8.
-            UnicodeSet ethiopic = new UnicodeSet("[[:Block=Ethiopic:]&[:Script=Ethiopic:]]");
-            UnicodeSetIterator it = new UnicodeSetIterator(ethiopic);
-            while (it.next() && it.codepoint != UnicodeSetIterator.IS_STRING) {
-                if ((it.codepoint & 0x7) != 0) {
-                    exemplars.remove(it.codepoint);
-                }
-            }
+            UnicodeSet ethiopic = new UnicodeSet("[ሀለሐመሠረሰሸቀቈቐቘበቨተቸኀኈነኘአከኰኸዀወዐዘዠየደዸጀገጐጘጠጨጰጸፀፈፐፘ]");
+            ethiopic.retainAll(exemplars);
+            exemplars.remove('ሀ', 0x137F).addAll(ethiopic);
         }
 
         // Upper-case any that aren't already so.

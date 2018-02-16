@@ -1160,4 +1160,24 @@ public class AlphabeticIndexTest extends TestFmwk {
         assertEquals("Wrong bucket label", "inflow", index.getInflowLabel());
         assertEquals("Bucket size not 1", 1, inflowBucket.size());
     }
+
+    @Test
+    public void testHasBuckets() {
+        checkHasBuckets(new Locale("am"), UScript.ETHIOPIC);
+        checkHasBuckets(new Locale("haw"), UScript.LATIN);
+        checkHasBuckets(new Locale("hy"), UScript.ARMENIAN);
+        checkHasBuckets(new Locale("vai"), UScript.VAI);
+    }
+
+    private void checkHasBuckets(Locale locale, int script) {
+        AlphabeticIndex.ImmutableIndex index =
+                new AlphabeticIndex<String>(locale).buildImmutableIndex();
+        String loc = locale.toString();
+        assertTrue(loc + " at least 3 buckets", index.getBucketCount() >= 3);
+        AlphabeticIndex.Bucket bucket = index.getBucket(1);
+        assertEquals(loc + " real bucket", AlphabeticIndex.Bucket.LabelType.NORMAL,
+                bucket.getLabelType());
+        assertEquals(loc + " expected script", script,
+                UScript.getScript(bucket.getLabel().codePointAt(0)));
+    }
 }

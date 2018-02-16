@@ -13,6 +13,7 @@
 #ifndef ALPHAINDEXTST_H
 #define ALPHAINDEXTST_H
 
+#include "unicode/uscript.h"
 #include "intltest.h"
 
 class AlphabeticIndexTest: public IntlTest {
@@ -49,6 +50,9 @@ public:
     void TestChineseZhuyin();
     void TestJapaneseKanji();
     void TestChineseUnihan();
+
+    void testHasBuckets();
+    void checkHasBuckets(const Locale &locale, UScriptCode script);
 };
 
 #endif
