@@ -348,6 +348,12 @@
     <ClCompile Include="decimfmt.cpp" />
     <ClCompile Include="decNumber.cpp" />
     <ClCompile Include="digitlst.cpp" />
+    <ClCompile Include="double-conversion-bignum-dtoa.cpp" />
+    <ClCompile Include="double-conversion-bignum.cpp" />
+    <ClCompile Include="double-conversion-cached-powers.cpp" />
+    <ClCompile Include="double-conversion-diy-fp.cpp" />
+    <ClCompile Include="double-conversion-fast-dtoa.cpp" />
+    <ClCompile Include="double-conversion.cpp" />
     <ClCompile Include="dtfmtsym.cpp" />
     <ClCompile Include="dtitvfmt.cpp" />
     <ClCompile Include="dtitvinf.cpp" />
@@ -665,6 +671,14 @@
     <ClInclude Include="decNumber.h" />
     <ClInclude Include="decNumberLocal.h" />
     <ClInclude Include="digitlst.h" />
+    <ClInclude Include="double-conversion-bignum-dtoa.h" />
+    <ClInclude Include="double-conversion-bignum.h" />
+    <ClInclude Include="double-conversion-cached-powers.h" />
+    <ClInclude Include="double-conversion-diy-fp.h" />
+    <ClInclude Include="double-conversion-fast-dtoa.h" />
+    <ClInclude Include="double-conversion-ieee.h" />
+    <ClInclude Include="double-conversion-utils.h" />
+    <ClInclude Include="double-conversion.h" />
     <ClInclude Include="dt_impl.h" />
     <CustomBuild Include="unicode\dtfmtsym.h">
       <Command>copy "%(FullPath)" ..\..\include\unicode
