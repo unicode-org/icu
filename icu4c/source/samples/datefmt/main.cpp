@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include "util.h"
 
+using namespace icu;
+
 /**
  * If the ID supplied to TimeZone is not a valid system ID,
  * TimeZone::createTimeZone() will return a GMT zone object.  In order

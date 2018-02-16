@@ -35,6 +35,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/uclean.h"
 
+using namespace icu;
 
 //
 //  The following variables contain paramters that may be set from the command line.

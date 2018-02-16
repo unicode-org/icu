@@ -13,6 +13,7 @@
 //! [getBestPatternExample1]
 
 using namespace std;
+using namespace icu;
 
 static void getBestPatternExample() {
 	    

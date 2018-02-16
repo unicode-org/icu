@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+using namespace icu;
+
 // Verify that a UErrorCode is successful; exit(1) if not
 void check(UErrorCode& status, const char* msg) {
     if (U_FAILURE(status)) {
