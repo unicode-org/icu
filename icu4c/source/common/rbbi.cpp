@@ -1305,6 +1305,7 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
         fUnhandledBreakEngine = new UnhandledEngine(status);
         if (U_SUCCESS(status) && fUnhandledBreakEngine == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
         }
         // Put it last so that scripts for which we have an engine get tried
         // first.
