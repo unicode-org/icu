@@ -1,5 +1,7 @@
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2026
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "break", "..\break\break.vcxproj", "{DEEADF02-9C14-4854-A395-E505D2904D65}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cal", "..\cal\cal.vcxproj", "{F7659D77-09CF-4FE9-ACEE-927287AA9509}"
@@ -259,21 +261,27 @@ Global
 		{8945255B-473B-4C47-9425-E92384338CAA}.Debug|x64.ActiveCfg = Debug|Win32
 		{8945255B-473B-4C47-9425-E92384338CAA}.Release|Win32.ActiveCfg = Release|Win32
 		{8945255B-473B-4C47-9425-E92384338CAA}.Release|Win32.Build.0 = Release|Win32
-		{8945255B-473B-4C47-9425-E92384338CAA}.Release|x64.ActiveCfg = Release|Win32
+		{8945255B-473B-4C47-9425-E92384338CAA}.Release|x64.ActiveCfg = Release|x64
+		{8945255B-473B-4C47-9425-E92384338CAA}.Release|x64.Build.0 = Release|x64
 		{B500B731-ED1A-4761-94ED-B22DFE25FF2B}.Debug|Win32.ActiveCfg = Debug|Win32
 		{B500B731-ED1A-4761-94ED-B22DFE25FF2B}.Debug|Win32.Build.0 = Debug|Win32
 		{B500B731-ED1A-4761-94ED-B22DFE25FF2B}.Debug|x64.ActiveCfg = Debug|Win32
 		{B500B731-ED1A-4761-94ED-B22DFE25FF2B}.Release|Win32.ActiveCfg = Release|Win32
 		{B500B731-ED1A-4761-94ED-B22DFE25FF2B}.Release|Win32.Build.0 = Release|Win32
-		{B500B731-ED1A-4761-94ED-B22DFE25FF2B}.Release|x64.ActiveCfg = Release|Win32
+		{B500B731-ED1A-4761-94ED-B22DFE25FF2B}.Release|x64.ActiveCfg = Release|x64
+		{B500B731-ED1A-4761-94ED-B22DFE25FF2B}.Release|x64.Build.0 = Release|x64
 		{115886F0-7DFB-4B8B-BE79-83162EE8713B}.Debug|Win32.ActiveCfg = Debug|Win32
 		{115886F0-7DFB-4B8B-BE79-83162EE8713B}.Debug|Win32.Build.0 = Debug|Win32
 		{115886F0-7DFB-4B8B-BE79-83162EE8713B}.Debug|x64.ActiveCfg = Debug|Win32
 		{115886F0-7DFB-4B8B-BE79-83162EE8713B}.Release|Win32.ActiveCfg = Release|Win32
 		{115886F0-7DFB-4B8B-BE79-83162EE8713B}.Release|Win32.Build.0 = Release|Win32
-		{115886F0-7DFB-4B8B-BE79-83162EE8713B}.Release|x64.ActiveCfg = Release|Win32
+		{115886F0-7DFB-4B8B-BE79-83162EE8713B}.Release|x64.ActiveCfg = Release|x64
+		{115886F0-7DFB-4B8B-BE79-83162EE8713B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB7CDCAF-F002-40F8-9E0E-F25F68EEC77B}
 	EndGlobalSection
 EndGlobal
