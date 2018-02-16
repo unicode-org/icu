@@ -879,6 +879,14 @@
     <ClInclude Include="decNumber.h" />
     <ClInclude Include="decNumberLocal.h" />
     <ClInclude Include="digitlst.h" />
+    <ClInclude Include="double-conversion-bignum-dtoa.h" />
+    <ClInclude Include="double-conversion-bignum.h" />
+    <ClInclude Include="double-conversion-cached-powers.h" />
+    <ClInclude Include="double-conversion-diy-fp.h" />
+    <ClInclude Include="double-conversion-fast-dtoa.h" />
+    <ClInclude Include="double-conversion-ieee.h" />
+    <ClInclude Include="double-conversion-utils.h" />
+    <ClInclude Include="double-conversion.h" />
     <ClInclude Include="dt_impl.h" />
     <CustomBuild Include="unicode\dtfmtsym.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
