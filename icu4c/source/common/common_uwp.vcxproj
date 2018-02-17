@@ -192,7 +192,7 @@
       <ProgramDataBaseFileName>.\x86\ReleaseUWP/</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\bin32uwp\icuuc60.dll</OutputFile>
+      <OutputFile>..\..\bin32uwp\icuuc61.dll</OutputFile>
       <ProgramDatabaseFile>.\..\..\lib32uwp\icuuc.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\lib32uwp\icuuc.lib</ImportLibrary>
     </Link>
@@ -208,7 +208,7 @@
       <ProgramDataBaseFileName>.\x86\DebugUWP/</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\bin32uwp\icuuc60d.dll</OutputFile>
+      <OutputFile>..\..\bin32uwp\icuuc61d.dll</OutputFile>
       <ProgramDatabaseFile>.\..\..\lib32uwp\icuucd.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\lib32uwp\icuucd.lib</ImportLibrary>
     </Link>
@@ -224,7 +224,7 @@
       <ProgramDataBaseFileName>.\x64\ReleaseUWP/</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\bin64uwp\icuuc60.dll</OutputFile>
+      <OutputFile>..\..\bin64uwp\icuuc61.dll</OutputFile>
       <ProgramDatabaseFile>.\..\..\lib64uwp\icuuc.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\lib64uwp\icuuc.lib</ImportLibrary>
     </Link>
@@ -240,7 +240,7 @@
       <ProgramDataBaseFileName>.\x64\DebugUWP/</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\bin64uwp\icuuc60d.dll</OutputFile>
+      <OutputFile>..\..\bin64uwp\icuuc61d.dll</OutputFile>
       <ProgramDatabaseFile>.\..\..\lib64uwp\icuucd.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\lib64uwp\icuucd.lib</ImportLibrary>
     </Link>
@@ -256,7 +256,7 @@
       <ProgramDataBaseFileName>.\ARM\ReleaseUWP/</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\binARMuwp\icuuc60.dll</OutputFile>
+      <OutputFile>..\..\binARMuwp\icuuc61.dll</OutputFile>
       <ProgramDatabaseFile>.\..\..\libARMuwp\icuuc.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\libARMuwp\icuuc.lib</ImportLibrary>
     </Link>
@@ -272,7 +272,7 @@
       <ProgramDataBaseFileName>.\ARM\DebugUWP/</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\binARMuwp\icuuc60d.dll</OutputFile>
+      <OutputFile>..\..\binARMuwp\icuuc61d.dll</OutputFile>
       <ProgramDatabaseFile>.\..\..\libARMuwp\icuucd.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\libARMuwp\icuucd.lib</ImportLibrary>
     </Link>
