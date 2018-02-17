@@ -1054,7 +1054,10 @@ class RBBITableBuilder {
 
            //
            // Fill in the header fields.
-           //      Annoying because they really want to be ints, not shorts.
+           //      Note that NUMSTATES, ROWLEN and FLAGS are ints, not shorts.
+           //      ICU data created from Java is always big endian format, so
+           //      order the halves of the 32 bit fields into the short[] data accordingly.
+           //      TODO: ticket 13598 restructure so that ints are represented as ints directly.
            //
            // RBBIStateTable.fNumStates
            table[RBBIDataWrapper.NUMSTATES]   = (short)(numStates >>> 16);
