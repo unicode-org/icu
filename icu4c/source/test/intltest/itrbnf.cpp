@@ -2291,7 +2291,7 @@ void IntlTestRBNF::TestParseFailure() {
         u"・・・・・・・・・・・・・・・・・・・・・・・・"
     };
     for (int i = 0; i < UPRV_LENGTHOF(testData); ++i) {
-        UnicodeString spelledNumberString = UnicodeString(testData[i]).unescape();
+        UnicodeString spelledNumberString(testData[i]);
         Formattable actualNumber;
         rbnf.parse(spelledNumberString, actualNumber, status);
         if (status != U_INVALID_FORMAT_ERROR) { // I would have expected U_PARSE_ERROR, but NumberFormat::parse gives U_INVALID_FORMAT_ERROR

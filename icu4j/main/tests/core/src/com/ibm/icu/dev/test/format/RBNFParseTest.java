@@ -167,7 +167,7 @@ public class RBNFParseTest extends TestFmwk {
     public void TestBadParse() {
         RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(Locale.JAPAN, RuleBasedNumberFormat.SPELLOUT);
         String[] testData = {
-                "\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB\u30FB",
+                "・・・・・・・・・・・・・・・・・・・・・・・・",
         };
 
         for (String testString : testData) {
