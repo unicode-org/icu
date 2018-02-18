@@ -1324,8 +1324,8 @@ CjkBreakEngine::divideUpDictionaryRange( UText *inText,
             }
             if (katakanaRunLength < kMaxKatakanaGroupLength) {
                 uint32_t newSnlp = bestSnlp.elementAti(i) + getKatakanaCost(katakanaRunLength);
-                if (newSnlp < (uint32_t)bestSnlp.elementAti(j)) {
-                    bestSnlp.setElementAt(newSnlp, j);
+                if (newSnlp < (uint32_t)bestSnlp.elementAti(i+katakanaRunLength)) {
+                    bestSnlp.setElementAt(newSnlp, i+katakanaRunLength);
                     prev.setElementAt(i, i+katakanaRunLength);  // prev[j] = i;
                 }
             }

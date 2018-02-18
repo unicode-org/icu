@@ -38,17 +38,8 @@
 
 
 #   Temp debugging tests
-<locale en>
-<rules>
-$s0=[;,*];
-$s1=[a-z];
-$s2=[i-n];
-$s3=[x-z];
-!!forward;
-($s0 | '?')*
-($s1 | $s2 | $s3)*;
-</rules>
-<data>•hello• •</data>
+#
+
 
 ## FILTERED BREAK TESTS
 
@@ -326,6 +317,15 @@ $s3=[x-z];
 <locale en>
 <data>•ロ<400>から<400>売却<400>完了<400>時<400>の<400>時価<400>が<400>提示<400>さ<400>れ<400>て<400>いる<400></data>
 <data>•\U00011700<200>ロ<400>から<400>売却<400>完了<400>時<400>の<400>時価<400>が<400>提示<400>さ<400>れ<400>て<400>いる<400></data>
+
+#
+# Ticket #13549
+#   CjiBreakEngine::divideUpDictionaryRange: assertion failure.
+#
+<locale en>
+<word>
+<data>•\U00020029<400>\u3300<400>\U0002C400<400></data>
+<data>•\uFAD7<400>\u331B<400>\u87DF<400>\u006D<200>\uFFFD•</data>
 
 #
 # What Is Unicode in Japanese
