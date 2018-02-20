@@ -20,7 +20,6 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{247E2681-6C84-408B-B40C-5DB50BC5E18F}</ProjectGuid>
-    <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -95,7 +94,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>icuucd.lib;icuind.lib;icuiod.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>./Debug/citer.exe</OutputFile>
+      <OutputFile>.\x86\Debug\citer.exe</OutputFile>
       <AdditionalLibraryDirectories>..\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)citer.pdb</ProgramDatabaseFile>
@@ -125,7 +124,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>icuucd.lib;icuind.lib;icuiod.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>./Debug/citer.exe</OutputFile>
+      <OutputFile>.\x64\Debug\citer.exe</OutputFile>
       <AdditionalLibraryDirectories>..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)citer.pdb</ProgramDatabaseFile>
@@ -149,7 +148,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>icuuc.lib;icuin.lib;icuio.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>./Release/citer.exe</OutputFile>
+      <OutputFile>.\x86\Release\citer.exe</OutputFile>
       <AdditionalLibraryDirectories>..\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
@@ -177,7 +176,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>icuuc.lib;icuin.lib;icuio.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>./Release/citer.exe</OutputFile>
+      <OutputFile>.\x64\Release\citer.exe</OutputFile>
       <AdditionalLibraryDirectories>..\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>

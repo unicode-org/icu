@@ -155,6 +155,7 @@ icu4c/source/samples/*.sdf
 icu4c/source/samples/Makefile
 icu4c/source/samples/all/*.opensdf
 icu4c/source/samples/all/*.sdf
+icu4c/source/samples/all/.vs
 icu4c/source/samples/all/all.ncb
 icu4c/source/samples/all/all.suo
 icu4c/source/samples/break/*.vcxproj.user
@@ -233,6 +234,10 @@ icu4c/source/samples/datefmt/datefmt.vcproj.*.*.user
 icu4c/source/samples/datefmt/release
 icu4c/source/samples/datefmt/x64
 icu4c/source/samples/datefmt/x86
+icu4c/source/samples/dtitvfmtsample/x64
+icu4c/source/samples/dtitvfmtsample/x86
+icu4c/source/samples/dtptngsample/x64
+icu4c/source/samples/dtptngsample/x86
 icu4c/source/samples/layout/*.d
 icu4c/source/samples/layout/*.pdb
 icu4c/source/samples/layout/*.vcxproj.user
@@ -267,6 +272,8 @@ icu4c/source/samples/numfmt/numfmt.vcproj.*.*.user
 icu4c/source/samples/numfmt/release
 icu4c/source/samples/numfmt/x64
 icu4c/source/samples/numfmt/x86
+icu4c/source/samples/plurfmtsample/x64
+icu4c/source/samples/plurfmtsample/x86
 icu4c/source/samples/props/*.vcxproj.user
 icu4c/source/samples/props/Debug
 icu4c/source/samples/props/props

@@ -291,7 +291,7 @@ void readFile(const char *name) {
     //   Read in the file
     //
     charBuf    = (char *)realloc(charBuf, rawFileLen+1);   // Need error checking...
-    int t = fread(charBuf, 1, rawFileLen, file);
+    int t = static_cast<int>(fread(charBuf, 1, rawFileLen, file));
     if (t != rawFileLen)  {
         fprintf(stderr, "Error reading file \"%s\"\n", fileName);
         fclose(file);
