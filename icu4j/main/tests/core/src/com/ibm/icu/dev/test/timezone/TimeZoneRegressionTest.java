@@ -394,10 +394,10 @@ public class TimeZoneRegressionTest extends TestFmwk {
         int[] DATA = {
             1, GOOD,
             0, BAD,
-            -1, BAD,
+            -1, GOOD,   // #13566 updates SimpleTimeZone to support negative DST saving amount
             60*60*1000, GOOD,
-            Integer.MIN_VALUE, BAD,
-            // Integer.MAX_VALUE, ?, // no upper limit on DST savings at this time
+            Integer.MAX_VALUE, GOOD,    // no upper limit on DST savings at this time
+            Integer.MIN_VALUE, GOOD,    // no lower limit as well
         };
         for (int i=0; i<DATA.length; i+=2) {
             int savings = DATA[i];
@@ -1222,6 +1222,48 @@ public class TimeZoneRegressionTest extends TestFmwk {
             } catch (InterruptedException ie) {
 
             }
+        }
+    }
+
+    @Test
+    public void TestNegativeDaylightSaving() {
+        int stdOff = 1 * 60*60*1000;    // Standard offset UTC+1
+        int save = -1 * 60*60*1000;     // DST saving amount -1 hour
+        SimpleTimeZone stzDublin = new SimpleTimeZone(
+                1*60*60*1000, "Dublin-2018a",
+                Calendar.OCTOBER, -1, -Calendar.SUNDAY, 2*60*60*1000,
+                Calendar.MARCH, -1, -Calendar.SUNDAY, 1*60*60*1000,
+                save);
+        if (save != stzDublin.getDSTSavings()) {
+            errln("FAIL: DST saving is not " + save);
+        }
+
+        GregorianCalendar cal = new GregorianCalendar(TimeZone.GMT_ZONE);
+        Date testDate;
+        int[] offsets = new int[2];
+
+        cal.set(2018, Calendar.JANUARY, 15, 0, 0, 0);
+        testDate = cal.getTime();
+        if (!stzDublin.inDaylightTime(testDate)) {
+            errln("FAIL: The test date (Jan 15) must be in DST.");
+        }
+        stzDublin.getOffset(testDate.getTime(), false, offsets);
+        if (offsets[0] != stdOff || offsets[1] != save) {
+            errln("FAIL: Expected [stdoff=" + stdOff + ",save=" + save
+                    + "] on the test date (Jan 15), actual[stdoff=" + offsets[0]
+                    + ",save=" + offsets[1] + "]");
+        }
+
+        cal.set(2018, Calendar.JULY, 15, 0, 0, 0);
+        testDate = cal.getTime();
+        if (stzDublin.inDaylightTime(testDate)) {
+            errln("FAIL: The test date (Jul 15) must not be in DST.");
+        }
+        stzDublin.getOffset(testDate.getTime(), false, offsets);
+        if (offsets[0] != stdOff || offsets[1] != 0) {
+            errln("FAIL: Expected [stdoff=" + stdOff + ",save=" + 0
+                    + "] on the test date (Jul 15), actual[stdoff=" + offsets[0]
+                    + ",save=" + offsets[1] + "]");
         }
     }
 }
