@@ -169,27 +169,21 @@ abstract class DictionaryBreakEngine implements LanguageBreakEngine {
     }
 
     UnicodeSet fSet = new UnicodeSet();
-    private BitSet fTypes = new BitSet(32);
 
     /**
-     * @param breakTypes The types of break iterators that can use this engine.
-     *  For example, BreakIterator.KIND_LINE
+     *  Constructor
      */
-    public DictionaryBreakEngine(Integer... breakTypes) {
-        for (Integer type: breakTypes) {
-            fTypes.set(type);
-        }
+    public DictionaryBreakEngine() {
     }
 
     @Override
-    public boolean handles(int c, int breakType) {
-        return fTypes.get(breakType) &&  // this type can use us
-                fSet.contains(c);        // we recognize the character
+    public boolean handles(int c) {
+        return fSet.contains(c);        // we recognize the character
     }
 
     @Override
     public int findBreaks(CharacterIterator text, int startPos, int endPos,
-            int breakType, DequeI foundBreaks) {
+            DequeI foundBreaks) {
         int result = 0;
 
          // Find the span of characters included in the set.
@@ -208,8 +202,6 @@ abstract class DictionaryBreakEngine implements LanguageBreakEngine {
         rangeStart = start;
         rangeEnd = current;
 
-        // if (breakType >= 0 && breakType < 32 && (((uint32_t)1 << breakType) & fTypes)) {
-        // TODO: Why does icu4c have this?
         result = divideUpDictionaryRange(text, rangeStart, rangeEnd, foundBreaks);
         text.setIndex(current);
 

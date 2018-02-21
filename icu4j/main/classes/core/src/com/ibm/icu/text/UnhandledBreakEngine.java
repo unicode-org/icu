@@ -8,17 +8,14 @@
  */
 package com.ibm.icu.text;
 
-import static com.ibm.icu.impl.CharacterIteration.DONE32;
-
 import java.text.CharacterIterator;
-import java.util.concurrent.atomic.AtomicReferenceArray;
 
 import com.ibm.icu.impl.CharacterIteration;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 
 final class UnhandledBreakEngine implements LanguageBreakEngine {
-    // TODO: Use two arrays of UnicodeSet, one with all frozen sets, one with unfrozen.
+    // TODO: Use two UnicodeSets, one with all frozen sets, one with unfrozen.
     // in handleChar(), update the unfrozen version, clone, freeze, replace the frozen one.
 
     // Note on concurrency: A single instance of UnhandledBreakEngine is shared across all
@@ -35,49 +32,42 @@ final class UnhandledBreakEngine implements LanguageBreakEngine {
     // on which scripts have been previously seen by handleChar(). (This is not a
     // threading specific issue). Possibly stop on script boundaries?
 
-    final AtomicReferenceArray<UnicodeSet> fHandled = new AtomicReferenceArray<UnicodeSet>(BreakIterator.KIND_TITLE + 1);
+    volatile UnicodeSet fHandled = new UnicodeSet();
     public UnhandledBreakEngine() {
-        for (int i = 0; i < fHandled.length(); i++) {
-            fHandled.set(i, new UnicodeSet());
-        }
     }
 
     @Override
-    public boolean handles(int c, int breakType) {
-        return (breakType >= 0 && breakType < fHandled.length()) &&
-                (fHandled.get(breakType).contains(c));
+    public boolean handles(int c) {
+        return fHandled.contains(c);
     }
 
     @Override
     public int findBreaks(CharacterIterator text, int startPos, int endPos,
-            int breakType, DictionaryBreakEngine.DequeI foundBreaks) {
-        if (breakType >= 0 && breakType < fHandled.length()) {
-            UnicodeSet uniset = fHandled.get(breakType);
-            int c = CharacterIteration.current32(text);
-            while (text.getIndex() < endPos && uniset.contains(c)) {
-                CharacterIteration.next32(text);
-                c = CharacterIteration.current32(text);
-            }
+            DictionaryBreakEngine.DequeI foundBreaks) {
+
+        UnicodeSet uniset = fHandled;
+        int c = CharacterIteration.current32(text);
+        while (text.getIndex() < endPos && uniset.contains(c)) {
+            CharacterIteration.next32(text);
+            c = CharacterIteration.current32(text);
         }
         return 0;
     }
 
     /**
-     * Update the set of unhandled characters for the specified breakType to include
+     * Update the set of unhandled characters to include
      * all that have the same script as c.
      * May be called concurrently with handles() or findBreaks().
      * Must not be called concurrently with itself.
      */
-    public void handleChar(int c, int breakType) {
-        if (breakType >= 0 && breakType < fHandled.length() && c != DONE32) {
-            UnicodeSet originalSet = fHandled.get(breakType);
-            if (!originalSet.contains(c)) {
-                int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
-                UnicodeSet newSet = new UnicodeSet();
-                newSet.applyIntPropertyValue(UProperty.SCRIPT, script);
-                newSet.addAll(originalSet);
-                fHandled.set(breakType, newSet);
-            }
+    public void handleChar(int c) {
+        UnicodeSet originalSet = fHandled;
+        if (!originalSet.contains(c)) {
+            int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
+            UnicodeSet newSet = new UnicodeSet();
+            newSet.applyIntPropertyValue(UProperty.SCRIPT, script);
+            newSet.addAll(originalSet);
+            fHandled = newSet;
         }
     }
 }
