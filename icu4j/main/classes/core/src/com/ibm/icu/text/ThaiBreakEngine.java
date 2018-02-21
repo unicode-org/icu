@@ -16,7 +16,7 @@ import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 
 class ThaiBreakEngine extends DictionaryBreakEngine {
-    
+
     // Constants for ThaiBreakIterator
     // How many words in a row are "good enough"?
     private static final byte THAI_LOOKAHEAD = 3;
@@ -33,14 +33,14 @@ class ThaiBreakEngine extends DictionaryBreakEngine {
     private static final byte THAI_MIN_WORD = 2;
     // Minimum number of characters for two words
     private static final byte THAI_MIN_WORD_SPAN = THAI_MIN_WORD * 2;
-    
+
     private DictionaryMatcher fDictionary;
     private static UnicodeSet fThaiWordSet;
     private static UnicodeSet fEndWordSet;
     private static UnicodeSet fBeginWordSet;
     private static UnicodeSet fSuffixSet;
     private static UnicodeSet fMarkSet;
-    
+
     static {
         // Initialize UnicodeSets
         fThaiWordSet = new UnicodeSet();
@@ -66,7 +66,7 @@ class ThaiBreakEngine extends DictionaryBreakEngine {
         fEndWordSet.compact();
         fBeginWordSet.compact();
         fSuffixSet.compact();
-        
+
         // Freeze the static UnicodeSet
         fThaiWordSet.freeze();
         fMarkSet.freeze();
@@ -74,32 +74,32 @@ class ThaiBreakEngine extends DictionaryBreakEngine {
         fBeginWordSet.freeze();
         fSuffixSet.freeze();
     }
-    
+
     public ThaiBreakEngine() throws IOException {
-        super(BreakIterator.KIND_WORD, BreakIterator.KIND_LINE);
         setCharacters(fThaiWordSet);
         // Initialize dictionary
         fDictionary = DictionaryData.loadDictionaryFor("Thai");
     }
-    
+
+    @Override
     public boolean equals(Object obj) {
         // Normally is a singleton, but it's possible to have duplicates
         //   during initialization. All are equivalent.
         return obj instanceof ThaiBreakEngine;
     }
 
+    @Override
     public int hashCode() {
         return getClass().hashCode();
     }
-    
-    public boolean handles(int c, int breakType) {
-        if (breakType == BreakIterator.KIND_WORD || breakType == BreakIterator.KIND_LINE) {
-            int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
-            return (script == UScript.THAI);
-        }
-        return false;
+
+    @Override
+    public boolean handles(int c) {
+        int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
+        return (script == UScript.THAI);
     }
 
+    @Override
     public int divideUpDictionaryRange(CharacterIterator fIter, int rangeStart, int rangeEnd,
             DequeI foundBreaks) {
 
@@ -112,7 +112,7 @@ class ThaiBreakEngine extends DictionaryBreakEngine {
         for (int i = 0; i < THAI_LOOKAHEAD; i++) {
             words[i] = new PossibleWord();
         }
-        
+
         int uc;
         fIter.setIndex(rangeStart);
         int current;
@@ -156,7 +156,7 @@ class ThaiBreakEngine extends DictionaryBreakEngine {
                                 }
                             } while (words[(wordsFound+1)%THAI_LOOKAHEAD].backUp(fIter));
                         }
-                    } 
+                    }
                     while (words[wordsFound%THAI_LOOKAHEAD].backUp(fIter));
                     // foundBest: end of loop
                 }
@@ -174,7 +174,7 @@ class ThaiBreakEngine extends DictionaryBreakEngine {
                 // no preceding word, or the non-word shares less than the minimum threshold
                 // of characters with a dictionary word, then scan to resynchronize
                 if (words[wordsFound%THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) <= 0 &&
-                        (wordLength == 0 || 
+                        (wordLength == 0 ||
                                 words[wordsFound%THAI_LOOKAHEAD].longestPrefix() < THAI_PREFIX_COMBINE_THRESHOLD)) {
                     // Look for a plausible word boundary
                     int remaining = rangeEnd - (current + wordLength);
@@ -224,7 +224,7 @@ class ThaiBreakEngine extends DictionaryBreakEngine {
 
             // Look ahead for possible suffixes if a dictionary word does not follow.
             // We do this in code rather than using a rule so that the heuristic
-            // resynch continues to function. For example, one of the suffix characters 
+            // resynch continues to function. For example, one of the suffix characters
             // could be a typo in the middle of a word.
             if (fIter.getIndex() < rangeEnd && wordLength > 0) {
                 if (words[wordsFound%THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) <= 0 &&

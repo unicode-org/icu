@@ -38,7 +38,6 @@ class CjkBreakEngine extends DictionaryBreakEngine {
     private DictionaryMatcher fDictionary = null;
 
     public CjkBreakEngine(boolean korean) throws IOException {
-        super(BreakIterator.KIND_WORD);
         fDictionary = DictionaryData.loadDictionaryFor("Hira");
         if (korean) {
             setCharacters(fHangulWordSet);

@@ -278,13 +278,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
             && ICUDebug.value(RBBI_DEBUG_ARG).indexOf("trace") >= 0;
 
     /**
-     * What kind of break iterator this is.
-     * Defaulting BreakType to word gives reasonable dictionary behavior for
-     * Break Iterators that are built from rules.
-     */
-    private int fBreakType = KIND_WORD;
-
-    /**
      * The "default" break engine - just skips over ranges of dictionary words,
      * producing no breaks. Should only be used if characters need to be handled
      * by a dictionary but we have no dictionary implementation for them.
@@ -648,21 +641,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         this.first();
     }
 
-    /**
-     * package private
-     */
-    void setBreakType(int type) {
-        fBreakType = type;
-    }
-
-    /**
-     * package private
-     */
-    int getBreakType() {
-        return fBreakType;
-    }
-
-    /**
+     /**
      * Control debug, trace and dump options.
      * @internal
      */
@@ -675,7 +654,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         // We have a dictionary character.
         // Does an already instantiated break engine handle it?
         for (LanguageBreakEngine candidate : fBreakEngines) {
-            if (candidate.handles(c, fBreakType)) {
+            if (candidate.handles(c)) {
                 return candidate;
             }
         }
@@ -685,7 +664,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             // Check the global list, another break iterator may have instantiated the
             // desired engine.
             for (LanguageBreakEngine candidate : gAllBreakEngines) {
-                if (candidate.handles(c, fBreakType)) {
+                if (candidate.handles(c)) {
                     fBreakEngines.add(candidate);
                     return candidate;
                 }
@@ -715,24 +694,13 @@ public class RuleBasedBreakIterator extends BreakIterator {
                     eng = new KhmerBreakEngine();
                     break;
                 case UScript.HAN:
-                    if (getBreakType() == KIND_WORD) {
-                        eng = new CjkBreakEngine(false);
-                    }
-                    else {
-                        gUnhandledBreakEngine.handleChar(c, getBreakType());
-                        eng = gUnhandledBreakEngine;
-                    }
-                    break;
+                    eng = new CjkBreakEngine(false);
+                     break;
                 case UScript.HANGUL:
-                    if (getBreakType() == KIND_WORD) {
-                        eng = new CjkBreakEngine(true);
-                    } else {
-                        gUnhandledBreakEngine.handleChar(c, getBreakType());
-                        eng = gUnhandledBreakEngine;
-                    }
+                    eng = new CjkBreakEngine(true);
                     break;
                 default:
-                    gUnhandledBreakEngine.handleChar(c, getBreakType());
+                    gUnhandledBreakEngine.handleChar(c);
                     eng = gUnhandledBreakEngine;
                     break;
                 }
@@ -1308,7 +1276,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 // Ask the language object if there are any breaks. It will add them to the cache and
                 // leave the text pointer on the other side of its range, ready to search for the next one.
                 if (lbe != null) {
-                    foundBreakCount += lbe.findBreaks(fText, rangeStart, rangeEnd, fBreakType, fBreaks);
+                    foundBreakCount += lbe.findBreaks(fText, rangeStart, rangeEnd, fBreaks);
                 }
 
                 // Reload the loop variables for the next go-round
