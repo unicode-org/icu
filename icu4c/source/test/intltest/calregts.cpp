@@ -17,6 +17,7 @@
 #include "unicode/simpletz.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/strenum.h"
+#include "unicode/localpointer.h"
 #include "cmemory.h"
 #include "caltest.h"
 #include "unicode/localpointer.h"
@@ -94,6 +95,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(51,TestT11632);
         CASE(52,TestPersianCalOverflow);
         CASE(53,TestIslamicCalOverflow);
+        CASE(54,TestWeekOfYear13548);
     default: name = ""; break;
     }
 }
@@ -3048,6 +3050,22 @@ void CalendarRegressionTest::TestIslamicCalOverflow(void) {
             }
         }
         delete cal;
+    }
+}
+
+void CalendarRegressionTest::TestWeekOfYear13548(void) {
+    int32_t year = 2000;
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> cal(Calendar::createInstance(status));
+    failure(status, "Calendar::createInstance(status)");
+
+    cal->set(UCAL_YEAR, year);
+    cal->set(UCAL_WEEK_OF_YEAR, 4);
+
+    int32_t resultYear = cal->get(UCAL_YEAR, status);
+    failure(status, "get(UCAL_YEAR, status)");
+    if (year != resultYear) {
+        errln((UnicodeString)"Fail: Expected year=" + year + ", actual=" + resultYear);
     }
 }
 

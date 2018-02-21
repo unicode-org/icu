@@ -2541,5 +2541,19 @@ public class CalendarRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+
+    @Test
+    public void TestWeekOfYear13548() {
+        int year = 2000;
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.WEEK_OF_YEAR, 4);
+
+        int resultYear = cal.get(Calendar.YEAR);
+        if (year != resultYear) {
+            errln("Fail: Expected year=" + year + ", actual=" + resultYear);
+        }
+    }
 }
 //eof
