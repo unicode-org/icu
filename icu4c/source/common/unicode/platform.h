@@ -482,9 +482,9 @@
     /* Otherwise use the predefined value. */
 #elif !defined(__cplusplus)
 #   define U_CPLUSPLUS_VERSION 0
-#elif __cplusplus >= 201402L
+#elif __cplusplus >= 201402L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201402L)
 #   define U_CPLUSPLUS_VERSION 14
-#elif __cplusplus >= 201103L
+#elif __cplusplus >= 201103L || (defined(_MSVC_LANG) && _MSVC_LANG >= 201103L)
 #   define U_CPLUSPLUS_VERSION 11
 #else
     // C++98 or C++03
