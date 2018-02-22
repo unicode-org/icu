@@ -1750,7 +1750,7 @@
         </java>
     </target>
 
-    <target name="draftAPIs" depends="info, gatherapi" description="Run API collector tool and generate draft API report">
+    <target name="draftAPIs" depends="info, gatherapi" description="Run API collector tool and generate draft API report in html">
         <java classname="com.ibm.icu.dev.tool.docs.CollectAPI"
                 classpath="${icu4j.build-tools.jar}"
                 failonerror="true">
@@ -1758,6 +1758,19 @@
             <arg value="Draft"/>
             <arg value="-o"/>
             <arg value="${out.dir}/draftAPIs.html"/>
+            <arg value="${out.dir}/icu4j${api.report.version}.api3.gz" />
+        </java>
+    </target>
+
+    <target name="draftAPIsTSV" depends="info, gatherapi" description="Run API collector tool and generate draft API report in TSV">
+        <java classname="com.ibm.icu.dev.tool.docs.CollectAPI"
+                classpath="${icu4j.build-tools.jar}"
+                failonerror="true">
+            <arg value="-f"/>
+            <arg value="Draft"/>
+            <arg value="-o"/>
+            <arg value="${out.dir}/draftAPIs.tsv"/>
+            <arg value="-t"/>
             <arg value="${out.dir}/icu4j${api.report.version}.api3.gz" />
         </java>
     </target>
