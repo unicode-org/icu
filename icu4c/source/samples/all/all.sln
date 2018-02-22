@@ -12,8 +12,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "date", "..\date\date.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "datefmt", "..\datefmt\datefmt.vcxproj", "{6D592DB7-B9C8-4B1B-A1C1-F9A9EB4FD4E4}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "layout", "..\layout\layout.vcxproj", "{497500ED-DE1D-4B20-B529-F41B5A0FBEEB}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "legacy", "..\legacy\legacy.vcxproj", "{57F56795-1802-4605-88A0-013AAE9998F6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "msgfmt", "..\msgfmt\msgfmt.vcxproj", "{5FF1D1A2-1630-446C-B6EA-93EFD4F975C3}"
@@ -104,14 +102,6 @@ Global
 		{6D592DB7-B9C8-4B1B-A1C1-F9A9EB4FD4E4}.Release|Win32.Build.0 = Release|Win32
 		{6D592DB7-B9C8-4B1B-A1C1-F9A9EB4FD4E4}.Release|x64.ActiveCfg = Release|x64
 		{6D592DB7-B9C8-4B1B-A1C1-F9A9EB4FD4E4}.Release|x64.Build.0 = Release|x64
-		{497500ED-DE1D-4B20-B529-F41B5A0FBEEB}.Debug|Win32.ActiveCfg = Debug|Win32
-		{497500ED-DE1D-4B20-B529-F41B5A0FBEEB}.Debug|Win32.Build.0 = Debug|Win32
-		{497500ED-DE1D-4B20-B529-F41B5A0FBEEB}.Debug|x64.ActiveCfg = Debug|x64
-		{497500ED-DE1D-4B20-B529-F41B5A0FBEEB}.Debug|x64.Build.0 = Debug|x64
-		{497500ED-DE1D-4B20-B529-F41B5A0FBEEB}.Release|Win32.ActiveCfg = Release|Win32
-		{497500ED-DE1D-4B20-B529-F41B5A0FBEEB}.Release|Win32.Build.0 = Release|Win32
-		{497500ED-DE1D-4B20-B529-F41B5A0FBEEB}.Release|x64.ActiveCfg = Release|x64
-		{497500ED-DE1D-4B20-B529-F41B5A0FBEEB}.Release|x64.Build.0 = Release|x64
 		{57F56795-1802-4605-88A0-013AAE9998F6}.Debug|Win32.ActiveCfg = Debug|Win32
 		{57F56795-1802-4605-88A0-013AAE9998F6}.Debug|Win32.Build.0 = Debug|Win32
 		{57F56795-1802-4605-88A0-013AAE9998F6}.Debug|x64.ActiveCfg = Debug|x64

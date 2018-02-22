@@ -469,34 +469,14 @@
     <ClCompile Include="ulistformatter.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="unicode\ubidi.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="localsvc.h" />
     <ClInclude Include="msvcres.h" />
     <ClInclude Include="pluralmap.h" />
     <ClInclude Include="propname_data.h" />
     <ClInclude Include="ubidi_props.h" />
     <ClInclude Include="ubidiimp.h" />
-    <CustomBuild Include="unicode\ushape.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="brkeng.h" />
-    <CustomBuild Include="unicode\brkiter.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\dbbi.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="dictbe.h" />
-    <CustomBuild Include="unicode\rbbi.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="rbbidata.h" />
     <ClInclude Include="rbbinode.h" />
     <ClInclude Include="rbbirb.h" />
@@ -506,10 +486,6 @@
     <ClInclude Include="rbbitblb.h" />
     <ClInclude Include="rbbi_cache.h" />
     <ClInclude Include="dictionarydata.h" />
-    <CustomBuild Include="unicode\ubrk.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="ubidi_props_data.h" />
     <ClInclude Include="ubrkimpl.h" />
     <ClInclude Include="ucase_props_data.h" />
@@ -520,23 +496,11 @@
     <ClInclude Include="unistrappender.h" />
     <ClInclude Include="hash.h" />
     <ClInclude Include="propsvec.h" />
-    <CustomBuild Include="unicode\strenum.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="uarrsort.h" />
-    <CustomBuild Include="unicode\uenum.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="uelement.h" />
     <ClInclude Include="uenumimp.h" />
     <ClInclude Include="uhash.h" />
     <ClInclude Include="ulist.h" />
-    <CustomBuild Include="unicode\enumset.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="unicode\filteredbrk.h" />
     <ClInclude Include="ustrenum.h" />
     <ClInclude Include="utrie.h" />
@@ -547,396 +511,68 @@
     <ClInclude Include="uvectr32.h" />
     <ClInclude Include="uvectr64.h" />
     <ClInclude Include="cpputils.h" />
-    <CustomBuild Include="unicode\docmain.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\errorcode.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\icudataver.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="locmap.h" />
     <ClInclude Include="mutex.h" />
-    <CustomBuild Include="unicode\platform.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\ptypes.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\putil.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="putilimp.h" />
-    <CustomBuild Include="unicode\std_string.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="uassert.h" />
-    <CustomBuild Include="unicode\uconfig.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\umachine.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="umutex.h" />
     <ClInclude Include="uposixdefs.h" />
-    <CustomBuild Include="unicode\urename.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\utrace.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="utracimp.h" />
-    <CustomBuild Include="unicode\utypes.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\uvernum.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\uversion.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="wintz.h" />
-    <CustomBuild Include="unicode\ucnv.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="ucnv_bld.h" />
-    <CustomBuild Include="unicode\ucnv_cb.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="ucnv_cnv.h" />
-    <CustomBuild Include="unicode\ucnv_err.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="ucnv_ext.h" />
     <ClInclude Include="ucnv_imp.h" />
     <ClInclude Include="ucnv_io.h" />
     <ClInclude Include="ucnvmbcs.h" />
-    <CustomBuild Include="unicode\ucnvsel.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="cmemory.h" />
-    <CustomBuild Include="unicode\localpointer.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\uclean.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="ucln.h" />
     <ClInclude Include="ucln_cmn.h" />
     <ClInclude Include="ucln_imp.h" />
     <ClInclude Include="ucmndata.h" />
-    <CustomBuild Include="unicode\udata.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="udatamem.h" />
     <ClInclude Include="udataswp.h" />
     <ClInclude Include="umapfile.h" />
-    <CustomBuild Include="unicode\uobject.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\dtintrv.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\parseerr.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\parsepos.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\umisc.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="ustrfmt.h" />
     <ClInclude Include="util.h" />
-    <CustomBuild Include="unicode\idna.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="punycode.h" />
-    <CustomBuild Include="unicode\uidna.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="locbased.h" />
-    <CustomBuild Include="unicode\locid.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="locutil.h" />
-    <CustomBuild Include="unicode\resbund.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="sharedobject.h" />
     <ClCompile Include="sharedobject.cpp" />
-    <CustomBuild Include="unicode\locdspnm.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\simpleformatter.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\ucat.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\udisplaycontext.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\uldnames.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\uloc.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="ulocimp.h" />
-    <CustomBuild Include="unicode\ures.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="unifiedcache.h" />
     <ClInclude Include="uresdata.h" />
     <ClInclude Include="uresimp.h" />
     <ClInclude Include="ureslocs.h" />
     <ClInclude Include="resource.h" />
-    <CustomBuild Include="unicode\ucurr.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="ucurrimp.h" />
-    <CustomBuild Include="unicode\caniter.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="norm2allmodes.h" />
-    <CustomBuild Include="unicode\normalizer2.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="normalizer2impl.h" />
-    <CustomBuild Include="unicode\normlzr.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\unorm.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\unorm2.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="unormimp.h" />
     <ClInclude Include="bmpset.h" />
     <ClInclude Include="messageimpl.h" />
     <ClInclude Include="patternprops.h" />
     <ClInclude Include="propname.h" />
     <ClInclude Include="ruleiter.h" />
-    <CustomBuild Include="unicode\symtable.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="ucase.h" />
-    <CustomBuild Include="unicode\uchar.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\unifilt.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\unifunct.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\unimatch.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\uniset.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="unisetspan.h" />
     <ClInclude Include="uprops.h" />
     <ClInclude Include="usc_impl.h" />
-    <CustomBuild Include="unicode\uscript.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\uset.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="uset_imp.h" />
-    <CustomBuild Include="unicode\usetiter.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\icuplug.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="icuplugimp.h" />
     <ClInclude Include="serv.h" />
     <ClInclude Include="servloc.h" />
     <ClInclude Include="servnotf.h" />
     <ClInclude Include="sprpimpl.h" />
-    <CustomBuild Include="unicode\usprep.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\appendable.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="bytesinkutil.h" />
-    <CustomBuild Include="unicode\bytestream.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\bytestrie.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\bytestriebuilder.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\chariter.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="charstr.h" />
     <ClInclude Include="cstring.h" />
     <ClInclude Include="cstr.h" />
     <ClInclude Include="cwchar.h" />
-    <CustomBuild Include="unicode\messagepattern.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\rep.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\schriter.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\stringpiece.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\stringtriebuilder.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\ucasemap.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\ucharstrie.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\ucharstriebuilder.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\uchriter.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="uinvchar.h" />
-    <CustomBuild Include="unicode\uiter.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\unistr.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\urep.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
     <ClInclude Include="ustr_cnv.h" />
     <ClInclude Include="ustr_imp.h" />
-    <CustomBuild Include="unicode\ustring.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\ustringtrie.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\utext.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\utf.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\utf16.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\utf32.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\utf8.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\utf_old.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\listformatter.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\ulistformatter.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode</Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
-    <CustomBuild Include="unicode\stringoptions.h">
-      <Command>copy "%(FullPath)" ..\..\include\unicode </Command>
-      <Outputs>..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
-    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="common.rc" />
