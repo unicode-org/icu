@@ -736,6 +736,11 @@ public class Currency extends MeasureUnit {
         return isoResult;
     }
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
     public static TextTrieMap<CurrencyStringInfo> getParsingTrie(ULocale locale, int type) {
         List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = getCurrencyTrieVec(locale);
         if (type == Currency.LONG_NAME) {
