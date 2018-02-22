@@ -74,8 +74,14 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "makedata_uwp", "..\data\makedata_uwp.vcxproj", "{B1D53358-37BD-48BC-B27C-68BAF1E78508}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i18n_uwp", "..\i18n\i18n_uwp.vcxproj", "{6786C051-383B-47E0-9E82-B8B994E06A25}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0178B127-6269-407D-B112-93877BB62776} = {0178B127-6269-407D-B112-93877BB62776}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common_uwp", "..\common\common_uwp.vcxproj", "{C10CF34B-3F79-430E-AD38-5A32DC0589C2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
