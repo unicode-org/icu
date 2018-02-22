@@ -15,8 +15,7 @@ import com.ibm.icu.util.ULocale;
  *
  * This class is not intended for public subclassing.
  *
- * @draft ICU 59
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 59
  */
 public abstract class CaseMap {
     /**
@@ -37,26 +36,22 @@ public abstract class CaseMap {
 
     /**
      * @return Lowercasing object with default options.
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public static Lower toLower() { return Lower.DEFAULT; }
     /**
      * @return Uppercasing object with default options.
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public static Upper toUpper() { return Upper.DEFAULT; }
     /**
      * @return Titlecasing object with default options.
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public static Title toTitle() { return Title.DEFAULT; }
     /**
      * @return Case folding object with default options.
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public static Fold fold() { return Fold.DEFAULT; }
 
@@ -65,8 +60,7 @@ public abstract class CaseMap {
      * omits unchanged text when case-mapping with {@link Edits}.
      *
      * @return an options object with this option.
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public abstract CaseMap omitUnchangedText();
 
@@ -74,8 +68,7 @@ public abstract class CaseMap {
      * Lowercasing options and methods. Immutable.
      *
      * @see #toLower()
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public static final class Lower extends CaseMap {
         private static final Lower DEFAULT = new Lower(0);
@@ -84,8 +77,7 @@ public abstract class CaseMap {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         @Override
         public Lower omitUnchangedText() {
@@ -125,8 +117,7 @@ public abstract class CaseMap {
          * @return dest with the result string (or only changes) appended.
          *
          * @see UCharacter#toLowerCase(Locale, String)
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
          public <A extends Appendable> A apply(
                  Locale locale, CharSequence src, A dest, Edits edits) {
@@ -138,8 +129,7 @@ public abstract class CaseMap {
      * Uppercasing options and methods. Immutable.
      *
      * @see #toUpper()
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public static final class Upper extends CaseMap {
         private static final Upper DEFAULT = new Upper(0);
@@ -148,8 +138,7 @@ public abstract class CaseMap {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         @Override
         public Upper omitUnchangedText() {
@@ -189,8 +178,7 @@ public abstract class CaseMap {
          * @return dest with the result string (or only changes) appended.
          *
          * @see UCharacter#toUpperCase(Locale, String)
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
          public <A extends Appendable> A apply(
                  Locale locale, CharSequence src, A dest, Edits edits) {
@@ -202,8 +190,7 @@ public abstract class CaseMap {
      * Titlecasing options and methods. Immutable.
      *
      * @see #toTitle()
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public static final class Title extends CaseMap {
         private static final Title DEFAULT = new Title(0);
@@ -248,8 +235,7 @@ public abstract class CaseMap {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         @Override
         public Title omitUnchangedText() {
@@ -271,8 +257,7 @@ public abstract class CaseMap {
          * @return an options object with this option.
          * @see UCharacter#TITLECASE_NO_LOWERCASE
          * @see #adjustToCased()
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         public Title noLowercase() {
             return new Title(internalOptions | UCharacter.TITLECASE_NO_LOWERCASE);
@@ -291,8 +276,7 @@ public abstract class CaseMap {
          *
          * @return an options object with this option.
          * @see UCharacter#TITLECASE_NO_BREAK_ADJUSTMENT
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         public Title noBreakAdjustment() {
             return new Title(CaseMapImpl.addTitleAdjustmentOption(
@@ -380,8 +364,7 @@ public abstract class CaseMap {
          * @return dest with the result string (or only changes) appended.
          *
          * @see UCharacter#toTitleCase(Locale, String, BreakIterator, int)
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
          public <A extends Appendable> A apply(
                  Locale locale, BreakIterator iter, CharSequence src, A dest, Edits edits) {
@@ -399,8 +382,7 @@ public abstract class CaseMap {
      * Case folding options and methods. Immutable.
      *
      * @see #fold()
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public static final class Fold extends CaseMap {
         private static final Fold DEFAULT = new Fold(0);
@@ -412,8 +394,7 @@ public abstract class CaseMap {
 
         /**
          * {@inheritDoc}
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         @Override
         public Fold omitUnchangedText() {
@@ -431,8 +412,7 @@ public abstract class CaseMap {
          *
          * @return an options object with this option.
          * @see UCharacter#FOLD_CASE_EXCLUDE_SPECIAL_I
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         public Fold turkic() {
             return (internalOptions & CaseMapImpl.OMIT_UNCHANGED_TEXT) == 0 ?
@@ -474,8 +454,7 @@ public abstract class CaseMap {
          * @return dest with the result string (or only changes) appended.
          *
          * @see UCharacter#foldCase(String, int)
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
          public <A extends Appendable> A apply(CharSequence src, A dest, Edits edits) {
              return CaseMapImpl.fold(internalOptions, src, dest, edits);
