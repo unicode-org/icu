@@ -42,15 +42,6 @@ UnicodeString operator+(const UnicodeString& left, const UnicodeSet& set) {
     return left + UnicodeSetTest::escape(pat);
 }
 
-#define CASE(id,test) case id:                          \
-                          name = #test;                 \
-                          if (exec) {                   \
-                              logln(#test "---");       \
-                              logln();                  \
-                              test();                   \
-                          }                             \
-                          break
-
 UnicodeSetTest::UnicodeSetTest() : utf8Cnv(NULL) {
 }
 
@@ -100,6 +91,7 @@ UnicodeSetTest::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestUCAUnsafeBackwards);
     TESTCASE_AUTO(TestIntOverflow);
     TESTCASE_AUTO(TestUnusedCcc);
+    TESTCASE_AUTO(TestDeepPattern);
     TESTCASE_AUTO_END;
 }
 
@@ -3969,4 +3961,20 @@ void UnicodeSetTest::TestUnusedCcc() {
                  U_ILLEGAL_ARGUMENT_ERROR, errorCode.reset());
     assertTrue("[:ccc=1.1:] -> empty set", ccc1_1.isEmpty());
 #endif
+}
+
+void UnicodeSetTest::TestDeepPattern() {
+    IcuTestErrorCode errorCode(*this, "TestDeepPattern");
+    // Nested ranges are parsed via recursion which can use a lot of stack space.
+    // After a reasonable limit, we should get an error.
+    constexpr int32_t DEPTH = 20000;
+    UnicodeString pattern, suffix;
+    for (int32_t i = 0; i < DEPTH; ++i) {
+        pattern.append(u"[a", 2);
+        suffix.append(']');
+    }
+    pattern.append(suffix);
+    UnicodeSet set(pattern, errorCode);
+    assertTrue("[a[a[a...1000s...]]] -> error", errorCode.isFailure());
+    errorCode.reset();
 }
