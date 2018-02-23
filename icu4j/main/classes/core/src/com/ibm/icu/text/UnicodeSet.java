@@ -2422,7 +2422,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         StringBuilder rebuiltPat = new StringBuilder();
         RuleCharacterIterator chars =
                 new RuleCharacterIterator(pattern, symbols, pos);
-        applyPattern(chars, symbols, rebuiltPat, options);
+        applyPattern(chars, symbols, rebuiltPat, options, 0);
         if (chars.inVariable()) {
             syntaxError(chars, "Extra chars in variable value");
         }
@@ -2458,6 +2458,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             SETMODE2_PROPERTYPAT = 2,
             SETMODE3_PREPARSED = 3;
 
+    private static final int MAX_DEPTH = 100;
+
     /**
      * Parse the pattern from the given RuleCharacterIterator.  The
      * iterator is advanced over the parsed pattern.
@@ -2473,7 +2475,10 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * IGNORE_SPACE, CASE.
      */
     private void applyPattern(RuleCharacterIterator chars, SymbolTable symbols,
-            Appendable rebuiltPat, int options) {
+            Appendable rebuiltPat, int options, int depth) {
+        if (depth > MAX_DEPTH) {
+            syntaxError(chars, "Pattern nested too deeply");
+        }
 
         // Syntax characters: [ ] ^ - & { }
 
@@ -2605,7 +2610,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
                 }
                 switch (setMode) {
                 case SETMODE1_UNICODESET:
-                    nested.applyPattern(chars, symbols, patBuf, options);
+                    nested.applyPattern(chars, symbols, patBuf, options, depth + 1);
                     break;
                 case SETMODE2_PROPERTYPAT:
                     chars.skipIgnored(opts);
