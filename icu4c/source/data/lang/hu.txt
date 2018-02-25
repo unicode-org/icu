@@ -46,6 +46,7 @@ hu{
         arc{"arámi"}
         arn{"mapucse"}
         arp{"arapaho"}
+        ars{"nedzsdi arab"}
         arw{"aravak"}
         as{"asszámi"}
         asa{"asu"}
@@ -899,7 +900,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
     characterLabelPattern{
         all{"{0} – összes"}
         category-list{"{0}: {1}"}

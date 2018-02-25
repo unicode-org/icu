@@ -32,6 +32,7 @@ sr_Latn{
         151{"Istočna Evropa"}
         154{"Severna Evropa"}
         155{"Zapadna Evropa"}
+        202{"Afrika južno od Sahare"}
         419{"Latinska Amerika"}
         AC{"Ostrvo Asension"}
         AD{"Andora"}
@@ -312,5 +313,5 @@ sr_Latn{
         MK{"Makedonija (BJRM)"}
         TL{"Istočni Timor"}
     }
-    Version{"2.1.37.8"}
+    Version{"2.1.39.37"}
 }

@@ -9,6 +9,7 @@ pt_PT{
         034{"Ásia do Sul"}
         039{"Europa do Sul"}
         154{"Europa do Norte"}
+        202{"África subsariana"}
         AI{"Anguila"}
         AM{"Arménia"}
         AX{"Alanda"}
@@ -81,5 +82,5 @@ pt_PT{
         FK{"Ilhas Malvinas"}
         MK{"Macedónia (ARJM)"}
     }
-    Version{"2.1.37.6"}
+    Version{"2.1.39.11"}
 }

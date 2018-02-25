@@ -39,5 +39,5 @@ sw_CD{
         wae{"Kiwalser"}
         yi{"Kiyidi"}
     }
-    Version{"2.1.37.6"}
+    Version{"2.1.39.11"}
 }

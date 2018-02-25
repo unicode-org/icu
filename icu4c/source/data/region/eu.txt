@@ -31,6 +31,7 @@ eu{
         151{"Europa ekialdea"}
         154{"Europa iparraldea"}
         155{"Europa mendebaldea"}
+        202{"Saharaz hegoaldeko Afrika"}
         419{"Latinoamerika"}
         AC{"Ascension uhartea"}
         AD{"Andorra"}
@@ -304,9 +305,11 @@ eu{
     Countries%variant{
         CD{"Kongo (DR)"}
         CG{"Kongoko Errepublika"}
+        CI{"CI"}
         CZ{"Txekiar Errepublika"}
         FK{"Falkland uharteak"}
         MK{"Mazedoniako Jugoslaviar Errepublika Ohia"}
+        TL{"TL"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.11"}
 }

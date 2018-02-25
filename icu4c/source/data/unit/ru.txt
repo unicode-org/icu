@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ru{
-    Version{"2.1.37.58"}
+    Version{"2.1.39.20"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -1129,10 +1129,10 @@ ru{
             }
             hour{
                 dnam{"ч"}
-                few{"{0} ч."}
-                many{"{0} ч."}
-                one{"{0} ч."}
-                other{"{0} ч."}
+                few{"{0} ч"}
+                many{"{0} ч"}
+                one{"{0} ч"}
+                other{"{0} ч"}
                 per{"{0}/ч."}
             }
             microsecond{
@@ -1151,10 +1151,10 @@ ru{
             }
             minute{
                 dnam{"мин"}
-                few{"{0} мин."}
-                many{"{0} мин."}
-                one{"{0} мин."}
-                other{"{0} мин."}
+                few{"{0} мин"}
+                many{"{0} мин"}
+                one{"{0} мин"}
+                other{"{0} мин"}
                 per{"{0}/мин."}
             }
             month{
@@ -1174,10 +1174,10 @@ ru{
             }
             second{
                 dnam{"c"}
-                few{"{0} с."}
-                many{"{0} с."}
-                one{"{0} с."}
-                other{"{0} с."}
+                few{"{0} с"}
+                many{"{0} с"}
+                one{"{0} с"}
+                other{"{0} с"}
                 per{"{0}/c"}
             }
             week{
@@ -1475,6 +1475,13 @@ ru{
                 many{"{0} мм рт. ст."}
                 one{"{0} мм рт. ст."}
                 other{"{0} мм рт. ст."}
+            }
+            pound-per-square-inch{
+                dnam{"ф. на дюйм²"}
+                few{"{0} ф./дюйм²"}
+                many{"{0} ф./дюйм²"}
+                one{"{0} ф./дюйм²"}
+                other{"{0} ф./дюйм²"}
             }
         }
         speed{
@@ -2046,10 +2053,10 @@ ru{
             }
             foot{
                 dnam{"фт"}
-                few{"{0} фута"}
-                many{"{0} футов"}
-                one{"{0} фут"}
-                other{"{0} фута"}
+                few{"{0} фт"}
+                many{"{0} фт"}
+                one{"{0} фт"}
+                other{"{0} фт"}
                 per{"{0}/фт"}
             }
             furlong{

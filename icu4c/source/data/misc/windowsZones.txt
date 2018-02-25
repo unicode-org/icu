@@ -212,7 +212,6 @@ windowsZones:table(nofallback){
             KE{"Africa/Nairobi"}
             KM{"Indian/Comoro"}
             MG{"Indian/Antananarivo"}
-            SD{"Africa/Khartoum"}
             SO{"Africa/Mogadishu"}
             SS{"Africa/Juba"}
             TZ{"Africa/Dar_es_Salaam"}
@@ -613,6 +612,10 @@ windowsZones:table(nofallback){
         "Sri Lanka Standard Time"{
             001{"Asia/Colombo"}
             LK{"Asia/Colombo"}
+        }
+        "Sudan Standard Time"{
+            001{"Africa/Khartoum"}
+            SD{"Africa/Khartoum"}
         }
         "Syria Standard Time"{
             001{"Asia/Damascus"}

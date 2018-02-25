@@ -31,6 +31,7 @@ it{
         151{"Europa orientale"}
         154{"Europa settentrionale"}
         155{"Europa occidentale"}
+        202{"Africa subsahariana"}
         419{"America Latina"}
         AC{"Isola Ascensione"}
         AD{"Andorra"}
@@ -311,5 +312,5 @@ it{
         MK{"Ex Repubblica Jugoslava di Macedonia"}
         TL{"Timor Leste"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.40"}
 }

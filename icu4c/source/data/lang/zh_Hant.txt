@@ -52,6 +52,7 @@ zh_Hant{
         aro{"阿拉奧納文"}
         arp{"阿拉帕霍文"}
         arq{"阿爾及利亞阿拉伯文"}
+        ars{"納吉迪阿拉伯文"}
         arw{"阿拉瓦克文"}
         ary{"摩洛哥阿拉伯文"}
         arz{"埃及阿拉伯文"}
@@ -1073,7 +1074,7 @@ zh_Hant{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
     characterLabelPattern{
         all{"{0} — 全部"}
         category-list{"{0}: {1}"}

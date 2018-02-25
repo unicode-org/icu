@@ -46,6 +46,7 @@ hr{
         arc{"aramejski"}
         arn{"mapuche"}
         arp{"arapaho"}
+        ars{"najdi arapski"}
         arw{"aravački"}
         as{"asamski"}
         asa{"asu"}
@@ -915,7 +916,7 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
     characterLabelPattern{
         all{"{0} — Sve"}
         category-list{"{0}: {1}"}

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sq{
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abixhan"}
@@ -1780,7 +1780,7 @@ sq{
             ls{"Ora e Palaut"}
         }
         "meta:Papua_New_Guinea"{
-            ls{"Ora e Papua-Guinesë së Re"}
+            ls{"Ora e Guinesë së Re-Papua"}
         }
         "meta:Paraguay"{
             ld{"Ora Verore e Paraguait"}

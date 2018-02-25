@@ -31,6 +31,7 @@ lv{
         151{"Austrumeiropa"}
         154{"Ziemeļeiropa"}
         155{"Rietumeiropa"}
+        202{"Subsahāras Āfrika"}
         419{"Latīņamerika"}
         AC{"Debesbraukšanas sala"}
         AD{"Andora"}
@@ -310,5 +311,5 @@ lv{
         FK{"Folklenda (Malvinu) salas"}
         MK{"bijusī Dienvidslāvijas Maķedonijas Republika"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.11"}
 }

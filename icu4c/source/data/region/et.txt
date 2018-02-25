@@ -31,6 +31,7 @@ et{
         151{"Ida-Euroopa"}
         154{"Põhja-Euroopa"}
         155{"Lääne-Euroopa"}
+        202{"Sahara-tagune Aafrika"}
         419{"Ladina-Ameerika"}
         AC{"Ascensioni saar"}
         AD{"Andorra"}
@@ -311,5 +312,5 @@ et{
         MK{"Makedoonia Vabariik"}
         TL{"Timor-Leste"}
     }
-    Version{"2.1.37.22"}
+    Version{"2.1.39.11"}
 }

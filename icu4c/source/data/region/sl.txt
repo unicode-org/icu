@@ -31,6 +31,7 @@ sl{
         151{"Vzhodna Evropa"}
         154{"Severna Evropa"}
         155{"Zahodna Evropa"}
+        202{"podsaharska Afrika"}
         419{"Latinska Amerika"}
         AC{"Otok Ascension"}
         AD{"Andora"}
@@ -311,5 +312,5 @@ sl{
         MK{"Makedonija (FYROM)"}
         TL{"Vzhodni Timor"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
 }

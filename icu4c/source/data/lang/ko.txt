@@ -48,6 +48,7 @@ ko{
         arn{"마푸둔군어"}
         arp{"아라파호어"}
         arq{"알제리 아랍어"}
+        ars{"나즈디 아랍어"}
         arw{"아라와크어"}
         ary{"모로코 아랍어"}
         arz{"이집트 아랍어"}
@@ -918,7 +919,7 @@ ko{
         VAIDIKA{"바이디카"}
         VALLADER{"발라더"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
     characterLabelPattern{
         all{"{0} — 전체"}
         category-list{"{0}: {1}"}

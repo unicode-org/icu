@@ -430,7 +430,7 @@ kok{
             latn{"अस्तंत अंक"}
         }
     }
-    Version{"2.1.36.86"}
+    Version{"2.1.38.69"}
     codePatterns{
         language{"भाशा: {0}"}
         script{"लिपी: {0}"}

@@ -875,7 +875,7 @@ lb{
         VALENCIA{"Valencianesch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
     codePatterns{
         language{"Sprooch: {0}"}
         script{"Schrëft: {0}"}

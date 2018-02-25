@@ -31,6 +31,7 @@ sv{
         151{"Östeuropa"}
         154{"Nordeuropa"}
         155{"Västeuropa"}
+        202{"202"}
         419{"Latinamerika"}
         AC{"Ascension"}
         AD{"Andorra"}
@@ -305,7 +306,11 @@ sv{
     Countries%variant{
         CD{"Demokratiska republiken Kongo"}
         CG{"Republiken Kongo"}
+        CI{"CI"}
+        CZ{"CZ"}
+        FK{"FK"}
         MK{"f.d. jugoslaviska republiken Makedonien"}
+        TL{"TL"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
 }
