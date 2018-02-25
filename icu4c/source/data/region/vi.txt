@@ -31,6 +31,7 @@ vi{
         151{"Đông Âu"}
         154{"Bắc Âu"}
         155{"Tây Âu"}
+        202{"Châu Phi hạ Sahara"}
         419{"Châu Mỹ La-tinh"}
         AC{"Đảo Ascension"}
         AD{"Andorra"}
@@ -43,7 +44,7 @@ vi{
         AO{"Angola"}
         AQ{"Nam Cực"}
         AR{"Argentina"}
-        AS{"Đảo Somoa thuộc Mỹ"}
+        AS{"Samoa thuộc Mỹ"}
         AT{"Áo"}
         AU{"Australia"}
         AW{"Aruba"}
@@ -311,5 +312,5 @@ vi{
         MK{"Macedonia (FYROM)"}
         TL{"Đông Timor"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
 }

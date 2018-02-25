@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en_AU{
     %%Parent{"en_001"}
-    Version{"2.1.37.6"}
+    Version{"2.1.38.73"}
     units{
         energy{
             kilowatt-hour{
@@ -12,6 +12,12 @@ en_AU{
             }
         }
         length{
+            centimeter{
+                other{"{0} centimetres"}
+            }
+            decimeter{
+                other{"{0} decimetres"}
+            }
             kilometer{
                 dnam{"kilometre"}
             }
@@ -244,6 +250,9 @@ en_AU{
             carat{
                 one{"{0} CM"}
                 other{"{0} CM"}
+            }
+            pound{
+                other{"{0} lb"}
             }
         }
         pressure{

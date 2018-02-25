@@ -131,11 +131,11 @@ metaZones:table(nofallback){
             001{"America/Halifax"}
             AG{"America/Antigua"}
             AI{"America/Anguilla"}
-            AN{"America/Curacao"}
             AW{"America/Aruba"}
             BB{"America/Barbados"}
             BM{"Atlantic/Bermuda"}
             BQ{"America/Kralendijk"}
+            CW{"America/Curacao"}
             DM{"America/Dominica"}
             GD{"America/Grenada"}
             GL{"America/Thule"}

@@ -395,6 +395,7 @@ sl{
         rm{"retoromanščina"}
         rn{"rundščina"}
         ro{"romunščina"}
+        ro_MD{"moldavščina"}
         rof{"rombo"}
         rom{"romščina"}
         root{"rootščina"}
@@ -877,7 +878,7 @@ sl{
         VALENCIA{"valencijski pravopis"}
         WADEGILE{"romanizacija Wade-Giles"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
     characterLabelPattern{
         all{"{0} – vse"}
         category-list{"{0}: {1}"}

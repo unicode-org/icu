@@ -98,5 +98,5 @@ zh_Hant_HK{
     Countries%variant{
         CI{"象牙海岸"}
     }
-    Version{"2.1.37.6"}
+    Version{"2.1.39.11"}
 }

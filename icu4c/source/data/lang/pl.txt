@@ -51,6 +51,7 @@ pl{
         aro{"araona"}
         arp{"arapaho"}
         arq{"algierski arabski"}
+        ars{"arabski nadżdyjski"}
         arw{"arawak"}
         ary{"marokański arabski"}
         arz{"egipski arabski"}
@@ -965,7 +966,7 @@ pl{
         VALENCIA{"walencki"}
         WADEGILE{"latynizacja Wade’a i Gilesa"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.15"}
     characterLabelPattern{
         all{"{0} — wszystko"}
         category-list{"{0}: {1}"}

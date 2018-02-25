@@ -10,5 +10,5 @@ en_001{
             yes{"Sort Unicode Normalised"}
         }
     }
-    Version{"2.1.35.71"}
+    Version{"2.1.38.69"}
 }

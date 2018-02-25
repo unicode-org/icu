@@ -31,6 +31,7 @@ af{
         151{"Oos-Europa"}
         154{"Noord-Europa"}
         155{"Wes-Europa"}
+        202{"Afrika suid van die Sahara"}
         419{"Latyns-Amerika"}
         AC{"Ascensioneiland"}
         AD{"Andorra"}
@@ -309,5 +310,5 @@ af{
         FK{"Falklandeilande (Malvinas)"}
         MK{"Macedonië (VJRM)"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.11"}
 }

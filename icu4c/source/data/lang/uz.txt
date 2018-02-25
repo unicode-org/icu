@@ -242,7 +242,7 @@ uz{
         min{"minangkabau"}
         mk{"makedon"}
         ml{"malayalam"}
-        mn{"mo‘g‘ul"}
+        mn{"mongol"}
         mni{"manipur"}
         moh{"mohauk"}
         mos{"mossi"}
@@ -269,7 +269,7 @@ uz{
         ng{"ndonga"}
         nia{"nias"}
         niu{"niue"}
-        nl{"golland"}
+        nl{"niderland"}
         nl_BE{"flamand"}
         nmg{"kvasio"}
         nn{"norveg-nyunorsk"}
@@ -546,7 +546,7 @@ uz{
             tibt{"tibet raqamlari"}
         }
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
     characterLabelPattern{
         all{"{0} — hammasi"}
         category-list{"{0}: {1}"}

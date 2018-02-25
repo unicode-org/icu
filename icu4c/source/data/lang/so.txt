@@ -52,5 +52,5 @@ so{
         Zxxx{"Aan la qorin"}
         Zzzz{"Far aan la aqoon amase aan saxnayn"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.38.69"}
 }

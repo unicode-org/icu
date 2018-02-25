@@ -51,6 +51,7 @@ fi{
         aro{"araona"}
         arp{"arapaho"}
         arq{"algerianarabia"}
+        ars{"arabia – najd"}
         arw{"arawak"}
         ary{"marokonarabia"}
         arz{"egyptinarabia"}
@@ -1117,7 +1118,7 @@ fi{
     Variants%secondary{
         FONUPA{"suomalais-ugrilainen tarkekirjoitus"}
     }
-    Version{"2.1.37.67"}
+    Version{"2.1.39.20"}
     characterLabelPattern{
         all{"{0} – kaikki"}
         category-list{"{0}: {1}"}

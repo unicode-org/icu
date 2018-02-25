@@ -420,6 +420,8 @@ af{
         yue{"Kantonees"}
         zgh{"Standaard Marokkaanse Tamazight"}
         zh{"Sjinees"}
+        zh_Hans{"Chinees (Vereenvoudig)"}
+        zh_Hant{"Chinees (Tradisioneel)"}
         zu{"Zoeloe"}
         zun{"Zuni"}
         zxx{"Geen taalinhoud nie"}
@@ -624,7 +626,7 @@ af{
             vaii{"Vai-syfers"}
         }
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.11"}
     characterLabelPattern{
         all{"{0} – Alle"}
         category-list{"{0}: {1}"}

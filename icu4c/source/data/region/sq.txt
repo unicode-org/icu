@@ -31,6 +31,7 @@ sq{
         151{"Europa Lindore"}
         154{"Europa Veriore"}
         155{"Europa Perëndimore"}
+        202{"Afrika Subsahariane"}
         419{"Amerika Latine"}
         AC{"Ishulli Asenshion"}
         AD{"Andorrë"}
@@ -58,7 +59,7 @@ sq{
         BH{"Bahrejn"}
         BI{"Burundi"}
         BJ{"Benin"}
-        BL{"Shën Bartolomeu"}
+        BL{"Shën-Bartolome"}
         BM{"Bermudë"}
         BN{"Brunei"}
         BO{"Bolivi"}
@@ -133,7 +134,7 @@ sq{
         GW{"Guine-Bisau"}
         GY{"Guajanë"}
         HK{"RPA i Hong-Kongut"}
-        HM{"Ishulli Hërd dhe Ishujt Mekdonald"}
+        HM{"Ishujt Hërd e Mekdonald"}
         HN{"Honduras"}
         HR{"Kroaci"}
         HT{"Haiti"}
@@ -218,7 +219,7 @@ sq{
         PH{"Filipine"}
         PK{"Pakistan"}
         PL{"Poloni"}
-        PM{"Shën Pier dhe Mikelon"}
+        PM{"Shën-Pier dhe Mikelon"}
         PN{"Ishujt Pitkern"}
         PR{"Porto-Riko"}
         PS{"Territoret Palestineze"}
@@ -240,7 +241,7 @@ sq{
         SG{"Singapor"}
         SH{"Shën-Helenë"}
         SI{"Slloveni"}
-        SJ{"Svalbard dhe Jan-Majen"}
+        SJ{"Svalbard e Jan-Majen"}
         SK{"Sllovaki"}
         SL{"Siera-Leone"}
         SM{"San-Marino"}
@@ -248,7 +249,7 @@ sq{
         SO{"Somali"}
         SR{"Surinami"}
         SS{"Sudani i Jugut"}
-        ST{"Sao Tome dhe Principe"}
+        ST{"Sao-Tome e Principe"}
         SV{"Salvador"}
         SX{"Sint-Marten"}
         SY{"Siri"}
@@ -311,5 +312,5 @@ sq{
         MK{"Maqedoni (IRJM)"}
         TL{"Timori Lindor"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
 }

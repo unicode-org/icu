@@ -112,7 +112,7 @@ es_MX{
             tibt{"Dígitos en tibetano"}
         }
     }
-    Version{"2.1.37.32"}
+    Version{"2.1.38.73"}
     characterLabelPattern{
         historic{"{0} — Históricos"}
         miscellaneous{"{0} — Varios"}

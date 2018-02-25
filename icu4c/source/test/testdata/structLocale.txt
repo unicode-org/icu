@@ -4134,6 +4134,10 @@ structLocale:table(nofallback){
             2,
             2,
         }
+        typographicNames:intvector{
+            2,
+            2,
+        }
         unit-pattern:intvector{
             2,
             2,
@@ -8349,6 +8353,7 @@ structLocale:table(nofallback){
             }
         }
         default{""}
+        default_latn{""}
         deva{
             miscPatterns{
                 atLeast{""}

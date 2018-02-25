@@ -31,6 +31,7 @@ tr{
         151{"Doğu Avrupa"}
         154{"Kuzey Avrupa"}
         155{"Batı Avrupa"}
+        202{"Sahra Altı Afrika"}
         419{"Latin Amerika"}
         AC{"Ascension Adası"}
         AD{"Andorra"}
@@ -310,5 +311,5 @@ tr{
         MK{"Makedonya (EYMC)"}
         TL{"Doğu Timor"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
 }

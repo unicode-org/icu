@@ -31,6 +31,7 @@ id{
         151{"Eropa Bagian Timur"}
         154{"Eropa Bagian Utara"}
         155{"Eropa Bagian Barat"}
+        202{"Afrika Sub-Sahara"}
         419{"Amerika Latin"}
         AC{"Pulau Ascension"}
         AD{"Andorra"}
@@ -309,5 +310,5 @@ id{
         FK{"Kepulauan Malvinas (Falkland)"}
         MK{"Makedonia (BRY)"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
 }

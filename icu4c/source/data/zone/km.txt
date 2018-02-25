@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 km{
-    Version{"2.1.37.5"}
+    Version{"2.1.39.11"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"អាប៊ីដ្យាន"}
@@ -1075,6 +1075,9 @@ km{
         }
         "Europe:Sarajevo"{
             ec{"សារ៉ាយ៉េវ៉ូ"}
+        }
+        "Europe:Saratov"{
+            ec{"សារ៉ាតាវ"}
         }
         "Europe:Simferopol"{
             ec{"ស៊ីមហ្វើរ៉ុប៉ូល"}

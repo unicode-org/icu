@@ -31,6 +31,7 @@ nb{
         151{"Øst-Europa"}
         154{"Nord-Europa"}
         155{"Vest-Europa"}
+        202{"Afrika sør for Sahara"}
         419{"Latin-Amerika"}
         AC{"Ascension"}
         AD{"Andorra"}
@@ -308,5 +309,5 @@ nb{
         FK{"Falklandsøyene (Islas Malvinas)"}
         MK{"Den tidligere jugoslaviske republikk Makedonia"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
 }

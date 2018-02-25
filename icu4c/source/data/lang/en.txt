@@ -548,6 +548,7 @@ en{
         sog{"Sogdien"}
         sq{"Albanian"}
         sr{"Serbian"}
+        sr_ME{"Montenegrin"}
         srn{"Sranan Tongo"}
         srr{"Serer"}
         ss{"Swati"}
@@ -1226,7 +1227,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.37.44"}
+    Version{"2.1.39.27"}
     characterLabelPattern{
         all{"{0} — all"}
         category-list{"{0}: {1}"}

@@ -1,6 +1,6 @@
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-RBNF_CLDR_VERSION = 32.0.1
+RBNF_CLDR_VERSION = 33
 # A list of txt's to build
 # Note:
 #
@@ -39,18 +39,19 @@ RBNF_ALIAS_SOURCE = $(RBNF_SYNTHETIC_ALIAS)
 # Ordinary resources
 RBNF_SOURCE = af.txt ak.txt am.txt ar.txt\
  az.txt be.txt bg.txt bs.txt ca.txt\
- chr.txt cs.txt cy.txt da.txt de.txt\
- de_CH.txt ee.txt el.txt en.txt en_001.txt\
- en_IN.txt eo.txt es.txt es_419.txt et.txt\
- fa.txt fa_AF.txt fi.txt fil.txt fo.txt\
- fr.txt fr_BE.txt fr_CH.txt ga.txt he.txt\
- hi.txt hr.txt hu.txt hy.txt id.txt\
- is.txt it.txt ja.txt ka.txt kl.txt\
- km.txt ko.txt ky.txt lo.txt lrc.txt\
- lt.txt lv.txt mk.txt ms.txt mt.txt\
- my.txt nb.txt nl.txt nn.txt pl.txt\
- pt.txt pt_PT.txt ro.txt ru.txt se.txt\
- sk.txt sl.txt sq.txt sr.txt sr_Latn.txt\
- sv.txt ta.txt th.txt tr.txt uk.txt\
+ ccp.txt chr.txt cs.txt cy.txt da.txt\
+ de.txt de_CH.txt ee.txt el.txt en.txt\
+ en_001.txt en_IN.txt eo.txt es.txt es_419.txt\
+ et.txt fa.txt fa_AF.txt ff.txt fi.txt\
+ fil.txt fo.txt fr.txt fr_BE.txt fr_CH.txt\
+ ga.txt he.txt hi.txt hr.txt hu.txt\
+ hy.txt id.txt is.txt it.txt ja.txt\
+ ka.txt kl.txt km.txt ko.txt ky.txt\
+ lb.txt lo.txt lrc.txt lt.txt lv.txt\
+ mk.txt ms.txt mt.txt my.txt nb.txt\
+ nl.txt nn.txt pl.txt pt.txt pt_PT.txt\
+ qu.txt ro.txt ru.txt se.txt sk.txt\
+ sl.txt sq.txt sr.txt sr_Latn.txt sv.txt\
+ sw.txt ta.txt th.txt tr.txt uk.txt\
  vi.txt yue.txt yue_Hans.txt zh.txt zh_Hant.txt
 

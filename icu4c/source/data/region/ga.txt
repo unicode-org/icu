@@ -31,6 +31,7 @@ ga{
         151{"Oirthear na hEorpa"}
         154{"Tuaisceart na hEorpa"}
         155{"Iarthar na hEorpa"}
+        202{"an Afraic fho-Shahárach"}
         419{"Meiriceá Laidineach"}
         AC{"Oileán na Deascabhála"}
         AD{"Andóra"}
@@ -305,9 +306,10 @@ ga{
     Countries%variant{
         CD{"an Congó (PDC)"}
         CG{"an Congó (Poblacht)"}
+        CI{"Côte d’Ivoire"}
         CZ{"Poblacht na Seice"}
         FK{"Oileáin Fháclainne (Islas Malvinas)"}
         MK{"an Mhacadóin (PIIM)"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.11"}
 }
