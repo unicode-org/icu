@@ -24,27 +24,26 @@ U_CAPI UTrie3 * U_EXPORT2
 utrie3_openFromSerialized(UTrie3ValueBits valueBits,
                           const void *data, int32_t length, int32_t *pActualLength,
                           UErrorCode *pErrorCode) {
-    if(U_FAILURE(*pErrorCode)) {
+    if (U_FAILURE(*pErrorCode)) {
         return 0;
     }
 
-    if( length<=0 || (U_POINTER_MASK_LSB(data, 3)!=0) ||
-        valueBits < 0 || UTRIE3_32_VALUE_BITS < valueBits
-    ) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+    if (length<=0 || (U_POINTER_MASK_LSB(data, 3)!=0) ||
+            valueBits < 0 || UTRIE3_32_VALUE_BITS < valueBits) {
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
-    /* enough data for a trie header? */
-    if(length<(int32_t)sizeof(UTrie3Header)) {
-        *pErrorCode=U_INVALID_FORMAT_ERROR;
+    // enough data for a trie header?
+    if (length < (int32_t)sizeof(UTrie3Header)) {
+        *pErrorCode = U_INVALID_FORMAT_ERROR;
         return 0;
     }
 
-    /* check the signature */
-    const UTrie3Header *header=(const UTrie3Header *)data;
-    if(header->signature!=UTRIE3_SIG) {
-        *pErrorCode=U_INVALID_FORMAT_ERROR;
+    // Check the signature.
+    const UTrie3Header *header = (const UTrie3Header *)data;
+    if (header->signature != UTRIE3_SIG) {
+        *pErrorCode = U_INVALID_FORMAT_ERROR;
         return 0;
     }
 
@@ -55,72 +54,72 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
         return 0;
     }
 
-    /* get the length values and offsets */
+    // Get the length values and offsets.
     UTrie3 tempTrie;
     uprv_memset(&tempTrie, 0, sizeof(tempTrie));
-    tempTrie.indexLength=header->indexLength;
-    tempTrie.dataLength=header->shiftedDataLength<<UTRIE3_INDEX_SHIFT;
+    tempTrie.indexLength = header->indexLength;
+    tempTrie.dataLength = header->shiftedDataLength << 2;
     tempTrie.index2NullOffset = header->index2NullOffset;
-    tempTrie.dataNullOffset = options >> 12;
+    tempTrie.dataNullOffset = (options >> 12) & 0x3ffff;
 
-    tempTrie.highStart=header->shiftedHighStart<<UTRIE3_SHIFT_1;
-    tempTrie.shiftedHighStart=header->shiftedHighStart;
-    tempTrie.highValue=header->highValue;
-    tempTrie.errorValue=header->errorValue;
+    tempTrie.highStart = header->shiftedHighStart << UTRIE3_SUPP_SHIFT_1;
+    tempTrie.shifted12HighStart = (tempTrie.highStart + 0xfff) >> 12;
+    tempTrie.highValue = header->highValue;
+    tempTrie.errorValue = header->errorValue;
 
-    /* calculate the actual length */
-    int32_t actualLength=(int32_t)sizeof(UTrie3Header)+tempTrie.indexLength*2;
-    if(valueBits==UTRIE3_16_VALUE_BITS) {
-        actualLength+=tempTrie.dataLength*2;
+    // Calculate the actual length.
+    int32_t actualLength = (int32_t)sizeof(UTrie3Header) + tempTrie.indexLength * 2;
+    if (valueBits == UTRIE3_16_VALUE_BITS) {
+        actualLength += tempTrie.dataLength * 2;
     } else {
-        actualLength+=tempTrie.dataLength*4;
+        actualLength += tempTrie.dataLength * 4;
     }
-    if(length<actualLength) {
-        *pErrorCode=U_INVALID_FORMAT_ERROR;  /* not enough bytes */
+    if (length < actualLength) {
+        *pErrorCode = U_INVALID_FORMAT_ERROR;  // Not enough bytes.
         return 0;
     }
 
-    /* allocate the trie */
-    UTrie3 *trie=(UTrie3 *)uprv_malloc(sizeof(UTrie3));
-    if(trie==NULL) {
-        *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+    // Allocate the trie.
+    UTrie3 *trie = (UTrie3 *)uprv_malloc(sizeof(UTrie3));
+    if (trie == nullptr) {
+        *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
     uprv_memcpy(trie, &tempTrie, sizeof(tempTrie));
-    trie->name="fromSerialized";
+    trie->name = "fromSerialized";
 
-    /* set the pointers to its index and data arrays */
-    const uint16_t *p16=(const uint16_t *)(header+1);
-    trie->index=p16;
-    p16+=trie->indexLength;
+    // Set the pointers to its index and data arrays.
+    const uint16_t *p16 = (const uint16_t *)(header + 1);
+    trie->index = p16;
+    p16 += trie->indexLength;
 
-    /* get the data */
-    switch(valueBits) {
+    // Get the data.
+    switch (valueBits) {
     case UTRIE3_16_VALUE_BITS:
-        trie->data16=p16;
-        trie->data32=NULL;
-        if (trie->dataNullOffset < (trie->indexLength + trie->dataLength)) {
-            trie->initialValue = trie->index[trie->dataNullOffset];
+        trie->data16 = p16;
+        trie->data32 = nullptr;
+        if (trie->dataNullOffset < trie->dataLength) {
+            trie->nullValue = trie->data16[trie->dataNullOffset];
         } else {
-            trie->initialValue = trie->highValue;
+            trie->nullValue = trie->highValue;
         }
         break;
     case UTRIE3_32_VALUE_BITS:
-        trie->data16=NULL;
-        trie->data32=(const uint32_t *)p16;
+        trie->data16 = nullptr;
+        trie->data32 = (const uint32_t *)p16;
         if (trie->dataNullOffset < trie->dataLength) {
-            trie->initialValue=trie->data32[trie->dataNullOffset];
+            trie->nullValue = trie->data32[trie->dataNullOffset];
         } else {
-            trie->initialValue = trie->highValue;
+            trie->nullValue = trie->highValue;
         }
         break;
     default:
-        *pErrorCode=U_INVALID_FORMAT_ERROR;
+        *pErrorCode = U_INVALID_FORMAT_ERROR;
         return 0;
     }
 
-    if(pActualLength!=NULL) {
-        *pActualLength=actualLength;
+    if (pActualLength != nullptr) {
+        *pActualLength = actualLength;
     }
     return trie;
 }
@@ -171,6 +170,59 @@ utrie3_close(UTrie3 *trie) {
     uprv_free(trie);
 }
 
+U_CAPI int32_t U_EXPORT2
+utrie3_internalIndexFromSupp(const UTrie3 *trie, UChar32 c) {
+    U_ASSERT(0xffff < c && c < trie->highStart);
+    int32_t i2Block = trie->index[
+        (UTRIE3_INDEX_1_OFFSET - UTRIE3_OMITTED_BMP_INDEX_1_LENGTH) + (c >> UTRIE3_SUPP_SHIFT_1)];
+    int32_t c2 = (c >> UTRIE3_SUPP_SHIFT_2) & UTRIE3_INDEX_2_MASK;
+    int32_t dataBlock;
+    if ((i2Block & 0x8000) == 0) {
+        // 16-bit indexes
+        dataBlock = trie->index[i2Block + c2];
+    } else {
+        // 18-bit indexes stored in groups of 9 entries per 8 indexes.
+        i2Block = (i2Block & 0x7fff) + (c2 & ~7) + (c2 >> 3);
+        c2 &= 7;
+        dataBlock = (trie->index[i2Block++] << (2 + (2 * c2))) & 0x30000;
+        dataBlock |= trie->index[i2Block + c2];
+    }
+    return dataBlock + (c & UTRIE3_SUPP_DATA_MASK);
+}
+
+U_CAPI int32_t U_EXPORT2
+utrie3_internalIndexFromSuppU8(const UTrie3 *trie, uint16_t lt1, uint8_t t2, uint8_t t3) {
+    return utrie3_internalIndexFromSupp(trie, (lt1 << 12) | (t2 << 6) | t3);
+}
+
+U_CAPI int32_t U_EXPORT2
+utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
+                           const uint8_t *start, const uint8_t *src) {
+    int32_t i, length;
+    // Support 64-bit pointers by avoiding cast of arbitrary difference.
+    if ((src - start) <= 7) {
+        i = length = (int32_t)(src - start);
+    } else {
+        i = length = 7;
+        start = src - 7;
+    }
+    c = utf8_prevCharSafeBody(start, 0, &i, c, -1);
+    i = length - i;  // Number of bytes read backward from src.
+    if (c >= 0) {
+        int32_t idx;
+        if (c <= 0xffff) {
+            idx = _UTRIE3_INDEX_FROM_BMP(trie->index, c);
+        } else if(c >= trie->highStart) {
+            return -16 | i;  // for highValue
+        } else {
+            idx = utrie3_internalIndexFromSupp(trie, c);
+        }
+        return (idx << 3) | i;
+    } else {
+        return -8 | i;  // for errorValue
+    }
+}
+
 U_CAPI uint32_t U_EXPORT2
 utrie3_get(const UTrie3 *trie, UChar32 c) {
     if ((uint32_t)c <= 0x7f) {
@@ -190,11 +242,10 @@ utrie3_get(const UTrie3 *trie, UChar32 c) {
     } else if (c >= trie->highStart) {
         return trie->highValue;
     } else {
-        int32_t i2Block, dataBlock;
-        dataIndex = _UTRIE3_INDEX_FROM_SUPP(trie->index, c, i2Block, dataBlock);
+        dataIndex = utrie3_internalIndexFromSupp(trie, c);
     }
     if (trie->data32 == nullptr) {
-        return trie->index[dataIndex];
+        return trie->data16[dataIndex];
     } else {
         return trie->data32[dataIndex];
     }
@@ -204,9 +255,9 @@ namespace {
 
 constexpr int32_t MAX_UNICODE = 0x10ffff;
 
-inline uint32_t maybeHandleValue(uint32_t value, uint32_t initialValue, uint32_t nullValue,
+inline uint32_t maybeHandleValue(uint32_t value, uint32_t trieNullValue, uint32_t nullValue,
                                  UTrie3HandleValue *handleValue, const void *context) {
-    if (value == initialValue) {
+    if (value == trieNullValue) {
         value = nullValue;
     } else if (handleValue != nullptr) {
         value = handleValue(context, value);
@@ -231,9 +282,10 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
         return MAX_UNICODE;
     }
 
-    uint32_t nullValue = trie->initialValue;
+    uint32_t nullValue = trie->nullValue;
     if (handleValue != nullptr) { nullValue = handleValue(context, nullValue); }
     const uint16_t *index = trie->index;
+    const uint16_t *data16 = trie->data16;
     const uint32_t *data32 = trie->data32;
 
     int32_t prevI2Block = -1;
@@ -243,12 +295,18 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
     bool haveValue = false;
     do {
         int32_t i2Block;
+        int32_t i2;
+        int32_t i2BlockLength;
+        int32_t dataBlockLength;
         if (c <= 0xffff) {
-            i2Block = (c >> UTRIE3_SHIFT_2) & ~UTRIE3_INDEX_2_MASK;
+            i2Block = 0;
+            i2 = c >> UTRIE3_BMP_SHIFT;
+            i2BlockLength = UTRIE3_BMP_INDEX_LENGTH;
+            dataBlockLength = UTRIE3_BMP_DATA_BLOCK_LENGTH;
         } else {
             // Supplementary code points
             i2Block = index[(UTRIE3_INDEX_1_OFFSET - UTRIE3_OMITTED_BMP_INDEX_1_LENGTH) +
-                            (c >> UTRIE3_SHIFT_1)];
+                            (c >> UTRIE3_SUPP_SHIFT_1)];
             if (i2Block == prevI2Block && (c - start) >= UTRIE3_CP_PER_INDEX_1_ENTRY) {
                 // The index-2 block is the same as the previous one, and filled with value.
                 // Only possible for supplementary code points because the linear-BMP index
@@ -257,39 +315,9 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
                 c += UTRIE3_CP_PER_INDEX_1_ENTRY;
                 continue;
             }
-        }
-        prevI2Block = i2Block;
-        if (i2Block == trie->index2NullOffset) {
-            // This is the index-2 null block.
-            if (haveValue) {
-                if (nullValue != value) {
-                    return c - 1;
-                }
-            } else {
-                value = nullValue;
-                if (pValue != nullptr) { *pValue = nullValue; }
-                haveValue = true;
-            }
-            prevBlock = trie->dataNullOffset;
-            c = (c + UTRIE3_CP_PER_INDEX_1_ENTRY) & ~(UTRIE3_CP_PER_INDEX_1_ENTRY - 1);
-            continue;
-        }
-        // Enumerate data blocks for one index-2 block.
-        int32_t i2 = (c >> UTRIE3_SHIFT_2) & UTRIE3_INDEX_2_MASK;
-        for(; i2 < UTRIE3_INDEX_2_BLOCK_LENGTH; ++i2) {
-            int32_t block = index[i2Block + i2];
-            if (i2Block >= UTRIE3_INDEX_2_BMP_LENGTH) {
-                block <<= UTRIE3_INDEX_SHIFT;
-            }
-            if (block == prevBlock && (c - start) >= UTRIE3_DATA_BLOCK_LENGTH) {
-                // The block is the same as the previous one, and filled with value.
-                U_ASSERT((c & UTRIE3_DATA_MASK) == 0);
-                c += UTRIE3_DATA_BLOCK_LENGTH;
-                continue;
-            }
-            prevBlock = block;
-            if (block == trie->dataNullOffset) {
-                // This is the data null block.
+            prevI2Block = i2Block;
+            if (i2Block == trie->index2NullOffset) {
+                // This is the index-2 null block.
                 if (haveValue) {
                     if (nullValue != value) {
                         return c - 1;
@@ -299,32 +327,72 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
                     if (pValue != nullptr) { *pValue = nullValue; }
                     haveValue = true;
                 }
-                c = (c + UTRIE3_DATA_BLOCK_LENGTH) & ~UTRIE3_DATA_MASK;
+                prevBlock = trie->dataNullOffset;
+                c = (c + UTRIE3_CP_PER_INDEX_1_ENTRY) & ~(UTRIE3_CP_PER_INDEX_1_ENTRY - 1);
+                continue;
+            }
+            i2 = (c >> UTRIE3_SUPP_SHIFT_2) & UTRIE3_INDEX_2_MASK;
+            i2BlockLength = UTRIE3_INDEX_2_BLOCK_LENGTH;
+            dataBlockLength = UTRIE3_SUPP_DATA_BLOCK_LENGTH;
+        }
+        // Enumerate data blocks for one index-2 block.
+        do {
+            int32_t block;
+            if ((i2Block & 0x8000) == 0) {
+                block = index[i2Block + i2];
             } else {
-                int32_t di = block + (c & UTRIE3_DATA_MASK);
-                uint32_t value2 = data32 != nullptr ? data32[di] : index[di];
-                value2 = maybeHandleValue(value2, trie->initialValue, nullValue, handleValue, context);
-                if (haveValue) {
-                    if (value2 != value) {
-                        return c - 1;
+                // 18-bit indexes stored in groups of 9 entries per 8 indexes.
+                int32_t group = (i2Block & 0x7fff) + (i2 & ~7) + (i2 >> 3);
+                int32_t gi = i2 & 7;
+                block = (index[group++] << (2 + (2 * gi))) & 0x30000;
+                block |= index[group + gi];
+            }
+            if (block == prevBlock && (c - start) >= dataBlockLength) {
+                // The block is the same as the previous one, and filled with value.
+                U_ASSERT((c & (dataBlockLength - 1)) == 0);
+                c += dataBlockLength;
+            } else {
+                int32_t dataMask = dataBlockLength - 1;
+                prevBlock = block;
+                if (block == trie->dataNullOffset) {
+                    // This is the data null block.
+                    if (haveValue) {
+                        if (nullValue != value) {
+                            return c - 1;
+                        }
+                    } else {
+                        value = nullValue;
+                        if (pValue != nullptr) { *pValue = nullValue; }
+                        haveValue = true;
                     }
+                    c = (c + dataBlockLength) & ~dataMask;
                 } else {
-                    value = value2;
-                    if (pValue != nullptr) { *pValue = value; }
-                    haveValue = true;
-                }
-                while ((++c & UTRIE3_DATA_MASK) != 0) {
-                    if (maybeHandleValue(data32 != nullptr ? data32[++di] : index[++di],
-                                         trie->initialValue, nullValue,
-                                         handleValue, context) != value) {
-                        return c - 1;
+                    int32_t di = block + (c & dataMask);
+                    uint32_t value2 = data32 != nullptr ? data32[di] : data16[di];
+                    value2 = maybeHandleValue(value2, trie->nullValue, nullValue,
+                                              handleValue, context);
+                    if (haveValue) {
+                        if (value2 != value) {
+                            return c - 1;
+                        }
+                    } else {
+                        value = value2;
+                        if (pValue != nullptr) { *pValue = value; }
+                        haveValue = true;
+                    }
+                    while ((++c & dataMask) != 0) {
+                        if (maybeHandleValue(data32 != nullptr ? data32[++di] : data16[++di],
+                                             trie->nullValue, nullValue,
+                                             handleValue, context) != value) {
+                            return c - 1;
+                        }
                     }
                 }
             }
-        }
+        } while (++i2 < i2BlockLength);
     } while (c < trie->highStart);
     U_ASSERT(haveValue);
-    if (maybeHandleValue(trie->highValue, trie->initialValue, nullValue,
+    if (maybeHandleValue(trie->highValue, trie->nullValue, nullValue,
                          handleValue, context) != value) {
         return c - 1;
     } else {
@@ -333,43 +401,14 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
 }
 
 U_CAPI int32_t U_EXPORT2
-utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
-                           const uint8_t *start, const uint8_t *src) {
-    int32_t i, length;
-    /* support 64-bit pointers by avoiding cast of arbitrary difference */
-    if((src-start)<=7) {
-        i=length=(int32_t)(src-start);
-    } else {
-        i=length=7;
-        start=src-7;
-    }
-    c=utf8_prevCharSafeBody(start, 0, &i, c, -1);
-    i=length-i;  /* number of bytes read backward from src */
-    if(c>=0) {
-        int32_t idx;
-        if(c<=0xffff) {
-            idx=_UTRIE3_INDEX_FROM_BMP(trie->index, c);
-        } else if(c>=trie->highStart) {
-            return -16|i;  // for highValue
-        } else {
-            int32_t i2Block, dataBlock;
-            idx = _UTRIE3_INDEX_FROM_SUPP(trie->index, c, i2Block, dataBlock);
-        }
-        return (idx<<3)|i;
-    } else {
-        return -8|i;  // for errorValue
-    }
-}
-
-U_CAPI int32_t U_EXPORT2
 utrie3_serialize(const UTrie3 *trie,
                  void *data, int32_t capacity,
                  UErrorCode *pErrorCode) {
-    if(U_FAILURE(*pErrorCode)) {
+    if (U_FAILURE(*pErrorCode)) {
         return 0;
     }
 
-    if(trie == nullptr || capacity < 0 ||
+    if (trie == nullptr || capacity < 0 ||
             (capacity > 0 && (data == nullptr || (U_POINTER_MASK_LSB(data, 3) != 0)))) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
@@ -394,9 +433,9 @@ utrie3_serialize(const UTrie3 *trie,
     header->signature = UTRIE3_SIG;  // "Tri3"
     header->options = ((uint32_t)trie->dataNullOffset << 12) | valueBits;
     header->indexLength = (uint16_t)trie->indexLength;
-    header->shiftedDataLength = (uint16_t)(trie->dataLength >> UTRIE3_INDEX_SHIFT);
+    header->shiftedDataLength = (uint16_t)(trie->dataLength >> 2);
     header->index2NullOffset = trie->index2NullOffset;
-    header->shiftedHighStart = trie->shiftedHighStart;
+    header->shiftedHighStart = trie->highStart >> UTRIE3_SUPP_SHIFT_1;
     header->highValue = trie->highValue;
     header->errorValue = trie->errorValue;
     bytes += sizeof(UTrie3Header);
@@ -451,17 +490,17 @@ utrie3_getVersion(const void *data, int32_t length, UBool anyEndianOk) {
 namespace {
 
 #ifdef UTRIE3_DEBUG
-long countInitial(const UTrie3 *trie) {
-    uint32_t initialValue=trie->initialValue;
+long countNull(const UTrie3 *trie) {
+    uint32_t nullValue=trie->nullValue;
     int32_t length=trie->dataLength;
     long count=0;
     if(trie->data16!=nullptr) {
         for(int32_t i=0; i<length; ++i) {
-            if(trie->data16[i]==initialValue) { ++count; }
+            if(trie->data16[i]==nullValue) { ++count; }
         }
     } else {
         for(int32_t i=0; i<length; ++i) {
-            if(trie->data32[i]==initialValue) { ++count; }
+            if(trie->data32[i]==nullValue) { ++count; }
         }
     }
     return count;
@@ -472,8 +511,8 @@ utrie3_printLengths(const UTrie3 *trie, const char *which) {
     long indexLength=trie->indexLength;
     long dataLength=(long)trie->dataLength;
     long totalLength=(long)sizeof(UTrie3Header)+indexLength*2+dataLength*(trie->data32!=NULL ? 4 : 2);
-    printf("**UTrie3Lengths(%s %s)** index:%6ld  data:%6ld  countInitial:%6ld  serialized:%6ld\n",
-           which, trie->name, indexLength, dataLength, countInitial(trie), totalLength);
+    printf("**UTrie3Lengths(%s %s)** index:%6ld  data:%6ld  countNull:%6ld  serialized:%6ld\n",
+           which, trie->name, indexLength, dataLength, countNull(trie), totalLength);
 }
 #endif
 
@@ -509,7 +548,7 @@ utrie3_swap(const UDataSwapper *ds,
     trie.shiftedDataLength=ds->readUInt16(inTrie->shiftedDataLength);
 
     valueBits=(UTrie3ValueBits)(trie.options&UTRIE3_OPTIONS_VALUE_BITS_MASK);
-    dataLength=(int32_t)trie.shiftedDataLength<<UTRIE3_INDEX_SHIFT;
+    dataLength = (int32_t)trie.shiftedDataLength << 2;
 
     if( trie.signature!=UTRIE3_SIG ||
         valueBits < 0 || UTRIE3_32_VALUE_BITS < valueBits ||
