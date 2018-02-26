@@ -1579,10 +1579,10 @@ public class NumberFormatterApiTest {
                 "US$ 12,345.67");
 
         assertFormatSingle(
-                "Currency symbol should follow number in ar with NS arab",
+                "Currency symbol should follow number in ar-EG with NS arab",
                 "",
                 NumberFormatter.with().unit(USD),
-                new ULocale("ar"),
+                new ULocale("ar-EG"),
                 12345.67,
                 "١٢٬٣٤٥٫٦٧ US$");
 
