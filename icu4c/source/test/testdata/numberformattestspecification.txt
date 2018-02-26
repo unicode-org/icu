@@ -13,7 +13,7 @@
 // https://docs.google.com/document/d/1T2P0p953_Lh1pRwo-5CuPVrHlIBa_wcXElG-Hhg_WHM/edit?usp=sharing
 
 test plus sign
-set locale ar
+set locale ar-EG
 set pattern +0;-#
 begin
 format	output	breaks

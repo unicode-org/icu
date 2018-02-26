@@ -393,7 +393,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
     @Test
     public void TestArabicLongStyle() {
         NumberFormat cdf =
-                CompactDecimalFormat.getInstance(new Locale("ar"), CompactStyle.LONG);
+                CompactDecimalFormat.getInstance(new Locale("ar-EG"), CompactStyle.LONG);
         assertEquals("Arabic Long", "\u061C-\u0665\u066B\u0663 \u0623\u0644\u0641", cdf.format(-5300));
     }
 
@@ -690,17 +690,17 @@ public class CompactDecimalFormatTest extends TestFmwk {
         assertEquals("CDF should correctly format 43000 in 'ar'", "٤٣ ألف", result);
 
         // Bug #12449
-        cdf = CompactDecimalFormat.getInstance(new ULocale("ar"), CompactDecimalFormat.CompactStyle.SHORT);
+        cdf = CompactDecimalFormat.getInstance(new ULocale("ar-EG"), CompactDecimalFormat.CompactStyle.SHORT);
         cdf.setMaximumSignificantDigits(3);
         result = cdf.format(1234);
-        assertEquals("CDF should correctly format 1234 with 3 significant digits in 'ar'", "١٫٢٣ ألف", result);
+        assertEquals("CDF should correctly format 1234 with 3 significant digits in 'ar-EG'", "١٫٢٣ ألف", result);
 
         // Check currency formatting as well
-        cdf = CompactDecimalFormat.getInstance(new ULocale("ar"), CompactDecimalFormat.CompactStyle.SHORT);
+        cdf = CompactDecimalFormat.getInstance(new ULocale("ar-EG"), CompactDecimalFormat.CompactStyle.SHORT);
         result = cdf.format(new CurrencyAmount(43000f, Currency.getInstance("USD")));
-        assertEquals("CDF should correctly format 43000 with currency in 'ar'", "US$ ٤٣ ألف", result);
+        assertEquals("CDF should correctly format 43000 with currency in 'ar-EG'", "US$ ٤٣ ألف", result);
         result = cdf.format(new CurrencyAmount(-43000f, Currency.getInstance("USD")));
-        assertEquals("CDF should correctly format -43000 with currency in 'ar'", "؜-US$ ٤٣ ألف", result);
+        assertEquals("CDF should correctly format -43000 with currency in 'ar-EG'", "؜-US$ ٤٣ ألف", result);
 
         // Extra locale with different positive/negative formats
         cdf = CompactDecimalFormat.getInstance(new ULocale("fi"), CompactDecimalFormat.CompactStyle.SHORT);
