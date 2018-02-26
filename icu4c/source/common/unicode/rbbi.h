@@ -59,12 +59,14 @@ private:
      */
     UText  fText;
 
+#ifndef U_HIDE_INTERNAL_API
+public:
+#endif /* U_HIDE_INTERNAL_API */
     /**
      * The rule data for this BreakIterator instance.
      * Not for general use; Public only for testing purposes.
      * @internal
      */
-public:
     RBBIDataWrapper    *fData;
 private:
 
