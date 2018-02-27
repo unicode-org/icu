@@ -734,7 +734,7 @@ ka{
             tibt{"ტიბეტური ციფრები"}
         }
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
     characterLabelPattern{
         all{"{0} — ყველა"}
         category-list{"{0}: {1}"}

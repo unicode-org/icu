@@ -61,7 +61,6 @@ class BurmeseBreakEngine extends DictionaryBreakEngine {
     }
 
     public BurmeseBreakEngine() throws IOException {
-        super(BreakIterator.KIND_WORD, BreakIterator.KIND_LINE);
         setCharacters(fBurmeseWordSet);
         // Initialize dictionary
         fDictionary = DictionaryData.loadDictionaryFor("Mymr");
@@ -80,12 +79,9 @@ class BurmeseBreakEngine extends DictionaryBreakEngine {
     }
 
     @Override
-    public boolean handles(int c, int breakType) {
-        if (breakType == BreakIterator.KIND_WORD || breakType == BreakIterator.KIND_LINE) {
-            int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
-            return (script == UScript.MYANMAR);
-        }
-        return false;
+    public boolean handles(int c) {
+        int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
+        return (script == UScript.MYANMAR);
     }
 
     @Override

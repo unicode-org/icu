@@ -5959,12 +5959,12 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
         int year;
 
-        if (bestField == WEEK_OF_YEAR) {
+        if (bestField == WEEK_OF_YEAR && newerField(YEAR_WOY, YEAR) == YEAR_WOY) {
             // Nota Bene!  It is critical that YEAR_WOY be used as the year here, if it is
             // set.  Otherwise, when WOY is the best field, the year may be wrong at the
             // extreme limits of the year.  If YEAR_WOY is not set then it will fall back.
             // TODO: Should resolveField(YEAR_PRECEDENCE) be brought to bear?
-            year = internalGet(YEAR_WOY, handleGetExtendedYear());
+            year = internalGet(YEAR_WOY);
         } else {
             year = handleGetExtendedYear();
         }

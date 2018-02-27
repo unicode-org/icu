@@ -60,7 +60,6 @@ static void TestNumericProperties(void);
 static void TestPropertyNames(void);
 static void TestPropertyValues(void);
 static void TestConsistency(void);
-static void TestUBiDiProps(void);
 static void TestCaseFolding(void);
 
 /* internal methods used */
@@ -196,7 +195,6 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestPropertyNames, "tsutil/cucdtst/TestPropertyNames");
     addTest(root, &TestPropertyValues, "tsutil/cucdtst/TestPropertyValues");
     addTest(root, &TestConsistency, "tsutil/cucdtst/TestConsistency");
-    addTest(root, &TestUBiDiProps, "tsutil/cucdtst/TestUBiDiProps");
     addTest(root, &TestCaseFolding, "tsutil/cucdtst/TestCaseFolding");
 }
 
@@ -3300,59 +3298,6 @@ TestConsistency() {
     }
     uset_close(set1);
     uset_close(set2);
-}
-
-/*
- * Starting with ICU4C 3.4, the core Unicode properties files
- * (uprops.icu, ucase.icu, ubidi.icu, unorm.icu)
- * are hardcoded in the common DLL and therefore not included
- * in the data package any more.
- * Test requiring these files are disabled so that
- * we need not jump through hoops (like adding snapshots of these files
- * to testdata).
- * See Jitterbug 4497.
- */
-#define HARDCODED_DATA_4497 1
-
-/* API coverage for ubidi_props.c */
-static void TestUBiDiProps() {
-#if !HARDCODED_DATA_4497
-    UDataMemory *pData;
-    UBiDiProps *bdp;
-    const UBiDiProps *cbdp;
-    UErrorCode errorCode;
-
-    /* coverage for ubidi_openBinary() */
-    errorCode=U_ZERO_ERROR;
-    pData=udata_open(NULL, UBIDI_DATA_TYPE, UBIDI_DATA_NAME, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        log_data_err("unable to open " UBIDI_DATA_NAME "." UBIDI_DATA_TYPE ": %s\n",
-                    u_errorName(errorCode));
-        return;
-    }
-
-    bdp=ubidi_openBinary((const uint8_t *)pData->pHeader, -1, &errorCode);
-    if(U_FAILURE(errorCode)) {
-        log_err("ubidi_openBinary() fails for the contents of " UBIDI_DATA_NAME "." UBIDI_DATA_TYPE ": %s\n",
-                u_errorName(errorCode));
-        udata_close(pData);
-        return;
-    }
-
-    if(0x2215!=ubidi_getMirror(bdp, 0x29F5)) { /* verify some data */
-        log_err("ubidi_openBinary() does not seem to return working UBiDiProps\n");
-    }
-
-    ubidi_closeProps(bdp);
-    udata_close(pData);
-
-    /* coverage for ubidi_getDummy() */
-    errorCode=U_ZERO_ERROR;
-    cbdp=ubidi_getDummy(&errorCode);
-    if(ubidi_getClass(cbdp, 0x20)!=0) {
-        log_err("ubidi_getClass(dummy, space)!=0\n");
-    }
-#endif
 }
 
 /* test case folding, compare return values with CaseFolding.txt ------------ */

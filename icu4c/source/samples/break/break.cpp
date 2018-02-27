@@ -17,8 +17,9 @@
 #include <unicode/brkiter.h>
 #include <stdlib.h>
 
-U_CFUNC int c_main(void);
+using namespace icu;
 
+U_CFUNC int c_main(void);
 
 void printUnicodeString(const UnicodeString &s) {
     char charBuf[1000];

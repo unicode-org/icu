@@ -8,6 +8,7 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import java.text.ParseException;
 import java.util.Locale;
 
 import org.junit.Test;
@@ -160,5 +161,23 @@ public class RBNFParseTest extends TestFmwk {
         logln("rbnf_en:" + rbnf_en.getDefaultRuleSetName());
         logln("rbnf_fr:" + rbnf_en.getDefaultRuleSetName());
         parseList(rbnf_en, rbnf_fr, lists);
+    }
+
+    @Test
+    public void TestBadParse() {
+        RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(Locale.JAPAN, RuleBasedNumberFormat.SPELLOUT);
+        String[] testData = {
+                "・・・・・・・・・・・・・・・・・・・・・・・・",
+        };
+
+        for (String testString : testData) {
+            try {
+                rbnf.parse(testString);
+                errln("Unexpected success: " + testString);
+            }
+            catch (ParseException e) {
+                // success!
+            }
+        }
     }
 }

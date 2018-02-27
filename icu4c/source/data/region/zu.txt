@@ -31,6 +31,7 @@ zu{
         151{"i-Eastern Europe"}
         154{"i-Northern Europe"}
         155{"i-Western Europe"}
+        202{"Sub-Saharan Africa"}
         419{"i-Latin America"}
         AC{"i-Ascension Island"}
         AD{"i-Andorra"}
@@ -311,5 +312,5 @@ zu{
         MK{"i-Macedonia (FYROM)"}
         TL{"i-East Timor"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
 }

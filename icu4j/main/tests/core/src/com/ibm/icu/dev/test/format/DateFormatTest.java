@@ -2067,8 +2067,8 @@ public class DateFormatTest extends TestFmwk {
         Date date = new Date(874266720000L);  // Sun Sep 14 21:52:00 CET 1997
         TimeZone tz = TimeZone.getTimeZone("CET");
 
-        DateFormat dfArab = DateFormat.getTimeInstance(DateFormat.SHORT, new ULocale("ar"));
-        DateFormat dfLatn = DateFormat.getTimeInstance(DateFormat.SHORT, new ULocale("ar-u-nu-latn"));
+        DateFormat dfArab = DateFormat.getTimeInstance(DateFormat.SHORT, new ULocale("ar-EG"));
+        DateFormat dfLatn = DateFormat.getTimeInstance(DateFormat.SHORT, new ULocale("ar-EG-u-nu-latn"));
 
         dfArab.setTimeZone(tz);
         dfLatn.setTimeZone(tz);
@@ -3912,7 +3912,8 @@ public class DateFormatTest extends TestFmwk {
             df = DateFormat.getPatternInstance("", new Locale("en_US"));
             df = DateFormat.getPatternInstance(null, "", new Locale("en_US"));
         } catch(Exception e) {
-            errln("DateFormat.getPatternInstance is not suppose to return an exception.");
+            errln("DateFormat.getPatternInstance is not suppose to return an exception, got: " + e.toString());
+            //e.printStackTrace();
         }
     }
 

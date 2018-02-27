@@ -1486,9 +1486,9 @@ void NumberFormatterApiTest::symbols() {
             u"US$ 12,345.67");
 
     assertFormatSingle(
-            u"Currency symbol should follow number in ar with NS arab",
+            u"Currency symbol should follow number in ar-EG with NS arab",
             NumberFormatter::with().unit(USD),
-            Locale("ar"),
+            Locale("ar-EG"),
             12345.67,
             u"١٢٬٣٤٥٫٦٧ US$");
 

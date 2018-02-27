@@ -55,6 +55,7 @@ enum ENumberFormatTestTupleField {
     kPositiveSuffix,
     kNegativePrefix,
     kNegativeSuffix,
+    kSignAlwaysShown,
     kLocalizedPattern,
     kToPattern,
     kToLocalizedPattern,
@@ -118,6 +119,7 @@ public:
     UnicodeString positiveSuffix;
     UnicodeString negativePrefix;
     UnicodeString negativeSuffix;
+    int32_t signAlwaysShown;
     UnicodeString localizedPattern;
     UnicodeString toPattern;
     UnicodeString toLocalizedPattern;
@@ -164,6 +166,7 @@ public:
     UBool positiveSuffixFlag;
     UBool negativePrefixFlag;
     UBool negativeSuffixFlag;
+    UBool signAlwaysShownFlag;
     UBool localizedPatternFlag;
     UBool toPatternFlag;
     UBool toLocalizedPatternFlag;

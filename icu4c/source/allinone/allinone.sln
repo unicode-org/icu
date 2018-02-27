@@ -1,8 +1,12 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cal", "..\samples\cal\cal.vcxproj", "{F7659D77-09CF-4FE9-ACEE-927287AA9509}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0178B127-6269-407D-B112-93877BB62776} = {0178B127-6269-407D-B112-93877BB62776}
+		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cintltst", "..\test\cintltst\cintltst.vcxproj", "{3D1246AE-1B32-479B-BECA-AEFA97BE2321}"
 EndProject
@@ -11,6 +15,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ctestfw", "..\tools\ctestfw\ctestfw.vcxproj", "{ECA6B435-B4FA-4F9F-BF95-F451D078FC47}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "date", "..\samples\date\date.vcxproj", "{38B5751A-C6F9-4409-950C-F4F9DA17275F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0178B127-6269-407D-B112-93877BB62776} = {0178B127-6269-407D-B112-93877BB62776}
+		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "derb", "..\tools\genrb\derb.vcxproj", "{D3065ADB-8820-4CC7-9B6C-9510833961A3}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -66,8 +74,14 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "makedata_uwp", "..\data\makedata_uwp.vcxproj", "{B1D53358-37BD-48BC-B27C-68BAF1E78508}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i18n_uwp", "..\i18n\i18n_uwp.vcxproj", "{6786C051-383B-47E0-9E82-B8B994E06A25}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0178B127-6269-407D-B112-93877BB62776} = {0178B127-6269-407D-B112-93877BB62776}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "common_uwp", "..\common\common_uwp.vcxproj", "{C10CF34B-3F79-430E-AD38-5A32DC0589C2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D} = {73C0A65B-D1F2-4DE1-B3A6-15DAD2C23F3D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -408,6 +422,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A714726C-FE2D-466C-95F3-06C5C4EAE54F}
 	EndGlobalSection
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True

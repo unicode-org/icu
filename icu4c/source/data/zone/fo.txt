@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fo{
-    Version{"2.1.37.5"}
+    Version{"2.1.39.11"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -148,7 +148,7 @@ fo{
             ec{"Porto-Novo"}
         }
         "Africa:Sao_Tome"{
-            ec{"Sao Tome"}
+            ec{"São Tomé"}
         }
         "Africa:Tripoli"{
             ec{"Tripoli"}
@@ -1110,7 +1110,7 @@ fo{
             ec{"Ulyanovsk"}
         }
         "Europe:Uzhgorod"{
-            ec{"Uzhgorod"}
+            ec{"Uzhhorod"}
         }
         "Europe:Vaduz"{
             ec{"Vaduz"}

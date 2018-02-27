@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fr_CA{
-    Version{"2.1.37.22"}
+    Version{"2.1.38.73"}
     units{
         acceleration{
             g-force{
@@ -73,10 +73,6 @@ fr_CA{
         mass{
             kilogram{
                 per{"{0} par kilogramme"}
-            }
-            microgram{
-                one{"{0} microgramme"}
-                other{"{0} microgrammes"}
             }
             stone{
                 other{"{0} stone"}
@@ -211,10 +207,6 @@ fr_CA{
             }
         }
         mass{
-            kilogram{
-                one{"{0}kg"}
-                other{"{0}kg"}
-            }
             metric-ton{
                 one{"{0}t"}
                 other{"{0}t"}
@@ -352,12 +344,6 @@ fr_CA{
                 dnam{"psi"}
                 one{"{0} psi"}
                 other{"{0} psi"}
-            }
-        }
-        temperature{
-            generic{
-                one{"{0}°"}
-                other{"{0}°"}
             }
         }
         volume{

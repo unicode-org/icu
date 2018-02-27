@@ -12,12 +12,12 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}.Debug|Win32.ActiveCfg = Debug|Win32
 		{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}.Debug|Win32.Build.0 = Debug|Win32
-		{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}.Debug|x64.ActiveCfg = Debug|Win32
-		{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}.Debug|x64.Build.0 = Debug|Win32
+		{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}.Debug|x64.ActiveCfg = Debug|x64
+		{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}.Debug|x64.Build.0 = Debug|x64
 		{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}.Release|Win32.ActiveCfg = Release|Win32
 		{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}.Release|Win32.Build.0 = Release|Win32
-		{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}.Release|x64.ActiveCfg = Release|Win32
-		{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}.Release|x64.Build.0 = Release|Win32
+		{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}.Release|x64.ActiveCfg = Release|x64
+		{FF92E6C1-BACA-41AD-BB6D-ECA19C05573E}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -50,6 +50,7 @@ nl{
         aro{"Araona"}
         arp{"Arapaho"}
         arq{"Algerijns Arabisch"}
+        ars{"Nadjdi-Arabisch"}
         arw{"Arawak"}
         ary{"Marokkaans Arabisch"}
         arz{"Egyptisch Arabisch"}
@@ -1131,7 +1132,7 @@ nl{
         WADEGILE{"Wade-Giles-romanisering"}
         XSISTEMO{"X-sistemo"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.20"}
     characterLabelPattern{
         all{"{0} — alle"}
         category-list{"{0}: {1}"}

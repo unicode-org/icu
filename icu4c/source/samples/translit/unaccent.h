@@ -11,6 +11,8 @@
 #include "unicode/translit.h"
 #include "unicode/normlzr.h"
 
+using namespace icu;
+
 class UnaccentTransliterator : public Transliterator {
     
  public:

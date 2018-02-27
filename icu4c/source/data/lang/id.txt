@@ -49,6 +49,7 @@ id{
         arn{"Mapuche"}
         arp{"Arapaho"}
         arq{"Arab Aljazair"}
+        ars{"Arab Najdi"}
         arw{"Arawak"}
         ary{"Arab Maroko"}
         arz{"Arab Mesir"}
@@ -963,7 +964,7 @@ id{
         VALLADER{"VALLADER"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
     characterLabelPattern{
         all{"{0} — Semua"}
         category-list{"{0}: {1}"}

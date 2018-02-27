@@ -31,6 +31,7 @@ ms{
         151{"Eropah Timur"}
         154{"Eropah Utara"}
         155{"Eropah Barat"}
+        202{"Afrika Sub-Sahara"}
         419{"Amerika Latin"}
         AC{"Pulau Ascension"}
         AD{"Andorra"}
@@ -311,5 +312,5 @@ ms{
         MK{"Macedonia (FYROM)"}
         TL{"Timor Timur"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
 }

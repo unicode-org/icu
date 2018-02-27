@@ -65,7 +65,7 @@ numberformattesttuple.o numberformat2test.o pluralmaptest.o \
 numbertest_affixutils.o numbertest_api.o numbertest_decimalquantity.o \
 numbertest_modifiers.o numbertest_patternmodifier.o numbertest_patternstring.o \
 numbertest_stringbuilder.o numbertest_stringsegment.o numbertest_unisets.o \
-numbertest_parse.o
+numbertest_parse.o numbertest_doubleconversion.o
 
 DEPS = $(OBJECTS:.o=.d)
 

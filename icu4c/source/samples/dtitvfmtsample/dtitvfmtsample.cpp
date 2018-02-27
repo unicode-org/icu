@@ -12,6 +12,7 @@
 //! [dtitvfmtPreDefined1]
 
 using namespace std;
+using namespace icu;
 
 static void dtitvfmtPreDefined() {
 	  

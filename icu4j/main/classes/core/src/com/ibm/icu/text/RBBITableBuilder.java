@@ -10,6 +10,7 @@
 package com.ibm.icu.text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.TreeSet;
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.text.RBBIRuleBuilder.IntPair;
 
 //
 //  class RBBITableBuilder is part of the RBBI rule compiler.
@@ -655,7 +657,7 @@ class RBBITableBuilder {
                         // if sd.fAccepting already had a value other than 0 or -1, leave it be.
 
                        // If the end marker node is from a look-ahead rule, set
-                       //   the fLookAhead field or this state also.
+                       //   the fLookAhead field for this state also.
                        if (endMarker.fLookAheadEnd) {
                         // TODO:  don't change value if already set?
                         // TODO:  allow for more than one active look-ahead rule in engine.
@@ -832,6 +834,149 @@ class RBBITableBuilder {
 
 
 
+       /**
+        *  Find duplicate (redundant) character classes, beginning at the specified
+        *  pair, within this state table. This is an iterator-like function, used to
+        *  identify character classes (state table columns) that can be eliminated.
+        *  @param categories in/out parameter, specifies where to start looking for duplicates,
+        *                and returns the first pair of duplicates found, if any.
+        *  @return true if duplicate char classes were found, false otherwise.
+        *  @internal
+        */
+       boolean findDuplCharClassFrom(RBBIRuleBuilder.IntPair categories) {
+           int numStates = fDStates.size();
+           int numCols = fRB.fSetBuilder.getNumCharCategories();
+
+           int table_base = 0;
+           int table_dupl = 0;
+           for (; categories.first < numCols-1; ++categories.first) {
+               for (categories.second=categories.first+1; categories.second < numCols; ++categories.second) {
+                   for (int state=0; state<numStates; state++) {
+                       RBBIStateDescriptor sd = fDStates.get(state);
+                       table_base = sd.fDtran[categories.first];
+                       table_dupl = sd.fDtran[categories.second];
+                       if (table_base != table_dupl) {
+                           break;
+                       }
+                   }
+                   if (table_base == table_dupl) {
+                       return true;
+                   }
+               }
+           }
+           return false;
+       }
+
+       /**
+        * Remove a column from the state table. Used when two character categories
+        * have been found equivalent, and merged together, to eliminate the unneeded table column.
+        */
+       void removeColumn(int column) {
+           int numStates = fDStates.size();
+           for (int state=0; state<numStates; state++) {
+               RBBIStateDescriptor sd = fDStates.get(state);
+               assert(column < sd.fDtran.length);
+               int[] newArray = Arrays.copyOf(sd.fDtran, sd.fDtran.length - 1);
+               System.arraycopy(sd.fDtran, column+1, newArray, column, newArray.length - column);
+               sd.fDtran = newArray;
+           }
+       }
+
+
+       /**
+        *  Find duplicate (redundant) states, beginning at the specified pair,
+        *  within this state table. This is an iterator-like function, used to
+        *  identify states (state table rows) that can be eliminated.
+        *  @param states in/out parameter, specifies where to start looking for duplicates,
+        *                and returns the first pair of duplicates found, if any.
+        *  @return true if duplicate states were found, false otherwise.
+        *  @internal
+        */
+       boolean findDuplicateState(RBBIRuleBuilder.IntPair states) {
+           int numStates = fDStates.size();
+           int numCols = fRB.fSetBuilder.getNumCharCategories();
+
+           for (; states.first<numStates-1; ++states.first) {
+               RBBIStateDescriptor firstSD = fDStates.get(states.first);
+               for (states.second=states.first+1; states.second<numStates; ++states.second) {
+                   RBBIStateDescriptor duplSD = fDStates.get(states.second);
+                   if (firstSD.fAccepting != duplSD.fAccepting ||
+                           firstSD.fLookAhead != duplSD.fLookAhead ||
+                           firstSD.fTagsIdx   != duplSD.fTagsIdx) {
+                       continue;
+                   }
+                   boolean rowsMatch = true;
+                   for (int col=0; col < numCols; ++col) {
+                       int firstVal = firstSD.fDtran[col];
+                       int duplVal = duplSD.fDtran[col];
+                       if (!((firstVal == duplVal) ||
+                               ((firstVal == states.first || firstVal == states.second) &&
+                                       (duplVal  == states.first || duplVal  == states.second)))) {
+                           rowsMatch = false;
+                           break;
+                       }
+                   }
+                   if (rowsMatch) {
+                       return true;
+                   }
+               }
+           }
+           return false;
+       }
+
+       /**
+        * Remove a duplicate state (row) from the state table. All references to the deleted state are
+        * redirected to "keepState", the first encountered of the duplicated pair of states.
+        * @param keepState The first of the duplicate pair of states, the one to be kept.
+        * @param duplState The second of the duplicate pair, the one to be removed.
+        * @internal
+        */
+       void removeState(int keepState, int duplState) {
+           assert(keepState < duplState);
+           assert(duplState < fDStates.size());
+
+           fDStates.remove(duplState);
+
+           int numStates = fDStates.size();
+           int numCols = fRB.fSetBuilder.getNumCharCategories();
+           for (int state=0; state<numStates; ++state) {
+               RBBIStateDescriptor sd = fDStates.get(state);
+               for (int col=0; col<numCols; col++) {
+                   int existingVal = sd.fDtran[col];
+                   int newVal = existingVal;
+                   if (existingVal == duplState) {
+                       newVal = keepState;
+                   } else if (existingVal > duplState) {
+                       newVal = existingVal - 1;
+                   }
+                   sd.fDtran[col] = newVal;
+               }
+               if (sd.fAccepting == duplState) {
+                   sd.fAccepting = keepState;
+               } else if (sd.fAccepting > duplState) {
+                   sd.fAccepting--;
+               }
+               if (sd.fLookAhead == duplState) {
+                   sd.fLookAhead = keepState;
+               } else if (sd.fLookAhead > duplState) {
+                   sd.fLookAhead--;
+               }
+           }
+       }
+
+
+       /**
+        *  Check for, and remove duplicate states (table rows).
+        *  @internal
+        */
+       void removeDuplicateStates() {
+           IntPair dupls = new IntPair(3, 0);
+           while (findDuplicateState(dupls)) {
+               // System.out.printf("Removing duplicate states (%d, %d)\n", dupls.first, dupls.second);
+               removeState(dupls.first, dupls.second);
+           }
+       }
+
 
        //-----------------------------------------------------------------------------
        //
@@ -901,7 +1046,7 @@ class RBBITableBuilder {
 
            // Size of table size in shorts.
            //  the "4" is the size of struct RBBIStateTableRow, the row header part only.
-           int rowLen = 4 + fRB.fSetBuilder.getNumCharCategories();
+           int rowLen = 4 + fRB.fSetBuilder.getNumCharCategories();   // Row Length in shorts.
            int tableSize = getTableSize() / 2;
 
 
@@ -909,15 +1054,19 @@ class RBBITableBuilder {
 
            //
            // Fill in the header fields.
-           //      Annoying because they really want to be ints, not shorts.
+           //      Note that NUMSTATES, ROWLEN and FLAGS are ints, not shorts.
+           //      ICU data created from Java is always big endian format, so
+           //      order the halves of the 32 bit fields into the short[] data accordingly.
+           //      TODO: ticket 13598 restructure so that ints are represented as ints directly.
            //
            // RBBIStateTable.fNumStates
            table[RBBIDataWrapper.NUMSTATES]   = (short)(numStates >>> 16);
            table[RBBIDataWrapper.NUMSTATES+1] = (short)(numStates & 0x0000ffff);
 
-           // RBBIStateTable.fRowLen
-           table[RBBIDataWrapper.ROWLEN]   = (short)(rowLen >>> 16);
-           table[RBBIDataWrapper.ROWLEN+1] = (short)(rowLen & 0x0000ffff);
+           // RBBIStateTable.fRowLen. In bytes.
+           int rowLenInBytes = rowLen * 2;
+           table[RBBIDataWrapper.ROWLEN]   = (short)(rowLenInBytes >>> 16);
+           table[RBBIDataWrapper.ROWLEN+1] = (short)(rowLenInBytes & 0x0000ffff);
 
            // RBBIStateTable.fFlags
            int flags = 0;

@@ -31,6 +31,7 @@ ro{
         151{"Europa Orientală"}
         154{"Europa Septentrională"}
         155{"Europa Occidentală"}
+        202{"Africa Subsahariană"}
         419{"America Latină"}
         AC{"Insula Ascension"}
         AD{"Andorra"}
@@ -309,6 +310,7 @@ ro{
         CZ{"Republica Cehă"}
         FK{"Insulele Falkland (Insulele Malvine)"}
         MK{"Republica Macedonia (FRIM)"}
+        TL{"TL"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
 }

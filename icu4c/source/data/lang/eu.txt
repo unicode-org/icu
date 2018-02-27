@@ -27,7 +27,7 @@ eu{
         ace{"acehnera"}
         ach{"acholiera"}
         ada{"adangmera"}
-        ady{"adyghera"}
+        ady{"adigera"}
         af{"afrikaansa"}
         agq{"aghemera"}
         ain{"ainuera"}
@@ -423,7 +423,7 @@ eu{
         zza{"zazakia"}
     }
     Languages%short{
-        az{"azeriera"}
+        az{"azerbaijanera"}
         en_GB{"Erresuma Batuko ingelesa"}
         en_US{"AEBko ingelesa"}
     }
@@ -625,7 +625,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.11"}
     characterLabelPattern{
         all{"{0} — Guztiak"}
         category-list{"{0}: {1}"}

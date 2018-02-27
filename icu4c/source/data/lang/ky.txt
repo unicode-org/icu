@@ -539,20 +539,20 @@ ky{
             tibt{"Тибет сандары"}
         }
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.11"}
     characterLabelPattern{
-        all{"{0} — Баары"}
+        all{"{0} — баары"}
         category-list{"{0}: {1}"}
-        compatibility{"{0} — Ылайыктуулук"}
-        enclosed{"{0} — Кашаага/Тырмакчага алынган"}
-        extended{"{0} — Кеңейтилген"}
-        historic{"{0} — Тарыхый"}
-        miscellaneous{"{0} — Башка"}
-        other{"{0} —Башкалар"}
+        compatibility{"{0} — ылайыктуулук"}
+        enclosed{"{0} — кашаага/тырмакчага алынган"}
+        extended{"{0} — кеңейтилген"}
+        historic{"{0} — тарыхый"}
+        miscellaneous{"{0} — башка"}
+        other{"{0} — башкалар"}
         scripts{"Жазуулар — {0}"}
         strokes{
             one{"{0} штрих"}
-            other{"{0} штрихтер"}
+            other{"{0} штрих"}
         }
     }
     codePatterns{

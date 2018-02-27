@@ -696,7 +696,7 @@ bs_Cyrl{
         TARASK{"Тараскијевичка ортографија"}
         VALENCIA{"Валенцијска"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.11"}
     characterLabelPattern{
         all{"{0} — све"}
         strokes{

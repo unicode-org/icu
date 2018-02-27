@@ -51,6 +51,7 @@ sv{
         aro{"araoniska"}
         arp{"arapaho"}
         arq{"algerisk arabiska"}
+        ars{"najdiarabiska"}
         arw{"arawakiska"}
         ary{"marockansk arabiska"}
         arz{"egyptisk arabiska"}
@@ -1096,7 +1097,7 @@ sv{
         WADEGILE{"Wade-Giles"}
         XSISTEMO{"x-system"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
     characterLabelPattern{
         all{"{0} — alla"}
         category-list{"{0}: {1}"}

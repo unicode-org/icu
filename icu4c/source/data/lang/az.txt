@@ -17,7 +17,7 @@ az{
         ace{"akin"}
         ach{"akoli"}
         ada{"adanqme"}
-        ady{"aduge"}
+        ady{"adıgey"}
         ae{"avestan"}
         af{"afrikaans"}
         afh{"afrihili"}
@@ -87,7 +87,7 @@ az{
         chp{"çipevyan"}
         chr{"çeroki"}
         chy{"çeyen"}
-        ckb{"soran"}
+        ckb{"Mərkəzi kürdcə"}
         co{"korsika"}
         cop{"kopt"}
         cr{"kri"}
@@ -662,7 +662,7 @@ az{
         Zzzz{"tanınmayan yazı"}
     }
     Scripts%stand-alone{
-        Hans{"Sadələşdirilmiş Han"}
+        Hans{"Sadələşmiş Han"}
         Hant{"Ənənəvi Han"}
     }
     Types{
@@ -745,7 +745,7 @@ az{
             tibt{"Tibet Rəqəmləri"}
         }
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
     characterLabelPattern{
         all{"{0} — Bütün"}
         category-list{"{0}: {1}"}

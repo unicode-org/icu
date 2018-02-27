@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 my{
-    Version{"2.1.37.5"}
+    Version{"2.1.39.11"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -383,7 +383,7 @@ my{
             kilogram{
                 dnam{"ကီလိုဂရမ်"}
                 other{"{0} ကီလိုဂရမ်"}
-                per{"{0} လျှင် တစ်ကီလိုဂရမ်"}
+                per{"တစ်ကီလိုဂရမ်လျှင် {0}"}
             }
             metric-ton{
                 dnam{"မက်ထရစ်တန်"}

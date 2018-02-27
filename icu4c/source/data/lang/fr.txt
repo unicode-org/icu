@@ -51,6 +51,7 @@ fr{
         aro{"araona"}
         arp{"arapaho"}
         arq{"arabe algérien"}
+        ars{"arabe najdi"}
         arw{"arawak"}
         ary{"arabe marocain"}
         arz{"arabe égyptien"}
@@ -966,7 +967,7 @@ fr{
         VALENCIA{"valencien"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.20"}
     characterLabelPattern{
         all{"{0} — tout"}
         category-list{"{0} : {1}"}

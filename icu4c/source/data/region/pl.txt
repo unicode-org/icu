@@ -31,6 +31,7 @@ pl{
         151{"Europa Wschodnia"}
         154{"Europa Północna"}
         155{"Europa Zachodnia"}
+        202{"Afryka Subsaharyjska"}
         419{"Ameryka Łacińska"}
         AC{"Wyspa Wniebowstąpienia"}
         AD{"Andora"}
@@ -303,6 +304,7 @@ pl{
         US{"USA"}
     }
     Countries%variant{
+        CD{"Kongo (DRK)"}
         CG{"Republika Konga"}
         CI{"Wybrzeże Kości Słoniowej"}
         CZ{"Republika Czeska"}
@@ -310,5 +312,5 @@ pl{
         MK{"Była Jugosłowiańska Republika Macedonii"}
         TL{"Timor-Leste"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.15"}
 }

@@ -399,7 +399,7 @@ az_Cyrl{
     Scripts{
         Cyrl{"Кирил"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.38.69"}
     codePatterns{
         language{"Дил: {0}"}
         script{"Скрипт: {0}"}

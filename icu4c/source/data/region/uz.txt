@@ -31,6 +31,7 @@ uz{
         151{"Sharqiy Yevropa"}
         154{"Shimoliy Yevropa"}
         155{"G‘arbiy Yevropa"}
+        202{"Sahro janubidagi Afrika"}
         419{"Lotin Amerikasi"}
         AC{"Me’roj oroli"}
         AD{"Andorra"}
@@ -311,5 +312,5 @@ uz{
         MK{"Makedoniya (SYRM)"}
         TL{"Sharqiy Timor"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
 }

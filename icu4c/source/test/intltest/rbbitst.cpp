@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <vector>
 
 #include "unicode/brkiter.h"
 #include "unicode/localpointer.h"
@@ -39,9 +40,11 @@
 #include "cstr.h"
 #include "intltest.h"
 #include "rbbitst.h"
+#include "rbbidata.h"
 #include "utypeinfo.h"  // for 'typeid' to work
 #include "uvector.h"
 #include "uvectr32.h"
+
 
 #if !UCONFIG_NO_FILTERED_BREAK_ITERATION
 #include "unicode/filteredbrk.h"
@@ -106,6 +109,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestEmoji);
     TESTCASE_AUTO(TestBug12519);
     TESTCASE_AUTO(TestBug12677);
+    TESTCASE_AUTO(TestTableRedundancies);
     TESTCASE_AUTO_END;
 }
 
@@ -4453,6 +4457,67 @@ void RBBITest::TestBug12677() {
     UnicodeString rtRules = bi.getRules();
     assertEquals(WHERE, UnicodeString(u"!!forward; $x = [ab#]; '#' '?'; "),  rtRules);
 }
+
+
+void RBBITest::TestTableRedundancies() {
+    UErrorCode status = U_ZERO_ERROR;
+    
+    LocalPointer<RuleBasedBreakIterator> bi (
+        (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status));
+    assertSuccess(WHERE, status);
+    if (U_FAILURE(status)) return;
+
+    RBBIDataWrapper *dw = bi->fData;
+    const RBBIStateTable *fwtbl = dw->fForwardTable;
+    int32_t numCharClasses = dw->fHeader->fCatCount;
+    // printf("Char Classes: %d     states: %d\n", numCharClasses, fwtbl->fNumStates);
+
+    // Check for duplicate columns (character categories)
+
+    std::vector<UnicodeString> columns;
+    for (int32_t column = 0; column < numCharClasses; column++) {
+        UnicodeString s;
+        for (int32_t r = 1; r < (int32_t)fwtbl->fNumStates; r++) {
+            RBBIStateTableRow  *row = (RBBIStateTableRow *) (fwtbl->fTableData + (fwtbl->fRowLen * r));
+            s.append(row->fNextState[column]);
+        }
+        columns.push_back(s);
+    }
+    // Ignore column (char class) 0 while checking; it's special, and may have duplicates.
+    for (int c1=1; c1<numCharClasses; c1++) {
+        for (int c2 = c1+1; c2 < numCharClasses; c2++) {
+            if (columns.at(c1) == columns.at(c2)) {
+                errln("%s:%d Duplicate columns (%d, %d)\n", __FILE__, __LINE__, c1, c2);
+                goto out;
+            }
+        }
+    }
+  out:
+
+    // Check for duplicate states
+    std::vector<UnicodeString> rows;
+    for (int32_t r=0; r < (int32_t)fwtbl->fNumStates; r++) {
+        UnicodeString s;
+        RBBIStateTableRow  *row = (RBBIStateTableRow *) (fwtbl->fTableData + (fwtbl->fRowLen * r));
+        assertTrue(WHERE, row->fAccepting >= -1);
+        s.append(row->fAccepting + 1);   // values of -1 are expected.
+        s.append(row->fLookAhead);
+        s.append(row->fTagIdx);
+        for (int32_t column = 0; column < numCharClasses; column++) {
+            s.append(row->fNextState[column]);
+        }
+        rows.push_back(s);
+    }
+    for (int r1=0; r1 < (int32_t)fwtbl->fNumStates; r1++) {
+        for (int r2 = r1+1; r2 < (int32_t)fwtbl->fNumStates; r2++) {
+            if (rows.at(r1) == rows.at(r2)) {
+                errln("%s:%d Duplicate rows (%d, %d)\n", __FILE__, __LINE__, r1, r2);
+                return;
+            }
+        }
+    }
+}
+
 
 //
 //  TestDebug    -  A place-holder test for debugging purposes.

@@ -31,6 +31,7 @@ fil{
         151{"Silangang Europe"}
         154{"Hilagang Europe"}
         155{"Kanlurang Europe"}
+        202{"Sub-Saharan Africa"}
         419{"Latin America"}
         AC{"Acsencion island"}
         AD{"Andorra"}
@@ -311,5 +312,5 @@ fil{
         MK{"Macedonia (FYROM)"}
         TL{"East Timor"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
 }

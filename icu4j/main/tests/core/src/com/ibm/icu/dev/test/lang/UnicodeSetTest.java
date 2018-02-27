@@ -2773,4 +2773,23 @@ public class UnicodeSetTest extends TestFmwk {
         } catch (IllegalArgumentException expected) {
         }
     }
+
+    @Test
+    public void TestDeepPattern() {
+        // Nested ranges are parsed via recursion which can use a lot of stack space.
+        // After a reasonable limit, we should get an error.
+        final int DEPTH = 20000;
+        StringBuilder pattern = new StringBuilder();
+        StringBuilder suffix = new StringBuilder();
+        for (int i = 0; i < DEPTH; ++i) {
+            pattern.append("[a");
+            suffix.append(']');
+        }
+        pattern.append(suffix);
+        try {
+            new UnicodeSet(pattern.toString());
+            fail("[a[a[a...1000s...]]] did not throw an exception");
+        } catch(RuntimeException expected) {
+        }
+    }
 }

@@ -17,6 +17,7 @@ pt_PT{
         ang{"inglês antigo"}
         ar_001{"árabe moderno padrão"}
         arn{"mapuche"}
+        ars{"árabe do Négede"}
         av{"avaric"}
         bax{"bamun"}
         bbj{"ghomala"}
@@ -40,6 +41,7 @@ pt_PT{
         en_US{"inglês americano"}
         es_419{"espanhol latino-americano"}
         es_ES{"espanhol europeu"}
+        es_MX{"espanhol mexicano"}
         et{"estónio"}
         fon{"fon"}
         fr_CA{"francês canadiano"}
@@ -249,7 +251,7 @@ pt_PT{
         MONOTON{"monotónico"}
         POLYTON{"politónico"}
     }
-    Version{"2.1.37.6"}
+    Version{"2.1.39.11"}
     characterLabelPattern{
         all{"{0} – tudo"}
         compatibility{"{0} – compatibilidade"}

@@ -31,6 +31,7 @@ gl{
         151{"Europa do Leste"}
         154{"Europa Setentrional"}
         155{"Europa Occidental"}
+        202{"África subsahariana"}
         419{"América Latina"}
         AC{"Illa de Ascensión"}
         AD{"Andorra"}
@@ -311,5 +312,5 @@ gl{
         MK{"Macedonia (ARIM)"}
         TL{"TL"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
 }

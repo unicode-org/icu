@@ -38,7 +38,6 @@ class CjkBreakEngine extends DictionaryBreakEngine {
     private DictionaryMatcher fDictionary = null;
 
     public CjkBreakEngine(boolean korean) throws IOException {
-        super(BreakIterator.KIND_WORD);
         fDictionary = DictionaryData.loadDictionaryFor("Hira");
         if (korean) {
             setCharacters(fHangulWordSet);
@@ -102,7 +101,7 @@ class CjkBreakEngine extends DictionaryBreakEngine {
         boolean isNormalized = Normalizer.quickCheck(prenormstr, Normalizer.NFKC) == Normalizer.YES ||
                                Normalizer.isNormalized(prenormstr, Normalizer.NFKC, 0);
         CharacterIterator text;
-        int numChars = 0;
+        int numCodePts = 0;
         if (isNormalized) {
             text = new java.text.StringCharacterIterator(prenormstr);
             int index = 0;
@@ -110,8 +109,8 @@ class CjkBreakEngine extends DictionaryBreakEngine {
             while (index < prenormstr.length()) {
                 int codepoint = prenormstr.codePointAt(index);
                 index += Character.charCount(codepoint);
-                numChars++;
-                charPositions[numChars] = index;
+                numCodePts++;
+                charPositions[numCodePts] = index;
             }
         } else {
             String normStr = Normalizer.normalize(prenormstr, Normalizer.NFKC);
@@ -122,37 +121,43 @@ class CjkBreakEngine extends DictionaryBreakEngine {
             charPositions[0] = 0;
             while (index < normalizer.endIndex()) {
                 normalizer.next();
-                numChars++;
+                numCodePts++;
                 index = normalizer.getIndex();
-                charPositions[numChars] = index;
+                charPositions[numCodePts] = index;
             }
         }
 
         // From here on out, do the algorithm. Note that our indices
         // refer to indices within the normalized string.
-        int[] bestSnlp = new int[numChars + 1];
+        int[] bestSnlp = new int[numCodePts + 1];
         bestSnlp[0] = 0;
-        for (int i = 1; i <= numChars; i++) {
+        for (int i = 1; i <= numCodePts; i++) {
             bestSnlp[i] = kint32max;
         }
 
-        int[] prev = new int[numChars + 1];
-        for (int i = 0; i <= numChars; i++) {
+        int[] prev = new int[numCodePts + 1];
+        for (int i = 0; i <= numCodePts; i++) {
             prev[i] = -1;
         }
 
         final int maxWordSize = 20;
-        int values[] = new int[numChars];
-        int lengths[] = new int[numChars];
+        int values[] = new int[numCodePts];
+        int lengths[] = new int[numCodePts];
         // dynamic programming to find the best segmentation
+
+        // In outer loop, i  is the code point index,
+        //                ix is the corresponding code unit index.
+        //    They differ when the string contains supplementary characters.
+        int ix = 0;
+        text.setIndex(ix);
         boolean is_prev_katakana = false;
-        for (int i = 0; i < numChars; i++) {
-            text.setIndex(i);
+        for (int i = 0; i < numCodePts; i++, text.setIndex(ix), next32(text)) {
+            ix = text.getIndex();
             if (bestSnlp[i] == kint32max) {
                 continue;
             }
 
-            int maxSearchLength = (i + maxWordSize < numChars) ? maxWordSize : (numChars - i);
+            int maxSearchLength = (i + maxWordSize < numCodePts) ? maxWordSize : (numCodePts - i);
             int[] count_ = new int[1];
             fDictionary.matches(text, maxSearchLength, lengths, count_, maxSearchLength, values);
             int count = count_[0];
@@ -162,7 +167,7 @@ class CjkBreakEngine extends DictionaryBreakEngine {
             // with the highest value possible (i.e. the least likely to occur).
             // Exclude Korean characters from this treatment, as they should be
             // left together by default.
-            text.setIndex(i);  // fDictionary.matches() advances the text position; undo that.
+            text.setIndex(ix);  // fDictionary.matches() advances the text position; undo that.
             if ((count == 0 || lengths[0] != 1) && current32(text) != DONE32 && !fHangulWordSet.contains(current32(text))) {
                 values[count] = maxSnlp;
                 lengths[count] = 1;
@@ -186,7 +191,7 @@ class CjkBreakEngine extends DictionaryBreakEngine {
             if (!is_prev_katakana && is_katakana) {
                 int j = i + 1;
                 next32(text);
-                while (j < numChars && (j - i) < kMaxKatakanaGroupLength && isKatakana(current32(text))) {
+                while (j < numCodePts && (j - i) < kMaxKatakanaGroupLength && isKatakana(current32(text))) {
                     next32(text);
                     ++j;
                 }
@@ -202,13 +207,13 @@ class CjkBreakEngine extends DictionaryBreakEngine {
             is_prev_katakana = is_katakana;
         }
 
-        int t_boundary[] = new int[numChars + 1];
+        int t_boundary[] = new int[numCodePts + 1];
         int numBreaks = 0;
-        if (bestSnlp[numChars] == kint32max) {
-            t_boundary[numBreaks] = numChars;
+        if (bestSnlp[numCodePts] == kint32max) {
+            t_boundary[numBreaks] = numCodePts;
             numBreaks++;
         } else {
-            for (int i = numChars; i > 0; i = prev[i]) {
+            for (int i = numCodePts; i > 0; i = prev[i]) {
                 t_boundary[numBreaks] = i;
                 numBreaks++;
             }

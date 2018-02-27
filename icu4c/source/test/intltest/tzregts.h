@@ -49,6 +49,7 @@ public:
     void TestJDK12API(void);
     void Test4184229(void);
     UBool checkCalendar314(GregorianCalendar *testCal, TimeZone *testTZ);
+    void TestNegativeDaylightSaving(void);
 
 
 protected:

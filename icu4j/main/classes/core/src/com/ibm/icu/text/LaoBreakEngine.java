@@ -16,7 +16,7 @@ import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 
 class LaoBreakEngine extends DictionaryBreakEngine {
-    
+
     // Constants for LaoBreakIterator
     // How many words in a row are "good enough"?
     private static final byte LAO_LOOKAHEAD = 3;
@@ -27,13 +27,13 @@ class LaoBreakEngine extends DictionaryBreakEngine {
     private static final byte LAO_PREFIX_COMBINE_THRESHOLD = 3;
     // Minimum word size
     private static final byte LAO_MIN_WORD = 2;
-    
+
     private DictionaryMatcher fDictionary;
     private static UnicodeSet fLaoWordSet;
     private static UnicodeSet fEndWordSet;
     private static UnicodeSet fBeginWordSet;
     private static UnicodeSet fMarkSet;
-    
+
     static {
         // Initialize UnicodeSets
         fLaoWordSet = new UnicodeSet();
@@ -55,43 +55,43 @@ class LaoBreakEngine extends DictionaryBreakEngine {
         fMarkSet.compact();
         fEndWordSet.compact();
         fBeginWordSet.compact();
-        
+
         // Freeze the static UnicodeSet
         fLaoWordSet.freeze();
         fMarkSet.freeze();
         fEndWordSet.freeze();
         fBeginWordSet.freeze();
     }
-    
+
     public LaoBreakEngine() throws IOException {
-        super(BreakIterator.KIND_WORD, BreakIterator.KIND_LINE);
         setCharacters(fLaoWordSet);
         // Initialize dictionary
         fDictionary = DictionaryData.loadDictionaryFor("Laoo");
     }
 
+    @Override
     public boolean equals(Object obj) {
         // Normally is a singleton, but it's possible to have duplicates
         //   during initialization. All are equivalent.
         return obj instanceof LaoBreakEngine;
     }
 
+    @Override
     public int hashCode() {
         return getClass().hashCode();
     }
-    
-    public boolean handles(int c, int breakType) {
-        if (breakType == BreakIterator.KIND_WORD || breakType == BreakIterator.KIND_LINE) {
-            int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
-            return (script == UScript.LAO);
-        }
-        return false;
+
+    @Override
+    public boolean handles(int c) {
+        int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
+        return (script == UScript.LAO);
     }
 
+    @Override
     public int divideUpDictionaryRange(CharacterIterator fIter, int rangeStart, int rangeEnd,
             DequeI foundBreaks) {
-        
-        
+
+
         if ((rangeEnd - rangeStart) < LAO_MIN_WORD) {
             return 0;  // Not enough characters for word
         }
@@ -162,7 +162,7 @@ class LaoBreakEngine extends DictionaryBreakEngine {
                 // no preceding word, or the non-word shares less than the minimum threshold
                 // of characters with a dictionary word, then scan to resynchronize
                 if (words[wordsFound%LAO_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd) <= 0 &&
-                        (wordLength == 0 || 
+                        (wordLength == 0 ||
                                 words[wordsFound%LAO_LOOKAHEAD].longestPrefix() < LAO_PREFIX_COMBINE_THRESHOLD)) {
                     // Look for a plausible word boundary
                     int remaining = rangeEnd - (current + wordLength);
@@ -208,7 +208,7 @@ class LaoBreakEngine extends DictionaryBreakEngine {
 
             // Look ahead for possible suffixes if a dictionary word does not follow.
             // We do this in code rather than using a rule so that the heuristic
-            // resynch continues to function. For example, one of the suffix characters 
+            // resynch continues to function. For example, one of the suffix characters
             // could be a typo in the middle of a word.
             // NOT CURRENTLY APPLICABLE TO LAO
 
