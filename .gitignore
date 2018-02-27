@@ -87,6 +87,7 @@ icu4c/source/extra/scrptrun/srtest.d
 icu4c/source/extra/uconv/*.d
 icu4c/source/extra/uconv/*.o
 icu4c/source/extra/uconv/*.vcxproj.user
+icu4c/source/extra/uconv/.vs
 icu4c/source/extra/uconv/Debug
 icu4c/source/extra/uconv/Makefile
 icu4c/source/extra/uconv/Release
@@ -139,6 +140,7 @@ icu4c/source/layoutex/*.d
 icu4c/source/layoutex/*.o
 icu4c/source/layoutex/*.pdb
 icu4c/source/layoutex/*.vcxproj.user
+icu4c/source/layoutex/.vs
 icu4c/source/layoutex/Debug
 icu4c/source/layoutex/Makefile
 icu4c/source/layoutex/Release
@@ -155,6 +157,7 @@ icu4c/source/samples/*.sdf
 icu4c/source/samples/Makefile
 icu4c/source/samples/all/*.opensdf
 icu4c/source/samples/all/*.sdf
+icu4c/source/samples/all/.vs
 icu4c/source/samples/all/all.ncb
 icu4c/source/samples/all/all.suo
 icu4c/source/samples/break/*.vcxproj.user
@@ -233,6 +236,10 @@ icu4c/source/samples/datefmt/datefmt.vcproj.*.*.user
 icu4c/source/samples/datefmt/release
 icu4c/source/samples/datefmt/x64
 icu4c/source/samples/datefmt/x86
+icu4c/source/samples/dtitvfmtsample/x64
+icu4c/source/samples/dtitvfmtsample/x86
+icu4c/source/samples/dtptngsample/x64
+icu4c/source/samples/dtptngsample/x86
 icu4c/source/samples/layout/*.d
 icu4c/source/samples/layout/*.pdb
 icu4c/source/samples/layout/*.vcxproj.user
@@ -267,6 +274,8 @@ icu4c/source/samples/numfmt/numfmt.vcproj.*.*.user
 icu4c/source/samples/numfmt/release
 icu4c/source/samples/numfmt/x64
 icu4c/source/samples/numfmt/x86
+icu4c/source/samples/plurfmtsample/x64
+icu4c/source/samples/plurfmtsample/x86
 icu4c/source/samples/props/*.vcxproj.user
 icu4c/source/samples/props/Debug
 icu4c/source/samples/props/props
@@ -635,6 +644,8 @@ icu4c/source/tools/ctestfw/libsicutest*
 icu4c/source/tools/ctestfw/release
 icu4c/source/tools/ctestfw/x64
 icu4c/source/tools/ctestfw/x86
+icu4c/source/tools/escapesrc/*.d
+icu4c/source/tools/escapesrc/Makefile
 icu4c/source/tools/genbrk/*.d
 icu4c/source/tools/genbrk/*.o
 icu4c/source/tools/genbrk/*.pdb
@@ -898,6 +909,7 @@ icu4c/source/tools/toolutil/x64
 icu4c/source/tools/toolutil/x86
 icu4c/source/tools/tzcode/*.ao
 icu4c/source/tools/tzcode/*.o
+icu4c/source/tools/tzcode/.vs
 icu4c/source/tools/tzcode/Makefile
 icu4c/source/uconfig.h.prepend
 icu4j/*.jar

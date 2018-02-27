@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 tr{
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -1835,6 +1835,7 @@ tr{
                 other{"{0} pm"}
             }
             point{
+                dnam{"punto"}
                 one{"{0} pt"}
                 other{"{0} pt"}
             }

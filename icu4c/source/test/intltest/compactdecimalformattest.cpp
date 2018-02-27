@@ -279,7 +279,7 @@ void CompactDecimalFormatTest::TestSwahiliShortNegative() {
 }
 
 void CompactDecimalFormatTest::TestArabicLong() {
-  CheckLocale("ar", UNUM_LONG, kArabicLong, UPRV_LENGTHOF(kArabicLong));
+  CheckLocale("ar-EG", UNUM_LONG, kArabicLong, UPRV_LENGTHOF(kArabicLong));
 }
 
 void CompactDecimalFormatTest::TestSignificantDigits() {

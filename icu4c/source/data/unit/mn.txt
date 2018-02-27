@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 mn{
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
     durationUnits{
         hm{"hh:mm"}
         hms{"hh:mm:ss"}
@@ -147,7 +147,7 @@ mn{
             }
         }
         coordinate{
-            east{"{0}E"}
+            east{"{0}Зүүн"}
             north{"{0}Умард"}
             south{"{0}Өмнөд"}
             west{"{0}Өрнөд"}
@@ -1512,7 +1512,7 @@ mn{
                 other{"{0} гПа"}
             }
             inch-hg{
-                dnam{"МөУсИн"}
+                dnam{"МөУс инч"}
                 one{"{0} МөУсИн"}
                 other{"{0} МөУсИн"}
             }

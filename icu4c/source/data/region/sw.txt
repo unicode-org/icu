@@ -311,5 +311,5 @@ sw{
         MK{"Macedonia (FYROM)"}
         TL{"Timor ya Mashariki"}
     }
-    Version{"2.1.37.34"}
+    Version{"2.1.39.11"}
 }

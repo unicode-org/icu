@@ -18,20 +18,22 @@ import com.ibm.icu.impl.ICUBinary.Authenticate;
 import com.ibm.icu.impl.Trie2;
 
 /**
-* <p>Internal class used for Rule Based Break Iterators</p>
+* <p>Internal class used for Rule Based Break Iterators.</p>
 * <p>This class provides access to the compiled break rule data, as
 * it is stored in a .brk file.
+* Not intended for public use; declared public for testing purposes only.
+* @internal
 */
-final class RBBIDataWrapper {
+public final class RBBIDataWrapper {
     //
     // These fields are the ready-to-use compiled rule data, as
     //   read from the file.
     //
-    RBBIDataHeader fHeader;
-    short          fFTable[];
-    short          fRTable[];
-    short          fSFTable[];
-    short          fSRTable[];
+    public RBBIDataHeader fHeader;
+    public short   fFTable[];
+    public short   fRTable[];
+    public short   fSFTable[];
+    public short   fSRTable[];
     Trie2          fTrie;
     String         fRuleSource;
     int            fStatusTable[];
@@ -78,11 +80,16 @@ final class RBBIDataWrapper {
     // Index offsets to the fields in a state table row.
     //    Corresponds to struct RBBIStateTableRow in the C version.
     //
-    final static int      ACCEPTING  = 0;
-    final static int      LOOKAHEAD  = 1;
-    final static int      TAGIDX     = 2;
-    final static int      RESERVED   = 3;
-    final static int      NEXTSTATES = 4;
+    /** @internal */
+    public final static int      ACCEPTING  = 0;
+    /** @internal */
+    public final static int      LOOKAHEAD  = 1;
+    /** @internal */
+    public final static int      TAGIDX     = 2;
+    /** @internal */
+    public final static int      RESERVED   = 3;
+    /** @internal */
+    public final static int      NEXTSTATES = 4;
 
     // Index offsets to header fields of a state table
     //     struct RBBIStateTable {...   in the C version.
@@ -101,13 +108,15 @@ final class RBBIDataWrapper {
 
     /**
      * Data Header.  A struct-like class with the fields from the RBBI data file header.
+     * Not intended for public use, declared public for testing purposes only.
+     * @internal
      */
-    final static class RBBIDataHeader {
+    public final static class RBBIDataHeader {
         int         fMagic;         //  == 0xbla0
         byte[]      fFormatVersion; //  For ICU 3.4 and later.
         int         fLength;        //  Total length in bytes of this RBBI Data,
                                        //      including all sections, not just the header.
-        int         fCatCount;      //  Number of character categories.
+        public int  fCatCount;      //  Number of character categories.
 
         //
         //  Offsets and sizes of each of the subsections within the RBBI data.
@@ -139,9 +148,9 @@ final class RBBIDataWrapper {
     /**
      * RBBI State Table Indexing Function.  Given a state number, return the
      * array index of the start of the state table row for that state.
-     *
+     * @internal
      */
-    int getRowIndex(int state){
+    public int getRowIndex(int state){
         return ROW_DATA + state * (fHeader.fCatCount + 4);
     }
 
@@ -311,17 +320,17 @@ final class RBBIDataWrapper {
         return This;
     }
 
-    ///CLOVER:OFF
-    //  Getters for fields from the state table header
-    //
-    private int getStateTableNumStates(short table[]) {
+    /**
+     *  Getters for fields from the state table header
+     *  @internal
+     */
+    public int getStateTableNumStates(short table[]) {
         if (isBigEndian) {
             return (table[NUMSTATES] << 16) | (table[NUMSTATES+1] & 0xffff);
         } else {
             return (table[NUMSTATES+1] << 16) | (table[NUMSTATES] & 0xffff);
         }
     }
-    ///CLOVER:ON
 
     int getStateTableFlags(short table[]) {
         // This works for up to 15 flags bits.
@@ -330,7 +339,7 @@ final class RBBIDataWrapper {
 
     ///CLOVER:OFF
     /* Debug function to display the break iterator data. */
-    void dump(java.io.PrintStream out) {
+    public void dump(java.io.PrintStream out) {
         if (fFTable.length == 0) {
             // There is no table. Fail early for testing purposes.
             throw new NullPointerException();

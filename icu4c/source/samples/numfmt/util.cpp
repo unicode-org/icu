@@ -13,6 +13,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+using namespace icu;
+
 enum {
     U_SPACE=0x20,
     U_DQUOTE=0x22,

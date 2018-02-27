@@ -59,11 +59,16 @@ private:
      */
     UText  fText;
 
+#ifndef U_HIDE_INTERNAL_API
+public:
+#endif /* U_HIDE_INTERNAL_API */
     /**
-     * The rule data for this BreakIterator instance
+     * The rule data for this BreakIterator instance.
+     * Not for general use; Public only for testing purposes.
      * @internal
      */
     RBBIDataWrapper    *fData;
+private:
 
     /** 
      *  The iteration state - current position, rule status for the current position,
@@ -113,13 +118,6 @@ private:
      * @internal
      */
     UnhandledEngine     *fUnhandledBreakEngine;
-
-    /**
-     *
-     * The type of the break iterator, or -1 if it has not been set.
-     * @internal
-     */
-    int32_t             fBreakType;
 
     /**
      * Counter for the number of characters encountered with the "dictionary"
@@ -632,12 +630,6 @@ private:
     void reset(void);
 
     /**
-      * Set the type of the break iterator.
-      * @internal
-      */
-    void setBreakType(int32_t type);
-
-    /**
       * Common initialization function, used by constructors and bufferClone.
       * @internal
       */
@@ -683,6 +675,13 @@ private:
      *   @internal
      */
      void dumpCache();
+
+    /**
+     * Debugging function only.
+     * @internal
+     */
+    void dumpTables();
+
 #endif  /* U_HIDE_INTERNAL_API */
 };
 

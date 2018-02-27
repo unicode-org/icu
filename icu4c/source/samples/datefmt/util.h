@@ -10,6 +10,8 @@
 
 #include "unicode/unistr.h"
 
+using namespace icu;
+
 // Verify that a UErrorCode is successful; exit(1) if not
 void check(UErrorCode& status, const char* msg);
 

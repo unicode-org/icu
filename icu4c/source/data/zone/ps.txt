@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ps{
-    Version{"2.1.36.86"}
+    Version{"2.1.39.11"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"ابيجان"}
@@ -873,6 +873,9 @@ ps{
         "Australia:Hobart"{
             ec{"هوبارټ"}
         }
+        "Australia:Lindeman"{
+            ec{"لینډامین"}
+        }
         "Australia:Lord_Howe"{
             ec{"رب هیله"}
         }
@@ -1126,6 +1129,9 @@ ps{
         }
         "Pacific:Honolulu"{
             ec{"هینولولو"}
+        }
+        "Pacific:Johnston"{
+            ec{"جانستون"}
         }
         "Pacific:Kosrae"{
             ec{"کوسیرا"}
@@ -1640,6 +1646,9 @@ ps{
             lg{"سینټ پییرا و ميکلين وخت"}
             ls{"سینټ پییرا و ميکلين معیاری وخت"}
         }
+        "meta:Pitcairn"{
+            ls{"پیټ کارین وخت"}
+        }
         "meta:Ponape"{
             ls{"پونپپ وخت"}
         }
@@ -1667,6 +1676,9 @@ ps{
         }
         "meta:Singapore"{
             ls{"د سنګاپور معیاري وخت"}
+        }
+        "meta:Solomon"{
+            ls{"د سلیمان ټاپوګانو وخت"}
         }
         "meta:South_Georgia"{
             ls{"د سویل جورجیا وخت"}

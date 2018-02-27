@@ -18,6 +18,8 @@
 #include <unicode/brkiter.h>
 #include <stdlib.h>
 
+using namespace icu;
+
 U_CFUNC int c_main(UFILE *out);
 
 void printUnicodeString(UFILE *out, const UnicodeString &s) {

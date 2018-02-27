@@ -13,9 +13,11 @@
 #include "unicode/plurfmt.h"
 #include "unicode/msgfmt.h"
 #include "unicode/ustdio.h"
-//! [PluralFormatExample1] 
+//! [PluralFormatExample1]
 
 using namespace std;
+using namespace icu;
+
 static void PluralFormatExample() {
 	  
 	u_printf("=============================================================================\n");

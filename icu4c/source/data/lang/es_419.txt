@@ -14,6 +14,7 @@ es_419{
         ady{"adigeo"}
         alt{"altái del sur"}
         arp{"arapajó"}
+        ars{"árabe de Néyed"}
         bla{"siksiká"}
         eu{"vasco"}
         fon{"fon"}
@@ -95,7 +96,7 @@ es_419{
             wara{"dígitos en Warang Citi"}
         }
     }
-    Version{"2.1.37.22"}
+    Version{"2.1.38.39"}
     characterLabelPattern{
         enclosed{"{0} — Adjunto"}
         extended{"{0} — Extendido"}

@@ -229,6 +229,9 @@ static void adjustDecimalFormat(
     if (tuple.negativeSuffixFlag) {
         fmt.setNegativeSuffix(tuple.negativeSuffix);
     }
+    if (tuple.signAlwaysShownFlag) {
+        // Not currently supported
+    }
     if (tuple.localizedPatternFlag) {
         UErrorCode status = U_ZERO_ERROR;
         fmt.applyLocalizedPattern(tuple.localizedPattern, status);
@@ -624,6 +627,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test13327_numberingSystemBufferOverflow);
   TESTCASE_AUTO(Test13391_chakmaParsing);
   TESTCASE_AUTO(Test11035_FormatCurrencyAmount);
+  TESTCASE_AUTO(Test11318_DoubleConversion);
   TESTCASE_AUTO_END;
 }
 
@@ -8947,6 +8951,16 @@ void NumberFormatTest::Test11035_FormatCurrencyAmount() {
     if (!logKnownIssue("13574")) {
         assertEquals("Custom Currency Pattern, Set Currency", expected, actualSetCurrency);
     }
+}
+
+void NumberFormatTest::Test11318_DoubleConversion() {
+    IcuTestErrorCode status(*this, "Test11318_DoubleConversion");
+    LocalPointer<NumberFormat> nf(NumberFormat::createInstance("en", status));
+    nf->setMaximumFractionDigits(40);
+    nf->setMaximumIntegerDigits(40);
+    UnicodeString appendTo;
+    nf->format(999999999999999.9, appendTo);
+    assertEquals("Should render all digits", u"999,999,999,999,999.9", appendTo);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

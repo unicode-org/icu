@@ -51,6 +51,7 @@ it{
         aro{"araona"}
         arp{"arapaho"}
         arq{"arabo algerino"}
+        ars{"arabo, najd"}
         arw{"aruaco"}
         ary{"arabo marocchino"}
         arz{"arabo egiziano"}
@@ -1019,7 +1020,7 @@ it{
         VALENCIA{"valenziano"}
         WADEGILE{"romanizzazione Wade-Giles"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.40"}
     characterLabelPattern{
         all{"{0} — Tutto"}
         category-list{"{0}: {1}"}

@@ -50,6 +50,7 @@ README text !eol
 
 icu4c/icu4c.css -text
 icu4c/source/aclocal.m4 -text
+icu4c/source/allinone/Windows.CopyUnicodeHeaderFiles.targets -text
 icu4c/source/config/m4/icu-conditional.m4 -text
 icu4c/source/data/curr/pool.res -text
 icu4c/source/data/in/coll/ucadata-implicithan.icu -text
@@ -601,6 +602,18 @@ tools/unicodetools/com/ibm/rbm/gui/images/tree_icon_item.gif -text
 tools/unicodetools/com/ibm/rbm/gui/images/tree_icon_language.gif -text
 tools/unicodetools/com/ibm/rbm/gui/images/tree_icon_project.gif -text
 tools/unicodetools/com/ibm/rbm/gui/images/tree_icon_variant.gif -text
+vendor/double-conversion/UPDATING.md -text
+vendor/double-conversion/upstream/AUTHORS -text
+vendor/double-conversion/upstream/BUILD -text
+vendor/double-conversion/upstream/COPYING -text
+vendor/double-conversion/upstream/Changelog -text
+vendor/double-conversion/upstream/LICENSE -text
+vendor/double-conversion/upstream/README.md -text
+vendor/double-conversion/upstream/SConstruct -text
+vendor/double-conversion/upstream/WORKSPACE -text
+vendor/double-conversion/upstream/double-conversion/SConscript -text
+vendor/double-conversion/upstream/msvc/testrunner.cmd -text
+vendor/double-conversion/upstream/test/cctest/SConscript -text
 
 # The following file types are stored in Git-LFS.
 *.jar filter=lfs diff=lfs merge=lfs -text

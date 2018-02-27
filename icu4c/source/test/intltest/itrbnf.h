@@ -147,6 +147,7 @@ class IntlTestRBNF : public IntlTest {
     void TestRounding();
     void TestLargeNumbers();
     void TestCompactDecimalFormatStyle();
+    void TestParseFailure();
 
 protected:
   virtual void doTest(RuleBasedNumberFormat* formatter, const char* const testData[][2], UBool testParsing);

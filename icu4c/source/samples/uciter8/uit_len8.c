@@ -551,7 +551,7 @@ uiter_setLenient8(UCharIterator *iter, const char *s, int32_t length) {
             if(length>=0) {
                 iter->limit=length;
             } else {
-                iter->limit=strlen(s);
+                iter->limit=(int32_t)strlen(s);
             }
             iter->length= iter->limit<=1 ? iter->limit : -1;
         } else {

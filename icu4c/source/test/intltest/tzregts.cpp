@@ -12,6 +12,7 @@
 #include "unicode/simpletz.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/strenum.h"
+#include "unicode/gregocal.h"
 #include "tzregts.h"
 #include "calregts.h"
 #include "cmemory.h"
@@ -46,6 +47,7 @@ TimeZoneRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(16, TestJDK12API);
         CASE(17, Test4176686);
         CASE(18, Test4184229);
+        CASE(19, TestNegativeDaylightSaving);
         default: name = ""; break;
     }
 }
@@ -709,10 +711,10 @@ TimeZoneRegressionTest::Test4154525()
     int32_t DATA [] = {
         1, GOOD,
         0, BAD,
-        -1, BAD,
+        -1, GOOD,   // #13566 updates SimpleTimeZone to support negative DST saving amount
         60*60*1000, GOOD,
-        INT32_MIN, BAD,
-        // Integer.MAX_VALUE, ?, // no upper limit on DST savings at this time
+        INT32_MAX, GOOD,    // no upper limit on DST savings at this time
+        INT32_MIN, GOOD     // no lower limit as well
     };
 
     UErrorCode status = U_ZERO_ERROR;
@@ -1205,5 +1207,62 @@ void TimeZoneRegressionTest::Test4184229() {
     }
     delete zone;
 }
+
+void TimeZoneRegressionTest::TestNegativeDaylightSaving() {
+    UErrorCode status = U_ZERO_ERROR;
+    int32_t stdOff = 1 * 60*60*1000;    // Standard offset UTC+1
+    int save = -1 * 60*60*1000;     // DST saving amount -1 hour
+    SimpleTimeZone stzDublin(stdOff, "Dublin-2018",
+                                UCAL_OCTOBER, -1, -UCAL_SUNDAY, 2*60*60*1000,
+                                UCAL_MARCH, -1, -UCAL_SUNDAY, 1*60*60*1000,
+                                save, status);
+    failure(status, "SimpleTimeZone constructor");
+
+    if (save != stzDublin.getDSTSavings()) {
+        errln((UnicodeString)"FAIL: DST saving is not " + save);
+    }
+
+    GregorianCalendar cal(* TimeZone::getGMT(), status);
+    failure(status, "GregorianCalendar constructor");
+
+    UDate testDate;
+    int32_t rawOffset;
+    int32_t dstOffset;
+
+    cal.set(2018, UCAL_JANUARY, 15, 0, 0, 0);
+    testDate = cal.getTime(status);
+    failure(status, "calendar getTime() - Jan 15");
+
+    if (!stzDublin.inDaylightTime(testDate, status)) {
+        errln("FAIL: The test date (Jan 15) must be in DST.");
+    }
+    failure(status, "inDaylightTime() - Jan 15");
+
+    stzDublin.getOffset(testDate, FALSE, rawOffset, dstOffset, status);
+    failure(status, "getOffset() - Jan 15");
+    if (rawOffset != stdOff || dstOffset != save) {
+        errln((UnicodeString)"FAIL: Expected [stdoff=" + stdOff + ",save=" + save
+            + "] on the test date (Jan 15), actual[stdoff=" + rawOffset
+            + ",save=" + dstOffset + "]");
+    }
+
+    cal.set(2018, UCAL_JULY, 15, 0, 0, 0);
+    testDate = cal.getTime(status);
+    failure(status, "calendar getTime() - Jul 15");
+
+    if (stzDublin.inDaylightTime(testDate, status)) {
+        errln("FAIL: The test date (Jul 15) must be in DST.");
+    }
+    failure(status, "inDaylightTime() - Jul 15");
+
+    stzDublin.getOffset(testDate, FALSE, rawOffset, dstOffset, status);
+    failure(status, "getOffset() - Jul 15");
+    if (rawOffset != stdOff || dstOffset != 0) {
+        errln((UnicodeString)"FAIL: Expected [stdoff=" + stdOff + ",save=" + 0
+            + "] on the test date (Jul 15), actual[stdoff=" + rawOffset
+            + ",save=" + dstOffset + "]");
+    }
+}
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

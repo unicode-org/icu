@@ -46,6 +46,7 @@ da{
         arc{"aramæisk"}
         arn{"mapudungun"}
         arp{"arapaho"}
+        ars{"najd-arabisk"}
         arw{"arawak"}
         as{"assamesisk"}
         asa{"asu"}
@@ -556,6 +557,7 @@ da{
     Languages%short{
         az{"azeri"}
         en_GB{"engelsk (UK)"}
+        en_US{"en-US"}
     }
     Languages%variant{
         ps{"pushto"}
@@ -956,7 +958,7 @@ da{
         VALLADER{"vallader"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
     characterLabelPattern{
         all{"{0} – alle"}
         category-list{"{0}: {1}"}

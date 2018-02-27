@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 it{
-    Version{"2.1.37.1"}
+    Version{"2.1.39.40"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -826,7 +826,7 @@ it{
             }
             month{
                 dnam{"mese"}
-                one{"{0}mesi"}
+                one{"{0}mese"}
                 other{"{0}mesi"}
             }
             second{

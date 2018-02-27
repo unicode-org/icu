@@ -532,6 +532,37 @@ public class DecimalQuantityTest extends TestFmwk {
         assertFalse("10^20 should not fit", quantity.fitsInLong());
     }
 
+    @Test
+    public void testHardDoubleConversion() {
+        // This test is somewhat duplicated from previous tests, but it is needed
+        // for ICU4C compatibility.
+        Object[][] cases = {
+                { 512.0000000000017, "512.0000000000017" },
+                { 4095.9999999999977, "4095.9999999999977" },
+                { 4095.999999999998, "4095.999999999998" },
+                { 4095.9999999999986, "4095.9999999999986" },
+                { 4095.999999999999, "4095.999999999999" },
+                { 4095.9999999999995, "4095.9999999999995" },
+                { 4096.000000000001, "4096.000000000001" },
+                { 4096.000000000002, "4096.000000000002" },
+                { 4096.000000000003, "4096.000000000003" },
+                { 4096.000000000004, "4096.000000000004" },
+                { 4096.000000000005, "4096.000000000005" },
+                { 4096.0000000000055, "4096.0000000000055" },
+                { 4096.000000000006, "4096.000000000006" },
+                { 4096.000000000007, "4096.000000000007" } };
+
+        for (Object[] cas : cases) {
+            double input = (Double) cas[0];
+            String expectedOutput = (String) cas[1];
+
+            DecimalQuantity q = new DecimalQuantity_DualStorageBCD(input);
+            q.roundToInfinity();
+            String actualOutput = q.toPlainString();
+            assertEquals("", expectedOutput, actualOutput);
+        }
+    }
+
     static void assertDoubleEquals(String message, double d1, double d2) {
         boolean equal = (Math.abs(d1 - d2) < 1e-6) || (Math.abs((d1 - d2) / d1) < 1e-6);
         handleAssert(equal, message, d1, d2, null, false);

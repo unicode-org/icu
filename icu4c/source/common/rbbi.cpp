@@ -65,7 +65,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedBreakIterator)
  * tables object that is passed in as a parameter.
  */
 RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status)
- : fSCharIter(UnicodeString())
+ : fText(UTEXT_INITIALIZER), fSCharIter(UnicodeString())
 {
     init(status);
     fData = new RBBIDataWrapper(data, status); // status checked in constructor
@@ -83,7 +83,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode 
 RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
                        uint32_t       ruleLength,
                        UErrorCode     &status)
- : fSCharIter(UnicodeString())
+ : fText(UTEXT_INITIALIZER), fSCharIter(UnicodeString())
 {
     init(status);
     if (U_FAILURE(status)) {
@@ -114,7 +114,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
 //
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &status)
- : fSCharIter(UnicodeString())
+ : fText(UTEXT_INITIALIZER), fSCharIter(UnicodeString())
 {
     init(status);
     fData = new RBBIDataWrapper(udm, status); // status checked in constructor
@@ -135,7 +135,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &sta
 RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
                                                 UParseError          &parseError,
                                                 UErrorCode           &status)
- : fSCharIter(UnicodeString())
+ : fText(UTEXT_INITIALIZER), fSCharIter(UnicodeString())
 {
     init(status);
     if (U_FAILURE(status)) {return;}
@@ -159,7 +159,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
 //                           of rules.
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator()
- : fSCharIter(UnicodeString())
+ : fText(UTEXT_INITIALIZER), fSCharIter(UnicodeString())
 {
     UErrorCode status = U_ZERO_ERROR;
     init(status);
@@ -174,7 +174,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator()
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& other)
 : BreakIterator(other),
-  fSCharIter(UnicodeString())
+  fText(UTEXT_INITIALIZER), fSCharIter(UnicodeString())
 {
     UErrorCode status = U_ZERO_ERROR;
     this->init(status);
@@ -222,7 +222,6 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
     }
     BreakIterator::operator=(that);
 
-    fBreakType = that.fBreakType;
     if (fLanguageBreakEngines != NULL) {
         delete fLanguageBreakEngines;
         fLanguageBreakEngines = NULL;   // Just rebuild for now
@@ -278,18 +277,12 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
 //
 //-----------------------------------------------------------------------------
 void RuleBasedBreakIterator::init(UErrorCode &status) {
-    fText                 = UTEXT_INITIALIZER;
     fCharIter             = NULL;
     fData                 = NULL;
     fPosition             = 0;
     fRuleStatusIndex      = 0;
     fDone                 = false;
     fDictionaryCharCount  = 0;
-    fBreakType            = UBRK_WORD;  // Defaulting BreakType to word gives reasonable
-                                        //   dictionary behavior for Break Iterators that are
-                                        //   built from rules.  Even better would be the ability to
-                                        //   declare the type in the rules.
-
     fLanguageBreakEngines = NULL;
     fUnhandledBreakEngine = NULL;
     fBreakCache           = NULL;
@@ -1239,7 +1232,7 @@ static void U_CALLCONV initLanguageFactories() {
 
 
 static const LanguageBreakEngine*
-getLanguageBreakEngineFromFactory(UChar32 c, int32_t breakType)
+getLanguageBreakEngineFromFactory(UChar32 c)
 {
     umtx_initOnce(gLanguageBreakFactoriesInitOnce, &initLanguageFactories);
     if (gLanguageBreakFactories == NULL) {
@@ -1250,7 +1243,7 @@ getLanguageBreakEngineFromFactory(UChar32 c, int32_t breakType)
     const LanguageBreakEngine *lbe = NULL;
     while (--i >= 0) {
         LanguageBreakFactory *factory = (LanguageBreakFactory *)(gLanguageBreakFactories->elementAt(i));
-        lbe = factory->getEngineFor(c, breakType);
+        lbe = factory->getEngineFor(c);
         if (lbe != NULL) {
             break;
         }
@@ -1282,14 +1275,14 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
     int32_t i = fLanguageBreakEngines->size();
     while (--i >= 0) {
         lbe = (const LanguageBreakEngine *)(fLanguageBreakEngines->elementAt(i));
-        if (lbe->handles(c, fBreakType)) {
+        if (lbe->handles(c)) {
             return lbe;
         }
     }
 
     // No existing dictionary took the character. See if a factory wants to
     // give us a new LanguageBreakEngine for this character.
-    lbe = getLanguageBreakEngineFromFactory(c, fBreakType);
+    lbe = getLanguageBreakEngineFromFactory(c);
 
     // If we got one, use it and push it on our stack.
     if (lbe != NULL) {
@@ -1305,6 +1298,7 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
         fUnhandledBreakEngine = new UnhandledEngine(status);
         if (U_SUCCESS(status) && fUnhandledBreakEngine == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
         }
         // Put it last so that scripts for which we have an engine get tried
         // first.
@@ -1319,23 +1313,17 @@ RuleBasedBreakIterator::getLanguageBreakEngine(UChar32 c) {
 
     // Tell the reject engine about the character; at its discretion, it may
     // add more than just the one character.
-    fUnhandledBreakEngine->handleCharacter(c, fBreakType);
+    fUnhandledBreakEngine->handleCharacter(c);
 
     return fUnhandledBreakEngine;
 }
 
-
-
-/*int32_t RuleBasedBreakIterator::getBreakType() const {
-    return fBreakType;
-}*/
-
-void RuleBasedBreakIterator::setBreakType(int32_t type) {
-    fBreakType = type;
-}
-
 void RuleBasedBreakIterator::dumpCache() {
     fBreakCache->dumpCache();
+}
+
+void RuleBasedBreakIterator::dumpTables() {
+    fData->printData();
 }
 
 /**

@@ -480,19 +480,17 @@ public final class UCharacterCaseTest extends TestFmwk
                 }
             }
             else {
-                if (!SPECIAL_DATA_[j + 1].equals(
-                     UCharacter.toLowerCase(str))) {
+                String lower = UCharacter.toLowerCase(str);
+                if (!SPECIAL_DATA_[j + 1].equals(lower)) {
                     errln("error lowercasing special characters " +
                         hex(str) + " expected " + SPECIAL_DATA_[j + 1] +
-                        " but got " +
-                        hex(UCharacter.toLowerCase(locale, str)));
+                        " but got " + hex(lower));
                 }
-                if (!SPECIAL_DATA_[j + 2].equals(
-                     UCharacter.toUpperCase(locale, str))) {
+                String upper = UCharacter.toUpperCase(str);
+                if (!SPECIAL_DATA_[j + 2].equals(upper)) {
                     errln("error uppercasing special characters " +
                         hex(str) + " expected " + SPECIAL_DATA_[j + 2] +
-                        " but got " +
-                        hex(UCharacter.toUpperCase(locale, str)));
+                        " but got " + hex(upper));
                 }
             }
         }

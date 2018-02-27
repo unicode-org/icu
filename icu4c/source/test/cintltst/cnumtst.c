@@ -2372,7 +2372,7 @@ static const NumSysTestItem numSysTestItems[] = {
     { "en",                          "latn",    10,  FALSE,  latnDesc },
     { "en@numbers=roman",            "roman",   10,  TRUE,   romanDesc },
     { "en@numbers=finance",          "latn",    10,  FALSE,  latnDesc },
-    { "ar",                          "arab",    10,  FALSE,  arabDesc },
+    { "ar-EG",                       "arab",    10,  FALSE,  arabDesc },
     { "fa",                          "arabext", 10,  FALSE,  arabextDesc },
     { "zh_Hans@numbers=hanidec",     "hanidec", 10,  FALSE,  hanidecDesc },
     { "zh_Hant@numbers=traditional", "hant",    10,  TRUE,   hantDesc },

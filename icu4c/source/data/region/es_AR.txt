@@ -12,5 +12,5 @@ es_AR{
     Countries%short{
         GB{"RU"}
     }
-    Version{"2.1.37.22"}
+    Version{"2.1.38.39"}
 }

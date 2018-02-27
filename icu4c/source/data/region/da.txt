@@ -31,6 +31,7 @@ da{
         151{"Østeuropa"}
         154{"Nordeuropa"}
         155{"Vesteuropa"}
+        202{"Afrika syd for Sahara"}
         419{"Latinamerika"}
         AC{"Ascensionøen"}
         AD{"Andorra"}
@@ -310,5 +311,5 @@ da{
         MK{"Den tidligere jugoslaviske republik Makedonien"}
         TL{"Østtimor"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.20"}
 }

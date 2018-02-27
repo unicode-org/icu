@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ce{
-    Version{"2.1.37.5"}
+    Version{"2.1.39.11"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -303,6 +303,9 @@ ce{
         "America:El_Salvador"{
             ec{"Сальвадор"}
         }
+        "America:Fort_Nelson"{
+            ec{"Форт Нельсон"}
+        }
         "America:Fortaleza"{
             ec{"Форталеза"}
         }
@@ -503,6 +506,9 @@ ce{
         }
         "America:Puerto_Rico"{
             ec{"Пуэрто-Рико"}
+        }
+        "America:Punta_Arenas"{
+            ec{"Пунта-Аренас"}
         }
         "America:Rainy_River"{
             ec{"Рейни-Ривер"}
@@ -707,6 +713,9 @@ ce{
         }
         "Asia:Dushanbe"{
             ec{"Душанбе"}
+        }
+        "Asia:Famagusta"{
+            ec{"Фамагуста"}
         }
         "Asia:Gaza"{
             ec{"Газа"}
@@ -1278,7 +1287,7 @@ ce{
             ec{"Уоллис"}
         }
         "meta:Afghanistan"{
-            ls{"ОвхӀан мохк"}
+            ls{"ОвхӀан"}
         }
         "meta:Africa_Central"{
             ls{"Юккъера Африка"}
@@ -1422,9 +1431,9 @@ ce{
             ls{"Чили, стандартан хан"}
         }
         "meta:China"{
-            ld{"Китай, аьхкенан хан"}
-            lg{"Китай"}
-            ls{"Китай, стандартан хан"}
+            ld{"Цийчоьнан, аьхкенан хан"}
+            lg{"Цийчоь"}
+            ls{"Цийчоьнан, стандартан хан"}
         }
         "meta:Choibalsan"{
             ld{"Чойбалсан, аьхкенан хан"}
@@ -1552,7 +1561,7 @@ ce{
             ls{"Ховд, стандартан хан"}
         }
         "meta:India"{
-            ls{"Инди"}
+            ls{"ХӀинди"}
         }
         "meta:Indian_Ocean"{
             ls{"Индин океан"}
@@ -1585,9 +1594,9 @@ ce{
             ls{"Израиль, стандартан хан"}
         }
         "meta:Japan"{
-            ld{"Япони, аьхкенан хан"}
-            lg{"Япони"}
-            ls{"Япони, стандартан хан"}
+            ld{"Япон, аьхкенан хан"}
+            lg{"Япон"}
+            ls{"Япон, стандартан хан"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Малхбален Казахстан"}
@@ -1751,6 +1760,9 @@ ce{
         }
         "meta:Ponape"{
             ls{"Понапе, гӀ-наш"}
+        }
+        "meta:Pyongyang"{
+            ls{"Пхеньян"}
         }
         "meta:Reunion"{
             ls{"Реюньон"}

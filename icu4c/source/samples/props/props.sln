@@ -12,12 +12,12 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}.Debug|Win32.ActiveCfg = Debug|Win32
 		{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}.Debug|Win32.Build.0 = Debug|Win32
-		{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}.Debug|x64.ActiveCfg = Debug|Win32
-		{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}.Debug|x64.Build.0 = Debug|Win32
+		{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}.Debug|x64.ActiveCfg = Debug|x64
+		{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}.Debug|x64.Build.0 = Debug|x64
 		{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}.Release|Win32.ActiveCfg = Release|Win32
 		{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}.Release|Win32.Build.0 = Release|Win32
-		{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}.Release|x64.ActiveCfg = Release|Win32
-		{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}.Release|x64.Build.0 = Release|Win32
+		{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}.Release|x64.ActiveCfg = Release|x64
+		{ABE4CD17-8ED8-4DE6-ABDE-CDEFC220CF60}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

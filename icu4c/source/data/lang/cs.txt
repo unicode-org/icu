@@ -51,6 +51,7 @@ cs{
         aro{"araonština"}
         arp{"arapažština"}
         arq{"arabština (alžírská)"}
+        ars{"arabština (nadžd)"}
         arw{"arawacké jazyky"}
         ary{"arabština (marocká)"}
         arz{"arabština (egyptská)"}
@@ -960,7 +961,7 @@ cs{
         SCOTLAND{"angličtina (Skotsko)"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.37.11"}
+    Version{"2.1.39.15"}
     characterLabelPattern{
         all{"{0} – vše"}
         category-list{"{0}: {1}"}

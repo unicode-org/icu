@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 chr{
-    Version{"2.1.37.1"}
+    Version{"2.1.39.11"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -147,10 +147,10 @@ chr{
             }
         }
         coordinate{
-            east{"{0}Ꮧ"}
-            north{"{0}ᏧᏴ"}
-            south{"{0}ᏧᎦ"}
-            west{"{0}Ꮽ"}
+            east{"{0} ᏗᎧᎸᎬ"}
+            north{"{0} ᏧᏴᏢ"}
+            south{"{0} ᏧᎦᏄᏮ"}
+            west{"{0} ᏭᏕᎵᎬ"}
         }
         digital{
             bit{
@@ -994,10 +994,10 @@ chr{
             }
         }
         coordinate{
-            east{"{0}Ꮧ"}
-            north{"{0}ᏧᏴ"}
-            south{"{0}ᏧᎦ"}
-            west{"{0}Ꮽ"}
+            east{"{0} Ꮧ"}
+            north{"{0} ᏧᏴ"}
+            south{"{0} ᏧᎦ"}
+            west{"{0} Ꮽ"}
         }
         digital{
             bit{

@@ -46,6 +46,7 @@ pt{
         arc{"aramaico"}
         arn{"mapudungun"}
         arp{"arapaho"}
+        ars{"árabe - Négede"}
         arw{"arauaqui"}
         as{"assamês"}
         asa{"asu"}
@@ -879,7 +880,7 @@ pt{
         VALENCIA{"valenciano"}
         WADEGILE{"romanização Wade-Giles"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.20"}
     characterLabelPattern{
         all{"{0} — Tudo"}
         category-list{"{0}: {1}"}

@@ -31,6 +31,7 @@ nl{
         151{"Oost-Europa"}
         154{"Noord-Europa"}
         155{"West-Europa"}
+        202{"Sub-Saharaans Afrika"}
         419{"Latijns-Amerika"}
         AC{"Ascension"}
         AD{"Andorra"}
@@ -311,5 +312,5 @@ nl{
         MK{"Macedonië (FYROM)"}
         TL{"Democratische Republiek Oost-Timor"}
     }
-    Version{"2.1.37.1"}
+    Version{"2.1.39.20"}
 }

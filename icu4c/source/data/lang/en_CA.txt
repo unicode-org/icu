@@ -13,6 +13,13 @@ en_CA{
             dangi{"Korean Calendar"}
             ethiopic{"Ethiopian Calendar"}
         }
+        d0{
+            fwidth{"To Full Width"}
+            hwidth{"To Half Width"}
+            lower{"To Lower Case"}
+            title{"To Title Case"}
+            upper{"To Upper Case"}
+        }
     }
-    Version{"2.1.37.22"}
+    Version{"2.1.38.73"}
 }

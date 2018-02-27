@@ -31,6 +31,7 @@ sk{
         151{"východná Európa"}
         154{"severná Európa"}
         155{"západná Európa"}
+        202{"subsaharská Afrika"}
         419{"Latinská Amerika"}
         AC{"Ascension"}
         AD{"Andorra"}
@@ -307,5 +308,5 @@ sk{
         FK{"Falklandy (Malvíny)"}
         MK{"Macedónsko (BJRM)"}
     }
-    Version{"2.1.37.5"}
+    Version{"2.1.39.11"}
 }

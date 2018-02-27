@@ -16,5 +16,5 @@ ar_SA{
     Countries%variant{
         CZ{"التشيك"}
     }
-    Version{"2.1.37.6"}
+    Version{"2.1.38.80"}
 }

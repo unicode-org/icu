@@ -130,7 +130,7 @@ zh_Hant_HK{
         SCOTLAND{"蘇格蘭標準英語"}
         SOTAV{"SOTAV"}
     }
-    Version{"2.1.37.6"}
+    Version{"2.1.39.11"}
     characterLabelPattern{
         enclosed{"{0} — 包含"}
         historic{"{0} — 舊式"}

@@ -12,12 +12,12 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{721FBD47-E458-4C35-90DA-FF192907D5E2}.Debug|Win32.ActiveCfg = Debug|Win32
 		{721FBD47-E458-4C35-90DA-FF192907D5E2}.Debug|Win32.Build.0 = Debug|Win32
-		{721FBD47-E458-4C35-90DA-FF192907D5E2}.Debug|x64.ActiveCfg = Debug|Win32
-		{721FBD47-E458-4C35-90DA-FF192907D5E2}.Debug|x64.Build.0 = Debug|Win32
+		{721FBD47-E458-4C35-90DA-FF192907D5E2}.Debug|x64.ActiveCfg = Debug|x64
+		{721FBD47-E458-4C35-90DA-FF192907D5E2}.Debug|x64.Build.0 = Debug|x64
 		{721FBD47-E458-4C35-90DA-FF192907D5E2}.Release|Win32.ActiveCfg = Release|Win32
 		{721FBD47-E458-4C35-90DA-FF192907D5E2}.Release|Win32.Build.0 = Release|Win32
-		{721FBD47-E458-4C35-90DA-FF192907D5E2}.Release|x64.ActiveCfg = Release|Win32
-		{721FBD47-E458-4C35-90DA-FF192907D5E2}.Release|x64.Build.0 = Release|Win32
+		{721FBD47-E458-4C35-90DA-FF192907D5E2}.Release|x64.ActiveCfg = Release|x64
+		{721FBD47-E458-4C35-90DA-FF192907D5E2}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

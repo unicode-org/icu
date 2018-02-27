@@ -409,6 +409,8 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
 
     void readDecNumberToBcd(decNumber *dn);
 
+    void readDoubleConversionToBcd(const char* buffer, int32_t length, int32_t point);
+
     void copyBcdFrom(const DecimalQuantity &other);
 
     /**

@@ -102,10 +102,25 @@
         <matches string="${java.version}" pattern="9((-.|\.\d).*)?"/>
     </condition>
 
+    <condition property="is.java10">
+        <matches string="${java.version}" pattern="10((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java11">
+        <matches string="${java.version}" pattern="11((-.|\.\d).*)?"/>
+    </condition>
+
+    <condition property="is.java12">
+        <matches string="${java.version}" pattern="12((-.|\.\d).*)?"/>
+    </condition>
+
     <condition property="is.java8.plus">
         <or>
             <isset property="is.java8"/>
             <isset property="is.java9"/>
+            <isset property="is.java10"/>
+            <isset property="is.java11"/>
+            <isset property="is.java12"/>
         </or>
     </condition>
 
