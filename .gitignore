@@ -87,6 +87,7 @@ icu4c/source/extra/scrptrun/srtest.d
 icu4c/source/extra/uconv/*.d
 icu4c/source/extra/uconv/*.o
 icu4c/source/extra/uconv/*.vcxproj.user
+icu4c/source/extra/uconv/.vs
 icu4c/source/extra/uconv/Debug
 icu4c/source/extra/uconv/Makefile
 icu4c/source/extra/uconv/Release
@@ -139,6 +140,7 @@ icu4c/source/layoutex/*.d
 icu4c/source/layoutex/*.o
 icu4c/source/layoutex/*.pdb
 icu4c/source/layoutex/*.vcxproj.user
+icu4c/source/layoutex/.vs
 icu4c/source/layoutex/Debug
 icu4c/source/layoutex/Makefile
 icu4c/source/layoutex/Release
@@ -907,6 +909,7 @@ icu4c/source/tools/toolutil/x64
 icu4c/source/tools/toolutil/x86
 icu4c/source/tools/tzcode/*.ao
 icu4c/source/tools/tzcode/*.o
+icu4c/source/tools/tzcode/.vs
 icu4c/source/tools/tzcode/Makefile
 icu4c/source/uconfig.h.prepend
 icu4j/*.jar

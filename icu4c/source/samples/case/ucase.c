@@ -63,7 +63,7 @@ int c_main(UFILE *out)
   u_fprintf(out, "u_strToLower(%S, turkish) -> %S\n", upper, buffer);
 
 
-  /* ustring.h APIs, UChar * string case mapping with a Engish locale */
+  /* ustring.h APIs, UChar * string case mapping with a English locale */
   /* result buffer = "ABI" latin CAPITAL letter A, latin capital letter B,
      latin capital letter I */
   length = u_strToUpper(buffer, sizeof(buffer)/sizeof(buffer[0]), upper, 
