@@ -448,7 +448,8 @@ struct FormatThreadTestData
 // "Someone from {2} is receiving a #{0} error - {1}. Their telephone call is costing {3 number,currency}."
 
 static void formatErrorMessage(UErrorCode &realStatus, const UnicodeString& pattern, const Locale& theLocale,
-                     UErrorCode inStatus0, /* statusString 1 */ const Locale &inCountry2, double currency3, // these numbers are the message arguments.
+                     UErrorCode inStatus0,                       // statusString 1
+                     const Locale &inCountry2, double currency3, // these numbers are the message arguments.
                      UnicodeString &result)
 {
     if(U_FAILURE(realStatus))
@@ -666,13 +667,13 @@ public:
         // Keep this data here to avoid static initialization.
         FormatThreadTestData kNumberFormatTestData[] =
         {
-            FormatThreadTestData((double)5.0, UnicodeString("5", "")),
-                FormatThreadTestData( 6.0, UnicodeString("6", "")),
-                FormatThreadTestData( 20.0, UnicodeString("20", "")),
-                FormatThreadTestData( 8.0, UnicodeString("8", "")),
-                FormatThreadTestData( 8.3, UnicodeString("8.3", "")),
-                FormatThreadTestData( 12345, UnicodeString("12,345", "")),
-                FormatThreadTestData( 81890.23, UnicodeString("81,890.23", "")),
+            FormatThreadTestData((double)5.0, UnicodeString(u"5")),
+                FormatThreadTestData( 6.0, UnicodeString(u"6")),
+                FormatThreadTestData( 20.0, UnicodeString(u"20")),
+                FormatThreadTestData( 8.0, UnicodeString(u"8")),
+                FormatThreadTestData( 8.3, UnicodeString(u"8.3")),
+                FormatThreadTestData( 12345, UnicodeString(u"12,345")),
+                FormatThreadTestData( 81890.23, UnicodeString(u"81,890.23")),
         };
         int32_t kNumberFormatTestDataLength = UPRV_LENGTHOF(kNumberFormatTestData);
 
@@ -1388,7 +1389,7 @@ const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
     } else {
         result->addRef();
     }
-    
+ 
     // Log that we created an object. The first object was already counted,
     //    don't do it again.
     umtx_lock(&gCTMutex);
@@ -1451,7 +1452,7 @@ void UnifiedCacheThread::exerciseByLocale(const Locale &locale) {
 
 void UnifiedCacheThread::run() {
     // Run the exercise with 2 different locales so that we can exercise
-    // eviction more. If each thread exerices just one locale, then
+    // eviction more. If each thread exercises just one locale, then
     // eviction can't start until the threads end.
     exerciseByLocale(fLoc);
     exerciseByLocale(fLoc2);
