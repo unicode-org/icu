@@ -110,6 +110,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug12519);
     TESTCASE_AUTO(TestBug12677);
     TESTCASE_AUTO(TestTableRedundancies);
+    TESTCASE_AUTO(TestBug13447);
     TESTCASE_AUTO_END;
 }
 
@@ -4518,6 +4519,21 @@ void RBBITest::TestTableRedundancies() {
     }
 }
 
+void RBBITest::TestBug13447() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<RuleBasedBreakIterator> bi(
+        (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status));
+    assertSuccess(WHERE, status);
+    if (U_FAILURE(status)) return;
+    UnicodeString data(u"1234");
+    bi->setText(data);
+    assertEquals(WHERE, UBRK_WORD_NONE, bi->getRuleStatus());
+    assertEquals(WHERE, 4, bi->next());
+    assertEquals(WHERE, UBRK_WORD_NUMBER, bi->getRuleStatus());
+    assertEquals(WHERE, UBRK_DONE, bi->next());
+    assertEquals(WHERE, 4, bi->current());
+    assertEquals(WHERE, UBRK_WORD_NUMBER, bi->getRuleStatus());
+}
 
 //
 //  TestDebug    -  A place-holder test for debugging purposes.

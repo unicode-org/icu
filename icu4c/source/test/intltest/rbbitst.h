@@ -76,6 +76,7 @@ public:
     void TestBug12519();
     void TestBug12677();
     void TestTableRedundancies();
+    void TestBug13447();
 
     void TestDebug();
     void TestProperties();
