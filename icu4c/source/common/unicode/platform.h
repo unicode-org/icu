@@ -749,8 +749,10 @@ namespace std {
 #else
     /*
      * Notes:
-     * Visual Studio 10 (_MSC_VER>=1600) defines char16_t but
-     * does not support u"abc" string literals.
+     * Visual Studio 2010 (_MSC_VER==1600) defines char16_t as a typedef
+     * and does not support u"abc" string literals.
+     * Visual Studio 2015 (_MSC_VER>=1900) and above adds support for
+     * both char16_t and u"abc" string literals.
      * gcc 4.4 defines the __CHAR16_TYPE__ macro to a usable type but
      * does not support u"abc" string literals.
      * C++11 and C11 require support for UTF-16 literals
