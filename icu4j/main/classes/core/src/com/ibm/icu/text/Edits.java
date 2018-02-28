@@ -10,8 +10,7 @@ import java.util.Arrays;
  * Supports replacements, insertions, deletions in linear progression.
  * Does not support moving/reordering of text.
  *
- * @draft ICU 59
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 59
  */
 public final class Edits {
     // 0000uuuuuuuuuuuu records u+1 unchanged text units.
@@ -40,8 +39,7 @@ public final class Edits {
 
     /**
      * Constructs an empty object.
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public Edits() {
         array = new char[STACK_CAPACITY];
@@ -49,8 +47,7 @@ public final class Edits {
 
     /**
      * Resets the data but may not release memory.
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public void reset() {
         length = delta = numChanges = 0;
@@ -66,8 +63,7 @@ public final class Edits {
     /**
      * Adds a record for an unchanged segment of text.
      * Normally called from inside ICU string transformation functions, not user code.
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public void addUnchanged(int unchangedLength) {
         if(unchangedLength < 0) {
@@ -99,8 +95,7 @@ public final class Edits {
     /**
      * Adds a record for a text replacement/insertion/deletion.
      * Normally called from inside ICU string transformation functions, not user code.
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public void addReplace(int oldLength, int newLength) {
         if(oldLength < 0 || newLength < 0) {
@@ -197,14 +192,12 @@ public final class Edits {
     /**
      * How much longer is the new text compared with the old text?
      * @return new length minus old length
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public int lengthDelta() { return delta; }
     /**
      * @return true if there are any change edits
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public boolean hasChanges()  { return numChanges != 0; }
 
@@ -219,8 +212,7 @@ public final class Edits {
      * Access to the list of edits.
      * @see #getCoarseIterator
      * @see #getFineIterator
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public static final class Iterator {
         private final char[] array;
@@ -291,8 +283,7 @@ public final class Edits {
         /**
          * Advances to the next edit.
          * @return true if there is another edit
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         public boolean next() {
             return next(onlyChanges_);
@@ -511,8 +502,7 @@ public final class Edits {
          *
          * @param i source index
          * @return true if the edit for the source index was found
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         public boolean findSourceIndex(int i) {
             return findIndex(i, true) == 0;
@@ -707,41 +697,35 @@ public final class Edits {
         /**
          * @return true if this edit replaces oldLength() units with newLength() different ones.
          *         false if oldLength units remain unchanged.
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         public boolean hasChange() { return changed; }
         /**
          * @return the number of units in the original string which are replaced or remain unchanged.
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         public int oldLength() { return oldLength_; }
         /**
          * @return the number of units in the modified string, if hasChange() is true.
          *         Same as oldLength if hasChange() is false.
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         public int newLength() { return newLength_; }
 
         /**
          * @return the current index into the source string
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         public int sourceIndex() { return srcIndex; }
         /**
          * @return the current index into the replacement-characters-only string,
          *         not counting unchanged spans
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         public int replacementIndex() { return replIndex; }
         /**
          * @return the current index into the full destination string
-         * @draft ICU 59
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 59
          */
         public int destinationIndex() { return destIndex; }
     };
@@ -750,8 +734,7 @@ public final class Edits {
      * Returns an Iterator for coarse-grained changes for simple string updates.
      * Skips non-changes.
      * @return an Iterator that merges adjacent changes.
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public Iterator getCoarseChangesIterator() {
         return new Iterator(array, length, true, true);
@@ -760,8 +743,7 @@ public final class Edits {
     /**
      * Returns an Iterator for coarse-grained changes and non-changes for simple string updates.
      * @return an Iterator that merges adjacent changes.
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public Iterator getCoarseIterator() {
         return new Iterator(array, length, false, true);
@@ -771,8 +753,7 @@ public final class Edits {
      * Returns an Iterator for fine-grained changes for modifying styled text.
      * Skips non-changes.
      * @return an Iterator that separates adjacent changes.
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public Iterator getFineChangesIterator() {
         return new Iterator(array, length, true, false);
@@ -781,8 +762,7 @@ public final class Edits {
     /**
      * Returns an Iterator for fine-grained changes and non-changes for modifying styled text.
      * @return an Iterator that separates adjacent changes.
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public Iterator getFineIterator() {
         return new Iterator(array, length, false, false);
