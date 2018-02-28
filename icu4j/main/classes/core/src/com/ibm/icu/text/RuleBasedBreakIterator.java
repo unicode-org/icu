@@ -225,7 +225,9 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * The rule data for this BreakIterator instance.
      * Not intended for public use. Declared public for testing purposes only.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public RBBIDataWrapper    fRData;
 
     /**
