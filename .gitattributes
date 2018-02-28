@@ -5796,6 +5796,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/SortedSetRelation.java svneol=nativ
 icu4j/main/classes/core/src/com/ibm/icu/impl/StandardPlural.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/StringPrepDataReader.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/StringRange.java svneol=native#text/plain%3Bcharset%3Dutf-8%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/StringSegment.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/TZDBTimeZoneNames.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/TextTrieMap.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/TimeZoneAdapter.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -6467,6 +6468,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/WriteNumberFormatSerialTes
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/plurals.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/impl/CSCharacterIteratorTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/impl/CacheTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/impl/StringSegmentTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/iterator/TestUCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/DataDrivenUScriptTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/TestUScript.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -6506,7 +6508,6 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/NumberParserTest.java svne
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/NumberStringBuilderTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/PatternStringTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/PropertiesTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/StringSegmentTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/UnicodeSetStaticCacheTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/AbstractBreakIteratorTests.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/rbbi/BreakIteratorRegTest.java svneol=native#text/plain%3Bcharset%3Dutf-8

@@ -615,6 +615,10 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * the lead byte of that incomplete sequence.
  * For example, if the string ends with E1 80, the length is reduced by 2.
  *
+ * In all other cases (the string ends with a complete sequence, or it is not
+ * possible for any further trail byte to extend the trailing sequence)
+ * the length remains unchanged.
+ *
  * Useful for processing text split across multiple buffers
  * (save the incomplete sequence for later)
  * and for optimizing iteration
@@ -627,7 +631,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  *
  * @param s const uint8_t * string
  * @param start int32_t starting string offset (usually 0)
- * @param length int32_t string length, must be start<=length
+ * @param length int32_t string length (usually start<=length)
  * @see U8_SET_CP_START
  * @draft ICU 61
  */

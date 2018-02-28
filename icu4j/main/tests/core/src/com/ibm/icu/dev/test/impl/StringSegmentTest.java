@@ -1,12 +1,12 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
-package com.ibm.icu.dev.test.number;
+package com.ibm.icu.dev.test.impl;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.ibm.icu.impl.number.parse.StringSegment;
+import com.ibm.icu.impl.StringSegment;
 
 /**
  * @author sffc
@@ -17,9 +17,11 @@ public class StringSegmentTest {
 
     @Test
     public void testOffset() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING, 0);
+        StringSegment segment = new StringSegment(SAMPLE_STRING, false);
         assertEquals(0, segment.getOffset());
-        segment.adjustOffset(3);
+        segment.adjustOffsetByCodePoint();
+        assertEquals(2, segment.getOffset());
+        segment.adjustOffset(1);
         assertEquals(3, segment.getOffset());
         segment.adjustOffset(2);
         assertEquals(5, segment.getOffset());
@@ -29,7 +31,7 @@ public class StringSegmentTest {
 
     @Test
     public void testLength() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING, 0);
+        StringSegment segment = new StringSegment(SAMPLE_STRING, false);
         assertEquals(11, segment.length());
         segment.adjustOffset(3);
         assertEquals(8, segment.length());
@@ -43,7 +45,7 @@ public class StringSegmentTest {
 
     @Test
     public void testCharAt() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING, 0);
+        StringSegment segment = new StringSegment(SAMPLE_STRING, false);
         assertCharSequenceEquals(SAMPLE_STRING, segment);
         segment.adjustOffset(3);
         assertCharSequenceEquals("radio 📻", segment);
@@ -53,7 +55,7 @@ public class StringSegmentTest {
 
     @Test
     public void testGetCodePoint() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING, 0);
+        StringSegment segment = new StringSegment(SAMPLE_STRING, false);
         assertEquals(0x1F4FB, segment.getCodePoint());
         segment.setLength(1);
         assertEquals(0xD83D, segment.getCodePoint());
@@ -66,18 +68,20 @@ public class StringSegmentTest {
 
     @Test
     public void testCommonPrefixLength() {
-        StringSegment segment = new StringSegment(SAMPLE_STRING, 0);
+        StringSegment segment = new StringSegment(SAMPLE_STRING, true);
         assertEquals(11, segment.getCommonPrefixLength(SAMPLE_STRING));
         assertEquals(4, segment.getCommonPrefixLength("📻 r"));
         assertEquals(3, segment.getCommonPrefixLength("📻 x"));
         assertEquals(0, segment.getCommonPrefixLength("x"));
         assertEquals(0, segment.getCommonPrefixLength(""));
         segment.adjustOffset(3);
-        assertEquals(0, segment.getCommonPrefixLength("RADiO"));
+        assertEquals(5, segment.getCommonPrefixLength("raDio"));
         assertEquals(5, segment.getCommonPrefixLength("radio"));
         assertEquals(2, segment.getCommonPrefixLength("rafio"));
         assertEquals(0, segment.getCommonPrefixLength("fadio"));
         assertEquals(0, segment.getCommonPrefixLength(""));
+        assertEquals(5, segment.getCaseSensitivePrefixLength("radio"));
+        assertEquals(2, segment.getCaseSensitivePrefixLength("raDio"));
         segment.setLength(3);
         assertEquals(3, segment.getCommonPrefixLength("radio"));
         assertEquals(2, segment.getCommonPrefixLength("rafio"));

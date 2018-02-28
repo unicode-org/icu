@@ -5,6 +5,7 @@ package com.ibm.icu.impl.number.parse;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.text.UnicodeSet;
 
 /**

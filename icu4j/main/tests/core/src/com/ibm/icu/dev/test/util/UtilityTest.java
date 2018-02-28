@@ -15,6 +15,7 @@ package com.ibm.icu.dev.test.util;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import org.junit.Test;
@@ -248,5 +249,46 @@ public class UtilityTest extends TestFmwk {
 
     public String CheckSourceLocale() {
         return TestFmwk.sourceLocation();
+    }
+
+    static final String RANDOM_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    static final Random RANDOM = new Random(2018);
+
+    @Test
+    public void TestCharSequenceEqualsAndHashCode() {
+        for (int t=0; t<1000; t++) {
+            int length = RANDOM.nextInt(5);
+            CharSequence a = randomCharSequence(length);
+            CharSequence b = randomCharSequence(length);
+            CharSequence c = randomCharSequence(length + 3);
+            String message = "a=" + a + "; b=" + b + "; c=" + c;
+
+            assertTrue(message, Utility.charSequenceEquals(a, a));
+            assertFalse(message, Utility.charSequenceEquals(a, c));
+            assertTrue(message, Utility.charSequenceEquals(b, b));
+            assertFalse(message, Utility.charSequenceEquals(b, c));
+            assertFalse(message, Utility.charSequenceEquals(c, a));
+            assertFalse(message, Utility.charSequenceEquals(c, b));
+            assertTrue(message, Utility.charSequenceEquals(c, c));
+            if (length == 0 || a.toString().equals(b.toString())) {
+                assertTrue(message, Utility.charSequenceEquals(a, b));
+                assertTrue(message, Utility.charSequenceEquals(b, a));
+            } else {
+                assertFalse(message, Utility.charSequenceEquals(a, b));
+                assertFalse(message, Utility.charSequenceEquals(b, a));
+            }
+
+            assertEquals(message, Utility.charSequenceHashCode(a), a.toString().hashCode());
+            assertEquals(message, Utility.charSequenceHashCode(b), b.toString().hashCode());
+            assertEquals(message, Utility.charSequenceHashCode(c), c.toString().hashCode());
+        }
+    }
+
+    private CharSequence randomCharSequence(int length) {
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<length; i++) {
+            sb.append(RANDOM_CHARS.charAt(RANDOM.nextInt(RANDOM_CHARS.length())));
+        }
+        return sb;
     }
 }
