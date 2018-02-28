@@ -249,7 +249,7 @@ public class NumberParserTest {
             String input = (String) cas[0];
             String expectedCurrencyCode = (String) cas[1];
 
-            StringSegment segment = new StringSegment(input, 0);
+            StringSegment segment = new StringSegment(input, true);
             ParsedNumber result = new ParsedNumber();
             matcher.match(segment, result);
             assertEquals("Parsing " + input, expectedCurrencyCode, result.currencyCode);
@@ -289,7 +289,7 @@ public class NumberParserTest {
             assertEquals(affixPattern + " " + exactMatch, expectedMatcherLength, matcher.length());
 
             // Check that the matcher works on a sample string
-            StringSegment segment = new StringSegment(sampleParseableString, 0);
+            StringSegment segment = new StringSegment(sampleParseableString, true);
             ParsedNumber result = new ParsedNumber();
             matcher.match(segment, result);
             assertEquals(affixPattern + " " + exactMatch,

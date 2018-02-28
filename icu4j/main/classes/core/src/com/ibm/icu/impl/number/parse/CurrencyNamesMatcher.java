@@ -4,6 +4,7 @@ package com.ibm.icu.impl.number.parse;
 
 import java.util.Iterator;
 
+import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.TextTrieMap;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
