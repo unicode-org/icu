@@ -10,6 +10,7 @@
 #endif
 
 #include "unicode/utypes.h"
+#include "unicode/uobject.h"
 #include "unicode/utf16.h"
 #include "cmemory.h"
 #include "uassert.h"
@@ -169,8 +170,16 @@ Trie3Builder::~Trie3Builder() {
 
 Trie3Builder *Trie3Builder::fromUTrie3(const UTrie3 *trie, UErrorCode &errorCode) {
     // Use the highValue as the initialValue to reduce the highStart.
-    uint32_t initialValue = trie->highValue;
-    Trie3Builder *builder = new Trie3Builder(initialValue, trie->errorValue, errorCode);
+    uint32_t errorValue;
+    uint32_t initialValue;
+    if (trie->data32 != nullptr) {
+        errorValue = trie->data32[trie->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET];
+        initialValue = trie->data32[trie->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET];
+    } else {
+        errorValue = trie->data16[trie->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET];
+        initialValue = trie->data16[trie->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET];
+    }
+    Trie3Builder *builder = new Trie3Builder(initialValue, errorValue, errorCode);
     if (U_FAILURE(errorCode)) {
         delete builder;
         return nullptr;
@@ -501,9 +510,8 @@ void Trie3Builder::setRange(UChar32 start, UChar32 end, uint32_t value, UBool ov
 
 void Trie3Builder::maskValues(uint32_t mask) {
     initialValue &= mask;
+    errorValue &= mask;
     highValue &= mask;
-    // Leave the errorValue as is: It is not stored in the data array,
-    // and an error value outside the normal value range might be useful.
     int32_t iLimit = highStart >> UTRIE3_SUPP_SHIFT_2;
     for (int32_t i = 0; i < iLimit; ++i) {
         if (flags[i] == ALL_SAME) {
@@ -773,6 +781,8 @@ int32_t Trie3Builder::compactWholeDataBlocks(AllSameBlocks &allSameBlocks) {
     // ASCII data will be stored as a linear table, even if the following code
     // does not yet count it that way.
     int32_t newDataCapacity = ASCII_LIMIT;
+    // Add room for special values (errorValue, highValue) and padding.
+    newDataCapacity += 4;
     int32_t iLimit = highStart >> UTRIE3_SUPP_SHIFT_2;
     int32_t blockLength = UTRIE3_BMP_DATA_BLOCK_LENGTH;
     int32_t inc = SUPP_DATA_BLOCKS_PER_BMP_BLOCK;
@@ -986,12 +996,6 @@ int32_t Trie3Builder::compactData(uint32_t *newData) {
         }
     }
 
-    // Pad to a multiple of 4 data words, so that the length can be shifted right by 2
-    // for the header shiftedDataLength.
-    while ((newDataLength & 3) != 0) {
-        newData[newDataLength++] = 0xffee;  // arbitary value
-    }
-
 #ifdef UTRIE3_DEBUG
     /* we saved some space */
     printf("compacting UTrie3: count of 32-bit data words %lu->%lu  countSame=%ld  sumOverlaps=%ld\n",
@@ -1034,6 +1038,8 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
     // starting with the length of the index-1 table.
     int32_t index1Length = (highStart - BMP_LIMIT) >> UTRIE3_SUPP_SHIFT_1;
     int32_t index16Capacity = index1Length;
+    // Account for possible index table padding.
+    ++index16Capacity;
     i2FirstNull = index2NullOffset;
     int32_t iLimit = highStart >> UTRIE3_SUPP_SHIFT_2;
     for (int32_t i = BMP_I_LIMIT; i < iLimit;) {
@@ -1073,10 +1079,6 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
             index16Capacity += INDEX_2_18BIT_BLOCK_LENGTH;
         }
         i = j;
-    }
-    // Account for index table padding.
-    if ((index16Capacity & 1) != 0) {
-        ++index16Capacity;
     }
 
     // Compact the supplementary index-2 table.
@@ -1186,18 +1188,8 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
         index2NullOffset = UTRIE3_NO_INDEX2_NULL_OFFSET;
     }
 
-    // Ensure data table alignment:
-    // Needs to be 2-aligned for uint32_t data,
-    // and to make the whole structure a multiple of 4 bytes.
-    if ((indexLength & 1) != 0) {
-        index16[indexLength++] = 0xffee;  // arbitary value
-    }
     U_ASSERT(indexLength <= index16Capacity);
     indexLength += UTRIE3_BMP_INDEX_LENGTH;
-    if (indexLength > MAX_INDEX_LENGTH) {
-        errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
-        return 0;
-    }
 
 #ifdef UTRIE3_DEBUG
     /* we saved some space */
@@ -1263,7 +1255,8 @@ int32_t Trie3Builder::compactTrie(UErrorCode &errorCode) {
     data = newData;
     dataCapacity = newDataCapacity;
     dataLength = newDataLength;
-    if (dataLength > 0x3fffc) {  // (dataLength >> 2) > 0xffff
+    if (dataLength > (0x3ffff + UTRIE3_SUPP_DATA_BLOCK_LENGTH)) {
+        // The offset of the last data block is too high to be stored in the index table.
         errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
@@ -1309,13 +1302,44 @@ UTrie3 *Trie3Builder::build(UTrie3ValueBits valueBits, UErrorCode &errorCode) {
         return nullptr;
     }
 
-    // Calculate the total length of the UTrie3 as a single memory block.
-    int32_t length = sizeof(UTrie3) + indexLength * 2;
+    // Ensure data table alignment: The index length must be even for uint32_t data.
+    int32_t suppIndexLength = indexLength - UTRIE3_BMP_INDEX_LENGTH;
+    if (valueBits == UTRIE3_32_VALUE_BITS && (indexLength & 1) != 0) {
+        index16[suppIndexLength++] = 0xffee;  // arbitary value
+        ++indexLength;
+    }
+    if (indexLength > MAX_INDEX_LENGTH) {
+        errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+        clear();
+        return nullptr;
+    }
+
+    // Make the total trie structure length a multiple of 4 bytes by padding the data table,
+    // and store special values as the last two data values.
+    int32_t length = indexLength * 2;
     if (valueBits == UTRIE3_16_VALUE_BITS) {
+        if (((indexLength ^ dataLength) & 1) != 0) {
+            // padding
+            data[dataLength++] = errorValue;
+        }
+        if (data[dataLength - 1] != errorValue || data[dataLength - 2] != highValue) {
+            data[dataLength++] = highValue;
+            data[dataLength++] = errorValue;
+        }
         length += dataLength * 2;
     } else {
+        // 32-bit data words never need padding to a multiple of 4 bytes.
+        if (data[dataLength - 1] != errorValue || data[dataLength - 2] != highValue) {
+            if (data[dataLength - 1] != highValue) {
+                data[dataLength++] = highValue;
+            }
+            data[dataLength++] = errorValue;
+        }
         length += dataLength * 4;
     }
+
+    // Calculate the total length of the UTrie3 as a single memory block.
+    length += sizeof(UTrie3);
     U_ASSERT((length & 3) == 0);
 
     char *bytes = (char *)uprv_malloc(length);
@@ -1333,12 +1357,10 @@ UTrie3 *Trie3Builder::build(UTrie3ValueBits valueBits, UErrorCode &errorCode) {
     // Round up shifted12HighStart to a multiple of 0x1000 for easy testing from UTF-8 lead bytes.
     // Runtime code needs to then test for the real highStart as well.
     trie->shifted12HighStart = (highStart + 0xfff) >> 12;
-    trie->highValue = highValue;
 
     trie->index2NullOffset = index2NullOffset;
     trie->dataNullOffset = dataNullOffset;
     trie->nullValue = initialValue;
-    trie->errorValue = errorValue;
 
     bytes += sizeof(UTrie3);
 
@@ -1351,9 +1373,8 @@ UTrie3 *Trie3Builder::build(UTrie3ValueBits valueBits, UErrorCode &errorCode) {
         *dest16++ = (uint16_t)index[i];
     }
 
-    if (highStart > BMP_LIMIT) {
+    if (suppIndexLength > 0) {
         // Write 16-bit index-1 and index-2 values for supplementary code points.
-        int32_t suppIndexLength = indexLength - UTRIE3_BMP_INDEX_LENGTH;
         uprv_memcpy(dest16, index16, suppIndexLength * 2);
         dest16 += suppIndexLength;
     }

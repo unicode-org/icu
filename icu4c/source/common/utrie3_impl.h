@@ -27,31 +27,30 @@ typedef struct UTrie3Header {
 
     /**
      * Options bit field:
-     * Bits 31..30: Reserved (0).
-     * Bits 29..12: Data null block offset, not shifted (0x3ffff if none).
-     * Bits 11..3: Reserved (0).
+     * Bits 15..12: Data length bits 19..16.
+     * Bits 11..8: Data null block offset bits 19..16.
+     * Bits 7..3: Reserved (0).
      * Bits 2..0: UTrie3ValueBits valueBits
      */
-    uint32_t options;
+    uint16_t options;
 
     /** Total length of the BMP index and the supplementary index-1 and index-2 tables. */
     uint16_t indexLength;
 
-    /** Data length, shifted right by 2 bits. */
-    uint16_t shiftedDataLength;
+    /** Data length bits 15..0. */
+    uint16_t dataLength;
 
-    /** Index-2 null block offset, 0x7fff if none. */
+    /** Index-2 null block offset, 0x7fff or 0xffff if none. */
     uint16_t index2NullOffset;
+
+    /** Data null block offset bits 15..0, 0xfffff if none. */
+    uint16_t dataNullOffset;
 
     /**
      * First code point of the single-value range ending with U+10ffff,
      * rounded up and then shifted right by UTRIE3_SUPP_SHIFT_1.
      */
     uint16_t shiftedHighStart;
-    /** Value for code points highStart..U+10FFFF. */
-    uint32_t highValue;
-    /** Value returned for out-of-range code points and ill-formed UTF-8/16. */
-    uint32_t errorValue;
 } UTrie3Header;
 
 /**
@@ -60,10 +59,12 @@ typedef struct UTrie3Header {
  */
 enum {
     /** Mask to get the UTrie3ValueBits valueBits from options. */
-    UTRIE3_OPTIONS_RESERVED_MASK = 0xc0000ff8,
+    UTRIE3_OPTIONS_DATA_LENGTH_MASK = 0xf000,
+    UTRIE3_OPTIONS_DATA_NULL_OFFSET_MASK = 0xf00,
+    UTRIE3_OPTIONS_RESERVED_MASK = 0xf8,
     UTRIE3_OPTIONS_VALUE_BITS_MASK = 7,
     UTRIE3_NO_INDEX2_NULL_OFFSET = 0x7fff,  // TODO: doc max value, bit 15 indicates something
-    UTRIE3_NO_DATA_NULL_OFFSET = 0x3ffff
+    UTRIE3_NO_DATA_NULL_OFFSET = 0xfffff
 };
 
 #endif

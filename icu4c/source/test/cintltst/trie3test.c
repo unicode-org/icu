@@ -322,6 +322,7 @@ testTrieUTF16(const char *testName,
 
     const UChar *p, *limit;
 
+    uint32_t errorValue = utrie3_get(trie, -1);
     uint32_t value, expected;
     UChar32 prevCP, c, c2;
     int32_t i, length, sIndex, countValues;
@@ -371,7 +372,7 @@ testTrieUTF16(const char *testName,
         } else {
             UTRIE3_U16_NEXT32(trie, p, limit, c, value);
         }
-        expected= U_IS_SURROGATE(c) ? trie->errorValue : values[i];
+        expected = U_IS_SURROGATE(c) ? errorValue : values[i];
         if(value!=expected) {
             log_err("error: wrong value from UTRIE3_NEXT(%s)(U+%04lx): 0x%lx instead of 0x%lx\n",
                     testName, (long)c, (long)value, (long)expected);
@@ -397,7 +398,7 @@ testTrieUTF16(const char *testName,
         } else {
             UTRIE3_U16_PREV32(trie, s, p, c, value);
         }
-        expected= U_IS_SURROGATE(c) ? trie->errorValue : values[i];
+        expected = U_IS_SURROGATE(c) ? errorValue : values[i];
         if(value!=expected) {
             log_err("error: wrong value from UTRIE3_PREV(%s)(U+%04lx): 0x%lx instead of 0x%lx\n",
                     testName, (long)c, (long)value, (long)expected);
@@ -623,6 +624,7 @@ testBuilder(const char *testName, const UTrie3Builder *builder,
 }
 
 static uint32_t storage[120000];
+static uint32_t swapped[120000];
 
 static void
 testTrieSerialize(const char *testName,
@@ -693,7 +695,6 @@ testTrieSerialize(const char *testName,
         trie=NULL;
 
         if(withSwap) {
-            uint32_t swapped[10000];
             int32_t swappedLength;
 
             UDataSwapper *ds;

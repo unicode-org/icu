@@ -216,7 +216,7 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  * @param c (UChar32, in) the input code point
  * @return (uint16_t) The code point's trie value.
  */
-#define UTRIE3_GET16(trie, c, result) _UTRIE3_GET((trie), data16, (trie)->indexLength, (c), (result))  // TODO: docs
+#define UTRIE3_GET16(trie, c, result) _UTRIE3_GET((trie), data16, (c), (result))  // TODO: docs
 
 /**
  * Return a 32-bit trie value from a code point, with range checking.
@@ -226,7 +226,7 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  * @param c (UChar32, in) the input code point
  * @return (uint32_t) The code point's trie value.
  */
-#define UTRIE3_GET32(trie, c, result) _UTRIE3_GET((trie), data32, 0, (c), (result))  // TODO: docs
+#define UTRIE3_GET32(trie, c, result) _UTRIE3_GET((trie), data32, (c), (result))  // TODO: docs
 
 /**
  * UTF-16: Get the next code point (UChar32 c, out), post-increment src,
@@ -386,7 +386,7 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
 U_CDECL_END
 
 /* C++ convenience wrappers ------------------------------------------------- */
-// TODO: remove?
+#if 0  // TODO: remove?
 
 #ifdef __cplusplus
 
@@ -431,7 +431,7 @@ public:
 U_NAMESPACE_END
 
 #endif
-
+#endif
 /* Internal definitions ----------------------------------------------------- */
 
 U_CDECL_BEGIN
@@ -447,6 +447,7 @@ U_CDECL_BEGIN
  */
 struct UTrie3 {
     /* protected: used by macros and functions for reading values */
+    // TODO: "public" for ASCII
     const uint16_t *index;
     const uint16_t *data16;     /* for fast UTF-8 ASCII access, if 16b data */
     const uint32_t *data32;     /* NULL if 16b data is used via index */
@@ -454,7 +455,6 @@ struct UTrie3 {
     int32_t indexLength, dataLength;
     /** Start of the last range which ends at U+10ffff, and its value. */
     UChar32 highStart;
-    uint32_t highValue;
     uint16_t shifted12HighStart;  // highStart>>12
 
     /**
@@ -468,8 +468,6 @@ struct UTrie3 {
      */
     int32_t dataNullOffset;
     uint32_t nullValue;
-    /** Value returned for out-of-range code points and ill-formed UTF-8/16. */
-    uint32_t errorValue;
 
     const char *name;  // TODO
 };
@@ -537,8 +535,11 @@ enum {
     UTRIE3_INDEX_1_OFFSET = UTRIE3_BMP_INDEX_LENGTH,
     UTRIE3_MAX_INDEX_1_LENGTH = 0x100000 >> UTRIE3_SUPP_SHIFT_1,
 
-    /** The start of data blocks after the linear ASCII data, at offset 128=0x80. */
-    UTRIE3_DATA_START_OFFSET = 0x80
+    /** TODO docs */
+    /** TODO Value returned for out-of-range code points and ill-formed UTF-8/16. */
+    UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET = 1,
+    /** TODO Value for code points highStart..U+10FFFF. */
+    UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET = 2
 };
 
 /* Internal functions and macros -------------------------------------------- */
@@ -549,7 +550,7 @@ utrie3_internalIndexFromSupp(const UTrie3 *trie, UChar32 c);
 
 /** TODO */
 U_INTERNAL int32_t U_EXPORT2
-utrie3_internalIndexFromSuppU8(const UTrie3 *trie, uint16_t lt1, uint8_t t2, uint8_t t3);
+utrie3_internalIndexFromSuppU8(const UTrie3 *trie, int32_t lt1, uint8_t t2, uint8_t t3);
 
 /**
  * Internal function for part of the UTRIE3_U8_PREVxx() macro implementations.
@@ -570,107 +571,110 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
 
 /** Internal trie getter from a supplementary code point. Sets result to the data value. */
 // TODO: back to *returning* values?
+#define _UTRIE3_INDEX_FROM_SUPP(trie, c) \
+    ((c) >= (trie)->highStart ? \
+        (trie)->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET : \
+        utrie3_internalIndexFromSupp(trie, c))
+
 #define _UTRIE3_GET_FROM_SUPP(trie, data, c, result) { \
-    if ((c) >= (trie)->highStart) { \
-        (result) = (trie)->highValue; \
-    } else { \
-        (result) = (trie)->data[utrie3_internalIndexFromSupp(trie, c)]; \
-    } \
+    (result) = (trie)->data[_UTRIE3_INDEX_FROM_SUPP(trie, c)]; \
 }
 
 /**
  * Internal trie getter from a code point, with checking that c is in 0..10FFFF.
  * Sets result to the data value.
  */
-#define _UTRIE3_GET(trie, data, asciiOffset, c, result) { \
-    if ((uint32_t)(c) <= 0xffff) { \
-        (result) = _UTRIE3_GET_FROM_BMP(trie, data, c); \
-    } else if ((uint32_t)(c) <= 0x10ffff) { \
-        _UTRIE3_GET_FROM_SUPP(trie, data, c, result); \
-    } else { \
-        (result) = (trie)->errorValue; \
-    } \
+// TODO: back to *returning* values?
+#define _UTRIE3_INDEX_FROM_CP(trie, c) \
+    ((uint32_t)(c) <= 0xffff ? \
+        _UTRIE3_INDEX_FROM_BMP((trie)->index, c) : \
+        (uint32_t)(c) <= 0x10ffff ? \
+            _UTRIE3_INDEX_FROM_SUPP(trie, c) : \
+            (trie)->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET)
+
+#define _UTRIE3_GET(trie, data, c, result) { \
+    (result) = (trie)->data[_UTRIE3_INDEX_FROM_CP(trie, c)]; \
 }
 
 /** Internal next-post-increment: get the next code point (c) and its data. */
 #define _UTRIE3_U16_NEXT(trie, data, src, limit, c, result) { \
     (c) = *(src)++; \
+    int32_t __index; \
     if (!U16_IS_SURROGATE(c)) { \
-        (result) = _UTRIE3_GET_FROM_BMP(trie, data, c); \
+        __index = _UTRIE3_INDEX_FROM_BMP((trie)->index, c); \
     } else { \
         uint16_t __c2; \
         if (U16_IS_SURROGATE_LEAD(c) && (src) != (limit) && U16_IS_TRAIL(__c2 = *(src))) { \
             ++(src); \
             (c) = U16_GET_SUPPLEMENTARY((c), __c2); \
-            _UTRIE3_GET_FROM_SUPP((trie), data, (c), (result)); \
+            __index = _UTRIE3_INDEX_FROM_SUPP(trie, c); \
         } else { \
-            (result) = (trie)->errorValue; \
+            __index = (trie)->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET; \
         } \
     } \
+    (result) = (trie)->data[__index]; \
 }
 
 /** Internal pre-decrement-previous: get the previous code point (c) and its data */
 #define _UTRIE3_U16_PREV(trie, data, start, src, c, result) { \
     (c) = *--(src); \
+    int32_t __index; \
     if (!U16_IS_SURROGATE(c)) { \
-        (result) = _UTRIE3_GET_FROM_BMP(trie, data, c); \
+        __index = _UTRIE3_INDEX_FROM_BMP((trie)->index, c); \
     } else { \
         uint16_t __c2; \
         if (U16_IS_SURROGATE_TRAIL(c) && (src) != (start) && U16_IS_LEAD(__c2 = *((src) - 1))) { \
             --(src); \
             (c) = U16_GET_SUPPLEMENTARY(__c2, (c)); \
-            _UTRIE3_GET_FROM_SUPP((trie), data, (c), (result)); \
+            __index = _UTRIE3_INDEX_FROM_SUPP(trie, c); \
         } else { \
-            (result) = (trie)->errorValue; \
+            __index = (trie)->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET; \
         } \
     } \
+    (result) = (trie)->data[__index]; \
 }
 
 /** Internal UTF-8 next-post-increment: get the next code point's data. */
 #define _UTRIE3_U8_NEXT(trie, data, src, limit, result) { \
-    uint16_t __lead = (uint8_t)*(src)++; \
-    if (U8_IS_SINGLE(__lead)) { \
-        (result) = (trie)->data[__lead]; \
-    } else { \
+    int32_t __lead = (uint8_t)*(src)++; \
+    if (!U8_IS_SINGLE(__lead)) { \
         uint8_t __t1, __t2, __t3; \
         if ((src) != (limit) && \
             (__lead >= 0xe0 ? \
                 __lead < 0xf0 ?  /* U+0800..U+FFFF except surrogates */ \
                     U8_LEAD3_T1_BITS[__lead &= 0xf] & (1 << ((__t1 = *(src)) >> 5)) && \
                     ++(src) != (limit) && (__t2 = *(src) - 0x80) <= 0x3f && \
-                    ((result) = (trie)->data[ \
-                        ((int32_t)(trie)->index[(__lead << (12 - UTRIE3_BMP_SHIFT)) + (__t1 & 0x3f)]) + \
-                        __t2], 1) \
+                    (__lead = ((int32_t)(trie)->index[(__lead << 6) + (__t1 & 0x3f)]) + __t2, 1) \
                 :  /* U+10000..U+10FFFF */ \
                     (__lead -= 0xf0) <= 4 && \
                     U8_LEAD4_T1_BITS[(__t1 = *(src)) >> 4] & (1 << __lead) && \
                     (__lead = (__lead << 6) | (__t1 & 0x3f), ++(src) != (limit)) && \
                     (__t2 = *(src) - 0x80) <= 0x3f && \
                     ++(src) != (limit) && (__t3 = *(src) - 0x80) <= 0x3f && \
-                    ((result) = __lead >= (trie)->shifted12HighStart ? (trie)->highValue : \
-                        (trie)->data[utrie3_internalIndexFromSuppU8((trie), __lead, __t2, __t3)], 1) \
+                    (__lead = __lead >= (trie)->shifted12HighStart ? \
+                        (trie)->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET : \
+                        utrie3_internalIndexFromSuppU8((trie), __lead, __t2, __t3), 1) \
             :  /* U+0080..U+07FF */ \
                 __lead >= 0xc2 && (__t1 = *(src) - 0x80) <= 0x3f && \
-                ((result) = (trie)->data[(trie)->index[__lead & 0x1f] + __t1], 1))) { \
+                (__lead = (trie)->index[__lead & 0x1f] + __t1, 1))) { \
             ++(src); \
         } else { \
-            (result) = (trie)->errorValue;  /* ill-formed*/ \
+            __lead = (trie)->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET;  /* ill-formed*/ \
         } \
     } \
+    (result) = (trie)->data[__lead]; \
 }
 
 /** Internal UTF-8 pre-decrement-previous: get the previous code point's data. */
 #define _UTRIE3_U8_PREV(trie, data, start, src, result) { \
-    uint8_t __b = (uint8_t)*--(src); \
-    if (U8_IS_SINGLE(__b)) { \
-        (result) = (trie)->data[__b]; \
-    } else { \
-        int32_t __index = utrie3_internalU8PrevIndex((trie), __b, (const uint8_t *)(start), \
-                                                                  (const uint8_t *)(src)); \
-        (src) -= __index&7; \
-        (result) = __index >= 0 ? (trie)->data[__index >> 3] : \
-                   __index >= -8 ? (trie)->errorValue : (trie)->highValue; \
+    int32_t __index = (uint8_t)*--(src); \
+    if (!U8_IS_SINGLE(__index)) { \
+        __index = utrie3_internalU8PrevIndex((trie), __index, (const uint8_t *)(start), \
+                                                              (const uint8_t *)(src)); \
+        (src) -= __index & 7; \
+        __index >>= 3; \
     } \
+    (result) = (trie)->data[__index]; \
 }
 
 U_CDECL_END
