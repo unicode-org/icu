@@ -510,7 +510,7 @@ ubrk_countAvailable(void);
 
 
 /**
-* Returns true if the specfied position is a boundary position.  As a side
+* Returns true if the specified position is a boundary position.  As a side
 * effect, leaves the iterator pointing to the first boundary position at
 * or after "offset".
 * @param bi The break iterator to use.
@@ -544,7 +544,7 @@ ubrk_getRuleStatus(UBreakIterator *bi);
  * @param fillInVec an array to be filled in with the status values.
  * @param capacity  the length of the supplied vector.  A length of zero causes
  *                  the function to return the number of status values, in the
- *                  normal way, without attemtping to store any values.
+ *                  normal way, without attempting to store any values.
  * @param status    receives error codes.
  * @return          The number of rule status values from rules that determined
  *                  the most recent boundary returned by the break iterator.
