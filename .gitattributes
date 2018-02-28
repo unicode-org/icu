@@ -5973,7 +5973,6 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireExponentMatcher
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireNumberMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/ScientificMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/SeriesMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/StringSegment.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/SymbolMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/UnicodeSetStaticCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/ValidationMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
