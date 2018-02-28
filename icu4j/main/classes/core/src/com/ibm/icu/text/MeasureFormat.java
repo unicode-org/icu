@@ -56,6 +56,13 @@ import com.ibm.icu.util.UResourceBundle;
  * A formatter for Measure objects.
  *
  * <p>
+ * <strong>IMPORTANT:</strong> New users are strongly encouraged to see if
+ * {@link NumberFormatter} fits their use case.  Although not deprecated, this
+ * class, MeasureFormat, is on life support and is provided for
+ * backwards compatibility only.
+ * <hr>
+ *
+ * <p>
  * To format a Measure object, first create a formatter object using a MeasureFormat factory method. Then
  * use that object's format or formatMeasures methods.
  *

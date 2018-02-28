@@ -34,7 +34,16 @@ import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
 /**
- * {@icuenhanced java.text.DecimalFormat}.{@icu _usage_} <code>DecimalFormat</code> is the primary
+ * {@icuenhanced java.text.DecimalFormat}.{@icu _usage_}
+ *
+ * <p>
+ * <strong>IMPORTANT:</strong> New users are strongly encouraged to see if
+ * {@link NumberFormatter} fits their use case.  Although not deprecated, this
+ * class, DecimalFormat, is on life support and is only provided for
+ * java.text.DecimalFormat compatibility.
+ * <hr>
+ *
+ * <code>DecimalFormat</code> is the primary
  * concrete subclass of {@link NumberFormat}. It has a variety of features designed to make it
  * possible to parse and format numbers in any locale, including support for Western, Arabic, or
  * Indic digits. It supports different flavors of numbers, including integers ("123"), fixed-point
