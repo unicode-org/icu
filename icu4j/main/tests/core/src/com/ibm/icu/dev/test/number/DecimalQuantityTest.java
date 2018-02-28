@@ -176,6 +176,7 @@ public class DecimalQuantityTest extends TestFmwk {
 
     private static final MathContext MATH_CONTEXT_HALF_EVEN = new MathContext(0, RoundingMode.HALF_EVEN);
     private static final MathContext MATH_CONTEXT_CEILING = new MathContext(0, RoundingMode.CEILING);
+    @SuppressWarnings("unused")
     private static final MathContext MATH_CONTEXT_FLOOR = new MathContext(0, RoundingMode.FLOOR);
     private static final MathContext MATH_CONTEXT_PRECISION = new MathContext(3, RoundingMode.HALF_UP);
 
