@@ -25,6 +25,7 @@ import java.util.Set;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.CurrencyAmount;
@@ -34,6 +35,13 @@ import com.ibm.icu.util.UResourceBundle;
 
 /**
  * {@icuenhanced java.text.NumberFormat}.{@icu _usage_}
+ *
+ * <p>
+ * <strong>IMPORTANT:</strong> New users are strongly encouraged to see if
+ * {@link NumberFormatter} fits their use case.  Although not deprecated, this
+ * class, NumberFormat, is on life support and is only provided for
+ * java.text.NumberFormat compatibility.
+ * <hr>
  *
  * <code>NumberFormat</code> is the abstract base class for all number
  * formats. This class provides the interface for formatting and parsing

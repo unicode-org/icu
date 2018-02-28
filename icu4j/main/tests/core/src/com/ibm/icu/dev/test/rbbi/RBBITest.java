@@ -625,6 +625,21 @@ public class RBBITest extends TestFmwk {
     }
 
     @Test
+    public void TestBug13447() {
+        // Bug 13447: verify that getRuleStatus() returns the value corresponding to current(),
+        //  even after next() has returned DONE.
+       RuleBasedBreakIterator bi =
+                (RuleBasedBreakIterator)BreakIterator.getWordInstance(Locale.ENGLISH);
+        bi.setText("1234");
+        assertEquals("", BreakIterator.WORD_NONE, bi.getRuleStatus());
+        assertEquals("", 4, bi.next());
+        assertEquals("", BreakIterator.WORD_NUMBER, bi.getRuleStatus());
+        assertEquals("", BreakIterator.DONE, bi.next());
+        assertEquals("", 4, bi.current());
+        assertEquals("", BreakIterator.WORD_NUMBER, bi.getRuleStatus());
+    }
+
+    @Test
     public void TestTableRebuild() {
         // Test to verify that rebuilding the state tables from rule source for the standard
         // break iterator types yields the same tables as are imported from ICU4C as part of the default data.

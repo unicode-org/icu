@@ -30,7 +30,7 @@
 #include "unicode/utypes.h"
 /**
  * \file
- * \brief C++ API: Formats decimal numbers.
+ * \brief C++ API: Compatibility APIs for decimal formatting.
  */
 
 #if !UCONFIG_NO_FORMATTING
@@ -75,6 +75,11 @@ template class U_I18N_API    EnumSet<UNumberFormatAttribute,
 #endif
 
 /**
+ * <p><strong>IMPORTANT:</strong> New users are strongly encouraged to see if
+ * numberformatter.h fits their use case.  Although not deprecated, this header
+ * is on life support and is provided for backwards compatibility only.
+ * <hr/>
+ *
  * DecimalFormat is a concrete subclass of NumberFormat that formats decimal
  * numbers. It has a variety of features designed to make it possible to parse
  * and format numbers in any locale, including support for Western, Arabic, or

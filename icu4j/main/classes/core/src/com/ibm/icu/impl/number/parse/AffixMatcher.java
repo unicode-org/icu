@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.AffixUtils;
