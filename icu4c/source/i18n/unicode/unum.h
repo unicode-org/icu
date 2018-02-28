@@ -32,6 +32,9 @@
  * \brief C API: NumberFormat
  *
  * <h2> Number Format C API </h2>
+ * 
+ * <p><strong>IMPORTANT:</strong> New users with C++ capabilities are
+ * strongly encouraged to see if numberformatter.h fits their use case.
  *
  * Number Format C API  Provides functions for
  * formatting and parsing a number.  Also provides methods for

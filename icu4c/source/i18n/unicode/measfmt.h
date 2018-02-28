@@ -22,7 +22,7 @@
 
 /**
  * \file 
- * \brief C++ API: Formatter for measure objects.
+ * \brief C++ API: Compatibility APIs for measure formatting.
  */
 
 /**
@@ -87,8 +87,9 @@ class ListFormatter;
 class DateFormat;
 
 /**
- * 
- * A formatter for measure objects.
+ * <p><strong>IMPORTANT:</strong> New users are strongly encouraged to see if
+ * numberformatter.h fits their use case.  Although not deprecated, this header
+ * is on life support and is provided for backwards compatibility only.
  *
  * @see Format
  * @author Alan Liu
