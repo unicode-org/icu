@@ -6,12 +6,17 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.MacroProps;
+import com.ibm.icu.number.NumberFormatter.UnitWidth;
+import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
+import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.NoUnit;
 
 /**
  * @author sffc
@@ -20,7 +25,7 @@ import com.ibm.icu.util.Currency.CurrencyUsage;
 class NumberSkeletonImpl {
 
     static enum StemType {
-        ROUNDER, FRACTION_ROUNDER, MAYBE_INCREMENT_ROUNDER, CURRENCY_ROUNDER
+        OTHER, ROUNDER, FRACTION_ROUNDER, MAYBE_INCREMENT_ROUNDER, CURRENCY_ROUNDER, MEASURE_UNIT, UNIT_WIDTH
     }
 
     static class SkeletonDataStructure {
@@ -62,6 +67,12 @@ class NumberSkeletonImpl {
                 "round-currency-standard",
                 Rounder.currency(CurrencyUsage.STANDARD));
         skeletonData.put(StemType.ROUNDER, "round-currency-cash", Rounder.currency(CurrencyUsage.CASH));
+
+        skeletonData.put(StemType.UNIT_WIDTH, "unit-width-narrow", UnitWidth.NARROW);
+        skeletonData.put(StemType.UNIT_WIDTH, "unit-width-short", UnitWidth.SHORT);
+        skeletonData.put(StemType.UNIT_WIDTH, "unit-width-full-name", UnitWidth.FULL_NAME);
+        skeletonData.put(StemType.UNIT_WIDTH, "unit-width-iso-code", UnitWidth.ISO_CODE);
+        skeletonData.put(StemType.UNIT_WIDTH, "unit-width-hidden", UnitWidth.HIDDEN);
     }
 
     private static final Map<String, UnlocalizedNumberFormatter> cache = new ConcurrentHashMap<String, UnlocalizedNumberFormatter>();
@@ -171,6 +182,7 @@ class NumberSkeletonImpl {
                 // Check for stems that require an option
                 switch (stem) {
                 case MAYBE_INCREMENT_ROUNDER:
+                case MEASURE_UNIT:
                     throw new SkeletonSyntaxException("Stem requires an option", segment);
                 default:
                     break;
@@ -192,6 +204,10 @@ class NumberSkeletonImpl {
                 checkNull(macros.rounder, content);
                 macros.rounder = (Rounder) value;
                 break;
+            case UNIT_WIDTH:
+                checkNull(macros.unitWidth, content);
+                macros.unitWidth = (UnitWidth) value;
+                break;
             default:
                 assert false;
             }
@@ -201,6 +217,8 @@ class NumberSkeletonImpl {
         // Second try: literal stems that require an option
         if (content.equals("round-increment")) {
             return StemType.MAYBE_INCREMENT_ROUNDER;
+        } else if (content.equals("measure-unit")) {
+            return StemType.MEASURE_UNIT;
         }
 
         // Second try: stem "blueprint" syntax
@@ -249,6 +267,14 @@ class NumberSkeletonImpl {
             }
         }
 
+        // Measure unit option
+        switch (stem) {
+        case MEASURE_UNIT:
+            // The measure unit option is required.
+            parseMeasureUnitOption(content, macros);
+            return StemType.OTHER;
+        }
+
         // Unknown option
         throw new SkeletonSyntaxException("Unknown option", content);
     }
@@ -258,6 +284,14 @@ class NumberSkeletonImpl {
     private static void generateSkeleton(MacroProps macros, StringBuilder sb) {
         if (macros.rounder != null) {
             generateRoundingValue(macros, sb);
+            sb.append(' ');
+        }
+        if (macros.unit != null) {
+            generateUnitValue(macros, sb);
+            sb.append(' ');
+        }
+        if (macros.unitWidth != null) {
+            generateUnitWidthValue(macros, sb);
             sb.append(' ');
         }
 
@@ -390,15 +424,11 @@ class NumberSkeletonImpl {
     }
 
     private static void parseIncrementOption(CharSequence content, MacroProps macros) {
-        // Clunkilly convert the CharSequence to a char array for the BigDecimal constructor.
-        // We can't use content.toString() because that doesn't create a clean string.
-        char[] chars = new char[content.length()];
-        for (int i = 0; i < content.length(); i++) {
-            chars[i] = content.charAt(i);
-        }
+        // Call content.subSequence() because content.toString() doesn't create a clean string.
+        String str = content.subSequence(0, content.length()).toString();
         BigDecimal increment;
         try {
-            increment = new BigDecimal(chars);
+            increment = new BigDecimal(str);
         } catch (NumberFormatException e) {
             throw new SkeletonSyntaxException("Invalid rounding increment", content, e);
         }
@@ -423,6 +453,29 @@ class NumberSkeletonImpl {
 
     private static void generateRoundingModeOption(RoundingMode mode, StringBuilder sb) {
         sb.append(mode.toString());
+    }
+
+    private static void parseMeasureUnitOption(CharSequence content, MacroProps macros) {
+        // NOTE: The category (type) of the unit is guaranteed to be a valid subtag (alphanumeric)
+        // http://unicode.org/reports/tr35/#Validity_Data
+        int firstHyphen = 0;
+        while (firstHyphen < content.length() && content.charAt(firstHyphen) != '-') {
+            firstHyphen++;
+        }
+        String type = content.subSequence(0, firstHyphen).toString();
+        String subType = content.subSequence(firstHyphen + 1, content.length()).toString();
+        Set<MeasureUnit> units = MeasureUnit.getAvailable(type);
+        for (MeasureUnit unit : units) {
+            if (subType.equals(unit.getSubtype())) {
+                macros.unit = unit;
+                return;
+            }
+        }
+        throw new SkeletonSyntaxException("Unknown unit", content);
+    }
+
+    private static void generateMeasureUnitOption(MeasureUnit unit, StringBuilder sb) {
+        sb.append(unit.getType() + "-" + unit.getSubtype());
     }
 
     /////
@@ -472,6 +525,32 @@ class NumberSkeletonImpl {
             sb.append('/');
             generateRoundingModeOption(macros.rounder.mathContext.getRoundingMode(), sb);
         }
+    }
+
+    private static void generateUnitValue(MacroProps macros, StringBuilder sb) {
+        // Check for literals
+        String literal = skeletonData.valueToStem(macros.unit);
+        if (literal != null) {
+            sb.append(literal);
+            return;
+        }
+
+        // Generate the stem
+        if (macros.unit instanceof Currency) {
+            // TODO
+        } else if (macros.unit instanceof NoUnit) {
+            // TODO
+        } else {
+            sb.append("measure-unit/");
+            generateMeasureUnitOption(macros.unit, sb);
+        }
+    }
+
+    private static void generateUnitWidthValue(MacroProps macros, StringBuilder sb) {
+        // There should be a literal.
+        String literal = skeletonData.valueToStem(macros.unitWidth);
+        assert literal != null;
+        sb.append(literal);
     }
 
     /////

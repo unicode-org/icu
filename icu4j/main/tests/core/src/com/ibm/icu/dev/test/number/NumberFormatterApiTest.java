@@ -377,7 +377,7 @@ public class NumberFormatterApiTest {
     public void unitMeasure() {
         assertFormatDescending(
                 "Meters Short",
-                "U:length:meter",
+                "measure-unit/length-meter",
                 NumberFormatter.with().unit(MeasureUnit.METER),
                 ULocale.ENGLISH,
                 "87,650 m",
@@ -392,7 +392,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Meters Long",
-                "U:length:meter unit-width=FULL_NAME",
+                "measure-unit/length-meter unit-width-full-name",
                 NumberFormatter.with().unit(MeasureUnit.METER).unitWidth(UnitWidth.FULL_NAME),
                 ULocale.ENGLISH,
                 "87,650 meters",
@@ -407,7 +407,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Compact Meters Long",
-                "CC U:length:meter unit-width=FULL_NAME",
+                "compact-long measure-unit/length-meter unit-width-full-name",
                 NumberFormatter.with().notation(Notation.compactLong()).unit(MeasureUnit.METER)
                         .unitWidth(UnitWidth.FULL_NAME),
                 ULocale.ENGLISH,

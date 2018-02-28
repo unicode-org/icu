@@ -81,9 +81,7 @@ public class StringSegment implements CharSequence {
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        throw new AssertionError(); // Never used
-        // Possible implementation:
-        // return str.subSequence(start + this.start, end + this.start);
+        return str.subSequence(start + this.start, end + this.start);
     }
 
     /**
