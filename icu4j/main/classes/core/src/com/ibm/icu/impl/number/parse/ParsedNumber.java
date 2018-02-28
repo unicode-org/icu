@@ -5,6 +5,7 @@ package com.ibm.icu.impl.number.parse;
 import java.math.BigDecimal;
 import java.util.Comparator;
 
+import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 
 /**

@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
@@ -380,7 +381,8 @@ public class NumberParserImpl {
     public void parse(String input, int start, boolean greedy, ParsedNumber result) {
         assert frozen;
         assert start >= 0 && start < input.length();
-        StringSegment segment = new StringSegment(input, parseFlags);
+        StringSegment segment = new StringSegment(input,
+                0 != (parseFlags & ParsingUtils.PARSE_FLAG_IGNORE_CASE));
         segment.adjustOffset(start);
         if (greedy) {
             parseGreedyRecursive(segment, result);

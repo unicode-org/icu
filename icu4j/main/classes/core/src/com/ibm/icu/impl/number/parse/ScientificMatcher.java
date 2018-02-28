@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
+import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
@@ -47,10 +48,10 @@ public class ScientificMatcher implements NumberParseMatcher {
 
             // Allow a sign, and then try to match digits.
             boolean minusSign = false;
-            if (segment.matches(UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.MINUS_SIGN))) {
+            if (segment.startsWith(UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.MINUS_SIGN))) {
                 minusSign = true;
                 segment.adjustOffsetByCodePoint();
-            } else if (segment.matches(UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.PLUS_SIGN))) {
+            } else if (segment.startsWith(UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.PLUS_SIGN))) {
                 segment.adjustOffsetByCodePoint();
             }
 
