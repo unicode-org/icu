@@ -454,6 +454,20 @@ public final class NumberFormatter {
     }
 
     /**
+     * Call this method at the beginning of a NumberFormatter fluent chain to create an instance based
+     * on a given number skeleton string.
+     *
+     * @param skeleton
+     *            The skeleton string off of which to base this NumberFormatter.
+     * @return An {@link UnlocalizedNumberFormatter}, to be used for chaining.
+     * @draft ICU 62
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static UnlocalizedNumberFormatter fromSkeleton(String skeleton) {
+        return NumberSkeletonImpl.getOrCreate(skeleton);
+    }
+
+    /**
      * @internal
      * @deprecated ICU 60 This API is ICU internal only.
      */

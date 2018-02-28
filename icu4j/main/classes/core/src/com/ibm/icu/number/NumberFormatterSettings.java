@@ -475,6 +475,18 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
         return create(KEY_THRESHOLD, threshold);
     }
 
+    /**
+     * Creates a skeleton string representation of this number formatter. A skeleton string is a
+     * locale-agnostic serialized form of a number formatter.
+     *
+     * @return A number skeleton string with behavior corresponding to this number formatter.
+     * @draft ICU 62
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String toSkeleton() {
+        return NumberSkeletonImpl.generate(resolve());
+    }
+
     /* package-protected */ abstract T create(int key, Object value);
 
     MacroProps resolve() {

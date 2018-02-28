@@ -26,8 +26,11 @@ public abstract class Rounder implements Cloneable {
 
     /* package-private final */ MathContext mathContext;
 
+    /* package-private */ static final MathContext DEFAULT_MATH_CONTEXT = RoundingUtils
+            .mathContextUnlimited(RoundingUtils.DEFAULT_ROUNDING_MODE);
+
     /* package-private */ Rounder() {
-        mathContext = RoundingUtils.mathContextUnlimited(RoundingUtils.DEFAULT_ROUNDING_MODE);
+        mathContext = DEFAULT_MATH_CONTEXT;
     }
 
     /**
@@ -245,7 +248,7 @@ public abstract class Rounder implements Cloneable {
      */
     public static Rounder maxDigits(int maxSignificantDigits) {
         if (maxSignificantDigits >= 1 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
-            return constructSignificant(0, maxSignificantDigits);
+            return constructSignificant(1, maxSignificantDigits);
         } else {
             throw new IllegalArgumentException("Significant digits must be between 1 and "
                     + RoundingUtils.MAX_INT_FRAC_SIG
