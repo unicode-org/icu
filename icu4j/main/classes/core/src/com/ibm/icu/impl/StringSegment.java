@@ -107,6 +107,13 @@ public class StringSegment implements CharSequence {
     }
 
     /**
+     * Returns the code point at the given index relative to the current offset.
+     */
+    public int codePointAt(int index) {
+        return str.codePointAt(start + index);
+    }
+
+    /**
      * Returns true if the first code point of this StringSegment equals the given code point.
      *
      * <p>
