@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.parse.IgnorablesMatcher;
 import com.ibm.icu.impl.number.parse.MinusSignMatcher;
@@ -17,7 +18,6 @@ import com.ibm.icu.impl.number.parse.ParsingUtils;
 import com.ibm.icu.impl.number.parse.PercentMatcher;
 import com.ibm.icu.impl.number.parse.PlusSignMatcher;
 import com.ibm.icu.impl.number.parse.SeriesMatcher;
-import com.ibm.icu.impl.number.parse.StringSegment;
 import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache;
 import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.Key;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -192,7 +192,7 @@ public class NumberParserTest {
             int expectedOffset = (Integer) cas[1];
             boolean expectedMaybeMore = (Boolean) cas[2];
 
-            StringSegment segment = new StringSegment(input, 0);
+            StringSegment segment = new StringSegment(input, false);
             ParsedNumber result = new ParsedNumber();
             boolean actualMaybeMore = series.match(segment, result);
             int actualOffset = segment.getOffset();

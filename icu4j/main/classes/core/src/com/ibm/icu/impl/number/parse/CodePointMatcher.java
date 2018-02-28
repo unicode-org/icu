@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
+import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -24,7 +25,7 @@ public class CodePointMatcher implements NumberParseMatcher {
 
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
-        if (segment.matches(cp)) {
+        if (segment.startsWith(cp)) {
             segment.adjustOffsetByCodePoint();
             result.setCharsConsumed(segment);
         }

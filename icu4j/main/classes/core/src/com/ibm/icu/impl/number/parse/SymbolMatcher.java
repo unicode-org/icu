@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
+import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -47,7 +48,7 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
             }
         }
 
-        if (segment.matches(uniSet)) {
+        if (segment.startsWith(uniSet)) {
             segment.adjustOffsetByCodePoint();
             accept(segment, result);
             return false;
