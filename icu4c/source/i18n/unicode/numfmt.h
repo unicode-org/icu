@@ -28,7 +28,7 @@
 
 /**
  * \file
- * \brief C++ API: Abstract base class for all number formats.
+ * \brief C++ API: Compatibility APIs for number formatting.
  */
 
 #if !UCONFIG_NO_FORMATTING
@@ -53,15 +53,15 @@ class StringEnumeration;
 #endif
 
 /**
+ * <p><strong>IMPORTANT:</strong> New users are strongly encouraged to see if
+ * numberformatter.h fits their use case.  Although not deprecated, this header
+ * is on life support and is provided for backwards compatibility only.
+ * <hr/>
  *
  * Abstract base class for all number formats.  Provides interface for
  * formatting and parsing a number.  Also provides methods for
  * determining which locales have number formats, and what their names
  * are.
- *
- * <p><strong>NOTE:</strong> Starting in ICU 60, there is a new set of APIs for localized number
- * formatting that are designed to be an improvement over DecimalFormat.  New users are discouraged
- * from using DecimalFormat.  For more information, see numberformatter.h.
  *
  * \headerfile unicode/numfmt.h "unicode/numfmt.h"
  * <P>
