@@ -1027,6 +1027,12 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
         return UTRIE3_BMP_INDEX_LENGTH;
     }
 
+    // Find the largest "gap" of one or more index-2 null blocks.
+    // Put the empty gap at highStart.
+    int32_t gapStart = highStart >> UTRIE3_SUPP_SHIFT_2;
+    int32_t gapLength = 0;
+    int32_t tempGapStart = -1;
+
     // Examine supplementary index-2 blocks. For each determine one of:
     // - same as the index-2 null block
     // - same as a BMP index block
@@ -1034,12 +1040,8 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
     // - 18-bit indexes
     // We store this in the first flags entry for the index-2 block.
     //
-    // Also determine an upper limit for the index16 table length,
-    // starting with the length of the index-1 table.
-    int32_t index1Length = (highStart - BMP_LIMIT) >> UTRIE3_SUPP_SHIFT_1;
-    int32_t index16Capacity = index1Length;
-    // Account for possible index table padding.
-    ++index16Capacity;
+    // Also determine an upper limit for the index16 table length.
+    int32_t index16Capacity = 0;
     i2FirstNull = index2NullOffset;
     int32_t iLimit = highStart >> UTRIE3_SUPP_SHIFT_2;
     for (int32_t i = BMP_I_LIMIT; i < iLimit;) {
@@ -1064,22 +1066,48 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
                 }
                 i2FirstNull = 0;
             }
-        } else if (oredI2 <= 0xffff) {
-            int32_t n = findSameBlock(index, 0, UTRIE3_BMP_INDEX_LENGTH,
-                                      index, i, UTRIE3_INDEX_2_BLOCK_LENGTH);
-            if (n >= 0) {
-                flags[i] = I2_BMP;
-                index[i] = n;
-            } else {
-                flags[i] = I2_16;
-                index16Capacity += UTRIE3_INDEX_2_BLOCK_LENGTH;
+            if (tempGapStart < 0) {
+                tempGapStart = i;
+            }
+            int32_t tempGapLength = j - tempGapStart;
+            if (tempGapLength > gapLength) {
+                gapStart = tempGapStart;
+                gapLength = tempGapLength;
             }
         } else {
-            flags[i] = I2_18;
-            index16Capacity += INDEX_2_18BIT_BLOCK_LENGTH;
+            if (oredI2 <= 0xffff) {
+                int32_t n = findSameBlock(index, 0, UTRIE3_BMP_INDEX_LENGTH,
+                                          index, i, UTRIE3_INDEX_2_BLOCK_LENGTH);
+                if (n >= 0) {
+                    flags[i] = I2_BMP;
+                    index[i] = n;
+                } else {
+                    flags[i] = I2_16;
+                    index16Capacity += UTRIE3_INDEX_2_BLOCK_LENGTH;
+                }
+            } else {
+                flags[i] = I2_18;
+                index16Capacity += INDEX_2_18BIT_BLOCK_LENGTH;
+            }
+            tempGapStart = -1;
         }
         i = j;
     }
+
+    int32_t gapLimit = gapStart + gapLength;
+    // Note: There is a small chance that the data null block is only reachable from gap indexes,
+    // in which case we only need one data null value rather than a whole data block.
+    // It is not worth trying to prevent that.
+    // Note: When nullValue!=highValue, it is possible that
+    // the gap consumes the entire index-1 table.
+
+    // Length of the index-1 table including gapStart & gapLimit but minus the gap.
+    int32_t index1Length = 2 + ((highStart - BMP_LIMIT) >> UTRIE3_SUPP_SHIFT_1) -
+        (gapLength >> UTRIE3_SUPP_SHIFT_1_2);
+
+    // Include the index-1 table in the index array capacity.
+    // +1 for possible index table padding.
+    index16Capacity += index1Length + 1;
 
     // Compact the supplementary index-2 table.
     // Write the supplementary index-1 table at the start of index16, then the index-2 values.
@@ -1088,9 +1116,18 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
+
+    int32_t i1 = 0;
+    index16[i1++] = gapStart >> UTRIE3_SUPP_SHIFT_1_2;
+    index16[i1++] = gapLimit >> UTRIE3_SUPP_SHIFT_1_2;
+
     i2FirstNull = index2NullOffset;
     int32_t indexLength = index1Length;
-    for (int32_t i = BMP_I_LIMIT; i < iLimit; i += UTRIE3_INDEX_2_BLOCK_LENGTH) {
+    for (int32_t i = BMP_I_LIMIT;; i += UTRIE3_INDEX_2_BLOCK_LENGTH) {
+        if (i == gapStart) {
+            i = gapLimit;  // Skip the gap.
+        }
+        if (i == iLimit) { break; }
         int32_t i2;
         uint8_t f = flags[i];
         if (f == I2_NULL && i2FirstNull < 0) {
@@ -1181,8 +1218,9 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
             index2NullOffset = i2;
         }
         // Set the index-1 table entry.
-        index16[(i >> UTRIE3_SUPP_SHIFT_1_2) - UTRIE3_OMITTED_BMP_INDEX_1_LENGTH] = i2;
+        index16[i1++] = i2;
     }
+    U_ASSERT(i1 == index1Length);
 
     if (index2NullOffset < 0) {
         index2NullOffset = UTRIE3_NO_INDEX2_NULL_OFFSET;
@@ -1193,8 +1231,10 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
 
 #ifdef UTRIE3_DEBUG
     /* we saved some space */
-    printf("compacting UTrie3: count of 16-bit index words %lu->%lu\n",
-            (long)iLimit, (long)indexLength);
+    printf("compacting UTrie3: count of 16-bit index words %lu->%lu  "
+           "index-1 gap length %d %04lx..%04lx\n",
+            (long)iLimit, (long)indexLength, (int)(gapLength >> UTRIE3_SUPP_SHIFT_1_2),
+            (long)(gapStart << UTRIE3_SUPP_SHIFT_2), (long)(gapLimit << UTRIE3_SUPP_SHIFT_2));
 #endif
 
     return indexLength;

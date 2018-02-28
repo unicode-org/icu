@@ -95,7 +95,7 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
 
     // Get the data.
     int32_t nullValueOffset = trie->dataNullOffset;
-    if (nullValueOffset >= trie->dataLength - UTRIE3_SUPP_DATA_BLOCK_LENGTH) {
+    if (nullValueOffset >= trie->dataLength) {
         nullValueOffset = trie->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET;
     }
     switch (valueBits) {
@@ -168,31 +168,41 @@ utrie3_close(UTrie3 *trie) {
 
 U_CAPI int32_t U_EXPORT2
 utrie3_internalIndexFromSupp(const UTrie3 *trie, UChar32 c) {
-    U_ASSERT(0xffff < c && c <= 0x10ffff);
-    if (c >= trie->highStart) {
-        // Possible when called from UTF-8 macro which compares with shifted12HighStart.
-        return trie->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET;
+    U_ASSERT(0xffff < c && c < trie->highStart);
+    int32_t i1Start = UTRIE3_BMP_INDEX_LENGTH;
+    int32_t i1 = c >> UTRIE3_SUPP_SHIFT_1;
+    int32_t gapStart = trie->index[i1Start];
+    if (i1 >= gapStart) {
+        int32_t gapLimit = trie->index[i1Start + 1];
+        if (i1 < gapLimit) {
+            return trie->dataNullOffset;  // inside the index-1 gap
+        }
+        i1 -= gapLimit - gapStart;  // above the index-1 gap
     }
-    int32_t i2Block = trie->index[
-        (UTRIE3_INDEX_1_OFFSET - UTRIE3_OMITTED_BMP_INDEX_1_LENGTH) + (c >> UTRIE3_SUPP_SHIFT_1)];
-    int32_t c2 = (c >> UTRIE3_SUPP_SHIFT_2) & UTRIE3_INDEX_2_MASK;
+    int32_t i2Block = trie->index[i1Start - UTRIE3_OMITTED_BMP_INDEX_1_LENGTH + 2 + i1];
+    int32_t i2 = (c >> UTRIE3_SUPP_SHIFT_2) & UTRIE3_INDEX_2_MASK;
     int32_t dataBlock;
     if ((i2Block & 0x8000) == 0) {
         // 16-bit indexes
-        dataBlock = trie->index[i2Block + c2];
+        dataBlock = trie->index[i2Block + i2];
     } else {
         // 18-bit indexes stored in groups of 9 entries per 8 indexes.
-        i2Block = (i2Block & 0x7fff) + (c2 & ~7) + (c2 >> 3);
-        c2 &= 7;
-        dataBlock = (trie->index[i2Block++] << (2 + (2 * c2))) & 0x30000;
-        dataBlock |= trie->index[i2Block + c2];
+        i2Block = (i2Block & 0x7fff) + (i2 & ~7) + (i2 >> 3);
+        i2 &= 7;
+        dataBlock = (trie->index[i2Block++] << (2 + (2 * i2))) & 0x30000;
+        dataBlock |= trie->index[i2Block + i2];
     }
     return dataBlock + (c & UTRIE3_SUPP_DATA_MASK);
 }
 
 U_CAPI int32_t U_EXPORT2
 utrie3_internalIndexFromSuppU8(const UTrie3 *trie, int32_t lt1, uint8_t t2, uint8_t t3) {
-    return utrie3_internalIndexFromSupp(trie, (lt1 << 12) | (t2 << 6) | t3);
+    UChar32 c = (lt1 << 12) | (t2 << 6) | t3;
+    if (c >= trie->highStart) {
+        // Possible because the UTF-8 macro compares with shifted12HighStart which may be higher.
+        return trie->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET;
+    }
+    return utrie3_internalIndexFromSupp(trie, c);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -294,8 +304,28 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
             dataBlockLength = UTRIE3_BMP_DATA_BLOCK_LENGTH;
         } else {
             // Supplementary code points
-            i2Block = index[(UTRIE3_INDEX_1_OFFSET - UTRIE3_OMITTED_BMP_INDEX_1_LENGTH) +
-                            (c >> UTRIE3_SUPP_SHIFT_1)];
+            int32_t i1Start = UTRIE3_BMP_INDEX_LENGTH;
+            int32_t i1 = c >> UTRIE3_SUPP_SHIFT_1;
+            int32_t gapStart = trie->index[i1Start];
+            if (i1 >= gapStart) {
+                int32_t gapLimit = trie->index[i1Start + 1];
+                if (i1 < gapLimit) {
+                    // inside the index-1 gap
+                    if (haveValue) {
+                        if (nullValue != value) {
+                            return c - 1;
+                        }
+                    } else {
+                        value = nullValue;
+                        if (pValue != nullptr) { *pValue = nullValue; }
+                        haveValue = true;
+                    }
+                    c = gapLimit << UTRIE3_SUPP_SHIFT_1;
+                    continue;
+                }
+                i1 -= gapLimit - gapStart;  // above the index-1 gap
+            }
+            i2Block = trie->index[i1Start - UTRIE3_OMITTED_BMP_INDEX_1_LENGTH + 2 + i1];
             if (i2Block == prevI2Block && (c - start) >= UTRIE3_CP_PER_INDEX_1_ENTRY) {
                 // The index-2 block is the same as the previous one, and filled with value.
                 // Only possible for supplementary code points because the linear-BMP index
@@ -546,7 +576,7 @@ utrie3_swap(const UDataSwapper *ds,
     if( trie.signature!=UTRIE3_SIG ||
         UTRIE3_32_VALUE_BITS < valueBits ||
         (trie.options & UTRIE3_OPTIONS_RESERVED_MASK) != 0 ||
-        trie.indexLength<UTRIE3_INDEX_1_OFFSET ||
+        trie.indexLength < UTRIE3_BMP_INDEX_LENGTH ||
         dataLength < ASCII_LIMIT
     ) {
         *pErrorCode=U_INVALID_FORMAT_ERROR; /* not a UTrie */

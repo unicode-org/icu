@@ -1098,7 +1098,7 @@ FreeBlocksTest(void) {
      * Repeatedly set overlapping same-value ranges to stress the free-data-block management.
      * If it fails, it will overflow the data array.
      */
-    for(i=0; i<(0x120000>>UTRIE3_SUPP_SHIFT_2)/2; ++i) {
+    for(i=0; i<(0x120000>>4)/2; ++i) {  // 4=UTRIE3_SUPP_SHIFT_2
         utrie3bld_setRange(builder, 0x740, 0x840-1, 1, TRUE, &errorCode);
         utrie3bld_setRange(builder, 0x780, 0x880-1, 1, TRUE, &errorCode);
         utrie3bld_setRange(builder, 0x740, 0x840-1, 2, TRUE, &errorCode);

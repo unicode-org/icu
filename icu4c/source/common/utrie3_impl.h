@@ -67,4 +67,60 @@ enum {
     UTRIE3_NO_DATA_NULL_OFFSET = 0xfffff
 };
 
+// Internal constants. TODO: move some into the builder .cpp?
+// TODO: doc complete data structure
+enum {
+    /** The length of the BMP index table. 1024=0x400 */
+    UTRIE3_BMP_INDEX_LENGTH = 0x10000 >> UTRIE3_BMP_SHIFT,
+
+    /** Shift size for getting the index-1 table offset. */
+    UTRIE3_SUPP_SHIFT_1 = 6 + 4,
+
+    /** Shift size for getting the index-2 table offset. */
+    UTRIE3_SUPP_SHIFT_2 = 4,
+
+    /**
+     * Difference between the two shift sizes,
+     * for getting an index-1 offset from an index-2 offset. 6=10-4
+     */
+    UTRIE3_SUPP_SHIFT_1_2 = UTRIE3_SUPP_SHIFT_1 - UTRIE3_SUPP_SHIFT_2,
+
+    /**
+     * Number of index-1 entries for the BMP. 64=0x40
+     * This part of the index-1 table is omitted from the serialized form.
+     */
+    UTRIE3_OMITTED_BMP_INDEX_1_LENGTH = 0x10000 >> UTRIE3_SUPP_SHIFT_1,
+
+    /** Number of code points per index-1 table entry. 1024=0x400 */
+    UTRIE3_CP_PER_INDEX_1_ENTRY = 1 << UTRIE3_SUPP_SHIFT_1,
+
+    /** Number of entries in an index-2 block. 64=0x40 */
+    UTRIE3_INDEX_2_BLOCK_LENGTH = 1 << UTRIE3_SUPP_SHIFT_1_2,
+
+    /** Mask for getting the lower bits for the in-index-2-block offset. */
+    UTRIE3_INDEX_2_MASK = UTRIE3_INDEX_2_BLOCK_LENGTH - 1,
+
+    /** Number of entries in a supplementary data block. 16=0x10 */
+    UTRIE3_SUPP_DATA_BLOCK_LENGTH = 1 << UTRIE3_SUPP_SHIFT_2,
+
+    /** Mask for getting the lower bits for the in-supplementary-data-block offset. */
+    UTRIE3_SUPP_DATA_MASK = UTRIE3_SUPP_DATA_BLOCK_LENGTH - 1
+
+#if 0
+    /**
+     * The supplementary index-1 table follows the BMP index table at offset 1024=0x400.
+     * Variable length, for code points up to highStart, where the last single-value range starts.
+     * Maximum length 1024=0x400=0x100000>>UTRIE3_SUPP_SHIFT_1.
+     * (For 0x100000 supplementary code points U+10000..U+10ffff.)
+     *
+     * The supplementary index-2 table starts after this index-1 table.
+     *
+     * Both the supplementary index-1 table and the supplementary index-2 table
+     * are omitted completely if there is only BMP data (highStart<=0x10000).
+     */
+    UTRIE3_INDEX_1_OFFSET = UTRIE3_BMP_INDEX_LENGTH,
+
+#endif
+};
+
 #endif
