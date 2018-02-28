@@ -1722,11 +1722,32 @@ public class NumberFormatTest extends TestFmwk {
         // Test all characters in the UTS 18 "blank" set stated in the API docstring.
         UnicodeSet blanks = new UnicodeSet("[[:Zs:][\\u0009]]").freeze();
         for (String space : blanks) {
-            String str = "a  " + space + "  b1234";
+            String str = "a " + space + " b1234c  ";
+            expect(fmt, str, n);
+        }
+
+        // Arbitrary whitespace is not accepted in strict mode.
+        fmt.setParseStrict(true);
+        for (String space : blanks) {
+            String str = "a " + space + " b1234c  ";
+            expectParseException(fmt, str, n);
+        }
+
+        // Test default ignorable characters.  These should work in both lenient and strict.
+        UnicodeSet defaultIgnorables = new UnicodeSet("[[:Default_Ignorable_Code_Point:]]").freeze();
+        fmt.setParseStrict(false);
+        for (String ignorable : defaultIgnorables) {
+            String str = "a b " + ignorable + "1234c  ";
+            expect(fmt, str, n);
+        }
+        fmt.setParseStrict(true);
+        for (String ignorable : defaultIgnorables) {
+            String str = "a b " + ignorable + "1234c  ";
             expect(fmt, str, n);
         }
 
         // Test that other whitespace characters do not work
+        fmt.setParseStrict(false);
         UnicodeSet otherWhitespace = new UnicodeSet("[[:whitespace:]]").removeAll(blanks).freeze();
         for (String space : otherWhitespace) {
             String str = "a  " + space + "  b1234";
