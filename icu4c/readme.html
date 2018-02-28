@@ -787,25 +787,47 @@
     <p>The steps are:</p>
 
     <ol>
-      <li>Unzip the icu-XXXX.zip file into any convenient location. Using command
-      line zip, type "unzip -a icu-XXXX.zip -d drive:\directory", or just use
-      WinZip.</li>
+      <li>Unzip the <tt>icu-XXXX.zip</tt> file into any convenient location.<br/>
+        <ul class="no-left-margin">
+          <li>You can use the built-in zip functionality of Windows Explorer to do this.
+          Right-click on the .zip file and choose the "Extract All" option from the context menu.
+          This will open a new window where you can choose the output location to put the files.</li>
+          <li>Alternatively, you can use a 3<sup>rd</sup> party GUI tool like 7-Zip or WinZip to do this as well.</li>
+        </ul>
+      </li>
 
-      <li>Be sure that the ICU binary directory, <i>&lt;ICU&gt;</i>\bin\, is
+      <li>Be sure that the ICU binary directory, (ex: <i>&lt;ICU&gt;</i><tt>\bin\</tt>), is
       included in the <strong>PATH</strong> environment variable. The tests will
-      not work without the location of the ICU DLL files in the path.</li>
+      not work without the location of the ICU DLL files in the path.
+      Note that the binary directory name can depend on what architecture you select when you compile ICU.
+      For x86 or 32-bit builds, the binary directory is "<tt>bin</tt>". Whereas for x64 or 64-bit builds
+      the binary directory is "<tt>bin64</tt>".
+      </li>
 
-      <li>Open the "<i>&lt;ICU&gt;</i>\source\allinone\allinone.sln" workspace
+      <li>Open the "<i>&lt;ICU&gt;</i><tt>\source\allinone\allinone.sln</tt>" solution
       file in Microsoft Visual Studio. (This solution includes all the
       International Components for Unicode libraries, necessary ICU building
-      tools, and the test suite projects). Please see the <a href=
-      "#HowToBuildWindowsCommandLine">command line note below</a> if you want to
+      tools, and the test suite projects). Please see the 
+      <a href="#HowToBuildWindowsCommandLine">command line note below</a> if you want to
       build from the command line instead.</li>
 
-      <li>You may need to re-target the UWP projects to the version of the SDK that you have installed. In Visual Studio you can
-      right-click on the UWP projects and select the option 'Retarget SDK Version'. Note: You do not need to have a copy of 
-      the Windows 10 SDK installed in order to build the non-UWP projects in Visual Studio. If the SDK is not installed then the
-      UWP projects will simply not be loaded.</li>
+      <li>You may need to "re-target" the 3 UWP projects (common_uwp, i18n_uwp, and makedata_uwp) to 
+      the version of the SDK that you have installed. In Visual Studio you can right-click on the 
+      UWP projects in the Solution Explorer and select the option 'Retarget Projects' from the context menu.
+      This will open up a window where you can select the SDK version to target from a list of the
+      various SDKs that are installed on the machine.
+      <br/> Alternatively, you can manually edit the "<tt>*.vcxproj</tt>" files for the 3 UWP 
+      projects to change the value of the "<tt>WindowsTargetPlatformVersion</tt>" property to the
+      version of the SDK that you would like to use instead.</li>
+        <ul class="no-left-margin">
+          <li>Note: You do <i>not</i> need to have a copy of the Windows 10 SDK installed in order
+            to build the other (non-UWP) projects in Visual Studio. If the Windows 10 SDK is not 
+            installed then the UWP projects will not be loaded by Visual Studio.</li>
+          <li>On Windows versions below Windows 10, the UWP projects will not load inside of the 
+            Visual Studio GUI. However, you can still build the UWP projects on the command line
+            using <tt>MSBUILD</tt> instead. For more on this limitation see the Visual Studio 2017
+            <a href="https://docs.microsoft.com/visualstudio/productinfo/vs2017-system-requirements-vs">release notes</a>.</li>
+      </ul>
 
       <li>Set the active platform to "Win32" or "x64" (See <a href="#HowToBuildWindowsPlatform">Windows platform note</a> below)
       and configuration to "Debug" or "Release" (See <a href="#HowToBuildWindowsConfig">Windows configuration note</a> below).</li>
@@ -814,62 +836,81 @@
       build the Debug and Release at the same time, see the <a href=
       "#HowToBuildWindowsBatch">batch configuration note</a> below.</li>
 
-
       <li>Run the tests. They can be run from the command line or from within Visual Studio.
 
-	 <h4>Running the Tests from the Windows Command Line (cmd)</h4>
-	<ul>
-	   <li>For x86 (32 bit) and Debug, use: <br />
+        <h4>Running the Tests from the Windows Command Line (cmd)</h4>
+        <ul>
+          <li>The general syntax is:<br />
+              <div class="indent">
+                <tt><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <i>Platform</i> <i>Configuration</i></tt>
+              </div>
+          </li>
+          <li>So, for example for x86 (32-bit) and Debug, use the following:<br />
+              <samp><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x86</b> <b>Debug</b></samp>
+              For x86 (32-bit) and Release:
+              <samp><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x86</b> <b>Release</b></samp>
+              For x64 (64-bit) and Debug:
+              <samp><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x64</b> <b>Debug</b></samp>
+              For x64 (64-bit) and Release:
+              <samp><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x64</b> <b>Release</b></samp>
+          </li>
+        </ul>
 
-	<tt><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <i>Platform</i> <i>Configuration</i>
-		</tt> <br />
-       </li>
-	<li>So, for example:
-				 <br />
-		<samp><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x86</b> <b>Debug</b></samp>
-				or
-		<samp><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x86</b> <b>Release</b></samp>
-				or
-		<samp><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x64</b> <b>Release</b></samp></li>
-	</ul>
+        <h4>Running the Tests from within Visual Studio</h4>
 
-         <h4>Running the Tests from within Visual Studio</h4>
+        <ol>
+          <li>Run the C++ test suite, "<tt>intltest</tt>". To do this: set the active startup
+          project to "intltest", and press Ctrl+F5 to run it. Make sure that it
+          passes without any errors.</li>
 
-	<ol>
-      <li>Run the C++ test suite, "intltest". To do this: set the active startup
-      project to "intltest", and press Ctrl+F5 to run it. Make sure that it
-      passes without any errors.</li>
+          <li>Run the C test suite, "<tt>cintltst</tt>". To do this: set the active startup
+          project to "cintltst", and press Ctrl+F5 to run it. Make sure that it
+          passes without any errors.</li>
 
-      <li>Run the C test suite, "cintltst". To do this: set the active startup
-      project to "cintltst", and press Ctrl+F5 to run it. Make sure that it
-      passes without any errors.</li>
-
-      <li>Run the I/O test suite, "iotest". To do this: set the active startup
-      project to "iotest", and press Ctrl+F5 to run it. Make sure that it passes
-      without any errors.</li>
-
-	</ol>
-
+          <li>Run the I/O test suite, "<tt>iotest</tt>". To do this: set the active startup
+          project to "iotest", and press Ctrl+F5 to run it. Make sure that it passes
+          without any errors.</li>
+        </ol>
 	</li>
 
       <li>You are now able to develop applications with ICU by using the
-      libraries and tools in <i>&lt;ICU&gt;</i>\bin\. The headers are in
-      <i>&lt;ICU&gt;</i>\include\ and the link libraries are in
-      <i>&lt;ICU&gt;</i>\lib\. To install the ICU runtime on a machine, or ship
+      libraries and tools in <tt><i>&lt;ICU&gt;</i>\bin\</tt>. The headers are in
+      <tt><i>&lt;ICU&gt;</i>\include\</tt> and the link libraries are in
+      <tt><i>&lt;ICU&gt;</i>\lib\</tt>. To install the ICU runtime on a machine, or ship
       it with your application, copy the needed components from
-      <i>&lt;ICU&gt;</i>\bin\ to a location on the system PATH or to your
+      <tt><i>&lt;ICU&gt;</i>\bin\</tt> to a location on the system PATH or to your
       application directory.</li>
     </ol>
 
     <p><a name="HowToBuildWindowsCommandLine" id=
-    "HowToBuildWindowsCommandLine"><strong>Using MSDEV At The Command Line
-    Note:</strong></a> You can build ICU from the command line. Assuming that you
-    have properly installed Microsoft Visual C++ to support command line
-    execution, you can run the following command to build the 32-bit Release version:
-    <code>'devenv.com <i>&lt;ICU&gt;</i>\source\allinone\allinone.sln /build "Release|Win32"'</code>.
-    Or to build the 64-bit Release version from the command line: 
-    <code>'devenv.com <i>&lt;ICU&gt;</i>\source\allinone\allinone.sln /build "Release|x64"'</code>.
-    <br />You can also use Cygwin with this compiler to build ICU, and you can refer to the <a href=
+    "HowToBuildWindowsCommandLine"><strong>Using MSBUILD At The Command Line Note:</strong></a>
+    You can build ICU from the command line instead of using the Visual Studio GUI.
+    
+    Assuming that you have properly installed Visual Studio to support command line building, you 
+    should have a shortcut for the "Developer Command Prompt" listed in the Start Menu.
+    (For Visual Studio 2017 you will need to install the "Desktop development with C++" option).</p>
+    
+    <ul>
+      <li>Open the "Developer Command Prompt" shortcut from the Start Menu. (This will open up a new command line window).</li>
+      <li>From within the "Developer Command Prompt" change directory (<tt>cd</tt>) to the ICU source directory.</li>
+      <li>You can then use either '<tt>msbuild</tt>' directly, or you can use the '<tt>devenv.com</tt>' command to build ICU.</li>
+      <li>Using <tt>MSBUILD</tt>:</li>
+      <ul class="no-left-margin">
+        <li>To build the 32-bit Debug version, use the following command line:
+          <code>'msbuild source\allinone\allinone.sln /p:Configuration=Debug /p:Platform=Win32'</code>.</li>
+        <li>To build the 64-bit Release version, use the following command line: 
+          <code>'msbuild source\allinone\allinone.sln /p:Configuration=Release /p:Platform=x64'</code>.</li>
+      </ul>
+      <li>Using <tt>devenv.com</tt>:</li>
+      <ul class="no-left-margin">
+        <li>To build the 32-bit Debug version, use the following command line:
+          <code>'devenv.com source\allinone\allinone.sln /build "Debug|Win32"'</code>.</li>
+        <li>To build the 64-bit Release version, use the following command line: 
+          <code>'devenv.com source\allinone\allinone.sln /build "Release|x64"'</code>.</li>
+      </ul>
+    </ul>
+    
+    <p>You can also use Cygwin with the MSVC compiler to build ICU, and you can refer to the <a href=
     "#HowToBuildCygwin">How To Build And Install On Windows with Cygwin</a>
     section for more details.</p>
 
@@ -907,6 +948,16 @@
     Build...". Click the "Select All" button, and then click the "Rebuild"
     button.</p>
 
+    <p><a name="HowToUseOtherCompilerVersions" id="HowToUseOtherCompilerVersions">
+    <strong>Building with other versions of MSVC Note:</strong></a> The particular version of the MSVC compiler
+    that is used to compile ICU is determined by the "<tt>PlatformToolset</tt>"  property in the various
+    <tt>.vcxproj</tt> project files. <br/>For example, <code>&lt;PlatformToolset&gt;v140&lt;/PlatformToolset&gt;</code>
+    corresponds to the Visual Studio 2015 compiler tool set, whereas <code>&lt;PlatformToolset&gt;v141&lt;/PlatformToolset&gt;</code>
+    corresponds to the Visual Studio 2017 compiler tool set.
+    However, using older versions of the MSVC compiler is generally not recommended due to the improved support for the C++11 standard
+    in newer versions of the compiler. Older versions of the compiler have reduced support for various C++11 features, many of which
+    are used by ICU.<br/></p>
+    
     <h3><a name="HowToBuildCygwin" href="#HowToBuildCygwin" id=
     "HowToBuildCygwin">How To Build And Install On Windows with Cygwin</a></h3>
 
@@ -916,7 +967,7 @@
     <ul>
       <li>Microsoft Windows</li>
 
-      <li>Microsoft Visual C++ (from Visual Studio 2015 or newer, when gcc isn't used).</li>
+      <li>Microsoft Visual C++ (from Visual Studio 2017 or newer, when gcc isn't used).</li>
 
       <li>
         Cygwin with the following installed:
@@ -1619,13 +1670,13 @@ gnumake</pre>
     <h3><a name="ImportantNotesWindows" href="#ImportantNotesWindows" id=
     "ImportantNotesWindows">Windows Platform</a></h3>
 
-    <p>If you are building on the Win32 platform, it is important that you
+    <p>If you are building on the Windows platform, it is important that you
     understand a few of the following build details.</p>
 
     <h4>DLL directories and the PATH setting</h4>
 
     <p>As delivered, the International Components for Unicode build as several
-    DLLs, which are placed in the "<i>&lt;ICU&gt;</i>\bin" directory. You must
+    DLLs, which are placed in the "<i>&lt;ICU&gt;</i>\bin64" directory. You must
     add this directory to the PATH environment variable in your system, or any
     executables you build will not be able to access International Components for
     Unicode libraries. Alternatively, you can copy the DLL files into a directory
@@ -1635,12 +1686,12 @@ gnumake</pre>
     <h4><a name="ImportantNotesWindowsPath" id=
     "ImportantNotesWindowsPath">Changing your PATH</a></h4>
 
-    <p><strong>Windows 2000/XP</strong>: Use the System Icon in the Control
+    <p><strong>Windows 2000/XP and above</strong>: Use the System Icon in the Control
     Panel. Pick the "Advanced" tab. Select the "Environment Variables..."
     button. Select the variable PATH in the lower box, and select the lower
     "Edit..." button. In the "Variable Value" box, append the string
-    ";<i>&lt;ICU&gt;</i>\bin" to the end of the path string. If there is
-    nothing there, just type in "<i>&lt;ICU&gt;</i>\bin". Click the Set button,
+    ";<i>&lt;ICU&gt;</i>\bin64" to the end of the path string. If there is
+    nothing there, just type in "<i>&lt;ICU&gt;</i>\bin64". Click the Set button,
     then the OK button.</p>
 
     <p>Note: When packaging a Windows application for distribution and
