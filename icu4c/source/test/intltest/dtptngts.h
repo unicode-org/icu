@@ -31,6 +31,7 @@ private:
     void testStaticGetSkeleton(/* char* par */);
     void testC();
     void testSkeletonsWithDayPeriods();
+    void testGetFieldDisplayNames();
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
