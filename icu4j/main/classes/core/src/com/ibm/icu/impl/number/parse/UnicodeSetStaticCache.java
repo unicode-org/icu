@@ -81,8 +81,9 @@ public class UnicodeSetStaticCache {
     }
 
     static {
-        // BiDi characters are skipped over and ignored at any point in the string, even in strict mode.
-        unicodeSets.put(Key.BIDI, new UnicodeSet("[[\\u200E\\u200F\\u061C]]").freeze());
+        // These characters are skipped over and ignored at any point in the string, even in strict mode.
+        // See ticket #13084.
+        unicodeSets.put(Key.BIDI, new UnicodeSet("[[:DI:]]").freeze());
 
         // This set was decided after discussion with icu-design@. See ticket #13309.
         // Zs+TAB is "horizontal whitespace" according to UTS #18 (blank property).

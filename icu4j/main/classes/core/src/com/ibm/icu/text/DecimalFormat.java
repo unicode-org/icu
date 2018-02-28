@@ -198,7 +198,7 @@ import com.ibm.icu.util.ULocale.Category;
  * example, a formatter instance gotten from NumberFormat.getInstance(ULocale,
  * NumberFormat.CURRENCYSTYLE) can parse both "USD1.00" and "3.00 US dollars".
  *
- * <p>Whitespace characters (lenient mode) and bidi control characters (lenient and strict mode),
+ * <p>Whitespace characters (lenient mode) and control characters (lenient and strict mode),
  * collectively called "ignorables", do not need to match in identity or quantity between the
  * pattern string and the input string. For example, the pattern "# %" matches "35 %" (with a single
  * space), "35%" (with no space), "35&nbsp;%" (with a non-breaking space), and "35&nbsp; %" (with
@@ -206,6 +206,7 @@ import com.ibm.icu.util.ULocale.Category;
  * number: prefix, number, exponent separator, and suffix. Ignorable whitespace characters are those
  * having the Unicode "blank" property for regular expressions, defined in UTS #18 Annex C, which is
  * "horizontal" whitespace, like spaces and tabs, but not "vertical" whitespace, like line breaks.
+ * Ignorable control characters are those in the Unicode set [:Default_Ignorable_Code_Point:].
  *
  * <p>If {@link #parse(String, ParsePosition)} fails to parse a string, it returns <code>null</code>
  * and leaves the parse position unchanged. The convenience method {@link #parse(String)} indicates

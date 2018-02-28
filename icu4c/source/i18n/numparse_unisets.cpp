@@ -63,8 +63,9 @@ void U_CALLCONV initNumberParseUniSets(UErrorCode& status) {
 
     gUnicodeSets[EMPTY] = new UnicodeSet();
 
-    // BiDi characters are skipped over and ignored at any point in the string, even in strict mode.
-    gUnicodeSets[BIDI] = new UnicodeSet(u"[[\\u200E\\u200F\\u061C]]", status);
+    // These characters are skipped over and ignored at any point in the string, even in strict mode.
+    // See ticket #13084.
+    gUnicodeSets[BIDI] = new UnicodeSet(u"[[:DI:]]", status);
 
     // This set was decided after discussion with icu-design@. See ticket #13309.
     // Zs+TAB is "horizontal whitespace" according to UTS #18 (blank property).
