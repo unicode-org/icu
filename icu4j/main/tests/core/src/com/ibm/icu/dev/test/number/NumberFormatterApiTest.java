@@ -770,7 +770,7 @@ public class NumberFormatterApiTest {
     public void roundingFraction() {
         assertFormatDescending(
                 "Integer",
-                "F0",
+                "round-integer",
                 NumberFormatter.with().rounding(Rounder.integer()),
                 ULocale.ENGLISH,
                 "87,650",
@@ -785,7 +785,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Fixed Fraction",
-                "F3",
+                ".000",
                 NumberFormatter.with().rounding(Rounder.fixedFraction(3)),
                 ULocale.ENGLISH,
                 "87,650.000",
@@ -800,7 +800,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Min Fraction",
-                "F1-",
+                ".0+",
                 NumberFormatter.with().rounding(Rounder.minFraction(1)),
                 ULocale.ENGLISH,
                 "87,650.0",
@@ -815,7 +815,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Max Fraction",
-                "F-1",
+                ".#",
                 NumberFormatter.with().rounding(Rounder.maxFraction(1)),
                 ULocale.ENGLISH,
                 "87,650",
@@ -830,7 +830,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Min/Max Fraction",
-                "F1-3",
+                ".0##",
                 NumberFormatter.with().rounding(Rounder.minMaxFraction(1, 3)),
                 ULocale.ENGLISH,
                 "87,650.0",
@@ -848,7 +848,7 @@ public class NumberFormatterApiTest {
     public void roundingFigures() {
         assertFormatSingle(
                 "Fixed Significant",
-                "S3",
+                "@@@",
                 NumberFormatter.with().rounding(Rounder.fixedDigits(3)),
                 ULocale.ENGLISH,
                 -98,
@@ -856,7 +856,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "Fixed Significant Rounding",
-                "S3",
+                "@@@",
                 NumberFormatter.with().rounding(Rounder.fixedDigits(3)),
                 ULocale.ENGLISH,
                 -98.7654321,
@@ -864,7 +864,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "Fixed Significant Zero",
-                "S3",
+                "@@@",
                 NumberFormatter.with().rounding(Rounder.fixedDigits(3)),
                 ULocale.ENGLISH,
                 0,
@@ -872,7 +872,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "Min Significant",
-                "S2-",
+                "@@+",
                 NumberFormatter.with().rounding(Rounder.minDigits(2)),
                 ULocale.ENGLISH,
                 -9,
@@ -880,7 +880,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "Max Significant",
-                "S-4",
+                "@###",
                 NumberFormatter.with().rounding(Rounder.maxDigits(4)),
                 ULocale.ENGLISH,
                 98.7654321,
@@ -888,7 +888,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "Min/Max Significant",
-                "S3-4",
+                "@@@#",
                 NumberFormatter.with().rounding(Rounder.minMaxDigits(3, 4)),
                 ULocale.ENGLISH,
                 9.99999,
@@ -899,7 +899,7 @@ public class NumberFormatterApiTest {
     public void roundingFractionFigures() {
         assertFormatDescending(
                 "Basic Significant", // for comparison
-                "S-2",
+                "@#",
                 NumberFormatter.with().rounding(Rounder.maxDigits(2)),
                 ULocale.ENGLISH,
                 "88,000",
@@ -914,7 +914,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "FracSig minMaxFrac minSig",
-                "F1-2>3",
+                ".0#/@@@+",
                 NumberFormatter.with().rounding(Rounder.minMaxFraction(1, 2).withMinDigits(3)),
                 ULocale.ENGLISH,
                 "87,650.0",
@@ -929,7 +929,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "FracSig minMaxFrac maxSig A",
-                "F1-3<2",
+                ".0##/@#",
                 NumberFormatter.with().rounding(Rounder.minMaxFraction(1, 3).withMaxDigits(2)),
                 ULocale.ENGLISH,
                 "88,000.0", // maxSig beats maxFrac
@@ -944,7 +944,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "FracSig minMaxFrac maxSig B",
-                "F2<2",
+                ".00/@#",
                 NumberFormatter.with().rounding(Rounder.fixedFraction(2).withMaxDigits(2)),
                 ULocale.ENGLISH,
                 "88,000.00", // maxSig beats maxFrac
@@ -959,7 +959,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "FracSig with trailing zeros A",
-                "",
+                ".00/@@@+",
                 NumberFormatter.with().rounding(Rounder.fixedFraction(2).withMinDigits(3)),
                 ULocale.ENGLISH,
                 0.1,
@@ -967,7 +967,7 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "FracSig with trailing zeros B",
-                "",
+                ".00/@@@+",
                 NumberFormatter.with().rounding(Rounder.fixedFraction(2).withMinDigits(3)),
                 ULocale.ENGLISH,
                 0.0999999,
@@ -978,7 +978,7 @@ public class NumberFormatterApiTest {
     public void roundingOther() {
         assertFormatDescending(
                 "Rounding None",
-                "Y",
+                "round-unlimited",
                 NumberFormatter.with().rounding(Rounder.unlimited()),
                 ULocale.ENGLISH,
                 "87,650",
@@ -993,7 +993,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Increment",
-                "M0.5",
+                "round-increment/0.5",
                 NumberFormatter.with().rounding(Rounder.increment(BigDecimal.valueOf(0.5))),
                 ULocale.ENGLISH,
                 "87,650.0",
@@ -1008,7 +1008,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Increment with Min Fraction",
-                "M0.5",
+                "round-increment/0.50",
                 NumberFormatter.with().rounding(Rounder.increment(new BigDecimal("0.50"))),
                 ULocale.ENGLISH,
                 "87,650.00",
@@ -1023,7 +1023,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Currency Standard",
-                "$CZK GSTANDARD",
+                "round-currency-standard",
                 NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.STANDARD)).unit(CZK),
                 ULocale.ENGLISH,
                 "CZK 87,650.00",
@@ -1038,7 +1038,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Currency Cash",
-                "$CZK GCASH",
+                "round-currency-cash",
                 NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.CASH)).unit(CZK),
                 ULocale.ENGLISH,
                 "CZK 87,650",
@@ -1053,7 +1053,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Currency Cash with Nickel Rounding",
-                "$CAD GCASH",
+                "round-currency-cash",
                 NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.CASH)).unit(CAD),
                 ULocale.ENGLISH,
                 "CA$87,650.00",
@@ -1068,7 +1068,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Currency not in top-level fluent chain",
-                "F0",
+                "round-currency-cash/CZK",
                 NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.CASH).withCurrency(CZK)),
                 ULocale.ENGLISH,
                 "87,650",
@@ -1083,7 +1083,7 @@ public class NumberFormatterApiTest {
 
         // NOTE: Other tests cover the behavior of the other rounding modes.
         assertFormatDescending(
-                "Rounding Mode CEILING",
+                "round-integer/CEILING",
                 "",
                 NumberFormatter.with().rounding(Rounder.integer().withMode(RoundingMode.CEILING)),
                 ULocale.ENGLISH,
@@ -2036,16 +2036,18 @@ public class NumberFormatterApiTest {
             double[] inputs,
             String... expected) {
         assert expected.length == 9;
-        // TODO: Add a check for skeleton.
-        // assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
+        assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
         LocalizedNumberFormatter l1 = f.threshold(0L).locale(locale); // no self-regulation
         LocalizedNumberFormatter l2 = f.threshold(1L).locale(locale); // all self-regulation
+        LocalizedNumberFormatter l3 = NumberFormatter.fromSkeleton(skeleton).locale(locale);
         for (int i = 0; i < 9; i++) {
             double d = inputs[i];
             String actual1 = l1.format(d).toString();
             assertEquals(message + ": Unsafe Path: " + d, expected[i], actual1);
             String actual2 = l2.format(d).toString();
             assertEquals(message + ": Safe Path: " + d, expected[i], actual2);
+            String actual3 = l3.format(d).toString();
+            assertEquals(message + ": Skeleton Path: " + d, expected[i], actual3);
         }
     }
 
@@ -2056,14 +2058,16 @@ public class NumberFormatterApiTest {
             ULocale locale,
             Number input,
             String expected) {
-        // TODO: Add a check for skeleton.
-        // assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
+        assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
         LocalizedNumberFormatter l1 = f.threshold(0L).locale(locale); // no self-regulation
         LocalizedNumberFormatter l2 = f.threshold(1L).locale(locale); // all self-regulation
+        LocalizedNumberFormatter l3 = NumberFormatter.fromSkeleton(skeleton).locale(locale);
         String actual1 = l1.format(input).toString();
         assertEquals(message + ": Unsafe Path: " + input, expected, actual1);
         String actual2 = l2.format(input).toString();
         assertEquals(message + ": Safe Path: " + input, expected, actual2);
+        String actual3 = l3.format(input).toString();
+        assertEquals(message + ": Skeleton Path: " + input, expected, actual3);
     }
 
     private static void assertFormatSingleMeasure(
@@ -2073,13 +2077,15 @@ public class NumberFormatterApiTest {
             ULocale locale,
             Measure input,
             String expected) {
-        // TODO: Add a check for skeleton.
-        // assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
+        assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
         LocalizedNumberFormatter l1 = f.threshold(0L).locale(locale); // no self-regulation
         LocalizedNumberFormatter l2 = f.threshold(1L).locale(locale); // all self-regulation
+        LocalizedNumberFormatter l3 = NumberFormatter.fromSkeleton(skeleton).locale(locale);
         String actual1 = l1.format(input).toString();
         assertEquals(message + ": Unsafe Path: " + input, expected, actual1);
         String actual2 = l2.format(input).toString();
         assertEquals(message + ": Safe Path: " + input, expected, actual2);
+        String actual3 = l3.format(input).toString();
+        assertEquals(message + ": Skeleton Path: " + input, expected, actual3);
     }
 }
