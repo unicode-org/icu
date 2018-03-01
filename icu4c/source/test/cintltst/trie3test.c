@@ -9,6 +9,7 @@
 #include "unicode/utf.h"
 #include "unicode/utf16.h"
 #include "unicode/utf8.h"
+#include "uassert.h"
 #include "utrie.h"
 #include "utrie3.h"
 #include "utrie3builder.h"
@@ -317,8 +318,8 @@ static void
 testTrieUTF16(const char *testName,
               const UTrie3 *trie, UTrie3ValueBits valueBits,
               const CheckRange checkRanges[], int32_t countCheckRanges) {
-    UChar s[2000];
-    uint32_t values[1000];
+    UChar s[30000];
+    uint32_t values[16000];
 
     const UChar *p, *limit;
 
@@ -337,6 +338,7 @@ testTrieUTF16(const char *testName,
             U16_APPEND_UNSAFE(s, length, prevCP);   /* start of the range */
             values[countValues++]=value;
         }
+        U_ASSERT(length < UPRV_LENGTHOF(s) && countValues < UPRV_LENGTHOF(values));
         c=checkRanges[i].limit;
         prevCP=(prevCP+c)/2;                    /* middle of the range */
         if(!ACCIDENTAL_SURROGATE_PAIR(s, length, prevCP)) {
@@ -437,8 +439,8 @@ testTrieUTF8(const char *testName,
         0xfe,
         0xff
     };
-    uint8_t s[6000];
-    uint32_t values[2000];
+    uint8_t s[60000];
+    uint32_t values[16000];
 
     const uint8_t *p, *limit;
 
@@ -471,6 +473,7 @@ testTrieUTF8(const char *testName,
         } else {
             values[countValues++]=value;
         }
+        U_ASSERT(length < UPRV_LENGTHOF(s) && countValues < UPRV_LENGTHOF(values));
         c=checkRanges[i].limit;
         prevCP=(prevCP+c)/2;                    /* middle of the range */
         U8_APPEND_UNSAFE(s, length, prevCP);
@@ -823,7 +826,7 @@ testTrieSerializeAllValueBits(const char *testName,
                       UTRIE3_32_VALUE_BITS, withClone,
                       checkRanges, countCheckRanges);
 
-    return builder; /* could be the clone */
+    return builder;
 }
 
 static UTrie3Builder *
@@ -1210,6 +1213,62 @@ ManyAllSameBlocksTest(void) {
     utrie3bld_close(builder);
 }
 
+static void
+MuchDataTest(void) {
+    static const char *const testName="much-data";
+
+    UTrie3Builder *builder;
+    int32_t r, c;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    CheckRange checkRanges[(0x10000 >> 6) + (0x10240 >> 4) + 10];
+
+    builder = utrie3bld_open(0xff33, 0xbad, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_err("error: utrie3bld_open(%s) failed: %s\n", testName, u_errorName(errorCode));
+        return;
+    }
+    checkRanges[0].limit = 0;
+    checkRanges[0].value = 0xff33;  // initialValue
+    r = 1;
+
+    // Add much data that does not compact well,
+    // to get more than 128k data values after compaction.
+    for (c = 0; c < 0x10000; c += 0x40) {
+        uint32_t value = c >> 4;
+        utrie3bld_setRange(builder, c, c + 0x3f, value, TRUE, &errorCode);
+        checkRanges[r].limit = c + 0x40;
+        checkRanges[r++].value = value;
+    }
+    checkRanges[r].limit = 0x20000;
+    checkRanges[r++].value = 0xff33;
+    for (c = 0x20000; c < 0x30230; c += 0x10) {
+        uint32_t value = c >> 4;
+        utrie3bld_setRange(builder, c, c + 0xf, value, TRUE, &errorCode);
+        checkRanges[r].limit = c + 0x10;
+        checkRanges[r++].value = value;
+    }
+    utrie3bld_setRange(builder, 0x30230, 0x30233, 0x3023, TRUE, &errorCode);
+    checkRanges[r].limit = 0x30234;
+    checkRanges[r++].value = 0x3023;
+    utrie3bld_setRange(builder, 0x30234, 0xdffff, 0x5005, TRUE, &errorCode);
+    checkRanges[r].limit = 0xe0000;
+    checkRanges[r++].value = 0x5005;
+    utrie3bld_setRange(builder, 0xe0000, 0x10ffff, 0x9009, TRUE, &errorCode);
+    checkRanges[r].limit = 0x110000;
+    checkRanges[r++].value = 0x9009;
+    if (U_FAILURE(errorCode)) {
+        log_err("error: setting lots of values into a builder (%s) failed - %s\n",
+                testName, u_errorName(errorCode));
+        utrie3bld_close(builder);
+        return;
+    }
+    U_ASSERT(r <= UPRV_LENGTHOF(checkRanges));
+
+    testBuilder(testName, builder, checkRanges, r);
+    testTrieSerialize("much-data.16", builder, UTRIE3_16_VALUE_BITS, FALSE, checkRanges, r);
+    utrie3bld_close(builder);
+}
+
 /* versions 1 and 2 --------------------------------------------------------- */
 
 static void
@@ -1264,5 +1323,6 @@ addTrie3Test(TestNode** root) {
     addTest(root, &FreeBlocksTest, "tsutil/trie3test/FreeBlocksTest");
     addTest(root, &GrowDataArrayTest, "tsutil/trie3test/GrowDataArrayTest");
     addTest(root, &ManyAllSameBlocksTest, "tsutil/trie3test/ManyAllSameBlocksTest");
+    addTest(root, &MuchDataTest, "tsutil/trie3test/MuchDataTest");
     addTest(root, &GetVersionTest, "tsutil/trie3test/GetVersionTest");
 }
