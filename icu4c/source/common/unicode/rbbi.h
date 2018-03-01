@@ -478,6 +478,9 @@ public:
      * position from <code>next()</code>, <code>previous()</code>, or
      * any other break iterator functions that returns a boundary position.
      * <p>
+     * Note that <code>getRuleStatus()</code> returns the value corresponding to
+     * <code>current()</code> index even after <code>next()</code> has returned DONE.
+     * <p>
      * When creating custom break rules, one is free to define whatever
      * status values may be convenient for the application.
      * <p>
