@@ -832,15 +832,13 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit *createPicometer(UErrorCode &status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Returns unit of length: point.
      * Caller owns returned value and must free it.
      * @param status ICU error code.
-     * @draft ICU 59
+     * @stable ICU 59
      */
     static MeasureUnit *createPoint(UErrorCode &status);
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns unit of length: yard.
