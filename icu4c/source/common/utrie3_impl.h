@@ -74,27 +74,27 @@ enum {
     UTRIE3_BMP_INDEX_LENGTH = 0x10000 >> UTRIE3_BMP_SHIFT,
 
     /** Shift size for getting the index-1 table offset. */
-    UTRIE3_SUPP_SHIFT_1 = 6 + 4,
+    UTRIE3_SUPP_SHIFT_1 = 5 + 4,
 
     /** Shift size for getting the index-2 table offset. */
     UTRIE3_SUPP_SHIFT_2 = 4,
 
     /**
      * Difference between the two shift sizes,
-     * for getting an index-1 offset from an index-2 offset. 6=10-4
+     * for getting an index-1 offset from an index-2 offset. 5=9-4
      */
     UTRIE3_SUPP_SHIFT_1_2 = UTRIE3_SUPP_SHIFT_1 - UTRIE3_SUPP_SHIFT_2,
 
     /**
-     * Number of index-1 entries for the BMP. 64=0x40
+     * Number of index-1 entries for the BMP. 128=0x80
      * This part of the index-1 table is omitted from the serialized form.
      */
     UTRIE3_OMITTED_BMP_INDEX_1_LENGTH = 0x10000 >> UTRIE3_SUPP_SHIFT_1,
 
-    /** Number of code points per index-1 table entry. 1024=0x400 */
+    /** Number of code points per index-1 table entry. 512=0x200 */
     UTRIE3_CP_PER_INDEX_1_ENTRY = 1 << UTRIE3_SUPP_SHIFT_1,
 
-    /** Number of entries in an index-2 block. 64=0x40 */
+    /** Number of entries in an index-2 block. 32=0x20 */
     UTRIE3_INDEX_2_BLOCK_LENGTH = 1 << UTRIE3_SUPP_SHIFT_1_2,
 
     /** Mask for getting the lower bits for the in-index-2-block offset. */
