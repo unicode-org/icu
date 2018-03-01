@@ -1764,14 +1764,14 @@ void NumberFormatterApiTest::errors() {
         FormattedNumber fn = lnf.formatInt(1, status1);
         assertEquals(
                 "Should fail since rounder is not legal",
-                (UBool) TRUE,
-                (UBool) U_FAILURE(status1));
+                U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
+                status1);
         FieldPosition fp;
         fn.populateFieldPosition(fp, status2);
         assertEquals(
                 "Should fail on terminal method",
-                (UBool) TRUE,
-                (UBool) U_FAILURE(status2));
+                U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
+                status2);
     }
 
     {
@@ -1779,8 +1779,8 @@ void NumberFormatterApiTest::errors() {
         lnf.copyErrorTo(status);
         assertEquals(
                 "Should fail since rounder is not legal",
-                (UBool) TRUE,
-                (UBool) U_FAILURE(status));
+                U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
+                status);
     }
 }
 
