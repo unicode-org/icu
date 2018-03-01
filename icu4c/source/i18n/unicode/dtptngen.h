@@ -522,13 +522,14 @@ private:
      */
     DateTimePatternGenerator& operator=(const DateTimePatternGenerator& other);
 
+    static const int32_t UDATPG_WIDTH_COUNT = UDATPG_NARROW + 1;
+
     Locale pLocale;  // pattern locale
     FormatParser *fp;
     DateTimeMatcher* dtMatcher;
     DistanceInfo *distanceInfo;
     PatternMap *patternMap;
     UnicodeString appendItemFormats[UDATPG_FIELD_COUNT];
-    #define UDATPG_WIDTH_COUNT (UDATPG_NARROW + 1)
     UnicodeString fieldDisplayNames[UDATPG_FIELD_COUNT][UDATPG_WIDTH_COUNT];
     UnicodeString dateTimeFormat;
     UnicodeString decimal;

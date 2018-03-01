@@ -267,7 +267,7 @@ static const char* const CLDR_FIELD_NAME[UDATPG_FIELD_COUNT] = {
     "hour", "minute", "second", "*", "zone"
 };
 
-static const char* const CLDR_FIELD_WIDTH[UDATPG_WIDTH_COUNT] = {
+static const char* const CLDR_FIELD_WIDTH[] = { // [UDATPG_WIDTH_COUNT]
     "", "-short", "-narrow"
 };
 
