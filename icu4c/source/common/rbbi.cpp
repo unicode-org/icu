@@ -277,7 +277,6 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
 //
 //-----------------------------------------------------------------------------
 void RuleBasedBreakIterator::init(UErrorCode &status) {
-    fText                 = UTEXT_INITIALIZER;
     fCharIter             = NULL;
     fData                 = NULL;
     fPosition             = 0;
@@ -289,7 +288,12 @@ void RuleBasedBreakIterator::init(UErrorCode &status) {
     fBreakCache           = NULL;
     fDictionaryCache      = NULL;
 
-    if (U_FAILURE(status)) {
+    // Note: IBM xlC is unable to assign or initialize member fText from UTEXT_INITIALIZER.
+    // fText                 = UTEXT_INITIALIZER;
+    static const UText initializedUText = UTEXT_INITIALIZER;
+    uprv_memcpy(&fText, &initializedUText, sizeof(UText));
+
+   if (U_FAILURE(status)) {
         return;
     }
 
