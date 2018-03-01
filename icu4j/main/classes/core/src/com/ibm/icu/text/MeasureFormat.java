@@ -933,10 +933,15 @@ public class MeasureFormat extends UFormat {
         if (intFieldPosition.getBeginIndex() == 0 && intFieldPosition.getEndIndex() == 0) {
             throw new IllegalStateException();
         }
+
         // Format our duration as a date, but keep track of where the smallest field is
         // so that we can use it to replace the integer portion of the smallest value.
+        // #13606: DateFormat is not thread-safe, but MeasureFormat advertises itself as thread-safe.
         FieldPosition smallestFieldPosition = new FieldPosition(smallestField);
-        String draft = formatter.format(duration, new StringBuffer(), smallestFieldPosition).toString();
+        String draft;
+        synchronized (formatter) {
+            draft = formatter.format(duration, new StringBuffer(), smallestFieldPosition).toString();
+        }
 
         try {
             // If we find the smallest field
