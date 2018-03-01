@@ -4519,6 +4519,9 @@ void RBBITest::TestTableRedundancies() {
     }
 }
 
+// Bug 13447: verify that getRuleStatus() returns the value corresponding to current(),
+//            even after next() has returned DONE.
+
 void RBBITest::TestBug13447() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedBreakIterator> bi(
