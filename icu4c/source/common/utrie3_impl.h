@@ -73,23 +73,38 @@ enum {
     /** The length of the BMP index table. 1024=0x400 */
     UTRIE3_BMP_INDEX_LENGTH = 0x10000 >> UTRIE3_BMP_SHIFT,
 
-    /** Shift size for getting the index-1 table offset. */
-    UTRIE3_SUPP_SHIFT_1 = 5 + 4,
-
     /** Shift size for getting the index-2 table offset. */
     UTRIE3_SUPP_SHIFT_2 = 4,
 
+    /** Shift size for getting the index-1 table offset. */
+    UTRIE3_SUPP_SHIFT_1 = 5 + UTRIE3_SUPP_SHIFT_2,
+
+    /** Shift size for getting the index-0 table offset. TODO: shift index-x numbers; drop SUPP from shifts? */
+    UTRIE3_SUPP_SHIFT_0 = 5 + UTRIE3_SUPP_SHIFT_1,
+
     /**
-     * Difference between the two shift sizes,
+     * Difference between two shift sizes,
      * for getting an index-1 offset from an index-2 offset. 5=9-4
      */
     UTRIE3_SUPP_SHIFT_1_2 = UTRIE3_SUPP_SHIFT_1 - UTRIE3_SUPP_SHIFT_2,
 
     /**
-     * Number of index-1 entries for the BMP. 128=0x80
-     * This part of the index-1 table is omitted from the serialized form.
+     * Difference between two shift sizes,
+     * for getting an index-0 offset from an index-1 offset. 5=14-9
      */
-    UTRIE3_OMITTED_BMP_INDEX_1_LENGTH = 0x10000 >> UTRIE3_SUPP_SHIFT_1,
+    UTRIE3_SUPP_SHIFT_0_1 = UTRIE3_SUPP_SHIFT_0 - UTRIE3_SUPP_SHIFT_1,
+
+    /**
+     * Number of index-0 entries for the BMP. (4)
+     * This part of the index-0 table is omitted from the serialized form.
+     */
+    UTRIE3_OMITTED_BMP_INDEX_0_LENGTH = 0x10000 >> UTRIE3_SUPP_SHIFT_0,
+
+    /** Number of entries in an index-1 block. 32=0x20 */
+    UTRIE3_INDEX_1_BLOCK_LENGTH = 1 << UTRIE3_SUPP_SHIFT_0_1,
+
+    /** Mask for getting the lower bits for the in-index-1-block offset. */
+    UTRIE3_INDEX_1_MASK = UTRIE3_INDEX_1_BLOCK_LENGTH - 1,
 
     /** Number of code points per index-1 table entry. 512=0x200 */
     UTRIE3_CP_PER_INDEX_1_ENTRY = 1 << UTRIE3_SUPP_SHIFT_1,

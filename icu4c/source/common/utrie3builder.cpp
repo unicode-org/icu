@@ -51,15 +51,13 @@ constexpr int32_t MEDIUM_DATA_LENGTH = ((int32_t)1 << 17);
  */
 constexpr int32_t MAX_DATA_LENGTH = UNICODE_LIMIT;
 
+constexpr int32_t MAX_INDEX_1_LENGTH = (UNICODE_LIMIT - BMP_LIMIT) >> UTRIE3_SUPP_SHIFT_1;
+
 // Flag values for index-2 blocks while compacting/building.
 constexpr uint8_t I2_NULL = 0;
 constexpr uint8_t I2_BMP = 1;
 constexpr uint8_t I2_16 = 2;
 constexpr uint8_t I2_18 = 3;
-
-// This maximum index length guarantees that the index-2 null offset
-// cannot be the start of an actual index-2 block.
-constexpr int32_t MAX_INDEX_LENGTH = UTRIE3_NO_INDEX2_NULL_OFFSET + UTRIE3_INDEX_2_BLOCK_LENGTH - 1;
 
 constexpr int32_t INDEX_2_18BIT_BLOCK_LENGTH = UTRIE3_INDEX_2_BLOCK_LENGTH + UTRIE3_INDEX_2_BLOCK_LENGTH / 8;
 
@@ -1027,12 +1025,6 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
         return UTRIE3_BMP_INDEX_LENGTH;
     }
 
-    // Find the largest "gap" of one or more index-2 null blocks.
-    // Put the empty gap at highStart.
-    int32_t gapStart = highStart >> UTRIE3_SUPP_SHIFT_2;
-    int32_t gapLength = 0;
-    int32_t tempGapStart = -1;
-
     // Examine supplementary index-2 blocks. For each determine one of:
     // - same as the index-2 null block
     // - same as a BMP index block
@@ -1066,14 +1058,6 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
                 }
                 i2FirstNull = 0;
             }
-            if (tempGapStart < 0) {
-                tempGapStart = i;
-            }
-            int32_t tempGapLength = j - tempGapStart;
-            if (tempGapLength > gapLength) {
-                gapStart = tempGapStart;
-                gapLength = tempGapLength;
-            }
         } else {
             if (oredI2 <= 0xffff) {
                 int32_t n = findSameBlock(index, 0, UTRIE3_BMP_INDEX_LENGTH,
@@ -1089,25 +1073,18 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
                 flags[i] = I2_18;
                 index16Capacity += INDEX_2_18BIT_BLOCK_LENGTH;
             }
-            tempGapStart = -1;
         }
         i = j;
     }
 
-    int32_t gapLimit = gapStart + gapLength;
-    // Note: There is a small chance that the data null block is only reachable from gap indexes,
-    // in which case we only need one data null value rather than a whole data block.
-    // It is not worth trying to prevent that.
-    // Note: When nullValue!=highValue, it is possible that
-    // the gap consumes the entire index-1 table.
+    int32_t index1Capacity = (highStart - BMP_LIMIT) >> UTRIE3_SUPP_SHIFT_1;
 
-    // Length of the index-1 table including gapStart & gapLimit but minus the gap.
-    int32_t index1Length = 2 + ((highStart - BMP_LIMIT) >> UTRIE3_SUPP_SHIFT_1) -
-        (gapLength >> UTRIE3_SUPP_SHIFT_1_2);
+    // Length of the index-0 table, rounded up.
+    int32_t index0Length = (index1Capacity + UTRIE3_INDEX_1_MASK) >> UTRIE3_SUPP_SHIFT_0_1;
 
-    // Include the index-1 table in the index array capacity.
+    // Include the index-0 and index-1 tables in the index array capacity.
     // +1 for possible index table padding.
-    index16Capacity += index1Length + 1;
+    index16Capacity += index0Length + index1Capacity + 1;
 
     // Compact the supplementary index-2 table.
     // Write the supplementary index-1 table at the start of index16, then the index-2 values.
@@ -1117,17 +1094,11 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
         return 0;
     }
 
-    int32_t i1 = 0;
-    index16[i1++] = gapStart >> UTRIE3_SUPP_SHIFT_1_2;
-    index16[i1++] = gapLimit >> UTRIE3_SUPP_SHIFT_1_2;
-
+    uint16_t index1[MAX_INDEX_1_LENGTH];  // index1Capacity
+    int32_t i1Length = 0;
     i2FirstNull = index2NullOffset;
-    int32_t indexLength = index1Length;
-    for (int32_t i = BMP_I_LIMIT;; i += UTRIE3_INDEX_2_BLOCK_LENGTH) {
-        if (i == gapStart) {
-            i = gapLimit;  // Skip the gap.
-        }
-        if (i == iLimit) { break; }
+    int32_t indexLength = index0Length;
+    for (int32_t i = BMP_I_LIMIT; i < iLimit; i += UTRIE3_INDEX_2_BLOCK_LENGTH) {
         int32_t i2;
         uint8_t f = flags[i];
         if (f == I2_NULL && i2FirstNull < 0) {
@@ -1140,13 +1111,13 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
         } else if (f == I2_BMP) {
             i2 = index[i];
         } else if (f == I2_16) {
-            int32_t n = findSameBlock(index16, index1Length, indexLength,
+            int32_t n = findSameBlock(index16, index0Length, indexLength,
                                       index, i, UTRIE3_INDEX_2_BLOCK_LENGTH);
             if (n >= 0) {
                 i2 = UTRIE3_BMP_INDEX_LENGTH + n;
             } else {
-                if (indexLength == index1Length) {
-                    // No overlap at the boundary between the index-1 and index-2 tables.
+                if (indexLength == index0Length) {
+                    // No overlap at the boundary between the index-0 and index-2 tables.
                     n = 0;
                 } else {
                     n = getOverlap(index16, indexLength,
@@ -1191,13 +1162,13 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
                 index16[k++] = v;
                 index16[k - 9] = upperBits;
             } while (j < jLimit);
-            int32_t n = findSameBlock(index16, index1Length, indexLength,
+            int32_t n = findSameBlock(index16, index0Length, indexLength,
                                       index16, indexLength, INDEX_2_18BIT_BLOCK_LENGTH);
             if (n >= 0) {
                 i2 = (UTRIE3_BMP_INDEX_LENGTH + n) | 0x8000;
             } else {
-                if (indexLength == index1Length) {
-                    // No overlap at the boundary between the index-1 and index-2 tables.
+                if (indexLength == index0Length) {
+                    // No overlap at the boundary between the index-0 and index-2 tables.
                     n = 0;
                 } else {
                     n = getOverlap(index16, indexLength,
@@ -1207,7 +1178,7 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
                 if (n > 0) {
                     int32_t start = indexLength;
                     while (n < INDEX_2_18BIT_BLOCK_LENGTH) {
-                        index16[indexLength++] = index[start + n++];
+                        index16[indexLength++] = index16[start + n++];
                     }
                 } else {
                     indexLength += INDEX_2_18BIT_BLOCK_LENGTH;
@@ -1218,23 +1189,56 @@ int32_t Trie3Builder::compactIndex2(UErrorCode &errorCode) {
             index2NullOffset = i2;
         }
         // Set the index-1 table entry.
-        index16[i1++] = i2;
+        index1[i1Length++] = i2;
     }
-    U_ASSERT(i1 == index1Length);
+    U_ASSERT(i1Length == index1Capacity);
 
     if (index2NullOffset < 0) {
         index2NullOffset = UTRIE3_NO_INDEX2_NULL_OFFSET;
     }
+    if (indexLength >= (UTRIE3_NO_INDEX2_NULL_OFFSET + UTRIE3_INDEX_2_BLOCK_LENGTH)) {
+        // The index-2 offsets exceed 15 bits, or
+        // the last one cannot be distinguished from the no-null-block value.
+        errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
+        return 0;
+    }
+
+    int32_t blockLength = UTRIE3_INDEX_1_BLOCK_LENGTH;
+    int32_t i0 = 0;
+    for (int32_t i = 0; i < i1Length; i += blockLength) {
+        if ((i1Length - i) < blockLength) {
+            // highStart is inside the last index-1 block. Shorten it.
+            blockLength = i1Length - i;
+        }
+        int32_t i1;
+        int32_t n = findSameBlock(index16, index0Length, indexLength,
+                                  index1, i, blockLength);
+        if (n >= 0) {
+            i1 = UTRIE3_BMP_INDEX_LENGTH + n;
+        } else {
+            if (indexLength == index0Length) {
+                // No overlap at the boundary between the index-0 and index-2/1 tables.
+                n = 0;
+            } else {
+                n = getOverlap(index16, indexLength, index1, i, blockLength);
+            }
+            i1 = UTRIE3_BMP_INDEX_LENGTH + (indexLength - n);
+            while (n < blockLength) {
+                index16[indexLength++] = index1[i + n++];
+            }
+        }
+        // Set the index-0 table entry.
+        index16[i0++] = i1;
+    }
+    U_ASSERT(i0 == index0Length);
 
     U_ASSERT(indexLength <= index16Capacity);
     indexLength += UTRIE3_BMP_INDEX_LENGTH;
 
 #ifdef UTRIE3_DEBUG
     /* we saved some space */
-    printf("compacting UTrie3: count of 16-bit index words %lu->%lu  "
-           "index-1 gap length %d %04lx..%04lx\n",
-            (long)iLimit, (long)indexLength, (int)(gapLength >> UTRIE3_SUPP_SHIFT_1_2),
-            (long)(gapStart << UTRIE3_SUPP_SHIFT_2), (long)(gapLimit << UTRIE3_SUPP_SHIFT_2));
+    printf("compacting UTrie3: count of 16-bit index words %lu->%lu\n",
+            (long)iLimit, (long)indexLength);
 #endif
 
     return indexLength;
@@ -1347,11 +1351,6 @@ UTrie3 *Trie3Builder::build(UTrie3ValueBits valueBits, UErrorCode &errorCode) {
     if (valueBits == UTRIE3_32_VALUE_BITS && (indexLength & 1) != 0) {
         index16[suppIndexLength++] = 0xffee;  // arbitary value
         ++indexLength;
-    }
-    if (indexLength > MAX_INDEX_LENGTH) {
-        errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
-        clear();
-        return nullptr;
     }
 
     // Make the total trie structure length a multiple of 4 bytes by padding the data table,

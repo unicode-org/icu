@@ -169,17 +169,9 @@ utrie3_close(UTrie3 *trie) {
 U_CAPI int32_t U_EXPORT2
 utrie3_internalIndexFromSupp(const UTrie3 *trie, UChar32 c) {
     U_ASSERT(0xffff < c && c < trie->highStart);
-    int32_t i1Start = UTRIE3_BMP_INDEX_LENGTH;
-    int32_t i1 = c >> UTRIE3_SUPP_SHIFT_1;
-    int32_t gapStart = trie->index[i1Start];
-    if (i1 >= gapStart) {
-        int32_t gapLimit = trie->index[i1Start + 1];
-        if (i1 < gapLimit) {
-            return trie->dataNullOffset;  // inside the index-1 gap
-        }
-        i1 -= gapLimit - gapStart;  // above the index-1 gap
-    }
-    int32_t i2Block = trie->index[i1Start - UTRIE3_OMITTED_BMP_INDEX_1_LENGTH + 2 + i1];
+    int32_t i1Block = trie->index[UTRIE3_BMP_INDEX_LENGTH - UTRIE3_OMITTED_BMP_INDEX_0_LENGTH +
+                                  (c >> UTRIE3_SUPP_SHIFT_0)];
+    int32_t i2Block = trie->index[i1Block + ((c >> UTRIE3_SUPP_SHIFT_1) & UTRIE3_INDEX_1_MASK)];
     int32_t i2 = (c >> UTRIE3_SUPP_SHIFT_2) & UTRIE3_INDEX_2_MASK;
     int32_t dataBlock;
     if ((i2Block & 0x8000) == 0) {
@@ -304,32 +296,11 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
             dataBlockLength = UTRIE3_BMP_DATA_BLOCK_LENGTH;
         } else {
             // Supplementary code points
-            int32_t i1Start = UTRIE3_BMP_INDEX_LENGTH;
-            int32_t i1 = c >> UTRIE3_SUPP_SHIFT_1;
-            int32_t gapStart = trie->index[i1Start];
-            if (i1 >= gapStart) {
-                int32_t gapLimit = trie->index[i1Start + 1];
-                if (i1 < gapLimit) {
-                    // inside the index-1 gap
-                    if (haveValue) {
-                        if (nullValue != value) {
-                            return c - 1;
-                        }
-                    } else {
-                        value = nullValue;
-                        if (pValue != nullptr) { *pValue = nullValue; }
-                        haveValue = true;
-                    }
-                    c = gapLimit << UTRIE3_SUPP_SHIFT_1;
-                    continue;
-                }
-                i1 -= gapLimit - gapStart;  // above the index-1 gap
-            }
-            i2Block = trie->index[i1Start - UTRIE3_OMITTED_BMP_INDEX_1_LENGTH + 2 + i1];
+            int32_t i1Block = trie->index[UTRIE3_BMP_INDEX_LENGTH - UTRIE3_OMITTED_BMP_INDEX_0_LENGTH +
+                                          (c >> UTRIE3_SUPP_SHIFT_0)];
+            i2Block = trie->index[i1Block + ((c >> UTRIE3_SUPP_SHIFT_1) & UTRIE3_INDEX_1_MASK)];
             if (i2Block == prevI2Block && (c - start) >= UTRIE3_CP_PER_INDEX_1_ENTRY) {
                 // The index-2 block is the same as the previous one, and filled with value.
-                // Only possible for supplementary code points because the linear-BMP index
-                // table creates unique i2Block values.
                 U_ASSERT((c & (UTRIE3_CP_PER_INDEX_1_ENTRY - 1)) == 0);
                 c += UTRIE3_CP_PER_INDEX_1_ENTRY;
                 continue;
