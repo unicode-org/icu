@@ -83,11 +83,14 @@ public class MeasureUnitThreadTest extends TestFmwk {
         t1.join();
         t2.join();
         if (t1.error != null) {
-            throw new AssertionError("Failure in thread 1", t1.error);
+            AssertionError error = new AssertionError("Failure in thread 1");
+            error.initCause(t1.error);
+            throw error;
         }
         if (t2.error != null) {
-            throw new AssertionError("Failure in thread 2", t2.error);
+            AssertionError error = new AssertionError("Failure in thread 2");
+            error.initCause(t2.error);
+            throw error;
         }
     }
 }
-
