@@ -370,7 +370,7 @@ typedef int8_t UBool;
  * Exception: ICU 58 UChar was defined to UCHAR_TYPE if that macro was defined.
  * The current UChar responds to UCHAR_TYPE but OldUChar does not.
  *
- * @draft ICU 59
+ * @stable ICU 59
  */
 #if U_SIZEOF_WCHAR_T==2
     typedef wchar_t OldUChar;

@@ -54,6 +54,7 @@ public class XLocaleDistanceTest extends TestFmwk {
         }
     }
 
+    @SuppressWarnings("unused")
     @Ignore("Disabled because of Linux; need to investigate.")
     @Test
     public void testTiming() {

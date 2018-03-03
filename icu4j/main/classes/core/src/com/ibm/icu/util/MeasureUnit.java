@@ -845,8 +845,7 @@ public class MeasureUnit implements Serializable {
 
     /**
      * Constant for unit of length: point
-     * @draft ICU 59
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 59
      */
     public static final MeasureUnit POINT = MeasureUnit.internalGetInstance("length", "point");
 

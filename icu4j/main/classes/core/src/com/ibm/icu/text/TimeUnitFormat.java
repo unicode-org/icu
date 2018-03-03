@@ -216,7 +216,12 @@ public class TimeUnitFormat extends MeasureFormat {
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     * @deprecated ICU 53 see {@link MeasureFormat}.
+     */
     @Override
+    @Deprecated
     public NumberFormat getNumberFormat() {
         return (NumberFormat) format.clone();
     }

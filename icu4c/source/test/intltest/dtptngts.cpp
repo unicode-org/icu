@@ -18,6 +18,7 @@
 #include "unicode/smpdtfmt.h"
 #include "unicode/dtfmtsym.h"
 #include "unicode/dtptngen.h"
+#include "unicode/ustring.h"
 #include "cmemory.h"
 #include "loctest.h"
 
@@ -36,6 +37,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(3, testStaticGetSkeleton);
         TESTCASE(4, testC);
         TESTCASE(5, testSkeletonsWithDayPeriods);
+        TESTCASE(6, testGetFieldDisplayNames);
         default: name = ""; break;
     }
 }
@@ -1208,6 +1210,53 @@ void IntlTestDateTimePatternGeneratorAPI::testSkeletonsWithDayPeriods() {
         }
     }
     delete gen;
+}
+
+typedef struct FieldDisplayNameData {
+    const char *            locale;
+    UDateTimePatternField   field;
+    UDateTimePGDisplayWidth width;
+    const char *            expected; // can have escapes such as \\u00E0
+} FieldDisplayNameData;
+enum { kFieldDisplayNameMax = 32 };
+
+void IntlTestDateTimePatternGeneratorAPI::testGetFieldDisplayNames() {
+    const FieldDisplayNameData testData[] = {
+        /*loc      field                              width               expectedName */
+        { "de",    UDATPG_QUARTER_FIELD,              UDATPG_WIDE,        "Quartal" },
+        { "de",    UDATPG_QUARTER_FIELD,              UDATPG_ABBREVIATED, "Quart." },
+        { "de",    UDATPG_QUARTER_FIELD,              UDATPG_NARROW,      "Q" },
+        { "en",    UDATPG_DAY_OF_WEEK_IN_MONTH_FIELD, UDATPG_WIDE,        "weekday of the month" },
+        { "en",    UDATPG_DAY_OF_WEEK_IN_MONTH_FIELD, UDATPG_ABBREVIATED, "wkday. of mo." },
+        { "en",    UDATPG_DAY_OF_WEEK_IN_MONTH_FIELD, UDATPG_NARROW,      "wkday. of mo." }, // fallback
+        { "en_GB", UDATPG_DAY_OF_WEEK_IN_MONTH_FIELD, UDATPG_WIDE,        "weekday of the month" },
+        { "en_GB", UDATPG_DAY_OF_WEEK_IN_MONTH_FIELD, UDATPG_ABBREVIATED, "wkday of mo" }, // override
+        { "en_GB", UDATPG_DAY_OF_WEEK_IN_MONTH_FIELD, UDATPG_NARROW,      "wkday of mo" },
+        { "it",    UDATPG_SECOND_FIELD,               UDATPG_WIDE,        "secondo" },
+        { "it",    UDATPG_SECOND_FIELD,               UDATPG_ABBREVIATED, "s" },
+        { "it",    UDATPG_SECOND_FIELD,               UDATPG_NARROW,      "s" },
+    };
+
+    int count = UPRV_LENGTHOF(testData);
+    const FieldDisplayNameData * testDataPtr = testData;
+    for (; count-- > 0; ++testDataPtr) {
+        UErrorCode status = U_ZERO_ERROR;
+        Locale locale(testDataPtr->locale);
+        DateTimePatternGenerator * dtpg = DateTimePatternGenerator::createInstance(locale, status);
+        if (U_FAILURE(status)) {
+            dataerrln("FAIL: DateTimePatternGenerator::createInstance failed for locale %s", testDataPtr->locale);
+        } else {
+            UChar expName[kFieldDisplayNameMax+1];
+            u_unescape(testDataPtr->expected, expName, kFieldDisplayNameMax);
+            expName[kFieldDisplayNameMax] = 0; // ensure 0 termination
+            UnicodeString getName = dtpg->getFieldDisplayName(testDataPtr->field, testDataPtr->width);
+            if (getName.compare(expName, u_strlen(expName)) != 0) {
+                errln("ERROR: locale %s field %d width %d, expected %s\n",
+                      testDataPtr->locale, testDataPtr->field, testDataPtr->width, testDataPtr->expected);
+            }
+            delete dtpg;
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

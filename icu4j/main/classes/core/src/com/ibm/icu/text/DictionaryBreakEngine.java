@@ -9,7 +9,6 @@
 package com.ibm.icu.text;
 
 import java.text.CharacterIterator;
-import java.util.BitSet;
 
 import com.ibm.icu.impl.CharacterIteration;
 

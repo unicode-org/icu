@@ -1147,6 +1147,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
          * @internal
          * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         private static int COUNT = DisplayWidth.values().length;
         private final String cldrKey;
         DisplayWidth(String cldrKey) {
@@ -1156,7 +1157,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             return cldrKey;
         }
     }
-    
+
     /**
      * The field name width for use in appendItems
      */
@@ -1265,7 +1266,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      *
      * @param field The index to get the append item name.
      * @return name for field
-     * @see getFieldDisplayName
+     * @see #getFieldDisplayName(int, DisplayWidth)
      * @stable ICU 3.6
      */
     public String getAppendItemName(int field) {
@@ -1282,6 +1283,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     private void setFieldDisplayName(int field, DisplayWidth width, String value) {
         checkFrozen();
         if (field < TYPE_LIMIT && field >= 0) {

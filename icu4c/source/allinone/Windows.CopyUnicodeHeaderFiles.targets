@@ -3,7 +3,7 @@
 <!--
   This file is used to copy all of the header files (*.h) from a project's "unicode" folder to a common output folder.
 -->
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <!-- This is the location of the common output folder. -->
     <CopyDestionationPath>$(SolutionDir)\..\..\include\unicode</CopyDestionationPath>
