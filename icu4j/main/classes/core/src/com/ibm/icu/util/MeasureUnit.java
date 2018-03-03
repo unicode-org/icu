@@ -150,6 +150,7 @@ public class MeasureUnit implements Serializable {
         Map<String, MeasureUnit> units = cache.get(type);
         // Train users not to modify returned set from the start giving us more
         // flexibility for implementation.
+        // Use CollectionSet instead of HashSet for better performance.
         return units == null ? Collections.<MeasureUnit>emptySet()
                 : Collections.unmodifiableSet(new CollectionSet<MeasureUnit>(units.values()));
     }
