@@ -272,12 +272,13 @@ PluralFormat::format(const Formattable& numberObject, double number,
     if (offset == 0) {
         DecimalFormat *decFmt = dynamic_cast<DecimalFormat *>(numberFormat);
         if(decFmt != NULL) {
-            decFmt->initVisibleDigitsWithExponent(
-                    numberObject, dec, status);
-            if (U_FAILURE(status)) {
-                return appendTo;
-            }
-            decFmt->format(dec, numberString, ignorePos, status);
+//            decFmt->initVisibleDigitsWithExponent(
+//                    numberObject, dec, status);
+//            if (U_FAILURE(status)) {
+//                return appendTo;
+//            }
+//            decFmt->format(dec, numberString, ignorePos, status);
+            decFmt->format(numberObject, numberString, ignorePos, status);
         } else {
             numberFormat->format(
                     numberObject, numberString, ignorePos, status);  // could be BigDecimal etc.
@@ -285,12 +286,13 @@ PluralFormat::format(const Formattable& numberObject, double number,
     } else {
         DecimalFormat *decFmt = dynamic_cast<DecimalFormat *>(numberFormat);
         if(decFmt != NULL) {
-            decFmt->initVisibleDigitsWithExponent(
-                    numberMinusOffset, dec, status);
-            if (U_FAILURE(status)) {
-                return appendTo;
-            }
-            decFmt->format(dec, numberString, ignorePos, status);
+//            decFmt->initVisibleDigitsWithExponent(
+//                    numberMinusOffset, dec, status);
+//            if (U_FAILURE(status)) {
+//                return appendTo;
+//            }
+//            decFmt->format(dec, numberString, ignorePos, status);
+            decFmt->format(numberObject, numberString, ignorePos, status);
         } else {
             numberFormat->format(
                     numberMinusOffset, numberString, ignorePos, status);

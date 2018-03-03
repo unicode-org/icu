@@ -1959,14 +1959,15 @@ UnicodeString MessageFormat::PluralSelectorProvider::select(void *ctx, double nu
         return UnicodeString(FALSE, OTHER_STRING, 5);
     }
     context.formatter->format(context.number, context.numberString, ec);
-    const DecimalFormat *decFmt = dynamic_cast<const DecimalFormat *>(context.formatter);
+    auto* decFmt = dynamic_cast<const DecimalFormat *>(context.formatter);
     if(decFmt != NULL) {
-        VisibleDigitsWithExponent digits;
-        decFmt->initVisibleDigitsWithExponent(context.number, digits, ec);
+        const IFixedDecimal& dec = decFmt->toNumberFormatter()
+                .formatDouble(context.number.getDouble(ec), ec)
+                .getFixedDecimal(ec);
         if (U_FAILURE(ec)) {
             return UnicodeString(FALSE, OTHER_STRING, 5);
         }
-        return rules->select(digits);
+        return rules->select(dec);
     } else {
         return rules->select(number);
     }

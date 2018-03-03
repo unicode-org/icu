@@ -254,10 +254,11 @@ PluralRules::select(const Formattable& obj, const NumberFormat& fmt, UErrorCode&
     if (U_SUCCESS(status)) {
         const DecimalFormat *decFmt = dynamic_cast<const DecimalFormat *>(&fmt);
         if (decFmt != NULL) {
-            VisibleDigitsWithExponent digits;
-            decFmt->initVisibleDigitsWithExponent(obj, digits, status);
+            const IFixedDecimal& dec = decFmt->toNumberFormatter()
+                    .formatDouble(obj.getDouble(status), status)
+                    .getFixedDecimal(status);
             if (U_SUCCESS(status)) {
-                return select(digits);
+                return select(dec);
             }
         } else {
             double number = obj.getDouble(status);

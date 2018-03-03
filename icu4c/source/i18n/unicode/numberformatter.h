@@ -381,6 +381,9 @@ typedef enum UNumberDecimalSeparatorDisplay {
 
 U_NAMESPACE_BEGIN
 
+// Forward declarations:
+class IFixedDecimal;
+
 namespace numparse {
 namespace impl {
 
@@ -2125,6 +2128,15 @@ class U_I18N_API FormattedNumber : public UMemory {
      * @see UNumberFormatFields
      */
     void populateFieldPositionIterator(FieldPositionIterator &iterator, UErrorCode &status);
+
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     *  Get an IFixedDecimal for plural rule selection.
+     *  Internal, not intended for public use.
+     *  @internal
+     */
+    const IFixedDecimal& getFixedDecimal(UErrorCode &status) const;
+#endif
 
     /**
      * Destruct an instance of FormattedNumber, cleaning up any memory it might own.
