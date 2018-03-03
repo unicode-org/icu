@@ -51,10 +51,10 @@
 #include "uassert.h"
 #include "umutex.h"
 #include "mutex.h"
-#include "digitlst.h"
 #include <float.h>
 #include "sharednumberformat.h"
 #include "unifiedcache.h"
+#include "number_decimalquantity.h"
 
 //#define FMT_DEBUG
 
@@ -524,7 +524,7 @@ ArgExtractor::ArgExtractor(const NumberFormat& /*nf*/, const Formattable& obj, U
 ArgExtractor::~ArgExtractor() {
 }
 
-UnicodeString& NumberFormat::format(const DigitList &number,
+UnicodeString& NumberFormat::format(const number::impl::DecimalQuantity &number,
                       UnicodeString& appendTo,
                       FieldPositionIterator* posIter,
                       UErrorCode& status) const {
@@ -534,7 +534,7 @@ UnicodeString& NumberFormat::format(const DigitList &number,
     if (U_FAILURE(status)) {
         return appendTo;
     }
-    double dnum = number.getDouble();
+    double dnum = number.toDouble();
     format(dnum, appendTo, posIter, status);
     return appendTo;
 }
@@ -542,7 +542,7 @@ UnicodeString& NumberFormat::format(const DigitList &number,
 
 
 UnicodeString&
-NumberFormat::format(const DigitList &number,
+NumberFormat::format(const number::impl::DecimalQuantity &number,
                      UnicodeString& appendTo,
                      FieldPosition& pos,
                      UErrorCode &status) const { 
@@ -552,7 +552,7 @@ NumberFormat::format(const DigitList &number,
     if (U_FAILURE(status)) {
         return appendTo;
     }
-    double dnum = number.getDouble();
+    double dnum = number.toDouble();
     format(dnum, appendTo, pos, status);
     return appendTo;
 }
@@ -578,7 +578,7 @@ NumberFormat::format(const Formattable& obj,
       return cloneFmt->format(*n, appendTo, pos, status);
     }
 
-    if (n->isNumeric() && n->getDigitList() != NULL) {
+    if (n->isNumeric() && n->getDecimalQuantity() != NULL) {
         // Decimal Number.  We will have a DigitList available if the value was
         //   set to a decimal number, or if the value originated with a parse.
         //
@@ -587,7 +587,7 @@ NumberFormat::format(const Formattable& obj,
         // know about DigitList to continue to operate as they had.
         //
         // DecimalFormat overrides the DigitList formatting functions.
-        format(*n->getDigitList(), appendTo, pos, status);
+        format(*n->getDecimalQuantity(), appendTo, pos, status);
     } else {
         switch (n->getType()) {
         case Formattable::kDouble:
@@ -633,9 +633,9 @@ NumberFormat::format(const Formattable& obj,
       return cloneFmt->format(*n, appendTo, posIter, status);
     }
 
-    if (n->isNumeric() && n->getDigitList() != NULL) {
+    if (n->isNumeric() && n->getDecimalQuantity() != NULL) {
         // Decimal Number
-        format(*n->getDigitList(), appendTo, posIter, status);
+        format(*n->getDecimalQuantity(), appendTo, posIter, status);
     } else {
         switch (n->getType()) {
         case Formattable::kDouble:

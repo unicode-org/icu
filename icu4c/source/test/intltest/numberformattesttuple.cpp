@@ -15,7 +15,6 @@
 #include "charstr.h"
 #include "cstring.h"
 #include "cmemory.h"
-#include "digitlst.h"
 
 static NumberFormatTestTuple *gNullPtr = NULL;
 

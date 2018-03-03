@@ -22,7 +22,6 @@
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "digitlst.h"
 #include "hash.h"
 #include "locutil.h"
 #include "mutex.h"
@@ -37,12 +36,14 @@
 #include "unifiedcache.h"
 #include "digitinterval.h" 
 #include "visibledigits.h"
+#include "number_decimalquantity.h"
 
 #if !UCONFIG_NO_FORMATTING
 
 U_NAMESPACE_BEGIN
 
 using namespace icu::pluralimpl;
+using icu::number::impl::DecimalQuantity;
 
 static const UChar PLURAL_KEYWORD_OTHER[]={LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,0};
 static const UChar PLURAL_DEFAULT_RULE[]={LOW_O,LOW_T,LOW_H,LOW_E,LOW_R,COLON,SPACE,LOW_N,0};
@@ -254,11 +255,10 @@ PluralRules::select(const Formattable& obj, const NumberFormat& fmt, UErrorCode&
     if (U_SUCCESS(status)) {
         const DecimalFormat *decFmt = dynamic_cast<const DecimalFormat *>(&fmt);
         if (decFmt != NULL) {
-            const IFixedDecimal& dec = decFmt->toNumberFormatter()
-                    .formatDouble(obj.getDouble(status), status)
-                    .getFixedDecimal(status);
+            number::impl::DecimalQuantity dq;
+            decFmt->formatToDecimalQuantity(obj, dq, status);
             if (U_SUCCESS(status)) {
-                return select(dec);
+                return select(dq);
             }
         } else {
             double number = obj.getDouble(status);
@@ -1477,14 +1477,14 @@ FixedDecimal::FixedDecimal() {
 FixedDecimal::FixedDecimal(const UnicodeString &num, UErrorCode &status) {
     CharString cs;
     cs.appendInvariantChars(num, status);
-    DigitList dl;
-    dl.set(cs.toStringPiece(), status);
+    DecimalQuantity dl;
+    dl.setToDecNumber(cs.toStringPiece());
     if (U_FAILURE(status)) {
         init(0, 0, 0);
         return;
     }
     int32_t decimalPoint = num.indexOf(DOT);
-    double n = dl.getDouble();
+    double n = dl.toDouble();
     if (decimalPoint == -1) {
         init(n, 0, 0);
     } else {
