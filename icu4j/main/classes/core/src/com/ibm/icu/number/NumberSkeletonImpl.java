@@ -7,15 +7,17 @@ import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
+import com.ibm.icu.impl.CacheBase;
 import com.ibm.icu.impl.PatternProps;
+import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
@@ -83,52 +85,64 @@ class NumberSkeletonImpl {
     static final SkeletonDataStructure skeletonData = new SkeletonDataStructure();
 
     static {
-        skeletonData.put(StemType.COMPACT_NOTATION, "compact-short", Notation.compactShort());
-        skeletonData.put(StemType.COMPACT_NOTATION, "compact-long", Notation.compactLong());
-        skeletonData.put(StemType.SCIENTIFIC_NOTATION, "scientific", Notation.scientific());
-        skeletonData.put(StemType.SCIENTIFIC_NOTATION, "engineering", Notation.engineering());
-        skeletonData.put(StemType.SIMPLE_NOTATION, "simple-notation", Notation.simple());
+        SkeletonDataStructure d = skeletonData; // abbreviate for shorter lines
+        d.put(StemType.COMPACT_NOTATION, "compact-short", Notation.compactShort());
+        d.put(StemType.COMPACT_NOTATION, "compact-long", Notation.compactLong());
+        d.put(StemType.SCIENTIFIC_NOTATION, "scientific", Notation.scientific());
+        d.put(StemType.SCIENTIFIC_NOTATION, "engineering", Notation.engineering());
+        d.put(StemType.SIMPLE_NOTATION, "notation-simple", Notation.simple());
 
-        skeletonData.put(StemType.NO_UNIT, "base-unit", NoUnit.BASE);
-        skeletonData.put(StemType.NO_UNIT, "percent", NoUnit.PERCENT);
-        skeletonData.put(StemType.NO_UNIT, "permille", NoUnit.PERMILLE);
+        d.put(StemType.NO_UNIT, "base-unit", NoUnit.BASE);
+        d.put(StemType.NO_UNIT, "percent", NoUnit.PERCENT);
+        d.put(StemType.NO_UNIT, "permille", NoUnit.PERMILLE);
 
-        skeletonData.put(StemType.ROUNDER, "round-integer", Rounder.integer());
-        skeletonData.put(StemType.ROUNDER, "round-unlimited", Rounder.unlimited());
-        skeletonData.put(StemType.ROUNDER,
-                "round-currency-standard",
-                Rounder.currency(CurrencyUsage.STANDARD));
-        skeletonData.put(StemType.ROUNDER, "round-currency-cash", Rounder.currency(CurrencyUsage.CASH));
+        d.put(StemType.ROUNDER, "round-integer", Rounder.integer());
+        d.put(StemType.ROUNDER, "round-unlimited", Rounder.unlimited());
+        d.put(StemType.ROUNDER, "round-currency-standard", Rounder.currency(CurrencyUsage.STANDARD));
+        d.put(StemType.ROUNDER, "round-currency-cash", Rounder.currency(CurrencyUsage.CASH));
 
-        skeletonData.put(StemType.GROUPING, "group-off", GroupingStrategy.OFF);
-        skeletonData.put(StemType.GROUPING, "group-min2", GroupingStrategy.MIN2);
-        skeletonData.put(StemType.GROUPING, "group-auto", GroupingStrategy.AUTO);
-        skeletonData.put(StemType.GROUPING, "group-on-aligned", GroupingStrategy.ON_ALIGNED);
-        skeletonData.put(StemType.GROUPING, "group-thousands", GroupingStrategy.THOUSANDS);
+        d.put(StemType.GROUPING, "group-off", GroupingStrategy.OFF);
+        d.put(StemType.GROUPING, "group-min2", GroupingStrategy.MIN2);
+        d.put(StemType.GROUPING, "group-auto", GroupingStrategy.AUTO);
+        d.put(StemType.GROUPING, "group-on-aligned", GroupingStrategy.ON_ALIGNED);
+        d.put(StemType.GROUPING, "group-thousands", GroupingStrategy.THOUSANDS);
 
-        skeletonData.put(StemType.LATIN, "latin", NumberingSystem.LATIN);
+        d.put(StemType.LATIN, "latin", NumberingSystem.LATIN);
 
-        skeletonData.put(StemType.UNIT_WIDTH, "unit-width-narrow", UnitWidth.NARROW);
-        skeletonData.put(StemType.UNIT_WIDTH, "unit-width-short", UnitWidth.SHORT);
-        skeletonData.put(StemType.UNIT_WIDTH, "unit-width-full-name", UnitWidth.FULL_NAME);
-        skeletonData.put(StemType.UNIT_WIDTH, "unit-width-iso-code", UnitWidth.ISO_CODE);
-        skeletonData.put(StemType.UNIT_WIDTH, "unit-width-hidden", UnitWidth.HIDDEN);
+        d.put(StemType.UNIT_WIDTH, "unit-width-narrow", UnitWidth.NARROW);
+        d.put(StemType.UNIT_WIDTH, "unit-width-short", UnitWidth.SHORT);
+        d.put(StemType.UNIT_WIDTH, "unit-width-full-name", UnitWidth.FULL_NAME);
+        d.put(StemType.UNIT_WIDTH, "unit-width-iso-code", UnitWidth.ISO_CODE);
+        d.put(StemType.UNIT_WIDTH, "unit-width-hidden", UnitWidth.HIDDEN);
 
-        skeletonData.put(StemType.SIGN_DISPLAY, "sign-auto", SignDisplay.AUTO);
-        skeletonData.put(StemType.SIGN_DISPLAY, "sign-always", SignDisplay.ALWAYS);
-        skeletonData.put(StemType.SIGN_DISPLAY, "sign-never", SignDisplay.NEVER);
-        skeletonData.put(StemType.SIGN_DISPLAY, "sign-accounting", SignDisplay.ACCOUNTING);
-        skeletonData.put(StemType.SIGN_DISPLAY, "sign-accounting-always", SignDisplay.ACCOUNTING_ALWAYS);
-        skeletonData.put(StemType.SIGN_DISPLAY, "sign-except-zero", SignDisplay.EXCEPT_ZERO);
-        skeletonData.put(StemType.SIGN_DISPLAY,
-                "sign-accounting-except-zero",
-                SignDisplay.ACCOUNTING_EXCEPT_ZERO);
+        d.put(StemType.SIGN_DISPLAY, "sign-auto", SignDisplay.AUTO);
+        d.put(StemType.SIGN_DISPLAY, "sign-always", SignDisplay.ALWAYS);
+        d.put(StemType.SIGN_DISPLAY, "sign-never", SignDisplay.NEVER);
+        d.put(StemType.SIGN_DISPLAY, "sign-accounting", SignDisplay.ACCOUNTING);
+        d.put(StemType.SIGN_DISPLAY, "sign-accounting-always", SignDisplay.ACCOUNTING_ALWAYS);
+        d.put(StemType.SIGN_DISPLAY, "sign-except-zero", SignDisplay.EXCEPT_ZERO);
+        d.put(StemType.SIGN_DISPLAY, "sign-accounting-except-zero", SignDisplay.ACCOUNTING_EXCEPT_ZERO);
 
-        skeletonData.put(StemType.DECIMAL_DISPLAY, "decimal-auto", DecimalSeparatorDisplay.AUTO);
-        skeletonData.put(StemType.DECIMAL_DISPLAY, "decimal-always", DecimalSeparatorDisplay.ALWAYS);
+        d.put(StemType.DECIMAL_DISPLAY, "decimal-auto", DecimalSeparatorDisplay.AUTO);
+        d.put(StemType.DECIMAL_DISPLAY, "decimal-always", DecimalSeparatorDisplay.ALWAYS);
     }
 
-    private static final Map<String, UnlocalizedNumberFormatter> cache = new ConcurrentHashMap<String, UnlocalizedNumberFormatter>();
+    static final String[] ROUNDING_MODE_STRINGS = {
+            "up",
+            "down",
+            "ceiling",
+            "floor",
+            "half-up",
+            "half-down",
+            "half-even",
+            "unnecessary" };
+
+    private static final CacheBase<String, UnlocalizedNumberFormatter, Void> cache = new SoftCache<String, UnlocalizedNumberFormatter, Void>() {
+        @Override
+        protected UnlocalizedNumberFormatter createInstance(String skeletonString, Void unused) {
+            return create(skeletonString);
+        }
+    };
 
     /**
      * Gets the number formatter for the given number skeleton string from the cache, creating it if it
@@ -139,43 +153,9 @@ class NumberSkeletonImpl {
      * @return An UnlocalizedNumberFormatter with behavior defined by the given skeleton string.
      */
     public static UnlocalizedNumberFormatter getOrCreate(String skeletonString) {
-        String unNormalized = skeletonString; // more appropriate variable name for the implementation
-
-        // First try: look up the un-normalized skeleton.
-        UnlocalizedNumberFormatter formatter = cache.get(unNormalized);
-        if (formatter != null) {
-            return formatter;
-        }
-
-        // Second try: normalize the skeleton, and then access the cache.
-        // Store the un-normalized form for a faster lookup next time.
-        // Synchronize because we need a transaction with multiple queries to the cache.
-        String normalized = normalizeSkeleton(unNormalized);
-        if (cache.containsKey(normalized)) {
-            synchronized (cache) {
-                formatter = cache.get(normalized);
-                if (formatter != null) {
-                    cache.putIfAbsent(unNormalized, formatter);
-                }
-            }
-        }
-        if (formatter != null) {
-            return formatter;
-        }
-
-        // Third try: create the formatter, store it in the cache, and return it.
-        formatter = create(normalized);
-
-        // Synchronize because we need a transaction with multiple queries to the cache.
-        synchronized (cache) {
-            if (cache.containsKey(normalized)) {
-                formatter = cache.get(normalized);
-            } else {
-                cache.put(normalized, formatter);
-            }
-            cache.putIfAbsent(unNormalized, formatter);
-        }
-        return formatter;
+        // TODO: This does not currently check the cache for the normalized form of the skeleton.
+        // A new cache implementation would be required for that to work.
+        return cache.getInstance(skeletonString, null);
     }
 
     /**
@@ -190,22 +170,17 @@ class NumberSkeletonImpl {
         return NumberFormatter.with().macros(macros);
     }
 
+    /**
+     * Create a skeleton string corresponding to the given NumberFormatter.
+     *
+     * @param macros
+     *            The NumberFormatter options object.
+     * @return A skeleton string in normalized form.
+     */
     public static String generate(MacroProps macros) {
         StringBuilder sb = new StringBuilder();
         generateSkeleton(macros, sb);
         return sb.toString();
-    }
-
-    /**
-     * Normalizes a number skeleton string to the shortest equivalent form.
-     *
-     * @param skeletonString
-     *            A number skeleton string, possibly not in its shortest form.
-     * @return An equivalent and possibly simplified skeleton string.
-     */
-    public static String normalizeSkeleton(String skeletonString) {
-        // FIXME
-        return skeletonString;
     }
 
     /////
@@ -396,49 +371,58 @@ class NumberSkeletonImpl {
         }
 
         // Unknown option
-        throw new SkeletonSyntaxException("Unknown option", content);
+        throw new SkeletonSyntaxException("Invalid option", content);
     }
 
     private static void generateSkeleton(MacroProps macros, StringBuilder sb) {
-        if (macros.notation != null) {
-            generateNotationValue(macros, sb);
+        // Supported options
+        if (macros.notation != null && generateNotationValue(macros, sb)) {
             sb.append(' ');
         }
-        if (macros.unit != null) {
-            generateUnitValue(macros, sb);
+        if (macros.unit != null && generateUnitValue(macros, sb)) {
             sb.append(' ');
         }
-        if (macros.perUnit != null) {
-            generatePerUnitValue(macros, sb);
+        if (macros.perUnit != null && generatePerUnitValue(macros, sb)) {
             sb.append(' ');
         }
-        if (macros.rounder != null) {
-            generateRoundingValue(macros, sb);
+        if (macros.rounder != null && generateRoundingValue(macros, sb)) {
             sb.append(' ');
         }
-        if (macros.grouping != null) {
-            generateGroupingValue(macros, sb);
+        if (macros.grouping != null && generateGroupingValue(macros, sb)) {
             sb.append(' ');
         }
-        if (macros.integerWidth != null) {
-            generateIntegerWidthValue(macros, sb);
+        if (macros.integerWidth != null && generateIntegerWidthValue(macros, sb)) {
             sb.append(' ');
         }
-        if (macros.symbols != null) {
-            generateSymbolsValue(macros, sb);
+        if (macros.symbols != null && generateSymbolsValue(macros, sb)) {
             sb.append(' ');
         }
-        if (macros.unitWidth != null) {
-            generateUnitWidthValue(macros, sb);
+        if (macros.unitWidth != null && generateUnitWidthValue(macros, sb)) {
             sb.append(' ');
         }
-        if (macros.sign != null) {
-            generateSignValue(macros, sb);
+        if (macros.sign != null && generateSignValue(macros, sb)) {
             sb.append(' ');
         }
-        if (macros.decimal != null) {
-            generateDecimalValue(macros, sb);
+        if (macros.decimal != null && generateDecimalValue(macros, sb)) {
             sb.append(' ');
+        }
+
+        // Unsupported options
+        if (macros.padder != null) {
+            throw new UnsupportedOperationException(
+                    "Cannot generate number skeleton with custom padder");
+        }
+        if (macros.affixProvider != null) {
+            throw new UnsupportedOperationException(
+                    "Cannot generate number skeleton with custom affix provider");
+        }
+        if (macros.multiplier != null) {
+            throw new UnsupportedOperationException(
+                    "Cannot generate number skeleton with custom multiplier");
+        }
+        if (macros.rules != null) {
+            throw new UnsupportedOperationException(
+                    "Cannot generate number skeleton with custom plural rules");
         }
 
         // Remove the trailing space
@@ -640,15 +624,51 @@ class NumberSkeletonImpl {
         if (content.charAt(0) != '@') {
             return false;
         }
-        FractionRounder oldRounder = (FractionRounder) macros.rounder;
-        // A little bit of a hack: parse the option as a digits stem, and extract the min/max sig from
-        // the new Rounder saved into the macros.
-        parseDigitsStem(content, macros);
-        Rounder.SignificantRounderImpl intermediate = (Rounder.SignificantRounderImpl) macros.rounder;
-        if (intermediate.maxSig == -1) {
-            macros.rounder = oldRounder.withMinDigits(intermediate.minSig);
+        int offset = 0;
+        int minSig = 0;
+        int maxSig;
+        for (; offset < content.length(); offset++) {
+            if (content.charAt(offset) == '@') {
+                minSig++;
+            } else {
+                break;
+            }
+        }
+        // For the frac-sig option, there must be minSig or maxSig but not both.
+        // Valid: @+, @@+, @@@+
+        // Valid: @#, @##, @###
+        // Invalid: @, @@, @@@
+        // Invalid: @@#, @@##, @@@#
+        if (offset < content.length()) {
+            if (content.charAt(offset) == '+') {
+                maxSig = -1;
+                offset++;
+            } else if (minSig > 1) {
+                // @@#, @@##, @@@#
+                throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", content);
+            } else {
+                maxSig = minSig;
+                for (; offset < content.length(); offset++) {
+                    if (content.charAt(offset) == '#') {
+                        maxSig++;
+                    } else {
+                        break;
+                    }
+                }
+            }
         } else {
-            macros.rounder = oldRounder.withMaxDigits(intermediate.maxSig);
+            // @, @@, @@@
+            throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", content);
+        }
+        if (offset < content.length()) {
+            throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", content);
+        }
+
+        FractionRounder oldRounder = (FractionRounder) macros.rounder;
+        if (maxSig == -1) {
+            macros.rounder = oldRounder.withMinDigits(minSig);
+        } else {
+            macros.rounder = oldRounder.withMaxDigits(maxSig);
         }
         return true;
     }
@@ -670,11 +690,9 @@ class NumberSkeletonImpl {
     }
 
     private static boolean parseRoundingModeOption(CharSequence content, MacroProps macros) {
-        // Iterate over int modes instead of enum modes for performance
-        for (int rm = 0; rm <= BigDecimal.ROUND_UNNECESSARY; rm++) {
-            RoundingMode mode = RoundingMode.valueOf(rm);
-            if (content.equals(mode.toString())) {
-                macros.rounder = macros.rounder.withMode(mode);
+        for (int rm = 0; rm < ROUNDING_MODE_STRINGS.length; rm++) {
+            if (content.equals(ROUNDING_MODE_STRINGS[rm])) {
+                macros.rounder = macros.rounder.withMode(RoundingMode.valueOf(rm));
                 return true;
             }
         }
@@ -682,7 +700,8 @@ class NumberSkeletonImpl {
     }
 
     private static void generateRoundingModeOption(RoundingMode mode, StringBuilder sb) {
-        sb.append(mode.toString());
+        String option = ROUNDING_MODE_STRINGS[mode.ordinal()];
+        sb.append(option);
     }
 
     private static void parseIntegerWidthOption(CharSequence content, MacroProps macros) {
@@ -749,18 +768,22 @@ class NumberSkeletonImpl {
 
     /////
 
-    private static void generateNotationValue(MacroProps macros, StringBuilder sb) {
+    private static boolean generateNotationValue(MacroProps macros, StringBuilder sb) {
         // Check for literals
         String literal = skeletonData.valueToStem(macros.notation);
-        if (literal != null) {
+        if ("notation-simple".equals(literal)) {
+            return false; // Default value
+        } else if (literal != null) {
             sb.append(literal);
-            return;
+            return true;
         }
 
         // Generate the stem
         if (macros.notation instanceof CompactNotation) {
             // Compact notation generated from custom data (not supported in skeleton)
             // The other compact notations are literals
+            throw new UnsupportedOperationException(
+                    "Cannot generate number skeleton with custom compact data");
         } else if (macros.notation instanceof ScientificNotation) {
             ScientificNotation impl = (ScientificNotation) macros.notation;
             if (impl.engineeringInterval == 3) {
@@ -776,49 +799,56 @@ class NumberSkeletonImpl {
                 sb.append('/');
                 sb.append(skeletonData.valueToStem(impl.exponentSignDisplay));
             }
+            return true;
         } else {
-            assert macros.notation instanceof SimpleNotation;
-            sb.append("notation-simple");
+            // SimpleNotation should be handled by a literal
+            throw new AssertionError();
         }
     }
 
-    private static void generateUnitValue(MacroProps macros, StringBuilder sb) {
+    private static boolean generateUnitValue(MacroProps macros, StringBuilder sb) {
         // Check for literals
         String literal = skeletonData.valueToStem(macros.unit);
-        if (literal != null) {
+        if ("base-unit".equals(literal)) {
+            return false; // Default value
+        } else if (literal != null) {
             sb.append(literal);
-            return;
+            return true;
         }
 
         // Generate the stem
         if (macros.unit instanceof Currency) {
             sb.append("currency/");
             generateCurrencyOption((Currency) macros.unit, sb);
+            return true;
         } else if (macros.unit instanceof NoUnit) {
             // This should be taken care of by the literals.
-            assert false;
+            throw new AssertionError();
         } else {
             sb.append("measure-unit/");
             generateMeasureUnitOption(macros.unit, sb);
+            return true;
         }
     }
 
-    private static void generatePerUnitValue(MacroProps macros, StringBuilder sb) {
+    private static boolean generatePerUnitValue(MacroProps macros, StringBuilder sb) {
         // Per-units are currently expected to be only MeasureUnits.
         if (macros.unit instanceof Currency || macros.unit instanceof NoUnit) {
-            assert false;
+            throw new UnsupportedOperationException(
+                    "Cannot generate number skeleton with per-unit that is not a standard measure unit");
         } else {
             sb.append("per-measure-unit/");
             generateMeasureUnitOption(macros.perUnit, sb);
+            return true;
         }
     }
 
-    private static void generateRoundingValue(MacroProps macros, StringBuilder sb) {
+    private static boolean generateRoundingValue(MacroProps macros, StringBuilder sb) {
         // Check for literals
         String literal = skeletonData.valueToStem(macros.rounder);
         if (literal != null) {
             sb.append(literal);
-            return;
+            return true;
         }
 
         // Generate the stem
@@ -858,18 +888,34 @@ class NumberSkeletonImpl {
             sb.append('/');
             generateRoundingModeOption(macros.rounder.mathContext.getRoundingMode(), sb);
         }
+
+        // NOTE: Always return true for rounding because the default value depends on other options.
+        return true;
     }
 
-    private static void generateGroupingValue(MacroProps macros, StringBuilder sb) {
-        appendExpectedLiteral(macros.grouping, sb);
+    private static boolean generateGroupingValue(MacroProps macros, StringBuilder sb) {
+        if (macros.grouping instanceof GroupingStrategy) {
+            if (macros.grouping == GroupingStrategy.AUTO) {
+                return false; // Default value
+            }
+            appendExpectedLiteral(macros.grouping, sb);
+            return true;
+        } else {
+            throw new UnsupportedOperationException(
+                    "Cannot generate number skeleton with custom Grouper");
+        }
     }
 
-    private static void generateIntegerWidthValue(MacroProps macros, StringBuilder sb) {
+    private static boolean generateIntegerWidthValue(MacroProps macros, StringBuilder sb) {
+        if (macros.integerWidth.equals(IntegerWidth.DEFAULT)) {
+            return false; // Default
+        }
         sb.append("integer-width/");
         generateIntegerWidthOption(macros.integerWidth.minInt, macros.integerWidth.maxInt, sb);
+        return true;
     }
 
-    private static void generateSymbolsValue(MacroProps macros, StringBuilder sb) {
+    private static boolean generateSymbolsValue(MacroProps macros, StringBuilder sb) {
         if (macros.symbols instanceof NumberingSystem) {
             NumberingSystem ns = (NumberingSystem) macros.symbols;
             if (ns.getName().equals("latn")) {
@@ -878,21 +924,36 @@ class NumberSkeletonImpl {
                 sb.append("numbering-system/");
                 generateNumberingSystemOption(ns, sb);
             }
+            return true;
         } else {
-            // DecimalFormatSymbols (not supported in skeleton)
+            assert macros.symbols instanceof DecimalFormatSymbols;
+            throw new UnsupportedOperationException(
+                    "Cannot generate number skeleton with custom DecimalFormatSymbols");
         }
     }
 
-    private static void generateUnitWidthValue(MacroProps macros, StringBuilder sb) {
+    private static boolean generateUnitWidthValue(MacroProps macros, StringBuilder sb) {
+        if (macros.unitWidth == UnitWidth.SHORT) {
+            return false; // Default value
+        }
         appendExpectedLiteral(macros.unitWidth, sb);
+        return true;
     }
 
-    private static void generateSignValue(MacroProps macros, StringBuilder sb) {
+    private static boolean generateSignValue(MacroProps macros, StringBuilder sb) {
+        if (macros.sign == SignDisplay.AUTO) {
+            return false; // Default value
+        }
         appendExpectedLiteral(macros.sign, sb);
+        return true;
     }
 
-    private static void generateDecimalValue(MacroProps macros, StringBuilder sb) {
+    private static boolean generateDecimalValue(MacroProps macros, StringBuilder sb) {
+        if (macros.decimal == DecimalSeparatorDisplay.AUTO) {
+            return false; // Default value
+        }
         appendExpectedLiteral(macros.decimal, sb);
+        return true;
     }
 
     /////

@@ -194,7 +194,7 @@ class NumberFormatterImpl {
         } else if (isCurrency) {
             micros.rounding = Rounder.MONETARY_STANDARD;
         } else {
-            micros.rounding = Rounder.MAX_FRAC_6;
+            micros.rounding = Rounder.DEFAULT_MAX_FRAC_6;
         }
         micros.rounding = micros.rounding.withLocaleData(currency);
 

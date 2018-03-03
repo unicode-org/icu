@@ -478,8 +478,17 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     /**
      * Creates a skeleton string representation of this number formatter. A skeleton string is a
      * locale-agnostic serialized form of a number formatter.
+     * <p>
+     * Not all options are capable of being represented in the skeleton string; for example, a
+     * DecimalFormatSymbols object. If any such option is encountered, an
+     * {@link UnsupportedOperationException} is thrown.
+     * <p>
+     * The returned skeleton is in normalized form, such that two number formatters with equivalent
+     * behavior should produce the same skeleton.
      *
      * @return A number skeleton string with behavior corresponding to this number formatter.
+     * @throws UnsupportedOperationException
+     *             If the number formatter has an option that cannot be represented in a skeleton string.
      * @draft ICU 62
      * @provisional This API might change or be removed in a future release.
      */

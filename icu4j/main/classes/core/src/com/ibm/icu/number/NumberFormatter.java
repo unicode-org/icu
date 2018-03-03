@@ -460,6 +460,7 @@ public final class NumberFormatter {
      * @param skeleton
      *            The skeleton string off of which to base this NumberFormatter.
      * @return An {@link UnlocalizedNumberFormatter}, to be used for chaining.
+     * @throws SkeletonSyntaxException If the given string is not a valid number formatting skeleton.
      * @draft ICU 62
      * @provisional This API might change or be removed in a future release.
      */
