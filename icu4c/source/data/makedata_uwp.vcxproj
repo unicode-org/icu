@@ -32,10 +32,6 @@
     <ProjectGuid>{B1D53358-37BD-48BC-B27C-68BAF1E78508}</ProjectGuid>
     <Keyword>MakeFileProj</Keyword>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
-    <AppContainerApplication>true</AppContainerApplication>
-    <ApplicationType>Windows Store</ApplicationType>
-    <ApplicationTypeRevision>10.0</ApplicationTypeRevision>
     <ConfigurationType>Makefile</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
