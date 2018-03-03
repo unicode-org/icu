@@ -42,6 +42,7 @@
 #include "unicode/stringpiece.h"
 #include "unicode/curramt.h"
 #include "unicode/enumset.h"
+#include "unicode/numberformatter.h"
 
 #ifndef U_HIDE_INTERNAL_API
 /**
@@ -698,7 +699,7 @@ public:
      *                  pattern is invalid this will be set to a failure code.
      * @stable ICU 2.0
      */
-    DecimalFormat(UErrorCode& status);
+    explicit DecimalFormat(UErrorCode& status);
 
     /**
      * Create a DecimalFormat from the given pattern and the symbols
@@ -800,7 +801,7 @@ public:
      * @see getGroupingUsed
      * @stable ICU 53
      */
-    virtual void setGroupingUsed(UBool newValue);
+    void setGroupingUsed(UBool newValue) U_OVERRIDE;
 
     /**
      * Sets whether or not numbers should be parsed as integers only.
@@ -809,7 +810,7 @@ public:
      * @see isParseIntegerOnly
      * @stable ICU 53
      */
-    virtual void setParseIntegerOnly(UBool value);
+    void setParseIntegerOnly(UBool value) U_OVERRIDE;
 
     /**
      * Set a particular UDisplayContext value in the formatter, such as
@@ -820,7 +821,7 @@ public:
      *               updated with any new status from the function.
      * @stable ICU 53
      */
-    virtual void setContext(UDisplayContext value, UErrorCode& status);
+    void setContext(UDisplayContext value, UErrorCode& status) U_OVERRIDE;
 
     /**
      * Create a DecimalFormat from the given pattern and symbols.
@@ -886,7 +887,7 @@ public:
      * Destructor.
      * @stable ICU 2.0
      */
-    virtual ~DecimalFormat();
+    ~DecimalFormat() U_OVERRIDE;
 
     /**
      * Clone this Format object polymorphically. The caller owns the
@@ -895,7 +896,7 @@ public:
      * @return    a polymorphic copy of this DecimalFormat.
      * @stable ICU 2.0
      */
-    virtual Format* clone(void) const;
+    Format* clone(void) const U_OVERRIDE;
 
     /**
      * Return true if the given Format objects are semantically equal.
@@ -905,7 +906,7 @@ public:
      * @return         true if the given Format objects are semantically equal.
      * @stable ICU 2.0
      */
-    virtual UBool operator==(const Format& other) const;
+    UBool operator==(const Format& other) const U_OVERRIDE;
 
 
     using NumberFormat::format;
@@ -921,9 +922,9 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @stable ICU 2.0
      */
-    virtual UnicodeString& format(double number,
-                                  UnicodeString& appendTo,
-                                  FieldPosition& pos) const;
+    UnicodeString& format(double number,
+                          UnicodeString& appendTo,
+                          FieldPosition& pos) const U_OVERRIDE;
 
 
     /**
@@ -938,10 +939,10 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @internal
      */
-    virtual UnicodeString& format(double number,
-                                  UnicodeString& appendTo,
-                                  FieldPosition& pos,
-                                  UErrorCode &status) const;
+    UnicodeString& format(double number,
+                          UnicodeString& appendTo,
+                          FieldPosition& pos,
+                          UErrorCode &status) const U_OVERRIDE;
 
     /**
      * Format a double or long number using base-10 representation.
@@ -956,10 +957,10 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @stable ICU 4.4
      */
-    virtual UnicodeString& format(double number,
-                                  UnicodeString& appendTo,
-                                  FieldPositionIterator* posIter,
-                                  UErrorCode& status) const;
+    UnicodeString& format(double number,
+                          UnicodeString& appendTo,
+                          FieldPositionIterator* posIter,
+                          UErrorCode& status) const U_OVERRIDE;
 
     /**
      * Format a long number using base-10 representation.
@@ -972,9 +973,9 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @stable ICU 2.0
      */
-    virtual UnicodeString& format(int32_t number,
-                                  UnicodeString& appendTo,
-                                  FieldPosition& pos) const;
+    UnicodeString& format(int32_t number,
+                          UnicodeString& appendTo,
+                          FieldPosition& pos) const U_OVERRIDE;
 
     /**
      * Format a long number using base-10 representation.
@@ -987,10 +988,10 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @internal
      */
-    virtual UnicodeString& format(int32_t number,
-                                  UnicodeString& appendTo,
-                                  FieldPosition& pos,
-                                  UErrorCode &status) const;
+    UnicodeString& format(int32_t number,
+                          UnicodeString& appendTo,
+                          FieldPosition& pos,
+                          UErrorCode &status) const U_OVERRIDE;
 
     /**
      * Format a long number using base-10 representation.
@@ -1005,10 +1006,10 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @stable ICU 4.4
      */
-    virtual UnicodeString& format(int32_t number,
-                                  UnicodeString& appendTo,
-                                  FieldPositionIterator* posIter,
-                                  UErrorCode& status) const;
+    UnicodeString& format(int32_t number,
+                          UnicodeString& appendTo,
+                          FieldPositionIterator* posIter,
+                          UErrorCode& status) const U_OVERRIDE;
 
     /**
      * Format an int64 number using base-10 representation.
@@ -1021,9 +1022,9 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @stable ICU 2.8
      */
-    virtual UnicodeString& format(int64_t number,
-                                  UnicodeString& appendTo,
-                                  FieldPosition& pos) const;
+    UnicodeString& format(int64_t number,
+                          UnicodeString& appendTo,
+                          FieldPosition& pos) const U_OVERRIDE;
 
     /**
      * Format an int64 number using base-10 representation.
@@ -1036,10 +1037,10 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @internal
      */
-    virtual UnicodeString& format(int64_t number,
-                                  UnicodeString& appendTo,
-                                  FieldPosition& pos,
-                                  UErrorCode &status) const;
+    UnicodeString& format(int64_t number,
+                          UnicodeString& appendTo,
+                          FieldPosition& pos,
+                          UErrorCode &status) const U_OVERRIDE;
 
     /**
      * Format an int64 number using base-10 representation.
@@ -1054,10 +1055,10 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @stable ICU 4.4
      */
-    virtual UnicodeString& format(int64_t number,
-                                  UnicodeString& appendTo,
-                                  FieldPositionIterator* posIter,
-                                  UErrorCode& status) const;
+    UnicodeString& format(int64_t number,
+                          UnicodeString& appendTo,
+                          FieldPositionIterator* posIter,
+                          UErrorCode& status) const U_OVERRIDE;
 
     /**
      * Format a decimal number.
@@ -1075,10 +1076,10 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @stable ICU 4.4
      */
-    virtual UnicodeString& format(StringPiece number,
-                                  UnicodeString& appendTo,
-                                  FieldPositionIterator* posIter,
-                                  UErrorCode& status) const;
+    UnicodeString& format(StringPiece number,
+                          UnicodeString& appendTo,
+                          FieldPositionIterator* posIter,
+                          UErrorCode& status) const U_OVERRIDE;
 
 
     /**
@@ -1096,10 +1097,10 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @internal
      */
-    virtual UnicodeString& format(const DigitList &number,
-                                  UnicodeString& appendTo,
-                                  FieldPositionIterator* posIter,
-                                  UErrorCode& status) const;
+    UnicodeString& format(const DigitList &number,
+                          UnicodeString& appendTo,
+                          FieldPositionIterator* posIter,
+                          UErrorCode& status) const U_OVERRIDE;
 
     /**
      * Format a decimal number.
@@ -1112,11 +1113,10 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @internal
      */
-    virtual UnicodeString& format(
-            const VisibleDigitsWithExponent &number,
-            UnicodeString& appendTo,
-            FieldPosition& pos,
-            UErrorCode& status) const;
+    virtual UnicodeString& format(const VisibleDigitsWithExponent &number,
+                          UnicodeString& appendTo,
+                          FieldPosition& pos,
+                          UErrorCode& status) const;
 
     /**
      * Format a decimal number.
@@ -1129,11 +1129,10 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @internal
      */
-    virtual UnicodeString& format(
-            const VisibleDigitsWithExponent &number,
-            UnicodeString& appendTo,
-            FieldPositionIterator* posIter,
-            UErrorCode& status) const;
+    virtual UnicodeString& format(const VisibleDigitsWithExponent &number,
+                          UnicodeString& appendTo,
+                          FieldPositionIterator* posIter,
+                          UErrorCode& status) const;
 
     /**
      * Format a decimal number.
@@ -1150,10 +1149,10 @@ public:
      * @return          Reference to 'appendTo' parameter.
      * @internal
      */
-    virtual UnicodeString& format(const DigitList &number,
-                                  UnicodeString& appendTo,
-                                  FieldPosition& pos,
-                                  UErrorCode& status) const;
+    UnicodeString& format(const DigitList &number,
+                          UnicodeString& appendTo,
+                          FieldPosition& pos,
+                          UErrorCode& status) const U_OVERRIDE;
 
    using NumberFormat::parse;
 
@@ -1176,9 +1175,9 @@ public:
     * @see Formattable
     * @stable ICU 2.0
     */
-    virtual void parse(const UnicodeString& text,
-                       Formattable& result,
-                       ParsePosition& parsePosition) const;
+    void parse(const UnicodeString& text,
+               Formattable& result,
+               ParsePosition& parsePosition) const U_OVERRIDE;
 
     /**
      * Parses text from the given string as a currency amount.  Unlike
@@ -1199,8 +1198,8 @@ public:
      *             the parsed currency; if parse fails, this is NULL.
      * @stable ICU 49
      */
-    virtual CurrencyAmount* parseCurrency(const UnicodeString& text,
-                                          ParsePosition& pos) const;
+    CurrencyAmount* parseCurrency(const UnicodeString& text,
+                                  ParsePosition& pos) const U_OVERRIDE;
 
     /**
      * Returns the decimal format symbols, which is generally not changed
@@ -1385,7 +1384,7 @@ public:
      * @see #setRoundingMode
      * @stable ICU 2.0
      */
-    virtual ERoundingMode getRoundingMode(void) const;
+    virtual ERoundingMode getRoundingMode(void) const U_OVERRIDE;
 
     /**
      * Set the rounding mode.
@@ -1395,7 +1394,7 @@ public:
      * @see #getRoundingMode
      * @stable ICU 2.0
      */
-    virtual void setRoundingMode(ERoundingMode roundingMode);
+    virtual void setRoundingMode(ERoundingMode roundingMode) U_OVERRIDE;
 
     /**
      * Get the width to which the output of format() is padded.
@@ -1767,8 +1766,8 @@ public:
      * @stable ICU 2.0
      */
     virtual void applyPattern(const UnicodeString& pattern,
-                             UParseError& parseError,
-                             UErrorCode& status);
+                              UParseError& parseError,
+                              UErrorCode& status);
     /**
      * Sets the pattern.
      * @param pattern   The pattern to be applied.
@@ -1778,7 +1777,7 @@ public:
      * @stable ICU 2.0
      */
     virtual void applyPattern(const UnicodeString& pattern,
-                             UErrorCode& status);
+                              UErrorCode& status);
 
     /**
      * Apply the given pattern to this Format object.  The pattern
@@ -1836,7 +1835,7 @@ public:
      * @see NumberFormat#setMaximumIntegerDigits
      * @stable ICU 2.0
      */
-    virtual void setMaximumIntegerDigits(int32_t newValue);
+    void setMaximumIntegerDigits(int32_t newValue) U_OVERRIDE;
 
     /**
      * Sets the minimum number of digits allowed in the integer portion of a
@@ -1847,7 +1846,7 @@ public:
      * @see NumberFormat#setMinimumIntegerDigits
      * @stable ICU 2.0
      */
-    virtual void setMinimumIntegerDigits(int32_t newValue);
+    void setMinimumIntegerDigits(int32_t newValue) U_OVERRIDE;
 
     /**
      * Sets the maximum number of digits allowed in the fraction portion of a
@@ -1858,7 +1857,7 @@ public:
      * @see NumberFormat#setMaximumFractionDigits
      * @stable ICU 2.0
      */
-    virtual void setMaximumFractionDigits(int32_t newValue);
+    void setMaximumFractionDigits(int32_t newValue) U_OVERRIDE;
 
     /**
      * Sets the minimum number of digits allowed in the fraction portion of a
@@ -1869,7 +1868,7 @@ public:
      * @see NumberFormat#setMinimumFractionDigits
      * @stable ICU 2.0
      */
-    virtual void setMinimumFractionDigits(int32_t newValue);
+    void setMinimumFractionDigits(int32_t newValue) U_OVERRIDE;
 
     /**
      * Returns the minimum number of significant digits that will be
@@ -1945,7 +1944,7 @@ public:
      * @param ec input-output error code
      * @stable ICU 3.0
      */
-    virtual void setCurrency(const char16_t* theCurrency, UErrorCode& ec);
+    void setCurrency(const char16_t* theCurrency, UErrorCode& ec) U_OVERRIDE;
 
     /**
      * Sets the currency used to display currency amounts.  See
@@ -2041,6 +2040,15 @@ public:
 public:
 
     /**
+     * Converts this DecimalFormat to a NumberFormatter.  Starting in ICU 60,
+     * NumberFormatter is the recommended way to format numbers.
+     *
+     * @return An instance of LocalizedNumberFormatter with the same behavior as this DecimalFormat.
+     * @draft ICU 62
+     */
+    number::LocalizedNumberFormatter getNumberFormatter() const;
+
+    /**
      * Return the class ID for this class.  This is useful only for
      * comparing to a return value from getDynamicClassID().  For example:
      * <pre>
@@ -2064,7 +2072,7 @@ public:
      *                  other classes have different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const;
+    virtual UClassID getDynamicClassID(void) const U_OVERRIDE;
 
 private:
 
@@ -2253,7 +2261,7 @@ protected:
      * have a capacity of at least 4
      * @internal
      */
-    virtual void getEffectiveCurrency(char16_t* result, UErrorCode& ec) const;
+    void getEffectiveCurrency(char16_t* result, UErrorCode& ec) const U_OVERRIDE;
 
   /** number of integer digits
    * @stable ICU 2.4
