@@ -149,15 +149,16 @@ StandardPlural::Form QuantityFormatter::selectPlural(
         return StandardPlural::OTHER;
     }
     UnicodeString pluralKeyword;
-    VisibleDigitsWithExponent digits;
     const DecimalFormat *decFmt = dynamic_cast<const DecimalFormat *>(&fmt);
     if (decFmt != NULL) {
-        decFmt->initVisibleDigitsWithExponent(number, digits, status);
+        const IFixedDecimal& dec = decFmt->toNumberFormatter()
+                .formatDouble(number.getDouble(status), status)
+                .getFixedDecimal(status);
         if (U_FAILURE(status)) {
             return StandardPlural::OTHER;
         }
-        pluralKeyword = rules.select(digits);
-        decFmt->format(digits, formattedNumber, pos, status);
+        pluralKeyword = rules.select(dec);
+        decFmt->format(number, formattedNumber, pos, status);
     } else {
         if (number.getType() == Formattable::kDouble) {
             pluralKeyword = rules.select(number.getDouble());
