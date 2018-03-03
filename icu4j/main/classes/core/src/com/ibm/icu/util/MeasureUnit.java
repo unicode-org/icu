@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.ibm.icu.impl.CollectionSet;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Pair;
@@ -150,7 +151,7 @@ public class MeasureUnit implements Serializable {
         // Train users not to modify returned set from the start giving us more
         // flexibility for implementation.
         return units == null ? Collections.<MeasureUnit>emptySet()
-                : Collections.unmodifiableSet(new HashSet<MeasureUnit>(units.values()));
+                : Collections.unmodifiableSet(new CollectionSet<MeasureUnit>(units.values()));
     }
 
     /**
