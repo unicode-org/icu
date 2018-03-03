@@ -23,7 +23,6 @@
 #include "unicode/measfmt.h"
 #include "unicode/curramt.h"
 #include "unicode/strenum.h"
-#include "digitlst.h"
 #include "textfile.h"
 #include "tokiter.h"
 #include "charstr.h"
@@ -40,6 +39,7 @@
 #include "numberformattesttuple.h"
 #include "datadrivennumberformattestsuite.h"
 #include "unicode/msgfmt.h"
+#include "number_decimalquantity.h"
 
 #if (U_PLATFORM == U_PF_AIX) || (U_PLATFORM == U_PF_OS390)
 // These should not be macros. If they are,
@@ -62,6 +62,7 @@ namespace std {
 #endif
 #endif
 
+using icu::number::impl::DecimalQuantity;
 
 class NumberFormatTestDataDriven : public DataDrivenNumberFormatTestSuite {
 protected:
@@ -83,34 +84,34 @@ UBool isParseCurrencyPass(
         UErrorCode &status);
 };
 
-static DigitList &strToDigitList(
+static DecimalQuantity &strToDigitList(
         const UnicodeString &str,
-        DigitList &digitList,
+        DecimalQuantity &digitList,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
         return digitList;
     }
     if (str == "NaN") {
-        digitList.set(uprv_getNaN());
+        digitList.setToDouble(uprv_getNaN());
         return digitList;
     }
     if (str == "-Inf") {
-        digitList.set(-1*uprv_getInfinity());
+        digitList.setToDouble(-1*uprv_getInfinity());
         return digitList;
     }
     if (str == "Inf") {
-        digitList.set(uprv_getInfinity());
+        digitList.setToDouble(uprv_getInfinity());
         return digitList;
     }
     CharString formatValue;
     formatValue.appendInvariantChars(str, status);
-    digitList.set(StringPiece(formatValue.data()), status, 0);
+    digitList.setToDecNumber(StringPiece(formatValue.data()));
     return digitList;
 }
 
 static UnicodeString &format(
         const DecimalFormat &fmt,
-        const DigitList &digitList,
+        const DecimalQuantity &digitList,
         UnicodeString &appendTo,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
@@ -315,7 +316,7 @@ UBool NumberFormatTestDataDriven::isFormatPass(
     if (appendErrorMessage.length() > 0) {
         return FALSE;
     }
-    DigitList digitList;
+    DecimalQuantity digitList;
     strToDigitList(tuple.format, digitList, status);
     {
         UnicodeString appendTo;
@@ -330,7 +331,7 @@ UBool NumberFormatTestDataDriven::isFormatPass(
             return FALSE;
         }
     }
-    double doubleVal = digitList.getDouble();
+    double doubleVal = digitList.toDouble();
     {
         UnicodeString appendTo;
         format(*fmtPtr, doubleVal, appendTo, status);
@@ -345,7 +346,7 @@ UBool NumberFormatTestDataDriven::isFormatPass(
         }
     }
     if (!uprv_isNaN(doubleVal) && !uprv_isInfinite(doubleVal) && doubleVal == uprv_floor(doubleVal)) {
-        int64_t intVal = digitList.getInt64();
+        int64_t intVal = digitList.toLong();
         {
             UnicodeString appendTo;
             format(*fmtPtr, intVal, appendTo, status);
@@ -446,13 +447,13 @@ UBool NumberFormatTestDataDriven::isParsePass(
         }
         return TRUE;
     }
-    DigitList expected;
+    DecimalQuantity expected;
     strToDigitList(tuple.output, expected, status);
     if (U_FAILURE(status)) {
         appendErrorMessage.append("Error parsing.");
         return FALSE;
     }
-    if (expected != *result.getDigitList()) {
+    if (expected != *result.getDecimalQuantity()) {
         appendErrorMessage.append(UnicodeString("Expected: ") + tuple.output + ", but got: " + resultStr + " (" + ppos.getIndex() + ":" + ppos.getErrorIndex() + ")");
         return FALSE;
     }
@@ -490,13 +491,13 @@ UBool NumberFormatTestDataDriven::isParseCurrencyPass(
         appendErrorMessage.append(UnicodeString("Parse succeeded: ") + resultStr + ", but was expected to fail.");
         return TRUE; // TRUE because failure handling is in the test suite
     }
-    DigitList expected;
+    DecimalQuantity expected;
     strToDigitList(tuple.output, expected, status);
     if (U_FAILURE(status)) {
         appendErrorMessage.append("Error parsing.");
         return FALSE;
     }
-    if (expected != *currAmt->getNumber().getDigitList()) {
+    if (expected != *currAmt->getNumber().getDecimalQuantity()) {
         appendErrorMessage.append(UnicodeString("Expected: ") + tuple.output + ", but got: " + resultStr + " (" + ppos.getIndex() + ":" + ppos.getErrorIndex() + ")");
         return FALSE;
     }
@@ -7024,9 +7025,9 @@ void NumberFormatTest::TestDecimal() {
             dataerrln("Unable to create NumberFormat");
         } else {
             UnicodeString formattedResult;
-            DigitList dl;
+            DecimalQuantity dl;
             StringPiece num("123.4566666666666666666666666666666666621E+40");
-            dl.set(num, status);
+            dl.setToDecNumber(num);
             ASSERT_SUCCESS(status);
             fmtr->format(dl, formattedResult, NULL, status);
             ASSERT_SUCCESS(status);
@@ -7034,7 +7035,7 @@ void NumberFormatTest::TestDecimal() {
 
             status = U_ZERO_ERROR;
             num.set("666.666");
-            dl.set(num, status);
+            dl.setToDecNumber(num);
             FieldPosition pos(NumberFormat::FRACTION_FIELD);
             ASSERT_SUCCESS(status);
             formattedResult.remove();
@@ -8669,14 +8670,6 @@ void NumberFormatTest::Test11868() {
         assertEquals("", "-9,876.54 US dollars", result);
         verifyFieldPositionIterator(attributes, iter);
     }
-}
-
-void NumberFormatTest::Test10727_RoundingZero() {
-   DigitList d;
-   d.set(-0.0);
-   assertFalse("", d.isPositive());
-   d.round(3);
-   assertFalse("", d.isPositive());
 }
 
 void NumberFormatTest::Test11376_getAndSetPositivePrefix() {

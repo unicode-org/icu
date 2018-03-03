@@ -49,6 +49,7 @@
 #include "util.h"
 #include "uvector.h"
 #include "visibledigits.h"
+#include "number_decimalquantity.h"
 
 // *****************************************************************************
 // class MessageFormat
@@ -1961,13 +1962,12 @@ UnicodeString MessageFormat::PluralSelectorProvider::select(void *ctx, double nu
     context.formatter->format(context.number, context.numberString, ec);
     auto* decFmt = dynamic_cast<const DecimalFormat *>(context.formatter);
     if(decFmt != NULL) {
-        const IFixedDecimal& dec = decFmt->toNumberFormatter()
-                .formatDouble(context.number.getDouble(ec), ec)
-                .getFixedDecimal(ec);
+        number::impl::DecimalQuantity dq;
+        decFmt->formatToDecimalQuantity(number, dq, ec);
         if (U_FAILURE(ec)) {
             return UnicodeString(FALSE, OTHER_STRING, 5);
         }
-        return rules->select(dec);
+        return rules->select(dq);
     } else {
         return rules->select(number);
     }

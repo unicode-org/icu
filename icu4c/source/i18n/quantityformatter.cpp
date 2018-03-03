@@ -25,6 +25,7 @@
 #include "standardplural.h"
 #include "visibledigits.h"
 #include "uassert.h"
+#include "number_decimalquantity.h"
 
 U_NAMESPACE_BEGIN
 
@@ -151,13 +152,12 @@ StandardPlural::Form QuantityFormatter::selectPlural(
     UnicodeString pluralKeyword;
     const DecimalFormat *decFmt = dynamic_cast<const DecimalFormat *>(&fmt);
     if (decFmt != NULL) {
-        const IFixedDecimal& dec = decFmt->toNumberFormatter()
-                .formatDouble(number.getDouble(status), status)
-                .getFixedDecimal(status);
+        number::impl::DecimalQuantity dq;
+        decFmt->formatToDecimalQuantity(number, dq, status);
         if (U_FAILURE(status)) {
             return StandardPlural::OTHER;
         }
-        pluralKeyword = rules.select(dec);
+        pluralKeyword = rules.select(dq);
         decFmt->format(number, formattedNumber, pos, status);
     } else {
         if (number.getType() == Formattable::kDouble) {

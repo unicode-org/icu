@@ -248,6 +248,10 @@ class U_I18N_API IFixedDecimal {
     virtual bool isNaN() const = 0;
 
     virtual bool isInfinite() const = 0;
+
+    virtual bool hasIntegerValue() {
+        return getPluralOperand(PLURAL_OPERAND_N) == getPluralOperand(PLURAL_OPERAND_I);
+    }
 };
 
 /**

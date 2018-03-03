@@ -29,8 +29,8 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "decNumber.h"
-#include "digitlst.h"
 #include "fmtableimp.h"
+#include "number_decimalquantity.h"
 
 // *****************************************************************************
 // class Formattable
@@ -39,6 +39,8 @@
 U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Formattable)
+
+using number::impl::DecimalQuantity;
 
 
 //-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
@@ -103,7 +105,7 @@ void  Formattable::init() {
     fValue.fInt64 = 0;
     fType = kLong;
     fDecimalStr = NULL;
-    fDecimalNum = NULL;
+    fDecimalQuantity = NULL;
     fBogus.setToBogus(); 
 }
 
@@ -257,8 +259,8 @@ Formattable::operator=(const Formattable& source)
         }
 
         UErrorCode status = U_ZERO_ERROR;
-        if (source.fDecimalNum != NULL) {
-          fDecimalNum = new DigitList(*source.fDecimalNum); // TODO: use internal digit list
+        if (source.fDecimalQuantity != NULL) {
+          fDecimalQuantity = new DecimalQuantity(*source.fDecimalQuantity);
         }
         if (source.fDecimalStr != NULL) {
             fDecimalStr = new CharString(*source.fDecimalStr, status);
@@ -356,14 +358,9 @@ void Formattable::dispose()
 
     delete fDecimalStr;
     fDecimalStr = NULL;
-    
-    FmtStackData *stackData = (FmtStackData*)fStackData;
-    if(fDecimalNum != &(stackData->stackDecimalNum)) {
-      delete fDecimalNum;
-    } else {
-      fDecimalNum->~DigitList(); // destruct, don't deallocate
-    }
-    fDecimalNum = NULL;
+
+    delete fDecimalQuantity;
+    fDecimalQuantity = NULL;
 }
 
 Formattable *
@@ -465,8 +462,8 @@ Formattable::getInt64(UErrorCode& status) const
         } else if (fValue.fDouble < (double)U_INT64_MIN) {
             status = U_INVALID_FORMAT_ERROR;
             return U_INT64_MIN;
-        } else if (fabs(fValue.fDouble) > U_DOUBLE_MAX_EXACT_INT && fDecimalNum != NULL) {
-            int64_t val = fDecimalNum->getInt64();
+        } else if (fabs(fValue.fDouble) > U_DOUBLE_MAX_EXACT_INT && fDecimalQuantity != NULL) {
+            int64_t val = fDecimalQuantity->toLong();
             if (val != 0) {
                 return val;
             } else {
@@ -714,27 +711,27 @@ StringPiece Formattable::getDecimalNumber(UErrorCode &status) {
 
 CharString *Formattable::internalGetCharString(UErrorCode &status) {
     if(fDecimalStr == NULL) {
-      if (fDecimalNum == NULL) {
+      if (fDecimalQuantity == NULL) {
         // No decimal number for the formattable yet.  Which means the value was
         // set directly by the user as an int, int64 or double.  If the value came
         // from parsing, or from the user setting a decimal number, fDecimalNum
         // would already be set.
         //
-        fDecimalNum = new DigitList; // TODO: use internal digit list
-        if (fDecimalNum == NULL) {
+        fDecimalQuantity = new DecimalQuantity(); // TODO: use internal digit list
+        if (fDecimalQuantity == NULL) {
           status = U_MEMORY_ALLOCATION_ERROR;
           return NULL;
         }
 
         switch (fType) {
         case kDouble:
-          fDecimalNum->set(this->getDouble());
+          fDecimalQuantity->setToDouble(this->getDouble());
           break;
         case kLong:
-          fDecimalNum->set(this->getLong());
+          fDecimalQuantity->setToInt(this->getLong());
           break;
         case kInt64:
-          fDecimalNum->set(this->getInt64());
+          fDecimalQuantity->setToLong(this->getInt64());
           break;
         default:
           // The formattable's value is not a numeric type.
@@ -743,55 +740,48 @@ CharString *Formattable::internalGetCharString(UErrorCode &status) {
         }
       }
 
-      fDecimalStr = new CharString;
+      fDecimalStr = new CharString();
       if (fDecimalStr == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
       }
-      fDecimalNum->getDecimal(*fDecimalStr, status);
+      UnicodeString result = fDecimalQuantity->toNumberString();
+      for (int32_t i=0; i<result.length(); i++) {
+        fDecimalStr->append(static_cast<char>(result[i]), status);
+        if (U_FAILURE(status)) {
+          return NULL;
+        }
+      }
     }
     return fDecimalStr;
 }
 
-
-DigitList *
-Formattable::getInternalDigitList() {
-  FmtStackData *stackData = (FmtStackData*)fStackData;
-  if(fDecimalNum != &(stackData->stackDecimalNum)) {
-    delete fDecimalNum;
-    fDecimalNum = new (&(stackData->stackDecimalNum), kOnStack) DigitList();
-  } else {
-    fDecimalNum->clear();
-  }
-  return fDecimalNum;
-}
-
 // ---------------------------------------
 void
-Formattable::adoptDigitList(DigitList *dl) {
-  if(fDecimalNum==dl) {
-    fDecimalNum = NULL; // don't delete
-  }
-  dispose();
-
-  fDecimalNum = dl;
-
-  if(dl==NULL) { // allow adoptDigitList(NULL) to clear
-    return;
-  }
+Formattable::adoptDecimalQuantity(DecimalQuantity *dq) {
+    if (fDecimalQuantity != NULL) {
+        delete fDecimalQuantity;
+    }
+    fDecimalQuantity = dq;
+    if (dq == NULL) { // allow adoptDigitList(NULL) to clear
+        return;
+    }
 
     // Set the value into the Union of simple type values.
     // Cannot use the set() functions because they would delete the fDecimalNum value,
-
-    if (fDecimalNum->fitsIntoLong(FALSE)) {
+    // TODO: fDecimalQuantity->fitsInInt() to kLong type.
+    /*
+    if (fDecimalQuantity->fitsIntoLong(FALSE)) {
         fType = kLong;
         fValue.fInt64 = fDecimalNum->getLong();
-    } else if (fDecimalNum->fitsIntoInt64(FALSE)) {
+    } else
+    */
+    if (fDecimalQuantity->fitsInLong()) {
         fType = kInt64;
-        fValue.fInt64 = fDecimalNum->getInt64();
+        fValue.fInt64 = fDecimalQuantity->toLong();
     } else {
         fType = kDouble;
-        fValue.fDouble = fDecimalNum->getDouble();
+        fValue.fDouble = fDecimalQuantity->toDouble();
     }
 }
 
@@ -804,24 +794,12 @@ Formattable::setDecimalNumber(StringPiece numberString, UErrorCode &status) {
     }
     dispose();
 
-    // Copy the input string and nul-terminate it.
-    //    The decNumber library requires nul-terminated input.  StringPiece input
-    //    is not guaranteed nul-terminated.  Too bad.
-    //    CharString automatically adds the nul.
-    DigitList *dnum = new DigitList(); // TODO: use getInternalDigitList
-    if (dnum == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    dnum->set(CharString(numberString, status).toStringPiece(), status);
-    if (U_FAILURE(status)) {
-        delete dnum;
-        return;   // String didn't contain a decimal number.
-    }
-    adoptDigitList(dnum);
+    DecimalQuantity* dq = new DecimalQuantity();
+    dq->setToDecNumber(numberString);
+    adoptDecimalQuantity(dq);
 
     // Note that we do not hang on to the caller's input string.
-    // If we are asked for the string, we will regenerate one from fDecimalNum.
+    // If we are asked for the string, we will regenerate one from fDecimalQuantity.
 }
 
 #if 0
