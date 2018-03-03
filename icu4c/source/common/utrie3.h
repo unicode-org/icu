@@ -205,7 +205,7 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  * @param c (UChar32, in) the input code point
  * @return (uint16_t) The code point's trie value.
  */
-#define UTRIE3_GET16(trie, c, result) _UTRIE3_GET((trie), data16, (c), (result))  // TODO: docs
+#define UTRIE3_GET16(trie, c) (trie)->data16[_UTRIE3_INDEX_FROM_CP(trie, c)]
 
 /**
  * Return a 32-bit trie value from a code point, with range checking.
@@ -215,7 +215,7 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  * @param c (UChar32, in) the input code point
  * @return (uint32_t) The code point's trie value.
  */
-#define UTRIE3_GET32(trie, c, result) _UTRIE3_GET((trie), data32, (c), (result))  // TODO: docs
+#define UTRIE3_GET32(trie, c) (trie)->data32[_UTRIE3_INDEX_FROM_CP(trie, c)]
 
 /**
  * UTF-16: Get the next code point (UChar32 c, out), post-increment src,
@@ -334,6 +334,10 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  * all characters that do not have any mappings are simply copied as is.
  */
 
+// TODO: docs
+#define UTRIE3_GET16_FROM_ASCII(trie, c) ((trie)->data16[c])
+#define UTRIE3_GET32_FROM_ASCII(trie, c) ((trie)->data32[c])
+
 /**
  * Returns a 16-bit trie value from a BMP code point or UTF-16 code unit (0..U+ffff).
  * Same as UTRIE3_GET16() if c is a BMP code point, but smaller and faster.
@@ -342,7 +346,7 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  * @param c (UChar32, in) the input code unit, must be 0<=c<=U+ffff
  * @return (uint16_t) The code unit's trie value.
  */
-#define UTRIE3_GET16_FROM_BMP(trie, c) _UTRIE3_GET_FROM_BMP((trie), data16, c)
+#define UTRIE3_GET16_FROM_BMP(trie, c) ((trie)->data16[_UTRIE3_INDEX_FROM_BMP(trie, c)])
 
 /**
  * Returns a 32-bit trie value from a BMP code point or UTF-16 code unit (0..U+ffff).
@@ -352,7 +356,7 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  * @param c (UChar32, in) the input code unit, must be 0<=c<=U+ffff
  * @return (uint32_t) The code unit's trie value.
  */
-#define UTRIE3_GET32_FROM_BMP(trie, c) _UTRIE3_GET_FROM_BMP((trie), data32, c)
+#define UTRIE3_GET32_FROM_BMP(trie, c) ((trie)->data32[_UTRIE3_INDEX_FROM_BMP(trie, c)])
 
 /**
  * Return a 16-bit trie value from a supplementary code point (U+10000..U+10ffff).
@@ -361,7 +365,7 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  * @param c (UChar32, in) the input code point, must be U+10000<=c<=U+10ffff
  * @return (uint16_t) The code point's trie value.
  */
-#define UTRIE3_GET16_FROM_SUPP(trie, c, result) _UTRIE3_GET_FROM_SUPP((trie), data16, c, (result))  // TODO: docs
+#define UTRIE3_GET16_FROM_SUPP(trie, c) ((trie)->data16[_UTRIE3_INDEX_FROM_SUPP(trie, c)])
 
 /**
  * Return a 32-bit trie value from a supplementary code point (U+10000..U+10ffff).
@@ -370,7 +374,7 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  * @param c (UChar32, in) the input code point, must be U+10000<=c<=U+10ffff
  * @return (uint32_t) The code point's trie value.
  */
-#define UTRIE3_GET32_FROM_SUPP(trie, c, result) _UTRIE3_GET_FROM_SUPP((trie), data32, c, (result))  // TODO: docs
+#define UTRIE3_GET32_FROM_SUPP(trie, c) ((trie)->data32[_UTRIE3_INDEX_FROM_SUPP(trie, c)])
 
 /* Internal definitions ----------------------------------------------------- */
 
@@ -385,7 +389,6 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  */
 struct UTrie3 {
     /* protected: used by macros and functions for reading values */
-    // TODO: "public" for ASCII
     const uint16_t *index;
     const uint16_t *data16;     /* for fast UTF-8 ASCII access, if 16b data */
     const uint32_t *data32;     /* NULL if 16b data is used via index */
@@ -450,46 +453,32 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
                            const uint8_t *start, const uint8_t *src);
 
 /** Internal trie getter from a BMP code point. Returns the data index. */
-#define _UTRIE3_INDEX_FROM_BMP(trieIndex, c) \
-    (((int32_t)(trieIndex)[(c) >> UTRIE3_BMP_SHIFT]) + ((c) & UTRIE3_BMP_DATA_MASK))
+#define _UTRIE3_INDEX_FROM_BMP(trie, c) \
+    (((int32_t)(trie)->index[(c) >> UTRIE3_BMP_SHIFT]) + ((c) & UTRIE3_BMP_DATA_MASK))
 
-/** Internal trie getter from a BMP code point. Returns the data value. */
-#define _UTRIE3_GET_FROM_BMP(trie, data, c) \
-    (trie)->data[_UTRIE3_INDEX_FROM_BMP((trie)->index, c)]
-
-/** Internal trie getter from a supplementary code point. Sets result to the data value. */
-// TODO: back to *returning* values?
+/** Internal trie getter from a supplementary code point. Returns the data index. */
 #define _UTRIE3_INDEX_FROM_SUPP(trie, c) \
     ((c) >= (trie)->highStart ? \
         (trie)->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET : \
         utrie3_internalIndexFromSupp(trie, c))
 
-#define _UTRIE3_GET_FROM_SUPP(trie, data, c, result) { \
-    (result) = (trie)->data[_UTRIE3_INDEX_FROM_SUPP(trie, c)]; \
-}
-
 /**
  * Internal trie getter from a code point, with checking that c is in 0..10FFFF.
- * Sets result to the data value.
+ * Returns the data index.
  */
-// TODO: back to *returning* values?
 #define _UTRIE3_INDEX_FROM_CP(trie, c) \
     ((uint32_t)(c) <= 0xffff ? \
-        _UTRIE3_INDEX_FROM_BMP((trie)->index, c) : \
+        _UTRIE3_INDEX_FROM_BMP(trie, c) : \
         (uint32_t)(c) <= 0x10ffff ? \
             _UTRIE3_INDEX_FROM_SUPP(trie, c) : \
             (trie)->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET)
-
-#define _UTRIE3_GET(trie, data, c, result) { \
-    (result) = (trie)->data[_UTRIE3_INDEX_FROM_CP(trie, c)]; \
-}
 
 /** Internal next-post-increment: get the next code point (c) and its data. */
 #define _UTRIE3_U16_NEXT(trie, data, src, limit, c, result) { \
     (c) = *(src)++; \
     int32_t __index; \
     if (!U16_IS_SURROGATE(c)) { \
-        __index = _UTRIE3_INDEX_FROM_BMP((trie)->index, c); \
+        __index = _UTRIE3_INDEX_FROM_BMP(trie, c); \
     } else { \
         uint16_t __c2; \
         if (U16_IS_SURROGATE_LEAD(c) && (src) != (limit) && U16_IS_TRAIL(__c2 = *(src))) { \
@@ -508,7 +497,7 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
     (c) = *--(src); \
     int32_t __index; \
     if (!U16_IS_SURROGATE(c)) { \
-        __index = _UTRIE3_INDEX_FROM_BMP((trie)->index, c); \
+        __index = _UTRIE3_INDEX_FROM_BMP(trie, c); \
     } else { \
         uint16_t __c2; \
         if (U16_IS_SURROGATE_TRAIL(c) && (src) != (start) && U16_IS_LEAD(__c2 = *((src) - 1))) { \

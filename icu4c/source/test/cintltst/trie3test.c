@@ -181,6 +181,18 @@ testTrieGetters(const char *testName,
         value=checkRanges[i].value;
 
         while(start<limit) {
+            if (start <= 0x7f) {
+                if (valueBits == UTRIE3_16_VALUE_BITS) {
+                    value2 = UTRIE3_GET16_FROM_ASCII(trie, start);
+                } else {
+                    value2 = UTRIE3_GET32_FROM_ASCII(trie, start);
+                }
+                if (value != value2) {
+                    log_err("error: %s(%s).fromASCII(U+%04lx)==0x%lx instead of 0x%lx\n",
+                            typeName, testName, (long)start, (long)value2, (long)value);
+                    ++countErrors;
+                }
+            }
             if(start<=0xffff) {
                 if(valueBits==UTRIE3_16_VALUE_BITS) {
                     value2=UTRIE3_GET16_FROM_BMP(trie, start);
@@ -194,9 +206,9 @@ testTrieGetters(const char *testName,
                 }
             } else {
                 if(valueBits==UTRIE3_16_VALUE_BITS) {
-                    UTRIE3_GET16_FROM_SUPP(trie, start, value2);
+                    value2 = UTRIE3_GET16_FROM_SUPP(trie, start);
                 } else {
-                    UTRIE3_GET32_FROM_SUPP(trie, start, value2);
+                    value2 = UTRIE3_GET32_FROM_SUPP(trie, start);
                 }
                 if(value!=value2) {
                     log_err("error: %s(%s).fromSupp(U+%04lx)==0x%lx instead of 0x%lx\n",
@@ -205,9 +217,9 @@ testTrieGetters(const char *testName,
                 }
             }
             if(valueBits==UTRIE3_16_VALUE_BITS) {
-                UTRIE3_GET16(trie, start, value2);
+                value2 = UTRIE3_GET16(trie, start);
             } else {
-                UTRIE3_GET32(trie, start, value2);
+                value2 = UTRIE3_GET32(trie, start);
             }
             if(value!=value2) {
                 log_err("error: %s(%s).get(U+%04lx)==0x%lx instead of 0x%lx\n",
@@ -253,11 +265,11 @@ testTrieGetters(const char *testName,
 
     /* test errorValue */
     if(valueBits==UTRIE3_16_VALUE_BITS) {
-        UTRIE3_GET16(trie, -1, value);
-        UTRIE3_GET16(trie, 0x110000, value2);
+        value = UTRIE3_GET16(trie, -1);
+        value2 = UTRIE3_GET16(trie, 0x110000);
     } else {
-        UTRIE3_GET32(trie, -1, value);
-        UTRIE3_GET32(trie, 0x110000, value2);
+        value = UTRIE3_GET32(trie, -1);
+        value2 = UTRIE3_GET32(trie, 0x110000);
     }
     if(value!=errorValue || value2!=errorValue) {
         log_err("error: %s(%s).get(out of range) != errorValue\n",

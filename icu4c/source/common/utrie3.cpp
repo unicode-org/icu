@@ -169,16 +169,7 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
     }
     c = utf8_prevCharSafeBody(start, 0, &i, c, -1);
     i = length - i;  // Number of bytes read backward from src.
-    int32_t idx;
-    if (c >= 0) {
-        if (c <= 0xffff) {
-            idx = _UTRIE3_INDEX_FROM_BMP(trie->index, c);
-        } else {
-            idx = _UTRIE3_INDEX_FROM_SUPP(trie, c);
-        }
-    } else {
-        idx = trie->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET;
-    }
+    int32_t idx = _UTRIE3_INDEX_FROM_CP(trie, c);
     return (idx << 3) | i;
 }
 
