@@ -372,58 +372,7 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  */
 #define UTRIE3_GET32_FROM_SUPP(trie, c, result) _UTRIE3_GET_FROM_SUPP((trie), data32, c, (result))  // TODO: docs
 
-U_CDECL_END
-
-/* C++ convenience wrappers ------------------------------------------------- */
-#if 0  // TODO: remove?
-
-#ifdef __cplusplus
-
-#include "unicode/utf.h"
-#include "mutex.h"
-
-U_NAMESPACE_BEGIN
-
-// Use the Forward/Backward subclasses below.
-class UTrie3StringIterator : public UMemory {
-public:
-    UTrie3StringIterator(const UTrie3 *t, const UChar *p) :
-        trie(t), codePointStart(p), codePointLimit(p), codePoint(U_SENTINEL) {}
-
-    const UTrie3 *trie;
-    const UChar *codePointStart, *codePointLimit;
-    UChar32 codePoint;
-};
-
-class BackwardUTrie3StringIterator : public UTrie3StringIterator {
-public:
-    BackwardUTrie3StringIterator(const UTrie3 *t, const UChar *s, const UChar *p) :
-        UTrie3StringIterator(t, p), start(s) {}
-
-    uint16_t previous16();
-
-    const UChar *start;
-};
-
-class ForwardUTrie3StringIterator : public UTrie3StringIterator {
-public:
-    // Iteration limit l can be NULL.
-    // In that case, the caller must detect c==0 and stop.
-    ForwardUTrie3StringIterator(const UTrie3 *t, const UChar *p, const UChar *l) :
-        UTrie3StringIterator(t, p), limit(l) {}
-
-    uint16_t next16();
-
-    const UChar *limit;
-};
-
-U_NAMESPACE_END
-
-#endif
-#endif
 /* Internal definitions ----------------------------------------------------- */
-
-U_CDECL_BEGIN
 
 /*
  * Trie structure definition.

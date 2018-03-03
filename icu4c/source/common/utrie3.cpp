@@ -561,32 +561,3 @@ utrie3_swap(const UDataSwapper *ds,
 
 // utrie3_swapAnyVersion() should be defined here but lives in utrie3_builder.cpp
 // to avoid a dependency from utrie3.cpp on utrie.cpp.
-
-/* C++ convenience wrappers ------------------------------------------------- */
-#if 0  // TODO
-U_NAMESPACE_BEGIN
-
-uint16_t BackwardUTrie3StringIterator::previous16() {
-    codePointLimit=codePointStart;
-    if(start>=codePointStart) {
-        codePoint=U_SENTINEL;
-        return trie->errorValue;
-    }
-    uint16_t result;
-    UTRIE3_U16_PREV16(trie, start, codePointStart, codePoint, result);
-    return result;
-}
-
-uint16_t ForwardUTrie3StringIterator::next16() {
-    codePointStart=codePointLimit;
-    if(codePointLimit==limit) {
-        codePoint=U_SENTINEL;
-        return trie->errorValue;
-    }
-    uint16_t result;
-    UTRIE3_U16_NEXT16(trie, codePointLimit, limit, codePoint, result);
-    return result;
-}
-
-U_NAMESPACE_END
-#endif
