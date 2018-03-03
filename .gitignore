@@ -3,12 +3,14 @@ icu4c/bin
 icu4c/bin32uwp
 icu4c/bin64
 icu4c/bin64uwp
+icu4c/binARMUWP
 icu4c/commondata
 icu4c/include
 icu4c/lib
 icu4c/lib32uwp
 icu4c/lib64
 icu4c/lib64uwp
+icu4c/libARMuwp
 icu4c/source/Doxyfile
 icu4c/source/Makefile
 icu4c/source/README
@@ -34,6 +36,7 @@ icu4c/source/common/Generated[!!-~]Files
 icu4c/source/common/Makefile
 icu4c/source/common/Makefile.local
 icu4c/source/common/Release
+icu4c/source/common/arm
 icu4c/source/common/common.res
 icu4c/source/common/common.vcproj.*.*.user
 icu4c/source/common/debug
@@ -114,6 +117,7 @@ icu4c/source/i18n/Generated[!!-~]Files
 icu4c/source/i18n/Makefile
 icu4c/source/i18n/Makefile.local
 icu4c/source/i18n/Release
+icu4c/source/i18n/arm
 icu4c/source/i18n/debug
 icu4c/source/i18n/i18n.res
 icu4c/source/i18n/i18n.vcproj.*.*.user

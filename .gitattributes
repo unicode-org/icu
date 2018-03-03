@@ -5,6 +5,8 @@ icu4c/icu4c.css -text svneol=unset#text/css
 icu4c/license.html svneol=native#text/html%3Bcharset%3Dutf-8
 icu4c/readme.html svneol=native#text/html%3Bcharset%3Dutf-8
 icu4c/source/aclocal.m4 -text
+icu4c/source/allinone/Build.Windows.ProjectConfiguration.props -text
+icu4c/source/allinone/Build.Windows.UWP.ProjectConfiguration.props -text
 icu4c/source/allinone/Windows.CopyUnicodeHeaderFiles.targets -text
 icu4c/source/common/appendable.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/common/bmpset.cpp svneol=native#text/plain%3Bcharset%3Dutf-8

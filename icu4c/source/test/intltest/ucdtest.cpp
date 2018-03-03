@@ -558,7 +558,8 @@ void UnicodeTest::TestInvalidCodePointFolding(void) {
             0x110000, // out of range
             -1 // negative
     };
-    for (auto cp : invalidCodePoints) {
+    for (int32_t i=0; i<UPRV_LENGTHOF(invalidCodePoints); ++i) {
+        UChar32 cp = invalidCodePoints[i];
         assertEquals("Invalid code points should be echoed back",
                 cp, u_foldCase(cp, U_FOLD_CASE_DEFAULT));
         assertEquals("Invalid code points should be echoed back",

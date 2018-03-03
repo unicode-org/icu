@@ -1062,9 +1062,13 @@ UnicodeString &MeasureFormat::formatNumeric(
     }
 
     // Format time. draft becomes something like '5:30:45'
+    // #13606: DateFormat is not thread-safe, but MeasureFormat advertises itself as thread-safe.
     FieldPosition smallestFieldPosition(smallestField);
     UnicodeString draft;
+    static UMutex dateFmtMutex = U_MUTEX_INITIALIZER;
+    umtx_lock(&dateFmtMutex);
     dateFmt.format(date, draft, smallestFieldPosition, status);
+    umtx_unlock(&dateFmtMutex);
 
     // If we find field for smallest amount replace it with the formatted
     // smallest amount from above taking care to replace the integer part

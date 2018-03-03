@@ -1850,7 +1850,7 @@ public final class Utility {
     }
 
     /**
-     * This implementation is equivalent to Java 8+ {@link Math#addExact(int, int)}
+     * This implementation is equivalent to Java 8+ Math#addExact(int, int)
      * @param x the first value
      * @param y the second value
      * @return the result

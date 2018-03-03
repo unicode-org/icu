@@ -65,7 +65,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RuleBasedBreakIterator)
  * tables object that is passed in as a parameter.
  */
 RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode &status)
- : fText(UTEXT_INITIALIZER), fSCharIter(UnicodeString())
+ : fSCharIter(UnicodeString())
 {
     init(status);
     fData = new RBBIDataWrapper(data, status); // status checked in constructor
@@ -83,7 +83,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(RBBIDataHeader* data, UErrorCode 
 RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
                        uint32_t       ruleLength,
                        UErrorCode     &status)
- : fText(UTEXT_INITIALIZER), fSCharIter(UnicodeString())
+ : fSCharIter(UnicodeString())
 {
     init(status);
     if (U_FAILURE(status)) {
@@ -114,7 +114,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(const uint8_t *compiledRules,
 //
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &status)
- : fText(UTEXT_INITIALIZER), fSCharIter(UnicodeString())
+ : fSCharIter(UnicodeString())
 {
     init(status);
     fData = new RBBIDataWrapper(udm, status); // status checked in constructor
@@ -135,7 +135,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator(UDataMemory* udm, UErrorCode &sta
 RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
                                                 UParseError          &parseError,
                                                 UErrorCode           &status)
- : fText(UTEXT_INITIALIZER), fSCharIter(UnicodeString())
+ : fSCharIter(UnicodeString())
 {
     init(status);
     if (U_FAILURE(status)) {return;}
@@ -159,7 +159,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator( const UnicodeString  &rules,
 //                           of rules.
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator()
- : fText(UTEXT_INITIALIZER), fSCharIter(UnicodeString())
+ : fSCharIter(UnicodeString())
 {
     UErrorCode status = U_ZERO_ERROR;
     init(status);
@@ -174,7 +174,7 @@ RuleBasedBreakIterator::RuleBasedBreakIterator()
 //-------------------------------------------------------------------------------
 RuleBasedBreakIterator::RuleBasedBreakIterator(const RuleBasedBreakIterator& other)
 : BreakIterator(other),
-  fText(UTEXT_INITIALIZER), fSCharIter(UnicodeString())
+  fSCharIter(UnicodeString())
 {
     UErrorCode status = U_ZERO_ERROR;
     this->init(status);
@@ -288,7 +288,12 @@ void RuleBasedBreakIterator::init(UErrorCode &status) {
     fBreakCache           = NULL;
     fDictionaryCache      = NULL;
 
-    if (U_FAILURE(status)) {
+    // Note: IBM xlC is unable to assign or initialize member fText from UTEXT_INITIALIZER.
+    // fText                 = UTEXT_INITIALIZER;
+    static const UText initializedUText = UTEXT_INITIALIZER;
+    uprv_memcpy(&fText, &initializedUText, sizeof(UText));
+
+   if (U_FAILURE(status)) {
         return;
     }
 

@@ -777,7 +777,7 @@
     <ul>
       <li>Microsoft Windows</li>
 
-      <li>Microsoft Visual C++ (part of <a href="https://www.visualstudio.com/">Visual Studio</a>) (see the ICU download page for the currently compatible version)</li>
+      <li>Microsoft Visual C++ (part of <a href="https://www.visualstudio.com/">Visual Studio</a>) (from either Visual Studio 2015 or Visual Studio 2017)</li>
       
       <li><i><b>Optional:</b></i> A version of the <a href="https://developer.microsoft.com/windows/downloads">Windows 10 SDK</a> (if you want to build the UWP projects)</li>
     </ul>
@@ -805,30 +805,18 @@
       </li>
 
       <li>Open the "<i>&lt;ICU&gt;</i><tt>\source\allinone\allinone.sln</tt>" solution
-      file in Microsoft Visual Studio. (This solution includes all the
+      file in 'Visual Studio 2017'. (This solution includes all the
       International Components for Unicode libraries, necessary ICU building
       tools, and the test suite projects). Please see the 
       <a href="#HowToBuildWindowsCommandLine">command line note below</a> if you want to
       build from the command line instead.</li>
 
-      <li>You may need to "re-target" the 3 UWP projects (common_uwp, i18n_uwp, and makedata_uwp) to 
-      the version of the SDK that you have installed. In Visual Studio you can right-click on the 
-      UWP projects in the Solution Explorer and select the option 'Retarget Projects' from the context menu.
-      This will open up a window where you can select the SDK version to target from a list of the
-      various SDKs that are installed on the machine.
-      <br/> Alternatively, you can manually edit the "<tt>*.vcxproj</tt>" files for the 3 UWP 
-      projects to change the value of the "<tt>WindowsTargetPlatformVersion</tt>" property to the
-      version of the SDK that you would like to use instead.</li>
-        <ul class="no-left-margin">
-          <li>Note: You do <i>not</i> need to have a copy of the Windows 10 SDK installed in order
-            to build the other (non-UWP) projects in Visual Studio. If the Windows 10 SDK is not 
-            installed then the UWP projects will not be loaded by Visual Studio.</li>
-          <li>On Windows versions below Windows 10, the UWP projects will not load inside of the 
-            Visual Studio GUI. However, you can still build the UWP projects on the command line
-            using <tt>MSBUILD</tt> instead. For more on this limitation see the Visual Studio 2017
-            <a href="https://docs.microsoft.com/visualstudio/productinfo/vs2017-system-requirements-vs">release notes</a>.</li>
-      </ul>
-
+      <li>If you are building using 'Visual Studio 2015' instead, or if you are building the UWP projects and you have a different
+      version of the Windows 10 SDK installed you will first need to modify the two "<tt>Build.Windows.*.props</tt>" files
+      in the "<tt>allinone</tt>" directory before you can open the "allinone" solution file.
+      Please see the notes below about <a href="#HowToUseOtherVSVersions">building with other versions of Visual Studio</a> or the 
+      notes on <a href="#HowToRetargetTheWin10SDK">re-targeting the Windows 10 SDK for the UWP projects</a> for details.</li>
+      
       <li>Set the active platform to "Win32" or "x64" (See <a href="#HowToBuildWindowsPlatform">Windows platform note</a> below)
       and configuration to "Debug" or "Release" (See <a href="#HowToBuildWindowsConfig">Windows configuration note</a> below).</li>
 
@@ -882,6 +870,48 @@
       application directory.</li>
     </ol>
 
+    <p><a name="HowToUseOtherVSVersions" id="HowToUseOtherVSVersions">
+    <strong>Building with other versions of Visual Studio Note:</strong></a>
+    The particular version of the MSVC compiler tool-set (and thus the corresponding version of Visual Studio) that
+    is used to compile ICU is determined by the "<tt>PlatformToolset</tt>" property. This property is stored in two
+    different shared files that are used to set common configuration settings amongst the various ICU "<tt>*.vcxproj</tt>" project files.
+    
+    For the non-UWP projects, this setting is in the shared file called "<tt>Build.Windows.ProjectConfiguration.props</tt>" located
+    in the "allinone" directory.
+    
+    For the UWP projects, this setting is in the shared file called "<tt>Build.Windows.UWP.ProjectConfiguration.props</tt>", also 
+    located in the "allinone" directory.
+    <br/>
+    The value of <tt>v140</tt> corresponds to the Visual Studio 2015 compiler tool set, whereas the value of
+    <tt>v141</tt> corresponds to the Visual Studio 2017 compiler tool set.
+    
+    <br/>In order to build the non-UWP projects with Visual Studio 2015 you will need to modify the file
+    called "<tt>Build.Windows.ProjectConfiguration.props</tt>" to change the value of the <tt>PlatformToolset</tt> property.
+    
+    Note however that Visual Studio 2017 is required for building the UWP projects.
+    </p>
+    
+    <p>Please consider: Using older versions of the MSVC compiler is generally not recommended due to the improved support for the C++11 standard
+    in newer versions of the compiler.</p>
+    
+    <p><a name="HowToRetargetTheWin10SDK" id="HowToRetargetTheWin10SDK">
+    <strong>Re-targeting the Windows 10 SDK for the UWP projects Note:</strong></a>
+    
+      If the version of the Windows 10 SDK that you have installed does not match the version used by the UWP projects, then you 
+      will need to "retarget" them to use the version of the SDK that you have installed instead.
+      
+      There are two ways to do this:
+      <ul>
+        <li>In Visual Studio you can right-click on the UWP projects in the 'Solution Explorer' and select the
+            option 'Retarget Projects' from the context menu. This will open up a window where you can select the
+            SDK version to target from a drop-down list of the various SDKs that are installed on the machine.</li>
+
+        <li>Alternatively, you can manually edit the shared file called "<tt>Build.Windows.UWP.ProjectConfiguration.props</tt>"
+            which is located in the "allinone" directory. You will need to change the of the
+            "<tt>WindowsTargetPlatformVersion</tt>" property to the version of the SDK that you would like to use instead.</li>
+      </ul>
+    </p>
+    
     <p><a name="HowToBuildWindowsCommandLine" id=
     "HowToBuildWindowsCommandLine"><strong>Using MSBUILD At The Command Line Note:</strong></a>
     You can build ICU from the command line instead of using the Visual Studio GUI.
@@ -948,16 +978,6 @@
     Build...". Click the "Select All" button, and then click the "Rebuild"
     button.</p>
 
-    <p><a name="HowToUseOtherCompilerVersions" id="HowToUseOtherCompilerVersions">
-    <strong>Building with other versions of MSVC Note:</strong></a> The particular version of the MSVC compiler
-    that is used to compile ICU is determined by the "<tt>PlatformToolset</tt>"  property in the various
-    <tt>.vcxproj</tt> project files. <br/>For example, <code>&lt;PlatformToolset&gt;v140&lt;/PlatformToolset&gt;</code>
-    corresponds to the Visual Studio 2015 compiler tool set, whereas <code>&lt;PlatformToolset&gt;v141&lt;/PlatformToolset&gt;</code>
-    corresponds to the Visual Studio 2017 compiler tool set.
-    However, using older versions of the MSVC compiler is generally not recommended due to the improved support for the C++11 standard
-    in newer versions of the compiler. Older versions of the compiler have reduced support for various C++11 features, many of which
-    are used by ICU.<br/></p>
-    
     <h3><a name="HowToBuildCygwin" href="#HowToBuildCygwin" id=
     "HowToBuildCygwin">How To Build And Install On Windows with Cygwin</a></h3>
 
@@ -967,7 +987,7 @@
     <ul>
       <li>Microsoft Windows</li>
 
-      <li>Microsoft Visual C++ (from Visual Studio 2017 or newer, when gcc isn't used).</li>
+      <li>Microsoft Visual C++ (from Visual Studio 2015 or newer, when gcc isn't used).</li>
 
       <li>
         Cygwin with the following installed:

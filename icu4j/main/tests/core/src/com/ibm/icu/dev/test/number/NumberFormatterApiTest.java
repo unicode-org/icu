@@ -1785,7 +1785,7 @@ public class NumberFormatterApiTest {
                 "+444,444");
 
         assertFormatSingle(
-                "Sign Always Negative",
+                "Sign Except-Zero Negative",
                 "sign-except-zero",
                 NumberFormatter.with().sign(SignDisplay.EXCEPT_ZERO),
                 ULocale.ENGLISH,

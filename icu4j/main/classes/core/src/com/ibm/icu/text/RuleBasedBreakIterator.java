@@ -225,7 +225,9 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * The rule data for this BreakIterator instance.
      * Not intended for public use. Declared public for testing purposes only.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     public RBBIDataWrapper    fRData;
 
     /**
@@ -527,7 +529,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     }
 
     /**
-     * Returns the current iteration position.  Note that UBRK_DONE is never
+     * Returns the current iteration position.  Note that DONE is never
      * returned from this function; if iteration has run to the end of a
      * string, current() will return the length of the string while
      * next() will return BreakIterator.DONE).
@@ -556,6 +558,10 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * position from <code>next()</code>, <code>previous()</code>, or
      * any other break iterator functions that returns a boundary position.
      * <p>
+     * Note that <code>getRuleStatus()</code> returns the value corresponding to
+     * <code>current()</code> index even after <code>next()</code> has returned DONE.
+     * <p>
+
      * @return the status from the break rule that determined the boundary
      * at the current iteration position.
      *

@@ -16,7 +16,8 @@
 system_symbols:
   deps
     # C
-    PIC system_debug malloc_functions c_strings c_string_formatting
+    PIC system_misc system_debug malloc_functions ubsan
+    c_strings c_string_formatting
     floating_point trigonometry
     stdlib_qsort
     pthread system_locale
@@ -28,11 +29,18 @@ group: PIC
     # Position-Independent Code (-fPIC) requires a Global Offset Table.
     _GLOBAL_OFFSET_TABLE_
 
+group: system_misc
+    abort
+
 group: system_debug
     __assert_fail __stack_chk_fail
 
 group: malloc_functions
     free malloc realloc
+
+group: ubsan
+    # UBSan=UndefinedBehaviorSanitizer, clang -fsanitize=bounds
+    __ubsan_handle_out_of_bounds
 
 group: c_strings
     isspace isdigit
@@ -415,7 +423,7 @@ group: simpleformatter
 group: patternprops
     patternprops.o
   deps
-    PIC
+    PIC ubsan
 
 group: ushape
     ushape.o
@@ -760,6 +768,8 @@ group: errorcode  # ErrorCode base class
 
 group: utypes  # u_errorName()
     utypes.o
+  deps
+    ubsan
 
 group: platform
     # Files in the "platform" group.
@@ -779,7 +789,8 @@ group: platform
     utrace.o
   deps
     # The "platform" group has no ICU dependencies.
-    PIC system_debug malloc_functions c_strings c_string_formatting
+    PIC system_misc system_debug malloc_functions ubsan
+    c_strings c_string_formatting
     floating_point pthread system_locale
     stdio_input readlink_function dir_io
     dlfcn  # Move related code into icuplug.c?
@@ -793,7 +804,7 @@ library: i18n
     alphabetic_index collation collation_builder string_search
     dayperiodrules
     formatting formattable_cnv regex regex_cnv translit
-    numberformatter
+    double_conversion numberformatter
     universal_time_scale
     uclean_i18n
 
@@ -867,6 +878,13 @@ group: dayperiodrules
   deps
     resourcebundle uclean_i18n
 
+group: double_conversion
+    double-conversion.o double-conversion-bignum.o double-conversion-bignum-dtoa.o
+    double-conversion-cached-powers.o double-conversion-diy-fp.o
+    double-conversion-fast-dtoa.o
+  deps
+    platform
+
 group: numberformatter
     # ICU 60+ NumberFormatter API
     number_affixutils.o number_compact.o number_decimalquantity.o
@@ -938,7 +956,7 @@ group: units
 group: digitlist
     digitlst.o decContext.o decNumber.o visibledigits.o
   deps
-    uclean_i18n
+    double_conversion uclean_i18n
 
 group: formattable
     fmtable.o
@@ -980,6 +998,8 @@ group: translit
 
 group: universal_time_scale
     utmscale.o
+  deps
+    ubsan
 
 group: uclean_i18n
     ucln_in.o
