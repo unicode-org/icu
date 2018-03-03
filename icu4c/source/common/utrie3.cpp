@@ -120,47 +120,6 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
     return trie;
 }
 
-U_CAPI UTrie3 * U_EXPORT2
-utrie3_clone(const UTrie3 *other, UErrorCode *pErrorCode) {
-    if (U_FAILURE(*pErrorCode)) {
-        return nullptr;
-    }
-    if (other == nullptr) {
-        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return nullptr;
-    }
-
-    int32_t length = other->indexLength * 2;
-    if (other->data16 != nullptr) {
-        length += other->dataLength * 2;
-    } else {
-        length += other->dataLength * 4;
-    }
-
-    char *bytes = (char *)uprv_malloc(sizeof(UTrie3) + length);
-    if (bytes == nullptr) {
-        *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-        return nullptr;
-    }
-    UTrie3 *trie = (UTrie3 *)bytes;
-    uprv_memcpy(trie, other, sizeof(UTrie3));
-    bytes += sizeof(UTrie3);
-
-    // Make the clone's pointers point to its own memory.
-    trie->index = (uint16_t *)bytes;
-    uprv_memcpy(bytes, other->index, trie->indexLength * 2);
-    bytes += trie->indexLength * 2;
-
-    if (other->data16 != nullptr) {
-        trie->data16 = (uint16_t *)bytes;
-        uprv_memcpy(bytes, other->data16, trie->dataLength * 2);
-    } else {
-        trie->data32 = (uint32_t *)bytes;
-        uprv_memcpy(bytes, other->data32, trie->dataLength * 4);
-    }
-    return trie;
-}
-
 U_CAPI void U_EXPORT2
 utrie3_close(UTrie3 *trie) {
     uprv_free(trie);

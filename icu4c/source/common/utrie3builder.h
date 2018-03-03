@@ -177,7 +177,7 @@ utrie3bld_setRange(UTrie3Builder *builder,
  *                             (the trie builder will be immutable and usable,
  *                             but not frozen and not usable with the fast macros)
  *
- * @see utrie3_cloneAsThawed
+ * @see utrie3bld_fromUTrie3
  */
 U_CAPI UTrie3 * U_EXPORT2
 utrie3bld_build(UTrie3Builder *builder, UTrie3ValueBits valueBits, UErrorCode *pErrorCode);

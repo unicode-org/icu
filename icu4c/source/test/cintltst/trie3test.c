@@ -660,17 +660,6 @@ testTrieSerialize(const char *testName,
             break;
         }
         errorCode=U_ZERO_ERROR;
-        if(withSwap) {
-            UTrie3 *clone=utrie3_clone(trie, &errorCode);
-            if(U_FAILURE(errorCode)) {
-                log_err("error: cloning a UTrie3 failed (%s) - %s\n",
-                        testName, u_errorName(errorCode));
-                errorCode=U_ZERO_ERROR;  /* continue with the original */
-            } else {
-                utrie3_close(trie);
-                trie=clone;
-            }
-        }
         length1=utrie3_serialize(trie, NULL, 0, &errorCode);
         if(errorCode!=U_BUFFER_OVERFLOW_ERROR) {
             log_err("error: utrie3_serialize(%s) preflighting set %s != U_BUFFER_OVERFLOW_ERROR\n",
@@ -761,20 +750,6 @@ testTrieSerialize(const char *testName,
         uprv_memset((char *)storage+length3, 0xfa, (int32_t)(sizeof(storage)-length3));
 
         errorCode=U_ZERO_ERROR;
-        if(withSwap) {
-            /* clone a deserialized trie */
-            UTrie3 *clone=utrie3_clone(trie, &errorCode);
-            if(U_FAILURE(errorCode)) {
-                log_err("error: utrie3_clone(unserialized %s) failed - %s\n",
-                        testName, u_errorName(errorCode));
-                errorCode=U_ZERO_ERROR;
-                /* no need to break: just test the original trie */
-            } else {
-                utrie3_close(trie);
-                trie=clone;
-                uprv_memset(storage, 0, sizeof(storage));
-            }
-        }
         testTrie(testName, trie, valueBits, checkRanges, countCheckRanges);
         {
             /* make a builder from an unserialized trie */

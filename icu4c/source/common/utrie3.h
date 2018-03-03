@@ -70,17 +70,6 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
                           UErrorCode *pErrorCode);
 
 /**
- * Clone a trie.
- * You must utrie3_close() the clone once you are done using it.
- *
- * @param other the trie to clone
- * @param pErrorCode an in/out ICU UErrorCode
- * @return a pointer to the new trie clone
- */
-U_CAPI UTrie3 * U_EXPORT2
-utrie3_clone(const UTrie3 *other, UErrorCode *pErrorCode);
-
-/**
  * Close a trie and release associated memory.
  *
  * @param trie the trie
