@@ -5,6 +5,7 @@ package com.ibm.icu.dev.test.number;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -75,7 +76,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescendingBig(
                 "Big Simple",
-                "simple-notation",
+                "notation-simple",
                 NumberFormatter.with().notation(Notation.simple()),
                 ULocale.ENGLISH,
                 "87,650,000",
@@ -1084,7 +1085,7 @@ public class NumberFormatterApiTest {
         // NOTE: Other tests cover the behavior of the other rounding modes.
         assertFormatDescending(
                 "Rounding Mode CEILING",
-                "round-integer/CEILING",
+                "round-integer/ceiling",
                 NumberFormatter.with().rounding(Rounder.integer().withMode(RoundingMode.CEILING)),
                 ULocale.ENGLISH,
                 "87,650",
@@ -2046,13 +2047,18 @@ public class NumberFormatterApiTest {
             assertEquals(message + ": Safe Path: " + d, expected[i], actual2);
         }
         if (skeleton != null) { // if null, skeleton is declared as undefined.
-            assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
-            LocalizedNumberFormatter l3 = NumberFormatter.fromSkeleton(skeleton).locale(locale);
+            // Only compare normalized skeletons: the tests need not provide the normalized forms.
+            // Use the normalized form to construct the testing formatter to guarantee no loss of info.
+            String normalized = NumberFormatter.fromSkeleton(skeleton).toSkeleton();
+            assertEquals(message + ": Skeleton:", normalized, f.toSkeleton());
+            LocalizedNumberFormatter l3 = NumberFormatter.fromSkeleton(normalized).locale(locale);
             for (int i = 0; i < 9; i++) {
                 double d = inputs[i];
                 String actual3 = l3.format(d).toString();
                 assertEquals(message + ": Skeleton Path: " + d, expected[i], actual3);
             }
+        } else {
+            assertUndefinedSkeleton(f);
         }
     }
 
@@ -2070,10 +2076,15 @@ public class NumberFormatterApiTest {
         String actual2 = l2.format(input).toString();
         assertEquals(message + ": Safe Path: " + input, expected, actual2);
         if (skeleton != null) { // if null, skeleton is declared as undefined.
-            assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
-            LocalizedNumberFormatter l3 = NumberFormatter.fromSkeleton(skeleton).locale(locale);
+            // Only compare normalized skeletons: the tests need not provide the normalized forms.
+            // Use the normalized form to construct the testing formatter to ensure no loss of info.
+            String normalized = NumberFormatter.fromSkeleton(skeleton).toSkeleton();
+            assertEquals(message + ": Skeleton:", normalized, f.toSkeleton());
+            LocalizedNumberFormatter l3 = NumberFormatter.fromSkeleton(normalized).locale(locale);
             String actual3 = l3.format(input).toString();
             assertEquals(message + ": Skeleton Path: " + input, expected, actual3);
+        } else {
+            assertUndefinedSkeleton(f);
         }
     }
 
@@ -2091,10 +2102,22 @@ public class NumberFormatterApiTest {
         String actual2 = l2.format(input).toString();
         assertEquals(message + ": Safe Path: " + input, expected, actual2);
         if (skeleton != null) { // if null, skeleton is declared as undefined.
-            assertEquals(message + ": Skeleton:", skeleton, f.toSkeleton());
-            LocalizedNumberFormatter l3 = NumberFormatter.fromSkeleton(skeleton).locale(locale);
+            // Only compare normalized skeletons: the tests need not provide the normalized forms.
+            // Use the normalized form to construct the testing formatter to ensure no loss of info.
+            String normalized = NumberFormatter.fromSkeleton(skeleton).toSkeleton();
+            assertEquals(message + ": Skeleton:", normalized, f.toSkeleton());
+            LocalizedNumberFormatter l3 = NumberFormatter.fromSkeleton(normalized).locale(locale);
             String actual3 = l3.format(input).toString();
             assertEquals(message + ": Skeleton Path: " + input, expected, actual3);
+        } else {
+            assertUndefinedSkeleton(f);
         }
+    }
+
+    private static void assertUndefinedSkeleton(UnlocalizedNumberFormatter f) {
+        try {
+            String skeleton = f.toSkeleton();
+            fail("Expected toSkeleton to fail, but it passed, producing: " + skeleton);
+        } catch (UnsupportedOperationException expected) {}
     }
 }

@@ -2,12 +2,16 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.dev.test.number;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import java.math.RoundingMode;
 
 import org.junit.Test;
 
 import com.ibm.icu.number.NumberFormatter;
+import com.ibm.icu.number.Rounder;
 import com.ibm.icu.number.SkeletonSyntaxException;
 
 /**
@@ -27,17 +31,100 @@ public class NumberSkeletonTest {
     }
 
     @Test
+    public void validTokens() {
+        // This tests only if the tokens are valid, not their behavior.
+        // Most of these are from the design doc.
+        String[] cases = {
+                "round-integer",
+                "round-unlimited",
+                "@@@##",
+                "@@+",
+                ".000##",
+                ".00+",
+                ".",
+                ".+",
+                ".######",
+                ".00/@@+",
+                ".00/@##",
+                "round-increment/3.14",
+                "round-currency-standard",
+                "round-integer/half-up",
+                ".00#/ceiling",
+                ".00/@@+/floor",
+                "scientific",
+                "scientific/+ee",
+                "scientific/sign-always",
+                "scientific/+ee/sign-always",
+                "scientific/sign-always/+ee",
+                "scientific/sign-except-zero",
+                "engineering",
+                "engineering/+eee",
+                "compact-short",
+                "compact-long",
+                "notation-simple",
+                "percent",
+                "permille",
+                "measure-unit/length-meter",
+                "measure-unit/area-square-meter",
+                "measure-unit/energy-joule per-measure-unit/length-meter",
+                "currency/XXX",
+                "group-off",
+                "group-min2",
+                "group-auto",
+                "group-on-aligned",
+                "group-thousands",
+                "integer-width/00",
+                "integer-width/#0",
+                "integer-width/+00",
+                "sign-always",
+                "sign-auto",
+                "sign-never",
+                "sign-accounting",
+                "sign-accounting-always",
+                "sign-except-zero",
+                "sign-accounting-except-zero",
+                "unit-width-narrow",
+                "unit-width-short",
+                "unit-width-iso-code",
+                "unit-width-full-name",
+                "unit-width-hidden",
+                "decimal-auto",
+                "decimal-always",
+                "latin",
+                "numbering-system/arab",
+                "numbering-system/latn" };
+
+        for (String cas : cases) {
+            try {
+                NumberFormatter.fromSkeleton(cas);
+            } catch (SkeletonSyntaxException e) {
+                fail(e.getMessage());
+            }
+        }
+    }
+
+    @Test
     public void invalidTokens() {
         String[] cases = {
                 ".00x",
                 ".00##0",
                 ".##+",
+                ".00##+",
                 ".0#+",
                 "@@x",
                 "@@##0",
                 "@#+",
+                ".00/@",
+                ".00/@@",
+                ".00/@@x",
+                ".00/@@#",
+                ".00/@@#+",
+                ".00/floor/@@+", // wrong order
+                "round-currency-cash/XXX",
+                "scientific/ee",
                 "round-increment/xxx",
                 "round-increment/0.1.2",
+                "group-thousands/foo",
                 "currency/dummy",
                 "measure-unit/foo",
                 "integer-width/xxx",
@@ -47,7 +134,7 @@ public class NumberSkeletonTest {
         for (String cas : cases) {
             try {
                 NumberFormatter.fromSkeleton(cas);
-                fail();
+                fail("Skeleton parses, but it should have failed: " + cas);
             } catch (SkeletonSyntaxException expected) {
                 assertTrue(expected.getMessage(), expected.getMessage().contains("Invalid"));
             }
@@ -83,6 +170,37 @@ public class NumberSkeletonTest {
                             expected.getMessage().contains("requires an option"));
                 }
             }
+        }
+    }
+
+    @Test
+    public void defaultTokens() {
+        String[] cases = {
+                "notation-simple",
+                "base-unit",
+                "group-auto",
+                "integer-width/+0",
+                "sign-auto",
+                "unit-width-short",
+                "decimal-auto" };
+
+        for (String skeleton : cases) {
+            String normalized = NumberFormatter.fromSkeleton(skeleton).toSkeleton();
+            assertEquals("Skeleton should become empty when normalized: " + skeleton, "", normalized);
+        }
+    }
+
+    @Test
+    public void roundingModeNames() {
+        for (RoundingMode mode : RoundingMode.values()) {
+            if (mode == RoundingMode.HALF_EVEN) {
+                // This rounding mode is not printed in the skeleton since it is the default
+                continue;
+            }
+            String skeleton = NumberFormatter.with().rounding(Rounder.integer().withMode(mode))
+                    .toSkeleton();
+            String modeString = mode.toString().toLowerCase().replace('_', '-');
+            assertEquals(mode.toString(), modeString, skeleton.substring(14));
         }
     }
 }
