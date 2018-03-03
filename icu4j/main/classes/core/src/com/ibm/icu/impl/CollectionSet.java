@@ -7,8 +7,8 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * A wrapper around java.util.CollectionSet that implements java.util.Set. This class keeps a pointer to
- * the CollectionSet and does not persist any data on its own.
+ * A wrapper around java.util.Collection that implements java.util.Set. This class keeps a pointer to the
+ * Collection and does not persist any data on its own.
  */
 public class CollectionSet<E> implements Set<E> {
 
