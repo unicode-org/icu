@@ -253,13 +253,9 @@ class RBBIRuleBuilder {
         }
 
         // Write out the actual state tables.
-        short[] tableData;
-        tableData = fForwardTables.exportTable();
-        Assert.assrt(outputPos == header[4]);
-        for (i = 0; i < tableData.length; i++) {
-            dos.writeShort(tableData[i]);
-            outputPos += 2;
-        }
+        RBBIDataWrapper.RBBIStateTable table = fForwardTables.exportTable();
+        assert(outputPos == header[4]);
+        outputPos += table.put(dos);
 
         /* do not write the reverse table
         tableData = fReverseTables.exportTable();
@@ -281,16 +277,13 @@ class RBBIRuleBuilder {
 
         // Write the safe reverse table.
         // If not present, write the plain reverse table (old style rule compatibility)
-        Assert.assrt(outputPos == header[10]);
+        assert(outputPos == header[10]);
         if (safeRevTableSize > 0) {
-            tableData = fSafeRevTables.exportTable();
+            table = fSafeRevTables.exportTable();
         } else {
-            tableData = fReverseTables.exportTable();
+            table = fReverseTables.exportTable();
         }
-        for (i = 0; i < tableData.length; i++) {
-            dos.writeShort(tableData[i]);
-            outputPos += 2;
-        }
+        outputPos += table.put(dos);
 
         // write out the Trie table
         Assert.assrt(outputPos == header[12]);
