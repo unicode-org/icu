@@ -805,7 +805,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         CharacterIterator text = fText;
         Trie2 trie = fRData.fTrie;
 
-        short[] stateTable  = fRData.fFTable;
+        short[] stateTable  = fRData.fFTable.fTable;
         int initialPosition = fPosition;
         text.setIndex(initialPosition);
         int result          = initialPosition;
@@ -824,7 +824,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         int state           = START_STATE;
         int row             = fRData.getRowIndex(state);
         short category      = 3;
-        int flagsState      = fRData.getStateTableFlags(stateTable);
+        int flagsState      = fRData.fFTable.fFlags;
         int mode            = RBBI_RUN;
         if ((flagsState & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
             category = 2;
@@ -984,7 +984,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         int            result             = 0;
         int            initialPosition    = fromPosition;
         fLookAheadMatches.reset();
-        short[] stateTable = fRData.fSRTable;
+        short[] stateTable = fRData.fSRTable.fTable;
         CISetIndex32(fText, fromPosition);
         if (fromPosition == fText.getBeginIndex()) {
             return BreakIterator.DONE;
@@ -999,7 +999,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         row = fRData.getRowIndex(state);
         category = 3;   // TODO:  obsolete?  from the old start/run mode scheme?
         mode     = RBBI_RUN;
-        if ((fRData.getStateTableFlags(stateTable) & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
+        if ((fRData.fSRTable.fFlags & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
             category = 2;
             mode     = RBBI_START;
         }
