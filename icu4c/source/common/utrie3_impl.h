@@ -29,7 +29,8 @@ typedef struct UTrie3Header {
      * Options bit field:
      * Bits 15..12: Data length bits 19..16.
      * Bits 11..8: Data null block offset bits 19..16.
-     * Bits 7..3: Reserved (0).
+     * Bits 7..6: UTrie3Type
+     * Bits 5..3: Reserved (0).
      * Bits 2..0: UTrie3ValueBits valueBits
      */
     uint16_t options;
@@ -61,7 +62,7 @@ enum {
     /** Mask to get the UTrie3ValueBits valueBits from options. */
     UTRIE3_OPTIONS_DATA_LENGTH_MASK = 0xf000,
     UTRIE3_OPTIONS_DATA_NULL_OFFSET_MASK = 0xf00,
-    UTRIE3_OPTIONS_RESERVED_MASK = 0xf8,
+    UTRIE3_OPTIONS_RESERVED_MASK = 0x38,
     UTRIE3_OPTIONS_VALUE_BITS_MASK = 7,
     UTRIE3_NO_INDEX2_NULL_OFFSET = 0x7fff,  // TODO: doc max value, bit 15 indicates something
     UTRIE3_NO_DATA_NULL_OFFSET = 0xfffff
@@ -73,8 +74,12 @@ enum {
     /** The length of the BMP index table. 1024=0x400 */
     UTRIE3_BMP_INDEX_LENGTH = 0x10000 >> UTRIE3_BMP_SHIFT,
 
+    UTRIE3_SMALL_LIMIT = 0x1000,
+    UTRIE3_SMALL_INDEX_LENGTH = UTRIE3_SMALL_LIMIT >> UTRIE3_BMP_SHIFT,
+
     /** Shift size for getting the index-2 table offset. */
     UTRIE3_SUPP_SHIFT_2 = 4,
+    // TODO: remove _SUPP, or replace BMP_ with FAST_ and SUPP_ with SMALL_
 
     /** Shift size for getting the index-1 table offset. */
     UTRIE3_SUPP_SHIFT_1 = 5 + UTRIE3_SUPP_SHIFT_2,

@@ -1457,7 +1457,7 @@ utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
 
 #ifdef UTRIE3_DEBUG
     utrie3bld_setName(newTrie->t3, trie->name);
-    utrie3_close(utrie3bld_build(newTrie->t3, (UTrie3ValueBits)valueBits, pErrorCode));
+    utrie3_close(utrie3bld_build(newTrie->t3, UTRIE3_TYPE_FAST, (UTrie3ValueBits)valueBits, pErrorCode));
 #endif
     /* Delete the UNewTrie2. */
     uprv_free(newTrie->data);

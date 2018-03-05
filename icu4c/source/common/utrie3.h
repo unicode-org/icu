@@ -35,11 +35,23 @@ typedef struct UTrie3 UTrie3;
 /* Public UTrie3 API functions: read-only access ---------------------------- */
 
 /**
+ * Selectors for the type of a UTrie3.
+ * Different trade-offs for size vs. speed.
+ */
+enum UTrie3Type {
+    /** Fast/simple/larger BMP data structure. Use functions and "fast" macros. */
+    UTRIE3_TYPE_FAST,  // TODO: move _16 to the end
+    /** Small/slower BMP data structure. Use functions and "small" macros. */
+    UTRIE3_TYPE_SMALL
+};
+typedef enum UTrie3Type UTrie3Type;
+
+/**
  * Selectors for the width of a UTrie3 data value.
  */
 enum UTrie3ValueBits {
     /** 16 bits per UTrie3 data value. */
-    UTRIE3_16_VALUE_BITS,
+    UTRIE3_16_VALUE_BITS,  // TODO: move _16 to the end
     /** 32 bits per UTrie3 data value. */
     UTRIE3_32_VALUE_BITS
 };
@@ -65,7 +77,7 @@ typedef enum UTrie3ValueBits UTrie3ValueBits;
  * @see utrie3_serialize
  */
 U_CAPI UTrie3 * U_EXPORT2
-utrie3_openFromSerialized(UTrie3ValueBits valueBits,
+utrie3_openFromSerialized(UTrie3Type type, UTrie3ValueBits valueBits,
                           const void *data, int32_t length, int32_t *pActualLength,
                           UErrorCode *pErrorCode);
 
@@ -205,7 +217,7 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  * @param c (UChar32, in) the input code point
  * @return (uint16_t) The code point's trie value.
  */
-#define UTRIE3_GET16(trie, c) (trie)->data16[_UTRIE3_INDEX_FROM_CP(trie, c)]
+#define UTRIE3_GET16(trie, c) (trie)->data16[_UTRIE3_INDEX_FROM_CP(trie, 0xffff, c)]
 
 /**
  * Return a 32-bit trie value from a code point, with range checking.
@@ -215,7 +227,11 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  * @param c (UChar32, in) the input code point
  * @return (uint32_t) The code point's trie value.
  */
-#define UTRIE3_GET32(trie, c) (trie)->data32[_UTRIE3_INDEX_FROM_CP(trie, c)]
+#define UTRIE3_GET32(trie, c) (trie)->data32[_UTRIE3_INDEX_FROM_CP(trie, 0xffff, c)]
+
+// TODO: docs
+#define UTRIE3_SMALL_GET16(trie, c) (trie)->data16[_UTRIE3_INDEX_FROM_CP(trie, UTRIE3_SMALL_MAX, c)]
+#define UTRIE3_SMALL_GET32(trie, c) (trie)->data32[_UTRIE3_INDEX_FROM_CP(trie, UTRIE3_SMALL_MAX, c)]
 
 /**
  * UTF-16: Get the next code point (UChar32 c, out), post-increment src,
@@ -347,6 +363,7 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  * @return (uint16_t) The code unit's trie value.
  */
 #define UTRIE3_GET16_FROM_BMP(trie, c) ((trie)->data16[_UTRIE3_INDEX_FROM_BMP(trie, c)])
+// TODO: UTRIE3_FAST_...
 
 /**
  * Returns a 32-bit trie value from a BMP code point or UTF-16 code unit (0..U+ffff).
@@ -398,6 +415,8 @@ struct UTrie3 {
     UChar32 highStart;
     uint16_t shifted12HighStart;  // highStart>>12
 
+    UTrie3Type type;
+
     /**
      * Index-2 null block offset.
      * Set to an impossibly high value (e.g., 0xffff) if there is no dedicated index-2 null block.
@@ -426,6 +445,8 @@ enum {
     /** Mask for getting the lower bits for the in-BMP-data-block offset. */
     UTRIE3_BMP_DATA_MASK = UTRIE3_BMP_DATA_BLOCK_LENGTH - 1,
 
+    UTRIE3_SMALL_MAX = 0xfff,
+
     /** TODO docs */
     /** TODO Value returned for out-of-range code points and ill-formed UTF-8/16. */
     UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET = 1,
@@ -437,11 +458,11 @@ enum {
 
 /** TODO */
 U_INTERNAL int32_t U_EXPORT2
-utrie3_internalIndexFromSupp(const UTrie3 *trie, UChar32 c);
+utrie3_internalSmallIndex(const UTrie3 *trie, UChar32 c);
 
 /** TODO */
 U_INTERNAL int32_t U_EXPORT2
-utrie3_internalIndexFromSuppU8(const UTrie3 *trie, int32_t lt1, uint8_t t2, uint8_t t3);
+utrie3_internalSmallIndexFromU8(const UTrie3 *trie, int32_t lt1, uint8_t t2, uint8_t t3);
 
 /**
  * Internal function for part of the UTRIE3_U8_PREVxx() macro implementations.
@@ -460,14 +481,14 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
 #define _UTRIE3_INDEX_FROM_SUPP(trie, c) \
     ((c) >= (trie)->highStart ? \
         (trie)->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET : \
-        utrie3_internalIndexFromSupp(trie, c))
+        utrie3_internalSmallIndex(trie, c))
 
 /**
  * Internal trie getter from a code point, with checking that c is in 0..10FFFF.
  * Returns the data index.
  */
-#define _UTRIE3_INDEX_FROM_CP(trie, c) \
-    ((uint32_t)(c) <= 0xffff ? \
+#define _UTRIE3_INDEX_FROM_CP(trie, fastMax, c) \
+    ((uint32_t)(c) <= (uint32_t)(fastMax) ? \
         _UTRIE3_INDEX_FROM_BMP(trie, c) : \
         (uint32_t)(c) <= 0x10ffff ? \
             _UTRIE3_INDEX_FROM_SUPP(trie, c) : \
@@ -530,7 +551,7 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
                     ++(src) != (limit) && (__t3 = *(src) - 0x80) <= 0x3f && \
                     (__lead = __lead >= (trie)->shifted12HighStart ? \
                         (trie)->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET : \
-                        utrie3_internalIndexFromSuppU8((trie), __lead, __t2, __t3), 1) \
+                        utrie3_internalSmallIndexFromU8((trie), __lead, __t2, __t3), 1) \
             :  /* U+0080..U+07FF */ \
                 __lead >= 0xc2 && (__t1 = *(src) - 0x80) <= 0x3f && \
                 (__lead = (trie)->index[__lead & 0x1f] + __t1, 1))) { \

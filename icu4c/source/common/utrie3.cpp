@@ -21,15 +21,15 @@
 /* Public UTrie3 API implementation ----------------------------------------- */
 
 U_CAPI UTrie3 * U_EXPORT2
-utrie3_openFromSerialized(UTrie3ValueBits valueBits,
+utrie3_openFromSerialized(UTrie3Type type, UTrie3ValueBits valueBits,
                           const void *data, int32_t length, int32_t *pActualLength,
                           UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return 0;
     }
 
-    if (length<=0 || (U_POINTER_MASK_LSB(data, 3)!=0) ||
-            valueBits < 0 || UTRIE3_32_VALUE_BITS < valueBits) {
+    if (length <= 0 || (U_POINTER_MASK_LSB(data, 3) != 0) ||
+            type > UTRIE3_TYPE_SMALL || valueBits > UTRIE3_32_VALUE_BITS) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -48,7 +48,8 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
     }
 
     int32_t options = header->options;
-    if (valueBits != (UTrie3ValueBits)(options & UTRIE3_OPTIONS_VALUE_BITS_MASK) ||
+    if (type != (UTrie3Type)((options >> 6) & 3) ||
+            valueBits != (UTrie3ValueBits)(options & UTRIE3_OPTIONS_VALUE_BITS_MASK) ||
             (options & UTRIE3_OPTIONS_RESERVED_MASK) != 0) {
         *pErrorCode = U_INVALID_FORMAT_ERROR;
         return 0;
@@ -66,6 +67,7 @@ utrie3_openFromSerialized(UTrie3ValueBits valueBits,
 
     tempTrie.highStart = header->shiftedHighStart << UTRIE3_SUPP_SHIFT_1;
     tempTrie.shifted12HighStart = (tempTrie.highStart + 0xfff) >> 12;
+    tempTrie.type = type;
 
     // Calculate the actual length.
     int32_t actualLength = (int32_t)sizeof(UTrie3Header) + tempTrie.indexLength * 2;
@@ -126,11 +128,16 @@ utrie3_close(UTrie3 *trie) {
 }
 
 U_CAPI int32_t U_EXPORT2
-utrie3_internalIndexFromSupp(const UTrie3 *trie, UChar32 c) {
-    U_ASSERT(0xffff < c && c < trie->highStart);
-    int32_t i1Block = trie->index[UTRIE3_BMP_INDEX_LENGTH - UTRIE3_OMITTED_BMP_INDEX_0_LENGTH +
-                                  (c >> UTRIE3_SUPP_SHIFT_0)];
-    int32_t i2Block = trie->index[i1Block + ((c >> UTRIE3_SUPP_SHIFT_1) & UTRIE3_INDEX_1_MASK)];
+utrie3_internalSmallIndex(const UTrie3 *trie, UChar32 c) {
+    int32_t i0 = c >> UTRIE3_SUPP_SHIFT_0;
+    if (trie->type == UTRIE3_TYPE_FAST) {
+        U_ASSERT(0xffff < c && c < trie->highStart);
+        i0 += UTRIE3_BMP_INDEX_LENGTH - UTRIE3_OMITTED_BMP_INDEX_0_LENGTH;
+    } else {
+        U_ASSERT(c < trie->highStart && trie->highStart > UTRIE3_SMALL_LIMIT);
+        i0 += UTRIE3_SMALL_INDEX_LENGTH;
+    }
+    int32_t i2Block = trie->index[trie->index[i0] + ((c >> UTRIE3_SUPP_SHIFT_1) & UTRIE3_INDEX_1_MASK)];
     int32_t i2 = (c >> UTRIE3_SUPP_SHIFT_2) & UTRIE3_INDEX_2_MASK;
     int32_t dataBlock;
     if ((i2Block & 0x8000) == 0) {
@@ -147,13 +154,13 @@ utrie3_internalIndexFromSupp(const UTrie3 *trie, UChar32 c) {
 }
 
 U_CAPI int32_t U_EXPORT2
-utrie3_internalIndexFromSuppU8(const UTrie3 *trie, int32_t lt1, uint8_t t2, uint8_t t3) {
+utrie3_internalSmallIndexFromU8(const UTrie3 *trie, int32_t lt1, uint8_t t2, uint8_t t3) {
     UChar32 c = (lt1 << 12) | (t2 << 6) | t3;
     if (c >= trie->highStart) {
         // Possible because the UTF-8 macro compares with shifted12HighStart which may be higher.
         return trie->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET;
     }
-    return utrie3_internalIndexFromSupp(trie, c);
+    return utrie3_internalSmallIndex(trie, c);
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -169,7 +176,7 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
     }
     c = utf8_prevCharSafeBody(start, 0, &i, c, -1);
     i = length - i;  // Number of bytes read backward from src.
-    int32_t idx = _UTRIE3_INDEX_FROM_CP(trie, c);
+    int32_t idx = _UTRIE3_INDEX_FROM_CP(trie, 0xffff, c);
     return (idx << 3) | i;
 }
 
@@ -180,7 +187,8 @@ utrie3_get(const UTrie3 *trie, UChar32 c) {
         // linear ASCII
         dataIndex = c;
     } else {
-        dataIndex = _UTRIE3_INDEX_FROM_CP(trie, c);
+        UChar32 fastMax = trie->type == UTRIE3_TYPE_FAST ? 0xffff : UTRIE3_SMALL_MAX;
+        dataIndex = _UTRIE3_INDEX_FROM_CP(trie, fastMax, c);
     }
     if (trie->data32 == nullptr) {
         return trie->data16[dataIndex];
@@ -239,16 +247,23 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
         int32_t i2;
         int32_t i2BlockLength;
         int32_t dataBlockLength;
-        if (c <= 0xffff) {
+        if (c <= 0xffff && (trie->type == UTRIE3_TYPE_FAST || c <= UTRIE3_SMALL_MAX)) {
             i2Block = 0;
             i2 = c >> UTRIE3_BMP_SHIFT;
-            i2BlockLength = UTRIE3_BMP_INDEX_LENGTH;
+            i2BlockLength = trie->type == UTRIE3_TYPE_FAST ?
+                UTRIE3_BMP_INDEX_LENGTH : UTRIE3_SMALL_INDEX_LENGTH;
             dataBlockLength = UTRIE3_BMP_DATA_BLOCK_LENGTH;
         } else {
-            // Supplementary code points
-            int32_t i1Block = trie->index[UTRIE3_BMP_INDEX_LENGTH - UTRIE3_OMITTED_BMP_INDEX_0_LENGTH +
-                                          (c >> UTRIE3_SUPP_SHIFT_0)];
-            i2Block = trie->index[i1Block + ((c >> UTRIE3_SUPP_SHIFT_1) & UTRIE3_INDEX_1_MASK)];
+            // Use the multi-stage index.
+            int32_t i0 = c >> UTRIE3_SUPP_SHIFT_0;
+            if (trie->type == UTRIE3_TYPE_FAST) {
+                U_ASSERT(0xffff < c && c < trie->highStart);
+                i0 += UTRIE3_BMP_INDEX_LENGTH - UTRIE3_OMITTED_BMP_INDEX_0_LENGTH;
+            } else {
+                U_ASSERT(c < trie->highStart && trie->highStart > UTRIE3_SMALL_LIMIT);
+                i0 += UTRIE3_SMALL_INDEX_LENGTH;
+            }
+            i2Block = trie->index[trie->index[i0] + ((c >> UTRIE3_SUPP_SHIFT_1) & UTRIE3_INDEX_1_MASK)];
             if (i2Block == prevI2Block && (c - start) >= UTRIE3_CP_PER_INDEX_1_ENTRY) {
                 // The index-2 block is the same as the previous one, and filled with value.
                 U_ASSERT((c & (UTRIE3_CP_PER_INDEX_1_ENTRY - 1)) == 0);
@@ -376,6 +391,7 @@ utrie3_serialize(const UTrie3 *trie,
     header->options = (uint16_t)(
         ((trie->dataLength & 0xf0000) >> 4) |
         ((trie->dataNullOffset & 0xf0000) >> 8) |
+        (trie->type << 6) |
         valueBits);
     header->indexLength = (uint16_t)trie->indexLength;
     header->dataLength = (uint16_t)trie->dataLength;
@@ -491,13 +507,16 @@ utrie3_swap(const UDataSwapper *ds,
     trie.indexLength=ds->readUInt16(inTrie->indexLength);
     trie.dataLength = ds->readUInt16(inTrie->dataLength);
 
+    UTrie3Type type = (UTrie3Type)((trie.options >> 6) & 3);
     valueBits=(UTrie3ValueBits)(trie.options&UTRIE3_OPTIONS_VALUE_BITS_MASK);
     dataLength = ((int32_t)(trie.options & UTRIE3_OPTIONS_DATA_LENGTH_MASK) << 4) | trie.dataLength;
 
+    int32_t minIndexLength = type == UTRIE3_TYPE_FAST ?
+        UTRIE3_BMP_INDEX_LENGTH : UTRIE3_SMALL_INDEX_LENGTH;
     if( trie.signature!=UTRIE3_SIG ||
         UTRIE3_32_VALUE_BITS < valueBits ||
         (trie.options & UTRIE3_OPTIONS_RESERVED_MASK) != 0 ||
-        trie.indexLength < UTRIE3_BMP_INDEX_LENGTH ||
+        trie.indexLength < minIndexLength ||
         dataLength < ASCII_LIMIT
     ) {
         *pErrorCode=U_INVALID_FORMAT_ERROR; /* not a UTrie */

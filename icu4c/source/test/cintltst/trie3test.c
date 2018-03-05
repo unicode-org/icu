@@ -162,8 +162,8 @@ testTrieGetRanges(const char *testName, const UTrie3 *trie, const UTrie3Builder 
 }
 
 static void
-testTrieGetters(const char *testName,
-                const UTrie3 *trie, UTrie3ValueBits valueBits,
+testTrieGetters(const char *testName, const UTrie3 *trie,
+                UTrie3Type type, UTrie3ValueBits valueBits,
                 const CheckRange checkRanges[], int32_t countCheckRanges) {
     uint32_t initialValue, errorValue;
     uint32_t value, value2;
@@ -193,33 +193,41 @@ testTrieGetters(const char *testName,
                     ++countErrors;
                 }
             }
-            if(start<=0xffff) {
-                if(valueBits==UTRIE3_16_VALUE_BITS) {
-                    value2=UTRIE3_GET16_FROM_BMP(trie, start);
+            if (type == UTRIE3_TYPE_FAST) {
+                if(start<=0xffff) {
+                    if(valueBits==UTRIE3_16_VALUE_BITS) {
+                        value2=UTRIE3_GET16_FROM_BMP(trie, start);
+                    } else {
+                        value2=UTRIE3_GET32_FROM_BMP(trie, start);
+                    }
+                    if(value!=value2) {
+                        log_err("error: %s(%s).fromBMP(U+%04lx)==0x%lx instead of 0x%lx\n",
+                                typeName, testName, (long)start, (long)value2, (long)value);
+                        ++countErrors;
+                    }
                 } else {
-                    value2=UTRIE3_GET32_FROM_BMP(trie, start);
+                    if(valueBits==UTRIE3_16_VALUE_BITS) {
+                        value2 = UTRIE3_GET16_FROM_SUPP(trie, start);
+                    } else {
+                        value2 = UTRIE3_GET32_FROM_SUPP(trie, start);
+                    }
+                    if(value!=value2) {
+                        log_err("error: %s(%s).fromSupp(U+%04lx)==0x%lx instead of 0x%lx\n",
+                                typeName, testName, (long)start, (long)value2, (long)value);
+                        ++countErrors;
+                    }
                 }
-                if(value!=value2) {
-                    log_err("error: %s(%s).fromBMP(U+%04lx)==0x%lx instead of 0x%lx\n",
-                            typeName, testName, (long)start, (long)value2, (long)value);
-                    ++countErrors;
+                if(valueBits==UTRIE3_16_VALUE_BITS) {
+                    value2 = UTRIE3_GET16(trie, start);
+                } else {
+                    value2 = UTRIE3_GET32(trie, start);
                 }
             } else {
                 if(valueBits==UTRIE3_16_VALUE_BITS) {
-                    value2 = UTRIE3_GET16_FROM_SUPP(trie, start);
+                    value2 = UTRIE3_SMALL_GET16(trie, start);
                 } else {
-                    value2 = UTRIE3_GET32_FROM_SUPP(trie, start);
+                    value2 = UTRIE3_SMALL_GET32(trie, start);
                 }
-                if(value!=value2) {
-                    log_err("error: %s(%s).fromSupp(U+%04lx)==0x%lx instead of 0x%lx\n",
-                            typeName, testName, (long)start, (long)value2, (long)value);
-                    ++countErrors;
-                }
-            }
-            if(valueBits==UTRIE3_16_VALUE_BITS) {
-                value2 = UTRIE3_GET16(trie, start);
-            } else {
-                value2 = UTRIE3_GET32(trie, start);
             }
             if(value!=value2) {
                 log_err("error: %s(%s).get(U+%04lx)==0x%lx instead of 0x%lx\n",
@@ -264,12 +272,22 @@ testTrieGetters(const char *testName,
     }
 
     /* test errorValue */
-    if(valueBits==UTRIE3_16_VALUE_BITS) {
-        value = UTRIE3_GET16(trie, -1);
-        value2 = UTRIE3_GET16(trie, 0x110000);
+    if (type == UTRIE3_TYPE_FAST) {
+        if(valueBits==UTRIE3_16_VALUE_BITS) {
+            value = UTRIE3_GET16(trie, -1);
+            value2 = UTRIE3_GET16(trie, 0x110000);
+        } else {
+            value = UTRIE3_GET32(trie, -1);
+            value2 = UTRIE3_GET32(trie, 0x110000);
+        }
     } else {
-        value = UTRIE3_GET32(trie, -1);
-        value2 = UTRIE3_GET32(trie, 0x110000);
+        if(valueBits==UTRIE3_16_VALUE_BITS) {
+            value = UTRIE3_SMALL_GET16(trie, -1);
+            value2 = UTRIE3_SMALL_GET16(trie, 0x110000);
+        } else {
+            value = UTRIE3_SMALL_GET32(trie, -1);
+            value2 = UTRIE3_SMALL_GET32(trie, 0x110000);
+        }
     }
     if(value!=errorValue || value2!=errorValue) {
         log_err("error: %s(%s).get(out of range) != errorValue\n",
@@ -623,12 +641,15 @@ testTrieUTF8(const char *testName,
 }
 
 static void
-testTrie(const char *testName, const UTrie3 *trie, UTrie3ValueBits valueBits,
+testTrie(const char *testName, const UTrie3 *trie,
+         UTrie3Type type, UTrie3ValueBits valueBits,
          const CheckRange checkRanges[], int32_t countCheckRanges) {
-    testTrieGetters(testName, trie, valueBits, checkRanges, countCheckRanges);
+    testTrieGetters(testName, trie, type, valueBits, checkRanges, countCheckRanges);
     testTrieGetRanges(testName, trie, NULL, checkRanges, countCheckRanges);
-    testTrieUTF16(testName, trie, valueBits, checkRanges, countCheckRanges);
-    testTrieUTF8(testName, trie, valueBits, checkRanges, countCheckRanges);
+    if (type == UTRIE3_TYPE_FAST) {
+        testTrieUTF16(testName, trie, valueBits, checkRanges, countCheckRanges);
+        testTrieUTF8(testName, trie, valueBits, checkRanges, countCheckRanges);
+    }
 }
 
 static void
@@ -642,9 +663,8 @@ static uint32_t storage[120000];
 static uint32_t swapped[120000];
 
 static void
-testTrieSerialize(const char *testName,
-                  UTrie3Builder *builder, UTrie3ValueBits valueBits,
-                  UBool withSwap,
+testTrieSerialize(const char *testName, UTrie3Builder *builder,
+                  UTrie3Type type, UTrie3ValueBits valueBits, UBool withSwap,
                   const CheckRange checkRanges[], int32_t countCheckRanges) {
     UTrie3 *trie;
     int32_t length1, length2, length3;
@@ -665,7 +685,7 @@ testTrieSerialize(const char *testName,
      */
     do {
         errorCode=U_ZERO_ERROR;
-        trie = utrie3bld_build(builder, valueBits, &errorCode);
+        trie = utrie3bld_build(builder, type, valueBits, &errorCode);
         if (U_FAILURE(errorCode)) {
             log_err("error: utrie3bld_build(%s) failed: %s\n",
                     testName, u_errorName(errorCode));
@@ -694,7 +714,7 @@ testTrieSerialize(const char *testName,
             break;
         }
 
-        testTrie(testName, trie, valueBits, checkRanges, countCheckRanges);
+        testTrie(testName, trie, type, valueBits, checkRanges, countCheckRanges);
         utrie3_close(trie);
         trie=NULL;
 
@@ -744,7 +764,7 @@ testTrieSerialize(const char *testName,
             }
         }
 
-        trie=utrie3_openFromSerialized(valueBits, storage, length2, &length3, &errorCode);
+        trie = utrie3_openFromSerialized(type, valueBits, storage, length2, &length3, &errorCode);
         if(U_FAILURE(errorCode)) {
             log_err("error: utrie3_openFromSerialized(%s) failed, %s\n", testName, u_errorName(errorCode));
             break;
@@ -762,7 +782,7 @@ testTrieSerialize(const char *testName,
         uprv_memset((char *)storage+length3, 0xfa, (int32_t)(sizeof(storage)-length3));
 
         errorCode=U_ZERO_ERROR;
-        testTrie(testName, trie, valueBits, checkRanges, countCheckRanges);
+        testTrie(testName, trie, type, valueBits, checkRanges, countCheckRanges);
         {
             /* make a builder from an unserialized trie */
             uint32_t value, value2;
@@ -804,13 +824,19 @@ testTrieSerializeAllValueBits(const char *testName,
     uprv_strcpy(name, testName);
     uprv_strcat(name, ".16");
     testTrieSerialize(name, builder,
-                      UTRIE3_16_VALUE_BITS, withClone,
+                      UTRIE3_TYPE_FAST, UTRIE3_16_VALUE_BITS, withClone,
                       checkRanges, countCheckRanges);
 
     uprv_strcpy(name, testName);
     uprv_strcat(name, ".32");
     testTrieSerialize(name, builder,
-                      UTRIE3_32_VALUE_BITS, withClone,
+                      UTRIE3_TYPE_FAST, UTRIE3_32_VALUE_BITS, withClone,
+                      checkRanges, countCheckRanges);
+
+    uprv_strcpy(name, testName);
+    uprv_strcat(name, ".small16");
+    testTrieSerialize(name, builder,
+                      UTRIE3_TYPE_SMALL, UTRIE3_16_VALUE_BITS, withClone,
                       checkRanges, countCheckRanges);
 
     return builder;
@@ -1252,7 +1278,8 @@ MuchDataTest(void) {
     U_ASSERT(r <= UPRV_LENGTHOF(checkRanges));
 
     testBuilder(testName, builder, checkRanges, r);
-    testTrieSerialize("much-data.16", builder, UTRIE3_16_VALUE_BITS, FALSE, checkRanges, r);
+    testTrieSerialize("much-data.16", builder,
+                      UTRIE3_TYPE_FAST, UTRIE3_16_VALUE_BITS, FALSE, checkRanges, r);
     utrie3bld_close(builder);
 }
 
