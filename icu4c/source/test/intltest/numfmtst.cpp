@@ -8934,8 +8934,12 @@ void NumberFormatTest::Test11035_FormatCurrencyAmount() {
     // Test two ways to set a currency via API
 
     Locale loc1 = Locale("pt_PT");
-    LocalPointer<NumberFormat> fmt1(NumberFormat::createCurrencyInstance(loc1, status));
-    assertSuccess("Creating fmt1", status);
+    LocalPointer<NumberFormat> fmt1(NumberFormat::createCurrencyInstance("loc1", status),
+                                    status);
+    if (U_FAILURE(status)) {
+      dataerrln("%s %d NumberFormat instance fmt1 is null",  __FILE__, __LINE__);
+      return;
+    }
     fmt1->setCurrency(u"PTE", status);
     assertSuccess("Setting currency on fmt1", status);
     UnicodeString actualSetCurrency;
@@ -8947,7 +8951,7 @@ void NumberFormatTest::Test11035_FormatCurrencyAmount() {
     UnicodeString actualLocaleString;
     fmt2->format(amount, actualLocaleString);
 
-    // TODO: The following test fill fail until DecimalFormat wraps NumberFormatter.
+    // TODO: The following test will fail until DecimalFormat wraps NumberFormatter.
     if (!logKnownIssue("13574")) {
         assertEquals("Custom Currency Pattern, Set Currency", expected, actualSetCurrency);
     }
@@ -8955,7 +8959,11 @@ void NumberFormatTest::Test11035_FormatCurrencyAmount() {
 
 void NumberFormatTest::Test11318_DoubleConversion() {
     IcuTestErrorCode status(*this, "Test11318_DoubleConversion");
-    LocalPointer<NumberFormat> nf(NumberFormat::createInstance("en", status));
+    LocalPointer<NumberFormat> nf(NumberFormat::createInstance("en", status), status);
+    if (U_FAILURE(status)) {
+      dataerrln("%s %d Error in NumberFormat instance creation",  __FILE__, __LINE__);
+      return;
+    }
     nf->setMaximumFractionDigits(40);
     nf->setMaximumIntegerDigits(40);
     UnicodeString appendTo;

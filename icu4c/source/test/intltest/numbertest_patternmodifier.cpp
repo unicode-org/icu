@@ -106,8 +106,13 @@ void PatternModifierTest::testPatternWithNoPlaceholder() {
     nsb.append(u"x123y", UNUM_FIELD_COUNT, status);
     assertSuccess("Spot 5", status);
     MicroProps micros;
-    LocalPointer<ImmutablePatternModifier> imod(mod.createImmutable(status));
-    assertSuccess("Spot 6", status);
+    LocalPointer<ImmutablePatternModifier> imod(mod.createImmutable(status), status);
+    if (U_FAILURE(status)) {
+      dataerrln("%s %d  Error in ImmutablePatternModifier creation",
+                __FILE__, __LINE__);
+      assertSuccess("Spot 6", status);
+      return;
+    }
     DecimalQuantity quantity;
     imod->applyToMicros(micros, quantity);
     micros.modMiddle->apply(nsb, 1, 4, status);
