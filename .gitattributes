@@ -7106,10 +7106,6 @@ icu4j/stylesheet7.css svneol=native#text/css%3Bcharset%3Dutf-8
 icu4j/stylesheet8.css svneol=native#text/css%3Bcharset%3Dutf-8
 icu4j/tools/build/README.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/build.xml svneol=native#text/xml
-icu4j/tools/build/icu4j48.api3.gz -text
-icu4j/tools/build/icu4j49.api3.gz -text
-icu4j/tools/build/icu4j50.api3.gz -text
-icu4j/tools/build/icu4j51.api3.gz -text
 icu4j/tools/build/icu4j52.api3.gz -text
 icu4j/tools/build/icu4j53.api3.gz -text
 icu4j/tools/build/icu4j54.api3.gz -text
@@ -7119,6 +7115,7 @@ icu4j/tools/build/icu4j57.api3.gz -text
 icu4j/tools/build/icu4j58.api3.gz -text
 icu4j/tools/build/icu4j59.api3.gz -text
 icu4j/tools/build/icu4j60.api3.gz -text
+icu4j/tools/build/icu4j61.api3.gz -text
 icu4j/tools/build/src-pre8/com/ibm/icu/dev/tool/docs/ICUTagletAdapter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/coverage/JacocoReportCheck.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/APIData.java svneol=native#text/plain%3Bcharset%3Dutf-8
