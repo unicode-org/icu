@@ -151,14 +151,17 @@ typedef enum UNumberUnitWidth {
      *
      * @draft ICU 60
      */
-            UNUM_UNIT_WIDTH_HIDDEN,
+            UNUM_UNIT_WIDTH_HIDDEN
 
+#ifndef U_HIDE_INTERNAL_API
+    ,
     /**
      * One more than the highest UNumberUnitWidth value.
      *
      * @internal ICU 60: The numeric value may change over time; see ICU ticket #12420.
      */
             UNUM_UNIT_WIDTH_COUNT
+#endif  // U_HIDE_INTERNAL_API
 } UNumberUnitWidth;
 
 /**
@@ -336,14 +339,17 @@ typedef enum UNumberSignDisplay {
      *
      * @draft ICU 61
      */
-    UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO,
+    UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO
 
+#ifndef U_HIDE_INTERNAL_API
+    ,
     /**
      * One more than the highest UNumberSignDisplay value.
      *
      * @internal ICU 60: The numeric value may change over time; see ICU ticket #12420.
      */
     UNUM_SIGN_COUNT
+#endif  // U_HIDE_INTERNAL_API
 } UNumberSignDisplay;
 
 /**
@@ -369,14 +375,17 @@ typedef enum UNumberDecimalSeparatorDisplay {
      *
      * @draft ICU 60
      */
-            UNUM_DECIMAL_SEPARATOR_ALWAYS,
+            UNUM_DECIMAL_SEPARATOR_ALWAYS
 
+#ifndef U_HIDE_INTERNAL_API
+    ,
     /**
      * One more than the highest UNumberDecimalSeparatorDisplay value.
      *
      * @internal ICU 60: The numeric value may change over time; see ICU ticket #12420.
      */
             UNUM_DECIMAL_SEPARATOR_COUNT
+#endif  // U_HIDE_INTERNAL_API
 } UNumberDecimalMarkDisplay;
 
 U_NAMESPACE_BEGIN namespace number {  // icu::number
@@ -395,6 +404,7 @@ class IntegerWidth;
 
 namespace impl {
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * Datatype for minimum/maximum fraction digits. Must be able to hold kMaxIntFracSig.
  *
@@ -409,6 +419,7 @@ typedef int16_t digits_t;
  * @internal
  */
 static constexpr int32_t DEFAULT_THRESHOLD = 3;
+#endif  // U_HIDE_INTERNAL_API
 
 // Forward declarations:
 class Padder;
@@ -1222,6 +1233,7 @@ class U_I18N_API IntegerWidth : public UMemory {
 
 namespace impl {
 
+// Do not enclose entire SymbolsWrapper with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
 class U_I18N_API SymbolsWrapper : public UMemory {
   public:
@@ -1237,6 +1249,7 @@ class U_I18N_API SymbolsWrapper : public UMemory {
     /** @internal */
     SymbolsWrapper &operator=(const SymbolsWrapper &other);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * The provided object is copied, but we do not adopt it.
      * @internal
@@ -1284,6 +1297,7 @@ class U_I18N_API SymbolsWrapper : public UMemory {
         }
         return FALSE;
     }
+#endif  // U_HIDE_INTERNAL_API
 
   private:
     enum SymbolsPointerType {
@@ -1300,9 +1314,11 @@ class U_I18N_API SymbolsWrapper : public UMemory {
     void doCleanup();
 };
 
+// Do not enclose entire Grouper with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
 class U_I18N_API Grouper : public UMemory {
   public:
+#ifndef U_HIDE_INTERNAL_API
     /** @internal */
     static Grouper forStrategy(UGroupingStrategy grouping);
 
@@ -1311,6 +1327,7 @@ class U_I18N_API Grouper : public UMemory {
     /** @internal */
     Grouper(int16_t grouping1, int16_t grouping2, int16_t minGrouping)
             : fGrouping1(grouping1), fGrouping2(grouping2), fMinGrouping(minGrouping) {}
+#endif  // U_HIDE_INTERNAL_API
 
   private:
     /**
@@ -1352,14 +1369,17 @@ class U_I18N_API Grouper : public UMemory {
     friend class NumberFormatterImpl;
 };
 
+// Do not enclose entire Padder with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
 class U_I18N_API Padder : public UMemory {
   public:
+#ifndef U_HIDE_INTERNAL_API
     /** @internal */
     static Padder none();
 
     /** @internal */
     static Padder codePoints(UChar32 cp, int32_t targetWidth, UNumberFormatPadPosition position);
+#endif  // U_HIDE_INTERNAL_API
 
   private:
     UChar32 fWidth;  // -3 = error; -2 = bogus; -1 = no padding
@@ -1409,6 +1429,7 @@ class U_I18N_API Padder : public UMemory {
     friend class impl::NumberFormatterImpl;
 };
 
+// Do not enclose entire MacroProps with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
 struct U_I18N_API MacroProps : public UMemory {
     /** @internal */
