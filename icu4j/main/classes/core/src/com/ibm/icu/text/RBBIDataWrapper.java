@@ -76,6 +76,9 @@ public final class RBBIDataWrapper {
         @Deprecated
         public short[] fTable;
 
+        RBBIStateTable() {
+        }
+
         static RBBIStateTable get(ByteBuffer bytes, int length) throws IOException {
             if (length == 0) {
                 return null;
@@ -111,6 +114,12 @@ public final class RBBIDataWrapper {
             return bytesWritten;
         }
 
+        /**
+         * {@inheritDoc}
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         @Override
         public boolean equals (Object other) {
             if (other == this) {

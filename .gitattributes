@@ -498,10 +498,6 @@ icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/es.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/mt.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/res_index.res -text
 icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/root.res -text
-icu4j/tools/build/icu4j48.api3.gz -text
-icu4j/tools/build/icu4j49.api3.gz -text
-icu4j/tools/build/icu4j50.api3.gz -text
-icu4j/tools/build/icu4j51.api3.gz -text
 icu4j/tools/build/icu4j52.api3.gz -text
 icu4j/tools/build/icu4j53.api3.gz -text
 icu4j/tools/build/icu4j54.api3.gz -text
@@ -511,6 +507,7 @@ icu4j/tools/build/icu4j57.api3.gz -text
 icu4j/tools/build/icu4j58.api3.gz -text
 icu4j/tools/build/icu4j59.api3.gz -text
 icu4j/tools/build/icu4j60.api3.gz -text
+icu4j/tools/build/icu4j61.api3.gz -text
 tools/multi/c/Makefile-c.inc -text
 tools/multi/c/patch/3_0 -text
 tools/multi/c/patch/3_2 -text
