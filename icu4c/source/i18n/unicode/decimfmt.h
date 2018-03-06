@@ -1970,12 +1970,14 @@ public:
     UCurrencyUsage getCurrencyUsage() const;
 
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * The resource tags we use to retrieve decimal format data from
      * locale resource bundles.
      * @deprecated ICU 3.4. This string has no public purpose. Please don't use it.
      */
     static const char fgNumberPatterns[];
+#endif  // U_HIDE_DEPRECATED_API
 
 #ifndef U_HIDE_INTERNAL_API
     /**
