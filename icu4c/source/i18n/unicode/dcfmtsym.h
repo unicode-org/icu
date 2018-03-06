@@ -513,6 +513,7 @@ DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
     return *strPtr;
 }
 
+#ifndef U_HIDE_INTERNAL_API
 inline const UnicodeString& DecimalFormatSymbols::getConstDigitSymbol(int32_t digit) const {
     if (digit < 0 || digit > 9) {
         digit = 0;
@@ -523,6 +524,7 @@ inline const UnicodeString& DecimalFormatSymbols::getConstDigitSymbol(int32_t di
     ENumberFormatSymbol key = static_cast<ENumberFormatSymbol>(kOneDigitSymbol + digit - 1);
     return fSymbols[key];
 }
+#endif
 
 // -------------------------------------
 
