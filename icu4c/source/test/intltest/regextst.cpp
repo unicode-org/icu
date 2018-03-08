@@ -39,6 +39,7 @@
 #include "unicode/ustring.h"
 #include "unicode/utext.h"
 #include "unicode/utf16.h"
+#include "cstr.h"
 #include "regextst.h"
 #include "regexcmp.h"
 #include "uvector.h"
@@ -101,6 +102,7 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
     TESTCASE_AUTO(NamedCapture);
     TESTCASE_AUTO(NamedCaptureLimits);
     TESTCASE_AUTO(TestBug12884);
+    TESTCASE_AUTO(TestBug13631);
     TESTCASE_AUTO_END;
 }
 
@@ -5805,5 +5807,29 @@ void RegexTest::TestBug12884() {
     ngM.find(status);
     REGEX_ASSERT(status == U_REGEX_TIME_OUT);
 }
+
+// Bug 13631. A find() of a pattern with a zero length look-behind assertions
+//            can cause a read past the end of the input text.
+//            The failure is seen when running this test with Clang's Addresss Sanitizer.
+
+void RegexTest::TestBug13631() {
+    const UChar *pats[] = { u"(?<!^)",
+                            u"(?<=^)",
+                            nullptr
+                          };
+    for (const UChar **pat=pats; *pat; ++pat) {
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString upat(*pat);
+        RegexMatcher matcher(upat, 0, status);
+        const UChar s =u'a';
+        UText *ut = utext_openUChars(nullptr, &s, 1, &status);
+        REGEX_CHECK_STATUS;
+        matcher.reset(ut);
+        while (matcher.find()) {
+        }
+        utext_close(ut);
+    }
+}
+
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
