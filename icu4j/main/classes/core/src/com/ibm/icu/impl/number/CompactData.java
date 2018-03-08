@@ -15,6 +15,9 @@ import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
+/**
+ * Datatype for compact notation data. Includes logic for data loading.
+ */
 public class CompactData implements MultiplierProducer {
 
     public enum CompactType {
