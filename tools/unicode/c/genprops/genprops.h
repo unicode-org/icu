@@ -42,7 +42,7 @@ public:
 
 class PNamesBuilder : public PropsBuilder {
 public:
-    virtual const PropertyNames *getPropertyNames() = 0;
+    virtual const icu::PropertyNames *getPropertyNames() = 0;
 };
 
 PNamesBuilder *createPNamesBuilder(UErrorCode &errorCode);

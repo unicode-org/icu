@@ -521,10 +521,11 @@ def ParsePropertyAliases(in_file):
   AddBinaryProperty("segstart", "Segment_Starter")
   # http://www.unicode.org/reports/tr51/#Emoji_Properties
   AddBinaryProperty("Emoji", "Emoji")
-  AddBinaryProperty("Emoji_Presentation", "Emoji_Presentation")
-  AddBinaryProperty("Emoji_Modifier", "Emoji_Modifier")
-  AddBinaryProperty("Emoji_Modifier_Base", "Emoji_Modifier_Base")
-  AddBinaryProperty("Emoji_Component", "Emoji_Component")
+  AddBinaryProperty("EPres", "Emoji_Presentation")
+  AddBinaryProperty("EMod", "Emoji_Modifier")
+  AddBinaryProperty("EBase", "Emoji_Modifier_Base")
+  AddBinaryProperty("EComp", "Emoji_Component")
+  AddBinaryProperty("ExtPict", "Extended_Pictographic")
   # C/POSIX character classes that do not have Unicode property [value] aliases.
   # See uchar.h.
   AddPOSIXBinaryProperty("alnum")

@@ -1014,13 +1014,31 @@ public final class UScript {
     public static final int ZANABAZAR_SQUARE = 177; /* Zanb */
 
     /**
+     * ISO 15924 script code
+     * @stable ICU 62
+     */
+    public static final int DOGRA = 178; /* Dogr */
+    /** @stable ICU 62 */
+    public static final int GUNJALA_GONDI = 179; /* Gong */
+    /** @stable ICU 62 */
+    public static final int MAKASAR = 180; /* Maka */
+    /** @stable ICU 62 */
+    public static final int MEDEFAIDRIN = 181; /* Medf */
+    /** @stable ICU 62 */
+    public static final int HANIFI_ROHINGYA = 182; /* Rohg */
+    /** @stable ICU 62 */
+    public static final int SOGDIAN = 183; /* Sogd */
+    /** @stable ICU 62 */
+    public static final int OLD_SOGDIAN = 184; /* Sogo */
+
+    /**
      * One more than the highest normal UScript code.
      * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.SCRIPT).
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int CODE_LIMIT   = 178;
+    public static final int CODE_LIMIT   = 185;
 
     private static int[] getCodesFromLocale(ULocale locale) {
         // Multi-script languages, equivalent to the LocaleScript data
