@@ -5,12 +5,12 @@
 	-->
 <head>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4C API Comparison: ICU 60 with ICU 61</title>
+<title>ICU4C API Comparison: ICU 60 (update #1: 60.2) with ICU 61</title>
 <link type="text/css" href="icu4c.css" rel="stylesheet">
 </head>
 <body>
 <a name="#_top"></a>
-<h1>ICU4C API Comparison: ICU 60 with ICU 61</h1>
+<h1>ICU4C API Comparison: ICU 60 (update #1: 60.2) with ICU 61</h1>
 <div id="toc">
 <ul>
 <li>
@@ -50,11 +50,11 @@
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptSymbols(const NumberingSystem*)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
+<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptSymbols(const NumberingSystem*)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>actually, just<br>removed “const”<br>from one param<br>
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptUnit(const icu::MeasureUnit*)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
+<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptUnit(const icu::MeasureUnit*)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>actually, just<br>removed “const”<br>from one param<br>
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row0">
@@ -74,11 +74,11 @@
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">utrans.h</td><td class="proto">void utrans_trans(const UTransliterator*, UReplaceable*, UReplaceableCallbacks*, int32_t, int32_t*, UErrorCode*)</td><td class="stabchange">Stable<br>ICU 2.0</td><td>(missing)<br>
+<td class="file">utrans.h</td><td class="proto">void utrans_trans(const UTransliterator*, UReplaceable*, UReplaceableCallbacks*, int32_t, int32_t*, UErrorCode*)</td><td class="stabchange">Stable<br>ICU 2.0</td><td>(missing)<br>actually, just<br>added “const”<br>to one param<br>
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">utrans.h</td><td class="proto">void utrans_transIncremental(const UTransliterator*, UReplaceable*, UReplaceableCallbacks*, UTransPosition*, UErrorCode*)</td><td class="stabchange">Stable<br>ICU 2.0</td><td>(missing)<br>
+<td class="file">utrans.h</td><td class="proto">void utrans_transIncremental(const UTransliterator*, UReplaceable*, UReplaceableCallbacks*, UTransPosition*, UErrorCode*)</td><td class="stabchange">Stable<br>ICU 2.0</td><td>(missing)<br>actually, just<br>added “const”<br>to one param<br>
 <span class=""><span></span></span></td>
 </tr>
 </table>
@@ -93,6 +93,9 @@
 <th>File</th><th>API</th><th>ICU 60</th><th>ICU 61</th>
 </tr>
 </THEAD>
+<tr>
+<td></td><td></td><td></td><td></td>
+</tr>
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
@@ -406,11 +409,11 @@
 <td class="file">upluralrules.h</td><td class="proto">UEnumeration* uplrules_getKeywords(const UPluralRules*, UErrorCode*)</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 59</td>
 </tr>
 <tr class="row1">
-<td class="file">utrans.h</td><td class="proto">void utrans_trans(const UTransliterator*, UReplaceable*, const UReplaceableCallbacks*, int32_t, int32_t*, UErrorCode*)</td><td class="">(missing)</td><td>Stable<br>
+<td class="file">utrans.h</td><td class="proto">void utrans_trans(const UTransliterator*, UReplaceable*, const UReplaceableCallbacks*, int32_t, int32_t*, UErrorCode*)</td><td class="">(missing)<br>old version (stable)<br>lacked “const”<br>on one param</td><td>Stable<br>
 <span class=""><span>ICU 2.0</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">utrans.h</td><td class="proto">void utrans_transIncremental(const UTransliterator*, UReplaceable*, const UReplaceableCallbacks*, UTransPosition*, UErrorCode*)</td><td class="">(missing)</td><td>Stable<br>
+<td class="file">utrans.h</td><td class="proto">void utrans_transIncremental(const UTransliterator*, UReplaceable*, const UReplaceableCallbacks*, UTransPosition*, UErrorCode*)</td><td class="">(missing)<br>old version (stable)<br>lacked “const”<br>on one param</td><td>Stable<br>
 <span class=""><span>ICU 2.0</span></span></td>
 </tr>
 </table>
@@ -446,16 +449,16 @@
 <span class=""><span>ICU 61</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptSymbols(NumberingSystem*)</td><td class="">(missing)</td><td>Draft<br>
+<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptSymbols(NumberingSystem*)</td><td class="">(missing)<br>old version<br>had “const”<br>on param</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
-<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 61)</b></span></td>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 61)</b><br>decided to keep draft ICU 60</span></td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptUnit(icu::MeasureUnit*)</td><td class="">(missing)</td><td>Draft<br>
+<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptUnit(icu::MeasureUnit*)</td><td class="">(missing)<br>old version<br>had “const”<br>on param</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
-<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 61)</b></span></td>
+<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 61)</b><br>decided to keep draft ICU 60</span></td>
 </tr>
 <tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::grouping(const UGroupingStrategy&amp;)</td><td class="">(missing)</td><td>Draft<br>
@@ -534,11 +537,11 @@
 <span class=""><span>ICU 61</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">utrans.h</td><td class="proto">void utrans_trans(const UTransliterator*, UReplaceable*, const UReplaceableCallbacks*, int32_t, int32_t*, UErrorCode*)</td><td class="">(missing)</td><td>Stable<br>
+<td class="file">utrans.h</td><td class="proto">void utrans_trans(const UTransliterator*, UReplaceable*, const UReplaceableCallbacks*, int32_t, int32_t*, UErrorCode*)</td><td class="">(missing) old version<br>(stable) lacked “const”<br>on one parameter</td><td>Stable<br>
 <span class=""><span>ICU 2.0</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">utrans.h</td><td class="proto">void utrans_transIncremental(const UTransliterator*, UReplaceable*, const UReplaceableCallbacks*, UTransPosition*, UErrorCode*)</td><td class="">(missing)</td><td>Stable<br>
+<td class="file">utrans.h</td><td class="proto">void utrans_transIncremental(const UTransliterator*, UReplaceable*, const UReplaceableCallbacks*, UTransPosition*, UErrorCode*)</td><td class="">(missing) old version<br>(stable) lacked “const”<br>on one parameter</td><td>Stable<br>
 <span class=""><span>ICU 2.0</span></span></td>
 </tr>
 </table>
@@ -895,13 +898,12 @@
 <i>This section shows cases where the signature was "simplified" for the sake of comparison. The simplified form is in bold, followed by
     	all possible variations in "original" form.</i>
 <div class="other">
-<ul></ul>
 </div>
 <P></P>
 <a href="#_top">(jump back to top)</a>
 <hr>
 <p>
-<i><font size="-1">Contents generated by StableAPI tool on Fri Mar 09 14:18:54 CET 2018<br>Copyright (C) 2018, International Business Machines Corporation, All Rights Reserved.</font></i>
+<i><font size="-1">Contents generated by StableAPI tool on Wed Mar 07 19:18:25 UTC 2018<br>Copyright (C) 2018, International Business Machines Corporation, All Rights Reserved.</font></i>
 </p>
 </body>
 </html>
