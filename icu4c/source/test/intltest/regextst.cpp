@@ -103,6 +103,7 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
     TESTCASE_AUTO(NamedCaptureLimits);
     TESTCASE_AUTO(TestBug12884);
     TESTCASE_AUTO(TestBug13631);
+    TESTCASE_AUTO(TestBug13632);
     TESTCASE_AUTO_END;
 }
 
@@ -5831,5 +5832,23 @@ void RegexTest::TestBug13631() {
     }
 }
 
+// Bug 13632 Out of bounds memory reference if a replacement string ends with a '$',
+//           where a following group specification would be expected.
+//           Failure shows when running the test under Clang's Address Sanitizer.
+
+void RegexTest::TestBug13632() {
+    UErrorCode status = U_ZERO_ERROR;
+    URegularExpression *re = uregex_openC(" ", 0, nullptr, &status);
+    const char16_t *sourceString = u"Hello, world.";
+    uregex_setText(re, sourceString, u_strlen(sourceString), &status);
+
+    const int32_t destCap = 20;
+    char16_t dest[destCap] = {};
+    const char16_t replacement[] = {u'x', u'$'};    // Not nul terminated string.
+    uregex_replaceAll(re, replacement, 2, dest, destCap, &status);
+
+    assertEquals("", U_REGEX_INVALID_CAPTURE_GROUP_NAME, status);
+    uregex_close(re);
+}
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
