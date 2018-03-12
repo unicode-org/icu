@@ -1072,7 +1072,6 @@ CasePropsBuilder::makeException(UChar32 c, uint32_t value, ExcProps &ep, UErrorC
         if(count==1 && ep.delta!=0) {
             int32_t excIndex=exceptions.indexOf(excString);
             if(excIndex>=0) {
-                printf("share delta: U+%04lx %ld\n", (long)c, (long)ep.delta);
                 return excIndex;
             }
         }

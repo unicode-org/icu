@@ -446,6 +446,13 @@ typedef enum UProperty {
      * @stable ICU 60
      */
     UCHAR_PREPENDED_CONCATENATION_MARK=63,
+    /**
+     * Binary property Extended_Pictographic.
+     * See http://www.unicode.org/reports/tr51/#Emoji_Properties
+     *
+     * @stable ICU 62
+     */
+    UCHAR_EXTENDED_PICTOGRAPHIC=64,
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the last constant for binary Unicode properties.
