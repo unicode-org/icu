@@ -2517,6 +2517,8 @@ public final class UCharacterTest extends TestFmwk
                 UCharacter.hasBinaryProperty(0x1F64B, UProperty.EMOJI_MODIFIER_BASE));
         assertTrue("asterisk is Emoji_Component",
                 UCharacter.hasBinaryProperty(0x2A, UProperty.EMOJI_COMPONENT));
+        assertTrue("copyright is Extended_Pictographic",
+                UCharacter.hasBinaryProperty(0xA9, UProperty.EXTENDED_PICTOGRAPHIC));
     }
 
     @Test

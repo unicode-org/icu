@@ -187,9 +187,6 @@ TODO missing Unicode 11 versions: idna, security, CLDR root collation
 - boolean emoji property Extended_Pictographic
   -> added in preparseucd.py
   -> uchar.h & UProperty.java
-
-TODO implement, use in RBBI rules
-
 - misc. property Equivalent_Unified_Ideograph (EqUIdeo)
   as shown in PropertyValueAliases.txt
   -> ??

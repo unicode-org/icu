@@ -531,6 +531,8 @@ void UnicodeTest::TestEmojiProperties() {
                u_hasBinaryProperty(0x1F64B, UCHAR_EMOJI_MODIFIER_BASE));
     assertTrue("asterisk is Emoji_Component",
                u_hasBinaryProperty(0x2A, UCHAR_EMOJI_COMPONENT));
+    assertTrue("copyright is Extended_Pictographic",
+               u_hasBinaryProperty(0xA9, UCHAR_EXTENDED_PICTOGRAPHIC));
 }
 
 void UnicodeTest::TestDefaultScriptExtensions() {
