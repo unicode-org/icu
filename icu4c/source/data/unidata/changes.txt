@@ -240,6 +240,21 @@ set(ICU4C_SRC_DIR /usr/local/google/home/mscherer/svn.icu/uni/src/icu4c)
     genuca/genuca --hanOrder radical-stroke $ICU_SRC/icu4c
 - rebuild ICU (make install) & tools
 
+* Fix case props
+    genprops error: casepropsbuilder: too many exceptions words
+    genprops error: failure finalizing the data - U_BUFFER_OVERFLOW_ERROR
+- With the addition of Georgian Mtavruli capital letters,
+  there are now too many simple case mappings with big mapping deltas
+  that yield uncompressible exceptions.
+- Changing the data structure (now formatVersion 4),
+  adding one bit for no-simple-case-folding (for Cherokee), and
+  one optional slot for a big delta (for most faraway mappings),
+  together with another bit for whether that is negative.
+  This makes most Cherokee & Georgian etc. case mappings compressible,
+  reducing the number of exceptions words.
+- Further changes to gain one more bit for the exceptions index,
+  for future growth. Details see casepropsbuilder.cpp.
+
 * update uts46test.cpp and UTS46Test.java if there are new characters that are equivalent to
   sequences with non-LDH ASCII (that is, their decompositions contain '=' or similar)
 - grep IdnaMappingTable.txt or uts46.txt for "disallowed_STD3_valid" on non-ASCII characters
@@ -248,6 +263,13 @@ set(ICU4C_SRC_DIR /usr/local/google/home/mscherer/svn.icu/uni/src/icu4c)
 
 * run & fix ICU4C tests
 - Andy handles RBBI & spoof check test failures
+
+TODO:
+- Errors in char.txt, word.txt, word_POSIX.txt like
+    createRuleBasedBreakIterator: ICU Error "U_BRK_RULE_EMPTY_SET"  at line 46, column 16
+  because \p{Grapheme_Cluster_Break = EBG} and \p{Word_Break = EBG} are empty.
+  -> Temporary(!) workaround: Add an arbitrary code point to these sets to make them
+     not empty, just to get ICU building.
 
 * collation: CLDR collation root, UCA DUCET
 
