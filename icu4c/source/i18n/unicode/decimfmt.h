@@ -77,7 +77,7 @@ template class U_I18N_API    EnumSet<UNumberFormatAttribute,
 /**
  * <p><strong>IMPORTANT:</strong> New users are strongly encouraged to see if
  * numberformatter.h fits their use case.  Although not deprecated, this header
- * is on life support and is provided for backwards compatibility only.
+ * is provided for backwards compatibility only.
  * <hr/>
  *
  * DecimalFormat is a concrete subclass of NumberFormat that formats decimal
@@ -694,6 +694,9 @@ public:
      * on NumberFormat such as createInstance. These factories will
      * return the most appropriate sub-class of NumberFormat for a given
      * locale.
+     * <p>
+     * <strong>NOTE:</strong> New users are strongly encouraged to use
+     * {@link NumberFormatter} instead of DecimalFormat.
      * @param status    Output param set to success/failure code. If the
      *                  pattern is invalid this will be set to a failure code.
      * @stable ICU 2.0
@@ -709,6 +712,9 @@ public:
      * on NumberFormat such as createInstance. These factories will
      * return the most appropriate sub-class of NumberFormat for a given
      * locale.
+     * <p>
+     * <strong>NOTE:</strong> New users are strongly encouraged to use
+     * {@link NumberFormatter} instead of DecimalFormat.
      * @param pattern   A non-localized pattern string.
      * @param status    Output param set to success/failure code. If the
      *                  pattern is invalid this will be set to a failure code.
@@ -727,6 +733,9 @@ public:
      * createInstance or createCurrencyInstance. If you need only minor adjustments
      * to a standard format, you can modify the format returned by
      * a NumberFormat factory method.
+     * <p>
+     * <strong>NOTE:</strong> New users are strongly encouraged to use
+     * {@link NumberFormatter} instead of DecimalFormat.
      *
      * @param pattern           a non-localized pattern string
      * @param symbolsToAdopt    the set of symbols to be used.  The caller should not
@@ -832,6 +841,9 @@ public:
      * createInstance or createCurrencyInstance. If you need only minor adjustments
      * to a standard format, you can modify the format returned by
      * a NumberFormat factory method.
+     * <p>
+     * <strong>NOTE:</strong> New users are strongly encouraged to use
+     * {@link NumberFormatter} instead of DecimalFormat.
      *
      * @param pattern           a non-localized pattern string
      * @param symbolsToAdopt    the set of symbols to be used.  The caller should not
@@ -855,6 +867,9 @@ public:
      * createInstance or createCurrencyInstance. If you need only minor adjustments
      * to a standard format, you can modify the format returned by
      * a NumberFormat factory method.
+     * <p>
+     * <strong>NOTE:</strong> New users are strongly encouraged to use
+     * {@link NumberFormatter} instead of DecimalFormat.
      *
      * @param pattern           a non-localized pattern string
      * @param symbols   the set of symbols to be used
