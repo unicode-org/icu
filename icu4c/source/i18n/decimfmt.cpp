@@ -71,18 +71,229 @@ DecimalFormat::DecimalFormat(const DecimalFormatSymbols* symbolsToAdopt, UErrorC
     }
 }
 
-void DecimalFormat::setParseAllInput(UNumberFormatAttributeValue value) {}
+#if UCONFIG_HAVE_PARSEALLINPUT
+
+void DecimalFormat::setParseAllInput(UNumberFormatAttributeValue value) {
+    properties->parseAllInput = value;
+}
+
+#endif
 
 DecimalFormat&
-DecimalFormat::setAttribute(UNumberFormatAttribute attr, int32_t newvalue, UErrorCode& status) {}
+DecimalFormat::setAttribute(UNumberFormatAttribute attr, int32_t newValue, UErrorCode& status) {
+    if (U_FAILURE(status)) { return *this; }
 
-int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& status) const {}
+    switch (attr) {
+        case UNUM_LENIENT_PARSE:
+            setLenient(newValue != 0);
+            break;
 
-void DecimalFormat::setGroupingUsed(UBool newValue) {}
+        case UNUM_PARSE_INT_ONLY:
+            setParseIntegerOnly(newValue != 0);
+            break;
 
-void DecimalFormat::setParseIntegerOnly(UBool value) {}
+        case UNUM_GROUPING_USED:
+            setGroupingUsed(newValue != 0);
+            break;
 
-void DecimalFormat::setContext(UDisplayContext value, UErrorCode& status) {}
+        case UNUM_DECIMAL_ALWAYS_SHOWN:
+            setDecimalSeparatorAlwaysShown(newValue != 0);
+            break;
+
+        case UNUM_MAX_INTEGER_DIGITS:
+            setMaximumIntegerDigits(newValue);
+            break;
+
+        case UNUM_MIN_INTEGER_DIGITS:
+            setMinimumIntegerDigits(newValue);
+            break;
+
+        case UNUM_INTEGER_DIGITS:
+            setMinimumIntegerDigits(newValue);
+            setMaximumIntegerDigits(newValue);
+            break;
+
+        case UNUM_MAX_FRACTION_DIGITS:
+            setMaximumFractionDigits(newValue);
+            break;
+
+        case UNUM_MIN_FRACTION_DIGITS:
+            setMinimumFractionDigits(newValue);
+            break;
+
+        case UNUM_FRACTION_DIGITS:
+            setMinimumFractionDigits(newValue);
+            setMaximumFractionDigits(newValue);
+            break;
+
+        case UNUM_SIGNIFICANT_DIGITS_USED:
+            setSignificantDigitsUsed(newValue != 0);
+            break;
+
+        case UNUM_MAX_SIGNIFICANT_DIGITS:
+            setMaximumSignificantDigits(newValue);
+            break;
+
+        case UNUM_MIN_SIGNIFICANT_DIGITS:
+            setMinimumSignificantDigits(newValue);
+            break;
+
+        case UNUM_MULTIPLIER:
+            setMultiplier(newValue);
+            break;
+
+        case UNUM_GROUPING_SIZE:
+            setGroupingSize(newValue);
+            break;
+
+        case UNUM_ROUNDING_MODE:
+            setRoundingMode((DecimalFormat::ERoundingMode) newValue);
+            break;
+
+        case UNUM_FORMAT_WIDTH:
+            setFormatWidth(newValue);
+            break;
+
+        case UNUM_PADDING_POSITION:
+            /** The position at which padding will take place. */
+            setPadPosition((DecimalFormat::EPadPosition) newValue);
+            break;
+
+        case UNUM_SECONDARY_GROUPING_SIZE:
+            setSecondaryGroupingSize(newValue);
+            break;
+
+#if UCONFIG_HAVE_PARSEALLINPUT
+        case UNUM_PARSE_ALL_INPUT:
+            setParseAllInput((UNumberFormatAttributeValue) newValue);
+            break;
+#endif
+
+        case UNUM_PARSE_NO_EXPONENT:
+            setParseNoExponent((UBool) newValue);
+            break;
+
+        case UNUM_PARSE_DECIMAL_MARK_REQUIRED:
+            setDecimalPatternMatchRequired((UBool) newValue);
+            break;
+
+        case UNUM_CURRENCY_USAGE:
+            setCurrencyUsage((UCurrencyUsage) newValue, &status);
+            break;
+
+        case UNUM_MINIMUM_GROUPING_DIGITS:
+            setMinimumGroupingDigits(newValue);
+            break;
+
+        default:
+            status = U_UNSUPPORTED_ERROR;
+            break;
+    }
+    // TODO: UNUM_SCALE?
+    // TODO: UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS?
+    return *this;
+}
+
+int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& status) const {
+    if (U_FAILURE(status)) { return -1; }
+    switch (attr) {
+        case UNUM_LENIENT_PARSE:
+            return isLenient();
+
+        case UNUM_PARSE_INT_ONLY:
+            return isParseIntegerOnly();
+
+        case UNUM_GROUPING_USED:
+            return isGroupingUsed();
+
+        case UNUM_DECIMAL_ALWAYS_SHOWN:
+            return isDecimalSeparatorAlwaysShown();
+
+        case UNUM_MAX_INTEGER_DIGITS:
+            return getMaximumIntegerDigits();
+
+        case UNUM_MIN_INTEGER_DIGITS:
+            return getMinimumIntegerDigits();
+
+        case UNUM_INTEGER_DIGITS:
+            // TBD: what should this return?
+            return getMinimumIntegerDigits();
+
+        case UNUM_MAX_FRACTION_DIGITS:
+            return getMaximumFractionDigits();
+
+        case UNUM_MIN_FRACTION_DIGITS:
+            return getMinimumFractionDigits();
+
+        case UNUM_FRACTION_DIGITS:
+            // TBD: what should this return?
+            return getMinimumFractionDigits();
+
+        case UNUM_SIGNIFICANT_DIGITS_USED:
+            return areSignificantDigitsUsed();
+
+        case UNUM_MAX_SIGNIFICANT_DIGITS:
+            return getMaximumSignificantDigits();
+
+        case UNUM_MIN_SIGNIFICANT_DIGITS:
+            return getMinimumSignificantDigits();
+
+        case UNUM_MULTIPLIER:
+            return getMultiplier();
+
+        case UNUM_GROUPING_SIZE:
+            return getGroupingSize();
+
+        case UNUM_ROUNDING_MODE:
+            return getRoundingMode();
+
+        case UNUM_FORMAT_WIDTH:
+            return getFormatWidth();
+
+        case UNUM_PADDING_POSITION:
+            return getPadPosition();
+
+        case UNUM_SECONDARY_GROUPING_SIZE:
+            return getSecondaryGroupingSize();
+
+        case UNUM_PARSE_NO_EXPONENT:
+            return getParseNoExponent();
+
+        case UNUM_PARSE_DECIMAL_MARK_REQUIRED:
+            return isDecimalPatternMatchRequired();
+
+        case UNUM_CURRENCY_USAGE:
+            return getCurrencyUsage();
+
+        case UNUM_MINIMUM_GROUPING_DIGITS:
+            return getMinimumGroupingDigits();
+
+        default:
+            status = U_UNSUPPORTED_ERROR;
+            break;
+    }
+    // TODO: UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS?
+    // TODO: UNUM_SCALE?
+
+    return -1; /* undefined */
+}
+
+void DecimalFormat::setGroupingUsed(UBool enabled) {
+    if (enabled) {
+        // Set to a reasonable default value
+        properties->groupingSize = 3;
+        properties->secondaryGroupingSize = 3;
+    } else {
+        properties->groupingSize = 0;
+        properties->secondaryGroupingSize = 0;
+    }
+    refreshFormatterNoError();
+}
+
+void DecimalFormat::setParseIntegerOnly(UBool value) {
+    properties->parseIntegerOnly = value;
+    refreshFormatterNoError();
+}
 
 DecimalFormat::DecimalFormat(const UnicodeString& pattern, DecimalFormatSymbols* symbolsToAdopt,
                              UParseError& parseError, UErrorCode& status)
@@ -106,60 +317,139 @@ DecimalFormat::DecimalFormat(const DecimalFormat& source) {
     if (properties == nullptr || exportedProperties == nullptr || symbols == nullptr) {
         return;
     }
-    ErrorCode localStatus;
-    refreshFormatter(localStatus);
+    refreshFormatterNoError();
 }
 
-DecimalFormat& DecimalFormat::operator=(const DecimalFormat& rhs) {}
+DecimalFormat& DecimalFormat::operator=(const DecimalFormat& rhs) {
+    *properties = *rhs.properties;
+    exportedProperties->clear();
+    symbols = new DecimalFormatSymbols(*rhs.symbols);
+    refreshFormatterNoError();
+}
 
 DecimalFormat::~DecimalFormat() = default;
 
-Format* DecimalFormat::clone() const {}
+Format* DecimalFormat::clone() const {
+    return new DecimalFormat(*this);
+}
 
-UBool DecimalFormat::operator==(const Format& other) const {}
+UBool DecimalFormat::operator==(const Format& other) const {
+    const DecimalFormat* otherDF = dynamic_cast<const DecimalFormat*>(&other);
+    if (otherDF == nullptr) {
+        return false;
+    }
+    return *properties == *otherDF->properties && *symbols == *otherDF->symbols;
+}
 
-UnicodeString& DecimalFormat::format(double number, UnicodeString& appendTo, FieldPosition& pos) const {}
+UnicodeString& DecimalFormat::format(double number, UnicodeString& appendTo, FieldPosition& pos) const {
+    ErrorCode localStatus;
+    FormattedNumber output = formatter->formatDouble(number, localStatus);
+    output.populateFieldPosition(pos, localStatus);
+    auto appendable = UnicodeStringAppendable(appendTo);
+    output.appendTo(appendable);
+    return appendTo;
+}
 
 UnicodeString& DecimalFormat::format(double number, UnicodeString& appendTo, FieldPosition& pos,
-                                     UErrorCode& status) const {}
+                                     UErrorCode& status) const {
+    FormattedNumber output = formatter->formatDouble(number, status);
+    output.populateFieldPosition(pos, status);
+    auto appendable = UnicodeStringAppendable(appendTo);
+    output.appendTo(appendable);
+    return appendTo;
+}
 
 UnicodeString&
 DecimalFormat::format(double number, UnicodeString& appendTo, FieldPositionIterator* posIter,
-                      UErrorCode& status) const {}
+                      UErrorCode& status) const {
+    FormattedNumber output = formatter->formatDouble(number, status);
+    output.populateFieldPositionIterator(*posIter, status);
+    auto appendable = UnicodeStringAppendable(appendTo);
+    output.appendTo(appendable);
+    return appendTo;
+}
 
-UnicodeString& DecimalFormat::format(int32_t number, UnicodeString& appendTo, FieldPosition& pos) const {}
+UnicodeString& DecimalFormat::format(int32_t number, UnicodeString& appendTo, FieldPosition& pos) const {
+    return format(static_cast<int64_t> (number), appendTo, pos);
+}
 
 UnicodeString& DecimalFormat::format(int32_t number, UnicodeString& appendTo, FieldPosition& pos,
-                                     UErrorCode& status) const {}
+                                     UErrorCode& status) const {
+    return format(static_cast<int64_t> (number), appendTo, pos, status);
+}
 
 UnicodeString&
 DecimalFormat::format(int32_t number, UnicodeString& appendTo, FieldPositionIterator* posIter,
-                      UErrorCode& status) const {}
+                      UErrorCode& status) const {
+    return format(static_cast<int64_t> (number), appendTo, posIter, status);
+}
 
-UnicodeString& DecimalFormat::format(int64_t number, UnicodeString& appendTo, FieldPosition& pos) const {}
+UnicodeString& DecimalFormat::format(int64_t number, UnicodeString& appendTo, FieldPosition& pos) const {
+    ErrorCode localStatus;
+    FormattedNumber output = formatter->formatInt(number, localStatus);
+    output.populateFieldPosition(pos, localStatus);
+    auto appendable = UnicodeStringAppendable(appendTo);
+    output.appendTo(appendable);
+    return appendTo;
+}
 
 UnicodeString& DecimalFormat::format(int64_t number, UnicodeString& appendTo, FieldPosition& pos,
-                                     UErrorCode& status) const {}
+                                     UErrorCode& status) const {
+    FormattedNumber output = formatter->formatInt(number, status);
+    output.populateFieldPosition(pos, status);
+    auto appendable = UnicodeStringAppendable(appendTo);
+    output.appendTo(appendable);
+    return appendTo;
+}
 
 UnicodeString&
 DecimalFormat::format(int64_t number, UnicodeString& appendTo, FieldPositionIterator* posIter,
-                      UErrorCode& status) const {}
+                      UErrorCode& status) const {
+    FormattedNumber output = formatter->formatInt(number, status);
+    output.populateFieldPositionIterator(*posIter, status);
+    auto appendable = UnicodeStringAppendable(appendTo);
+    output.appendTo(appendable);
+    return appendTo;
+}
 
 UnicodeString&
 DecimalFormat::format(StringPiece number, UnicodeString& appendTo, FieldPositionIterator* posIter,
-                      UErrorCode& status) const {}
+                      UErrorCode& status) const {
+    ErrorCode localStatus;
+    FormattedNumber output = formatter->formatDecimal(number, localStatus);
+    output.populateFieldPositionIterator(*posIter, status);
+    auto appendable = UnicodeStringAppendable(appendTo);
+    output.appendTo(appendable);
+    return appendTo;
+}
 
 UnicodeString& DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo,
-                                     FieldPositionIterator* posIter, UErrorCode& status) const {}
+                                     FieldPositionIterator* posIter, UErrorCode& status) const {
+    FormattedNumber output = formatter->formatDecimalQuantity(number, status);
+    output.populateFieldPositionIterator(*posIter, status);
+    auto appendable = UnicodeStringAppendable(appendTo);
+    output.appendTo(appendable);
+    return appendTo;
+}
 
 UnicodeString&
 DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo, FieldPosition& pos,
-                      UErrorCode& status) const {}
+                      UErrorCode& status) const {
+    FormattedNumber output = formatter->formatDecimalQuantity(number, status);
+    output.populateFieldPosition(pos, status);
+    auto appendable = UnicodeStringAppendable(appendTo);
+    output.appendTo(appendable);
+    return appendTo;
+}
 
 void
-DecimalFormat::parse(const UnicodeString& text, Formattable& result, ParsePosition& parsePosition) const {}
+DecimalFormat::parse(const UnicodeString& text, Formattable& result, ParsePosition& parsePosition) const {
+    // FIXME
+}
 
-CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& text, ParsePosition& pos) const {}
+CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& text, ParsePosition& pos) const {
+    // FIXME
+}
 
 const DecimalFormatSymbols* DecimalFormat::getDecimalFormatSymbols(void) const {}
 
@@ -324,6 +614,11 @@ void DecimalFormat::refreshFormatter(UErrorCode& status) {
     parser = NumberParserImpl::createParserFromProperties(*properties, *symbols, false, false, status);
     parserWithCurrency = NumberParserImpl::createParserFromProperties(
             *properties, *symbols, true, false, status);
+}
+
+void DecimalFormat::refreshFormatterNoError() {
+    ErrorCode localStatus;
+    refreshFormatter(localStatus);
 }
 
 void DecimalFormat::setPropertiesFromPattern(const UnicodeString& pattern, int32_t ignoreRounding,

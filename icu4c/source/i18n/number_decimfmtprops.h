@@ -35,11 +35,19 @@ namespace impl {
 struct U_I18N_API CurrencyPluralInfoWrapper {
     LocalPointer<CurrencyPluralInfo> fPtr;
 
-    CurrencyPluralInfoWrapper() {}
+    CurrencyPluralInfoWrapper() = default;
+
     CurrencyPluralInfoWrapper(const CurrencyPluralInfoWrapper& other) {
         if (!other.fPtr.isNull()) {
             fPtr.adoptInstead(new CurrencyPluralInfo(*other.fPtr));
         }
+    }
+
+    CurrencyPluralInfoWrapper& operator=(const CurrencyPluralInfoWrapper& other) {
+        if (!other.fPtr.isNull()) {
+            fPtr.adoptInstead(new CurrencyPluralInfo(*other.fPtr));
+        }
+        return *this;
     }
 };
 
@@ -77,6 +85,7 @@ struct U_I18N_API DecimalFormatProperties {
     bool parseLenient;
     bool parseNoExponent;
     bool parseToBigDecimal;
+    UNumberFormatAttributeValue parseAllInput; // ICU4C-only
     //PluralRules pluralRules;
     UnicodeString positivePrefix;
     UnicodeString positivePrefixPattern;
