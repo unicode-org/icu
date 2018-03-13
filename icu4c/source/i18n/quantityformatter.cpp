@@ -23,7 +23,6 @@
 #include "unicode/fmtable.h"
 #include "unicode/fieldpos.h"
 #include "standardplural.h"
-#include "visibledigits.h"
 #include "uassert.h"
 #include "number_decimalquantity.h"
 

@@ -21,12 +21,13 @@
 #include "plurrule_impl.h"
 #include "uassert.h"
 #include "uhash.h"
-#include "precision.h"
-#include "visibledigits.h"
+#include "number_decimalquantity.h"
 
 #if !UCONFIG_NO_FORMATTING
 
 U_NAMESPACE_BEGIN
+
+using number::impl::DecimalQuantity;
 
 static const UChar OTHER_STRING[] = {
     0x6F, 0x74, 0x68, 0x65, 0x72, 0  // "other"
@@ -262,13 +263,9 @@ PluralFormat::format(const Formattable& numberObject, double number,
     // Select it based on the formatted number-offset.
     double numberMinusOffset = number - offset;
     UnicodeString numberString;
+    DecimalQuantity quantity;
+    quantity.setToDouble(numberMinusOffset);
     FieldPosition ignorePos;
-    FixedPrecision fp;
-    VisibleDigitsWithExponent dec;
-    fp.initVisibleDigitsWithExponent(numberMinusOffset, dec, status);
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
     if (offset == 0) {
         DecimalFormat *decFmt = dynamic_cast<DecimalFormat *>(numberFormat);
         if(decFmt != NULL) {
@@ -278,7 +275,7 @@ PluralFormat::format(const Formattable& numberObject, double number,
 //                return appendTo;
 //            }
 //            decFmt->format(dec, numberString, ignorePos, status);
-            decFmt->format(numberObject, numberString, ignorePos, status);
+            decFmt->format(quantity, numberString, ignorePos, status);
         } else {
             numberFormat->format(
                     numberObject, numberString, ignorePos, status);  // could be BigDecimal etc.
@@ -292,13 +289,13 @@ PluralFormat::format(const Formattable& numberObject, double number,
 //                return appendTo;
 //            }
 //            decFmt->format(dec, numberString, ignorePos, status);
-            decFmt->format(numberObject, numberString, ignorePos, status);
+            decFmt->format(quantity, numberString, ignorePos, status);
         } else {
             numberFormat->format(
                     numberMinusOffset, numberString, ignorePos, status);
         }
     }
-    int32_t partIndex = findSubMessage(msgPattern, 0, pluralRulesWrapper, &dec, number, status);
+    int32_t partIndex = findSubMessage(msgPattern, 0, pluralRulesWrapper, &quantity, number, status);
     if (U_FAILURE(status)) { return appendTo; }
     // Replace syntactic # signs in the top level of this sub-message
     // (not in nested arguments) with the formatted number-offset.
@@ -587,7 +584,7 @@ PluralFormat::PluralSelectorAdapter::~PluralSelectorAdapter() {
 UnicodeString PluralFormat::PluralSelectorAdapter::select(void *context, double number,
                                                           UErrorCode& /*ec*/) const {
     (void)number;  // unused except in the assertion
-    VisibleDigitsWithExponent *dec=static_cast<VisibleDigitsWithExponent *>(context);
+    IFixedDecimal *dec=static_cast<IFixedDecimal *>(context);
     return pluralRules->select(*dec);
 }
 

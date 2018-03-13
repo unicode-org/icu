@@ -1031,6 +1031,11 @@ const char16_t* DecimalQuantity::checkHealth() const {
     return nullptr;
 }
 
+bool DecimalQuantity::operator==(const DecimalQuantity& other) const {
+    // FIXME: Make a faster implementation.
+    return toString() == other.toString();
+}
+
 UnicodeString DecimalQuantity::toString() const {
     MaybeStackArray<char, 30> digits(precision + 1);
     for (int32_t i = 0; i < precision; i++) {

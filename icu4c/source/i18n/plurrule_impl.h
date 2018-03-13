@@ -271,7 +271,6 @@ class U_I18N_API FixedDecimal: public IFixedDecimal, public UObject {
     FixedDecimal(double  n, int32_t v, int64_t f);
     FixedDecimal(double n, int32_t);
     explicit FixedDecimal(double n);
-    explicit FixedDecimal(const VisibleDigits &n);
     FixedDecimal();
     ~FixedDecimal() U_OVERRIDE;
     FixedDecimal(const UnicodeString &s, UErrorCode &ec);
