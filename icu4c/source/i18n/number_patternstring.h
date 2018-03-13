@@ -139,6 +139,10 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
     friend class PatternParser;
 };
 
+enum IgnoreRounding {
+    IGNORE_ROUNDING_NEVER = 0, IGNORE_ROUNDING_IF_CURRENCY = 1, IGNORE_ROUNDING_ALWAYS = 2
+};
+
 class U_I18N_API PatternParser {
   public:
     /**
@@ -156,10 +160,6 @@ class U_I18N_API PatternParser {
      */
     static void parseToPatternInfo(const UnicodeString& patternString, ParsedPatternInfo& patternInfo,
                                    UErrorCode& status);
-
-    enum IgnoreRounding {
-        IGNORE_ROUNDING_NEVER = 0, IGNORE_ROUNDING_IF_CURRENCY = 1, IGNORE_ROUNDING_ALWAYS = 2
-    };
 
     /**
      * Parses a pattern string into a new property bag.

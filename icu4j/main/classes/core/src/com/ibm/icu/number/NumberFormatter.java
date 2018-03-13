@@ -5,7 +5,6 @@ package com.ibm.icu.number;
 import java.util.Locale;
 
 import com.ibm.icu.impl.number.DecimalFormatProperties;
-import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
 
@@ -469,6 +468,9 @@ public final class NumberFormatter {
     }
 
     /**
+     * Note: In Java, since NumberPropertyMapper is package-private, this method is here so that it is
+     * accessible to tests.
+     *
      * @internal
      * @deprecated ICU 60 This API is ICU internal only.
      */
@@ -477,7 +479,6 @@ public final class NumberFormatter {
             DecimalFormatProperties properties,
             DecimalFormatSymbols symbols,
             DecimalFormatProperties exportedProperties) {
-        MacroProps macros = NumberPropertyMapper.oldToNew(properties, symbols, exportedProperties);
-        return NumberFormatter.with().macros(macros);
+        return NumberPropertyMapper.create(properties, symbols, exportedProperties);
     }
 }

@@ -42,6 +42,15 @@ final class NumberPropertyMapper {
         return NumberFormatter.with().macros(macros);
     }
 
+    /** Convenience method to create a NumberFormatter directly from Properties. */
+    public static UnlocalizedNumberFormatter create(
+            DecimalFormatProperties properties,
+            DecimalFormatSymbols symbols,
+            DecimalFormatProperties exportedProperties) {
+        MacroProps macros = oldToNew(properties, symbols, exportedProperties);
+        return NumberFormatter.with().macros(macros);
+    }
+
     /**
      * Convenience method to create a NumberFormatter directly from a pattern string. Something like this
      * could become public API if there is demand.

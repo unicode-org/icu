@@ -1892,6 +1892,13 @@ class U_I18N_API NumberFormatterSettings {
      */
     Derived threshold(int32_t threshold) const;
 
+    /**
+     * Internal fluent setter to overwrite the entire macros object.
+     *
+     * @internal ICU 60: This API is ICU internal only.
+     */
+    Derived macros(impl::MacroProps& macros) const;
+
 #endif  /* U_HIDE_INTERNAL_API */
 
     /**

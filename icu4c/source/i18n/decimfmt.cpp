@@ -9,25 +9,67 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
+#include "unicode/errorcode.h"
 #include "unicode/decimfmt.h"
 #include "number_decimalquantity.h"
+#include "number_types.h"
+#include "numparse_impl.h"
+#include "number_mapper.h"
+#include "number_patternstring.h"
 
 using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
+using namespace icu::numparse;
+using namespace icu::numparse::impl;
 using ERoundingMode = icu::DecimalFormat::ERoundingMode;
 using EPadPosition = icu::DecimalFormat::EPadPosition;
 
 
-DecimalFormat::DecimalFormat(UErrorCode& status) {}
+DecimalFormat::DecimalFormat(UErrorCode& status)
+        : DecimalFormat(nullptr, status) {
+}
 
-DecimalFormat::DecimalFormat(const UnicodeString& pattern, UErrorCode& status) {}
+DecimalFormat::DecimalFormat(const UnicodeString& pattern, UErrorCode& status)
+        : DecimalFormat(nullptr, status) {
+    setPropertiesFromPattern(pattern, IGNORE_ROUNDING_IF_CURRENCY, status);
+    refreshFormatter(status);
+}
 
 DecimalFormat::DecimalFormat(const UnicodeString& pattern, DecimalFormatSymbols* symbolsToAdopt,
-                             UErrorCode& status) {}
+                             UErrorCode& status)
+        : DecimalFormat(symbolsToAdopt, status) {
+    setPropertiesFromPattern(pattern, IGNORE_ROUNDING_IF_CURRENCY, status);
+}
 
 DecimalFormat::DecimalFormat(const UnicodeString& pattern, DecimalFormatSymbols* symbolsToAdopt,
-                             UNumberFormatStyle style, UErrorCode& status) {}
+                             UNumberFormatStyle style, UErrorCode& status)
+        : DecimalFormat(symbolsToAdopt, status) {
+    // If choice is a currency type, ignore the rounding information.
+    if (style == UNumberFormatStyle::UNUM_CURRENCY || style == UNumberFormatStyle::UNUM_CURRENCY_ISO ||
+        style == UNumberFormatStyle::UNUM_CURRENCY_ACCOUNTING ||
+        style == UNumberFormatStyle::UNUM_CASH_CURRENCY ||
+        style == UNumberFormatStyle::UNUM_CURRENCY_STANDARD ||
+        style == UNumberFormatStyle::UNUM_CURRENCY_PLURAL) {
+        setPropertiesFromPattern(pattern, IGNORE_ROUNDING_ALWAYS, status);
+    } else {
+        setPropertiesFromPattern(pattern, IGNORE_ROUNDING_IF_CURRENCY, status);
+    }
+    refreshFormatter(status);
+}
+
+DecimalFormat::DecimalFormat(const DecimalFormatSymbols* symbolsToAdopt, UErrorCode& status) {
+    properties = new DecimalFormatProperties();
+    exportedProperties = new DecimalFormatProperties();
+    if (symbolsToAdopt == nullptr) {
+        symbols = new DecimalFormatSymbols(status);
+    } else {
+        symbols = symbolsToAdopt;
+    }
+    if (properties == nullptr || exportedProperties == nullptr || symbols == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
+}
 
 void DecimalFormat::setParseAllInput(UNumberFormatAttributeValue value) {}
 
@@ -43,12 +85,30 @@ void DecimalFormat::setParseIntegerOnly(UBool value) {}
 void DecimalFormat::setContext(UDisplayContext value, UErrorCode& status) {}
 
 DecimalFormat::DecimalFormat(const UnicodeString& pattern, DecimalFormatSymbols* symbolsToAdopt,
-                             UParseError& parseError, UErrorCode& status) {}
+                             UParseError& parseError, UErrorCode& status)
+        : DecimalFormat(symbolsToAdopt, status) {
+    // TODO: What is parseError for?
+    setPropertiesFromPattern(pattern, IGNORE_ROUNDING_IF_CURRENCY, status);
+    refreshFormatter(status);
+}
 
 DecimalFormat::DecimalFormat(const UnicodeString& pattern, const DecimalFormatSymbols& symbols,
-                             UErrorCode& status) {}
+                             UErrorCode& status)
+        : DecimalFormat(new DecimalFormatSymbols(symbols), status) {
+    setPropertiesFromPattern(pattern, IGNORE_ROUNDING_IF_CURRENCY, status);
+    refreshFormatter(status);
+}
 
-DecimalFormat::DecimalFormat(const DecimalFormat& source) {}
+DecimalFormat::DecimalFormat(const DecimalFormat& source) {
+    properties = new DecimalFormatProperties();
+    exportedProperties = new DecimalFormatProperties();
+    symbols = new DecimalFormatSymbols(*source.symbols);
+    if (properties == nullptr || exportedProperties == nullptr || symbols == nullptr) {
+        return;
+    }
+    ErrorCode localStatus;
+    refreshFormatter(localStatus);
+}
 
 DecimalFormat& DecimalFormat::operator=(const DecimalFormat& rhs) {}
 
@@ -238,6 +298,40 @@ number::LocalizedNumberFormatter DecimalFormat::toNumberFormatter() const {}
 UClassID DecimalFormat::getStaticClassID() {}
 
 UClassID DecimalFormat::getDynamicClassID() const {}
+
+/** Rebuilds the formatter object from the property bag. */
+void DecimalFormat::refreshFormatter(UErrorCode& status) {
+    if (exportedProperties == nullptr) {
+        // exportedProperties is null only when the formatter is not ready yet.
+        // The only time when this happens is during legacy deserialization.
+        return;
+    }
+    Locale locale = getLocale(ULOC_ACTUAL_LOCALE, status);
+    if (U_FAILURE(status)) {
+        // Constructor
+        locale = symbols->getLocale(ULOC_ACTUAL_LOCALE, status);
+    }
+    if (U_FAILURE(status)) {
+        // Deserialization
+        locale = symbols->getLocale();
+    }
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    *formatter = NumberPropertyMapper::create(*properties, *symbols, *exportedProperties, status).locale(
+            locale);
+    parser = NumberParserImpl::createParserFromProperties(*properties, *symbols, false, false, status);
+    parserWithCurrency = NumberParserImpl::createParserFromProperties(
+            *properties, *symbols, true, false, status);
+}
+
+void DecimalFormat::setPropertiesFromPattern(const UnicodeString& pattern, int32_t ignoreRounding,
+                                             UErrorCode& status) {
+    // Cast workaround to get around putting the enum in the public header file
+    auto actualIgnoreRounding = static_cast<IgnoreRounding>(ignoreRounding);
+    PatternParser::parseToExistingProperties(pattern, *properties, actualIgnoreRounding, status);
+}
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
