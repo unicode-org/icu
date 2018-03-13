@@ -139,6 +139,13 @@ Derived NumberFormatterSettings<Derived>::threshold(int32_t threshold) const {
     return copy;
 }
 
+template<typename Derived>
+Derived NumberFormatterSettings<Derived>::macros(impl::MacroProps& macros) const {
+    Derived copy(*this);
+    copy.fMacros = macros;
+    return copy;
+}
+
 // Declare all classes that implement NumberFormatterSettings
 // See https://stackoverflow.com/a/495056/1407170
 template

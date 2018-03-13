@@ -14,6 +14,7 @@
 #include "unicode/uniset.h"
 #include "numparse_currency.h"
 #include "numparse_affixes.h"
+#include "number_decimfmtprops.h"
 
 U_NAMESPACE_BEGIN namespace numparse {
 namespace impl {
@@ -24,6 +25,10 @@ class NumberParserImpl : public MutableMatcherCollection {
 
     static NumberParserImpl* createSimpleParser(const Locale& locale, const UnicodeString& patternString,
                                                 parse_flags_t parseFlags, UErrorCode& status);
+
+    static NumberParserImpl* createParserFromProperties(
+            const number::impl::DecimalFormatProperties& properties, DecimalFormatSymbols symbols,
+            bool parseCurrency, bool optimize, UErrorCode& status);
 
     void addMatcher(NumberParseMatcher& matcher) override;
 
