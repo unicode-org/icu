@@ -48,7 +48,6 @@
 #include "ustrfmt.h"
 #include "util.h"
 #include "uvector.h"
-#include "visibledigits.h"
 #include "number_decimalquantity.h"
 
 // *****************************************************************************

@@ -89,12 +89,12 @@ UnicodeString&
 DecimalFormat::format(StringPiece number, UnicodeString& appendTo, FieldPositionIterator* posIter,
                       UErrorCode& status) const {}
 
-UnicodeString&
-DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo, FieldPositionIterator* posIter,
-                      UErrorCode& status) const {}
+UnicodeString& DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo,
+                                     FieldPositionIterator* posIter, UErrorCode& status) const {}
 
-UnicodeString& DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo, FieldPosition& pos,
-                                     UErrorCode& status) const {}
+UnicodeString&
+DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo, FieldPosition& pos,
+                      UErrorCode& status) const {}
 
 void
 DecimalFormat::parse(const UnicodeString& text, Formattable& result, ParsePosition& parsePosition) const {}
@@ -226,6 +226,12 @@ void DecimalFormat::setCurrency(const char16_t* theCurrency) {}
 void DecimalFormat::setCurrencyUsage(UCurrencyUsage newUsage, UErrorCode* ec) {}
 
 UCurrencyUsage DecimalFormat::getCurrencyUsage() const {}
+
+void
+DecimalFormat::formatToDecimalQuantity(double number, DecimalQuantity& output, UErrorCode& status) const {}
+
+void DecimalFormat::formatToDecimalQuantity(const Formattable& number, DecimalQuantity& output,
+                                            UErrorCode& status) const {}
 
 number::LocalizedNumberFormatter DecimalFormat::toNumberFormatter() const {}
 

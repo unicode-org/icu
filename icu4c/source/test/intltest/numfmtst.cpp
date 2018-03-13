@@ -620,7 +620,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestFractionalDigitsForCurrency);
   TESTCASE_AUTO(TestFormatCurrencyPlural);
   TESTCASE_AUTO(Test11868);
-  TESTCASE_AUTO(Test10727_RoundingZero);
+//  TESTCASE_AUTO(Test10727_RoundingZero);
   TESTCASE_AUTO(Test11376_getAndSetPositivePrefix);
   TESTCASE_AUTO(Test11475_signRecognition);
   TESTCASE_AUTO(Test11640_getAffixes);

@@ -9,6 +9,7 @@
 #ifndef _DATADRIVENNUMBERFORMATTESTSUITE_H__
 #define _DATADRIVENNUMBERFORMATTESTSUITE_H__
 
+#include "cmemory.h"
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING

@@ -34,8 +34,6 @@
 #include "uvectr32.h"
 #include "sharedpluralrules.h"
 #include "unifiedcache.h"
-#include "digitinterval.h" 
-#include "visibledigits.h"
 #include "number_decimalquantity.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -280,14 +278,6 @@ PluralRules::select(const IFixedDecimal &number) const {
     }
 }
 
-UnicodeString
-PluralRules::select(const VisibleDigitsWithExponent &number) const {
-    if (number.getExponent() != NULL) {
-        return UnicodeString(TRUE, PLURAL_DEFAULT_RULE, -1);
-    }
-    return select(FixedDecimal(number.getMantissa()));
-}
-
 
 
 StringEnumeration*
@@ -315,7 +305,7 @@ PluralRules::getAllKeywordValues(const UnicodeString & /* keyword */, double * /
     return 0;
 }
 
-    
+
 static double scaleForInt(double d) {
     double scale = 1.0;
     while (d != floor(d)) {
@@ -350,7 +340,7 @@ getSamplesFromString(const UnicodeString &samples, double *dest,
                 dest[sampleCount++] = sampleValue;
             }
         } else {
-            
+
             FixedDecimal fixedLo(sampleRange.tempSubStringBetween(0, tildeIndex), status);
             FixedDecimal fixedHi(sampleRange.tempSubStringBetween(tildeIndex+1), status);
             double rangeLo = fixedLo.source;
@@ -366,7 +356,7 @@ getSamplesFromString(const UnicodeString &samples, double *dest,
             // For ranges of samples with fraction decimal digits, scale the number up so that we
             //   are adding one in the units place. Avoids roundoffs from repetitive adds of tenths.
 
-            double scale = scaleForInt(rangeLo); 
+            double scale = scaleForInt(rangeLo);
             double t = scaleForInt(rangeHi);
             if (t > scale) {
                 scale = t;
@@ -402,12 +392,12 @@ PluralRules::getSamples(const UnicodeString &keyword, double *dest,
         return 0;
     }
     int32_t numSamples = getSamplesFromString(rc->fIntegerSamples, dest, destCapacity, status);
-    if (numSamples == 0) { 
+    if (numSamples == 0) {
         numSamples = getSamplesFromString(rc->fDecimalSamples, dest, destCapacity, status);
     }
     return numSamples;
 }
-    
+
 
 RuleChain *PluralRules::rulesForKeyword(const UnicodeString &keyword) const {
     RuleChain *rc;
@@ -549,7 +539,7 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
                     }
                     else {
                         curAndConstraint->rangeList->setElementAt(getNumberValue(token), rangeHiIdx);
-                        if (curAndConstraint->rangeList->elementAti(rangeLowIdx) > 
+                        if (curAndConstraint->rangeList->elementAti(rangeLowIdx) >
                                 curAndConstraint->rangeList->elementAti(rangeHiIdx)) {
                             // Range Lower bound > Range Upper bound.
                             // U_UNEXPECTED_TOKEN seems a little funny, but it is consistently
@@ -600,7 +590,7 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
                 // The new rule chain goes at the end of the linked list of rule chains,
                 //   unless there is an "other" keyword & chain. "other" must remain last.
                 RuleChain *insertAfter = prules->mRules;
-                while (insertAfter->fNext!=NULL && 
+                while (insertAfter->fNext!=NULL &&
                        insertAfter->fNext->fKeyword.compare(PLURAL_KEYWORD_OTHER, 5) != 0 ){
                     insertAfter=insertAfter->fNext;
                 }
@@ -641,7 +631,7 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
                 currentChain->fDecimalSamples.append(token);
             }
             break;
-                
+
         default:
             break;
         }
@@ -896,13 +886,13 @@ OrConstraint::isFulfilled(const IFixedDecimal &number) {
 }
 
 
-RuleChain::RuleChain(): fKeyword(), fNext(NULL), ruleHeader(NULL), fDecimalSamples(), fIntegerSamples(), 
+RuleChain::RuleChain(): fKeyword(), fNext(NULL), ruleHeader(NULL), fDecimalSamples(), fIntegerSamples(),
                         fDecimalSamplesUnbounded(FALSE), fIntegerSamplesUnbounded(FALSE) {
 }
 
-RuleChain::RuleChain(const RuleChain& other) : 
+RuleChain::RuleChain(const RuleChain& other) :
         fKeyword(other.fKeyword), fNext(NULL), ruleHeader(NULL), fDecimalSamples(other.fDecimalSamples),
-        fIntegerSamples(other.fIntegerSamples), fDecimalSamplesUnbounded(other.fDecimalSamplesUnbounded), 
+        fIntegerSamples(other.fIntegerSamples), fDecimalSamplesUnbounded(other.fDecimalSamplesUnbounded),
         fIntegerSamplesUnbounded(other.fIntegerSamplesUnbounded) {
     if (other.ruleHeader != NULL) {
         this->ruleHeader = new OrConstraint(*(other.ruleHeader));
@@ -1071,9 +1061,9 @@ RuleChain::isKeyword(const UnicodeString& keywordParam) const {
 }
 
 
-PluralRuleParser::PluralRuleParser() : 
-        ruleIndex(0), token(), type(none), prevType(none), 
-        curAndConstraint(NULL), currentChain(NULL), rangeLowIdx(-1), rangeHiIdx(-1)  
+PluralRuleParser::PluralRuleParser() :
+        ruleIndex(0), token(), type(none), prevType(none),
+        curAndConstraint(NULL), currentChain(NULL), rangeLowIdx(-1), rangeHiIdx(-1)
 {
 }
 
@@ -1174,8 +1164,8 @@ PluralRuleParser::checkSyntax(UErrorCode &status)
         break;
     case tNumber:
         if (type != tDot2  && type != tSemiColon && type != tIs       && type != tNot    &&
-            type != tIn    && type != tEqual     && type != tNotEqual && type != tWithin && 
-            type != tAnd   && type != tOr        && type != tComma    && type != tAt     && 
+            type != tIn    && type != tEqual     && type != tNotEqual && type != tWithin &&
+            type != tAnd   && type != tOr        && type != tComma    && type != tAt     &&
             type != tEOF)
         {
             status = U_UNEXPECTED_TOKEN;
@@ -1220,7 +1210,7 @@ PluralRuleParser::getNextToken(UErrorCode &status)
         return;
     }
     int32_t curIndex= ruleIndex;
-        
+
     switch (type) {
       case tColon:
       case tSemiColon:
@@ -1325,7 +1315,7 @@ PluralRuleParser::charType(UChar ch) {
 
 //  Set token type for reserved words in the Plural Rule syntax.
 
-tokenType 
+tokenType
 PluralRuleParser::getKeyType(const UnicodeString &token, tokenType keyType)
 {
     if (keyType != tKeyword) {
@@ -1429,16 +1419,6 @@ PluralOperand tokenTypeToPluralOperand(tokenType tt) {
 }
 
 IFixedDecimal::~IFixedDecimal() = default;
-
-FixedDecimal::FixedDecimal(const VisibleDigits &digits) {
-    digits.getFixedDecimal(
-            source, intValue, decimalDigits,
-            decimalDigitsWithoutTrailingZeros,
-            visibleDecimalDigitCount, hasIntegerValue);
-    isNegative = digits.isNegative();
-    _isNaN = digits.isNaN();
-    _isInfinite = digits.isInfinite();
-}
 
 FixedDecimal::FixedDecimal(double n, int32_t v, int64_t f) {
     init(n, v, f);
@@ -1589,7 +1569,7 @@ int32_t FixedDecimal::decimals(double n) {
         if (buf[i] != '0') {
             break;
         }
-        --numFractionDigits; 
+        --numFractionDigits;
     }
     numFractionDigits -= exponent;   // Fraction part of fixed point representation.
     return numFractionDigits;
@@ -1638,7 +1618,7 @@ void FixedDecimal::adjustForMinFractionDigits(int32_t minFractionDigits) {
         visibleDecimalDigitCount += numTrailingFractionZeros;
     }
 }
-        
+
 
 double FixedDecimal::getPluralOperand(PluralOperand operand) const {
     switch(operand) {

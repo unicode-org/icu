@@ -243,7 +243,9 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
 
     bool operator==(const DecimalQuantity& other) const;
 
-    bool operator!=(const DecimalQuantity& other) const;
+    inline bool operator!=(const DecimalQuantity& other) const {
+        return !(*this == other);
+    }
 
     /**
      * Bogus flag for when a DecimalQuantity is stored on the stack.
