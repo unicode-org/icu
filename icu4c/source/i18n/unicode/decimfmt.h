@@ -792,7 +792,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @return *this - for chaining (example: format.setAttribute(...).setAttribute(...) )
      * @stable ICU 51
      */
-    virtual DecimalFormat& setAttribute(UNumberFormatAttribute attr, int32_t newvalue, UErrorCode& status);
+    virtual DecimalFormat& setAttribute(UNumberFormatAttribute attr, int32_t newValue, UErrorCode& status);
 
     /**
      * Get an integer
@@ -822,17 +822,6 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @stable ICU 53
      */
     void setParseIntegerOnly(UBool value) U_OVERRIDE;
-
-    /**
-     * Set a particular UDisplayContext value in the formatter, such as
-     * UDISPCTX_CAPITALIZATION_FOR_STANDALONE.
-     * @param value The UDisplayContext value to set.
-     * @param status Input/output status. If at entry this indicates a failure
-     *               status, the function will do nothing; otherwise this will be
-     *               updated with any new status from the function.
-     * @stable ICU 53
-     */
-    void setContext(UDisplayContext value, UErrorCode& status) U_OVERRIDE;
 
     /**
      * Create a DecimalFormat from the given pattern and symbols.
@@ -1651,7 +1640,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     UBool isDecimalPatternMatchRequired(void) const;
 
     /**
-     * Allows you to set the behavior of the pattern decimal mark.
+     * Allows you to set the parse behavior of the pattern decimal mark.
      *
      * if TRUE, the input must have a decimal mark if one was specified in the pattern. When
      * FALSE the decimal mark may be omitted from the input.
@@ -1660,6 +1649,24 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @stable ICU 54
      */
     virtual void setDecimalPatternMatchRequired(UBool newValue);
+
+    /**
+     * {@icu} Returns whether to ignore exponents when parsing.
+     *
+     * @see #setParseNoExponent
+     * @internal This API is a technical preview. It may change in an upcoming release.
+     */
+    UBool getParseNoExponent() const;
+
+    /**
+     * {@icu} Specifies whether to stop parsing when an exponent separator is encountered. For
+     * example, parses "123E4" to 123 (with parse position 3) instead of 1230000 (with parse position
+     * 5).
+     *
+     * @param value true to prevent exponents from being parsed; false to allow them to be parsed.
+     * @internal This API is a technical preview. It may change in an upcoming release.
+     */
+    void setParseNoExponent(UBool value);
 
 
     /**
@@ -1973,6 +1980,9 @@ class U_I18N_API DecimalFormat : public NumberFormat {
 
     /** Rebuilds the formatter object from the property bag. */
     void refreshFormatter(UErrorCode& status);
+
+    /** Rebuilds the formatter object, hiding the error code. */
+    void refreshFormatterNoError();
 
     /**
      * Updates the property bag with settings from the given pattern.

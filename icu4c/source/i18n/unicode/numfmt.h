@@ -973,7 +973,7 @@ public:
      * @stable ICU 2.6
      */
     const char16_t* getCurrency() const;
-	
+
     /**
      * Set a particular UDisplayContext value in the formatter, such as
      * UDISPCTX_CAPITALIZATION_FOR_STANDALONE.

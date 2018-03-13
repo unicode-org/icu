@@ -309,6 +309,17 @@ FormattedNumber LocalizedNumberFormatter::formatDecimal(StringPiece value, UErro
     return formatImpl(results, status);
 }
 
+FormattedNumber LocalizedNumberFormatter::formatDecimalQuantity(const DecimalQuantity& dq, UErrorCode &status) const {
+    if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
+    auto results = new NumberFormatterResults();
+    if (results == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return FormattedNumber(status);
+    }
+    results->quantity = dq;
+    return formatImpl(results, status);
+}
+
 FormattedNumber
 LocalizedNumberFormatter::formatImpl(impl::NumberFormatterResults *results, UErrorCode &status) const {
     // fUnsafeCallCount contains memory to be interpreted as an atomic int, most commonly

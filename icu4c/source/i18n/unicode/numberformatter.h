@@ -2027,6 +2027,13 @@ class U_I18N_API LocalizedNumberFormatter
      */
     FormattedNumber formatDecimal(StringPiece value, UErrorCode &status) const;
 
+#ifndef U_HIDE_INTERNAL_API
+    /** Internal method.
+     * @internal
+     */
+    FormattedNumber formatDecimalQuantity(const impl::DecimalQuantity& dq, UErrorCode& status) const;
+#endif
+
     // Make default copy constructor call the NumberFormatterSettings copy constructor.
     /**
      * Returns a copy of this LocalizedNumberFormatter.
