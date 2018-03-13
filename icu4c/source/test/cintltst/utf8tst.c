@@ -757,6 +757,14 @@ static void TestFwdBack() {
     }
 }
 
+/**
+* Ticket #13636 - Visual Studio 2017 has problems optimizing this function.
+* As a workaround, we will turn off optimization just for this function on VS2017 and above.
+*/
+#if defined(_MSC_VER) && (_MSC_VER > 1900)
+#pragma optimize( "", off )
+#endif
+
 static void TestFwdBackUnsafe() {
     /*
      * Use a (mostly) well-formed UTF-8 string and test at code point boundaries.
@@ -841,6 +849,13 @@ static void TestFwdBackUnsafe() {
         }
     }
 }
+
+/**
+* Ticket #13636 - Turn optimization back on.
+*/
+#if defined(_MSC_VER) && (_MSC_VER > 1900)
+#pragma optimize( "", on )
+#endif
 
 static void TestSetChar() {
     static const uint8_t input[]
