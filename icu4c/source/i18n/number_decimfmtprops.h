@@ -30,22 +30,22 @@ template class U_I18N_API LocalPointer<CurrencyPluralInfo>;
 namespace number {
 namespace impl {
 
-// TODO: Figure out a nicer way to deal with CurrencyPluralInfo.
 // Exported as U_I18N_API because it is a public member field of exported DecimalFormatProperties
-struct U_I18N_API CurrencyPluralInfoWrapper {
-    LocalPointer<CurrencyPluralInfo> fPtr;
+template<typename T>
+struct U_I18N_API CopyableLocalPointer {
+    LocalPointer<T> fPtr;
 
-    CurrencyPluralInfoWrapper() = default;
+    CopyableLocalPointer() = default;
 
-    CurrencyPluralInfoWrapper(const CurrencyPluralInfoWrapper& other) {
+    CopyableLocalPointer(const CopyableLocalPointer& other) {
         if (!other.fPtr.isNull()) {
-            fPtr.adoptInstead(new CurrencyPluralInfo(*other.fPtr));
+            fPtr.adoptInstead(new T(*other.fPtr));
         }
     }
 
-    CurrencyPluralInfoWrapper& operator=(const CurrencyPluralInfoWrapper& other) {
+    CopyableLocalPointer& operator=(const CopyableLocalPointer& other) {
         if (!other.fPtr.isNull()) {
-            fPtr.adoptInstead(new CurrencyPluralInfo(*other.fPtr));
+            fPtr.adoptInstead(new T(*other.fPtr));
         }
         return *this;
     }
@@ -57,7 +57,7 @@ struct U_I18N_API DecimalFormatProperties {
   public:
     NullableValue<UNumberCompactStyle> compactStyle;
     NullableValue<CurrencyUnit> currency;
-    CurrencyPluralInfoWrapper currencyPluralInfo;
+    CopyableLocalPointer<CurrencyPluralInfo> currencyPluralInfo;
     NullableValue<UCurrencyUsage> currencyUsage;
     bool decimalPatternMatchRequired;
     bool decimalSeparatorAlwaysShown;
@@ -100,9 +100,9 @@ struct U_I18N_API DecimalFormatProperties {
 
     //DecimalFormatProperties(const DecimalFormatProperties &other) = default;
 
-    DecimalFormatProperties &operator=(const DecimalFormatProperties &other) = default;
+    DecimalFormatProperties& operator=(const DecimalFormatProperties& other) = default;
 
-    bool operator==(const DecimalFormatProperties &other) const;
+    bool operator==(const DecimalFormatProperties& other) const;
 
     void clear();
 };

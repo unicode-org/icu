@@ -43,7 +43,7 @@ enum Key {
     PLUS_SIGN,
     PERCENT_SIGN,
     PERMILLE_SIGN,
-    INFINITY,
+    INFINITY_KEY, // INFINITY is defined in cmath
 
     // Other
             DIGITS,
