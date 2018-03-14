@@ -2004,32 +2004,27 @@ class U_I18N_API DecimalFormat : public NumberFormat {
 
     /**
      * The property bag corresponding to user-specified settings and settings from the pattern string.
-     * In principle this should be final, but serialize and clone won't work if it is final. Does not
-     * need to be volatile because the reference never changes.
      */
-    number::impl::DecimalFormatProperties* properties;
+    LocalPointer<number::impl::DecimalFormatProperties> fProperties;
 
     /**
-     * The symbols for the current locale. Volatile because threads may read and write at the same
-     * time.
+     * The symbols for the current locale.
      */
-    const DecimalFormatSymbols* symbols;
+    LocalPointer<const DecimalFormatSymbols> fSymbols;
 
     /**
      * The pre-computed formatter object. Setters cause this to be re-computed atomically. The {@link
-     * #format} method uses the formatter directly without needing to synchronize. Volatile because
-     * threads may read and write at the same time.
+     * #format} method uses the formatter directly without needing to synchronize.
      */
-    number::LocalizedNumberFormatter* formatter;
+    LocalPointer<const number::LocalizedNumberFormatter> fFormatter;
 
     /**
-     * The effective properties as exported from the formatter object. Volatile because threads may
-     * read and write at the same time.
+     * The effective properties as exported from the formatter object. Used by the getters.
      */
-    number::impl::DecimalFormatProperties* exportedProperties;
+    LocalPointer<number::impl::DecimalFormatProperties> fExportedProperties;
 
-    const numparse::impl::NumberParserImpl* parser;
-    const numparse::impl::NumberParserImpl* parserWithCurrency;
+    LocalPointer<const numparse::impl::NumberParserImpl> fParser;
+    LocalPointer<const numparse::impl::NumberParserImpl> fParserWithCurrency;
 
 };
 

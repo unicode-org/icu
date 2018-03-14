@@ -90,7 +90,7 @@ void U_CALLCONV initNumberParseUniSets(UErrorCode& status) {
 
     gUnicodeSets[PERCENT_SIGN] = new UnicodeSet(u"[%٪]", status);
     gUnicodeSets[PERMILLE_SIGN] = new UnicodeSet(u"[‰؉]", status);
-    gUnicodeSets[INFINITY] = new UnicodeSet(u"[∞]", status);
+    gUnicodeSets[INFINITY_KEY] = new UnicodeSet(u"[∞]", status);
 
     gUnicodeSets[DIGITS] = new UnicodeSet(u"[:digit:]", status);
     gUnicodeSets[NAN_LEAD] = new UnicodeSet(

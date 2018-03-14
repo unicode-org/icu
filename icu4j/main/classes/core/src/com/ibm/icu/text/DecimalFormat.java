@@ -1132,7 +1132,7 @@ public class DecimalFormat extends NumberFormat {
     // Try to convert to a magnitude multiplier first
     int delta = 0;
     int value = multiplier;
-    while (multiplier != 1) {
+    while (value != 1) {
       delta++;
       int temp = value / 10;
       if (temp * 10 != value) {
@@ -1143,7 +1143,9 @@ public class DecimalFormat extends NumberFormat {
     }
     if (delta != -1) {
       properties.setMagnitudeMultiplier(delta);
+      properties.setMultiplier(null);
     } else {
+      properties.setMagnitudeMultiplier(0);
       properties.setMultiplier(java.math.BigDecimal.valueOf(multiplier));
     }
     refreshFormatter();
@@ -1867,6 +1869,7 @@ public class DecimalFormat extends NumberFormat {
     if (enabled) {
       // Set to a reasonable default value
       properties.setGroupingSize(3);
+      properties.setSecondaryGroupingSize(3);
     } else {
       properties.setGroupingSize(0);
       properties.setSecondaryGroupingSize(0);
@@ -1919,7 +1922,7 @@ public class DecimalFormat extends NumberFormat {
     if (grouping1 == grouping2 || grouping2 < 0) {
       return 0;
     }
-    return properties.getSecondaryGroupingSize();
+    return grouping2;
   }
 
   /**
@@ -1953,12 +1956,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Deprecated
   public synchronized int getMinimumGroupingDigits() {
-    // Only 1 and 2 are supported right now.
-    if (properties.getMinimumGroupingDigits() == 2) {
-      return 2;
-    } else {
-      return 1;
-    }
+    return properties.getMinimumGroupingDigits();
   }
 
   /**
@@ -2437,8 +2435,15 @@ public class DecimalFormat extends NumberFormat {
     // to keep affix patterns intact.  In particular, pull rounding properties
     // so that CurrencyUsage is reflected properly.
     // TODO: Consider putting this logic in PatternString.java instead.
-    DecimalFormatProperties tprops = threadLocalProperties.get().copyFrom(properties);
-    if (useCurrency(properties)) {
+    DecimalFormatProperties tprops = new DecimalFormatProperties().copyFrom(properties);
+    boolean useCurrency = ((tprops.getCurrency() != null)
+            || tprops.getCurrencyPluralInfo() != null
+            || tprops.getCurrencyUsage() != null
+            || AffixUtils.hasCurrencySymbols(tprops.getPositivePrefixPattern())
+            || AffixUtils.hasCurrencySymbols(tprops.getPositiveSuffixPattern())
+            || AffixUtils.hasCurrencySymbols(tprops.getNegativePrefixPattern())
+            || AffixUtils.hasCurrencySymbols(tprops.getNegativeSuffixPattern()));
+    if (useCurrency) {
       tprops.setMinimumFractionDigits(exportedProperties.getMinimumFractionDigits());
       tprops.setMaximumFractionDigits(exportedProperties.getMaximumFractionDigits());
       tprops.setRoundingIncrement(exportedProperties.getRoundingIncrement());
@@ -2481,14 +2486,6 @@ public class DecimalFormat extends NumberFormat {
   public IFixedDecimal getFixedDecimal(double number) {
     return formatter.format(number).getFixedDecimal();
   }
-
-  private static final ThreadLocal<DecimalFormatProperties> threadLocalProperties =
-      new ThreadLocal<DecimalFormatProperties>() {
-        @Override
-        protected DecimalFormatProperties initialValue() {
-          return new DecimalFormatProperties();
-        }
-      };
 
   /** Rebuilds the formatter object from the property bag. */
   void refreshFormatter() {
@@ -2533,20 +2530,6 @@ public class DecimalFormat extends NumberFormat {
         return 0.0;
       }
     }
-  }
-
-  /**
-   * Returns true if the currency is set in The property bag or if currency symbols are present in
-   * the prefix/suffix pattern.
-   */
-  private static boolean useCurrency(DecimalFormatProperties properties) {
-    return ((properties.getCurrency() != null)
-        || properties.getCurrencyPluralInfo() != null
-        || properties.getCurrencyUsage() != null
-        || AffixUtils.hasCurrencySymbols(properties.getPositivePrefixPattern())
-        || AffixUtils.hasCurrencySymbols(properties.getPositiveSuffixPattern())
-        || AffixUtils.hasCurrencySymbols(properties.getNegativePrefixPattern())
-        || AffixUtils.hasCurrencySymbols(properties.getNegativeSuffixPattern()));
   }
 
   /**

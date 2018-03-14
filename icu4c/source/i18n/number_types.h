@@ -301,6 +301,10 @@ class U_I18N_API NullableValue {
         return fValue;
     }
 
+    T getNoError() const {
+        return fValue;
+    }
+
   private:
     bool fNull;
     T fValue;

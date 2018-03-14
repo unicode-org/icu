@@ -17,6 +17,7 @@
 #include "unicode/plurrule.h"
 #include "unicode/ucurr.h"
 #include "unicode/unum.h"
+#include "unicode/uobject.h"
 
 #ifndef U_HIDE_DRAFT_API
 
@@ -2144,12 +2145,20 @@ class U_I18N_API FormattedNumber : public UMemory {
     void populateFieldPositionIterator(FieldPositionIterator &iterator, UErrorCode &status);
 
 #ifndef U_HIDE_INTERNAL_API
+
     /**
      *  Get an IFixedDecimal for plural rule selection.
      *  Internal, not intended for public use.
      *  @internal
      */
-    const IFixedDecimal& getFixedDecimal(UErrorCode &status) const;
+    const IFixedDecimal& getFixedDecimal(UErrorCode& status) const;
+
+    /** @internal */
+    const UnicodeString getPrefix(UErrorCode& status) const;
+
+    /** @internal */
+    const UnicodeString getSuffix(UErrorCode& status) const;
+
 #endif
 
     /**

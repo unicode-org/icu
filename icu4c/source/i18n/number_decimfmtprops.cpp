@@ -34,7 +34,7 @@ void DecimalFormatProperties::clear() {
     minimumGroupingDigits = -1;
     minimumIntegerDigits = -1;
     minimumSignificantDigits = -1;
-    multiplier = 0;
+    multiplier = 1;
     negativePrefix.setToBogus();
     negativePrefixPattern.setToBogus();
     negativeSuffix.setToBogus();
@@ -46,6 +46,7 @@ void DecimalFormatProperties::clear() {
     parseLenient = false;
     parseNoExponent = false;
     parseToBigDecimal = false;
+    parseAllInput = UNUM_MAYBE;
     positivePrefix.setToBogus();
     positivePrefixPattern.setToBogus();
     positiveSuffix.setToBogus();
@@ -88,6 +89,7 @@ bool DecimalFormatProperties::operator==(const DecimalFormatProperties &other) c
     eq = eq && parseLenient == other.parseLenient;
     eq = eq && parseNoExponent == other.parseNoExponent;
     eq = eq && parseToBigDecimal == other.parseToBigDecimal;
+    eq = eq && parseAllInput == other.parseAllInput;
     eq = eq && positivePrefix == other.positivePrefix;
     eq = eq && positivePrefixPattern == other.positivePrefixPattern;
     eq = eq && positiveSuffix == other.positiveSuffix;

@@ -102,7 +102,7 @@ void IgnorablesMatcher::accept(StringSegment&, ParsedNumber&) const {
 
 
 InfinityMatcher::InfinityMatcher(const DecimalFormatSymbols& dfs)
-        : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kInfinitySymbol), unisets::INFINITY) {
+        : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kInfinitySymbol), unisets::INFINITY_KEY) {
 }
 
 bool InfinityMatcher::isDisabled(const ParsedNumber& result) const {
