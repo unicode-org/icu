@@ -9,25 +9,24 @@
 #include <iostream>
 #include <fstream>
 
-// Include this even though we aren't linking against it.
+// We only use U8_* macros, which are entirely inline.
 #include "unicode/utf8.h"
 
-// Include this here, to avoid needing to compile and link part of common lib
-// (bootstrapping problem)
-#include "utf_impl.cpp"
+// This contains a codepage and ISO 14882:1998 illegality table.
+// Use "make gen-table" to rebuild it.
+#include "cptbl.h"
 
 /**
  * What is this?
- *  or even:
- * what IS this??
- * 
+ *
  * "This" is a preprocessor that makes an attempt to convert fully valid C++11 source code
- * in utf-8 into.. something else. Something consumable by certain compilers (Solaris, xlC)
- * which aren't quite there.
+ * in utf-8 into something consumable by certain compilers (Solaris, xlC)
+ * which aren't quite standards compliant.
  *
  * - u"<unicode>" or u'<unicode>' gets converted to u"\uNNNN" or u'\uNNNN'
  * - u8"<unicode>" gets converted to "\xAA\xBB\xCC\xDD" etc.
- * - if the system is EBCDIC-based, well, that's taken into account.
+ *   (some compilers do not support the u8 prefix correctly.)
+ * - if the system is EBCDIC-based, that is used to correct the input characters.
  *
  * Usage:
  *   escapesrc infile.cpp outfile.cpp
@@ -38,8 +37,8 @@
  * %.o: _%.cpp
  *       $(COMPILE.cc) ... $@ $<
  *
- * Naturally, 'escapesrc' has to be excluded from said build rule.
-
+ * In the Makefiles, SKIP_ESCAPING=YES is used to prevent escapesrc.cpp 
+ * from being itself escaped.
  */
 
 
@@ -48,10 +47,6 @@ static const char
   kTAB     = 0x09,
   kLF      = 0x0A,
   kCR      = 0x0D;
-
-// This contains a codepage and ISO 14882:1998 illegality table.
-// Use "make gen-table" to rebuild it.
-# include "cptbl.h"
 
 // For convenience
 # define cp1047_to_8859(c) cp1047_8859_1[c]
