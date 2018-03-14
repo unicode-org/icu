@@ -2009,7 +2009,7 @@ public class NumberFormatterApiTest {
         }
     }
 
-    private static void assertFormatDescending(
+    static void assertFormatDescending(
             String message,
             String skeleton,
             UnlocalizedNumberFormatter f,
@@ -2019,7 +2019,7 @@ public class NumberFormatterApiTest {
         assertFormatDescending(message, skeleton, f, locale, inputs, expected);
     }
 
-    private static void assertFormatDescendingBig(
+    static void assertFormatDescendingBig(
             String message,
             String skeleton,
             UnlocalizedNumberFormatter f,
@@ -2029,7 +2029,7 @@ public class NumberFormatterApiTest {
         assertFormatDescending(message, skeleton, f, locale, inputs, expected);
     }
 
-    private static void assertFormatDescending(
+    static void assertFormatDescending(
             String message,
             String skeleton,
             UnlocalizedNumberFormatter f,
@@ -2062,7 +2062,7 @@ public class NumberFormatterApiTest {
         }
     }
 
-    private static void assertFormatSingle(
+    static void assertFormatSingle(
             String message,
             String skeleton,
             UnlocalizedNumberFormatter f,
@@ -2088,7 +2088,7 @@ public class NumberFormatterApiTest {
         }
     }
 
-    private static void assertFormatSingleMeasure(
+    static void assertFormatSingleMeasure(
             String message,
             String skeleton,
             UnlocalizedNumberFormatter f,
@@ -2114,7 +2114,7 @@ public class NumberFormatterApiTest {
         }
     }
 
-    private static void assertUndefinedSkeleton(UnlocalizedNumberFormatter f) {
+    static void assertUndefinedSkeleton(UnlocalizedNumberFormatter f) {
         try {
             String skeleton = f.toSkeleton();
             fail("Expected toSkeleton to fail, but it passed, producing: " + skeleton);
