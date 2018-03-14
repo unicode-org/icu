@@ -6478,6 +6478,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/normalizer/UnicodeNormalizerConfo
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/normalizer/package.html svneol=native#text/html
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/AffixUtilsTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/DecimalQuantityTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/ExhaustiveNumberTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/ModifierTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/MutablePatternModifierTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/number/NumberFormatterApiTest.java svneol=native#text/plain%3Bcharset%3Dutf-8

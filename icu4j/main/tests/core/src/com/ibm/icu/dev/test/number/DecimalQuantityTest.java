@@ -9,7 +9,6 @@ import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -354,91 +353,6 @@ public class DecimalQuantityTest extends TestFmwk {
         expected.append("-19");
         assertEquals("Failed on append", expected.toString(), fq.toNumberString());
         assertNull("Failed health check", fq.checkHealth());
-    }
-
-    @Ignore
-    @Test
-    public void testConvertToAccurateDouble() {
-        // based on https://github.com/google/double-conversion/issues/28
-        double[] hardDoubles = {
-                1651087494906221570.0,
-                -5074790912492772E-327,
-                83602530019752571E-327,
-                2.207817077636718750000000000000,
-                1.818351745605468750000000000000,
-                3.941719055175781250000000000000,
-                3.738609313964843750000000000000,
-                3.967735290527343750000000000000,
-                1.328025817871093750000000000000,
-                3.920967102050781250000000000000,
-                1.015235900878906250000000000000,
-                1.335227966308593750000000000000,
-                1.344520568847656250000000000000,
-                2.879127502441406250000000000000,
-                3.695838928222656250000000000000,
-                1.845344543457031250000000000000,
-                3.793952941894531250000000000000,
-                3.211402893066406250000000000000,
-                2.565971374511718750000000000000,
-                0.965156555175781250000000000000,
-                2.700004577636718750000000000000,
-                0.767097473144531250000000000000,
-                1.780448913574218750000000000000,
-                2.624839782714843750000000000000,
-                1.305290222167968750000000000000,
-                3.834922790527343750000000000000, };
-
-        double[] integerDoubles = {
-                51423,
-                51423e10,
-                4.503599627370496E15,
-                6.789512076111555E15,
-                9.007199254740991E15,
-                9.007199254740992E15 };
-
-        for (double d : hardDoubles) {
-            checkDoubleBehavior(d, true, "");
-        }
-
-        for (double d : integerDoubles) {
-            checkDoubleBehavior(d, false, "");
-        }
-
-        assertEquals("NaN check failed",
-                Double.NaN,
-                new DecimalQuantity_DualStorageBCD(Double.NaN).toDouble());
-        assertEquals("Inf check failed",
-                Double.POSITIVE_INFINITY,
-                new DecimalQuantity_DualStorageBCD(Double.POSITIVE_INFINITY).toDouble());
-        assertEquals("-Inf check failed",
-                Double.NEGATIVE_INFINITY,
-                new DecimalQuantity_DualStorageBCD(Double.NEGATIVE_INFINITY).toDouble());
-
-        // Generate random doubles
-        String alert = "UNEXPECTED FAILURE: PLEASE REPORT THIS MESSAGE TO THE ICU TEAM: ";
-        Random rnd = new Random();
-        for (int i = 0; i < 10000; i++) {
-            double d = Double.longBitsToDouble(rnd.nextLong());
-            if (Double.isNaN(d) || Double.isInfinite(d))
-                continue;
-            checkDoubleBehavior(d, false, alert);
-        }
-    }
-
-    private static void checkDoubleBehavior(double d, boolean explicitRequired, String alert) {
-        DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD(d);
-        if (explicitRequired) {
-            assertTrue(alert + "Should be using approximate double", !fq.explicitExactDouble);
-        }
-        assertEquals(alert + "Initial construction from hard double", d, fq.toDouble());
-        fq.roundToInfinity();
-        if (explicitRequired) {
-            assertTrue(alert + "Should not be using approximate double", fq.explicitExactDouble);
-        }
-        assertDoubleEquals(alert + "After conversion to exact BCD (double)", d, fq.toDouble());
-        assertBigDecimalEquals(alert + "After conversion to exact BCD (BigDecimal)",
-                new BigDecimal(Double.toString(d)),
-                fq.toBigDecimal());
     }
 
     @Test
