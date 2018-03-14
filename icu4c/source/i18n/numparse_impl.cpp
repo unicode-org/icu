@@ -74,6 +74,14 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     return parser;
 }
 
+NumberParserImpl* NumberParserImpl::createParserFromProperties(
+        const number::impl::DecimalFormatProperties& properties, DecimalFormatSymbols symbols,
+        bool parseCurrency, bool optimize, UErrorCode& status) {
+    // TODO
+    status = U_UNSUPPORTED_ERROR;
+    return nullptr;
+}
+
 NumberParserImpl::NumberParserImpl(parse_flags_t parseFlags, bool computeLeads)
         : fParseFlags(parseFlags), fComputeLeads(computeLeads) {
 }

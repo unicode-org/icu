@@ -2147,11 +2147,10 @@ class U_I18N_API FormattedNumber : public UMemory {
 #ifndef U_HIDE_INTERNAL_API
 
     /**
-     *  Get an IFixedDecimal for plural rule selection.
-     *  Internal, not intended for public use.
+     *  Gets the raw DecimalQuantity for plural rule selection.
      *  @internal
      */
-    const IFixedDecimal& getFixedDecimal(UErrorCode& status) const;
+    void getDecimalQuantity(impl::DecimalQuantity& output, UErrorCode& status) const;
 
     /** @internal */
     const UnicodeString getPrefix(UErrorCode& status) const;

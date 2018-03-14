@@ -16,7 +16,14 @@ using namespace icu::number;
 using namespace icu::number::impl;
 
 
-
+UnlocalizedNumberFormatter NumberPropertyMapper::create(const DecimalFormatProperties& properties,
+                                                        const DecimalFormatSymbols& symbols,
+                                                        DecimalFormatProperties& exportedProperties,
+                                                        UErrorCode& status) {
+    // TODO
+    status = U_UNSUPPORTED_ERROR;
+    return NumberFormatter::with();
+}
 
 
 

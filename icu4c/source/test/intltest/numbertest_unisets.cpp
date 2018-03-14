@@ -45,7 +45,7 @@ void UniSetsTest::testSetCoverage() {
     const UnicodeSet &minusSign = *get(unisets::MINUS_SIGN);
     const UnicodeSet &percent = *get(unisets::PERCENT_SIGN);
     const UnicodeSet &permille = *get(unisets::PERMILLE_SIGN);
-    const UnicodeSet &infinity = *get(unisets::INFINITY);
+    const UnicodeSet &infinity = *get(unisets::INFINITY_KEY);
     const UnicodeSet &nanLead = *get(unisets::NAN_LEAD);
     const UnicodeSet &scientificLead = *get(unisets::SCIENTIFIC_LEAD);
 
