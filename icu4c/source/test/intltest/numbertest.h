@@ -166,6 +166,7 @@ class PatternModifierTest : public IntlTest {
 
 class PatternStringTest : public IntlTest {
   public:
+    void testLocalized();
     void testToPatternSimple();
     void testExceptionOnInvalid();
     void testBug13117();

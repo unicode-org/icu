@@ -1956,7 +1956,10 @@ public class DecimalFormat extends NumberFormat {
    */
   @Deprecated
   public synchronized int getMinimumGroupingDigits() {
-    return properties.getMinimumGroupingDigits();
+    if (properties.getMinimumGroupingDigits() > 0) {
+      return properties.getMinimumGroupingDigits();
+    }
+    return 1;
   }
 
   /**

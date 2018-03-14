@@ -5,6 +5,11 @@
 
 #if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
 
+// Allow implicit conversion from char16_t* to UnicodeString for this file:
+// Helpful in toString methods and elsewhere.
+#define UNISTR_FROM_STRING_EXPLICIT
+#define UNISTR_FROM_CHAR_EXPLICIT
+
 #include "uassert.h"
 #include "number_patternstring.h"
 #include "unicode/utf16.h"
@@ -633,7 +638,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
     int groupingSize = uprv_min(properties.secondaryGroupingSize, dosMax);
     int firstGroupingSize = uprv_min(properties.groupingSize, dosMax);
     int paddingWidth = uprv_min(properties.formatWidth, dosMax);
-    NullableValue <PadPosition> paddingLocation = properties.padPosition;
+    NullableValue<PadPosition> paddingLocation = properties.padPosition;
     UnicodeString paddingString = properties.padString;
     int minInt = uprv_max(uprv_min(properties.minimumIntegerDigits, dosMax), 0);
     int maxInt = uprv_min(properties.maximumIntegerDigits, dosMax);
@@ -839,6 +844,144 @@ int PatternStringUtils::escapePaddingString(UnicodeString input, UnicodeString& 
         output.insert(startIndex + offset, u'\'');
     }
     return output.length() - startLength;
+}
+
+UnicodeString
+PatternStringUtils::convertLocalized(UnicodeString input, DecimalFormatSymbols symbols, bool toLocalized,
+                                     UErrorCode& status) {
+    // Construct a table of strings to be converted between localized and standard.
+    static constexpr int32_t LEN = 21;
+    UnicodeString table[LEN][2];
+    int standIdx = toLocalized ? 0 : 1;
+    int localIdx = toLocalized ? 1 : 0;
+    table[0][standIdx] = u"%";
+    table[0][localIdx] = symbols.getConstSymbol(DecimalFormatSymbols::kPercentSymbol);
+    table[1][standIdx] = u"‰";
+    table[1][localIdx] = symbols.getConstSymbol(DecimalFormatSymbols::kPerMillSymbol);
+    table[2][standIdx] = u".";
+    table[2][localIdx] = symbols.getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
+    table[3][standIdx] = u",";
+    table[3][localIdx] = symbols.getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
+    table[4][standIdx] = u"-";
+    table[4][localIdx] = symbols.getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol);
+    table[5][standIdx] = u"+";
+    table[5][localIdx] = symbols.getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol);
+    table[6][standIdx] = u";";
+    table[6][localIdx] = symbols.getConstSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol);
+    table[7][standIdx] = u"@";
+    table[7][localIdx] = symbols.getConstSymbol(DecimalFormatSymbols::kSignificantDigitSymbol);
+    table[8][standIdx] = u"E";
+    table[8][localIdx] = symbols.getConstSymbol(DecimalFormatSymbols::kExponentialSymbol);
+    table[9][standIdx] = u"*";
+    table[9][localIdx] = symbols.getConstSymbol(DecimalFormatSymbols::kPadEscapeSymbol);
+    table[10][standIdx] = u"#";
+    table[10][localIdx] = symbols.getConstSymbol(DecimalFormatSymbols::kDigitSymbol);
+    for (int i = 0; i < 10; i++) {
+        table[11 + i][standIdx] = u'0' + i;
+        table[11 + i][localIdx] = symbols.getConstDigitSymbol(i);
+    }
+
+    // Special case: quotes are NOT allowed to be in any localIdx strings.
+    // Substitute them with '’' instead.
+    for (int32_t i = 0; i < LEN; i++) {
+        table[i][localIdx].findAndReplace(u'\'', u'’');
+    }
+
+    // Iterate through the string and convert.
+    // State table:
+    // 0 => base state
+    // 1 => first char inside a quoted sequence in input and output string
+    // 2 => inside a quoted sequence in input and output string
+    // 3 => first char after a close quote in input string;
+    // close quote still needs to be written to output string
+    // 4 => base state in input string; inside quoted sequence in output string
+    // 5 => first char inside a quoted sequence in input string;
+    // inside quoted sequence in output string
+    UnicodeString result;
+    int state = 0;
+    for (int offset = 0; offset < input.length(); offset++) {
+        UChar ch = input.charAt(offset);
+
+        // Handle a quote character (state shift)
+        if (ch == u'\'') {
+            if (state == 0) {
+                result.append(u'\'');
+                state = 1;
+                continue;
+            } else if (state == 1) {
+                result.append(u'\'');
+                state = 0;
+                continue;
+            } else if (state == 2) {
+                state = 3;
+                continue;
+            } else if (state == 3) {
+                result.append(u'\'');
+                result.append(u'\'');
+                state = 1;
+                continue;
+            } else if (state == 4) {
+                state = 5;
+                continue;
+            } else {
+                U_ASSERT(state == 5);
+                result.append(u'\'');
+                result.append(u'\'');
+                state = 4;
+                continue;
+            }
+        }
+
+        if (state == 0 || state == 3 || state == 4) {
+            for (auto& pair : table) {
+                // Perform a greedy match on this symbol string
+                UnicodeString temp = input.tempSubString(offset, pair[0].length());
+                if (temp == pair[0]) {
+                    // Skip ahead past this region for the next iteration
+                    offset += pair[0].length() - 1;
+                    if (state == 3 || state == 4) {
+                        result.append(u'\'');
+                        state = 0;
+                    }
+                    result.append(pair[1]);
+                    goto continue_outer;
+                }
+            }
+            // No replacement found. Check if a special quote is necessary
+            for (auto& pair : table) {
+                UnicodeString temp = input.tempSubString(offset, pair[1].length());
+                if (temp == pair[1]) {
+                    if (state == 0) {
+                        result.append(u'\'');
+                        state = 4;
+                    }
+                    result.append(ch);
+                    goto continue_outer;
+                }
+            }
+            // Still nothing. Copy the char verbatim. (Add a close quote if necessary)
+            if (state == 3 || state == 4) {
+                result.append(u'\'');
+                state = 0;
+            }
+            result.append(ch);
+        } else {
+            U_ASSERT(state == 1 || state == 2 || state == 5);
+            result.append(ch);
+            state = 2;
+        }
+        continue_outer:;
+    }
+    // Resolve final quotes
+    if (state == 3 || state == 4) {
+        result.append(u'\'');
+        state = 0;
+    }
+    if (state != 0) {
+        // Malformed localized pattern: unterminated quote
+        status = U_PATTERN_SYNTAX_ERROR;
+    }
+    return result;
 }
 
 void PatternStringUtils::patternInfoToStringBuilder(const AffixPatternProvider& patternInfo, bool isPrefix,
