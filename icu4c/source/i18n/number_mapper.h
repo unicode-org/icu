@@ -18,19 +18,23 @@ namespace impl {
 
 class PropertiesAffixPatternProvider : public AffixPatternProvider, public UMemory {
   public:
-    bool isBogus() const;
+    bool isBogus() const {
+        return fBogus;
+    }
 
-    void setTo(const DecimalFormatProperties& properties);
+    void setToBogus() {
+        fBogus = true;
+    }
 
-    void setToBogus();
+    void setTo(const DecimalFormatProperties& properties, UErrorCode& status);
 
     // AffixPatternProvider Methods:
 
-    char16_t charAt(int flags, int i) const U_OVERRIDE;
+    char16_t charAt(int32_t flags, int32_t i) const U_OVERRIDE;
 
-    int length(int flags) const U_OVERRIDE;
+    int32_t length(int32_t flags) const U_OVERRIDE;
 
-    UnicodeString getString(int flags) const U_OVERRIDE;
+    UnicodeString getString(int32_t flags) const U_OVERRIDE;
 
     bool hasCurrencySign() const U_OVERRIDE;
 
@@ -42,7 +46,7 @@ class PropertiesAffixPatternProvider : public AffixPatternProvider, public UMemo
 
     bool containsSymbolType(AffixPatternType, UErrorCode&) const U_OVERRIDE;
 
-    virtual bool hasBody() const U_OVERRIDE;
+    bool hasBody() const U_OVERRIDE;
 
   private:
     UnicodeString posPrefix;
@@ -50,25 +54,31 @@ class PropertiesAffixPatternProvider : public AffixPatternProvider, public UMemo
     UnicodeString negPrefix;
     UnicodeString negSuffix;
 
+    const UnicodeString& getStringInternal(int32_t flags) const;
+
     bool fBogus{true};
 };
 
 
 class CurrencyPluralInfoAffixProvider : public AffixPatternProvider, public UMemory {
   public:
-    bool isBogus() const;
+    bool isBogus() const {
+        return fBogus;
+    }
 
-    void setTo(const CurrencyPluralInfo& cpi);
+    void setToBogus() {
+        fBogus = true;
+    }
 
-    void setToBogus();
+    void setTo(const CurrencyPluralInfo& cpi, UErrorCode& status);
 
     // AffixPatternProvider Methods:
 
-    char16_t charAt(int flags, int i) const U_OVERRIDE;
+    char16_t charAt(int32_t flags, int32_t i) const U_OVERRIDE;
 
-    int length(int flags) const U_OVERRIDE;
+    int32_t length(int32_t flags) const U_OVERRIDE;
 
-    UnicodeString getString(int flags) const U_OVERRIDE;
+    UnicodeString getString(int32_t flags) const U_OVERRIDE;
 
     bool hasCurrencySign() const U_OVERRIDE;
 
@@ -80,7 +90,7 @@ class CurrencyPluralInfoAffixProvider : public AffixPatternProvider, public UMem
 
     bool containsSymbolType(AffixPatternType, UErrorCode&) const U_OVERRIDE;
 
-    virtual bool hasBody() const U_OVERRIDE;
+    bool hasBody() const U_OVERRIDE;
 
   private:
     ParsedPatternInfo affixesByPlural[StandardPlural::COUNT];

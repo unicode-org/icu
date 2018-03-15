@@ -11,6 +11,8 @@
 
 #include "number_mapper.h"
 #include "number_patternstring.h"
+#include "unicode/errorcode.h"
+#include "number_utils.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -61,10 +63,10 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     AffixPatternProvider* affixProvider;
     if (properties.currencyPluralInfo.fPtr.isNull()) {
         warehouse.currencyPluralInfoAPP.setToBogus();
-        warehouse.propertiesAPP.setTo(properties);
+        warehouse.propertiesAPP.setTo(properties, status);
         affixProvider = &warehouse.propertiesAPP;
     } else {
-        warehouse.currencyPluralInfoAPP.setTo(*properties.currencyPluralInfo.fPtr);
+        warehouse.currencyPluralInfoAPP.setTo(*properties.currencyPluralInfo.fPtr, status);
         warehouse.propertiesAPP.setToBogus();
         affixProvider = &warehouse.currencyPluralInfoAPP;
     }
@@ -229,8 +231,8 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
                 macros.rounder = Rounder::constructSignificant(1, maxFrac_ + 1).withMode(roundingMode);
             } else {
                 // All other scientific patterns, which mean round to minInt+maxFrac
-                macros.rounder = Rounder::constructSignificant(minInt_ + minFrac_, minInt_ + maxFrac_)
-                        .withMode(roundingMode);
+                macros.rounder = Rounder::constructSignificant(
+                        minInt_ + minFrac_, minInt_ + maxFrac_).withMode(roundingMode);
             }
         }
     }
@@ -254,9 +256,9 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     /////////////////
 
     if (properties.magnitudeMultiplier != 0) {
-        macros.multiplier = MultiplierImpl::magnitude(properties.magnitudeMultiplier);
+        macros.multiplier = Multiplier::magnitude(properties.magnitudeMultiplier);
     } else if (properties.multiplier != 1) {
-        macros.multiplier = MultiplierImpl::integer(properties.multiplier);
+        macros.multiplier = Multiplier::integer(properties.multiplier);
     }
 
     //////////////////////
@@ -303,8 +305,127 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
 }
 
 
-void PropertiesAffixPatternProvider::setTo(const DecimalFormatProperties& properties) {
-    // TODO
+void PropertiesAffixPatternProvider::setTo(const DecimalFormatProperties& properties, UErrorCode&) {
+    // There are two ways to set affixes in DecimalFormat: via the pattern string (applyPattern), and via the
+    // explicit setters (setPositivePrefix and friends).  The way to resolve the settings is as follows:
+    //
+    // 1) If the explicit setting is present for the field, use it.
+    // 2) Otherwise, follows UTS 35 rules based on the pattern string.
+    //
+    // Importantly, the explicit setters affect only the one field they override.  If you set the positive
+    // prefix, that should not affect the negative prefix.  Since it is impossible for the user of this class
+    // to know whether the origin for a string was the override or the pattern, we have to say that we always
+    // have a negative subpattern and perform all resolution logic here.
+
+    // Convenience: Extract the properties into local variables.
+    // Variables are named with three chars: [p/n][p/s][o/p]
+    // [p/n] => p for positive, n for negative
+    // [p/s] => p for prefix, s for suffix
+    // [o/p] => o for escaped custom override string, p for pattern string
+    UnicodeString ppo = AffixUtils::escape(UnicodeStringCharSequence(properties.positivePrefix));
+    UnicodeString pso = AffixUtils::escape(UnicodeStringCharSequence(properties.positiveSuffix));
+    UnicodeString npo = AffixUtils::escape(UnicodeStringCharSequence(properties.negativePrefix));
+    UnicodeString nso = AffixUtils::escape(UnicodeStringCharSequence(properties.negativeSuffix));
+    const UnicodeString& ppp = properties.positivePrefixPattern;
+    const UnicodeString& psp = properties.positiveSuffixPattern;
+    const UnicodeString& npp = properties.negativePrefixPattern;
+    const UnicodeString& nsp = properties.negativeSuffixPattern;
+
+    if (!properties.positivePrefix.isBogus()) {
+        posPrefix = ppo;
+    } else if (!ppp.isBogus()) {
+        posPrefix = ppp;
+    } else {
+        // UTS 35: Default positive prefix is empty string.
+        posPrefix = u"";
+    }
+
+    if (!properties.positiveSuffix.isBogus()) {
+        posSuffix = pso;
+    } else if (!psp.isBogus()) {
+        posSuffix = psp;
+    } else {
+        // UTS 35: Default positive suffix is empty string.
+        posSuffix = u"";
+    }
+
+    if (!properties.negativePrefix.isBogus()) {
+        negPrefix = npo;
+    } else if (!npp.isBogus()) {
+        negPrefix = npp;
+    } else {
+        // UTS 35: Default negative prefix is "-" with positive prefix.
+        // Important: We prepend the "-" to the pattern, not the override!
+        negPrefix = ppp.isBogus() ? u"-" : u"-" + ppp;
+    }
+
+    if (!properties.negativeSuffix.isBogus()) {
+        negSuffix = nso;
+    } else if (!nsp.isBogus()) {
+        negSuffix = nsp;
+    } else {
+        // UTS 35: Default negative prefix is the positive prefix.
+        negSuffix = psp.isBogus() ? u"" : psp;
+    }
+}
+
+char16_t PropertiesAffixPatternProvider::charAt(int flags, int i) const {
+    return getStringInternal(flags).charAt(i);
+}
+
+int PropertiesAffixPatternProvider::length(int flags) const {
+    return getStringInternal(flags).length();
+}
+
+UnicodeString PropertiesAffixPatternProvider::getString(int32_t flags) const {
+    return getStringInternal(flags);
+}
+
+const UnicodeString& PropertiesAffixPatternProvider::getStringInternal(int32_t flags) const {
+    bool prefix = (flags & AFFIX_PREFIX) != 0;
+    bool negative = (flags & AFFIX_NEGATIVE_SUBPATTERN) != 0;
+    if (prefix && negative) {
+        return negPrefix;
+    } else if (prefix) {
+        return posPrefix;
+    } else if (negative) {
+        return negSuffix;
+    } else {
+        return posSuffix;
+    }
+}
+
+bool PropertiesAffixPatternProvider::positiveHasPlusSign() const {
+    // TODO: Change the internal APIs to propagate out the error?
+    ErrorCode localStatus;
+    return AffixUtils::containsType(UnicodeStringCharSequence(posPrefix), TYPE_PLUS_SIGN, localStatus) ||
+           AffixUtils::containsType(UnicodeStringCharSequence(posSuffix), TYPE_PLUS_SIGN, localStatus);
+}
+
+bool PropertiesAffixPatternProvider::hasNegativeSubpattern() const {
+    // See comments in the constructor for more information on why this is always true.
+    return true;
+}
+
+bool PropertiesAffixPatternProvider::negativeHasMinusSign() const {
+    ErrorCode localStatus;
+    return AffixUtils::containsType(UnicodeStringCharSequence(negPrefix), TYPE_MINUS_SIGN, localStatus) ||
+           AffixUtils::containsType(UnicodeStringCharSequence(negSuffix), TYPE_MINUS_SIGN, localStatus);
+}
+
+bool PropertiesAffixPatternProvider::hasCurrencySign() const {
+    ErrorCode localStatus;
+    return AffixUtils::hasCurrencySymbols(UnicodeStringCharSequence(posPrefix), localStatus) ||
+           AffixUtils::hasCurrencySymbols(UnicodeStringCharSequence(posSuffix), localStatus) ||
+           AffixUtils::hasCurrencySymbols(UnicodeStringCharSequence(negPrefix), localStatus) ||
+           AffixUtils::hasCurrencySymbols(UnicodeStringCharSequence(negSuffix), localStatus);
+}
+
+bool PropertiesAffixPatternProvider::containsSymbolType(AffixPatternType type, UErrorCode& status) const {
+    return AffixUtils::containsType(UnicodeStringCharSequence(posPrefix), type, status) ||
+           AffixUtils::containsType(UnicodeStringCharSequence(posSuffix), type, status) ||
+           AffixUtils::containsType(UnicodeStringCharSequence(negPrefix), type, status) ||
+           AffixUtils::containsType(UnicodeStringCharSequence(negSuffix), type, status);
 }
 
 bool PropertiesAffixPatternProvider::hasBody() const {
@@ -312,8 +433,48 @@ bool PropertiesAffixPatternProvider::hasBody() const {
 }
 
 
-void CurrencyPluralInfoAffixProvider::setTo(const CurrencyPluralInfo& cpi) {
-    // TODO
+void CurrencyPluralInfoAffixProvider::setTo(const CurrencyPluralInfo& cpi, UErrorCode& status) {
+    for (int32_t plural = 0; plural < StandardPlural::COUNT; plural++) {
+        const char* keyword = StandardPlural::getKeyword(static_cast<StandardPlural::Form>(plural));
+        UnicodeString patternString;
+        patternString = cpi.getCurrencyPluralPattern(keyword, patternString);
+        PatternParser::parseToPatternInfo(patternString, affixesByPlural[plural], status);
+    }
+}
+
+char16_t CurrencyPluralInfoAffixProvider::charAt(int32_t flags, int32_t i) const {
+    int32_t pluralOrdinal = (flags & AFFIX_PLURAL_MASK);
+    return affixesByPlural[pluralOrdinal].charAt(flags, i);
+}
+
+int32_t CurrencyPluralInfoAffixProvider::length(int32_t flags) const {
+    int32_t pluralOrdinal = (flags & AFFIX_PLURAL_MASK);
+    return affixesByPlural[pluralOrdinal].length(flags);
+}
+
+UnicodeString CurrencyPluralInfoAffixProvider::getString(int32_t flags) const {
+    int32_t pluralOrdinal = (flags & AFFIX_PLURAL_MASK);
+    return affixesByPlural[pluralOrdinal].getString(flags);
+}
+
+bool CurrencyPluralInfoAffixProvider::positiveHasPlusSign() const {
+    return affixesByPlural[StandardPlural::OTHER].positiveHasPlusSign();
+}
+
+bool CurrencyPluralInfoAffixProvider::hasNegativeSubpattern() const {
+    return affixesByPlural[StandardPlural::OTHER].hasNegativeSubpattern();
+}
+
+bool CurrencyPluralInfoAffixProvider::negativeHasMinusSign() const {
+    return affixesByPlural[StandardPlural::OTHER].negativeHasMinusSign();
+}
+
+bool CurrencyPluralInfoAffixProvider::hasCurrencySign() const {
+    return affixesByPlural[StandardPlural::OTHER].hasCurrencySign();
+}
+
+bool CurrencyPluralInfoAffixProvider::containsSymbolType(AffixPatternType type, UErrorCode& status) const {
+    return affixesByPlural[StandardPlural::OTHER].containsSymbolType(type, status);
 }
 
 bool CurrencyPluralInfoAffixProvider::hasBody() const {
