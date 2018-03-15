@@ -64,6 +64,7 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern, DecimalFormatSymbols*
 DecimalFormat::DecimalFormat(const DecimalFormatSymbols* symbolsToAdopt, UErrorCode& status) {
     fProperties.adoptInsteadAndCheckErrorCode(new DecimalFormatProperties(), status);
     fExportedProperties.adoptInsteadAndCheckErrorCode(new DecimalFormatProperties(), status);
+    fWarehouse.adoptInsteadAndCheckErrorCode(new DecimalFormatWarehouse(), status);
     if (symbolsToAdopt == nullptr) {
         fSymbols.adoptInsteadAndCheckErrorCode(new DecimalFormatSymbols(status), status);
     } else {
@@ -313,8 +314,10 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern, const DecimalFormatSy
 DecimalFormat::DecimalFormat(const DecimalFormat& source) {
     fProperties.adoptInstead(new DecimalFormatProperties());
     fExportedProperties.adoptInstead(new DecimalFormatProperties());
+    fWarehouse.adoptInstead(new DecimalFormatWarehouse());
     fSymbols.adoptInstead(new DecimalFormatSymbols(*source.fSymbols));
-    if (fProperties == nullptr || fExportedProperties == nullptr || fSymbols == nullptr) {
+    if (fProperties == nullptr || fExportedProperties == nullptr || fWarehouse == nullptr ||
+        fSymbols == nullptr) {
         return;
     }
     refreshFormatterNoError();
@@ -862,7 +865,7 @@ void DecimalFormat::formatToDecimalQuantity(const Formattable& number, DecimalQu
     status = U_UNSUPPORTED_ERROR;
 }
 
-number::LocalizedNumberFormatter DecimalFormat::toNumberFormatter() const {
+const number::LocalizedNumberFormatter& DecimalFormat::toNumberFormatter() const {
     return *fFormatter;
 }
 
@@ -897,14 +900,16 @@ void DecimalFormat::refreshFormatter(UErrorCode& status) {
     fFormatter.adoptInsteadAndCheckErrorCode(
             new LocalizedNumberFormatter(
                     NumberPropertyMapper::create(
-                            *fProperties, *fSymbols, *fExportedProperties, status).locale(
+                            *fProperties, *fSymbols, *fWarehouse, *fExportedProperties, status).locale(
                             locale)), status);
-    fParser.adoptInsteadAndCheckErrorCode(
-            NumberParserImpl::createParserFromProperties(
-                    *fProperties, *fSymbols, false, false, status), status);
-    fParserWithCurrency.adoptInsteadAndCheckErrorCode(
-            NumberParserImpl::createParserFromProperties(
-                    *fProperties, *fSymbols, true, false, status), status);
+
+    // fParser.adoptInsteadAndCheckErrorCode(
+    //         NumberParserImpl::createParserFromProperties(
+    //                 *fProperties, *fSymbols, false, false, status), status);
+
+    // fParserWithCurrency.adoptInsteadAndCheckErrorCode(
+    //         NumberParserImpl::createParserFromProperties(
+    //                 *fProperties, *fSymbols, true, false, status), status);
 }
 
 void DecimalFormat::refreshFormatterNoError() {

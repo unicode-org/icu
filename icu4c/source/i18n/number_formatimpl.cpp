@@ -276,6 +276,12 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
     /////////////////////////////////////////////////////////////////////////////////////
 
+    // Multiplier (compatibility mode value).
+    if (macros.multiplier.isValid()) {
+        fMicros.helpers.multiplier.setAndChain(macros.multiplier, chain);
+        chain = &fMicros.helpers.multiplier;
+    }
+
     // Rounding strategy
     if (!macros.rounder.isBogus()) {
         fMicros.rounding = macros.rounder;
@@ -342,7 +348,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     // Middle modifier (patterns, positive/negative, currency symbols, percent)
     auto patternModifier = new MutablePatternModifier(false);
     fPatternModifier.adoptInstead(patternModifier);
-    patternModifier->setPatternInfo(fPatternInfo.getAlias());
+    patternModifier->setPatternInfo(
+            macros.affixProvider != nullptr ? macros.affixProvider
+                                            : static_cast<const AffixPatternProvider*>(fPatternInfo.getAlias()));
     patternModifier->setPatternAttributes(fMicros.sign, isPermille);
     if (patternModifier->needsPlurals()) {
         patternModifier->setSymbols(

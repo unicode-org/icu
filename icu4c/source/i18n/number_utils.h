@@ -13,6 +13,7 @@
 #include "number_scientific.h"
 #include "number_patternstring.h"
 #include "number_modifiers.h"
+#include "number_multiplier.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
@@ -73,6 +74,7 @@ struct MicroProps : public MicroPropsGenerator {
         ScientificModifier scientificModifier;
         EmptyModifier emptyWeakModifier{false};
         EmptyModifier emptyStrongModifier{true};
+        MultiplierChain multiplier;
     } helpers;
 
 
