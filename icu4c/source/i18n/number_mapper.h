@@ -8,9 +8,94 @@
 #define __NUMBER_MAPPER_H__
 
 #include "number_types.h"
+#include "unicode/currpinf.h"
+#include "standardplural.h"
+#include "number_patternstring.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
+
+
+class PropertiesAffixPatternProvider : public AffixPatternProvider, public UMemory {
+  public:
+    bool isBogus() const;
+
+    void setTo(const DecimalFormatProperties& properties);
+
+    void setToBogus();
+
+    // AffixPatternProvider Methods:
+
+    char16_t charAt(int flags, int i) const U_OVERRIDE;
+
+    int length(int flags) const U_OVERRIDE;
+
+    UnicodeString getString(int flags) const U_OVERRIDE;
+
+    bool hasCurrencySign() const U_OVERRIDE;
+
+    bool positiveHasPlusSign() const U_OVERRIDE;
+
+    bool hasNegativeSubpattern() const U_OVERRIDE;
+
+    bool negativeHasMinusSign() const U_OVERRIDE;
+
+    bool containsSymbolType(AffixPatternType, UErrorCode&) const U_OVERRIDE;
+
+    virtual bool hasBody() const U_OVERRIDE;
+
+  private:
+    UnicodeString posPrefix;
+    UnicodeString posSuffix;
+    UnicodeString negPrefix;
+    UnicodeString negSuffix;
+
+    bool fBogus{true};
+};
+
+
+class CurrencyPluralInfoAffixProvider : public AffixPatternProvider, public UMemory {
+  public:
+    bool isBogus() const;
+
+    void setTo(const CurrencyPluralInfo& cpi);
+
+    void setToBogus();
+
+    // AffixPatternProvider Methods:
+
+    char16_t charAt(int flags, int i) const U_OVERRIDE;
+
+    int length(int flags) const U_OVERRIDE;
+
+    UnicodeString getString(int flags) const U_OVERRIDE;
+
+    bool hasCurrencySign() const U_OVERRIDE;
+
+    bool positiveHasPlusSign() const U_OVERRIDE;
+
+    bool hasNegativeSubpattern() const U_OVERRIDE;
+
+    bool negativeHasMinusSign() const U_OVERRIDE;
+
+    bool containsSymbolType(AffixPatternType, UErrorCode&) const U_OVERRIDE;
+
+    virtual bool hasBody() const U_OVERRIDE;
+
+  private:
+    ParsedPatternInfo affixesByPlural[StandardPlural::COUNT];
+
+    bool fBogus{true};
+};
+
+
+/**
+ * A struct for ownership of a few objects needed for formatting.
+ */
+struct DecimalFormatWarehouse {
+    PropertiesAffixPatternProvider propertiesAPP;
+    CurrencyPluralInfoAffixProvider currencyPluralInfoAPP;
+};
 
 
 /**
@@ -20,20 +105,15 @@ class NumberPropertyMapper {
   public:
     /** Convenience method to create a NumberFormatter directly from Properties. */
     static UnlocalizedNumberFormatter create(const DecimalFormatProperties& properties,
-                                             const DecimalFormatSymbols& symbols, UErrorCode& status);
+                                             const DecimalFormatSymbols& symbols,
+                                             DecimalFormatWarehouse& warehouse, UErrorCode& status);
 
     /** Convenience method to create a NumberFormatter directly from Properties. */
     static UnlocalizedNumberFormatter create(const DecimalFormatProperties& properties,
                                              const DecimalFormatSymbols& symbols,
+                                             DecimalFormatWarehouse& warehouse,
                                              DecimalFormatProperties& exportedProperties,
                                              UErrorCode& status);
-
-    /**
-     * Convenience method to create a NumberFormatter directly from a pattern string. Something like this
-     * could become public API if there is demand.
-     */
-    static UnlocalizedNumberFormatter create(const UnicodeString& pattern,
-                                             const DecimalFormatSymbols& symbols, UErrorCode& status);
 
     /**
      * Creates a new {@link MacroProps} object based on the content of a {@link DecimalFormatProperties}
@@ -49,9 +129,9 @@ class NumberPropertyMapper {
      *            getters.
      * @return A new MacroProps containing all of the information in the Properties.
      */
-    static void oldToNew(const DecimalFormatProperties& properties, const DecimalFormatSymbols& symbols,
-                         DecimalFormatProperties& exportedProperties, MacroProps& output,
-                         UErrorCode& status);
+    static MacroProps oldToNew(const DecimalFormatProperties& properties,
+                               const DecimalFormatSymbols& symbols, DecimalFormatWarehouse& warehouse,
+                               DecimalFormatProperties* exportedProperties, UErrorCode& status);
 };
 
 

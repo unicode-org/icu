@@ -51,6 +51,15 @@ Grouper Grouper::forStrategy(UGroupingStrategy grouping) {
     }
 }
 
+Grouper Grouper::forProperties(const DecimalFormatProperties& properties) {
+    auto grouping1 = static_cast<int16_t>(properties.groupingSize);
+    auto grouping2 = static_cast<int16_t>(properties.secondaryGroupingSize);
+    auto minGrouping = static_cast<int16_t>(properties.minimumGroupingDigits);
+    grouping1 = grouping1 > 0 ? grouping1 : grouping2 > 0 ? grouping2 : grouping1;
+    grouping2 = grouping2 > 0 ? grouping2 : grouping1;
+    return {grouping1, grouping2, minGrouping};
+}
+
 void Grouper::setLocaleData(const impl::ParsedPatternInfo &patternInfo, const Locale& locale) {
     if (fGrouping1 != -2 && fGrouping2 != -4) {
         return;

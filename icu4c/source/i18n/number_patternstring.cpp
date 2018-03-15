@@ -32,6 +32,11 @@ PatternParser::parseToProperties(const UnicodeString& pattern, IgnoreRounding ig
     return properties;
 }
 
+DecimalFormatProperties PatternParser::parseToProperties(const UnicodeString& pattern,
+                                                         UErrorCode& status) {
+    return parseToProperties(pattern, IGNORE_ROUNDING_NEVER, status);
+}
+
 void
 PatternParser::parseToExistingProperties(const UnicodeString& pattern, DecimalFormatProperties& properties,
                                          IgnoreRounding ignoreRounding, UErrorCode& status) {
