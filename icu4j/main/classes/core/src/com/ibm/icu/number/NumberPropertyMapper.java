@@ -54,6 +54,8 @@ final class NumberPropertyMapper {
     /**
      * Convenience method to create a NumberFormatter directly from a pattern string. Something like this
      * could become public API if there is demand.
+     *
+     * NOTE: This appears to be dead code.
      */
     public static UnlocalizedNumberFormatter create(String pattern, DecimalFormatSymbols symbols) {
         DecimalFormatProperties properties = PatternStringParser.parseToProperties(pattern);
@@ -159,13 +161,13 @@ final class NumberPropertyMapper {
         if (minInt == 0 && maxFrac != 0) {
             // Force a digit after the decimal point.
             minFrac = minFrac <= 0 ? 1 : minFrac;
-            maxFrac = maxFrac < 0 ? Integer.MAX_VALUE : maxFrac < minFrac ? minFrac : maxFrac;
+            maxFrac = maxFrac < 0 ? -1 : maxFrac < minFrac ? minFrac : maxFrac;
             minInt = 0;
             maxInt = maxInt < 0 ? -1 : maxInt > RoundingUtils.MAX_INT_FRAC_SIG ? -1 : maxInt;
         } else {
             // Force a digit before the decimal point.
             minFrac = minFrac < 0 ? 0 : minFrac;
-            maxFrac = maxFrac < 0 ? Integer.MAX_VALUE : maxFrac < minFrac ? minFrac : maxFrac;
+            maxFrac = maxFrac < 0 ? -1 : maxFrac < minFrac ? minFrac : maxFrac;
             minInt = minInt <= 0 ? 1 : minInt > RoundingUtils.MAX_INT_FRAC_SIG ? 1 : minInt;
             maxInt = maxInt < 0 ? -1
                     : maxInt < minInt ? minInt : maxInt > RoundingUtils.MAX_INT_FRAC_SIG ? -1 : maxInt;
@@ -210,9 +212,7 @@ final class NumberPropertyMapper {
         /////////////
 
         if (properties.getFormatWidth() != -1) {
-            macros.padder = new Padder(properties.getPadString(),
-                    properties.getFormatWidth(),
-                    properties.getPadPosition());
+            macros.padder = Padder.forProperties(properties);
         }
 
         ///////////////////////////////

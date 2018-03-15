@@ -8,12 +8,15 @@
 #include "unicode/numberformatter.h"
 #include "number_types.h"
 #include "number_stringbuilder.h"
+#include "number_decimfmtprops.h"
 
 using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
 
 namespace {
+
+static UChar32 kFallbackPadChar = 0x0020;
 
 int32_t
 addPaddingHelper(UChar32 paddingCp, int32_t requiredPadding, NumberStringBuilder &string, int32_t index,
@@ -45,6 +48,16 @@ Padder Padder::codePoints(UChar32 cp, int32_t targetWidth, UNumberFormatPadPosit
     } else {
         return {U_NUMBER_ARG_OUTOFBOUNDS_ERROR};
     }
+}
+
+Padder Padder::forProperties(const DecimalFormatProperties& properties) {
+    UChar32 padCp;
+    if (properties.padString.length() > 0) {
+        padCp = properties.padString.char32At(0);
+    } else {
+        padCp = kFallbackPadChar;
+    }
+    return {padCp, properties.formatWidth, properties.padPosition.getOrDefault(UNUM_PAD_BEFORE_PREFIX)};
 }
 
 int32_t Padder::padAndApply(const Modifier &mod1, const Modifier &mod2,

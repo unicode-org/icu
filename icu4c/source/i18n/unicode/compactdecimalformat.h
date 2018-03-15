@@ -112,7 +112,7 @@ public:
      *                  other classes have different class IDs.
      * @stable ICU 51
      */
-    virtual UClassID getDynamicClassID() const;
+    virtual UClassID getDynamicClassID() const U_OVERRIDE;
 };
 
 U_NAMESPACE_END

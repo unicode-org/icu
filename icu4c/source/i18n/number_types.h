@@ -305,6 +305,10 @@ class U_I18N_API NullableValue {
         return fValue;
     }
 
+    T getOrDefault(T defaultValue) const {
+        return fNull ? defaultValue : fValue;
+    }
+
   private:
     bool fNull;
     T fValue;

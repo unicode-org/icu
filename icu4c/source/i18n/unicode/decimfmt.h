@@ -42,7 +42,6 @@
 #include "unicode/stringpiece.h"
 #include "unicode/curramt.h"
 #include "unicode/enumset.h"
-#include "unicode/numberformatter.h"
 
 #ifndef U_HIDE_INTERNAL_API
 /**
@@ -68,9 +67,11 @@ class PluralRules;
 class VisibleDigitsWithExponent;
 
 namespace number {
+class LocalizedNumberFormatter;
 namespace impl {
 class DecimalQuantity;
 struct DecimalFormatProperties;
+struct DecimalFormatWarehouse;
 }
 }
 
@@ -1948,7 +1949,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @return An instance of LocalizedNumberFormatter with the same behavior as this DecimalFormat.
      * @draft ICU 62
      */
-    number::LocalizedNumberFormatter toNumberFormatter() const;
+    const number::LocalizedNumberFormatter& toNumberFormatter() const;
 
     /**
      * Return the class ID for this class.  This is useful only for
@@ -2022,6 +2023,9 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * The effective properties as exported from the formatter object. Used by the getters.
      */
     LocalPointer<number::impl::DecimalFormatProperties> fExportedProperties;
+
+    /** A field for a few additional helper object that need ownership. */
+    LocalPointer<number::impl::DecimalFormatWarehouse> fWarehouse;
 
     LocalPointer<const numparse::impl::NumberParserImpl> fParser;
     LocalPointer<const numparse::impl::NumberParserImpl> fParserWithCurrency;

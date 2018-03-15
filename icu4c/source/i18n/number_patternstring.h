@@ -177,6 +177,8 @@ class U_I18N_API PatternParser {
     static DecimalFormatProperties parseToProperties(const UnicodeString& pattern,
                                                      IgnoreRounding ignoreRounding, UErrorCode& status);
 
+    static DecimalFormatProperties parseToProperties(const UnicodeString& pattern, UErrorCode& status);
+
     /**
      * Parses a pattern string into an existing property bag. All properties that can be encoded into a pattern string
      * will be overwritten with either their default value or with the value coming from the pattern string. Properties
