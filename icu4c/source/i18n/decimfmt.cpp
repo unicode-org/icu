@@ -29,6 +29,9 @@ using ERoundingMode = icu::DecimalFormat::ERoundingMode;
 using EPadPosition = icu::DecimalFormat::EPadPosition;
 
 
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DecimalFormat)
+
+
 DecimalFormat::DecimalFormat(UErrorCode& status)
         : DecimalFormat(nullptr, status) {
 }
@@ -446,13 +449,14 @@ DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo, Fi
     return appendTo;
 }
 
-void
-DecimalFormat::parse(const UnicodeString& text, Formattable& result, ParsePosition& parsePosition) const {
+void DecimalFormat::parse(const UnicodeString& /*text*/, Formattable& /*result*/,
+                          ParsePosition& /*parsePosition*/) const {
     // FIXME
 }
 
-CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& text, ParsePosition& pos) const {
+CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& /*text*/, ParsePosition& /*pos*/) const {
     // FIXME
+    return nullptr;
 }
 
 const DecimalFormatSymbols* DecimalFormat::getDecimalFormatSymbols(void) const {
@@ -855,26 +859,34 @@ UCurrencyUsage DecimalFormat::getCurrencyUsage() const {
 
 void
 DecimalFormat::formatToDecimalQuantity(double number, DecimalQuantity& output, UErrorCode& status) const {
-    // TODO
-    status = U_UNSUPPORTED_ERROR;
+    fFormatter->formatDouble(number, status).getDecimalQuantity(output, status);
 }
 
 void DecimalFormat::formatToDecimalQuantity(const Formattable& number, DecimalQuantity& output,
                                             UErrorCode& status) const {
-    // TODO
-    status = U_UNSUPPORTED_ERROR;
+    // Check if the Formattable is a DecimalQuantity
+    DecimalQuantity* dq = number.getDecimalQuantity();
+    if (dq != nullptr) {
+        fFormatter->formatDecimalQuantity(*dq, status).getDecimalQuantity(output, status);
+        return;
+    }
+
+    // If not, it must be Double, Long (int32_t), or Int64:
+    switch (number.getType()) {
+        case Formattable::kDouble:
+            fFormatter->formatDouble(number.getDouble(), status).getDecimalQuantity(output, status);
+            break;
+        case Formattable::kLong:
+            fFormatter->formatInt(number.getLong(), status).getDecimalQuantity(output, status);
+            break;
+        case Formattable::kInt64:
+        default:
+            fFormatter->formatInt(number.getInt64(), status).getDecimalQuantity(output, status);
+    }
 }
 
 const number::LocalizedNumberFormatter& DecimalFormat::toNumberFormatter() const {
     return *fFormatter;
-}
-
-UClassID DecimalFormat::getStaticClassID() {
-    // TODO
-}
-
-UClassID DecimalFormat::getDynamicClassID() const {
-    // TODO
 }
 
 /** Rebuilds the formatter object from the property bag. */

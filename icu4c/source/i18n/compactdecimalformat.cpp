@@ -10,23 +10,38 @@
 #define UNISTR_FROM_STRING_EXPLICIT
 
 #include "unicode/compactdecimalformat.h"
+#include "number_decimfmtprops.h"
 
 using namespace icu;
 
 
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(CompactDecimalFormat)
+
+
 CompactDecimalFormat*
 CompactDecimalFormat::createInstance(const Locale& inLocale, UNumberCompactStyle style,
-                                     UErrorCode& status) {}
+                                     UErrorCode& status) {
+    return new CompactDecimalFormat(inLocale, style, status);
+}
+
+CompactDecimalFormat::CompactDecimalFormat(const Locale& inLocale, UNumberCompactStyle style,
+                                           UErrorCode& status)
+        : DecimalFormat(new DecimalFormatSymbols(inLocale, status), status) {
+    // Minimal properties: let the non-shim code path do most of the logic for us.
+    fProperties->compactStyle = style;
+    fProperties->groupingSize = -2; // do not forward grouping information
+    fProperties->minimumGroupingDigits = 2;
+    refreshFormatter(status);
+}
 
 CompactDecimalFormat::CompactDecimalFormat(const CompactDecimalFormat& source) = default;
 
 CompactDecimalFormat::~CompactDecimalFormat() = default;
 
-CompactDecimalFormat& CompactDecimalFormat::operator=(const CompactDecimalFormat& rhs) {}
-
-UClassID CompactDecimalFormat::getStaticClassID() {}
-
-UClassID CompactDecimalFormat::getDynamicClassID() const {}
+CompactDecimalFormat& CompactDecimalFormat::operator=(const CompactDecimalFormat& rhs) {
+    DecimalFormat::operator=(rhs);
+    return *this;
+}
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

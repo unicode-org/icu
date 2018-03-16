@@ -112,7 +112,10 @@ public:
      *                  other classes have different class IDs.
      * @stable ICU 51
      */
-    virtual UClassID getDynamicClassID() const U_OVERRIDE;
+    UClassID getDynamicClassID() const U_OVERRIDE;
+
+  private:
+    CompactDecimalFormat(const Locale& inLocale, UNumberCompactStyle style, UErrorCode& status);
 };
 
 U_NAMESPACE_END
