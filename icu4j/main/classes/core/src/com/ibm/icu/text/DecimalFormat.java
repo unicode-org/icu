@@ -39,8 +39,7 @@ import com.ibm.icu.util.ULocale.Category;
  * <p>
  * <strong>IMPORTANT:</strong> New users are strongly encouraged to see if
  * {@link NumberFormatter} fits their use case.  Although not deprecated, this
- * class, DecimalFormat, is on life support and is only provided for
- * java.text.DecimalFormat compatibility.
+ * class, DecimalFormat, is only provided for java.text.DecimalFormat compatibility.
  * <hr>
  *
  * <code>DecimalFormat</code> is the primary
