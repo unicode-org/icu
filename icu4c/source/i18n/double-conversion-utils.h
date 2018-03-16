@@ -30,6 +30,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// ICU PATCH: ifdef around UCONFIG_NO_FORMATTING
+#include "unicode/utypes.h"
+#if !UCONFIG_NO_FORMATTING
+
 #ifndef DOUBLE_CONVERSION_UTILS_H_
 #define DOUBLE_CONVERSION_UTILS_H_
 
@@ -158,6 +162,9 @@ typedef uint16_t uc16;
   TypeName();                                    \
   DISALLOW_COPY_AND_ASSIGN(TypeName)
 #endif
+
+// ICU PATCH: Wrap in ICU namespace
+U_NAMESPACE_BEGIN
 
 namespace double_conversion {
 
@@ -344,4 +351,8 @@ inline Dest BitCast(Source* source) {
 
 }  // namespace double_conversion
 
+// ICU PATCH: Close ICU namespace
+U_NAMESPACE_END
+
 #endif  // DOUBLE_CONVERSION_UTILS_H_
+#endif // ICU PATCH: close #if !UCONFIG_NO_FORMATTING

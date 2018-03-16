@@ -30,12 +30,19 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+// ICU PATCH: ifdef around UCONFIG_NO_FORMATTING
+#include "unicode/utypes.h"
+#if !UCONFIG_NO_FORMATTING
+
 #ifndef DOUBLE_CONVERSION_FAST_DTOA_H_
 #define DOUBLE_CONVERSION_FAST_DTOA_H_
 
 // ICU PATCH: Customize header file paths for ICU.
 
 #include "double-conversion-utils.h"
+
+// ICU PATCH: Wrap in ICU namespace
+U_NAMESPACE_BEGIN
 
 namespace double_conversion {
 
@@ -92,4 +99,8 @@ bool FastDtoa(double d,
 
 }  // namespace double_conversion
 
+// ICU PATCH: Close ICU namespace
+U_NAMESPACE_END
+
 #endif  // DOUBLE_CONVERSION_FAST_DTOA_H_
+#endif // ICU PATCH: close #if !UCONFIG_NO_FORMATTING
