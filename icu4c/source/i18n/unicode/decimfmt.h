@@ -60,11 +60,9 @@ class CurrencyPluralInfo;
 class Hashtable;
 class UnicodeSet;
 class FieldPositionHandler;
-class DecimalFormatStaticSets;
 class FixedDecimal;
-class DecimalFormatImpl;
 class PluralRules;
-class VisibleDigitsWithExponent;
+class CompactDecimalFormat;
 
 namespace number {
 class LocalizedNumberFormatter;
@@ -1975,7 +1973,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      *                  other classes have different class IDs.
      * @stable ICU 2.0
      */
-    virtual UClassID getDynamicClassID(void) const U_OVERRIDE;
+    UClassID getDynamicClassID(void) const U_OVERRIDE;
 
   private:
 
@@ -2029,6 +2027,9 @@ class U_I18N_API DecimalFormat : public NumberFormat {
 
     LocalPointer<const numparse::impl::NumberParserImpl> fParser;
     LocalPointer<const numparse::impl::NumberParserImpl> fParserWithCurrency;
+
+    // Allow child class CompactDecimalFormat to access fProperties:
+    friend class CompactDecimalFormat;
 
 };
 
