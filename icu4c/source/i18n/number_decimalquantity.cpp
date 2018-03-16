@@ -21,7 +21,7 @@ using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
 
-using double_conversion::DoubleToStringConverter;
+using icu::double_conversion::DoubleToStringConverter;
 
 namespace {
 

@@ -51,7 +51,7 @@
 #include <stdio.h>
 #include <limits>
 
-using double_conversion::DoubleToStringConverter;
+using icu::double_conversion::DoubleToStringConverter;
 
 #if !defined(U_USE_STRTOD_L)
 # if U_PLATFORM_USES_ONLY_WIN32_API
