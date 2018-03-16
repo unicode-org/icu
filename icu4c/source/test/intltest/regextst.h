@@ -57,6 +57,7 @@ public:
     virtual void TestBug11371();
     virtual void TestBug11480();
     virtual void TestBug12884();
+    virtual void TestBug13631();
     
     // The following functions are internal to the regexp tests.
     virtual void assertUText(const char *expected, UText *actual, const char *file, int line);
