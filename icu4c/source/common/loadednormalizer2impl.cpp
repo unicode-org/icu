@@ -131,15 +131,20 @@ U_CDECL_BEGIN
 static UBool U_CALLCONV uprv_loaded_normalizer2_cleanup();
 U_CDECL_END
 
+static Norm2AllModes *nfcSingleton;  // TODO
 static Norm2AllModes *nfkcSingleton;
 static Norm2AllModes *nfkc_cfSingleton;
 static UHashtable    *cache=NULL;
 
+static icu::UInitOnce nfcInitOnce = U_INITONCE_INITIALIZER;  // TODO
 static icu::UInitOnce nfkcInitOnce = U_INITONCE_INITIALIZER;
 static icu::UInitOnce nfkc_cfInitOnce = U_INITONCE_INITIALIZER;
 
 // UInitOnce singleton initialization function
 static void U_CALLCONV initSingletons(const char *what, UErrorCode &errorCode) {
+    if (uprv_strcmp(what, "nfc") == 0) {  // TODO...
+        nfcSingleton    = Norm2AllModes::createInstance(NULL, "nfc", errorCode);
+    } else  // ...TODO
     if (uprv_strcmp(what, "nfkc") == 0) {
         nfkcSingleton    = Norm2AllModes::createInstance(NULL, "nfkc", errorCode);
     } else if (uprv_strcmp(what, "nfkc_cf") == 0) {
@@ -157,6 +162,7 @@ static void U_CALLCONV deleteNorm2AllModes(void *allModes) {
 }
 
 static UBool U_CALLCONV uprv_loaded_normalizer2_cleanup() {
+    delete nfcSingleton; nfcSingleton = NULL;  // TODO
     delete nfkcSingleton;
     nfkcSingleton = NULL;
     delete nfkc_cfSingleton;
@@ -171,6 +177,13 @@ static UBool U_CALLCONV uprv_loaded_normalizer2_cleanup() {
 U_CDECL_END
 
 const Norm2AllModes *
+Norm2AllModes::getNFCInstance(UErrorCode &errorCode) {  // TODO
+    if(U_FAILURE(errorCode)) { return NULL; }
+    umtx_initOnce(nfcInitOnce, &initSingletons, "nfc", errorCode);
+    return nfcSingleton;
+}
+
+const Norm2AllModes *
 Norm2AllModes::getNFKCInstance(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return NULL; }
     umtx_initOnce(nfkcInitOnce, &initSingletons, "nfkc", errorCode);
@@ -183,6 +196,34 @@ Norm2AllModes::getNFKC_CFInstance(UErrorCode &errorCode) {
     umtx_initOnce(nfkc_cfInitOnce, &initSingletons, "nfkc_cf", errorCode);
     return nfkc_cfSingleton;
 }
+
+const Normalizer2 *  // TODO...
+Normalizer2::getNFCInstance(UErrorCode &errorCode) {
+    const Norm2AllModes *allModes=Norm2AllModes::getNFCInstance(errorCode);
+    return allModes!=NULL ? &allModes->comp : NULL;
+}
+
+const Normalizer2 *
+Normalizer2::getNFDInstance(UErrorCode &errorCode) {
+    const Norm2AllModes *allModes=Norm2AllModes::getNFCInstance(errorCode);
+    return allModes!=NULL ? &allModes->decomp : NULL;
+}
+
+const Normalizer2 *Normalizer2Factory::getFCDInstance(UErrorCode &errorCode) {
+    const Norm2AllModes *allModes=Norm2AllModes::getNFCInstance(errorCode);
+    return allModes!=NULL ? &allModes->fcd : NULL;
+}
+
+const Normalizer2 *Normalizer2Factory::getFCCInstance(UErrorCode &errorCode) {
+    const Norm2AllModes *allModes=Norm2AllModes::getNFCInstance(errorCode);
+    return allModes!=NULL ? &allModes->fcc : NULL;
+}
+
+const Normalizer2Impl *
+Normalizer2Factory::getNFCImpl(UErrorCode &errorCode) {
+    const Norm2AllModes *allModes=Norm2AllModes::getNFCInstance(errorCode);
+    return allModes!=NULL ? allModes->impl : NULL;
+}  // ...TODO
 
 const Normalizer2 *
 Normalizer2::getNFKCInstance(UErrorCode &errorCode) {
