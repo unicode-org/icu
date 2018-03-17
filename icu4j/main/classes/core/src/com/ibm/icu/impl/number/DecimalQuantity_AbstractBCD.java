@@ -585,11 +585,10 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         return result;
     }
 
-    static final byte[] INT64_BCD = { 9, 2, 2, 3, 3, 7, 2, 0, 3, 6, 8, 5, 4, 7, 7, 5, 8, 0, 7 };
+    static final byte[] INT64_BCD = { 9, 2, 2, 3, 3, 7, 2, 0, 3, 6, 8, 5, 4, 7, 7, 5, 8, 0, 8 };
 
     /**
      * Returns whether or not a Long can fully represent the value stored in this DecimalQuantity.
-     * Assumes that the DecimalQuantity is positive.
      */
     public boolean fitsInLong() {
         if (isZero()) {
@@ -615,8 +614,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                 return false;
             }
         }
-        // Exactly equal to max long.
-        return true;
+        // Exactly equal to max long plus one.
+        return isNegative();
     }
 
     /**

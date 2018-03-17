@@ -161,7 +161,7 @@ uint64_t DecimalQuantity::getPositionFingerprint() const {
 }
 
 void DecimalQuantity::roundToIncrement(double roundingIncrement, RoundingMode roundingMode,
-                                       int32_t minMaxFrac, UErrorCode& status) {
+                                       int32_t maxFrac, UErrorCode& status) {
     // TODO: This is innefficient.  Improve?
     // TODO: Should we convert to decNumber instead?
     double temp = toDouble();
@@ -173,7 +173,8 @@ void DecimalQuantity::roundToIncrement(double roundingIncrement, RoundingMode ro
     setToDouble(temp);
     // Since we reset the value to a double, we need to specify the rounding boundary
     // in order to get the DecimalQuantity out of approximation mode.
-    roundToMagnitude(-minMaxFrac, roundingMode, status);
+    // NOTE: In Java, we have minMaxFrac, but in C++, the two are differentiated.
+    roundToMagnitude(-maxFrac, roundingMode, status);
 }
 
 void DecimalQuantity::multiplyBy(int32_t multiplicand) {
@@ -454,6 +455,7 @@ int64_t DecimalQuantity::toLong() const {
     for (int32_t magnitude = scale + precision - 1; magnitude >= 0; magnitude--) {
         result = result * 10 + getDigitPos(magnitude - scale);
     }
+    if (isNegative()) { result = -result; }
     return result;
 }
 
@@ -485,15 +487,15 @@ bool DecimalQuantity::fitsInLong() const {
     // The largest int64 is: 9,223,372,036,854,775,807
     for (int p = 0; p < precision; p++) {
         int8_t digit = getDigit(18 - p);
-        static int8_t INT64_BCD[] = { 9, 2, 2, 3, 3, 7, 2, 0, 3, 6, 8, 5, 4, 7, 7, 5, 8, 0, 7 };
+        static int8_t INT64_BCD[] = { 9, 2, 2, 3, 3, 7, 2, 0, 3, 6, 8, 5, 4, 7, 7, 5, 8, 0, 8 };
         if (digit < INT64_BCD[p]) {
             return true;
         } else if (digit > INT64_BCD[p]) {
             return false;
         }
     }
-    // Exactly equal to max long.
-    return true;
+    // Exactly equal to max long plus one.
+    return isNegative();
 }
 
 double DecimalQuantity::toDouble() const {
@@ -725,8 +727,8 @@ UnicodeString DecimalQuantity::toPlainString() const {
         sb.append(u'-');
     }
     for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
+        if (m == -1) { sb.append(u'.'); }
         sb.append(getDigit(m) + u'0');
-        if (m == 0) { sb.append(u'.'); }
     }
     return sb;
 }
@@ -1046,12 +1048,13 @@ UnicodeString DecimalQuantity::toString() const {
     snprintf(
             buffer8,
             sizeof(buffer8),
-            "<DecimalQuantity %d:%d:%d:%d %s %s%s%d>",
+            "<DecimalQuantity %d:%d:%d:%d %s %s%s%s%d>",
             (lOptPos > 999 ? 999 : lOptPos),
             lReqPos,
             rReqPos,
             (rOptPos < -999 ? -999 : rOptPos),
             (usingBytes ? "bytes" : "long"),
+            (isNegative() ? "-" : ""),
             (precision == 0 ? "0" : digits.getAlias()),
             "E",
             scale);

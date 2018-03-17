@@ -1869,7 +1869,7 @@ public class DecimalFormat extends NumberFormat {
     if (enabled) {
       // Set to a reasonable default value
       properties.setGroupingSize(3);
-      properties.setSecondaryGroupingSize(3);
+      properties.setSecondaryGroupingSize(-1);
     } else {
       properties.setGroupingSize(0);
       properties.setSecondaryGroupingSize(0);

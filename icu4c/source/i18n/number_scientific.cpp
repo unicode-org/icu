@@ -116,6 +116,9 @@ void ScientificHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     ScientificModifier &mod = micros.helpers.scientificModifier;
     mod.set(exponent, this);
     micros.modInner = &mod;
+
+    // We already performed rounding. Do not perform it again.
+    micros.rounding = Rounder::constructPassThrough();
 }
 
 int32_t ScientificHandler::getMultiplier(int32_t magnitude) const {

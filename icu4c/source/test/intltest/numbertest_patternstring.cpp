@@ -50,6 +50,7 @@ void PatternStringTest::testToPatternSimple() {
                                   {u"0.##", u"0.##"},
                                   {u"0.00", u"0.00"},
                                   {u"0.00#", u"0.00#"},
+                                  {u"0.05", u"0.05"},
                                   {u"#E0", u"#E0"},
                                   {u"0E0", u"0E0"},
                                   {u"#00E00", u"#00E00"},
@@ -57,6 +58,7 @@ void PatternStringTest::testToPatternSimple() {
                                   {u"#;#", u"0;0"},
             // ignore a negative prefix pattern of '-' since that is the default:
                                   {u"#;-#", u"0"},
+                                  {u"pp#,000;(#)", u"pp#,000;(#,000)"},
                                   {u"**##0", u"**##0"},
                                   {u"*'x'##0", u"*x##0"},
                                   {u"a''b0", u"a''b0"},

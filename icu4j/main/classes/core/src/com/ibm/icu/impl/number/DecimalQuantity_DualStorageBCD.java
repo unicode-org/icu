@@ -415,12 +415,13 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
 
     @Override
     public String toString() {
-        return String.format("<DecimalQuantity %s:%d:%d:%s %s %s>",
+        return String.format("<DecimalQuantity %s:%d:%d:%s %s %s%s>",
                 (lOptPos > 1000 ? "999" : String.valueOf(lOptPos)),
                 lReqPos,
                 rReqPos,
                 (rOptPos < -1000 ? "-999" : String.valueOf(rOptPos)),
                 (usingBytes ? "bytes" : "long"),
+                (isNegative() ? "-" : ""),
                 toNumberString());
     }
 
