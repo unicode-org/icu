@@ -11,6 +11,7 @@
 #include "unicode/numberformatter.h"
 #include "number_types.h"
 #include "numbertest.h"
+#include "unicode/utypes.h"
 
 // Horrible workaround for the lack of a status code in the constructor...
 UErrorCode globalNumberFormatterApiTestStatus = U_ZERO_ERROR;
@@ -77,6 +78,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(formatTypes);
         TESTCASE_AUTO(errors);
         TESTCASE_AUTO(validRanges);
+        TESTCASE_AUTO(copyMove);
     TESTCASE_AUTO_END;
 }
 
@@ -1838,6 +1840,80 @@ void NumberFormatterApiTest::validRanges() {
     VALID_RANGE_ONEARG(notation, Notation::scientific().withMinExponentDigits, 1);
     VALID_RANGE_ONEARG(integerWidth, IntegerWidth::zeroFillTo, 0);
     VALID_RANGE_ONEARG(integerWidth, IntegerWidth::zeroFillTo(0).truncateAt, -1);
+}
+
+void NumberFormatterApiTest::copyMove() {
+    IcuTestErrorCode status(*this, "copyMove");
+
+    // Default constructors
+    LocalizedNumberFormatter l1;
+    assertEquals("Initial behavior", u"10", l1.formatInt(10, status).toString());
+    assertEquals("Initial call count", 1, l1.getCallCount());
+    assertTrue("Initial compiled", l1.getCompiled() == nullptr);
+
+    // Setup
+    l1 = NumberFormatter::withLocale("en").unit(NoUnit::percent()).threshold(3);
+    assertEquals("Initial behavior", u"10%", l1.formatInt(10, status).toString());
+    assertEquals("Initial call count", 1, l1.getCallCount());
+    assertTrue("Initial compiled", l1.getCompiled() == nullptr);
+    l1.formatInt(123, status);
+    assertEquals("Still not compiled", 2, l1.getCallCount());
+    assertTrue("Still not compiled", l1.getCompiled() == nullptr);
+    l1.formatInt(123, status);
+    assertEquals("Compiled", u"10%", l1.formatInt(10, status).toString());
+    assertEquals("Compiled", INT32_MIN, l1.getCallCount());
+    assertTrue("Compiled", l1.getCompiled() != nullptr);
+
+    // Copy constructor
+    LocalizedNumberFormatter l2 = l1;
+    assertEquals("[constructor] Copy behavior", u"10%", l2.formatInt(10, status).toString());
+    assertEquals("[constructor] Copy should not have compiled state", 1, l2.getCallCount());
+    assertTrue("[constructor] Copy should not have compiled state", l2.getCompiled() == nullptr);
+
+    // Move constructor
+    LocalizedNumberFormatter l3 = std::move(l1);
+    assertEquals("[constructor] Move behavior", u"10%", l3.formatInt(10, status).toString());
+    assertEquals("[constructor] Move *should* have compiled state", INT32_MIN, l3.getCallCount());
+    assertTrue("[constructor] Move *should* have compiled state", l3.getCompiled() != nullptr);
+    assertEquals("[constructor] Source should be reset after move", 0, l1.getCallCount());
+    assertTrue("[constructor] Source should be reset after move", l1.getCompiled() == nullptr);
+
+    // Reset l1 and l2 to check for macro-props copying for behavior testing
+    l1 = NumberFormatter::withLocale("en");
+    l2 = NumberFormatter::withLocale("en");
+
+    // Copy assignment
+    l1 = l3;
+    assertEquals("[assignment] Copy behavior", u"10%", l1.formatInt(10, status).toString());
+    assertEquals("[assignment] Copy should not have compiled state", 1, l1.getCallCount());
+    assertTrue("[assignment] Copy should not have compiled state", l1.getCompiled() == nullptr);
+
+    // Move assignment
+    l2 = std::move(l3);
+    assertEquals("[assignment] Move behavior", u"10%", l2.formatInt(10, status).toString());
+    assertEquals("[assignment] Move *should* have compiled state", INT32_MIN, l2.getCallCount());
+    assertTrue("[assignment] Move *should* have compiled state", l2.getCompiled() != nullptr);
+    assertEquals("[assignment] Source should be reset after move", 0, l3.getCallCount());
+    assertTrue("[assignment] Source should be reset after move", l3.getCompiled() == nullptr);
+
+    // Coverage tests for UnlocalizedNumberFormatter
+    UnlocalizedNumberFormatter u1;
+    assertEquals("Default behavior", u"10", u1.locale("en").formatInt(10, status).toString());
+    u1 = u1.unit(NoUnit::percent());
+    assertEquals("Copy assignment", u"10%", u1.locale("en").formatInt(10, status).toString());
+    UnlocalizedNumberFormatter u2 = u1;
+    assertEquals("Copy constructor", u"10%", u2.locale("en").formatInt(10, status).toString());
+    UnlocalizedNumberFormatter u3 = std::move(u1);
+    assertEquals("Move constructor", u"10%", u3.locale("en").formatInt(10, status).toString());
+    u1 = NumberFormatter::with();
+    u1 = std::move(u2);
+    assertEquals("Move assignment", u"10%", u1.locale("en").formatInt(10, status).toString());
+
+    // FormattedNumber move operators
+    FormattedNumber result = l1.formatInt(10, status);
+    assertEquals("FormattedNumber move constructor", u"10%", result.toString());
+    result = l1.formatInt(20, status);
+    assertEquals("FormattedNumber move assignment", u"20%", result.toString());
 }
 
 
