@@ -161,6 +161,11 @@ public:
     void sortedInsert(int32_t elem, UErrorCode& ec);
 
     /**
+     * Sort the contents of the int32_t vector.
+     */
+    void sorti(UErrorCode &ec);
+
+    /**
      * Returns a pointer to the internal array holding the vector.
      */
     int32_t *getBuffer() const;

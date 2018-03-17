@@ -123,9 +123,15 @@ public:
     RBBIRuleBuilder(const UnicodeString  &rules,
                     UParseError          *parseErr,
                     UErrorCode           &status
-        );
+    );
 
     virtual    ~RBBIRuleBuilder();
+
+    /**
+     *  Build the state tables and char class Trie from the source rules.
+     */
+    RBBIDataHeader  *build(UErrorCode &status);
+
 
     /**
      * Fold together redundant character classes (table columns) and
@@ -163,8 +169,6 @@ public:
     UVector                       *fUSetNodes;       // Vector of all uset nodes.
 
     RBBITableBuilder              *fForwardTables;   // State transition tables
-    RBBITableBuilder              *fReverseTables;
-    RBBITableBuilder              *fSafeFwdTables;
     RBBITableBuilder              *fSafeRevTables;
 
     UVector                       *fRuleStatusVals;  // The values that can be returned

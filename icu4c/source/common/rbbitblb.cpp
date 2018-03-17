@@ -27,21 +27,21 @@
 
 U_NAMESPACE_BEGIN
 
-RBBITableBuilder::RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode **rootNode) :
- fTree(*rootNode) {
-    fRB                 = rb;
-    fStatus             = fRB->fStatus;
-    UErrorCode status   = U_ZERO_ERROR;
-    fDStates            = new UVector(status);
-    if (U_FAILURE(*fStatus)) {
-        return;
-    }
+RBBITableBuilder::RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode **rootNode, UErrorCode &status) :
+        fRB(rb),
+        fTree(*rootNode),
+        fStatus(&status),
+        fDStates(nullptr),
+        fSafeTable(nullptr) {
     if (U_FAILURE(status)) {
-        *fStatus = status;
         return;
     }
-    if (fDStates == NULL) {
-        *fStatus = U_MEMORY_ALLOCATION_ERROR;;
+    // fDStates is UVector<RBBIStateDescriptor *>
+    fDStates = new UVector(status);
+    // SafeTable is UVector<UnicodeString *>.  Contents owned by the UVector.
+    fSafeTable = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status);
+    if (U_SUCCESS(status) && (fDStates == nullptr || fSafeTable == nullptr)) {
+        status = U_MEMORY_ALLOCATION_ERROR;;
     }
 }
 
@@ -52,7 +52,8 @@ RBBITableBuilder::~RBBITableBuilder() {
     for (i=0; i<fDStates->size(); i++) {
         delete (RBBIStateDescriptor *)fDStates->elementAt(i);
     }
-    delete   fDStates;
+    delete fDStates;
+    delete fSafeTable;
 }
 
 
@@ -1277,6 +1278,89 @@ void RBBITableBuilder::exportTable(void *where) {
 }
 
 
+/**
+ *   Synthesize a safe state table from the main state table.
+ */
+void RBBITableBuilder::buildSafe(UErrorCode &status) {
+    // Find safe char class pairs.
+
+    // make a state table row for each trailing class, and map from class to row.
+
+    // For each pair
+    //   startRow[p1] = p2
+    //   p2row[p2] = stopRow
+    // For each unfilled in cell
+    //   set to row corresponding to its column.
+    UVector32 safePairs(status);
+
+    int32_t numCharClasses = fRB->fSetBuilder->getNumCharCategories();
+    int32_t numStates = fDStates->size();
+
+    for (int32_t c1=0; c1<numCharClasses; ++c1) {
+        for (int32_t c2=0; c2 < numCharClasses; ++c2) {
+            int32_t wantedEndState = -1;
+            int32_t endState = 0;
+            for (int32_t startState = 1; startState < numStates; ++startState) {
+                RBBIStateDescriptor *startStateD = static_cast<RBBIStateDescriptor *>(fDStates->elementAt(startState));
+                int32_t s2 = startStateD->fDtran->elementAti(c1);
+                RBBIStateDescriptor *s2StateD = static_cast<RBBIStateDescriptor *>(fDStates->elementAt(s2));
+                endState = s2StateD->fDtran->elementAti(c2);
+                if (wantedEndState < 0) {
+                    wantedEndState = endState;
+                } else {
+                    if (wantedEndState != endState) {
+                        break;
+                    }
+                }
+            }
+            if (wantedEndState == endState) {
+                int32_t pair = c1 << 16 | c2;
+                safePairs.addElement(pair, status);
+                // printf("(%d, %d) ", c1, c2);
+            }
+        }
+        //printf("\n");
+    }
+
+    // Populate the initial safe table.
+    // The table as a whole is UVector<UnicodeString>
+    // Each row is represented by a UnicodeString, being used as a Vector<int16>.
+    // Row 0 is the stop state.
+    // Row 1 is the start sate.
+    // Row 2 and beyond are other states, initially one per char class, but
+    //   after initial construction, many of the states will be combined, compacting the table.)
+    fSafeTable = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, numCharClasses + 2, status);
+    for (int32_t row=0; row<numCharClasses + 2; ++row) {
+        fSafeTable->addElement(new UnicodeString(numCharClasses+4, 0, numCharClasses+4), status);
+    }
+
+    // From the start state, each input char class transitions to the state for that input.
+    UnicodeString &startState = *(UnicodeString *)fSafeTable->elementAt(1);
+    for (int32_t charClass=0; charClass < numCharClasses; ++charClass) {
+        // Note: +2 for the start & stop state; +4 for header columns in state table.
+        startState.setCharAt(charClass+4, charClass+2);
+    }
+
+    // Initially make every other state table row look like the start state row,
+    for (int32_t row=2; row<numCharClasses+2; ++row) {
+        UnicodeString &rowState = *(UnicodeString *)fSafeTable->elementAt(1);
+        rowState = startState;   // UnicodeString assignment, copies contents.
+    }
+
+    // Run through the safe pairs, make next state to zero when pair has been seen.
+    // Zero being the stop state, meaning we found a safe point.
+    for (int32_t pairIdx=0; pairIdx<safePairs.size(); pairIdx++) {
+        int32_t pair = safePairs.elementAti(pairIdx);
+        int32_t c1 = (pair >> 16) & 0x0000ffff;
+        int32_t c2 = pair & 0x0000ffff;
+
+        UnicodeString &rowState = *(UnicodeString *)fSafeTable->elementAt(c2 + 2);
+        rowState.setCharAt(c1 + 4, 0);
+    }
+
+    // Merge similar states.
+
+}
 
 //-----------------------------------------------------------------------------
 //
