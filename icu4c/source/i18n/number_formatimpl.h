@@ -50,7 +50,7 @@ class NumberFormatterImpl : public UMemory {
     MicroProps fMicros;
 
     // Other fields possibly used by the number formatting pipeline:
-    // TODO: Convert some of these LocalPointers to value objects to reduce the number of news?
+    // TODO: Convert more of these LocalPointers to value objects to reduce the number of news?
     LocalPointer<const DecimalFormatSymbols> fSymbols;
     LocalPointer<const PluralRules> fRules;
     LocalPointer<const ParsedPatternInfo> fPatternInfo;
@@ -59,6 +59,11 @@ class NumberFormatterImpl : public UMemory {
     LocalPointer<const ImmutablePatternModifier> fImmutablePatternModifier;
     LocalPointer<const LongNameHandler> fLongNameHandler;
     LocalPointer<const CompactHandler> fCompactHandler;
+
+    // Value objects possibly used by the number formatting pipeline:
+    struct Warehouse {
+        CurrencyDataSymbols fCurrencyDataSymbols;
+    } fWarehouse;
 
 
     NumberFormatterImpl(const MacroProps &macros, bool safe, UErrorCode &status);

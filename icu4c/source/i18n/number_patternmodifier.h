@@ -13,6 +13,7 @@
 #include "number_types.h"
 #include "number_modifiers.h"
 #include "number_utils.h"
+#include "number_currencysymbols.h"
 
 U_NAMESPACE_BEGIN
 
@@ -110,17 +111,16 @@ class U_I18N_API MutablePatternModifier
      *
      * @param symbols
      *            The desired instance of DecimalFormatSymbols.
-     * @param currency
-     *            The currency to be used when substituting currency values into the affixes.
+     * @param currencySymbols
+     *            The currency symbols to be used when substituting currency values into the affixes.
      * @param unitWidth
      *            The width used to render currencies.
      * @param rules
      *            Required if the triple currency sign, "¤¤¤", appears in the pattern, which can be determined from the
      *            convenience method {@link #needsPlurals()}.
      */
-    void
-    setSymbols(const DecimalFormatSymbols *symbols, const CurrencyUnit &currency, UNumberUnitWidth unitWidth,
-               const PluralRules *rules);
+    void setSymbols(const DecimalFormatSymbols* symbols, const CurrencySymbols* currencySymbols,
+                    UNumberUnitWidth unitWidth, const PluralRules* rules);
 
     /**
      * Sets attributes of the current number being processed.
@@ -201,7 +201,7 @@ class U_I18N_API MutablePatternModifier
     // Symbol details (initialized in setSymbols)
     const DecimalFormatSymbols *symbols;
     UNumberUnitWidth unitWidth;
-    char16_t currencyCode[4];
+    const CurrencySymbols *currencySymbols;
     const PluralRules *rules;
 
     // Number details (initialized in setNumberProperties)
