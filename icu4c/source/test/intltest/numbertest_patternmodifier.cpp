@@ -28,9 +28,9 @@ void PatternModifierTest::testBasic() {
     mod.setPatternInfo(&patternInfo);
     mod.setPatternAttributes(UNUM_SIGN_AUTO, false);
     DecimalFormatSymbols symbols(Locale::getEnglish(), status);
-    CurrencyUnit currency(u"USD", status);
+    CurrencyDataSymbols currencySymbols({u"USD", status}, "en", status);
     assertSuccess("Spot 2", status);
-    mod.setSymbols(&symbols, currency, UNUM_UNIT_WIDTH_SHORT, nullptr);
+    mod.setSymbols(&symbols, &currencySymbols, UNUM_UNIT_WIDTH_SHORT, nullptr);
 
     mod.setNumberProperties(1, StandardPlural::Form::COUNT);
     assertEquals("Pattern a0b", u"a", getPrefix(mod, status));
@@ -88,9 +88,9 @@ void PatternModifierTest::testPatternWithNoPlaceholder() {
     mod.setPatternInfo(&patternInfo);
     mod.setPatternAttributes(UNUM_SIGN_AUTO, false);
     DecimalFormatSymbols symbols(Locale::getEnglish(), status);
-    CurrencyUnit currency(u"USD", status);
+    CurrencyDataSymbols currencySymbols({u"USD", status}, "en", status);
     assertSuccess("Spot 2", status);
-    mod.setSymbols(&symbols, currency, UNUM_UNIT_WIDTH_SHORT, nullptr);
+    mod.setSymbols(&symbols, &currencySymbols, UNUM_UNIT_WIDTH_SHORT, nullptr);
     mod.setNumberProperties(1, StandardPlural::Form::COUNT);
 
     // Unsafe Code Path
@@ -124,10 +124,10 @@ void PatternModifierTest::testMutableEqualsImmutable() {
     mod.setPatternInfo(&patternInfo);
     mod.setPatternAttributes(UNUM_SIGN_AUTO, false);
     DecimalFormatSymbols symbols(Locale::getEnglish(), status);
-    CurrencyUnit currency(u"USD", status);
+    CurrencyDataSymbols currencySymbols({u"USD", status}, "en", status);
     assertSuccess("Spot 2", status);
     if (U_FAILURE(status)) { return; }
-    mod.setSymbols(&symbols, currency, UNUM_UNIT_WIDTH_SHORT, nullptr);
+    mod.setSymbols(&symbols, &currencySymbols, UNUM_UNIT_WIDTH_SHORT, nullptr);
     DecimalQuantity fq;
     fq.setToInt(1);
 

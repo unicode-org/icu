@@ -100,6 +100,7 @@ struct CurrencyFormatInfoResult {
 CurrencyFormatInfoResult
 getCurrencyFormatInfo(const Locale& locale, const char* isoCode, UErrorCode& status) {
     // TODO: Load this data in a centralized location like ICU4J?
+    // TODO: Move this into the CurrencySymbols class?
     // TODO: Parts of this same data are loaded in dcfmtsym.cpp; should clean up.
     CurrencyFormatInfoResult result = {false, nullptr, nullptr, nullptr};
     if (U_FAILURE(status)) { return result; }
@@ -203,6 +204,14 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     CurrencyUnit currency(kDefaultCurrency, status);
     if (isCurrency) {
         currency = CurrencyUnit(macros.unit, status); // Restore CurrencyUnit from MeasureUnit
+    }
+    CurrencySymbols* currencySymbols;
+    if (macros.currencySymbols != nullptr) {
+        // Used by the DecimalFormat code path
+        currencySymbols = macros.currencySymbols;
+    } else {
+        fWarehouse.fCurrencyDataSymbols = {currency, macros.locale, status};
+        currencySymbols = &fWarehouse.fCurrencyDataSymbols;
     }
     UNumberUnitWidth unitWidth = UNUM_UNIT_WIDTH_SHORT;
     if (macros.unitWidth != UNUM_UNIT_WIDTH_COUNT) {
@@ -355,11 +364,11 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     if (patternModifier->needsPlurals()) {
         patternModifier->setSymbols(
                 fMicros.symbols,
-                currency,
+                currencySymbols,
                 unitWidth,
                 resolvePluralRules(macros.rules, macros.locale, status));
     } else {
-        patternModifier->setSymbols(fMicros.symbols, currency, unitWidth, nullptr);
+        patternModifier->setSymbols(fMicros.symbols, currencySymbols, unitWidth, nullptr);
     }
     if (safe) {
         fImmutablePatternModifier.adoptInstead(patternModifier->createImmutableAndChain(chain, status));

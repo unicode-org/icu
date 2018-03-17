@@ -11,6 +11,7 @@
 #include "unicode/currpinf.h"
 #include "standardplural.h"
 #include "number_patternstring.h"
+#include "number_currencysymbols.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
@@ -105,6 +106,7 @@ class CurrencyPluralInfoAffixProvider : public AffixPatternProvider, public UMem
 struct DecimalFormatWarehouse {
     PropertiesAffixPatternProvider propertiesAPP;
     CurrencyPluralInfoAffixProvider currencyPluralInfoAPP;
+    CurrencyCustomSymbols currencyCustomSymbols;
 };
 
 

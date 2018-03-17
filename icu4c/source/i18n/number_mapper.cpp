@@ -13,6 +13,7 @@
 #include "number_patternstring.h"
 #include "unicode/errorcode.h"
 #include "number_utils.h"
+#include "number_currencysymbols.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -79,12 +80,15 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     bool useCurrency = (
             !properties.currency.isNull() || !properties.currencyPluralInfo.fPtr.isNull() ||
             !properties.currencyUsage.isNull() || affixProvider->hasCurrencySign());
-    // TODO: CustomSymbolCurrency
-    CurrencyUnit currency = {u"USD", status};
+    CurrencyUnit currency = resolveCurrency(properties, locale, status);
     UCurrencyUsage currencyUsage = properties.currencyUsage.getOrDefault(UCURR_USAGE_STANDARD);
     if (useCurrency) {
         // NOTE: Slicing is OK.
         macros.unit = currency; // NOLINT
+    }
+    if (symbols.isCustomCurrencySymbol() || symbols.isCustomIntlCurrencySymbol()) {
+        warehouse.currencyCustomSymbols = {currency, locale, symbols, status};
+        macros.currencySymbols = &warehouse.currencyCustomSymbols;
     }
 
     ///////////////////////

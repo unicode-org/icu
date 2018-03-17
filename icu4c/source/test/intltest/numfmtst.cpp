@@ -1236,7 +1236,7 @@ NumberFormatTest::TestCurrency(void)
     UnicodeString s; currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre ici a..........." + s);
     if (!(s==CharsToUnicodeString("1,50\\u00A0$")))
-        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>$");
+        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>$ but got " + s);
     delete currencyFmt;
     s.truncate(0);
     char loc[256]={0};
@@ -1246,7 +1246,7 @@ NumberFormatTest::TestCurrency(void)
     currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre en Allemagne a.." + s);
     if (!(s==CharsToUnicodeString("1,50\\u00A0DM")))
-        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>DM");
+        errln((UnicodeString)"FAIL: Expected 1,50<nbsp>DM but got " + s);
     delete currencyFmt;
     s.truncate(0);
     len = uloc_canonicalize("fr_FR_PREEURO", loc, 256, &status);

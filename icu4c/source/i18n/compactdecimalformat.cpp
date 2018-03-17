@@ -27,6 +27,7 @@ CompactDecimalFormat::createInstance(const Locale& inLocale, UNumberCompactStyle
 CompactDecimalFormat::CompactDecimalFormat(const Locale& inLocale, UNumberCompactStyle style,
                                            UErrorCode& status)
         : DecimalFormat(new DecimalFormatSymbols(inLocale, status), status) {
+    if (U_FAILURE(status)) return;
     // Minimal properties: let the non-shim code path do most of the logic for us.
     fProperties->compactStyle = style;
     fProperties->groupingSize = -2; // do not forward grouping information

@@ -46,6 +46,7 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern, DecimalFormatSymbols*
                              UErrorCode& status)
         : DecimalFormat(symbolsToAdopt, status) {
     setPropertiesFromPattern(pattern, IGNORE_ROUNDING_IF_CURRENCY, status);
+    refreshFormatter(status);
 }
 
 DecimalFormat::DecimalFormat(const UnicodeString& pattern, DecimalFormatSymbols* symbolsToAdopt,
@@ -896,18 +897,9 @@ void DecimalFormat::refreshFormatter(UErrorCode& status) {
         // The only time when this happens is during legacy deserialization.
         return;
     }
-    Locale locale = getLocale(ULOC_ACTUAL_LOCALE, status);
-    if (U_FAILURE(status)) {
-        // Constructor
-        locale = fSymbols->getLocale(ULOC_ACTUAL_LOCALE, status);
-    }
-    if (U_FAILURE(status)) {
-        // Deserialization
-        locale = fSymbols->getLocale();
-    }
-    if (U_FAILURE(status)) {
-        return;
-    }
+
+    // In C++, fSymbols is the source of truth for the locale.
+    Locale locale = fSymbols->getLocale();
 
     fFormatter.adoptInsteadAndCheckErrorCode(
             new LocalizedNumberFormatter(

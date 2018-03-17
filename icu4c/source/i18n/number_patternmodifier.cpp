@@ -27,13 +27,12 @@ void MutablePatternModifier::setPatternAttributes(UNumberSignDisplay signDisplay
     this->perMilleReplacesPercent = perMille;
 }
 
-void MutablePatternModifier::setSymbols(const DecimalFormatSymbols* symbols, const CurrencyUnit& currency,
+void MutablePatternModifier::setSymbols(const DecimalFormatSymbols* symbols,
+                                        const CurrencySymbols* currencySymbols,
                                         const UNumberUnitWidth unitWidth, const PluralRules* rules) {
     U_ASSERT((rules != nullptr) == needsPlurals());
     this->symbols = symbols;
-    uprv_memcpy(static_cast<char16_t*>(this->currencyCode),
-            currency.getISOCurrency(),
-            sizeof(char16_t) * 4);
+    this->currencySymbols = currencySymbols;
     this->unitWidth = unitWidth;
     this->rules = rules;
 }
@@ -249,6 +248,7 @@ void MutablePatternModifier::prepareAffix(bool isPrefix) {
 }
 
 UnicodeString MutablePatternModifier::getSymbol(AffixPatternType type) const {
+    UErrorCode localStatus = U_ZERO_ERROR;
     switch (type) {
         case AffixPatternType::TYPE_MINUS_SIGN:
             return symbols->getSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kMinusSignSymbol);
@@ -261,45 +261,23 @@ UnicodeString MutablePatternModifier::getSymbol(AffixPatternType type) const {
         case AffixPatternType::TYPE_CURRENCY_SINGLE: {
             // UnitWidth ISO and HIDDEN overrides the singular currency symbol.
             if (unitWidth == UNumberUnitWidth::UNUM_UNIT_WIDTH_ISO_CODE) {
-                return UnicodeString(currencyCode, 3);
+                return currencySymbols->getIntlCurrencySymbol(localStatus);
             } else if (unitWidth == UNumberUnitWidth::UNUM_UNIT_WIDTH_HIDDEN) {
                 return UnicodeString();
+            } else if (unitWidth == UNumberUnitWidth::UNUM_UNIT_WIDTH_NARROW) {
+                return currencySymbols->getNarrowCurrencySymbol(localStatus);
             } else {
-                UCurrNameStyle selector = (unitWidth == UNumberUnitWidth::UNUM_UNIT_WIDTH_NARROW)
-                                          ? UCurrNameStyle::UCURR_NARROW_SYMBOL_NAME
-                                          : UCurrNameStyle::UCURR_SYMBOL_NAME;
-                UErrorCode status = U_ZERO_ERROR;
-                UBool isChoiceFormat = FALSE;
-                int32_t symbolLen = 0;
-                const char16_t* symbol = ucurr_getName(
-                        currencyCode,
-                        symbols->getLocale().getName(),
-                        selector,
-                        &isChoiceFormat,
-                        &symbolLen,
-                        &status);
-                return UnicodeString(symbol, symbolLen);
+                return currencySymbols->getCurrencySymbol(localStatus);
             }
         }
         case AffixPatternType::TYPE_CURRENCY_DOUBLE:
-            return UnicodeString(currencyCode, 3);
-        case AffixPatternType::TYPE_CURRENCY_TRIPLE: {
+            return currencySymbols->getIntlCurrencySymbol(localStatus);
+        case AffixPatternType::TYPE_CURRENCY_TRIPLE:
             // NOTE: This is the code path only for patterns containing "¤¤¤".
             // Plural currencies set via the API are formatted in LongNameHandler.
             // This code path is used by DecimalFormat via CurrencyPluralInfo.
             U_ASSERT(plural != StandardPlural::Form::COUNT);
-            UErrorCode status = U_ZERO_ERROR;
-            UBool isChoiceFormat = FALSE;
-            int32_t symbolLen = 0;
-            const char16_t* symbol = ucurr_getPluralName(
-                    currencyCode,
-                    symbols->getLocale().getName(),
-                    &isChoiceFormat,
-                    StandardPlural::getKeyword(plural),
-                    &symbolLen,
-                    &status);
-            return UnicodeString(symbol, symbolLen);
-        }
+            return currencySymbols->getPluralName(plural, localStatus);
         case AffixPatternType::TYPE_CURRENCY_QUAD:
             return UnicodeString(u"\uFFFD");
         case AffixPatternType::TYPE_CURRENCY_QUINT:
