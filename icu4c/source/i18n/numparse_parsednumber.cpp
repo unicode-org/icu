@@ -70,7 +70,7 @@ double ParsedNumber::getDouble() const {
         return l;
     }
 
-    // TODO: MIN_LONG
+    // TODO: MIN_LONG. It is supported in quantity.toLong() if quantity had the negative flag.
     double d = quantity.toDouble();
     if (0 != (flags & FLAG_NEGATIVE)) {
         d *= -1;

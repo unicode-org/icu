@@ -14,6 +14,7 @@
 #include "number_patternstring.h"
 #include "unicode/utf16.h"
 #include "number_utils.h"
+#include "number_roundingutils.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -706,11 +707,11 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
         }
     } else if (roundingInterval != 0.0) {
         // Rounding Interval.
-        digitsStringScale = minFrac;
+        digitsStringScale = -roundingutils::doubleFractionLength(roundingInterval);
         // TODO: Check for DoS here?
         DecimalQuantity incrementQuantity;
         incrementQuantity.setToDouble(roundingInterval);
-        incrementQuantity.adjustMagnitude(minFrac);
+        incrementQuantity.adjustMagnitude(-digitsStringScale);
         incrementQuantity.roundToMagnitude(0, kDefaultMode, status);
         UnicodeString str = incrementQuantity.toPlainString();
         if (str.charAt(0) == u'-') {
@@ -809,7 +810,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
         sb.append(AffixUtils::escape(UnicodeStringCharSequence(np)));
         // Copy the positive digit format into the negative.
         // This is optional; the pattern is the same as if '#' were appended here instead.
-        sb.append(sb, afterPrefixPos, beforeSuffixPos);
+        sb.append(sb, afterPrefixPos, beforeSuffixPos - afterPrefixPos);
         if (!nsp.isBogus()) {
             sb.append(nsp);
         }

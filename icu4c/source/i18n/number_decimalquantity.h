@@ -71,7 +71,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      * @param mathContext The {@link RoundingMode} to use if rounding is necessary.
      */
     void roundToIncrement(double roundingIncrement, RoundingMode roundingMode,
-                          int32_t minMaxFrac, UErrorCode& status);
+                          int32_t maxFrac, UErrorCode& status);
 
     /**
      * Rounds the number to a specified magnitude (power of ten).
@@ -130,7 +130,6 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
 
     /**
      * Returns whether or not a Long can fully represent the value stored in this DecimalQuantity.
-     * Assumes that the DecimalQuantity is positive.
      */
     bool fitsInLong() const;
 

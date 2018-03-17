@@ -287,7 +287,7 @@ void DecimalFormat::setGroupingUsed(UBool enabled) {
     if (enabled) {
         // Set to a reasonable default value
         fProperties->groupingSize = 3;
-        fProperties->secondaryGroupingSize = 3;
+        fProperties->secondaryGroupingSize = -1;
     } else {
         fProperties->groupingSize = 0;
         fProperties->secondaryGroupingSize = 0;
