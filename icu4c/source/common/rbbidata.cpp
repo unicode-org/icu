@@ -80,8 +80,6 @@ UBool RBBIDataWrapper::isDataVersionAcceptable(const UVersionInfo version) {
 void RBBIDataWrapper::init0() {
     fHeader = NULL;
     fForwardTable = NULL;
-    fReverseTable = NULL;
-    fSafeFwdTable = NULL;
     fSafeRevTable = NULL;
     fRuleSource   = NULL;
     fRuleStatusTable = NULL;
@@ -108,23 +106,8 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
     if (data->fFTableLen != 0) {
         fForwardTable = (RBBIStateTable *)((char *)data + fHeader->fFTable);
     }
-    if (data->fRTableLen != 0) {
-        fReverseTable = (RBBIStateTable *)((char *)data + fHeader->fRTable);
-    }
-    if (data->fSFTableLen != 0) {
-        fSafeFwdTable = (RBBIStateTable *)((char *)data + fHeader->fSFTable);
-    }
     if (data->fSRTableLen != 0) {
         fSafeRevTable = (RBBIStateTable *)((char *)data + fHeader->fSRTable);
-    }
-
-    // Rule Compatibility Hacks
-    //    If a rule set includes reverse rules but does not explicitly include safe reverse rules,
-    //    the reverse rules are to be treated as safe reverse rules.
-
-    if (fSafeRevTable == NULL && fReverseTable != NULL) {
-        fSafeRevTable = fReverseTable;
-        fReverseTable = NULL;
     }
 
     fTrie = utrie2_openFromSerialized(UTRIE2_16_VALUE_BITS,
@@ -276,8 +259,6 @@ void  RBBIDataWrapper::printData() {
     RBBIDebugPrintf("   number of character categories = %d\n\n", fHeader->fCatCount);
 
     printTable("Forward State Transition Table", fForwardTable);
-    printTable("Reverse State Transition Table", fReverseTable);
-    printTable("Safe Forward State Transition Table", fSafeFwdTable);
     printTable("Safe Reverse State Transition Table", fSafeRevTable);
 
     RBBIDebugPrintf("\nOrignal Rules source:\n");

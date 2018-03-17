@@ -1100,6 +1100,91 @@ int32_t RuleBasedBreakIterator::handlePrevious(int32_t fromPosition) {
 }
 
 
+//-----------------------------------------------------------------------------------
+//
+//  handleSafePrevious()
+//
+//      Iterate backwards using the safe reverse rules.
+//      The logic of this function is similar to handleNext(), but simpler
+//      because the safe table does not require as many options.
+//
+//-----------------------------------------------------------------------------------
+int32_t RuleBasedBreakIterator::handleSafePrevious(int32_t fromPosition) {
+    int32_t             state;
+    uint16_t            category        = 0;
+    RBBIStateTableRow  *row;
+    UChar32             c;
+    int32_t             result          = 0;
+
+    const RBBIStateTable *stateTable = fData->fSafeRevTable;
+    UTEXT_SETNATIVEINDEX(&fText, fromPosition);
+    #ifdef RBBI_DEBUG
+        if (gTrace) {
+            RBBIDebugPuts("Handle Previous   pos   char  state category");
+        }
+    #endif
+
+    // if we're already at the start of the text, return DONE.
+    if (fData == NULL || UTEXT_GETNATIVEINDEX(&fText)==0) {
+        return BreakIterator::DONE;
+    }
+
+    //  Set the initial state for the state machine
+    c = UTEXT_PREVIOUS32(&fText);
+    state = START_STATE;
+    row = (RBBIStateTableRow *)
+            (stateTable->fTableData + (stateTable->fRowLen * state));
+
+    // loop until we reach the start of the text or transition to state 0
+    //
+    for (; c != U_SENTINEL; c = UTEXT_PREVIOUS32(&fText)) {
+
+        // look up the current character's character category, which tells us
+        // which column in the state table to look at.
+        // Note:  the 16 in UTRIE_GET16 refers to the size of the data being returned,
+        //        not the size of the character going in, which is a UChar32.
+        //
+        //  And off the dictionary flag bit. For reverse iteration it is not used.
+        category = UTRIE2_GET16(fData->fTrie, c);
+        category &= ~0x4000;
+
+        #ifdef RBBI_DEBUG
+            if (gTrace) {
+                RBBIDebugPrintf("             %4d   ", (int32_t)utext_getNativeIndex(&fText));
+                if (0x20<=c && c<0x7f) {
+                    RBBIDebugPrintf("\"%c\"  ", c);
+                } else {
+                    RBBIDebugPrintf("%5x  ", c);
+                }
+                RBBIDebugPrintf("%3d  %3d\n", state, category);
+            }
+        #endif
+
+        // State Transition - move machine to its next state
+        //
+        // fNextState is a variable-length array.
+        U_ASSERT(category<fData->fHeader->fCatCount);
+        state = row->fNextState[category];  /*Not accessing beyond memory*/
+        row = (RBBIStateTableRow *)
+            (stateTable->fTableData + (stateTable->fRowLen * state));
+
+        if (state == STOP_STATE) {
+            // This is the normal exit from the lookup state machine.
+            // Transistion to state zero means we have found a safe point.
+            break;
+        }
+    }
+
+    // The state machine is done.  Check whether it found a match...
+    result = (int32_t)UTEXT_GETNATIVEINDEX(&fText);
+    #ifdef RBBI_DEBUG
+        if (gTrace) {
+            RBBIDebugPrintf("result = %d\n\n", result);
+        }
+    #endif
+    return result;
+}
+
 //-------------------------------------------------------------------------------
 //
 //   getRuleStatus()   Return the break rule tag associated with the current

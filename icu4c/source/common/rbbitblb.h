@@ -37,12 +37,13 @@ class UVector32;
 
 class RBBITableBuilder : public UMemory {
 public:
-    RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode **rootNode);
+    RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode **rootNode, UErrorCode &status);
     ~RBBITableBuilder();
 
     void     build();
-    int32_t  getTableSize() const;      // Return the runtime size in bytes of
-                                        //     the built state table
+
+    /** Return the runtime size in bytes of the built state table.  */
+    int32_t  getTableSize() const;
 
     /** Fill in the runtime state table. Sufficient memory must exist at the specified location.
      */
@@ -61,6 +62,15 @@ public:
 
     /** Check for, and remove dupicate states (table rows). */
     void     removeDuplicateStates();
+
+    void     buildSafe(UErrorCode &status);
+
+    /** Return the runtime size in bytes of the built safe reverse state table. */
+    int32_t  getSafeTableSize() const;
+
+    /** Fill in the runtime safe state table. Sufficient memory must exist at the specified location.
+     */
+    void     exportSafeTable(void *where);
 
 
 private:
@@ -126,9 +136,13 @@ private:
                                            //   table for.
     UErrorCode       *fStatus;
 
+    /** State Descriptors, UVector<RBBIStateDescriptor> */
     UVector          *fDStates;            //  D states (Aho's terminology)
                                            //  Index is state number
                                            //  Contents are RBBIStateDescriptor pointers.
+
+    /** Synthesized safe table, UVector of UnicodeString, one string per table row.   */
+    UVector          *fSafeTable;
 
 
     RBBITableBuilder(const RBBITableBuilder &other); // forbid copying of this class

@@ -173,8 +173,6 @@ public:
     /*                                     */
     const RBBIDataHeader     *fHeader;
     const RBBIStateTable     *fForwardTable;
-    const RBBIStateTable     *fReverseTable;
-    const RBBIStateTable     *fSafeFwdTable;
     const RBBIStateTable     *fSafeRevTable;
     const UChar              *fRuleSource;
     const int32_t            *fRuleStatusTable; 

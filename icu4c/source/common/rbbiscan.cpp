@@ -372,7 +372,7 @@ UBool RBBIRuleScanner::doParseActions(int32_t action)
         //  (forward, reverse, safe_forward, safe_reverse)
         //  OR this rule into the appropriate group of them.
         //
-        RBBINode **destRules = (fReverseRule? &fRB->fReverseTree : fRB->fDefaultTree);
+        RBBINode **destRules = (fReverseRule? &fRB->fSafeRevTree : fRB->fDefaultTree);
 
         if (*destRules != NULL) {
             // This is not the first rule encounted.
@@ -1123,17 +1123,17 @@ void RBBIRuleScanner::parse() {
     }
 
     //
-    // If there were NO user specified reverse rules, set up the equivalent of ".*;"
+    // If there were NO user specified safe reverse rules, set up the equivalent of ".*;"
     //
-    if (fRB->fReverseTree == NULL) {
-        fRB->fReverseTree  = pushNewNode(RBBINode::opStar);
+    if (fRB->fSafeRevTree == NULL) {
+        fRB->fSafeRevTree  = pushNewNode(RBBINode::opStar);
         RBBINode  *operand = pushNewNode(RBBINode::setRef);
         if (U_FAILURE(*fRB->fStatus)) {
             return;
         }
         findSetFor(UnicodeString(TRUE, kAny, 3), operand);
-        fRB->fReverseTree->fLeftChild = operand;
-        operand->fParent              = fRB->fReverseTree;
+        fRB->fSafeRevTree->fLeftChild = operand;
+        operand->fParent              = fRB->fSafeRevTree;
         fNodeStackPtr -= 2;
     }
 
