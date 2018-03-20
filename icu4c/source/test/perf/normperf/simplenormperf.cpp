@@ -240,7 +240,7 @@ public:
 
 private:
     const Normalizer2 &norm2;
-    const UnicodeString &src;
+    UnicodeString src;
     const UChar *s;
     UnicodeString dest;
 };
@@ -303,9 +303,27 @@ double NormalizeUTF8::call(int32_t iterations, int32_t pieceLength) {
 }  // namespace
 
 extern int main(int /*argc*/, const char * /*argv*/[]) {
-    int32_t maxLength = getMaxLength();
+    // More than the longest piece length so that we read from different parts of the string
+    // for that piece length.
+    int32_t maxLength = getMaxLength() * 10;
     UErrorCode errorCode = U_ZERO_ERROR;
+    const Normalizer2 *nfc = Normalizer2::getNFCInstance(errorCode);
     const Normalizer2 *nfkc_cf = Normalizer2::getNFKCCasefoldInstance(errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr,
+                "simplenormperf: failed to get Normalizer2 instances - %s\n",
+                u_errorName(errorCode));
+    }
+    {
+        // Base line: Should remain in the fast loop without trie lookups.
+        NormalizeUTF16 op(*nfc, CommonChars::getLatin1(maxLength));
+        benchmark("NFC/UTF-16/latin1", op);
+    }
+    {
+        // Base line 2: Read UTF-8, trie lookups, but should have nothing to do.
+        NormalizeUTF8 op(*nfc, CommonChars::getJapanese(maxLength));
+        benchmark("NFC/UTF-8/japanese", op);
+    }
     {
         NormalizeUTF16 op(*nfkc_cf, CommonChars::getMixed(maxLength));
         benchmark("NFKC_CF/UTF-16/mixed", op);
