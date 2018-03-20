@@ -27,6 +27,7 @@
 #include "uassert.h"
 #include "ucln_cmn.h"
 #include "uhash.h"
+#include "utrie3.h"
 
 U_NAMESPACE_BEGIN
 
@@ -42,12 +43,12 @@ private:
     isAcceptable(void *context, const char *type, const char *name, const UDataInfo *pInfo);
 
     UDataMemory *memory;
-    UTrie2 *ownedTrie;
+    UTrie3 *ownedTrie;
 };
 
 LoadedNormalizer2Impl::~LoadedNormalizer2Impl() {
     udata_close(memory);
-    utrie2_close(ownedTrie);
+    utrie3_close(ownedTrie);
 }
 
 UBool U_CALLCONV
@@ -91,7 +92,7 @@ LoadedNormalizer2Impl::load(const char *packageName, const char *name, UErrorCod
 
     int32_t offset=inIndexes[IX_NORM_TRIE_OFFSET];
     int32_t nextOffset=inIndexes[IX_EXTRA_DATA_OFFSET];
-    ownedTrie=utrie2_openFromSerialized(UTRIE2_16_VALUE_BITS,
+    ownedTrie=utrie3_openFromSerialized(UTRIE3_TYPE_FAST, UTRIE3_16_VALUE_BITS,
                                         inBytes+offset, nextOffset-offset, NULL,
                                         &errorCode);
     if(U_FAILURE(errorCode)) {
@@ -169,8 +170,9 @@ static UBool U_CALLCONV uprv_loaded_normalizer2_cleanup() {
     nfkc_cfSingleton = NULL;
     uhash_close(cache);
     cache=NULL;
-    nfkcInitOnce.reset(); 
-    nfkc_cfInitOnce.reset(); 
+    nfcInitOnce.reset();  // TODO
+    nfkcInitOnce.reset();
+    nfkc_cfInitOnce.reset();
     return TRUE;
 }
 

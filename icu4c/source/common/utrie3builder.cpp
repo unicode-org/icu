@@ -234,7 +234,7 @@ inline uint32_t maybeHandleValue(uint32_t value, uint32_t initialValue, uint32_t
     return value;
 }
 
-int32_t Trie3Builder::getRange(UChar32 start,
+UChar32 Trie3Builder::getRange(UChar32 start,
                                UTrie3HandleValue *handleValue, const void *context,
                                uint32_t *pValue) const {
     if ((uint32_t)start > MAX_UNICODE) {

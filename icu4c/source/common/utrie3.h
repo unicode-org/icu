@@ -8,6 +8,7 @@
 #define __UTRIE3_H__
 
 #include "unicode/utypes.h"
+#include "unicode/localpointer.h"
 #include "unicode/utf8.h"
 #include "putilimp.h"
 #include "udataswp.h"
@@ -40,7 +41,7 @@ typedef struct UTrie3 UTrie3;
  */
 enum UTrie3Type {
     /** Fast/simple/larger BMP data structure. Use functions and "fast" macros. */
-    UTRIE3_TYPE_FAST,  // TODO: move _16 to the end
+    UTRIE3_TYPE_FAST,
     /** Small/slower BMP data structure. Use functions and "small" macros. */
     UTRIE3_TYPE_SMALL
 };
@@ -50,6 +51,7 @@ typedef enum UTrie3Type UTrie3Type;
  * Selectors for the width of a UTrie3 data value.
  */
 enum UTrie3ValueBits {
+    // TODO: 8
     /** 16 bits per UTrie3 data value. */
     UTRIE3_16_VALUE_BITS,  // TODO: move _16 to the end
     /** 32 bits per UTrie3 data value. */
@@ -88,6 +90,25 @@ utrie3_openFromSerialized(UTrie3Type type, UTrie3ValueBits valueBits,
  */
 U_CAPI void U_EXPORT2
 utrie3_close(UTrie3 *trie);
+
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUTrie3Pointer
+ * "Smart pointer" class, closes a UTrie3 via utrie3_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 62
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUTrie3Pointer, UTrie3, utrie3_close);
+
+U_NAMESPACE_END
+
+#endif
 
 /**
  * Get a value from a code point as stored in the trie.
@@ -144,7 +165,7 @@ UTrie3HandleValue(const void *context, uint32_t value);
  *     optionally modified by handleValue(context, trie value)
  * @return the range end code point, or -1 if start is not a valid code point
  */
-U_CAPI int32_t U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 utrie3_getRange(const UTrie3 *trie, UChar32 start,
                 UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue);
 

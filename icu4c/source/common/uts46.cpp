@@ -797,11 +797,24 @@ UTS46::processLabel(UnicodeString &dest,
                 info.labelErrors|=UIDNA_ERROR_DISALLOWED;
                 *s=0xfffd;
             }
-        } else {
+        } else if(c<0x3000) {
             oredChars|=c;
             if(disallowNonLDHDot && isNonASCIIDisallowedSTD3Valid(c)) {
                 info.labelErrors|=UIDNA_ERROR_DISALLOWED;
                 *s=0xfffd;
+            }
+        } else {
+            oredChars|=0x8000;  // remember non-ASCII
+            if(c<0xd800) {
+                // CJK
+            } else if(U16_IS_SURROGATE(c)) {
+                if(U16_IS_SURROGATE_LEAD(c) ?
+                        (s+1)==limit || !U16_IS_TRAIL(*(s+1)) :
+                        s==label || !U16_IS_LEAD(*(s-1))) {
+                    // unpaired surrogate
+                    info.labelErrors|=UIDNA_ERROR_DISALLOWED;
+                    *s=0xfffd;
+                }
             } else if(c==0xfffd) {
                 info.labelErrors|=UIDNA_ERROR_DISALLOWED;
             }

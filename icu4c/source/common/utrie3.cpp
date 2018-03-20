@@ -215,7 +215,7 @@ inline uint32_t maybeHandleValue(uint32_t value, uint32_t trieNullValue, uint32_
 
 }  // namespace
 
-U_CAPI int32_t U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 utrie3_getRange(const UTrie3 *trie, UChar32 start,
                 UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue) {
     if ((uint32_t)start > MAX_UNICODE) {

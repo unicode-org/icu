@@ -26,10 +26,11 @@
 #include "unicode/normalizer2.h"
 #include "unicode/unistr.h"
 #include "unicode/unorm.h"
+#include "unicode/utf.h"
 #include "unicode/utf16.h"
 #include "mutex.h"
 #include "uset_imp.h"
-#include "utrie2.h"
+#include "utrie3.h"
 
 U_NAMESPACE_BEGIN
 
@@ -158,8 +159,7 @@ public:
             appendBMP((UChar)c, cc, errorCode) :
             appendSupplementary(c, cc, errorCode);
     }
-    // s must be in NFD, otherwise change the implementation.
-    UBool append(const UChar *s, int32_t length,
+    UBool append(const UChar *s, int32_t length, UBool isNFD,
                  uint8_t leadCC, uint8_t trailCC,
                  UErrorCode &errorCode);
     UBool appendBMP(UChar c, uint8_t cc, UErrorCode &errorCode) {
@@ -243,7 +243,7 @@ public:
     }
     virtual ~Normalizer2Impl();
 
-    void init(const int32_t *inIndexes, const UTrie2 *inTrie,
+    void init(const int32_t *inIndexes, const UTrie3 *inTrie,
               const uint16_t *inExtraData, const uint8_t *inSmallFCD);
 
     void addLcccChars(UnicodeSet &set) const;
@@ -254,7 +254,10 @@ public:
 
     UBool ensureCanonIterData(UErrorCode &errorCode) const;
 
-    uint16_t getNorm16(UChar32 c) const { return UTRIE2_GET16(normTrie, c); }
+    // The trie stores values for lead surrogate code *units*.
+    // Surrogate code *points* are inert.
+    uint16_t getNorm16(UChar32 c) const { return U_IS_LEAD(c) ? INERT : UTRIE3_GET16(normTrie, c); }
+    uint16_t getRawNorm16(UChar32 c) const { return UTRIE3_GET16(normTrie, c); }
 
     UNormalizationCheckResult getCompQuickCheck(uint16_t norm16) const {
         if(norm16<minNoNo || MIN_YES_YES_WITH_CC<=norm16) {
@@ -533,6 +536,8 @@ private:
     friend class InitCanonIterData;
     friend class LcccContext;
 
+    UChar32 getNormTrieRange(UChar32 start, uint32_t &value) const;
+
     UBool isMaybe(uint16_t norm16) const { return minMaybeYes<=norm16 && norm16<=JAMO_VT; }
     UBool isMaybeOrNonZeroCC(uint16_t norm16) const { return norm16>=minMaybeYes; }
     static UBool isInert(uint16_t norm16) { return norm16==INERT; }
@@ -704,7 +709,7 @@ private:
     uint16_t centerNoNoDelta;
     uint16_t minMaybeYes;
 
-    const UTrie2 *normTrie;
+    const UTrie3 *normTrie;
     const uint16_t *maybeYesCompositions;
     const uint16_t *extraData;  // mappings and/or compositions for yesYes, yesNo & noNo characters
     const uint8_t *smallFCD;  // [0x100] one bit per 32 BMP code points, set if any FCD!=0
@@ -818,7 +823,7 @@ unorm_getFCD16(UChar32 c);
  *          minMaybeYes=indexes[IX_MIN_MAYBE_YES];
  *      See the normTrie description below and the design doc for details.
  *
- * UTrie2 normTrie; -- see utrie2_impl.h and utrie2.h
+ * UTrie2 normTrie; -- see utrie2_impl.h and utrie2.h  TODO
  *
  *      The trie holds the main normalization data. Each code point is mapped to a 16-bit value.
  *      Rather than using independent bits in the value (which would require more than 16 bits),

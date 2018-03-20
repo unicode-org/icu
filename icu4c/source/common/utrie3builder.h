@@ -8,6 +8,7 @@
 #define __UTRIE3BUILDER_H__
 
 #include "unicode/utypes.h"
+#include "unicode/localpointer.h"
 #include "unicode/utf8.h"
 #include "putilimp.h"
 #include "udataswp.h"
@@ -85,6 +86,25 @@ utrie3bld_clone(const UTrie3Builder *other, UErrorCode *pErrorCode);
 U_CAPI void U_EXPORT2
 utrie3bld_close(UTrie3Builder *builder);
 
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUTrie3BuilderPointer
+ * "Smart pointer" class, closes a UTrie3Builder via utrie3bld_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 62
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUTrie3BuilderPointer, UTrie3Builder, utrie3bld_close);
+
+U_NAMESPACE_END
+
+#endif
+
 /**
  * Creates a trie builder with the same contents as the input trie.
  * You must utrie3bld_close() the builder once you are done using it.
@@ -125,7 +145,7 @@ utrie3bld_get(const UTrie3Builder *builder, UChar32 c);
  *     optionally modified by handleValue(context, builder value)
  * @return the range end code point, or -1 if start is not a valid code point
  */
-U_CAPI int32_t U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 utrie3bld_getRange(const UTrie3Builder *builder, UChar32 start,
                    UTrie3HandleValue *enumValue, const void *context, uint32_t *pValue);
 

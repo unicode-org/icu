@@ -27,7 +27,7 @@
 #include "unicode/unistr.h"
 #include "normalizer2impl.h"  // for IX_COUNT
 #include "toolutil.h"
-#include "utrie2.h"
+#include "utrie3builder.h"
 #include "norms.h"
 
 U_NAMESPACE_BEGIN
@@ -95,9 +95,9 @@ private:
         return indexes[Normalizer2Impl::IX_MIN_MAYBE_YES]-
             ((2*Normalizer2Impl::MAX_DELTA+1)<<Normalizer2Impl::DELTA_SHIFT);
     }
-    void writeNorm16(UChar32 start, UChar32 end, Norm &norm);
-    void setHangulData();
-    void processData();
+    void writeNorm16(UTrie3Builder *norm16Trie, UChar32 start, UChar32 end, Norm &norm);
+    void setHangulData(UTrie3Builder *norm16Trie);
+    LocalUTrie3Pointer processData();
 
     Norms norms;
 
@@ -107,7 +107,7 @@ private:
     Optimization optimization;
 
     int32_t indexes[Normalizer2Impl::IX_COUNT];
-    UTrie2 *norm16Trie;
+    uint8_t *norm16TrieBytes;
     int32_t norm16TrieLength;
     UnicodeString extraData;
     uint8_t smallFCD[0x100];
