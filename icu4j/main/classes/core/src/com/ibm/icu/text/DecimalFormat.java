@@ -2508,8 +2508,8 @@ public class DecimalFormat extends NumberFormat {
     }
     assert locale != null;
     formatter = NumberFormatter.fromDecimalFormat(properties, symbols, exportedProperties).locale(locale);
-    parser = NumberParserImpl.createParserFromProperties(properties, symbols, false, false);
-    parserWithCurrency = NumberParserImpl.createParserFromProperties(properties, symbols, true, false);
+    parser = NumberParserImpl.createParserFromProperties(properties, symbols, false);
+    parserWithCurrency = NumberParserImpl.createParserFromProperties(properties, symbols, true);
   }
 
   /**
