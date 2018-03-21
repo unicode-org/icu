@@ -30,7 +30,7 @@ class NumberParserImpl : public MutableMatcherCollection {
 
     static NumberParserImpl* createParserFromProperties(
             const number::impl::DecimalFormatProperties& properties, const DecimalFormatSymbols& symbols,
-            bool parseCurrency, bool optimize, UErrorCode& status);
+            bool parseCurrency, UErrorCode& status);
 
     /**
      * Does NOT take ownership of the matcher. The matcher MUST remain valid for the lifespan of the

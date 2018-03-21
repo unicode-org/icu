@@ -76,7 +76,7 @@ public class NumberParserImpl {
             ParsePosition ppos,
             DecimalFormatProperties properties,
             DecimalFormatSymbols symbols) {
-        NumberParserImpl parser = createParserFromProperties(properties, symbols, false, false);
+        NumberParserImpl parser = createParserFromProperties(properties, symbols, false);
         ParsedNumber result = new ParsedNumber();
         parser.parse(input, true, result);
         if (result.success()) {
@@ -96,7 +96,7 @@ public class NumberParserImpl {
             ParsePosition ppos,
             DecimalFormatProperties properties,
             DecimalFormatSymbols symbols) {
-        NumberParserImpl parser = createParserFromProperties(properties, symbols, true, false);
+        NumberParserImpl parser = createParserFromProperties(properties, symbols, true);
         ParsedNumber result = new ParsedNumber();
         parser.parse(input, true, result);
         if (result.success()) {
@@ -109,10 +109,10 @@ public class NumberParserImpl {
         }
     }
 
-    public static NumberParserImpl createDefaultParserForLocale(ULocale loc, boolean optimize) {
+    public static NumberParserImpl createDefaultParserForLocale(ULocale loc) {
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(loc);
         DecimalFormatProperties properties = PatternStringParser.parseToProperties("0");
-        return createParserFromProperties(properties, symbols, false, optimize);
+        return createParserFromProperties(properties, symbols, false);
     }
 
     /**
@@ -125,15 +125,12 @@ public class NumberParserImpl {
      *            The locale's symbols.
      * @param parseCurrency
      *            True to force a currency match and use monetary separators; false otherwise.
-     * @param optimize
-     *            True to construct the lead-chars; false to disable.
      * @return An immutable parser object.
      */
     public static NumberParserImpl createParserFromProperties(
             DecimalFormatProperties properties,
             DecimalFormatSymbols symbols,
-            boolean parseCurrency,
-            boolean optimize) {
+            boolean parseCurrency) {
 
         ULocale locale = symbols.getULocale();
         AffixPatternProvider patternInfo = new PropertiesAffixPatternProvider(properties);
@@ -165,9 +162,6 @@ public class NumberParserImpl {
         }
         if (parseCurrency || patternInfo.hasCurrencySign()) {
             parseFlags |= ParsingUtils.PARSE_FLAG_MONETARY_SEPARATORS;
-        }
-        if (optimize) {
-            parseFlags |= ParsingUtils.PARSE_FLAG_OPTIMIZE;
         }
         IgnorablesMatcher ignorables = isStrict ? IgnorablesMatcher.STRICT : IgnorablesMatcher.DEFAULT;
 

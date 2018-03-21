@@ -305,7 +305,7 @@ public class NumberParserTest {
         properties.setGroupingSize(0);
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
         NumberParserImpl parser = NumberParserImpl
-                .createParserFromProperties(properties, symbols, false, true);
+                .createParserFromProperties(properties, symbols, false);
         ParsedNumber result = new ParsedNumber();
         parser.parse("12,345.678", true, result);
         assertEquals("Should not parse with grouping separator",
@@ -330,9 +330,8 @@ public class NumberParserTest {
             int expectedCaseSensitiveChars = (Integer) cas[2];
             int expectedCaseFoldingChars = (Integer) cas[3];
 
-            NumberParserImpl caseSensitiveParser = NumberParserImpl.createSimpleParser(ULocale.ENGLISH,
-                    patternString,
-                    ParsingUtils.PARSE_FLAG_OPTIMIZE);
+            NumberParserImpl caseSensitiveParser = NumberParserImpl
+                    .createSimpleParser(ULocale.ENGLISH, patternString, 0);
             ParsedNumber result = new ParsedNumber();
             caseSensitiveParser.parse(inputString, true, result);
             assertEquals("Case-Sensitive: " + inputString + " on " + patternString,
@@ -341,7 +340,7 @@ public class NumberParserTest {
 
             NumberParserImpl caseFoldingParser = NumberParserImpl.createSimpleParser(ULocale.ENGLISH,
                     patternString,
-                    ParsingUtils.PARSE_FLAG_IGNORE_CASE | ParsingUtils.PARSE_FLAG_OPTIMIZE);
+                    ParsingUtils.PARSE_FLAG_IGNORE_CASE);
             result = new ParsedNumber();
             caseFoldingParser.parse(inputString, true, result);
             assertEquals("Folded: " + inputString + " on " + patternString,
