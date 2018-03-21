@@ -190,6 +190,14 @@ DecimalFormat::setAttribute(UNumberFormatAttribute attr, int32_t newValue, UErro
             setMinimumGroupingDigits(newValue);
             break;
 
+        case UNUM_PARSE_CASE_SENSITIVE:
+            setParseCaseSensitive(static_cast<UBool>(newValue));
+            break;
+
+        case UNUM_SIGN_ALWAYS_SHOWN:
+            setSignAlwaysShown(static_cast<UBool>(newValue));
+            break;
+
         default:
             status = U_UNSUPPORTED_ERROR;
             break;
@@ -262,7 +270,7 @@ int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& sta
             return getSecondaryGroupingSize();
 
         case UNUM_PARSE_NO_EXPONENT:
-            return getParseNoExponent();
+            return isParseNoExponent();
 
         case UNUM_PARSE_DECIMAL_MARK_REQUIRED:
             return isDecimalPatternMatchRequired();
@@ -272,6 +280,12 @@ int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& sta
 
         case UNUM_MINIMUM_GROUPING_DIGITS:
             return getMinimumGroupingDigits();
+
+        case UNUM_PARSE_CASE_SENSITIVE:
+            return isParseCaseSensitive();
+
+        case UNUM_SIGN_ALWAYS_SHOWN:
+            return isSignAlwaysShown();
 
         default:
             status = U_UNSUPPORTED_ERROR;
@@ -296,7 +310,14 @@ void DecimalFormat::setGroupingUsed(UBool enabled) {
 }
 
 void DecimalFormat::setParseIntegerOnly(UBool value) {
+    NumberFormat::setParseIntegerOnly(value); // to set field for compatibility
     fProperties->parseIntegerOnly = value;
+    refreshFormatterNoError();
+}
+
+void DecimalFormat::setLenient(UBool enable) {
+    NumberFormat::setLenient(enable); // to set field for compatibility
+    fProperties->parseMode = enable ? PARSE_MODE_LENIENT : PARSE_MODE_STRICT;
     refreshFormatterNoError();
 }
 
@@ -450,14 +471,46 @@ DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo, Fi
     return appendTo;
 }
 
-void DecimalFormat::parse(const UnicodeString& /*text*/, Formattable& /*result*/,
-                          ParsePosition& /*parsePosition*/) const {
-    // FIXME
+void DecimalFormat::parse(const UnicodeString& text, Formattable& output,
+                          ParsePosition& parsePosition) const {
+    if (parsePosition.getIndex() < 0 || parsePosition.getIndex() >= text.length()) {
+        return;
+    }
+
+    ErrorCode status;
+    ParsedNumber result;
+    // Note: if this is a currency instance, currencies will be matched despite the fact that we are not in the
+    // parseCurrency method (backwards compatibility)
+    int32_t startIndex = parsePosition.getIndex();
+    fParser->parse(text, startIndex, true, result, status);
+    if (result.success()) {
+        parsePosition.setIndex(result.charEnd);
+        result.populateFormattable(output);
+    } else {
+        parsePosition.setErrorIndex(startIndex + result.charEnd);
+    }
 }
 
-CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& /*text*/, ParsePosition& /*pos*/) const {
-    // FIXME
-    return nullptr;
+CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& text, ParsePosition& parsePosition) const {
+    if (parsePosition.getIndex() < 0 || parsePosition.getIndex() >= text.length()) {
+        return nullptr;
+    }
+
+    ErrorCode status;
+    ParsedNumber result;
+    // Note: if this is a currency instance, currencies will be matched despite the fact that we are not in the
+    // parseCurrency method (backwards compatibility)
+    int32_t startIndex = parsePosition.getIndex();
+    fParserWithCurrency->parse(text, startIndex, true, result, status);
+    if (result.success()) {
+        parsePosition.setIndex(result.charEnd);
+        Formattable formattable;
+        result.populateFormattable(formattable);
+        return new CurrencyAmount(formattable, result.currencyCode, status);
+    } else {
+        parsePosition.setErrorIndex(startIndex + result.charEnd);
+        return nullptr;
+    }
 }
 
 const DecimalFormatSymbols* DecimalFormat::getDecimalFormatSymbols(void) const {
@@ -532,6 +585,15 @@ UnicodeString& DecimalFormat::getNegativeSuffix(UnicodeString& result) const {
 
 void DecimalFormat::setNegativeSuffix(const UnicodeString& newValue) {
     fProperties->negativeSuffix = newValue;
+    refreshFormatterNoError();
+}
+
+UBool DecimalFormat::isSignAlwaysShown() const {
+    return fProperties->signAlwaysShown;
+}
+
+void DecimalFormat::setSignAlwaysShown(UBool value) {
+    fProperties->signAlwaysShown = value;
     refreshFormatterNoError();
 }
 
@@ -708,12 +770,21 @@ void DecimalFormat::setDecimalPatternMatchRequired(UBool newValue) {
     refreshFormatterNoError();
 }
 
-UBool DecimalFormat::getParseNoExponent() const {
+UBool DecimalFormat::isParseNoExponent() const {
     return fProperties->parseNoExponent;
 }
 
 void DecimalFormat::setParseNoExponent(UBool value) {
     fProperties->parseNoExponent = value;
+    refreshFormatterNoError();
+}
+
+UBool DecimalFormat::isParseCaseSensitive() const {
+    return fProperties->parseCaseSensitive;
+}
+
+void DecimalFormat::setParseCaseSensitive(UBool value) {
+    fProperties->parseCaseSensitive = value;
     refreshFormatterNoError();
 }
 
@@ -907,13 +978,13 @@ void DecimalFormat::refreshFormatter(UErrorCode& status) {
                             *fProperties, *fSymbols, *fWarehouse, *fExportedProperties, status).locale(
                             locale)), status);
 
-    // fParser.adoptInsteadAndCheckErrorCode(
-    //         NumberParserImpl::createParserFromProperties(
-    //                 *fProperties, *fSymbols, false, false, status), status);
+    fParser.adoptInsteadAndCheckErrorCode(
+            NumberParserImpl::createParserFromProperties(
+                    *fProperties, *fSymbols, false, status), status);
 
-    // fParserWithCurrency.adoptInsteadAndCheckErrorCode(
-    //         NumberParserImpl::createParserFromProperties(
-    //                 *fProperties, *fSymbols, true, false, status), status);
+    fParserWithCurrency.adoptInsteadAndCheckErrorCode(
+            NumberParserImpl::createParserFromProperties(
+                    *fProperties, *fSymbols, true, status), status);
 }
 
 void DecimalFormat::refreshFormatterNoError() {

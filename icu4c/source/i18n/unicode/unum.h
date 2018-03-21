@@ -1052,7 +1052,7 @@ typedef enum UNumberFormatAttribute {
    * Default: 0 (unset)
    * @stable ICU 50
    */
-  UNUM_PARSE_NO_EXPONENT,
+  UNUM_PARSE_NO_EXPONENT = 0x1001,
 
   /** 
    * if this attribute is set to 1, specifies that, if the pattern contains a 
@@ -1067,7 +1067,19 @@ typedef enum UNumberFormatAttribute {
   /* The following cannot be #ifndef U_HIDE_INTERNAL_API, needed in .h file variable declararions */
   /** Limit of boolean attributes.
    * @internal */
-  UNUM_LIMIT_BOOLEAN_ATTRIBUTE = 0x1003
+  UNUM_LIMIT_BOOLEAN_ATTRIBUTE = 0x1003,
+
+  /**
+   * Whether parsing is sensitive to case (lowercase/uppercase).
+   * @internal This API is a technical preview. It may change in an upcoming release.
+   */
+  UNUM_PARSE_CASE_SENSITIVE = 0x1004,
+
+  /**
+   * Formatting: whether to show the plus sign on non-negative numbers.
+   * @internal This API is a technical preview. It may change in an upcoming release.
+   */
+  UNUM_SIGN_ALWAYS_SHOWN = 0x1005,
 } UNumberFormatAttribute;
 
 /**

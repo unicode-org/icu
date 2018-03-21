@@ -99,7 +99,7 @@ void DataDrivenNumberFormatTestSuite::run(const char *fileName, UBool runAllTest
                         : breaksC();
                 UBool actualSuccess = isPass(fTuple, errorMessage, status);
                 if (shouldFail && actualSuccess) {
-                    showFailure("Expected failure, but passed");
+                    showFailure("Expected failure, but passed: " + errorMessage);
                     break;
                 } else if (!shouldFail && !actualSuccess) {
                     showFailure(errorMessage);
