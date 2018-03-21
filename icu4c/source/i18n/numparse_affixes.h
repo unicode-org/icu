@@ -35,7 +35,7 @@ class CodePointMatcher : public NumberParseMatcher, public UMemory {
 
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
-    const UnicodeSet& getLeadCodePoints() override;
+    bool smokeTest(const StringSegment& segment) const override;
 
     UnicodeString toString() const override;
 
@@ -190,7 +190,7 @@ class AffixMatcher : public NumberParseMatcher, public UMemory {
 
     void postProcess(ParsedNumber& result) const override;
 
-    const UnicodeSet& getLeadCodePoints() override;
+    bool smokeTest(const StringSegment& segment) const override;
 
     int8_t compareTo(const AffixMatcher& rhs) const;
 

@@ -49,8 +49,6 @@ public class UnicodeSetStaticCache {
 
         // Other
         DIGITS,
-        NAN_LEAD,
-        SCIENTIFIC_LEAD,
         CWCF, // TODO: Check if this is being used and remove it if not.
 
         // Combined Separators with Digits (for lead code points)
@@ -112,10 +110,6 @@ public class UnicodeSetStaticCache {
         unicodeSets.put(Key.INFINITY, new UnicodeSet("[∞]").freeze());
 
         unicodeSets.put(Key.DIGITS, new UnicodeSet("[:digit:]").freeze());
-        unicodeSets.put(Key.NAN_LEAD,
-                new UnicodeSet("[NnТтmeՈոс¤НнчTtsҳ\u975e\u1002\u0e9a\u10d0\u0f68\u0644\u0646]")
-                        .freeze());
-        unicodeSets.put(Key.SCIENTIFIC_LEAD, new UnicodeSet("[Ee×·е\u0627]").freeze());
         unicodeSets.put(Key.CWCF, new UnicodeSet("[:CWCF:]").freeze());
 
         unicodeSets.put(Key.DIGITS_OR_ALL_SEPARATORS, computeUnion(Key.DIGITS, Key.ALL_SEPARATORS));

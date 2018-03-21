@@ -27,7 +27,7 @@ class DecimalMatcher : public NumberParseMatcher, public UMemory {
     bool
     match(StringSegment& segment, ParsedNumber& result, int8_t exponentSign, UErrorCode& status) const;
 
-    const UnicodeSet& getLeadCodePoints() override;
+    bool smokeTest(const StringSegment& segment) const override;
 
     UnicodeString toString() const override;
 

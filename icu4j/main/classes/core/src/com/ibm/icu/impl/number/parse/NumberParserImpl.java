@@ -19,7 +19,6 @@ import com.ibm.icu.impl.number.PropertiesAffixPatternProvider;
 import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
@@ -250,7 +249,6 @@ public class NumberParserImpl {
 
     private final int parseFlags;
     private final List<NumberParseMatcher> matchers;
-    private final List<UnicodeSet> leads;
     private boolean frozen;
 
     /**
@@ -261,11 +259,6 @@ public class NumberParserImpl {
      */
     public NumberParserImpl(int parseFlags) {
         matchers = new ArrayList<NumberParseMatcher>();
-        if (0 != (parseFlags & ParsingUtils.PARSE_FLAG_OPTIMIZE)) {
-            leads = new ArrayList<UnicodeSet>();
-        } else {
-            leads = null;
-        }
         this.parseFlags = parseFlags;
         frozen = false;
     }
@@ -273,30 +266,11 @@ public class NumberParserImpl {
     public void addMatcher(NumberParseMatcher matcher) {
         assert !frozen;
         this.matchers.add(matcher);
-        if (leads != null) {
-            addLeadCodePointsForMatcher(matcher);
-        }
     }
 
     public void addMatchers(Collection<? extends NumberParseMatcher> matchers) {
         assert !frozen;
         this.matchers.addAll(matchers);
-        if (leads != null) {
-            for (NumberParseMatcher matcher : matchers) {
-                addLeadCodePointsForMatcher(matcher);
-            }
-        }
-    }
-
-    private void addLeadCodePointsForMatcher(NumberParseMatcher matcher) {
-        UnicodeSet leadCodePoints = matcher.getLeadCodePoints();
-        assert leadCodePoints.isFrozen();
-        // TODO: Avoid the clone operation here.
-        if (0 != (parseFlags & ParsingUtils.PARSE_FLAG_IGNORE_CASE)) {
-            leadCodePoints = leadCodePoints.cloneAsThawed().closeOver(UnicodeSet.ADD_CASE_MAPPINGS)
-                    .freeze();
-        }
-        this.leads.add(leadCodePoints);
     }
 
     public void freeze() {
@@ -343,12 +317,11 @@ public class NumberParserImpl {
         }
 
         int initialOffset = segment.getOffset();
-        int leadCp = segment.getCodePoint();
         for (int i = 0; i < matchers.size(); i++) {
-            if (leads != null && !leads.get(i).contains(leadCp)) {
+            NumberParseMatcher matcher = matchers.get(i);
+            if (!matcher.smokeTest(segment)) {
                 continue;
             }
-            NumberParseMatcher matcher = matchers.get(i);
             matcher.match(segment, result);
             if (segment.getOffset() != initialOffset) {
                 // In a greedy parse, recurse on only the first match.
@@ -377,8 +350,10 @@ public class NumberParserImpl {
 
         int initialOffset = segment.getOffset();
         for (int i = 0; i < matchers.size(); i++) {
-            // TODO: Check leadChars here?
             NumberParseMatcher matcher = matchers.get(i);
+            if (!matcher.smokeTest(segment)) {
+                continue;
+            }
 
             // In a non-greedy parse, we attempt all possible matches and pick the best.
             for (int charsToConsume = 0; charsToConsume < segment.length();) {

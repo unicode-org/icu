@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ibm.icu.impl.StringSegment;
-import com.ibm.icu.text.UnicodeSet;
 
 /**
  * Composes a number of matchers, and succeeds if any of the matchers succeed. Always greedily chooses
@@ -58,22 +57,18 @@ public class AnyMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
+    public boolean smokeTest(StringSegment segment) {
         assert frozen;
         if (matchers == null) {
-            return UnicodeSet.EMPTY;
+            return false;
         }
 
-        if (matchers.size() == 1) {
-            return matchers.get(0).getLeadCodePoints();
-        }
-
-        UnicodeSet leadCodePoints = new UnicodeSet();
         for (int i = 0; i < matchers.size(); i++) {
-            NumberParseMatcher matcher = matchers.get(i);
-            leadCodePoints.addAll(matcher.getLeadCodePoints());
+            if (matchers.get(i).smokeTest(segment)) {
+                return true;
+            }
         }
-        return leadCodePoints.freeze();
+        return false;
     }
 
     @Override

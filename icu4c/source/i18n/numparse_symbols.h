@@ -28,7 +28,7 @@ class SymbolMatcher : public NumberParseMatcher, public UMemory {
 
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
-    const UnicodeSet& getLeadCodePoints() override;
+    bool smokeTest(const StringSegment& segment) const override;
 
     UnicodeString toString() const override;
 
@@ -95,8 +95,6 @@ class NanMatcher : public SymbolMatcher {
     NanMatcher() = default;  // WARNING: Leaves the object in an unusable state
 
     NanMatcher(const DecimalFormatSymbols& dfs);
-
-    const UnicodeSet& getLeadCodePoints() override;
 
   protected:
     bool isDisabled(const ParsedNumber& result) const override;

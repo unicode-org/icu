@@ -25,7 +25,7 @@ class ScientificMatcher : public NumberParseMatcher, public UMemory {
 
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
-    const UnicodeSet& getLeadCodePoints() override;
+    bool smokeTest(const StringSegment& segment) const override;
 
     UnicodeString toString() const override;
 

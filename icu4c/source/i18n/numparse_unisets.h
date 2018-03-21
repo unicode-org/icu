@@ -47,8 +47,6 @@ enum Key {
 
     // Other
             DIGITS,
-    NAN_LEAD,
-    SCIENTIFIC_LEAD,
     CWCF,
 
     // Combined Separators with Digits (for lead code points)

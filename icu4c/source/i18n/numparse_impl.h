@@ -32,6 +32,11 @@ class NumberParserImpl : public MutableMatcherCollection {
             const number::impl::DecimalFormatProperties& properties, const DecimalFormatSymbols& symbols,
             bool parseCurrency, bool optimize, UErrorCode& status);
 
+    /**
+     * Does NOT take ownership of the matcher. The matcher MUST remain valid for the lifespan of the
+     * NumberParserImpl.
+     * @param matcher The matcher to reference.
+     */
     void addMatcher(NumberParseMatcher& matcher) override;
 
     void freeze();
@@ -48,8 +53,6 @@ class NumberParserImpl : public MutableMatcherCollection {
     int32_t fNumMatchers = 0;
     // NOTE: The stack capacity for fMatchers and fLeads should be the same
     MaybeStackArray<const NumberParseMatcher*, 10> fMatchers;
-    MaybeStackArray<const UnicodeSet*, 10> fLeads;
-    bool fComputeLeads;
     bool fFrozen = false;
 
     // WARNING: All of these matchers start in an undefined state (default-constructed).
@@ -78,9 +81,7 @@ class NumberParserImpl : public MutableMatcherCollection {
         RequireNumberValidator number;
     } fLocalValidators;
 
-    NumberParserImpl(parse_flags_t parseFlags, bool computeLeads);
-
-    void addLeadCodePointsForMatcher(NumberParseMatcher& matcher);
+    explicit NumberParserImpl(parse_flags_t parseFlags);
 
     void parseGreedyRecursive(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const;
 

@@ -176,10 +176,9 @@ void NumberParserTest::testSeriesMatcher() {
     matchers[4] = &m4;
     ArraySeriesMatcher series(matchers, 5);
 
-    assertEquals(
-            "Lead set should be equal to lead set of lead matcher",
-            *unisets::get(unisets::PLUS_SIGN),
-            series.getLeadCodePoints());
+    assertFalse("", series.smokeTest(StringSegment(u"x", false)));
+    assertFalse("", series.smokeTest(StringSegment(u"-", false)));
+    assertTrue("", series.smokeTest(StringSegment(u"+", false)));
 
     static const struct TestCase {
         const char16_t* input;

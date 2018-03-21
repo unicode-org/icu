@@ -329,21 +329,23 @@ public class DecimalMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
+    public boolean smokeTest(StringSegment segment) {
+        // The common case uses a static leadSet for efficiency.
         if (digitStrings == null && leadSet != null) {
-            return leadSet;
+            return segment.startsWith(leadSet);
         }
-
-        UnicodeSet leadCodePoints = new UnicodeSet();
-        // Assumption: the sets are all single code points.
-        leadCodePoints.addAll(UnicodeSetStaticCache.get(Key.DIGITS));
-        leadCodePoints.addAll(separatorSet);
-        if (digitStrings != null) {
-            for (int i = 0; i < digitStrings.length; i++) {
-                ParsingUtils.putLeadCodePoint(digitStrings[i], leadCodePoints);
+        if (segment.startsWith(separatorSet) || UCharacter.isDigit(segment.getCodePoint())) {
+            return true;
+        }
+        if (digitStrings == null) {
+            return false;
+        }
+        for (int i = 0; i < digitStrings.length; i++) {
+            if (segment.startsWith(digitStrings[i])) {
+                return true;
             }
         }
-        return leadCodePoints.freeze();
+        return false;
     }
 
     @Override

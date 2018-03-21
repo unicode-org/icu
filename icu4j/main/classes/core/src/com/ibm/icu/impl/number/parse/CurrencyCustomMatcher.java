@@ -3,7 +3,6 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.StringSegment;
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
@@ -52,11 +51,8 @@ public class CurrencyCustomMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
-        UnicodeSet leadCodePoints = new UnicodeSet();
-        ParsingUtils.putLeadCodePoint(currency1, leadCodePoints);
-        ParsingUtils.putLeadCodePoint(currency2, leadCodePoints);
-        return leadCodePoints.freeze();
+    public boolean smokeTest(StringSegment segment) {
+        return segment.startsWith(currency1) || segment.startsWith(currency2);
     }
 
     @Override

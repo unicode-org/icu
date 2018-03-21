@@ -46,8 +46,6 @@ void UniSetsTest::testSetCoverage() {
     const UnicodeSet &percent = *get(unisets::PERCENT_SIGN);
     const UnicodeSet &permille = *get(unisets::PERMILLE_SIGN);
     const UnicodeSet &infinity = *get(unisets::INFINITY_KEY);
-    const UnicodeSet &nanLead = *get(unisets::NAN_LEAD);
-    const UnicodeSet &scientificLead = *get(unisets::SCIENTIFIC_LEAD);
 
     int32_t localeCount;
     const Locale* allAvailableLocales = Locale::getAvailableLocales(localeCount);
@@ -66,11 +64,6 @@ void UniSetsTest::testSetCoverage() {
         ASSERT_IN_SET(percent, dfs.getConstSymbol(DecimalFormatSymbols::kPercentSymbol));
         ASSERT_IN_SET(permille, dfs.getConstSymbol(DecimalFormatSymbols::kPerMillSymbol));
         ASSERT_IN_SET(infinity, dfs.getConstSymbol(DecimalFormatSymbols::kInfinitySymbol));
-        ASSERT_IN_SET(nanLead, dfs.getConstSymbol(DecimalFormatSymbols::kNaNSymbol).char32At(0));
-        ASSERT_IN_SET(nanLead,
-                u_foldCase(dfs.getConstSymbol(DecimalFormatSymbols::kNaNSymbol).char32At(0), 0));
-        ASSERT_IN_SET(scientificLead,
-                u_foldCase(dfs.getConstSymbol(DecimalFormatSymbols::kExponentialSymbol).char32At(0), 0));
     }
 }
 

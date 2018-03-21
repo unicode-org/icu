@@ -5,7 +5,6 @@ package com.ibm.icu.impl.number.parse;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author sffc
@@ -78,14 +77,8 @@ public class ScientificMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
-        int leadCp = exponentSeparatorString.codePointAt(0);
-        UnicodeSet s = UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.SCIENTIFIC_LEAD);
-        if (s.contains(leadCp)) {
-            return s;
-        } else {
-            return new UnicodeSet().add(leadCp).freeze();
-        }
+    public boolean smokeTest(StringSegment segment) {
+        return segment.startsWith(exponentSeparatorString);
     }
 
     @Override

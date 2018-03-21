@@ -59,16 +59,8 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
-        if (string.isEmpty()) {
-            // Assumption: for sets from UnicodeSetStaticCache, uniSet == leadCodePoints.
-            return uniSet;
-        }
-
-        UnicodeSet leadCodePoints = new UnicodeSet();
-        ParsingUtils.putLeadCodePoints(uniSet, leadCodePoints);
-        ParsingUtils.putLeadCodePoint(string, leadCodePoints);
-        return leadCodePoints.freeze();
+    public boolean smokeTest(StringSegment segment) {
+        return segment.startsWith(uniSet) || segment.startsWith(string);
     }
 
     @Override

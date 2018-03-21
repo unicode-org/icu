@@ -42,6 +42,8 @@ class AnyMatcher : public CompositionMatcher {
   public:
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
+    bool smokeTest(const StringSegment& segment) const override;
+
     void postProcess(ParsedNumber& result) const override;
 
   protected:
@@ -60,6 +62,8 @@ class AnyMatcher : public CompositionMatcher {
 class SeriesMatcher : public CompositionMatcher {
   public:
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
+
+    bool smokeTest(const StringSegment& segment) const override;
 
     void postProcess(ParsedNumber& result) const override;
 
@@ -80,12 +84,10 @@ class ArraySeriesMatcher : public SeriesMatcher {
   public:
     ArraySeriesMatcher();  // WARNING: Leaves the object in an unusable state
 
-    typedef MaybeStackArray<NumberParseMatcher*, 3> MatcherArray;
+    typedef MaybeStackArray<const NumberParseMatcher*, 3> MatcherArray;
 
     /** The array is std::move'd */
     ArraySeriesMatcher(MatcherArray& matchers, int32_t matchersLen);
-
-    const UnicodeSet& getLeadCodePoints() override;
 
     UnicodeString toString() const override;
 

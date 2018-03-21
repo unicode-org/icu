@@ -28,18 +28,6 @@ public class NanMatcher extends SymbolMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
-        // Overriding this here to allow use of statically allocated sets
-        int leadCp = string.codePointAt(0);
-        UnicodeSet s = UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.NAN_LEAD);
-        if (s.contains(leadCp)) {
-            return s;
-        } else {
-            return super.getLeadCodePoints();
-        }
-    }
-
-    @Override
     protected boolean isDisabled(ParsedNumber result) {
         return result.seenNumber();
     }
