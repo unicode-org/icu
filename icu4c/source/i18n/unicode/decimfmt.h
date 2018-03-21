@@ -823,6 +823,15 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     void setParseIntegerOnly(UBool value) U_OVERRIDE;
 
     /**
+     * Sets whether lenient parsing should be enabled (it is off by default).
+     *
+     * @param enable \c TRUE if lenient parsing should be used,
+     *               \c FALSE otherwise.
+     * @stable ICU 4.8
+     */
+    void setLenient(UBool enable) U_OVERRIDE;
+
+    /**
      * Create a DecimalFormat from the given pattern and symbols.
      * Use this constructor when you need to completely customize the
      * behavior of the format.
@@ -1267,6 +1276,19 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     virtual void setNegativeSuffix(const UnicodeString& newValue);
 
     /**
+     * Whether to show the plus sign on positive (non-negative) numbers; for example, "+12"
+     * @internal Technical Preview
+     */
+    UBool isSignAlwaysShown() const;
+
+    /**
+     * Set whether to show the plus sign on positive (non-negative) numbers; for example, "+12"
+     * @param value The new setting for whether to show plus sign on positive numbers
+     * @internal Technical Preview
+     */
+    void setSignAlwaysShown(UBool value);
+
+    /**
      * Get the multiplier for use in percent, permill, etc.
      * For a percentage, set the suffixes to have "%" and the multiplier to be 100.
      * (For Arabic, use arabic percent symbol).
@@ -1655,7 +1677,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @see #setParseNoExponent
      * @internal This API is a technical preview. It may change in an upcoming release.
      */
-    UBool getParseNoExponent() const;
+    UBool isParseNoExponent() const;
 
     /**
      * {@icu} Specifies whether to stop parsing when an exponent separator is encountered. For
@@ -1666,6 +1688,23 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @internal This API is a technical preview. It may change in an upcoming release.
      */
     void setParseNoExponent(UBool value);
+
+    /**
+     * {@icu} Returns whether parsing is sensitive to case (lowercase/uppercase).
+     *
+     * @see #setParseCaseSensitive
+     * @internal This API is a technical preview. It may change in an upcoming release.
+     */
+    UBool isParseCaseSensitive() const;
+
+    /**
+     * {@icu} Whether to pay attention to case when parsing; default is to ignore case (perform
+     * case-folding). For example, "A" == "a" in case-insensitive but not case-sensitive mode.
+     *
+     * Currency codes are never case-folded. For example, "us$1.00" will not parse in case-insensitive
+     * mode, even though "US$1.00" parses.
+     */
+    void setParseCaseSensitive(UBool value);
 
 
     /**

@@ -10,9 +10,12 @@
 #define UNISTR_FROM_STRING_EXPLICIT
 
 #include "numparse_types.h"
+#include "number_decimalquantity.h"
 #include <cmath>
 
 using namespace icu;
+using namespace icu::number;
+using namespace icu::number::impl;
 using namespace icu::numparse;
 using namespace icu::numparse::impl;
 
@@ -76,6 +79,38 @@ double ParsedNumber::getDouble() const {
         d *= -1;
     }
     return d;
+}
+
+void ParsedNumber::populateFormattable(Formattable& output) const {
+    bool sawNegative = 0 != (flags & FLAG_NEGATIVE);
+    bool sawNaN = 0 != (flags & FLAG_NAN);
+    bool sawInfinity = 0 != (flags & FLAG_INFINITY);
+
+    // Check for NaN, infinity, and -0.0
+    if (sawNaN) {
+        output.setDouble(NAN);
+        return;
+    }
+    if (sawInfinity) {
+        if (sawNegative) {
+            output.setDouble(-INFINITY);
+            return;
+        } else {
+            output.setDouble(INFINITY);
+            return;
+        }
+    }
+    if (quantity.isZero() && sawNegative) {
+        output.setDouble(-0.0);
+        return;
+    }
+
+    // All other numbers
+    LocalPointer<DecimalQuantity> actualQuantity(new DecimalQuantity(quantity));
+    if (0 != (flags & FLAG_NEGATIVE)) {
+        actualQuantity->multiplyBy(-1);
+    }
+    output.adoptDecimalQuantity(actualQuantity.orphan());
 }
 
 bool ParsedNumber::isBetterThan(const ParsedNumber& other) {

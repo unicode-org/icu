@@ -231,7 +231,7 @@ static void adjustDecimalFormat(
         fmt.setNegativeSuffix(tuple.negativeSuffix);
     }
     if (tuple.signAlwaysShownFlag) {
-        // Not currently supported
+        fmt.setSignAlwaysShown(tuple.signAlwaysShown != 0);
     }
     if (tuple.localizedPatternFlag) {
         UErrorCode status = U_ZERO_ERROR;
@@ -259,7 +259,7 @@ static void adjustDecimalFormat(
         }
     }
     if (tuple.parseCaseSensitiveFlag) {
-        // TODO: Fill this in when support is added in ICU4C
+        fmt.setParseCaseSensitive(tuple.parseCaseSensitive != 0);
     }
 }
 
@@ -403,8 +403,6 @@ UBool NumberFormatTestDataDriven::isParsePass(
         const NumberFormatTestTuple &tuple,
         UnicodeString &appendErrorMessage,
         UErrorCode &status) {
-    return TRUE;
-#if 0
     if (U_FAILURE(status)) {
         return FALSE;
     }
@@ -460,15 +458,12 @@ UBool NumberFormatTestDataDriven::isParsePass(
         return FALSE;
     }
     return TRUE;
-#endif
 }
 
 UBool NumberFormatTestDataDriven::isParseCurrencyPass(
         const NumberFormatTestTuple &tuple,
         UnicodeString &appendErrorMessage,
         UErrorCode &status) {
-    return TRUE;
-#if 0
     if (U_FAILURE(status)) {
         return FALSE;
     }
@@ -512,7 +507,6 @@ UBool NumberFormatTestDataDriven::isParseCurrencyPass(
         return FALSE;
     }
     return TRUE;
-#endif
 }
 
 //#define NUMFMTST_CACHE_DEBUG 1

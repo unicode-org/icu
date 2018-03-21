@@ -112,9 +112,12 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     if (parseCurrency || patternInfo.hasCurrencySign()) {
         parseFlags |= PARSE_FLAG_MONETARY_SEPARATORS;
     }
-    IgnorablesMatcher ignorables(isStrict ? unisets::DEFAULT_IGNORABLES : unisets::STRICT_IGNORABLES);
 
     LocalPointer<NumberParserImpl> parser(new NumberParserImpl(parseFlags));
+
+    parser->fLocalMatchers.ignorables = {
+            isStrict ? unisets::STRICT_IGNORABLES : unisets::DEFAULT_IGNORABLES};
+    IgnorablesMatcher& ignorables = parser->fLocalMatchers.ignorables;
 
     //////////////////////
     /// AFFIX MATCHERS ///

@@ -46,7 +46,7 @@ enum ParseFlags {
     PARSE_FLAG_USE_FULL_AFFIXES = 0x0100,
     PARSE_FLAG_EXACT_AFFIX = 0x0200,
     PARSE_FLAG_PLUS_SIGN_ALLOWED = 0x0400,
-    PARSE_FLAG_OPTIMIZE = 0x0800,
+    // PARSE_FLAG_OPTIMIZE = 0x0800, // no longer used
 };
 
 
@@ -155,6 +155,8 @@ class ParsedNumber {
     bool seenNumber() const;
 
     double getDouble() const;
+
+    void populateFormattable(Formattable& output) const;
 
     bool isBetterThan(const ParsedNumber& other);
 };
