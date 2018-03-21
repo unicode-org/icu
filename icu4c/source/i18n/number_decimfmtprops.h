@@ -51,6 +51,40 @@ struct U_I18N_API CopyableLocalPointer {
     }
 };
 
+/** Controls the set of rules for parsing a string from the old DecimalFormat API. */
+enum ParseMode {
+    /**
+     * Lenient mode should be used if you want to accept malformed user input. It will use heuristics
+     * to attempt to parse through typographical errors in the string.
+     */
+            PARSE_MODE_LENIENT,
+
+    /**
+     * Strict mode should be used if you want to require that the input is well-formed. More
+     * specifically, it differs from lenient mode in the following ways:
+     *
+     * <ul>
+     * <li>Grouping widths must match the grouping settings. For example, "12,3,45" will fail if the
+     * grouping width is 3, as in the pattern "#,##0".
+     * <li>The string must contain a complete prefix and suffix. For example, if the pattern is
+     * "{#};(#)", then "{123}" or "(123)" would match, but "{123", "123}", and "123" would all fail.
+     * (The latter strings would be accepted in lenient mode.)
+     * <li>Whitespace may not appear at arbitrary places in the string. In lenient mode, whitespace
+     * is allowed to occur arbitrarily before and after prefixes and exponent separators.
+     * <li>Leading grouping separators are not allowed, as in ",123".
+     * <li>Minus and plus signs can only appear if specified in the pattern. In lenient mode, a plus
+     * or minus sign can always precede a number.
+     * <li>The set of characters that can be interpreted as a decimal or grouping separator is
+     * smaller.
+     * <li><strong>If currency parsing is enabled,</strong> currencies must only appear where
+     * specified in either the current pattern string or in a valid pattern string for the current
+     * locale. For example, if the pattern is "¤0.00", then "$1.23" would match, but "1.23$" would
+     * fail to match.
+     * </ul>
+     */
+            PARSE_MODE_STRICT,
+};
+
 // Exported as U_I18N_API because it is needed for the unit test PatternStringTest
 struct U_I18N_API DecimalFormatProperties {
 
@@ -82,7 +116,7 @@ struct U_I18N_API DecimalFormatProperties {
     UnicodeString padString;
     bool parseCaseSensitive;
     bool parseIntegerOnly;
-    bool parseLenient;
+    NullableValue<ParseMode> parseMode;
     bool parseNoExponent;
     bool parseToBigDecimal;
     UNumberFormatAttributeValue parseAllInput; // ICU4C-only

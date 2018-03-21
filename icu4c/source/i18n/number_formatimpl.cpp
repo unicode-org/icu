@@ -210,8 +210,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         // Used by the DecimalFormat code path
         currencySymbols = macros.currencySymbols;
     } else {
-        fWarehouse.fCurrencyDataSymbols = {currency, macros.locale, status};
-        currencySymbols = &fWarehouse.fCurrencyDataSymbols;
+        fWarehouse.fCurrencySymbols = {currency, macros.locale, status};
+        currencySymbols = &fWarehouse.fCurrencySymbols;
     }
     UNumberUnitWidth unitWidth = UNUM_UNIT_WIDTH_SHORT;
     if (macros.unitWidth != UNUM_UNIT_WIDTH_COUNT) {

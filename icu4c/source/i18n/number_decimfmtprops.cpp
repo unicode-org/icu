@@ -43,7 +43,7 @@ void DecimalFormatProperties::clear() {
     padString.setToBogus();
     parseCaseSensitive = false;
     parseIntegerOnly = false;
-    parseLenient = false;
+    parseMode.nullify();
     parseNoExponent = false;
     parseToBigDecimal = false;
     parseAllInput = UNUM_MAYBE;
@@ -86,7 +86,7 @@ bool DecimalFormatProperties::operator==(const DecimalFormatProperties &other) c
     eq = eq && padString == other.padString;
     eq = eq && parseCaseSensitive == other.parseCaseSensitive;
     eq = eq && parseIntegerOnly == other.parseIntegerOnly;
-    eq = eq && parseLenient == other.parseLenient;
+    eq = eq && parseMode == other.parseMode;
     eq = eq && parseNoExponent == other.parseNoExponent;
     eq = eq && parseToBigDecimal == other.parseToBigDecimal;
     eq = eq && parseAllInput == other.parseAllInput;

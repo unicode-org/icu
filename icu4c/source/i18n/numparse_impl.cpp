@@ -9,6 +9,9 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
+#include <typeinfo>
+#include <array>
+#include <iostream>
 #include "number_types.h"
 #include "number_patternstring.h"
 #include "numparse_types.h"
@@ -16,11 +19,9 @@
 #include "numparse_symbols.h"
 #include "numparse_decimal.h"
 #include "unicode/numberformatter.h"
-
-#include <typeinfo>
-#include <array>
-#include <iostream>
 #include "cstr.h"
+#include "number_mapper.h"
+#include "numparse_unisets.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -33,22 +34,23 @@ NumberParserImpl*
 NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& patternString,
                                      parse_flags_t parseFlags, UErrorCode& status) {
 
-    auto* parser = new NumberParserImpl(parseFlags, true);
+    LocalPointer<NumberParserImpl> parser(new NumberParserImpl(parseFlags, true));
     DecimalFormatSymbols symbols(locale, status);
 
     parser->fLocalMatchers.ignorables = {unisets::DEFAULT_IGNORABLES};
     IgnorablesMatcher& ignorables = parser->fLocalMatchers.ignorables;
 
-    const UChar currencyCode[] = u"USD";
-    UnicodeString currency1(u"IU$");
-    UnicodeString currency2(u"ICU");
+    DecimalFormatSymbols dfs(locale, status);
+    dfs.setSymbol(DecimalFormatSymbols::kCurrencySymbol, u"IU$", status);
+    dfs.setSymbol(DecimalFormatSymbols::kIntlCurrencySymbol, u"ICU", status);
+    CurrencySymbols currencySymbols({u"ICU", status}, locale, dfs, status);
 
     ParsedPatternInfo patternInfo;
     PatternParser::parseToPatternInfo(patternString, patternInfo, status);
 
     // The following statements set up the affix matchers.
     AffixTokenMatcherSetupData affixSetupData = {
-            currencyCode, currency1, currency2, symbols, ignorables, locale};
+            currencySymbols, symbols, ignorables, locale};
     parser->fLocalMatchers.affixTokenMatcherWarehouse = {&affixSetupData};
     parser->fLocalMatchers.affixMatcherWarehouse = {&parser->fLocalMatchers.affixTokenMatcherWarehouse};
     parser->fLocalMatchers.affixMatcherWarehouse.createAffixMatchers(
@@ -71,17 +73,129 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
 //    parser.addMatcher(new RequireNumberMatcher());
 
     parser->freeze();
-    return parser;
+    return parser.orphan();
 }
 
-//NumberParserImpl*
-//NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatProperties& properties,
-//                                             DecimalFormatSymbols symbols, bool parseCurrency,
-//                                             bool optimize, UErrorCode& status) {
-//    // TODO
-//    status = U_UNSUPPORTED_ERROR;
-//    return nullptr;
-//}
+NumberParserImpl*
+NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatProperties& properties,
+                                             const DecimalFormatSymbols& symbols, bool parseCurrency,
+                                             bool computeLeads, UErrorCode& status) {
+    Locale locale = symbols.getLocale();
+    PropertiesAffixPatternProvider patternInfo(properties, status);
+    CurrencyUnit currency = resolveCurrency(properties, locale, status);
+    CurrencySymbols currencySymbols(currency, locale, symbols, status);
+    bool isStrict = properties.parseMode.getOrDefault(PARSE_MODE_STRICT) == PARSE_MODE_STRICT;
+    Grouper grouper = Grouper::forProperties(properties);
+    int parseFlags = 0;
+    // Fraction grouping is disabled by default because it has never been supported in DecimalFormat
+    parseFlags |= PARSE_FLAG_FRACTION_GROUPING_DISABLED;
+    if (!properties.parseCaseSensitive) {
+        parseFlags |= PARSE_FLAG_IGNORE_CASE;
+    }
+    if (properties.parseIntegerOnly) {
+        parseFlags |= PARSE_FLAG_INTEGER_ONLY;
+    }
+    if (properties.signAlwaysShown) {
+        parseFlags |= PARSE_FLAG_PLUS_SIGN_ALLOWED;
+    }
+    if (isStrict) {
+        parseFlags |= PARSE_FLAG_STRICT_GROUPING_SIZE;
+        parseFlags |= PARSE_FLAG_STRICT_SEPARATORS;
+        parseFlags |= PARSE_FLAG_USE_FULL_AFFIXES;
+        parseFlags |= PARSE_FLAG_EXACT_AFFIX;
+    } else {
+        parseFlags |= PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;
+    }
+    if (grouper.getPrimary() <= 0) {
+        parseFlags |= PARSE_FLAG_GROUPING_DISABLED;
+    }
+    if (parseCurrency || patternInfo.hasCurrencySign()) {
+        parseFlags |= PARSE_FLAG_MONETARY_SEPARATORS;
+    }
+    if (computeLeads) {
+        parseFlags |= PARSE_FLAG_OPTIMIZE;
+    }
+    IgnorablesMatcher ignorables(isStrict ? unisets::DEFAULT_IGNORABLES : unisets::STRICT_IGNORABLES);
+
+    LocalPointer<NumberParserImpl> parser(new NumberParserImpl(parseFlags, status));
+
+    //////////////////////
+    /// AFFIX MATCHERS ///
+    //////////////////////
+
+    // The following statements set up the affix matchers.
+    AffixTokenMatcherSetupData affixSetupData = {
+            currencySymbols,
+            symbols,
+            ignorables,
+            locale};
+    parser->fLocalMatchers.affixTokenMatcherWarehouse = {&affixSetupData};
+    parser->fLocalMatchers.affixMatcherWarehouse = {&parser->fLocalMatchers.affixTokenMatcherWarehouse};
+    parser->fLocalMatchers.affixMatcherWarehouse.createAffixMatchers(
+            patternInfo, *parser, ignorables, parseFlags, status);
+
+    ////////////////////////
+    /// CURRENCY MATCHER ///
+    ////////////////////////
+
+    if (parseCurrency || patternInfo.hasCurrencySign()) {
+        parser->addMatcher(parser->fLocalMatchers.currencyCustom = {currencySymbols, status});
+        parser->addMatcher(parser->fLocalMatchers.currencyNames = {locale, status});
+    }
+
+    ///////////////////////////////
+    /// OTHER STANDARD MATCHERS ///
+    ///////////////////////////////
+
+    if (!isStrict) {
+        parser->addMatcher(parser->fLocalMatchers.plusSign = {symbols, false});
+        parser->addMatcher(parser->fLocalMatchers.minusSign = {symbols, false});
+        parser->addMatcher(parser->fLocalMatchers.nan = {symbols});
+        parser->addMatcher(parser->fLocalMatchers.percent = {symbols});
+        parser->addMatcher(parser->fLocalMatchers.permille = {symbols});
+    }
+    parser->addMatcher(parser->fLocalMatchers.infinity = {symbols});
+    UnicodeString padString = properties.padString;
+    if (!padString.isBogus() && !ignorables.getSet()->contains(padString)) {
+        parser->addMatcher(parser->fLocalMatchers.padding = {padString});
+    }
+    parser->addMatcher(parser->fLocalMatchers.ignorables);
+    parser->addMatcher(parser->fLocalMatchers.decimal = {symbols, grouper, parseFlags});
+    if (!properties.parseNoExponent) {
+        parser->addMatcher(parser->fLocalMatchers.scientific = {symbols, grouper});
+    }
+
+    //////////////////
+    /// VALIDATORS ///
+    //////////////////
+
+    parser->addMatcher(parser->fLocalValidators.number = {});
+    if (isStrict) {
+        parser->addMatcher(parser->fLocalValidators.affix = {});
+    }
+    if (isStrict && properties.minimumExponentDigits > 0) {
+        parser->addMatcher(parser->fLocalValidators.exponent = {});
+    }
+    if (parseCurrency) {
+        parser->addMatcher(parser->fLocalValidators.currency = {});
+    }
+    if (properties.decimalPatternMatchRequired) {
+        bool patternHasDecimalSeparator =
+                properties.decimalSeparatorAlwaysShown || properties.maximumFractionDigits != 0;
+        parser->addMatcher(parser->fLocalValidators.decimalSeparator = {patternHasDecimalSeparator});
+    }
+
+    // TODO: MULTIPLIER
+//    if (properties.getMultiplier() != null) {
+//        // We need to use a math context in order to prevent non-terminating decimal expansions.
+//        // This is only used when dividing by the multiplier.
+//        parser.addMatcher(new MultiplierHandler(properties.getMultiplier(),
+//                RoundingUtils.getMathContextOr34Digits(properties)));
+//    }
+
+    parser->freeze();
+    return parser.orphan();
+}
 
 NumberParserImpl::NumberParserImpl(parse_flags_t parseFlags, bool computeLeads)
         : fParseFlags(parseFlags), fComputeLeads(computeLeads) {

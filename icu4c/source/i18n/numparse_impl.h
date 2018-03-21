@@ -15,6 +15,8 @@
 #include "numparse_currency.h"
 #include "numparse_affixes.h"
 #include "number_decimfmtprops.h"
+#include "unicode/localpointer.h"
+#include "numparse_validators.h"
 
 U_NAMESPACE_BEGIN namespace numparse {
 namespace impl {
@@ -27,7 +29,7 @@ class NumberParserImpl : public MutableMatcherCollection {
                                                 parse_flags_t parseFlags, UErrorCode& status);
 
     static NumberParserImpl* createParserFromProperties(
-            const number::impl::DecimalFormatProperties& properties, DecimalFormatSymbols symbols,
+            const number::impl::DecimalFormatProperties& properties, const DecimalFormatSymbols& symbols,
             bool parseCurrency, bool optimize, UErrorCode& status);
 
     void addMatcher(NumberParseMatcher& matcher) override;
@@ -64,9 +66,17 @@ class NumberParserImpl : public MutableMatcherCollection {
         DecimalMatcher decimal;
         ScientificMatcher scientific;
         CurrencyNamesMatcher currencyNames;
+        CurrencyCustomMatcher currencyCustom;
         AffixMatcherWarehouse affixMatcherWarehouse;
         AffixTokenMatcherWarehouse affixTokenMatcherWarehouse;
     } fLocalMatchers;
+    struct {
+        RequireAffixValidator affix;
+        RequireCurrencyValidator currency;
+        RequireDecimalSeparatorValidator decimalSeparator;
+        RequireExponentValidator exponent;
+        RequireNumberValidator number;
+    } fLocalValidators;
 
     NumberParserImpl(parse_flags_t parseFlags, bool computeLeads);
 

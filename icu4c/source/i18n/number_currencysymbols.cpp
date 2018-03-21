@@ -18,10 +18,37 @@ using namespace icu::number::impl;
 
 
 CurrencySymbols::CurrencySymbols(CurrencyUnit currency, const Locale& locale, UErrorCode& status)
-        : fCurrency(currency), fLocaleName(locale.getName(), status) {}
+        : fCurrency(currency), fLocaleName(locale.getName(), status) {
+    fCurrencySymbol.setToBogus();
+    fIntlCurrencySymbol.setToBogus();
+}
+
+CurrencySymbols::CurrencySymbols(CurrencyUnit currency, const Locale& locale,
+                                 const DecimalFormatSymbols& symbols, UErrorCode& status)
+        : CurrencySymbols(currency, locale, status) {
+    // If either of the overrides is present, save it in the local UnicodeString.
+    if (symbols.isCustomCurrencySymbol()) {
+        fCurrencySymbol = symbols.getConstSymbol(DecimalFormatSymbols::kCurrencySymbol);
+    }
+    if (symbols.isCustomIntlCurrencySymbol()) {
+        fIntlCurrencySymbol = symbols.getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol);
+    }
+}
+
+const char16_t* CurrencySymbols::getIsoCode() const {
+    return fCurrency.getISOCurrency();
+}
 
 UnicodeString CurrencySymbols::getNarrowCurrencySymbol(UErrorCode& status) const {
+    // Note: currently no override is available for narrow currency symbol
     return loadSymbol(UCURR_NARROW_SYMBOL_NAME, status);
+}
+
+UnicodeString CurrencySymbols::getCurrencySymbol(UErrorCode& status) const {
+    if (!fCurrencySymbol.isBogus()) {
+        return fCurrencySymbol;
+    }
+    return loadSymbol(UCURR_SYMBOL_NAME, status);
 }
 
 UnicodeString CurrencySymbols::loadSymbol(UCurrNameStyle selector, UErrorCode& status) const {
@@ -38,6 +65,14 @@ UnicodeString CurrencySymbols::loadSymbol(UCurrNameStyle selector, UErrorCode& s
     return UnicodeString(TRUE, symbol, symbolLen);
 }
 
+UnicodeString CurrencySymbols::getIntlCurrencySymbol(UErrorCode&) const {
+    if (!fIntlCurrencySymbol.isBogus()) {
+        return fIntlCurrencySymbol;
+    }
+    // Readonly-aliasing char16_t* constructor:
+    return UnicodeString(TRUE, fCurrency.getISOCurrency(), 3);
+}
+
 UnicodeString CurrencySymbols::getPluralName(StandardPlural::Form plural, UErrorCode& status) const {
     UBool isChoiceFormat = FALSE;
     int32_t symbolLen = 0;
@@ -50,46 +85,6 @@ UnicodeString CurrencySymbols::getPluralName(StandardPlural::Form plural, UError
             &status);
     // Readonly-aliasing char16_t* constructor:
     return UnicodeString(TRUE, symbol, symbolLen);
-}
-
-
-CurrencyDataSymbols::CurrencyDataSymbols(CurrencyUnit currency, const Locale& locale, UErrorCode& status)
-        : CurrencySymbols(currency, locale, status) {}
-
-UnicodeString CurrencyDataSymbols::getCurrencySymbol(UErrorCode& status) const {
-    return loadSymbol(UCURR_SYMBOL_NAME, status);
-}
-
-UnicodeString CurrencyDataSymbols::getIntlCurrencySymbol(UErrorCode&) const {
-    // Readonly-aliasing char16_t* constructor:
-    return UnicodeString(TRUE, fCurrency.getISOCurrency(), 3);
-}
-
-
-CurrencyCustomSymbols::CurrencyCustomSymbols(CurrencyUnit currency, const Locale& locale,
-                                             const DecimalFormatSymbols& symbols, UErrorCode& status)
-        : CurrencySymbols(currency, locale, status) {
-    // Hit the data bundle if the DecimalFormatSymbols version is not custom.
-    // Note: the CurrencyDataSymbols implementation waits to hit the data bundle until requested.
-    if (symbols.isCustomCurrencySymbol()) {
-        fCurrencySymbol = symbols.getConstSymbol(DecimalFormatSymbols::kCurrencySymbol);
-    } else {
-        fCurrencySymbol = loadSymbol(UCURR_SYMBOL_NAME, status);
-    }
-    if (symbols.isCustomIntlCurrencySymbol()) {
-        fIntlCurrencySymbol = symbols.getConstSymbol(DecimalFormatSymbols::kIntlCurrencySymbol);
-    } else {
-        // UnicodeString copy constructor since we don't know about the lifetime of the CurrencyUnit
-        fIntlCurrencySymbol = UnicodeString(currency.getISOCurrency(), 3);
-    }
-}
-
-UnicodeString CurrencyCustomSymbols::getCurrencySymbol(UErrorCode&) const {
-    return fCurrencySymbol;
-}
-
-UnicodeString CurrencyCustomSymbols::getIntlCurrencySymbol(UErrorCode&) const {
-    return fIntlCurrencySymbol;
 }
 
 

@@ -10,10 +10,12 @@
 #include "numparse_types.h"
 #include "numparse_compositions.h"
 #include "charstr.h"
+#include "number_currencysymbols.h"
 
 U_NAMESPACE_BEGIN namespace numparse {
 namespace impl {
 
+using ::icu::number::impl::CurrencySymbols;
 
 /**
  * Matches currencies according to all available strings in locale data.
@@ -46,8 +48,7 @@ class CurrencyCustomMatcher : public NumberParseMatcher, public UMemory {
   public:
     CurrencyCustomMatcher() = default;  // WARNING: Leaves the object in an unusable state
 
-    CurrencyCustomMatcher(const char16_t* currencyCode, const UnicodeString& currency1,
-                          const UnicodeString& currency2);
+    CurrencyCustomMatcher(const CurrencySymbols& currencySymbols, UErrorCode& status);
 
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
