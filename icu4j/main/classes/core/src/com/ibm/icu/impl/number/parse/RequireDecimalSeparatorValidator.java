@@ -6,18 +6,18 @@ package com.ibm.icu.impl.number.parse;
  * @author sffc
  *
  */
-public class RequireDecimalSeparatorMatcher extends ValidationMatcher {
+public class RequireDecimalSeparatorValidator extends ValidationMatcher {
 
-    private static final RequireDecimalSeparatorMatcher A = new RequireDecimalSeparatorMatcher(true);
-    private static final RequireDecimalSeparatorMatcher B = new RequireDecimalSeparatorMatcher(false);
+    private static final RequireDecimalSeparatorValidator A = new RequireDecimalSeparatorValidator(true);
+    private static final RequireDecimalSeparatorValidator B = new RequireDecimalSeparatorValidator(false);
 
     private final boolean patternHasDecimalSeparator;
 
-    public static RequireDecimalSeparatorMatcher getInstance(boolean patternHasDecimalSeparator) {
+    public static RequireDecimalSeparatorValidator getInstance(boolean patternHasDecimalSeparator) {
         return patternHasDecimalSeparator ? A : B;
     }
 
-    private RequireDecimalSeparatorMatcher(boolean patternHasDecimalSeparator) {
+    private RequireDecimalSeparatorValidator(boolean patternHasDecimalSeparator) {
         this.patternHasDecimalSeparator = patternHasDecimalSeparator;
     }
 

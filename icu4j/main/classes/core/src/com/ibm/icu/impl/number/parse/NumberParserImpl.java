@@ -11,6 +11,7 @@ import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.DecimalFormatProperties.ParseMode;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
@@ -31,45 +32,10 @@ import com.ibm.icu.util.ULocale;
  */
 public class NumberParserImpl {
 
-    // TODO: Find a better place for this enum.
-    /** Controls the set of rules for parsing a string. */
-    public static enum ParseMode {
-        /**
-         * Lenient mode should be used if you want to accept malformed user input. It will use heuristics
-         * to attempt to parse through typographical errors in the string.
-         */
-        LENIENT,
-
-        /**
-         * Strict mode should be used if you want to require that the input is well-formed. More
-         * specifically, it differs from lenient mode in the following ways:
-         *
-         * <ul>
-         * <li>Grouping widths must match the grouping settings. For example, "12,3,45" will fail if the
-         * grouping width is 3, as in the pattern "#,##0".
-         * <li>The string must contain a complete prefix and suffix. For example, if the pattern is
-         * "{#};(#)", then "{123}" or "(123)" would match, but "{123", "123}", and "123" would all fail.
-         * (The latter strings would be accepted in lenient mode.)
-         * <li>Whitespace may not appear at arbitrary places in the string. In lenient mode, whitespace
-         * is allowed to occur arbitrarily before and after prefixes and exponent separators.
-         * <li>Leading grouping separators are not allowed, as in ",123".
-         * <li>Minus and plus signs can only appear if specified in the pattern. In lenient mode, a plus
-         * or minus sign can always precede a number.
-         * <li>The set of characters that can be interpreted as a decimal or grouping separator is
-         * smaller.
-         * <li><strong>If currency parsing is enabled,</strong> currencies must only appear where
-         * specified in either the current pattern string or in a valid pattern string for the current
-         * locale. For example, if the pattern is "¤0.00", then "$1.23" would match, but "1.23$" would
-         * fail to match.
-         * </ul>
-         */
-        STRICT,
-    }
-
-    public static NumberParserImpl createSimpleParser(
-            ULocale locale,
-            String pattern,
-            int parseFlags) {
+    /**
+     * Creates a parser with most default options. Used for testing, not production.
+     */
+    public static NumberParserImpl createSimpleParser(ULocale locale, String pattern, int parseFlags) {
 
         NumberParserImpl parser = new NumberParserImpl(parseFlags);
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
@@ -97,12 +63,15 @@ public class NumberParserImpl {
         parser.addMatcher(PaddingMatcher.getInstance("@"));
         parser.addMatcher(ScientificMatcher.getInstance(symbols, grouper));
         parser.addMatcher(CurrencyNamesMatcher.getInstance(locale));
-        parser.addMatcher(new RequireNumberMatcher());
+        parser.addMatcher(new RequireNumberValidator());
 
         parser.freeze();
         return parser;
     }
 
+    /**
+     * Parses the string without returning a NumberParserImpl. Used for testing, not production.
+     */
     public static Number parseStatic(
             String input,
             ParsePosition ppos,
@@ -120,6 +89,9 @@ public class NumberParserImpl {
         }
     }
 
+    /**
+     * Parses the string without returning a NumberParserImpl. Used for testing, not production.
+     */
     public static CurrencyAmount parseStaticCurrency(
             String input,
             ParsePosition ppos,
@@ -130,16 +102,8 @@ public class NumberParserImpl {
         parser.parse(input, true, result);
         if (result.success()) {
             ppos.setIndex(result.charEnd);
-            // TODO: Clean this up
-            Currency currency;
-            if (result.currencyCode != null) {
-                currency = Currency.getInstance(result.currencyCode);
-            } else {
-                assert 0 != (result.flags & ParsedNumber.FLAG_HAS_DEFAULT_CURRENCY);
-                currency = CustomSymbolCurrency
-                        .resolve(properties.getCurrency(), symbols.getULocale(), symbols);
-            }
-            return new CurrencyAmount(result.getNumber(), currency);
+            assert result.currencyCode != null;
+            return new CurrencyAmount(result.getNumber(), Currency.getInstance(result.currencyCode));
         } else {
             ppos.setErrorIndex(result.charEnd);
             return null;
@@ -152,6 +116,20 @@ public class NumberParserImpl {
         return createParserFromProperties(properties, symbols, false, optimize);
     }
 
+    /**
+     * Creates a parser from the given DecimalFormatProperties. This is the endpoint used by
+     * DecimalFormat in production code.
+     *
+     * @param properties
+     *            The property bag.
+     * @param symbols
+     *            The locale's symbols.
+     * @param parseCurrency
+     *            True to force a currency match and use monetary separators; false otherwise.
+     * @param optimize
+     *            True to construct the lead-chars; false to disable.
+     * @return An immutable parser object.
+     */
     public static NumberParserImpl createParserFromProperties(
             DecimalFormatProperties properties,
             DecimalFormatSymbols symbols,
@@ -244,20 +222,20 @@ public class NumberParserImpl {
         /// VALIDATORS ///
         //////////////////
 
-        parser.addMatcher(new RequireNumberMatcher());
+        parser.addMatcher(new RequireNumberValidator());
         if (isStrict) {
-            parser.addMatcher(new RequireAffixMatcher());
+            parser.addMatcher(new RequireAffixValidator());
         }
         if (isStrict && properties.getMinimumExponentDigits() > 0) {
-            parser.addMatcher(new RequireExponentMatcher());
+            parser.addMatcher(new RequireExponentValidator());
         }
         if (parseCurrency) {
-            parser.addMatcher(new RequireCurrencyMatcher());
+            parser.addMatcher(new RequireCurrencyValidator());
         }
         if (properties.getDecimalPatternMatchRequired()) {
             boolean patternHasDecimalSeparator = properties.getDecimalSeparatorAlwaysShown()
                     || properties.getMaximumFractionDigits() != 0;
-            parser.addMatcher(RequireDecimalSeparatorMatcher.getInstance(patternHasDecimalSeparator));
+            parser.addMatcher(RequireDecimalSeparatorValidator.getInstance(patternHasDecimalSeparator));
         }
         if (properties.getMultiplier() != null) {
             // We need to use a math context in order to prevent non-terminating decimal expansions.

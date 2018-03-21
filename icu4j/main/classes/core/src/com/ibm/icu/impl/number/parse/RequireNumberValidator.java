@@ -6,18 +6,19 @@ package com.ibm.icu.impl.number.parse;
  * @author sffc
  *
  */
-public class RequireExponentMatcher extends ValidationMatcher {
+public class RequireNumberValidator extends ValidationMatcher {
 
     @Override
     public void postProcess(ParsedNumber result) {
-        if (0 == (result.flags & ParsedNumber.FLAG_HAS_EXPONENT)) {
+        // Require that a number is matched.
+        if (!result.seenNumber()) {
             result.flags |= ParsedNumber.FLAG_FAIL;
         }
     }
 
     @Override
     public String toString() {
-        return "<RequireExponent>";
+        return "<RequireNumber>";
     }
 
 }

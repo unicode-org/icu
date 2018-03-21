@@ -52,7 +52,7 @@ public class ParsedNumber {
     public static final int FLAG_PERCENT = 0x0002;
     public static final int FLAG_PERMILLE = 0x0004;
     public static final int FLAG_HAS_EXPONENT = 0x0008;
-    public static final int FLAG_HAS_DEFAULT_CURRENCY = 0x0010;
+    // public static final int FLAG_HAS_DEFAULT_CURRENCY = 0x0010; // no longer used
     public static final int FLAG_HAS_DECIMAL_SEPARATOR = 0x0020;
     public static final int FLAG_NAN = 0x0040;
     public static final int FLAG_INFINITY = 0x0080;
