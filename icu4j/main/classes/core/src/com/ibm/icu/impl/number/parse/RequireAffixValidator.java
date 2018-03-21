@@ -6,7 +6,7 @@ package com.ibm.icu.impl.number.parse;
  * @author sffc
  *
  */
-public class RequireAffixMatcher extends ValidationMatcher {
+public class RequireAffixValidator extends ValidationMatcher {
 
     @Override
     public void postProcess(ParsedNumber result) {

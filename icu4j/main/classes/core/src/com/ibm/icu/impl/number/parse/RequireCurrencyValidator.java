@@ -6,19 +6,18 @@ package com.ibm.icu.impl.number.parse;
  * @author sffc
  *
  */
-public class RequireNumberMatcher extends ValidationMatcher {
+public class RequireCurrencyValidator extends ValidationMatcher {
 
     @Override
     public void postProcess(ParsedNumber result) {
-        // Require that a number is matched.
-        if (!result.seenNumber()) {
+        if (result.currencyCode == null) {
             result.flags |= ParsedNumber.FLAG_FAIL;
         }
     }
 
     @Override
     public String toString() {
-        return "<RequireNumber>";
+        return "<RequireCurrency>";
     }
 
 }

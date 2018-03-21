@@ -6,18 +6,18 @@ package com.ibm.icu.impl.number.parse;
  * @author sffc
  *
  */
-public class RequireCurrencyMatcher extends ValidationMatcher {
+public class RequireExponentValidator extends ValidationMatcher {
 
     @Override
     public void postProcess(ParsedNumber result) {
-        if (result.currencyCode == null && 0 == (result.flags & ParsedNumber.FLAG_HAS_DEFAULT_CURRENCY)) {
+        if (0 == (result.flags & ParsedNumber.FLAG_HAS_EXPONENT)) {
             result.flags |= ParsedNumber.FLAG_FAIL;
         }
     }
 
     @Override
     public String toString() {
-        return "<RequireCurrency>";
+        return "<RequireExponent>";
     }
 
 }

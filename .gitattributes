@@ -5946,11 +5946,11 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/ParsingUtils.java svne
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/PercentMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/PermilleMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/PlusSignMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireAffixMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireCurrencyMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireDecimalSeparatorMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireExponentMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireNumberMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireAffixValidator.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireCurrencyValidator.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireDecimalSeparatorValidator.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireExponentValidator.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireNumberValidator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/ScientificMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/SeriesMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/SymbolMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8

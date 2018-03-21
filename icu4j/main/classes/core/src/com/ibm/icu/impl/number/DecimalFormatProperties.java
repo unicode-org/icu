@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import com.ibm.icu.impl.number.Padder.PadPosition;
-import com.ibm.icu.impl.number.parse.NumberParserImpl.ParseMode;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.PluralRules;
@@ -29,6 +28,40 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
 
     /** Auto-generated. */
     private static final long serialVersionUID = 4095518955889349243L;
+
+    /** Controls the set of rules for parsing a string from the old DecimalFormat API. */
+    public static enum ParseMode {
+        /**
+         * Lenient mode should be used if you want to accept malformed user input. It will use heuristics
+         * to attempt to parse through typographical errors in the string.
+         */
+        LENIENT,
+
+        /**
+         * Strict mode should be used if you want to require that the input is well-formed. More
+         * specifically, it differs from lenient mode in the following ways:
+         *
+         * <ul>
+         * <li>Grouping widths must match the grouping settings. For example, "12,3,45" will fail if the
+         * grouping width is 3, as in the pattern "#,##0".
+         * <li>The string must contain a complete prefix and suffix. For example, if the pattern is
+         * "{#};(#)", then "{123}" or "(123)" would match, but "{123", "123}", and "123" would all fail.
+         * (The latter strings would be accepted in lenient mode.)
+         * <li>Whitespace may not appear at arbitrary places in the string. In lenient mode, whitespace
+         * is allowed to occur arbitrarily before and after prefixes and exponent separators.
+         * <li>Leading grouping separators are not allowed, as in ",123".
+         * <li>Minus and plus signs can only appear if specified in the pattern. In lenient mode, a plus
+         * or minus sign can always precede a number.
+         * <li>The set of characters that can be interpreted as a decimal or grouping separator is
+         * smaller.
+         * <li><strong>If currency parsing is enabled,</strong> currencies must only appear where
+         * specified in either the current pattern string or in a valid pattern string for the current
+         * locale. For example, if the pattern is "¤0.00", then "$1.23" would match, but "1.23$" would
+         * fail to match.
+         * </ul>
+         */
+        STRICT,
+    }
 
     // The setters in this class should NOT have any side-effects or perform any validation. It is
     // up to the consumer of the property bag to deal with property validation.
@@ -44,7 +77,7 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
     /| or #equals(), but it will NOT catch if you forget to add it to #hashCode().                |/
     /+--------------------------------------------------------------------------------------------*/
 
-    private transient Map<String, Map<String, String>> compactCustomData;
+    private transient Map<String, Map<String, String>> compactCustomData; // ICU4J-only
     private transient CompactStyle compactStyle;
     private transient Currency currency;
     private transient CurrencyPluralInfo currencyPluralInfo;
@@ -55,7 +88,7 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
     private transient int formatWidth;
     private transient int groupingSize;
     private transient int magnitudeMultiplier;
-    private transient MathContext mathContext;
+    private transient MathContext mathContext; // ICU4J-only
     private transient int maximumFractionDigits;
     private transient int maximumIntegerDigits;
     private transient int maximumSignificantDigits;
