@@ -135,6 +135,19 @@ public class StringSegment implements CharSequence {
     }
 
     /**
+     * Returns true if there is at least one code point of overlap between this StringSegment and the
+     * given CharSequence. Null-safe.
+     */
+    public boolean startsWith(CharSequence other) {
+        if (other == null || other.length() == 0 || length() == 0) {
+            return false;
+        }
+        int cp1 = Character.codePointAt(this, 0);
+        int cp2 = Character.codePointAt(other, 0);
+        return codePointsEqual(cp1, cp2, foldCase);
+    }
+
+    /**
      * Returns the length of the prefix shared by this StringSegment and the given CharSequence. For
      * example, if this string segment is "aab", and the char sequence is "aac", this method returns 2,
      * since the first 2 characters are the same.

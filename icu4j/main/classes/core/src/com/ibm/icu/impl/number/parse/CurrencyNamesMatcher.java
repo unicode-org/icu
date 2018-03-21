@@ -23,6 +23,8 @@ public class CurrencyNamesMatcher implements NumberParseMatcher {
     private final TextTrieMap<CurrencyStringInfo> longNameTrie;
     private final TextTrieMap<CurrencyStringInfo> symbolTrie;
 
+    private final UnicodeSet leadCodePoints;
+
     public static CurrencyNamesMatcher getInstance(ULocale locale) {
         // TODO: Pre-compute some of the more popular locales?
         return new CurrencyNamesMatcher(locale);
@@ -33,6 +35,15 @@ public class CurrencyNamesMatcher implements NumberParseMatcher {
         // case folding on long-names but not symbols.
         longNameTrie = Currency.getParsingTrie(locale, Currency.LONG_NAME);
         symbolTrie = Currency.getParsingTrie(locale, Currency.SYMBOL_NAME);
+
+        // Compute the full set of characters that could be the first in a currency to allow for
+        // efficient smoke test.
+        leadCodePoints = new UnicodeSet();
+        longNameTrie.putLeadCodePoints(leadCodePoints);
+        symbolTrie.putLeadCodePoints(leadCodePoints);
+        // Always apply case mapping closure for currencies
+        leadCodePoints.closeOver(UnicodeSet.ADD_CASE_MAPPINGS);
+        leadCodePoints.freeze();
     }
 
     @Override
@@ -55,13 +66,8 @@ public class CurrencyNamesMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
-        UnicodeSet leadCodePoints = new UnicodeSet();
-        longNameTrie.putLeadCodePoints(leadCodePoints);
-        symbolTrie.putLeadCodePoints(leadCodePoints);
-        // Always apply case mapping closure for currencies
-        leadCodePoints.closeOver(UnicodeSet.ADD_CASE_MAPPINGS);
-        return leadCodePoints.freeze();
+    public boolean smokeTest(StringSegment segment) {
+        return segment.startsWith(leadCodePoints);
     }
 
     @Override

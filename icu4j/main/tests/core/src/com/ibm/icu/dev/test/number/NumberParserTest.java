@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -21,8 +22,6 @@ import com.ibm.icu.impl.number.parse.ParsingUtils;
 import com.ibm.icu.impl.number.parse.PercentMatcher;
 import com.ibm.icu.impl.number.parse.PlusSignMatcher;
 import com.ibm.icu.impl.number.parse.SeriesMatcher;
-import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache;
-import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.Key;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
@@ -196,7 +195,9 @@ public class NumberParserTest {
         series.addMatcher(IgnorablesMatcher.DEFAULT);
         series.freeze();
 
-        assertEquals(UnicodeSetStaticCache.get(Key.PLUS_SIGN), series.getLeadCodePoints());
+        assertFalse(series.smokeTest(new StringSegment("x", false)));
+        assertFalse(series.smokeTest(new StringSegment("-", false)));
+        assertTrue(series.smokeTest(new StringSegment("+", false)));
 
         Object[][] cases = new Object[][] {
                 { "", 0, true },

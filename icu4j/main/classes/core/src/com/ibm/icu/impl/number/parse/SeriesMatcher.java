@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ibm.icu.impl.StringSegment;
-import com.ibm.icu.text.UnicodeSet;
 
 /**
  * Composes a number of matchers, running one after another. Matches the input string only if all of the
@@ -82,15 +81,15 @@ public class SeriesMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
+    public boolean smokeTest(StringSegment segment) {
         assert frozen;
         if (matchers == null) {
-            return UnicodeSet.EMPTY;
+            return false;
         }
 
         // SeriesMatchers are never allowed to start with a Flexible matcher.
         assert !(matchers.get(0) instanceof NumberParseMatcher.Flexible);
-        return matchers.get(0).getLeadCodePoints();
+        return matchers.get(0).smokeTest(segment);
     }
 
     @Override

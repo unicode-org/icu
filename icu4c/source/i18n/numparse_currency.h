@@ -11,6 +11,7 @@
 #include "numparse_compositions.h"
 #include "charstr.h"
 #include "number_currencysymbols.h"
+#include "unicode/uniset.h"
 
 U_NAMESPACE_BEGIN namespace numparse {
 namespace impl {
@@ -32,7 +33,7 @@ class CurrencyNamesMatcher : public NumberParseMatcher, public UMemory {
 
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
-    const UnicodeSet& getLeadCodePoints() override;
+    bool smokeTest(const StringSegment& segment) const override;
 
     UnicodeString toString() const override;
 
@@ -41,6 +42,7 @@ class CurrencyNamesMatcher : public NumberParseMatcher, public UMemory {
     // Locale has a non-trivial default constructor.
     CharString fLocaleName;
 
+    UnicodeSet fLeadCodePoints;
 };
 
 
@@ -52,7 +54,7 @@ class CurrencyCustomMatcher : public NumberParseMatcher, public UMemory {
 
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
-    const UnicodeSet& getLeadCodePoints() override;
+    bool smokeTest(const StringSegment& segment) const override;
 
     UnicodeString toString() const override;
 
@@ -77,8 +79,6 @@ class CurrencyAnyMatcher : public AnyMatcher, public UMemory {
     CurrencyAnyMatcher(CurrencyAnyMatcher&& src) U_NOEXCEPT;
 
     CurrencyAnyMatcher& operator=(CurrencyAnyMatcher&& src) U_NOEXCEPT;
-
-    const UnicodeSet& getLeadCodePoints() override;
 
     UnicodeString toString() const override;
 

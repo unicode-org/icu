@@ -93,9 +93,6 @@ void U_CALLCONV initNumberParseUniSets(UErrorCode& status) {
     gUnicodeSets[INFINITY_KEY] = new UnicodeSet(u"[∞]", status);
 
     gUnicodeSets[DIGITS] = new UnicodeSet(u"[:digit:]", status);
-    gUnicodeSets[NAN_LEAD] = new UnicodeSet(
-            u"[NnТтmeՈոс¤НнчTtsҳ\u975e\u1002\u0e9a\u10d0\u0f68\u0644\u0646]", status);
-    gUnicodeSets[SCIENTIFIC_LEAD] = new UnicodeSet(u"[Ee×·е\u0627]", status);
     gUnicodeSets[CWCF] = new UnicodeSet(u"[:CWCF:]", status);
 
     gUnicodeSets[DIGITS_OR_ALL_SEPARATORS] = computeUnion(DIGITS, ALL_SEPARATORS);

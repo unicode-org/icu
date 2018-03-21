@@ -21,12 +21,12 @@ class ValidationMatcher : public NumberParseMatcher {
         return false;
     }
 
-    const UnicodeSet& getLeadCodePoints() U_OVERRIDE {
+    bool smokeTest(const StringSegment&) const U_OVERRIDE {
         // No-op
-        return *unisets::get(unisets::EMPTY);
+        return false;
     }
 
-    virtual void postProcess(ParsedNumber& result) const U_OVERRIDE = 0;
+    void postProcess(ParsedNumber& result) const U_OVERRIDE = 0;
 };
 
 

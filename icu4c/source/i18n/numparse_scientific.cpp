@@ -44,10 +44,10 @@ bool ScientificMatcher::match(StringSegment& segment, ParsedNumber& result, UErr
 
         // Allow a sign, and then try to match digits.
         int8_t exponentSign = 1;
-        if (segment.matches(*unisets::get(unisets::MINUS_SIGN))) {
+        if (segment.startsWith(*unisets::get(unisets::MINUS_SIGN))) {
             exponentSign = -1;
             segment.adjustOffsetByCodePoint();
-        } else if (segment.matches(*unisets::get(unisets::PLUS_SIGN))) {
+        } else if (segment.startsWith(*unisets::get(unisets::PLUS_SIGN))) {
             segment.adjustOffsetByCodePoint();
         }
 
@@ -71,20 +71,8 @@ bool ScientificMatcher::match(StringSegment& segment, ParsedNumber& result, UErr
     return false;
 }
 
-const UnicodeSet& ScientificMatcher::getLeadCodePoints() {
-    UChar32 leadCp = fExponentSeparatorString.char32At(0);
-    const UnicodeSet* s = unisets::get(unisets::SCIENTIFIC_LEAD);
-    if (s->contains(leadCp)) {
-        return *s;
-    }
-
-    if (fLocalLeadCodePoints.isNull()) {
-        auto* leadCodePoints = new UnicodeSet();
-        leadCodePoints->add(leadCp);
-        leadCodePoints->freeze();
-        fLocalLeadCodePoints.adoptInstead(leadCodePoints);
-    }
-    return *fLocalLeadCodePoints;
+bool ScientificMatcher::smokeTest(const StringSegment& segment) const {
+    return segment.startsWith(fExponentSeparatorString);
 }
 
 UnicodeString ScientificMatcher::toString() const {

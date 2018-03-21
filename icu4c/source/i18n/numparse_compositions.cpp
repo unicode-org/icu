@@ -38,9 +38,19 @@ bool AnyMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCode&
     return maybeMore;
 }
 
+bool AnyMatcher::smokeTest(const StringSegment& segment) const {
+    // NOTE: The range-based for loop calls the virtual begin() and end() methods.
+    for (auto& matcher : *this) {
+        if (matcher->smokeTest(segment)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void AnyMatcher::postProcess(ParsedNumber& result) const {
     // NOTE: The range-based for loop calls the virtual begin() and end() methods.
-    for (auto* matcher : *this) {
+    for (auto& matcher : *this) {
         matcher->postProcess(result);
     }
 }
@@ -83,6 +93,17 @@ bool SeriesMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCo
     return maybeMore;
 }
 
+bool SeriesMatcher::smokeTest(const StringSegment& segment) const {
+    // NOTE: The range-based for loop calls the virtual begin() and end() methods.
+    // NOTE: We only want the first element. Use the for loop for boundary checking.
+    for (auto& matcher : *this) {
+        // SeriesMatchers are never allowed to start with a Flexible matcher.
+        U_ASSERT(!matcher->isFlexible());
+        return matcher->smokeTest(segment);
+    }
+    return false;
+}
+
 void SeriesMatcher::postProcess(ParsedNumber& result) const {
     // NOTE: The range-based for loop calls the virtual begin() and end() methods.
     for (auto* matcher : *this) {
@@ -97,12 +118,6 @@ ArraySeriesMatcher::ArraySeriesMatcher()
 
 ArraySeriesMatcher::ArraySeriesMatcher(MatcherArray& matchers, int32_t matchersLen)
         : fMatchers(std::move(matchers)), fMatchersLen(matchersLen) {
-}
-
-const UnicodeSet& ArraySeriesMatcher::getLeadCodePoints() {
-    // SeriesMatchers are never allowed to start with a Flexible matcher.
-    U_ASSERT(!fMatchers[0]->isFlexible());
-    return fMatchers[0]->getLeadCodePoints();
 }
 
 int32_t ArraySeriesMatcher::length() const {

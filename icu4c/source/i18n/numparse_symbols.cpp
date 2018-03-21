@@ -58,20 +58,8 @@ bool SymbolMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCo
     return overlap == segment.length();
 }
 
-const UnicodeSet& SymbolMatcher::getLeadCodePoints() {
-    if (fString.isEmpty()) {
-        // Assumption: for sets from UnicodeSetStaticCache, uniSet == leadCodePoints.
-        return *fUniSet;
-    }
-
-    if (fLocalLeadCodePoints.isNull()) {
-        auto* leadCodePoints = new UnicodeSet();
-        utils::putLeadCodePoints(fUniSet, leadCodePoints);
-        utils::putLeadCodePoint(fString, leadCodePoints);
-        leadCodePoints->freeze();
-        fLocalLeadCodePoints.adoptInstead(leadCodePoints);
-    }
-    return *fLocalLeadCodePoints;
+bool SymbolMatcher::smokeTest(const StringSegment& segment) const {
+    return segment.startsWith(*fUniSet) || segment.startsWith(fString);
 }
 
 UnicodeString SymbolMatcher::toString() const {
@@ -132,17 +120,6 @@ void MinusSignMatcher::accept(StringSegment& segment, ParsedNumber& result) cons
 
 NanMatcher::NanMatcher(const DecimalFormatSymbols& dfs)
         : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kNaNSymbol), unisets::EMPTY) {
-}
-
-const UnicodeSet& NanMatcher::getLeadCodePoints() {
-    // Overriding this here to allow use of statically allocated sets
-    int leadCp = fString.char32At(0);
-    const UnicodeSet* s = unisets::get(unisets::NAN_LEAD);
-    if (s->contains(leadCp)) {
-        return *s;
-    }
-
-    return SymbolMatcher::getLeadCodePoints();
 }
 
 bool NanMatcher::isDisabled(const ParsedNumber& result) const {

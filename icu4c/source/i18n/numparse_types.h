@@ -26,7 +26,7 @@ enum ResultFlags {
     FLAG_PERCENT = 0x0002,
     FLAG_PERMILLE = 0x0004,
     FLAG_HAS_EXPONENT = 0x0008,
-    FLAG_HAS_DEFAULT_CURRENCY = 0x0010,
+    // FLAG_HAS_DEFAULT_CURRENCY = 0x0010, // no longer used
     FLAG_HAS_DECIMAL_SEPARATOR = 0x0020,
     FLAG_NAN = 0x0040,
     FLAG_INFINITY = 0x0080,
@@ -46,6 +46,7 @@ enum ParseFlags {
     PARSE_FLAG_USE_FULL_AFFIXES = 0x0100,
     PARSE_FLAG_EXACT_AFFIX = 0x0200,
     PARSE_FLAG_PLUS_SIGN_ALLOWED = 0x0400,
+    PARSE_FLAG_OPTIMIZE = 0x0800,
 };
 
 
@@ -216,12 +217,18 @@ class StringSegment : public UMemory, public ::icu::number::impl::CharSequence {
      * <p>
      * This method will perform case folding if case folding is enabled for the parser.
      */
-    bool matches(UChar32 otherCp) const;
+    bool startsWith(UChar32 otherCp) const;
 
     /**
      * Returns true if the first code point of this StringSegment is in the given UnicodeSet.
      */
-    bool matches(const UnicodeSet& uniset) const;
+    bool startsWith(const UnicodeSet& uniset) const;
+
+    /**
+     * Returns true if there is at least one code point of overlap between this StringSegment and the
+     * given UnicodeString.
+     */
+    bool startsWith(const UnicodeString& other) const;
 
     /**
      * Returns the length of the prefix shared by this StringSegment and the given CharSequence. For
@@ -294,17 +301,18 @@ class NumberParseMatcher {
     virtual bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const = 0;
 
     /**
-     * Should return a set representing all possible chars (UTF-16 code units) that could be the first
-     * char that this matcher can consume. This method is only called during construction phase, and its
-     * return value is used to skip this matcher unless a segment begins with a char in this set. To make
-     * this matcher always run, return {@link UnicodeSet#ALL_CODE_POINTS}.
+     * Performs a fast "smoke check" for whether or not this matcher could possibly match against the
+     * given string segment. The test should be as fast as possible but also as restrictive as possible.
+     * For example, matchers can maintain a UnicodeSet of all code points that count possibly start a
+     * match. Matchers should use the {@link StringSegment#startsWith} method in order to correctly
+     * handle case folding.
      *
-     * The returned UnicodeSet does not need adoption and is guaranteed to be alive for as long as the
-     * object that returned it.
-     *
-     * This method is NOT thread-safe.
+     * @param segment
+     *            The segment to check against.
+     * @return true if the matcher might be able to match against this segment; false if it definitely
+     *         will not be able to match.
      */
-    virtual const UnicodeSet& getLeadCodePoints() = 0;
+    virtual bool smokeTest(const StringSegment& segment) const = 0;
 
     /**
      * Method called at the end of a parse, after all matchers have failed to consume any more chars.
@@ -324,9 +332,6 @@ class NumberParseMatcher {
   protected:
     // No construction except by subclasses!
     NumberParseMatcher() = default;
-
-    // Optional ownership of the leadCodePoints set
-    LocalPointer<const UnicodeSet> fLocalLeadCodePoints;
 };
 
 

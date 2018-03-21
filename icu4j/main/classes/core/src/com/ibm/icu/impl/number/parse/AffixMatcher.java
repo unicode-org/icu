@@ -13,7 +13,6 @@ import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
-import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author sffc
@@ -206,15 +205,9 @@ public class AffixMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
-        UnicodeSet leadCodePoints = new UnicodeSet();
-        if (prefix != null) {
-            leadCodePoints.addAll(prefix.getLeadCodePoints());
-        }
-        if (suffix != null) {
-            leadCodePoints.addAll(suffix.getLeadCodePoints());
-        }
-        return leadCodePoints.freeze();
+    public boolean smokeTest(StringSegment segment) {
+        return (prefix != null && prefix.smokeTest(segment))
+                || (suffix != null && suffix.smokeTest(segment));
     }
 
     @Override

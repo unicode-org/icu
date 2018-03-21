@@ -75,11 +75,11 @@ UChar32 StringSegment::getCodePoint() const {
     }
 }
 
-bool StringSegment::matches(UChar32 otherCp) const {
+bool StringSegment::startsWith(UChar32 otherCp) const {
     return codePointsEqual(getCodePoint(), otherCp, fFoldCase);
 }
 
-bool StringSegment::matches(const UnicodeSet& uniset) const {
+bool StringSegment::startsWith(const UnicodeSet& uniset) const {
     // TODO: Move UnicodeSet case-folding logic here.
     // TODO: Handle string matches here instead of separately.
     UChar32 cp = getCodePoint();
@@ -87,6 +87,15 @@ bool StringSegment::matches(const UnicodeSet& uniset) const {
         return false;
     }
     return uniset.contains(cp);
+}
+
+bool StringSegment::startsWith(const UnicodeString& other) const {
+    if (other.isBogus() || other.length() == 0 || length() == 0) {
+        return false;
+    }
+    int cp1 = getCodePoint();
+    int cp2 = other.char32At(0);
+    return codePointsEqual(cp1, cp2, fFoldCase);
 }
 
 int32_t StringSegment::getCommonPrefixLength(const UnicodeString& other) {

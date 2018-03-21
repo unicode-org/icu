@@ -34,7 +34,7 @@ NumberParserImpl*
 NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& patternString,
                                      parse_flags_t parseFlags, UErrorCode& status) {
 
-    LocalPointer<NumberParserImpl> parser(new NumberParserImpl(parseFlags, true));
+    LocalPointer<NumberParserImpl> parser(new NumberParserImpl(parseFlags));
     DecimalFormatSymbols symbols(locale, status);
 
     parser->fLocalMatchers.ignorables = {unisets::DEFAULT_IGNORABLES};
@@ -117,7 +117,7 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     }
     IgnorablesMatcher ignorables(isStrict ? unisets::DEFAULT_IGNORABLES : unisets::STRICT_IGNORABLES);
 
-    LocalPointer<NumberParserImpl> parser(new NumberParserImpl(parseFlags, status));
+    LocalPointer<NumberParserImpl> parser(new NumberParserImpl(parseFlags));
 
     //////////////////////
     /// AFFIX MATCHERS ///
@@ -197,50 +197,20 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     return parser.orphan();
 }
 
-NumberParserImpl::NumberParserImpl(parse_flags_t parseFlags, bool computeLeads)
-        : fParseFlags(parseFlags), fComputeLeads(computeLeads) {
+NumberParserImpl::NumberParserImpl(parse_flags_t parseFlags)
+        : fParseFlags(parseFlags) {
 }
 
 NumberParserImpl::~NumberParserImpl() {
-    if (fComputeLeads) {
-        for (int32_t i = 0; i < fNumMatchers; i++) {
-            delete (fLeads[i]);
-        }
-    }
     fNumMatchers = 0;
 }
 
 void NumberParserImpl::addMatcher(NumberParseMatcher& matcher) {
     if (fNumMatchers + 1 > fMatchers.getCapacity()) {
         fMatchers.resize(fNumMatchers * 2, fNumMatchers);
-        if (fComputeLeads) {
-            // The two arrays should grow in tandem:
-            U_ASSERT(fNumMatchers >= fLeads.getCapacity());
-            fLeads.resize(fNumMatchers * 2, fNumMatchers);
-        }
     }
-
     fMatchers[fNumMatchers] = &matcher;
-
-    if (fComputeLeads) {
-        addLeadCodePointsForMatcher(matcher);
-    }
-
     fNumMatchers++;
-}
-
-void NumberParserImpl::addLeadCodePointsForMatcher(NumberParseMatcher& matcher) {
-    const UnicodeSet& leadCodePoints = matcher.getLeadCodePoints();
-    // TODO: Avoid the clone operation here.
-    if (0 != (fParseFlags & PARSE_FLAG_IGNORE_CASE)) {
-        auto* copy = dynamic_cast<UnicodeSet*>(leadCodePoints.cloneAsThawed());
-        copy->closeOver(USET_ADD_CASE_MAPPINGS);
-        copy->freeze();
-        fLeads[fNumMatchers] = copy;
-    } else {
-        // FIXME: new here because we still take ownership
-        fLeads[fNumMatchers] = new UnicodeSet(leadCodePoints);
-    }
 }
 
 void NumberParserImpl::freeze() {
@@ -276,12 +246,11 @@ void NumberParserImpl::parseGreedyRecursive(StringSegment& segment, ParsedNumber
     }
 
     int initialOffset = segment.getOffset();
-    int leadCp = segment.getCodePoint();
     for (int32_t i = 0; i < fNumMatchers; i++) {
-        if (fComputeLeads && !fLeads[i]->contains(leadCp)) {
+        const NumberParseMatcher* matcher = fMatchers[i];
+        if (!matcher->smokeTest(segment)) {
             continue;
         }
-        const NumberParseMatcher* matcher = fMatchers[i];
         matcher->match(segment, result, status);
         if (U_FAILURE(status)) {
             return;
@@ -313,8 +282,10 @@ void NumberParserImpl::parseLongestRecursive(StringSegment& segment, ParsedNumbe
 
     int initialOffset = segment.getOffset();
     for (int32_t i = 0; i < fNumMatchers; i++) {
-        // TODO: Check leadChars here?
         const NumberParseMatcher* matcher = fMatchers[i];
+        if (!matcher->smokeTest(segment)) {
+            continue;
+        }
 
         // In a non-greedy parse, we attempt all possible matches and pick the best.
         for (int32_t charsToConsume = 0; charsToConsume < segment.length();) {

@@ -30,9 +30,9 @@ import org.junit.Test;
 
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.DecimalFormatProperties.ParseMode;
 import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.PatternStringParser;
-import com.ibm.icu.impl.number.parse.NumberParserImpl.ParseMode;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;

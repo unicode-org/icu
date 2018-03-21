@@ -206,21 +206,15 @@ CodePointMatcher::CodePointMatcher(UChar32 cp)
         : fCp(cp) {}
 
 bool CodePointMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCode&) const {
-    if (segment.matches(fCp)) {
+    if (segment.startsWith(fCp)) {
         segment.adjustOffsetByCodePoint();
         result.setCharsConsumed(segment);
     }
     return false;
 }
 
-const UnicodeSet& CodePointMatcher::getLeadCodePoints() {
-    if (fLocalLeadCodePoints.isNull()) {
-        auto* leadCodePoints = new UnicodeSet();
-        leadCodePoints->add(fCp);
-        leadCodePoints->freeze();
-        fLocalLeadCodePoints.adoptInstead(leadCodePoints);
-    }
-    return *fLocalLeadCodePoints;
+bool CodePointMatcher::smokeTest(const StringSegment& segment) const {
+    return segment.startsWith(fCp);
 }
 
 UnicodeString CodePointMatcher::toString() const {
@@ -427,19 +421,9 @@ bool AffixMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCod
     }
 }
 
-const UnicodeSet& AffixMatcher::getLeadCodePoints() {
-    if (fLocalLeadCodePoints.isNull()) {
-        auto* leadCodePoints = new UnicodeSet();
-        if (fPrefix != nullptr) {
-            leadCodePoints->addAll(fPrefix->getLeadCodePoints());
-        }
-        if (fSuffix != nullptr) {
-            leadCodePoints->addAll(fSuffix->getLeadCodePoints());
-        }
-        leadCodePoints->freeze();
-        fLocalLeadCodePoints.adoptInstead(leadCodePoints);
-    }
-    return *fLocalLeadCodePoints;
+bool AffixMatcher::smokeTest(const StringSegment& segment) const {
+    return (fPrefix != nullptr && fPrefix->smokeTest(segment)) ||
+           (fSuffix != nullptr && fSuffix->smokeTest(segment));
 }
 
 void AffixMatcher::postProcess(ParsedNumber& result) const {

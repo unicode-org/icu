@@ -21,7 +21,12 @@ using namespace icu::numparse::impl;
 
 
 CurrencyNamesMatcher::CurrencyNamesMatcher(const Locale& locale, UErrorCode& status)
-        : fLocaleName(locale.getName(), -1, status) {}
+        : fLocaleName(locale.getName(), -1, status) {
+    uprv_currencyLeads(fLocaleName.data(), fLeadCodePoints, status);
+    // Always apply case mapping closure for currencies
+    fLeadCodePoints.closeOver(USET_ADD_CASE_MAPPINGS);
+    fLeadCodePoints.freeze();
+}
 
 bool CurrencyNamesMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const {
     if (result.currencyCode[0] != 0) {
@@ -57,17 +62,8 @@ bool CurrencyNamesMatcher::match(StringSegment& segment, ParsedNumber& result, U
     return partialMatch;
 }
 
-const UnicodeSet& CurrencyNamesMatcher::getLeadCodePoints() {
-    if (fLocalLeadCodePoints.isNull()) {
-        ErrorCode status;
-        auto* leadCodePoints = new UnicodeSet();
-        uprv_currencyLeads(fLocaleName.data(), *leadCodePoints, status);
-        // Always apply case mapping closure for currencies
-        leadCodePoints->closeOver(USET_ADD_CASE_MAPPINGS);
-        leadCodePoints->freeze();
-        fLocalLeadCodePoints.adoptInstead(leadCodePoints);
-    }
-    return *fLocalLeadCodePoints;
+bool CurrencyNamesMatcher::smokeTest(const StringSegment& segment) const {
+    return segment.startsWith(fLeadCodePoints);
 }
 
 UnicodeString CurrencyNamesMatcher::toString() const {
@@ -103,15 +99,8 @@ bool CurrencyCustomMatcher::match(StringSegment& segment, ParsedNumber& result, 
     return overlap1 == segment.length() || overlap2 == segment.length();
 }
 
-const UnicodeSet& CurrencyCustomMatcher::getLeadCodePoints() {
-    if (fLocalLeadCodePoints.isNull()) {
-        auto* leadCodePoints = new UnicodeSet();
-        utils::putLeadCodePoint(fCurrency1, leadCodePoints);
-        utils::putLeadCodePoint(fCurrency2, leadCodePoints);
-        leadCodePoints->freeze();
-        fLocalLeadCodePoints.adoptInstead(leadCodePoints);
-    }
-    return *fLocalLeadCodePoints;
+bool CurrencyCustomMatcher::smokeTest(const StringSegment& segment) const {
+    return segment.startsWith(fCurrency1) || segment.startsWith(fCurrency2);
 }
 
 UnicodeString CurrencyCustomMatcher::toString() const {
@@ -142,17 +131,6 @@ CurrencyAnyMatcher& CurrencyAnyMatcher::operator=(CurrencyAnyMatcher&& src) U_NO
     fCustomMatcher = std::move(src.fCustomMatcher);
     // Note: do NOT move fMatcherArray
     return *this;
-}
-
-const UnicodeSet& CurrencyAnyMatcher::getLeadCodePoints() {
-    if (fLocalLeadCodePoints.isNull()) {
-        auto* leadCodePoints = new UnicodeSet();
-        leadCodePoints->addAll(fNamesMatcher.getLeadCodePoints());
-        leadCodePoints->addAll(fCustomMatcher.getLeadCodePoints());
-        leadCodePoints->freeze();
-        fLocalLeadCodePoints.adoptInstead(leadCodePoints);
-    }
-    return *fLocalLeadCodePoints;
 }
 
 const NumberParseMatcher* const* CurrencyAnyMatcher::begin() const {
