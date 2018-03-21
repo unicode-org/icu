@@ -75,10 +75,10 @@ UnicodeString CurrencyNamesMatcher::toString() const {
 }
 
 
-CurrencyCustomMatcher::CurrencyCustomMatcher(const char16_t* currencyCode, const UnicodeString& currency1,
-                                             const UnicodeString& currency2)
-        : fCurrency1(currency1), fCurrency2(currency2) {
-    utils::copyCurrencyCode(fCurrencyCode, currencyCode);
+CurrencyCustomMatcher::CurrencyCustomMatcher(const CurrencySymbols& currencySymbols, UErrorCode& status)
+        : fCurrency1(currencySymbols.getCurrencySymbol(status)),
+          fCurrency2(currencySymbols.getIntlCurrencySymbol(status)) {
+    utils::copyCurrencyCode(fCurrencyCode, currencySymbols.getIsoCode());
 }
 
 bool CurrencyCustomMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCode&) const {

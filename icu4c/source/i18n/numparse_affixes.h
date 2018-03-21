@@ -11,6 +11,7 @@
 #include "numparse_symbols.h"
 #include "numparse_currency.h"
 #include "number_affixutils.h"
+#include "number_currencysymbols.h"
 
 #include <array>
 
@@ -23,6 +24,7 @@ class AffixPatternMatcher;
 
 using ::icu::number::impl::AffixPatternProvider;
 using ::icu::number::impl::TokenConsumer;
+using ::icu::number::impl::CurrencySymbols;
 
 
 class CodePointMatcher : public NumberParseMatcher, public UMemory {
@@ -73,9 +75,7 @@ class CodePointMatcherWarehouse : public UMemory {
 
 
 struct AffixTokenMatcherSetupData {
-    const UChar* currencyCode;
-    const UnicodeString& currency1;
-    const UnicodeString& currency2;
+    const CurrencySymbols& currencySymbols;
     const DecimalFormatSymbols& dfs;
     IgnorablesMatcher& ignorables;
     const Locale& locale;

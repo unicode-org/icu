@@ -29,6 +29,12 @@ class PropertiesAffixPatternProvider : public AffixPatternProvider, public UMemo
 
     void setTo(const DecimalFormatProperties& properties, UErrorCode& status);
 
+    PropertiesAffixPatternProvider() = default; // puts instance in valid but undefined state
+
+    PropertiesAffixPatternProvider(const DecimalFormatProperties& properties, UErrorCode& status) {
+        setTo(properties, status);
+    }
+
     // AffixPatternProvider Methods:
 
     char16_t charAt(int32_t flags, int32_t i) const U_OVERRIDE;
@@ -106,7 +112,7 @@ class CurrencyPluralInfoAffixProvider : public AffixPatternProvider, public UMem
 struct DecimalFormatWarehouse {
     PropertiesAffixPatternProvider propertiesAPP;
     CurrencyPluralInfoAffixProvider currencyPluralInfoAPP;
-    CurrencyCustomSymbols currencyCustomSymbols;
+    CurrencySymbols currencySymbols;
 };
 
 

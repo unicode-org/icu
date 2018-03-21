@@ -62,7 +62,7 @@ class NumberFormatterImpl : public UMemory {
 
     // Value objects possibly used by the number formatting pipeline:
     struct Warehouse {
-        CurrencyDataSymbols fCurrencyDataSymbols;
+        CurrencySymbols fCurrencySymbols;
     } fWarehouse;
 
 

@@ -216,13 +216,15 @@ void NumberParserTest::testCurrencyAnyMatcher() {
     IcuTestErrorCode status(*this, "testCurrencyAnyMatcher");
 
     IgnorablesMatcher ignorables(unisets::DEFAULT_IGNORABLES);
+    Locale locale = Locale::getEnglish();
+
+    DecimalFormatSymbols dfs(locale, status);
+    dfs.setSymbol(DecimalFormatSymbols::kCurrencySymbol, u"IU$", status);
+    dfs.setSymbol(DecimalFormatSymbols::kIntlCurrencySymbol, u"ICU", status);
+    CurrencySymbols currencySymbols({u"ICU", status}, locale, dfs, status);
+
     AffixTokenMatcherSetupData affixSetupData = {
-            u"ICU",
-            u"IU$",
-            u"ICU",
-            {"en", status},
-            ignorables,
-            "en"};
+            currencySymbols, {"en", status}, ignorables, "en"};
     AffixTokenMatcherWarehouse warehouse(&affixSetupData);
     NumberParseMatcher& matcher = warehouse.currency(status);
 
@@ -254,14 +256,16 @@ void NumberParserTest::testCurrencyAnyMatcher() {
 
 void NumberParserTest::testAffixPatternMatcher() {
     IcuTestErrorCode status(*this, "testAffixPatternMatcher");
+    Locale locale = Locale::getEnglish();
     IgnorablesMatcher ignorables(unisets::DEFAULT_IGNORABLES);
+
+    DecimalFormatSymbols dfs(locale, status);
+    dfs.setSymbol(DecimalFormatSymbols::kCurrencySymbol, u"IU$", status);
+    dfs.setSymbol(DecimalFormatSymbols::kIntlCurrencySymbol, u"ICU", status);
+    CurrencySymbols currencySymbols({u"ICU", status}, locale, dfs, status);
+
     AffixTokenMatcherSetupData affixSetupData = {
-            u"USD",
-            u"foo",
-            u"bar",
-            {"en", status},
-            ignorables,
-            "en"};
+            currencySymbols, {"en", status}, ignorables, "en"};
     AffixTokenMatcherWarehouse warehouse(&affixSetupData);
 
     static const struct TestCase {

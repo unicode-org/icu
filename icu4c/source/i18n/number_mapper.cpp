@@ -86,10 +86,8 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
         // NOTE: Slicing is OK.
         macros.unit = currency; // NOLINT
     }
-    if (symbols.isCustomCurrencySymbol() || symbols.isCustomIntlCurrencySymbol()) {
-        warehouse.currencyCustomSymbols = {currency, locale, symbols, status};
-        macros.currencySymbols = &warehouse.currencyCustomSymbols;
-    }
+    warehouse.currencySymbols = {currency, locale, symbols, status};
+    macros.currencySymbols = &warehouse.currencySymbols;
 
     ///////////////////////
     // ROUNDING STRATEGY //
