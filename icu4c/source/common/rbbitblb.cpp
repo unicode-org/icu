@@ -38,10 +38,8 @@ RBBITableBuilder::RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode **rootNode, UEr
     }
     // fDStates is UVector<RBBIStateDescriptor *>
     fDStates = new UVector(status);
-    // SafeTable is UVector<UnicodeString *>.  Contents owned by the UVector.
-    fSafeTable = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status);
-    if (U_SUCCESS(status) && (fDStates == nullptr || fSafeTable == nullptr)) {
-        status = U_MEMORY_ALLOCATION_ERROR;;
+    if (U_SUCCESS(status) && fDStates == nullptr ) {
+        status = U_MEMORY_ALLOCATION_ERROR;
     }
 }
 
@@ -190,8 +188,6 @@ void  RBBITableBuilder::build() {
     //    for all tables.  Merge the ones from this table into the global set.
     //
     mergeRuleStatusVals();
-
-    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "states")) {printStates();};
 }
 
 
@@ -1316,10 +1312,10 @@ void RBBITableBuilder::buildSafe(UErrorCode &status) {
             if (wantedEndState == endState) {
                 int32_t pair = c1 << 16 | c2;
                 safePairs.addElement(pair, status);
-                // printf("(%d, %d) ", c1, c2);
+                printf("(%d, %d) ", c1, c2);
             }
         }
-        //printf("\n");
+        printf("\n");
     }
 
     // Populate the initial safe table.
@@ -1329,21 +1325,25 @@ void RBBITableBuilder::buildSafe(UErrorCode &status) {
     // Row 1 is the start sate.
     // Row 2 and beyond are other states, initially one per char class, but
     //   after initial construction, many of the states will be combined, compacting the table.)
+    // The String holds the nextState data only. The four leading fields of a row, fAccepting,
+    // fLookAhead, etc. are not needed for the safe table, and are omitted at this stage of building.
+
+    U_ASSERT(fSafeTable == nullptr);
     fSafeTable = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, numCharClasses + 2, status);
     for (int32_t row=0; row<numCharClasses + 2; ++row) {
-        fSafeTable->addElement(new UnicodeString(numCharClasses+4, 0, numCharClasses+4), status);
+        fSafeTable->addElement(new UnicodeString(numCharClasses, 0, numCharClasses+4), status);
     }
 
     // From the start state, each input char class transitions to the state for that input.
     UnicodeString &startState = *(UnicodeString *)fSafeTable->elementAt(1);
     for (int32_t charClass=0; charClass < numCharClasses; ++charClass) {
-        // Note: +2 for the start & stop state; +4 for header columns in state table.
-        startState.setCharAt(charClass+4, charClass+2);
+        // Note: +2 for the start & stop state.
+        startState.setCharAt(charClass, charClass+2);
     }
 
     // Initially make every other state table row look like the start state row,
     for (int32_t row=2; row<numCharClasses+2; ++row) {
-        UnicodeString &rowState = *(UnicodeString *)fSafeTable->elementAt(1);
+        UnicodeString &rowState = *(UnicodeString *)fSafeTable->elementAt(row);
         rowState = startState;   // UnicodeString assignment, copies contents.
     }
 
@@ -1355,12 +1355,84 @@ void RBBITableBuilder::buildSafe(UErrorCode &status) {
         int32_t c2 = pair & 0x0000ffff;
 
         UnicodeString &rowState = *(UnicodeString *)fSafeTable->elementAt(c2 + 2);
-        rowState.setCharAt(c1 + 4, 0);
+        rowState.setCharAt(c1, 0);
     }
 
     // Merge similar states.
 
 }
+
+
+//-----------------------------------------------------------------------------
+//
+//   getSafeTableSize()    Calculate the size of the runtime form of this
+//                         safe state table.
+//
+//-----------------------------------------------------------------------------
+int32_t  RBBITableBuilder::getSafeTableSize() const {
+    int32_t    size = 0;
+    int32_t    numRows;
+    int32_t    numCols;
+    int32_t    rowSize;
+
+    if (fSafeTable == nullptr) {
+        return 0;
+    }
+
+    size    = offsetof(RBBIStateTable, fTableData);    // The header, with no rows to the table.
+
+    numRows = fSafeTable->size();
+    numCols = fRB->fSetBuilder->getNumCharCategories();
+
+    rowSize = offsetof(RBBIStateTableRow, fNextState) + sizeof(uint16_t)*numCols;
+    size   += numRows * rowSize;
+    return size;
+}
+
+
+//-----------------------------------------------------------------------------
+//
+//   exportTable()    export the state transition table in the format required
+//                    by the runtime engine.  getTableSize() bytes of memory
+//                    must be available at the output address "where".
+//
+//-----------------------------------------------------------------------------
+void RBBITableBuilder::exportSafeTable(void *where) {
+    RBBIStateTable    *table = (RBBIStateTable *)where;
+    uint32_t           state;
+    int                col;
+
+    if (U_FAILURE(*fStatus) || fSafeTable == nullptr) {
+        return;
+    }
+
+    int32_t catCount = fRB->fSetBuilder->getNumCharCategories();
+    if (catCount > 0x7fff ||
+            fSafeTable->size() > 0x7fff) {
+        *fStatus = U_BRK_INTERNAL_ERROR;
+        return;
+    }
+
+    table->fRowLen    = offsetof(RBBIStateTableRow, fNextState) + sizeof(uint16_t) * catCount;
+    table->fNumStates = fSafeTable->size();
+    table->fFlags     = 0;
+    table->fReserved  = 0;
+
+    for (state=0; state<table->fNumStates; state++) {
+        UnicodeString *rowString = (UnicodeString *)fSafeTable->elementAt(state);
+        RBBIStateTableRow   *row = (RBBIStateTableRow *)(table->fTableData + state*table->fRowLen);
+        row->fAccepting = 0;
+        row->fLookAhead = 0;
+        row->fTagIdx    = 0;
+        row->fReserved  = 0;
+        for (col=0; col<catCount; col++) {
+            row->fNextState[col] = rowString->charAt(col);
+        }
+    }
+}
+
+
+
 
 //-----------------------------------------------------------------------------
 //
@@ -1407,6 +1479,47 @@ void RBBITableBuilder::printStates() {
         RBBIDebugPrintf("%3d %3d %5d ", sd->fAccepting, sd->fLookAhead, sd->fTagsIdx);
         for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {
             RBBIDebugPrintf(" %2d", sd->fDtran->elementAti(c));
+        }
+        RBBIDebugPrintf("\n");
+    }
+    RBBIDebugPrintf("\n\n");
+}
+#endif
+
+
+//-----------------------------------------------------------------------------
+//
+//   printSafeTable    Debug Function.  Dump the fully constructed safe table.
+//
+//-----------------------------------------------------------------------------
+#ifdef RBBI_DEBUG
+void RBBITableBuilder::printSafeTable() {
+    int     c;    // input "character"
+    int     n;    // state number
+
+    RBBIDebugPrintf("    Safe Reverse Table \n");
+    if (fSafeTable == nullptr) {
+        RBBIDebugPrintf("   --- nullptr ---\n");
+        return;
+    }
+    RBBIDebugPrintf("state |           i n p u t     s y m b o l s \n");
+    RBBIDebugPrintf("      | Acc  LA    Tag");
+    for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {
+        RBBIDebugPrintf(" %2d", c);
+    }
+    RBBIDebugPrintf("\n");
+    RBBIDebugPrintf("      |---------------");
+    for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {
+        RBBIDebugPrintf("---");
+    }
+    RBBIDebugPrintf("\n");
+
+    for (n=0; n<fSafeTable->size(); n++) {
+        UnicodeString *rowString = (UnicodeString *)fSafeTable->elementAt(n);
+        RBBIDebugPrintf("  %3d | " , n);
+        RBBIDebugPrintf("%3d %3d %5d ", 0, 0, 0);  // Accepting, LookAhead, Tags
+        for (c=0; c<fRB->fSetBuilder->getNumCharCategories(); c++) {
+            RBBIDebugPrintf(" %2d", rowString->charAt(c));
         }
         RBBIDebugPrintf("\n");
     }

@@ -356,12 +356,16 @@ UBool RuleBasedBreakIterator::BreakCache::populateNear(int32_t position, UErrorC
         int32_t ruleStatusIndex = 0;
         // TODO: check for position == length of text. Although may still need to back up to get rule status.
         if (position > 20) {
-            int32_t backupPos = fBI->handlePrevious(position);
+            int32_t backupPos = fBI->handleSafePrevious(position);
             fBI->fPosition = backupPos;
-            aBoundary = fBI->handleNext();                // Ignore dictionary, just finding a rule based boundary.
+            aBoundary = fBI->handleNext();        // Ignore dictionary, just finding a rule based boundary.
+            if (aBoundary == backupPos + 1) {   // TODO: + 1 is wrong for supplementals.
+                // Safe rules work on pairs. +1 from start pos may be a false match.
+                aBoundary = fBI->handleNext();
+            }
             ruleStatusIndex = fBI->fRuleStatusIndex;
         }
-        reset(aBoundary, ruleStatusIndex);               // Reset cache to hold aBoundary as a single starting point.
+        reset(aBoundary, ruleStatusIndex);        // Reset cache to hold aBoundary as a single starting point.
     }
     
     // Fill in boundaries between existing cache content and the new requested position.
@@ -485,14 +489,17 @@ UBool RuleBasedBreakIterator::BreakCache::populatePreceding(UErrorCode &status) 
         if (backupPosition <= 0) {
             backupPosition = 0;
         } else {
-            backupPosition = fBI->handlePrevious(backupPosition);
+            backupPosition = fBI->handleSafePrevious(backupPosition);
         }
         if (backupPosition == UBRK_DONE || backupPosition == 0) {
             position = 0;
             positionStatusIdx = 0;
         } else {
             fBI->fPosition = backupPosition;  // TODO: pass starting position in a clearer way.
-            position = fBI->handleNext();
+            position = fBI->handleNext();     // TODO: supplementals don't work with the +1.
+            if (position == backupPosition + 1) {
+                position = fBI->handleNext();   // Safe rules identify safe pairs.
+            };
             positionStatusIdx = fBI->fRuleStatusIndex;
 
         }
