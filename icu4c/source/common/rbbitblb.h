@@ -123,11 +123,13 @@ public:
     void     printPosSets(RBBINode *n /* = NULL*/);
     void     printStates();
     void     printRuleStatusTable();
+    void     printSafeTable();
 #else
     #define  printSet(s)
     #define  printPosSets(n)
     #define  printStates()
     #define  printRuleStatusTable()
+    #define printSafeTable()
 #endif
 
 private:

@@ -154,13 +154,15 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
     //
     int32_t headerSize        = align8(sizeof(RBBIDataHeader));
     int32_t forwardTableSize  = align8(fForwardTables->getTableSize());
-    int32_t safeRevTableSize  = align8(fSafeRevTables->getTableSize());
+    int32_t reverseTableSize  = align8(fForwardTables->getSafeTableSize());
+    int32_t safeRevTableSize  = align8(fSafeRevTables->getTableSize());  // TODO: remove hand-written rules.
     int32_t trieSize          = align8(fSetBuilder->getTrieSize());
     int32_t statusTableSize   = align8(fRuleStatusVals->size() * sizeof(int32_t));
     int32_t rulesSize         = align8((fStrippedRules.length()+1) * sizeof(UChar));
 
     int32_t         totalSize = headerSize
-                                + forwardTableSize 
+                                + forwardTableSize
+                                + reverseTableSize
                                 + safeRevTableSize
                                 + statusTableSize + trieSize + rulesSize;
 
@@ -180,27 +182,18 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
     data->fLength           = totalSize;
     data->fCatCount         = fSetBuilder->getNumCharCategories();
 
-    // Only save the forward table and the safe reverse table,
-    // because these are the only ones used at run-time.
-    //
-    // For the moment, we still build the other tables if they are present in the rule source files,
-    // for backwards compatibility. Old rule files need to work, and this is the simplest approach.
-    //
-    // Additional backwards compatibility consideration: if no safe rules are provided, consider the
-    // reverse rules to actually be the safe reverse rules.
-
     data->fFTable        = headerSize;
     data->fFTableLen     = forwardTableSize;
 
-    // Do not save Reverse Table.
-    data->fRTable        = data->fFTable  + forwardTableSize;
-    data->fRTableLen     = 0;
+    data->fRTable        = data->fFTable  + data->fFTableLen;
+    data->fRTableLen     = reverseTableSize;
 
     // Do not save the Safe Forward table.
-    data->fSFTable       = data->fRTable + 0;
+    data->fSFTable       = data->fRTable + data->fRTableLen;
     data->fSFTableLen    = 0;
 
-    data->fSRTable       = data->fSFTable + 0;
+    // Hand written reverse rules. TODO: remove, once synthesized ones are working.
+    data->fSRTable       = data->fSFTable + data->fSFTableLen;
     data->fSRTableLen    = safeRevTableSize;
     U_ASSERT(safeRevTableSize > 0);
  
@@ -214,6 +207,7 @@ RBBIDataHeader *RBBIRuleBuilder::flattenData() {
     uprv_memset(data->fReserved, 0, sizeof(data->fReserved));
 
     fForwardTables->exportTable((uint8_t *)data + data->fFTable);
+    fForwardTables->exportSafeTable((uint8_t *)data + data->fRTable);
     fSafeRevTables->exportTable((uint8_t *)data + data->fSRTable);
 
     fSetBuilder->serializeTrie ((uint8_t *)data + data->fTrie);
@@ -297,22 +291,24 @@ RBBIDataHeader *RBBIRuleBuilder::build(UErrorCode &status) {
     if (fForwardTables == nullptr || fSafeRevTables == nullptr)
     {
         status = U_MEMORY_ALLOCATION_ERROR;
-        delete fForwardTables; fForwardTables = nullptr;
-        delete fSafeRevTables; fSafeRevTables = nullptr;
         return nullptr;
     }
 
     fForwardTables->build();
-    fForwardTables->buildSafe(status);
     fSafeRevTables->build();
+    optimizeTables();
+    fForwardTables->buildSafe(status);
 
+
+    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "states")) {printStates();};
 #ifdef RBBI_DEBUG
     if (fDebugEnv && uprv_strstr(fDebugEnv, "states")) {
+        fForwardTables
         fForwardTables->printRuleStatusTable();
+        fForwardTables->printSafeTable();
     }
 #endif
 
-    optimizeTables();
     fSetBuilder->buildTrie();
 
     //
