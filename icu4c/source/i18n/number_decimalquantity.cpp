@@ -192,12 +192,14 @@ int32_t DecimalQuantity::getMagnitude() const {
     return scale + precision - 1;
 }
 
-void DecimalQuantity::adjustMagnitude(int32_t delta) {
+bool DecimalQuantity::adjustMagnitude(int32_t delta) {
     if (precision != 0) {
-        // TODO: How to handle overflow cases?
-        scale += delta;
-        origDelta += delta;
+        // i.e., scale += delta; origDelta += delta
+        bool overflow = uprv_add32_overflow(scale, delta, &scale);
+        overflow = uprv_add32_overflow(origDelta, delta, &origDelta) || overflow;
+        return overflow;
     }
+    return false;
 }
 
 StandardPlural::Form DecimalQuantity::getStandardPlural(const PluralRules *rules) const {
