@@ -143,14 +143,6 @@ ParseState parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, S
 ParseState
 parseOption(ParseState stem, const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
-/**
- * Main skeleton generator function. Appends the normalized skeleton for the MacroProps to the given
- * StringBuilder.
- *
- * Internal: use the create() endpoint instead of this function.
- */
-void generateSkeleton(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
-
 } // namespace skeleton
 
 
@@ -241,37 +233,48 @@ void generateIntegerWidthOption(int32_t minInt, int32_t maxInt, UnicodeString& s
 
 void parseNumberingSystemOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
-void generateNumberingSystemOption(NumberingSystem, UnicodeString& sb, UErrorCode& status);
+void generateNumberingSystemOption(const NumberingSystem& ns, UnicodeString& sb, UErrorCode& status);
 
 } // namespace blueprint_helpers
 
 /**
- * Namespace for utility methods for generating a token corresponding to each macro-prop. Each method
+ * Class for utility methods for generating a token corresponding to each macro-prop. Each method
  * returns whether or not a token was written to the string builder.
+ *
+ * This needs to be a class, not a namespace, so it can be friended.
  */
-namespace generator_helpers {
+class GeneratorHelpers {
+  public:
+    /**
+     * Main skeleton generator function. Appends the normalized skeleton for the MacroProps to the given
+     * StringBuilder.
+     *
+     * Internal: use the create() endpoint instead of this function.
+     */
+    static void generateSkeleton(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
-bool notation(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+  private:
+    static bool notation(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
-bool unit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+    static bool unit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
-bool perUnit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+    static bool perUnit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
-bool rounding(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+    static bool rounding(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
-bool grouping(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+    static bool grouping(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
-bool integerWidth(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+    static bool integerWidth(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
-bool symbols(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+    static bool symbols(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
-bool unitWidth(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+    static bool unitWidth(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
-bool sign(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+    static bool sign(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
-bool decimal(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+    static bool decimal(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
-} // namespace generator_helpers
+};
 
 /**
  * Struct for null-checking.

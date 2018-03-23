@@ -454,6 +454,7 @@ class NumberPropertyMapper;
 struct DecimalFormatProperties;
 class MultiplierChain;
 class CurrencySymbols;
+class GeneratorHelpers;
 
 } // namespace impl
 
@@ -658,6 +659,9 @@ class U_I18N_API Notation : public UMemory {
     friend class impl::NumberFormatterImpl;
     friend class impl::ScientificModifier;
     friend class impl::ScientificHandler;
+
+    // To allow access to the skeleton generation code:
+    friend class impl::GeneratorHelpers;
 };
 
 /**
@@ -1045,6 +1049,9 @@ class U_I18N_API Rounder : public UMemory {
     friend class FractionRounder;
     friend class CurrencyRounder;
     friend class IncrementRounder;
+
+    // To allow access to the skeleton generation code:
+    friend class impl::GeneratorHelpers;
 };
 
 /**
@@ -1237,6 +1244,11 @@ class U_I18N_API IntegerWidth : public UMemory {
         fUnion.minMaxInt.fMinInt = -1;
     }
 
+    /** Returns the default instance. */
+    static IntegerWidth standard() {
+        return IntegerWidth::zeroFillTo(1);
+    }
+
     bool isBogus() const {
         return !fHasError && fUnion.minMaxInt.fMinInt == -1;
     }
@@ -1251,12 +1263,17 @@ class U_I18N_API IntegerWidth : public UMemory {
 
     void apply(impl::DecimalQuantity &quantity, UErrorCode &status) const;
 
+    bool operator==(const IntegerWidth& other) const;
+
     // To allow MacroProps/MicroProps to initialize empty instances:
     friend struct impl::MacroProps;
     friend struct impl::MicroProps;
 
     // To allow NumberFormatterImpl to access isBogus() and perform other operations:
     friend class impl::NumberFormatterImpl;
+
+    // To allow access to the skeleton generation code:
+    friend class impl::GeneratorHelpers;
 };
 
 namespace impl {
@@ -1362,8 +1379,11 @@ class U_I18N_API Grouper : public UMemory {
     // Future: static Grouper forProperties(DecimalFormatProperties& properties);
 
     /** @internal */
-    Grouper(int16_t grouping1, int16_t grouping2, int16_t minGrouping)
-            : fGrouping1(grouping1), fGrouping2(grouping2), fMinGrouping(minGrouping) {}
+    Grouper(int16_t grouping1, int16_t grouping2, int16_t minGrouping, UGroupingStrategy strategy)
+            : fGrouping1(grouping1),
+              fGrouping2(grouping2),
+              fMinGrouping(minGrouping),
+              fStrategy(strategy) {}
 
     /** @internal */
     int16_t getPrimary() const;
@@ -1384,13 +1404,19 @@ class U_I18N_API Grouper : public UMemory {
     int16_t fGrouping2;
 
     /**
-     * The minimum gropuing size, with the following special values:
+     * The minimum grouping size, with the following special values:
      * <ul>
      * <li>-2 = needs locale data
      * <li>-3 = no less than 2
      * </ul>
      */
     int16_t fMinGrouping;
+
+    /**
+     * The UGroupingStrategy that was used to create this Grouper, or UNUM_GROUPING_COUNT if this
+     * was not created from a UGroupingStrategy.
+     */
+    UGroupingStrategy fStrategy;
 
     Grouper() : fGrouping1(-3) {};
 
@@ -1412,6 +1438,9 @@ class U_I18N_API Grouper : public UMemory {
 
     // To allow NumberParserImpl to perform setLocaleData():
     friend class ::icu::numparse::impl::NumberParserImpl;
+
+    // To allow access to the skeleton generation code:
+    friend class impl::GeneratorHelpers;
 };
 
 /** @internal */
@@ -1472,6 +1501,9 @@ class U_I18N_API Padder : public UMemory {
 
     // To allow NumberFormatterImpl to access isBogus() and perform other operations:
     friend class impl::NumberFormatterImpl;
+
+    // To allow access to the skeleton generation code:
+    friend class impl::GeneratorHelpers;
 };
 
 /** @internal */
@@ -1504,6 +1536,9 @@ class U_I18N_API Multiplier : public UMemory {
 
     // To allow the helper class MultiplierChain access to private fields:
     friend class impl::MultiplierChain;
+
+    // To allow access to the skeleton generation code:
+    friend class impl::GeneratorHelpers;
 };
 
 /** @internal */

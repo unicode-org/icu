@@ -37,15 +37,15 @@ int16_t getMinGroupingForLocale(const Locale& locale) {
 Grouper Grouper::forStrategy(UGroupingStrategy grouping) {
     switch (grouping) {
     case UNUM_GROUPING_OFF:
-        return {-1, -1, -2};
+        return {-1, -1, -2, grouping};
     case UNUM_GROUPING_AUTO:
-        return {-2, -2, -2};
+        return {-2, -2, -2, grouping};
     case UNUM_GROUPING_MIN2:
-        return {-2, -2, -3};
+        return {-2, -2, -3, grouping};
     case UNUM_GROUPING_ON_ALIGNED:
-        return {-4, -4, 1};
+        return {-4, -4, 1, grouping};
     case UNUM_GROUPING_THOUSANDS:
-        return {3, 3, 1};
+        return {3, 3, 1, grouping};
     default:
         U_ASSERT(FALSE);
     }
@@ -57,7 +57,7 @@ Grouper Grouper::forProperties(const DecimalFormatProperties& properties) {
     auto minGrouping = static_cast<int16_t>(properties.minimumGroupingDigits);
     grouping1 = grouping1 > 0 ? grouping1 : grouping2 > 0 ? grouping2 : grouping1;
     grouping2 = grouping2 > 0 ? grouping2 : grouping1;
-    return {grouping1, grouping2, minGrouping};
+    return {grouping1, grouping2, minGrouping, UNUM_GROUPING_COUNT};
 }
 
 void Grouper::setLocaleData(const impl::ParsedPatternInfo &patternInfo, const Locale& locale) {

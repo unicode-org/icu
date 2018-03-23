@@ -1,6 +1,7 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#include <unicode/numberformatter.h>
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
@@ -45,6 +46,15 @@ void IntegerWidth::apply(impl::DecimalQuantity &quantity, UErrorCode &status) co
         quantity.setIntegerLength(fUnion.minMaxInt.fMinInt, INT32_MAX);
     } else {
         quantity.setIntegerLength(fUnion.minMaxInt.fMinInt, fUnion.minMaxInt.fMaxInt);
+    }
+}
+
+bool IntegerWidth::operator==(const IntegerWidth& other) const {
+    if (fHasError) {
+        return other.fHasError && fUnion.errorCode == other.fUnion.errorCode;
+    } else {
+        return !other.fHasError && fUnion.minMaxInt.fMinInt == other.fUnion.minMaxInt.fMinInt &&
+               fUnion.minMaxInt.fMaxInt == other.fUnion.minMaxInt.fMaxInt;
     }
 }
 
