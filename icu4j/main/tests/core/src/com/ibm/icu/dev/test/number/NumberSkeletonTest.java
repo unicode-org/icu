@@ -94,7 +94,10 @@ public class NumberSkeletonTest {
                 "decimal-always",
                 "latin",
                 "numbering-system/arab",
-                "numbering-system/latn" };
+                "numbering-system/latn",
+                "round-integer/@##",
+                "round-integer/ceiling",
+                "round-currency-cash/ceiling" };
 
         for (String cas : cases) {
             try {
@@ -131,7 +134,8 @@ public class NumberSkeletonTest {
                 "measure-unit/foo",
                 "integer-width/xxx",
                 "integer-width/0+",
-                "integer-width/+0#", };
+                "integer-width/+0#",
+                "scientific/foo"};
 
         for (String cas : cases) {
             try {

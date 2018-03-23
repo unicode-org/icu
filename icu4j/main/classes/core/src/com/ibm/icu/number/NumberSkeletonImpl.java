@@ -102,6 +102,117 @@ class NumberSkeletonImpl {
 
     static final ActualStem[] ACTUAL_STEM_VALUES = ActualStem.values();
 
+    private static Notation stemToNotation(ActualStem stem) {
+        switch (stem) {
+        case STEM_COMPACT_SHORT:
+            return Notation.compactShort();
+        case STEM_COMPACT_LONG:
+            return Notation.compactLong();
+        case STEM_SCIENTIFIC:
+            return Notation.scientific();
+        case STEM_ENGINEERING:
+            return Notation.engineering();
+        case STEM_NOTATION_SIMPLE:
+            return Notation.simple();
+        default:
+            return null;
+        }
+    }
+
+    private static MeasureUnit stemToUnit(ActualStem stem) {
+        switch (stem) {
+        case STEM_BASE_UNIT:
+            return NoUnit.BASE;
+        case STEM_PERCENT:
+            return NoUnit.PERCENT;
+        case STEM_PERMILLE:
+            return NoUnit.PERMILLE;
+        default:
+            return null;
+        }
+    }
+
+    private static Rounder stemToRounder(ActualStem stem) {
+        switch (stem) {
+        case STEM_ROUND_INTEGER:
+            return Rounder.integer();
+        case STEM_ROUND_UNLIMITED:
+            return Rounder.unlimited();
+        case STEM_ROUND_CURRENCY_STANDARD:
+            return Rounder.currency(CurrencyUsage.STANDARD);
+        case STEM_ROUND_CURRENCY_CASH:
+            return Rounder.currency(CurrencyUsage.CASH);
+        default:
+            return null;
+        }
+    }
+
+    private static GroupingStrategy stemToGrouper(ActualStem stem) {
+        switch (stem) {
+        case STEM_GROUP_OFF:
+            return GroupingStrategy.OFF;
+        case STEM_GROUP_MIN2:
+            return GroupingStrategy.MIN2;
+        case STEM_GROUP_AUTO:
+            return GroupingStrategy.AUTO;
+        case STEM_GROUP_ON_ALIGNED:
+            return GroupingStrategy.ON_ALIGNED;
+        case STEM_GROUP_THOUSANDS:
+            return GroupingStrategy.THOUSANDS;
+        default:
+            return null;
+        }
+    }
+
+    private static UnitWidth stemToUnitWidth(ActualStem stem) {
+        switch (stem) {
+        case STEM_UNIT_WIDTH_NARROW:
+            return UnitWidth.NARROW;
+        case STEM_UNIT_WIDTH_SHORT:
+            return UnitWidth.SHORT;
+        case STEM_UNIT_WIDTH_FULL_NAME:
+            return UnitWidth.FULL_NAME;
+        case STEM_UNIT_WIDTH_ISO_CODE:
+            return UnitWidth.ISO_CODE;
+        case STEM_UNIT_WIDTH_HIDDEN:
+            return UnitWidth.HIDDEN;
+        default:
+            return null;
+        }
+    }
+
+    private static SignDisplay stemToSignDisplay(ActualStem stem) {
+        switch (stem) {
+        case STEM_SIGN_AUTO:
+            return SignDisplay.AUTO;
+        case STEM_SIGN_ALWAYS:
+            return SignDisplay.ALWAYS;
+        case STEM_SIGN_NEVER:
+            return SignDisplay.NEVER;
+        case STEM_SIGN_ACCOUNTING:
+            return SignDisplay.ACCOUNTING;
+        case STEM_SIGN_ACCOUNTING_ALWAYS:
+            return SignDisplay.ACCOUNTING_ALWAYS;
+        case STEM_SIGN_EXCEPT_ZERO:
+            return SignDisplay.EXCEPT_ZERO;
+        case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
+            return SignDisplay.ACCOUNTING_EXCEPT_ZERO;
+        default:
+            return null;
+        }
+    }
+
+    private static DecimalSeparatorDisplay stemToDecimalSeparatorDisplay(ActualStem stem) {
+        switch (stem) {
+        case STEM_DECIMAL_AUTO:
+            return DecimalSeparatorDisplay.AUTO;
+        case STEM_DECIMAL_ALWAYS:
+            return DecimalSeparatorDisplay.ALWAYS;
+        default:
+            return null;
+        }
+    }
+
     static final String SERIALIZED_STEM_TRIE = buildStemTrie();
 
     static String buildStemTrie() {
@@ -154,28 +265,14 @@ class NumberSkeletonImpl {
     }
 
     static class SkeletonDataStructure {
-        final Map<String, StemType> stemsToTypes;
-        final Map<String, Object> stemsToValues;
         final Map<Object, String> valuesToStems;
 
         SkeletonDataStructure() {
-            stemsToTypes = new HashMap<String, StemType>();
-            stemsToValues = new HashMap<String, Object>();
             valuesToStems = new HashMap<Object, String>();
         }
 
         public void put(StemType stemType, String content, Object value) {
-            stemsToTypes.put(content, stemType);
-            stemsToValues.put(content, value);
             valuesToStems.put(value, content);
-        }
-
-        public StemType stemToType(CharSequence content) {
-            return stemsToTypes.get(content);
-        }
-
-        public Object stemToValue(CharSequence content) {
-            return stemsToValues.get(content);
         }
 
         public String valueToStem(Object value) {
@@ -367,7 +464,7 @@ class NumberSkeletonImpl {
         case '@':
             checkNull(macros.rounder, segment);
             parseDigitsStem(segment, macros);
-            return StemType.ROUNDER;
+            return StemType.OTHER;
         }
 
         // Now look at the stemsTrie, which is already be pointing at our stem.
@@ -384,164 +481,79 @@ class NumberSkeletonImpl {
         // Stems with meaning on their own, not requiring an option:
 
         case STEM_COMPACT_SHORT:
-            checkNull(macros.notation, segment);
-            macros.notation = Notation.compactShort();
-            return StemType.COMPACT_NOTATION;
-
         case STEM_COMPACT_LONG:
-            checkNull(macros.notation, segment);
-            macros.notation = Notation.compactLong();
-            return StemType.COMPACT_NOTATION;
-
         case STEM_SCIENTIFIC:
-            checkNull(macros.notation, segment);
-            macros.notation = Notation.scientific();
-            return StemType.SCIENTIFIC_NOTATION;
-
         case STEM_ENGINEERING:
-            checkNull(macros.notation, segment);
-            macros.notation = Notation.engineering();
-            return StemType.SCIENTIFIC_NOTATION;
-
         case STEM_NOTATION_SIMPLE:
             checkNull(macros.notation, segment);
-            macros.notation = Notation.simple();
-            return StemType.SIMPLE_NOTATION;
+            macros.notation = stemToNotation(stemEnum);
+            switch (stemEnum) {
+            case STEM_SCIENTIFIC:
+            case STEM_ENGINEERING:
+                return StemType.SCIENTIFIC_NOTATION; // allows for scientific options
+            default:
+                return StemType.OTHER;
+            }
 
         case STEM_BASE_UNIT:
-            checkNull(macros.unit, segment);
-            macros.unit = NoUnit.BASE;
-            return StemType.NO_UNIT;
-
         case STEM_PERCENT:
-            checkNull(macros.unit, segment);
-            macros.unit = NoUnit.PERCENT;
-            return StemType.NO_UNIT;
-
         case STEM_PERMILLE:
             checkNull(macros.unit, segment);
-            macros.unit = NoUnit.PERMILLE;
-            return StemType.NO_UNIT;
+            macros.unit = stemToUnit(stemEnum);
+            return StemType.OTHER;
 
         case STEM_ROUND_INTEGER:
-            checkNull(macros.rounder, segment);
-            macros.rounder = Rounder.integer();
-            return StemType.ROUNDER;
-
         case STEM_ROUND_UNLIMITED:
-            checkNull(macros.rounder, segment);
-            macros.rounder = Rounder.unlimited();
-            return StemType.ROUNDER;
-
         case STEM_ROUND_CURRENCY_STANDARD:
-            checkNull(macros.rounder, segment);
-            macros.rounder = Rounder.currency(CurrencyUsage.STANDARD);
-            return StemType.ROUNDER;
-
         case STEM_ROUND_CURRENCY_CASH:
             checkNull(macros.rounder, segment);
-            macros.rounder = Rounder.currency(CurrencyUsage.CASH);
-            return StemType.ROUNDER;
+            macros.rounder = stemToRounder(stemEnum);
+            switch (stemEnum) {
+            case STEM_ROUND_INTEGER:
+                return StemType.FRACTION_ROUNDER; // allows for "round-integer/@##"
+            default:
+                return StemType.ROUNDER; // allows for rounding mode options
+            }
 
         case STEM_GROUP_OFF:
-            checkNull(macros.grouping, segment);
-            macros.grouping = GroupingStrategy.OFF;
-            return StemType.GROUPING;
-
         case STEM_GROUP_MIN2:
-            checkNull(macros.grouping, segment);
-            macros.grouping = GroupingStrategy.MIN2;
-            return StemType.GROUPING;
-
         case STEM_GROUP_AUTO:
-            checkNull(macros.grouping, segment);
-            macros.grouping = GroupingStrategy.AUTO;
-            return StemType.GROUPING;
-
         case STEM_GROUP_ON_ALIGNED:
-            checkNull(macros.grouping, segment);
-            macros.grouping = GroupingStrategy.ON_ALIGNED;
-            return StemType.GROUPING;
-
         case STEM_GROUP_THOUSANDS:
             checkNull(macros.grouping, segment);
-            macros.grouping = GroupingStrategy.THOUSANDS;
-            return StemType.GROUPING;
+            macros.grouping = stemToGrouper(stemEnum);
+            return StemType.OTHER;
 
         case STEM_LATIN:
             checkNull(macros.symbols, segment);
             macros.symbols = NumberingSystem.LATIN;
-            return StemType.LATIN;
+            return StemType.OTHER;
 
         case STEM_UNIT_WIDTH_NARROW:
-            checkNull(macros.unitWidth, segment);
-            macros.unitWidth = UnitWidth.NARROW;
-            return StemType.UNIT_WIDTH;
-
         case STEM_UNIT_WIDTH_SHORT:
-            checkNull(macros.unitWidth, segment);
-            macros.unitWidth = UnitWidth.SHORT;
-            return StemType.UNIT_WIDTH;
-
         case STEM_UNIT_WIDTH_FULL_NAME:
-            checkNull(macros.unitWidth, segment);
-            macros.unitWidth = UnitWidth.FULL_NAME;
-            return StemType.UNIT_WIDTH;
-
         case STEM_UNIT_WIDTH_ISO_CODE:
-            checkNull(macros.unitWidth, segment);
-            macros.unitWidth = UnitWidth.ISO_CODE;
-            return StemType.UNIT_WIDTH;
-
         case STEM_UNIT_WIDTH_HIDDEN:
             checkNull(macros.unitWidth, segment);
-            macros.unitWidth = UnitWidth.HIDDEN;
-            return StemType.UNIT_WIDTH;
+            macros.unitWidth = stemToUnitWidth(stemEnum);
+            return StemType.OTHER;
 
         case STEM_SIGN_AUTO:
-            checkNull(macros.sign, segment);
-            macros.sign = SignDisplay.AUTO;
-            return StemType.SIGN_DISPLAY;
-
         case STEM_SIGN_ALWAYS:
-            checkNull(macros.sign, segment);
-            macros.sign = SignDisplay.ALWAYS;
-            return StemType.SIGN_DISPLAY;
-
         case STEM_SIGN_NEVER:
-            checkNull(macros.sign, segment);
-            macros.sign = SignDisplay.NEVER;
-            return StemType.SIGN_DISPLAY;
-
         case STEM_SIGN_ACCOUNTING:
-            checkNull(macros.sign, segment);
-            macros.sign = SignDisplay.ACCOUNTING;
-            return StemType.SIGN_DISPLAY;
-
         case STEM_SIGN_ACCOUNTING_ALWAYS:
-            checkNull(macros.sign, segment);
-            macros.sign = SignDisplay.ACCOUNTING_ALWAYS;
-            return StemType.SIGN_DISPLAY;
-
         case STEM_SIGN_EXCEPT_ZERO:
-            checkNull(macros.sign, segment);
-            macros.sign = SignDisplay.EXCEPT_ZERO;
-            return StemType.SIGN_DISPLAY;
-
         case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
             checkNull(macros.sign, segment);
-            macros.sign = SignDisplay.ACCOUNTING_EXCEPT_ZERO;
-            return StemType.SIGN_DISPLAY;
+            macros.sign = stemToSignDisplay(stemEnum);
+            return StemType.OTHER;
 
         case STEM_DECIMAL_AUTO:
-            checkNull(macros.decimal, segment);
-            macros.decimal = DecimalSeparatorDisplay.AUTO;
-            return StemType.DECIMAL_DISPLAY;
-
         case STEM_DECIMAL_ALWAYS:
             checkNull(macros.decimal, segment);
-            macros.decimal = DecimalSeparatorDisplay.ALWAYS;
-            return StemType.DECIMAL_DISPLAY;
+            macros.decimal = stemToDecimalSeparatorDisplay(stemEnum);
+            return StemType.OTHER;
 
         // Stems requiring an option:
 
@@ -720,13 +732,19 @@ class NumberSkeletonImpl {
     }
 
     private static boolean parseExponentSignOption(StringSegment segment, MacroProps macros) {
-        Object value = skeletonData.stemToValue(segment);
-        if (value != null && value instanceof SignDisplay) {
-            macros.notation = ((ScientificNotation) macros.notation)
-                    .withExponentSignDisplay((SignDisplay) value);
-            return true;
+        // Get the sign display type out of the CharsTrie data structure.
+        // TODO: Make this more efficient (avoid object allocation)? It shouldn't be very hot code.
+        CharsTrie tempStemTrie = new CharsTrie(SERIALIZED_STEM_TRIE, 0);
+        BytesTrie.Result result = tempStemTrie.next(segment, 0, segment.length());
+        if (result != BytesTrie.Result.INTERMEDIATE_VALUE && result != BytesTrie.Result.FINAL_VALUE) {
+            return false;
         }
-        return false;
+        SignDisplay sign = stemToSignDisplay(ACTUAL_STEM_VALUES[tempStemTrie.getValue()]);
+        if (sign == null) {
+            return false;
+        }
+        macros.notation = ((ScientificNotation) macros.notation).withExponentSignDisplay(sign);
+        return true;
     }
 
     private static void generateCurrencyOption(Currency currency, StringBuilder sb) {
