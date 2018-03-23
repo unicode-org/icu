@@ -107,6 +107,59 @@ class NumberSkeletonImpl {
     /** For mapping from ordinal back to StemEnum in Java. */
     static final StemEnum[] STEM_ENUM_VALUES = StemEnum.values();
 
+    /** A data structure for mapping from stem strings to the stem enum. Built at startup. */
+    static final String SERIALIZED_STEM_TRIE = buildStemTrie();
+
+    static String buildStemTrie() {
+        CharsTrieBuilder b = new CharsTrieBuilder();
+
+        // Section 1:
+        b.add("compact-short", StemEnum.STEM_COMPACT_SHORT.ordinal());
+        b.add("compact-long", StemEnum.STEM_COMPACT_LONG.ordinal());
+        b.add("scientific", StemEnum.STEM_SCIENTIFIC.ordinal());
+        b.add("engineering", StemEnum.STEM_ENGINEERING.ordinal());
+        b.add("notation-simple", StemEnum.STEM_NOTATION_SIMPLE.ordinal());
+        b.add("base-unit", StemEnum.STEM_BASE_UNIT.ordinal());
+        b.add("percent", StemEnum.STEM_PERCENT.ordinal());
+        b.add("permille", StemEnum.STEM_PERMILLE.ordinal());
+        b.add("round-integer", StemEnum.STEM_ROUND_INTEGER.ordinal());
+        b.add("round-unlimited", StemEnum.STEM_ROUND_UNLIMITED.ordinal());
+        b.add("round-currency-standard", StemEnum.STEM_ROUND_CURRENCY_STANDARD.ordinal());
+        b.add("round-currency-cash", StemEnum.STEM_ROUND_CURRENCY_CASH.ordinal());
+        b.add("group-off", StemEnum.STEM_GROUP_OFF.ordinal());
+        b.add("group-min2", StemEnum.STEM_GROUP_MIN2.ordinal());
+        b.add("group-auto", StemEnum.STEM_GROUP_AUTO.ordinal());
+        b.add("group-on-aligned", StemEnum.STEM_GROUP_ON_ALIGNED.ordinal());
+        b.add("group-thousands", StemEnum.STEM_GROUP_THOUSANDS.ordinal());
+        b.add("latin", StemEnum.STEM_LATIN.ordinal());
+        b.add("unit-width-narrow", StemEnum.STEM_UNIT_WIDTH_NARROW.ordinal());
+        b.add("unit-width-short", StemEnum.STEM_UNIT_WIDTH_SHORT.ordinal());
+        b.add("unit-width-full-name", StemEnum.STEM_UNIT_WIDTH_FULL_NAME.ordinal());
+        b.add("unit-width-iso-code", StemEnum.STEM_UNIT_WIDTH_ISO_CODE.ordinal());
+        b.add("unit-width-hidden", StemEnum.STEM_UNIT_WIDTH_HIDDEN.ordinal());
+        b.add("sign-auto", StemEnum.STEM_SIGN_AUTO.ordinal());
+        b.add("sign-always", StemEnum.STEM_SIGN_ALWAYS.ordinal());
+        b.add("sign-never", StemEnum.STEM_SIGN_NEVER.ordinal());
+        b.add("sign-accounting", StemEnum.STEM_SIGN_ACCOUNTING.ordinal());
+        b.add("sign-accounting-always", StemEnum.STEM_SIGN_ACCOUNTING_ALWAYS.ordinal());
+        b.add("sign-except-zero", StemEnum.STEM_SIGN_EXCEPT_ZERO.ordinal());
+        b.add("sign-accounting-except-zero", StemEnum.STEM_SIGN_ACCOUNTING_EXCEPT_ZERO.ordinal());
+        b.add("decimal-auto", StemEnum.STEM_DECIMAL_AUTO.ordinal());
+        b.add("decimal-always", StemEnum.STEM_DECIMAL_ALWAYS.ordinal());
+
+        // Section 2:
+        b.add("round-increment", StemEnum.STEM_ROUND_INCREMENT.ordinal());
+        b.add("measure-unit", StemEnum.STEM_MEASURE_UNIT.ordinal());
+        b.add("per-measure-unit", StemEnum.STEM_PER_MEASURE_UNIT.ordinal());
+        b.add("currency", StemEnum.STEM_CURRENCY.ordinal());
+        b.add("integer-width", StemEnum.STEM_INTEGER_WIDTH.ordinal());
+        b.add("numbering-system", StemEnum.STEM_NUMBERING_SYSTEM.ordinal());
+
+        // Build the CharsTrie
+        // TODO: Use SLOW or FAST here?
+        return b.buildCharSequence(StringTrieBuilder.Option.FAST).toString();
+    }
+
     /**
      * Utility class for methods that convert from StemEnum to corresponding objects or enums. This
      * applies to only the "Section 1" stems, those that are well-defined without an option.
@@ -126,7 +179,7 @@ class NumberSkeletonImpl {
             case STEM_NOTATION_SIMPLE:
                 return Notation.simple();
             default:
-                return null;
+                throw new AssertionError();
             }
         }
 
@@ -139,7 +192,7 @@ class NumberSkeletonImpl {
             case STEM_PERMILLE:
                 return NoUnit.PERMILLE;
             default:
-                return null;
+                throw new AssertionError();
             }
         }
 
@@ -154,7 +207,7 @@ class NumberSkeletonImpl {
             case STEM_ROUND_CURRENCY_CASH:
                 return Rounder.currency(CurrencyUsage.CASH);
             default:
-                return null;
+                throw new AssertionError();
             }
         }
 
@@ -171,7 +224,7 @@ class NumberSkeletonImpl {
             case STEM_GROUP_THOUSANDS:
                 return GroupingStrategy.THOUSANDS;
             default:
-                return null;
+                return null; // for objects, throw; for enums, return null
             }
         }
 
@@ -188,7 +241,7 @@ class NumberSkeletonImpl {
             case STEM_UNIT_WIDTH_HIDDEN:
                 return UnitWidth.HIDDEN;
             default:
-                return null;
+                return null; // for objects, throw; for enums, return null
             }
         }
 
@@ -209,7 +262,7 @@ class NumberSkeletonImpl {
             case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
                 return SignDisplay.ACCOUNTING_EXCEPT_ZERO;
             default:
-                return null;
+                return null; // for objects, throw; for enums, return null
             }
         }
 
@@ -220,7 +273,7 @@ class NumberSkeletonImpl {
             case STEM_DECIMAL_ALWAYS:
                 return DecimalSeparatorDisplay.ALWAYS;
             default:
-                return null;
+                return null; // for objects, throw; for enums, return null
             }
         }
     }
@@ -317,58 +370,6 @@ class NumberSkeletonImpl {
         }
     }
 
-    /** A data structure for mapping from stem strings to the stem enum. Built at startup. */
-    static final String SERIALIZED_STEM_TRIE = buildStemTrie();
-
-    static String buildStemTrie() {
-        CharsTrieBuilder b = new CharsTrieBuilder();
-
-        // Section 1:
-        b.add("compact-short", StemEnum.STEM_COMPACT_SHORT.ordinal());
-        b.add("compact-long", StemEnum.STEM_COMPACT_LONG.ordinal());
-        b.add("scientific", StemEnum.STEM_SCIENTIFIC.ordinal());
-        b.add("engineering", StemEnum.STEM_ENGINEERING.ordinal());
-        b.add("notation-simple", StemEnum.STEM_NOTATION_SIMPLE.ordinal());
-        b.add("base-unit", StemEnum.STEM_BASE_UNIT.ordinal());
-        b.add("percent", StemEnum.STEM_PERCENT.ordinal());
-        b.add("permille", StemEnum.STEM_PERMILLE.ordinal());
-        b.add("round-integer", StemEnum.STEM_ROUND_INTEGER.ordinal());
-        b.add("round-unlimited", StemEnum.STEM_ROUND_UNLIMITED.ordinal());
-        b.add("round-currency-standard", StemEnum.STEM_ROUND_CURRENCY_STANDARD.ordinal());
-        b.add("round-currency-cash", StemEnum.STEM_ROUND_CURRENCY_CASH.ordinal());
-        b.add("group-off", StemEnum.STEM_GROUP_OFF.ordinal());
-        b.add("group-min2", StemEnum.STEM_GROUP_MIN2.ordinal());
-        b.add("group-auto", StemEnum.STEM_GROUP_AUTO.ordinal());
-        b.add("group-on-aligned", StemEnum.STEM_GROUP_ON_ALIGNED.ordinal());
-        b.add("group-thousands", StemEnum.STEM_GROUP_THOUSANDS.ordinal());
-        b.add("latin", StemEnum.STEM_LATIN.ordinal());
-        b.add("unit-width-narrow", StemEnum.STEM_UNIT_WIDTH_NARROW.ordinal());
-        b.add("unit-width-short", StemEnum.STEM_UNIT_WIDTH_SHORT.ordinal());
-        b.add("unit-width-full-name", StemEnum.STEM_UNIT_WIDTH_FULL_NAME.ordinal());
-        b.add("unit-width-iso-code", StemEnum.STEM_UNIT_WIDTH_ISO_CODE.ordinal());
-        b.add("unit-width-hidden", StemEnum.STEM_UNIT_WIDTH_HIDDEN.ordinal());
-        b.add("sign-auto", StemEnum.STEM_SIGN_AUTO.ordinal());
-        b.add("sign-always", StemEnum.STEM_SIGN_ALWAYS.ordinal());
-        b.add("sign-never", StemEnum.STEM_SIGN_NEVER.ordinal());
-        b.add("sign-accounting", StemEnum.STEM_SIGN_ACCOUNTING.ordinal());
-        b.add("sign-accounting-always", StemEnum.STEM_SIGN_ACCOUNTING_ALWAYS.ordinal());
-        b.add("sign-except-zero", StemEnum.STEM_SIGN_EXCEPT_ZERO.ordinal());
-        b.add("sign-accounting-except-zero", StemEnum.STEM_SIGN_ACCOUNTING_EXCEPT_ZERO.ordinal());
-        b.add("decimal-auto", StemEnum.STEM_DECIMAL_AUTO.ordinal());
-        b.add("decimal-always", StemEnum.STEM_DECIMAL_ALWAYS.ordinal());
-
-        // Section 2:
-        b.add("round-increment", StemEnum.STEM_ROUND_INCREMENT.ordinal());
-        b.add("measure-unit", StemEnum.STEM_MEASURE_UNIT.ordinal());
-        b.add("per-measure-unit", StemEnum.STEM_PER_MEASURE_UNIT.ordinal());
-        b.add("currency", StemEnum.STEM_CURRENCY.ordinal());
-        b.add("integer-width", StemEnum.STEM_INTEGER_WIDTH.ordinal());
-        b.add("numbering-system", StemEnum.STEM_NUMBERING_SYSTEM.ordinal());
-
-        // TODO: Use SLOW or FAST here?
-        return b.buildCharSequence(StringTrieBuilder.Option.FAST).toString();
-    }
-
     /** Kebab case versions of the rounding mode enum. */
     static final String[] ROUNDING_MODE_STRINGS = {
             "up",
@@ -443,6 +444,7 @@ class NumberSkeletonImpl {
         CharsTrie stemTrie = new CharsTrie(SERIALIZED_STEM_TRIE, 0);
         ParseState stem = ParseState.STATE_NULL;
         int offset = 0;
+
         // Primary skeleton parse loop:
         while (offset < segment.length()) {
             int cp = segment.codePointAt(offset);
@@ -722,6 +724,10 @@ class NumberSkeletonImpl {
 
     ///// MAIN SKELETON GENERATION FUNCTION /////
 
+    /**
+     * Main skeleton generator function. Appends the normalized skeleton for the MacroProps to the given
+     * StringBuilder.
+     */
     private static void generateSkeleton(MacroProps macros, StringBuilder sb) {
         // Supported options
         if (macros.notation != null && GeneratorHelpers.notation(macros, sb)) {
@@ -779,9 +785,14 @@ class NumberSkeletonImpl {
         }
     }
 
-    ///// BLUEPRINT HELPER FUNCTIONS (stem and options that cannot be interpreted literally) /////
+    ///// BLUEPRINT HELPER FUNCTIONS /////
 
+    /**
+     * Utility class for methods for processing stems and options that cannot be interpreted literally.
+     */
     static final class BlueprintHelpers {
+
+        /** @return Whether we successfully found and parsed an exponent width option. */
         private static boolean parseExponentWidthOption(StringSegment segment, MacroProps macros) {
             if (segment.charAt(0) != '+') {
                 return false;
@@ -808,6 +819,7 @@ class NumberSkeletonImpl {
             appendMultiple(sb, 'e', minExponentDigits);
         }
 
+        /** @return Whether we successfully found and parsed an exponent sign option. */
         private static boolean parseExponentSignOption(StringSegment segment, MacroProps macros) {
             // Get the sign display type out of the CharsTrie data structure.
             // TODO: Make this more efficient (avoid object allocation)? It shouldn't be very hot code.
@@ -977,6 +989,7 @@ class NumberSkeletonImpl {
             }
         }
 
+        /** @return Whether we successfully found and parsed a frac-sig option. */
         private static boolean parseFracSigOption(StringSegment segment, MacroProps macros) {
             if (segment.charAt(0) != '@') {
                 return false;
@@ -1047,6 +1060,7 @@ class NumberSkeletonImpl {
             sb.append(increment.toPlainString());
         }
 
+        /** @return Whether we successfully found and parsed a rounding mode. */
         private static boolean parseRoundingModeOption(StringSegment segment, MacroProps macros) {
             for (int rm = 0; rm < ROUNDING_MODE_STRINGS.length; rm++) {
                 if (segment.equals(ROUNDING_MODE_STRINGS[rm])) {
@@ -1127,6 +1141,10 @@ class NumberSkeletonImpl {
 
     ///// STEM GENERATION HELPER FUNCTIONS /////
 
+    /**
+     * Utility class for methods for generating a token corresponding to each macro-prop. Each method
+     * returns whether or not a token was written to the string builder.
+     */
     static final class GeneratorHelpers {
 
         private static boolean notation(MacroProps macros, StringBuilder sb) {

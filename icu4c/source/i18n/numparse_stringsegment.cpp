@@ -20,9 +20,9 @@ using namespace icu::numparse;
 using namespace icu::numparse::impl;
 
 
-StringSegment::StringSegment(const UnicodeString& str, parse_flags_t parseFlags)
+StringSegment::StringSegment(const UnicodeString& str, bool ignoreCase)
         : fStr(str), fStart(0), fEnd(str.length()),
-          fFoldCase(0 != (parseFlags & PARSE_FLAG_IGNORE_CASE)) {}
+          fFoldCase(ignoreCase) {}
 
 int32_t StringSegment::getOffset() const {
     return fStart;
