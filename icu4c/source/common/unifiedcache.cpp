@@ -263,13 +263,10 @@ UBool UnifiedCache::_flush(UBool all) const {
 int32_t UnifiedCache::_computeCountOfItemsToEvict() const {
     int32_t totalItems = uhash_count(fHashtable);
     int32_t evictableItems = totalItems - fNumValuesInUse;
-    U_ASSERT(totalItems >= fNumValuesInUse);
-    U_ASSERT(totalItems >= evictableItems);
 
     int32_t unusedLimitByPercentage = fNumValuesInUse * fMaxPercentageOfInUse / 100;
     int32_t unusedLimit = std::max(unusedLimitByPercentage, fMaxUnused);
     int32_t countOfItemsToEvict = std::max(0, evictableItems - unusedLimit);
-    U_ASSERT(countOfItemsToEvict >= 0 && countOfItemsToEvict <= evictableItems);
     return countOfItemsToEvict;
 }
 
