@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -13,6 +14,7 @@ import org.junit.Test;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.Rounder;
 import com.ibm.icu.number.SkeletonSyntaxException;
+import com.ibm.icu.util.ULocale;
 
 /**
  * @author sffc
@@ -143,7 +145,7 @@ public class NumberSkeletonTest {
 
     @Test
     public void unknownTokens() {
-        String[] cases = { "measure-unit/foo-bar", "numbering-system/dummy" };
+        String[] cases = { "maesure-unit", "measure-unit/foo-bar", "numbering-system/dummy" };
 
         for (String cas : cases) {
             try {
@@ -158,16 +160,16 @@ public class NumberSkeletonTest {
     @Test
     public void stemsRequiringOption() {
         String[] stems = { "round-increment", "currency", "measure-unit", "integer-width", };
-        String[] suffixes = { "", "/", " scientific", "/ scientific" };
+        String[] suffixes = { "", "/ceiling", " scientific", "/ceiling scientific" };
 
         for (String stem : stems) {
             for (String suffix : suffixes) {
+                String skeletonString = stem + suffix;
                 try {
-                    NumberFormatter.fromSkeleton(stem + suffix);
-                    fail();
+                    NumberFormatter.fromSkeleton(skeletonString);
+                    fail(skeletonString);
                 } catch (SkeletonSyntaxException expected) {
-                    assertTrue(expected.getMessage(),
-                            expected.getMessage().contains("requires an option"));
+                    // Success
                 }
             }
         }
@@ -187,6 +189,33 @@ public class NumberSkeletonTest {
         for (String skeleton : cases) {
             String normalized = NumberFormatter.fromSkeleton(skeleton).toSkeleton();
             assertEquals("Skeleton should become empty when normalized: " + skeleton, "", normalized);
+        }
+    }
+
+    @Test
+    public void flexibleSeparators() {
+        String[][] cases = {
+                { "round-integer group-off", "5142" },
+                { "round-integer  group-off", "5142" },
+                { "round-integer/ceiling group-off", "5143" },
+                { "round-integer//ceiling group-off", null },
+                { "round-integer/ceiling  group-off", "5143" },
+                { "round-integer//ceiling  group-off", null },
+                { "round-integer/ group-off", null },
+                { "round-integer// group-off", null } };
+
+        for (String[] cas : cases) {
+            String skeleton = cas[0];
+            String expected = cas[1];
+
+            try {
+                String actual = NumberFormatter.fromSkeleton(skeleton).locale(ULocale.ENGLISH)
+                        .format(5142.3).toString();
+                assertEquals(skeleton, expected, actual);
+            } catch (SkeletonSyntaxException e) {
+                // Expected failure?
+                assertNull(skeleton, expected);
+            }
         }
     }
 
