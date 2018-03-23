@@ -105,7 +105,7 @@ typedef enum UNumberUnitWidth {
      *
      * @draft ICU 60
      */
-            UNUM_UNIT_WIDTH_NARROW,
+    UNUM_UNIT_WIDTH_NARROW,
 
     /**
      * Print an abbreviated version of the unit name. Similar to NARROW, but use a slightly wider abbreviation or
@@ -121,7 +121,7 @@ typedef enum UNumberUnitWidth {
      *
      * @draft ICU 60
      */
-            UNUM_UNIT_WIDTH_SHORT,
+    UNUM_UNIT_WIDTH_SHORT,
 
     /**
      * Print the full name of the unit, without any abbreviations.
@@ -132,7 +132,7 @@ typedef enum UNumberUnitWidth {
      *
      * @draft ICU 60
      */
-            UNUM_UNIT_WIDTH_FULL_NAME,
+    UNUM_UNIT_WIDTH_FULL_NAME,
 
     /**
      * Use the three-digit ISO XXX code in place of the symbol for displaying currencies. The behavior of this
@@ -143,7 +143,7 @@ typedef enum UNumberUnitWidth {
      *
      * @draft ICU 60
      */
-            UNUM_UNIT_WIDTH_ISO_CODE,
+    UNUM_UNIT_WIDTH_ISO_CODE,
 
     /**
      * Format the number according to the specified unit, but do not display the unit. For currencies, apply
@@ -152,14 +152,14 @@ typedef enum UNumberUnitWidth {
      *
      * @draft ICU 60
      */
-            UNUM_UNIT_WIDTH_HIDDEN,
+    UNUM_UNIT_WIDTH_HIDDEN,
 
     /**
      * One more than the highest UNumberUnitWidth value.
      *
      * @internal ICU 60: The numeric value may change over time; see ICU ticket #12420.
      */
-            UNUM_UNIT_WIDTH_COUNT
+    UNUM_UNIT_WIDTH_COUNT
 } UNumberUnitWidth;
 
 /**
@@ -186,7 +186,8 @@ typedef enum UNumberUnitWidth {
  * Note: This enum specifies the strategy for grouping sizes. To set which character to use as the
  * grouping separator, use the "symbols" setter.
  *
- * @draft ICU 61
+ * @draft ICU 61 -- TODO: This should be renamed to UNumberGroupingStrategy before promoting to stable,
+ * for consistency with the other enums.
  */
 typedef enum UGroupingStrategy {
     /**
@@ -249,7 +250,14 @@ typedef enum UGroupingStrategy {
      *
      * @draft ICU 61
      */
-    UNUM_GROUPING_THOUSANDS
+    UNUM_GROUPING_THOUSANDS,
+
+    /**
+     * One more than the highest UNumberSignDisplay value.
+     *
+     * @internal ICU 62: The numeric value may change over time; see ICU ticket #12420.
+     */
+    UNUM_GROUPING_COUNT
 
 } UGroupingStrategy;
 
@@ -363,22 +371,22 @@ typedef enum UNumberDecimalSeparatorDisplay {
      *
      * @draft ICU 60
      */
-            UNUM_DECIMAL_SEPARATOR_AUTO,
+    UNUM_DECIMAL_SEPARATOR_AUTO,
 
     /**
      * Always show the decimal separator, even if there are no digits to display after the separator.
      *
      * @draft ICU 60
      */
-            UNUM_DECIMAL_SEPARATOR_ALWAYS,
+    UNUM_DECIMAL_SEPARATOR_ALWAYS,
 
     /**
      * One more than the highest UNumberDecimalSeparatorDisplay value.
      *
      * @internal ICU 60: The numeric value may change over time; see ICU ticket #12420.
      */
-            UNUM_DECIMAL_SEPARATOR_COUNT
-} UNumberDecimalMarkDisplay;
+    UNUM_DECIMAL_SEPARATOR_COUNT
+} UNumberDecimalSeparatorDisplay;
 
 U_NAMESPACE_BEGIN
 

@@ -170,7 +170,7 @@ class ParsedNumber {
  */
 class StringSegment : public UMemory, public ::icu::number::impl::CharSequence {
   public:
-    explicit StringSegment(const UnicodeString& str, parse_flags_t parseFlags);
+    StringSegment(const UnicodeString& str, bool ignoreCase);
 
     int32_t getOffset() const;
 
@@ -247,6 +247,8 @@ class StringSegment : public UMemory, public ::icu::number::impl::CharSequence {
      * enabled for the parser.
      */
     int32_t getCaseSensitivePrefixLength(const UnicodeString& other);
+
+    bool operator==(const UnicodeString& other) const;
 
   private:
     const UnicodeString fStr;
