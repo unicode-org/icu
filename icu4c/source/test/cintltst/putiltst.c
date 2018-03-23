@@ -128,6 +128,20 @@ static void TestPUtilAPI(void){
         log_err("ERROR: uprv_isInfinite failed.\n");
     }
 
+    log_verbose("Testing the APIs uprv_add32_overflow and uprv_mul32_overflow\n");
+    int32_t overflow_result;
+    doAssert(FALSE, uprv_add32_overflow(INT32_MAX - 2, 1, &overflow_result), "should not overflow");
+    doAssert(INT32_MAX - 1, overflow_result, "should equal INT32_MAX - 1");
+    doAssert(FALSE, uprv_add32_overflow(INT32_MAX - 2, 2, &overflow_result), "should not overflow");
+    doAssert(INT32_MAX, overflow_result, "should equal exactly INT32_MAX");
+    doAssert(TRUE, uprv_add32_overflow(INT32_MAX - 2, 3, &overflow_result), "should overflow");
+    doAssert(FALSE, uprv_mul32_overflow(INT32_MAX / 5, 4, &overflow_result), "should not overflow");
+    doAssert(INT32_MAX / 5 * 4, overflow_result, "should equal INT32_MAX / 5 * 4");
+    doAssert(TRUE, uprv_mul32_overflow(INT32_MAX / 5, 6, &overflow_result), "should overflow");
+    // Test on negative numbers:
+    doAssert(FALSE, uprv_add32_overflow(-3, -2, &overflow_result), "should not overflow");
+    doAssert(-5, overflow_result, "should equal -5");
+
 #if 0
     log_verbose("Testing the API uprv_digitsAfterDecimal()....\n");
     doAssert(uprv_digitsAfterDecimal(value1), 3, "uprv_digitsAfterDecimal() failed.");

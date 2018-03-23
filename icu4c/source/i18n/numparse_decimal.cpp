@@ -164,9 +164,11 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
 
             // Save the digit in the DecimalQuantity or scientific adjustment.
             if (exponentSign != 0) {
-                int nextExponent = digit + exponent * 10;
-                if (nextExponent < exponent) {
-                    // Overflow
+                int32_t nextExponent;
+                // i.e., nextExponent = exponent * 10 + digit
+                UBool overflow = uprv_mul32_overflow(exponent, 10, &nextExponent) ||
+                                 uprv_add32_overflow(nextExponent, digit, &nextExponent);
+                if (overflow) {
                     exponent = INT32_MAX;
                 } else {
                     exponent = nextExponent;
@@ -278,7 +280,7 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
         U_ASSERT(!result.quantity.bogus);
         bool overflow = (exponent == INT32_MAX);
         if (!overflow) {
-            result.quantity.adjustMagnitude(exponentSign * exponent);
+            overflow = result.quantity.adjustMagnitude(exponentSign * exponent);
         }
         if (overflow) {
             if (exponentSign == -1) {

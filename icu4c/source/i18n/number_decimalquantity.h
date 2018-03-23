@@ -100,8 +100,9 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      * this method with delta=-3 will change the value to "1.23456".
      *
      * @param delta The number of magnitudes of ten to change by.
+     * @return true if integer overflow occured; false otherwise.
      */
-    void adjustMagnitude(int32_t delta);
+    bool adjustMagnitude(int32_t delta);
 
     /**
      * @return The power of ten corresponding to the most significant nonzero digit.
