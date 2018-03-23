@@ -357,16 +357,16 @@ class NumberSkeletonImpl {
         return macros;
     }
 
-    private static StemType parseStem2(CharSequence content, CharsTrie stemTrie, MacroProps macros) {
+    private static StemType parseStem2(StringSegment segment, CharsTrie stemTrie, MacroProps macros) {
         // First check for "blueprint" stems, which start with a "signal char"
-        switch (content.charAt(0)) {
+        switch (segment.charAt(0)) {
         case '.':
-            checkNull(macros.rounder, content);
-            parseFractionStem(content, macros);
+            checkNull(macros.rounder, segment);
+            parseFractionStem(segment, macros);
             return StemType.FRACTION_ROUNDER;
         case '@':
-            checkNull(macros.rounder, content);
-            parseDigitsStem(content, macros);
+            checkNull(macros.rounder, segment);
+            parseDigitsStem(segment, macros);
             return StemType.ROUNDER;
         }
 
@@ -375,7 +375,7 @@ class NumberSkeletonImpl {
 
         if (stemResult != BytesTrie.Result.INTERMEDIATE_VALUE
                 && stemResult != BytesTrie.Result.FINAL_VALUE) {
-            throw new SkeletonSyntaxException("Unknown stem", content);
+            throw new SkeletonSyntaxException("Unknown stem", segment);
         }
 
         ActualStem stemEnum = ACTUAL_STEM_VALUES[stemTrie.getValue()];
@@ -384,189 +384,189 @@ class NumberSkeletonImpl {
         // Stems with meaning on their own, not requiring an option:
 
         case STEM_COMPACT_SHORT:
-            checkNull(macros.notation, content);
+            checkNull(macros.notation, segment);
             macros.notation = Notation.compactShort();
             return StemType.COMPACT_NOTATION;
 
         case STEM_COMPACT_LONG:
-            checkNull(macros.notation, content);
+            checkNull(macros.notation, segment);
             macros.notation = Notation.compactLong();
             return StemType.COMPACT_NOTATION;
 
         case STEM_SCIENTIFIC:
-            checkNull(macros.notation, content);
+            checkNull(macros.notation, segment);
             macros.notation = Notation.scientific();
             return StemType.SCIENTIFIC_NOTATION;
 
         case STEM_ENGINEERING:
-            checkNull(macros.notation, content);
+            checkNull(macros.notation, segment);
             macros.notation = Notation.engineering();
             return StemType.SCIENTIFIC_NOTATION;
 
         case STEM_NOTATION_SIMPLE:
-            checkNull(macros.notation, content);
+            checkNull(macros.notation, segment);
             macros.notation = Notation.simple();
             return StemType.SIMPLE_NOTATION;
 
         case STEM_BASE_UNIT:
-            checkNull(macros.unit, content);
+            checkNull(macros.unit, segment);
             macros.unit = NoUnit.BASE;
             return StemType.NO_UNIT;
 
         case STEM_PERCENT:
-            checkNull(macros.unit, content);
+            checkNull(macros.unit, segment);
             macros.unit = NoUnit.PERCENT;
             return StemType.NO_UNIT;
 
         case STEM_PERMILLE:
-            checkNull(macros.unit, content);
+            checkNull(macros.unit, segment);
             macros.unit = NoUnit.PERMILLE;
             return StemType.NO_UNIT;
 
         case STEM_ROUND_INTEGER:
-            checkNull(macros.rounder, content);
+            checkNull(macros.rounder, segment);
             macros.rounder = Rounder.integer();
             return StemType.ROUNDER;
 
         case STEM_ROUND_UNLIMITED:
-            checkNull(macros.rounder, content);
+            checkNull(macros.rounder, segment);
             macros.rounder = Rounder.unlimited();
             return StemType.ROUNDER;
 
         case STEM_ROUND_CURRENCY_STANDARD:
-            checkNull(macros.rounder, content);
+            checkNull(macros.rounder, segment);
             macros.rounder = Rounder.currency(CurrencyUsage.STANDARD);
             return StemType.ROUNDER;
 
         case STEM_ROUND_CURRENCY_CASH:
-            checkNull(macros.rounder, content);
+            checkNull(macros.rounder, segment);
             macros.rounder = Rounder.currency(CurrencyUsage.CASH);
             return StemType.ROUNDER;
 
         case STEM_GROUP_OFF:
-            checkNull(macros.grouping, content);
+            checkNull(macros.grouping, segment);
             macros.grouping = GroupingStrategy.OFF;
             return StemType.GROUPING;
 
         case STEM_GROUP_MIN2:
-            checkNull(macros.grouping, content);
+            checkNull(macros.grouping, segment);
             macros.grouping = GroupingStrategy.MIN2;
             return StemType.GROUPING;
 
         case STEM_GROUP_AUTO:
-            checkNull(macros.grouping, content);
+            checkNull(macros.grouping, segment);
             macros.grouping = GroupingStrategy.AUTO;
             return StemType.GROUPING;
 
         case STEM_GROUP_ON_ALIGNED:
-            checkNull(macros.grouping, content);
+            checkNull(macros.grouping, segment);
             macros.grouping = GroupingStrategy.ON_ALIGNED;
             return StemType.GROUPING;
 
         case STEM_GROUP_THOUSANDS:
-            checkNull(macros.grouping, content);
+            checkNull(macros.grouping, segment);
             macros.grouping = GroupingStrategy.THOUSANDS;
             return StemType.GROUPING;
 
         case STEM_LATIN:
-            checkNull(macros.symbols, content);
+            checkNull(macros.symbols, segment);
             macros.symbols = NumberingSystem.LATIN;
             return StemType.LATIN;
 
         case STEM_UNIT_WIDTH_NARROW:
-            checkNull(macros.unitWidth, content);
+            checkNull(macros.unitWidth, segment);
             macros.unitWidth = UnitWidth.NARROW;
             return StemType.UNIT_WIDTH;
 
         case STEM_UNIT_WIDTH_SHORT:
-            checkNull(macros.unitWidth, content);
+            checkNull(macros.unitWidth, segment);
             macros.unitWidth = UnitWidth.SHORT;
             return StemType.UNIT_WIDTH;
 
         case STEM_UNIT_WIDTH_FULL_NAME:
-            checkNull(macros.unitWidth, content);
+            checkNull(macros.unitWidth, segment);
             macros.unitWidth = UnitWidth.FULL_NAME;
             return StemType.UNIT_WIDTH;
 
         case STEM_UNIT_WIDTH_ISO_CODE:
-            checkNull(macros.unitWidth, content);
+            checkNull(macros.unitWidth, segment);
             macros.unitWidth = UnitWidth.ISO_CODE;
             return StemType.UNIT_WIDTH;
 
         case STEM_UNIT_WIDTH_HIDDEN:
-            checkNull(macros.unitWidth, content);
+            checkNull(macros.unitWidth, segment);
             macros.unitWidth = UnitWidth.HIDDEN;
             return StemType.UNIT_WIDTH;
 
         case STEM_SIGN_AUTO:
-            checkNull(macros.sign, content);
+            checkNull(macros.sign, segment);
             macros.sign = SignDisplay.AUTO;
             return StemType.SIGN_DISPLAY;
 
         case STEM_SIGN_ALWAYS:
-            checkNull(macros.sign, content);
+            checkNull(macros.sign, segment);
             macros.sign = SignDisplay.ALWAYS;
             return StemType.SIGN_DISPLAY;
 
         case STEM_SIGN_NEVER:
-            checkNull(macros.sign, content);
+            checkNull(macros.sign, segment);
             macros.sign = SignDisplay.NEVER;
             return StemType.SIGN_DISPLAY;
 
         case STEM_SIGN_ACCOUNTING:
-            checkNull(macros.sign, content);
+            checkNull(macros.sign, segment);
             macros.sign = SignDisplay.ACCOUNTING;
             return StemType.SIGN_DISPLAY;
 
         case STEM_SIGN_ACCOUNTING_ALWAYS:
-            checkNull(macros.sign, content);
+            checkNull(macros.sign, segment);
             macros.sign = SignDisplay.ACCOUNTING_ALWAYS;
             return StemType.SIGN_DISPLAY;
 
         case STEM_SIGN_EXCEPT_ZERO:
-            checkNull(macros.sign, content);
+            checkNull(macros.sign, segment);
             macros.sign = SignDisplay.EXCEPT_ZERO;
             return StemType.SIGN_DISPLAY;
 
         case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
-            checkNull(macros.sign, content);
+            checkNull(macros.sign, segment);
             macros.sign = SignDisplay.ACCOUNTING_EXCEPT_ZERO;
             return StemType.SIGN_DISPLAY;
 
         case STEM_DECIMAL_AUTO:
-            checkNull(macros.decimal, content);
+            checkNull(macros.decimal, segment);
             macros.decimal = DecimalSeparatorDisplay.AUTO;
             return StemType.DECIMAL_DISPLAY;
 
         case STEM_DECIMAL_ALWAYS:
-            checkNull(macros.decimal, content);
+            checkNull(macros.decimal, segment);
             macros.decimal = DecimalSeparatorDisplay.ALWAYS;
             return StemType.DECIMAL_DISPLAY;
 
         // Stems requiring an option:
 
         case STEM_ROUND_INCREMENT:
-            checkNull(macros.rounder, content);
+            checkNull(macros.rounder, segment);
             return StemType.MAYBE_INCREMENT_ROUNDER;
 
         case STEM_MEASURE_UNIT:
-            checkNull(macros.unit, content);
+            checkNull(macros.unit, segment);
             return StemType.MEASURE_UNIT;
 
         case STEM_PER_MEASURE_UNIT:
-            checkNull(macros.perUnit, content);
+            checkNull(macros.perUnit, segment);
             return StemType.PER_MEASURE_UNIT;
 
         case STEM_CURRENCY:
-            checkNull(macros.unit, content);
+            checkNull(macros.unit, segment);
             return StemType.CURRENCY;
 
         case STEM_INTEGER_WIDTH:
-            checkNull(macros.integerWidth, content);
+            checkNull(macros.integerWidth, segment);
             return StemType.INTEGER_WIDTH;
 
         case STEM_NUMBERING_SYSTEM:
-            checkNull(macros.symbols, content);
+            checkNull(macros.symbols, segment);
             return StemType.NUMBERING_SYSTEM;
 
         default:
@@ -574,28 +574,28 @@ class NumberSkeletonImpl {
         }
     }
 
-    private static StemType parseOption(StemType stem, CharSequence content, MacroProps macros) {
+    private static StemType parseOption(StemType stem, StringSegment segment, MacroProps macros) {
 
         ///// Required options: /////
 
         switch (stem) {
         case CURRENCY:
-            parseCurrencyOption(content, macros);
+            parseCurrencyOption(segment, macros);
             return StemType.OTHER;
         case MEASURE_UNIT:
-            parseMeasureUnitOption(content, macros);
+            parseMeasureUnitOption(segment, macros);
             return StemType.OTHER;
         case PER_MEASURE_UNIT:
-            parseMeasurePerUnitOption(content, macros);
+            parseMeasurePerUnitOption(segment, macros);
             return StemType.OTHER;
         case MAYBE_INCREMENT_ROUNDER:
-            parseIncrementOption(content, macros);
+            parseIncrementOption(segment, macros);
             return StemType.ROUNDER;
         case INTEGER_WIDTH:
-            parseIntegerWidthOption(content, macros);
+            parseIntegerWidthOption(segment, macros);
             return StemType.OTHER;
         case NUMBERING_SYSTEM:
-            parseNumberingSystemOption(content, macros);
+            parseNumberingSystemOption(segment, macros);
             return StemType.OTHER;
         }
 
@@ -604,10 +604,10 @@ class NumberSkeletonImpl {
         // Scientific options
         switch (stem) {
         case SCIENTIFIC_NOTATION:
-            if (parseExponentWidthOption(content, macros)) {
+            if (parseExponentWidthOption(segment, macros)) {
                 return StemType.SCIENTIFIC_NOTATION;
             }
-            if (parseExponentSignOption(content, macros)) {
+            if (parseExponentSignOption(segment, macros)) {
                 return StemType.SCIENTIFIC_NOTATION;
             }
         }
@@ -615,7 +615,7 @@ class NumberSkeletonImpl {
         // Frac-sig option
         switch (stem) {
         case FRACTION_ROUNDER:
-            if (parseFracSigOption(content, macros)) {
+            if (parseFracSigOption(segment, macros)) {
                 return StemType.ROUNDER;
             }
         }
@@ -625,13 +625,13 @@ class NumberSkeletonImpl {
         case ROUNDER:
         case FRACTION_ROUNDER:
         case CURRENCY_ROUNDER:
-            if (parseRoundingModeOption(content, macros)) {
+            if (parseRoundingModeOption(segment, macros)) {
                 return StemType.ROUNDER;
             }
         }
 
         // Unknown option
-        throw new SkeletonSyntaxException("Invalid option", content);
+        throw new SkeletonSyntaxException("Invalid option", segment);
     }
 
     private static void generateSkeleton(MacroProps macros, StringBuilder sb) {
@@ -693,20 +693,20 @@ class NumberSkeletonImpl {
 
     /////
 
-    private static boolean parseExponentWidthOption(CharSequence content, MacroProps macros) {
-        if (content.charAt(0) != '+') {
+    private static boolean parseExponentWidthOption(StringSegment segment, MacroProps macros) {
+        if (segment.charAt(0) != '+') {
             return false;
         }
         int offset = 1;
         int minExp = 0;
-        for (; offset < content.length(); offset++) {
-            if (content.charAt(offset) == 'e') {
+        for (; offset < segment.length(); offset++) {
+            if (segment.charAt(offset) == 'e') {
                 minExp++;
             } else {
                 break;
             }
         }
-        if (offset < content.length()) {
+        if (offset < segment.length()) {
             return false;
         }
         // Use the public APIs to enforce bounds checking
@@ -719,8 +719,8 @@ class NumberSkeletonImpl {
         appendMultiple(sb, 'e', minExponentDigits);
     }
 
-    private static boolean parseExponentSignOption(CharSequence content, MacroProps macros) {
-        Object value = skeletonData.stemToValue(content);
+    private static boolean parseExponentSignOption(StringSegment segment, MacroProps macros) {
+        Object value = skeletonData.stemToValue(segment);
         if (value != null && value instanceof SignDisplay) {
             macros.notation = ((ScientificNotation) macros.notation)
                     .withExponentSignDisplay((SignDisplay) value);
@@ -733,27 +733,27 @@ class NumberSkeletonImpl {
         sb.append(currency.getCurrencyCode());
     }
 
-    private static void parseCurrencyOption(CharSequence content, MacroProps macros) {
-        String currencyCode = content.subSequence(0, content.length()).toString();
+    private static void parseCurrencyOption(StringSegment segment, MacroProps macros) {
+        String currencyCode = segment.subSequence(0, segment.length()).toString();
         try {
             macros.unit = Currency.getInstance(currencyCode);
         } catch (IllegalArgumentException e) {
-            throw new SkeletonSyntaxException("Invalid currency", content, e);
+            throw new SkeletonSyntaxException("Invalid currency", segment, e);
         }
     }
 
-    private static void parseMeasureUnitOption(CharSequence content, MacroProps macros) {
+    private static void parseMeasureUnitOption(StringSegment segment, MacroProps macros) {
         // NOTE: The category (type) of the unit is guaranteed to be a valid subtag (alphanumeric)
         // http://unicode.org/reports/tr35/#Validity_Data
         int firstHyphen = 0;
-        while (firstHyphen < content.length() && content.charAt(firstHyphen) != '-') {
+        while (firstHyphen < segment.length() && segment.charAt(firstHyphen) != '-') {
             firstHyphen++;
         }
-        if (firstHyphen == content.length()) {
-            throw new SkeletonSyntaxException("Invalid measure unit option", content);
+        if (firstHyphen == segment.length()) {
+            throw new SkeletonSyntaxException("Invalid measure unit option", segment);
         }
-        String type = content.subSequence(0, firstHyphen).toString();
-        String subType = content.subSequence(firstHyphen + 1, content.length()).toString();
+        String type = segment.subSequence(0, firstHyphen).toString();
+        String subType = segment.subSequence(firstHyphen + 1, segment.length()).toString();
         Set<MeasureUnit> units = MeasureUnit.getAvailable(type);
         for (MeasureUnit unit : units) {
             if (subType.equals(unit.getSubtype())) {
@@ -761,42 +761,42 @@ class NumberSkeletonImpl {
                 return;
             }
         }
-        throw new SkeletonSyntaxException("Unknown measure unit", content);
+        throw new SkeletonSyntaxException("Unknown measure unit", segment);
     }
 
     private static void generateMeasureUnitOption(MeasureUnit unit, StringBuilder sb) {
         sb.append(unit.getType() + "-" + unit.getSubtype());
     }
 
-    private static void parseMeasurePerUnitOption(CharSequence content, MacroProps macros) {
+    private static void parseMeasurePerUnitOption(StringSegment segment, MacroProps macros) {
         // A little bit of a hack: safe the current unit (numerator), call the main measure unit parsing
         // code, put back the numerator unit, and put the new unit into per-unit.
         MeasureUnit numerator = macros.unit;
-        parseMeasureUnitOption(content, macros);
+        parseMeasureUnitOption(segment, macros);
         macros.perUnit = macros.unit;
         macros.unit = numerator;
     }
 
-    private static void parseFractionStem(CharSequence content, MacroProps macros) {
-        assert content.charAt(0) == '.';
+    private static void parseFractionStem(StringSegment segment, MacroProps macros) {
+        assert segment.charAt(0) == '.';
         int offset = 1;
         int minFrac = 0;
         int maxFrac;
-        for (; offset < content.length(); offset++) {
-            if (content.charAt(offset) == '0') {
+        for (; offset < segment.length(); offset++) {
+            if (segment.charAt(offset) == '0') {
                 minFrac++;
             } else {
                 break;
             }
         }
-        if (offset < content.length()) {
-            if (content.charAt(offset) == '+') {
+        if (offset < segment.length()) {
+            if (segment.charAt(offset) == '+') {
                 maxFrac = -1;
                 offset++;
             } else {
                 maxFrac = minFrac;
-                for (; offset < content.length(); offset++) {
-                    if (content.charAt(offset) == '#') {
+                for (; offset < segment.length(); offset++) {
+                    if (segment.charAt(offset) == '#') {
                         maxFrac++;
                     } else {
                         break;
@@ -806,8 +806,8 @@ class NumberSkeletonImpl {
         } else {
             maxFrac = minFrac;
         }
-        if (offset < content.length()) {
-            throw new SkeletonSyntaxException("Invalid fraction stem", content);
+        if (offset < segment.length()) {
+            throw new SkeletonSyntaxException("Invalid fraction stem", segment);
         }
         // Use the public APIs to enforce bounds checking
         if (maxFrac == -1) {
@@ -831,26 +831,26 @@ class NumberSkeletonImpl {
         }
     }
 
-    private static void parseDigitsStem(CharSequence content, MacroProps macros) {
-        assert content.charAt(0) == '@';
+    private static void parseDigitsStem(StringSegment segment, MacroProps macros) {
+        assert segment.charAt(0) == '@';
         int offset = 0;
         int minSig = 0;
         int maxSig;
-        for (; offset < content.length(); offset++) {
-            if (content.charAt(offset) == '@') {
+        for (; offset < segment.length(); offset++) {
+            if (segment.charAt(offset) == '@') {
                 minSig++;
             } else {
                 break;
             }
         }
-        if (offset < content.length()) {
-            if (content.charAt(offset) == '+') {
+        if (offset < segment.length()) {
+            if (segment.charAt(offset) == '+') {
                 maxSig = -1;
                 offset++;
             } else {
                 maxSig = minSig;
-                for (; offset < content.length(); offset++) {
-                    if (content.charAt(offset) == '#') {
+                for (; offset < segment.length(); offset++) {
+                    if (segment.charAt(offset) == '#') {
                         maxSig++;
                     } else {
                         break;
@@ -860,8 +860,8 @@ class NumberSkeletonImpl {
         } else {
             maxSig = minSig;
         }
-        if (offset < content.length()) {
-            throw new SkeletonSyntaxException("Invalid significant digits stem", content);
+        if (offset < segment.length()) {
+            throw new SkeletonSyntaxException("Invalid significant digits stem", segment);
         }
         // Use the public APIs to enforce bounds checking
         if (maxSig == -1) {
@@ -880,15 +880,15 @@ class NumberSkeletonImpl {
         }
     }
 
-    private static boolean parseFracSigOption(CharSequence content, MacroProps macros) {
-        if (content.charAt(0) != '@') {
+    private static boolean parseFracSigOption(StringSegment segment, MacroProps macros) {
+        if (segment.charAt(0) != '@') {
             return false;
         }
         int offset = 0;
         int minSig = 0;
         int maxSig;
-        for (; offset < content.length(); offset++) {
-            if (content.charAt(offset) == '@') {
+        for (; offset < segment.length(); offset++) {
+            if (segment.charAt(offset) == '@') {
                 minSig++;
             } else {
                 break;
@@ -899,17 +899,17 @@ class NumberSkeletonImpl {
         // Valid: @#, @##, @###
         // Invalid: @, @@, @@@
         // Invalid: @@#, @@##, @@@#
-        if (offset < content.length()) {
-            if (content.charAt(offset) == '+') {
+        if (offset < segment.length()) {
+            if (segment.charAt(offset) == '+') {
                 maxSig = -1;
                 offset++;
             } else if (minSig > 1) {
                 // @@#, @@##, @@@#
-                throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", content);
+                throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
             } else {
                 maxSig = minSig;
-                for (; offset < content.length(); offset++) {
-                    if (content.charAt(offset) == '#') {
+                for (; offset < segment.length(); offset++) {
+                    if (segment.charAt(offset) == '#') {
                         maxSig++;
                     } else {
                         break;
@@ -918,10 +918,10 @@ class NumberSkeletonImpl {
             }
         } else {
             // @, @@, @@@
-            throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", content);
+            throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
         }
-        if (offset < content.length()) {
-            throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", content);
+        if (offset < segment.length()) {
+            throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
         }
 
         FractionRounder oldRounder = (FractionRounder) macros.rounder;
@@ -933,14 +933,14 @@ class NumberSkeletonImpl {
         return true;
     }
 
-    private static void parseIncrementOption(CharSequence content, MacroProps macros) {
-        // Call content.subSequence() because content.toString() doesn't create a clean string.
-        String str = content.subSequence(0, content.length()).toString();
+    private static void parseIncrementOption(StringSegment segment, MacroProps macros) {
+        // Call segment.subSequence() because segment.toString() doesn't create a clean string.
+        String str = segment.subSequence(0, segment.length()).toString();
         BigDecimal increment;
         try {
             increment = new BigDecimal(str);
         } catch (NumberFormatException e) {
-            throw new SkeletonSyntaxException("Invalid rounding increment", content, e);
+            throw new SkeletonSyntaxException("Invalid rounding increment", segment, e);
         }
         macros.rounder = Rounder.increment(increment);
     }
@@ -949,9 +949,9 @@ class NumberSkeletonImpl {
         sb.append(increment.toPlainString());
     }
 
-    private static boolean parseRoundingModeOption(CharSequence content, MacroProps macros) {
+    private static boolean parseRoundingModeOption(StringSegment segment, MacroProps macros) {
         for (int rm = 0; rm < ROUNDING_MODE_STRINGS.length; rm++) {
-            if (content.equals(ROUNDING_MODE_STRINGS[rm])) {
+            if (segment.equals(ROUNDING_MODE_STRINGS[rm])) {
                 macros.rounder = macros.rounder.withMode(RoundingMode.valueOf(rm));
                 return true;
             }
@@ -964,26 +964,26 @@ class NumberSkeletonImpl {
         sb.append(option);
     }
 
-    private static void parseIntegerWidthOption(CharSequence content, MacroProps macros) {
+    private static void parseIntegerWidthOption(StringSegment segment, MacroProps macros) {
         int offset = 0;
         int minInt = 0;
         int maxInt;
-        if (content.charAt(0) == '+') {
+        if (segment.charAt(0) == '+') {
             maxInt = -1;
             offset++;
         } else {
             maxInt = 0;
         }
-        for (; offset < content.length(); offset++) {
-            if (content.charAt(offset) == '#') {
+        for (; offset < segment.length(); offset++) {
+            if (segment.charAt(offset) == '#') {
                 maxInt++;
             } else {
                 break;
             }
         }
-        if (offset < content.length()) {
-            for (; offset < content.length(); offset++) {
-                if (content.charAt(offset) == '0') {
+        if (offset < segment.length()) {
+            for (; offset < segment.length(); offset++) {
+                if (segment.charAt(offset) == '0') {
                     minInt++;
                 } else {
                     break;
@@ -993,8 +993,8 @@ class NumberSkeletonImpl {
         if (maxInt != -1) {
             maxInt += minInt;
         }
-        if (offset < content.length()) {
-            throw new SkeletonSyntaxException("Invalid integer width stem", content);
+        if (offset < segment.length()) {
+            throw new SkeletonSyntaxException("Invalid integer width stem", segment);
         }
         // Use the public APIs to enforce bounds checking
         if (maxInt == -1) {
@@ -1013,11 +1013,11 @@ class NumberSkeletonImpl {
         appendMultiple(sb, '0', minInt);
     }
 
-    private static void parseNumberingSystemOption(CharSequence content, MacroProps macros) {
-        String nsName = content.subSequence(0, content.length()).toString();
+    private static void parseNumberingSystemOption(StringSegment segment, MacroProps macros) {
+        String nsName = segment.subSequence(0, segment.length()).toString();
         NumberingSystem ns = NumberingSystem.getInstanceByName(nsName);
         if (ns == null) {
-            throw new SkeletonSyntaxException("Unknown numbering system", content);
+            throw new SkeletonSyntaxException("Unknown numbering system", segment);
         }
         macros.symbols = ns;
     }
