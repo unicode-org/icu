@@ -45,6 +45,7 @@ MultithreadTest::~MultithreadTest()
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>    // tolower, toupper
+#include <memory>
 
 #include "unicode/putil.h"
 
@@ -62,82 +63,24 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
                 const char* &name, char* /*par*/ ) {
     if (exec)
         logln("TestSuite MultithreadTest: ");
-    switch (index) {
-    case 0:
-        name = "TestThreads";
-        if (exec)
-            TestThreads();
-        break;
 
-    case 1:
-        name = "TestMutex";
-        if (exec)
-            TestMutex();
-        break;
-
-    case 2:
-        name = "TestThreadedIntl";
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestThreads);
+    TESTCASE_AUTO(TestMutex);
 #if !UCONFIG_NO_FORMATTING
-        if (exec) {
-            TestThreadedIntl();
-        }
+    TESTCASE_AUTO(TestThreadedIntl);
 #endif
-        break;
-
-    case 3:
-      name = "TestCollators";
 #if !UCONFIG_NO_COLLATION
-      if (exec) {
-            TestCollators();
-      }
+    TESTCASE_AUTO(TestCollators);
 #endif /* #if !UCONFIG_NO_COLLATION */
-      break;
-
-    case 4:
-        name = "TestString";
-        if (exec) {
-            TestString();
-        }
-        break;
-
-    case 5:
-        name = "TestArabicShapingThreads";
-        if (exec) {
-            TestArabicShapingThreads();
-        }
-        break;
-
-    case 6:
-        name = "TestAnyTranslit";
-        if (exec) {
-            TestAnyTranslit();
-        }
-        break;
-
-    case 7:
-        name = "TestConditionVariables";
-        if (exec) {
-            TestConditionVariables();
-        }
-        break;
-    case 8:
-        name = "TestUnifiedCache";
-        if (exec) {
-            TestUnifiedCache();
-        }
-        break;
-#if !UCONFIG_NO_TRANSLITERATION
-    case 9:
-        name = "TestBreakTranslit";
-        if (exec) {
-            TestBreakTranslit();
-        }
-        break;
-#endif
-    default:
-        name = "";
-        break; //needed to end loop
-    }
+    TESTCASE_AUTO(TestString);
+    TESTCASE_AUTO(TestArabicShapingThreads);
+    TESTCASE_AUTO(TestAnyTranslit);
+    TESTCASE_AUTO(TestConditionVariables);
+    TESTCASE_AUTO(TestUnifiedCache);
+    TESTCASE_AUTO(TestBreakTranslit);
+    TESTCASE_AUTO(TestIncDec);
+    TESTCASE_AUTO_END
 }
 
 
@@ -1571,5 +1514,37 @@ void MultithreadTest::TestBreakTranslit() {
     gTranslitInput = NULL;
     gTranslitExpected = NULL;
 }
+
+
+class TestIncDecThread : public SimpleThread {
+public:
+    TestIncDecThread() { };
+    virtual void run();
+};
+
+static u_atomic_int32_t gIncDecCounter;
+
+void TestIncDecThread::run() {
+    umtx_atomic_inc(&gIncDecCounter);
+    for (int32_t i=0; i<5000000; ++i) {
+        umtx_atomic_inc(&gIncDecCounter);
+        umtx_atomic_dec(&gIncDecCounter);
+    }
+}
+
+void MultithreadTest::TestIncDec()
+{
+    static constexpr int NUM_THREADS = 4;
+    gIncDecCounter = 0;
+    TestIncDecThread threads[NUM_THREADS];
+    for (auto &thread:threads) {
+        thread.start();
+    }
+    for (auto &thread:threads) {
+        thread.join();
+    }
+    assertEquals("TestIncDec", NUM_THREADS, gIncDecCounter);
+}
+
 
 #endif /* !UCONFIG_NO_TRANSLITERATION */
