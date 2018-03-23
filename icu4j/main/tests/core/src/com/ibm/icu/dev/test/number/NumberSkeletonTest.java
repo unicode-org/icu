@@ -3,7 +3,6 @@
 package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -129,13 +128,12 @@ public class NumberSkeletonTest {
                 "scientific/ee",
                 "round-increment/xxx",
                 "round-increment/0.1.2",
-                "group-thousands/foo",
                 "currency/dummy",
                 "measure-unit/foo",
                 "integer-width/xxx",
                 "integer-width/0+",
                 "integer-width/+0#",
-                "scientific/foo"};
+                "scientific/foo" };
 
         for (String cas : cases) {
             try {
@@ -157,6 +155,25 @@ public class NumberSkeletonTest {
                 fail();
             } catch (SkeletonSyntaxException expected) {
                 assertTrue(expected.getMessage(), expected.getMessage().contains("Unknown"));
+            }
+        }
+    }
+
+    @Test
+    public void unexpectedTokens() {
+        String[] cases = {
+                "group-thousands/foo",
+                "round-integer//ceiling group-off",
+                "round-integer//ceiling  group-off",
+                "round-integer/ group-off",
+                "round-integer// group-off" };
+
+        for (String cas : cases) {
+            try {
+                NumberFormatter.fromSkeleton(cas);
+                fail();
+            } catch (SkeletonSyntaxException expected) {
+                assertTrue(expected.getMessage(), expected.getMessage().contains("Unexpected"));
             }
         }
     }
@@ -202,24 +219,14 @@ public class NumberSkeletonTest {
                 { "round-integer group-off", "5142" },
                 { "round-integer  group-off", "5142" },
                 { "round-integer/ceiling group-off", "5143" },
-                { "round-integer//ceiling group-off", null },
-                { "round-integer/ceiling  group-off", "5143" },
-                { "round-integer//ceiling  group-off", null },
-                { "round-integer/ group-off", null },
-                { "round-integer// group-off", null } };
+                { "round-integer/ceiling  group-off", "5143" }, };
 
         for (String[] cas : cases) {
             String skeleton = cas[0];
             String expected = cas[1];
-
-            try {
-                String actual = NumberFormatter.fromSkeleton(skeleton).locale(ULocale.ENGLISH)
-                        .format(5142.3).toString();
-                assertEquals(skeleton, expected, actual);
-            } catch (SkeletonSyntaxException e) {
-                // Expected failure?
-                assertNull(skeleton, expected);
-            }
+            String actual = NumberFormatter.fromSkeleton(skeleton).locale(ULocale.ENGLISH).format(5142.3)
+                    .toString();
+            assertEquals(skeleton, expected, actual);
         }
     }
 
