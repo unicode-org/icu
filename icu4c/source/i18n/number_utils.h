@@ -122,6 +122,22 @@ inline int32_t insertDigitFromSymbols(NumberStringBuilder& output, int32_t index
     return output.insert(index, symbols.getConstDigitSymbol(digit), field, status);
 }
 
+inline bool unitIsCurrency(const MeasureUnit& unit) {
+    return uprv_strcmp("currency", unit.getType()) == 0;
+}
+
+inline bool unitIsNoUnit(const MeasureUnit& unit) {
+    return uprv_strcmp("none", unit.getType()) == 0;
+}
+
+inline bool unitIsPercent(const MeasureUnit& unit) {
+    return uprv_strcmp("percent", unit.getSubtype()) == 0;
+}
+
+inline bool unitIsPermille(const MeasureUnit& unit) {
+    return uprv_strcmp("permille", unit.getSubtype()) == 0;
+}
+
 } // namespace impl
 } // namespace number
 U_NAMESPACE_END

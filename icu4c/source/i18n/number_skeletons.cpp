@@ -1,6 +1,7 @@
 // © 2018 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#include <unicode/numberformatter.h>
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
@@ -15,6 +16,7 @@
 #include "hash.h"
 #include "patternprops.h"
 #include "unicode/ucharstriebuilder.h"
+#include "number_utils.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -327,7 +329,7 @@ UnicodeString skeleton::generate(const MacroProps& macros, UErrorCode& status) {
     if (U_FAILURE(status)) { return {}; }
 
     UnicodeString sb;
-    generateSkeleton(macros, sb, status);
+    GeneratorHelpers::generateSkeleton(macros, sb, status);
     return sb;
 }
 
@@ -557,6 +559,333 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         default:
             U_ASSERT(false);
     }
+}
+
+ParseState skeleton::parseOption(ParseState stem, const StringSegment& segment, MacroProps& macros,
+                                 UErrorCode& status) {
+
+    ///// Required options: /////
+
+    switch (stem) {
+        case STATE_CURRENCY_UNIT:
+            blueprint_helpers::parseCurrencyOption(segment, macros, status);
+            return STATE_NULL;
+        case STATE_MEASURE_UNIT:
+            blueprint_helpers::parseMeasureUnitOption(segment, macros, status);
+            return STATE_NULL;
+        case STATE_PER_MEASURE_UNIT:
+            blueprint_helpers::parseMeasurePerUnitOption(segment, macros, status);
+            return STATE_NULL;
+        case STATE_INCREMENT_ROUNDER:
+            blueprint_helpers::parseIncrementOption(segment, macros, status);
+            return STATE_ROUNDER;
+        case STATE_INTEGER_WIDTH:
+            blueprint_helpers::parseIntegerWidthOption(segment, macros, status);
+            return STATE_NULL;
+        case STATE_NUMBERING_SYSTEM:
+            blueprint_helpers::parseNumberingSystemOption(segment, macros, status);
+            return STATE_NULL;
+        default:
+            break;
+    }
+
+    ///// Non-required options: /////
+
+    // Scientific options
+    switch (stem) {
+        case STATE_SCIENTIFIC:
+            if (blueprint_helpers::parseExponentWidthOption(segment, macros, status)) {
+                return STATE_SCIENTIFIC;
+            }
+            if (blueprint_helpers::parseExponentSignOption(segment, macros, status)) {
+                return STATE_SCIENTIFIC;
+            }
+            break;
+        default:
+            break;
+    }
+
+    // Frac-sig option
+    switch (stem) {
+        case STATE_FRACTION_ROUNDER:
+            if (blueprint_helpers::parseFracSigOption(segment, macros, status)) {
+                return STATE_ROUNDER;
+            }
+            break;
+        default:
+            break;
+    }
+
+    // Rounding mode option
+    switch (stem) {
+        case STATE_ROUNDER:
+        case STATE_FRACTION_ROUNDER:
+            if (blueprint_helpers::parseRoundingModeOption(segment, macros, status)) {
+                return STATE_ROUNDER;
+            }
+            break;
+        default:
+            break;
+    }
+
+    // Unknown option
+    // throw new SkeletonSyntaxException("Invalid option", segment);
+    status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+    return STATE_NULL;
+}
+
+void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    // Supported options
+    if (GeneratorHelpers::notation(macros, sb, status)) {
+        sb.append(u' ');
+    }
+    if (U_FAILURE(status)) { return; }
+    if (GeneratorHelpers::unit(macros, sb, status)) {
+        sb.append(u' ');
+    }
+    if (U_FAILURE(status)) { return; }
+    if (GeneratorHelpers::perUnit(macros, sb, status)) {
+        sb.append(u' ');
+    }
+    if (U_FAILURE(status)) { return; }
+    if (GeneratorHelpers::rounding(macros, sb, status)) {
+        sb.append(u' ');
+    }
+    if (U_FAILURE(status)) { return; }
+    if (GeneratorHelpers::grouping(macros, sb, status)) {
+        sb.append(u' ');
+    }
+    if (U_FAILURE(status)) { return; }
+    if (GeneratorHelpers::integerWidth(macros, sb, status)) {
+        sb.append(u' ');
+    }
+    if (U_FAILURE(status)) { return; }
+    if (GeneratorHelpers::symbols(macros, sb, status)) {
+        sb.append(u' ');
+    }
+    if (U_FAILURE(status)) { return; }
+    if (GeneratorHelpers::unitWidth(macros, sb, status)) {
+        sb.append(u' ');
+    }
+    if (U_FAILURE(status)) { return; }
+    if (GeneratorHelpers::sign(macros, sb, status)) {
+        sb.append(u' ');
+    }
+    if (U_FAILURE(status)) { return; }
+    if (GeneratorHelpers::decimal(macros, sb, status)) {
+        sb.append(u' ');
+    }
+    if (U_FAILURE(status)) { return; }
+
+    // Unsupported options
+    if (!macros.padder.isBogus()) {
+        status = U_UNSUPPORTED_ERROR;
+        return;
+    }
+    if (macros.affixProvider != nullptr) {
+        status = U_UNSUPPORTED_ERROR;
+        return;
+    }
+    if (macros.multiplier.isValid()) {
+        status = U_UNSUPPORTED_ERROR;
+        return;
+    }
+    if (macros.rules != nullptr) {
+        status = U_UNSUPPORTED_ERROR;
+        return;
+    }
+    if (macros.currencySymbols != nullptr) {
+        status = U_UNSUPPORTED_ERROR;
+        return;
+    }
+
+    // Remove the trailing space
+    if (sb.length() > 0) {
+        sb.truncate(sb.length() - 1);
+    }
+}
+
+
+bool GeneratorHelpers::notation(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    if (macros.notation.fType == Notation::NTN_COMPACT) {
+        UNumberCompactStyle style = macros.notation.fUnion.compactStyle;
+        if (style == UNumberCompactStyle::UNUM_LONG) {
+            sb.append(u"compact-long", -1);
+            return true;
+        } else if (style == UNumberCompactStyle::UNUM_SHORT) {
+            sb.append(u"compact-short", -1);
+            return true;
+        } else {
+            // Compact notation generated from custom data (not supported in skeleton)
+            // The other compact notations are literals
+            status = U_UNSUPPORTED_ERROR;
+            return false;
+        }
+    } else if (macros.notation.fType == Notation::NTN_SCIENTIFIC) {
+        const Notation::ScientificSettings& impl = macros.notation.fUnion.scientific;
+        if (impl.fEngineeringInterval == 3) {
+            sb.append(u"engineering", -1);
+        } else {
+            sb.append(u"scientific", -1);
+        }
+        if (impl.fMinExponentDigits > 1) {
+            sb.append(u'/');
+            blueprint_helpers::generateExponentWidthOption(impl.fMinExponentDigits, sb, status);
+        }
+        if (impl.fExponentSignDisplay != UNUM_SIGN_AUTO) {
+            sb.append(u'/');
+            enum_to_stem_string::signDisplay(impl.fExponentSignDisplay, sb);
+        }
+        return true;
+    } else {
+        // Default value is not shown in normalized form
+        return false;
+    }
+}
+
+bool GeneratorHelpers::unit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    if (unitIsCurrency(macros.unit)) {
+        sb.append(u"currency/", -1);
+        blueprint_helpers::generateCurrencyOption({macros.unit, status}, sb, status);
+        return true;
+    } else if (unitIsNoUnit(macros.unit)) {
+        if (unitIsPercent(macros.unit)) {
+            sb.append(u"percent", -1);
+            return true;
+        } else if (unitIsPermille(macros.unit)) {
+            sb.append(u"permille", -1);
+            return true;
+        } else {
+            // Default value is not shown in normalized form
+            return false;
+        }
+    } else {
+        sb.append(u"measure-unit/", -1);
+        blueprint_helpers::generateMeasureUnitOption(macros.unit, sb, status);
+        return true;
+    }
+}
+
+bool GeneratorHelpers::perUnit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    // Per-units are currently expected to be only MeasureUnits.
+    if (unitIsCurrency(macros.perUnit) || unitIsNoUnit(macros.perUnit)) {
+        status = U_UNSUPPORTED_ERROR;
+    } else {
+        sb.append(u"per-measure-unit/", -1);
+        blueprint_helpers::generateMeasureUnitOption(macros.perUnit, sb, status);
+        return true;
+    }
+}
+
+bool GeneratorHelpers::rounding(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    if (macros.rounder.fType == Rounder::RND_NONE) {
+        sb.append(u"round-unlimited", -1);
+    } else if (macros.rounder.fType == Rounder::RND_FRACTION) {
+        const Rounder::FractionSignificantSettings& impl = macros.rounder.fUnion.fracSig;
+        blueprint_helpers::generateFractionStem(impl.fMinFrac, impl.fMaxFrac, sb, status);
+    } else if (macros.rounder.fType == Rounder::RND_SIGNIFICANT) {
+        const Rounder::FractionSignificantSettings& impl = macros.rounder.fUnion.fracSig;
+        blueprint_helpers::generateDigitsStem(impl.fMinSig, impl.fMaxSig, sb, status);
+    } else if (macros.rounder.fType == Rounder::RND_FRACTION_SIGNIFICANT) {
+        const Rounder::FractionSignificantSettings& impl = macros.rounder.fUnion.fracSig;
+        blueprint_helpers::generateFractionStem(impl.fMinFrac, impl.fMaxFrac, sb, status);
+        sb.append(u'/');
+        if (impl.fMinSig == -1) {
+            blueprint_helpers::generateDigitsStem(1, impl.fMaxSig, sb, status);
+        } else {
+            blueprint_helpers::generateDigitsStem(impl.fMinSig, -1, sb, status);
+        }
+    } else if (macros.rounder.fType == Rounder::RND_INCREMENT) {
+        const Rounder::IncrementSettings& impl = macros.rounder.fUnion.increment;
+        sb.append(u"round-increment/", -1);
+        blueprint_helpers::generateIncrementOption(impl.fIncrement, sb, status);
+    } else if (macros.rounder.fType == Rounder::RND_CURRENCY) {
+        UCurrencyUsage usage = macros.rounder.fUnion.currencyUsage;
+        if (usage == UCURR_USAGE_STANDARD) {
+            sb.append(u"round-currency-standard", -1);
+        } else {
+            sb.append(u"round-currency-cash", -1);
+        }
+    } else {
+        // Bogus or Error
+        return false;
+    }
+
+    // Generate the options
+    if (macros.rounder.fRoundingMode != kDefaultMode) {
+        sb.append(u'/');
+        blueprint_helpers::generateRoundingModeOption(macros.rounder.fRoundingMode, sb, status);
+    }
+
+    // NOTE: Always return true for rounding because the default value depends on other options.
+    return true;
+}
+
+bool GeneratorHelpers::grouping(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    if (macros.grouper.isBogus() || macros.grouper.fStrategy == UNUM_GROUPING_COUNT) {
+        status = U_UNSUPPORTED_ERROR;
+    } else if (macros.grouper.fStrategy == UNUM_GROUPING_AUTO) {
+        return false; // Default value
+    } else {
+        enum_to_stem_string::groupingStrategy(macros.grouper.fStrategy, sb);
+    }
+}
+
+bool GeneratorHelpers::integerWidth(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    if (macros.integerWidth.fHasError || macros.integerWidth == IntegerWidth::standard()) {
+        // Error or Default
+        return false;
+    }
+    sb.append(u"integer-width/", -1);
+    blueprint_helpers::generateIntegerWidthOption(
+            macros.integerWidth.fUnion.minMaxInt.fMinInt,
+            macros.integerWidth.fUnion.minMaxInt.fMaxInt,
+            sb,
+            status);
+    return true;
+}
+
+bool GeneratorHelpers::symbols(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    if (macros.symbols.isNumberingSystem()) {
+        const NumberingSystem& ns = *macros.symbols.getNumberingSystem();
+        if (uprv_strcmp(ns.getName(), "latn") == 0) {
+            sb.append(u"latin", -1);
+        } else {
+            sb.append(u"numbering-system/", -1);
+            blueprint_helpers::generateNumberingSystemOption(ns, sb, status);
+        }
+        return true;
+    } else if (macros.symbols.isDecimalFormatSymbols()) {
+        status = U_UNSUPPORTED_ERROR;
+        return false;
+    } else {
+        // No custom symbols
+        return false;
+    }
+}
+
+bool GeneratorHelpers::unitWidth(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    if (macros.unitWidth == UNUM_UNIT_WIDTH_SHORT || macros.unitWidth == UNUM_UNIT_WIDTH_COUNT) {
+        return false; // Default or Bogus
+    }
+    enum_to_stem_string::unitWidth(macros.unitWidth, sb);
+    return true;
+}
+
+bool GeneratorHelpers::sign(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    if (macros.sign == UNUM_SIGN_AUTO || macros.sign == UNUM_SIGN_COUNT) {
+        return false; // Default or Bogus
+    }
+    enum_to_stem_string::signDisplay(macros.sign, sb);
+    return true;
+}
+
+bool GeneratorHelpers::decimal(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    if (macros.decimal == UNUM_DECIMAL_SEPARATOR_AUTO || macros.decimal == UNUM_DECIMAL_SEPARATOR_COUNT) {
+        return false; // Default or Bogus
+    }
+    enum_to_stem_string::decimalSeparatorDisplay(macros.decimal, sb);
+    return true;
 }
 
 

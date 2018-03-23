@@ -125,22 +125,6 @@ getCurrencyFormatInfo(const Locale& locale, const char* isoCode, UErrorCode& sta
     return result;
 }
 
-inline bool unitIsCurrency(const MeasureUnit& unit) {
-    return uprv_strcmp("currency", unit.getType()) == 0;
-}
-
-inline bool unitIsNoUnit(const MeasureUnit& unit) {
-    return uprv_strcmp("none", unit.getType()) == 0;
-}
-
-inline bool unitIsPercent(const MeasureUnit& unit) {
-    return uprv_strcmp("percent", unit.getSubtype()) == 0;
-}
-
-inline bool unitIsPermille(const MeasureUnit& unit) {
-    return uprv_strcmp("permille", unit.getSubtype()) == 0;
-}
-
 }  // namespace
 
 NumberFormatterImpl* NumberFormatterImpl::fromMacros(const MacroProps& macros, UErrorCode& status) {
@@ -325,7 +309,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     if (!macros.integerWidth.isBogus()) {
         fMicros.integerWidth = macros.integerWidth;
     } else {
-        fMicros.integerWidth = IntegerWidth::zeroFillTo(1);
+        fMicros.integerWidth = IntegerWidth::standard();
     }
 
     // Sign display

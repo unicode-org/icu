@@ -686,6 +686,8 @@ class NumberSkeletonImpl {
         case STATE_NUMBERING_SYSTEM:
             BlueprintHelpers.parseNumberingSystemOption(segment, macros);
             return ParseState.STATE_NULL;
+        default:
+            break;
         }
 
         ///// Non-required options: /////
@@ -699,6 +701,9 @@ class NumberSkeletonImpl {
             if (BlueprintHelpers.parseExponentSignOption(segment, macros)) {
                 return ParseState.STATE_SCIENTIFIC;
             }
+            break;
+        default:
+            break;
         }
 
         // Frac-sig option
@@ -707,6 +712,9 @@ class NumberSkeletonImpl {
             if (BlueprintHelpers.parseFracSigOption(segment, macros)) {
                 return ParseState.STATE_ROUNDER;
             }
+            break;
+        default:
+            break;
         }
 
         // Rounding mode option
@@ -716,6 +724,9 @@ class NumberSkeletonImpl {
             if (BlueprintHelpers.parseRoundingModeOption(segment, macros)) {
                 return ParseState.STATE_ROUNDER;
             }
+            break;
+        default:
+            break;
         }
 
         // Unknown option
@@ -1210,7 +1221,7 @@ class NumberSkeletonImpl {
 
         private static boolean perUnit(MacroProps macros, StringBuilder sb) {
             // Per-units are currently expected to be only MeasureUnits.
-            if (macros.unit instanceof Currency || macros.unit instanceof NoUnit) {
+            if (macros.perUnit instanceof Currency || macros.perUnit instanceof NoUnit) {
                 throw new UnsupportedOperationException(
                         "Cannot generate number skeleton with per-unit that is not a standard measure unit");
             } else {
@@ -1242,8 +1253,6 @@ class NumberSkeletonImpl {
                 Rounder.IncrementRounderImpl impl = (Rounder.IncrementRounderImpl) macros.rounder;
                 sb.append("round-increment/");
                 BlueprintHelpers.generateIncrementOption(impl.increment, sb);
-            } else if (macros.rounder instanceof Rounder.InfiniteRounderImpl) {
-                sb.append("round-unlimited");
             } else {
                 assert macros.rounder instanceof Rounder.CurrencyRounderImpl;
                 Rounder.CurrencyRounderImpl impl = (Rounder.CurrencyRounderImpl) macros.rounder;
