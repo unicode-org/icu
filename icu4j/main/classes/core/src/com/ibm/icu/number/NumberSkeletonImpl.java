@@ -4,8 +4,6 @@ package com.ibm.icu.number;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 import com.ibm.icu.impl.CacheBase;
@@ -147,7 +145,7 @@ class NumberSkeletonImpl {
         }
     }
 
-    private static GroupingStrategy stemToGrouper(ActualStem stem) {
+    private static GroupingStrategy stemToGroupingStrategy(ActualStem stem) {
         switch (stem) {
         case STEM_GROUP_OFF:
             return GroupingStrategy.OFF;
@@ -213,6 +211,91 @@ class NumberSkeletonImpl {
         }
     }
 
+    private static void groupingStrategyToStemString(GroupingStrategy value, StringBuilder sb) {
+        switch (value) {
+        case OFF:
+            sb.append("group-off");
+            break;
+        case MIN2:
+            sb.append("group-min2");
+            break;
+        case AUTO:
+            sb.append("group-auto");
+            break;
+        case ON_ALIGNED:
+            sb.append("group-on-aligned");
+            break;
+        case THOUSANDS:
+            sb.append("group-thousands");
+            break;
+        default:
+            throw new AssertionError();
+        }
+    }
+
+    private static void unitWidthToStemString(UnitWidth value, StringBuilder sb) {
+        switch (value) {
+        case NARROW:
+            sb.append("unit-width-narrow");
+            break;
+        case SHORT:
+            sb.append("unit-width-short");
+            break;
+        case FULL_NAME:
+            sb.append("unit-width-full-name");
+            break;
+        case ISO_CODE:
+            sb.append("unit-width-iso-code");
+            break;
+        case HIDDEN:
+            sb.append("unit-width-hidden");
+            break;
+        default:
+            throw new AssertionError();
+        }
+    }
+
+    private static void signDisplayToStemString(SignDisplay value, StringBuilder sb) {
+        switch (value) {
+        case AUTO:
+            sb.append("sign-auto");
+            break;
+        case ALWAYS:
+            sb.append("sign-always");
+            break;
+        case NEVER:
+            sb.append("sign-never");
+            break;
+        case ACCOUNTING:
+            sb.append("sign-accounting");
+            break;
+        case ACCOUNTING_ALWAYS:
+            sb.append("sign-accounting-always");
+            break;
+        case EXCEPT_ZERO:
+            sb.append("sign-except-zero");
+            break;
+        case ACCOUNTING_EXCEPT_ZERO:
+            sb.append("sign-accounting-except-zero");
+            break;
+        default:
+            throw new AssertionError();
+        }
+    }
+
+    private static void decimalSeparatorDisplayToStemString(DecimalSeparatorDisplay value, StringBuilder sb) {
+        switch (value) {
+        case AUTO:
+            sb.append("decimal-auto");
+            break;
+        case ALWAYS:
+            sb.append("decimal-always");
+            break;
+        default:
+            throw new AssertionError();
+        }
+    }
+
     static final String SERIALIZED_STEM_TRIE = buildStemTrie();
 
     static String buildStemTrie() {
@@ -262,67 +345,6 @@ class NumberSkeletonImpl {
 
         // TODO: Use SLOW or FAST here?
         return b.buildCharSequence(StringTrieBuilder.Option.FAST).toString();
-    }
-
-    static class SkeletonDataStructure {
-        final Map<Object, String> valuesToStems;
-
-        SkeletonDataStructure() {
-            valuesToStems = new HashMap<Object, String>();
-        }
-
-        public void put(StemType stemType, String content, Object value) {
-            valuesToStems.put(value, content);
-        }
-
-        public String valueToStem(Object value) {
-            return valuesToStems.get(value);
-        }
-    }
-
-    static final SkeletonDataStructure skeletonData = new SkeletonDataStructure();
-
-    static {
-        SkeletonDataStructure d = skeletonData; // abbreviate for shorter lines
-        d.put(StemType.COMPACT_NOTATION, "compact-short", Notation.compactShort());
-        d.put(StemType.COMPACT_NOTATION, "compact-long", Notation.compactLong());
-        d.put(StemType.SCIENTIFIC_NOTATION, "scientific", Notation.scientific());
-        d.put(StemType.SCIENTIFIC_NOTATION, "engineering", Notation.engineering());
-        d.put(StemType.SIMPLE_NOTATION, "notation-simple", Notation.simple());
-
-        d.put(StemType.NO_UNIT, "base-unit", NoUnit.BASE);
-        d.put(StemType.NO_UNIT, "percent", NoUnit.PERCENT);
-        d.put(StemType.NO_UNIT, "permille", NoUnit.PERMILLE);
-
-        d.put(StemType.ROUNDER, "round-integer", Rounder.integer());
-        d.put(StemType.ROUNDER, "round-unlimited", Rounder.unlimited());
-        d.put(StemType.ROUNDER, "round-currency-standard", Rounder.currency(CurrencyUsage.STANDARD));
-        d.put(StemType.ROUNDER, "round-currency-cash", Rounder.currency(CurrencyUsage.CASH));
-
-        d.put(StemType.GROUPING, "group-off", GroupingStrategy.OFF);
-        d.put(StemType.GROUPING, "group-min2", GroupingStrategy.MIN2);
-        d.put(StemType.GROUPING, "group-auto", GroupingStrategy.AUTO);
-        d.put(StemType.GROUPING, "group-on-aligned", GroupingStrategy.ON_ALIGNED);
-        d.put(StemType.GROUPING, "group-thousands", GroupingStrategy.THOUSANDS);
-
-        d.put(StemType.LATIN, "latin", NumberingSystem.LATIN);
-
-        d.put(StemType.UNIT_WIDTH, "unit-width-narrow", UnitWidth.NARROW);
-        d.put(StemType.UNIT_WIDTH, "unit-width-short", UnitWidth.SHORT);
-        d.put(StemType.UNIT_WIDTH, "unit-width-full-name", UnitWidth.FULL_NAME);
-        d.put(StemType.UNIT_WIDTH, "unit-width-iso-code", UnitWidth.ISO_CODE);
-        d.put(StemType.UNIT_WIDTH, "unit-width-hidden", UnitWidth.HIDDEN);
-
-        d.put(StemType.SIGN_DISPLAY, "sign-auto", SignDisplay.AUTO);
-        d.put(StemType.SIGN_DISPLAY, "sign-always", SignDisplay.ALWAYS);
-        d.put(StemType.SIGN_DISPLAY, "sign-never", SignDisplay.NEVER);
-        d.put(StemType.SIGN_DISPLAY, "sign-accounting", SignDisplay.ACCOUNTING);
-        d.put(StemType.SIGN_DISPLAY, "sign-accounting-always", SignDisplay.ACCOUNTING_ALWAYS);
-        d.put(StemType.SIGN_DISPLAY, "sign-except-zero", SignDisplay.EXCEPT_ZERO);
-        d.put(StemType.SIGN_DISPLAY, "sign-accounting-except-zero", SignDisplay.ACCOUNTING_EXCEPT_ZERO);
-
-        d.put(StemType.DECIMAL_DISPLAY, "decimal-auto", DecimalSeparatorDisplay.AUTO);
-        d.put(StemType.DECIMAL_DISPLAY, "decimal-always", DecimalSeparatorDisplay.ALWAYS);
     }
 
     static final String[] ROUNDING_MODE_STRINGS = {
@@ -521,7 +543,7 @@ class NumberSkeletonImpl {
         case STEM_GROUP_ON_ALIGNED:
         case STEM_GROUP_THOUSANDS:
             checkNull(macros.grouping, segment);
-            macros.grouping = stemToGrouper(stemEnum);
+            macros.grouping = stemToGroupingStrategy(stemEnum);
             return StemType.OTHER;
 
         case STEM_LATIN:
@@ -1047,21 +1069,19 @@ class NumberSkeletonImpl {
     /////
 
     private static boolean generateNotationValue(MacroProps macros, StringBuilder sb) {
-        // Check for literals
-        String literal = skeletonData.valueToStem(macros.notation);
-        if ("notation-simple".equals(literal)) {
-            return false; // Default value
-        } else if (literal != null) {
-            sb.append(literal);
-            return true;
-        }
-
-        // Generate the stem
         if (macros.notation instanceof CompactNotation) {
-            // Compact notation generated from custom data (not supported in skeleton)
-            // The other compact notations are literals
-            throw new UnsupportedOperationException(
-                    "Cannot generate number skeleton with custom compact data");
+            if (macros.notation == Notation.compactLong()) {
+                sb.append("compact-long");
+                return true;
+            } else if (macros.notation == Notation.compactShort()) {
+                sb.append("compact-short");
+                return true;
+            } else {
+                // Compact notation generated from custom data (not supported in skeleton)
+                // The other compact notations are literals
+                throw new UnsupportedOperationException(
+                        "Cannot generate number skeleton with custom compact data");
+            }
         } else if (macros.notation instanceof ScientificNotation) {
             ScientificNotation impl = (ScientificNotation) macros.notation;
             if (impl.engineeringInterval == 3) {
@@ -1075,33 +1095,33 @@ class NumberSkeletonImpl {
             }
             if (impl.exponentSignDisplay != SignDisplay.AUTO) {
                 sb.append('/');
-                sb.append(skeletonData.valueToStem(impl.exponentSignDisplay));
+                signDisplayToStemString(impl.exponentSignDisplay, sb);
             }
             return true;
         } else {
-            // SimpleNotation should be handled by a literal
-            throw new AssertionError();
+            assert macros.notation instanceof SimpleNotation;
+            // Default value is not shown in normalized form
+            return false;
         }
     }
 
     private static boolean generateUnitValue(MacroProps macros, StringBuilder sb) {
-        // Check for literals
-        String literal = skeletonData.valueToStem(macros.unit);
-        if ("base-unit".equals(literal)) {
-            return false; // Default value
-        } else if (literal != null) {
-            sb.append(literal);
-            return true;
-        }
-
-        // Generate the stem
         if (macros.unit instanceof Currency) {
             sb.append("currency/");
             generateCurrencyOption((Currency) macros.unit, sb);
             return true;
         } else if (macros.unit instanceof NoUnit) {
-            // This should be taken care of by the literals.
-            throw new AssertionError();
+            if (macros.unit == NoUnit.PERCENT) {
+                sb.append("percent");
+                return true;
+            } else if (macros.unit == NoUnit.PERMILLE) {
+                sb.append("permille");
+                return true;
+            } else {
+                assert macros.unit == NoUnit.BASE;
+                // Default value is not shown in normalized form
+                return false;
+            }
         } else {
             sb.append("measure-unit/");
             generateMeasureUnitOption(macros.unit, sb);
@@ -1122,14 +1142,6 @@ class NumberSkeletonImpl {
     }
 
     private static boolean generateRoundingValue(MacroProps macros, StringBuilder sb) {
-        // Check for literals
-        String literal = skeletonData.valueToStem(macros.rounder);
-        if (literal != null) {
-            sb.append(literal);
-            return true;
-        }
-
-        // Generate the stem
         if (macros.rounder instanceof Rounder.InfiniteRounderImpl) {
             sb.append("round-unlimited");
         } else if (macros.rounder instanceof Rounder.FractionRounderImpl) {
@@ -1151,6 +1163,8 @@ class NumberSkeletonImpl {
             Rounder.IncrementRounderImpl impl = (Rounder.IncrementRounderImpl) macros.rounder;
             sb.append("round-increment/");
             generateIncrementOption(impl.increment, sb);
+        } else if (macros.rounder instanceof Rounder.InfiniteRounderImpl) {
+            sb.append("round-unlimited");
         } else {
             assert macros.rounder instanceof Rounder.CurrencyRounderImpl;
             Rounder.CurrencyRounderImpl impl = (Rounder.CurrencyRounderImpl) macros.rounder;
@@ -1176,7 +1190,7 @@ class NumberSkeletonImpl {
             if (macros.grouping == GroupingStrategy.AUTO) {
                 return false; // Default value
             }
-            appendExpectedLiteral(macros.grouping, sb);
+            groupingStrategyToStemString((GroupingStrategy) macros.grouping, sb);
             return true;
         } else {
             throw new UnsupportedOperationException(
@@ -1214,7 +1228,7 @@ class NumberSkeletonImpl {
         if (macros.unitWidth == UnitWidth.SHORT) {
             return false; // Default value
         }
-        appendExpectedLiteral(macros.unitWidth, sb);
+        unitWidthToStemString(macros.unitWidth, sb);
         return true;
     }
 
@@ -1222,7 +1236,7 @@ class NumberSkeletonImpl {
         if (macros.sign == SignDisplay.AUTO) {
             return false; // Default value
         }
-        appendExpectedLiteral(macros.sign, sb);
+        signDisplayToStemString(macros.sign, sb);
         return true;
     }
 
@@ -1230,7 +1244,7 @@ class NumberSkeletonImpl {
         if (macros.decimal == DecimalSeparatorDisplay.AUTO) {
             return false; // Default value
         }
-        appendExpectedLiteral(macros.decimal, sb);
+        decimalSeparatorDisplayToStemString(macros.decimal, sb);
         return true;
     }
 
@@ -1246,11 +1260,5 @@ class NumberSkeletonImpl {
         for (int i = 0; i < count; i++) {
             sb.appendCodePoint(cp);
         }
-    }
-
-    private static void appendExpectedLiteral(Object value, StringBuilder sb) {
-        String literal = skeletonData.valueToStem(value);
-        assert literal != null;
-        sb.append(literal);
     }
 }
