@@ -19,10 +19,14 @@ import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberingSystem;
+import com.ibm.icu.util.BytesTrie;
+import com.ibm.icu.util.CharsTrie;
+import com.ibm.icu.util.CharsTrieBuilder;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.NoUnit;
+import com.ibm.icu.util.StringTrieBuilder;
 
 /**
  * @author sffc
@@ -50,6 +54,103 @@ class NumberSkeletonImpl {
         UNIT_WIDTH,
         SIGN_DISPLAY,
         DECIMAL_DISPLAY
+    }
+
+    static enum ActualStem {
+        // Section 1: Stems that do not require an option:
+        STEM_COMPACT_SHORT,
+        STEM_COMPACT_LONG,
+        STEM_SCIENTIFIC,
+        STEM_ENGINEERING,
+        STEM_NOTATION_SIMPLE,
+        STEM_BASE_UNIT,
+        STEM_PERCENT,
+        STEM_PERMILLE,
+        STEM_ROUND_INTEGER,
+        STEM_ROUND_UNLIMITED,
+        STEM_ROUND_CURRENCY_STANDARD,
+        STEM_ROUND_CURRENCY_CASH,
+        STEM_GROUP_OFF,
+        STEM_GROUP_MIN2,
+        STEM_GROUP_AUTO,
+        STEM_GROUP_ON_ALIGNED,
+        STEM_GROUP_THOUSANDS,
+        STEM_LATIN,
+        STEM_UNIT_WIDTH_NARROW,
+        STEM_UNIT_WIDTH_SHORT,
+        STEM_UNIT_WIDTH_FULL_NAME,
+        STEM_UNIT_WIDTH_ISO_CODE,
+        STEM_UNIT_WIDTH_HIDDEN,
+        STEM_SIGN_AUTO,
+        STEM_SIGN_ALWAYS,
+        STEM_SIGN_NEVER,
+        STEM_SIGN_ACCOUNTING,
+        STEM_SIGN_ACCOUNTING_ALWAYS,
+        STEM_SIGN_EXCEPT_ZERO,
+        STEM_SIGN_ACCOUNTING_EXCEPT_ZERO,
+        STEM_DECIMAL_AUTO,
+        STEM_DECIMAL_ALWAYS,
+
+        // Section 2: Stems that DO require an option:
+        STEM_ROUND_INCREMENT,
+        STEM_MEASURE_UNIT,
+        STEM_PER_MEASURE_UNIT,
+        STEM_CURRENCY,
+        STEM_INTEGER_WIDTH,
+        STEM_NUMBERING_SYSTEM,
+    };
+
+    static final ActualStem[] ACTUAL_STEM_VALUES = ActualStem.values();
+
+    static final String SERIALIZED_STEM_TRIE = buildStemTrie();
+
+    static String buildStemTrie() {
+        CharsTrieBuilder b = new CharsTrieBuilder();
+
+        // Section 1:
+        b.add("compact-short", ActualStem.STEM_COMPACT_SHORT.ordinal());
+        b.add("compact-long", ActualStem.STEM_COMPACT_LONG.ordinal());
+        b.add("scientific", ActualStem.STEM_SCIENTIFIC.ordinal());
+        b.add("engineering", ActualStem.STEM_ENGINEERING.ordinal());
+        b.add("notation-simple", ActualStem.STEM_NOTATION_SIMPLE.ordinal());
+        b.add("base-unit", ActualStem.STEM_BASE_UNIT.ordinal());
+        b.add("percent", ActualStem.STEM_PERCENT.ordinal());
+        b.add("permille", ActualStem.STEM_PERMILLE.ordinal());
+        b.add("round-integer", ActualStem.STEM_ROUND_INTEGER.ordinal());
+        b.add("round-unlimited", ActualStem.STEM_ROUND_UNLIMITED.ordinal());
+        b.add("round-currency-standard", ActualStem.STEM_ROUND_CURRENCY_STANDARD.ordinal());
+        b.add("round-currency-cash", ActualStem.STEM_ROUND_CURRENCY_CASH.ordinal());
+        b.add("group-off", ActualStem.STEM_GROUP_OFF.ordinal());
+        b.add("group-min2", ActualStem.STEM_GROUP_MIN2.ordinal());
+        b.add("group-auto", ActualStem.STEM_GROUP_AUTO.ordinal());
+        b.add("group-on-aligned", ActualStem.STEM_GROUP_ON_ALIGNED.ordinal());
+        b.add("group-thousands", ActualStem.STEM_GROUP_THOUSANDS.ordinal());
+        b.add("latin", ActualStem.STEM_LATIN.ordinal());
+        b.add("unit-width-narrow", ActualStem.STEM_UNIT_WIDTH_NARROW.ordinal());
+        b.add("unit-width-short", ActualStem.STEM_UNIT_WIDTH_SHORT.ordinal());
+        b.add("unit-width-full-name", ActualStem.STEM_UNIT_WIDTH_FULL_NAME.ordinal());
+        b.add("unit-width-iso-code", ActualStem.STEM_UNIT_WIDTH_ISO_CODE.ordinal());
+        b.add("unit-width-hidden", ActualStem.STEM_UNIT_WIDTH_HIDDEN.ordinal());
+        b.add("sign-auto", ActualStem.STEM_SIGN_AUTO.ordinal());
+        b.add("sign-always", ActualStem.STEM_SIGN_ALWAYS.ordinal());
+        b.add("sign-never", ActualStem.STEM_SIGN_NEVER.ordinal());
+        b.add("sign-accounting", ActualStem.STEM_SIGN_ACCOUNTING.ordinal());
+        b.add("sign-accounting-always", ActualStem.STEM_SIGN_ACCOUNTING_ALWAYS.ordinal());
+        b.add("sign-except-zero", ActualStem.STEM_SIGN_EXCEPT_ZERO.ordinal());
+        b.add("sign-accounting-except-zero", ActualStem.STEM_SIGN_ACCOUNTING_EXCEPT_ZERO.ordinal());
+        b.add("decimal-auto", ActualStem.STEM_DECIMAL_AUTO.ordinal());
+        b.add("decimal-always", ActualStem.STEM_DECIMAL_ALWAYS.ordinal());
+
+        // Section 2:
+        b.add("round-increment", ActualStem.STEM_ROUND_INCREMENT.ordinal());
+        b.add("measure-unit", ActualStem.STEM_MEASURE_UNIT.ordinal());
+        b.add("per-measure-unit", ActualStem.STEM_PER_MEASURE_UNIT.ordinal());
+        b.add("currency", ActualStem.STEM_CURRENCY.ordinal());
+        b.add("integer-width", ActualStem.STEM_INTEGER_WIDTH.ordinal());
+        b.add("numbering-system", ActualStem.STEM_NUMBERING_SYSTEM.ordinal());
+
+        // TODO: Use SLOW or FAST here?
+        return b.buildCharSequence(StringTrieBuilder.Option.FAST).toString();
     }
 
     static class SkeletonDataStructure {
@@ -186,28 +287,58 @@ class NumberSkeletonImpl {
     /////
 
     private static MacroProps parseSkeleton(String skeletonString) {
+        // Add a trailing whitespace to the end of the skeleton string to make code cleaner.
+        skeletonString += " ";
+
         MacroProps macros = new MacroProps();
-        StringSegment segment = new StringSegment(skeletonString + " ", false);
+        StringSegment segment = new StringSegment(skeletonString, false);
+        CharsTrie stemTrie = new CharsTrie(SERIALIZED_STEM_TRIE, 0);
         StemType stem = null;
         int offset = 0;
         while (offset < segment.length()) {
             int cp = segment.codePointAt(offset);
-            boolean isWhiteSpace = PatternProps.isWhiteSpace(cp);
-            if (offset > 0 && (isWhiteSpace || cp == '/')) {
+            boolean isTokenSeparator = PatternProps.isWhiteSpace(cp);
+            boolean isOptionSeparator = (cp == '/');
+
+            if (!isTokenSeparator && !isOptionSeparator) {
+                // Non-separator token; consume it.
+                offset += Character.charCount(cp);
+                if (stem == null) {
+                    // We are currently consuming a stem.
+                    // Go to the next state in the stem trie.
+                    stemTrie.nextForCodePoint(cp);
+                }
+                continue;
+            }
+
+            // We are looking at a token or option separator.
+            // If the segment is nonempty, parse it and reset the segment.
+            // Otherwise, make sure it is a valid repeating separator.
+            if (offset != 0) {
                 segment.setLength(offset);
                 if (stem == null) {
-                    stem = parseStem(segment, macros);
+                    // The first separator after the start of a token. Parse it as a stem.
+                    stem = parseStem2(segment, stemTrie, macros);
+                    stemTrie.reset();
                 } else {
+                    // A separator after the first separator of a token. Parse it as an option.
                     stem = parseOption(stem, segment, macros);
                 }
                 segment.resetLength();
                 segment.adjustOffset(offset + 1);
                 offset = 0;
+
+            } else if (stem != null) {
+                // A separator ('/' or whitespace) following an option separator ('/')
+                throw new SkeletonSyntaxException("Unexpected separator character", segment);
+
             } else {
-                offset += Character.charCount(cp);
+                // Two spaces in a row; this is OK.
+                segment.adjustOffset(Character.charCount(cp));
             }
-            if (isWhiteSpace && stem != null) {
-                // Check for stems that require an option
+
+            // Make sure we aren't in a state requiring an option, and then reset the state.
+            if (isTokenSeparator && stem != null) {
                 switch (stem) {
                 case MAYBE_INCREMENT_ROUNDER:
                 case MEASURE_UNIT:
@@ -226,92 +357,221 @@ class NumberSkeletonImpl {
         return macros;
     }
 
-    private static StemType parseStem(CharSequence content, MacroProps macros) {
-        // First try: exact match with a literal stem
-        StemType stem = skeletonData.stemToType(content);
-        if (stem != null) {
-            Object value = skeletonData.stemToValue(content);
-            switch (stem) {
-            case COMPACT_NOTATION:
-            case SCIENTIFIC_NOTATION:
-            case SIMPLE_NOTATION:
-                checkNull(macros.notation, content);
-                macros.notation = (Notation) value;
-                break;
-            case NO_UNIT:
-                checkNull(macros.unit, content);
-                macros.unit = (NoUnit) value;
-                break;
-            case ROUNDER:
-                checkNull(macros.rounder, content);
-                macros.rounder = (Rounder) value;
-                break;
-            case GROUPING:
-                checkNull(macros.grouping, content);
-                macros.grouping = value;
-                break;
-            case LATIN:
-                checkNull(macros.symbols, content);
-                macros.symbols = value;
-                break;
-            case UNIT_WIDTH:
-                checkNull(macros.unitWidth, content);
-                macros.unitWidth = (UnitWidth) value;
-                break;
-            case SIGN_DISPLAY:
-                checkNull(macros.sign, content);
-                macros.sign = (SignDisplay) value;
-                break;
-            case DECIMAL_DISPLAY:
-                checkNull(macros.decimal, content);
-                macros.decimal = (DecimalSeparatorDisplay) value;
-                break;
-            default:
-                assert false;
-            }
-            return stem;
-        }
-
-        // Second try: literal stems that require an option
-        if (content.equals("round-increment")) {
-            checkNull(macros.rounder, content);
-            return StemType.MAYBE_INCREMENT_ROUNDER;
-        } else if (content.equals("measure-unit")) {
-            checkNull(macros.unit, content);
-            return StemType.MEASURE_UNIT;
-        } else if (content.equals("per-measure-unit")) {
-            checkNull(macros.perUnit, content);
-            return StemType.PER_MEASURE_UNIT;
-        } else if (content.equals("currency")) {
-            checkNull(macros.unit, content);
-            return StemType.CURRENCY;
-        } else if (content.equals("integer-width")) {
-            checkNull(macros.integerWidth, content);
-            return StemType.INTEGER_WIDTH;
-        } else if (content.equals("numbering-system")) {
-            checkNull(macros.symbols, content);
-            return StemType.NUMBERING_SYSTEM;
-        }
-
-        // Third try: stem "blueprint" syntax
+    private static StemType parseStem2(CharSequence content, CharsTrie stemTrie, MacroProps macros) {
+        // First check for "blueprint" stems, which start with a "signal char"
         switch (content.charAt(0)) {
         case '.':
-            stem = StemType.FRACTION_ROUNDER;
             checkNull(macros.rounder, content);
             parseFractionStem(content, macros);
-            break;
+            return StemType.FRACTION_ROUNDER;
         case '@':
-            stem = StemType.ROUNDER;
             checkNull(macros.rounder, content);
             parseDigitsStem(content, macros);
-            break;
-        }
-        if (stem != null) {
-            return stem;
+            return StemType.ROUNDER;
         }
 
-        // Still no hits: throw an exception
-        throw new SkeletonSyntaxException("Unknown stem", content);
+        // Now look at the stemsTrie, which is already be pointing at our stem.
+        BytesTrie.Result stemResult = stemTrie.current();
+
+        if (stemResult != BytesTrie.Result.INTERMEDIATE_VALUE
+                && stemResult != BytesTrie.Result.FINAL_VALUE) {
+            throw new SkeletonSyntaxException("Unknown stem", content);
+        }
+
+        ActualStem stemEnum = ACTUAL_STEM_VALUES[stemTrie.getValue()];
+        switch (stemEnum) {
+
+        // Stems with meaning on their own, not requiring an option:
+
+        case STEM_COMPACT_SHORT:
+            checkNull(macros.notation, content);
+            macros.notation = Notation.compactShort();
+            return StemType.COMPACT_NOTATION;
+
+        case STEM_COMPACT_LONG:
+            checkNull(macros.notation, content);
+            macros.notation = Notation.compactLong();
+            return StemType.COMPACT_NOTATION;
+
+        case STEM_SCIENTIFIC:
+            checkNull(macros.notation, content);
+            macros.notation = Notation.scientific();
+            return StemType.SCIENTIFIC_NOTATION;
+
+        case STEM_ENGINEERING:
+            checkNull(macros.notation, content);
+            macros.notation = Notation.engineering();
+            return StemType.SCIENTIFIC_NOTATION;
+
+        case STEM_NOTATION_SIMPLE:
+            checkNull(macros.notation, content);
+            macros.notation = Notation.simple();
+            return StemType.SIMPLE_NOTATION;
+
+        case STEM_BASE_UNIT:
+            checkNull(macros.unit, content);
+            macros.unit = NoUnit.BASE;
+            return StemType.NO_UNIT;
+
+        case STEM_PERCENT:
+            checkNull(macros.unit, content);
+            macros.unit = NoUnit.PERCENT;
+            return StemType.NO_UNIT;
+
+        case STEM_PERMILLE:
+            checkNull(macros.unit, content);
+            macros.unit = NoUnit.PERMILLE;
+            return StemType.NO_UNIT;
+
+        case STEM_ROUND_INTEGER:
+            checkNull(macros.rounder, content);
+            macros.rounder = Rounder.integer();
+            return StemType.ROUNDER;
+
+        case STEM_ROUND_UNLIMITED:
+            checkNull(macros.rounder, content);
+            macros.rounder = Rounder.unlimited();
+            return StemType.ROUNDER;
+
+        case STEM_ROUND_CURRENCY_STANDARD:
+            checkNull(macros.rounder, content);
+            macros.rounder = Rounder.currency(CurrencyUsage.STANDARD);
+            return StemType.ROUNDER;
+
+        case STEM_ROUND_CURRENCY_CASH:
+            checkNull(macros.rounder, content);
+            macros.rounder = Rounder.currency(CurrencyUsage.CASH);
+            return StemType.ROUNDER;
+
+        case STEM_GROUP_OFF:
+            checkNull(macros.grouping, content);
+            macros.grouping = GroupingStrategy.OFF;
+            return StemType.GROUPING;
+
+        case STEM_GROUP_MIN2:
+            checkNull(macros.grouping, content);
+            macros.grouping = GroupingStrategy.MIN2;
+            return StemType.GROUPING;
+
+        case STEM_GROUP_AUTO:
+            checkNull(macros.grouping, content);
+            macros.grouping = GroupingStrategy.AUTO;
+            return StemType.GROUPING;
+
+        case STEM_GROUP_ON_ALIGNED:
+            checkNull(macros.grouping, content);
+            macros.grouping = GroupingStrategy.ON_ALIGNED;
+            return StemType.GROUPING;
+
+        case STEM_GROUP_THOUSANDS:
+            checkNull(macros.grouping, content);
+            macros.grouping = GroupingStrategy.THOUSANDS;
+            return StemType.GROUPING;
+
+        case STEM_LATIN:
+            checkNull(macros.symbols, content);
+            macros.symbols = NumberingSystem.LATIN;
+            return StemType.LATIN;
+
+        case STEM_UNIT_WIDTH_NARROW:
+            checkNull(macros.unitWidth, content);
+            macros.unitWidth = UnitWidth.NARROW;
+            return StemType.UNIT_WIDTH;
+
+        case STEM_UNIT_WIDTH_SHORT:
+            checkNull(macros.unitWidth, content);
+            macros.unitWidth = UnitWidth.SHORT;
+            return StemType.UNIT_WIDTH;
+
+        case STEM_UNIT_WIDTH_FULL_NAME:
+            checkNull(macros.unitWidth, content);
+            macros.unitWidth = UnitWidth.FULL_NAME;
+            return StemType.UNIT_WIDTH;
+
+        case STEM_UNIT_WIDTH_ISO_CODE:
+            checkNull(macros.unitWidth, content);
+            macros.unitWidth = UnitWidth.ISO_CODE;
+            return StemType.UNIT_WIDTH;
+
+        case STEM_UNIT_WIDTH_HIDDEN:
+            checkNull(macros.unitWidth, content);
+            macros.unitWidth = UnitWidth.HIDDEN;
+            return StemType.UNIT_WIDTH;
+
+        case STEM_SIGN_AUTO:
+            checkNull(macros.sign, content);
+            macros.sign = SignDisplay.AUTO;
+            return StemType.SIGN_DISPLAY;
+
+        case STEM_SIGN_ALWAYS:
+            checkNull(macros.sign, content);
+            macros.sign = SignDisplay.ALWAYS;
+            return StemType.SIGN_DISPLAY;
+
+        case STEM_SIGN_NEVER:
+            checkNull(macros.sign, content);
+            macros.sign = SignDisplay.NEVER;
+            return StemType.SIGN_DISPLAY;
+
+        case STEM_SIGN_ACCOUNTING:
+            checkNull(macros.sign, content);
+            macros.sign = SignDisplay.ACCOUNTING;
+            return StemType.SIGN_DISPLAY;
+
+        case STEM_SIGN_ACCOUNTING_ALWAYS:
+            checkNull(macros.sign, content);
+            macros.sign = SignDisplay.ACCOUNTING_ALWAYS;
+            return StemType.SIGN_DISPLAY;
+
+        case STEM_SIGN_EXCEPT_ZERO:
+            checkNull(macros.sign, content);
+            macros.sign = SignDisplay.EXCEPT_ZERO;
+            return StemType.SIGN_DISPLAY;
+
+        case STEM_SIGN_ACCOUNTING_EXCEPT_ZERO:
+            checkNull(macros.sign, content);
+            macros.sign = SignDisplay.ACCOUNTING_EXCEPT_ZERO;
+            return StemType.SIGN_DISPLAY;
+
+        case STEM_DECIMAL_AUTO:
+            checkNull(macros.decimal, content);
+            macros.decimal = DecimalSeparatorDisplay.AUTO;
+            return StemType.DECIMAL_DISPLAY;
+
+        case STEM_DECIMAL_ALWAYS:
+            checkNull(macros.decimal, content);
+            macros.decimal = DecimalSeparatorDisplay.ALWAYS;
+            return StemType.DECIMAL_DISPLAY;
+
+        // Stems requiring an option:
+
+        case STEM_ROUND_INCREMENT:
+            checkNull(macros.rounder, content);
+            return StemType.MAYBE_INCREMENT_ROUNDER;
+
+        case STEM_MEASURE_UNIT:
+            checkNull(macros.unit, content);
+            return StemType.MEASURE_UNIT;
+
+        case STEM_PER_MEASURE_UNIT:
+            checkNull(macros.perUnit, content);
+            return StemType.PER_MEASURE_UNIT;
+
+        case STEM_CURRENCY:
+            checkNull(macros.unit, content);
+            return StemType.CURRENCY;
+
+        case STEM_INTEGER_WIDTH:
+            checkNull(macros.integerWidth, content);
+            return StemType.INTEGER_WIDTH;
+
+        case STEM_NUMBERING_SYSTEM:
+            checkNull(macros.symbols, content);
+            return StemType.NUMBERING_SYSTEM;
+
+        default:
+            throw new AssertionError();
+        }
     }
 
     private static StemType parseOption(StemType stem, CharSequence content, MacroProps macros) {
@@ -454,9 +714,9 @@ class NumberSkeletonImpl {
         return true;
     }
 
-    private static void generateExponentWidthOption(int minInt, int maxInt, StringBuilder sb) {
+    private static void generateExponentWidthOption(int minExponentDigits, StringBuilder sb) {
         sb.append('+');
-        appendMultiple(sb, 'e', minInt);
+        appendMultiple(sb, 'e', minExponentDigits);
     }
 
     private static boolean parseExponentSignOption(CharSequence content, MacroProps macros) {
@@ -793,7 +1053,7 @@ class NumberSkeletonImpl {
             }
             if (impl.minExponentDigits > 1) {
                 sb.append('/');
-                generateExponentWidthOption(impl.minExponentDigits, -1, sb);
+                generateExponentWidthOption(impl.minExponentDigits, sb);
             }
             if (impl.exponentSignDisplay != SignDisplay.AUTO) {
                 sb.append('/');
