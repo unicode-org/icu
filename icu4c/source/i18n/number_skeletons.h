@@ -192,7 +192,7 @@ namespace blueprint_helpers {
 /** @return Whether we successfully found and parsed an exponent width option. */
 bool parseExponentWidthOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
-void generateExponentWidthOption(int32_t xyz, UnicodeString& sb, UErrorCode& status);
+void generateExponentWidthOption(int32_t minExponentDigits, UnicodeString& sb, UErrorCode& status);
 
 /** @return Whether we successfully found and parsed an exponent sign option. */
 bool parseExponentSignOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
@@ -225,7 +225,7 @@ void generateIncrementOption(double increment, UnicodeString& sb, UErrorCode& st
 /** @return Whether we successfully found and parsed a rounding mode. */
 bool parseRoundingModeOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
-void generateRoundingModeOption(RoundingMode, UnicodeString& sb, UErrorCode& status);
+void generateRoundingModeOption(RoundingMode mode, UnicodeString& sb, UErrorCode& status);
 
 void parseIntegerWidthOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 

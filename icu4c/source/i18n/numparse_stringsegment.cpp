@@ -61,7 +61,8 @@ UChar32 StringSegment::codePointAt(int32_t index) const {
 }
 
 UnicodeString StringSegment::toUnicodeString() const {
-    return UnicodeString(fStr, fStart, fEnd - fStart);
+    // Use the readonly-aliasing constructor for efficiency.
+    return UnicodeString(FALSE, fStr.getBuffer() + fStart, fEnd - fStart);
 }
 
 UChar32 StringSegment::getCodePoint() const {

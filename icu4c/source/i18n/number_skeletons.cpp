@@ -1,7 +1,6 @@
 // © 2018 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include <unicode/numberformatter.h>
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
@@ -13,10 +12,11 @@
 #include "number_skeletons.h"
 #include "umutex.h"
 #include "ucln_in.h"
-#include "hash.h"
 #include "patternprops.h"
 #include "unicode/ucharstriebuilder.h"
 #include "number_utils.h"
+#include "number_decimalquantity.h"
+#include "unicode/numberformatter.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -34,6 +34,7 @@ char16_t* kSerializedStemTrie = nullptr;
 UBool U_CALLCONV cleanupNumberSkeletons() {
     uprv_free(kSerializedStemTrie);
     kSerializedStemTrie = nullptr;
+    return TRUE;
 }
 
 void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
@@ -99,7 +100,14 @@ void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
 }
 
 
-#define CHECK_NULL(seen, field, status) void; /* for auto-format line wraping */ \
+inline void appendMultiple(UnicodeString& sb, UChar32 cp, int32_t count) {
+    for (int i = 0; i < count; i++) {
+        sb.append(cp);
+    }
+}
+
+
+#define CHECK_NULL(seen, field, status) (void)(seen); /* for auto-format line wraping */ \
 { \
     if ((seen).field) { \
         (status) = U_NUMBER_SKELETON_SYNTAX_ERROR; \
@@ -107,6 +115,15 @@ void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
     } \
     (seen).field = true; \
 }
+
+
+const char16_t* const kRoundingModeStrings[] = {
+        u"up", u"down", u"ceiling", u"floor", u"half-up", u"half-down", u"half-even", u"unnecessary"};
+
+constexpr int32_t kRoundingModeCount = 8;
+static_assert(
+        sizeof(kRoundingModeStrings) / sizeof(*kRoundingModeStrings) == kRoundingModeCount,
+        "kRoundingModeCount should be the number of rounding modes");
 
 
 } // anonymous namespace
@@ -376,6 +393,7 @@ MacroProps skeleton::parseSkeleton(const UnicodeString& skeletonString, UErrorCo
                 stem = parseOption(stem, segment, macros, status);
             }
             segment.resetLength();
+            if (U_FAILURE(status)) { return macros; }
 
             // Consume the segment:
             segment.adjustOffset(offset);
@@ -439,6 +457,8 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         CHECK_NULL(seen, rounder, status);
             blueprint_helpers::parseDigitsStem(segment, macros, status);
             return STATE_NULL;
+        default:
+            break;
     }
 
     // Now look at the stemsTrie, which is already be pointing at our stem.
@@ -706,6 +726,461 @@ void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString&
 }
 
 
+bool blueprint_helpers::parseExponentWidthOption(const StringSegment& segment, MacroProps& macros,
+                                                 UErrorCode&) {
+    if (segment.charAt(0) != u'+') {
+        return false;
+    }
+    int32_t offset = 1;
+    int32_t minExp = 0;
+    for (; offset < segment.length(); offset++) {
+        if (segment.charAt(offset) == u'e') {
+            minExp++;
+        } else {
+            break;
+        }
+    }
+    if (offset < segment.length()) {
+        return false;
+    }
+    // Use the public APIs to enforce bounds checking
+    macros.notation = static_cast<ScientificNotation&>(macros.notation).withMinExponentDigits(minExp);
+    return true;
+}
+
+void
+blueprint_helpers::generateExponentWidthOption(int32_t minExponentDigits, UnicodeString& sb, UErrorCode&) {
+    sb.append(u'+');
+    appendMultiple(sb, u'e', minExponentDigits);
+}
+
+bool
+blueprint_helpers::parseExponentSignOption(const StringSegment& segment, MacroProps& macros, UErrorCode&) {
+    // Get the sign display type out of the CharsTrie data structure.
+    UCharsTrie tempStemTrie(kSerializedStemTrie);
+    UStringTrieResult result = tempStemTrie.next(segment.toUnicodeString().getBuffer(), segment.length());
+    if (result != USTRINGTRIE_INTERMEDIATE_VALUE && result != USTRINGTRIE_FINAL_VALUE) {
+        return false;
+    }
+    auto sign = stem_to_object::signDisplay(static_cast<StemEnum>(tempStemTrie.getValue()));
+    if (sign == UNUM_SIGN_COUNT) {
+        return false;
+    }
+    macros.notation = static_cast<ScientificNotation&>(macros.notation).withExponentSignDisplay(sign);
+    return true;
+}
+
+void blueprint_helpers::parseCurrencyOption(const StringSegment& segment, MacroProps& macros,
+                                            UErrorCode& status) {
+    if (segment.length() != 3) {
+        // throw new SkeletonSyntaxException("Invalid currency", segment);
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
+    }
+    const UChar* currencyCode = segment.toUnicodeString().getTerminatedBuffer();
+    // Check that the currency code is valid:
+    int32_t numericCode = ucurr_getNumericCode(currencyCode);
+    if (numericCode == 0) {
+        // throw new SkeletonSyntaxException("Invalid currency", segment);
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
+    }
+    // Slicing is OK
+    macros.unit = CurrencyUnit(currencyCode, status); // NOLINT
+}
+
+void
+blueprint_helpers::generateCurrencyOption(const CurrencyUnit& currency, UnicodeString& sb, UErrorCode&) {
+    sb.append(currency.getISOCurrency(), -1);
+}
+
+void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, MacroProps& macros,
+                                               UErrorCode& status) {
+    // NOTE: The category (type) of the unit is guaranteed to be a valid subtag (alphanumeric)
+    // http://unicode.org/reports/tr35/#Validity_Data
+    int firstHyphen = 0;
+    while (firstHyphen < segment.length() && segment.charAt(firstHyphen) != '-') {
+        firstHyphen++;
+    }
+    if (firstHyphen == segment.length()) {
+        // throw new SkeletonSyntaxException("Invalid measure unit option", segment);
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
+    }
+
+    // MeasureUnit is in char space; we need to convert.
+    // Note: the longest type/subtype as of this writing (March 2018) is 24 chars.
+    static constexpr int32_t CAPACITY = 30;
+    char type[CAPACITY];
+    char subType[CAPACITY];
+    const int32_t typeLen = firstHyphen;
+    const int32_t subTypeLen = segment.length() - firstHyphen - 1;
+    if (typeLen + 1 > CAPACITY || subTypeLen + 1 > CAPACITY) {
+        // Type or subtype longer than 30?
+        // The capacity should be increased if this is a problem with a real CLDR unit.
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
+    }
+    u_UCharsToChars(segment.toUnicodeString().getBuffer(), type, typeLen);
+    u_UCharsToChars(segment.toUnicodeString().getBuffer() + firstHyphen + 1, subType, subTypeLen);
+    type[typeLen] = 0;
+    subType[subTypeLen] = 0;
+
+    // Note: the largest type as of this writing (March 2018) is "volume", which has 24 units.
+    MeasureUnit units[30];
+    UErrorCode localStatus = U_ZERO_ERROR;
+    int32_t numUnits = MeasureUnit::getAvailable(type, units, 30, localStatus);
+    if (U_FAILURE(localStatus)) {
+        // More than 30 units in this type?
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
+    }
+    for (int32_t i = 0; i < numUnits; i++) {
+        auto& unit = units[i];
+        if (uprv_strcmp(subType, unit.getSubtype()) == 0) {
+            macros.unit = unit;
+            return;
+        }
+    }
+
+    // throw new SkeletonSyntaxException("Unknown measure unit", segment);
+    status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+}
+
+void blueprint_helpers::generateMeasureUnitOption(const MeasureUnit& measureUnit, UnicodeString& sb,
+                                                  UErrorCode& status) {
+    // We need to convert from char* to UChar*...
+    // See comments in the previous function about the capacity setting.
+    static constexpr int32_t CAPACITY = 30;
+    char16_t type16[CAPACITY];
+    char16_t subType16[CAPACITY];
+    const auto typeLen = static_cast<int32_t>(uprv_strlen(measureUnit.getType()));
+    const auto subTypeLen = static_cast<int32_t>(uprv_strlen(measureUnit.getSubtype()));
+    if (typeLen + 1 > CAPACITY || subTypeLen + 1 > CAPACITY) {
+        // Type or subtype longer than 30?
+        // The capacity should be increased if this is a problem with a real CLDR unit.
+        status = U_UNSUPPORTED_ERROR;
+        return;
+    }
+    u_charsToUChars(measureUnit.getType(), type16, typeLen);
+    u_charsToUChars(measureUnit.getSubtype(), subType16, subTypeLen);
+
+    sb.append(type16, typeLen);
+    sb.append(u'-');
+    sb.append(subType16, subTypeLen);
+}
+
+void blueprint_helpers::parseMeasurePerUnitOption(const StringSegment& segment, MacroProps& macros,
+                                                  UErrorCode& status) {
+    // A little bit of a hack: safe the current unit (numerator), call the main measure unit
+    // parsing code, put back the numerator unit, and put the new unit into per-unit.
+    MeasureUnit numerator = macros.unit;
+    parseMeasureUnitOption(segment, macros, status);
+    macros.perUnit = macros.unit;
+    macros.unit = numerator;
+}
+
+void blueprint_helpers::parseFractionStem(const StringSegment& segment, MacroProps& macros,
+                                          UErrorCode& status) {
+    U_ASSERT(segment.charAt(0) == u'.');
+    int32_t offset = 1;
+    int32_t minFrac = 0;
+    int32_t maxFrac;
+    for (; offset < segment.length(); offset++) {
+        if (segment.charAt(offset) == u'0') {
+            minFrac++;
+        } else {
+            break;
+        }
+    }
+    if (offset < segment.length()) {
+        if (segment.charAt(offset) == u'+') {
+            maxFrac = -1;
+            offset++;
+        } else {
+            maxFrac = minFrac;
+            for (; offset < segment.length(); offset++) {
+                if (segment.charAt(offset) == u'#') {
+                    maxFrac++;
+                } else {
+                    break;
+                }
+            }
+        }
+    } else {
+        maxFrac = minFrac;
+    }
+    if (offset < segment.length()) {
+        // throw new SkeletonSyntaxException("Invalid fraction stem", segment);
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
+    }
+    // Use the public APIs to enforce bounds checking
+    if (maxFrac == -1) {
+        macros.rounder = Rounder::minFraction(minFrac);
+    } else {
+        macros.rounder = Rounder::minMaxFraction(minFrac, maxFrac);
+    }
+}
+
+void
+blueprint_helpers::generateFractionStem(int32_t minFrac, int32_t maxFrac, UnicodeString& sb, UErrorCode&) {
+    if (minFrac == 0 && maxFrac == 0) {
+        sb.append(u"round-integer", -1);
+        return;
+    }
+    sb.append(u'.');
+    appendMultiple(sb, u'0', minFrac);
+    if (maxFrac == -1) {
+        sb.append(u'+');
+    } else {
+        appendMultiple(sb, u'#', maxFrac - minFrac);
+    }
+}
+
+void
+blueprint_helpers::parseDigitsStem(const StringSegment& segment, MacroProps& macros, UErrorCode& status) {
+    U_ASSERT(segment.charAt(0) == u'@');
+    int offset = 0;
+    int minSig = 0;
+    int maxSig;
+    for (; offset < segment.length(); offset++) {
+        if (segment.charAt(offset) == u'@') {
+            minSig++;
+        } else {
+            break;
+        }
+    }
+    if (offset < segment.length()) {
+        if (segment.charAt(offset) == u'+') {
+            maxSig = -1;
+            offset++;
+        } else {
+            maxSig = minSig;
+            for (; offset < segment.length(); offset++) {
+                if (segment.charAt(offset) == u'#') {
+                    maxSig++;
+                } else {
+                    break;
+                }
+            }
+        }
+    } else {
+        maxSig = minSig;
+    }
+    if (offset < segment.length()) {
+        // throw new SkeletonSyntaxException("Invalid significant digits stem", segment);
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+    }
+    // Use the public APIs to enforce bounds checking
+    if (maxSig == -1) {
+        macros.rounder = Rounder::minDigits(minSig);
+    } else {
+        macros.rounder = Rounder::minMaxDigits(minSig, maxSig);
+    }
+}
+
+void
+blueprint_helpers::generateDigitsStem(int32_t minSig, int32_t maxSig, UnicodeString& sb, UErrorCode&) {
+    appendMultiple(sb, u'@', minSig);
+    if (maxSig == -1) {
+        sb.append(u'+');
+    } else {
+        appendMultiple(sb, u'#', maxSig - minSig);
+    }
+}
+
+bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroProps& macros,
+                                           UErrorCode& status) {
+    if (segment.charAt(0) != u'@') {
+        return false;
+    }
+    int offset = 0;
+    int minSig = 0;
+    int maxSig;
+    for (; offset < segment.length(); offset++) {
+        if (segment.charAt(offset) == u'@') {
+            minSig++;
+        } else {
+            break;
+        }
+    }
+    // For the frac-sig option, there must be minSig or maxSig but not both.
+    // Valid: @+, @@+, @@@+
+    // Valid: @#, @##, @###
+    // Invalid: @, @@, @@@
+    // Invalid: @@#, @@##, @@@#
+    if (offset < segment.length()) {
+        if (segment.charAt(offset) == u'+') {
+            maxSig = -1;
+            offset++;
+        } else if (minSig > 1) {
+            // @@#, @@##, @@@#
+            // throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
+            status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+            return false;
+        } else {
+            maxSig = minSig;
+            for (; offset < segment.length(); offset++) {
+                if (segment.charAt(offset) == u'#') {
+                    maxSig++;
+                } else {
+                    break;
+                }
+            }
+        }
+    } else {
+        // @, @@, @@@
+        // throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return false;
+    }
+    if (offset < segment.length()) {
+        // throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return false;
+    }
+
+    auto& oldRounder = static_cast<const FractionRounder&>(macros.rounder);
+    if (maxSig == -1) {
+        macros.rounder = oldRounder.withMinDigits(minSig);
+    } else {
+        macros.rounder = oldRounder.withMaxDigits(maxSig);
+    }
+    return true;
+}
+
+void blueprint_helpers::parseIncrementOption(const StringSegment& segment, MacroProps& macros,
+                                             UErrorCode& status) {
+    // Utilize DecimalQuantity/decNumber to parse this for us.
+    static constexpr int32_t CAPACITY = 30;
+    char buffer[CAPACITY];
+    if (segment.length() > CAPACITY) {
+        // No support for numbers this long; they won't fit in a double anyway.
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
+    }
+    u_UCharsToChars(segment.toUnicodeString().getBuffer(), buffer, segment.length());
+    DecimalQuantity dq;
+    dq.setToDecNumber({buffer, segment.length()});
+    double increment = dq.toDouble();
+    macros.rounder = Rounder::increment(increment);
+}
+
+void blueprint_helpers::generateIncrementOption(double increment, UnicodeString& sb, UErrorCode&) {
+    // Utilize DecimalQuantity/double_conversion to format this for us.
+    DecimalQuantity dq;
+    dq.setToDouble(increment);
+    dq.roundToInfinity();
+    sb.append(dq.toPlainString());
+}
+
+bool
+blueprint_helpers::parseRoundingModeOption(const StringSegment& segment, MacroProps& macros, UErrorCode&) {
+    for (int rm = 0; rm < kRoundingModeCount; rm++) {
+        if (segment == UnicodeString(kRoundingModeStrings[rm], -1)) {
+            macros.rounder = macros.rounder.withMode(static_cast<RoundingMode>(rm));
+            return true;
+        }
+    }
+    return false;
+}
+
+void blueprint_helpers::generateRoundingModeOption(RoundingMode mode, UnicodeString& sb, UErrorCode&) {
+    sb.append(kRoundingModeStrings[mode], -1);
+}
+
+void blueprint_helpers::parseIntegerWidthOption(const StringSegment& segment, MacroProps& macros,
+                                                UErrorCode& status) {
+    int32_t offset = 0;
+    int32_t minInt = 0;
+    int32_t maxInt;
+    if (segment.charAt(0) == u'+') {
+        maxInt = -1;
+        offset++;
+    } else {
+        maxInt = 0;
+    }
+    for (; offset < segment.length(); offset++) {
+        if (segment.charAt(offset) == u'#') {
+            maxInt++;
+        } else {
+            break;
+        }
+    }
+    if (offset < segment.length()) {
+        for (; offset < segment.length(); offset++) {
+            if (segment.charAt(offset) == u'0') {
+                minInt++;
+            } else {
+                break;
+            }
+        }
+    }
+    if (maxInt != -1) {
+        maxInt += minInt;
+    }
+    if (offset < segment.length()) {
+        // throw new SkeletonSyntaxException("Invalid integer width stem", segment);
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
+    }
+    // Use the public APIs to enforce bounds checking
+    if (maxInt == -1) {
+        macros.integerWidth = IntegerWidth::zeroFillTo(minInt);
+    } else {
+        macros.integerWidth = IntegerWidth::zeroFillTo(minInt).truncateAt(maxInt);
+    }
+}
+
+void blueprint_helpers::generateIntegerWidthOption(int32_t minInt, int32_t maxInt, UnicodeString& sb,
+                                                   UErrorCode&) {
+    if (maxInt == -1) {
+        sb.append(u'+');
+    } else {
+        appendMultiple(sb, u'#', maxInt - minInt);
+    }
+    appendMultiple(sb, u'0', minInt);
+}
+
+void blueprint_helpers::parseNumberingSystemOption(const StringSegment& segment, MacroProps& macros,
+                                                   UErrorCode& status) {
+    // Need to do char <-> UChar conversion...
+    static constexpr int32_t CAPACITY = 30;
+    char buffer[CAPACITY];
+    if (segment.length() + 1 > CAPACITY) {
+        // No support for numbers this long; they won't fit in a double anyway.
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
+    }
+    u_UCharsToChars(segment.toUnicodeString().getBuffer(), buffer, segment.length());
+    buffer[segment.length()] = 0;
+
+    NumberingSystem* ns = NumberingSystem::createInstanceByName(buffer, status);
+    if (ns == nullptr) {
+        // throw new SkeletonSyntaxException("Unknown numbering system", segment);
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
+    }
+    macros.symbols.setTo(ns);
+}
+
+void blueprint_helpers::generateNumberingSystemOption(const NumberingSystem& ns, UnicodeString& sb,
+                                                      UErrorCode& status) {
+    // Need to do char <-> UChar conversion...
+    static constexpr int32_t CAPACITY = 30;
+    char16_t buffer16[CAPACITY];
+    const auto len = static_cast<int32_t>(uprv_strlen(ns.getName()));
+    if (len > CAPACITY) {
+        // No support for numbers this long; they won't fit in a double anyway.
+        status = U_UNSUPPORTED_ERROR;
+        return;
+    }
+    u_charsToUChars(ns.getName(), buffer16, len);
+    sb.append(buffer16, len);
+}
+
+
 bool GeneratorHelpers::notation(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
     if (macros.notation.fType == Notation::NTN_COMPACT) {
         UNumberCompactStyle style = macros.notation.fUnion.compactStyle;
@@ -770,6 +1245,7 @@ bool GeneratorHelpers::perUnit(const MacroProps& macros, UnicodeString& sb, UErr
     // Per-units are currently expected to be only MeasureUnits.
     if (unitIsCurrency(macros.perUnit) || unitIsNoUnit(macros.perUnit)) {
         status = U_UNSUPPORTED_ERROR;
+        return false;
     } else {
         sb.append(u"per-measure-unit/", -1);
         blueprint_helpers::generateMeasureUnitOption(macros.perUnit, sb, status);
@@ -824,10 +1300,12 @@ bool GeneratorHelpers::rounding(const MacroProps& macros, UnicodeString& sb, UEr
 bool GeneratorHelpers::grouping(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
     if (macros.grouper.isBogus() || macros.grouper.fStrategy == UNUM_GROUPING_COUNT) {
         status = U_UNSUPPORTED_ERROR;
+        return false;
     } else if (macros.grouper.fStrategy == UNUM_GROUPING_AUTO) {
         return false; // Default value
     } else {
         enum_to_stem_string::groupingStrategy(macros.grouper.fStrategy, sb);
+        return true;
     }
 }
 
@@ -864,7 +1342,7 @@ bool GeneratorHelpers::symbols(const MacroProps& macros, UnicodeString& sb, UErr
     }
 }
 
-bool GeneratorHelpers::unitWidth(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+bool GeneratorHelpers::unitWidth(const MacroProps& macros, UnicodeString& sb, UErrorCode&) {
     if (macros.unitWidth == UNUM_UNIT_WIDTH_SHORT || macros.unitWidth == UNUM_UNIT_WIDTH_COUNT) {
         return false; // Default or Bogus
     }
@@ -872,7 +1350,7 @@ bool GeneratorHelpers::unitWidth(const MacroProps& macros, UnicodeString& sb, UE
     return true;
 }
 
-bool GeneratorHelpers::sign(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+bool GeneratorHelpers::sign(const MacroProps& macros, UnicodeString& sb, UErrorCode&) {
     if (macros.sign == UNUM_SIGN_AUTO || macros.sign == UNUM_SIGN_COUNT) {
         return false; // Default or Bogus
     }
@@ -880,7 +1358,7 @@ bool GeneratorHelpers::sign(const MacroProps& macros, UnicodeString& sb, UErrorC
     return true;
 }
 
-bool GeneratorHelpers::decimal(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+bool GeneratorHelpers::decimal(const MacroProps& macros, UnicodeString& sb, UErrorCode&) {
     if (macros.decimal == UNUM_DECIMAL_SEPARATOR_AUTO || macros.decimal == UNUM_DECIMAL_SEPARATOR_COUNT) {
         return false; // Default or Bogus
     }

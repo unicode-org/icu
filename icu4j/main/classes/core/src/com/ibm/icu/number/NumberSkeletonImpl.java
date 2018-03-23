@@ -884,13 +884,14 @@ class NumberSkeletonImpl {
         }
 
         private static void generateMeasureUnitOption(MeasureUnit unit, StringBuilder sb) {
-            sb.append(unit.getType() + "-" + unit.getSubtype());
+            sb.append(unit.getType());
+            sb.append("-");
+            sb.append(unit.getSubtype());
         }
 
         private static void parseMeasurePerUnitOption(StringSegment segment, MacroProps macros) {
             // A little bit of a hack: safe the current unit (numerator), call the main measure unit
-            // parsing
-            // code, put back the numerator unit, and put the new unit into per-unit.
+            // parsing code, put back the numerator unit, and put the new unit into per-unit.
             MeasureUnit numerator = macros.unit;
             parseMeasureUnitOption(segment, macros);
             macros.perUnit = macros.unit;
@@ -1083,8 +1084,7 @@ class NumberSkeletonImpl {
         }
 
         private static void generateRoundingModeOption(RoundingMode mode, StringBuilder sb) {
-            String option = ROUNDING_MODE_STRINGS[mode.ordinal()];
-            sb.append(option);
+            sb.append(ROUNDING_MODE_STRINGS[mode.ordinal()]);
         }
 
         private static void parseIntegerWidthOption(StringSegment segment, MacroProps macros) {
