@@ -5090,6 +5090,7 @@ icu4c/source/test/intltest/numbertest_modifiers.cpp svneol=native#text/plain%3Bc
 icu4c/source/test/intltest/numbertest_parse.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/numbertest_patternmodifier.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/numbertest_patternstring.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/test/intltest/numbertest_skeletons.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/numbertest_stringbuilder.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/numbertest_stringsegment.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/numbertest_unisets.cpp svneol=native#text/plain%3Bcharset%3Dutf-8

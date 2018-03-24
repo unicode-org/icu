@@ -22,16 +22,6 @@ import com.ibm.icu.util.ULocale;
 public class NumberSkeletonTest {
 
     @Test
-    public void duplicateValues() {
-        try {
-            NumberFormatter.fromSkeleton("round-integer round-integer");
-            fail();
-        } catch (SkeletonSyntaxException expected) {
-            assertTrue(expected.getMessage(), expected.getMessage().contains("Duplicated setting"));
-        }
-    }
-
-    @Test
     public void validTokens() {
         // This tests only if the tokens are valid, not their behavior.
         // Most of these are from the design doc.
@@ -69,6 +59,7 @@ public class NumberSkeletonTest {
                 "measure-unit/area-square-meter",
                 "measure-unit/energy-joule per-measure-unit/length-meter",
                 "currency/XXX",
+                "currency/ZZZ",
                 "group-off",
                 "group-min2",
                 "group-auto",
@@ -138,7 +129,7 @@ public class NumberSkeletonTest {
         for (String cas : cases) {
             try {
                 NumberFormatter.fromSkeleton(cas);
-                fail("Skeleton parses, but it should have failed: " + cas);
+                fail(cas);
             } catch (SkeletonSyntaxException expected) {
                 assertTrue(expected.getMessage(), expected.getMessage().contains("Invalid"));
             }
@@ -147,12 +138,20 @@ public class NumberSkeletonTest {
 
     @Test
     public void unknownTokens() {
-        String[] cases = { "maesure-unit", "measure-unit/foo-bar", "numbering-system/dummy" };
+        String[] cases = {
+                "maesure-unit",
+                "measure-unit/foo-bar",
+                "numbering-system/dummy",
+                "français",
+                "measure-unit/français-français", // non-invariant characters for C++
+                "numbering-system/français", // non-invariant characters for C++
+                "round-increment/français", // non-invariant characters for C++
+                "currency-USD" };
 
         for (String cas : cases) {
             try {
                 NumberFormatter.fromSkeleton(cas);
-                fail();
+                fail(cas);
             } catch (SkeletonSyntaxException expected) {
                 assertTrue(expected.getMessage(), expected.getMessage().contains("Unknown"));
             }
@@ -171,9 +170,30 @@ public class NumberSkeletonTest {
         for (String cas : cases) {
             try {
                 NumberFormatter.fromSkeleton(cas);
-                fail();
+                fail(cas);
             } catch (SkeletonSyntaxException expected) {
                 assertTrue(expected.getMessage(), expected.getMessage().contains("Unexpected"));
+            }
+        }
+    }
+
+    @Test
+    public void duplicateValues() {
+        String[] cases = {
+                "round-integer round-integer",
+                "round-integer .00+",
+                "round-integer round-unlimited",
+                "round-integer @@@",
+                "scientific engineering",
+                "engineering compact-long",
+                "sign-auto sign-always" };
+
+        for (String cas : cases) {
+            try {
+                NumberFormatter.fromSkeleton(cas);
+                fail(cas);
+            } catch (SkeletonSyntaxException expected) {
+                assertTrue(expected.getMessage(), expected.getMessage().contains("Duplicated"));
             }
         }
     }

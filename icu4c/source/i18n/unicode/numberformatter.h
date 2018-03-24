@@ -2180,6 +2180,25 @@ class U_I18N_API NumberFormatterSettings {
 #endif  /* U_HIDE_INTERNAL_API */
 
     /**
+     * Creates a skeleton string representation of this number formatter. A skeleton string is a
+     * locale-agnostic serialized form of a number formatter.
+     * <p>
+     * Not all options are capable of being represented in the skeleton string; for example, a
+     * DecimalFormatSymbols object. If any such option is encountered, an
+     * {@link UnsupportedOperationException} is thrown.
+     * <p>
+     * The returned skeleton is in normalized form, such that two number formatters with equivalent
+     * behavior should produce the same skeleton.
+     * <p>
+     * Sets an error code if the number formatter has an option that cannot be represented in a skeleton
+     * string.
+     *
+     * @return A number skeleton string with behavior corresponding to this number formatter.
+     * @draft ICU 62
+     */
+    UnicodeString toSkeleton(UErrorCode& status) const;
+
+    /**
      * Sets the UErrorCode if an error occurred in the fluent chain.
      * Preserves older error codes in the outErrorCode.
      * @return TRUE if U_FAILURE(outErrorCode)
@@ -2192,7 +2211,7 @@ class U_I18N_API NumberFormatterSettings {
         }
         fMacros.copyErrorTo(outErrorCode);
         return U_FAILURE(outErrorCode);
-    }
+    };
 
     // NOTE: Uses default copy and move constructors.
 
@@ -2587,6 +2606,18 @@ class U_I18N_API NumberFormatter final {
      * @draft ICU 60
      */
     static LocalizedNumberFormatter withLocale(const Locale &locale);
+
+    /**
+     * Call this method at the beginning of a NumberFormatter fluent chain to create an instance based
+     * on a given number skeleton string.
+     *
+     * @param skeleton
+     *            The skeleton string off of which to base this NumberFormatter.
+     * @return An UnlocalizedNumberFormatter, to be used for chaining.
+     * @throws SkeletonSyntaxException If the given string is not a valid number formatting skeleton.
+     * @draft ICU 62
+     */
+    static UnlocalizedNumberFormatter fromSkeleton(const UnicodeString& skeleton, UErrorCode& status);
 
     /**
      * Use factory methods instead of the constructor to create a NumberFormatter.

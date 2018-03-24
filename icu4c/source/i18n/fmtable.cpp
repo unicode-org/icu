@@ -795,7 +795,7 @@ Formattable::setDecimalNumber(StringPiece numberString, UErrorCode &status) {
     dispose();
 
     DecimalQuantity* dq = new DecimalQuantity();
-    dq->setToDecNumber(numberString);
+    dq->setToDecNumber(numberString, status);
     adoptDecimalQuantity(dq);
 
     // Note that we do not hang on to the caller's input string.

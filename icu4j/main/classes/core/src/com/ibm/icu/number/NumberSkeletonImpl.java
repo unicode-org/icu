@@ -850,11 +850,14 @@ class NumberSkeletonImpl {
 
         private static void parseCurrencyOption(StringSegment segment, MacroProps macros) {
             String currencyCode = segment.subSequence(0, segment.length()).toString();
+            Currency currency;
             try {
-                macros.unit = Currency.getInstance(currencyCode);
+                currency = Currency.getInstance(currencyCode);
             } catch (IllegalArgumentException e) {
+                // Not 3 ascii chars
                 throw new SkeletonSyntaxException("Invalid currency", segment, e);
             }
+            macros.unit = currency;
         }
 
         private static void generateCurrencyOption(Currency currency, StringBuilder sb) {

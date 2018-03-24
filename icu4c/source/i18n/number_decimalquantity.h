@@ -145,7 +145,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
 
     /** decNumber is similar to BigDecimal in Java. */
 
-    DecimalQuantity &setToDecNumber(StringPiece n);
+    DecimalQuantity &setToDecNumber(StringPiece n, UErrorCode& status);
 
     /**
      * Appends a digit, optionally with one or more leading zeros, to the end of the value represented

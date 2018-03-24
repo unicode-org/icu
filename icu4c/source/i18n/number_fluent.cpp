@@ -11,6 +11,7 @@
 #include "number_decimalquantity.h"
 #include "number_formatimpl.h"
 #include "umutex.h"
+#include "number_skeletons.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -287,6 +288,11 @@ Derived NumberFormatterSettings<Derived>::macros(impl::MacroProps&& macros) && {
     return move;
 }
 
+template<typename Derived>
+UnicodeString NumberFormatterSettings<Derived>::toSkeleton(UErrorCode& status) const {
+    return skeleton::generate(fMacros, status);
+}
+
 // Declare all classes that implement NumberFormatterSettings
 // See https://stackoverflow.com/a/495056/1407170
 template
@@ -302,6 +308,11 @@ UnlocalizedNumberFormatter NumberFormatter::with() {
 
 LocalizedNumberFormatter NumberFormatter::withLocale(const Locale& locale) {
     return with().locale(locale);
+}
+
+UnlocalizedNumberFormatter
+NumberFormatter::fromSkeleton(const UnicodeString& skeleton, UErrorCode& status) {
+    return skeleton::create(skeleton, status);
 }
 
 
@@ -563,7 +574,7 @@ FormattedNumber LocalizedNumberFormatter::formatDecimal(StringPiece value, UErro
         status = U_MEMORY_ALLOCATION_ERROR;
         return FormattedNumber(status);
     }
-    results->quantity.setToDecNumber(value);
+    results->quantity.setToDecNumber(value, status);
     return formatImpl(results, status);
 }
 

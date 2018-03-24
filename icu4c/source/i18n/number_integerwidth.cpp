@@ -39,7 +39,7 @@ IntegerWidth IntegerWidth::truncateAt(int32_t maxInt) {
     }
 }
 
-void IntegerWidth::apply(impl::DecimalQuantity &quantity, UErrorCode &status) const {
+void IntegerWidth::apply(impl::DecimalQuantity& quantity, UErrorCode& status) const {
     if (fHasError) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
     } else if (fUnion.minMaxInt.fMaxInt == -1) {
@@ -50,12 +50,13 @@ void IntegerWidth::apply(impl::DecimalQuantity &quantity, UErrorCode &status) co
 }
 
 bool IntegerWidth::operator==(const IntegerWidth& other) const {
-    if (fHasError) {
-        return other.fHasError && fUnion.errorCode == other.fUnion.errorCode;
-    } else {
-        return !other.fHasError && fUnion.minMaxInt.fMinInt == other.fUnion.minMaxInt.fMinInt &&
-               fUnion.minMaxInt.fMaxInt == other.fUnion.minMaxInt.fMaxInt;
-    }
+    // Private operator==; do error and bogus checking first!
+    U_ASSERT(!fHasError);
+    U_ASSERT(!other.fHasError);
+    U_ASSERT(!isBogus());
+    U_ASSERT(!other.isBogus());
+    return fUnion.minMaxInt.fMinInt == other.fUnion.minMaxInt.fMinInt &&
+           fUnion.minMaxInt.fMaxInt == other.fUnion.minMaxInt.fMaxInt;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -17,13 +17,13 @@
 #include "number_utils.h"
 #include "number_decimalquantity.h"
 #include "unicode/numberformatter.h"
+#include "uinvchar.h"
+#include "charstr.h"
 
 using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
 using namespace icu::number::impl::skeleton;
-
-static constexpr UErrorCode U_NUMBER_SKELETON_SYNTAX_ERROR = U_ILLEGAL_ARGUMENT_ERROR;
 
 namespace {
 
@@ -107,7 +107,7 @@ inline void appendMultiple(UnicodeString& sb, UChar32 cp, int32_t count) {
 }
 
 
-#define CHECK_NULL(seen, field, status) (void)(seen); /* for auto-format line wraping */ \
+#define CHECK_NULL(seen, field, status) (void)(seen); /* for auto-format line wrapping */ \
 { \
     if ((seen).field) { \
         (status) = U_NUMBER_SKELETON_SYNTAX_ERROR; \
@@ -117,8 +117,24 @@ inline void appendMultiple(UnicodeString& sb, UChar32 cp, int32_t count) {
 }
 
 
+#define SKELETON_UCHAR_TO_CHAR(dest, src, start, end, status) (void)(dest); \
+{ \
+    UErrorCode conversionStatus = U_ZERO_ERROR; \
+    (dest).appendInvariantChars({FALSE, (src).getBuffer() + (start), (end) - (start)}, conversionStatus); \
+    if (conversionStatus == U_INVARIANT_CONVERSION_ERROR) { \
+        /* Don't propagate the invariant conversion error; it is a skeleton syntax error */ \
+        (status) = U_NUMBER_SKELETON_SYNTAX_ERROR; \
+        return; \
+    } else if (U_FAILURE(conversionStatus)) { \
+        (status) = conversionStatus; \
+        return; \
+    } \
+}
+
+
+// NOTE: The order of these strings must be consistent with UNumberFormatRoundingMode
 const char16_t* const kRoundingModeStrings[] = {
-        u"up", u"down", u"ceiling", u"floor", u"half-up", u"half-down", u"half-even", u"unnecessary"};
+        u"ceiling", u"floor", u"down", u"up", u"half-even", u"half-down", u"half-up", u"unnecessary"};
 
 constexpr int32_t kRoundingModeCount = 8;
 static_assert(
@@ -357,14 +373,14 @@ MacroProps skeleton::parseSkeleton(const UnicodeString& skeletonString, UErrorCo
 
     SeenMacroProps seen;
     MacroProps macros;
-    StringSegment segment(skeletonString, false);
+    StringSegment segment(tempSkeletonString, false);
     UCharsTrie stemTrie(kSerializedStemTrie);
     ParseState stem = STATE_NULL;
-    int offset = 0;
+    int32_t offset = 0;
 
     // Primary skeleton parse loop:
     while (offset < segment.length()) {
-        int cp = segment.codePointAt(offset);
+        UChar32 cp = segment.codePointAt(offset);
         bool isTokenSeparator = PatternProps::isWhiteSpace(cp);
         bool isOptionSeparator = (cp == u'/');
 
@@ -772,21 +788,17 @@ blueprint_helpers::parseExponentSignOption(const StringSegment& segment, MacroPr
 
 void blueprint_helpers::parseCurrencyOption(const StringSegment& segment, MacroProps& macros,
                                             UErrorCode& status) {
-    if (segment.length() != 3) {
-        // throw new SkeletonSyntaxException("Invalid currency", segment);
-        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
-        return;
-    }
     const UChar* currencyCode = segment.toUnicodeString().getTerminatedBuffer();
-    // Check that the currency code is valid:
-    int32_t numericCode = ucurr_getNumericCode(currencyCode);
-    if (numericCode == 0) {
+    UErrorCode localStatus = U_ZERO_ERROR;
+    CurrencyUnit currency(currencyCode, localStatus);
+    if (U_FAILURE(localStatus)) {
+        // Not 3 ascii chars
         // throw new SkeletonSyntaxException("Invalid currency", segment);
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return;
     }
     // Slicing is OK
-    macros.unit = CurrencyUnit(currencyCode, status); // NOLINT
+    macros.unit = currency; // NOLINT
 }
 
 void
@@ -796,48 +808,40 @@ blueprint_helpers::generateCurrencyOption(const CurrencyUnit& currency, UnicodeS
 
 void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, MacroProps& macros,
                                                UErrorCode& status) {
+    UnicodeString stemString = segment.toUnicodeString();
+
     // NOTE: The category (type) of the unit is guaranteed to be a valid subtag (alphanumeric)
     // http://unicode.org/reports/tr35/#Validity_Data
     int firstHyphen = 0;
-    while (firstHyphen < segment.length() && segment.charAt(firstHyphen) != '-') {
+    while (firstHyphen < stemString.length() && stemString.charAt(firstHyphen) != '-') {
         firstHyphen++;
     }
-    if (firstHyphen == segment.length()) {
+    if (firstHyphen == stemString.length()) {
         // throw new SkeletonSyntaxException("Invalid measure unit option", segment);
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return;
     }
 
-    // MeasureUnit is in char space; we need to convert.
-    // Note: the longest type/subtype as of this writing (March 2018) is 24 chars.
-    static constexpr int32_t CAPACITY = 30;
-    char type[CAPACITY];
-    char subType[CAPACITY];
-    const int32_t typeLen = firstHyphen;
-    const int32_t subTypeLen = segment.length() - firstHyphen - 1;
-    if (typeLen + 1 > CAPACITY || subTypeLen + 1 > CAPACITY) {
-        // Type or subtype longer than 30?
-        // The capacity should be increased if this is a problem with a real CLDR unit.
-        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
-        return;
-    }
-    u_UCharsToChars(segment.toUnicodeString().getBuffer(), type, typeLen);
-    u_UCharsToChars(segment.toUnicodeString().getBuffer() + firstHyphen + 1, subType, subTypeLen);
-    type[typeLen] = 0;
-    subType[subTypeLen] = 0;
+    // Need to do char <-> UChar conversion...
+    if (U_FAILURE(status)) { return; }
+    CharString type;
+    SKELETON_UCHAR_TO_CHAR(type, stemString, 0, firstHyphen, status);
+    CharString subType;
+    SKELETON_UCHAR_TO_CHAR(subType, stemString, firstHyphen + 1, stemString.length(), status);
 
     // Note: the largest type as of this writing (March 2018) is "volume", which has 24 units.
-    MeasureUnit units[30];
+    static constexpr int32_t CAPACITY = 30;
+    MeasureUnit units[CAPACITY];
     UErrorCode localStatus = U_ZERO_ERROR;
-    int32_t numUnits = MeasureUnit::getAvailable(type, units, 30, localStatus);
+    int32_t numUnits = MeasureUnit::getAvailable(type.data(), units, CAPACITY, localStatus);
     if (U_FAILURE(localStatus)) {
         // More than 30 units in this type?
-        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }
     for (int32_t i = 0; i < numUnits; i++) {
         auto& unit = units[i];
-        if (uprv_strcmp(subType, unit.getSubtype()) == 0) {
+        if (uprv_strcmp(subType.data(), unit.getSubtype()) == 0) {
             macros.unit = unit;
             return;
         }
@@ -848,26 +852,11 @@ void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, Mac
 }
 
 void blueprint_helpers::generateMeasureUnitOption(const MeasureUnit& measureUnit, UnicodeString& sb,
-                                                  UErrorCode& status) {
-    // We need to convert from char* to UChar*...
-    // See comments in the previous function about the capacity setting.
-    static constexpr int32_t CAPACITY = 30;
-    char16_t type16[CAPACITY];
-    char16_t subType16[CAPACITY];
-    const auto typeLen = static_cast<int32_t>(uprv_strlen(measureUnit.getType()));
-    const auto subTypeLen = static_cast<int32_t>(uprv_strlen(measureUnit.getSubtype()));
-    if (typeLen + 1 > CAPACITY || subTypeLen + 1 > CAPACITY) {
-        // Type or subtype longer than 30?
-        // The capacity should be increased if this is a problem with a real CLDR unit.
-        status = U_UNSUPPORTED_ERROR;
-        return;
-    }
-    u_charsToUChars(measureUnit.getType(), type16, typeLen);
-    u_charsToUChars(measureUnit.getSubtype(), subType16, subTypeLen);
-
-    sb.append(type16, typeLen);
+                                                  UErrorCode&) {
+    // Need to do char <-> UChar conversion...
+    sb.append(UnicodeString(measureUnit.getType(), -1, US_INV));
     sb.append(u'-');
-    sb.append(subType16, subTypeLen);
+    sb.append(UnicodeString(measureUnit.getSubtype(), -1, US_INV));
 }
 
 void blueprint_helpers::parseMeasurePerUnitOption(const StringSegment& segment, MacroProps& macros,
@@ -1052,17 +1041,19 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
 
 void blueprint_helpers::parseIncrementOption(const StringSegment& segment, MacroProps& macros,
                                              UErrorCode& status) {
+    // Need to do char <-> UChar conversion...
+    CharString buffer;
+    SKELETON_UCHAR_TO_CHAR(buffer, segment.toUnicodeString(), 0, segment.length(), status);
+
     // Utilize DecimalQuantity/decNumber to parse this for us.
-    static constexpr int32_t CAPACITY = 30;
-    char buffer[CAPACITY];
-    if (segment.length() > CAPACITY) {
-        // No support for numbers this long; they won't fit in a double anyway.
+    DecimalQuantity dq;
+    UErrorCode localStatus = U_ZERO_ERROR;
+    dq.setToDecNumber({buffer.data(), buffer.length()}, localStatus);
+    if (U_FAILURE(localStatus)) {
+        // throw new SkeletonSyntaxException("Invalid rounding increment", segment, e);
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return;
     }
-    u_UCharsToChars(segment.toUnicodeString().getBuffer(), buffer, segment.length());
-    DecimalQuantity dq;
-    dq.setToDecNumber({buffer, segment.length()});
     double increment = dq.toDouble();
     macros.rounder = Rounder::increment(increment);
 }
@@ -1146,17 +1137,10 @@ void blueprint_helpers::generateIntegerWidthOption(int32_t minInt, int32_t maxIn
 void blueprint_helpers::parseNumberingSystemOption(const StringSegment& segment, MacroProps& macros,
                                                    UErrorCode& status) {
     // Need to do char <-> UChar conversion...
-    static constexpr int32_t CAPACITY = 30;
-    char buffer[CAPACITY];
-    if (segment.length() + 1 > CAPACITY) {
-        // No support for numbers this long; they won't fit in a double anyway.
-        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
-        return;
-    }
-    u_UCharsToChars(segment.toUnicodeString().getBuffer(), buffer, segment.length());
-    buffer[segment.length()] = 0;
+    CharString buffer;
+    SKELETON_UCHAR_TO_CHAR(buffer, segment.toUnicodeString(), 0, segment.length(), status);
 
-    NumberingSystem* ns = NumberingSystem::createInstanceByName(buffer, status);
+    NumberingSystem* ns = NumberingSystem::createInstanceByName(buffer.data(), status);
     if (ns == nullptr) {
         // throw new SkeletonSyntaxException("Unknown numbering system", segment);
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
@@ -1166,18 +1150,9 @@ void blueprint_helpers::parseNumberingSystemOption(const StringSegment& segment,
 }
 
 void blueprint_helpers::generateNumberingSystemOption(const NumberingSystem& ns, UnicodeString& sb,
-                                                      UErrorCode& status) {
+                                                      UErrorCode&) {
     // Need to do char <-> UChar conversion...
-    static constexpr int32_t CAPACITY = 30;
-    char16_t buffer16[CAPACITY];
-    const auto len = static_cast<int32_t>(uprv_strlen(ns.getName()));
-    if (len > CAPACITY) {
-        // No support for numbers this long; they won't fit in a double anyway.
-        status = U_UNSUPPORTED_ERROR;
-        return;
-    }
-    u_charsToUChars(ns.getName(), buffer16, len);
-    sb.append(buffer16, len);
+    sb.append(UnicodeString(ns.getName(), -1, US_INV));
 }
 
 
@@ -1243,7 +1218,15 @@ bool GeneratorHelpers::unit(const MacroProps& macros, UnicodeString& sb, UErrorC
 
 bool GeneratorHelpers::perUnit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
     // Per-units are currently expected to be only MeasureUnits.
-    if (unitIsCurrency(macros.perUnit) || unitIsNoUnit(macros.perUnit)) {
+    if (unitIsNoUnit(macros.perUnit)) {
+        if (unitIsPercent(macros.perUnit) || unitIsPermille(macros.perUnit)) {
+            status = U_UNSUPPORTED_ERROR;
+            return false;
+        } else {
+            // Default value: ok to ignore
+            return false;
+        }
+    } else if (unitIsCurrency(macros.perUnit)) {
         status = U_UNSUPPORTED_ERROR;
         return false;
     } else {
@@ -1298,7 +1281,9 @@ bool GeneratorHelpers::rounding(const MacroProps& macros, UnicodeString& sb, UEr
 }
 
 bool GeneratorHelpers::grouping(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
-    if (macros.grouper.isBogus() || macros.grouper.fStrategy == UNUM_GROUPING_COUNT) {
+    if (macros.grouper.isBogus()) {
+        return false; // No value
+    } else if (macros.grouper.fStrategy == UNUM_GROUPING_COUNT) {
         status = U_UNSUPPORTED_ERROR;
         return false;
     } else if (macros.grouper.fStrategy == UNUM_GROUPING_AUTO) {
@@ -1310,7 +1295,8 @@ bool GeneratorHelpers::grouping(const MacroProps& macros, UnicodeString& sb, UEr
 }
 
 bool GeneratorHelpers::integerWidth(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
-    if (macros.integerWidth.fHasError || macros.integerWidth == IntegerWidth::standard()) {
+    if (macros.integerWidth.fHasError || macros.integerWidth.isBogus() ||
+        macros.integerWidth == IntegerWidth::standard()) {
         // Error or Default
         return false;
     }
