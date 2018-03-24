@@ -229,6 +229,23 @@ class NumberParserTest : public IntlTest {
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 };
 
+class NumberSkeletonTest : public IntlTest {
+  public:
+    void validTokens();
+    void invalidTokens();
+    void unknownTokens();
+    void unexpectedTokens();
+    void duplicateValues();
+    void stemsRequiringOption();
+    void defaultTokens();
+    void flexibleSeparators();
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+
+  private:
+    void expectedErrorSkeleton(const char16_t** cases, int32_t casesLen);
+};
+
 
 // NOTE: This macro is identical to the one in itformat.cpp
 #define TESTCLASS(id, TestClass)          \
@@ -261,6 +278,7 @@ class NumberTest : public IntlTest {
         TESTCLASS(8, StringSegmentTest);
         TESTCLASS(9, UniSetsTest);
         TESTCLASS(10, NumberParserTest);
+        TESTCLASS(11, NumberSkeletonTest);
         default: name = ""; break; // needed to end loop
         }
     }

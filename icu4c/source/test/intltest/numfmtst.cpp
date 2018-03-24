@@ -105,7 +105,7 @@ static DecimalQuantity &strToDigitList(
     }
     CharString formatValue;
     formatValue.appendInvariantChars(str, status);
-    digitList.setToDecNumber(StringPiece(formatValue.data()));
+    digitList.setToDecNumber(StringPiece(formatValue.data()), status);
     return digitList;
 }
 
@@ -7027,7 +7027,7 @@ void NumberFormatTest::TestDecimal() {
             UnicodeString formattedResult;
             DecimalQuantity dl;
             StringPiece num("123.4566666666666666666666666666666666621E+40");
-            dl.setToDecNumber(num);
+            dl.setToDecNumber(num, status);
             ASSERT_SUCCESS(status);
             fmtr->format(dl, formattedResult, NULL, status);
             ASSERT_SUCCESS(status);
@@ -7035,7 +7035,7 @@ void NumberFormatTest::TestDecimal() {
 
             status = U_ZERO_ERROR;
             num.set("666.666");
-            dl.setToDecNumber(num);
+            dl.setToDecNumber(num, status);
             FieldPosition pos(NumberFormat::FRACTION_FIELD);
             ASSERT_SUCCESS(status);
             formattedResult.remove();

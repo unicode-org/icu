@@ -636,7 +636,7 @@ void PluralRulesTest::checkSelect(const LocalPointer<PluralRules> &rules, UError
 
         // DigitList is a convenient way to parse the decimal number string and get a double.
         DecimalQuantity  dl;
-        dl.setToDecNumber(StringPiece(num));
+        dl.setToDecNumber(StringPiece(num), status);
         if (U_FAILURE(status)) {
             errln("file %s, line %d, ICU error status: %s.", __FILE__, line, u_errorName(status));
             status = U_ZERO_ERROR;

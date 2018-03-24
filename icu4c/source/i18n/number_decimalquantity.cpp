@@ -16,6 +16,7 @@
 #include "number_roundingutils.h"
 #include "double-conversion.h"
 #include "unicode/plurrule.h"
+#include "charstr.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -33,19 +34,29 @@ static constexpr int32_t DEFAULT_DIGITS = 34;
 typedef MaybeStackHeaderAndArray<decNumber, char, DEFAULT_DIGITS> DecNumberWithStorage;
 
 /** Helper function to convert a decNumber-compatible string into a decNumber. */
-void stringToDecNumber(StringPiece n, DecNumberWithStorage &dn) {
+void stringToDecNumber(StringPiece n, DecNumberWithStorage &dn, UErrorCode& status) {
     decContext set;
     uprv_decContextDefault(&set, DEC_INIT_BASE);
     uprv_decContextSetRounding(&set, DEC_ROUND_HALF_EVEN);
-    set.traps = 0; // no traps, thank you
+    set.traps = 0; // no traps, thank you (what does this mean?)
     if (n.length() > DEFAULT_DIGITS) {
         dn.resize(n.length(), 0);
         set.digits = n.length();
     } else {
         set.digits = DEFAULT_DIGITS;
     }
-    uprv_decNumberFromString(dn.getAlias(), n.data(), &set);
-    U_ASSERT(DECDPUN == 1);
+
+    // Make sure that the string is NUL-terminated; CharString guarantees this, but not StringPiece.
+    CharString cs(n, status);
+    if (U_FAILURE(status)) { return; }
+
+    static_assert(DECDPUN == 1, "Assumes that DECDPUN is set to 1");
+    uprv_decNumberFromString(dn.getAlias(), cs.data(), &set);
+
+    // Check for invalid syntax and set the corresponding error code.
+    if ((set.status & DEC_Conversion_syntax) != 0) {
+        status = U_DECIMAL_NUMBER_SYNTAX_ERROR;
+    }
 }
 
 /** Helper function for safe subtraction (no overflow). */
@@ -329,7 +340,9 @@ void DecimalQuantity::_setToLong(int64_t n) {
     if (n == INT64_MIN) {
         static const char *int64minStr = "9.223372036854775808E+18";
         DecNumberWithStorage dn;
-        stringToDecNumber(int64minStr, dn);
+        UErrorCode localStatus = U_ZERO_ERROR;
+        stringToDecNumber(int64minStr, dn, localStatus);
+        if (U_FAILURE(localStatus)) { return; } // unexpected
         readDecNumberToBcd(dn.getAlias());
     } else if (n <= INT32_MAX) {
         readIntToBcd(static_cast<int32_t>(n));
@@ -429,12 +442,13 @@ void DecimalQuantity::convertToAccurateDouble() {
     explicitExactDouble = true;
 }
 
-DecimalQuantity &DecimalQuantity::setToDecNumber(StringPiece n) {
+DecimalQuantity &DecimalQuantity::setToDecNumber(StringPiece n, UErrorCode& status) {
     setBcdToZero();
     flags = 0;
 
     DecNumberWithStorage dn;
-    stringToDecNumber(n, dn);
+    stringToDecNumber(n, dn, status);
+    if (U_FAILURE(status)) { return *this; }
 
     // The code path for decNumber is modeled after BigDecimal in Java.
     if (decNumberIsNegative(dn.getAlias())) {

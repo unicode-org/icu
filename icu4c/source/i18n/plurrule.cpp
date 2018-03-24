@@ -1458,7 +1458,7 @@ FixedDecimal::FixedDecimal(const UnicodeString &num, UErrorCode &status) {
     CharString cs;
     cs.appendInvariantChars(num, status);
     DecimalQuantity dl;
-    dl.setToDecNumber(cs.toStringPiece());
+    dl.setToDecNumber(cs.toStringPiece(), status);
     if (U_FAILURE(status)) {
         init(0, 0, 0);
         return;

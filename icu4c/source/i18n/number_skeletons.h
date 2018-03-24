@@ -16,6 +16,8 @@ using icu::numparse::impl::StringSegment;
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
 
+static constexpr UErrorCode U_NUMBER_SKELETON_SYNTAX_ERROR = U_ILLEGAL_ARGUMENT_ERROR;
+
 // Forward-declaration
 struct SeenMacroProps;
 
