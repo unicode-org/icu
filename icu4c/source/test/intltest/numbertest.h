@@ -98,14 +98,17 @@ class NumberFormatterApiTest : public IntlTest {
     DecimalFormatSymbols SWISS_SYMBOLS;
     DecimalFormatSymbols MYANMAR_SYMBOLS;
 
-    void assertFormatDescending(const UnicodeString &message, const UnlocalizedNumberFormatter &f,
-                                Locale locale, ...);
+    void assertFormatDescending(const char16_t* message, const char16_t* skeleton,
+                                const UnlocalizedNumberFormatter& f, Locale locale, ...);
 
-    void assertFormatDescendingBig(const UnicodeString &message, const UnlocalizedNumberFormatter &f,
-                                   Locale locale, ...);
+    void assertFormatDescendingBig(const char16_t* message, const char16_t* skeleton,
+                                   const UnlocalizedNumberFormatter& f, Locale locale, ...);
 
-    void assertFormatSingle(const UnicodeString &message, const UnlocalizedNumberFormatter &f,
-                            Locale locale, double input, const UnicodeString &expected);
+    void assertFormatSingle(const char16_t* message, const char16_t* skeleton,
+                            const UnlocalizedNumberFormatter& f, Locale locale, double input,
+                            const UnicodeString& expected);
+
+    void assertUndefinedSkeleton(const UnlocalizedNumberFormatter& f);
 };
 
 class DecimalQuantityTest : public IntlTest {
