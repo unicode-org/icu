@@ -528,7 +528,7 @@ void NumberFormatterApiTest::unitMeasure() {
 
     assertFormatSingle(
             u"MeasureUnit form without {0} in CLDR pattern and wide base form",
-            u"measure-unit/temperature-kelvin .0000000000 unit-width-full-name",
+            u"measure-unit/temperature-kelvin .00000000000000000000 unit-width-full-name",
             NumberFormatter::with().rounding(Rounder::fixedFraction(20))
                     .unit(KELVIN)
                     .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
@@ -1761,8 +1761,8 @@ void NumberFormatterApiTest::sign() {
             u"$444,444.00");
 
     assertFormatSingle(
-            u"currency/USD sign-accounting",
             u"Sign Accounting Negative",
+            u"currency/USD sign-accounting",
             NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING).unit(USD),
             Locale::getEnglish(),
             -444444,

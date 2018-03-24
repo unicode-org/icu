@@ -502,9 +502,9 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "MeasureUnit form without {0} in CLDR pattern and wide base form",
-                "measure-unit/temperature-kelvin .0000000000 unit-width-full-name",
+                "measure-unit/temperature-kelvin .00000000000000000000 unit-width-full-name",
                 NumberFormatter.with()
-                    .rounding(Rounder.fixedFraction(10))
+                    .rounding(Rounder.fixedFraction(20))
                     .unit(MeasureUnit.KELVIN)
                     .unitWidth(UnitWidth.FULL_NAME),
                 ULocale.forLanguageTag("es-MX"),
@@ -515,7 +515,7 @@ public class NumberFormatterApiTest {
     @Test
     public void unitCompoundMeasure() {
         assertFormatDescending(
-                "Meters Per Second Short (unit that simplifies)",
+                "Meters Per Second Short (unit that simplifies) and perUnit method",
                 "measure-unit/length-meter per-measure-unit/duration-second",
                 NumberFormatter.with().unit(MeasureUnit.METER).perUnit(MeasureUnit.SECOND),
                 ULocale.ENGLISH,

@@ -222,7 +222,8 @@ bool parseFracSigOption(const StringSegment& segment, MacroProps& macros, UError
 
 void parseIncrementOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
-void generateIncrementOption(double increment, UnicodeString& sb, UErrorCode& status);
+void
+generateIncrementOption(double increment, int32_t trailingZeros, UnicodeString& sb, UErrorCode& status);
 
 /** @return Whether we successfully found and parsed a rounding mode. */
 bool parseRoundingModeOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
