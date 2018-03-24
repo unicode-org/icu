@@ -1055,15 +1055,32 @@ void blueprint_helpers::parseIncrementOption(const StringSegment& segment, Macro
         return;
     }
     double increment = dq.toDouble();
-    macros.rounder = Rounder::increment(increment);
+
+    // We also need to figure out how many digits. Do a brute force string operation.
+    int decimalOffset = 0;
+    while (decimalOffset < segment.length() && segment.charAt(decimalOffset) != '.') {
+        decimalOffset++;
+    }
+    if (decimalOffset == segment.length()) {
+        macros.rounder = Rounder::increment(increment);
+    } else {
+        int32_t fractionLength = segment.length() - decimalOffset - 1;
+        macros.rounder = Rounder::increment(increment).withMinFraction(fractionLength);
+    }
 }
 
-void blueprint_helpers::generateIncrementOption(double increment, UnicodeString& sb, UErrorCode&) {
+void blueprint_helpers::generateIncrementOption(double increment, int32_t trailingZeros, UnicodeString& sb,
+                                                UErrorCode&) {
     // Utilize DecimalQuantity/double_conversion to format this for us.
     DecimalQuantity dq;
     dq.setToDouble(increment);
     dq.roundToInfinity();
     sb.append(dq.toPlainString());
+
+    // We might need to append extra trailing zeros for min fraction...
+    if (trailingZeros > 0) {
+        appendMultiple(sb, u'0', trailingZeros);
+    }
 }
 
 bool
@@ -1257,7 +1274,11 @@ bool GeneratorHelpers::rounding(const MacroProps& macros, UnicodeString& sb, UEr
     } else if (macros.rounder.fType == Rounder::RND_INCREMENT) {
         const Rounder::IncrementSettings& impl = macros.rounder.fUnion.increment;
         sb.append(u"round-increment/", -1);
-        blueprint_helpers::generateIncrementOption(impl.fIncrement, sb, status);
+        blueprint_helpers::generateIncrementOption(
+                impl.fIncrement,
+                impl.fMinFrac - impl.fMaxFrac,
+                sb,
+                status);
     } else if (macros.rounder.fType == Rounder::RND_CURRENCY) {
         UCurrencyUsage usage = macros.rounder.fUnion.currencyUsage;
         if (usage == UCURR_USAGE_STANDARD) {

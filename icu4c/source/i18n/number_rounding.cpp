@@ -251,6 +251,7 @@ IncrementRounder Rounder::constructIncrement(double increment, int32_t minFrac) 
     settings.fIncrement = increment;
     settings.fMinFrac = static_cast<digits_t>(minFrac);
     // One of the few pre-computed quantities:
+    // Note: it is possible for minFrac to be more than maxFrac... (misleading)
     settings.fMaxFrac = roundingutils::doubleFractionLength(increment);
     RounderUnion union_;
     union_.increment = settings;
