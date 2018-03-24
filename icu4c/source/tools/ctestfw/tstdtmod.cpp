@@ -13,6 +13,8 @@
 #include "unicode/tstdtmod.h"
 #include "cmemory.h"
 #include <stdio.h>
+#include "cstr.h"
+#include "cstring.h"
 
 TestLog::~TestLog() {}
 
@@ -59,10 +61,28 @@ UBool IcuTestErrorCode::logDataIfFailureAndReset(const char *fmt, ...) {
     }
 }
 
+void IcuTestErrorCode::setScope(const char* message) {
+    scopeMessage = message;
+}
+
+static char kScopeMessageBuf[256];
+
+void IcuTestErrorCode::setScope(const UnicodeString& message) {
+    CStr cstr(message);
+    const char* str = cstr();
+    uprv_strncpy(kScopeMessageBuf, str, 256);
+    kScopeMessageBuf[255] = 0; // ensure NUL-terminated
+    scopeMessage = kScopeMessageBuf;
+}
+
 void IcuTestErrorCode::handleFailure() const {
     // testClass.errln("%s failure - %s", testName, errorName());
     UnicodeString msg(testName, -1, US_INV);
     msg.append(UNICODE_STRING_SIMPLE(" failure: ")).append(UnicodeString(errorName(), -1, US_INV));
+
+    if (scopeMessage != nullptr) {
+        msg.append(UNICODE_STRING_SIMPLE(" scope: ")).append(UnicodeString(scopeMessage, -1, US_INV));
+    }
 
     if (get() == U_MISSING_RESOURCE_ERROR || get() == U_FILE_ACCESS_ERROR) {
         testClass.dataerrln(msg);
