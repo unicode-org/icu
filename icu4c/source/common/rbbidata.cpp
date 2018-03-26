@@ -106,7 +106,10 @@ void RBBIDataWrapper::init(const RBBIDataHeader *data, UErrorCode &status) {
     if (data->fFTableLen != 0) {
         fForwardTable = (RBBIStateTable *)((char *)data + fHeader->fFTable);
     }
-    if (data->fSRTableLen != 0) {
+    if (data->fRTableLen != 0) {
+        fReverseTable = (RBBIStateTable *)((char *)data + fHeader->fRTable);
+    }
+    if (data->fSRTableLen != 0) {   // TODO: obsolete. Remove.
         fSafeRevTable = (RBBIStateTable *)((char *)data + fHeader->fSRTable);
     }
 

@@ -1312,10 +1312,10 @@ void RBBITableBuilder::buildSafe(UErrorCode &status) {
             if (wantedEndState == endState) {
                 int32_t pair = c1 << 16 | c2;
                 safePairs.addElement(pair, status);
-                printf("(%d, %d) ", c1, c2);
+                // printf("(%d, %d) ", c1, c2);
             }
         }
-        printf("\n");
+        // printf("\n");
     }
 
     // Populate the initial safe table.
@@ -1358,7 +1358,7 @@ void RBBITableBuilder::buildSafe(UErrorCode &status) {
         rowState.setCharAt(c1, 0);
     }
 
-    // Merge similar states.
+    // TODO: Merge similar states.
 
 }
 
@@ -1392,9 +1392,9 @@ int32_t  RBBITableBuilder::getSafeTableSize() const {
 
 //-----------------------------------------------------------------------------
 //
-//   exportTable()    export the state transition table in the format required
-//                    by the runtime engine.  getTableSize() bytes of memory
-//                    must be available at the output address "where".
+//   exportSafeTable()   export the state transition table in the format required
+//                       by the runtime engine.  getTableSize() bytes of memory
+//                       must be available at the output address "where".
 //
 //-----------------------------------------------------------------------------
 void RBBITableBuilder::exportSafeTable(void *where) {

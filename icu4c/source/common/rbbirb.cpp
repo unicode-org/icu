@@ -300,10 +300,9 @@ RBBIDataHeader *RBBIRuleBuilder::build(UErrorCode &status) {
     fForwardTables->buildSafe(status);
 
 
-    if (fRB->fDebugEnv && uprv_strstr(fRB->fDebugEnv, "states")) {printStates();};
 #ifdef RBBI_DEBUG
     if (fDebugEnv && uprv_strstr(fDebugEnv, "states")) {
-        fForwardTables
+        fForwardTables->printStates();
         fForwardTables->printRuleStatusTable();
         fForwardTables->printSafeTable();
     }
