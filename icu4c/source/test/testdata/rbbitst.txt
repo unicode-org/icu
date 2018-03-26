@@ -39,7 +39,9 @@
 
 #   Temp debugging tests
 #
-
+<word>
+<data>•
+•</data>
 
 ## FILTERED BREAK TESTS
 

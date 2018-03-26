@@ -173,7 +173,8 @@ public:
     /*                                     */
     const RBBIDataHeader     *fHeader;
     const RBBIStateTable     *fForwardTable;
-    const RBBIStateTable     *fSafeRevTable;
+    const RBBIStateTable     *fReverseTable;      // auto-generated safe reverse.
+    const RBBIStateTable     *fSafeRevTable;      // hand-written safe reverse. TODO: delete this.
     const UChar              *fRuleSource;
     const int32_t            *fRuleStatusTable; 
 

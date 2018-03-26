@@ -651,7 +651,7 @@ UBool RuleBasedBreakIterator::isBoundary(int32_t offset) {
     }
 
     // Adjust offset to be on a code point boundary and not beyond the end of the text.
-    // Note that isBoundary() is always be false for offsets that are not on code point boundaries.
+    // Note that isBoundary() is always false for offsets that are not on code point boundaries.
     // But we still need the side effect of leaving iteration at the following boundary.
 
     utext_setNativeIndex(&fText, offset);
@@ -1116,7 +1116,7 @@ int32_t RuleBasedBreakIterator::handleSafePrevious(int32_t fromPosition) {
     UChar32             c;
     int32_t             result          = 0;
 
-    const RBBIStateTable *stateTable = fData->fSafeRevTable;
+    const RBBIStateTable *stateTable = fData->fReverseTable;
     UTEXT_SETNATIVEINDEX(&fText, fromPosition);
     #ifdef RBBI_DEBUG
         if (gTrace) {

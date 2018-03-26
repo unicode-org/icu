@@ -4551,40 +4551,6 @@ void RBBITest::TestDebug(void) {
     UParseError pe;
     LocalPointer<RuleBasedBreakIterator> newbi(new RuleBasedBreakIterator(rules, pe, status));
     assertSuccess(WHERE, status);
-
-#if 0
-    bi->dumpTables();
-
-    RBBIDataWrapper *dw = bi->fData;
-    const RBBIStateTable *fwtbl = dw->fForwardTable;
-    int32_t numCharClasses = dw->fHeader->fCatCount;
-    printf("Char Classes: %d     states: %d\n", numCharClasses, fwtbl->fNumStates);
-
-    for (int32_t c1=0; c1<numCharClasses; ++c1) {
-        for (int32_t c2=0; c2 < numCharClasses; ++c2) {
-            int32_t wantedEndState = -1;
-            int32_t endState = 0;
-            for (int32_t startState = 1; startState < (int32_t)fwtbl->fNumStates; ++startState) {
-                RBBIStateTableRow  *row = (RBBIStateTableRow *) (fwtbl->fTableData + (fwtbl->fRowLen * startState));
-                int32_t s2 = row->fNextState[c1];
-                row = (RBBIStateTableRow *) (fwtbl->fTableData + (fwtbl->fRowLen * s2));
-                endState = row->fNextState[c2];
-                if (wantedEndState < 0) {
-                    wantedEndState = endState;
-                } else {
-                    if (wantedEndState != endState) {
-                        break;
-                    }
-                }
-            }
-            if (wantedEndState == endState) {
-                printf("(%d, %d) ", c1, c2);
-            }
-        }
-        printf("\n");
-    }
-    printf("\n");
-#endif
 }
 
 void RBBITest::TestProperties() {
