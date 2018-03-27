@@ -13,6 +13,7 @@
 #include "number_utypes.h"
 #include "unicode/numberformatter.h"
 #include "unicode/unumberformatter.h"
+#include "fieldposutil.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -153,16 +154,47 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
 }
 
 U_CAPI void U_EXPORT2
-unumf_closeResult(const UFormattedNumber* uresult, UErrorCode* ec) {
-    const UFormattedNumberData* impl = UFormattedNumberData::validate(uresult, *ec);
+unumf_resultGetField(const UFormattedNumber* uresult, UFieldPosition* ufpos, UErrorCode* ec) {
+    if (ufpos == nullptr) {
+        *ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    const UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
     if (U_FAILURE(*ec)) { return; }
+
+    UFieldPositionWrapper helper(*ufpos);
+    result->string.populateFieldPosition(helper, 0, *ec);
+}
+
+U_CAPI void U_EXPORT2
+unumf_resultGetAllFields(const UFormattedNumber* uresult, UFieldPositionIterator* ufpositer,
+                         UErrorCode* ec) {
+    if (ufpositer == nullptr) {
+        *ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    const UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
+    if (U_FAILURE(*ec)) { return; }
+
+    auto* helper = reinterpret_cast<FieldPositionIterator*>(ufpositer);
+    result->string.populateFieldPositionIterator(*helper, *ec);
+}
+
+U_CAPI void U_EXPORT2
+unumf_closeResult(const UFormattedNumber* uresult) {
+    UErrorCode localStatus = U_ZERO_ERROR;
+    const UFormattedNumberData* impl = UFormattedNumberData::validate(uresult, localStatus);
+    if (U_FAILURE(localStatus)) { return; }
     delete impl;
 }
 
 U_CAPI void U_EXPORT2
-unumf_close(UNumberFormatter* f, UErrorCode* ec) {
-    const UNumberFormatterData* impl = UNumberFormatterData::validate(f, *ec);
-    if (U_FAILURE(*ec)) { return; }
+unumf_close(UNumberFormatter* f) {
+    UErrorCode localStatus = U_ZERO_ERROR;
+    const UNumberFormatterData* impl = UNumberFormatterData::validate(f, localStatus);
+    if (U_FAILURE(localStatus)) { return; }
     delete impl;
 }
 
