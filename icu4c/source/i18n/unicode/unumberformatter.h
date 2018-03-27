@@ -7,6 +7,9 @@
 #ifndef __UNUMBERFORMATTER_H__
 #define __UNUMBERFORMATTER_H__
 
+#include "unicode/ufieldpositer.h"
+#include "unicode/umisc.h"
+
 
 /**
  * \file
@@ -441,25 +444,62 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
 
 
 /**
- * Releases the UFormattedNumber returned by unumf_formatDouble and friends.
+ * Determines the start and end indices of the first occurrence of the given field in the output string.
+ * This allows you to determine the locations of the integer part, fraction part, and sign.
  *
- * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
+ * If a field occurs multiple times in an output string, such as a grouping separator, this method will
+ * only ever return the first occurrence. Use unumf_resultGetAllFields() to access all occurrences of an
+ * attribute.
  *
- * @draft ICU 62
+ * @param fpos
+ *         A pointer to a UFieldPosition. On input, position->field is read. On output,
+ *         position->beginIndex and position->endIndex indicate the beginning and ending indices of field
+ *         number position->field, if such a field exists.
  */
 U_DRAFT void U_EXPORT2
-unumf_closeResult(const UFormattedNumber* uresult, UErrorCode* ec);
+unumf_resultGetField(const UFormattedNumber* uresult, UFieldPosition* ufpos, UErrorCode* ec);
 
 
 /**
- * Releases the UNumberFormatter created by unumf_openFromSkeletonAndLocale.
+ * Populates the given iterator with all fields in the formatted output string. This allows you to
+ * determine the locations of the integer part, fraction part, and sign.
+ *
+ * If you need information on only one field, consider using unumf_resultGetField().
+ *
+ * @param fpositer
+ *         A pointer to a UFieldPositionIterator created by {@link #ufieldpositer_open}. Iteration
+ *         information already present in the UFieldPositionIterator is deleted, and the iterator is reset
+ *         to apply to the fields in the formatted string created by this function call. The field values
+ *         and indexes returned by {@link #ufieldpositer_next} represent fields denoted by
+ *         the UNumberFormatFields enum. Fields are not returned in a guaranteed order. Fields cannot
+ *         overlap, but they may nest. For example, 1234 could format as "1,234" which might consist of a
+ *         grouping separator field for ',' and an integer field encompassing the entire string.
+ */
+U_DRAFT void U_EXPORT2
+unumf_resultGetAllFields(const UFormattedNumber* uresult, UFieldPositionIterator* ufpositer,
+                         UErrorCode* ec);
+
+
+/**
+ * Releases the UNumberFormatter created by unumf_openFromSkeletonAndLocale().
  *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
  * @draft ICU 62
  */
 U_DRAFT void U_EXPORT2
-unumf_close(UNumberFormatter* uformatter, UErrorCode* ec);
+unumf_close(UNumberFormatter* uformatter);
+
+
+/**
+ * Releases the UFormattedNumber created by unumf_openResult().
+ *
+ * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
+ *
+ * @draft ICU 62
+ */
+U_DRAFT void U_EXPORT2
+unumf_closeResult(const UFormattedNumber* uresult);
 
 
 #endif //__UNUMBERFORMATTER_H__

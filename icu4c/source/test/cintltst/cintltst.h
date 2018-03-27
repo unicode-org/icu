@@ -142,6 +142,11 @@ U_CFUNC UBool assertEquals(const char* msg, const char* expectedString,
 U_CFUNC UBool assertUEquals(const char* msg, const UChar* expectedString,
                             const UChar* actualString);
 
+/**
+ * Assert that two 64-bit integers are equal, returning TRUE if they do.
+ */
+U_CFUNC UBool assertIntEquals(const char* msg, int64_t expected, int64_t actual);
+
 /*
  * note - isICUVersionBefore and isICUVersionAtLeast have been removed.
  * use log_knownIssue() instead.

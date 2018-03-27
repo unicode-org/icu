@@ -729,4 +729,18 @@ U_CFUNC UBool assertUEquals(const char* message, const UChar* expected,
     return TRUE;
 }
 
+U_CFUNC UBool assertIntEquals(const char* message, int64_t expected, int64_t actual) {
+    if (expected != actual) {
+        log_err("FAIL: %s; got \"%d\"; expected \"%d\"\n",
+                message, actual, expected);
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        log_verbose("Ok: %s; got \"%d\"\n", message, actual);
+    }
+#endif
+    return TRUE;
+}
+
 #endif
