@@ -17,6 +17,38 @@
  *
  * This is the C-compatible version of the NumberFormatter API introduced in ICU 60. C++ users should
  * include unicode/numberformatter.h and use the proper C++ APIs.
+ *
+ * The C API accepts a number skeleton string for specifying the settings for formatting, which covers a
+ * very large subset of all possible number formatting features. For more information on number skeleton
+ * strings, see unicode/numberformatter.h.
+ *
+ * When using UNumberFormatter, which is treated as immutable, the results are exported to a mutable
+ * UFormattedNumber object, which you subsequently use for populating your string buffer or iterating over
+ * the fields.
+ *
+ * Example code:
+ * <pre>
+ * // Setup:
+ * UErrorCode ec = U_ZERO_ERROR;
+ * UNumberFormatter* uformatter = unumf_openFromSkeletonAndLocale(u"round-integer", -1, "en", &ec);
+ * UFormattedNumber* uresult = unumf_openResult(&ec);
+ * if (U_FAILURE(ec)) { return; }
+ *
+ * // Format a double:
+ * unumf_formatDouble(uformatter, 5142.3, uresult, &ec);
+ * if (U_FAILURE(ec)) { return; }
+ *
+ * // Export the string:
+ * int32_t len = unumf_resultToString(uresult, NULL, 0, &ec);
+ * UChar* buffer = (UChar*) malloc((len+1)*sizeof(UChar));
+ * unumf_resultToString(uresult, buffer, len+1, &ec);
+ * if (U_FAILURE(ec)) { return; }
+ *
+ * // Cleanup:
+ * unumf_close(uformatter);
+ * unumf_closeResult(uresult);
+ * free(buffer);
+ * </pre>
  */
 
 
@@ -355,7 +387,8 @@ typedef struct UFormattedNumber UFormattedNumber;
 
 
 /**
- * Creates a new UNumberFormatter from the given skeleton string and locale.
+ * Creates a new UNumberFormatter from the given skeleton string and locale. This is currently the only
+ * method for creating a new UNumberFormatter.
  *
  * For more details on skeleton strings, see the documentation in numberformatter.h. For more details on
  * the usage of this API, see the documentation at the top of unumberformatter.h.
@@ -381,7 +414,7 @@ unumf_openResult(UErrorCode* ec);
 
 
 /**
- * Uses a UNumberFormatter to format a double to a UFormattedNumber. A string, field position, and other
+ * Uses a UNumberFormatter to format an integer to a UFormattedNumber. A string, field position, and other
  * information can be retrieved from the UFormattedNumber.
  *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
@@ -423,18 +456,15 @@ unumf_formatDecimal(const UNumberFormatter* uformatter, const char* value, int32
 
 
 /**
- * Extracts the result number string out of a UFormattedNumber to a UChar buffer. The usual ICU pattern
- * is used for writing to the buffer:
+ * Extracts the result number string out of a UFormattedNumber to a UChar buffer if possible.
+ * If bufferCapacity is greater than the required length, a terminating NUL is written.
+ * If bufferCapacity is less than the required length, an error code is set.
  *
- * - If the string is shorter than the buffer, it will be written to the buffer and will be NUL-terminated.
- * - If the string is exactly the length of the buffer, it will be written to the buffer, but it will not
- *   be NUL-terminated, and a warning will be set.
- * - If the string is longer than the buffer, nothing will be written to the buffer, and an error will be
- *   set.
- *
- * In all cases, the actual length of the string is returned, whether or not it was written to the buffer.
+ * If NULL is passed as the buffer argument, the required length is returned without setting an error.
  *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
+ *
+ * @return The required length.
  *
  * @draft ICU 62
  */

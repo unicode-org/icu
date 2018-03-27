@@ -150,6 +150,11 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
     const UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
     if (U_FAILURE(*ec)) { return 0; }
 
+    if (buffer == nullptr) {
+        // Return the length without setting an error.
+        return result->string.length();
+    }
+
     return result->string.toUnicodeString().extract(buffer, bufferCapacity, *ec);
 }
 

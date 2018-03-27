@@ -13,16 +13,20 @@
 #include "unicode/umisc.h"
 #include "unicode/unum.h"
 #include "cintltst.h"
+#include "cmemory.h"
 
 static void TestSkeletonFormatToString();
 
 static void TestSkeletonFormatToFields();
+
+static void TestExampleCode();
 
 void addUNumberFormatterTest(TestNode** root);
 
 void addUNumberFormatterTest(TestNode** root) {
     addTest(root, &TestSkeletonFormatToString, "unumberformatter/TestSkeletonFormatToString");
     addTest(root, &TestSkeletonFormatToFields, "unumberformatter/TestSkeletonFormatToFields");
+    addTest(root, &TestExampleCode, "unumberformatter/TestExampleCode");
 }
 
 
@@ -127,6 +131,33 @@ static void TestSkeletonFormatToFields() {
     unumf_closeResult(uresult);
     unumf_close(uformatter);
     ufieldpositer_close(ufpositer);
+}
+
+
+static void TestExampleCode() {
+    // This is the example code given in unumberformatter.h.
+
+    // Setup:
+    UErrorCode ec = U_ZERO_ERROR;
+    UNumberFormatter* uformatter = unumf_openFromSkeletonAndLocale(u"round-integer", -1, "en", &ec);
+    UFormattedNumber* uresult = unumf_openResult(&ec);
+    assertSuccess("There should not be a failure in the example code", &ec);
+
+    // Format a double:
+    unumf_formatDouble(uformatter, 5142.3, uresult, &ec);
+    assertSuccess("There should not be a failure in the example code", &ec);
+
+    // Export the string:
+    int32_t len = unumf_resultToString(uresult, NULL, 0, &ec);
+    UChar* buffer = (UChar*) uprv_malloc((len+1)*sizeof(UChar));
+    unumf_resultToString(uresult, buffer, len+1, &ec);
+    assertSuccess("There should not be a failure in the example code", &ec);
+    assertUEquals("Should produce expected string result", u"5,142", buffer);
+
+    // Cleanup:
+    unumf_close(uformatter);
+    unumf_closeResult(uresult);
+    uprv_free(buffer);
 }
 
 
