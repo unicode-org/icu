@@ -518,7 +518,7 @@ int32_t NumberFormatterImpl::writeFractionDigits(const MicroProps& micros, Decim
         // Get and append the next digit value
         int8_t nextDigit = quantity.getDigit(-i - 1);
         length += insertDigitFromSymbols(
-                string, string.length(), nextDigit, *micros.symbols, UNUM_INTEGER_FIELD, status);
+                string, string.length(), nextDigit, *micros.symbols, UNUM_FRACTION_FIELD, status);
     }
     return length;
 }
