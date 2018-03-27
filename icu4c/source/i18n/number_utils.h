@@ -102,17 +102,6 @@ struct MicroProps : public MicroPropsGenerator {
     bool exhausted = false;
 };
 
-/**
- * This struct provides the result of the number formatting pipeline to FormattedNumber.
- *
- * The DecimalQuantity is not currently being used by FormattedNumber, but at some point it could be used
- * to add a toDecNumber() or similar method.
- */
-struct NumberFormatterResults : public UMemory {
-    DecimalQuantity quantity;
-    NumberStringBuilder string;
-};
-
 inline int32_t insertDigitFromSymbols(NumberStringBuilder& output, int32_t index, int8_t digit,
                                       const DecimalFormatSymbols& symbols, Field field,
                                       UErrorCode& status) {
