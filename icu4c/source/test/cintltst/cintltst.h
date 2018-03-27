@@ -135,6 +135,13 @@ U_CFUNC UBool assertTrue(const char* msg, int condition);
 U_CFUNC UBool assertEquals(const char* msg, const char* expectedString,
                            const char* actualString);
 
+/**
+ * Assert that the actualString equals the expectedString, and return
+ * TRUE if it does.
+ */
+U_CFUNC UBool assertUEquals(const char* msg, const UChar* expectedString,
+                            const UChar* actualString);
+
 /*
  * note - isICUVersionBefore and isICUVersionAtLeast have been removed.
  * use log_knownIssue() instead.
