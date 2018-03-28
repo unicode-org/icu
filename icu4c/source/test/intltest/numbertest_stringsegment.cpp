@@ -50,10 +50,13 @@ void StringSegmentTest::testLength() {
 void StringSegmentTest::testCharAt() {
     StringSegment segment(SAMPLE_STRING, 0);
     assertEquals("Initial", SAMPLE_STRING, segment.toUnicodeString());
+    assertEquals("Initial", SAMPLE_STRING, segment.toTempUnicodeString());
     segment.adjustOffset(3);
     assertEquals("After adjust-offset", UnicodeString(u"radio 📻"), segment.toUnicodeString());
+    assertEquals("After adjust-offset", UnicodeString(u"radio 📻"), segment.toTempUnicodeString());
     segment.setLength(5);
     assertEquals("After adjust-length", UnicodeString(u"radio"), segment.toUnicodeString());
+    assertEquals("After adjust-length", UnicodeString(u"radio"), segment.toTempUnicodeString());
 }
 
 void StringSegmentTest::testGetCodePoint() {

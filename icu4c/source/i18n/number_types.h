@@ -111,7 +111,16 @@ class U_I18N_API CharSequence {
         }
     }
 
+    /**
+     * Gets a "safe" UnicodeString that can be used even after the CharSequence is destructed.
+     * */
     virtual UnicodeString toUnicodeString() const = 0;
+
+    /**
+     * Gets an "unsafe" UnicodeString that is valid only as long as the CharSequence is alive and
+     * unchanged. Slightly faster than toUnicodeString().
+     */
+    virtual const UnicodeString toTempUnicodeString() const = 0;
 };
 
 class U_I18N_API AffixPatternProvider {

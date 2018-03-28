@@ -33,9 +33,8 @@ bool CurrencyNamesMatcher::match(StringSegment& segment, ParsedNumber& result, U
         return false;
     }
 
-    // NOTE: This requires a new UnicodeString to be allocated, instead of using the StringSegment.
-    // This should be fixed with #13584.
-    UnicodeString segmentString = segment.toUnicodeString();
+    // NOTE: This call site should be improved with #13584.
+    const UnicodeString segmentString = segment.toTempUnicodeString();
 
     // Try to parse the currency
     ParsePosition ppos(0);

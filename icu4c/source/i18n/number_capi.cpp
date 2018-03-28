@@ -155,7 +155,7 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
         return result->string.length();
     }
 
-    return result->string.toUnicodeString().extract(buffer, bufferCapacity, *ec);
+    return result->string.toTempUnicodeString().extract(buffer, bufferCapacity, *ec);
 }
 
 U_CAPI void U_EXPORT2

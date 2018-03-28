@@ -29,12 +29,13 @@
 
 /**
  * \file
- * \brief C API: NumberFormat
+ * \brief C API: Compatibility APIs for number formatting.
  *
  * <h2> Number Format C API </h2>
  * 
- * <p><strong>IMPORTANT:</strong> New users with C++ capabilities are
- * strongly encouraged to see if numberformatter.h fits their use case.
+ * <p><strong>IMPORTANT:</strong> New users with are strongly encouraged to
+ * see if unumberformatter.h fits their use case.  Although not deprecated,
+ * this header is provided for backwards compatibility only.
  *
  * Number Format C API  Provides functions for
  * formatting and parsing a number.  Also provides methods for
@@ -399,6 +400,10 @@ typedef enum UNumberFormatFields {
  * number format is opened using the given pattern, which must conform
  * to the syntax described in DecimalFormat or RuleBasedNumberFormat,
  * respectively.
+ *
+ * <p><strong>NOTE::</strong> New users with are strongly encouraged to
+ * use unumf_openWithSkeletonAndLocale instead of unum_open.
+ *
  * @param pattern A pattern specifying the format to use. 
  * This parameter is ignored unless the style is
  * UNUM_PATTERN_DECIMAL or UNUM_PATTERN_RULEBASED.

@@ -226,6 +226,7 @@ void AffixUtilsTest::testUnescapeWithSymbolProvider() {
         AffixUtils::unescape(UnicodeStringCharSequence(input), sb, 0, provider, status);
         assertSuccess("Spot 1", status);
         assertEquals(input, expected, sb.toUnicodeString());
+        assertEquals(input, expected, sb.toTempUnicodeString());
     }
 
     // Test insertion position
