@@ -323,18 +323,15 @@ class U_I18N_API Notation : public UMemory {
 
     typedef NotationUnion::ScientificSettings ScientificSettings;
 
-    Notation(const NotationType& type, const NotationUnion& union_)
-            : fType(type), fUnion(union_) {}
+    Notation(const NotationType &type, const NotationUnion &union_) : fType(type), fUnion(union_) {}
 
-    Notation(UErrorCode errorCode)
-            : fType(NTN_ERROR) {
+    Notation(UErrorCode errorCode) : fType(NTN_ERROR) {
         fUnion.errorCode = errorCode;
     }
 
-    Notation()
-            : fType(NTN_SIMPLE), fUnion() {}
+    Notation() : fType(NTN_SIMPLE), fUnion() {}
 
-    UBool copyErrorTo(UErrorCode& status) const {
+    UBool copyErrorTo(UErrorCode &status) const {
         if (fType == NTN_ERROR) {
             status = fUnion.errorCode;
             return TRUE;
@@ -657,22 +654,20 @@ class U_I18N_API Rounder : public UMemory {
 
     UNumberFormatRoundingMode fRoundingMode;
 
-    Rounder(const RounderType& type, const RounderUnion& union_, UNumberFormatRoundingMode roundingMode)
+    Rounder(const RounderType &type, const RounderUnion &union_, UNumberFormatRoundingMode roundingMode)
             : fType(type), fUnion(union_), fRoundingMode(roundingMode) {}
 
-    Rounder(UErrorCode errorCode)
-            : fType(RND_ERROR) {
+    Rounder(UErrorCode errorCode) : fType(RND_ERROR) {
         fUnion.errorCode = errorCode;
     }
 
-    Rounder()
-            : fType(RND_BOGUS) {}
+    Rounder() : fType(RND_BOGUS) {}
 
     bool isBogus() const {
         return fType == RND_BOGUS;
     }
 
-    UBool copyErrorTo(UErrorCode& status) const {
+    UBool copyErrorTo(UErrorCode &status) const {
         if (fType == RND_ERROR) {
             status = fUnion.errorCode;
             return TRUE;
@@ -681,15 +676,15 @@ class U_I18N_API Rounder : public UMemory {
     }
 
     // On the parent type so that this method can be called internally on Rounder instances.
-    Rounder withCurrency(const CurrencyUnit& currency, UErrorCode& status) const;
+    Rounder withCurrency(const CurrencyUnit &currency, UErrorCode &status) const;
 
     /** NON-CONST: mutates the current instance. */
-    void setLocaleData(const CurrencyUnit& currency, UErrorCode& status);
+    void setLocaleData(const CurrencyUnit &currency, UErrorCode &status);
 
-    void apply(impl::DecimalQuantity& value, UErrorCode& status) const;
+    void apply(impl::DecimalQuantity &value, UErrorCode &status) const;
 
     /** Version of {@link #apply} that obeys minInt constraints. Used for scientific notation compatibility mode. */
-    void apply(impl::DecimalQuantity& value, int32_t minInt, UErrorCode status);
+    void apply(impl::DecimalQuantity &value, int32_t minInt, UErrorCode status);
 
     /**
      * Rounding endpoint used by Engineering and Compact notation. Chooses the most appropriate multiplier (magnitude
@@ -705,15 +700,16 @@ class U_I18N_API Rounder : public UMemory {
      * @param producer Function to call to return a multiplier based on a magnitude.
      * @return The number of orders of magnitude the input was adjusted by this method.
      */
-    int32_t chooseMultiplierAndApply(impl::DecimalQuantity& input,
-                                     const impl::MultiplierProducer& producer, UErrorCode& status);
+    int32_t
+    chooseMultiplierAndApply(impl::DecimalQuantity &input, const impl::MultiplierProducer &producer,
+                             UErrorCode &status);
 
     static FractionRounder constructFraction(int32_t minFrac, int32_t maxFrac);
 
     static Rounder constructSignificant(int32_t minSig, int32_t maxSig);
 
-    static Rounder constructFractionSignificant(const FractionRounder& base, int32_t minSig,
-                                                int32_t maxSig);
+    static Rounder
+    constructFractionSignificant(const FractionRounder &base, int32_t minSig, int32_t maxSig);
 
     static IncrementRounder constructIncrement(double increment, int32_t minFrac);
 
@@ -830,7 +826,7 @@ class U_I18N_API CurrencyRounder : public Rounder {
       * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
       * @draft ICU 60
       */
-    Rounder withCurrency(const CurrencyUnit& currency) const;
+    Rounder withCurrency(const CurrencyUnit &currency) const;
 
   private:
     // Inherit constructor
@@ -945,7 +941,7 @@ class U_I18N_API IntegerWidth : public UMemory {
         return !fHasError && fUnion.minMaxInt.fMinInt == -1;
     }
 
-    UBool copyErrorTo(UErrorCode& status) const {
+    UBool copyErrorTo(UErrorCode &status) const {
         if (fHasError) {
             status = fUnion.errorCode;
             return TRUE;
@@ -953,7 +949,7 @@ class U_I18N_API IntegerWidth : public UMemory {
         return FALSE;
     }
 
-    void apply(impl::DecimalQuantity& quantity, UErrorCode& status) const;
+    void apply(impl::DecimalQuantity &quantity, UErrorCode &status) const;
 
     bool operator==(const IntegerWidth& other) const;
 
@@ -974,11 +970,10 @@ namespace impl {
 class U_I18N_API SymbolsWrapper : public UMemory {
   public:
     /** @internal */
-    SymbolsWrapper()
-            : fType(SYMPTR_NONE), fPtr{nullptr} {}
+    SymbolsWrapper() : fType(SYMPTR_NONE), fPtr{nullptr} {}
 
     /** @internal */
-    SymbolsWrapper(const SymbolsWrapper& other);
+    SymbolsWrapper(const SymbolsWrapper &other);
 
     /** @internal */
     SymbolsWrapper(SymbolsWrapper&& src) U_NOEXCEPT;
@@ -987,22 +982,22 @@ class U_I18N_API SymbolsWrapper : public UMemory {
     ~SymbolsWrapper();
 
     /** @internal */
-    SymbolsWrapper& operator=(const SymbolsWrapper& other);
+    SymbolsWrapper &operator=(const SymbolsWrapper &other);
 
     /** @internal */
-    SymbolsWrapper& operator=(SymbolsWrapper&& src) U_NOEXCEPT;
+    SymbolsWrapper &operator=(SymbolsWrapper&& src) U_NOEXCEPT;
 
     /**
      * The provided object is copied, but we do not adopt it.
      * @internal
      */
-    void setTo(const DecimalFormatSymbols& dfs);
+    void setTo(const DecimalFormatSymbols &dfs);
 
     /**
      * Adopt the provided object.
      * @internal
      */
-    void setTo(const NumberingSystem* ns);
+    void setTo(const NumberingSystem *ns);
 
     /**
      * Whether the object is currently holding a DecimalFormatSymbols.
@@ -1020,16 +1015,16 @@ class U_I18N_API SymbolsWrapper : public UMemory {
      * Get the DecimalFormatSymbols pointer. No ownership change.
      * @internal
      */
-    const DecimalFormatSymbols* getDecimalFormatSymbols() const;
+    const DecimalFormatSymbols *getDecimalFormatSymbols() const;
 
     /**
      * Get the NumberingSystem pointer. No ownership change.
      * @internal
      */
-    const NumberingSystem* getNumberingSystem() const;
+    const NumberingSystem *getNumberingSystem() const;
 
     /** @internal */
-    UBool copyErrorTo(UErrorCode& status) const {
+    UBool copyErrorTo(UErrorCode &status) const {
         if (fType == SYMPTR_DFS && fPtr.dfs == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return TRUE;
@@ -1046,11 +1041,11 @@ class U_I18N_API SymbolsWrapper : public UMemory {
     } fType;
 
     union {
-        const DecimalFormatSymbols* dfs;
-        const NumberingSystem* ns;
+        const DecimalFormatSymbols *dfs;
+        const NumberingSystem *ns;
     } fPtr;
 
-    void doCopyFrom(const SymbolsWrapper& other);
+    void doCopyFrom(const SymbolsWrapper &other);
 
     void doMoveFrom(SymbolsWrapper&& src);
 
@@ -1111,17 +1106,16 @@ class U_I18N_API Grouper : public UMemory {
      */
     UGroupingStrategy fStrategy;
 
-    Grouper()
-            : fGrouping1(-3) {};
+    Grouper() : fGrouping1(-3) {};
 
     bool isBogus() const {
         return fGrouping1 == -3;
     }
 
     /** NON-CONST: mutates the current instance. */
-    void setLocaleData(const impl::ParsedPatternInfo& patternInfo, const Locale& locale);
+    void setLocaleData(const impl::ParsedPatternInfo &patternInfo, const Locale& locale);
 
-    bool groupAtPosition(int32_t position, const impl::DecimalQuantity& value) const;
+    bool groupAtPosition(int32_t position, const impl::DecimalQuantity &value) const;
 
     // To allow MacroProps/MicroProps to initialize empty instances:
     friend struct MacroProps;
@@ -1163,19 +1157,17 @@ class U_I18N_API Padder : public UMemory {
 
     Padder(int32_t width);
 
-    Padder(UErrorCode errorCode)
-            : fWidth(-3) { // NOLINT
+    Padder(UErrorCode errorCode) : fWidth(-3) { // NOLINT
         fUnion.errorCode = errorCode;
     }
 
-    Padder()
-            : fWidth(-2) {} // NOLINT
+    Padder() : fWidth(-2) {} // NOLINT
 
     bool isBogus() const {
         return fWidth == -2;
     }
 
-    UBool copyErrorTo(UErrorCode& status) const {
+    UBool copyErrorTo(UErrorCode &status) const {
         if (fWidth == -3) {
             status = fUnion.errorCode;
             return TRUE;
@@ -1187,9 +1179,9 @@ class U_I18N_API Padder : public UMemory {
         return fWidth > 0;
     }
 
-    int32_t padAndApply(const impl::Modifier& mod1, const impl::Modifier& mod2,
-                        impl::NumberStringBuilder& string, int32_t leftIndex, int32_t rightIndex,
-                        UErrorCode& status) const;
+    int32_t padAndApply(const impl::Modifier &mod1, const impl::Modifier &mod2,
+                        impl::NumberStringBuilder &string, int32_t leftIndex, int32_t rightIndex,
+                        UErrorCode &status) const;
 
     // To allow MacroProps/MicroProps to initialize empty instances:
     friend struct MacroProps;
@@ -1217,8 +1209,7 @@ class U_I18N_API Multiplier : public UMemory {
 
     Multiplier(int32_t magnitudeMultiplier, int32_t multiplier);
 
-    Multiplier()
-            : magnitudeMultiplier(0), multiplier(1) {}
+    Multiplier() : magnitudeMultiplier(0), multiplier(1) {}
 
     bool isValid() const {
         return magnitudeMultiplier != 0 || multiplier != 1;
@@ -1280,10 +1271,10 @@ struct U_I18N_API MacroProps : public UMemory {
     AffixPatternProvider* affixProvider = nullptr;  // no ownership
 
     /** @internal */
-    PluralRules* rules = nullptr;  // no ownership
+    PluralRules *rules = nullptr;  // no ownership
 
     /** @internal */
-    CurrencySymbols* currencySymbols = nullptr;  // no ownership
+    CurrencySymbols *currencySymbols = nullptr;  // no ownership
 
     /** @internal */
     int32_t threshold = DEFAULT_THRESHOLD;
@@ -1297,9 +1288,10 @@ struct U_I18N_API MacroProps : public UMemory {
      * Check all members for errors.
      * @internal
      */
-    bool copyErrorTo(UErrorCode& status) const {
-        return notation.copyErrorTo(status) || rounder.copyErrorTo(status) || padder.copyErrorTo(status) ||
-               integerWidth.copyErrorTo(status) || symbols.copyErrorTo(status);
+    bool copyErrorTo(UErrorCode &status) const {
+        return notation.copyErrorTo(status) || rounder.copyErrorTo(status) ||
+               padder.copyErrorTo(status) || integerWidth.copyErrorTo(status) ||
+               symbols.copyErrorTo(status);
     }
 };
 
@@ -1340,7 +1332,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see Notation
      * @draft ICU 60
      */
-    Derived notation(const Notation& notation) const& ;
+    Derived notation(const Notation &notation) const &;
 
     /**
      * Overload of notation() for use on an rvalue reference.
@@ -1351,7 +1343,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #notation
      * @draft ICU 62
      */
-    Derived notation(const Notation& notation)&& ;
+    Derived notation(const Notation &notation) &&;
 
     /**
      * Specifies the unit (unit of measure, currency, or percent) to associate with rendered numbers.
@@ -1397,7 +1389,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #perUnit
      * @draft ICU 60
      */
-    Derived unit(const icu::MeasureUnit& unit) const& ;
+    Derived unit(const icu::MeasureUnit &unit) const &;
 
     /**
      * Overload of unit() for use on an rvalue reference.
@@ -1408,7 +1400,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #unit
      * @draft ICU 62
      */
-    Derived unit(const icu::MeasureUnit& unit)&& ;
+    Derived unit(const icu::MeasureUnit &unit) &&;
 
     /**
      * Like unit(), but takes ownership of a pointer.  Convenient for use with the MeasureFormat factory
@@ -1425,7 +1417,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see MeasureUnit
      * @draft ICU 60
      */
-    Derived adoptUnit(icu::MeasureUnit* unit) const& ;
+    Derived adoptUnit(icu::MeasureUnit *unit) const &;
 
     /**
      * Overload of adoptUnit() for use on an rvalue reference.
@@ -1436,7 +1428,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #adoptUnit
      * @draft ICU 62
      */
-    Derived adoptUnit(icu::MeasureUnit* unit)&& ;
+    Derived adoptUnit(icu::MeasureUnit *unit) &&;
 
     /**
      * Sets a unit to be used in the denominator. For example, to format "3 m/s", pass METER to the unit and SECOND to
@@ -1455,7 +1447,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #unit
      * @draft ICU 61
      */
-    Derived perUnit(const icu::MeasureUnit& perUnit) const& ;
+    Derived perUnit(const icu::MeasureUnit &perUnit) const &;
 
     /**
      * Overload of perUnit() for use on an rvalue reference.
@@ -1466,7 +1458,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #perUnit
      * @draft ICU 62
      */
-    Derived perUnit(const icu::MeasureUnit& perUnit)&& ;
+    Derived perUnit(const icu::MeasureUnit &perUnit) &&;
 
     /**
      * Like perUnit(), but takes ownership of a pointer.  Convenient for use with the MeasureFormat factory
@@ -1485,7 +1477,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see MeasureUnit
      * @draft ICU 61
      */
-    Derived adoptPerUnit(icu::MeasureUnit* perUnit) const& ;
+    Derived adoptPerUnit(icu::MeasureUnit *perUnit) const &;
 
     /**
      * Overload of adoptPerUnit() for use on an rvalue reference.
@@ -1496,7 +1488,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #adoptPerUnit
      * @draft ICU 62
      */
-    Derived adoptPerUnit(icu::MeasureUnit* perUnit)&& ;
+    Derived adoptPerUnit(icu::MeasureUnit *perUnit) &&;
 
     /**
      * Specifies the rounding strategy to use when formatting numbers.
@@ -1528,7 +1520,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see Rounder
      * @draft ICU 60
      */
-    Derived rounding(const Rounder& rounder) const& ;
+    Derived rounding(const Rounder &rounder) const &;
 
     /**
      * Overload of rounding() for use on an rvalue reference.
@@ -1539,7 +1531,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #rounding
      * @draft ICU 62
      */
-    Derived rounding(const Rounder& rounder)&& ;
+    Derived rounding(const Rounder& rounder) &&;
 
     /**
      * Specifies the grouping strategy to use when formatting numbers.
@@ -1568,7 +1560,7 @@ class U_I18N_API NumberFormatterSettings {
      * @return The fluent chain.
      * @draft ICU 61
      */
-    Derived grouping(const UGroupingStrategy& strategy) const& ;
+    Derived grouping(const UGroupingStrategy &strategy) const &;
 
     /**
      * Overload of grouping() for use on an rvalue reference.
@@ -1580,7 +1572,7 @@ class U_I18N_API NumberFormatterSettings {
      * @provisional This API might change or be removed in a future release.
      * @draft ICU 62
      */
-    Derived grouping(const UGroupingStrategy& rounder)&& ;
+    Derived grouping(const UGroupingStrategy& rounder) &&;
 
     /**
      * Specifies the minimum and maximum number of digits to render before the decimal mark.
@@ -1606,7 +1598,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see IntegerWidth
      * @draft ICU 60
      */
-    Derived integerWidth(const IntegerWidth& style) const& ;
+    Derived integerWidth(const IntegerWidth &style) const &;
 
     /**
      * Overload of integerWidth() for use on an rvalue reference.
@@ -1617,7 +1609,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #integerWidth
      * @draft ICU 62
      */
-    Derived integerWidth(const IntegerWidth& style)&& ;
+    Derived integerWidth(const IntegerWidth &style) &&;
 
     /**
      * Specifies the symbols (decimal separator, grouping separator, percent sign, numerals, etc.) to use when rendering
@@ -1659,7 +1651,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see DecimalFormatSymbols
      * @draft ICU 60
      */
-    Derived symbols(const DecimalFormatSymbols& symbols) const& ;
+    Derived symbols(const DecimalFormatSymbols &symbols) const &;
 
     /**
      * Overload of symbols() for use on an rvalue reference.
@@ -1670,7 +1662,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #symbols
      * @draft ICU 62
      */
-    Derived symbols(const DecimalFormatSymbols& symbols)&& ;
+    Derived symbols(const DecimalFormatSymbols &symbols) &&;
 
     /**
      * Specifies that the given numbering system should be used when fetching symbols.
@@ -1705,7 +1697,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see NumberingSystem
      * @draft ICU 60
      */
-    Derived adoptSymbols(NumberingSystem* symbols) const& ;
+    Derived adoptSymbols(NumberingSystem *symbols) const &;
 
     /**
      * Overload of adoptSymbols() for use on an rvalue reference.
@@ -1716,7 +1708,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #adoptSymbols
      * @draft ICU 62
      */
-    Derived adoptSymbols(NumberingSystem* symbols)&& ;
+    Derived adoptSymbols(NumberingSystem *symbols) &&;
 
     /**
      * Sets the width of the unit (measure unit or currency).  Most common values:
@@ -1743,7 +1735,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see UNumberUnitWidth
      * @draft ICU 60
      */
-    Derived unitWidth(const UNumberUnitWidth& width) const& ;
+    Derived unitWidth(const UNumberUnitWidth &width) const &;
 
     /**
      * Overload of unitWidth() for use on an rvalue reference.
@@ -1754,7 +1746,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #unitWidth
      * @draft ICU 62
      */
-    Derived unitWidth(const UNumberUnitWidth& width)&& ;
+    Derived unitWidth(const UNumberUnitWidth &width) &&;
 
     /**
      * Sets the plus/minus sign display strategy. Most common values:
@@ -1782,7 +1774,7 @@ class U_I18N_API NumberFormatterSettings {
      * @provisional This API might change or be removed in a future release.
      * @draft ICU 60
      */
-    Derived sign(const UNumberSignDisplay& style) const& ;
+    Derived sign(const UNumberSignDisplay &style) const &;
 
     /**
      * Overload of sign() for use on an rvalue reference.
@@ -1793,7 +1785,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #sign
      * @draft ICU 62
      */
-    Derived sign(const UNumberSignDisplay& style)&& ;
+    Derived sign(const UNumberSignDisplay &style) &&;
 
     /**
      * Sets the decimal separator display strategy. This affects integer numbers with no fraction part. Most common
@@ -1821,7 +1813,7 @@ class U_I18N_API NumberFormatterSettings {
      * @provisional This API might change or be removed in a future release.
      * @draft ICU 60
      */
-    Derived decimal(const UNumberDecimalSeparatorDisplay& style) const& ;
+    Derived decimal(const UNumberDecimalSeparatorDisplay &style) const &;
 
     /**
      * Overload of decimal() for use on an rvalue reference.
@@ -1832,7 +1824,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #sign
      * @draft ICU 62
      */
-    Derived decimal(const UNumberDecimalSeparatorDisplay& style)&& ;
+    Derived decimal(const UNumberDecimalSeparatorDisplay &style) &&;
 
 #ifndef U_HIDE_INTERNAL_API
 
@@ -1841,10 +1833,10 @@ class U_I18N_API NumberFormatterSettings {
      *
      * @internal ICU 60: This API is ICU internal only.
      */
-    Derived padding(const impl::Padder& padder) const& ;
+    Derived padding(const impl::Padder &padder) const &;
 
     /** @internal */
-    Derived padding(const impl::Padder& padder)&& ;
+    Derived padding(const impl::Padder &padder) &&;
 
     /**
      * Internal fluent setter to support a custom regulation threshold. A threshold of 1 causes the data structures to
@@ -1852,26 +1844,26 @@ class U_I18N_API NumberFormatterSettings {
      *
      * @internal ICU 60: This API is ICU internal only.
      */
-    Derived threshold(int32_t threshold) const& ;
+    Derived threshold(int32_t threshold) const &;
 
     /** @internal */
-    Derived threshold(int32_t threshold)&& ;
+    Derived threshold(int32_t threshold) &&;
 
     /**
      * Internal fluent setter to overwrite the entire macros object.
      *
      * @internal ICU 60: This API is ICU internal only.
      */
-    Derived macros(const impl::MacroProps& macros) const& ;
+    Derived macros(const impl::MacroProps& macros) const &;
 
     /** @internal */
-    Derived macros(const impl::MacroProps& macros)&& ;
+    Derived macros(const impl::MacroProps& macros) &&;
 
     /** @internal */
-    Derived macros(impl::MacroProps&& macros) const& ;
+    Derived macros(impl::MacroProps&& macros) const &;
 
     /** @internal */
-    Derived macros(impl::MacroProps&& macros)&& ;
+    Derived macros(impl::MacroProps&& macros) &&;
 
 #endif  /* U_HIDE_INTERNAL_API */
 
@@ -1900,7 +1892,7 @@ class U_I18N_API NumberFormatterSettings {
      * @return TRUE if U_FAILURE(outErrorCode)
      * @draft ICU 60
      */
-    UBool copyErrorTo(UErrorCode& outErrorCode) const {
+    UBool copyErrorTo(UErrorCode &outErrorCode) const {
         if (U_FAILURE(outErrorCode)) {
             // Do not overwrite the older error code
             return TRUE;
@@ -1948,7 +1940,7 @@ class U_I18N_API UnlocalizedNumberFormatter
      * @return The fluent chain.
      * @draft ICU 60
      */
-    LocalizedNumberFormatter locale(const icu::Locale& locale) const& ;
+    LocalizedNumberFormatter locale(const icu::Locale &locale) const &;
 
     /**
      * Overload of locale() for use on an rvalue reference.
@@ -1959,7 +1951,7 @@ class U_I18N_API UnlocalizedNumberFormatter
      * @see #locale
      * @draft ICU 62
      */
-    LocalizedNumberFormatter locale(const icu::Locale& locale)&& ;
+    LocalizedNumberFormatter locale(const icu::Locale &locale) &&;
 
     /**
      * Default constructor: puts the formatter into a valid but undefined state.
@@ -1973,7 +1965,7 @@ class U_I18N_API UnlocalizedNumberFormatter
      * Returns a copy of this UnlocalizedNumberFormatter.
      * @draft ICU 60
      */
-    UnlocalizedNumberFormatter(const UnlocalizedNumberFormatter& other);
+    UnlocalizedNumberFormatter(const UnlocalizedNumberFormatter &other);
 
     /**
      * Move constructor:
@@ -2028,7 +2020,7 @@ class U_I18N_API LocalizedNumberFormatter
      * @return A FormattedNumber object; call .toString() to get the string.
      * @draft ICU 60
      */
-    FormattedNumber formatInt(int64_t value, UErrorCode& status) const;
+    FormattedNumber formatInt(int64_t value, UErrorCode &status) const;
 
     /**
      * Format the given float or double to a string using the settings specified in the NumberFormatter fluent setting
@@ -2041,7 +2033,7 @@ class U_I18N_API LocalizedNumberFormatter
      * @return A FormattedNumber object; call .toString() to get the string.
      * @draft ICU 60
      */
-    FormattedNumber formatDouble(double value, UErrorCode& status) const;
+    FormattedNumber formatDouble(double value, UErrorCode &status) const;
 
     /**
      * Format the given decimal number to a string using the settings
@@ -2092,7 +2084,7 @@ class U_I18N_API LocalizedNumberFormatter
      * Returns a copy of this LocalizedNumberFormatter.
      * @draft ICU 60
      */
-    LocalizedNumberFormatter(const LocalizedNumberFormatter& other);
+    LocalizedNumberFormatter(const LocalizedNumberFormatter &other);
 
     /**
      * Move constructor:
@@ -2126,7 +2118,7 @@ class U_I18N_API LocalizedNumberFormatter
      * @param results
      *            The results object. This method will mutate it to save the results.
      */
-    void formatImpl(impl::UFormattedNumberData* results, UErrorCode& status) const;
+    void formatImpl(impl::UFormattedNumberData *results, UErrorCode &status) const;
 
 #endif
 
@@ -2139,16 +2131,16 @@ class U_I18N_API LocalizedNumberFormatter
   private:
     // Note: fCompiled can't be a LocalPointer because impl::NumberFormatterImpl is defined in an internal
     // header, and LocalPointer needs the full class definition in order to delete the instance.
-    const impl::NumberFormatterImpl* fCompiled{nullptr};
-    char fUnsafeCallCount[8]{};  // internally cast to u_atomic_int32_t
+    const impl::NumberFormatterImpl* fCompiled {nullptr};
+    char fUnsafeCallCount[8] {};  // internally cast to u_atomic_int32_t
 
     explicit LocalizedNumberFormatter(const NumberFormatterSettings<LocalizedNumberFormatter>& other);
 
     explicit LocalizedNumberFormatter(NumberFormatterSettings<LocalizedNumberFormatter>&& src) U_NOEXCEPT;
 
-    LocalizedNumberFormatter(const impl::MacroProps& macros, const Locale& locale);
+    LocalizedNumberFormatter(const impl::MacroProps &macros, const Locale &locale);
 
-    LocalizedNumberFormatter(impl::MacroProps&& macros, const Locale& locale);
+    LocalizedNumberFormatter(impl::MacroProps &&macros, const Locale &locale);
 
     // To give the fluent setters access to this class's constructor:
     friend class NumberFormatterSettings<UnlocalizedNumberFormatter>;
@@ -2183,7 +2175,7 @@ class U_I18N_API FormattedNumber : public UMemory {
      * @draft ICU 60
      * @see Appendable
      */
-    Appendable& appendTo(Appendable& appendable);
+    Appendable &appendTo(Appendable &appendable);
 
     /**
      * Determine the start and end indices of the first occurrence of the given <em>field</em> in the output string.
@@ -2204,7 +2196,7 @@ class U_I18N_API FormattedNumber : public UMemory {
      * @draft ICU 60
      * @see UNumberFormatFields
      */
-    void populateFieldPosition(FieldPosition& fieldPosition, UErrorCode& status);
+    void populateFieldPosition(FieldPosition &fieldPosition, UErrorCode &status);
 
     /**
      * Export the formatted number to a FieldPositionIterator. This allows you to determine which characters in
@@ -2220,7 +2212,7 @@ class U_I18N_API FormattedNumber : public UMemory {
      * @draft ICU 60
      * @see UNumberFormatFields
      */
-    void populateFieldPositionIterator(FieldPositionIterator& iterator, UErrorCode& status);
+    void populateFieldPositionIterator(FieldPositionIterator &iterator, UErrorCode &status);
 
 #ifndef U_HIDE_INTERNAL_API
 
@@ -2240,7 +2232,6 @@ class U_I18N_API FormattedNumber : public UMemory {
 
     // Don't allow copying of FormattedNumber, but moving is okay.
     FormattedNumber(const FormattedNumber&) = delete;
-
     FormattedNumber& operator=(const FormattedNumber&) = delete;
 
     /**
@@ -2265,7 +2256,7 @@ class U_I18N_API FormattedNumber : public UMemory {
 
   private:
     // Can't use LocalPointer because UFormattedNumberData is forward-declared
-    const impl::UFormattedNumberData* fResults;
+    const impl::UFormattedNumberData *fResults;
 
     // Error code for the terminal methods
     UErrorCode fErrorCode;
@@ -2274,11 +2265,11 @@ class U_I18N_API FormattedNumber : public UMemory {
      * Internal constructor from data type. Adopts the data pointer.
      * @internal
      */
-    explicit FormattedNumber(const impl::UFormattedNumberData* results)
-            : fResults(results), fErrorCode(U_ZERO_ERROR) {};
+    explicit FormattedNumber(impl::UFormattedNumberData *results)
+        : fResults(results), fErrorCode(U_ZERO_ERROR) {};
 
     explicit FormattedNumber(UErrorCode errorCode)
-            : fResults(nullptr), fErrorCode(errorCode) {};
+        : fResults(nullptr), fErrorCode(errorCode) {};
 
     // To give LocalizedNumberFormatter format methods access to this class's constructor:
     friend class LocalizedNumberFormatter;
@@ -2309,7 +2300,7 @@ class U_I18N_API NumberFormatter final {
      * @return A {@link LocalizedNumberFormatter}, to be used for chaining.
      * @draft ICU 60
      */
-    static LocalizedNumberFormatter withLocale(const Locale& locale);
+    static LocalizedNumberFormatter withLocale(const Locale &locale);
 
     /**
      * Call this method at the beginning of a NumberFormatter fluent chain to create an instance based
@@ -2338,3 +2329,4 @@ U_NAMESPACE_END
 #endif // __NUMBERFORMATTER_H__
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
