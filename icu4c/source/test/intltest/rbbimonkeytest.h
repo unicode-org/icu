@@ -25,6 +25,20 @@
 #include "uhash.h"
 #include "uvector.h"
 
+// RBBI Monkey Test. Run break iterators against randomly generated strings, compare results with
+//                   an independent reference implementation.
+//
+//         The monkey test can be run with parameters, e.g.
+//              intltest rbbi/RBBIMonkeyTest@loop=-1,rules=word.txt
+//         will run word break testing in an infinite loop.
+//         Summary of options
+//               test=name             Test against the named reference rule file.
+//                                     Files are found in source/test/testdata/break_rules
+//               loop=nnn              Loop nnn times. -1 for no limit. loop of 1 is useful for debugging.
+//               seed=nnnn             Random number generator seed. Allows recreation of a failure.
+//                                     Error messages include the necessary seed value.
+//               verbose               Display details of a failure. Useful for debugging. Use with loop=1.
+//               expansions            Debug option, show expansions of rules and sets.
 //
 //  TODO:
 //     Develop a tailoring format.
