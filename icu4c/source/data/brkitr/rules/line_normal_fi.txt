@@ -103,8 +103,6 @@ $ALPlus = [$AL $AI $SG $XX [$SA-[[:Mn:][:Mc:]]]];
 
 ## -------------------------------------------------
 
-!!forward;
-
 #
 # CAN_CM  is the set of characters that may combine with CM combining chars.
 #         Note that Linebreak UAX 14's concept of a combining char and the rules
@@ -345,36 +343,3 @@ $EB $CM* $EM;
 # LB 31 Break everywhere else.
 #       Match a single code point if no other rule applies.
 .;
-
-## -------------------------------------------------
-
-!!safe_reverse;
-
-# LB 9
-^$CM+ [^$CM $BK $CR $LF $NL $ZW $SP];
-^$CM+ $SP / .;
-
-# LB 14
-$SP+ $CM* $OP;
-
-# LB 15
-$SP+ $CM* $QU;
-
-# LB 16
-$SP+ $CM* ($CL | $CP);
-
-# LB 17
-$SP+ $CM* $B2;
-
-# LB 21
-$CM* ($HY | $BA | $HH) $CM* $HL;
-
-# LB 25
-($CM* ($IS | $SY))+ $CM* $NU;
-($CL | $CP) $CM* ($NU | $IS | $SY);
-
-#  LB 30
-($CM* $RI)+;
-
-# For dictionary-based break
-$dictionary $dictionary;

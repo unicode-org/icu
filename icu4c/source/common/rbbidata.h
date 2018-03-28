@@ -81,10 +81,6 @@ struct RBBIDataHeader {
     uint32_t         fFTableLen;
     uint32_t         fRTable;         /*  Offset to the reverse state transition table. */
     uint32_t         fRTableLen;
-    uint32_t         fSFTable;        /*  safe point forward transition table */
-    uint32_t         fSFTableLen;
-    uint32_t         fSRTable;        /*  safe point reverse transition table */
-    uint32_t         fSRTableLen;
     uint32_t         fTrie;           /*  Offset to Trie data for character categories */
     uint32_t         fTrieLen;
     uint32_t         fRuleSource;     /*  Offset to the source for for the break */
@@ -173,8 +169,7 @@ public:
     /*                                     */
     const RBBIDataHeader     *fHeader;
     const RBBIStateTable     *fForwardTable;
-    const RBBIStateTable     *fReverseTable;      // auto-generated safe reverse.
-    const RBBIStateTable     *fSafeRevTable;      // hand-written safe reverse. TODO: delete this.
+    const RBBIStateTable     *fReverseTable;
     const UChar              *fRuleSource;
     const int32_t            *fRuleStatusTable; 
 

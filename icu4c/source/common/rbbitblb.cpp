@@ -61,7 +61,7 @@ RBBITableBuilder::~RBBITableBuilder() {
 //                               table from the RBBI rules parse tree.
 //
 //-----------------------------------------------------------------------------
-void  RBBITableBuilder::build() {
+void  RBBITableBuilder::buildForwardTable() {
 
     if (U_FAILURE(*fStatus)) {
         return;
@@ -1150,6 +1150,35 @@ bool RBBITableBuilder::findDuplicateState(int32_t &firstState, int32_t &duplStat
     return false;
 }
 
+
+bool RBBITableBuilder::findDuplicateSafeState(int32_t *firstState, int32_t *duplState) {
+    int32_t numStates = fSafeTable->size();
+
+    for (; *firstState<numStates-1; ++(*firstState)) {
+        UnicodeString *firstRow = static_cast<UnicodeString *>(fSafeTable->elementAt(*firstState));
+        for (*duplState=*firstState+1; *duplState<numStates; ++(*duplState)) {
+            UnicodeString *duplRow = static_cast<UnicodeString *>(fSafeTable->elementAt(*duplState));
+            bool rowsMatch = true;
+            int32_t numCols = firstRow->length();
+            for (int32_t col=0; col < numCols; ++col) {
+                int32_t firstVal = firstRow->charAt(col);
+                int32_t duplVal = duplRow->charAt(col);
+                if (!((firstVal == duplVal) ||
+                        ((firstVal == *firstState || firstVal == *duplState) &&
+                        (duplVal  == *firstState || duplVal  == *duplState)))) {
+                    rowsMatch = false;
+                    break;
+                }
+            }
+            if (rowsMatch) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
 void RBBITableBuilder::removeState(int32_t keepState, int32_t duplState) {
     U_ASSERT(keepState < duplState);
     U_ASSERT(duplState < fDStates->size());
@@ -1185,6 +1214,29 @@ void RBBITableBuilder::removeState(int32_t keepState, int32_t duplState) {
     }
 }
 
+void RBBITableBuilder::removeSafeState(int32_t keepState, int32_t duplState) {
+    U_ASSERT(keepState < duplState);
+    U_ASSERT(duplState < fSafeTable->size());
+
+    fSafeTable->removeElementAt(duplState);   // Note that fSafeTable has a deleter function
+                                              // and will auto-delete the removed element.
+    int32_t numStates = fSafeTable->size();
+    int32_t numCols = fRB->fSetBuilder->getNumCharCategories();
+    for (int32_t state=0; state<numStates; ++state) {
+        UnicodeString *sd = (UnicodeString *)fSafeTable->elementAt(state);
+        for (int32_t col=0; col<numCols; col++) {
+            int32_t existingVal = sd->charAt(col);
+            int32_t newVal = existingVal;
+            if (existingVal == duplState) {
+                newVal = keepState;
+            } else if (existingVal > duplState) {
+                newVal = existingVal - 1;
+            }
+            sd->setCharAt(col, newVal);
+        }
+    }
+}
+
 
 /*
  * RemoveDuplicateStates
@@ -1197,6 +1249,7 @@ void RBBITableBuilder::removeDuplicateStates() {
         removeState(firstState, duplicateState);
     }
 }
+
 
 //-----------------------------------------------------------------------------
 //
@@ -1277,7 +1330,7 @@ void RBBITableBuilder::exportTable(void *where) {
 /**
  *   Synthesize a safe state table from the main state table.
  */
-void RBBITableBuilder::buildSafe(UErrorCode &status) {
+void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
     // Find safe char class pairs.
 
     // make a state table row for each trailing class, and map from class to row.
@@ -1358,8 +1411,13 @@ void RBBITableBuilder::buildSafe(UErrorCode &status) {
         rowState.setCharAt(c1, 0);
     }
 
-    // TODO: Merge similar states.
-
+    // Remove duplicate or redundant rows from the table.
+    int32_t firstState = 1;
+    int32_t duplicateState = 0;    // initial value is not used; set by findDuplicateSafeState().
+    while (findDuplicateSafeState(&firstState, &duplicateState)) {
+        // printf("Removing duplicate safe states (%d, %d)\n", firstState, duplicateState);
+        removeSafeState(firstState, duplicateState);
+    }
 }
 
 
@@ -1493,7 +1551,7 @@ void RBBITableBuilder::printStates() {
 //
 //-----------------------------------------------------------------------------
 #ifdef RBBI_DEBUG
-void RBBITableBuilder::printSafeTable() {
+void RBBITableBuilder::printReverseTable() {
     int     c;    // input "character"
     int     n;    // state number
 

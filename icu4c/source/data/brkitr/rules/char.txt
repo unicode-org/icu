@@ -49,7 +49,6 @@ $EmojiNRK    = [[\p{Emoji}] - [\p{Grapheme_Cluster_Break = Regional_Indicator}*\
 ## -------------------------------------------------
 !!chain;
 !!lookAheadHardBreak;
-!!forward;
 
 $CR $LF;
 
@@ -80,9 +79,3 @@ $Prepend [^$Control $CR $LF];
 
 # GB 999 Match a single code point if no other rule applies.
 .;
-
-## -------------------------------------------------
-
-!!safe_reverse;
-$Regional_Indicator $Regional_Indicator;
-($Extend | $ZWJ | $EmojiNRK | $Extended_Pict)+ .;

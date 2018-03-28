@@ -168,8 +168,7 @@ public:
     RBBISetBuilder                *fSetBuilder;      // Set and Character Category builder.
     UVector                       *fUSetNodes;       // Vector of all uset nodes.
 
-    RBBITableBuilder              *fForwardTables;   // State transition tables
-    RBBITableBuilder              *fSafeRevTables;
+    RBBITableBuilder              *fForwardTable;    // State transition table, build time form.
 
     UVector                       *fRuleStatusVals;  // The values that can be returned
                                                      //   from getRuleStatus().
