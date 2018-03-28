@@ -61,6 +61,10 @@ UChar32 StringSegment::codePointAt(int32_t index) const {
 }
 
 UnicodeString StringSegment::toUnicodeString() const {
+    return UnicodeString(fStr.getBuffer() + fStart, fEnd - fStart);
+}
+
+const UnicodeString StringSegment::toTempUnicodeString() const {
     // Use the readonly-aliasing constructor for efficiency.
     return UnicodeString(FALSE, fStr.getBuffer() + fStart, fEnd - fStart);
 }
@@ -134,7 +138,7 @@ bool StringSegment::codePointsEqual(UChar32 cp1, UChar32 cp2, bool foldCase) {
 }
 
 bool StringSegment::operator==(const UnicodeString& other) const {
-    return toUnicodeString() == other;
+    return toTempUnicodeString() == other;
 }
 
 

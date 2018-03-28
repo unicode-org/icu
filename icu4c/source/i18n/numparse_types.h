@@ -203,6 +203,8 @@ class StringSegment : public UMemory, public ::icu::number::impl::CharSequence {
 
     UnicodeString toUnicodeString() const override;
 
+    const UnicodeString toTempUnicodeString() const override;
+
     /**
      * Returns the first code point in the string segment, or -1 if the string starts with an invalid
      * code point.

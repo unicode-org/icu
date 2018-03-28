@@ -774,7 +774,9 @@ bool
 blueprint_helpers::parseExponentSignOption(const StringSegment& segment, MacroProps& macros, UErrorCode&) {
     // Get the sign display type out of the CharsTrie data structure.
     UCharsTrie tempStemTrie(kSerializedStemTrie);
-    UStringTrieResult result = tempStemTrie.next(segment.toUnicodeString().getBuffer(), segment.length());
+    UStringTrieResult result = tempStemTrie.next(
+            segment.toTempUnicodeString().getBuffer(),
+            segment.length());
     if (result != USTRINGTRIE_INTERMEDIATE_VALUE && result != USTRINGTRIE_FINAL_VALUE) {
         return false;
     }
@@ -788,6 +790,7 @@ blueprint_helpers::parseExponentSignOption(const StringSegment& segment, MacroPr
 
 void blueprint_helpers::parseCurrencyOption(const StringSegment& segment, MacroProps& macros,
                                             UErrorCode& status) {
+    // Can't use toTempUnicodeString() because getTerminatedBuffer is non-const
     const UChar* currencyCode = segment.toUnicodeString().getTerminatedBuffer();
     UErrorCode localStatus = U_ZERO_ERROR;
     CurrencyUnit currency(currencyCode, localStatus);
@@ -808,7 +811,7 @@ blueprint_helpers::generateCurrencyOption(const CurrencyUnit& currency, UnicodeS
 
 void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, MacroProps& macros,
                                                UErrorCode& status) {
-    UnicodeString stemString = segment.toUnicodeString();
+    const UnicodeString stemString = segment.toTempUnicodeString();
 
     // NOTE: The category (type) of the unit is guaranteed to be a valid subtag (alphanumeric)
     // http://unicode.org/reports/tr35/#Validity_Data
@@ -1043,7 +1046,7 @@ void blueprint_helpers::parseIncrementOption(const StringSegment& segment, Macro
                                              UErrorCode& status) {
     // Need to do char <-> UChar conversion...
     CharString buffer;
-    SKELETON_UCHAR_TO_CHAR(buffer, segment.toUnicodeString(), 0, segment.length(), status);
+    SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
 
     // Utilize DecimalQuantity/decNumber to parse this for us.
     DecimalQuantity dq;
@@ -1155,7 +1158,7 @@ void blueprint_helpers::parseNumberingSystemOption(const StringSegment& segment,
                                                    UErrorCode& status) {
     // Need to do char <-> UChar conversion...
     CharString buffer;
-    SKELETON_UCHAR_TO_CHAR(buffer, segment.toUnicodeString(), 0, segment.length(), status);
+    SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
 
     NumberingSystem* ns = NumberingSystem::createInstanceByName(buffer.data(), status);
     if (ns == nullptr) {

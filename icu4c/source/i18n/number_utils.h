@@ -39,12 +39,13 @@ class UnicodeStringCharSequence : public CharSequence {
     }
 
     UnicodeString toUnicodeString() const U_OVERRIDE {
-        // Allocate a UnicodeString of the correct length
-        UnicodeString output(length(), 0, -1);
-        for (int32_t i = 0; i < length(); i++) {
-            output.append(charAt(i));
-        }
-        return output;
+        // Performs a copy:
+        return fStr;
+    }
+
+    const UnicodeString toTempUnicodeString() const U_OVERRIDE {
+        // Readonly alias:
+        return UnicodeString().fastCopyFrom(fStr);
     }
 
   private:

@@ -334,6 +334,10 @@ int32_t NumberStringBuilder::remove(int32_t index, int32_t count) {
 }
 
 UnicodeString NumberStringBuilder::toUnicodeString() const {
+    return UnicodeString(getCharPtr() + fZero, fLength);
+}
+
+const UnicodeString NumberStringBuilder::toTempUnicodeString() const {
     // Readonly-alias constructor:
     return UnicodeString(FALSE, getCharPtr() + fZero, fLength);
 }
