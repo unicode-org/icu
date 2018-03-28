@@ -18,7 +18,6 @@ package com.ibm.icu.dev.test.rbbi;
 //            or simply retired if it is no longer interesting.
 import java.text.CharacterIterator;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -574,16 +573,16 @@ public class RBBITest extends TestFmwk {
         // Build a break iterator from source rules.
         // Want to check the rule builder in Java, not the pre-built rules that are imported from ICU4C.
         RBBIDataWrapper dw = bi.fRData;
-        short[] fwtbl = dw.fFTable;
+        RBBIDataWrapper.RBBIStateTable fwtbl = dw.fFTable;
         int numCharClasses = dw.fHeader.fCatCount;
 
         // Check for duplicate columns (character categories)
         List<String> columns = new ArrayList<String>();
         for (int column=0; column<numCharClasses; column++) {
             StringBuilder s = new StringBuilder();
-            for (int r = 1; r < dw.getStateTableNumStates(fwtbl); r++) {
+            for (int r = 1; r < fwtbl.fNumStates; r++) {
                 int row = dw.getRowIndex(r);
-                short tableVal = fwtbl[row + RBBIDataWrapper.NEXTSTATES + column];
+                short tableVal = fwtbl.fTable[row + RBBIDataWrapper.NEXTSTATES + column];
                 s.append((char)tableVal);
             }
             columns.add(s.toString());
@@ -600,22 +599,22 @@ public class RBBITest extends TestFmwk {
 
         // Check for duplicate states.
         List<String> rows = new ArrayList<String>();
-        for (int r=0; r<dw.getStateTableNumStates(fwtbl); r++) {
+        for (int r=0; r<fwtbl.fNumStates; r++) {
             StringBuilder s = new StringBuilder();
             int row = dw.getRowIndex(r);
-            assertTrue("Accepting < -1", fwtbl[row + RBBIDataWrapper.ACCEPTING] >= -1);
-            s.append(fwtbl[row + RBBIDataWrapper.ACCEPTING]);
-            s.append(fwtbl[row + RBBIDataWrapper.LOOKAHEAD]);
-            s.append(fwtbl[row + RBBIDataWrapper.TAGIDX]);
+            assertTrue("Accepting < -1", fwtbl.fTable[row + RBBIDataWrapper.ACCEPTING] >= -1);
+            s.append(fwtbl.fTable[row + RBBIDataWrapper.ACCEPTING]);
+            s.append(fwtbl.fTable[row + RBBIDataWrapper.LOOKAHEAD]);
+            s.append(fwtbl.fTable[row + RBBIDataWrapper.TAGIDX]);
             for (int column=0; column<numCharClasses; column++) {
-                short tableVal = fwtbl[row + RBBIDataWrapper.NEXTSTATES + column];
+                short tableVal = fwtbl.fTable[row + RBBIDataWrapper.NEXTSTATES + column];
                 s.append((char)tableVal);
             }
             rows.add(s.toString());
         }
 
-        for (int r1=0; r1 < dw.getStateTableNumStates(fwtbl); r1++) {
-            for (int r2= r1+1; r2 < dw.getStateTableNumStates(fwtbl); r2++) {
+        for (int r1=0; r1 < fwtbl.fNumStates; r1++) {
+            for (int r2= r1+1; r2 < fwtbl.fNumStates; r2++) {
                 assertFalse(String.format("Duplicate states (%d, %d)", r1, r2), rows.get(r1).equals(rows.get(r2)));
                 // if (rows.get(r1).equals(rows.get(r2))) {
                 //     System.out.printf("Duplicate states (%d, %d)\n", r1, r2);
@@ -652,11 +651,10 @@ public class RBBITest extends TestFmwk {
         for (RuleBasedBreakIterator bi: breakIterators) {
             String rules = bi.toString();
             RuleBasedBreakIterator bi2 = new RuleBasedBreakIterator(rules);
-
-            assertTrue("Forward Table",      Arrays.equals(bi.fRData.fFTable, bi2.fRData.fFTable));
-            assertTrue("Reverse Table",      Arrays.equals(bi.fRData.fRTable, bi2.fRData.fRTable));
-            assertTrue("Safe Forward Table", Arrays.equals(bi.fRData.fSFTable, bi2.fRData.fSFTable));
-            assertTrue("SafeForward Table",  Arrays.equals(bi.fRData.fSRTable, bi2.fRData.fSRTable));
+            assertTrue("Forward Table",      RBBIDataWrapper.equals(bi.fRData.fFTable, bi2.fRData.fFTable));
+            assertTrue("Reverse Table",      RBBIDataWrapper.equals(bi.fRData.fRTable, bi2.fRData.fRTable));
+            assertTrue("Safe Forward Table", RBBIDataWrapper.equals(bi.fRData.fSFTable, bi2.fRData.fSFTable));
+            assertTrue("SafeForward Table",  RBBIDataWrapper.equals(bi.fRData.fSRTable, bi2.fRData.fSRTable));
         }
     }
 }

@@ -364,16 +364,18 @@ public class DeprecatedAPIChecker {
         // erase generic args
         if (paramsSegment.indexOf('<') >= 0) {
             StringBuilder buf = new StringBuilder();
-            boolean inGenericsParams = false;
+            int genericsNestLevel = 0;
             for (int i = 0; i < paramsSegment.length(); i++) {
                 char c = paramsSegment.charAt(i);
-                if (inGenericsParams) {
-                    if (c == '>') {
-                        inGenericsParams = false;
+                if (genericsNestLevel > 0) {
+                    if (c == '<') {
+                        genericsNestLevel++;
+                    } else if (c == '>') {
+                        genericsNestLevel--;
                     }
                 } else {
                     if (c == '<') {
-                        inGenericsParams = true;
+                        genericsNestLevel++;
                     } else {
                         buf.append(c);
                     }

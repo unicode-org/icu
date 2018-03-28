@@ -609,6 +609,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
     } \
 }
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * If the string ends with a UTF-8 byte sequence that is valid so far
  * but incomplete, then reduce the length of the string to end before
@@ -657,6 +658,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
             } \
         } \
     }
+#endif  // U_HIDE_DRAFT_API
 
 /* definitions with backward iteration -------------------------------------- */
 

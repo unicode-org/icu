@@ -437,15 +437,19 @@ DecimalFormatSymbols::initialize(const Locale& loc, UErrorCode& status,
     sink.resolveMissingMonetarySeparators(fSymbols);
 
     // Resolve codePointZero
-    const UnicodeString& stringZero = getConstDigitSymbol(0);
-    UChar32 tempCodePointZero = stringZero.char32At(0);
-    if (u_isdigit(tempCodePointZero) && stringZero.countChar32() == 1) {
-        for (int32_t i=0; i<=9; i++) {
-            const UnicodeString& stringDigit = getConstDigitSymbol(i);
-            if (stringDigit.char32At(0) != tempCodePointZero + i || stringDigit.countChar32() != 1) {
-                tempCodePointZero = -1;
-                break;
-            }
+    UChar32 tempCodePointZero;
+    for (int32_t i=0; i<=9; i++) {
+        const UnicodeString& stringDigit = getConstDigitSymbol(i);
+        if (stringDigit.countChar32() != 1) {
+            tempCodePointZero = -1;
+            break;
+        }
+        UChar32 cp = stringDigit.char32At(0);
+        if (i == 0) {
+            tempCodePointZero = cp;
+        } else if (cp != tempCodePointZero + i) {
+            tempCodePointZero = -1;
+            break;
         }
     }
     fCodePointZero = tempCodePointZero;

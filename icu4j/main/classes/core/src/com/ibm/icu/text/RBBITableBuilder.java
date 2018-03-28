@@ -978,118 +978,70 @@ class RBBITableBuilder {
        }
 
 
-       //-----------------------------------------------------------------------------
-       //
-       //   getTableSize()    Calculate the size in bytes of the runtime form of this
-       //                     state transition table.
-       //
-       //          Note:  Refer to common/rbbidata.h from ICU4C for the declarations
-       //                 of the structures being matched by this calculation.
-       //
-       //-----------------------------------------------------------------------------
+       /**
+        *  Calculate the size in bytes of the serialized form of this state transition table,
+        *  which is identical to the ICU4C runtime form.
+        *  Refer to common/rbbidata.h from ICU4C for the declarations of the structures
+        *  being matched by this calculation.
+        */
        int  getTableSize()  {
-           int    size = 0;
-           int    numRows;
-           int    numCols;
-           int    rowSize;
-
            if (fRB.fTreeRoots[fRootIx] == null) {
                return 0;
            }
-
-           size    = /*sizeof(RBBIStateTable) - 4 */ 16;    // The header, with no rows to the table.
-
-           numRows = fDStates.size();
-           numCols = fRB.fSetBuilder.getNumCharCategories();
-
-           //  Note  The declaration of RBBIStateTableRow is for a table of two columns.
-           //        Therefore we subtract two from numCols when determining
-           //        how much storage to add to a row for the total columns.
-           // rowSize = sizeof(RBBIStateTableRow) + sizeof(uint16_t)*(numCols-2);
-           rowSize = 8 + 2*numCols;
+           int size    = 16;    // The header of 4 ints, with no rows to the table.
+           int numRows = fDStates.size();
+           int numCols = fRB.fSetBuilder.getNumCharCategories();
+           int rowSize = 8 + 2*numCols;
            size   += numRows * rowSize;
-           while (size % 8 > 0) {    // Size must be multiple of 8 bytes in size.
-               size++;
-           }
-
+           size = (size + 7) & ~7;   // round up to a multiple of 8 bytes
            return size;
        }
 
 
 
-       //-----------------------------------------------------------------------------
-       //
-       //   exportTable()    export the state transition table in the ICU4C format.
-       //
-       //                    Most of the table is 16 bit shorts.  This function exports
-       //                    the whole thing as an array of shorts.
-       //
-       //                    The size of the array must be rounded up to a multiple of
-       //                    8 bytes.
-       //
-       //                    See struct RBBIStateTable in ICU4C, common/rbbidata.h
-       //
-       //-----------------------------------------------------------------------------
-
-       short [] exportTable() {
+       /**
+        * Create a RBBIDataWrapper.RBBIStateTable for a newly compiled table.
+        * RBBIDataWrapper.RBBIStateTable is similar to struct RBBIStateTable in ICU4C,
+        * in common/rbbidata.h
+        */
+       RBBIDataWrapper.RBBIStateTable exportTable() {
            int                state;
            int                col;
 
+           RBBIDataWrapper.RBBIStateTable table = new RBBIDataWrapper.RBBIStateTable();
            if (fRB.fTreeRoots[fRootIx] == null) {
-               return new short[0];
+               return table;
            }
 
            Assert.assrt(fRB.fSetBuilder.getNumCharCategories() < 0x7fff &&
                fDStates.size() < 0x7fff);
-
-           int numStates = fDStates.size();
+           table.fNumStates = fDStates.size();
 
            // Size of table size in shorts.
            //  the "4" is the size of struct RBBIStateTableRow, the row header part only.
            int rowLen = 4 + fRB.fSetBuilder.getNumCharCategories();   // Row Length in shorts.
-           int tableSize = getTableSize() / 2;
+           int tableSize = (getTableSize() - 16) / 2;       // fTable length in shorts.
+           table.fTable = new short[tableSize];
+           table.fRowLen = rowLen * 2;                      // Row length in bytes.
 
-
-           short [] table = new short[tableSize];
-
-           //
-           // Fill in the header fields.
-           //      Note that NUMSTATES, ROWLEN and FLAGS are ints, not shorts.
-           //      ICU data created from Java is always big endian format, so
-           //      order the halves of the 32 bit fields into the short[] data accordingly.
-           //      TODO: ticket 13598 restructure so that ints are represented as ints directly.
-           //
-           // RBBIStateTable.fNumStates
-           table[RBBIDataWrapper.NUMSTATES]   = (short)(numStates >>> 16);
-           table[RBBIDataWrapper.NUMSTATES+1] = (short)(numStates & 0x0000ffff);
-
-           // RBBIStateTable.fRowLen. In bytes.
-           int rowLenInBytes = rowLen * 2;
-           table[RBBIDataWrapper.ROWLEN]   = (short)(rowLenInBytes >>> 16);
-           table[RBBIDataWrapper.ROWLEN+1] = (short)(rowLenInBytes & 0x0000ffff);
-
-           // RBBIStateTable.fFlags
-           int flags = 0;
            if (fRB.fLookAheadHardBreak) {
-               flags  |= RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK;
+               table.fFlags  |= RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK;
            }
            if (fRB.fSetBuilder.sawBOF()) {
-               flags  |= RBBIDataWrapper.RBBI_BOF_REQUIRED;
+               table.fFlags  |= RBBIDataWrapper.RBBI_BOF_REQUIRED;
            }
-           table[RBBIDataWrapper.FLAGS]   = (short)(flags >>> 16);
-           table[RBBIDataWrapper.FLAGS+1] = (short)(flags & 0x0000ffff);
 
            int numCharCategories = fRB.fSetBuilder.getNumCharCategories();
-           for (state=0; state<numStates; state++) {
+           for (state=0; state<table.fNumStates; state++) {
                RBBIStateDescriptor sd = fDStates.get(state);
-               int                row = 8 + state*rowLen;
+               int row = state*rowLen;
                Assert.assrt (-32768 < sd.fAccepting && sd.fAccepting <= 32767);
                Assert.assrt (-32768 < sd.fLookAhead && sd.fLookAhead <= 32767);
-               table[row + RBBIDataWrapper.ACCEPTING] = (short)sd.fAccepting;
-               table[row + RBBIDataWrapper.LOOKAHEAD] = (short)sd.fLookAhead;
-               table[row + RBBIDataWrapper.TAGIDX]    = (short)sd.fTagsIdx;
+               table.fTable[row + RBBIDataWrapper.ACCEPTING] = (short)sd.fAccepting;
+               table.fTable[row + RBBIDataWrapper.LOOKAHEAD] = (short)sd.fLookAhead;
+               table.fTable[row + RBBIDataWrapper.TAGIDX]    = (short)sd.fTagsIdx;
                for (col=0; col<numCharCategories; col++) {
-                   table[row + RBBIDataWrapper.NEXTSTATES + col] = (short)sd.fDtran[col];
+                   table.fTable[row + RBBIDataWrapper.NEXTSTATES + col] = (short)sd.fDtran[col];
                }
            }
            return table;

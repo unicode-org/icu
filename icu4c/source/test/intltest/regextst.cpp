@@ -39,6 +39,7 @@
 #include "unicode/ustring.h"
 #include "unicode/utext.h"
 #include "unicode/utf16.h"
+#include "cstr.h"
 #include "regextst.h"
 #include "regexcmp.h"
 #include "uvector.h"
@@ -101,6 +102,8 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
     TESTCASE_AUTO(NamedCapture);
     TESTCASE_AUTO(NamedCaptureLimits);
     TESTCASE_AUTO(TestBug12884);
+    TESTCASE_AUTO(TestBug13631);
+    TESTCASE_AUTO(TestBug13632);
     TESTCASE_AUTO_END;
 }
 
@@ -5804,6 +5807,48 @@ void RegexTest::TestBug12884() {
     ngM.reset(ut.getAlias());
     ngM.find(status);
     REGEX_ASSERT(status == U_REGEX_TIME_OUT);
+}
+
+// Bug 13631. A find() of a pattern with a zero length look-behind assertions
+//            can cause a read past the end of the input text.
+//            The failure is seen when running this test with Clang's Addresss Sanitizer.
+
+void RegexTest::TestBug13631() {
+    const UChar *pats[] = { u"(?<!^)",
+                            u"(?<=^)",
+                            nullptr
+                          };
+    for (const UChar **pat=pats; *pat; ++pat) {
+        UErrorCode status = U_ZERO_ERROR;
+        UnicodeString upat(*pat);
+        RegexMatcher matcher(upat, 0, status);
+        const UChar s =u'a';
+        UText *ut = utext_openUChars(nullptr, &s, 1, &status);
+        REGEX_CHECK_STATUS;
+        matcher.reset(ut);
+        while (matcher.find()) {
+        }
+        utext_close(ut);
+    }
+}
+
+// Bug 13632 Out of bounds memory reference if a replacement string ends with a '$',
+//           where a following group specification would be expected.
+//           Failure shows when running the test under Clang's Address Sanitizer.
+
+void RegexTest::TestBug13632() {
+    UErrorCode status = U_ZERO_ERROR;
+    URegularExpression *re = uregex_openC(" ", 0, nullptr, &status);
+    const char16_t *sourceString = u"Hello, world.";
+    uregex_setText(re, sourceString, u_strlen(sourceString), &status);
+
+    const int32_t destCap = 20;
+    char16_t dest[destCap] = {};
+    const char16_t replacement[] = {u'x', u'$'};    // Not nul terminated string.
+    uregex_replaceAll(re, replacement, 2, dest, destCap, &status);
+
+    assertEquals("", U_REGEX_INVALID_CAPTURE_GROUP_NAME, status);
+    uregex_close(re);
 }
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */

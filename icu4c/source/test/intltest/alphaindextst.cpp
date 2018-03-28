@@ -736,7 +736,11 @@ void AlphabeticIndexTest::testHasBuckets() {
 void AlphabeticIndexTest::checkHasBuckets(const Locale &locale, UScriptCode script) {
     IcuTestErrorCode errorCode(*this, "checkHasBuckets");
     AlphabeticIndex aindex(locale, errorCode);
-    LocalPointer<AlphabeticIndex::ImmutableIndex> index(aindex.buildImmutableIndex(errorCode));
+    LocalPointer<AlphabeticIndex::ImmutableIndex> index(aindex.buildImmutableIndex(errorCode), errorCode);
+    if (U_FAILURE(errorCode)) {
+      dataerrln("%s %d  Error in index creation",  __FILE__, __LINE__);
+      return;
+    }
     UnicodeString loc = locale.getName();
     assertTrue(loc + u" at least 3 buckets", index->getBucketCount() >= 3);
     const AlphabeticIndex::Bucket *bucket = index->getBucket(1);

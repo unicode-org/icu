@@ -23,8 +23,7 @@ import com.ibm.icu.util.ULocale;
  * <p>
  * <strong>IMPORTANT:</strong> New users are strongly encouraged to see if
  * {@link NumberFormatter} fits their use case.  Although not deprecated, this
- * class, CompactDecimalFormat, is on life support and is provided for
- * backwards compatibility only.
+ * class, CompactDecimalFormat, is provided for backwards compatibility only.
  * <hr>
  *
  * The CompactDecimalFormat produces abbreviated numbers, suitable for display in environments will
@@ -80,6 +79,9 @@ public class CompactDecimalFormat extends DecimalFormat {
   }
 
   /**
+   * <strong>NOTE:</strong> New users are strongly encouraged to use
+   * {@link NumberFormatter} instead of NumberFormat.
+   * <hr>
    * Creates a CompactDecimalFormat appropriate for a locale. The result may be affected by the
    * number system in the locale, such as ar-u-nu-latn.
    *
@@ -92,6 +94,9 @@ public class CompactDecimalFormat extends DecimalFormat {
   }
 
   /**
+   * <strong>NOTE:</strong> New users are strongly encouraged to use
+   * {@link NumberFormatter} instead of NumberFormat.
+   * <hr>
    * Creates a CompactDecimalFormat appropriate for a locale. The result may be affected by the
    * number system in the locale, such as ar-u-nu-latn.
    *

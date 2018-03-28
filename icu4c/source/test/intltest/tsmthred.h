@@ -52,7 +52,7 @@ public:
     void TestConditionVariables();
     void TestUnifiedCache();
     void TestBreakTranslit();
-
+    void TestIncDec();
 };
 
 #endif
