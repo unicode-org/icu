@@ -40,7 +40,7 @@ public:
     RBBITableBuilder(RBBIRuleBuilder *rb, RBBINode **rootNode, UErrorCode &status);
     ~RBBITableBuilder();
 
-    void     build();
+    void     buildForwardTable();
 
     /** Return the runtime size in bytes of the built state table.  */
     int32_t  getTableSize() const;
@@ -63,7 +63,8 @@ public:
     /** Check for, and remove dupicate states (table rows). */
     void     removeDuplicateStates();
 
-    void     buildSafe(UErrorCode &status);
+    /** Build the safe reverse table from the already-constructed forward table. */
+    void     buildSafeReverseTable(UErrorCode &status);
 
     /** Return the runtime size in bytes of the built safe reverse state table. */
     int32_t  getSafeTableSize() const;
@@ -109,6 +110,21 @@ private:
      */
     void removeState(int32_t keepState, int32_t duplState);
 
+    /** Find the next duplicate state in the safe reverse table. An iterator function.
+     * @param firstState ptr to state variable. Begin looking at this state, set to the first of the
+     *                   pair of duplicates on return.
+     * @param duplicateState ptr to where to return the duplicate state of fistState. Output only.
+     * @return true if a duplicate pair of states was found.
+     */
+    bool findDuplicateSafeState(int32_t *firstState, int32_t *duplicateState);
+
+    /** Remove a duplicate state from the safe table.
+     * @param keepState First of the duplicate pair. Keep it.
+     * @param duplState Duplicate state. Remove it. Redirect all table references to the duplicate state
+     *                  to refer to keepState instead.
+     */
+    void removeSafeState(int32_t keepState, int32_t duplState);
+
     // Set functions for UVector.
     //   TODO:  make a USet subclass of UVector
 
@@ -123,7 +139,7 @@ public:
     void     printPosSets(RBBINode *n /* = NULL*/);
     void     printStates();
     void     printRuleStatusTable();
-    void     printSafeTable();
+    void     printReverseTable();
 #else
     #define  printSet(s)
     #define  printPosSets(n)
