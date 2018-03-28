@@ -522,7 +522,8 @@ private:
      */
     DateTimePatternGenerator& operator=(const DateTimePatternGenerator& other);
 
-    static const int32_t UDATPG_WIDTH_COUNT = UDATPG_NARROW + 1;
+    // TODO(ticket:13619): re-enable when UDATPG_NARROW no longer in  draft mode.
+    // static const int32_t UDATPG_WIDTH_COUNT = UDATPG_NARROW + 1;
 
     Locale pLocale;  // pattern locale
     FormatParser *fp;
@@ -530,7 +531,8 @@ private:
     DistanceInfo *distanceInfo;
     PatternMap *patternMap;
     UnicodeString appendItemFormats[UDATPG_FIELD_COUNT];
-    UnicodeString fieldDisplayNames[UDATPG_FIELD_COUNT][UDATPG_WIDTH_COUNT];
+    // TODO(ticket:13619): [3] -> UDATPG_WIDTH_COUNT
+    UnicodeString fieldDisplayNames[UDATPG_FIELD_COUNT][3];
     UnicodeString dateTimeFormat;
     UnicodeString decimal;
     DateTimeMatcher *skipMatcher;
@@ -560,9 +562,11 @@ private:
     void setDateTimeFromCalendar(const Locale& locale, UErrorCode& status);
     void setDecimalSymbols(const Locale& locale, UErrorCode& status);
     UDateTimePatternField getAppendFormatNumber(const char* field) const;
+#ifndef U_HIDE_DRAFT_API
     UDateTimePatternField getFieldAndWidthIndices(const char* key, UDateTimePGDisplayWidth* widthP) const;
     void setFieldDisplayName(UDateTimePatternField field, UDateTimePGDisplayWidth width, const UnicodeString& value);
     UnicodeString& getMutableFieldDisplayName(UDateTimePatternField field, UDateTimePGDisplayWidth width);
+#endif  // U_HIDE_DRAFT_API
     void getAppendName(UDateTimePatternField field, UnicodeString& value);
     UnicodeString mapSkeletonMetacharacters(const UnicodeString& patternForm, int32_t* flags, UErrorCode& status);
     int32_t getCanonicalIndex(const UnicodeString& field);

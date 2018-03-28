@@ -20,14 +20,17 @@
 
 /**
  * Opaque datatype representing an array of font runs
+ * @internal
  */
 typedef void pl_fontRuns;
 /**
  * Opaque datatype representing an array of value runs
+ * @internal
  */
 typedef void pl_valueRuns;
 /**
  * Opaque datatype representing an array of locale runs
+ * @internal
  */
 typedef void pl_localeRuns;
 

@@ -85,8 +85,7 @@ public class StringSegment implements CharSequence {
     }
 
     /**
-     * Returns the first code point in the string segment, or -1 if the string starts with an invalid
-     * code point.
+     * Returns the first code point in the string segment.
      *
      * <p>
      * <strong>Important:</strong> Most of the time, you should use {@link #startsWith}, which handles

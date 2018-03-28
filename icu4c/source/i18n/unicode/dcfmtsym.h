@@ -411,7 +411,7 @@ public:
      *
      * @param symbol Constant to indicate a number format symbol.
      * @return the format symbol by the param 'symbol'
-     * @draft ICU 61
+     * @internal
      */
     inline const UnicodeString& getConstSymbol(ENumberFormatSymbol symbol) const;
 
@@ -501,7 +501,7 @@ DecimalFormatSymbols::getSymbol(ENumberFormatSymbol symbol) const {
     return *strPtr;
 }
 
-// See comments above for this function. Not hidden with #ifndef U_HIDE_INTERNAL_API
+// See comments above for this function. Not hidden with #ifdef U_HIDE_INTERNAL_API
 inline const UnicodeString &
 DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
     const UnicodeString *strPtr;
@@ -513,6 +513,7 @@ DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
     return *strPtr;
 }
 
+#ifndef U_HIDE_INTERNAL_API
 inline const UnicodeString& DecimalFormatSymbols::getConstDigitSymbol(int32_t digit) const {
     if (digit < 0 || digit > 9) {
         digit = 0;
@@ -523,6 +524,7 @@ inline const UnicodeString& DecimalFormatSymbols::getConstDigitSymbol(int32_t di
     ENumberFormatSymbol key = static_cast<ENumberFormatSymbol>(kOneDigitSymbol + digit - 1);
     return fSymbols[key];
 }
+#endif
 
 // -------------------------------------
 

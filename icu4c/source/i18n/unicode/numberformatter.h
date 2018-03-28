@@ -106,6 +106,7 @@ class IntegerWidth;
 
 namespace impl {
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * Datatype for minimum/maximum fraction digits. Must be able to hold kMaxIntFracSig.
  *
@@ -120,6 +121,7 @@ typedef int16_t digits_t;
  * @internal
  */
 static constexpr int32_t DEFAULT_THRESHOLD = 3;
+#endif  // U_HIDE_INTERNAL_API
 
 // Forward declarations:
 class Padder;
@@ -966,6 +968,7 @@ class U_I18N_API IntegerWidth : public UMemory {
 
 namespace impl {
 
+// Do not enclose entire SymbolsWrapper with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
 class U_I18N_API SymbolsWrapper : public UMemory {
   public:
@@ -986,6 +989,8 @@ class U_I18N_API SymbolsWrapper : public UMemory {
 
     /** @internal */
     SymbolsWrapper &operator=(SymbolsWrapper&& src) U_NOEXCEPT;
+
+#ifndef U_HIDE_INTERNAL_API
 
     /**
      * The provided object is copied, but we do not adopt it.
@@ -1035,6 +1040,8 @@ class U_I18N_API SymbolsWrapper : public UMemory {
         return FALSE;
     }
 
+#endif  // U_HIDE_INTERNAL_API
+
   private:
     enum SymbolsPointerType {
         SYMPTR_NONE, SYMPTR_DFS, SYMPTR_NS
@@ -1052,9 +1059,11 @@ class U_I18N_API SymbolsWrapper : public UMemory {
     void doCleanup();
 };
 
+// Do not enclose entire Grouper with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
 class U_I18N_API Grouper : public UMemory {
   public:
+#ifndef U_HIDE_INTERNAL_API
     /** @internal */
     static Grouper forStrategy(UGroupingStrategy grouping);
 
@@ -1072,6 +1081,7 @@ class U_I18N_API Grouper : public UMemory {
               fGrouping2(grouping2),
               fMinGrouping(minGrouping),
               fStrategy(strategy) {}
+#endif  // U_HIDE_INTERNAL_API
 
     /** @internal */
     int16_t getPrimary() const;
@@ -1131,14 +1141,17 @@ class U_I18N_API Grouper : public UMemory {
     friend class impl::GeneratorHelpers;
 };
 
+// Do not enclose entire Padder with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
 class U_I18N_API Padder : public UMemory {
   public:
+#ifndef U_HIDE_INTERNAL_API
     /** @internal */
     static Padder none();
 
     /** @internal */
     static Padder codePoints(UChar32 cp, int32_t targetWidth, UNumberFormatPadPosition position);
+#endif  // U_HIDE_INTERNAL_API
 
     /** @internal */
     static Padder forProperties(const DecimalFormatProperties& properties);
@@ -1194,6 +1207,7 @@ class U_I18N_API Padder : public UMemory {
     friend class impl::GeneratorHelpers;
 };
 
+// Do not enclose entire MacroProps with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
 class U_I18N_API Multiplier : public UMemory {
   public:
@@ -2329,4 +2343,3 @@ U_NAMESPACE_END
 #endif // __NUMBERFORMATTER_H__
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
-
