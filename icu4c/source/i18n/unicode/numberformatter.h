@@ -1884,16 +1884,13 @@ class U_I18N_API NumberFormatterSettings {
     /**
      * Creates a skeleton string representation of this number formatter. A skeleton string is a
      * locale-agnostic serialized form of a number formatter.
-     * <p>
+     *
      * Not all options are capable of being represented in the skeleton string; for example, a
-     * DecimalFormatSymbols object. If any such option is encountered, an
-     * {@link UnsupportedOperationException} is thrown.
-     * <p>
+     * DecimalFormatSymbols object. If any such option is encountered, the error code is set to
+     * U_UNSUPPORTED_ERROR.
+     *
      * The returned skeleton is in normalized form, such that two number formatters with equivalent
      * behavior should produce the same skeleton.
-     * <p>
-     * Sets an error code if the number formatter has an option that cannot be represented in a skeleton
-     * string.
      *
      * @return A number skeleton string with behavior corresponding to this number formatter.
      * @draft ICU 62
@@ -2322,8 +2319,9 @@ class U_I18N_API NumberFormatter final {
      *
      * @param skeleton
      *            The skeleton string off of which to base this NumberFormatter.
+     * @param status
+     *            Set to U_NUMBER_SKELETON_SYNTAX_ERROR if the skeleton was invalid.
      * @return An UnlocalizedNumberFormatter, to be used for chaining.
-     * @throws SkeletonSyntaxException If the given string is not a valid number formatting skeleton.
      * @draft ICU 62
      */
     static UnlocalizedNumberFormatter fromSkeleton(const UnicodeString& skeleton, UErrorCode& status);
