@@ -1123,22 +1123,6 @@ void RBBIRuleScanner::parse() {
     }
 
     //
-    // If there were NO user specified safe reverse rules, set up the equivalent of ".*;"
-    //
-    if (fRB->fSafeRevTree == NULL) {
-        fRB->fSafeRevTree  = pushNewNode(RBBINode::opStar);
-        RBBINode  *operand = pushNewNode(RBBINode::setRef);
-        if (U_FAILURE(*fRB->fStatus)) {
-            return;
-        }
-        findSetFor(UnicodeString(TRUE, kAny, 3), operand);
-        fRB->fSafeRevTree->fLeftChild = operand;
-        operand->fParent              = fRB->fSafeRevTree;
-        fNodeStackPtr -= 2;
-    }
-
-
-    //
     // Parsing of the input RBBI rules is complete.
     // We now have a parse tree for the rule expressions
     // and a list of all UnicodeSets that are referenced.

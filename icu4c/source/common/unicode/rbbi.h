@@ -639,16 +639,6 @@ private:
     void init(UErrorCode &status);
 
     /**
-     * Iterate backwards from an arbitrary position in the input text using the Safe Reverse rules.
-     * This locates a "Safe Position" from which the forward break rules
-     * will operate correctly. A Safe Position is not necessarily a boundary itself.
-     *
-     * @param fromPosition the position in the input text to begin the iteration.
-     * @internal
-     */
-    int32_t handlePrevious(int32_t fromPosition);
-
-    /**
      * Iterate backwards from an arbitrary position in the input text using the
      * synthesized Safe Reverse rules.
      * This locates a "Safe Position" from which the forward break rules
