@@ -12,7 +12,6 @@ package com.ibm.icu.text;
 import static com.ibm.icu.impl.CharacterIteration.DONE32;
 import static com.ibm.icu.impl.CharacterIteration.next32;
 import static com.ibm.icu.impl.CharacterIteration.nextTrail32;
-import static com.ibm.icu.impl.CharacterIteration.previous32;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -510,7 +509,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
         checkOffset(offset, fText);
 
         // Adjust offset to be on a code point boundary and not beyond the end of the text.
-        // Note that isBoundary() is always be false for offsets that are not on code point boundaries.
+        // Note that isBoundary() is always false for offsets that are not on code point boundaries.
         // But we still need the side effect of leaving iteration at the following boundary.
         int adjustedOffset = CISetIndex32(fText, offset);
 
@@ -966,142 +965,71 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * This locates a "Safe Position" from which the forward break rules
      * will operate correctly. A Safe Position is not necessarily a boundary itself.
      *
-     * The logic of this function is very similar to handleNext(), above.
+     * The logic of this function is very similar to handleNext(), above, but simpler
+     * because the safe table does not require as many options.
      *
      * @param fromPosition the position in the input text to begin the iteration.
      * @internal
      */
-    private int handlePrevious(int fromPosition) {
-        if (fText == null) {
-            return 0;
+    private int handleSafePrevious(int fromPosition) {
+        int             state;
+        short           category = 0;
+        int             result = 0;
+
+        // caches for quicker access
+        CharacterIterator text = fText;
+        Trie2 trie = fRData.fTrie;
+        short[] stateTable  = fRData.fRTable.fTable;
+
+        CISetIndex32(text, fromPosition);
+        if (TRACE) {
+            System.out.print("Handle Previous   pos   char  state category");
         }
 
-        int            state;
-        int            category           = 0;
-        int            mode;
-        int            row;
-        int            c;
-        int            result             = 0;
-        int            initialPosition    = fromPosition;
-        fLookAheadMatches.reset();
-        short[] stateTable = fRData.fSRTable.fTable;
-        CISetIndex32(fText, fromPosition);
-        if (fromPosition == fText.getBeginIndex()) {
+        // if we're already at the start of the text, return DONE.
+        if (text.getIndex() == text.getBeginIndex()) {
             return BreakIterator.DONE;
         }
 
-        // set up the starting char
-        result          = initialPosition;
-        c               = previous32(fText);
-
-        // Set up the initial state for the state machine
+        //  Set the initial state for the state machine
+        int c = CharacterIteration.previous32(text);
         state = START_STATE;
-        row = fRData.getRowIndex(state);
-        category = 3;   // TODO:  obsolete?  from the old start/run mode scheme?
-        mode     = RBBI_RUN;
-        if ((fRData.fSRTable.fFlags & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
-            category = 2;
-            mode     = RBBI_START;
-        }
+        int row = fRData.getRowIndex(state);
 
-        if (TRACE) {
-            System.out.println("Handle Prev   pos   char  state category ");
-        }
-
-        // loop until we reach the beginning of the text or transition to state 0
+        // loop until we reach the start of the text or transition to state 0
         //
-        mainLoop: for (;;) {
-            if (c == DONE32) {
-                // Reached end of input string.
-                if (mode == RBBI_END) {
-                    // We have already done the {eof} iteration.  Now is the time
-                    // to unconditionally bail out.
-                    break mainLoop;
-                }
-                mode = RBBI_END;
-                category = 1;
-            }
+        for (; c != DONE32; c = CharacterIteration.previous32(text)) {
 
-            if (mode == RBBI_RUN) {
-                // look up the current character's category, which tells us
-                // which column in the state table to look at.
-                //
-                //  And off the dictionary flag bit. For reverse iteration it is not used.
-                category = (short) fRData.fTrie.get(c);
-                category &= ~0x4000;
-            }
-
+            // look up the current character's character category, which tells us
+            // which column in the state table to look at.
+            //
+            //  And off the dictionary flag bit. For reverse iteration it is not used.
+            category = (short) trie.get(c);
+            category &= ~0x4000;
             if (TRACE) {
-                System.out.print("             " + fText.getIndex() + "   ");
-                if (0x20 <= c && c < 0x7f) {
-                    System.out.print("  " + c + "  ");
-                } else {
-                    System.out.print(" " + Integer.toHexString(c) + " ");
-                }
-                System.out.println(" " + state + "  " + category + " ");
+                System.out.print("            " +  RBBIDataWrapper.intToString(text.getIndex(), 5));
+                System.out.print(RBBIDataWrapper.intToHexString(c, 10));
+                System.out.println(RBBIDataWrapper.intToString(state,7) + RBBIDataWrapper.intToString(category,6));
             }
 
             // State Transition - move machine to its next state
             //
+            assert(category < fRData.fHeader.fCatCount);
             state = stateTable[row + RBBIDataWrapper.NEXTSTATES + category];
-            row = fRData.getRowIndex(state);
-
-            if (stateTable[row + RBBIDataWrapper.ACCEPTING] == -1) {
-                // Match found, common case, could have lookahead so we move
-                // on to check it
-                result = fText.getIndex();
-            }
-
-
-            int completedRule = stateTable[row + RBBIDataWrapper.ACCEPTING];
-            if (completedRule > 0) {
-                // Lookahead match is completed.
-                int lookaheadResult = fLookAheadMatches.getPosition(completedRule);
-                if (lookaheadResult >= 0) {
-                    result = lookaheadResult;
-                    break mainLoop;
-                }
-            }
-            int rule = stateTable[row + RBBIDataWrapper.LOOKAHEAD];
-            if (rule != 0) {
-                // At the position of a '/' in a look-ahead match. Record it.
-                int pos = fText.getIndex();
-                fLookAheadMatches.setPosition(rule, pos);
-            }
+            row   = fRData.getRowIndex(state);
 
             if (state == STOP_STATE) {
-                // Normal loop exit is here
-                break mainLoop;
+                // This is the normal exit from the lookup state machine.
+                // Transition to state zero means we have found a safe point.
+                break;
             }
-
-            // then move iterator position backwards one character
-            //
-            if (mode == RBBI_RUN) {
-                c = previous32(fText);
-            } else {
-                if (mode == RBBI_START) {
-                    mode = RBBI_RUN;
-                }
-            }
-
-
-        }   // End of the main loop.
-
-        // The state machine is done.  Check whether it found a match...
-        //
-        // If the iterator failed to move in the match engine, force it back by one code point.
-        //   (This really indicates a defect in the break rules.  They should always match
-        //    at least one character.)
-        if (result == initialPosition) {
-            CISetIndex32(fText, initialPosition);
-            previous32(fText);
-            result = fText.getIndex();
         }
 
+        // The state machine is done.
+        result = text.getIndex();
         if (TRACE) {
-            System.out.println("Result = " + result);
+            System.out.println("result = " + result);
         }
-
         return result;
     }
 
@@ -1493,11 +1421,26 @@ class BreakCache {
         if ((position < fBoundaries[fStartBufIdx] - 15) || position > (fBoundaries[fEndBufIdx] + 15)) {
             int aBoundary = fText.getBeginIndex();
             int ruleStatusIndex = 0;
-            // TODO: check for position == length of text. Although may still need to back up to get rule status.
             if (position > aBoundary + 20) {
-                int backupPos = handlePrevious(position);
-                fPosition = backupPos;
-                aBoundary = handleNext();                // Ignore dictionary, just finding a rule based boundary.
+                int backupPos = handleSafePrevious(position);
+                if (backupPos > aBoundary) {
+                    // Advance to the boundary following the backup position.
+                    // There is a complication: the safe reverse rules identify pairs of code points
+                    // that are safe. If advancing from the safe point moves forwards by less than
+                    // two code points, we need to advance one more time to ensure that the boundary
+                    // is good, including a correct rules status value.
+                    //
+                    fPosition = backupPos;
+                    aBoundary = handleNext();
+                    if (aBoundary == backupPos + 1 ||
+                            (aBoundary == backupPos + 2 &&
+                            Character.isHighSurrogate(fText.setIndex(backupPos)) &&
+                            Character.isLowSurrogate(fText.next()))) {
+                        // The initial handleNext() only advanced by a single code point. Go again.
+                        // Safe rules identify safe pairs.
+                        aBoundary = handleNext();
+                    }
+                }
                 ruleStatusIndex = fRuleStatusIndex;
             }
             reset(aBoundary, ruleStatusIndex);               // Reset cache to hold aBoundary as a single starting point.
@@ -1628,21 +1571,34 @@ class BreakCache {
             if (backupPosition <= textBegin) {
                 backupPosition = textBegin;
             } else {
-                backupPosition = handlePrevious(backupPosition);
+                backupPosition = handleSafePrevious(backupPosition);
             }
             if (backupPosition == BreakIterator.DONE || backupPosition == textBegin) {
                 position = textBegin;
                 positionStatusIdx = 0;
             } else {
+                // Advance to the boundary following the backup position.
+                // There is a complication: the safe reverse rules identify pairs of code points
+                // that are safe. If advancing from the safe point moves forwards by less than
+                // two code points, we need to advance one more time to ensure that the boundary
+                // is good, including a correct rules status value.
+                //
                 fPosition = backupPosition;  // TODO: pass starting position in a clearer way.
                 position = handleNext();
+                if (position == backupPosition + 1 ||
+                        (position == backupPosition + 2 &&
+                        Character.isHighSurrogate(fText.setIndex(backupPosition)) &&
+                        Character.isLowSurrogate(fText.next()))) {
+                    // The initial handleNext() only advanced by a single code point. Go again.
+                    // Safe rules identify safe pairs.
+                    position = handleNext();
+                }
                 positionStatusIdx = fRuleStatusIndex;
-
             }
         } while (position >= fromPosition);
 
         // Find boundaries between the one we just located and the first already-cached boundary
-        // Put them in a side buffer, because we don't yet know where they will fall in the circular cache buffer..
+        // Put them in a side buffer, because we don't yet know where they will fall in the circular cache buffer.
 
         fSideBuffer.removeAllElements();
         fSideBuffer.push(position);
