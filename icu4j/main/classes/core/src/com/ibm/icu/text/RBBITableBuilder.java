@@ -95,7 +95,7 @@ class RBBITableBuilder {
        //                               table from the RBBI rules parse tree.
        //
        //-----------------------------------------------------------------------------
-       void  build() {
+       void  buildForwardTable() {
            // If there were no rules, just return.  This situation can easily arise
            //   for the reverse rules.
            if (fRB.fTreeRoots[fRootIx]==null) {
