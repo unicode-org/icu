@@ -115,6 +115,7 @@ public class NumberSkeletonTest {
                 ".00/@@#",
                 ".00/@@#+",
                 ".00/floor/@@+", // wrong order
+                "round-increment/français", // non-invariant characters for C++
                 "round-currency-cash/XXX",
                 "scientific/ee",
                 "round-increment/xxx",
@@ -145,7 +146,6 @@ public class NumberSkeletonTest {
                 "français",
                 "measure-unit/français-français", // non-invariant characters for C++
                 "numbering-system/français", // non-invariant characters for C++
-                "round-increment/français", // non-invariant characters for C++
                 "currency-USD" };
 
         for (String cas : cases) {

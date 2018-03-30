@@ -753,7 +753,7 @@ NumberFormatTest::TestPatterns(void)
 
     const char* pat[]    = { "#.#", "#.", ".#", "#" };
     int32_t pat_length = UPRV_LENGTHOF(pat);
-    const char* newpat[] = { "#0.#", "#0.", "#.0", "#" };
+    const char* newpat[] = { "0.#", "0.", "#.0", "0" };
     const char* num[]    = { "0",   "0.", ".0", "0" };
     for (int32_t i=0; i<pat_length; ++i)
     {
@@ -1338,7 +1338,7 @@ void NumberFormatTest::TestCurrencyObject() {
                    1234.56, CharsToUnicodeString("\\u00A51,235")); // Yen
 
     expectCurrency(*fmt, Locale("fr", "CH", ""),
-                   1234.56, "CHF1,234.56"); // no more 0.05 rounding here, see cldrbug 5548
+                   1234.56, "CHF 1,234.56"); // no more 0.05 rounding here, see cldrbug 5548
 
     expectCurrency(*fmt, Locale::getUS(),
                    1234.56, "$1,234.56");
@@ -1481,7 +1481,8 @@ NumberFormatTest::TestLenientParse(void)
 
             if (U_FAILURE(status) || n.getType() != Formattable::kLong ||
             	n.getLong() != 1) {
-            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientAffixTestCases[t] + (UnicodeString) "\"");
+            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientAffixTestCases[t]
+                      + (UnicodeString) "\"; error code = " + u_errorName(status));
             	status = U_ZERO_ERROR;
             }
        }
@@ -1504,7 +1505,8 @@ NumberFormatTest::TestLenientParse(void)
             logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
 
             if (U_FAILURE(status) || n.getType() != Formattable::kLong || n.getLong() != -5) {
-                errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientMinusTestCases[t] + (UnicodeString) "\"");
+                errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientMinusTestCases[t]
+                      + (UnicodeString) "\"; error code = " + u_errorName(status));
                 status = U_ZERO_ERROR;
             }
         }
@@ -1524,7 +1526,8 @@ NumberFormatTest::TestLenientParse(void)
             logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
 
             if (U_FAILURE(status) || n.getType() != Formattable::kLong || n.getLong() != -5) {
-                errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientMinusTestCases[t] + (UnicodeString) "\"");
+                errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientMinusTestCases[t]
+                      + (UnicodeString) "\"; error code = " + u_errorName(status));
                 status = U_ZERO_ERROR;
             }
         }
@@ -1545,7 +1548,8 @@ NumberFormatTest::TestLenientParse(void)
 
             if (U_FAILURE(status) ||n.getType() != Formattable::kLong ||
             	n.getLong() != 1000) {
-            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientCurrencyTestCases[t] + (UnicodeString) "\"");
+            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientCurrencyTestCases[t]
+                      + (UnicodeString) "\"; error code = " + u_errorName(status));
             	status = U_ZERO_ERROR;
             }
         }
@@ -1558,7 +1562,8 @@ NumberFormatTest::TestLenientParse(void)
 
             if (U_FAILURE(status) ||n.getType() != Formattable::kLong ||
             	n.getLong() != -1000) {
-            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientNegativeCurrencyTestCases[t] + (UnicodeString) "\"");
+            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientNegativeCurrencyTestCases[t]
+                      + (UnicodeString) "\"; error code = " + u_errorName(status));
             	status = U_ZERO_ERROR;
             }
         }
@@ -1580,7 +1585,8 @@ NumberFormatTest::TestLenientParse(void)
 
             if (U_FAILURE(status) ||n.getType() != Formattable::kDouble ||
             	n.getDouble() != 0.25) {
-            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientPercentTestCases[t] + (UnicodeString) "\"");
+            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientPercentTestCases[t]
+                      + (UnicodeString) "\"; error code = " + u_errorName(status));
             	status = U_ZERO_ERROR;
             }
         }
@@ -1593,7 +1599,8 @@ NumberFormatTest::TestLenientParse(void)
 
             if (U_FAILURE(status) ||n.getType() != Formattable::kDouble ||
             	n.getDouble() != -0.25) {
-            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientNegativePercentTestCases[t] + (UnicodeString) "\"");
+            	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientNegativePercentTestCases[t]
+                      + (UnicodeString) "\"; error code = " + u_errorName(status));
             	status = U_ZERO_ERROR;
             }
         }
@@ -1616,7 +1623,8 @@ NumberFormatTest::TestLenientParse(void)
 	       logln((UnicodeString)"parse(" + testCase + ") = " + n.getLong());
 
 	       if (! U_FAILURE(status)) {
-		       errln((UnicodeString)"Strict Parse succeeded for \"" + (UnicodeString) strictFailureTestCases[t] + (UnicodeString) "\"");
+		       errln((UnicodeString)"Strict Parse succeeded for \"" + (UnicodeString) strictFailureTestCases[t]
+                     + (UnicodeString) "\"; error code = " + u_errorName(status));
 	       }
 
 	       status = U_ZERO_ERROR;
@@ -1632,7 +1640,8 @@ NumberFormatTest::TestLenientParse(void)
 
 	       if (U_FAILURE(status) ||n.getType() != Formattable::kLong ||
 	            	n.getLong() != 1000) {
-		       errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) strictFailureTestCases[t] + (UnicodeString) "\"");
+		       errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) strictFailureTestCases[t]
+                     + (UnicodeString) "\"; error code = " + u_errorName(status));
 		       status = U_ZERO_ERROR;
 	       }
        }
