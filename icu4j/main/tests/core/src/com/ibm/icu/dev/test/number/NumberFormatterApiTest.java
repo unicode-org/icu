@@ -894,6 +894,22 @@ public class NumberFormatterApiTest {
                 ULocale.ENGLISH,
                 9.99999,
                 "10.0");
+
+        assertFormatSingle(
+                "Fixed Significant on zero with zero integer width",
+                "@ integer-width/+",
+                NumberFormatter.with().rounding(Rounder.fixedDigits(1)).integerWidth(IntegerWidth.zeroFillTo(0)),
+                ULocale.ENGLISH,
+                0,
+                "0");
+
+        assertFormatSingle(
+                "Fixed Significant on zero with lots of integer width",
+                "@ integer-width/+000",
+                NumberFormatter.with().rounding(Rounder.fixedDigits(1)).integerWidth(IntegerWidth.zeroFillTo(3)),
+                ULocale.ENGLISH,
+                0,
+                "000");
     }
 
     @Test

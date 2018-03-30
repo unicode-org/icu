@@ -910,6 +910,24 @@ void NumberFormatterApiTest::roundingFigures() {
             Locale::getEnglish(),
             9.99999,
             u"10.0");
+
+    assertFormatSingle(
+            u"Fixed Significant on zero with lots of integer width",
+            u"@ integer-width/+000",
+            NumberFormatter::with().rounding(Rounder::fixedDigits(1))
+                    .integerWidth(IntegerWidth::zeroFillTo(3)),
+            Locale::getEnglish(),
+            0,
+            "000");
+
+    assertFormatSingle(
+            u"Fixed Significant on zero with zero integer width",
+            u"@ integer-width/+",
+            NumberFormatter::with().rounding(Rounder::fixedDigits(1))
+                    .integerWidth(IntegerWidth::zeroFillTo(0)),
+            Locale::getEnglish(),
+            0,
+            "0");
 }
 
 void NumberFormatterApiTest::roundingFractionFigures() {

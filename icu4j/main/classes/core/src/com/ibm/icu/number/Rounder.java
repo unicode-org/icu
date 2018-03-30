@@ -609,6 +609,10 @@ public abstract class Rounder implements Cloneable {
             value.roundToMagnitude(getRoundingMagnitudeSignificant(value, maxSig), mathContext);
             value.setFractionLength(Math.max(0, -getDisplayMagnitudeSignificant(value, minSig)),
                     Integer.MAX_VALUE);
+            // Make sure that digits are displayed on zero.
+            if (value.isZero() && minSig > 0) {
+                value.setIntegerLength(1, Integer.MAX_VALUE);
+            }
         }
 
         /**
