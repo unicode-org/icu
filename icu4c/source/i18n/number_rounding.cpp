@@ -342,6 +342,10 @@ void Rounder::apply(impl::DecimalQuantity &value, UErrorCode& status) const {
             value.setFractionLength(
                     uprv_max(0, -getDisplayMagnitudeSignificant(value, fUnion.fracSig.fMinSig)),
                     INT32_MAX);
+            // Make sure that digits are displayed on zero.
+            if (value.isZero() && fUnion.fracSig.fMinSig > 0) {
+                value.setIntegerLength(1, INT32_MAX);
+            }
             break;
 
         case RND_FRACTION_SIGNIFICANT: {
