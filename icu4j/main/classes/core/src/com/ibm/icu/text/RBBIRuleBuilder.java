@@ -35,13 +35,16 @@ class RBBIRuleBuilder {
     //
     //  There are four separate parse trees generated, one for each of the
     //    forward rules, reverse rules, safe forward rules and safe reverse rules.
-    //  This array references the root of each of the trees.
+    //    This array references the root of each of the trees.
+    //    Only fForwardTree data is actually used to generate a state table.
+    //    The other three are retained for back compatibility with old rule files,
+    //    which may have safe and reverse rules. These are still parsed.
     //
     RBBINode[]         fTreeRoots = new RBBINode[4];
     static final int   fForwardTree = 0;  // Indexes into the above fTreeRoots array
     static final int   fReverseTree = 1;  //   for each of the trees.
-    //                                    //   (in C, these are pointer variables and
-    //                                    //    there is no array.)
+    static final int   fSafeFwdTree = 3;  //   (in C, these are pointer variables and
+    static final int   fSafeRevTree = 4;  //    there is no array.)
     int fDefaultTree = fForwardTree;      // For rules not qualified with a !
                                           //   the tree to which they belong to.
 
