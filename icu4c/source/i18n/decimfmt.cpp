@@ -337,7 +337,7 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern, const DecimalFormatSy
 }
 
 DecimalFormat::DecimalFormat(const DecimalFormat& source) {
-    fProperties.adoptInstead(new DecimalFormatProperties());
+    fProperties.adoptInstead(new DecimalFormatProperties(*source.fProperties));
     fExportedProperties.adoptInstead(new DecimalFormatProperties());
     fWarehouse.adoptInstead(new DecimalFormatWarehouse());
     fSymbols.adoptInstead(new DecimalFormatSymbols(*source.fSymbols));

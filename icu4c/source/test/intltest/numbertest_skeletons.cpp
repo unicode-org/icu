@@ -121,6 +121,7 @@ void NumberSkeletonTest::invalidTokens() {
             u".00/@@#",
             u".00/@@#+",
             u".00/floor/@@+", // wrong order
+            u"round-increment/français", // non-invariant characters for C++
             u"round-currency-cash/XXX",
             u"scientific/ee",
             u"round-increment/xxx",
@@ -143,7 +144,6 @@ void NumberSkeletonTest::unknownTokens() {
             u"français",
             u"measure-unit/français-français", // non-invariant characters for C++
             u"numbering-system/français", // non-invariant characters for C++
-            u"round-increment/français", // non-invariant characters for C++
             u"currency-USD"};
 
     expectedErrorSkeleton(cases, sizeof(cases) / sizeof(*cases));
