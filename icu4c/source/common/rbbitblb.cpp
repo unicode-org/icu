@@ -57,8 +57,8 @@ RBBITableBuilder::~RBBITableBuilder() {
 
 //-----------------------------------------------------------------------------
 //
-//   RBBITableBuilder::build  -  This is the main function for building the DFA state transtion
-//                               table from the RBBI rules parse tree.
+//   RBBITableBuilder::buildForwardTable  -  This is the main function for building
+//                               the DFA state transition table from the RBBI rules parse tree.
 //
 //-----------------------------------------------------------------------------
 void  RBBITableBuilder::buildForwardTable() {
@@ -1221,9 +1221,9 @@ void RBBITableBuilder::removeSafeState(int32_t keepState, int32_t duplState) {
     fSafeTable->removeElementAt(duplState);   // Note that fSafeTable has a deleter function
                                               // and will auto-delete the removed element.
     int32_t numStates = fSafeTable->size();
-    int32_t numCols = fRB->fSetBuilder->getNumCharCategories();
     for (int32_t state=0; state<numStates; ++state) {
         UnicodeString *sd = (UnicodeString *)fSafeTable->elementAt(state);
+        int32_t numCols = sd->length();
         for (int32_t col=0; col<numCols; col++) {
             int32_t existingVal = sd->charAt(col);
             int32_t newVal = existingVal;
