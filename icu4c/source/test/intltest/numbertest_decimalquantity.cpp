@@ -21,6 +21,7 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
         TESTCASE_AUTO(testConvertToAccurateDouble);
         TESTCASE_AUTO(testUseApproximateDoubleWhenAble);
         TESTCASE_AUTO(testHardDoubleConversion);
+        TESTCASE_AUTO(testToDouble);
     TESTCASE_AUTO_END;
 }
 
@@ -291,6 +292,22 @@ void DecimalQuantityTest::testHardDoubleConversion() {
         q.roundToInfinity();
         UnicodeString actualOutput = q.toPlainString();
         assertEquals("", cas.expectedOutput, actualOutput);
+    }
+}
+
+void DecimalQuantityTest::testToDouble() {
+    static const struct TestCase {
+        const char* input; // char* for the decNumber constructor
+        double expected;
+    } cases[] = {
+            { "0", 0.0 },
+            { "-3.142E-271", -3.142e-271 } };
+
+    for (auto& cas : cases) {
+        DecimalQuantity q;
+        q.setToDecNumber({cas.input, -1});
+        double actual = q.toDouble();
+        assertEquals("Doubles should exactly equal", cas.expected, actual);
     }
 }
 

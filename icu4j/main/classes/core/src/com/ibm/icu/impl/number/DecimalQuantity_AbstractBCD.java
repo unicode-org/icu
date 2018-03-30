@@ -636,6 +636,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             return isNegative() ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
         }
 
+        // TODO: Do like in C++ and use a library function to perform this conversion?
+
         long tempLong = 0L;
         int lostDigits = precision - Math.min(precision, 17);
         for (int shift = precision - 1; shift >= lostDigits; shift--) {

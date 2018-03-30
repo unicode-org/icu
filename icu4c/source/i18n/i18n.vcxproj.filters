@@ -171,6 +171,9 @@
     <ClCompile Include="double-conversion-fast-dtoa.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="double-conversion-strtod.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="double-conversion.cpp">
       <Filter>formatting</Filter>
     </ClCompile>

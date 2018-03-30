@@ -119,6 +119,7 @@ class DecimalQuantityTest : public IntlTest {
     void testConvertToAccurateDouble();
     void testUseApproximateDoubleWhenAble();
     void testHardDoubleConversion();
+    void testToDouble();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
