@@ -22,6 +22,7 @@ using namespace icu::number;
 using namespace icu::number::impl;
 
 using icu::double_conversion::DoubleToStringConverter;
+using icu::double_conversion::StringToDoubleConverter;
 
 namespace {
 
@@ -476,24 +477,11 @@ double DecimalQuantity::toDouble() const {
         return isNegative() ? -INFINITY : INFINITY;
     }
 
-    int64_t tempLong = 0L;
-    int32_t lostDigits = precision - (precision < 17 ? precision : 17);
-    for (int shift = precision - 1; shift >= lostDigits; shift--) {
-        tempLong = tempLong * 10 + getDigitPos(shift);
-    }
-    double result = static_cast<double>(tempLong);
-    int32_t _scale = scale + lostDigits;
-    if (_scale >= 0) {
-        // 1e22 is the largest exact double.
-        int32_t i = _scale;
-        for (; i >= 22; i -= 22) result *= 1e22;
-        result *= DOUBLE_MULTIPLIERS[i];
-    } else {
-        // 1e22 is the largest exact double.
-        int32_t i = _scale;
-        for (; i <= -22; i += 22) result /= 1e22;
-        result /= DOUBLE_MULTIPLIERS[-i];
-    }
+    // We are processing well-formed input, so we don't need any special options to StringToDoubleConverter.
+    StringToDoubleConverter converter(0, 0, 0, "", "");
+    UnicodeString numberString = toNumberString();
+    int32_t count;
+    double result = converter.StringToDouble(reinterpret_cast<const uint16_t*>(numberString.getBuffer()), numberString.length(), &count);
     if (isNegative()) { result = -result; }
     return result;
 }
@@ -1023,12 +1011,25 @@ UnicodeString DecimalQuantity::toString() const {
 }
 
 UnicodeString DecimalQuantity::toNumberString() const {
-    MaybeStackArray<char, 30> digits(precision + 11);
+    UnicodeString result;
     for (int32_t i = 0; i < precision; i++) {
-        digits[i] = getDigitPos(precision - i - 1) + '0';
+        result.append(u'0' + getDigitPos(precision - i - 1));
     }
-    snprintf(digits.getAlias() + precision, 11, "E%d", scale);
-    return UnicodeString(digits.getAlias(), -1, US_INV);
+    result.append(u'E');
+    int32_t _scale = scale;
+    if (_scale < 0) {
+        _scale *= -1;
+        result.append(u'-');
+    }
+    if (_scale == 0) {
+        result.append(u'0');
+    }
+    int32_t insertIndex = result.length();
+    while (_scale > 0) {
+        result.insert(insertIndex, u'0' + (_scale % 10));
+        _scale /= 10;
+    }
+    return result;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
