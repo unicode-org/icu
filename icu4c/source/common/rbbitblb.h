@@ -145,7 +145,7 @@ public:
     #define  printPosSets(n)
     #define  printStates()
     #define  printRuleStatusTable()
-    #define printSafeTable()
+    #define  printReverseTable()
 #endif
 
 private:
