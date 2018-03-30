@@ -927,7 +927,7 @@ NumberFormatTest::TestExponential(void)
 #endif
             }
             else {
-                errln((UnicodeString)"FAIL: Non-numeric Formattable returned");
+                errln(UnicodeString("FAIL: Non-numeric Formattable returned: ") + pattern + " " + s);
                 continue;
             }
             if (pos.getIndex() == s.length())
@@ -938,7 +938,8 @@ NumberFormatTest::TestExponential(void)
                     (uprv_fabs(a - valParse[v+ival]) / a > (2*DBL_EPSILON))) ||
                     (!useEpsilon && a != valParse[v+ival]))
                 {
-                    errln((UnicodeString)"FAIL: Expected " + valParse[v+ival]);
+                    errln((UnicodeString)"FAIL: Expected " + valParse[v+ival] + " but got " + a
+                        + " on input " + s);
                 }
             }
             else {
@@ -965,7 +966,7 @@ NumberFormatTest::TestExponential(void)
                 {
                     logln((UnicodeString)"  -parse-> " + a);
                     if (a != lvalParse[v+ilval])
-                        errln((UnicodeString)"FAIL: Expected " + lvalParse[v+ilval]);
+                        errln((UnicodeString)"FAIL: Expected " + lvalParse[v+ilval] + " but got " + a);
                 }
                 else
                     errln((UnicodeString)"FAIL: Partial parse (" + pos.getIndex() + " chars) -> " + a);

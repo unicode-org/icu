@@ -202,6 +202,10 @@ void DecimalQuantity::multiplyBy(int32_t multiplicand) {
     setToDouble(temp);
 }
 
+void DecimalQuantity::negate() {
+    flags ^= NEGATIVE_FLAG;
+}
+
 int32_t DecimalQuantity::getMagnitude() const {
     U_ASSERT(precision != 0);
     return scale + precision - 1;

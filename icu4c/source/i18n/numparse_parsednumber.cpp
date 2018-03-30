@@ -108,7 +108,7 @@ void ParsedNumber::populateFormattable(Formattable& output) const {
     // All other numbers
     LocalPointer<DecimalQuantity> actualQuantity(new DecimalQuantity(quantity));
     if (0 != (flags & FLAG_NEGATIVE)) {
-        actualQuantity->multiplyBy(-1);
+        actualQuantity->negate();
     }
     output.adoptDecimalQuantity(actualQuantity.orphan());
 }

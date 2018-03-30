@@ -296,6 +296,7 @@ void DecimalQuantityTest::testHardDoubleConversion() {
 }
 
 void DecimalQuantityTest::testToDouble() {
+    IcuTestErrorCode status(*this, "testToDouble");
     static const struct TestCase {
         const char* input; // char* for the decNumber constructor
         double expected;
@@ -304,8 +305,9 @@ void DecimalQuantityTest::testToDouble() {
             { "-3.142E-271", -3.142e-271 } };
 
     for (auto& cas : cases) {
+        status.setScope(cas.input);
         DecimalQuantity q;
-        q.setToDecNumber({cas.input, -1});
+        q.setToDecNumber({cas.input, -1}, status);
         double actual = q.toDouble();
         assertEquals("Doubles should exactly equal", cas.expected, actual);
     }
