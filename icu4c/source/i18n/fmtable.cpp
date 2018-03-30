@@ -768,17 +768,14 @@ Formattable::adoptDecimalQuantity(DecimalQuantity *dq) {
     }
 
     // Set the value into the Union of simple type values.
-    // Cannot use the set() functions because they would delete the fDecimalNum value,
-    // TODO: fDecimalQuantity->fitsInInt() to kLong type.
-    /*
-    if (fDecimalQuantity->fitsInInt()) {
-        fType = kLong;
-        fValue.fInt64 = fDecimalNum->getLong();
-    } else
-    */
+    // Cannot use the set() functions because they would delete the fDecimalNum value.
     if (fDecimalQuantity->fitsInLong()) {
-        fType = kInt64;
         fValue.fInt64 = fDecimalQuantity->toLong();
+        if (fValue.fInt64 <= INT32_MAX && fValue.fInt64 >= INT32_MIN) {
+            fType = kLong;
+        } else {
+            fType = kInt64;
+        }
     } else {
         fType = kDouble;
         fValue.fDouble = fDecimalQuantity->toDouble();

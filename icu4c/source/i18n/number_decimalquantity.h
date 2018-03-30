@@ -95,6 +95,9 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      */
     void multiplyBy(int32_t multiplicand);
 
+    /** Flips the sign from positive to negative and back. C++-only: not currently needed in Java. */
+    void negate();
+
     /**
      * Scales the number by a power of ten. For example, if the value is currently "1234.56", calling
      * this method with delta=-3 will change the value to "1.23456".
