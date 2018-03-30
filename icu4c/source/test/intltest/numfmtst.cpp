@@ -105,7 +105,7 @@ static DecimalQuantity &strToDigitList(
     }
     CharString formatValue;
     formatValue.appendInvariantChars(str, status);
-    digitList.setToDecNumber(StringPiece(formatValue.data()), status);
+    digitList.setToDecNumber({formatValue.data(), formatValue.length()}, status);
     return digitList;
 }
 
@@ -332,7 +332,9 @@ UBool NumberFormatTestDataDriven::isFormatPass(
         }
     }
     double doubleVal = digitList.toDouble();
-    {
+    DecimalQuantity doubleCheck;
+    doubleCheck.setToDouble(doubleVal);
+    if (digitList == doubleCheck) { // skip cases where the double does not round-trip
         UnicodeString appendTo;
         format(*fmtPtr, doubleVal, appendTo, status);
         if (U_FAILURE(status)) {
@@ -345,7 +347,7 @@ UBool NumberFormatTestDataDriven::isFormatPass(
             return FALSE;
         }
     }
-    if (!uprv_isNaN(doubleVal) && !uprv_isInfinite(doubleVal) && doubleVal == uprv_floor(doubleVal)) {
+    if (!uprv_isNaN(doubleVal) && !uprv_isInfinite(doubleVal) && digitList.fitsInLong()) {
         int64_t intVal = digitList.toLong();
         {
             UnicodeString appendTo;
@@ -423,40 +425,55 @@ UBool NumberFormatTestDataDriven::isParsePass(
         appendErrorMessage = appendErrorMessage + ppos.getErrorIndex();
         return FALSE;
     }
-    UnicodeString resultStr(UnicodeString::fromUTF8(result.getDecimalNumber(status)));
     if (tuple.output == "fail") {
-        appendErrorMessage.append(UnicodeString("Parse succeeded: ") + resultStr + ", but was expected to fail.");
+        appendErrorMessage.append(UnicodeString("Parse succeeded: ") + result.getDouble() + ", but was expected to fail.");
         return TRUE; // TRUE because failure handling is in the test suite
     }
     if (tuple.output == "NaN") {
         if (!uprv_isNaN(result.getDouble())) {
-            appendErrorMessage.append("Expected NaN, but got: " + resultStr);
+            appendErrorMessage.append(UnicodeString("Expected NaN, but got: ") + result.getDouble());
             return FALSE;
         }
         return TRUE;
     } else if (tuple.output == "Inf") {
         if (!uprv_isInfinite(result.getDouble()) || result.getDouble() < 0) {
-            appendErrorMessage.append("Expected Inf, but got: " + resultStr);
+            appendErrorMessage.append(UnicodeString("Expected Inf, but got: ") + result.getDouble());
             return FALSE;
         }
         return TRUE;
     } else if (tuple.output == "-Inf") {
         if (!uprv_isInfinite(result.getDouble()) || result.getDouble() > 0) {
-            appendErrorMessage.append("Expected -Inf, but got: " + resultStr);
+            appendErrorMessage.append(UnicodeString("Expected -Inf, but got: ") + result.getDouble());
+            return FALSE;
+        }
+        return TRUE;
+    } else if (tuple.output == "-0.0") {
+        if (std::signbit(result.getDouble()) == 0 || result.getDouble() != 0) {
+            appendErrorMessage.append(UnicodeString("Expected -0.0, but got: ") + result.getDouble());
             return FALSE;
         }
         return TRUE;
     }
-    DecimalQuantity expected;
-    strToDigitList(tuple.output, expected, status);
+    // All other cases parse to a DecimalQuantity, not a double.
+
+    DecimalQuantity expectedQuantity;
+    strToDigitList(tuple.output, expectedQuantity, status);
+    UnicodeString expectedString = expectedQuantity.toNumberString();
     if (U_FAILURE(status)) {
-        appendErrorMessage.append("Error parsing.");
+        appendErrorMessage.append("[Error parsing decnumber] ");
+        // If this happens, assume that tuple.output is exactly the same format as
+        // DecimalQuantity.toNumberString()
+        expectedString = tuple.output;
+        status = U_ZERO_ERROR;
+    }
+    UnicodeString actualString = result.getDecimalQuantity()->toNumberString();
+    if (expectedString != actualString) {
+        appendErrorMessage.append(
+                UnicodeString("Expected: ") + tuple.output + " (i.e., " + expectedString + "), but got: " +
+                actualString + " (" + ppos.getIndex() + ":" + ppos.getErrorIndex() + ")");
         return FALSE;
     }
-    if (expected != *result.getDecimalQuantity()) {
-        appendErrorMessage.append(UnicodeString("Expected: ") + tuple.output + ", but got: " + resultStr + " (" + ppos.getIndex() + ":" + ppos.getErrorIndex() + ")");
-        return FALSE;
-    }
+
     return TRUE;
 }
 
@@ -485,22 +502,30 @@ UBool NumberFormatTestDataDriven::isParseCurrencyPass(
         return FALSE;
     }
     UnicodeString currStr(currAmt->getISOCurrency());
-    Formattable resultFormattable(currAmt->getNumber());
-    UnicodeString resultStr(UnicodeString::fromUTF8(resultFormattable.getDecimalNumber(status)));
+    U_ASSERT(currAmt->getNumber().getDecimalQuantity() != nullptr); // no doubles in currency tests
+    UnicodeString resultStr = currAmt->getNumber().getDecimalQuantity()->toNumberString();
     if (tuple.output == "fail") {
         appendErrorMessage.append(UnicodeString("Parse succeeded: ") + resultStr + ", but was expected to fail.");
         return TRUE; // TRUE because failure handling is in the test suite
     }
-    DecimalQuantity expected;
-    strToDigitList(tuple.output, expected, status);
+
+    DecimalQuantity expectedQuantity;
+    strToDigitList(tuple.output, expectedQuantity, status);
+    UnicodeString expectedString = expectedQuantity.toNumberString();
     if (U_FAILURE(status)) {
-        appendErrorMessage.append("Error parsing.");
+        appendErrorMessage.append("Error parsing decnumber");
+        // If this happens, assume that tuple.output is exactly the same format as
+        // DecimalQuantity.toNumberString()
+        expectedString = tuple.output;
+        status = U_ZERO_ERROR;
+    }
+    if (expectedString != resultStr) {
+        appendErrorMessage.append(
+                UnicodeString("Expected: ") + tuple.output + " (i.e., " + expectedString + "), but got: " +
+                resultStr + " (" + ppos.getIndex() + ":" + ppos.getErrorIndex() + ")");
         return FALSE;
     }
-    if (expected != *currAmt->getNumber().getDecimalQuantity()) {
-        appendErrorMessage.append(UnicodeString("Expected: ") + tuple.output + ", but got: " + resultStr + " (" + ppos.getIndex() + ":" + ppos.getErrorIndex() + ")");
-        return FALSE;
-    }
+
     if (currStr != tuple.outputCurrency) {
         appendErrorMessage.append(UnicodeString(
                 "Expected currency: ") + tuple.outputCurrency + ", got: " + currStr + ". ");

@@ -223,7 +223,7 @@ void NumberParserImpl::parse(const UnicodeString& input, int32_t start, bool gre
                              UErrorCode& status) const {
     U_ASSERT(fFrozen);
     // TODO: Check start >= 0 and start < input.length()
-    StringSegment segment(input, fParseFlags);
+    StringSegment segment(input, 0 != (fParseFlags & PARSE_FLAG_IGNORE_CASE));
     segment.adjustOffset(start);
     if (greedy) {
         parseGreedyRecursive(segment, result, status);

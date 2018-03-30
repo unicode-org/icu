@@ -646,14 +646,26 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         if (_scale >= 0) {
             // 1e22 is the largest exact double.
             int i = _scale;
-            for (; i >= 22; i -= 22)
+            for (; i >= 22; i -= 22) {
                 result *= 1e22;
+                if (Double.isInfinite(result)) {
+                    // Further multiplications will not be productive.
+                    i = 0;
+                    break;
+                }
+            }
             result *= DOUBLE_MULTIPLIERS[i];
         } else {
             // 1e22 is the largest exact double.
             int i = _scale;
-            for (; i <= -22; i += 22)
+            for (; i <= -22; i += 22) {
                 result /= 1e22;
+                if (result == 0.0) {
+                    // Further divisions will not be productive.
+                    i = 0;
+                    break;
+                }
+            }
             result /= DOUBLE_MULTIPLIERS[-i];
         }
         if (isNegative())

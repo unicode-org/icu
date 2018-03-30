@@ -99,7 +99,8 @@ bool CurrencyCustomMatcher::match(StringSegment& segment, ParsedNumber& result, 
 }
 
 bool CurrencyCustomMatcher::smokeTest(const StringSegment& segment) const {
-    return segment.startsWith(fCurrency1) || segment.startsWith(fCurrency2);
+    return segment.startsWith(fCurrency1)
+           || segment.startsWith(fCurrency2);
 }
 
 UnicodeString CurrencyCustomMatcher::toString() const {

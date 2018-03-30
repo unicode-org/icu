@@ -201,7 +201,7 @@ void NumberParserTest::testSeriesMatcher() {
     for (auto& cas : cases) {
         UnicodeString input(cas.input);
 
-        StringSegment segment(input, 0);
+        StringSegment segment(input, false);
         ParsedNumber result;
         bool actualMaybeMore = series.match(segment, result, status);
         int actualOffset = segment.getOffset();
@@ -242,7 +242,7 @@ void NumberParserTest::testCurrencyAnyMatcher() {
     for (auto& cas : cases) {
         UnicodeString input(cas.input);
 
-        StringSegment segment(input, 0);
+        StringSegment segment(input, false);
         ParsedNumber result;
         matcher.match(segment, result, status);
         assertEquals("Parsing " + input, cas.expectedCurrencyCode, result.currencyCode);
@@ -293,7 +293,7 @@ void NumberParserTest::testAffixPatternMatcher() {
         assertEquals(affixPattern + " " + cas.exactMatch, cas.expectedMatcherLength, matcher.length());
 
         // Check that the matcher works on a sample string
-        StringSegment segment(sampleParseableString, 0);
+        StringSegment segment(sampleParseableString, false);
         ParsedNumber result;
         matcher.match(segment, result, status);
         assertEquals(affixPattern + " " + cas.exactMatch, sampleParseableString.length(), result.charEnd);

@@ -56,6 +56,9 @@ void stringToDecNumber(StringPiece n, DecNumberWithStorage &dn, UErrorCode& stat
     // Check for invalid syntax and set the corresponding error code.
     if ((set.status & DEC_Conversion_syntax) != 0) {
         status = U_DECIMAL_NUMBER_SYNTAX_ERROR;
+    } else if (set.status != 0) {
+        // Not a syntax error, but some other error, like an exponent that is too large.
+        status = U_UNSUPPORTED_ERROR;
     }
 }
 
@@ -535,12 +538,26 @@ double DecimalQuantity::toDouble() const {
     if (_scale >= 0) {
         // 1e22 is the largest exact double.
         int32_t i = _scale;
-        for (; i >= 22; i -= 22) result *= 1e22;
+        for (; i >= 22; i -= 22) {
+            result *= 1e22;
+            if (uprv_isInfinite(result)) {
+                // Further multiplications will not be productive.
+                i = 0;
+                break;
+            }
+        }
         result *= DOUBLE_MULTIPLIERS[i];
     } else {
         // 1e22 is the largest exact double.
         int32_t i = _scale;
-        for (; i <= -22; i += 22) result /= 1e22;
+        for (; i <= -22; i += 22) {
+            result /= 1e22;
+            if (result == 0.0) {
+                // Further divisions will not be productive.
+                i = 0;
+                break;
+            }
+        }
         result /= DOUBLE_MULTIPLIERS[-i];
     }
     if (isNegative()) { result = -result; }
@@ -1078,11 +1095,12 @@ UnicodeString DecimalQuantity::toString() const {
 }
 
 UnicodeString DecimalQuantity::toNumberString() const {
-    MaybeStackArray<char, 30> digits(precision + 11);
+    // 13 should hold both the largest and the smallest int32_t plus exponent separator and NUL
+    MaybeStackArray<char, 30> digits(precision + 13);
     for (int32_t i = 0; i < precision; i++) {
         digits[i] = getDigitPos(precision - i - 1) + '0';
     }
-    snprintf(digits.getAlias() + precision, 11, "E%d", scale);
+    snprintf(digits.getAlias() + precision, 13, "E%d", scale);
     return UnicodeString(digits.getAlias(), -1, US_INV);
 }
 
