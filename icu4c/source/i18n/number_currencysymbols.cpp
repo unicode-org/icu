@@ -61,7 +61,7 @@ UnicodeString CurrencySymbols::loadSymbol(UCurrNameStyle selector, UErrorCode& s
             &ignoredIsChoiceFormatFillIn,
             &symbolLen,
             &status);
-    // Readonly-aliasing char16_t* constructor:
+    // Readonly-aliasing char16_t* constructor, which points to a resource bundle:
     return UnicodeString(TRUE, symbol, symbolLen);
 }
 
@@ -69,8 +69,9 @@ UnicodeString CurrencySymbols::getIntlCurrencySymbol(UErrorCode&) const {
     if (!fIntlCurrencySymbol.isBogus()) {
         return fIntlCurrencySymbol;
     }
-    // Readonly-aliasing char16_t* constructor:
-    return UnicodeString(TRUE, fCurrency.getISOCurrency(), 3);
+    // Note: Not safe to use readonly-aliasing constructor here because the buffer belongs to this object,
+    // which could be destructed or moved during the lifetime of the return value.
+    return UnicodeString(fCurrency.getISOCurrency(), 3);
 }
 
 UnicodeString CurrencySymbols::getPluralName(StandardPlural::Form plural, UErrorCode& status) const {
@@ -83,7 +84,7 @@ UnicodeString CurrencySymbols::getPluralName(StandardPlural::Form plural, UError
             StandardPlural::getKeyword(plural),
             &symbolLen,
             &status);
-    // Readonly-aliasing char16_t* constructor:
+    // Readonly-aliasing char16_t* constructor, which points to a resource bundle:
     return UnicodeString(TRUE, symbol, symbolLen);
 }
 

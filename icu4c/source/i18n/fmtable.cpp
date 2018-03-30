@@ -771,7 +771,7 @@ Formattable::adoptDecimalQuantity(DecimalQuantity *dq) {
     // Cannot use the set() functions because they would delete the fDecimalNum value,
     // TODO: fDecimalQuantity->fitsInInt() to kLong type.
     /*
-    if (fDecimalQuantity->fitsIntoLong(FALSE)) {
+    if (fDecimalQuantity->fitsInInt()) {
         fType = kLong;
         fValue.fInt64 = fDecimalNum->getLong();
     } else
@@ -794,7 +794,7 @@ Formattable::setDecimalNumber(StringPiece numberString, UErrorCode &status) {
     }
     dispose();
 
-    DecimalQuantity* dq = new DecimalQuantity();
+    auto* dq = new DecimalQuantity();
     dq->setToDecNumber(numberString, status);
     adoptDecimalQuantity(dq);
 

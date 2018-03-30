@@ -161,6 +161,7 @@ public class ParsedNumber {
             d = d.negate();
         }
         // Special case: MIN_LONG
+        // TODO: It is supported in quantity.toLong() if quantity had the negative flag.
         if (d.compareTo(BigDecimal.valueOf(Long.MIN_VALUE)) == 0 && !forceBigDecimal) {
             return Long.MIN_VALUE;
         }
