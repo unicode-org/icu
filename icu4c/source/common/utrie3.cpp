@@ -357,6 +357,46 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
     }
 }
 
+U_CAPI UChar32 U_EXPORT2
+ucptrie_getRangeSkipLead(const UTrie3 *trie, UChar32 start, uint32_t leadValue,
+                         UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue) {
+    uint32_t value;
+    if (pValue == nullptr) {
+        // We need to examine the range value even if the caller does not want it.
+        pValue = &value;
+    }
+    UChar32 end = utrie3_getRange(trie, start, handleValue, context, pValue);
+    if (end < 0xd7ff || start > 0xdbff) {
+        return end;
+    }
+    // The range overlaps with lead surrogates, or ends just before the first one.
+    if (*pValue == leadValue) {
+        if (end >= 0xdbff) {
+            // Lead surrogates followed by a non-leadValue range,
+            // or lead surrogates are part of a larger leadValue range.
+            return end;
+        }
+    } else {
+        if (start <= 0xd7ff) {
+            return 0xd7ff;  // Non-leadValue range ends before leadValue surrogates.
+        }
+        // Start is a lead surrogate with a non-leadValue code *unit* value.
+        // Return a leadValue code *point* range.
+        *pValue = leadValue;
+        if (end > 0xdbff) {
+            return 0xdbff;  // Inert surrogate range ends before non-leadValue rest of range.
+        }
+    }
+    // See if the leadValue lead surrogate range can be merged with
+    // an immediately following range.
+    uint32_t value2;
+    UChar32 end2 = utrie3_getRange(trie, 0xdc00, handleValue, context, &value2);
+    if (value2 == leadValue) {
+        return end2;
+    }
+    return 0xdbff;
+}
+
 U_CAPI int32_t U_EXPORT2
 utrie3_serialize(const UTrie3 *trie,
                  void *data, int32_t capacity,

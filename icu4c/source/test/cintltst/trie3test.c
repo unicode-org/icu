@@ -96,12 +96,13 @@ doCheckRange(const char *name, const char *variant,
     return TRUE;
 }
 
-static UChar32 iterStarts[] = { 0, 0xdddd, 0x10000, 0x12345, 0x110000 };
+static UChar32 iterStarts[] = { 0, 0xd888, 0xdddd, 0x10000, 0x12345, 0x110000 };
 
 static void
 testTrieGetRanges(const char *testName, const UTrie3 *trie, const UTrie3Builder *builder,
+                  UBool skipLead, uint32_t leadValue,
                   const CheckRange checkRanges[], int32_t countCheckRanges) {
-    const char *const typeName = trie != NULL ? "trie" : "builder";
+    const char *const typeName = trie != NULL ? (skipLead ? "trie/skipLead" : "trie") : "builder";
     char name[80];
     int32_t s;
     for (s = 0; s < UPRV_LENGTHOF(iterStarts); ++s) {
@@ -124,7 +125,9 @@ testTrieGetRanges(const char *testName, const UTrie3 *trie, const UTrie3Builder 
                 expEnd = -1;
                 expValue = value = 0x5005;
             }
-            end = trie != NULL ? utrie3_getRange(trie, start, NULL, NULL, &value) :
+            end = trie != NULL ?
+                (skipLead ? ucptrie_getRangeSkipLead(trie, start, leadValue, NULL, NULL, &value) :
+                    utrie3_getRange(trie, start, NULL, NULL, &value)) :
                 utrie3bld_getRange(builder, start, NULL, NULL, &value);
             if (!doCheckRange(name, "without value handler", start, end, value, expEnd, expValue)) {
                 break;
@@ -139,7 +142,10 @@ testTrieGetRanges(const char *testName, const UTrie3 *trie, const UTrie3Builder 
                 expEnd = -1;
                 expValue = value = 0x5005;
             }
-            end = trie != NULL ? utrie3_getRange(trie, start, testHandleValue, NULL, &value) :
+            end = trie != NULL ?
+                (skipLead ? ucptrie_getRangeSkipLead(trie, start, leadValue ^ 0x5555,
+                                                     testHandleValue, NULL, &value) :
+                    utrie3_getRange(trie, start, testHandleValue, NULL, &value)) :
                 utrie3bld_getRange(builder, start, testHandleValue, NULL, &value);
             if (!doCheckRange(name, "with value handler", start, end, value, expEnd, expValue)) {
                 break;
@@ -152,7 +158,9 @@ testTrieGetRanges(const char *testName, const UTrie3 *trie, const UTrie3Builder 
             } else {
                 expEnd = -1;
             }
-            end = trie != NULL ? utrie3_getRange(trie, start, NULL, NULL, NULL) :
+            end = trie != NULL ?
+                (skipLead ? ucptrie_getRangeSkipLead(trie, start, leadValue, NULL, NULL, NULL) :
+                    utrie3_getRange(trie, start, NULL, NULL, NULL)) :
                 utrie3bld_getRange(builder, start, NULL, NULL, NULL);
             if (!doCheckRange(name, "without value", start, end, 0, expEnd, 0)) {
                 break;
@@ -645,7 +653,7 @@ testTrie(const char *testName, const UTrie3 *trie,
          UTrie3Type type, UTrie3ValueBits valueBits,
          const CheckRange checkRanges[], int32_t countCheckRanges) {
     testTrieGetters(testName, trie, type, valueBits, checkRanges, countCheckRanges);
-    testTrieGetRanges(testName, trie, NULL, checkRanges, countCheckRanges);
+    testTrieGetRanges(testName, trie, NULL, FALSE, 0, checkRanges, countCheckRanges);
     if (type == UTRIE3_TYPE_FAST) {
         testTrieUTF16(testName, trie, valueBits, checkRanges, countCheckRanges);
         testTrieUTF8(testName, trie, valueBits, checkRanges, countCheckRanges);
@@ -656,7 +664,7 @@ static void
 testBuilder(const char *testName, const UTrie3Builder *builder,
             const CheckRange checkRanges[], int32_t countCheckRanges) {
     testBuilderGetters(testName, builder, checkRanges, countCheckRanges);
-    testTrieGetRanges(testName, NULL, builder, checkRanges, countCheckRanges);
+    testTrieGetRanges(testName, NULL, builder, FALSE, 0, checkRanges, countCheckRanges);
 }
 
 static uint32_t storage[120000];
@@ -1283,6 +1291,103 @@ MuchDataTest(void) {
     utrie3bld_close(builder);
 }
 
+static void testGetRangesSkipLead(const char *testName, const UTrie3Builder *builder,
+                                  const CheckRange checkRanges[], int32_t countCheckRanges) {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UTrie3Builder *clone = utrie3bld_clone(builder, &errorCode);
+    UTrie3 *trie;
+    if (U_FAILURE(errorCode)) {
+        log_err("error: utrie3bld_clone(%s) failed: %s\n", testName, u_errorName(errorCode));
+        return;
+    }
+    trie = utrie3bld_build(clone, UTRIE3_TYPE_FAST, UTRIE3_16_VALUE_BITS, &errorCode);
+    utrie3bld_close(clone);
+    if (U_FAILURE(errorCode)) {
+        log_err("error: utrie3bld_build(%s) failed: %s\n", testName, u_errorName(errorCode));
+        return;
+    }
+    testTrieGetRanges(testName, trie, NULL, TRUE, 5, checkRanges, countCheckRanges);
+    utrie3_close(trie);
+}
+
+static void
+TrieTestGetRangesSkipLead(void) {
+    static const SetRange
+    setRangesSkipLead[]={
+        { 0xd000, 0xd7ff, 5, TRUE },
+        { 0xd7ff, 0xdc01, 3, TRUE },
+        { 0xdc01, 0xf900, 5, TRUE },
+    };
+
+    static const CheckRange
+    checkRangesSkipLead1[]={
+        { 0,      0 },
+        { 0xd000, 0 },
+        { 0xd7ff, 5 },
+        { 0xd800, 3 },
+        { 0xdc00, 5 },
+        { 0xdc01, 3 },
+        { 0xf900, 5 },
+        { 0x110000, 0 }
+    };
+
+    static const CheckRange
+    checkRangesSkipLead3[]={
+        { 0,      0 },
+        { 0xd000, 0 },
+        { 0xdc00, 5 },
+        { 0xdc01, 3 },
+        { 0xf900, 5 },
+        { 0x110000, 0 }
+    };
+
+    static const CheckRange
+    checkRangesSkipLead4[]={
+        { 0,      0 },
+        { 0xd000, 0 },
+        { 0xf900, 5 },
+        { 0x110000, 0 }
+    };
+
+    UTrie3Builder *builder = makeTrieWithRanges(
+        "skipLead", FALSE, setRangesSkipLead, UPRV_LENGTHOF(setRangesSkipLead),
+        checkRangesSkipLead1, UPRV_LENGTHOF(checkRangesSkipLead1));
+    UErrorCode errorCode = U_ZERO_ERROR;
+    if (builder == NULL) {
+        return;
+    }
+    testGetRangesSkipLead("skipLead1", builder,
+                          checkRangesSkipLead1, UPRV_LENGTHOF(checkRangesSkipLead1));
+    // Setting a range in the middle of lead surrogates makes no difference
+    utrie3bld_setRange(builder, 0xd844, 0xd899, 5, TRUE, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_err("error: utrie3bld_setRange(skipLead2) failed: %s\n", u_errorName(errorCode));
+        utrie3bld_close(builder);
+        return;
+    }
+    testGetRangesSkipLead("skipLead2", builder,
+                          checkRangesSkipLead1, UPRV_LENGTHOF(checkRangesSkipLead1));
+    // Bridge the gap before the lead surrogates.
+    utrie3bld_set(builder, 0xd7ff, 5, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_err("error: utrie3bld_set(skipLead3) failed: %s\n", u_errorName(errorCode));
+        utrie3bld_close(builder);
+        return;
+    }
+    testGetRangesSkipLead("skipLead3", builder,
+                          checkRangesSkipLead3, UPRV_LENGTHOF(checkRangesSkipLead3));
+    // Bridge the gap after the lead surrogates.
+    utrie3bld_set(builder, 0xdc00, 5, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        log_err("error: utrie3bld_set(skipLead4) failed: %s\n", u_errorName(errorCode));
+        utrie3bld_close(builder);
+        return;
+    }
+    testGetRangesSkipLead("skipLead4", builder,
+                          checkRangesSkipLead4, UPRV_LENGTHOF(checkRangesSkipLead4));
+    utrie3bld_close(builder);
+}
+
 /* versions 1 and 2 --------------------------------------------------------- */
 
 static void
@@ -1338,5 +1443,6 @@ addTrie3Test(TestNode** root) {
     addTest(root, &GrowDataArrayTest, "tsutil/trie3test/GrowDataArrayTest");
     addTest(root, &ManyAllSameBlocksTest, "tsutil/trie3test/ManyAllSameBlocksTest");
     addTest(root, &MuchDataTest, "tsutil/trie3test/MuchDataTest");
+    addTest(root, &TrieTestGetRangesSkipLead, "tsutil/trie3test/TrieTestGetRangesSkipLead");
     addTest(root, &GetVersionTest, "tsutil/trie3test/GetVersionTest");
 }

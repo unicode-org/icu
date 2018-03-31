@@ -466,46 +466,12 @@ segmentStarterMapper(const void * /*context*/, uint32_t value) {
 
 U_CDECL_END
 
-UChar32 Normalizer2Impl::getNormTrieRange(UChar32 start, uint32_t &value) const {
-    UChar32 end = utrie3_getRange(normTrie, start, nullptr, nullptr, &value);
-    // The trie stores values for lead surrogate code *units*.
-    // Surrogate code *points* are inert.
-    if (end < 0xd7ff || start > 0xdbff) {
-        return end;
-    }
-    // The range overlaps with lead surrogates, or ends just before the first one.
-    if (value == INERT) {
-        if (end >= 0xdbff) {
-            // Lead surrogates followed by a non-inert range,
-            // or lead surrogates are part of a larger inert range.
-            return end;
-        }
-    } else {
-        if (start <= 0xd7ff) {
-            return 0xd7ff;  // Non-inert range ends before inert surrogates.
-        }
-        // Start is a lead surrogate with a non-inert code *unit* value.
-        // Return an inert code *point* range.
-        value = INERT;
-        if (end > 0xdbff) {
-            return 0xdbff;  // Inert surrogate range ends before non-inert rest of range.
-        }
-    }
-    // See if the inert lead surrogate range can be merged with
-    // an immediately following range.
-    uint32_t value2;
-    UChar32 end2 = utrie3_getRange(normTrie, 0xdc00, nullptr, nullptr, &value2);
-    if (value2 == INERT) {
-        return end2;
-    }
-    return 0xdbff;
-}
-
 void
 Normalizer2Impl::addLcccChars(UnicodeSet &set) const {
     UChar32 start = 0, end;
     uint32_t norm16;
-    while ((end = getNormTrieRange(start, norm16)) >= 0) {
+    while ((end = ucptrie_getRangeSkipLead(normTrie, start, INERT,
+                                           nullptr, nullptr, &norm16)) >= 0) {
         if (norm16 > Normalizer2Impl::MIN_NORMAL_MAYBE_YES &&
                 norm16 != Normalizer2Impl::JAMO_VT) {
             set.add(start, end);
@@ -522,7 +488,8 @@ Normalizer2Impl::addPropertyStarts(const USetAdder *sa, UErrorCode & /*errorCode
     // Add the start code point of each same-value range of the trie.
     UChar32 start = 0, end;
     uint32_t value;
-    while ((end = getNormTrieRange(start, value)) >= 0) {
+    while ((end = ucptrie_getRangeSkipLead(normTrie, start, INERT,
+                                           nullptr, nullptr, &value)) >= 0) {
         sa->add(sa->set, start);
         if (start != end && isAlgorithmicNoNo((uint16_t)value) &&
                 (value & Normalizer2Impl::DELTA_TCCC_MASK) > Normalizer2Impl::DELTA_TCCC_1) {
@@ -2428,7 +2395,8 @@ void InitCanonIterData::doInit(Normalizer2Impl *impl, UErrorCode &errorCode) {
     if (U_SUCCESS(errorCode)) {
         UChar32 start = 0, end;
         uint32_t value;
-        while ((end = impl->getNormTrieRange(start, value)) >= 0) {
+        while ((end = ucptrie_getRangeSkipLead(impl->normTrie, start, Normalizer2Impl::INERT,
+                                               nullptr, nullptr, &value)) >= 0) {
             // Call Normalizer2Impl::makeCanonIterDataFromNorm16() for a range of same-norm16 characters.
             if (value != Normalizer2Impl::INERT) {
                 impl->makeCanonIterDataFromNorm16(start, end, value, *impl->fCanonIterData, errorCode);

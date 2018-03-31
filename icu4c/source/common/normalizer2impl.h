@@ -536,8 +536,6 @@ private:
     friend class InitCanonIterData;
     friend class LcccContext;
 
-    UChar32 getNormTrieRange(UChar32 start, uint32_t &value) const;
-
     UBool isMaybe(uint16_t norm16) const { return minMaybeYes<=norm16 && norm16<=JAMO_VT; }
     UBool isMaybeOrNonZeroCC(uint16_t norm16) const { return norm16>=minMaybeYes; }
     static UBool isInert(uint16_t norm16) { return norm16==INERT; }
