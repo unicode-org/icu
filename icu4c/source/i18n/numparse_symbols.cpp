@@ -152,13 +152,6 @@ PercentMatcher::PercentMatcher(const DecimalFormatSymbols& dfs)
         : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kPercentSymbol), unisets::PERCENT_SIGN) {
 }
 
-void PercentMatcher::postProcess(ParsedNumber& result) const {
-    SymbolMatcher::postProcess(result);
-    if (0 != (result.flags & FLAG_PERCENT) && !result.quantity.bogus) {
-        result.quantity.adjustMagnitude(-2);
-    }
-}
-
 bool PercentMatcher::isDisabled(const ParsedNumber& result) const {
     return 0 != (result.flags & FLAG_PERCENT);
 }
@@ -171,13 +164,6 @@ void PercentMatcher::accept(StringSegment& segment, ParsedNumber& result) const 
 
 PermilleMatcher::PermilleMatcher(const DecimalFormatSymbols& dfs)
         : SymbolMatcher(dfs.getConstSymbol(DecimalFormatSymbols::kPerMillSymbol), unisets::PERMILLE_SIGN) {
-}
-
-void PermilleMatcher::postProcess(ParsedNumber& result) const {
-    SymbolMatcher::postProcess(result);
-    if (0 != (result.flags & FLAG_PERMILLE) && !result.quantity.bogus) {
-        result.quantity.adjustMagnitude(-3);
-    }
 }
 
 bool PermilleMatcher::isDisabled(const ParsedNumber& result) const {

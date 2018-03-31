@@ -86,6 +86,9 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
      */
     public void multiplyBy(BigDecimal multiplicand);
 
+    /** Flips the sign from positive to negative and back. */
+    void negate();
+
     /**
      * Scales the number by a power of ten. For example, if the value is currently "1234.56", calling
      * this method with delta=-3 will change the value to "1.23456".

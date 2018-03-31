@@ -32,6 +32,8 @@ class ScientificMatcher : public NumberParseMatcher, public UMemory {
   private:
     UnicodeString fExponentSeparatorString;
     DecimalMatcher fExponentMatcher;
+    UnicodeString fCustomMinusSign;
+    UnicodeString fCustomPlusSign;
 };
 
 

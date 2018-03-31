@@ -302,6 +302,7 @@ public class NumberParserImpl {
         for (NumberParseMatcher matcher : matchers) {
             matcher.postProcess(result);
         }
+        result.postProcess();
     }
 
     private void parseGreedyRecursive(StringSegment segment, ParsedNumber result) {

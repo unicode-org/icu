@@ -5955,4 +5955,23 @@ public class NumberFormatTest extends TestFmwk {
                 result.doubleValue(),
                 0.0);
     }
+
+    @Test
+    public void testScientificCustomSign() {
+        DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        dfs.setMinusSignString("nnn");
+        dfs.setPlusSignString("ppp");
+        DecimalFormat df = new DecimalFormat("0E0", dfs);
+        df.setExponentSignAlwaysShown(true);
+        expect2(df, 0.5, "5Ennn1");
+        expect2(df, 50, "5Eppp1");
+    }
+
+    @Test
+    public void testParsePercentInPattern() {
+        DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        DecimalFormat df = new DecimalFormat("0x%", dfs);
+        df.setParseStrict(true);
+        expect2(df, 0.5, "50x%");
+    }
 }

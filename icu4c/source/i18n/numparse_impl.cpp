@@ -233,6 +233,7 @@ void NumberParserImpl::parse(const UnicodeString& input, int32_t start, bool gre
     for (int32_t i = 0; i < fNumMatchers; i++) {
         fMatchers[i]->postProcess(result);
     }
+    result.postProcess();
 }
 
 void NumberParserImpl::parseGreedyRecursive(StringSegment& segment, ParsedNumber& result,

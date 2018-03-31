@@ -2,7 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
-import java.math.BigDecimal;
 import java.util.Comparator;
 
 import com.ibm.icu.impl.StringSegment;
@@ -112,6 +111,19 @@ public class ParsedNumber {
         charEnd = segment.getOffset();
     }
 
+    /** Apply certain number-related flags to the DecimalQuantity. */
+    public void postProcess() {
+        if (quantity != null && 0 != (flags & FLAG_NEGATIVE)) {
+            quantity.negate();
+        }
+        if (quantity != null && 0 != (flags & FLAG_PERCENT)) {
+            quantity.adjustMagnitude(-2);
+        }
+        if (quantity != null && 0 != (flags & FLAG_PERMILLE)) {
+            quantity.adjustMagnitude(-3);
+        }
+    }
+
     /**
      * Returns whether this the parse was successful. To be successful, at least one char must have been
      * consumed, and the failure flag must not be set.
@@ -129,7 +141,6 @@ public class ParsedNumber {
     }
 
     public Number getNumber(boolean forceBigDecimal) {
-        boolean sawNegative = 0 != (flags & FLAG_NEGATIVE);
         boolean sawNaN = 0 != (flags & FLAG_NAN);
         boolean sawInfinity = 0 != (flags & FLAG_INFINITY);
 
@@ -138,34 +149,22 @@ public class ParsedNumber {
             return Double.NaN;
         }
         if (sawInfinity) {
-            if (sawNegative) {
+            if (0 != (flags & FLAG_NEGATIVE)) {
                 return Double.NEGATIVE_INFINITY;
             } else {
                 return Double.POSITIVE_INFINITY;
             }
         }
-        if (quantity.isZero() && sawNegative) {
+        assert quantity != null;
+        if (quantity.isZero() && quantity.isNegative()) {
             return -0.0;
         }
 
         if (quantity.fitsInLong() && !forceBigDecimal) {
-            long l = quantity.toLong();
-            if (0 != (flags & FLAG_NEGATIVE)) {
-                l *= -1;
-            }
-            return l;
+            return quantity.toLong();
+        } else {
+            return quantity.toBigDecimal();
         }
-
-        BigDecimal d = quantity.toBigDecimal();
-        if (0 != (flags & FLAG_NEGATIVE)) {
-            d = d.negate();
-        }
-        // Special case: MIN_LONG
-        // TODO: It is supported in quantity.toLong() if quantity had the negative flag.
-        if (d.compareTo(BigDecimal.valueOf(Long.MIN_VALUE)) == 0 && !forceBigDecimal) {
-            return Long.MIN_VALUE;
-        }
-        return d;
 
     }
 

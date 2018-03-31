@@ -95,7 +95,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      */
     void multiplyBy(int32_t multiplicand);
 
-    /** Flips the sign from positive to negative and back. C++-only: not currently needed in Java. */
+    /** Flips the sign from positive to negative and back. */
     void negate();
 
     /**

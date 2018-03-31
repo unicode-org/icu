@@ -129,7 +129,7 @@ public class AffixMatcher implements NumberParseMatcher {
                 continue;
             }
 
-            // Flags for setting in the ParsedNumber
+            // Flags for setting in the ParsedNumber; the token matchers may add more.
             int flags = (signum == -1) ? ParsedNumber.FLAG_NEGATIVE : 0;
 
             // Note: it is indeed possible for posPrefix and posSuffix to both be null.
@@ -223,6 +223,12 @@ public class AffixMatcher implements NumberParseMatcher {
                 result.suffix = "";
             }
             result.flags |= flags;
+            if (prefix != null) {
+                prefix.postProcess(result);
+            }
+            if (suffix != null) {
+                suffix.postProcess(result);
+            }
         }
     }
 
