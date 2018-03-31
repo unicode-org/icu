@@ -5974,4 +5974,14 @@ public class NumberFormatTest extends TestFmwk {
         df.setParseStrict(true);
         expect2(df, 0.5, "50x%");
     }
+
+    @Test
+    public void testParseIsoStrict() {
+        DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        DecimalFormat df = new DecimalFormat("¤¤0;-0¤¤", dfs);
+        df.setCurrency(Currency.getInstance("USD"));
+        df.setParseStrict(true);
+        expect2(df, 45, "USD 45.00");
+        expect2(df, -45, "-45.00 USD");
+    }
 }

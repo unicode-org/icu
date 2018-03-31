@@ -19,38 +19,21 @@ namespace impl {
 using ::icu::number::impl::CurrencySymbols;
 
 /**
- * Matches currencies according to all available strings in locale data.
+ * Matches a currency, either a custom currency or one from the data bundle. The class is called
+ * "combined" to emphasize that the currency string may come from one of multiple sources.
  *
- * The implementation of this class is different between J and C. See #13584 for a follow-up.
+ * Will match currency spacing either before or after the number depending on whether we are currently in
+ * the prefix or suffix.
+ *
+ * The implementation of this class is slightly different between J and C. See #13584 for a follow-up.
  *
  * @author sffc
  */
-class CurrencyNamesMatcher : public NumberParseMatcher, public UMemory {
+class CombinedCurrencyMatcher : public NumberParseMatcher, public UMemory {
   public:
-    CurrencyNamesMatcher() = default;  // WARNING: Leaves the object in an unusable state
+    CombinedCurrencyMatcher() = default;  // WARNING: Leaves the object in an unusable state
 
-    CurrencyNamesMatcher(const Locale& locale, UErrorCode& status);
-
-    bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
-
-    bool smokeTest(const StringSegment& segment) const override;
-
-    UnicodeString toString() const override;
-
-  private:
-    // We could use Locale instead of CharString here, but
-    // Locale has a non-trivial default constructor.
-    CharString fLocaleName;
-
-    UnicodeSet fLeadCodePoints;
-};
-
-
-class CurrencyCustomMatcher : public NumberParseMatcher, public UMemory {
-  public:
-    CurrencyCustomMatcher() = default;  // WARNING: Leaves the object in an unusable state
-
-    CurrencyCustomMatcher(const CurrencySymbols& currencySymbols, UErrorCode& status);
+    CombinedCurrencyMatcher(const CurrencySymbols& currencySymbols, const DecimalFormatSymbols& dfs, UErrorCode& status);
 
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
@@ -62,36 +45,18 @@ class CurrencyCustomMatcher : public NumberParseMatcher, public UMemory {
     UChar fCurrencyCode[4];
     UnicodeString fCurrency1;
     UnicodeString fCurrency2;
-};
 
+    UnicodeString afterPrefixInsert;
+    UnicodeString beforeSuffixInsert;
 
-/**
- * An implementation of AnyMatcher, allowing for either currency data or locale currency matches.
- */
-class CurrencyAnyMatcher : public AnyMatcher, public UMemory {
-  public:
-    CurrencyAnyMatcher();  // WARNING: Leaves the object in an unusable state
+    // We could use Locale instead of CharString here, but
+    // Locale has a non-trivial default constructor.
+    CharString fLocaleName;
 
-    CurrencyAnyMatcher(CurrencyNamesMatcher namesMatcher, CurrencyCustomMatcher customMatcher);
+    UnicodeSet fLeadCodePoints;
 
-    // Needs custom move constructor/operator since constructor is nontrivial
-
-    CurrencyAnyMatcher(CurrencyAnyMatcher&& src) U_NOEXCEPT;
-
-    CurrencyAnyMatcher& operator=(CurrencyAnyMatcher&& src) U_NOEXCEPT;
-
-    UnicodeString toString() const override;
-
-  protected:
-    const NumberParseMatcher* const* begin() const override;
-
-    const NumberParseMatcher* const* end() const override;
-
-  private:
-    CurrencyNamesMatcher fNamesMatcher;
-    CurrencyCustomMatcher fCustomMatcher;
-
-    const NumberParseMatcher* fMatcherArray[2];
+    /** Matches the currency string without concern for currency spacing. */
+    bool matchCurrency(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const;
 };
 
 

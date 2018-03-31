@@ -69,7 +69,7 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     parser->addMatcher(parser->fLocalMatchers.infinity = {symbols});
     parser->addMatcher(parser->fLocalMatchers.padding = {u"@"});
     parser->addMatcher(parser->fLocalMatchers.scientific = {symbols, grouper});
-    parser->addMatcher(parser->fLocalMatchers.currencyNames = {locale, status});
+    parser->addMatcher(parser->fLocalMatchers.currency = {currencySymbols, symbols, status});
 //    parser.addMatcher(new RequireNumberMatcher());
 
     parser->freeze();
@@ -136,8 +136,7 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     ////////////////////////
 
     if (parseCurrency || patternInfo.hasCurrencySign()) {
-        parser->addMatcher(parser->fLocalMatchers.currencyCustom = {currencySymbols, status});
-        parser->addMatcher(parser->fLocalMatchers.currencyNames = {locale, status});
+        parser->addMatcher(parser->fLocalMatchers.currency = {currencySymbols, symbols, status});
     }
 
     ///////////////////////////////

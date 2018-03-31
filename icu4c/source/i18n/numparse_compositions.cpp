@@ -18,44 +18,6 @@ using namespace icu::numparse;
 using namespace icu::numparse::impl;
 
 
-bool AnyMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const {
-    int32_t initialOffset = segment.getOffset();
-    bool maybeMore = false;
-
-    // NOTE: The range-based for loop calls the virtual begin() and end() methods.
-    for (auto& matcher : *this) {
-        maybeMore = maybeMore || matcher->match(segment, result, status);
-        if (segment.getOffset() != initialOffset) {
-            // Match succeeded.
-            // NOTE: Except for a couple edge cases, if a matcher accepted string A, then it will
-            // accept any string starting with A. Therefore, there is no possibility that matchers
-            // later in the list may be evaluated on longer strings, and we can exit the loop here.
-            break;
-        }
-    }
-
-    // None of the matchers succeeded.
-    return maybeMore;
-}
-
-bool AnyMatcher::smokeTest(const StringSegment& segment) const {
-    // NOTE: The range-based for loop calls the virtual begin() and end() methods.
-    for (auto& matcher : *this) {
-        if (matcher->smokeTest(segment)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-void AnyMatcher::postProcess(ParsedNumber& result) const {
-    // NOTE: The range-based for loop calls the virtual begin() and end() methods.
-    for (auto& matcher : *this) {
-        matcher->postProcess(result);
-    }
-}
-
-
 bool SeriesMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const {
     ParsedNumber backup(result);
 

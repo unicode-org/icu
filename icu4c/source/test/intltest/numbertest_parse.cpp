@@ -23,7 +23,7 @@ void NumberParserTest::runIndexedTest(int32_t index, UBool exec, const char*& na
     TESTCASE_AUTO_BEGIN;
         TESTCASE_AUTO(testBasic);
         TESTCASE_AUTO(testSeriesMatcher);
-        TESTCASE_AUTO(testCurrencyAnyMatcher);
+        TESTCASE_AUTO(testCombinedCurrencyMatcher);
         TESTCASE_AUTO(testAffixPatternMatcher);
     TESTCASE_AUTO_END;
 }
@@ -211,8 +211,8 @@ void NumberParserTest::testSeriesMatcher() {
     }
 }
 
-void NumberParserTest::testCurrencyAnyMatcher() {
-    IcuTestErrorCode status(*this, "testCurrencyAnyMatcher");
+void NumberParserTest::testCombinedCurrencyMatcher() {
+    IcuTestErrorCode status(*this, "testCombinedCurrencyMatcher");
 
     IgnorablesMatcher ignorables(unisets::DEFAULT_IGNORABLES);
     Locale locale = Locale::getEnglish();

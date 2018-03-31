@@ -68,8 +68,7 @@ class NumberParserImpl : public MutableMatcherCollection {
         PlusSignMatcher plusSign;
         DecimalMatcher decimal;
         ScientificMatcher scientific;
-        CurrencyNamesMatcher currencyNames;
-        CurrencyCustomMatcher currencyCustom;
+        CombinedCurrencyMatcher currency;
         AffixMatcherWarehouse affixMatcherWarehouse;
         AffixTokenMatcherWarehouse affixTokenMatcherWarehouse;
     } fLocalMatchers;

@@ -29,27 +29,29 @@ class CompositionMatcher : public NumberParseMatcher {
 };
 
 
-/**
- * Composes a number of matchers, and succeeds if any of the matchers succeed. Always greedily chooses
- * the first matcher in the list to succeed.
- *
- * NOTE: In C++, this is a base class, unlike ICU4J, which uses a factory-style interface.
- *
- * @author sffc
- * @see SeriesMatcher
- */
-class AnyMatcher : public CompositionMatcher {
-  public:
-    bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
-
-    bool smokeTest(const StringSegment& segment) const override;
-
-    void postProcess(ParsedNumber& result) const override;
-
-  protected:
-    // No construction except by subclasses!
-    AnyMatcher() = default;
-};
+// NOTE: AnyMatcher is no longer being used. The previous definition is shown below.
+// The implementation can be found in SVN source control, deleted around March 30, 2018.
+///**
+// * Composes a number of matchers, and succeeds if any of the matchers succeed. Always greedily chooses
+// * the first matcher in the list to succeed.
+// *
+// * NOTE: In C++, this is a base class, unlike ICU4J, which uses a factory-style interface.
+// *
+// * @author sffc
+// * @see SeriesMatcher
+// */
+//class AnyMatcher : public CompositionMatcher {
+//  public:
+//    bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
+//
+//    bool smokeTest(const StringSegment& segment) const override;
+//
+//    void postProcess(ParsedNumber& result) const override;
+//
+//  protected:
+//    // No construction except by subclasses!
+//    AnyMatcher() = default;
+//};
 
 
 /**
