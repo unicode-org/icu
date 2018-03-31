@@ -13,7 +13,7 @@ import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.parse.AffixPatternMatcher;
 import com.ibm.icu.impl.number.parse.AffixTokenMatcherFactory;
-import com.ibm.icu.impl.number.parse.AnyMatcher;
+import com.ibm.icu.impl.number.parse.CombinedCurrencyMatcher;
 import com.ibm.icu.impl.number.parse.IgnorablesMatcher;
 import com.ibm.icu.impl.number.parse.MinusSignMatcher;
 import com.ibm.icu.impl.number.parse.NumberParserImpl;
@@ -229,12 +229,13 @@ public class NumberParserTest {
     }
 
     @Test
-    public void testCurrencyAnyMatcher() {
+    public void testCombinedCurrencyMatcher() {
         AffixTokenMatcherFactory factory = new AffixTokenMatcherFactory();
         factory.locale = ULocale.ENGLISH;
         CustomSymbolCurrency currency = new CustomSymbolCurrency("ICU", "IU$", "ICU");
         factory.currency = currency;
-        AnyMatcher matcher = factory.currency();
+        factory.symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        CombinedCurrencyMatcher matcher = factory.currency();
 
         Object[][] cases = new Object[][] {
                 { "", null },

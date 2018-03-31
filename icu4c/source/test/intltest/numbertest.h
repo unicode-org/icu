@@ -226,9 +226,10 @@ class NumberParserTest : public IntlTest {
     void testBasic();
     void testLocaleFi();
     void testSeriesMatcher();
-    void testCurrencyAnyMatcher();
+    void testCombinedCurrencyMatcher();
     void testAffixPatternMatcher();
     void testGroupingDisabled();
+    void testCaseFolding();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 };

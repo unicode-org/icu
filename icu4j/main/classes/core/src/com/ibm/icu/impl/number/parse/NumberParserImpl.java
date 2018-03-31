@@ -37,11 +37,12 @@ public class NumberParserImpl {
     public static NumberParserImpl createSimpleParser(ULocale locale, String pattern, int parseFlags) {
 
         NumberParserImpl parser = new NumberParserImpl(parseFlags);
+        Currency currency = Currency.getInstance("USD");
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
         IgnorablesMatcher ignorables = IgnorablesMatcher.DEFAULT;
 
         AffixTokenMatcherFactory factory = new AffixTokenMatcherFactory();
-        factory.currency = Currency.getInstance("USD");
+        factory.currency = currency;
         factory.symbols = symbols;
         factory.ignorables = ignorables;
         factory.locale = locale;
@@ -61,7 +62,7 @@ public class NumberParserImpl {
         parser.addMatcher(InfinityMatcher.getInstance(symbols));
         parser.addMatcher(PaddingMatcher.getInstance("@"));
         parser.addMatcher(ScientificMatcher.getInstance(symbols, grouper));
-        parser.addMatcher(CurrencyNamesMatcher.getInstance(locale));
+        parser.addMatcher(CombinedCurrencyMatcher.getInstance(currency, symbols));
         parser.addMatcher(new RequireNumberValidator());
 
         parser.freeze();
@@ -185,8 +186,7 @@ public class NumberParserImpl {
         ////////////////////////
 
         if (parseCurrency || patternInfo.hasCurrencySign()) {
-            parser.addMatcher(CurrencyCustomMatcher.getInstance(currency, locale));
-            parser.addMatcher(CurrencyNamesMatcher.getInstance(locale));
+            parser.addMatcher(CombinedCurrencyMatcher.getInstance(currency, symbols));
         }
 
         ///////////////////////////////

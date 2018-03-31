@@ -33,12 +33,8 @@ public class AffixTokenMatcherFactory {
         return PermilleMatcher.getInstance(symbols);
     }
 
-    public AnyMatcher currency() {
-        AnyMatcher any = new AnyMatcher();
-        any.addMatcher(CurrencyCustomMatcher.getInstance(currency, locale));
-        any.addMatcher(CurrencyNamesMatcher.getInstance(locale));
-        any.freeze();
-        return any;
+    public CombinedCurrencyMatcher currency() {
+        return CombinedCurrencyMatcher.getInstance(currency, symbols);
     }
 
     public IgnorablesMatcher ignorables() {

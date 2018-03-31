@@ -125,7 +125,7 @@ class AffixTokenMatcherWarehouse : public UMemory {
     PlusSignMatcher fPlusSign;
     PercentMatcher fPercent;
     PermilleMatcher fPermille;
-    CurrencyAnyMatcher fCurrency;
+    CombinedCurrencyMatcher fCurrency;
 
     // Use a child class for code point matchers, since it requires non-default operators.
     CodePointMatcherWarehouse fCodePoints;
