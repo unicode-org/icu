@@ -340,7 +340,7 @@ void AffixMatcherWarehouse::createAffixMatchers(const AffixPatternProvider& patt
             continue;
         }
 
-        // Flags for setting in the ParsedNumber
+        // Flags for setting in the ParsedNumber; the token matchers may add more.
         int flags = (signum == -1) ? FLAG_NEGATIVE : 0;
 
         // Note: it is indeed possible for posPrefix and posSuffix to both be null.
@@ -438,6 +438,12 @@ void AffixMatcher::postProcess(ParsedNumber& result) const {
             result.suffix = UnicodeString();
         }
         result.flags |= fFlags;
+        if (fPrefix != nullptr) {
+            fPrefix->postProcess(result);
+        }
+        if (fSuffix != nullptr) {
+            fSuffix->postProcess(result);
+        }
     }
 }
 

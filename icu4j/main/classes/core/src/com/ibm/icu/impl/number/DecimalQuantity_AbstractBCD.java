@@ -200,6 +200,11 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     @Override
+    public void negate() {
+      flags ^= NEGATIVE_FLAG;
+    }
+
+    @Override
     public int getMagnitude() throws ArithmeticException {
         if (precision == 0) {
             throw new ArithmeticException("Magnitude is not well-defined for zero");
@@ -573,6 +578,9 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         for (int magnitude = scale + precision - 1; magnitude >= 0; magnitude--) {
             result = result * 10 + getDigitPos(magnitude - scale);
         }
+        if (isNegative()) {
+            result = -result;
+        }
         return result;
     }
 
@@ -676,8 +684,9 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             }
             result /= DOUBLE_MULTIPLIERS[-i];
         }
-        if (isNegative())
+        if (isNegative()) {
             result = -result;
+        }
         return result;
     }
 
@@ -704,8 +713,9 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                 result /= 1e22;
             result /= DOUBLE_MULTIPLIERS[-delta];
         }
-        if (isNegative())
-            result *= -1;
+        if (isNegative()) {
+            result = -result;
+        }
         return result;
     }
 

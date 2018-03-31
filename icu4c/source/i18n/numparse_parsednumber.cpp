@@ -37,6 +37,18 @@ void ParsedNumber::setCharsConsumed(const StringSegment& segment) {
     charEnd = segment.getOffset();
 }
 
+void ParsedNumber::postProcess() {
+    if (!quantity.bogus && 0 != (flags & FLAG_NEGATIVE)) {
+        quantity.negate();
+    }
+    if (!quantity.bogus && 0 != (flags & FLAG_PERCENT)) {
+        quantity.adjustMagnitude(-2);
+    }
+    if (!quantity.bogus && 0 != (flags & FLAG_PERMILLE)) {
+        quantity.adjustMagnitude(-3);
+    }
+}
+
 bool ParsedNumber::success() const {
     return charEnd > 0 && 0 == (flags & FLAG_FAIL);
 }
@@ -46,7 +58,6 @@ bool ParsedNumber::seenNumber() const {
 }
 
 double ParsedNumber::getDouble() const {
-    bool sawNegative = 0 != (flags & FLAG_NEGATIVE);
     bool sawNaN = 0 != (flags & FLAG_NAN);
     bool sawInfinity = 0 != (flags & FLAG_INFINITY);
 
@@ -55,34 +66,25 @@ double ParsedNumber::getDouble() const {
         return NAN;
     }
     if (sawInfinity) {
-        if (sawNegative) {
+        if (0 != (flags & FLAG_NEGATIVE)) {
             return -INFINITY;
         } else {
             return INFINITY;
         }
     }
-    if (quantity.isZero() && sawNegative) {
+    U_ASSERT(!quantity.bogus);
+    if (quantity.isZero() && quantity.isNegative()) {
         return -0.0;
     }
 
     if (quantity.fitsInLong()) {
-        long l = quantity.toLong();
-        if (0 != (flags & FLAG_NEGATIVE)) {
-            l *= -1;
-        }
-        return l;
+        return quantity.toLong();
+    } else {
+        return quantity.toDouble();
     }
-
-    // TODO: MIN_LONG. It is supported in quantity.toLong() if quantity had the negative flag.
-    double d = quantity.toDouble();
-    if (0 != (flags & FLAG_NEGATIVE)) {
-        d *= -1;
-    }
-    return d;
 }
 
 void ParsedNumber::populateFormattable(Formattable& output) const {
-    bool sawNegative = 0 != (flags & FLAG_NEGATIVE);
     bool sawNaN = 0 != (flags & FLAG_NAN);
     bool sawInfinity = 0 != (flags & FLAG_INFINITY);
 
@@ -92,7 +94,7 @@ void ParsedNumber::populateFormattable(Formattable& output) const {
         return;
     }
     if (sawInfinity) {
-        if (sawNegative) {
+        if (0 != (flags & FLAG_NEGATIVE)) {
             output.setDouble(-INFINITY);
             return;
         } else {
@@ -100,17 +102,14 @@ void ParsedNumber::populateFormattable(Formattable& output) const {
             return;
         }
     }
-    if (quantity.isZero() && sawNegative) {
+    U_ASSERT(!quantity.bogus);
+    if (quantity.isZero() && quantity.isNegative()) {
         output.setDouble(-0.0);
         return;
     }
 
     // All other numbers
-    LocalPointer<DecimalQuantity> actualQuantity(new DecimalQuantity(quantity));
-    if (0 != (flags & FLAG_NEGATIVE)) {
-        actualQuantity->negate();
-    }
-    output.adoptDecimalQuantity(actualQuantity.orphan());
+    output.adoptDecimalQuantity(new DecimalQuantity(quantity));
 }
 
 bool ParsedNumber::isBetterThan(const ParsedNumber& other) {

@@ -428,6 +428,9 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
     public String toNumberString() {
         StringBuilder sb = new StringBuilder();
         if (usingBytes) {
+            if (precision == 0) {
+                sb.append('0');
+            }
             for (int i = precision - 1; i >= 0; i--) {
                 sb.append(bcdBytes[i]);
             }

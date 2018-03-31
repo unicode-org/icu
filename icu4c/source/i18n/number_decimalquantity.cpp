@@ -485,7 +485,9 @@ int64_t DecimalQuantity::toLong() const {
     for (int32_t magnitude = scale + precision - 1; magnitude >= 0; magnitude--) {
         result = result * 10 + getDigitPos(magnitude - scale);
     }
-    if (isNegative()) { result = -result; }
+    if (isNegative()) {
+        result = -result;
+    }
     return result;
 }
 
@@ -544,7 +546,9 @@ double DecimalQuantity::toDouble() const {
     UnicodeString numberString = toNumberString();
     int32_t count;
     double result = converter.StringToDouble(reinterpret_cast<const uint16_t*>(numberString.getBuffer()), numberString.length(), &count);
-    if (isNegative()) { result = -result; }
+    if (isNegative()) {
+        result = -result;
+    }
     return result;
 }
 
@@ -560,7 +564,9 @@ double DecimalQuantity::toDoubleFromOriginal() const {
         for (; delta <= -22; delta += 22) result /= 1e22;
         result /= DOUBLE_MULTIPLIERS[-delta];
     }
-    if (isNegative()) { result *= -1; }
+    if (isNegative()) {
+        result = -result;
+    }
     return result;
 }
 
@@ -1080,6 +1086,9 @@ UnicodeString DecimalQuantity::toString() const {
 
 UnicodeString DecimalQuantity::toNumberString() const {
     UnicodeString result;
+    if (precision == 0) {
+        result.append(u'0');
+    }
     for (int32_t i = 0; i < precision; i++) {
         result.append(u'0' + getDigitPos(precision - i - 1));
     }

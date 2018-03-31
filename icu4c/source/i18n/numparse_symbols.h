@@ -124,8 +124,6 @@ class PercentMatcher : public SymbolMatcher {
 
     PercentMatcher(const DecimalFormatSymbols& dfs);
 
-    void postProcess(ParsedNumber& result) const override;
-
   protected:
     bool isDisabled(const ParsedNumber& result) const override;
 
@@ -138,8 +136,6 @@ class PermilleMatcher : public SymbolMatcher {
     PermilleMatcher() = default;  // WARNING: Leaves the object in an unusable state
 
     PermilleMatcher(const DecimalFormatSymbols& dfs);
-
-    void postProcess(ParsedNumber& result) const override;
 
   protected:
     bool isDisabled(const ParsedNumber& result) const override;

@@ -42,14 +42,6 @@ public class PermilleMatcher extends SymbolMatcher {
     }
 
     @Override
-    public void postProcess(ParsedNumber result) {
-        super.postProcess(result);
-        if (0 != (result.flags & ParsedNumber.FLAG_PERMILLE) && result.quantity != null) {
-            result.quantity.adjustMagnitude(-3);
-        }
-    }
-
-    @Override
     public String toString() {
         return "<PermilleMatcher>";
     }

@@ -1688,13 +1688,13 @@ void NumberFormatTest::TestSecondaryGrouping(void) {
     CHECK(status, "DecimalFormat ct");
 
     expect2(f, (int32_t)123456789L, "12,34,56,789");
-    expectPat(f, "#,##,###");
+    expectPat(f, "#,##,##0");
     f.applyPattern("#,###", status);
     CHECK(status, "applyPattern");
 
     f.setSecondaryGroupingSize(4);
     expect2(f, (int32_t)123456789L, "12,3456,789");
-    expectPat(f, "#,####,###");
+    expectPat(f, "#,####,##0");
     NumberFormat *g = NumberFormat::createInstance(Locale("hi", "IN"), status);
     CHECK_DATA(status, "createInstance(hi_IN)");
 
@@ -1816,7 +1816,7 @@ void NumberFormatTest::TestScientific(void) {
     int32_t PAT_length = UPRV_LENGTHOF(PAT);
     int32_t DIGITS[] = {
         // min int, max int, min frac, max frac
-        0, 1, 0, 0, // "#E0"
+        1, 1, 0, 0, // "#E0"
         1, 1, 0, 4, // "0.####E0"
         2, 2, 3, 3, // "00.000E00"
         1, 3, 0, 4, // "##0.####E000"
@@ -2159,7 +2159,7 @@ void NumberFormatTest::TestPatterns2(void) {
 
     fmt.setFormatWidth(16);
     //              12  34567890123456
-    expectPat(fmt, "AA*^#,###,##0.00ZZ");
+    expectPat(fmt, "AA*^#####,##0.00ZZ");
 }
 
 void NumberFormatTest::TestSurrogateSupport(void) {
@@ -2223,9 +2223,9 @@ void NumberFormatTest::TestSurrogateSupport(void) {
            int32_t(-20), expStr, status);
 
     custom.setSymbol(DecimalFormatSymbols::kPercentSymbol, "percent");
-    patternStr = "'You''ve lost ' -0.00 %' of your money today'";
+    patternStr = "'You''ve lost ' 0.00 %' of your money today'";
     patternStr = patternStr.unescape();
-    expStr = UnicodeString(" minus You've lost   minus 2000decimal00 percent of your money today", "");
+    expStr = UnicodeString(" minus You've lost  2000decimal00 percent of your money today", "");
     status = U_ZERO_ERROR;
     expect2(new DecimalFormat(patternStr, custom, status),
            int32_t(-20), expStr, status);

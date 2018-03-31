@@ -1601,6 +1601,15 @@ lenient	parse	output	breaks
 0	0	fail	JK
 0	+0	0	JK
 
+test parse with scientific-separator-affix overlap
+set locale en
+begin
+pattern	lenient	parse	output	breaks
+0E0','x	1	5E3,x	5000
+0E0','x	0	5E3,x	5000
+0E0'.'x	1	5E3.x	5000
+0E0'.'x	0	5E3.x	5000
+
 
 
 

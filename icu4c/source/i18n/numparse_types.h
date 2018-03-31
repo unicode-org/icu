@@ -146,6 +146,9 @@ class ParsedNumber {
      */
     void setCharsConsumed(const StringSegment& segment);
 
+    /** Apply certain number-related flags to the DecimalQuantity. */
+    void postProcess();
+
     /**
      * Returns whether this the parse was successful. To be successful, at least one char must have been
      * consumed, and the failure flag must not be set.

@@ -298,6 +298,7 @@ int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& sta
 }
 
 void DecimalFormat::setGroupingUsed(UBool enabled) {
+    NumberFormat::setGroupingUsed(enabled); // to set field for compatibility
     if (enabled) {
         // Set to a reasonable default value
         fProperties->groupingSize = 3;
@@ -649,6 +650,7 @@ ERoundingMode DecimalFormat::getRoundingMode(void) const {
 }
 
 void DecimalFormat::setRoundingMode(ERoundingMode roundingMode) {
+    NumberFormat::setMaximumIntegerDigits(roundingMode); // to set field for compatibility
     fProperties->roundingMode = static_cast<UNumberFormatRoundingMode>(roundingMode);
     refreshFormatterNoError();
 }
@@ -985,6 +987,12 @@ void DecimalFormat::refreshFormatter(UErrorCode& status) {
     fParserWithCurrency.adoptInsteadAndCheckErrorCode(
             NumberParserImpl::createParserFromProperties(
                     *fProperties, *fSymbols, true, status), status);
+
+    // In order for the getters to work, we need to populate some fields in NumberFormat.
+    NumberFormat::setMaximumIntegerDigits(fExportedProperties->maximumIntegerDigits);
+    NumberFormat::setMinimumIntegerDigits(fExportedProperties->minimumIntegerDigits);
+    NumberFormat::setMaximumFractionDigits(fExportedProperties->maximumFractionDigits);
+    NumberFormat::setMinimumFractionDigits(fExportedProperties->minimumFractionDigits);
 }
 
 void DecimalFormat::refreshFormatterNoError() {

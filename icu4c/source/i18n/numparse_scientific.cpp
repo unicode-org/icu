@@ -18,9 +18,36 @@ using namespace icu::numparse;
 using namespace icu::numparse::impl;
 
 
+namespace {
+
+inline const UnicodeSet& minusSignSet() {
+    return *unisets::get(unisets::MINUS_SIGN);
+}
+
+inline const UnicodeSet& plusSignSet() {
+    return *unisets::get(unisets::PLUS_SIGN);
+}
+
+} // namespace
+
+
 ScientificMatcher::ScientificMatcher(const DecimalFormatSymbols& dfs, const Grouper& grouper)
         : fExponentSeparatorString(dfs.getConstSymbol(DecimalFormatSymbols::kExponentialSymbol)),
-          fExponentMatcher(dfs, grouper, PARSE_FLAG_INTEGER_ONLY) {
+          fExponentMatcher(dfs, grouper, PARSE_FLAG_INTEGER_ONLY | PARSE_FLAG_GROUPING_DISABLED) {
+
+    const UnicodeString& minusSign = dfs.getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol);
+    if (minusSignSet().contains(minusSign)) {
+        fCustomMinusSign.setToBogus();
+    } else {
+        fCustomMinusSign = minusSign;
+    }
+
+    const UnicodeString& plusSign = dfs.getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol);
+    if (plusSignSet().contains(plusSign)) {
+        fCustomPlusSign.setToBogus();
+    } else {
+        fCustomPlusSign = plusSign;
+    }
 }
 
 bool ScientificMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const {
@@ -37,18 +64,35 @@ bool ScientificMatcher::match(StringSegment& segment, ParsedNumber& result, UErr
         // Full exponent separator match.
 
         // First attempt to get a code point, returning true if we can't get one.
-        segment.adjustOffset(overlap1);
-        if (segment.length() == 0) {
+        if (segment.length() == overlap1) {
             return true;
         }
+        segment.adjustOffset(overlap1);
 
         // Allow a sign, and then try to match digits.
         int8_t exponentSign = 1;
-        if (segment.startsWith(*unisets::get(unisets::MINUS_SIGN))) {
+        if (segment.startsWith(minusSignSet())) {
             exponentSign = -1;
             segment.adjustOffsetByCodePoint();
-        } else if (segment.startsWith(*unisets::get(unisets::PLUS_SIGN))) {
+        } else if (segment.startsWith(plusSignSet())) {
             segment.adjustOffsetByCodePoint();
+        } else if (segment.startsWith(fCustomMinusSign)) {
+            int32_t overlap2 = segment.getCommonPrefixLength(fCustomMinusSign);
+            if (overlap2 != fCustomMinusSign.length()) {
+                // Partial custom sign match; un-match the exponent separator.
+                segment.adjustOffset(-overlap1);
+                return true;
+            }
+            exponentSign = -1;
+            segment.adjustOffset(overlap2);
+        } else if (segment.startsWith(fCustomPlusSign)) {
+            int32_t overlap2 = segment.getCommonPrefixLength(fCustomPlusSign);
+            if (overlap2 != fCustomPlusSign.length()) {
+                // Partial custom sign match; un-match the exponent separator.
+                segment.adjustOffset(-overlap1);
+                return true;
+            }
+            segment.adjustOffset(overlap2);
         }
 
         int digitsOffset = segment.getOffset();
