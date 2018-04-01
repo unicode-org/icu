@@ -487,7 +487,7 @@ void Normalizer2DataBuilder::writeNorm16(UTrie3Builder *norm16Trie, UChar32 star
         norm16|=Normalizer2Impl::HAS_COMP_BOUNDARY_AFTER;
     }
     IcuToolErrorCode errorCode("gennorm2/writeNorm16()");
-    utrie3bld_setRange(norm16Trie, start, end, (uint32_t)norm16, TRUE, errorCode);
+    utrie3bld_setRange(norm16Trie, start, end, (uint32_t)norm16, errorCode);
 
     // Set the minimum code points for real data lookups in the quick check loops.
     UBool isDecompNo=
@@ -528,12 +528,12 @@ void Normalizer2DataBuilder::setHangulData(UTrie3Builder *norm16Trie) {
         indexes[Normalizer2Impl::IX_MIN_COMP_NO_MAYBE_CP]=Hangul::JAMO_V_BASE;
     }
     utrie3bld_setRange(norm16Trie, Hangul::JAMO_L_BASE, Hangul::JAMO_L_END,
-                       Normalizer2Impl::JAMO_L, TRUE, errorCode);
+                       Normalizer2Impl::JAMO_L, errorCode);
     utrie3bld_setRange(norm16Trie, Hangul::JAMO_V_BASE, Hangul::JAMO_V_END,
-                       Normalizer2Impl::JAMO_VT, TRUE, errorCode);
+                       Normalizer2Impl::JAMO_VT, errorCode);
     // JAMO_T_BASE+1: not U+11A7
     utrie3bld_setRange(norm16Trie, Hangul::JAMO_T_BASE+1, Hangul::JAMO_T_END,
-                       Normalizer2Impl::JAMO_VT, TRUE, errorCode);
+                       Normalizer2Impl::JAMO_VT, errorCode);
 
     // Hangul LV encoded as minYesNo
     uint32_t lv=indexes[Normalizer2Impl::IX_MIN_YES_NO];
@@ -546,8 +546,7 @@ void Normalizer2DataBuilder::setHangulData(UTrie3Builder *norm16Trie) {
     // Set the first LV, then write all other Hangul syllables as LVT,
     // then overwrite the remaining LV.
     utrie3bld_set(norm16Trie, Hangul::HANGUL_BASE, lv, errorCode);
-    utrie3bld_setRange(norm16Trie, Hangul::HANGUL_BASE+1, Hangul::HANGUL_END,
-                       lvt, TRUE, errorCode);
+    utrie3bld_setRange(norm16Trie, Hangul::HANGUL_BASE+1, Hangul::HANGUL_END, lvt, errorCode);
     UChar32 c=Hangul::HANGUL_BASE;
     while((c+=Hangul::JAMO_T_COUNT)<=Hangul::HANGUL_END) {
         utrie3bld_set(norm16Trie, c, lv, errorCode);

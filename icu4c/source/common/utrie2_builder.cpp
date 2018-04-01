@@ -746,7 +746,7 @@ utrie2_setRange32(UTrie2 *trie,
         *pErrorCode=U_NO_WRITE_PERMISSION;
         return;
     }
-    utrie3bld_setRange(newTrie->t3, start, end, value, overwrite, pErrorCode);
+    utrie3bld_setRange(newTrie->t3, start, end, value, pErrorCode);
     if(!overwrite && value==newTrie->initialValue) {
         return; /* nothing to do */
     }

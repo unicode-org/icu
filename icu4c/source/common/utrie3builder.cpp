@@ -77,7 +77,7 @@ public:
                      uint32_t *pValue) const;
 
     void set(UChar32 c, uint32_t value, UErrorCode &errorCode);
-    void setRange(UChar32 start, UChar32 end, uint32_t value, UBool overwrite, UErrorCode &errorCode);
+    void setRange(UChar32 start, UChar32 end, uint32_t value, UErrorCode &errorCode);
 
     UTrie3 *build(UTrie3Type type, UTrie3ValueBits valueBits, UErrorCode &errorCode);
 
@@ -187,7 +187,7 @@ Trie3Builder *Trie3Builder::fromUTrie3(const UTrie3 *trie, UErrorCode &errorCode
             if (start == end) {
                 builder->set(start, value, errorCode);
             } else {
-                builder->setRange(start, end, value, TRUE, errorCode);
+                builder->setRange(start, end, value, errorCode);
             }
         }
         start = end + 1;
@@ -409,40 +409,22 @@ void Trie3Builder::set(UChar32 c, uint32_t value, UErrorCode &errorCode) {
     data[block + (c & UTRIE3_SUPP_DATA_MASK)] = value;
 }
 
-/**
- * initialValue is ignored if overwrite=TRUE
- * @internal
- */
 void
-fillBlock(uint32_t *block, UChar32 start, UChar32 limit,
-          uint32_t value, uint32_t initialValue, UBool overwrite) {
+fillBlock(uint32_t *block, UChar32 start, UChar32 limit, uint32_t value) {
     uint32_t *pLimit = block + limit;
     block += start;
-    if (overwrite) {
-        while (block < pLimit) {
-            *block++ = value;
-        }
-    } else {
-        while (block < pLimit) {
-            if (*block == initialValue) {
-                *block = value;
-            }
-            ++block;
-        }
+    while (block < pLimit) {
+        *block++ = value;
     }
 }
 
-void Trie3Builder::setRange(UChar32 start, UChar32 end, uint32_t value, UBool overwrite,
-                            UErrorCode &errorCode) {
+void Trie3Builder::setRange(UChar32 start, UChar32 end, uint32_t value, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
     if ((uint32_t)start > MAX_UNICODE || (uint32_t)end > MAX_UNICODE || start > end) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return;
-    }
-    if (!overwrite && value == initialValue) {
-        return;  // nothing to do
     }
     if (!ensureHighStart(end)) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -461,11 +443,11 @@ void Trie3Builder::setRange(UChar32 start, UChar32 end, uint32_t value, UBool ov
         UChar32 nextStart = (start + UTRIE3_SUPP_DATA_MASK) & ~UTRIE3_SUPP_DATA_MASK;
         if (nextStart <= limit) {
             fillBlock(data + block, start & UTRIE3_SUPP_DATA_MASK, UTRIE3_SUPP_DATA_BLOCK_LENGTH,
-                      value, initialValue, overwrite);
+                      value);
             start = nextStart;
         } else {
             fillBlock(data + block, start & UTRIE3_SUPP_DATA_MASK, limit & UTRIE3_SUPP_DATA_MASK,
-                      value, initialValue, overwrite);
+                      value);
             return;
         }
     }
@@ -480,12 +462,9 @@ void Trie3Builder::setRange(UChar32 start, UChar32 end, uint32_t value, UBool ov
     while (start < limit) {
         int32_t i = start >> UTRIE3_SUPP_SHIFT_2;
         if (flags[i] == ALL_SAME) {
-            if (overwrite || index[i] == initialValue) {
-                index[i] = value;
-            }
+            index[i] = value;
         } else /* MIXED */ {
-            fillBlock(data + index[i], 0, UTRIE3_SUPP_DATA_BLOCK_LENGTH,
-                      value, initialValue, overwrite);
+            fillBlock(data + index[i], 0, UTRIE3_SUPP_DATA_BLOCK_LENGTH, value);
         }
         start += UTRIE3_SUPP_DATA_BLOCK_LENGTH;
     }
@@ -498,7 +477,7 @@ void Trie3Builder::setRange(UChar32 start, UChar32 end, uint32_t value, UBool ov
             return;
         }
 
-        fillBlock(data + block, 0, rest, value, initialValue, overwrite);
+        fillBlock(data + block, 0, rest, value);
     }
 }
 
@@ -1540,11 +1519,11 @@ utrie3bld_set(UTrie3Builder *builder, UChar32 c, uint32_t value, UErrorCode *pEr
 
 U_CAPI void U_EXPORT2
 utrie3bld_setRange(UTrie3Builder *builder, UChar32 start, UChar32 end,
-                   uint32_t value, UBool overwrite, UErrorCode *pErrorCode) {
+                   uint32_t value, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return;
     }
-    reinterpret_cast<Trie3Builder *>(builder)->setRange(start, end, value, overwrite, *pErrorCode);
+    reinterpret_cast<Trie3Builder *>(builder)->setRange(start, end, value, *pErrorCode);
 }
 
 /* Compact and internally serialize the trie. */

@@ -170,15 +170,13 @@ utrie3bld_set(UTrie3Builder *builder, UChar32 c, uint32_t value, UErrorCode *pEr
  * @param start the first code point to get the value
  * @param end the last code point to get the value (inclusive)
  * @param value the value
- * @param overwrite flag for whether old non-initial values are to be overwritten
  * @param pErrorCode an in/out ICU UErrorCode; among other possible error codes:
  * - U_NO_WRITE_PERMISSION if the trie builder is frozen
  */
 U_CAPI void U_EXPORT2
 utrie3bld_setRange(UTrie3Builder *builder,
                    UChar32 start, UChar32 end,
-                   uint32_t value, UBool overwrite,
-                   UErrorCode *pErrorCode);
+                   uint32_t value, UErrorCode *pErrorCode);
 
 /**
  * Freeze a trie builder. Make it immutable (read-only) and compact it,  // TODO: doc as _build()

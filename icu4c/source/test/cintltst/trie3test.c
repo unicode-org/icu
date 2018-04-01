@@ -24,7 +24,6 @@ void addTrie3Test(TestNode** root);
 typedef struct SetRange {
     UChar32 start, limit;
     uint32_t value;
-    UBool overwrite;
 } SetRange;
 
 /*
@@ -860,7 +859,6 @@ makeTrieWithRanges(const char *testName, UBool withClone,
     UChar32 start, limit;
     int32_t i;
     UErrorCode errorCode;
-    UBool overwrite;
 
     log_verbose("\ntesting Trie '%s'\n", testName);
     errorCode=U_ZERO_ERROR;
@@ -888,11 +886,10 @@ makeTrieWithRanges(const char *testName, UBool withClone,
         start=setRanges[i].start;
         limit=setRanges[i].limit;
         value=setRanges[i].value;
-        overwrite=setRanges[i].overwrite;
-        if((limit-start)==1 && overwrite) {
+        if ((limit - start) == 1) {
             utrie3bld_set(builder, start, value, &errorCode);
         } else {
-            utrie3bld_setRange(builder, start, limit-1, value, overwrite, &errorCode);
+            utrie3bld_setRange(builder, start, limit-1, value, &errorCode);
         }
     }
 
@@ -924,20 +921,20 @@ testTrieRanges(const char *testName, UBool withClone,
 /* set consecutive ranges, even with value 0 */
 static const SetRange
 setRanges1[]={
-    { 0,        0x40,     0,      FALSE },
-    { 0x40,     0xe7,     0x1234, FALSE },
-    { 0xe7,     0x3400,   0,      FALSE },
-    { 0x3400,   0x9fa6,   0x6162, FALSE },
-    { 0x9fa6,   0xda9e,   0x3132, FALSE },
-    { 0xdada,   0xeeee,   0x87ff, FALSE },
-    { 0xeeee,   0x11111,  1,      FALSE },
-    { 0x11111,  0x44444,  0x6162, FALSE },
-    { 0x44444,  0x60003,  0,      FALSE },
-    { 0xf0003,  0xf0004,  0xf,    FALSE },
-    { 0xf0004,  0xf0006,  0x10,   FALSE },
-    { 0xf0006,  0xf0007,  0x11,   FALSE },
-    { 0xf0007,  0xf0040,  0x12,   FALSE },
-    { 0xf0040,  0x110000, 0,      FALSE }
+    { 0,        0x40,     0      },
+    { 0x40,     0xe7,     0x1234 },
+    { 0xe7,     0x3400,   0      },
+    { 0x3400,   0x9fa6,   0x6162 },
+    { 0x9fa6,   0xda9e,   0x3132 },
+    { 0xdada,   0xeeee,   0x87ff },
+    { 0xeeee,   0x11111,  1      },
+    { 0x11111,  0x44444,  0x6162 },
+    { 0x44444,  0x60003,  0      },
+    { 0xf0003,  0xf0004,  0xf    },
+    { 0xf0004,  0xf0006,  0x10   },
+    { 0xf0006,  0xf0007,  0x11   },
+    { 0xf0007,  0xf0040,  0x12   },
+    { 0xf0040,  0x110000, 0      }
 };
 
 static const CheckRange
@@ -963,18 +960,18 @@ checkRanges1[]={
 /* set some interesting overlapping ranges */
 static const SetRange
 setRanges2[]={
-    { 0x21,     0x7f,     0x5555, TRUE },
-    { 0x2f800,  0x2fedc,  0x7a,   TRUE },
-    { 0x72,     0xdd,     3,      TRUE },
-    { 0xdd,     0xde,     4,      FALSE },
-    { 0x201,    0x240,    6,      TRUE },  /* 3 consecutive blocks with the same pattern but */
-    { 0x241,    0x280,    6,      TRUE },  /* discontiguous value ranges, testing utrie3_enum() */
-    { 0x281,    0x2c0,    6,      TRUE },
-    { 0x2f987,  0x2fa98,  5,      TRUE },
-    { 0x2f777,  0x2f883,  0,      TRUE },
-    { 0x2f900,  0x2ffaa,  1,      FALSE },
-    { 0x2ffaa,  0x2ffab,  2,      TRUE },
-    { 0x2ffbb,  0x2ffc0,  7,      TRUE }
+    { 0x21,     0x7f,     0x5555 },
+    { 0x2f800,  0x2fedc,  0x7a   },
+    { 0x72,     0xdd,     3      },
+    { 0xdd,     0xde,     4      },
+    { 0x201,    0x240,    6      },  /* 3 consecutive blocks with the same pattern but */
+    { 0x241,    0x280,    6      },  /* discontiguous value ranges, testing iteration */
+    { 0x281,    0x2c0,    6      },
+    { 0x2f987,  0x2fa98,  5      },
+    { 0x2f777,  0x2f883,  0      },
+    { 0x2fedc,  0x2ffaa,  1      },
+    { 0x2ffaa,  0x2ffab,  2      },
+    { 0x2ffbb,  0x2ffc0,  7      }
 };
 
 static const CheckRange
@@ -1004,13 +1001,13 @@ checkRanges2[]={
 /* use a non-zero initial value */
 static const SetRange
 setRanges3[]={
-    { 0x31,     0xa4,     1, FALSE },
-    { 0x3400,   0x6789,   2, FALSE },
-    { 0x8000,   0x89ab,   9, TRUE },
-    { 0x9000,   0xa000,   4, TRUE },
-    { 0xabcd,   0xbcde,   3, TRUE },
-    { 0x55555,  0x110000, 6, TRUE },  /* highStart<U+ffff with non-initialValue */
-    { 0xcccc,   0x55555,  6, TRUE }
+    { 0x31,     0xa4,     1 },
+    { 0x3400,   0x6789,   2 },
+    { 0x8000,   0x89ab,   9 },
+    { 0x9000,   0xa000,   4 },
+    { 0xabcd,   0xbcde,   3 },
+    { 0x55555,  0x110000, 6 },  /* highStart<U+ffff with non-initialValue */
+    { 0xcccc,   0x55555,  6 }
 };
 
 static const CheckRange
@@ -1031,7 +1028,7 @@ checkRanges3[]={
 /* empty or single-value tries, testing highStart==0 */
 static const SetRange
 setRangesEmpty[]={
-    { 0,        0,        0, FALSE },  /* need some values for it to compile */
+    { 0,        0,        0 },  /* need some values for it to compile */
 };
 
 static const CheckRange
@@ -1042,7 +1039,7 @@ checkRangesEmpty[]={
 
 static const SetRange
 setRangesSingleValue[]={
-    { 0,        0x110000, 5, TRUE },
+    { 0,        0x110000, 5 },
 };
 
 static const CheckRange
@@ -1123,15 +1120,15 @@ FreeBlocksTest(void) {
      * If it fails, it will overflow the data array.
      */
     for(i=0; i<(0x120000>>4)/2; ++i) {  // 4=UTRIE3_SUPP_SHIFT_2
-        utrie3bld_setRange(builder, 0x740, 0x840-1, 1, TRUE, &errorCode);
-        utrie3bld_setRange(builder, 0x780, 0x880-1, 1, TRUE, &errorCode);
-        utrie3bld_setRange(builder, 0x740, 0x840-1, 2, TRUE, &errorCode);
-        utrie3bld_setRange(builder, 0x780, 0x880-1, 3, TRUE, &errorCode);
+        utrie3bld_setRange(builder, 0x740, 0x840-1, 1, &errorCode);
+        utrie3bld_setRange(builder, 0x780, 0x880-1, 1, &errorCode);
+        utrie3bld_setRange(builder, 0x740, 0x840-1, 2, &errorCode);
+        utrie3bld_setRange(builder, 0x780, 0x880-1, 3, &errorCode);
     }
     /* make blocks that will be free during compaction */
-    utrie3bld_setRange(builder, 0x1000, 0x3000-1, 2, TRUE, &errorCode);
-    utrie3bld_setRange(builder, 0x2000, 0x4000-1, 3, TRUE, &errorCode);
-    utrie3bld_setRange(builder, 0x1000, 0x4000-1, 1, TRUE, &errorCode);
+    utrie3bld_setRange(builder, 0x1000, 0x3000-1, 2, &errorCode);
+    utrie3bld_setRange(builder, 0x2000, 0x4000-1, 3, &errorCode);
+    utrie3bld_setRange(builder, 0x1000, 0x4000-1, 1, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("error: setting lots of ranges into a builder (%s) failed - %s\n",
                 testName, u_errorName(errorCode));
@@ -1216,7 +1213,7 @@ ManyAllSameBlocksTest(void) {
     // Many all-same-value blocks.
     for (i = 0; i < 0x110000; i += 0x1000) {
         uint32_t value = i >> 12;
-        utrie3bld_setRange(builder, i, i + 0xfff, value, TRUE, &errorCode);
+        utrie3bld_setRange(builder, i, i + 0xfff, value, &errorCode);
         checkRanges[value + 1].limit = i + 0x1000;
         checkRanges[value + 1].value = value;
     }
@@ -1256,7 +1253,7 @@ MuchDataTest(void) {
     // to get more than 128k data values after compaction.
     for (c = 0; c < 0x10000; c += 0x40) {
         uint32_t value = c >> 4;
-        utrie3bld_setRange(builder, c, c + 0x3f, value, TRUE, &errorCode);
+        utrie3bld_setRange(builder, c, c + 0x3f, value, &errorCode);
         checkRanges[r].limit = c + 0x40;
         checkRanges[r++].value = value;
     }
@@ -1264,17 +1261,17 @@ MuchDataTest(void) {
     checkRanges[r++].value = 0xff33;
     for (c = 0x20000; c < 0x30230; c += 0x10) {
         uint32_t value = c >> 4;
-        utrie3bld_setRange(builder, c, c + 0xf, value, TRUE, &errorCode);
+        utrie3bld_setRange(builder, c, c + 0xf, value, &errorCode);
         checkRanges[r].limit = c + 0x10;
         checkRanges[r++].value = value;
     }
-    utrie3bld_setRange(builder, 0x30230, 0x30233, 0x3023, TRUE, &errorCode);
+    utrie3bld_setRange(builder, 0x30230, 0x30233, 0x3023, &errorCode);
     checkRanges[r].limit = 0x30234;
     checkRanges[r++].value = 0x3023;
-    utrie3bld_setRange(builder, 0x30234, 0xdffff, 0x5005, TRUE, &errorCode);
+    utrie3bld_setRange(builder, 0x30234, 0xdffff, 0x5005, &errorCode);
     checkRanges[r].limit = 0xe0000;
     checkRanges[r++].value = 0x5005;
-    utrie3bld_setRange(builder, 0xe0000, 0x10ffff, 0x9009, TRUE, &errorCode);
+    utrie3bld_setRange(builder, 0xe0000, 0x10ffff, 0x9009, &errorCode);
     checkRanges[r].limit = 0x110000;
     checkRanges[r++].value = 0x9009;
     if (U_FAILURE(errorCode)) {
@@ -1314,9 +1311,9 @@ static void
 TrieTestGetRangesSkipLead(void) {
     static const SetRange
     setRangesSkipLead[]={
-        { 0xd000, 0xd7ff, 5, TRUE },
-        { 0xd7ff, 0xdc01, 3, TRUE },
-        { 0xdc01, 0xf900, 5, TRUE },
+        { 0xd000, 0xd7ff, 5 },
+        { 0xd7ff, 0xdc01, 3 },
+        { 0xdc01, 0xf900, 5 },
     };
 
     static const CheckRange
@@ -1359,7 +1356,7 @@ TrieTestGetRangesSkipLead(void) {
     testGetRangesSkipLead("skipLead1", builder,
                           checkRangesSkipLead1, UPRV_LENGTHOF(checkRangesSkipLead1));
     // Setting a range in the middle of lead surrogates makes no difference
-    utrie3bld_setRange(builder, 0xd844, 0xd899, 5, TRUE, &errorCode);
+    utrie3bld_setRange(builder, 0xd844, 0xd899, 5, &errorCode);
     if (U_FAILURE(errorCode)) {
         log_err("error: utrie3bld_setRange(skipLead2) failed: %s\n", u_errorName(errorCode));
         utrie3bld_close(builder);
