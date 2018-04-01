@@ -13,7 +13,6 @@
 #include "uvectr32.h"
 #include "cmemory.h"
 #include "putilimp.h"
-#include "uarrsort.h"
 
 U_NAMESPACE_BEGIN
 
@@ -329,15 +328,8 @@ void UVector32::sortedInsert(int32_t tok, UErrorCode& ec) {
 }
 
 
-/**
-  * Sort the vector, assuming it contains ints.
-  */
-void UVector32::sorti(UErrorCode &ec) {
-    if (U_SUCCESS(ec)) {
-        uprv_sortArray(elements, count, sizeof(int32_t),
-                       uprv_int32Comparator, nullptr, false, &ec);
-    }
-}
+
+
 
 U_NAMESPACE_END
 
