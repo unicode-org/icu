@@ -20,7 +20,7 @@
 #include "unicode/utf16.h"
 #include "normalizer2impl.h"
 #include "toolutil.h"
-#include "utrie2.h"
+#include "utrie3builder.h"
 #include "uvectr32.h"
 
 U_NAMESPACE_BEGIN
@@ -176,8 +176,6 @@ public:
         virtual ~Enumerator();
         /** Called for enumerated value!=0. */
         virtual void rangeHandler(UChar32 start, UChar32 end, Norm &norm) = 0;
-        /** @internal Public only for C callback. */
-        UBool rangeHandler(UChar32 start, UChar32 end, uint32_t value);
     protected:
         Norms &norms;
     };
@@ -190,7 +188,7 @@ private:
     Norms(const Norms &other) = delete;
     Norms &operator=(const Norms &other) = delete;
 
-    UTrie2 *normTrie;
+    UTrie3Builder *normTrie;
     UToolMemory *normMem;
     Norm *norms;
 };
