@@ -518,7 +518,7 @@ sortiComparator(const void * /*context */, const void *left, const void *right) 
 }
 
 /**
-  * Sort the vector, assuming it contains ints.
+  * Sort the vector, assuming it constains ints.
   *     (A more general sort would take a comparison function, but it's
   *     not clear whether UVector's UElementComparator or
   *     UComparator from uprv_sortAray would be more appropriate.)
