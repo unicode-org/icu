@@ -1004,7 +1004,7 @@ class RBBITableBuilder {
         */
        void removeSafeState(int keepState, int duplState) {
            assert(keepState < duplState);
-           assert(duplState < fDStates.size());
+           assert(duplState < fSafeTable.size());
 
            fSafeTable.remove(duplState);
            int numStates = fSafeTable.size();

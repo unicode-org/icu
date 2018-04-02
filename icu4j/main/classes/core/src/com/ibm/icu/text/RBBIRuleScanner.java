@@ -285,7 +285,7 @@ class RBBIRuleScanner {
             // All rule expressions are ORed together.
             // The ';' that terminates an expression really just functions as a
             // '|' with
-            //   a low operator prededence.
+            //   a low operator precedence.
             //
             // Each of the four sets of rules are collected separately.
             //  (forward, reverse, safe_forward, safe_reverse)
