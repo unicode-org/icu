@@ -43,8 +43,8 @@ class RBBIRuleBuilder {
     RBBINode[]         fTreeRoots = new RBBINode[4];
     static final int   fForwardTree = 0;  // Indexes into the above fTreeRoots array
     static final int   fReverseTree = 1;  //   for each of the trees.
-    static final int   fSafeFwdTree = 3;  //   (in C, these are pointer variables and
-    static final int   fSafeRevTree = 4;  //    there is no array.)
+    static final int   fSafeFwdTree = 2;  //   (in C, these are pointer variables and
+    static final int   fSafeRevTree = 3;  //    there is no array.)
     int fDefaultTree = fForwardTree;      // For rules not qualified with a !
                                           //   the tree to which they belong to.
 
@@ -59,7 +59,7 @@ class RBBIRuleBuilder {
                                           // longest match.
 
     RBBISetBuilder fSetBuilder;           // Set and Character Category builder.
-    List<RBBINode> fUSetNodes;            // Vector of all uset nodes.
+    List<RBBINode> fUSetNodes;            // Vector of all used nodes.
     RBBITableBuilder fForwardTable;       // State transition tables
 
     //
@@ -99,7 +99,7 @@ class RBBIRuleBuilder {
     /**< Syntax error in RBBI rule.                        */
 
     static final int U_BRK_UNCLOSED_SET = 0x10205;
-    /**< UnicodeSet witing an RBBI rule missing a closing ']'.  */
+    /**< UnicodeSet writing an RBBI rule missing a closing ']'.  */
 
     static final int U_BRK_ASSIGN_ERROR = 0x10206;
     /**< Syntax error in RBBI rule assignment statement.   */

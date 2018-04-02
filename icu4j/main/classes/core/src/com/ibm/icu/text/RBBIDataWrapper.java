@@ -352,7 +352,7 @@ public final class RBBIDataWrapper {
         }
 
         // Current position in the buffer.
-        int pos = 24 * 4;     // offset of end of header, which has 24 fields, all int32_t (4 bytes)
+        int pos = DH_SIZE * 4;     // offset of end of header, which has DH_SIZE fields, all int32_t (4 bytes)
 
         //
         // Read in the Forward state transition table as an array of shorts.
