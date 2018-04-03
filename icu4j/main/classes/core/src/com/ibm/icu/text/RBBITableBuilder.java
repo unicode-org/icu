@@ -1110,15 +1110,9 @@ class RBBITableBuilder {
         *   Synthesize a safe state table from the main state table.
         */
        void buildSafeReverseTable() {
-           // Find safe char class pairs.
-
-           // make a state table row for each trailing class, and map from class to row.
-
-           // For each pair
-           //   startRow[p1] = p2
-           //   p2row[p2] = stopRow
-           // For each unfilled in cell
-           //   set to row corresponding to its column.
+           // Safe Reverse table construction is described in more detail in the corresponding
+           // function in ICU4C, in source/common/rbbitblb.cpp. Not duplicated here because
+           // it is too likely to get out of sync.
 
            // Each safe pair is stored as two chars in the safePair stringBuilder.
            StringBuilder safePairs = new StringBuilder();
