@@ -180,6 +180,9 @@ public class BidiFmwk extends TestFmwk {
         - A-F == Arabic Letters 0631-0636
         - G-V == Hebrew letters 05d7-05ea
         - W-Z == Unassigned RTL 08d0-08d3
+            Unicode 6.1 changes U+08A0..U+08FF from R to AL which works ok.
+            Unicode 11 adds U+08D3 ARABIC SMALL LOW WAW which has bc=NSM
+                so we stop using Z in this test.
         - 0-5 == western digits 0030-0035
         - 6-9 == Arabic-Indic digits 0666-0669
         - ` == Combining Grave Accent 0300 (NSM)

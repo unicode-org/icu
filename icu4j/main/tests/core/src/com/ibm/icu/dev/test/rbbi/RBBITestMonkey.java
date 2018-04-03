@@ -609,11 +609,6 @@ public class RBBITestMonkey extends TestFmwk {
                 }
 
 
-                // Rule 14 (E_Base | EBG) x E_Modifier
-                if ((fEBaseSet.contains(c1)  || fEBGSet.contains(c1)) && fEModifierSet.contains(c2)) {
-                    continue;
-                }
-
                 // Rule 15 - 17   Group piars of Regional Indicators
                 if (fRegionalIndicatorSet.contains(c0) && fRegionalIndicatorSet.contains(c1)) {
                     break;

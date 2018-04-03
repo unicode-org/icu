@@ -1495,6 +1495,13 @@ public final class UScript {
             0x11D10 | EXCLUSION,  // Gonm
             0x11A5C | EXCLUSION,  // Soyo
             0x11A0B | EXCLUSION,  // Zanb
+            0x1180B | EXCLUSION,  // Dogr
+            0x11D71 | LIMITED_USE,  // Gong
+            0x11EE5 | EXCLUSION,  // Maka
+            0x16E40 | EXCLUSION | CASED,  // Medf
+            0x10D12 | LIMITED_USE | RTL,  // Rohg
+            0x10F42 | EXCLUSION | RTL,  // Sogd
+            0x10F19 | EXCLUSION | RTL,  // Sogo
             // End copy-paste from parsescriptmetadata.py
         };
 

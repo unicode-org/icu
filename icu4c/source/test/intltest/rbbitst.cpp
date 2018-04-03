@@ -2153,11 +2153,6 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
             continue;
         }
 
-        // WB 14  (E_Base | EBG) x E_Modifier
-        if ((fEBaseSet->contains(c1)  || fEBGSet->contains(c1)) && fEModifierSet->contains(c2)) {
-            continue;
-        }
-
         // Rule 15 - 17   Group pairs of Regional Indicators.
         if (fRegionalIndicatorSet->contains(c0) && fRegionalIndicatorSet->contains(c1)) {
             break;
