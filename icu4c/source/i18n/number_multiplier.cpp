@@ -11,36 +11,76 @@
 
 #include "number_types.h"
 #include "number_multiplier.h"
+#include "numparse_validators.h"
 
 using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
+using namespace icu::numparse::impl;
 
 
-Multiplier::Multiplier(int32_t magnitudeMultiplier, int32_t multiplier)
-        : magnitudeMultiplier(magnitudeMultiplier), multiplier(multiplier) {}
+Multiplier::Multiplier(int32_t magnitude, double arbitrary)
+        : fMagnitude(magnitude), fArbitrary(arbitrary) {}
 
-Multiplier Multiplier::magnitude(int32_t magnitudeMultiplier) {
-    return {magnitudeMultiplier, 1};
+Multiplier Multiplier::none() {
+    return {0, 1};
 }
 
-Multiplier Multiplier::integer(int32_t multiplier) {
-    return {0, multiplier};
+Multiplier Multiplier::powerOfTen(int32_t power) {
+    return {power, 1};
+}
+
+Multiplier Multiplier::arbitraryDecimal(StringPiece multiplicand) {
+    // TODO: Fix this hack
+    UErrorCode localError = U_ZERO_ERROR;
+    DecimalQuantity dq;
+    dq.setToDecNumber(multiplicand, localError);
+    return {0, dq.toDouble()};
+}
+
+Multiplier Multiplier::arbitraryDouble(double multiplicand) {
+    return {0, multiplicand};
+}
+
+void Multiplier::applyTo(impl::DecimalQuantity& quantity) const {
+    quantity.adjustMagnitude(fMagnitude);
+    quantity.multiplyBy(fArbitrary);
+}
+
+void Multiplier::applyReciprocalTo(impl::DecimalQuantity& quantity) const {
+    quantity.adjustMagnitude(-fMagnitude);
+    if (fArbitrary != 0) {
+        quantity.multiplyBy(1 / fArbitrary);
+    }
 }
 
 
-void MultiplierChain::setAndChain(const Multiplier& multiplier, const MicroPropsGenerator* parent) {
+void
+MultiplierFormatHandler::setAndChain(const Multiplier& multiplier, const MicroPropsGenerator* parent) {
     this->multiplier = multiplier;
     this->parent = parent;
 }
 
-void
-MultiplierChain::processQuantity(DecimalQuantity& quantity, MicroProps& micros, UErrorCode& status) const {
+void MultiplierFormatHandler::processQuantity(DecimalQuantity& quantity, MicroProps& micros,
+                                              UErrorCode& status) const {
     parent->processQuantity(quantity, micros, status);
-    quantity.adjustMagnitude(multiplier.magnitudeMultiplier);
-    if (multiplier.multiplier != 1) {
-        quantity.multiplyBy(multiplier.multiplier);
+    multiplier.applyTo(quantity);
+}
+
+
+// NOTE: MultiplierParseHandler is declared in the header numparse_validators.h
+MultiplierParseHandler::MultiplierParseHandler(::icu::number::Multiplier multiplier)
+        : fMultiplier(multiplier) {}
+
+void MultiplierParseHandler::postProcess(ParsedNumber& result) const {
+    if (!result.quantity.bogus) {
+        fMultiplier.applyReciprocalTo(result.quantity);
+        // NOTE: It is okay if the multiplier was negative.
     }
+}
+
+UnicodeString MultiplierParseHandler::toString() const {
+    return u"<Multiplier>";
 }
 
 

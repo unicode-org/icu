@@ -257,11 +257,7 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     // MULTIPLIERS //
     /////////////////
 
-    if (properties.magnitudeMultiplier != 0) {
-        macros.multiplier = Multiplier::magnitude(properties.magnitudeMultiplier);
-    } else if (properties.multiplier != 1) {
-        macros.multiplier = Multiplier::integer(properties.multiplier);
-    }
+    macros.multiplier = multiplierFromProperties(properties);
 
     //////////////////////
     // PROPERTY EXPORTS //

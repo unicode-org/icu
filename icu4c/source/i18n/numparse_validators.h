@@ -77,6 +77,26 @@ class RequireNumberValidator : public ValidationMatcher, public UMemory {
 };
 
 
+/**
+ * Wraps a {@link Multiplier} for use in the number parsing pipeline.
+ *
+ * NOTE: Implemented in number_multiplier.cpp
+ */
+class MultiplierParseHandler : public ValidationMatcher, public UMemory {
+  public:
+    MultiplierParseHandler() = default;  // leaves instance in valid but undefined state
+
+    MultiplierParseHandler(::icu::number::Multiplier multiplier);
+
+    void postProcess(ParsedNumber& result) const U_OVERRIDE;
+
+    UnicodeString toString() const U_OVERRIDE;
+
+  private:
+    ::icu::number::Multiplier fMultiplier;
+};
+
+
 } // namespace impl
 } // namespace numparse
 U_NAMESPACE_END

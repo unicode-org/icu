@@ -4,6 +4,7 @@ package com.ibm.icu.impl.number;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.number.IntegerWidth;
+import com.ibm.icu.number.Multiplier;
 import com.ibm.icu.number.Notation;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -25,8 +26,8 @@ public class MacroProps implements Cloneable {
     public UnitWidth unitWidth;
     public SignDisplay sign;
     public DecimalSeparatorDisplay decimal;
+    public Multiplier multiplier;
     public AffixPatternProvider affixProvider; // not in API; for JDK compatibility mode only
-    public MultiplierImpl multiplier; // not in API; for JDK compatibility mode only
     public PluralRules rules; // not in API; could be made public in the future
     public Long threshold; // not in API; controls internal self-regulation threshold
     public ULocale loc;

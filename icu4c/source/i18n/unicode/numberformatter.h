@@ -86,6 +86,7 @@ namespace impl {
 
 // Forward declarations:
 class NumberParserImpl;
+class MultiplierParseHandler;
 
 }
 }
@@ -142,7 +143,7 @@ class NumberStringBuilder;
 class AffixPatternProvider;
 class NumberPropertyMapper;
 struct DecimalFormatProperties;
-class MultiplierChain;
+class MultiplierFormatHandler;
 class CurrencySymbols;
 class GeneratorHelpers;
 
@@ -895,7 +896,6 @@ class U_I18N_API IntegerWidth : public UMemory {
      *            The minimum number of places before the decimal separator.
      * @return An IntegerWidth for chaining or passing to the NumberFormatter integerWidth() setter.
      * @draft ICU 60
-     * @see NumberFormatter
      */
     static IntegerWidth zeroFillTo(int32_t minInt);
 
@@ -909,7 +909,6 @@ class U_I18N_API IntegerWidth : public UMemory {
      *            truncation.
      * @return An IntegerWidth for passing to the NumberFormatter integerWidth() setter.
      * @draft ICU 60
-     * @see NumberFormatter
      */
     IntegerWidth truncateAt(int32_t maxInt);
 
@@ -964,6 +963,94 @@ class U_I18N_API IntegerWidth : public UMemory {
 
     // To allow access to the skeleton generation code:
     friend class impl::GeneratorHelpers;
+};
+
+/**
+ * A class that defines a quantity by which a number should be multiplied when formatting.
+ *
+ * <p>
+ * To create a Multiplier, use one of the factory methods.
+ *
+ * @draft ICU 62
+ */
+class U_I18N_API Multiplier : public UMemory {
+  public:
+    /**
+     * Do not change the value of numbers when formatting or parsing.
+     *
+     * @return A Multiplier to prevent any multiplication.
+     * @draft ICU 62
+     */
+    static Multiplier none();
+
+    /**
+     * Multiply numbers by 100 before formatting. Useful for combining with a percent unit:
+     *
+     * <pre>
+     * NumberFormatter::with().unit(NoUnit::percent()).multiplier(Multiplier::powerOfTen(2))
+     * </pre>
+     *
+     * @return A Multiplier for passing to the setter in NumberFormatter.
+     * @draft ICU 62
+     */
+    static Multiplier powerOfTen(int32_t power);
+
+    /**
+     * Multiply numbers by an arbitrary value before formatting. Useful for unit conversions.
+     *
+     * This method takes a string in a decimal number format with syntax
+     * as defined in the Decimal Arithmetic Specification, available at
+     * http://speleotrove.com/decimal
+     *
+     * Also see the version of this method that takes a double.
+     *
+     * @return A Multiplier for passing to the setter in NumberFormatter.
+     * @draft ICU 62
+     */
+    static Multiplier arbitraryDecimal(StringPiece multiplicand);
+
+    /**
+     * Multiply numbers by an arbitrary value before formatting. Useful for unit conversions.
+     *
+     * This method takes a double; also see the version of this method that takes an exact decimal.
+     *
+     * @return A Multiplier for passing to the setter in NumberFormatter.
+     * @draft ICU 62
+     */
+    static Multiplier arbitraryDouble(double multiplicand);
+
+  private:
+    int32_t fMagnitude;
+    double fArbitrary;
+
+    Multiplier(int32_t magnitude, double arbitrary);
+
+    Multiplier() : fMagnitude(0), fArbitrary(1) {}
+
+    bool isValid() const {
+        return fMagnitude != 0 || fArbitrary != 1;
+    }
+
+    void applyTo(impl::DecimalQuantity& quantity) const;
+
+    void applyReciprocalTo(impl::DecimalQuantity& quantity) const;
+
+    // To allow MacroProps/MicroProps to initialize empty instances:
+    friend struct impl::MacroProps;
+    friend struct impl::MicroProps;
+
+    // To allow NumberFormatterImpl to access isBogus() and perform other operations:
+    friend class impl::NumberFormatterImpl;
+
+    // To allow the helper class MultiplierFormatHandler access to private fields:
+    friend class impl::MultiplierFormatHandler;
+
+    // To allow access to the skeleton generation code:
+    friend class impl::GeneratorHelpers;
+
+    // To allow access to parsing code:
+    friend class ::icu::numparse::impl::NumberParserImpl;
+    friend class ::icu::numparse::impl::MultiplierParseHandler;
 };
 
 namespace impl {
@@ -1209,41 +1296,6 @@ class U_I18N_API Padder : public UMemory {
 
 // Do not enclose entire MacroProps with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
-class U_I18N_API Multiplier : public UMemory {
-  public:
-    /** @internal */
-    static Multiplier magnitude(int32_t magnitudeMultiplier);
-
-    /** @internal */
-    static Multiplier integer(int32_t multiplier);
-
-  private:
-    int32_t magnitudeMultiplier;
-    int32_t multiplier;
-
-    Multiplier(int32_t magnitudeMultiplier, int32_t multiplier);
-
-    Multiplier() : magnitudeMultiplier(0), multiplier(1) {}
-
-    bool isValid() const {
-        return magnitudeMultiplier != 0 || multiplier != 1;
-    }
-
-    // To allow MacroProps/MicroProps to initialize empty instances:
-    friend struct MacroProps;
-    friend struct MicroProps;
-
-    // To allow NumberFormatterImpl to access isBogus() and perform other operations:
-    friend class impl::NumberFormatterImpl;
-
-    // To allow the helper class MultiplierChain access to private fields:
-    friend class impl::MultiplierChain;
-
-    // To allow access to the skeleton generation code:
-    friend class impl::GeneratorHelpers;
-};
-
-/** @internal */
 struct U_I18N_API MacroProps : public UMemory {
     /** @internal */
     Notation notation;
@@ -1280,8 +1332,10 @@ struct U_I18N_API MacroProps : public UMemory {
     /** @internal */
     UNumberDecimalSeparatorDisplay decimal = UNUM_DECIMAL_SEPARATOR_COUNT;
 
-    Multiplier multiplier;  // = Multiplier();  (bogus)
+    /** @internal */
+    Multiplier multiplier;  // = Multiplier();  (benign value)
 
+    /** @internal */
     AffixPatternProvider* affixProvider = nullptr;  // no ownership
 
     /** @internal */
@@ -1835,10 +1889,47 @@ class U_I18N_API NumberFormatterSettings {
      * @param style
      *            The decimal separator display strategy to use when rendering numbers.
      * @return The fluent chain.
-     * @see #sign
+     * @see #decimal
      * @draft ICU 62
      */
     Derived decimal(const UNumberDecimalSeparatorDisplay &style) &&;
+
+    /**
+     * Sets a multiplier to be used to scale the number by an arbitrary amount before formatting. Most
+     * common values:
+     *
+     * <ul>
+     * <li>Multiply by 100: useful for percentages.
+     * <li>Multiply by an arbitrary value: useful for unit conversions.
+     * </ul>
+     *
+     * <p>
+     * Pass an element from a {@link Multiplier} factory method to this setter. For example:
+     *
+     * <pre>
+     * NumberFormatter::with().multiplier(Multiplier::powerOfTen(2))
+     * </pre>
+     *
+     * <p>
+     * The default is to not apply any multiplier.
+     *
+     * @param style
+     *            The decimal separator display strategy to use when rendering numbers.
+     * @return The fluent chain
+     * @draft ICU 60
+     */
+    Derived multiplier(const Multiplier &style) const &;
+
+    /**
+     * Overload of multiplier() for use on an rvalue reference.
+     *
+     * @param style
+     *            The multiplier separator display strategy to use when rendering numbers.
+     * @return The fluent chain.
+     * @see #multiplier
+     * @draft ICU 62
+     */
+    Derived multiplier(const Multiplier &style) &&;
 
 #ifndef U_HIDE_INTERNAL_API
 

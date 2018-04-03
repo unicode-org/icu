@@ -93,7 +93,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      *
      * @param multiplicand The value by which to multiply.
      */
-    void multiplyBy(int32_t multiplicand);
+    void multiplyBy(double multiplicand);
 
     /** Flips the sign from positive to negative and back. */
     void negate();

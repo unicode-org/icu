@@ -230,11 +230,10 @@ public class NumberParserImpl {
                     || properties.getMaximumFractionDigits() != 0;
             parser.addMatcher(RequireDecimalSeparatorValidator.getInstance(patternHasDecimalSeparator));
         }
+        // NOTE: Don't look at magnitude multiplier here. That is performed when percent sign is seen.
         if (properties.getMultiplier() != null) {
-            // We need to use a math context in order to prevent non-terminating decimal expansions.
-            // This is only used when dividing by the multiplier.
-            parser.addMatcher(new MultiplierHandler(properties.getMultiplier(),
-                    RoundingUtils.getMathContextOr34Digits(properties)));
+            parser.addMatcher(
+                    new MultiplierParseHandler(RoundingUtils.multiplierFromProperties(properties)));
         }
 
         parser.freeze();

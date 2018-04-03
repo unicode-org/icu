@@ -12,6 +12,7 @@ import com.ibm.icu.impl.number.LongNameHandler;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.impl.number.MicroPropsGenerator;
+import com.ibm.icu.impl.number.MultiplierFormatHandler;
 import com.ibm.icu.impl.number.MutablePatternModifier;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.Padder;
@@ -183,7 +184,7 @@ class NumberFormatterImpl {
 
         // Multiplier (compatibility mode value).
         if (macros.multiplier != null) {
-            chain = macros.multiplier.copyAndChain(chain);
+            chain = new MultiplierFormatHandler(macros.multiplier, chain);
         }
 
         // Rounding strategy

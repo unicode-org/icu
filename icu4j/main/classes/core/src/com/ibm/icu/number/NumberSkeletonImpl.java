@@ -11,6 +11,7 @@ import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.MacroProps;
+import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -1267,7 +1268,7 @@ class NumberSkeletonImpl {
             }
 
             // Generate the options
-            if (macros.rounder.mathContext != Rounder.DEFAULT_MATH_CONTEXT) {
+            if (macros.rounder.mathContext != RoundingUtils.DEFAULT_MATH_CONTEXT_UNLIMITED) {
                 sb.append('/');
                 BlueprintHelpers.generateRoundingModeOption(macros.rounder.mathContext.getRoundingMode(),
                         sb);

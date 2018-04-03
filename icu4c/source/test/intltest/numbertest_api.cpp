@@ -77,6 +77,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         //TESTCASE_AUTO(symbolsOverride);
         TESTCASE_AUTO(sign);
         TESTCASE_AUTO(decimal);
+        TESTCASE_AUTO(multiplier);
         TESTCASE_AUTO(locale);
         TESTCASE_AUTO(formatTypes);
         TESTCASE_AUTO(errors);
@@ -1907,6 +1908,83 @@ void NumberFormatterApiTest::decimal() {
             u"0.08765",
             u"0.008765",
             u"0.");
+}
+
+void NumberFormatterApiTest::multiplier() {
+    assertFormatDescending(
+            u"Multiplier None",
+            u"",
+            NumberFormatter::with().multiplier(Multiplier::none()),
+            Locale::getEnglish(),
+            u"87,650",
+            u"8,765",
+            u"876.5",
+            u"87.65",
+            u"8.765",
+            u"0.8765",
+            u"0.08765",
+            u"0.008765",
+            u"0");
+
+    assertFormatDescending(
+            u"Multiplier Power of Ten",
+            nullptr,
+            NumberFormatter::with().multiplier(Multiplier::powerOfTen(6)),
+            Locale::getEnglish(),
+            u"87,650,000,000",
+            u"8,765,000,000",
+            u"876,500,000",
+            u"87,650,000",
+            u"8,765,000",
+            u"876,500",
+            u"87,650",
+            u"8,765",
+            u"0");
+
+    assertFormatDescending(
+            u"Multiplier Arbitrary Double",
+            nullptr,
+            NumberFormatter::with().multiplier(Multiplier::arbitraryDouble(5.2)),
+            Locale::getEnglish(),
+            u"455,780",
+            u"45,578",
+            u"4,557.8",
+            u"455.78",
+            u"45.578",
+            u"4.5578",
+            u"0.45578",
+            u"0.045578",
+            u"0");
+
+    assertFormatDescending(
+            u"Multiplier Arbitrary BigDecimal",
+            nullptr,
+            NumberFormatter::with().multiplier(Multiplier::arbitraryDecimal({"5.2", -1})),
+            Locale::getEnglish(),
+            u"455,780",
+            u"45,578",
+            u"4,557.8",
+            u"455.78",
+            u"45.578",
+            u"4.5578",
+            u"0.45578",
+            u"0.045578",
+            u"0");
+
+    assertFormatDescending(
+            u"Multiplier Zero",
+            nullptr,
+            NumberFormatter::with().multiplier(Multiplier::arbitraryDouble(0)),
+            Locale::getEnglish(),
+            u"0",
+            u"0",
+            u"0",
+            u"0",
+            u"0",
+            u"0",
+            u"0",
+            u"0",
+            u"0");
 }
 
 void NumberFormatterApiTest::locale() {
