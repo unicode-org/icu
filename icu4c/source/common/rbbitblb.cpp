@@ -1331,16 +1331,33 @@ void RBBITableBuilder::exportTable(void *where) {
  *   Synthesize a safe state table from the main state table.
  */
 void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
-    // Find safe char class pairs.
+    // The safe table creation has three steps:
 
-    // make a state table row for each trailing class, and map from class to row.
+    // 1. Identifiy pairs of character classes that are "safe." Safe means that boundaries
+    // following the pair do not depend on context or state before the pair. To test
+    // whether a pair is safe, run it through the main forward state table, starting
+    // from each state. If the the final state is the same, no matter what the starting state,
+    // the pair is safe.
+    //
+    // 2. Build a state table that recognizes the safe pairs. It's similar to their
+    // forward table, with a column for each input character [class], and a row for
+    // each state. Row 1 is the start state, and row 0 is the stop state. Initially
+    // create an additional state for each input character category; being in
+    // one of these states means that the character has been seen, and is potentially
+    // the first of a pair. In each of these rows, the entry for the second character
+    // of a safe pair is set to the stop state (0), indicating that a match was found.
+    // All other table entries are set to the state corresponding the current input
+    // character, allowing that charcter to be the of a start following pair.
+    //
+    // Because the safe rules are to be run in reverse, moving backwards in the text,
+    // the first and second pair categories are swapped when building the table.
+    //
+    // 3. Compress the table. There are typically many rows (states) that are
+    // equivalent - that have zeroes (match completed) in the same columns -
+    // and can be folded together.
 
-    // For each pair
-    //   startRow[p1] = p2
-    //   p2row[p2] = stopRow
-    // For each unfilled in cell
-    //   set to row corresponding to its column.
-    UVector32 safePairs(status);
+    // Each safe pair is stored as two UChars in the safePair string.
+    UnicodeString safePairs;
 
     int32_t numCharClasses = fRB->fSetBuilder->getNumCharCategories();
     int32_t numStates = fDStates->size();
@@ -1363,8 +1380,8 @@ void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
                 }
             }
             if (wantedEndState == endState) {
-                int32_t pair = c1 << 16 | c2;
-                safePairs.addElement(pair, status);
+                safePairs.append((char16_t)c1);
+                safePairs.append((char16_t)c2);
                 // printf("(%d, %d) ", c1, c2);
             }
         }
@@ -1377,7 +1394,7 @@ void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
     // Row 0 is the stop state.
     // Row 1 is the start sate.
     // Row 2 and beyond are other states, initially one per char class, but
-    //   after initial construction, many of the states will be combined, compacting the table.)
+    //   after initial construction, many of the states will be combined, compacting the table.
     // The String holds the nextState data only. The four leading fields of a row, fAccepting,
     // fLookAhead, etc. are not needed for the safe table, and are omitted at this stage of building.
 
@@ -1388,7 +1405,7 @@ void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
     }
 
     // From the start state, each input char class transitions to the state for that input.
-    UnicodeString &startState = *(UnicodeString *)fSafeTable->elementAt(1);
+    UnicodeString &startState = *static_cast<UnicodeString *>(fSafeTable->elementAt(1));
     for (int32_t charClass=0; charClass < numCharClasses; ++charClass) {
         // Note: +2 for the start & stop state.
         startState.setCharAt(charClass, charClass+2);
@@ -1396,18 +1413,17 @@ void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
 
     // Initially make every other state table row look like the start state row,
     for (int32_t row=2; row<numCharClasses+2; ++row) {
-        UnicodeString &rowState = *(UnicodeString *)fSafeTable->elementAt(row);
+        UnicodeString &rowState = *static_cast<UnicodeString *>(fSafeTable->elementAt(row));
         rowState = startState;   // UnicodeString assignment, copies contents.
     }
 
-    // Run through the safe pairs, make next state to zero when pair has been seen.
+    // Run through the safe pairs, set the next state to zero when pair has been seen.
     // Zero being the stop state, meaning we found a safe point.
-    for (int32_t pairIdx=0; pairIdx<safePairs.size(); pairIdx++) {
-        int32_t pair = safePairs.elementAti(pairIdx);
-        int32_t c1 = (pair >> 16) & 0x0000ffff;
-        int32_t c2 = pair & 0x0000ffff;
+    for (int32_t pairIdx=0; pairIdx<safePairs.length(); pairIdx+=2) {
+        int32_t c1 = safePairs.charAt(pairIdx);
+        int32_t c2 = safePairs.charAt(pairIdx + 1);
 
-        UnicodeString &rowState = *(UnicodeString *)fSafeTable->elementAt(c2 + 2);
+        UnicodeString &rowState = *static_cast<UnicodeString *>(fSafeTable->elementAt(c2 + 2));
         rowState.setCharAt(c1, 0);
     }
 
