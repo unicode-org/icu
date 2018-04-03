@@ -17,6 +17,7 @@
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/rbbi.h"
+#include "rbbirb.h"
 #include "rbbinode.h"
 
 
@@ -49,11 +50,15 @@ public:
      */
     void     exportTable(void *where);
 
-    /** Find duplicate (redundant) character classes, beginning after the specifed
+    /**
+     *  Find duplicate (redundant) character classes, beginning at the specified
      *  pair, within this state table. This is an iterator-like function, used to
-     *  identify char classes (state table columns) that can be eliminated.
+     *  identify character classes (state table columns) that can be eliminated.
+     *  @param categories in/out parameter, specifies where to start looking for duplicates,
+     *                and returns the first pair of duplicates found, if any.
+     *  @return true if duplicate char classes were found, false otherwise.
      */
-    bool     findDuplCharClassFrom(int &baseClass, int &duplClass);
+    bool     findDuplCharClassFrom(IntPair *statePair);
 
     /** Remove a column from the state table. Used when two character categories
      *  have been found equivalent, and merged together, to eliminate the uneeded table column.
@@ -95,13 +100,15 @@ private:
 
     void     addRuleRootNodes(UVector *dest, RBBINode *node);
 
-    /** Find the next duplicate state. An iterator function.
-     * @param firstState (in/out) begin looking at this state, return the first of the
-     *                   pair of duplicates.
-     * @param duplicateState returns the duplicate state of fistState
-     * @return true if a duplicate pair of states was found.
+    /**
+     *  Find duplicate (redundant) states, beginning at the specified pair,
+     *  within this state table. This is an iterator-like function, used to
+     *  identify states (state table rows) that can be eliminated.
+     *  @param states in/out parameter, specifies where to start looking for duplicates,
+     *                and returns the first pair of duplicates found, if any.
+     *  @return true if duplicate states were found, false otherwise.
      */
-    bool findDuplicateState(int32_t &firstState, int32_t &duplicateState);
+    bool findDuplicateState(IntPair *states);
 
     /** Remove a duplicate state/
      * @param keepState First of the duplicate pair. Keep it.
@@ -111,12 +118,11 @@ private:
     void removeState(int32_t keepState, int32_t duplState);
 
     /** Find the next duplicate state in the safe reverse table. An iterator function.
-     * @param firstState ptr to state variable. Begin looking at this state, set to the first of the
-     *                   pair of duplicates on return.
-     * @param duplicateState ptr to where to return the duplicate state of fistState. Output only.
-     * @return true if a duplicate pair of states was found.
+     *  @param states in/out parameter, specifies where to start looking for duplicates,
+     *                and returns the first pair of duplicates found, if any.
+     *  @return true if a duplicate pair of states was found.
      */
-    bool findDuplicateSafeState(int32_t *firstState, int32_t *duplicateState);
+    bool findDuplicateSafeState(IntPair *states);
 
     /** Remove a duplicate state from the safe table.
      * @param keepState First of the duplicate pair. Keep it.
