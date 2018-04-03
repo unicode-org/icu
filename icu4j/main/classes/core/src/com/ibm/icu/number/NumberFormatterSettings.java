@@ -39,9 +39,10 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     static final int KEY_UNIT_WIDTH = 9;
     static final int KEY_SIGN = 10;
     static final int KEY_DECIMAL = 11;
-    static final int KEY_THRESHOLD = 12;
-    static final int KEY_PER_UNIT = 13;
-    static final int KEY_MAX = 14;
+    static final int KEY_MULTIPLIER = 12;
+    static final int KEY_THRESHOLD = 13;
+    static final int KEY_PER_UNIT = 14;
+    static final int KEY_MAX = 15;
 
     final NumberFormatterSettings<?> parent;
     final int key;
@@ -442,6 +443,36 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     }
 
     /**
+     * Sets a multiplier to be used to scale the number by an arbitrary amount before formatting. Most
+     * common values:
+     *
+     * <ul>
+     * <li>Multiply by 100: useful for percentages.
+     * <li>Multiply by an arbitrary value: useful for unit conversions.
+     * </ul>
+     *
+     * <p>
+     * Pass an element from a {@link Multiplier} factory method to this setter. For example:
+     *
+     * <pre>
+     * NumberFormatter.with().multiplier(Multiplier.powerOfTen(2))
+     * </pre>
+     *
+     * <p>
+     * The default is to not apply any multiplier.
+     *
+     * @param multiplier
+     *            An amount to be multiplied against numbers before formatting.
+     * @return The fluent chain
+     * @see Multiplier
+     * @draft ICU 62
+     * @provisional This API might change or be removed in a future release.
+     */
+    public T multiplier(Multiplier multiplier) {
+        return create(KEY_MULTIPLIER, multiplier);
+    }
+
+    /**
      * Internal method to set a starting macros.
      *
      * @internal
@@ -566,6 +597,11 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
             case KEY_DECIMAL:
                 if (macros.decimal == null) {
                     macros.decimal = (DecimalSeparatorDisplay) current.value;
+                }
+                break;
+            case KEY_MULTIPLIER:
+                if (macros.multiplier == null) {
+                    macros.multiplier = (Multiplier) current.value;
                 }
                 break;
             case KEY_THRESHOLD:

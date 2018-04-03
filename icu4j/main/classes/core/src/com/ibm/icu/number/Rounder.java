@@ -26,11 +26,8 @@ public abstract class Rounder implements Cloneable {
 
     /* package-private final */ MathContext mathContext;
 
-    /* package-private */ static final MathContext DEFAULT_MATH_CONTEXT = RoundingUtils
-            .mathContextUnlimited(RoundingUtils.DEFAULT_ROUNDING_MODE);
-
     /* package-private */ Rounder() {
-        mathContext = DEFAULT_MATH_CONTEXT;
+        mathContext = RoundingUtils.DEFAULT_MATH_CONTEXT_UNLIMITED;
     }
 
     /**

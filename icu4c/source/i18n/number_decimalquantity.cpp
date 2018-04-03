@@ -198,10 +198,18 @@ void DecimalQuantity::roundToIncrement(double roundingIncrement, RoundingMode ro
     roundToMagnitude(-maxFrac, roundingMode, status);
 }
 
-void DecimalQuantity::multiplyBy(int32_t multiplicand) {
+void DecimalQuantity::multiplyBy(double multiplicand) {
     if (isInfinite() || isZero() || isNaN()) {
         return;
     }
+    // Cover a few simple cases...
+    if (multiplicand == 1) {
+        return;
+    } else if (multiplicand == -1) {
+        negate();
+        return;
+    }
+    // Do math for all other cases...
     // TODO: Should we convert to decNumber instead?
     double temp = toDouble();
     temp *= multiplicand;

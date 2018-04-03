@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
+import com.ibm.icu.number.Multiplier;
+
 /** @author sffc */
 public class RoundingUtils {
 
@@ -147,6 +149,14 @@ public class RoundingUtils {
         }
     }
 
+    /** The default MathContext, unlimited-precision version. */
+    public static final MathContext DEFAULT_MATH_CONTEXT_UNLIMITED
+            = MATH_CONTEXT_BY_ROUNDING_MODE_UNLIMITED[DEFAULT_ROUNDING_MODE.ordinal()];
+
+    /** The default MathContext, 34-digit version. */
+    public static final MathContext DEFAULT_MATH_CONTEXT_34_DIGITS
+            = MATH_CONTEXT_BY_ROUNDING_MODE_34_DIGITS[DEFAULT_ROUNDING_MODE.ordinal()];
+
     /**
      * Gets the user-specified math context out of the property bag. If there is none, falls back to a
      * math context with unlimited precision and the user-specified rounding mode, which defaults to
@@ -197,5 +207,16 @@ public class RoundingUtils {
      */
     public static MathContext mathContextUnlimited(RoundingMode roundingMode) {
         return MATH_CONTEXT_BY_ROUNDING_MODE_UNLIMITED[roundingMode.ordinal()];
+    }
+
+    public static Multiplier multiplierFromProperties(DecimalFormatProperties properties) {
+        MathContext mc = getMathContextOr34Digits(properties);
+        if (properties.getMagnitudeMultiplier() != 0) {
+            return Multiplier.powerOfTen(properties.getMagnitudeMultiplier()).withMathContext(mc);
+        } else if (properties.getMultiplier() != null) {
+            return Multiplier.arbitrary(properties.getMultiplier()).withMathContext(mc);
+        } else {
+            return null;
+        }
     }
 }

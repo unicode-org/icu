@@ -11,7 +11,6 @@ import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.impl.number.MacroProps;
-import com.ibm.icu.impl.number.MultiplierImpl;
 import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PropertiesAffixPatternProvider;
@@ -299,11 +298,7 @@ final class NumberPropertyMapper {
         // MULTIPLIERS //
         /////////////////
 
-        if (properties.getMagnitudeMultiplier() != 0) {
-            macros.multiplier = new MultiplierImpl(properties.getMagnitudeMultiplier());
-        } else if (properties.getMultiplier() != null) {
-            macros.multiplier = new MultiplierImpl(properties.getMultiplier());
-        }
+        macros.multiplier = RoundingUtils.multiplierFromProperties(properties);
 
         //////////////////////
         // PROPERTY EXPORTS //

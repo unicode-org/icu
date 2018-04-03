@@ -75,7 +75,7 @@ struct MicroProps : public MicroPropsGenerator {
         ScientificModifier scientificModifier;
         EmptyModifier emptyWeakModifier{false};
         EmptyModifier emptyStrongModifier{true};
-        MultiplierChain multiplier;
+        MultiplierFormatHandler multiplier;
     } helpers;
 
 

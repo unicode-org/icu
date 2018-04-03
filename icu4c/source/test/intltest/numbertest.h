@@ -64,6 +64,7 @@ class NumberFormatterApiTest : public IntlTest {
     //void symbolsOverride();
     void sign();
     void decimal();
+    void multiplier();
     void locale();
     void formatTypes();
     void errors();

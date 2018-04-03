@@ -17,6 +17,7 @@
 #include "number_decimfmtprops.h"
 #include "unicode/localpointer.h"
 #include "numparse_validators.h"
+#include "number_multiplier.h"
 
 U_NAMESPACE_BEGIN namespace numparse {
 namespace impl {
@@ -78,6 +79,7 @@ class NumberParserImpl : public MutableMatcherCollection {
         RequireDecimalSeparatorValidator decimalSeparator;
         RequireExponentValidator exponent;
         RequireNumberValidator number;
+        MultiplierParseHandler multiplier;
     } fLocalValidators;
 
     explicit NumberParserImpl(parse_flags_t parseFlags);

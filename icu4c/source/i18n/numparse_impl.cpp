@@ -180,14 +180,10 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
                 properties.decimalSeparatorAlwaysShown || properties.maximumFractionDigits != 0;
         parser->addMatcher(parser->fLocalValidators.decimalSeparator = {patternHasDecimalSeparator});
     }
-
-    // TODO: MULTIPLIER
-//    if (properties.getMultiplier() != null) {
-//        // We need to use a math context in order to prevent non-terminating decimal expansions.
-//        // This is only used when dividing by the multiplier.
-//        parser.addMatcher(new MultiplierHandler(properties.getMultiplier(),
-//                RoundingUtils.getMathContextOr34Digits(properties)));
-//    }
+    // NOTE: Don't look at magnitude multiplier here. That is performed when percent sign is seen.
+    if (properties.multiplier != 1) {
+        parser->addMatcher(parser->fLocalValidators.multiplier = {multiplierFromProperties(properties)});
+    }
 
     parser->freeze();
     return parser.orphan();

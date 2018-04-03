@@ -29,6 +29,7 @@ import com.ibm.icu.number.CompactNotation;
 import com.ibm.icu.number.FractionRounder;
 import com.ibm.icu.number.IntegerWidth;
 import com.ibm.icu.number.LocalizedNumberFormatter;
+import com.ibm.icu.number.Multiplier;
 import com.ibm.icu.number.Notation;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
@@ -1880,6 +1881,84 @@ public class NumberFormatterApiTest {
                 "0.08765",
                 "0.008765",
                 "0.");
+    }
+
+    @Test
+    public void multiplier() {
+        assertFormatDescending(
+                "Multiplier None",
+                null,
+                NumberFormatter.with().multiplier(Multiplier.none()),
+                ULocale.ENGLISH,
+                "87,650",
+                "8,765",
+                "876.5",
+                "87.65",
+                "8.765",
+                "0.8765",
+                "0.08765",
+                "0.008765",
+                "0");
+
+        assertFormatDescending(
+                "Multiplier Power of Ten",
+                null,
+                NumberFormatter.with().multiplier(Multiplier.powerOfTen(6)),
+                ULocale.ENGLISH,
+                "87,650,000,000",
+                "8,765,000,000",
+                "876,500,000",
+                "87,650,000",
+                "8,765,000",
+                "876,500",
+                "87,650",
+                "8,765",
+                "0");
+
+        assertFormatDescending(
+                "Multiplier Arbitrary Double",
+                null,
+                NumberFormatter.with().multiplier(Multiplier.arbitrary(5.2)),
+                ULocale.ENGLISH,
+                "455,780",
+                "45,578",
+                "4,557.8",
+                "455.78",
+                "45.578",
+                "4.5578",
+                "0.45578",
+                "0.045578",
+                "0");
+
+        assertFormatDescending(
+                "Multiplier Arbitrary BigDecimal",
+                null,
+                NumberFormatter.with().multiplier(Multiplier.arbitrary(new BigDecimal("5.2"))),
+                ULocale.ENGLISH,
+                "455,780",
+                "45,578",
+                "4,557.8",
+                "455.78",
+                "45.578",
+                "4.5578",
+                "0.45578",
+                "0.045578",
+                "0");
+
+        assertFormatDescending(
+                "Multiplier Zero",
+                null,
+                NumberFormatter.with().multiplier(Multiplier.arbitrary(0)),
+                ULocale.ENGLISH,
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0",
+                "0");
     }
 
     @Test
