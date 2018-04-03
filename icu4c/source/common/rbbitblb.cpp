@@ -1078,18 +1078,18 @@ void RBBITableBuilder::printPosSets(RBBINode *n) {
 //
 //    findDuplCharClassFrom()
 //
-bool RBBITableBuilder::findDuplCharClassFrom(int32_t &baseCategory, int32_t &duplCategory) {
+bool RBBITableBuilder::findDuplCharClassFrom(IntPair *categories) {
     int32_t numStates = fDStates->size();
     int32_t numCols = fRB->fSetBuilder->getNumCharCategories();
 
     uint16_t table_base;
     uint16_t table_dupl;
-    for (; baseCategory < numCols-1; ++baseCategory) {
-        for (duplCategory=baseCategory+1; duplCategory < numCols; ++duplCategory) {
+    for (; categories->first < numCols-1; categories->first++) {
+        for (categories->second=categories->first+1; categories->second < numCols; categories->second++) {
              for (int32_t state=0; state<numStates; state++) {
                  RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(state);
-                 table_base = (uint16_t)sd->fDtran->elementAti(baseCategory);
-                 table_dupl = (uint16_t)sd->fDtran->elementAti(duplCategory);
+                 table_base = (uint16_t)sd->fDtran->elementAti(categories->first);
+                 table_dupl = (uint16_t)sd->fDtran->elementAti(categories->second);
                  if (table_base != table_dupl) {
                      break;
                  }
@@ -1118,14 +1118,14 @@ void RBBITableBuilder::removeColumn(int32_t column) {
 /*
  * findDuplicateState
  */
-bool RBBITableBuilder::findDuplicateState(int32_t &firstState, int32_t &duplState) {
+bool RBBITableBuilder::findDuplicateState(IntPair *states) {
     int32_t numStates = fDStates->size();
     int32_t numCols = fRB->fSetBuilder->getNumCharCategories();
 
-    for (; firstState<numStates-1; ++firstState) {
-        RBBIStateDescriptor *firstSD = (RBBIStateDescriptor *)fDStates->elementAt(firstState);
-        for (duplState=firstState+1; duplState<numStates; ++duplState) {
-            RBBIStateDescriptor *duplSD = (RBBIStateDescriptor *)fDStates->elementAt(duplState);
+    for (; states->first<numStates-1; states->first++) {
+        RBBIStateDescriptor *firstSD = (RBBIStateDescriptor *)fDStates->elementAt(states->first);
+        for (states->second=states->first+1; states->second<numStates; states->second++) {
+            RBBIStateDescriptor *duplSD = (RBBIStateDescriptor *)fDStates->elementAt(states->second);
             if (firstSD->fAccepting != duplSD->fAccepting ||
                 firstSD->fLookAhead != duplSD->fLookAhead ||
                 firstSD->fTagsIdx   != duplSD->fTagsIdx) {
@@ -1136,8 +1136,8 @@ bool RBBITableBuilder::findDuplicateState(int32_t &firstState, int32_t &duplStat
                 int32_t firstVal = firstSD->fDtran->elementAti(col);
                 int32_t duplVal = duplSD->fDtran->elementAti(col);
                 if (!((firstVal == duplVal) ||
-                        ((firstVal == firstState || firstVal == duplState) &&
-                        (duplVal  == firstState || duplVal  == duplState)))) {
+                        ((firstVal == states->first || firstVal == states->second) &&
+                        (duplVal  == states->first || duplVal  == states->second)))) {
                     rowsMatch = false;
                     break;
                 }
@@ -1151,21 +1151,21 @@ bool RBBITableBuilder::findDuplicateState(int32_t &firstState, int32_t &duplStat
 }
 
 
-bool RBBITableBuilder::findDuplicateSafeState(int32_t *firstState, int32_t *duplState) {
+bool RBBITableBuilder::findDuplicateSafeState(IntPair *states) {
     int32_t numStates = fSafeTable->size();
 
-    for (; *firstState<numStates-1; ++(*firstState)) {
-        UnicodeString *firstRow = static_cast<UnicodeString *>(fSafeTable->elementAt(*firstState));
-        for (*duplState=*firstState+1; *duplState<numStates; ++(*duplState)) {
-            UnicodeString *duplRow = static_cast<UnicodeString *>(fSafeTable->elementAt(*duplState));
+    for (; states->first<numStates-1; states->first++) {
+        UnicodeString *firstRow = static_cast<UnicodeString *>(fSafeTable->elementAt(states->first));
+        for (states->second=states->first+1; states->second<numStates; states->second++) {
+            UnicodeString *duplRow = static_cast<UnicodeString *>(fSafeTable->elementAt(states->second));
             bool rowsMatch = true;
             int32_t numCols = firstRow->length();
             for (int32_t col=0; col < numCols; ++col) {
                 int32_t firstVal = firstRow->charAt(col);
                 int32_t duplVal = duplRow->charAt(col);
                 if (!((firstVal == duplVal) ||
-                        ((firstVal == *firstState || firstVal == *duplState) &&
-                        (duplVal  == *firstState || duplVal  == *duplState)))) {
+                        ((firstVal == states->first || firstVal == states->second) &&
+                        (duplVal  == states->first || duplVal  == states->second)))) {
                     rowsMatch = false;
                     break;
                 }
@@ -1242,11 +1242,10 @@ void RBBITableBuilder::removeSafeState(int32_t keepState, int32_t duplState) {
  * RemoveDuplicateStates
  */
 void RBBITableBuilder::removeDuplicateStates() {
-    int32_t firstState = 3;
-    int32_t duplicateState = 0;
-    while (findDuplicateState(firstState, duplicateState)) {
-        // printf("Removing duplicate states (%d, %d)\n", firstState, duplicateState);
-        removeState(firstState, duplicateState);
+    IntPair dupls = {3, 0};
+    while (findDuplicateState(&dupls)) {
+        // printf("Removing duplicate states (%d, %d)\n", dupls.first, dupls.second);
+        removeState(dupls.first, dupls.second);
     }
 }
 
@@ -1428,11 +1427,10 @@ void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
     }
 
     // Remove duplicate or redundant rows from the table.
-    int32_t firstState = 1;
-    int32_t duplicateState = 0;    // initial value is not used; set by findDuplicateSafeState().
-    while (findDuplicateSafeState(&firstState, &duplicateState)) {
-        // printf("Removing duplicate safe states (%d, %d)\n", firstState, duplicateState);
-        removeSafeState(firstState, duplicateState);
+    IntPair states = {1, 0};
+    while (findDuplicateSafeState(&states)) {
+        // printf("Removing duplicate safe states (%d, %d)\n", states.first, states.second);
+        removeSafeState(states.first, states.second);
     }
 }
 

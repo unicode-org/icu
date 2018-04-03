@@ -308,9 +308,12 @@ void RBBIRuleBuilder::optimizeTables() {
 
     leftClass = 3;
     rightClass = 0;
-    while (fForwardTable->findDuplCharClassFrom(leftClass, rightClass)) {
-        fSetBuilder->mergeCategories(leftClass, rightClass);
-        fForwardTable->removeColumn(rightClass);
+
+    IntPair duplPair = {3, 0};
+
+    while (fForwardTable->findDuplCharClassFrom(&duplPair)) {
+        fSetBuilder->mergeCategories(duplPair.first, duplPair.second);
+        fForwardTable->removeColumn(duplPair.second);
     }
     fForwardTable->removeDuplicateStates();
 }

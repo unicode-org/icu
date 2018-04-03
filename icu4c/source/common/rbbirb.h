@@ -18,6 +18,8 @@
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
+#include <utility>
+
 #include "unicode/uobject.h"
 #include "unicode/rbbi.h"
 #include "unicode/uniset.h"
@@ -25,8 +27,7 @@
 #include "uhash.h"
 #include "uvector.h"
 #include "unicode/symtable.h"// For UnicodeSet parsing, is the interface that
-                          //    looks up references to $variables within a set.
-
+                             //    looks up references to $variables within a set.
 
 
 U_NAMESPACE_BEGIN
@@ -202,6 +203,11 @@ struct RBBISetTableEl {
     UnicodeString *key;
     RBBINode      *val;
 };
+
+/**
+ *   A pair of ints, used to bundle pairs of states or pairs of character classes.
+ */
+typedef std::pair<int32_t, int32_t> IntPair;
 
 
 //----------------------------------------------------------------------------
