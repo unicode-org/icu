@@ -1227,9 +1227,17 @@ enumDefaultsRange(const void *context, UChar32 start, UChar32 limit, UCharCatego
         { 0xFE00, U_RIGHT_TO_LEFT_ARABIC },
         { 0xFE70, U_LEFT_TO_RIGHT },
         { 0xFF00, U_RIGHT_TO_LEFT_ARABIC },
+
         { 0x10800, U_LEFT_TO_RIGHT },
+        { 0x10D00, U_RIGHT_TO_LEFT },  // Unicode 11 changes U+10D00..U+10D3F from R to AL.
+        { 0x10D40, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x10F30, U_RIGHT_TO_LEFT },  // Unicode 11 changes U+10F30..U+10F6F from R to AL.
+        { 0x10F70, U_RIGHT_TO_LEFT_ARABIC },
         { 0x11000, U_RIGHT_TO_LEFT },
+
         { 0x1E800, U_LEFT_TO_RIGHT },  /* new default-R range in Unicode 5.2: U+1E800 - U+1EFFF */
+        { 0x1EC70, U_RIGHT_TO_LEFT },  // Unicode 11 changes U+1EC70..U+1ECBF from R to AL.
+        { 0x1ECC0, U_RIGHT_TO_LEFT_ARABIC },
         { 0x1EE00, U_RIGHT_TO_LEFT },
         { 0x1EF00, U_RIGHT_TO_LEFT_ARABIC },  /* Unicode 6.1 changes U+1EE00..U+1EEFF from R to AL */
         { 0x1F000, U_RIGHT_TO_LEFT },
@@ -2515,7 +2523,7 @@ TestAdditionalProperties() {
         { 0x155A, UCHAR_BLOCK, UBLOCK_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS },
         { 0x1717, UCHAR_BLOCK, UBLOCK_TAGALOG },
         { 0x1900, UCHAR_BLOCK, UBLOCK_LIMBU },
-        { 0x1CBF, UCHAR_BLOCK, UBLOCK_NO_BLOCK },
+        { 0x0870, UCHAR_BLOCK, UBLOCK_NO_BLOCK },
         { 0x3040, UCHAR_BLOCK, UBLOCK_HIRAGANA },
         { 0x1D0FF, UCHAR_BLOCK, UBLOCK_BYZANTINE_MUSICAL_SYMBOLS },
         { 0x50000, UCHAR_BLOCK, UBLOCK_NO_BLOCK },
@@ -2591,7 +2599,7 @@ TestAdditionalProperties() {
 
         /* UCHAR_NUMERIC_TYPE tested in TestNumericProperties() */
 
-        /* UCHAR_SCRIPT tested in TestUScriptCodeAPI() */
+        /* UCHAR_SCRIPT tested in cucdapi.c TestUScriptCodeAPI() */
 
         { 0x10ff, UCHAR_HANGUL_SYLLABLE_TYPE, 0 },
         { 0x1100, UCHAR_HANGUL_SYLLABLE_TYPE, U_HST_LEADING_JAMO },

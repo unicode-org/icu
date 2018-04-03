@@ -38,10 +38,7 @@ $LVT         = [\p{Grapheme_Cluster_Break = LVT}];
 
 # Emoji defintions
 
-$E_Base      = [\p{Grapheme_Cluster_Break = EB}];
-$E_Modifier  = [\p{Grapheme_Cluster_Break = EM}];
 $Extended_Pict = [:ExtPict:];
-$E_Base_GAZ  = [\p{Grapheme_Cluster_Break = EBG}\uFDD0];
 $EmojiNRK    = [[\p{Emoji}] - [\p{Grapheme_Cluster_Break = Regional_Indicator}*\u00230-9©®™〰〽]];
 
 ## -------------------------------------------------
@@ -64,10 +61,7 @@ $L ($L | $V | $LV | $LVT);
 # GB 9b
 $Prepend [^$Control $CR $LF];
 
-# GB 10 Do not break within emoji modifier sequences or emoji zwj sequences.
-($E_Base | $E_Base_GAZ) $Extend* $E_Modifier;
-
-# GB 11
+# GB 11 Do not break within emoji modifier sequences or emoji zwj sequences.
 ($Extended_Pict | $EmojiNRK) $Extend* $ZWJ ($Extended_Pict | $EmojiNRK);
 
 # GB 12-13. Keep pairs of regional indicators together

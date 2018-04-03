@@ -46,10 +46,7 @@ $MidLetter          = [\p{Word_Break = MidLetter} - [\:]];
 $MidNum             = [\p{Word_Break = MidNum} [.]];
 $Numeric            = [\p{Word_Break = Numeric}];
 $ExtendNumLet       = [\p{Word_Break = ExtendNumLet}];
-$E_Base             = [\p{Word_Break = EB}];
-$E_Modifier         = [\p{Word_Break = EM}];
 $Extended_Pict      = [:ExtPict:];
-$EBG                = [\p{Word_Break = EBG}\uFDD0];
 $EmojiNRK           = [[\p{Emoji}] - [\p{Word_Break = Regional_Indicator}\u002a\u00230-9©®™〰〽]];
 
 $Han                = [:Han:];
@@ -122,8 +119,6 @@ $KatakanaEx {400};       # note:  these status values override those from rule 5
 $HiraganaEx {400};       #        by virtue of being numerically larger.
 $IdeographicEx {400};    #
 
-$E_Base ($Extend | $Format | $ZWJ)*;
-$E_Modifier ($Extend | $Format | $ZWJ)*;
 $Extended_Pict ($Extend | $Format | $ZWJ)*;
 
 #
@@ -175,11 +170,6 @@ $ExtendNumLetEx  $ALetterEx      {200};    #  (13b)
 $ExtendNumLetEx  $Hebrew_Letter  {200};    #  (13b)
 $ExtendNumLetEx  $NumericEx      {100};    #  (13b)
 $ExtendNumLetEx  $KatakanaEx     {400};    #  (13b)
-
-# rule 14
-#    Do not break within emoji modifier sequences
-
-($E_Base | $EBG) ($Format | $Extend | $ZWJ)* $E_Modifier;
 
 # rules 15 - 17
 #    Pairs of Regional Indicators stay together.

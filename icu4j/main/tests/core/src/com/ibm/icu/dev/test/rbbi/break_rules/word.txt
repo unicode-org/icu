@@ -32,11 +32,8 @@ MidLetter          = [\p{Word_Break = MidLetter}];
 MidNum             = [\p{Word_Break = MidNum}];
 Numeric            = [\p{Word_Break = Numeric}];
 ExtendNumLet       = [\p{Word_Break = ExtendNumLet}];
-E_Base             = [\p{Word_Break = EB}];
-E_Modifier         = [\p{Word_Break = EM}];
 EmojiNRK           = [[\p{Emoji}] - [[Regional_Indicator]\u002a\u00230-9©®™〰〽]];
 Extended_Pict      = [:ExtPict:];
-EBG                = [\p{Word_Break = EBG}];
 
 #define dictionary, with the effect being that those characters don't appear in test data.
 
@@ -86,8 +83,6 @@ WB13b:  ExtendNumLet ExtFmt* (AHLetter | Numeric | Katakana);
 #              Interacts with WB3c.
 WB15:  Regional_Indicator ExtFmt* Regional_Indicator ExtFmt* ZWJ (Extended_Pict | EmojiNRK);
 WB17:  Regional_Indicator ExtFmt* Regional_Indicator ExtFmt* ÷;
-
-WB14:  (E_Base | EBG) ExtFmt* E_Modifier;
 
 # Rule WB 999   Any ÷ Any
 #    Interacts with WB3c, do not break between ZWJ and (Extended_Pict | EBG).
