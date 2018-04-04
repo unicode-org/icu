@@ -3,6 +3,7 @@
 package com.ibm.icu.number;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
 
 import com.ibm.icu.impl.number.DecimalQuantity;
@@ -37,6 +38,16 @@ public class Multiplier {
     }
 
     private Multiplier(int magnitude, BigDecimal arbitrary, MathContext mc) {
+        if (arbitrary != null) {
+            // Attempt to convert the BigDecimal to a magnitude multiplier.
+            arbitrary = arbitrary.stripTrailingZeros();
+            if (arbitrary.precision() == 1 && arbitrary.unscaledValue().equals(BigInteger.ONE)) {
+                // Success!
+                magnitude = -arbitrary.scale();
+                arbitrary = null;
+            }
+        }
+
         this.magnitude = magnitude;
         this.arbitrary = arbitrary;
         this.mc = mc;
@@ -128,6 +139,13 @@ public class Multiplier {
         } else {
             return new Multiplier(0, BigDecimal.valueOf(multiplicand));
         }
+    }
+
+    /**
+     * Returns whether the multiplier will change the number.
+     */
+    boolean isValid() {
+        return magnitude != 0 || arbitrary != null;
     }
 
     /**
