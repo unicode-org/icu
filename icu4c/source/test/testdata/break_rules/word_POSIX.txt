@@ -31,7 +31,7 @@ MidLetter          = [\p{Word_Break = MidLetter} - [\:]];
 MidNum             = [\p{Word_Break = MidNum} [.]];
 Numeric            = [\p{Word_Break = Numeric}];
 ExtendNumLet       = [\p{Word_Break = ExtendNumLet}];
-EmojiNRK           = [[\p{Emoji}] - [[Regional_Indicator]\u002a\u00230-9©®™〰〽]];
+WSegSpace          = [[\p{Zs}]-[\p{Line_Break=Glue}]];
 Extended_Pict      = [:ExtPict:];
 
 #define dictionary, with the effect being that those characters don't appear in test data.
@@ -58,7 +58,8 @@ WB3:   CR LF;
 WB3a:  (Newline | CR | LF) ÷;
 WB3b:  . ÷ (Newline | CR | LF);   # actually redundant? No other rule combines.
                                   # (but needed with UAX treat-as scheme.)
-WB3c:   ZWJ (Extended_Pict | EmojiNRK);
+WB3c:   ZWJ Extended_Pict;
+WB3d:   WSegSpace WSegSpace;
 
 WB5:    AHLetter ExtFmt* AHLetter;
 
@@ -80,11 +81,11 @@ WB13b:  ExtendNumLet ExtFmt* (AHLetter | Numeric | Katakana);
 
 # WB rule 15 - 17, pairs of Regional Indicators stay unbroken.
 #              Interacts with WB3c.
-WB15:  Regional_Indicator ExtFmt* Regional_Indicator ExtFmt* ZWJ (Extended_Pict | EmojiNRK);
+WB15:  Regional_Indicator ExtFmt* Regional_Indicator ExtFmt* ZWJ Extended_Pict;
 WB17:  Regional_Indicator ExtFmt* Regional_Indicator ExtFmt* ÷;
 
 # Rule WB 999   Any ÷ Any
 #    Interacts with WB3c, do not break between ZWJ and (Extended_Pict | EBG).
-WB999.1: . ExtFmt* ZWJ (Extended_Pict | EmojiNRK);
+WB999.1: . ExtFmt* ZWJ Extended_Pict;
 WB999.2: . ExtFmt* ÷;
 

@@ -46,8 +46,8 @@ $MidLetter          = [\p{Word_Break = MidLetter} - [\:]];
 $MidNum             = [\p{Word_Break = MidNum} [.]];
 $Numeric            = [\p{Word_Break = Numeric}];
 $ExtendNumLet       = [\p{Word_Break = ExtendNumLet}];
+$WSegSpace          = [[\p{Zs}]-[\p{Line_Break = Glue}]];
 $Extended_Pict      = [:ExtPict:];
-$EmojiNRK           = [[\p{Emoji}] - [\p{Word_Break = Regional_Indicator}\u002a\u00230-9©®™〰〽]];
 
 $Han                = [:Han:];
 $Hiragana           = [:Hiragana:];
@@ -101,8 +101,11 @@ $CR $LF;
 
 # Rule 3c   ZWJ x (Extended_Pict | EmojiNRK).  Precedes WB4, so no intervening Extend chars allowed.
 #
-$ZWJ ($Extended_Pict | $EmojiNRK);
+$ZWJ $Extended_Pict;
 
+# Rule 3d - Keep horizontal whitespace together.
+#
+$WSegSpace $WSegSpace;
 
 # Rule 4 - ignore Format and Extend characters, except when they appear at the beginning
 #          of a region of Text.   The rule here comes into play when the start of text
