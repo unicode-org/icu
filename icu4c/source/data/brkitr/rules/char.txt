@@ -20,6 +20,9 @@
 $CR          = [\p{Grapheme_Cluster_Break = CR}];
 $LF          = [\p{Grapheme_Cluster_Break = LF}];
 $Control     = [[\p{Grapheme_Cluster_Break = Control}]];
+# TODO: Enable Virama & LinkingConsonant definitions once rule builder allows empty sets.
+#$Virama      = [[\p{Grapheme_Cluster_Break = Virama}]];
+#$LinkingConsonant = [[\p{Grapheme_Cluster_Break = LinkingConsonant}]];
 $Extend      = [[\p{Grapheme_Cluster_Break = Extend}]];
 $ZWJ         = [\p{Grapheme_Cluster_Break = ZWJ}];
 $Regional_Indicator = [\p{Grapheme_Cluster_Break = Regional_Indicator}];
@@ -39,7 +42,6 @@ $LVT         = [\p{Grapheme_Cluster_Break = LVT}];
 # Emoji defintions
 
 $Extended_Pict = [:ExtPict:];
-$EmojiNRK    = [[\p{Emoji}] - [\p{Grapheme_Cluster_Break = Regional_Indicator}*\u00230-9©®™〰〽]];
 
 ## -------------------------------------------------
 !!chain;
@@ -62,7 +64,7 @@ $L ($L | $V | $LV | $LVT);
 $Prepend [^$Control $CR $LF];
 
 # GB 11 Do not break within emoji modifier sequences or emoji zwj sequences.
-($Extended_Pict | $EmojiNRK) $Extend* $ZWJ ($Extended_Pict | $EmojiNRK);
+$Extended_Pict $Extend* $ZWJ $Extended_Pict;
 
 # GB 12-13. Keep pairs of regional indicators together
 #           Note that hard break '/' rule triggers only if there are three or more initial RIs,
@@ -77,4 +79,4 @@ $Prepend [^$Control $CR $LF];
 
 !!safe_reverse;
 $Regional_Indicator $Regional_Indicator;
-($Extend | $ZWJ | $EmojiNRK | $Extended_Pict)+ .;
+($Extend | $ZWJ | $Extended_Pict)+ .;

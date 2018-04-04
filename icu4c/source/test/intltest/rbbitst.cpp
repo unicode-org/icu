@@ -1585,11 +1585,7 @@ private:
     UnicodeSet  *fLVSet;
     UnicodeSet  *fLVTSet;
     UnicodeSet  *fHangulSet;
-    UnicodeSet  *fEmojiBaseSet;
-    UnicodeSet  *fEmojiModifierSet;
     UnicodeSet  *fExtendedPictSet;
-    UnicodeSet  *fEBGSet;
-    UnicodeSet  *fEmojiNRKSet;
     UnicodeSet  *fAnySet;
 
     const UnicodeString *fText;
@@ -1621,12 +1617,7 @@ RBBICharMonkey::RBBICharMonkey() {
     fHangulSet->addAll(*fLVSet);
     fHangulSet->addAll(*fLVTSet);
 
-    fEmojiBaseSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EB}]"), status);
-    fEmojiModifierSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EM}]"), status);
     fExtendedPictSet  = new UnicodeSet(u"[:Extended_Pictographic:]", status);
-    fEBGSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EBG}]"), status);
-    fEmojiNRKSet      = new UnicodeSet(UNICODE_STRING_SIMPLE(
-                "[[\\p{Emoji}]-[\\p{Grapheme_Cluster_Break = Regional_Indicator}*#0-9\\u00a9\\u00ae\\u2122\\u3030\\u303d]]"), status);
     fAnySet           = new UnicodeSet(0, 0x10ffff);
 
     fSets             = new UVector(status);
@@ -1640,12 +1631,8 @@ RBBICharMonkey::RBBICharMonkey() {
     fSets->addElement(fSpacingSet, status);
     fSets->addElement(fHangulSet,  status);
     fSets->addElement(fAnySet,     status);
-    fSets->addElement(fEmojiBaseSet, status);
-    fSets->addElement(fEmojiModifierSet, status);
     fSets->addElement(fZWJSet,     status);
     fSets->addElement(fExtendedPictSet, status);
-    fSets->addElement(fEBGSet,     status);
-    fSets->addElement(fEmojiNRKSet,status);
     if (U_FAILURE(status)) {
         deferredStatus = status;
     }
@@ -1765,22 +1752,8 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
             continue;
         }
 
-        // Rule (GB10)   (Emoji_Base | EBG) Extend * x Emoji_Modifier
-        if ((fEmojiBaseSet->contains(c1) || fEBGSet->contains(c1)) && fEmojiModifierSet->contains(c2)) {
-            continue;
-        }
-        if ((fEmojiBaseSet->contains(cBase) || fEBGSet->contains(cBase)) &&
-                fExtendSet->contains(c1) && fEmojiModifierSet->contains(c2)) {
-            continue;
-        }
-
-        // Rule (GB11)   (Glue_After_ZWJ | Emoji) Extend * ZWJ x (Glue_After_ZWJ | Emoji)
-        if ((fExtendedPictSet->contains(c0) || fEmojiNRKSet->contains(c0)) && fZWJSet->contains(c1) &&
-                (fExtendedPictSet->contains(c2) || fEmojiNRKSet->contains(c2))) {
-            continue;
-        }
-        if ((fExtendedPictSet->contains(cBase) || fEmojiNRKSet->contains(cBase)) && fExtendSet->contains(c0) && fZWJSet->contains(c1) &&
-                (fExtendedPictSet->contains(c2) || fEmojiNRKSet->contains(c2))) {
+        // Rule (GB11)   Extended_Pictographic Extend * ZWJ x Extended_Pictographic
+        if (fExtendedPictSet->contains(cBase) && fZWJSet->contains(c1) && fExtendedPictSet->contains(c2)) {
             continue;
         }
 
@@ -1827,12 +1800,8 @@ RBBICharMonkey::~RBBICharMonkey() {
     delete fLVTSet;
     delete fHangulSet;
     delete fAnySet;
-    delete fEmojiBaseSet;
-    delete fEmojiModifierSet;
     delete fZWJSet;
     delete fExtendedPictSet;
-    delete fEBGSet;
-    delete fEmojiNRKSet;
 }
 
 //------------------------------------------------------------------------------------------
@@ -1868,13 +1837,10 @@ private:
     UnicodeSet  *fOtherSet;
     UnicodeSet  *fExtendSet;
     UnicodeSet  *fExtendNumLetSet;
+    UnicodeSet  *fWSegSpaceSet;
     UnicodeSet  *fDictionarySet;
-    UnicodeSet  *fEBaseSet;
-    UnicodeSet  *fEBGSet;
-    UnicodeSet  *fEModifierSet;
     UnicodeSet  *fZWJSet;
     UnicodeSet  *fExtendedPictSet;
-    UnicodeSet  *fEmojiNRKSet;
 
     const UnicodeString  *fText;
 };
@@ -1902,14 +1868,10 @@ RBBIWordMonkey::RBBIWordMonkey()
     fFormatSet        = new UnicodeSet(u"[\\p{Word_Break = Format}]",       status);
     fExtendNumLetSet  = new UnicodeSet(u"[\\p{Word_Break = ExtendNumLet}]", status);
     fExtendSet        = new UnicodeSet(u"[\\p{Word_Break = Extend}]",       status);
+    fWSegSpaceSet     = new UnicodeSet(u"[[\\p{Zs}]-[\\p{Line_Break = GL}]]",   status);
 
-    fEBaseSet         = new UnicodeSet(u"[\\p{Word_Break = EB}]",           status);
-    fEBGSet           = new UnicodeSet(u"[\\p{Word_Break = EBG}]",          status);
-    fEModifierSet     = new UnicodeSet(u"[\\p{Word_Break = EM}]",           status);
     fZWJSet           = new UnicodeSet(u"[\\p{Word_Break = ZWJ}]",          status);
     fExtendedPictSet  = new UnicodeSet(u"[:Extended_Pictographic:]", status);
-    fEmojiNRKSet      = new UnicodeSet(
-            u"[[\\p{Emoji}]-[\\p{Word_Break = Regional_Indicator}*#0-9\\u00a9\\u00ae\\u2122\\u3030\\u303d]]", status);
 
     fDictionarySet = new UnicodeSet(u"[[\\uac00-\\ud7a3][:Han:][:Hiragana:]]", status);
     fDictionarySet->addAll(*fKatakanaSet);
@@ -1937,15 +1899,12 @@ RBBIWordMonkey::RBBIWordMonkey()
     fOtherSet->removeAll(*fMidNumSet);
     fOtherSet->removeAll(*fNumericSet);
     fOtherSet->removeAll(*fExtendNumLetSet);
+    fOtherSet->removeAll(*fWSegSpaceSet);
     fOtherSet->removeAll(*fFormatSet);
     fOtherSet->removeAll(*fExtendSet);
     fOtherSet->removeAll(*fRegionalIndicatorSet);
-    fOtherSet->removeAll(*fEBaseSet);
-    fOtherSet->removeAll(*fEBGSet);
-    fOtherSet->removeAll(*fEModifierSet);
     fOtherSet->removeAll(*fZWJSet);
     fOtherSet->removeAll(*fExtendedPictSet);
-    fOtherSet->removeAll(*fEmojiNRKSet);
 
     // Inhibit dictionary characters from being tested at all.
     fOtherSet->removeAll(*fDictionarySet);
@@ -1969,13 +1928,10 @@ RBBIWordMonkey::RBBIWordMonkey()
     fSets->addElement(fExtendSet,            status);
     fSets->addElement(fOtherSet,             status);
     fSets->addElement(fExtendNumLetSet,      status);
+    fSets->addElement(fWSegSpaceSet,         status);
 
-    fSets->addElement(fEBaseSet,             status);
-    fSets->addElement(fEBGSet,               status);
-    fSets->addElement(fEModifierSet,         status);
     fSets->addElement(fZWJSet,               status);
     fSets->addElement(fExtendedPictSet,      status);
-    fSets->addElement(fEmojiNRKSet,          status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2059,7 +2015,12 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
         //              get the potential ZWJ, the character immediately preceding c2.
         //              Sloppy UChar32 indexing: p2-1 may reference trail half
         //              but char32At will get the full code point.
-        if (fZWJSet->contains(fText->char32At(p2-1)) && (fExtendedPictSet->contains(c2) || fEmojiNRKSet->contains(c2))) {
+        if (fZWJSet->contains(fText->char32At(p2-1)) && fExtendedPictSet->contains(c2)) {
+            continue;
+        }
+
+        // Rule (3d)    Keep horizontal whitespace together.
+        if (fWSegSpaceSet->contains(fText->char32At(p2-1)) && fWSegSpaceSet->contains(c2)) {
             continue;
         }
 
@@ -2192,15 +2153,12 @@ RBBIWordMonkey::~RBBIWordMonkey() {
     delete fFormatSet;
     delete fExtendSet;
     delete fExtendNumLetSet;
+    delete fWSegSpaceSet;
     delete fRegionalIndicatorSet;
     delete fDictionarySet;
     delete fOtherSet;
-    delete fEBaseSet;
-    delete fEBGSet;
-    delete fEModifierSet;
     delete fZWJSet;
     delete fExtendedPictSet;
-    delete fEmojiNRKSet;
 }
 
 
