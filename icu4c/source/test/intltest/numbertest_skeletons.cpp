@@ -90,6 +90,11 @@ void NumberSkeletonTest::validTokens() {
             u"unit-width-hidden",
             u"decimal-auto",
             u"decimal-always",
+            u"multiply/5.2",
+            u"multiply/-5.2",
+            u"multiply/100",
+            u"multiply/1E2",
+            u"multiply/1",
             u"latin",
             u"numbering-system/arab",
             u"numbering-system/latn",
@@ -126,6 +131,9 @@ void NumberSkeletonTest::invalidTokens() {
             u"scientific/ee",
             u"round-increment/xxx",
             u"round-increment/0.1.2",
+            u"multiply/xxx",
+            u"multiply/0.1.2",
+            u"multiply/français", // non-invariant characters for C++
             u"currency/dummy",
             u"measure-unit/foo",
             u"integer-width/xxx",
@@ -174,7 +182,14 @@ void NumberSkeletonTest::duplicateValues() {
 }
 
 void NumberSkeletonTest::stemsRequiringOption() {
-    static const char16_t* stems[] = {u"round-increment", u"currency", u"measure-unit", u"integer-width",};
+    static const char16_t* stems[] = {
+            u"round-increment",
+            u"measure-unit",
+            u"per-unit",
+            u"currency",
+            u"integer-width",
+            u"numbering-system",
+            u"multiply"};
     static const char16_t* suffixes[] = {u"", u"/ceiling", u" scientific", u"/ceiling scientific"};
 
     for (auto& stem : stems) {

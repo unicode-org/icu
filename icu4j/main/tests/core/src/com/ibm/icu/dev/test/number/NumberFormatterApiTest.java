@@ -1887,7 +1887,7 @@ public class NumberFormatterApiTest {
     public void multiplier() {
         assertFormatDescending(
                 "Multiplier None",
-                null,
+                "multiply/1",
                 NumberFormatter.with().multiplier(Multiplier.none()),
                 ULocale.ENGLISH,
                 "87,650",
@@ -1902,7 +1902,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Multiplier Power of Ten",
-                null,
+                "multiply/1000000",
                 NumberFormatter.with().multiplier(Multiplier.powerOfTen(6)),
                 ULocale.ENGLISH,
                 "87,650,000,000",
@@ -1917,7 +1917,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Multiplier Arbitrary Double",
-                null,
+                "multiply/5.2",
                 NumberFormatter.with().multiplier(Multiplier.arbitrary(5.2)),
                 ULocale.ENGLISH,
                 "455,780",
@@ -1932,7 +1932,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Multiplier Arbitrary BigDecimal",
-                null,
+                "multiply/5.2",
                 NumberFormatter.with().multiplier(Multiplier.arbitrary(new BigDecimal("5.2"))),
                 ULocale.ENGLISH,
                 "455,780",
@@ -1947,7 +1947,7 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Multiplier Zero",
-                null,
+                "multiply/0",
                 NumberFormatter.with().multiplier(Multiplier.arbitrary(0)),
                 ULocale.ENGLISH,
                 "0",
@@ -1959,6 +1959,22 @@ public class NumberFormatterApiTest {
                 "0",
                 "0",
                 "0");
+
+        assertFormatSingle(
+                "Multiplier Skeleton Scientific Notation and Percent",
+                "percent multiply/1E2",
+                NumberFormatter.with().unit(NoUnit.PERCENT).multiplier(Multiplier.powerOfTen(2)),
+                ULocale.ENGLISH,
+                0.5,
+                "50%");
+
+        assertFormatSingle(
+                "Negative Multiplier",
+                "multiply/-5.2",
+                NumberFormatter.with().multiplier(Multiplier.arbitrary(-5.2)),
+                ULocale.ENGLISH,
+                2,
+                "-10.4");
     }
 
     @Test

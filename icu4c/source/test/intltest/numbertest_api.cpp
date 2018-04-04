@@ -1913,7 +1913,7 @@ void NumberFormatterApiTest::decimal() {
 void NumberFormatterApiTest::multiplier() {
     assertFormatDescending(
             u"Multiplier None",
-            u"",
+            u"multiply/1",
             NumberFormatter::with().multiplier(Multiplier::none()),
             Locale::getEnglish(),
             u"87,650",
@@ -1928,7 +1928,7 @@ void NumberFormatterApiTest::multiplier() {
 
     assertFormatDescending(
             u"Multiplier Power of Ten",
-            nullptr,
+            u"multiply/1000000",
             NumberFormatter::with().multiplier(Multiplier::powerOfTen(6)),
             Locale::getEnglish(),
             u"87,650,000,000",
@@ -1943,7 +1943,7 @@ void NumberFormatterApiTest::multiplier() {
 
     assertFormatDescending(
             u"Multiplier Arbitrary Double",
-            nullptr,
+            u"multiply/5.2",
             NumberFormatter::with().multiplier(Multiplier::arbitraryDouble(5.2)),
             Locale::getEnglish(),
             u"455,780",
@@ -1958,7 +1958,7 @@ void NumberFormatterApiTest::multiplier() {
 
     assertFormatDescending(
             u"Multiplier Arbitrary BigDecimal",
-            nullptr,
+            u"multiply/5.2",
             NumberFormatter::with().multiplier(Multiplier::arbitraryDecimal({"5.2", -1})),
             Locale::getEnglish(),
             u"455,780",
@@ -1973,7 +1973,7 @@ void NumberFormatterApiTest::multiplier() {
 
     assertFormatDescending(
             u"Multiplier Zero",
-            nullptr,
+            u"multiply/0",
             NumberFormatter::with().multiplier(Multiplier::arbitraryDouble(0)),
             Locale::getEnglish(),
             u"0",
@@ -1985,6 +1985,22 @@ void NumberFormatterApiTest::multiplier() {
             u"0",
             u"0",
             u"0");
+
+    assertFormatSingle(
+            u"Multiplier Skeleton Scientific Notation and Percent",
+            u"percent multiply/1E2",
+            NumberFormatter::with().unit(NoUnit::percent()).multiplier(Multiplier::powerOfTen(2)),
+            Locale::getEnglish(),
+            0.5,
+            u"50%");
+
+    assertFormatSingle(
+            u"Negative Multiplier",
+            u"multiply/-5.2",
+            NumberFormatter::with().multiplier(Multiplier::arbitraryDouble(-5.2)),
+            Locale::getEnglish(),
+            2,
+            u"-10.4");
 }
 
 void NumberFormatterApiTest::locale() {

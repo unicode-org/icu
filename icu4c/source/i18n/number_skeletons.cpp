@@ -85,6 +85,7 @@ void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
     b.add(u"currency", STEM_CURRENCY, status);
     b.add(u"integer-width", STEM_INTEGER_WIDTH, status);
     b.add(u"numbering-system", STEM_NUMBERING_SYSTEM, status);
+    b.add(u"multiply", STEM_MULTIPLY, status);
     if (U_FAILURE(status)) { return; }
 
     // Build the CharsTrie
@@ -443,6 +444,7 @@ MacroProps skeleton::parseSkeleton(const UnicodeString& skeletonString, UErrorCo
                 case STATE_CURRENCY_UNIT:
                 case STATE_INTEGER_WIDTH:
                 case STATE_NUMBERING_SYSTEM:
+                case STATE_MULTIPLY:
                     // segment.setLength(U16_LENGTH(cp)); // for error message
                     // throw new SkeletonSyntaxException("Stem requires an option", segment);
                     status = U_NUMBER_SKELETON_SYNTAX_ERROR;
@@ -592,6 +594,10 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         CHECK_NULL(seen, symbols, status);
             return STATE_NUMBERING_SYSTEM;
 
+        case STEM_MULTIPLY:
+        CHECK_NULL(seen, multiplier, status);
+            return STATE_MULTIPLY;
+
         default:
             U_ASSERT(false);
     }
@@ -620,6 +626,9 @@ ParseState skeleton::parseOption(ParseState stem, const StringSegment& segment, 
             return STATE_NULL;
         case STATE_NUMBERING_SYSTEM:
             blueprint_helpers::parseNumberingSystemOption(segment, macros, status);
+            return STATE_NULL;
+        case STATE_MULTIPLY:
+            blueprint_helpers::parseMultiplierOption(segment, macros, status);
             return STATE_NULL;
         default:
             break;
@@ -712,6 +721,10 @@ void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString&
         sb.append(u' ');
     }
     if (U_FAILURE(status)) { return; }
+    if (GeneratorHelpers::multiplier(macros, sb, status)) {
+        sb.append(u' ');
+    }
+    if (U_FAILURE(status)) { return; }
 
     // Unsupported options
     if (!macros.padder.isBogus()) {
@@ -719,10 +732,6 @@ void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString&
         return;
     }
     if (macros.affixProvider != nullptr) {
-        status = U_UNSUPPORTED_ERROR;
-        return;
-    }
-    if (macros.multiplier.isValid()) {
         status = U_UNSUPPORTED_ERROR;
         return;
     }
@@ -1175,6 +1184,35 @@ void blueprint_helpers::generateNumberingSystemOption(const NumberingSystem& ns,
     sb.append(UnicodeString(ns.getName(), -1, US_INV));
 }
 
+void blueprint_helpers::parseMultiplierOption(const StringSegment& segment, MacroProps& macros,
+                                              UErrorCode& status) {
+    // Need to do char <-> UChar conversion...
+    CharString buffer;
+    SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
+
+    // Utilize DecimalQuantity/decNumber to parse this for us.
+    // TODO: Parse to a DecNumber directly.
+    DecimalQuantity dq;
+    UErrorCode localStatus = U_ZERO_ERROR;
+    dq.setToDecNumber({buffer.data(), buffer.length()}, localStatus);
+    if (U_FAILURE(localStatus)) {
+        // throw new SkeletonSyntaxException("Invalid rounding increment", segment, e);
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
+    }
+    macros.multiplier = Multiplier::arbitraryDouble(dq.toDouble());
+}
+
+void blueprint_helpers::generateMultiplierOption(int32_t magnitude, double arbitrary, UnicodeString& sb,
+                                                 UErrorCode&) {
+    // Utilize DecimalQuantity/double_conversion to format this for us.
+    DecimalQuantity dq;
+    dq.setToDouble(arbitrary);
+    dq.adjustMagnitude(magnitude);
+    dq.roundToInfinity();
+    sb.append(dq.toPlainString());
+}
+
 
 bool GeneratorHelpers::notation(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
     if (macros.notation.fType == Notation::NTN_COMPACT) {
@@ -1373,6 +1411,19 @@ bool GeneratorHelpers::decimal(const MacroProps& macros, UnicodeString& sb, UErr
         return false; // Default or Bogus
     }
     enum_to_stem_string::decimalSeparatorDisplay(macros.decimal, sb);
+    return true;
+}
+
+bool GeneratorHelpers::multiplier(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    if (!macros.multiplier.isValid()) {
+        return false; // Default or Bogus
+    }
+    sb.append(u"multiply/", -1);
+    blueprint_helpers::generateMultiplierOption(
+            macros.multiplier.fMagnitude,
+            macros.multiplier.fArbitrary,
+            sb,
+            status);
     return true;
 }
 

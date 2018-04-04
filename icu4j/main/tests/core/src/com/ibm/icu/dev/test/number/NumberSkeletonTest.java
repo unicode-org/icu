@@ -82,6 +82,11 @@ public class NumberSkeletonTest {
                 "unit-width-hidden",
                 "decimal-auto",
                 "decimal-always",
+                "multiply/5.2",
+                "multiply/-5.2",
+                "multiply/100",
+                "multiply/1E2",
+                "multiply/1",
                 "latin",
                 "numbering-system/arab",
                 "numbering-system/latn",
@@ -120,6 +125,9 @@ public class NumberSkeletonTest {
                 "scientific/ee",
                 "round-increment/xxx",
                 "round-increment/0.1.2",
+                "multiply/xxx",
+                "multiply/0.1.2",
+                "multiply/français", // non-invariant characters for C++
                 "currency/dummy",
                 "measure-unit/foo",
                 "integer-width/xxx",
@@ -200,7 +208,14 @@ public class NumberSkeletonTest {
 
     @Test
     public void stemsRequiringOption() {
-        String[] stems = { "round-increment", "currency", "measure-unit", "integer-width", };
+        String[] stems = {
+                "round-increment",
+                "measure-unit",
+                "per-unit",
+                "currency",
+                "integer-width",
+                "numbering-system",
+                "multiply" };
         String[] suffixes = { "", "/ceiling", " scientific", "/ceiling scientific" };
 
         for (String stem : stems) {

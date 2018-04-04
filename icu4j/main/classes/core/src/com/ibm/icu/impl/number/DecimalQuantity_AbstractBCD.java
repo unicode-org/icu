@@ -946,6 +946,9 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         if (isNegative()) {
             sb.append('-');
         }
+        if (precision == 0) {
+            sb.append('0');
+        }
         for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
             sb.append(getDigit(m));
             if (m == 0)
