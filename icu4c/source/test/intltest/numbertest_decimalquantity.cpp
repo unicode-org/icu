@@ -302,6 +302,7 @@ void DecimalQuantityTest::testToDouble() {
         double expected;
     } cases[] = {
             { "0", 0.0 },
+            { "514.23", 514.23 },
             { "-3.142E-271", -3.142e-271 } };
 
     for (auto& cas : cases) {

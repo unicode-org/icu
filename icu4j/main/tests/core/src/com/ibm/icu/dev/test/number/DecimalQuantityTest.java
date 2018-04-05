@@ -478,6 +478,26 @@ public class DecimalQuantityTest extends TestFmwk {
         }
     }
 
+    @Test
+    public void testToDouble() {
+        Object[][] cases = new Object[][] {
+            { "0", 0.0 },
+            { "514.23", 514.23 },
+            // NOTE: This does not currently pass in Java. See DecimalFormat_AbstractBCD#toDecimal.
+            // { "-3.142E-271", -3.142e-271 }
+        };
+
+        for (Object[] cas : cases) {
+            String input = (String) cas[0];
+            double expected = (Double) cas[1];
+
+            DecimalQuantity q = new DecimalQuantity_DualStorageBCD();
+            q.setToBigDecimal(new BigDecimal(input));
+            double actual = q.toDouble();
+            assertEquals("Doubles should exactly equal", expected, actual);
+        }
+    }
+
     static void assertDoubleEquals(String message, double d1, double d2) {
         boolean equal = (Math.abs(d1 - d2) < 1e-6) || (Math.abs((d1 - d2) / d1) < 1e-6);
         handleAssert(equal, message, d1, d2, null, false);

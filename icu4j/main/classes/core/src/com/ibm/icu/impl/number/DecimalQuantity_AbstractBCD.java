@@ -651,6 +651,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         }
 
         // TODO: Do like in C++ and use a library function to perform this conversion?
+        // This code is not as not in Java because .parse() returns a BigDecimal, not a double.
 
         long tempLong = 0L;
         int lostDigits = precision - Math.min(precision, 17);
