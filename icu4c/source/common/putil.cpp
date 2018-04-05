@@ -533,8 +533,6 @@ uprv_fmin(double x, double y)
     return (x > y ? y : x);
 }
 
-#include <iostream>
-
 U_CAPI UBool U_EXPORT2
 uprv_add32_overflow(int32_t a, int32_t b, int32_t* res) {
     // NOTE: Some compilers (GCC, Clang) have primitives available, like __builtin_add_overflow.
