@@ -91,12 +91,8 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet                fLVSet;
         UnicodeSet                fLVTSet;
         UnicodeSet                fHangulSet;
-        UnicodeSet                fEmojiModifierSet;
-        UnicodeSet                fEmojiBaseSet;
         UnicodeSet                fZWJSet;
         UnicodeSet                fExtendedPictSet;
-        UnicodeSet                fEBGSet;
-        UnicodeSet                fEmojiNRKSet;
         UnicodeSet                fAnySet;
 
 
@@ -125,11 +121,7 @@ public class RBBITestMonkey extends TestFmwk {
             fHangulSet.addAll(fLVSet);
             fHangulSet.addAll(fLVTSet);
 
-            fEmojiBaseSet     = new UnicodeSet("[\\p{Grapheme_Cluster_Break = EB}]");
-            fEmojiModifierSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = EM}]");
             fExtendedPictSet  = new UnicodeSet("[:Extended_Pictographic:]");
-            fEBGSet           = new UnicodeSet("[\\p{Grapheme_Cluster_Break = EBG}]");
-            fEmojiNRKSet      = new UnicodeSet("[[\\p{Emoji}]-[\\p{Grapheme_Cluster_Break = Regional_Indicator}*#0-9©®™〰〽]]");
             fAnySet           = new UnicodeSet("[\\u0000-\\U0010ffff]");
 
 
@@ -144,12 +136,8 @@ public class RBBITestMonkey extends TestFmwk {
             fSets.add(fSpacingSet);
             fSets.add(fHangulSet);
             fSets.add(fAnySet);
-            fSets.add(fEmojiBaseSet);
-            fSets.add(fEmojiModifierSet);
             fSets.add(fZWJSet);
             fSets.add(fExtendedPictSet);
-            fSets.add(fEBGSet);
-            fSets.add(fEmojiNRKSet);
         }
 
 
@@ -264,22 +252,9 @@ public class RBBITestMonkey extends TestFmwk {
                 if (fPrependSet.contains(c1)) {
                     continue;
                 }
-                // Rule (GB10)   (Emoji_Base | EBG) Extend* x Emoji_Modifier
-                if ((fEmojiBaseSet.contains(c1) || fEBGSet.contains(c1)) && fEmojiModifierSet.contains(c2)) {
-                    continue;
-                }
-                if ((fEmojiBaseSet.contains(cBase) || fEBGSet.contains(cBase)) &&
-                        fExtendSet.contains(c1) && fEmojiModifierSet.contains(c2)) {
-                    continue;
-                }
 
-                // Rule (GB11)   (Extended_Pictographic | Emoji) ZWJ x (Extended_Pictographic | Emoji)
-                if ((fExtendedPictSet.contains(c0) || fEmojiNRKSet.contains(c0)) && fZWJSet.contains(c1) &&
-                        (fExtendedPictSet.contains(c2) || fEmojiNRKSet.contains(c2))) {
-                    continue;
-                }
-                if ((fExtendedPictSet.contains(cBase) || fEmojiNRKSet.contains(cBase)) && fExtendSet.contains(c0) && fZWJSet.contains(c1) &&
-                        (fExtendedPictSet.contains(c2) || fEmojiNRKSet.contains(c2))) {
+                // Rule (GB11)   Extended_Pictographic ZWJ x Extended_Pictographic
+                if (fExtendedPictSet.contains(cBase) && fZWJSet.contains(c1) && fExtendedPictSet.contains(c2) ) {
                     continue;
                 }
 
@@ -333,14 +308,11 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet                fFormatSet;
         UnicodeSet                fExtendSet;
         UnicodeSet                fExtendNumLetSet;
+        UnicodeSet                fWSegSpaceSet;
         UnicodeSet                fOtherSet;
         UnicodeSet                fDictionarySet;
-        UnicodeSet                fEBaseSet;
-        UnicodeSet                fEBGSet;
-        UnicodeSet                fEModifierSet;
         UnicodeSet                fZWJSet;
         UnicodeSet                fExtendedPictSet;
-        UnicodeSet                fEmojiNRKSet;
 
 
         RBBIWordMonkey() {
@@ -362,12 +334,9 @@ public class RBBITestMonkey extends TestFmwk {
             fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]");
             fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]");
             fExtendSet       = new UnicodeSet("[\\p{Word_Break = Extend}]");
-            fEBaseSet        = new UnicodeSet("[\\p{Word_Break = EB}]");
-            fEBGSet          = new UnicodeSet("[\\p{Word_Break = EBG}]");
-            fEModifierSet    = new UnicodeSet("[\\p{Word_Break = EM}]");
+            fWSegSpaceSet    = new UnicodeSet("[[\\p{Zs}]-[\\p{Line_Break = GL}]]");
             fZWJSet          = new UnicodeSet("[\\p{Word_Break = ZWJ}]");
             fExtendedPictSet = new UnicodeSet("[:Extended_Pictographic:]");
-            fEmojiNRKSet     = new UnicodeSet("[[\\p{Emoji}]-[\\p{Grapheme_Cluster_Break = Regional_Indicator}*#0-9©®™〰〽]]");
 
             fDictionarySet = new UnicodeSet("[[\\uac00-\\ud7a3][:Han:][:Hiragana:]]");
             fDictionarySet.addAll(fKatakanaSet);
@@ -391,13 +360,10 @@ public class RBBITestMonkey extends TestFmwk {
             fOtherSet.removeAll(fFormatSet);
             fOtherSet.removeAll(fExtendSet);
             fOtherSet.removeAll(fExtendNumLetSet);
+            fOtherSet.removeAll(fWSegSpaceSet);
             fOtherSet.removeAll(fRegionalIndicatorSet);
-            fOtherSet.removeAll(fEBaseSet);
-            fOtherSet.removeAll(fEBGSet);
-            fOtherSet.removeAll(fEModifierSet);
             fOtherSet.removeAll(fZWJSet);
             fOtherSet.removeAll(fExtendedPictSet);
-            fOtherSet.removeAll(fEmojiNRKSet);
 
             // Inhibit dictionary characters from being tested at all.
             // remove surrogates so as to not generate higher CJK characters
@@ -423,13 +389,10 @@ public class RBBITestMonkey extends TestFmwk {
             fSets.add(fFormatSet);
             fSets.add(fExtendSet);
             fSets.add(fExtendNumLetSet);
+            fSets.add(fWSegSpaceSet);
             fSets.add(fRegionalIndicatorSet);
-            fSets.add(fEBaseSet);
-            fSets.add(fEBGSet);
-            fSets.add(fEModifierSet);
             fSets.add(fZWJSet);
             fSets.add(fExtendedPictSet);
-            fSets.add(fEmojiNRKSet);
             fSets.add(fOtherSet);
         }
 
@@ -511,10 +474,15 @@ public class RBBITestMonkey extends TestFmwk {
                     break;
                 }
 
-                // Rule (3c)    ZWJ x (Extended_Pictographic | Emoji).
+                // Rule (3c)    ZWJ x Extended_Pictographic.
                 //              Not ignoring extend chars, so peek into input text to
                 //              get the potential ZWJ, the character immediately preceding c2.
-                if (fZWJSet.contains(fText.codePointBefore(p2)) && (fExtendedPictSet.contains(c2) || fEmojiNRKSet.contains(c2))) {
+                if (fZWJSet.contains(fText.codePointBefore(p2)) && fExtendedPictSet.contains(c2)) {
+                    continue;
+                }
+
+                // Rule (3d)    Keep horizontal whitespace together.
+                if (fWSegSpaceSet.contains(fText.codePointBefore(p2)) && fWSegSpaceSet.contains(c2)) {
                     continue;
                 }
 
