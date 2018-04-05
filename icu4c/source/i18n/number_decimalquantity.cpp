@@ -9,6 +9,7 @@
 #include <cmath>
 #include "cmemory.h"
 #include <limits>
+#include <stdlib.h>
 #include "putilimp.h"
 #include "number_decimalquantity.h"
 #include "number_roundingutils.h"
@@ -1114,8 +1115,9 @@ UnicodeString DecimalQuantity::toNumberString() const {
     }
     int32_t insertIndex = result.length();
     while (_scale > 0) {
-        result.insert(insertIndex, u'0' + (_scale % 10));
-        _scale /= 10;
+        std::div_t res = std::div(_scale, 10);
+        result.insert(insertIndex, u'0' + res.rem);
+        _scale = res.quot;
     }
     return result;
 }
