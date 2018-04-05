@@ -86,7 +86,7 @@ public final class UCaseProps {
     private final static class IsAcceptable implements ICUBinary.Authenticate {
         @Override
         public boolean isDataVersionAcceptable(byte version[]) {
-            return version[0]==3;
+            return version[0]==4;
         }
     }
 
