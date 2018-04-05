@@ -14,6 +14,7 @@
 #include "numparse_unisets.h"
 #include "numparse_utils.h"
 #include "unicode/uchar.h"
+#include "putilimp.h"
 
 using namespace icu;
 using namespace icu::numparse;

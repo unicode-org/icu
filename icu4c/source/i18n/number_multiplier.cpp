@@ -12,6 +12,8 @@
 #include "number_types.h"
 #include "number_multiplier.h"
 #include "numparse_validators.h"
+#include "number_utils.h"
+#include "decNumber.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -19,38 +21,108 @@ using namespace icu::number::impl;
 using namespace icu::numparse::impl;
 
 
-Multiplier::Multiplier(int32_t magnitude, double arbitrary)
-        : fMagnitude(magnitude), fArbitrary(arbitrary) {}
+Multiplier::Multiplier(int32_t magnitude, DecNum* arbitraryToAdopt)
+        : fMagnitude(magnitude), fArbitrary(arbitraryToAdopt), fError(U_ZERO_ERROR) {
+    if (fArbitrary != nullptr) {
+        // Attempt to convert the DecNum to a magnitude multiplier.
+        fArbitrary->normalize();
+        if (fArbitrary->getRawDecNumber()->digits == 1 && fArbitrary->getRawDecNumber()->lsu[0] == 1 &&
+            !fArbitrary->isNegative()) {
+            // Success!
+            fMagnitude = fArbitrary->getRawDecNumber()->exponent;
+            delete fArbitrary;
+            fArbitrary = nullptr;
+        }
+    }
+}
+
+Multiplier::Multiplier(const Multiplier& other)
+        : fMagnitude(other.fMagnitude), fArbitrary(nullptr), fError(other.fError) {
+    if (other.fArbitrary != nullptr) {
+        UErrorCode localStatus = U_ZERO_ERROR;
+        fArbitrary = new DecNum(*other.fArbitrary, localStatus);
+    }
+}
+
+Multiplier& Multiplier::operator=(const Multiplier& other) {
+    fMagnitude = other.fMagnitude;
+    if (other.fArbitrary != nullptr) {
+        UErrorCode localStatus = U_ZERO_ERROR;
+        fArbitrary = new DecNum(*other.fArbitrary, localStatus);
+    } else {
+        fArbitrary = nullptr;
+    }
+    fError = other.fError;
+    return *this;
+}
+
+Multiplier::Multiplier(Multiplier&& src) U_NOEXCEPT
+        : fMagnitude(src.fMagnitude), fArbitrary(src.fArbitrary), fError(src.fError) {
+    // Take ownership away from src if necessary
+    src.fArbitrary = nullptr;
+}
+
+Multiplier& Multiplier::operator=(Multiplier&& src) U_NOEXCEPT {
+    fMagnitude = src.fMagnitude;
+    fArbitrary = src.fArbitrary;
+    fError = src.fError;
+    // Take ownership away from src if necessary
+    src.fArbitrary = nullptr;
+    return *this;
+}
+
+Multiplier::~Multiplier() {
+    delete fArbitrary;
+}
+
 
 Multiplier Multiplier::none() {
-    return {0, 1};
+    return {0, nullptr};
 }
 
 Multiplier Multiplier::powerOfTen(int32_t power) {
-    return {power, 1};
+    return {power, nullptr};
 }
 
 Multiplier Multiplier::arbitraryDecimal(StringPiece multiplicand) {
-    // TODO: Fix this hack
     UErrorCode localError = U_ZERO_ERROR;
-    DecimalQuantity dq;
-    dq.setToDecNumber(multiplicand, localError);
-    return {0, dq.toDouble()};
+    LocalPointer<DecNum> decnum(new DecNum(), localError);
+    if (U_FAILURE(localError)) {
+        return {localError};
+    }
+    decnum->setTo(multiplicand, localError);
+    if (U_FAILURE(localError)) {
+        return {localError};
+    }
+    return {0, decnum.orphan()};
 }
 
 Multiplier Multiplier::arbitraryDouble(double multiplicand) {
-    return {0, multiplicand};
+    UErrorCode localError = U_ZERO_ERROR;
+    LocalPointer<DecNum> decnum(new DecNum(), localError);
+    if (U_FAILURE(localError)) {
+        return {localError};
+    }
+    decnum->setTo(multiplicand, localError);
+    if (U_FAILURE(localError)) {
+        return {localError};
+    }
+    return {0, decnum.orphan()};
 }
 
 void Multiplier::applyTo(impl::DecimalQuantity& quantity) const {
     quantity.adjustMagnitude(fMagnitude);
-    quantity.multiplyBy(fArbitrary);
+    if (fArbitrary != nullptr) {
+        UErrorCode localStatus = U_ZERO_ERROR;
+        quantity.multiplyBy(*fArbitrary, localStatus);
+    }
 }
 
 void Multiplier::applyReciprocalTo(impl::DecimalQuantity& quantity) const {
     quantity.adjustMagnitude(-fMagnitude);
-    if (fArbitrary != 0) {
-        quantity.multiplyBy(1 / fArbitrary);
+    if (fArbitrary != nullptr) {
+        UErrorCode localStatus = U_ZERO_ERROR;
+        quantity.divideBy(*fArbitrary, localStatus);
     }
 }
 
@@ -70,7 +142,7 @@ void MultiplierFormatHandler::processQuantity(DecimalQuantity& quantity, MicroPr
 
 // NOTE: MultiplierParseHandler is declared in the header numparse_validators.h
 MultiplierParseHandler::MultiplierParseHandler(::icu::number::Multiplier multiplier)
-        : fMultiplier(multiplier) {}
+        : fMultiplier(std::move(multiplier)) {}
 
 void MultiplierParseHandler::postProcess(ParsedNumber& result) const {
     if (!result.quantity.bogus) {

@@ -4390,6 +4390,7 @@ icu4c/source/i18n/number_skeletons.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/number_stringbuilder.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/number_stringbuilder.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/number_types.h svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/i18n/number_utils.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/number_utils.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/number_utypes.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/numfmt.cpp svneol=native#text/plain%3Bcharset%3Dutf-8

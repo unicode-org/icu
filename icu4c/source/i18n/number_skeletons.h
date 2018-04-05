@@ -22,6 +22,11 @@ struct SeenMacroProps;
 // namespace for enums and entrypoint functions
 namespace skeleton {
 
+///////////////////////////////////////////////////////////////////////////////////////
+// NOTE: For an example of how to add a new stem to the number skeleton parser, see: //
+// http://bugs.icu-project.org/trac/changeset/41193                                  //
+///////////////////////////////////////////////////////////////////////////////////////
+
 /**
  * While parsing a skeleton, this enum records what type of option we expect to find next.
  */
@@ -240,7 +245,8 @@ void generateNumberingSystemOption(const NumberingSystem& ns, UnicodeString& sb,
 
 void parseMultiplierOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
-void generateMultiplierOption(int32_t magnitude, double arbitrary, UnicodeString& sb, UErrorCode& status);
+void generateMultiplierOption(int32_t magnitude, const DecNum* arbitrary, UnicodeString& sb,
+                              UErrorCode& status);
 
 } // namespace blueprint_helpers
 

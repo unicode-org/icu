@@ -1975,6 +1975,14 @@ public class NumberFormatterApiTest {
                 ULocale.ENGLISH,
                 2,
                 "-10.4");
+
+        assertFormatSingle(
+                "Negative One Multiplier",
+                "multiply/-1",
+                NumberFormatter.with().multiplier(Multiplier.arbitrary(-1)),
+                ULocale.ENGLISH,
+                444444,
+                "-444,444");
     }
 
     @Test

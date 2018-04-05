@@ -146,6 +146,7 @@ struct DecimalFormatProperties;
 class MultiplierFormatHandler;
 class CurrencySymbols;
 class GeneratorHelpers;
+class DecNum;
 
 } // namespace impl
 
@@ -1019,16 +1020,46 @@ class U_I18N_API Multiplier : public UMemory {
      */
     static Multiplier arbitraryDouble(double multiplicand);
 
+    // We need a custom destructor for the DecNum, which means we need to declare
+    // the copy/move constructor/assignment quartet.
+
+    /** @draft ICU 62 */
+    Multiplier(const Multiplier& other);
+
+    /** @draft ICU 62 */
+    Multiplier& operator=(const Multiplier& other);
+
+    /** @draft ICU 62 */
+    Multiplier(Multiplier&& src) U_NOEXCEPT;
+
+    /** @draft ICU 62 */
+    Multiplier& operator=(Multiplier&& src) U_NOEXCEPT;
+
+    /** @draft ICU 62 */
+    ~Multiplier();
+
+    /** @internal */
+    Multiplier(int32_t magnitude, impl::DecNum* arbitraryToAdopt);
+
   private:
     int32_t fMagnitude;
-    double fArbitrary;
+    impl::DecNum* fArbitrary;
+    UErrorCode fError;
 
-    Multiplier(int32_t magnitude, double arbitrary);
+    Multiplier(UErrorCode error) : fMagnitude(0), fArbitrary(nullptr), fError(error) {}
 
-    Multiplier() : fMagnitude(0), fArbitrary(1) {}
+    Multiplier() : fMagnitude(0), fArbitrary(nullptr), fError(U_ZERO_ERROR) {}
 
     bool isValid() const {
-        return fMagnitude != 0 || fArbitrary != 1;
+        return fMagnitude != 0 || fArbitrary != nullptr;
+    }
+
+    UBool copyErrorTo(UErrorCode &status) const {
+        if (fError != U_ZERO_ERROR) {
+            status = fError;
+            return TRUE;
+        }
+        return FALSE;
     }
 
     void applyTo(impl::DecimalQuantity& quantity) const;
@@ -1066,16 +1097,16 @@ class U_I18N_API SymbolsWrapper : public UMemory {
     SymbolsWrapper(const SymbolsWrapper &other);
 
     /** @internal */
-    SymbolsWrapper(SymbolsWrapper&& src) U_NOEXCEPT;
-
-    /** @internal */
-    ~SymbolsWrapper();
-
-    /** @internal */
     SymbolsWrapper &operator=(const SymbolsWrapper &other);
 
     /** @internal */
+    SymbolsWrapper(SymbolsWrapper&& src) U_NOEXCEPT;
+
+    /** @internal */
     SymbolsWrapper &operator=(SymbolsWrapper&& src) U_NOEXCEPT;
+
+    /** @internal */
+    ~SymbolsWrapper();
 
 #ifndef U_HIDE_INTERNAL_API
 
@@ -1359,7 +1390,7 @@ struct U_I18N_API MacroProps : public UMemory {
     bool copyErrorTo(UErrorCode &status) const {
         return notation.copyErrorTo(status) || rounder.copyErrorTo(status) ||
                padder.copyErrorTo(status) || integerWidth.copyErrorTo(status) ||
-               symbols.copyErrorTo(status);
+               symbols.copyErrorTo(status) || multiplier.copyErrorTo(status);
     }
 };
 

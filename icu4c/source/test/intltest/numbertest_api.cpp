@@ -7,6 +7,7 @@
 
 #include "charstr.h"
 #include <cstdarg>
+#include <cmath>
 #include "unicode/unum.h"
 #include "unicode/numberformatter.h"
 #include "number_types.h"
@@ -2001,6 +2002,14 @@ void NumberFormatterApiTest::multiplier() {
             Locale::getEnglish(),
             2,
             u"-10.4");
+
+    assertFormatSingle(
+            u"Negative One Multiplier",
+            u"multiply/-1",
+            NumberFormatter::with().multiplier(Multiplier::arbitraryDouble(-1)),
+            Locale::getEnglish(),
+            444444,
+            u"-444,444");
 }
 
 void NumberFormatterApiTest::locale() {
@@ -2209,7 +2218,7 @@ void NumberFormatterApiTest::assertFormatDescending(const char16_t* umessage, co
         for (int32_t i = 0; i < 9; i++) {
             double d = inputs[i];
             UnicodeString actual3 = l3.formatDouble(d, status).toString();
-            assertEquals(message + ": Skeleton Path: " + d, expecteds[i], actual3);
+            assertEquals(message + ": Skeleton Path: '" + normalized + "': " + d, expecteds[i], actual3);
         }
     } else {
         assertUndefinedSkeleton(f);
@@ -2250,7 +2259,7 @@ void NumberFormatterApiTest::assertFormatDescendingBig(const char16_t* umessage,
         for (int32_t i = 0; i < 9; i++) {
             double d = inputs[i];
             UnicodeString actual3 = l3.formatDouble(d, status).toString();
-            assertEquals(message + ": Skeleton Path: " + d, expecteds[i], actual3);
+            assertEquals(message + ": Skeleton Path: '" + normalized + "': " + d, expecteds[i], actual3);
         }
     } else {
         assertUndefinedSkeleton(f);
@@ -2279,7 +2288,7 @@ void NumberFormatterApiTest::assertFormatSingle(const char16_t* umessage, const 
         assertEquals(message + ": Skeleton:", normalized, f.toSkeleton(status));
         LocalizedNumberFormatter l3 = NumberFormatter::fromSkeleton(normalized, status).locale(locale);
         UnicodeString actual3 = l3.formatDouble(input, status).toString();
-        assertEquals(message + ": Skeleton Path: " + input, expected, actual3);
+        assertEquals(message + ": Skeleton Path: '" + normalized + "': " + input, expected, actual3);
     } else {
         assertUndefinedSkeleton(f);
     }

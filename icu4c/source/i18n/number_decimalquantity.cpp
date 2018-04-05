@@ -8,15 +8,14 @@
 #include "uassert.h"
 #include <cmath>
 #include "cmemory.h"
-#include "decNumber.h"
 #include <limits>
+#include "putilimp.h"
 #include "number_decimalquantity.h"
-#include "decContext.h"
-#include "decNumber.h"
 #include "number_roundingutils.h"
 #include "double-conversion.h"
 #include "unicode/plurrule.h"
 #include "charstr.h"
+#include "number_utils.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -30,38 +29,6 @@ namespace {
 int8_t NEGATIVE_FLAG = 1;
 int8_t INFINITY_FLAG = 2;
 int8_t NAN_FLAG = 4;
-
-static constexpr int32_t DEFAULT_DIGITS = 34;
-typedef MaybeStackHeaderAndArray<decNumber, char, DEFAULT_DIGITS> DecNumberWithStorage;
-
-/** Helper function to convert a decNumber-compatible string into a decNumber. */
-void stringToDecNumber(StringPiece n, DecNumberWithStorage &dn, UErrorCode& status) {
-    decContext set;
-    uprv_decContextDefault(&set, DEC_INIT_BASE);
-    uprv_decContextSetRounding(&set, DEC_ROUND_HALF_EVEN);
-    set.traps = 0; // no traps, thank you (what does this mean?)
-    if (n.length() > DEFAULT_DIGITS) {
-        dn.resize(n.length(), 0);
-        set.digits = n.length();
-    } else {
-        set.digits = DEFAULT_DIGITS;
-    }
-
-    // Make sure that the string is NUL-terminated; CharString guarantees this, but not StringPiece.
-    CharString cs(n, status);
-    if (U_FAILURE(status)) { return; }
-
-    static_assert(DECDPUN == 1, "Assumes that DECDPUN is set to 1");
-    uprv_decNumberFromString(dn.getAlias(), cs.data(), &set);
-
-    // Check for invalid syntax and set the corresponding error code.
-    if ((set.status & DEC_Conversion_syntax) != 0) {
-        status = U_DECIMAL_NUMBER_SYNTAX_ERROR;
-    } else if (set.status != 0) {
-        // Not a syntax error, but some other error, like an exponent that is too large.
-        status = U_UNSUPPORTED_ERROR;
-    }
-}
 
 /** Helper function for safe subtraction (no overflow). */
 inline int32_t safeSubtract(int32_t a, int32_t b) {
@@ -198,22 +165,30 @@ void DecimalQuantity::roundToIncrement(double roundingIncrement, RoundingMode ro
     roundToMagnitude(-maxFrac, roundingMode, status);
 }
 
-void DecimalQuantity::multiplyBy(double multiplicand) {
+void DecimalQuantity::multiplyBy(const DecNum& multiplicand, UErrorCode& status) {
     if (isInfinite() || isZero() || isNaN()) {
         return;
     }
-    // Cover a few simple cases...
-    if (multiplicand == 1) {
-        return;
-    } else if (multiplicand == -1) {
-        negate();
+    // Convert to DecNum, multiply, and convert back.
+    DecNum decnum;
+    toDecNum(decnum, status);
+    if (U_FAILURE(status)) { return; }
+    decnum.multiplyBy(multiplicand, status);
+    if (U_FAILURE(status)) { return; }
+    setToDecNum(decnum, status);
+}
+
+void DecimalQuantity::divideBy(const DecNum& divisor, UErrorCode& status) {
+    if (isInfinite() || isZero() || isNaN()) {
         return;
     }
-    // Do math for all other cases...
-    // TODO: Should we convert to decNumber instead?
-    double temp = toDouble();
-    temp *= multiplicand;
-    setToDouble(temp);
+    // Convert to DecNum, multiply, and convert back.
+    DecNum decnum;
+    toDecNum(decnum, status);
+    if (U_FAILURE(status)) { return; }
+    decnum.divideBy(divisor, status);
+    if (U_FAILURE(status)) { return; }
+    setToDecNum(decnum, status);
 }
 
 void DecimalQuantity::negate() {
@@ -347,7 +322,7 @@ void DecimalQuantity::_setToInt(int32_t n) {
 DecimalQuantity &DecimalQuantity::setToLong(int64_t n) {
     setBcdToZero();
     flags = 0;
-    if (n < 0) {
+    if (n < 0 && n > INT64_MIN) {
         flags |= NEGATIVE_FLAG;
         n = -n;
     }
@@ -360,12 +335,12 @@ DecimalQuantity &DecimalQuantity::setToLong(int64_t n) {
 
 void DecimalQuantity::_setToLong(int64_t n) {
     if (n == INT64_MIN) {
-        static const char *int64minStr = "9.223372036854775808E+18";
-        DecNumberWithStorage dn;
+        DecNum decnum;
         UErrorCode localStatus = U_ZERO_ERROR;
-        stringToDecNumber(int64minStr, dn, localStatus);
+        decnum.setTo("9.223372036854775808E+18", localStatus);
         if (U_FAILURE(localStatus)) { return; } // unexpected
-        readDecNumberToBcd(dn.getAlias());
+        flags |= NEGATIVE_FLAG;
+        readDecNumberToBcd(decnum);
     } else if (n <= INT32_MAX) {
         readIntToBcd(static_cast<int32_t>(n));
     } else {
@@ -468,27 +443,36 @@ DecimalQuantity &DecimalQuantity::setToDecNumber(StringPiece n, UErrorCode& stat
     setBcdToZero();
     flags = 0;
 
-    DecNumberWithStorage dn;
-    stringToDecNumber(n, dn, status);
-    if (U_FAILURE(status)) { return *this; }
+    // Compute the decNumber representation
+    DecNum decnum;
+    decnum.setTo(n, status);
 
-    // The code path for decNumber is modeled after BigDecimal in Java.
-    if (decNumberIsNegative(dn.getAlias())) {
-        flags |= NEGATIVE_FLAG;
-    }
-    if (!decNumberIsZero(dn.getAlias())) {
-        _setToDecNumber(dn.getAlias());
-    }
+    _setToDecNum(decnum, status);
     return *this;
 }
 
-void DecimalQuantity::_setToDecNumber(decNumber *n) {
-    // Java fastpaths for ints here. In C++, just always read directly from the decNumber.
-    readDecNumberToBcd(n);
-    compact();
+DecimalQuantity& DecimalQuantity::setToDecNum(const DecNum& decnum, UErrorCode& status) {
+    setBcdToZero();
+    flags = 0;
+
+    _setToDecNum(decnum, status);
+    return *this;
+}
+
+void DecimalQuantity::_setToDecNum(const DecNum& decnum, UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
+    if (decnum.isNegative()) {
+        flags |= NEGATIVE_FLAG;
+    }
+    if (!decnum.isZero()) {
+        readDecNumberToBcd(decnum);
+        compact();
+    }
 }
 
 int64_t DecimalQuantity::toLong() const {
+    // NOTE: Call sites should be guarded by fitsInLong(), like this:
+    // if (dq.fitsInLong()) { /* use dq.toLong() */ } else { /* use some fallback */ }
     int64_t result = 0L;
     for (int32_t magnitude = scale + precision - 1; magnitude >= 0; magnitude--) {
         result = result * 10 + getDigitPos(magnitude - scale);
@@ -576,6 +560,21 @@ double DecimalQuantity::toDoubleFromOriginal() const {
         result = -result;
     }
     return result;
+}
+
+void DecimalQuantity::toDecNum(DecNum& output, UErrorCode& status) const {
+    // Special handling for zero
+    if (precision == 0) {
+        output.setTo("0", status);
+    }
+
+    // Use the BCD constructor. We need to do a little bit of work to convert, though.
+    // The decNumber constructor expects most-significant first, but we store least-significant first.
+    MaybeStackArray<uint8_t, 20> ubcd(precision);
+    for (int32_t m = 0; m < precision; m++) {
+        ubcd[precision - m - 1] = static_cast<uint8_t>(getDigitPos(m));
+    }
+    output.setTo(ubcd.getAlias(), precision, scale, isNegative(), status);
 }
 
 void DecimalQuantity::roundToMagnitude(int32_t magnitude, RoundingMode roundingMode, UErrorCode& status) {
@@ -886,7 +885,8 @@ void DecimalQuantity::readLongToBcd(int64_t n) {
     }
 }
 
-void DecimalQuantity::readDecNumberToBcd(decNumber *dn) {
+void DecimalQuantity::readDecNumberToBcd(const DecNum& decnum) {
+    const decNumber* dn = decnum.getRawDecNumber();
     if (dn->digits > 16) {
         ensureCapacity(dn->digits);
         for (int32_t i = 0; i < dn->digits; i++) {

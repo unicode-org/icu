@@ -14,6 +14,8 @@
 #include "number_patternstring.h"
 #include "number_modifiers.h"
 #include "number_multiplier.h"
+#include "decNumber.h"
+#include "charstr.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
@@ -127,6 +129,50 @@ inline bool unitIsPercent(const MeasureUnit& unit) {
 inline bool unitIsPermille(const MeasureUnit& unit) {
     return uprv_strcmp("permille", unit.getSubtype()) == 0;
 }
+
+
+/** A very thin C++ wrapper around decNumber.h */
+class DecNum : public UMemory {
+  public:
+    DecNum();  // leaves object in valid but undefined state
+
+    // Copy-like constructor; use the default move operators.
+    DecNum(const DecNum& other, UErrorCode& status);
+
+    /** Sets the decNumber to the StringPiece. */
+    void setTo(StringPiece str, UErrorCode& status);
+
+    /** Sets the decNumber to the NUL-terminated char string. */
+    void setTo(const char* str, UErrorCode& status);
+
+    /** Uses double_conversion to set this decNumber to the given double. */
+    void setTo(double d, UErrorCode& status);
+
+    /** Sets the decNumber to the BCD representation. */
+    void setTo(const uint8_t* bcd, int32_t length, int32_t scale, bool isNegative, UErrorCode& status);
+
+    void normalize();
+
+    void multiplyBy(const DecNum& rhs, UErrorCode& status);
+
+    void divideBy(const DecNum& rhs, UErrorCode& status);
+
+    bool isNegative() const;
+
+    bool isZero() const;
+
+    inline const decNumber* getRawDecNumber() const {
+        return fData.getAlias();
+    }
+
+  private:
+    static constexpr int32_t kDefaultDigits = 34;
+    MaybeStackHeaderAndArray<decNumber, char, kDefaultDigits> fData;
+    decContext fContext;
+
+    void _setTo(const char* str, int32_t maxDigits, UErrorCode& status);
+};
+
 
 } // namespace impl
 } // namespace number

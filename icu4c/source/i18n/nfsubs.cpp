@@ -20,6 +20,7 @@
 
 #include "nfsubs.h"
 #include "fmtableimp.h"
+#include "putilimp.h"
 #include "number_decimalquantity.h"
 
 #if U_HAVE_RBNF

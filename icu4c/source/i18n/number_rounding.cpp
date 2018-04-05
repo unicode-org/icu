@@ -11,6 +11,7 @@
 #include "number_decimalquantity.h"
 #include "double-conversion.h"
 #include "number_roundingutils.h"
+#include "putilimp.h"
 
 using namespace icu;
 using namespace icu::number;
