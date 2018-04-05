@@ -130,8 +130,10 @@ void NumberSkeletonTest::invalidTokens() {
             u"round-currency-cash/XXX",
             u"scientific/ee",
             u"round-increment/xxx",
+            u"round-increment/NaN",
             u"round-increment/0.1.2",
             u"multiply/xxx",
+            u"multiply/NaN",
             u"multiply/0.1.2",
             u"multiply/français", // non-invariant characters for C++
             u"currency/dummy",

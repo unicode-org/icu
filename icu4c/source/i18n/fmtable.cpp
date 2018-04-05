@@ -28,7 +28,6 @@
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "decNumber.h"
 #include "fmtableimp.h"
 #include "number_decimalquantity.h"
 
@@ -463,12 +462,12 @@ Formattable::getInt64(UErrorCode& status) const
             status = U_INVALID_FORMAT_ERROR;
             return U_INT64_MIN;
         } else if (fabs(fValue.fDouble) > U_DOUBLE_MAX_EXACT_INT && fDecimalQuantity != NULL) {
-            int64_t val = fDecimalQuantity->toLong();
-            if (val != 0) {
-                return val;
+            if (fDecimalQuantity->fitsInLong()) {
+                return fDecimalQuantity->toLong();
+            } else if (fDecimalQuantity->isNegative()) {
+                return U_INT64_MIN;
             } else {
-                status = U_INVALID_FORMAT_ERROR;
-                return fValue.fDouble > 0 ? U_INT64_MAX : U_INT64_MIN;
+                return U_INT64_MAX;
             }
         } else {
             return (int64_t)fValue.fDouble;

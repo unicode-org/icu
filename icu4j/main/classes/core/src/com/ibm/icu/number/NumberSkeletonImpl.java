@@ -33,6 +33,11 @@ import com.ibm.icu.util.StringTrieBuilder;
  */
 class NumberSkeletonImpl {
 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    // NOTE: For an example of how to add a new stem to the number skeleton parser, see: //
+    // http://bugs.icu-project.org/trac/changeset/41193                                  //
+    ///////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * While parsing a skeleton, this enum records what type of option we expect to find next.
      */

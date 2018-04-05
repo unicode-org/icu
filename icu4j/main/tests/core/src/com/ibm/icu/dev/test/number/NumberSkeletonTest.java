@@ -124,8 +124,10 @@ public class NumberSkeletonTest {
                 "round-currency-cash/XXX",
                 "scientific/ee",
                 "round-increment/xxx",
+                "round-increment/NaN",
                 "round-increment/0.1.2",
                 "multiply/xxx",
+                "multiply/NaN",
                 "multiply/0.1.2",
                 "multiply/français", // non-invariant characters for C++
                 "currency/dummy",

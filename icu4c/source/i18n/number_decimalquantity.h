@@ -9,13 +9,15 @@
 
 #include <cstdint>
 #include "unicode/umachine.h"
-#include "decNumber.h"
 #include "standardplural.h"
 #include "plurrule_impl.h"
 #include "number_types.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
+
+// Forward-declare (maybe don't want number_utils.h included here):
+class DecNum;
 
 /**
  * An class for representing a number to be processed by the decimal formatting pipeline. Includes
@@ -89,11 +91,18 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     void roundToInfinity();
 
     /**
-     * Multiply the internal value.
+     * Multiply the internal value. Uses decNumber.
      *
      * @param multiplicand The value by which to multiply.
      */
-    void multiplyBy(double multiplicand);
+    void multiplyBy(const DecNum& multiplicand, UErrorCode& status);
+
+    /**
+     * Divide the internal value. Uses decNumber.
+     *
+     * @param multiplicand The value by which to multiply.
+     */
+    void divideBy(const DecNum& divisor, UErrorCode& status);
 
     /** Flips the sign from positive to negative and back. */
     void negate();
@@ -140,6 +149,9 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     /** @return The value contained in this {@link DecimalQuantity} approximated as a double. */
     double toDouble() const;
 
+    /** Computes a DecNum representation of this DecimalQuantity, saving it to the output parameter. */
+    void toDecNum(DecNum& output, UErrorCode& status) const;
+
     DecimalQuantity &setToInt(int32_t n);
 
     DecimalQuantity &setToLong(int64_t n);
@@ -147,8 +159,10 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     DecimalQuantity &setToDouble(double n);
 
     /** decNumber is similar to BigDecimal in Java. */
-
     DecimalQuantity &setToDecNumber(StringPiece n, UErrorCode& status);
+
+    /** Internal method if the caller already has a DecNum. */
+    DecimalQuantity &setToDecNum(const DecNum& n, UErrorCode& status);
 
     /**
      * Appends a digit, optionally with one or more leading zeros, to the end of the value represented
@@ -416,7 +430,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      */
     void readLongToBcd(int64_t n);
 
-    void readDecNumberToBcd(decNumber *dn);
+    void readDecNumberToBcd(const DecNum& dn);
 
     void readDoubleConversionToBcd(const char* buffer, int32_t length, int32_t point);
 
@@ -438,7 +452,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
 
     void _setToDoubleFast(double n);
 
-    void _setToDecNumber(decNumber *n);
+    void _setToDecNum(const DecNum& dn, UErrorCode& status);
 
     void convertToAccurateDouble();
 

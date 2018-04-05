@@ -1190,24 +1190,28 @@ void blueprint_helpers::parseMultiplierOption(const StringSegment& segment, Macr
     CharString buffer;
     SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
 
-    // Utilize DecimalQuantity/decNumber to parse this for us.
-    // TODO: Parse to a DecNumber directly.
-    DecimalQuantity dq;
-    UErrorCode localStatus = U_ZERO_ERROR;
-    dq.setToDecNumber({buffer.data(), buffer.length()}, localStatus);
-    if (U_FAILURE(localStatus)) {
-        // throw new SkeletonSyntaxException("Invalid rounding increment", segment, e);
+    LocalPointer<DecNum> decnum(new DecNum(), status);
+    if (U_FAILURE(status)) { return; }
+    decnum->setTo({buffer.data(), buffer.length()}, status);
+    if (U_FAILURE(status)) {
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return;
     }
-    macros.multiplier = Multiplier::arbitraryDouble(dq.toDouble());
+
+    // NOTE: The constructor will optimize the decnum for us if possible.
+    macros.multiplier = {0, decnum.orphan()};
 }
 
-void blueprint_helpers::generateMultiplierOption(int32_t magnitude, double arbitrary, UnicodeString& sb,
-                                                 UErrorCode&) {
+void
+blueprint_helpers::generateMultiplierOption(int32_t magnitude, const DecNum* arbitrary, UnicodeString& sb,
+                                            UErrorCode& status) {
     // Utilize DecimalQuantity/double_conversion to format this for us.
     DecimalQuantity dq;
-    dq.setToDouble(arbitrary);
+    if (arbitrary != nullptr) {
+        dq.setToDecNum(*arbitrary, status);
+    } else {
+        dq.setToInt(1);
+    }
     dq.adjustMagnitude(magnitude);
     dq.roundToInfinity();
     sb.append(dq.toPlainString());
