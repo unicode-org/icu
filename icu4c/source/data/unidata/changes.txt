@@ -412,10 +412,11 @@ or
 - send notice to icu-design about new born-@stable API (enum constants etc.)
 
 *** CLDR numbering systems
-- look for new sets of decimal digits (gc=ND & nv=4) and submit a CLDR ticket
-  Unicode 11:
-    rohg 10D30..10D39
-    gong 11DA0..11DA9
+- look for new sets of decimal digits (gc=ND & nv=4) and add to CLDR
+  Unicode 11: using Unicode 11 CLDR ticket #10978
+    rohg 10D30..10D39 Hanifi_Rohingya
+    gong 11DA0..11DA9 Gunjala_Gondi
+  Earlier: CLDR tickets specific to adding new numbering systems.
   Unicode 10: http://unicode.org/cldr/trac/ticket/10219
   Unicode 9: http://unicode.org/cldr/trac/ticket/9692
 
