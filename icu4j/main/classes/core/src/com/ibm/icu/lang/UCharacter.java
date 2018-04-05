@@ -3322,6 +3322,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int GLUE_AFTER_ZWJ = 20;   /*[GAZ]*/
         /** @stable ICU 58 */
         public static final int ZWJ = 21;              /*[ZWJ]*/
+        /** @stable ICU 62 */
+        public static final int WSEGSPACE = 22;        /*[WSEGSPACE]*/
         /**
          * One more than the highest normal WordBreak value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.WORD_BREAK).
@@ -3329,7 +3331,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 22;
+        public static final int COUNT = 23;
     }
 
     /**

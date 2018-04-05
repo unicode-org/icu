@@ -63,7 +63,7 @@ UNICODE_DATA=~/unidata/uni11/20180402
 CLDR_SRC=~/svn.cldr/uni
 ICU_ROOT=~/svn.icu/uni
 ICU_SRC=$ICU_ROOT/src
-ICUDT=icudt60b
+ICUDT=icudt61b
 ICU4C_DATA_IN=$ICU_SRC/icu4c/source/data/in
 ICU4C_UNIDATA=$ICU_SRC/icu4c/source/data/unidata
 export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
@@ -262,7 +262,7 @@ set(ICU4C_SRC_DIR /usr/local/google/home/mscherer/svn.icu/uni/src/icu4c)
      not empty, just to get ICU building.
   -> Intermediate workaround: Remove $E_Base_GAZ and other now-unused variables
      and properties together with the rules that used them (GB 10, WB 14).
-     Andy will adjust the rule sets further to sync with
+  -> Andy adjusts the rule sets further to sync with
      Unicode 11 grapheme, word, and line break spec changes.
 
 * collation: CLDR collation root, UCA DUCET
@@ -359,20 +359,20 @@ set(ICU4C_SRC_DIR /usr/local/google/home/mscherer/svn.icu/uni/src/icu4c)
 - $ICU_ROOT/dbg/icu4c$ make ICU4J_ROOT=/tmp/icu4j icu4j-data-install
   output:
     ...
-    Unicode .icu files built to ./out/build/icudt60l
+    Unicode .icu files built to ./out/build/icudt61l
     echo timestamp > uni-core-data
-    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt60b
-    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt60b
+    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt61b
+    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt61b
     echo pnames.icu uprops.icu ucase.icu ubidi.icu nfc.nrm > ./out/icu4j/add.txt
-    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt60l.dat ./out/icu4j/icudt60b.dat -a ./out/icu4j/add.txt -s ./out/build/icudt60l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt60b
-    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt60b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt60b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt60b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt60b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt60b"
-    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt60b/
+    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt61l.dat ./out/icu4j/icudt61b.dat -a ./out/icu4j/add.txt -s ./out/build/icudt61l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt61b
+    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt61b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt61b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt61b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt61b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt61b"
+    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt61b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icudata.jar /tmp/icu4j/main/shared/data
-    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt60b/
+    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt61b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icutzdata.jar /tmp/icu4j/main/shared/data
-    make[1]: Leaving directory `/usr/local/google/home/mscherer/svn.icu/uni10/dbg/icu4c/data'
+    make[1]: Leaving directory '/usr/local/google/home/mscherer/svn.icu/uni/dbg/icu4c/data'
 - copy the big-endian Unicode data files to another location,
   separate from the other data files,
   and then refresh ICU4J
@@ -413,6 +413,9 @@ or
 
 *** CLDR numbering systems
 - look for new sets of decimal digits (gc=ND & nv=4) and submit a CLDR ticket
+  Unicode 11:
+    rohg 10D30..10D39
+    gong 11DA0..11DA9
   Unicode 10: http://unicode.org/cldr/trac/ticket/10219
   Unicode 9: http://unicode.org/cldr/trac/ticket/9692
 
