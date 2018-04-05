@@ -2010,7 +2010,7 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
             break;
         };
 
-        // Rule (3c)    ZWJ x (Glue_after_ZWJ | EmojiNRK).
+        // Rule (3c)    ZWJ x Extended_Pictographic
         //              Not ignoring extend chars, so peek into input text to
         //              get the potential ZWJ, the character immediately preceding c2.
         //              Sloppy UChar32 indexing: p2-1 may reference trail half

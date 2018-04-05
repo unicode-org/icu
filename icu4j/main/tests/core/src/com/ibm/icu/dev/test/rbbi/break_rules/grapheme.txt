@@ -35,7 +35,6 @@ LVT                = [\p{Grapheme_Cluster_Break = LVT}];
 
 # Emoji defintions
 
-EmojiNRK           = [[\p{Emoji}] - [Regional_Indicator\u002a\u00230-9©®™〰〽]];
 Extended_Pict      = [:ExtPict:];
 
 GB3:     CR LF;
@@ -46,7 +45,7 @@ GB6:     L (L | V | LV | LVT);
 GB7:     (LV | V) (V | T);
 GB8:     (LVT | T) T;
 
-GB11:    (Extended_Pict | EmojiNRK) Extend* ZWJ (Extended_Pict | EmojiNRK);
+GB11:    Extended_Pict Extend* ZWJ Extended_Pict;
 GB9:     . (Extend | ZWJ);
 
 GB9a:    . SpacingMark;
