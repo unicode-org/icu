@@ -86,7 +86,7 @@ public final class UCaseProps {
     private final static class IsAcceptable implements ICUBinary.Authenticate {
         @Override
         public boolean isDataVersionAcceptable(byte version[]) {
-            return version[0]==3;
+            return version[0]==4;
         }
     }
 
@@ -193,6 +193,10 @@ public final class UCaseProps {
         } else {
             int excOffset=getExceptionsOffset(props);
             int excWord=exceptions.charAt(excOffset++);
+            if(hasSlot(excWord, EXC_DELTA) && isUpperOrTitleFromProps(props)) {
+                int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
+                return (excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta;
+            }
             if(hasSlot(excWord, EXC_LOWER)) {
                 c=getSlotValue(excWord, EXC_LOWER, excOffset);
             }
@@ -209,6 +213,10 @@ public final class UCaseProps {
         } else {
             int excOffset=getExceptionsOffset(props);
             int excWord=exceptions.charAt(excOffset++);
+            if(hasSlot(excWord, EXC_DELTA) && getTypeFromProps(props)==LOWER) {
+                int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
+                return (excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta;
+            }
             if(hasSlot(excWord, EXC_UPPER)) {
                 c=getSlotValue(excWord, EXC_UPPER, excOffset);
             }
@@ -225,6 +233,10 @@ public final class UCaseProps {
         } else {
             int excOffset=getExceptionsOffset(props);
             int excWord=exceptions.charAt(excOffset++);
+            if(hasSlot(excWord, EXC_DELTA) && getTypeFromProps(props)==LOWER) {
+                int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
+                return (excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta;
+            }
             int index;
             if(hasSlot(excWord, EXC_TITLE)) {
                 index=EXC_TITLE;
@@ -304,6 +316,10 @@ public final class UCaseProps {
                     c=getSlotValue(excWord, index, excOffset);
                     set.add(c);
                 }
+            }
+            if(hasSlot(excWord, EXC_DELTA)) {
+                int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
+                set.add((excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta);
             }
 
             /* get the closure string pointer & length */
@@ -479,7 +495,12 @@ public final class UCaseProps {
     }
 
     public final boolean isCaseSensitive(int c) {
-        return (trie.get(c)&SENSITIVE)!=0;
+        int props=trie.get(c);
+        if(!propsHasException(props)) {
+            return (props&SENSITIVE)!=0;
+        } else {
+            return (exceptions.charAt(getExceptionsOffset(props))&EXC_SENSITIVE)!=0;
+        }
     }
 
     // string casing ------------------------------------------------------- ***
@@ -1109,6 +1130,10 @@ public final class UCaseProps {
                 }
             }
 
+            if(hasSlot(excWord, EXC_DELTA) && isUpperOrTitleFromProps(props)) {
+                int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
+                return (excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta;
+            }
             if(hasSlot(excWord, EXC_LOWER)) {
                 result=getSlotValue(excWord, EXC_LOWER, excOffset2);
             }
@@ -1201,6 +1226,10 @@ public final class UCaseProps {
                 }
             }
 
+            if(hasSlot(excWord, EXC_DELTA) && getTypeFromProps(props)==LOWER) {
+                int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
+                return (excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta;
+            }
             if(!upperNotTitle && hasSlot(excWord, EXC_TITLE)) {
                 index=EXC_TITLE;
             } else if(hasSlot(excWord, EXC_UPPER)) {
@@ -1314,6 +1343,13 @@ public final class UCaseProps {
                     }
                 }
             }
+            if((excWord&EXC_NO_SIMPLE_CASE_FOLDING)!=0) {
+                return c;
+            }
+            if(hasSlot(excWord, EXC_DELTA) && isUpperOrTitleFromProps(props)) {
+                int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
+                return (excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta;
+            }
             if(hasSlot(excWord, EXC_FOLD)) {
                 index=EXC_FOLD;
             } else if(hasSlot(excWord, EXC_LOWER)) {
@@ -1408,6 +1444,13 @@ public final class UCaseProps {
                 }
             }
 
+            if((excWord&EXC_NO_SIMPLE_CASE_FOLDING)!=0) {
+                return ~c;
+            }
+            if(hasSlot(excWord, EXC_DELTA) && isUpperOrTitleFromProps(props)) {
+                int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
+                return (excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta;
+            }
             if(hasSlot(excWord, EXC_FOLD)) {
                 index=EXC_FOLD;
             } else if(hasSlot(excWord, EXC_LOWER)) {
@@ -1534,8 +1577,8 @@ public final class UCaseProps {
     }
 
     static final int IGNORABLE=4;
-    private static final int SENSITIVE=     8;
-    private static final int EXCEPTION=     0x10;
+    private static final int EXCEPTION=     8;
+    private static final int SENSITIVE=     0x10;
 
     private static final int DOT_MASK=      0x60;
     //private static final int NO_DOT=        0;      /* normal characters with cc=0 */
@@ -1553,9 +1596,9 @@ public final class UCaseProps {
         return (short)props>>DELTA_SHIFT;
     }
 
-    /* exception: bits 15..5 are an unsigned 11-bit index into the exceptions array */
-    private static final int EXC_SHIFT=     5;
-    //private static final int EXC_MASK=      0xffe0;
+    /* exception: bits 15..4 are an unsigned 12-bit index into the exceptions array */
+    private static final int EXC_SHIFT=     4;
+    //private static final int EXC_MASK=      0xfff0;
     //private static final int MAX_EXCEPTIONS=((EXC_MASK>>EXC_SHIFT)+1);
 
     /* definitions for 16-bit main exceptions word ------------------------------ */
@@ -1565,7 +1608,7 @@ public final class UCaseProps {
     private static final int EXC_FOLD=1;
     private static final int EXC_UPPER=2;
     private static final int EXC_TITLE=3;
-    //private static final int EXC_4=4;           /* reserved */
+    private static final int EXC_DELTA=4;
     //private static final int EXC_5=5;           /* reserved */
     private static final int EXC_CLOSURE=6;
     private static final int EXC_FULL_MAPPINGS=7;
@@ -1574,7 +1617,9 @@ public final class UCaseProps {
     /* each slot is 2 uint16_t instead of 1 */
     private static final int EXC_DOUBLE_SLOTS=          0x100;
 
-    /* reserved: exception bits 11..9 */
+    private static final int EXC_NO_SIMPLE_CASE_FOLDING=0x200;
+    private static final int EXC_DELTA_IS_NEGATIVE=0x400;
+    private static final int EXC_SENSITIVE=0x800;
 
     /* EXC_DOT_MASK=DOT_MASK<<EXC_DOT_SHIFT */
     private static final int EXC_DOT_SHIFT=7;

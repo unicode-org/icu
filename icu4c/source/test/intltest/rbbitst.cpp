@@ -1556,34 +1556,6 @@ static uint32_t m_rand()
 }
 
 
-//
-// Data for Extended Pictographic scraped from CLDR common/properties/ExtendedPictographic.txt, r13267
-//
-static const char16_t *gExtended_Pict = u"["
-    "\\U0001F774-\\U0001F77F\\U00002700-\\U00002701\\U00002703-\\U00002704\\U0000270E\\U00002710-\\U00002711\\U00002765-\\U00002767"
-    "\\U0001F030-\\U0001F093\\U0001F094-\\U0001F09F\\U0001F10D-\\U0001F10F\\U0001F12F\\U0001F16C-\\U0001F16F\\U0001F1AD-\\U0001F1E5"
-    "\\U0001F260-\\U0001F265\\U0001F203-\\U0001F20F\\U0001F23C-\\U0001F23F\\U0001F249-\\U0001F24F\\U0001F252-\\U0001F25F"
-    "\\U0001F266-\\U0001F2FF\\U0001F7D5-\\U0001F7FF\\U0001F000-\\U0001F003\\U0001F005-\\U0001F02B\\U0001F02C-\\U0001F02F"
-    "\\U0001F322-\\U0001F323\\U0001F394-\\U0001F395\\U0001F398\\U0001F39C-\\U0001F39D\\U0001F3F1-\\U0001F3F2\\U0001F3F6"
-    "\\U0001F4FE\\U0001F53E-\\U0001F548\\U0001F54F\\U0001F568-\\U0001F56E\\U0001F571-\\U0001F572\\U0001F57B-\\U0001F586"
-    "\\U0001F588-\\U0001F589\\U0001F58E-\\U0001F58F\\U0001F591-\\U0001F594\\U0001F597-\\U0001F5A3\\U0001F5A6-\\U0001F5A7"
-    "\\U0001F5A9-\\U0001F5B0\\U0001F5B3-\\U0001F5BB\\U0001F5BD-\\U0001F5C1\\U0001F5C5-\\U0001F5D0\\U0001F5D4-\\U0001F5DB"
-    "\\U0001F5DF-\\U0001F5E0\\U0001F5E2\\U0001F5E4-\\U0001F5E7\\U0001F5E9-\\U0001F5EE\\U0001F5F0-\\U0001F5F2\\U0001F5F4-\\U0001F5F9"
-    "\\U00002605\\U00002607-\\U0000260D\\U0000260F-\\U00002610\\U00002612\\U00002616-\\U00002617\\U00002619-\\U0000261C"
-    "\\U0000261E-\\U0000261F\\U00002621\\U00002624-\\U00002625\\U00002627-\\U00002629\\U0000262B-\\U0000262D\\U00002630-\\U00002637"
-    "\\U0000263B-\\U00002647\\U00002654-\\U0000265F\\U00002661-\\U00002662\\U00002664\\U00002667\\U00002669-\\U0000267A"
-    "\\U0000267C-\\U0000267E\\U00002680-\\U00002691\\U00002695\\U00002698\\U0000269A\\U0000269D-\\U0000269F\\U000026A2-\\U000026A9"
-    "\\U000026AC-\\U000026AF\\U000026B2-\\U000026BC\\U000026BF-\\U000026C3\\U000026C6-\\U000026C7\\U000026C9-\\U000026CD"
-    "\\U000026D0\\U000026D2\\U000026D5-\\U000026E8\\U000026EB-\\U000026EF\\U000026F6\\U000026FB-\\U000026FC\\U000026FE-\\U000026FF"
-    "\\U00002388\\U0001FA00-\\U0001FFFD\\U0001F0A0-\\U0001F0AE\\U0001F0B1-\\U0001F0BF\\U0001F0C1-\\U0001F0CF\\U0001F0D1-\\U0001F0F5"
-    "\\U0001F0AF-\\U0001F0B0\\U0001F0C0\\U0001F0D0\\U0001F0F6-\\U0001F0FF\\U0001F80C-\\U0001F80F\\U0001F848-\\U0001F84F"
-    "\\U0001F85A-\\U0001F85F\\U0001F888-\\U0001F88F\\U0001F8AE-\\U0001F8FF\\U0001F900-\\U0001F90B\\U0001F91F\\U0001F928-\\U0001F92F"
-    "\\U0001F931-\\U0001F932\\U0001F94C\\U0001F95F-\\U0001F96B\\U0001F992-\\U0001F997\\U0001F9D0-\\U0001F9E6\\U0001F90C-\\U0001F90F"
-    "\\U0001F93F\\U0001F94D-\\U0001F94F\\U0001F96C-\\U0001F97F\\U0001F998-\\U0001F9BF\\U0001F9C1-\\U0001F9CF\\U0001F9E7-\\U0001F9FF"
-    "\\U0001F6C6-\\U0001F6CA\\U0001F6D3-\\U0001F6D4\\U0001F6E6-\\U0001F6E8\\U0001F6EA\\U0001F6F1-\\U0001F6F2\\U0001F6F7-\\U0001F6F8"
-    "\\U0001F6D5-\\U0001F6DF\\U0001F6ED-\\U0001F6EF\\U0001F6F9-\\U0001F6FF"
-    "]";
-
 //------------------------------------------------------------------------------------------
 //
 //   class RBBICharMonkey      Character (Grapheme Cluster) specific implementation
@@ -1613,11 +1585,7 @@ private:
     UnicodeSet  *fLVSet;
     UnicodeSet  *fLVTSet;
     UnicodeSet  *fHangulSet;
-    UnicodeSet  *fEmojiBaseSet;
-    UnicodeSet  *fEmojiModifierSet;
     UnicodeSet  *fExtendedPictSet;
-    UnicodeSet  *fEBGSet;
-    UnicodeSet  *fEmojiNRKSet;
     UnicodeSet  *fAnySet;
 
     const UnicodeString *fText;
@@ -1649,12 +1617,7 @@ RBBICharMonkey::RBBICharMonkey() {
     fHangulSet->addAll(*fLVSet);
     fHangulSet->addAll(*fLVTSet);
 
-    fEmojiBaseSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EB}]"), status);
-    fEmojiModifierSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EM}]"), status);
-    fExtendedPictSet  = new UnicodeSet(gExtended_Pict, status);
-    fEBGSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = EBG}]"), status);
-    fEmojiNRKSet      = new UnicodeSet(UNICODE_STRING_SIMPLE(
-                "[[\\p{Emoji}]-[\\p{Grapheme_Cluster_Break = Regional_Indicator}*#0-9\\u00a9\\u00ae\\u2122\\u3030\\u303d]]"), status);
+    fExtendedPictSet  = new UnicodeSet(u"[:Extended_Pictographic:]", status);
     fAnySet           = new UnicodeSet(0, 0x10ffff);
 
     fSets             = new UVector(status);
@@ -1668,12 +1631,8 @@ RBBICharMonkey::RBBICharMonkey() {
     fSets->addElement(fSpacingSet, status);
     fSets->addElement(fHangulSet,  status);
     fSets->addElement(fAnySet,     status);
-    fSets->addElement(fEmojiBaseSet, status);
-    fSets->addElement(fEmojiModifierSet, status);
     fSets->addElement(fZWJSet,     status);
     fSets->addElement(fExtendedPictSet, status);
-    fSets->addElement(fEBGSet,     status);
-    fSets->addElement(fEmojiNRKSet,status);
     if (U_FAILURE(status)) {
         deferredStatus = status;
     }
@@ -1793,22 +1752,8 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
             continue;
         }
 
-        // Rule (GB10)   (Emoji_Base | EBG) Extend * x Emoji_Modifier
-        if ((fEmojiBaseSet->contains(c1) || fEBGSet->contains(c1)) && fEmojiModifierSet->contains(c2)) {
-            continue;
-        }
-        if ((fEmojiBaseSet->contains(cBase) || fEBGSet->contains(cBase)) &&
-                fExtendSet->contains(c1) && fEmojiModifierSet->contains(c2)) {
-            continue;
-        }
-
-        // Rule (GB11)   (Glue_After_ZWJ | Emoji) Extend * ZWJ x (Glue_After_ZWJ | Emoji)
-        if ((fExtendedPictSet->contains(c0) || fEmojiNRKSet->contains(c0)) && fZWJSet->contains(c1) &&
-                (fExtendedPictSet->contains(c2) || fEmojiNRKSet->contains(c2))) {
-            continue;
-        }
-        if ((fExtendedPictSet->contains(cBase) || fEmojiNRKSet->contains(cBase)) && fExtendSet->contains(c0) && fZWJSet->contains(c1) &&
-                (fExtendedPictSet->contains(c2) || fEmojiNRKSet->contains(c2))) {
+        // Rule (GB11)   Extended_Pictographic Extend * ZWJ x Extended_Pictographic
+        if (fExtendedPictSet->contains(cBase) && fZWJSet->contains(c1) && fExtendedPictSet->contains(c2)) {
             continue;
         }
 
@@ -1855,12 +1800,8 @@ RBBICharMonkey::~RBBICharMonkey() {
     delete fLVTSet;
     delete fHangulSet;
     delete fAnySet;
-    delete fEmojiBaseSet;
-    delete fEmojiModifierSet;
     delete fZWJSet;
     delete fExtendedPictSet;
-    delete fEBGSet;
-    delete fEmojiNRKSet;
 }
 
 //------------------------------------------------------------------------------------------
@@ -1896,13 +1837,10 @@ private:
     UnicodeSet  *fOtherSet;
     UnicodeSet  *fExtendSet;
     UnicodeSet  *fExtendNumLetSet;
+    UnicodeSet  *fWSegSpaceSet;
     UnicodeSet  *fDictionarySet;
-    UnicodeSet  *fEBaseSet;
-    UnicodeSet  *fEBGSet;
-    UnicodeSet  *fEModifierSet;
     UnicodeSet  *fZWJSet;
     UnicodeSet  *fExtendedPictSet;
-    UnicodeSet  *fEmojiNRKSet;
 
     const UnicodeString  *fText;
 };
@@ -1930,14 +1868,10 @@ RBBIWordMonkey::RBBIWordMonkey()
     fFormatSet        = new UnicodeSet(u"[\\p{Word_Break = Format}]",       status);
     fExtendNumLetSet  = new UnicodeSet(u"[\\p{Word_Break = ExtendNumLet}]", status);
     fExtendSet        = new UnicodeSet(u"[\\p{Word_Break = Extend}]",       status);
+    fWSegSpaceSet     = new UnicodeSet(u"[\\p{Word_Break = WSegSpace}]",    status);
 
-    fEBaseSet         = new UnicodeSet(u"[\\p{Word_Break = EB}]",           status);
-    fEBGSet           = new UnicodeSet(u"[\\p{Word_Break = EBG}]",          status);
-    fEModifierSet     = new UnicodeSet(u"[\\p{Word_Break = EM}]",           status);
     fZWJSet           = new UnicodeSet(u"[\\p{Word_Break = ZWJ}]",          status);
-    fExtendedPictSet  = new UnicodeSet(gExtended_Pict, status);
-    fEmojiNRKSet      = new UnicodeSet(
-            u"[[\\p{Emoji}]-[\\p{Word_Break = Regional_Indicator}*#0-9\\u00a9\\u00ae\\u2122\\u3030\\u303d]]", status);
+    fExtendedPictSet  = new UnicodeSet(u"[:Extended_Pictographic:]", status);
 
     fDictionarySet = new UnicodeSet(u"[[\\uac00-\\ud7a3][:Han:][:Hiragana:]]", status);
     fDictionarySet->addAll(*fKatakanaSet);
@@ -1965,15 +1899,12 @@ RBBIWordMonkey::RBBIWordMonkey()
     fOtherSet->removeAll(*fMidNumSet);
     fOtherSet->removeAll(*fNumericSet);
     fOtherSet->removeAll(*fExtendNumLetSet);
+    fOtherSet->removeAll(*fWSegSpaceSet);
     fOtherSet->removeAll(*fFormatSet);
     fOtherSet->removeAll(*fExtendSet);
     fOtherSet->removeAll(*fRegionalIndicatorSet);
-    fOtherSet->removeAll(*fEBaseSet);
-    fOtherSet->removeAll(*fEBGSet);
-    fOtherSet->removeAll(*fEModifierSet);
     fOtherSet->removeAll(*fZWJSet);
     fOtherSet->removeAll(*fExtendedPictSet);
-    fOtherSet->removeAll(*fEmojiNRKSet);
 
     // Inhibit dictionary characters from being tested at all.
     fOtherSet->removeAll(*fDictionarySet);
@@ -1997,13 +1928,10 @@ RBBIWordMonkey::RBBIWordMonkey()
     fSets->addElement(fExtendSet,            status);
     fSets->addElement(fOtherSet,             status);
     fSets->addElement(fExtendNumLetSet,      status);
+    fSets->addElement(fWSegSpaceSet,         status);
 
-    fSets->addElement(fEBaseSet,             status);
-    fSets->addElement(fEBGSet,               status);
-    fSets->addElement(fEModifierSet,         status);
     fSets->addElement(fZWJSet,               status);
     fSets->addElement(fExtendedPictSet,      status);
-    fSets->addElement(fEmojiNRKSet,          status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2082,12 +2010,17 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
             break;
         };
 
-        // Rule (3c)    ZWJ x (Glue_after_ZWJ | EmojiNRK).
+        // Rule (3c)    ZWJ x Extended_Pictographic
         //              Not ignoring extend chars, so peek into input text to
         //              get the potential ZWJ, the character immediately preceding c2.
         //              Sloppy UChar32 indexing: p2-1 may reference trail half
         //              but char32At will get the full code point.
-        if (fZWJSet->contains(fText->char32At(p2-1)) && (fExtendedPictSet->contains(c2) || fEmojiNRKSet->contains(c2))) {
+        if (fZWJSet->contains(fText->char32At(p2-1)) && fExtendedPictSet->contains(c2)) {
+            continue;
+        }
+
+        // Rule (3d)    Keep horizontal whitespace together.
+        if (fWSegSpaceSet->contains(fText->char32At(p2-1)) && fWSegSpaceSet->contains(c2)) {
             continue;
         }
 
@@ -2181,11 +2114,6 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
             continue;
         }
 
-        // WB 14  (E_Base | EBG) x E_Modifier
-        if ((fEBaseSet->contains(c1)  || fEBGSet->contains(c1)) && fEModifierSet->contains(c2)) {
-            continue;
-        }
-
         // Rule 15 - 17   Group pairs of Regional Indicators.
         if (fRegionalIndicatorSet->contains(c0) && fRegionalIndicatorSet->contains(c1)) {
             break;
@@ -2225,15 +2153,12 @@ RBBIWordMonkey::~RBBIWordMonkey() {
     delete fFormatSet;
     delete fExtendSet;
     delete fExtendNumLetSet;
+    delete fWSegSpaceSet;
     delete fRegionalIndicatorSet;
     delete fDictionarySet;
     delete fOtherSet;
-    delete fEBaseSet;
-    delete fEBGSet;
-    delete fEModifierSet;
     delete fZWJSet;
     delete fExtendedPictSet;
-    delete fEmojiNRKSet;
 }
 
 
@@ -2691,7 +2616,7 @@ RBBILineMonkey::RBBILineMonkey() :
     fEM    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EM}]"), status);
     fZJ    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=ZWJ}]"), status);
     fEmojiNRK = new UnicodeSet(UNICODE_STRING_SIMPLE("[[\\p{Emoji}]-[\\p{Line_break=RI}*#0-9\\u00a9\\u00ae\\u2122\\u3030\\u303d]]"), status);
-    fExtendedPict = new UnicodeSet(gExtended_Pict, status);
+    fExtendedPict = new UnicodeSet(u"[:Extended_Pictographic:]", status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;

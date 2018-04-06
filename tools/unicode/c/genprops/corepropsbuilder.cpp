@@ -47,7 +47,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 7.4 .
+The following is a description of format version 7.5 .
 
 Data contents:
 
@@ -266,6 +266,11 @@ ICU 60 adds the Prepended_Concatenation_Mark property to vector word 1.
 
 ICU 60 adds the Emoji_Component property to vector word 2, for emoji 5.
 http://bugs.icu-project.org/trac/ticket/13062
+http://www.unicode.org/reports/tr51/#Emoji_Properties
+
+--- Changes in format version 7.5 ---
+
+ICU 62 adds the Extended_Pictographic property to vector word 2, for emoji 11.
 http://www.unicode.org/reports/tr51/#Emoji_Properties
 
 ----------------------------------------------------------------------------- */
@@ -580,6 +585,7 @@ propToBinaries[]={
     { UCHAR_EMOJI_MODIFIER_BASE,            2, UPROPS_2_EMOJI_MODIFIER_BASE },
     { UCHAR_EMOJI_COMPONENT,                2, UPROPS_2_EMOJI_COMPONENT },
     { UCHAR_PREPENDED_CONCATENATION_MARK,   1, UPROPS_PREPENDED_CONCATENATION_MARK },
+    { UCHAR_EXTENDED_PICTOGRAPHIC,          2, UPROPS_2_EXTENDED_PICTOGRAPHIC },
 };
 
 struct PropToEnum {

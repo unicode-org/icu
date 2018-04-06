@@ -259,6 +259,9 @@ static void buildPseudoTables(void)
     - A-F == Arabic Letters 0631-0636
     - G-V == Hebrew letters 05d7-05e6
     - W-Z == Unassigned RTL 08d0-08d3
+        Unicode 6.1 changes U+08A0..U+08FF from R to AL which works ok.
+        Unicode 11 adds U+08D3 ARABIC SMALL LOW WAW which has bc=NSM
+            so we stop using Z in this test.
     - 0-5 == western digits 0030-0035
     - 6-9 == Arabic-Indic digits 0666-0669
     - ` == Combining Grave Accent 0300 (NSM)
@@ -656,7 +659,7 @@ testReorder(void) {
             "day  4   I  DPIQNF    dayabbr",
             "day  5  M  DPMEG  dayabbr",
             "helloDPMEG",
-            "hello WXYZ"
+            "hello WXY"
     };
     static const char* const visualOrder[]={
             "del(CK)add(&.C.K)",
@@ -670,7 +673,7 @@ testReorder(void) {
             "day  4   FNQIPD  I    dayabbr",
             "day  5  GEMPD  M  dayabbr",
             "helloGEMPD",
-            "hello ZYXW"
+            "hello YXW"
     };
     static const char* const visualOrder1[]={
             ")K.C.&(dda)KC(led",
@@ -684,7 +687,7 @@ testReorder(void) {
             "rbbayad    I  DPIQNF   4  yad",
             "rbbayad  M  DPMEG  5  yad",
             "DPMEGolleh",
-            "WXYZ olleh"
+            "WXY olleh"
     };
 
     static const char* const visualOrder2[]={
@@ -699,7 +702,7 @@ testReorder(void) {
             "rbbayad    @I  DPIQNF@   4  yad",
             "rbbayad  @M  DPMEG@  5  yad",
             "DPMEGolleh",
-            "WXYZ@ olleh"
+            "WXY@ olleh"
     };
     static const char* const visualOrder3[]={
             ")K.C.&(KC)dda(led",
@@ -713,7 +716,7 @@ testReorder(void) {
             "rbbayad    DPIQNF     I 4 yad",
             "rbbayad  DPMEG   M  5 yad",
             "DPMEGolleh",
-            "WXYZ olleh"
+            "WXY olleh"
     };
     static const char* const visualOrder4[]={
             "del(add(CK(.C.K)",
@@ -727,7 +730,7 @@ testReorder(void) {
             "day 4 I     FNQIPD    dayabbr",
             "day 5  M   GEMPD  dayabbr",
             "helloGEMPD",
-            "hello ZYXW"
+            "hello YXW"
     };
     char formatChars[MAXLEN];
     UErrorCode ec = U_ZERO_ERROR;
