@@ -70,13 +70,6 @@ public:
     RBBIDataWrapper    *fData;
 private:
 
-    /** 
-     *  The iteration state - current position, rule status for the current position,
-     *                        and whether the iterator ran off the end, yielding UBRK_DONE.
-     *                        Current position is pinned to be 0 < position <= text.length.
-     *                        Current position is always set to a boundary.
-     *  @internal
-    */
     /**
       * The current  position of the iterator. Pinned, 0 < fPosition <= text.length.
       * Never has the value UBRK_DONE (-1).

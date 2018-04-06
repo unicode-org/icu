@@ -1179,7 +1179,9 @@ bool RBBITableBuilder::findDuplicateSafeState(IntPair *states) {
 }
 
 
-void RBBITableBuilder::removeState(int32_t keepState, int32_t duplState) {
+void RBBITableBuilder::removeState(IntPair duplStates) {
+    const int32_t keepState = duplStates.first;
+    const int32_t duplState = duplStates.second;
     U_ASSERT(keepState < duplState);
     U_ASSERT(duplState < fDStates->size());
 
@@ -1214,7 +1216,9 @@ void RBBITableBuilder::removeState(int32_t keepState, int32_t duplState) {
     }
 }
 
-void RBBITableBuilder::removeSafeState(int32_t keepState, int32_t duplState) {
+void RBBITableBuilder::removeSafeState(IntPair duplStates) {
+    const int32_t keepState = duplStates.first;
+    const int32_t duplState = duplStates.second;
     U_ASSERT(keepState < duplState);
     U_ASSERT(duplState < fSafeTable->size());
 
@@ -1245,7 +1249,7 @@ void RBBITableBuilder::removeDuplicateStates() {
     IntPair dupls = {3, 0};
     while (findDuplicateState(&dupls)) {
         // printf("Removing duplicate states (%d, %d)\n", dupls.first, dupls.second);
-        removeState(dupls.first, dupls.second);
+        removeState(dupls);
     }
 }
 
@@ -1430,7 +1434,7 @@ void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
     IntPair states = {1, 0};
     while (findDuplicateSafeState(&states)) {
         // printf("Removing duplicate safe states (%d, %d)\n", states.first, states.second);
-        removeSafeState(states.first, states.second);
+        removeSafeState(states);
     }
 }
 

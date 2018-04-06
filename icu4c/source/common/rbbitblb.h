@@ -51,14 +51,15 @@ public:
     void     exportTable(void *where);
 
     /**
-     *  Find duplicate (redundant) character classes, beginning at the specified
-     *  pair, within this state table. This is an iterator-like function, used to
-     *  identify character classes (state table columns) that can be eliminated.
+     *  Find duplicate (redundant) character classes. Begin looking with categories.first.
+     *  Duplicate, if found are returned in the categories parameter.
+     *  This is an iterator-like function, used to identify character classes
+     *  (state table columns) that can be eliminated.
      *  @param categories in/out parameter, specifies where to start looking for duplicates,
      *                and returns the first pair of duplicates found, if any.
      *  @return true if duplicate char classes were found, false otherwise.
      */
-    bool     findDuplCharClassFrom(IntPair *statePair);
+    bool     findDuplCharClassFrom(IntPair *categories);
 
     /** Remove a column from the state table. Used when two character categories
      *  have been found equivalent, and merged together, to eliminate the uneeded table column.
@@ -110,12 +111,12 @@ private:
      */
     bool findDuplicateState(IntPair *states);
 
-    /** Remove a duplicate state/
-     * @param keepState First of the duplicate pair. Keep it.
-     * @param duplState Duplicate state. Remove it. Redirect all references to the duplicate state
-     *                  to refer to keepState instead.
+    /** Remove a duplicate state.
+     * @param duplStates The duplicate states. The first is kept, the second is removed.
+     *                   All references to the second in the state table are retargeted
+     *                   to the first.
      */
-    void removeState(int32_t keepState, int32_t duplState);
+    void removeState(IntPair duplStates);
 
     /** Find the next duplicate state in the safe reverse table. An iterator function.
      *  @param states in/out parameter, specifies where to start looking for duplicates,
@@ -125,11 +126,11 @@ private:
     bool findDuplicateSafeState(IntPair *states);
 
     /** Remove a duplicate state from the safe table.
-     * @param keepState First of the duplicate pair. Keep it.
-     * @param duplState Duplicate state. Remove it. Redirect all table references to the duplicate state
-     *                  to refer to keepState instead.
+     * @param duplStates The duplicate states. The first is kept, the second is removed.
+     *                   All references to the second in the state table are retargeted
+     *                   to the first.
      */
-    void removeSafeState(int32_t keepState, int32_t duplState);
+    void removeSafeState(IntPair duplStates);
 
     // Set functions for UVector.
     //   TODO:  make a USet subclass of UVector
