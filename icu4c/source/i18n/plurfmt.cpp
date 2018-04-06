@@ -264,35 +264,26 @@ PluralFormat::format(const Formattable& numberObject, double number,
     double numberMinusOffset = number - offset;
     UnicodeString numberString;
     DecimalQuantity quantity;
-    quantity.setToDouble(numberMinusOffset);
     FieldPosition ignorePos;
     if (offset == 0) {
         DecimalFormat *decFmt = dynamic_cast<DecimalFormat *>(numberFormat);
         if(decFmt != NULL) {
-//            decFmt->initVisibleDigitsWithExponent(
-//                    numberObject, dec, status);
-//            if (U_FAILURE(status)) {
-//                return appendTo;
-//            }
-//            decFmt->format(dec, numberString, ignorePos, status);
-            decFmt->format(quantity, numberString, ignorePos, status);
+            decFmt->formatToDecimalQuantity(numberObject, quantity, status);
         } else {
             numberFormat->format(
                     numberObject, numberString, ignorePos, status);  // could be BigDecimal etc.
+            quantity.setToDouble(numberMinusOffset);
+            quantity.roundToInfinity();
         }
     } else {
         DecimalFormat *decFmt = dynamic_cast<DecimalFormat *>(numberFormat);
         if(decFmt != NULL) {
-//            decFmt->initVisibleDigitsWithExponent(
-//                    numberMinusOffset, dec, status);
-//            if (U_FAILURE(status)) {
-//                return appendTo;
-//            }
-//            decFmt->format(dec, numberString, ignorePos, status);
-            decFmt->format(quantity, numberString, ignorePos, status);
+            decFmt->formatToDecimalQuantity(numberMinusOffset, quantity, status);
         } else {
             numberFormat->format(
                     numberMinusOffset, numberString, ignorePos, status);
+            quantity.setToDouble(numberMinusOffset);
+            quantity.roundToInfinity();
         }
     }
     int32_t partIndex = findSubMessage(msgPattern, 0, pluralRulesWrapper, &quantity, number, status);

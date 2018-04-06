@@ -196,10 +196,10 @@ public class NumberParserImpl {
         if (!isStrict) {
             parser.addMatcher(PlusSignMatcher.getInstance(symbols, false));
             parser.addMatcher(MinusSignMatcher.getInstance(symbols, false));
-            parser.addMatcher(NanMatcher.getInstance(symbols, parseFlags));
             parser.addMatcher(PercentMatcher.getInstance(symbols));
             parser.addMatcher(PermilleMatcher.getInstance(symbols));
         }
+        parser.addMatcher(NanMatcher.getInstance(symbols, parseFlags));
         parser.addMatcher(InfinityMatcher.getInstance(symbols));
         String padString = properties.getPadString();
         if (padString != null && !ignorables.getSet().contains(padString)) {

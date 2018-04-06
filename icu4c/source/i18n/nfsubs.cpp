@@ -1086,7 +1086,7 @@ FractionalPartSubstitution::doSubstitution(double number, UnicodeString& toInser
       } else {
         pad = TRUE;
       }
-      int64_t digit = didx>=0 ? dl.getDigit(didx) - '0' : 0;
+      int64_t digit = dl.getDigit(didx);
       getRuleSet()->format(digit, toInsertInto, _pos + getPos(), recursionCount, status);
     }
 
@@ -1145,6 +1145,7 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
 //          double p10 = 0.1;
 
         DecimalQuantity dl;
+        int32_t totalDigits = 0;
         NumberFormat* fmt = NULL;
         while (workText.length() > 0 && workPos.getIndex() != 0) {
             workPos.setIndex(0);
@@ -1172,8 +1173,8 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
             }
 
             if (workPos.getIndex() != 0) {
-                // TODO(sffc): Make sure this is doing what it is supposed to do.
                 dl.appendDigit(static_cast<int8_t>(digit), 0, true);
+                totalDigits++;
 //                  result += digit * p10;
 //                  p10 /= 10;
                 parsePosition.setIndex(parsePosition.getIndex() + workPos.getIndex());
@@ -1186,6 +1187,7 @@ FractionalPartSubstitution::doParse(const UnicodeString& text,
         }
         delete fmt;
 
+        dl.adjustMagnitude(-totalDigits);
         result = dl.toDouble();
         result = composeRuleValue(result, baseValue);
         resVal.setDouble(result);

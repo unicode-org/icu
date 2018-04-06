@@ -725,6 +725,7 @@ CharString *Formattable::internalGetCharString(UErrorCode &status) {
         switch (fType) {
         case kDouble:
           fDecimalQuantity->setToDouble(this->getDouble());
+          fDecimalQuantity->roundToInfinity();
           break;
         case kLong:
           fDecimalQuantity->setToInt(this->getLong());
@@ -745,12 +746,7 @@ CharString *Formattable::internalGetCharString(UErrorCode &status) {
         return NULL;
       }
       UnicodeString result = fDecimalQuantity->toNumberString();
-      for (int32_t i=0; i<result.length(); i++) {
-        fDecimalStr->append(static_cast<char>(result[i]), status);
-        if (U_FAILURE(status)) {
-          return NULL;
-        }
-      }
+      fDecimalStr->appendInvariantChars(result, status);
     }
     return fDecimalStr;
 }

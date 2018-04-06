@@ -1120,12 +1120,12 @@ RuleBasedNumberFormat::format(const DecimalQuantity &number,
     }
     DecimalQuantity copy(number);
     if (copy.fitsInLong()) {
-        format(((DecimalQuantity &)number).toLong(), appendTo, posIter, status);
+        format(number.toLong(), appendTo, posIter, status);
     }
     else {
         copy.roundToMagnitude(0, number::impl::RoundingMode::UNUM_ROUND_HALFEVEN, status);
         if (copy.fitsInLong()) {
-            format(number.toLong(), appendTo, posIter, status);
+            format(number.toDouble(), appendTo, posIter, status);
         }
         else {
             // We're outside of our normal range that this framework can handle.
@@ -1153,12 +1153,12 @@ RuleBasedNumberFormat::format(const DecimalQuantity &number,
     }
     DecimalQuantity copy(number);
     if (copy.fitsInLong()) {
-        format(((DecimalQuantity &)number).toLong(), appendTo, pos, status);
+        format(number.toLong(), appendTo, pos, status);
     }
     else {
         copy.roundToMagnitude(0, number::impl::RoundingMode::UNUM_ROUND_HALFEVEN, status);
         if (copy.fitsInLong()) {
-            format(number.toLong(), appendTo, pos, status);
+            format(number.toDouble(), appendTo, pos, status);
         }
         else {
             // We're outside of our normal range that this framework can handle.

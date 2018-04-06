@@ -146,10 +146,10 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     if (!isStrict) {
         parser->addMatcher(parser->fLocalMatchers.plusSign = {symbols, false});
         parser->addMatcher(parser->fLocalMatchers.minusSign = {symbols, false});
-        parser->addMatcher(parser->fLocalMatchers.nan = {symbols});
         parser->addMatcher(parser->fLocalMatchers.percent = {symbols});
         parser->addMatcher(parser->fLocalMatchers.permille = {symbols});
     }
+    parser->addMatcher(parser->fLocalMatchers.nan = {symbols});
     parser->addMatcher(parser->fLocalMatchers.infinity = {symbols});
     UnicodeString padString = properties.padString;
     if (!padString.isBogus() && !ignorables.getSet()->contains(padString)) {
