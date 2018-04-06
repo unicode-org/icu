@@ -346,6 +346,7 @@
     <ClCompile Include="double-conversion-cached-powers.cpp" />
     <ClCompile Include="double-conversion-diy-fp.cpp" />
     <ClCompile Include="double-conversion-fast-dtoa.cpp" />
+    <ClCompile Include="double-conversion-strtod.cpp" />
     <ClCompile Include="double-conversion.cpp" />
     <ClCompile Include="dtfmtsym.cpp" />
     <ClCompile Include="dtitvfmt.cpp" />
