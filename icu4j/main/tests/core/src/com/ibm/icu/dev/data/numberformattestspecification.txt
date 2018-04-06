@@ -743,7 +743,7 @@ parse	output	breaks
 (34  25E-1)	-342.5	K
 (34,,25E-1)	-342.5
 // J doesn't allow trailing separators before E but C does
-(34,,25,E-1)	-342.5	J
+(34,,25,E-1)	-342.5	JP
 (34  25 E-1)	-342.5	JK
 (34,,25 E-1)	-342.5	CJK
 // Spaces are not allowed after exponent symbol
@@ -807,8 +807,8 @@ parse	output	breaks
 // C parses until trailing separators, but sees -1234
 1,234,,,+	1234	JKC
 1,234-	-1234
-// J bails because of trailing separators
-1,234,-	-1234	J
+// J and P bail because of trailing separators
+1,234,-	-1234	JP
 // J bails here too
 1234  -	-1234	J
 
