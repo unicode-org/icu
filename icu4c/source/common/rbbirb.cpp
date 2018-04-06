@@ -303,16 +303,14 @@ RBBIDataHeader *RBBIRuleBuilder::build(UErrorCode &status) {
 }
 
 void RBBIRuleBuilder::optimizeTables() {
-    int32_t leftClass;
-    int32_t rightClass;
 
-    leftClass = 3;
-    rightClass = 0;
-
+    // Begin looking for duplicates with char class 3.
+    // Classes 0, 1 and 2 are special; they are unused, {bof} and {eof} respectively,
+    // and should not have other categories merged into them.
     IntPair duplPair = {3, 0};
 
     while (fForwardTable->findDuplCharClassFrom(&duplPair)) {
-        fSetBuilder->mergeCategories(duplPair.first, duplPair.second);
+        fSetBuilder->mergeCategories(duplPair);
         fForwardTable->removeColumn(duplPair.second);
     }
     fForwardTable->removeDuplicateStates();
