@@ -5984,4 +5984,14 @@ public class NumberFormatTest extends TestFmwk {
         expect2(df, 45, "USD 45.00");
         expect2(df, -45, "-45.00 USD");
     }
+
+    @Test
+    public void test13684_FrenchPercentParsing() {
+        NumberFormat numberFormat = NumberFormat.getPercentInstance(ULocale.FRENCH);
+        numberFormat.setParseStrict(true);
+        ParsePosition ppos = new ParsePosition(0);
+        Number percentage = numberFormat.parse("8\u00A0%", ppos);
+        assertEquals("Should parse successfully", 0.08, percentage.doubleValue());
+        assertEquals("Should consume whole string", 3, ppos.getIndex());
+    }
 }

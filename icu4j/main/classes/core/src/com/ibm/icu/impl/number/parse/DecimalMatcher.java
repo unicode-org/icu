@@ -278,6 +278,12 @@ public class DecimalMatcher implements NumberParseMatcher {
             break;
         }
 
+        // Back up if there was a trailing grouping separator
+        if (backupOffset != -1) {
+            segment.setOffset(backupOffset);
+            hasPartialPrefix = true; // redundant with `groupingOverlap == segment.length()`
+        }
+
         // Check the final grouping for validity
         if (requireGroupingMatch
                 && !seenDecimal
