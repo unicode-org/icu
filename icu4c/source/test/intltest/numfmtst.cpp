@@ -3691,6 +3691,7 @@ NumberFormatTest::TestSpaceParsing() {
         foo->setLenient(DATA[i].lenient);
         Formattable result;
         foo->parse(stringToBeParsed, result, parsePosition);
+        logln("Parsing: " + stringToBeParsed);
         if (parsePosition.getIndex() != parsedPosition ||
             parsePosition.getErrorIndex() != errorIndex) {
             errln("FAILED parse " + stringToBeParsed + "; lenient: " + DATA[i].lenient + "; wrong position, expected: (" + parsedPosition + ", " + errorIndex + "); got (" + parsePosition.getIndex() + ", " + parsePosition.getErrorIndex() + ")");

@@ -474,6 +474,7 @@ void DecimalQuantity::_setToDecNum(const DecNum& decnum, UErrorCode& status) {
 int64_t DecimalQuantity::toLong() const {
     // NOTE: Call sites should be guarded by fitsInLong(), like this:
     // if (dq.fitsInLong()) { /* use dq.toLong() */ } else { /* use some fallback */ }
+    U_ASSERT(fitsInLong());
     int64_t result = 0L;
     for (int32_t magnitude = scale + precision - 1; magnitude >= 0; magnitude--) {
         result = result * 10 + getDigitPos(magnitude - scale);
@@ -753,6 +754,7 @@ void DecimalQuantity::appendDigit(int8_t value, int32_t leadingZeros, bool appen
 }
 
 UnicodeString DecimalQuantity::toPlainString() const {
+    U_ASSERT(!isApproximate);
     UnicodeString sb;
     if (isNegative()) {
         sb.append(u'-');
@@ -1097,6 +1099,7 @@ UnicodeString DecimalQuantity::toString() const {
 }
 
 UnicodeString DecimalQuantity::toNumberString() const {
+    U_ASSERT(!isApproximate);
     UnicodeString result;
     if (precision == 0) {
         result.append(u'0');

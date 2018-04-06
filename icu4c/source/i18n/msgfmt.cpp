@@ -1962,7 +1962,7 @@ UnicodeString MessageFormat::PluralSelectorProvider::select(void *ctx, double nu
     auto* decFmt = dynamic_cast<const DecimalFormat *>(context.formatter);
     if(decFmt != NULL) {
         number::impl::DecimalQuantity dq;
-        decFmt->formatToDecimalQuantity(number, dq, ec);
+        decFmt->formatToDecimalQuantity(context.number, dq, ec);
         if (U_FAILURE(ec)) {
             return UnicodeString(FALSE, OTHER_STRING, 5);
         }
