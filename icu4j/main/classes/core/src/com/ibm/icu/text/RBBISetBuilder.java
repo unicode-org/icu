@@ -16,6 +16,7 @@ import java.util.List;
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.Trie2Writable;
 import com.ibm.icu.impl.Trie2_16;
+import com.ibm.icu.text.RBBIRuleBuilder.IntPair;
 
 //
 //  RBBISetBuilder   Handles processing of Unicode Sets from RBBI rules
@@ -307,17 +308,18 @@ class RBBISetBuilder {
 
     /**
      * Merge two character categories that have been identified as having equivalent behavior.
-     * The ranges belonging to the right category (table column) will be added to the left.
+     * The ranges belonging to the second category (table column) will be added to the first.
+     * @param categories the pair of categories to be merged.
      */
-    void mergeCategories(int left, int right) {
-        assert(left >= 1);
-        assert(right > left);
+    void mergeCategories(IntPair categories) {
+        assert(categories.first >= 1);
+        assert(categories.second > categories.first);
         for (RangeDescriptor rd = fRangeList; rd != null; rd = rd.fNext) {
             int rangeNum = rd.fNum & ~DICT_BIT;
             int rangeDict = rd.fNum & DICT_BIT;
-            if (rangeNum == right) {
-                rd.fNum = left | rangeDict;
-            } else if (rangeNum > right) {
+            if (rangeNum == categories.second) {
+                rd.fNum = categories.first | rangeDict;
+            } else if (rangeNum > categories.second) {
                 rd.fNum--;
             }
         }

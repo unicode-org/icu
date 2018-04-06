@@ -833,9 +833,10 @@ class RBBITableBuilder {
 
 
        /**
-        *  Find duplicate (redundant) character classes, beginning at the specified
-        *  pair, within this state table. This is an iterator-like function, used to
-        *  identify character classes (state table columns) that can be eliminated.
+        *  Find duplicate (redundant) character classes. Begin looking with categories.first.
+        *  Duplicates, if found are returned in the categories parameter.
+        *  This is an iterator-like function, used to identify character classes
+        *  (state table columns) that can be eliminated.
         *  @param categories in/out parameter, specifies where to start looking for duplicates,
         *                and returns the first pair of duplicates found, if any.
         *  @return true if duplicate char classes were found, false otherwise.
@@ -957,13 +958,14 @@ class RBBITableBuilder {
        }
 
        /**
-        * Remove a duplicate state (row) from the state table. All references to the deleted state are
-        * redirected to "keepState", the first encountered of the duplicated pair of states.
-        * @param keepState The first of the duplicate pair of states, the one to be kept.
-        * @param duplState The second of the duplicate pair, the one to be removed.
+        * Remove a duplicate state (row) from the state table. All references to the deleted (second) state
+        * are redirected to first state.
+        * @param duplStates The duplicate pair of states.
         * @internal
         */
-       void removeState(int keepState, int duplState) {
+       void removeState(IntPair duplStates) {
+           final int keepState = duplStates.first;
+           final int duplState = duplStates.second;
            assert(keepState < duplState);
            assert(duplState < fDStates.size());
 
@@ -998,11 +1000,14 @@ class RBBITableBuilder {
 
        /**
         * Remove a duplicate state from the safe table.
-        * @param keepState The first of the duplicate pair of states, the one to be kept.
-        * @param duplState The second of the duplicate pair, the one to be removed.
+        * @param duplStates The duplicate pair of states.  The first is kept, the second is removed.
+        *                   All references to the second in the state table are retargeted
+        *                   to the first.
         * @internal
         */
-       void removeSafeState(int keepState, int duplState) {
+       void removeSafeState(IntPair duplStates) {
+           final int keepState = duplStates.first;
+           final int duplState = duplStates.second;
            assert(keepState < duplState);
            assert(duplState < fSafeTable.size());
 
@@ -1032,7 +1037,7 @@ class RBBITableBuilder {
            IntPair dupls = new IntPair(3, 0);
            while (findDuplicateState(dupls)) {
                // System.out.printf("Removing duplicate states (%d, %d)\n", dupls.first, dupls.second);
-               removeState(dupls.first, dupls.second);
+               removeState(dupls);
            }
        }
 
@@ -1188,7 +1193,7 @@ class RBBITableBuilder {
            RBBIRuleBuilder.IntPair states = new RBBIRuleBuilder.IntPair(1, 0);
            while (findDuplicateSafeState(states)) {
                // System.out.printf("Removing duplicate safe states (%d, %d)\n", states.first, states.second);
-               removeSafeState(states.first, states.second);
+               removeSafeState(states);
            }
        }
 

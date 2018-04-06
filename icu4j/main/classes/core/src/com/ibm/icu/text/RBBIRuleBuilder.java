@@ -330,9 +330,12 @@ class RBBIRuleBuilder {
     }
 
     void optimizeTables() {
+        // Begin looking for duplicates with char class 3.
+        // Classes 0, 1 and 2 are special; they are unused, {bof} and {eof} respectively,
+        // and should not have other categories merged into them.
         IntPair duplPair = new IntPair(3, 0);
         while (fForwardTable.findDuplCharClassFrom(duplPair)) {
-            fSetBuilder.mergeCategories(duplPair.first, duplPair.second);
+            fSetBuilder.mergeCategories(duplPair);
             fForwardTable.removeColumn(duplPair.second);
         }
         fForwardTable.removeDuplicateStates();
