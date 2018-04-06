@@ -46,7 +46,7 @@ $MidLetter          = [\p{Word_Break = MidLetter} - [\:]];
 $MidNum             = [\p{Word_Break = MidNum} [.]];
 $Numeric            = [\p{Word_Break = Numeric}];
 $ExtendNumLet       = [\p{Word_Break = ExtendNumLet}];
-$WSegSpace          = [[\p{Zs}]-[\p{Line_Break = Glue}]];
+$WSegSpace          = [\p{Word_Break = WSegSpace}];
 $Extended_Pict      = [:ExtPict:];
 
 $Han                = [:Han:];

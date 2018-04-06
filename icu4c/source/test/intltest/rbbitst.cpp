@@ -1868,7 +1868,7 @@ RBBIWordMonkey::RBBIWordMonkey()
     fFormatSet        = new UnicodeSet(u"[\\p{Word_Break = Format}]",       status);
     fExtendNumLetSet  = new UnicodeSet(u"[\\p{Word_Break = ExtendNumLet}]", status);
     fExtendSet        = new UnicodeSet(u"[\\p{Word_Break = Extend}]",       status);
-    fWSegSpaceSet     = new UnicodeSet(u"[[\\p{Zs}]-[\\p{Line_Break = GL}]]",   status);
+    fWSegSpaceSet     = new UnicodeSet(u"[\\p{Word_Break = WSegSpace}]",    status);
 
     fZWJSet           = new UnicodeSet(u"[\\p{Word_Break = ZWJ}]",          status);
     fExtendedPictSet  = new UnicodeSet(u"[:Extended_Pictographic:]", status);

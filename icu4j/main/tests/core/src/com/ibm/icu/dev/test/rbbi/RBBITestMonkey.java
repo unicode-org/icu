@@ -334,7 +334,7 @@ public class RBBITestMonkey extends TestFmwk {
             fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]");
             fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]");
             fExtendSet       = new UnicodeSet("[\\p{Word_Break = Extend}]");
-            fWSegSpaceSet    = new UnicodeSet("[[\\p{Zs}]-[\\p{Line_Break = GL}]]");
+            fWSegSpaceSet    = new UnicodeSet("[\\p{Word_Break = WSegSpace}]");
             fZWJSet          = new UnicodeSet("[\\p{Word_Break = ZWJ}]");
             fExtendedPictSet = new UnicodeSet("[:Extended_Pictographic:]");
 
