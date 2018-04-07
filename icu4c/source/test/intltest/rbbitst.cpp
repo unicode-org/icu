@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <utility>
 #include <vector>
 
 #include "unicode/brkiter.h"
@@ -111,6 +112,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug12677);
     TESTCASE_AUTO(TestTableRedundancies);
     TESTCASE_AUTO(TestBug13447);
+    TESTCASE_AUTO(TestReverse);
     TESTCASE_AUTO_END;
 }
 
@@ -1762,7 +1764,7 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
         //                      a break if there are three or more contiguous RIs. If there are
         //                      only two, a break following will occur via other rules, and will include
         //                      any trailing extend characters, which is needed behavior.
-        if (fRegionalIndicatorSet->contains(c0) && fRegionalIndicatorSet->contains(c1) 
+        if (fRegionalIndicatorSet->contains(c0) && fRegionalIndicatorSet->contains(c1)
                 && fRegionalIndicatorSet->contains(c2)) {
             break;
         }
@@ -3046,11 +3048,11 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         // LB 23a Do not break between numeric prefixes and ideographs, or between ideographs and numeric postfixes.
         //      PR x (ID | EB | EM)
         //     (ID | EB | EM) x PO
-        if (fPR->contains(prevChar) && 
+        if (fPR->contains(prevChar) &&
                 (fID->contains(thisChar) || fEB->contains(thisChar) || fEM->contains(thisChar)))  {
             continue;
         }
-        if ((fID->contains(prevChar) || fEB->contains(prevChar) || fEM->contains(prevChar)) && 
+        if ((fID->contains(prevChar) || fEB->contains(prevChar) || fEM->contains(prevChar)) &&
                 fPO->contains(thisChar)) {
             continue;
         }
@@ -4347,7 +4349,7 @@ void RBBITest::TestBug12519() {
         return;
     }
     assertTrue(WHERE, Locale::getEnglish() == biEn->getLocale(ULOC_VALID_LOCALE, status));
-    
+
     assertTrue(WHERE, Locale::getFrench() == biFr->getLocale(ULOC_VALID_LOCALE, status));
     assertTrue(WHERE "Locales do not participate in BreakIterator equality.", *biEn == *biFr);
 
@@ -4387,7 +4389,7 @@ void RBBITest::TestBug12677() {
 
 void RBBITest::TestTableRedundancies() {
     UErrorCode status = U_ZERO_ERROR;
-    
+
     LocalPointer<RuleBasedBreakIterator> bi (
         (RuleBasedBreakIterator *)BreakIterator::createLineInstance(Locale::getEnglish(), status));
     assertSuccess(WHERE, status);
@@ -4463,12 +4465,98 @@ void RBBITest::TestBug13447() {
     assertEquals(WHERE, UBRK_WORD_NUMBER, bi->getRuleStatus());
 }
 
+//  TestReverse exercises both the synthesized safe reverse rules and the logic
+//  for filling the break iterator cache when starting from random positions
+//  in the text.
+//
+//  It's a monkey test, working on random data, with the expected data obtained
+//  from forward iteration (no safe rules involved), comparing with results
+//  when indexing into the interior of the string (safe rules needed).
+
+void RBBITest::TestReverse() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    TestReverse(std::unique_ptr<RuleBasedBreakIterator>((RuleBasedBreakIterator *)
+            BreakIterator::createCharacterInstance(Locale::getEnglish(), status)));
+    assertSuccess(WHERE, status);
+    TestReverse(std::unique_ptr<RuleBasedBreakIterator>((RuleBasedBreakIterator *)
+            BreakIterator::createWordInstance(Locale::getEnglish(), status)));
+    assertSuccess(WHERE, status);
+    TestReverse(std::unique_ptr<RuleBasedBreakIterator>((RuleBasedBreakIterator *)
+            BreakIterator::createLineInstance(Locale::getEnglish(), status)));
+    assertSuccess(WHERE, status);
+    TestReverse(std::unique_ptr<RuleBasedBreakIterator>((RuleBasedBreakIterator *)
+            BreakIterator::createSentenceInstance(Locale::getEnglish(), status)));
+    assertSuccess(WHERE, status);
+}
+
+void RBBITest::TestReverse(std::unique_ptr<RuleBasedBreakIterator>bi) {
+    if (!bi) {
+        errln(WHERE);
+        return;
+    }
+
+    // From the mapping trie in the break iterator's internal data, create a
+    // vector of UnicodeStrings, one for each character category, containing
+    // all of the code points that map to that category. Unicode planes 0 and 1 only,
+    // to avoid an execess of unassigned code points.
+
+    RBBIDataWrapper *data = bi->fData;
+    int32_t categoryCount = data->fHeader->fCatCount;
+    UTrie2  *trie = data->fTrie;
+
+    std::vector<UnicodeString> strings(categoryCount, UnicodeString());
+    for (int cp=0; cp<0x1fff0; ++cp) {
+        int cat = utrie2_get32(trie, cp);
+        cat &= ~0x4000;    // And off the dictionary bit from the category.
+        assertTrue(WHERE, cat < categoryCount && cat >= 0);
+        if (cat < 0 || cat >= categoryCount) return;
+        strings[cat].append(cp);
+    }
+
+    icu_rand randomGen;
+    const int testStringLength = 10000;
+    UnicodeString testString;
+
+    for (int i=0; i<testStringLength; ++i) {
+        int charClass = randomGen() % categoryCount;
+        if (strings[charClass].length() > 0) {
+            int cp = strings[charClass].char32At(randomGen() % strings[charClass].length());
+            testString.append(cp);
+        }
+    }
+
+    typedef std::pair<UBool, int32_t> Result;
+    std::vector<Result> expectedResults;
+    bi->setText(testString);
+    for (int i=0; i<testString.length(); ++i) {
+        bool isboundary = bi->isBoundary(i);
+        int  ruleStatus = bi->getRuleStatus();
+        expectedResults.push_back(std::make_pair(isboundary, ruleStatus));
+    }
+
+    for (int i=testString.length()-1; i>=0; --i) {
+        bi->setText(testString);   // clears the internal break cache
+        Result expected = expectedResults[i];
+        assertEquals(WHERE, expected.first, bi->isBoundary(i));
+        assertEquals(WHERE, expected.second, bi->getRuleStatus());
+    }
+}
+
+
 //
 //  TestDebug    -  A place-holder test for debugging purposes.
 //                  For putting in fragments of other tests that can be invoked
 //                  for tracing  without a lot of unwanted extra stuff happening.
 //
 void RBBITest::TestDebug(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<RuleBasedBreakIterator> bi ((RuleBasedBreakIterator *)
+            BreakIterator::createCharacterInstance(Locale::getEnglish(), status), status);
+    const UnicodeString &rules = bi->getRules();
+    UParseError pe;
+    LocalPointer<RuleBasedBreakIterator> newbi(new RuleBasedBreakIterator(rules, pe, status));
+    assertSuccess(WHERE, status);
 }
 
 void RBBITest::TestProperties() {

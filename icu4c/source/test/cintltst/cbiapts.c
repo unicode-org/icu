@@ -308,14 +308,14 @@ static void TestBreakIteratorCAPI()
 
 
     log_verbose("\nTesting the functions for sentence\n");
-    ubrk_first(sentence);
+    pos = ubrk_first(sentence);
     pos = ubrk_current(sentence);
     log_verbose("Current(sentence) = %d\n", (int32_t)pos);
        pos = ubrk_last(sentence);
     if(pos!=49)
         log_err("error ubrk_last for sentence did not return 49\n");
     log_verbose("Last (sentence) = %d\n", (int32_t)pos);
-    ubrk_first(sentence);
+    pos = ubrk_first(sentence);
     to = ubrk_following( sentence, 0 );
     if (to == 0) log_err("ubrk_following returned 0\n");
     to = ubrk_preceding( sentence, to );
