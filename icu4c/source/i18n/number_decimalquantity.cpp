@@ -84,11 +84,29 @@ DecimalQuantity::DecimalQuantity(const DecimalQuantity &other) {
     *this = other;
 }
 
+DecimalQuantity::DecimalQuantity(DecimalQuantity&& src) U_NOEXCEPT {
+    *this = std::move(src);
+}
+
 DecimalQuantity &DecimalQuantity::operator=(const DecimalQuantity &other) {
     if (this == &other) {
         return *this;
     }
     copyBcdFrom(other);
+    copyFieldsFrom(other);
+    return *this;
+}
+
+DecimalQuantity& DecimalQuantity::operator=(DecimalQuantity&& src) U_NOEXCEPT {
+    if (this == &src) {
+        return *this;
+    }
+    moveBcdFrom(src);
+    copyFieldsFrom(src);
+    return *this;
+}
+
+void DecimalQuantity::copyFieldsFrom(const DecimalQuantity& other) {
     bogus = other.bogus;
     lOptPos = other.lOptPos;
     lReqPos = other.lReqPos;
@@ -100,7 +118,6 @@ DecimalQuantity &DecimalQuantity::operator=(const DecimalQuantity &other) {
     origDouble = other.origDouble;
     origDelta = other.origDelta;
     isApproximate = other.isApproximate;
-    return *this;
 }
 
 void DecimalQuantity::clear() {
@@ -474,7 +491,6 @@ void DecimalQuantity::_setToDecNum(const DecNum& decnum, UErrorCode& status) {
 int64_t DecimalQuantity::toLong() const {
     // NOTE: Call sites should be guarded by fitsInLong(), like this:
     // if (dq.fitsInLong()) { /* use dq.toLong() */ } else { /* use some fallback */ }
-    U_ASSERT(fitsInLong());
     int64_t result = 0L;
     for (int32_t magnitude = scale + precision - 1; magnitude >= 0; magnitude--) {
         result = result * 10 + getDigitPos(magnitude - scale);
@@ -1027,6 +1043,20 @@ void DecimalQuantity::copyBcdFrom(const DecimalQuantity &other) {
     if (other.usingBytes) {
         ensureCapacity(other.precision);
         uprv_memcpy(fBCD.bcdBytes.ptr, other.fBCD.bcdBytes.ptr, other.precision * sizeof(int8_t));
+    } else {
+        fBCD.bcdLong = other.fBCD.bcdLong;
+    }
+}
+
+void DecimalQuantity::moveBcdFrom(DecimalQuantity &other) {
+    setBcdToZero();
+    if (other.usingBytes) {
+        usingBytes = true;
+        fBCD.bcdBytes.ptr = other.fBCD.bcdBytes.ptr;
+        fBCD.bcdBytes.len = other.fBCD.bcdBytes.len;
+        // Take ownership away from the old instance:
+        other.fBCD.bcdBytes.ptr = nullptr;
+        other.usingBytes = false;
     } else {
         fBCD.bcdLong = other.fBCD.bcdLong;
     }

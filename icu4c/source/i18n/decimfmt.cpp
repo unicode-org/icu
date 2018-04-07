@@ -62,6 +62,15 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern, DecimalFormatSymbols*
     } else {
         setPropertiesFromPattern(pattern, IGNORE_ROUNDING_IF_CURRENCY, status);
     }
+    // Note: in Java, CurrencyPluralInfo is set in NumberFormat.java, but in C++, it is not set there,
+    // so we have to set it here.
+    if (style == UNumberFormatStyle::UNUM_CURRENCY_PLURAL) {
+        LocalPointer<CurrencyPluralInfo> cpi(
+                new CurrencyPluralInfo(fSymbols->getLocale(), status),
+                status);
+        if (U_FAILURE(status)) { return; }
+        fProperties->currencyPluralInfo.fPtr.adoptInstead(cpi.orphan());
+    }
     refreshFormatter(status);
 }
 

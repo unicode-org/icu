@@ -304,6 +304,8 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
 
 
 void PropertiesAffixPatternProvider::setTo(const DecimalFormatProperties& properties, UErrorCode&) {
+    fBogus = false;
+
     // There are two ways to set affixes in DecimalFormat: via the pattern string (applyPattern), and via the
     // explicit setters (setPositivePrefix and friends).  The way to resolve the settings is as follows:
     //
@@ -432,11 +434,16 @@ bool PropertiesAffixPatternProvider::hasBody() const {
 
 
 void CurrencyPluralInfoAffixProvider::setTo(const CurrencyPluralInfo& cpi, UErrorCode& status) {
+    fBogus = false;
     for (int32_t plural = 0; plural < StandardPlural::COUNT; plural++) {
         const char* keyword = StandardPlural::getKeyword(static_cast<StandardPlural::Form>(plural));
         UnicodeString patternString;
         patternString = cpi.getCurrencyPluralPattern(keyword, patternString);
-        PatternParser::parseToPatternInfo(patternString, affixesByPlural[plural], status);
+        // ParsedPatternInfo does not support being overwritten if it was written previously;
+        // instead, we need to write to a fresh instance and move it into place.
+        ParsedPatternInfo temp;
+        PatternParser::parseToPatternInfo(patternString, temp, status);
+        affixesByPlural[plural] = std::move(temp);
     }
 }
 

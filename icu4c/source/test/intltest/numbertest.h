@@ -116,6 +116,7 @@ class DecimalQuantityTest : public IntlTest {
   public:
     void testDecimalQuantityBehaviorStandalone();
     void testSwitchStorage();
+    void testCopyMove();
     void testAppend();
     void testConvertToAccurateDouble();
     void testUseApproximateDoubleWhenAble();

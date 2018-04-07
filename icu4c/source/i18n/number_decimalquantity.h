@@ -35,6 +35,9 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     /** Copy constructor. */
     DecimalQuantity(const DecimalQuantity &other);
 
+    /** Move constructor. */
+    DecimalQuantity(DecimalQuantity &&src) U_NOEXCEPT;
+
     DecimalQuantity();
 
     ~DecimalQuantity() override;
@@ -45,6 +48,9 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      * @param other The instance to copy from.
      */
     DecimalQuantity &operator=(const DecimalQuantity &other);
+
+    /** Move assignment */
+    DecimalQuantity &operator=(DecimalQuantity&& src) U_NOEXCEPT;
 
     /**
      * Sets the minimum and maximum integer digits that this {@link DecimalQuantity} should generate.
@@ -434,7 +440,11 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
 
     void readDoubleConversionToBcd(const char* buffer, int32_t length, int32_t point);
 
+    void copyFieldsFrom(const DecimalQuantity& other);
+
     void copyBcdFrom(const DecimalQuantity &other);
+
+    void moveBcdFrom(DecimalQuantity& src);
 
     /**
      * Removes trailing zeros from the BCD (adjusting the scale as required) and then computes the

@@ -20,6 +20,7 @@ using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
 
+
 void PatternParser::parseToPatternInfo(const UnicodeString& patternString, ParsedPatternInfo& patternInfo,
                                        UErrorCode& status) {
     patternInfo.consumePattern(patternString, status);
@@ -43,6 +44,7 @@ PatternParser::parseToExistingProperties(const UnicodeString& pattern, DecimalFo
                                          IgnoreRounding ignoreRounding, UErrorCode& status) {
     parseToExistingPropertiesImpl(pattern, properties, ignoreRounding, status);
 }
+
 
 char16_t ParsedPatternInfo::charAt(int32_t flags, int32_t index) const {
     const Endpoints& endpoints = getEndpoints(flags);
@@ -134,6 +136,10 @@ void ParsedPatternInfo::consumePattern(const UnicodeString& patternString, UErro
     if (U_FAILURE(status)) { return; }
     this->pattern = patternString;
 
+    // This class is not intended for writing twice!
+    // Use move assignment to overwrite instead.
+    U_ASSERT(state.offset == 0);
+
     // pattern := subpattern (';' subpattern)?
     currentSubpattern = &positive;
     consumeSubpattern(status);
@@ -178,12 +184,13 @@ void ParsedPatternInfo::consumePadding(PadPosition paddingLocation, UErrorCode& 
     if (state.peek() != u'*') {
         return;
     }
-    if (!currentSubpattern->paddingLocation.isNull()) {
+    if (currentSubpattern->hasPadding) {
         state.toParseException(u"Cannot have multiple pad specifiers");
         status = U_MULTIPLE_PAD_SPECIFIERS;
         return;
     }
     currentSubpattern->paddingLocation = paddingLocation;
+    currentSubpattern->hasPadding = true;
     state.next(); // consume the '*'
     currentSubpattern->paddingEndpoints.start = state.offset;
     consumeLiteral(status);
@@ -580,7 +587,7 @@ PatternParser::patternInfoToProperties(DecimalFormatProperties& properties, Pars
     UnicodeString posSuffix = patternInfo.getString(0);
 
     // Padding settings
-    if (!positive.paddingLocation.isNull()) {
+    if (positive.hasPadding) {
         // The width of the positive prefix and suffix templates are included in the padding
         int paddingWidth = positive.widthExceptAffixes +
                            AffixUtils::estimateLength(UnicodeStringCharSequence(posPrefix), status) +

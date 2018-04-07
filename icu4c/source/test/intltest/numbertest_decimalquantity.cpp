@@ -16,7 +16,8 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
     }
     TESTCASE_AUTO_BEGIN;
         TESTCASE_AUTO(testDecimalQuantityBehaviorStandalone);
-        TESTCASE_AUTO(testSwitchStorage);
+        TESTCASE_AUTO(testSwitchStorage);;
+        TESTCASE_AUTO(testCopyMove);
         TESTCASE_AUTO(testAppend);
         TESTCASE_AUTO(testConvertToAccurateDouble);
         TESTCASE_AUTO(testUseApproximateDoubleWhenAble);
@@ -117,6 +118,53 @@ void DecimalQuantityTest::testSwitchStorage() {
     assertFalse("Should not be using byte array", fq.isUsingBytes());
     assertEquals("Failed on round", u"123412341234E5", fq.toNumberString());
     assertHealth(fq);
+}
+
+void DecimalQuantityTest::testCopyMove() {
+    // Small numbers (fits in BCD long)
+    {
+        DecimalQuantity a;
+        a.setToLong(1234123412341234L);
+        DecimalQuantity b = a; // copy constructor
+        assertToStringAndHealth(a, u"<DecimalQuantity 999:0:0:-999 long 1234123412341234E0>");
+        assertToStringAndHealth(b, u"<DecimalQuantity 999:0:0:-999 long 1234123412341234E0>");
+        DecimalQuantity c(std::move(a)); // move constructor
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 long 1234123412341234E0>");
+        c.setToLong(54321L);
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 long 54321E0>");
+        c = b; // copy assignment
+        assertToStringAndHealth(b, u"<DecimalQuantity 999:0:0:-999 long 1234123412341234E0>");
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 long 1234123412341234E0>");
+        b.setToLong(45678);
+        c.setToLong(56789);
+        c = std::move(b); // move assignment
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 long 45678E0>");
+        a = std::move(c); // move assignment to a defunct object
+        assertToStringAndHealth(a, u"<DecimalQuantity 999:0:0:-999 long 45678E0>");
+    }
+
+    // Large numbers (requires byte allocation)
+    {
+        IcuTestErrorCode status(*this, "testCopyMove");
+        DecimalQuantity a;
+        a.setToDecNumber({"1234567890123456789", -1}, status);
+        DecimalQuantity b = a; // copy constructor
+        assertToStringAndHealth(a, u"<DecimalQuantity 999:0:0:-999 bytes 1234567890123456789E0>");
+        assertToStringAndHealth(b, u"<DecimalQuantity 999:0:0:-999 bytes 1234567890123456789E0>");
+        DecimalQuantity c(std::move(a)); // move constructor
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 bytes 1234567890123456789E0>");
+        c.setToDecNumber({"9876543210987654321", -1}, status);
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 bytes 9876543210987654321E0>");
+        c = b; // copy assignment
+        assertToStringAndHealth(b, u"<DecimalQuantity 999:0:0:-999 bytes 1234567890123456789E0>");
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 bytes 1234567890123456789E0>");
+        b.setToDecNumber({"876543210987654321", -1}, status);
+        c.setToDecNumber({"987654321098765432", -1}, status);
+        c = std::move(b); // move assignment
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 bytes 876543210987654321E0>");
+        a = std::move(c); // move assignment to a defunct object
+        assertToStringAndHealth(a, u"<DecimalQuantity 999:0:0:-999 bytes 876543210987654321E0>");
+    }
 }
 
 void DecimalQuantityTest::testAppend() {

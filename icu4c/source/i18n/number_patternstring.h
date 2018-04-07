@@ -41,7 +41,9 @@ struct U_I18N_API ParsedSubpatternInfo {
     int32_t fractionTotal = 0; // for convenience
     bool hasDecimal = false;
     int32_t widthExceptAffixes = 0;
-    NullableValue<UNumberFormatPadPosition> paddingLocation;
+    // Note: NullableValue causes issues here with std::move.
+    bool hasPadding = false;
+    UNumberFormatPadPosition paddingLocation = UNUM_PAD_BEFORE_PREFIX;
     DecimalQuantity rounding;
     bool exponentHasPlusSign = false;
     int32_t exponentZeros = 0;
@@ -66,6 +68,9 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
             : state(this->pattern), currentSubpattern(nullptr) {}
 
     ~ParsedPatternInfo() U_OVERRIDE = default;
+
+    // Need to declare this explicitly because of the destructor
+    ParsedPatternInfo& operator=(ParsedPatternInfo&& src) U_NOEXCEPT = default;
 
     static int32_t getLengthFromEndpoints(const Endpoints& endpoints);
 
@@ -94,6 +99,13 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
 
         explicit ParserState(const UnicodeString& _pattern)
                 : pattern(_pattern) {};
+
+        ParserState& operator=(ParserState&& src) U_NOEXCEPT {
+            // Leave pattern reference alone; it will continue to point to the same place in memory,
+            // which gets overwritten by ParsedPatternInfo's implicit move assignment.
+            offset = src.offset;
+            return *this;
+        }
 
         UChar32 peek();
 
