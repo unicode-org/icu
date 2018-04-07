@@ -65,6 +65,11 @@ public class SeriesMatcher implements NumberParseMatcher {
             } else if (success) {
                 // Match succeeded, and this is NOT a flexible matcher. Proceed to the next matcher.
                 i++;
+                // Small hack: if there is another matcher coming, do not accept trailing weak chars.
+                // Needed for proper handling of currency spacing.
+                if (i < matchers.size() && segment.getOffset() != result.charEnd && result.charEnd > matcherOffset) {
+                    segment.setOffset(result.charEnd);
+                }
             } else if (isFlexible) {
                 // Match failed, and this is a flexible matcher. Try again with the next matcher.
                 i++;

@@ -304,7 +304,7 @@ void AffixMatcherWarehouse::createAffixMatchers(const AffixPatternProvider& patt
     UnicodeString sb;
     bool includeUnpaired = 0 != (parseFlags & PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES);
     UNumberSignDisplay signDisplay = (0 != (parseFlags & PARSE_FLAG_PLUS_SIGN_ALLOWED)) ? UNUM_SIGN_ALWAYS
-                                                                                        : UNUM_SIGN_NEVER;
+                                                                                        : UNUM_SIGN_AUTO;
 
     int32_t numAffixMatchers = 0;
     int32_t numAffixPatternMatchers = 0;

@@ -92,7 +92,7 @@ public class AffixMatcher implements NumberParseMatcher {
         boolean includeUnpaired = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES);
         SignDisplay signDisplay = (0 != (parseFlags & ParsingUtils.PARSE_FLAG_PLUS_SIGN_ALLOWED))
                 ? SignDisplay.ALWAYS
-                : SignDisplay.NEVER;
+                : SignDisplay.AUTO;
 
         AffixPatternMatcher posPrefix = null;
         AffixPatternMatcher posSuffix = null;

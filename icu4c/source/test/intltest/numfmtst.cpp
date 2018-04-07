@@ -3987,10 +3987,10 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
         {"en_US", "1", "USD", "$1.00", "USD\\u00A01.00", "1.00 US dollars"},
         {"en_US", "1234.56", "USD", "$1,234.56", "USD\\u00A01,234.56", "1,234.56 US dollars"},
         {"en_US", "-1234.56", "USD", "-$1,234.56", "-USD\\u00A01,234.56", "-1,234.56 US dollars"},
-        {"zh_CN", "1", "USD", "US$1.00", "USD\\u00A01.00", "1.00\\u7F8E\\u5143"},
-        {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD\\u00A01,234.56", "1,234.56\\u7F8E\\u5143"},
-        {"zh_CN", "1", "CNY", "\\uFFE51.00", "CNY\\u00A01.00", "1.00\\u4EBA\\u6C11\\u5E01"},
-        {"zh_CN", "1234.56", "CNY", "\\uFFE51,234.56", "CNY\\u00A01,234.56", "1,234.56\\u4EBA\\u6C11\\u5E01"},
+        {"zh_CN", "1", "USD", "US$1.00", "USD\\u00A01.00", "1.00\\u00A0\\u7F8E\\u5143"},
+        {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD\\u00A01,234.56", "1,234.56\\u00A0\\u7F8E\\u5143"},
+        {"zh_CN", "1", "CNY", "\\uFFE51.00", "CNY\\u00A01.00", "1.00\\u00A0\\u4EBA\\u6C11\\u5E01"},
+        {"zh_CN", "1234.56", "CNY", "\\uFFE51,234.56", "CNY\\u00A01,234.56", "1,234.56\\u00A0\\u4EBA\\u6C11\\u5E01"},
         {"ru_RU", "1", "RUB", "1,00\\u00A0\\u20BD", "1,00\\u00A0RUB", "1,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E \\u0440\\u0443\\u0431\\u043B\\u044F"},
         {"ru_RU", "2", "RUB", "2,00\\u00A0\\u20BD", "2,00\\u00A0RUB", "2,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E \\u0440\\u0443\\u0431\\u043B\\u044F"},
         {"ru_RU", "5", "RUB", "5,00\\u00A0\\u20BD", "5,00\\u00A0RUB", "5,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E \\u0440\\u0443\\u0431\\u043B\\u044F"},
@@ -4040,7 +4040,9 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
             errln("FAIL: Expected " + formatResult + " actual: " + strBuf);
         }
         // test parsing, and test parsing for all currency formats.
-        for (int j = 3; j < 6; ++j) {
+        // NOTE: ICU 62 requires that the currency format match the pattern in strict mode.
+        //for (int j = 3; j < 6; ++j) {
+        for (int j = 3 + kIndex; j <= 3 + kIndex; j++) {
             // DATA[i][3] is the currency format result using
             // CURRENCYSTYLE formatter.
             // DATA[i][4] is the currency format result using
