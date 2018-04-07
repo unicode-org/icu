@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.AffixPatternProvider;
+import com.ibm.icu.impl.number.CurrencyPluralInfoAffixProvider;
 import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.DecimalFormatProperties.ParseMode;
@@ -134,7 +135,12 @@ public class NumberParserImpl {
             boolean parseCurrency) {
 
         ULocale locale = symbols.getULocale();
-        AffixPatternProvider patternInfo = new PropertiesAffixPatternProvider(properties);
+        AffixPatternProvider affixProvider;
+        if (properties.getCurrencyPluralInfo() == null) {
+            affixProvider = new PropertiesAffixPatternProvider(properties);
+        } else {
+            affixProvider = new CurrencyPluralInfoAffixProvider(properties.getCurrencyPluralInfo());
+        }
         Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
         boolean isStrict = properties.getParseMode() == ParseMode.STRICT;
         Grouper grouper = Grouper.forProperties(properties);
@@ -161,7 +167,7 @@ public class NumberParserImpl {
         if (grouper.getPrimary() <= 0) {
             parseFlags |= ParsingUtils.PARSE_FLAG_GROUPING_DISABLED;
         }
-        if (parseCurrency || patternInfo.hasCurrencySign()) {
+        if (parseCurrency || affixProvider.hasCurrencySign()) {
             parseFlags |= ParsingUtils.PARSE_FLAG_MONETARY_SEPARATORS;
         }
         IgnorablesMatcher ignorables = isStrict ? IgnorablesMatcher.STRICT : IgnorablesMatcher.DEFAULT;
@@ -179,13 +185,13 @@ public class NumberParserImpl {
         //////////////////////
 
         // Set up a pattern modifier with mostly defaults to generate AffixMatchers.
-        AffixMatcher.createMatchers(patternInfo, parser, factory, ignorables, parseFlags);
+        AffixMatcher.createMatchers(affixProvider, parser, factory, ignorables, parseFlags);
 
         ////////////////////////
         /// CURRENCY MATCHER ///
         ////////////////////////
 
-        if (parseCurrency || patternInfo.hasCurrencySign()) {
+        if (parseCurrency || affixProvider.hasCurrencySign()) {
             parser.addMatcher(CombinedCurrencyMatcher.getInstance(currency, symbols));
         }
 

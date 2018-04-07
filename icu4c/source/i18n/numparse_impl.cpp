@@ -81,12 +81,23 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
                                              const DecimalFormatSymbols& symbols, bool parseCurrency,
                                              UErrorCode& status) {
     Locale locale = symbols.getLocale();
-    PropertiesAffixPatternProvider patternInfo(properties, status);
+    PropertiesAffixPatternProvider localPAPP;
+    CurrencyPluralInfoAffixProvider localCPIAP;
+    AffixPatternProvider* affixProvider;
+    if (properties.currencyPluralInfo.fPtr.isNull()) {
+        localPAPP.setTo(properties, status);
+        affixProvider = &localPAPP;
+    } else {
+        localCPIAP.setTo(*properties.currencyPluralInfo.fPtr, status);
+        affixProvider = &localCPIAP;
+    }
+    if (affixProvider == nullptr || U_FAILURE(status)) { return nullptr; }
     CurrencyUnit currency = resolveCurrency(properties, locale, status);
     CurrencySymbols currencySymbols(currency, locale, symbols, status);
     bool isStrict = properties.parseMode.getOrDefault(PARSE_MODE_STRICT) == PARSE_MODE_STRICT;
     Grouper grouper = Grouper::forProperties(properties);
     int parseFlags = 0;
+    if (affixProvider == nullptr || U_FAILURE(status)) { return nullptr; }
     // Fraction grouping is disabled by default because it has never been supported in DecimalFormat
     parseFlags |= PARSE_FLAG_FRACTION_GROUPING_DISABLED;
     if (!properties.parseCaseSensitive) {
@@ -109,7 +120,7 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     if (grouper.getPrimary() <= 0) {
         parseFlags |= PARSE_FLAG_GROUPING_DISABLED;
     }
-    if (parseCurrency || patternInfo.hasCurrencySign()) {
+    if (parseCurrency || affixProvider->hasCurrencySign()) {
         parseFlags |= PARSE_FLAG_MONETARY_SEPARATORS;
     }
 
@@ -129,13 +140,13 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     parser->fLocalMatchers.affixTokenMatcherWarehouse = {&affixSetupData};
     parser->fLocalMatchers.affixMatcherWarehouse = {&parser->fLocalMatchers.affixTokenMatcherWarehouse};
     parser->fLocalMatchers.affixMatcherWarehouse.createAffixMatchers(
-            patternInfo, *parser, ignorables, parseFlags, status);
+            *affixProvider, *parser, ignorables, parseFlags, status);
 
     ////////////////////////
     /// CURRENCY MATCHER ///
     ////////////////////////
 
-    if (parseCurrency || patternInfo.hasCurrencySign()) {
+    if (parseCurrency || affixProvider->hasCurrencySign()) {
         parser->addMatcher(parser->fLocalMatchers.currency = {currencySymbols, symbols, status});
     }
 

@@ -40,6 +40,11 @@ bool SeriesMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCo
         } else if (success) {
             // Match succeeded, and this is NOT a flexible matcher. Proceed to the next matcher.
             it++;
+            // Small hack: if there is another matcher coming, do not accept trailing weak chars.
+            // Needed for proper handling of currency spacing.
+            if (it < end() && segment.getOffset() != result.charEnd && result.charEnd > matcherOffset) {
+                segment.setOffset(result.charEnd);
+            }
         } else if (isFlexible) {
             // Match failed, and this is a flexible matcher. Try again with the next matcher.
             it++;

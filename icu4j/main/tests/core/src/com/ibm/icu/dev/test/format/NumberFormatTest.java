@@ -5994,4 +5994,27 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("Should parse successfully", 0.08, percentage.doubleValue());
         assertEquals("Should consume whole string", 3, ppos.getIndex());
     }
+
+    @Test
+    public void testStrictParseCurrencyLongNames() {
+        DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(ULocale.ENGLISH, DecimalFormat.PLURALCURRENCYSTYLE);
+        df.setParseStrict(true);
+        df.setCurrency(Currency.getInstance("USD"));
+        double input = 514.23;
+        String formatted = df.format(input);
+        assertEquals("Should format as expected", "514.23 US dollars", formatted);
+        ParsePosition ppos = new ParsePosition(0);
+        CurrencyAmount ca = df.parseCurrency(formatted, ppos);
+        assertEquals("Should consume whole number", ppos.getIndex(), 17);
+        assertEquals("Number should round-trip", ca.getNumber().doubleValue(), input);
+        assertEquals("Should get correct currency", ca.getCurrency().getCurrencyCode(), "USD");
+    }
+
+    @Test
+    public void testStrictParseCurrencySpacing() {
+        DecimalFormat df = new DecimalFormat("¤ 0", DecimalFormatSymbols.getInstance(ULocale.ROOT));
+        df.setCurrency(Currency.getInstance("USD"));
+        df.setParseStrict(true);
+        expect2(df, -51.42, "-US$ 51.42");
+    }
 }
