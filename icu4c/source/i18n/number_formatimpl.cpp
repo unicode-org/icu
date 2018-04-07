@@ -233,7 +233,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         if (info.exists) {
             pattern = info.pattern;
             // It's clunky to clone an object here, but this code is not frequently executed.
-            DecimalFormatSymbols* symbols = new DecimalFormatSymbols(*fMicros.symbols);
+            auto* symbols = new DecimalFormatSymbols(*fMicros.symbols);
             fMicros.symbols = symbols;
             fSymbols.adoptInstead(symbols);
             symbols->setSymbol(

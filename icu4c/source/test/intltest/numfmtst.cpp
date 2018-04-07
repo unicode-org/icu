@@ -3804,13 +3804,13 @@ NumberFormatTest::TestMultiCurrencySign() {
         // currency format using currency ISO name, such as "USD",
         // currency format using plural name, such as "US dollars".
         // for US locale
-        {"en_US", "\\u00A4#,##0.00;-\\u00A4#,##0.00", "1234.56", "$1,234.56", "USD1,234.56", "US dollars1,234.56"},
-        {"en_US", "\\u00A4#,##0.00;-\\u00A4#,##0.00", "-1234.56", "-$1,234.56", "-USD1,234.56", "-US dollars1,234.56"},
-        {"en_US", "\\u00A4#,##0.00;-\\u00A4#,##0.00", "1", "$1.00", "USD1.00", "US dollars1.00"},
+        {"en_US", "\\u00A4#,##0.00;-\\u00A4#,##0.00", "1234.56", "$1,234.56", "USD\\u00A01,234.56", "US dollars\\u00A01,234.56"},
+        {"en_US", "\\u00A4#,##0.00;-\\u00A4#,##0.00", "-1234.56", "-$1,234.56", "-USD\\u00A01,234.56", "-US dollars\\u00A01,234.56"},
+        {"en_US", "\\u00A4#,##0.00;-\\u00A4#,##0.00", "1", "$1.00", "USD\\u00A01.00", "US dollars\\u00A01.00"},
         // for CHINA locale
-        {"zh_CN", "\\u00A4#,##0.00;(\\u00A4#,##0.00)", "1234.56", "\\uFFE51,234.56", "CNY1,234.56", "\\u4EBA\\u6C11\\u5E011,234.56"},
-        {"zh_CN", "\\u00A4#,##0.00;(\\u00A4#,##0.00)", "-1234.56", "(\\uFFE51,234.56)", "(CNY1,234.56)", "(\\u4EBA\\u6C11\\u5E011,234.56)"},
-        {"zh_CN", "\\u00A4#,##0.00;(\\u00A4#,##0.00)", "1", "\\uFFE51.00", "CNY1.00", "\\u4EBA\\u6C11\\u5E011.00"}
+        {"zh_CN", "\\u00A4#,##0.00;(\\u00A4#,##0.00)", "1234.56", "\\uFFE51,234.56", "CNY\\u00A01,234.56", "\\u4EBA\\u6C11\\u5E01\\u00A01,234.56"},
+        {"zh_CN", "\\u00A4#,##0.00;(\\u00A4#,##0.00)", "-1234.56", "(\\uFFE51,234.56)", "(CNY\\u00A01,234.56)", "(\\u4EBA\\u6C11\\u5E01\\u00A01,234.56)"},
+        {"zh_CN", "\\u00A4#,##0.00;(\\u00A4#,##0.00)", "1", "\\uFFE51.00", "CNY\\u00A01.00", "\\u4EBA\\u6C11\\u5E01\\u00A01.00"}
     };
 
     const UChar doubleCurrencySign[] = {0xA4, 0xA4, 0};
@@ -3896,7 +3896,7 @@ NumberFormatTest::TestCurrencyFormatForMixParsing() {
         "$1,234.56",  // string to be parsed
         "USD1,234.56",
         "US dollars1,234.56",
-        "1,234.56 US dollars"
+        "1,234.56 US dollars" // NOTE: Fails in 62 because currency format is not compatible with pattern
     };
     const CurrencyAmount* curramt = NULL;
     for (uint32_t i = 0; i < UPRV_LENGTHOF(formats); ++i) {
@@ -3949,10 +3949,10 @@ NumberFormatTest::TestDecimalFormatCurrencyParse() {
         // string to be parsed, the parsed result (number)
         {"$1.00", "1"},
         {"USD1.00", "1"},
-        {"1.00 US dollar", "1"},
+        {"1.00 US dollar", "1"}, // NOTE: Fails in 62 because currency format is not compatible with pattern
         {"$1,234.56", "1234.56"},
         {"USD1,234.56", "1234.56"},
-        {"1,234.56 US dollar", "1234.56"},
+        {"1,234.56 US dollar", "1234.56"}, // NOTE: Fails in 62 because currency format is not compatible with pattern
     };
     for (uint32_t i = 0; i < UPRV_LENGTHOF(DATA); ++i) {
         UnicodeString stringToBeParsed = ctou(DATA[i][0]);
@@ -3960,6 +3960,7 @@ NumberFormatTest::TestDecimalFormatCurrencyParse() {
         UErrorCode status = U_ZERO_ERROR;
         Formattable result;
         fmt->parse(stringToBeParsed, result, status);
+        logln((UnicodeString)"Input: " + stringToBeParsed + "; output: " + result.getDouble(status));
         if (U_FAILURE(status) ||
             (result.getType() == Formattable::kDouble &&
             result.getDouble() != parsedResult) ||
@@ -3983,13 +3984,13 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
         // format result using ISOCURRENCYSTYLE,
         // format result using PLURALCURRENCYSTYLE,
 
-        {"en_US", "1", "USD", "$1.00", "USD1.00", "1.00 US dollars"},
-        {"en_US", "1234.56", "USD", "$1,234.56", "USD1,234.56", "1,234.56 US dollars"},
-        {"en_US", "-1234.56", "USD", "-$1,234.56", "-USD1,234.56", "-1,234.56 US dollars"},
-        {"zh_CN", "1", "USD", "US$1.00", "USD1.00", "1.00\\u7F8E\\u5143"},
-        {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD1,234.56", "1,234.56\\u7F8E\\u5143"},
-        {"zh_CN", "1", "CNY", "\\uFFE51.00", "CNY1.00", "1.00\\u4EBA\\u6C11\\u5E01"},
-        {"zh_CN", "1234.56", "CNY", "\\uFFE51,234.56", "CNY1,234.56", "1,234.56\\u4EBA\\u6C11\\u5E01"},
+        {"en_US", "1", "USD", "$1.00", "USD\\u00A01.00", "1.00 US dollars"},
+        {"en_US", "1234.56", "USD", "$1,234.56", "USD\\u00A01,234.56", "1,234.56 US dollars"},
+        {"en_US", "-1234.56", "USD", "-$1,234.56", "-USD\\u00A01,234.56", "-1,234.56 US dollars"},
+        {"zh_CN", "1", "USD", "US$1.00", "USD\\u00A01.00", "1.00\\u7F8E\\u5143"},
+        {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD\\u00A01,234.56", "1,234.56\\u7F8E\\u5143"},
+        {"zh_CN", "1", "CNY", "\\uFFE51.00", "CNY\\u00A01.00", "1.00\\u4EBA\\u6C11\\u5E01"},
+        {"zh_CN", "1234.56", "CNY", "\\uFFE51,234.56", "CNY\\u00A01,234.56", "1,234.56\\u4EBA\\u6C11\\u5E01"},
         {"ru_RU", "1", "RUB", "1,00\\u00A0\\u20BD", "1,00\\u00A0RUB", "1,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E \\u0440\\u0443\\u0431\\u043B\\u044F"},
         {"ru_RU", "2", "RUB", "2,00\\u00A0\\u20BD", "2,00\\u00A0RUB", "2,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E \\u0440\\u0443\\u0431\\u043B\\u044F"},
         {"ru_RU", "5", "RUB", "5,00\\u00A0\\u20BD", "5,00\\u00A0RUB", "5,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E \\u0440\\u0443\\u0431\\u043B\\u044F"},
@@ -4005,12 +4006,14 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
     };
 
     for (int32_t i=0; i<UPRV_LENGTHOF(DATA); ++i) {
+      const char* localeString = DATA[i][0];
+      double numberToBeFormat = atof(DATA[i][1]);
+      const char* currencyISOCode = DATA[i][2];
+      logln(UnicodeString(u"Locale: ") + localeString + "; amount: " + numberToBeFormat);
+      Locale locale(localeString);
       for (int32_t kIndex = 0; kIndex < UPRV_LENGTHOF(currencyStyles); ++kIndex) {
         UNumberFormatStyle k = currencyStyles[kIndex];
-        const char* localeString = DATA[i][0];
-        double numberToBeFormat = atof(DATA[i][1]);
-        const char* currencyISOCode = DATA[i][2];
-        Locale locale(localeString);
+        logln(UnicodeString(u"UNumberFormatStyle: ") + k);
         UErrorCode status = U_ZERO_ERROR;
         NumberFormat* numFmt = NumberFormat::createInstance(locale, k, status);
         if (U_FAILURE(status)) {
