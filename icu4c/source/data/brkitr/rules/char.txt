@@ -46,7 +46,6 @@ $Extended_Pict = [:ExtPict:];
 ## -------------------------------------------------
 !!chain;
 !!lookAheadHardBreak;
-!!forward;
 
 $CR $LF;
 
@@ -75,8 +74,3 @@ $Extended_Pict $Extend* $ZWJ $Extended_Pict;
 # GB 999 Match a single code point if no other rule applies.
 .;
 
-## -------------------------------------------------
-
-!!safe_reverse;
-$Regional_Indicator $Regional_Indicator;
-($Extend | $ZWJ | $Extended_Pict)+ .;

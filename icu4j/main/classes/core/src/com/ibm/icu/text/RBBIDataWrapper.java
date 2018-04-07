@@ -177,25 +177,13 @@ public final class RBBIDataWrapper {
      */
     @Deprecated
     public RBBIStateTable   fRTable;
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public RBBIStateTable   fSFTable;
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public RBBIStateTable   fSRTable;
 
     Trie2          fTrie;
     String         fRuleSource;
     int            fStatusTable[];
 
     static final int DATA_FORMAT = 0x42726b20;     // "Brk "
-    static final int FORMAT_VERSION = 0x04000000;  // 4.0.0.0
+    static final int FORMAT_VERSION = 0x05000000;  // 4.0.0.0
 
     private static final class IsAcceptable implements Authenticate {
         @Override
@@ -210,7 +198,7 @@ public final class RBBIDataWrapper {
     // Indexes to fields in the ICU4C style binary form of the RBBI Data Header
     //   Used by the rule compiler when flattening the data.
     //
-    final static int    DH_SIZE           = 24;
+    final static int    DH_SIZE           = 20;
     final static int    DH_MAGIC          = 0;
     final static int    DH_FORMATVERSION  = 1;
     final static int    DH_LENGTH         = 2;
@@ -219,16 +207,12 @@ public final class RBBIDataWrapper {
     final static int    DH_FTABLELEN      = 5;
     final static int    DH_RTABLE         = 6;
     final static int    DH_RTABLELEN      = 7;
-    final static int    DH_SFTABLE        = 8;
-    final static int    DH_SFTABLELEN     = 9;
-    final static int    DH_SRTABLE        = 10;
-    final static int    DH_SRTABLELEN     = 11;
-    final static int    DH_TRIE           = 12;
-    final static int    DH_TRIELEN        = 13;
-    final static int    DH_RULESOURCE     = 14;
-    final static int    DH_RULESOURCELEN  = 15;
-    final static int    DH_STATUSTABLE    = 16;
-    final static int    DH_STATUSTABLELEN = 17;
+    final static int    DH_TRIE           = 8;
+    final static int    DH_TRIELEN        = 9;
+    final static int    DH_RULESOURCE     = 10;
+    final static int    DH_RULESOURCELEN  = 11;
+    final static int    DH_STATUSTABLE    = 12;
+    final static int    DH_STATUSTABLELEN = 13;
 
 
     // Index offsets to the fields in a state table row.
@@ -299,10 +283,6 @@ public final class RBBIDataWrapper {
         int         fFTableLen;
         int         fRTable;         //  Offset to the reverse state transition table.
         int         fRTableLen;
-        int         fSFTable;        //  safe point forward transition table
-        int         fSFTableLen;
-        int         fSRTable;        //  safe point reverse transition table
-        int         fSRTableLen;
         int         fTrie;           //  Offset to Trie data for character categories
         int         fTrieLen;
         int         fRuleSource;     //  Offset to the source for for the break
@@ -358,10 +338,6 @@ public final class RBBIDataWrapper {
         This.fHeader.fFTableLen      = bytes.getInt();
         This.fHeader.fRTable         = bytes.getInt();
         This.fHeader.fRTableLen      = bytes.getInt();
-        This.fHeader.fSFTable        = bytes.getInt();
-        This.fHeader.fSFTableLen     = bytes.getInt();
-        This.fHeader.fSRTable        = bytes.getInt();
-        This.fHeader.fSRTableLen     = bytes.getInt();
         This.fHeader.fTrie           = bytes.getInt();
         This.fHeader.fTrieLen        = bytes.getInt();
         This.fHeader.fRuleSource     = bytes.getInt();
@@ -376,7 +352,7 @@ public final class RBBIDataWrapper {
         }
 
         // Current position in the buffer.
-        int pos = 24 * 4;     // offset of end of header, which has 24 fields, all int32_t (4 bytes)
+        int pos = DH_SIZE * 4;     // offset of end of header, which has DH_SIZE fields, all int32_t (4 bytes)
 
         //
         // Read in the Forward state transition table as an array of shorts.
@@ -405,41 +381,6 @@ public final class RBBIDataWrapper {
         // Create & fill the table itself.
         This.fRTable = RBBIStateTable.get(bytes, This.fHeader.fRTableLen);
         pos += This.fHeader.fRTableLen;
-
-        //
-        // Read in the Safe Forward state table
-        //
-        if (This.fHeader.fSFTableLen > 0) {
-            // Skip over any padding in the file
-            ICUBinary.skipBytes(bytes, This.fHeader.fSFTable - pos);
-            pos = This.fHeader.fSFTable;
-
-            // Create & fill the table itself.
-            This.fSFTable = RBBIStateTable.get(bytes, This.fHeader.fSFTableLen);
-            pos += This.fHeader.fSFTableLen;
-        }
-
-        //
-        // Read in the Safe Reverse state table
-        //
-        if (This.fHeader.fSRTableLen > 0) {
-            // Skip over any padding in the file
-            ICUBinary.skipBytes(bytes, This.fHeader.fSRTable - pos);
-            pos = This.fHeader.fSRTable;
-
-            // Create & fill the table itself.
-            This.fSRTable = RBBIStateTable.get(bytes, This.fHeader.fSRTableLen);
-            pos += This.fHeader.fSRTableLen;
-        }
-
-        // Rule Compatibility Hacks
-        //    If a rule set includes reverse rules but does not explicitly include safe reverse rules,
-        //    the reverse rules are to be treated as safe reverse rules.
-
-        if (This.fSRTable == null && This.fRTable != null) {
-            This.fSRTable = This.fRTable;
-            This.fRTable = null;
-        }
 
         //
         // Unserialize the Character categories TRIE
@@ -512,10 +453,6 @@ public final class RBBIDataWrapper {
         dumpTable(out, fFTable);
         out.println("Reverse State Table");
         dumpTable(out, fRTable);
-        out.println("Forward Safe Points Table");
-        dumpTable(out, fSFTable);
-        out.println("Reverse Safe Points Table");
-        dumpTable(out, fSRTable);
 
         dumpCharCategories(out);
         out.println("Source Rules: " + fRuleSource);

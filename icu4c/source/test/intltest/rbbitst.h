@@ -17,6 +17,8 @@
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
+#include <memory>
+
 #include "intltest.h"
 #include "unicode/brkiter.h"
 #include "unicode/rbbi.h"
@@ -77,6 +79,8 @@ public:
     void TestBug12677();
     void TestTableRedundancies();
     void TestBug13447();
+    void TestReverse();
+    void TestReverse(std::unique_ptr<RuleBasedBreakIterator>bi);
 
     void TestDebug();
     void TestProperties();

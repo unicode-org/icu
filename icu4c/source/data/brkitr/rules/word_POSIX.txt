@@ -92,9 +92,6 @@ $IdeographicEx  = $Ideographic  ($Extend |  $Format | $ZWJ)*;
 
 ## -------------------------------------------------
 
-!!forward;
-
-
 # Rule 3 - CR x LF
 #
 $CR $LF;
@@ -188,27 +185,3 @@ $KanaKanji $KanaKanji {400}; # different rule status if both kana and kanji foun
 # Rule 999
 #     Match a single code point if no other rule applies.
 .;
-
-
-## -------------------------------------------------
-
-!!safe_reverse;
-
-# rule 3
-($Extend | $Format | $ZWJ)+ .?;
-
-# rule 6
-($MidLetter | $MidNumLet | $Single_Quote) ($Format | $Extend | $ZWJ)* ($Hebrew_Letter | $ALetterPlus);
-
-# rule 7b
-$Double_Quote ($Format | $Extend | $ZWJ)* $Hebrew_Letter;
-
-
-# rule 11
-($MidNum | $MidNumLet | $Single_Quote) ($Format | $Extend | $ZWJ)* $Numeric;
-
-# rule 13c
-$Regional_Indicator ($Format | $Extend | $ZWJ)* $Regional_Indicator;
-
-# For dictionary-based break
-$dictionary $dictionary;

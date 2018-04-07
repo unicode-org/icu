@@ -39,7 +39,9 @@
 
 #   Temp debugging tests
 #
-
+<word>
+<data>•
+•</data>
 
 ## FILTERED BREAK TESTS
 
@@ -1370,7 +1372,7 @@ Bangkok)•</data>
 <rules>
 !!forward;
     Hello\ World;
-!!reverse;
+!!safe_reverse;
     .*;
 </rules>
 <data>•Hello World•</data>
@@ -1379,7 +1381,7 @@ Bangkok)•</data>
 !!quoted_literals_only;
 !!forward;
     Hello\ World;
-!!reverse;
+!!safe_reverse;
     .*;
 </badrules>
 
@@ -1387,7 +1389,7 @@ Bangkok)•</data>
 !!quoted_literals_only;
 !!forward;
     'Hello World';
-!!reverse;
+!!safe_reverse;
     .*;
 </rules>
 <data>•Hello World•</data>
@@ -1399,7 +1401,7 @@ Bangkok)•</data>
 <rules>
 !!forward;
 .;
-!!reverse;
+!!safe_reverse;
 .*;
 </rules>
 <data>•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•a•</data>
