@@ -113,6 +113,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestTableRedundancies);
     TESTCASE_AUTO(TestBug13447);
     TESTCASE_AUTO(TestReverse);
+    TESTCASE_AUTO(TestBug13692);
     TESTCASE_AUTO_END;
 }
 
@@ -4543,6 +4544,24 @@ void RBBITest::TestReverse(std::unique_ptr<RuleBasedBreakIterator>bi) {
     }
 }
 
+
+// Ticket 13692 - finding word boundaries in very large numbers or words could
+//                be very time consuming. When the problem was present, this void test
+//                would run more than fifteen minutes, which is to say, the failure was noticeale.
+
+void RBBITest::TestBug13692() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<RuleBasedBreakIterator> bi ((RuleBasedBreakIterator *)
+            BreakIterator::createWordInstance(Locale::getEnglish(), status), status);
+    constexpr int32_t LENGTH = 1000000;
+    UnicodeString longNumber(LENGTH, (UChar32)u'3', LENGTH);
+    for (int i=0; i<20; i+=2) {
+        longNumber.setCharAt(i, u' ');
+    }
+    bi->setText(longNumber);
+    assertFalse(WHERE, bi->isBoundary(LENGTH-5));
+    assertSuccess(WHERE, status);
+}
 
 //
 //  TestDebug    -  A place-holder test for debugging purposes.
