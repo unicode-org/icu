@@ -265,6 +265,7 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
 
     if (exportedProperties != nullptr) {
 
+        exportedProperties->currency = currency;
         exportedProperties->roundingMode = roundingMode;
         exportedProperties->minimumIntegerDigits = minInt;
         exportedProperties->maximumIntegerDigits = maxInt == -1 ? INT32_MAX : maxInt;

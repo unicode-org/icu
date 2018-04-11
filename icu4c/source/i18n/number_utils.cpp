@@ -104,18 +104,20 @@ void DecNum::_setTo(const char* str, int32_t maxDigits, UErrorCode& status) {
     static_assert(DECDPUN == 1, "Assumes that DECDPUN is set to 1");
     uprv_decNumberFromString(fData.getAlias(), str, &fContext);
 
-    // For consistency with Java BigDecimal, no support for DecNum that is NaN or Infinity!
-    if (decNumberIsSpecial(fData.getAlias())) {
+    // Check for invalid syntax and set the corresponding error code.
+    if ((fContext.status & DEC_Conversion_syntax) != 0) {
+        status = U_DECIMAL_NUMBER_SYNTAX_ERROR;
+        return;
+    } else if (fContext.status != 0) {
+        // Not a syntax error, but some other error, like an exponent that is too large.
         status = U_UNSUPPORTED_ERROR;
         return;
     }
 
-    // Check for invalid syntax and set the corresponding error code.
-    if ((fContext.status & DEC_Conversion_syntax) != 0) {
-        status = U_DECIMAL_NUMBER_SYNTAX_ERROR;
-    } else if (fContext.status != 0) {
-        // Not a syntax error, but some other error, like an exponent that is too large.
+    // For consistency with Java BigDecimal, no support for DecNum that is NaN or Infinity!
+    if (decNumberIsSpecial(fData.getAlias())) {
         status = U_UNSUPPORTED_ERROR;
+        return;
     }
 }
 

@@ -5450,8 +5450,8 @@ public class NumberFormatTest extends TestFmwk {
 
     @Test
     public void testGetSetCurrency() {
-        DecimalFormat df = new DecimalFormat("¤#");
-        assertEquals("Currency should start out null", null, df.getCurrency());
+        DecimalFormat df = new DecimalFormat("¤#", DecimalFormatSymbols.getInstance(ULocale.US));
+        assertEquals("Currency should start out as the locale default", Currency.getInstance("USD"), df.getCurrency());
         Currency curr = Currency.getInstance("EUR");
         df.setCurrency(curr);
         assertEquals("Currency should equal EUR after set", curr, df.getCurrency());

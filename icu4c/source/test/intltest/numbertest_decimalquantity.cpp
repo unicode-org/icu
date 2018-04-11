@@ -105,18 +105,18 @@ void DecimalQuantityTest::testSwitchStorage() {
 
     fq.setToLong(1234123412341234L);
     assertFalse("Should not be using byte array", fq.isUsingBytes());
-    assertEquals("Failed on initialize", u"1234123412341234E0", fq.toNumberString());
+    assertEquals("Failed on initialize", u"1.234123412341234E+15", fq.toScientificString());
     assertHealth(fq);
     // Long -> Bytes
     fq.appendDigit(5, 0, true);
     assertTrue("Should be using byte array", fq.isUsingBytes());
-    assertEquals("Failed on multiply", u"12341234123412345E0", fq.toNumberString());
+    assertEquals("Failed on multiply", u"1.2341234123412345E+16", fq.toScientificString());
     assertHealth(fq);
     // Bytes -> Long
     fq.roundToMagnitude(5, RoundingMode::UNUM_ROUND_HALFEVEN, status);
     assertSuccess("Rounding to magnitude", status);
     assertFalse("Should not be using byte array", fq.isUsingBytes());
-    assertEquals("Failed on round", u"123412341234E5", fq.toNumberString());
+    assertEquals("Failed on round", u"1.23412341234E+16", fq.toScientificString());
     assertHealth(fq);
 }
 
@@ -170,50 +170,46 @@ void DecimalQuantityTest::testCopyMove() {
 void DecimalQuantityTest::testAppend() {
     DecimalQuantity fq;
     fq.appendDigit(1, 0, true);
-    assertEquals("Failed on append", u"1E0", fq.toNumberString());
+    assertEquals("Failed on append", u"1E+0", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(2, 0, true);
-    assertEquals("Failed on append", u"12E0", fq.toNumberString());
+    assertEquals("Failed on append", u"1.2E+1", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(3, 1, true);
-    assertEquals("Failed on append", u"1203E0", fq.toNumberString());
+    assertEquals("Failed on append", u"1.203E+3", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(0, 1, true);
-    assertEquals("Failed on append", u"1203E2", fq.toNumberString());
+    assertEquals("Failed on append", u"1.203E+5", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(4, 0, true);
-    assertEquals("Failed on append", u"1203004E0", fq.toNumberString());
+    assertEquals("Failed on append", u"1.203004E+6", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(0, 0, true);
-    assertEquals("Failed on append", u"1203004E1", fq.toNumberString());
+    assertEquals("Failed on append", u"1.203004E+7", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(5, 0, false);
-    assertEquals("Failed on append", u"120300405E-1", fq.toNumberString());
+    assertEquals("Failed on append", u"1.20300405E+7", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(6, 0, false);
-    assertEquals("Failed on append", u"1203004056E-2", fq.toNumberString());
+    assertEquals("Failed on append", u"1.203004056E+7", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(7, 3, false);
-    assertEquals("Failed on append", u"12030040560007E-6", fq.toNumberString());
+    assertEquals("Failed on append", u"1.2030040560007E+7", fq.toScientificString());
     assertHealth(fq);
-    UnicodeString baseExpected(u"12030040560007");
+    UnicodeString baseExpected(u"1.2030040560007");
     for (int i = 0; i < 10; i++) {
         fq.appendDigit(8, 0, false);
         baseExpected.append(u'8');
         UnicodeString expected(baseExpected);
-        expected.append(u"E-");
-        if (i >= 3) {
-            expected.append(u'1');
-        }
-        expected.append(((7 + i) % 10) + u'0');
-        assertEquals("Failed on append", expected, fq.toNumberString());
+        expected.append(u"E+7");
+        assertEquals("Failed on append", expected, fq.toScientificString());
         assertHealth(fq);
     }
     fq.appendDigit(9, 2, false);
     baseExpected.append(u"009");
     UnicodeString expected(baseExpected);
-    expected.append(u"E-19");
-    assertEquals("Failed on append", expected, fq.toNumberString());
+    expected.append(u"E+7");
+    assertEquals("Failed on append", expected, fq.toScientificString());
     assertHealth(fq);
 }
 

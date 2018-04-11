@@ -459,7 +459,7 @@ void NumberStringBuilder::populateFieldPosition(FieldPosition &fp, int32_t offse
 
 void NumberStringBuilder::populateFieldPositionIterator(FieldPositionIterator &fpi, UErrorCode &status) const {
     // TODO: Set an initial capacity on uvec?
-    LocalPointer <UVector32> uvec(new UVector32(status));
+    LocalPointer <UVector32> uvec(new UVector32(status), status);
     if (U_FAILURE(status)) {
         return;
     }

@@ -38,9 +38,6 @@ static constexpr RoundingMode kDefaultMode = RoundingMode::UNUM_FOUND_HALFEVEN;
 // ICU4J Equivalent: Padder.FALLBACK_PADDING_STRING
 static constexpr char16_t kFallbackPaddingString[] = u" ";
 
-// ICU4J Equivalent: NumberFormatterImpl.DEFAULT_CURRENCY
-static constexpr char16_t kDefaultCurrency[] = u"XXX";
-
 // Forward declarations:
 
 class Modifier;
