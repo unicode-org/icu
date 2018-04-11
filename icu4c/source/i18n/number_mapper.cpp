@@ -67,7 +67,7 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
         warehouse.propertiesAPP.setTo(properties, status);
         affixProvider = &warehouse.propertiesAPP;
     } else {
-        warehouse.currencyPluralInfoAPP.setTo(*properties.currencyPluralInfo.fPtr, status);
+        warehouse.currencyPluralInfoAPP.setTo(*properties.currencyPluralInfo.fPtr, properties, status);
         warehouse.propertiesAPP.setToBogus();
         affixProvider = &warehouse.currencyPluralInfoAPP;
     }
@@ -434,17 +434,23 @@ bool PropertiesAffixPatternProvider::hasBody() const {
 }
 
 
-void CurrencyPluralInfoAffixProvider::setTo(const CurrencyPluralInfo& cpi, UErrorCode& status) {
+void CurrencyPluralInfoAffixProvider::setTo(const CurrencyPluralInfo& cpi,
+                                            const DecimalFormatProperties& properties,
+                                            UErrorCode& status) {
+    // We need to use a PropertiesAffixPatternProvider, not the simpler version ParsedPatternInfo,
+    // because user-specified affix overrides still need to work.
     fBogus = false;
+    DecimalFormatProperties pluralProperties(properties);
     for (int32_t plural = 0; plural < StandardPlural::COUNT; plural++) {
         const char* keyword = StandardPlural::getKeyword(static_cast<StandardPlural::Form>(plural));
         UnicodeString patternString;
         patternString = cpi.getCurrencyPluralPattern(keyword, patternString);
-        // ParsedPatternInfo does not support being overwritten if it was written previously;
-        // instead, we need to write to a fresh instance and move it into place.
-        ParsedPatternInfo temp;
-        PatternParser::parseToPatternInfo(patternString, temp, status);
-        affixesByPlural[plural] = std::move(temp);
+        PatternParser::parseToExistingProperties(
+                patternString,
+                pluralProperties,
+                IGNORE_ROUNDING_NEVER,
+                status);
+        affixesByPlural[plural].setTo(pluralProperties, status);
     }
 }
 

@@ -88,7 +88,7 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
         localPAPP.setTo(properties, status);
         affixProvider = &localPAPP;
     } else {
-        localCPIAP.setTo(*properties.currencyPluralInfo.fPtr, status);
+        localCPIAP.setTo(*properties.currencyPluralInfo.fPtr, properties, status);
         affixProvider = &localCPIAP;
     }
     if (affixProvider == nullptr || U_FAILURE(status)) { return nullptr; }

@@ -6027,4 +6027,14 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("Should fail to parse", 0, ppos.getIndex());
         assertEquals("Should fail to parse", 0, ppos.getErrorIndex());
     }
+
+    @Test
+    public void testCurrencyPluralAffixOverrides() {
+        // The affix setters should override CurrencyPluralInfo, used in the plural currency constructor.
+        DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(ULocale.ENGLISH, NumberFormat.PLURALCURRENCYSTYLE);
+        df.setCurrency(Currency.getInstance("USD"));
+        df.setPositiveSuffix("lala");
+        assertEquals("Custom suffix should round-trip", "lala", df.getPositiveSuffix());
+        assertEquals("Custom suffix should be used in formatting", "123.00lala", df.format(123));
+    }
 }

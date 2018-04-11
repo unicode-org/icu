@@ -139,7 +139,7 @@ public class NumberParserImpl {
         if (properties.getCurrencyPluralInfo() == null) {
             affixProvider = new PropertiesAffixPatternProvider(properties);
         } else {
-            affixProvider = new CurrencyPluralInfoAffixProvider(properties.getCurrencyPluralInfo());
+            affixProvider = new CurrencyPluralInfoAffixProvider(properties.getCurrencyPluralInfo(), properties);
         }
         Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
         boolean isStrict = properties.getParseMode() == ParseMode.STRICT;
