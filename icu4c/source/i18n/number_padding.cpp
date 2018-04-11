@@ -16,8 +16,6 @@ using namespace icu::number::impl;
 
 namespace {
 
-static UChar32 kFallbackPadChar = 0x0020;
-
 int32_t
 addPaddingHelper(UChar32 paddingCp, int32_t requiredPadding, NumberStringBuilder &string, int32_t index,
                  UErrorCode &status) {
@@ -55,7 +53,7 @@ Padder Padder::forProperties(const DecimalFormatProperties& properties) {
     if (properties.padString.length() > 0) {
         padCp = properties.padString.char32At(0);
     } else {
-        padCp = kFallbackPadChar;
+        padCp = kFallbackPaddingString[0];
     }
     return {padCp, properties.formatWidth, properties.padPosition.getOrDefault(UNUM_PAD_BEFORE_PREFIX)};
 }

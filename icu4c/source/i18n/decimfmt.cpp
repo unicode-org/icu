@@ -564,7 +564,7 @@ void DecimalFormat::setCurrencyPluralInfo(const CurrencyPluralInfo& info) {
 
 UnicodeString& DecimalFormat::getPositivePrefix(UnicodeString& result) const {
     ErrorCode localStatus;
-    result = fFormatter->formatInt(1, localStatus).getPrefix(localStatus);
+    fFormatter->getAffix(true, false, result, localStatus);
     return result;
 }
 
@@ -575,7 +575,7 @@ void DecimalFormat::setPositivePrefix(const UnicodeString& newValue) {
 
 UnicodeString& DecimalFormat::getNegativePrefix(UnicodeString& result) const {
     ErrorCode localStatus;
-    result = fFormatter->formatInt(-1, localStatus).getPrefix(localStatus);
+    fFormatter->getAffix(true, true, result, localStatus);
     return result;
 }
 
@@ -586,7 +586,7 @@ void DecimalFormat::setNegativePrefix(const UnicodeString& newValue) {
 
 UnicodeString& DecimalFormat::getPositiveSuffix(UnicodeString& result) const {
     ErrorCode localStatus;
-    result = fFormatter->formatInt(1, localStatus).getSuffix(localStatus);
+    fFormatter->getAffix(false, false, result, localStatus);
     return result;
 }
 
@@ -597,7 +597,7 @@ void DecimalFormat::setPositiveSuffix(const UnicodeString& newValue) {
 
 UnicodeString& DecimalFormat::getNegativeSuffix(UnicodeString& result) const {
     ErrorCode localStatus;
-    result = fFormatter->formatInt(-1, localStatus).getSuffix(localStatus);
+    fFormatter->getAffix(false, true, result, localStatus);
     return result;
 }
 
@@ -682,7 +682,12 @@ void DecimalFormat::setFormatWidth(int32_t width) {
 }
 
 UnicodeString DecimalFormat::getPadCharacterString() const {
-    return fProperties->padString;
+    if (fProperties->padString.isBogus()) {
+        // Readonly-alias the static string kFallbackPaddingString
+        return {TRUE, kFallbackPaddingString, -1};
+    } else {
+        return fProperties->padString;
+    }
 }
 
 void DecimalFormat::setPadCharacter(const UnicodeString& padChar) {

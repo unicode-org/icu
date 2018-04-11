@@ -137,6 +137,12 @@ void NumberFormatterImpl::applyStatic(const MacroProps& macros, DecimalQuantity&
     impl.applyUnsafe(inValue, outString, status);
 }
 
+int32_t NumberFormatterImpl::getPrefixSuffix(const MacroProps& macros, DecimalQuantity& inValue,
+                                             NumberStringBuilder& outString, UErrorCode& status) {
+    NumberFormatterImpl impl(macros, false, status);
+    return impl.getPrefixSuffixUnsafe(inValue, outString, status);
+}
+
 // NOTE: C++ SPECIFIC DIFFERENCE FROM JAVA:
 // The "safe" apply method uses a new MicroProps. In the MicroPropsGenerator, fMicros is copied into the new instance.
 // The "unsafe" method simply re-uses fMicros, eliminating the extra copy operation.
@@ -157,6 +163,18 @@ void NumberFormatterImpl::applyUnsafe(DecimalQuantity& inValue, NumberStringBuil
     fMicroPropsGenerator->processQuantity(inValue, fMicros, status);
     if (U_FAILURE(status)) { return; }
     microsToString(fMicros, inValue, outString, status);
+}
+
+int32_t
+NumberFormatterImpl::getPrefixSuffixUnsafe(DecimalQuantity& inValue, NumberStringBuilder& outString,
+                                           UErrorCode& status) {
+    if (U_FAILURE(status)) { return 0; }
+    fMicroPropsGenerator->processQuantity(inValue, fMicros, status);
+    if (U_FAILURE(status)) { return 0; }
+    // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle).
+    fMicros.modMiddle->apply(outString, 0, 0, status);
+    if (U_FAILURE(status)) { return 0; }
+    return fMicros.modMiddle->getPrefixLength(status);
 }
 
 NumberFormatterImpl::NumberFormatterImpl(const MacroProps& macros, bool safe, UErrorCode& status) {

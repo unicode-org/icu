@@ -677,6 +677,24 @@ void LocalizedNumberFormatter::formatImpl(impl::UFormattedNumberData* results, U
     }
 }
 
+void LocalizedNumberFormatter::getAffix(bool isPrefix, bool isNegative, UnicodeString& result,
+                                        UErrorCode& status) const {
+    NumberStringBuilder nsb;
+    DecimalQuantity dq;
+    if (isNegative) {
+        dq.setToInt(-1);
+    } else {
+        dq.setToInt(1);
+    }
+    int prefixLength = NumberFormatterImpl::getPrefixSuffix(fMacros, dq, nsb, status);
+    result.remove();
+    if (isPrefix) {
+        result.append(nsb.toTempUnicodeString().tempSubStringBetween(0, prefixLength));
+    } else {
+        result.append(nsb.toTempUnicodeString().tempSubStringBetween(prefixLength, nsb.length()));
+    }
+}
+
 const impl::NumberFormatterImpl* LocalizedNumberFormatter::getCompiled() const {
     return fCompiled;
 }
@@ -729,24 +747,6 @@ void FormattedNumber::getDecimalQuantity(DecimalQuantity& output, UErrorCode& st
         return;
     }
     output = fResults->quantity;
-}
-
-const UnicodeString FormattedNumber::getPrefix(UErrorCode& status) const {
-    if (fResults == nullptr) {
-        status = fErrorCode;
-        return {};
-    }
-    // FIXME
-    return {};
-}
-
-const UnicodeString FormattedNumber::getSuffix(UErrorCode& status) const {
-    if (fResults == nullptr) {
-        status = fErrorCode;
-        return {};
-    }
-    // FIXME
-    return {};
 }
 
 FormattedNumber::~FormattedNumber() {

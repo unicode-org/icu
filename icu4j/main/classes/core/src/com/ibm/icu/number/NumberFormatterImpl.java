@@ -48,14 +48,30 @@ class NumberFormatterImpl {
     /**
      * Builds and evaluates an "unsafe" MicroPropsGenerator, which is cheaper but can be used only once.
      */
-    public static MicroProps applyStatic(
+    public static void applyStatic(
             MacroProps macros,
             DecimalQuantity inValue,
             NumberStringBuilder outString) {
         MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, false);
         MicroProps micros = microPropsGenerator.processQuantity(inValue);
         microsToString(micros, inValue, outString);
-        return micros;
+    }
+
+    /**
+     * Prints only the prefix and suffix; used for DecimalFormat getters.
+     *
+     * @return The index into the output at which the prefix ends and the suffix starts; in other words,
+     *         the prefix length.
+     */
+    public static int getPrefixSuffix(
+            MacroProps macros,
+            DecimalQuantity inValue,
+            NumberStringBuilder output) {
+        MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, false);
+        MicroProps micros = microPropsGenerator.processQuantity(inValue);
+        // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle).
+        micros.modMiddle.apply(output, 0, 0);
+        return micros.modMiddle.getPrefixLength();
     }
 
     private static final Currency DEFAULT_CURRENCY = Currency.getInstance("XXX");
@@ -66,10 +82,9 @@ class NumberFormatterImpl {
         this.microPropsGenerator = microPropsGenerator;
     }
 
-    public MicroProps apply(DecimalQuantity inValue, NumberStringBuilder outString) {
+    public void apply(DecimalQuantity inValue, NumberStringBuilder outString) {
         MicroProps micros = microPropsGenerator.processQuantity(inValue);
         microsToString(micros, inValue, outString);
-        return micros;
     }
 
     //////////
