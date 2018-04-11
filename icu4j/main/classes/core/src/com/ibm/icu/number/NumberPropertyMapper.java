@@ -102,7 +102,7 @@ final class NumberPropertyMapper {
         if (properties.getCurrencyPluralInfo() == null) {
             affixProvider = new PropertiesAffixPatternProvider(properties);
         } else {
-            affixProvider = new CurrencyPluralInfoAffixProvider(properties.getCurrencyPluralInfo());
+            affixProvider = new CurrencyPluralInfoAffixProvider(properties.getCurrencyPluralInfo(), properties);
         }
         macros.affixProvider = affixProvider;
 

@@ -132,10 +132,6 @@ struct U_I18N_API DecimalFormatProperties {
 
     DecimalFormatProperties();
 
-    //DecimalFormatProperties(const DecimalFormatProperties &other) = default;
-
-    DecimalFormatProperties& operator=(const DecimalFormatProperties& other) = default;
-
     bool operator==(const DecimalFormatProperties& other) const;
 
     void clear();

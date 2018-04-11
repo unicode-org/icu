@@ -77,7 +77,8 @@ class CurrencyPluralInfoAffixProvider : public AffixPatternProvider, public UMem
         fBogus = true;
     }
 
-    void setTo(const CurrencyPluralInfo& cpi, UErrorCode& status);
+    void setTo(const CurrencyPluralInfo& cpi, const DecimalFormatProperties& properties,
+               UErrorCode& status);
 
     // AffixPatternProvider Methods:
 
@@ -100,7 +101,7 @@ class CurrencyPluralInfoAffixProvider : public AffixPatternProvider, public UMem
     bool hasBody() const U_OVERRIDE;
 
   private:
-    ParsedPatternInfo affixesByPlural[StandardPlural::COUNT];
+    PropertiesAffixPatternProvider affixesByPlural[StandardPlural::COUNT];
 
     bool fBogus{true};
 };
