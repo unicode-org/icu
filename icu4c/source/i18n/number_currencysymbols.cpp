@@ -52,17 +52,23 @@ UnicodeString CurrencySymbols::getCurrencySymbol(UErrorCode& status) const {
 }
 
 UnicodeString CurrencySymbols::loadSymbol(UCurrNameStyle selector, UErrorCode& status) const {
+    const char16_t* isoCode = fCurrency.getISOCurrency();
     UBool ignoredIsChoiceFormatFillIn = FALSE;
     int32_t symbolLen = 0;
     const char16_t* symbol = ucurr_getName(
-            fCurrency.getISOCurrency(),
+            isoCode,
             fLocaleName.data(),
             selector,
             &ignoredIsChoiceFormatFillIn,
             &symbolLen,
             &status);
-    // Readonly-aliasing char16_t* constructor, which points to a resource bundle:
-    return UnicodeString(TRUE, symbol, symbolLen);
+    // If given an unknown currency, ucurr_getName returns the input string, which we can't alias safely!
+    // Otherwise, symbol points to a resource bundle, and we can use readonly-aliasing constructor.
+    if (symbol == isoCode) {
+        return UnicodeString(isoCode, 3);
+    } else {
+        return UnicodeString(TRUE, symbol, symbolLen);
+    }
 }
 
 UnicodeString CurrencySymbols::getIntlCurrencySymbol(UErrorCode&) const {
@@ -75,17 +81,23 @@ UnicodeString CurrencySymbols::getIntlCurrencySymbol(UErrorCode&) const {
 }
 
 UnicodeString CurrencySymbols::getPluralName(StandardPlural::Form plural, UErrorCode& status) const {
+    const char16_t* isoCode = fCurrency.getISOCurrency();
     UBool isChoiceFormat = FALSE;
     int32_t symbolLen = 0;
     const char16_t* symbol = ucurr_getPluralName(
-            fCurrency.getISOCurrency(),
+            isoCode,
             fLocaleName.data(),
             &isChoiceFormat,
             StandardPlural::getKeyword(plural),
             &symbolLen,
             &status);
-    // Readonly-aliasing char16_t* constructor, which points to a resource bundle:
-    return UnicodeString(TRUE, symbol, symbolLen);
+    // If given an unknown currency, ucurr_getName returns the input string, which we can't alias safely!
+    // Otherwise, symbol points to a resource bundle, and we can use readonly-aliasing constructor.
+    if (symbol == isoCode) {
+        return UnicodeString(isoCode, 3);
+    } else {
+        return UnicodeString(TRUE, symbol, symbolLen);
+    }
 }
 
 
