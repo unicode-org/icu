@@ -292,17 +292,17 @@ public class DecimalQuantityTest extends TestFmwk {
 
         fq.setToLong(1234123412341234L);
         assertFalse("Should not be using byte array", fq.isUsingBytes());
-        assertEquals("Failed on initialize", "1234123412341234E0", fq.toNumberString());
+        assertEquals("Failed on initialize", "1.234123412341234E+15", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         // Long -> Bytes
         fq.appendDigit((byte) 5, 0, true);
         assertTrue("Should be using byte array", fq.isUsingBytes());
-        assertEquals("Failed on multiply", "12341234123412345E0", fq.toNumberString());
+        assertEquals("Failed on multiply", "1.2341234123412345E+16", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         // Bytes -> Long
         fq.roundToMagnitude(5, MATH_CONTEXT_HALF_EVEN);
         assertFalse("Should not be using byte array", fq.isUsingBytes());
-        assertEquals("Failed on round", "123412341234E5", fq.toNumberString());
+        assertEquals("Failed on round", "1.23412341234E+16", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
     }
 
@@ -310,48 +310,46 @@ public class DecimalQuantityTest extends TestFmwk {
     public void testAppend() {
         DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD();
         fq.appendDigit((byte) 1, 0, true);
-        assertEquals("Failed on append", "1E0", fq.toNumberString());
+        assertEquals("Failed on append", "1E+0", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 2, 0, true);
-        assertEquals("Failed on append", "12E0", fq.toNumberString());
+        assertEquals("Failed on append", "1.2E+1", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 3, 1, true);
-        assertEquals("Failed on append", "1203E0", fq.toNumberString());
+        assertEquals("Failed on append", "1.203E+3", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 0, 1, true);
-        assertEquals("Failed on append", "1203E2", fq.toNumberString());
+        assertEquals("Failed on append", "1.203E+5", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 4, 0, true);
-        assertEquals("Failed on append", "1203004E0", fq.toNumberString());
+        assertEquals("Failed on append", "1.203004E+6", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 0, 0, true);
-        assertEquals("Failed on append", "1203004E1", fq.toNumberString());
+        assertEquals("Failed on append", "1.203004E+7", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 5, 0, false);
-        assertEquals("Failed on append", "120300405E-1", fq.toNumberString());
+        assertEquals("Failed on append", "1.20300405E+7", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 6, 0, false);
-        assertEquals("Failed on append", "1203004056E-2", fq.toNumberString());
+        assertEquals("Failed on append", "1.203004056E+7", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 7, 3, false);
-        assertEquals("Failed on append", "12030040560007E-6", fq.toNumberString());
+        assertEquals("Failed on append", "1.2030040560007E+7", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
-        StringBuilder baseExpected = new StringBuilder("12030040560007");
+        StringBuilder baseExpected = new StringBuilder("1.2030040560007");
         for (int i = 0; i < 10; i++) {
             fq.appendDigit((byte) 8, 0, false);
             baseExpected.append('8');
             StringBuilder expected = new StringBuilder(baseExpected);
-            expected.append("E");
-            expected.append(-7 - i);
-            assertEquals("Failed on append", expected.toString(), fq.toNumberString());
+            expected.append("E+7");
+            assertEquals("Failed on append", expected.toString(), fq.toScientificString());
             assertNull("Failed health check", fq.checkHealth());
         }
         fq.appendDigit((byte) 9, 2, false);
         baseExpected.append("009");
         StringBuilder expected = new StringBuilder(baseExpected);
-        expected.append('E');
-        expected.append("-19");
-        assertEquals("Failed on append", expected.toString(), fq.toNumberString());
+        expected.append("E+7");
+        assertEquals("Failed on append", expected.toString(), fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
     }
 

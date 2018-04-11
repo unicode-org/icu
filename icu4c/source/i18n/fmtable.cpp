@@ -745,8 +745,14 @@ CharString *Formattable::internalGetCharString(UErrorCode &status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
       }
-      UnicodeString result = fDecimalQuantity->toNumberString();
-      fDecimalStr->appendInvariantChars(result, status);
+      // Older ICUs called uprv_decNumberToString here, which is not exactly the same as
+      // DecimalQuantity::toScientificString(). The biggest difference is that uprv_decNumberToString does
+      // not print scientific notation for magnitudes greater than -5 and smaller than some amount (+5?).
+      if (std::abs(fDecimalQuantity->getMagnitude()) < 5) {
+        fDecimalStr->appendInvariantChars(fDecimalQuantity->toPlainString(), status);
+      } else {
+        fDecimalStr->appendInvariantChars(fDecimalQuantity->toScientificString(), status);
+      }
     }
     return fDecimalStr;
 }

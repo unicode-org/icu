@@ -185,7 +185,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     bool isAccounting =
             macros.sign == UNUM_SIGN_ACCOUNTING || macros.sign == UNUM_SIGN_ACCOUNTING_ALWAYS ||
             macros.sign == UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO;
-    CurrencyUnit currency(kDefaultCurrency, status);
+    CurrencyUnit currency(nullptr, status);
     if (isCurrency) {
         currency = CurrencyUnit(macros.unit, status); // Restore CurrencyUnit from MeasureUnit
     }

@@ -18,20 +18,23 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 
+static constexpr char16_t kDefaultCurrency[] = u"XXX";
+
 U_NAMESPACE_BEGIN
 
 CurrencyUnit::CurrencyUnit(ConstChar16Ptr _isoCode, UErrorCode& ec) {
-    *isoCode = 0;
-    if (U_SUCCESS(ec)) {
-        if (_isoCode != nullptr && u_strlen(_isoCode)==3) {
-            u_strcpy(isoCode, _isoCode);
-            char simpleIsoCode[4];
-            u_UCharsToChars(isoCode, simpleIsoCode, 4);
-            initCurrency(simpleIsoCode);
-        } else {
-            ec = U_ILLEGAL_ARGUMENT_ERROR;
-        }
+    // The constructor always leaves the CurrencyUnit in a valid state (with a 3-character currency code).
+    if (U_FAILURE(ec) || _isoCode == nullptr) {
+        u_strcpy(isoCode, kDefaultCurrency);
+    } else if (u_strlen(_isoCode) != 3) {
+        u_strcpy(isoCode, kDefaultCurrency);
+        ec = U_ILLEGAL_ARGUMENT_ERROR;
+    } else {
+        u_strcpy(isoCode, _isoCode);
     }
+    char simpleIsoCode[4];
+    u_UCharsToChars(isoCode, simpleIsoCode, 4);
+    initCurrency(simpleIsoCode);
 }
 
 CurrencyUnit::CurrencyUnit(const CurrencyUnit& other) : MeasureUnit(other) {
@@ -52,7 +55,7 @@ CurrencyUnit::CurrencyUnit(const MeasureUnit& other, UErrorCode& ec) : MeasureUn
 }
 
 CurrencyUnit::CurrencyUnit() : MeasureUnit() {
-    u_strcpy(isoCode, u"XXX");
+    u_strcpy(isoCode, kDefaultCurrency);
     char simpleIsoCode[4];
     u_UCharsToChars(isoCode, simpleIsoCode, 4);
     initCurrency(simpleIsoCode);

@@ -252,10 +252,10 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
 
     UnicodeString toString() const;
 
-    /* Returns the string in exponential notation. */
-    UnicodeString toNumberString() const;
+    /** Returns the string in standard exponential notation. */
+    UnicodeString toScientificString() const;
 
-    /* Returns the string without exponential notation. Slightly slower than toNumberString(). */
+    /** Returns the string without exponential notation. Slightly slower than toScientificString(). */
     UnicodeString toPlainString() const;
 
     /** Visible for testing */

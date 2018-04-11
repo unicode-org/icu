@@ -553,13 +553,12 @@ double DecimalQuantity::toDouble() const {
 
     // We are processing well-formed input, so we don't need any special options to StringToDoubleConverter.
     StringToDoubleConverter converter(0, 0, 0, "", "");
-    UnicodeString numberString = toNumberString();
+    UnicodeString numberString = this->toScientificString();
     int32_t count;
-    double result = converter.StringToDouble(reinterpret_cast<const uint16_t*>(numberString.getBuffer()), numberString.length(), &count);
-    if (isNegative()) {
-        result = -result;
-    }
-    return result;
+    return converter.StringToDouble(
+            reinterpret_cast<const uint16_t*>(numberString.getBuffer()),
+            numberString.length(),
+            &count);
 }
 
 double DecimalQuantity::toDoubleFromOriginal() const {
@@ -775,7 +774,7 @@ UnicodeString DecimalQuantity::toPlainString() const {
     if (isNegative()) {
         sb.append(u'-');
     }
-    if (precision == 0) {
+    if (precision == 0 || getMagnitude() < 0) {
         sb.append(u'0');
     }
     for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
@@ -783,6 +782,43 @@ UnicodeString DecimalQuantity::toPlainString() const {
         sb.append(getDigit(m) + u'0');
     }
     return sb;
+}
+
+UnicodeString DecimalQuantity::toScientificString() const {
+    U_ASSERT(!isApproximate);
+    UnicodeString result;
+    if (isNegative()) {
+        result.append(u'-');
+    }
+    if (precision == 0) {
+        result.append(u"0E+0", -1);
+        return result;
+    }
+    result.append(u'0' + getDigitPos(precision - 1));
+    if (precision > 1) {
+        result.append(u'.');
+        for (int32_t i = 1; i < precision; i++) {
+            result.append(u'0' + getDigitPos(precision - i - 1));
+        }
+    }
+    result.append(u'E');
+    int32_t _scale = scale + precision - 1;
+    if (_scale < 0) {
+        _scale *= -1;
+        result.append(u'-');
+    } else {
+        result.append(u'+');
+    }
+    if (_scale == 0) {
+        result.append(u'0');
+    }
+    int32_t insertIndex = result.length();
+    while (_scale > 0) {
+        std::div_t res = std::div(_scale, 10);
+        result.insert(insertIndex, u'0' + res.rem);
+        _scale = res.quot;
+    }
+    return result;
 }
 
 ////////////////////////////////////////////////////
@@ -1126,33 +1162,6 @@ UnicodeString DecimalQuantity::toString() const {
             "E",
             scale);
     return UnicodeString(buffer8, -1, US_INV);
-}
-
-UnicodeString DecimalQuantity::toNumberString() const {
-    U_ASSERT(!isApproximate);
-    UnicodeString result;
-    if (precision == 0) {
-        result.append(u'0');
-    }
-    for (int32_t i = 0; i < precision; i++) {
-        result.append(u'0' + getDigitPos(precision - i - 1));
-    }
-    result.append(u'E');
-    int32_t _scale = scale;
-    if (_scale < 0) {
-        _scale *= -1;
-        result.append(u'-');
-    }
-    if (_scale == 0) {
-        result.append(u'0');
-    }
-    int32_t insertIndex = result.length();
-    while (_scale > 0) {
-        std::div_t res = std::div(_scale, 10);
-        result.insert(insertIndex, u'0' + res.rem);
-        _scale = res.quot;
-    }
-    return result;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

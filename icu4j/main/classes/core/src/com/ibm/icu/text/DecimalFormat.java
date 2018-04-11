@@ -2006,7 +2006,7 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * Returns the user-specified currency. May be null.
+   * Returns the currency used to display currency amounts. May be null.
    *
    * @see #setCurrency
    * @see DecimalFormatSymbols#getCurrency
@@ -2015,7 +2015,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized Currency getCurrency() {
-    return properties.getCurrency();
+    return exportedProperties.getCurrency();
   }
 
   /**

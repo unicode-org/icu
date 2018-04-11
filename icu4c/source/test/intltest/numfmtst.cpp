@@ -458,15 +458,15 @@ UBool NumberFormatTestDataDriven::isParsePass(
 
     DecimalQuantity expectedQuantity;
     strToDigitList(tuple.output, expectedQuantity, status);
-    UnicodeString expectedString = expectedQuantity.toNumberString();
+    UnicodeString expectedString = expectedQuantity.toScientificString();
     if (U_FAILURE(status)) {
         appendErrorMessage.append("[Error parsing decnumber] ");
         // If this happens, assume that tuple.output is exactly the same format as
-        // DecimalQuantity.toNumberString()
+        // DecimalQuantity.toScientificString()
         expectedString = tuple.output;
         status = U_ZERO_ERROR;
     }
-    UnicodeString actualString = result.getDecimalQuantity()->toNumberString();
+    UnicodeString actualString = result.getDecimalQuantity()->toScientificString();
     if (expectedString != actualString) {
         appendErrorMessage.append(
                 UnicodeString("Expected: ") + tuple.output + " (i.e., " + expectedString + "), but got: " +
@@ -503,7 +503,7 @@ UBool NumberFormatTestDataDriven::isParseCurrencyPass(
     }
     UnicodeString currStr(currAmt->getISOCurrency());
     U_ASSERT(currAmt->getNumber().getDecimalQuantity() != nullptr); // no doubles in currency tests
-    UnicodeString resultStr = currAmt->getNumber().getDecimalQuantity()->toNumberString();
+    UnicodeString resultStr = currAmt->getNumber().getDecimalQuantity()->toScientificString();
     if (tuple.output == "fail") {
         appendErrorMessage.append(UnicodeString("Parse succeeded: ") + resultStr + ", but was expected to fail.");
         return TRUE; // TRUE because failure handling is in the test suite
@@ -511,7 +511,7 @@ UBool NumberFormatTestDataDriven::isParseCurrencyPass(
 
     DecimalQuantity expectedQuantity;
     strToDigitList(tuple.output, expectedQuantity, status);
-    UnicodeString expectedString = expectedQuantity.toNumberString();
+    UnicodeString expectedString = expectedQuantity.toScientificString();
     if (U_FAILURE(status)) {
         appendErrorMessage.append("Error parsing decnumber");
         // If this happens, assume that tuple.output is exactly the same format as
@@ -6978,15 +6978,11 @@ const char* attrString(int32_t attrId) {
 //      API test, not a comprehensive test.
 //      See DecimalFormatTest/DataDrivenTests
 //
-#define ASSERT_SUCCESS(status) {if (U_FAILURE(status)) errln("file %s, line %d: status: %s", \
-                                                __FILE__, __LINE__, u_errorName(status));}
-#define ASSERT_EQUALS(expected, actual) {if ((expected) != (actual)) \
-                  errln("file %s, line %d: %s != %s", __FILE__, __LINE__, #expected, #actual);}
-
-static UBool operator != (const char *s1, UnicodeString &s2) {
-    // This function lets ASSERT_EQUALS("literal", UnicodeString) work.
-    UnicodeString us1(s1);
-    return us1 != s2;
+#define ASSERT_SUCCESS(status) { \
+    assertSuccess(UnicodeString("file ") + __FILE__ + ", line " + __LINE__, (status)); \
+}
+#define ASSERT_EQUALS(expected, actual) { \
+    assertEquals(UnicodeString("file ") + __FILE__ + ", line " + __LINE__, (expected), (actual)); \
 }
 
 void NumberFormatTest::TestDecimal() {
@@ -6996,7 +6992,7 @@ void NumberFormatTest::TestDecimal() {
         ASSERT_SUCCESS(status);
         StringPiece s = f.getDecimalNumber(status);
         ASSERT_SUCCESS(status);
-        ASSERT_EQUALS("1.2345678999987654321E+667", s);
+        ASSERT_EQUALS("1.2345678999987654321E+667", s.data());
         //printf("%s\n", s.data());
     }
 
@@ -7015,7 +7011,7 @@ void NumberFormatTest::TestDecimal() {
         ASSERT_EQUALS(123.45, f.getDouble());
         ASSERT_EQUALS(123.45, f.getDouble(status));
         ASSERT_SUCCESS(status);
-        ASSERT_EQUALS("123.45", f.getDecimalNumber(status));
+        ASSERT_EQUALS("123.45", f.getDecimalNumber(status).data());
         ASSERT_SUCCESS(status);
 
         f.setDecimalNumber("4.5678E7", status);
@@ -7030,7 +7026,7 @@ void NumberFormatTest::TestDecimal() {
         ASSERT_EQUALS(-123, f.getLong());
         ASSERT_EQUALS(-123, f.getLong(status));
         ASSERT_SUCCESS(status);
-        ASSERT_EQUALS("-123", f.getDecimalNumber(status));
+        ASSERT_EQUALS("-123", f.getDecimalNumber(status).data());
         ASSERT_SUCCESS(status);
 
         status = U_ZERO_ERROR;
@@ -7040,7 +7036,7 @@ void NumberFormatTest::TestDecimal() {
         ASSERT_EQUALS(1234567890123LL, f.getInt64());
         ASSERT_EQUALS(1234567890123LL, f.getInt64(status));
         ASSERT_SUCCESS(status);
-        ASSERT_EQUALS("1234567890123", f.getDecimalNumber(status));
+        ASSERT_EQUALS("1.234567890123E+12", f.getDecimalNumber(status).data());
         ASSERT_SUCCESS(status);
     }
 
@@ -7103,7 +7099,7 @@ void NumberFormatTest::TestDecimal() {
             Formattable result;
             fmtr->parse(input, result, status);
             ASSERT_SUCCESS(status);
-            ASSERT_EQUALS(0, strcmp("0.0184", result.getDecimalNumber(status).data()));
+            ASSERT_EQUALS("0.0184", result.getDecimalNumber(status).data());
             //std::cout << result.getDecimalNumber(status).data();
             delete fmtr;
         }
@@ -7156,8 +7152,8 @@ void NumberFormatTest::TestCurrencyFractionDigits() {
             errln((UnicodeString)"NumberFormat::format() should return the same result - text1="
                 + text1 + " text2=" + text2);
         }
-        delete fmt;
     }
+    delete fmt;
 }
 
 void NumberFormatTest::TestExponentParse() {

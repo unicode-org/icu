@@ -425,7 +425,7 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
                 toNumberString());
     }
 
-    public String toNumberString() {
+    private String toNumberString() {
         StringBuilder sb = new StringBuilder();
         if (usingBytes) {
             if (precision == 0) {

@@ -402,7 +402,9 @@ UnicodeString&
 DecimalFormat::format(double number, UnicodeString& appendTo, FieldPositionIterator* posIter,
                       UErrorCode& status) const {
     FormattedNumber output = fFormatter->formatDouble(number, status);
-    output.populateFieldPositionIterator(*posIter, status);
+    if (posIter != nullptr) {
+        output.populateFieldPositionIterator(*posIter, status);
+    }
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable);
     return appendTo;
@@ -445,7 +447,9 @@ UnicodeString&
 DecimalFormat::format(int64_t number, UnicodeString& appendTo, FieldPositionIterator* posIter,
                       UErrorCode& status) const {
     FormattedNumber output = fFormatter->formatInt(number, status);
-    output.populateFieldPositionIterator(*posIter, status);
+    if (posIter != nullptr) {
+        output.populateFieldPositionIterator(*posIter, status);
+    }
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable);
     return appendTo;
@@ -456,7 +460,9 @@ DecimalFormat::format(StringPiece number, UnicodeString& appendTo, FieldPosition
                       UErrorCode& status) const {
     ErrorCode localStatus;
     FormattedNumber output = fFormatter->formatDecimal(number, localStatus);
-    output.populateFieldPositionIterator(*posIter, status);
+    if (posIter != nullptr) {
+        output.populateFieldPositionIterator(*posIter, status);
+    }
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable);
     return appendTo;
@@ -465,7 +471,9 @@ DecimalFormat::format(StringPiece number, UnicodeString& appendTo, FieldPosition
 UnicodeString& DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo,
                                      FieldPositionIterator* posIter, UErrorCode& status) const {
     FormattedNumber output = fFormatter->formatDecimalQuantity(number, status);
-    output.populateFieldPositionIterator(*posIter, status);
+    if (posIter != nullptr) {
+        output.populateFieldPositionIterator(*posIter, status);
+    }
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable);
     return appendTo;
@@ -916,6 +924,7 @@ void DecimalFormat::setSignificantDigitsUsed(UBool useSignificantDigits) {
 }
 
 void DecimalFormat::setCurrency(const char16_t* theCurrency, UErrorCode& ec) {
+    NumberFormat::setCurrency(theCurrency, ec); // to set field for compatibility
     fProperties->currency = CurrencyUnit(theCurrency, ec);
     // TODO: Set values in fSymbols, too?
     refreshFormatterNoError();
@@ -923,6 +932,7 @@ void DecimalFormat::setCurrency(const char16_t* theCurrency, UErrorCode& ec) {
 
 void DecimalFormat::setCurrency(const char16_t* theCurrency) {
     ErrorCode localStatus;
+    NumberFormat::setCurrency(theCurrency, localStatus); // to set field for compatibility
     setCurrency(theCurrency, localStatus);
 }
 
@@ -998,6 +1008,7 @@ void DecimalFormat::refreshFormatter(UErrorCode& status) {
                     *fProperties, *fSymbols, true, status), status);
 
     // In order for the getters to work, we need to populate some fields in NumberFormat.
+    NumberFormat::setCurrency(fExportedProperties->currency.get(status).getISOCurrency(), status);
     NumberFormat::setMaximumIntegerDigits(fExportedProperties->maximumIntegerDigits);
     NumberFormat::setMinimumIntegerDigits(fExportedProperties->minimumIntegerDigits);
     NumberFormat::setMaximumFractionDigits(fExportedProperties->maximumFractionDigits);

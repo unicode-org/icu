@@ -306,6 +306,7 @@ final class NumberPropertyMapper {
 
         if (exportedProperties != null) {
 
+            exportedProperties.setCurrency(currency);
             exportedProperties.setMathContext(mathContext);
             exportedProperties.setRoundingMode(mathContext.getRoundingMode());
             exportedProperties.setMinimumIntegerDigits(minInt);

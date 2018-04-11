@@ -947,7 +947,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         if (isNegative()) {
             sb.append('-');
         }
-        if (precision == 0) {
+        if (precision == 0 || getMagnitude() < 0) {
             sb.append('0');
         }
         for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
@@ -956,6 +956,48 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                 sb.append('.');
         }
         return sb.toString();
+    }
+
+    public String toScientificString() {
+        StringBuilder sb = new StringBuilder();
+        toScientificString(sb);
+        return sb.toString();
+    }
+
+    public void toScientificString(StringBuilder result) {
+        assert(!isApproximate);
+        if (isNegative()) {
+            result.append('-');
+        }
+        if (precision == 0) {
+            result.append("0E+0");
+            return;
+        }
+        result.append((char) ('0' + getDigitPos(precision - 1)));
+        if (precision > 1) {
+            result.append('.');
+            for (int i = 1; i < precision; i++) {
+                result.append((char) ('0' + getDigitPos(precision - i - 1)));
+            }
+        }
+        result.append('E');
+        int _scale = scale + precision - 1;
+        if (_scale < 0) {
+            _scale *= -1;
+            result.append('-');
+        } else {
+            result.append('+');
+        }
+        if (_scale == 0) {
+            result.append('0');
+        }
+        int insertIndex = result.length();
+        while (_scale > 0) {
+            int quot = _scale / 10;
+            int rem = _scale % 10;
+            result.insert(insertIndex, (char) ('0' + rem));
+            _scale = quot;
+        }
     }
 
     /**
