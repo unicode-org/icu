@@ -4082,24 +4082,24 @@ NumberFormatTest::TestCurrencyParsing() {
         // format result using CURRENCYSTYLE,
         // format result using ISOCURRENCYSTYLE,
         // format result using PLURALCURRENCYSTYLE,
-        {"en_US", "1", "USD", "$1.00", "USD1.00", "1.00 US dollar"},
+        {"en_US", "1", "USD", "$1.00", "USD\\u00A01.00", "1.00 US dollar"},
         {"pa_IN", "1", "USD", "US$\\u00A01.00", "USD\\u00A01.00", "1.00 \\u0a2f\\u0a42.\\u0a10\\u0a38. \\u0a21\\u0a3e\\u0a32\\u0a30"},
         {"es_AR", "1", "USD", "US$\\u00A01,00", "USD\\u00A01,00", "1,00 d\\u00f3lar estadounidense"},
         {"ar_EG", "1", "USD", "\\u0661\\u066b\\u0660\\u0660\\u00a0US$", "\\u0661\\u066b\\u0660\\u0660\\u00a0USD", "\\u0661\\u066b\\u0660\\u0660 \\u062f\\u0648\\u0644\\u0627\\u0631 \\u0623\\u0645\\u0631\\u064a\\u0643\\u064a"},
         {"fa_CA", "1", "USD", "\\u200e$\\u06f1\\u066b\\u06f0\\u06f0", "\\u200eUSD\\u06f1\\u066b\\u06f0\\u06f0", "\\u06f1\\u066b\\u06f0\\u06f0 \\u062f\\u0644\\u0627\\u0631 \\u0627\\u0645\\u0631\\u06cc\\u06a9\\u0627"},
         {"he_IL", "1", "USD", "\\u200f1.00\\u00a0$", "\\u200f1.00\\u00a0USD", "1.00 \\u05d3\\u05d5\\u05dc\\u05e8 \\u05d0\\u05de\\u05e8\\u05d9\\u05e7\\u05d0\\u05d9"},
         {"hr_HR", "1", "USD", "1,00\\u00a0USD", "1,00\\u00a0USD", "1,00 Ameri\\u010dki dolar"},
-        {"id_ID", "1", "USD", "US$1,00", "USD1,00", "1,00 Dolar Amerika Serikat"},
+        {"id_ID", "1", "USD", "US$\\u00A01,00", "USD\\u00A01,00", "1,00 Dolar Amerika Serikat"},
         {"it_IT", "1", "USD", "1,00\\u00a0USD", "1,00\\u00a0USD", "1,00 Dollaro Statunitense"},
-        {"ko_KR", "1", "USD", "US$1.00", "USD1.00", "1.00 \\ubbf8\\uad6d \\ub2ec\\ub7ec"},
-        {"ja_JP", "1", "USD", "$1.00", "USD1.00", "1.00\\u7c73\\u30c9\\u30eb"},
-        {"zh_CN", "1", "CNY", "\\uFFE51.00", "CNY01.00", "1.00\\u4EBA\\u6C11\\u5E01"},
-        {"zh_TW", "1", "CNY", "CN\\u00A51.00", "CNY1.00", "1.00 \\u4eba\\u6c11\\u5e63"},
-        {"zh_Hant", "1", "CNY", "CN\\u00A51.00", "CNY1.00", "1.00 \\u4eba\\u6c11\\u5e63"},
-        {"zh_Hant", "1", "JPY", "\\u00A51.00", "JPY1.00", "1.00 \\u65e5\\u5713"},
-        {"ja_JP", "1", "JPY", "\\uFFE51.00", "JPY1.00", "1.00\\u65e5\\u672c\\u5186"},
-        {"ja_JP", "1", "JPY", "\\u00A51.00", "JPY1.00", "1.00\\u65e5\\u672c\\u5186"},
-        {"ru_RU", "1", "RUB", "1,00\\u00A0\\u20BD", "1,00\\u00A0RUB", "1,00 \\u0420\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u0438\\u0439 \\u0440\\u0443\\u0431\\u043B\\u044C"}
+        {"ko_KR", "1", "USD", "US$\\u00A01.00", "USD\\u00A01.00", "1.00 \\ubbf8\\uad6d \\ub2ec\\ub7ec"},
+        {"ja_JP", "1", "USD", "$1.00", "USD\\u00A01.00", "1.00\\u00A0\\u7c73\\u30c9\\u30eb"},
+        {"zh_CN", "1", "CNY", "\\uFFE51.00", "CNY\\u00A001.00", "1.00\\u00A0\\u4EBA\\u6C11\\u5E01"},
+        {"zh_TW", "1", "CNY", "CN\\u00A51.00", "CNY\\u00A01.00", "1.00 \\u4eba\\u6c11\\u5e63"},
+        {"zh_Hant", "1", "CNY", "CN\\u00A51.00", "CNY\\u00A01.00", "1.00 \\u4eba\\u6c11\\u5e63"},
+        {"zh_Hant", "1", "JPY", "\\u00A51.00", "JPY\\u00A01.00", "1.00 \\u65e5\\u5713"},
+        {"ja_JP", "1", "JPY", "\\uFFE51.00", "JPY\\u00A01.00", "1.00\\u00A0\\u65e5\\u672c\\u5186"},
+        {"ja_JP", "1", "JPY", "\\u00A51.00", "JPY\\u00A01.00", "1.00\\u00A0\\u65e5\\u672c\\u5186"},
+        {"ru_RU", "1", "RUB", "1,00\\u00A0\\u00A0\\u20BD", "1,00\\u00A0\\u00A0RUB", "1,00 \\u0420\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u0438\\u0439 \\u0440\\u0443\\u0431\\u043B\\u044C"}
     };
     static const UNumberFormatStyle currencyStyles[] = {
         UNUM_CURRENCY,
@@ -4158,7 +4158,9 @@ for (;;) {
         }
         */
         // test parsing, and test parsing for all currency formats.
-        for (int j = 3; j < 6; ++j) {
+        // NOTE: ICU 62 requires that the currency format match the pattern in strict mode.
+        //for (int j = 3; j < 6; ++j) {
+        for (int j = 3 + kIndex; j <= 3 + kIndex; j++) {
             // DATA[i][3] is the currency format result using
             // CURRENCYSTYLE formatter.
             // DATA[i][4] is the currency format result using
@@ -6744,6 +6746,7 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
       UnicodeString formatted = ctou(DATA[i]);
       UErrorCode status = U_ZERO_ERROR;
       NumberFormat* numFmt = NumberFormat::createInstance(locale, UNUM_CURRENCY, status);
+      numFmt->setLenient(TRUE); // ICU 62 PATCH
       if (numFmt != NULL && U_SUCCESS(status)) {
           ParsePosition parsePos;
           LocalPointer<CurrencyAmount> currAmt(numFmt->parseCurrency(formatted, parsePos));

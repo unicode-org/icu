@@ -6017,4 +6017,14 @@ public class NumberFormatTest extends TestFmwk {
         df.setParseStrict(true);
         expect2(df, -51.42, "-US$ 51.42");
     }
+
+    @Test
+    public void testCaseSensitiveCustomIsoCurrency() {
+        DecimalFormat df = new DecimalFormat("¤¤0", DecimalFormatSymbols.getInstance(ULocale.ENGLISH));
+        df.setCurrency(Currency.getInstance("ICU"));
+        ParsePosition ppos = new ParsePosition(0);
+        df.parseCurrency("icu123", ppos);
+        assertEquals("Should fail to parse", 0, ppos.getIndex());
+        assertEquals("Should fail to parse", 0, ppos.getErrorIndex());
+    }
 }

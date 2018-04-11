@@ -81,7 +81,7 @@ bool CombinedCurrencyMatcher::match(StringSegment& segment, ParsedNumber& result
 bool CombinedCurrencyMatcher::matchCurrency(StringSegment& segment, ParsedNumber& result,
                                             UErrorCode& status) const {
 
-    int32_t overlap1 = segment.getCommonPrefixLength(fCurrency1);
+    int32_t overlap1 = segment.getCaseSensitivePrefixLength(fCurrency1);
     if (overlap1 == fCurrency1.length()) {
         utils::copyCurrencyCode(result.currencyCode, fCurrencyCode);
         segment.adjustOffset(overlap1);
@@ -89,7 +89,7 @@ bool CombinedCurrencyMatcher::matchCurrency(StringSegment& segment, ParsedNumber
         return segment.length() == 0;
     }
 
-    int32_t overlap2 = segment.getCommonPrefixLength(fCurrency2);
+    int32_t overlap2 = segment.getCaseSensitivePrefixLength(fCurrency2);
     if (overlap2 == fCurrency2.length()) {
         utils::copyCurrencyCode(result.currencyCode, fCurrencyCode);
         segment.adjustOffset(overlap2);

@@ -109,7 +109,7 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
 
     /** Matches the currency string without concern for currency spacing. */
     private boolean matchCurrency(StringSegment segment, ParsedNumber result) {
-        int overlap1 = segment.getCommonPrefixLength(currency1);
+        int overlap1 = segment.getCaseSensitivePrefixLength(currency1);
         if (overlap1 == currency1.length()) {
             result.currencyCode = isoCode;
             segment.adjustOffset(overlap1);
@@ -117,7 +117,7 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
             return segment.length() == 0;
         }
 
-        int overlap2 = segment.getCommonPrefixLength(currency2);
+        int overlap2 = segment.getCaseSensitivePrefixLength(currency2);
         if (overlap2 == currency2.length()) {
             result.currencyCode = isoCode;
             segment.adjustOffset(overlap2);

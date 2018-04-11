@@ -663,6 +663,9 @@ public class NumberFormatDataDrivenTest {
                 if (ppos.getIndex() == 0 || actual.getCurrency().getCurrencyCode().equals("XXX")) {
                     return "Parse failed; got " + actual + ", but expected " + tuple.output;
                 }
+                if (tuple.output.equals("fail")) {
+                    return null;
+                }
                 BigDecimal expectedNumber = new BigDecimal(tuple.output);
                 if (expectedNumber.compareTo(new BigDecimal(actual.getNumber().toString())) != 0) {
                     return "Wrong number: Expected: " + expectedNumber + ", got: " + actual;
