@@ -38,6 +38,15 @@ class NumberFormatterImpl : public UMemory {
                 UErrorCode &status);
 
     /**
+     * Prints only the prefix and suffix; used for DecimalFormat getters.
+     *
+     * @return The index into the output at which the prefix ends and the suffix starts; in other words,
+     *         the prefix length.
+     */
+    static int32_t getPrefixSuffix(const MacroProps& macros, DecimalQuantity& inValue,
+                                   NumberStringBuilder& outString, UErrorCode& status);
+
+    /**
      * Evaluates the "safe" MicroPropsGenerator created by "fromMacros".
      */
     void apply(DecimalQuantity &inValue, NumberStringBuilder &outString, UErrorCode &status) const;
@@ -69,6 +78,9 @@ class NumberFormatterImpl : public UMemory {
     NumberFormatterImpl(const MacroProps &macros, bool safe, UErrorCode &status);
 
     void applyUnsafe(DecimalQuantity &inValue, NumberStringBuilder &outString, UErrorCode &status);
+
+    int32_t getPrefixSuffixUnsafe(DecimalQuantity& inValue, NumberStringBuilder& outString,
+                                  UErrorCode& status);
 
     /**
      * If rulesPtr is non-null, return it.  Otherwise, return a PluralRules owned by this object for the

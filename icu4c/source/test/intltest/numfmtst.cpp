@@ -637,7 +637,6 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestNumberFormatTestTuple);
   TESTCASE_AUTO(TestDataDriven);
   TESTCASE_AUTO(TestDoubleLimit11439);
-  TESTCASE_AUTO(TestFastPathConsistent11524);
   TESTCASE_AUTO(TestGetAffixes);
   TESTCASE_AUTO(TestToPatternScientific11648);
   TESTCASE_AUTO(TestBenchmark);
@@ -1586,7 +1585,8 @@ NumberFormatTest::TestLenientParse(void)
             if (U_FAILURE(status) ||n.getType() != Formattable::kDouble ||
             	n.getDouble() != 0.25) {
             	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientPercentTestCases[t]
-                      + (UnicodeString) "\"; error code = " + u_errorName(status));
+                      + (UnicodeString) "\"; error code = " + u_errorName(status)
+                      + "; got: " + n.getDouble(status));
             	status = U_ZERO_ERROR;
             }
         }
@@ -1600,7 +1600,8 @@ NumberFormatTest::TestLenientParse(void)
             if (U_FAILURE(status) ||n.getType() != Formattable::kDouble ||
             	n.getDouble() != -0.25) {
             	errln((UnicodeString)"Lenient parse failed for \"" + (UnicodeString) lenientNegativePercentTestCases[t]
-                      + (UnicodeString) "\"; error code = " + u_errorName(status));
+                      + (UnicodeString) "\"; error code = " + u_errorName(status)
+                      + "; got: " + n.getDouble(status));
             	status = U_ZERO_ERROR;
             }
         }
@@ -7983,19 +7984,14 @@ void NumberFormatTest::Test10468ApplyPattern() {
         return;
     }
 
-    if (fmt.getPadCharacterString() != UnicodeString("a")) {
-        errln("Padding character should be 'a'.");
-        return;
-    }
+    assertEquals("Padding character should be 'a'.", u"a", fmt.getPadCharacterString());
 
     // Padding char of fmt ought to be '*' since that is the default and no
     // explicit padding char is specified in the new pattern.
     fmt.applyPattern("AA#,##0.00ZZ", status);
 
     // Oops this still prints 'a' even though we changed the pattern.
-    if (fmt.getPadCharacterString() != UnicodeString(" ")) {
-        errln("applyPattern did not clear padding character.");
-    }
+    assertEquals("applyPattern did not clear padding character.", u" ", fmt.getPadCharacterString());
 }
 
 void NumberFormatTest::TestRoundingScientific10542() {
@@ -8275,7 +8271,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
             UnicodeString original;
             fmt->format(agent,original);
-            assertEquals("Test Currency Usage 1", UnicodeString("PKR124"), original);
+            assertEquals("Test Currency Usage 1", UnicodeString("PKR\u00A0124"), original);
 
             // test the getter here
             UCurrencyUsage curUsage = fmt->getCurrencyUsage();
@@ -8295,7 +8291,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
         UnicodeString cash_currency;
         fmt->format(agent,cash_currency);
-        assertEquals("Test Currency Usage 2", UnicodeString("PKR124"), cash_currency);
+        assertEquals("Test Currency Usage 2", UnicodeString("PKR\u00A0124"), cash_currency);
         delete fmt;
     }
 
@@ -8355,7 +8351,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
         UnicodeString PKR_changed;
         fmt->format(agent, PKR_changed);
-        assertEquals("Test Currency Usage 6", UnicodeString("PKR124"), PKR_changed);
+        assertEquals("Test Currency Usage 6", UnicodeString("PKR\u00A0124"), PKR_changed);
         delete fmt;
     }
 }
@@ -8458,21 +8454,6 @@ void NumberFormatTest::TestDoubleLimit11439() {
             return;
         }
     }
-}
-
-void NumberFormatTest::TestFastPathConsistent11524() {
-    UErrorCode status = U_ZERO_ERROR;
-    NumberFormat *fmt = NumberFormat::createInstance("en", status);
-    if (U_FAILURE(status) || fmt == NULL) {
-        dataerrln("Failed call to NumberFormat::createInstance() - %s", u_errorName(status));
-        return;
-    }
-    fmt->setMaximumIntegerDigits(INT32_MIN);
-    UnicodeString appendTo;
-    assertEquals("", "0", fmt->format((int32_t)123, appendTo));
-    appendTo.remove();
-    assertEquals("", "0", fmt->format((int32_t)12345, appendTo));
-    delete fmt;
 }
 
 void NumberFormatTest::TestGetAffixes() {

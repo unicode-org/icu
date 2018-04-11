@@ -9,7 +9,6 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.MacroProps;
-import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.CurrencyAmount;
@@ -137,16 +136,33 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
         // Further benchmarking is required.
         long currentCount = callCount.incrementAndGet(this);
         NumberStringBuilder string = new NumberStringBuilder();
-        MicroProps micros;
         if (currentCount == macros.threshold.longValue()) {
             compiled = NumberFormatterImpl.fromMacros(macros);
-            micros = compiled.apply(fq, string);
+            compiled.apply(fq, string);
         } else if (compiled != null) {
-            micros = compiled.apply(fq, string);
+            compiled.apply(fq, string);
         } else {
-            micros = NumberFormatterImpl.applyStatic(macros, fq, string);
+            NumberFormatterImpl.applyStatic(macros, fq, string);
         }
-        return new FormattedNumber(string, fq, micros);
+        return new FormattedNumber(string, fq);
+    }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only. Use {@link FormattedNumber#populateFieldPosition} or
+     *             {@link FormattedNumber#getFieldIterator} for similar functionality.
+     */
+    @Deprecated
+    public String getAffix(boolean isPrefix, boolean isNegative) {
+        MacroProps macros = resolve();
+        NumberStringBuilder nsb = new NumberStringBuilder();
+        DecimalQuantity dq = new DecimalQuantity_DualStorageBCD(isNegative ? -1 : 1);
+        int prefixLength = NumberFormatterImpl.getPrefixSuffix(macros, dq, nsb);
+        if (isPrefix) {
+            return nsb.subSequence(0, prefixLength).toString();
+        } else {
+            return nsb.subSequence(prefixLength, nsb.length()).toString();
+        }
     }
 
     @Override

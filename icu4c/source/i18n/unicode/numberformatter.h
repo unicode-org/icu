@@ -2191,6 +2191,11 @@ class U_I18N_API LocalizedNumberFormatter
      */
     FormattedNumber formatDecimalQuantity(const impl::DecimalQuantity& dq, UErrorCode& status) const;
 
+    /** Internal method for DecimalFormat compatibility.
+     * @internal
+     */
+    void getAffix(bool isPrefix, bool isNegative, UnicodeString& result, UErrorCode& status) const;
+
     /**
      * Internal method for testing.
      * @internal
@@ -2250,6 +2255,7 @@ class U_I18N_API LocalizedNumberFormatter
      *
      * @param results
      *            The results object. This method will mutate it to save the results.
+     * @internal
      */
     void formatImpl(impl::UFormattedNumberData *results, UErrorCode &status) const;
 
@@ -2354,12 +2360,6 @@ class U_I18N_API FormattedNumber : public UMemory {
      *  @internal
      */
     void getDecimalQuantity(impl::DecimalQuantity& output, UErrorCode& status) const;
-
-    /** @internal */
-    const UnicodeString getPrefix(UErrorCode& status) const;
-
-    /** @internal */
-    const UnicodeString getSuffix(UErrorCode& status) const;
 
 #endif
 

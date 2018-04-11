@@ -15,6 +15,7 @@ import java.text.ParsePosition;
 import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.DecimalFormatProperties.ParseMode;
+import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringUtils;
@@ -915,7 +916,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getPositivePrefix() {
-    return formatter.format(1).getPrefix();
+    return formatter.getAffix(true, false);
   }
 
   /**
@@ -952,7 +953,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getNegativePrefix() {
-    return formatter.format(-1).getPrefix();
+    return formatter.getAffix(true, true);
   }
 
   /**
@@ -989,7 +990,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getPositiveSuffix() {
-    return formatter.format(1).getSuffix();
+    return formatter.getAffix(false, false);
   }
 
   /**
@@ -1026,7 +1027,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getNegativeSuffix() {
-    return formatter.format(-1).getSuffix();
+    return formatter.getAffix(false, true);
   }
 
   /**
@@ -1686,7 +1687,7 @@ public class DecimalFormat extends NumberFormat {
   public synchronized char getPadCharacter() {
     CharSequence paddingString = properties.getPadString();
     if (paddingString == null) {
-      return '.'; // TODO: Is this the correct behavior?
+      return Padder.FALLBACK_PADDING_STRING.charAt(0);
     } else {
       return paddingString.charAt(0);
     }
