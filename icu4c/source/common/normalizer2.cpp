@@ -221,10 +221,12 @@ static icu::UInitOnce nfcInitOnce = U_INITONCE_INITIALIZER;
 static icu::UInitOnce noopInitOnce = U_INITONCE_INITIALIZER;
 
 // UInitOnce singleton initialization functions
+#if 0  // TODO
 static void U_CALLCONV initNFCSingleton(UErrorCode &errorCode) {
     nfcSingleton=Norm2AllModes::createNFCInstance(errorCode);
     ucln_common_registerCleanup(UCLN_COMMON_NORMALIZER2, uprv_normalizer2_cleanup);
 }
+#endif  // TODO
 
 static void U_CALLCONV initNoopSingleton(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) {

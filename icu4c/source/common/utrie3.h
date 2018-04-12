@@ -156,7 +156,7 @@ UTrie3HandleValue(const void *context, uint32_t value);
  * }
  * \endcode
  *
- * @param trie a pointer to a frozen trie
+ * @param trie a pointer to a trie
  * @param start range start
  * @param handleValue a pointer to a function that may modify the trie entry value,
  *     or NULL if the values from the trie are to be used directly
@@ -171,17 +171,22 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
 
 /**
  * Returns the last code point such that all those from start to there have the same value,
- * skipping lead surrogates.
- * Same as utrie3_getRange() but treats all lead surrogates (U+D800..U+DBFF)
- * as having the leadValue (without transforming it via handleValue()). See U16_IS_LEAD(c).
+ * with a fixed value for surrogates.
+ * Same as utrie3_getRange() but treats either lead surrogates (U+D800..U+DBFF)
+ * or all surrogates (U+D800..U+DFFF)
+ * as having the surrValue (without transforming it via handleValue()).
+ * See U_IS_LEAD(c) and U_IS_SURROGATE(c).
  *
- * This is useful for tries that map lead surrogate code *units* to
- * special values optimized for UTF-16 string processing,
+ * This is useful for tries that map surrogate code *units* to
+ * special values optimized for UTF-16 string processing
+ * or for special error behavior for unpaired surrogates,
  * but those values are not to be associated with the lead surrogate code *points*.
  *
- * @param trie a pointer to a frozen trie
+ * @param trie a pointer to a trie
  * @param start range start
- * @param leadValue value for lead surrogates
+ * @param allSurr if TRUE, then the surrValue is used for all surrogates;
+ *                if FALSE, it is used only for lead surrogates
+ * @param surrValue value for surrogates
  * @param handleValue a pointer to a function that may modify the trie entry value,
  *     or NULL if the values from the trie are to be used directly
  * @param context an opaque pointer that is passed on to the handleValue function
@@ -190,8 +195,8 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
  * @return the range end code point, or -1 if start is not a valid code point
  */
 U_CAPI UChar32 U_EXPORT2
-ucptrie_getRangeSkipLead(const UTrie3 *trie, UChar32 start, uint32_t leadValue,
-                         UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue);
+ucptrie_getRangeFixedSurr(const UTrie3 *trie, UChar32 start, UBool allSurr, uint32_t surrValue,
+                          UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue);
 
 /**
  * Serialize a frozen trie into 32-bit aligned memory.

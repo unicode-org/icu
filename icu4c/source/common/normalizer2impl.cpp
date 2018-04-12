@@ -465,8 +465,8 @@ void
 Normalizer2Impl::addLcccChars(UnicodeSet &set) const {
     UChar32 start = 0, end;
     uint32_t norm16;
-    while ((end = ucptrie_getRangeSkipLead(normTrie, start, INERT,
-                                           nullptr, nullptr, &norm16)) >= 0) {
+    while ((end = ucptrie_getRangeFixedSurr(normTrie, start, FALSE, INERT,
+                                            nullptr, nullptr, &norm16)) >= 0) {
         if (norm16 > Normalizer2Impl::MIN_NORMAL_MAYBE_YES &&
                 norm16 != Normalizer2Impl::JAMO_VT) {
             set.add(start, end);
@@ -483,8 +483,8 @@ Normalizer2Impl::addPropertyStarts(const USetAdder *sa, UErrorCode & /*errorCode
     // Add the start code point of each same-value range of the trie.
     UChar32 start = 0, end;
     uint32_t value;
-    while ((end = ucptrie_getRangeSkipLead(normTrie, start, INERT,
-                                           nullptr, nullptr, &value)) >= 0) {
+    while ((end = ucptrie_getRangeFixedSurr(normTrie, start, FALSE, INERT,
+                                            nullptr, nullptr, &value)) >= 0) {
         sa->add(sa->set, start);
         if (start != end && isAlgorithmicNoNo((uint16_t)value) &&
                 (value & Normalizer2Impl::DELTA_TCCC_MASK) > Normalizer2Impl::DELTA_TCCC_1) {
@@ -2396,8 +2396,8 @@ void InitCanonIterData::doInit(Normalizer2Impl *impl, UErrorCode &errorCode) {
     if (U_SUCCESS(errorCode)) {
         UChar32 start = 0, end;
         uint32_t value;
-        while ((end = ucptrie_getRangeSkipLead(impl->normTrie, start, Normalizer2Impl::INERT,
-                                               nullptr, nullptr, &value)) >= 0) {
+        while ((end = ucptrie_getRangeFixedSurr(impl->normTrie, start, FALSE, Normalizer2Impl::INERT,
+                                                nullptr, nullptr, &value)) >= 0) {
             // Call Normalizer2Impl::makeCanonIterDataFromNorm16() for a range of same-norm16 characters.
             if (value != Normalizer2Impl::INERT) {
                 impl->makeCanonIterDataFromNorm16(start, end, value, *impl->fCanonIterData, errorCode);

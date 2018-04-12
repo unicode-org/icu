@@ -358,43 +358,44 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
 }
 
 U_CAPI UChar32 U_EXPORT2
-ucptrie_getRangeSkipLead(const UTrie3 *trie, UChar32 start, uint32_t leadValue,
-                         UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue) {
+ucptrie_getRangeFixedSurr(const UTrie3 *trie, UChar32 start, UBool allSurr, uint32_t surrValue,
+                          UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue) {
     uint32_t value;
     if (pValue == nullptr) {
         // We need to examine the range value even if the caller does not want it.
         pValue = &value;
     }
+    UChar32 surrEnd = allSurr ? 0xdfff : 0xdbff;
     UChar32 end = utrie3_getRange(trie, start, handleValue, context, pValue);
-    if (end < 0xd7ff || start > 0xdbff) {
+    if (end < 0xd7ff || start > surrEnd) {
         return end;
     }
-    // The range overlaps with lead surrogates, or ends just before the first one.
-    if (*pValue == leadValue) {
-        if (end >= 0xdbff) {
-            // Lead surrogates followed by a non-leadValue range,
-            // or lead surrogates are part of a larger leadValue range.
+    // The range overlaps with surrogates, or ends just before the first one.
+    if (*pValue == surrValue) {
+        if (end >= surrEnd) {
+            // Surrogates followed by a non-surrValue range,
+            // or surrogates are part of a larger surrValue range.
             return end;
         }
     } else {
         if (start <= 0xd7ff) {
-            return 0xd7ff;  // Non-leadValue range ends before leadValue surrogates.
+            return 0xd7ff;  // Non-surrValue range ends before surrValue surrogates.
         }
-        // Start is a lead surrogate with a non-leadValue code *unit* value.
-        // Return a leadValue code *point* range.
-        *pValue = leadValue;
-        if (end > 0xdbff) {
-            return 0xdbff;  // Inert surrogate range ends before non-leadValue rest of range.
+        // Start is a surrogate with a non-surrValue code *unit* value.
+        // Return a surrValue code *point* range.
+        *pValue = surrValue;
+        if (end > surrEnd) {
+            return surrEnd;  // Inert surrogate range ends before non-surrValue rest of range.
         }
     }
-    // See if the leadValue lead surrogate range can be merged with
+    // See if the surrValue surrogate range can be merged with
     // an immediately following range.
     uint32_t value2;
-    UChar32 end2 = utrie3_getRange(trie, 0xdc00, handleValue, context, &value2);
-    if (value2 == leadValue) {
+    UChar32 end2 = utrie3_getRange(trie, surrEnd + 1, handleValue, context, &value2);
+    if (value2 == surrValue) {
         return end2;
     }
-    return 0xdbff;
+    return surrEnd;
 }
 
 U_CAPI int32_t U_EXPORT2
