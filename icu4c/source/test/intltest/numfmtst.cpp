@@ -602,6 +602,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestSpaceParsing);
   TESTCASE_AUTO(TestMultiCurrencySign);
   TESTCASE_AUTO(TestCurrencyFormatForMixParsing);
+  TESTCASE_AUTO(TestMismatchedCurrencyFormatFail);
   TESTCASE_AUTO(TestDecimalFormatCurrencyParse);
   TESTCASE_AUTO(TestCurrencyIsoPluralFormat);
   TESTCASE_AUTO(TestCurrencyParsing);
@@ -644,7 +645,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestFractionalDigitsForCurrency);
   TESTCASE_AUTO(TestFormatCurrencyPlural);
   TESTCASE_AUTO(Test11868);
-//  TESTCASE_AUTO(Test10727_RoundingZero);
+  TESTCASE_AUTO(Test10727_RoundingZero);
   TESTCASE_AUTO(Test11376_getAndSetPositivePrefix);
   TESTCASE_AUTO(Test11475_signRecognition);
   TESTCASE_AUTO(Test11640_getAffixes);
@@ -671,10 +672,10 @@ NumberFormatTest::TestAPI(void)
   }
   if(test != NULL) {
     test->setMinimumIntegerDigits(10);
-    test->setMaximumIntegerDigits(2);
+    test->setMaximumIntegerDigits(1);
 
     test->setMinimumFractionDigits(10);
-    test->setMaximumFractionDigits(2);
+    test->setMaximumFractionDigits(1);
 
     UnicodeString result;
     FieldPosition pos;
@@ -689,9 +690,14 @@ NumberFormatTest::TestAPI(void)
     result.remove();
     int64_t ll = 12;
     test->format(ll, result);
-    if (result != "12.00"){
-        errln("format int64_t error");
-    }
+    assertEquals("format int64_t error", u"2.0", result);
+
+    test->setMinimumIntegerDigits(4);
+    test->setMinimumFractionDigits(4);
+
+    result.remove();
+    test->format(ll, result);
+    assertEquals("format int64_t error", u"0,012.0000", result);
 
     ParsePosition ppos;
     LocalPointer<CurrencyAmount> currAmt(test->parseCurrency("",ppos));
@@ -1748,6 +1754,8 @@ void NumberFormatTest::TestWhiteSpaceParsing(void) {
         errcheckln(ec, "FAIL: Constructor - %s", u_errorName(ec));
         return;
     }
+    // From ICU 62, flexible whitespace needs lenient mode
+    fmt.setLenient(TRUE);
     int32_t n = 1234;
     expect(fmt, "a b1234c ", n);
     expect(fmt, "a   b1234c   ", n);
@@ -2225,9 +2233,9 @@ void NumberFormatTest::TestSurrogateSupport(void) {
            int32_t(-20), expStr, status);
 
     custom.setSymbol(DecimalFormatSymbols::kPercentSymbol, "percent");
-    patternStr = "'You''ve lost ' 0.00 %' of your money today'";
+    patternStr = "'You''ve lost ' -0.00 %' of your money today'";
     patternStr = patternStr.unescape();
-    expStr = UnicodeString(" minus You've lost  2000decimal00 percent of your money today", "");
+    expStr = UnicodeString(" minus You've lost   minus 2000decimal00 percent of your money today", "");
     status = U_ZERO_ERROR;
     expect2(new DecimalFormat(patternStr, custom, status),
            int32_t(-20), expStr, status);
@@ -3654,28 +3662,24 @@ NumberFormatTest::TestSpaceParsing() {
     // the data are:
     // the string to be parsed, parsed position, parsed error index
     const TestSpaceParsingItem DATA[] = {
-        // TOTO: Update the following TODOs, some may be handled now
         {"$124",           4, -1, FALSE},
         {"$124 $124",      4, -1, FALSE},
         {"$124 ",          4, -1, FALSE},
-        //{"$ 124 ",       5, -1, FALSE}, // TODO: need to handle space correctly
-        //{"$\\u00A0124 ", 5, -1, FALSE}, // TODO: need to handle space correctly
-        {"$ 124 ",         0,  1, FALSE}, // errorIndex used to be 0, now 1 (better)
-        {"$\\u00A0124 ",   0,  1, FALSE}, // errorIndex used to be 0, now 1 (better)
-        {" $ 124 ",        0,  0, FALSE}, // TODO: need to handle space correctly
-        {"124$",           0,  3, FALSE}, // TODO: need to handle space correctly
-        // {"124 $",       5, -1, FALSE}, // TODO: OK or not, need currency spacing rule
-        {"124 $",          0,  3, FALSE},
+        {"$ 124 ",         0,  1, FALSE},
+        {"$\\u00A0124 ",   5, -1, FALSE},
+        {" $ 124 ",        0,  0, FALSE},
+        {"124$",           0,  4, FALSE},
+        {"124 $",          0,  5, FALSE},
         {"$124",           4, -1, TRUE},
         {"$124 $124",      4, -1, TRUE},
         {"$124 ",          4, -1, TRUE},
         {"$ 124 ",         5, -1, TRUE},
         {"$\\u00A0124 ",   5, -1, TRUE},
         {" $ 124 ",        6, -1, TRUE},
-        //{"124$",         4, -1, TRUE}, // TODO: need to handle trailing currency correctly
-        {"124$",           3, -1, TRUE},
-        //{"124 $",        5, -1, TRUE}, // TODO: OK or not, need currency spacing rule
-        {"124 $",          4, -1, TRUE},
+        {"124$",           4, -1, TRUE},
+        {"124$",           4, -1, TRUE},
+        {"124 $",          5, -1, TRUE},
+        {"124 $",          5, -1, TRUE},
     };
     UErrorCode status = U_ZERO_ERROR;
     Locale locale("en_US");
@@ -3898,7 +3902,7 @@ NumberFormatTest::TestCurrencyFormatForMixParsing() {
         "$1,234.56",  // string to be parsed
         "USD1,234.56",
         "US dollars1,234.56",
-        "1,234.56 US dollars" // NOTE: Fails in 62 because currency format is not compatible with pattern
+        // "1,234.56 US dollars" // Fails in 62 because currency format is not compatible with pattern.
     };
     const CurrencyAmount* curramt = NULL;
     for (uint32_t i = 0; i < UPRV_LENGTHOF(formats); ++i) {
@@ -3927,6 +3931,39 @@ NumberFormatTest::TestCurrencyFormatForMixParsing() {
 }
 
 
+/** Starting in ICU 62, strict mode is actually strict with currency formats. */
+void NumberFormatTest::TestMismatchedCurrencyFormatFail() {
+    IcuTestErrorCode status(*this, "TestMismatchedCurrencyFormatFail");
+    LocalPointer<DecimalFormat> df(
+            dynamic_cast<DecimalFormat*>(DecimalFormat::createCurrencyInstance("en", status)), status);
+    UnicodeString pattern;
+    assertEquals("Test assumes that currency sign is at the beginning",
+            u"\u00A4#,##0.00",
+            df->toPattern(pattern));
+    // Should round-trip on the correct currency format:
+    expect2(*df, 1.23, u"XXX\u00A01.23");
+    df->setCurrency(u"EUR", status);
+    expect2(*df, 1.23, u"\u20AC1.23");
+    // Should parse with currency in the wrong place in lenient mode
+    df->setLenient(TRUE);
+    expect(*df, u"1.23\u20AC", 1.23);
+    expectParseCurrency(*df, u"EUR", 1.23, "1.23\\u20AC");
+    // Should NOT parse with currency in the wrong place in STRICT mode
+    df->setLenient(FALSE);
+    {
+        Formattable result;
+        ErrorCode failStatus;
+        df->parse(u"1.23\u20AC", result, failStatus);
+        assertEquals("Should fail to parse", U_INVALID_FORMAT_ERROR, failStatus);
+    }
+    {
+        ParsePosition ppos;
+        df->parseCurrency(u"1.23\u20AC", ppos);
+        assertEquals("Should fail to parse currency", 0, ppos.getIndex());
+    }
+}
+
+
 void
 NumberFormatTest::TestDecimalFormatCurrencyParse() {
     // Locale.US
@@ -3951,11 +3988,13 @@ NumberFormatTest::TestDecimalFormatCurrencyParse() {
         // string to be parsed, the parsed result (number)
         {"$1.00", "1"},
         {"USD1.00", "1"},
-        {"1.00 US dollar", "1"}, // NOTE: Fails in 62 because currency format is not compatible with pattern
+        {"1.00 US dollar", "1"},
         {"$1,234.56", "1234.56"},
         {"USD1,234.56", "1234.56"},
-        {"1,234.56 US dollar", "1234.56"}, // NOTE: Fails in 62 because currency format is not compatible with pattern
+        {"1,234.56 US dollar", "1234.56"},
     };
+    // NOTE: ICU 62 requires that the currency format match the pattern in strict mode.
+    fmt->setLenient(TRUE);
     for (uint32_t i = 0; i < UPRV_LENGTHOF(DATA); ++i) {
         UnicodeString stringToBeParsed = ctou(DATA[i][0]);
         double parsedResult = atof(DATA[i][1]);
@@ -4043,8 +4082,8 @@ NumberFormatTest::TestCurrencyIsoPluralFormat() {
         }
         // test parsing, and test parsing for all currency formats.
         // NOTE: ICU 62 requires that the currency format match the pattern in strict mode.
-        //for (int j = 3; j < 6; ++j) {
-        for (int j = 3 + kIndex; j <= 3 + kIndex; j++) {
+        numFmt->setLenient(TRUE);
+        for (int j = 3; j < 6; ++j) {
             // DATA[i][3] is the currency format result using
             // CURRENCYSTYLE formatter.
             // DATA[i][4] is the currency format result using
@@ -4084,24 +4123,24 @@ NumberFormatTest::TestCurrencyParsing() {
         // format result using CURRENCYSTYLE,
         // format result using ISOCURRENCYSTYLE,
         // format result using PLURALCURRENCYSTYLE,
-        {"en_US", "1", "USD", "$1.00", "USD\\u00A01.00", "1.00 US dollar"},
+        {"en_US", "1", "USD", "$1.00", "USD\\u00A01.00", "1.00 US dollars"},
         {"pa_IN", "1", "USD", "US$\\u00A01.00", "USD\\u00A01.00", "1.00 \\u0a2f\\u0a42.\\u0a10\\u0a38. \\u0a21\\u0a3e\\u0a32\\u0a30"},
         {"es_AR", "1", "USD", "US$\\u00A01,00", "USD\\u00A01,00", "1,00 d\\u00f3lar estadounidense"},
         {"ar_EG", "1", "USD", "\\u0661\\u066b\\u0660\\u0660\\u00a0US$", "\\u0661\\u066b\\u0660\\u0660\\u00a0USD", "\\u0661\\u066b\\u0660\\u0660 \\u062f\\u0648\\u0644\\u0627\\u0631 \\u0623\\u0645\\u0631\\u064a\\u0643\\u064a"},
         {"fa_CA", "1", "USD", "\\u200e$\\u06f1\\u066b\\u06f0\\u06f0", "\\u200eUSD\\u06f1\\u066b\\u06f0\\u06f0", "\\u06f1\\u066b\\u06f0\\u06f0 \\u062f\\u0644\\u0627\\u0631 \\u0627\\u0645\\u0631\\u06cc\\u06a9\\u0627"},
         {"he_IL", "1", "USD", "\\u200f1.00\\u00a0$", "\\u200f1.00\\u00a0USD", "1.00 \\u05d3\\u05d5\\u05dc\\u05e8 \\u05d0\\u05de\\u05e8\\u05d9\\u05e7\\u05d0\\u05d9"},
-        {"hr_HR", "1", "USD", "1,00\\u00a0USD", "1,00\\u00a0USD", "1,00 Ameri\\u010dki dolar"},
+        {"hr_HR", "1", "USD", "1,00\\u00a0USD", "1,00\\u00a0USD", "1,00 ameri\\u010Dkih dolara"},
         {"id_ID", "1", "USD", "US$\\u00A01,00", "USD\\u00A01,00", "1,00 Dolar Amerika Serikat"},
-        {"it_IT", "1", "USD", "1,00\\u00a0USD", "1,00\\u00a0USD", "1,00 Dollaro Statunitense"},
+        {"it_IT", "1", "USD", "1,00\\u00a0USD", "1,00\\u00a0USD", "1,00 dollari statunitensi"},
         {"ko_KR", "1", "USD", "US$\\u00A01.00", "USD\\u00A01.00", "1.00 \\ubbf8\\uad6d \\ub2ec\\ub7ec"},
         {"ja_JP", "1", "USD", "$1.00", "USD\\u00A01.00", "1.00\\u00A0\\u7c73\\u30c9\\u30eb"},
         {"zh_CN", "1", "CNY", "\\uFFE51.00", "CNY\\u00A001.00", "1.00\\u00A0\\u4EBA\\u6C11\\u5E01"},
         {"zh_TW", "1", "CNY", "CN\\u00A51.00", "CNY\\u00A01.00", "1.00 \\u4eba\\u6c11\\u5e63"},
         {"zh_Hant", "1", "CNY", "CN\\u00A51.00", "CNY\\u00A01.00", "1.00 \\u4eba\\u6c11\\u5e63"},
-        {"zh_Hant", "1", "JPY", "\\u00A51.00", "JPY\\u00A01.00", "1.00 \\u65e5\\u5713"},
-        {"ja_JP", "1", "JPY", "\\uFFE51.00", "JPY\\u00A01.00", "1.00\\u00A0\\u65e5\\u672c\\u5186"},
-        {"ja_JP", "1", "JPY", "\\u00A51.00", "JPY\\u00A01.00", "1.00\\u00A0\\u65e5\\u672c\\u5186"},
-        {"ru_RU", "1", "RUB", "1,00\\u00A0\\u00A0\\u20BD", "1,00\\u00A0\\u00A0RUB", "1,00 \\u0420\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u0438\\u0439 \\u0440\\u0443\\u0431\\u043B\\u044C"}
+        {"zh_Hant", "1", "JPY", "\\u00A51.00", "JPY\\u00A01.00", "1 \\u65E5\\u5713"},
+        {"ja_JP", "1", "JPY", "\\uFFE51.00", "JPY\\u00A01.00", "1\\u00A0\\u5186"},
+        {"ja_JP", "1", "JPY", "\\u00A51.00", "JPY\\u00A01.00", "1\\u00A0\\u5186"},
+        {"ru_RU", "1", "RUB", "1,00\\u00A0\\u00A0\\u20BD", "1,00\\u00A0\\u00A0RUB", "1,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E \\u0440\\u0443\\u0431\\u043B\\u044F"}
     };
     static const UNumberFormatStyle currencyStyles[] = {
         UNUM_CURRENCY,
@@ -4148,9 +4187,6 @@ for (;;) {
 
         UnicodeString strBuf;
         numFmt->format(numberToBeFormat, strBuf);
-        // TODO: Re-enable the following test block. It has been disabled since
-        // the code was first checked-in (r25497)
-        /*
         int resultDataIndex = 3 + kIndex;
         // DATA[i][resultDataIndex] is the currency format result
         // using 'k' currency style.
@@ -4158,11 +4194,10 @@ for (;;) {
         if (strBuf.compare(formatResult)) {
             errln("FAIL: Expected " + formatResult + " actual: " + strBuf);
         }
-        */
         // test parsing, and test parsing for all currency formats.
         // NOTE: ICU 62 requires that the currency format match the pattern in strict mode.
-        //for (int j = 3; j < 6; ++j) {
-        for (int j = 3 + kIndex; j <= 3 + kIndex; j++) {
+        numFmt->setLenient(TRUE);
+        for (int j = 3; j < 6; ++j) {
             // DATA[i][3] is the currency format result using
             // CURRENCYSTYLE formatter.
             // DATA[i][4] is the currency format result using
@@ -6748,7 +6783,8 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
       UnicodeString formatted = ctou(DATA[i]);
       UErrorCode status = U_ZERO_ERROR;
       NumberFormat* numFmt = NumberFormat::createInstance(locale, UNUM_CURRENCY, status);
-      numFmt->setLenient(TRUE); // ICU 62 PATCH
+      // NOTE: ICU 62 requires that the currency format match the pattern in strict mode.
+      numFmt->setLenient(TRUE);
       if (numFmt != NULL && U_SUCCESS(status)) {
           ParsePosition parsePos;
           LocalPointer<CurrencyAmount> currAmt(numFmt->parseCurrency(formatted, parsePos));
@@ -8692,6 +8728,15 @@ void NumberFormatTest::Test11868() {
         assertEquals("", "-9,876.54 US dollars", result);
         verifyFieldPositionIterator(attributes, iter);
     }
+}
+
+void NumberFormatTest::Test10727_RoundingZero() {
+    IcuTestErrorCode status(*this, "Test10727_RoundingZero");
+    DecimalQuantity dq;
+    dq.setToDouble(-0.0);
+    assertTrue("", dq.isNegative());
+    dq.roundToMagnitude(0, UNUM_ROUND_HALFEVEN, status);
+    assertTrue("", dq.isNegative());
 }
 
 void NumberFormatTest::Test11376_getAndSetPositivePrefix() {
