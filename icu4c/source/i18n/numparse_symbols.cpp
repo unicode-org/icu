@@ -109,7 +109,7 @@ MinusSignMatcher::MinusSignMatcher(const DecimalFormatSymbols& dfs, bool allowTr
 }
 
 bool MinusSignMatcher::isDisabled(const ParsedNumber& result) const {
-    return 0 != (result.flags & FLAG_NEGATIVE) || (fAllowTrailing ? false : result.seenNumber());
+    return !fAllowTrailing && result.seenNumber();
 }
 
 void MinusSignMatcher::accept(StringSegment& segment, ParsedNumber& result) const {
@@ -182,7 +182,7 @@ PlusSignMatcher::PlusSignMatcher(const DecimalFormatSymbols& dfs, bool allowTrai
 }
 
 bool PlusSignMatcher::isDisabled(const ParsedNumber& result) const {
-    return fAllowTrailing ? false : result.seenNumber();
+    return !fAllowTrailing && result.seenNumber();
 }
 
 void PlusSignMatcher::accept(StringSegment& segment, ParsedNumber& result) const {

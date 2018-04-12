@@ -37,8 +37,7 @@ public class MinusSignMatcher extends SymbolMatcher {
 
     @Override
     protected boolean isDisabled(ParsedNumber result) {
-        return 0 != (result.flags & ParsedNumber.FLAG_NEGATIVE)
-                || (allowTrailing ? false : result.seenNumber());
+        return !allowTrailing && result.seenNumber();
     }
 
     @Override

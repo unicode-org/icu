@@ -867,21 +867,41 @@ void DecimalFormat::applyLocalizedPattern(const UnicodeString& localizedPattern,
 }
 
 void DecimalFormat::setMaximumIntegerDigits(int32_t newValue) {
+    // For backwards compatibility, conflicting min/max need to keep the most recent setting.
+    int32_t min = fProperties->minimumIntegerDigits;
+    if (min >= 0 && min > newValue) {
+        fProperties->minimumIntegerDigits = newValue;
+    }
     fProperties->maximumIntegerDigits = newValue;
     refreshFormatterNoError();
 }
 
 void DecimalFormat::setMinimumIntegerDigits(int32_t newValue) {
+    // For backwards compatibility, conflicting min/max need to keep the most recent setting.
+    int32_t max = fProperties->maximumIntegerDigits;
+    if (max >= 0 && max < newValue) {
+        fProperties->maximumIntegerDigits = newValue;
+    }
     fProperties->minimumIntegerDigits = newValue;
     refreshFormatterNoError();
 }
 
 void DecimalFormat::setMaximumFractionDigits(int32_t newValue) {
+    // For backwards compatibility, conflicting min/max need to keep the most recent setting.
+    int32_t min = fProperties->minimumFractionDigits;
+    if (min >= 0 && min > newValue) {
+        fProperties->minimumFractionDigits = newValue;
+    }
     fProperties->maximumFractionDigits = newValue;
     refreshFormatterNoError();
 }
 
 void DecimalFormat::setMinimumFractionDigits(int32_t newValue) {
+    // For backwards compatibility, conflicting min/max need to keep the most recent setting.
+    int32_t max = fProperties->maximumFractionDigits;
+    if (max >= 0 && max < newValue) {
+        fProperties->maximumFractionDigits = newValue;
+    }
     fProperties->minimumFractionDigits = newValue;
     refreshFormatterNoError();
 }

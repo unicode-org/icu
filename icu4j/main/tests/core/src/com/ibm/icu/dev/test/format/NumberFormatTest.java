@@ -593,6 +593,36 @@ public class NumberFormatTest extends TestFmwk {
         }
     }
 
+
+    /** Starting in ICU 62, strict mode is actually strict with currency formats. */
+    @Test
+    public void TestMismatchedCurrencyFormatFail() {
+        DecimalFormat df = (DecimalFormat) NumberFormat.getCurrencyInstance(ULocale.ENGLISH);
+        assertEquals("Test assumes that currency sign is at the beginning",
+                "\u00A4#,##0.00",
+                df.toPattern());
+        // Should round-trip on the correct currency format:
+        expect2(df, 1.23, "XXX\u00A01.23");
+        df.setCurrency(Currency.getInstance("EUR"));
+        expect2(df, 1.23, "\u20AC1.23");
+        // Should parse with currency in the wrong place in lenient mode
+        df.setParseStrict(false);
+        expect(df, "1.23\u20AC", 1.23);
+        expectParseCurrency(df, Currency.getInstance("EUR"), "1.23\u20AC");
+        // Should NOT parse with currency in the wrong place in STRICT mode
+        df.setParseStrict(true);
+        {
+            ParsePosition ppos = new ParsePosition(0);
+            df.parse("1.23\u20AC", ppos);
+            assertEquals("Should fail to parse", 0, ppos.getIndex());
+        }
+        {
+            ParsePosition ppos = new ParsePosition(0);
+            df.parseCurrency("1.23\u20AC", ppos);
+            assertEquals("Should fail to parse currency", 0, ppos.getIndex());
+        }
+    }
+
     @Test
     public void TestDecimalFormatCurrencyParse() {
         // Locale.US
@@ -6038,5 +6068,11 @@ public class NumberFormatTest extends TestFmwk {
         df.setPositiveSuffix("lala");
         assertEquals("Custom suffix should round-trip", "lala", df.getPositiveSuffix());
         assertEquals("Custom suffix should be used in formatting", "123.00lala", df.format(123));
+    }
+
+    @Test
+    public void testParseDoubleMinus() {
+        DecimalFormat df = new DecimalFormat("-0", DecimalFormatSymbols.getInstance(ULocale.ENGLISH));
+        expect2(df, -5, "--5");
     }
 }

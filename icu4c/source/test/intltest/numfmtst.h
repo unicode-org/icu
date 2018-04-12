@@ -155,6 +155,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestSpaceParsing();
     void TestMultiCurrencySign();
     void TestCurrencyFormatForMixParsing();
+    void TestMismatchedCurrencyFormatFail();
     void TestDecimalFormatCurrencyParse();
     void TestCurrencyIsoPluralFormat();
     void TestCurrencyParsing();
