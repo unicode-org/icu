@@ -1412,7 +1412,7 @@ static const char *lenientAffixTestCases[] = {
 static const char *lenientMinusTestCases[] = {
     "-5",
     "\\u22125",
-    "\\u20105"
+    "\\u27965"
 };
 
 static const char *lenientCurrencyTestCases[] = {
