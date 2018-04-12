@@ -1469,7 +1469,6 @@ utrie3bld_clone(const UTrie3Builder *other, UErrorCode *pErrorCode) {
         return nullptr;
     }
     if (other == nullptr) {
-        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
     Trie3Builder *clone = new Trie3Builder(

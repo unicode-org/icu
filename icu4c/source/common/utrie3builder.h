@@ -147,7 +147,7 @@ utrie3bld_get(const UTrie3Builder *builder, UChar32 c);
  */
 U_CAPI UChar32 U_EXPORT2
 utrie3bld_getRange(const UTrie3Builder *builder, UChar32 start,
-                   UTrie3HandleValue *enumValue, const void *context, uint32_t *pValue);
+                   UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue);
 
 /**
  * Set a value for a code point.

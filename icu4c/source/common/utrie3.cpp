@@ -406,8 +406,7 @@ utrie3_serialize(const UTrie3 *trie,
         return 0;
     }
 
-    if (trie == nullptr || capacity < 0 ||
-            (capacity > 0 && (data == nullptr || (U_POINTER_MASK_LSB(data, 3) != 0)))) {
+    if (capacity < 0 || (capacity > 0 && (data == nullptr || (U_POINTER_MASK_LSB(data, 3) != 0)))) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -463,7 +462,7 @@ utrie3_serialize(const UTrie3 *trie,
 U_CAPI int32_t U_EXPORT2
 utrie3_getVersion(const void *data, int32_t length, UBool anyEndianOk) {
     uint32_t signature;
-    if(length<16 || data==NULL || (U_POINTER_MASK_LSB(data, 3)!=0)) {
+    if(length<16 || data==nullptr || (U_POINTER_MASK_LSB(data, 3)!=0)) {
         return 0;
     }
     signature=*(const uint32_t *)data;
@@ -511,7 +510,7 @@ U_CFUNC void
 utrie3_printLengths(const UTrie3 *trie, const char *which) {
     long indexLength=trie->indexLength;
     long dataLength=(long)trie->dataLength;
-    long totalLength=(long)sizeof(UTrie3Header)+indexLength*2+dataLength*(trie->data32!=NULL ? 4 : 2);
+    long totalLength=(long)sizeof(UTrie3Header)+indexLength*2+dataLength*(trie->data32!=nullptr ? 4 : 2);
     printf("**UTrie3Lengths(%s %s)** index:%6ld  data:%6ld  countNull:%6ld  serialized:%6ld\n",
            which, trie->name, indexLength, dataLength, countNull(trie), totalLength);
 }
@@ -531,7 +530,7 @@ utrie3_swap(const UDataSwapper *ds,
     if(U_FAILURE(*pErrorCode)) {
         return 0;
     }
-    if(ds==NULL || inData==NULL || (length>=0 && outData==NULL)) {
+    if(ds==nullptr || inData==nullptr || (length>=0 && outData==nullptr)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
