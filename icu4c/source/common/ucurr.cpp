@@ -17,11 +17,13 @@
 #include "unicode/ustring.h"
 #include "unicode/parsepos.h"
 #include "unicode/uniset.h"
+#include "unicode/usetiter.h"
 #include "unicode/utf16.h"
 #include "ustr_imp.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "numparse_unisets.h"
 #include "uassert.h"
 #include "umutex.h"
 #include "ucln_cmn.h"
@@ -66,14 +68,6 @@ static const int32_t POW10[] = { 1, 10, 100, 1000, 10000, 100000,
                                  1000000, 10000000, 100000000, 1000000000 };
 
 static const int32_t MAX_POW10 = UPRV_LENGTHOF(POW10) - 1;
-
-// Defines equivalent currency symbols.
-static const char *EQUIV_CURRENCY_SYMBOLS[][2] = {
-    {"\\u00a5", "\\uffe5"},
-    {"$", "\\ufe69"},
-    {"$", "\\uff04"},
-    {"\\u20a8", "\\u20b9"},
-    {"\\u00a3", "\\u20a4"}};
 
 #define ISO_CURRENCY_CODE_LENGTH 3
 
@@ -2207,16 +2201,21 @@ static void U_CALLCONV initIsoCodes(UErrorCode &status) {
 }
 
 static void populateCurrSymbolsEquiv(icu::Hashtable *hash, UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    int32_t length = UPRV_LENGTHOF(EQUIV_CURRENCY_SYMBOLS);
-    for (int32_t i = 0; i < length; ++i) {
-        icu::UnicodeString lhs(EQUIV_CURRENCY_SYMBOLS[i][0], -1, US_INV);
-        icu::UnicodeString rhs(EQUIV_CURRENCY_SYMBOLS[i][1], -1, US_INV);
-        makeEquivalent(lhs.unescape(), rhs.unescape(), hash, status);
-        if (U_FAILURE(status)) {
-            return;
+    using namespace icu::numparse::impl;
+    if (U_FAILURE(status)) { return; }
+    for (auto& entry : unisets::kCurrencyEntries) {
+        UnicodeString exemplar(entry.exemplar);
+        const UnicodeSet* set = unisets::get(entry.key);
+        if (set == nullptr) { return; }
+        UnicodeSetIterator it(*set);
+        while (it.next()) {
+            UnicodeString value = it.getString();
+            if (value == exemplar) {
+                // No need to mark the exemplar character as an equivalent
+                continue;
+            }
+            makeEquivalent(exemplar, value, hash, status);
+            if (U_FAILURE(status)) { return; }
         }
     }
 }

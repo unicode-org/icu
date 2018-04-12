@@ -1764,7 +1764,7 @@ public class NumberFormatTest extends TestFmwk {
         }
 
         // Test default ignorable characters.  These should work in both lenient and strict.
-        UnicodeSet defaultIgnorables = new UnicodeSet("[[:Default_Ignorable_Code_Point:]]").freeze();
+        UnicodeSet defaultIgnorables = new UnicodeSet("[[:Bidi_Control:]]").freeze();
         fmt.setParseStrict(false);
         for (String ignorable : defaultIgnorables) {
             String str = "a b " + ignorable + "1234c  ";

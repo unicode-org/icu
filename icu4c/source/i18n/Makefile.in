@@ -92,7 +92,7 @@ csdetect.o csmatch.o csr2022.o csrecog.o csrmbcs.o csrsbcs.o csrucode.o csrutf8.
 wintzimpl.o windtfmt.o winnmfmt.o basictz.o dtrule.o rbtz.o tzrule.o tztrans.o vtzone.o zonemeta.o \
 standardplural.o upluralrules.o plurrule.o plurfmt.o selfmt.o dtitvfmt.o dtitvinf.o udateintervalformat.o \
 tmunit.o tmutamt.o tmutfmt.o currpinf.o \
-uspoof.o uspoof_impl.o uspoof_build.o uspoof_conf.o decfmtst.o smpdtfst.o \
+uspoof.o uspoof_impl.o uspoof_build.o uspoof_conf.o smpdtfst.o \
 ztrans.o zrule.o vzone.o fphdlimp.o fpositer.o ufieldpositer.o \
 decNumber.o decContext.o alphaindex.o tznames.o tznames_impl.o tzgnames.o \
 tzfmt.o compactdecimalformat.o gender.o region.o scriptset.o \
@@ -107,7 +107,7 @@ number_mapper.o number_multiplier.o number_currencysymbols.o number_skeletons.o 
 double-conversion.o double-conversion-bignum-dtoa.o double-conversion-bignum.o \
 double-conversion-cached-powers.o double-conversion-diy-fp.o \
 double-conversion-fast-dtoa.o double-conversion-strtod.o \
-numparse_stringsegment.o numparse_unisets.o numparse_parsednumber.o numparse_impl.o \
+numparse_stringsegment.o numparse_parsednumber.o numparse_impl.o \
 numparse_symbols.o numparse_decimal.o numparse_scientific.o numparse_currency.o \
 numparse_affixes.o numparse_compositions.o numparse_validators.o \
 
