@@ -79,10 +79,6 @@ struct AffixTokenMatcherSetupData {
     const DecimalFormatSymbols& dfs;
     IgnorablesMatcher& ignorables;
     const Locale& locale;
-
-//    const UChar* currencyCode, const UnicodeString* currency1,
-//    const UnicodeString* currency2, const DecimalFormatSymbols* dfs,
-//            IgnorablesMatcher* ignorables, const Locale* locale
 };
 
 

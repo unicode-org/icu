@@ -651,6 +651,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11649_toPatternWithMultiCurrency);
   TESTCASE_AUTO(Test13327_numberingSystemBufferOverflow);
   TESTCASE_AUTO(Test13391_chakmaParsing);
+  TESTCASE_AUTO(Test11735_ExceptionIssue);
   TESTCASE_AUTO(Test11035_FormatCurrencyAmount);
   TESTCASE_AUTO(Test11318_DoubleConversion);
   TESTCASE_AUTO_END;
@@ -8724,9 +8725,7 @@ void NumberFormatTest::Test11376_getAndSetPositivePrefix() {
         }
         DecimalFormat *dfmt = (DecimalFormat *) fmt.getAlias();
         UnicodeString result;
-        UnicodeString tripleIntlCurrency(" \\u00a4\\u00a4\\u00a4");
-        tripleIntlCurrency = tripleIntlCurrency.unescape();
-        assertEquals("", tripleIntlCurrency, dfmt->getPositiveSuffix(result));
+        assertEquals("", u" (unknown currency)", dfmt->getPositiveSuffix(result));
         dfmt->setCurrency(USD);
 
         // getPositiveSuffix() always returns the suffix for the
@@ -8919,8 +8918,8 @@ void NumberFormatTest::verifyFieldPositionIterator(
     }
 }
 
-void NumberFormatTest::checkExceptionIssue11735() {
-    UErrorCode status;
+void NumberFormatTest::Test11735_ExceptionIssue() {
+    UErrorCode status = U_ZERO_ERROR;
     Locale enLocale("en");
     DecimalFormatSymbols symbols(enLocale, status);
 
