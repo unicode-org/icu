@@ -64,11 +64,16 @@ enum {
     UTRIE3_OPTIONS_DATA_NULL_OFFSET_MASK = 0xf00,
     UTRIE3_OPTIONS_RESERVED_MASK = 0x38,
     UTRIE3_OPTIONS_VALUE_BITS_MASK = 7,
-    UTRIE3_NO_INDEX2_NULL_OFFSET = 0x7fff,  // TODO: doc max value, bit 15 indicates something
+    /**
+     * Value for index2NullOffset which indicates that there is no index-2 null block.
+     * Bit 15 is unused for this value because this bit is used if the index-2 contains
+     * 18-bit indexes.
+     */
+    UTRIE3_NO_INDEX2_NULL_OFFSET = 0x7fff,
     UTRIE3_NO_DATA_NULL_OFFSET = 0xfffff
 };
 
-// Internal constants. TODO: move some into the builder .cpp?
+// Internal constants.
 // TODO: doc complete data structure
 enum {
     /** The length of the BMP index table. 1024=0x400 */
@@ -125,22 +130,29 @@ enum {
 
     /** Mask for getting the lower bits for the in-supplementary-data-block offset. */
     UTRIE3_SUPP_DATA_MASK = UTRIE3_SUPP_DATA_BLOCK_LENGTH - 1
-
-#if 0
-    /**
-     * The supplementary index-1 table follows the BMP index table at offset 1024=0x400.
-     * Variable length, for code points up to highStart, where the last single-value range starts.
-     * Maximum length 1024=0x400=0x100000>>UTRIE3_SUPP_SHIFT_1.
-     * (For 0x100000 supplementary code points U+10000..U+10ffff.)
-     *
-     * The supplementary index-2 table starts after this index-1 table.
-     *
-     * Both the supplementary index-1 table and the supplementary index-2 table
-     * are omitted completely if there is only BMP data (highStart<=0x10000).
-     */
-    UTRIE3_INDEX_1_OFFSET = UTRIE3_BMP_INDEX_LENGTH,
-
-#endif
 };
+
+/**
+ * For a "fast" trie:
+ *
+ * The supplementary index-0 table follows the BMP index table at offset 1024=0x400.
+ * Variable length, for code points up to highStart, where the last single-value range starts.
+ * Maximum length 1024=0x400=0x100000>>UTRIE3_SUPP_SHIFT_1.
+ * (For 0x100000 supplementary code points U+10000..U+10ffff.)
+ *
+ * The supplementary index-2 table starts after this index-1 table.
+ *
+ * The supplementary index tables
+ * are omitted completely if there is only BMP data (highStart<=0x10000).
+ *
+ * For a "small" trie:
+ *
+ * The "supplementary" index tables are always stored.
+ *
+ * For both trie types:
+ *
+ * The last index-1 block may be a partial block, storing indexes only for code points
+ * below highStart.
+ */
 
 #endif
