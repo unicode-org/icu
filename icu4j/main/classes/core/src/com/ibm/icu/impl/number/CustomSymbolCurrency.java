@@ -17,14 +17,14 @@ public class CustomSymbolCurrency extends Currency {
         if (currency == null) {
             currency = symbols.getCurrency();
         }
-        String currency1Sym = symbols.getCurrencySymbol();
-        String currency2Sym = symbols.getInternationalCurrencySymbol();
         if (currency == null) {
-            return new CustomSymbolCurrency("XXX", currency1Sym, currency2Sym);
+            return Currency.getInstance("XXX");
         }
         if (!currency.equals(symbols.getCurrency())) {
             return currency;
         }
+        String currency1Sym = symbols.getCurrencySymbol();
+        String currency2Sym = symbols.getInternationalCurrencySymbol();
         String currency1 = currency.getName(symbols.getULocale(), Currency.SYMBOL_NAME, null);
         String currency2 = currency.getCurrencyCode();
         if (!currency1.equals(currency1Sym) || !currency2.equals(currency2Sym)) {
