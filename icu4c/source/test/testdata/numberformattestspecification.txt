@@ -1543,8 +1543,8 @@ begin
 parse	output	breaks
 55%	0.55
 // J and K get null
-// P requires the symbol to be present and gets 55
-55	0.55	CJKP
+// C and P scale by 100 even if the percent sign is not present
+55	0.55	JK
 
 test trailing grouping separators in pattern
 // This test is for #13115

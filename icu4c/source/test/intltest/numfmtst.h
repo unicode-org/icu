@@ -222,6 +222,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test11735_ExceptionIssue();
     void Test11035_FormatCurrencyAmount();
     void Test11318_DoubleConversion();
+    void TestParsePercentRegression();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);

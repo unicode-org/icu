@@ -150,6 +150,23 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
         parser->addMatcher(parser->fLocalMatchers.currency = {currencySymbols, symbols, status});
     }
 
+    ///////////////
+    /// PERCENT ///
+    ///////////////
+
+    // ICU-TC meeting, April 11, 2018: accept percent/permille only if it is in the pattern,
+    // and to maintain regressive behavior, divide by 100 even if no percent sign is present.
+    if (affixProvider->containsSymbolType(AffixPatternType::TYPE_PERCENT, status)) {
+        parser->addMatcher(parser->fLocalMatchers.percent = {symbols});
+        // causes number to be always scaled by 100:
+        parser->addMatcher(parser->fLocalValidators.percentFlags = {ResultFlags::FLAG_PERCENT});
+    }
+    if (affixProvider->containsSymbolType(AffixPatternType::TYPE_PERMILLE, status)) {
+        parser->addMatcher(parser->fLocalMatchers.permille = {symbols});
+        // causes number to be always scaled by 1000:
+        parser->addMatcher(parser->fLocalValidators.permilleFlags = {ResultFlags::FLAG_PERMILLE});
+    }
+
     ///////////////////////////////
     /// OTHER STANDARD MATCHERS ///
     ///////////////////////////////
@@ -157,8 +174,6 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     if (!isStrict) {
         parser->addMatcher(parser->fLocalMatchers.plusSign = {symbols, false});
         parser->addMatcher(parser->fLocalMatchers.minusSign = {symbols, false});
-        parser->addMatcher(parser->fLocalMatchers.percent = {symbols});
-        parser->addMatcher(parser->fLocalMatchers.permille = {symbols});
     }
     parser->addMatcher(parser->fLocalMatchers.nan = {symbols});
     parser->addMatcher(parser->fLocalMatchers.infinity = {symbols});
