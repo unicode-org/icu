@@ -80,6 +80,8 @@ class NumberParserImpl : public MutableMatcherCollection {
         RequireExponentValidator exponent;
         RequireNumberValidator number;
         MultiplierParseHandler multiplier;
+        FlagHandler percentFlags;
+        FlagHandler permilleFlags;
     } fLocalValidators;
 
     explicit NumberParserImpl(parse_flags_t parseFlags);

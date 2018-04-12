@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.AffixPatternProvider;
+import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.CurrencyPluralInfoAffixProvider;
 import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
@@ -195,6 +196,23 @@ public class NumberParserImpl {
             parser.addMatcher(CombinedCurrencyMatcher.getInstance(currency, symbols));
         }
 
+        ///////////////
+        /// PERCENT ///
+        ///////////////
+
+        // ICU-TC meeting, April 11, 2018: accept percent/permille only if it is in the pattern,
+        // and to maintain regressive behavior, divide by 100 even if no percent sign is present.
+        if (affixProvider.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
+            parser.addMatcher(PercentMatcher.getInstance(symbols));
+            // causes number to be always scaled by 100:
+            parser.addMatcher(FlagHandler.PERCENT);
+        }
+        if (affixProvider.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
+            parser.addMatcher(PermilleMatcher.getInstance(symbols));
+            // causes number to be always scaled by 1000:
+            parser.addMatcher(FlagHandler.PERMILLE);
+        }
+
         ///////////////////////////////
         /// OTHER STANDARD MATCHERS ///
         ///////////////////////////////
@@ -202,8 +220,6 @@ public class NumberParserImpl {
         if (!isStrict) {
             parser.addMatcher(PlusSignMatcher.getInstance(symbols, false));
             parser.addMatcher(MinusSignMatcher.getInstance(symbols, false));
-            parser.addMatcher(PercentMatcher.getInstance(symbols));
-            parser.addMatcher(PermilleMatcher.getInstance(symbols));
         }
         parser.addMatcher(NanMatcher.getInstance(symbols, parseFlags));
         parser.addMatcher(InfinityMatcher.getInstance(symbols));

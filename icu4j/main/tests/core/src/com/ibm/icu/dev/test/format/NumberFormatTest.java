@@ -5637,7 +5637,7 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("Should consume the trailing bidi since it is in the symbol", 5, ppos.getIndex());
         ppos.setIndex(0);
         result = df.parse("-42a\u200E ", ppos);
-        assertEquals("Should not parse as percent", new Long(-42), result);
+        assertEquals("Should parse as percent", -0.42, result.doubleValue());
         assertEquals("Should not consume the trailing bidi or whitespace", 4, ppos.getIndex());
 
         // A few more cases based on the docstring:
@@ -6074,5 +6074,33 @@ public class NumberFormatTest extends TestFmwk {
     public void testParseDoubleMinus() {
         DecimalFormat df = new DecimalFormat("-0", DecimalFormatSymbols.getInstance(ULocale.ENGLISH));
         expect2(df, -5, "--5");
+    }
+
+    @Test
+    public void testParsePercentRegression() {
+        DecimalFormat df1 = (DecimalFormat) NumberFormat.getInstance(ULocale.ENGLISH);
+        DecimalFormat df2 = (DecimalFormat) NumberFormat.getPercentInstance(ULocale.ENGLISH);
+        df1.setParseStrict(false);
+        df2.setParseStrict(false);
+
+        {
+            ParsePosition ppos = new ParsePosition(0);
+            Number result = df1.parse("50%", ppos);
+            assertEquals("df1 should accept a number but not the percent sign", 2, ppos.getIndex());
+            assertEquals("df1 should return the number as 50", 50.0, result.doubleValue());
+        }
+        {
+            ParsePosition ppos = new ParsePosition(0);
+            Number result = df2.parse("50%", ppos);
+            assertEquals("df2 should accept the percent sign", 3, ppos.getIndex());
+            assertEquals("df2 should return the number as 0.5", 0.5, result.doubleValue());
+        }
+        {
+            ParsePosition ppos = new ParsePosition(0);
+            Number result = df2.parse("50", ppos);
+            assertEquals("df2 should return the number as 0.5 even though the percent sign is missing",
+                    0.5,
+                    result.doubleValue());
+        }
     }
 }

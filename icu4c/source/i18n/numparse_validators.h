@@ -97,6 +97,24 @@ class MultiplierParseHandler : public ValidationMatcher, public UMemory {
 };
 
 
+/**
+ * Unconditionally applies a given set of flags to the ParsedNumber in the post-processing step.
+ */
+class FlagHandler : public ValidationMatcher, public UMemory {
+  public:
+    FlagHandler() = default;
+
+    FlagHandler(result_flags_t flags);
+
+    void postProcess(ParsedNumber& result) const U_OVERRIDE;
+
+    UnicodeString toString() const U_OVERRIDE;
+
+  private:
+    result_flags_t fFlags;
+};
+
+
 } // namespace impl
 } // namespace numparse
 U_NAMESPACE_END
