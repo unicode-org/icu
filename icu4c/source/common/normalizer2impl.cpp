@@ -16,7 +16,7 @@
 *   created by: Markus W. Scherer
 */
 
-#define UTRIE3_DEBUG  // TODO
+#define UCPTRIE_DEBUG  // TODO
 
 #include "unicode/utypes.h"
 
@@ -26,6 +26,8 @@
 #include "unicode/edits.h"
 #include "unicode/normalizer2.h"
 #include "unicode/stringoptions.h"
+#include "unicode/ucptrie.h"
+#include "unicode/ucptriebuilder.h"
 #include "unicode/udata.h"
 #include "unicode/ustring.h"
 #include "unicode/utf16.h"
@@ -37,8 +39,6 @@
 #include "putilimp.h"
 #include "uassert.h"
 #include "uset_imp.h"
-#include "utrie3.h"
-#include "utrie3builder.h"
 #include "uvector.h"
 
 U_NAMESPACE_BEGIN
@@ -417,8 +417,8 @@ struct CanonIterData : public UMemory {
     CanonIterData(UErrorCode &errorCode);
     ~CanonIterData();
     void addToStartSet(UChar32 origin, UChar32 decompLead, UErrorCode &errorCode);
-    UTrie3Builder *builder;
-    UTrie3 *trie;
+    UCPTrieBuilder *builder;
+    UCPTrie *trie;
     UVector canonStartSets;  // contains UnicodeSet *
 };
 
@@ -427,7 +427,7 @@ Normalizer2Impl::~Normalizer2Impl() {
 }
 
 void
-Normalizer2Impl::init(const int32_t *inIndexes, const UTrie3 *inTrie,
+Normalizer2Impl::init(const int32_t *inIndexes, const UCPTrie *inTrie,
                       const uint16_t *inExtraData, const uint8_t *inSmallFCD) {
     minDecompNoCP = static_cast<UChar>(inIndexes[IX_MIN_DECOMP_NO_CP]);
     minCompNoMaybeCP = static_cast<UChar>(inIndexes[IX_MIN_COMP_NO_MAYBE_CP]);
@@ -517,8 +517,8 @@ Normalizer2Impl::addCanonIterPropertyStarts(const USetAdder *sa, UErrorCode &err
     // Currently only used for the SEGMENT_STARTER property.
     UChar32 start = 0, end;
     uint32_t value;
-    while ((end = utrie3_getRange(fCanonIterData->trie, start,
-                                  segmentStarterMapper, nullptr, &value)) >= 0) {
+    while ((end = ucptrie_getRange(fCanonIterData->trie, start,
+                                   segmentStarterMapper, nullptr, &value)) >= 0) {
         sa->add(sa->set, start);
         start = end + 1;
     }
@@ -607,7 +607,7 @@ Normalizer2Impl::decompose(const UChar *src, const UChar *limit,
         // count code units below the minimum or with irrelevant data for the quick check
         for(prevSrc=src; src!=limit;) {
             if( (c=*src)<minNoCP ||
-                isMostDecompYesAndZeroCC(norm16=UTRIE3_GET16_FROM_BMP(normTrie, c))
+                isMostDecompYesAndZeroCC(norm16=UCPTRIE_FAST_GET16_FROM_BMP(normTrie, c))
             ) {
                 ++src;
             } else if(!U16_IS_LEAD(c)) {
@@ -616,7 +616,7 @@ Normalizer2Impl::decompose(const UChar *src, const UChar *limit,
                 UChar c2;
                 if((src+1)!=limit && U16_IS_TRAIL(c2=src[1])) {
                     c=U16_GET_SUPPLEMENTARY(c, c2);
-                    norm16=UTRIE3_GET16_FROM_SUPP(normTrie, c);
+                    norm16=UCPTRIE_FAST_GET16_FROM_SUPP(normTrie, c);
                     if(isMostDecompYesAndZeroCC(norm16)) {
                         src+=2;
                     } else {
@@ -683,7 +683,7 @@ Normalizer2Impl::decomposeShort(const UChar *src, const UChar *limit,
         const UChar *prevSrc = src;
         UChar32 c;
         uint16_t norm16;
-        UTRIE3_U16_NEXT16(normTrie, src, limit, c, norm16);
+        UCPTRIE_FAST_U16_NEXT16(normTrie, src, limit, c, norm16);
         if (stopAtCompBoundary && norm16HasCompBoundaryBefore(norm16)) {
             return prevSrc;
         }
@@ -741,7 +741,7 @@ Normalizer2Impl::decomposeShort(const uint8_t *src, const uint8_t *limit,
     while (src < limit) {
         const uint8_t *prevSrc = src;
         uint16_t norm16;
-        UTRIE3_U8_NEXT16(normTrie, src, limit, norm16);
+        UCPTRIE_FAST_U8_NEXT16(normTrie, src, limit, norm16);
         // Get the decomposition and the lead and trail cc's.
         UChar32 c = U_SENTINEL;
         if (norm16 >= limitNoNo) {
@@ -903,7 +903,7 @@ void Normalizer2Impl::decomposeAndAppend(const UChar *src, const UChar *limit,
         const UChar *codePointStart = p;
         UChar32 c;
         uint16_t norm16;
-        UTRIE3_U16_NEXT16(normTrie, p, limit, c, norm16);
+        UCPTRIE_FAST_U16_NEXT16(normTrie, p, limit, c, norm16);
         if ((cc = getCC(norm16)) == 0) {
             p = codePointStart;
             break;
@@ -1105,7 +1105,7 @@ void Normalizer2Impl::recompose(ReorderingBuffer &buffer, int32_t recomposeStart
     prevCC=0;
 
     for(;;) {
-        UTRIE3_U16_NEXT16(normTrie, p, limit, c, norm16);
+        UCPTRIE_FAST_U16_NEXT16(normTrie, p, limit, c, norm16);
         cc=getCCFromYesOrMaybe(norm16);
         if( // this character combines backward and
             isMaybe(norm16) &&
@@ -1340,7 +1340,7 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
                 return TRUE;
             }
             if( (c=*src)<minNoMaybeCP ||
-                isCompYesAndZeroCC(norm16=UTRIE3_GET16_FROM_BMP(normTrie, c))
+                isCompYesAndZeroCC(norm16=UCPTRIE_FAST_GET16_FROM_BMP(normTrie, c))
             ) {
                 ++src;
             } else {
@@ -1352,7 +1352,7 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
                     if(src!=limit && U16_IS_TRAIL(c2=*src)) {
                         ++src;
                         c=U16_GET_SUPPLEMENTARY(c, c2);
-                        norm16=UTRIE3_GET16_FROM_SUPP(normTrie, c);
+                        norm16=UCPTRIE_FAST_GET16_FROM_SUPP(normTrie, c);
                         if(!isCompYesAndZeroCC(norm16)) {
                             break;
                         }
@@ -1504,7 +1504,7 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
                     }
                     uint8_t prevCC = cc;
                     nextSrc = src;
-                    UTRIE3_U16_NEXT16(normTrie, nextSrc, limit, c, n16);
+                    UCPTRIE_FAST_U16_NEXT16(normTrie, nextSrc, limit, c, n16);
                     if (n16 >= MIN_YES_YES_WITH_CC) {
                         cc = getCCFromNormalYesOrMaybe(n16);
                         if (prevCC > cc) {
@@ -1534,7 +1534,7 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
         // decompose and recompose.
         if (prevBoundary != prevSrc && !norm16HasCompBoundaryBefore(norm16)) {
             const UChar *p = prevSrc;
-            UTRIE3_U16_PREV16(normTrie, prevBoundary, p, c, norm16);
+            UCPTRIE_FAST_U16_PREV16(normTrie, prevBoundary, p, c, norm16);
             if (!norm16HasCompBoundaryAfter(norm16, onlyContiguous)) {
                 prevSrc = p;
             }
@@ -1601,7 +1601,7 @@ Normalizer2Impl::composeQuickCheck(const UChar *src, const UChar *limit,
                 return src;
             }
             if( (c=*src)<minNoMaybeCP ||
-                isCompYesAndZeroCC(norm16=UTRIE3_GET16_FROM_BMP(normTrie, c))
+                isCompYesAndZeroCC(norm16=UCPTRIE_FAST_GET16_FROM_BMP(normTrie, c))
             ) {
                 ++src;
             } else {
@@ -1613,7 +1613,7 @@ Normalizer2Impl::composeQuickCheck(const UChar *src, const UChar *limit,
                     if(src!=limit && U16_IS_TRAIL(c2=*src)) {
                         ++src;
                         c=U16_GET_SUPPLEMENTARY(c, c2);
-                        norm16=UTRIE3_GET16_FROM_SUPP(normTrie, c);
+                        norm16=UCPTRIE_FAST_GET16_FROM_SUPP(normTrie, c);
                         if(!isCompYesAndZeroCC(norm16)) {
                             break;
                         }
@@ -1634,7 +1634,7 @@ Normalizer2Impl::composeQuickCheck(const UChar *src, const UChar *limit,
             } else {
                 const UChar *p = prevSrc;
                 uint16_t n16;
-                UTRIE3_U16_PREV16(normTrie, prevBoundary, p, c, n16);
+                UCPTRIE_FAST_U16_PREV16(normTrie, prevBoundary, p, c, n16);
                 if (norm16HasCompBoundaryAfter(n16, onlyContiguous)) {
                     prevBoundary = prevSrc;
                 } else {
@@ -1668,7 +1668,7 @@ Normalizer2Impl::composeQuickCheck(const UChar *src, const UChar *limit,
                     }
                     uint8_t prevCC = cc;
                     nextSrc = src;
-                    UTRIE3_U16_NEXT16(normTrie, nextSrc, limit, c, norm16);
+                    UCPTRIE_FAST_U16_NEXT16(normTrie, nextSrc, limit, c, norm16);
                     if (isMaybeOrNonZeroCC(norm16)) {
                         cc = getCCFromYesOrMaybe(norm16);
                         if (!(prevCC <= cc || cc == 0)) {
@@ -1755,7 +1755,7 @@ Normalizer2Impl::composeUTF8(uint32_t options, UBool onlyContiguous,
                 ++src;
             } else {
                 prevSrc = src;
-                UTRIE3_U8_NEXT16(normTrie, src, limit, norm16);
+                UCPTRIE_FAST_U8_NEXT16(normTrie, src, limit, norm16);
                 if (!isCompYesAndZeroCC(norm16)) {
                     break;
                 }
@@ -1914,7 +1914,7 @@ Normalizer2Impl::composeUTF8(uint32_t options, UBool onlyContiguous,
                     }
                     uint8_t prevCC = cc;
                     nextSrc = src;
-                    UTRIE3_U8_NEXT16(normTrie, nextSrc, limit, n16);
+                    UCPTRIE_FAST_U8_NEXT16(normTrie, nextSrc, limit, n16);
                     if (n16 >= MIN_YES_YES_WITH_CC) {
                         cc = getCCFromNormalYesOrMaybe(n16);
                         if (prevCC > cc) {
@@ -1944,7 +1944,7 @@ Normalizer2Impl::composeUTF8(uint32_t options, UBool onlyContiguous,
         // decompose and recompose.
         if (prevBoundary != prevSrc && !norm16HasCompBoundaryBefore(norm16)) {
             const uint8_t *p = prevSrc;
-            UTRIE3_U8_PREV16(normTrie, prevBoundary, p, norm16);
+            UCPTRIE_FAST_U8_PREV16(normTrie, prevBoundary, p, norm16);
             if (!norm16HasCompBoundaryAfter(norm16, onlyContiguous)) {
                 prevSrc = p;
             }
@@ -1992,7 +1992,7 @@ UBool Normalizer2Impl::hasCompBoundaryBefore(const UChar *src, const UChar *limi
     }
     UChar32 c;
     uint16_t norm16;
-    UTRIE3_U16_NEXT16(normTrie, src, limit, c, norm16);
+    UCPTRIE_FAST_U16_NEXT16(normTrie, src, limit, c, norm16);
     return norm16HasCompBoundaryBefore(norm16);
 }
 
@@ -2001,7 +2001,7 @@ UBool Normalizer2Impl::hasCompBoundaryBefore(const uint8_t *src, const uint8_t *
         return TRUE;
     }
     uint16_t norm16;
-    UTRIE3_U8_NEXT16(normTrie, src, limit, norm16);
+    UCPTRIE_FAST_U8_NEXT16(normTrie, src, limit, norm16);
     return norm16HasCompBoundaryBefore(norm16);
 }
 
@@ -2012,7 +2012,7 @@ UBool Normalizer2Impl::hasCompBoundaryAfter(const UChar *start, const UChar *p,
     }
     UChar32 c;
     uint16_t norm16;
-    UTRIE3_U16_PREV16(normTrie, start, p, c, norm16);
+    UCPTRIE_FAST_U16_PREV16(normTrie, start, p, c, norm16);
     return norm16HasCompBoundaryAfter(norm16, onlyContiguous);
 }
 
@@ -2022,7 +2022,7 @@ UBool Normalizer2Impl::hasCompBoundaryAfter(const uint8_t *start, const uint8_t 
         return TRUE;
     }
     uint16_t norm16;
-    UTRIE3_U8_PREV16(normTrie, start, p, norm16);
+    UCPTRIE_FAST_U8_PREV16(normTrie, start, p, norm16);
     return norm16HasCompBoundaryAfter(norm16, onlyContiguous);
 }
 
@@ -2032,7 +2032,7 @@ const UChar *Normalizer2Impl::findPreviousCompBoundary(const UChar *start, const
         const UChar *codePointLimit = p;
         UChar32 c;
         uint16_t norm16;
-        UTRIE3_U16_PREV16(normTrie, start, p, c, norm16);
+        UCPTRIE_FAST_U16_PREV16(normTrie, start, p, c, norm16);
         if (norm16HasCompBoundaryAfter(norm16, onlyContiguous)) {
             return codePointLimit;
         }
@@ -2049,7 +2049,7 @@ const UChar *Normalizer2Impl::findNextCompBoundary(const UChar *p, const UChar *
         const UChar *codePointStart = p;
         UChar32 c;
         uint16_t norm16;
-        UTRIE3_U16_NEXT16(normTrie, p, limit, c, norm16);
+        UCPTRIE_FAST_U16_NEXT16(normTrie, p, limit, c, norm16);
         if (hasCompBoundaryBefore(c, norm16)) {
             return codePointStart;
         }
@@ -2304,7 +2304,7 @@ const UChar *Normalizer2Impl::findPreviousFCDBoundary(const UChar *start, const 
         const UChar *codePointLimit = p;
         UChar32 c;
         uint16_t norm16;
-        UTRIE3_U16_PREV16(normTrie, start, p, c, norm16);
+        UCPTRIE_FAST_U16_PREV16(normTrie, start, p, c, norm16);
         if (c < minDecompNoCP || norm16HasDecompBoundaryAfter(norm16)) {
             return codePointLimit;
         }
@@ -2320,7 +2320,7 @@ const UChar *Normalizer2Impl::findNextFCDBoundary(const UChar *p, const UChar *l
         const UChar *codePointStart=p;
         UChar32 c;
         uint16_t norm16;
-        UTRIE3_U16_NEXT16(normTrie, p, limit, c, norm16);
+        UCPTRIE_FAST_U16_NEXT16(normTrie, p, limit, c, norm16);
         if (c < minLcccCP || norm16HasDecompBoundaryBefore(norm16)) {
             return codePointStart;
         }
@@ -2334,20 +2334,20 @@ const UChar *Normalizer2Impl::findNextFCDBoundary(const UChar *p, const UChar *l
 // CanonicalIterator data -------------------------------------------------- ***
 
 CanonIterData::CanonIterData(UErrorCode &errorCode) :
-        builder(utrie3bld_open(0, 0, &errorCode)), trie(nullptr),
+        builder(ucptriebld_open(0, 0, &errorCode)), trie(nullptr),
         canonStartSets(uprv_deleteUObject, NULL, errorCode) {}
 
 CanonIterData::~CanonIterData() {
-    utrie3bld_close(builder);
-    utrie3_close(trie);
+    ucptriebld_close(builder);
+    ucptrie_close(trie);
 }
 
 void CanonIterData::addToStartSet(UChar32 origin, UChar32 decompLead, UErrorCode &errorCode) {
-    uint32_t canonValue = utrie3bld_get(builder, decompLead);
+    uint32_t canonValue = ucptriebld_get(builder, decompLead);
     if((canonValue&(CANON_HAS_SET|CANON_VALUE_MASK))==0 && origin!=0) {
         // origin is the first character whose decomposition starts with
         // the character for which we are setting the value.
-        utrie3bld_set(builder, decompLead, canonValue|origin, &errorCode);
+        ucptriebld_set(builder, decompLead, canonValue|origin, &errorCode);
     } else {
         // origin is not the first character, or it is U+0000.
         UnicodeSet *set;
@@ -2359,7 +2359,7 @@ void CanonIterData::addToStartSet(UChar32 origin, UChar32 decompLead, UErrorCode
             }
             UChar32 firstOrigin=(UChar32)(canonValue&CANON_VALUE_MASK);
             canonValue=(canonValue&~CANON_VALUE_MASK)|CANON_HAS_SET|(uint32_t)canonStartSets.size();
-            utrie3bld_set(builder, decompLead, canonValue, &errorCode);
+            ucptriebld_set(builder, decompLead, canonValue, &errorCode);
             canonStartSets.addElement(set, errorCode);
             if(firstOrigin!=0) {
                 set->add(firstOrigin);
@@ -2404,10 +2404,10 @@ void InitCanonIterData::doInit(Normalizer2Impl *impl, UErrorCode &errorCode) {
             }
             start = end + 1;
         }
-        utrie3bld_setName(impl->fCanonIterData->builder, "CanonIterData");
-        impl->fCanonIterData->trie = utrie3bld_build(
-            impl->fCanonIterData->builder, UTRIE3_TYPE_SMALL, UTRIE3_32_VALUE_BITS, &errorCode);
-        utrie3bld_close(impl->fCanonIterData->builder);
+        ucptriebld_setName(impl->fCanonIterData->builder, "CanonIterData");
+        impl->fCanonIterData->trie = ucptriebld_build(
+            impl->fCanonIterData->builder, UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_32, &errorCode);
+        ucptriebld_close(impl->fCanonIterData->builder);
         impl->fCanonIterData->builder = nullptr;
     }
     if (U_FAILURE(errorCode)) {
@@ -2429,7 +2429,7 @@ void Normalizer2Impl::makeCanonIterDataFromNorm16(UChar32 start, UChar32 end, co
         return;
     }
     for(UChar32 c=start; c<=end; ++c) {
-        uint32_t oldValue = utrie3bld_get(newData.builder, c);
+        uint32_t oldValue = ucptriebld_get(newData.builder, c);
         uint32_t newValue=oldValue;
         if(isMaybeOrNonZeroCC(norm16)) {
             // not a segment starter if it occurs in a decomposition or has cc!=0
@@ -2474,10 +2474,10 @@ void Normalizer2Impl::makeCanonIterDataFromNorm16(UChar32 start, UChar32 end, co
                     if(norm16_2>=minNoNo) {
                         while(i<length) {
                             U16_NEXT_UNSAFE(mapping, i, c2);
-                            uint32_t c2Value = utrie3bld_get(newData.builder, c2);
+                            uint32_t c2Value = ucptriebld_get(newData.builder, c2);
                             if((c2Value&CANON_NOT_SEGMENT_STARTER)==0) {
-                                utrie3bld_set(newData.builder, c2, c2Value|CANON_NOT_SEGMENT_STARTER,
-                                              &errorCode);
+                                ucptriebld_set(newData.builder, c2, c2Value|CANON_NOT_SEGMENT_STARTER,
+                                               &errorCode);
                             }
                         }
                     }
@@ -2488,7 +2488,7 @@ void Normalizer2Impl::makeCanonIterDataFromNorm16(UChar32 start, UChar32 end, co
             }
         }
         if(newValue!=oldValue) {
-            utrie3bld_set(newData.builder, c, newValue, &errorCode);
+            ucptriebld_set(newData.builder, c, newValue, &errorCode);
         }
     }
 }
@@ -2501,7 +2501,7 @@ UBool Normalizer2Impl::ensureCanonIterData(UErrorCode &errorCode) const {
 }
 
 int32_t Normalizer2Impl::getCanonValue(UChar32 c) const {
-    return (int32_t)utrie3_get(fCanonIterData->trie, c);
+    return (int32_t)ucptrie_get(fCanonIterData->trie, c);
 }
 
 const UnicodeSet &Normalizer2Impl::getCanonStartSet(int32_t n) const {
@@ -2635,7 +2635,7 @@ unorm2_swap(const UDataSwapper *ds,
 
         /* swap the trie */
         nextOffset=indexes[Normalizer2Impl::IX_EXTRA_DATA_OFFSET];
-        utrie3_swap(ds, inBytes+offset, nextOffset-offset, outBytes+offset, pErrorCode);
+        ucptrie_swap(ds, inBytes+offset, nextOffset-offset, outBytes+offset, pErrorCode);
         offset=nextOffset;
 
         /* swap the uint16_t extraData[] */

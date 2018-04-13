@@ -18,6 +18,7 @@
 #include "unicode/udata.h"
 #include "unicode/localpointer.h"
 #include "unicode/normalizer2.h"
+#include "unicode/ucptrie.h"
 #include "unicode/unistr.h"
 #include "unicode/unorm.h"
 #include "cstring.h"
@@ -27,7 +28,6 @@
 #include "uassert.h"
 #include "ucln_cmn.h"
 #include "uhash.h"
-#include "utrie3.h"
 
 U_NAMESPACE_BEGIN
 
@@ -43,12 +43,12 @@ private:
     isAcceptable(void *context, const char *type, const char *name, const UDataInfo *pInfo);
 
     UDataMemory *memory;
-    UTrie3 *ownedTrie;
+    UCPTrie *ownedTrie;
 };
 
 LoadedNormalizer2Impl::~LoadedNormalizer2Impl() {
     udata_close(memory);
-    utrie3_close(ownedTrie);
+    ucptrie_close(ownedTrie);
 }
 
 UBool U_CALLCONV
@@ -92,9 +92,9 @@ LoadedNormalizer2Impl::load(const char *packageName, const char *name, UErrorCod
 
     int32_t offset=inIndexes[IX_NORM_TRIE_OFFSET];
     int32_t nextOffset=inIndexes[IX_EXTRA_DATA_OFFSET];
-    ownedTrie=utrie3_openFromSerialized(UTRIE3_TYPE_FAST, UTRIE3_16_VALUE_BITS,
-                                        inBytes+offset, nextOffset-offset, NULL,
-                                        &errorCode);
+    ownedTrie=ucptrie_openFromBinary(UCPTRIE_TYPE_FAST, UCPTRIE_VALUE_BITS_16,
+                                     inBytes+offset, nextOffset-offset, NULL,
+                                     &errorCode);
     if(U_FAILURE(errorCode)) {
         return;
     }

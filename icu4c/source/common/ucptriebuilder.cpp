@@ -1,22 +1,22 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-// utrie3builder.cpp (inspired by utrie2_builder.cpp)
+// ucptriebuilder.cpp (inspired by utrie2_builder.cpp)
 // created: 2017dec29 Markus W. Scherer
 
-#define UTRIE3_DEBUG  // TODO
-#ifdef UTRIE3_DEBUG
+#define UCPTRIE_DEBUG  // TODO
+#ifdef UCPTRIE_DEBUG
 #   include <stdio.h>
 #endif
 
 #include "unicode/utypes.h"
+#include "unicode/ucptrie.h"
+#include "unicode/ucptriebuilder.h"
 #include "unicode/uobject.h"
 #include "unicode/utf16.h"
 #include "cmemory.h"
 #include "uassert.h"
-#include "utrie3.h"
-#include "utrie3builder.h"
-#include "utrie3_impl.h"
+#include "ucptrie_impl.h"
 
 U_NAMESPACE_BEGIN
 
@@ -28,11 +28,11 @@ constexpr int32_t UNICODE_LIMIT = 0x110000;
 constexpr int32_t BMP_LIMIT = 0x10000;
 constexpr int32_t ASCII_LIMIT = 0x80;
 
-constexpr int32_t I_LIMIT = UNICODE_LIMIT >> UTRIE3_SUPP_SHIFT_2;
-constexpr int32_t BMP_I_LIMIT = BMP_LIMIT >> UTRIE3_SUPP_SHIFT_2;
-constexpr int32_t ASCII_I_LIMIT = ASCII_LIMIT >> UTRIE3_SUPP_SHIFT_2;
+constexpr int32_t I_LIMIT = UNICODE_LIMIT >> UCPTRIE_SHIFT_3;
+constexpr int32_t BMP_I_LIMIT = BMP_LIMIT >> UCPTRIE_SHIFT_3;
+constexpr int32_t ASCII_I_LIMIT = ASCII_LIMIT >> UCPTRIE_SHIFT_3;
 
-constexpr int32_t SUPP_DATA_BLOCKS_PER_BMP_BLOCK = (1 << (UTRIE3_BMP_SHIFT - UTRIE3_SUPP_SHIFT_2));
+constexpr int32_t SMALL_DATA_BLOCKS_PER_BMP_BLOCK = (1 << (UCPTRIE_FAST_SHIFT - UCPTRIE_SHIFT_3));
 
 // Flag values for data blocks.
 constexpr uint8_t ALL_SAME = 0;
@@ -51,35 +51,35 @@ constexpr int32_t MEDIUM_DATA_LENGTH = ((int32_t)1 << 17);
  */
 constexpr int32_t MAX_DATA_LENGTH = UNICODE_LIMIT;
 
-// Flag values for index-2 blocks while compacting/building.
-constexpr uint8_t I2_NULL = 0;
-constexpr uint8_t I2_BMP = 1;
-constexpr uint8_t I2_16 = 2;
-constexpr uint8_t I2_18 = 3;
+// Flag values for index-3 blocks while compacting/building.
+constexpr uint8_t I3_NULL = 0;
+constexpr uint8_t I3_BMP = 1;
+constexpr uint8_t I3_16 = 2;
+constexpr uint8_t I3_18 = 3;
 
-constexpr int32_t INDEX_2_18BIT_BLOCK_LENGTH = UTRIE3_INDEX_2_BLOCK_LENGTH + UTRIE3_INDEX_2_BLOCK_LENGTH / 8;
+constexpr int32_t INDEX_3_18BIT_BLOCK_LENGTH = UCPTRIE_INDEX_3_BLOCK_LENGTH + UCPTRIE_INDEX_3_BLOCK_LENGTH / 8;
 
 class AllSameBlocks;
 
-class Trie3Builder : public UMemory {
+class CodePointTrieBuilder : public UMemory {
 public:
-    Trie3Builder(uint32_t initialValue, uint32_t errorValue, UErrorCode &errorCode);
-    Trie3Builder(const Trie3Builder &other, UErrorCode &errorCode);
-    Trie3Builder(const Trie3Builder &other) = delete;
-    ~Trie3Builder();
+    CodePointTrieBuilder(uint32_t initialValue, uint32_t errorValue, UErrorCode &errorCode);
+    CodePointTrieBuilder(const CodePointTrieBuilder &other, UErrorCode &errorCode);
+    CodePointTrieBuilder(const CodePointTrieBuilder &other) = delete;
+    ~CodePointTrieBuilder();
 
-    Trie3Builder &operator=(const Trie3Builder &other) = delete;
+    CodePointTrieBuilder &operator=(const CodePointTrieBuilder &other) = delete;
 
-    static Trie3Builder *fromUTrie3(const UTrie3 *trie, UErrorCode &errorCode);
+    static CodePointTrieBuilder *fromUCPTrie(const UCPTrie *trie, UErrorCode &errorCode);
 
     uint32_t get(UChar32 c) const;
-    int32_t getRange(UChar32 start, UTrie3HandleValue *handleValue, const void *context,
+    int32_t getRange(UChar32 start, UCPTrieHandleValue *handleValue, const void *context,
                      uint32_t *pValue) const;
 
     void set(UChar32 c, uint32_t value, UErrorCode &errorCode);
     void setRange(UChar32 start, UChar32 end, uint32_t value, UErrorCode &errorCode);
 
-    UTrie3 *build(UTrie3Type type, UTrie3ValueBits valueBits, UErrorCode &errorCode);
+    UCPTrie *build(UCPTrieType type, UCPTrieValueBits valueBits, UErrorCode &errorCode);
 
 private:
     void clear();
@@ -97,7 +97,7 @@ private:
 
     uint32_t *index;
     int32_t indexCapacity;
-    int32_t index2NullOffset;
+    int32_t index3NullOffset;
     uint32_t *data;
     int32_t dataCapacity, dataLength;
     int32_t dataNullOffset;
@@ -107,18 +107,18 @@ private:
     uint32_t errorValue;
     UChar32 highStart;
     uint32_t highValue;
-#ifdef UTRIE3_DEBUG
+#ifdef UCPTRIE_DEBUG
 public:
     const char *name;  // TODO
 #endif
 private:
     /** Temporary array while building the final data. */
     uint16_t *index16;
-    uint8_t flags[UNICODE_LIMIT >> UTRIE3_SUPP_SHIFT_2];
+    uint8_t flags[UNICODE_LIMIT >> UCPTRIE_SHIFT_3];
 };
 
-Trie3Builder::Trie3Builder(uint32_t iniValue, uint32_t errValue, UErrorCode &errorCode) :
-        index(nullptr), indexCapacity(0), index2NullOffset(-1),
+CodePointTrieBuilder::CodePointTrieBuilder(uint32_t iniValue, uint32_t errValue, UErrorCode &errorCode) :
+        index(nullptr), indexCapacity(0), index3NullOffset(-1),
         data(nullptr), dataCapacity(0), dataLength(0), dataNullOffset(-1),
         origInitialValue(iniValue), initialValue(iniValue), errorValue(errValue),
         highStart(0), highValue(initialValue), name("open"), index16(nullptr) {
@@ -133,8 +133,8 @@ Trie3Builder::Trie3Builder(uint32_t iniValue, uint32_t errValue, UErrorCode &err
     dataCapacity = INITIAL_DATA_LENGTH;
 }
 
-Trie3Builder::Trie3Builder(const Trie3Builder &other, UErrorCode &errorCode) :
-        index(nullptr), indexCapacity(0), index2NullOffset(other.index2NullOffset),
+CodePointTrieBuilder::CodePointTrieBuilder(const CodePointTrieBuilder &other, UErrorCode &errorCode) :
+        index(nullptr), indexCapacity(0), index3NullOffset(other.index3NullOffset),
         data(nullptr), dataCapacity(0), dataLength(0), dataNullOffset(other.dataNullOffset),
         origInitialValue(other.origInitialValue), initialValue(other.initialValue),
         errorValue(other.errorValue),
@@ -151,38 +151,38 @@ Trie3Builder::Trie3Builder(const Trie3Builder &other, UErrorCode &errorCode) :
     indexCapacity = iCapacity;
     dataCapacity = other.dataCapacity;
 
-    int32_t iLimit = highStart >> UTRIE3_SUPP_SHIFT_2;
+    int32_t iLimit = highStart >> UCPTRIE_SHIFT_3;
     uprv_memcpy(flags, other.flags, iLimit);
     uprv_memcpy(index, other.index, iLimit * 4);
     uprv_memcpy(data, other.data, (size_t)other.dataLength * 4);
     dataLength = other.dataLength;
 }
 
-Trie3Builder::~Trie3Builder() {
+CodePointTrieBuilder::~CodePointTrieBuilder() {
     uprv_free(index);
     uprv_free(data);
     uprv_free(index16);
 }
 
-Trie3Builder *Trie3Builder::fromUTrie3(const UTrie3 *trie, UErrorCode &errorCode) {
+CodePointTrieBuilder *CodePointTrieBuilder::fromUCPTrie(const UCPTrie *trie, UErrorCode &errorCode) {
     // Use the highValue as the initialValue to reduce the highStart.
     uint32_t errorValue;
     uint32_t initialValue;
     if (trie->data32 != nullptr) {
-        errorValue = trie->data32[trie->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET];
-        initialValue = trie->data32[trie->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET];
+        errorValue = trie->data32[trie->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET];
+        initialValue = trie->data32[trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET];
     } else {
-        errorValue = trie->data16[trie->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET];
-        initialValue = trie->data16[trie->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET];
+        errorValue = trie->data16[trie->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET];
+        initialValue = trie->data16[trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET];
     }
-    Trie3Builder *builder = new Trie3Builder(initialValue, errorValue, errorCode);
+    CodePointTrieBuilder *builder = new CodePointTrieBuilder(initialValue, errorValue, errorCode);
     if (U_FAILURE(errorCode)) {
         delete builder;
         return nullptr;
     }
     UChar32 start = 0, end;
     uint32_t value;
-    while ((end = utrie3_getRange(trie, start, nullptr, nullptr, &value)) >= 0) {
+    while ((end = ucptrie_getRange(trie, start, nullptr, nullptr, &value)) >= 0) {
         if (value != initialValue) {
             if (start == end) {
                 builder->set(start, value, errorCode);
@@ -200,8 +200,8 @@ Trie3Builder *Trie3Builder::fromUTrie3(const UTrie3 *trie, UErrorCode &errorCode
     }
 }
 
-void Trie3Builder::clear() {
-    index2NullOffset = dataNullOffset = -1;
+void CodePointTrieBuilder::clear() {
+    index3NullOffset = dataNullOffset = -1;
     dataLength = 0;
     highValue = initialValue = origInitialValue;
     highStart = 0;
@@ -209,23 +209,23 @@ void Trie3Builder::clear() {
     index16 = nullptr;
 }
 
-uint32_t Trie3Builder::get(UChar32 c) const {
+uint32_t CodePointTrieBuilder::get(UChar32 c) const {
     if ((uint32_t)c > MAX_UNICODE) {
         return errorValue;
     }
     if (c >= highStart) {
         return highValue;
     }
-    int32_t i = c >> UTRIE3_SUPP_SHIFT_2;
+    int32_t i = c >> UCPTRIE_SHIFT_3;
     if (flags[i] == ALL_SAME) {
         return index[i];
     } else {
-        return data[index[i] + (c & UTRIE3_SUPP_DATA_MASK)];
+        return data[index[i] + (c & UCPTRIE_SMALL_DATA_MASK)];
     }
 }
 
 inline uint32_t maybeHandleValue(uint32_t value, uint32_t initialValue, uint32_t nullValue,
-                                 UTrie3HandleValue *handleValue, const void *context) {
+                                 UCPTrieHandleValue *handleValue, const void *context) {
     if (value == initialValue) {
         value = nullValue;
     } else if (handleValue != nullptr) {
@@ -234,9 +234,9 @@ inline uint32_t maybeHandleValue(uint32_t value, uint32_t initialValue, uint32_t
     return value;
 }
 
-UChar32 Trie3Builder::getRange(UChar32 start,
-                               UTrie3HandleValue *handleValue, const void *context,
-                               uint32_t *pValue) const {
+UChar32 CodePointTrieBuilder::getRange(
+        UChar32 start, UCPTrieHandleValue *handleValue, const void *context,
+        uint32_t *pValue) const {
     if ((uint32_t)start > MAX_UNICODE) {
         return U_SENTINEL;
     }
@@ -253,7 +253,7 @@ UChar32 Trie3Builder::getRange(UChar32 start,
     UChar32 c = start;
     uint32_t value;
     bool haveValue = false;
-    int32_t i = c >> UTRIE3_SUPP_SHIFT_2;
+    int32_t i = c >> UCPTRIE_SHIFT_3;
     do {
         if (flags[i] == ALL_SAME) {
             uint32_t value2 = maybeHandleValue(index[i], initialValue, nullValue,
@@ -267,9 +267,9 @@ UChar32 Trie3Builder::getRange(UChar32 start,
                 if (pValue != nullptr) { *pValue = value; }
                 haveValue = true;
             }
-            c = (c + UTRIE3_SUPP_DATA_BLOCK_LENGTH) & ~UTRIE3_SUPP_DATA_MASK;
+            c = (c + UCPTRIE_SMALL_DATA_BLOCK_LENGTH) & ~UCPTRIE_SMALL_DATA_MASK;
         } else /* MIXED */ {
-            int32_t di = index[i] + (c & UTRIE3_SUPP_DATA_MASK);
+            int32_t di = index[i] + (c & UCPTRIE_SMALL_DATA_MASK);
             uint32_t value2 = maybeHandleValue(data[di], initialValue, nullValue,
                                                handleValue, context);
             if (haveValue) {
@@ -281,7 +281,7 @@ UChar32 Trie3Builder::getRange(UChar32 start,
                 if (pValue != nullptr) { *pValue = value; }
                 haveValue = true;
             }
-            while ((++c & UTRIE3_SUPP_DATA_MASK) != 0) {
+            while ((++c & UCPTRIE_SMALL_DATA_MASK) != 0) {
                 if (maybeHandleValue(data[++di], initialValue, nullValue,
                                      handleValue, context) != value) {
                     return c - 1;
@@ -301,18 +301,18 @@ UChar32 Trie3Builder::getRange(UChar32 start,
 
 void
 writeBlock(uint32_t *block, uint32_t value) {
-    uint32_t *limit = block + UTRIE3_SUPP_DATA_BLOCK_LENGTH;
+    uint32_t *limit = block + UCPTRIE_SMALL_DATA_BLOCK_LENGTH;
     while (block < limit) {
         *block++ = value;
     }
 }
 
-bool Trie3Builder::ensureHighStart(UChar32 c) {
+bool CodePointTrieBuilder::ensureHighStart(UChar32 c) {
     if (c >= highStart) {
-        // Round up to a UTRIE3_CP_PER_INDEX_1_ENTRY boundary to simplify compaction.
-        c = (c + UTRIE3_CP_PER_INDEX_1_ENTRY) & ~(UTRIE3_CP_PER_INDEX_1_ENTRY - 1);
-        int32_t i = highStart >> UTRIE3_SUPP_SHIFT_2;
-        int32_t iLimit = c >> UTRIE3_SUPP_SHIFT_2;
+        // Round up to a UCPTRIE_CP_PER_INDEX_2_ENTRY boundary to simplify compaction.
+        c = (c + UCPTRIE_CP_PER_INDEX_2_ENTRY) & ~(UCPTRIE_CP_PER_INDEX_2_ENTRY - 1);
+        int32_t i = highStart >> UCPTRIE_SHIFT_3;
+        int32_t iLimit = c >> UCPTRIE_SHIFT_3;
         if (iLimit > indexCapacity) {
             uint32_t *newIndex = (uint32_t *)uprv_malloc(I_LIMIT * 4);
             if (newIndex == nullptr) { return false; }
@@ -330,7 +330,7 @@ bool Trie3Builder::ensureHighStart(UChar32 c) {
     return true;
 }
 
-int32_t Trie3Builder::allocDataBlock(int32_t blockLength) {
+int32_t CodePointTrieBuilder::allocDataBlock(int32_t blockLength) {
     int32_t newBlock = dataLength;
     int32_t newTop = newBlock + blockLength;
     if (newTop > dataCapacity) {
@@ -364,25 +364,25 @@ int32_t Trie3Builder::allocDataBlock(int32_t blockLength) {
  * @return -1 if no new data block available (out of memory in data array)
  * @internal
  */
-int32_t Trie3Builder::getDataBlock(int32_t i) {
+int32_t CodePointTrieBuilder::getDataBlock(int32_t i) {
     if (flags[i] == MIXED) {
         return index[i];
     }
     if (i < BMP_I_LIMIT) {
-        int32_t newBlock = allocDataBlock(UTRIE3_BMP_DATA_BLOCK_LENGTH);
+        int32_t newBlock = allocDataBlock(UCPTRIE_FAST_DATA_BLOCK_LENGTH);
         if (newBlock < 0) { return newBlock; }
-        int32_t i0 = i & ~(SUPP_DATA_BLOCKS_PER_BMP_BLOCK -1);
-        int32_t iLimit = i0 + SUPP_DATA_BLOCKS_PER_BMP_BLOCK;
+        int32_t iStart = i & ~(SMALL_DATA_BLOCKS_PER_BMP_BLOCK -1);
+        int32_t iLimit = iStart + SMALL_DATA_BLOCKS_PER_BMP_BLOCK;
         do {
-            U_ASSERT(flags[i0] == ALL_SAME);
-            writeBlock(data + newBlock, index[i0]);
-            flags[i0] = MIXED;
-            index[i0++] = newBlock;
-            newBlock += UTRIE3_SUPP_DATA_BLOCK_LENGTH;
-        } while (i0 < iLimit);
+            U_ASSERT(flags[iStart] == ALL_SAME);
+            writeBlock(data + newBlock, index[iStart]);
+            flags[iStart] = MIXED;
+            index[iStart++] = newBlock;
+            newBlock += UCPTRIE_SMALL_DATA_BLOCK_LENGTH;
+        } while (iStart < iLimit);
         return index[i];
     } else {
-        int32_t newBlock = allocDataBlock(UTRIE3_SUPP_DATA_BLOCK_LENGTH);
+        int32_t newBlock = allocDataBlock(UCPTRIE_SMALL_DATA_BLOCK_LENGTH);
         if (newBlock < 0) { return newBlock; }
         writeBlock(data + newBlock, index[i]);
         flags[i] = MIXED;
@@ -391,7 +391,7 @@ int32_t Trie3Builder::getDataBlock(int32_t i) {
     }
 }
 
-void Trie3Builder::set(UChar32 c, uint32_t value, UErrorCode &errorCode) {
+void CodePointTrieBuilder::set(UChar32 c, uint32_t value, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
@@ -401,12 +401,12 @@ void Trie3Builder::set(UChar32 c, uint32_t value, UErrorCode &errorCode) {
     }
 
     int32_t block;
-    if (!ensureHighStart(c) || (block = getDataBlock(c >> UTRIE3_SUPP_SHIFT_2)) < 0) {
+    if (!ensureHighStart(c) || (block = getDataBlock(c >> UCPTRIE_SHIFT_3)) < 0) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
 
-    data[block + (c & UTRIE3_SUPP_DATA_MASK)] = value;
+    data[block + (c & UCPTRIE_SMALL_DATA_MASK)] = value;
 }
 
 void
@@ -418,7 +418,7 @@ fillBlock(uint32_t *block, UChar32 start, UChar32 limit, uint32_t value) {
     }
 }
 
-void Trie3Builder::setRange(UChar32 start, UChar32 end, uint32_t value, UErrorCode &errorCode) {
+void CodePointTrieBuilder::setRange(UChar32 start, UChar32 end, uint32_t value, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
@@ -432,46 +432,46 @@ void Trie3Builder::setRange(UChar32 start, UChar32 end, uint32_t value, UErrorCo
     }
 
     UChar32 limit = end + 1;
-    if (start & UTRIE3_SUPP_DATA_MASK) {
+    if (start & UCPTRIE_SMALL_DATA_MASK) {
         // Set partial block at [start..following block boundary[.
-        int32_t block = getDataBlock(start >> UTRIE3_SUPP_SHIFT_2);
+        int32_t block = getDataBlock(start >> UCPTRIE_SHIFT_3);
         if (block < 0) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
 
-        UChar32 nextStart = (start + UTRIE3_SUPP_DATA_MASK) & ~UTRIE3_SUPP_DATA_MASK;
+        UChar32 nextStart = (start + UCPTRIE_SMALL_DATA_MASK) & ~UCPTRIE_SMALL_DATA_MASK;
         if (nextStart <= limit) {
-            fillBlock(data + block, start & UTRIE3_SUPP_DATA_MASK, UTRIE3_SUPP_DATA_BLOCK_LENGTH,
+            fillBlock(data + block, start & UCPTRIE_SMALL_DATA_MASK, UCPTRIE_SMALL_DATA_BLOCK_LENGTH,
                       value);
             start = nextStart;
         } else {
-            fillBlock(data + block, start & UTRIE3_SUPP_DATA_MASK, limit & UTRIE3_SUPP_DATA_MASK,
+            fillBlock(data + block, start & UCPTRIE_SMALL_DATA_MASK, limit & UCPTRIE_SMALL_DATA_MASK,
                       value);
             return;
         }
     }
 
     // Number of positions in the last, partial block.
-    int32_t rest = limit & UTRIE3_SUPP_DATA_MASK;
+    int32_t rest = limit & UCPTRIE_SMALL_DATA_MASK;
 
     // Round down limit to a block boundary.
-    limit &= ~UTRIE3_SUPP_DATA_MASK;
+    limit &= ~UCPTRIE_SMALL_DATA_MASK;
 
     // Iterate over all-value blocks.
     while (start < limit) {
-        int32_t i = start >> UTRIE3_SUPP_SHIFT_2;
+        int32_t i = start >> UCPTRIE_SHIFT_3;
         if (flags[i] == ALL_SAME) {
             index[i] = value;
         } else /* MIXED */ {
-            fillBlock(data + index[i], 0, UTRIE3_SUPP_DATA_BLOCK_LENGTH, value);
+            fillBlock(data + index[i], 0, UCPTRIE_SMALL_DATA_BLOCK_LENGTH, value);
         }
-        start += UTRIE3_SUPP_DATA_BLOCK_LENGTH;
+        start += UCPTRIE_SMALL_DATA_BLOCK_LENGTH;
     }
 
     if (rest > 0) {
         // Set partial block at [last block boundary..limit[.
-        int32_t block = getDataBlock(start >> UTRIE3_SUPP_SHIFT_2);
+        int32_t block = getDataBlock(start >> UCPTRIE_SHIFT_3);
         if (block < 0) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -483,11 +483,11 @@ void Trie3Builder::setRange(UChar32 start, UChar32 end, uint32_t value, UErrorCo
 
 /* compaction --------------------------------------------------------------- */
 
-void Trie3Builder::maskValues(uint32_t mask) {
+void CodePointTrieBuilder::maskValues(uint32_t mask) {
     initialValue &= mask;
     errorValue &= mask;
     highValue &= mask;
-    int32_t iLimit = highStart >> UTRIE3_SUPP_SHIFT_2;
+    int32_t iLimit = highStart >> UCPTRIE_SHIFT_3;
     for (int32_t i = 0; i < iLimit; ++i) {
         if (flags[i] == ALL_SAME) {
             index[i] &= mask;
@@ -650,8 +650,8 @@ int32_t getAllSameOverlap(const uint32_t *p, int32_t length, uint32_t value,
  * Finds the start of the last range in the trie by enumerating backward.
  * Indexes for supplementary code points higher than this will be omitted.
  */
-UChar32 Trie3Builder::findHighStart() const {
-    int32_t i = highStart >> UTRIE3_SUPP_SHIFT_2;
+UChar32 CodePointTrieBuilder::findHighStart() const {
+    int32_t i = highStart >> UCPTRIE_SHIFT_3;
     while (i > 0) {
         bool match;
         if (flags[--i] == ALL_SAME) {
@@ -659,7 +659,7 @@ UChar32 Trie3Builder::findHighStart() const {
         } else /* MIXED */ {
             const uint32_t *p = data + index[i];
             for (int32_t j = 0;; ++j) {
-                if (j == UTRIE3_SUPP_DATA_BLOCK_LENGTH) {
+                if (j == UCPTRIE_SMALL_DATA_BLOCK_LENGTH) {
                     match = true;
                     break;
                 }
@@ -670,7 +670,7 @@ UChar32 Trie3Builder::findHighStart() const {
             }
         }
         if (!match) {
-            return (i + 1) << UTRIE3_SUPP_SHIFT_2;
+            return (i + 1) << UCPTRIE_SHIFT_3;
         }
     }
     return 0;
@@ -748,8 +748,8 @@ private:
     int32_t refCounts[CAPACITY];
 };
 
-int32_t Trie3Builder::compactWholeDataBlocks(int32_t fastILimit, AllSameBlocks &allSameBlocks) {
-#ifdef UTRIE3_DEBUG
+int32_t CodePointTrieBuilder::compactWholeDataBlocks(int32_t fastILimit, AllSameBlocks &allSameBlocks) {
+#ifdef UCPTRIE_DEBUG
     bool overflow = false;
 #endif
 
@@ -758,12 +758,12 @@ int32_t Trie3Builder::compactWholeDataBlocks(int32_t fastILimit, AllSameBlocks &
     int32_t newDataCapacity = ASCII_LIMIT;
     // Add room for special values (errorValue, highValue) and padding.
     newDataCapacity += 4;
-    int32_t iLimit = highStart >> UTRIE3_SUPP_SHIFT_2;
-    int32_t blockLength = UTRIE3_BMP_DATA_BLOCK_LENGTH;
-    int32_t inc = SUPP_DATA_BLOCKS_PER_BMP_BLOCK;
+    int32_t iLimit = highStart >> UCPTRIE_SHIFT_3;
+    int32_t blockLength = UCPTRIE_FAST_DATA_BLOCK_LENGTH;
+    int32_t inc = SMALL_DATA_BLOCKS_PER_BMP_BLOCK;
     for (int32_t i = 0; i < iLimit; i += inc) {
         if (i == fastILimit) {
-            blockLength = UTRIE3_SUPP_DATA_BLOCK_LENGTH;
+            blockLength = UCPTRIE_SMALL_DATA_BLOCK_LENGTH;
             inc = 1;
         }
         uint32_t value = index[i];
@@ -805,13 +805,13 @@ int32_t Trie3Builder::compactWholeDataBlocks(int32_t fastILimit, AllSameBlocks &
         int32_t other = allSameBlocks.findOrAdd(i, inc, value);
         if (other == AllSameBlocks::OVERFLOW) {
             // The fixed-size array overflowed. Slow check for a duplicate block.
-#ifdef UTRIE3_DEBUG
+#ifdef UCPTRIE_DEBUG
             if (!overflow) {
-                puts("UTrie3 AllSameBlocks overflow");
+                puts("UCPTrie AllSameBlocks overflow");
                 overflow = true;
             }
 #endif
-            int32_t jInc = SUPP_DATA_BLOCKS_PER_BMP_BLOCK;
+            int32_t jInc = SMALL_DATA_BLOCKS_PER_BMP_BLOCK;
             for (int32_t j = 0;; j += jInc) {
                 if (j == i) {
                     allSameBlocks.add(i, inc, value);
@@ -841,13 +841,13 @@ int32_t Trie3Builder::compactWholeDataBlocks(int32_t fastILimit, AllSameBlocks &
     return newDataCapacity;
 }
 
-#ifdef UTRIE3_DEBUG
+#ifdef UCPTRIE_DEBUG
 #   define DEBUG_DO(expr) expr
 #else
 #   define DEBUG_DO(expr)
 #endif
 
-#ifdef UTRIE3_DEBUG
+#ifdef UCPTRIE_DEBUG
 // Braille symbols: U+28xx = UTF-8 E2 A0 80..E2 A3 BF
 int32_t appendValue(char s[], int32_t length, uint32_t value) {
     value ^= value >> 16;
@@ -860,7 +860,7 @@ int32_t appendValue(char s[], int32_t length, uint32_t value) {
 
 void printBlock(const uint32_t *block, int32_t blockLength, uint32_t value,
                 UChar32 start, int32_t overlap, uint32_t initialValue) {
-    char s[UTRIE3_BMP_DATA_BLOCK_LENGTH * 3 + 3];
+    char s[UCPTRIE_FAST_DATA_BLOCK_LENGTH * 3 + 3];
     int32_t length = 0;
     int32_t i;
     for (i = 0; i < overlap; ++i) {
@@ -898,8 +898,8 @@ void printBlock(const uint32_t *block, int32_t blockLength, uint32_t value,
  *
  * It does not try to find an optimal order of writing, deduplicating, and overlapping blocks.
  */
-int32_t Trie3Builder::compactData(int32_t fastILimit, uint32_t *newData) {
-#ifdef UTRIE3_DEBUG
+int32_t CodePointTrieBuilder::compactData(int32_t fastILimit, uint32_t *newData) {
+#ifdef UCPTRIE_DEBUG
     int32_t countSame=0, sumOverlaps=0;
     bool printData = dataLength == 29088 /* line.brk */ ||
         // dataLength == 30048 /* CanonIterData */ ||
@@ -909,21 +909,21 @@ int32_t Trie3Builder::compactData(int32_t fastILimit, uint32_t *newData) {
     // The linear ASCII data has been copied into newData already.
     int32_t newDataLength = 0;
     for (int32_t i = 0; newDataLength < ASCII_LIMIT;
-            newDataLength += UTRIE3_BMP_DATA_BLOCK_LENGTH, i += SUPP_DATA_BLOCKS_PER_BMP_BLOCK) {
+            newDataLength += UCPTRIE_FAST_DATA_BLOCK_LENGTH, i += SMALL_DATA_BLOCKS_PER_BMP_BLOCK) {
         index[i] = newDataLength;
-#ifdef UTRIE3_DEBUG
+#ifdef UCPTRIE_DEBUG
         if (printData) {
-            printBlock(newData + newDataLength, UTRIE3_BMP_DATA_BLOCK_LENGTH, 0, newDataLength, 0, initialValue);
+            printBlock(newData + newDataLength, UCPTRIE_FAST_DATA_BLOCK_LENGTH, 0, newDataLength, 0, initialValue);
         }
 #endif
     }
 
-    int32_t iLimit = highStart >> UTRIE3_SUPP_SHIFT_2;
-    int32_t blockLength = UTRIE3_BMP_DATA_BLOCK_LENGTH;
-    int32_t inc = SUPP_DATA_BLOCKS_PER_BMP_BLOCK;
+    int32_t iLimit = highStart >> UCPTRIE_SHIFT_3;
+    int32_t blockLength = UCPTRIE_FAST_DATA_BLOCK_LENGTH;
+    int32_t inc = SMALL_DATA_BLOCKS_PER_BMP_BLOCK;
     for (int32_t i = ASCII_I_LIMIT; i < iLimit; i += inc) {
         if (i == fastILimit) {
-            blockLength = UTRIE3_SUPP_DATA_BLOCK_LENGTH;
+            blockLength = UCPTRIE_SMALL_DATA_BLOCK_LENGTH;
             inc = 1;
         }
         if (flags[i] == ALL_SAME) {
@@ -935,9 +935,9 @@ int32_t Trie3Builder::compactData(int32_t fastILimit, uint32_t *newData) {
             } else {
                 n = getAllSameOverlap(newData, newDataLength, value, blockLength);
                 DEBUG_DO(sumOverlaps += n);
-#ifdef UTRIE3_DEBUG
+#ifdef UCPTRIE_DEBUG
                 if (printData) {
-                    printBlock(nullptr, blockLength, value, i << UTRIE3_SUPP_SHIFT_2, n, initialValue);
+                    printBlock(nullptr, blockLength, value, i << UCPTRIE_SHIFT_3, n, initialValue);
                 }
 #endif
                 index[i] = newDataLength - n;
@@ -955,9 +955,9 @@ int32_t Trie3Builder::compactData(int32_t fastILimit, uint32_t *newData) {
             } else {
                 n = getOverlap(newData, newDataLength, block, 0, blockLength);
                 DEBUG_DO(sumOverlaps += n);
-#ifdef UTRIE3_DEBUG
+#ifdef UCPTRIE_DEBUG
                 if (printData) {
-                    printBlock(block, blockLength, 0, i << UTRIE3_SUPP_SHIFT_2, n, initialValue);
+                    printBlock(block, blockLength, 0, i << UCPTRIE_SHIFT_3, n, initialValue);
                 }
 #endif
                 index[i] = newDataLength - n;
@@ -971,113 +971,113 @@ int32_t Trie3Builder::compactData(int32_t fastILimit, uint32_t *newData) {
         }
     }
 
-#ifdef UTRIE3_DEBUG
+#ifdef UCPTRIE_DEBUG
     /* we saved some space */
-    printf("compacting UTrie3: count of 32-bit data words %lu->%lu  countSame=%ld  sumOverlaps=%ld\n",
+    printf("compacting UCPTrie: count of 32-bit data words %lu->%lu  countSame=%ld  sumOverlaps=%ld\n",
             (long)dataLength, (long)newDataLength, (long)countSame, (long)sumOverlaps);
 #endif
     return newDataLength;
 }
 
-int32_t Trie3Builder::compactIndex(int32_t fastILimit, UErrorCode &errorCode) {
-    int32_t fastIndexLength = fastILimit >> (UTRIE3_BMP_SHIFT - UTRIE3_SUPP_SHIFT_2);
-    if ((highStart >> UTRIE3_BMP_SHIFT) <= fastIndexLength) {
+int32_t CodePointTrieBuilder::compactIndex(int32_t fastILimit, UErrorCode &errorCode) {
+    int32_t fastIndexLength = fastILimit >> (UCPTRIE_FAST_SHIFT - UCPTRIE_SHIFT_3);
+    if ((highStart >> UCPTRIE_FAST_SHIFT) <= fastIndexLength) {
         // Only the linear BMP index, no supplementary index tables.
         // TODO: fix BMP/supp comments
-        index2NullOffset = UTRIE3_NO_INDEX2_NULL_OFFSET;
+        index3NullOffset = UCPTRIE_NO_INDEX2_NULL_OFFSET;
         return fastIndexLength;
     }
 
     // Condense the fast index table.
-    // Also, does it contain an index-2 block with all dataNullOffset?
-    uint16_t fastIndex[UTRIE3_BMP_INDEX_LENGTH];  // fastIndexLength
-    int32_t i2FirstNull = -1;
+    // Also, does it contain an index-3 block with all dataNullOffset?
+    uint16_t fastIndex[UCPTRIE_BMP_INDEX_LENGTH];  // fastIndexLength
+    int32_t i3FirstNull = -1;
     for (int32_t i = 0, j = 0; i < fastILimit; ++j) {
-        uint32_t i2 = index[i];
-        fastIndex[j] = (uint16_t)i2;
-        if (i2 == (uint32_t)dataNullOffset) {
-            if (i2FirstNull < 0) {
-                i2FirstNull = j;
-            } else if (index2NullOffset < 0 &&
-                    (j - i2FirstNull + 1) == UTRIE3_INDEX_2_BLOCK_LENGTH) {
-                index2NullOffset = i2FirstNull;
+        uint32_t i3 = index[i];
+        fastIndex[j] = (uint16_t)i3;
+        if (i3 == (uint32_t)dataNullOffset) {
+            if (i3FirstNull < 0) {
+                i3FirstNull = j;
+            } else if (index3NullOffset < 0 &&
+                    (j - i3FirstNull + 1) == UCPTRIE_INDEX_3_BLOCK_LENGTH) {
+                index3NullOffset = i3FirstNull;
             }
         } else {
-            i2FirstNull = -1;
+            i3FirstNull = -1;
         }
         // Set the index entries that compactData() skipped.
         // Needed when the multi-stage index covers the fast index range as well.
-        int32_t iNext = i + SUPP_DATA_BLOCKS_PER_BMP_BLOCK;
+        int32_t iNext = i + SMALL_DATA_BLOCKS_PER_BMP_BLOCK;
         while (++i < iNext) {
-            i2 += UTRIE3_SUPP_DATA_BLOCK_LENGTH;
-            index[i] = i2;
+            i3 += UCPTRIE_SMALL_DATA_BLOCK_LENGTH;
+            index[i] = i3;
         }
     }
 
-    // Examine supplementary index-2 blocks. For each determine one of:
-    // - same as the index-2 null block
+    // Examine supplementary index-3 blocks. For each determine one of:
+    // - same as the index-3 null block
     // - same as a BMP index block
     // - 16-bit indexes
     // - 18-bit indexes
-    // We store this in the first flags entry for the index-2 block.
+    // We store this in the first flags entry for the index-3 block.
     //
-    // Also determine an upper limit for the index-2 table length.
-    int32_t index2Capacity = 0;
-    i2FirstNull = index2NullOffset;
+    // Also determine an upper limit for the index-3 table length.
+    int32_t index3Capacity = 0;
+    i3FirstNull = index3NullOffset;
     // If the fast index covers the whole BMP, then
     // the multi-stage index is only for supplementary code points.
     // Otherwise, the multi-stage index covers all of Unicode.
     int32_t iStart = fastILimit < BMP_I_LIMIT ? 0 : BMP_I_LIMIT;
-    int32_t iLimit = highStart >> UTRIE3_SUPP_SHIFT_2;
+    int32_t iLimit = highStart >> UCPTRIE_SHIFT_3;
     for (int32_t i = iStart; i < iLimit;) {
         int32_t j = i;
-        int32_t jLimit = i + UTRIE3_INDEX_2_BLOCK_LENGTH;
-        uint32_t oredI2 = 0;
+        int32_t jLimit = i + UCPTRIE_INDEX_3_BLOCK_LENGTH;
+        uint32_t oredI3 = 0;
         bool isNull = true;
         do {
-            uint32_t i2 = index[j];
-            oredI2 |= i2;
-            if (i2 != (uint32_t)dataNullOffset) {
+            uint32_t i3 = index[j];
+            oredI3 |= i3;
+            if (i3 != (uint32_t)dataNullOffset) {
                 isNull = false;
             }
         } while (++j < jLimit);
         if (isNull) {
-            flags[i] = I2_NULL;
-            if (i2FirstNull < 0) {
-                if (oredI2 <= 0xffff) {
-                    index2Capacity += UTRIE3_INDEX_2_BLOCK_LENGTH;
+            flags[i] = I3_NULL;
+            if (i3FirstNull < 0) {
+                if (oredI3 <= 0xffff) {
+                    index3Capacity += UCPTRIE_INDEX_3_BLOCK_LENGTH;
                 } else {
-                    index2Capacity += INDEX_2_18BIT_BLOCK_LENGTH;
+                    index3Capacity += INDEX_3_18BIT_BLOCK_LENGTH;
                 }
-                i2FirstNull = 0;
+                i3FirstNull = 0;
             }
         } else {
-            if (oredI2 <= 0xffff) {
+            if (oredI3 <= 0xffff) {
                 int32_t n = findSameBlock(fastIndex, 0, fastIndexLength,
-                                          index, i, UTRIE3_INDEX_2_BLOCK_LENGTH);
+                                          index, i, UCPTRIE_INDEX_3_BLOCK_LENGTH);
                 if (n >= 0) {
-                    flags[i] = I2_BMP;
+                    flags[i] = I3_BMP;
                     index[i] = n;
                 } else {
-                    flags[i] = I2_16;
-                    index2Capacity += UTRIE3_INDEX_2_BLOCK_LENGTH;
+                    flags[i] = I3_16;
+                    index3Capacity += UCPTRIE_INDEX_3_BLOCK_LENGTH;
                 }
             } else {
-                flags[i] = I2_18;
-                index2Capacity += INDEX_2_18BIT_BLOCK_LENGTH;
+                flags[i] = I3_18;
+                index3Capacity += INDEX_3_18BIT_BLOCK_LENGTH;
             }
         }
         i = j;
     }
 
-    int32_t index1Capacity = (iLimit - iStart) >> UTRIE3_SUPP_SHIFT_1_2;
+    int32_t index2Capacity = (iLimit - iStart) >> UCPTRIE_SHIFT_2_3;
 
-    // Length of the index-0 table, rounded up.
-    int32_t index0Length = (index1Capacity + UTRIE3_INDEX_1_MASK) >> UTRIE3_SUPP_SHIFT_0_1;
+    // Length of the index-1 table, rounded up.
+    int32_t index1Length = (index2Capacity + UCPTRIE_INDEX_2_MASK) >> UCPTRIE_SHIFT_1_2;
 
-    // Index table: Fast index, index-0, index-2, index-1.
+    // Index table: Fast index, index-1, index-3, index-2.
     // +1 for possible index table padding.
-    int32_t index16Capacity = fastIndexLength + index0Length + index2Capacity + index1Capacity + 1;
+    int32_t index16Capacity = fastIndexLength + index1Length + index3Capacity + index2Capacity + 1;
     index16 = (uint16_t *)uprv_malloc(index16Capacity * 2);
     if (index16 == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
@@ -1085,47 +1085,47 @@ int32_t Trie3Builder::compactIndex(int32_t fastILimit, UErrorCode &errorCode) {
     }
     uprv_memcpy(index16, fastIndex, fastIndexLength * 2);
 
-    // Compact the index-2 table and write an uncompacted version of the index-1 table.
-    uint16_t index1[UNICODE_LIMIT >> UTRIE3_SUPP_SHIFT_1];  // index1Capacity
-    int32_t i1Length = 0;
-    i2FirstNull = index2NullOffset;
-    int32_t index2Start = fastIndexLength + index0Length;
-    int32_t indexLength = index2Start;
-    for (int32_t i = iStart; i < iLimit; i += UTRIE3_INDEX_2_BLOCK_LENGTH) {
-        int32_t i2;
+    // Compact the index-3 table and write an uncompacted version of the index-2 table.
+    uint16_t index2[UNICODE_LIMIT >> UCPTRIE_SHIFT_2];  // index2Capacity
+    int32_t i2Length = 0;
+    i3FirstNull = index3NullOffset;
+    int32_t index3Start = fastIndexLength + index1Length;
+    int32_t indexLength = index3Start;
+    for (int32_t i = iStart; i < iLimit; i += UCPTRIE_INDEX_3_BLOCK_LENGTH) {
+        int32_t i3;
         uint8_t f = flags[i];
-        if (f == I2_NULL && i2FirstNull < 0) {
-            // First index-2 null block. Write & overlap it like a normal block, then remember it.
-            f = dataNullOffset <= 0xffff ? I2_16 : I2_18;
-            i2FirstNull = 0;
+        if (f == I3_NULL && i3FirstNull < 0) {
+            // First index-3 null block. Write & overlap it like a normal block, then remember it.
+            f = dataNullOffset <= 0xffff ? I3_16 : I3_18;
+            i3FirstNull = 0;
         }
-        if (f == I2_NULL) {
-            i2 = index2NullOffset;
-        } else if (f == I2_BMP) {
-            i2 = index[i];
-        } else if (f == I2_16) {
-            int32_t n = findSameBlock(index16, index2Start, indexLength,
-                                      index, i, UTRIE3_INDEX_2_BLOCK_LENGTH);
+        if (f == I3_NULL) {
+            i3 = index3NullOffset;
+        } else if (f == I3_BMP) {
+            i3 = index[i];
+        } else if (f == I3_16) {
+            int32_t n = findSameBlock(index16, index3Start, indexLength,
+                                      index, i, UCPTRIE_INDEX_3_BLOCK_LENGTH);
             if (n >= 0) {
-                i2 = n;
+                i3 = n;
             } else {
-                if (indexLength == index2Start) {
-                    // No overlap at the boundary between the index-0 and index-2 tables.
+                if (indexLength == index3Start) {
+                    // No overlap at the boundary between the index-1 and index-3 tables.
                     n = 0;
                 } else {
                     n = getOverlap(index16, indexLength,
-                                   index, i, UTRIE3_INDEX_2_BLOCK_LENGTH);
+                                   index, i, UCPTRIE_INDEX_3_BLOCK_LENGTH);
                 }
-                i2 = indexLength - n;
-                while (n < UTRIE3_INDEX_2_BLOCK_LENGTH) {
+                i3 = indexLength - n;
+                while (n < UCPTRIE_INDEX_3_BLOCK_LENGTH) {
                     index16[indexLength++] = index[i + n++];
                 }
             }
         } else {
-            U_ASSERT(f == I2_18);
-            // Encode an index-2 block that contains one or more data indexes exceeding 16 bits.
+            U_ASSERT(f == I3_18);
+            // Encode an index-3 block that contains one or more data indexes exceeding 16 bits.
             int32_t j = i;
-            int32_t jLimit = i + UTRIE3_INDEX_2_BLOCK_LENGTH;
+            int32_t jLimit = i + UCPTRIE_INDEX_3_BLOCK_LENGTH;
             int32_t k = indexLength;
             do {
                 ++k;
@@ -1155,109 +1155,109 @@ int32_t Trie3Builder::compactIndex(int32_t fastILimit, UErrorCode &errorCode) {
                 index16[k++] = v;
                 index16[k - 9] = upperBits;
             } while (j < jLimit);
-            int32_t n = findSameBlock(index16, index2Start, indexLength,
-                                      index16, indexLength, INDEX_2_18BIT_BLOCK_LENGTH);
+            int32_t n = findSameBlock(index16, index3Start, indexLength,
+                                      index16, indexLength, INDEX_3_18BIT_BLOCK_LENGTH);
             if (n >= 0) {
-                i2 = n | 0x8000;
+                i3 = n | 0x8000;
             } else {
-                if (indexLength == index2Start) {
-                    // No overlap at the boundary between the index-0 and index-2 tables.
+                if (indexLength == index3Start) {
+                    // No overlap at the boundary between the index-1 and index-3 tables.
                     n = 0;
                 } else {
                     n = getOverlap(index16, indexLength,
-                                   index16, indexLength, INDEX_2_18BIT_BLOCK_LENGTH);
+                                   index16, indexLength, INDEX_3_18BIT_BLOCK_LENGTH);
                 }
-                i2 = (indexLength - n) | 0x8000;
+                i3 = (indexLength - n) | 0x8000;
                 if (n > 0) {
                     int32_t start = indexLength;
-                    while (n < INDEX_2_18BIT_BLOCK_LENGTH) {
+                    while (n < INDEX_3_18BIT_BLOCK_LENGTH) {
                         index16[indexLength++] = index16[start + n++];
                     }
                 } else {
-                    indexLength += INDEX_2_18BIT_BLOCK_LENGTH;
+                    indexLength += INDEX_3_18BIT_BLOCK_LENGTH;
                 }
             }
         }
-        if (index2NullOffset < 0 && i2FirstNull >= 0) {
-            index2NullOffset = i2;
+        if (index3NullOffset < 0 && i3FirstNull >= 0) {
+            index3NullOffset = i3;
         }
-        // Set the index-1 table entry.
-        index1[i1Length++] = i2;
+        // Set the index-2 table entry.
+        index2[i2Length++] = i3;
     }
-    U_ASSERT(i1Length == index1Capacity);
-    U_ASSERT(indexLength <= index2Start + index2Capacity);
+    U_ASSERT(i2Length == index2Capacity);
+    U_ASSERT(indexLength <= index3Start + index3Capacity);
 
-    if (index2NullOffset < 0) {
-        index2NullOffset = UTRIE3_NO_INDEX2_NULL_OFFSET;
+    if (index3NullOffset < 0) {
+        index3NullOffset = UCPTRIE_NO_INDEX2_NULL_OFFSET;
     }
-    if (indexLength >= (UTRIE3_NO_INDEX2_NULL_OFFSET + UTRIE3_INDEX_2_BLOCK_LENGTH)) {
-        // The index-2 offsets exceed 15 bits, or
+    if (indexLength >= (UCPTRIE_NO_INDEX2_NULL_OFFSET + UCPTRIE_INDEX_3_BLOCK_LENGTH)) {
+        // The index-3 offsets exceed 15 bits, or
         // the last one cannot be distinguished from the no-null-block value.
         errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
     }
 
-    // Compact the index-1 table and write the index-0 table.
-    int32_t blockLength = UTRIE3_INDEX_1_BLOCK_LENGTH;
-    int32_t i0 = fastIndexLength;
-    for (int32_t i = 0; i < i1Length; i += blockLength) {
-        if ((i1Length - i) < blockLength) {
-            // highStart is inside the last index-1 block. Shorten it.
-            blockLength = i1Length - i;
+    // Compact the index-2 table and write the index-1 table.
+    int32_t blockLength = UCPTRIE_INDEX_2_BLOCK_LENGTH;
+    int32_t i1 = fastIndexLength;
+    for (int32_t i = 0; i < i2Length; i += blockLength) {
+        if ((i2Length - i) < blockLength) {
+            // highStart is inside the last index-2 block. Shorten it.
+            blockLength = i2Length - i;
         }
-        int32_t i1;
-        int32_t n = findSameBlock(index16, index2Start, indexLength,
-                                  index1, i, blockLength);
+        int32_t i2;
+        int32_t n = findSameBlock(index16, index3Start, indexLength,
+                                  index2, i, blockLength);
         if (n >= 0) {
-            i1 = n;
+            i2 = n;
         } else {
-            if (indexLength == index2Start) {
-                // No overlap at the boundary between the index-0 and index-2/1 tables.
+            if (indexLength == index3Start) {
+                // No overlap at the boundary between the index-1 and index-3/2 tables.
                 n = 0;
             } else {
-                n = getOverlap(index16, indexLength, index1, i, blockLength);
+                n = getOverlap(index16, indexLength, index2, i, blockLength);
             }
-            i1 = indexLength - n;
+            i2 = indexLength - n;
             while (n < blockLength) {
-                index16[indexLength++] = index1[i + n++];
+                index16[indexLength++] = index2[i + n++];
             }
         }
-        // Set the index-0 table entry.
-        index16[i0++] = i1;
+        // Set the index-1 table entry.
+        index16[i1++] = i2;
     }
-    U_ASSERT(i0 == index2Start);
+    U_ASSERT(i1 == index3Start);
     U_ASSERT(indexLength <= index16Capacity);
 
-#ifdef UTRIE3_DEBUG
+#ifdef UCPTRIE_DEBUG
     /* we saved some space */
-    printf("compacting UTrie3: count of 16-bit index words %lu->%lu\n",
+    printf("compacting UCPTrie: count of 16-bit index words %lu->%lu\n",
             (long)iLimit, (long)indexLength);
 #endif
 
     return indexLength;
 }
 
-int32_t Trie3Builder::compactTrie(int32_t fastILimit, UErrorCode &errorCode) {
+int32_t CodePointTrieBuilder::compactTrie(int32_t fastILimit, UErrorCode &errorCode) {
     // Find the real highStart and round it up.
-    U_ASSERT((highStart & (UTRIE3_CP_PER_INDEX_1_ENTRY - 1)) == 0);
+    U_ASSERT((highStart & (UCPTRIE_CP_PER_INDEX_2_ENTRY - 1)) == 0);
     highValue = get(MAX_UNICODE);
     int32_t realHighStart = findHighStart();
-    realHighStart = (realHighStart + (UTRIE3_CP_PER_INDEX_1_ENTRY - 1)) &
-        ~(UTRIE3_CP_PER_INDEX_1_ENTRY - 1);
+    realHighStart = (realHighStart + (UCPTRIE_CP_PER_INDEX_2_ENTRY - 1)) &
+        ~(UCPTRIE_CP_PER_INDEX_2_ENTRY - 1);
     if (realHighStart == UNICODE_LIMIT) {
         highValue = initialValue;
     }
 
-#ifdef UTRIE3_DEBUG
-    printf("UTrie3: highStart U+%06lx  highValue 0x%lx  initialValue 0x%lx\n",
+#ifdef UCPTRIE_DEBUG
+    printf("UCPTrie: highStart U+%06lx  highValue 0x%lx  initialValue 0x%lx\n",
             (long)realHighStart, (long)highValue, (long)initialValue);
 #endif
 
     // We always store indexes and data values for the BMP.
     // Pin highStart to the supplementary range while building.
-    UChar32 fastLimit = fastILimit << UTRIE3_SUPP_SHIFT_2;
+    UChar32 fastLimit = fastILimit << UCPTRIE_SHIFT_3;
     if (realHighStart < fastLimit) {
-        for (int32_t i = (realHighStart >> UTRIE3_SUPP_SHIFT_2); i < fastILimit; ++i) {
+        for (int32_t i = (realHighStart >> UCPTRIE_SHIFT_3); i < fastILimit; ++i) {
             flags[i] = ALL_SAME;
             index[i] = highValue;
         }
@@ -1293,7 +1293,7 @@ int32_t Trie3Builder::compactTrie(int32_t fastILimit, UErrorCode &errorCode) {
     data = newData;
     dataCapacity = newDataCapacity;
     dataLength = newDataLength;
-    if (dataLength > (0x3ffff + UTRIE3_SUPP_DATA_BLOCK_LENGTH)) {
+    if (dataLength > (0x3ffff + UCPTRIE_SMALL_DATA_BLOCK_LENGTH)) {
         // The offset of the last data block is too high to be stored in the index table.
         errorCode = U_INDEX_OUTOFBOUNDS_ERROR;
         return 0;
@@ -1302,15 +1302,15 @@ int32_t Trie3Builder::compactTrie(int32_t fastILimit, UErrorCode &errorCode) {
     int32_t dataNullIndex = allSameBlocks.findMostUsed();
     if (dataNullIndex >= 0) {
         dataNullOffset = index[dataNullIndex];
-#ifdef UTRIE3_DEBUG
+#ifdef UCPTRIE_DEBUG
         if (data[dataNullOffset] != initialValue) {
-            printf("UTrie3 initialValue %lx -> more common nullValue %lx\n",
+            printf("UCPTrie initialValue %lx -> more common nullValue %lx\n",
                    (long)initialValue, (long)data[dataNullOffset]);
         }
 #endif
         initialValue = data[dataNullOffset];
     } else {
-        dataNullOffset = UTRIE3_NO_DATA_NULL_OFFSET;
+        dataNullOffset = UCPTRIE_NO_DATA_NULL_OFFSET;
     }
 
     int32_t indexLength = compactIndex(fastILimit, errorCode);
@@ -1318,38 +1318,38 @@ int32_t Trie3Builder::compactTrie(int32_t fastILimit, UErrorCode &errorCode) {
     return indexLength;
 }
 
-UTrie3 *Trie3Builder::build(UTrie3Type type, UTrie3ValueBits valueBits, UErrorCode &errorCode) {
+UCPTrie *CodePointTrieBuilder::build(UCPTrieType type, UCPTrieValueBits valueBits, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
-    if (type > UTRIE3_TYPE_SMALL || valueBits > UTRIE3_32_VALUE_BITS) {
+    if (type > UCPTRIE_TYPE_SMALL || valueBits > UCPTRIE_VALUE_BITS_32) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
 
     // The builder always stores 32-bit values.
-    // When we build a UTrie3 for a smaller value width, we first mask off unused bits
+    // When we build a UCPTrie for a smaller value width, we first mask off unused bits
     // before compacting the data.
-    if (valueBits != UTRIE3_32_VALUE_BITS) {
+    if (valueBits != UCPTRIE_VALUE_BITS_32) {
         maskValues(0xffff);
     }
 
-    UChar32 fastLimit = type == UTRIE3_TYPE_FAST ? BMP_LIMIT : UTRIE3_SMALL_LIMIT;
-    int32_t indexLength = compactTrie(fastLimit >> UTRIE3_SUPP_SHIFT_2, errorCode);
+    UChar32 fastLimit = type == UCPTRIE_TYPE_FAST ? BMP_LIMIT : UCPTRIE_SMALL_LIMIT;
+    int32_t indexLength = compactTrie(fastLimit >> UCPTRIE_SHIFT_3, errorCode);
     if (U_FAILURE(errorCode)) {
         clear();
         return nullptr;
     }
 
     // Ensure data table alignment: The index length must be even for uint32_t data.
-    if (valueBits == UTRIE3_32_VALUE_BITS && (indexLength & 1) != 0) {
+    if (valueBits == UCPTRIE_VALUE_BITS_32 && (indexLength & 1) != 0) {
         index16[indexLength++] = 0xffee;  // arbitary value
     }
 
     // Make the total trie structure length a multiple of 4 bytes by padding the data table,
     // and store special values as the last two data values.
     int32_t length = indexLength * 2;
-    if (valueBits == UTRIE3_16_VALUE_BITS) {
+    if (valueBits == UCPTRIE_VALUE_BITS_16) {
         if (((indexLength ^ dataLength) & 1) != 0) {
             // padding
             data[dataLength++] = errorValue;
@@ -1370,8 +1370,8 @@ UTrie3 *Trie3Builder::build(UTrie3Type type, UTrie3ValueBits valueBits, UErrorCo
         length += dataLength * 4;
     }
 
-    // Calculate the total length of the UTrie3 as a single memory block.
-    length += sizeof(UTrie3);
+    // Calculate the total length of the UCPTrie as a single memory block.
+    length += sizeof(UCPTrie);
     U_ASSERT((length & 3) == 0);
 
     char *bytes = (char *)uprv_malloc(length);
@@ -1380,8 +1380,8 @@ UTrie3 *Trie3Builder::build(UTrie3Type type, UTrie3ValueBits valueBits, UErrorCo
         clear();
         return nullptr;
     }
-    UTrie3 *trie = reinterpret_cast<UTrie3 *>(bytes);
-    uprv_memset(trie, 0, sizeof(UTrie3));
+    UCPTrie *trie = reinterpret_cast<UCPTrie *>(bytes);
+    uprv_memset(trie, 0, sizeof(UCPTrie));
     trie->indexLength = indexLength;
     trie->dataLength = dataLength;
 
@@ -1391,11 +1391,11 @@ UTrie3 *Trie3Builder::build(UTrie3Type type, UTrie3ValueBits valueBits, UErrorCo
     trie->shifted12HighStart = (highStart + 0xfff) >> 12;
     trie->type = type;
 
-    trie->index2NullOffset = index2NullOffset;
+    trie->index3NullOffset = index3NullOffset;
     trie->dataNullOffset = dataNullOffset;
     trie->nullValue = initialValue;
 
-    bytes += sizeof(UTrie3);
+    bytes += sizeof(UCPTrie);
 
     // Fill the index and data arrays.
     uint16_t *dest16 = (uint16_t *)bytes;
@@ -1403,7 +1403,7 @@ UTrie3 *Trie3Builder::build(UTrie3Type type, UTrie3ValueBits valueBits, UErrorCo
 
     if (highStart <= fastLimit) {
         // Condense only the fast index from the builder index.
-        for (int32_t i = 0, j = 0; j < indexLength; i += SUPP_DATA_BLOCKS_PER_BMP_BLOCK, ++j) {
+        for (int32_t i = 0, j = 0; j < indexLength; i += SMALL_DATA_BLOCKS_PER_BMP_BLOCK, ++j) {
             *dest16++ = (uint16_t)index[i];  // dest16[j]
         }
     } else {
@@ -1415,7 +1415,7 @@ UTrie3 *Trie3Builder::build(UTrie3Type type, UTrie3ValueBits valueBits, UErrorCo
     // Write the 16/32-bit data array.
     const uint32_t *p = data;
     switch (valueBits) {
-    case UTRIE3_16_VALUE_BITS:
+    case UCPTRIE_VALUE_BITS_16:
         // Write 16-bit data values.
         trie->data16 = dest16;
         trie->data32 = nullptr;
@@ -1423,7 +1423,7 @@ UTrie3 *Trie3Builder::build(UTrie3Type type, UTrie3ValueBits valueBits, UErrorCo
             *dest16++ = (uint16_t)*p++;
         }
         break;
-    case UTRIE3_32_VALUE_BITS:
+    case UCPTRIE_VALUE_BITS_32:
         // Write 32-bit data values.
         trie->data16 = nullptr;
         trie->data32 = (uint32_t *)bytes;
@@ -1436,8 +1436,8 @@ UTrie3 *Trie3Builder::build(UTrie3Type type, UTrie3ValueBits valueBits, UErrorCo
 
     trie->name = name;
 
-#ifdef UTRIE3_DEBUG
-    utrie3_printLengths(trie, "");
+#ifdef UCPTRIE_DEBUG
+    ucptrie_printLengths(trie, "");
 #endif
 
     clear();
@@ -1450,43 +1450,43 @@ U_NAMESPACE_END
 
 U_NAMESPACE_USE
 
-U_CAPI UTrie3Builder * U_EXPORT2
-utrie3bld_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) {
+U_CAPI UCPTrieBuilder * U_EXPORT2
+ucptriebld_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return nullptr;
     }
-    Trie3Builder *builder = new Trie3Builder(initialValue, errorValue, *pErrorCode);
+    CodePointTrieBuilder *builder = new CodePointTrieBuilder(initialValue, errorValue, *pErrorCode);
     if (U_FAILURE(*pErrorCode)) {
         delete builder;
         return nullptr;
     }
-    return reinterpret_cast<UTrie3Builder *>(builder);
+    return reinterpret_cast<UCPTrieBuilder *>(builder);
 }
 
-U_CAPI UTrie3Builder * U_EXPORT2
-utrie3bld_clone(const UTrie3Builder *other, UErrorCode *pErrorCode) {
+U_CAPI UCPTrieBuilder * U_EXPORT2
+ucptriebld_clone(const UCPTrieBuilder *other, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return nullptr;
     }
     if (other == nullptr) {
         return nullptr;
     }
-    Trie3Builder *clone = new Trie3Builder(
-        *reinterpret_cast<const Trie3Builder *>(other), *pErrorCode);
+    CodePointTrieBuilder *clone = new CodePointTrieBuilder(
+        *reinterpret_cast<const CodePointTrieBuilder *>(other), *pErrorCode);
     if (U_FAILURE(*pErrorCode)) {
         delete clone;
         return nullptr;
     }
-    return reinterpret_cast<UTrie3Builder *>(clone);
+    return reinterpret_cast<UCPTrieBuilder *>(clone);
 }
 
 U_CAPI void U_EXPORT2
-utrie3bld_close(UTrie3Builder *builder) {
-    delete reinterpret_cast<Trie3Builder *>(builder);
+ucptriebld_close(UCPTrieBuilder *builder) {
+    delete reinterpret_cast<CodePointTrieBuilder *>(builder);
 }
 
-U_CAPI UTrie3Builder * U_EXPORT2
-utrie3bld_fromUTrie3(const UTrie3 *trie, UErrorCode *pErrorCode) {
+U_CAPI UCPTrieBuilder * U_EXPORT2
+ucptriebld_fromUCPTrie(const UCPTrie *trie, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return nullptr;
     }
@@ -1494,69 +1494,69 @@ utrie3bld_fromUTrie3(const UTrie3 *trie, UErrorCode *pErrorCode) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
-    return reinterpret_cast<UTrie3Builder *>(Trie3Builder::fromUTrie3(trie, *pErrorCode));
+    return reinterpret_cast<UCPTrieBuilder *>(CodePointTrieBuilder::fromUCPTrie(trie, *pErrorCode));
 }
 
 U_CAPI uint32_t U_EXPORT2
-utrie3bld_get(const UTrie3Builder *builder, UChar32 c) {
-    return reinterpret_cast<const Trie3Builder *>(builder)->get(c);
+ucptriebld_get(const UCPTrieBuilder *builder, UChar32 c) {
+    return reinterpret_cast<const CodePointTrieBuilder *>(builder)->get(c);
 }
 
 U_CAPI int32_t U_EXPORT2
-utrie3bld_getRange(const UTrie3Builder *builder, UChar32 start,
-                   UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue) {
-    return reinterpret_cast<const Trie3Builder *>(builder)->getRange(start, handleValue, context, pValue);
+ucptriebld_getRange(const UCPTrieBuilder *builder, UChar32 start,
+                   UCPTrieHandleValue *handleValue, const void *context, uint32_t *pValue) {
+    return reinterpret_cast<const CodePointTrieBuilder *>(builder)->getRange(start, handleValue, context, pValue);
 }
 
 U_CAPI void U_EXPORT2
-utrie3bld_set(UTrie3Builder *builder, UChar32 c, uint32_t value, UErrorCode *pErrorCode) {
+ucptriebld_set(UCPTrieBuilder *builder, UChar32 c, uint32_t value, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return;
     }
-    reinterpret_cast<Trie3Builder *>(builder)->set(c, value, *pErrorCode);
+    reinterpret_cast<CodePointTrieBuilder *>(builder)->set(c, value, *pErrorCode);
 }
 
 U_CAPI void U_EXPORT2
-utrie3bld_setRange(UTrie3Builder *builder, UChar32 start, UChar32 end,
+ucptriebld_setRange(UCPTrieBuilder *builder, UChar32 start, UChar32 end,
                    uint32_t value, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return;
     }
-    reinterpret_cast<Trie3Builder *>(builder)->setRange(start, end, value, *pErrorCode);
+    reinterpret_cast<CodePointTrieBuilder *>(builder)->setRange(start, end, value, *pErrorCode);
 }
 
 /* Compact and internally serialize the trie. */
-U_CAPI UTrie3 * U_EXPORT2
-utrie3bld_build(UTrie3Builder *builder, UTrie3Type type, UTrie3ValueBits valueBits,
+U_CAPI UCPTrie * U_EXPORT2
+ucptriebld_build(UCPTrieBuilder *builder, UCPTrieType type, UCPTrieValueBits valueBits,
                 UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return nullptr;
     }
-    return reinterpret_cast<Trie3Builder *>(builder)->build(type, valueBits, *pErrorCode);
+    return reinterpret_cast<CodePointTrieBuilder *>(builder)->build(type, valueBits, *pErrorCode);
 }
 
-U_CFUNC void utrie3bld_setName(UTrie3Builder *builder, const char *name) {
-    reinterpret_cast<Trie3Builder *>(builder)->name = name;  // TODO
+U_CFUNC void ucptriebld_setName(UCPTrieBuilder *builder, const char *name) {
+    reinterpret_cast<CodePointTrieBuilder *>(builder)->name = name;  // TODO
 }
 
 /*
- * This is here to avoid a dependency from utrie3.cpp on utrie.cpp.
+ * This is here to avoid a dependency from ucptrie.cpp on utrie.cpp.
  * This file already depends on utrie.cpp.
- * Otherwise, this should be in utrie3.cpp right after utrie3_swap().
+ * Otherwise, this should be in ucptrie.cpp right after ucptrie_swap().
  * TODO: find a better place
  */
 U_CAPI int32_t U_EXPORT2
-utrie3_swapAnyVersion(const UDataSwapper *ds,
+ucptrie_swapAnyVersion(const UDataSwapper *ds,
                       const void *inData, int32_t length, void *outData,
                       UErrorCode *pErrorCode) {
     if(U_SUCCESS(*pErrorCode)) {
-        switch(utrie3_getVersion(inData, length, TRUE)) {
+        switch(ucptrie_getVersion(inData, length, TRUE)) {
 //         case 1:
 //             return utrie_swap(ds, inData, length, outData, pErrorCode);
 //         case 2:  TODO
 //             return utrie2_swap(ds, inData, length, outData, pErrorCode);
         case 3:
-            return utrie3_swap(ds, inData, length, outData, pErrorCode);
+            return ucptrie_swap(ds, inData, length, outData, pErrorCode);
         default:
             *pErrorCode=U_INVALID_FORMAT_ERROR;
             return 0;

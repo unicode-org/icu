@@ -1455,7 +1455,7 @@ struct StringPair { const char *input, *expected; };
 void
 BasicNormalizerTest::TestCustomComp() {
     static const StringPair pairs[]={
-        // ICU 62 normalization with UTrie3 requires inert surrogate code points.
+        // ICU 62 normalization with UCPTrie requires inert surrogate code points.
         // { "\\uD801\\uE000\\uDFFE", "" },
         // { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD7FF\\uFFFF" },
         // { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD7FF\\U000107FE\\uFFFF" },
@@ -1490,7 +1490,7 @@ BasicNormalizerTest::TestCustomComp() {
 void
 BasicNormalizerTest::TestCustomFCC() {
     static const StringPair pairs[]={
-        // ICU 62 normalization with UTrie3 requires inert surrogate code points.
+        // ICU 62 normalization with UCPTrie requires inert surrogate code points.
         // { "\\uD801\\uE000\\uDFFE", "" },
         // { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD7FF\\uFFFF" },
         // { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD7FF\\U000107FE\\uFFFF" },

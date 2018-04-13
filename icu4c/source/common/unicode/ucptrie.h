@@ -1,11 +1,11 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-// utrie3.h (modified from utrie2.h)
+// ucptrie.h (modified from utrie2.h)
 // created: 2017dec29 Markus W. Scherer
 
-#ifndef __UTRIE3_H__
-#define __UTRIE3_H__
+#ifndef __UCPTRIE_H__
+#define __UCPTRIE_H__
 
 #include "unicode/utypes.h"
 #include "unicode/localpointer.h"
@@ -18,11 +18,9 @@ U_CDECL_BEGIN
 /**
  * \file
  *
- * This is a common implementation of a Unicode trie.
- * It is a kind of compressed, serializable table of 16- or 32-bit values associated with
- * Unicode code points (0..U+10ffff). (A map from code points to integers.)
+ * This defines a Unicode code point trie.
+ * It is a fast, reasonably compact, map from Unicode code points (0..U+10ffff) to integer values.
  *
- * This is the third common version of a Unicode trie (hence the name UTrie3).
  * For details see https://sites.google.com/site/icusite/design/struct/utrie
  */
 
@@ -30,44 +28,44 @@ U_CDECL_BEGIN
  * Trie structure.
  * Use only with public API macros and functions.
  */
-struct UTrie3;
-typedef struct UTrie3 UTrie3;
+struct UCPTrie;
+typedef struct UCPTrie UCPTrie;
 
-/* Public UTrie3 API functions: read-only access ---------------------------- */
+/* Public UCPTrie API functions: read-only access ---------------------------- */
 
 /**
- * Selectors for the type of a UTrie3.
+ * Selectors for the type of a UCPTrie.
  * Different trade-offs for size vs. speed.
  */
-enum UTrie3Type {
+enum UCPTrieType {
     /** Fast/simple/larger BMP data structure. Use functions and "fast" macros. */
-    UTRIE3_TYPE_FAST,
+    UCPTRIE_TYPE_FAST,
     /** Small/slower BMP data structure. Use functions and "small" macros. */
-    UTRIE3_TYPE_SMALL
+    UCPTRIE_TYPE_SMALL
 };
-typedef enum UTrie3Type UTrie3Type;
+typedef enum UCPTrieType UCPTrieType;
 
 /**
- * Selectors for the width of a UTrie3 data value.
+ * Selectors for the width of a UCPTrie data value.
  */
-enum UTrie3ValueBits {
+enum UCPTrieValueBits {
     // TODO: 8
-    /** 16 bits per UTrie3 data value. */
-    UTRIE3_16_VALUE_BITS,  // TODO: move _16 to the end
-    /** 32 bits per UTrie3 data value. */
-    UTRIE3_32_VALUE_BITS
+    /** 16 bits per UCPTrie data value. */
+    UCPTRIE_VALUE_BITS_16,
+    /** 32 bits per UCPTrie data value. */
+    UCPTRIE_VALUE_BITS_32
 };
-typedef enum UTrie3ValueBits UTrie3ValueBits;
+typedef enum UCPTrieValueBits UCPTrieValueBits;
 
 /**
  * Open a frozen trie from its serialized from, stored in 32-bit-aligned memory.
- * Inverse of utrie3_serialize().
+ * Inverse of ucptrie_toBinary().
  * The memory must remain valid and unchanged as long as the trie is used.
- * You must utrie3_close() the trie once you are done using it.
+ * You must ucptrie_close() the trie once you are done using it.
  *
  * @param valueBits selects the data entry size; results in an
  *                  U_INVALID_FORMAT_ERROR if it does not match the serialized form
- * @param data a pointer to 32-bit-aligned memory containing the serialized form of a UTrie3
+ * @param data a pointer to 32-bit-aligned memory containing the serialized form of a UCPTrie
  * @param length the number of bytes available at data;
  *               can be more than necessary
  * @param pActualLength receives the actual number of bytes at data taken up by the trie data;
@@ -75,13 +73,13 @@ typedef enum UTrie3ValueBits UTrie3ValueBits;
  * @param pErrorCode an in/out ICU UErrorCode
  * @return the unserialized trie
  *
- * @see utrie3bld_open
- * @see utrie3_serialize
+ * @see ucptriebld_open
+ * @see ucptrie_toBinary
  */
-U_CAPI UTrie3 * U_EXPORT2
-utrie3_openFromSerialized(UTrie3Type type, UTrie3ValueBits valueBits,
-                          const void *data, int32_t length, int32_t *pActualLength,
-                          UErrorCode *pErrorCode);
+U_CAPI UCPTrie * U_EXPORT2
+ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueBits valueBits,
+                       const void *data, int32_t length, int32_t *pActualLength,
+                       UErrorCode *pErrorCode);
 
 /**
  * Close a trie and release associated memory.
@@ -89,22 +87,22 @@ utrie3_openFromSerialized(UTrie3Type type, UTrie3ValueBits valueBits,
  * @param trie the trie
  */
 U_CAPI void U_EXPORT2
-utrie3_close(UTrie3 *trie);
+ucptrie_close(UCPTrie *trie);
 
 #if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 
 /**
- * \class LocalUTrie3Pointer
- * "Smart pointer" class, closes a UTrie3 via utrie3_close().
+ * \class LocalUCPTriePointer
+ * "Smart pointer" class, closes a UCPTrie via ucptrie_close().
  * For most methods see the LocalPointerBase base class.
  *
  * @see LocalPointerBase
  * @see LocalPointer
  * @draft ICU 62
  */
-U_DEFINE_LOCAL_OPEN_POINTER(LocalUTrie3Pointer, UTrie3, utrie3_close);
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUCPTriePointer, UCPTrie, ucptrie_close);
 
 U_NAMESPACE_END
 
@@ -112,8 +110,8 @@ U_NAMESPACE_END
 
 /**
  * Get a value from a code point as stored in the trie.
- * Easier to use than UTRIE3_GET16() and UTRIE3_GET32() but slower.
- * Easier to use because, unlike the macros, this function works on all UTrie3
+ * Easier to use than UCPTRIE_FAST_GET16() and similar macros but slower.
+ * Easier to use because, unlike the macros, this function works on all UCPTrie
  * objects, frozen or not, holding 16-bit or 32-bit data values.
  *
  * @param trie the trie
@@ -121,21 +119,22 @@ U_NAMESPACE_END
  * @return the value
  */
 U_CAPI uint32_t U_EXPORT2
-utrie3_get(const UTrie3 *trie, UChar32 c);
+ucptrie_get(const UCPTrie *trie, UChar32 c);
 
 /**
  * Callback function type: Modifies a trie value.
- * Optionally called by utrie3_getRange() or utrie3bld_getRange().
+ * Optionally called by ucptrie_getRange() or ucptriebld_getRange().
  * The modified value will be returned by the getRange function.
  *
- * Can be used to ignore some of the value bits, return a value index by the trie value, etc.
+ * Can be used to ignore some of the value bits,
+ * return a value index extracted from the trie value, etc.
  *
  * @param context an opaque pointer, as passed into the getRange function
  * @param value a value from the trie
  * @return the modified value
  */
 typedef uint32_t U_CALLCONV
-UTrie3HandleValue(const void *context, uint32_t value);
+UCPTrieHandleValue(const void *context, uint32_t value);
 
 /**
  * Returns the last code point such that all those from start to there have the same value.
@@ -143,14 +142,14 @@ UTrie3HandleValue(const void *context, uint32_t value);
  * Do not modify the trie during the enumeration.  TODO
  *
  * For each entry in the trie, the value to be delivered is passed through
- * the UTrie3HandleValue function.
+ * the UCPTrieHandleValue function.
  * The value is unchanged if that function pointer is NULL.
  *
  * Example:
  * \code
  * UChar32 start = 0, end;
  * uint32_t value;
- * while ((end = utrie3_getRange(trie, start, NULL, NULL, &value)) >= 0) {
+ * while ((end = ucptrie_getRange(trie, start, NULL, NULL, &value)) >= 0) {
  *     // Work with the range start..end and its value.
  *     start = end + 1;
  * }
@@ -166,13 +165,13 @@ UTrie3HandleValue(const void *context, uint32_t value);
  * @return the range end code point, or -1 if start is not a valid code point
  */
 U_CAPI UChar32 U_EXPORT2
-utrie3_getRange(const UTrie3 *trie, UChar32 start,
-                UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue);
+ucptrie_getRange(const UCPTrie *trie, UChar32 start,
+                 UCPTrieHandleValue *handleValue, const void *context, uint32_t *pValue);
 
 /**
  * Returns the last code point such that all those from start to there have the same value,
  * with a fixed value for surrogates.
- * Same as utrie3_getRange() but treats either lead surrogates (U+D800..U+DBFF)
+ * Same as ucptrie_getRange() but treats either lead surrogates (U+D800..U+DBFF)
  * or all surrogates (U+D800..U+DFFF)
  * as having the surrValue (without transforming it via handleValue()).
  * See U_IS_LEAD(c) and U_IS_SURROGATE(c).
@@ -195,8 +194,8 @@ utrie3_getRange(const UTrie3 *trie, UChar32 start,
  * @return the range end code point, or -1 if start is not a valid code point
  */
 U_CAPI UChar32 U_EXPORT2
-ucptrie_getRangeFixedSurr(const UTrie3 *trie, UChar32 start, UBool allSurr, uint32_t surrValue,
-                          UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue);
+ucptrie_getRangeFixedSurr(const UCPTrie *trie, UChar32 start, UBool allSurr, uint32_t surrValue,
+                          UCPTrieHandleValue *handleValue, const void *context, uint32_t *pValue);
 
 /**
  * Serialize a frozen trie into 32-bit aligned memory.
@@ -214,18 +213,16 @@ ucptrie_getRangeFixedSurr(const UTrie3 *trie, UChar32 start, UBool allSurr, uint
  *                            parameters are bad
  * @return the number of bytes written or needed for the trie
  *
- * @see utrie3_openFromSerialized()
+ * @see ucptrie_openFromBinary()
  */
 U_CAPI int32_t U_EXPORT2
-utrie3_serialize(const UTrie3 *trie,
-                 void *data, int32_t capacity,
-                 UErrorCode *pErrorCode);
+ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *pErrorCode);
 
-/* Public UTrie3 API: miscellaneous functions ------------------------------- */
+/* Public UCPTrie API: miscellaneous functions ------------------------------- */
 
 /**
  * Get the UTrie version from 32-bit-aligned memory containing the serialized form
- * of either a UTrie (version 1) or a UTrie3 (version 2).
+ * of either a UTrie (version 1) or a UCPTrie (version 2).
  *
  * @param data a pointer to 32-bit-aligned memory containing the serialized form
  *             of a UTrie, version 1 or 2
@@ -237,163 +234,171 @@ utrie3_serialize(const UTrie3 *trie,
  *         recognized as a serialized UTrie
  */
 U_CAPI int32_t U_EXPORT2
-utrie3_getVersion(const void *data, int32_t length, UBool anyEndianOk);
+ucptrie_getVersion(const void *data, int32_t length, UBool anyEndianOk);
 
 /**
- * Swap a serialized UTrie3.
+ * Swap a serialized UCPTrie.
  * @internal
  */
 U_CAPI int32_t U_EXPORT2
-utrie3_swap(const UDataSwapper *ds,
-            const void *inData, int32_t length, void *outData,
-            UErrorCode *pErrorCode);
+ucptrie_swap(const UDataSwapper *ds,
+             const void *inData, int32_t length, void *outData,
+             UErrorCode *pErrorCode);
 
 /**
- * Swap a serialized UTrie or UTrie3. TODO
+ * Swap a serialized UTrie or UCPTrie. TODO
  * @internal
  */
 U_CAPI int32_t U_EXPORT2
-utrie3_swapAnyVersion(const UDataSwapper *ds,
-                      const void *inData, int32_t length, void *outData,
-                      UErrorCode *pErrorCode);
+ucptrie_swapAnyVersion(const UDataSwapper *ds,
+                       const void *inData, int32_t length, void *outData,
+                       UErrorCode *pErrorCode);
 
-/* Public UTrie3 API macros ------------------------------------------------- */
+/* Public UCPTrie API macros ------------------------------------------------- */
 
 /**
  * Return a 16-bit trie value from a code point, with range checking.
  * Returns trie->errorValue if c is not in the range 0..U+10ffff.
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param c (UChar32, in) the input code point
  * @return (uint16_t) The code point's trie value.
  */
-#define UTRIE3_GET16(trie, c) (trie)->data16[_UTRIE3_INDEX_FROM_CP(trie, 0xffff, c)]
+#define UCPTRIE_FAST_GET16(trie, c) (trie)->data16[_UCPTRIE_INDEX_FROM_CP(trie, 0xffff, c)]
 
 /**
  * Return a 32-bit trie value from a code point, with range checking.
  * Returns trie->errorValue if c is not in the range 0..U+10ffff.
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param c (UChar32, in) the input code point
  * @return (uint32_t) The code point's trie value.
  */
-#define UTRIE3_GET32(trie, c) (trie)->data32[_UTRIE3_INDEX_FROM_CP(trie, 0xffff, c)]
+#define UCPTRIE_FAST_GET32(trie, c) (trie)->data32[_UCPTRIE_INDEX_FROM_CP(trie, 0xffff, c)]
 
 // TODO: docs
-#define UTRIE3_SMALL_GET16(trie, c) (trie)->data16[_UTRIE3_INDEX_FROM_CP(trie, UTRIE3_SMALL_MAX, c)]
-#define UTRIE3_SMALL_GET32(trie, c) (trie)->data32[_UTRIE3_INDEX_FROM_CP(trie, UTRIE3_SMALL_MAX, c)]
+#define UCPTRIE_SMALL_GET16(trie, c) (trie)->data16[_UCPTRIE_INDEX_FROM_CP(trie, UCPTRIE_SMALL_MAX, c)]
+#define UCPTRIE_SMALL_GET32(trie, c) (trie)->data32[_UCPTRIE_INDEX_FROM_CP(trie, UCPTRIE_SMALL_MAX, c)]
 
 /**
  * UTF-16: Get the next code point (UChar32 c, out), post-increment src,
  * and get a 16-bit value from the trie.
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param src (const UChar *, in/out) the source text pointer
  * @param limit (const UChar *, in) the limit pointer for the text, or NULL if NUL-terminated
  * @param c (UChar32, out) variable for the code point
  * @param result (uint16_t, out) uint16_t variable for the trie lookup result
  */
-#define UTRIE3_U16_NEXT16(trie, src, limit, c, result) _UTRIE3_U16_NEXT(trie, data16, src, limit, c, result)
+#define UCPTRIE_FAST_U16_NEXT16(trie, src, limit, c, result) \
+    _UCPTRIE_FAST_U16_NEXT(trie, data16, src, limit, c, result)
 
 /**
  * UTF-16: Get the next code point (UChar32 c, out), post-increment src,
  * and get a 32-bit value from the trie.
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param src (const UChar *, in/out) the source text pointer
  * @param limit (const UChar *, in) the limit pointer for the text, or NULL if NUL-terminated
  * @param c (UChar32, out) variable for the code point
  * @param result (uint32_t, out) uint32_t variable for the trie lookup result
  */
-#define UTRIE3_U16_NEXT32(trie, src, limit, c, result) _UTRIE3_U16_NEXT(trie, data32, src, limit, c, result)
+#define UCPTRIE_FAST_U16_NEXT32(trie, src, limit, c, result) \
+    _UCPTRIE_FAST_U16_NEXT(trie, data32, src, limit, c, result)
 
 /**
  * UTF-16: Get the previous code point (UChar32 c, out), pre-decrement src,
  * and get a 16-bit value from the trie.
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param start (const UChar *, in) the start pointer for the text
  * @param src (const UChar *, in/out) the source text pointer
  * @param c (UChar32, out) variable for the code point
  * @param result (uint16_t, out) uint16_t variable for the trie lookup result
  */
-#define UTRIE3_U16_PREV16(trie, start, src, c, result) _UTRIE3_U16_PREV(trie, data16, start, src, c, result)
+#define UCPTRIE_FAST_U16_PREV16(trie, start, src, c, result) \
+    _UCPTRIE_FAST_U16_PREV(trie, data16, start, src, c, result)
 
 /**
  * UTF-16: Get the previous code point (UChar32 c, out), pre-decrement src,
  * and get a 32-bit value from the trie.
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param start (const UChar *, in) the start pointer for the text
  * @param src (const UChar *, in/out) the source text pointer
  * @param c (UChar32, out) variable for the code point
  * @param result (uint32_t, out) uint32_t variable for the trie lookup result
  */
-#define UTRIE3_U16_PREV32(trie, start, src, c, result) _UTRIE3_U16_PREV(trie, data32, start, src, c, result)
+#define UCPTRIE_FAST_U16_PREV32(trie, start, src, c, result) \
+    _UCPTRIE_FAST_U16_PREV(trie, data32, start, src, c, result)
 
 /**
  * UTF-8: Post-increment src and get a 16-bit value from the trie.
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param src (const char *, in/out) the source text pointer
  * @param limit (const char *, in) the limit pointer for the text (must not be NULL)
  * @param result (uint16_t, out) uint16_t variable for the trie lookup result
  */
-#define UTRIE3_U8_NEXT16(trie, src, limit, result) _UTRIE3_U8_NEXT(trie, data16, src, limit, result)
+#define UCPTRIE_FAST_U8_NEXT16(trie, src, limit, result) \
+    _UCPTRIE_FAST_U8_NEXT(trie, data16, src, limit, result)
 
 /**
  * UTF-8: Post-increment src and get a 32-bit value from the trie.
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param src (const char *, in/out) the source text pointer
  * @param limit (const char *, in) the limit pointer for the text (must not be NULL)
  * @param result (uint16_t, out) uint32_t variable for the trie lookup result
  */
-#define UTRIE3_U8_NEXT32(trie, src, limit, result) _UTRIE3_U8_NEXT(trie, data32, src, limit, result)
+#define UCPTRIE_FAST_U8_NEXT32(trie, src, limit, result) \
+    _UCPTRIE_FAST_U8_NEXT(trie, data32, src, limit, result)
 
 /**
  * UTF-8: Pre-decrement src and get a 16-bit value from the trie.
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param start (const char *, in) the start pointer for the text
  * @param src (const char *, in/out) the source text pointer
  * @param result (uint16_t, out) uint16_t variable for the trie lookup result
  */
-#define UTRIE3_U8_PREV16(trie, start, src, result) _UTRIE3_U8_PREV(trie, data16, start, src, result)
+#define UCPTRIE_FAST_U8_PREV16(trie, start, src, result) \
+    _UCPTRIE_FAST_U8_PREV(trie, data16, start, src, result)
 
 /**
  * UTF-8: Pre-decrement src and get a 32-bit value from the trie.
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param start (const char *, in) the start pointer for the text
  * @param src (const char *, in/out) the source text pointer
  * @param result (uint16_t, out) uint32_t variable for the trie lookup result
  */
-#define UTRIE3_U8_PREV32(trie, start, src, result) _UTRIE3_U8_PREV(trie, data32, start, src, result)
+#define UCPTRIE_FAST_U8_PREV32(trie, start, src, result) \
+    _UCPTRIE_FAST_U8_PREV(trie, data32, start, src, result)
 
-/* Public UTrie3 API: optimized UTF-16 access ------------------------------- */
+/* Public UCPTrie API: optimized UTF-16 access ------------------------------ */
 
 /*
  * TODO
  * The following function and macros are used for highly optimized UTF-16
- * text processing. The UTRIE3_U16_NEXTxy() macros do not depend on these.
+ * text processing. The UCPTRIE_FAST_U16_NEXTxy() macros do not depend on these.
  *
  * UTF-16 text processing can be optimized by detecting surrogate pairs and
  * assembling supplementary code points only when there is non-trivial data
  * available.
  *
- * At build-time, use utrie3bld_getRange() starting from U+10000 to see if there
+ * At build-time, use ucptriebld_getRange() starting from U+10000 to see if there
  * is non-trivial data for any of the supplementary code points
  * associated with a lead surrogate.
  * If so, then set a special (application-specific) value for the
  * lead surrogate.
  *
- * At runtime, use UTRIE3_GET16_FROM_BMP() or
- * UTRIE3_GET32_FROM_BMP() per code unit. If there is non-trivial
+ * At runtime, use UCPTRIE_FAST_GET16_FROM_BMP() or
+ * UCPTRIE_FAST_GET32_FROM_BMP() per code unit. If there is non-trivial
  * data and the code unit is a lead surrogate, then check if a trail surrogate
  * follows. If so, assemble the supplementary code point with
- * U16_GET_SUPPLEMENTARY() and look up its value with UTRIE3_GET16_FROM_SUPP()
- * or UTRIE3_GET32_FROM_SUPP(); otherwise deal with the unpaired surrogate in some way.
+ * U16_GET_SUPPLEMENTARY() and look up its value with UCPTRIE_FAST_GET16_FROM_SUPP()
+ * or UCPTRIE_FAST_GET32_FROM_SUPP(); otherwise deal with the unpaired surrogate in some way.
  *
  * If there is only trivial data for lead and trail surrogates, then processing
  * can often skip them. For example, in normalization or case mapping
@@ -401,77 +406,70 @@ utrie3_swapAnyVersion(const UDataSwapper *ds,
  */
 
 // TODO: docs
-#define UTRIE3_GET16_FROM_ASCII(trie, c) ((trie)->data16[c])
-#define UTRIE3_GET32_FROM_ASCII(trie, c) ((trie)->data32[c])
+#define UCPTRIE_GET16_FROM_ASCII(trie, c) ((trie)->data16[c])
+#define UCPTRIE_GET32_FROM_ASCII(trie, c) ((trie)->data32[c])
 
 /**
  * Returns a 16-bit trie value from a BMP code point or UTF-16 code unit (0..U+ffff).
- * Same as UTRIE3_GET16() if c is a BMP code point, but smaller and faster.
+ * Same as UCPTRIE_FAST_GET16() if c is a BMP code point, but smaller and faster.
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param c (UChar32, in) the input code unit, must be 0<=c<=U+ffff
  * @return (uint16_t) The code unit's trie value.
  */
-#define UTRIE3_GET16_FROM_BMP(trie, c) ((trie)->data16[_UTRIE3_INDEX_FROM_BMP(trie, c)])
-// TODO: UTRIE3_FAST_...
+#define UCPTRIE_FAST_GET16_FROM_BMP(trie, c) ((trie)->data16[_UCPTRIE_FAST_INDEX(trie, c)])
 
 /**
  * Returns a 32-bit trie value from a BMP code point or UTF-16 code unit (0..U+ffff).
- * Same as UTRIE3_GET32() if c is a BMP code point, but smaller and faster.
+ * Same as UCPTRIE_FAST_GET32() if c is a BMP code point, but smaller and faster.
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param c (UChar32, in) the input code unit, must be 0<=c<=U+ffff
  * @return (uint32_t) The code unit's trie value.
  */
-#define UTRIE3_GET32_FROM_BMP(trie, c) ((trie)->data32[_UTRIE3_INDEX_FROM_BMP(trie, c)])
+#define UCPTRIE_FAST_GET32_FROM_BMP(trie, c) ((trie)->data32[_UCPTRIE_FAST_INDEX(trie, c)])
 
 /**
  * Return a 16-bit trie value from a supplementary code point (U+10000..U+10ffff).
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param c (UChar32, in) the input code point, must be U+10000<=c<=U+10ffff
  * @return (uint16_t) The code point's trie value.
  */
-#define UTRIE3_GET16_FROM_SUPP(trie, c) ((trie)->data16[_UTRIE3_INDEX_FROM_SUPP(trie, c)])
+#define UCPTRIE_FAST_GET16_FROM_SUPP(trie, c) ((trie)->data16[_UCPTRIE_SMALL_INDEX(trie, c)])
 
 /**
  * Return a 32-bit trie value from a supplementary code point (U+10000..U+10ffff).
  *
- * @param trie (const UTrie3 *, in) a frozen trie
+ * @param trie (const UCPTrie *, in) a frozen trie
  * @param c (UChar32, in) the input code point, must be U+10000<=c<=U+10ffff
  * @return (uint32_t) The code point's trie value.
  */
-#define UTRIE3_GET32_FROM_SUPP(trie, c) ((trie)->data32[_UTRIE3_INDEX_FROM_SUPP(trie, c)])
+#define UCPTRIE_FAST_GET32_FROM_SUPP(trie, c) ((trie)->data32[_UCPTRIE_SMALL_INDEX(trie, c)])
 
 /* Internal definitions ----------------------------------------------------- */
 
 /*
  * Trie structure definition.
- *
- * Either the data table is 16 bits wide and accessed via the index
- * pointer, with each index item increased by indexLength;
- * in this case, data32==NULL, and data16 is used for direct ASCII access.
- *
- * Or the data table is 32 bits wide and accessed via the data32 pointer.
  */
-struct UTrie3 {
+struct UCPTrie {
     /* protected: used by macros and functions for reading values */
     const uint16_t *index;
-    const uint16_t *data16;     /* for fast UTF-8 ASCII access, if 16b data */
-    const uint32_t *data32;     /* NULL if 16b data is used via index */
+    const uint16_t *data16;
+    const uint32_t *data32;
 
     int32_t indexLength, dataLength;
-    /** Start of the last range which ends at U+10ffff, and its value. */
+    /** Start of the last range which ends at U+10ffff. */
     UChar32 highStart;
     uint16_t shifted12HighStart;  // highStart>>12
 
-    UTrie3Type type;
+    UCPTrieType type;
 
     /**
-     * Index-2 null block offset.
-     * Set to an impossibly high value (e.g., 0xffff) if there is no dedicated index-2 null block.
+     * Index-3 null block offset.
+     * Set to an impossibly high value (e.g., 0xffff) if there is no dedicated index-3 null block.
      */
-    uint16_t index2NullOffset;
+    uint16_t index3NullOffset;
     /**
      * Data null block offset, not shifted.
      * Set to an impossibly high value (e.g., 0xfffff) if there is no dedicated data null block.
@@ -487,103 +485,103 @@ struct UTrie3 {
  * These are needed for the runtime macros, but users should not use these directly.
  */
 enum {
-    UTRIE3_BMP_SHIFT = 6,
+    UCPTRIE_FAST_SHIFT = 6,
 
-    /** Number of entries in a BMP data block. 64=0x40 */
-    UTRIE3_BMP_DATA_BLOCK_LENGTH = 1 << UTRIE3_BMP_SHIFT,
+    /** Number of entries in a data block for code points below the fast limit. 64=0x40 */
+    UCPTRIE_FAST_DATA_BLOCK_LENGTH = 1 << UCPTRIE_FAST_SHIFT,
 
-    /** Mask for getting the lower bits for the in-BMP-data-block offset. */
-    UTRIE3_BMP_DATA_MASK = UTRIE3_BMP_DATA_BLOCK_LENGTH - 1,
+    /** Mask for getting the lower bits for the in-fast-data-block offset. */
+    UCPTRIE_FAST_DATA_MASK = UCPTRIE_FAST_DATA_BLOCK_LENGTH - 1,
 
-    UTRIE3_SMALL_MAX = 0xfff,
+    UCPTRIE_SMALL_MAX = 0xfff,
 
     /** TODO docs */
     /** TODO Value returned for out-of-range code points and ill-formed UTF-8/16. */
-    UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET = 1,
+    UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET = 1,
     /** TODO Value for code points highStart..U+10FFFF. */
-    UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET = 2
+    UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET = 2
 };
 
 /* Internal functions and macros -------------------------------------------- */
 
 /** TODO */
 U_INTERNAL int32_t U_EXPORT2
-utrie3_internalSmallIndex(const UTrie3 *trie, UChar32 c);
+ucptrie_internalSmallIndex(const UCPTrie *trie, UChar32 c);
 
 /** TODO */
 U_INTERNAL int32_t U_EXPORT2
-utrie3_internalSmallIndexFromU8(const UTrie3 *trie, int32_t lt1, uint8_t t2, uint8_t t3);
+ucptrie_internalSmallIndexFromU8(const UCPTrie *trie, int32_t lt1, uint8_t t2, uint8_t t3);
 
 /**
- * Internal function for part of the UTRIE3_U8_PREVxx() macro implementations.
+ * Internal function for part of the UCPTRIE_FAST_U8_PREVxx() macro implementations.
  * Do not call directly.
  * @internal
  */
 U_INTERNAL int32_t U_EXPORT2
-utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
-                           const uint8_t *start, const uint8_t *src);
+ucptrie_internalU8PrevIndex(const UCPTrie *trie, UChar32 c,
+                            const uint8_t *start, const uint8_t *src);
 
-/** Internal trie getter from a BMP code point. Returns the data index. */
-#define _UTRIE3_INDEX_FROM_BMP(trie, c) \
-    (((int32_t)(trie)->index[(c) >> UTRIE3_BMP_SHIFT]) + ((c) & UTRIE3_BMP_DATA_MASK))
+/** Internal trie getter from a code point below the fast limit. Returns the data index. */
+#define _UCPTRIE_FAST_INDEX(trie, c) \
+    (((int32_t)(trie)->index[(c) >> UCPTRIE_FAST_SHIFT]) + ((c) & UCPTRIE_FAST_DATA_MASK))
 
-/** Internal trie getter from a supplementary code point. Returns the data index. */
-#define _UTRIE3_INDEX_FROM_SUPP(trie, c) \
+/** Internal trie getter from a code point at or above the fast limit. Returns the data index. */
+#define _UCPTRIE_SMALL_INDEX(trie, c) \
     ((c) >= (trie)->highStart ? \
-        (trie)->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET : \
-        utrie3_internalSmallIndex(trie, c))
+        (trie)->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET : \
+        ucptrie_internalSmallIndex(trie, c))
 
 /**
  * Internal trie getter from a code point, with checking that c is in 0..10FFFF.
  * Returns the data index.
  */
-#define _UTRIE3_INDEX_FROM_CP(trie, fastMax, c) \
+#define _UCPTRIE_INDEX_FROM_CP(trie, fastMax, c) \
     ((uint32_t)(c) <= (uint32_t)(fastMax) ? \
-        _UTRIE3_INDEX_FROM_BMP(trie, c) : \
+        _UCPTRIE_FAST_INDEX(trie, c) : \
         (uint32_t)(c) <= 0x10ffff ? \
-            _UTRIE3_INDEX_FROM_SUPP(trie, c) : \
-            (trie)->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET)
+            _UCPTRIE_SMALL_INDEX(trie, c) : \
+            (trie)->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET)
 
 /** Internal next-post-increment: get the next code point (c) and its data. */
-#define _UTRIE3_U16_NEXT(trie, data, src, limit, c, result) { \
+#define _UCPTRIE_FAST_U16_NEXT(trie, data, src, limit, c, result) { \
     (c) = *(src)++; \
     int32_t __index; \
     if (!U16_IS_SURROGATE(c)) { \
-        __index = _UTRIE3_INDEX_FROM_BMP(trie, c); \
+        __index = _UCPTRIE_FAST_INDEX(trie, c); \
     } else { \
         uint16_t __c2; \
         if (U16_IS_SURROGATE_LEAD(c) && (src) != (limit) && U16_IS_TRAIL(__c2 = *(src))) { \
             ++(src); \
             (c) = U16_GET_SUPPLEMENTARY((c), __c2); \
-            __index = _UTRIE3_INDEX_FROM_SUPP(trie, c); \
+            __index = _UCPTRIE_SMALL_INDEX(trie, c); \
         } else { \
-            __index = (trie)->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET; \
+            __index = (trie)->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET; \
         } \
     } \
     (result) = (trie)->data[__index]; \
 }
 
 /** Internal pre-decrement-previous: get the previous code point (c) and its data */
-#define _UTRIE3_U16_PREV(trie, data, start, src, c, result) { \
+#define _UCPTRIE_FAST_U16_PREV(trie, data, start, src, c, result) { \
     (c) = *--(src); \
     int32_t __index; \
     if (!U16_IS_SURROGATE(c)) { \
-        __index = _UTRIE3_INDEX_FROM_BMP(trie, c); \
+        __index = _UCPTRIE_FAST_INDEX(trie, c); \
     } else { \
         uint16_t __c2; \
         if (U16_IS_SURROGATE_TRAIL(c) && (src) != (start) && U16_IS_LEAD(__c2 = *((src) - 1))) { \
             --(src); \
             (c) = U16_GET_SUPPLEMENTARY(__c2, (c)); \
-            __index = _UTRIE3_INDEX_FROM_SUPP(trie, c); \
+            __index = _UCPTRIE_SMALL_INDEX(trie, c); \
         } else { \
-            __index = (trie)->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET; \
+            __index = (trie)->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET; \
         } \
     } \
     (result) = (trie)->data[__index]; \
 }
 
 /** Internal UTF-8 next-post-increment: get the next code point's data. */
-#define _UTRIE3_U8_NEXT(trie, data, src, limit, result) { \
+#define _UCPTRIE_FAST_U8_NEXT(trie, data, src, limit, result) { \
     int32_t __lead = (uint8_t)*(src)++; \
     if (!U8_IS_SINGLE(__lead)) { \
         uint8_t __t1, __t2, __t3; \
@@ -600,24 +598,24 @@ utrie3_internalU8PrevIndex(const UTrie3 *trie, UChar32 c,
                     (__t2 = *(src) - 0x80) <= 0x3f && \
                     ++(src) != (limit) && (__t3 = *(src) - 0x80) <= 0x3f && \
                     (__lead = __lead >= (trie)->shifted12HighStart ? \
-                        (trie)->dataLength - UTRIE3_HIGH_VALUE_NEG_DATA_OFFSET : \
-                        utrie3_internalSmallIndexFromU8((trie), __lead, __t2, __t3), 1) \
+                        (trie)->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET : \
+                        ucptrie_internalSmallIndexFromU8((trie), __lead, __t2, __t3), 1) \
             :  /* U+0080..U+07FF */ \
                 __lead >= 0xc2 && (__t1 = *(src) - 0x80) <= 0x3f && \
                 (__lead = (trie)->index[__lead & 0x1f] + __t1, 1))) { \
             ++(src); \
         } else { \
-            __lead = (trie)->dataLength - UTRIE3_ERROR_VALUE_NEG_DATA_OFFSET;  /* ill-formed*/ \
+            __lead = (trie)->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET;  /* ill-formed*/ \
         } \
     } \
     (result) = (trie)->data[__lead]; \
 }
 
 /** Internal UTF-8 pre-decrement-previous: get the previous code point's data. */
-#define _UTRIE3_U8_PREV(trie, data, start, src, result) { \
+#define _UCPTRIE_FAST_U8_PREV(trie, data, start, src, result) { \
     int32_t __index = (uint8_t)*--(src); \
     if (!U8_IS_SINGLE(__index)) { \
-        __index = utrie3_internalU8PrevIndex((trie), __index, (const uint8_t *)(start), \
+        __index = ucptrie_internalU8PrevIndex((trie), __index, (const uint8_t *)(start), \
                                                               (const uint8_t *)(src)); \
         (src) -= __index & 7; \
         __index >>= 3; \

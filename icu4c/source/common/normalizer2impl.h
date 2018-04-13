@@ -24,13 +24,13 @@
 #if !UCONFIG_NO_NORMALIZATION
 
 #include "unicode/normalizer2.h"
+#include "unicode/ucptrie.h"
 #include "unicode/unistr.h"
 #include "unicode/unorm.h"
 #include "unicode/utf.h"
 #include "unicode/utf16.h"
 #include "mutex.h"
 #include "uset_imp.h"
-#include "utrie3.h"
 
 U_NAMESPACE_BEGIN
 
@@ -243,7 +243,7 @@ public:
     }
     virtual ~Normalizer2Impl();
 
-    void init(const int32_t *inIndexes, const UTrie3 *inTrie,
+    void init(const int32_t *inIndexes, const UCPTrie *inTrie,
               const uint16_t *inExtraData, const uint8_t *inSmallFCD);
 
     void addLcccChars(UnicodeSet &set) const;
@@ -256,8 +256,10 @@ public:
 
     // The trie stores values for lead surrogate code *units*.
     // Surrogate code *points* are inert.
-    uint16_t getNorm16(UChar32 c) const { return U_IS_LEAD(c) ? INERT : UTRIE3_GET16(normTrie, c); }
-    uint16_t getRawNorm16(UChar32 c) const { return UTRIE3_GET16(normTrie, c); }
+    uint16_t getNorm16(UChar32 c) const {
+        return U_IS_LEAD(c) ? INERT : UCPTRIE_FAST_GET16(normTrie, c);
+    }
+    uint16_t getRawNorm16(UChar32 c) const { return UCPTRIE_FAST_GET16(normTrie, c); }
 
     UNormalizationCheckResult getCompQuickCheck(uint16_t norm16) const {
         if(norm16<minNoNo || MIN_YES_YES_WITH_CC<=norm16) {
@@ -707,7 +709,7 @@ private:
     uint16_t centerNoNoDelta;
     uint16_t minMaybeYes;
 
-    const UTrie3 *normTrie;
+    const UCPTrie *normTrie;
     const uint16_t *maybeYesCompositions;
     const uint16_t *extraData;  // mappings and/or compositions for yesYes, yesNo & noNo characters
     const uint8_t *smallFCD;  // [0x100] one bit per 32 BMP code points, set if any FCD!=0

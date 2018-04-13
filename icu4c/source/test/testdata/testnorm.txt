@@ -44,7 +44,7 @@
 0360..0361:234
 0362:233
 0363..036F:230
-# ICU 62 normalization with UTrie3 requires inert surrogate code points.
+# ICU 62 normalization with UCPTrie requires inert surrogate code points.
 # D802:2  # surrogates with non-zero combining classes
 # D803:3
 # D804:4
@@ -59,7 +59,7 @@
 00C4=0041 0308
 00C5=0041 030A
 00C7=0043 0327
-# ICU 62 normalization with UTrie3 requires inert surrogate code points.
+# ICU 62 normalization with UCPTrie requires inert surrogate code points.
 # D800>D7FF  # surrogates with mappings, and mappings to empty strings
 # D801>
 # DFFE>

@@ -1,18 +1,18 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-// utrie3builder.h (split out of utrie3.h)
+// ucptriebuilder.h (split out of ucptrie.h)
 // created: 2018jan24 Markus W. Scherer
 
-#ifndef __UTRIE3BUILDER_H__
-#define __UTRIE3BUILDER_H__
+#ifndef __UCPTRIEBUILDER_H__
+#define __UCPTRIEBUILDER_H__
 
 #include "unicode/utypes.h"
 #include "unicode/localpointer.h"
+#include "unicode/ucptrie.h"
 #include "unicode/utf8.h"
 #include "putilimp.h"
 #include "udataswp.h"
-#include "utrie3.h"
 
 U_CDECL_BEGIN
 
@@ -22,24 +22,24 @@ U_CDECL_BEGIN
  * TODO
  *
  * The following function and macros are used for highly optimized UTF-16
- * text processing. The UTRIE3_U16_NEXTxy() macros do not depend on these.
+ * text processing. The UCPTRIE_FAST_U16_NEXTxy() macros do not depend on these.
  *
  * UTF-16 text processing can be optimized by detecting surrogate pairs and
  * assembling supplementary code points only when there is non-trivial data
  * available.
  *
- * At build-time, use utrie3bld_getRange() starting from U+10000 to see if there
+ * At build-time, use ucptriebld_getRange() starting from U+10000 to see if there
  * is non-trivial (non-initialValue) data for any of the supplementary
  * code points associated with a lead surrogate.
  * If so, then set a special (application-specific) value for the
  * lead surrogate.
  *
- * At runtime, use UTRIE3_GET16_FROM_BMP() or
- * UTRIE3_GET32_FROM_BMP() per code unit. If there is non-trivial
+ * At runtime, use UCPTRIE_FAST_GET16_FROM_BMP() or
+ * UCPTRIE_FAST_GET32_FROM_BMP() per code unit. If there is non-trivial
  * data and the code unit is a lead surrogate, then check if a trail surrogate
  * follows. If so, assemble the supplementary code point with
- * U16_GET_SUPPLEMENTARY() and look up its value with UTRIE3_GET16_FROM_SUPP()
- * or UTRIE3_GET32_FROM_SUPP(); otherwise deal with the unpaired surrogate in some way.
+ * U16_GET_SUPPLEMENTARY() and look up its value with UCPTRIE_FAST_GET16_FROM_SUPP()
+ * or UCPTRIE_FAST_GET32_FROM_SUPP(); otherwise deal with the unpaired surrogate in some way.
  *
  * If there is only trivial data for lead and trail surrogates, then processing
  * can often skip them. For example, in normalization or case mapping
@@ -48,35 +48,35 @@ U_CDECL_BEGIN
 
 /**
  * Opaque trie builder structure.
- * @see UTrie3
+ * @see UCPTrie
  */
-struct UTrie3Builder;
-typedef struct UTrie3Builder UTrie3Builder;
+struct UCPTrieBuilder;
+typedef struct UCPTrieBuilder UCPTrieBuilder;
 
 /**
  * Creates an empty trie builder. At build time, 32-bit data values are used.
- * utrie3_freeze() takes a valueBits parameter
+ * ucptrie_freeze() takes a valueBits parameter
  * which determines the data value width in the serialized and frozen forms.
- * You must utrie3bld_close() the trie builder once you are done using it.
+ * You must ucptriebld_close() the trie builder once you are done using it.
  *
  * @param initialValue the initial value that is set for all code points
  * @param errorValue the value for out-of-range code points and ill-formed UTF-8/16
  * @param pErrorCode an in/out ICU UErrorCode
  * @return a pointer to the allocated and initialized new builder
  */
-U_CAPI UTrie3Builder * U_EXPORT2
-utrie3bld_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode);
+U_CAPI UCPTrieBuilder * U_EXPORT2
+ucptriebld_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode);
 
 /**
  * Clones a trie builder.
- * You must utrie3_close() the clone once you are done using it.
+ * You must ucptrie_close() the clone once you are done using it.
  *
  * @param other the trie builder to clone
  * @param pErrorCode an in/out ICU UErrorCode
  * @return a pointer to the new trie builder clone
  */
-U_CAPI UTrie3Builder * U_EXPORT2
-utrie3bld_clone(const UTrie3Builder *other, UErrorCode *pErrorCode);
+U_CAPI UCPTrieBuilder * U_EXPORT2
+ucptriebld_clone(const UCPTrieBuilder *other, UErrorCode *pErrorCode);
 
 /**
  * Closes a trie builder and release associated memory.
@@ -84,22 +84,22 @@ utrie3bld_clone(const UTrie3Builder *other, UErrorCode *pErrorCode);
  * @param builder the builder
  */
 U_CAPI void U_EXPORT2
-utrie3bld_close(UTrie3Builder *builder);
+ucptriebld_close(UCPTrieBuilder *builder);
 
 #if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 
 /**
- * \class LocalUTrie3BuilderPointer
- * "Smart pointer" class, closes a UTrie3Builder via utrie3bld_close().
+ * \class LocalUCPTrieBuilderPointer
+ * "Smart pointer" class, closes a UCPTrieBuilder via ucptriebld_close().
  * For most methods see the LocalPointerBase base class.
  *
  * @see LocalPointerBase
  * @see LocalPointer
  * @draft ICU 62
  */
-U_DEFINE_LOCAL_OPEN_POINTER(LocalUTrie3BuilderPointer, UTrie3Builder, utrie3bld_close);
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUCPTrieBuilderPointer, UCPTrieBuilder, ucptriebld_close);
 
 U_NAMESPACE_END
 
@@ -107,14 +107,14 @@ U_NAMESPACE_END
 
 /**
  * Creates a trie builder with the same contents as the input trie.
- * You must utrie3bld_close() the builder once you are done using it.
+ * You must ucptriebld_close() the builder once you are done using it.
  *
  * @param trie the trie to clone
  * @param pErrorCode an in/out ICU UErrorCode
  * @return a pointer to the new trie builder
  */
-U_CAPI UTrie3Builder * U_EXPORT2
-utrie3bld_fromUTrie3(const UTrie3 *trie, UErrorCode *pErrorCode);
+U_CAPI UCPTrieBuilder * U_EXPORT2
+ucptriebld_fromUCPTrie(const UCPTrie *trie, UErrorCode *pErrorCode);
 
 /**
  * Get a value from a code point as stored in the trie builder.
@@ -124,17 +124,17 @@ utrie3bld_fromUTrie3(const UTrie3 *trie, UErrorCode *pErrorCode);
  * @return the value
  */
 U_CAPI uint32_t U_EXPORT2
-utrie3bld_get(const UTrie3Builder *builder, UChar32 c);
+ucptriebld_get(const UCPTrieBuilder *builder, UChar32 c);
 
 /**
  * Returns the last code point such that all those from start to there have the same value.
  * Can be used to efficiently iterate over all same-value ranges in a trie builder.
  *
  * For each entry in the trie builder, the value to be delivered is passed through
- * the UTrie3HandleValue function.
+ * the UCPTrieHandleValue function.
  * The value is unchanged if that function pointer is NULL.
  *
- * See the same-signature utrie3_getRange() for a code sample.
+ * See the same-signature ucptrie_getRange() for a code sample.
  *
  * @param builder a pointer to a trie builder
  * @param start range start
@@ -146,8 +146,8 @@ utrie3bld_get(const UTrie3Builder *builder, UChar32 c);
  * @return the range end code point, or -1 if start is not a valid code point
  */
 U_CAPI UChar32 U_EXPORT2
-utrie3bld_getRange(const UTrie3Builder *builder, UChar32 start,
-                   UTrie3HandleValue *handleValue, const void *context, uint32_t *pValue);
+ucptriebld_getRange(const UCPTrieBuilder *builder, UChar32 start,
+                    UCPTrieHandleValue *handleValue, const void *context, uint32_t *pValue);
 
 /**
  * Set a value for a code point.
@@ -159,7 +159,7 @@ utrie3bld_getRange(const UTrie3Builder *builder, UChar32 start,
  * - U_NO_WRITE_PERMISSION if the trie builder is frozen
  */
 U_CAPI void U_EXPORT2
-utrie3bld_set(UTrie3Builder *builder, UChar32 c, uint32_t value, UErrorCode *pErrorCode);
+ucptriebld_set(UCPTrieBuilder *builder, UChar32 c, uint32_t value, UErrorCode *pErrorCode);
 
 /**
  * Set a value in a range of code points [start..end].
@@ -174,9 +174,9 @@ utrie3bld_set(UTrie3Builder *builder, UChar32 c, uint32_t value, UErrorCode *pEr
  * - U_NO_WRITE_PERMISSION if the trie builder is frozen
  */
 U_CAPI void U_EXPORT2
-utrie3bld_setRange(UTrie3Builder *builder,
-                   UChar32 start, UChar32 end,
-                   uint32_t value, UErrorCode *pErrorCode);
+ucptriebld_setRange(UCPTrieBuilder *builder,
+                    UChar32 start, UChar32 end,
+                    uint32_t value, UErrorCode *pErrorCode);
 
 /**
  * Freeze a trie builder. Make it immutable (read-only) and compact it,  // TODO: doc as _build()
@@ -195,17 +195,17 @@ utrie3bld_setRange(UTrie3Builder *builder,
  *                             (the trie builder will be immutable and usable,
  *                             but not frozen and not usable with the fast macros)
  *
- * @see utrie3bld_fromUTrie3
+ * @see ucptriebld_fromUCPTrie
  */
-U_CAPI UTrie3 * U_EXPORT2
-utrie3bld_build(UTrie3Builder *builder, UTrie3Type type, UTrie3ValueBits valueBits,
-                UErrorCode *pErrorCode);
+U_CAPI UCPTrie * U_EXPORT2
+ucptriebld_build(UCPTrieBuilder *builder, UCPTrieType type, UCPTrieValueBits valueBits,
+                 UErrorCode *pErrorCode);
 
-#ifdef UTRIE3_DEBUG
+#ifdef UCPTRIE_DEBUG
 U_CFUNC void
-utrie3_printLengths(const UTrie3 *trie, const char *which);
+ucptrie_printLengths(const UCPTrie *trie, const char *which);
 
-U_CFUNC void utrie3bld_setName(UTrie3Builder *builder, const char *name);
+U_CFUNC void ucptriebld_setName(UCPTrieBuilder *builder, const char *name);
 #endif
 
 U_CDECL_END

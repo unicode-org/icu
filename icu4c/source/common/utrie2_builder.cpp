@@ -28,14 +28,14 @@
 #ifdef UTRIE2_DEBUG
 #   include <stdio.h>
 #endif
-#define UTRIE3_DEBUG  // TODO
+#define UCPTRIE_DEBUG  // TODO
 
 #include "unicode/utypes.h"
+#include "unicode/ucptrie.h"  // TODO
+#include "unicode/ucptriebuilder.h"  // TODO
 #include "cmemory.h"
 #include "utrie2.h"
 #include "utrie2_impl.h"
-#include "utrie3.h"  // TODO
-#include "utrie3builder.h"  // TODO
 
 #include "utrie.h" /* for utrie2_fromUTrie() and utrie_swap() */
 
@@ -139,7 +139,7 @@ utrie2_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
     trie->name="open";
 
     newTrie->data=data;
-    newTrie->t3=utrie3bld_open(initialValue, errorValue, pErrorCode);
+    newTrie->t3=ucptriebld_open(initialValue, errorValue, pErrorCode);
     newTrie->dataCapacity=UNEWTRIE2_INITIAL_DATA_LENGTH;
     newTrie->initialValue=initialValue;
     newTrie->errorValue=errorValue;
@@ -256,7 +256,7 @@ cloneBuilder(const UNewTrie2 *other) {
         trie->t3=nullptr;
     } else {
         UErrorCode errorCode=U_ZERO_ERROR;
-        trie->t3=utrie3bld_clone(other->t3, &errorCode);
+        trie->t3=ucptriebld_clone(other->t3, &errorCode);
     }
     trie->dataCapacity=other->dataCapacity;
 
@@ -650,7 +650,7 @@ set32(UNewTrie2 *trie,
         *pErrorCode=U_NO_WRITE_PERMISSION;
         return;
     }
-    utrie3bld_set(trie->t3, c, value, pErrorCode);
+    ucptriebld_set(trie->t3, c, value, pErrorCode);
 
     block=getDataBlock(trie, c, forLSCP);
     if(block<0) {
@@ -746,7 +746,7 @@ utrie2_setRange32(UTrie2 *trie,
         *pErrorCode=U_NO_WRITE_PERMISSION;
         return;
     }
-    utrie3bld_setRange(newTrie->t3, start, end, value, pErrorCode);
+    ucptriebld_setRange(newTrie->t3, start, end, value, pErrorCode);
     if(!overwrite && value==newTrie->initialValue) {
         return; /* nothing to do */
     }
@@ -1455,9 +1455,9 @@ utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
     utrie2_printLengths(trie, "");
 #endif
 
-#ifdef UTRIE3_DEBUG
-    utrie3bld_setName(newTrie->t3, trie->name);
-    utrie3_close(utrie3bld_build(newTrie->t3, UTRIE3_TYPE_FAST, (UTrie3ValueBits)valueBits, pErrorCode));
+#ifdef UCPTRIE_DEBUG
+    ucptriebld_setName(newTrie->t3, trie->name);
+    ucptrie_close(ucptriebld_build(newTrie->t3, UCPTRIE_TYPE_FAST, (UCPTrieValueBits)valueBits, pErrorCode));
 #endif
     /* Delete the UNewTrie2. */
     uprv_free(newTrie->data);

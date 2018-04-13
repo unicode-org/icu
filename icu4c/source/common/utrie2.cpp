@@ -25,6 +25,7 @@
 *   See utrie2_builder.c for the builder code.
 */
 #include "unicode/utypes.h"
+#include "unicode/ucptriebuilder.h"  // TODO
 #include "unicode/utf.h"
 #include "unicode/utf8.h"
 #include "unicode/utf16.h"
@@ -32,7 +33,6 @@
 #include "utrie2.h"
 #include "utrie2_impl.h"
 #include "uassert.h"
-#include "utrie3builder.h"  // TODO
 
 /* Public UTrie2 API implementation ----------------------------------------- */
 
@@ -372,7 +372,7 @@ utrie2_close(UTrie2 *trie) {
         }
         if(trie->newTrie!=NULL) {
             uprv_free(trie->newTrie->data);
-            utrie3bld_close(trie->newTrie->t3);
+            ucptriebld_close(trie->newTrie->t3);
             uprv_free(trie->newTrie);
         }
         uprv_free(trie);
