@@ -4,7 +4,7 @@ package com.ibm.icu.impl.number;
 
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.number.IntegerWidth;
-import com.ibm.icu.number.Multiplier;
+import com.ibm.icu.number.Scale;
 import com.ibm.icu.number.Notation;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -26,7 +26,7 @@ public class MacroProps implements Cloneable {
     public UnitWidth unitWidth;
     public SignDisplay sign;
     public DecimalSeparatorDisplay decimal;
-    public Multiplier multiplier;
+    public Scale scale;
     public AffixPatternProvider affixProvider; // not in API; for JDK compatibility mode only
     public PluralRules rules; // not in API; could be made public in the future
     public Long threshold; // not in API; controls internal self-regulation threshold
@@ -63,8 +63,8 @@ public class MacroProps implements Cloneable {
             decimal = fallback.decimal;
         if (affixProvider == null)
             affixProvider = fallback.affixProvider;
-        if (multiplier == null)
-            multiplier = fallback.multiplier;
+        if (scale == null)
+            scale = fallback.scale;
         if (rules == null)
             rules = fallback.rules;
         if (loc == null)
@@ -85,7 +85,7 @@ public class MacroProps implements Cloneable {
                 sign,
                 decimal,
                 affixProvider,
-                multiplier,
+                scale,
                 rules,
                 loc);
     }
@@ -111,7 +111,7 @@ public class MacroProps implements Cloneable {
                 && Utility.equals(sign, other.sign)
                 && Utility.equals(decimal, other.decimal)
                 && Utility.equals(affixProvider, other.affixProvider)
-                && Utility.equals(multiplier, other.multiplier)
+                && Utility.equals(scale, other.scale)
                 && Utility.equals(rules, other.rules)
                 && Utility.equals(loc, other.loc);
     }

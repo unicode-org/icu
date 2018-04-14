@@ -19,7 +19,7 @@ import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.impl.number.PropertiesAffixPatternProvider;
 import com.ibm.icu.impl.number.RoundingUtils;
-import com.ibm.icu.number.Multiplier;
+import com.ibm.icu.number.Scale;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
@@ -250,7 +250,7 @@ public class NumberParserImpl {
             parser.addMatcher(RequireDecimalSeparatorValidator.getInstance(patternHasDecimalSeparator));
         }
         // The multiplier takes care of scaling percentages.
-        Multiplier multiplier = RoundingUtils.multiplierFromProperties(properties);
+        Scale multiplier = RoundingUtils.scaleFromProperties(properties);
         if (multiplier != null) {
             parser.addMatcher(new MultiplierParseHandler(multiplier));
         }

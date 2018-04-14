@@ -90,11 +90,11 @@ void NumberSkeletonTest::validTokens() {
             u"unit-width-hidden",
             u"decimal-auto",
             u"decimal-always",
-            u"multiply/5.2",
-            u"multiply/-5.2",
-            u"multiply/100",
-            u"multiply/1E2",
-            u"multiply/1",
+            u"scale/5.2",
+            u"scale/-5.2",
+            u"scale/100",
+            u"scale/1E2",
+            u"scale/1",
             u"latin",
             u"numbering-system/arab",
             u"numbering-system/latn",
@@ -132,10 +132,10 @@ void NumberSkeletonTest::invalidTokens() {
             u"round-increment/xxx",
             u"round-increment/NaN",
             u"round-increment/0.1.2",
-            u"multiply/xxx",
-            u"multiply/NaN",
-            u"multiply/0.1.2",
-            u"multiply/français", // non-invariant characters for C++
+            u"scale/xxx",
+            u"scale/NaN",
+            u"scale/0.1.2",
+            u"scale/français", // non-invariant characters for C++
             u"currency/dummy",
             u"measure-unit/foo",
             u"integer-width/xxx",
@@ -191,7 +191,7 @@ void NumberSkeletonTest::stemsRequiringOption() {
             u"currency",
             u"integer-width",
             u"numbering-system",
-            u"multiply"};
+            u"scale"};
     static const char16_t* suffixes[] = {u"", u"/ceiling", u" scientific", u"/ceiling scientific"};
 
     for (auto& stem : stems) {

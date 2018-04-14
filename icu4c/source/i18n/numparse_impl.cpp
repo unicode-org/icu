@@ -203,7 +203,7 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
         parser->addMatcher(parser->fLocalValidators.decimalSeparator = {patternHasDecimalSeparator});
     }
     // The multiplier takes care of scaling percentages.
-    Multiplier multiplier = multiplierFromProperties(properties);
+    Scale multiplier = scaleFromProperties(properties);
     if (multiplier.isValid()) {
         parser->addMatcher(parser->fLocalValidators.multiplier = {multiplier});
     }

@@ -82,11 +82,11 @@ public class NumberSkeletonTest {
                 "unit-width-hidden",
                 "decimal-auto",
                 "decimal-always",
-                "multiply/5.2",
-                "multiply/-5.2",
-                "multiply/100",
-                "multiply/1E2",
-                "multiply/1",
+                "scale/5.2",
+                "scale/-5.2",
+                "scale/100",
+                "scale/1E2",
+                "scale/1",
                 "latin",
                 "numbering-system/arab",
                 "numbering-system/latn",
@@ -126,10 +126,10 @@ public class NumberSkeletonTest {
                 "round-increment/xxx",
                 "round-increment/NaN",
                 "round-increment/0.1.2",
-                "multiply/xxx",
-                "multiply/NaN",
-                "multiply/0.1.2",
-                "multiply/français", // non-invariant characters for C++
+                "scale/xxx",
+                "scale/NaN",
+                "scale/0.1.2",
+                "scale/français", // non-invariant characters for C++
                 "currency/dummy",
                 "measure-unit/foo",
                 "integer-width/xxx",
@@ -217,7 +217,7 @@ public class NumberSkeletonTest {
                 "currency",
                 "integer-width",
                 "numbering-system",
-                "multiply" };
+                "scale" };
         String[] suffixes = { "", "/ceiling", " scientific", "/ceiling scientific" };
 
         for (String stem : stems) {

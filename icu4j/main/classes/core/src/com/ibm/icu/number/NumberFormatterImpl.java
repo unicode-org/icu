@@ -197,9 +197,9 @@ class NumberFormatterImpl {
         /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
         /////////////////////////////////////////////////////////////////////////////////////
 
-        // Multiplier (compatibility mode value).
-        if (macros.multiplier != null) {
-            chain = new MultiplierFormatHandler(macros.multiplier, chain);
+        // Multiplier
+        if (macros.scale != null) {
+            chain = new MultiplierFormatHandler(macros.scale, chain);
         }
 
         // Rounding strategy

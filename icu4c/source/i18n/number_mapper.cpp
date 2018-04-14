@@ -257,7 +257,7 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     // MULTIPLIERS //
     /////////////////
 
-    macros.multiplier = multiplierFromProperties(properties);
+    macros.scale = scaleFromProperties(properties);
 
     //////////////////////
     // PROPERTY EXPORTS //

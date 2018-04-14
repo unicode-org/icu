@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
-import com.ibm.icu.number.Multiplier;
+import com.ibm.icu.number.Scale;
 
 /** @author sffc */
 public class RoundingUtils {
@@ -209,12 +209,12 @@ public class RoundingUtils {
         return MATH_CONTEXT_BY_ROUNDING_MODE_UNLIMITED[roundingMode.ordinal()];
     }
 
-    public static Multiplier multiplierFromProperties(DecimalFormatProperties properties) {
+    public static Scale scaleFromProperties(DecimalFormatProperties properties) {
         MathContext mc = getMathContextOr34Digits(properties);
         if (properties.getMagnitudeMultiplier() != 0) {
-            return Multiplier.powerOfTen(properties.getMagnitudeMultiplier()).withMathContext(mc);
+            return Scale.powerOfTen(properties.getMagnitudeMultiplier()).withMathContext(mc);
         } else if (properties.getMultiplier() != null) {
-            return Multiplier.arbitrary(properties.getMultiplier()).withMathContext(mc);
+            return Scale.byBigDecimal(properties.getMultiplier()).withMathContext(mc);
         } else {
             return null;
         }

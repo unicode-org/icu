@@ -21,7 +21,7 @@ using namespace icu::number::impl;
 using namespace icu::numparse::impl;
 
 
-Multiplier::Multiplier(int32_t magnitude, DecNum* arbitraryToAdopt)
+Scale::Scale(int32_t magnitude, DecNum* arbitraryToAdopt)
         : fMagnitude(magnitude), fArbitrary(arbitraryToAdopt), fError(U_ZERO_ERROR) {
     if (fArbitrary != nullptr) {
         // Attempt to convert the DecNum to a magnitude multiplier.
@@ -29,14 +29,14 @@ Multiplier::Multiplier(int32_t magnitude, DecNum* arbitraryToAdopt)
         if (fArbitrary->getRawDecNumber()->digits == 1 && fArbitrary->getRawDecNumber()->lsu[0] == 1 &&
             !fArbitrary->isNegative()) {
             // Success!
-            fMagnitude = fArbitrary->getRawDecNumber()->exponent;
+            fMagnitude += fArbitrary->getRawDecNumber()->exponent;
             delete fArbitrary;
             fArbitrary = nullptr;
         }
     }
 }
 
-Multiplier::Multiplier(const Multiplier& other)
+Scale::Scale(const Scale& other)
         : fMagnitude(other.fMagnitude), fArbitrary(nullptr), fError(other.fError) {
     if (other.fArbitrary != nullptr) {
         UErrorCode localStatus = U_ZERO_ERROR;
@@ -44,7 +44,7 @@ Multiplier::Multiplier(const Multiplier& other)
     }
 }
 
-Multiplier& Multiplier::operator=(const Multiplier& other) {
+Scale& Scale::operator=(const Scale& other) {
     fMagnitude = other.fMagnitude;
     if (other.fArbitrary != nullptr) {
         UErrorCode localStatus = U_ZERO_ERROR;
@@ -56,13 +56,13 @@ Multiplier& Multiplier::operator=(const Multiplier& other) {
     return *this;
 }
 
-Multiplier::Multiplier(Multiplier&& src) U_NOEXCEPT
+Scale::Scale(Scale&& src) U_NOEXCEPT
         : fMagnitude(src.fMagnitude), fArbitrary(src.fArbitrary), fError(src.fError) {
     // Take ownership away from src if necessary
     src.fArbitrary = nullptr;
 }
 
-Multiplier& Multiplier::operator=(Multiplier&& src) U_NOEXCEPT {
+Scale& Scale::operator=(Scale&& src) U_NOEXCEPT {
     fMagnitude = src.fMagnitude;
     fArbitrary = src.fArbitrary;
     fError = src.fError;
@@ -71,20 +71,20 @@ Multiplier& Multiplier::operator=(Multiplier&& src) U_NOEXCEPT {
     return *this;
 }
 
-Multiplier::~Multiplier() {
+Scale::~Scale() {
     delete fArbitrary;
 }
 
 
-Multiplier Multiplier::none() {
+Scale Scale::none() {
     return {0, nullptr};
 }
 
-Multiplier Multiplier::powerOfTen(int32_t power) {
+Scale Scale::powerOfTen(int32_t power) {
     return {power, nullptr};
 }
 
-Multiplier Multiplier::arbitraryDecimal(StringPiece multiplicand) {
+Scale Scale::byDecimal(StringPiece multiplicand) {
     UErrorCode localError = U_ZERO_ERROR;
     LocalPointer<DecNum> decnum(new DecNum(), localError);
     if (U_FAILURE(localError)) {
@@ -97,7 +97,7 @@ Multiplier Multiplier::arbitraryDecimal(StringPiece multiplicand) {
     return {0, decnum.orphan()};
 }
 
-Multiplier Multiplier::arbitraryDouble(double multiplicand) {
+Scale Scale::byDouble(double multiplicand) {
     UErrorCode localError = U_ZERO_ERROR;
     LocalPointer<DecNum> decnum(new DecNum(), localError);
     if (U_FAILURE(localError)) {
@@ -110,7 +110,20 @@ Multiplier Multiplier::arbitraryDouble(double multiplicand) {
     return {0, decnum.orphan()};
 }
 
-void Multiplier::applyTo(impl::DecimalQuantity& quantity) const {
+Scale Scale::byDoubleAndPowerOfTen(double multiplicand, int32_t power) {
+    UErrorCode localError = U_ZERO_ERROR;
+    LocalPointer<DecNum> decnum(new DecNum(), localError);
+    if (U_FAILURE(localError)) {
+        return {localError};
+    }
+    decnum->setTo(multiplicand, localError);
+    if (U_FAILURE(localError)) {
+        return {localError};
+    }
+    return {power, decnum.orphan()};
+}
+
+void Scale::applyTo(impl::DecimalQuantity& quantity) const {
     quantity.adjustMagnitude(fMagnitude);
     if (fArbitrary != nullptr) {
         UErrorCode localStatus = U_ZERO_ERROR;
@@ -118,7 +131,7 @@ void Multiplier::applyTo(impl::DecimalQuantity& quantity) const {
     }
 }
 
-void Multiplier::applyReciprocalTo(impl::DecimalQuantity& quantity) const {
+void Scale::applyReciprocalTo(impl::DecimalQuantity& quantity) const {
     quantity.adjustMagnitude(-fMagnitude);
     if (fArbitrary != nullptr) {
         UErrorCode localStatus = U_ZERO_ERROR;
@@ -128,7 +141,7 @@ void Multiplier::applyReciprocalTo(impl::DecimalQuantity& quantity) const {
 
 
 void
-MultiplierFormatHandler::setAndChain(const Multiplier& multiplier, const MicroPropsGenerator* parent) {
+MultiplierFormatHandler::setAndChain(const Scale& multiplier, const MicroPropsGenerator* parent) {
     this->multiplier = multiplier;
     this->parent = parent;
 }
@@ -141,7 +154,7 @@ void MultiplierFormatHandler::processQuantity(DecimalQuantity& quantity, MicroPr
 
 
 // NOTE: MultiplierParseHandler is declared in the header numparse_validators.h
-MultiplierParseHandler::MultiplierParseHandler(::icu::number::Multiplier multiplier)
+MultiplierParseHandler::MultiplierParseHandler(::icu::number::Scale multiplier)
         : fMultiplier(std::move(multiplier)) {}
 
 void MultiplierParseHandler::postProcess(ParsedNumber& result) const {
@@ -152,7 +165,7 @@ void MultiplierParseHandler::postProcess(ParsedNumber& result) const {
 }
 
 UnicodeString MultiplierParseHandler::toString() const {
-    return u"<Multiplier>";
+    return u"<Scale>";
 }
 
 

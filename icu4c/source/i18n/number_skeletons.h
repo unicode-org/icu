@@ -50,7 +50,7 @@ enum ParseState {
     STATE_CURRENCY_UNIT,
     STATE_INTEGER_WIDTH,
     STATE_NUMBERING_SYSTEM,
-    STATE_MULTIPLY,
+    STATE_SCALE,
 };
 
 /**
@@ -105,7 +105,7 @@ enum StemEnum {
     STEM_CURRENCY,
     STEM_INTEGER_WIDTH,
     STEM_NUMBERING_SYSTEM,
-    STEM_MULTIPLY,
+    STEM_SCALE,
 };
 
 /**
@@ -243,9 +243,9 @@ void parseNumberingSystemOption(const StringSegment& segment, MacroProps& macros
 
 void generateNumberingSystemOption(const NumberingSystem& ns, UnicodeString& sb, UErrorCode& status);
 
-void parseMultiplierOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
+void parseScaleOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
-void generateMultiplierOption(int32_t magnitude, const DecNum* arbitrary, UnicodeString& sb,
+void generateScaleOption(int32_t magnitude, const DecNum* arbitrary, UnicodeString& sb,
                               UErrorCode& status);
 
 } // namespace blueprint_helpers
@@ -287,7 +287,7 @@ class GeneratorHelpers {
 
     static bool decimal(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
-    static bool multiplier(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+    static bool scale(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
 };
 
@@ -307,7 +307,7 @@ struct SeenMacroProps {
     bool unitWidth = false;
     bool sign = false;
     bool decimal = false;
-    bool multiplier = false;
+    bool scale = false;
 };
 
 } // namespace impl
