@@ -52,6 +52,9 @@ Grouper Grouper::forStrategy(UGroupingStrategy grouping) {
 }
 
 Grouper Grouper::forProperties(const DecimalFormatProperties& properties) {
+    if (!properties.groupingUsed) {
+        return forStrategy(UNUM_GROUPING_OFF);
+    }
     auto grouping1 = static_cast<int16_t>(properties.groupingSize);
     auto grouping2 = static_cast<int16_t>(properties.secondaryGroupingSize);
     auto minGrouping = static_cast<int16_t>(properties.minimumGroupingDigits);

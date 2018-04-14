@@ -25,6 +25,7 @@ void DecimalFormatProperties::clear() {
     exponentSignAlwaysShown = false;
     formatWidth = -1;
     groupingSize = -1;
+    groupingUsed = false;
     magnitudeMultiplier = 0;
     maximumFractionDigits = -1;
     maximumIntegerDigits = -1;
@@ -68,6 +69,7 @@ bool DecimalFormatProperties::operator==(const DecimalFormatProperties &other) c
     eq = eq && exponentSignAlwaysShown == other.exponentSignAlwaysShown;
     eq = eq && formatWidth == other.formatWidth;
     eq = eq && groupingSize == other.groupingSize;
+    eq = eq && groupingUsed == other.groupingUsed;
     eq = eq && magnitudeMultiplier == other.magnitudeMultiplier;
     eq = eq && maximumFractionDigits == other.maximumFractionDigits;
     eq = eq && maximumIntegerDigits == other.maximumIntegerDigits;

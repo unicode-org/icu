@@ -98,6 +98,7 @@ struct U_I18N_API DecimalFormatProperties {
     bool exponentSignAlwaysShown;
     int32_t formatWidth;
     int32_t groupingSize;
+    bool groupingUsed;
     int32_t magnitudeMultiplier;
     int32_t maximumFractionDigits;
     int32_t maximumIntegerDigits;

@@ -113,14 +113,38 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     // bug 10864
     status = U_ZERO_ERROR;
     DecimalFormat noGrouping("###0.##", status);
-    if (noGrouping.getGroupingSize() != 0) {
-      errln("Grouping size should be 0 for no grouping.");
-    }
+    assertEquals("Grouping size should be 0 for no grouping.", 0, noGrouping.getGroupingSize());
     noGrouping.setGroupingUsed(TRUE);
-    if (noGrouping.getGroupingSize() != 0) {
-      errln("Grouping size should still be 0.");
-    }
+    assertEquals("Grouping size should still be 0.", 0, noGrouping.getGroupingSize());
     // end bug 10864
+
+    // bug 13442 comment 14
+    status = U_ZERO_ERROR;
+    {
+        DecimalFormat df("0", {"en", status}, status);
+        UnicodeString result;
+        assertEquals("pat 0: ", 0, df.getGroupingSize());
+        assertEquals("pat 0: ", (UBool) FALSE, (UBool) df.isGroupingUsed());
+        df.setGroupingUsed(false);
+        assertEquals("pat 0 then disabled: ", 0, df.getGroupingSize());
+        assertEquals("pat 0 then disabled: ", u"1111", df.format(1111, result.remove()));
+        df.setGroupingUsed(true);
+        assertEquals("pat 0 then enabled: ", 0, df.getGroupingSize());
+        assertEquals("pat 0 then enabled: ", u"1111", df.format(1111, result.remove()));
+    }
+    {
+        DecimalFormat df("#,##0", {"en", status}, status);
+        UnicodeString result;
+        assertEquals("pat #,##0: ", 3, df.getGroupingSize());
+        assertEquals("pat #,##0: ", (UBool) TRUE, (UBool) df.isGroupingUsed());
+        df.setGroupingUsed(false);
+        assertEquals("pat #,##0 then disabled: ", 3, df.getGroupingSize());
+        assertEquals("pat #,##0 then disabled: ", u"1111", df.format(1111, result.remove()));
+        df.setGroupingUsed(true);
+        assertEquals("pat #,##0 then enabled: ", 3, df.getGroupingSize());
+        assertEquals("pat #,##0 then enabled: ", u"1,111", df.format(1111, result.remove()));
+    }
+    // end bug 13442 comment 14
 
     status = U_ZERO_ERROR;
     const UnicodeString pattern("#,##0.# FF");
