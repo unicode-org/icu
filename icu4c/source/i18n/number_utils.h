@@ -105,6 +105,18 @@ struct MicroProps : public MicroPropsGenerator {
     bool exhausted = false;
 };
 
+enum CldrPatternStyle {
+    CLDR_PATTERN_STYLE_DECIMAL,
+    CLDR_PATTERN_STYLE_CURRENCY,
+    CLDR_PATTERN_STYLE_ACCOUNTING,
+    CLDR_PATTERN_STYLE_PERCENT,
+    CLDR_PATTERN_STYLE_SCIENTIFIC,
+    CLDR_PATTERN_STYLE_COUNT,
+};
+
+// Namespace for naked functions
+namespace utils {
+
 inline int32_t insertDigitFromSymbols(NumberStringBuilder& output, int32_t index, int8_t digit,
                                       const DecimalFormatSymbols& symbols, Field field,
                                       UErrorCode& status) {
@@ -129,6 +141,12 @@ inline bool unitIsPercent(const MeasureUnit& unit) {
 inline bool unitIsPermille(const MeasureUnit& unit) {
     return uprv_strcmp("permille", unit.getSubtype()) == 0;
 }
+
+// NOTE: In Java, this method is in NumberFormat.java
+const char16_t*
+getPatternForStyle(const Locale& locale, const char* nsName, CldrPatternStyle style, UErrorCode& status);
+
+} // namespace utils
 
 
 /** A very thin C++ wrapper around decNumber.h */

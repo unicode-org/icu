@@ -64,7 +64,13 @@ int32_t ScientificModifier::apply(NumberStringBuilder &output, int32_t /*leftInd
     int32_t disp = std::abs(fExponent);
     for (int j = 0; j < fHandler->fSettings.fMinExponentDigits || disp > 0; j++, disp /= 10) {
         auto d = static_cast<int8_t>(disp % 10);
-        i += insertDigitFromSymbols(output, i - j, d, *fHandler->fSymbols, UNUM_EXPONENT_FIELD, status);
+        i += utils::insertDigitFromSymbols(
+                output,
+                i - j,
+                d,
+                *fHandler->fSymbols,
+                UNUM_EXPONENT_FIELD,
+                status);
     }
     return i - rightIndex;
 }

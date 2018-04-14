@@ -34,6 +34,16 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DecimalFormat)
 
 DecimalFormat::DecimalFormat(UErrorCode& status)
         : DecimalFormat(nullptr, status) {
+    // Use the default locale and decimal pattern.
+    const char* localeName = Locale::getDefault().getName();
+    LocalPointer<NumberingSystem> ns(NumberingSystem::createInstance(status));
+    UnicodeString patternString = utils::getPatternForStyle(
+            localeName,
+            ns->getName(),
+            CLDR_PATTERN_STYLE_DECIMAL,
+            status);
+    setPropertiesFromPattern(patternString, IGNORE_ROUNDING_IF_CURRENCY, status);
+    refreshFormatter(status);
 }
 
 DecimalFormat::DecimalFormat(const UnicodeString& pattern, UErrorCode& status)

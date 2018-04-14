@@ -1256,15 +1256,15 @@ bool GeneratorHelpers::notation(const MacroProps& macros, UnicodeString& sb, UEr
 }
 
 bool GeneratorHelpers::unit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
-    if (unitIsCurrency(macros.unit)) {
+    if (utils::unitIsCurrency(macros.unit)) {
         sb.append(u"currency/", -1);
         blueprint_helpers::generateCurrencyOption({macros.unit, status}, sb, status);
         return true;
-    } else if (unitIsNoUnit(macros.unit)) {
-        if (unitIsPercent(macros.unit)) {
+    } else if (utils::unitIsNoUnit(macros.unit)) {
+        if (utils::unitIsPercent(macros.unit)) {
             sb.append(u"percent", -1);
             return true;
-        } else if (unitIsPermille(macros.unit)) {
+        } else if (utils::unitIsPermille(macros.unit)) {
             sb.append(u"permille", -1);
             return true;
         } else {
@@ -1280,15 +1280,15 @@ bool GeneratorHelpers::unit(const MacroProps& macros, UnicodeString& sb, UErrorC
 
 bool GeneratorHelpers::perUnit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
     // Per-units are currently expected to be only MeasureUnits.
-    if (unitIsNoUnit(macros.perUnit)) {
-        if (unitIsPercent(macros.perUnit) || unitIsPermille(macros.perUnit)) {
+    if (utils::unitIsNoUnit(macros.perUnit)) {
+        if (utils::unitIsPercent(macros.perUnit) || utils::unitIsPermille(macros.perUnit)) {
             status = U_UNSUPPORTED_ERROR;
             return false;
         } else {
             // Default value: ok to ignore
             return false;
         }
-    } else if (unitIsCurrency(macros.perUnit)) {
+    } else if (utils::unitIsCurrency(macros.perUnit)) {
         status = U_UNSUPPORTED_ERROR;
         return false;
     } else {
