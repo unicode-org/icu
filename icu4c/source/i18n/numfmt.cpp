@@ -55,6 +55,7 @@
 #include "sharednumberformat.h"
 #include "unifiedcache.h"
 #include "number_decimalquantity.h"
+#include "number_utils.h"
 
 //#define FMT_DEBUG
 
@@ -129,31 +130,28 @@ static const UChar * const gLastResortNumberPatterns[UNUM_FORMAT_STYLE_COUNT] = 
 
 // Keys used for accessing resource bundles
 
-static const char *gNumberElements = "NumberElements";
-static const char *gLatn = "latn";
-static const char *gPatterns = "patterns";
-static const char *gFormatKeys[UNUM_FORMAT_STYLE_COUNT] = {
-    NULL,  // UNUM_PATTERN_DECIMAL
-    "decimalFormat",  // UNUM_DECIMAL
-    "currencyFormat",  // UNUM_CURRENCY
-    "percentFormat",  // UNUM_PERCENT
-    "scientificFormat",  // UNUM_SCIENTIFIC
-    NULL,  // UNUM_SPELLOUT
-    NULL,  // UNUM_ORDINAL
-    NULL,  // UNUM_DURATION
-    NULL,  // UNUM_NUMBERING_SYSTEM
-    NULL,  // UNUM_PATTERN_RULEBASED
+static const icu::number::impl::CldrPatternStyle gFormatCldrStyles[UNUM_FORMAT_STYLE_COUNT] = {
+    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_PATTERN_DECIMAL
+    icu::number::impl::CLDR_PATTERN_STYLE_DECIMAL,  // UNUM_DECIMAL
+    icu::number::impl::CLDR_PATTERN_STYLE_CURRENCY,  // UNUM_CURRENCY
+    icu::number::impl::CLDR_PATTERN_STYLE_PERCENT,  // UNUM_PERCENT
+    icu::number::impl::CLDR_PATTERN_STYLE_SCIENTIFIC,  // UNUM_SCIENTIFIC
+    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_SPELLOUT
+    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_ORDINAL
+    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_DURATION
+    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_NUMBERING_SYSTEM
+    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_PATTERN_RULEBASED
     // For UNUM_CURRENCY_ISO and UNUM_CURRENCY_PLURAL,
     // the pattern is the same as the pattern of UNUM_CURRENCY
     // except for replacing the single currency sign with
     // double currency sign or triple currency sign.
-    "currencyFormat",  // UNUM_CURRENCY_ISO
-    "currencyFormat",  // UNUM_CURRENCY_PLURAL
-    "accountingFormat",  // UNUM_CURRENCY_ACCOUNTING
-    "currencyFormat",  // UNUM_CASH_CURRENCY
-    NULL,  // UNUM_DECIMAL_COMPACT_SHORT
-    NULL,  // UNUM_DECIMAL_COMPACT_LONG
-    "currencyFormat",  // UNUM_CURRENCY_STANDARD
+    icu::number::impl::CLDR_PATTERN_STYLE_CURRENCY,  // UNUM_CURRENCY_ISO
+    icu::number::impl::CLDR_PATTERN_STYLE_CURRENCY,  // UNUM_CURRENCY_PLURAL
+    icu::number::impl::CLDR_PATTERN_STYLE_ACCOUNTING,  // UNUM_CURRENCY_ACCOUNTING
+    icu::number::impl::CLDR_PATTERN_STYLE_CURRENCY,  // UNUM_CASH_CURRENCY
+    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_DECIMAL_COMPACT_SHORT
+    /* NULL */ icu::number::impl::CLDR_PATTERN_STYLE_COUNT,  // UNUM_DECIMAL_COMPACT_LONG
+    icu::number::impl::CLDR_PATTERN_STYLE_CURRENCY,  // UNUM_CURRENCY_STANDARD
 };
 
 // Static hashtable cache of NumberingSystem objects used by NumberFormat
@@ -1400,27 +1398,13 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
             return NULL;
         }
 
-        UResourceBundle *resource = ownedResource.orphan();
-        UResourceBundle *numElements = ures_getByKeyWithFallback(resource, gNumberElements, NULL, &status);
-        resource = ures_getByKeyWithFallback(numElements, ns->getName(), resource, &status);
-        resource = ures_getByKeyWithFallback(resource, gPatterns, resource, &status);
-        ownedResource.adoptInstead(resource);
-
-        int32_t patLen = 0;
-        const UChar *patResStr = ures_getStringByKeyWithFallback(resource, gFormatKeys[style], &patLen, &status);
-
-        // Didn't find a pattern specific to the numbering system, so fall back to "latn"
-        if ( status == U_MISSING_RESOURCE_ERROR && uprv_strcmp(gLatn,ns->getName())) {  
-            status = U_ZERO_ERROR;
-            resource = ures_getByKeyWithFallback(numElements, gLatn, resource, &status);
-            resource = ures_getByKeyWithFallback(resource, gPatterns, resource, &status);
-            patResStr = ures_getStringByKeyWithFallback(resource, gFormatKeys[style], &patLen, &status);
-        }
-
-        ures_close(numElements);
-
-        // Creates the specified decimal format style of the desired locale.
-        pattern.setTo(TRUE, patResStr, patLen);
+        // Load the pattern from data using the common library function
+        const char16_t* patternPtr = number::impl::utils::getPatternForStyle(
+                desiredLocale,
+                ns->getName(),
+                gFormatCldrStyles[style],
+                status);
+        pattern = UnicodeString(TRUE, patternPtr, -1);
     }
     if (U_FAILURE(status)) {
         return NULL;

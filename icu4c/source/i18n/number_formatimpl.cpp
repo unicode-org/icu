@@ -26,70 +26,6 @@ using namespace icu::number::impl;
 
 namespace {
 
-// NOTE: In Java, the method to get a pattern from the resource bundle exists in NumberFormat.
-// In C++, we have to implement that logic here.
-// TODO: Make Java and C++ consistent?
-
-enum CldrPatternStyle {
-    CLDR_PATTERN_STYLE_DECIMAL,
-    CLDR_PATTERN_STYLE_CURRENCY,
-    CLDR_PATTERN_STYLE_ACCOUNTING,
-    CLDR_PATTERN_STYLE_PERCENT
-    // TODO: Consider scientific format.
-};
-
-const char16_t*
-doGetPattern(UResourceBundle* res, const char* nsName, const char* patternKey, UErrorCode& publicStatus,
-             UErrorCode& localStatus) {
-    // Construct the path into the resource bundle
-    CharString key;
-    key.append("NumberElements/", publicStatus);
-    key.append(nsName, publicStatus);
-    key.append("/patterns/", publicStatus);
-    key.append(patternKey, publicStatus);
-    if (U_FAILURE(publicStatus)) {
-        return u"";
-    }
-    return ures_getStringByKeyWithFallback(res, key.data(), nullptr, &localStatus);
-}
-
-const char16_t* getPatternForStyle(const Locale& locale, const char* nsName, CldrPatternStyle style,
-                                   UErrorCode& status) {
-    const char* patternKey;
-    switch (style) {
-        case CLDR_PATTERN_STYLE_DECIMAL:
-            patternKey = "decimalFormat";
-            break;
-        case CLDR_PATTERN_STYLE_CURRENCY:
-            patternKey = "currencyFormat";
-            break;
-        case CLDR_PATTERN_STYLE_ACCOUNTING:
-            patternKey = "accountingFormat";
-            break;
-        case CLDR_PATTERN_STYLE_PERCENT:
-        default:
-            patternKey = "percentFormat";
-            break;
-    }
-    LocalUResourceBundlePointer res(ures_open(nullptr, locale.getName(), &status));
-    if (U_FAILURE(status)) { return u""; }
-
-    // Attempt to get the pattern with the native numbering system.
-    UErrorCode localStatus = U_ZERO_ERROR;
-    const char16_t* pattern;
-    pattern = doGetPattern(res.getAlias(), nsName, patternKey, status, localStatus);
-    if (U_FAILURE(status)) { return u""; }
-
-    // Fall back to latn if native numbering system does not have the right pattern
-    if (U_FAILURE(localStatus) && uprv_strcmp("latn", nsName) != 0) {
-        localStatus = U_ZERO_ERROR;
-        pattern = doGetPattern(res.getAlias(), "latn", patternKey, status, localStatus);
-        if (U_FAILURE(status)) { return u""; }
-    }
-
-    return pattern;
-}
-
 struct CurrencyFormatInfoResult {
     bool exists;
     const char16_t* pattern;
@@ -195,10 +131,10 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     // TODO: Accept currency symbols from DecimalFormatSymbols?
 
     // Pre-compute a few values for efficiency.
-    bool isCurrency = unitIsCurrency(macros.unit);
-    bool isNoUnit = unitIsNoUnit(macros.unit);
-    bool isPercent = isNoUnit && unitIsPercent(macros.unit);
-    bool isPermille = isNoUnit && unitIsPermille(macros.unit);
+    bool isCurrency = utils::unitIsCurrency(macros.unit);
+    bool isNoUnit = utils::unitIsNoUnit(macros.unit);
+    bool isPercent = isNoUnit && utils::unitIsPercent(macros.unit);
+    bool isPermille = isNoUnit && utils::unitIsPermille(macros.unit);
     bool isCldrUnit = !isCurrency && !isNoUnit;
     bool isAccounting =
             macros.sign == UNUM_SIGN_ACCOUNTING || macros.sign == UNUM_SIGN_ACCOUNTING_ALWAYS ||
@@ -277,7 +213,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         } else {
             patternStyle = CLDR_PATTERN_STYLE_CURRENCY;
         }
-        pattern = getPatternForStyle(macros.locale, nsName, patternStyle, status);
+        pattern = utils::getPatternForStyle(macros.locale, nsName, patternStyle, status);
     }
     auto patternInfo = new ParsedPatternInfo();
     fPatternInfo.adoptInstead(patternInfo);
@@ -522,7 +458,7 @@ int32_t NumberFormatterImpl::writeIntegerDigits(const MicroProps& micros, Decima
 
         // Get and append the next digit value
         int8_t nextDigit = quantity.getDigit(i);
-        length += insertDigitFromSymbols(
+        length += utils::insertDigitFromSymbols(
                 string, 0, nextDigit, *micros.symbols, UNUM_INTEGER_FIELD, status);
     }
     return length;
@@ -535,7 +471,7 @@ int32_t NumberFormatterImpl::writeFractionDigits(const MicroProps& micros, Decim
     for (int i = 0; i < fractionCount; i++) {
         // Get and append the next digit value
         int8_t nextDigit = quantity.getDigit(-i - 1);
-        length += insertDigitFromSymbols(
+        length += utils::insertDigitFromSymbols(
                 string, string.length(), nextDigit, *micros.symbols, UNUM_FRACTION_FIELD, status);
     }
     return length;

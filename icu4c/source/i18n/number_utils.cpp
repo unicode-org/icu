@@ -17,12 +17,76 @@
 #include "decContext.h"
 #include "decNumber.h"
 #include "double-conversion.h"
+#include "uresimp.h"
+#include "ureslocs.h"
 
 using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
 
 using icu::double_conversion::DoubleToStringConverter;
+
+
+namespace {
+
+const char16_t*
+doGetPattern(UResourceBundle* res, const char* nsName, const char* patternKey, UErrorCode& publicStatus,
+             UErrorCode& localStatus) {
+    // Construct the path into the resource bundle
+    CharString key;
+    key.append("NumberElements/", publicStatus);
+    key.append(nsName, publicStatus);
+    key.append("/patterns/", publicStatus);
+    key.append(patternKey, publicStatus);
+    if (U_FAILURE(publicStatus)) {
+        return u"";
+    }
+    return ures_getStringByKeyWithFallback(res, key.data(), nullptr, &localStatus);
+}
+
+}
+
+
+const char16_t* utils::getPatternForStyle(const Locale& locale, const char* nsName, CldrPatternStyle style,
+                                          UErrorCode& status) {
+    const char* patternKey;
+    switch (style) {
+        case CLDR_PATTERN_STYLE_DECIMAL:
+            patternKey = "decimalFormat";
+            break;
+        case CLDR_PATTERN_STYLE_CURRENCY:
+            patternKey = "currencyFormat";
+            break;
+        case CLDR_PATTERN_STYLE_ACCOUNTING:
+            patternKey = "accountingFormat";
+            break;
+        case CLDR_PATTERN_STYLE_PERCENT:
+            patternKey = "percentFormat";
+            break;
+        case CLDR_PATTERN_STYLE_SCIENTIFIC:
+            patternKey = "scientificFormat";
+            break;
+        default:
+            U_ASSERT(false);
+    }
+    LocalUResourceBundlePointer res(ures_open(nullptr, locale.getName(), &status));
+    if (U_FAILURE(status)) { return u""; }
+
+    // Attempt to get the pattern with the native numbering system.
+    UErrorCode localStatus = U_ZERO_ERROR;
+    const char16_t* pattern;
+    pattern = doGetPattern(res.getAlias(), nsName, patternKey, status, localStatus);
+    if (U_FAILURE(status)) { return u""; }
+
+    // Fall back to latn if native numbering system does not have the right pattern
+    if (U_FAILURE(localStatus) && uprv_strcmp("latn", nsName) != 0) {
+        localStatus = U_ZERO_ERROR;
+        pattern = doGetPattern(res.getAlias(), "latn", patternKey, status, localStatus);
+        if (U_FAILURE(status)) { return u""; }
+    }
+
+    return pattern;
+}
 
 
 DecNum::DecNum() {
