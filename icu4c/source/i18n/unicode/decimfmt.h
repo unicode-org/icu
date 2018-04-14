@@ -1320,12 +1320,34 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * For a percentage, set the suffixes to have "%" and the multiplier to be 100.
      * (For Arabic, use arabic percent symbol).
      * For a permill, set the suffixes to have "\\u2031" and the multiplier to be 1000.
+     * It is possible to set both via setMultiplier() as via setScale() simultaneously.
      *
      * @param newValue    the new value of the multiplier for use in percent, permill, etc.
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
      * @stable ICU 2.0
      */
     virtual void setMultiplier(int32_t newValue);
+
+    /**
+     * Gets a multiplier for the given power of ten.
+     * For example, scale of 2 corresponds to a multiplier of 100.
+     *
+     * @return    the multiplier for use in percent, permill, etc.
+     * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * @draft ICU 62
+     */
+    int32_t getScale(void) const;
+
+    /**
+     * Sets a multiplier for the given power of ten.
+     * For example, scale of 2 corresponds to a multiplier of 100.
+     * It is possible to set both via setMultiplier() as via setScale() simultaneously.
+     *
+     * @param newValue    the new value of the multiplier for use in percent, permill, etc.
+     * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * @draft ICU 62
+     */
+    virtual void setScale(int32_t newValue);
 
     /**
      * Get the rounding increment.

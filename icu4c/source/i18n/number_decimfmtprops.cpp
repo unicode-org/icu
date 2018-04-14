@@ -54,6 +54,7 @@ void DecimalFormatProperties::clear() {
     positiveSuffixPattern.setToBogus();
     roundingIncrement = 0.0;
     roundingMode.nullify();
+    scaleMultiplier = 0;
     secondaryGroupingSize = -1;
     signAlwaysShown = false;
 }
@@ -98,6 +99,7 @@ bool DecimalFormatProperties::operator==(const DecimalFormatProperties &other) c
     eq = eq && positiveSuffixPattern == other.positiveSuffixPattern;
     eq = eq && roundingIncrement == other.roundingIncrement;
     eq = eq && roundingMode == other.roundingMode;
+    eq = eq && scaleMultiplier == other.scaleMultiplier;
     eq = eq && secondaryGroupingSize == other.secondaryGroupingSize;
     eq = eq && signAlwaysShown == other.signAlwaysShown;
     return eq;
