@@ -116,12 +116,6 @@ public class ParsedNumber {
         if (quantity != null && 0 != (flags & FLAG_NEGATIVE)) {
             quantity.negate();
         }
-        if (quantity != null && 0 != (flags & FLAG_PERCENT)) {
-            quantity.adjustMagnitude(-2);
-        }
-        if (quantity != null && 0 != (flags & FLAG_PERMILLE)) {
-            quantity.adjustMagnitude(-3);
-        }
     }
 
     /**
