@@ -158,13 +158,9 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     // and to maintain regressive behavior, divide by 100 even if no percent sign is present.
     if (affixProvider->containsSymbolType(AffixPatternType::TYPE_PERCENT, status)) {
         parser->addMatcher(parser->fLocalMatchers.percent = {symbols});
-        // causes number to be always scaled by 100:
-        parser->addMatcher(parser->fLocalValidators.percentFlags = {ResultFlags::FLAG_PERCENT});
     }
     if (affixProvider->containsSymbolType(AffixPatternType::TYPE_PERMILLE, status)) {
         parser->addMatcher(parser->fLocalMatchers.permille = {symbols});
-        // causes number to be always scaled by 1000:
-        parser->addMatcher(parser->fLocalValidators.permilleFlags = {ResultFlags::FLAG_PERMILLE});
     }
 
     ///////////////////////////////
@@ -206,9 +202,10 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
                 properties.decimalSeparatorAlwaysShown || properties.maximumFractionDigits != 0;
         parser->addMatcher(parser->fLocalValidators.decimalSeparator = {patternHasDecimalSeparator});
     }
-    // NOTE: Don't look at magnitude multiplier here. That is performed when percent sign is seen.
-    if (properties.multiplier != 1) {
-        parser->addMatcher(parser->fLocalValidators.multiplier = {multiplierFromProperties(properties)});
+    // The multiplier takes care of scaling percentages.
+    Multiplier multiplier = multiplierFromProperties(properties);
+    if (multiplier.isValid()) {
+        parser->addMatcher(parser->fLocalValidators.multiplier = {multiplier});
     }
 
     parser->freeze();

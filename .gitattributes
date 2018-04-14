@@ -5942,7 +5942,6 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/AffixTokenMatcherFacto
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/CodePointMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/CombinedCurrencyMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/DecimalMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/FlagHandler.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/IgnorablesMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/InfinityMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/MinusSignMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8

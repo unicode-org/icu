@@ -41,12 +41,6 @@ void ParsedNumber::postProcess() {
     if (!quantity.bogus && 0 != (flags & FLAG_NEGATIVE)) {
         quantity.negate();
     }
-    if (!quantity.bogus && 0 != (flags & FLAG_PERCENT)) {
-        quantity.adjustMagnitude(-2);
-    }
-    if (!quantity.bogus && 0 != (flags & FLAG_PERMILLE)) {
-        quantity.adjustMagnitude(-3);
-    }
 }
 
 bool ParsedNumber::success() const {

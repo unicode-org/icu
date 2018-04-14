@@ -19,6 +19,7 @@ import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.impl.number.PropertiesAffixPatternProvider;
 import com.ibm.icu.impl.number.RoundingUtils;
+import com.ibm.icu.number.Multiplier;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
@@ -204,13 +205,9 @@ public class NumberParserImpl {
         // and to maintain regressive behavior, divide by 100 even if no percent sign is present.
         if (affixProvider.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
             parser.addMatcher(PercentMatcher.getInstance(symbols));
-            // causes number to be always scaled by 100:
-            parser.addMatcher(FlagHandler.PERCENT);
         }
         if (affixProvider.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
             parser.addMatcher(PermilleMatcher.getInstance(symbols));
-            // causes number to be always scaled by 1000:
-            parser.addMatcher(FlagHandler.PERMILLE);
         }
 
         ///////////////////////////////
@@ -252,10 +249,10 @@ public class NumberParserImpl {
                     || properties.getMaximumFractionDigits() != 0;
             parser.addMatcher(RequireDecimalSeparatorValidator.getInstance(patternHasDecimalSeparator));
         }
-        // NOTE: Don't look at magnitude multiplier here. That is performed when percent sign is seen.
-        if (properties.getMultiplier() != null) {
-            parser.addMatcher(
-                    new MultiplierParseHandler(RoundingUtils.multiplierFromProperties(properties)));
+        // The multiplier takes care of scaling percentages.
+        Multiplier multiplier = RoundingUtils.multiplierFromProperties(properties);
+        if (multiplier != null) {
+            parser.addMatcher(new MultiplierParseHandler(multiplier));
         }
 
         parser.freeze();

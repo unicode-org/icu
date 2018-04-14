@@ -80,16 +80,4 @@ UnicodeString RequireNumberValidator::toString() const {
 }
 
 
-FlagHandler::FlagHandler(result_flags_t flags)
-        : fFlags(flags) {}
-
-void FlagHandler::postProcess(ParsedNumber& result) const {
-    result.flags |= fFlags;
-}
-
-UnicodeString FlagHandler::toString() const {
-    return u"<Flags>";
-}
-
-
 #endif /* #if !UCONFIG_NO_FORMATTING */
