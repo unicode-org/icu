@@ -241,7 +241,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
         switch (operand) {
         case i:
-            return toLong();
+            // Invert the negative sign if necessary
+            return isNegative() ? -toLong() : toLong();
         case f:
             return toFractionLong(true);
         case t:
@@ -571,7 +572,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      * Returns a long approximating the internal BCD. A long can only represent the integral part of the
      * number.
      *
-     * @return A double representation of the internal BCD.
+     * @return A 64-bit integer representation of the internal BCD.
      */
     public long toLong() {
         long result = 0L;

@@ -245,7 +245,8 @@ double DecimalQuantity::getPluralOperand(PluralOperand operand) const {
 
     switch (operand) {
         case PLURAL_OPERAND_I:
-            return static_cast<double>(toLong());
+            // Invert the negative sign if necessary
+            return static_cast<double>(isNegative() ? -toLong() : toLong());
         case PLURAL_OPERAND_F:
             return static_cast<double>(toFractionLong(true));
         case PLURAL_OPERAND_T:

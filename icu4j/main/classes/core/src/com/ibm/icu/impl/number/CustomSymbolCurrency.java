@@ -49,10 +49,6 @@ public class CustomSymbolCurrency extends Currency {
 
     @Override
     public String getName(ULocale locale, int nameStyle, String pluralCount, boolean[] isChoiceFormat) {
-        if (nameStyle == PLURAL_LONG_NAME && subType.equals("XXX")) {
-            // Plural in absence of a currency should return the symbol
-            return symbol1;
-        }
         return super.getName(locale, nameStyle, pluralCount, isChoiceFormat);
     }
 
