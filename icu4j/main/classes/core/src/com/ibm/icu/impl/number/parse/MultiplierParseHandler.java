@@ -2,16 +2,16 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
-import com.ibm.icu.number.Multiplier;
+import com.ibm.icu.number.Scale;
 
 /**
- * Wraps a {@link Multiplier} for use in the number parsing pipeline.
+ * Wraps a {@link Scale} for use in the number parsing pipeline.
  */
 public class MultiplierParseHandler extends ValidationMatcher {
 
-    private final Multiplier multiplier;
+    private final Scale multiplier;
 
-    public MultiplierParseHandler(Multiplier multiplier) {
+    public MultiplierParseHandler(Scale multiplier) {
         this.multiplier = multiplier;
     }
 

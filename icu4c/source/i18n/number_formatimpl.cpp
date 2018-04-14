@@ -223,9 +223,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
     /////////////////////////////////////////////////////////////////////////////////////
 
-    // Multiplier (compatibility mode value).
-    if (macros.multiplier.isValid()) {
-        fMicros.helpers.multiplier.setAndChain(macros.multiplier, chain);
+    // Multiplier
+    if (macros.scale.isValid()) {
+        fMicros.helpers.multiplier.setAndChain(macros.scale, chain);
         chain = &fMicros.helpers.multiplier;
     }
 

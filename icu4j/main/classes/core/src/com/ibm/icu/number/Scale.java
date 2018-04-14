@@ -19,11 +19,11 @@ import com.ibm.icu.impl.number.RoundingUtils;
  * @provisional This API might change or be removed in a future release.
  * @see NumberFormatter
  */
-public class Multiplier {
+public class Scale {
 
-    private static final Multiplier DEFAULT = new Multiplier(0, null);
-    private static final Multiplier HUNDRED = new Multiplier(2, null);
-    private static final Multiplier THOUSAND = new Multiplier(3, null);
+    private static final Scale DEFAULT = new Scale(0, null);
+    private static final Scale HUNDRED = new Scale(2, null);
+    private static final Scale THOUSAND = new Scale(3, null);
 
     private static final BigDecimal BIG_DECIMAL_100 = BigDecimal.valueOf(100);
     private static final BigDecimal BIG_DECIMAL_1000 = BigDecimal.valueOf(1000);
@@ -33,17 +33,17 @@ public class Multiplier {
     final BigDecimal reciprocal;
     final MathContext mc;
 
-    private Multiplier(int magnitude, BigDecimal arbitrary) {
+    private Scale(int magnitude, BigDecimal arbitrary) {
         this(magnitude, arbitrary, RoundingUtils.DEFAULT_MATH_CONTEXT_34_DIGITS);
     }
 
-    private Multiplier(int magnitude, BigDecimal arbitrary, MathContext mc) {
+    private Scale(int magnitude, BigDecimal arbitrary, MathContext mc) {
         if (arbitrary != null) {
             // Attempt to convert the BigDecimal to a magnitude multiplier.
             arbitrary = arbitrary.stripTrailingZeros();
             if (arbitrary.precision() == 1 && arbitrary.unscaledValue().equals(BigInteger.ONE)) {
                 // Success!
-                magnitude = -arbitrary.scale();
+                magnitude -= arbitrary.scale();
                 arbitrary = null;
             }
         }
@@ -68,7 +68,7 @@ public class Multiplier {
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
-    public static Multiplier none() {
+    public static Scale none() {
         return DEFAULT;
     }
 
@@ -85,7 +85,7 @@ public class Multiplier {
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
-    public static Multiplier powerOfTen(int power) {
+    public static Scale powerOfTen(int power) {
         if (power == 0) {
             return DEFAULT;
         } else if (power == 2) {
@@ -93,7 +93,7 @@ public class Multiplier {
         } else if (power == 3) {
             return THOUSAND;
         } else {
-            return new Multiplier(power, null);
+            return new Scale(power, null);
         }
     }
 
@@ -107,7 +107,7 @@ public class Multiplier {
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
-    public static Multiplier arbitrary(BigDecimal multiplicand) {
+    public static Scale byBigDecimal(BigDecimal multiplicand) {
         if (multiplicand.compareTo(BigDecimal.ONE) == 0) {
             return DEFAULT;
         } else if (multiplicand.compareTo(BIG_DECIMAL_100) == 0) {
@@ -115,7 +115,7 @@ public class Multiplier {
         } else if (multiplicand.compareTo(BIG_DECIMAL_1000) == 0) {
             return THOUSAND;
         } else {
-            return new Multiplier(0, multiplicand);
+            return new Scale(0, multiplicand);
         }
     }
 
@@ -129,7 +129,7 @@ public class Multiplier {
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
      */
-    public static Multiplier arbitrary(double multiplicand) {
+    public static Scale byDouble(double multiplicand) {
         if (multiplicand == 1) {
             return DEFAULT;
         } else if (multiplicand == 100.0) {
@@ -137,8 +137,20 @@ public class Multiplier {
         } else if (multiplicand == 1000.0) {
             return THOUSAND;
         } else {
-            return new Multiplier(0, BigDecimal.valueOf(multiplicand));
+            return new Scale(0, BigDecimal.valueOf(multiplicand));
         }
+    }
+
+    /**
+     * Multiply a number by both a power of ten and by an arbitrary double value before formatting.
+     *
+     * @return A Multiplier for passing to the setter in NumberFormatter.
+     * @draft ICU 62
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberFormatter
+     */
+    public static Scale byDoubleAndPowerOfTen(double multiplicand, int power) {
+        return new Scale(power, BigDecimal.valueOf(multiplicand));
     }
 
     /**
@@ -153,12 +165,12 @@ public class Multiplier {
      * @deprecated ICU 62 This API is ICU internal only.
      */
     @Deprecated
-    public Multiplier withMathContext(MathContext mc) {
+    public Scale withMathContext(MathContext mc) {
         // TODO: Make this public?
         if (this.mc.equals(mc)) {
             return this;
         }
-        return new Multiplier(magnitude, arbitrary, mc);
+        return new Scale(magnitude, arbitrary, mc);
     }
 
     /**

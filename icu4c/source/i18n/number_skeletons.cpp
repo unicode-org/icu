@@ -85,7 +85,7 @@ void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
     b.add(u"currency", STEM_CURRENCY, status);
     b.add(u"integer-width", STEM_INTEGER_WIDTH, status);
     b.add(u"numbering-system", STEM_NUMBERING_SYSTEM, status);
-    b.add(u"multiply", STEM_MULTIPLY, status);
+    b.add(u"scale", STEM_SCALE, status);
     if (U_FAILURE(status)) { return; }
 
     // Build the CharsTrie
@@ -444,7 +444,7 @@ MacroProps skeleton::parseSkeleton(const UnicodeString& skeletonString, UErrorCo
                 case STATE_CURRENCY_UNIT:
                 case STATE_INTEGER_WIDTH:
                 case STATE_NUMBERING_SYSTEM:
-                case STATE_MULTIPLY:
+                case STATE_SCALE:
                     // segment.setLength(U16_LENGTH(cp)); // for error message
                     // throw new SkeletonSyntaxException("Stem requires an option", segment);
                     status = U_NUMBER_SKELETON_SYNTAX_ERROR;
@@ -594,9 +594,9 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
         CHECK_NULL(seen, symbols, status);
             return STATE_NUMBERING_SYSTEM;
 
-        case STEM_MULTIPLY:
-        CHECK_NULL(seen, multiplier, status);
-            return STATE_MULTIPLY;
+        case STEM_SCALE:
+        CHECK_NULL(seen, scale, status);
+            return STATE_SCALE;
 
         default:
             U_ASSERT(false);
@@ -627,8 +627,8 @@ ParseState skeleton::parseOption(ParseState stem, const StringSegment& segment, 
         case STATE_NUMBERING_SYSTEM:
             blueprint_helpers::parseNumberingSystemOption(segment, macros, status);
             return STATE_NULL;
-        case STATE_MULTIPLY:
-            blueprint_helpers::parseMultiplierOption(segment, macros, status);
+        case STATE_SCALE:
+            blueprint_helpers::parseScaleOption(segment, macros, status);
             return STATE_NULL;
         default:
             break;
@@ -721,7 +721,7 @@ void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString&
         sb.append(u' ');
     }
     if (U_FAILURE(status)) { return; }
-    if (GeneratorHelpers::multiplier(macros, sb, status)) {
+    if (GeneratorHelpers::scale(macros, sb, status)) {
         sb.append(u' ');
     }
     if (U_FAILURE(status)) { return; }
@@ -1184,7 +1184,7 @@ void blueprint_helpers::generateNumberingSystemOption(const NumberingSystem& ns,
     sb.append(UnicodeString(ns.getName(), -1, US_INV));
 }
 
-void blueprint_helpers::parseMultiplierOption(const StringSegment& segment, MacroProps& macros,
+void blueprint_helpers::parseScaleOption(const StringSegment& segment, MacroProps& macros,
                                               UErrorCode& status) {
     // Need to do char <-> UChar conversion...
     CharString buffer;
@@ -1199,11 +1199,11 @@ void blueprint_helpers::parseMultiplierOption(const StringSegment& segment, Macr
     }
 
     // NOTE: The constructor will optimize the decnum for us if possible.
-    macros.multiplier = {0, decnum.orphan()};
+    macros.scale = {0, decnum.orphan()};
 }
 
 void
-blueprint_helpers::generateMultiplierOption(int32_t magnitude, const DecNum* arbitrary, UnicodeString& sb,
+blueprint_helpers::generateScaleOption(int32_t magnitude, const DecNum* arbitrary, UnicodeString& sb,
                                             UErrorCode& status) {
     // Utilize DecimalQuantity/double_conversion to format this for us.
     DecimalQuantity dq;
@@ -1418,14 +1418,14 @@ bool GeneratorHelpers::decimal(const MacroProps& macros, UnicodeString& sb, UErr
     return true;
 }
 
-bool GeneratorHelpers::multiplier(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
-    if (!macros.multiplier.isValid()) {
+bool GeneratorHelpers::scale(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    if (!macros.scale.isValid()) {
         return false; // Default or Bogus
     }
-    sb.append(u"multiply/", -1);
-    blueprint_helpers::generateMultiplierOption(
-            macros.multiplier.fMagnitude,
-            macros.multiplier.fArbitrary,
+    sb.append(u"scale/", -1);
+    blueprint_helpers::generateScaleOption(
+            macros.scale.fMagnitude,
+            macros.scale.fArbitrary,
             sb,
             status);
     return true;

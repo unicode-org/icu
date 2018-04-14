@@ -298,7 +298,7 @@ final class NumberPropertyMapper {
         // MULTIPLIERS //
         /////////////////
 
-        macros.multiplier = RoundingUtils.multiplierFromProperties(properties);
+        macros.scale = RoundingUtils.scaleFromProperties(properties);
 
         //////////////////////
         // PROPERTY EXPORTS //

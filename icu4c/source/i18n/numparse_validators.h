@@ -86,14 +86,14 @@ class MultiplierParseHandler : public ValidationMatcher, public UMemory {
   public:
     MultiplierParseHandler() = default;  // leaves instance in valid but undefined state
 
-    MultiplierParseHandler(::icu::number::Multiplier multiplier);
+    MultiplierParseHandler(::icu::number::Scale multiplier);
 
     void postProcess(ParsedNumber& result) const U_OVERRIDE;
 
     UnicodeString toString() const U_OVERRIDE;
 
   private:
-    ::icu::number::Multiplier fMultiplier;
+    ::icu::number::Scale fMultiplier;
 };
 
 

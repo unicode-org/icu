@@ -2,16 +2,16 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
-import com.ibm.icu.number.Multiplier;
+import com.ibm.icu.number.Scale;
 
 /**
- * Wraps a {@link Multiplier} for use in the number formatting pipeline.
+ * Wraps a {@link Scale} for use in the number formatting pipeline.
  */
 public class MultiplierFormatHandler implements MicroPropsGenerator {
-    final Multiplier multiplier;
+    final Scale multiplier;
     final MicroPropsGenerator parent;
 
-    public MultiplierFormatHandler(Multiplier multiplier, MicroPropsGenerator parent) {
+    public MultiplierFormatHandler(Scale multiplier, MicroPropsGenerator parent) {
         this.multiplier = multiplier;
         this.parent = parent;
     }

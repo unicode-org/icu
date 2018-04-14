@@ -234,16 +234,16 @@ Derived NumberFormatterSettings<Derived>::decimal(const UNumberDecimalSeparatorD
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::multiplier(const Multiplier& multiplier) const& {
+Derived NumberFormatterSettings<Derived>::scale(const Scale& scale) const& {
     Derived copy(*this);
-    copy.fMacros.multiplier = multiplier;
+    copy.fMacros.scale = scale;
     return copy;
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::multiplier(const Multiplier& multiplier)&& {
+Derived NumberFormatterSettings<Derived>::scale(const Scale& scale)&& {
     Derived move(std::move(*this));
-    move.fMacros.multiplier = multiplier;
+    move.fMacros.scale = scale;
     return move;
 }
 

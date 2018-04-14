@@ -970,31 +970,31 @@ class U_I18N_API IntegerWidth : public UMemory {
  * A class that defines a quantity by which a number should be multiplied when formatting.
  *
  * <p>
- * To create a Multiplier, use one of the factory methods.
+ * To create a Scale, use one of the factory methods.
  *
  * @draft ICU 62
  */
-class U_I18N_API Multiplier : public UMemory {
+class U_I18N_API Scale : public UMemory {
   public:
     /**
      * Do not change the value of numbers when formatting or parsing.
      *
-     * @return A Multiplier to prevent any multiplication.
+     * @return A Scale to prevent any multiplication.
      * @draft ICU 62
      */
-    static Multiplier none();
+    static Scale none();
 
     /**
-     * Multiply numbers by 100 before formatting. Useful for combining with a percent unit:
+     * Multiply numbers by a power of ten before formatting. Useful for combining with a percent unit:
      *
      * <pre>
-     * NumberFormatter::with().unit(NoUnit::percent()).multiplier(Multiplier::powerOfTen(2))
+     * NumberFormatter::with().unit(NoUnit::percent()).multiplier(Scale::powerOfTen(2))
      * </pre>
      *
-     * @return A Multiplier for passing to the setter in NumberFormatter.
+     * @return A Scale for passing to the setter in NumberFormatter.
      * @draft ICU 62
      */
-    static Multiplier powerOfTen(int32_t power);
+    static Scale powerOfTen(int32_t power);
 
     /**
      * Multiply numbers by an arbitrary value before formatting. Useful for unit conversions.
@@ -1005,50 +1005,58 @@ class U_I18N_API Multiplier : public UMemory {
      *
      * Also see the version of this method that takes a double.
      *
-     * @return A Multiplier for passing to the setter in NumberFormatter.
+     * @return A Scale for passing to the setter in NumberFormatter.
      * @draft ICU 62
      */
-    static Multiplier arbitraryDecimal(StringPiece multiplicand);
+    static Scale byDecimal(StringPiece multiplicand);
 
     /**
      * Multiply numbers by an arbitrary value before formatting. Useful for unit conversions.
      *
      * This method takes a double; also see the version of this method that takes an exact decimal.
      *
-     * @return A Multiplier for passing to the setter in NumberFormatter.
+     * @return A Scale for passing to the setter in NumberFormatter.
      * @draft ICU 62
      */
-    static Multiplier arbitraryDouble(double multiplicand);
+    static Scale byDouble(double multiplicand);
+
+    /**
+     * Multiply a number by both a power of ten and by an arbitrary double value.
+     *
+     * @return A Scale for passing to the setter in NumberFormatter.
+     * @draft ICU 62
+     */
+    static Scale byDoubleAndPowerOfTen(double multiplicand, int32_t power);
 
     // We need a custom destructor for the DecNum, which means we need to declare
     // the copy/move constructor/assignment quartet.
 
     /** @draft ICU 62 */
-    Multiplier(const Multiplier& other);
+    Scale(const Scale& other);
 
     /** @draft ICU 62 */
-    Multiplier& operator=(const Multiplier& other);
+    Scale& operator=(const Scale& other);
 
     /** @draft ICU 62 */
-    Multiplier(Multiplier&& src) U_NOEXCEPT;
+    Scale(Scale&& src) U_NOEXCEPT;
 
     /** @draft ICU 62 */
-    Multiplier& operator=(Multiplier&& src) U_NOEXCEPT;
+    Scale& operator=(Scale&& src) U_NOEXCEPT;
 
     /** @draft ICU 62 */
-    ~Multiplier();
+    ~Scale();
 
     /** @internal */
-    Multiplier(int32_t magnitude, impl::DecNum* arbitraryToAdopt);
+    Scale(int32_t magnitude, impl::DecNum* arbitraryToAdopt);
 
   private:
     int32_t fMagnitude;
     impl::DecNum* fArbitrary;
     UErrorCode fError;
 
-    Multiplier(UErrorCode error) : fMagnitude(0), fArbitrary(nullptr), fError(error) {}
+    Scale(UErrorCode error) : fMagnitude(0), fArbitrary(nullptr), fError(error) {}
 
-    Multiplier() : fMagnitude(0), fArbitrary(nullptr), fError(U_ZERO_ERROR) {}
+    Scale() : fMagnitude(0), fArbitrary(nullptr), fError(U_ZERO_ERROR) {}
 
     bool isValid() const {
         return fMagnitude != 0 || fArbitrary != nullptr;
@@ -1364,7 +1372,7 @@ struct U_I18N_API MacroProps : public UMemory {
     UNumberDecimalSeparatorDisplay decimal = UNUM_DECIMAL_SEPARATOR_COUNT;
 
     /** @internal */
-    Multiplier multiplier;  // = Multiplier();  (benign value)
+    Scale scale;  // = Scale();  (benign value)
 
     /** @internal */
     AffixPatternProvider* affixProvider = nullptr;  // no ownership
@@ -1390,7 +1398,7 @@ struct U_I18N_API MacroProps : public UMemory {
     bool copyErrorTo(UErrorCode &status) const {
         return notation.copyErrorTo(status) || rounder.copyErrorTo(status) ||
                padder.copyErrorTo(status) || integerWidth.copyErrorTo(status) ||
-               symbols.copyErrorTo(status) || multiplier.copyErrorTo(status);
+               symbols.copyErrorTo(status) || scale.copyErrorTo(status);
     }
 };
 
@@ -1926,8 +1934,8 @@ class U_I18N_API NumberFormatterSettings {
     Derived decimal(const UNumberDecimalSeparatorDisplay &style) &&;
 
     /**
-     * Sets a multiplier to be used to scale the number by an arbitrary amount before formatting. Most
-     * common values:
+     * Sets a scale (multiplier) to be used to scale the number by an arbitrary amount before formatting.
+     * Most common values:
      *
      * <ul>
      * <li>Multiply by 100: useful for percentages.
@@ -1935,32 +1943,32 @@ class U_I18N_API NumberFormatterSettings {
      * </ul>
      *
      * <p>
-     * Pass an element from a {@link Multiplier} factory method to this setter. For example:
+     * Pass an element from a {@link Scale} factory method to this setter. For example:
      *
      * <pre>
-     * NumberFormatter::with().multiplier(Multiplier::powerOfTen(2))
+     * NumberFormatter::with().scale(Scale::powerOfTen(2))
      * </pre>
      *
      * <p>
      * The default is to not apply any multiplier.
      *
-     * @param style
-     *            The decimal separator display strategy to use when rendering numbers.
+     * @param scale
+     *            The scale to apply when rendering numbers.
      * @return The fluent chain
      * @draft ICU 60
      */
-    Derived multiplier(const Multiplier &style) const &;
+    Derived scale(const Scale &scale) const &;
 
     /**
-     * Overload of multiplier() for use on an rvalue reference.
+     * Overload of scale() for use on an rvalue reference.
      *
-     * @param style
-     *            The multiplier separator display strategy to use when rendering numbers.
+     * @param scale
+     *            The scale to apply when rendering numbers.
      * @return The fluent chain.
-     * @see #multiplier
+     * @see #scale
      * @draft ICU 62
      */
-    Derived multiplier(const Multiplier &style) &&;
+    Derived scale(const Scale &scale) &&;
 
 #ifndef U_HIDE_INTERNAL_API
 

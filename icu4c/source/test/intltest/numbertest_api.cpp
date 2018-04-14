@@ -78,7 +78,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         //TESTCASE_AUTO(symbolsOverride);
         TESTCASE_AUTO(sign);
         TESTCASE_AUTO(decimal);
-        TESTCASE_AUTO(multiplier);
+        TESTCASE_AUTO(scale);
         TESTCASE_AUTO(locale);
         TESTCASE_AUTO(formatTypes);
         TESTCASE_AUTO(errors);
@@ -1911,11 +1911,11 @@ void NumberFormatterApiTest::decimal() {
             u"0.");
 }
 
-void NumberFormatterApiTest::multiplier() {
+void NumberFormatterApiTest::scale() {
     assertFormatDescending(
             u"Multiplier None",
-            u"multiply/1",
-            NumberFormatter::with().multiplier(Multiplier::none()),
+            u"scale/1",
+            NumberFormatter::with().scale(Scale::none()),
             Locale::getEnglish(),
             u"87,650",
             u"8,765",
@@ -1929,8 +1929,8 @@ void NumberFormatterApiTest::multiplier() {
 
     assertFormatDescending(
             u"Multiplier Power of Ten",
-            u"multiply/1000000",
-            NumberFormatter::with().multiplier(Multiplier::powerOfTen(6)),
+            u"scale/1000000",
+            NumberFormatter::with().scale(Scale::powerOfTen(6)),
             Locale::getEnglish(),
             u"87,650,000,000",
             u"8,765,000,000",
@@ -1944,8 +1944,8 @@ void NumberFormatterApiTest::multiplier() {
 
     assertFormatDescending(
             u"Multiplier Arbitrary Double",
-            u"multiply/5.2",
-            NumberFormatter::with().multiplier(Multiplier::arbitraryDouble(5.2)),
+            u"scale/5.2",
+            NumberFormatter::with().scale(Scale::byDouble(5.2)),
             Locale::getEnglish(),
             u"455,780",
             u"45,578",
@@ -1959,8 +1959,8 @@ void NumberFormatterApiTest::multiplier() {
 
     assertFormatDescending(
             u"Multiplier Arbitrary BigDecimal",
-            u"multiply/5.2",
-            NumberFormatter::with().multiplier(Multiplier::arbitraryDecimal({"5.2", -1})),
+            u"scale/5.2",
+            NumberFormatter::with().scale(Scale::byDecimal({"5.2", -1})),
             Locale::getEnglish(),
             u"455,780",
             u"45,578",
@@ -1973,9 +1973,24 @@ void NumberFormatterApiTest::multiplier() {
             u"0");
 
     assertFormatDescending(
+            u"Multiplier Arbitrary Double And Power Of Ten",
+            u"scale/5200",
+            NumberFormatter::with().scale(Scale::byDoubleAndPowerOfTen(5.2, 3)),
+            Locale::getEnglish(),
+            u"455,780,000",
+            u"45,578,000",
+            u"4,557,800",
+            u"455,780",
+            u"45,578",
+            u"4,557.8",
+            u"455.78",
+            u"45.578",
+            u"0");
+
+    assertFormatDescending(
             u"Multiplier Zero",
-            u"multiply/0",
-            NumberFormatter::with().multiplier(Multiplier::arbitraryDouble(0)),
+            u"scale/0",
+            NumberFormatter::with().scale(Scale::byDouble(0)),
             Locale::getEnglish(),
             u"0",
             u"0",
@@ -1989,27 +2004,35 @@ void NumberFormatterApiTest::multiplier() {
 
     assertFormatSingle(
             u"Multiplier Skeleton Scientific Notation and Percent",
-            u"percent multiply/1E2",
-            NumberFormatter::with().unit(NoUnit::percent()).multiplier(Multiplier::powerOfTen(2)),
+            u"percent scale/1E2",
+            NumberFormatter::with().unit(NoUnit::percent()).scale(Scale::powerOfTen(2)),
             Locale::getEnglish(),
             0.5,
             u"50%");
 
     assertFormatSingle(
             u"Negative Multiplier",
-            u"multiply/-5.2",
-            NumberFormatter::with().multiplier(Multiplier::arbitraryDouble(-5.2)),
+            u"scale/-5.2",
+            NumberFormatter::with().scale(Scale::byDouble(-5.2)),
             Locale::getEnglish(),
             2,
             u"-10.4");
 
     assertFormatSingle(
             u"Negative One Multiplier",
-            u"multiply/-1",
-            NumberFormatter::with().multiplier(Multiplier::arbitraryDouble(-1)),
+            u"scale/-1",
+            NumberFormatter::with().scale(Scale::byDouble(-1)),
             Locale::getEnglish(),
             444444,
             u"-444,444");
+
+    assertFormatSingle(
+            u"Two-Type Multiplier with Overlap",
+            u"scale/10000",
+            NumberFormatter::with().scale(Scale::byDoubleAndPowerOfTen(100, 2)),
+            Locale::getEnglish(),
+            2,
+            u"20,000");
 }
 
 void NumberFormatterApiTest::locale() {

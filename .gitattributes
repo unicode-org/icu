@@ -5984,7 +5984,6 @@ icu4j/main/classes/core/src/com/ibm/icu/number/FormattedNumber.java svneol=nativ
 icu4j/main/classes/core/src/com/ibm/icu/number/FractionRounder.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/number/IntegerWidth.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/number/LocalizedNumberFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/number/Multiplier.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/number/Notation.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/number/NumberFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/number/NumberFormatterImpl.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -5992,6 +5991,7 @@ icu4j/main/classes/core/src/com/ibm/icu/number/NumberFormatterSettings.java svne
 icu4j/main/classes/core/src/com/ibm/icu/number/NumberPropertyMapper.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/number/NumberSkeletonImpl.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/number/Rounder.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/number/Scale.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/number/ScientificNotation.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/number/SimpleNotation.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/number/SkeletonSyntaxException.java svneol=native#text/plain%3Bcharset%3Dutf-8

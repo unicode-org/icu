@@ -19,25 +19,29 @@ namespace impl {
  */
 class MultiplierFormatHandler : public MicroPropsGenerator, public UMemory {
   public:
-    void setAndChain(const Multiplier& multiplier, const MicroPropsGenerator* parent);
+    void setAndChain(const Scale& multiplier, const MicroPropsGenerator* parent);
 
     void processQuantity(DecimalQuantity& quantity, MicroProps& micros,
                          UErrorCode& status) const U_OVERRIDE;
 
   private:
-    Multiplier multiplier;
+    Scale multiplier;
     const MicroPropsGenerator *parent;
 };
 
 
-/** Gets a Multiplier from a DecimalFormatProperties. In Java, defined in RoundingUtils.java */
-static inline Multiplier multiplierFromProperties(const DecimalFormatProperties& properties) {
-    if (properties.magnitudeMultiplier != 0) {
-        return Multiplier::powerOfTen(properties.magnitudeMultiplier);
-    } else if (properties.multiplier != 1) {
-        return Multiplier::arbitraryDouble(properties.multiplier);
+/** Gets a Scale from a DecimalFormatProperties. In Java, defined in RoundingUtils.java */
+static inline Scale scaleFromProperties(const DecimalFormatProperties& properties) {
+    int32_t magnitudeMultiplier = properties.magnitudeMultiplier + properties.scaleMultiplier;
+    int32_t arbitraryMultiplier = properties.multiplier;
+    if (magnitudeMultiplier != 0 && arbitraryMultiplier != 1) {
+        return Scale::byDoubleAndPowerOfTen(arbitraryMultiplier, magnitudeMultiplier);
+    } else if (magnitudeMultiplier != 0) {
+        return Scale::powerOfTen(magnitudeMultiplier);
+    } else if (arbitraryMultiplier != 1) {
+        return Scale::byDouble(arbitraryMultiplier);
     } else {
-        return Multiplier::none();
+        return Scale::none();
     }
 }
 

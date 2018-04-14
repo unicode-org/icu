@@ -57,7 +57,7 @@ class NumberSkeletonImpl {
         STATE_CURRENCY_UNIT,
         STATE_INTEGER_WIDTH,
         STATE_NUMBERING_SYSTEM,
-        STATE_MULTIPLY,
+        STATE_SCALE,
     }
 
     /**
@@ -109,7 +109,7 @@ class NumberSkeletonImpl {
         STEM_CURRENCY,
         STEM_INTEGER_WIDTH,
         STEM_NUMBERING_SYSTEM,
-        STEM_MULTIPLY,
+        STEM_SCALE,
     };
 
     /** For mapping from ordinal back to StemEnum in Java. */
@@ -162,7 +162,7 @@ class NumberSkeletonImpl {
         b.add("currency", StemEnum.STEM_CURRENCY.ordinal());
         b.add("integer-width", StemEnum.STEM_INTEGER_WIDTH.ordinal());
         b.add("numbering-system", StemEnum.STEM_NUMBERING_SYSTEM.ordinal());
-        b.add("multiply", StemEnum.STEM_MULTIPLY.ordinal());
+        b.add("scale", StemEnum.STEM_SCALE.ordinal());
 
         // Build the CharsTrie
         // TODO: Use SLOW or FAST here?
@@ -514,7 +514,7 @@ class NumberSkeletonImpl {
                 case STATE_CURRENCY_UNIT:
                 case STATE_INTEGER_WIDTH:
                 case STATE_NUMBERING_SYSTEM:
-                case STATE_MULTIPLY:
+                case STATE_SCALE:
                     segment.setLength(Character.charCount(cp)); // for error message
                     throw new SkeletonSyntaxException("Stem requires an option", segment);
                 default:
@@ -662,9 +662,9 @@ class NumberSkeletonImpl {
             checkNull(macros.symbols, segment);
             return ParseState.STATE_NUMBERING_SYSTEM;
 
-        case STEM_MULTIPLY:
-            checkNull(macros.multiplier, segment);
-            return ParseState.STATE_MULTIPLY;
+        case STEM_SCALE:
+            checkNull(macros.scale, segment);
+            return ParseState.STATE_SCALE;
 
         default:
             throw new AssertionError();
@@ -700,8 +700,8 @@ class NumberSkeletonImpl {
         case STATE_NUMBERING_SYSTEM:
             BlueprintHelpers.parseNumberingSystemOption(segment, macros);
             return ParseState.STATE_NULL;
-        case STATE_MULTIPLY:
-            BlueprintHelpers.parseMultiplierOption(segment, macros);
+        case STATE_SCALE:
+            BlueprintHelpers.parseScaleOption(segment, macros);
             return ParseState.STATE_NULL;
         default:
             break;
@@ -788,7 +788,7 @@ class NumberSkeletonImpl {
         if (macros.decimal != null && GeneratorHelpers.decimal(macros, sb)) {
             sb.append(' ');
         }
-        if (macros.multiplier != null && GeneratorHelpers.multiplier(macros, sb)) {
+        if (macros.scale != null && GeneratorHelpers.scale(macros, sb)) {
             sb.append(' ');
         }
 
@@ -1168,25 +1168,25 @@ class NumberSkeletonImpl {
             sb.append(ns.getName());
         }
 
-        private static void parseMultiplierOption(StringSegment segment, MacroProps macros) {
+        private static void parseScaleOption(StringSegment segment, MacroProps macros) {
             // Call segment.subSequence() because segment.toString() doesn't create a clean string.
             String str = segment.subSequence(0, segment.length()).toString();
             BigDecimal bd;
             try {
                 bd = new BigDecimal(str);
             } catch (NumberFormatException e) {
-                throw new SkeletonSyntaxException("Invalid multiplier", segment, e);
+                throw new SkeletonSyntaxException("Invalid scale", segment, e);
             }
-            // NOTE: If bd is a power of ten, the Multiplier API optimizes it for us.
-            macros.multiplier = Multiplier.arbitrary(bd);
+            // NOTE: If bd is a power of ten, the Scale API optimizes it for us.
+            macros.scale = Scale.byBigDecimal(bd);
         }
 
-        private static void generateMultiplierOption(Multiplier multiplier, StringBuilder sb) {
-            BigDecimal bd = multiplier.arbitrary;
+        private static void generateScaleOption(Scale scale, StringBuilder sb) {
+            BigDecimal bd = scale.arbitrary;
             if (bd == null) {
                 bd = BigDecimal.ONE;
             }
-            bd = bd.scaleByPowerOfTen(multiplier.magnitude);
+            bd = bd.scaleByPowerOfTen(scale.magnitude);
             sb.append(bd.toPlainString());
         }
     }
@@ -1380,12 +1380,12 @@ class NumberSkeletonImpl {
             return true;
         }
 
-        private static boolean multiplier(MacroProps macros, StringBuilder sb) {
-            if (!macros.multiplier.isValid()) {
+        private static boolean scale(MacroProps macros, StringBuilder sb) {
+            if (!macros.scale.isValid()) {
                 return false; // Default value
             }
-            sb.append("multiply/");
-            BlueprintHelpers.generateMultiplierOption(macros.multiplier, sb);
+            sb.append("scale/");
+            BlueprintHelpers.generateScaleOption(macros.scale, sb);
             return true;
         }
 
