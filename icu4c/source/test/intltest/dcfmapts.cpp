@@ -367,6 +367,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
 // ======= Test applyPattern()
 
     logln((UnicodeString)"Testing applyPattern()");
+    pat = DecimalFormat(status); // reset
 
     UnicodeString p1("#,##0.0#;(#,##0.0#)");
     logln((UnicodeString)"Applying pattern " + p1);
@@ -378,9 +379,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     UnicodeString s2;
     s2 = pat.toPattern(s2);
     logln((UnicodeString)"Extracted pattern is " + s2);
-    if(s2 != p1) {
-        errln((UnicodeString)"ERROR: toPattern() result did not match pattern applied");
-    }
+    assertEquals("toPattern() result did not match pattern applied", p1, s2);
 
     if(pat.getSecondaryGroupingSize() != 0) {
         errln("FAIL: Secondary Grouping Size should be 0, not %d\n", pat.getSecondaryGroupingSize());
@@ -400,9 +399,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     UnicodeString s3;
     s3 = pat.toLocalizedPattern(s3);
     logln((UnicodeString)"Extracted pattern is " + s3);
-    if(s3 != p2) {
-        errln((UnicodeString)"ERROR: toLocalizedPattern() result did not match pattern applied");
-    }
+    assertEquals("toLocalizedPattern() result did not match pattern applied", p2, s3);
 
     status = U_ZERO_ERROR;
     UParseError pe;
@@ -413,9 +410,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     UnicodeString s4;
     s4 = pat.toLocalizedPattern(s3);
     logln((UnicodeString)"Extracted pattern is " + s4);
-    if(s4 != p2) {
-        errln((UnicodeString)"ERROR: toLocalizedPattern(with ParseErr) result did not match pattern applied");
-    }
+    assertEquals("toLocalizedPattern(with ParseErr) result did not match pattern applied", p2, s4);
 
     if(pat.getSecondaryGroupingSize() != 2) {
         errln("FAIL: Secondary Grouping Size should be 2, not %d\n", pat.getSecondaryGroupingSize());
@@ -519,14 +514,14 @@ void IntlTestDecimalFormatAPI::testRounding(/*char *par*/)
         //for +2.55 with RoundingIncrement=1.0
         pat.setRoundingIncrement(1.0);
         pat.format(Roundingnumber, resultStr);
-        message= (UnicodeString)"Round() failed:  round(" + (double)Roundingnumber + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
+        message= (UnicodeString)"round(" + (double)Roundingnumber + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
         verify(message, resultStr, result[i++]);
         message.remove();
         resultStr.remove();
 
         //for -2.55 with RoundingIncrement=1.0
         pat.format(Roundingnumber1, resultStr);
-        message= (UnicodeString)"Round() failed:  round(" + (double)Roundingnumber1 + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
+        message= (UnicodeString)"round(" + (double)Roundingnumber1 + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
         verify(message, resultStr, result[i++]);
         message.remove();
         resultStr.remove();
@@ -614,7 +609,14 @@ void IntlTestDecimalFormatAPI::TestScale()
         if ( i > 2 ) {
             pat.applyPattern(percentPattern,status);
         }
-        pat.setAttribute(UNUM_SCALE,testData[i].inputScale,status);
+        // Test both the attribute and the setter
+        if (i % 2 == 0) {
+            pat.setAttribute(UNUM_SCALE, testData[i].inputScale,status);
+            assertEquals("", testData[i].inputScale, pat.getScale());
+        } else {
+            pat.setScale(testData[i].inputScale);
+            assertEquals("", testData[i].inputScale, pat.getAttribute(UNUM_SCALE, status));
+        }
         pat.format(testData[i].inputValue, resultStr);
         message = UnicodeString("Unexpected output for ") + testData[i].inputValue + UnicodeString(" and scale ") +
                   testData[i].inputScale + UnicodeString(". Got: ");
