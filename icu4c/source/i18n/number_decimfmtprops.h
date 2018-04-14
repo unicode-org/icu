@@ -128,6 +128,7 @@ struct U_I18N_API DecimalFormatProperties {
     UnicodeString positiveSuffixPattern;
     double roundingIncrement;
     NullableValue<RoundingMode> roundingMode;
+    int32_t scaleMultiplier;
     int32_t secondaryGroupingSize;
     bool signAlwaysShown;
 

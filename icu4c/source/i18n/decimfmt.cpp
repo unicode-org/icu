@@ -166,6 +166,10 @@ DecimalFormat::setAttribute(UNumberFormatAttribute attr, int32_t newValue, UErro
             setMultiplier(newValue);
             break;
 
+        case UNUM_SCALE:
+            setScale(newValue);
+            break;
+
         case UNUM_GROUPING_SIZE:
             setGroupingSize(newValue);
             break;
@@ -221,7 +225,6 @@ DecimalFormat::setAttribute(UNumberFormatAttribute attr, int32_t newValue, UErro
             status = U_UNSUPPORTED_ERROR;
             break;
     }
-    // TODO: UNUM_SCALE?
     // TODO: UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS?
     return *this;
 }
@@ -273,6 +276,9 @@ int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& sta
         case UNUM_MULTIPLIER:
             return getMultiplier();
 
+        case UNUM_SCALE:
+            return getScale();
+
         case UNUM_GROUPING_SIZE:
             return getGroupingSize();
 
@@ -311,7 +317,6 @@ int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& sta
             break;
     }
     // TODO: UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS?
-    // TODO: UNUM_SCALE?
 
     return -1; /* undefined */
 }
@@ -654,6 +659,15 @@ void DecimalFormat::setMultiplier(int32_t multiplier) {
         fProperties->magnitudeMultiplier = 0;
         fProperties->multiplier = multiplier;
     }
+    refreshFormatterNoError();
+}
+
+int32_t DecimalFormat::getScale() const {
+    return fProperties->scaleMultiplier;
+}
+
+void DecimalFormat::setScale(int32_t newValue) {
+    fProperties->scaleMultiplier = newValue;
     refreshFormatterNoError();
 }
 
