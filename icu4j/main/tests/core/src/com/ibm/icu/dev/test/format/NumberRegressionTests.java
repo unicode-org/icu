@@ -38,6 +38,7 @@ import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -49,6 +50,7 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.VersionInfo;
@@ -410,9 +412,7 @@ public class NumberRegressionTests extends TestFmwk {
         logln("Long.MIN_VALUE : " + df.parse(str, new ParsePosition(0)).toString());
         df.setMultiplier(100);
         Number num = df.parse(str, new ParsePosition(0));
-        if (num.doubleValue() != -9.223372036854776E16) {
-            errln("Bug 4092561 test failed when multiplier is set to not 1.");
-        }
+        assertEquals("Bug 4092561 test failed when multiplier is set to not 1.", -9.223372036854776E16, num.doubleValue());
         Locale.setDefault(savedLocale);
     }
 
@@ -998,8 +998,12 @@ public class NumberRegressionTests extends TestFmwk {
      * 1) Make sure that all currency formats use the generic currency symbol.
      * 2) Make sure we get the same results using the generic symbol or a
      *    hard-coded one.
+     *
+     * ICU 62: DecimalFormatSymbols currency symbol has long been deprecated.
+     * In the absence of a user-specified currency, XXX is used instead.
      */
     @Test
+    @Ignore
     public void Test4122840()
     {
         Locale[] locales = NumberFormat.getAvailableLocales();
@@ -1555,10 +1559,13 @@ public class NumberRegressionTests extends TestFmwk {
                 String pat = df.toPattern();
                 DecimalFormatSymbols symb = new DecimalFormatSymbols(avail[i]);
                 DecimalFormat f2 = new DecimalFormat(pat, symb);
-                f2.setCurrency(df.getCurrency()); // Currency does not travel with the pattern string
+                if (df.getCurrency() != Currency.getInstance("XXX") && j == 1) {
+                    // Currency does not travel with the pattern string
+                    f2.setCurrency(df.getCurrency());
+                }
                 if (!df.equals(f2)) {
                     errln("FAIL: " + avail[i] + " #" + j + " -> \"" + pat +
-                          "\" -> \"" + f2.toPattern() + '"');
+                          "\" -> \"" + f2.toPattern() + "\" for case " + j);
                 }
 
                 // Test toLocalizedPattern/applyLocalizedPattern round trip

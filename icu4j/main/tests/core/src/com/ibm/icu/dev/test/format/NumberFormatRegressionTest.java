@@ -393,8 +393,8 @@ public class NumberFormatRegressionTest extends TestFmwk {
         ULocale locale = new ULocale("en");
         DecimalFormat nf = (DecimalFormat) NumberFormat.getInstance(locale, NumberFormat.PLURALCURRENCYSTYLE);
         assertEquals(
-            "Positive suffix should contain the single currency sign when no currency is set",
-            " \u00A4",
+            "Positive suffix should contain the localized display name for currency XXX",
+            " (unknown currency)",
             nf.getPositiveSuffix());
     }
 }
