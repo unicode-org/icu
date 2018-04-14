@@ -2838,6 +2838,7 @@ public class NumberFormatTest extends TestFmwk {
         // Grouping separators are not allowed in the pattern, but we can enable them via the API.
         DecimalFormat df = new DecimalFormat("###0.000E0");
         df.setGroupingUsed(true);
+        df.setGroupingSize(3);
         expect2(df, 123, "123.0E0");
         expect2(df, 1234, "1,234E0");
         expect2(df, 12340, "1.234E4");
@@ -5371,14 +5372,6 @@ public class NumberFormatTest extends TestFmwk {
         Number resultScientific = df.parse(expectedScientific);
         assertEquals("Should parse scientific to 130 in ccp",
                 130, resultScientific.longValue());
-    }
-
-    @Test
-    public void Test13442() {
-        DecimalFormat df = new DecimalFormat();
-        df.setGroupingUsed(false);
-        assertEquals("Grouping size should now be zero", 0, df.getGroupingSize());
-        assertEquals("Grouping should be off", false, df.isGroupingUsed());
     }
 
     @Test

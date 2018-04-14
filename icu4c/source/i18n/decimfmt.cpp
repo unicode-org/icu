@@ -308,14 +308,7 @@ int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& sta
 
 void DecimalFormat::setGroupingUsed(UBool enabled) {
     NumberFormat::setGroupingUsed(enabled); // to set field for compatibility
-    if (enabled) {
-        // Set to a reasonable default value
-        fProperties->groupingSize = 3;
-        fProperties->secondaryGroupingSize = -1;
-    } else {
-        fProperties->groupingSize = 0;
-        fProperties->secondaryGroupingSize = 0;
-    }
+    fProperties->groupingUsed = enabled;
     refreshFormatterNoError();
 }
 
@@ -346,7 +339,7 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern, const DecimalFormatSy
     refreshFormatter(status);
 }
 
-DecimalFormat::DecimalFormat(const DecimalFormat& source) {
+DecimalFormat::DecimalFormat(const DecimalFormat& source) : NumberFormat(source) {
     fProperties.adoptInstead(new DecimalFormatProperties(*source.fProperties));
     fExportedProperties.adoptInstead(new DecimalFormatProperties());
     fWarehouse.adoptInstead(new DecimalFormatWarehouse());
@@ -501,6 +494,7 @@ void DecimalFormat::parse(const UnicodeString& text, Formattable& output,
     // parseCurrency method (backwards compatibility)
     int32_t startIndex = parsePosition.getIndex();
     fParser->parse(text, startIndex, true, result, status);
+    // TODO: Do we need to check for fProperties->parseAllInput (UCONFIG_HAVE_PARSEALLINPUT) here?
     if (result.success()) {
         parsePosition.setIndex(result.charEnd);
         result.populateFormattable(output);
@@ -520,6 +514,7 @@ CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& text, ParsePos
     // parseCurrency method (backwards compatibility)
     int32_t startIndex = parsePosition.getIndex();
     fParserWithCurrency->parse(text, startIndex, true, result, status);
+    // TODO: Do we need to check for fProperties->parseAllInput (UCONFIG_HAVE_PARSEALLINPUT) here?
     if (result.success()) {
         parsePosition.setIndex(result.charEnd);
         Formattable formattable;
@@ -745,6 +740,9 @@ void DecimalFormat::setExponentSignAlwaysShown(UBool expSignAlways) {
 }
 
 int32_t DecimalFormat::getGroupingSize(void) const {
+    if (fProperties->groupingSize < 0) {
+        return 0;
+    }
     return fProperties->groupingSize;
 }
 
@@ -1038,6 +1036,8 @@ void DecimalFormat::refreshFormatter(UErrorCode& status) {
     NumberFormat::setMinimumIntegerDigits(fExportedProperties->minimumIntegerDigits);
     NumberFormat::setMaximumFractionDigits(fExportedProperties->maximumFractionDigits);
     NumberFormat::setMinimumFractionDigits(fExportedProperties->minimumFractionDigits);
+    // fProperties, not fExportedProperties, since this information comes from the pattern:
+    NumberFormat::setGroupingUsed(fProperties->groupingUsed);
 }
 
 void DecimalFormat::refreshFormatterNoError() {

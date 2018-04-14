@@ -1844,7 +1844,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized boolean isGroupingUsed() {
-    return properties.getGroupingSize() > 0 || properties.getSecondaryGroupingSize() > 0;
+    return properties.getGroupingUsed();
   }
 
   /**
@@ -1866,14 +1866,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized void setGroupingUsed(boolean enabled) {
-    if (enabled) {
-      // Set to a reasonable default value
-      properties.setGroupingSize(3);
-      properties.setSecondaryGroupingSize(-1);
-    } else {
-      properties.setGroupingSize(0);
-      properties.setSecondaryGroupingSize(0);
-    }
+    properties.setGroupingUsed(enabled);
     refreshFormatter();
   }
 
@@ -1885,6 +1878,9 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized int getGroupingSize() {
+    if (properties.getGroupingSize() < 0) {
+      return 0;
+    }
     return properties.getGroupingSize();
   }
 

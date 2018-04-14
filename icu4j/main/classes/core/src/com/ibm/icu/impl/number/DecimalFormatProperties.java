@@ -87,6 +87,7 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
     private transient boolean exponentSignAlwaysShown;
     private transient int formatWidth;
     private transient int groupingSize;
+    private transient boolean groupingUsed;
     private transient int magnitudeMultiplier;
     private transient MathContext mathContext; // ICU4J-only
     private transient int maximumFractionDigits;
@@ -158,6 +159,7 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
         exponentSignAlwaysShown = false;
         formatWidth = -1;
         groupingSize = -1;
+        groupingUsed = false;
         magnitudeMultiplier = 0;
         mathContext = null;
         maximumFractionDigits = -1;
@@ -203,6 +205,7 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
         exponentSignAlwaysShown = other.exponentSignAlwaysShown;
         formatWidth = other.formatWidth;
         groupingSize = other.groupingSize;
+        groupingUsed = other.groupingUsed;
         magnitudeMultiplier = other.magnitudeMultiplier;
         mathContext = other.mathContext;
         maximumFractionDigits = other.maximumFractionDigits;
@@ -249,6 +252,7 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
         eq = eq && _equalsHelper(exponentSignAlwaysShown, other.exponentSignAlwaysShown);
         eq = eq && _equalsHelper(formatWidth, other.formatWidth);
         eq = eq && _equalsHelper(groupingSize, other.groupingSize);
+        eq = eq && _equalsHelper(groupingUsed, other.groupingUsed);
         eq = eq && _equalsHelper(magnitudeMultiplier, other.magnitudeMultiplier);
         eq = eq && _equalsHelper(mathContext, other.mathContext);
         eq = eq && _equalsHelper(maximumFractionDigits, other.maximumFractionDigits);
@@ -311,6 +315,7 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
         hashCode ^= _hashCodeHelper(exponentSignAlwaysShown);
         hashCode ^= _hashCodeHelper(formatWidth);
         hashCode ^= _hashCodeHelper(groupingSize);
+        hashCode ^= _hashCodeHelper(groupingUsed);
         hashCode ^= _hashCodeHelper(magnitudeMultiplier);
         hashCode ^= _hashCodeHelper(mathContext);
         hashCode ^= _hashCodeHelper(maximumFractionDigits);
@@ -437,6 +442,10 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
 
     public int getGroupingSize() {
         return groupingSize;
+    }
+
+    public boolean getGroupingUsed() {
+        return groupingUsed;
     }
 
     public int getMagnitudeMultiplier() {
@@ -787,6 +796,18 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
      */
     public DecimalFormatProperties setGroupingSize(int groupingSize) {
         this.groupingSize = groupingSize;
+        return this;
+    }
+
+    /**
+     * Sets whether to enable grouping when formatting.
+     *
+     * @param groupingUsed
+     *            true to enable the display of grouping separators; false to disable.
+     * @return The property bag, for chaining.
+     */
+    public DecimalFormatProperties setGroupingUsed(boolean groupingUsed) {
+        this.groupingUsed = groupingUsed;
         return this;
     }
 

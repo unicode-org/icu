@@ -497,8 +497,10 @@ PatternParser::patternInfoToProperties(DecimalFormatProperties& properties, Pars
     auto grouping3 = static_cast<int16_t> ((positive.groupingSizes >> 32) & 0xffff);
     if (grouping2 != -1) {
         properties.groupingSize = grouping1;
+        properties.groupingUsed = true;
     } else {
         properties.groupingSize = -1;
+        properties.groupingUsed = false;
     }
     if (grouping3 != -1) {
         properties.secondaryGroupingSize = grouping2;
