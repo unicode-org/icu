@@ -34,12 +34,12 @@ U_CDECL_BEGIN
  * If so, then set a special (application-specific) value for the
  * lead surrogate.
  *
- * At runtime, use UCPTRIE_FAST_GET16_FROM_BMP() or
- * UCPTRIE_FAST_GET32_FROM_BMP() per code unit. If there is non-trivial
+ * At runtime, use UCPTRIE_FAST_BMP_GET16() or
+ * UCPTRIE_FAST_BMP_GET32() per code unit. If there is non-trivial
  * data and the code unit is a lead surrogate, then check if a trail surrogate
  * follows. If so, assemble the supplementary code point with
- * U16_GET_SUPPLEMENTARY() and look up its value with UCPTRIE_FAST_GET16_FROM_SUPP()
- * or UCPTRIE_FAST_GET32_FROM_SUPP(); otherwise deal with the unpaired surrogate in some way.
+ * U16_GET_SUPPLEMENTARY() and look up its value with UCPTRIE_FAST_SUPP_GET16()
+ * or UCPTRIE_FAST_SUPP_GET32(); otherwise deal with the unpaired surrogate in some way.
  *
  * If there is only trivial data for lead and trail surrogates, then processing
  * can often skip them. For example, in normalization or case mapping

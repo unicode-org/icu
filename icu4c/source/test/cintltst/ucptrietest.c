@@ -53,7 +53,7 @@ getSpecialValues(const CheckRange checkRanges[], int32_t countCheckRanges,
     if(i<countCheckRanges && checkRanges[i].limit<0) {
         *pErrorValue=checkRanges[i++].value;
     } else {
-        *pErrorValue=0xbad;
+        *pErrorValue=0xad;
     }
     if(i<countCheckRanges && checkRanges[i].limit==0) {
         *pInitialValue=checkRanges[i++].value;
@@ -197,9 +197,11 @@ testTrieGetters(const char *testName, const UCPTrie *trie,
         while(start<limit) {
             if (start <= 0x7f) {
                 if (valueBits == UCPTRIE_VALUE_BITS_16) {
-                    value2 = UCPTRIE_GET16_FROM_ASCII(trie, start);
+                    value2 = UCPTRIE_ASCII_GET16(trie, start);
+                } else if (valueBits == UCPTRIE_VALUE_BITS_32) {
+                    value2 = UCPTRIE_ASCII_GET32(trie, start);
                 } else {
-                    value2 = UCPTRIE_GET32_FROM_ASCII(trie, start);
+                    value2 = UCPTRIE_ASCII_GET8(trie, start);
                 }
                 if (value != value2) {
                     log_err("error: %s(%s).fromASCII(U+%04lx)==0x%lx instead of 0x%lx\n",
@@ -210,9 +212,11 @@ testTrieGetters(const char *testName, const UCPTrie *trie,
             if (type == UCPTRIE_TYPE_FAST) {
                 if(start<=0xffff) {
                     if(valueBits==UCPTRIE_VALUE_BITS_16) {
-                        value2=UCPTRIE_FAST_GET16_FROM_BMP(trie, start);
+                        value2=UCPTRIE_FAST_BMP_GET16(trie, start);
+                    } else if(valueBits==UCPTRIE_VALUE_BITS_32) {
+                        value2=UCPTRIE_FAST_BMP_GET32(trie, start);
                     } else {
-                        value2=UCPTRIE_FAST_GET32_FROM_BMP(trie, start);
+                        value2=UCPTRIE_FAST_BMP_GET8(trie, start);
                     }
                     if(value!=value2) {
                         log_err("error: %s(%s).fromBMP(U+%04lx)==0x%lx instead of 0x%lx\n",
@@ -221,9 +225,11 @@ testTrieGetters(const char *testName, const UCPTrie *trie,
                     }
                 } else {
                     if(valueBits==UCPTRIE_VALUE_BITS_16) {
-                        value2 = UCPTRIE_FAST_GET16_FROM_SUPP(trie, start);
+                        value2 = UCPTRIE_FAST_SUPP_GET16(trie, start);
+                    } else if(valueBits==UCPTRIE_VALUE_BITS_32) {
+                        value2 = UCPTRIE_FAST_SUPP_GET32(trie, start);
                     } else {
-                        value2 = UCPTRIE_FAST_GET32_FROM_SUPP(trie, start);
+                        value2 = UCPTRIE_FAST_SUPP_GET8(trie, start);
                     }
                     if(value!=value2) {
                         log_err("error: %s(%s).fromSupp(U+%04lx)==0x%lx instead of 0x%lx\n",
@@ -233,14 +239,18 @@ testTrieGetters(const char *testName, const UCPTrie *trie,
                 }
                 if(valueBits==UCPTRIE_VALUE_BITS_16) {
                     value2 = UCPTRIE_FAST_GET16(trie, start);
-                } else {
+                } else if(valueBits==UCPTRIE_VALUE_BITS_32) {
                     value2 = UCPTRIE_FAST_GET32(trie, start);
+                } else {
+                    value2 = UCPTRIE_FAST_GET8(trie, start);
                 }
             } else {
                 if(valueBits==UCPTRIE_VALUE_BITS_16) {
                     value2 = UCPTRIE_SMALL_GET16(trie, start);
-                } else {
+                } else if(valueBits==UCPTRIE_VALUE_BITS_32) {
                     value2 = UCPTRIE_SMALL_GET32(trie, start);
+                } else {
+                    value2 = UCPTRIE_SMALL_GET8(trie, start);
                 }
             }
             if(value!=value2) {
@@ -270,8 +280,10 @@ testTrieGetters(const char *testName, const UCPTrie *trie,
         while(start<limit && start<=0x7f) {
             if(valueBits==UCPTRIE_VALUE_BITS_16) {
                 value2=trie->data16[start];
-            } else {
+            } else if(valueBits==UCPTRIE_VALUE_BITS_32) {
                 value2=trie->data32[start];
+            } else {
+                value2=trie->data8[start];
             }
             if(value!=value2) {
                 log_err("error: %s(%s).asciiData[U+%04lx]==0x%lx instead of 0x%lx\n",
@@ -290,17 +302,23 @@ testTrieGetters(const char *testName, const UCPTrie *trie,
         if(valueBits==UCPTRIE_VALUE_BITS_16) {
             value = UCPTRIE_FAST_GET16(trie, -1);
             value2 = UCPTRIE_FAST_GET16(trie, 0x110000);
-        } else {
+        } else if(valueBits==UCPTRIE_VALUE_BITS_32) {
             value = UCPTRIE_FAST_GET32(trie, -1);
             value2 = UCPTRIE_FAST_GET32(trie, 0x110000);
+        } else {
+            value = UCPTRIE_FAST_GET8(trie, -1);
+            value2 = UCPTRIE_FAST_GET8(trie, 0x110000);
         }
     } else {
         if(valueBits==UCPTRIE_VALUE_BITS_16) {
             value = UCPTRIE_SMALL_GET16(trie, -1);
             value2 = UCPTRIE_SMALL_GET16(trie, 0x110000);
-        } else {
+        } else if(valueBits==UCPTRIE_VALUE_BITS_32) {
             value = UCPTRIE_SMALL_GET32(trie, -1);
             value2 = UCPTRIE_SMALL_GET32(trie, 0x110000);
+        } else {
+            value = UCPTRIE_SMALL_GET8(trie, -1);
+            value2 = UCPTRIE_SMALL_GET8(trie, 0x110000);
         }
     }
     if(value!=errorValue || value2!=errorValue) {
@@ -415,8 +433,10 @@ testTrieUTF16(const char *testName,
         c=0x33;
         if(valueBits==UCPTRIE_VALUE_BITS_16) {
             UCPTRIE_FAST_U16_NEXT16(trie, p, limit, c, value);
-        } else {
+        } else if(valueBits==UCPTRIE_VALUE_BITS_32) {
             UCPTRIE_FAST_U16_NEXT32(trie, p, limit, c, value);
+        } else {
+            UCPTRIE_FAST_U16_NEXT8(trie, p, limit, c, value);
         }
         expected = U_IS_SURROGATE(c) ? errorValue : values[i];
         if(value!=expected) {
@@ -441,8 +461,10 @@ testTrieUTF16(const char *testName,
         c=0x33;
         if(valueBits==UCPTRIE_VALUE_BITS_16) {
             UCPTRIE_FAST_U16_PREV16(trie, s, p, c, value);
-        } else {
+        } else if(valueBits==UCPTRIE_VALUE_BITS_32) {
             UCPTRIE_FAST_U16_PREV32(trie, s, p, c, value);
+        } else {
+            UCPTRIE_FAST_U16_PREV8(trie, s, p, c, value);
         }
         expected = U_IS_SURROGATE(c) ? errorValue : values[i];
         if(value!=expected) {
@@ -575,8 +597,10 @@ testTrieUTF8(const char *testName,
         U8_NEXT(s, i8, length, c);
         if(valueBits==UCPTRIE_VALUE_BITS_16) {
             UCPTRIE_FAST_U8_NEXT16(trie, p, limit, value);
-        } else {
+        } else if(valueBits==UCPTRIE_VALUE_BITS_32) {
             UCPTRIE_FAST_U8_NEXT32(trie, p, limit, value);
+        } else {
+            UCPTRIE_FAST_U8_NEXT8(trie, p, limit, value);
         }
         expectedBytes=0;
         if(value!=values[i] || i8!=(p-s)) {
@@ -619,8 +643,10 @@ testTrieUTF8(const char *testName,
         U8_PREV(s, 0, i8, c);
         if(valueBits==UCPTRIE_VALUE_BITS_16) {
             UCPTRIE_FAST_U8_PREV16(trie, s, p, value);
-        } else {
+        } else if(valueBits==UCPTRIE_VALUE_BITS_32) {
             UCPTRIE_FAST_U8_PREV32(trie, s, p, value);
+        } else {
+            UCPTRIE_FAST_U8_PREV8(trie, s, p, value);
         }
         expectedBytes=0;
         if(value!=values[i] || i8!=(p-s)) {
@@ -783,8 +809,11 @@ testTrieSerialize(const char *testName, UCPTrieBuilder *builder,
             log_err("error: ucptrie_openFromBinary(%s) failed, %s\n", testName, u_errorName(errorCode));
             break;
         }
-        if((valueBits==UCPTRIE_VALUE_BITS_16)!=(trie->data32==NULL)) {
-            log_err("error: trie serialization (%s) did not preserve 32-bitness\n", testName);
+        UCPTrieValueBits fromBinaryValueBits =
+                trie->data16 != NULL ? UCPTRIE_VALUE_BITS_16 :
+                trie->data32 != NULL ? UCPTRIE_VALUE_BITS_32 : UCPTRIE_VALUE_BITS_8;
+        if(valueBits != fromBinaryValueBits) {
+            log_err("error: trie serialization (%s) did not preserve data value width\n", testName);
             break;
         }
         if(length2!=length3) {
@@ -794,6 +823,27 @@ testTrieSerialize(const char *testName, UCPTrieBuilder *builder,
         }
         /* overwrite the storage that is not supposed to be needed */
         uprv_memset((char *)storage+length3, 0xfa, (int32_t)(sizeof(storage)-length3));
+
+        {
+            errorCode=U_ZERO_ERROR;
+            UCPTrie *any = ucptrie_openFromBinary(UCPTRIE_TYPE_ANY, UCPTRIE_VALUE_BITS_ANY,
+                                                  storage, length3, NULL, &errorCode);
+            if (U_SUCCESS(errorCode)) {
+                if (type != ucptrie_getType(any)) {
+                    log_err("error: ucptrie_openFromBinary("
+                            "UCPTRIE_TYPE_ANY, UCPTRIE_VALUE_BITS_ANY).getType() wrong\n");
+                }
+                if (valueBits != ucptrie_getValueBits(any)) {
+                    log_err("error: ucptrie_openFromBinary("
+                            "UCPTRIE_TYPE_ANY, UCPTRIE_VALUE_BITS_ANY).getValueBits() wrong\n");
+                }
+                ucptrie_close(any);
+            } else {
+                log_err("error: ucptrie_openFromBinary("
+                        "UCPTRIE_TYPE_ANY, UCPTRIE_VALUE_BITS_ANY) failed - %s\n",
+                        u_errorName(errorCode));
+            }
+        }
 
         errorCode=U_ZERO_ERROR;
         testTrie(testName, trie, type, valueBits, checkRanges, countCheckRanges);
@@ -828,18 +878,21 @@ testTrieSerializeAllValueBits(const char *testName,
                               UCPTrieBuilder *builder, UBool withClone,
                               const CheckRange checkRanges[], int32_t countCheckRanges) {
     char name[40];
+    uint32_t oredValues = 0;
+    int32_t i;
+    for (i = 0; i < countCheckRanges; ++i) {
+        oredValues |= checkRanges[i].value;
+    }
 
     testBuilder(testName, builder, checkRanges, countCheckRanges);
 
-    /*
-     * Test with both valueBits serializations,
-     * and that ucptrie_toBinary() can be called multiple times.
-     */
-    uprv_strcpy(name, testName);
-    uprv_strcat(name, ".16");
-    testTrieSerialize(name, builder,
-                      UCPTRIE_TYPE_FAST, UCPTRIE_VALUE_BITS_16, withClone,
-                      checkRanges, countCheckRanges);
+    if (oredValues <= 0xffff) {
+        uprv_strcpy(name, testName);
+        uprv_strcat(name, ".16");
+        testTrieSerialize(name, builder,
+                          UCPTRIE_TYPE_FAST, UCPTRIE_VALUE_BITS_16, withClone,
+                          checkRanges, countCheckRanges);
+    }
 
     uprv_strcpy(name, testName);
     uprv_strcat(name, ".32");
@@ -847,11 +900,21 @@ testTrieSerializeAllValueBits(const char *testName,
                       UCPTRIE_TYPE_FAST, UCPTRIE_VALUE_BITS_32, withClone,
                       checkRanges, countCheckRanges);
 
-    uprv_strcpy(name, testName);
-    uprv_strcat(name, ".small16");
-    testTrieSerialize(name, builder,
-                      UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_16, withClone,
-                      checkRanges, countCheckRanges);
+    if (oredValues <= 0xff) {
+        uprv_strcpy(name, testName);
+        uprv_strcat(name, ".8");
+        testTrieSerialize(name, builder,
+                          UCPTRIE_TYPE_FAST, UCPTRIE_VALUE_BITS_8, withClone,
+                          checkRanges, countCheckRanges);
+    }
+
+    if (oredValues <= 0xffff) {
+        uprv_strcpy(name, testName);
+        uprv_strcat(name, ".small16");
+        testTrieSerialize(name, builder,
+                          UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_16, withClone,
+                          checkRanges, countCheckRanges);
+    }
 
     return builder;
 }
@@ -928,34 +991,34 @@ testTrieRanges(const char *testName, UBool withClone,
 /* set consecutive ranges, even with value 0 */
 static const SetRange
 setRanges1[]={
-    { 0,        0x40,     0      },
-    { 0x40,     0xe7,     0x1234 },
-    { 0xe7,     0x3400,   0      },
-    { 0x3400,   0x9fa6,   0x6162 },
-    { 0x9fa6,   0xda9e,   0x3132 },
-    { 0xdada,   0xeeee,   0x87ff },
-    { 0xeeee,   0x11111,  1      },
-    { 0x11111,  0x44444,  0x6162 },
-    { 0x44444,  0x60003,  0      },
-    { 0xf0003,  0xf0004,  0xf    },
-    { 0xf0004,  0xf0006,  0x10   },
-    { 0xf0006,  0xf0007,  0x11   },
-    { 0xf0007,  0xf0040,  0x12   },
-    { 0xf0040,  0x110000, 0      }
+    { 0,        0x40,     0    },
+    { 0x40,     0xe7,     0x34 },
+    { 0xe7,     0x3400,   0    },
+    { 0x3400,   0x9fa6,   0x61 },
+    { 0x9fa6,   0xda9e,   0x31 },
+    { 0xdada,   0xeeee,   0xff },
+    { 0xeeee,   0x11111,  1    },
+    { 0x11111,  0x44444,  0x61 },
+    { 0x44444,  0x60003,  0    },
+    { 0xf0003,  0xf0004,  0xf  },
+    { 0xf0004,  0xf0006,  0x10 },
+    { 0xf0006,  0xf0007,  0x11 },
+    { 0xf0007,  0xf0040,  0x12 },
+    { 0xf0040,  0x110000, 0    }
 };
 
 static const CheckRange
 checkRanges1[]={
     { 0,        0 },
     { 0x40,     0 },
-    { 0xe7,     0x1234 },
+    { 0xe7,     0x34 },
     { 0x3400,   0 },
-    { 0x9fa6,   0x6162 },
-    { 0xda9e,   0x3132 },
+    { 0x9fa6,   0x61 },
+    { 0xda9e,   0x31 },
     { 0xdada,   0 },
-    { 0xeeee,   0x87ff },
+    { 0xeeee,   0xff },
     { 0x11111,  1 },
-    { 0x44444,  0x6162 },
+    { 0x44444,  0x61 },
     { 0xf0003,  0 },
     { 0xf0004,  0xf },
     { 0xf0006,  0x10 },
@@ -1116,7 +1179,7 @@ FreeBlocksTest(void) {
     UErrorCode errorCode;
 
     errorCode=U_ZERO_ERROR;
-    builder=ucptriebld_open(1, 0xbad, &errorCode);
+    builder=ucptriebld_open(1, 0xad, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("error: ucptriebld_open(%s) failed: %s\n", testName, u_errorName(errorCode));
         return;
@@ -1165,7 +1228,7 @@ GrowDataArrayTest(void) {
     UErrorCode errorCode;
 
     errorCode=U_ZERO_ERROR;
-    builder=ucptriebld_open(1, 0xbad, &errorCode);
+    builder=ucptriebld_open(1, 0xad, &errorCode);
     if(U_FAILURE(errorCode)) {
         log_err("error: ucptriebld_open(%s) failed: %s\n", testName, u_errorName(errorCode));
         return;
@@ -1209,7 +1272,7 @@ ManyAllSameBlocksTest(void) {
     CheckRange checkRanges[(0x110000 >> 12) + 1];
 
     errorCode = U_ZERO_ERROR;
-    builder = ucptriebld_open(0xff33, 0xbad, &errorCode);
+    builder = ucptriebld_open(0xff33, 0xad, &errorCode);
     if (U_FAILURE(errorCode)) {
         log_err("error: ucptriebld_open(%s) failed: %s\n", testName, u_errorName(errorCode));
         return;
@@ -1247,7 +1310,7 @@ MuchDataTest(void) {
     UErrorCode errorCode = U_ZERO_ERROR;
     CheckRange checkRanges[(0x10000 >> 6) + (0x10240 >> 4) + 10];
 
-    builder = ucptriebld_open(0xff33, 0xbad, &errorCode);
+    builder = ucptriebld_open(0xff33, 0xad, &errorCode);
     if (U_FAILURE(errorCode)) {
         log_err("error: ucptriebld_open(%s) failed: %s\n", testName, u_errorName(errorCode));
         return;

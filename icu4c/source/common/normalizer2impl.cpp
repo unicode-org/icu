@@ -607,7 +607,7 @@ Normalizer2Impl::decompose(const UChar *src, const UChar *limit,
         // count code units below the minimum or with irrelevant data for the quick check
         for(prevSrc=src; src!=limit;) {
             if( (c=*src)<minNoCP ||
-                isMostDecompYesAndZeroCC(norm16=UCPTRIE_FAST_GET16_FROM_BMP(normTrie, c))
+                isMostDecompYesAndZeroCC(norm16=UCPTRIE_FAST_BMP_GET16(normTrie, c))
             ) {
                 ++src;
             } else if(!U16_IS_LEAD(c)) {
@@ -616,7 +616,7 @@ Normalizer2Impl::decompose(const UChar *src, const UChar *limit,
                 UChar c2;
                 if((src+1)!=limit && U16_IS_TRAIL(c2=src[1])) {
                     c=U16_GET_SUPPLEMENTARY(c, c2);
-                    norm16=UCPTRIE_FAST_GET16_FROM_SUPP(normTrie, c);
+                    norm16=UCPTRIE_FAST_SUPP_GET16(normTrie, c);
                     if(isMostDecompYesAndZeroCC(norm16)) {
                         src+=2;
                     } else {
@@ -1340,7 +1340,7 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
                 return TRUE;
             }
             if( (c=*src)<minNoMaybeCP ||
-                isCompYesAndZeroCC(norm16=UCPTRIE_FAST_GET16_FROM_BMP(normTrie, c))
+                isCompYesAndZeroCC(norm16=UCPTRIE_FAST_BMP_GET16(normTrie, c))
             ) {
                 ++src;
             } else {
@@ -1352,7 +1352,7 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
                     if(src!=limit && U16_IS_TRAIL(c2=*src)) {
                         ++src;
                         c=U16_GET_SUPPLEMENTARY(c, c2);
-                        norm16=UCPTRIE_FAST_GET16_FROM_SUPP(normTrie, c);
+                        norm16=UCPTRIE_FAST_SUPP_GET16(normTrie, c);
                         if(!isCompYesAndZeroCC(norm16)) {
                             break;
                         }
@@ -1601,7 +1601,7 @@ Normalizer2Impl::composeQuickCheck(const UChar *src, const UChar *limit,
                 return src;
             }
             if( (c=*src)<minNoMaybeCP ||
-                isCompYesAndZeroCC(norm16=UCPTRIE_FAST_GET16_FROM_BMP(normTrie, c))
+                isCompYesAndZeroCC(norm16=UCPTRIE_FAST_BMP_GET16(normTrie, c))
             ) {
                 ++src;
             } else {
@@ -1613,7 +1613,7 @@ Normalizer2Impl::composeQuickCheck(const UChar *src, const UChar *limit,
                     if(src!=limit && U16_IS_TRAIL(c2=*src)) {
                         ++src;
                         c=U16_GET_SUPPLEMENTARY(c, c2);
-                        norm16=UCPTRIE_FAST_GET16_FROM_SUPP(normTrie, c);
+                        norm16=UCPTRIE_FAST_SUPP_GET16(normTrie, c);
                         if(!isCompYesAndZeroCC(norm16)) {
                             break;
                         }

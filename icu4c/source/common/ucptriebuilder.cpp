@@ -168,12 +168,15 @@ CodePointTrieBuilder *CodePointTrieBuilder::fromUCPTrie(const UCPTrie *trie, UEr
     // Use the highValue as the initialValue to reduce the highStart.
     uint32_t errorValue;
     uint32_t initialValue;
-    if (trie->data32 != nullptr) {
+    if (trie->data16 != nullptr) {
+        errorValue = trie->data16[trie->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET];
+        initialValue = trie->data16[trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET];
+    } else if (trie->data32 != nullptr) {
         errorValue = trie->data32[trie->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET];
         initialValue = trie->data32[trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET];
     } else {
-        errorValue = trie->data16[trie->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET];
-        initialValue = trie->data16[trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET];
+        errorValue = trie->data8[trie->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET];
+        initialValue = trie->data8[trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET];
     }
     CodePointTrieBuilder *builder = new CodePointTrieBuilder(initialValue, errorValue, errorCode);
     if (U_FAILURE(errorCode)) {
@@ -1322,7 +1325,8 @@ UCPTrie *CodePointTrieBuilder::build(UCPTrieType type, UCPTrieValueBits valueBit
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
-    if (type > UCPTRIE_TYPE_SMALL || valueBits > UCPTRIE_VALUE_BITS_32) {
+    if (type < UCPTRIE_TYPE_FAST || UCPTRIE_TYPE_SMALL < type ||
+            valueBits < UCPTRIE_VALUE_BITS_16 || UCPTRIE_VALUE_BITS_8 < valueBits) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
@@ -1330,8 +1334,17 @@ UCPTrie *CodePointTrieBuilder::build(UCPTrieType type, UCPTrieValueBits valueBit
     // The builder always stores 32-bit values.
     // When we build a UCPTrie for a smaller value width, we first mask off unused bits
     // before compacting the data.
-    if (valueBits != UCPTRIE_VALUE_BITS_32) {
+    switch (valueBits) {
+    case UCPTRIE_VALUE_BITS_32:
+        break;
+    case UCPTRIE_VALUE_BITS_16:
         maskValues(0xffff);
+        break;
+    case UCPTRIE_VALUE_BITS_8:
+        maskValues(0xff);
+        break;
+    default:
+        break;
     }
 
     UChar32 fastLimit = type == UCPTRIE_TYPE_FAST ? BMP_LIMIT : UCPTRIE_SMALL_LIMIT;
@@ -1359,7 +1372,7 @@ UCPTrie *CodePointTrieBuilder::build(UCPTrieType type, UCPTrieValueBits valueBit
             data[dataLength++] = errorValue;
         }
         length += dataLength * 2;
-    } else {
+    } else if (valueBits == UCPTRIE_VALUE_BITS_32) {
         // 32-bit data words never need padding to a multiple of 4 bytes.
         if (data[dataLength - 1] != errorValue || data[dataLength - 2] != highValue) {
             if (data[dataLength - 1] != highValue) {
@@ -1368,13 +1381,28 @@ UCPTrie *CodePointTrieBuilder::build(UCPTrieType type, UCPTrieValueBits valueBit
             data[dataLength++] = errorValue;
         }
         length += dataLength * 4;
+    } else {
+        int32_t and3 = (length + dataLength) & 3;
+        if (and3 == 0 && data[dataLength - 1] == errorValue && data[dataLength - 2] == highValue) {
+            // all set
+        } else if(and3 == 3 && data[dataLength - 1] == highValue) {
+            data[dataLength++] = errorValue;
+        } else {
+            while (and3 != 2) {
+                data[dataLength++] = highValue;
+                and3 = (and3 + 1) & 3;
+            }
+            data[dataLength++] = highValue;
+            data[dataLength++] = errorValue;
+        }
+        length += dataLength;
     }
 
     // Calculate the total length of the UCPTrie as a single memory block.
     length += sizeof(UCPTrie);
     U_ASSERT((length & 3) == 0);
 
-    char *bytes = (char *)uprv_malloc(length);
+    uint8_t *bytes = (uint8_t *)uprv_malloc(length);
     if (bytes == nullptr) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         clear();
@@ -1412,13 +1440,14 @@ UCPTrie *CodePointTrieBuilder::build(UCPTrieType type, UCPTrieValueBits valueBit
     }
     bytes += indexLength * 2;
 
-    // Write the 16/32-bit data array.
+    // Write the data array.
     const uint32_t *p = data;
     switch (valueBits) {
     case UCPTRIE_VALUE_BITS_16:
         // Write 16-bit data values.
         trie->data16 = dest16;
         trie->data32 = nullptr;
+        trie->data8 = nullptr;
         for (int32_t i = dataLength; i > 0; --i) {
             *dest16++ = (uint16_t)*p++;
         }
@@ -1427,7 +1456,17 @@ UCPTrie *CodePointTrieBuilder::build(UCPTrieType type, UCPTrieValueBits valueBit
         // Write 32-bit data values.
         trie->data16 = nullptr;
         trie->data32 = (uint32_t *)bytes;
+        trie->data8 = nullptr;
         uprv_memcpy(bytes, p, (size_t)dataLength * 4);
+        break;
+    case UCPTRIE_VALUE_BITS_8:
+        // Write 8-bit data values.
+        trie->data16 = nullptr;
+        trie->data32 = nullptr;
+        trie->data8 = bytes;
+        for (int32_t i = dataLength; i > 0; --i) {
+            *bytes++ = (uint8_t)*p++;
+        }
         break;
     default:
         // Will not occur, valueBits checked at the beginning.
