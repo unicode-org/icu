@@ -168,8 +168,9 @@ uint64_t DecimalQuantity::getPositionFingerprint() const {
 
 void DecimalQuantity::roundToIncrement(double roundingIncrement, RoundingMode roundingMode,
                                        int32_t maxFrac, UErrorCode& status) {
-    // TODO: This is innefficient.  Improve?
-    // TODO: Should we convert to decNumber instead?
+    // TODO(13701): This is innefficient.  Improve?
+    // TODO(13701): Should we convert to decNumber instead?
+    roundToInfinity();
     double temp = toDouble();
     temp /= roundingIncrement;
     setToDouble(temp);
@@ -246,7 +247,7 @@ double DecimalQuantity::getPluralOperand(PluralOperand operand) const {
     switch (operand) {
         case PLURAL_OPERAND_I:
             // Invert the negative sign if necessary
-            return static_cast<double>(isNegative() ? -toLong() : toLong());
+            return static_cast<double>(isNegative() ? -toLong(true) : toLong(true));
         case PLURAL_OPERAND_F:
             return static_cast<double>(toFractionLong(true));
         case PLURAL_OPERAND_T:
@@ -258,6 +259,10 @@ double DecimalQuantity::getPluralOperand(PluralOperand operand) const {
         default:
             return std::abs(toDouble());
     }
+}
+
+bool DecimalQuantity::hasIntegerValue() const {
+    return scale >= 0;
 }
 
 int32_t DecimalQuantity::getUpperDisplayMagnitude() const {
@@ -489,11 +494,17 @@ void DecimalQuantity::_setToDecNum(const DecNum& decnum, UErrorCode& status) {
     }
 }
 
-int64_t DecimalQuantity::toLong() const {
+int64_t DecimalQuantity::toLong(bool truncateIfOverflow) const {
     // NOTE: Call sites should be guarded by fitsInLong(), like this:
     // if (dq.fitsInLong()) { /* use dq.toLong() */ } else { /* use some fallback */ }
+    // Fallback behavior upon truncateIfOverflow is to truncate at 17 digits.
+    U_ASSERT(truncateIfOverflow || fitsInLong());
     int64_t result = 0L;
-    for (int32_t magnitude = scale + precision - 1; magnitude >= 0; magnitude--) {
+    int32_t upperMagnitude = std::min(scale + precision, lOptPos) - 1;
+    if (truncateIfOverflow) {
+        upperMagnitude = std::min(upperMagnitude, 17);
+    }
+    for (int32_t magnitude = upperMagnitude; magnitude >= 0; magnitude--) {
         result = result * 10 + getDigitPos(magnitude - scale);
     }
     if (isNegative()) {
@@ -502,12 +513,21 @@ int64_t DecimalQuantity::toLong() const {
     return result;
 }
 
-int64_t DecimalQuantity::toFractionLong(bool includeTrailingZeros) const {
-    int64_t result = 0L;
+uint64_t DecimalQuantity::toFractionLong(bool includeTrailingZeros) const {
+    uint64_t result = 0L;
     int32_t magnitude = -1;
-    for (; (magnitude >= scale || (includeTrailingZeros && magnitude >= rReqPos)) &&
-           magnitude >= rOptPos; magnitude--) {
+    int32_t lowerMagnitude = std::max(scale, rOptPos);
+    if (includeTrailingZeros) {
+        lowerMagnitude = std::min(lowerMagnitude, rReqPos);
+    }
+    for (; magnitude >= lowerMagnitude && result <= 1e18L; magnitude--) {
         result = result * 10 + getDigitPos(magnitude - scale);
+    }
+    // Remove trailing zeros; this can happen during integer overflow cases.
+    if (!includeTrailingZeros) {
+        while (result > 0 && (result % 10) == 0) {
+            result /= 10;
+        }
     }
     return result;
 }
@@ -542,9 +562,9 @@ bool DecimalQuantity::fitsInLong() const {
 }
 
 double DecimalQuantity::toDouble() const {
-    if (isApproximate) {
-        return toDoubleFromOriginal();
-    }
+    // If this assertion fails, you need to call roundToInfinity() or some other rounding method.
+    // See the comment in the header file explaining the "isApproximate" field.
+    U_ASSERT(!isApproximate);
 
     if (isNaN()) {
         return NAN;
@@ -560,24 +580,6 @@ double DecimalQuantity::toDouble() const {
             reinterpret_cast<const uint16_t*>(numberString.getBuffer()),
             numberString.length(),
             &count);
-}
-
-double DecimalQuantity::toDoubleFromOriginal() const {
-    double result = origDouble;
-    int32_t delta = origDelta;
-    if (delta >= 0) {
-        // 1e22 is the largest exact double.
-        for (; delta >= 22; delta -= 22) result *= 1e22;
-        result *= DOUBLE_MULTIPLIERS[delta];
-    } else {
-        // 1e22 is the largest exact double.
-        for (; delta <= -22; delta += 22) result /= 1e22;
-        result /= DOUBLE_MULTIPLIERS[-delta];
-    }
-    if (isNegative()) {
-        result = -result;
-    }
-    return result;
 }
 
 void DecimalQuantity::toDecNum(DecNum& output, UErrorCode& status) const {
@@ -795,15 +797,20 @@ UnicodeString DecimalQuantity::toScientificString() const {
         result.append(u"0E+0", -1);
         return result;
     }
-    result.append(u'0' + getDigitPos(precision - 1));
-    if (precision > 1) {
+    // NOTE: It is not safe to add to lOptPos (aka maxInt) or subtract from
+    // rOptPos (aka -maxFrac) due to overflow.
+    int32_t upperPos = std::min(precision + scale, lOptPos) - scale - 1;
+    int32_t lowerPos = std::max(scale, rOptPos) - scale;
+    int32_t p = upperPos;
+    result.append(u'0' + getDigitPos(p));
+    if ((--p) >= lowerPos) {
         result.append(u'.');
-        for (int32_t i = 1; i < precision; i++) {
-            result.append(u'0' + getDigitPos(precision - i - 1));
+        for (; p >= lowerPos; p--) {
+            result.append(u'0' + getDigitPos(p));
         }
     }
     result.append(u'E');
-    int32_t _scale = scale + precision - 1;
+    int32_t _scale = upperPos + scale;
     if (_scale < 0) {
         _scale *= -1;
         result.append(u'-');

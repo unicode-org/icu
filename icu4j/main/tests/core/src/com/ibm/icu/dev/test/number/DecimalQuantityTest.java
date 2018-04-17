@@ -496,6 +496,22 @@ public class DecimalQuantityTest extends TestFmwk {
         }
     }
 
+    @Test
+    public void testMaxDigits() {
+        DecimalQuantity_DualStorageBCD dq = new DecimalQuantity_DualStorageBCD(876.543);
+        dq.roundToInfinity();
+        dq.setIntegerLength(0, 2);
+        dq.setFractionLength(0, 2);
+        assertEquals("Should trim, toPlainString", "76.54", dq.toPlainString());
+        assertEquals("Should trim, toScientificString", "7.654E+1", dq.toScientificString());
+        assertEquals("Should trim, toLong", 76, dq.toLong(true));
+        assertEquals("Should trim, toFractionLong", 54, dq.toFractionLong(false));
+        if (!logKnownIssue("13701", "consider cleaning up")) {
+            assertEquals("Should trim, toDouble", 76.54, dq.toDouble());
+            assertEquals("Should trim, toBigDecimal", new BigDecimal("76.54"), dq.toBigDecimal());
+        }
+    }
+
     static void assertDoubleEquals(String message, double d1, double d2) {
         boolean equal = (Math.abs(d1 - d2) < 1e-6) || (Math.abs((d1 - d2) / d1) < 1e-6);
         handleAssert(equal, message, d1, d2, null, false);

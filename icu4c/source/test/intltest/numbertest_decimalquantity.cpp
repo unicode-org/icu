@@ -8,6 +8,7 @@
 #include "number_decimalquantity.h"
 #include "math.h"
 #include <cmath>
+#include "number_utils.h"
 #include "numbertest.h"
 
 void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *) {
@@ -23,6 +24,7 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
         TESTCASE_AUTO(testUseApproximateDoubleWhenAble);
         TESTCASE_AUTO(testHardDoubleConversion);
         TESTCASE_AUTO(testToDouble);
+        TESTCASE_AUTO(testMaxDigits);
     TESTCASE_AUTO_END;
 }
 
@@ -60,9 +62,6 @@ void DecimalQuantityTest::checkDoubleBehavior(double d, bool explicitRequired) {
         assertTrue("Should be using approximate double", !fq.isExplicitExactDouble());
     }
     UnicodeString baseStr = fq.toString();
-    assertDoubleEquals(
-        UnicodeString(u"Initial construction from hard double: ") + baseStr,
-        d, fq.toDouble());
     fq.roundToInfinity();
     UnicodeString newStr = fq.toString();
     if (explicitRequired) {
@@ -355,6 +354,28 @@ void DecimalQuantityTest::testToDouble() {
         q.setToDecNumber({cas.input, -1}, status);
         double actual = q.toDouble();
         assertEquals("Doubles should exactly equal", cas.expected, actual);
+    }
+}
+
+void DecimalQuantityTest::testMaxDigits() {
+    IcuTestErrorCode status(*this, "testMaxDigits");
+    DecimalQuantity dq;
+    dq.setToDouble(876.543);
+    dq.roundToInfinity();
+    dq.setIntegerLength(0, 2);
+    dq.setFractionLength(0, 2);
+    assertEquals("Should trim, toPlainString", "76.54", dq.toPlainString());
+    assertEquals("Should trim, toScientificString", "7.654E+1", dq.toScientificString());
+    assertEquals("Should trim, toLong", 76L, dq.toLong());
+    assertEquals("Should trim, toFractionLong", 54L, dq.toFractionLong(false));
+    assertEquals("Should trim, toDouble", 76.54, dq.toDouble());
+    // To test DecNum output, check the round-trip.
+    DecNum dn;
+    dq.toDecNum(dn, status);
+    DecimalQuantity copy;
+    copy.setToDecNum(dn, status);
+    if (!logKnownIssue("13701")) {
+        assertEquals("Should trim, toDecNum", "76.54", copy.toPlainString());
     }
 }
 

@@ -169,6 +169,9 @@ abstract public class TestFmwk extends AbstractTestLog {
             return false;
         }
 
+        // TODO: This method currently does not do very much.
+        // See http://bugs.icu-project.org/trac/ticket/12589
+
         StringBuffer descBuf = new StringBuffer();
         // TODO(junit) : what to do about this?
         //getParams().stack.appendPath(descBuf);
