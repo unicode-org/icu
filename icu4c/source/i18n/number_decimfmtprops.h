@@ -119,7 +119,7 @@ struct U_I18N_API DecimalFormatProperties {
     bool parseIntegerOnly;
     NullableValue<ParseMode> parseMode;
     bool parseNoExponent;
-    bool parseToBigDecimal;
+    bool parseToBigDecimal; // TODO: Not needed in ICU4C?
     UNumberFormatAttributeValue parseAllInput; // ICU4C-only
     //PluralRules pluralRules;
     UnicodeString positivePrefix;

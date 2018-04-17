@@ -78,9 +78,10 @@ double ParsedNumber::getDouble() const {
     }
 }
 
-void ParsedNumber::populateFormattable(Formattable& output) const {
+void ParsedNumber::populateFormattable(Formattable& output, parse_flags_t parseFlags) const {
     bool sawNaN = 0 != (flags & FLAG_NAN);
     bool sawInfinity = 0 != (flags & FLAG_INFINITY);
+    bool integerOnly = 0 != (parseFlags & PARSE_FLAG_INTEGER_ONLY);
 
     // Check for NaN, infinity, and -0.0
     if (sawNaN) {
@@ -97,7 +98,7 @@ void ParsedNumber::populateFormattable(Formattable& output) const {
         }
     }
     U_ASSERT(!quantity.bogus);
-    if (quantity.isZero() && quantity.isNegative()) {
+    if (quantity.isZero() && quantity.isNegative() && !integerOnly) {
         output.setDouble(-0.0);
         return;
     }

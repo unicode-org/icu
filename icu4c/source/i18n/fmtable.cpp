@@ -462,12 +462,12 @@ Formattable::getInt64(UErrorCode& status) const
             status = U_INVALID_FORMAT_ERROR;
             return U_INT64_MIN;
         } else if (fabs(fValue.fDouble) > U_DOUBLE_MAX_EXACT_INT && fDecimalQuantity != NULL) {
-            if (fDecimalQuantity->fitsInLong()) {
+            if (fDecimalQuantity->fitsInLong(true)) {
                 return fDecimalQuantity->toLong();
-            } else if (fDecimalQuantity->isNegative()) {
-                return U_INT64_MIN;
             } else {
-                return U_INT64_MAX;
+                // Unexpected
+                status = U_INVALID_FORMAT_ERROR;
+                return fDecimalQuantity->isNegative() ? U_INT64_MIN : U_INT64_MAX;
             }
         } else {
             return (int64_t)fValue.fDouble;

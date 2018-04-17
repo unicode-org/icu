@@ -3,6 +3,7 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.StringSegment;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
@@ -46,9 +47,7 @@ public class ScientificMatcher implements NumberParseMatcher {
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
         // Only accept scientific notation after the mantissa.
-        // Most places use result.hasNumber(), but we need a stronger condition here (i.e., exponent is
-        // not well-defined after NaN or infinity).
-        if (result.quantity == null) {
+        if (!result.seenNumber()) {
             return false;
         }
 
@@ -89,8 +88,17 @@ public class ScientificMatcher implements NumberParseMatcher {
                 segment.adjustOffset(overlap2);
             }
 
+            // We are supposed to accept E0 after NaN, so we need to make sure result.quantity is available.
+            boolean wasNull = (result.quantity == null);
+            if (wasNull) {
+                result.quantity = new DecimalQuantity_DualStorageBCD();
+            }
             int digitsOffset = segment.getOffset();
             boolean digitsReturnValue = exponentMatcher.match(segment, result, exponentSign);
+            if (wasNull) {
+                result.quantity = null;
+            }
+
             if (segment.getOffset() != digitsOffset) {
                 // At least one exponent digit was matched.
                 result.flags |= ParsedNumber.FLAG_HAS_EXPONENT;

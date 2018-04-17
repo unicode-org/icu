@@ -42,6 +42,8 @@ class NumberParserImpl : public MutableMatcherCollection {
 
     void freeze();
 
+    parse_flags_t getParseFlags() const;
+
     void parse(const UnicodeString& input, bool greedy, ParsedNumber& result, UErrorCode& status) const;
 
     void parse(const UnicodeString& input, int32_t start, bool greedy, ParsedNumber& result,

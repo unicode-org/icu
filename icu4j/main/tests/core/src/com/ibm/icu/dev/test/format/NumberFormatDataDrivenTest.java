@@ -460,9 +460,8 @@ public class NumberFormatDataDrivenTest {
     if (tuple.maxSigDigits != null) {
       properties.setMaximumSignificantDigits(tuple.maxSigDigits);
     }
-    if (tuple.useGrouping != null && tuple.useGrouping == 0) {
-      properties.setGroupingSize(-1);
-      properties.setSecondaryGroupingSize(-1);
+    if (tuple.useGrouping != null) {
+      properties.setGroupingUsed(tuple.useGrouping > 0);
     }
     if (tuple.multiplier != null) {
       properties.setMultiplier(new BigDecimal(tuple.multiplier));

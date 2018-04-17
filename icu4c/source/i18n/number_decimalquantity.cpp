@@ -173,9 +173,11 @@ void DecimalQuantity::roundToIncrement(double roundingIncrement, RoundingMode ro
     roundToInfinity();
     double temp = toDouble();
     temp /= roundingIncrement;
-    setToDouble(temp);
-    roundToMagnitude(0, roundingMode, status);
-    temp = toDouble();
+    // Use another DecimalQuantity to perform the actual rounding...
+    DecimalQuantity dq;
+    dq.setToDouble(temp);
+    dq.roundToMagnitude(0, roundingMode, status);
+    temp = dq.toDouble();
     temp *= roundingIncrement;
     setToDouble(temp);
     // Since we reset the value to a double, we need to specify the rounding boundary
@@ -498,8 +500,7 @@ int64_t DecimalQuantity::toLong(bool truncateIfOverflow) const {
     // NOTE: Call sites should be guarded by fitsInLong(), like this:
     // if (dq.fitsInLong()) { /* use dq.toLong() */ } else { /* use some fallback */ }
     // Fallback behavior upon truncateIfOverflow is to truncate at 17 digits.
-    U_ASSERT(truncateIfOverflow || fitsInLong());
-    int64_t result = 0L;
+    uint64_t result = 0L;
     int32_t upperMagnitude = std::min(scale + precision, lOptPos) - 1;
     if (truncateIfOverflow) {
         upperMagnitude = std::min(upperMagnitude, 17);
@@ -508,7 +509,7 @@ int64_t DecimalQuantity::toLong(bool truncateIfOverflow) const {
         result = result * 10 + getDigitPos(magnitude - scale);
     }
     if (isNegative()) {
-        result = -result;
+        return -result;
     }
     return result;
 }
@@ -532,11 +533,11 @@ uint64_t DecimalQuantity::toFractionLong(bool includeTrailingZeros) const {
     return result;
 }
 
-bool DecimalQuantity::fitsInLong() const {
+bool DecimalQuantity::fitsInLong(bool ignoreFraction) const {
     if (isZero()) {
         return true;
     }
-    if (scale < 0) {
+    if (scale < 0 && !ignoreFraction) {
         return false;
     }
     int magnitude = getMagnitude();
