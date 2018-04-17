@@ -143,9 +143,10 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     /** @return Whether the value represented by this {@link DecimalQuantity} is not a number. */
     bool isNaN() const U_OVERRIDE;
 
-    int64_t toLong() const;
+    /** @param truncateIfOverflow if false and the number does NOT fit, fails with an assertion error. */
+    int64_t toLong(bool truncateIfOverflow = false) const;
 
-    int64_t toFractionLong(bool includeTrailingZeros) const;
+    uint64_t toFractionLong(bool includeTrailingZeros) const;
 
     /**
      * Returns whether or not a Long can fully represent the value stored in this DecimalQuantity.
@@ -199,6 +200,8 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     StandardPlural::Form getStandardPlural(const PluralRules *rules) const;
 
     double getPluralOperand(PluralOperand operand) const U_OVERRIDE;
+
+    bool hasIntegerValue() const U_OVERRIDE;
 
     /**
      * Gets the digit at the specified magnitude. For example, if the represented number is 12.3,
@@ -465,8 +468,6 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     void _setToDecNum(const DecNum& dn, UErrorCode& status);
 
     void convertToAccurateDouble();
-
-    double toDoubleFromOriginal() const;
 
     /** Ensure that a byte array of at least 40 digits is allocated. */
     void ensureCapacity();

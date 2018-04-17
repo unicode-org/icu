@@ -249,9 +249,8 @@ class U_I18N_API IFixedDecimal {
 
     virtual bool isInfinite() const = 0;
 
-    virtual bool hasIntegerValue() {
-        return getPluralOperand(PLURAL_OPERAND_N) == getPluralOperand(PLURAL_OPERAND_I);
-    }
+    /** Whether the number has no nonzero fraction digits. */
+    virtual bool hasIntegerValue() const = 0;
 };
 
 /**
@@ -279,6 +278,7 @@ class U_I18N_API FixedDecimal: public IFixedDecimal, public UObject {
     double getPluralOperand(PluralOperand operand) const U_OVERRIDE;
     bool isNaN() const U_OVERRIDE;
     bool isInfinite() const U_OVERRIDE;
+    bool hasIntegerValue() const U_OVERRIDE;
 
     bool isNanOrInfinity() const;  // used in decimfmtimpl.cpp
 
@@ -297,7 +297,7 @@ class U_I18N_API FixedDecimal: public IFixedDecimal, public UObject {
     int64_t     decimalDigits;
     int64_t     decimalDigitsWithoutTrailingZeros;
     int64_t     intValue;
-    UBool       hasIntegerValue;
+    UBool       _hasIntegerValue;
     UBool       isNegative;
     UBool       _isNaN;
     UBool       _isInfinite;

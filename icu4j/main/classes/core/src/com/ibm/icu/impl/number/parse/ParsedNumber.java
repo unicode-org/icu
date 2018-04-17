@@ -155,7 +155,7 @@ public class ParsedNumber {
         }
 
         if (quantity.fitsInLong() && !forceBigDecimal) {
-            return quantity.toLong();
+            return quantity.toLong(false);
         } else {
             return quantity.toBigDecimal();
         }

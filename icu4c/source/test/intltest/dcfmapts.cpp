@@ -825,12 +825,12 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
     ASSERT_EQUAL(FALSE, fd.isNegative());
 
-    fable.setDecimalNumber("12.345678901234567890123456789", status);
+    fable.setDecimalNumber("12.3456789012345678900123456789", status);
     TEST_ASSERT_STATUS(status);
     df->formatToDecimalQuantity(fable, fd, status);
     TEST_ASSERT_STATUS(status);
     ASSERT_EQUAL(22, fd.getPluralOperand(PLURAL_OPERAND_V));
-    ASSERT_EQUAL(345678901234567890LL, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(3456789012345678900LL, fd.getPluralOperand(PLURAL_OPERAND_F));
     ASSERT_EQUAL(34567890123456789LL, fd.getPluralOperand(PLURAL_OPERAND_T));
     ASSERT_EQUAL(12, fd.getPluralOperand(PLURAL_OPERAND_I));
     ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
@@ -842,8 +842,8 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     df->formatToDecimalQuantity(fable, fd, status);
     TEST_ASSERT_STATUS(status);
     ASSERT_EQUAL(22, fd.getPluralOperand(PLURAL_OPERAND_V));
-    ASSERT_EQUAL(123456789012345678LL, fd.getPluralOperand(PLURAL_OPERAND_F));
-    ASSERT_EQUAL(123456789012345678LL, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(1234567890123456789LL, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(1234567890123456789LL, fd.getPluralOperand(PLURAL_OPERAND_T));
     ASSERT_EQUAL(345678901234567890LL, fd.getPluralOperand(PLURAL_OPERAND_I));
     ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
     ASSERT_EQUAL(FALSE, fd.isNegative());
@@ -892,7 +892,7 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_V));
     ASSERT_EQUAL(30, fd.getPluralOperand(PLURAL_OPERAND_F));
     ASSERT_EQUAL(3, fd.getPluralOperand(PLURAL_OPERAND_T));
-    ASSERT_EQUAL(100000000000000000LL, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_I));
     ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
     ASSERT_EQUAL(FALSE, fd.isNegative());
 

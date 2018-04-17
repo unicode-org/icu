@@ -1480,7 +1480,7 @@ FixedDecimal::FixedDecimal(const FixedDecimal &other) {
     decimalDigits = other.decimalDigits;
     decimalDigitsWithoutTrailingZeros = other.decimalDigitsWithoutTrailingZeros;
     intValue = other.intValue;
-    hasIntegerValue = other.hasIntegerValue;
+    _hasIntegerValue = other._hasIntegerValue;
     isNegative = other.isNegative;
     _isNaN = other._isNaN;
     _isInfinite = other._isInfinite;
@@ -1504,10 +1504,10 @@ void FixedDecimal::init(double n, int32_t v, int64_t f) {
         v = 0;
         f = 0;
         intValue = 0;
-        hasIntegerValue = FALSE;
+        _hasIntegerValue = FALSE;
     } else {
         intValue = (int64_t)source;
-        hasIntegerValue = (source == intValue);
+        _hasIntegerValue = (source == intValue);
     }
 
     visibleDecimalDigitCount = v;
@@ -1639,6 +1639,10 @@ bool FixedDecimal::isNaN() const {
 
 bool FixedDecimal::isInfinite() const {
     return _isInfinite;
+}
+
+bool FixedDecimal::hasIntegerValue() const {
+    return _hasIntegerValue;
 }
 
 bool FixedDecimal::isNanOrInfinity() const {

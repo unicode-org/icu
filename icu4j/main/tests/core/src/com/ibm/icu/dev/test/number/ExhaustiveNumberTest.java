@@ -170,7 +170,6 @@ public class ExhaustiveNumberTest extends TestFmwk {
         if (explicitRequired) {
             assertTrue(alert + "Should be using approximate double", !fq.explicitExactDouble);
         }
-        assertEquals(alert + "Initial construction from hard double", d, fq.toDouble());
         fq.roundToInfinity();
         if (explicitRequired) {
             assertTrue(alert + "Should not be using approximate double", fq.explicitExactDouble);
