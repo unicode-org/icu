@@ -60,6 +60,8 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
     }
 
     public DecimalQuantity_DualStorageBCD(Number number) {
+        // NOTE: Number type expansion happens both here
+        // and in NumberFormat.java
         if (number instanceof Long) {
             setToLong(number.longValue());
         } else if (number instanceof Integer) {

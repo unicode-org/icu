@@ -55,7 +55,7 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
     PluralFormat* plFmt[8];
     Locale        locale = Locale::getDefault();
     UnicodeString otherPattern = UnicodeString("other{#}");
-    UnicodeString message=UnicodeString("ERROR: PluralFormat basic test");
+    UnicodeString message=UnicodeString("PluralFormat basic test");
 
     // ========= Test constructors
     logln(" Testing PluralFormat constructors ...");
@@ -685,7 +685,7 @@ PluralFormatTest::TestDecimals() {
 }
 
 void
-PluralFormatTest::numberFormatTest(PluralFormat* plFmt, 
+PluralFormatTest::numberFormatTest(PluralFormat* plFmt,
                                    NumberFormat *numFmt,
                                    int32_t start,
                                    int32_t end,
@@ -723,12 +723,15 @@ PluralFormatTest::numberFormatTest(PluralFormat* plFmt,
                 }
             }
         }
-        if ( (numResult!=plResult) || U_FAILURE(status) ) {
+        if (U_FAILURE(status)) {
+            assertSuccess(*message + " in numberFormatTest", status);
+        }
+        if (numResult!=plResult) {
             if ( message == NULL ) {
                 errln("ERROR: Unexpected plural format - got:"+plResult+ UnicodeString("  expecting:")+numResult);
             }
             else {
-                errln( *message+UnicodeString("  got:")+plResult+UnicodeString("  expecting:")+numResult);
+                assertEquals(*message + " in numberFormatTest", numResult, plResult);
             }
         }
     }

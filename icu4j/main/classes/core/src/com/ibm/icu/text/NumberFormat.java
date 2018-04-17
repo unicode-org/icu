@@ -269,6 +269,8 @@ public abstract class NumberFormat extends UFormat {
     public StringBuffer format(Object number,
                                StringBuffer toAppendTo,
                                FieldPosition pos) {
+        // NOTE: Number type expansion happens both here
+        // and in DecimalQuantity_DualStorageBCD.java
         if (number instanceof Long) {
             return format(((Long)number).longValue(), toAppendTo, pos);
         } else if (number instanceof BigInteger) {
