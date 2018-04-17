@@ -232,6 +232,10 @@ void NumberParserImpl::freeze() {
     fFrozen = true;
 }
 
+parse_flags_t NumberParserImpl::getParseFlags() const {
+    return fParseFlags;
+}
+
 void NumberParserImpl::parse(const UnicodeString& input, bool greedy, ParsedNumber& result,
                              UErrorCode& status) const {
     return parse(input, 0, greedy, result, status);

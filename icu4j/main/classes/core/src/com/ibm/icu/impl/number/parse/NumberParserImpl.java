@@ -19,8 +19,8 @@ import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.impl.number.PropertiesAffixPatternProvider;
 import com.ibm.icu.impl.number.RoundingUtils;
-import com.ibm.icu.number.Scale;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
+import com.ibm.icu.number.Scale;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
@@ -155,6 +155,9 @@ public class NumberParserImpl {
         if (properties.getParseIntegerOnly()) {
             parseFlags |= ParsingUtils.PARSE_FLAG_INTEGER_ONLY;
         }
+        if (properties.getParseToBigDecimal()) {
+            parseFlags |= ParsingUtils.PARSE_FLAG_FORCE_BIG_DECIMAL;
+        }
         if (properties.getSignAlwaysShown()) {
             parseFlags |= ParsingUtils.PARSE_FLAG_PLUS_SIGN_ALLOWED;
         }
@@ -287,6 +290,10 @@ public class NumberParserImpl {
 
     public void freeze() {
         frozen = true;
+    }
+
+    public int getParseFlags() {
+        return parseFlags;
     }
 
     public void parse(String input, boolean greedy, ParsedNumber result) {

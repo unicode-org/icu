@@ -1384,17 +1384,18 @@ public class NumberRegressionTests extends TestFmwk {
      */
     @Test
     public void Test4170798() {
-        Locale savedLocale = Locale.getDefault();
-        Locale.setDefault(Locale.US);
-        DecimalFormat df = new DecimalFormat();
-        df.setParseIntegerOnly(true);
-        Number n = df.parse("-0.0", new ParsePosition(0));
-        if (!(n instanceof Double)
-            || n.intValue() != 0) {
-            errln("FAIL: parse(\"-0.0\") returns " +
-                  n + " (" + n.getClass().getName() + ')');
+        DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(ULocale.US);
+        {
+            ParsePosition ppos = new ParsePosition(0);
+            Number result = df.parse("-0.0", ppos);
+            assertEquals("Should parse to double -0.0", new Double(-0.0), result);
         }
-        Locale.setDefault(savedLocale);
+        df.setParseIntegerOnly(true);
+        {
+            ParsePosition ppos = new ParsePosition(0);
+            Number result = df.parse("-0.0", ppos);
+            assertEquals("Should parse to an integer type, not a double", new Long(0), result);
+        }
     }
 
     /**

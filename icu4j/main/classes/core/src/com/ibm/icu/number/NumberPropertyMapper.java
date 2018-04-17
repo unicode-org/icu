@@ -139,8 +139,7 @@ final class NumberPropertyMapper {
         boolean explicitMinMaxFrac = minFrac != -1 || maxFrac != -1;
         boolean explicitMinMaxSig = minSig != -1 || maxSig != -1;
         // Resolve min/max frac for currencies, required for the validation logic and for when minFrac or
-        // maxFrac was
-        // set (but not both) on a currency instance.
+        // maxFrac was set (but not both) on a currency instance.
         // NOTE: Increments are handled in "Rounder.constructCurrency()".
         if (useCurrency) {
             if (minFrac == -1 && maxFrac == -1) {

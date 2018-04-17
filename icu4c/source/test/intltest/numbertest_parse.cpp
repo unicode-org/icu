@@ -99,7 +99,7 @@ void NumberParserTest::testBasic() {
                  {3, u".00", u"0", 3, 0.0},
                  {3, u"                              1,234", u"a0", 35, 1234.}, // should not hang
                  {3, u"NaN", u"0", 3, NAN},
-                 {3, u"NaN E5", u"0", 3, NAN},
+                 {3, u"NaN E5", u"0", 6, NAN},
                  {3, u"0", u"0", 1, 0.0}};
 
     parse_flags_t parseFlags = PARSE_FLAG_IGNORE_CASE | PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;

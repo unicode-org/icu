@@ -159,7 +159,7 @@ class ParsedNumber {
 
     double getDouble() const;
 
-    void populateFormattable(Formattable& output) const;
+    void populateFormattable(Formattable& output, parse_flags_t parseFlags) const;
 
     bool isBetterThan(const ParsedNumber& other);
 };

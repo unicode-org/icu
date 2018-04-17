@@ -131,12 +131,15 @@ public class ParsedNumber {
     }
 
     public Number getNumber() {
-        return getNumber(false);
+        return getNumber(0);
     }
 
-    public Number getNumber(boolean forceBigDecimal) {
+    /** @param parseFlags Configuration settings from ParsingUtils.java */
+    public Number getNumber(int parseFlags) {
         boolean sawNaN = 0 != (flags & FLAG_NAN);
         boolean sawInfinity = 0 != (flags & FLAG_INFINITY);
+        boolean forceBigDecimal = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_FORCE_BIG_DECIMAL);
+        boolean integerOnly = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_INTEGER_ONLY);
 
         // Check for NaN, infinity, and -0.0
         if (sawNaN) {
@@ -150,7 +153,7 @@ public class ParsedNumber {
             }
         }
         assert quantity != null;
-        if (quantity.isZero() && quantity.isNegative()) {
+        if (quantity.isZero() && quantity.isNegative() && !integerOnly) {
             return -0.0;
         }
 

@@ -25,7 +25,7 @@ void DecimalFormatProperties::clear() {
     exponentSignAlwaysShown = false;
     formatWidth = -1;
     groupingSize = -1;
-    groupingUsed = false;
+    groupingUsed = true;
     magnitudeMultiplier = 0;
     maximumFractionDigits = -1;
     maximumIntegerDigits = -1;

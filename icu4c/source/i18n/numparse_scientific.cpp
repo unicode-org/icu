@@ -52,9 +52,7 @@ ScientificMatcher::ScientificMatcher(const DecimalFormatSymbols& dfs, const Grou
 
 bool ScientificMatcher::match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const {
     // Only accept scientific notation after the mantissa.
-    // Most places use result.hasNumber(), but we need a stronger condition here (i.e., exponent is
-    // not well-defined after NaN or infinity).
-    if (result.quantity.bogus) {
+    if (!result.seenNumber()) {
         return false;
     }
 
@@ -95,8 +93,13 @@ bool ScientificMatcher::match(StringSegment& segment, ParsedNumber& result, UErr
             segment.adjustOffset(overlap2);
         }
 
+        // We are supposed to accept E0 after NaN, so we need to make sure result.quantity is available.
+        bool wasBogus = result.quantity.bogus;
+        result.quantity.bogus = false;
         int digitsOffset = segment.getOffset();
         bool digitsReturnValue = fExponentMatcher.match(segment, result, exponentSign, status);
+        result.quantity.bogus = wasBogus;
+
         if (segment.getOffset() != digitsOffset) {
             // At least one exponent digit was matched.
             result.flags |= FLAG_HAS_EXPONENT;

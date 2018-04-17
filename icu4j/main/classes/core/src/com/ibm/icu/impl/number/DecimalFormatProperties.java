@@ -159,7 +159,7 @@ public class DecimalFormatProperties implements Cloneable, Serializable {
         exponentSignAlwaysShown = false;
         formatWidth = -1;
         groupingSize = -1;
-        groupingUsed = false;
+        groupingUsed = true;
         magnitudeMultiplier = 0;
         mathContext = null;
         maximumFractionDigits = -1;

@@ -254,6 +254,12 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
         break;
     }
 
+    // Back up if there was a trailing grouping separator
+    if (backupOffset != -1) {
+        segment.setOffset(backupOffset);
+        hasPartialPrefix = true; // redundant with `groupingOverlap == segment.length()`
+    }
+
     // Check the final grouping for validity
     if (requireGroupingMatch && !seenDecimal && seenGrouping && afterFirstGrouping &&
         groupedDigitCount != grouping1) {

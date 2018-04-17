@@ -512,7 +512,7 @@ void DecimalFormat::parse(const UnicodeString& text, Formattable& output,
     // TODO: Do we need to check for fProperties->parseAllInput (UCONFIG_HAVE_PARSEALLINPUT) here?
     if (result.success()) {
         parsePosition.setIndex(result.charEnd);
-        result.populateFormattable(output);
+        result.populateFormattable(output, fParser->getParseFlags());
     } else {
         parsePosition.setErrorIndex(startIndex + result.charEnd);
     }
@@ -533,7 +533,7 @@ CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& text, ParsePos
     if (result.success()) {
         parsePosition.setIndex(result.charEnd);
         Formattable formattable;
-        result.populateFormattable(formattable);
+        result.populateFormattable(formattable, fParser->getParseFlags());
         return new CurrencyAmount(formattable, result.currencyCode, status);
     } else {
         parsePosition.setErrorIndex(startIndex + result.charEnd);

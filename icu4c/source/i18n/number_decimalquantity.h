@@ -150,8 +150,9 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
 
     /**
      * Returns whether or not a Long can fully represent the value stored in this DecimalQuantity.
+     * @param ignoreFraction if true, silently ignore digits after the decimal place.
      */
-    bool fitsInLong() const;
+    bool fitsInLong(bool ignoreFraction = false) const;
 
     /** @return The value contained in this {@link DecimalQuantity} approximated as a double. */
     double toDouble() const;

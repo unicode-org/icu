@@ -822,7 +822,7 @@ public class DecimalFormat extends NumberFormat {
       if (result.success()) {
           parsePosition.setIndex(result.charEnd);
           // TODO: Accessing properties here is technically not thread-safe
-          Number number = result.getNumber(properties.getParseToBigDecimal());
+          Number number = result.getNumber(parser.getParseFlags());
           // Backwards compatibility: return com.ibm.icu.math.BigDecimal
           if (number instanceof java.math.BigDecimal) {
               number = safeConvertBigDecimal((java.math.BigDecimal) number);
@@ -861,7 +861,7 @@ public class DecimalFormat extends NumberFormat {
       if (result.success()) {
           parsePosition.setIndex(result.charEnd);
           // TODO: Accessing properties here is technically not thread-safe
-          Number number = result.getNumber(properties.getParseToBigDecimal());
+          Number number = result.getNumber(parserWithCurrency.getParseFlags());
           // Backwards compatibility: return com.ibm.icu.math.BigDecimal
           if (number instanceof java.math.BigDecimal) {
               number = safeConvertBigDecimal((java.math.BigDecimal) number);
