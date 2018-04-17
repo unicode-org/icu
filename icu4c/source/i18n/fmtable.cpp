@@ -716,28 +716,11 @@ CharString *Formattable::internalGetCharString(UErrorCode &status) {
         // from parsing, or from the user setting a decimal number, fDecimalNum
         // would already be set.
         //
-        fDecimalQuantity = new DecimalQuantity(); // TODO: use internal digit list
-        if (fDecimalQuantity == NULL) {
-          status = U_MEMORY_ALLOCATION_ERROR;
-          return NULL;
-        }
-
-        switch (fType) {
-        case kDouble:
-          fDecimalQuantity->setToDouble(this->getDouble());
-          fDecimalQuantity->roundToInfinity();
-          break;
-        case kLong:
-          fDecimalQuantity->setToInt(this->getLong());
-          break;
-        case kInt64:
-          fDecimalQuantity->setToLong(this->getInt64());
-          break;
-        default:
-          // The formattable's value is not a numeric type.
-          status = U_INVALID_STATE_ERROR;
-          return NULL;
-        }
+        LocalPointer<DecimalQuantity> dq(new DecimalQuantity(), status);
+        if (U_FAILURE(status)) { return nullptr; }
+        populateDecimalQuantity(*dq, status);
+        if (U_FAILURE(status)) { return nullptr; }
+        fDecimalQuantity = dq.orphan();
       }
 
       fDecimalStr = new CharString();
@@ -757,6 +740,30 @@ CharString *Formattable::internalGetCharString(UErrorCode &status) {
       }
     }
     return fDecimalStr;
+}
+
+void
+Formattable::populateDecimalQuantity(number::impl::DecimalQuantity& output, UErrorCode& status) const {
+    if (fDecimalQuantity != nullptr) {
+        output = *fDecimalQuantity;
+        return;
+    }
+
+    switch (fType) {
+        case kDouble:
+            output.setToDouble(this->getDouble());
+            output.roundToInfinity();
+            break;
+        case kLong:
+            output.setToInt(this->getLong());
+            break;
+        case kInt64:
+            output.setToLong(this->getInt64());
+            break;
+        default:
+            // The formattable's value is not a numeric type.
+            status = U_INVALID_STATE_ERROR;
+    }
 }
 
 // ---------------------------------------

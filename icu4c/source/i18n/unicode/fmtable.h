@@ -660,6 +660,12 @@ public:
     number::impl::DecimalQuantity *getDecimalQuantity() const { return fDecimalQuantity;}
 
     /**
+     * Export the value of this Formattable to a DecimalQuantity.
+     * @internal
+     */
+    void populateDecimalQuantity(number::impl::DecimalQuantity& output, UErrorCode& status) const;
+
+    /**
      *  Adopt, and set value from, a DecimalQuantity
      *     Internal Function, do not use.
      *  @param dl the DecimalQuantity to be adopted

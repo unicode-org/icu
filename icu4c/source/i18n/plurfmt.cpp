@@ -22,6 +22,8 @@
 #include "uassert.h"
 #include "uhash.h"
 #include "number_decimalquantity.h"
+#include "number_utils.h"
+#include "number_utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -259,34 +261,33 @@ PluralFormat::format(const Formattable& numberObject, double number,
     if (msgPattern.countParts() == 0) {
         return numberFormat->format(numberObject, appendTo, pos, status);
     }
+
     // Get the appropriate sub-message.
     // Select it based on the formatted number-offset.
     double numberMinusOffset = number - offset;
-    UnicodeString numberString;
-    DecimalQuantity quantity;
-    FieldPosition ignorePos;
+    // Call NumberFormatter to get both the DecimalQuantity and the string.
+    // This call site needs to use more internal APIs than the Java equivalent.
+    number::impl::UFormattedNumberData data;
     if (offset == 0) {
-        DecimalFormat *decFmt = dynamic_cast<DecimalFormat *>(numberFormat);
-        if(decFmt != NULL) {
-            decFmt->formatToDecimalQuantity(numberObject, quantity, status);
-        } else {
-            numberFormat->format(
-                    numberObject, numberString, ignorePos, status);  // could be BigDecimal etc.
-            quantity.setToDouble(numberMinusOffset);
-            quantity.roundToInfinity();
-        }
+        // could be BigDecimal etc.
+        numberObject.populateDecimalQuantity(data.quantity, status);
     } else {
-        DecimalFormat *decFmt = dynamic_cast<DecimalFormat *>(numberFormat);
-        if(decFmt != NULL) {
-            decFmt->formatToDecimalQuantity(numberMinusOffset, quantity, status);
+        data.quantity.setToDouble(numberMinusOffset);
+    }
+    UnicodeString numberString;
+    auto *decFmt = dynamic_cast<DecimalFormat *>(numberFormat);
+    if(decFmt != nullptr) {
+        decFmt->toNumberFormatter().formatImpl(&data, status); // mutates &data
+        numberString = data.string.toUnicodeString();
+    } else {
+        if (offset == 0) {
+            numberFormat->format(numberObject, numberString, status);
         } else {
-            numberFormat->format(
-                    numberMinusOffset, numberString, ignorePos, status);
-            quantity.setToDouble(numberMinusOffset);
-            quantity.roundToInfinity();
+            numberFormat->format(numberMinusOffset, numberString, status);
         }
     }
-    int32_t partIndex = findSubMessage(msgPattern, 0, pluralRulesWrapper, &quantity, number, status);
+
+    int32_t partIndex = findSubMessage(msgPattern, 0, pluralRulesWrapper, &data.quantity, number, status);
     if (U_FAILURE(status)) { return appendTo; }
     // Replace syntactic # signs in the top level of this sub-message
     // (not in nested arguments) with the formatted number-offset.
