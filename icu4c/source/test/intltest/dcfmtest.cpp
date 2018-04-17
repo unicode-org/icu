@@ -454,8 +454,9 @@ void DecimalFormatTest::execFormatTest(int32_t lineNum,
     }
     
     if (result != expected) {
-        errln("[%s] file dcfmtest.txt, line %d: expected \"%s\", got \"%s\"",
-            typeStr, lineNum, UnicodeStringPiece(expected).data(), UnicodeStringPiece(result).data());
+        errln("[%s] file dcfmtest.txt, line %d: expected \"%s\", got \"%s\", %s",
+            typeStr, lineNum, UnicodeStringPiece(expected).data(), UnicodeStringPiece(result).data(),
+            u_errorName(status));
     }
 }
 
