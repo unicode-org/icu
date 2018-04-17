@@ -331,11 +331,14 @@ void CompactDecimalFormatTest::TestAPIVariants() {
   }
   
   actual.remove();
+  pos.setBeginIndex(0);
+  pos.setEndIndex(0);
   status = U_ZERO_ERROR;
   cdf->format((double)123456.0, actual, &posIter, status);
-  if (status != U_UNSUPPORTED_ERROR) {
-    errln(UnicodeString("Fail format(double,UnicodeString&,FieldPositionIterator*,UErrorCode&): Expected status U_UNSUPPORTED_ERROR;") +
-                                                              "Got status " + u_errorName(status));
+  posIter.next(pos);
+  if (actual != expected || pos.getEndIndex() != 3 || status != U_ZERO_ERROR) {
+    errln(UnicodeString("Fail format(int32_t,UnicodeString&,FieldPosition&,UErrorCode&): Expected: \"") + expected + "\", first pos 3, status U_ZERO_ERROR; " +
+          "Got: \"" + actual + "\", pos " + pos.getEndIndex() + ", status " + u_errorName(status));
   }
 
   actual.remove();
@@ -358,11 +361,14 @@ void CompactDecimalFormatTest::TestAPIVariants() {
   }
   
   actual.remove();
+  pos.setBeginIndex(0);
+  pos.setEndIndex(0);
   status = U_ZERO_ERROR;
   cdf->format((int32_t)123456, actual, &posIter, status);
-  if (status != U_UNSUPPORTED_ERROR) {
-    errln(UnicodeString("Fail format(int32_t,UnicodeString&,FieldPositionIterator*,UErrorCode&): Expected status U_UNSUPPORTED_ERROR;") +
-                                                              "Got status " + u_errorName(status));
+  posIter.next(pos);
+  if (actual != expected || pos.getEndIndex() != 3 || status != U_ZERO_ERROR) {
+    errln(UnicodeString("Fail format(int32_t,UnicodeString&,FieldPosition&,UErrorCode&): Expected: \"") + expected + "\", first pos 3, status U_ZERO_ERROR; " +
+          "Got: \"" + actual + "\", pos " + pos.getEndIndex() + ", status " + u_errorName(status));
   }
 
   actual.remove();
@@ -385,11 +391,14 @@ void CompactDecimalFormatTest::TestAPIVariants() {
   }
   
   actual.remove();
+  pos.setBeginIndex(0);
+  pos.setEndIndex(0);
   status = U_ZERO_ERROR;
   cdf->format((int64_t)123456, actual, &posIter, status);
-  if (status != U_UNSUPPORTED_ERROR) {
-    errln(UnicodeString("Fail format(int64_t,UnicodeString&,FieldPositionIterator*,UErrorCode&): Expected status U_UNSUPPORTED_ERROR;") +
-                                                              "Got status " + u_errorName(status));
+  posIter.next(pos);
+  if (actual != expected || pos.getEndIndex() != 3 || status != U_ZERO_ERROR) {
+    errln(UnicodeString("Fail format(int32_t,UnicodeString&,FieldPosition&,UErrorCode&): Expected: \"") + expected + "\", first pos 3, status U_ZERO_ERROR; " +
+          "Got: \"" + actual + "\", pos " + pos.getEndIndex() + ", status " + u_errorName(status));
   }
 
 }

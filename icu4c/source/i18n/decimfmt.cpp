@@ -466,8 +466,7 @@ DecimalFormat::format(int64_t number, UnicodeString& appendTo, FieldPositionIter
 UnicodeString&
 DecimalFormat::format(StringPiece number, UnicodeString& appendTo, FieldPositionIterator* posIter,
                       UErrorCode& status) const {
-    ErrorCode localStatus;
-    FormattedNumber output = fFormatter->formatDecimal(number, localStatus);
+    FormattedNumber output = fFormatter->formatDecimal(number, status);
     if (posIter != nullptr) {
         output.populateFieldPositionIterator(*posIter, status);
     }

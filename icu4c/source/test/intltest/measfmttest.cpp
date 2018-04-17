@@ -1876,9 +1876,9 @@ void MeasureFormatTest::TestCurrencies() {
     if (!assertSuccess("Error creating format object", status)) {
         return;
     }
-    verifyFormat("TestCurrenciesShort", fmt, &USD_NEG_1, 1, "-USD1.00");
-    verifyFormat("TestCurrenciesShort", fmt, &USD_1, 1, "USD1.00");
-    verifyFormat("TestCurrenciesShort", fmt, &USD_2, 1, "USD2.00");
+    verifyFormat("TestCurrenciesShort", fmt, &USD_NEG_1, 1, "-USD\\u00A01.00");
+    verifyFormat("TestCurrenciesShort", fmt, &USD_1, 1, "USD\\u00A01.00");
+    verifyFormat("TestCurrenciesShort", fmt, &USD_2, 1, "USD\\u00A02.00");
     fmt = MeasureFormat(en, UMEASFMT_WIDTH_NARROW, status);
     if (!assertSuccess("Error creating format object", status)) {
         return;
@@ -2099,8 +2099,8 @@ void MeasureFormatTest::TestGroupingSeparator() {
             "grouping separator",
             "2,147,483,647 yrs, -2,147,483,648 mths, -987 days, 1,362 hr, 987 min",
             appendTo);
-    assertEquals("begin index", 9, pos.getBeginIndex());
-    assertEquals("end index", 10, pos.getEndIndex());
+    assertEquals("begin index", 1, pos.getBeginIndex());
+    assertEquals("end index", 2, pos.getEndIndex());
 }
 
 void MeasureFormatTest::TestDoubleZero() {

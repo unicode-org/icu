@@ -589,13 +589,13 @@ NumberFormat::format(const Formattable& obj,
     } else {
         switch (n->getType()) {
         case Formattable::kDouble:
-            format(n->getDouble(), appendTo, pos);
+            format(n->getDouble(), appendTo, pos, status);
             break;
         case Formattable::kLong:
-            format(n->getLong(), appendTo, pos);
+            format(n->getLong(), appendTo, pos, status);
             break;
         case Formattable::kInt64:
-            format(n->getInt64(), appendTo, pos);
+            format(n->getInt64(), appendTo, pos, status);
             break;
         default:
             status = U_INVALID_FORMAT_ERROR;
