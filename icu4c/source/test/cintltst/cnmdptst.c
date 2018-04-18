@@ -69,7 +69,7 @@ static void TestPatterns(void)
     UChar *str=NULL;
     UErrorCode status = U_ZERO_ERROR;
     const char* pat[]    = { "#.#", "#.", ".#", "#" };
-    const char* newpat[] = { "#0.#", "#0.", "#.0", "#" };
+    const char* newpat[] = { "0.#", "0.", "#.0", "0" };
     const char* num[]    = { "0",   "0.", ".0", "0" };
 
     log_verbose("\nTesting different format patterns\n");
@@ -473,8 +473,8 @@ static void TestCurrencyPreEuro(void)
     };
 
     const char* result[]={
-        "\\u20A7\\u00A02", "2\\u00A0F",            "IEP1.50",                      "1,50\\u00A0mk",   "2\\u00A0F",         "ITL\\u00A02",
-        "1$50\\u00A0\\u200B", "\\u00F6S\\u00A01,50",  "1,50\\u00A0\\u0394\\u03C1\\u03C7", "2\\u00A0\\u20A7", "1,50\\u00A0FB",     "IEP1.50",
+        "\\u20A7\\u00A02", "2\\u00A0F",            "IEP\\u00A01.50",                      "1,50\\u00A0mk",   "2\\u00A0F",         "ITL\\u00A02",
+        "1$50\\u00A0\\u200B", "\\u00F6S\\u00A01,50",  "1,50\\u00A0\\u0394\\u03C1\\u03C7", "2\\u00A0\\u20A7", "1,50\\u00A0FB",     "IEP\\u00A01.50",
         "1,50\\u00A0BEF",   "1,50\\u00A0DM",        "1,50\\u00A0BEF",                    "\\u20A7\\u00A02", "1,50\\u00A0F",      "2\\u00A0\\u20A7",
         "NLG\\u00A01,50"
     };
@@ -731,17 +731,17 @@ static void TestSecondaryGrouping(void) {
     u_uastrcpy(buffer, "12,34,56,789");
     if ((u_strcmp(resultBuffer, buffer) != 0) || U_FAILURE(status))
     {
-        log_err("Fail: Formatting \"#,##,###\" pattern with 123456789 got %s, expected %s\n", resultBuffer, "12,34,56,789");
+        log_err("Fail: Formatting \"#,##,###\" pattern with 123456789 got %s, expected %s\n", austrdup(resultBuffer), "12,34,56,789");
     }
     if (pos.beginIndex != 0 && pos.endIndex != 12) {
         log_err("Fail: Formatting \"#,##,###\" pattern pos = (%d, %d) expected pos = (0, 12)\n", pos.beginIndex, pos.endIndex);
     }
     memset(resultBuffer,0, sizeof(UChar)*512);
     unum_toPattern(f, FALSE, resultBuffer, 512, &status);
-    u_uastrcpy(buffer, "#,##,###");
+    u_uastrcpy(buffer, "#,##,##0");
     if ((u_strcmp(resultBuffer, buffer) != 0) || U_FAILURE(status))
     {
-        log_err("Fail: toPattern() got %s, expected %s\n", resultBuffer, "#,##,###");
+        log_err("Fail: toPattern() got %s, expected %s\n", austrdup(resultBuffer), "#,##,##0");
     }
     memset(resultBuffer,0, sizeof(UChar)*512);
     u_uastrcpy(buffer, "#,###");
@@ -755,14 +755,14 @@ static void TestSecondaryGrouping(void) {
     u_uastrcpy(buffer, "12,3456,789");
     if ((u_strcmp(resultBuffer, buffer) != 0) || U_FAILURE(status))
     {
-        log_err("Fail: Formatting \"#,###\" pattern with 123456789 got %s, expected %s\n", resultBuffer, "12,3456,789");
+        log_err("Fail: Formatting \"#,###\" pattern with 123456789 got %s, expected %s\n", austrdup(resultBuffer), "12,3456,789");
     }
     memset(resultBuffer,0, sizeof(UChar)*512);
     unum_toPattern(f, FALSE, resultBuffer, 512, &status);
-    u_uastrcpy(buffer, "#,####,###");
+    u_uastrcpy(buffer, "#,####,##0");
     if ((u_strcmp(resultBuffer, buffer) != 0) || U_FAILURE(status))
     {
-        log_err("Fail: toPattern() got %s, expected %s\n", resultBuffer, "#,####,###");
+        log_err("Fail: toPattern() got %s, expected %s\n", austrdup(resultBuffer), "#,####,##0");
     }
     memset(resultBuffer,0, sizeof(UChar)*512);
     g = unum_open(UNUM_DECIMAL, NULL,0,"hi_IN",NULL, &status);
