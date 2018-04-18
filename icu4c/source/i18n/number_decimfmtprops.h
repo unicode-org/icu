@@ -100,7 +100,7 @@ struct U_I18N_API DecimalFormatProperties {
     int32_t formatWidth;
     int32_t groupingSize;
     bool groupingUsed;
-    int32_t magnitudeMultiplier;
+    int32_t magnitudeMultiplier; // internal field like multiplierScale but separate to avoid conflict
     int32_t maximumFractionDigits;
     int32_t maximumIntegerDigits;
     int32_t maximumSignificantDigits;
@@ -110,6 +110,7 @@ struct U_I18N_API DecimalFormatProperties {
     int32_t minimumIntegerDigits;
     int32_t minimumSignificantDigits;
     int32_t multiplier;
+    int32_t multiplierScale; // ICU4C-only
     UnicodeString negativePrefix;
     UnicodeString negativePrefixPattern;
     UnicodeString negativeSuffix;
@@ -129,7 +130,6 @@ struct U_I18N_API DecimalFormatProperties {
     UnicodeString positiveSuffixPattern;
     double roundingIncrement;
     NullableValue<RoundingMode> roundingMode;
-    int32_t scaleMultiplier;
     int32_t secondaryGroupingSize;
     bool signAlwaysShown;
 

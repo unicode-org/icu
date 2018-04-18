@@ -32,7 +32,7 @@ class MultiplierFormatHandler : public MicroPropsGenerator, public UMemory {
 
 /** Gets a Scale from a DecimalFormatProperties. In Java, defined in RoundingUtils.java */
 static inline Scale scaleFromProperties(const DecimalFormatProperties& properties) {
-    int32_t magnitudeMultiplier = properties.magnitudeMultiplier + properties.scaleMultiplier;
+    int32_t magnitudeMultiplier = properties.magnitudeMultiplier + properties.multiplierScale;
     int32_t arbitraryMultiplier = properties.multiplier;
     if (magnitudeMultiplier != 0 && arbitraryMultiplier != 1) {
         return Scale::byDoubleAndPowerOfTen(arbitraryMultiplier, magnitudeMultiplier);

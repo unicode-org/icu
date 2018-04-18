@@ -167,7 +167,7 @@ DecimalFormat::setAttribute(UNumberFormatAttribute attr, int32_t newValue, UErro
             break;
 
         case UNUM_SCALE:
-            setScale(newValue);
+            setMultiplierScale(newValue);
             break;
 
         case UNUM_GROUPING_SIZE:
@@ -280,7 +280,7 @@ int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& sta
             return getMultiplier();
 
         case UNUM_SCALE:
-            return getScale();
+            return getMultiplierScale();
 
         case UNUM_GROUPING_SIZE:
             return getGroupingSize();
@@ -667,12 +667,12 @@ void DecimalFormat::setMultiplier(int32_t multiplier) {
     refreshFormatterNoError();
 }
 
-int32_t DecimalFormat::getScale() const {
-    return fProperties->scaleMultiplier;
+int32_t DecimalFormat::getMultiplierScale() const {
+    return fProperties->multiplierScale;
 }
 
-void DecimalFormat::setScale(int32_t newValue) {
-    fProperties->scaleMultiplier = newValue;
+void DecimalFormat::setMultiplierScale(int32_t newValue) {
+    fProperties->multiplierScale = newValue;
     refreshFormatterNoError();
 }
 
