@@ -143,7 +143,7 @@ static void strToInt(
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    int32_t value = 0;
+    uint32_t value = 0;
     for (int32_t i = start; i < len; ++i) {
         UChar ch = str[i];
         if (ch < 0x30 || ch > 0x39) {
@@ -152,25 +152,23 @@ static void strToInt(
         }
         value = value * 10 - 0x30 + (int32_t) ch;
     }
-    if (neg) {
-        value = -value;
-    }
-    *static_cast<int32_t *>(intPtr) = value;
+    int32_t signedValue = neg ? -value : static_cast<int32_t>(value);
+    *static_cast<int32_t *>(intPtr) = signedValue;
 }
 
 static void intToStr(
         const void *intPtr, UnicodeString &appendTo) {
     UChar buffer[20];
-    int32_t x = *static_cast<const int32_t *>(intPtr);
-    UBool neg = FALSE;
-    if (x < 0) {
-        neg = TRUE;
-        x = -x;
-    }
-    if (neg) {
+    // int64_t such that all int32_t values can be negated
+    int64_t xSigned = *static_cast<const int32_t *>(intPtr);
+    uint32_t x;
+    if (xSigned < 0) {
         appendTo.append((UChar)0x2D);
+        x = static_cast<uint32_t>(-xSigned);
+    } else {
+        x = static_cast<uint32_t>(xSigned);
     }
-    int32_t len = uprv_itou(buffer, UPRV_LENGTHOF(buffer), (uint32_t) x, 10, 1);
+    int32_t len = uprv_itou(buffer, UPRV_LENGTHOF(buffer), x, 10, 1);
     appendTo.append(buffer, 0, len);
 }
 

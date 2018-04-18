@@ -2018,6 +2018,29 @@ public class NumberFormatterApiTest {
     }
 
     @Test
+    public void formatTypes() {
+        LocalizedNumberFormatter formatter = NumberFormatter.withLocale(ULocale.ENGLISH);
+
+        // Double
+        assertEquals("514.23", formatter.format(514.23).toString());
+
+        // Int64
+        assertEquals("51,423", formatter.format(51423L).toString());
+
+        // BigDecimal
+        assertEquals("987,654,321,234,567,890",
+                formatter.format(new BigDecimal("98765432123456789E1")).toString());
+
+        // Also test proper DecimalQuantity bytes storage when all digits are in the fraction.
+        // The number needs to have exactly 40 digits, which is the size of the default buffer.
+        // (issue discovered by the address sanitizer in C++)
+        assertEquals("0.009876543210987654321098765432109876543211",
+                formatter.rounding(Rounder.unlimited())
+                        .format(new BigDecimal("0.009876543210987654321098765432109876543211"))
+                        .toString());
+    }
+
+    @Test
     public void plurals() {
         // TODO: Expand this test.
 
