@@ -2171,7 +2171,7 @@ static void TestNoExponent(void) {
 
     ASSERT_TRUE(unum_getAttribute(fmt, UNUM_PARSE_NO_EXPONENT)==1);
 
-
+    // A scientific formatter should parse the exponent even if UNUM_PARSE_NO_EXPONENT is set
     cstr = "10E6";
     u_uastrcpy(str, cstr);
     expect = 10000000;
@@ -2472,28 +2472,28 @@ static void TestCurrencyIsoPluralFormat(void) {
         // format result using ISOCURRENCYSTYLE,
         // format result using PLURALCURRENCYSTYLE,
 
-        // locale             amount     ISOcode CURRENCYSTYLE         CURRENCY_STANDARD     CURRENCY_ACCOUNTING   ISOCURRENCYSTYLE  PLURALCURRENCYSTYLE
-        {"en_US",             "1",        "USD", "$1.00",              "$1.00",              "$1.00",              "USD1.00",        "1.00 US dollars"},
-        {"en_US",             "1234.56",  "USD", "$1,234.56",          "$1,234.56",          "$1,234.56",          "USD1,234.56",    "1,234.56 US dollars"},
-        {"en_US@cf=account",  "1234.56",  "USD", "$1,234.56",          "$1,234.56",          "$1,234.56",          "USD1,234.56",    "1,234.56 US dollars"},
-        {"en_US",             "-1234.56", "USD", "-$1,234.56",         "-$1,234.56",         "($1,234.56)",        "-USD1,234.56",   "-1,234.56 US dollars"},
-        {"en_US@cf=account",  "-1234.56", "USD", "($1,234.56)",        "-$1,234.56",         "($1,234.56)",        "-USD1,234.56",   "-1,234.56 US dollars"},
-        {"en_US@cf=standard", "-1234.56", "USD", "-$1,234.56",         "-$1,234.56",         "($1,234.56)",        "-USD1,234.56",   "-1,234.56 US dollars"},
-        {"zh_CN",             "1",        "USD", "US$1.00",            "US$1.00",            "US$1.00",            "USD1.00",        "1.00\\u7F8E\\u5143"},
-        {"zh_CN",             "-1",       "USD", "-US$1.00",           "-US$1.00",           "(US$1.00)",          "-USD1.00",       "-1.00\\u7F8E\\u5143"},
-        {"zh_CN@cf=account",  "-1",       "USD", "(US$1.00)",          "-US$1.00",           "(US$1.00)",          "-USD1.00",       "-1.00\\u7F8E\\u5143"},
-        {"zh_CN@cf=standard", "-1",       "USD", "-US$1.00",           "-US$1.00",           "(US$1.00)",          "-USD1.00",       "-1.00\\u7F8E\\u5143"},
-        {"zh_CN",             "1234.56",  "USD", "US$1,234.56",        "US$1,234.56",        "US$1,234.56",        "USD1,234.56",    "1,234.56\\u7F8E\\u5143"},
+        // locale             amount     ISOcode CURRENCYSTYLE         CURRENCY_STANDARD     CURRENCY_ACCOUNTING   ISOCURRENCYSTYLE          PLURALCURRENCYSTYLE
+        {"en_US",             "1",        "USD", "$1.00",              "$1.00",              "$1.00",              "USD\\u00A01.00",        "1.00 US dollars"},
+        {"en_US",             "1234.56",  "USD", "$1,234.56",          "$1,234.56",          "$1,234.56",          "USD\\u00A01,234.56",    "1,234.56 US dollars"},
+        {"en_US@cf=account",  "1234.56",  "USD", "$1,234.56",          "$1,234.56",          "$1,234.56",          "USD\\u00A01,234.56",    "1,234.56 US dollars"},
+        {"en_US",             "-1234.56", "USD", "-$1,234.56",         "-$1,234.56",         "($1,234.56)",        "-USD\\u00A01,234.56",   "-1,234.56 US dollars"},
+        {"en_US@cf=account",  "-1234.56", "USD", "($1,234.56)",        "-$1,234.56",         "($1,234.56)",        "-USD\\u00A01,234.56",   "-1,234.56 US dollars"},
+        {"en_US@cf=standard", "-1234.56", "USD", "-$1,234.56",         "-$1,234.56",         "($1,234.56)",        "-USD\\u00A01,234.56",   "-1,234.56 US dollars"},
+        {"zh_CN",             "1",        "USD", "US$1.00",            "US$1.00",            "US$1.00",            "USD\\u00A01.00",        "1.00\\u00A0\\u7F8E\\u5143"},
+        {"zh_CN",             "-1",       "USD", "-US$1.00",           "-US$1.00",           "(US$1.00)",          "-USD\\u00A01.00",       "-1.00\\u00A0\\u7F8E\\u5143"},
+        {"zh_CN@cf=account",  "-1",       "USD", "(US$1.00)",          "-US$1.00",           "(US$1.00)",          "-USD\\u00A01.00",       "-1.00\\u00A0\\u7F8E\\u5143"},
+        {"zh_CN@cf=standard", "-1",       "USD", "-US$1.00",           "-US$1.00",           "(US$1.00)",          "-USD\\u00A01.00",       "-1.00\\u00A0\\u7F8E\\u5143"},
+        {"zh_CN",             "1234.56",  "USD", "US$1,234.56",        "US$1,234.56",        "US$1,234.56",        "USD\\u00A01,234.56",    "1,234.56\\u00A0\\u7F8E\\u5143"},
         // {"zh_CN",          "1",        "CHY", "CHY1.00",            "CHY1.00",            "CHY1.00",            "CHY1.00",        "1.00 CHY"}, // wrong ISO code
         // {"zh_CN",          "1234.56",  "CHY", "CHY1,234.56",        "CHY1,234.56",        "CHY1,234.56",        "CHY1,234.56",    "1,234.56 CHY"}, // wrong ISO code
-        {"zh_CN",             "1",        "CNY", "\\uFFE51.00",        "\\uFFE51.00",        "\\uFFE51.00",        "CNY1.00",        "1.00\\u4EBA\\u6C11\\u5E01"},
-        {"zh_CN",             "1234.56",  "CNY", "\\uFFE51,234.56",    "\\uFFE51,234.56",    "\\uFFE51,234.56",    "CNY1,234.56",    "1,234.56\\u4EBA\\u6C11\\u5E01"},
-        {"ru_RU",             "1",        "RUB", "1,00\\u00A0\\u20BD", "1,00\\u00A0\\u20BD", "1,00\\u00A0\\u20BD", "1,00\\u00A0RUB", "1,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E "
-                                                                                                                                           "\\u0440\\u0443\\u0431\\u043B\\u044F"},
-        {"ru_RU",             "2",        "RUB", "2,00\\u00A0\\u20BD", "2,00\\u00A0\\u20BD", "2,00\\u00A0\\u20BD", "2,00\\u00A0RUB", "2,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E "
-                                                                                                                                           "\\u0440\\u0443\\u0431\\u043B\\u044F"},
-        {"ru_RU",             "5",        "RUB", "5,00\\u00A0\\u20BD", "5,00\\u00A0\\u20BD", "5,00\\u00A0\\u20BD", "5,00\\u00A0RUB", "5,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E "
-                                                                                                                                           "\\u0440\\u0443\\u0431\\u043B\\u044F"},
+        {"zh_CN",             "1",        "CNY", "\\uFFE51.00",        "\\uFFE51.00",        "\\uFFE51.00",        "CNY\\u00A01.00",        "1.00\\u00A0\\u4EBA\\u6C11\\u5E01"},
+        {"zh_CN",             "1234.56",  "CNY", "\\uFFE51,234.56",    "\\uFFE51,234.56",    "\\uFFE51,234.56",    "CNY\\u00A01,234.56",    "1,234.56\\u00A0\\u4EBA\\u6C11\\u5E01"},
+        {"ru_RU",             "1",        "RUB", "1,00\\u00A0\\u20BD", "1,00\\u00A0\\u20BD", "1,00\\u00A0\\u20BD", "1,00\\u00A0RUB",        "1,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E "
+                                                                                                                                            "\\u0440\\u0443\\u0431\\u043B\\u044F"},
+        {"ru_RU",             "2",        "RUB", "2,00\\u00A0\\u20BD", "2,00\\u00A0\\u20BD", "2,00\\u00A0\\u20BD", "2,00\\u00A0RUB",        "2,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E "
+                                                                                                                                            "\\u0440\\u0443\\u0431\\u043B\\u044F"},
+        {"ru_RU",             "5",        "RUB", "5,00\\u00A0\\u20BD", "5,00\\u00A0\\u20BD", "5,00\\u00A0\\u20BD", "5,00\\u00A0RUB",        "5,00 \\u0440\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u043E\\u0433\\u043E "
+                                                                                                                                            "\\u0440\\u0443\\u0431\\u043B\\u044F"},
         // test locale without currency information
         {"root",              "-1.23",    "USD", "-US$\\u00A01.23",    "-US$\\u00A01.23",    "-US$\\u00A01.23",    "-USD\\u00A01.23", "-1.23 USD"},
         {"root@cf=account",   "-1.23",    "USD", "-US$\\u00A01.23",    "-US$\\u00A01.23",    "-US$\\u00A01.23",    "-USD\\u00A01.23", "-1.23 USD"},
@@ -2630,7 +2630,7 @@ static void TestCurrencyUsage(void) {
          * - CAD rounds to .05
          */
 
-        {"PKR", "PKR124"},
+        {"PKR", "PKR\\u00A0124"},
         {"CAD", "CA$123.55"},
         {"USD", "$123.57"}
     };
@@ -2700,8 +2700,11 @@ static void TestCurrencyUsage(void) {
 static UChar currFmtNegSameAsPos[] = /* "\u00A4#,##0.00;\u00A4#,##0.00" */
     {0xA4,0x23,0x2C,0x23,0x23,0x30,0x2E,0x30,0x30,0x3B,0xA4,0x23,0x2C,0x23,0x23,0x30,0x2E,0x30,0x30,0};
 
-static UChar currFmtToPatExpected[] = /* "\u00A4#,##0.00" */
-    {0xA4,0x23,0x2C,0x23,0x23,0x30,0x2E,0x30,0x30,0};
+// NOTE: As of ICU 62, identical positive and negative subpatterns means no minus sign!
+// See CLDR ticket https://unicode.org/cldr/trac/ticket/10703
+//static UChar currFmtToPatExpected[] = /* "\u00A4#,##0.00" */
+//    {0xA4,0x23,0x2C,0x23,0x23,0x30,0x2E,0x30,0x30,0};
+static const UChar* currFmtToPatExpected = currFmtNegSameAsPos;
 
 static UChar currFmtResultExpected[] = /* "$100.00" */
     {0x24,0x31,0x30,0x30,0x2E,0x30,0x30,0};
@@ -2753,19 +2756,19 @@ static const ValueAndExpectedString enShort[] = {
   {0.0, "0"},
   {0.17, "0.17"},
   {1.0, "1"},
-  {1234.0, "1.23K"},
-  {12345.0, "12.3K"},
+  {1234.0, "1.2K"},
+  {12345.0, "12K"},
   {123456.0, "123K"},
-  {1234567.0, "1.23M"},
-  {12345678.0, "12.3M"},
+  {1234567.0, "1.2M"},
+  {12345678.0, "12M"},
   {123456789.0, "123M"},
-  {1.23456789E9, "1.23B"},
-  {1.23456789E10, "12.3B"},
+  {1.23456789E9, "1.2B"},
+  {1.23456789E10, "12B"},
   {1.23456789E11, "123B"},
-  {1.23456789E12, "1.23T"},
-  {1.23456789E13, "12.3T"},
+  {1.23456789E12, "1.2T"},
+  {1.23456789E13, "12T"},
   {1.23456789E14, "123T"},
-  {1.23456789E15, "1230T"},
+  {1.23456789E15, "1235T"},
   {0.0, NULL}
 };
 
@@ -2904,6 +2907,10 @@ static void TestVariousStylesAndAttributes(void) {
             const ValueAndExpectedString * veItemPtr;
             if (lsaTestPtr->attribute >= 0) {
                 unum_setAttribute(unum, (UNumberFormatAttribute)lsaTestPtr->attribute, lsaTestPtr->attrValue);
+            }
+            // ICU 62: should call minSignificantDigits in tandem with maxSignificantDigits.
+            if (lsaTestPtr->attribute == UNUM_MIN_SIGNIFICANT_DIGITS) {
+                unum_setAttribute(unum, UNUM_MAX_SIGNIFICANT_DIGITS, lsaTestPtr->attrValue);
             }
             for (veItemPtr = lsaTestPtr->veItems; veItemPtr->expected != NULL; veItemPtr++) {
                 UChar uexp[kUBufSize];

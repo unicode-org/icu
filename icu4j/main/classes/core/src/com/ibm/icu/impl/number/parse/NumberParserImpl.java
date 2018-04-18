@@ -229,7 +229,8 @@ public class NumberParserImpl {
         }
         parser.addMatcher(ignorables);
         parser.addMatcher(DecimalMatcher.getInstance(symbols, grouper, parseFlags));
-        if (!properties.getParseNoExponent()) {
+        // NOTE: parseNoExponent doesn't disable scientific parsing if we have a scientific formatter
+        if (!properties.getParseNoExponent() || properties.getMinimumExponentDigits() > 0) {
             parser.addMatcher(ScientificMatcher.getInstance(symbols, grouper));
         }
 
