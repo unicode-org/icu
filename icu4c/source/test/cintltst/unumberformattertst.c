@@ -147,8 +147,10 @@ static void TestExampleCode() {
     unumf_formatDouble(uformatter, 5142.3, uresult, &ec);
     assertSuccess("There should not be a failure in the example code", &ec);
 
-    // Export the string:
+    // Export the string to a malloc'd buffer:
     int32_t len = unumf_resultToString(uresult, NULL, 0, &ec);
+    assertTrue("No buffer yet", ec == U_BUFFER_OVERFLOW_ERROR);
+    ec = U_ZERO_ERROR;
     UChar* buffer = (UChar*) uprv_malloc((len+1)*sizeof(UChar));
     unumf_resultToString(uresult, buffer, len+1, &ec);
     assertSuccess("There should not be a failure in the example code", &ec);
