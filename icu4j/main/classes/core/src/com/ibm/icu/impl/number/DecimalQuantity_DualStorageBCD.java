@@ -90,7 +90,7 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
     @Override
     protected byte getDigitPos(int position) {
         if (usingBytes) {
-            if (position < 0 || position > precision)
+            if (position < 0 || position >= precision)
                 return 0;
             return bcdBytes[position];
         } else {

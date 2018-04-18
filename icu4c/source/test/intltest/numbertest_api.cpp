@@ -2047,9 +2047,23 @@ void NumberFormatterApiTest::locale() {
 void NumberFormatterApiTest::formatTypes() {
     UErrorCode status = U_ZERO_ERROR;
     LocalizedNumberFormatter formatter = NumberFormatter::withLocale(Locale::getEnglish());
-    const char* str1 = "98765432123456789E1";
-    UnicodeString actual = formatter.formatDecimal(str1, status).toString();
+
+    // Double
+    assertEquals("Format double", "514.23", formatter.formatDouble(514.23, status).toString());
+
+    // Int64
+    assertEquals("Format int64", "51,423", formatter.formatDouble(51423L, status).toString());
+
+    // decNumber
+    UnicodeString actual = formatter.formatDecimal("98765432123456789E1", status).toString();
     assertEquals("Format decNumber", u"987,654,321,234,567,890", actual);
+
+    // Also test proper DecimalQuantity bytes storage when all digits are in the fraction.
+    // The number needs to have exactly 40 digits, which is the size of the default buffer.
+    // (issue discovered by the address sanitizer in C++)
+    static const char* str = "0.009876543210987654321098765432109876543211";
+    actual = formatter.rounding(Rounder::unlimited()).formatDecimal(str, status).toString();
+    assertEquals("Format decNumber to 40 digits", str, actual);
 }
 
 void NumberFormatterApiTest::errors() {
