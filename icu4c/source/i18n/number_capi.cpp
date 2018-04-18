@@ -150,9 +150,9 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
     const UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
     if (U_FAILURE(*ec)) { return 0; }
 
-    if (buffer == nullptr) {
-        // Return the length without setting an error.
-        return result->string.length();
+    if (buffer == nullptr ? bufferCapacity != 0 : bufferCapacity < 0) {
+        *ec = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
     }
 
     return result->string.toTempUnicodeString().extract(buffer, bufferCapacity, *ec);
@@ -188,7 +188,7 @@ unumf_resultGetAllFields(const UFormattedNumber* uresult, UFieldPositionIterator
 }
 
 U_CAPI void U_EXPORT2
-unumf_closeResult(const UFormattedNumber* uresult) {
+unumf_closeResult(UFormattedNumber* uresult) {
     UErrorCode localStatus = U_ZERO_ERROR;
     const UFormattedNumberData* impl = UFormattedNumberData::validate(uresult, localStatus);
     if (U_FAILURE(localStatus)) { return; }

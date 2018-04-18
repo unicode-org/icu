@@ -70,6 +70,7 @@ class NumberFormatterApiTest : public IntlTest {
     void errors();
     void validRanges();
     void copyMove();
+    void localPointerCAPI();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 

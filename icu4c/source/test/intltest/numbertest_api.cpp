@@ -84,6 +84,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(errors);
         TESTCASE_AUTO(validRanges);
         TESTCASE_AUTO(copyMove);
+        TESTCASE_AUTO(localPointerCAPI);
     TESTCASE_AUTO_END;
 }
 
@@ -2204,6 +2205,28 @@ void NumberFormatterApiTest::copyMove() {
     assertEquals("FormattedNumber move constructor", u"10%", result.toString());
     result = l1.formatInt(20, status);
     assertEquals("FormattedNumber move assignment", u"20%", result.toString());
+}
+
+void NumberFormatterApiTest::localPointerCAPI() {
+    // NOTE: This is also the sample code in unumberformatter.h
+    UErrorCode ec = U_ZERO_ERROR;
+
+    // Setup:
+    LocalUNumberFormatterPointer uformatter(unumf_openFromSkeletonAndLocale(u"percent", -1, "en", &ec));
+    LocalUFormattedNumberPointer uresult(unumf_openResult(&ec));
+    assertSuccess("", ec);
+
+    // Format a decimal number:
+    unumf_formatDecimal(uformatter.getAlias(), "9.87E-3", -1, uresult.getAlias(), &ec);
+    assertSuccess("", ec);
+
+    // Get the location of the percent sign:
+    UFieldPosition ufpos = {UNUM_PERCENT_FIELD, 0, 0};
+    unumf_resultGetField(uresult.getAlias(), &ufpos, &ec);
+    assertEquals("Percent sign location within '0.00987%'", 7, ufpos.beginIndex);
+    assertEquals("Percent sign location within '0.00987%'", 8, ufpos.endIndex);
+
+    // No need to do any cleanup since we are using LocalPointer.
 }
 
 
