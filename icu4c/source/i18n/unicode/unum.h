@@ -1018,6 +1018,8 @@ typedef enum UNumberFormatAttribute {
     * <p>Example: setting the scale to 3, 123 formats as "123,000"
     * <p>Example: setting the scale to -4, 123 formats as "0.0123"
     *
+    * This setting is analogous to getMultiplierScale() and setMultiplierScale() in decimfmt.h.
+    *
    * @stable ICU 51 */
   UNUM_SCALE = 21,
 #ifndef U_HIDE_INTERNAL_API

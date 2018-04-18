@@ -1301,13 +1301,15 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @param value The new setting for whether to show plus sign on positive numbers
      * @internal Technical Preview
      */
-    void setSignAlwaysShown(UBool value);
+    virtual void setSignAlwaysShown(UBool value);
 
     /**
      * Get the multiplier for use in percent, permill, etc.
      * For a percentage, set the suffixes to have "%" and the multiplier to be 100.
      * (For Arabic, use arabic percent symbol).
      * For a permill, set the suffixes to have "\\u2031" and the multiplier to be 1000.
+     *
+     * The number may also be multiplied by a power of ten; see getMultiplierScale().
      *
      * @return    the multiplier for use in percent, permill, etc.
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
@@ -1320,7 +1322,9 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * For a percentage, set the suffixes to have "%" and the multiplier to be 100.
      * (For Arabic, use arabic percent symbol).
      * For a permill, set the suffixes to have "\\u2031" and the multiplier to be 1000.
-     * It is possible to set both via setMultiplier() as via setScale() simultaneously.
+     *
+     * This method only supports integer multipliers. To multiply by a non-integer, pair this
+     * method with setMultiplierScale().
      *
      * @param newValue    the new value of the multiplier for use in percent, permill, etc.
      * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
@@ -1332,22 +1336,30 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * Gets a multiplier for the given power of ten.
      * For example, scale of 2 corresponds to a multiplier of 100.
      *
-     * @return    the multiplier for use in percent, permill, etc.
-     * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * This method is analogous to UNUM_SCALE in getAttribute.
+     *
+     * @return    the new value of the power-of-ten multiplier.
      * @draft ICU 62
      */
-    int32_t getScale(void) const;
+    int32_t getMultiplierScale(void) const;
 
     /**
-     * Sets a multiplier for the given power of ten.
-     * For example, scale of 2 corresponds to a multiplier of 100.
-     * It is possible to set both via setMultiplier() as via setScale() simultaneously.
+     * Sets a power of ten by which number should be multiplied before formatting, which
+     * can be combined with setMultiplier() to multiply by any arbitrary decimal value.
      *
-     * @param newValue    the new value of the multiplier for use in percent, permill, etc.
-     * Examples: with 100, 1.23 -> "123", and "123" -> 1.23
+     * For example, to multiply numbers by 0.5 before formatting, you can do:
+     *
+     * <pre>
+     * df.setMultiplier(5);
+     * df.setMultiplierScale(-1);
+     * </pre>
+     *
+     * This method is analogous to UNUM_SCALE in setAttribute.
+     *
+     * @param newValue    the new value of the power-of-ten multiplier.
      * @draft ICU 62
      */
-    virtual void setScale(int32_t newValue);
+    virtual void setMultiplierScale(int32_t newValue);
 
     /**
      * Get the rounding increment.

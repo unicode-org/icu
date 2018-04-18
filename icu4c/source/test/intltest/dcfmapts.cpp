@@ -612,9 +612,9 @@ void IntlTestDecimalFormatAPI::TestScale()
         // Test both the attribute and the setter
         if (i % 2 == 0) {
             pat.setAttribute(UNUM_SCALE, testData[i].inputScale,status);
-            assertEquals("", testData[i].inputScale, pat.getScale());
+            assertEquals("", testData[i].inputScale, pat.getMultiplierScale());
         } else {
-            pat.setScale(testData[i].inputScale);
+            pat.setMultiplierScale(testData[i].inputScale);
             assertEquals("", testData[i].inputScale, pat.getAttribute(UNUM_SCALE, status));
         }
         pat.format(testData[i].inputValue, resultStr);

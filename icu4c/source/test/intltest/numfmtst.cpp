@@ -656,6 +656,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11035_FormatCurrencyAmount);
   TESTCASE_AUTO(Test11318_DoubleConversion);
   TESTCASE_AUTO(TestParsePercentRegression);
+  TESTCASE_AUTO(TestMultiplierWithScale);
   TESTCASE_AUTO_END;
 }
 
@@ -9059,6 +9060,16 @@ void NumberFormatTest::TestParsePercentRegression() {
                 0.5,
                 result.getDouble(status));
     }
+}
+
+void NumberFormatTest::TestMultiplierWithScale() {
+    IcuTestErrorCode status(*this, "TestMultiplierWithScale");
+
+    // Test magnitude combined with multiplier, as shown in API docs
+    DecimalFormat df("0", {"en", status}, status);
+    df.setMultiplier(5);
+    df.setMultiplierScale(-1);
+    expect2(df, 100, u"50"); // round-trip test
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
