@@ -108,6 +108,7 @@ UBool U_CALLCONV cleanupNumberParseUniSets() {
         delete gUnicodeSets[i];
         gUnicodeSets[i] = nullptr;
     }
+    gNumberParseUniSetsInitOnce.reset();
     return TRUE;
 }
 
