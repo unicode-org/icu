@@ -1913,9 +1913,8 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized int getSecondaryGroupingSize() {
-    int grouping1 = properties.getGroupingSize();
     int grouping2 = properties.getSecondaryGroupingSize();
-    if (grouping1 == grouping2 || grouping2 < 0) {
+    if (grouping2 < 0) {
       return 0;
     }
     return grouping2;

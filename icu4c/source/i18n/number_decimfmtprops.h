@@ -96,6 +96,7 @@ struct U_I18N_API DecimalFormatProperties {
     bool decimalPatternMatchRequired;
     bool decimalSeparatorAlwaysShown;
     bool exponentSignAlwaysShown;
+    bool formatFailIfMoreThanMaxDigits; // ICU4C-only
     int32_t formatWidth;
     int32_t groupingSize;
     bool groupingUsed;

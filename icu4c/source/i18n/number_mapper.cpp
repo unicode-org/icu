@@ -159,7 +159,10 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     // INTEGER WIDTH //
     ///////////////////
 
-    macros.integerWidth = IntegerWidth::zeroFillTo(minInt).truncateAt(maxInt);
+    macros.integerWidth = IntegerWidth(
+            static_cast<digits_t>(minInt),
+            static_cast<digits_t>(maxInt),
+            properties.formatFailIfMoreThanMaxDigits);
 
     ///////////////////////
     // GROUPING STRATEGY //

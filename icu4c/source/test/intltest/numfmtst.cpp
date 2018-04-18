@@ -3670,7 +3670,7 @@ NumberFormatTest::TestSpaceParsing() {
         {"$\\u00A0124 ",   5, -1, FALSE},
         {" $ 124 ",        0,  0, FALSE},
         {"124$",           0,  4, FALSE},
-        {"124 $",          0,  5, FALSE},
+        {"124 $",          0,  3, FALSE},
         {"$124",           4, -1, TRUE},
         {"$124 $124",      4, -1, TRUE},
         {"$124 ",          4, -1, TRUE},

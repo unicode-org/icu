@@ -819,7 +819,10 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
         sb.append(AffixUtils::escape(UnicodeStringCharSequence(np)));
         // Copy the positive digit format into the negative.
         // This is optional; the pattern is the same as if '#' were appended here instead.
-        sb.append(sb, afterPrefixPos, beforeSuffixPos - afterPrefixPos);
+        // NOTE: It is not safe to append the UnicodeString to itself, so we need to copy.
+        // See http://bugs.icu-project.org/trac/ticket/13707
+        UnicodeString copy(sb);
+        sb.append(copy, afterPrefixPos, beforeSuffixPos - afterPrefixPos);
         if (!nsp.isBogus()) {
             sb.append(nsp);
         }

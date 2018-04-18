@@ -1724,7 +1724,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @param value true to prevent exponents from being parsed; false to allow them to be parsed.
      * @internal This API is a technical preview. It may change in an upcoming release.
      */
-    void setParseNoExponent(UBool value);
+    virtual void setParseNoExponent(UBool value);
 
     /**
      * {@icu} Returns whether parsing is sensitive to case (lowercase/uppercase).
@@ -1738,10 +1738,29 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * {@icu} Whether to pay attention to case when parsing; default is to ignore case (perform
      * case-folding). For example, "A" == "a" in case-insensitive but not case-sensitive mode.
      *
-     * Currency codes are never case-folded. For example, "us$1.00" will not parse in case-insensitive
+     * Currency symbols are never case-folded. For example, "us$1.00" will not parse in case-insensitive
      * mode, even though "US$1.00" parses.
+     *
+     * @internal This API is a technical preview. It may change in an upcoming release.
      */
     void setParseCaseSensitive(UBool value);
+
+    /**
+     * {@icu} Returns whether truncation of high-order integer digits should result in an error.
+     * By default, setMaximumIntegerDigits truncates high-order digits silently.
+     *
+     * @see setFormatFailIfMoreThanMaxDigits
+     * @internal This API is a technical preview. It may change in an upcoming release.
+     */
+    UBool isFormatFailIfMoreThanMaxDigits() const;
+
+    /**
+     * {@icu} Sets whether truncation of high-order integer digits should result in an error.
+     * By default, setMaximumIntegerDigits truncates high-order digits silently.
+     *
+     * @internal This API is a technical preview. It may change in an upcoming release.
+     */
+    virtual void setFormatFailIfMoreThanMaxDigits(UBool value);
 
 
     /**
