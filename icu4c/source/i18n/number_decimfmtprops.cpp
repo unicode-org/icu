@@ -23,6 +23,7 @@ void DecimalFormatProperties::clear() {
     decimalPatternMatchRequired = false;
     decimalSeparatorAlwaysShown = false;
     exponentSignAlwaysShown = false;
+    formatFailIfMoreThanMaxDigits = false;
     formatWidth = -1;
     groupingSize = -1;
     groupingUsed = true;
@@ -68,6 +69,7 @@ bool DecimalFormatProperties::operator==(const DecimalFormatProperties &other) c
     eq = eq && decimalPatternMatchRequired == other.decimalPatternMatchRequired;
     eq = eq && decimalSeparatorAlwaysShown == other.decimalSeparatorAlwaysShown;
     eq = eq && exponentSignAlwaysShown == other.exponentSignAlwaysShown;
+    eq = eq && formatFailIfMoreThanMaxDigits == other.formatFailIfMoreThanMaxDigits;
     eq = eq && formatWidth == other.formatWidth;
     eq = eq && groupingSize == other.groupingSize;
     eq = eq && groupingUsed == other.groupingUsed;

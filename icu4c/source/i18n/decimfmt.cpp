@@ -221,11 +221,14 @@ DecimalFormat::setAttribute(UNumberFormatAttribute attr, int32_t newValue, UErro
             setSignAlwaysShown(static_cast<UBool>(newValue));
             break;
 
+        case UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS:
+            setFormatFailIfMoreThanMaxDigits(static_cast<UBool>(newValue));
+            break;
+
         default:
             status = U_UNSUPPORTED_ERROR;
             break;
     }
-    // TODO: UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS?
     return *this;
 }
 
@@ -311,6 +314,9 @@ int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& sta
 
         case UNUM_SIGN_ALWAYS_SHOWN:
             return isSignAlwaysShown();
+
+        case UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS:
+            return isFormatFailIfMoreThanMaxDigits();
 
         default:
             status = U_UNSUPPORTED_ERROR;
@@ -775,9 +781,8 @@ void DecimalFormat::setGroupingSize(int32_t newValue) {
 }
 
 int32_t DecimalFormat::getSecondaryGroupingSize(void) const {
-    int grouping1 = fProperties->groupingSize;
     int grouping2 = fProperties->secondaryGroupingSize;
-    if (grouping1 == grouping2 || grouping2 < 0) {
+    if (grouping2 < 0) {
         return 0;
     }
     return grouping2;
@@ -830,6 +835,15 @@ UBool DecimalFormat::isParseCaseSensitive() const {
 
 void DecimalFormat::setParseCaseSensitive(UBool value) {
     fProperties->parseCaseSensitive = value;
+    refreshFormatterNoError();
+}
+
+UBool DecimalFormat::isFormatFailIfMoreThanMaxDigits() const {
+    return fProperties->formatFailIfMoreThanMaxDigits;
+}
+
+void DecimalFormat::setFormatFailIfMoreThanMaxDigits(UBool value) {
+    fProperties->formatFailIfMoreThanMaxDigits = value;
     refreshFormatterNoError();
 }
 

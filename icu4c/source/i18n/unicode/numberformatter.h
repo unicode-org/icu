@@ -918,12 +918,13 @@ class U_I18N_API IntegerWidth : public UMemory {
         struct {
             impl::digits_t fMinInt;
             impl::digits_t fMaxInt;
+            bool fFormatFailIfMoreThanMaxDigits;
         } minMaxInt;
         UErrorCode errorCode;
     } fUnion;
     bool fHasError = false;
 
-    IntegerWidth(impl::digits_t minInt, impl::digits_t maxInt);
+    IntegerWidth(impl::digits_t minInt, impl::digits_t maxInt, bool formatFailIfMoreThanMaxDigits);
 
     IntegerWidth(UErrorCode errorCode) { // NOLINT
         fUnion.errorCode = errorCode;
@@ -961,6 +962,9 @@ class U_I18N_API IntegerWidth : public UMemory {
 
     // To allow NumberFormatterImpl to access isBogus() and perform other operations:
     friend class impl::NumberFormatterImpl;
+
+    // So that NumberPropertyMapper can create instances
+    friend class impl::NumberPropertyMapper;
 
     // To allow access to the skeleton generation code:
     friend class impl::GeneratorHelpers;

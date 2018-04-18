@@ -742,8 +742,8 @@ parse	output	breaks
 // JDK stops parsing at the spaces. JDK doesn't see space as a grouping separator
 (34  25E-1)	-342.5	K
 (34,,25E-1)	-342.5
-// J doesn't allow trailing separators before E but C does
-(34,,25,E-1)	-342.5	J
+// J doesn't allow trailing separators before E
+(34,,25,E-1)	-342.5	CJ
 (34  25 E-1)	-342.5	JK
 (34,,25 E-1)	-342.5	JK
 // Spaces are not allowed after exponent symbol
@@ -806,7 +806,7 @@ parse	output	breaks
 1,234,,,+	1234	JK
 1,234-	-1234
 // J bails because of trailing separators
-1,234,-	-1234	J
+1,234,-	-1234	CJ
 // J bails here too
 1234  -	-1234	J
 
