@@ -54,6 +54,10 @@ static inline UNumberFormat * copyInvariantFormatter(ULocaleBundle *result, UNum
             UErrorCode status = U_ZERO_ERROR;
             UNumberFormat *formatAlias = unum_open(style, NULL, 0, "en_US_POSIX", NULL, &status);
             if (U_SUCCESS(status)) {
+                // ICU 62 requires exponent on strict scientific parser, but we don't want that here
+                if (style == UNUM_SCIENTIFIC) {
+                    unum_setAttribute(formatAlias, UNUM_LENIENT_PARSE, TRUE);
+                }
                 gPosixNumberFormat[style-1] = formatAlias;
                 ucln_io_registerCleanup(UCLN_IO_LOCBUND, locbund_cleanup);
             }
@@ -174,6 +178,10 @@ u_locbund_getNumberFormat(ULocaleBundle *bundle, UNumberFormatStyle style)
                     formatAlias = NULL;
                 }
                 else {
+                    // ICU 62 requires exponent on strict scientific parser, but we don't want that here
+                    if (style == UNUM_SCIENTIFIC) {
+                        unum_setAttribute(formatAlias, UNUM_LENIENT_PARSE, TRUE);
+                    }
                     bundle->fNumberFormat[style-1] = formatAlias;
                 }
             }
