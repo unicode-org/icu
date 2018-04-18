@@ -179,7 +179,8 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     }
     parser->addMatcher(parser->fLocalMatchers.ignorables);
     parser->addMatcher(parser->fLocalMatchers.decimal = {symbols, grouper, parseFlags});
-    if (!properties.parseNoExponent) {
+    // NOTE: parseNoExponent doesn't disable scientific parsing if we have a scientific formatter
+    if (!properties.parseNoExponent || properties.minimumExponentDigits > 0) {
         parser->addMatcher(parser->fLocalMatchers.scientific = {symbols, grouper});
     }
 
