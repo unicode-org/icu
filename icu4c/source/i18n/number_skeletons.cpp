@@ -34,6 +34,7 @@ char16_t* kSerializedStemTrie = nullptr;
 UBool U_CALLCONV cleanupNumberSkeletons() {
     uprv_free(kSerializedStemTrie);
     kSerializedStemTrie = nullptr;
+    gNumberSkeletonsInitOnce.reset();
     return TRUE;
 }
 

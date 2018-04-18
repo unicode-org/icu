@@ -32,6 +32,7 @@ UBool U_CALLCONV cleanupDefaultCurrencySpacing() {
     UNISET_DIGIT = nullptr;
     delete UNISET_NOTS;
     UNISET_NOTS = nullptr;
+    gDefaultCurrencySpacingInitOnce.reset();
     return TRUE;
 }
 
