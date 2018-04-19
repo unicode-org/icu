@@ -1333,8 +1333,11 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     virtual void setMultiplier(int32_t newValue);
 
     /**
-     * Gets a multiplier for the given power of ten.
-     * For example, scale of 2 corresponds to a multiplier of 100.
+     * Gets the power of ten by which number should be multiplied before formatting, which
+     * can be combined with setMultiplier() to multiply by any arbitrary decimal value.
+     *
+     * A multiplier scale of 2 corresponds to multiplication by 100, and a multiplier scale
+     * of -2 corresponds to multiplication by 0.01.
      *
      * This method is analogous to UNUM_SCALE in getAttribute.
      *
@@ -1346,6 +1349,9 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     /**
      * Sets a power of ten by which number should be multiplied before formatting, which
      * can be combined with setMultiplier() to multiply by any arbitrary decimal value.
+     *
+     * A multiplier scale of 2 corresponds to multiplication by 100, and a multiplier scale
+     * of -2 corresponds to multiplication by 0.01.
      *
      * For example, to multiply numbers by 0.5 before formatting, you can do:
      *
