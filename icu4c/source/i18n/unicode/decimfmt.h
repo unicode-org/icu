@@ -1341,7 +1341,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      *
      * This method is analogous to UNUM_SCALE in getAttribute.
      *
-     * @return    the new value of the power-of-ten multiplier.
+     * @return    the current value of the power-of-ten multiplier.
      * @draft ICU 62
      */
     int32_t getMultiplierScale(void) const;
