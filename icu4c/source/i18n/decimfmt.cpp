@@ -992,7 +992,6 @@ void DecimalFormat::setCurrency(const char16_t* theCurrency, UErrorCode& ec) {
 
 void DecimalFormat::setCurrency(const char16_t* theCurrency) {
     ErrorCode localStatus;
-    NumberFormat::setCurrency(theCurrency, localStatus); // to set field for compatibility
     setCurrency(theCurrency, localStatus);
 }
 
