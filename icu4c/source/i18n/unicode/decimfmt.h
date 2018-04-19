@@ -27,6 +27,7 @@
 #ifndef DECIMFMT_H
 #define DECIMFMT_H
 
+#include <atomic>
 #include "unicode/utypes.h"
 /**
  * \file
@@ -2057,10 +2058,11 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * Converts this DecimalFormat to a NumberFormatter.  Starting in ICU 60,
      * NumberFormatter is the recommended way to format numbers.
      *
-     * @return An instance of LocalizedNumberFormatter with the same behavior as this DecimalFormat.
+     * @param output The variable into which to store the LocalizedNumberFormatter.
+     * @return The output variable, for chaining.
      * @draft ICU 62
      */
-    const number::LocalizedNumberFormatter& toNumberFormatter() const;
+    number::LocalizedNumberFormatter& toNumberFormatter(number::LocalizedNumberFormatter& output) const;
 
     /**
      * Return the class ID for this class.  This is useful only for
@@ -2091,10 +2093,10 @@ class U_I18N_API DecimalFormat : public NumberFormat {
   private:
 
     /** Rebuilds the formatter object from the property bag. */
-    void refreshFormatter(UErrorCode& status);
+    void touch(UErrorCode& status);
 
     /** Rebuilds the formatter object, hiding the error code. */
-    void refreshFormatterNoError();
+    void touchNoError();
 
     /**
      * Updates the property bag with settings from the given pattern.
@@ -2109,6 +2111,18 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     void setPropertiesFromPattern(const UnicodeString& pattern, int32_t ignoreRounding,
                                   UErrorCode& status);
+
+    const numparse::impl::NumberParserImpl& getParser(UErrorCode& status) const;
+
+    const numparse::impl::NumberParserImpl& getCurrencyParser(UErrorCode& status) const;
+
+    void setupFastFormat();
+
+    bool fastFormatDouble(double input, UnicodeString& output) const;
+
+    bool fastFormatInt64(int64_t input, UnicodeString& output) const;
+
+    void doFastFormatInt32(int32_t input, UnicodeString& output) const;
 
     //=====================================================================================//
     //                                   INSTANCE FIELDS                                   //
@@ -2138,8 +2152,18 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     /** A field for a few additional helper object that need ownership. */
     LocalPointer<number::impl::DecimalFormatWarehouse> fWarehouse;
 
-    LocalPointer<const numparse::impl::NumberParserImpl> fParser;
-    LocalPointer<const numparse::impl::NumberParserImpl> fParserWithCurrency;
+    std::atomic<numparse::impl::NumberParserImpl*> fAtomicParser = {};
+    std::atomic<numparse::impl::NumberParserImpl*> fAtomicCurrencyParser = {};
+
+    // Data for fastpath
+    bool fCanUseFastFormat;
+    struct FastFormatData {
+        char16_t cpZero;
+        char16_t cpGroupingSeparator;
+        char16_t cpMinusSign;
+        int8_t minInt;
+        int8_t maxInt;
+    } fFastData;
 
     // Allow child class CompactDecimalFormat to access fProperties:
     friend class CompactDecimalFormat;

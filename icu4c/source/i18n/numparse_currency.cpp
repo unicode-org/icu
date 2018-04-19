@@ -29,15 +29,16 @@ CombinedCurrencyMatcher::CombinedCurrencyMatcher(const CurrencySymbols& currency
           fLocaleName(dfs.getLocale().getName(), -1, status) {
     utils::copyCurrencyCode(fCurrencyCode, currencySymbols.getIsoCode());
 
-    // Compute the full set of characters that could be the first in a currency to allow for
-    // efficient smoke test.
-    fLeadCodePoints.add(fCurrency1.char32At(0));
-    fLeadCodePoints.add(fCurrency2.char32At(0));
-    fLeadCodePoints.add(beforeSuffixInsert.char32At(0));
-    uprv_currencyLeads(fLocaleName.data(), fLeadCodePoints, status);
-    // Always apply case mapping closure for currencies
-    fLeadCodePoints.closeOver(USET_ADD_CASE_MAPPINGS);
-    fLeadCodePoints.freeze();
+    // TODO: Figure out how to make this faster and re-enable.
+//    // Compute the full set of characters that could be the first in a currency to allow for
+//    // efficient smoke test.
+//    fLeadCodePoints.add(fCurrency1.char32At(0));
+//    fLeadCodePoints.add(fCurrency2.char32At(0));
+//    fLeadCodePoints.add(beforeSuffixInsert.char32At(0));
+//    uprv_currencyLeads(fLocaleName.data(), fLeadCodePoints, status);
+//    // Always apply case mapping closure for currencies
+//    fLeadCodePoints.closeOver(USET_ADD_CASE_MAPPINGS);
+//    fLeadCodePoints.freeze();
 }
 
 bool CombinedCurrencyMatcher::match(StringSegment& segment, ParsedNumber& result,
@@ -124,7 +125,9 @@ bool CombinedCurrencyMatcher::matchCurrency(StringSegment& segment, ParsedNumber
 }
 
 bool CombinedCurrencyMatcher::smokeTest(const StringSegment& segment) const {
-    return segment.startsWith(fLeadCodePoints);
+    // TODO: See constructor
+    return true;
+    //return segment.startsWith(fLeadCodePoints);
 }
 
 UnicodeString CombinedCurrencyMatcher::toString() const {

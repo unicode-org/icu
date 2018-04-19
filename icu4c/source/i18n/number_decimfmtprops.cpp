@@ -6,10 +6,25 @@
 #if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
 
 #include "number_decimfmtprops.h"
+#include "umutex.h"
 
 using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
+
+
+namespace {
+
+char kRawDefaultProperties[sizeof(DecimalFormatProperties)];
+
+icu::UInitOnce gDefaultPropertiesInitOnce = U_INITONCE_INITIALIZER;
+
+void U_CALLCONV initDefaultProperties(UErrorCode&) {
+    *reinterpret_cast<DecimalFormatProperties*>(kRawDefaultProperties) = {}; // set to the default instance
+}
+
+}
+
 
 DecimalFormatProperties::DecimalFormatProperties() {
     clear();
@@ -60,51 +75,70 @@ void DecimalFormatProperties::clear() {
     signAlwaysShown = false;
 }
 
-bool DecimalFormatProperties::operator==(const DecimalFormatProperties &other) const {
+bool
+DecimalFormatProperties::_equals(const DecimalFormatProperties& other, bool ignoreForFastFormat) const {
     bool eq = true;
+
+    // Properties that must be equal both normally and for fast-path formatting
     eq = eq && compactStyle == other.compactStyle;
     eq = eq && currency == other.currency;
     eq = eq && currencyPluralInfo.fPtr.getAlias() == other.currencyPluralInfo.fPtr.getAlias();
     eq = eq && currencyUsage == other.currencyUsage;
-    eq = eq && decimalPatternMatchRequired == other.decimalPatternMatchRequired;
     eq = eq && decimalSeparatorAlwaysShown == other.decimalSeparatorAlwaysShown;
     eq = eq && exponentSignAlwaysShown == other.exponentSignAlwaysShown;
     eq = eq && formatFailIfMoreThanMaxDigits == other.formatFailIfMoreThanMaxDigits;
     eq = eq && formatWidth == other.formatWidth;
-    eq = eq && groupingSize == other.groupingSize;
-    eq = eq && groupingUsed == other.groupingUsed;
     eq = eq && magnitudeMultiplier == other.magnitudeMultiplier;
-    eq = eq && maximumFractionDigits == other.maximumFractionDigits;
-    eq = eq && maximumIntegerDigits == other.maximumIntegerDigits;
     eq = eq && maximumSignificantDigits == other.maximumSignificantDigits;
     eq = eq && minimumExponentDigits == other.minimumExponentDigits;
     eq = eq && minimumFractionDigits == other.minimumFractionDigits;
     eq = eq && minimumGroupingDigits == other.minimumGroupingDigits;
-    eq = eq && minimumIntegerDigits == other.minimumIntegerDigits;
     eq = eq && minimumSignificantDigits == other.minimumSignificantDigits;
     eq = eq && multiplier == other.multiplier;
     eq = eq && multiplierScale == other.multiplierScale;
     eq = eq && negativePrefix == other.negativePrefix;
-    eq = eq && negativePrefixPattern == other.negativePrefixPattern;
     eq = eq && negativeSuffix == other.negativeSuffix;
-    eq = eq && negativeSuffixPattern == other.negativeSuffixPattern;
     eq = eq && padPosition == other.padPosition;
     eq = eq && padString == other.padString;
+    eq = eq && positivePrefix == other.positivePrefix;
+    eq = eq && positiveSuffix == other.positiveSuffix;
+    eq = eq && roundingIncrement == other.roundingIncrement;
+    eq = eq && roundingMode == other.roundingMode;
+    eq = eq && secondaryGroupingSize == other.secondaryGroupingSize;
+    eq = eq && signAlwaysShown == other.signAlwaysShown;
+
+    if (ignoreForFastFormat) {
+        return eq;
+    }
+
+    // Properties ignored by fast-path formatting
+    // Formatting (special handling required):
+    eq = eq && groupingSize == other.groupingSize;
+    eq = eq && groupingUsed == other.groupingUsed;
+    eq = eq && maximumFractionDigits == other.maximumFractionDigits;
+    eq = eq && maximumIntegerDigits == other.maximumIntegerDigits;
+    eq = eq && minimumIntegerDigits == other.minimumIntegerDigits;
+    eq = eq && negativePrefixPattern == other.negativePrefixPattern;
+    eq = eq && negativeSuffixPattern == other.negativeSuffixPattern;
+    eq = eq && positivePrefixPattern == other.positivePrefixPattern;
+    eq = eq && positiveSuffixPattern == other.positiveSuffixPattern;
+
+    // Parsing (always safe to ignore):
+    eq = eq && decimalPatternMatchRequired == other.decimalPatternMatchRequired;
     eq = eq && parseCaseSensitive == other.parseCaseSensitive;
     eq = eq && parseIntegerOnly == other.parseIntegerOnly;
     eq = eq && parseMode == other.parseMode;
     eq = eq && parseNoExponent == other.parseNoExponent;
     eq = eq && parseToBigDecimal == other.parseToBigDecimal;
     eq = eq && parseAllInput == other.parseAllInput;
-    eq = eq && positivePrefix == other.positivePrefix;
-    eq = eq && positivePrefixPattern == other.positivePrefixPattern;
-    eq = eq && positiveSuffix == other.positiveSuffix;
-    eq = eq && positiveSuffixPattern == other.positiveSuffixPattern;
-    eq = eq && roundingIncrement == other.roundingIncrement;
-    eq = eq && roundingMode == other.roundingMode;
-    eq = eq && secondaryGroupingSize == other.secondaryGroupingSize;
-    eq = eq && signAlwaysShown == other.signAlwaysShown;
+
     return eq;
+}
+
+bool DecimalFormatProperties::equalsDefaultExceptFastFormat() const {
+    UErrorCode localStatus = U_ZERO_ERROR;
+    umtx_initOnce(gDefaultPropertiesInitOnce, &initDefaultProperties, localStatus);
+    return _equals(*reinterpret_cast<DecimalFormatProperties*>(kRawDefaultProperties), true);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

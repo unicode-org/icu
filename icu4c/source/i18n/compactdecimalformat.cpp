@@ -32,7 +32,7 @@ CompactDecimalFormat::CompactDecimalFormat(const Locale& inLocale, UNumberCompac
     fProperties->compactStyle = style;
     fProperties->groupingSize = -2; // do not forward grouping information
     fProperties->minimumGroupingDigits = 2;
-    refreshFormatter(status);
+    touch(status);
 }
 
 CompactDecimalFormat::CompactDecimalFormat(const CompactDecimalFormat& source) = default;

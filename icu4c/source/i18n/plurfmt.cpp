@@ -277,7 +277,8 @@ PluralFormat::format(const Formattable& numberObject, double number,
     UnicodeString numberString;
     auto *decFmt = dynamic_cast<DecimalFormat *>(numberFormat);
     if(decFmt != nullptr) {
-        decFmt->toNumberFormatter().formatImpl(&data, status); // mutates &data
+        number::LocalizedNumberFormatter formatter;
+        decFmt->toNumberFormatter(formatter).formatImpl(&data, status); // mutates &data
         numberString = data.string.toUnicodeString();
     } else {
         if (offset == 0) {
