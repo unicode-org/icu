@@ -244,6 +244,9 @@ void NumberParserImpl::parse(const UnicodeString& input, bool greedy, ParsedNumb
 
 void NumberParserImpl::parse(const UnicodeString& input, int32_t start, bool greedy, ParsedNumber& result,
                              UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return;
+    }
     U_ASSERT(fFrozen);
     // TODO: Check start >= 0 and start < input.length()
     StringSegment segment(input, 0 != (fParseFlags & PARSE_FLAG_IGNORE_CASE));

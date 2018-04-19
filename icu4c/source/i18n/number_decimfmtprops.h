@@ -135,9 +135,20 @@ struct U_I18N_API DecimalFormatProperties {
 
     DecimalFormatProperties();
 
-    bool operator==(const DecimalFormatProperties& other) const;
+    inline bool operator==(const DecimalFormatProperties& other) const {
+        return _equals(other, false);
+    }
 
     void clear();
+
+    /**
+     * Checks for equality to the default DecimalFormatProperties, but ignores the prescribed set of
+     * options for fast-path formatting.
+     */
+    bool equalsDefaultExceptFastFormat() const;
+
+  private:
+    bool _equals(const DecimalFormatProperties& other, bool ignoreForFastFormat) const;
 };
 
 } // namespace impl
