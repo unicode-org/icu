@@ -37,6 +37,7 @@ CurrencyUnit::CurrencyUnit(ConstChar16Ptr _isoCode, UErrorCode& ec) {
     } else {
         isoCodeToUse = _isoCode;
     }
+    // TODO: Perform uppercasing here like in ICU4J Currency.getInstance()?
     u_strncpy(isoCode, isoCodeToUse, 3);
     isoCode[3] = 0;
     char simpleIsoCode[4];
