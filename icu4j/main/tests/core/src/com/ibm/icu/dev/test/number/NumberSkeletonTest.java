@@ -60,6 +60,7 @@ public class NumberSkeletonTest {
                 "measure-unit/energy-joule per-measure-unit/length-meter",
                 "currency/XXX",
                 "currency/ZZZ",
+                "currency/usd",
                 "group-off",
                 "group-min2",
                 "group-auto",
@@ -131,6 +132,7 @@ public class NumberSkeletonTest {
                 "scale/0.1.2",
                 "scale/français", // non-invariant characters for C++
                 "currency/dummy",
+                "currency/ççç", // three characters but not ASCII
                 "measure-unit/foo",
                 "integer-width/xxx",
                 "integer-width/0+",

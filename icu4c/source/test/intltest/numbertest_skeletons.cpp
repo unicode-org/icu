@@ -68,6 +68,7 @@ void NumberSkeletonTest::validTokens() {
             u"measure-unit/energy-joule per-measure-unit/length-meter",
             u"currency/XXX",
             u"currency/ZZZ",
+            u"currency/usd",
             u"group-off",
             u"group-min2",
             u"group-auto",
@@ -137,6 +138,7 @@ void NumberSkeletonTest::invalidTokens() {
             u"scale/0.1.2",
             u"scale/français", // non-invariant characters for C++
             u"currency/dummy",
+            u"currency/ççç", // three characters but not ASCII
             u"measure-unit/foo",
             u"integer-width/xxx",
             u"integer-width/0+",

@@ -800,8 +800,12 @@ blueprint_helpers::parseExponentSignOption(const StringSegment& segment, MacroPr
 
 void blueprint_helpers::parseCurrencyOption(const StringSegment& segment, MacroProps& macros,
                                             UErrorCode& status) {
-    // Can't use toTempUnicodeString() because getTerminatedBuffer is non-const
-    const UChar* currencyCode = segment.toUnicodeString().getTerminatedBuffer();
+    // Unlike ICU4J, have to check length manually because ICU4C CurrencyUnit does not check it for us
+    if (segment.length() != 3) {
+        status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
+    }
+    const UChar* currencyCode = segment.toTempUnicodeString().getBuffer();
     UErrorCode localStatus = U_ZERO_ERROR;
     CurrencyUnit currency(currencyCode, localStatus);
     if (U_FAILURE(localStatus)) {
