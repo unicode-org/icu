@@ -264,7 +264,7 @@ class U_I18N_API PatternStringUtils {
      *            notation.
      * @return The pattern expressed in the other notation.
      */
-    static UnicodeString convertLocalized(UnicodeString input, DecimalFormatSymbols symbols,
+    static UnicodeString convertLocalized(const UnicodeString& input, const DecimalFormatSymbols& symbols,
                                           bool toLocalized, UErrorCode& status);
 
     /**

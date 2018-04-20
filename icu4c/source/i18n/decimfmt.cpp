@@ -383,8 +383,8 @@ DecimalFormat& DecimalFormat::operator=(const DecimalFormat& rhs) {
 }
 
 DecimalFormat::~DecimalFormat() {
-    delete fAtomicParser.load();
-    delete fAtomicCurrencyParser.load();
+    delete fAtomicParser.exchange(nullptr);
+    delete fAtomicCurrencyParser.exchange(nullptr);
 };
 
 Format* DecimalFormat::clone() const {
@@ -1078,8 +1078,8 @@ void DecimalFormat::touch(UErrorCode& status) {
                             locale)));
 
     // Delete the parsers if they were made previously
-    delete fAtomicParser.exchange(nullptr, std::memory_order_relaxed);
-    delete fAtomicCurrencyParser.exchange(nullptr, std::memory_order_relaxed);
+    delete fAtomicParser.exchange(nullptr);
+    delete fAtomicCurrencyParser.exchange(nullptr);
 
     // In order for the getters to work, we need to populate some fields in NumberFormat.
     NumberFormat::setCurrency(fExportedProperties->currency.get(status).getISOCurrency(), status);
@@ -1104,41 +1104,57 @@ void DecimalFormat::setPropertiesFromPattern(const UnicodeString& pattern, int32
 }
 
 const numparse::impl::NumberParserImpl& DecimalFormat::getParser(UErrorCode& status) const {
+    // First try to get the pre-computed parser
     auto* ptr = fAtomicParser.load();
     if (ptr != nullptr) {
         return *ptr;
     }
 
-    ptr = NumberParserImpl::createParserFromProperties(*fProperties, *fSymbols, false, status);
-
-    if (ptr == nullptr) {
+    // Try computing the parser on our own
+    auto* temp = NumberParserImpl::createParserFromProperties(*fProperties, *fSymbols, false, status);
+    if (temp == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        // although we still dereference, call sites should be guarded
+        // although we may still dereference, call sites should be guarded
     }
 
-    // Store the new pointer, and delete the old one if it got created.
+    // Note: ptr starts as nullptr; during compare_exchange, it is set to what is actually stored in the
+    // atomic, which may me temp or may be another object computed by a different thread.
     auto* nonConstThis = const_cast<DecimalFormat*>(this);
-    delete nonConstThis->fAtomicParser.exchange(ptr, std::memory_order_relaxed);
-    return *ptr;
+    if (!nonConstThis->fAtomicParser.compare_exchange_strong(ptr, temp)) {
+        // Another thread beat us to computing the parser
+        delete temp;
+        return *ptr;
+    } else {
+        // Our copy of the parser got stored in the atomic
+        return *temp;
+    }
 }
 
 const numparse::impl::NumberParserImpl& DecimalFormat::getCurrencyParser(UErrorCode& status) const {
+    // First try to get the pre-computed parser
     auto* ptr = fAtomicCurrencyParser.load();
     if (ptr != nullptr) {
         return *ptr;
     }
 
-    ptr = NumberParserImpl::createParserFromProperties(*fProperties, *fSymbols, true, status);
-
-    if (ptr == nullptr) {
+    // Try computing the parser on our own
+    auto* temp = NumberParserImpl::createParserFromProperties(*fProperties, *fSymbols, true, status);
+    if (temp == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        // although we still dereference, call sites should be guarded
+        // although we may still dereference, call sites should be guarded
     }
 
-    // Store the new pointer, and delete the old one if it got created.
+    // Note: ptr starts as nullptr; during compare_exchange, it is set to what is actually stored in the
+    // atomic, which may me temp or may be another object computed by a different thread.
     auto* nonConstThis = const_cast<DecimalFormat*>(this);
-    delete nonConstThis->fAtomicCurrencyParser.exchange(ptr, std::memory_order_relaxed);
-    return *ptr;
+    if (!nonConstThis->fAtomicCurrencyParser.compare_exchange_strong(ptr, temp)) {
+        // Another thread beat us to computing the parser
+        delete temp;
+        return *ptr;
+    } else {
+        // Our copy of the parser got stored in the atomic
+        return *temp;
+    }
 }
 
 void DecimalFormat::setupFastFormat() {
