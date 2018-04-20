@@ -865,8 +865,8 @@ int PatternStringUtils::escapePaddingString(UnicodeString input, UnicodeString& 
 }
 
 UnicodeString
-PatternStringUtils::convertLocalized(UnicodeString input, DecimalFormatSymbols symbols, bool toLocalized,
-                                     UErrorCode& status) {
+PatternStringUtils::convertLocalized(const UnicodeString& input, const DecimalFormatSymbols& symbols,
+                                     bool toLocalized, UErrorCode& status) {
     // Construct a table of strings to be converted between localized and standard.
     static constexpr int32_t LEN = 21;
     UnicodeString table[LEN][2];
