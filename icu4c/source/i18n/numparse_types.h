@@ -171,7 +171,7 @@ class ParsedNumber {
  *
  * @author sffc
  */
-class StringSegment : public UMemory, public ::icu::number::impl::CharSequence {
+class StringSegment : public UMemory {
   public:
     StringSegment(const UnicodeString& str, bool ignoreCase);
 
@@ -198,15 +198,15 @@ class StringSegment : public UMemory, public ::icu::number::impl::CharSequence {
 
     void resetLength();
 
-    int32_t length() const override;
+    int32_t length() const;
 
-    char16_t charAt(int32_t index) const override;
+    char16_t charAt(int32_t index) const;
 
-    UChar32 codePointAt(int32_t index) const override;
+    UChar32 codePointAt(int32_t index) const;
 
-    UnicodeString toUnicodeString() const override;
+    UnicodeString toUnicodeString() const;
 
-    const UnicodeString toTempUnicodeString() const override;
+    const UnicodeString toTempUnicodeString() const;
 
     /**
      * Returns the first code point in the string segment, or -1 if the string starts with an invalid

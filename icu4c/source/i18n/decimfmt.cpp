@@ -920,13 +920,10 @@ UnicodeString& DecimalFormat::toPattern(UnicodeString& result) const {
     DecimalFormatProperties tprops(*fProperties);
     bool useCurrency = ((!tprops.currency.isNull()) || !tprops.currencyPluralInfo.fPtr.isNull() ||
                         !tprops.currencyUsage.isNull() || AffixUtils::hasCurrencySymbols(
-            UnicodeStringCharSequence(tprops.positivePrefixPattern), localStatus) ||
-                        AffixUtils::hasCurrencySymbols(
-                                UnicodeStringCharSequence(tprops.positiveSuffixPattern), localStatus) ||
-                        AffixUtils::hasCurrencySymbols(
-                                UnicodeStringCharSequence(tprops.negativePrefixPattern), localStatus) ||
-                        AffixUtils::hasCurrencySymbols(
-                                UnicodeStringCharSequence(tprops.negativeSuffixPattern), localStatus));
+            tprops.positivePrefixPattern, localStatus) || AffixUtils::hasCurrencySymbols(
+            tprops.positiveSuffixPattern, localStatus) || AffixUtils::hasCurrencySymbols(
+            tprops.negativePrefixPattern, localStatus) || AffixUtils::hasCurrencySymbols(
+            tprops.negativeSuffixPattern, localStatus));
     if (useCurrency) {
         tprops.minimumFractionDigits = fExportedProperties->minimumFractionDigits;
         tprops.maximumFractionDigits = fExportedProperties->maximumFractionDigits;

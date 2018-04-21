@@ -126,7 +126,7 @@ bool CombinedCurrencyMatcher::matchCurrency(StringSegment& segment, ParsedNumber
            partialMatchLen == segment.length();
 }
 
-bool CombinedCurrencyMatcher::smokeTest(const StringSegment& segment) const {
+bool CombinedCurrencyMatcher::smokeTest(const StringSegment&) const {
     // TODO: See constructor
     return true;
     //return segment.startsWith(fLeadCodePoints);

@@ -206,10 +206,7 @@ int32_t MutablePatternModifier::getPrefixLength(UErrorCode& status) const {
 
     // Enter and exit CharSequence Mode to get the length.
     nonConstThis->prepareAffix(true);
-    int result = AffixUtils::unescapedCodePointCount(
-            UnicodeStringCharSequence(currentAffix),
-            *this,
-            status);  // prefix length
+    int result = AffixUtils::unescapedCodePointCount(currentAffix, *this, status);  // prefix length
     return result;
 }
 
@@ -220,15 +217,9 @@ int32_t MutablePatternModifier::getCodePointCount(UErrorCode& status) const {
 
     // Render the affixes to get the length
     nonConstThis->prepareAffix(true);
-    int result = AffixUtils::unescapedCodePointCount(
-            UnicodeStringCharSequence(currentAffix),
-            *this,
-            status);  // prefix length
+    int result = AffixUtils::unescapedCodePointCount(currentAffix, *this, status);  // prefix length
     nonConstThis->prepareAffix(false);
-    result += AffixUtils::unescapedCodePointCount(
-            UnicodeStringCharSequence(currentAffix),
-            *this,
-            status);  // suffix length
+    result += AffixUtils::unescapedCodePointCount(currentAffix, *this, status);  // suffix length
     return result;
 }
 
@@ -238,15 +229,13 @@ bool MutablePatternModifier::isStrong() const {
 
 int32_t MutablePatternModifier::insertPrefix(NumberStringBuilder& sb, int position, UErrorCode& status) {
     prepareAffix(true);
-    int length = AffixUtils::unescape(
-            UnicodeStringCharSequence(currentAffix), sb, position, *this, status);
+    int length = AffixUtils::unescape(currentAffix, sb, position, *this, status);
     return length;
 }
 
 int32_t MutablePatternModifier::insertSuffix(NumberStringBuilder& sb, int position, UErrorCode& status) {
     prepareAffix(false);
-    int length = AffixUtils::unescape(
-            UnicodeStringCharSequence(currentAffix), sb, position, *this, status);
+    int length = AffixUtils::unescape(currentAffix, sb, position, *this, status);
     return length;
 }
 

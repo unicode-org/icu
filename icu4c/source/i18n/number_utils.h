@@ -20,40 +20,6 @@
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
 
-class UnicodeStringCharSequence : public CharSequence {
-  public:
-    explicit UnicodeStringCharSequence(const UnicodeString& other) {
-        fStr = other;
-    }
-
-    ~UnicodeStringCharSequence() U_OVERRIDE = default;
-
-    int32_t length() const U_OVERRIDE {
-        return fStr.length();
-    }
-
-    char16_t charAt(int32_t index) const U_OVERRIDE {
-        return fStr.charAt(index);
-    }
-
-    UChar32 codePointAt(int32_t index) const U_OVERRIDE {
-        return fStr.char32At(index);
-    }
-
-    UnicodeString toUnicodeString() const U_OVERRIDE {
-        // Performs a copy:
-        return fStr;
-    }
-
-    const UnicodeString toTempUnicodeString() const U_OVERRIDE {
-        // Readonly alias:
-        return UnicodeString().fastCopyFrom(fStr);
-    }
-
-  private:
-    UnicodeString fStr;
-};
-
 struct MicroProps : public MicroPropsGenerator {
 
     // NOTE: All of these fields are properly initialized in NumberFormatterImpl.
