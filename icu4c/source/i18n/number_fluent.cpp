@@ -640,6 +640,34 @@ LocalizedNumberFormatter::formatDecimalQuantity(const DecimalQuantity& dq, UErro
 }
 
 void LocalizedNumberFormatter::formatImpl(impl::UFormattedNumberData* results, UErrorCode& status) const {
+    if (computeCompiled(status)) {
+        fCompiled->apply(results->quantity, results->string, status);
+    } else {
+        NumberFormatterImpl::applyStatic(fMacros, results->quantity, results->string, status);
+    }
+}
+
+void LocalizedNumberFormatter::getAffixImpl(bool isPrefix, bool isNegative, UnicodeString& result,
+                                            UErrorCode& status) const {
+    NumberStringBuilder string;
+    auto signum = static_cast<int8_t>(isNegative ? -1 : 1);
+    // Always return affixes for plural form OTHER.
+    static const StandardPlural::Form plural = StandardPlural::OTHER;
+    int32_t prefixLength;
+    if (computeCompiled(status)) {
+        prefixLength = fCompiled->getPrefixSuffix(signum, plural, string, status);
+    } else {
+        prefixLength = NumberFormatterImpl::getPrefixSuffixStatic(fMacros, signum, plural, string, status);
+    }
+    result.remove();
+    if (isPrefix) {
+        result.append(string.toTempUnicodeString().tempSubStringBetween(0, prefixLength));
+    } else {
+        result.append(string.toTempUnicodeString().tempSubStringBetween(prefixLength, string.length()));
+    }
+}
+
+bool LocalizedNumberFormatter::computeCompiled(UErrorCode& status) const {
     // fUnsafeCallCount contains memory to be interpreted as an atomic int, most commonly
     // std::atomic<int32_t>.  Since the type of atomic int is platform-dependent, we cast the
     // bytes in fUnsafeCallCount to u_atomic_int32_t, a typedef for the platform-dependent
@@ -666,32 +694,14 @@ void LocalizedNumberFormatter::formatImpl(impl::UFormattedNumberData* results, U
         U_ASSERT(fCompiled == nullptr);
         const_cast<LocalizedNumberFormatter*>(this)->fCompiled = compiled;
         umtx_storeRelease(*callCount, INT32_MIN);
-        compiled->apply(results->quantity, results->string, status);
+        return true;
     } else if (currentCount < 0) {
         // The data structure is already built; use it (fast path).
         U_ASSERT(fCompiled != nullptr);
-        fCompiled->apply(results->quantity, results->string, status);
+        return true;
     } else {
         // Format the number without building the data structure (slow path).
-        NumberFormatterImpl::applyStatic(fMacros, results->quantity, results->string, status);
-    }
-}
-
-void LocalizedNumberFormatter::getAffix(bool isPrefix, bool isNegative, UnicodeString& result,
-                                        UErrorCode& status) const {
-    NumberStringBuilder nsb;
-    DecimalQuantity dq;
-    if (isNegative) {
-        dq.setToInt(-1);
-    } else {
-        dq.setToInt(1);
-    }
-    int prefixLength = NumberFormatterImpl::getPrefixSuffix(fMacros, dq, nsb, status);
-    result.remove();
-    if (isPrefix) {
-        result.append(nsb.toTempUnicodeString().tempSubStringBetween(0, prefixLength));
-    } else {
-        result.append(nsb.toTempUnicodeString().tempSubStringBetween(prefixLength, nsb.length()));
+        return false;
     }
 }
 

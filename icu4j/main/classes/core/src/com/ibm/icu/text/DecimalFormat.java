@@ -916,7 +916,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getPositivePrefix() {
-    return formatter.getAffix(true, false);
+    return formatter.getAffixImpl(true, false);
   }
 
   /**
@@ -953,7 +953,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getNegativePrefix() {
-    return formatter.getAffix(true, true);
+    return formatter.getAffixImpl(true, true);
   }
 
   /**
@@ -990,7 +990,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getPositiveSuffix() {
-    return formatter.getAffix(false, false);
+    return formatter.getAffixImpl(false, false);
   }
 
   /**
@@ -1027,7 +1027,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getNegativeSuffix() {
-    return formatter.getAffix(false, true);
+    return formatter.getAffixImpl(false, true);
   }
 
   /**

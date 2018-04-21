@@ -42,6 +42,8 @@ class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator, public U
 
     void applyToMicros(MicroProps& micros, DecimalQuantity& quantity) const;
 
+    const Modifier* getModifier(int8_t signum, StandardPlural::Form plural) const;
+
   private:
     ImmutablePatternModifier(ParameterizedModifier* pm, const PluralRules* rules,
                              const MicroPropsGenerator* parent);

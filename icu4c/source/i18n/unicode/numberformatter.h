@@ -2206,7 +2206,7 @@ class U_I18N_API LocalizedNumberFormatter
     /** Internal method for DecimalFormat compatibility.
      * @internal
      */
-    void getAffix(bool isPrefix, bool isNegative, UnicodeString& result, UErrorCode& status) const;
+    void getAffixImpl(bool isPrefix, bool isNegative, UnicodeString& result, UErrorCode& status) const;
 
     /**
      * Internal method for testing.
@@ -2292,6 +2292,11 @@ class U_I18N_API LocalizedNumberFormatter
     LocalizedNumberFormatter(const impl::MacroProps &macros, const Locale &locale);
 
     LocalizedNumberFormatter(impl::MacroProps &&macros, const Locale &locale);
+
+    /**
+     * @return true if the compiled formatter is available.
+     */
+    bool computeCompiled(UErrorCode& status) const;
 
     // To give the fluent setters access to this class's constructor:
     friend class NumberFormatterSettings<UnlocalizedNumberFormatter>;

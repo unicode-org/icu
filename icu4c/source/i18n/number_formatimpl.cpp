@@ -73,10 +73,11 @@ void NumberFormatterImpl::applyStatic(const MacroProps& macros, DecimalQuantity&
     impl.applyUnsafe(inValue, outString, status);
 }
 
-int32_t NumberFormatterImpl::getPrefixSuffix(const MacroProps& macros, DecimalQuantity& inValue,
-                                             NumberStringBuilder& outString, UErrorCode& status) {
+int32_t NumberFormatterImpl::getPrefixSuffixStatic(const MacroProps& macros, int8_t signum,
+                                                   StandardPlural::Form plural,
+                                                   NumberStringBuilder& outString, UErrorCode& status) {
     NumberFormatterImpl impl(macros, false, status);
-    return impl.getPrefixSuffixUnsafe(inValue, outString, status);
+    return impl.getPrefixSuffixUnsafe(signum, plural, outString, status);
 }
 
 // NOTE: C++ SPECIFIC DIFFERENCE FROM JAVA:
@@ -101,16 +102,26 @@ void NumberFormatterImpl::applyUnsafe(DecimalQuantity& inValue, NumberStringBuil
     microsToString(fMicros, inValue, outString, status);
 }
 
-int32_t
-NumberFormatterImpl::getPrefixSuffixUnsafe(DecimalQuantity& inValue, NumberStringBuilder& outString,
-                                           UErrorCode& status) {
+int32_t NumberFormatterImpl::getPrefixSuffix(int8_t signum, StandardPlural::Form plural,
+                                             NumberStringBuilder& outString, UErrorCode& status) const {
     if (U_FAILURE(status)) { return 0; }
-    fMicroPropsGenerator->processQuantity(inValue, fMicros, status);
+    // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle, aka pattern modifier).
+    // Safe path: use fImmutablePatternModifier.
+    const Modifier* modifier = fImmutablePatternModifier->getModifier(signum, plural);
+    modifier->apply(outString, 0, 0, status);
     if (U_FAILURE(status)) { return 0; }
-    // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle).
-    fMicros.modMiddle->apply(outString, 0, 0, status);
+    return modifier->getPrefixLength(status);
+}
+
+int32_t NumberFormatterImpl::getPrefixSuffixUnsafe(int8_t signum, StandardPlural::Form plural,
+                                                   NumberStringBuilder& outString, UErrorCode& status) {
     if (U_FAILURE(status)) { return 0; }
-    return fMicros.modMiddle->getPrefixLength(status);
+    // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle, aka pattern modifier).
+    // Unsafe path: use fPatternModifier.
+    fPatternModifier->setNumberProperties(signum, plural);
+    fPatternModifier->apply(outString, 0, 0, status);
+    if (U_FAILURE(status)) { return 0; }
+    return fPatternModifier->getPrefixLength(status);
 }
 
 NumberFormatterImpl::NumberFormatterImpl(const MacroProps& macros, bool safe, UErrorCode& status) {

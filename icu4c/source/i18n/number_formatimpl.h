@@ -43,13 +43,20 @@ class NumberFormatterImpl : public UMemory {
      * @return The index into the output at which the prefix ends and the suffix starts; in other words,
      *         the prefix length.
      */
-    static int32_t getPrefixSuffix(const MacroProps& macros, DecimalQuantity& inValue,
-                                   NumberStringBuilder& outString, UErrorCode& status);
+    static int32_t getPrefixSuffixStatic(const MacroProps& macros, int8_t signum,
+                                         StandardPlural::Form plural, NumberStringBuilder& outString,
+                                         UErrorCode& status);
 
     /**
      * Evaluates the "safe" MicroPropsGenerator created by "fromMacros".
      */
-    void apply(DecimalQuantity &inValue, NumberStringBuilder &outString, UErrorCode &status) const;
+    void apply(DecimalQuantity& inValue, NumberStringBuilder& outString, UErrorCode& status) const;
+
+    /**
+     * Like getPrefixSuffixStatic() but uses the safe compiled object.
+     */
+    int32_t getPrefixSuffix(int8_t signum, StandardPlural::Form plural, NumberStringBuilder& outString,
+                            UErrorCode& status) const;
 
   private:
     // Head of the MicroPropsGenerator linked list:
@@ -64,7 +71,7 @@ class NumberFormatterImpl : public UMemory {
     LocalPointer<const PluralRules> fRules;
     LocalPointer<const ParsedPatternInfo> fPatternInfo;
     LocalPointer<const ScientificHandler> fScientificHandler;
-    LocalPointer<const MutablePatternModifier> fPatternModifier;
+    LocalPointer<MutablePatternModifier> fPatternModifier;
     LocalPointer<const ImmutablePatternModifier> fImmutablePatternModifier;
     LocalPointer<const LongNameHandler> fLongNameHandler;
     LocalPointer<const CompactHandler> fCompactHandler;
@@ -79,8 +86,8 @@ class NumberFormatterImpl : public UMemory {
 
     void applyUnsafe(DecimalQuantity &inValue, NumberStringBuilder &outString, UErrorCode &status);
 
-    int32_t getPrefixSuffixUnsafe(DecimalQuantity& inValue, NumberStringBuilder& outString,
-                                  UErrorCode& status);
+    int32_t getPrefixSuffixUnsafe(int8_t signum, StandardPlural::Form plural,
+                                  NumberStringBuilder& outString, UErrorCode& status);
 
     /**
      * If rulesPtr is non-null, return it.  Otherwise, return a PluralRules owned by this object for the

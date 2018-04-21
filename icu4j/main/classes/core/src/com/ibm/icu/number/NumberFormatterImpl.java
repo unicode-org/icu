@@ -4,9 +4,11 @@ package com.ibm.icu.number;
 
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.impl.CurrencyData.CurrencyFormatInfo;
+import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.CompactData.CompactType;
 import com.ibm.icu.impl.number.ConstantAffixModifier;
 import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.impl.number.LongNameHandler;
 import com.ibm.icu.impl.number.MacroProps;
@@ -63,15 +65,13 @@ class NumberFormatterImpl {
      * @return The index into the output at which the prefix ends and the suffix starts; in other words,
      *         the prefix length.
      */
-    public static int getPrefixSuffix(
+    public static int getPrefixSuffixStatic(
             MacroProps macros,
-            DecimalQuantity inValue,
+            byte signum,
+            StandardPlural plural,
             NumberStringBuilder output) {
         MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, false);
-        MicroProps micros = microPropsGenerator.processQuantity(inValue);
-        // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle).
-        micros.modMiddle.apply(output, 0, 0);
-        return micros.modMiddle.getPrefixLength();
+        return getPrefixSuffixImpl(microPropsGenerator, signum, output);
     }
 
     private static final Currency DEFAULT_CURRENCY = Currency.getInstance("XXX");
@@ -85,6 +85,23 @@ class NumberFormatterImpl {
     public void apply(DecimalQuantity inValue, NumberStringBuilder outString) {
         MicroProps micros = microPropsGenerator.processQuantity(inValue);
         microsToString(micros, inValue, outString);
+    }
+
+    public int getPrefixSuffix(byte signum, StandardPlural plural, NumberStringBuilder output) {
+        return getPrefixSuffixImpl(microPropsGenerator, signum, output);
+    }
+
+    private static int getPrefixSuffixImpl(MicroPropsGenerator generator, byte signum, NumberStringBuilder output) {
+        // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle).
+        // TODO: Clean this up, closer to C++. The pattern modifier is not as accessible as in C++.
+        // Right now, ignore the plural form, run the pipeline with number 0, and get the modifier from the result.
+        DecimalQuantity_DualStorageBCD quantity = new DecimalQuantity_DualStorageBCD(0);
+        if (signum < 0) {
+            quantity.negate();
+        }
+        MicroProps micros = generator.processQuantity(quantity);
+        micros.modMiddle.apply(output, 0, 0);
+        return micros.modMiddle.getPrefixLength();
     }
 
     //////////
