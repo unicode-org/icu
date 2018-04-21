@@ -41,21 +41,21 @@ static const int32_t gOffsets[] = {
     16,
     20,
     24,
-    319,
-    329,
-    340,
-    344,
-    350,
-    354,
-    374,
-    375,
-    386,
-    389,
-    395,
-    400,
-    404,
-    408,
-    433
+    321,
+    331,
+    342,
+    346,
+    352,
+    356,
+    376,
+    377,
+    388,
+    391,
+    397,
+    402,
+    406,
+    410,
+    435
 };
 
 static const int32_t gIndexes[] = {
@@ -297,6 +297,7 @@ static const char * const gSubTypes[] = {
     "MNT",
     "MOP",
     "MRO",
+    "MRU",
     "MTL",
     "MTP",
     "MUR",
@@ -357,6 +358,7 @@ static const char * const gSubTypes[] = {
     "SRG",
     "SSP",
     "STD",
+    "STN",
     "SUR",
     "SVC",
     "SYP",
@@ -545,14 +547,14 @@ static const char * const gSubTypes[] = {
 
 // Must be sorted by first value and then second value.
 static int32_t unitPerUnitToSingleUnit[][4] = {
-        {361, 331, 17, 0},
-        {363, 337, 17, 2},
-        {365, 331, 17, 3},
-        {365, 422, 4, 2},
-        {365, 423, 4, 3},
-        {380, 420, 3, 1},
-        {383, 11, 16, 4},
-        {425, 361, 4, 1}
+        {363, 333, 17, 0},
+        {365, 339, 17, 2},
+        {367, 333, 17, 3},
+        {367, 424, 4, 2},
+        {367, 425, 4, 3},
+        {382, 422, 3, 1},
+        {385, 11, 16, 4},
+        {427, 363, 4, 1}
 };
 
 MeasureUnit *MeasureUnit::createGForce(UErrorCode &status) {
