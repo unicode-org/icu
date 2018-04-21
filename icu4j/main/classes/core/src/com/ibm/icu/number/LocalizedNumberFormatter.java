@@ -5,6 +5,7 @@ package com.ibm.icu.number;
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 
+import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
@@ -130,19 +131,11 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      */
     @Deprecated
     public FormattedNumber format(DecimalQuantity fq) {
-        MacroProps macros = resolve();
-        // NOTE: In Java, the atomic increment logic is slightly different than ICU4C.
-        // It seems to be more efficient to make just one function call instead of two.
-        // Further benchmarking is required.
-        long currentCount = callCount.incrementAndGet(this);
         NumberStringBuilder string = new NumberStringBuilder();
-        if (currentCount == macros.threshold.longValue()) {
-            compiled = NumberFormatterImpl.fromMacros(macros);
-            compiled.apply(fq, string);
-        } else if (compiled != null) {
+        if (computeCompiled()) {
             compiled.apply(fq, string);
         } else {
-            NumberFormatterImpl.applyStatic(macros, fq, string);
+            NumberFormatterImpl.applyStatic(resolve(), fq, string);
         }
         return new FormattedNumber(string, fq);
     }
@@ -153,15 +146,37 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      *             {@link FormattedNumber#getFieldIterator} for similar functionality.
      */
     @Deprecated
-    public String getAffix(boolean isPrefix, boolean isNegative) {
-        MacroProps macros = resolve();
-        NumberStringBuilder nsb = new NumberStringBuilder();
-        DecimalQuantity dq = new DecimalQuantity_DualStorageBCD(isNegative ? -1 : 1);
-        int prefixLength = NumberFormatterImpl.getPrefixSuffix(macros, dq, nsb);
-        if (isPrefix) {
-            return nsb.subSequence(0, prefixLength).toString();
+    public String getAffixImpl(boolean isPrefix, boolean isNegative) {
+        NumberStringBuilder string = new NumberStringBuilder();
+        byte signum = (byte) (isNegative ? -1 : 1);
+        // Always return affixes for plural form OTHER.
+        StandardPlural plural = StandardPlural.OTHER;
+        int prefixLength;
+        if (computeCompiled()) {
+            prefixLength = compiled.getPrefixSuffix(signum, plural, string);
         } else {
-            return nsb.subSequence(prefixLength, nsb.length()).toString();
+            prefixLength = NumberFormatterImpl.getPrefixSuffixStatic(resolve(), signum, plural, string);
+        }
+        if (isPrefix) {
+            return string.subSequence(0, prefixLength).toString();
+        } else {
+            return string.subSequence(prefixLength, string.length()).toString();
+        }
+    }
+
+    private boolean computeCompiled() {
+        MacroProps macros = resolve();
+        // NOTE: In Java, the atomic increment logic is slightly different than ICU4C.
+        // It seems to be more efficient to make just one function call instead of two.
+        // Further benchmarking is required.
+        long currentCount = callCount.incrementAndGet(this);
+        if (currentCount == macros.threshold.longValue()) {
+            compiled = NumberFormatterImpl.fromMacros(macros);
+            return true;
+        } else if (compiled != null) {
+            return true;
+        } else {
+            return false;
         }
     }
 

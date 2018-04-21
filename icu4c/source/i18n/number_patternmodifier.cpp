@@ -137,6 +137,15 @@ void ImmutablePatternModifier::applyToMicros(MicroProps& micros, DecimalQuantity
     }
 }
 
+const Modifier* ImmutablePatternModifier::getModifier(int8_t signum, StandardPlural::Form plural) const {
+    if (rules == nullptr) {
+        return pm->getModifier(signum);
+    } else {
+        return pm->getModifier(signum, plural);
+    }
+}
+
+
 /** Used by the unsafe code path. */
 MicroPropsGenerator& MutablePatternModifier::addToChain(const MicroPropsGenerator* parent) {
     this->parent = parent;

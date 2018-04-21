@@ -5011,7 +5011,7 @@ public class NumberFormatTest extends TestFmwk {
         DecimalFormat df = (DecimalFormat) NumberFormat.getInstance();
         df.applyPattern("¤¤¤ 0");
         String result = df.getPositivePrefix();
-        assertEquals("Triple-currency should give long name on getPositivePrefix", "US dollar ", result);
+        assertEquals("Triple-currency should give long name on getPositivePrefix", "US dollars ", result);
     }
 
     @Test

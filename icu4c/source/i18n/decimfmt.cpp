@@ -614,7 +614,7 @@ void DecimalFormat::setCurrencyPluralInfo(const CurrencyPluralInfo& info) {
 
 UnicodeString& DecimalFormat::getPositivePrefix(UnicodeString& result) const {
     ErrorCode localStatus;
-    fFormatter->getAffix(true, false, result, localStatus);
+    fFormatter->getAffixImpl(true, false, result, localStatus);
     return result;
 }
 
@@ -626,7 +626,7 @@ void DecimalFormat::setPositivePrefix(const UnicodeString& newValue) {
 
 UnicodeString& DecimalFormat::getNegativePrefix(UnicodeString& result) const {
     ErrorCode localStatus;
-    fFormatter->getAffix(true, true, result, localStatus);
+    fFormatter->getAffixImpl(true, true, result, localStatus);
     return result;
 }
 
@@ -638,7 +638,7 @@ void DecimalFormat::setNegativePrefix(const UnicodeString& newValue) {
 
 UnicodeString& DecimalFormat::getPositiveSuffix(UnicodeString& result) const {
     ErrorCode localStatus;
-    fFormatter->getAffix(false, false, result, localStatus);
+    fFormatter->getAffixImpl(false, false, result, localStatus);
     return result;
 }
 
@@ -650,7 +650,7 @@ void DecimalFormat::setPositiveSuffix(const UnicodeString& newValue) {
 
 UnicodeString& DecimalFormat::getNegativeSuffix(UnicodeString& result) const {
     ErrorCode localStatus;
-    fFormatter->getAffix(false, true, result, localStatus);
+    fFormatter->getAffixImpl(false, true, result, localStatus);
     return result;
 }
 
