@@ -91,7 +91,6 @@ DecimalFormatProperties::_equals(const DecimalFormatProperties& other, bool igno
     eq = eq && magnitudeMultiplier == other.magnitudeMultiplier;
     eq = eq && maximumSignificantDigits == other.maximumSignificantDigits;
     eq = eq && minimumExponentDigits == other.minimumExponentDigits;
-    eq = eq && minimumFractionDigits == other.minimumFractionDigits;
     eq = eq && minimumGroupingDigits == other.minimumGroupingDigits;
     eq = eq && minimumSignificantDigits == other.minimumSignificantDigits;
     eq = eq && multiplier == other.multiplier;
@@ -115,6 +114,7 @@ DecimalFormatProperties::_equals(const DecimalFormatProperties& other, bool igno
     // Formatting (special handling required):
     eq = eq && groupingSize == other.groupingSize;
     eq = eq && groupingUsed == other.groupingUsed;
+    eq = eq && minimumFractionDigits == other.minimumFractionDigits;
     eq = eq && maximumFractionDigits == other.maximumFractionDigits;
     eq = eq && maximumIntegerDigits == other.maximumIntegerDigits;
     eq = eq && minimumIntegerDigits == other.minimumIntegerDigits;

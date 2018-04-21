@@ -100,6 +100,7 @@ DecimalFormat::DecimalFormat(const DecimalFormatSymbols* symbolsToAdopt, UErrorC
 #if UCONFIG_HAVE_PARSEALLINPUT
 
 void DecimalFormat::setParseAllInput(UNumberFormatAttributeValue value) {
+    if (value == fProperties->parseAllInput) { return; }
     fProperties->parseAllInput = value;
 }
 
@@ -330,20 +331,24 @@ int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& sta
 }
 
 void DecimalFormat::setGroupingUsed(UBool enabled) {
+    if (enabled == fProperties->groupingUsed) { return; }
     NumberFormat::setGroupingUsed(enabled); // to set field for compatibility
     fProperties->groupingUsed = enabled;
     touchNoError();
 }
 
 void DecimalFormat::setParseIntegerOnly(UBool value) {
+    if (value == fProperties->parseIntegerOnly) { return; }
     NumberFormat::setParseIntegerOnly(value); // to set field for compatibility
     fProperties->parseIntegerOnly = value;
     touchNoError();
 }
 
 void DecimalFormat::setLenient(UBool enable) {
+    ParseMode mode = enable ? PARSE_MODE_LENIENT : PARSE_MODE_STRICT;
+    if (!fProperties->parseMode.isNull() && mode == fProperties->parseMode.getNoError()) { return; }
     NumberFormat::setLenient(enable); // to set field for compatibility
-    fProperties->parseMode = enable ? PARSE_MODE_LENIENT : PARSE_MODE_STRICT;
+    fProperties->parseMode = mode;
     touchNoError();
 }
 
@@ -363,12 +368,15 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern, const DecimalFormatSy
 }
 
 DecimalFormat::DecimalFormat(const DecimalFormat& source) : NumberFormat(source) {
+    // Note: it is not safe to copy fFormatter or fWarehouse directly because fFormatter might have
+    // dangling pointers to fields inside fWarehouse. The safe thing is to re-construct fFormatter from
+    // the property bag, despite being somewhat slower.
     fProperties.adoptInstead(new DecimalFormatProperties(*source.fProperties));
+    fSymbols.adoptInstead(new DecimalFormatSymbols(*source.fSymbols));
     fExportedProperties.adoptInstead(new DecimalFormatProperties());
     fWarehouse.adoptInstead(new DecimalFormatWarehouse());
-    fSymbols.adoptInstead(new DecimalFormatSymbols(*source.fSymbols));
-    if (fProperties == nullptr || fExportedProperties == nullptr || fWarehouse == nullptr ||
-        fSymbols == nullptr) {
+    if (fProperties == nullptr || fSymbols == nullptr || fExportedProperties == nullptr ||
+        fWarehouse == nullptr) {
         return;
     }
     touchNoError();
@@ -536,13 +544,13 @@ void DecimalFormat::parse(const UnicodeString& text, Formattable& output,
     // Note: if this is a currency instance, currencies will be matched despite the fact that we are not in the
     // parseCurrency method (backwards compatibility)
     int32_t startIndex = parsePosition.getIndex();
-    const NumberParserImpl& parser = getParser(status);
+    const NumberParserImpl* parser = getParser(status);
     if (U_FAILURE(status)) { return; }
-    parser.parse(text, startIndex, true, result, status);
+    parser->parse(text, startIndex, true, result, status);
     // TODO: Do we need to check for fProperties->parseAllInput (UCONFIG_HAVE_PARSEALLINPUT) here?
     if (result.success()) {
         parsePosition.setIndex(result.charEnd);
-        result.populateFormattable(output, parser.getParseFlags());
+        result.populateFormattable(output, parser->getParseFlags());
     } else {
         parsePosition.setErrorIndex(startIndex + result.charEnd);
     }
@@ -558,14 +566,14 @@ CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& text, ParsePos
     // Note: if this is a currency instance, currencies will be matched despite the fact that we are not in the
     // parseCurrency method (backwards compatibility)
     int32_t startIndex = parsePosition.getIndex();
-    const NumberParserImpl& parser = getCurrencyParser(status);
+    const NumberParserImpl* parser = getCurrencyParser(status);
     if (U_FAILURE(status)) { return nullptr; }
-    parser.parse(text, startIndex, true, result, status);
+    parser->parse(text, startIndex, true, result, status);
     // TODO: Do we need to check for fProperties->parseAllInput (UCONFIG_HAVE_PARSEALLINPUT) here?
     if (result.success()) {
         parsePosition.setIndex(result.charEnd);
         Formattable formattable;
-        result.populateFormattable(formattable, parser.getParseFlags());
+        result.populateFormattable(formattable, parser->getParseFlags());
         return new CurrencyAmount(formattable, result.currencyCode, status);
     } else {
         parsePosition.setErrorIndex(startIndex + result.charEnd);
@@ -611,6 +619,7 @@ UnicodeString& DecimalFormat::getPositivePrefix(UnicodeString& result) const {
 }
 
 void DecimalFormat::setPositivePrefix(const UnicodeString& newValue) {
+    if (newValue == fProperties->positivePrefix) { return; }
     fProperties->positivePrefix = newValue;
     touchNoError();
 }
@@ -622,6 +631,7 @@ UnicodeString& DecimalFormat::getNegativePrefix(UnicodeString& result) const {
 }
 
 void DecimalFormat::setNegativePrefix(const UnicodeString& newValue) {
+    if (newValue == fProperties->negativePrefix) { return; }
     fProperties->negativePrefix = newValue;
     touchNoError();
 }
@@ -633,6 +643,7 @@ UnicodeString& DecimalFormat::getPositiveSuffix(UnicodeString& result) const {
 }
 
 void DecimalFormat::setPositiveSuffix(const UnicodeString& newValue) {
+    if (newValue == fProperties->positiveSuffix) { return; }
     fProperties->positiveSuffix = newValue;
     touchNoError();
 }
@@ -644,6 +655,7 @@ UnicodeString& DecimalFormat::getNegativeSuffix(UnicodeString& result) const {
 }
 
 void DecimalFormat::setNegativeSuffix(const UnicodeString& newValue) {
+    if (newValue == fProperties->negativeSuffix) { return; }
     fProperties->negativeSuffix = newValue;
     touchNoError();
 }
@@ -653,6 +665,7 @@ UBool DecimalFormat::isSignAlwaysShown() const {
 }
 
 void DecimalFormat::setSignAlwaysShown(UBool value) {
+    if (value == fProperties->signAlwaysShown) { return; }
     fProperties->signAlwaysShown = value;
     touchNoError();
 }
@@ -699,6 +712,7 @@ int32_t DecimalFormat::getMultiplierScale() const {
 }
 
 void DecimalFormat::setMultiplierScale(int32_t newValue) {
+    if (newValue == fProperties->multiplierScale) { return; }
     fProperties->multiplierScale = newValue;
     touchNoError();
 }
@@ -708,6 +722,7 @@ double DecimalFormat::getRoundingIncrement(void) const {
 }
 
 void DecimalFormat::setRoundingIncrement(double newValue) {
+    if (newValue == fProperties->roundingIncrement) { return; }
     fProperties->roundingIncrement = newValue;
     touchNoError();
 }
@@ -718,8 +733,12 @@ ERoundingMode DecimalFormat::getRoundingMode(void) const {
 }
 
 void DecimalFormat::setRoundingMode(ERoundingMode roundingMode) {
+    auto uRoundingMode = static_cast<UNumberFormatRoundingMode>(roundingMode);
+    if (!fProperties->roundingMode.isNull() && uRoundingMode == fProperties->roundingMode.getNoError()) {
+        return;
+    }
     NumberFormat::setMaximumIntegerDigits(roundingMode); // to set field for compatibility
-    fProperties->roundingMode = static_cast<UNumberFormatRoundingMode>(roundingMode);
+    fProperties->roundingMode = uRoundingMode;
     touchNoError();
 }
 
@@ -728,6 +747,7 @@ int32_t DecimalFormat::getFormatWidth(void) const {
 }
 
 void DecimalFormat::setFormatWidth(int32_t width) {
+    if (width == fProperties->formatWidth) { return; }
     fProperties->formatWidth = width;
     touchNoError();
 }
@@ -742,6 +762,7 @@ UnicodeString DecimalFormat::getPadCharacterString() const {
 }
 
 void DecimalFormat::setPadCharacter(const UnicodeString& padChar) {
+    if (padChar == fProperties->padString) { return; }
     if (padChar.length() > 0) {
         fProperties->padString = UnicodeString(padChar.char32At(0));
     } else {
@@ -760,7 +781,11 @@ EPadPosition DecimalFormat::getPadPosition(void) const {
 }
 
 void DecimalFormat::setPadPosition(EPadPosition padPos) {
-    fProperties->padPosition = static_cast<UNumberFormatPadPosition>(padPos);
+    auto uPadPos = static_cast<UNumberFormatPadPosition>(padPos);
+    if (!fProperties->padPosition.isNull() && uPadPos == fProperties->padPosition.getNoError()) {
+        return;
+    }
+    fProperties->padPosition = uPadPos;
     touchNoError();
 }
 
@@ -769,6 +794,8 @@ UBool DecimalFormat::isScientificNotation(void) const {
 }
 
 void DecimalFormat::setScientificNotation(UBool useScientific) {
+    int32_t minExp = useScientific ? 1 : -1;
+    if (fProperties->minimumExponentDigits == minExp) { return; }
     if (useScientific) {
         fProperties->minimumExponentDigits = 1;
     } else {
@@ -782,6 +809,7 @@ int8_t DecimalFormat::getMinimumExponentDigits(void) const {
 }
 
 void DecimalFormat::setMinimumExponentDigits(int8_t minExpDig) {
+    if (minExpDig == fProperties->minimumExponentDigits) { return; }
     fProperties->minimumExponentDigits = minExpDig;
     touchNoError();
 }
@@ -791,6 +819,7 @@ UBool DecimalFormat::isExponentSignAlwaysShown(void) const {
 }
 
 void DecimalFormat::setExponentSignAlwaysShown(UBool expSignAlways) {
+    if (expSignAlways == fProperties->exponentSignAlwaysShown) { return; }
     fProperties->exponentSignAlwaysShown = expSignAlways;
     touchNoError();
 }
@@ -803,6 +832,7 @@ int32_t DecimalFormat::getGroupingSize(void) const {
 }
 
 void DecimalFormat::setGroupingSize(int32_t newValue) {
+    if (newValue == fProperties->groupingSize) { return; }
     fProperties->groupingSize = newValue;
     touchNoError();
 }
@@ -816,6 +846,7 @@ int32_t DecimalFormat::getSecondaryGroupingSize(void) const {
 }
 
 void DecimalFormat::setSecondaryGroupingSize(int32_t newValue) {
+    if (newValue == fProperties->secondaryGroupingSize) { return; }
     fProperties->secondaryGroupingSize = newValue;
     touchNoError();
 }
@@ -825,6 +856,7 @@ int32_t DecimalFormat::getMinimumGroupingDigits() const {
 }
 
 void DecimalFormat::setMinimumGroupingDigits(int32_t newValue) {
+    if (newValue == fProperties->minimumGroupingDigits) { return; }
     fProperties->minimumGroupingDigits = newValue;
     touchNoError();
 }
@@ -834,6 +866,7 @@ UBool DecimalFormat::isDecimalSeparatorAlwaysShown(void) const {
 }
 
 void DecimalFormat::setDecimalSeparatorAlwaysShown(UBool newValue) {
+    if (newValue == fProperties->decimalSeparatorAlwaysShown) { return; }
     fProperties->decimalSeparatorAlwaysShown = newValue;
     touchNoError();
 }
@@ -843,6 +876,7 @@ UBool DecimalFormat::isDecimalPatternMatchRequired(void) const {
 }
 
 void DecimalFormat::setDecimalPatternMatchRequired(UBool newValue) {
+    if (newValue == fProperties->decimalPatternMatchRequired) { return; }
     fProperties->decimalPatternMatchRequired = newValue;
     touchNoError();
 }
@@ -852,6 +886,7 @@ UBool DecimalFormat::isParseNoExponent() const {
 }
 
 void DecimalFormat::setParseNoExponent(UBool value) {
+    if (value == fProperties->parseNoExponent) { return; }
     fProperties->parseNoExponent = value;
     touchNoError();
 }
@@ -861,6 +896,7 @@ UBool DecimalFormat::isParseCaseSensitive() const {
 }
 
 void DecimalFormat::setParseCaseSensitive(UBool value) {
+    if (value == fProperties->parseCaseSensitive) { return; }
     fProperties->parseCaseSensitive = value;
     touchNoError();
 }
@@ -870,6 +906,7 @@ UBool DecimalFormat::isFormatFailIfMoreThanMaxDigits() const {
 }
 
 void DecimalFormat::setFormatFailIfMoreThanMaxDigits(UBool value) {
+    if (value == fProperties->formatFailIfMoreThanMaxDigits) { return; }
     fProperties->formatFailIfMoreThanMaxDigits = value;
     touchNoError();
 }
@@ -929,6 +966,7 @@ void DecimalFormat::applyLocalizedPattern(const UnicodeString& localizedPattern,
 }
 
 void DecimalFormat::setMaximumIntegerDigits(int32_t newValue) {
+    if (newValue == fProperties->maximumIntegerDigits) { return; }
     // For backwards compatibility, conflicting min/max need to keep the most recent setting.
     int32_t min = fProperties->minimumIntegerDigits;
     if (min >= 0 && min > newValue) {
@@ -939,6 +977,7 @@ void DecimalFormat::setMaximumIntegerDigits(int32_t newValue) {
 }
 
 void DecimalFormat::setMinimumIntegerDigits(int32_t newValue) {
+    if (newValue == fProperties->minimumIntegerDigits) { return; }
     // For backwards compatibility, conflicting min/max need to keep the most recent setting.
     int32_t max = fProperties->maximumIntegerDigits;
     if (max >= 0 && max < newValue) {
@@ -949,6 +988,7 @@ void DecimalFormat::setMinimumIntegerDigits(int32_t newValue) {
 }
 
 void DecimalFormat::setMaximumFractionDigits(int32_t newValue) {
+    if (newValue == fProperties->maximumFractionDigits) { return; }
     // For backwards compatibility, conflicting min/max need to keep the most recent setting.
     int32_t min = fProperties->minimumFractionDigits;
     if (min >= 0 && min > newValue) {
@@ -959,6 +999,7 @@ void DecimalFormat::setMaximumFractionDigits(int32_t newValue) {
 }
 
 void DecimalFormat::setMinimumFractionDigits(int32_t newValue) {
+    if (newValue == fProperties->minimumFractionDigits) { return; }
     // For backwards compatibility, conflicting min/max need to keep the most recent setting.
     int32_t max = fProperties->maximumFractionDigits;
     if (max >= 0 && max < newValue) {
@@ -977,6 +1018,7 @@ int32_t DecimalFormat::getMaximumSignificantDigits() const {
 }
 
 void DecimalFormat::setMinimumSignificantDigits(int32_t value) {
+    if (value == fProperties->minimumSignificantDigits) { return; }
     int32_t max = fProperties->maximumSignificantDigits;
     if (max >= 0 && max < value) {
         fProperties->maximumSignificantDigits = value;
@@ -986,6 +1028,7 @@ void DecimalFormat::setMinimumSignificantDigits(int32_t value) {
 }
 
 void DecimalFormat::setMaximumSignificantDigits(int32_t value) {
+    if (value == fProperties->maximumSignificantDigits) { return; }
     int32_t min = fProperties->minimumSignificantDigits;
     if (min >= 0 && min > value) {
         fProperties->minimumSignificantDigits = value;
@@ -999,20 +1042,26 @@ UBool DecimalFormat::areSignificantDigitsUsed() const {
 }
 
 void DecimalFormat::setSignificantDigitsUsed(UBool useSignificantDigits) {
-    if (useSignificantDigits) {
-        // These are the default values from the old implementation.
-        fProperties->minimumSignificantDigits = 1;
-        fProperties->maximumSignificantDigits = 6;
-    } else {
-        fProperties->minimumSignificantDigits = -1;
-        fProperties->maximumSignificantDigits = -1;
+    // These are the default values from the old implementation.
+    int32_t minSig = useSignificantDigits ? 1 : -1;
+    int32_t maxSig = useSignificantDigits ? 6 : -1;
+    if (fProperties->minimumSignificantDigits == minSig &&
+        fProperties->maximumSignificantDigits == maxSig) {
+        return;
     }
+    fProperties->minimumSignificantDigits = minSig;
+    fProperties->maximumSignificantDigits = maxSig;
     touchNoError();
 }
 
 void DecimalFormat::setCurrency(const char16_t* theCurrency, UErrorCode& ec) {
+    CurrencyUnit currencyUnit(theCurrency, ec);
+    if (U_FAILURE(ec)) { return; }
+    if (!fProperties->currency.isNull() && fProperties->currency.getNoError() == currencyUnit) {
+        return;
+    }
     NumberFormat::setCurrency(theCurrency, ec); // to set field for compatibility
-    fProperties->currency = CurrencyUnit(theCurrency, ec);
+    fProperties->currency = currencyUnit;
     // TODO: Set values in fSymbols, too?
     touchNoError();
 }
@@ -1023,6 +1072,9 @@ void DecimalFormat::setCurrency(const char16_t* theCurrency) {
 }
 
 void DecimalFormat::setCurrencyUsage(UCurrencyUsage newUsage, UErrorCode* ec) {
+    if (!fProperties->currencyUsage.isNull() && newUsage == fProperties->currencyUsage.getNoError()) {
+        return;
+    }
     fProperties->currencyUsage = newUsage;
     touch(*ec);
 }
@@ -1063,19 +1115,21 @@ void DecimalFormat::touch(UErrorCode& status) {
         return;
     }
 
-    setupFastFormat();
-
     // In C++, fSymbols is the source of truth for the locale.
     Locale locale = fSymbols->getLocale();
 
     // Note: The formatter is relatively cheap to create, and we need it to populate fExportedProperties,
     // so automatically compute it here. The parser is a bit more expensive and is not needed until the
     // parse method is called, so defer that until needed.
+    // TODO: Only update the pieces that changed instead of re-computing the whole formatter?
     fFormatter.adoptInstead(
             new LocalizedNumberFormatter(
                     NumberPropertyMapper::create(
                             *fProperties, *fSymbols, *fWarehouse, *fExportedProperties, status).locale(
                             locale)));
+
+    // Do this after fExportedProperties are set up
+    setupFastFormat();
 
     // Delete the parsers if they were made previously
     delete fAtomicParser.exchange(nullptr);
@@ -1103,11 +1157,13 @@ void DecimalFormat::setPropertiesFromPattern(const UnicodeString& pattern, int32
     PatternParser::parseToExistingProperties(pattern, *fProperties, actualIgnoreRounding, status);
 }
 
-const numparse::impl::NumberParserImpl& DecimalFormat::getParser(UErrorCode& status) const {
+const numparse::impl::NumberParserImpl* DecimalFormat::getParser(UErrorCode& status) const {
+    if (U_FAILURE(status)) { return nullptr; }
+
     // First try to get the pre-computed parser
     auto* ptr = fAtomicParser.load();
     if (ptr != nullptr) {
-        return *ptr;
+        return ptr;
     }
 
     // Try computing the parser on our own
@@ -1118,23 +1174,25 @@ const numparse::impl::NumberParserImpl& DecimalFormat::getParser(UErrorCode& sta
     }
 
     // Note: ptr starts as nullptr; during compare_exchange, it is set to what is actually stored in the
-    // atomic, which may me temp or may be another object computed by a different thread.
+    // atomic if another thread beat us to computing the parser object.
     auto* nonConstThis = const_cast<DecimalFormat*>(this);
     if (!nonConstThis->fAtomicParser.compare_exchange_strong(ptr, temp)) {
         // Another thread beat us to computing the parser
         delete temp;
-        return *ptr;
+        return ptr;
     } else {
         // Our copy of the parser got stored in the atomic
-        return *temp;
+        return temp;
     }
 }
 
-const numparse::impl::NumberParserImpl& DecimalFormat::getCurrencyParser(UErrorCode& status) const {
+const numparse::impl::NumberParserImpl* DecimalFormat::getCurrencyParser(UErrorCode& status) const {
+    if (U_FAILURE(status)) { return nullptr; }
+
     // First try to get the pre-computed parser
     auto* ptr = fAtomicCurrencyParser.load();
     if (ptr != nullptr) {
-        return *ptr;
+        return ptr;
     }
 
     // Try computing the parser on our own
@@ -1145,21 +1203,25 @@ const numparse::impl::NumberParserImpl& DecimalFormat::getCurrencyParser(UErrorC
     }
 
     // Note: ptr starts as nullptr; during compare_exchange, it is set to what is actually stored in the
-    // atomic, which may me temp or may be another object computed by a different thread.
+    // atomic if another thread beat us to computing the parser object.
     auto* nonConstThis = const_cast<DecimalFormat*>(this);
     if (!nonConstThis->fAtomicCurrencyParser.compare_exchange_strong(ptr, temp)) {
         // Another thread beat us to computing the parser
         delete temp;
-        return *ptr;
+        return ptr;
     } else {
         // Our copy of the parser got stored in the atomic
-        return *temp;
+        return temp;
     }
 }
+
+// To debug fast-format, change void(x) to printf(x)
+#define trace(x) void(x)
 
 void DecimalFormat::setupFastFormat() {
     // Check the majority of properties:
     if (!fProperties->equalsDefaultExceptFastFormat()) {
+        trace("no fast format: equality\n");
         fCanUseFastFormat = false;
         return;
     }
@@ -1173,6 +1235,7 @@ void DecimalFormat::setupFastFormat() {
             fProperties->negativePrefixPattern.charAt(0) == u'-');
     UBool trivialNS = fProperties->negativeSuffixPattern.isEmpty();
     if (!trivialPP || !trivialPS || !trivialNP || !trivialNS) {
+        trace("no fast format: affixes\n");
         fCanUseFastFormat = false;
         return;
     }
@@ -1182,15 +1245,25 @@ void DecimalFormat::setupFastFormat() {
     bool unusualGroupingSize = fProperties->groupingSize > 0 && fProperties->groupingSize != 3;
     const UnicodeString& groupingString = fSymbols->getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
     if (groupingUsed && (unusualGroupingSize || groupingString.length() != 1)) {
+        trace("no fast format: grouping\n");
         fCanUseFastFormat = false;
         return;
     }
 
     // Integer length:
-    int32_t minInt = fProperties->minimumIntegerDigits;
-    int32_t maxInt = fProperties->maximumIntegerDigits;
+    int32_t minInt = fExportedProperties->minimumIntegerDigits;
+    int32_t maxInt = fExportedProperties->maximumIntegerDigits;
     // Fastpath supports up to only 10 digits (length of INT32_MIN)
     if (minInt > 10) {
+        trace("no fast format: integer\n");
+        fCanUseFastFormat = false;
+        return;
+    }
+
+    // Fraction length (no fraction part allowed in fast path):
+    int32_t minFrac = fExportedProperties->minimumFractionDigits;
+    if (minFrac > 0) {
+        trace("no fast format: fraction\n");
         fCanUseFastFormat = false;
         return;
     }
@@ -1199,17 +1272,19 @@ void DecimalFormat::setupFastFormat() {
     const UnicodeString& minusSignString = fSymbols->getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol);
     UChar32 codePointZero = fSymbols->getCodePointZero();
     if (minusSignString.length() != 1 || U16_LENGTH(codePointZero) != 1) {
+        trace("no fast format: symbols\n");
         fCanUseFastFormat = false;
         return;
     }
 
     // Good to go!
+    trace("can use fast format!\n");
     fCanUseFastFormat = true;
     fFastData.cpZero = static_cast<char16_t>(codePointZero);
     fFastData.cpGroupingSeparator = groupingUsed ? groupingString.charAt(0) : 0;
     fFastData.cpMinusSign = minusSignString.charAt(0);
-    fFastData.minInt = static_cast<int8_t>(minInt);
-    fFastData.maxInt = static_cast<int8_t>(maxInt < 0 ? 127 : maxInt);
+    fFastData.minInt = (minInt < 0 || minInt > 127) ? 0 : static_cast<int8_t>(minInt);
+    fFastData.maxInt = (maxInt < 0 || maxInt > 127) ? 127 : static_cast<int8_t>(maxInt);
 }
 
 bool DecimalFormat::fastFormatDouble(double input, UnicodeString& output) const {
@@ -1220,7 +1295,7 @@ bool DecimalFormat::fastFormatDouble(double input, UnicodeString& output) const 
     if (i32 != input || i32 == INT32_MIN) {
         return false;
     }
-    doFastFormatInt32(i32, output);
+    doFastFormatInt32(i32, std::signbit(input), output);
     return true;
 }
 
@@ -1232,13 +1307,13 @@ bool DecimalFormat::fastFormatInt64(int64_t input, UnicodeString& output) const 
     if (i32 != input || i32 == INT32_MIN) {
         return false;
     }
-    doFastFormatInt32(i32, output);
+    doFastFormatInt32(i32, std::signbit(input), output);
     return true;
 }
 
-void DecimalFormat::doFastFormatInt32(int32_t input, UnicodeString& output) const {
+void DecimalFormat::doFastFormatInt32(int32_t input, bool isNegative, UnicodeString& output) const {
     U_ASSERT(fCanUseFastFormat);
-    if (input < 0) {
+    if (isNegative) {
         output.append(fFastData.cpMinusSign);
         U_ASSERT(input != INT32_MIN);  // handled by callers
         input = -input;
@@ -1250,13 +1325,13 @@ void DecimalFormat::doFastFormatInt32(int32_t input, UnicodeString& output) cons
     char16_t* ptr = localBuffer + localCapacity;
     int8_t group = 0;
     for (int8_t i = 0; i < fFastData.maxInt && (input != 0 || i < fFastData.minInt); i++) {
+        if (group++ == 3 && fFastData.cpGroupingSeparator != 0) {
+            *(--ptr) = fFastData.cpGroupingSeparator;
+            group = 1;
+        }
         std::div_t res = std::div(input, 10);
         *(--ptr) = static_cast<char16_t>(fFastData.cpZero + res.rem);
         input = res.quot;
-        if (++group == 3 && fFastData.cpGroupingSeparator != 0) {
-            *(--ptr) = fFastData.cpGroupingSeparator;
-            group = 0;
-        }
     }
     int32_t len = localCapacity - static_cast<int32_t>(ptr - localBuffer);
     output.append(ptr, len);
