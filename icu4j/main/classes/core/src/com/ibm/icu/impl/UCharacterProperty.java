@@ -413,6 +413,7 @@ public final class UCharacterProperty
             }
         },
         new BinaryProperty(1, 1<<PREPENDED_CONCATENATION_MARK),
+        new BinaryProperty(2, 1<<PROPS_2_EXTENDED_PICTOGRAPHIC),
     };
 
     public boolean hasBinaryProperty(int c, int which) {
@@ -1165,14 +1166,14 @@ public final class UCharacterProperty
     /*
      * Properties in vector word 2
      * Bits
-     * 31..27   http://www.unicode.org/reports/tr51/#Emoji_Properties
-     *     26   reserved
+     * 31..26   http://www.unicode.org/reports/tr51/#Emoji_Properties
      * 25..20   Line Break
      * 19..15   Sentence Break
      * 14..10   Word Break
      *  9.. 5   Grapheme Cluster Break
      *  4.. 0   Decomposition Type
      */
+    private static final int PROPS_2_EXTENDED_PICTOGRAPHIC=26;
     private static final int PROPS_2_EMOJI_COMPONENT = 27;
     private static final int PROPS_2_EMOJI = 28;
     private static final int PROPS_2_EMOJI_PRESENTATION = 29;

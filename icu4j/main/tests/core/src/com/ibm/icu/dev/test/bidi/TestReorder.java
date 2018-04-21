@@ -34,7 +34,7 @@ public class TestReorder extends BidiFmwk {
         "day  4   I  DPIQNF    dayabbr",
         "day  5  M  DPMEG  dayabbr",
         "helloDPMEG",
-        "hello WXYZ"
+        "hello WXY"
     };
 
     private static final String[] visualOrder = {
@@ -49,7 +49,7 @@ public class TestReorder extends BidiFmwk {
         "day  4   FNQIPD  I    dayabbr",
         "day  5  GEMPD  M  dayabbr",
         "helloGEMPD",
-        "hello ZYXW"
+        "hello YXW"
     };
 
     private static final String[] visualOrder1 = {
@@ -64,7 +64,7 @@ public class TestReorder extends BidiFmwk {
         "rbbayad    I  DPIQNF   4  yad",
         "rbbayad  M  DPMEG  5  yad",
         "DPMEGolleh",
-        "WXYZ olleh"
+        "WXY olleh"
     };
 
     private static final String[] visualOrder2 = {
@@ -79,7 +79,7 @@ public class TestReorder extends BidiFmwk {
         "rbbayad    @I  DPIQNF@   4  yad",
         "rbbayad  @M  DPMEG@  5  yad",
         "DPMEGolleh",
-        "WXYZ@ olleh"
+        "WXY@ olleh"
     };
 
     private static final String[] visualOrder3 = {
@@ -94,7 +94,7 @@ public class TestReorder extends BidiFmwk {
         "rbbayad    DPIQNF     I 4 yad",
         "rbbayad  DPMEG   M  5 yad",
         "DPMEGolleh",
-        "WXYZ olleh"
+        "WXY olleh"
     };
 
     private static final String[] visualOrder4 = {
@@ -109,7 +109,7 @@ public class TestReorder extends BidiFmwk {
         "day 4 I     FNQIPD    dayabbr",
         "day 5  M   GEMPD  dayabbr",
         "helloGEMPD",
-        "hello ZYXW"
+        "hello YXW"
     };
 
     @Test
