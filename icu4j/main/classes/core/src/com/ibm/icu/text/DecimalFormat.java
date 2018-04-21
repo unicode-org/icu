@@ -289,7 +289,7 @@ public class DecimalFormat extends NumberFormat {
   transient volatile DecimalFormatProperties exportedProperties;
 
   transient volatile NumberParserImpl parser;
-  transient volatile NumberParserImpl parserWithCurrency;
+  transient volatile NumberParserImpl currencyParser;
 
   //=====================================================================================//
   //                                    CONSTRUCTORS                                     //
@@ -818,6 +818,7 @@ public class DecimalFormat extends NumberFormat {
       // Note: if this is a currency instance, currencies will be matched despite the fact that we are not in the
       // parseCurrency method (backwards compatibility)
       int startIndex = parsePosition.getIndex();
+      NumberParserImpl parser = getParser();
       parser.parse(text, startIndex, true, result);
       if (result.success()) {
           parsePosition.setIndex(result.charEnd);
@@ -857,11 +858,12 @@ public class DecimalFormat extends NumberFormat {
 
       ParsedNumber result = new ParsedNumber();
       int startIndex = parsePosition.getIndex();
-      parserWithCurrency.parse(text.toString(), startIndex, true, result);
+      NumberParserImpl parser = getCurrencyParser();
+      parser.parse(text.toString(), startIndex, true, result);
       if (result.success()) {
           parsePosition.setIndex(result.charEnd);
           // TODO: Accessing properties here is technically not thread-safe
-          Number number = result.getNumber(parserWithCurrency.getParseFlags());
+          Number number = result.getNumber(parser.getParseFlags());
           // Backwards compatibility: return com.ibm.icu.math.BigDecimal
           if (number instanceof java.math.BigDecimal) {
               number = safeConvertBigDecimal((java.math.BigDecimal) number);
@@ -2503,8 +2505,24 @@ public class DecimalFormat extends NumberFormat {
     }
     assert locale != null;
     formatter = NumberFormatter.fromDecimalFormat(properties, symbols, exportedProperties).locale(locale);
-    parser = NumberParserImpl.createParserFromProperties(properties, symbols, false);
-    parserWithCurrency = NumberParserImpl.createParserFromProperties(properties, symbols, true);
+
+    // Lazy-initialize the parsers only when we need them.
+    parser = null;
+    currencyParser = null;
+  }
+
+  NumberParserImpl getParser() {
+    if (parser == null) {
+      parser = NumberParserImpl.createParserFromProperties(properties, symbols, false);
+    }
+    return parser;
+  }
+
+  NumberParserImpl getCurrencyParser() {
+    if (currencyParser == null) {
+      currencyParser = NumberParserImpl.createParserFromProperties(properties, symbols, true);
+    }
+    return currencyParser;
   }
 
   /**

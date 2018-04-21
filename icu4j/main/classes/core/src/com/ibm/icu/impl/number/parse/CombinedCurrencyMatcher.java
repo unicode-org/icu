@@ -7,7 +7,6 @@ import java.util.Iterator;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.TextTrieMap;
 import com.ibm.icu.text.DecimalFormatSymbols;
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyStringInfo;
 
@@ -34,7 +33,8 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
     private final TextTrieMap<CurrencyStringInfo> longNameTrie;
     private final TextTrieMap<CurrencyStringInfo> symbolTrie;
 
-    private final UnicodeSet leadCodePoints;
+    // TODO: See comments in constructor.
+    // private final UnicodeSet leadCodePoints;
 
     public static CombinedCurrencyMatcher getInstance(Currency currency, DecimalFormatSymbols dfs) {
         // TODO: Cache these instances. They are somewhat expensive.
@@ -46,27 +46,30 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
         this.currency1 = currency.getSymbol(dfs.getULocale());
         this.currency2 = currency.getCurrencyCode();
 
-        afterPrefixInsert = dfs
-                .getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT, false);
-        beforeSuffixInsert = dfs
-                .getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT, true);
+        afterPrefixInsert = dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT,
+                false);
+        beforeSuffixInsert = dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT,
+                true);
 
         // TODO: Currency trie does not currently have an option for case folding. It defaults to use
         // case folding on long-names but not symbols.
         longNameTrie = Currency.getParsingTrie(dfs.getULocale(), Currency.LONG_NAME);
         symbolTrie = Currency.getParsingTrie(dfs.getULocale(), Currency.SYMBOL_NAME);
 
-        // Compute the full set of characters that could be the first in a currency to allow for
-        // efficient smoke test.
-        leadCodePoints = new UnicodeSet();
-        leadCodePoints.add(currency1.codePointAt(0));
-        leadCodePoints.add(currency2.codePointAt(0));
-        leadCodePoints.add(beforeSuffixInsert.codePointAt(0));
-        longNameTrie.putLeadCodePoints(leadCodePoints);
-        symbolTrie.putLeadCodePoints(leadCodePoints);
-        // Always apply case mapping closure for currencies
-        leadCodePoints.closeOver(UnicodeSet.ADD_CASE_MAPPINGS);
-        leadCodePoints.freeze();
+        // TODO: Figure out how to make this faster and re-enable.
+        // Computing the "lead code points" set for fastpathing is too slow to use in production.
+        // See http://bugs.icu-project.org/trac/ticket/13584
+        // // Compute the full set of characters that could be the first in a currency to allow for
+        // // efficient smoke test.
+        // leadCodePoints = new UnicodeSet();
+        // leadCodePoints.add(currency1.codePointAt(0));
+        // leadCodePoints.add(currency2.codePointAt(0));
+        // leadCodePoints.add(beforeSuffixInsert.codePointAt(0));
+        // longNameTrie.putLeadCodePoints(leadCodePoints);
+        // symbolTrie.putLeadCodePoints(leadCodePoints);
+        // // Always apply case mapping closure for currencies
+        // leadCodePoints.closeOver(UnicodeSet.ADD_CASE_MAPPINGS);
+        // leadCodePoints.freeze();
     }
 
     @Override
@@ -141,7 +144,9 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
 
     @Override
     public boolean smokeTest(StringSegment segment) {
-        return segment.startsWith(leadCodePoints);
+        // TODO: See constructor
+        return true;
+        // return segment.startsWith(leadCodePoints);
     }
 
     @Override

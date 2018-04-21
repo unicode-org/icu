@@ -53,7 +53,8 @@ class CombinedCurrencyMatcher : public NumberParseMatcher, public UMemory {
     // Locale has a non-trivial default constructor.
     CharString fLocaleName;
 
-    UnicodeSet fLeadCodePoints;
+    // TODO: See comments in constructor in numparse_currency.cpp
+    // UnicodeSet fLeadCodePoints;
 
     /** Matches the currency string without concern for currency spacing. */
     bool matchCurrency(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const;
