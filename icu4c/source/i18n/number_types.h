@@ -87,39 +87,6 @@ enum CompactType {
 };
 
 
-// TODO: Should this be moved somewhere else, maybe where other ICU classes can use it?
-// Exported as U_I18N_API because it is a base class for other exported types
-class U_I18N_API CharSequence {
-  public:
-    virtual ~CharSequence() = default;
-
-    virtual int32_t length() const = 0;
-
-    virtual char16_t charAt(int32_t index) const = 0;
-
-    virtual UChar32 codePointAt(int32_t index) const {
-        // Default implementation; can be overridden with a more efficient version
-        char16_t leading = charAt(index);
-        if (U16_IS_LEAD(leading) && length() > index + 1) {
-            char16_t trailing = charAt(index + 1);
-            return U16_GET_SUPPLEMENTARY(leading, trailing);
-        } else {
-            return leading;
-        }
-    }
-
-    /**
-     * Gets a "safe" UnicodeString that can be used even after the CharSequence is destructed.
-     * */
-    virtual UnicodeString toUnicodeString() const = 0;
-
-    /**
-     * Gets an "unsafe" UnicodeString that is valid only as long as the CharSequence is alive and
-     * unchanged. Slightly faster than toUnicodeString().
-     */
-    virtual const UnicodeString toTempUnicodeString() const = 0;
-};
-
 class U_I18N_API AffixPatternProvider {
   public:
     static const int32_t AFFIX_PLURAL_MASK = 0xff;

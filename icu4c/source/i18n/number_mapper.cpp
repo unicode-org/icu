@@ -326,10 +326,10 @@ void PropertiesAffixPatternProvider::setTo(const DecimalFormatProperties& proper
     // [p/n] => p for positive, n for negative
     // [p/s] => p for prefix, s for suffix
     // [o/p] => o for escaped custom override string, p for pattern string
-    UnicodeString ppo = AffixUtils::escape(UnicodeStringCharSequence(properties.positivePrefix));
-    UnicodeString pso = AffixUtils::escape(UnicodeStringCharSequence(properties.positiveSuffix));
-    UnicodeString npo = AffixUtils::escape(UnicodeStringCharSequence(properties.negativePrefix));
-    UnicodeString nso = AffixUtils::escape(UnicodeStringCharSequence(properties.negativeSuffix));
+    UnicodeString ppo = AffixUtils::escape(properties.positivePrefix);
+    UnicodeString pso = AffixUtils::escape(properties.positiveSuffix);
+    UnicodeString npo = AffixUtils::escape(properties.negativePrefix);
+    UnicodeString nso = AffixUtils::escape(properties.negativeSuffix);
     const UnicodeString& ppp = properties.positivePrefixPattern;
     const UnicodeString& psp = properties.positiveSuffixPattern;
     const UnicodeString& npp = properties.negativePrefixPattern;
@@ -402,8 +402,8 @@ const UnicodeString& PropertiesAffixPatternProvider::getStringInternal(int32_t f
 bool PropertiesAffixPatternProvider::positiveHasPlusSign() const {
     // TODO: Change the internal APIs to propagate out the error?
     ErrorCode localStatus;
-    return AffixUtils::containsType(UnicodeStringCharSequence(posPrefix), TYPE_PLUS_SIGN, localStatus) ||
-           AffixUtils::containsType(UnicodeStringCharSequence(posSuffix), TYPE_PLUS_SIGN, localStatus);
+    return AffixUtils::containsType(posPrefix, TYPE_PLUS_SIGN, localStatus) ||
+           AffixUtils::containsType(posSuffix, TYPE_PLUS_SIGN, localStatus);
 }
 
 bool PropertiesAffixPatternProvider::hasNegativeSubpattern() const {
@@ -413,23 +413,23 @@ bool PropertiesAffixPatternProvider::hasNegativeSubpattern() const {
 
 bool PropertiesAffixPatternProvider::negativeHasMinusSign() const {
     ErrorCode localStatus;
-    return AffixUtils::containsType(UnicodeStringCharSequence(negPrefix), TYPE_MINUS_SIGN, localStatus) ||
-           AffixUtils::containsType(UnicodeStringCharSequence(negSuffix), TYPE_MINUS_SIGN, localStatus);
+    return AffixUtils::containsType(negPrefix, TYPE_MINUS_SIGN, localStatus) ||
+           AffixUtils::containsType(negSuffix, TYPE_MINUS_SIGN, localStatus);
 }
 
 bool PropertiesAffixPatternProvider::hasCurrencySign() const {
     ErrorCode localStatus;
-    return AffixUtils::hasCurrencySymbols(UnicodeStringCharSequence(posPrefix), localStatus) ||
-           AffixUtils::hasCurrencySymbols(UnicodeStringCharSequence(posSuffix), localStatus) ||
-           AffixUtils::hasCurrencySymbols(UnicodeStringCharSequence(negPrefix), localStatus) ||
-           AffixUtils::hasCurrencySymbols(UnicodeStringCharSequence(negSuffix), localStatus);
+    return AffixUtils::hasCurrencySymbols(posPrefix, localStatus) ||
+           AffixUtils::hasCurrencySymbols(posSuffix, localStatus) ||
+           AffixUtils::hasCurrencySymbols(negPrefix, localStatus) ||
+           AffixUtils::hasCurrencySymbols(negSuffix, localStatus);
 }
 
 bool PropertiesAffixPatternProvider::containsSymbolType(AffixPatternType type, UErrorCode& status) const {
-    return AffixUtils::containsType(UnicodeStringCharSequence(posPrefix), type, status) ||
-           AffixUtils::containsType(UnicodeStringCharSequence(posSuffix), type, status) ||
-           AffixUtils::containsType(UnicodeStringCharSequence(negPrefix), type, status) ||
-           AffixUtils::containsType(UnicodeStringCharSequence(negSuffix), type, status);
+    return AffixUtils::containsType(posPrefix, type, status) ||
+           AffixUtils::containsType(posSuffix, type, status) ||
+           AffixUtils::containsType(negPrefix, type, status) ||
+           AffixUtils::containsType(negSuffix, type, status);
 }
 
 bool PropertiesAffixPatternProvider::hasBody() const {

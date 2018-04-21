@@ -240,7 +240,7 @@ AffixPatternMatcher AffixPatternMatcher::fromAffixPattern(const UnicodeString& a
     }
 
     AffixPatternMatcherBuilder builder(affixPattern, tokenWarehouse, ignorables);
-    AffixUtils::iterateWithConsumer(UnicodeStringCharSequence(affixPattern), builder, status);
+    AffixUtils::iterateWithConsumer(affixPattern, builder, status);
     return builder.build();
 }
 
@@ -264,13 +264,13 @@ AffixMatcherWarehouse::AffixMatcherWarehouse(AffixTokenMatcherWarehouse* tokenWa
 bool AffixMatcherWarehouse::isInteresting(const AffixPatternProvider& patternInfo,
                                           const IgnorablesMatcher& ignorables, parse_flags_t parseFlags,
                                           UErrorCode& status) {
-    UnicodeStringCharSequence posPrefixString(patternInfo.getString(AffixPatternProvider::AFFIX_POS_PREFIX));
-    UnicodeStringCharSequence posSuffixString(patternInfo.getString(AffixPatternProvider::AFFIX_POS_SUFFIX));
-    UnicodeStringCharSequence negPrefixString(UnicodeString(u""));
-    UnicodeStringCharSequence negSuffixString(UnicodeString(u""));
+    UnicodeString posPrefixString = patternInfo.getString(AffixPatternProvider::AFFIX_POS_PREFIX);
+    UnicodeString posSuffixString = patternInfo.getString(AffixPatternProvider::AFFIX_POS_SUFFIX);
+    UnicodeString negPrefixString;
+    UnicodeString negSuffixString;
     if (patternInfo.hasNegativeSubpattern()) {
-        negPrefixString = UnicodeStringCharSequence(patternInfo.getString(AffixPatternProvider::AFFIX_NEG_PREFIX));
-        negSuffixString = UnicodeStringCharSequence(patternInfo.getString(AffixPatternProvider::AFFIX_NEG_SUFFIX));
+        negPrefixString = patternInfo.getString(AffixPatternProvider::AFFIX_NEG_PREFIX);
+        negSuffixString = patternInfo.getString(AffixPatternProvider::AFFIX_NEG_SUFFIX);
     }
 
     if (0 == (parseFlags & PARSE_FLAG_USE_FULL_AFFIXES) &&

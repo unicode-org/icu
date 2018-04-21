@@ -107,7 +107,7 @@ bool ParsedPatternInfo::hasCurrencySign() const {
 }
 
 bool ParsedPatternInfo::containsSymbolType(AffixPatternType type, UErrorCode& status) const {
-    return AffixUtils::containsType(UnicodeStringCharSequence(pattern), type, status);
+    return AffixUtils::containsType(pattern, type, status);
 }
 
 bool ParsedPatternInfo::hasBody() const {
@@ -592,8 +592,8 @@ PatternParser::patternInfoToProperties(DecimalFormatProperties& properties, Pars
     if (positive.hasPadding) {
         // The width of the positive prefix and suffix templates are included in the padding
         int paddingWidth = positive.widthExceptAffixes +
-                           AffixUtils::estimateLength(UnicodeStringCharSequence(posPrefix), status) +
-                           AffixUtils::estimateLength(UnicodeStringCharSequence(posSuffix), status);
+                           AffixUtils::estimateLength(posPrefix, status) +
+                           AffixUtils::estimateLength(posSuffix, status);
         properties.formatWidth = paddingWidth;
         UnicodeString rawPaddingString = patternInfo.getString(AffixPatternProvider::AFFIX_PADDING);
         if (rawPaddingString.length() == 1) {
@@ -677,7 +677,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
     if (!ppp.isBogus()) {
         sb.append(ppp);
     }
-    sb.append(AffixUtils::escape(UnicodeStringCharSequence(pp)));
+    sb.append(AffixUtils::escape(pp));
     int afterPrefixPos = sb.length();
 
     // Figure out the grouping sizes.
@@ -774,7 +774,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
     if (!psp.isBogus()) {
         sb.append(psp);
     }
-    sb.append(AffixUtils::escape(UnicodeStringCharSequence(ps)));
+    sb.append(AffixUtils::escape(ps));
 
     // Resolve Padding
     if (paddingWidth != -1 && !paddingLocation.isNull()) {
@@ -816,7 +816,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
         if (!npp.isBogus()) {
             sb.append(npp);
         }
-        sb.append(AffixUtils::escape(UnicodeStringCharSequence(np)));
+        sb.append(AffixUtils::escape(np));
         // Copy the positive digit format into the negative.
         // This is optional; the pattern is the same as if '#' were appended here instead.
         // NOTE: It is not safe to append the UnicodeString to itself, so we need to copy.
@@ -826,7 +826,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
         if (!nsp.isBogus()) {
             sb.append(nsp);
         }
-        sb.append(AffixUtils::escape(UnicodeStringCharSequence(ns)));
+        sb.append(AffixUtils::escape(ns));
     }
 
     return sb;

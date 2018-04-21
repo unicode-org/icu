@@ -13,12 +13,12 @@ using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
 
-int32_t AffixUtils::estimateLength(const CharSequence &patternString, UErrorCode &status) {
+int32_t AffixUtils::estimateLength(const UnicodeString &patternString, UErrorCode &status) {
     AffixPatternState state = STATE_BASE;
     int32_t offset = 0;
     int32_t length = 0;
     for (; offset < patternString.length();) {
-        UChar32 cp = patternString.codePointAt(offset);
+        UChar32 cp = patternString.char32At(offset);
 
         switch (state) {
             case STATE_BASE:
@@ -79,12 +79,12 @@ int32_t AffixUtils::estimateLength(const CharSequence &patternString, UErrorCode
     return length;
 }
 
-UnicodeString AffixUtils::escape(const CharSequence &input) {
+UnicodeString AffixUtils::escape(const UnicodeString &input) {
     AffixPatternState state = STATE_BASE;
     int32_t offset = 0;
     UnicodeString output;
     for (; offset < input.length();) {
-        UChar32 cp = input.codePointAt(offset);
+        UChar32 cp = input.char32At(offset);
 
         switch (cp) {
             case u'\'':
@@ -154,7 +154,7 @@ Field AffixUtils::getFieldForType(AffixPatternType type) {
 }
 
 int32_t
-AffixUtils::unescape(const CharSequence &affixPattern, NumberStringBuilder &output, int32_t position,
+AffixUtils::unescape(const UnicodeString &affixPattern, NumberStringBuilder &output, int32_t position,
                      const SymbolProvider &provider, UErrorCode &status) {
     int32_t length = 0;
     AffixTag tag;
@@ -174,7 +174,7 @@ AffixUtils::unescape(const CharSequence &affixPattern, NumberStringBuilder &outp
     return length;
 }
 
-int32_t AffixUtils::unescapedCodePointCount(const CharSequence &affixPattern,
+int32_t AffixUtils::unescapedCodePointCount(const UnicodeString &affixPattern,
                                             const SymbolProvider &provider, UErrorCode &status) {
     int32_t length = 0;
     AffixTag tag;
@@ -193,7 +193,7 @@ int32_t AffixUtils::unescapedCodePointCount(const CharSequence &affixPattern,
 }
 
 bool
-AffixUtils::containsType(const CharSequence &affixPattern, AffixPatternType type, UErrorCode &status) {
+AffixUtils::containsType(const UnicodeString &affixPattern, AffixPatternType type, UErrorCode &status) {
     if (affixPattern.length() == 0) {
         return false;
     }
@@ -208,7 +208,7 @@ AffixUtils::containsType(const CharSequence &affixPattern, AffixPatternType type
     return false;
 }
 
-bool AffixUtils::hasCurrencySymbols(const CharSequence &affixPattern, UErrorCode &status) {
+bool AffixUtils::hasCurrencySymbols(const UnicodeString &affixPattern, UErrorCode &status) {
     if (affixPattern.length() == 0) {
         return false;
     }
@@ -223,9 +223,9 @@ bool AffixUtils::hasCurrencySymbols(const CharSequence &affixPattern, UErrorCode
     return false;
 }
 
-UnicodeString AffixUtils::replaceType(const CharSequence &affixPattern, AffixPatternType type,
+UnicodeString AffixUtils::replaceType(const UnicodeString &affixPattern, AffixPatternType type,
                                       char16_t replacementChar, UErrorCode &status) {
-    UnicodeString output = affixPattern.toUnicodeString();
+    UnicodeString output(affixPattern); // copy
     if (affixPattern.length() == 0) {
         return output;
     };
@@ -240,7 +240,7 @@ UnicodeString AffixUtils::replaceType(const CharSequence &affixPattern, AffixPat
     return output;
 }
 
-bool AffixUtils::containsOnlySymbolsAndIgnorables(const CharSequence& affixPattern,
+bool AffixUtils::containsOnlySymbolsAndIgnorables(const UnicodeString& affixPattern,
                                                   const UnicodeSet& ignorables, UErrorCode& status) {
     if (affixPattern.length() == 0) {
         return true;
@@ -256,7 +256,7 @@ bool AffixUtils::containsOnlySymbolsAndIgnorables(const CharSequence& affixPatte
     return true;
 }
 
-void AffixUtils::iterateWithConsumer(const CharSequence& affixPattern, TokenConsumer& consumer,
+void AffixUtils::iterateWithConsumer(const UnicodeString& affixPattern, TokenConsumer& consumer,
                                      UErrorCode& status) {
     if (affixPattern.length() == 0) {
         return;
@@ -270,11 +270,11 @@ void AffixUtils::iterateWithConsumer(const CharSequence& affixPattern, TokenCons
     }
 }
 
-AffixTag AffixUtils::nextToken(AffixTag tag, const CharSequence &patternString, UErrorCode &status) {
+AffixTag AffixUtils::nextToken(AffixTag tag, const UnicodeString &patternString, UErrorCode &status) {
     int32_t offset = tag.offset;
     int32_t state = tag.state;
     for (; offset < patternString.length();) {
-        UChar32 cp = patternString.codePointAt(offset);
+        UChar32 cp = patternString.char32At(offset);
         int32_t count = U16_LENGTH(cp);
 
         switch (state) {
@@ -413,7 +413,7 @@ AffixTag AffixUtils::nextToken(AffixTag tag, const CharSequence &patternString, 
     }
 }
 
-bool AffixUtils::hasNext(const AffixTag &tag, const CharSequence &string) {
+bool AffixUtils::hasNext(const AffixTag &tag, const UnicodeString &string) {
     // First check for the {-1} and default initializer syntax.
     if (tag.offset < 0) {
         return false;
