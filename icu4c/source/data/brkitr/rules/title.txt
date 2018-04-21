@@ -13,8 +13,6 @@ $CaseIgnorable   = [[:Mn:][:Me:][:Cf:][:Lm:][:Sk:] \u0027 \u00AD \u2019];
 $Cased           = [[:Upper_Case:][:Lower_Case:][:Lt:]  - $CaseIgnorable];
 $NotCased        = [[^ $Cased] - $CaseIgnorable];
 
-!!forward;
-
 #  If the iterator begins on a CaseIgnorable, advance it past it/them.
 #  This can occur at the start-of-text, or after application of the
 #  safe-reverse rule.
@@ -26,12 +24,3 @@ $NotCased        = [[^ $Cased] - $CaseIgnorable];
 #         the uncased characters following the word.
 
 $Cased ($Cased | $CaseIgnorable)* ($NotCased | $CaseIgnorable)*;
-
-
-!!safe_reverse;
-
-# Safe Reverse: the exact forward rule must not start in the middle
-#  of a word, so the safe reverse skips over any Cased characters,
-#  leaving it just before the start of a word.
-
-($Cased | $CaseIgnorable)*;

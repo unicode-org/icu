@@ -49,7 +49,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 3.0 .
+The following is a description of format version 4.0 .
 
 Format version 1.1 adds data for case closure.
 
@@ -62,6 +62,16 @@ Format version 3.0 (ICU 49) shuffles the trie bits to simplify some builder and 
 It moves the Case_Ignorable flag from sometimes-trie-bit 6, sometimes-exception-bit 11
 to always-trie-bit 2 and adjusts the higher trie bits accordingly.
 Exception index reduced from 12 bits to 11, simple case mapping delta reduced from 10 bits to 9.
+
+Format version 4.0 (ICU 62) swaps trie data bits 3 and 4, exception vs. case-sensitive,
+and when exception=1 then data bits 15..4 (not 15..5) are used for the exception index,
+and the case-sensitive bit is moved into the excWord. This will allow for more exceptions words.
+Also, an additional optional exception slot is used for a 16-bit delta,
+with one more excWord bit if the delta is actually negative,
+for a reasonably compact, and compressible, encoding of simple case mappings
+between distant blocks for Cherokee, Georgian, and similar.
+Another excWord bit is used to indicate that the character has no simple case folding,
+even if it has a simple lowercase mapping.
 
 The file contains the following structures:
 
@@ -89,7 +99,7 @@ The file contains the following structures:
 Trie data word:
 Bits
 if(exception) {
-    15..5   unsigned exception index
+    15..4   unsigned exception index
 } else {
     if(not uncased) {
         15..7   signed delta to simple case mapping code point
@@ -103,8 +113,8 @@ if(exception) {
             3 other cc
             The runtime code relies on these two bits to be adjacent with this encoding.
 }
-    4   exception
-    3   case-sensitive
+    4   case-sensitive
+    3   exception
     2   case-ignorable
  1..0   0 uncased
         1 lowercase
@@ -132,10 +142,9 @@ Bits
         1 soft-dotted character
         2 cc=230
         3 other cc
-11      reserved
-        (was used in formatVersion 1.2..2.0:
-         case-ignorable (used when the character is cased or has another exception))
-10.. 9  reserved
+    11  same as non-exception case-sensitive bit
+    10  the delta in the optional value slot is negative
+     9  no simple case folding, even if there is a simple lowercase mapping
      8  if set, then for each optional-value slot there are 2 uint16_t values
         (high and low parts of 32-bit values)
         instead of single ones
@@ -146,7 +155,8 @@ Optional-value slots:
 1   case folding (code point)
 2   uppercase mapping (code point)
 3   titlecase mapping (code point)
-4   reserved
+4   delta to simple case mapping code point
+    (add delta to input code point, or subtract if excWord bit 10 is set)
 5   reserved
 6   closure mappings (new in format version 1.1)
 7   there is at least one full (string) case mapping
@@ -214,8 +224,8 @@ static UDataInfo dataInfo={
 
     /* dataFormat="cAsE" */
     { UCASE_FMT_0, UCASE_FMT_1, UCASE_FMT_2, UCASE_FMT_3 },
-    { 3, 0, 0, 0 },                             /* formatVersion */
-    { 6, 0, 0, 0 }                              /* dataVersion */
+    { 4, 0, 0, 0 },  /* formatVersion */
+    { 11, 0, 0, 0 }  /* dataVersion */
 };
 
 #define UGENCASE_EXC_SHIFT     20
@@ -226,16 +236,20 @@ enum {
 };
 
 struct ExcProps {
-    ExcProps()
-            : hasConditionalCaseMappings(FALSE), hasTurkicCaseFolding(FALSE) {}
-    ExcProps(const UniProps &otherProps)
-            : props(otherProps),
-              hasConditionalCaseMappings(FALSE), hasTurkicCaseFolding(FALSE) {}
+    ExcProps() :
+            delta(0), hasConditionalCaseMappings(FALSE), hasTurkicCaseFolding(FALSE),
+            hasNoSimpleCaseFolding(FALSE) {}
+    ExcProps(const UniProps &otherProps) :
+            props(otherProps),
+            delta(0), hasConditionalCaseMappings(FALSE), hasTurkicCaseFolding(FALSE),
+            hasNoSimpleCaseFolding(FALSE) {}
 
     UniProps props;
     UnicodeSet closure;
+    int32_t delta;
     UBool hasConditionalCaseMappings;
     UBool hasTurkicCaseFolding;
+    UBool hasNoSimpleCaseFolding;
 };
 
 /*
@@ -385,6 +399,7 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
 
     /* default: map to self */
     int32_t delta=0;
+    UBool noDelta=FALSE;
 
     uint32_t type;
     if(props.binProps[UCHAR_LOWERCASE]) {
@@ -398,6 +413,7 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
     }
     uint32_t value=type;
 
+    // Examine simple case mappings.
     UBool hasMapping=FALSE;
     if(props.suc>=0) {
         /* uppercase mapping as delta if the character is lowercase */
@@ -405,6 +421,7 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         if(type==UCASE_LOWER) {
             delta=props.suc-start;
         } else {
+            noDelta=TRUE;
             value|=UCASE_EXCEPTION;
         }
     }
@@ -414,6 +431,7 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         if(type>=UCASE_UPPER) {
             delta=props.slc-start;
         } else {
+            noDelta=TRUE;
             value|=UCASE_EXCEPTION;
         }
     }
@@ -421,37 +439,49 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
         hasMapping=TRUE;
     }
     if(props.suc!=props.stc) {
+        noDelta=TRUE;
         value|=UCASE_EXCEPTION;
     }
+
+    // Simple case folding falls back to simple lowercasing.
+    // If they differ, then store them separately.
+    UChar32 scf=props.scf;
+    if(scf>=0 && scf!=props.slc) {
+        hasMapping=noDelta=TRUE;
+        value|=UCASE_EXCEPTION;
+    }
+
+    // If there is no case folding but there is a lowercase mapping,
+    // then set a bit for that.
+    // For example: Cherokee uppercase syllables since Unicode 8.
+    // (Full case folding falls back to simple case folding,
+    // not to full lowercasing, so we need not also handle it specially
+    // for such cases.)
+    UBool hasNoSimpleCaseFolding=FALSE;
+    if(scf<0 && props.slc>=0) {
+        hasNoSimpleCaseFolding=TRUE;
+        value|=UCASE_EXCEPTION;
+    }
+
+    if(noDelta) {
+        delta=0;
+    } else if(delta<UCASE_MIN_DELTA || UCASE_MAX_DELTA<delta) {
+        // The case mapping delta is too big for the main data word.
+        // Store it in an exceptions slot.
+        value|=UCASE_EXCEPTION;
+    }
+
+    // Examine full case mappings.
     if(!props.lc.isEmpty() || !props.uc.isEmpty() || !props.tc.isEmpty() ||
         newValues.contains(PPUCD_CONDITIONAL_CASE_MAPPINGS)
     ) {
         hasMapping=TRUE;
         value|=UCASE_EXCEPTION;
     }
-    if( (props.scf>=0 && props.scf!=props.slc) ||
-        (!props.cf.isEmpty() && props.cf!=UnicodeString(props.scf)) ||
+    if( (!props.cf.isEmpty() && props.cf!=UnicodeString(props.scf)) ||
         newValues.contains(PPUCD_TURKIC_CASE_FOLDING)
     ) {
         hasMapping=TRUE;
-        value|=UCASE_EXCEPTION;
-    }
-
-    // Simple case folding falls back to simple lowercasing.
-    // If there is no case folding but there is a lowercase mapping,
-    // then add a case folding mapping to the code point.
-    // For example: Cherokee uppercase syllables since Unicode 8.
-    // (Full case folding falls back to simple case folding,
-    // not to full lowercasing, so we need not also handle it specially
-    // for such cases.)
-    UChar32 scf=props.scf;
-    if(scf<0 && props.slc>=0) {
-        scf=start;
-        hasMapping=TRUE;
-        value|=UCASE_EXCEPTION;
-    }
-
-    if(delta<UCASE_MIN_DELTA || UCASE_MAX_DELTA<delta) {
         value|=UCASE_EXCEPTION;
     }
 
@@ -502,8 +532,10 @@ CasePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
             return;
         }
         newExcProps->props.scf=scf;
+        newExcProps->delta=delta;
         newExcProps->hasConditionalCaseMappings=newValues.contains(PPUCD_CONDITIONAL_CASE_MAPPINGS);
         newExcProps->hasTurkicCaseFolding=newValues.contains(PPUCD_TURKIC_CASE_FOLDING);
+        newExcProps->hasNoSimpleCaseFolding=hasNoSimpleCaseFolding;
         value|=(uint32_t)excPropsCount<<UGENCASE_EXC_SHIFT;
         excProps[excPropsCount++]=newExcProps;
     } else {
@@ -880,8 +912,8 @@ CasePropsBuilder::makeException(UChar32 c, uint32_t value, ExcProps &ep, UErrorC
         return 0;
     }
 
-    /* copy and shift the soft-dotted bits */
-    UChar excWord=(UChar)((value&UCASE_DOT_MASK)<<UCASE_EXC_DOT_SHIFT);
+    /* copy and shift the soft-dotted and case-sensitive bits */
+    UChar excWord=(UChar)((value&(UCASE_DOT_MASK|UCASE_SENSITIVE))<<UCASE_EXC_DOT_SHIFT);
 
     UniProps &p=ep.props;
 
@@ -895,6 +927,9 @@ CasePropsBuilder::makeException(UChar32 c, uint32_t value, ExcProps &ep, UErrorC
     if(ep.hasTurkicCaseFolding) {
         excWord|=UCASE_EXC_CONDITIONAL_FOLD;
         p.cf.remove();
+    }
+    if(ep.hasNoSimpleCaseFolding) {
+        excWord|=UCASE_EXC_NO_SIMPLE_CASE_FOLDING;
     }
 
     /* remove redundant data */
@@ -917,36 +952,48 @@ CasePropsBuilder::makeException(UChar32 c, uint32_t value, ExcProps &ep, UErrorC
     uint32_t slotBits=0;
     int32_t count=0;
 
-    if(p.slc>=0) {
-        slots[count]=(uint32_t)p.slc;
-        slotBits|=slots[count];
-        ++count;
-        excWord|=U_MASK(UCASE_EXC_LOWER);
-    }
-    if( p.scf>=0 &&
-            (p.slc>=0 ?
-                p.scf!=p.slc :
-                p.scf!=c)) {
-        slots[count]=(uint32_t)p.scf;
-        slotBits|=slots[count];
-        ++count;
-        excWord|=U_MASK(UCASE_EXC_FOLD);
-    }
-    if(p.suc>=0) {
-        slots[count]=(uint32_t)p.suc;
-        slotBits|=slots[count];
-        ++count;
-        excWord|=U_MASK(UCASE_EXC_UPPER);
-    }
-    if(p.suc!=p.stc) {
-        if(p.stc>=0) {
-            slots[count]=(uint32_t)p.stc;
-        } else {
-            slots[count]=(uint32_t)c;
+    if(ep.delta!=0) {
+        int32_t delta=ep.delta;
+        if(delta<0) {
+            excWord|=UCASE_EXC_DELTA_IS_NEGATIVE;
+            delta=-delta;
         }
+        slots[count]=(uint32_t)delta;
         slotBits|=slots[count];
         ++count;
-        excWord|=U_MASK(UCASE_EXC_TITLE);
+        excWord|=U_MASK(UCASE_EXC_DELTA);
+    } else {
+        if(p.slc>=0) {
+            slots[count]=(uint32_t)p.slc;
+            slotBits|=slots[count];
+            ++count;
+            excWord|=U_MASK(UCASE_EXC_LOWER);
+        }
+        if( p.scf>=0 &&
+                (p.slc>=0 ?
+                    p.scf!=p.slc :
+                    p.scf!=c)) {
+            slots[count]=(uint32_t)p.scf;
+            slotBits|=slots[count];
+            ++count;
+            excWord|=U_MASK(UCASE_EXC_FOLD);
+        }
+        if(p.suc>=0) {
+            slots[count]=(uint32_t)p.suc;
+            slotBits|=slots[count];
+            ++count;
+            excWord|=U_MASK(UCASE_EXC_UPPER);
+        }
+        if(p.suc!=p.stc) {
+            if(p.stc>=0) {
+                slots[count]=(uint32_t)p.stc;
+            } else {
+                slots[count]=(uint32_t)c;
+            }
+            slotBits|=slots[count];
+            ++count;
+            excWord|=U_MASK(UCASE_EXC_TITLE);
+        }
     }
 
     /* length of case closure */
@@ -994,33 +1041,42 @@ CasePropsBuilder::makeException(UChar32 c, uint32_t value, ExcProps &ep, UErrorC
         return excIndex;
     } else {
         /* write slots */
-        int32_t excIndex=exceptions.length();
-        exceptions.append((UChar)0);  /* placeholder for excWord which will be stored at excIndex */
+        UnicodeString excString;
+        excString.append((UChar)0);  /* placeholder for excWord which will be stored at excIndex */
 
         if(slotBits<=0xffff) {
             for(int32_t i=0; i<count; ++i) {
-                exceptions.append((UChar)slots[i]);
+                excString.append((UChar)slots[i]);
             }
         } else {
             excWord|=UCASE_EXC_DOUBLE_SLOTS;
             for(int32_t i=0; i<count; ++i) {
-                exceptions.append((UChar)(slots[i]>>16));
-                exceptions.append((UChar)slots[i]);
+                excString.append((UChar)(slots[i]>>16));
+                excString.append((UChar)slots[i]);
             }
         }
 
         /* write the full case mapping strings */
-        exceptions.append(p.lc);
-        exceptions.append(p.cf);
-        exceptions.append(p.uc);
-        exceptions.append(p.tc);
+        excString.append(p.lc);
+        excString.append(p.cf);
+        excString.append(p.uc);
+        excString.append(p.tc);
 
         /* write the closure data */
-        exceptions.append(closureString);
+        excString.append(closureString);
 
         /* write the main exceptions word */
-        exceptions.setCharAt(excIndex, (UChar)excWord);
+        excString.setCharAt(0, (UChar)excWord);
 
+        // Try to share data.
+        if(count==1 && ep.delta!=0) {
+            int32_t excIndex=exceptions.indexOf(excString);
+            if(excIndex>=0) {
+                return excIndex;
+            }
+        }
+        int32_t excIndex=exceptions.length();
+        exceptions.append(excString);
         return excIndex;
     }
 }
@@ -1065,7 +1121,6 @@ CasePropsBuilder::build(UErrorCode &errorCode) {
     }
 
     makeCaseClosure(errorCode);
-    makeExceptions(errorCode);
     if(U_FAILURE(errorCode)) { return; }
 
     /*
@@ -1089,6 +1144,9 @@ CasePropsBuilder::build(UErrorCode &errorCode) {
                 u_errorName(errorCode));
         return;
     }
+
+    makeExceptions(errorCode);
+    if(U_FAILURE(errorCode)) { return; }
 
     utrie2_freeze(pTrie, UTRIE2_16_VALUE_BITS, &errorCode);
     if(U_FAILURE(errorCode)) {

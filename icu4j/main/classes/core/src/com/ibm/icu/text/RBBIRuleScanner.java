@@ -285,14 +285,14 @@ class RBBIRuleScanner {
             // All rule expressions are ORed together.
             // The ';' that terminates an expression really just functions as a
             // '|' with
-            //   a low operator prededence.
+            //   a low operator precedence.
             //
             // Each of the four sets of rules are collected separately.
             //  (forward, reverse, safe_forward, safe_reverse)
             //  OR this rule into the appropriate group of them.
             //
 
-            int destRules = (fReverseRule ? RBBIRuleBuilder.fReverseTree : fRB.fDefaultTree);
+            int destRules = (fReverseRule ? RBBIRuleBuilder.fSafeRevTree : fRB.fDefaultTree);
 
             if (fRB.fTreeRoots[destRules] != null) {
                 // This is not the first rule encountered.
@@ -970,18 +970,6 @@ class RBBIRuleScanner {
         //
         if (fRB.fTreeRoots[RBBIRuleBuilder.fForwardTree] == null) {
             error(RBBIRuleBuilder.U_BRK_RULE_SYNTAX);
-        }
-
-        //
-        // If there were NO user specified reverse rules, set up the equivalent of ".*;"
-        //
-        if (fRB.fTreeRoots[RBBIRuleBuilder.fReverseTree] == null) {
-            fRB.fTreeRoots[RBBIRuleBuilder.fReverseTree] = pushNewNode(RBBINode.opStar);
-            RBBINode operand = pushNewNode(RBBINode.setRef);
-            findSetFor(kAny, operand, null);
-            fRB.fTreeRoots[RBBIRuleBuilder.fReverseTree].fLeftChild = operand;
-            operand.fParent = fRB.fTreeRoots[RBBIRuleBuilder.fReverseTree];
-            fNodeStackPtr -= 2;
         }
 
         //

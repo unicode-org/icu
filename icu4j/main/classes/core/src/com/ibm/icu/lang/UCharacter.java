@@ -1177,6 +1177,31 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 60 */
         public static final int ZANABAZAR_SQUARE_ID = 280; /*[11A00]*/
 
+        // New blocks in Unicode 11.0
+
+        /** @stable ICU 62 */
+        public static final int CHESS_SYMBOLS_ID = 281; /*[1FA00]*/
+        /** @stable ICU 62 */
+        public static final int DOGRA_ID = 282; /*[11800]*/
+        /** @stable ICU 62 */
+        public static final int GEORGIAN_EXTENDED_ID = 283; /*[1C90]*/
+        /** @stable ICU 62 */
+        public static final int GUNJALA_GONDI_ID = 284; /*[11D60]*/
+        /** @stable ICU 62 */
+        public static final int HANIFI_ROHINGYA_ID = 285; /*[10D00]*/
+        /** @stable ICU 62 */
+        public static final int INDIC_SIYAQ_NUMBERS_ID = 286; /*[1EC70]*/
+        /** @stable ICU 62 */
+        public static final int MAKASAR_ID = 287; /*[11EE0]*/
+        /** @stable ICU 62 */
+        public static final int MAYAN_NUMERALS_ID = 288; /*[1D2E0]*/
+        /** @stable ICU 62 */
+        public static final int MEDEFAIDRIN_ID = 289; /*[16E40]*/
+        /** @stable ICU 62 */
+        public static final int OLD_SOGDIAN_ID = 290; /*[10F00]*/
+        /** @stable ICU 62 */
+        public static final int SOGDIAN_ID = 291; /*[10F30]*/
+
         /**
          * One more than the highest normal UnicodeBlock value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.BLOCK).
@@ -1184,7 +1209,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 281;
+        public static final int COUNT = 292;
 
         // blocks objects ---------------------------------------------------
 
@@ -2464,6 +2489,39 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final UnicodeBlock ZANABAZAR_SQUARE =
                 new UnicodeBlock("ZANABAZAR_SQUARE", ZANABAZAR_SQUARE_ID); /*[11A00]*/
 
+        // New blocks in Unicode 11.0
+
+        /** @stable ICU 62 */
+        public static final UnicodeBlock CHESS_SYMBOLS =
+                new UnicodeBlock("CHESS_SYMBOLS", CHESS_SYMBOLS_ID); /*[1FA00]*/
+        /** @stable ICU 62 */
+        public static final UnicodeBlock DOGRA = new UnicodeBlock("DOGRA", DOGRA_ID); /*[11800]*/
+        /** @stable ICU 62 */
+        public static final UnicodeBlock GEORGIAN_EXTENDED =
+                new UnicodeBlock("GEORGIAN_EXTENDED", GEORGIAN_EXTENDED_ID); /*[1C90]*/
+        /** @stable ICU 62 */
+        public static final UnicodeBlock GUNJALA_GONDI =
+                new UnicodeBlock("GUNJALA_GONDI", GUNJALA_GONDI_ID); /*[11D60]*/
+        /** @stable ICU 62 */
+        public static final UnicodeBlock HANIFI_ROHINGYA =
+                new UnicodeBlock("HANIFI_ROHINGYA", HANIFI_ROHINGYA_ID); /*[10D00]*/
+        /** @stable ICU 62 */
+        public static final UnicodeBlock INDIC_SIYAQ_NUMBERS =
+                new UnicodeBlock("INDIC_SIYAQ_NUMBERS", INDIC_SIYAQ_NUMBERS_ID); /*[1EC70]*/
+        /** @stable ICU 62 */
+        public static final UnicodeBlock MAKASAR = new UnicodeBlock("MAKASAR", MAKASAR_ID); /*[11EE0]*/
+        /** @stable ICU 62 */
+        public static final UnicodeBlock MAYAN_NUMERALS =
+                new UnicodeBlock("MAYAN_NUMERALS", MAYAN_NUMERALS_ID); /*[1D2E0]*/
+        /** @stable ICU 62 */
+        public static final UnicodeBlock MEDEFAIDRIN =
+                new UnicodeBlock("MEDEFAIDRIN", MEDEFAIDRIN_ID); /*[16E40]*/
+        /** @stable ICU 62 */
+        public static final UnicodeBlock OLD_SOGDIAN =
+                new UnicodeBlock("OLD_SOGDIAN", OLD_SOGDIAN_ID); /*[10F00]*/
+        /** @stable ICU 62 */
+        public static final UnicodeBlock SOGDIAN = new UnicodeBlock("SOGDIAN", SOGDIAN_ID); /*[10F30]*/
+
         /**
          * @stable ICU 2.4
          */
@@ -3092,6 +3150,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 60 */
         public static final int MALAYALAM_TTA = 99;
 
+        /** @stable ICU 62 */
+        public static final int HANIFI_ROHINGYA_KINNA_YA = 100;
+        /** @stable ICU 62 */
+        public static final int HANIFI_ROHINGYA_PA = 101;
+
         /**
          * One more than the highest normal JoiningGroup value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.JoiningGroup).
@@ -3099,7 +3162,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 100;
+        public static final int COUNT = 102;
     }
 
     /**
@@ -3168,6 +3231,11 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int GLUE_AFTER_ZWJ = 16;  /*[GAZ]*/
         /** @stable ICU 58 */
         public static final int ZWJ = 17;             /*[ZWJ]*/
+        /** @stable ICU 62 */
+        public static final int LINKING_CONSONANT = 18;   /*[LinkC]*/
+        /** @stable ICU 62 */
+        public static final int VIRAMA = 19;          /*[Virama]*/
+
         /**
          * One more than the highest normal GraphemeClusterBreak value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.GRAPHEME_CLUSTER_BREAK).
@@ -3175,7 +3243,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 18;
+        public static final int COUNT = 20;
     }
 
     /**
@@ -3254,6 +3322,8 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int GLUE_AFTER_ZWJ = 20;   /*[GAZ]*/
         /** @stable ICU 58 */
         public static final int ZWJ = 21;              /*[ZWJ]*/
+        /** @stable ICU 62 */
+        public static final int WSEGSPACE = 22;        /*[WSEGSPACE]*/
         /**
          * One more than the highest normal WordBreak value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.WORD_BREAK).
@@ -3261,7 +3331,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 22;
+        public static final int COUNT = 23;
     }
 
     /**

@@ -560,13 +560,20 @@ public interface UProperty
      * @stable ICU 60
      */
     public static final int PREPENDED_CONCATENATION_MARK=63;
+    /**
+     * Binary property Extended_Pictographic.
+     * See http://www.unicode.org/reports/tr51/#Emoji_Properties
+     *
+     * @stable ICU 62
+     */
+    public static final int EXTENDED_PICTOGRAPHIC=64;
 
     /**
      * One more than the last constant for binary Unicode properties.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     @Deprecated
-    public static final int BINARY_LIMIT = 64;
+    public static final int BINARY_LIMIT = 65;
 
     /**
      * Enumerated property Bidi_Class.

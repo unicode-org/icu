@@ -70,13 +70,6 @@ public:
     RBBIDataWrapper    *fData;
 private:
 
-    /** 
-     *  The iteration state - current position, rule status for the current position,
-     *                        and whether the iterator ran off the end, yielding UBRK_DONE.
-     *                        Current position is pinned to be 0 < position <= text.length.
-     *                        Current position is always set to a boundary.
-     *  @internal
-    */
     /**
       * The current  position of the iterator. Pinned, 0 < fPosition <= text.length.
       * Never has the value UBRK_DONE (-1).
@@ -639,14 +632,15 @@ private:
     void init(UErrorCode &status);
 
     /**
-     * Iterate backwards from an arbitrary position in the input text using the Safe Reverse rules.
+     * Iterate backwards from an arbitrary position in the input text using the
+     * synthesized Safe Reverse rules.
      * This locates a "Safe Position" from which the forward break rules
      * will operate correctly. A Safe Position is not necessarily a boundary itself.
      *
      * @param fromPosition the position in the input text to begin the iteration.
      * @internal
      */
-    int32_t handlePrevious(int32_t fromPosition);
+    int32_t handleSafePrevious(int32_t fromPosition);
 
     /**
      * Find a rule-based boundary by running the state machine.
