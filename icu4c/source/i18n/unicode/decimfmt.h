@@ -2112,9 +2112,9 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     void setPropertiesFromPattern(const UnicodeString& pattern, int32_t ignoreRounding,
                                   UErrorCode& status);
 
-    const numparse::impl::NumberParserImpl& getParser(UErrorCode& status) const;
+    const numparse::impl::NumberParserImpl* getParser(UErrorCode& status) const;
 
-    const numparse::impl::NumberParserImpl& getCurrencyParser(UErrorCode& status) const;
+    const numparse::impl::NumberParserImpl* getCurrencyParser(UErrorCode& status) const;
 
     void setupFastFormat();
 
@@ -2122,7 +2122,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
 
     bool fastFormatInt64(int64_t input, UnicodeString& output) const;
 
-    void doFastFormatInt32(int32_t input, UnicodeString& output) const;
+    void doFastFormatInt32(int32_t input, bool isNegative, UnicodeString& output) const;
 
     //=====================================================================================//
     //                                   INSTANCE FIELDS                                   //

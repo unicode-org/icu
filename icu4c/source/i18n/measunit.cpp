@@ -557,6 +557,10 @@ static int32_t unitPerUnitToSingleUnit[][4] = {
         {427, 363, 4, 1}
 };
 
+// Shortcuts to the base unit in order to make the default constructor fast
+static const int32_t kBaseTypeIdx = 14;
+static const int32_t kBaseSubTypeIdx = 0;
+
 MeasureUnit *MeasureUnit::createGForce(UErrorCode &status) {
     return MeasureUnit::create(0, 0, status);
 }
@@ -1118,7 +1122,8 @@ static int32_t binarySearch(
 
 MeasureUnit::MeasureUnit() {
     fCurrency[0] = 0;
-    initNoUnit("base");
+    fTypeId = kBaseTypeIdx;
+    fSubTypeId = kBaseSubTypeIdx;
 }
 
 MeasureUnit::MeasureUnit(const MeasureUnit &other)

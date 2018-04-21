@@ -40,6 +40,7 @@
 #include "datadrivennumberformattestsuite.h"
 #include "unicode/msgfmt.h"
 #include "number_decimalquantity.h"
+#include "unicode/numberformatter.h"
 
 #if (U_PLATFORM == U_PF_AIX) || (U_PLATFORM == U_PF_OS390)
 // These should not be macros. If they are,
@@ -63,6 +64,7 @@ namespace std {
 #endif
 
 using icu::number::impl::DecimalQuantity;
+using namespace icu::number;
 
 class NumberFormatTestDataDriven : public DataDrivenNumberFormatTestSuite {
 protected:
@@ -657,6 +659,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11318_DoubleConversion);
   TESTCASE_AUTO(TestParsePercentRegression);
   TESTCASE_AUTO(TestMultiplierWithScale);
+  TESTCASE_AUTO(TestFastFormatInt32);
   TESTCASE_AUTO_END;
 }
 
@@ -9070,6 +9073,51 @@ void NumberFormatTest::TestMultiplierWithScale() {
     df.setMultiplier(5);
     df.setMultiplierScale(-1);
     expect2(df, 100, u"50"); // round-trip test
+}
+
+void NumberFormatTest::TestFastFormatInt32() {
+    IcuTestErrorCode status(*this, "TestFastFormatInt32");
+
+    // The two simplest formatters, old API and new API.
+    // Old API should use the fastpath for ints.
+    LocalizedNumberFormatter lnf = NumberFormatter::withLocale("en");
+    LocalPointer<NumberFormat> df(NumberFormat::createInstance("en", status));
+
+    double nums[] = {
+            0.0,
+            -0.0,
+            NAN,
+            INFINITY,
+            0.1,
+            1.0,
+            1.1,
+            2.0,
+            3.0,
+            9.0,
+            10.0,
+            99.0,
+            100.0,
+            999.0,
+            1000.0,
+            9999.0,
+            10000.0,
+            99999.0,
+            100000.0,
+            999999.0,
+            1000000.0,
+            static_cast<double>(INT32_MAX) - 1,
+            static_cast<double>(INT32_MAX),
+            static_cast<double>(INT32_MAX) + 1,
+            static_cast<double>(INT32_MIN) - 1,
+            static_cast<double>(INT32_MIN),
+            static_cast<double>(INT32_MIN) + 1};
+
+    for (auto num : nums) {
+        UnicodeString expected = lnf.formatDouble(num, status).toString();
+        UnicodeString actual;
+        df->format(num, actual);
+        assertEquals(UnicodeString("d = ") + num, expected, actual);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
