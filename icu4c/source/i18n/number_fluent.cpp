@@ -4,7 +4,7 @@
 #include <unicode/numberformatter.h>
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
+#if !UCONFIG_NO_FORMATTING
 
 #include "uassert.h"
 #include "unicode/numberformatter.h"
