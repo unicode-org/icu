@@ -1239,7 +1239,8 @@ void DecimalFormat::setupFastFormat() {
 
     // Grouping (secondary grouping is forbidden in equalsDefaultExceptFastFormat):
     bool groupingUsed = fProperties->groupingUsed;
-    bool unusualGroupingSize = fProperties->groupingSize > 0 && fProperties->groupingSize != 3;
+    int32_t groupingSize = fProperties->groupingSize;
+    bool unusualGroupingSize = groupingSize > 0 && groupingSize != 3;
     const UnicodeString& groupingString = fSymbols->getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
     if (groupingUsed && (unusualGroupingSize || groupingString.length() != 1)) {
         trace("no fast format: grouping\n");
@@ -1278,7 +1279,7 @@ void DecimalFormat::setupFastFormat() {
     trace("can use fast format!\n");
     fCanUseFastFormat = true;
     fFastData.cpZero = static_cast<char16_t>(codePointZero);
-    fFastData.cpGroupingSeparator = groupingUsed ? groupingString.charAt(0) : 0;
+    fFastData.cpGroupingSeparator = groupingUsed && groupingSize == 3 ? groupingString.charAt(0) : 0;
     fFastData.cpMinusSign = minusSignString.charAt(0);
     fFastData.minInt = (minInt < 0 || minInt > 127) ? 0 : static_cast<int8_t>(minInt);
     fFastData.maxInt = (maxInt < 0 || maxInt > 127) ? 127 : static_cast<int8_t>(maxInt);
