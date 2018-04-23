@@ -416,6 +416,8 @@ typedef struct UFormattedNumber UFormattedNumber;
  * Creates a new UNumberFormatter from the given skeleton string and locale. This is currently the only
  * method for creating a new UNumberFormatter.
  *
+ * Objects of type UNumberFormatter returned by this method are threadsafe.
+ *
  * For more details on skeleton strings, see the documentation in numberformatter.h. For more details on
  * the usage of this API, see the documentation at the top of unumberformatter.h.
  *
@@ -435,6 +437,8 @@ unumf_openFromSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, cons
 /**
  * Creates a new UFormattedNumber for holding the result of a number formatting operation.
  *
+ * Objects of type UFormattedNumber are not guaranteed to be threadsafe.
+ *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
  * @param ec Set if an error occurs.
@@ -447,6 +451,9 @@ unumf_openResult(UErrorCode* ec);
 /**
  * Uses a UNumberFormatter to format an integer to a UFormattedNumber. A string, field position, and other
  * information can be retrieved from the UFormattedNumber.
+ *
+ * The UNumberFormatter can be shared between threads. Each thread should have its own local
+ * UFormattedNumber, however, for storing the result of the formatting operation.
  *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
@@ -465,6 +472,9 @@ unumf_formatInt(const UNumberFormatter* uformatter, int64_t value, UFormattedNum
  * Uses a UNumberFormatter to format a double to a UFormattedNumber. A string, field position, and other
  * information can be retrieved from the UFormattedNumber.
  *
+ * The UNumberFormatter can be shared between threads. Each thread should have its own local
+ * UFormattedNumber, however, for storing the result of the formatting operation.
+ *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
  * @param uformatter A formatter object created by unumf_openFromSkeletonAndLocale or similar.
@@ -481,6 +491,9 @@ unumf_formatDouble(const UNumberFormatter* uformatter, double value, UFormattedN
 /**
  * Uses a UNumberFormatter to format a decimal number to a UFormattedNumber. A string, field position, and
  * other information can be retrieved from the UFormattedNumber.
+ *
+ * The UNumberFormatter can be shared between threads. Each thread should have its own local
+ * UFormattedNumber, however, for storing the result of the formatting operation.
  *
  * The syntax of the unformatted number is a "numeric string" as defined in the Decimal Arithmetic
  * Specification, available at http://speleotrove.com/decimal
