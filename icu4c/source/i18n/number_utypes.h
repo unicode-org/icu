@@ -3,7 +3,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
+#if !UCONFIG_NO_FORMATTING
 #ifndef __SOURCE_NUMBER_UTYPES_H__
 #define __SOURCE_NUMBER_UTYPES_H__
 

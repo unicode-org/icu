@@ -1005,7 +1005,7 @@ void StringCaseTest::TestCopyMoveEdits() {
 
     // std::move trouble on these platforms.
     // See https://ssl.icu-project.org/trac/ticket/13393
-#if !UPRV_INCOMPLETE_CPP11_SUPPORT && !(U_PLATFORM == U_PF_AIX || U_PLATFORM == U_PF_OS390)
+#if !(U_PLATFORM == U_PF_AIX || U_PLATFORM == U_PF_OS390)
     // move constructor empties object with heap array
     Edits d(std::move(a));
     assertEquals("d: move-constructed many edits, length delta", 250, d.lengthDelta());
