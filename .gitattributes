@@ -4472,7 +4472,6 @@ icu4c/source/i18n/sharedcalendar.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/shareddateformatsymbols.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/sharednumberformat.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/sharedpluralrules.h svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/i18n/significantdigitinterval.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/simpletz.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/smpdtfmt.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/smpdtfst.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
