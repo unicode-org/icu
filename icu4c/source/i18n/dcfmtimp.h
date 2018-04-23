@@ -6,6 +6,8 @@
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************/
 
+// TODO: This file, and the corresponding UCONFIG settings, may be obsolete.
+
 #ifndef DCFMTIMP_H
 #define DCFMTIMP_H
 
