@@ -839,6 +839,9 @@
     <ClInclude Include="number_types.h">
       <Filter>formatting</Filter>
     </ClInclude>
+    <ClInclude Include="number_utypes.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
     <ClInclude Include="number_utils.h">
       <Filter>formatting</Filter>
     </ClInclude>
@@ -852,6 +855,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="number_skeletons.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="fieldposutil.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="numparse_stringsegment.h">

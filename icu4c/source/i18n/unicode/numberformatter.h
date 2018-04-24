@@ -1676,14 +1676,14 @@ class U_I18N_API NumberFormatterSettings {
     /**
      * Overload of grouping() for use on an rvalue reference.
      *
-     * @param rounder
+     * @param strategy
      *            The grouping strategy to use.
      * @return The fluent chain.
      * @see #grouping
      * @provisional This API might change or be removed in a future release.
      * @draft ICU 62
      */
-    Derived grouping(const UGroupingStrategy& rounder) &&;
+    Derived grouping(const UGroupingStrategy& strategy) &&;
 
     /**
      * Specifies the minimum and maximum number of digits to render before the decimal mark.

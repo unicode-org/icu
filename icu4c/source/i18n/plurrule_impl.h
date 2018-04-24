@@ -42,6 +42,8 @@ class VisibleDigits;
 
 namespace pluralimpl {
 
+// TODO: Remove this and replace with u"" literals. Was for EBCDIC compatibility.
+
 static const UChar DOT = ((UChar) 0x002E);
 static const UChar SINGLE_QUOTE = ((UChar) 0x0027);
 static const UChar SLASH = ((UChar) 0x002F);

@@ -44,5 +44,31 @@ CompactDecimalFormat& CompactDecimalFormat::operator=(const CompactDecimalFormat
     return *this;
 }
 
+Format* CompactDecimalFormat::clone() const {
+    return new CompactDecimalFormat(*this);
+}
+
+void
+CompactDecimalFormat::parse(
+        const UnicodeString& /* text */,
+        Formattable& /* result */,
+        ParsePosition& /* parsePosition */) const {
+}
+
+void
+CompactDecimalFormat::parse(
+        const UnicodeString& /* text */,
+        Formattable& /* result */,
+        UErrorCode& status) const {
+    status = U_UNSUPPORTED_ERROR;
+}
+
+CurrencyAmount*
+CompactDecimalFormat::parseCurrency(
+        const UnicodeString& /* text */,
+        ParsePosition& /* pos */) const {
+    return nullptr;
+}
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
