@@ -94,7 +94,61 @@ public:
      */
     CompactDecimalFormat& operator=(const CompactDecimalFormat& rhs);
 
+    /**
+     * Clone this Format object polymorphically. The caller owns the
+     * result and should delete it when done.
+     *
+     * @return    a polymorphic copy of this CompactDecimalFormat.
+     * @stable ICU 51
+     */
+    virtual Format* clone() const;
+
     using DecimalFormat::format;
+
+    /**
+     * CompactDecimalFormat does not support parsing. This implementation
+     * does nothing.
+     * @param text           Unused.
+     * @param result         Does not change.
+     * @param parsePosition  Does not change.
+     * @see Formattable
+     * @stable ICU 51
+     */
+    void parse(const UnicodeString& text, Formattable& result,
+               ParsePosition& parsePosition) const U_OVERRIDE;
+
+    /**
+     * CompactDecimalFormat does not support parsing. This implementation
+     * sets status to U_UNSUPPORTED_ERROR
+     *
+     * @param text      Unused.
+     * @param result    Does not change.
+     * @param status    Always set to U_UNSUPPORTED_ERROR.
+     * @stable ICU 51
+     */
+    void parse(const UnicodeString& text, Formattable& result, UErrorCode& status) const U_OVERRIDE;
+
+    /**
+     * Parses text from the given string as a currency amount.  Unlike
+     * the parse() method, this method will attempt to parse a generic
+     * currency name, searching for a match of this object's locale's
+     * currency display names, or for a 3-letter ISO currency code.
+     * This method will fail if this format is not a currency format,
+     * that is, if it does not contain the currency pattern symbol
+     * (U+00A4) in its prefix or suffix. This implementation always returns
+     * NULL.
+     *
+     * @param text the string to parse
+     * @param pos  input-output position; on input, the position within text
+     *             to match; must have 0 <= pos.getIndex() < text.length();
+     *             on output, the position after the last matched character.
+     *             If the parse fails, the position in unchanged upon output.
+     * @return     if parse succeeds, a pointer to a newly-created CurrencyAmount
+     *             object (owned by the caller) containing information about
+     *             the parsed currency; if parse fails, this is NULL.
+     * @internal
+     */
+    CurrencyAmount* parseCurrency(const UnicodeString& text, ParsePosition& pos) const U_OVERRIDE;
 
     /**
      * Return the class ID for this class.  This is useful only for

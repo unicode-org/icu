@@ -8,6 +8,15 @@
 // for that test suite. After the global settings, comes "begin", the
 // per-test field names, and finally the test specific field values, 1 test
 // per line.
+//
+// Field names:
+//  J = ICU58
+//  K = JDK
+//  C = ICU4C
+//  P = ICU4J parsing
+//  Q = ICU4J formatting
+//  S = ICU4J toPattern
+//
 // For more information on the format of this file, including all the available
 // field names, please see
 // https://docs.google.com/document/d/1T2P0p953_Lh1pRwo-5CuPVrHlIBa_wcXElG-Hhg_WHM/edit?usp=sharing

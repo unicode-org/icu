@@ -22,8 +22,9 @@
 
 #include "putilimp.h"
 #include "plurrule_impl.h"
+#include "number_decimalquantity.h"
+
 #include <stdio.h>
-#include <number_decimalquantity.h>
 
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
 // try to test the full functionality.  It just calls each function in the class and

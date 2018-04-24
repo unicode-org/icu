@@ -528,11 +528,13 @@
     <ClInclude Include="number_scientific.h" />
     <ClInclude Include="number_stringbuilder.h" />
     <ClInclude Include="number_types.h" />
+    <ClInclude Include="number_utypes.h" />
     <ClInclude Include="number_utils.h" />
     <ClInclude Include="number_mapper.h" />
     <ClInclude Include="number_multiplier.h" />
     <ClInclude Include="number_currencysymbols.h" />
     <ClInclude Include="number_skeletons.h" />
+    <ClInclude Include="fieldposutil.h" />
     <ClInclude Include="numparse_stringsegment.h" />
     <ClInclude Include="numparse_impl.h" />
     <ClInclude Include="numparse_symbols.h" />

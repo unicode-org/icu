@@ -27,7 +27,6 @@
 #ifndef DECIMFMT_H
 #define DECIMFMT_H
 
-#include <atomic>
 #include "unicode/utypes.h"
 /**
  * \file
@@ -36,6 +35,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <atomic>
 #include "unicode/dcfmtsym.h"
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
@@ -56,13 +56,8 @@
 
 U_NAMESPACE_BEGIN
 
-class DigitList;
 class CurrencyPluralInfo;
-class Hashtable;
-class UnicodeSet;
 class FieldPositionHandler;
-class FixedDecimal;
-class PluralRules;
 class CompactDecimalFormat;
 
 namespace number {
@@ -712,7 +707,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      *                  pattern is invalid this will be set to a failure code.
      * @stable ICU 2.0
      */
-    explicit DecimalFormat(UErrorCode& status);
+    DecimalFormat(UErrorCode& status);
 
     /**
      * Create a DecimalFormat from the given pattern and the symbols
@@ -1733,7 +1728,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @see #setParseNoExponent
      * @internal This API is a technical preview. It may change in an upcoming release.
      */
-    UBool isParseNoExponent() const;
+    virtual UBool isParseNoExponent() const;
 
     /**
      * {@icu} Specifies whether to stop parsing when an exponent separator is encountered. For
@@ -1751,7 +1746,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @see #setParseCaseSensitive
      * @internal This API is a technical preview. It may change in an upcoming release.
      */
-    UBool isParseCaseSensitive() const;
+    virtual UBool isParseCaseSensitive() const;
 
     /**
      * {@icu} Whether to pay attention to case when parsing; default is to ignore case (perform
@@ -1762,7 +1757,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      *
      * @internal This API is a technical preview. It may change in an upcoming release.
      */
-    void setParseCaseSensitive(UBool value);
+    virtual void setParseCaseSensitive(UBool value);
 
     /**
      * {@icu} Returns whether truncation of high-order integer digits should result in an error.
@@ -1771,7 +1766,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @see setFormatFailIfMoreThanMaxDigits
      * @internal This API is a technical preview. It may change in an upcoming release.
      */
-    UBool isFormatFailIfMoreThanMaxDigits() const;
+    virtual UBool isFormatFailIfMoreThanMaxDigits() const;
 
     /**
      * {@icu} Sets whether truncation of high-order integer digits should result in an error.

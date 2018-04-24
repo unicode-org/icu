@@ -9,7 +9,6 @@
 #ifndef _DATADRIVENNUMBERFORMATTESTSUITE_H__
 #define _DATADRIVENNUMBERFORMATTESTSUITE_H__
 
-#include "cmemory.h"
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -18,6 +17,7 @@
 #include "unicode/unistr.h"
 #include "numberformattesttuple.h"
 #include "intltest.h"
+#include "cmemory.h"
 
 struct UCHARBUF;
 class IntlTest;
