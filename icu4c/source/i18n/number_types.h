@@ -15,6 +15,7 @@
 #include "unicode/utf16.h"
 #include "uassert.h"
 #include "unicode/platform.h"
+#include "unicode/uniset.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
