@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <cmath>
 
 #include "unicode/ctest.h" // for str_timeDelta
 #include "unicode/curramt.h"
@@ -235,6 +236,12 @@ UnicodeString toString(int32_t n) {
 
 UnicodeString toString(UBool b) {
   return b ? UnicodeString("TRUE"):UnicodeString("FALSE");
+}
+
+UnicodeString toString(const UnicodeSet& uniset, UErrorCode& status) {
+    UnicodeString result;
+    uniset.toPattern(result, status);
+    return result;
 }
 
 // stephen - cleaned up 05/05/99
@@ -1998,7 +2005,8 @@ UBool IntlTest::assertEquals(const char* message,
 UBool IntlTest::assertEquals(const char* message,
                              double expected,
                              double actual) {
-    if (expected != actual) {
+    bool bothNaN = std::isnan(expected) && std::isnan(actual);
+    if (expected != actual && !bothNaN) {
         errln((UnicodeString)"FAIL: " + message + "; got " +
               actual + 
               "; expected " + expected);
@@ -2043,6 +2051,24 @@ UBool IntlTest::assertEquals(const char* message,
 #ifdef VERBOSE_ASSERTIONS
     else {
         logln((UnicodeString)"Ok: " + message + "; got " + u_errorName(actual));
+    }
+#endif
+    return TRUE;
+}
+
+UBool IntlTest::assertEquals(const char* message,
+                             const UnicodeSet& expected,
+                             const UnicodeSet& actual) {
+    IcuTestErrorCode status(*this, "assertEqualsUniSet");
+    if (expected != actual) {
+        errln((UnicodeString)"FAIL: " + message + "; got " +
+              toString(actual, status) +
+              "; expected " + toString(expected, status));
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString)"Ok: " + message + "; got " + toString(actual, status));
     }
 #endif
     return TRUE;
@@ -2132,6 +2158,11 @@ UBool IntlTest::assertEquals(const UnicodeString& message,
 UBool IntlTest::assertEquals(const UnicodeString& message,
                              UErrorCode expected,
                              UErrorCode actual) {
+    return assertEquals(extractToAssertBuf(message), expected, actual);
+}
+UBool IntlTest::assertEquals(const UnicodeString& message,
+                             const UnicodeSet& expected,
+                             const UnicodeSet& actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
 }
 

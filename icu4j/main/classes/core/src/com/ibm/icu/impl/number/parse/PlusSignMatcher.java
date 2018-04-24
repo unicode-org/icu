@@ -37,7 +37,7 @@ public class PlusSignMatcher extends SymbolMatcher {
 
     @Override
     protected boolean isDisabled(ParsedNumber result) {
-        return allowTrailing ? false : result.seenNumber();
+        return !allowTrailing && result.seenNumber();
     }
 
     @Override

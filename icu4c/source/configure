@@ -4354,12 +4354,12 @@ $as_echo "$ac_use_strict_options" >&6; }
         then
             case "${host}" in
             *-*-solaris*)
-                # Don't use -std=c99 on Solaris because of timezone check fails
+                # Don't use -std=c11 on Solaris because of timezone check fails
                 ;;
             *)
                 # Do not use -ansi. It limits us to C90, and it breaks some platforms.
-                # We use -std=c99 to disable the gnu99 defaults and its associated warnings
-                CFLAGS="$CFLAGS -std=c99"
+                # We use -std=c11 to disable the gnu99 defaults and its associated warnings
+                CFLAGS="$CFLAGS -std=c11"
                 ;;
             esac
 
@@ -7473,15 +7473,13 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     ;;
 esac
 
-# GCC >= 4.4 supports UTF16 string literals. The CFLAGS and CXXFLAGS may change in the future.
+# GCC >= 4.4 supports UTF16 string literals. As of ICU 62, both C and C++ files require them.
 if test "$CHECK_UTF16_STRING_RESULT" = "unknown"; then
     if test "$GCC" = yes; then
-        OLD_CFLAGS="${CFLAGS}"
-        CFLAGS="${CFLAGS} -std=gnu99"
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-static const char16_t test[] = u"This is a UTF16 literal string.";
+static const unsigned short test[] = u"This is a UTF16 literal string.";
 
 int
 main ()
@@ -7498,10 +7496,7 @@ else
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
         if test "$CC_UTF16_STRING" = 1; then
-            UCONFIG_CFLAGS="${UCONFIG_CFLAGS} -std=gnu99"
             CHECK_UTF16_STRING_RESULT="C only";
-        else
-            CFLAGS="${OLD_CFLAGS}"
         fi
     fi
     if test "$GXX" = yes; then

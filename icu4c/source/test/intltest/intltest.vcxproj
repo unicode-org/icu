@@ -248,12 +248,15 @@
     <ClCompile Include="numbertest_affixutils.cpp" />
     <ClCompile Include="numbertest_api.cpp" />
     <ClCompile Include="numbertest_decimalquantity.cpp" />
-    <ClCompile Include="numbertest_doubleconversion.cpp" />
     <ClCompile Include="numbertest_modifiers.cpp" />
     <ClCompile Include="numbertest_patternmodifier.cpp" />
     <ClCompile Include="numbertest_patternstring.cpp" />
     <ClCompile Include="numbertest_stringbuilder.cpp" />
-    <ClCompile Include="numberformat2test.cpp" />
+    <ClCompile Include="numbertest_stringsegment.cpp" />
+    <ClCompile Include="numbertest_unisets.cpp" />
+    <ClCompile Include="numbertest_parse.cpp" />
+    <ClCompile Include="numbertest_doubleconversion.cpp" />
+    <ClCompile Include="numbertest_skeletons.cpp" />
     <ClCompile Include="numfmtst.cpp" />
     <ClCompile Include="numrgts.cpp" />
     <ClCompile Include="pluralmaptest.cpp" />

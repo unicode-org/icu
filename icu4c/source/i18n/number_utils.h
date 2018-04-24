@@ -3,7 +3,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
+#if !UCONFIG_NO_FORMATTING
 #ifndef __NUMBER_UTILS_H__
 #define __NUMBER_UTILS_H__
 
@@ -13,42 +13,12 @@
 #include "number_scientific.h"
 #include "number_patternstring.h"
 #include "number_modifiers.h"
+#include "number_multiplier.h"
+#include "decNumber.h"
+#include "charstr.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
-
-class UnicodeStringCharSequence : public CharSequence {
-  public:
-    explicit UnicodeStringCharSequence(const UnicodeString &other) {
-        fStr = other;
-    }
-
-    ~UnicodeStringCharSequence() U_OVERRIDE = default;
-
-    int32_t length() const U_OVERRIDE {
-        return fStr.length();
-    }
-
-    char16_t charAt(int32_t index) const U_OVERRIDE {
-        return fStr.charAt(index);
-    }
-
-    UChar32 codePointAt(int32_t index) const U_OVERRIDE {
-        return fStr.char32At(index);
-    }
-
-    UnicodeString toUnicodeString() const U_OVERRIDE {
-        // Allocate a UnicodeString of the correct length
-        UnicodeString output(length(), 0, -1);
-        for (int32_t i = 0; i < length(); i++) {
-            output.append(charAt(i));
-        }
-        return output;
-    }
-
-  private:
-    UnicodeString fStr;
-};
 
 struct MicroProps : public MicroPropsGenerator {
 
@@ -62,10 +32,10 @@ struct MicroProps : public MicroPropsGenerator {
     bool useCurrency;
 
     // Note: This struct has no direct ownership of the following pointers.
-    const DecimalFormatSymbols *symbols;
-    const Modifier *modOuter;
-    const Modifier *modMiddle;
-    const Modifier *modInner;
+    const DecimalFormatSymbols* symbols;
+    const Modifier* modOuter;
+    const Modifier* modMiddle;
+    const Modifier* modInner;
 
     // The following "helper" fields may optionally be used during the MicroPropsGenerator.
     // They live here to retain memory.
@@ -73,17 +43,18 @@ struct MicroProps : public MicroPropsGenerator {
         ScientificModifier scientificModifier;
         EmptyModifier emptyWeakModifier{false};
         EmptyModifier emptyStrongModifier{true};
+        MultiplierFormatHandler multiplier;
     } helpers;
 
 
     MicroProps() = default;
 
-    MicroProps(const MicroProps &other) = default;
+    MicroProps(const MicroProps& other) = default;
 
-    MicroProps &operator=(const MicroProps &other) = default;
+    MicroProps& operator=(const MicroProps& other) = default;
 
-    void processQuantity(DecimalQuantity &, MicroProps &micros, UErrorCode &status) const U_OVERRIDE {
-        (void)status;
+    void processQuantity(DecimalQuantity&, MicroProps& micros, UErrorCode& status) const U_OVERRIDE {
+        (void) status;
         if (this == &micros) {
             // Unsafe path: no need to perform a copy.
             U_ASSERT(!exhausted);
@@ -100,26 +71,92 @@ struct MicroProps : public MicroPropsGenerator {
     bool exhausted = false;
 };
 
-/**
- * This struct provides the result of the number formatting pipeline to FormattedNumber.
- *
- * The DecimalQuantity is not currently being used by FormattedNumber, but at some point it could be used
- * to add a toDecNumber() or similar method.
- */
-struct NumberFormatterResults : public UMemory {
-    DecimalQuantity quantity;
-    NumberStringBuilder string;
+enum CldrPatternStyle {
+    CLDR_PATTERN_STYLE_DECIMAL,
+    CLDR_PATTERN_STYLE_CURRENCY,
+    CLDR_PATTERN_STYLE_ACCOUNTING,
+    CLDR_PATTERN_STYLE_PERCENT,
+    CLDR_PATTERN_STYLE_SCIENTIFIC,
+    CLDR_PATTERN_STYLE_COUNT,
 };
 
-inline const UnicodeString getDigitFromSymbols(int8_t digit, const DecimalFormatSymbols &symbols) {
-    // TODO: Implement DecimalFormatSymbols.getCodePointZero()?
-    if (digit == 0) {
-        return symbols.getSymbol(DecimalFormatSymbols::ENumberFormatSymbol::kZeroDigitSymbol);
-    } else {
-        return symbols.getSymbol(static_cast<DecimalFormatSymbols::ENumberFormatSymbol>(
-                                         DecimalFormatSymbols::ENumberFormatSymbol::kOneDigitSymbol + digit - 1));
+// Namespace for naked functions
+namespace utils {
+
+inline int32_t insertDigitFromSymbols(NumberStringBuilder& output, int32_t index, int8_t digit,
+                                      const DecimalFormatSymbols& symbols, Field field,
+                                      UErrorCode& status) {
+    if (symbols.getCodePointZero() != -1) {
+        return output.insertCodePoint(index, symbols.getCodePointZero() + digit, field, status);
     }
+    return output.insert(index, symbols.getConstDigitSymbol(digit), field, status);
 }
+
+inline bool unitIsCurrency(const MeasureUnit& unit) {
+    return uprv_strcmp("currency", unit.getType()) == 0;
+}
+
+inline bool unitIsNoUnit(const MeasureUnit& unit) {
+    return uprv_strcmp("none", unit.getType()) == 0;
+}
+
+inline bool unitIsPercent(const MeasureUnit& unit) {
+    return uprv_strcmp("percent", unit.getSubtype()) == 0;
+}
+
+inline bool unitIsPermille(const MeasureUnit& unit) {
+    return uprv_strcmp("permille", unit.getSubtype()) == 0;
+}
+
+// NOTE: In Java, this method is in NumberFormat.java
+const char16_t*
+getPatternForStyle(const Locale& locale, const char* nsName, CldrPatternStyle style, UErrorCode& status);
+
+} // namespace utils
+
+
+/** A very thin C++ wrapper around decNumber.h */
+class DecNum : public UMemory {
+  public:
+    DecNum();  // leaves object in valid but undefined state
+
+    // Copy-like constructor; use the default move operators.
+    DecNum(const DecNum& other, UErrorCode& status);
+
+    /** Sets the decNumber to the StringPiece. */
+    void setTo(StringPiece str, UErrorCode& status);
+
+    /** Sets the decNumber to the NUL-terminated char string. */
+    void setTo(const char* str, UErrorCode& status);
+
+    /** Uses double_conversion to set this decNumber to the given double. */
+    void setTo(double d, UErrorCode& status);
+
+    /** Sets the decNumber to the BCD representation. */
+    void setTo(const uint8_t* bcd, int32_t length, int32_t scale, bool isNegative, UErrorCode& status);
+
+    void normalize();
+
+    void multiplyBy(const DecNum& rhs, UErrorCode& status);
+
+    void divideBy(const DecNum& rhs, UErrorCode& status);
+
+    bool isNegative() const;
+
+    bool isZero() const;
+
+    inline const decNumber* getRawDecNumber() const {
+        return fData.getAlias();
+    }
+
+  private:
+    static constexpr int32_t kDefaultDigits = 34;
+    MaybeStackHeaderAndArray<decNumber, char, kDefaultDigits> fData;
+    decContext fContext;
+
+    void _setTo(const char* str, int32_t maxDigits, UErrorCode& status);
+};
+
 
 } // namespace impl
 } // namespace number

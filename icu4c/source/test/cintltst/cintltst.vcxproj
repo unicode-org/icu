@@ -242,6 +242,7 @@
     <ClCompile Include="spooftest.c" />
     <ClCompile Include="uregiontest.c" />
     <ClCompile Include="ulistfmttest.c" />
+    <ClCompile Include="unumberformattertst.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cbiditst.h" />

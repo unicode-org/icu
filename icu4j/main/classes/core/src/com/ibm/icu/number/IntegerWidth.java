@@ -70,6 +70,8 @@ public class IntegerWidth {
             return this;
         } else if (maxInt >= 0 && maxInt <= RoundingUtils.MAX_INT_FRAC_SIG && maxInt >= minInt) {
             return new IntegerWidth(minInt, maxInt);
+        } else if (minInt == 1 && maxInt == -1) {
+            return DEFAULT;
         } else if (maxInt == -1) {
             return new IntegerWidth(minInt, -1);
         } else {

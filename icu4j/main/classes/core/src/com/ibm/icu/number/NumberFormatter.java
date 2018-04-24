@@ -5,7 +5,6 @@ package com.ibm.icu.number;
 import java.util.Locale;
 
 import com.ibm.icu.impl.number.DecimalFormatProperties;
-import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
 
@@ -454,6 +453,24 @@ public final class NumberFormatter {
     }
 
     /**
+     * Call this method at the beginning of a NumberFormatter fluent chain to create an instance based
+     * on a given number skeleton string.
+     *
+     * @param skeleton
+     *            The skeleton string off of which to base this NumberFormatter.
+     * @return An {@link UnlocalizedNumberFormatter}, to be used for chaining.
+     * @throws SkeletonSyntaxException If the given string is not a valid number formatting skeleton.
+     * @draft ICU 62
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static UnlocalizedNumberFormatter fromSkeleton(String skeleton) {
+        return NumberSkeletonImpl.getOrCreate(skeleton);
+    }
+
+    /**
+     * Note: In Java, since NumberPropertyMapper is package-private, this method is here so that it is
+     * accessible to tests.
+     *
      * @internal
      * @deprecated ICU 60 This API is ICU internal only.
      */
@@ -462,7 +479,6 @@ public final class NumberFormatter {
             DecimalFormatProperties properties,
             DecimalFormatSymbols symbols,
             DecimalFormatProperties exportedProperties) {
-        MacroProps macros = NumberPropertyMapper.oldToNew(properties, symbols, exportedProperties);
-        return NumberFormatter.with().macros(macros);
+        return NumberPropertyMapper.create(properties, symbols, exportedProperties);
     }
 }

@@ -48,7 +48,7 @@
 #include "ustrfmt.h"
 #include "util.h"
 #include "uvector.h"
-#include "visibledigits.h"
+#include "number_decimalquantity.h"
 
 // *****************************************************************************
 // class MessageFormat
@@ -1959,14 +1959,14 @@ UnicodeString MessageFormat::PluralSelectorProvider::select(void *ctx, double nu
         return UnicodeString(FALSE, OTHER_STRING, 5);
     }
     context.formatter->format(context.number, context.numberString, ec);
-    const DecimalFormat *decFmt = dynamic_cast<const DecimalFormat *>(context.formatter);
+    auto* decFmt = dynamic_cast<const DecimalFormat *>(context.formatter);
     if(decFmt != NULL) {
-        VisibleDigitsWithExponent digits;
-        decFmt->initVisibleDigitsWithExponent(context.number, digits, ec);
+        number::impl::DecimalQuantity dq;
+        decFmt->formatToDecimalQuantity(context.number, dq, ec);
         if (U_FAILURE(ec)) {
             return UnicodeString(FALSE, OTHER_STRING, 5);
         }
-        return rules->select(digits);
+        return rules->select(dq);
     } else {
         return rules->select(number);
     }

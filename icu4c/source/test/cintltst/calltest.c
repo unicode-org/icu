@@ -45,6 +45,7 @@ void addUSpoofTest(TestNode** root);
 #if !UCONFIG_NO_FORMATTING
 void addGendInfoForTest(TestNode** root);
 #endif
+void addUNumberFormatterTest(TestNode** root);
 
 void addAllTests(TestNode** root)
 {
@@ -88,5 +89,6 @@ void addAllTests(TestNode** root)
     addPUtilTest(root);
 #if !UCONFIG_NO_FORMATTING
     addGendInfoForTest(root);
+    addUNumberFormatterTest(root);
 #endif
 }

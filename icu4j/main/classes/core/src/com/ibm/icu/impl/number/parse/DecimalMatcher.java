@@ -28,9 +28,6 @@ public class DecimalMatcher implements NumberParseMatcher {
     /** If true, do not accept numbers in the fraction */
     private final boolean integerOnly;
 
-    /** If true, save the result as an exponent instead of a quantity in the ParsedNumber */
-    private final boolean isScientific;
-
     private final int grouping1;
     private final int grouping2;
 
@@ -98,20 +95,28 @@ public class DecimalMatcher implements NumberParseMatcher {
         fractionGroupingDisabled = 0 != (parseFlags
                 & ParsingUtils.PARSE_FLAG_FRACTION_GROUPING_DISABLED);
         integerOnly = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_INTEGER_ONLY);
-        isScientific = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_DECIMAL_SCIENTIFIC);
         grouping1 = grouper.getPrimary();
         grouping2 = grouper.getSecondary();
     }
 
     @Override
     public boolean match(StringSegment segment, ParsedNumber result) {
-        return match(segment, result, false);
+        return match(segment, result, 0);
     }
 
-    public boolean match(StringSegment segment, ParsedNumber result, boolean negativeExponent) {
-        if (result.seenNumber() && !isScientific) {
+    /**
+     * @param exponentSign
+     *            -1 means a negative exponent; +1 means a positive exponent; 0 means NO exponent. If -1
+     *            or +1, the number will be saved by scaling the pre-existing DecimalQuantity in the
+     *            ParsedNumber. If 0, a new DecimalQuantity will be created to store the number.
+     */
+    public boolean match(StringSegment segment, ParsedNumber result, int exponentSign) {
+        if (result.seenNumber() && exponentSign == 0) {
             // A number has already been consumed.
             return false;
+        } else if (exponentSign != 0) {
+            // scientific notation always comes after the number
+            assert result.quantity != null;
         }
 
         ParsedNumber backupResult = null;
@@ -182,7 +187,7 @@ public class DecimalMatcher implements NumberParseMatcher {
                 }
 
                 // Save the digit in the DecimalQuantity or scientific adjustment.
-                if (isScientific) {
+                if (exponentSign != 0) {
                     int nextExponent = digit + exponent * 10;
                     if (nextExponent < exponent) {
                         // Overflow
@@ -273,10 +278,11 @@ public class DecimalMatcher implements NumberParseMatcher {
             break;
         }
 
-        // if (backupOffset != -1) {
-        // segment.setOffset(backupOffset);
-        // hasPartialPrefix = true;
-        // }
+        // Back up if there was a trailing grouping separator
+        if (backupOffset != -1) {
+            segment.setOffset(backupOffset);
+            hasPartialPrefix = true; // redundant with `groupingOverlap == segment.length()`
+        }
 
         // Check the final grouping for validity
         if (requireGroupingMatch
@@ -304,18 +310,17 @@ public class DecimalMatcher implements NumberParseMatcher {
             result.quantity.adjustMagnitude(-digitsAfterDecimal);
         }
 
-        if (isScientific && segment.getOffset() != initialOffset) {
-            assert result.quantity != null; // scientific notation always comes after the number
+        if (exponentSign != 0 && segment.getOffset() != initialOffset) {
             boolean overflow = (exponent == Integer.MAX_VALUE);
             if (!overflow) {
                 try {
-                    result.quantity.adjustMagnitude(negativeExponent ? -exponent : exponent);
+                    result.quantity.adjustMagnitude(exponentSign * exponent);
                 } catch (ArithmeticException e) {
                     overflow = true;
                 }
             }
             if (overflow) {
-                if (negativeExponent) {
+                if (exponentSign == -1) {
                     // Set to zero
                     result.quantity.clear();
                 } else {
@@ -330,21 +335,23 @@ public class DecimalMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
+    public boolean smokeTest(StringSegment segment) {
+        // The common case uses a static leadSet for efficiency.
         if (digitStrings == null && leadSet != null) {
-            return leadSet;
+            return segment.startsWith(leadSet);
         }
-
-        UnicodeSet leadCodePoints = new UnicodeSet();
-        // Assumption: the sets are all single code points.
-        leadCodePoints.addAll(UnicodeSetStaticCache.get(Key.DIGITS));
-        leadCodePoints.addAll(separatorSet);
-        if (digitStrings != null) {
-            for (int i = 0; i < digitStrings.length; i++) {
-                ParsingUtils.putLeadCodePoint(digitStrings[i], leadCodePoints);
+        if (segment.startsWith(separatorSet) || UCharacter.isDigit(segment.getCodePoint())) {
+            return true;
+        }
+        if (digitStrings == null) {
+            return false;
+        }
+        for (int i = 0; i < digitStrings.length; i++) {
+            if (segment.startsWith(digitStrings[i])) {
+                return true;
             }
         }
-        return leadCodePoints.freeze();
+        return false;
     }
 
     @Override

@@ -42,14 +42,6 @@ public class PercentMatcher extends SymbolMatcher {
     }
 
     @Override
-    public void postProcess(ParsedNumber result) {
-        super.postProcess(result);
-        if (0 != (result.flags & ParsedNumber.FLAG_PERCENT) && result.quantity != null) {
-            result.quantity.adjustMagnitude(-2);
-        }
-    }
-
-    @Override
     public String toString() {
         return "<PercentMatcher>";
     }

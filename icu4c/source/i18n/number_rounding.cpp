@@ -3,16 +3,22 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
+#if !UCONFIG_NO_FORMATTING
 
 #include "uassert.h"
 #include "unicode/numberformatter.h"
 #include "number_types.h"
 #include "number_decimalquantity.h"
+#include "double-conversion.h"
+#include "number_roundingutils.h"
+#include "putilimp.h"
 
 using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
+
+
+using double_conversion::DoubleToStringConverter;
 
 namespace {
 
@@ -43,6 +49,26 @@ int32_t getDisplayMagnitudeSignificant(const DecimalQuantity &value, int minSig)
     return magnitude - minSig + 1;
 }
 
+}
+
+
+digits_t roundingutils::doubleFractionLength(double input) {
+    char buffer[DoubleToStringConverter::kBase10MaximalLength + 1];
+    bool sign; // unused; always positive
+    int32_t length;
+    int32_t point;
+    DoubleToStringConverter::DoubleToAscii(
+            input,
+            DoubleToStringConverter::DtoaMode::SHORTEST,
+            0,
+            buffer,
+            sizeof(buffer),
+            &sign,
+            &length,
+            &point
+    );
+
+    return static_cast<digits_t>(length - point);
 }
 
 
@@ -225,6 +251,9 @@ IncrementRounder Rounder::constructIncrement(double increment, int32_t minFrac) 
     IncrementSettings settings;
     settings.fIncrement = increment;
     settings.fMinFrac = static_cast<digits_t>(minFrac);
+    // One of the few pre-computed quantities:
+    // Note: it is possible for minFrac to be more than maxFrac... (misleading)
+    settings.fMaxFrac = roundingutils::doubleFractionLength(increment);
     RounderUnion union_;
     union_.increment = settings;
     return {RND_INCREMENT, union_, kDefaultMode};
@@ -314,6 +343,10 @@ void Rounder::apply(impl::DecimalQuantity &value, UErrorCode& status) const {
             value.setFractionLength(
                     uprv_max(0, -getDisplayMagnitudeSignificant(value, fUnion.fracSig.fMinSig)),
                     INT32_MAX);
+            // Make sure that digits are displayed on zero.
+            if (value.isZero() && fUnion.fracSig.fMinSig > 0) {
+                value.setIntegerLength(1, INT32_MAX);
+            }
             break;
 
         case RND_FRACTION_SIGNIFICANT: {
@@ -335,8 +368,11 @@ void Rounder::apply(impl::DecimalQuantity &value, UErrorCode& status) const {
 
         case RND_INCREMENT:
             value.roundToIncrement(
-                fUnion.increment.fIncrement, fRoundingMode, fUnion.increment.fMinFrac, status);
-            value.setFractionLength(fUnion.increment.fMinFrac, fUnion.increment.fMinFrac);
+                fUnion.increment.fIncrement,
+                fRoundingMode,
+                fUnion.increment.fMaxFrac,
+                status);
+            value.setFractionLength(fUnion.increment.fMinFrac, INT32_MAX);
             break;
 
         case RND_CURRENCY:

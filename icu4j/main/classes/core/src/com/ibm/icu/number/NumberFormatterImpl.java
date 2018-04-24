@@ -4,14 +4,17 @@ package com.ibm.icu.number;
 
 import com.ibm.icu.impl.CurrencyData;
 import com.ibm.icu.impl.CurrencyData.CurrencyFormatInfo;
+import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.CompactData.CompactType;
 import com.ibm.icu.impl.number.ConstantAffixModifier;
 import com.ibm.icu.impl.number.DecimalQuantity;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.impl.number.LongNameHandler;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.impl.number.MicroPropsGenerator;
+import com.ibm.icu.impl.number.MultiplierFormatHandler;
 import com.ibm.icu.impl.number.MutablePatternModifier;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.Padder;
@@ -47,14 +50,28 @@ class NumberFormatterImpl {
     /**
      * Builds and evaluates an "unsafe" MicroPropsGenerator, which is cheaper but can be used only once.
      */
-    public static MicroProps applyStatic(
+    public static void applyStatic(
             MacroProps macros,
             DecimalQuantity inValue,
             NumberStringBuilder outString) {
         MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, false);
         MicroProps micros = microPropsGenerator.processQuantity(inValue);
         microsToString(micros, inValue, outString);
-        return micros;
+    }
+
+    /**
+     * Prints only the prefix and suffix; used for DecimalFormat getters.
+     *
+     * @return The index into the output at which the prefix ends and the suffix starts; in other words,
+     *         the prefix length.
+     */
+    public static int getPrefixSuffixStatic(
+            MacroProps macros,
+            byte signum,
+            StandardPlural plural,
+            NumberStringBuilder output) {
+        MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, false);
+        return getPrefixSuffixImpl(microPropsGenerator, signum, output);
     }
 
     private static final Currency DEFAULT_CURRENCY = Currency.getInstance("XXX");
@@ -65,10 +82,26 @@ class NumberFormatterImpl {
         this.microPropsGenerator = microPropsGenerator;
     }
 
-    public MicroProps apply(DecimalQuantity inValue, NumberStringBuilder outString) {
+    public void apply(DecimalQuantity inValue, NumberStringBuilder outString) {
         MicroProps micros = microPropsGenerator.processQuantity(inValue);
         microsToString(micros, inValue, outString);
-        return micros;
+    }
+
+    public int getPrefixSuffix(byte signum, StandardPlural plural, NumberStringBuilder output) {
+        return getPrefixSuffixImpl(microPropsGenerator, signum, output);
+    }
+
+    private static int getPrefixSuffixImpl(MicroPropsGenerator generator, byte signum, NumberStringBuilder output) {
+        // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle).
+        // TODO: Clean this up, closer to C++. The pattern modifier is not as accessible as in C++.
+        // Right now, ignore the plural form, run the pipeline with number 0, and get the modifier from the result.
+        DecimalQuantity_DualStorageBCD quantity = new DecimalQuantity_DualStorageBCD(0);
+        if (signum < 0) {
+            quantity.negate();
+        }
+        MicroProps micros = generator.processQuantity(quantity);
+        micros.modMiddle.apply(output, 0, 0);
+        return micros.modMiddle.getPrefixLength();
     }
 
     //////////
@@ -181,9 +214,9 @@ class NumberFormatterImpl {
         /// START POPULATING THE DEFAULT MICROPROPS AND BUILDING THE MICROPROPS GENERATOR ///
         /////////////////////////////////////////////////////////////////////////////////////
 
-        // Multiplier (compatibility mode value).
-        if (macros.multiplier != null) {
-            chain = macros.multiplier.copyAndChain(chain);
+        // Multiplier
+        if (macros.scale != null) {
+            chain = new MultiplierFormatHandler(macros.scale, chain);
         }
 
         // Rounding strategy
@@ -194,7 +227,7 @@ class NumberFormatterImpl {
         } else if (isCurrency) {
             micros.rounding = Rounder.MONETARY_STANDARD;
         } else {
-            micros.rounding = Rounder.MAX_FRAC_6;
+            micros.rounding = Rounder.DEFAULT_MAX_FRAC_6;
         }
         micros.rounding = micros.rounding.withLocaleData(currency);
 

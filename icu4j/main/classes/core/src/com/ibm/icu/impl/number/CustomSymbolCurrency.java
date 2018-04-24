@@ -17,14 +17,14 @@ public class CustomSymbolCurrency extends Currency {
         if (currency == null) {
             currency = symbols.getCurrency();
         }
-        String currency1Sym = symbols.getCurrencySymbol();
-        String currency2Sym = symbols.getInternationalCurrencySymbol();
         if (currency == null) {
-            return new CustomSymbolCurrency("XXX", currency1Sym, currency2Sym);
+            return Currency.getInstance("XXX");
         }
         if (!currency.equals(symbols.getCurrency())) {
             return currency;
         }
+        String currency1Sym = symbols.getCurrencySymbol();
+        String currency2Sym = symbols.getInternationalCurrencySymbol();
         String currency1 = currency.getName(symbols.getULocale(), Currency.SYMBOL_NAME, null);
         String currency2 = currency.getCurrencyCode();
         if (!currency1.equals(currency1Sym) || !currency2.equals(currency2Sym)) {
@@ -49,10 +49,6 @@ public class CustomSymbolCurrency extends Currency {
 
     @Override
     public String getName(ULocale locale, int nameStyle, String pluralCount, boolean[] isChoiceFormat) {
-        if (nameStyle == PLURAL_LONG_NAME && subType.equals("XXX")) {
-            // Plural in absence of a currency should return the symbol
-            return symbol1;
-        }
         return super.getName(locale, nameStyle, pluralCount, isChoiceFormat);
     }
 

@@ -66,6 +66,12 @@ public class Padder {
         }
     }
 
+    public static Padder forProperties(DecimalFormatProperties properties) {
+        return new Padder(properties.getPadString(),
+                properties.getFormatWidth(),
+                properties.getPadPosition());
+    }
+
     public boolean isValid() {
         return targetWidth > 0;
     }

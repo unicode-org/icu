@@ -22,6 +22,8 @@
 
 #include "putilimp.h"
 #include "plurrule_impl.h"
+#include "number_decimalquantity.h"
+
 #include <stdio.h>
 
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
@@ -112,14 +114,38 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     // bug 10864
     status = U_ZERO_ERROR;
     DecimalFormat noGrouping("###0.##", status);
-    if (noGrouping.getGroupingSize() != 0) {
-      errln("Grouping size should be 0 for no grouping.");
-    }
+    assertEquals("Grouping size should be 0 for no grouping.", 0, noGrouping.getGroupingSize());
     noGrouping.setGroupingUsed(TRUE);
-    if (noGrouping.getGroupingSize() != 0) {
-      errln("Grouping size should still be 0.");
-    }
+    assertEquals("Grouping size should still be 0.", 0, noGrouping.getGroupingSize());
     // end bug 10864
+
+    // bug 13442 comment 14
+    status = U_ZERO_ERROR;
+    {
+        DecimalFormat df("0", {"en", status}, status);
+        UnicodeString result;
+        assertEquals("pat 0: ", 0, df.getGroupingSize());
+        assertEquals("pat 0: ", (UBool) FALSE, (UBool) df.isGroupingUsed());
+        df.setGroupingUsed(false);
+        assertEquals("pat 0 then disabled: ", 0, df.getGroupingSize());
+        assertEquals("pat 0 then disabled: ", u"1111", df.format(1111, result.remove()));
+        df.setGroupingUsed(true);
+        assertEquals("pat 0 then enabled: ", 0, df.getGroupingSize());
+        assertEquals("pat 0 then enabled: ", u"1111", df.format(1111, result.remove()));
+    }
+    {
+        DecimalFormat df("#,##0", {"en", status}, status);
+        UnicodeString result;
+        assertEquals("pat #,##0: ", 3, df.getGroupingSize());
+        assertEquals("pat #,##0: ", (UBool) TRUE, (UBool) df.isGroupingUsed());
+        df.setGroupingUsed(false);
+        assertEquals("pat #,##0 then disabled: ", 3, df.getGroupingSize());
+        assertEquals("pat #,##0 then disabled: ", u"1111", df.format(1111, result.remove()));
+        df.setGroupingUsed(true);
+        assertEquals("pat #,##0 then enabled: ", 3, df.getGroupingSize());
+        assertEquals("pat #,##0 then enabled: ", u"1,111", df.format(1111, result.remove()));
+    }
+    // end bug 13442 comment 14
 
     status = U_ZERO_ERROR;
     const UnicodeString pattern("#,##0.# FF");
@@ -342,6 +368,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
 // ======= Test applyPattern()
 
     logln((UnicodeString)"Testing applyPattern()");
+    pat = DecimalFormat(status); // reset
 
     UnicodeString p1("#,##0.0#;(#,##0.0#)");
     logln((UnicodeString)"Applying pattern " + p1);
@@ -353,9 +380,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     UnicodeString s2;
     s2 = pat.toPattern(s2);
     logln((UnicodeString)"Extracted pattern is " + s2);
-    if(s2 != p1) {
-        errln((UnicodeString)"ERROR: toPattern() result did not match pattern applied");
-    }
+    assertEquals("toPattern() result did not match pattern applied", p1, s2);
 
     if(pat.getSecondaryGroupingSize() != 0) {
         errln("FAIL: Secondary Grouping Size should be 0, not %d\n", pat.getSecondaryGroupingSize());
@@ -375,9 +400,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     UnicodeString s3;
     s3 = pat.toLocalizedPattern(s3);
     logln((UnicodeString)"Extracted pattern is " + s3);
-    if(s3 != p2) {
-        errln((UnicodeString)"ERROR: toLocalizedPattern() result did not match pattern applied");
-    }
+    assertEquals("toLocalizedPattern() result did not match pattern applied", p2, s3);
 
     status = U_ZERO_ERROR;
     UParseError pe;
@@ -388,9 +411,7 @@ void IntlTestDecimalFormatAPI::testAPI(/*char *par*/)
     UnicodeString s4;
     s4 = pat.toLocalizedPattern(s3);
     logln((UnicodeString)"Extracted pattern is " + s4);
-    if(s4 != p2) {
-        errln((UnicodeString)"ERROR: toLocalizedPattern(with ParseErr) result did not match pattern applied");
-    }
+    assertEquals("toLocalizedPattern(with ParseErr) result did not match pattern applied", p2, s4);
 
     if(pat.getSecondaryGroupingSize() != 2) {
         errln("FAIL: Secondary Grouping Size should be 2, not %d\n", pat.getSecondaryGroupingSize());
@@ -494,14 +515,14 @@ void IntlTestDecimalFormatAPI::testRounding(/*char *par*/)
         //for +2.55 with RoundingIncrement=1.0
         pat.setRoundingIncrement(1.0);
         pat.format(Roundingnumber, resultStr);
-        message= (UnicodeString)"Round() failed:  round(" + (double)Roundingnumber + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
+        message= (UnicodeString)"round(" + (double)Roundingnumber + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
         verify(message, resultStr, result[i++]);
         message.remove();
         resultStr.remove();
 
         //for -2.55 with RoundingIncrement=1.0
         pat.format(Roundingnumber1, resultStr);
-        message= (UnicodeString)"Round() failed:  round(" + (double)Roundingnumber1 + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
+        message= (UnicodeString)"round(" + (double)Roundingnumber1 + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
         verify(message, resultStr, result[i++]);
         message.remove();
         resultStr.remove();
@@ -589,7 +610,14 @@ void IntlTestDecimalFormatAPI::TestScale()
         if ( i > 2 ) {
             pat.applyPattern(percentPattern,status);
         }
-        pat.setAttribute(UNUM_SCALE,testData[i].inputScale,status);
+        // Test both the attribute and the setter
+        if (i % 2 == 0) {
+            pat.setAttribute(UNUM_SCALE, testData[i].inputScale,status);
+            assertEquals("", testData[i].inputScale, pat.getMultiplierScale());
+        } else {
+            pat.setMultiplierScale(testData[i].inputScale);
+            assertEquals("", testData[i].inputScale, pat.getAttribute(UNUM_SCALE, status));
+        }
         pat.format(testData[i].inputValue, resultStr);
         message = UnicodeString("Unexpected output for ") + testData[i].inputValue + UnicodeString(" and scale ") +
                   testData[i].inputScale + UnicodeString(". Got: ");
@@ -613,171 +641,172 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     if (status == U_MISSING_RESOURCE_ERROR) {
         return;
     }
-    FixedDecimal fd = df->getFixedDecimal(44, status);
+    number::impl::DecimalQuantity fd;
+    df->formatToDecimalQuantity(44, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(44, fd.source);
-    ASSERT_EQUAL(0, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(44, fd.getPluralOperand(PLURAL_OPERAND_N));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
-    fd = df->getFixedDecimal(-44, status);
+    df->formatToDecimalQuantity(-44, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(44, fd.source);
-    ASSERT_EQUAL(0, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(TRUE, fd.isNegative);
+    ASSERT_EQUAL(44, fd.getPluralOperand(PLURAL_OPERAND_N));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(TRUE, fd.isNegative());
 
     df.adoptInsteadAndCheckErrorCode(new DecimalFormat("###.00##", status), status);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(123.456, status);
+    df->formatToDecimalQuantity(123.456, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(3, fd.visibleDecimalDigitCount); // v
-    ASSERT_EQUAL(456, fd.decimalDigits); // f
-    ASSERT_EQUAL(456, fd.decimalDigitsWithoutTrailingZeros); // t
-    ASSERT_EQUAL(123, fd.intValue); // i
-    ASSERT_EQUAL(123.456, fd.source); // n
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(3, fd.getPluralOperand(PLURAL_OPERAND_V)); // v
+    ASSERT_EQUAL(456, fd.getPluralOperand(PLURAL_OPERAND_F)); // f
+    ASSERT_EQUAL(456, fd.getPluralOperand(PLURAL_OPERAND_T)); // t
+    ASSERT_EQUAL(123, fd.getPluralOperand(PLURAL_OPERAND_I)); // i
+    ASSERT_EQUAL(123.456, fd.getPluralOperand(PLURAL_OPERAND_N)); // n
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
-    fd = df->getFixedDecimal(-123.456, status);
+    df->formatToDecimalQuantity(-123.456, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(3, fd.visibleDecimalDigitCount); // v
-    ASSERT_EQUAL(456, fd.decimalDigits); // f
-    ASSERT_EQUAL(456, fd.decimalDigitsWithoutTrailingZeros); // t
-    ASSERT_EQUAL(123, fd.intValue); // i
-    ASSERT_EQUAL(123.456, fd.source); // n
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(TRUE, fd.isNegative);
+    ASSERT_EQUAL(3, fd.getPluralOperand(PLURAL_OPERAND_V)); // v
+    ASSERT_EQUAL(456, fd.getPluralOperand(PLURAL_OPERAND_F)); // f
+    ASSERT_EQUAL(456, fd.getPluralOperand(PLURAL_OPERAND_T)); // t
+    ASSERT_EQUAL(123, fd.getPluralOperand(PLURAL_OPERAND_I)); // i
+    ASSERT_EQUAL(123.456, fd.getPluralOperand(PLURAL_OPERAND_N)); // n
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(TRUE, fd.isNegative());
 
     // test max int digits
     df->setMaximumIntegerDigits(2);
-    fd = df->getFixedDecimal(123.456, status);
+    df->formatToDecimalQuantity(123.456, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(3, fd.visibleDecimalDigitCount); // v
-    ASSERT_EQUAL(456, fd.decimalDigits); // f
-    ASSERT_EQUAL(456, fd.decimalDigitsWithoutTrailingZeros); // t
-    ASSERT_EQUAL(23, fd.intValue); // i
-    ASSERT_EQUAL(23.456, fd.source); // n
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(3, fd.getPluralOperand(PLURAL_OPERAND_V)); // v
+    ASSERT_EQUAL(456, fd.getPluralOperand(PLURAL_OPERAND_F)); // f
+    ASSERT_EQUAL(456, fd.getPluralOperand(PLURAL_OPERAND_T)); // t
+    ASSERT_EQUAL(23, fd.getPluralOperand(PLURAL_OPERAND_I)); // i
+    ASSERT_EQUAL(23.456, fd.getPluralOperand(PLURAL_OPERAND_N)); // n
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
-    fd = df->getFixedDecimal(-123.456, status);
+    df->formatToDecimalQuantity(-123.456, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(3, fd.visibleDecimalDigitCount); // v
-    ASSERT_EQUAL(456, fd.decimalDigits); // f
-    ASSERT_EQUAL(456, fd.decimalDigitsWithoutTrailingZeros); // t
-    ASSERT_EQUAL(23, fd.intValue); // i
-    ASSERT_EQUAL(23.456, fd.source); // n
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(TRUE, fd.isNegative);
+    ASSERT_EQUAL(3, fd.getPluralOperand(PLURAL_OPERAND_V)); // v
+    ASSERT_EQUAL(456, fd.getPluralOperand(PLURAL_OPERAND_F)); // f
+    ASSERT_EQUAL(456, fd.getPluralOperand(PLURAL_OPERAND_T)); // t
+    ASSERT_EQUAL(23, fd.getPluralOperand(PLURAL_OPERAND_I)); // i
+    ASSERT_EQUAL(23.456, fd.getPluralOperand(PLURAL_OPERAND_N)); // n
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(TRUE, fd.isNegative());
 
     // test max fraction digits
     df->setMaximumIntegerDigits(2000000000);
     df->setMaximumFractionDigits(2);
-    fd = df->getFixedDecimal(123.456, status);
+    df->formatToDecimalQuantity(123.456, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount); // v
-    ASSERT_EQUAL(46, fd.decimalDigits); // f
-    ASSERT_EQUAL(46, fd.decimalDigitsWithoutTrailingZeros); // t
-    ASSERT_EQUAL(123, fd.intValue); // i
-    ASSERT_EQUAL(123.46, fd.source); // n
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_V)); // v
+    ASSERT_EQUAL(46, fd.getPluralOperand(PLURAL_OPERAND_F)); // f
+    ASSERT_EQUAL(46, fd.getPluralOperand(PLURAL_OPERAND_T)); // t
+    ASSERT_EQUAL(123, fd.getPluralOperand(PLURAL_OPERAND_I)); // i
+    ASSERT_EQUAL(123.46, fd.getPluralOperand(PLURAL_OPERAND_N)); // n
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
-    fd = df->getFixedDecimal(-123.456, status);
+    df->formatToDecimalQuantity(-123.456, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount); // v
-    ASSERT_EQUAL(46, fd.decimalDigits); // f
-    ASSERT_EQUAL(46, fd.decimalDigitsWithoutTrailingZeros); // t
-    ASSERT_EQUAL(123, fd.intValue); // i
-    ASSERT_EQUAL(123.46, fd.source); // n
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(TRUE, fd.isNegative);
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_V)); // v
+    ASSERT_EQUAL(46, fd.getPluralOperand(PLURAL_OPERAND_F)); // f
+    ASSERT_EQUAL(46, fd.getPluralOperand(PLURAL_OPERAND_T)); // t
+    ASSERT_EQUAL(123, fd.getPluralOperand(PLURAL_OPERAND_I)); // i
+    ASSERT_EQUAL(123.46, fd.getPluralOperand(PLURAL_OPERAND_N)); // n
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(TRUE, fd.isNegative());
 
     // test esoteric rounding
     df->setMaximumFractionDigits(6);
     df->setRoundingIncrement(7.3);
 
-    fd = df->getFixedDecimal(30.0, status);
+    df->formatToDecimalQuantity(30.0, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount); // v
-    ASSERT_EQUAL(20, fd.decimalDigits); // f
-    ASSERT_EQUAL(2, fd.decimalDigitsWithoutTrailingZeros); // t
-    ASSERT_EQUAL(29, fd.intValue); // i
-    ASSERT_EQUAL(29.2, fd.source); // n
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_V)); // v
+    ASSERT_EQUAL(20, fd.getPluralOperand(PLURAL_OPERAND_F)); // f
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_T)); // t
+    ASSERT_EQUAL(29, fd.getPluralOperand(PLURAL_OPERAND_I)); // i
+    ASSERT_EQUAL(29.2, fd.getPluralOperand(PLURAL_OPERAND_N)); // n
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
-    fd = df->getFixedDecimal(-30.0, status);
+    df->formatToDecimalQuantity(-30.0, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount); // v
-    ASSERT_EQUAL(20, fd.decimalDigits); // f
-    ASSERT_EQUAL(2, fd.decimalDigitsWithoutTrailingZeros); // t
-    ASSERT_EQUAL(29, fd.intValue); // i
-    ASSERT_EQUAL(29.2, fd.source); // n
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(TRUE, fd.isNegative);
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_V)); // v
+    ASSERT_EQUAL(20, fd.getPluralOperand(PLURAL_OPERAND_F)); // f
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_T)); // t
+    ASSERT_EQUAL(29, fd.getPluralOperand(PLURAL_OPERAND_I)); // i
+    ASSERT_EQUAL(29.2, fd.getPluralOperand(PLURAL_OPERAND_N)); // n
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(TRUE, fd.isNegative());
 
     df.adoptInsteadAndCheckErrorCode(new DecimalFormat("###", status), status);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(123.456, status);
+    df->formatToDecimalQuantity(123.456, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(0, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(0, fd.decimalDigits);
-    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(123, fd.intValue);
-    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(123, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
     df.adoptInsteadAndCheckErrorCode(new DecimalFormat("###.0", status), status);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(123.01, status);
+    df->formatToDecimalQuantity(123.01, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(1, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(0, fd.decimalDigits);
-    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(123, fd.intValue);
-    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(1, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(123, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
     df.adoptInsteadAndCheckErrorCode(new DecimalFormat("###.0", status), status);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(123.06, status);
+    df->formatToDecimalQuantity(123.06, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(1, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(1, fd.decimalDigits);
-    ASSERT_EQUAL(1, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(123, fd.intValue);
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(1, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(1, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(1, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(123, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
     df.adoptInsteadAndCheckErrorCode(new DecimalFormat("@@@@@", status), status);  // Significant Digits
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(123, status);
+    df->formatToDecimalQuantity(123, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(0, fd.decimalDigits);
-    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(123, fd.intValue);
-    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(123, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
     df.adoptInsteadAndCheckErrorCode(new DecimalFormat("@@@@@", status), status);  // Significant Digits
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(1.23, status);
+    df->formatToDecimalQuantity(1.23, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(4, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(2300, fd.decimalDigits);
-    ASSERT_EQUAL(23, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(1, fd.intValue);
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(4, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(2300, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(23, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(1, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
-    fd = df->getFixedDecimal(uprv_getInfinity(), status);
+    df->formatToDecimalQuantity(uprv_getInfinity(), fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(TRUE, fd.isNanOrInfinity());
-    fd = df->getFixedDecimal(0.0, status);
-    ASSERT_EQUAL(FALSE, fd.isNanOrInfinity());
-    fd = df->getFixedDecimal(uprv_getNaN(), status);
-    ASSERT_EQUAL(TRUE, fd.isNanOrInfinity());
+    ASSERT_EQUAL(TRUE, fd.isNaN() || fd.isInfinite());
+    df->formatToDecimalQuantity(0.0, fd, status);
+    ASSERT_EQUAL(FALSE, fd.isNaN() || fd.isInfinite());
+    df->formatToDecimalQuantity(uprv_getNaN(), fd, status);
+    ASSERT_EQUAL(TRUE, fd.isNaN() || fd.isInfinite());
     TEST_ASSERT_STATUS(status);
 
     // Test Big Decimal input.
@@ -788,135 +817,141 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     TEST_ASSERT_STATUS(status);
     Formattable fable("12.34", status);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(fable, status);
+    df->formatToDecimalQuantity(fable, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(34, fd.decimalDigits);
-    ASSERT_EQUAL(34, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(12, fd.intValue);
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(34, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(34, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(12, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
-    fable.setDecimalNumber("12.345678901234567890123456789", status);
+    fable.setDecimalNumber("12.3456789012345678900123456789", status);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(fable, status);
+    df->formatToDecimalQuantity(fable, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(22, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(345678901234567890LL, fd.decimalDigits);
-    ASSERT_EQUAL(34567890123456789LL, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(12, fd.intValue);
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(22, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(3456789012345678900LL, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(34567890123456789LL, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(12, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
     // On field overflow, Integer part is truncated on the left, fraction part on the right.
     fable.setDecimalNumber("123456789012345678901234567890.123456789012345678901234567890", status);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(fable, status);
+    df->formatToDecimalQuantity(fable, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(22, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(123456789012345678LL, fd.decimalDigits);
-    ASSERT_EQUAL(123456789012345678LL, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(345678901234567890LL, fd.intValue);
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(22, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(1234567890123456789LL, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(1234567890123456789LL, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(345678901234567890LL, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
     // Digits way to the right of the decimal but within the format's precision aren't truncated
     fable.setDecimalNumber("1.0000000000000000000012", status);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(fable, status);
+    df->formatToDecimalQuantity(fable, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(22, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(12, fd.decimalDigits);
-    ASSERT_EQUAL(12, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(1, fd.intValue);
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(22, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(12, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(12, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(1, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
     // Digits beyond the precision of the format are rounded away
     fable.setDecimalNumber("1.000000000000000000000012", status);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(fable, status);
+    df->formatToDecimalQuantity(fable, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(0, fd.decimalDigits);
-    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(1, fd.intValue);
-    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(1, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
     // Negative numbers come through
     fable.setDecimalNumber("-1.0000000000000000000012", status);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(fable, status);
+    df->formatToDecimalQuantity(fable, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(22, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(12, fd.decimalDigits);
-    ASSERT_EQUAL(12, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(1, fd.intValue);
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(TRUE, fd.isNegative);
+    ASSERT_EQUAL(22, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(12, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(12, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(1, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(TRUE, fd.isNegative());
 
     // MinFractionDigits from format larger than from number.
     fable.setDecimalNumber("1000000000000000000000.3", status);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(fable, status);
+    df->formatToDecimalQuantity(fable, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(30, fd.decimalDigits);
-    ASSERT_EQUAL(3, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(100000000000000000LL, fd.intValue);
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(30, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(3, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
     fable.setDecimalNumber("1000000000000000050000.3", status);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(fable, status);
+    df->formatToDecimalQuantity(fable, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(30, fd.decimalDigits);
-    ASSERT_EQUAL(3, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(50000LL, fd.intValue);
-    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(30, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(3, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(50000LL, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
     // Test some int64_t values that are out of the range of a double
     fable.setInt64(4503599627370496LL);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(fable, status);
+    df->formatToDecimalQuantity(fable, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(0, fd.decimalDigits);
-    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(4503599627370496LL, fd.intValue);
-    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(4503599627370496LL, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
     fable.setInt64(4503599627370497LL);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(fable, status);
+    df->formatToDecimalQuantity(fable, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(0, fd.decimalDigits);
-    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(4503599627370497LL, fd.intValue);
-    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_T));
+    ASSERT_EQUAL(4503599627370497LL, fd.getPluralOperand(PLURAL_OPERAND_I));
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
     fable.setInt64(9223372036854775807LL);
     TEST_ASSERT_STATUS(status);
-    fd = df->getFixedDecimal(fable, status);
+    df->formatToDecimalQuantity(fable, fd, status);
     TEST_ASSERT_STATUS(status);
-    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
-    ASSERT_EQUAL(0, fd.decimalDigits);
-    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(2, fd.getPluralOperand(PLURAL_OPERAND_V));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_F));
+    ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_T));
     // note: going through DigitList path to FixedDecimal, which is trimming
     //       int64_t fields to 18 digits. See ticket Ticket #10374
-    // ASSERT_EQUAL(223372036854775807LL, fd.intValue);
-    if (!(fd.intValue == 223372036854775807LL || fd.intValue == 9223372036854775807LL)) {
-        dataerrln("File %s, Line %d, fd.intValue = %lld", __FILE__, __LINE__, fd.intValue);
+    // ASSERT_EQUAL(223372036854775807LL, fd.getPluralOperand(PLURAL_OPERAND_I);
+    if (!(
+            fd.getPluralOperand(PLURAL_OPERAND_I) == 223372036854775807LL ||
+            fd.getPluralOperand(PLURAL_OPERAND_I) == 9223372036854775807LL)) {
+        dataerrln(
+                "File %s, Line %d, fd.getPluralOperand(PLURAL_OPERAND_I = %lld",
+                __FILE__,
+                __LINE__,
+                fd.getPluralOperand(PLURAL_OPERAND_I));
     }
-    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
-    ASSERT_EQUAL(FALSE, fd.isNegative);
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue());
+    ASSERT_EQUAL(FALSE, fd.isNegative());
 
 }
 

@@ -15,6 +15,7 @@ import java.util.Locale;
 import com.ibm.icu.impl.IllegalIcuArgumentException;
 import com.ibm.icu.impl.InvalidFormatException;
 import com.ibm.icu.impl.locale.LocaleSyntaxException;
+import com.ibm.icu.number.SkeletonSyntaxException;
 import com.ibm.icu.text.ArabicShapingException;
 import com.ibm.icu.text.StringPrepParseException;
 import com.ibm.icu.util.IllformedLocaleException;
@@ -143,6 +144,17 @@ public abstract class ExceptionHandler implements SerializableTestUtility.Handle
         {
             IllegalIcuArgumentException[] exceptions = {
                 new IllegalIcuArgumentException("Bad argument FOO")
+            };
+            return exceptions;
+        }
+    }
+
+    static class SkeletonSyntaxExceptionHandler extends ExceptionHandler
+    {
+        public Object[] getTestObjects()
+        {
+            SkeletonSyntaxException[] exceptions = {
+                new SkeletonSyntaxException("Bad number skeleton", "[foo]")
             };
             return exceptions;
         }

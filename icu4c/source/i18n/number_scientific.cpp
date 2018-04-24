@@ -3,7 +3,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
+#if !UCONFIG_NO_FORMATTING
 
 #include <cstdlib>
 #include "number_scientific.h"
@@ -64,8 +64,13 @@ int32_t ScientificModifier::apply(NumberStringBuilder &output, int32_t /*leftInd
     int32_t disp = std::abs(fExponent);
     for (int j = 0; j < fHandler->fSettings.fMinExponentDigits || disp > 0; j++, disp /= 10) {
         auto d = static_cast<int8_t>(disp % 10);
-        const UnicodeString &digitString = getDigitFromSymbols(d, *fHandler->fSymbols);
-        i += output.insert(i - j, digitString, UNUM_EXPONENT_FIELD, status);
+        i += utils::insertDigitFromSymbols(
+                output,
+                i - j,
+                d,
+                *fHandler->fSymbols,
+                UNUM_EXPONENT_FIELD,
+                status);
     }
     return i - rightIndex;
 }
@@ -117,6 +122,9 @@ void ScientificHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     ScientificModifier &mod = micros.helpers.scientificModifier;
     mod.set(exponent, this);
     micros.modInner = &mod;
+
+    // We already performed rounding. Do not perform it again.
+    micros.rounding = Rounder::constructPassThrough();
 }
 
 int32_t ScientificHandler::getMultiplier(int32_t magnitude) const {

@@ -9,7 +9,6 @@ import java.text.FieldPosition;
 import java.util.Arrays;
 
 import com.ibm.icu.impl.number.DecimalQuantity;
-import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
 import com.ibm.icu.util.ICUUncheckedIOException;
@@ -23,14 +22,12 @@ import com.ibm.icu.util.ICUUncheckedIOException;
  * @see NumberFormatter
  */
 public class FormattedNumber {
-    NumberStringBuilder nsb;
-    DecimalQuantity fq;
-    MicroProps micros;
+    final NumberStringBuilder nsb;
+    final DecimalQuantity fq;
 
-    FormattedNumber(NumberStringBuilder nsb, DecimalQuantity fq, MicroProps micros) {
+    FormattedNumber(NumberStringBuilder nsb, DecimalQuantity fq) {
         this.nsb = nsb;
         this.fq = fq;
-        this.micros = micros;
     }
 
     /**
@@ -139,34 +136,6 @@ public class FormattedNumber {
      */
     public BigDecimal toBigDecimal() {
         return fq.toBigDecimal();
-    }
-
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only. Use {@link #populateFieldPosition} or
-     *             {@link #getFieldIterator} for similar functionality.
-     */
-    @Deprecated
-    public String getPrefix() {
-        NumberStringBuilder temp = new NumberStringBuilder();
-        // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle).
-        micros.modMiddle.apply(temp, 0, 0);
-        int prefixLength = micros.modMiddle.getPrefixLength();
-        return temp.subSequence(0, prefixLength).toString();
-    }
-
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only. Use {@link #populateFieldPosition} or
-     *             {@link #getFieldIterator} for similar functionality.
-     */
-    @Deprecated
-    public String getSuffix() {
-        NumberStringBuilder temp = new NumberStringBuilder();
-        // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle).
-        int length = micros.modMiddle.apply(temp, 0, 0);
-        int prefixLength = micros.modMiddle.getPrefixLength();
-        return temp.subSequence(prefixLength, length).toString();
     }
 
     /**

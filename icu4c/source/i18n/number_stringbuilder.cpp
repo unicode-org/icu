@@ -3,7 +3,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
+#if !UCONFIG_NO_FORMATTING
 
 #include "number_stringbuilder.h"
 #include "unicode/utf16.h"
@@ -337,6 +337,11 @@ UnicodeString NumberStringBuilder::toUnicodeString() const {
     return UnicodeString(getCharPtr() + fZero, fLength);
 }
 
+const UnicodeString NumberStringBuilder::toTempUnicodeString() const {
+    // Readonly-alias constructor:
+    return UnicodeString(FALSE, getCharPtr() + fZero, fLength);
+}
+
 UnicodeString NumberStringBuilder::toDebugString() const {
     UnicodeString sb;
     sb.append(u"<NumberStringBuilder [", -1);
@@ -454,7 +459,7 @@ void NumberStringBuilder::populateFieldPosition(FieldPosition &fp, int32_t offse
 
 void NumberStringBuilder::populateFieldPositionIterator(FieldPositionIterator &fpi, UErrorCode &status) const {
     // TODO: Set an initial capacity on uvec?
-    LocalPointer <UVector32> uvec(new UVector32(status));
+    LocalPointer <UVector32> uvec(new UVector32(status), status);
     if (U_FAILURE(status)) {
         return;
     }

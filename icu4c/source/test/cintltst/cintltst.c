@@ -709,4 +709,38 @@ U_CFUNC UBool assertEquals(const char* message, const char* expected,
     return TRUE;
 }
 
+U_CFUNC UBool assertUEquals(const char* message, const UChar* expected,
+                            const UChar* actual) {
+    for (int32_t i=0;; i++) {
+        if (expected[i] != actual[i]) {
+            log_err("FAIL: %s; got \"%s\"; expected \"%s\"\n",
+                    message, austrdup(actual), austrdup(expected));
+            return FALSE;
+        }
+        UChar curr = expected[i];
+        U_ASSERT(curr == actual[i]);
+        if (curr == 0) {
+            break;
+        }
+    }
+#ifdef VERBOSE_ASSERTIONS
+    log_verbose("Ok: %s; got \"%s\"\n", message, austrdup(actual));
+#endif
+    return TRUE;
+}
+
+U_CFUNC UBool assertIntEquals(const char* message, int64_t expected, int64_t actual) {
+    if (expected != actual) {
+        log_err("FAIL: %s; got \"%d\"; expected \"%d\"\n",
+                message, actual, expected);
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        log_verbose("Ok: %s; got \"%d\"\n", message, actual);
+    }
+#endif
+    return TRUE;
+}
+
 #endif

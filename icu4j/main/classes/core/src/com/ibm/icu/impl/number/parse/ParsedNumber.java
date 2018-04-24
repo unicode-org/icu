@@ -2,18 +2,21 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number.parse;
 
-import java.math.BigDecimal;
 import java.util.Comparator;
 
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 
 /**
- * @author sffc
+ * Struct-like class to hold the results of a parsing routine.
  *
+ * @author sffc
  */
 public class ParsedNumber {
 
+    /**
+     * The numerical value that was parsed.
+     */
     public DecimalQuantity_DualStorageBCD quantity;
 
     /**
@@ -48,7 +51,7 @@ public class ParsedNumber {
     public static final int FLAG_PERCENT = 0x0002;
     public static final int FLAG_PERMILLE = 0x0004;
     public static final int FLAG_HAS_EXPONENT = 0x0008;
-    public static final int FLAG_HAS_DEFAULT_CURRENCY = 0x0010;
+    // public static final int FLAG_HAS_DEFAULT_CURRENCY = 0x0010; // no longer used
     public static final int FLAG_HAS_DECIMAL_SEPARATOR = 0x0020;
     public static final int FLAG_NAN = 0x0040;
     public static final int FLAG_INFINITY = 0x0080;
@@ -108,6 +111,13 @@ public class ParsedNumber {
         charEnd = segment.getOffset();
     }
 
+    /** Apply certain number-related flags to the DecimalQuantity. */
+    public void postProcess() {
+        if (quantity != null && 0 != (flags & FLAG_NEGATIVE)) {
+            quantity.negate();
+        }
+    }
+
     /**
      * Returns whether this the parse was successful. To be successful, at least one char must have been
      * consumed, and the failure flag must not be set.
@@ -121,46 +131,41 @@ public class ParsedNumber {
     }
 
     public Number getNumber() {
-        return getNumber(false);
+        return getNumber(0);
     }
 
-    public Number getNumber(boolean forceBigDecimal) {
-        boolean sawNegative = 0 != (flags & FLAG_NEGATIVE);
+    /** @param parseFlags Configuration settings from ParsingUtils.java */
+    public Number getNumber(int parseFlags) {
         boolean sawNaN = 0 != (flags & FLAG_NAN);
         boolean sawInfinity = 0 != (flags & FLAG_INFINITY);
+        boolean forceBigDecimal = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_FORCE_BIG_DECIMAL);
+        boolean integerOnly = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_INTEGER_ONLY);
 
         // Check for NaN, infinity, and -0.0
         if (sawNaN) {
             return Double.NaN;
         }
         if (sawInfinity) {
-            if (sawNegative) {
+            if (0 != (flags & FLAG_NEGATIVE)) {
                 return Double.NEGATIVE_INFINITY;
             } else {
                 return Double.POSITIVE_INFINITY;
             }
         }
-        if (quantity.isZero() && sawNegative) {
+        assert quantity != null;
+        if (quantity.isZero() && quantity.isNegative() && !integerOnly) {
             return -0.0;
         }
 
         if (quantity.fitsInLong() && !forceBigDecimal) {
-            long l = quantity.toLong();
-            if (0 != (flags & FLAG_NEGATIVE)) {
-                l *= -1;
-            }
-            return l;
+            return quantity.toLong(false);
+        } else {
+            return quantity.toBigDecimal();
         }
 
-        BigDecimal d = quantity.toBigDecimal();
-        if (0 != (flags & FLAG_NEGATIVE)) {
-            d = d.negate();
-        }
-        // Special case: MIN_LONG
-        if (d.compareTo(BigDecimal.valueOf(Long.MIN_VALUE)) == 0 && !forceBigDecimal) {
-            return Long.MIN_VALUE;
-        }
-        return d;
+    }
 
+    boolean isBetterThan(ParsedNumber other) {
+        return COMPARATOR.compare(this, other) > 0;
     }
 }

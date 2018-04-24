@@ -593,6 +593,36 @@ public class NumberFormatTest extends TestFmwk {
         }
     }
 
+
+    /** Starting in ICU 62, strict mode is actually strict with currency formats. */
+    @Test
+    public void TestMismatchedCurrencyFormatFail() {
+        DecimalFormat df = (DecimalFormat) NumberFormat.getCurrencyInstance(ULocale.ENGLISH);
+        assertEquals("Test assumes that currency sign is at the beginning",
+                "\u00A4#,##0.00",
+                df.toPattern());
+        // Should round-trip on the correct currency format:
+        expect2(df, 1.23, "XXX\u00A01.23");
+        df.setCurrency(Currency.getInstance("EUR"));
+        expect2(df, 1.23, "\u20AC1.23");
+        // Should parse with currency in the wrong place in lenient mode
+        df.setParseStrict(false);
+        expect(df, "1.23\u20AC", 1.23);
+        expectParseCurrency(df, Currency.getInstance("EUR"), "1.23\u20AC");
+        // Should NOT parse with currency in the wrong place in STRICT mode
+        df.setParseStrict(true);
+        {
+            ParsePosition ppos = new ParsePosition(0);
+            df.parse("1.23\u20AC", ppos);
+            assertEquals("Should fail to parse", 0, ppos.getIndex());
+        }
+        {
+            ParsePosition ppos = new ParsePosition(0);
+            df.parseCurrency("1.23\u20AC", ppos);
+            assertEquals("Should fail to parse currency", 0, ppos.getIndex());
+        }
+    }
+
     @Test
     public void TestDecimalFormatCurrencyParse() {
         // Locale.US
@@ -1722,11 +1752,32 @@ public class NumberFormatTest extends TestFmwk {
         // Test all characters in the UTS 18 "blank" set stated in the API docstring.
         UnicodeSet blanks = new UnicodeSet("[[:Zs:][\\u0009]]").freeze();
         for (String space : blanks) {
-            String str = "a  " + space + "  b1234";
+            String str = "a " + space + " b1234c  ";
+            expect(fmt, str, n);
+        }
+
+        // Arbitrary whitespace is not accepted in strict mode.
+        fmt.setParseStrict(true);
+        for (String space : blanks) {
+            String str = "a " + space + " b1234c  ";
+            expectParseException(fmt, str, n);
+        }
+
+        // Test default ignorable characters.  These should work in both lenient and strict.
+        UnicodeSet defaultIgnorables = new UnicodeSet("[[:Bidi_Control:]]").freeze();
+        fmt.setParseStrict(false);
+        for (String ignorable : defaultIgnorables) {
+            String str = "a b " + ignorable + "1234c  ";
+            expect(fmt, str, n);
+        }
+        fmt.setParseStrict(true);
+        for (String ignorable : defaultIgnorables) {
+            String str = "a b " + ignorable + "1234c  ";
             expect(fmt, str, n);
         }
 
         // Test that other whitespace characters do not work
+        fmt.setParseStrict(false);
         UnicodeSet otherWhitespace = new UnicodeSet("[[:whitespace:]]").removeAll(blanks).freeze();
         for (String space : otherWhitespace) {
             String str = "a  " + space + "  b1234";
@@ -2787,6 +2838,7 @@ public class NumberFormatTest extends TestFmwk {
         // Grouping separators are not allowed in the pattern, but we can enable them via the API.
         DecimalFormat df = new DecimalFormat("###0.000E0");
         df.setGroupingUsed(true);
+        df.setGroupingSize(3);
         expect2(df, 123, "123.0E0");
         expect2(df, 1234, "1,234E0");
         expect2(df, 12340, "1.234E4");
@@ -4959,7 +5011,7 @@ public class NumberFormatTest extends TestFmwk {
         DecimalFormat df = (DecimalFormat) NumberFormat.getInstance();
         df.applyPattern("¤¤¤ 0");
         String result = df.getPositivePrefix();
-        assertEquals("Triple-currency should give long name on getPositivePrefix", "US dollar ", result);
+        assertEquals("Triple-currency should give long name on getPositivePrefix", "US dollars ", result);
     }
 
     @Test
@@ -5206,7 +5258,7 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("Secondary grouping should return 0", 0, df.getSecondaryGroupingSize());
         df.setSecondaryGroupingSize(3);
         assertEquals("Primary grouping should still return 3", 3, df.getGroupingSize());
-        assertEquals("Secondary grouping should still return 0", 0, df.getSecondaryGroupingSize());
+        assertEquals("Secondary grouping should round-trip", 3, df.getSecondaryGroupingSize());
         df.setGroupingSize(4);
         assertEquals("Primary grouping should return 4", 4, df.getGroupingSize());
         assertEquals("Secondary should remember explicit setting and return 3", 3, df.getSecondaryGroupingSize());
@@ -5323,14 +5375,6 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
-    public void Test13442() {
-        DecimalFormat df = new DecimalFormat();
-        df.setGroupingUsed(false);
-        assertEquals("Grouping size should now be zero", 0, df.getGroupingSize());
-        assertEquals("Grouping should be off", false, df.isGroupingUsed());
-    }
-
-    @Test
     public void Test13453_AffixContent() {
         DecimalFormat df = (DecimalFormat) DecimalFormat.getScientificInstance();
         assertEquals("Scientific should NOT be included", "", df.getPositiveSuffix());
@@ -5429,8 +5473,8 @@ public class NumberFormatTest extends TestFmwk {
 
     @Test
     public void testGetSetCurrency() {
-        DecimalFormat df = new DecimalFormat("¤#");
-        assertEquals("Currency should start out null", null, df.getCurrency());
+        DecimalFormat df = new DecimalFormat("¤#", DecimalFormatSymbols.getInstance(ULocale.US));
+        assertEquals("Currency should start out as the locale default", Currency.getInstance("USD"), df.getCurrency());
         Currency curr = Currency.getInstance("EUR");
         df.setCurrency(curr);
         assertEquals("Currency should equal EUR after set", curr, df.getCurrency());
@@ -5586,7 +5630,7 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("Should consume the trailing bidi since it is in the symbol", 5, ppos.getIndex());
         ppos.setIndex(0);
         result = df.parse("-42a\u200E ", ppos);
-        assertEquals("Should not parse as percent", new Long(-42), result);
+        assertEquals("Should parse as percent", -0.42, result.doubleValue());
         assertEquals("Should not consume the trailing bidi or whitespace", 4, ppos.getIndex());
 
         // A few more cases based on the docstring:
@@ -5933,5 +5977,123 @@ public class NumberFormatTest extends TestFmwk {
                 -52.0,
                 result.doubleValue(),
                 0.0);
+    }
+
+    @Test
+    public void testScientificCustomSign() {
+        DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        dfs.setMinusSignString("nnn");
+        dfs.setPlusSignString("ppp");
+        DecimalFormat df = new DecimalFormat("0E0", dfs);
+        df.setExponentSignAlwaysShown(true);
+        expect2(df, 0.5, "5Ennn1");
+        expect2(df, 50, "5Eppp1");
+    }
+
+    @Test
+    public void testParsePercentInPattern() {
+        DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        DecimalFormat df = new DecimalFormat("0x%", dfs);
+        df.setParseStrict(true);
+        expect2(df, 0.5, "50x%");
+    }
+
+    @Test
+    public void testParseIsoStrict() {
+        DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        DecimalFormat df = new DecimalFormat("¤¤0;-0¤¤", dfs);
+        df.setCurrency(Currency.getInstance("USD"));
+        df.setParseStrict(true);
+        expect2(df, 45, "USD 45.00");
+        expect2(df, -45, "-45.00 USD");
+    }
+
+    @Test
+    public void test13684_FrenchPercentParsing() {
+        NumberFormat numberFormat = NumberFormat.getPercentInstance(ULocale.FRENCH);
+        numberFormat.setParseStrict(true);
+        ParsePosition ppos = new ParsePosition(0);
+        Number percentage = numberFormat.parse("8\u00A0%", ppos);
+        assertEquals("Should parse successfully", 0.08, percentage.doubleValue());
+        assertEquals("Should consume whole string", 3, ppos.getIndex());
+    }
+
+    @Test
+    public void testStrictParseCurrencyLongNames() {
+        DecimalFormat df = (DecimalFormat) DecimalFormat.getInstance(ULocale.ENGLISH, DecimalFormat.PLURALCURRENCYSTYLE);
+        df.setParseStrict(true);
+        df.setCurrency(Currency.getInstance("USD"));
+        double input = 514.23;
+        String formatted = df.format(input);
+        assertEquals("Should format as expected", "514.23 US dollars", formatted);
+        ParsePosition ppos = new ParsePosition(0);
+        CurrencyAmount ca = df.parseCurrency(formatted, ppos);
+        assertEquals("Should consume whole number", ppos.getIndex(), 17);
+        assertEquals("Number should round-trip", ca.getNumber().doubleValue(), input);
+        assertEquals("Should get correct currency", ca.getCurrency().getCurrencyCode(), "USD");
+    }
+
+    @Test
+    public void testStrictParseCurrencySpacing() {
+        DecimalFormat df = new DecimalFormat("¤ 0", DecimalFormatSymbols.getInstance(ULocale.ROOT));
+        df.setCurrency(Currency.getInstance("USD"));
+        df.setParseStrict(true);
+        expect2(df, -51.42, "-US$ 51.42");
+    }
+
+    @Test
+    public void testCaseSensitiveCustomIsoCurrency() {
+        DecimalFormat df = new DecimalFormat("¤¤0", DecimalFormatSymbols.getInstance(ULocale.ENGLISH));
+        df.setCurrency(Currency.getInstance("ICU"));
+        ParsePosition ppos = new ParsePosition(0);
+        df.parseCurrency("icu123", ppos);
+        assertEquals("Should fail to parse", 0, ppos.getIndex());
+        assertEquals("Should fail to parse", 0, ppos.getErrorIndex());
+    }
+
+    @Test
+    public void testCurrencyPluralAffixOverrides() {
+        // The affix setters should override CurrencyPluralInfo, used in the plural currency constructor.
+        DecimalFormat df = (DecimalFormat) NumberFormat.getInstance(ULocale.ENGLISH, NumberFormat.PLURALCURRENCYSTYLE);
+        assertEquals("Defaults to unknown currency", " (unknown currency)", df.getPositiveSuffix());
+        df.setCurrency(Currency.getInstance("USD"));
+        assertEquals("Should resolve to CurrencyPluralInfo", " US dollars", df.getPositiveSuffix());
+        df.setPositiveSuffix("lala");
+        assertEquals("Custom suffix should round-trip", "lala", df.getPositiveSuffix());
+        assertEquals("Custom suffix should be used in formatting", "123.00lala", df.format(123));
+    }
+
+    @Test
+    public void testParseDoubleMinus() {
+        DecimalFormat df = new DecimalFormat("-0", DecimalFormatSymbols.getInstance(ULocale.ENGLISH));
+        expect2(df, -5, "--5");
+    }
+
+    @Test
+    public void testParsePercentRegression() {
+        DecimalFormat df1 = (DecimalFormat) NumberFormat.getInstance(ULocale.ENGLISH);
+        DecimalFormat df2 = (DecimalFormat) NumberFormat.getPercentInstance(ULocale.ENGLISH);
+        df1.setParseStrict(false);
+        df2.setParseStrict(false);
+
+        {
+            ParsePosition ppos = new ParsePosition(0);
+            Number result = df1.parse("50%", ppos);
+            assertEquals("df1 should accept a number but not the percent sign", 2, ppos.getIndex());
+            assertEquals("df1 should return the number as 50", 50.0, result.doubleValue());
+        }
+        {
+            ParsePosition ppos = new ParsePosition(0);
+            Number result = df2.parse("50%", ppos);
+            assertEquals("df2 should accept the percent sign", 3, ppos.getIndex());
+            assertEquals("df2 should return the number as 0.5", 0.5, result.doubleValue());
+        }
+        {
+            ParsePosition ppos = new ParsePosition(0);
+            Number result = df2.parse("50", ppos);
+            assertEquals("df2 should return the number as 0.5 even though the percent sign is missing",
+                    0.5,
+                    result.doubleValue());
+        }
     }
 }

@@ -559,8 +559,10 @@ public class PatternStringParser {
         short grouping3 = (short) ((positive.groupingSizes >>> 32) & 0xffff);
         if (grouping2 != -1) {
             properties.setGroupingSize(grouping1);
+            properties.setGroupingUsed(true);
         } else {
             properties.setGroupingSize(-1);
+            properties.setGroupingUsed(false);
         }
         if (grouping3 != -1) {
             properties.setSecondaryGroupingSize(grouping2);

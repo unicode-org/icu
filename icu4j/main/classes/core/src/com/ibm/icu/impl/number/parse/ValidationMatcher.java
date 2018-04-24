@@ -3,7 +3,6 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.StringSegment;
-import com.ibm.icu.text.UnicodeSet;
 
 /**
  * A Matcher used only for post-process validation, not for consuming characters at runtime.
@@ -16,8 +15,8 @@ public abstract class ValidationMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
-        return UnicodeSet.EMPTY;
+    public boolean smokeTest(StringSegment segment) {
+        return false;
     }
 
 }
