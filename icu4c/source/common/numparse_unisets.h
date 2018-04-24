@@ -61,7 +61,8 @@ enum Key {
     COUNT
 };
 
-const UnicodeSet* get(Key key);
+// Exported as U_COMMON_API for ucurr.h
+const U_COMMON_API UnicodeSet* get(Key key);
 
 Key chooseFrom(UnicodeString str, Key key1);
 

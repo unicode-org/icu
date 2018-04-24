@@ -30,9 +30,10 @@ void addUNumberFormatterTest(TestNode** root) {
 }
 
 
+#define CAPACITY 30
+
 static void TestSkeletonFormatToString() {
     UErrorCode ec = U_ZERO_ERROR;
-    static const int32_t CAPACITY = 30;
     UChar buffer[CAPACITY];
 
     // setup:
