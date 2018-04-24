@@ -12,6 +12,7 @@
 #include "unicode/stringpiece.h"
 #include "unicode/unistr.h"
 #include "number_stringbuilder.h"
+#include "unicode/uniset.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {

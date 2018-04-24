@@ -101,7 +101,7 @@ public:
      * @return    a polymorphic copy of this CompactDecimalFormat.
      * @stable ICU 51
      */
-    virtual Format* clone() const;
+    Format* clone() const U_OVERRIDE;
 
     using DecimalFormat::format;
 
