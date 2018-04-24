@@ -296,6 +296,9 @@ public class IntlTestDecimalFormatSymbols extends TestFmwk
         final String[] differentDigitStrings = {"0", "b", "3", "d", "5", "ff", "7", "h", "9", "j"};
 
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.ENGLISH);
+        if (defZero != symbols.getCodePointZero()) {
+            errln("ERROR: Code point zero initialize to ASCII 0");
+        }
 
         symbols.setDigitStrings(osmanyaDigitStrings);
         if (!Arrays.equals(symbols.getDigitStrings(), osmanyaDigitStrings)) {

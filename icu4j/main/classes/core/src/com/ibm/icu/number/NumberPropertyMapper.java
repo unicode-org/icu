@@ -11,7 +11,6 @@ import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.impl.number.MacroProps;
-import com.ibm.icu.impl.number.MultiplierImpl;
 import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PropertiesAffixPatternProvider;
@@ -42,9 +41,20 @@ final class NumberPropertyMapper {
         return NumberFormatter.with().macros(macros);
     }
 
+    /** Convenience method to create a NumberFormatter directly from Properties. */
+    public static UnlocalizedNumberFormatter create(
+            DecimalFormatProperties properties,
+            DecimalFormatSymbols symbols,
+            DecimalFormatProperties exportedProperties) {
+        MacroProps macros = oldToNew(properties, symbols, exportedProperties);
+        return NumberFormatter.with().macros(macros);
+    }
+
     /**
      * Convenience method to create a NumberFormatter directly from a pattern string. Something like this
      * could become public API if there is demand.
+     *
+     * NOTE: This appears to be dead code.
      */
     public static UnlocalizedNumberFormatter create(String pattern, DecimalFormatSymbols symbols) {
         DecimalFormatProperties properties = PatternStringParser.parseToProperties(pattern);
@@ -92,7 +102,7 @@ final class NumberPropertyMapper {
         if (properties.getCurrencyPluralInfo() == null) {
             affixProvider = new PropertiesAffixPatternProvider(properties);
         } else {
-            affixProvider = new CurrencyPluralInfoAffixProvider(properties.getCurrencyPluralInfo());
+            affixProvider = new CurrencyPluralInfoAffixProvider(properties.getCurrencyPluralInfo(), properties);
         }
         macros.affixProvider = affixProvider;
 
@@ -129,8 +139,7 @@ final class NumberPropertyMapper {
         boolean explicitMinMaxFrac = minFrac != -1 || maxFrac != -1;
         boolean explicitMinMaxSig = minSig != -1 || maxSig != -1;
         // Resolve min/max frac for currencies, required for the validation logic and for when minFrac or
-        // maxFrac was
-        // set (but not both) on a currency instance.
+        // maxFrac was set (but not both) on a currency instance.
         // NOTE: Increments are handled in "Rounder.constructCurrency()".
         if (useCurrency) {
             if (minFrac == -1 && maxFrac == -1) {
@@ -150,13 +159,13 @@ final class NumberPropertyMapper {
         if (minInt == 0 && maxFrac != 0) {
             // Force a digit after the decimal point.
             minFrac = minFrac <= 0 ? 1 : minFrac;
-            maxFrac = maxFrac < 0 ? Integer.MAX_VALUE : maxFrac < minFrac ? minFrac : maxFrac;
+            maxFrac = maxFrac < 0 ? -1 : maxFrac < minFrac ? minFrac : maxFrac;
             minInt = 0;
             maxInt = maxInt < 0 ? -1 : maxInt > RoundingUtils.MAX_INT_FRAC_SIG ? -1 : maxInt;
         } else {
             // Force a digit before the decimal point.
             minFrac = minFrac < 0 ? 0 : minFrac;
-            maxFrac = maxFrac < 0 ? Integer.MAX_VALUE : maxFrac < minFrac ? minFrac : maxFrac;
+            maxFrac = maxFrac < 0 ? -1 : maxFrac < minFrac ? minFrac : maxFrac;
             minInt = minInt <= 0 ? 1 : minInt > RoundingUtils.MAX_INT_FRAC_SIG ? 1 : minInt;
             maxInt = maxInt < 0 ? -1
                     : maxInt < minInt ? minInt : maxInt > RoundingUtils.MAX_INT_FRAC_SIG ? -1 : maxInt;
@@ -201,9 +210,7 @@ final class NumberPropertyMapper {
         /////////////
 
         if (properties.getFormatWidth() != -1) {
-            macros.padder = new Padder(properties.getPadString(),
-                    properties.getFormatWidth(),
-                    properties.getPadPosition());
+            macros.padder = Padder.forProperties(properties);
         }
 
         ///////////////////////////////
@@ -290,11 +297,7 @@ final class NumberPropertyMapper {
         // MULTIPLIERS //
         /////////////////
 
-        if (properties.getMagnitudeMultiplier() != 0) {
-            macros.multiplier = new MultiplierImpl(properties.getMagnitudeMultiplier());
-        } else if (properties.getMultiplier() != null) {
-            macros.multiplier = new MultiplierImpl(properties.getMultiplier());
-        }
+        macros.scale = RoundingUtils.scaleFromProperties(properties);
 
         //////////////////////
         // PROPERTY EXPORTS //
@@ -302,6 +305,7 @@ final class NumberPropertyMapper {
 
         if (exportedProperties != null) {
 
+            exportedProperties.setCurrency(currency);
             exportedProperties.setMathContext(mathContext);
             exportedProperties.setRoundingMode(mathContext.getRoundingMode());
             exportedProperties.setMinimumIntegerDigits(minInt);

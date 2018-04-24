@@ -142,6 +142,12 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         assert minInt >= 0;
         assert maxInt >= minInt;
 
+        // Special behavior: do not set minInt to be less than what is already set.
+        // This is so significant digits rounding can set the integer length.
+        if (minInt < lReqPos) {
+            minInt = lReqPos;
+        }
+
         // Save values into internal state
         // Negation is safe for minFrac/maxFrac because -Integer.MAX_VALUE > Integer.MIN_VALUE
         lOptPos = maxInt;
@@ -194,6 +200,11 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     @Override
+    public void negate() {
+      flags ^= NEGATIVE_FLAG;
+    }
+
+    @Override
     public int getMagnitude() throws ArithmeticException {
         if (precision == 0) {
             throw new ArithmeticException("Magnitude is not well-defined for zero");
@@ -230,7 +241,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
         switch (operand) {
         case i:
-            return toLong();
+            // Invert the negative sign if necessary
+            return isNegative() ? -toLong(true) : toLong(true);
         case f:
             return toFractionLong(true);
         case t:
@@ -560,12 +572,24 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      * Returns a long approximating the internal BCD. A long can only represent the integral part of the
      * number.
      *
-     * @return A double representation of the internal BCD.
+     * @param truncateIfOverflow if false and the number does NOT fit, fails with an assertion error.
+     * @return A 64-bit integer representation of the internal BCD.
      */
-    public long toLong() {
+    public long toLong(boolean truncateIfOverflow) {
+        // NOTE: Call sites should be guarded by fitsInLong(), like this:
+        // if (dq.fitsInLong()) { /* use dq.toLong() */ } else { /* use some fallback */ }
+        // Fallback behavior upon truncateIfOverflow is to truncate at 17 digits.
+        assert(truncateIfOverflow || fitsInLong());
         long result = 0L;
-        for (int magnitude = scale + precision - 1; magnitude >= 0; magnitude--) {
+        int upperMagnitude = Math.min(scale + precision, lOptPos) - 1;
+        if (truncateIfOverflow) {
+            upperMagnitude = Math.min(upperMagnitude, 17);
+        }
+        for (int magnitude = upperMagnitude; magnitude >= 0; magnitude--) {
             result = result * 10 + getDigitPos(magnitude - scale);
+        }
+        if (isNegative()) {
+            result = -result;
         }
         return result;
     }
@@ -578,18 +602,27 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     public long toFractionLong(boolean includeTrailingZeros) {
         long result = 0L;
         int magnitude = -1;
-        for (; (magnitude >= scale || (includeTrailingZeros && magnitude >= rReqPos))
-                && magnitude >= rOptPos; magnitude--) {
+        int lowerMagnitude = Math.max(scale, rOptPos);
+        if (includeTrailingZeros) {
+            lowerMagnitude = Math.min(lowerMagnitude, rReqPos);
+        }
+        // NOTE: Java has only signed longs, so we check result <= 1e17 instead of 1e18
+        for (; magnitude >= lowerMagnitude && result <= 1e17; magnitude--) {
             result = result * 10 + getDigitPos(magnitude - scale);
+        }
+        // Remove trailing zeros; this can happen during integer overflow cases.
+        if (!includeTrailingZeros) {
+            while (result > 0 && (result % 10) == 0) {
+                result /= 10;
+            }
         }
         return result;
     }
 
-    static final byte[] INT64_BCD = { 9, 2, 2, 3, 3, 7, 2, 0, 3, 6, 8, 5, 4, 7, 7, 5, 8, 0, 7 };
+    static final byte[] INT64_BCD = { 9, 2, 2, 3, 3, 7, 2, 0, 3, 6, 8, 5, 4, 7, 7, 5, 8, 0, 8 };
 
     /**
      * Returns whether or not a Long can fully represent the value stored in this DecimalQuantity.
-     * Assumes that the DecimalQuantity is positive.
      */
     public boolean fitsInLong() {
         if (isZero()) {
@@ -615,8 +648,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                 return false;
             }
         }
-        // Exactly equal to max long.
-        return true;
+        // Exactly equal to max long plus one.
+        return isNegative();
     }
 
     /**
@@ -627,9 +660,9 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      */
     @Override
     public double toDouble() {
-        if (isApproximate) {
-            return toDoubleFromOriginal();
-        }
+        // If this assertion fails, you need to call roundToInfinity() or some other rounding method.
+        // See the comment at the top of this file explaining the "isApproximate" field.
+        assert !isApproximate;
 
         if (isNaN()) {
             return Double.NaN;
@@ -638,6 +671,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         }
 
         // TODO: Do like in C++ and use a library function to perform this conversion?
+        // This code is not as hot in Java because .parse() returns a BigDecimal, not a double.
 
         long tempLong = 0L;
         int lostDigits = precision - Math.min(precision, 17);
@@ -649,18 +683,31 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         if (_scale >= 0) {
             // 1e22 is the largest exact double.
             int i = _scale;
-            for (; i >= 22; i -= 22)
+            for (; i >= 22; i -= 22) {
                 result *= 1e22;
+                if (Double.isInfinite(result)) {
+                    // Further multiplications will not be productive.
+                    i = 0;
+                    break;
+                }
+            }
             result *= DOUBLE_MULTIPLIERS[i];
         } else {
             // 1e22 is the largest exact double.
             int i = _scale;
-            for (; i <= -22; i += 22)
+            for (; i <= -22; i += 22) {
                 result /= 1e22;
+                if (result == 0.0) {
+                    // Further divisions will not be productive.
+                    i = 0;
+                    break;
+                }
+            }
             result /= DOUBLE_MULTIPLIERS[-i];
         }
-        if (isNegative())
+        if (isNegative()) {
             result = -result;
+        }
         return result;
     }
 
@@ -671,25 +718,6 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             convertToAccurateDouble();
         }
         return bcdToBigDecimal();
-    }
-
-    protected double toDoubleFromOriginal() {
-        double result = origDouble;
-        int delta = origDelta;
-        if (delta >= 0) {
-            // 1e22 is the largest exact double.
-            for (; delta >= 22; delta -= 22)
-                result *= 1e22;
-            result *= DOUBLE_MULTIPLIERS[delta];
-        } else {
-            // 1e22 is the largest exact double.
-            for (; delta <= -22; delta += 22)
-                result /= 1e22;
-            result /= DOUBLE_MULTIPLIERS[-delta];
-        }
-        if (isNegative())
-            result *= -1;
-        return result;
     }
 
     private static int safeSubtract(int a, int b) {
@@ -919,12 +947,62 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         if (isNegative()) {
             sb.append('-');
         }
+        if (precision == 0 || getMagnitude() < 0) {
+            sb.append('0');
+        }
         for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
-            sb.append(getDigit(m));
+            sb.append((char) ('0' + getDigit(m)));
             if (m == 0)
                 sb.append('.');
         }
         return sb.toString();
+    }
+
+    public String toScientificString() {
+        StringBuilder sb = new StringBuilder();
+        toScientificString(sb);
+        return sb.toString();
+    }
+
+    public void toScientificString(StringBuilder result) {
+        assert(!isApproximate);
+        if (isNegative()) {
+            result.append('-');
+        }
+        if (precision == 0) {
+            result.append("0E+0");
+            return;
+        }
+        // NOTE: It is not safe to add to lOptPos (aka maxInt) or subtract from
+        // rOptPos (aka -maxFrac) due to overflow.
+        int upperPos = Math.min(precision + scale, lOptPos) - scale - 1;
+        int lowerPos = Math.max(scale, rOptPos) - scale;
+        int p = upperPos;
+        result.append((char) ('0' + getDigitPos(p)));
+        if ((--p) >= lowerPos) {
+            result.append('.');
+            for (; p >= lowerPos; p--) {
+                result.append((char) ('0' + getDigitPos(p)));
+            }
+        }
+        result.append('E');
+        int _scale = upperPos + scale;
+        if (_scale < 0) {
+            _scale *= -1;
+            result.append('-');
+        } else {
+            result.append('+');
+        }
+        if (_scale == 0) {
+            result.append('0');
+        }
+        int insertIndex = result.length();
+        while (_scale > 0) {
+            int quot = _scale / 10;
+            int rem = _scale % 10;
+            result.insert(insertIndex, (char) ('0' + rem));
+            _scale = quot;
+        }
     }
 
     /**

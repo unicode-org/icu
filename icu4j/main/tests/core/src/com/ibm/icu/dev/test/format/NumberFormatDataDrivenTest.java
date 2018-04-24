@@ -11,11 +11,11 @@ import org.junit.Test;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.text.DecimalFormat_ICU58;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.DecimalFormatProperties.ParseMode;
 import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.impl.number.parse.NumberParserImpl;
-import com.ibm.icu.impl.number.parse.NumberParserImpl.ParseMode;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.DecimalFormat;
@@ -460,9 +460,8 @@ public class NumberFormatDataDrivenTest {
     if (tuple.maxSigDigits != null) {
       properties.setMaximumSignificantDigits(tuple.maxSigDigits);
     }
-    if (tuple.useGrouping != null && tuple.useGrouping == 0) {
-      properties.setGroupingSize(-1);
-      properties.setSecondaryGroupingSize(-1);
+    if (tuple.useGrouping != null) {
+      properties.setGroupingUsed(tuple.useGrouping > 0);
     }
     if (tuple.multiplier != null) {
       properties.setMultiplier(new BigDecimal(tuple.multiplier));
@@ -662,6 +661,9 @@ public class NumberFormatDataDrivenTest {
                 }
                 if (ppos.getIndex() == 0 || actual.getCurrency().getCurrencyCode().equals("XXX")) {
                     return "Parse failed; got " + actual + ", but expected " + tuple.output;
+                }
+                if (tuple.output.equals("fail")) {
+                    return null;
                 }
                 BigDecimal expectedNumber = new BigDecimal(tuple.output);
                 if (expectedNumber.compareTo(new BigDecimal(actual.getNumber().toString())) != 0) {

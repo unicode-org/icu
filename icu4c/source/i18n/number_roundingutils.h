@@ -3,7 +3,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
+#if !UCONFIG_NO_FORMATTING
 #ifndef __NUMBER_ROUNDINGUTILS_H__
 #define __NUMBER_ROUNDINGUTILS_H__
 
@@ -130,6 +130,12 @@ inline bool roundsAtMidpoint(int roundingMode) {
             return true;
     }
 }
+
+/**
+ * Computes the number of fraction digits in a double. Used for computing maxFrac for an increment.
+ * Calls into the DoubleToStringConverter library to do so.
+ */
+digits_t doubleFractionLength(double input);
 
 } // namespace roundingutils
 } // namespace impl

@@ -24,10 +24,12 @@
 #include "unicode/stringpiece.h"
 
 #include "cmemory.h"
-#include "digitlst.h"
 #include "plurrule_impl.h"
 #include "plurults.h"
 #include "uhash.h"
+#include "number_decimalquantity.h"
+
+using icu::number::impl::DecimalQuantity;
 
 void setupResult(const int32_t testSource[], char result[], int32_t* max);
 UBool checkEqual(const PluralRules &test, char *result, int32_t max);
@@ -633,14 +635,14 @@ void PluralRulesTest::checkSelect(const LocalPointer<PluralRules> &rules, UError
         }
 
         // DigitList is a convenient way to parse the decimal number string and get a double.
-        DigitList  dl;
-        dl.set(StringPiece(num), status);
+        DecimalQuantity  dl;
+        dl.setToDecNumber(StringPiece(num), status);
         if (U_FAILURE(status)) {
             errln("file %s, line %d, ICU error status: %s.", __FILE__, line, u_errorName(status));
             status = U_ZERO_ERROR;
             continue;
         }
-        double numDbl = dl.getDouble();
+        double numDbl = dl.toDouble();
         const char *decimalPoint = strchr(num, '.');
         int fractionDigitCount = decimalPoint == NULL ? 0 : (num + strlen(num) - 1) - decimalPoint;
         int fractionDigits = fractionDigitCount == 0 ? 0 : atoi(decimalPoint + 1);

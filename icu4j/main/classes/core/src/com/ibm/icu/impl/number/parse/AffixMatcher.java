@@ -13,7 +13,6 @@ import com.ibm.icu.impl.number.AffixPatternProvider;
 import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
-import com.ibm.icu.text.UnicodeSet;
 
 /**
  * @author sffc
@@ -30,15 +29,15 @@ public class AffixMatcher implements NumberParseMatcher {
      */
     public static final Comparator<AffixMatcher> COMPARATOR = new Comparator<AffixMatcher>() {
         @Override
-        public int compare(AffixMatcher o1, AffixMatcher o2) {
-            if (length(o1.prefix) != length(o2.prefix)) {
-                return length(o1.prefix) > length(o2.prefix) ? -1 : 1;
-            } else if (length(o1.suffix) != length(o2.suffix)) {
-                return length(o1.suffix) > length(o2.suffix) ? -1 : 1;
-            } else if (!o1.equals(o2)) {
+        public int compare(AffixMatcher lhs, AffixMatcher rhs) {
+            if (length(lhs.prefix) != length(rhs.prefix)) {
+                return length(lhs.prefix) > length(rhs.prefix) ? -1 : 1;
+            } else if (length(lhs.suffix) != length(rhs.suffix)) {
+                return length(lhs.suffix) > length(rhs.suffix) ? -1 : 1;
+            } else if (!lhs.equals(rhs)) {
                 // If the prefix and suffix are the same length, arbitrarily break ties.
                 // We can't return zero unless the elements are equal.
-                return o1.hashCode() > o2.hashCode() ? -1 : 1;
+                return lhs.hashCode() > rhs.hashCode() ? -1 : 1;
             } else {
                 return 0;
             }
@@ -76,10 +75,10 @@ public class AffixMatcher implements NumberParseMatcher {
         return true;
     }
 
-    public static void newGenerate(
+    public static void createMatchers(
             AffixPatternProvider patternInfo,
             NumberParserImpl output,
-            MatcherFactory factory,
+            AffixTokenMatcherFactory factory,
             IgnorablesMatcher ignorables,
             int parseFlags) {
         if (!isInteresting(patternInfo, ignorables, parseFlags)) {
@@ -93,7 +92,7 @@ public class AffixMatcher implements NumberParseMatcher {
         boolean includeUnpaired = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES);
         SignDisplay signDisplay = (0 != (parseFlags & ParsingUtils.PARSE_FLAG_PLUS_SIGN_ALLOWED))
                 ? SignDisplay.ALWAYS
-                : SignDisplay.NEVER;
+                : SignDisplay.AUTO;
 
         AffixPatternMatcher posPrefix = null;
         AffixPatternMatcher posSuffix = null;
@@ -130,7 +129,7 @@ public class AffixMatcher implements NumberParseMatcher {
                 continue;
             }
 
-            // Flags for setting in the ParsedNumber
+            // Flags for setting in the ParsedNumber; the token matchers may add more.
             int flags = (signum == -1) ? ParsedNumber.FLAG_NEGATIVE : 0;
 
             // Note: it is indeed possible for posPrefix and posSuffix to both be null.
@@ -206,15 +205,9 @@ public class AffixMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
-        UnicodeSet leadCodePoints = new UnicodeSet();
-        if (prefix != null) {
-            leadCodePoints.addAll(prefix.getLeadCodePoints());
-        }
-        if (suffix != null) {
-            leadCodePoints.addAll(suffix.getLeadCodePoints());
-        }
-        return leadCodePoints.freeze();
+    public boolean smokeTest(StringSegment segment) {
+        return (prefix != null && prefix.smokeTest(segment))
+                || (suffix != null && suffix.smokeTest(segment));
     }
 
     @Override
@@ -230,6 +223,12 @@ public class AffixMatcher implements NumberParseMatcher {
                 result.suffix = "";
             }
             result.flags |= flags;
+            if (prefix != null) {
+                prefix.postProcess(result);
+            }
+            if (suffix != null) {
+                suffix.postProcess(result);
+            }
         }
     }
 

@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.ibm.icu.impl.StringSegment;
-import com.ibm.icu.text.UnicodeSet;
 
 /**
  * Composes a number of matchers, running one after another. Matches the input string only if all of the
@@ -66,6 +65,11 @@ public class SeriesMatcher implements NumberParseMatcher {
             } else if (success) {
                 // Match succeeded, and this is NOT a flexible matcher. Proceed to the next matcher.
                 i++;
+                // Small hack: if there is another matcher coming, do not accept trailing weak chars.
+                // Needed for proper handling of currency spacing.
+                if (i < matchers.size() && segment.getOffset() != result.charEnd && result.charEnd > matcherOffset) {
+                    segment.setOffset(result.charEnd);
+                }
             } else if (isFlexible) {
                 // Match failed, and this is a flexible matcher. Try again with the next matcher.
                 i++;
@@ -82,15 +86,15 @@ public class SeriesMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
+    public boolean smokeTest(StringSegment segment) {
         assert frozen;
         if (matchers == null) {
-            return UnicodeSet.EMPTY;
+            return false;
         }
 
         // SeriesMatchers are never allowed to start with a Flexible matcher.
         assert !(matchers.get(0) instanceof NumberParseMatcher.Flexible);
-        return matchers.get(0).getLeadCodePoints();
+        return matchers.get(0).smokeTest(segment);
     }
 
     @Override

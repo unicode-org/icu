@@ -3,17 +3,21 @@
 package com.ibm.icu.impl.number;
 
 import com.ibm.icu.impl.StandardPlural;
-import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.text.CurrencyPluralInfo;
 
 public class CurrencyPluralInfoAffixProvider implements AffixPatternProvider {
-    private final AffixPatternProvider[] affixesByPlural;
+    private final PropertiesAffixPatternProvider[] affixesByPlural;
 
-    public CurrencyPluralInfoAffixProvider(CurrencyPluralInfo cpi) {
-        affixesByPlural = new ParsedPatternInfo[StandardPlural.COUNT];
+    public CurrencyPluralInfoAffixProvider(CurrencyPluralInfo cpi, DecimalFormatProperties properties) {
+        // We need to use a PropertiesAffixPatternProvider, not the simpler version ParsedPatternInfo,
+        // because user-specified affix overrides still need to work.
+        affixesByPlural = new PropertiesAffixPatternProvider[StandardPlural.COUNT];
+        DecimalFormatProperties pluralProperties = new DecimalFormatProperties();
+        pluralProperties.copyFrom(properties);
         for (StandardPlural plural : StandardPlural.VALUES) {
-            affixesByPlural[plural.ordinal()] = PatternStringParser
-                    .parseToPatternInfo(cpi.getCurrencyPluralPattern(plural.getKeyword()));
+            String pattern = cpi.getCurrencyPluralPattern(plural.getKeyword());
+            PatternStringParser.parseToExistingProperties(pattern, pluralProperties);
+            affixesByPlural[plural.ordinal()] = new PropertiesAffixPatternProvider(pluralProperties);
         }
     }
 

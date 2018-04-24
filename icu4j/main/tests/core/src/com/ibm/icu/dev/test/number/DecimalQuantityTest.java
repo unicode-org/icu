@@ -9,7 +9,6 @@ import java.math.RoundingMode;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.junit.Ignore;
 import org.junit.Test;
@@ -293,17 +292,17 @@ public class DecimalQuantityTest extends TestFmwk {
 
         fq.setToLong(1234123412341234L);
         assertFalse("Should not be using byte array", fq.isUsingBytes());
-        assertEquals("Failed on initialize", "1234123412341234E0", fq.toNumberString());
+        assertEquals("Failed on initialize", "1.234123412341234E+15", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         // Long -> Bytes
         fq.appendDigit((byte) 5, 0, true);
         assertTrue("Should be using byte array", fq.isUsingBytes());
-        assertEquals("Failed on multiply", "12341234123412345E0", fq.toNumberString());
+        assertEquals("Failed on multiply", "1.2341234123412345E+16", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         // Bytes -> Long
         fq.roundToMagnitude(5, MATH_CONTEXT_HALF_EVEN);
         assertFalse("Should not be using byte array", fq.isUsingBytes());
-        assertEquals("Failed on round", "123412341234E5", fq.toNumberString());
+        assertEquals("Failed on round", "1.23412341234E+16", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
     }
 
@@ -311,134 +310,47 @@ public class DecimalQuantityTest extends TestFmwk {
     public void testAppend() {
         DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD();
         fq.appendDigit((byte) 1, 0, true);
-        assertEquals("Failed on append", "1E0", fq.toNumberString());
+        assertEquals("Failed on append", "1E+0", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 2, 0, true);
-        assertEquals("Failed on append", "12E0", fq.toNumberString());
+        assertEquals("Failed on append", "1.2E+1", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 3, 1, true);
-        assertEquals("Failed on append", "1203E0", fq.toNumberString());
+        assertEquals("Failed on append", "1.203E+3", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 0, 1, true);
-        assertEquals("Failed on append", "1203E2", fq.toNumberString());
+        assertEquals("Failed on append", "1.203E+5", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 4, 0, true);
-        assertEquals("Failed on append", "1203004E0", fq.toNumberString());
+        assertEquals("Failed on append", "1.203004E+6", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 0, 0, true);
-        assertEquals("Failed on append", "1203004E1", fq.toNumberString());
+        assertEquals("Failed on append", "1.203004E+7", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 5, 0, false);
-        assertEquals("Failed on append", "120300405E-1", fq.toNumberString());
+        assertEquals("Failed on append", "1.20300405E+7", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 6, 0, false);
-        assertEquals("Failed on append", "1203004056E-2", fq.toNumberString());
+        assertEquals("Failed on append", "1.203004056E+7", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
         fq.appendDigit((byte) 7, 3, false);
-        assertEquals("Failed on append", "12030040560007E-6", fq.toNumberString());
+        assertEquals("Failed on append", "1.2030040560007E+7", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
-        StringBuilder baseExpected = new StringBuilder("12030040560007");
+        StringBuilder baseExpected = new StringBuilder("1.2030040560007");
         for (int i = 0; i < 10; i++) {
             fq.appendDigit((byte) 8, 0, false);
             baseExpected.append('8');
             StringBuilder expected = new StringBuilder(baseExpected);
-            expected.append("E");
-            expected.append(-7 - i);
-            assertEquals("Failed on append", expected.toString(), fq.toNumberString());
+            expected.append("E+7");
+            assertEquals("Failed on append", expected.toString(), fq.toScientificString());
             assertNull("Failed health check", fq.checkHealth());
         }
         fq.appendDigit((byte) 9, 2, false);
         baseExpected.append("009");
         StringBuilder expected = new StringBuilder(baseExpected);
-        expected.append('E');
-        expected.append("-19");
-        assertEquals("Failed on append", expected.toString(), fq.toNumberString());
+        expected.append("E+7");
+        assertEquals("Failed on append", expected.toString(), fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
-    }
-
-    @Ignore
-    @Test
-    public void testConvertToAccurateDouble() {
-        // based on https://github.com/google/double-conversion/issues/28
-        double[] hardDoubles = {
-                1651087494906221570.0,
-                -5074790912492772E-327,
-                83602530019752571E-327,
-                2.207817077636718750000000000000,
-                1.818351745605468750000000000000,
-                3.941719055175781250000000000000,
-                3.738609313964843750000000000000,
-                3.967735290527343750000000000000,
-                1.328025817871093750000000000000,
-                3.920967102050781250000000000000,
-                1.015235900878906250000000000000,
-                1.335227966308593750000000000000,
-                1.344520568847656250000000000000,
-                2.879127502441406250000000000000,
-                3.695838928222656250000000000000,
-                1.845344543457031250000000000000,
-                3.793952941894531250000000000000,
-                3.211402893066406250000000000000,
-                2.565971374511718750000000000000,
-                0.965156555175781250000000000000,
-                2.700004577636718750000000000000,
-                0.767097473144531250000000000000,
-                1.780448913574218750000000000000,
-                2.624839782714843750000000000000,
-                1.305290222167968750000000000000,
-                3.834922790527343750000000000000, };
-
-        double[] integerDoubles = {
-                51423,
-                51423e10,
-                4.503599627370496E15,
-                6.789512076111555E15,
-                9.007199254740991E15,
-                9.007199254740992E15 };
-
-        for (double d : hardDoubles) {
-            checkDoubleBehavior(d, true, "");
-        }
-
-        for (double d : integerDoubles) {
-            checkDoubleBehavior(d, false, "");
-        }
-
-        assertEquals("NaN check failed",
-                Double.NaN,
-                new DecimalQuantity_DualStorageBCD(Double.NaN).toDouble());
-        assertEquals("Inf check failed",
-                Double.POSITIVE_INFINITY,
-                new DecimalQuantity_DualStorageBCD(Double.POSITIVE_INFINITY).toDouble());
-        assertEquals("-Inf check failed",
-                Double.NEGATIVE_INFINITY,
-                new DecimalQuantity_DualStorageBCD(Double.NEGATIVE_INFINITY).toDouble());
-
-        // Generate random doubles
-        String alert = "UNEXPECTED FAILURE: PLEASE REPORT THIS MESSAGE TO THE ICU TEAM: ";
-        Random rnd = new Random();
-        for (int i = 0; i < 10000; i++) {
-            double d = Double.longBitsToDouble(rnd.nextLong());
-            if (Double.isNaN(d) || Double.isInfinite(d))
-                continue;
-            checkDoubleBehavior(d, false, alert);
-        }
-    }
-
-    private static void checkDoubleBehavior(double d, boolean explicitRequired, String alert) {
-        DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD(d);
-        if (explicitRequired) {
-            assertTrue(alert + "Should be using approximate double", !fq.explicitExactDouble);
-        }
-        assertEquals(alert + "Initial construction from hard double", d, fq.toDouble());
-        fq.roundToInfinity();
-        if (explicitRequired) {
-            assertTrue(alert + "Should not be using approximate double", fq.explicitExactDouble);
-        }
-        assertDoubleEquals(alert + "After conversion to exact BCD (double)", d, fq.toDouble());
-        assertBigDecimalEquals(alert + "After conversion to exact BCD (BigDecimal)",
-                new BigDecimal(Double.toString(d)),
-                fq.toBigDecimal());
     }
 
     @Test
@@ -561,6 +473,42 @@ public class DecimalQuantityTest extends TestFmwk {
             q.roundToInfinity();
             String actualOutput = q.toPlainString();
             assertEquals("", expectedOutput, actualOutput);
+        }
+    }
+
+    @Test
+    public void testToDouble() {
+        Object[][] cases = new Object[][] {
+            { "0", 0.0 },
+            { "514.23", 514.23 },
+            // NOTE: This does not currently pass in Java. See DecimalFormat_AbstractBCD#toDecimal.
+            // { "-3.142E-271", -3.142e-271 }
+        };
+
+        for (Object[] cas : cases) {
+            String input = (String) cas[0];
+            double expected = (Double) cas[1];
+
+            DecimalQuantity q = new DecimalQuantity_DualStorageBCD();
+            q.setToBigDecimal(new BigDecimal(input));
+            double actual = q.toDouble();
+            assertEquals("Doubles should exactly equal", expected, actual);
+        }
+    }
+
+    @Test
+    public void testMaxDigits() {
+        DecimalQuantity_DualStorageBCD dq = new DecimalQuantity_DualStorageBCD(876.543);
+        dq.roundToInfinity();
+        dq.setIntegerLength(0, 2);
+        dq.setFractionLength(0, 2);
+        assertEquals("Should trim, toPlainString", "76.54", dq.toPlainString());
+        assertEquals("Should trim, toScientificString", "7.654E+1", dq.toScientificString());
+        assertEquals("Should trim, toLong", 76, dq.toLong(true));
+        assertEquals("Should trim, toFractionLong", 54, dq.toFractionLong(false));
+        if (!logKnownIssue("13701", "consider cleaning up")) {
+            assertEquals("Should trim, toDouble", 76.54, dq.toDouble());
+            assertEquals("Should trim, toBigDecimal", new BigDecimal("76.54"), dq.toBigDecimal());
         }
     }
 

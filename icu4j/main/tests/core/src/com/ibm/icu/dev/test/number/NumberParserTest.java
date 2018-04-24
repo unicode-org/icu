@@ -3,13 +3,17 @@
 package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import com.ibm.icu.impl.StringSegment;
+import com.ibm.icu.impl.number.CustomSymbolCurrency;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.parse.AffixPatternMatcher;
+import com.ibm.icu.impl.number.parse.AffixTokenMatcherFactory;
+import com.ibm.icu.impl.number.parse.CombinedCurrencyMatcher;
 import com.ibm.icu.impl.number.parse.IgnorablesMatcher;
 import com.ibm.icu.impl.number.parse.MinusSignMatcher;
 import com.ibm.icu.impl.number.parse.NumberParserImpl;
@@ -18,9 +22,8 @@ import com.ibm.icu.impl.number.parse.ParsingUtils;
 import com.ibm.icu.impl.number.parse.PercentMatcher;
 import com.ibm.icu.impl.number.parse.PlusSignMatcher;
 import com.ibm.icu.impl.number.parse.SeriesMatcher;
-import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache;
-import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.Key;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -48,6 +51,9 @@ public class NumberParserTest {
                 { 3, "𝟱𝟭𝟰𝟮𝟯x", "0", 10, 51423. },
                 { 3, " 𝟱𝟭𝟰𝟮𝟯", "0", 11, 51423. },
                 { 3, "𝟱𝟭𝟰𝟮𝟯 ", "0", 10, 51423. },
+                { 7, "51,423", "#,##,##0", 6, 51423. },
+                { 7, " 51,423", "#,##,##0", 7, 51423. },
+                { 7, "51,423 ", "#,##,##0", 6, 51423. },
                 { 7, "𝟱𝟭,𝟰𝟮𝟯", "#,##,##0", 11, 51423. },
                 { 7, "𝟳,𝟴𝟵,𝟱𝟭,𝟰𝟮𝟯", "#,##,##0", 19, 78951423. },
                 { 7, "𝟳𝟴,𝟵𝟱𝟭.𝟰𝟮𝟯", "#,##,##0", 18, 78951.423 },
@@ -55,12 +61,24 @@ public class NumberParserTest {
                 { 7, "𝟳𝟴,𝟬𝟬𝟬.𝟬𝟬𝟬", "#,##,##0", 18, 78000. },
                 { 7, "𝟳𝟴,𝟬𝟬𝟬.𝟬𝟮𝟯", "#,##,##0", 18, 78000.023 },
                 { 7, "𝟳𝟴.𝟬𝟬𝟬.𝟬𝟮𝟯", "#,##,##0", 11, 78. },
-                { 3, "-𝟱𝟭𝟰𝟮𝟯", "0", 11, -51423. },
-                { 3, "-𝟱𝟭𝟰𝟮𝟯-", "0", 11, -51423. },
+                { 3, "-51423", "0", 6, -51423. },
+                { 3, "51423-", "0", 5, 51423. }, // plus and minus sign by default do NOT match after
+                { 3, "+51423", "0", 6, 51423. },
+                { 3, "51423+", "0", 5, 51423. }, // plus and minus sign by default do NOT match after
+                { 3, "%51423", "0", 6, 51423. },
+                { 3, "51423%", "0", 6, 51423. },
+                { 3, "51423%%", "0", 6, 51423. },
+                { 3, "‰51423", "0", 6, 51423. },
+                { 3, "51423‰", "0", 6, 51423. },
+                { 3, "51423‰‰", "0", 6, 51423. },
+                { 3, "∞", "0", 1, Double.POSITIVE_INFINITY },
+                { 3, "-∞", "0", 2, Double.NEGATIVE_INFINITY },
+                { 3, "@@@123  @@", "0", 6, 123. }, // TODO: Should padding be strong instead of weak?
+                { 3, "@@@123@@  ", "0", 6, 123. }, // TODO: Should padding be strong instead of weak?
                 { 3, "a51423US dollars", "a0¤¤¤", 16, 51423. },
                 { 3, "a 51423 US dollars", "a0¤¤¤", 18, 51423. },
-                { 3, "514.23 USD", "0", 10, 514.23 },
-                { 3, "514.23 GBP", "0", 10, 514.23 },
+                { 3, "514.23 USD", "¤0", 10, 514.23 },
+                { 3, "514.23 GBP", "¤0", 10, 514.23 },
                 { 3, "a 𝟱𝟭𝟰𝟮𝟯 b", "a0b", 14, 51423. },
                 { 3, "-a 𝟱𝟭𝟰𝟮𝟯 b", "a0b", 15, -51423. },
                 { 3, "a -𝟱𝟭𝟰𝟮𝟯 b", "a0b", 15, -51423. },
@@ -80,34 +98,38 @@ public class NumberParserTest {
                 { 3, "𝟱.𝟭𝟰𝟮E𝟯", "0", 12, 5142. },
                 { 3, "𝟱.𝟭𝟰𝟮E-𝟯", "0", 13, 0.005142 },
                 { 3, "𝟱.𝟭𝟰𝟮e-𝟯", "0", 13, 0.005142 },
-                { 7, "5,142.50 Canadian dollars", "#,##,##0", 25, 5142.5 },
+                { 7, "5,142.50 Canadian dollars", "#,##,##0 ¤¤¤", 25, 5142.5 },
                 { 3, "a$ b5", "a ¤ b0", 5, 5.0 },
                 { 3, "📺1.23", "📺0;📻0", 6, 1.23 },
                 { 3, "📻1.23", "📺0;📻0", 6, -1.23 },
                 { 3, ".00", "0", 3, 0.0 },
-                { 3, "                              0", "a0", 31, 0.0 }, // should not hang
+                { 3, "                              1,234", "a0", 35, 1234. }, // should not hang
+                { 3, "NaN", "0", 3, Double.NaN },
+                { 3, "NaN E5", "0", 6, Double.NaN },
                 { 3, "0", "0", 1, 0.0 } };
 
+        int parseFlags = ParsingUtils.PARSE_FLAG_IGNORE_CASE
+                | ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;
         for (Object[] cas : cases) {
             int flags = (Integer) cas[0];
-            String input = (String) cas[1];
-            String pattern = (String) cas[2];
+            String inputString = (String) cas[1];
+            String patternString = (String) cas[2];
             int expectedCharsConsumed = (Integer) cas[3];
-            double resultDouble = (Double) cas[4];
+            double expectedResultDouble = (Double) cas[4];
             NumberParserImpl parser = NumberParserImpl
-                    .createParserFromPattern(ULocale.ENGLISH, pattern, false);
-            String message = "Input <" + input + "> Parser " + parser;
+                    .createSimpleParser(ULocale.ENGLISH, patternString, parseFlags);
+            String message = "Input <" + inputString + "> Parser " + parser;
 
             if (0 != (flags & 0x01)) {
                 // Test greedy code path
                 ParsedNumber resultObject = new ParsedNumber();
-                parser.parse(input, true, resultObject);
-                assertNotNull("Greedy Parse failed: " + message, resultObject.quantity);
+                parser.parse(inputString, true, resultObject);
+                assertTrue("Greedy Parse failed: " + message, resultObject.success());
                 assertEquals("Greedy Parse failed: " + message,
                         expectedCharsConsumed,
                         resultObject.charEnd);
                 assertEquals("Greedy Parse failed: " + message,
-                        resultDouble,
+                        expectedResultDouble,
                         resultObject.getNumber().doubleValue(),
                         0.0);
             }
@@ -115,28 +137,30 @@ public class NumberParserTest {
             if (0 != (flags & 0x02)) {
                 // Test slow code path
                 ParsedNumber resultObject = new ParsedNumber();
-                parser.parse(input, false, resultObject);
-                assertNotNull("Non-Greedy Parse failed: " + message, resultObject.quantity);
+                parser.parse(inputString, false, resultObject);
+                assertTrue("Non-Greedy Parse failed: " + message, resultObject.success());
                 assertEquals("Non-Greedy Parse failed: " + message,
                         expectedCharsConsumed,
                         resultObject.charEnd);
                 assertEquals("Non-Greedy Parse failed: " + message,
-                        resultDouble,
+                        expectedResultDouble,
                         resultObject.getNumber().doubleValue(),
                         0.0);
             }
 
             if (0 != (flags & 0x04)) {
                 // Test with strict separators
-                parser = NumberParserImpl.createParserFromPattern(ULocale.ENGLISH, pattern, true);
+                parser = NumberParserImpl.createSimpleParser(ULocale.ENGLISH,
+                        patternString,
+                        parseFlags | ParsingUtils.PARSE_FLAG_STRICT_GROUPING_SIZE);
                 ParsedNumber resultObject = new ParsedNumber();
-                parser.parse(input, true, resultObject);
-                assertNotNull("Strict Parse failed: " + message, resultObject.quantity);
+                parser.parse(inputString, true, resultObject);
+                assertTrue("Strict Parse failed: " + message, resultObject.success());
                 assertEquals("Strict Parse failed: " + message,
                         expectedCharsConsumed,
                         resultObject.charEnd);
                 assertEquals("Strict Parse failed: " + message,
-                        resultDouble,
+                        expectedResultDouble,
                         resultObject.getNumber().doubleValue(),
                         0.0);
             }
@@ -147,7 +171,7 @@ public class NumberParserTest {
     public void testLocaleFi() {
         // This case is interesting because locale fi has NaN starting with 'e', the same as scientific
         NumberParserImpl parser = NumberParserImpl
-                .createParserFromPattern(new ULocale("fi"), "0", false);
+                .createSimpleParser(new ULocale("fi"), "0", ParsingUtils.PARSE_FLAG_IGNORE_CASE);
 
         ParsedNumber resultObject = new ParsedNumber();
         parser.parse("epäluku", false, resultObject);
@@ -171,7 +195,9 @@ public class NumberParserTest {
         series.addMatcher(IgnorablesMatcher.DEFAULT);
         series.freeze();
 
-        assertEquals(UnicodeSetStaticCache.get(Key.PLUS_SIGN), series.getLeadCodePoints());
+        assertFalse(series.smokeTest(new StringSegment("x", false)));
+        assertFalse(series.smokeTest(new StringSegment("-", false)));
+        assertTrue(series.smokeTest(new StringSegment("+", false)));
 
         Object[][] cases = new Object[][] {
                 { "", 0, true },
@@ -203,12 +229,84 @@ public class NumberParserTest {
     }
 
     @Test
+    public void testCombinedCurrencyMatcher() {
+        AffixTokenMatcherFactory factory = new AffixTokenMatcherFactory();
+        factory.locale = ULocale.ENGLISH;
+        CustomSymbolCurrency currency = new CustomSymbolCurrency("ICU", "IU$", "ICU");
+        factory.currency = currency;
+        factory.symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        CombinedCurrencyMatcher matcher = factory.currency();
+
+        Object[][] cases = new Object[][] {
+                { "", null },
+                { "FOO", null },
+                { "USD", "USD" },
+                { "$", "USD" },
+                { "US dollars", "USD" },
+                { "eu", null },
+                { "euros", "EUR" },
+                { "ICU", "ICU" },
+                { "IU$", "ICU" } };
+        for (Object[] cas : cases) {
+            String input = (String) cas[0];
+            String expectedCurrencyCode = (String) cas[1];
+
+            StringSegment segment = new StringSegment(input, true);
+            ParsedNumber result = new ParsedNumber();
+            matcher.match(segment, result);
+            assertEquals("Parsing " + input, expectedCurrencyCode, result.currencyCode);
+            assertEquals("Whole string on " + input,
+                    expectedCurrencyCode == null ? 0 : input.length(),
+                    result.charEnd);
+        }
+    }
+
+    @Test
+    public void testAffixPatternMatcher() {
+        AffixTokenMatcherFactory factory = new AffixTokenMatcherFactory();
+        factory.currency = Currency.getInstance("EUR");
+        factory.symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        factory.ignorables = IgnorablesMatcher.DEFAULT;
+        factory.locale = ULocale.ENGLISH;
+
+        Object[][] cases = {
+                { false, "-", 1, "-" },
+                { false, "+-%", 5, "+-%" },
+                { true, "+-%", 3, "+-%" },
+                { false, "ab c", 5, "a    bc" },
+                { true, "abc", 3, "abc" },
+                { false, "hello-to+this%very¤long‰string", 59, "hello-to+this%very USD long‰string" } };
+
+        for (Object[] cas : cases) {
+            boolean exactMatch = (Boolean) cas[0];
+            String affixPattern = (String) cas[1];
+            int expectedMatcherLength = (Integer) cas[2];
+            String sampleParseableString = (String) cas[3];
+            int parseFlags = exactMatch ? ParsingUtils.PARSE_FLAG_EXACT_AFFIX : 0;
+
+            AffixPatternMatcher matcher = AffixPatternMatcher
+                    .fromAffixPattern(affixPattern, factory, parseFlags);
+
+            // Check that the matcher has the expected number of children
+            assertEquals(affixPattern + " " + exactMatch, expectedMatcherLength, matcher.length());
+
+            // Check that the matcher works on a sample string
+            StringSegment segment = new StringSegment(sampleParseableString, true);
+            ParsedNumber result = new ParsedNumber();
+            matcher.match(segment, result);
+            assertEquals(affixPattern + " " + exactMatch,
+                    sampleParseableString.length(),
+                    result.charEnd);
+        }
+    }
+
+    @Test
     public void testGroupingDisabled() {
         DecimalFormatProperties properties = new DecimalFormatProperties();
         properties.setGroupingSize(0);
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
         NumberParserImpl parser = NumberParserImpl
-                .createParserFromProperties(properties, symbols, false, true);
+                .createParserFromProperties(properties, symbols, false);
         ParsedNumber result = new ParsedNumber();
         parser.parse("12,345.678", true, result);
         assertEquals("Should not parse with grouping separator",
@@ -234,16 +332,16 @@ public class NumberParserTest {
             int expectedCaseFoldingChars = (Integer) cas[3];
 
             NumberParserImpl caseSensitiveParser = NumberParserImpl
-                    .removeMeWhenMerged(ULocale.ENGLISH, patternString, ParsingUtils.PARSE_FLAG_OPTIMIZE);
+                    .createSimpleParser(ULocale.ENGLISH, patternString, 0);
             ParsedNumber result = new ParsedNumber();
             caseSensitiveParser.parse(inputString, true, result);
             assertEquals("Case-Sensitive: " + inputString + " on " + patternString,
                     expectedCaseSensitiveChars,
                     result.charEnd);
 
-            NumberParserImpl caseFoldingParser = NumberParserImpl.removeMeWhenMerged(ULocale.ENGLISH,
+            NumberParserImpl caseFoldingParser = NumberParserImpl.createSimpleParser(ULocale.ENGLISH,
                     patternString,
-                    ParsingUtils.PARSE_FLAG_IGNORE_CASE | ParsingUtils.PARSE_FLAG_OPTIMIZE);
+                    ParsingUtils.PARSE_FLAG_IGNORE_CASE);
             result = new ParsedNumber();
             caseFoldingParser.parse(inputString, true, result);
             assertEquals("Folded: " + inputString + " on " + patternString,

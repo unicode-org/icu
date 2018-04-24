@@ -43,6 +43,6 @@ public class InfinityMatcher extends SymbolMatcher {
 
     @Override
     public String toString() {
-        return "<PercentMatcher>";
+        return "<InfinityMatcher>";
     }
 }

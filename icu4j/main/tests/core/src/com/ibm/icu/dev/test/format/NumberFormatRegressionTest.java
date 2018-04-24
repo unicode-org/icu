@@ -393,8 +393,36 @@ public class NumberFormatRegressionTest extends TestFmwk {
         ULocale locale = new ULocale("en");
         DecimalFormat nf = (DecimalFormat) NumberFormat.getInstance(locale, NumberFormat.PLURALCURRENCYSTYLE);
         assertEquals(
-            "Positive suffix should contain the single currency sign when no currency is set",
-            " \u00A4",
+            "Positive suffix should contain the localized display name for currency XXX",
+            " (unknown currency)",
             nf.getPositiveSuffix());
+    }
+
+    @Test
+    public void TestGroupingEnabledDisabledGetters() {
+        // See ticket #13442 comment 14
+        DecimalFormatSymbols EN = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        {
+            DecimalFormat df = new DecimalFormat("0", EN);
+            assertEquals("pat 0: ", 0, df.getGroupingSize());
+            assertEquals("pat 0: ", false, df.isGroupingUsed());
+            df.setGroupingUsed(false);
+            assertEquals("pat 0 then disabled: ", 0, df.getGroupingSize());
+            assertEquals("pat 0 then disabled: ", "1111", df.format(1111));
+            df.setGroupingUsed(true);
+            assertEquals("pat 0 then enabled: ", 0, df.getGroupingSize());
+            assertEquals("pat 0 then enabled: ", "1111", df.format(1111));
+        }
+        {
+            DecimalFormat df = new DecimalFormat("#,##0", EN);
+            assertEquals("pat #,##0: ", 3, df.getGroupingSize());
+            assertEquals("pat #,##0: ", true, df.isGroupingUsed());
+            df.setGroupingUsed(false);
+            assertEquals("pat #,##0 then disabled: ", 3, df.getGroupingSize());
+            assertEquals("pat #,##0 then disabled: ", "1111", df.format(1111));
+            df.setGroupingUsed(true);
+            assertEquals("pat #,##0 then enabled: ", 3, df.getGroupingSize());
+            assertEquals("pat #,##0 then enabled: ", "1,111", df.format(1111));
+        }
     }
 }

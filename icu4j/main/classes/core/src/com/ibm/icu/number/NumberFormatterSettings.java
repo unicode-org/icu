@@ -39,9 +39,10 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     static final int KEY_UNIT_WIDTH = 9;
     static final int KEY_SIGN = 10;
     static final int KEY_DECIMAL = 11;
-    static final int KEY_THRESHOLD = 12;
-    static final int KEY_PER_UNIT = 13;
-    static final int KEY_MAX = 14;
+    static final int KEY_SCALE = 12;
+    static final int KEY_THRESHOLD = 13;
+    static final int KEY_PER_UNIT = 14;
+    static final int KEY_MAX = 15;
 
     final NumberFormatterSettings<?> parent;
     final int key;
@@ -442,6 +443,36 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     }
 
     /**
+     * Sets a scale (multiplier) to be used to scale the number by an arbitrary amount before formatting.
+     * Most common values:
+     *
+     * <ul>
+     * <li>Multiply by 100: useful for percentages.
+     * <li>Multiply by an arbitrary value: useful for unit conversions.
+     * </ul>
+     *
+     * <p>
+     * Pass an element from a {@link Scale} factory method to this setter. For example:
+     *
+     * <pre>
+     * NumberFormatter.with().scale(Scale.powerOfTen(2))
+     * </pre>
+     *
+     * <p>
+     * The default is to not apply any multiplier.
+     *
+     * @param scale
+     *            An amount to be multiplied against numbers before formatting.
+     * @return The fluent chain
+     * @see Scale
+     * @draft ICU 62
+     * @provisional This API might change or be removed in a future release.
+     */
+    public T scale(Scale scale) {
+        return create(KEY_SCALE, scale);
+    }
+
+    /**
      * Internal method to set a starting macros.
      *
      * @internal
@@ -473,6 +504,27 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     @Deprecated
     public T threshold(Long threshold) {
         return create(KEY_THRESHOLD, threshold);
+    }
+
+    /**
+     * Creates a skeleton string representation of this number formatter. A skeleton string is a
+     * locale-agnostic serialized form of a number formatter.
+     * <p>
+     * Not all options are capable of being represented in the skeleton string; for example, a
+     * DecimalFormatSymbols object. If any such option is encountered, an
+     * {@link UnsupportedOperationException} is thrown.
+     * <p>
+     * The returned skeleton is in normalized form, such that two number formatters with equivalent
+     * behavior should produce the same skeleton.
+     *
+     * @return A number skeleton string with behavior corresponding to this number formatter.
+     * @throws UnsupportedOperationException
+     *             If the number formatter has an option that cannot be represented in a skeleton string.
+     * @draft ICU 62
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String toSkeleton() {
+        return NumberSkeletonImpl.generate(resolve());
     }
 
     /* package-protected */ abstract T create(int key, Object value);
@@ -545,6 +597,11 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
             case KEY_DECIMAL:
                 if (macros.decimal == null) {
                     macros.decimal = (DecimalSeparatorDisplay) current.value;
+                }
+                break;
+            case KEY_SCALE:
+                if (macros.scale == null) {
+                    macros.scale = (Scale) current.value;
                 }
                 break;
             case KEY_THRESHOLD:

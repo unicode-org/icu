@@ -16,13 +16,13 @@ public class ParsingUtils {
     public static final int PARSE_FLAG_STRICT_GROUPING_SIZE = 0x0008;
     public static final int PARSE_FLAG_INTEGER_ONLY = 0x0010;
     public static final int PARSE_FLAG_GROUPING_DISABLED = 0x0020;
-    public static final int PARSE_FLAG_DECIMAL_SCIENTIFIC = 0x0040;
+    public static final int PARSE_FLAG_FRACTION_GROUPING_DISABLED = 0x0040;
     public static final int PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES = 0x0080;
     public static final int PARSE_FLAG_USE_FULL_AFFIXES = 0x0100;
     public static final int PARSE_FLAG_EXACT_AFFIX = 0x0200;
     public static final int PARSE_FLAG_PLUS_SIGN_ALLOWED = 0x0400;
-    public static final int PARSE_FLAG_FRACTION_GROUPING_DISABLED = 0x0800;
-    public static final int PARSE_FLAG_OPTIMIZE = 0x1000;
+    // public static final int PARSE_FLAG_OPTIMIZE = 0x0800; // no longer used
+    public static final int PARSE_FLAG_FORCE_BIG_DECIMAL = 0x1000;
 
     public static void putLeadCodePoints(UnicodeSet input, UnicodeSet output) {
         for (EntryRange range : input.ranges()) {

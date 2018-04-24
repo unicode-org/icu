@@ -27,7 +27,7 @@ public abstract class Rounder implements Cloneable {
     /* package-private final */ MathContext mathContext;
 
     /* package-private */ Rounder() {
-        mathContext = RoundingUtils.mathContextUnlimited(RoundingUtils.DEFAULT_ROUNDING_MODE);
+        mathContext = RoundingUtils.DEFAULT_MATH_CONTEXT_UNLIMITED;
     }
 
     /**
@@ -245,7 +245,7 @@ public abstract class Rounder implements Cloneable {
      */
     public static Rounder maxDigits(int maxSignificantDigits) {
         if (maxSignificantDigits >= 1 && maxSignificantDigits <= RoundingUtils.MAX_INT_FRAC_SIG) {
-            return constructSignificant(0, maxSignificantDigits);
+            return constructSignificant(1, maxSignificantDigits);
         } else {
             throw new IllegalArgumentException("Significant digits must be between 1 and "
                     + RoundingUtils.MAX_INT_FRAC_SIG
@@ -399,7 +399,7 @@ public abstract class Rounder implements Cloneable {
 
     static final FractionRounderImpl FIXED_FRAC_0 = new FractionRounderImpl(0, 0);
     static final FractionRounderImpl FIXED_FRAC_2 = new FractionRounderImpl(2, 2);
-    static final FractionRounderImpl MAX_FRAC_6 = new FractionRounderImpl(0, 6);
+    static final FractionRounderImpl DEFAULT_MAX_FRAC_6 = new FractionRounderImpl(0, 6);
 
     static final SignificantRounderImpl FIXED_SIG_2 = new SignificantRounderImpl(2, 2);
     static final SignificantRounderImpl FIXED_SIG_3 = new SignificantRounderImpl(3, 3);
@@ -424,7 +424,7 @@ public abstract class Rounder implements Cloneable {
         } else if (minFrac == 2 && maxFrac == 2) {
             return FIXED_FRAC_2;
         } else if (minFrac == 0 && maxFrac == 6) {
-            return MAX_FRAC_6;
+            return DEFAULT_MAX_FRAC_6;
         } else {
             return new FractionRounderImpl(minFrac, maxFrac);
         }
@@ -606,6 +606,10 @@ public abstract class Rounder implements Cloneable {
             value.roundToMagnitude(getRoundingMagnitudeSignificant(value, maxSig), mathContext);
             value.setFractionLength(Math.max(0, -getDisplayMagnitudeSignificant(value, minSig)),
                     Integer.MAX_VALUE);
+            // Make sure that digits are displayed on zero.
+            if (value.isZero() && minSig > 0) {
+                value.setIntegerLength(1, Integer.MAX_VALUE);
+            }
         }
 
         /**

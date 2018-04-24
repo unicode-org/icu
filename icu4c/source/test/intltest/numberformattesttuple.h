@@ -13,7 +13,6 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "decimalformatpattern.h"
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
 

@@ -3,11 +3,12 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
+#if !UCONFIG_NO_FORMATTING
 
 #include "unicode/numberformatter.h"
 #include "number_types.h"
 #include "number_stringbuilder.h"
+#include "number_decimfmtprops.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -45,6 +46,16 @@ Padder Padder::codePoints(UChar32 cp, int32_t targetWidth, UNumberFormatPadPosit
     } else {
         return {U_NUMBER_ARG_OUTOFBOUNDS_ERROR};
     }
+}
+
+Padder Padder::forProperties(const DecimalFormatProperties& properties) {
+    UChar32 padCp;
+    if (properties.padString.length() > 0) {
+        padCp = properties.padString.char32At(0);
+    } else {
+        padCp = kFallbackPaddingString[0];
+    }
+    return {padCp, properties.formatWidth, properties.padPosition.getOrDefault(UNUM_PAD_BEFORE_PREFIX)};
 }
 
 int32_t Padder::padAndApply(const Modifier &mod1, const Modifier &mod2,

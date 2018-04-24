@@ -15,7 +15,7 @@ public class AffixPatternMatcher extends SeriesMatcher implements AffixUtils.Tok
     private final String affixPattern;
 
     // Used during construction only:
-    private MatcherFactory factory;
+    private AffixTokenMatcherFactory factory;
     private IgnorablesMatcher ignorables;
     private int lastTypeOrCp;
 
@@ -29,7 +29,7 @@ public class AffixPatternMatcher extends SeriesMatcher implements AffixUtils.Tok
      */
     public static AffixPatternMatcher fromAffixPattern(
             String affixPattern,
-            MatcherFactory factory,
+            AffixTokenMatcherFactory factory,
             int parseFlags) {
         if (affixPattern.isEmpty()) {
             return null;
@@ -71,10 +71,10 @@ public class AffixPatternMatcher extends SeriesMatcher implements AffixUtils.Tok
             // Case 1: the token is a symbol.
             switch (typeOrCp) {
             case AffixUtils.TYPE_MINUS_SIGN:
-                addMatcher(factory.minusSign(true));
+                addMatcher(factory.minusSign());
                 break;
             case AffixUtils.TYPE_PLUS_SIGN:
-                addMatcher(factory.plusSign(true));
+                addMatcher(factory.plusSign());
                 break;
             case AffixUtils.TYPE_PERCENT:
                 addMatcher(factory.percent());

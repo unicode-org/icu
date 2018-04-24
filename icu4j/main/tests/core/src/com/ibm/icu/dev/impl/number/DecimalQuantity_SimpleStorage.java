@@ -429,6 +429,11 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
     }
   }
 
+  @Override
+  public void negate() {
+    flags ^= NEGATIVE_FLAG;
+  }
+
   /**
    * Divide the internal number by the specified quotient. This method forces the internal
    * representation into a BigDecimal. If you are dividing by a power of 10, use {@link

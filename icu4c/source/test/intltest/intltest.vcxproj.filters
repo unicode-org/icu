@@ -256,9 +256,6 @@
     <ClCompile Include="numberformattesttuple.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="numberformat2test.cpp">
-      <Filter>formatting</Filter>
-    </ClCompile>
     <ClCompile Include="numbertest_affixutils.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -266,9 +263,6 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="numbertest_decimalquantity.cpp">
-      <Filter>formatting</Filter>
-    </ClCompile>
-    <ClCompile Include="numbertest_doubleconversion.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="numbertest_modifiers.cpp">
@@ -281,6 +275,21 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="numbertest_stringbuilder.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="numbertest_stringsegment.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="numbertest_unisets.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="numbertest_parse.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="numbertest_doubleconversion.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="numbertest_skeletons.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="numfmtst.cpp">

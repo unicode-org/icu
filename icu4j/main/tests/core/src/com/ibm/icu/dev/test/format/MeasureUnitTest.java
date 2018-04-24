@@ -2164,7 +2164,10 @@ public class MeasureUnitTest extends TestFmwk {
         TreeMap<String, List<MeasureUnit>> allUnits = getAllUnits();
 
         // Hack: for C++, add NoUnits here, but ignore them when printing the create methods.
+        // ALso keep track of the base unit offset to make the C++ default constructor faster.
         allUnits.put("none", Arrays.asList(new MeasureUnit[]{NoUnit.BASE, NoUnit.PERCENT, NoUnit.PERMILLE}));
+        int baseTypeIdx = -1;
+        int baseSubTypeIdx = -1;
 
         System.out.println("static const int32_t gOffsets[] = {");
         int index = 0;
@@ -2217,6 +2220,10 @@ public class MeasureUnitTest extends TestFmwk {
                 first = false;
                 measureUnitToOffset.put(unit, offset);
                 measureUnitToTypeSubType.put(unit, Pair.of(typeIdx, subTypeIdx));
+                if (unit == NoUnit.BASE) {
+                    baseTypeIdx = typeIdx;
+                    baseSubTypeIdx = subTypeIdx;
+                }
                 offset++;
                 subTypeIdx++;
             }
@@ -2259,6 +2266,12 @@ public class MeasureUnitTest extends TestFmwk {
         }
         System.out.println();
         System.out.println("};");
+        System.out.println();
+
+        // Print out the fast-path for the default constructor
+        System.out.println("// Shortcuts to the base unit in order to make the default constructor fast");
+        System.out.println("static const int32_t kBaseTypeIdx = " + baseTypeIdx + ";");
+        System.out.println("static const int32_t kBaseSubTypeIdx = " + baseSubTypeIdx + ";");
         System.out.println();
 
         Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();

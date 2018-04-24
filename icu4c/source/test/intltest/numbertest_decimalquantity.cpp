@@ -3,11 +3,12 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
+#if !UCONFIG_NO_FORMATTING
 
 #include "number_decimalquantity.h"
 #include "math.h"
 #include <cmath>
+#include "number_utils.h"
 #include "numbertest.h"
 
 void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *) {
@@ -16,12 +17,14 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
     }
     TESTCASE_AUTO_BEGIN;
         TESTCASE_AUTO(testDecimalQuantityBehaviorStandalone);
-        TESTCASE_AUTO(testSwitchStorage);
+        TESTCASE_AUTO(testSwitchStorage);;
+        TESTCASE_AUTO(testCopyMove);
         TESTCASE_AUTO(testAppend);
         TESTCASE_AUTO(testConvertToAccurateDouble);
         TESTCASE_AUTO(testUseApproximateDoubleWhenAble);
         TESTCASE_AUTO(testHardDoubleConversion);
         TESTCASE_AUTO(testToDouble);
+        TESTCASE_AUTO(testMaxDigits);
     TESTCASE_AUTO_END;
 }
 
@@ -59,9 +62,6 @@ void DecimalQuantityTest::checkDoubleBehavior(double d, bool explicitRequired) {
         assertTrue("Should be using approximate double", !fq.isExplicitExactDouble());
     }
     UnicodeString baseStr = fq.toString();
-    assertDoubleEquals(
-        UnicodeString(u"Initial construction from hard double: ") + baseStr,
-        d, fq.toDouble());
     fq.roundToInfinity();
     UnicodeString newStr = fq.toString();
     if (explicitRequired) {
@@ -104,68 +104,111 @@ void DecimalQuantityTest::testSwitchStorage() {
 
     fq.setToLong(1234123412341234L);
     assertFalse("Should not be using byte array", fq.isUsingBytes());
-    assertEquals("Failed on initialize", u"1234123412341234E0", fq.toNumberString());
+    assertEquals("Failed on initialize", u"1.234123412341234E+15", fq.toScientificString());
     assertHealth(fq);
     // Long -> Bytes
     fq.appendDigit(5, 0, true);
     assertTrue("Should be using byte array", fq.isUsingBytes());
-    assertEquals("Failed on multiply", u"12341234123412345E0", fq.toNumberString());
+    assertEquals("Failed on multiply", u"1.2341234123412345E+16", fq.toScientificString());
     assertHealth(fq);
     // Bytes -> Long
     fq.roundToMagnitude(5, RoundingMode::UNUM_ROUND_HALFEVEN, status);
     assertSuccess("Rounding to magnitude", status);
     assertFalse("Should not be using byte array", fq.isUsingBytes());
-    assertEquals("Failed on round", u"123412341234E5", fq.toNumberString());
+    assertEquals("Failed on round", u"1.23412341234E+16", fq.toScientificString());
     assertHealth(fq);
+}
+
+void DecimalQuantityTest::testCopyMove() {
+    // Small numbers (fits in BCD long)
+    {
+        DecimalQuantity a;
+        a.setToLong(1234123412341234L);
+        DecimalQuantity b = a; // copy constructor
+        assertToStringAndHealth(a, u"<DecimalQuantity 999:0:0:-999 long 1234123412341234E0>");
+        assertToStringAndHealth(b, u"<DecimalQuantity 999:0:0:-999 long 1234123412341234E0>");
+        DecimalQuantity c(std::move(a)); // move constructor
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 long 1234123412341234E0>");
+        c.setToLong(54321L);
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 long 54321E0>");
+        c = b; // copy assignment
+        assertToStringAndHealth(b, u"<DecimalQuantity 999:0:0:-999 long 1234123412341234E0>");
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 long 1234123412341234E0>");
+        b.setToLong(45678);
+        c.setToLong(56789);
+        c = std::move(b); // move assignment
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 long 45678E0>");
+        a = std::move(c); // move assignment to a defunct object
+        assertToStringAndHealth(a, u"<DecimalQuantity 999:0:0:-999 long 45678E0>");
+    }
+
+    // Large numbers (requires byte allocation)
+    {
+        IcuTestErrorCode status(*this, "testCopyMove");
+        DecimalQuantity a;
+        a.setToDecNumber({"1234567890123456789", -1}, status);
+        DecimalQuantity b = a; // copy constructor
+        assertToStringAndHealth(a, u"<DecimalQuantity 999:0:0:-999 bytes 1234567890123456789E0>");
+        assertToStringAndHealth(b, u"<DecimalQuantity 999:0:0:-999 bytes 1234567890123456789E0>");
+        DecimalQuantity c(std::move(a)); // move constructor
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 bytes 1234567890123456789E0>");
+        c.setToDecNumber({"9876543210987654321", -1}, status);
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 bytes 9876543210987654321E0>");
+        c = b; // copy assignment
+        assertToStringAndHealth(b, u"<DecimalQuantity 999:0:0:-999 bytes 1234567890123456789E0>");
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 bytes 1234567890123456789E0>");
+        b.setToDecNumber({"876543210987654321", -1}, status);
+        c.setToDecNumber({"987654321098765432", -1}, status);
+        c = std::move(b); // move assignment
+        assertToStringAndHealth(c, u"<DecimalQuantity 999:0:0:-999 bytes 876543210987654321E0>");
+        a = std::move(c); // move assignment to a defunct object
+        assertToStringAndHealth(a, u"<DecimalQuantity 999:0:0:-999 bytes 876543210987654321E0>");
+    }
 }
 
 void DecimalQuantityTest::testAppend() {
     DecimalQuantity fq;
     fq.appendDigit(1, 0, true);
-    assertEquals("Failed on append", u"1E0", fq.toNumberString());
+    assertEquals("Failed on append", u"1E+0", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(2, 0, true);
-    assertEquals("Failed on append", u"12E0", fq.toNumberString());
+    assertEquals("Failed on append", u"1.2E+1", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(3, 1, true);
-    assertEquals("Failed on append", u"1203E0", fq.toNumberString());
+    assertEquals("Failed on append", u"1.203E+3", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(0, 1, true);
-    assertEquals("Failed on append", u"1203E2", fq.toNumberString());
+    assertEquals("Failed on append", u"1.203E+5", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(4, 0, true);
-    assertEquals("Failed on append", u"1203004E0", fq.toNumberString());
+    assertEquals("Failed on append", u"1.203004E+6", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(0, 0, true);
-    assertEquals("Failed on append", u"1203004E1", fq.toNumberString());
+    assertEquals("Failed on append", u"1.203004E+7", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(5, 0, false);
-    assertEquals("Failed on append", u"120300405E-1", fq.toNumberString());
+    assertEquals("Failed on append", u"1.20300405E+7", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(6, 0, false);
-    assertEquals("Failed on append", u"1203004056E-2", fq.toNumberString());
+    assertEquals("Failed on append", u"1.203004056E+7", fq.toScientificString());
     assertHealth(fq);
     fq.appendDigit(7, 3, false);
-    assertEquals("Failed on append", u"12030040560007E-6", fq.toNumberString());
+    assertEquals("Failed on append", u"1.2030040560007E+7", fq.toScientificString());
     assertHealth(fq);
-    UnicodeString baseExpected(u"12030040560007");
+    UnicodeString baseExpected(u"1.2030040560007");
     for (int i = 0; i < 10; i++) {
         fq.appendDigit(8, 0, false);
         baseExpected.append(u'8');
         UnicodeString expected(baseExpected);
-        expected.append(u"E-");
-        if (i >= 3) {
-            expected.append(u'1');
-        }
-        expected.append(((7 + i) % 10) + u'0');
-        assertEquals("Failed on append", expected, fq.toNumberString());
+        expected.append(u"E+7");
+        assertEquals("Failed on append", expected, fq.toScientificString());
         assertHealth(fq);
     }
     fq.appendDigit(9, 2, false);
     baseExpected.append(u"009");
     UnicodeString expected(baseExpected);
-    expected.append(u"E-19");
-    assertEquals("Failed on append", expected, fq.toNumberString());
+    expected.append(u"E+7");
+    assertEquals("Failed on append", expected, fq.toScientificString());
     assertHealth(fq);
 }
 
@@ -296,18 +339,43 @@ void DecimalQuantityTest::testHardDoubleConversion() {
 }
 
 void DecimalQuantityTest::testToDouble() {
+    IcuTestErrorCode status(*this, "testToDouble");
     static const struct TestCase {
         const char* input; // char* for the decNumber constructor
         double expected;
     } cases[] = {
             { "0", 0.0 },
+            { "514.23", 514.23 },
             { "-3.142E-271", -3.142e-271 } };
 
     for (auto& cas : cases) {
+        status.setScope(cas.input);
         DecimalQuantity q;
-        q.setToDecNumber({cas.input, -1});
+        q.setToDecNumber({cas.input, -1}, status);
         double actual = q.toDouble();
         assertEquals("Doubles should exactly equal", cas.expected, actual);
+    }
+}
+
+void DecimalQuantityTest::testMaxDigits() {
+    IcuTestErrorCode status(*this, "testMaxDigits");
+    DecimalQuantity dq;
+    dq.setToDouble(876.543);
+    dq.roundToInfinity();
+    dq.setIntegerLength(0, 2);
+    dq.setFractionLength(0, 2);
+    assertEquals("Should trim, toPlainString", "76.54", dq.toPlainString());
+    assertEquals("Should trim, toScientificString", "7.654E+1", dq.toScientificString());
+    assertEquals("Should trim, toLong", 76L, dq.toLong(true));
+    assertEquals("Should trim, toFractionLong", 54L, dq.toFractionLong(false));
+    assertEquals("Should trim, toDouble", 76.54, dq.toDouble());
+    // To test DecNum output, check the round-trip.
+    DecNum dn;
+    dq.toDecNum(dn, status);
+    DecimalQuantity copy;
+    copy.setToDecNum(dn, status);
+    if (!logKnownIssue("13701")) {
+        assertEquals("Should trim, toDecNum", "76.54", copy.toPlainString());
     }
 }
 

@@ -17,6 +17,7 @@
 #include "unicode/unistr.h"
 #include "numberformattesttuple.h"
 #include "intltest.h"
+#include "cmemory.h"
 
 struct UCHARBUF;
 class IntlTest;

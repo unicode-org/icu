@@ -3,7 +3,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
+#if !UCONFIG_NO_FORMATTING
 
 #include "putilimp.h"
 #include "numbertest.h"
@@ -77,7 +77,7 @@ void NumberStringBuilderTest::testInsertAppendUnicodeString() {
 }
 
 void NumberStringBuilderTest::testSplice() {
-    const struct TestCase {
+    static const struct TestCase {
         const char16_t* input;
         const int32_t startThis;
         const int32_t endThis;

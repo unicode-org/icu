@@ -48,6 +48,9 @@ public class Grouper {
      * Resolve the values in Properties to a Grouper object.
      */
     public static Grouper forProperties(DecimalFormatProperties properties) {
+        if (!properties.getGroupingUsed()) {
+            return GROUPER_NEVER;
+        }
         short grouping1 = (short) properties.getGroupingSize();
         short grouping2 = (short) properties.getSecondaryGroupingSize();
         short minGrouping = (short) properties.getMinimumGroupingDigits();

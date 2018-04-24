@@ -14,11 +14,12 @@ import java.text.ParsePosition;
 
 import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
+import com.ibm.icu.impl.number.DecimalFormatProperties.ParseMode;
+import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.impl.number.parse.NumberParserImpl;
-import com.ibm.icu.impl.number.parse.NumberParserImpl.ParseMode;
 import com.ibm.icu.impl.number.parse.ParsedNumber;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
@@ -206,7 +207,7 @@ import com.ibm.icu.util.ULocale.Category;
  * example, a formatter instance gotten from NumberFormat.getInstance(ULocale,
  * NumberFormat.CURRENCYSTYLE) can parse both "USD1.00" and "3.00 US dollars".
  *
- * <p>Whitespace characters (lenient mode) and bidi control characters (lenient and strict mode),
+ * <p>Whitespace characters (lenient mode) and control characters (lenient and strict mode),
  * collectively called "ignorables", do not need to match in identity or quantity between the
  * pattern string and the input string. For example, the pattern "# %" matches "35 %" (with a single
  * space), "35%" (with no space), "35&nbsp;%" (with a non-breaking space), and "35&nbsp; %" (with
@@ -214,6 +215,7 @@ import com.ibm.icu.util.ULocale.Category;
  * number: prefix, number, exponent separator, and suffix. Ignorable whitespace characters are those
  * having the Unicode "blank" property for regular expressions, defined in UTS #18 Annex C, which is
  * "horizontal" whitespace, like spaces and tabs, but not "vertical" whitespace, like line breaks.
+ * Ignorable control characters are those in the Unicode set [:Default_Ignorable_Code_Point:].
  *
  * <p>If {@link #parse(String, ParsePosition)} fails to parse a string, it returns <code>null</code>
  * and leaves the parse position unchanged. The convenience method {@link #parse(String)} indicates
@@ -287,7 +289,7 @@ public class DecimalFormat extends NumberFormat {
   transient volatile DecimalFormatProperties exportedProperties;
 
   transient volatile NumberParserImpl parser;
-  transient volatile NumberParserImpl parserWithCurrency;
+  transient volatile NumberParserImpl currencyParser;
 
   //=====================================================================================//
   //                                    CONSTRUCTORS                                     //
@@ -816,11 +818,12 @@ public class DecimalFormat extends NumberFormat {
       // Note: if this is a currency instance, currencies will be matched despite the fact that we are not in the
       // parseCurrency method (backwards compatibility)
       int startIndex = parsePosition.getIndex();
+      NumberParserImpl parser = getParser();
       parser.parse(text, startIndex, true, result);
       if (result.success()) {
           parsePosition.setIndex(result.charEnd);
           // TODO: Accessing properties here is technically not thread-safe
-          Number number = result.getNumber(properties.getParseToBigDecimal());
+          Number number = result.getNumber(parser.getParseFlags());
           // Backwards compatibility: return com.ibm.icu.math.BigDecimal
           if (number instanceof java.math.BigDecimal) {
               number = safeConvertBigDecimal((java.math.BigDecimal) number);
@@ -855,11 +858,12 @@ public class DecimalFormat extends NumberFormat {
 
       ParsedNumber result = new ParsedNumber();
       int startIndex = parsePosition.getIndex();
-      parserWithCurrency.parse(text.toString(), startIndex, true, result);
+      NumberParserImpl parser = getCurrencyParser();
+      parser.parse(text.toString(), startIndex, true, result);
       if (result.success()) {
           parsePosition.setIndex(result.charEnd);
           // TODO: Accessing properties here is technically not thread-safe
-          Number number = result.getNumber(properties.getParseToBigDecimal());
+          Number number = result.getNumber(parser.getParseFlags());
           // Backwards compatibility: return com.ibm.icu.math.BigDecimal
           if (number instanceof java.math.BigDecimal) {
               number = safeConvertBigDecimal((java.math.BigDecimal) number);
@@ -914,7 +918,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getPositivePrefix() {
-    return formatter.format(1).getPrefix();
+    return formatter.getAffixImpl(true, false);
   }
 
   /**
@@ -951,7 +955,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getNegativePrefix() {
-    return formatter.format(-1).getPrefix();
+    return formatter.getAffixImpl(true, true);
   }
 
   /**
@@ -988,7 +992,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getPositiveSuffix() {
-    return formatter.format(1).getSuffix();
+    return formatter.getAffixImpl(false, false);
   }
 
   /**
@@ -1025,7 +1029,7 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized String getNegativeSuffix() {
-    return formatter.format(-1).getSuffix();
+    return formatter.getAffixImpl(false, true);
   }
 
   /**
@@ -1130,7 +1134,7 @@ public class DecimalFormat extends NumberFormat {
     // Try to convert to a magnitude multiplier first
     int delta = 0;
     int value = multiplier;
-    while (multiplier != 1) {
+    while (value != 1) {
       delta++;
       int temp = value / 10;
       if (temp * 10 != value) {
@@ -1141,7 +1145,9 @@ public class DecimalFormat extends NumberFormat {
     }
     if (delta != -1) {
       properties.setMagnitudeMultiplier(delta);
+      properties.setMultiplier(null);
     } else {
+      properties.setMagnitudeMultiplier(0);
       properties.setMultiplier(java.math.BigDecimal.valueOf(multiplier));
     }
     refreshFormatter();
@@ -1683,7 +1689,7 @@ public class DecimalFormat extends NumberFormat {
   public synchronized char getPadCharacter() {
     CharSequence paddingString = properties.getPadString();
     if (paddingString == null) {
-      return '.'; // TODO: Is this the correct behavior?
+      return Padder.FALLBACK_PADDING_STRING.charAt(0);
     } else {
       return paddingString.charAt(0);
     }
@@ -1840,7 +1846,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized boolean isGroupingUsed() {
-    return properties.getGroupingSize() > 0 || properties.getSecondaryGroupingSize() > 0;
+    return properties.getGroupingUsed();
   }
 
   /**
@@ -1862,13 +1868,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized void setGroupingUsed(boolean enabled) {
-    if (enabled) {
-      // Set to a reasonable default value
-      properties.setGroupingSize(3);
-    } else {
-      properties.setGroupingSize(0);
-      properties.setSecondaryGroupingSize(0);
-    }
+    properties.setGroupingUsed(enabled);
     refreshFormatter();
   }
 
@@ -1880,6 +1880,9 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized int getGroupingSize() {
+    if (properties.getGroupingSize() < 0) {
+      return 0;
+    }
     return properties.getGroupingSize();
   }
 
@@ -1912,12 +1915,11 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 2.0
    */
   public synchronized int getSecondaryGroupingSize() {
-    int grouping1 = properties.getGroupingSize();
     int grouping2 = properties.getSecondaryGroupingSize();
-    if (grouping1 == grouping2 || grouping2 < 0) {
+    if (grouping2 < 0) {
       return 0;
     }
-    return properties.getSecondaryGroupingSize();
+    return grouping2;
   }
 
   /**
@@ -1951,12 +1953,10 @@ public class DecimalFormat extends NumberFormat {
    */
   @Deprecated
   public synchronized int getMinimumGroupingDigits() {
-    // Only 1 and 2 are supported right now.
-    if (properties.getMinimumGroupingDigits() == 2) {
-      return 2;
-    } else {
-      return 1;
+    if (properties.getMinimumGroupingDigits() > 0) {
+      return properties.getMinimumGroupingDigits();
     }
+    return 1;
   }
 
   /**
@@ -2004,7 +2004,7 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
-   * Returns the user-specified currency. May be null.
+   * Returns the currency used to display currency amounts. May be null.
    *
    * @see #setCurrency
    * @see DecimalFormatSymbols#getCurrency
@@ -2013,7 +2013,7 @@ public class DecimalFormat extends NumberFormat {
    */
   @Override
   public synchronized Currency getCurrency() {
-    return properties.getCurrency();
+    return exportedProperties.getCurrency();
   }
 
   /**
@@ -2435,8 +2435,15 @@ public class DecimalFormat extends NumberFormat {
     // to keep affix patterns intact.  In particular, pull rounding properties
     // so that CurrencyUsage is reflected properly.
     // TODO: Consider putting this logic in PatternString.java instead.
-    DecimalFormatProperties tprops = threadLocalProperties.get().copyFrom(properties);
-    if (useCurrency(properties)) {
+    DecimalFormatProperties tprops = new DecimalFormatProperties().copyFrom(properties);
+    boolean useCurrency = ((tprops.getCurrency() != null)
+            || tprops.getCurrencyPluralInfo() != null
+            || tprops.getCurrencyUsage() != null
+            || AffixUtils.hasCurrencySymbols(tprops.getPositivePrefixPattern())
+            || AffixUtils.hasCurrencySymbols(tprops.getPositiveSuffixPattern())
+            || AffixUtils.hasCurrencySymbols(tprops.getNegativePrefixPattern())
+            || AffixUtils.hasCurrencySymbols(tprops.getNegativeSuffixPattern()));
+    if (useCurrency) {
       tprops.setMinimumFractionDigits(exportedProperties.getMinimumFractionDigits());
       tprops.setMaximumFractionDigits(exportedProperties.getMaximumFractionDigits());
       tprops.setRoundingIncrement(exportedProperties.getRoundingIncrement());
@@ -2480,14 +2487,6 @@ public class DecimalFormat extends NumberFormat {
     return formatter.format(number).getFixedDecimal();
   }
 
-  private static final ThreadLocal<DecimalFormatProperties> threadLocalProperties =
-      new ThreadLocal<DecimalFormatProperties>() {
-        @Override
-        protected DecimalFormatProperties initialValue() {
-          return new DecimalFormatProperties();
-        }
-      };
-
   /** Rebuilds the formatter object from the property bag. */
   void refreshFormatter() {
     if (exportedProperties == null) {
@@ -2506,8 +2505,24 @@ public class DecimalFormat extends NumberFormat {
     }
     assert locale != null;
     formatter = NumberFormatter.fromDecimalFormat(properties, symbols, exportedProperties).locale(locale);
-    parser = NumberParserImpl.createParserFromProperties(properties, symbols, false, false);
-    parserWithCurrency = NumberParserImpl.createParserFromProperties(properties, symbols, true, false);
+
+    // Lazy-initialize the parsers only when we need them.
+    parser = null;
+    currencyParser = null;
+  }
+
+  NumberParserImpl getParser() {
+    if (parser == null) {
+      parser = NumberParserImpl.createParserFromProperties(properties, symbols, false);
+    }
+    return parser;
+  }
+
+  NumberParserImpl getCurrencyParser() {
+    if (currencyParser == null) {
+      currencyParser = NumberParserImpl.createParserFromProperties(properties, symbols, true);
+    }
+    return currencyParser;
   }
 
   /**
@@ -2531,20 +2546,6 @@ public class DecimalFormat extends NumberFormat {
         return 0.0;
       }
     }
-  }
-
-  /**
-   * Returns true if the currency is set in The property bag or if currency symbols are present in
-   * the prefix/suffix pattern.
-   */
-  private static boolean useCurrency(DecimalFormatProperties properties) {
-    return ((properties.getCurrency() != null)
-        || properties.getCurrencyPluralInfo() != null
-        || properties.getCurrencyUsage() != null
-        || AffixUtils.hasCurrencySymbols(properties.getPositivePrefixPattern())
-        || AffixUtils.hasCurrencySymbols(properties.getPositiveSuffixPattern())
-        || AffixUtils.hasCurrencySymbols(properties.getNegativePrefixPattern())
-        || AffixUtils.hasCurrencySymbols(properties.getNegativeSuffixPattern()));
   }
 
   /**

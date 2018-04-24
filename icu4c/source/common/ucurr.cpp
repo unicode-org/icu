@@ -16,10 +16,14 @@
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
 #include "unicode/parsepos.h"
+#include "unicode/uniset.h"
+#include "unicode/usetiter.h"
+#include "unicode/utf16.h"
 #include "ustr_imp.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "numparse_unisets.h"
 #include "uassert.h"
 #include "umutex.h"
 #include "ucln_cmn.h"
@@ -64,14 +68,6 @@ static const int32_t POW10[] = { 1, 10, 100, 1000, 10000, 100000,
                                  1000000, 10000000, 100000000, 1000000000 };
 
 static const int32_t MAX_POW10 = UPRV_LENGTHOF(POW10) - 1;
-
-// Defines equivalent currency symbols.
-static const char *EQUIV_CURRENCY_SYMBOLS[][2] = {
-    {"\\u00a5", "\\uffe5"},
-    {"$", "\\ufe69"},
-    {"$", "\\uff04"},
-    {"\\u20a8", "\\u20b9"},
-    {"\\u00a3", "\\u20a4"}};
 
 #define ISO_CURRENCY_CODE_LENGTH 3
 
@@ -1287,17 +1283,28 @@ static void
 linearSearch(const CurrencyNameStruct* currencyNames, 
              int32_t begin, int32_t end,
              const UChar* text, int32_t textLen,
+             int32_t *partialMatchLen,
              int32_t *maxMatchLen, int32_t* maxMatchIndex) {
+    int32_t initialPartialMatchLen = *partialMatchLen;
     for (int32_t index = begin; index <= end; ++index) {
         int32_t len = currencyNames[index].currencyNameLen;
         if (len > *maxMatchLen && len <= textLen &&
             uprv_memcmp(currencyNames[index].currencyName, text, len * sizeof(UChar)) == 0) {
+            *partialMatchLen = MAX(*partialMatchLen, len);
             *maxMatchIndex = index;
             *maxMatchLen = len;
 #ifdef UCURR_DEBUG
             printf("maxMatchIndex = %d, maxMatchLen = %d\n",
                    *maxMatchIndex, *maxMatchLen);
 #endif
+        } else {
+            // Check for partial matches.
+            for (int32_t i=initialPartialMatchLen; i<MIN(len, textLen); i++) {
+                if (currencyNames[index].currencyName[i] != text[i]) {
+                    break;
+                }
+                *partialMatchLen = MAX(*partialMatchLen, i + 1);
+            }
         }
     }
 }
@@ -1314,7 +1321,8 @@ linearSearch(const CurrencyNameStruct* currencyNames,
 static void
 searchCurrencyName(const CurrencyNameStruct* currencyNames, 
                    int32_t total_currency_count,
-                   const UChar* text, int32_t textLen, 
+                   const UChar* text, int32_t textLen,
+                   int32_t *partialMatchLen,
                    int32_t* maxMatchLen, int32_t* maxMatchIndex) {
     *maxMatchIndex = -1;
     *maxMatchLen = 0;
@@ -1344,6 +1352,7 @@ searchCurrencyName(const CurrencyNameStruct* currencyNames,
         if (binarySearchBegin == -1) { // did not find the range
             break;
         }
+        *partialMatchLen = MAX(*partialMatchLen, index + 1);
         if (matchIndex != -1) { 
             // find an exact match for text from text[0] to text[index] 
             // in currencyNames array.
@@ -1354,6 +1363,7 @@ searchCurrencyName(const CurrencyNameStruct* currencyNames,
             // linear search if within threshold.
             linearSearch(currencyNames, binarySearchBegin, binarySearchEnd,
                          text, textLen,
+                         partialMatchLen,
                          maxMatchLen, maxMatchIndex);
             break;
         }
@@ -1422,19 +1432,13 @@ currency_cache_cleanup(void) {
 }
 
 
-U_CAPI void
-uprv_parseCurrency(const char* locale,
-                   const icu::UnicodeString& text,
-                   icu::ParsePosition& pos,
-                   int8_t type,
-                   UChar* result,
-                   UErrorCode& ec)
-{
-    U_NAMESPACE_USE
-
-    if (U_FAILURE(ec)) {
-        return;
-    }
+/**
+ * Loads the currency name data from the cache, or from resource bundles if necessary.
+ * The refCount is automatically incremented.  It is the caller's responsibility
+ * to decrement it when done!
+ */
+static CurrencyNameCacheEntry*
+getCacheEntry(const char* locale, UErrorCode& ec) {
 
     int32_t total_currency_name_count = 0;
     CurrencyNameStruct* currencyNames = NULL;
@@ -1455,17 +1459,13 @@ uprv_parseCurrency(const char* locale,
     }
     if (found != -1) {
         cacheEntry = currCache[found];
-        currencyNames = cacheEntry->currencyNames;
-        total_currency_name_count = cacheEntry->totalCurrencyNameCount;
-        currencySymbols = cacheEntry->currencySymbols;
-        total_currency_symbol_count = cacheEntry->totalCurrencySymbolCount;
         ++(cacheEntry->refCount);
     }
     umtx_unlock(&gCurrencyCacheMutex);
     if (found == -1) {
         collectCurrencyNames(locale, &currencyNames, &total_currency_name_count, &currencySymbols, &total_currency_symbol_count, ec);
         if (U_FAILURE(ec)) {
-            return;
+            return NULL;
         }
         umtx_lock(&gCurrencyCacheMutex);
         // check again.
@@ -1505,14 +1505,44 @@ uprv_parseCurrency(const char* locale,
             deleteCurrencyNames(currencyNames, total_currency_name_count);
             deleteCurrencyNames(currencySymbols, total_currency_symbol_count);
             cacheEntry = currCache[found];
-            currencyNames = cacheEntry->currencyNames;
-            total_currency_name_count = cacheEntry->totalCurrencyNameCount;
-            currencySymbols = cacheEntry->currencySymbols;
-            total_currency_symbol_count = cacheEntry->totalCurrencySymbolCount;
             ++(cacheEntry->refCount);
         }
         umtx_unlock(&gCurrencyCacheMutex);
     }
+
+    return cacheEntry;
+}
+
+static void releaseCacheEntry(CurrencyNameCacheEntry* cacheEntry) {
+    umtx_lock(&gCurrencyCacheMutex);
+    --(cacheEntry->refCount);
+    if (cacheEntry->refCount == 0) {  // remove
+        deleteCacheEntry(cacheEntry);
+    }
+    umtx_unlock(&gCurrencyCacheMutex);
+}
+
+U_CAPI void
+uprv_parseCurrency(const char* locale,
+                   const icu::UnicodeString& text,
+                   icu::ParsePosition& pos,
+                   int8_t type,
+                   int32_t* partialMatchLen,
+                   UChar* result,
+                   UErrorCode& ec) {
+    U_NAMESPACE_USE
+    if (U_FAILURE(ec)) {
+        return;
+    }
+    CurrencyNameCacheEntry* cacheEntry = getCacheEntry(locale, ec);
+    if (U_FAILURE(ec)) {
+        return;
+    }
+
+    int32_t total_currency_name_count = cacheEntry->totalCurrencyNameCount;
+    CurrencyNameStruct* currencyNames = cacheEntry->currencyNames;
+    int32_t total_currency_symbol_count = cacheEntry->totalCurrencySymbolCount;
+    CurrencyNameStruct* currencySymbols = cacheEntry->currencySymbols;
 
     int32_t start = pos.getIndex();
 
@@ -1523,11 +1553,14 @@ uprv_parseCurrency(const char* locale,
     UErrorCode ec1 = U_ZERO_ERROR;
     textLen = u_strToUpper(upperText, MAX_CURRENCY_NAME_LEN, inputText, textLen, locale, &ec1);
 
+    // Make sure partialMatchLen is initialized
+    *partialMatchLen = 0;
+
     int32_t max = 0;
     int32_t matchIndex = -1;
     // case in-sensitive comparision against currency names
     searchCurrencyName(currencyNames, total_currency_name_count, 
-                       upperText, textLen, &max, &matchIndex);
+                       upperText, textLen, partialMatchLen, &max, &matchIndex);
 
 #ifdef UCURR_DEBUG
     printf("search in names, max = %d, matchIndex = %d\n", max, matchIndex);
@@ -1538,7 +1571,8 @@ uprv_parseCurrency(const char* locale,
     if (type != UCURR_LONG_NAME) {  // not name only
         // case sensitive comparison against currency symbols and ISO code.
         searchCurrencyName(currencySymbols, total_currency_symbol_count, 
-                           inputText, textLen, 
+                           inputText, textLen,
+                           partialMatchLen,
                            &maxInSymbol, &matchIndexInSymbol);
     }
 
@@ -1555,15 +1589,38 @@ uprv_parseCurrency(const char* locale,
     } else if (maxInSymbol >= max && matchIndexInSymbol != -1) {
         u_charsToUChars(currencySymbols[matchIndexInSymbol].IsoCode, result, 4);
         pos.setIndex(start + maxInSymbol);
-    } 
+    }
 
     // decrease reference count
-    umtx_lock(&gCurrencyCacheMutex);
-    --(cacheEntry->refCount);
-    if (cacheEntry->refCount == 0) {  // remove 
-        deleteCacheEntry(cacheEntry);
+    releaseCacheEntry(cacheEntry);
+}
+
+void uprv_currencyLeads(const char* locale, icu::UnicodeSet& result, UErrorCode& ec) {
+    U_NAMESPACE_USE
+    if (U_FAILURE(ec)) {
+        return;
     }
-    umtx_unlock(&gCurrencyCacheMutex);
+    CurrencyNameCacheEntry* cacheEntry = getCacheEntry(locale, ec);
+    if (U_FAILURE(ec)) {
+        return;
+    }
+
+    for (int32_t i=0; i<cacheEntry->totalCurrencySymbolCount; i++) {
+        const CurrencyNameStruct& info = cacheEntry->currencySymbols[i];
+        UChar32 cp;
+        U16_GET(info.currencyName, 0, 0, info.currencyNameLen, cp);
+        result.add(cp);
+    }
+
+    for (int32_t i=0; i<cacheEntry->totalCurrencyNameCount; i++) {
+        const CurrencyNameStruct& info = cacheEntry->currencyNames[i];
+        UChar32 cp;
+        U16_GET(info.currencyName, 0, 0, info.currencyNameLen, cp);
+        result.add(cp);
+    }
+
+    // decrease reference count
+    releaseCacheEntry(cacheEntry);
 }
 
 
@@ -2144,16 +2201,21 @@ static void U_CALLCONV initIsoCodes(UErrorCode &status) {
 }
 
 static void populateCurrSymbolsEquiv(icu::Hashtable *hash, UErrorCode &status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    int32_t length = UPRV_LENGTHOF(EQUIV_CURRENCY_SYMBOLS);
-    for (int32_t i = 0; i < length; ++i) {
-        icu::UnicodeString lhs(EQUIV_CURRENCY_SYMBOLS[i][0], -1, US_INV);
-        icu::UnicodeString rhs(EQUIV_CURRENCY_SYMBOLS[i][1], -1, US_INV);
-        makeEquivalent(lhs.unescape(), rhs.unescape(), hash, status);
-        if (U_FAILURE(status)) {
-            return;
+    using namespace icu::numparse::impl;
+    if (U_FAILURE(status)) { return; }
+    for (auto& entry : unisets::kCurrencyEntries) {
+        UnicodeString exemplar(entry.exemplar);
+        const UnicodeSet* set = unisets::get(entry.key);
+        if (set == nullptr) { return; }
+        UnicodeSetIterator it(*set);
+        while (it.next()) {
+            UnicodeString value = it.getString();
+            if (value == exemplar) {
+                // No need to mark the exemplar character as an equivalent
+                continue;
+            }
+            makeEquivalent(exemplar, value, hash, status);
+            if (U_FAILURE(status)) { return; }
         }
     }
 }

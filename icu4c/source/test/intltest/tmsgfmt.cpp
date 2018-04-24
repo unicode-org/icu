@@ -990,8 +990,8 @@ void TestMessageFormat::testSetLocale()
     // {sfb} to get $, would need Locale::US, not Locale::ENGLISH
     // Just use unlocalized currency symbol.
     //UnicodeString compareStrEng = "At <time> on Aug 8, 1997, you made a deposit of $456.83.";
-    UnicodeString compareStrEng = "At <time> on Aug 8, 1997, you made a deposit of ";
-    compareStrEng += (UChar) 0x00a4;
+    UnicodeString compareStrEng = "At <time> on Aug 8, 1997, you made a deposit of XXX";
+    compareStrEng += (UChar) 0x00a0;
     compareStrEng += "456.83.";
     // {sfb} to get DM, would need Locale::GERMANY, not Locale::GERMAN
     // Just use unlocalized currency symbol.
@@ -999,8 +999,7 @@ void TestMessageFormat::testSetLocale()
     UnicodeString compareStrGer = "At <time> on 08.08.1997, you made a deposit of ";
     compareStrGer += "456,83";
     compareStrGer += (UChar) 0x00a0;
-    compareStrGer += (UChar) 0x00a4;
-    compareStrGer += ".";
+    compareStrGer += "XXX.";
 
     MessageFormat msg( formatStr, err);
     result = "";

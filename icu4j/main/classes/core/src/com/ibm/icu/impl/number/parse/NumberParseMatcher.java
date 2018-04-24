@@ -3,9 +3,10 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.StringSegment;
-import com.ibm.icu.text.UnicodeSet;
 
 /**
+ * The core interface implemented by all matchers used for number parsing.
+ *
  * Given a string, there should NOT be more than one way to consume the string with the same matcher
  * applied multiple times. If there is, the non-greedy parsing algorithm will be unhappy and may enter an
  * exponential-time loop. For example, consider the "A Matcher" that accepts "any number of As". Given
@@ -43,12 +44,18 @@ public interface NumberParseMatcher {
     public boolean match(StringSegment segment, ParsedNumber result);
 
     /**
-     * Should return a set representing all possible chars (UTF-16 code units) that could be the first
-     * char that this matcher can consume. This method is only called during construction phase, and its
-     * return value is used to skip this matcher unless a segment begins with a char in this set. To make
-     * this matcher always run, return {@link UnicodeSet#ALL_CODE_POINTS}.
+     * Performs a fast "smoke check" for whether or not this matcher could possibly match against the
+     * given string segment. The test should be as fast as possible but also as restrictive as possible.
+     * For example, matchers can maintain a UnicodeSet of all code points that count possibly start a
+     * match. Matchers should use the {@link StringSegment#startsWith} method in order to correctly
+     * handle case folding.
+     *
+     * @param segment
+     *            The segment to check against.
+     * @return true if the matcher might be able to match against this segment; false if it definitely
+     *         will not be able to match.
      */
-    public UnicodeSet getLeadCodePoints();
+    public boolean smokeTest(StringSegment segment);
 
     /**
      * Method called at the end of a parse, after all matchers have failed to consume any more chars.

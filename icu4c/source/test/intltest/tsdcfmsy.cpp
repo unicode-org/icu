@@ -207,7 +207,7 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
     sym.setSymbol(DecimalFormatSymbols::kPercentSymbol, (UnicodeString)"P");
     Verify(34.5, (UnicodeString)"00 %", sym, (UnicodeString)"3450 P");
     sym.setSymbol(DecimalFormatSymbols::kCurrencySymbol, (UnicodeString)"D");
-    Verify(34.5, CharsToUnicodeString("\\u00a4##.##"), sym, (UnicodeString)"D34.5");
+    Verify(34.5, CharsToUnicodeString("\\u00a4##.##"), sym, (UnicodeString)"D 34.50");
     sym.setSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol, (UnicodeString)"|");
     Verify(3456.5, (UnicodeString)"0,000.##", sym, (UnicodeString)"3|456S5");
 

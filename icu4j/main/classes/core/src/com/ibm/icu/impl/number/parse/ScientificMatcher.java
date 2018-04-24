@@ -3,6 +3,7 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.StringSegment;
+import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
@@ -15,6 +16,8 @@ public class ScientificMatcher implements NumberParseMatcher {
 
     private final String exponentSeparatorString;
     private final DecimalMatcher exponentMatcher;
+    private final String customMinusSign;
+    private final String customPlusSign;
 
     public static ScientificMatcher getInstance(DecimalFormatSymbols symbols, Grouper grouper) {
         // TODO: Static-initialize most common instances?
@@ -25,7 +28,20 @@ public class ScientificMatcher implements NumberParseMatcher {
         exponentSeparatorString = symbols.getExponentSeparator();
         exponentMatcher = DecimalMatcher.getInstance(symbols,
                 grouper,
-                ParsingUtils.PARSE_FLAG_DECIMAL_SCIENTIFIC | ParsingUtils.PARSE_FLAG_INTEGER_ONLY);
+                ParsingUtils.PARSE_FLAG_INTEGER_ONLY | ParsingUtils.PARSE_FLAG_GROUPING_DISABLED);
+
+        String minusSign = symbols.getMinusSignString();
+        customMinusSign = minusSignSet().contains(minusSign) ? null : minusSign;
+        String plusSign = symbols.getPlusSignString();
+        customPlusSign = plusSignSet().contains(plusSign) ? null : plusSign;
+    }
+
+    private static UnicodeSet minusSignSet() {
+        return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.MINUS_SIGN);
+    }
+
+    private static UnicodeSet plusSignSet() {
+        return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.PLUS_SIGN);
     }
 
     @Override
@@ -41,22 +57,48 @@ public class ScientificMatcher implements NumberParseMatcher {
             // Full exponent separator match.
 
             // First attempt to get a code point, returning true if we can't get one.
-            segment.adjustOffset(overlap1);
-            if (segment.length() == 0) {
+            if (segment.length() == overlap1) {
                 return true;
             }
+            segment.adjustOffset(overlap1);
 
             // Allow a sign, and then try to match digits.
-            boolean minusSign = false;
-            if (segment.startsWith(UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.MINUS_SIGN))) {
-                minusSign = true;
+            int exponentSign = 1;
+            if (segment.startsWith(minusSignSet())) {
+                exponentSign = -1;
                 segment.adjustOffsetByCodePoint();
-            } else if (segment.startsWith(UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.PLUS_SIGN))) {
+            } else if (segment.startsWith(plusSignSet())) {
                 segment.adjustOffsetByCodePoint();
+            } else if (segment.startsWith(customMinusSign)) {
+                int overlap2 = segment.getCommonPrefixLength(customMinusSign);
+                if (overlap2 != customMinusSign.length()) {
+                    // Partial custom sign match; un-match the exponent separator.
+                    segment.adjustOffset(-overlap1);
+                    return true;
+                }
+                exponentSign = -1;
+                segment.adjustOffset(overlap2);
+            } else if (segment.startsWith(customPlusSign)) {
+                int overlap2 = segment.getCommonPrefixLength(customPlusSign);
+                if (overlap2 != customPlusSign.length()) {
+                    // Partial custom sign match; un-match the exponent separator.
+                    segment.adjustOffset(-overlap1);
+                    return true;
+                }
+                segment.adjustOffset(overlap2);
             }
 
+            // We are supposed to accept E0 after NaN, so we need to make sure result.quantity is available.
+            boolean wasNull = (result.quantity == null);
+            if (wasNull) {
+                result.quantity = new DecimalQuantity_DualStorageBCD();
+            }
             int digitsOffset = segment.getOffset();
-            boolean digitsReturnValue = exponentMatcher.match(segment, result, minusSign);
+            boolean digitsReturnValue = exponentMatcher.match(segment, result, exponentSign);
+            if (wasNull) {
+                result.quantity = null;
+            }
+
             if (segment.getOffset() != digitsOffset) {
                 // At least one exponent digit was matched.
                 result.flags |= ParsedNumber.FLAG_HAS_EXPONENT;
@@ -76,14 +118,8 @@ public class ScientificMatcher implements NumberParseMatcher {
     }
 
     @Override
-    public UnicodeSet getLeadCodePoints() {
-        int leadCp = exponentSeparatorString.codePointAt(0);
-        UnicodeSet s = UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.SCIENTIFIC_LEAD);
-        if (s.contains(leadCp)) {
-            return s;
-        } else {
-            return new UnicodeSet().add(leadCp).freeze();
-        }
+    public boolean smokeTest(StringSegment segment) {
+        return segment.startsWith(exponentSeparatorString);
     }
 
     @Override

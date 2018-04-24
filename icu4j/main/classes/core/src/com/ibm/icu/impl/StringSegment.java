@@ -81,9 +81,7 @@ public class StringSegment implements CharSequence {
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        throw new AssertionError(); // Never used
-        // Possible implementation:
-        // return str.subSequence(start + this.start, end + this.start);
+        return str.subSequence(start + this.start, end + this.start);
     }
 
     /**
@@ -103,6 +101,13 @@ public class StringSegment implements CharSequence {
             return Character.toCodePoint(lead, trail);
         }
         return lead;
+    }
+
+    /**
+     * Returns the code point at the given index relative to the current offset.
+     */
+    public int codePointAt(int index) {
+        return str.codePointAt(start + index);
     }
 
     /**
@@ -126,6 +131,19 @@ public class StringSegment implements CharSequence {
             return false;
         }
         return uniset.contains(cp);
+    }
+
+    /**
+     * Returns true if there is at least one code point of overlap between this StringSegment and the
+     * given CharSequence. Null-safe.
+     */
+    public boolean startsWith(CharSequence other) {
+        if (other == null || other.length() == 0 || length() == 0) {
+            return false;
+        }
+        int cp1 = Character.codePointAt(this, 0);
+        int cp2 = Character.codePointAt(other, 0);
+        return codePointsEqual(cp1, cp2, foldCase);
     }
 
     /**
