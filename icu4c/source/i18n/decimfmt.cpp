@@ -1305,7 +1305,7 @@ bool DecimalFormat::fastFormatInt64(int64_t input, UnicodeString& output) const 
     if (i32 != input || i32 == INT32_MIN) {
         return false;
     }
-    doFastFormatInt32(i32, std::signbit(input), output);
+    doFastFormatInt32(i32, input < 0, output);
     return true;
 }
 

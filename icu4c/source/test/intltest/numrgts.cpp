@@ -2770,7 +2770,7 @@ void NumberFormatRegressionTest::Test8199(void) {
     nf->parse(numStr, val, status);
     TEST_CHECK_STATUS(status);
     TEST_ASSERT_EQUALS(Formattable::kDouble, val.getType());
-    TEST_ASSERT_EQUALS(1000000000L, val.getInt64(status));
+    TEST_ASSERT_EQUALS(1000000000LL, val.getInt64(status));
     TEST_CHECK_STATUS(status);
     TEST_ASSERT_EQUALS(1000000000.6, val.getDouble(status));
     TEST_CHECK_STATUS(status);
