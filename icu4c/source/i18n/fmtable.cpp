@@ -19,6 +19,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <cstdlib>
 #include <math.h>
 #include "unicode/fmtable.h"
 #include "unicode/ustring.h"
