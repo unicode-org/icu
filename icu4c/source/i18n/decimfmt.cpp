@@ -10,6 +10,7 @@
 #define UNISTR_FROM_STRING_EXPLICIT
 
 #include <cmath>
+#include <cstdlib>
 #include <stdlib.h>
 #include "unicode/errorcode.h"
 #include "unicode/decimfmt.h"
