@@ -5,18 +5,20 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "uassert.h"
+#include <cstdlib>
 #include <cmath>
-#include "cmemory.h"
 #include <limits>
 #include <stdlib.h>
+
+#include "unicode/plurrule.h"
+#include "cmemory.h"
 #include "putilimp.h"
 #include "number_decimalquantity.h"
 #include "number_roundingutils.h"
 #include "double-conversion.h"
-#include "unicode/plurrule.h"
 #include "charstr.h"
 #include "number_utils.h"
+#include "uassert.h"
 
 using namespace icu;
 using namespace icu::number;
