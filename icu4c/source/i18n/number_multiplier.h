@@ -17,7 +17,8 @@ namespace impl {
 /**
  * Wraps a {@link Multiplier} for use in the number formatting pipeline.
  */
-class MultiplierFormatHandler : public MicroPropsGenerator, public UMemory {
+// Exported as U_I18N_API for tests
+class U_I18N_API MultiplierFormatHandler : public MicroPropsGenerator, public UMemory {
   public:
     void setAndChain(const Scale& multiplier, const MicroPropsGenerator* parent);
 

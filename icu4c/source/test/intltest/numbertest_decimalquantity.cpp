@@ -367,7 +367,7 @@ void DecimalQuantityTest::testMaxDigits() {
     assertEquals("Should trim, toPlainString", "76.54", dq.toPlainString());
     assertEquals("Should trim, toScientificString", "7.654E+1", dq.toScientificString());
     assertEquals("Should trim, toLong", 76LL, dq.toLong(true));
-    assertEquals("Should trim, toFractionLong", 54L, dq.toFractionLong(false));
+    assertEquals("Should trim, toFractionLong", 54LL, dq.toFractionLong(false));
     assertEquals("Should trim, toDouble", 76.54, dq.toDouble());
     // To test DecNum output, check the round-trip.
     DecNum dn;

@@ -78,6 +78,14 @@ class NumberParserImpl;
 // explicit template instantiation. see digitlst.h
 // (When building DLLs for Windows this is required.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
+#pragma warning(suppress: 4661)
+template class U_I18N_API LocalPointerBase<number::LocalizedNumberFormatter>;
+template class U_I18N_API LocalPointer<number::LocalizedNumberFormatter>;
+template class U_I18N_API LocalPointerBase<number::impl::DecimalFormatProperties>;
+template class U_I18N_API LocalPointer<number::impl::DecimalFormatProperties>;
+template class U_I18N_API LocalPointerBase<DecimalFormatSymbols>;
+template class U_I18N_API LocalPointer<DecimalFormatSymbols>;
 template class U_I18N_API    EnumSet<UNumberFormatAttribute,
             UNUM_MAX_NONBOOLEAN_ATTRIBUTE+1,
             UNUM_LIMIT_BOOLEAN_ATTRIBUTE>;
@@ -2144,11 +2152,11 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     LocalPointer<number::impl::DecimalFormatProperties> fExportedProperties;
 
-    /** A field for a few additional helper object that need ownership. */
-    LocalPointer<number::impl::DecimalFormatWarehouse> fWarehouse;
-
-    std::atomic<numparse::impl::NumberParserImpl*> fAtomicParser = {};
-    std::atomic<numparse::impl::NumberParserImpl*> fAtomicCurrencyParser = {};
+    /**
+	 * A field for a few additional helper object that need ownership.
+	 * Can't be a LocalPointer because it is an internal class.
+	 */
+    number::impl::DecimalFormatWarehouse* fWarehouse;
 
     // Data for fastpath
     bool fCanUseFastFormat;

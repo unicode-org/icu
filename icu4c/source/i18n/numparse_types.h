@@ -84,7 +84,8 @@ class CompactUnicodeString {
  *
  * @author sffc
  */
-class ParsedNumber {
+// Exported as U_I18N_API for tests
+class U_I18N_API ParsedNumber {
   public:
 
     /**
@@ -171,7 +172,8 @@ class ParsedNumber {
  *
  * @author sffc
  */
-class StringSegment : public UMemory {
+// Exported as U_I18N_API for tests
+class U_I18N_API StringSegment : public UMemory {
   public:
     StringSegment(const UnicodeString& str, bool ignoreCase);
 
@@ -282,7 +284,8 @@ class StringSegment : public UMemory {
  *
  * @author sffc
  */
-class NumberParseMatcher {
+// Exported as U_I18N_API for tests
+class U_I18N_API NumberParseMatcher {
   public:
     /**
      * Matchers can override this method to return true to indicate that they are optional and can be run

@@ -47,7 +47,8 @@ class CodePointMatcher : public NumberParseMatcher, public UMemory {
 /**
  * A warehouse to retain ownership of CodePointMatchers.
  */
-class CodePointMatcherWarehouse : public UMemory {
+// Exported as U_I18N_API for tests
+class U_I18N_API CodePointMatcherWarehouse : public UMemory {
   private:
     static constexpr int32_t CODE_POINT_STACK_CAPACITY = 5; // Number of entries directly on the stack
     static constexpr int32_t CODE_POINT_BATCH_SIZE = 10; // Number of entries per heap allocation
@@ -92,7 +93,8 @@ struct AffixTokenMatcherSetupData {
  *
  * @author sffc
  */
-class AffixTokenMatcherWarehouse : public UMemory {
+// Exported as U_I18N_API for tests
+class U_I18N_API AffixTokenMatcherWarehouse : public UMemory {
   public:
     AffixTokenMatcherWarehouse() = default;  // WARNING: Leaves the object in an unusable state
 
@@ -154,7 +156,8 @@ class AffixPatternMatcherBuilder : public TokenConsumer, public MutableMatcherCo
 };
 
 
-class AffixPatternMatcher : public ArraySeriesMatcher {
+// Exported as U_I18N_API for tests
+class U_I18N_API AffixPatternMatcher : public ArraySeriesMatcher {
   public:
     AffixPatternMatcher() = default;  // WARNING: Leaves the object in an unusable state
 

@@ -509,9 +509,9 @@ int64_t DecimalQuantity::toLong(bool truncateIfOverflow) const {
         result = result * 10 + getDigitPos(magnitude - scale);
     }
     if (isNegative()) {
-        return -result;
+        return static_cast<int64_t>(-result);
     }
-    return result;
+    return static_cast<int64_t>(result);
 }
 
 uint64_t DecimalQuantity::toFractionLong(bool includeTrailingZeros) const {

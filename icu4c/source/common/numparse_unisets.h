@@ -61,12 +61,14 @@ enum Key {
     COUNT
 };
 
-// Exported as U_COMMON_API for ucurr.h
-const U_COMMON_API UnicodeSet* get(Key key);
+// Exported as U_COMMON_API for ucurr.cpp
+U_COMMON_API const UnicodeSet* get(Key key);
 
-Key chooseFrom(UnicodeString str, Key key1);
+// Exported as U_COMMON_API for numparse_decimal.cpp
+U_COMMON_API Key chooseFrom(UnicodeString str, Key key1);
 
-Key chooseFrom(UnicodeString str, Key key1, Key key2);
+// Exported as U_COMMON_API for numparse_decimal.cpp
+U_COMMON_API Key chooseFrom(UnicodeString str, Key key1, Key key2);
 
 // Unused in C++:
 // Key chooseCurrency(UnicodeString str);
