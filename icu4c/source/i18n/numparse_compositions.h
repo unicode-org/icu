@@ -16,7 +16,8 @@ namespace impl {
 /**
  * Base class for AnyMatcher and SeriesMatcher.
  */
-class CompositionMatcher : public NumberParseMatcher {
+// Exported as U_I18N_API for tests
+class U_I18N_API CompositionMatcher : public NumberParseMatcher {
   protected:
     // No construction except by subclasses!
     CompositionMatcher() = default;

@@ -350,7 +350,8 @@ class U_I18N_API NumberParseMatcher {
 /**
  * Interface for use in arguments.
  */
-class MutableMatcherCollection {
+// Exported as U_I18N_API for tests
+class U_I18N_API MutableMatcherCollection {
   public:
     virtual ~MutableMatcherCollection() = default;
 

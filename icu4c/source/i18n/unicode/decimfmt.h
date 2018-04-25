@@ -35,7 +35,6 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include <atomic>
 #include "unicode/dcfmtsym.h"
 #include "unicode/numfmt.h"
 #include "unicode/locid.h"
@@ -57,15 +56,13 @@
 U_NAMESPACE_BEGIN
 
 class CurrencyPluralInfo;
-class FieldPositionHandler;
 class CompactDecimalFormat;
 
 namespace number {
 class LocalizedNumberFormatter;
 namespace impl {
 class DecimalQuantity;
-struct DecimalFormatProperties;
-struct DecimalFormatWarehouse;
+struct DecimalFormatFields;
 }
 }
 
@@ -78,14 +75,6 @@ class NumberParserImpl;
 // explicit template instantiation. see digitlst.h
 // (When building DLLs for Windows this is required.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-// Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
-#pragma warning(suppress: 4661)
-template class U_I18N_API LocalPointerBase<number::LocalizedNumberFormatter>;
-template class U_I18N_API LocalPointer<number::LocalizedNumberFormatter>;
-template class U_I18N_API LocalPointerBase<number::impl::DecimalFormatProperties>;
-template class U_I18N_API LocalPointer<number::impl::DecimalFormatProperties>;
-template class U_I18N_API LocalPointerBase<DecimalFormatSymbols>;
-template class U_I18N_API LocalPointer<DecimalFormatSymbols>;
 template class U_I18N_API    EnumSet<UNumberFormatAttribute,
             UNUM_MAX_NONBOOLEAN_ATTRIBUTE+1,
             UNUM_LIMIT_BOOLEAN_ATTRIBUTE>;
@@ -2131,42 +2120,8 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     //                                   INSTANCE FIELDS                                   //
     //=====================================================================================//
 
-    /**
-     * The property bag corresponding to user-specified settings and settings from the pattern string.
-     */
-    LocalPointer<number::impl::DecimalFormatProperties> fProperties;
-
-    /**
-     * The symbols for the current locale.
-     */
-    LocalPointer<const DecimalFormatSymbols> fSymbols;
-
-    /**
-     * The pre-computed formatter object. Setters cause this to be re-computed atomically. The {@link
-     * #format} method uses the formatter directly without needing to synchronize.
-     */
-    LocalPointer<const number::LocalizedNumberFormatter> fFormatter;
-
-    /**
-     * The effective properties as exported from the formatter object. Used by the getters.
-     */
-    LocalPointer<number::impl::DecimalFormatProperties> fExportedProperties;
-
-    /**
-	 * A field for a few additional helper object that need ownership.
-	 * Can't be a LocalPointer because it is an internal class.
-	 */
-    number::impl::DecimalFormatWarehouse* fWarehouse;
-
-    // Data for fastpath
-    bool fCanUseFastFormat;
-    struct FastFormatData {
-        char16_t cpZero;
-        char16_t cpGroupingSeparator;
-        char16_t cpMinusSign;
-        int8_t minInt;
-        int8_t maxInt;
-    } fFastData;
+    // Only one instance field: keep all fields inside of an implementation class defined in number_mapper.h
+    number::impl::DecimalFormatFields* fields;
 
     // Allow child class CompactDecimalFormat to access fProperties:
     friend class CompactDecimalFormat;

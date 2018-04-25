@@ -7,13 +7,16 @@
 #ifndef __NUMBER_MAPPER_H__
 #define __NUMBER_MAPPER_H__
 
+#include <atomic>
 #include "number_types.h"
 #include "unicode/currpinf.h"
 #include "standardplural.h"
 #include "number_patternstring.h"
 #include "number_currencysymbols.h"
+#include "numparse_impl.h"
 
-U_NAMESPACE_BEGIN namespace number {
+U_NAMESPACE_BEGIN
+namespace number {
 namespace impl {
 
 
@@ -114,10 +117,47 @@ struct DecimalFormatWarehouse {
     PropertiesAffixPatternProvider propertiesAPP;
     CurrencyPluralInfoAffixProvider currencyPluralInfoAPP;
     CurrencySymbols currencySymbols;
+};
 
-    // Can't have std::atomic in public header files, so put it here in the warehouse.
-    std::atomic<numparse::impl::NumberParserImpl*> fAtomicParser = {};
-    std::atomic<numparse::impl::NumberParserImpl*> fAtomicCurrencyParser = {};
+
+/**
+* Internal fields for DecimalFormat.
+* TODO: Make some of these fields by value instead of by LocalPointer?
+*/
+struct DecimalFormatFields : public UMemory {
+    /** The property bag corresponding to user-specified settings and settings from the pattern string. */
+    LocalPointer<DecimalFormatProperties> properties;
+
+    /** The symbols for the current locale. */
+    LocalPointer<const DecimalFormatSymbols> symbols;
+
+    /**
+    * The pre-computed formatter object. Setters cause this to be re-computed atomically. The {@link
+    * #format} method uses the formatter directly without needing to synchronize.
+    */
+    LocalPointer<const LocalizedNumberFormatter> formatter;
+
+    /** The lazy-computed parser for .parse() */
+    std::atomic<::icu::numparse::impl::NumberParserImpl*> atomicParser = {};
+
+    /** The lazy-computed parser for .parseCurrency() */
+    std::atomic<::icu::numparse::impl::NumberParserImpl*> atomicCurrencyParser = {};
+
+    /** Small object ownership warehouse for the formatter and parser */
+    DecimalFormatWarehouse warehouse;
+
+    /** The effective properties as exported from the formatter object. Used by some getters. */
+    LocalPointer<DecimalFormatProperties> exportedProperties;
+
+    // Data for fastpath
+    bool canUseFastFormat;
+    struct FastFormatData {
+        char16_t cpZero;
+        char16_t cpGroupingSeparator;
+        char16_t cpMinusSign;
+        int8_t minInt;
+        int8_t maxInt;
+    } fastData;
 };
 
 
