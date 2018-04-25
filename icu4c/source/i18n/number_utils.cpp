@@ -67,6 +67,7 @@ const char16_t* utils::getPatternForStyle(const Locale& locale, const char* nsNa
             patternKey = "scientificFormat";
             break;
         default:
+            patternKey = "decimalFormat"; // silence compiler error
             U_ASSERT(false);
     }
     LocalUResourceBundlePointer res(ures_open(nullptr, locale.getName(), &status));
