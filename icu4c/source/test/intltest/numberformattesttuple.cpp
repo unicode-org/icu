@@ -152,7 +152,7 @@ static void strToInt(
         }
         value = value * 10 - 0x30 + (int32_t) ch;
     }
-    int32_t signedValue = neg ? -value : static_cast<int32_t>(value);
+    int32_t signedValue = neg ? static_cast<int32_t>(-value) : static_cast<int32_t>(value);
     *static_cast<int32_t *>(intPtr) = signedValue;
 }
 

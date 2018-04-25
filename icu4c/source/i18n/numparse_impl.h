@@ -22,7 +22,8 @@
 U_NAMESPACE_BEGIN namespace numparse {
 namespace impl {
 
-class NumberParserImpl : public MutableMatcherCollection {
+// Exported as U_I18N_API for tests
+class U_I18N_API NumberParserImpl : public MutableMatcherCollection {
   public:
     virtual ~NumberParserImpl();
 

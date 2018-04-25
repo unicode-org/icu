@@ -44,7 +44,8 @@ class SymbolMatcher : public NumberParseMatcher, public UMemory {
 };
 
 
-class IgnorablesMatcher : public SymbolMatcher {
+// Exported as U_I18N_API for tests
+class U_I18N_API IgnorablesMatcher : public SymbolMatcher {
   public:
     IgnorablesMatcher() = default;  // WARNING: Leaves the object in an unusable state
 
@@ -74,7 +75,8 @@ class InfinityMatcher : public SymbolMatcher {
 };
 
 
-class MinusSignMatcher : public SymbolMatcher {
+// Exported as U_I18N_API for tests
+class U_I18N_API MinusSignMatcher : public SymbolMatcher {
   public:
     MinusSignMatcher() = default;  // WARNING: Leaves the object in an unusable state
 
@@ -118,7 +120,8 @@ class PaddingMatcher : public SymbolMatcher {
 };
 
 
-class PercentMatcher : public SymbolMatcher {
+// Exported as U_I18N_API for tests
+class U_I18N_API PercentMatcher : public SymbolMatcher {
   public:
     PercentMatcher() = default;  // WARNING: Leaves the object in an unusable state
 
@@ -144,7 +147,8 @@ class PermilleMatcher : public SymbolMatcher {
 };
 
 
-class PlusSignMatcher : public SymbolMatcher {
+// Exported as U_I18N_API for tests
+class U_I18N_API PlusSignMatcher : public SymbolMatcher {
   public:
     PlusSignMatcher() = default;  // WARNING: Leaves the object in an unusable state
 

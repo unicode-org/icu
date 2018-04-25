@@ -114,6 +114,10 @@ struct DecimalFormatWarehouse {
     PropertiesAffixPatternProvider propertiesAPP;
     CurrencyPluralInfoAffixProvider currencyPluralInfoAPP;
     CurrencySymbols currencySymbols;
+
+    // Can't have std::atomic in public header files, so put it here in the warehouse.
+    std::atomic<numparse::impl::NumberParserImpl*> fAtomicParser = {};
+    std::atomic<numparse::impl::NumberParserImpl*> fAtomicCurrencyParser = {};
 };
 
 

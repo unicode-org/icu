@@ -566,7 +566,7 @@
     <ClInclude Include="uinvchar.h" />
     <ClInclude Include="ustr_cnv.h" />
     <ClInclude Include="ustr_imp.h" />
-    <ClCompile Include="numparse_unisets.h" />
+    <ClInclude Include="numparse_unisets.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="common.rc" />

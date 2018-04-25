@@ -15,7 +15,8 @@ U_NAMESPACE_BEGIN namespace number {
 namespace impl {
 
 
-class CurrencySymbols : public UMemory {
+// Exported as U_I18N_API for tests
+class U_I18N_API CurrencySymbols : public UMemory {
   public:
     CurrencySymbols() = default; // default constructor: leaves class in valid but undefined state
 

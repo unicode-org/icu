@@ -116,7 +116,8 @@ getPatternForStyle(const Locale& locale, const char* nsName, CldrPatternStyle st
 
 
 /** A very thin C++ wrapper around decNumber.h */
-class DecNum : public UMemory {
+// Exported as U_I18N_API for tests
+class U_I18N_API DecNum : public UMemory {
   public:
     DecNum();  // leaves object in valid but undefined state
 

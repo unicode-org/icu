@@ -61,7 +61,8 @@ class CompositionMatcher : public NumberParseMatcher {
  * @author sffc
  * @see AnyMatcher
  */
-class SeriesMatcher : public CompositionMatcher {
+// Exported as U_I18N_API for tests
+class U_I18N_API SeriesMatcher : public CompositionMatcher {
   public:
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
@@ -82,7 +83,8 @@ class SeriesMatcher : public CompositionMatcher {
  *
  * The object adopts the array, but NOT the matchers contained inside the array.
  */
-class ArraySeriesMatcher : public SeriesMatcher {
+// Exported as U_I18N_API for tests
+class U_I18N_API ArraySeriesMatcher : public SeriesMatcher {
   public:
     ArraySeriesMatcher();  // WARNING: Leaves the object in an unusable state
 

@@ -72,7 +72,7 @@ double ParsedNumber::getDouble() const {
     }
 
     if (quantity.fitsInLong()) {
-        return quantity.toLong();
+        return static_cast<double>(quantity.toLong());
     } else {
         return quantity.toDouble();
     }

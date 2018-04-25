@@ -30,6 +30,14 @@ using namespace icu::numparse::impl;
 using ERoundingMode = icu::DecimalFormat::ERoundingMode;
 using EPadPosition = icu::DecimalFormat::EPadPosition;
 
+// MSVC warns C4805 when comparing bool with UBool
+// TODO: Move this macro into a better place?
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+#define UBOOL_TO_BOOL(b) static_cast<bool>(b)
+#else
+#define UBOOL_TO_BOOL(b) b
+#endif
+
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DecimalFormat)
 
@@ -89,7 +97,10 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern, DecimalFormatSymbols*
 DecimalFormat::DecimalFormat(const DecimalFormatSymbols* symbolsToAdopt, UErrorCode& status) {
     fProperties.adoptInsteadAndCheckErrorCode(new DecimalFormatProperties(), status);
     fExportedProperties.adoptInsteadAndCheckErrorCode(new DecimalFormatProperties(), status);
-    fWarehouse.adoptInsteadAndCheckErrorCode(new DecimalFormatWarehouse(), status);
+    fWarehouse = new DecimalFormatWarehouse();
+	if (fWarehouse == nullptr) {
+		status = U_MEMORY_ALLOCATION_ERROR;
+	}
     if (symbolsToAdopt == nullptr) {
         fSymbols.adoptInsteadAndCheckErrorCode(new DecimalFormatSymbols(status), status);
     } else {
@@ -331,14 +342,14 @@ int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& sta
 }
 
 void DecimalFormat::setGroupingUsed(UBool enabled) {
-    if (enabled == fProperties->groupingUsed) { return; }
+    if (UBOOL_TO_BOOL(enabled) == fProperties->groupingUsed) { return; }
     NumberFormat::setGroupingUsed(enabled); // to set field for compatibility
     fProperties->groupingUsed = enabled;
     touchNoError();
 }
 
 void DecimalFormat::setParseIntegerOnly(UBool value) {
-    if (value == fProperties->parseIntegerOnly) { return; }
+    if (UBOOL_TO_BOOL(value) == fProperties->parseIntegerOnly) { return; }
     NumberFormat::setParseIntegerOnly(value); // to set field for compatibility
     fProperties->parseIntegerOnly = value;
     touchNoError();
@@ -374,7 +385,7 @@ DecimalFormat::DecimalFormat(const DecimalFormat& source) : NumberFormat(source)
     fProperties.adoptInstead(new DecimalFormatProperties(*source.fProperties));
     fSymbols.adoptInstead(new DecimalFormatSymbols(*source.fSymbols));
     fExportedProperties.adoptInstead(new DecimalFormatProperties());
-    fWarehouse.adoptInstead(new DecimalFormatWarehouse());
+    fWarehouse = new DecimalFormatWarehouse();
     if (fProperties == nullptr || fSymbols == nullptr || fExportedProperties == nullptr ||
         fWarehouse == nullptr) {
         return;
@@ -391,8 +402,9 @@ DecimalFormat& DecimalFormat::operator=(const DecimalFormat& rhs) {
 }
 
 DecimalFormat::~DecimalFormat() {
-    delete fAtomicParser.exchange(nullptr);
-    delete fAtomicCurrencyParser.exchange(nullptr);
+    delete fWarehouse->fAtomicParser.exchange(nullptr);
+    delete fWarehouse->fAtomicCurrencyParser.exchange(nullptr);
+	delete fWarehouse;
 };
 
 Format* DecimalFormat::clone() const {
@@ -665,7 +677,7 @@ UBool DecimalFormat::isSignAlwaysShown() const {
 }
 
 void DecimalFormat::setSignAlwaysShown(UBool value) {
-    if (value == fProperties->signAlwaysShown) { return; }
+    if (UBOOL_TO_BOOL(value) == fProperties->signAlwaysShown) { return; }
     fProperties->signAlwaysShown = value;
     touchNoError();
 }
@@ -819,7 +831,7 @@ UBool DecimalFormat::isExponentSignAlwaysShown(void) const {
 }
 
 void DecimalFormat::setExponentSignAlwaysShown(UBool expSignAlways) {
-    if (expSignAlways == fProperties->exponentSignAlwaysShown) { return; }
+    if (UBOOL_TO_BOOL(expSignAlways) == fProperties->exponentSignAlwaysShown) { return; }
     fProperties->exponentSignAlwaysShown = expSignAlways;
     touchNoError();
 }
@@ -866,7 +878,7 @@ UBool DecimalFormat::isDecimalSeparatorAlwaysShown(void) const {
 }
 
 void DecimalFormat::setDecimalSeparatorAlwaysShown(UBool newValue) {
-    if (newValue == fProperties->decimalSeparatorAlwaysShown) { return; }
+    if (UBOOL_TO_BOOL(newValue) == fProperties->decimalSeparatorAlwaysShown) { return; }
     fProperties->decimalSeparatorAlwaysShown = newValue;
     touchNoError();
 }
@@ -876,7 +888,7 @@ UBool DecimalFormat::isDecimalPatternMatchRequired(void) const {
 }
 
 void DecimalFormat::setDecimalPatternMatchRequired(UBool newValue) {
-    if (newValue == fProperties->decimalPatternMatchRequired) { return; }
+    if (UBOOL_TO_BOOL(newValue) == fProperties->decimalPatternMatchRequired) { return; }
     fProperties->decimalPatternMatchRequired = newValue;
     touchNoError();
 }
@@ -886,7 +898,7 @@ UBool DecimalFormat::isParseNoExponent() const {
 }
 
 void DecimalFormat::setParseNoExponent(UBool value) {
-    if (value == fProperties->parseNoExponent) { return; }
+    if (UBOOL_TO_BOOL(value) == fProperties->parseNoExponent) { return; }
     fProperties->parseNoExponent = value;
     touchNoError();
 }
@@ -896,7 +908,7 @@ UBool DecimalFormat::isParseCaseSensitive() const {
 }
 
 void DecimalFormat::setParseCaseSensitive(UBool value) {
-    if (value == fProperties->parseCaseSensitive) { return; }
+    if (UBOOL_TO_BOOL(value) == fProperties->parseCaseSensitive) { return; }
     fProperties->parseCaseSensitive = value;
     touchNoError();
 }
@@ -906,7 +918,7 @@ UBool DecimalFormat::isFormatFailIfMoreThanMaxDigits() const {
 }
 
 void DecimalFormat::setFormatFailIfMoreThanMaxDigits(UBool value) {
-    if (value == fProperties->formatFailIfMoreThanMaxDigits) { return; }
+    if (UBOOL_TO_BOOL(value) == fProperties->formatFailIfMoreThanMaxDigits) { return; }
     fProperties->formatFailIfMoreThanMaxDigits = value;
     touchNoError();
 }
@@ -1129,8 +1141,8 @@ void DecimalFormat::touch(UErrorCode& status) {
     setupFastFormat();
 
     // Delete the parsers if they were made previously
-    delete fAtomicParser.exchange(nullptr);
-    delete fAtomicCurrencyParser.exchange(nullptr);
+    delete fWarehouse->fAtomicParser.exchange(nullptr);
+    delete fWarehouse->fAtomicCurrencyParser.exchange(nullptr);
 
     // In order for the getters to work, we need to populate some fields in NumberFormat.
     NumberFormat::setCurrency(fExportedProperties->currency.get(status).getISOCurrency(), status);
@@ -1158,7 +1170,7 @@ const numparse::impl::NumberParserImpl* DecimalFormat::getParser(UErrorCode& sta
     if (U_FAILURE(status)) { return nullptr; }
 
     // First try to get the pre-computed parser
-    auto* ptr = fAtomicParser.load();
+    auto* ptr = fWarehouse->fAtomicParser.load();
     if (ptr != nullptr) {
         return ptr;
     }
@@ -1173,7 +1185,7 @@ const numparse::impl::NumberParserImpl* DecimalFormat::getParser(UErrorCode& sta
     // Note: ptr starts as nullptr; during compare_exchange, it is set to what is actually stored in the
     // atomic if another thread beat us to computing the parser object.
     auto* nonConstThis = const_cast<DecimalFormat*>(this);
-    if (!nonConstThis->fAtomicParser.compare_exchange_strong(ptr, temp)) {
+    if (!nonConstThis->fWarehouse->fAtomicParser.compare_exchange_strong(ptr, temp)) {
         // Another thread beat us to computing the parser
         delete temp;
         return ptr;
@@ -1187,7 +1199,7 @@ const numparse::impl::NumberParserImpl* DecimalFormat::getCurrencyParser(UErrorC
     if (U_FAILURE(status)) { return nullptr; }
 
     // First try to get the pre-computed parser
-    auto* ptr = fAtomicCurrencyParser.load();
+    auto* ptr = fWarehouse->fAtomicCurrencyParser.load();
     if (ptr != nullptr) {
         return ptr;
     }
@@ -1202,7 +1214,7 @@ const numparse::impl::NumberParserImpl* DecimalFormat::getCurrencyParser(UErrorC
     // Note: ptr starts as nullptr; during compare_exchange, it is set to what is actually stored in the
     // atomic if another thread beat us to computing the parser object.
     auto* nonConstThis = const_cast<DecimalFormat*>(this);
-    if (!nonConstThis->fAtomicCurrencyParser.compare_exchange_strong(ptr, temp)) {
+    if (!nonConstThis->fWarehouse->fAtomicCurrencyParser.compare_exchange_strong(ptr, temp)) {
         // Another thread beat us to computing the parser
         delete temp;
         return ptr;
