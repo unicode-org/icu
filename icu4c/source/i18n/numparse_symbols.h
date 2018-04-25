@@ -20,7 +20,8 @@ namespace impl {
  *
  * @author sffc
  */
-class SymbolMatcher : public NumberParseMatcher, public UMemory {
+// Exported as U_I18N_API for tests
+class U_I18N_API SymbolMatcher : public NumberParseMatcher, public UMemory {
   public:
     SymbolMatcher() = default;  // WARNING: Leaves the object in an unusable state
 
