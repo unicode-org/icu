@@ -11,6 +11,7 @@
 
 #include "numparse_types.h"
 #include "number_decimalquantity.h"
+#include "putilimp.h"
 #include <cmath>
 
 using namespace icu;
@@ -57,7 +58,9 @@ double ParsedNumber::getDouble() const {
 
     // Check for NaN, infinity, and -0.0
     if (sawNaN) {
-        return NAN;
+        // Can't use NAN or std::nan because the byte pattern is platform-dependent;
+        // MSVC sets the sign bit, but Clang and GCC do not
+        return uprv_getNaN();
     }
     if (sawInfinity) {
         if (0 != (flags & FLAG_NEGATIVE)) {
@@ -85,7 +88,9 @@ void ParsedNumber::populateFormattable(Formattable& output, parse_flags_t parseF
 
     // Check for NaN, infinity, and -0.0
     if (sawNaN) {
-        output.setDouble(NAN);
+        // Can't use NAN or std::nan because the byte pattern is platform-dependent;
+        // MSVC sets the sign bit, but Clang and GCC do not
+        output.setDouble(uprv_getNaN());
         return;
     }
     if (sawInfinity) {

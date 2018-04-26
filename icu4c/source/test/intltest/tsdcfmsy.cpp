@@ -201,15 +201,15 @@ void IntlTestDecimalFormatSymbols::testSymbols(/* char *par */)
     DecimalFormatSymbols sym(Locale::getUS(), status);
 
     UnicodeString customDecSeperator("S");
-    Verify(34.5, (UnicodeString)"00.00", sym, (UnicodeString)"34.50");
+    Verify(34.5, u"00.00", sym, u"34.50");
     sym.setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, customDecSeperator);
-    Verify(34.5, (UnicodeString)"00.00", sym, (UnicodeString)"34S50");
-    sym.setSymbol(DecimalFormatSymbols::kPercentSymbol, (UnicodeString)"P");
-    Verify(34.5, (UnicodeString)"00 %", sym, (UnicodeString)"3450 P");
-    sym.setSymbol(DecimalFormatSymbols::kCurrencySymbol, (UnicodeString)"D");
-    Verify(34.5, CharsToUnicodeString("\\u00a4##.##"), sym, (UnicodeString)"D 34.50");
-    sym.setSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol, (UnicodeString)"|");
-    Verify(3456.5, (UnicodeString)"0,000.##", sym, (UnicodeString)"3|456S5");
+    Verify(34.5, u"00.00", sym, u"34S50");
+    sym.setSymbol(DecimalFormatSymbols::kPercentSymbol, u"P");
+    Verify(34.5, u"00 %", sym, u"3450 P");
+    sym.setSymbol(DecimalFormatSymbols::kCurrencySymbol, u"D");
+    Verify(34.5, u"\u00a4##.##", sym, u"D\u00a034.50");
+    sym.setSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol, u"|");
+    Verify(3456.5, u"0,000.##", sym, u"3|456S5");
 
 }
 

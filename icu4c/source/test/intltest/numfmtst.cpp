@@ -450,7 +450,7 @@ UBool NumberFormatTestDataDriven::isParsePass(
         }
         return TRUE;
     } else if (tuple.output == "-0.0") {
-        if (std::signbit(result.getDouble()) == 0 || result.getDouble() != 0) {
+        if (!std::signbit(result.getDouble()) || result.getDouble() != 0) {
             appendErrorMessage.append(UnicodeString("Expected -0.0, but got: ") + result.getDouble());
             return FALSE;
         }
@@ -660,6 +660,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestParsePercentRegression);
   TESTCASE_AUTO(TestMultiplierWithScale);
   TESTCASE_AUTO(TestFastFormatInt32);
+  TESTCASE_AUTO(TestParseNaN);
   TESTCASE_AUTO_END;
 }
 
@@ -8313,7 +8314,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
             UnicodeString original;
             fmt->format(agent,original);
-            assertEquals("Test Currency Usage 1", UnicodeString("PKR\u00A0124"), original);
+            assertEquals("Test Currency Usage 1", u"PKR\u00A0124", original);
 
             // test the getter here
             UCurrencyUsage curUsage = fmt->getCurrencyUsage();
@@ -8333,7 +8334,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
         UnicodeString cash_currency;
         fmt->format(agent,cash_currency);
-        assertEquals("Test Currency Usage 2", UnicodeString("PKR\u00A0124"), cash_currency);
+        assertEquals("Test Currency Usage 2", u"PKR\u00A0124", cash_currency);
         delete fmt;
     }
 
@@ -8350,7 +8351,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
             UnicodeString original_rounding;
             fmt->format(agent, original_rounding);
-            assertEquals("Test Currency Usage 3", UnicodeString("CA$123.57"), original_rounding);
+            assertEquals("Test Currency Usage 3", u"CA$123.57", original_rounding);
             fmt->setCurrencyUsage(UCURR_USAGE_CASH, &status);
         }else{
             fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_CAD, UNUM_CASH_CURRENCY, status);
@@ -8361,7 +8362,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
         UnicodeString cash_rounding_currency;
         fmt->format(agent, cash_rounding_currency);
-        assertEquals("Test Currency Usage 4", UnicodeString("CA$123.55"), cash_rounding_currency);
+        assertEquals("Test Currency Usage 4", u"CA$123.55", cash_rounding_currency);
         delete fmt;
     }
 
@@ -8386,14 +8387,14 @@ void NumberFormatTest::TestCurrencyUsage() {
         UnicodeString cur_original;
         fmt->setCurrencyUsage(UCURR_USAGE_STANDARD, &status);
         fmt->format(agent, cur_original);
-        assertEquals("Test Currency Usage 5", UnicodeString("CA$123.57"), cur_original);
+        assertEquals("Test Currency Usage 5", u"CA$123.57", cur_original);
 
         fmt->setCurrency(CUR_PKR, status);
         assertSuccess("Set currency to PKR", status);
 
         UnicodeString PKR_changed;
         fmt->format(agent, PKR_changed);
-        assertEquals("Test Currency Usage 6", UnicodeString("PKR\u00A0124"), PKR_changed);
+        assertEquals("Test Currency Usage 6", u"PKR\u00A0124", PKR_changed);
         delete fmt;
     }
 }
@@ -9118,6 +9119,19 @@ void NumberFormatTest::TestFastFormatInt32() {
         df->format(num, actual);
         assertEquals(UnicodeString("d = ") + num, expected, actual);
     }
+}
+
+void NumberFormatTest::TestParseNaN() {
+    IcuTestErrorCode status(*this, "TestParseNaN");
+
+    DecimalFormat df("0", { "en", status }, status);
+    Formattable parseResult;
+    df.parse(u"NaN", parseResult, status);
+    assertEquals("NaN should parse successfully", NAN, parseResult.getDouble());
+    assertFalse("Result NaN should be positive", std::signbit(parseResult.getDouble()));
+    UnicodeString formatResult;
+    df.format(parseResult.getDouble(), formatResult);
+    assertEquals("NaN should round-trip", u"NaN", formatResult);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
