@@ -378,13 +378,11 @@ LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&& sr
 
 LocalizedNumberFormatter::LocalizedNumberFormatter(NFS<LNF>&& src) U_NOEXCEPT
         : NFS<LNF>(std::move(src)) {
-    // For the move operators, copy over the call count and compiled formatter.
-    auto&& srcAsLNF = static_cast<LNF&&>(src);
-    fCompiled = srcAsLNF.fCompiled;
-    uprv_memcpy(fUnsafeCallCount, srcAsLNF.fUnsafeCallCount, sizeof(fUnsafeCallCount));
-    // Reset the source object to leave it in a safe state.
-    srcAsLNF.fCompiled = nullptr;
-    uprv_memset(srcAsLNF.fUnsafeCallCount, 0, sizeof(fUnsafeCallCount));
+    // For the move operators, copy over the compiled formatter.
+    // Note: if the formatter is not compiled, call count information is lost.
+    if (static_cast<LNF&&>(src).fCompiled != nullptr) {
+        lnfMoveHelper(static_cast<LNF&&>(src));
+    }
 }
 
 LocalizedNumberFormatter& LocalizedNumberFormatter::operator=(const LNF& other) {
@@ -395,13 +393,31 @@ LocalizedNumberFormatter& LocalizedNumberFormatter::operator=(const LNF& other) 
 
 LocalizedNumberFormatter& LocalizedNumberFormatter::operator=(LNF&& src) U_NOEXCEPT {
     NFS<LNF>::operator=(static_cast<NFS<LNF>&&>(src));
-    // For the move operators, copy over the call count and compiled formatter.
-    fCompiled = src.fCompiled;
-    uprv_memcpy(fUnsafeCallCount, src.fUnsafeCallCount, sizeof(fUnsafeCallCount));
-    // Reset the source object to leave it in a safe state.
-    src.fCompiled = nullptr;
-    uprv_memset(src.fUnsafeCallCount, 0, sizeof(fUnsafeCallCount));
+    // For the move operators, copy over the compiled formatter.
+    // Note: if the formatter is not compiled, call count information is lost.
+    if (static_cast<LNF&&>(src).fCompiled != nullptr) {
+        // Formatter is compiled
+        lnfMoveHelper(static_cast<LNF&&>(src));
+    } else {
+        // Reset to default values.
+        auto* callCount = reinterpret_cast<u_atomic_int32_t*>(fUnsafeCallCount);
+        umtx_storeRelease(*callCount, 0);
+        fCompiled = nullptr;
+    }
     return *this;
+}
+
+void LocalizedNumberFormatter::lnfMoveHelper(LNF&& src) {
+    // Copy over the compiled formatter and set call count to INT32_MIN as in computeCompiled().
+    // Don't copy the call count directly because doing so requires a loadAcquire/storeRelease.
+    // The bits themselves appear to be platform-dependent, so copying them might not be safe.
+    auto* callCount = reinterpret_cast<u_atomic_int32_t*>(fUnsafeCallCount);
+    umtx_storeRelease(*callCount, INT32_MIN);
+    fCompiled = src.fCompiled;
+    // Reset the source object to leave it in a safe state.
+    auto* srcCallCount = reinterpret_cast<u_atomic_int32_t*>(src.fUnsafeCallCount);
+    umtx_storeRelease(*srcCallCount, 0);
+    src.fCompiled = nullptr;
 }
 
 

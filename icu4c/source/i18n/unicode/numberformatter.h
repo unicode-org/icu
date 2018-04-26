@@ -2293,6 +2293,8 @@ class U_I18N_API LocalizedNumberFormatter
 
     LocalizedNumberFormatter(impl::MacroProps &&macros, const Locale &locale);
 
+    void lnfMoveHelper(LocalizedNumberFormatter&& src);
+
     /**
      * @return true if the compiled formatter is available.
      */
