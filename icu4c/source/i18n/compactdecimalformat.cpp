@@ -10,6 +10,7 @@
 #define UNISTR_FROM_STRING_EXPLICIT
 
 #include "unicode/compactdecimalformat.h"
+#include "number_mapper.h"
 #include "number_decimfmtprops.h"
 
 using namespace icu;
@@ -29,9 +30,9 @@ CompactDecimalFormat::CompactDecimalFormat(const Locale& inLocale, UNumberCompac
         : DecimalFormat(new DecimalFormatSymbols(inLocale, status), status) {
     if (U_FAILURE(status)) return;
     // Minimal properties: let the non-shim code path do most of the logic for us.
-    fProperties->compactStyle = style;
-    fProperties->groupingSize = -2; // do not forward grouping information
-    fProperties->minimumGroupingDigits = 2;
+    fields->properties->compactStyle = style;
+    fields->properties->groupingSize = -2; // do not forward grouping information
+    fields->properties->minimumGroupingDigits = 2;
     touch(status);
 }
 
