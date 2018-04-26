@@ -380,7 +380,7 @@ DecimalQuantity &DecimalQuantity::setToDouble(double n) {
     setBcdToZero();
     flags = 0;
     // signbit() from <math.h> handles +0.0 vs -0.0
-    if (std::signbit(n) != 0) {
+    if (std::signbit(n)) {
         flags |= NEGATIVE_FLAG;
         n = -n;
     }
