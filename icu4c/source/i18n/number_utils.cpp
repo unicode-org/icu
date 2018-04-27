@@ -1,8 +1,6 @@
 // © 2018 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include <stdlib.h>
-#include <cmath>
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -11,6 +9,8 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
+#include <stdlib.h>
+#include <cmath>
 #include "number_types.h"
 #include "number_utils.h"
 #include "charstr.h"
