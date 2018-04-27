@@ -511,7 +511,7 @@ int64_t DecimalQuantity::toLong(bool truncateIfOverflow) const {
         result = result * 10 + getDigitPos(magnitude - scale);
     }
     if (isNegative()) {
-        return static_cast<int64_t>(~result + 1); // i.e., -result
+        return static_cast<int64_t>(0LL - result); // i.e., -result
     }
     return static_cast<int64_t>(result);
 }
