@@ -296,6 +296,10 @@ void CompactDecimalFormatTest::TestSignificantDigits() {
   if (actual != expected) {
     errln(UnicodeString("Fail: Expected: ") + expected + UnicodeString(" Got: ") + actual);
   }
+  // This should collapse to 2 significant digits for smaller numbers
+  cdf->format(1234.0, actual.remove());
+  expected = u"1.2K";
+  assertEquals("Only two significant digits for numbers closer to the decimal place", expected, actual);
 }
 
 void CompactDecimalFormatTest::TestAPIVariants() {
