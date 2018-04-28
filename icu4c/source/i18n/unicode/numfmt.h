@@ -555,7 +555,9 @@ public:
                                   UnicodeString& appendTo,
                                   FieldPositionIterator* posIter,
                                   UErrorCode& status) const;
-public:
+
+#ifndef U_HIDE_INTERNAL_API
+
     /**
      * Format a decimal number.
      * The number is a DecimalQuantity wrapper onto a floating point decimal number.
@@ -600,7 +602,7 @@ public:
                                   FieldPosition& pos,
                                   UErrorCode& status) const;
 
-public:
+#endif // U_HIDE_INTERNAL_API
 
    /**
     * Return a long if possible (e.g. within range LONG_MAX,

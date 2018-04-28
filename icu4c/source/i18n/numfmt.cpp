@@ -543,7 +543,7 @@ UnicodeString&
 NumberFormat::format(const number::impl::DecimalQuantity &number,
                      UnicodeString& appendTo,
                      FieldPosition& pos,
-                     UErrorCode &status) const { 
+                     UErrorCode &status) const {
     // DecimalFormat overrides this function, and handles DigitList based big decimals.
     // Other subclasses (ChoiceFormat) do not (yet) handle DigitLists,
     // so this default implementation falls back to formatting decimal numbers as doubles.

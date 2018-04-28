@@ -1074,6 +1074,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     UnicodeString& format(StringPiece number, UnicodeString& appendTo, FieldPositionIterator* posIter,
                           UErrorCode& status) const U_OVERRIDE;
 
+#ifndef U_HIDE_INTERNAL_API
 
     /**
      * Format a decimal number.
@@ -1110,6 +1111,8 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     UnicodeString& format(const number::impl::DecimalQuantity& number, UnicodeString& appendTo,
                           FieldPosition& pos, UErrorCode& status) const U_OVERRIDE;
+
+#endif // U_HIDE_INTERNAL_API
 
     using NumberFormat::parse;
 
