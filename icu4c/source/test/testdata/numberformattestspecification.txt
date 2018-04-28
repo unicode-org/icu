@@ -1459,13 +1459,14 @@ maxFractionDigits	format	output	breaks
 
 test ticket 11230
 set locale en
-set pattern #,##0
 begin
-parse	output	breaks
+pattern	parse	output	breaks
 // K and J return null; S, C, and P return 99
- 9 9	9	CJKP
+#,##0	 9 9	99	JK
 // K returns null
- 9 999	9999	K
+#,##0	 9 999	9999	K
+0	 9 9	9	JK
+0	 9 999	9	K
 
 test parse ignorables
 set locale ar
