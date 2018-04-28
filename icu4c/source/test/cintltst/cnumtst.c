@@ -1208,7 +1208,7 @@ static void TestSignificantDigits()
     double d = 123456.789;
 
     u_uastrcpy(temp, "###0.0#");
-    fmt=unum_open(UNUM_IGNORE, temp, -1, NULL, NULL,&status);
+    fmt=unum_open(UNUM_IGNORE, temp, -1, "en", NULL, &status);
     if (U_FAILURE(status)) {
         log_data_err("got unexpected error for unum_open: '%s'\n", u_errorName(status));
         return;
@@ -1249,7 +1249,7 @@ static void TestSigDigRounding()
     UNumberFormat* fmt;
     double d = 123.4;
 
-    fmt=unum_open(UNUM_DECIMAL, NULL, 0, NULL /* "en_US"*/, NULL, &status);
+    fmt=unum_open(UNUM_DECIMAL, NULL, 0, "en", NULL, &status);
     if (U_FAILURE(status)) {
         log_data_err("got unexpected error for unum_open: '%s'\n", u_errorName(status));
         return;
@@ -2199,7 +2199,7 @@ static void TestMaxInt(void) {
                   UNUM_PATTERN_DECIMAL,      /* style         */
                   &pattern_hash[0],          /* pattern       */
                   u_strlen(pattern_hash),    /* patternLength */
-                  0,
+                  "en",
                   0,                         /* parseErr      */
                   &status);
     if(U_FAILURE(status) || fmt == NULL) {
