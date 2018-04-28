@@ -65,6 +65,7 @@ static void TestVariousStylesAndAttributes(void);
 static void TestParseCurrPatternWithDecStyle(void);
 static void TestFormatForFields(void);
 static void TestRBNFRounding(void);
+static void Test12052_NullPointer(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -97,6 +98,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestVariousStylesAndAttributes);
     TESTCASE(TestParseCurrPatternWithDecStyle);
     TESTCASE(TestFormatForFields);
+    TESTCASE(Test12052_NullPointer);
 }
 
 /* test Parse int 64 */
@@ -3065,6 +3067,19 @@ static void TestFormatForFields(void) {
         }
         ufieldpositer_close(fpositer);
     }
+}
+
+static void Test12052_NullPointer() {
+    UErrorCode status = U_ZERO_ERROR;
+    static const UChar input[] = u"199a";
+    UChar currency[200] = {0};
+    UNumberFormat *theFormatter = unum_open(UNUM_CURRENCY, NULL, 0, "en_US", NULL, &status);
+    status = U_ZERO_ERROR;
+    unum_setAttribute(theFormatter, UNUM_LENIENT_PARSE, 1);
+    int32_t pos = 1;
+    unum_parseDoubleCurrency(theFormatter, input, -1, &pos, currency, &status);
+    assertEquals("should fail gracefully", "U_PARSE_ERROR", u_errorName(status));
+    unum_close(theFormatter);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
