@@ -6096,4 +6096,15 @@ public class NumberFormatTest extends TestFmwk {
                     result.doubleValue());
         }
     }
+
+    @Test
+    public void test13148_GroupingSeparatorOverride() throws Exception {
+        DecimalFormat fmt = (DecimalFormat)NumberFormat.getInstance(new ULocale("en", "ZA"));
+        DecimalFormatSymbols symbols = fmt.getDecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        symbols.setGroupingSeparator(',');
+        fmt.setDecimalFormatSymbols(symbols);
+        Number number = fmt.parse("300,000");
+        assertEquals("Should use custom symbols and not monetary symbols", 300000L, number);
+    }
 }
