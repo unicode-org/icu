@@ -661,6 +661,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestMultiplierWithScale);
   TESTCASE_AUTO(TestFastFormatInt32);
   TESTCASE_AUTO(TestParseNaN);
+  TESTCASE_AUTO(Test11897_LocalizedPatternSeparator);
   TESTCASE_AUTO_END;
 }
 
@@ -9132,6 +9133,19 @@ void NumberFormatTest::TestParseNaN() {
     UnicodeString formatResult;
     df.format(parseResult.getDouble(), formatResult);
     assertEquals("NaN should round-trip", u"NaN", formatResult);
+}
+
+void NumberFormatTest::Test11897_LocalizedPatternSeparator() {
+    IcuTestErrorCode status(*this, "Test11897_LocalizedPatternSeparator");
+
+    DecimalFormatSymbols dfs("en", status);
+    dfs.setSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol, u"!", FALSE);
+    DecimalFormat df(u"0", dfs, status);
+    df.applyPattern("a0;b0", status); // should not throw
+    UnicodeString result;
+    assertEquals("should apply the normal pattern", df.getNegativePrefix(result.remove()), "b");
+    df.applyLocalizedPattern(u"c0!d0", status); // should not throw
+    assertEquals("should apply the localized pattern", df.getNegativePrefix(result.remove()), "d");
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

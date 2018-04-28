@@ -6107,4 +6107,15 @@ public class NumberFormatTest extends TestFmwk {
         Number number = fmt.parse("300,000");
         assertEquals("Should use custom symbols and not monetary symbols", 300000L, number);
     }
+
+    @Test
+    public void test11897_LocalizedPatternSeparator() {
+        DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        dfs.setPatternSeparator('!');
+        DecimalFormat df = new DecimalFormat("0", dfs);
+        df.applyPattern("a0;b0"); // should not throw
+        assertEquals("should apply the normal pattern", df.getNegativePrefix(), "b");
+        df.applyLocalizedPattern("c0!d0"); // should not throw
+        assertEquals("should apply the localized pattern", df.getNegativePrefix(), "d");
+    }
 }
