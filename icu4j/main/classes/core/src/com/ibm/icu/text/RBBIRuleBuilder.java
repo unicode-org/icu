@@ -20,6 +20,7 @@ import java.util.Set;
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUDebug;
+import com.ibm.icu.impl.RBBIDataWrapper;
 
 class RBBIRuleBuilder {
     //   This is the main class for building (compiling) break rules into the tables
