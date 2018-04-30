@@ -44,7 +44,7 @@ public:
 
     void checkIdnaTestResult(const char *line, const char *type,
                              const UnicodeString &expected, const UnicodeString &result,
-                             const IDNAInfo &info);
+                             const char *status, const IDNAInfo &info);
     void idnaTestOneLine(char *fields[][2], UErrorCode &errorCode);
 
 private:
@@ -896,7 +896,7 @@ void UTS46Test::TestSomeCases() {
 
 namespace {
 
-const int32_t kNumFields = 4;  // Will need 5 when we read NV8 from the optional fifth column.
+const int32_t kNumFields = 7;
 
 void U_CALLCONV
 idnaTestLineFn(void *context,
@@ -905,17 +905,43 @@ idnaTestLineFn(void *context,
     reinterpret_cast<UTS46Test *>(context)->idnaTestOneLine(fields, *pErrorCode);
 }
 
+UnicodeString s16FromField(char *(&field)[2]) {
+    int32_t length = (int32_t)(field[1] - field[0]);
+    return UnicodeString::fromUTF8(StringPiece(field[0], length)).trim().unescape();
+}
+
+std::string statusFromField(char *(&field)[2]) {
+    const char *start = u_skipWhitespace(field[0]);
+    std::string status;
+    if (start != field[1]) {
+        int32_t length = (int32_t)(field[1] - start);
+        while (length > 0 && (start[length - 1] == u' ' || start[length - 1] == u'\t')) {
+            --length;
+        }
+        status.assign(start, length);
+    }
+    return status;
+}
+
 }  // namespace
 
 void UTS46Test::checkIdnaTestResult(const char *line, const char *type,
                                     const UnicodeString &expected, const UnicodeString &result,
-                                    const IDNAInfo &info) {
+                                    const char *status, const IDNAInfo &info) {
     // An error in toUnicode or toASCII is indicated by a value in square brackets,
     // such as "[B5 B6]".
-    UBool expectedHasErrors = !expected.isEmpty() && expected[0] == u'[';
+    UBool expectedHasErrors = FALSE;
+    if (*status != 0) {
+        if (*status != u'[') {
+            errln("%s  status field does not start with '[': %s\n    %s", type, status, line);
+        }
+        if (strcmp(status, u8"[]") != 0) {
+            expectedHasErrors = TRUE;
+        }
+    }
     if (expectedHasErrors != info.hasErrors()) {
-        errln("%s  expected errors %d != %d = actual has errors: %04lx\n    %s",
-              type, expectedHasErrors, info.hasErrors(), (long)info.getErrors(), line);
+        errln("%s  expected errors %s %d != %d = actual has errors: %04lx\n    %s",
+              type, status, expectedHasErrors, info.hasErrors(), (long)info.getErrors(), line);
     }
     if (!expectedHasErrors && expected != result) {
         errln("%s  expected != actual\n    %s", type, line);
@@ -925,57 +951,68 @@ void UTS46Test::checkIdnaTestResult(const char *line, const char *type,
 }
 
 void UTS46Test::idnaTestOneLine(char *fields[][2], UErrorCode &errorCode) {
-    // Column 1: type - T for transitional, N for nontransitional, B for both
-    const char *typePtr = u_skipWhitespace(fields[0][0]);
-    const char *limit;
-    char typeChar;
-    if (typePtr == fields[0][1] ||
-            ((typeChar = *typePtr) != 'B' && typeChar != 'N' && typeChar != 'T') ||
-            (limit = u_skipWhitespace(typePtr + 1)) != fields[0][1]) {
-        errln("empty or unknown type field: %s", fields[0][0]);
-        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
+    // IdnaTestV2.txt (since Unicode 11)
+    // Column 1: source
+    // The source string to be tested
+    UnicodeString source = s16FromField(fields[0]);
 
-    // Column 2: source - the source string to be tested
-    int32_t length = (int32_t)(fields[1][1] - fields[1][0]);
-    UnicodeString source16 = UnicodeString::fromUTF8(StringPiece(fields[1][0], length)).
-        trim().unescape();
-
-    // Column 3: toUnicode - the result of applying toUnicode to the source.
+    // Column 2: toUnicode
+    // The result of applying toUnicode to the source, with Transitional_Processing=false.
     // A blank value means the same as the source value.
-    length = (int32_t)(fields[2][1] - fields[2][0]);
-    UnicodeString unicode16 = UnicodeString::fromUTF8(StringPiece(fields[2][0], length)).
-        trim().unescape();
-    if (unicode16.isEmpty()) {
-        unicode16 = source16;
+    UnicodeString toUnicode = s16FromField(fields[1]);
+    if (toUnicode.isEmpty()) {
+        toUnicode = source;
     }
 
-    // Column 4: toASCII - the result of applying toASCII to the source, using the specified type.
+    // Column 3: toUnicodeStatus
+    // A set of status codes, each corresponding to a particular test.
+    // A blank value means [].
+    std::string toUnicodeStatus = statusFromField(fields[2]);
+
+    // Column 4: toAsciiN
+    // The result of applying toASCII to the source, with Transitional_Processing=false.
     // A blank value means the same as the toUnicode value.
-    length = (int32_t)(fields[3][1] - fields[3][0]);
-    UnicodeString ascii16 = UnicodeString::fromUTF8(StringPiece(fields[3][0], length)).
-        trim().unescape();
-    if (ascii16.isEmpty()) {
-        ascii16 = unicode16;
+    UnicodeString toAsciiN = s16FromField(fields[3]);
+    if (toAsciiN.isEmpty()) {
+        toAsciiN = toUnicode;
     }
 
-    // Column 5: NV8 - present if the toUnicode value would not be a valid domain name under IDNA2008. Not a normative field.
-    // Ignored as long as we do not implement and test vanilla IDNA2008.
+    // Column 5: toAsciiNStatus
+    // A set of status codes, each corresponding to a particular test.
+    // A blank value means the same as the toUnicodeStatus value.
+    std::string toAsciiNStatus = statusFromField(fields[4]);
+    if (toAsciiNStatus.empty()) {
+        toAsciiNStatus = toUnicodeStatus;
+    }
+
+    // Column 6: toAsciiT
+    // The result of applying toASCII to the source, with Transitional_Processing=true.
+    // A blank value means the same as the toAsciiN value.
+    UnicodeString toAsciiT = s16FromField(fields[5]);
+    if (toAsciiT.isEmpty()) {
+        toAsciiT = toAsciiN;
+    }
+
+    // Column 7: toAsciiTStatus
+    // A set of status codes, each corresponding to a particular test.
+    // A blank value means the same as the toAsciiNStatus value.
+    std::string toAsciiTStatus = statusFromField(fields[6]);
+    if (toAsciiTStatus.empty()) {
+        toAsciiTStatus = toAsciiNStatus;
+    }
 
     // ToASCII/ToUnicode, transitional/nontransitional
     UnicodeString uN, aN, aT;
     IDNAInfo uNInfo, aNInfo, aTInfo;
-    nontrans->nameToUnicode(source16, uN, uNInfo, errorCode);
-    checkIdnaTestResult(fields[0][0], "toUnicodeNontrans", unicode16, uN, uNInfo);
-    if (typeChar == 'T' || typeChar == 'B') {
-        trans->nameToASCII(source16, aT, aTInfo, errorCode);
-        checkIdnaTestResult(fields[0][0], "toASCIITrans", ascii16, aT, aTInfo);
-    }
-    if (typeChar == 'N' || typeChar == 'B') {
-        nontrans->nameToASCII(source16, aN, aNInfo, errorCode);
-        checkIdnaTestResult(fields[0][0], "toASCIINontrans", ascii16, aN, aNInfo);
-    }
+    nontrans->nameToUnicode(source, uN, uNInfo, errorCode);
+    checkIdnaTestResult(fields[0][0], "toUnicodeNontrans", toUnicode, uN,
+                        toUnicodeStatus.c_str(), uNInfo);
+    nontrans->nameToASCII(source, aN, aNInfo, errorCode);
+    checkIdnaTestResult(fields[0][0], "toASCIINontrans", toAsciiN, aN,
+                        toAsciiNStatus.c_str(), aNInfo);
+    trans->nameToASCII(source, aT, aTInfo, errorCode);
+    checkIdnaTestResult(fields[0][0], "toASCIITrans", toAsciiT, aT,
+                        toAsciiTStatus.c_str(), aTInfo);
 }
 
 // TODO: de-duplicate
@@ -990,7 +1027,7 @@ void UTS46Test::IdnaTest() {
         return;
     }
     CharString path(sourceTestDataPath, errorCode);
-    path.appendPathPart("IdnaTest.txt", errorCode);
+    path.appendPathPart("IdnaTestV2.txt", errorCode);
     LocalStdioFilePointer idnaTestFile(fopen(path.data(), "r"));
     if (idnaTestFile.isNull()) {
         errln("unable to open %s", path.data());
