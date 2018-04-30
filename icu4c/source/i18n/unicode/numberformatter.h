@@ -2320,9 +2320,21 @@ class U_I18N_API FormattedNumber : public UMemory {
      * Returns a UnicodeString representation of the formatted number.
      *
      * @return a UnicodeString containing the localized number.
-     * @draft ICU 60
+     * @deprecated ICU 62 Use the version of this method with an error code instead.
+ *                    This method was never @stable and will be removed in a future release.
+     *                See http://bugs.icu-project.org/trac/ticket/13746
      */
     UnicodeString toString() const;
+
+    /**
+     * Returns a UnicodeString representation of the formatted number.
+     *
+     * @param status
+     *            Set if an error occurs while formatting the number to the UnicodeString.
+     * @return a UnicodeString containing the localized number.
+     * @draft ICU 62
+     */
+    UnicodeString toString(UErrorCode& status) const;
 
     /**
      * Appends the formatted number to an Appendable.
@@ -2330,10 +2342,25 @@ class U_I18N_API FormattedNumber : public UMemory {
      * @param appendable
      *            The Appendable to which to append the formatted number string.
      * @return The same Appendable, for chaining.
-     * @draft ICU 60
+     * @deprecated ICU 62 Use the version of this method with an error code instead.
+ *                    This method was never @stable and will be removed in a future release.
+     *                See http://bugs.icu-project.org/trac/ticket/13746
      * @see Appendable
      */
     Appendable &appendTo(Appendable &appendable);
+
+    /**
+     * Appends the formatted number to an Appendable.
+     *
+     * @param appendable
+     *            The Appendable to which to append the formatted number string.
+     * @param status
+     *            Set if an error occurs while formatting the number to the Appendable.
+     * @return The same Appendable, for chaining.
+     * @draft ICU 62
+     * @see Appendable
+     */
+    Appendable &appendTo(Appendable &appendable, UErrorCode& status);
 
     /**
      * Determine the start and end indices of the first occurrence of the given <em>field</em> in the output string.

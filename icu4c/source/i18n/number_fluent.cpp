@@ -732,7 +732,17 @@ int32_t LocalizedNumberFormatter::getCallCount() const {
 
 UnicodeString FormattedNumber::toString() const {
     if (fResults == nullptr) {
-        // TODO: http://bugs.icu-project.org/trac/ticket/13437
+        return {};
+    }
+    return fResults->string.toUnicodeString();
+}
+
+UnicodeString FormattedNumber::toString(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return {};
+    }
+    if (fResults == nullptr) {
+        status = fErrorCode;
         return {};
     }
     return fResults->string.toUnicodeString();
@@ -740,7 +750,18 @@ UnicodeString FormattedNumber::toString() const {
 
 Appendable& FormattedNumber::appendTo(Appendable& appendable) {
     if (fResults == nullptr) {
-        // TODO: http://bugs.icu-project.org/trac/ticket/13437
+        return appendable;
+    }
+    appendable.appendString(fResults->string.chars(), fResults->string.length());
+    return appendable;
+}
+
+Appendable& FormattedNumber::appendTo(Appendable& appendable, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return appendable;
+    }
+    if (fResults == nullptr) {
+        status = fErrorCode;
         return appendable;
     }
     appendable.appendString(fResults->string.chars(), fResults->string.length());
@@ -748,7 +769,9 @@ Appendable& FormattedNumber::appendTo(Appendable& appendable) {
 }
 
 void FormattedNumber::populateFieldPosition(FieldPosition& fieldPosition, UErrorCode& status) {
-    if (U_FAILURE(status)) { return; }
+    if (U_FAILURE(status)) {
+        return;
+    }
     if (fResults == nullptr) {
         status = fErrorCode;
         return;
@@ -757,7 +780,9 @@ void FormattedNumber::populateFieldPosition(FieldPosition& fieldPosition, UError
 }
 
 void FormattedNumber::populateFieldPositionIterator(FieldPositionIterator& iterator, UErrorCode& status) {
-    if (U_FAILURE(status)) { return; }
+    if (U_FAILURE(status)) {
+        return;
+    }
     if (fResults == nullptr) {
         status = fErrorCode;
         return;
@@ -766,7 +791,9 @@ void FormattedNumber::populateFieldPositionIterator(FieldPositionIterator& itera
 }
 
 void FormattedNumber::getDecimalQuantity(DecimalQuantity& output, UErrorCode& status) const {
-    if (U_FAILURE(status)) { return; }
+    if (U_FAILURE(status)) {
+        return;
+    }
     if (fResults == nullptr) {
         status = fErrorCode;
         return;
