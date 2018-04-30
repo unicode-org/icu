@@ -728,14 +728,23 @@ public class UTS46Test extends TestFmwk {
     }
 
     private void checkIdnaTestResult(String line, String type,
-            String expected, CharSequence result, IDNA.Info info) {
+            String expected, CharSequence result, String status, IDNA.Info info) {
         // An error in toUnicode or toASCII is indicated by a value in square brackets,
         // such as "[B5 B6]".
-        boolean expectedHasErrors = !expected.isEmpty() && expected.charAt(0) == '[';
+        boolean expectedHasErrors = false;
+        if (!status.isEmpty()) {
+            if (status.charAt(0) != '[') {
+                errln(String.format("%s  status field does not start with '[': %s\n    %s",
+                        type, status, line));
+            }
+            if (!status.equals("[]")) {
+                expectedHasErrors = true;
+            }
+        }
         if (expectedHasErrors != info.hasErrors()) {
             errln(String.format(
-                    "%s  expected errors %b != %b = actual has errors: %s\n    %s",
-                    type, expectedHasErrors, info.hasErrors(), info.getErrors(), line));
+                    "%s  expected errors %s %b != %b = actual has errors: %s\n    %s",
+                    type, status, expectedHasErrors, info.hasErrors(), info.getErrors(), line));
         }
         if (!expectedHasErrors && !UTF16Plus.equal(expected, result)) {
             errln(String.format("%s  expected != actual\n    %s", type, line));
@@ -746,7 +755,7 @@ public class UTS46Test extends TestFmwk {
 
     @Test
     public void IdnaTest() throws IOException {
-        BufferedReader idnaTestFile = TestUtil.getDataReader("unicode/IdnaTest.txt", "UTF-8");
+        BufferedReader idnaTestFile = TestUtil.getDataReader("unicode/IdnaTestV2.txt", "UTF-8");
         Pattern semi = Pattern.compile(";");
         try {
             String line;
@@ -761,48 +770,65 @@ public class UTS46Test extends TestFmwk {
                     continue;  // Skip empty and comment-only lines.
                 }
 
-                // Column 1: type - T for transitional, N for nontransitional, B for both
-                String type = fields[0].trim();
-                char typeChar;
-                if (type.length() != 1 ||
-                        ((typeChar = type.charAt(0)) != 'B' && typeChar != 'N' && typeChar != 'T')) {
-                    errln("empty or unknown type field: " + line);
-                    return;
-                }
+                // IdnaTestV2.txt (since Unicode 11)
+                // Column 1: source
+                // The source string to be tested
+                String source = Utility.unescape(fields[0].trim());
 
-                // Column 2: source - the source string to be tested
-                String source16 = Utility.unescape(fields[1].trim());
-
-                // Column 3: toUnicode - the result of applying toUnicode to the source.
+                // Column 2: toUnicode
+                // The result of applying toUnicode to the source, with Transitional_Processing=false.
                 // A blank value means the same as the source value.
-                String unicode16 = Utility.unescape(fields[2].trim());
-                if (unicode16.isEmpty()) {
-                    unicode16 = source16;
+                String toUnicode = Utility.unescape(fields[1].trim());
+                if (toUnicode.isEmpty()) {
+                    toUnicode = source;
                 }
 
-                // Column 4: toASCII - the result of applying toASCII to the source, using the specified type.
+                // Column 3: toUnicodeStatus
+                // A set of status codes, each corresponding to a particular test.
+                // A blank value means [].
+                String toUnicodeStatus = fields[2].trim();
+
+                // Column 4: toAsciiN
+                // The result of applying toASCII to the source, with Transitional_Processing=false.
                 // A blank value means the same as the toUnicode value.
-                String ascii16 = Utility.unescape(fields[3].trim());
-                if (ascii16.isEmpty()) {
-                    ascii16 = unicode16;
+                String toAsciiN = Utility.unescape(fields[3].trim());
+                if (toAsciiN.isEmpty()) {
+                    toAsciiN = toUnicode;
                 }
 
-                // Column 5: NV8 - present if the toUnicode value would not be a valid domain name under IDNA2008. Not a normative field.
-                // Ignored as long as we do not implement and test vanilla IDNA2008.
+                // Column 5: toAsciiNStatus
+                // A set of status codes, each corresponding to a particular test.
+                // A blank value means the same as the toUnicodeStatus value.
+                String toAsciiNStatus = fields[4].trim();
+                if (toAsciiNStatus.isEmpty()) {
+                    toAsciiNStatus = toUnicodeStatus;
+                }
+
+                // Column 6: toAsciiT
+                // The result of applying toASCII to the source, with Transitional_Processing=true.
+                // A blank value means the same as the toAsciiN value.
+                String toAsciiT = Utility.unescape(fields[5].trim());
+                if (toAsciiT.isEmpty()) {
+                    toAsciiT = toAsciiN;
+                }
+
+                // Column 7: toAsciiTStatus
+                // A set of status codes, each corresponding to a particular test.
+                // A blank value means the same as the toAsciiNStatus value.
+                String toAsciiTStatus = fields[6].trim();
+                if (toAsciiTStatus.isEmpty()) {
+                    toAsciiTStatus = toAsciiNStatus;
+                }
 
                 // ToASCII/ToUnicode, transitional/nontransitional
                 StringBuilder uN, aN, aT;
                 IDNA.Info uNInfo, aNInfo, aTInfo;
-                nontrans.nameToUnicode(source16, uN = new StringBuilder(), uNInfo = new IDNA.Info());
-                checkIdnaTestResult(line, "toUnicodeNontrans", unicode16, uN, uNInfo);
-                if (typeChar == 'T' || typeChar == 'B') {
-                    trans.nameToASCII(source16, aT = new StringBuilder(), aTInfo = new IDNA.Info());
-                    checkIdnaTestResult(line, "toASCIITrans", ascii16, aT, aTInfo);
-                }
-                if (typeChar == 'N' || typeChar == 'B') {
-                    nontrans.nameToASCII(source16, aN = new StringBuilder(), aNInfo = new IDNA.Info());
-                    checkIdnaTestResult(line, "toASCIINontrans", ascii16, aN, aNInfo);
-                }
+                nontrans.nameToUnicode(source, uN = new StringBuilder(), uNInfo = new IDNA.Info());
+                checkIdnaTestResult(line, "toUnicodeNontrans", toUnicode, uN, toUnicodeStatus, uNInfo);
+                nontrans.nameToASCII(source, aN = new StringBuilder(), aNInfo = new IDNA.Info());
+                checkIdnaTestResult(line, "toASCIINontrans", toAsciiN, aN, toAsciiNStatus, aNInfo);
+                trans.nameToASCII(source, aT = new StringBuilder(), aTInfo = new IDNA.Info());
+                checkIdnaTestResult(line, "toASCIITrans", toAsciiT, aT, toAsciiTStatus, aTInfo);
             }
         } finally {
             idnaTestFile.close();

@@ -1603,7 +1603,7 @@ _files = {
   "emoji-data.txt": (DontCopy, ParseNamedProperties),
   "GraphemeBreakProperty.txt": (DontCopy, ParseGraphemeBreakProperty),
   "GraphemeBreakTest.txt": (CopyOnly, "testdata"),
-  "IdnaTest.txt": (CopyOnly, "testdata"),
+  "IdnaTestV2.txt": (CopyOnly, "testdata"),
   "IndicPositionalCategory.txt": (DontCopy, ParseIndicPositionalCategory),
   "IndicSyllabicCategory.txt": (DontCopy, ParseIndicSyllabicCategory),
   "LineBreak.txt": (DontCopy, ParseLineBreak),

@@ -26,14 +26,18 @@ public final class TestUtil {
      * Return an input stream on the data file at path 'name' rooted at the data path
      */
     public static final InputStream getDataStream(String name) throws IOException {
+        String path = DATA_PATH + name;
         InputStream is = null;
         try {
-            is = TestUtil.class.getResourceAsStream(DATA_PATH + name);
+            is = TestUtil.class.getResourceAsStream(path);
         } catch (Throwable t) {
             IOException ex =
-                new IOException("data resource '" + name + "' not found");
+                new IOException("data resource '" + path + "' not found");
             ex.initCause(t);
             throw ex;
+        }
+        if (is == null) {
+            throw new IOException("data resource '" + path + "' not found");
         }
         return is;
     }
