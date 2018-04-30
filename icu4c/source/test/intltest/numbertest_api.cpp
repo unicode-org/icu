@@ -2071,24 +2071,81 @@ void NumberFormatterApiTest::errors() {
             Rounder::fixedFraction(
                     -1));
 
-    {
-        UErrorCode status1 = U_ZERO_ERROR;
-        UErrorCode status2 = U_ZERO_ERROR;
-        FormattedNumber fn = lnf.formatInt(1, status1);
-        assertEquals(
-                "Should fail since rounder is not legal", U_NUMBER_ARG_OUTOFBOUNDS_ERROR, status1);
-        FieldPosition fp;
-        fn.populateFieldPosition(fp, status2);
-        assertEquals(
-                "Should fail on terminal method", U_NUMBER_ARG_OUTOFBOUNDS_ERROR, status2);
-    }
+    // formatInt
+    UErrorCode status = U_ZERO_ERROR;
+    FormattedNumber fn = lnf.formatInt(1, status);
+    assertEquals(
+            "Should fail in formatInt method with error code for rounding",
+            U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
+            status);
 
-    {
-        UErrorCode status = U_ZERO_ERROR;
-        lnf.copyErrorTo(status);
-        assertEquals(
-                "Should fail since rounder is not legal", U_NUMBER_ARG_OUTOFBOUNDS_ERROR, status);
-    }
+    // formatDouble
+    status = U_ZERO_ERROR;
+    fn = lnf.formatDouble(1.0, status);
+    assertEquals(
+            "Should fail in formatDouble method with error code for rounding",
+            U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
+            status);
+
+    // formatDecimal (decimal error)
+    status = U_ZERO_ERROR;
+    fn = NumberFormatter::withLocale("en").formatDecimal("1x2", status);
+    assertEquals(
+            "Should fail in formatDecimal method with error code for decimal number syntax",
+            U_DECIMAL_NUMBER_SYNTAX_ERROR,
+            status);
+
+    // formatDecimal (setting error)
+    status = U_ZERO_ERROR;
+    fn = lnf.formatDecimal("1.0", status);
+    assertEquals(
+            "Should fail in formatDecimal method with error code for rounding",
+            U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
+            status);
+
+    // FieldPosition
+    status = U_ZERO_ERROR;
+    FieldPosition fp;
+    fn.populateFieldPosition(fp, status);
+    assertEquals(
+            "Should fail on FieldPosition terminal method with correct error code",
+            U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
+            status);
+
+    // FieldPositionIterator
+    status = U_ZERO_ERROR;
+    FieldPositionIterator fpi;
+    fn.populateFieldPositionIterator(fpi, status);
+    assertEquals(
+            "Should fail on FieldPositoinIterator terminal method with correct error code",
+            U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
+            status);
+
+    // Appendable
+    status = U_ZERO_ERROR;
+    UnicodeString output;
+    UnicodeStringAppendable appendable(output);
+    fn.appendTo(appendable, status);
+    assertEquals(
+            "Should fail on Appendable terminal method with correct error code",
+            U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
+            status);
+
+    // UnicodeString
+    status = U_ZERO_ERROR;
+    output = fn.toString(status);
+    assertEquals(
+            "Should fail on UnicodeString terminal method with correct error code",
+            U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
+            status);
+
+    // CopyErrorTo
+    status = U_ZERO_ERROR;
+    lnf.copyErrorTo(status);
+    assertEquals(
+            "Should fail since rounder is not legal with correct error code",
+            U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
+            status);
 }
 
 void NumberFormatterApiTest::validRanges() {
