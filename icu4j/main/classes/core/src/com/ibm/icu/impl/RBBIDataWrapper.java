@@ -7,76 +7,52 @@
  *******************************************************************************
  */
 
-package com.ibm.icu.text;
+package com.ibm.icu.impl;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUBinary.Authenticate;
-import com.ibm.icu.impl.Trie2;
+import com.ibm.icu.text.RuleBasedBreakIterator;
 
 /**
 * <p>Internal class used for Rule Based Break Iterators.</p>
 * <p>This class provides access to the compiled break rule data, as
 * it is stored in a .brk file. Refer to the file common/rbbidata.h from
 * ICU4C for further details.
-* Not intended for public use; declared public for testing purposes only.
-* @internal
-* @deprecated This API is ICU internal only.
 */
-@Deprecated
 public final class RBBIDataWrapper {
 
     /**
      * A RBBI State Transition table, the form of the data used at run time in Java.
      * These can be created from stored ICU data, or built from rules.
      * The structure corresponds closely to struct RBBIStateTable in ICU4C.
-     * Not intended for public use; declared public for testing purposes only.
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
-    @Deprecated
     static public class RBBIStateTable {
         /**
          * Number of states (rows) in this table.
-         * @internal
-         * @deprecated This API is ICU internal only.
          */
-        @Deprecated
         public int     fNumStates;
         /**
          * Length of a table row in bytes. Note mismatch with table data, which is short[].
-         * @internal
-         * @deprecated This API is ICU internal only.
          */
-        @Deprecated
         public int     fRowLen;
         /**
          * Option Flags for this state table.
-         * @internal
-         * @deprecated This API is ICU internal only.
          */
-        @Deprecated
         public int     fFlags;
         /**
          * Option Flags for this state table.
-         * @internal
-         * @deprecated This API is ICU internal only.
          */
-        @Deprecated
         public int     fReserved;
         /**
          * Linear array of next state values, accessed as short[state, char_class]
-         * @internal
-         * @deprecated This API is ICU internal only.
          */
-        @Deprecated
         public short[] fTable;
 
-        RBBIStateTable() {
+        public RBBIStateTable() {
         }
 
         static RBBIStateTable get(ByteBuffer bytes, int length) throws IOException {
@@ -96,7 +72,7 @@ public final class RBBIDataWrapper {
             return This;
         }
 
-        int put(DataOutputStream bytes) throws IOException {
+        public int put(DataOutputStream bytes) throws IOException {
             bytes.writeInt(fNumStates);
             bytes.writeInt(fRowLen);
             bytes.writeInt(fFlags);
@@ -116,10 +92,7 @@ public final class RBBIDataWrapper {
 
         /**
          * {@inheritDoc}
-         * @internal
-         * @deprecated This API is ICU internal only.
          */
-        @Deprecated
         @Override
         public boolean equals (Object other) {
             if (other == this) {
@@ -139,11 +112,7 @@ public final class RBBIDataWrapper {
 
     /**
      * Equals helper for state tables, including null handling.
-     * Not intended for public use; declared public for testing purposes only.
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
-    @Deprecated
     static public boolean equals(RBBIStateTable left, RBBIStateTable right) {
         if (left == right) {
             return true;
@@ -159,31 +128,18 @@ public final class RBBIDataWrapper {
     // These fields are the ready-to-use compiled rule data, as
     //   read from the file.
     //
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
     public RBBIDataHeader fHeader;
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
+
     public RBBIStateTable   fFTable;
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
+
     public RBBIStateTable   fRTable;
 
-    Trie2          fTrie;
-    String         fRuleSource;
-    int            fStatusTable[];
+    public Trie2   fTrie;
+    public String  fRuleSource;
+    public int     fStatusTable[];
 
-    static final int DATA_FORMAT = 0x42726b20;     // "Brk "
-    static final int FORMAT_VERSION = 0x05000000;  // 4.0.0.0
+    public static final int DATA_FORMAT = 0x42726b20;     // "Brk "
+    public static final int FORMAT_VERSION = 0x05000000;  // 4.0.0.0
 
     private static final class IsAcceptable implements Authenticate {
         @Override
@@ -198,80 +154,65 @@ public final class RBBIDataWrapper {
     // Indexes to fields in the ICU4C style binary form of the RBBI Data Header
     //   Used by the rule compiler when flattening the data.
     //
-    final static int    DH_SIZE           = 20;
-    final static int    DH_MAGIC          = 0;
-    final static int    DH_FORMATVERSION  = 1;
-    final static int    DH_LENGTH         = 2;
-    final static int    DH_CATCOUNT       = 3;
-    final static int    DH_FTABLE         = 4;
-    final static int    DH_FTABLELEN      = 5;
-    final static int    DH_RTABLE         = 6;
-    final static int    DH_RTABLELEN      = 7;
-    final static int    DH_TRIE           = 8;
-    final static int    DH_TRIELEN        = 9;
-    final static int    DH_RULESOURCE     = 10;
-    final static int    DH_RULESOURCELEN  = 11;
-    final static int    DH_STATUSTABLE    = 12;
-    final static int    DH_STATUSTABLELEN = 13;
+    public final static int    DH_SIZE           = 20;
+    public final static int    DH_MAGIC          = 0;
+    public final static int    DH_FORMATVERSION  = 1;
+    public final static int    DH_LENGTH         = 2;
+    public final static int    DH_CATCOUNT       = 3;
+    public final static int    DH_FTABLE         = 4;
+    public final static int    DH_FTABLELEN      = 5;
+    public final static int    DH_RTABLE         = 6;
+    public final static int    DH_RTABLELEN      = 7;
+    public final static int    DH_TRIE           = 8;
+    public final static int    DH_TRIELEN        = 9;
+    public final static int    DH_RULESOURCE     = 10;
+    public final static int    DH_RULESOURCELEN  = 11;
+    public final static int    DH_STATUSTABLE    = 12;
+    public final static int    DH_STATUSTABLELEN = 13;
 
 
     // Index offsets to the fields in a state table row.
     //    Corresponds to struct RBBIStateTableRow in the C version.
     //
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * offset to the "accepting" field in a state table row.
      */
-    @Deprecated
     public final static int      ACCEPTING  = 0;
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * offset to the "lookahead" field in a state table row.
      */
-    @Deprecated
     public final static int      LOOKAHEAD  = 1;
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * offset to the "tagIndex" field in a state table row.
      */
-    @Deprecated
     public final static int      TAGIDX     = 2;
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * offset to the reserved field in a state table row.
      */
-    @Deprecated
     public final static int      RESERVED   = 3;
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * offset to the start of the next states array in a state table row.
      */
-    @Deprecated
     public final static int      NEXTSTATES = 4;
 
     //  Bit selectors for the "FLAGS" field of the state table header
     //     enum RBBIStateTableFlags in the C version.
     //
-    final static int      RBBI_LOOKAHEAD_HARD_BREAK = 1;
-    final static int      RBBI_BOF_REQUIRED         = 2;
+    public final static int      RBBI_LOOKAHEAD_HARD_BREAK = 1;
+    public final static int      RBBI_BOF_REQUIRED         = 2;
 
     /**
      * Data Header.  A struct-like class with the fields from the RBBI data file header.
      * Not intended for public use, declared public for testing purposes only.
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
-    @Deprecated
     public final static class RBBIDataHeader {
         int         fMagic;         //  == 0xbla0
         byte[]      fFormatVersion; //  For ICU 3.4 and later.
         int         fLength;        //  Total length in bytes of this RBBI Data,
-                                       //      including all sections, not just the header.
+                                    //      including all sections, not just the header.
         /**
-         * @internal
-         * @deprecated This API is ICU internal only.
+         * the number of character categories.
          */
-        @Deprecated
         public int  fCatCount;      //  Number of character categories.
 
         //
@@ -290,11 +231,6 @@ public final class RBBIDataWrapper {
         int         fStatusTable;    // Offset to the table of rule status values
         int         fStatusTableLen;
 
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        @Deprecated
         public RBBIDataHeader() {
             fMagic = 0;
             fFormatVersion = new byte[4];
@@ -305,10 +241,7 @@ public final class RBBIDataWrapper {
     /**
      * RBBI State Table Indexing Function.  Given a state number, return the
      * array index of the start of the state table row for that state.
-     * @internal
-     * @deprecated This API is ICU internal only.
      */
-    @Deprecated
     public int getRowIndex(int state){
         return state * (fHeader.fCatCount + 4);
     }
@@ -316,11 +249,11 @@ public final class RBBIDataWrapper {
     RBBIDataWrapper() {
     }
 
-    /*
+    /**
      *  Get an RBBIDataWrapper from an InputStream onto a pre-compiled set
      *  of RBBI rules.
      */
-    static RBBIDataWrapper get(ByteBuffer bytes) throws IOException {
+    public static RBBIDataWrapper get(ByteBuffer bytes) throws IOException {
         RBBIDataWrapper This = new RBBIDataWrapper();
 
         ICUBinary.readHeader(bytes, DATA_FORMAT, IS_ACCEPTABLE);
@@ -435,13 +368,7 @@ public final class RBBIDataWrapper {
         return This;
     }
 
-    ///CLOVER:OFF
-    /* Debug function to display the break iterator data. */
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
+    /** Debug function to display the break iterator data. */
     public void dump(java.io.PrintStream out) {
         if (fFTable == null) {
             // There is no table. Fail early for testing purposes.
@@ -458,15 +385,8 @@ public final class RBBIDataWrapper {
         out.println("Source Rules: " + fRuleSource);
 
     }
-    ///CLOVER:ON
 
-    ///CLOVER:OFF
-    /* Fixed width int-to-string conversion. */
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
+    /** Fixed width int-to-string conversion. */
     static public String intToString(int n, int width) {
         StringBuilder  dest = new StringBuilder(width);
         dest.append(n);
@@ -475,15 +395,8 @@ public final class RBBIDataWrapper {
         }
         return dest.toString();
     }
-    ///CLOVER:ON
 
-    ///CLOVER:OFF
-    /* Fixed width int-to-string conversion. */
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
+    /** Fixed width int-to-string conversion. */
     static public String intToHexString(int n, int width) {
         StringBuilder  dest = new StringBuilder(width);
         dest.append(Integer.toHexString(n));
@@ -492,9 +405,7 @@ public final class RBBIDataWrapper {
         }
         return dest.toString();
     }
-    ///CLOVER:ON
 
-    ///CLOVER:OFF
     /** Dump a state table.  (A full set of RBBI rules has 4 state tables.)  */
     private void dumpTable(java.io.PrintStream out, RBBIStateTable table) {
         if (table == null || table.fTable.length == 0)   {
@@ -517,9 +428,7 @@ public final class RBBIDataWrapper {
             out.println();
         }
     }
-    ///CLOVER:ON
 
-    ///CLOVER:OFF
     /**
      * Dump (for debug) a single row of an RBBI state table
      * @param table
@@ -547,9 +456,7 @@ public final class RBBIDataWrapper {
 
         out.println(dest);
     }
-    ///CLOVER:ON
 
-    ///CLOVER:OFF
     private void dumpCharCategories(java.io.PrintStream out) {
         int n = fHeader.fCatCount;
         String   catStrings[] = new  String[n+1];
@@ -601,32 +508,5 @@ public final class RBBIDataWrapper {
         }
         out.println();
     }
-    ///CLOVER:ON
 
-    /*static RBBIDataWrapper get(String name) throws IOException {
-        String  fullName = "data/" + name;
-        InputStream is = ICUData.getRequiredStream(fullName);
-        return get(is);
-    }
-
-    public static void main(String[] args) {
-        String s;
-        if (args.length == 0) {
-            s = "char";
-        } else {
-            s = args[0];
-        }
-        System.out.println("RBBIDataWrapper.main(" + s + ") ");
-
-        String versionedName = ICUResourceBundle.ICU_BUNDLE+"/"+ s + ".brk";
-
-        try {
-            RBBIDataWrapper This = RBBIDataWrapper.get(versionedName);
-            This.dump();
-        }
-       catch (Exception e) {
-           System.out.println("Exception: " + e.toString());
-       }
-
-    }*/
 }

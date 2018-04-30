@@ -25,6 +25,7 @@ import java.util.List;
 import com.ibm.icu.impl.CharacterIteration;
 import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUDebug;
+import com.ibm.icu.impl.RBBIDataWrapper;
 import com.ibm.icu.impl.Trie2;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
@@ -649,9 +650,11 @@ public class RuleBasedBreakIterator extends BreakIterator {
      /**
      * Control debug, trace and dump options.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
-    static final String fDebugEnv = ICUDebug.enabled(RBBI_DEBUG_ARG) ?
-                                        ICUDebug.value(RBBI_DEBUG_ARG) : null;
+    @Deprecated
+    public static final String fDebugEnv = ICUDebug.enabled(RBBI_DEBUG_ARG) ?
+                                           ICUDebug.value(RBBI_DEBUG_ARG) : null;
 
 
     private LanguageBreakEngine getLanguageBreakEngine(int c) {
