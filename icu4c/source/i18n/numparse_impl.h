@@ -22,6 +22,13 @@
 U_NAMESPACE_BEGIN namespace numparse {
 namespace impl {
 
+// Export an explicit template instantiation of the MaybeStackArray that is used as a data member of NumberParserImpl.
+// When building DLLs for Windows this is required even though no direct access to the MaybeStackArray leaks out of the i18n library.
+// (See numparse_compositions.h, numparse_affixes.h, datefmt.h, and others for similar examples.)
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API MaybeStackArray<const NumberParseMatcher*, 10>;
+#endif
+
 // Exported as U_I18N_API for tests
 class U_I18N_API NumberParserImpl : public MutableMatcherCollection {
   public:

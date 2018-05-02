@@ -115,6 +115,15 @@ getPatternForStyle(const Locale& locale, const char* nsName, CldrPatternStyle st
 } // namespace utils
 
 
+#define DECNUM_INITIAL_CAPACITY 34
+
+  // Export an explicit template instantiation of the MaybeStackHeaderAndArray that is used as a data member of DecNum.
+  // When building DLLs for Windows this is required even though no direct access to the MaybeStackHeaderAndArray leaks out of the i18n library.
+  // (See digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.)
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API MaybeStackHeaderAndArray<decNumber, char, DECNUM_INITIAL_CAPACITY>;
+#endif
+
 /** A very thin C++ wrapper around decNumber.h */
 // Exported as U_I18N_API for tests
 class U_I18N_API DecNum : public UMemory {
@@ -151,7 +160,7 @@ class U_I18N_API DecNum : public UMemory {
     }
 
   private:
-    static constexpr int32_t kDefaultDigits = 34;
+    static constexpr int32_t kDefaultDigits = DECNUM_INITIAL_CAPACITY;
     MaybeStackHeaderAndArray<decNumber, char, kDefaultDigits> fData;
     decContext fContext;
 
