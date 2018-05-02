@@ -1671,7 +1671,7 @@ class U_I18N_API NumberFormatterSettings {
      * @return The fluent chain.
      * @draft ICU 61
      */
-    Derived grouping(const UGroupingStrategy &strategy) const &;
+    Derived grouping(UGroupingStrategy strategy) const &;
 
     /**
      * Overload of grouping() for use on an rvalue reference.
@@ -1683,7 +1683,7 @@ class U_I18N_API NumberFormatterSettings {
      * @provisional This API might change or be removed in a future release.
      * @draft ICU 62
      */
-    Derived grouping(const UGroupingStrategy& strategy) &&;
+    Derived grouping(UGroupingStrategy strategy) &&;
 
     /**
      * Specifies the minimum and maximum number of digits to render before the decimal mark.
@@ -1846,7 +1846,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see UNumberUnitWidth
      * @draft ICU 60
      */
-    Derived unitWidth(const UNumberUnitWidth &width) const &;
+    Derived unitWidth(UNumberUnitWidth width) const &;
 
     /**
      * Overload of unitWidth() for use on an rvalue reference.
@@ -1857,7 +1857,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #unitWidth
      * @draft ICU 62
      */
-    Derived unitWidth(const UNumberUnitWidth &width) &&;
+    Derived unitWidth(UNumberUnitWidth width) &&;
 
     /**
      * Sets the plus/minus sign display strategy. Most common values:
@@ -1885,7 +1885,7 @@ class U_I18N_API NumberFormatterSettings {
      * @provisional This API might change or be removed in a future release.
      * @draft ICU 60
      */
-    Derived sign(const UNumberSignDisplay &style) const &;
+    Derived sign(UNumberSignDisplay style) const &;
 
     /**
      * Overload of sign() for use on an rvalue reference.
@@ -1896,7 +1896,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #sign
      * @draft ICU 62
      */
-    Derived sign(const UNumberSignDisplay &style) &&;
+    Derived sign(UNumberSignDisplay style) &&;
 
     /**
      * Sets the decimal separator display strategy. This affects integer numbers with no fraction part. Most common
@@ -1924,7 +1924,7 @@ class U_I18N_API NumberFormatterSettings {
      * @provisional This API might change or be removed in a future release.
      * @draft ICU 60
      */
-    Derived decimal(const UNumberDecimalSeparatorDisplay &style) const &;
+    Derived decimal(UNumberDecimalSeparatorDisplay style) const &;
 
     /**
      * Overload of decimal() for use on an rvalue reference.
@@ -1935,7 +1935,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #decimal
      * @draft ICU 62
      */
-    Derived decimal(const UNumberDecimalSeparatorDisplay &style) &&;
+    Derived decimal(UNumberDecimalSeparatorDisplay style) &&;
 
     /**
      * Sets a scale (multiplier) to be used to scale the number by an arbitrary amount before formatting.
