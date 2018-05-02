@@ -86,26 +86,14 @@ Derived NumberFormatterSettings<Derived>::perUnit(const icu::MeasureUnit& perUni
 
 template<typename Derived>
 Derived NumberFormatterSettings<Derived>::perUnit(const icu::MeasureUnit& perUnit)&& {
-    Derived copy(*this);
-    // See comments above about slicing.
-    copy.fMacros.perUnit = perUnit;
-    return copy;
-}
-
-template<typename Derived>
-Derived NumberFormatterSettings<Derived>::adoptPerUnit(icu::MeasureUnit* perUnit) const& {
     Derived move(std::move(*this));
-    // See comments above about slicing and ownership.
-    if (perUnit != nullptr) {
-        // TODO: On nullptr, reset to default value?
-        move.fMacros.perUnit = std::move(*perUnit);
-        delete perUnit;
-    }
+    // See comments above about slicing.
+    move.fMacros.perUnit = perUnit;
     return move;
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::adoptPerUnit(icu::MeasureUnit* perUnit)&& {
+Derived NumberFormatterSettings<Derived>::adoptPerUnit(icu::MeasureUnit* perUnit) const& {
     Derived copy(*this);
     // See comments above about slicing and ownership.
     if (perUnit != nullptr) {
@@ -114,6 +102,18 @@ Derived NumberFormatterSettings<Derived>::adoptPerUnit(icu::MeasureUnit* perUnit
         delete perUnit;
     }
     return copy;
+}
+
+template<typename Derived>
+Derived NumberFormatterSettings<Derived>::adoptPerUnit(icu::MeasureUnit* perUnit)&& {
+    Derived move(std::move(*this));
+    // See comments above about slicing and ownership.
+    if (perUnit != nullptr) {
+        // TODO: On nullptr, reset to default value?
+        move.fMacros.perUnit = std::move(*perUnit);
+        delete perUnit;
+    }
+    return move;
 }
 
 template<typename Derived>
@@ -133,7 +133,7 @@ Derived NumberFormatterSettings<Derived>::rounding(const Rounder& rounder)&& {
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::grouping(const UGroupingStrategy& strategy) const& {
+Derived NumberFormatterSettings<Derived>::grouping(UGroupingStrategy strategy) const& {
     Derived copy(*this);
     // NOTE: This is slightly different than how the setting is stored in Java
     // because we want to put it on the stack.
@@ -142,7 +142,7 @@ Derived NumberFormatterSettings<Derived>::grouping(const UGroupingStrategy& stra
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::grouping(const UGroupingStrategy& strategy)&& {
+Derived NumberFormatterSettings<Derived>::grouping(UGroupingStrategy strategy)&& {
     Derived move(std::move(*this));
     move.fMacros.grouper = Grouper::forStrategy(strategy);
     return move;
@@ -191,42 +191,42 @@ Derived NumberFormatterSettings<Derived>::adoptSymbols(NumberingSystem* ns)&& {
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::unitWidth(const UNumberUnitWidth& width) const& {
+Derived NumberFormatterSettings<Derived>::unitWidth(UNumberUnitWidth width) const& {
     Derived copy(*this);
     copy.fMacros.unitWidth = width;
     return copy;
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::unitWidth(const UNumberUnitWidth& width)&& {
+Derived NumberFormatterSettings<Derived>::unitWidth(UNumberUnitWidth width)&& {
     Derived move(std::move(*this));
     move.fMacros.unitWidth = width;
     return move;
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::sign(const UNumberSignDisplay& style) const& {
+Derived NumberFormatterSettings<Derived>::sign(UNumberSignDisplay style) const& {
     Derived copy(*this);
     copy.fMacros.sign = style;
     return copy;
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::sign(const UNumberSignDisplay& style)&& {
+Derived NumberFormatterSettings<Derived>::sign(UNumberSignDisplay style)&& {
     Derived move(std::move(*this));
     move.fMacros.sign = style;
     return move;
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::decimal(const UNumberDecimalSeparatorDisplay& style) const& {
+Derived NumberFormatterSettings<Derived>::decimal(UNumberDecimalSeparatorDisplay style) const& {
     Derived copy(*this);
     copy.fMacros.decimal = style;
     return copy;
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::decimal(const UNumberDecimalSeparatorDisplay& style)&& {
+Derived NumberFormatterSettings<Derived>::decimal(UNumberDecimalSeparatorDisplay style)&& {
     Derived move(std::move(*this));
     move.fMacros.decimal = style;
     return move;
