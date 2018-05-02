@@ -17,9 +17,6 @@
 
 U_NAMESPACE_BEGIN
 
-namespace number {
-namespace impl {
-
 // Export an explicit template instantiation of the LocalPointer that is used as a
 // data member of CurrencyPluralInfoWrapper.
 // (When building DLLs for Windows this is required.)
@@ -30,25 +27,30 @@ template class U_I18N_API LocalPointerBase<CurrencyPluralInfo>;
 template class U_I18N_API LocalPointer<CurrencyPluralInfo>;
 #endif
 
+namespace number {
+namespace impl {
+
 // Exported as U_I18N_API because it is a public member field of exported DecimalFormatProperties
-template<typename T>
-struct U_I18N_API CopyableLocalPointer {
-    LocalPointer<T> fPtr;
+// Using this wrapper is rather unfortunate, but is needed on Windows platforms in order to allow
+// for DLL-exporting an fully specified template instantiation.
+class U_I18N_API CurrencyPluralInfoWrapper {
+public:
+	LocalPointer<CurrencyPluralInfo> fPtr;
 
-    CopyableLocalPointer() = default;
+	CurrencyPluralInfoWrapper() = default;
 
-    CopyableLocalPointer(const CopyableLocalPointer& other) {
-        if (!other.fPtr.isNull()) {
-            fPtr.adoptInstead(new T(*other.fPtr));
-        }
-    }
+	CurrencyPluralInfoWrapper(const CurrencyPluralInfoWrapper& other) {
+		if (!other.fPtr.isNull()) {
+			fPtr.adoptInstead(new CurrencyPluralInfo(*other.fPtr));
+		}
+	}
 
-    CopyableLocalPointer& operator=(const CopyableLocalPointer& other) {
-        if (!other.fPtr.isNull()) {
-            fPtr.adoptInstead(new T(*other.fPtr));
-        }
-        return *this;
-    }
+	CurrencyPluralInfoWrapper& operator=(const CurrencyPluralInfoWrapper& other) {
+		if (!other.fPtr.isNull()) {
+			fPtr.adoptInstead(new CurrencyPluralInfo(*other.fPtr));
+		}
+		return *this;
+	}
 };
 
 /** Controls the set of rules for parsing a string from the old DecimalFormat API. */
@@ -91,7 +93,7 @@ struct U_I18N_API DecimalFormatProperties {
   public:
     NullableValue<UNumberCompactStyle> compactStyle;
     NullableValue<CurrencyUnit> currency;
-    CopyableLocalPointer<CurrencyPluralInfo> currencyPluralInfo;
+	CurrencyPluralInfoWrapper currencyPluralInfo;
     NullableValue<UCurrencyUsage> currencyUsage;
     bool decimalPatternMatchRequired;
     bool decimalSeparatorAlwaysShown;
