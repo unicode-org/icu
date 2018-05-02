@@ -44,6 +44,13 @@ class CodePointMatcher : public NumberParseMatcher, public UMemory {
 };
 
 
+// Export an explicit template instantiation of the MaybeStackArray that is used as a data member of CodePointMatcherWarehouse.
+// When building DLLs for Windows this is required even though no direct access to the MaybeStackArray leaks out of the i18n library.
+// (See numparse_compositions.h, digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.)
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API MaybeStackArray<CodePointMatcher*, 3>;
+#endif
+
 /**
  * A warehouse to retain ownership of CodePointMatchers.
  */
@@ -155,6 +162,12 @@ class AffixPatternMatcherBuilder : public TokenConsumer, public MutableMatcherCo
     void addMatcher(NumberParseMatcher& matcher) override;
 };
 
+// Export an explicit template instantiation of the CompactUnicodeString that is used as a data member of AffixPatternMatcher.
+// When building DLLs for Windows this is required even though no direct access to the CompactUnicodeString leaks out of the i18n library.
+// (See digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.)
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API CompactUnicodeString<4>;
+#endif
 
 // Exported as U_I18N_API for tests
 class U_I18N_API AffixPatternMatcher : public ArraySeriesMatcher {
