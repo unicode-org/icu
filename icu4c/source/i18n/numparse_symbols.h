@@ -134,8 +134,8 @@ class U_I18N_API PercentMatcher : public SymbolMatcher {
     void accept(StringSegment& segment, ParsedNumber& result) const override;
 };
 
-
-class PermilleMatcher : public SymbolMatcher {
+// Exported as U_I18N_API for tests
+class U_I18N_API PermilleMatcher : public SymbolMatcher {
   public:
     PermilleMatcher() = default;  // WARNING: Leaves the object in an unusable state
 

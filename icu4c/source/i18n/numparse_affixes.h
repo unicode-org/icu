@@ -163,9 +163,11 @@ class AffixPatternMatcherBuilder : public TokenConsumer, public MutableMatcherCo
 };
 
 // Export an explicit template instantiation of the CompactUnicodeString that is used as a data member of AffixPatternMatcher.
+// Also an explicit template instantiation of the MaybeStackArray that is used inside of the CompactUnicodeString.
 // When building DLLs for Windows this is required even though no direct access to the CompactUnicodeString leaks out of the i18n library.
 // (See digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API MaybeStackArray<UChar, 4>;
 template class U_I18N_API CompactUnicodeString<4>;
 #endif
 
