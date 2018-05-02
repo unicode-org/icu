@@ -9,6 +9,10 @@ import java.util.Set;
 /**
  * A wrapper around java.util.Collection that implements java.util.Set. This class keeps a pointer to the
  * Collection and does not persist any data on its own.
+ *
+ * Useful when you need a Set but creating a HashSet is too expensive.
+ *
+ * IMPORTANT: The elements of the Collection *must* be unique! This class does not check.
  */
 public class CollectionSet<E> implements Set<E> {
 
