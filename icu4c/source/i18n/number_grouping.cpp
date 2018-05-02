@@ -48,6 +48,7 @@ Grouper Grouper::forStrategy(UGroupingStrategy grouping) {
         return {3, 3, 1, grouping};
     default:
         U_ASSERT(FALSE);
+        return {}; // return a value: silence compiler warning
     }
 }
 
