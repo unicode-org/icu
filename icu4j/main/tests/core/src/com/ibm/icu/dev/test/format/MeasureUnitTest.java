@@ -19,6 +19,7 @@ import java.text.FieldPosition;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -1460,6 +1461,15 @@ public class MeasureUnitTest extends TestFmwk {
             MeasureUnit actual = MeasureUnit.internalGetInstance(type, code);
             assertSame("Identity check", expected, actual);
         }
+
+        // The return value should contain only unique elements
+        assertUnique(MeasureUnit.getAvailable());
+    }
+
+    static void assertUnique(Collection<?> coll) {
+        int expectedSize = new HashSet<Object>(coll).size();
+        int actualSize = coll.size();
+        assertEquals("Collection should contain only unique elements", expectedSize, actualSize);
     }
 
     @Test
