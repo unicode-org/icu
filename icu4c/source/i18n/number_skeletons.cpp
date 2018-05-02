@@ -161,6 +161,7 @@ Notation stem_to_object::notation(skeleton::StemEnum stem) {
             return Notation::simple();
         default:
             U_ASSERT(false);
+            return Notation::simple(); // return a value: silence compiler warning
     }
 }
 
@@ -177,6 +178,7 @@ MeasureUnit stem_to_object::unit(skeleton::StemEnum stem) {
             return NoUnit::permille(); // NOLINT
         default:
             U_ASSERT(false);
+            return {}; // return a value: silence compiler warning
     }
 }
 
@@ -192,6 +194,7 @@ Rounder stem_to_object::rounder(skeleton::StemEnum stem) {
             return Rounder::currency(UCURR_USAGE_CASH);
         default:
             U_ASSERT(false);
+            return Rounder::integer(); // return a value: silence compiler warning
     }
 }
 
@@ -601,6 +604,7 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
 
         default:
             U_ASSERT(false);
+            return STATE_NULL; // return a value: silence compiler warning
     }
 }
 
