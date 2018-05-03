@@ -246,7 +246,13 @@ class U_I18N_API NullableValue {
         fNull = false;
     }
 
-    NullableValue<T>& operator=(const NullableValue<T>& other) = default;
+    NullableValue<T>& operator=(const NullableValue<T>& other) {
+        fNull = other.fNull;
+        if (!fNull) {
+            fValue = other.fValue;
+        }
+        return *this;
+    }
 
     NullableValue<T>& operator=(const T& other) {
         fValue = other;
