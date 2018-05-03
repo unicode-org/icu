@@ -338,7 +338,6 @@ int32_t DecimalFormat::getAttribute(UNumberFormatAttribute attr, UErrorCode& sta
             status = U_UNSUPPORTED_ERROR;
             break;
     }
-    // TODO: UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS?
 
     return -1; /* undefined */
 }
