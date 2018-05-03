@@ -287,6 +287,8 @@ class U_I18N_API StringSegment : public UMemory {
 // Exported as U_I18N_API for tests
 class U_I18N_API NumberParseMatcher {
   public:
+    virtual ~NumberParseMatcher();
+
     /**
      * Matchers can override this method to return true to indicate that they are optional and can be run
      * repeatedly. Used by SeriesMatcher, primarily in the context of IgnorablesMatcher.

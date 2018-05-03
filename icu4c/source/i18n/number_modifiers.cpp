@@ -51,6 +51,9 @@ void U_CALLCONV initDefaultCurrencySpacing(UErrorCode &status) {
 }  // namespace
 
 
+Modifier::~Modifier() = default;
+
+
 int32_t ConstantAffixModifier::apply(NumberStringBuilder &output, int leftIndex, int rightIndex,
                                      UErrorCode &status) const {
     // Insert the suffix first since inserting the prefix will change the rightIndex

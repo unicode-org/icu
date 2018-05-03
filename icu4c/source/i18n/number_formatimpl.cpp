@@ -63,6 +63,10 @@ getCurrencyFormatInfo(const Locale& locale, const char* isoCode, UErrorCode& sta
 
 }  // namespace
 
+
+MicroPropsGenerator::~MicroPropsGenerator() = default;
+
+
 NumberFormatterImpl* NumberFormatterImpl::fromMacros(const MacroProps& macros, UErrorCode& status) {
     return new NumberFormatterImpl(macros, true, status);
 }
