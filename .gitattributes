@@ -4308,7 +4308,6 @@ icu4c/source/i18n/esctrn.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/esctrn.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/ethpccal.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/ethpccal.h svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/i18n/fieldposutil.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/fmtable.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/fmtable_cnv.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/fmtableimp.h svneol=native#text/plain%3Bcharset%3Dutf-8

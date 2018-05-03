@@ -81,6 +81,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(scale);
         TESTCASE_AUTO(locale);
         TESTCASE_AUTO(formatTypes);
+        TESTCASE_AUTO(fieldPosition);
         TESTCASE_AUTO(errors);
         TESTCASE_AUTO(validRanges);
         TESTCASE_AUTO(copyMove);
@@ -2066,6 +2067,94 @@ void NumberFormatterApiTest::formatTypes() {
     assertEquals("Format decNumber to 40 digits", str, actual);
 }
 
+void NumberFormatterApiTest::fieldPosition() {
+    IcuTestErrorCode status(*this, "fieldPosition");
+    FormattedNumber fmtd = NumberFormatter::withLocale("en").formatDouble(-9876543210.12, status);
+    assertEquals("Should have expected format output", u"-9,876,543,210.12", fmtd.toString(status));
+
+    static const UFieldPosition expectedFieldPositions[] = {
+            // field, begin index, end index
+            {UNUM_SIGN_FIELD, 0, 1},
+            {UNUM_GROUPING_SEPARATOR_FIELD, 2, 3},
+            {UNUM_GROUPING_SEPARATOR_FIELD, 6, 7},
+            {UNUM_GROUPING_SEPARATOR_FIELD, 10, 11},
+            {UNUM_INTEGER_FIELD, 1, 14},
+            {UNUM_DECIMAL_SEPARATOR_FIELD, 14, 15},
+            {UNUM_FRACTION_FIELD, 15, 17}};
+
+    FieldPositionIterator fpi;
+    fmtd.getAllFieldPositions(fpi, status);
+    int32_t i = 0;
+    FieldPosition actual;
+    while (fpi.next(actual)) {
+        UFieldPosition expected = expectedFieldPositions[i++];
+        assertEquals(
+                UnicodeString(u"Field, case #") + Int64ToUnicodeString(i),
+                expected.field,
+                actual.getField());
+        assertEquals(
+                UnicodeString(u"Iterator, begin index, case #") + Int64ToUnicodeString(i),
+                expected.beginIndex,
+                actual.getBeginIndex());
+        assertEquals(
+                UnicodeString(u"Iterator, end index, case #") + Int64ToUnicodeString(i),
+                expected.endIndex,
+                actual.getEndIndex());
+
+        // Check for the first location of the field
+        if (expected.field != UNUM_GROUPING_SEPARATOR_FIELD) {
+            FieldPosition actual2(expected.field);
+            UBool found = fmtd.nextFieldPosition(actual2, status);
+            assertEquals(
+                    UnicodeString(u"Next, found first time, case #") + Int64ToUnicodeString(i),
+                    (UBool) TRUE,
+                    found);
+            assertEquals(
+                    UnicodeString(u"Next, begin index, case #") + Int64ToUnicodeString(i),
+                    expected.beginIndex,
+                    actual2.getBeginIndex());
+            assertEquals(
+                    UnicodeString(u"Next, end index, case #") + Int64ToUnicodeString(i),
+                    expected.endIndex,
+                    actual2.getEndIndex());
+            found = fmtd.nextFieldPosition(actual2, status);
+            assertEquals(
+                    UnicodeString(u"Next, found second time, case #") + Int64ToUnicodeString(i),
+                    (UBool) FALSE,
+                    found);
+        }
+    }
+    assertEquals(
+            "Should have seen every field position",
+            sizeof(expectedFieldPositions) / sizeof(*expectedFieldPositions),
+            i);
+
+    // Test the iteration functionality of nextFieldPosition
+    actual = {UNUM_GROUPING_SEPARATOR_FIELD};
+    i = 1;
+    while (fmtd.nextFieldPosition(actual, status)) {
+        UFieldPosition expected = expectedFieldPositions[i++];
+        assertEquals(
+                UnicodeString(u"Next for grouping, field, case #") + Int64ToUnicodeString(i),
+                expected.field,
+                actual.getField());
+        assertEquals(
+                UnicodeString(u"Next for grouping, begin index, case #") + Int64ToUnicodeString(i),
+                expected.beginIndex,
+                actual.getBeginIndex());
+        assertEquals(
+                UnicodeString(u"Next for grouping, end index, case #") + Int64ToUnicodeString(i),
+                expected.endIndex,
+                actual.getEndIndex());
+    }
+    assertEquals(u"Should have seen all grouping separators", 4, i);
+
+    // Make sure strings without fraction do not contain fraction field
+    actual = {UNUM_FRACTION_FIELD};
+    fmtd = NumberFormatter::withLocale("en").formatInt(5, status);
+    assertFalse(u"No fraction part in an integer", fmtd.nextFieldPosition(actual, status));
+}
+
 void NumberFormatterApiTest::errors() {
     LocalizedNumberFormatter lnf = NumberFormatter::withLocale(Locale::getEnglish()).rounding(
             Rounder::fixedFraction(
@@ -2293,7 +2382,7 @@ void NumberFormatterApiTest::localPointerCAPI() {
 
     // Get the location of the percent sign:
     UFieldPosition ufpos = {UNUM_PERCENT_FIELD, 0, 0};
-    unumf_resultGetField(uresult.getAlias(), &ufpos, &ec);
+    unumf_resultNextFieldPosition(uresult.getAlias(), &ufpos, &ec);
     assertEquals("Percent sign location within '0.00987%'", 7, ufpos.beginIndex);
     assertEquals("Percent sign location within '0.00987%'", 8, ufpos.endIndex);
 

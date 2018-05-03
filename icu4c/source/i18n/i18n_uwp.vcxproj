@@ -639,7 +639,6 @@
     <ClInclude Include="number_multiplier.h" />
     <ClInclude Include="number_currencysymbols.h" />
     <ClInclude Include="number_skeletons.h" />
-    <ClInclude Include="fieldposutil.h" />
     <ClInclude Include="numparse_stringsegment.h" />
     <ClInclude Include="numparse_impl.h" />
     <ClInclude Include="numparse_symbols.h" />

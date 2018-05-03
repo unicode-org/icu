@@ -101,9 +101,9 @@ class U_I18N_API NumberStringBuilder : public UMemory {
 
     bool contentEquals(const NumberStringBuilder &other) const;
 
-    void populateFieldPosition(FieldPosition &fp, int32_t offset, UErrorCode &status) const;
+    bool nextFieldPosition(FieldPosition& fp, UErrorCode& status) const;
 
-    void populateFieldPositionIterator(FieldPositionIterator &fpi, UErrorCode &status) const;
+    void getAllFieldPositions(FieldPositionIterator& fpi, UErrorCode& status) const;
 
   private:
     bool fUsingHeap = false;

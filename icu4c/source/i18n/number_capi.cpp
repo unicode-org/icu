@@ -13,7 +13,6 @@
 #include "number_utypes.h"
 #include "unicode/numberformatter.h"
 #include "unicode/unumberformatter.h"
-#include "fieldposutil.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -158,23 +157,30 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
     return result->string.toTempUnicodeString().extract(buffer, bufferCapacity, *ec);
 }
 
-U_CAPI void U_EXPORT2
-unumf_resultGetField(const UFormattedNumber* uresult, UFieldPosition* ufpos, UErrorCode* ec) {
+U_CAPI UBool U_EXPORT2
+unumf_resultNextFieldPosition(const UFormattedNumber* uresult, UFieldPosition* ufpos, UErrorCode* ec) {
     if (ufpos == nullptr) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
+        return FALSE;
     }
 
     const UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
-    if (U_FAILURE(*ec)) { return; }
+    if (U_FAILURE(*ec)) { return FALSE; }
 
-    UFieldPositionWrapper helper(*ufpos);
-    result->string.populateFieldPosition(helper, 0, *ec);
+    FieldPosition fp;
+    fp.setField(ufpos->field);
+    fp.setBeginIndex(ufpos->beginIndex);
+    fp.setEndIndex(ufpos->endIndex);
+    bool retval = result->string.nextFieldPosition(fp, *ec);
+    ufpos->beginIndex = fp.getBeginIndex();
+    ufpos->endIndex = fp.getEndIndex();
+    // NOTE: MSVC sometimes complains when implicitly converting between bool and UBool
+    return retval ? TRUE : FALSE;
 }
 
 U_CAPI void U_EXPORT2
-unumf_resultGetAllFields(const UFormattedNumber* uresult, UFieldPositionIterator* ufpositer,
-                         UErrorCode* ec) {
+unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPositionIterator* ufpositer,
+                                 UErrorCode* ec) {
     if (ufpositer == nullptr) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
         return;
@@ -184,7 +190,7 @@ unumf_resultGetAllFields(const UFormattedNumber* uresult, UFieldPositionIterator
     if (U_FAILURE(*ec)) { return; }
 
     auto* helper = reinterpret_cast<FieldPositionIterator*>(ufpositer);
-    result->string.populateFieldPositionIterator(*helper, *ec);
+    result->string.getAllFieldPositions(*helper, *ec);
 }
 
 U_CAPI void U_EXPORT2

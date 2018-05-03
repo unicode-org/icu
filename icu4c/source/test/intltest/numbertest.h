@@ -67,6 +67,7 @@ class NumberFormatterApiTest : public IntlTest {
     void scale();
     void locale();
     void formatTypes();
+    void fieldPosition();
     void errors();
     void validRanges();
     void copyMove();

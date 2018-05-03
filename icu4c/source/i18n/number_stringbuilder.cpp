@@ -413,23 +413,24 @@ bool NumberStringBuilder::contentEquals(const NumberStringBuilder &other) const 
     return true;
 }
 
-void NumberStringBuilder::populateFieldPosition(FieldPosition &fp, int32_t offset, UErrorCode &status) const {
+bool NumberStringBuilder::nextFieldPosition(FieldPosition& fp, UErrorCode& status) const {
     int32_t rawField = fp.getField();
 
     if (rawField == FieldPosition::DONT_CARE) {
-        return;
+        return FALSE;
     }
 
     if (rawField < 0 || rawField >= UNUM_FIELD_COUNT) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
+        return FALSE;
     }
 
     auto field = static_cast<Field>(rawField);
 
     bool seenStart = false;
     int32_t fractionStart = -1;
-    for (int i = fZero; i <= fZero + fLength; i++) {
+    int32_t startIndex = fp.getEndIndex();
+    for (int i = fZero + startIndex; i <= fZero + fLength; i++) {
         Field _field = UNUM_FIELD_COUNT;
         if (i < fZero + fLength) {
             _field = getFieldPtr()[i];
@@ -439,10 +440,10 @@ void NumberStringBuilder::populateFieldPosition(FieldPosition &fp, int32_t offse
             if (field == UNUM_INTEGER_FIELD && _field == UNUM_GROUPING_SEPARATOR_FIELD) {
                 continue;
             }
-            fp.setEndIndex(i - fZero + offset);
+            fp.setEndIndex(i - fZero);
             break;
         } else if (!seenStart && field == _field) {
-            fp.setBeginIndex(i - fZero + offset);
+            fp.setBeginIndex(i - fZero);
             seenStart = true;
         }
         if (_field == UNUM_INTEGER_FIELD || _field == UNUM_DECIMAL_SEPARATOR_FIELD) {
@@ -450,14 +451,17 @@ void NumberStringBuilder::populateFieldPosition(FieldPosition &fp, int32_t offse
         }
     }
 
-    // Backwards compatibility: FRACTION needs to start after INTEGER if empty
-    if (field == UNUM_FRACTION_FIELD && !seenStart) {
-        fp.setBeginIndex(fractionStart + offset);
-        fp.setEndIndex(fractionStart + offset);
+    // Backwards compatibility: FRACTION needs to start after INTEGER if empty.
+    // Do not return that a field was found, though, since there is not actually a fraction part.
+    if (field == UNUM_FRACTION_FIELD && !seenStart && fractionStart != -1) {
+        fp.setBeginIndex(fractionStart);
+        fp.setEndIndex(fractionStart);
     }
+
+    return seenStart;
 }
 
-void NumberStringBuilder::populateFieldPositionIterator(FieldPositionIterator &fpi, UErrorCode &status) const {
+void NumberStringBuilder::getAllFieldPositions(FieldPositionIterator& fpi, UErrorCode& status) const {
     // TODO: Set an initial capacity on uvec?
     LocalPointer <UVector32> uvec(new UVector32(status), status);
     if (U_FAILURE(status)) {

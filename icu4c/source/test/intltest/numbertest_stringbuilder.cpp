@@ -191,7 +191,7 @@ void NumberStringBuilderTest::testFields() {
         // Very basic FieldPosition test. More robust tests happen in NumberFormatTest.
         // Let NumberFormatTest also take care of FieldPositionIterator material.
         FieldPosition fp(UNUM_CURRENCY_FIELD);
-        sb.populateFieldPosition(fp, 0, status);
+        sb.nextFieldPosition(fp, status);
         assertSuccess("Populating the FieldPosition", status);
         assertEquals("Currency start position", str.length(), fp.getBeginIndex());
         assertEquals("Currency end position", str.length() * 2, fp.getEndIndex());

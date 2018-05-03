@@ -85,43 +85,91 @@ public class FormattedNumber {
      *
      * @param fieldPosition
      *            The FieldPosition to populate with the start and end indices of the desired field.
-     * @draft ICU 60
+     * @deprecated ICU 62 Use {@link #nextFieldPosition} instead. This method will be removed in a future
+     *             release. See http://bugs.icu-project.org/trac/ticket/13746
+     * @see com.ibm.icu.text.NumberFormat.Field
+     * @see NumberFormatter
+     */
+    @Deprecated
+    public void populateFieldPosition(FieldPosition fieldPosition) {
+        // in case any users were depending on the old behavior:
+        fieldPosition.setEndIndex(0);
+        nextFieldPosition(fieldPosition);
+    }
+
+    /**
+     * Determines the start and end indices of the next occurrence of the given <em>field</em> in the
+     * output string. This allows you to determine the locations of, for example, the integer part,
+     * fraction part, or symbols.
+     * <p>
+     * If a field occurs just once, calling this method will find that occurrence and return it. If a
+     * field occurs multiple times, this method may be called repeatedly with the following pattern:
+     * <p>
+     * <pre>
+     * FieldPosition fpos = new FieldPosition(NumberFormat.Field.GROUPING_SEPARATOR);
+     * while (formattedNumber.nextFieldPosition(fpos, status)) {
+     *   // do something with fpos.
+     * }
+     * </pre>
+     * <p>
+     * This method is useful if you know which field to query. If you want all available field position
+     * information, use #getAllFields().
+     *
+     * @param fieldPosition
+     *            Input+output variable. On input, the "field" property determines which field to look up,
+     *            and the "endIndex" property determines where to begin the search. On output, the
+     *            "beginIndex" field is set to the beginning of the first occurrence of the field after the
+     *            input "endIndex", and "endIndex" is set to the end of that occurrence of the field
+     *            (exclusive index). If a field position is not found, the FieldPosition is not changed and
+     *            the method returns false.
+     * @return true if a new occurrence of the field was found; false otherwise.
+     * @draft ICU 62
      * @provisional This API might change or be removed in a future release.
      * @see com.ibm.icu.text.NumberFormat.Field
      * @see NumberFormatter
      */
-    public void populateFieldPosition(FieldPosition fieldPosition) {
-        populateFieldPosition(fieldPosition, 0);
-    }
-
-    /**
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    @Deprecated
-    public void populateFieldPosition(FieldPosition fieldPosition, int offset) {
-        nsb.populateFieldPosition(fieldPosition, offset);
+    public boolean nextFieldPosition(FieldPosition fieldPosition) {
         fq.populateUFieldPosition(fieldPosition);
+        return nsb.nextFieldPosition(fieldPosition);
     }
 
     /**
      * Export the formatted number as an AttributedCharacterIterator. This allows you to determine which
      * characters in the output string correspond to which <em>fields</em>, such as the integer part,
      * fraction part, and sign.
-     *
      * <p>
      * If information on only one field is needed, consider using populateFieldPosition() instead.
      *
      * @return An AttributedCharacterIterator, containing information on the field attributes of the
      *         number string.
-     * @draft ICU 60
+     * @deprecated ICU 62 Use {@link #toCharacterIterator} instead. This method will be removed in a future
+     *             release. See http://bugs.icu-project.org/trac/ticket/13746
+     * @see com.ibm.icu.text.NumberFormat.Field
+     * @see AttributedCharacterIterator
+     * @see NumberFormatter
+     */
+    @Deprecated
+    public AttributedCharacterIterator getFieldIterator() {
+        return nsb.toCharacterIterator();
+    }
+
+    /**
+     * Export the formatted number as an AttributedCharacterIterator. This allows you to determine which
+     * characters in the output string correspond to which <em>fields</em>, such as the integer part,
+     * fraction part, and sign.
+     * <p>
+     * If information on only one field is needed, consider using populateFieldPosition() instead.
+     *
+     * @return An AttributedCharacterIterator, containing information on the field attributes of the
+     *         number string.
+     * @draft ICU 62
      * @provisional This API might change or be removed in a future release.
      * @see com.ibm.icu.text.NumberFormat.Field
      * @see AttributedCharacterIterator
      * @see NumberFormatter
      */
-    public AttributedCharacterIterator getFieldIterator() {
-        return nsb.getIterator();
+    public AttributedCharacterIterator toCharacterIterator() {
+        return nsb.toCharacterIterator();
     }
 
     /**

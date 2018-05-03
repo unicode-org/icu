@@ -388,7 +388,7 @@ public class MeasureFormat extends UFormat {
         FormattedNumber result = getUnitFormatterFromCache(NUMBER_FORMATTER_STANDARD,
                 measure.getUnit(),
                 perUnit).format(measure.getNumber());
-        result.populateFieldPosition(pos, appendTo.length());
+        DecimalFormat.fieldPositionHelper(result, pos, appendTo.length());
         result.appendTo(appendTo);
         return appendTo;
     }

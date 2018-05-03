@@ -3,6 +3,7 @@
 package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -11,6 +12,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.AttributedCharacterIterator;
+import java.text.FieldPosition;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -26,6 +29,7 @@ import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.number.CompactNotation;
+import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.FractionRounder;
 import com.ibm.icu.number.IntegerWidth;
 import com.ibm.icu.number.LocalizedNumberFormatter;
@@ -40,6 +44,7 @@ import com.ibm.icu.number.Scale;
 import com.ibm.icu.number.ScientificNotation;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
@@ -2038,6 +2043,79 @@ public class NumberFormatterApiTest {
                 formatter.rounding(Rounder.unlimited())
                         .format(new BigDecimal("0.009876543210987654321098765432109876543211"))
                         .toString());
+    }
+
+    @Test
+    public void fieldPosition() {
+        FormattedNumber fmtd = NumberFormatter.withLocale(ULocale.ENGLISH).format(-9876543210.12);
+        assertEquals("Should have expected format output", "-9,876,543,210.12", fmtd.toString());
+
+        Object[][] expectedFieldPositions = new Object[][]{
+                {NumberFormat.Field.SIGN, 0, 1},
+                {NumberFormat.Field.GROUPING_SEPARATOR, 2, 3},
+                {NumberFormat.Field.GROUPING_SEPARATOR, 6, 7},
+                {NumberFormat.Field.GROUPING_SEPARATOR, 10, 11},
+                {NumberFormat.Field.INTEGER, 1, 14},
+                {NumberFormat.Field.DECIMAL_SEPARATOR, 14, 15},
+                {NumberFormat.Field.FRACTION, 15, 17}};
+
+        AttributedCharacterIterator fpi = fmtd.getFieldIterator();
+        Set<AttributedCharacterIterator.Attribute> allAttributes = fpi.getAllAttributeKeys();
+        assertEquals("All known fields should be in the iterator", 5, allAttributes.size());
+        assertEquals("Iterator should have length of string output", 17, fpi.getEndIndex());
+        int i = 0;
+        for (char c = fpi.first(); c != AttributedCharacterIterator.DONE; c = fpi.next(), i++) {
+            Set<AttributedCharacterIterator.Attribute> currentAttributes = fpi.getAttributes().keySet();
+            int attributesRemaining = currentAttributes.size();
+            for (Object[] cas : expectedFieldPositions) {
+                NumberFormat.Field expectedField = (NumberFormat.Field) cas[0];
+                int expectedBeginIndex = (Integer) cas[1];
+                int expectedEndIndex = (Integer) cas[2];
+                if (expectedBeginIndex > i || expectedEndIndex <= i) {
+                    // Field position does not overlap with the current character
+                    continue;
+                }
+
+                assertTrue("Current character should have expected field", currentAttributes.contains(expectedField));
+                assertTrue("Field should be a known attribute", allAttributes.contains(expectedField));
+                int actualBeginIndex = fpi.getRunStart(expectedField);
+                int actualEndIndex = fpi.getRunLimit(expectedField);
+                assertEquals(expectedField + " begin index @" + i, expectedBeginIndex, actualBeginIndex);
+                assertEquals(expectedField + " end index @" + i, expectedEndIndex, actualEndIndex);
+                attributesRemaining--;
+            }
+            assertEquals("Should have looked at every field", 0, attributesRemaining);
+        }
+        assertEquals("Should have looked at every character", 17, i);
+
+        // Test the iteration functionality of nextFieldPosition
+        FieldPosition actual = new FieldPosition(NumberFormat.Field.GROUPING_SEPARATOR);
+        i = 1;
+        while (fmtd.nextFieldPosition(actual)) {
+            Object[] cas = expectedFieldPositions[i++];
+            NumberFormat.Field expectedField = (NumberFormat.Field) cas[0];
+            int expectedBeginIndex = (Integer) cas[1];
+            int expectedEndIndex = (Integer) cas[2];
+
+            assertEquals(
+                    "Next for grouping, field, case #" + i,
+                    expectedField,
+                    actual.getFieldAttribute());
+            assertEquals(
+                    "Next for grouping, begin index, case #" + i,
+                    expectedBeginIndex,
+                    actual.getBeginIndex());
+            assertEquals(
+                    "Next for grouping, end index, case #" + i,
+                    expectedEndIndex,
+                    actual.getEndIndex());
+        }
+        assertEquals("Should have seen all grouping separators", 4, i);
+
+        // Make sure strings without fraction do not contain fraction field
+        actual = new FieldPosition(NumberFormat.Field.FRACTION);
+        fmtd = NumberFormatter.withLocale(ULocale.ENGLISH).format(5);
+        assertFalse("No fraction part in an integer", fmtd.nextFieldPosition(actual));
     }
 
     @Test
