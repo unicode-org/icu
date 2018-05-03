@@ -12,6 +12,7 @@
 #include "unicode/utf16.h"
 #include "unicode/utf8.h"
 #include "uassert.h"
+#include "ucptrie_impl.h"
 #include "utrie.h"
 #include "cstring.h"
 #include "cmemory.h"

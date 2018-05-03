@@ -19,31 +19,10 @@ U_CDECL_BEGIN
 /**
  * \file
  *
- * TODO
+ * This file defines a builder for Unicode code point tries.
  *
- * The following function and macros are used for highly optimized UTF-16
- * text processing. The UCPTRIE_FAST_U16_NEXTxy() macros do not depend on these.
- *
- * UTF-16 text processing can be optimized by detecting surrogate pairs and
- * assembling supplementary code points only when there is non-trivial data
- * available.
- *
- * At build-time, use ucptriebld_getRange() starting from U+10000 to see if there
- * is non-trivial (non-initialValue) data for any of the supplementary
- * code points associated with a lead surrogate.
- * If so, then set a special (application-specific) value for the
- * lead surrogate.
- *
- * At runtime, use UCPTRIE_FAST_BMP_GET16() or
- * UCPTRIE_FAST_BMP_GET32() per code unit. If there is non-trivial
- * data and the code unit is a lead surrogate, then check if a trail surrogate
- * follows. If so, assemble the supplementary code point with
- * U16_GET_SUPPLEMENTARY() and look up its value with UCPTRIE_FAST_SUPP_GET16()
- * or UCPTRIE_FAST_SUPP_GET32(); otherwise deal with the unpaired surrogate in some way.
- *
- * If there is only trivial data for lead and trail surrogates, then processing
- * can often skip them. For example, in normalization or case mapping
- * all characters that do not have any mappings are simply copied as is.
+ * @see UCPTrie
+ * @see UCPTrieBuilder
  */
 
 /**
@@ -159,7 +138,8 @@ ucptriebld_get(const UCPTrieBuilder *builder, UChar32 c);
  *     or NULL if the values from the builder are to be used unmodified
  * @param context an opaque pointer that is passed on to the handleValue function
  * @param pValue if not NULL, receives the value that every code point start..end has;
- *     may have been modified by handleValue(context, builder value) if that function pointer is not NULL
+ *     may have been modified by handleValue(context, builder value)
+ *     if that function pointer is not NULL
  * @return the range end code point, or -1 if start is not a valid code point
  * @draft ICU 62
  */
@@ -219,13 +199,6 @@ ucptriebld_setRange(UCPTrieBuilder *builder,
 U_CAPI UCPTrie * U_EXPORT2
 ucptriebld_build(UCPTrieBuilder *builder, UCPTrieType type, UCPTrieValueBits valueBits,
                  UErrorCode *pErrorCode);
-
-#ifdef UCPTRIE_DEBUG
-U_CFUNC void
-ucptrie_printLengths(const UCPTrie *trie, const char *which);
-
-U_CFUNC void ucptriebld_setName(UCPTrieBuilder *builder, const char *name);
-#endif
 
 U_CDECL_END
 

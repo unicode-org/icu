@@ -38,6 +38,7 @@
 #include "normalizer2impl.h"
 #include "putilimp.h"
 #include "uassert.h"
+#include "ucptrie_impl.h"
 #include "uset_imp.h"
 #include "uvector.h"
 

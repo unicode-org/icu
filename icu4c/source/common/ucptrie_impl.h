@@ -8,6 +8,7 @@
 #define __UCPTRIE_IMPL_H__
 
 #include "unicode/ucptrie.h"
+#include "unicode/ucptriebuilder.h"  // TODO
 
 // UCPTrie signature values, in platform endianness and opposite endianness.
 #define UCPTRIE_SIG     0x54726933
@@ -131,6 +132,47 @@ enum {
 };
 
 /**
+ * Get the UTrie version from 32-bit-aligned memory containing the serialized form
+ * of either a UTrie (version 1) or a UCPTrie (version 2).
+ *
+ * @param data a pointer to 32-bit-aligned memory containing the serialized form
+ *             of a UTrie, version 1 or 2
+ * @param length the number of bytes available at data;
+ *               can be more than necessary (see return value)
+ * @param anyEndianOk If FALSE, only platform-endian serialized forms are recognized.
+ *                    If TRUE, opposite-endian serialized forms are recognized as well.
+ * @return the UTrie version of the serialized form, or 0 if it is not
+ *         recognized as a serialized UTrie
+ */
+U_CAPI int32_t U_EXPORT2
+ucptrie_getVersion(const void *data, int32_t length, UBool anyEndianOk);
+
+/**
+ * Swap a serialized UCPTrie.
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+ucptrie_swap(const UDataSwapper *ds,
+             const void *inData, int32_t length, void *outData,
+             UErrorCode *pErrorCode);
+
+/**
+ * Swap a serialized UTrie or UCPTrie. TODO
+ * @internal
+ */
+U_CAPI int32_t U_EXPORT2
+ucptrie_swapAnyVersion(const UDataSwapper *ds,
+                       const void *inData, int32_t length, void *outData,
+                       UErrorCode *pErrorCode);
+
+#ifdef UCPTRIE_DEBUG
+U_CFUNC void
+ucptrie_printLengths(const UCPTrie *trie, const char *which);
+
+U_CFUNC void ucptriebld_setName(UCPTrieBuilder *builder, const char *name);
+#endif
+
+/*
  * For a "fast" trie:
  *
  * The supplementary index-1 table follows the BMP index table at offset 1024=0x400.
@@ -152,6 +194,36 @@ enum {
  *
  * The last index-2 block may be a partial block, storing indexes only for code points
  * below highStart.
+ */
+
+/*
+ * TODO User Guide?
+ *
+ * Public UCPTrie API: optimized UTF-16 access
+ *
+ * The following function and macros are used for highly optimized UTF-16
+ * text processing. The UCPTRIE_FAST_U16_NEXTxy() macros do not depend on these.
+ *
+ * UTF-16 text processing can be optimized by detecting surrogate pairs and
+ * assembling supplementary code points only when there is non-trivial data
+ * available.
+ *
+ * At build-time, use ucptriebld_getRange() starting from U+10000 to see if there
+ * is non-trivial data for any of the supplementary code points
+ * associated with a lead surrogate.
+ * If so, then set a special (application-specific) value for the
+ * lead surrogate.
+ *
+ * At runtime, use UCPTRIE_FAST_BMP_GET16() or
+ * UCPTRIE_FAST_BMP_GET32() per code unit. If there is non-trivial
+ * data and the code unit is a lead surrogate, then check if a trail surrogate
+ * follows. If so, assemble the supplementary code point with
+ * U16_GET_SUPPLEMENTARY() and look up its value with UCPTRIE_FAST_SUPP_GET16()
+ * or UCPTRIE_FAST_SUPP_GET32(); otherwise deal with the unpaired surrogate in some way.
+ *
+ * If there is only trivial data for lead and trail surrogates, then processing
+ * can often skip them. For example, in normalization or case mapping
+ * all characters that do not have any mappings are simply copied as is.
  */
 
 #endif

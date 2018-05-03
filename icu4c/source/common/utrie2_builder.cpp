@@ -33,6 +33,7 @@
 #include "unicode/utypes.h"
 #include "unicode/ucptrie.h"  // TODO
 #include "unicode/ucptriebuilder.h"  // TODO
+#include "ucptrie_impl.h"  // TODO
 #include "cmemory.h"
 #include "utrie2.h"
 #include "utrie2_impl.h"
