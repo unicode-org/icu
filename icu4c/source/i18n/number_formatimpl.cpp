@@ -125,6 +125,7 @@ int32_t NumberFormatterImpl::getPrefixSuffixUnsafe(int8_t signum, StandardPlural
 }
 
 NumberFormatterImpl::NumberFormatterImpl(const MacroProps& macros, bool safe, UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
     fMicroPropsGenerator = macrosToMicroGenerator(macros, safe, status);
 }
 

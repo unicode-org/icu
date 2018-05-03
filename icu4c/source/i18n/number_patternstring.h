@@ -30,7 +30,7 @@ struct U_I18N_API Endpoints {
 
 // Exported as U_I18N_API because it is a public member field of exported ParsedPatternInfo
 struct U_I18N_API ParsedSubpatternInfo {
-    int64_t groupingSizes = 0x0000ffffffff0000L;
+    uint64_t groupingSizes = 0x0000ffffffff0000L;
     int32_t integerLeadingHashSigns = 0;
     int32_t integerTrailingHashSigns = 0;
     int32_t integerNumerals = 0;
