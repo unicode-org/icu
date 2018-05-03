@@ -101,7 +101,7 @@ class U_I18N_API AffixPatternProvider {
     static const int32_t AFFIX_NEG_PREFIX = AFFIX_PREFIX | AFFIX_NEGATIVE_SUBPATTERN;
     static const int32_t AFFIX_NEG_SUFFIX = AFFIX_NEGATIVE_SUBPATTERN;
 
-    virtual ~AffixPatternProvider() = default;
+    virtual ~AffixPatternProvider();
 
     virtual char16_t charAt(int flags, int i) const = 0;
 
@@ -139,7 +139,7 @@ class U_I18N_API AffixPatternProvider {
  */
 class U_I18N_API Modifier {
   public:
-    virtual ~Modifier() = default;
+    virtual ~Modifier();
 
     /**
      * Apply this Modifier to the string builder.
@@ -199,7 +199,7 @@ class U_I18N_API Modifier {
  */
 class U_I18N_API MicroPropsGenerator {
   public:
-    virtual ~MicroPropsGenerator() = default;
+    virtual ~MicroPropsGenerator();
 
     /**
      * Considers the given {@link DecimalQuantity}, optionally mutates it, and returns a {@link MicroProps}.
@@ -219,7 +219,7 @@ class U_I18N_API MicroPropsGenerator {
  */
 class MultiplierProducer {
   public:
-    virtual ~MultiplierProducer() = default;
+    virtual ~MultiplierProducer();
 
     /**
      * Maps a magnitude to a multiplier in powers of ten. For example, in compact notation in English, a magnitude of 5

@@ -30,6 +30,9 @@ using namespace icu::numparse;
 using namespace icu::numparse::impl;
 
 
+NumberParseMatcher::~NumberParseMatcher() = default;
+
+
 NumberParserImpl*
 NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& patternString,
                                      parse_flags_t parseFlags, UErrorCode& status) {

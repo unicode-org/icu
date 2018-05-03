@@ -56,7 +56,7 @@ class TokenConsumer {
 // Exported as U_I18N_API because it is a base class for other exported types
 class U_I18N_API SymbolProvider {
   public:
-    virtual ~SymbolProvider() = default;
+    virtual ~SymbolProvider();
 
     // TODO: Could this be more efficient if it returned by reference?
     virtual UnicodeString getSymbol(AffixPatternType type) const = 0;

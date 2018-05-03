@@ -13,6 +13,8 @@ using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
 
+SymbolProvider::~SymbolProvider() = default;
+
 int32_t AffixUtils::estimateLength(const UnicodeString &patternString, UErrorCode &status) {
     AffixPatternState state = STATE_BASE;
     int32_t offset = 0;

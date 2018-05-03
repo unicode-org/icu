@@ -52,6 +52,9 @@ int32_t getDisplayMagnitudeSignificant(const DecimalQuantity &value, int minSig)
 }
 
 
+MultiplierProducer::~MultiplierProducer() = default;
+
+
 digits_t roundingutils::doubleFractionLength(double input) {
     char buffer[DoubleToStringConverter::kBase10MaximalLength + 1];
     bool sign; // unused; always positive
