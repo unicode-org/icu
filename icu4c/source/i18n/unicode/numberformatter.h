@@ -2378,10 +2378,44 @@ class U_I18N_API FormattedNumber : public UMemory {
      *            The FieldPosition to populate with the start and end indices of the desired field.
      * @param status
      *            Set if an error occurs while populating the FieldPosition.
-     * @draft ICU 60
+     * @deprecated ICU 62 Use {@link #toCharacterIterator} instead. This method will be removed in a future
+     *             release. See http://bugs.icu-project.org/trac/ticket/13746
      * @see UNumberFormatFields
      */
     void populateFieldPosition(FieldPosition &fieldPosition, UErrorCode &status);
+
+    /**
+     * Determines the start and end indices of the next occurrence of the given <em>field</em> in the
+     * output string. This allows you to determine the locations of, for example, the integer part,
+     * fraction part, or symbols.
+     *
+     * If a field occurs just once, calling this method will find that occurrence and return it. If a
+     * field occurs multiple times, this method may be called repeatedly with the following pattern:
+     *
+     * <pre>
+     * FieldPosition fpos(UNUM_GROUPING_SEPARATOR_FIELD);
+     * while (formattedNumber.nextFieldPosition(fpos, status)) {
+     *   // do something with fpos.
+     * }
+     * </pre>
+     *
+     * This method is useful if you know which field to query. If you want all available field position
+     * information, use #getAllFields().
+     *
+     * @param fieldPosition
+     *            Input+output variable. On input, the "field" property determines which field to look up,
+     *            and the "endIndex" property determines where to begin the search. On output, the
+     *            "beginIndex" field is set to the beginning of the first occurrence of the field after the
+     *            input "endIndex", and "endIndex" is set to the end of that occurrence of the field
+     *            (exclusive index). If a field position is not found, the FieldPosition is not changed and
+     *            the method returns FALSE.
+     * @param status
+     *            Set if an error occurs while populating the FieldPosition.
+     * @return TRUE if a new occurrence of the field was found; FALSE otherwise.
+     * @draft ICU 62
+     * @see UNumberFormatFields
+     */
+    UBool nextFieldPosition(FieldPosition& fieldPosition, UErrorCode& status) const;
 
     /**
      * Export the formatted number to a FieldPositionIterator. This allows you to determine which characters in
@@ -2394,10 +2428,26 @@ class U_I18N_API FormattedNumber : public UMemory {
      *            The FieldPositionIterator to populate with all of the fields present in the formatted number.
      * @param status
      *            Set if an error occurs while populating the FieldPositionIterator.
-     * @draft ICU 60
+     * @deprecated ICU 62 Use {@link #getAllFieldPositions} instead. This method will be removed in a
+     *             future release. See http://bugs.icu-project.org/trac/ticket/13746
      * @see UNumberFormatFields
      */
     void populateFieldPositionIterator(FieldPositionIterator &iterator, UErrorCode &status);
+
+    /**
+     * Export the formatted number to a FieldPositionIterator. This allows you to determine which characters in
+     * the output string correspond to which <em>fields</em>, such as the integer part, fraction part, and sign.
+     *
+     * If information on only one field is needed, use #nextFieldPosition().
+     *
+     * @param iterator
+     *            The FieldPositionIterator to populate with all of the fields present in the formatted number.
+     * @param status
+     *            Set if an error occurs while populating the FieldPositionIterator.
+     * @draft ICU 62
+     * @see UNumberFormatFields
+     */
+    void getAllFieldPositions(FieldPositionIterator &iterator, UErrorCode &status) const;
 
 #ifndef U_HIDE_INTERNAL_API
 

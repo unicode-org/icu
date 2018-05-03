@@ -428,7 +428,7 @@ UnicodeString& DecimalFormat::format(double number, UnicodeString& appendTo, Fie
     }
     UErrorCode localStatus = U_ZERO_ERROR;
     FormattedNumber output = fields->formatter->formatDouble(number, localStatus);
-    output.populateFieldPosition(pos, localStatus);
+    fieldPositionHelper(output, pos, appendTo.length(), localStatus);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable);
     return appendTo;
@@ -440,7 +440,7 @@ UnicodeString& DecimalFormat::format(double number, UnicodeString& appendTo, Fie
         return appendTo;
     }
     FormattedNumber output = fields->formatter->formatDouble(number, status);
-    output.populateFieldPosition(pos, status);
+    fieldPositionHelper(output, pos, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable);
     return appendTo;
@@ -482,7 +482,7 @@ UnicodeString& DecimalFormat::format(int64_t number, UnicodeString& appendTo, Fi
     }
     UErrorCode localStatus = U_ZERO_ERROR;
     FormattedNumber output = fields->formatter->formatInt(number, localStatus);
-    output.populateFieldPosition(pos, localStatus);
+    fieldPositionHelper(output, pos, appendTo.length(), localStatus);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable);
     return appendTo;
@@ -494,7 +494,7 @@ UnicodeString& DecimalFormat::format(int64_t number, UnicodeString& appendTo, Fi
         return appendTo;
     }
     FormattedNumber output = fields->formatter->formatInt(number, status);
-    output.populateFieldPosition(pos, status);
+    fieldPositionHelper(output, pos, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable);
     return appendTo;
@@ -542,7 +542,7 @@ UnicodeString&
 DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo, FieldPosition& pos,
                       UErrorCode& status) const {
     FormattedNumber output = fields->formatter->formatDecimalQuantity(number, status);
-    output.populateFieldPosition(pos, status);
+    fieldPositionHelper(output, pos, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable);
     return appendTo;
@@ -1224,6 +1224,17 @@ const numparse::impl::NumberParserImpl* DecimalFormat::getCurrencyParser(UErrorC
     } else {
         // Our copy of the parser got stored in the atomic
         return temp;
+    }
+}
+
+void
+DecimalFormat::fieldPositionHelper(const number::FormattedNumber& formatted, FieldPosition& fieldPosition,
+                                   int32_t offset, UErrorCode& status) {
+    fieldPosition.setEndIndex(0); // always return first occurrence
+    bool found = formatted.nextFieldPosition(fieldPosition, status);
+    if (found && offset != 0) {
+        fieldPosition.setBeginIndex(fieldPosition.getBeginIndex() + offset);
+        fieldPosition.setEndIndex(fieldPosition.getEndIndex() + offset);
     }
 }
 

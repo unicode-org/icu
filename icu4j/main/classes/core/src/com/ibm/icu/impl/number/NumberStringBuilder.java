@@ -486,10 +486,9 @@ public class NumberStringBuilder implements CharSequence {
      *
      * @param fp
      *            The FieldPosition to populate.
-     * @param offset
-     *            An offset to add to the field position index; can be zero.
+     * @return true if the field was found; false if it was not found.
      */
-    public void populateFieldPosition(FieldPosition fp, int offset) {
+    public boolean nextFieldPosition(FieldPosition fp) {
         java.text.Format.Field rawField = fp.getFieldAttribute();
 
         if (rawField == null) {
@@ -500,21 +499,22 @@ public class NumberStringBuilder implements CharSequence {
                 rawField = NumberFormat.Field.FRACTION;
             } else {
                 // No field is set
-                return;
+                return false;
             }
         }
 
-        if (!(rawField instanceof com.ibm.icu.text.NumberFormat.Field)) {
+        if (!(rawField instanceof NumberFormat.Field)) {
             throw new IllegalArgumentException(
                     "You must pass an instance of com.ibm.icu.text.NumberFormat.Field as your FieldPosition attribute.  You passed: "
                             + rawField.getClass().toString());
         }
 
-        /* com.ibm.icu.text.NumberFormat. */ Field field = (Field) rawField;
+        NumberFormat.Field field = (NumberFormat.Field) rawField;
 
         boolean seenStart = false;
         int fractionStart = -1;
-        for (int i = zero; i <= zero + length; i++) {
+        int startIndex = fp.getEndIndex();
+        for (int i = zero + startIndex; i <= zero + length; i++) {
             Field _field = (i < zero + length) ? fields[i] : null;
             if (seenStart && field != _field) {
                 // Special case: GROUPING_SEPARATOR counts as an INTEGER.
@@ -522,10 +522,10 @@ public class NumberStringBuilder implements CharSequence {
                         && _field == NumberFormat.Field.GROUPING_SEPARATOR) {
                     continue;
                 }
-                fp.setEndIndex(i - zero + offset);
+                fp.setEndIndex(i - zero);
                 break;
             } else if (!seenStart && field == _field) {
-                fp.setBeginIndex(i - zero + offset);
+                fp.setBeginIndex(i - zero);
                 seenStart = true;
             }
             if (_field == NumberFormat.Field.INTEGER || _field == NumberFormat.Field.DECIMAL_SEPARATOR) {
@@ -533,14 +533,17 @@ public class NumberStringBuilder implements CharSequence {
             }
         }
 
-        // Backwards compatibility: FRACTION needs to start after INTEGER if empty
-        if (field == NumberFormat.Field.FRACTION && !seenStart) {
-            fp.setBeginIndex(fractionStart + offset);
-            fp.setEndIndex(fractionStart + offset);
+        // Backwards compatibility: FRACTION needs to start after INTEGER if empty.
+        // Do not return that a field was found, though, since there is not actually a fraction part.
+        if (field == NumberFormat.Field.FRACTION && !seenStart && fractionStart != -1) {
+            fp.setBeginIndex(fractionStart);
+            fp.setEndIndex(fractionStart);
         }
+
+        return seenStart;
     }
 
-    public AttributedCharacterIterator getIterator() {
+    public AttributedCharacterIterator toCharacterIterator() {
         AttributedString as = new AttributedString(toString());
         Field current = null;
         int currentStart = -1;

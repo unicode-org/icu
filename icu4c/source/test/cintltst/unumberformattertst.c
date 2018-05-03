@@ -83,14 +83,14 @@ static void TestSkeletonFormatToFields() {
 
     // field position test:
     UFieldPosition ufpos = {UNUM_DECIMAL_SEPARATOR_FIELD};
-    unumf_resultGetField(uresult, &ufpos, &ec);
+    unumf_resultNextFieldPosition(uresult, &ufpos, &ec);
     assertIntEquals("Field position should be correct", 14, ufpos.beginIndex);
     assertIntEquals("Field position should be correct", 15, ufpos.endIndex);
 
     // field position iterator test:
     UFieldPositionIterator* ufpositer = ufieldpositer_open(&ec);
     assertSuccess("Should create iterator without error", &ec);
-    unumf_resultGetAllFields(uresult, ufpositer, &ec);
+    unumf_resultGetAllFieldPositions(uresult, ufpositer, &ec);
     static const UFieldPosition expectedFields[] = {
             // Field, begin index, end index
             {UNUM_SIGN_FIELD, 0, 1},
@@ -127,6 +127,18 @@ static void TestSkeletonFormatToFields() {
     }
     actual.field = ufieldpositer_next(ufpositer, &actual.beginIndex, &actual.endIndex);
     assertTrue("No more fields; should return a negative index", actual.field < 0);
+
+    // next field iteration:
+    actual.field = UNUM_GROUPING_SEPARATOR_FIELD;
+    actual.beginIndex = 0;
+    actual.endIndex = 0;
+    int32_t i = 1;
+    while (unumf_resultNextFieldPosition(uresult, &actual, &ec)) {
+        UFieldPosition expected = expectedFields[i++];
+        assertIntEquals("Grouping separator begin index", expected.beginIndex, actual.beginIndex);
+        assertIntEquals("Grouping separator end index", expected.endIndex, actual.endIndex);
+    }
+    assertIntEquals("Should have seen all grouping separators", 4, i);
 
     // cleanup:
     unumf_closeResult(uresult);

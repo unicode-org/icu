@@ -709,7 +709,7 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public StringBuffer format(double number, StringBuffer result, FieldPosition fieldPosition) {
     FormattedNumber output = formatter.format(number);
-    output.populateFieldPosition(fieldPosition, result.length());
+    fieldPositionHelper(output, fieldPosition, result.length());
     output.appendTo(result);
     return result;
   }
@@ -722,7 +722,7 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public StringBuffer format(long number, StringBuffer result, FieldPosition fieldPosition) {
     FormattedNumber output = formatter.format(number);
-    output.populateFieldPosition(fieldPosition, result.length());
+    fieldPositionHelper(output, fieldPosition, result.length());
     output.appendTo(result);
     return result;
   }
@@ -735,7 +735,7 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public StringBuffer format(BigInteger number, StringBuffer result, FieldPosition fieldPosition) {
     FormattedNumber output = formatter.format(number);
-    output.populateFieldPosition(fieldPosition, result.length());
+    fieldPositionHelper(output, fieldPosition, result.length());
     output.appendTo(result);
     return result;
   }
@@ -749,7 +749,7 @@ public class DecimalFormat extends NumberFormat {
   public StringBuffer format(
       java.math.BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
     FormattedNumber output = formatter.format(number);
-    output.populateFieldPosition(fieldPosition, result.length());
+    fieldPositionHelper(output, fieldPosition, result.length());
     output.appendTo(result);
     return result;
   }
@@ -762,7 +762,7 @@ public class DecimalFormat extends NumberFormat {
   @Override
   public StringBuffer format(BigDecimal number, StringBuffer result, FieldPosition fieldPosition) {
     FormattedNumber output = formatter.format(number);
-    output.populateFieldPosition(fieldPosition, result.length());
+    fieldPositionHelper(output, fieldPosition, result.length());
     output.appendTo(result);
     return result;
   }
@@ -786,11 +786,11 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 3.0
    */
   @Override
-  public StringBuffer format(CurrencyAmount currAmt, StringBuffer toAppendTo, FieldPosition pos) {
+  public StringBuffer format(CurrencyAmount currAmt, StringBuffer result, FieldPosition fieldPosition) {
     FormattedNumber output = formatter.format(currAmt);
-    output.populateFieldPosition(pos, toAppendTo.length());
-    output.appendTo(toAppendTo);
-    return toAppendTo;
+    fieldPositionHelper(output, fieldPosition, result.length());
+    output.appendTo(result);
+    return result;
   }
 
   /**
@@ -2564,6 +2564,15 @@ public class DecimalFormat extends NumberFormat {
       throw new NullPointerException();
     }
     PatternStringParser.parseToExistingProperties(pattern, properties, ignoreRounding);
+  }
+
+  static void fieldPositionHelper(FormattedNumber formatted, FieldPosition fieldPosition, int offset) {
+      fieldPosition.setEndIndex(0); // always return first occurrence
+      boolean found = formatted.nextFieldPosition(fieldPosition);
+      if (found && offset != 0) {
+          fieldPosition.setBeginIndex(fieldPosition.getBeginIndex() + offset);
+          fieldPosition.setEndIndex(fieldPosition.getEndIndex() + offset);
+      }
   }
 
   /**

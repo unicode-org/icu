@@ -857,9 +857,6 @@
     <ClInclude Include="number_skeletons.h">
       <Filter>formatting</Filter>
     </ClInclude>
-    <ClInclude Include="fieldposutil.h">
-      <Filter>formatting</Filter>
-    </ClInclude>
     <ClInclude Include="numparse_stringsegment.h">
       <Filter>formatting</Filter>
     </ClInclude>

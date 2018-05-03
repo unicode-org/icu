@@ -776,7 +776,21 @@ void FormattedNumber::populateFieldPosition(FieldPosition& fieldPosition, UError
         status = fErrorCode;
         return;
     }
-    fResults->string.populateFieldPosition(fieldPosition, 0, status);
+    // in case any users were depending on the old behavior:
+    fieldPosition.setEndIndex(0);
+    fResults->string.nextFieldPosition(fieldPosition, status);
+}
+
+UBool FormattedNumber::nextFieldPosition(FieldPosition& fieldPosition, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    if (fResults == nullptr) {
+        status = fErrorCode;
+        return FALSE;
+    }
+    // NOTE: MSVC sometimes complains when implicitly converting between bool and UBool
+    return fResults->string.nextFieldPosition(fieldPosition, status) ? TRUE : FALSE;
 }
 
 void FormattedNumber::populateFieldPositionIterator(FieldPositionIterator& iterator, UErrorCode& status) {
@@ -787,7 +801,18 @@ void FormattedNumber::populateFieldPositionIterator(FieldPositionIterator& itera
         status = fErrorCode;
         return;
     }
-    fResults->string.populateFieldPositionIterator(iterator, status);
+    fResults->string.getAllFieldPositions(iterator, status);
+}
+
+void FormattedNumber::getAllFieldPositions(FieldPositionIterator& iterator, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if (fResults == nullptr) {
+        status = fErrorCode;
+        return;
+    }
+    fResults->string.getAllFieldPositions(iterator, status);
 }
 
 void FormattedNumber::getDecimalQuantity(DecimalQuantity& output, UErrorCode& status) const {

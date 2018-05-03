@@ -60,6 +60,7 @@ class CompactDecimalFormat;
 
 namespace number {
 class LocalizedNumberFormatter;
+class FormattedNumber;
 namespace impl {
 class DecimalQuantity;
 struct DecimalFormatFields;
@@ -2110,6 +2111,9 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     const numparse::impl::NumberParserImpl* getParser(UErrorCode& status) const;
 
     const numparse::impl::NumberParserImpl* getCurrencyParser(UErrorCode& status) const;
+
+    static void fieldPositionHelper(const number::FormattedNumber& formatted, FieldPosition& fieldPosition,
+                                    int32_t offset, UErrorCode& status);
 
     void setupFastFormat();
 

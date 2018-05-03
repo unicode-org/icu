@@ -532,30 +532,44 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
 
 
 /**
- * Determines the start and end indices of the first occurrence of the given field in the output string.
- * This allows you to determine the locations of the integer part, fraction part, and sign.
+ * Determines the start and end indices of the next occurrence of the given <em>field</em> in the
+ * output string. This allows you to determine the locations of, for example, the integer part,
+ * fraction part, or symbols.
  *
- * If a field occurs multiple times in an output string, such as a grouping separator, this method will
- * only ever return the first occurrence. Use unumf_resultGetAllFields() to access all occurrences of an
- * attribute.
+ * If a field occurs just once, calling this method will find that occurrence and return it. If a
+ * field occurs multiple times, this method may be called repeatedly with the following pattern:
  *
- * @param uresult The object containing the formatted number.
- * @param fpos
- *         A pointer to a UFieldPosition. On input, position->field is read. On output,
- *         position->beginIndex and position->endIndex indicate the beginning and ending indices of field
- *         number position->field, if such a field exists.
+ * <pre>
+ * UFieldPosition ufpos = {UNUM_GROUPING_SEPARATOR_FIELD, 0, 0};
+ * while (unumf_resultNextFieldPosition(uresult, ufpos, &ec)) {
+ *   // do something with ufpos.
+ * }
+ * </pre>
+ *
+ * This method is useful if you know which field to query. If you want all available field position
+ * information, use unumf_resultGetAllFieldPositions().
+ *
+ * NOTE: All fields of the UFieldPosition must be initialized before calling this method.
+ *
+ * @param fieldPosition
+ *            Input+output variable. On input, the "field" property determines which field to look up,
+ *            and the "endIndex" property determines where to begin the search. On output, the
+ *            "beginIndex" field is set to the beginning of the first occurrence of the field after the
+ *            input "endIndex", and "endIndex" is set to the end of that occurrence of the field
+ *            (exclusive index). If a field position is not found, the FieldPosition is not changed and
+ *            the method returns FALSE.
  * @param ec Set if an error occurs.
  * @draft ICU 62
  */
-U_DRAFT void U_EXPORT2
-unumf_resultGetField(const UFormattedNumber* uresult, UFieldPosition* ufpos, UErrorCode* ec);
+U_DRAFT UBool U_EXPORT2
+unumf_resultNextFieldPosition(const UFormattedNumber* uresult, UFieldPosition* ufpos, UErrorCode* ec);
 
 
 /**
  * Populates the given iterator with all fields in the formatted output string. This allows you to
  * determine the locations of the integer part, fraction part, and sign.
  *
- * If you need information on only one field, consider using unumf_resultGetField().
+ * If you need information on only one field, use unumf_resultNextFieldPosition().
  *
  * @param uresult The object containing the formatted number.
  * @param fpositer
@@ -570,8 +584,8 @@ unumf_resultGetField(const UFormattedNumber* uresult, UFieldPosition* ufpos, UEr
  * @draft ICU 62
  */
 U_DRAFT void U_EXPORT2
-unumf_resultGetAllFields(const UFormattedNumber* uresult, UFieldPositionIterator* ufpositer,
-                         UErrorCode* ec);
+unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPositionIterator* ufpositer,
+                                 UErrorCode* ec);
 
 
 /**

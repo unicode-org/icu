@@ -170,7 +170,7 @@ public class NumberStringBuilderTest {
             // Very basic FieldPosition test. More robust tests happen in NumberFormatTest.
             // Let NumberFormatTest also take care of AttributedCharacterIterator material.
             FieldPosition fp = new FieldPosition(NumberFormat.Field.CURRENCY);
-            sb.populateFieldPosition(fp, 0);
+            sb.nextFieldPosition(fp);
             assertEquals(str.length(), fp.getBeginIndex());
             assertEquals(str.length() * 2, fp.getEndIndex());
 
