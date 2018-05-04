@@ -2374,7 +2374,8 @@ void NumberFormatterApiTest::localPointerCAPI() {
     // Setup:
     LocalUNumberFormatterPointer uformatter(unumf_openFromSkeletonAndLocale(u"percent", -1, "en", &ec));
     LocalUFormattedNumberPointer uresult(unumf_openResult(&ec));
-    assertSuccess("", ec);
+    assertSuccess("", ec, TRUE);
+    if (U_FAILURE(ec)) { return; }
 
     // Format a decimal number:
     unumf_formatDecimal(uformatter.getAlias(), "9.87E-3", -1, uresult.getAlias(), &ec);

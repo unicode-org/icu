@@ -106,7 +106,7 @@ static const UChar LOW_W = ((UChar) 0x0077);
 static const UChar LOW_Y = ((UChar) 0x0079);
 static const UChar LOW_Z = ((UChar) 0x007A);
 
-};
+}
 
 
 static const int32_t PLURAL_RANGE_HIGH = 0x7fffffff;

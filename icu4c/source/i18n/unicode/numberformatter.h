@@ -13,11 +13,11 @@
 #include "unicode/fieldpos.h"
 #include "unicode/fpositer.h"
 #include "unicode/measunit.h"
-#include "unicode/unumberformatter.h"
 #include "unicode/nounit.h"
 #include "unicode/plurrule.h"
 #include "unicode/ucurr.h"
 #include "unicode/unum.h"
+#include "unicode/unumberformatter.h"
 #include "unicode/uobject.h"
 
 #ifndef U_HIDE_DRAFT_API
