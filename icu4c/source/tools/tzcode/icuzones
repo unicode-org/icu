@@ -130,8 +130,24 @@ Link Europe/Dublin--ICU Eire--ICU
 
 
 #
-# tzdata2018e also added another instance of negative DST - Africa/Windhoek
+# tzdata2018e also added another instance of negative DST to
+# Europe/Prague and Africa/Windhoek
 #
+# Zone	NAME		GMTOFF	RULES	FORMAT	[UNTIL]
+Zone	Europe/Prague--ICU	0:57:44 -	LMT	1850
+			0:57:44	-	PMT	1891 Oct    # Prague Mean Time
+			1:00	C-Eur	CE%sT	1945 May  9
+			1:00	Czech	CE%sT	1946 Dec  1  3:00
+# Vanguard section, for zic and other parsers that support negative DST.
+#			1:00	-1:00	GMT	1947 Feb 23  2:00
+# Rearguard section, for parsers that do not support negative DST.
+			0:00	-	GMT	1947 Feb 23  2:00
+# End of rearguard section.
+			1:00	Czech	CE%sT	1979
+			1:00	EU	CE%sT
+
+# Slovakia
+Link Europe/Prague--ICU Europe/Bratislava--ICU
 
 # RULE	NAME	FROM	TO	TYPE	IN	ON	AT	SAVE	LETTER/S
 # Vanguard section, for zic and other parsers that support negative DST.
