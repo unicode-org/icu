@@ -76,7 +76,8 @@ static void TestSkeletonFormatToFields() {
     // setup:
     UNumberFormatter* uformatter = unumf_openFromSkeletonAndLocale(
             u".00 measure-unit/length-meter sign-always", -1, "en", &ec);
-    assertSuccess("Should create without error", &ec);
+    assertSuccessCheck("Should create without error", &ec, TRUE);
+    if (U_FAILURE(ec)) { return; }
     UFormattedNumber* uresult = unumf_openResult(&ec);
     assertSuccess("Should create result without error", &ec);
     unumf_formatInt(uformatter, 9876543210L, uresult, &ec); // "+9,876,543,210.00 m"
@@ -154,7 +155,8 @@ static void TestExampleCode() {
     UErrorCode ec = U_ZERO_ERROR;
     UNumberFormatter* uformatter = unumf_openFromSkeletonAndLocale(u"round-integer", -1, "en", &ec);
     UFormattedNumber* uresult = unumf_openResult(&ec);
-    assertSuccess("There should not be a failure in the example code", &ec);
+    assertSuccessCheck("There should not be a failure in the example code", &ec, TRUE);
+    if (U_FAILURE(ec)) { return; }
 
     // Format a double:
     unumf_formatDouble(uformatter, 5142.3, uresult, &ec);

@@ -9,8 +9,8 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
-#include "numparse_types.h"
 #include "number_utypes.h"
+#include "numparse_types.h"
 #include "unicode/numberformatter.h"
 #include "unicode/unumberformatter.h"
 
@@ -159,13 +159,13 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
 
 U_CAPI UBool U_EXPORT2
 unumf_resultNextFieldPosition(const UFormattedNumber* uresult, UFieldPosition* ufpos, UErrorCode* ec) {
+    const UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
+    if (U_FAILURE(*ec)) { return FALSE; }
+
     if (ufpos == nullptr) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
         return FALSE;
     }
-
-    const UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
-    if (U_FAILURE(*ec)) { return FALSE; }
 
     FieldPosition fp;
     fp.setField(ufpos->field);
@@ -181,13 +181,13 @@ unumf_resultNextFieldPosition(const UFormattedNumber* uresult, UFieldPosition* u
 U_CAPI void U_EXPORT2
 unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPositionIterator* ufpositer,
                                  UErrorCode* ec) {
+    const UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
+    if (U_FAILURE(*ec)) { return; }
+
     if (ufpositer == nullptr) {
         *ec = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-
-    const UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
-    if (U_FAILURE(*ec)) { return; }
 
     auto* helper = reinterpret_cast<FieldPositionIterator*>(ufpositer);
     result->string.getAllFieldPositions(*helper, *ec);
@@ -197,7 +197,6 @@ U_CAPI void U_EXPORT2
 unumf_closeResult(UFormattedNumber* uresult) {
     UErrorCode localStatus = U_ZERO_ERROR;
     const UFormattedNumberData* impl = UFormattedNumberData::validate(uresult, localStatus);
-    if (U_FAILURE(localStatus)) { return; }
     delete impl;
 }
 
@@ -205,7 +204,6 @@ U_CAPI void U_EXPORT2
 unumf_close(UNumberFormatter* f) {
     UErrorCode localStatus = U_ZERO_ERROR;
     const UNumberFormatterData* impl = UNumberFormatterData::validate(f, localStatus);
-    if (U_FAILURE(localStatus)) { return; }
     delete impl;
 }
 
