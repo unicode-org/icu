@@ -28,7 +28,7 @@ U_CDECL_BEGIN
 /**
  * Unicode code point trie builder.
  * Fast map from Unicode code points (U+0000..U+10FFFF) to 32-bit integer values.
- * For details see https://sites.google.com/site/icusite/design/struct/utrie
+ * For details see http://site.icu-project.org/design/struct/utrie
  *
  * Setting values (especially ranges) and lookup is fast.
  * The builder is only somewhat space-efficient.

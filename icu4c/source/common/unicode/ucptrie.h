@@ -27,7 +27,7 @@ U_CDECL_BEGIN
 /**
  * Immutable Unicode code point trie structure.
  * Fast, reasonably compact, map from Unicode code points (U+0000..U+10FFFF) to integer values.
- * For details see https://sites.google.com/site/icusite/design/struct/utrie
+ * For details see http://site.icu-project.org/design/struct/utrie
  *
  * Do not access UCPTrie fields directly; use public functions and macros.
  *
@@ -111,7 +111,7 @@ typedef enum UCPTrieValueBits UCPTrieValueBits;
  *             use UCPTRIE_TYPE_ANY to accept any type
  * @param valueBits selects the number of bits in a data value; results in an
  *                  U_INVALID_FORMAT_ERROR if it does not match the binary data;
- *                  use UCPTRIE_VALUE_BITS_ANY to accept any data value with
+ *                  use UCPTRIE_VALUE_BITS_ANY to accept any data value width
  * @param data a pointer to 32-bit-aligned memory containing the binary data of a UCPTrie
  * @param length the number of bytes available at data;
  *               can be more than necessary
