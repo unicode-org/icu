@@ -1113,10 +1113,8 @@ void DecimalFormat::formatToDecimalQuantity(const Formattable& number, DecimalQu
     output = std::move(obj.quantity);
 }
 
-number::LocalizedNumberFormatter&
-DecimalFormat::toNumberFormatter(number::LocalizedNumberFormatter& output) const {
-    output = *fields->formatter; // copy assignment
-    return output;
+const number::LocalizedNumberFormatter& DecimalFormat::toNumberFormatter() const {
+    return *fields->formatter;
 }
 
 /** Rebuilds the formatter object from the property bag. */
