@@ -30,7 +30,7 @@
  * <pre>
  * // Setup:
  * UErrorCode ec = U_ZERO_ERROR;
- * UNumberFormatter* uformatter = unumf_openFromSkeletonAndLocale(u"round-integer", -1, "en", &ec);
+ * UNumberFormatter* uformatter = unumf_openFromSkeletonAndLocale(u"precision-integer", -1, "en", &ec);
  * UFormattedNumber* uresult = unumf_openResult(&ec);
  * if (U_FAILURE(ec)) { return; }
  *
@@ -423,7 +423,7 @@ typedef struct UFormattedNumber UFormattedNumber;
  *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
- * @param skeleton The skeleton string, like u"percent round-integer"
+ * @param skeleton The skeleton string, like u"percent precision-integer"
  * @param skeletonLen The number of UChars in the skeleton string, or -1 it it is NUL-terminated.
  * @param locale The NUL-terminated locale ID.
  * @param ec Set if an error occurs.

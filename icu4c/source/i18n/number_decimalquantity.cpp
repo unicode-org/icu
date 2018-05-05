@@ -132,7 +132,7 @@ void DecimalQuantity::clear() {
 }
 
 void DecimalQuantity::setIntegerLength(int32_t minInt, int32_t maxInt) {
-    // Validation should happen outside of DecimalQuantity, e.g., in the Rounder class.
+    // Validation should happen outside of DecimalQuantity, e.g., in the Precision class.
     U_ASSERT(minInt >= 0);
     U_ASSERT(maxInt >= minInt);
 
@@ -149,7 +149,7 @@ void DecimalQuantity::setIntegerLength(int32_t minInt, int32_t maxInt) {
 }
 
 void DecimalQuantity::setFractionLength(int32_t minFrac, int32_t maxFrac) {
-    // Validation should happen outside of DecimalQuantity, e.g., in the Rounder class.
+    // Validation should happen outside of DecimalQuantity, e.g., in the Precision class.
     U_ASSERT(minFrac >= 0);
     U_ASSERT(maxFrac >= minFrac);
 

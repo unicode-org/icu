@@ -5,7 +5,7 @@ package com.ibm.icu.impl.number;
 import com.ibm.icu.number.IntegerWidth;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
-import com.ibm.icu.number.Rounder;
+import com.ibm.icu.number.Precision;
 import com.ibm.icu.text.DecimalFormatSymbols;
 
 public class MicroProps implements Cloneable, MicroPropsGenerator {
@@ -20,7 +20,7 @@ public class MicroProps implements Cloneable, MicroPropsGenerator {
     public Modifier modOuter;
     public Modifier modMiddle;
     public Modifier modInner;
-    public Rounder rounding;
+    public Precision rounder;
     public Grouper grouping;
     public boolean useCurrency;
 

@@ -260,7 +260,7 @@ void LongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &mic
     parent->processQuantity(quantity, micros, status);
     // TODO: Avoid the copy here?
     DecimalQuantity copy(quantity);
-    micros.rounding.apply(copy, status);
+    micros.rounder.apply(copy, status);
     micros.modOuter = &fModifiers[copy.getStandardPlural(rules)];
 }
 

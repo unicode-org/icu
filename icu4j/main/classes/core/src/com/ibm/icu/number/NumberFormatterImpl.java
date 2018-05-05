@@ -220,16 +220,19 @@ class NumberFormatterImpl {
         }
 
         // Rounding strategy
-        if (macros.rounder != null) {
-            micros.rounding = macros.rounder;
+        if (macros.precision != null) {
+            micros.rounder = macros.precision;
         } else if (macros.notation instanceof CompactNotation) {
-            micros.rounding = Rounder.COMPACT_STRATEGY;
+            micros.rounder = Precision.COMPACT_STRATEGY;
         } else if (isCurrency) {
-            micros.rounding = Rounder.MONETARY_STANDARD;
+            micros.rounder = Precision.MONETARY_STANDARD;
         } else {
-            micros.rounding = Rounder.DEFAULT_MAX_FRAC_6;
+            micros.rounder = Precision.DEFAULT_MAX_FRAC_6;
         }
-        micros.rounding = micros.rounding.withLocaleData(currency);
+        if (macros.roundingMode != null) {
+            micros.rounder = micros.rounder.withMode(macros.roundingMode);
+        }
+        micros.rounder = micros.rounder.withLocaleData(currency);
 
         // Grouping strategy
         if (macros.grouping instanceof Grouper) {
@@ -360,7 +363,7 @@ class NumberFormatterImpl {
             MicroProps micros,
             DecimalQuantity quantity,
             NumberStringBuilder string) {
-        micros.rounding.apply(quantity);
+        micros.rounder.apply(quantity);
         if (micros.integerWidth.maxInt == -1) {
             quantity.setIntegerLength(micros.integerWidth.minInt, Integer.MAX_VALUE);
         } else {

@@ -533,7 +533,7 @@ void NumberFormatterApiTest::unitMeasure() {
     assertFormatSingle(
             u"MeasureUnit form without {0} in CLDR pattern and wide base form",
             u"measure-unit/temperature-kelvin .00000000000000000000 unit-width-full-name",
-            NumberFormatter::with().rounding(Rounder::fixedFraction(20))
+            NumberFormatter::with().precision(Precision::fixedFraction(20))
                     .unit(KELVIN)
                     .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
             Locale("es-MX"),
@@ -792,8 +792,8 @@ void NumberFormatterApiTest::unitPercent() {
 void NumberFormatterApiTest::roundingFraction() {
     assertFormatDescending(
             u"Integer",
-            u"round-integer",
-            NumberFormatter::with().rounding(Rounder::integer()),
+            u"precision-integer",
+            NumberFormatter::with().precision(Precision::integer()),
             Locale::getEnglish(),
             u"87,650",
             u"8,765",
@@ -808,7 +808,7 @@ void NumberFormatterApiTest::roundingFraction() {
     assertFormatDescending(
             u"Fixed Fraction",
             u".000",
-            NumberFormatter::with().rounding(Rounder::fixedFraction(3)),
+            NumberFormatter::with().precision(Precision::fixedFraction(3)),
             Locale::getEnglish(),
             u"87,650.000",
             u"8,765.000",
@@ -823,7 +823,7 @@ void NumberFormatterApiTest::roundingFraction() {
     assertFormatDescending(
             u"Min Fraction",
             u".0+",
-            NumberFormatter::with().rounding(Rounder::minFraction(1)),
+            NumberFormatter::with().precision(Precision::minFraction(1)),
             Locale::getEnglish(),
             u"87,650.0",
             u"8,765.0",
@@ -838,7 +838,7 @@ void NumberFormatterApiTest::roundingFraction() {
     assertFormatDescending(
             u"Max Fraction",
             u".#",
-            NumberFormatter::with().rounding(Rounder::maxFraction(1)),
+            NumberFormatter::with().precision(Precision::maxFraction(1)),
             Locale::getEnglish(),
             u"87,650",
             u"8,765",
@@ -853,7 +853,7 @@ void NumberFormatterApiTest::roundingFraction() {
     assertFormatDescending(
             u"Min/Max Fraction",
             u".0##",
-            NumberFormatter::with().rounding(Rounder::minMaxFraction(1, 3)),
+            NumberFormatter::with().precision(Precision::minMaxFraction(1, 3)),
             Locale::getEnglish(),
             u"87,650.0",
             u"8,765.0",
@@ -870,7 +870,7 @@ void NumberFormatterApiTest::roundingFigures() {
     assertFormatSingle(
             u"Fixed Significant",
             u"@@@",
-            NumberFormatter::with().rounding(Rounder::fixedDigits(3)),
+            NumberFormatter::with().precision(Precision::fixedSignificantDigits(3)),
             Locale::getEnglish(),
             -98,
             u"-98.0");
@@ -878,7 +878,7 @@ void NumberFormatterApiTest::roundingFigures() {
     assertFormatSingle(
             u"Fixed Significant Rounding",
             u"@@@",
-            NumberFormatter::with().rounding(Rounder::fixedDigits(3)),
+            NumberFormatter::with().precision(Precision::fixedSignificantDigits(3)),
             Locale::getEnglish(),
             -98.7654321,
             u"-98.8");
@@ -886,7 +886,7 @@ void NumberFormatterApiTest::roundingFigures() {
     assertFormatSingle(
             u"Fixed Significant Zero",
             u"@@@",
-            NumberFormatter::with().rounding(Rounder::fixedDigits(3)),
+            NumberFormatter::with().precision(Precision::fixedSignificantDigits(3)),
             Locale::getEnglish(),
             0,
             u"0.00");
@@ -894,7 +894,7 @@ void NumberFormatterApiTest::roundingFigures() {
     assertFormatSingle(
             u"Min Significant",
             u"@@+",
-            NumberFormatter::with().rounding(Rounder::minDigits(2)),
+            NumberFormatter::with().precision(Precision::minSignificantDigits(2)),
             Locale::getEnglish(),
             -9,
             u"-9.0");
@@ -902,7 +902,7 @@ void NumberFormatterApiTest::roundingFigures() {
     assertFormatSingle(
             u"Max Significant",
             u"@###",
-            NumberFormatter::with().rounding(Rounder::maxDigits(4)),
+            NumberFormatter::with().precision(Precision::maxSignificantDigits(4)),
             Locale::getEnglish(),
             98.7654321,
             u"98.77");
@@ -910,7 +910,7 @@ void NumberFormatterApiTest::roundingFigures() {
     assertFormatSingle(
             u"Min/Max Significant",
             u"@@@#",
-            NumberFormatter::with().rounding(Rounder::minMaxDigits(3, 4)),
+            NumberFormatter::with().precision(Precision::minMaxSignificantDigits(3, 4)),
             Locale::getEnglish(),
             9.99999,
             u"10.0");
@@ -918,7 +918,7 @@ void NumberFormatterApiTest::roundingFigures() {
     assertFormatSingle(
             u"Fixed Significant on zero with lots of integer width",
             u"@ integer-width/+000",
-            NumberFormatter::with().rounding(Rounder::fixedDigits(1))
+            NumberFormatter::with().precision(Precision::fixedSignificantDigits(1))
                     .integerWidth(IntegerWidth::zeroFillTo(3)),
             Locale::getEnglish(),
             0,
@@ -927,7 +927,7 @@ void NumberFormatterApiTest::roundingFigures() {
     assertFormatSingle(
             u"Fixed Significant on zero with zero integer width",
             u"@ integer-width/+",
-            NumberFormatter::with().rounding(Rounder::fixedDigits(1))
+            NumberFormatter::with().precision(Precision::fixedSignificantDigits(1))
                     .integerWidth(IntegerWidth::zeroFillTo(0)),
             Locale::getEnglish(),
             0,
@@ -938,7 +938,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
     assertFormatDescending(
             u"Basic Significant", // for comparison
             u"@#",
-            NumberFormatter::with().rounding(Rounder::maxDigits(2)),
+            NumberFormatter::with().precision(Precision::maxSignificantDigits(2)),
             Locale::getEnglish(),
             u"88,000",
             u"8,800",
@@ -953,7 +953,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
     assertFormatDescending(
             u"FracSig minMaxFrac minSig",
             u".0#/@@@+",
-            NumberFormatter::with().rounding(Rounder::minMaxFraction(1, 2).withMinDigits(3)),
+            NumberFormatter::with().precision(Precision::minMaxFraction(1, 2).withMinDigits(3)),
             Locale::getEnglish(),
             u"87,650.0",
             u"8,765.0",
@@ -968,7 +968,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
     assertFormatDescending(
             u"FracSig minMaxFrac maxSig A",
             u".0##/@#",
-            NumberFormatter::with().rounding(Rounder::minMaxFraction(1, 3).withMaxDigits(2)),
+            NumberFormatter::with().precision(Precision::minMaxFraction(1, 3).withMaxDigits(2)),
             Locale::getEnglish(),
             u"88,000.0", // maxSig beats maxFrac
             u"8,800.0", // maxSig beats maxFrac
@@ -983,7 +983,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
     assertFormatDescending(
             u"FracSig minMaxFrac maxSig B",
             u".00/@#",
-            NumberFormatter::with().rounding(Rounder::fixedFraction(2).withMaxDigits(2)),
+            NumberFormatter::with().precision(Precision::fixedFraction(2).withMaxDigits(2)),
             Locale::getEnglish(),
             u"88,000.00", // maxSig beats maxFrac
             u"8,800.00", // maxSig beats maxFrac
@@ -998,7 +998,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
     assertFormatSingle(
             u"FracSig with trailing zeros A",
             u".00/@@@+",
-            NumberFormatter::with().rounding(Rounder::fixedFraction(2).withMinDigits(3)),
+            NumberFormatter::with().precision(Precision::fixedFraction(2).withMinDigits(3)),
             Locale::getEnglish(),
             0.1,
             u"0.10");
@@ -1006,7 +1006,7 @@ void NumberFormatterApiTest::roundingFractionFigures() {
     assertFormatSingle(
             u"FracSig with trailing zeros B",
             u".00/@@@+",
-            NumberFormatter::with().rounding(Rounder::fixedFraction(2).withMinDigits(3)),
+            NumberFormatter::with().precision(Precision::fixedFraction(2).withMinDigits(3)),
             Locale::getEnglish(),
             0.0999999,
             u"0.10");
@@ -1015,8 +1015,8 @@ void NumberFormatterApiTest::roundingFractionFigures() {
 void NumberFormatterApiTest::roundingOther() {
     assertFormatDescending(
             u"Rounding None",
-            u"round-unlimited",
-            NumberFormatter::with().rounding(Rounder::unlimited()),
+            u"precision-unlimited",
+            NumberFormatter::with().precision(Precision::unlimited()),
             Locale::getEnglish(),
             u"87,650",
             u"8,765",
@@ -1030,8 +1030,8 @@ void NumberFormatterApiTest::roundingOther() {
 
     assertFormatDescending(
             u"Increment",
-            u"round-increment/0.5",
-            NumberFormatter::with().rounding(Rounder::increment(0.5).withMinFraction(1)),
+            u"precision-increment/0.5",
+            NumberFormatter::with().precision(Precision::increment(0.5).withMinFraction(1)),
             Locale::getEnglish(),
             u"87,650.0",
             u"8,765.0",
@@ -1045,8 +1045,8 @@ void NumberFormatterApiTest::roundingOther() {
 
     assertFormatDescending(
             u"Increment with Min Fraction",
-            u"round-increment/0.50",
-            NumberFormatter::with().rounding(Rounder::increment(0.5).withMinFraction(2)),
+            u"precision-increment/0.50",
+            NumberFormatter::with().precision(Precision::increment(0.5).withMinFraction(2)),
             Locale::getEnglish(),
             u"87,650.00",
             u"8,765.00",
@@ -1060,8 +1060,8 @@ void NumberFormatterApiTest::roundingOther() {
 
     assertFormatDescending(
             u"Currency Standard",
-            u"currency/CZK round-currency-standard",
-            NumberFormatter::with().rounding(Rounder::currency(UCurrencyUsage::UCURR_USAGE_STANDARD))
+            u"currency/CZK precision-currency-standard",
+            NumberFormatter::with().precision(Precision::currency(UCurrencyUsage::UCURR_USAGE_STANDARD))
                     .unit(CZK),
             Locale::getEnglish(),
             u"CZK 87,650.00",
@@ -1076,8 +1076,8 @@ void NumberFormatterApiTest::roundingOther() {
 
     assertFormatDescending(
             u"Currency Cash",
-            u"currency/CZK round-currency-cash",
-            NumberFormatter::with().rounding(Rounder::currency(UCurrencyUsage::UCURR_USAGE_CASH))
+            u"currency/CZK precision-currency-cash",
+            NumberFormatter::with().precision(Precision::currency(UCurrencyUsage::UCURR_USAGE_CASH))
                     .unit(CZK),
             Locale::getEnglish(),
             u"CZK 87,650",
@@ -1092,8 +1092,8 @@ void NumberFormatterApiTest::roundingOther() {
 
     assertFormatDescending(
             u"Currency Cash with Nickel Rounding",
-            u"currency/CAD round-currency-cash",
-            NumberFormatter::with().rounding(Rounder::currency(UCurrencyUsage::UCURR_USAGE_CASH))
+            u"currency/CAD precision-currency-cash",
+            NumberFormatter::with().precision(Precision::currency(UCurrencyUsage::UCURR_USAGE_CASH))
                     .unit(CAD),
             Locale::getEnglish(),
             u"CA$87,650.00",
@@ -1108,9 +1108,9 @@ void NumberFormatterApiTest::roundingOther() {
 
     assertFormatDescending(
             u"Currency not in top-level fluent chain",
-            u"round-integer", // calling .withCurrency() applies currency rounding rules immediately
-            NumberFormatter::with().rounding(
-                    Rounder::currency(UCurrencyUsage::UCURR_USAGE_CASH).withCurrency(CZK)),
+            u"precision-integer", // calling .withCurrency() applies currency rounding rules immediately
+            NumberFormatter::with().precision(
+                    Precision::currency(UCurrencyUsage::UCURR_USAGE_CASH).withCurrency(CZK)),
             Locale::getEnglish(),
             u"87,650",
             u"8,765",
@@ -1125,8 +1125,8 @@ void NumberFormatterApiTest::roundingOther() {
     // NOTE: Other tests cover the behavior of the other rounding modes.
     assertFormatDescending(
             u"Rounding Mode CEILING",
-            u"round-integer/ceiling",
-            NumberFormatter::with().rounding(Rounder::integer().withMode(UNumberFormatRoundingMode::UNUM_ROUND_CEILING)),
+            u"precision-integer rounding-mode-ceiling",
+            NumberFormatter::with().precision(Precision::integer()).roundingMode(UNUM_ROUND_CEILING),
             Locale::getEnglish(),
             u"87,650",
             u"8,765",
@@ -2063,7 +2063,7 @@ void NumberFormatterApiTest::formatTypes() {
     // The number needs to have exactly 40 digits, which is the size of the default buffer.
     // (issue discovered by the address sanitizer in C++)
     static const char* str = "0.009876543210987654321098765432109876543211";
-    actual = formatter.rounding(Rounder::unlimited()).formatDecimal(str, status).toString();
+    actual = formatter.precision(Precision::unlimited()).formatDecimal(str, status).toString();
     assertEquals("Format decNumber to 40 digits", str, actual);
 }
 
@@ -2156,8 +2156,8 @@ void NumberFormatterApiTest::fieldPosition() {
 }
 
 void NumberFormatterApiTest::errors() {
-    LocalizedNumberFormatter lnf = NumberFormatter::withLocale(Locale::getEnglish()).rounding(
-            Rounder::fixedFraction(
+    LocalizedNumberFormatter lnf = NumberFormatter::withLocale(Locale::getEnglish()).precision(
+            Precision::fixedFraction(
                     -1));
 
     // formatInt
@@ -2278,16 +2278,16 @@ void NumberFormatterApiTest::validRanges() {
     } \
 }
 
-    VALID_RANGE_ONEARG(rounding, Rounder::fixedFraction, 0);
-    VALID_RANGE_ONEARG(rounding, Rounder::minFraction, 0);
-    VALID_RANGE_ONEARG(rounding, Rounder::maxFraction, 0);
-    VALID_RANGE_TWOARGS(rounding, Rounder::minMaxFraction, 0);
-    VALID_RANGE_ONEARG(rounding, Rounder::fixedDigits, 1);
-    VALID_RANGE_ONEARG(rounding, Rounder::minDigits, 1);
-    VALID_RANGE_ONEARG(rounding, Rounder::maxDigits, 1);
-    VALID_RANGE_TWOARGS(rounding, Rounder::minMaxDigits, 1);
-    VALID_RANGE_ONEARG(rounding, Rounder::fixedFraction(1).withMinDigits, 1);
-    VALID_RANGE_ONEARG(rounding, Rounder::fixedFraction(1).withMaxDigits, 1);
+    VALID_RANGE_ONEARG(rounding, Precision::fixedFraction, 0);
+    VALID_RANGE_ONEARG(rounding, Precision::minFraction, 0);
+    VALID_RANGE_ONEARG(rounding, Precision::maxFraction, 0);
+    VALID_RANGE_TWOARGS(rounding, Precision::minMaxFraction, 0);
+    VALID_RANGE_ONEARG(rounding, Precision::fixedSignificantDigits, 1);
+    VALID_RANGE_ONEARG(rounding, Precision::minSignificantDigits, 1);
+    VALID_RANGE_ONEARG(rounding, Precision::maxSignificantDigits, 1);
+    VALID_RANGE_TWOARGS(rounding, Precision::minMaxSignificantDigits, 1);
+    VALID_RANGE_ONEARG(rounding, Precision::fixedFraction(1).withMinDigits, 1);
+    VALID_RANGE_ONEARG(rounding, Precision::fixedFraction(1).withMaxDigits, 1);
     VALID_RANGE_ONEARG(notation, Notation::scientific().withMinExponentDigits, 1);
     VALID_RANGE_ONEARG(integerWidth, IntegerWidth::zeroFillTo, 0);
     VALID_RANGE_ONEARG(integerWidth, IntegerWidth::zeroFillTo(0).truncateAt, -1);

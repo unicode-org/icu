@@ -30,7 +30,7 @@ import com.ibm.icu.impl.number.Padder.PadPosition;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.number.CompactNotation;
 import com.ibm.icu.number.FormattedNumber;
-import com.ibm.icu.number.FractionRounder;
+import com.ibm.icu.number.FractionPrecision;
 import com.ibm.icu.number.IntegerWidth;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.Notation;
@@ -39,7 +39,7 @@ import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
-import com.ibm.icu.number.Rounder;
+import com.ibm.icu.number.Precision;
 import com.ibm.icu.number.Scale;
 import com.ibm.icu.number.ScientificNotation;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
@@ -510,7 +510,7 @@ public class NumberFormatterApiTest {
                 "MeasureUnit form without {0} in CLDR pattern and wide base form",
                 "measure-unit/temperature-kelvin .00000000000000000000 unit-width-full-name",
                 NumberFormatter.with()
-                    .rounding(Rounder.fixedFraction(20))
+                    .precision(Precision.fixedFraction(20))
                     .unit(MeasureUnit.KELVIN)
                     .unitWidth(UnitWidth.FULL_NAME),
                 ULocale.forLanguageTag("es-MX"),
@@ -777,8 +777,8 @@ public class NumberFormatterApiTest {
     public void roundingFraction() {
         assertFormatDescending(
                 "Integer",
-                "round-integer",
-                NumberFormatter.with().rounding(Rounder.integer()),
+                "precision-integer",
+                NumberFormatter.with().precision(Precision.integer()),
                 ULocale.ENGLISH,
                 "87,650",
                 "8,765",
@@ -793,7 +793,7 @@ public class NumberFormatterApiTest {
         assertFormatDescending(
                 "Fixed Fraction",
                 ".000",
-                NumberFormatter.with().rounding(Rounder.fixedFraction(3)),
+                NumberFormatter.with().precision(Precision.fixedFraction(3)),
                 ULocale.ENGLISH,
                 "87,650.000",
                 "8,765.000",
@@ -808,7 +808,7 @@ public class NumberFormatterApiTest {
         assertFormatDescending(
                 "Min Fraction",
                 ".0+",
-                NumberFormatter.with().rounding(Rounder.minFraction(1)),
+                NumberFormatter.with().precision(Precision.minFraction(1)),
                 ULocale.ENGLISH,
                 "87,650.0",
                 "8,765.0",
@@ -823,7 +823,7 @@ public class NumberFormatterApiTest {
         assertFormatDescending(
                 "Max Fraction",
                 ".#",
-                NumberFormatter.with().rounding(Rounder.maxFraction(1)),
+                NumberFormatter.with().precision(Precision.maxFraction(1)),
                 ULocale.ENGLISH,
                 "87,650",
                 "8,765",
@@ -838,7 +838,7 @@ public class NumberFormatterApiTest {
         assertFormatDescending(
                 "Min/Max Fraction",
                 ".0##",
-                NumberFormatter.with().rounding(Rounder.minMaxFraction(1, 3)),
+                NumberFormatter.with().precision(Precision.minMaxFraction(1, 3)),
                 ULocale.ENGLISH,
                 "87,650.0",
                 "8,765.0",
@@ -856,7 +856,7 @@ public class NumberFormatterApiTest {
         assertFormatSingle(
                 "Fixed Significant",
                 "@@@",
-                NumberFormatter.with().rounding(Rounder.fixedDigits(3)),
+                NumberFormatter.with().precision(Precision.fixedSignificantDigits(3)),
                 ULocale.ENGLISH,
                 -98,
                 "-98.0");
@@ -864,7 +864,7 @@ public class NumberFormatterApiTest {
         assertFormatSingle(
                 "Fixed Significant Rounding",
                 "@@@",
-                NumberFormatter.with().rounding(Rounder.fixedDigits(3)),
+                NumberFormatter.with().precision(Precision.fixedSignificantDigits(3)),
                 ULocale.ENGLISH,
                 -98.7654321,
                 "-98.8");
@@ -872,7 +872,7 @@ public class NumberFormatterApiTest {
         assertFormatSingle(
                 "Fixed Significant Zero",
                 "@@@",
-                NumberFormatter.with().rounding(Rounder.fixedDigits(3)),
+                NumberFormatter.with().precision(Precision.fixedSignificantDigits(3)),
                 ULocale.ENGLISH,
                 0,
                 "0.00");
@@ -880,7 +880,7 @@ public class NumberFormatterApiTest {
         assertFormatSingle(
                 "Min Significant",
                 "@@+",
-                NumberFormatter.with().rounding(Rounder.minDigits(2)),
+                NumberFormatter.with().precision(Precision.minSignificantDigits(2)),
                 ULocale.ENGLISH,
                 -9,
                 "-9.0");
@@ -888,7 +888,7 @@ public class NumberFormatterApiTest {
         assertFormatSingle(
                 "Max Significant",
                 "@###",
-                NumberFormatter.with().rounding(Rounder.maxDigits(4)),
+                NumberFormatter.with().precision(Precision.maxSignificantDigits(4)),
                 ULocale.ENGLISH,
                 98.7654321,
                 "98.77");
@@ -896,7 +896,7 @@ public class NumberFormatterApiTest {
         assertFormatSingle(
                 "Min/Max Significant",
                 "@@@#",
-                NumberFormatter.with().rounding(Rounder.minMaxDigits(3, 4)),
+                NumberFormatter.with().precision(Precision.minMaxSignificantDigits(3, 4)),
                 ULocale.ENGLISH,
                 9.99999,
                 "10.0");
@@ -904,7 +904,7 @@ public class NumberFormatterApiTest {
         assertFormatSingle(
                 "Fixed Significant on zero with zero integer width",
                 "@ integer-width/+",
-                NumberFormatter.with().rounding(Rounder.fixedDigits(1)).integerWidth(IntegerWidth.zeroFillTo(0)),
+                NumberFormatter.with().precision(Precision.fixedSignificantDigits(1)).integerWidth(IntegerWidth.zeroFillTo(0)),
                 ULocale.ENGLISH,
                 0,
                 "0");
@@ -912,7 +912,7 @@ public class NumberFormatterApiTest {
         assertFormatSingle(
                 "Fixed Significant on zero with lots of integer width",
                 "@ integer-width/+000",
-                NumberFormatter.with().rounding(Rounder.fixedDigits(1)).integerWidth(IntegerWidth.zeroFillTo(3)),
+                NumberFormatter.with().precision(Precision.fixedSignificantDigits(1)).integerWidth(IntegerWidth.zeroFillTo(3)),
                 ULocale.ENGLISH,
                 0,
                 "000");
@@ -923,7 +923,7 @@ public class NumberFormatterApiTest {
         assertFormatDescending(
                 "Basic Significant", // for comparison
                 "@#",
-                NumberFormatter.with().rounding(Rounder.maxDigits(2)),
+                NumberFormatter.with().precision(Precision.maxSignificantDigits(2)),
                 ULocale.ENGLISH,
                 "88,000",
                 "8,800",
@@ -938,7 +938,7 @@ public class NumberFormatterApiTest {
         assertFormatDescending(
                 "FracSig minMaxFrac minSig",
                 ".0#/@@@+",
-                NumberFormatter.with().rounding(Rounder.minMaxFraction(1, 2).withMinDigits(3)),
+                NumberFormatter.with().precision(Precision.minMaxFraction(1, 2).withMinDigits(3)),
                 ULocale.ENGLISH,
                 "87,650.0",
                 "8,765.0",
@@ -953,7 +953,7 @@ public class NumberFormatterApiTest {
         assertFormatDescending(
                 "FracSig minMaxFrac maxSig A",
                 ".0##/@#",
-                NumberFormatter.with().rounding(Rounder.minMaxFraction(1, 3).withMaxDigits(2)),
+                NumberFormatter.with().precision(Precision.minMaxFraction(1, 3).withMaxDigits(2)),
                 ULocale.ENGLISH,
                 "88,000.0", // maxSig beats maxFrac
                 "8,800.0", // maxSig beats maxFrac
@@ -968,7 +968,7 @@ public class NumberFormatterApiTest {
         assertFormatDescending(
                 "FracSig minMaxFrac maxSig B",
                 ".00/@#",
-                NumberFormatter.with().rounding(Rounder.fixedFraction(2).withMaxDigits(2)),
+                NumberFormatter.with().precision(Precision.fixedFraction(2).withMaxDigits(2)),
                 ULocale.ENGLISH,
                 "88,000.00", // maxSig beats maxFrac
                 "8,800.00", // maxSig beats maxFrac
@@ -983,7 +983,7 @@ public class NumberFormatterApiTest {
         assertFormatSingle(
                 "FracSig with trailing zeros A",
                 ".00/@@@+",
-                NumberFormatter.with().rounding(Rounder.fixedFraction(2).withMinDigits(3)),
+                NumberFormatter.with().precision(Precision.fixedFraction(2).withMinDigits(3)),
                 ULocale.ENGLISH,
                 0.1,
                 "0.10");
@@ -991,7 +991,7 @@ public class NumberFormatterApiTest {
         assertFormatSingle(
                 "FracSig with trailing zeros B",
                 ".00/@@@+",
-                NumberFormatter.with().rounding(Rounder.fixedFraction(2).withMinDigits(3)),
+                NumberFormatter.with().precision(Precision.fixedFraction(2).withMinDigits(3)),
                 ULocale.ENGLISH,
                 0.0999999,
                 "0.10");
@@ -1001,8 +1001,8 @@ public class NumberFormatterApiTest {
     public void roundingOther() {
         assertFormatDescending(
                 "Rounding None",
-                "round-unlimited",
-                NumberFormatter.with().rounding(Rounder.unlimited()),
+                "precision-unlimited",
+                NumberFormatter.with().precision(Precision.unlimited()),
                 ULocale.ENGLISH,
                 "87,650",
                 "8,765",
@@ -1016,8 +1016,8 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Increment",
-                "round-increment/0.5",
-                NumberFormatter.with().rounding(Rounder.increment(BigDecimal.valueOf(0.5))),
+                "precision-increment/0.5",
+                NumberFormatter.with().precision(Precision.increment(BigDecimal.valueOf(0.5))),
                 ULocale.ENGLISH,
                 "87,650.0",
                 "8,765.0",
@@ -1031,8 +1031,8 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Increment with Min Fraction",
-                "round-increment/0.50",
-                NumberFormatter.with().rounding(Rounder.increment(new BigDecimal("0.50"))),
+                "precision-increment/0.50",
+                NumberFormatter.with().precision(Precision.increment(new BigDecimal("0.50"))),
                 ULocale.ENGLISH,
                 "87,650.00",
                 "8,765.00",
@@ -1046,8 +1046,8 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Currency Standard",
-                "currency/CZK round-currency-standard",
-                NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.STANDARD)).unit(CZK),
+                "currency/CZK precision-currency-standard",
+                NumberFormatter.with().precision(Precision.currency(CurrencyUsage.STANDARD)).unit(CZK),
                 ULocale.ENGLISH,
                 "CZK 87,650.00",
                 "CZK 8,765.00",
@@ -1061,8 +1061,8 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Currency Cash",
-                "currency/CZK round-currency-cash",
-                NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.CASH)).unit(CZK),
+                "currency/CZK precision-currency-cash",
+                NumberFormatter.with().precision(Precision.currency(CurrencyUsage.CASH)).unit(CZK),
                 ULocale.ENGLISH,
                 "CZK 87,650",
                 "CZK 8,765",
@@ -1076,8 +1076,8 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Currency Cash with Nickel Rounding",
-                "currency/CAD round-currency-cash",
-                NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.CASH)).unit(CAD),
+                "currency/CAD precision-currency-cash",
+                NumberFormatter.with().precision(Precision.currency(CurrencyUsage.CASH)).unit(CAD),
                 ULocale.ENGLISH,
                 "CA$87,650.00",
                 "CA$8,765.00",
@@ -1091,8 +1091,8 @@ public class NumberFormatterApiTest {
 
         assertFormatDescending(
                 "Currency not in top-level fluent chain",
-                "round-integer", // calling .withCurrency() applies currency rounding rules immediately
-                NumberFormatter.with().rounding(Rounder.currency(CurrencyUsage.CASH).withCurrency(CZK)),
+                "precision-integer", // calling .withCurrency() applies currency rounding rules immediately
+                NumberFormatter.with().precision(Precision.currency(CurrencyUsage.CASH).withCurrency(CZK)),
                 ULocale.ENGLISH,
                 "87,650",
                 "8,765",
@@ -1107,8 +1107,8 @@ public class NumberFormatterApiTest {
         // NOTE: Other tests cover the behavior of the other rounding modes.
         assertFormatDescending(
                 "Rounding Mode CEILING",
-                "round-integer/ceiling",
-                NumberFormatter.with().rounding(Rounder.integer().withMode(RoundingMode.CEILING)),
+                "precision-integer rounding-mode-ceiling",
+                NumberFormatter.with().precision(Precision.integer()).roundingMode(RoundingMode.CEILING),
                 ULocale.ENGLISH,
                 "87,650",
                 "8,765",
@@ -2040,7 +2040,7 @@ public class NumberFormatterApiTest {
         // The number needs to have exactly 40 digits, which is the size of the default buffer.
         // (issue discovered by the address sanitizer in C++)
         assertEquals("0.009876543210987654321098765432109876543211",
-                formatter.rounding(Rounder.unlimited())
+                formatter.precision(Precision.unlimited())
                         .format(new BigDecimal("0.009876543210987654321098765432109876543211"))
                         .toString());
     }
@@ -2124,8 +2124,8 @@ public class NumberFormatterApiTest {
 
         assertFormatSingle(
                 "Plural 1",
-                "currency/USD round-integer unit-width-full-name",
-                NumberFormatter.with().unit(USD).unitWidth(UnitWidth.FULL_NAME).rounding(Rounder.fixedFraction(0)),
+                "currency/USD precision-integer unit-width-full-name",
+                NumberFormatter.with().unit(USD).unitWidth(UnitWidth.FULL_NAME).precision(Precision.fixedFraction(0)),
                 ULocale.ENGLISH,
                 1,
                 "1 US dollar");
@@ -2133,7 +2133,7 @@ public class NumberFormatterApiTest {
         assertFormatSingle(
                 "Plural 1.00",
                 "currency/USD .00 unit-width-full-name",
-                NumberFormatter.with().unit(USD).unitWidth(UnitWidth.FULL_NAME).rounding(Rounder.fixedFraction(2)),
+                NumberFormatter.with().unit(USD).unitWidth(UnitWidth.FULL_NAME).precision(Precision.fixedFraction(2)),
                 ULocale.ENGLISH,
                 1,
                 "1.00 US dollars");
@@ -2141,20 +2141,20 @@ public class NumberFormatterApiTest {
 
     @Test
     public void validRanges() throws NoSuchMethodException, IllegalAccessException {
-        Method[] methodsWithOneArgument = new Method[] { Rounder.class.getDeclaredMethod("fixedFraction", Integer.TYPE),
-                Rounder.class.getDeclaredMethod("minFraction", Integer.TYPE),
-                Rounder.class.getDeclaredMethod("maxFraction", Integer.TYPE),
-                Rounder.class.getDeclaredMethod("fixedDigits", Integer.TYPE),
-                Rounder.class.getDeclaredMethod("minDigits", Integer.TYPE),
-                Rounder.class.getDeclaredMethod("maxDigits", Integer.TYPE),
-                FractionRounder.class.getDeclaredMethod("withMinDigits", Integer.TYPE),
-                FractionRounder.class.getDeclaredMethod("withMaxDigits", Integer.TYPE),
+        Method[] methodsWithOneArgument = new Method[] { Precision.class.getDeclaredMethod("fixedFraction", Integer.TYPE),
+                Precision.class.getDeclaredMethod("minFraction", Integer.TYPE),
+                Precision.class.getDeclaredMethod("maxFraction", Integer.TYPE),
+                Precision.class.getDeclaredMethod("fixedDigits", Integer.TYPE),
+                Precision.class.getDeclaredMethod("minDigits", Integer.TYPE),
+                Precision.class.getDeclaredMethod("maxDigits", Integer.TYPE),
+                FractionPrecision.class.getDeclaredMethod("withMinDigits", Integer.TYPE),
+                FractionPrecision.class.getDeclaredMethod("withMaxDigits", Integer.TYPE),
                 ScientificNotation.class.getDeclaredMethod("withMinExponentDigits", Integer.TYPE),
                 IntegerWidth.class.getDeclaredMethod("zeroFillTo", Integer.TYPE),
                 IntegerWidth.class.getDeclaredMethod("truncateAt", Integer.TYPE), };
         Method[] methodsWithTwoArguments = new Method[] {
-                Rounder.class.getDeclaredMethod("minMaxFraction", Integer.TYPE, Integer.TYPE),
-                Rounder.class.getDeclaredMethod("minMaxDigits", Integer.TYPE, Integer.TYPE), };
+                Precision.class.getDeclaredMethod("minMaxFraction", Integer.TYPE, Integer.TYPE),
+                Precision.class.getDeclaredMethod("minMaxDigits", Integer.TYPE, Integer.TYPE), };
 
         final int EXPECTED_MAX_INT_FRAC_SIG = 999;
         final String expectedSubstring0 = "between 0 and 999 (inclusive)";
@@ -2182,8 +2182,8 @@ public class NumberFormatterApiTest {
 
         // Some of the methods require an object to be called upon.
         Map<String, Object> targets = new HashMap<String, Object>();
-        targets.put("withMinDigits", Rounder.integer());
-        targets.put("withMaxDigits", Rounder.integer());
+        targets.put("withMinDigits", Precision.integer());
+        targets.put("withMaxDigits", Precision.integer());
         targets.put("withMinExponentDigits", Notation.scientific());
         targets.put("truncateAt", IntegerWidth.zeroFillTo(0));
 

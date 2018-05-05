@@ -2,14 +2,16 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
+import java.math.RoundingMode;
+
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.number.IntegerWidth;
-import com.ibm.icu.number.Scale;
 import com.ibm.icu.number.Notation;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
-import com.ibm.icu.number.Rounder;
+import com.ibm.icu.number.Precision;
+import com.ibm.icu.number.Scale;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
@@ -18,7 +20,8 @@ public class MacroProps implements Cloneable {
     public Notation notation;
     public MeasureUnit unit;
     public MeasureUnit perUnit;
-    public Rounder rounder;
+    public Precision precision;
+    public RoundingMode roundingMode;
     public Object grouping;
     public Padder padder;
     public IntegerWidth integerWidth;
@@ -45,8 +48,10 @@ public class MacroProps implements Cloneable {
             unit = fallback.unit;
         if (perUnit == null)
             perUnit = fallback.perUnit;
-        if (rounder == null)
-            rounder = fallback.rounder;
+        if (precision == null)
+            precision = fallback.precision;
+        if (roundingMode == null)
+            roundingMode = fallback.roundingMode;
         if (grouping == null)
             grouping = fallback.grouping;
         if (padder == null)
@@ -76,7 +81,8 @@ public class MacroProps implements Cloneable {
         return Utility.hash(notation,
                 unit,
                 perUnit,
-                rounder,
+                precision,
+                roundingMode,
                 grouping,
                 padder,
                 integerWidth,
@@ -102,7 +108,8 @@ public class MacroProps implements Cloneable {
         return Utility.equals(notation, other.notation)
                 && Utility.equals(unit, other.unit)
                 && Utility.equals(perUnit, other.perUnit)
-                && Utility.equals(rounder, other.rounder)
+                && Utility.equals(precision, other.precision)
+                && Utility.equals(roundingMode, other.roundingMode)
                 && Utility.equals(grouping, other.grouping)
                 && Utility.equals(padder, other.padder)
                 && Utility.equals(integerWidth, other.integerWidth)

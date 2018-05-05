@@ -34,8 +34,8 @@ void NumberSkeletonTest::validTokens() {
     // This tests only if the tokens are valid, not their behavior.
     // Most of these are from the design doc.
     static const char16_t* cases[] = {
-            u"round-integer",
-            u"round-unlimited",
+            u"precision-integer",
+            u"precision-unlimited",
             u"@@@##",
             u"@@+",
             u".000##",
@@ -45,11 +45,11 @@ void NumberSkeletonTest::validTokens() {
             u".######",
             u".00/@@+",
             u".00/@##",
-            u"round-increment/3.14",
-            u"round-currency-standard",
-            u"round-integer/half-up",
-            u".00#/ceiling",
-            u".00/@@+/floor",
+            u"precision-increment/3.14",
+            u"precision-currency-standard",
+            u"precision-integer rounding-mode-half-up",
+            u".00# rounding-mode-ceiling",
+            u".00/@@+ rounding-mode-floor",
             u"scientific",
             u"scientific/+ee",
             u"scientific/sign-always",
@@ -99,9 +99,9 @@ void NumberSkeletonTest::validTokens() {
             u"latin",
             u"numbering-system/arab",
             u"numbering-system/latn",
-            u"round-integer/@##",
-            u"round-integer/ceiling",
-            u"round-currency-cash/ceiling"};
+            u"precision-integer/@##",
+            u"precision-integer rounding-mode-ceiling",
+            u"precision-currency-cash rounding-mode-ceiling"};
 
     for (auto& cas : cases) {
         UnicodeString skeletonString(cas);
@@ -127,12 +127,11 @@ void NumberSkeletonTest::invalidTokens() {
             u".00/@@#",
             u".00/@@#+",
             u".00/floor/@@+", // wrong order
-            u"round-increment/français", // non-invariant characters for C++
-            u"round-currency-cash/XXX",
+            u"precision-increment/français", // non-invariant characters for C++
             u"scientific/ee",
-            u"round-increment/xxx",
-            u"round-increment/NaN",
-            u"round-increment/0.1.2",
+            u"precision-increment/xxx",
+            u"precision-increment/NaN",
+            u"precision-increment/0.1.2",
             u"scale/xxx",
             u"scale/NaN",
             u"scale/0.1.2",
@@ -164,20 +163,20 @@ void NumberSkeletonTest::unknownTokens() {
 void NumberSkeletonTest::unexpectedTokens() {
     static const char16_t* cases[] = {
             u"group-thousands/foo",
-            u"round-integer//ceiling group-off",
-            u"round-integer//ceiling  group-off",
-            u"round-integer/ group-off",
-            u"round-integer// group-off"};
+            u"precision-integer//@## group-off",
+            u"precision-integer//@##  group-off",
+            u"precision-integer/ group-off",
+            u"precision-integer// group-off"};
 
     expectedErrorSkeleton(cases, sizeof(cases) / sizeof(*cases));
 }
 
 void NumberSkeletonTest::duplicateValues() {
     static const char16_t* cases[] = {
-            u"round-integer round-integer",
-            u"round-integer .00+",
-            u"round-integer round-unlimited",
-            u"round-integer @@@",
+            u"precision-integer precision-integer",
+            u"precision-integer .00+",
+            u"precision-integer precision-unlimited",
+            u"precision-integer @@@",
             u"scientific engineering",
             u"engineering compact-long",
             u"sign-auto sign-always"};
@@ -187,14 +186,14 @@ void NumberSkeletonTest::duplicateValues() {
 
 void NumberSkeletonTest::stemsRequiringOption() {
     static const char16_t* stems[] = {
-            u"round-increment",
+            u"precision-increment",
             u"measure-unit",
             u"per-unit",
             u"currency",
             u"integer-width",
             u"numbering-system",
             u"scale"};
-    static const char16_t* suffixes[] = {u"", u"/ceiling", u" scientific", u"/ceiling scientific"};
+    static const char16_t* suffixes[] = {u"", u"/@##", u" scientific", u"/@## scientific"};
 
     for (auto& stem : stems) {
         for (auto& suffix : suffixes) {
@@ -234,10 +233,10 @@ void NumberSkeletonTest::flexibleSeparators() {
     static struct TestCase {
         const char16_t* skeleton;
         const char16_t* expected;
-    } cases[] = {{u"round-integer group-off", u"5142"},
-                 {u"round-integer  group-off", u"5142"},
-                 {u"round-integer/ceiling group-off", u"5143"},
-                 {u"round-integer/ceiling  group-off", u"5143"}};
+    } cases[] = {{u"precision-integer group-off", u"5142"},
+                 {u"precision-integer  group-off", u"5142"},
+                 {u"precision-integer/@## group-off", u"5140"},
+                 {u"precision-integer/@##  group-off", u"5140"}};
 
     for (auto& cas : cases) {
         UnicodeString skeletonString(cas.skeleton);

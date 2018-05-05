@@ -53,10 +53,18 @@ void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
     b.add(u"base-unit", STEM_BASE_UNIT, status);
     b.add(u"percent", STEM_PERCENT, status);
     b.add(u"permille", STEM_PERMILLE, status);
-    b.add(u"round-integer", STEM_ROUND_INTEGER, status);
-    b.add(u"round-unlimited", STEM_ROUND_UNLIMITED, status);
-    b.add(u"round-currency-standard", STEM_ROUND_CURRENCY_STANDARD, status);
-    b.add(u"round-currency-cash", STEM_ROUND_CURRENCY_CASH, status);
+    b.add(u"precision-integer", STEM_PRECISION_INTEGER, status);
+    b.add(u"precision-unlimited", STEM_PRECISION_UNLIMITED, status);
+    b.add(u"precision-currency-standard", STEM_PRECISION_CURRENCY_STANDARD, status);
+    b.add(u"precision-currency-cash", STEM_PRECISION_CURRENCY_CASH, status);
+    b.add(u"rounding-mode-ceiling", STEM_ROUNDING_MODE_CEILING, status);
+    b.add(u"rounding-mode-floor", STEM_ROUNDING_MODE_FLOOR, status);
+    b.add(u"rounding-mode-down", STEM_ROUNDING_MODE_DOWN, status);
+    b.add(u"rounding-mode-up", STEM_ROUNDING_MODE_UP, status);
+    b.add(u"rounding-mode-half-even", STEM_ROUNDING_MODE_HALF_EVEN, status);
+    b.add(u"rounding-mode-half-down", STEM_ROUNDING_MODE_HALF_DOWN, status);
+    b.add(u"rounding-mode-half-up", STEM_ROUNDING_MODE_HALF_UP, status);
+    b.add(u"rounding-mode-unnecessary", STEM_ROUNDING_MODE_UNNECESSARY, status);
     b.add(u"group-off", STEM_GROUP_OFF, status);
     b.add(u"group-min2", STEM_GROUP_MIN2, status);
     b.add(u"group-auto", STEM_GROUP_AUTO, status);
@@ -80,7 +88,7 @@ void U_CALLCONV initNumberSkeletons(UErrorCode& status) {
     if (U_FAILURE(status)) { return; }
 
     // Section 2:
-    b.add(u"round-increment", STEM_ROUND_INCREMENT, status);
+    b.add(u"precision-increment", STEM_PRECISION_INCREMENT, status);
     b.add(u"measure-unit", STEM_MEASURE_UNIT, status);
     b.add(u"per-measure-unit", STEM_PER_MEASURE_UNIT, status);
     b.add(u"currency", STEM_CURRENCY, status);
@@ -134,16 +142,6 @@ inline void appendMultiple(UnicodeString& sb, UChar32 cp, int32_t count) {
 }
 
 
-// NOTE: The order of these strings must be consistent with UNumberFormatRoundingMode
-const char16_t* const kRoundingModeStrings[] = {
-        u"ceiling", u"floor", u"down", u"up", u"half-even", u"half-down", u"half-up", u"unnecessary"};
-
-constexpr int32_t kRoundingModeCount = 8;
-static_assert(
-        sizeof(kRoundingModeStrings) / sizeof(*kRoundingModeStrings) == kRoundingModeCount,
-        "kRoundingModeCount should be the number of rounding modes");
-
-
 } // anonymous namespace
 
 
@@ -182,19 +180,43 @@ MeasureUnit stem_to_object::unit(skeleton::StemEnum stem) {
     }
 }
 
-Rounder stem_to_object::rounder(skeleton::StemEnum stem) {
+Precision stem_to_object::precision(skeleton::StemEnum stem) {
     switch (stem) {
-        case STEM_ROUND_INTEGER:
-            return Rounder::integer();
-        case STEM_ROUND_UNLIMITED:
-            return Rounder::unlimited();
-        case STEM_ROUND_CURRENCY_STANDARD:
-            return Rounder::currency(UCURR_USAGE_STANDARD);
-        case STEM_ROUND_CURRENCY_CASH:
-            return Rounder::currency(UCURR_USAGE_CASH);
+        case STEM_PRECISION_INTEGER:
+            return Precision::integer();
+        case STEM_PRECISION_UNLIMITED:
+            return Precision::unlimited();
+        case STEM_PRECISION_CURRENCY_STANDARD:
+            return Precision::currency(UCURR_USAGE_STANDARD);
+        case STEM_PRECISION_CURRENCY_CASH:
+            return Precision::currency(UCURR_USAGE_CASH);
         default:
             U_ASSERT(false);
-            return Rounder::integer(); // return a value: silence compiler warning
+            return Precision::integer(); // return a value: silence compiler warning
+    }
+}
+
+UNumberFormatRoundingMode stem_to_object::roundingMode(skeleton::StemEnum stem) {
+    switch (stem) {
+        case STEM_ROUNDING_MODE_CEILING:
+            return UNUM_ROUND_CEILING;
+        case STEM_ROUNDING_MODE_FLOOR:
+            return UNUM_ROUND_FLOOR;
+        case STEM_ROUNDING_MODE_DOWN:
+            return UNUM_ROUND_DOWN;
+        case STEM_ROUNDING_MODE_UP:
+            return UNUM_ROUND_UP;
+        case STEM_ROUNDING_MODE_HALF_EVEN:
+            return UNUM_ROUND_HALFEVEN;
+        case STEM_ROUNDING_MODE_HALF_DOWN:
+            return UNUM_ROUND_HALFDOWN;
+        case STEM_ROUNDING_MODE_HALF_UP:
+            return UNUM_ROUND_HALFUP;
+        case STEM_ROUNDING_MODE_UNNECESSARY:
+            return UNUM_ROUND_UNNECESSARY;
+        default:
+            U_ASSERT(false);
+            return UNUM_ROUND_UNNECESSARY;
     }
 }
 
@@ -264,6 +286,37 @@ UNumberDecimalSeparatorDisplay stem_to_object::decimalSeparatorDisplay(skeleton:
     }
 }
 
+
+void enum_to_stem_string::roundingMode(UNumberFormatRoundingMode value, UnicodeString& sb) {
+    switch (value) {
+        case UNUM_ROUND_CEILING:
+            sb.append(u"rounding-mode-ceiling", -1);
+            break;
+        case UNUM_ROUND_FLOOR:
+            sb.append(u"rounding-mode-floor", -1);
+            break;
+        case UNUM_ROUND_DOWN:
+            sb.append(u"rounding-mode-down", -1);
+            break;
+        case UNUM_ROUND_UP:
+            sb.append(u"rounding-mode-up", -1);
+            break;
+        case UNUM_ROUND_HALFEVEN:
+            sb.append(u"rounding-mode-half-even", -1);
+            break;
+        case UNUM_ROUND_HALFDOWN:
+            sb.append(u"rounding-mode-half-down", -1);
+            break;
+        case UNUM_ROUND_HALFUP:
+            sb.append(u"rounding-mode-half-up", -1);
+            break;
+        case UNUM_ROUND_UNNECESSARY:
+            sb.append(u"rounding-mode-unnecessary", -1);
+            break;
+        default:
+            U_ASSERT(false);
+    }
+}
 
 void enum_to_stem_string::groupingStrategy(UGroupingStrategy value, UnicodeString& sb) {
     switch (value) {
@@ -442,7 +495,7 @@ MacroProps skeleton::parseSkeleton(const UnicodeString& skeletonString, UErrorCo
         // Does the current stem require an option?
         if (isTokenSeparator && stem != STATE_NULL) {
             switch (stem) {
-                case STATE_INCREMENT_ROUNDER:
+                case STATE_INCREMENT_PRECISION:
                 case STATE_MEASURE_UNIT:
                 case STATE_PER_MEASURE_UNIT:
                 case STATE_CURRENCY_UNIT:
@@ -472,11 +525,11 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
     // First check for "blueprint" stems, which start with a "signal char"
     switch (segment.charAt(0)) {
         case u'.':
-        CHECK_NULL(seen, rounder, status);
+        CHECK_NULL(seen, precision, status);
             blueprint_helpers::parseFractionStem(segment, macros, status);
-            return STATE_FRACTION_ROUNDER;
+            return STATE_FRACTION_PRECISION;
         case u'@':
-        CHECK_NULL(seen, rounder, status);
+        CHECK_NULL(seen, precision, status);
             blueprint_helpers::parseDigitsStem(segment, macros, status);
             return STATE_NULL;
         default:
@@ -519,18 +572,30 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
             macros.unit = stem_to_object::unit(stem);
             return STATE_NULL;
 
-        case STEM_ROUND_INTEGER:
-        case STEM_ROUND_UNLIMITED:
-        case STEM_ROUND_CURRENCY_STANDARD:
-        case STEM_ROUND_CURRENCY_CASH:
-        CHECK_NULL(seen, rounder, status);
-            macros.rounder = stem_to_object::rounder(stem);
+        case STEM_PRECISION_INTEGER:
+        case STEM_PRECISION_UNLIMITED:
+        case STEM_PRECISION_CURRENCY_STANDARD:
+        case STEM_PRECISION_CURRENCY_CASH:
+        CHECK_NULL(seen, precision, status);
+            macros.precision = stem_to_object::precision(stem);
             switch (stem) {
-                case STEM_ROUND_INTEGER:
-                    return STATE_FRACTION_ROUNDER; // allows for "round-integer/@##"
+                case STEM_PRECISION_INTEGER:
+                    return STATE_FRACTION_PRECISION; // allows for "precision-integer/@##"
                 default:
-                    return STATE_ROUNDER; // allows for rounding mode options
+                    return STATE_NULL;
             }
+
+        case STEM_ROUNDING_MODE_CEILING:
+        case STEM_ROUNDING_MODE_FLOOR:
+        case STEM_ROUNDING_MODE_DOWN:
+        case STEM_ROUNDING_MODE_UP:
+        case STEM_ROUNDING_MODE_HALF_EVEN:
+        case STEM_ROUNDING_MODE_HALF_DOWN:
+        case STEM_ROUNDING_MODE_HALF_UP:
+        case STEM_ROUNDING_MODE_UNNECESSARY:
+        CHECK_NULL(seen, roundingMode, status);
+            macros.roundingMode = stem_to_object::roundingMode(stem);
+            return STATE_NULL;
 
         case STEM_GROUP_OFF:
         case STEM_GROUP_MIN2:
@@ -574,9 +639,9 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
 
             // Stems requiring an option:
 
-        case STEM_ROUND_INCREMENT:
-        CHECK_NULL(seen, rounder, status);
-            return STATE_INCREMENT_ROUNDER;
+        case STEM_PRECISION_INCREMENT:
+        CHECK_NULL(seen, precision, status);
+            return STATE_INCREMENT_PRECISION;
 
         case STEM_MEASURE_UNIT:
         CHECK_NULL(seen, unit, status);
@@ -623,9 +688,9 @@ ParseState skeleton::parseOption(ParseState stem, const StringSegment& segment, 
         case STATE_PER_MEASURE_UNIT:
             blueprint_helpers::parseMeasurePerUnitOption(segment, macros, status);
             return STATE_NULL;
-        case STATE_INCREMENT_ROUNDER:
+        case STATE_INCREMENT_PRECISION:
             blueprint_helpers::parseIncrementOption(segment, macros, status);
-            return STATE_ROUNDER;
+            return STATE_NULL;
         case STATE_INTEGER_WIDTH:
             blueprint_helpers::parseIntegerWidthOption(segment, macros, status);
             return STATE_NULL;
@@ -657,21 +722,9 @@ ParseState skeleton::parseOption(ParseState stem, const StringSegment& segment, 
 
     // Frac-sig option
     switch (stem) {
-        case STATE_FRACTION_ROUNDER:
+        case STATE_FRACTION_PRECISION:
             if (blueprint_helpers::parseFracSigOption(segment, macros, status)) {
-                return STATE_ROUNDER;
-            }
-            break;
-        default:
-            break;
-    }
-
-    // Rounding mode option
-    switch (stem) {
-        case STATE_ROUNDER:
-        case STATE_FRACTION_ROUNDER:
-            if (blueprint_helpers::parseRoundingModeOption(segment, macros, status)) {
-                return STATE_ROUNDER;
+                return STATE_NULL;
             }
             break;
         default:
@@ -698,7 +751,11 @@ void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString&
         sb.append(u' ');
     }
     if (U_FAILURE(status)) { return; }
-    if (GeneratorHelpers::rounding(macros, sb, status)) {
+    if (GeneratorHelpers::precision(macros, sb, status)) {
+        sb.append(u' ');
+    }
+    if (U_FAILURE(status)) { return; }
+    if (GeneratorHelpers::roundingMode(macros, sb, status)) {
         sb.append(u' ');
     }
     if (U_FAILURE(status)) { return; }
@@ -927,16 +984,16 @@ void blueprint_helpers::parseFractionStem(const StringSegment& segment, MacroPro
     }
     // Use the public APIs to enforce bounds checking
     if (maxFrac == -1) {
-        macros.rounder = Rounder::minFraction(minFrac);
+        macros.precision = Precision::minFraction(minFrac);
     } else {
-        macros.rounder = Rounder::minMaxFraction(minFrac, maxFrac);
+        macros.precision = Precision::minMaxFraction(minFrac, maxFrac);
     }
 }
 
 void
 blueprint_helpers::generateFractionStem(int32_t minFrac, int32_t maxFrac, UnicodeString& sb, UErrorCode&) {
     if (minFrac == 0 && maxFrac == 0) {
-        sb.append(u"round-integer", -1);
+        sb.append(u"precision-integer", -1);
         return;
     }
     sb.append(u'.');
@@ -984,9 +1041,9 @@ blueprint_helpers::parseDigitsStem(const StringSegment& segment, MacroProps& mac
     }
     // Use the public APIs to enforce bounds checking
     if (maxSig == -1) {
-        macros.rounder = Rounder::minDigits(minSig);
+        macros.precision = Precision::minSignificantDigits(minSig);
     } else {
-        macros.rounder = Rounder::minMaxDigits(minSig, maxSig);
+        macros.precision = Precision::minMaxSignificantDigits(minSig, maxSig);
     }
 }
 
@@ -1051,11 +1108,11 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
         return false;
     }
 
-    auto& oldRounder = static_cast<const FractionRounder&>(macros.rounder);
+    auto& oldPrecision = static_cast<const FractionPrecision&>(macros.precision);
     if (maxSig == -1) {
-        macros.rounder = oldRounder.withMinDigits(minSig);
+        macros.precision = oldPrecision.withMinDigits(minSig);
     } else {
-        macros.rounder = oldRounder.withMaxDigits(maxSig);
+        macros.precision = oldPrecision.withMaxDigits(maxSig);
     }
     return true;
 }
@@ -1083,10 +1140,10 @@ void blueprint_helpers::parseIncrementOption(const StringSegment& segment, Macro
         decimalOffset++;
     }
     if (decimalOffset == segment.length()) {
-        macros.rounder = Rounder::increment(increment);
+        macros.precision = Precision::increment(increment);
     } else {
         int32_t fractionLength = segment.length() - decimalOffset - 1;
-        macros.rounder = Rounder::increment(increment).withMinFraction(fractionLength);
+        macros.precision = Precision::increment(increment).withMinFraction(fractionLength);
     }
 }
 
@@ -1102,21 +1159,6 @@ void blueprint_helpers::generateIncrementOption(double increment, int32_t traili
     if (trailingZeros > 0) {
         appendMultiple(sb, u'0', trailingZeros);
     }
-}
-
-bool
-blueprint_helpers::parseRoundingModeOption(const StringSegment& segment, MacroProps& macros, UErrorCode&) {
-    for (int rm = 0; rm < kRoundingModeCount; rm++) {
-        if (segment == UnicodeString(kRoundingModeStrings[rm], -1)) {
-            macros.rounder = macros.rounder.withMode(static_cast<RoundingMode>(rm));
-            return true;
-        }
-    }
-    return false;
-}
-
-void blueprint_helpers::generateRoundingModeOption(RoundingMode mode, UnicodeString& sb, UErrorCode&) {
-    sb.append(kRoundingModeStrings[mode], -1);
 }
 
 void blueprint_helpers::parseIntegerWidthOption(const StringSegment& segment, MacroProps& macros,
@@ -1307,17 +1349,17 @@ bool GeneratorHelpers::perUnit(const MacroProps& macros, UnicodeString& sb, UErr
     }
 }
 
-bool GeneratorHelpers::rounding(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
-    if (macros.rounder.fType == Rounder::RND_NONE) {
-        sb.append(u"round-unlimited", -1);
-    } else if (macros.rounder.fType == Rounder::RND_FRACTION) {
-        const Rounder::FractionSignificantSettings& impl = macros.rounder.fUnion.fracSig;
+bool GeneratorHelpers::precision(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    if (macros.precision.fType == Precision::RND_NONE) {
+        sb.append(u"precision-unlimited", -1);
+    } else if (macros.precision.fType == Precision::RND_FRACTION) {
+        const Precision::FractionSignificantSettings& impl = macros.precision.fUnion.fracSig;
         blueprint_helpers::generateFractionStem(impl.fMinFrac, impl.fMaxFrac, sb, status);
-    } else if (macros.rounder.fType == Rounder::RND_SIGNIFICANT) {
-        const Rounder::FractionSignificantSettings& impl = macros.rounder.fUnion.fracSig;
+    } else if (macros.precision.fType == Precision::RND_SIGNIFICANT) {
+        const Precision::FractionSignificantSettings& impl = macros.precision.fUnion.fracSig;
         blueprint_helpers::generateDigitsStem(impl.fMinSig, impl.fMaxSig, sb, status);
-    } else if (macros.rounder.fType == Rounder::RND_FRACTION_SIGNIFICANT) {
-        const Rounder::FractionSignificantSettings& impl = macros.rounder.fUnion.fracSig;
+    } else if (macros.precision.fType == Precision::RND_FRACTION_SIGNIFICANT) {
+        const Precision::FractionSignificantSettings& impl = macros.precision.fUnion.fracSig;
         blueprint_helpers::generateFractionStem(impl.fMinFrac, impl.fMaxFrac, sb, status);
         sb.append(u'/');
         if (impl.fMinSig == -1) {
@@ -1325,33 +1367,35 @@ bool GeneratorHelpers::rounding(const MacroProps& macros, UnicodeString& sb, UEr
         } else {
             blueprint_helpers::generateDigitsStem(impl.fMinSig, -1, sb, status);
         }
-    } else if (macros.rounder.fType == Rounder::RND_INCREMENT) {
-        const Rounder::IncrementSettings& impl = macros.rounder.fUnion.increment;
-        sb.append(u"round-increment/", -1);
+    } else if (macros.precision.fType == Precision::RND_INCREMENT) {
+        const Precision::IncrementSettings& impl = macros.precision.fUnion.increment;
+        sb.append(u"precision-increment/", -1);
         blueprint_helpers::generateIncrementOption(
                 impl.fIncrement,
                 impl.fMinFrac - impl.fMaxFrac,
                 sb,
                 status);
-    } else if (macros.rounder.fType == Rounder::RND_CURRENCY) {
-        UCurrencyUsage usage = macros.rounder.fUnion.currencyUsage;
+    } else if (macros.precision.fType == Precision::RND_CURRENCY) {
+        UCurrencyUsage usage = macros.precision.fUnion.currencyUsage;
         if (usage == UCURR_USAGE_STANDARD) {
-            sb.append(u"round-currency-standard", -1);
+            sb.append(u"precision-currency-standard", -1);
         } else {
-            sb.append(u"round-currency-cash", -1);
+            sb.append(u"precision-currency-cash", -1);
         }
     } else {
         // Bogus or Error
         return false;
     }
 
-    // Generate the options
-    if (macros.rounder.fRoundingMode != kDefaultMode) {
-        sb.append(u'/');
-        blueprint_helpers::generateRoundingModeOption(macros.rounder.fRoundingMode, sb, status);
-    }
-
     // NOTE: Always return true for rounding because the default value depends on other options.
+    return true;
+}
+
+bool GeneratorHelpers::roundingMode(const MacroProps& macros, UnicodeString& sb, UErrorCode&) {
+    if (macros.roundingMode == kDefaultMode) {
+        return false; // Default
+    }
+    enum_to_stem_string::roundingMode(macros.roundingMode, sb);
     return true;
 }
 

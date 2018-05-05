@@ -106,7 +106,7 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     // Resolve min/max frac for currencies, required for the validation logic and for when minFrac or
     // maxFrac was
     // set (but not both) on a currency instance.
-    // NOTE: Increments are handled in "Rounder.constructCurrency()".
+    // NOTE: Increments are handled in "Precision.constructCurrency()".
     if (useCurrency && (minFrac == -1 || maxFrac == -1)) {
         int32_t digits = ucurr_getDefaultFractionDigitsForUsage(
                 currency.getISOCurrency(), currencyUsage, &status);
@@ -135,24 +135,24 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
         minInt = minInt <= 0 ? 1 : minInt > kMaxIntFracSig ? 1 : minInt;
         maxInt = maxInt < 0 ? -1 : maxInt < minInt ? minInt : maxInt > kMaxIntFracSig ? -1 : maxInt;
     }
-    Rounder rounding;
+    Precision precision;
     if (!properties.currencyUsage.isNull()) {
-        rounding = Rounder::constructCurrency(currencyUsage).withCurrency(currency);
+        precision = Precision::constructCurrency(currencyUsage).withCurrency(currency);
     } else if (roundingIncrement != 0.0) {
-        rounding = Rounder::constructIncrement(roundingIncrement, minFrac);
+        precision = Precision::constructIncrement(roundingIncrement, minFrac);
     } else if (explicitMinMaxSig) {
         minSig = minSig < 1 ? 1 : minSig > kMaxIntFracSig ? kMaxIntFracSig : minSig;
         maxSig = maxSig < 0 ? kMaxIntFracSig : maxSig < minSig ? minSig : maxSig > kMaxIntFracSig
                                                                           ? kMaxIntFracSig : maxSig;
-        rounding = Rounder::constructSignificant(minSig, maxSig);
+        precision = Precision::constructSignificant(minSig, maxSig);
     } else if (explicitMinMaxFrac) {
-        rounding = Rounder::constructFraction(minFrac, maxFrac);
+        precision = Precision::constructFraction(minFrac, maxFrac);
     } else if (useCurrency) {
-        rounding = Rounder::constructCurrency(currencyUsage);
+        precision = Precision::constructCurrency(currencyUsage);
     }
-    if (!rounding.isBogus()) {
-        rounding = rounding.withMode(roundingMode);
-        macros.rounder = rounding;
+    if (!precision.isBogus()) {
+        precision = precision.withMode(roundingMode);
+        macros.precision = precision;
     }
 
     ///////////////////
@@ -221,7 +221,7 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
                 properties.exponentSignAlwaysShown ? UNUM_SIGN_ALWAYS : UNUM_SIGN_AUTO);
         // Scientific notation also involves overriding the rounding mode.
         // TODO: Overriding here is a bit of a hack. Should this logic go earlier?
-        if (macros.rounder.fType == Rounder::RounderType::RND_FRACTION) {
+        if (macros.precision.fType == Precision::PrecisionType::RND_FRACTION) {
             // For the purposes of rounding, get the original min/max int/frac, since the local
             // variables
             // have been manipulated for display purposes.
@@ -230,13 +230,13 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
             int maxFrac_ = properties.maximumFractionDigits;
             if (minInt_ == 0 && maxFrac_ == 0) {
                 // Patterns like "#E0" and "##E0", which mean no rounding!
-                macros.rounder = Rounder::unlimited().withMode(roundingMode);
+                macros.precision = Precision::unlimited().withMode(roundingMode);
             } else if (minInt_ == 0 && minFrac_ == 0) {
                 // Patterns like "#.##E0" (no zeros in the mantissa), which mean round to maxFrac+1
-                macros.rounder = Rounder::constructSignificant(1, maxFrac_ + 1).withMode(roundingMode);
+                macros.precision = Precision::constructSignificant(1, maxFrac_ + 1).withMode(roundingMode);
             } else {
                 // All other scientific patterns, which mean round to minInt+maxFrac
-                macros.rounder = Rounder::constructSignificant(
+                macros.precision = Precision::constructSignificant(
                         minInt_ + minFrac_, minInt_ + maxFrac_).withMode(roundingMode);
             }
         }
@@ -273,25 +273,25 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
         exportedProperties->minimumIntegerDigits = minInt;
         exportedProperties->maximumIntegerDigits = maxInt == -1 ? INT32_MAX : maxInt;
 
-        Rounder rounding_;
-        if (rounding.fType == Rounder::RounderType::RND_CURRENCY) {
-            rounding_ = rounding.withCurrency(currency, status);
+        Precision rounding_;
+        if (precision.fType == Precision::PrecisionType::RND_CURRENCY) {
+            rounding_ = precision.withCurrency(currency, status);
         } else {
-            rounding_ = rounding;
+            rounding_ = precision;
         }
         int minFrac_ = minFrac;
         int maxFrac_ = maxFrac;
         int minSig_ = minSig;
         int maxSig_ = maxSig;
         double increment_ = 0.0;
-        if (rounding_.fType == Rounder::RounderType::RND_FRACTION) {
+        if (rounding_.fType == Precision::PrecisionType::RND_FRACTION) {
             minFrac_ = rounding_.fUnion.fracSig.fMinFrac;
             maxFrac_ = rounding_.fUnion.fracSig.fMaxFrac;
-        } else if (rounding_.fType == Rounder::RounderType::RND_INCREMENT) {
+        } else if (rounding_.fType == Precision::PrecisionType::RND_INCREMENT) {
             increment_ = rounding_.fUnion.increment.fIncrement;
             minFrac_ = rounding_.fUnion.increment.fMinFrac;
             maxFrac_ = rounding_.fUnion.increment.fMinFrac;
-        } else if (rounding_.fType == Rounder::RounderType::RND_SIGNIFICANT) {
+        } else if (rounding_.fType == Precision::PrecisionType::RND_SIGNIFICANT) {
             minSig_ = rounding_.fUnion.fracSig.fMinSig;
             maxSig_ = rounding_.fUnion.fracSig.fMaxSig;
         }
