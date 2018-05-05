@@ -91,6 +91,7 @@ void IntlTestSpoof::runIndexedTest( int32_t index, UBool exec, const char* &name
     TESTCASE_AUTO(testBug12825);
     TESTCASE_AUTO(testBug12815);
     TESTCASE_AUTO(testBug13314_MixedNumbers);
+    TESTCASE_AUTO(testBug13328_MixedCombiningMarks);
     TESTCASE_AUTO_END;
 }
 
@@ -695,6 +696,18 @@ void IntlTestSpoof::testBug13314_MixedNumbers() {
     failedChecks = uspoof_check2UnicodeString(sc.getAlias(), u"3Ȝ", nullptr, &status);
     TEST_ASSERT_SUCCESS(status);
     assertEquals("The '33' string does not fail spoof", 0, failedChecks);
+}
+
+void IntlTestSpoof::testBug13328_MixedCombiningMarks() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalUSpoofCheckerPointer sc(uspoof_open(&status));
+    TEST_ASSERT_SUCCESS(status);
+    int32_t failedChecks = uspoof_check2UnicodeString(sc.getAlias(), u"\u0061\u0F84", nullptr, &status);
+    TEST_ASSERT_SUCCESS(status);
+    assertEquals(
+            "The mismatched combining marks string fails spoof",
+            USPOOF_RESTRICTION_LEVEL,
+            failedChecks);
 }
 
 #endif /* !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_NORMALIZATION && !UCONFIG_NO_FILE_IO */

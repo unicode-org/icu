@@ -845,4 +845,14 @@ public class SpoofCheckerTest extends TestFmwk {
         SpoofChecker sc2 = new SpoofChecker.Builder(sc1).build();
         assertEquals("Copy constructor should produce identical instances", sc1, sc2);
     }
+
+    @Test
+    public void testBug13328_MixedCombiningMarks() {
+        SpoofChecker sc = new SpoofChecker.Builder().build();
+        CheckResult checkResult = new CheckResult();
+        sc.failsChecks("\u0061\u0F84", checkResult);
+        assertEquals("The mismatched combining marks string fails spoof",
+                SpoofChecker.RESTRICTION_LEVEL,
+                checkResult.checks);
+    }
 }
