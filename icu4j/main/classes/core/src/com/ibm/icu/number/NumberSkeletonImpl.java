@@ -47,11 +47,10 @@ class NumberSkeletonImpl {
 
         // Section 1: We might accept an option, but it is not required:
         STATE_SCIENTIFIC,
-        STATE_ROUNDER,
-        STATE_FRACTION_ROUNDER,
+        STATE_FRACTION_PRECISION,
 
         // Section 2: An option is required:
-        STATE_INCREMENT_ROUNDER,
+        STATE_INCREMENT_PRECISION,
         STATE_MEASURE_UNIT,
         STATE_PER_MEASURE_UNIT,
         STATE_CURRENCY_UNIT,
@@ -77,10 +76,18 @@ class NumberSkeletonImpl {
         STEM_BASE_UNIT,
         STEM_PERCENT,
         STEM_PERMILLE,
-        STEM_ROUND_INTEGER,
-        STEM_ROUND_UNLIMITED,
-        STEM_ROUND_CURRENCY_STANDARD,
-        STEM_ROUND_CURRENCY_CASH,
+        STEM_PRECISION_INTEGER,
+        STEM_PRECISION_UNLIMITED,
+        STEM_PRECISION_CURRENCY_STANDARD,
+        STEM_PRECISION_CURRENCY_CASH,
+        STEM_ROUNDING_MODE_CEILING,
+        STEM_ROUNDING_MODE_FLOOR,
+        STEM_ROUNDING_MODE_DOWN,
+        STEM_ROUNDING_MODE_UP,
+        STEM_ROUNDING_MODE_HALF_EVEN,
+        STEM_ROUNDING_MODE_HALF_DOWN,
+        STEM_ROUNDING_MODE_HALF_UP,
+        STEM_ROUNDING_MODE_UNNECESSARY,
         STEM_GROUP_OFF,
         STEM_GROUP_MIN2,
         STEM_GROUP_AUTO,
@@ -103,7 +110,7 @@ class NumberSkeletonImpl {
         STEM_DECIMAL_ALWAYS,
 
         // Section 2: Stems that DO require an option:
-        STEM_ROUND_INCREMENT,
+        STEM_PRECISION_INCREMENT,
         STEM_MEASURE_UNIT,
         STEM_PER_MEASURE_UNIT,
         STEM_CURRENCY,
@@ -130,10 +137,18 @@ class NumberSkeletonImpl {
         b.add("base-unit", StemEnum.STEM_BASE_UNIT.ordinal());
         b.add("percent", StemEnum.STEM_PERCENT.ordinal());
         b.add("permille", StemEnum.STEM_PERMILLE.ordinal());
-        b.add("round-integer", StemEnum.STEM_ROUND_INTEGER.ordinal());
-        b.add("round-unlimited", StemEnum.STEM_ROUND_UNLIMITED.ordinal());
-        b.add("round-currency-standard", StemEnum.STEM_ROUND_CURRENCY_STANDARD.ordinal());
-        b.add("round-currency-cash", StemEnum.STEM_ROUND_CURRENCY_CASH.ordinal());
+        b.add("precision-integer", StemEnum.STEM_PRECISION_INTEGER.ordinal());
+        b.add("precision-unlimited", StemEnum.STEM_PRECISION_UNLIMITED.ordinal());
+        b.add("precision-currency-standard", StemEnum.STEM_PRECISION_CURRENCY_STANDARD.ordinal());
+        b.add("precision-currency-cash", StemEnum.STEM_PRECISION_CURRENCY_CASH.ordinal());
+        b.add("rounding-mode-ceiling", StemEnum.STEM_ROUNDING_MODE_CEILING.ordinal());
+        b.add("rounding-mode-floor", StemEnum.STEM_ROUNDING_MODE_FLOOR.ordinal());
+        b.add("rounding-mode-down", StemEnum.STEM_ROUNDING_MODE_DOWN.ordinal());
+        b.add("rounding-mode-up", StemEnum.STEM_ROUNDING_MODE_UP.ordinal());
+        b.add("rounding-mode-half-even", StemEnum.STEM_ROUNDING_MODE_HALF_EVEN.ordinal());
+        b.add("rounding-mode-half-down", StemEnum.STEM_ROUNDING_MODE_HALF_DOWN.ordinal());
+        b.add("rounding-mode-half-up", StemEnum.STEM_ROUNDING_MODE_HALF_UP.ordinal());
+        b.add("rounding-mode-unnecessary", StemEnum.STEM_ROUNDING_MODE_UNNECESSARY.ordinal());
         b.add("group-off", StemEnum.STEM_GROUP_OFF.ordinal());
         b.add("group-min2", StemEnum.STEM_GROUP_MIN2.ordinal());
         b.add("group-auto", StemEnum.STEM_GROUP_AUTO.ordinal());
@@ -156,7 +171,7 @@ class NumberSkeletonImpl {
         b.add("decimal-always", StemEnum.STEM_DECIMAL_ALWAYS.ordinal());
 
         // Section 2:
-        b.add("round-increment", StemEnum.STEM_ROUND_INCREMENT.ordinal());
+        b.add("precision-increment", StemEnum.STEM_PRECISION_INCREMENT.ordinal());
         b.add("measure-unit", StemEnum.STEM_MEASURE_UNIT.ordinal());
         b.add("per-measure-unit", StemEnum.STEM_PER_MEASURE_UNIT.ordinal());
         b.add("currency", StemEnum.STEM_CURRENCY.ordinal());
@@ -205,16 +220,39 @@ class NumberSkeletonImpl {
             }
         }
 
-        private static Rounder rounder(StemEnum stem) {
+        private static Precision precision(StemEnum stem) {
             switch (stem) {
-            case STEM_ROUND_INTEGER:
-                return Rounder.integer();
-            case STEM_ROUND_UNLIMITED:
-                return Rounder.unlimited();
-            case STEM_ROUND_CURRENCY_STANDARD:
-                return Rounder.currency(CurrencyUsage.STANDARD);
-            case STEM_ROUND_CURRENCY_CASH:
-                return Rounder.currency(CurrencyUsage.CASH);
+            case STEM_PRECISION_INTEGER:
+                return Precision.integer();
+            case STEM_PRECISION_UNLIMITED:
+                return Precision.unlimited();
+            case STEM_PRECISION_CURRENCY_STANDARD:
+                return Precision.currency(CurrencyUsage.STANDARD);
+            case STEM_PRECISION_CURRENCY_CASH:
+                return Precision.currency(CurrencyUsage.CASH);
+            default:
+                throw new AssertionError();
+            }
+        }
+
+        private static RoundingMode roundingMode(StemEnum stem) {
+            switch (stem) {
+            case STEM_ROUNDING_MODE_CEILING:
+                return RoundingMode.CEILING;
+            case STEM_ROUNDING_MODE_FLOOR:
+                return RoundingMode.FLOOR;
+            case STEM_ROUNDING_MODE_DOWN:
+                return RoundingMode.DOWN;
+            case STEM_ROUNDING_MODE_UP:
+                return RoundingMode.UP;
+            case STEM_ROUNDING_MODE_HALF_EVEN:
+                return RoundingMode.HALF_EVEN;
+            case STEM_ROUNDING_MODE_HALF_DOWN:
+                return RoundingMode.HALF_DOWN;
+            case STEM_ROUNDING_MODE_HALF_UP:
+                return RoundingMode.HALF_UP;
+            case STEM_ROUNDING_MODE_UNNECESSARY:
+                return RoundingMode.UNNECESSARY;
             default:
                 throw new AssertionError();
             }
@@ -292,6 +330,37 @@ class NumberSkeletonImpl {
      * take place in ObjectToStemString.
      */
     static final class EnumToStemString {
+
+        private static void roundingMode(RoundingMode value, StringBuilder sb) {
+            switch (value) {
+            case CEILING:
+                sb.append("rounding-mode-ceiling");
+                break;
+            case FLOOR:
+                sb.append("rounding-mode-floor");
+                break;
+            case DOWN:
+                sb.append("rounding-mode-down");
+                break;
+            case UP:
+                sb.append("rounding-mode-up");
+                break;
+            case HALF_EVEN:
+                sb.append("rounding-mode-half-even");
+                break;
+            case HALF_DOWN:
+                sb.append("rounding-mode-half-down");
+                break;
+            case HALF_UP:
+                sb.append("rounding-mode-half-up");
+                break;
+            case UNNECESSARY:
+                sb.append("rounding-mode-unnecessary");
+                break;
+            default:
+                throw new AssertionError();
+            }
+        }
 
         private static void groupingStrategy(GroupingStrategy value, StringBuilder sb) {
             switch (value) {
@@ -378,17 +447,6 @@ class NumberSkeletonImpl {
             }
         }
     }
-
-    /** Kebab case versions of the rounding mode enum. */
-    static final String[] ROUNDING_MODE_STRINGS = {
-            "up",
-            "down",
-            "ceiling",
-            "floor",
-            "half-up",
-            "half-down",
-            "half-even",
-            "unnecessary" };
 
     ///// ENTRYPOINT FUNCTIONS /////
 
@@ -508,7 +566,7 @@ class NumberSkeletonImpl {
             // Does the current stem require an option?
             if (isTokenSeparator && stem != ParseState.STATE_NULL) {
                 switch (stem) {
-                case STATE_INCREMENT_ROUNDER:
+                case STATE_INCREMENT_PRECISION:
                 case STATE_MEASURE_UNIT:
                 case STATE_PER_MEASURE_UNIT:
                 case STATE_CURRENCY_UNIT:
@@ -539,11 +597,11 @@ class NumberSkeletonImpl {
         // First check for "blueprint" stems, which start with a "signal char"
         switch (segment.charAt(0)) {
         case '.':
-            checkNull(macros.rounder, segment);
+            checkNull(macros.precision, segment);
             BlueprintHelpers.parseFractionStem(segment, macros);
-            return ParseState.STATE_FRACTION_ROUNDER;
+            return ParseState.STATE_FRACTION_PRECISION;
         case '@':
-            checkNull(macros.rounder, segment);
+            checkNull(macros.precision, segment);
             BlueprintHelpers.parseDigitsStem(segment, macros);
             return ParseState.STATE_NULL;
         }
@@ -583,18 +641,30 @@ class NumberSkeletonImpl {
             macros.unit = StemToObject.unit(stem);
             return ParseState.STATE_NULL;
 
-        case STEM_ROUND_INTEGER:
-        case STEM_ROUND_UNLIMITED:
-        case STEM_ROUND_CURRENCY_STANDARD:
-        case STEM_ROUND_CURRENCY_CASH:
-            checkNull(macros.rounder, segment);
-            macros.rounder = StemToObject.rounder(stem);
+        case STEM_PRECISION_INTEGER:
+        case STEM_PRECISION_UNLIMITED:
+        case STEM_PRECISION_CURRENCY_STANDARD:
+        case STEM_PRECISION_CURRENCY_CASH:
+            checkNull(macros.precision, segment);
+            macros.precision = StemToObject.precision(stem);
             switch (stem) {
-            case STEM_ROUND_INTEGER:
-                return ParseState.STATE_FRACTION_ROUNDER; // allows for "round-integer/@##"
+            case STEM_PRECISION_INTEGER:
+                return ParseState.STATE_FRACTION_PRECISION; // allows for "precision-integer/@##"
             default:
-                return ParseState.STATE_ROUNDER; // allows for rounding mode options
+                return ParseState.STATE_NULL;
             }
+
+        case STEM_ROUNDING_MODE_CEILING:
+        case STEM_ROUNDING_MODE_FLOOR:
+        case STEM_ROUNDING_MODE_DOWN:
+        case STEM_ROUNDING_MODE_UP:
+        case STEM_ROUNDING_MODE_HALF_EVEN:
+        case STEM_ROUNDING_MODE_HALF_DOWN:
+        case STEM_ROUNDING_MODE_HALF_UP:
+        case STEM_ROUNDING_MODE_UNNECESSARY:
+            checkNull(macros.roundingMode, segment);
+            macros.roundingMode = StemToObject.roundingMode(stem);
+            return ParseState.STATE_NULL;
 
         case STEM_GROUP_OFF:
         case STEM_GROUP_MIN2:
@@ -638,9 +708,9 @@ class NumberSkeletonImpl {
 
         // Stems requiring an option:
 
-        case STEM_ROUND_INCREMENT:
-            checkNull(macros.rounder, segment);
-            return ParseState.STATE_INCREMENT_ROUNDER;
+        case STEM_PRECISION_INCREMENT:
+            checkNull(macros.precision, segment);
+            return ParseState.STATE_INCREMENT_PRECISION;
 
         case STEM_MEASURE_UNIT:
             checkNull(macros.unit, segment);
@@ -691,9 +761,9 @@ class NumberSkeletonImpl {
         case STATE_PER_MEASURE_UNIT:
             BlueprintHelpers.parseMeasurePerUnitOption(segment, macros);
             return ParseState.STATE_NULL;
-        case STATE_INCREMENT_ROUNDER:
+        case STATE_INCREMENT_PRECISION:
             BlueprintHelpers.parseIncrementOption(segment, macros);
-            return ParseState.STATE_ROUNDER;
+            return ParseState.STATE_NULL;
         case STATE_INTEGER_WIDTH:
             BlueprintHelpers.parseIntegerWidthOption(segment, macros);
             return ParseState.STATE_NULL;
@@ -725,21 +795,9 @@ class NumberSkeletonImpl {
 
         // Frac-sig option
         switch (stem) {
-        case STATE_FRACTION_ROUNDER:
+        case STATE_FRACTION_PRECISION:
             if (BlueprintHelpers.parseFracSigOption(segment, macros)) {
-                return ParseState.STATE_ROUNDER;
-            }
-            break;
-        default:
-            break;
-        }
-
-        // Rounding mode option
-        switch (stem) {
-        case STATE_ROUNDER:
-        case STATE_FRACTION_ROUNDER:
-            if (BlueprintHelpers.parseRoundingModeOption(segment, macros)) {
-                return ParseState.STATE_ROUNDER;
+                return ParseState.STATE_NULL;
             }
             break;
         default:
@@ -767,7 +825,10 @@ class NumberSkeletonImpl {
         if (macros.perUnit != null && GeneratorHelpers.perUnit(macros, sb)) {
             sb.append(' ');
         }
-        if (macros.rounder != null && GeneratorHelpers.rounding(macros, sb)) {
+        if (macros.precision != null && GeneratorHelpers.precision(macros, sb)) {
+            sb.append(' ');
+        }
+        if (macros.roundingMode != null && GeneratorHelpers.roundingMode(macros, sb)) {
             sb.append(' ');
         }
         if (macros.grouping != null && GeneratorHelpers.grouping(macros, sb)) {
@@ -951,15 +1012,15 @@ class NumberSkeletonImpl {
             }
             // Use the public APIs to enforce bounds checking
             if (maxFrac == -1) {
-                macros.rounder = Rounder.minFraction(minFrac);
+                macros.precision = Precision.minFraction(minFrac);
             } else {
-                macros.rounder = Rounder.minMaxFraction(minFrac, maxFrac);
+                macros.precision = Precision.minMaxFraction(minFrac, maxFrac);
             }
         }
 
         private static void generateFractionStem(int minFrac, int maxFrac, StringBuilder sb) {
             if (minFrac == 0 && maxFrac == 0) {
-                sb.append("round-integer");
+                sb.append("precision-integer");
                 return;
             }
             sb.append('.');
@@ -1005,9 +1066,9 @@ class NumberSkeletonImpl {
             }
             // Use the public APIs to enforce bounds checking
             if (maxSig == -1) {
-                macros.rounder = Rounder.minDigits(minSig);
+                macros.precision = Precision.minSignificantDigits(minSig);
             } else {
-                macros.rounder = Rounder.minMaxDigits(minSig, maxSig);
+                macros.precision = Precision.minMaxSignificantDigits(minSig, maxSig);
             }
         }
 
@@ -1066,11 +1127,11 @@ class NumberSkeletonImpl {
                 throw new SkeletonSyntaxException("Invalid digits option for fraction rounder", segment);
             }
 
-            FractionRounder oldRounder = (FractionRounder) macros.rounder;
+            FractionPrecision oldRounder = (FractionPrecision) macros.precision;
             if (maxSig == -1) {
-                macros.rounder = oldRounder.withMinDigits(minSig);
+                macros.precision = oldRounder.withMinDigits(minSig);
             } else {
-                macros.rounder = oldRounder.withMaxDigits(maxSig);
+                macros.precision = oldRounder.withMaxDigits(maxSig);
             }
             return true;
         }
@@ -1084,26 +1145,11 @@ class NumberSkeletonImpl {
             } catch (NumberFormatException e) {
                 throw new SkeletonSyntaxException("Invalid rounding increment", segment, e);
             }
-            macros.rounder = Rounder.increment(increment);
+            macros.precision = Precision.increment(increment);
         }
 
         private static void generateIncrementOption(BigDecimal increment, StringBuilder sb) {
             sb.append(increment.toPlainString());
-        }
-
-        /** @return Whether we successfully found and parsed a rounding mode. */
-        private static boolean parseRoundingModeOption(StringSegment segment, MacroProps macros) {
-            for (int rm = 0; rm < ROUNDING_MODE_STRINGS.length; rm++) {
-                if (segment.equals(ROUNDING_MODE_STRINGS[rm])) {
-                    macros.rounder = macros.rounder.withMode(RoundingMode.valueOf(rm));
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private static void generateRoundingModeOption(RoundingMode mode, StringBuilder sb) {
-            sb.append(ROUNDING_MODE_STRINGS[mode.ordinal()]);
         }
 
         private static void parseIntegerWidthOption(StringSegment segment, MacroProps macros) {
@@ -1272,17 +1318,17 @@ class NumberSkeletonImpl {
             }
         }
 
-        private static boolean rounding(MacroProps macros, StringBuilder sb) {
-            if (macros.rounder instanceof Rounder.InfiniteRounderImpl) {
-                sb.append("round-unlimited");
-            } else if (macros.rounder instanceof Rounder.FractionRounderImpl) {
-                Rounder.FractionRounderImpl impl = (Rounder.FractionRounderImpl) macros.rounder;
+        private static boolean precision(MacroProps macros, StringBuilder sb) {
+            if (macros.precision instanceof Precision.InfiniteRounderImpl) {
+                sb.append("precision-unlimited");
+            } else if (macros.precision instanceof Precision.FractionRounderImpl) {
+                Precision.FractionRounderImpl impl = (Precision.FractionRounderImpl) macros.precision;
                 BlueprintHelpers.generateFractionStem(impl.minFrac, impl.maxFrac, sb);
-            } else if (macros.rounder instanceof Rounder.SignificantRounderImpl) {
-                Rounder.SignificantRounderImpl impl = (Rounder.SignificantRounderImpl) macros.rounder;
+            } else if (macros.precision instanceof Precision.SignificantRounderImpl) {
+                Precision.SignificantRounderImpl impl = (Precision.SignificantRounderImpl) macros.precision;
                 BlueprintHelpers.generateDigitsStem(impl.minSig, impl.maxSig, sb);
-            } else if (macros.rounder instanceof Rounder.FracSigRounderImpl) {
-                Rounder.FracSigRounderImpl impl = (Rounder.FracSigRounderImpl) macros.rounder;
+            } else if (macros.precision instanceof Precision.FracSigRounderImpl) {
+                Precision.FracSigRounderImpl impl = (Precision.FracSigRounderImpl) macros.precision;
                 BlueprintHelpers.generateFractionStem(impl.minFrac, impl.maxFrac, sb);
                 sb.append('/');
                 if (impl.minSig == -1) {
@@ -1290,28 +1336,29 @@ class NumberSkeletonImpl {
                 } else {
                     BlueprintHelpers.generateDigitsStem(impl.minSig, -1, sb);
                 }
-            } else if (macros.rounder instanceof Rounder.IncrementRounderImpl) {
-                Rounder.IncrementRounderImpl impl = (Rounder.IncrementRounderImpl) macros.rounder;
-                sb.append("round-increment/");
+            } else if (macros.precision instanceof Precision.IncrementRounderImpl) {
+                Precision.IncrementRounderImpl impl = (Precision.IncrementRounderImpl) macros.precision;
+                sb.append("precision-increment/");
                 BlueprintHelpers.generateIncrementOption(impl.increment, sb);
             } else {
-                assert macros.rounder instanceof Rounder.CurrencyRounderImpl;
-                Rounder.CurrencyRounderImpl impl = (Rounder.CurrencyRounderImpl) macros.rounder;
+                assert macros.precision instanceof Precision.CurrencyRounderImpl;
+                Precision.CurrencyRounderImpl impl = (Precision.CurrencyRounderImpl) macros.precision;
                 if (impl.usage == CurrencyUsage.STANDARD) {
-                    sb.append("round-currency-standard");
+                    sb.append("precision-currency-standard");
                 } else {
-                    sb.append("round-currency-cash");
+                    sb.append("precision-currency-cash");
                 }
             }
 
-            // Generate the options
-            if (macros.rounder.mathContext != RoundingUtils.DEFAULT_MATH_CONTEXT_UNLIMITED) {
-                sb.append('/');
-                BlueprintHelpers.generateRoundingModeOption(macros.rounder.mathContext.getRoundingMode(),
-                        sb);
-            }
-
             // NOTE: Always return true for rounding because the default value depends on other options.
+            return true;
+        }
+
+        private static boolean roundingMode(MacroProps macros, StringBuilder sb) {
+            if (macros.roundingMode == RoundingUtils.DEFAULT_ROUNDING_MODE) {
+                return false; // Default value
+            }
+            EnumToStemString.roundingMode(macros.roundingMode, sb);
             return true;
         }
 

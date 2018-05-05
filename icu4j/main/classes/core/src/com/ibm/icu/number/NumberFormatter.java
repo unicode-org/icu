@@ -20,7 +20,7 @@ import com.ibm.icu.util.ULocale;
  * NumberFormatter.with()
  *     .notation(Notation.compactShort())
  *     .unit(Currency.getInstance("EUR"))
- *     .rounding(Rounder.maxDigits(2))
+ *     .precision(Precision.maxDigits(2))
  *     .locale(...)
  *     .format(1234)
  *     .toString();  // €1.2K in en-US
@@ -28,7 +28,7 @@ import com.ibm.icu.util.ULocale;
  * // Create a formatter in a private static final field:
  * private static final LocalizedNumberFormatter formatter = NumberFormatter.withLocale(...)
  *     .unit(NoUnit.PERCENT)
- *     .rounding(Rounder.fixedFraction(3));
+ *     .precision(Precision.fixedFraction(3));
  * formatter.format(5.9831).toString();  // 5.983% in en-US
  *
  * // Create a "template" in a private static final field but without setting a locale until the call site:
@@ -50,7 +50,7 @@ import com.ibm.icu.util.ULocale;
  * <pre>
  * UnlocalizedNumberFormatter formatter = UnlocalizedNumberFormatter.with()
  *         .notation(Notation.scientific());
- * formatter.rounding(Rounder.maxFraction(2)); // does nothing!
+ * formatter.precision(Precision.maxFraction(2)); // does nothing!
  * formatter.locale(ULocale.ENGLISH).format(9.8765).toString(); // prints "9.8765E0", not "9.88E0"
  * </pre>
  *

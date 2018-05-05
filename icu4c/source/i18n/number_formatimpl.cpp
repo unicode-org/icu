@@ -246,16 +246,24 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     }
 
     // Rounding strategy
-    if (!macros.rounder.isBogus()) {
-        fMicros.rounding = macros.rounder;
+    Precision precision;
+    if (!macros.precision.isBogus()) {
+        precision = macros.precision;
     } else if (macros.notation.fType == Notation::NTN_COMPACT) {
-        fMicros.rounding = Rounder::integer().withMinDigits(2);
+        precision = Precision::integer().withMinDigits(2);
     } else if (isCurrency) {
-        fMicros.rounding = Rounder::currency(UCURR_USAGE_STANDARD);
+        precision = Precision::currency(UCURR_USAGE_STANDARD);
     } else {
-        fMicros.rounding = Rounder::maxFraction(6);
+        precision = Precision::maxFraction(6);
     }
-    fMicros.rounding.setLocaleData(currency, status);
+    UNumberFormatRoundingMode roundingMode;
+    if (macros.roundingMode != kDefaultMode) {
+        roundingMode = macros.roundingMode;
+    } else {
+        // Temporary until ICU 64
+        roundingMode = precision.fRoundingMode;
+    }
+    fMicros.rounder = {precision, roundingMode, currency, status};
 
     // Grouping strategy
     if (!macros.grouper.isBogus()) {
@@ -397,7 +405,7 @@ NumberFormatterImpl::resolvePluralRules(const PluralRules* rulesPtr, const Local
 
 int32_t NumberFormatterImpl::microsToString(const MicroProps& micros, DecimalQuantity& quantity,
                                             NumberStringBuilder& string, UErrorCode& status) {
-    micros.rounding.apply(quantity, status);
+    micros.rounder.apply(quantity, status);
     micros.integerWidth.apply(quantity, status);
     int32_t length = writeNumber(micros, quantity, string, status);
     // NOTE: When range formatting is added, these modifiers can bubble up.

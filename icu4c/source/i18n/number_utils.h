@@ -14,6 +14,7 @@
 #include "number_patternstring.h"
 #include "number_modifiers.h"
 #include "number_multiplier.h"
+#include "number_roundingutils.h"
 #include "decNumber.h"
 #include "charstr.h"
 
@@ -23,7 +24,7 @@ namespace impl {
 struct MicroProps : public MicroPropsGenerator {
 
     // NOTE: All of these fields are properly initialized in NumberFormatterImpl.
-    Rounder rounding;
+    RoundingImpl rounder;
     Grouper grouping;
     Padder padding;
     IntegerWidth integerWidth;

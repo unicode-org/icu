@@ -15,7 +15,7 @@ import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.Key;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.number.NumberFormatter;
-import com.ibm.icu.number.Rounder;
+import com.ibm.icu.number.Precision;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
@@ -92,7 +92,7 @@ public class ExhaustiveNumberTest extends TestFmwk {
         BigDecimal ten10000 = BigDecimal.valueOf(10).pow(10000);
         BigDecimal longFraction = ten10000.subtract(BigDecimal.ONE).divide(ten10000);
         String expected = longFraction.toPlainString();
-        String actual = NumberFormatter.withLocale(ULocale.ENGLISH).rounding(Rounder.unlimited())
+        String actual = NumberFormatter.withLocale(ULocale.ENGLISH).rounding(Precision.unlimited())
                 .format(longFraction).toString();
         assertEquals("All digits should be displayed", expected, actual);
     }

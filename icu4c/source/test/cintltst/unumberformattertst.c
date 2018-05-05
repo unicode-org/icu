@@ -38,7 +38,7 @@ static void TestSkeletonFormatToString() {
 
     // setup:
     UNumberFormatter* f = unumf_openFromSkeletonAndLocale(
-            u"round-integer currency/USD sign-accounting", -1, "en", &ec);
+            u"precision-integer currency/USD sign-accounting", -1, "en", &ec);
     assertSuccess("Should create without error", &ec);
     UFormattedNumber* result = unumf_openResult(&ec);
     assertSuccess("Should create result without error", &ec);
@@ -153,7 +153,7 @@ static void TestExampleCode() {
 
     // Setup:
     UErrorCode ec = U_ZERO_ERROR;
-    UNumberFormatter* uformatter = unumf_openFromSkeletonAndLocale(u"round-integer", -1, "en", &ec);
+    UNumberFormatter* uformatter = unumf_openFromSkeletonAndLocale(u"precision-integer", -1, "en", &ec);
     UFormattedNumber* uresult = unumf_openResult(&ec);
     assertSuccessCheck("There should not be a failure in the example code", &ec, TRUE);
     if (U_FAILURE(ec)) { return; }

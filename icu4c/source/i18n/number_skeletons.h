@@ -39,12 +39,11 @@ enum ParseState {
     // Section 1: We might accept an option, but it is not required:
 
     STATE_SCIENTIFIC,
-    STATE_ROUNDER,
-    STATE_FRACTION_ROUNDER,
+    STATE_FRACTION_PRECISION,
 
     // Section 2: An option is required:
 
-    STATE_INCREMENT_ROUNDER,
+    STATE_INCREMENT_PRECISION,
     STATE_MEASURE_UNIT,
     STATE_PER_MEASURE_UNIT,
     STATE_CURRENCY_UNIT,
@@ -72,10 +71,18 @@ enum StemEnum {
     STEM_BASE_UNIT,
     STEM_PERCENT,
     STEM_PERMILLE,
-    STEM_ROUND_INTEGER,
-    STEM_ROUND_UNLIMITED,
-    STEM_ROUND_CURRENCY_STANDARD,
-    STEM_ROUND_CURRENCY_CASH,
+    STEM_PRECISION_INTEGER,
+    STEM_PRECISION_UNLIMITED,
+    STEM_PRECISION_CURRENCY_STANDARD,
+    STEM_PRECISION_CURRENCY_CASH,
+    STEM_ROUNDING_MODE_CEILING,
+    STEM_ROUNDING_MODE_FLOOR,
+    STEM_ROUNDING_MODE_DOWN,
+    STEM_ROUNDING_MODE_UP,
+    STEM_ROUNDING_MODE_HALF_EVEN,
+    STEM_ROUNDING_MODE_HALF_DOWN,
+    STEM_ROUNDING_MODE_HALF_UP,
+    STEM_ROUNDING_MODE_UNNECESSARY,
     STEM_GROUP_OFF,
     STEM_GROUP_MIN2,
     STEM_GROUP_AUTO,
@@ -99,7 +106,7 @@ enum StemEnum {
 
     // Section 2: Stems that DO require an option:
 
-    STEM_ROUND_INCREMENT,
+    STEM_PRECISION_INCREMENT,
     STEM_MEASURE_UNIT,
     STEM_PER_MEASURE_UNIT,
     STEM_CURRENCY,
@@ -163,7 +170,9 @@ Notation notation(skeleton::StemEnum stem);
 
 MeasureUnit unit(skeleton::StemEnum stem);
 
-Rounder rounder(skeleton::StemEnum stem);
+Precision precision(skeleton::StemEnum stem);
+
+UNumberFormatRoundingMode roundingMode(skeleton::StemEnum stem);
 
 UGroupingStrategy groupingStrategy(skeleton::StemEnum stem);
 
@@ -180,6 +189,8 @@ UNumberDecimalSeparatorDisplay decimalSeparatorDisplay(skeleton::StemEnum stem);
  * take place in the object_to_stem_string namespace.
  */
 namespace enum_to_stem_string {
+
+void roundingMode(UNumberFormatRoundingMode value, UnicodeString& sb);
 
 void groupingStrategy(UGroupingStrategy value, UnicodeString& sb);
 
@@ -230,11 +241,6 @@ void parseIncrementOption(const StringSegment& segment, MacroProps& macros, UErr
 void
 generateIncrementOption(double increment, int32_t trailingZeros, UnicodeString& sb, UErrorCode& status);
 
-/** @return Whether we successfully found and parsed a rounding mode. */
-bool parseRoundingModeOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
-
-void generateRoundingModeOption(RoundingMode mode, UnicodeString& sb, UErrorCode& status);
-
 void parseIntegerWidthOption(const StringSegment& segment, MacroProps& macros, UErrorCode& status);
 
 void generateIntegerWidthOption(int32_t minInt, int32_t maxInt, UnicodeString& sb, UErrorCode& status);
@@ -273,7 +279,9 @@ class GeneratorHelpers {
 
     static bool perUnit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
-    static bool rounding(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+    static bool precision(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
+
+    static bool roundingMode(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
     static bool grouping(const MacroProps& macros, UnicodeString& sb, UErrorCode& status);
 
@@ -299,7 +307,8 @@ struct SeenMacroProps {
     bool notation = false;
     bool unit = false;
     bool perUnit = false;
-    bool rounder = false;
+    bool precision = false;
+    bool roundingMode = false;
     bool grouper = false;
     bool padder = false;
     bool integerWidth = false;

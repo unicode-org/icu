@@ -11,7 +11,6 @@ import java.math.RoundingMode;
 import org.junit.Test;
 
 import com.ibm.icu.number.NumberFormatter;
-import com.ibm.icu.number.Rounder;
 import com.ibm.icu.number.SkeletonSyntaxException;
 import com.ibm.icu.util.ULocale;
 
@@ -26,8 +25,8 @@ public class NumberSkeletonTest {
         // This tests only if the tokens are valid, not their behavior.
         // Most of these are from the design doc.
         String[] cases = {
-                "round-integer",
-                "round-unlimited",
+                "precision-integer",
+                "precision-unlimited",
                 "@@@##",
                 "@@+",
                 ".000##",
@@ -37,11 +36,11 @@ public class NumberSkeletonTest {
                 ".######",
                 ".00/@@+",
                 ".00/@##",
-                "round-increment/3.14",
-                "round-currency-standard",
-                "round-integer/half-up",
-                ".00#/ceiling",
-                ".00/@@+/floor",
+                "precision-increment/3.14",
+                "precision-currency-standard",
+                "precision-integer rounding-mode-half-up",
+                ".00# rounding-mode-ceiling",
+                ".00/@@+ rounding-mode-floor",
                 "scientific",
                 "scientific/+ee",
                 "scientific/sign-always",
@@ -91,9 +90,9 @@ public class NumberSkeletonTest {
                 "latin",
                 "numbering-system/arab",
                 "numbering-system/latn",
-                "round-integer/@##",
-                "round-integer/ceiling",
-                "round-currency-cash/ceiling" };
+                "precision-integer/@##",
+                "precision-integer rounding-mode-ceiling",
+                "precision-currency-cash rounding-mode-ceiling" };
 
         for (String cas : cases) {
             try {
@@ -121,12 +120,11 @@ public class NumberSkeletonTest {
                 ".00/@@#",
                 ".00/@@#+",
                 ".00/floor/@@+", // wrong order
-                "round-increment/français", // non-invariant characters for C++
-                "round-currency-cash/XXX",
+                "precision-increment/français", // non-invariant characters for C++
                 "scientific/ee",
-                "round-increment/xxx",
-                "round-increment/NaN",
-                "round-increment/0.1.2",
+                "precision-increment/xxx",
+                "precision-increment/NaN",
+                "precision-increment/0.1.2",
                 "scale/xxx",
                 "scale/NaN",
                 "scale/0.1.2",
@@ -174,10 +172,10 @@ public class NumberSkeletonTest {
     public void unexpectedTokens() {
         String[] cases = {
                 "group-thousands/foo",
-                "round-integer//ceiling group-off",
-                "round-integer//ceiling  group-off",
-                "round-integer/ group-off",
-                "round-integer// group-off" };
+                "precision-integer//@## group-off",
+                "precision-integer//@##  group-off",
+                "precision-integer/ group-off",
+                "precision-integer// group-off" };
 
         for (String cas : cases) {
             try {
@@ -192,10 +190,10 @@ public class NumberSkeletonTest {
     @Test
     public void duplicateValues() {
         String[] cases = {
-                "round-integer round-integer",
-                "round-integer .00+",
-                "round-integer round-unlimited",
-                "round-integer @@@",
+                "precision-integer precision-integer",
+                "precision-integer .00+",
+                "precision-integer precision-unlimited",
+                "precision-integer @@@",
                 "scientific engineering",
                 "engineering compact-long",
                 "sign-auto sign-always" };
@@ -213,14 +211,14 @@ public class NumberSkeletonTest {
     @Test
     public void stemsRequiringOption() {
         String[] stems = {
-                "round-increment",
+                "precision-increment",
                 "measure-unit",
                 "per-unit",
                 "currency",
                 "integer-width",
                 "numbering-system",
                 "scale" };
-        String[] suffixes = { "", "/ceiling", " scientific", "/ceiling scientific" };
+        String[] suffixes = { "", "/@##", " scientific", "/@## scientific" };
 
         for (String stem : stems) {
             for (String suffix : suffixes) {
@@ -255,10 +253,10 @@ public class NumberSkeletonTest {
     @Test
     public void flexibleSeparators() {
         String[][] cases = {
-                { "round-integer group-off", "5142" },
-                { "round-integer  group-off", "5142" },
-                { "round-integer/ceiling group-off", "5143" },
-                { "round-integer/ceiling  group-off", "5143" }, };
+                { "precision-integer group-off", "5142" },
+                { "precision-integer  group-off", "5142" },
+                { "precision-integer/@## group-off", "5140" },
+                { "precision-integer/@##  group-off", "5140" }, };
 
         for (String[] cas : cases) {
             String skeleton = cas[0];
@@ -276,8 +274,7 @@ public class NumberSkeletonTest {
                 // This rounding mode is not printed in the skeleton since it is the default
                 continue;
             }
-            String skeleton = NumberFormatter.with().rounding(Rounder.integer().withMode(mode))
-                    .toSkeleton();
+            String skeleton = NumberFormatter.with().roundingMode(mode).toSkeleton();
             String modeString = mode.toString().toLowerCase().replace('_', '-');
             assertEquals(mode.toString(), modeString, skeleton.substring(14));
         }

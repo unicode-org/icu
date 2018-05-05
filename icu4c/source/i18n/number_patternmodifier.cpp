@@ -165,7 +165,7 @@ void MutablePatternModifier::processQuantity(DecimalQuantity& fq, MicroProps& mi
     if (needsPlurals()) {
         // TODO: Fix this. Avoid the copy.
         DecimalQuantity copy(fq);
-        micros.rounding.apply(copy, status);
+        micros.rounder.apply(copy, status);
         nonConstThis->setNumberProperties(fq.signum(), copy.getStandardPlural(rules));
     } else {
         nonConstThis->setNumberProperties(fq.signum(), StandardPlural::Form::COUNT);

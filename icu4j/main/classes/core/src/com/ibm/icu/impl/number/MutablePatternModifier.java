@@ -269,7 +269,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
         if (needsPlurals()) {
             // TODO: Fix this. Avoid the copy.
             DecimalQuantity copy = fq.createCopy();
-            micros.rounding.apply(copy);
+            micros.rounder.apply(copy);
             setNumberProperties(fq.signum(), copy.getStandardPlural(rules));
         } else {
             setNumberProperties(fq.signum(), null);

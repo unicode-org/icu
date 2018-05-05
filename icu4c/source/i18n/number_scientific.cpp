@@ -106,16 +106,16 @@ void ScientificHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     // Treat zero as if it had magnitude 0
     int32_t exponent;
     if (quantity.isZero()) {
-        if (fSettings.fRequireMinInt && micros.rounding.fType == Rounder::RND_SIGNIFICANT) {
+        if (fSettings.fRequireMinInt && micros.rounder.isSignificantDigits()) {
             // Show "00.000E0" on pattern "00.000E0"
-            micros.rounding.apply(quantity, fSettings.fEngineeringInterval, status);
+            micros.rounder.apply(quantity, fSettings.fEngineeringInterval, status);
             exponent = 0;
         } else {
-            micros.rounding.apply(quantity, status);
+            micros.rounder.apply(quantity, status);
             exponent = 0;
         }
     } else {
-        exponent = -micros.rounding.chooseMultiplierAndApply(quantity, *this, status);
+        exponent = -micros.rounder.chooseMultiplierAndApply(quantity, *this, status);
     }
 
     // Use MicroProps's helper ScientificModifier and save it as the modInner.
@@ -124,7 +124,7 @@ void ScientificHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     micros.modInner = &mod;
 
     // We already performed rounding. Do not perform it again.
-    micros.rounding = Rounder::constructPassThrough();
+    micros.rounder = RoundingImpl::passThrough();
 }
 
 int32_t ScientificHandler::getMultiplier(int32_t magnitude) const {

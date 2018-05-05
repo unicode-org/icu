@@ -33,11 +33,11 @@
  * // Most basic usage:
  * NumberFormatter::withLocale(...).format(123).toString();  // 1,234 in en-US
  *
- * // Custom notation, unit, and rounding strategy:
+ * // Custom notation, unit, and rounding precision:
  * NumberFormatter::with()
  *     .notation(Notation::compactShort())
  *     .unit(CurrencyUnit("EUR", status))
- *     .rounding(Rounder::maxDigits(2))
+ *     .precision(PrecisionPrecision:::maxDigits(2))
  *     .locale(...)
  *     .format(1234)
  *     .toString();  // €1.2K in en-US
@@ -45,7 +45,7 @@
  * // Create a formatter in a singleton for use later:
  * static const LocalizedNumberFormatter formatter = NumberFormatter::withLocale(...)
  *     .unit(NoUnit::percent())
- *     .rounding(Rounder::fixedFraction(3));
+ *     .precision(PrecisionPrecision:::fixedFraction(3));
  * formatter.format(5.9831).toString();  // 5.983% in en-US
  *
  * // Create a "template" in a singleton but without setting a locale until the call site:
@@ -65,7 +65,7 @@
  *
  * <pre>
  * UnlocalizedNumberFormatter formatter = UnlocalizedNumberFormatter::with().notation(Notation::scientific());
- * formatter.rounding(Rounder.maxFraction(2)); // does nothing!
+ * formatter.precision(Precision.maxFraction(2)); // does nothing!
  * formatter.locale(Locale.getEnglish()).format(9.8765).toString(); // prints "9.8765E0", not "9.88E0"
  * </pre>
  *
@@ -99,10 +99,10 @@ class LocalizedNumberFormatter;
 class FormattedNumber;
 class Notation;
 class ScientificNotation;
-class Rounder;
-class FractionRounder;
-class CurrencyRounder;
-class IncrementRounder;
+class Precision;
+class FractionPrecision;
+class CurrencyPrecision;
+class IncrementPrecision;
 class IntegerWidth;
 
 namespace impl {
@@ -134,10 +134,8 @@ class NumberFormatterImpl;
 struct ParsedPatternInfo;
 class ScientificModifier;
 class MultiplierProducer;
-class MutablePatternModifier;
-class LongNameHandler;
+class RoundingImpl;
 class ScientificHandler;
-class CompactHandler;
 class Modifier;
 class NumberStringBuilder;
 class AffixPatternProvider;
@@ -240,13 +238,13 @@ class U_I18N_API Notation : public UMemory {
      * </pre>
      *
      * <p>
-     * When compact notation is specified without an explicit rounding strategy, numbers are rounded off to the closest
+     * When compact notation is specified without an explicit rounding precision, numbers are rounded off to the closest
      * integer after scaling the number by the corresponding power of 10, but with a digit shown after the decimal
-     * separator if there is only one digit before the decimal separator. The default compact notation rounding strategy
+     * separator if there is only one digit before the decimal separator. The default compact notation rounding precision
      * is equivalent to:
      *
      * <pre>
-     * Rounder.integer().withMinDigits(2)
+     * Precision::integer().withMinDigits(2)
      * </pre>
      *
      * @return A CompactNotation for passing to the NumberFormatter notation() setter.
@@ -411,17 +409,25 @@ class U_I18N_API ScientificNotation : public Notation {
 };
 
 // Reserve extra names in case they are added as classes in the future:
-typedef Rounder DigitRounder;
+typedef Precision SignificantDigitsPrecision;
+
+// Typedefs for ICU 60/61 compatibility.
+// These will be removed in ICU 64.
+// See http://bugs.icu-project.org/trac/ticket/13746
+typedef Precision Rounder;
+typedef FractionPrecision FractionRounder;
+typedef IncrementPrecision IncrementRounder;
+typedef CurrencyPrecision CurrencyRounder;
 
 /**
- * A class that defines the rounding strategy to be used when formatting numbers in NumberFormatter.
+ * A class that defines the rounding precision to be used when formatting numbers in NumberFormatter.
  *
  * <p>
- * To create a Rounder, use one of the factory methods.
+ * To create a Precision, use one of the factory methods.
  *
  * @draft ICU 60
  */
-class U_I18N_API Rounder : public UMemory {
+class U_I18N_API Precision : public UMemory {
 
   public:
     /**
@@ -437,18 +443,18 @@ class U_I18N_API Rounder : public UMemory {
      * <p>
      * http://www.serpentine.com/blog/2011/06/29/here-be-dragons-advances-in-problems-you-didnt-even-know-you-had/
      *
-     * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      */
-    static Rounder unlimited();
+    static Precision unlimited();
 
     /**
      * Show numbers rounded if necessary to the nearest integer.
      *
-     * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      */
-    static FractionRounder integer();
+    static FractionPrecision integer();
 
     /**
      * Show numbers rounded if necessary to a certain number of fraction places (numerals after the decimal separator).
@@ -474,10 +480,10 @@ class U_I18N_API Rounder : public UMemory {
      * @param minMaxFractionPlaces
      *            The minimum and maximum number of numerals to display after the decimal separator (rounding if too
      *            long or padding with zeros if too short).
-     * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      */
-    static FractionRounder fixedFraction(int32_t minMaxFractionPlaces);
+    static FractionPrecision fixedFraction(int32_t minMaxFractionPlaces);
 
     /**
      * Always show at least a certain number of fraction places after the decimal separator, padding with zeros if
@@ -489,10 +495,10 @@ class U_I18N_API Rounder : public UMemory {
      * @param minFractionPlaces
      *            The minimum number of numerals to display after the decimal separator (padding with zeros if
      *            necessary).
-     * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      */
-    static FractionRounder minFraction(int32_t minFractionPlaces);
+    static FractionPrecision minFraction(int32_t minFractionPlaces);
 
     /**
      * Show numbers rounded if necessary to a certain number of fraction places (numerals after the decimal separator).
@@ -501,10 +507,10 @@ class U_I18N_API Rounder : public UMemory {
      *
      * @param maxFractionPlaces
      *            The maximum number of numerals to display after the decimal mark (rounding if necessary).
-     * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      */
-    static FractionRounder maxFraction(int32_t maxFractionPlaces);
+    static FractionPrecision maxFraction(int32_t maxFractionPlaces);
 
     /**
      * Show numbers rounded if necessary to a certain number of fraction places (numerals after the decimal separator);
@@ -516,10 +522,10 @@ class U_I18N_API Rounder : public UMemory {
      *            necessary).
      * @param maxFractionPlaces
      *            The maximum number of numerals to display after the decimal separator (rounding if necessary).
-     * @return A FractionRounder for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      */
-    static FractionRounder minMaxFraction(int32_t minFractionPlaces, int32_t maxFractionPlaces);
+    static FractionPrecision minMaxFraction(int32_t minFractionPlaces, int32_t maxFractionPlaces);
 
     /**
      * Show numbers rounded if necessary to a certain number of significant digits or significant figures. Additionally,
@@ -531,10 +537,10 @@ class U_I18N_API Rounder : public UMemory {
      * @param minMaxSignificantDigits
      *            The minimum and maximum number of significant digits to display (rounding if too long or padding with
      *            zeros if too short).
-     * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
-     * @draft ICU 60
+     * @return A precision for chaining or passing to the NumberFormatter precision() setter.
+     * @draft ICU 62
      */
-    static DigitRounder fixedDigits(int32_t minMaxSignificantDigits);
+    static SignificantDigitsPrecision fixedSignificantDigits(int32_t minMaxSignificantDigits);
 
     /**
      * Always show at least a certain number of significant digits/figures, padding with zeros if necessary. Do not
@@ -545,20 +551,20 @@ class U_I18N_API Rounder : public UMemory {
      *
      * @param minSignificantDigits
      *            The minimum number of significant digits to display (padding with zeros if too short).
-     * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
-     * @draft ICU 60
+     * @return A precision for chaining or passing to the NumberFormatter precision() setter.
+     * @draft ICU 62
      */
-    static DigitRounder minDigits(int32_t minSignificantDigits);
+    static SignificantDigitsPrecision minSignificantDigits(int32_t minSignificantDigits);
 
     /**
      * Show numbers rounded if necessary to a certain number of significant digits/figures.
      *
      * @param maxSignificantDigits
      *            The maximum number of significant digits to display (rounding if too long).
-     * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
-     * @draft ICU 60
+     * @return A precision for chaining or passing to the NumberFormatter precision() setter.
+     * @draft ICU 62
      */
-    static DigitRounder maxDigits(int32_t maxSignificantDigits);
+    static SignificantDigitsPrecision maxSignificantDigits(int32_t maxSignificantDigits);
 
     /**
      * Show numbers rounded if necessary to a certain number of significant digits/figures; in addition, always show at
@@ -568,10 +574,34 @@ class U_I18N_API Rounder : public UMemory {
      *            The minimum number of significant digits to display (padding with zeros if necessary).
      * @param maxSignificantDigits
      *            The maximum number of significant digits to display (rounding if necessary).
-     * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
-     * @draft ICU 60
+     * @return A precision for chaining or passing to the NumberFormatter precision() setter.
+     * @draft ICU 62
      */
-    static DigitRounder minMaxDigits(int32_t minSignificantDigits, int32_t maxSignificantDigits);
+    static SignificantDigitsPrecision minMaxSignificantDigits(int32_t minSignificantDigits,
+                                                              int32_t maxSignificantDigits);
+
+    // Compatiblity methods that will be removed in ICU 64.
+    // See http://bugs.icu-project.org/trac/ticket/13746
+
+    /** @deprecated ICU 62 */
+    static inline SignificantDigitsPrecision fixedDigits(int32_t a) {
+        return fixedSignificantDigits(a);
+    }
+
+    /** @deprecated ICU 62 */
+    static inline SignificantDigitsPrecision minDigits(int32_t a) {
+        return minSignificantDigits(a);
+    }
+
+    /** @deprecated ICU 62 */
+    static inline SignificantDigitsPrecision maxDigits(int32_t a) {
+        return maxSignificantDigits(a);
+    }
+
+    /** @deprecated ICU 62 */
+    static inline SignificantDigitsPrecision minMaxDigits(int32_t a, int32_t b) {
+        return minMaxSignificantDigits(a, b);
+    }
 
     /**
      * Show numbers rounded if necessary to the closest multiple of a certain rounding increment. For example, if the
@@ -584,20 +614,20 @@ class U_I18N_API Rounder : public UMemory {
      * decimal separator (to display 1.2 as "1.00" and 1.3 as "1.50"), you can run:
      *
      * <pre>
-     * Rounder::increment(0.5).withMinFraction(2)
+     * Precision::increment(0.5).withMinFraction(2)
      * </pre>
      *
      * @param roundingIncrement
      *            The increment to which to round numbers.
-     * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A precision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      */
-    static IncrementRounder increment(double roundingIncrement);
+    static IncrementPrecision increment(double roundingIncrement);
 
     /**
      * Show numbers rounded and padded according to the rules for the currency unit. The most common rounding settings
-     * for currencies include <code>Rounder.fixedFraction(2)</code>, <code>Rounder.integer()</code>, and
-     * <code>Rounder.increment(0.05)</code> for cash transactions ("nickel rounding").
+     * for currencies include <code>Precision::fixedFraction(2)</code>, <code>Precision::integer()</code>, and
+     * <code>Precision::increment(0.05)</code> for cash transactions ("nickel rounding").
      *
      * <p>
      * The exact rounding details will be resolved at runtime based on the currency unit specified in the
@@ -607,10 +637,10 @@ class U_I18N_API Rounder : public UMemory {
      * @param currencyUsage
      *            Either STANDARD (for digital transactions) or CASH (for transactions where the rounding increment may
      *            be limited by the available denominations of cash or coins).
-     * @return A CurrencyRounder for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A CurrencyPrecision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      */
-    static CurrencyRounder currency(UCurrencyUsage currencyUsage);
+    static CurrencyPrecision currency(UCurrencyUsage currencyUsage);
 
     /**
      * Sets the rounding mode to use when picking the direction to round (up or down). Common values
@@ -618,13 +648,15 @@ class U_I18N_API Rounder : public UMemory {
      *
      * @param roundingMode
      *            The RoundingMode to use.
-     * @return A Rounder for passing to the NumberFormatter rounding() setter.
-     * @draft ICU 60
+     * @return A Precision for passing to the NumberFormatter precision() setter.
+     * @deprecated ICU 62 Use the top-level roundingMode() setting instead.
+     *            This method will be removed in ICU 64.
+     *            See http://bugs.icu-project.org/trac/ticket/13746
      */
-    Rounder withMode(UNumberFormatRoundingMode roundingMode) const;
+    Precision withMode(UNumberFormatRoundingMode roundingMode) const;
 
   private:
-    enum RounderType {
+    enum PrecisionType {
         RND_BOGUS,
         RND_NONE,
         RND_FRACTION,
@@ -632,11 +664,10 @@ class U_I18N_API Rounder : public UMemory {
         RND_FRACTION_SIGNIFICANT,
         RND_INCREMENT,
         RND_CURRENCY,
-        RND_PASS_THROUGH,
         RND_ERROR
     } fType;
 
-    union RounderUnion {
+    union PrecisionUnion {
         struct FractionSignificantSettings {
             // For RND_FRACTION, RND_SIGNIFICANT, and RND_FRACTION_SIGNIFICANT
             impl::digits_t fMinFrac;
@@ -653,19 +684,21 @@ class U_I18N_API Rounder : public UMemory {
         UErrorCode errorCode; // For RND_ERROR
     } fUnion;
 
-    typedef RounderUnion::FractionSignificantSettings FractionSignificantSettings;
-    typedef RounderUnion::IncrementSettings IncrementSettings;
+    typedef PrecisionUnion::FractionSignificantSettings FractionSignificantSettings;
+    typedef PrecisionUnion::IncrementSettings IncrementSettings;
 
+    /** The Precision encapsulates the RoundingMode when used within the implementation. */
     UNumberFormatRoundingMode fRoundingMode;
 
-    Rounder(const RounderType &type, const RounderUnion &union_, UNumberFormatRoundingMode roundingMode)
+    Precision(const PrecisionType& type, const PrecisionUnion& union_,
+              UNumberFormatRoundingMode roundingMode)
             : fType(type), fUnion(union_), fRoundingMode(roundingMode) {}
 
-    Rounder(UErrorCode errorCode) : fType(RND_ERROR) {
+    Precision(UErrorCode errorCode) : fType(RND_ERROR) {
         fUnion.errorCode = errorCode;
     }
 
-    Rounder() : fType(RND_BOGUS) {}
+    Precision() : fType(RND_BOGUS) {}
 
     bool isBogus() const {
         return fType == RND_BOGUS;
@@ -679,47 +712,21 @@ class U_I18N_API Rounder : public UMemory {
         return FALSE;
     }
 
-    // On the parent type so that this method can be called internally on Rounder instances.
-    Rounder withCurrency(const CurrencyUnit &currency, UErrorCode &status) const;
+    // On the parent type so that this method can be called internally on Precision instances.
+    Precision withCurrency(const CurrencyUnit &currency, UErrorCode &status) const;
 
-    /** NON-CONST: mutates the current instance. */
-    void setLocaleData(const CurrencyUnit &currency, UErrorCode &status);
+    static FractionPrecision constructFraction(int32_t minFrac, int32_t maxFrac);
 
-    void apply(impl::DecimalQuantity &value, UErrorCode &status) const;
+    static Precision constructSignificant(int32_t minSig, int32_t maxSig);
 
-    /** Version of {@link #apply} that obeys minInt constraints. Used for scientific notation compatibility mode. */
-    void apply(impl::DecimalQuantity &value, int32_t minInt, UErrorCode status);
+    static Precision
+    constructFractionSignificant(const FractionPrecision &base, int32_t minSig, int32_t maxSig);
 
-    /**
-     * Rounding endpoint used by Engineering and Compact notation. Chooses the most appropriate multiplier (magnitude
-     * adjustment), applies the adjustment, rounds, and returns the chosen multiplier.
-     *
-     * <p>
-     * In most cases, this is simple. However, when rounding the number causes it to cross a multiplier boundary, we
-     * need to re-do the rounding. For example, to display 999,999 in Engineering notation with 2 sigfigs, first you
-     * guess the multiplier to be -3. However, then you end up getting 1000E3, which is not the correct output. You then
-     * change your multiplier to be -6, and you get 1.0E6, which is correct.
-     *
-     * @param input The quantity to process.
-     * @param producer Function to call to return a multiplier based on a magnitude.
-     * @return The number of orders of magnitude the input was adjusted by this method.
-     */
-    int32_t
-    chooseMultiplierAndApply(impl::DecimalQuantity &input, const impl::MultiplierProducer &producer,
-                             UErrorCode &status);
+    static IncrementPrecision constructIncrement(double increment, int32_t minFrac);
 
-    static FractionRounder constructFraction(int32_t minFrac, int32_t maxFrac);
+    static CurrencyPrecision constructCurrency(UCurrencyUsage usage);
 
-    static Rounder constructSignificant(int32_t minSig, int32_t maxSig);
-
-    static Rounder
-    constructFractionSignificant(const FractionRounder &base, int32_t minSig, int32_t maxSig);
-
-    static IncrementRounder constructIncrement(double increment, int32_t minFrac);
-
-    static CurrencyRounder constructCurrency(UCurrencyUsage usage);
-
-    static Rounder constructPassThrough();
+    static Precision constructPassThrough();
 
     // To allow MacroProps/MicroProps to initialize bogus instances:
     friend struct impl::MacroProps;
@@ -731,31 +738,28 @@ class U_I18N_API Rounder : public UMemory {
     // To allow NumberPropertyMapper to create instances from DecimalFormatProperties:
     friend class impl::NumberPropertyMapper;
 
-    // To give access to apply() and chooseMultiplierAndApply():
-    friend class impl::MutablePatternModifier;
-    friend class impl::LongNameHandler;
-    friend class impl::ScientificHandler;
-    friend class impl::CompactHandler;
+    // To allow access to the main implementation class:
+    friend class impl::RoundingImpl;
 
     // To allow child classes to call private methods:
-    friend class FractionRounder;
-    friend class CurrencyRounder;
-    friend class IncrementRounder;
+    friend class FractionPrecision;
+    friend class CurrencyPrecision;
+    friend class IncrementPrecision;
 
     // To allow access to the skeleton generation code:
     friend class impl::GeneratorHelpers;
 };
 
 /**
- * A class that defines a rounding strategy based on a number of fraction places and optionally significant digits to be
+ * A class that defines a rounding precision based on a number of fraction places and optionally significant digits to be
  * used when formatting numbers in NumberFormatter.
  *
  * <p>
- * To create a FractionRounder, use one of the factory methods on Rounder.
+ * To create a FractionPrecision, use one of the factory methods on Precision.
  *
  * @draft ICU 60
  */
-class U_I18N_API FractionRounder : public Rounder {
+class U_I18N_API FractionPrecision : public Precision {
   public:
     /**
      * Ensure that no less than this number of significant digits are retained when rounding according to fraction
@@ -770,10 +774,10 @@ class U_I18N_API FractionRounder : public Rounder {
      *
      * @param minSignificantDigits
      *            The number of significant figures to guarantee.
-     * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A precision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      */
-    Rounder withMinDigits(int32_t minSignificantDigits) const;
+    Precision withMinDigits(int32_t minSignificantDigits) const;
 
     /**
      * Ensure that no more than this number of significant digits are retained when rounding according to fraction
@@ -789,36 +793,36 @@ class U_I18N_API FractionRounder : public Rounder {
      *
      * @param maxSignificantDigits
      *            Round the number to no more than this number of significant figures.
-     * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A precision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      */
-    Rounder withMaxDigits(int32_t maxSignificantDigits) const;
+    Precision withMaxDigits(int32_t maxSignificantDigits) const;
 
   private:
     // Inherit constructor
-    using Rounder::Rounder;
+    using Precision::Precision;
 
     // To allow parent class to call this class's constructor:
-    friend class Rounder;
+    friend class Precision;
 };
 
 /**
- * A class that defines a rounding strategy parameterized by a currency to be used when formatting numbers in
+ * A class that defines a rounding precision parameterized by a currency to be used when formatting numbers in
  * NumberFormatter.
  *
  * <p>
- * To create a CurrencyRounder, use one of the factory methods on Rounder.
+ * To create a CurrencyPrecision, use one of the factory methods on Precision.
  *
  * @draft ICU 60
  */
-class U_I18N_API CurrencyRounder : public Rounder {
+class U_I18N_API CurrencyPrecision : public Precision {
   public:
     /**
-      * Associates a currency with this rounding strategy.
+      * Associates a currency with this rounding precision.
       *
       * <p>
       * <strong>Calling this method is <em>not required</em></strong>, because the currency specified in unit()
-      * is automatically applied to currency rounding strategies. However,
+      * is automatically applied to currency rounding precisions. However,
       * this method enables you to override that automatic association.
       *
       * <p>
@@ -826,30 +830,30 @@ class U_I18N_API CurrencyRounder : public Rounder {
       * currency format.
       *
       * @param currency
-      *            The currency to associate with this rounding strategy.
-      * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
+      *            The currency to associate with this rounding precision.
+      * @return A precision for chaining or passing to the NumberFormatter precision() setter.
       * @draft ICU 60
       */
-    Rounder withCurrency(const CurrencyUnit &currency) const;
+    Precision withCurrency(const CurrencyUnit &currency) const;
 
   private:
     // Inherit constructor
-    using Rounder::Rounder;
+    using Precision::Precision;
 
     // To allow parent class to call this class's constructor:
-    friend class Rounder;
+    friend class Precision;
 };
 
 /**
- * A class that defines a rounding strategy parameterized by a rounding increment to be used when formatting numbers in
+ * A class that defines a rounding precision parameterized by a rounding increment to be used when formatting numbers in
  * NumberFormatter.
  *
  * <p>
- * To create an IncrementRounder, use one of the factory methods on Rounder.
+ * To create an IncrementPrecision, use one of the factory methods on Precision.
  *
  * @draft ICU 60
  */
-class U_I18N_API IncrementRounder : public Rounder {
+class U_I18N_API IncrementPrecision : public Precision {
   public:
     /**
      * Specifies the minimum number of fraction digits to render after the decimal separator, padding with zeros if
@@ -863,17 +867,17 @@ class U_I18N_API IncrementRounder : public Rounder {
      * Note: In ICU4J, this functionality is accomplished via the scale of the BigDecimal rounding increment.
      *
      * @param minFrac The minimum number of digits after the decimal separator.
-     * @return A Rounder for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A precision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      */
-    Rounder withMinFraction(int32_t minFrac) const;
+    Precision withMinFraction(int32_t minFrac) const;
 
   private:
     // Inherit constructor
-    using Rounder::Rounder;
+    using Precision::Precision;
 
     // To allow parent class to call this class's constructor:
-    friend class Rounder;
+    friend class Precision;
 };
 
 /**
@@ -1350,7 +1354,10 @@ struct U_I18N_API MacroProps : public UMemory {
     MeasureUnit perUnit; // = NoUnit::base();
 
     /** @internal */
-    Rounder rounder;  // = Rounder();  (bogus)
+    Precision precision;  // = Precision();  (bogus)
+
+    /** @internal */
+    UNumberFormatRoundingMode roundingMode = UNUM_ROUND_HALFEVEN;
 
     /** @internal */
     Grouper grouper;  // = Grouper();  (bogus)
@@ -1400,7 +1407,7 @@ struct U_I18N_API MacroProps : public UMemory {
      * @internal
      */
     bool copyErrorTo(UErrorCode &status) const {
-        return notation.copyErrorTo(status) || rounder.copyErrorTo(status) ||
+        return notation.copyErrorTo(status) || precision.copyErrorTo(status) ||
                padder.copyErrorTo(status) || integerWidth.copyErrorTo(status) ||
                symbols.copyErrorTo(status) || scale.copyErrorTo(status);
     }
@@ -1426,7 +1433,7 @@ class U_I18N_API NumberFormatterSettings {
      *
      * <p>
      * All notation styles will be properly localized with locale data, and all notation styles are compatible with
-     * units, rounding strategies, and other number formatter settings.
+     * units, rounding precisions, and other number formatter settings.
      *
      * <p>
      * Pass this method the return value of a {@link Notation} factory method. For example:
@@ -1466,7 +1473,7 @@ class U_I18N_API NumberFormatterSettings {
      * </ul>
      *
      * All units will be properly localized with locale data, and all units are compatible with notation styles,
-     * rounding strategies, and other number formatter settings.
+     * rounding precisions, and other number formatter settings.
      *
      * Pass this method any instance of {@link MeasureUnit}. For units of measure (which often involve the
      * factory methods that return a pointer):
@@ -1602,7 +1609,7 @@ class U_I18N_API NumberFormatterSettings {
     Derived adoptPerUnit(icu::MeasureUnit *perUnit) &&;
 
     /**
-     * Specifies the rounding strategy to use when formatting numbers.
+     * Specifies the rounding precision to use when formatting numbers.
      *
      * <ul>
      * <li>Round to 3 decimal places: "3.142"
@@ -1612,37 +1619,75 @@ class U_I18N_API NumberFormatterSettings {
      * </ul>
      *
      * <p>
-     * Pass this method the return value of one of the factory methods on {@link Rounder}. For example:
+     * Pass this method the return value of one of the factory methods on {@link Precision}. For example:
      *
      * <pre>
-     * NumberFormatter::with().rounding(Rounder::fixedFraction(2))
+     * NumberFormatter::with().precision(Precision::fixedFraction(2))
      * </pre>
      *
      * <p>
      * In most cases, the default rounding strategy is to round to 6 fraction places; i.e.,
-     * <code>Rounder.maxFraction(6)</code>. The exceptions are if compact notation is being used, then the compact
+     * <code>Precision.maxFraction(6)</code>. The exceptions are if compact notation is being used, then the compact
      * notation rounding strategy is used (see {@link Notation#compactShort} for details), or if the unit is a currency,
-     * then standard currency rounding is used, which varies from currency to currency (see {@link Rounder#currency} for
+     * then standard currency rounding is used, which varies from currency to currency (see {@link Precision#currency} for
      * details).
      *
-     * @param rounder
-     *            The rounding strategy to use.
+     * @param precision
+     *            The rounding precision to use.
      * @return The fluent chain.
-     * @see Rounder
+     * @see Precision
      * @draft ICU 60
      */
-    Derived rounding(const Rounder &rounder) const &;
+    Derived precision(const Precision& precision) const &;
 
     /**
-     * Overload of rounding() for use on an rvalue reference.
+     * Overload of precision() for use on an rvalue reference.
      *
-     * @param rounder
-     *            The rounding strategy to use.
+     * @param precision
+     *            The rounding precision to use.
      * @return The fluent chain.
-     * @see #rounding
+     * @see #precision
      * @draft ICU 62
      */
-    Derived rounding(const Rounder& rounder) &&;
+    Derived precision(const Precision& precision) &&;
+
+    // Compatibility method that will be removed in ICU 64.
+    // Use precision() instead.
+    // See http://bugs.icu-project.org/trac/ticket/13746
+    /** @deprecated ICU 62 */
+    Derived rounding(const Rounder& rounder) const & {
+        return precision(rounder);
+    }
+
+    /**
+     * Specifies how to determine the direction to round a number when it has more digits than fit in the
+     * desired precision.  When formatting 1.235:
+     *
+     * <ul>
+     * <li>Ceiling rounding mode with integer precision: "2"
+     * <li>Half-down rounding mode with 2 fixed fraction digits: "1.23"
+     * <li>Half-up rounding mode with 2 fixed fraction digits: "1.24"
+     * </ul>
+     *
+     * The default is HALF_EVEN. For more information on rounding mode, see the ICU userguide here:
+     *
+     * http://userguide.icu-project.org/formatparse/numbers/rounding-modes
+     *
+     * @param roundingMode The rounding mode to use.
+     * @return The fluent chain.
+     * @draft ICU 62
+     */
+    Derived roundingMode(UNumberFormatRoundingMode roundingMode) const &;
+
+    /**
+     * Overload of roundingMode() for use on an rvalue reference.
+     *
+     * @param roundingMode The rounding mode to use.
+     * @return The fluent chain.
+     * @see #roundingMode
+     * @draft ICU 62
+     */
+    Derived roundingMode(UNumberFormatRoundingMode roundingMode) &&;
 
     /**
      * Specifies the grouping strategy to use when formatting numbers.

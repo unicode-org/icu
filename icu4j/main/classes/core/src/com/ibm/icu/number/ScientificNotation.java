@@ -10,7 +10,7 @@ import com.ibm.icu.impl.number.MultiplierProducer;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
-import com.ibm.icu.number.Rounder.SignificantRounderImpl;
+import com.ibm.icu.number.Precision.SignificantRounderImpl;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 
@@ -159,22 +159,22 @@ public class ScientificNotation extends Notation implements Cloneable {
         @Override
         public MicroProps processQuantity(DecimalQuantity quantity) {
             MicroProps micros = parent.processQuantity(quantity);
-            assert micros.rounding != null;
+            assert micros.rounder != null;
 
             // Treat zero as if it had magnitude 0
             int exponent;
             if (quantity.isZero()) {
-                if (notation.requireMinInt && micros.rounding instanceof SignificantRounderImpl) {
+                if (notation.requireMinInt && micros.rounder instanceof SignificantRounderImpl) {
                     // Show "00.000E0" on pattern "00.000E0"
-                    ((SignificantRounderImpl) micros.rounding).apply(quantity,
+                    ((SignificantRounderImpl) micros.rounder).apply(quantity,
                             notation.engineeringInterval);
                     exponent = 0;
                 } else {
-                    micros.rounding.apply(quantity);
+                    micros.rounder.apply(quantity);
                     exponent = 0;
                 }
             } else {
-                exponent = -micros.rounding.chooseMultiplierAndApply(quantity, this);
+                exponent = -micros.rounder.chooseMultiplierAndApply(quantity, this);
             }
 
             // Add the Modifier for the scientific format.
@@ -191,7 +191,7 @@ public class ScientificNotation extends Notation implements Cloneable {
             }
 
             // We already performed rounding. Do not perform it again.
-            micros.rounding = Rounder.constructPassThrough();
+            micros.rounder = Precision.constructPassThrough();
 
             return micros;
         }

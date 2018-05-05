@@ -119,16 +119,16 @@ public class CompactNotation extends Notation {
         @Override
         public MicroProps processQuantity(DecimalQuantity quantity) {
             MicroProps micros = parent.processQuantity(quantity);
-            assert micros.rounding != null;
+            assert micros.rounder != null;
 
             // Treat zero as if it had magnitude 0
             int magnitude;
             if (quantity.isZero()) {
                 magnitude = 0;
-                micros.rounding.apply(quantity);
+                micros.rounder.apply(quantity);
             } else {
                 // TODO: Revisit chooseMultiplierAndApply
-                int multiplier = micros.rounding.chooseMultiplierAndApply(quantity, data);
+                int multiplier = micros.rounder.chooseMultiplierAndApply(quantity, data);
                 magnitude = quantity.isZero() ? 0 : quantity.getMagnitude();
                 magnitude -= multiplier;
             }
@@ -152,7 +152,7 @@ public class CompactNotation extends Notation {
             }
 
             // We already performed rounding. Do not perform it again.
-            micros.rounding = Rounder.constructPassThrough();
+            micros.rounder = Precision.constructPassThrough();
 
             return micros;
         }

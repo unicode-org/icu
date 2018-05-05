@@ -40,7 +40,7 @@ import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
-import com.ibm.icu.number.Rounder;
+import com.ibm.icu.number.Precision;
 import com.ibm.icu.text.ListFormatter.FormattedListBuilder;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.ICUUncheckedIOException;
@@ -738,7 +738,7 @@ public class MeasureFormat extends UFormat {
         } else {
             assert type == NUMBER_FORMATTER_INTEGER;
             formatter = getNumberFormatter().unit(unit).perUnit(perUnit).unitWidth(formatWidth.unitWidth)
-                    .rounding(Rounder.integer().withMode(RoundingMode.DOWN));
+                    .rounding(Precision.integer().withMode(RoundingMode.DOWN));
         }
         formatter3 = formatter2;
         formatter2 = formatter1;

@@ -117,18 +117,32 @@ Derived NumberFormatterSettings<Derived>::adoptPerUnit(icu::MeasureUnit* perUnit
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::rounding(const Rounder& rounder) const& {
+Derived NumberFormatterSettings<Derived>::precision(const Precision& precision) const& {
     Derived copy(*this);
     // NOTE: Slicing is OK.
-    copy.fMacros.rounder = rounder;
+    copy.fMacros.precision = precision;
     return copy;
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::rounding(const Rounder& rounder)&& {
+Derived NumberFormatterSettings<Derived>::precision(const Precision& precision)&& {
     Derived move(std::move(*this));
     // NOTE: Slicing is OK.
-    move.fMacros.rounder = rounder;
+    move.fMacros.precision = precision;
+    return move;
+}
+
+template<typename Derived>
+Derived NumberFormatterSettings<Derived>::roundingMode(UNumberFormatRoundingMode roundingMode) const& {
+    Derived copy(*this);
+    copy.fMacros.roundingMode = roundingMode;
+    return copy;
+}
+
+template<typename Derived>
+Derived NumberFormatterSettings<Derived>::roundingMode(UNumberFormatRoundingMode roundingMode)&& {
+    Derived move(std::move(*this));
+    move.fMacros.roundingMode = roundingMode;
     return move;
 }
 
