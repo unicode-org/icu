@@ -2054,11 +2054,26 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * Converts this DecimalFormat to a NumberFormatter.  Starting in ICU 60,
      * NumberFormatter is the recommended way to format numbers.
      *
+     * NOTE: The returned LocalizedNumberFormatter is owned by this DecimalFormat.
+     * If a non-const method is called on the DecimalFormat, or if the DecimalFormat
+     * is deleted, the object becomes invalid. If you plan to keep the return value
+     * beyond the lifetime of the DecimalFormat, copy it to a local variable:
+     *
+     * <pre>
+     * LocalizedNumberFormatter f = df->toNumberFormatter();
+     * </pre>
+     *
+     * It is, however, safe to use the return value for chaining:
+     *
+     * <pre>
+     * FormattedNumber result = df->toNumberFormatter().formatDouble(123, status);
+     * </pre>
+     *
      * @param output The variable into which to store the LocalizedNumberFormatter.
      * @return The output variable, for chaining.
      * @draft ICU 62
      */
-    number::LocalizedNumberFormatter& toNumberFormatter(number::LocalizedNumberFormatter& output) const;
+    const number::LocalizedNumberFormatter& toNumberFormatter() const;
 
     /**
      * Return the class ID for this class.  This is useful only for
