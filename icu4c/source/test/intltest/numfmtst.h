@@ -211,6 +211,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestFractionalDigitsForCurrency();
     void TestFormatCurrencyPlural();
     void Test11868();
+    void Test11739_ParseLongCurrency();
     void Test10727_RoundingZero();
     void Test11376_getAndSetPositivePrefix();
     void Test11475_signRecognition();
