@@ -662,6 +662,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestFastFormatInt32);
   TESTCASE_AUTO(TestParseNaN);
   TESTCASE_AUTO(Test11897_LocalizedPatternSeparator);
+  TESTCASE_AUTO(Test10354);
   TESTCASE_AUTO_END;
 }
 
@@ -9146,6 +9147,20 @@ void NumberFormatTest::Test11897_LocalizedPatternSeparator() {
     assertEquals("should apply the normal pattern", df.getNegativePrefix(result.remove()), "b");
     df.applyLocalizedPattern(u"c0!d0", status); // should not throw
     assertEquals("should apply the localized pattern", df.getNegativePrefix(result.remove()), "d");
+}
+
+void NumberFormatTest::Test10354() {
+    IcuTestErrorCode errorCode(*this, "Test10354");
+    // Ticket #10354: invalid FieldPositionIterator when formatting with empty NaN
+    DecimalFormatSymbols dfs(errorCode);
+    UnicodeString empty;
+    dfs.setSymbol(DecimalFormatSymbols::kNaNSymbol, empty);
+    DecimalFormat df(errorCode);
+    df.setDecimalFormatSymbols(dfs);
+    UnicodeString result;
+    FieldPositionIterator positions;
+    df.format(NAN, result, &positions, errorCode);
+    errorCode.logIfFailureAndReset("DecimalFormat.format(NAN, FieldPositionIterator) failed");
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
