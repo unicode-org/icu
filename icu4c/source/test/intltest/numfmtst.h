@@ -228,6 +228,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestFastFormatInt32();
     void TestParseNaN();
     void Test11897_LocalizedPatternSeparator();
+    void Test11839();
     void Test10354();
     void Test11645_ApplyPatternEquality();
     void Test11648_ExpDecFormatMalPattern();
