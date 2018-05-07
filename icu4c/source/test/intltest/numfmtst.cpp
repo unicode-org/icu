@@ -672,6 +672,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11645_ApplyPatternEquality);
   TESTCASE_AUTO(Test12567);
   TESTCASE_AUTO(Test13056_GroupingSize);
+  TESTCASE_AUTO(Test11025_CurrencyPadding);
   TESTCASE_AUTO(Test11648_ExpDecFormatMalPattern);
   TESTCASE_AUTO(Test11649_DecFmtCurrencies);
   TESTCASE_AUTO_END;
@@ -9396,6 +9397,19 @@ void NumberFormatTest::Test13056_GroupingSize() {
     df.setGroupingSize(4);
     assertEquals("Primary grouping should return 4", 4, df.getGroupingSize());
     assertEquals("Secondary should remember explicit setting and return 3", 3, df.getSecondaryGroupingSize());
+}
+
+
+void NumberFormatTest::Test11025_CurrencyPadding() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString pattern(u"¤¤ **####0.00");
+    DecimalFormatSymbols sym(Locale::getFrance(), status);
+    if (!assertSuccess("", status)) return;
+    DecimalFormat fmt(pattern, sym, status);
+    if (!assertSuccess("", status)) return;
+    UnicodeString result;
+    fmt.format(433.0, result);
+    assertEquals("Number should be padded to 11 characters", "EUR *433,00", result);
 }
 
 void NumberFormatTest::Test11648_ExpDecFormatMalPattern() {
