@@ -45,6 +45,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestAPI(void);
 
     void TestCoverage(void);
+    void TestLocalizedPatternSymbolCoverage();
 
     /**
      * Test the handling of quotes
