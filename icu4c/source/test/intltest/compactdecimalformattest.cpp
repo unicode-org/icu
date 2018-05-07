@@ -243,6 +243,8 @@ private:
     void TestFieldPosition();
     void TestSignificantDigits();
     void TestAPIVariants();
+    void TestBug12975();
+    
     void CheckLocale(
         const Locale& locale, UNumberCompactStyle style,
         const ExpectedResult* expectedResults, int32_t expectedResultLength);
@@ -277,6 +279,7 @@ void CompactDecimalFormatTest::runIndexedTest(
   TESTCASE_AUTO(TestFieldPosition);
   TESTCASE_AUTO(TestSignificantDigits);
   TESTCASE_AUTO(TestAPIVariants);
+  TESTCASE_AUTO(TestBug12975);
   TESTCASE_AUTO_END;
 }
 
@@ -481,6 +484,23 @@ void CompactDecimalFormatTest::TestAPIVariants() {
   }
 
 }
+
+void CompactDecimalFormatTest::TestBug12975() {
+	IcuTestErrorCode status(*this, "TestBug12975");
+    Locale locale("it");
+    LocalPointer<CompactDecimalFormat> cdf(CompactDecimalFormat::createInstance(locale, UNUM_SHORT, status));
+    UnicodeString resultCdf;
+    cdf->format(120000, resultCdf);
+    LocalPointer<DecimalFormat> df((DecimalFormat*) DecimalFormat::createInstance(locale, status));
+    UnicodeString resultDefault;
+    df->format(120000, resultDefault);
+    assertEquals("CompactDecimalFormat should use default pattern when compact pattern is unavailable",
+                 resultDefault, resultCdf);
+}
+
+
+
+// End test cases. Helpers:
 
 void CompactDecimalFormatTest::CheckLocale(const Locale& locale, UNumberCompactStyle style, const ExpectedResult* expectedResults, int32_t expectedResultLength) {
   UErrorCode status = U_ZERO_ERROR;
