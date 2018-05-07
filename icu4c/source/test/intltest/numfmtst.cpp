@@ -663,6 +663,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestFastFormatInt32);
   TESTCASE_AUTO(TestParseNaN);
   TESTCASE_AUTO(Test11897_LocalizedPatternSeparator);
+  TESTCASE_AUTO(Test11839);
   TESTCASE_AUTO(Test10354);
   TESTCASE_AUTO(Test11645_ApplyPatternEquality);
   TESTCASE_AUTO(Test11648_ExpDecFormatMalPattern);
@@ -9161,6 +9162,23 @@ void NumberFormatTest::Test11897_LocalizedPatternSeparator() {
     assertEquals("should apply the normal pattern", df.getNegativePrefix(result.remove()), "b");
     df.applyLocalizedPattern(u"c0!d0", status); // should not throw
     assertEquals("should apply the localized pattern", df.getNegativePrefix(result.remove()), "d");
+}
+
+void NumberFormatTest::Test11839() {
+    IcuTestErrorCode errorCode(*this, "Test11839");
+    // Ticket #11839: DecimalFormat does not respect custom plus sign
+    LocalPointer<DecimalFormatSymbols> dfs(new DecimalFormatSymbols(Locale::getEnglish(), errorCode));
+    dfs->setSymbol(DecimalFormatSymbols::kMinusSignSymbol, u"a∸");
+    dfs->setSymbol(DecimalFormatSymbols::kPlusSignSymbol, u"b∔"); //  ∔  U+2214 DOT PLUS
+    DecimalFormat df(u"0.00+;0.00-", dfs.orphan(), errorCode);
+    UnicodeString result;
+    df.format(-1.234, result, errorCode);
+    assertEquals("Locale-specific minus sign should be used", u"1.23a∸", result);
+    df.format(1.234, result.remove(), errorCode);
+    assertEquals("Locale-specific plus sign should be used", u"1.23b∔", result);
+    // Test round-trip with parse
+    expect2(df, -456, u"456.00a∸");
+    expect2(df, 456, u"456.00b∔");
 }
 
 void NumberFormatTest::Test10354() {
