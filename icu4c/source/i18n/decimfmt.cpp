@@ -623,7 +623,11 @@ void DecimalFormat::adoptCurrencyPluralInfo(CurrencyPluralInfo* toAdopt) {
 }
 
 void DecimalFormat::setCurrencyPluralInfo(const CurrencyPluralInfo& info) {
-    *fields->properties->currencyPluralInfo.fPtr = info; // copy-assignment operator
+    if (fields->properties->currencyPluralInfo.fPtr.isNull()) {
+        fields->properties->currencyPluralInfo.fPtr.adoptInstead(info.clone());
+    } else {
+        *fields->properties->currencyPluralInfo.fPtr = info; // copy-assignment operator
+    }
     touchNoError();
 }
 
