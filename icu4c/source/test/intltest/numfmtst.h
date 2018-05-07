@@ -230,6 +230,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test11646_Equality();
     void TestParseNaN();
     void Test11897_LocalizedPatternSeparator();
+    void Test13055_PercentageRounding();
     void Test11839();
     void Test10354();
     void Test11645_ApplyPatternEquality();

@@ -665,6 +665,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11646_Equality);
   TESTCASE_AUTO(TestParseNaN);
   TESTCASE_AUTO(Test11897_LocalizedPatternSeparator);
+  TESTCASE_AUTO(Test13055_PercentageRounding);
   TESTCASE_AUTO(Test11839);
   TESTCASE_AUTO(Test10354);
   TESTCASE_AUTO(Test11645_ApplyPatternEquality);
@@ -9219,6 +9220,20 @@ void NumberFormatTest::Test11897_LocalizedPatternSeparator() {
     assertEquals("should apply the localized pattern", df.getNegativePrefix(result.remove()), "d");
 }
 
+void NumberFormatTest::Test13055_PercentageRounding() {
+  IcuTestErrorCode status(*this, "PercentageRounding");
+  UnicodeString actual;
+  NumberFormat *pFormat = NumberFormat::createPercentInstance("en_US", status);
+  if (U_FAILURE(status)) {
+      dataerrln("Failure creating DecimalFormat %s", u_errorName(status));
+      return;
+  }
+  pFormat->setMaximumFractionDigits(0);
+  pFormat->setRoundingMode(DecimalFormat::kRoundHalfEven);
+  pFormat->format(2.155, actual);
+  assertEquals("Should round percent toward even number", "216%", actual);
+}
+  
 void NumberFormatTest::Test11839() {
     IcuTestErrorCode errorCode(*this, "Test11839");
     // Ticket #11839: DecimalFormat does not respect custom plus sign
