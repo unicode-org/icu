@@ -665,7 +665,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11897_LocalizedPatternSeparator);
   TESTCASE_AUTO(Test10354);
   TESTCASE_AUTO(Test11645_ApplyPatternEquality);
-  TESTCASE_AUTO(Test12567);
+  TESTCASE_AUTO(Test11648_ExpDecFormatMalPattern);
   TESTCASE_AUTO_END;
 }
 
@@ -9221,22 +9221,17 @@ void NumberFormatTest::Test11645_ApplyPatternEquality() {
     assertFalse("currencyUsage", *fmt == *fmtCopy);
 }
 
-void NumberFormatTest::Test12567() {
-    IcuTestErrorCode errorCode(*this, "Test12567");
-    // Ticket #12567: DecimalFormat.equals() may not be symmetric
-    LocalPointer<DecimalFormat> df1((DecimalFormat *)
-        NumberFormat::createInstance(Locale::getUS(), UNUM_CURRENCY_PLURAL, errorCode));
-    LocalPointer<DecimalFormat> df2((DecimalFormat *)
-        NumberFormat::createInstance(Locale::getUS(), UNUM_DECIMAL, errorCode));
-    df2->setCurrency(df1->getCurrency());
-    df2->setCurrencyPluralInfo(*df1->getCurrencyPluralInfo());
-    df1->applyPattern(u"0.00", errorCode);
-    df2->applyPattern(u"0.00", errorCode);
-    // TODO(shane): assertTrue("df1 == df2", *df1 == *df2);
-    // TODO(shane): assertTrue("df2 == df1", *df2 == *df1);
-    df2->setPositivePrefix(u"abc");
-    assertTrue("df1 != df2", *df1 != *df2);
-    assertTrue("df2 != df1", *df2 != *df1);
+void NumberFormatTest::Test11648_ExpDecFormatMalPattern() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    DecimalFormat fmt("0.00", status);
+    fmt.setScientificNotation(TRUE);
+    UnicodeString pattern;
+
+    assertEquals("", "0.00E0", fmt.toPattern(pattern));
+
+    DecimalFormat fmt2(pattern, status);
+    assertSuccess("", status);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
