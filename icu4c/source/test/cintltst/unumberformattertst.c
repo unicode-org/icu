@@ -15,11 +15,11 @@
 #include "cintltst.h"
 #include "cmemory.h"
 
-static void TestSkeletonFormatToString();
+static void TestSkeletonFormatToString(void);
 
-static void TestSkeletonFormatToFields();
+static void TestSkeletonFormatToFields(void);
 
-static void TestExampleCode();
+static void TestExampleCode(void);
 
 void addUNumberFormatterTest(TestNode** root);
 
