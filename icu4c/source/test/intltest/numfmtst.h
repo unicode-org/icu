@@ -235,7 +235,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test11839();
     void Test10354();
     void Test11645_ApplyPatternEquality();
-    void Test11648_ExpDecFormatMalPattern();
+    void Test12567();
     void Test13056_GroupingSize();
 
  private:
