@@ -15,6 +15,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "numfmtst.h"
+#include "unicode/currpinf.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
 #include "unicode/localpointer.h"
@@ -671,6 +672,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test10354);
   TESTCASE_AUTO(Test11645_ApplyPatternEquality);
   TESTCASE_AUTO(Test12567);
+  TESTCASE_AUTO(TestCurrencyPluralInfoAndCustomPluralRules);
   TESTCASE_AUTO(Test13056_GroupingSize);
   TESTCASE_AUTO(Test11025_CurrencyPadding);
   TESTCASE_AUTO(Test11648_ExpDecFormatMalPattern);
@@ -9383,6 +9385,26 @@ void NumberFormatTest::Test12567() {
     df2->setPositivePrefix(u"abc");
     assertTrue("df1 != df2", *df1 != *df2);
     assertTrue("df2 != df1", *df2 != *df1);
+}
+
+void NumberFormatTest::TestCurrencyPluralInfoAndCustomPluralRules() {
+    IcuTestErrorCode errorCode(*this, "TestCurrencyPluralInfoAndCustomPluralRules");
+    // Ticket #11626: No unit test demonstrating how to use CurrencyPluralInfo to
+    // change formatting spelled out currencies
+    LocalPointer<DecimalFormatSymbols> symbols(
+        new DecimalFormatSymbols(Locale::getEnglish(), errorCode));
+    CurrencyPluralInfo info(Locale::getEnglish(), errorCode);
+    info.setCurrencyPluralPattern(u"one", u"0 qwerty", errorCode);
+    info.setCurrencyPluralPattern(u"few", u"0 dvorak", errorCode);
+    info.setPluralRules(u"one: n is 1; few: n in 2..4", errorCode);
+    DecimalFormat df(u"#", symbols.orphan(), UNUM_CURRENCY_PLURAL, errorCode);
+    df.setCurrencyPluralInfo(info);
+    df.setCurrency(u"USD");
+
+    UnicodeString result;
+    // TODO(shane): assertEquals("Plural one", u"1.00 qwerty", df.format(1, result, errorCode));
+    // TODO(shane): assertEquals("Plural few", u"3.00 dvorak", df.format(3, result.remove(), errorCode));
+    assertEquals("Plural other", u"5.80 US dollars", df.format(5.8, result.remove(), errorCode));
 }
 
 void NumberFormatTest::Test13056_GroupingSize() {
