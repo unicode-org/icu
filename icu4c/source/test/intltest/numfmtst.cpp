@@ -647,6 +647,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestFractionalDigitsForCurrency);
   TESTCASE_AUTO(TestFormatCurrencyPlural);
   TESTCASE_AUTO(Test11868);
+  TESTCASE_AUTO(Test11739_ParseLongCurrency);
   TESTCASE_AUTO(Test10727_RoundingZero);
   TESTCASE_AUTO(Test11376_getAndSetPositivePrefix);
   TESTCASE_AUTO(Test11475_signRecognition);
@@ -8746,6 +8747,17 @@ void NumberFormatTest::Test10727_RoundingZero() {
     assertTrue("", dq.isNegative());
     dq.roundToMagnitude(0, UNUM_ROUND_HALFEVEN, status);
     assertTrue("", dq.isNegative());
+}
+
+void NumberFormatTest::Test11739_ParseLongCurrency() {
+    IcuTestErrorCode status(*this, "Test11739_ParseLongCurrency");
+    LocalPointer<NumberFormat> nf(NumberFormat::createCurrencyInstance("sr_BA", status));
+    ((DecimalFormat*) nf.getAlias())->applyPattern(u"#,##0.0 ¤¤¤", status);
+    ParsePosition ppos(0);
+    CurrencyAmount* result = nf->parseCurrency(u"1.500 амерички долар", ppos);
+    assertEquals("Should parse to 1500 USD", -1, ppos.getErrorIndex());
+    assertEquals("Should parse to 1500 USD", 1500LL, result->getNumber().getInt64(status));
+    assertEquals("Should parse to 1500 USD", u"USD", result->getISOCurrency());
 }
 
 void NumberFormatTest::Test11376_getAndSetPositivePrefix() {
