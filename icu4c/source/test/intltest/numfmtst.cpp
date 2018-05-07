@@ -671,6 +671,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test10354);
   TESTCASE_AUTO(Test11645_ApplyPatternEquality);
   TESTCASE_AUTO(Test11648_ExpDecFormatMalPattern);
+  TESTCASE_AUTO(Test13056_GroupingSize);
   TESTCASE_AUTO_END;
 }
 
@@ -9373,6 +9374,20 @@ void NumberFormatTest::Test11648_ExpDecFormatMalPattern() {
 
     DecimalFormat fmt2(pattern, status);
     assertSuccess("", status);
+}
+
+void NumberFormatTest::Test13056_GroupingSize() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormat df(u"#,##0", status);
+    if (!assertSuccess("", status)) return;
+    assertEquals("Primary grouping should return 3", 3, df.getGroupingSize());
+    assertEquals("Secondary grouping should return 0", 0, df.getSecondaryGroupingSize());
+    df.setSecondaryGroupingSize(3);
+    assertEquals("Primary grouping should still return 3", 3, df.getGroupingSize());
+    assertEquals("Secondary grouping should round-trip", 3, df.getSecondaryGroupingSize());
+    df.setGroupingSize(4);
+    assertEquals("Primary grouping should return 4", 4, df.getGroupingSize());
+    assertEquals("Secondary should remember explicit setting and return 3", 3, df.getSecondaryGroupingSize());
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
