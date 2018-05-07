@@ -672,6 +672,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11645_ApplyPatternEquality);
   TESTCASE_AUTO(Test12567);
   TESTCASE_AUTO(Test13056_GroupingSize);
+  TESTCASE_AUTO(Test11648_ExpDecFormatMalPattern);
   TESTCASE_AUTO_END;
 }
 
@@ -9394,6 +9395,19 @@ void NumberFormatTest::Test13056_GroupingSize() {
     df.setGroupingSize(4);
     assertEquals("Primary grouping should return 4", 4, df.getGroupingSize());
     assertEquals("Secondary should remember explicit setting and return 3", 3, df.getSecondaryGroupingSize());
+}
+
+void NumberFormatTest::Test11648_ExpDecFormatMalPattern() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    DecimalFormat fmt("0.00", status);
+    fmt.setScientificNotation(TRUE);
+    UnicodeString pattern;
+
+    assertEquals("", "0.00E0", fmt.toPattern(pattern));
+
+    DecimalFormat fmt2(pattern, status);
+    assertSuccess("", status);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
