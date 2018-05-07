@@ -648,6 +648,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestFormatCurrencyPlural);
   TESTCASE_AUTO(Test11868);
   TESTCASE_AUTO(Test11739_ParseLongCurrency);
+  TESTCASE_AUTO(Test13035_MultiCodePointPaddingInPattern);
   TESTCASE_AUTO(Test10727_RoundingZero);
   TESTCASE_AUTO(Test11376_getAndSetPositivePrefix);
   TESTCASE_AUTO(Test11475_signRecognition);
@@ -8761,6 +8762,21 @@ void NumberFormatTest::Test11739_ParseLongCurrency() {
     assertEquals("Should parse to 1500 USD", -1, ppos.getErrorIndex());
     assertEquals("Should parse to 1500 USD", 1500LL, result->getNumber().getInt64(status));
     assertEquals("Should parse to 1500 USD", u"USD", result->getISOCurrency());
+}
+
+void NumberFormatTest::Test13035_MultiCodePointPaddingInPattern() {
+    IcuTestErrorCode status(*this, "Test13035_MultiCodePointPaddingInPattern");
+    DecimalFormat df(u"a*'நி'###0b", status);
+    UnicodeString result;
+    df.format(12, result.remove());
+    // TODO(13034): Re-enable this test when support is added in ICU4C.
+    //assertEquals("Multi-codepoint padding should not be split", u"aநிநி12b", result);
+    df = DecimalFormat(u"a*\U0001F601###0b", status);
+    result = df.format(12, result.remove());
+    assertEquals("Single-codepoint padding should not be split", u"a\U0001F601\U0001F60112b", result);
+    df = DecimalFormat(u"a*''###0b", status);
+    result = df.format(12, result.remove());
+    assertEquals("Quote should be escapable in padding syntax", "a''12b", result);
 }
 
 void NumberFormatTest::Test11376_getAndSetPositivePrefix() {
