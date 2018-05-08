@@ -25,6 +25,7 @@ public:
     void runIndexedTest(int32_t index, UBool exec, const char* &name, char* par = NULL);
     void TestErrorCode();
     void TestSubclass();
+    void TestIcuTestErrorCode();
 };
 
 #endif

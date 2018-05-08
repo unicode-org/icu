@@ -205,14 +205,14 @@ void DateFormatTest::TestPatterns() {
         //         actualPattern, locale);
         LocalPointer<DateTimePatternGenerator> generator(
                 DateTimePatternGenerator::createInstance(locale, errorCode));
-        if(errorCode.logDataIfFailureAndReset("DateTimePatternGenerator::createInstance() failed for locale ID \"%s\"", EXPECTED[i].localeID)) {
+        if(errorCode.errDataIfFailureAndReset("DateTimePatternGenerator::createInstance() failed for locale ID \"%s\"", EXPECTED[i].localeID)) {
             continue;
         }
         UnicodeString pattern = generator->getBestPattern(actualPattern, errorCode);
         SimpleDateFormat date1(pattern, locale, errorCode);
         SimpleDateFormat date2(pattern, locale, errorCode);
         date2.adoptCalendar(Calendar::createInstance(locale, errorCode));
-        if(errorCode.logIfFailureAndReset("DateFormat::getInstanceForSkeleton() failed")) {
+        if(errorCode.errIfFailureAndReset("DateFormat::getInstanceForSkeleton() failed")) {
             errln("  for actualPattern \"%s\" & locale ID \"%s\"",
                   EXPECTED[i].actualPattern, EXPECTED[i].localeID);
             continue;

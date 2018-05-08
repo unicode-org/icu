@@ -1799,11 +1799,11 @@ void TestMessageFormat::testCoverage(void) {
 void TestMessageFormat::testGetFormatNames() {
     IcuTestErrorCode errorCode(*this, "testGetFormatNames");
     MessageFormat msgfmt("Hello, {alice,number} {oops,date,full}  {zip,spellout} World.", Locale::getRoot(), errorCode);
-    if(errorCode.logDataIfFailureAndReset("MessageFormat() failed")) {
+    if(errorCode.errDataIfFailureAndReset("MessageFormat() failed")) {
         return;
     }
     LocalPointer<StringEnumeration> names(msgfmt.getFormatNames(errorCode));
-    if(errorCode.logIfFailureAndReset("msgfmt.getFormatNames() failed")) {
+    if(errorCode.errIfFailureAndReset("msgfmt.getFormatNames() failed")) {
         return;
     }
     const UnicodeString *name;
@@ -1845,7 +1845,7 @@ void TestMessageFormat::TestTrimArgumentName() {
     // ICU 4.8 allows and ignores white space around argument names and numbers.
     IcuTestErrorCode errorCode(*this, "TestTrimArgumentName");
     MessageFormat m("a { 0 , number , '#,#'#.0 } z", Locale::getEnglish(), errorCode);
-    if (errorCode.logDataIfFailureAndReset("Unable to instantiate MessageFormat")) {
+    if (errorCode.errDataIfFailureAndReset("Unable to instantiate MessageFormat")) {
         return;
     }
     Formattable args[1] = { (int32_t)2 };
@@ -1870,7 +1870,7 @@ void TestMessageFormat::TestSelectOrdinal() {
         "{0,plural,one{1 file}other{# files}}, "
         "{0,selectordinal,one{#st file}two{#nd file}few{#rd file}other{#th file}}",
         Locale::getEnglish(), errorCode);
-    if (errorCode.logDataIfFailureAndReset("Unable to instantiate MessageFormat")) {
+    if (errorCode.errDataIfFailureAndReset("Unable to instantiate MessageFormat")) {
         return;
     }
     Formattable args[1] = { (int32_t)21 };
@@ -1891,7 +1891,7 @@ void TestMessageFormat::TestSelectOrdinal() {
     assertEquals("plural-and-ordinal format(3) failed", "3 files, 3rd file",
                  m.format(args, 1, result.remove(), ignore, errorCode), TRUE);
 
-    errorCode.logDataIfFailureAndReset("");
+    errorCode.errDataIfFailureAndReset("");
 }
 
 void TestMessageFormat::TestDecimals() {

@@ -260,7 +260,7 @@ UBool BiDiConformanceTest::parseInputStringFromBiDiClasses(const char *&start) {
 void BiDiConformanceTest::TestBidiTest() {
     IcuTestErrorCode errorCode(*this, "TestBidiTest");
     const char *sourceTestDataPath=getSourceTestData(errorCode);
-    if(errorCode.logIfFailureAndReset("unable to find the source/test/testdata "
+    if(errorCode.errIfFailureAndReset("unable to find the source/test/testdata "
                                       "folder (getSourceTestData())")) {
         return;
     }
@@ -275,7 +275,7 @@ void BiDiConformanceTest::TestBidiTest() {
     LocalUBiDiPointer ubidi(ubidi_open());
     ubidi_setClassCallback(ubidi.getAlias(), biDiConfUBiDiClassCallback, NULL,
                            NULL, NULL, errorCode);
-    if(errorCode.logIfFailureAndReset("ubidi_setClassCallback()")) {
+    if(errorCode.errIfFailureAndReset("ubidi_setClassCallback()")) {
         return;
     }
     lineNumber=0;
@@ -333,7 +333,7 @@ void BiDiConformanceTest::TestBidiTest() {
                     ubidi_setPara(ubidi.getAlias(), inputString.getBuffer(), inputString.length(),
                                   paraLevels[i], NULL, errorCode);
                     const UBiDiLevel *actualLevels=ubidi_getLevels(ubidi.getAlias(), errorCode);
-                    if(errorCode.logIfFailureAndReset("ubidi_setPara() or ubidi_getLevels()")) {
+                    if(errorCode.errIfFailureAndReset("ubidi_setPara() or ubidi_getLevels()")) {
                         errln("Input line %d: %s", (int)lineNumber, line);
                         return;
                     }
@@ -429,7 +429,7 @@ L L R R R B R R L L L B ON ON ; 3 ; 0 ; 0 0 1 1 1 0 1 1 2 2 2 1 1 1
 void BiDiConformanceTest::TestBidiCharacterTest() {
     IcuTestErrorCode errorCode(*this, "TestBidiCharacterTest");
     const char *sourceTestDataPath=getSourceTestData(errorCode);
-    if(errorCode.logIfFailureAndReset("unable to find the source/test/testdata "
+    if(errorCode.errIfFailureAndReset("unable to find the source/test/testdata "
                                       "folder (getSourceTestData())")) {
         return;
     }
@@ -463,7 +463,7 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
         // Parse the code point string in field 0.
         UChar *buffer=inputString.getBuffer(200);
         int32_t length=u_parseString(start, buffer, inputString.getCapacity(), NULL, errorCode);
-        if(errorCode.logIfFailureAndReset("Invalid string in field 0")) {
+        if(errorCode.errIfFailureAndReset("Invalid string in field 0")) {
             errln("Input line %d: %s", (int)lineNumber, line);
             inputString.remove();
             continue;
@@ -542,7 +542,7 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
         ubidi_setPara(ubidi.getAlias(), inputString.getBuffer(), inputString.length(),
                       paraLevel, NULL, errorCode);
         const UBiDiLevel *actualLevels=ubidi_getLevels(ubidi.getAlias(), errorCode);
-        if(errorCode.logIfFailureAndReset("ubidi_setPara() or ubidi_getLevels()")) {
+        if(errorCode.errIfFailureAndReset("ubidi_setPara() or ubidi_getLevels()")) {
             errln("Input line %d: %s", (int)lineNumber, line);
             continue;
         }
@@ -633,7 +633,7 @@ UBool BiDiConformanceTest::checkOrdering(UBiDi *ubidi) {
     // and loop over each run's indexes, but that seems unnecessary for this test code.
     for(i=visualIndex=0; i<resultLength; ++i) {
         int32_t logicalIndex=ubidi_getLogicalIndex(ubidi, i, errorCode);
-        if(errorCode.logIfFailureAndReset("ubidi_getLogicalIndex()")) {
+        if(errorCode.errIfFailureAndReset("ubidi_getLogicalIndex()")) {
             errln("Input line %d: %s", (int)lineNumber, line);
             return FALSE;
         }

@@ -9324,7 +9324,7 @@ void NumberFormatTest::Test10354() {
     UnicodeString result;
     FieldPositionIterator positions;
     df.format(NAN, result, &positions, errorCode);
-    errorCode.logIfFailureAndReset("DecimalFormat.format(NAN, FieldPositionIterator) failed");
+    errorCode.errIfFailureAndReset("DecimalFormat.format(NAN, FieldPositionIterator) failed");
     FieldPosition fp;
     while (positions.next(fp)) {
         // Should not loop forever

@@ -217,11 +217,11 @@ void IntlTestDecimalFormatSymbols::testLastResortData() {
     IcuTestErrorCode errorCode(*this, "testLastResortData");
     LocalPointer<DecimalFormatSymbols> lastResort(
         DecimalFormatSymbols::createWithLastResortData(errorCode));
-    if(errorCode.logIfFailureAndReset("DecimalFormatSymbols::createWithLastResortData() failed")) {
+    if(errorCode.errIfFailureAndReset("DecimalFormatSymbols::createWithLastResortData() failed")) {
         return;
     }
     DecimalFormatSymbols root(Locale::getRoot(), errorCode);
-    if(errorCode.logDataIfFailureAndReset("DecimalFormatSymbols(root) failed")) {
+    if(errorCode.errDataIfFailureAndReset("DecimalFormatSymbols(root) failed")) {
         return;
     }
     // Note: It is not necessary that the last resort data matches the root locale,
@@ -370,13 +370,13 @@ void IntlTestDecimalFormatSymbols::testNumberingSystem() {
         testcase cas = cases[i];
         Locale loc(cas.locid);
         LocalPointer<NumberingSystem> ns(NumberingSystem::createInstanceByName(cas.nsname, errorCode));
-        if (errorCode.logDataIfFailureAndReset("NumberingSystem failed")) {
+        if (errorCode.errDataIfFailureAndReset("NumberingSystem failed")) {
             return;
         }
         UnicodeString expected1(cas.expected1);
         UnicodeString expected2(cas.expected2);
         DecimalFormatSymbols dfs(loc, *ns, errorCode);
-        if (errorCode.logDataIfFailureAndReset("DecimalFormatSymbols failed")) {
+        if (errorCode.errDataIfFailureAndReset("DecimalFormatSymbols failed")) {
             return;
         }
         Verify(1234.56, "#,##0.##", dfs, expected1);
