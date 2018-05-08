@@ -677,6 +677,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11025_CurrencyPadding);
   TESTCASE_AUTO(Test11648_ExpDecFormatMalPattern);
   TESTCASE_AUTO(Test11649_DecFmtCurrencies);
+  TESTCASE_AUTO(Test13148_ParseGroupingSeparators);
   TESTCASE_AUTO(Test12753_PatternDecimalPoint);
   TESTCASE_AUTO_END;
 }
@@ -9466,6 +9467,21 @@ void NumberFormatTest::Test11649_DecFmtCurrencies() {
 
   appendTo.remove();
   assertEquals("", "US dollars 12.34", fmt2.format(12.34, appendTo));
+}
+
+void NumberFormatTest::Test13148_ParseGroupingSeparators() {
+  IcuTestErrorCode status(*this, "Test13148");
+  LocalPointer<DecimalFormat> fmt(
+      (DecimalFormat*)NumberFormat::createInstance("en-ZA", status));
+
+  DecimalFormatSymbols symbols = *fmt->getDecimalFormatSymbols();
+
+  symbols.setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, u'.');
+  symbols.setSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol, u',');
+  fmt->setDecimalFormatSymbols(symbols);
+  Formattable number;
+  fmt->parse(u"300,000", number, status);
+  assertEquals("Should parse as 300000", 300000LL, number.getInt64(status));
 }
 
 void NumberFormatTest::Test12753_PatternDecimalPoint() {
