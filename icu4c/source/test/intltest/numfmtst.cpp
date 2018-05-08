@@ -9284,7 +9284,7 @@ void NumberFormatTest::Test11897_LocalizedPatternSeparator() {
 void NumberFormatTest::Test13055_PercentageRounding() {
   IcuTestErrorCode status(*this, "PercentageRounding");
   UnicodeString actual;
-  NumberFormat *pFormat = NumberFormat::createPercentInstance("en_US", status);
+  LocalPointer<NumberFormat>pFormat(NumberFormat::createPercentInstance("en_US", status));
   if (U_FAILURE(status)) {
       dataerrln("Failure creating DecimalFormat %s", u_errorName(status));
       return;
