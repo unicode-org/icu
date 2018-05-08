@@ -5328,19 +5328,6 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
-    public void Test13148() {
-        if (logKnownIssue("13148", "Currency separators used in non-currency parsing")) return;
-        DecimalFormat fmt = (DecimalFormat)NumberFormat.getInstance(new ULocale("en", "ZA"));
-        DecimalFormatSymbols symbols = fmt.getDecimalFormatSymbols();
-        symbols.setDecimalSeparator('.');
-        symbols.setGroupingSeparator(',');
-        fmt.setDecimalFormatSymbols(symbols);
-        ParsePosition ppos = new ParsePosition(0);
-        Number number = fmt.parse("300,000", ppos);
-        assertEquals("Should parse to 300000 using non-monetary separators: " + ppos, 300000L, number);
-    }
-
-    @Test
     public void Test13289() {
         DecimalFormat df = new DecimalFormat("#00.0#E0");
         String result = df.format(0.00123);
