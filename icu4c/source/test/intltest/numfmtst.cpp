@@ -8819,7 +8819,7 @@ void NumberFormatTest::Test11739_ParseLongCurrency() {
     LocalPointer<NumberFormat> nf(NumberFormat::createCurrencyInstance("sr_BA", status));
     ((DecimalFormat*) nf.getAlias())->applyPattern(u"#,##0.0 ¤¤¤", status);
     ParsePosition ppos(0);
-    CurrencyAmount* result = nf->parseCurrency(u"1.500 амерички долар", ppos);
+    LocalPointer<CurrencyAmount> result(nf->parseCurrency(u"1.500 амерички долар", ppos));
     assertEquals("Should parse to 1500 USD", -1, ppos.getErrorIndex());
     assertEquals("Should parse to 1500 USD", 1500LL, result->getNumber().getInt64(status));
     assertEquals("Should parse to 1500 USD", u"USD", result->getISOCurrency());
