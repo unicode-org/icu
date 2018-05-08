@@ -1317,11 +1317,13 @@ bool DecimalFormat::fastFormatDouble(double input, UnicodeString& output) const 
     if (!fields->canUseFastFormat) {
         return false;
     }
-    auto i32 = static_cast<int32_t>(input);
-    if (i32 != input || i32 == INT32_MIN) {
+    if (std::isnan(input)
+            || std::trunc(input) != input
+            || input <= INT32_MIN
+            || input > INT32_MAX) {
         return false;
     }
-    doFastFormatInt32(i32, std::signbit(input), output);
+    doFastFormatInt32(static_cast<int32_t>(input), std::signbit(input), output);
     return true;
 }
 
@@ -1329,11 +1331,10 @@ bool DecimalFormat::fastFormatInt64(int64_t input, UnicodeString& output) const 
     if (!fields->canUseFastFormat) {
         return false;
     }
-    auto i32 = static_cast<int32_t>(input);
-    if (i32 != input || i32 == INT32_MIN) {
+    if (input <= INT32_MIN || input > INT32_MAX) {
         return false;
     }
-    doFastFormatInt32(i32, input < 0, output);
+    doFastFormatInt32(static_cast<int32_t>(input), input < 0, output);
     return true;
 }
 
