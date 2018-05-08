@@ -9452,23 +9452,23 @@ void NumberFormatTest::Test11648_ExpDecFormatMalPattern() {
 }
 
 void NumberFormatTest::Test11649_DecFmtCurrencies() {
-  UnicodeString pattern("\\u00a4\\u00a4\\u00a4 0.00");
-  pattern = pattern.unescape();
-  UErrorCode status = U_ZERO_ERROR;
-  DecimalFormat fmt(pattern, status);
-  UChar USD[] = {0x55, 0x53, 0x44, 0x0};
-  fmt.setCurrency(USD);
-  UnicodeString appendTo;
+    IcuTestErrorCode status(*this, "Test11649_DecFmtCurrencies");
+    UnicodeString pattern("\\u00a4\\u00a4\\u00a4 0.00");
+    pattern = pattern.unescape();
+    DecimalFormat fmt(pattern, status);
+    static const UChar USD[] = u"USD";
+    fmt.setCurrency(USD);
+    UnicodeString appendTo;
 
-  assertEquals("", "US dollars 12.34", fmt.format(12.34, appendTo));
-  UnicodeString topattern;
+    assertEquals("", "US dollars 12.34", fmt.format(12.34, appendTo));
+    UnicodeString topattern;
 
-  assertEquals("", pattern, fmt.toPattern(topattern));
-  DecimalFormat fmt2(topattern, status);
-  fmt2.setCurrency(USD);
+    assertEquals("", pattern, fmt.toPattern(topattern));
+    DecimalFormat fmt2(topattern, status);
+    fmt2.setCurrency(USD);
 
-  appendTo.remove();
-  assertEquals("", "US dollars 12.34", fmt2.format(12.34, appendTo));
+    appendTo.remove();
+    assertEquals("", "US dollars 12.34", fmt2.format(12.34, appendTo));
 }
 
 void NumberFormatTest::Test13148_ParseGroupingSeparators() {
