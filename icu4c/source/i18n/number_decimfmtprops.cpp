@@ -20,7 +20,7 @@ char kRawDefaultProperties[sizeof(DecimalFormatProperties)];
 icu::UInitOnce gDefaultPropertiesInitOnce = U_INITONCE_INITIALIZER;
 
 void U_CALLCONV initDefaultProperties(UErrorCode&) {
-    *reinterpret_cast<DecimalFormatProperties*>(kRawDefaultProperties) = {}; // set to the default instance
+    new(kRawDefaultProperties) DecimalFormatProperties(); // set to the default instance
 }
 
 }
