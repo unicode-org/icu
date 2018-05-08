@@ -677,6 +677,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11025_CurrencyPadding);
   TESTCASE_AUTO(Test11648_ExpDecFormatMalPattern);
   TESTCASE_AUTO(Test11649_DecFmtCurrencies);
+  TESTCASE_AUTO(Test12753_PatternDecimalPoint);
   TESTCASE_AUTO_END;
 }
 
@@ -9466,4 +9467,18 @@ void NumberFormatTest::Test11649_DecFmtCurrencies() {
   appendTo.remove();
   assertEquals("", "US dollars 12.34", fmt2.format(12.34, appendTo));
 }
+
+void NumberFormatTest::Test12753_PatternDecimalPoint() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormatSymbols symbols(Locale::getUS(), status);
+    symbols.setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, u"*", false);
+    DecimalFormat df(u"0.00", symbols, status);
+    if (!assertSuccess("", status)) return;
+    df.setDecimalPatternMatchRequired(true);
+    Formattable result;
+    df.parse(u"123",result, status);
+    assertEquals("Parsing integer succeeded even though setDecimalPatternMatchRequired was set",
+                 U_INVALID_FORMAT_ERROR, status);
+    }
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
