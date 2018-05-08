@@ -241,7 +241,7 @@ private:
     void TestChineseCurrency();
     void TestArabicLong();
     void TestFieldPosition();
-    void TestSignificantDigits();
+    void TestDefaultSignificantDigits();
     void TestAPIVariants();
     void TestBug12975();
     
@@ -277,7 +277,7 @@ void CompactDecimalFormatTest::runIndexedTest(
   TESTCASE_AUTO(TestSwahiliShortNegative);
   TESTCASE_AUTO(TestArabicLong);
   TESTCASE_AUTO(TestFieldPosition);
-  TESTCASE_AUTO(TestSignificantDigits);
+  TESTCASE_AUTO(TestDefaultSignificantDigits);
   TESTCASE_AUTO(TestAPIVariants);
   TESTCASE_AUTO(TestBug12975);
   TESTCASE_AUTO_END;
@@ -360,24 +360,20 @@ void CompactDecimalFormatTest::TestArabicLong() {
   CheckLocale("ar-EG", UNUM_LONG, kArabicLong, UPRV_LENGTHOF(kArabicLong));
 }
 
-void CompactDecimalFormatTest::TestSignificantDigits() {
+void CompactDecimalFormatTest::TestDefaultSignificantDigits() {
   UErrorCode status = U_ZERO_ERROR;
   LocalPointer<CompactDecimalFormat> cdf(CompactDecimalFormat::createInstance("en", UNUM_SHORT, status));
   if (U_FAILURE(status)) {
     dataerrln("Unable to create format object - %s", u_errorName(status));
     return;
   }
+  // We are expecting two significant digits for compact formats with one or two zeros,
+  // and rounded to the unit for compact formats with three or more zeros.
   UnicodeString actual;
-  cdf->format(123456.0, actual);
-  // We expect 3 significant digits by default
-  UnicodeString expected("123K", -1, US_INV);
-  if (actual != expected) {
-    errln(UnicodeString("Fail: Expected: ") + expected + UnicodeString(" Got: ") + actual);
-  }
-  // This should collapse to 2 significant digits for smaller numbers
-  cdf->format(1234.0, actual.remove());
-  expected = u"1.2K";
-  assertEquals("Only two significant digits for numbers closer to the decimal place", expected, actual);
+  assertEquals("Default significant digits", u"123K", cdf->format(123456, actual.remove()));
+  assertEquals("Default significant digits", u"12K", cdf->format(12345, actual.remove()));
+  assertEquals("Default significant digits", u"1.2K", cdf->format(1234, actual.remove()));
+  assertEquals("Default significant digits", u"123", cdf->format(123, actual.remove()));
 }
 
 void CompactDecimalFormatTest::TestAPIVariants() {
