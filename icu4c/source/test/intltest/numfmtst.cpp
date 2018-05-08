@@ -9439,11 +9439,13 @@ void NumberFormatTest::Test11025_CurrencyPadding() {
 void NumberFormatTest::Test11648_ExpDecFormatMalPattern() {
     UErrorCode status = U_ZERO_ERROR;
 
-    DecimalFormat fmt("0.00", status);
+    DecimalFormat fmt("0.00", {"en", status}, status);
     fmt.setScientificNotation(TRUE);
     UnicodeString pattern;
 
-    assertEquals("", "0.00E0", fmt.toPattern(pattern));
+    assertEquals("A valid scientific notation pattern should be produced",
+            "0.00E0",
+            fmt.toPattern(pattern));
 
     DecimalFormat fmt2(pattern, status);
     assertSuccess("", status);
