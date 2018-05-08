@@ -2227,6 +2227,9 @@ void NumberFormatterApiTest::errors() {
             "Should fail on UnicodeString terminal method with correct error code",
             U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
             status);
+    assertTrue(
+            "Terminal UnicodeString on error object should be bogus",
+            output.isBogus());
 
     // CopyErrorTo
     status = U_ZERO_ERROR;

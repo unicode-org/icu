@@ -12,6 +12,7 @@
 #include "umutex.h"
 #include "number_skeletons.h"
 #include "number_utypes.h"
+#include "util.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -745,29 +746,24 @@ int32_t LocalizedNumberFormatter::getCallCount() const {
 }
 
 UnicodeString FormattedNumber::toString() const {
-    if (fResults == nullptr) {
-        return {};
-    }
-    return fResults->string.toUnicodeString();
+    UErrorCode localStatus = U_ZERO_ERROR;
+    return toString(localStatus);
 }
 
 UnicodeString FormattedNumber::toString(UErrorCode& status) const {
     if (U_FAILURE(status)) {
-        return {};
+        return ICU_Utility::makeBogusString();
     }
     if (fResults == nullptr) {
         status = fErrorCode;
-        return {};
+        return ICU_Utility::makeBogusString();
     }
     return fResults->string.toUnicodeString();
 }
 
 Appendable& FormattedNumber::appendTo(Appendable& appendable) {
-    if (fResults == nullptr) {
-        return appendable;
-    }
-    appendable.appendString(fResults->string.chars(), fResults->string.length());
-    return appendable;
+    UErrorCode localStatus = U_ZERO_ERROR;
+    return appendTo(appendable, localStatus);
 }
 
 Appendable& FormattedNumber::appendTo(Appendable& appendable, UErrorCode& status) {
