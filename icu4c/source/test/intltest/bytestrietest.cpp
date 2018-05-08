@@ -402,7 +402,7 @@ void BytesTrieTest::TestIteratorFromBranch() {
     trie->next('n');
     IcuTestErrorCode errorCode(*this, "TestIteratorFromBranch()");
     BytesTrie::Iterator iter(*trie, 0, errorCode);
-    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
+    if(errorCode.errIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
     // Expected data: Same as in buildMonthsTrie(), except only the suffixes
@@ -453,7 +453,7 @@ void BytesTrieTest::TestIteratorFromLinearMatch() {
     trie->next('a');
     IcuTestErrorCode errorCode(*this, "TestIteratorFromLinearMatch()");
     BytesTrie::Iterator iter(*trie, 0, errorCode);
-    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
+    if(errorCode.errIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
     // Expected data: Same as in buildMonthsTrie(), except only the suffixes
@@ -475,7 +475,7 @@ void BytesTrieTest::TestTruncatingIteratorFromRoot() {
     }
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromRoot()");
     BytesTrie::Iterator iter(*trie, 4, errorCode);
-    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
+    if(errorCode.errIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
     // Expected data: Same as in buildMonthsTrie(), except only the first 4 characters
@@ -530,7 +530,7 @@ void BytesTrieTest::TestTruncatingIteratorFromLinearMatchShort() {
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromLinearMatchShort()");
     // Truncate within the linear-match node.
     BytesTrie::Iterator iter(*trie, 2, errorCode);
-    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
+    if(errorCode.errIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
     static const StringAndValue expected[]={
@@ -559,7 +559,7 @@ void BytesTrieTest::TestTruncatingIteratorFromLinearMatchLong() {
     IcuTestErrorCode errorCode(*this, "TestTruncatingIteratorFromLinearMatchLong()");
     // Truncate after the linear-match node.
     BytesTrie::Iterator iter(*trie, 3, errorCode);
-    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
+    if(errorCode.errIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
     static const StringAndValue expected[]={
@@ -641,7 +641,7 @@ BytesTrie *BytesTrieTest::buildTrie(const StringAndValue data[], int32_t dataLen
     }
     StringPiece sp=builder_->buildStringPiece(buildOption, errorCode);
     LocalPointer<BytesTrie> trie(builder_->build(buildOption, errorCode));
-    if(!errorCode.logIfFailureAndReset("add()/build()")) {
+    if(!errorCode.errIfFailureAndReset("add()/build()")) {
         builder_->add("zzz", 999, errorCode);
         if(errorCode.reset()!=U_NO_WRITE_PERMISSION) {
             errln("builder.build().add(zzz) did not set U_NO_WRITE_PERMISSION");
@@ -848,7 +848,7 @@ void BytesTrieTest::checkIterator(const BytesTrie &trie,
                                   const StringAndValue data[], int32_t dataLength) {
     IcuTestErrorCode errorCode(*this, "checkIterator()");
     BytesTrie::Iterator iter(trie, 0, errorCode);
-    if(errorCode.logIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
+    if(errorCode.errIfFailureAndReset("BytesTrie::Iterator(trie) constructor")) {
         return;
     }
     checkIterator(iter, data, dataLength);
@@ -863,7 +863,7 @@ void BytesTrieTest::checkIterator(BytesTrie::Iterator &iter,
             break;
         }
         UBool hasNext=iter.next(errorCode);
-        if(errorCode.logIfFailureAndReset("trie iterator next() for item %d: %s", (int)i, data[i].s)) {
+        if(errorCode.errIfFailureAndReset("trie iterator next() for item %d: %s", (int)i, data[i].s)) {
             break;
         }
         if(!hasNext) {
@@ -885,7 +885,7 @@ void BytesTrieTest::checkIterator(BytesTrie::Iterator &iter,
         errln("trie iterator hasNext()=TRUE after all items");
     }
     UBool hasNext=iter.next(errorCode);
-    errorCode.logIfFailureAndReset("trie iterator next() after all items");
+    errorCode.errIfFailureAndReset("trie iterator next() after all items");
     if(hasNext) {
         errln("trie iterator next()=TRUE after all items");
     }

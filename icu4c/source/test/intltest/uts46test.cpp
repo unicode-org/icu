@@ -73,7 +73,7 @@ void UTS46Test::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
                 commonOptions|
                 UIDNA_NONTRANSITIONAL_TO_ASCII|UIDNA_NONTRANSITIONAL_TO_UNICODE,
                 errorCode);
-            if(errorCode.logDataIfFailureAndReset("createUTS46Instance()")) {
+            if(errorCode.errDataIfFailureAndReset("createUTS46Instance()")) {
                 name="";
                 return;
             }
@@ -611,7 +611,7 @@ void UTS46Test::TestSomeCases() {
         trans->nameToUnicode(input, uT, uTInfo, errorCode);
         nontrans->nameToASCII(input, aN, aNInfo, errorCode);
         nontrans->nameToUnicode(input, uN, uNInfo, errorCode);
-        if(errorCode.logIfFailureAndReset("first-level processing [%d/%s] %s",
+        if(errorCode.errIfFailureAndReset("first-level processing [%d/%s] %s",
                                           (int)i, testCase.o, testCase.s)
         ) {
             continue;
@@ -688,7 +688,7 @@ void UTS46Test::TestSomeCases() {
         nontrans->nameToASCII(uT, uTaN, uTaNInfo, errorCode);
         nontrans->nameToUnicode(aN, aNuN, aNuNInfo, errorCode);
         nontrans->nameToASCII(uN, uNaN, uNaNInfo, errorCode);
-        if(errorCode.logIfFailureAndReset("second-level processing [%d/%s] %s",
+        if(errorCode.errIfFailureAndReset("second-level processing [%d/%s] %s",
                                           (int)i, testCase.o, testCase.s)
         ) {
             continue;
@@ -732,7 +732,7 @@ void UTS46Test::TestSomeCases() {
         trans->labelToUnicode(input, uTL, uTLInfo, errorCode);
         nontrans->labelToASCII(input, aNL, aNLInfo, errorCode);
         nontrans->labelToUnicode(input, uNL, uNLInfo, errorCode);
-        if(errorCode.logIfFailureAndReset("labelToXYZ processing [%d/%s] %s",
+        if(errorCode.errIfFailureAndReset("labelToXYZ processing [%d/%s] %s",
                                           (int)i, testCase.o, testCase.s)
         ) {
             continue;
@@ -852,7 +852,7 @@ void UTS46Test::TestSomeCases() {
         trans->nameToUnicodeUTF8(input8, uT8Sink, uT8Info, errorCode);
         nontrans->nameToASCII_UTF8(input8, aN8Sink, aN8Info, errorCode);
         nontrans->nameToUnicodeUTF8(input8, uN8Sink, uN8Info, errorCode);
-        if(errorCode.logIfFailureAndReset("UTF-8 processing [%d/%s] %s",
+        if(errorCode.errIfFailureAndReset("UTF-8 processing [%d/%s] %s",
                                           (int)i, testCase.o, testCase.s)
         ) {
             continue;
@@ -1022,7 +1022,7 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalStdioFilePointer, FILE, fclose);
 void UTS46Test::IdnaTest() {
     IcuTestErrorCode errorCode(*this, "IdnaTest");
     const char *sourceTestDataPath = getSourceTestData(errorCode);
-    if (errorCode.logIfFailureAndReset("unable to find the source/test/testdata "
+    if (errorCode.errIfFailureAndReset("unable to find the source/test/testdata "
                                        "folder (getSourceTestData())")) {
         return;
     }
@@ -1039,7 +1039,7 @@ void UTS46Test::IdnaTest() {
     // Comments are indicated with hash marks.
     char *fields[kNumFields][2];
     u_parseDelimitedFile(path.data(), ';', fields, kNumFields, idnaTestLineFn, this, errorCode);
-    if (errorCode.logIfFailureAndReset("error parsing IdnaTest.txt")) {
+    if (errorCode.errIfFailureAndReset("error parsing IdnaTest.txt")) {
         return;
     }
 }

@@ -32,12 +32,15 @@ public:
 
 class T_CTEST_EXPORT_API IcuTestErrorCode : public ErrorCode {
 public:
-    IcuTestErrorCode(TestLog& callingTestClass, const char* callingTestName)
-            : testClass(callingTestClass), testName(callingTestName), scopeMessage(nullptr) {}
+    IcuTestErrorCode(TestLog &callingTestClass, const char *callingTestName)
+            : testClass(callingTestClass), testName(callingTestName), scopeMessage() {}
     virtual ~IcuTestErrorCode();
+
     // Returns TRUE if isFailure().
-    UBool logIfFailureAndReset(const char *fmt, ...);
-    UBool logDataIfFailureAndReset(const char *fmt, ...);
+    UBool errIfFailureAndReset();
+    UBool errIfFailureAndReset(const char *fmt, ...);
+    UBool errDataIfFailureAndReset();
+    UBool errDataIfFailureAndReset(const char *fmt, ...);
 
     /** Sets an additional message string to be appended to failure output. */
     void setScope(const char* message);
@@ -45,10 +48,13 @@ public:
 
 protected:
     virtual void handleFailure() const;
+
 private:
     TestLog &testClass;
     const char *const testName;
-    const char* scopeMessage;
+    UnicodeString scopeMessage;
+
+    void errlog(UBool dataErr, const char* extraMessage) const;
 };
 
 #endif

@@ -595,7 +595,7 @@ PluralRulesTest::testGetAllKeywordValues() {
 void PluralRulesTest::testOrdinal() {
     IcuTestErrorCode errorCode(*this, "testOrdinal");
     LocalPointer<PluralRules> pr(PluralRules::forLocale("en", UPLURAL_TYPE_ORDINAL, errorCode));
-    if (errorCode.logIfFailureAndReset("PluralRules::forLocale(en, UPLURAL_TYPE_ORDINAL) failed")) {
+    if (errorCode.errIfFailureAndReset("PluralRules::forLocale(en, UPLURAL_TYPE_ORDINAL) failed")) {
         return;
     }
     UnicodeString keyword = pr->select(2.);
