@@ -37,7 +37,7 @@
  * NumberFormatter::with()
  *     .notation(Notation::compactShort())
  *     .unit(CurrencyUnit("EUR", status))
- *     .precision(PrecisionPrecision:::maxDigits(2))
+ *     .precision(Precision::maxDigits(2))
  *     .locale(...)
  *     .format(1234)
  *     .toString();  // €1.2K in en-US
@@ -45,7 +45,7 @@
  * // Create a formatter in a singleton for use later:
  * static const LocalizedNumberFormatter formatter = NumberFormatter::withLocale(...)
  *     .unit(NoUnit::percent())
- *     .precision(PrecisionPrecision:::fixedFraction(3));
+ *     .precision(Precision::fixedFraction(3));
  * formatter.format(5.9831).toString();  // 5.983% in en-US
  *
  * // Create a "template" in a singleton but without setting a locale until the call site:
