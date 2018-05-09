@@ -143,7 +143,7 @@ static void strToInt(
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return;
     }
-    uint32_t value = 0;
+    int64_t value = 0;
     for (int32_t i = start; i < len; ++i) {
         UChar ch = str[i];
         if (ch < 0x30 || ch > 0x39) {
