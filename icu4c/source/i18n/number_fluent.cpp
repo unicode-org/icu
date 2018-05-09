@@ -320,7 +320,7 @@ Derived NumberFormatterSettings<Derived>::macros(impl::MacroProps&& macros)&& {
 template<typename Derived>
 UnicodeString NumberFormatterSettings<Derived>::toSkeleton(UErrorCode& status) const {
     if (fMacros.copyErrorTo(status)) {
-        return {};
+        return ICU_Utility::makeBogusString();
     }
     return skeleton::generate(fMacros, status);
 }

@@ -2192,6 +2192,17 @@ void NumberFormatterApiTest::errors() {
             U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
             status);
 
+    // Skeleton string
+    status = U_ZERO_ERROR;
+    UnicodeString output = lnf.toSkeleton(status);
+    assertEquals(
+            "Should fail on toSkeleton terminal method with correct error code",
+            U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
+            status);
+    assertTrue(
+            "Terminal toSkeleton on error object should be bogus",
+            output.isBogus());
+
     // FieldPosition
     status = U_ZERO_ERROR;
     FieldPosition fp;
@@ -2212,8 +2223,7 @@ void NumberFormatterApiTest::errors() {
 
     // Appendable
     status = U_ZERO_ERROR;
-    UnicodeString output;
-    UnicodeStringAppendable appendable(output);
+    UnicodeStringAppendable appendable(output.remove());
     fn.appendTo(appendable, status);
     assertEquals(
             "Should fail on Appendable terminal method with correct error code",
