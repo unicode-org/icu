@@ -1791,12 +1791,12 @@ class U_I18N_API NumberFormatterSettings {
      * numbering system.
      *
      * <p>
-     * <strong>Note:</strong> Calling this method will override any previously specified DecimalFormatSymbols
-     * or NumberingSystem.
+     * <strong>Note:</strong> The instance of DecimalFormatSymbols will be copied: changes made to the symbols object
+     * after passing it into the fluent chain will not be seen.
      *
      * <p>
-     * <strong>Note:</strong> Calling this method will override the NumberingSystem previously specified in
-     * {@link #symbols(NumberingSystem)}.
+     * <strong>Note:</strong> Calling this method will override any previously specified DecimalFormatSymbols
+     * or NumberingSystem.
      *
      * <p>
      * The default is to choose the symbols based on the locale specified in the fluent chain.
