@@ -378,7 +378,10 @@ public:
          *         not counting unchanged spans
          * @stable ICU 59
          */
-        int32_t replacementIndex() const { return replIndex; }
+        int32_t replacementIndex() const {
+            // TODO: Throw an exception if we aren't in a change edit?
+            return replIndex;
+        }
 
         /**
          * The start index of the current span in the destination string; the span has length
