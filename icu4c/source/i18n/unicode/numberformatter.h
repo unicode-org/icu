@@ -1791,8 +1791,8 @@ class U_I18N_API NumberFormatterSettings {
      * numbering system.
      *
      * <p>
-     * <strong>Note:</strong> The instance of DecimalFormatSymbols will be copied: changes made to the symbols object
-     * after passing it into the fluent chain will not be seen.
+     * <strong>Note:</strong> Calling this method will override any previously specified DecimalFormatSymbols
+     * or NumberingSystem.
      *
      * <p>
      * <strong>Note:</strong> Calling this method will override the NumberingSystem previously specified in
@@ -1838,8 +1838,8 @@ class U_I18N_API NumberFormatterSettings {
      * </pre>
      *
      * <p>
-     * <strong>Note:</strong> Calling this method will override the DecimalFormatSymbols previously specified in
-     * {@link #symbols(DecimalFormatSymbols)}.
+     * <strong>Note:</strong> Calling this method will override any previously specified DecimalFormatSymbols
+     * or NumberingSystem.
      *
      * <p>
      * The default is to choose the best numbering system for the locale.
@@ -1927,7 +1927,6 @@ class U_I18N_API NumberFormatterSettings {
      *            The sign display strategy to use when rendering numbers.
      * @return The fluent chain
      * @see UNumberSignDisplay
-     * @provisional This API might change or be removed in a future release.
      * @draft ICU 60
      */
     Derived sign(UNumberSignDisplay style) const &;
@@ -1966,7 +1965,6 @@ class U_I18N_API NumberFormatterSettings {
      *            The decimal separator display strategy to use when rendering numbers.
      * @return The fluent chain
      * @see UNumberDecimalSeparatorDisplay
-     * @provisional This API might change or be removed in a future release.
      * @draft ICU 60
      */
     Derived decimal(UNumberDecimalSeparatorDisplay style) const &;
@@ -2423,7 +2421,7 @@ class U_I18N_API FormattedNumber : public UMemory {
      *            The FieldPosition to populate with the start and end indices of the desired field.
      * @param status
      *            Set if an error occurs while populating the FieldPosition.
-     * @deprecated ICU 62 Use {@link #toCharacterIterator} instead. This method will be removed in a future
+     * @deprecated ICU 62 Use {@link #nextFieldPosition} instead. This method will be removed in a future
      *             release. See http://bugs.icu-project.org/trac/ticket/13746
      * @see UNumberFormatFields
      */
@@ -2445,15 +2443,15 @@ class U_I18N_API FormattedNumber : public UMemory {
      * </pre>
      *
      * This method is useful if you know which field to query. If you want all available field position
-     * information, use #getAllFields().
+     * information, use #getAllFieldPositions().
      *
      * @param fieldPosition
-     *            Input+output variable. On input, the "field" property determines which field to look up,
-     *            and the "endIndex" property determines where to begin the search. On output, the
-     *            "beginIndex" field is set to the beginning of the first occurrence of the field after the
-     *            input "endIndex", and "endIndex" is set to the end of that occurrence of the field
-     *            (exclusive index). If a field position is not found, the FieldPosition is not changed and
-     *            the method returns FALSE.
+     *            Input+output variable. On input, the "field" property determines which field to look
+     *            up, and the "beginIndex" and "endIndex" properties determine where to begin the search.
+     *            On output, the "beginIndex" is set to the beginning of the first occurrence of the
+     *            field with either begin or end indices after the input indices, "endIndex" is set to
+     *            the end of that occurrence of the field (exclusive index). If a field position is not
+     *            found, the method returns FALSE and the FieldPosition may or may not be changed.
      * @param status
      *            Set if an error occurs while populating the FieldPosition.
      * @return TRUE if a new occurrence of the field was found; FALSE otherwise.
@@ -2483,7 +2481,7 @@ class U_I18N_API FormattedNumber : public UMemory {
      * Export the formatted number to a FieldPositionIterator. This allows you to determine which characters in
      * the output string correspond to which <em>fields</em>, such as the integer part, fraction part, and sign.
      *
-     * If information on only one field is needed, use #nextFieldPosition().
+     * If information on only one field is needed, use #nextFieldPosition() instead.
      *
      * @param iterator
      *            The FieldPositionIterator to populate with all of the fields present in the formatted number.
