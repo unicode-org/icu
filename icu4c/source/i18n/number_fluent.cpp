@@ -787,6 +787,7 @@ void FormattedNumber::populateFieldPosition(FieldPosition& fieldPosition, UError
         return;
     }
     // in case any users were depending on the old behavior:
+    fieldPosition.setBeginIndex(0);
     fieldPosition.setEndIndex(0);
     fResults->string.nextFieldPosition(fieldPosition, status);
 }
