@@ -805,7 +805,10 @@ public final class Edits {
          *         spans
          * @stable ICU 59
          */
-        public int replacementIndex() { return replIndex; }
+        public int replacementIndex() {
+            // TODO: Throw an exception if we aren't in a change edit?
+            return replIndex;
+        }
 
         /**
          * The start index of the current span in the destination string; the span has length
