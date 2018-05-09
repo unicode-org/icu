@@ -1350,6 +1350,145 @@ public final class UCharacterCaseTest extends TestFmwk
                 CaseMap.fold().turkic().apply("IßtanBul"));
     }
 
+    @Test
+    public void TestCaseMapEditsIteratorDocs() {
+        String input = "abcßDeF";
+        // output: "abcssdef"
+
+        StringBuilder sb = new StringBuilder();
+        Edits edits = new Edits();
+        CaseMap.fold().apply(input, sb, edits);
+
+        String[] fineIteratorExpected = {
+                "{ src[0..3] ≡ dest[0..3] (no-change) }",
+                "{ src[3..4] ⇝ dest[3..5], repl[0..2] }",
+                "{ src[4..5] ⇝ dest[5..6], repl[2..3] }",
+                "{ src[5..6] ≡ dest[6..7] (no-change) }",
+                "{ src[6..7] ⇝ dest[7..8], repl[3..4] }",
+        };
+        String[] fineChangesIteratorExpected = {
+                "{ src[3..4] ⇝ dest[3..5], repl[0..2] }",
+                "{ src[4..5] ⇝ dest[5..6], repl[2..3] }",
+                "{ src[6..7] ⇝ dest[7..8], repl[3..4] }",
+        };
+        String[] coarseIteratorExpected = {
+                "{ src[0..3] ≡ dest[0..3] (no-change) }",
+                "{ src[3..5] ⇝ dest[3..6], repl[0..3] }",
+                "{ src[5..6] ≡ dest[6..7] (no-change) }",
+                "{ src[6..7] ⇝ dest[7..8], repl[3..4] }",
+        };
+        String[] coarseChangesIteratorExpected = {
+                "{ src[3..5] ⇝ dest[3..6], repl[0..3] }",
+                "{ src[6..7] ⇝ dest[7..8], repl[3..4] }",
+        };
+
+        // Expected destination indices when source index is queried
+        int[] expectedDestFineEditIndices = {0, 0, 0, 3, 5, 6, 7};
+        int[] expectedDestCoarseEditIndices = {0, 0, 0, 3, 3, 6, 7};
+        int[] expectedDestFineStringIndices = {0, 1, 2, 3, 5, 6, 7};
+        int[] expectedDestCoarseStringIndices = {0, 1, 2, 3, 6, 6, 7};
+
+        // Expected source indices when destination index is queried
+        int[] expectedSrcFineEditIndices = { 0, 0, 0, 3, 3, 4, 5, 6 };
+        int[] expectedSrcCoarseEditIndices = { 0, 0, 0, 3, 3, 3, 5, 6 };
+        int[] expectedSrcFineStringIndices = { 0, 1, 2, 3, 4, 4, 5, 6 };
+        int[] expectedSrcCoarseStringIndices = { 0, 1, 2, 3, 5, 5, 5, 6 };
+
+        // Demonstrate the iterator next() method:
+        Edits.Iterator fineIterator = edits.getFineIterator();
+        int i = 0;
+        while (fineIterator.next()) {
+            String expected = fineIteratorExpected[i++];
+            assertEquals("Iteration #" + i, expected, fineIterator.toString().substring(40));
+        }
+        Edits.Iterator fineChangesIterator = edits.getFineChangesIterator();
+        i = 0;
+        while (fineChangesIterator.next()) {
+            String expected = fineChangesIteratorExpected[i++];
+            assertEquals("Iteration #" + i, expected, fineChangesIterator.toString().substring(40));
+        }
+        Edits.Iterator coarseIterator = edits.getCoarseIterator();
+        i = 0;
+        while (coarseIterator.next()) {
+            String expected = coarseIteratorExpected[i++];
+            assertEquals("Iteration #" + i, expected, coarseIterator.toString().substring(40));
+        }
+        Edits.Iterator coarseChangesIterator = edits.getCoarseChangesIterator();
+        i = 0;
+        while (coarseChangesIterator.next()) {
+            String expected = coarseChangesIteratorExpected[i++];
+            assertEquals("Iteration #" + i, expected, coarseChangesIterator.toString().substring(40));
+        }
+
+        // Demonstrate the iterator indexing methods:
+        // fineIterator should have the same behavior as fineChangesIterator, and
+        // coarseIterator should have the same behavior as coarseChangesIterator.
+        for (int srcIndex=0; srcIndex<input.length(); srcIndex++) {
+            fineIterator.findSourceIndex(srcIndex);
+            fineChangesIterator.findSourceIndex(srcIndex);
+            coarseIterator.findSourceIndex(srcIndex);
+            coarseChangesIterator.findSourceIndex(srcIndex);
+
+            assertEquals("Source index: " + srcIndex,
+                    expectedDestFineEditIndices[srcIndex],
+                    fineIterator.destinationIndex());
+            assertEquals("Source index: " + srcIndex,
+                    expectedDestFineEditIndices[srcIndex],
+                    fineChangesIterator.destinationIndex());
+            assertEquals("Source index: " + srcIndex,
+                    expectedDestCoarseEditIndices[srcIndex],
+                    coarseIterator.destinationIndex());
+            assertEquals("Source index: " + srcIndex,
+                    expectedDestCoarseEditIndices[srcIndex],
+                    coarseChangesIterator.destinationIndex());
+
+            assertEquals("Source index: " + srcIndex,
+                    expectedDestFineStringIndices[srcIndex],
+                    fineIterator.destinationIndexFromSourceIndex(srcIndex));
+            assertEquals("Source index: " + srcIndex,
+                    expectedDestFineStringIndices[srcIndex],
+                    fineChangesIterator.destinationIndexFromSourceIndex(srcIndex));
+            assertEquals("Source index: " + srcIndex,
+                    expectedDestCoarseStringIndices[srcIndex],
+                    coarseIterator.destinationIndexFromSourceIndex(srcIndex));
+            assertEquals("Source index: " + srcIndex,
+                    expectedDestCoarseStringIndices[srcIndex],
+                    coarseChangesIterator.destinationIndexFromSourceIndex(srcIndex));
+        }
+        for (int destIndex=0; destIndex<input.length(); destIndex++) {
+            fineIterator.findDestinationIndex(destIndex);
+            fineChangesIterator.findDestinationIndex(destIndex);
+            coarseIterator.findDestinationIndex(destIndex);
+            coarseChangesIterator.findDestinationIndex(destIndex);
+
+            assertEquals("Destination index: " + destIndex,
+                    expectedSrcFineEditIndices[destIndex],
+                    fineIterator.sourceIndex());
+            assertEquals("Destination index: " + destIndex,
+                    expectedSrcFineEditIndices[destIndex],
+                    fineChangesIterator.sourceIndex());
+            assertEquals("Destination index: " + destIndex,
+                    expectedSrcCoarseEditIndices[destIndex],
+                    coarseIterator.sourceIndex());
+            assertEquals("Destination index: " + destIndex,
+                    expectedSrcCoarseEditIndices[destIndex],
+                    coarseChangesIterator.sourceIndex());
+
+            assertEquals("Destination index: " + destIndex,
+                    expectedSrcFineStringIndices[destIndex],
+                    fineIterator.sourceIndexFromDestinationIndex(destIndex));
+            assertEquals("Destination index: " + destIndex,
+                    expectedSrcFineStringIndices[destIndex],
+                    fineChangesIterator.sourceIndexFromDestinationIndex(destIndex));
+            assertEquals("Destination index: " + destIndex,
+                    expectedSrcCoarseStringIndices[destIndex],
+                    coarseIterator.sourceIndexFromDestinationIndex(destIndex));
+            assertEquals("Destination index: " + destIndex,
+                    expectedSrcCoarseStringIndices[destIndex],
+                    coarseChangesIterator.sourceIndexFromDestinationIndex(destIndex));
+        }
+    }
+
     // private data members - test data --------------------------------------
 
     private static final Locale TURKISH_LOCALE_ = new Locale("tr", "TR");

@@ -6,9 +6,54 @@ import java.nio.BufferOverflowException;
 import java.util.Arrays;
 
 /**
- * Records lengths of string edits but not replacement text.
- * Supports replacements, insertions, deletions in linear progression.
- * Does not support moving/reordering of text.
+ * Records lengths of string edits but not replacement text. Supports replacements, insertions, deletions
+ * in linear progression. Does not support moving/reordering of text.
+ * <p>
+ * There are two types of edits: <em>change edits</em> and <em>no-change edits</em>. Add edits to
+ * instances of this class using {@link #addReplace(int, int)} (for change edits) and
+ * {@link #addUnchanged(int)} (for no-change edits). Change edits are retained with full granularity,
+ * whereas adjacent no-change edits are always merged together. In no-change edits, there is a one-to-one
+ * mapping between code points in the source and destination strings.
+ * <p>
+ * After all edits have been added, instances of this class should be considered immutable, and an
+ * {@link Edits.Iterator} can be used for queries.
+ * <p>
+ * There are four flavors of Edits.Iterator:
+ * <p>
+ * <ul>
+ * <li>{@link #getFineIterator()} retains full granularity of change edits.
+ * <li>{@link #getFineChangesIterator()} retains full granularity of change edits, and when calling
+ * next() on the iterator, skips over no-change edits (unchanged regions).
+ * <li>{@link #getCoarseIterator()} treats adjacent change edits as a single edit. (Adjacent no-change
+ * edits are automatically merged during the construction phase.)
+ * <li>{@link #getCoarseChangesIterator()} treats adjacent change edits as a single edit, and when
+ * calling next() on the iterator, skips over no-change edits (unchanged regions).
+ * </ul>
+ * <p>
+ * For example, consider the string "abcßDeF", which case-folds to "abcssdef". This string has the
+ * following fine edits:
+ * <ul>
+ * <li>abc ⇨ abc (no-change)
+ * <li>ß ⇨ ss (change)
+ * <li>D ⇨ d (change)
+ * <li>e ⇨ e (no-change)
+ * <li>F ⇨ f (change)
+ * </ul>
+ * and the following coarse edits (note how adjacent change edits get merged together):
+ * <ul>
+ * <li>abc ⇨ abc (no-change)
+ * <li>ßD ⇨ ssd (change)
+ * <li>e ⇨ e (no-change)
+ * <li>F ⇨ f (change)
+ * </ul>
+ * <p>
+ * The "fine changes" and "coarse changes" iterators will step through only the change edits when their
+ * {@link Edits.Iterator#next()} methods are called. They are identical to the non-change iterators when
+ * their {@link Edits.Iterator#findSourceIndex(int)} or {@link Edits.Iterator#findDestinationIndex(int)}
+ * methods are used to walk through the string.
+ * <p>
+ * For examples of how to use this class, see the test <code>TestCaseMapEditsIteratorDocs</code> in
+ * UCharacterCaseTest.java.
  *
  * @stable ICU 59
  */
@@ -61,7 +106,7 @@ public final class Edits {
     }
 
     /**
-     * Adds a record for an unchanged segment of text.
+     * Adds a no-change edit: a record for an unchanged segment of text.
      * Normally called from inside ICU string transformation functions, not user code.
      * @stable ICU 59
      */
@@ -93,7 +138,7 @@ public final class Edits {
     }
 
     /**
-     * Adds a record for a text replacement/insertion/deletion.
+     * Adds a change edit: a record for a text replacement/insertion/deletion.
      * Normally called from inside ICU string transformation functions, not user code.
      * @stable ICU 59
      */
@@ -210,6 +255,20 @@ public final class Edits {
 
     /**
      * Access to the list of edits.
+     * <p>
+     * At any moment in time, an instance of this class points to a single edit: a "window" into a span
+     * of the source string and the corresponding span of the destination string. The source string span
+     * starts at {@link #sourceIndex()} and runs for {@link #oldLength()} chars; the destination string
+     * span starts at {@link #destinationIndex()} and runs for {@link #newLength()} chars.
+     * <p>
+     * The iterator can be moved between edits using the {@link #next()}, {@link #findSourceIndex(int)},
+     * and {@link #findDestinationIndex(int)} methods. Calling any of these methods mutates the iterator
+     * to make it point to the corresponding edit.
+     * <p>
+     * For more information, see the documentation for {@link Edits}.
+     * <p>
+     * Note: Although this class is called "Iterator", it does not implement {@link java.util.Iterator}.
+     *
      * @see #getCoarseIterator
      * @see #getFineIterator
      * @stable ICU 59
@@ -281,7 +340,7 @@ public final class Edits {
         }
 
         /**
-         * Advances to the next edit.
+         * Advances the iterator to the next edit.
          * @return true if there is another edit
          * @stable ICU 59
          */
@@ -489,9 +548,9 @@ public final class Edits {
         }
 
         /**
-         * Finds the edit that contains the source index.
-         * The source index may be found in a non-change
-         * even if normal iteration would skip non-changes.
+         * Moves the iterator to the edit that contains the source index.
+         * The source index may be found in a no-change edit
+         * even if normal iteration would skip no-change edits.
          * Normal iteration can continue from a found edit.
          *
          * <p>The iterator state before this search logically does not matter.
@@ -509,9 +568,9 @@ public final class Edits {
         }
 
         /**
-         * Finds the edit that contains the destination index.
-         * The destination index may be found in a non-change
-         * even if normal iteration would skip non-changes.
+         * Moves the iterator to the edit that contains the destination index.
+         * The destination index may be found in a no-change edit
+         * even if normal iteration would skip no-change edits.
          * Normal iteration can continue from a found edit.
          *
          * <p>The iterator state before this search logically does not matter.
@@ -617,7 +676,7 @@ public final class Edits {
         }
 
         /**
-         * Returns the destination index corresponding to the given source index.
+         * Computes the destination index corresponding to the given source index.
          * If the source index is inside a change edit (not at its start),
          * then the destination index at the end of that edit is returned,
          * since there is no information about index mapping inside a change edit.
@@ -656,7 +715,7 @@ public final class Edits {
         }
 
         /**
-         * Returns the source index corresponding to the given destination index.
+         * Computes the source index corresponding to the given destination index.
          * If the destination index is inside a change edit (not at its start),
          * then the source index at the end of that edit is returned,
          * since there is no information about index mapping inside a change edit.
@@ -695,44 +754,106 @@ public final class Edits {
         }
 
         /**
+         * Returns whether the edit currently represented by the iterator is a change edit.
+         *
          * @return true if this edit replaces oldLength() units with newLength() different ones.
          *         false if oldLength units remain unchanged.
          * @stable ICU 59
          */
         public boolean hasChange() { return changed; }
+
         /**
-         * @return the number of units in the original string which are replaced or remain unchanged.
+         * The length of the current span in the source string, which starts at {@link #sourceIndex}.
+         *
+         * @return the number of units in the source string which are replaced or remain unchanged.
          * @stable ICU 59
          */
         public int oldLength() { return oldLength_; }
+
         /**
-         * @return the number of units in the modified string, if hasChange() is true.
-         *         Same as oldLength if hasChange() is false.
+         * The length of the current span in the destination string, which starts at
+         * {@link #destinationIndex}, or in the replacement string, which starts at
+         * {@link #replacementIndex}.
+         *
+         * @return the number of units in the destination string, if hasChange() is true. Same as
+         *         oldLength if hasChange() is false.
          * @stable ICU 59
          */
         public int newLength() { return newLength_; }
 
         /**
+         * The start index of the current span in the source string; the span has length
+         * {@link #oldLength}.
+         *
          * @return the current index into the source string
          * @stable ICU 59
          */
         public int sourceIndex() { return srcIndex; }
+
         /**
-         * @return the current index into the replacement-characters-only string,
-         *         not counting unchanged spans
+         * The start index of the current span in the replacement string; the span has length
+         * {@link #newLength}. Well-defined only if the current edit is a change edit.
+         * <p>
+         * The <em>replacement string</em> is the concatenation of all substrings of the destination
+         * string corresponding to change edits.
+         * <p>
+         * This method is intended to be used together with operations that write only replacement
+         * characters (e.g., {@link CaseMap#omitUnchangedText()}). The source string can then be modified
+         * in-place.
+         *
+         * @return the current index into the replacement-characters-only string, not counting unchanged
+         *         spans
          * @stable ICU 59
          */
         public int replacementIndex() { return replIndex; }
+
         /**
+         * The start index of the current span in the destination string; the span has length
+         * {@link #newLength}.
+         *
          * @return the current index into the full destination string
          * @stable ICU 59
          */
         public int destinationIndex() { return destIndex; }
+
+        /**
+         * A string representation of the current edit represented by the iterator for debugging. You
+         * should not depend on the contents of the return string.
+         */
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            sb.append(super.toString());
+            sb.append("{ src[");
+            sb.append(srcIndex);
+            sb.append("..");
+            sb.append(srcIndex + oldLength_);
+            if (changed) {
+                sb.append("] ⇝ dest[");
+            } else {
+                sb.append("] ≡ dest[");
+            }
+            sb.append(destIndex);
+            sb.append("..");
+            sb.append(destIndex + newLength_);
+            if (changed) {
+                sb.append("], repl[");
+                sb.append(replIndex);
+                sb.append("..");
+                sb.append(replIndex + newLength_);
+                sb.append("] }");
+            } else {
+                sb.append("] (no-change) }");
+            }
+            return sb.toString();
+        }
     };
 
     /**
-     * Returns an Iterator for coarse-grained changes for simple string updates.
-     * Skips non-changes.
+     * Returns an Iterator for coarse-grained change edits
+     * (adjacent change edits are treated as one).
+     * Can be used to perform simple string updates.
+     * Skips no-change edits.
      * @return an Iterator that merges adjacent changes.
      * @stable ICU 59
      */
@@ -741,7 +862,10 @@ public final class Edits {
     }
 
     /**
-     * Returns an Iterator for coarse-grained changes and non-changes for simple string updates.
+     * Returns an Iterator for coarse-grained change and no-change edits
+     * (adjacent change edits are treated as one).
+     * Can be used to perform simple string updates.
+     * Adjacent change edits are treated as one edit.
      * @return an Iterator that merges adjacent changes.
      * @stable ICU 59
      */
@@ -750,8 +874,10 @@ public final class Edits {
     }
 
     /**
-     * Returns an Iterator for fine-grained changes for modifying styled text.
-     * Skips non-changes.
+     * Returns an Iterator for fine-grained change edits
+     * (full granularity of change edits is retained).
+     * Can be used for modifying styled text.
+     * Skips no-change edits.
      * @return an Iterator that separates adjacent changes.
      * @stable ICU 59
      */
@@ -760,7 +886,9 @@ public final class Edits {
     }
 
     /**
-     * Returns an Iterator for fine-grained changes and non-changes for modifying styled text.
+     * Returns an Iterator for fine-grained change and no-change edits
+     * (full granularity of change edits is retained).
+     * Can be used for modifying styled text.
      * @return an Iterator that separates adjacent changes.
      * @stable ICU 59
      */
