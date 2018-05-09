@@ -1232,7 +1232,9 @@ const numparse::impl::NumberParserImpl* DecimalFormat::getCurrencyParser(UErrorC
 void
 DecimalFormat::fieldPositionHelper(const number::FormattedNumber& formatted, FieldPosition& fieldPosition,
                                    int32_t offset, UErrorCode& status) {
-    fieldPosition.setEndIndex(0); // always return first occurrence
+    // always return first occurrence:
+    fieldPosition.setBeginIndex(0);
+    fieldPosition.setEndIndex(0);
     bool found = formatted.nextFieldPosition(fieldPosition, status);
     if (found && offset != 0) {
         fieldPosition.setBeginIndex(fieldPosition.getBeginIndex() + offset);

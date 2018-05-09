@@ -2567,7 +2567,9 @@ public class DecimalFormat extends NumberFormat {
   }
 
   static void fieldPositionHelper(FormattedNumber formatted, FieldPosition fieldPosition, int offset) {
-      fieldPosition.setEndIndex(0); // always return first occurrence
+      // always return first occurrence:
+      fieldPosition.setBeginIndex(0);
+      fieldPosition.setEndIndex(0);
       boolean found = formatted.nextFieldPosition(fieldPosition);
       if (found && offset != 0) {
           fieldPosition.setBeginIndex(fieldPosition.getBeginIndex() + offset);

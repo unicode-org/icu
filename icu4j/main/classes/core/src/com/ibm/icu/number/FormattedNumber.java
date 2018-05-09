@@ -93,6 +93,7 @@ public class FormattedNumber {
     @Deprecated
     public void populateFieldPosition(FieldPosition fieldPosition) {
         // in case any users were depending on the old behavior:
+        fieldPosition.setBeginIndex(0);
         fieldPosition.setEndIndex(0);
         nextFieldPosition(fieldPosition);
     }
@@ -105,23 +106,24 @@ public class FormattedNumber {
      * If a field occurs just once, calling this method will find that occurrence and return it. If a
      * field occurs multiple times, this method may be called repeatedly with the following pattern:
      * <p>
+     *
      * <pre>
      * FieldPosition fpos = new FieldPosition(NumberFormat.Field.GROUPING_SEPARATOR);
      * while (formattedNumber.nextFieldPosition(fpos, status)) {
-     *   // do something with fpos.
+     *     // do something with fpos.
      * }
      * </pre>
      * <p>
      * This method is useful if you know which field to query. If you want all available field position
-     * information, use #getAllFields().
+     * information, use {@link #toCharacterIterator()}.
      *
      * @param fieldPosition
-     *            Input+output variable. On input, the "field" property determines which field to look up,
-     *            and the "endIndex" property determines where to begin the search. On output, the
-     *            "beginIndex" field is set to the beginning of the first occurrence of the field after the
-     *            input "endIndex", and "endIndex" is set to the end of that occurrence of the field
-     *            (exclusive index). If a field position is not found, the FieldPosition is not changed and
-     *            the method returns false.
+     *            Input+output variable. On input, the "field" property determines which field to look
+     *            up, and the "beginIndex" and "endIndex" properties determine where to begin the search.
+     *            On output, the "beginIndex" is set to the beginning of the first occurrence of the
+     *            field with either begin or end indices after the input indices, "endIndex" is set to
+     *            the end of that occurrence of the field (exclusive index). If a field position is not
+     *            found, the method returns FALSE and the FieldPosition may or may not be changed.
      * @return true if a new occurrence of the field was found; false otherwise.
      * @draft ICU 62
      * @provisional This API might change or be removed in a future release.
@@ -158,7 +160,7 @@ public class FormattedNumber {
      * characters in the output string correspond to which <em>fields</em>, such as the integer part,
      * fraction part, and sign.
      * <p>
-     * If information on only one field is needed, consider using populateFieldPosition() instead.
+     * If information on only one field is needed, use {@link #nextFieldPosition(FieldPosition)} instead.
      *
      * @return An AttributedCharacterIterator, containing information on the field attributes of the
      *         number string.
