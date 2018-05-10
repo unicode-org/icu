@@ -19,7 +19,7 @@
 TestLog::~TestLog() {}
 
 IcuTestErrorCode::~IcuTestErrorCode() {
-    // Safe because our handleFailure() does not throw exceptions.
+    // Safe because our errlog() does not throw exceptions.
     if(isFailure()) {
         errlog(FALSE, nullptr);
     }
@@ -84,7 +84,7 @@ void IcuTestErrorCode::setScope(const char* message) {
 }
 
 void IcuTestErrorCode::setScope(const UnicodeString& message) {
-    scopeMessage.remove().append(message);
+    scopeMessage = message;
 }
 
 void IcuTestErrorCode::handleFailure() const {

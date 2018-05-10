@@ -259,6 +259,8 @@ void ErrorCodeTest::TestSubclass() {
 class IcuTestErrorCodeTestHelper : public IntlTest {
   public:
     void errln( const UnicodeString &message ) U_OVERRIDE {
+        test->assertFalse("Already saw an error", seenError);
+        seenError = TRUE;
         test->assertEquals("Message for Error", expectedErrln, message);
         if (expectedDataErr) {
             test->errln("Got non-data error, but expected data error");
@@ -266,6 +268,8 @@ class IcuTestErrorCodeTestHelper : public IntlTest {
     }
 
     void dataerrln( const UnicodeString &message ) U_OVERRIDE {
+        test->assertFalse("Already saw an error", seenError);
+        seenError = TRUE;
         test->assertEquals("Message for Error", expectedErrln, message);
         if (!expectedDataErr) {
             test->errln("Got data error, but expected non-data error");
@@ -275,6 +279,7 @@ class IcuTestErrorCodeTestHelper : public IntlTest {
     IntlTest* test;
     UBool expectedDataErr;
     UnicodeString expectedErrln;
+    UBool seenError;
 };
 
 void ErrorCodeTest::TestIcuTestErrorCode() {
@@ -284,43 +289,55 @@ void ErrorCodeTest::TestIcuTestErrorCode() {
     // Test destructor message
     helper.expectedErrln = u"AAA failure: U_ILLEGAL_PAD_POSITION";
     helper.expectedDataErr = FALSE;
+    helper.seenError = FALSE;
     {
         IcuTestErrorCode testStatus(helper, "AAA");
         testStatus.set(U_ILLEGAL_PAD_POSITION);
     }
+    assertTrue("Should have seen an error", helper.seenError);
 
     // Test destructor message with scope
     helper.expectedErrln = u"BBB failure: U_ILLEGAL_PAD_POSITION scope: foo";
     helper.expectedDataErr = FALSE;
+    helper.seenError = FALSE;
     {
         IcuTestErrorCode testStatus(helper, "BBB");
         testStatus.setScope("foo");
         testStatus.set(U_ILLEGAL_PAD_POSITION);
     }
+    assertTrue("Should have seen an error", helper.seenError);
 
     // Check errIfFailure message with scope
     helper.expectedErrln = u"CCC failure: U_ILLEGAL_PAD_POSITION scope: foo";
     helper.expectedDataErr = FALSE;
+    helper.seenError = FALSE;
     {
         IcuTestErrorCode testStatus(helper, "CCC");
         testStatus.setScope("foo");
         testStatus.set(U_ILLEGAL_PAD_POSITION);
         testStatus.errIfFailureAndReset();
+        assertTrue("Should have seen an error", helper.seenError);
+        helper.seenError = FALSE;
         helper.expectedErrln = u"CCC failure: U_ILLEGAL_CHAR_FOUND scope: foo - 5.4300";
         testStatus.set(U_ILLEGAL_CHAR_FOUND);
         testStatus.errIfFailureAndReset("%6.4f", 5.43);
+        assertTrue("Should have seen an error", helper.seenError);
     }
 
     // Check errDataIfFailure message without scope
     helper.expectedErrln = u"DDD failure: U_ILLEGAL_PAD_POSITION";
     helper.expectedDataErr = TRUE;
+    helper.seenError = FALSE;
     {
         IcuTestErrorCode testStatus(helper, "DDD");
         testStatus.set(U_ILLEGAL_PAD_POSITION);
         testStatus.errDataIfFailureAndReset();
+        assertTrue("Should have seen an error", helper.seenError);
+        helper.seenError = FALSE;
         helper.expectedErrln = u"DDD failure: U_ILLEGAL_CHAR_FOUND - 5.4300";
         testStatus.set(U_ILLEGAL_CHAR_FOUND);
         testStatus.errDataIfFailureAndReset("%6.4f", 5.43);
+        assertTrue("Should have seen an error", helper.seenError);
     }
 }
 
