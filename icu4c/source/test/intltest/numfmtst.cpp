@@ -679,6 +679,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11649_DecFmtCurrencies);
   TESTCASE_AUTO(Test13148_ParseGroupingSeparators);
   TESTCASE_AUTO(Test12753_PatternDecimalPoint);
+  TESTCASE_AUTO(Test11647_PatternCurrencySymbols);
   TESTCASE_AUTO_END;
 }
 
@@ -9503,4 +9504,13 @@ void NumberFormatTest::Test12753_PatternDecimalPoint() {
                  U_INVALID_FORMAT_ERROR, status);
     }
 
+ void NumberFormatTest::Test11647_PatternCurrencySymbols() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormat df(status);
+    df.applyPattern(u"¤¤¤¤#", status);
+    if (!assertSuccess("", status)) return;
+    UnicodeString actual;
+    df.format(123, actual);
+    assertEquals("Should replace 4 currency signs with U+FFFD", "\uFFFD123", actual);
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */
