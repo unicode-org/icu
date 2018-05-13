@@ -9514,7 +9514,7 @@ void NumberFormatTest::Test12753_PatternDecimalPoint() {
     if (!assertSuccess("", status)) return;
     UnicodeString actual;
     df.format(123, actual);
-    assertEquals("Should replace 4 currency signs with U+FFFD", "\uFFFD123", actual);
+    assertEquals("Should replace 4 currency signs with U+FFFD", u"\uFFFD123", actual);
 }
 
 void NumberFormatTest::Test11913_BigDecimal() {
