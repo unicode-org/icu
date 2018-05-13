@@ -682,6 +682,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test12753_PatternDecimalPoint);
   TESTCASE_AUTO(Test11647_PatternCurrencySymbols);
   TESTCASE_AUTO(Test11913_BigDecimal);
+  TESTCASE_AUTO(Test11020_RoundingInScientificNotation);
   TESTCASE_AUTO_END;
 }
 
@@ -9525,5 +9526,15 @@ void NumberFormatTest::Test11913_BigDecimal() {
     assertSuccess("", status);
     assertEquals("Should format more than 309 digits", u"12,345,678", UnicodeString(result, 0, 10));
     assertEquals("Should format more than 309 digits", 534, result.length());
+}
+
+void NumberFormatTest::Test11020_RoundingInScientificNotation() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormatSymbols sym(Locale::getFrance(), status);
+    DecimalFormat fmt(u"0.05E0", sym, status);
+    assertSuccess("", status);
+    UnicodeString result;
+    fmt.format(12301.2, result);
+    assertEquals("Rounding increment should be applied after magnitude scaling", u"1,25E4", result);
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
