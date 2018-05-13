@@ -217,7 +217,7 @@ DecNum::setTo(const uint8_t* bcd, int32_t length, int32_t scale, bool isNegative
     fData.getAlias()->bits = static_cast<uint8_t>(isNegative ? DECNEG : 0);
     uprv_decNumberSetBCD(fData, bcd, static_cast<uint32_t>(length));
     if (fContext.status != 0) {
-        // Some error occured while constructing the decNumber.
+        // Some error occurred while constructing the decNumber.
         status = U_INTERNAL_PROGRAM_ERROR;
     }
 }
