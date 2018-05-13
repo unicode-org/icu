@@ -244,6 +244,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test13148_ParseGroupingSeparators();
     void Test12753_PatternDecimalPoint();
     void Test11647_PatternCurrencySymbols();
+    void Test11913_BigDecimal();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);

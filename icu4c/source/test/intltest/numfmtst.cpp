@@ -27,6 +27,7 @@
 #include "textfile.h"
 #include "tokiter.h"
 #include "charstr.h"
+#include "cstr.h"
 #include "putilimp.h"
 #include "winnmtst.h"
 #include <cmath>
@@ -680,6 +681,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test13148_ParseGroupingSeparators);
   TESTCASE_AUTO(Test12753_PatternDecimalPoint);
   TESTCASE_AUTO(Test11647_PatternCurrencySymbols);
+  TESTCASE_AUTO(Test11913_BigDecimal);
   TESTCASE_AUTO_END;
 }
 
@@ -9512,5 +9514,16 @@ void NumberFormatTest::Test12753_PatternDecimalPoint() {
     UnicodeString actual;
     df.format(123, actual);
     assertEquals("Should replace 4 currency signs with U+FFFD", "\uFFFD123", actual);
+}
+
+void NumberFormatTest::Test11913_BigDecimal() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<NumberFormat> df(NumberFormat::createInstance(Locale::getEnglish(), status), status);
+    if (!assertSuccess("", status)) return;
+    UnicodeString result;
+    df->format(StringPiece("1.23456789E400"), result, nullptr, status);
+    assertSuccess("", status);
+    assertEquals("Should format more than 309 digits", u"12,345,678", UnicodeString(result, 0, 10));
+    assertEquals("Should format more than 309 digits", 534, result.length());
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
