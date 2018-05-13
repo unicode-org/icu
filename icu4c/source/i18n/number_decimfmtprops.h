@@ -35,22 +35,22 @@ namespace impl {
 // for DLL-exporting an fully specified template instantiation.
 class U_I18N_API CurrencyPluralInfoWrapper {
 public:
-	LocalPointer<CurrencyPluralInfo> fPtr;
+    LocalPointer<CurrencyPluralInfo> fPtr;
 
-	CurrencyPluralInfoWrapper() = default;
+    CurrencyPluralInfoWrapper() = default;
 
-	CurrencyPluralInfoWrapper(const CurrencyPluralInfoWrapper& other) {
-		if (!other.fPtr.isNull()) {
-			fPtr.adoptInstead(new CurrencyPluralInfo(*other.fPtr));
-		}
-	}
+    CurrencyPluralInfoWrapper(const CurrencyPluralInfoWrapper& other) {
+        if (!other.fPtr.isNull()) {
+            fPtr.adoptInstead(new CurrencyPluralInfo(*other.fPtr));
+        }
+    }
 
-	CurrencyPluralInfoWrapper& operator=(const CurrencyPluralInfoWrapper& other) {
-		if (!other.fPtr.isNull()) {
-			fPtr.adoptInstead(new CurrencyPluralInfo(*other.fPtr));
-		}
-		return *this;
-	}
+    CurrencyPluralInfoWrapper& operator=(const CurrencyPluralInfoWrapper& other) {
+        if (!other.fPtr.isNull()) {
+            fPtr.adoptInstead(new CurrencyPluralInfo(*other.fPtr));
+        }
+        return *this;
+    }
 };
 
 /** Controls the set of rules for parsing a string from the old DecimalFormat API. */
@@ -93,7 +93,7 @@ struct U_I18N_API DecimalFormatProperties {
   public:
     NullableValue<UNumberCompactStyle> compactStyle;
     NullableValue<CurrencyUnit> currency;
-	CurrencyPluralInfoWrapper currencyPluralInfo;
+    CurrencyPluralInfoWrapper currencyPluralInfo;
     NullableValue<UCurrencyUsage> currencyUsage;
     bool decimalPatternMatchRequired;
     bool decimalSeparatorAlwaysShown;
