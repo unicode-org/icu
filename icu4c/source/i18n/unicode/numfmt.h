@@ -556,7 +556,7 @@ public:
                                   FieldPositionIterator* posIter,
                                   UErrorCode& status) const;
 
-#ifndef U_HIDE_INTERNAL_API
+// Can't use #ifndef U_HIDE_INTERNAL_API because these are virtual methods
 
     /**
      * Format a decimal number.
@@ -601,8 +601,6 @@ public:
                                   UnicodeString& appendTo,
                                   FieldPosition& pos,
                                   UErrorCode& status) const;
-
-#endif // U_HIDE_INTERNAL_API
 
    /**
     * Return a long if possible (e.g. within range LONG_MAX,
