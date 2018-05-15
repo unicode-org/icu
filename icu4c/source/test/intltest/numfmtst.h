@@ -214,6 +214,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test11868();
     void Test11739_ParseLongCurrency();
     void Test13035_MultiCodePointPaddingInPattern();
+    void Test13737_ParseScientificStrict();
     void Test10727_RoundingZero();
     void Test11376_getAndSetPositivePrefix();
     void Test11475_signRecognition();

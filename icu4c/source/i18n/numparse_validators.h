@@ -61,14 +61,6 @@ class RequireDecimalSeparatorValidator : public ValidationMatcher, public UMemor
 };
 
 
-class RequireExponentValidator : public ValidationMatcher, public UMemory {
-  public:
-    void postProcess(ParsedNumber& result) const U_OVERRIDE;
-
-    UnicodeString toString() const U_OVERRIDE;
-};
-
-
 class RequireNumberValidator : public ValidationMatcher, public UMemory {
   public:
     void postProcess(ParsedNumber& result) const U_OVERRIDE;

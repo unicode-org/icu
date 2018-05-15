@@ -195,9 +195,6 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     if (isStrict) {
         parser->addMatcher(parser->fLocalValidators.affix = {});
     }
-    if (isStrict && properties.minimumExponentDigits > 0) {
-        parser->addMatcher(parser->fLocalValidators.exponent = {});
-    }
     if (parseCurrency) {
         parser->addMatcher(parser->fLocalValidators.currency = {});
     }

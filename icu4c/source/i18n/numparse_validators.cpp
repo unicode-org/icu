@@ -57,17 +57,6 @@ UnicodeString RequireDecimalSeparatorValidator::toString() const {
 }
 
 
-void RequireExponentValidator::postProcess(ParsedNumber& result) const {
-    if (0 == (result.flags & FLAG_HAS_EXPONENT)) {
-        result.flags |= FLAG_FAIL;
-    }
-}
-
-UnicodeString RequireExponentValidator::toString() const {
-    return u"<ReqExponent>";
-}
-
-
 void RequireNumberValidator::postProcess(ParsedNumber& result) const {
     // Require that a number is matched.
     if (!result.seenNumber()) {

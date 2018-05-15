@@ -5502,10 +5502,13 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("Should consume the whole number", 5, ppos.getIndex());
         ppos.setIndex(0);
         result0 = df.parse("123", ppos);
-        assertNull("Should reject number without exponent", result0);
+        // #13737: For backwards compatibility, do NOT require the exponent.
+        assertEquals("Should NOT reject number without exponent", 123L, result0);
         ppos.setIndex(0);
         CurrencyAmount result1 = df.parseCurrency("USD123", ppos);
-        assertNull("Should reject currency without exponent", result1);
+        assertEquals("Should NOT reject currency without exponent",
+                new CurrencyAmount(123L, Currency.getInstance("USD")),
+                result1);
     }
 
     @Test
@@ -5571,6 +5574,14 @@ public class NumberFormatTest extends TestFmwk {
         df = new DecimalFormat("a*''###0b");
         result = df.format(12);
         assertEquals("Quote should be escapable in padding syntax", "a''12b", result);
+    }
+
+    @Test
+    public void Test13737_ParseScientificStrict() {
+        NumberFormat df = NumberFormat.getScientificInstance(ULocale.ENGLISH);
+        df.setParseStrict(true);
+        // Parse Test: exponent is not required, even in strict mode
+        expect(df, "1.2", 1.2);
     }
 
     // TODO: Investigate this test and re-enable if appropriate.
