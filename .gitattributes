@@ -5958,7 +5958,6 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/PlusSignMatcher.java s
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireAffixValidator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireCurrencyValidator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireDecimalSeparatorValidator.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireExponentValidator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/RequireNumberValidator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/ScientificMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/parse/SeriesMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8

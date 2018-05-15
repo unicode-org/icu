@@ -87,7 +87,6 @@ class U_I18N_API NumberParserImpl : public MutableMatcherCollection {
         RequireAffixValidator affix;
         RequireCurrencyValidator currency;
         RequireDecimalSeparatorValidator decimalSeparator;
-        RequireExponentValidator exponent;
         RequireNumberValidator number;
         MultiplierParseHandler multiplier;
     } fLocalValidators;

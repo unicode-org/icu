@@ -652,6 +652,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11868);
   TESTCASE_AUTO(Test11739_ParseLongCurrency);
   TESTCASE_AUTO(Test13035_MultiCodePointPaddingInPattern);
+  TESTCASE_AUTO(Test13737_ParseScientificStrict);
   TESTCASE_AUTO(Test10727_RoundingZero);
   TESTCASE_AUTO(Test11376_getAndSetPositivePrefix);
   TESTCASE_AUTO(Test11475_signRecognition);
@@ -8843,6 +8844,14 @@ void NumberFormatTest::Test13035_MultiCodePointPaddingInPattern() {
     df = DecimalFormat(u"a*''###0b", status);
     result = df.format(12, result.remove());
     assertEquals("Quote should be escapable in padding syntax", "a''12b", result);
+}
+
+void NumberFormatTest::Test13737_ParseScientificStrict() {
+    IcuTestErrorCode status(*this, "Test13737_ParseScientificStrict");
+    LocalPointer<NumberFormat> df(NumberFormat::createScientificInstance("en", status));
+    df->setLenient(FALSE);
+    // Parse Test
+    expect(*df, u"1.2", 1.2);
 }
 
 void NumberFormatTest::Test11376_getAndSetPositivePrefix() {

@@ -877,15 +877,16 @@ parse	output	breaks
 (1,945d1)	fail	K
 
 test parse strict scientific
+// See #13737: Old behavior should be retained in this case
 set locale en
 set pattern #E0
 set lenient 0
 begin
 parse	output	breaks
-123	fail	JK
+123	123
 123E1	1230
 123E0	123
-123E	fail	JK
+123E	123
 
 test parse strict without prefix/suffix
 set locale en

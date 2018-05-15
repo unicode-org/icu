@@ -242,9 +242,6 @@ public class NumberParserImpl {
         if (isStrict) {
             parser.addMatcher(new RequireAffixValidator());
         }
-        if (isStrict && properties.getMinimumExponentDigits() > 0) {
-            parser.addMatcher(new RequireExponentValidator());
-        }
         if (parseCurrency) {
             parser.addMatcher(new RequireCurrencyValidator());
         }
