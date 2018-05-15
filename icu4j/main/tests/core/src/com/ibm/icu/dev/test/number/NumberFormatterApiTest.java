@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
+import java.text.Format;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -23,7 +24,9 @@ import java.util.Set;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.impl.number.Grouper;
+import com.ibm.icu.impl.number.LocalizedNumberFormatterAsFormat;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.Padder.PadPosition;
@@ -2116,6 +2119,47 @@ public class NumberFormatterApiTest {
         actual = new FieldPosition(NumberFormat.Field.FRACTION);
         fmtd = NumberFormatter.withLocale(ULocale.ENGLISH).format(5);
         assertFalse("No fraction part in an integer", fmtd.nextFieldPosition(actual));
+    }
+
+    /** Handler for serialization compatibility test suite. */
+    public static class FormatHandler implements SerializableTestUtility.Handler {
+        @Override
+        public Object[] getTestObjects() {
+            return new Object[] {
+                    NumberFormatter.withLocale(ULocale.FRENCH).toFormat(),
+                    NumberFormatter.fromSkeleton("percent").locale(ULocale.JAPANESE).toFormat(),
+                    NumberFormatter.fromSkeleton("scientific .000").locale(ULocale.ENGLISH).toFormat() };
+        }
+
+        @Override
+        public boolean hasSameBehavior(Object a, Object b) {
+            LocalizedNumberFormatterAsFormat f1 = (LocalizedNumberFormatterAsFormat) a;
+            LocalizedNumberFormatterAsFormat f2 = (LocalizedNumberFormatterAsFormat) b;
+            String s1 = f1.format(514.23);
+            String s2 = f1.format(514.23);
+            String k1 = f1.getNumberFormatter().toSkeleton();
+            String k2 = f2.getNumberFormatter().toSkeleton();
+            return s1.equals(s2) && k1.equals(k2);
+        }
+    }
+
+    @Test
+    public void toFormat() {
+        LocalizedNumberFormatter lnf = NumberFormatter.withLocale(ULocale.FRENCH)
+                .precision(Precision.fixedFraction(3));
+        Format format = lnf.toFormat();
+        FieldPosition fpos = new FieldPosition(NumberFormat.Field.DECIMAL_SEPARATOR);
+        StringBuffer sb = new StringBuffer();
+        format.format(514.23, sb, fpos);
+        assertEquals("Should correctly format number", "514,230", sb.toString());
+        assertEquals("Should find decimal separator", 3, fpos.getBeginIndex());
+        assertEquals("Should find end of decimal separator", 4, fpos.getEndIndex());
+        assertEquals("LocalizedNumberFormatter should round-trip",
+                lnf,
+                ((LocalizedNumberFormatterAsFormat) format).getNumberFormatter());
+        assertEquals("Should produce same character iterator",
+                lnf.format(514.23).toCharacterIterator().getAttributes(),
+                format.formatToCharacterIterator(514.23).getAttributes());
     }
 
     @Test

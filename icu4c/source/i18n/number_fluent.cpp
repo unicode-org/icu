@@ -11,6 +11,7 @@
 #include "number_formatimpl.h"
 #include "umutex.h"
 #include "number_skeletons.h"
+#include "number_utils.h"
 #include "number_utypes.h"
 #include "util.h"
 
@@ -575,23 +576,6 @@ const NumberingSystem* SymbolsWrapper::getNumberingSystem() const {
 }
 
 
-FormattedNumber::FormattedNumber(FormattedNumber&& src) U_NOEXCEPT
-        : fResults(src.fResults), fErrorCode(src.fErrorCode) {
-    // Disown src.fResults to prevent double-deletion
-    src.fResults = nullptr;
-    src.fErrorCode = U_INVALID_STATE_ERROR;
-}
-
-FormattedNumber& FormattedNumber::operator=(FormattedNumber&& src) U_NOEXCEPT {
-    delete fResults;
-    fResults = src.fResults;
-    fErrorCode = src.fErrorCode;
-    // Disown src.fResults to prevent double-deletion
-    src.fResults = nullptr;
-    src.fErrorCode = U_INVALID_STATE_ERROR;
-    return *this;
-}
-
 FormattedNumber LocalizedNumberFormatter::formatInt(int64_t value, UErrorCode& status) const {
     if (U_FAILURE(status)) { return FormattedNumber(U_ILLEGAL_ARGUMENT_ERROR); }
     auto results = new UFormattedNumberData();
@@ -743,6 +727,30 @@ int32_t LocalizedNumberFormatter::getCallCount() const {
     auto* callCount = reinterpret_cast<u_atomic_int32_t*>(
             const_cast<LocalizedNumberFormatter*>(this)->fUnsafeCallCount);
     return umtx_loadAcquire(*callCount);
+}
+
+Format* LocalizedNumberFormatter::toFormat(UErrorCode& status) const {
+    LocalPointer<LocalizedNumberFormatterAsFormat> retval(
+            new LocalizedNumberFormatterAsFormat(*this, fMacros.locale), status);
+    return retval.orphan();
+}
+
+
+FormattedNumber::FormattedNumber(FormattedNumber&& src) U_NOEXCEPT
+        : fResults(src.fResults), fErrorCode(src.fErrorCode) {
+    // Disown src.fResults to prevent double-deletion
+    src.fResults = nullptr;
+    src.fErrorCode = U_INVALID_STATE_ERROR;
+}
+
+FormattedNumber& FormattedNumber::operator=(FormattedNumber&& src) U_NOEXCEPT {
+    delete fResults;
+    fResults = src.fResults;
+    fErrorCode = src.fErrorCode;
+    // Disown src.fResults to prevent double-deletion
+    src.fResults = nullptr;
+    src.fErrorCode = U_INVALID_STATE_ERROR;
+    return *this;
 }
 
 UnicodeString FormattedNumber::toString() const {

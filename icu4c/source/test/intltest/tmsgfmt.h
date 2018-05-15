@@ -121,6 +121,7 @@ public:
     void TestSelectOrdinal();
     void TestDecimals();
     void TestArgIsPrefixOfAnother();
+    void TestMessageFormatNumberSkeleton();
 
 private:
     UnicodeString GetPatternAndSkipSyntax(const MessagePattern& pattern);

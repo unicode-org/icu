@@ -11,6 +11,7 @@
 #include "unicode/unum.h"
 #include "unicode/numberformatter.h"
 #include "number_types.h"
+#include "number_utils.h"
 #include "numbertest.h"
 #include "unicode/utypes.h"
 
@@ -82,6 +83,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(locale);
         TESTCASE_AUTO(formatTypes);
         TESTCASE_AUTO(fieldPosition);
+        TESTCASE_AUTO(toFormat);
         TESTCASE_AUTO(errors);
         TESTCASE_AUTO(validRanges);
         TESTCASE_AUTO(copyMove);
@@ -2153,6 +2155,30 @@ void NumberFormatterApiTest::fieldPosition() {
     actual = {UNUM_FRACTION_FIELD};
     fmtd = NumberFormatter::withLocale("en").formatInt(5, status);
     assertFalse(u"No fraction part in an integer", fmtd.nextFieldPosition(actual, status));
+}
+
+void NumberFormatterApiTest::toFormat() {
+    IcuTestErrorCode status(*this, "icuFormat");
+    LocalizedNumberFormatter lnf = NumberFormatter::withLocale("fr")
+            .precision(Precision::fixedFraction(3));
+    LocalPointer<Format> format(lnf.toFormat(status), status);
+    FieldPosition fpos(UNUM_DECIMAL_SEPARATOR_FIELD);
+    UnicodeString sb;
+    format->format(514.23, sb, fpos, status);
+    assertEquals("Should correctly format number", u"514,230", sb);
+    assertEquals("Should find decimal separator", 3, fpos.getBeginIndex());
+    assertEquals("Should find end of decimal separator", 4, fpos.getEndIndex());
+    assertEquals(
+            "ICU Format should round-trip",
+            lnf.toSkeleton(status),
+            dynamic_cast<LocalizedNumberFormatterAsFormat*>(format.getAlias())->getNumberFormatter()
+                    .toSkeleton(status));
+
+    FieldPositionIterator fpi1;
+    lnf.formatDouble(514.23, status).getAllFieldPositions(fpi1, status);
+    FieldPositionIterator fpi2;
+    format->format(514.23, sb.remove(), &fpi2, status);
+    assertTrue("Should produce same field position iterator", fpi1 == fpi2);
 }
 
 void NumberFormatterApiTest::errors() {

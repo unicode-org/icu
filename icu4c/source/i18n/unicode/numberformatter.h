@@ -2266,6 +2266,21 @@ class U_I18N_API LocalizedNumberFormatter
 #endif
 
     /**
+     * Creates a representation of this LocalizedNumberFormat as an icu::Format, enabling the use
+     * of this number formatter with APIs that need an object of that type, such as MessageFormat.
+     *
+     * This API is not intended to be used other than for enabling API compatibility. The formatDouble,
+     * formatInt, and formatDecimal methods should normally be used when formatting numbers, not the Format
+     * object returned by this method.
+     *
+     * The caller owns the returned object and must delete it when finished.
+     *
+     * @return A Format wrapping this LocalizedNumberFormatter.
+     * @draft ICU 62
+     */
+    Format* toFormat(UErrorCode& status) const;
+
+    /**
      * Default constructor: puts the formatter into a valid but undefined state.
      *
      * @draft ICU 62

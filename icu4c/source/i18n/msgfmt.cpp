@@ -31,6 +31,7 @@
 #include "unicode/decimfmt.h"
 #include "unicode/localpointer.h"
 #include "unicode/msgfmt.h"
+#include "unicode/numberformatter.h"
 #include "unicode/plurfmt.h"
 #include "unicode/rbnf.h"
 #include "unicode/selfmt.h"
@@ -1700,12 +1701,21 @@ Format* MessageFormat::createAppropriateFormat(UnicodeString& type, UnicodeStrin
             formattableType = Formattable::kLong;
             fmt = createIntegerFormat(fLocale, ec);
             break;
-        default: // pattern
-            fmt = NumberFormat::createInstance(fLocale, ec);
-            if (fmt) {
-                DecimalFormat* decfmt = dynamic_cast<DecimalFormat*>(fmt);
-                if (decfmt != NULL) {
-                    decfmt->applyPattern(style,parseError,ec);
+        default: // pattern or skeleton
+            int32_t i = 0;
+            for (; PatternProps::isWhiteSpace(style.charAt(i)); i++);
+            if (style.compare(i, 2, u"::", 0, 2) == 0) {
+                // Skeleton
+                UnicodeString skeleton = style.tempSubString(i + 2);
+                fmt = number::NumberFormatter::fromSkeleton(skeleton, ec).locale(fLocale).toFormat(ec);
+            } else {
+                // Pattern
+                fmt = NumberFormat::createInstance(fLocale, ec);
+                if (fmt) {
+                    auto* decfmt = dynamic_cast<DecimalFormat*>(fmt);
+                    if (decfmt != nullptr) {
+                        decfmt->applyPattern(style, parseError, ec);
+                    }
                 }
             }
             break;

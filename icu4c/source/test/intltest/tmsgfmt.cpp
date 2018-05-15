@@ -71,6 +71,7 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestSelectOrdinal);
     TESTCASE_AUTO(TestDecimals);
     TESTCASE_AUTO(TestArgIsPrefixOfAnother);
+    TESTCASE_AUTO(TestMessageFormatNumberSkeleton);
     TESTCASE_AUTO_END;
 }
 
@@ -1990,6 +1991,40 @@ void TestMessageFormat::TestArgIsPrefixOfAnother() {
     // Ticket #12172
     MessageFormat mf3("{aa} {aaa}", Locale::getEnglish(), errorCode);
     assertEquals("aa aaa", "AB ABC", mf3.format(argNames + 1, args + 1, 2, result.remove(), errorCode));
+}
+
+void TestMessageFormat::TestMessageFormatNumberSkeleton() {
+    IcuTestErrorCode status(*this, "TestMessageFormatNumberSkeleton");
+
+    static const struct TestCase {
+        const char16_t* messagePattern;
+        const char* localeName;
+        double arg;
+        const char16_t* expected;
+    } cases[] = {
+            { u"{0,number,::percent}", "en", 50, u"50%" },
+            { u"{0,number,::percent scale/100}", "en", 0.5, u"50%" },
+            { u"{0,number,   ::   percent   scale/100   }", "en", 0.5, u"50%" },
+            { u"{0,number,::currency/USD}", "en", 23, u"$23.00" },
+            { u"{0,number,::precision-integer}", "en", 514.23, u"514" },
+            { u"{0,number,::.000}", "en", 514.23, u"514.230" },
+            { u"{0,number,::.}", "en", 514.23, u"514" },
+            { u"{0,number,::}", "fr", 514.23, u"514,23" },
+            { u"Cost: {0,number,::currency/EUR}.", "en", 4.3, u"Cost: €4.30." },
+            { u"{0,number,'::'0.00}", "en", 50, u"::50.00" }, // pattern literal
+    };
+
+    for (auto& cas : cases) {
+        status.setScope(cas.messagePattern);
+        MessageFormat msgf(cas.messagePattern, cas.localeName, status);
+        UnicodeString sb;
+        FieldPosition fpos(0);
+        Formattable argsArray[] = {{cas.arg}};
+        Formattable args(argsArray, 1);
+        msgf.format(args, sb, status);
+
+        assertEquals(cas.messagePattern, cas.expected, sb);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

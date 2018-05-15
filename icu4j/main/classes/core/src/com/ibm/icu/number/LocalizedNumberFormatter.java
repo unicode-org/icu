@@ -3,12 +3,14 @@
 package com.ibm.icu.number;
 
 import java.math.BigInteger;
+import java.text.Format;
 import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
+import com.ibm.icu.impl.number.LocalizedNumberFormatterAsFormat;
 import com.ibm.icu.impl.number.MacroProps;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.math.BigDecimal;
@@ -112,6 +114,23 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
             savedWithUnit = withUnit;
         }
         return withUnit.format(number);
+    }
+
+    /**
+     * Creates a representation of this LocalizedNumberFormat as a {@link java.text.Format}, enabling the
+     * use of this number formatter with APIs that need an object of that type, such as MessageFormat.
+     * <p>
+     * This API is not intended to be used other than for enabling API compatibility. The {@link #format}
+     * methods should normally be used when formatting numbers, not the Format object returned by this
+     * method.
+     *
+     * @return A Format wrapping this LocalizedNumberFormatter.
+     * @draft ICU 62
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberFormatter
+     */
+    public Format toFormat() {
+        return new LocalizedNumberFormatterAsFormat(this, resolve().loc);
     }
 
     /**

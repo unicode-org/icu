@@ -2092,4 +2092,34 @@ public class TestMessageFormat extends TestFmwk {
         int actualHashResult2 = testDF2.hashCode();
         assertNotEquals("DateFormat hashCode() test: really the same hashcode?", actualHashResult1, actualHashResult2);
     }
+
+    @Test
+    public void TestMessageFormatNumberSkeleton() {
+        Object[][] cases = new Object[][] {
+                { "{0,number,::percent}", ULocale.ENGLISH, 50, "50%" },
+                { "{0,number,::percent scale/100}", ULocale.ENGLISH, 0.5, "50%" },
+                { "{0,number,   ::   percent   scale/100   }", ULocale.ENGLISH, 0.5, "50%" },
+                { "{0,number,::currency/USD}", ULocale.ENGLISH, 23, "$23.00" },
+                { "{0,number,::precision-integer}", ULocale.ENGLISH, 514.23, "514" },
+                { "{0,number,::.000}", ULocale.ENGLISH, 514.23, "514.230" },
+                { "{0,number,::.}", ULocale.ENGLISH, 514.23, "514" },
+                { "{0,number,::}", ULocale.FRENCH, 514.23, "514,23" },
+                { "Cost: {0,number,::currency/EUR}.", ULocale.ENGLISH, 4.3, "Cost: €4.30." },
+                { "{0,number,'::'0.00}", ULocale.ENGLISH, 50, "::50.00" }, // pattern literal
+        };
+
+        for (Object[] cas : cases) {
+            String messagePattern = (String) cas[0];
+            ULocale locale = (ULocale) cas[1];
+            Number arg = (Number) cas[2];
+            String expected = (String) cas[3];
+
+            MessageFormat msgf = new MessageFormat(messagePattern, locale);
+            StringBuffer sb = new StringBuffer();
+            FieldPosition fpos = new FieldPosition(0);
+            msgf.format(new Object[] { arg }, sb, fpos);
+
+            assertEquals(messagePattern, expected, sb.toString());
+        }
+    }
 }
