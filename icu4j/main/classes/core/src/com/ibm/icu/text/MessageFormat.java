@@ -36,6 +36,7 @@ import java.util.Set;
 
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.MessagePattern.ArgType;
 import com.ibm.icu.text.MessagePattern.Part;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
@@ -2204,9 +2205,17 @@ public class MessageFormat extends UFormat {
             case MODIFIER_INTEGER:
                 newFormat = NumberFormat.getIntegerInstance(ulocale);
                 break;
-            default: // pattern
-                newFormat = new DecimalFormat(style,
-                        new DecimalFormatSymbols(ulocale));
+            default: // pattern or skeleton
+                // Ignore leading whitespace when looking for "::", the skeleton signal sequence
+                int i = 0;
+                for (; PatternProps.isWhiteSpace(style.charAt(i)); i++);
+                if (style.regionMatches(i, "::", 0, 2)) {
+                    // Skeleton
+                    newFormat = NumberFormatter.fromSkeleton(style.substring(i + 2)).locale(ulocale).toFormat();
+                } else {
+                    // Pattern
+                    newFormat = new DecimalFormat(style, new DecimalFormatSymbols(ulocale));
+                }
                 break;
             }
             break;

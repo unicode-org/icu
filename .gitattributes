@@ -5917,6 +5917,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/number/DecimalQuantity.java svneol=
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/DecimalQuantity_AbstractBCD.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/DecimalQuantity_DualStorageBCD.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/Grouper.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/number/LocalizedNumberFormatterAsFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/LongNameHandler.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/MacroProps.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/number/MicroProps.java svneol=native#text/plain%3Bcharset%3Dutf-8

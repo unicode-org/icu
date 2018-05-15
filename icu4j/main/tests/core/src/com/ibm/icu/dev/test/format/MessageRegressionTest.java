@@ -894,7 +894,7 @@ public class MessageRegressionTest extends TestFmwk {
         format2 = serializeAndDeserialize(format1);
         assertEquals("MessageFormats (empty pattern) before and after serialization are not equal", format1, format2);
 
-        format1.applyPattern("ab{1}cd{0,number}ef{3,date}gh");
+        format1.applyPattern("ab{1}cd{0,number}ef{3,date}gh{4,number,::percent}ij");
         format1.setFormat(2, null);
         format1.setFormatByArgumentIndex(1, NumberFormat.getInstance(ULocale.ENGLISH));
         format2 = serializeAndDeserialize(format1);
@@ -902,7 +902,7 @@ public class MessageRegressionTest extends TestFmwk {
         assertEquals(
                 "MessageFormat (with custom formats) does not "+
                 "format correctly after serialization",
-                "ab3.3cd4,4ef***gh",
-                format2.format(new Object[] { 4.4, 3.3, "+++", "***" }));
+                "ab3.3cd4,4ef***gh50\u00A0%ij",
+                format2.format(new Object[] { 4.4, 3.3, "+++", "***", 50 }));
     }
 }
