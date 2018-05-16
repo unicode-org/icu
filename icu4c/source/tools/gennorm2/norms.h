@@ -15,7 +15,7 @@
 #if !UCONFIG_NO_NORMALIZATION
 
 #include "unicode/errorcode.h"
-#include "unicode/ucptriebuilder.h"
+#include "unicode/umutablecptrie.h"
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
 #include "unicode/utf16.h"
@@ -188,7 +188,7 @@ private:
     Norms(const Norms &other) = delete;
     Norms &operator=(const Norms &other) = delete;
 
-    UCPTrieBuilder *normTrie;
+    UMutableCPTrie *normTrie;
     UToolMemory *normMem;
     Norm *norms;
 };

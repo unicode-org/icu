@@ -1,7 +1,7 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-// ucptriebuilder.cpp (inspired by utrie2_builder.cpp)
+// umutablecptrie.cpp (inspired by utrie2_builder.cpp)
 // created: 2017dec29 Markus W. Scherer
 
 #define UCPTRIE_DEBUG  // TODO
@@ -11,7 +11,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucptrie.h"
-#include "unicode/ucptriebuilder.h"
+#include "unicode/umutablecptrie.h"
 #include "unicode/uobject.h"
 #include "unicode/utf16.h"
 #include "cmemory.h"
@@ -61,16 +61,16 @@ constexpr int32_t INDEX_3_18BIT_BLOCK_LENGTH = UCPTRIE_INDEX_3_BLOCK_LENGTH + UC
 
 class AllSameBlocks;
 
-class CodePointTrieBuilder : public UMemory {
+class MutableCodePointTrie : public UMemory {
 public:
-    CodePointTrieBuilder(uint32_t initialValue, uint32_t errorValue, UErrorCode &errorCode);
-    CodePointTrieBuilder(const CodePointTrieBuilder &other, UErrorCode &errorCode);
-    CodePointTrieBuilder(const CodePointTrieBuilder &other) = delete;
-    ~CodePointTrieBuilder();
+    MutableCodePointTrie(uint32_t initialValue, uint32_t errorValue, UErrorCode &errorCode);
+    MutableCodePointTrie(const MutableCodePointTrie &other, UErrorCode &errorCode);
+    MutableCodePointTrie(const MutableCodePointTrie &other) = delete;
+    ~MutableCodePointTrie();
 
-    CodePointTrieBuilder &operator=(const CodePointTrieBuilder &other) = delete;
+    MutableCodePointTrie &operator=(const MutableCodePointTrie &other) = delete;
 
-    static CodePointTrieBuilder *fromUCPTrie(const UCPTrie *trie, UErrorCode &errorCode);
+    static MutableCodePointTrie *fromUCPTrie(const UCPTrie *trie, UErrorCode &errorCode);
 
     uint32_t get(UChar32 c) const;
     int32_t getRange(UChar32 start, UCPTrieHandleValue *handleValue, const void *context,
@@ -79,7 +79,7 @@ public:
     void set(UChar32 c, uint32_t value, UErrorCode &errorCode);
     void setRange(UChar32 start, UChar32 end, uint32_t value, UErrorCode &errorCode);
 
-    UCPTrie *build(UCPTrieType type, UCPTrieValueBits valueBits, UErrorCode &errorCode);
+    UCPTrie *build(UCPTrieType type, UCPTrieValueWidth valueWidth, UErrorCode &errorCode);
 
 private:
     void clear();
@@ -117,7 +117,7 @@ private:
     uint8_t flags[UNICODE_LIMIT >> UCPTRIE_SHIFT_3];
 };
 
-CodePointTrieBuilder::CodePointTrieBuilder(uint32_t iniValue, uint32_t errValue, UErrorCode &errorCode) :
+MutableCodePointTrie::MutableCodePointTrie(uint32_t iniValue, uint32_t errValue, UErrorCode &errorCode) :
         index(nullptr), indexCapacity(0), index3NullOffset(-1),
         data(nullptr), dataCapacity(0), dataLength(0), dataNullOffset(-1),
         origInitialValue(iniValue), initialValue(iniValue), errorValue(errValue),
@@ -133,12 +133,12 @@ CodePointTrieBuilder::CodePointTrieBuilder(uint32_t iniValue, uint32_t errValue,
     dataCapacity = INITIAL_DATA_LENGTH;
 }
 
-CodePointTrieBuilder::CodePointTrieBuilder(const CodePointTrieBuilder &other, UErrorCode &errorCode) :
+MutableCodePointTrie::MutableCodePointTrie(const MutableCodePointTrie &other, UErrorCode &errorCode) :
         index(nullptr), indexCapacity(0), index3NullOffset(other.index3NullOffset),
         data(nullptr), dataCapacity(0), dataLength(0), dataNullOffset(other.dataNullOffset),
         origInitialValue(other.origInitialValue), initialValue(other.initialValue),
         errorValue(other.errorValue),
-        highStart(other.highStart), highValue(other.highValue), name("builder clone"),
+        highStart(other.highStart), highValue(other.highValue), name("mutable clone"),
         index16(nullptr) {
     if (U_FAILURE(errorCode)) { return; }
     int32_t iCapacity = highStart <= BMP_LIMIT ? BMP_I_LIMIT : I_LIMIT;
@@ -158,13 +158,13 @@ CodePointTrieBuilder::CodePointTrieBuilder(const CodePointTrieBuilder &other, UE
     dataLength = other.dataLength;
 }
 
-CodePointTrieBuilder::~CodePointTrieBuilder() {
+MutableCodePointTrie::~MutableCodePointTrie() {
     uprv_free(index);
     uprv_free(data);
     uprv_free(index16);
 }
 
-CodePointTrieBuilder *CodePointTrieBuilder::fromUCPTrie(const UCPTrie *trie, UErrorCode &errorCode) {
+MutableCodePointTrie *MutableCodePointTrie::fromUCPTrie(const UCPTrie *trie, UErrorCode &errorCode) {
     // Use the highValue as the initialValue to reduce the highStart.
     uint32_t errorValue;
     uint32_t initialValue;
@@ -178,9 +178,9 @@ CodePointTrieBuilder *CodePointTrieBuilder::fromUCPTrie(const UCPTrie *trie, UEr
         errorValue = trie->data8[trie->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET];
         initialValue = trie->data8[trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET];
     }
-    CodePointTrieBuilder *builder = new CodePointTrieBuilder(initialValue, errorValue, errorCode);
+    MutableCodePointTrie *mutableTrie = new MutableCodePointTrie(initialValue, errorValue, errorCode);
     if (U_FAILURE(errorCode)) {
-        delete builder;
+        delete mutableTrie;
         return nullptr;
     }
     UChar32 start = 0, end;
@@ -188,22 +188,22 @@ CodePointTrieBuilder *CodePointTrieBuilder::fromUCPTrie(const UCPTrie *trie, UEr
     while ((end = ucptrie_getRange(trie, start, nullptr, nullptr, &value)) >= 0) {
         if (value != initialValue) {
             if (start == end) {
-                builder->set(start, value, errorCode);
+                mutableTrie->set(start, value, errorCode);
             } else {
-                builder->setRange(start, end, value, errorCode);
+                mutableTrie->setRange(start, end, value, errorCode);
             }
         }
         start = end + 1;
     }
     if (U_SUCCESS(errorCode)) {
-        return builder;
+        return mutableTrie;
     } else {
-        delete builder;
+        delete mutableTrie;
         return nullptr;
     }
 }
 
-void CodePointTrieBuilder::clear() {
+void MutableCodePointTrie::clear() {
     index3NullOffset = dataNullOffset = -1;
     dataLength = 0;
     highValue = initialValue = origInitialValue;
@@ -212,7 +212,7 @@ void CodePointTrieBuilder::clear() {
     index16 = nullptr;
 }
 
-uint32_t CodePointTrieBuilder::get(UChar32 c) const {
+uint32_t MutableCodePointTrie::get(UChar32 c) const {
     if ((uint32_t)c > MAX_UNICODE) {
         return errorValue;
     }
@@ -237,7 +237,7 @@ inline uint32_t maybeHandleValue(uint32_t value, uint32_t initialValue, uint32_t
     return value;
 }
 
-UChar32 CodePointTrieBuilder::getRange(
+UChar32 MutableCodePointTrie::getRange(
         UChar32 start, UCPTrieHandleValue *handleValue, const void *context,
         uint32_t *pValue) const {
     if ((uint32_t)start > MAX_UNICODE) {
@@ -310,7 +310,7 @@ writeBlock(uint32_t *block, uint32_t value) {
     }
 }
 
-bool CodePointTrieBuilder::ensureHighStart(UChar32 c) {
+bool MutableCodePointTrie::ensureHighStart(UChar32 c) {
     if (c >= highStart) {
         // Round up to a UCPTRIE_CP_PER_INDEX_2_ENTRY boundary to simplify compaction.
         c = (c + UCPTRIE_CP_PER_INDEX_2_ENTRY) & ~(UCPTRIE_CP_PER_INDEX_2_ENTRY - 1);
@@ -333,7 +333,7 @@ bool CodePointTrieBuilder::ensureHighStart(UChar32 c) {
     return true;
 }
 
-int32_t CodePointTrieBuilder::allocDataBlock(int32_t blockLength) {
+int32_t MutableCodePointTrie::allocDataBlock(int32_t blockLength) {
     int32_t newBlock = dataLength;
     int32_t newTop = newBlock + blockLength;
     if (newTop > dataCapacity) {
@@ -367,7 +367,7 @@ int32_t CodePointTrieBuilder::allocDataBlock(int32_t blockLength) {
  * @return -1 if no new data block available (out of memory in data array)
  * @internal
  */
-int32_t CodePointTrieBuilder::getDataBlock(int32_t i) {
+int32_t MutableCodePointTrie::getDataBlock(int32_t i) {
     if (flags[i] == MIXED) {
         return index[i];
     }
@@ -394,7 +394,7 @@ int32_t CodePointTrieBuilder::getDataBlock(int32_t i) {
     }
 }
 
-void CodePointTrieBuilder::set(UChar32 c, uint32_t value, UErrorCode &errorCode) {
+void MutableCodePointTrie::set(UChar32 c, uint32_t value, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
@@ -421,7 +421,7 @@ fillBlock(uint32_t *block, UChar32 start, UChar32 limit, uint32_t value) {
     }
 }
 
-void CodePointTrieBuilder::setRange(UChar32 start, UChar32 end, uint32_t value, UErrorCode &errorCode) {
+void MutableCodePointTrie::setRange(UChar32 start, UChar32 end, uint32_t value, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
     }
@@ -486,7 +486,7 @@ void CodePointTrieBuilder::setRange(UChar32 start, UChar32 end, uint32_t value, 
 
 /* compaction --------------------------------------------------------------- */
 
-void CodePointTrieBuilder::maskValues(uint32_t mask) {
+void MutableCodePointTrie::maskValues(uint32_t mask) {
     initialValue &= mask;
     errorValue &= mask;
     highValue &= mask;
@@ -653,7 +653,7 @@ int32_t getAllSameOverlap(const uint32_t *p, int32_t length, uint32_t value,
  * Finds the start of the last range in the trie by enumerating backward.
  * Indexes for supplementary code points higher than this will be omitted.
  */
-UChar32 CodePointTrieBuilder::findHighStart() const {
+UChar32 MutableCodePointTrie::findHighStart() const {
     int32_t i = highStart >> UCPTRIE_SHIFT_3;
     while (i > 0) {
         bool match;
@@ -751,7 +751,7 @@ private:
     int32_t refCounts[CAPACITY];
 };
 
-int32_t CodePointTrieBuilder::compactWholeDataBlocks(int32_t fastILimit, AllSameBlocks &allSameBlocks) {
+int32_t MutableCodePointTrie::compactWholeDataBlocks(int32_t fastILimit, AllSameBlocks &allSameBlocks) {
 #ifdef UCPTRIE_DEBUG
     bool overflow = false;
 #endif
@@ -901,7 +901,7 @@ void printBlock(const uint32_t *block, int32_t blockLength, uint32_t value,
  *
  * It does not try to find an optimal order of writing, deduplicating, and overlapping blocks.
  */
-int32_t CodePointTrieBuilder::compactData(int32_t fastILimit, uint32_t *newData) {
+int32_t MutableCodePointTrie::compactData(int32_t fastILimit, uint32_t *newData) {
 #ifdef UCPTRIE_DEBUG
     int32_t countSame=0, sumOverlaps=0;
     bool printData = dataLength == 29088 /* line.brk */ ||
@@ -982,7 +982,7 @@ int32_t CodePointTrieBuilder::compactData(int32_t fastILimit, uint32_t *newData)
     return newDataLength;
 }
 
-int32_t CodePointTrieBuilder::compactIndex(int32_t fastILimit, UErrorCode &errorCode) {
+int32_t MutableCodePointTrie::compactIndex(int32_t fastILimit, UErrorCode &errorCode) {
     int32_t fastIndexLength = fastILimit >> (UCPTRIE_FAST_SHIFT - UCPTRIE_SHIFT_3);
     if ((highStart >> UCPTRIE_FAST_SHIFT) <= fastIndexLength) {
         // Only the linear BMP index, no supplementary index tables.
@@ -1240,7 +1240,7 @@ int32_t CodePointTrieBuilder::compactIndex(int32_t fastILimit, UErrorCode &error
     return indexLength;
 }
 
-int32_t CodePointTrieBuilder::compactTrie(int32_t fastILimit, UErrorCode &errorCode) {
+int32_t MutableCodePointTrie::compactTrie(int32_t fastILimit, UErrorCode &errorCode) {
     // Find the real highStart and round it up.
     U_ASSERT((highStart & (UCPTRIE_CP_PER_INDEX_2_ENTRY - 1)) == 0);
     highValue = get(MAX_UNICODE);
@@ -1321,20 +1321,20 @@ int32_t CodePointTrieBuilder::compactTrie(int32_t fastILimit, UErrorCode &errorC
     return indexLength;
 }
 
-UCPTrie *CodePointTrieBuilder::build(UCPTrieType type, UCPTrieValueBits valueBits, UErrorCode &errorCode) {
+UCPTrie *MutableCodePointTrie::build(UCPTrieType type, UCPTrieValueWidth valueWidth, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
     if (type < UCPTRIE_TYPE_FAST || UCPTRIE_TYPE_SMALL < type ||
-            valueBits < UCPTRIE_VALUE_BITS_16 || UCPTRIE_VALUE_BITS_8 < valueBits) {
+            valueWidth < UCPTRIE_VALUE_BITS_16 || UCPTRIE_VALUE_BITS_8 < valueWidth) {
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
 
-    // The builder always stores 32-bit values.
+    // The mutable trie always stores 32-bit values.
     // When we build a UCPTrie for a smaller value width, we first mask off unused bits
     // before compacting the data.
-    switch (valueBits) {
+    switch (valueWidth) {
     case UCPTRIE_VALUE_BITS_32:
         break;
     case UCPTRIE_VALUE_BITS_16:
@@ -1355,14 +1355,14 @@ UCPTrie *CodePointTrieBuilder::build(UCPTrieType type, UCPTrieValueBits valueBit
     }
 
     // Ensure data table alignment: The index length must be even for uint32_t data.
-    if (valueBits == UCPTRIE_VALUE_BITS_32 && (indexLength & 1) != 0) {
+    if (valueWidth == UCPTRIE_VALUE_BITS_32 && (indexLength & 1) != 0) {
         index16[indexLength++] = 0xffee;  // arbitary value
     }
 
     // Make the total trie structure length a multiple of 4 bytes by padding the data table,
     // and store special values as the last two data values.
     int32_t length = indexLength * 2;
-    if (valueBits == UCPTRIE_VALUE_BITS_16) {
+    if (valueWidth == UCPTRIE_VALUE_BITS_16) {
         if (((indexLength ^ dataLength) & 1) != 0) {
             // padding
             data[dataLength++] = errorValue;
@@ -1372,7 +1372,7 @@ UCPTrie *CodePointTrieBuilder::build(UCPTrieType type, UCPTrieValueBits valueBit
             data[dataLength++] = errorValue;
         }
         length += dataLength * 2;
-    } else if (valueBits == UCPTRIE_VALUE_BITS_32) {
+    } else if (valueWidth == UCPTRIE_VALUE_BITS_32) {
         // 32-bit data words never need padding to a multiple of 4 bytes.
         if (data[dataLength - 1] != errorValue || data[dataLength - 2] != highValue) {
             if (data[dataLength - 1] != highValue) {
@@ -1430,7 +1430,7 @@ UCPTrie *CodePointTrieBuilder::build(UCPTrieType type, UCPTrieValueBits valueBit
     trie->index = dest16;
 
     if (highStart <= fastLimit) {
-        // Condense only the fast index from the builder index.
+        // Condense only the fast index from the mutable-trie index.
         for (int32_t i = 0, j = 0; j < indexLength; i += SMALL_DATA_BLOCKS_PER_BMP_BLOCK, ++j) {
             *dest16++ = (uint16_t)index[i];  // dest16[j]
         }
@@ -1442,7 +1442,7 @@ UCPTrie *CodePointTrieBuilder::build(UCPTrieType type, UCPTrieValueBits valueBit
 
     // Write the data array.
     const uint32_t *p = data;
-    switch (valueBits) {
+    switch (valueWidth) {
     case UCPTRIE_VALUE_BITS_16:
         // Write 16-bit data values.
         trie->data16 = dest16;
@@ -1469,7 +1469,7 @@ UCPTrie *CodePointTrieBuilder::build(UCPTrieType type, UCPTrieValueBits valueBit
         }
         break;
     default:
-        // Will not occur, valueBits checked at the beginning.
+        // Will not occur, valueWidth checked at the beginning.
         break;
     }
 
@@ -1489,43 +1489,43 @@ U_NAMESPACE_END
 
 U_NAMESPACE_USE
 
-U_CAPI UCPTrieBuilder * U_EXPORT2
-ucptriebld_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) {
+U_CAPI UMutableCPTrie * U_EXPORT2
+umutablecptrie_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return nullptr;
     }
-    CodePointTrieBuilder *builder = new CodePointTrieBuilder(initialValue, errorValue, *pErrorCode);
+    MutableCodePointTrie *trie = new MutableCodePointTrie(initialValue, errorValue, *pErrorCode);
     if (U_FAILURE(*pErrorCode)) {
-        delete builder;
+        delete trie;
         return nullptr;
     }
-    return reinterpret_cast<UCPTrieBuilder *>(builder);
+    return reinterpret_cast<UMutableCPTrie *>(trie);
 }
 
-U_CAPI UCPTrieBuilder * U_EXPORT2
-ucptriebld_clone(const UCPTrieBuilder *other, UErrorCode *pErrorCode) {
+U_CAPI UMutableCPTrie * U_EXPORT2
+umutablecptrie_clone(const UMutableCPTrie *other, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return nullptr;
     }
     if (other == nullptr) {
         return nullptr;
     }
-    CodePointTrieBuilder *clone = new CodePointTrieBuilder(
-        *reinterpret_cast<const CodePointTrieBuilder *>(other), *pErrorCode);
+    MutableCodePointTrie *clone = new MutableCodePointTrie(
+        *reinterpret_cast<const MutableCodePointTrie *>(other), *pErrorCode);
     if (U_FAILURE(*pErrorCode)) {
         delete clone;
         return nullptr;
     }
-    return reinterpret_cast<UCPTrieBuilder *>(clone);
+    return reinterpret_cast<UMutableCPTrie *>(clone);
 }
 
 U_CAPI void U_EXPORT2
-ucptriebld_close(UCPTrieBuilder *builder) {
-    delete reinterpret_cast<CodePointTrieBuilder *>(builder);
+umutablecptrie_close(UMutableCPTrie *trie) {
+    delete reinterpret_cast<MutableCodePointTrie *>(trie);
 }
 
-U_CAPI UCPTrieBuilder * U_EXPORT2
-ucptriebld_fromUCPTrie(const UCPTrie *trie, UErrorCode *pErrorCode) {
+U_CAPI UMutableCPTrie * U_EXPORT2
+umutablecptrie_fromUCPTrie(const UCPTrie *trie, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return nullptr;
     }
@@ -1533,49 +1533,50 @@ ucptriebld_fromUCPTrie(const UCPTrie *trie, UErrorCode *pErrorCode) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
-    return reinterpret_cast<UCPTrieBuilder *>(CodePointTrieBuilder::fromUCPTrie(trie, *pErrorCode));
+    return reinterpret_cast<UMutableCPTrie *>(MutableCodePointTrie::fromUCPTrie(trie, *pErrorCode));
 }
 
 U_CAPI uint32_t U_EXPORT2
-ucptriebld_get(const UCPTrieBuilder *builder, UChar32 c) {
-    return reinterpret_cast<const CodePointTrieBuilder *>(builder)->get(c);
+umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c) {
+    return reinterpret_cast<const MutableCodePointTrie *>(trie)->get(c);
 }
 
 U_CAPI int32_t U_EXPORT2
-ucptriebld_getRange(const UCPTrieBuilder *builder, UChar32 start,
-                   UCPTrieHandleValue *handleValue, const void *context, uint32_t *pValue) {
-    return reinterpret_cast<const CodePointTrieBuilder *>(builder)->getRange(start, handleValue, context, pValue);
+umutablecptrie_getRange(const UMutableCPTrie *trie, UChar32 start,
+                        UCPTrieHandleValue *handleValue, const void *context, uint32_t *pValue) {
+    return reinterpret_cast<const MutableCodePointTrie *>(trie)->
+        getRange(start, handleValue, context, pValue);
 }
 
 U_CAPI void U_EXPORT2
-ucptriebld_set(UCPTrieBuilder *builder, UChar32 c, uint32_t value, UErrorCode *pErrorCode) {
+umutablecptrie_set(UMutableCPTrie *trie, UChar32 c, uint32_t value, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return;
     }
-    reinterpret_cast<CodePointTrieBuilder *>(builder)->set(c, value, *pErrorCode);
+    reinterpret_cast<MutableCodePointTrie *>(trie)->set(c, value, *pErrorCode);
 }
 
 U_CAPI void U_EXPORT2
-ucptriebld_setRange(UCPTrieBuilder *builder, UChar32 start, UChar32 end,
+umutablecptrie_setRange(UMutableCPTrie *trie, UChar32 start, UChar32 end,
                    uint32_t value, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return;
     }
-    reinterpret_cast<CodePointTrieBuilder *>(builder)->setRange(start, end, value, *pErrorCode);
+    reinterpret_cast<MutableCodePointTrie *>(trie)->setRange(start, end, value, *pErrorCode);
 }
 
 /* Compact and internally serialize the trie. */
 U_CAPI UCPTrie * U_EXPORT2
-ucptriebld_build(UCPTrieBuilder *builder, UCPTrieType type, UCPTrieValueBits valueBits,
-                UErrorCode *pErrorCode) {
+umutablecptrie_buildImmutable(UMutableCPTrie *trie, UCPTrieType type, UCPTrieValueWidth valueWidth,
+                              UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return nullptr;
     }
-    return reinterpret_cast<CodePointTrieBuilder *>(builder)->build(type, valueBits, *pErrorCode);
+    return reinterpret_cast<MutableCodePointTrie *>(trie)->build(type, valueWidth, *pErrorCode);
 }
 
-U_CFUNC void ucptriebld_setName(UCPTrieBuilder *builder, const char *name) {
-    reinterpret_cast<CodePointTrieBuilder *>(builder)->name = name;  // TODO
+U_CFUNC void umutablecptrie_setName(UMutableCPTrie *trie, const char *name) {
+    reinterpret_cast<MutableCodePointTrie *>(trie)->name = name;  // TODO
 }
 
 /*

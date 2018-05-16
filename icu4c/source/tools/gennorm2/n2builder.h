@@ -24,7 +24,7 @@
 #if !UCONFIG_NO_NORMALIZATION
 
 #include "unicode/errorcode.h"
-#include "unicode/ucptriebuilder.h"
+#include "unicode/umutablecptrie.h"
 #include "unicode/unistr.h"
 #include "normalizer2impl.h"  // for IX_COUNT
 #include "toolutil.h"
@@ -95,8 +95,8 @@ private:
         return indexes[Normalizer2Impl::IX_MIN_MAYBE_YES]-
             ((2*Normalizer2Impl::MAX_DELTA+1)<<Normalizer2Impl::DELTA_SHIFT);
     }
-    void writeNorm16(UCPTrieBuilder *norm16Trie, UChar32 start, UChar32 end, Norm &norm);
-    void setHangulData(UCPTrieBuilder *norm16Trie);
+    void writeNorm16(UMutableCPTrie *norm16Trie, UChar32 start, UChar32 end, Norm &norm);
+    void setHangulData(UMutableCPTrie *norm16Trie);
     LocalUCPTriePointer processData();
 
     Norms norms;

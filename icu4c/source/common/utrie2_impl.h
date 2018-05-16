@@ -22,7 +22,7 @@
 #ifndef __UTRIE2_IMPL_H__
 #define __UTRIE2_IMPL_H__
 
-#include "unicode/ucptriebuilder.h"  // TODO
+#include "unicode/umutablecptrie.h"  // TODO
 #include "utrie2.h"
 
 /* Public UTrie2 API implementation ----------------------------------------- */
@@ -146,7 +146,7 @@ struct UNewTrie2 {
     int32_t index1[UNEWTRIE2_INDEX_1_LENGTH];
     int32_t index2[UNEWTRIE2_MAX_INDEX_2_LENGTH];
     uint32_t *data;
-    UCPTrieBuilder *t3;
+    UMutableCPTrie *t3;
 
     uint32_t initialValue, errorValue;
     int32_t index2Length, dataCapacity, dataLength;

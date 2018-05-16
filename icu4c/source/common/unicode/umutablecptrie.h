@@ -1,11 +1,11 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-// ucptriebuilder.h (split out of ucptrie.h)
+// umutablecptrie.h (split out of ucptrie.h)
 // created: 2018jan24 Markus W. Scherer
 
-#ifndef __UCPTRIEBUILDER_H__
-#define __UCPTRIEBUILDER_H__
+#ifndef __UMUTABLECPTRIE_H__
+#define __UMUTABLECPTRIE_H__
 
 #include "unicode/utypes.h"
 #include "unicode/localpointer.h"
@@ -19,111 +19,111 @@ U_CDECL_BEGIN
 /**
  * \file
  *
- * This file defines a builder for Unicode code point tries.
+ * This file defines a mutable Unicode code point trie.
  *
  * @see UCPTrie
- * @see UCPTrieBuilder
+ * @see UMutableCPTrie
  */
 
 /**
- * Unicode code point trie builder.
+ * Mutable Unicode code point trie.
  * Fast map from Unicode code points (U+0000..U+10FFFF) to 32-bit integer values.
  * For details see http://site.icu-project.org/design/struct/utrie
  *
  * Setting values (especially ranges) and lookup is fast.
- * The builder is only somewhat space-efficient.
+ * The mutable trie is only somewhat space-efficient.
  * It builds a compacted, immutable UCPTrie.
  *
  * @see UCPTrie
- * @see ucptriebld_build
- * @draft ICU 62
+ * @see umutablecptrie_buildImmutable
+ * @draft ICU 63
  */
-struct UCPTrieBuilder;
-typedef struct UCPTrieBuilder UCPTrieBuilder;
+struct UMutableCPTrie;
+typedef struct UMutableCPTrie UMutableCPTrie;
 
 /**
- * Creates a trie builder that initially maps each Unicode code point to the same value.
- * At build time, 32-bit data values are used.
- * ucptriebld_build() takes a valueBits parameter which
+ * Creates a mutable trie that initially maps each Unicode code point to the same value.
+ * It uses 32-bit data values until umutablecptrie_buildImmutable() is called.
+ * umutablecptrie_buildImmutable() takes a valueWidth parameter which
  * determines the number of bits in the data value in the resulting UCPTrie.
- * You must ucptriebld_close() the trie builder once you are done using it.
+ * You must umutablecptrie_close() the trie once you are done using it.
  *
  * @param initialValue the initial value that is set for all code points
  * @param errorValue the value for out-of-range code points and ill-formed UTF-8/16
  * @param pErrorCode an in/out ICU UErrorCode
- * @return the builder
- * @draft ICU 62
+ * @return the trie
+ * @draft ICU 63
  */
-U_CAPI UCPTrieBuilder * U_EXPORT2
-ucptriebld_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode);
+U_CAPI UMutableCPTrie * U_EXPORT2
+umutablecptrie_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode);
 
 /**
- * Clones a trie builder.
- * You must ucptriebld_close() the clone once you are done using it.
+ * Clones a mutable trie.
+ * You must umutablecptrie_close() the clone once you are done using it.
  *
- * @param other the builder to clone
+ * @param other the trie to clone
  * @param pErrorCode an in/out ICU UErrorCode
- * @return the builder clone
- * @draft ICU 62
+ * @return the trie clone
+ * @draft ICU 63
  */
-U_CAPI UCPTrieBuilder * U_EXPORT2
-ucptriebld_clone(const UCPTrieBuilder *other, UErrorCode *pErrorCode);
+U_CAPI UMutableCPTrie * U_EXPORT2
+umutablecptrie_clone(const UMutableCPTrie *other, UErrorCode *pErrorCode);
 
 /**
- * Closes a trie builder and releases associated memory.
+ * Closes a mutable trie and releases associated memory.
  *
- * @param builder the builder
- * @draft ICU 62
+ * @param trie the trie
+ * @draft ICU 63
  */
 U_CAPI void U_EXPORT2
-ucptriebld_close(UCPTrieBuilder *builder);
+umutablecptrie_close(UMutableCPTrie *trie);
 
 #if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN
 
 /**
- * \class LocalUCPTrieBuilderPointer
- * "Smart pointer" class, closes a UCPTrieBuilder via ucptriebld_close().
+ * \class LocalUMutableCPTriePointer
+ * "Smart pointer" class, closes a UMutableCPTrie via umutablecptrie_close().
  * For most methods see the LocalPointerBase base class.
  *
  * @see LocalPointerBase
  * @see LocalPointer
- * @draft ICU 62
+ * @draft ICU 63
  */
-U_DEFINE_LOCAL_OPEN_POINTER(LocalUCPTrieBuilderPointer, UCPTrieBuilder, ucptriebld_close);
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUMutableCPTriePointer, UMutableCPTrie, umutablecptrie_close);
 
 U_NAMESPACE_END
 
 #endif
 
 /**
- * Creates a trie builder with the same contents as the input trie.
- * You must ucptriebld_close() the builder once you are done using it.
+ * Creates a mutable trie with the same contents as the immutable one.
+ * You must umutablecptrie_close() the mutable trie once you are done using it.
  *
- * @param trie the trie to clone
+ * @param trie the immutable trie
  * @param pErrorCode an in/out ICU UErrorCode
- * @return the builder
- * @draft ICU 62
+ * @return the mutable trie
+ * @draft ICU 63
  */
-U_CAPI UCPTrieBuilder * U_EXPORT2
-ucptriebld_fromUCPTrie(const UCPTrie *trie, UErrorCode *pErrorCode);
+U_CAPI UMutableCPTrie * U_EXPORT2
+umutablecptrie_fromUCPTrie(const UCPTrie *trie, UErrorCode *pErrorCode);
 
 /**
- * Returns the value for a code point as stored in the builder.
+ * Returns the value for a code point as stored in the trie.
  *
- * @param builder the builder
+ * @param trie the trie
  * @param c the code point
  * @return the value
- * @draft ICU 62
+ * @draft ICU 63
  */
 U_CAPI uint32_t U_EXPORT2
-ucptriebld_get(const UCPTrieBuilder *builder, UChar32 c);
+umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c);
 
 /**
  * Returns the last code point such that all those from start to there have the same value.
- * Can be used to efficiently iterate over all same-value ranges in a trie builder.
- * The builder can be modified between calls to this function.
+ * Can be used to efficiently iterate over all same-value ranges in a trie.
+ * The trie can be modified between calls to this function.
  *
  * If the UCPTrieHandleValue function pointer is not NULL, then
  * the value to be delivered is passed through that function, and the return value is the end
@@ -132,52 +132,52 @@ ucptriebld_get(const UCPTrieBuilder *builder, UChar32 c);
  *
  * See the same-signature ucptrie_getRange() for a code sample.
  *
- * @param builder the builder
+ * @param trie the trie
  * @param start range start
- * @param handleValue a pointer to a function that may modify the builder data value,
- *     or NULL if the values from the builder are to be used unmodified
+ * @param handleValue a pointer to a function that may modify the trie data value,
+ *     or NULL if the values from the trie are to be used unmodified
  * @param context an opaque pointer that is passed on to the handleValue function
  * @param pValue if not NULL, receives the value that every code point start..end has;
- *     may have been modified by handleValue(context, builder value)
+ *     may have been modified by handleValue(context, trie value)
  *     if that function pointer is not NULL
  * @return the range end code point, or -1 if start is not a valid code point
- * @draft ICU 62
+ * @draft ICU 63
  */
 U_CAPI UChar32 U_EXPORT2
-ucptriebld_getRange(const UCPTrieBuilder *builder, UChar32 start,
-                    UCPTrieHandleValue *handleValue, const void *context, uint32_t *pValue);
+umutablecptrie_getRange(const UMutableCPTrie *trie, UChar32 start,
+                        UCPTrieHandleValue *handleValue, const void *context, uint32_t *pValue);
 
 /**
  * Sets a value for a code point.
  *
- * @param builder the builder
+ * @param trie the trie
  * @param c the code point
  * @param value the value
  * @param pErrorCode an in/out ICU UErrorCode
- * @draft ICU 62
+ * @draft ICU 63
  */
 U_CAPI void U_EXPORT2
-ucptriebld_set(UCPTrieBuilder *builder, UChar32 c, uint32_t value, UErrorCode *pErrorCode);
+umutablecptrie_set(UMutableCPTrie *trie, UChar32 c, uint32_t value, UErrorCode *pErrorCode);
 
 /**
  * Sets a value for each code point [start..end].
  * Faster and more space-efficient than setting the value for each code point separately.
  *
- * @param builder the builder
+ * @param trie the trie
  * @param start the first code point to get the value
  * @param end the last code point to get the value (inclusive)
  * @param value the value
  * @param pErrorCode an in/out ICU UErrorCode
- * @draft ICU 62
+ * @draft ICU 63
  */
 U_CAPI void U_EXPORT2
-ucptriebld_setRange(UCPTrieBuilder *builder,
-                    UChar32 start, UChar32 end,
-                    uint32_t value, UErrorCode *pErrorCode);
+umutablecptrie_setRange(UMutableCPTrie *trie,
+                        UChar32 start, UChar32 end,
+                        uint32_t value, UErrorCode *pErrorCode);
 
 /**
  * Compacts the data and builds an immutable UCPTrie according to the parameters.
- * After this, the builder will be empty.
+ * After this, the mutable trie will be empty.
  *
  * Not every possible set of mappings can be built into a UCPTrie,
  * because of limitations resulting from speed and space optimizations.
@@ -187,18 +187,18 @@ ucptriebld_setRange(UCPTrieBuilder *builder,
  * It is possible to construct extremely unusual mappings that exceed the data structure limits.
  * In such a case this function will fail with a U_INDEX_OUTOFBOUNDS_ERROR.
  *
- * @param builder the trie builder
+ * @param trie the trie trie
  * @param type selects the trie type
- * @param valueBits selects the number of bits in a trie data value; if smaller than 32 bits, then
- *                  the values stored in the builder will be truncated first
+ * @param valueWidth selects the number of bits in a trie data value; if smaller than 32 bits, then
+ *                   the values stored in the trie will be truncated first
  * @param pErrorCode an in/out ICU UErrorCode
  *
- * @see ucptriebld_fromUCPTrie
- * @draft ICU 62
+ * @see umutablecptrie_fromUCPTrie
+ * @draft ICU 63
  */
 U_CAPI UCPTrie * U_EXPORT2
-ucptriebld_build(UCPTrieBuilder *builder, UCPTrieType type, UCPTrieValueBits valueBits,
-                 UErrorCode *pErrorCode);
+umutablecptrie_buildImmutable(UMutableCPTrie *trie, UCPTrieType type, UCPTrieValueWidth valueWidth,
+                              UErrorCode *pErrorCode);
 
 U_CDECL_END
 

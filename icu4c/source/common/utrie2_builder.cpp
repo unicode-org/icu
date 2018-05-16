@@ -32,7 +32,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/ucptrie.h"  // TODO
-#include "unicode/ucptriebuilder.h"  // TODO
+#include "unicode/umutablecptrie.h"  // TODO
 #include "ucptrie_impl.h"  // TODO
 #include "cmemory.h"
 #include "utrie2.h"
@@ -140,7 +140,7 @@ utrie2_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
     trie->name="open";
 
     newTrie->data=data;
-    newTrie->t3=ucptriebld_open(initialValue, errorValue, pErrorCode);
+    newTrie->t3=umutablecptrie_open(initialValue, errorValue, pErrorCode);
     newTrie->dataCapacity=UNEWTRIE2_INITIAL_DATA_LENGTH;
     newTrie->initialValue=initialValue;
     newTrie->errorValue=errorValue;
@@ -257,7 +257,7 @@ cloneBuilder(const UNewTrie2 *other) {
         trie->t3=nullptr;
     } else {
         UErrorCode errorCode=U_ZERO_ERROR;
-        trie->t3=ucptriebld_clone(other->t3, &errorCode);
+        trie->t3=umutablecptrie_clone(other->t3, &errorCode);
     }
     trie->dataCapacity=other->dataCapacity;
 
@@ -651,7 +651,7 @@ set32(UNewTrie2 *trie,
         *pErrorCode=U_NO_WRITE_PERMISSION;
         return;
     }
-    ucptriebld_set(trie->t3, c, value, pErrorCode);
+    umutablecptrie_set(trie->t3, c, value, pErrorCode);
 
     block=getDataBlock(trie, c, forLSCP);
     if(block<0) {
@@ -747,7 +747,7 @@ utrie2_setRange32(UTrie2 *trie,
         *pErrorCode=U_NO_WRITE_PERMISSION;
         return;
     }
-    ucptriebld_setRange(newTrie->t3, start, end, value, pErrorCode);
+    umutablecptrie_setRange(newTrie->t3, start, end, value, pErrorCode);
     if(!overwrite && value==newTrie->initialValue) {
         return; /* nothing to do */
     }
@@ -1457,8 +1457,10 @@ utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
 #endif
 
 #ifdef UCPTRIE_DEBUG
-    ucptriebld_setName(newTrie->t3, trie->name);
-    ucptrie_close(ucptriebld_build(newTrie->t3, UCPTRIE_TYPE_FAST, (UCPTrieValueBits)valueBits, pErrorCode));
+    umutablecptrie_setName(newTrie->t3, trie->name);
+    ucptrie_close(
+        umutablecptrie_buildImmutable(
+            newTrie->t3, UCPTRIE_TYPE_FAST, (UCPTrieValueWidth)valueBits, pErrorCode));
 #endif
     /* Delete the UNewTrie2. */
     uprv_free(newTrie->data);

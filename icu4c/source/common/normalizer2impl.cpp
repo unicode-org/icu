@@ -27,8 +27,8 @@
 #include "unicode/normalizer2.h"
 #include "unicode/stringoptions.h"
 #include "unicode/ucptrie.h"
-#include "unicode/ucptriebuilder.h"
 #include "unicode/udata.h"
+#include "unicode/umutablecptrie.h"
 #include "unicode/ustring.h"
 #include "unicode/utf16.h"
 #include "unicode/utf8.h"
@@ -418,7 +418,7 @@ struct CanonIterData : public UMemory {
     CanonIterData(UErrorCode &errorCode);
     ~CanonIterData();
     void addToStartSet(UChar32 origin, UChar32 decompLead, UErrorCode &errorCode);
-    UCPTrieBuilder *builder;
+    UMutableCPTrie *mutableTrie;
     UCPTrie *trie;
     UVector canonStartSets;  // contains UnicodeSet *
 };
@@ -2335,20 +2335,20 @@ const UChar *Normalizer2Impl::findNextFCDBoundary(const UChar *p, const UChar *l
 // CanonicalIterator data -------------------------------------------------- ***
 
 CanonIterData::CanonIterData(UErrorCode &errorCode) :
-        builder(ucptriebld_open(0, 0, &errorCode)), trie(nullptr),
+        mutableTrie(umutablecptrie_open(0, 0, &errorCode)), trie(nullptr),
         canonStartSets(uprv_deleteUObject, NULL, errorCode) {}
 
 CanonIterData::~CanonIterData() {
-    ucptriebld_close(builder);
+    umutablecptrie_close(mutableTrie);
     ucptrie_close(trie);
 }
 
 void CanonIterData::addToStartSet(UChar32 origin, UChar32 decompLead, UErrorCode &errorCode) {
-    uint32_t canonValue = ucptriebld_get(builder, decompLead);
+    uint32_t canonValue = umutablecptrie_get(mutableTrie, decompLead);
     if((canonValue&(CANON_HAS_SET|CANON_VALUE_MASK))==0 && origin!=0) {
         // origin is the first character whose decomposition starts with
         // the character for which we are setting the value.
-        ucptriebld_set(builder, decompLead, canonValue|origin, &errorCode);
+        umutablecptrie_set(mutableTrie, decompLead, canonValue|origin, &errorCode);
     } else {
         // origin is not the first character, or it is U+0000.
         UnicodeSet *set;
@@ -2360,7 +2360,7 @@ void CanonIterData::addToStartSet(UChar32 origin, UChar32 decompLead, UErrorCode
             }
             UChar32 firstOrigin=(UChar32)(canonValue&CANON_VALUE_MASK);
             canonValue=(canonValue&~CANON_VALUE_MASK)|CANON_HAS_SET|(uint32_t)canonStartSets.size();
-            ucptriebld_set(builder, decompLead, canonValue, &errorCode);
+            umutablecptrie_set(mutableTrie, decompLead, canonValue, &errorCode);
             canonStartSets.addElement(set, errorCode);
             if(firstOrigin!=0) {
                 set->add(firstOrigin);
@@ -2405,11 +2405,11 @@ void InitCanonIterData::doInit(Normalizer2Impl *impl, UErrorCode &errorCode) {
             }
             start = end + 1;
         }
-        ucptriebld_setName(impl->fCanonIterData->builder, "CanonIterData");
-        impl->fCanonIterData->trie = ucptriebld_build(
-            impl->fCanonIterData->builder, UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_32, &errorCode);
-        ucptriebld_close(impl->fCanonIterData->builder);
-        impl->fCanonIterData->builder = nullptr;
+        umutablecptrie_setName(impl->fCanonIterData->mutableTrie, "CanonIterData");
+        impl->fCanonIterData->trie = umutablecptrie_buildImmutable(
+            impl->fCanonIterData->mutableTrie, UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_32, &errorCode);
+        umutablecptrie_close(impl->fCanonIterData->mutableTrie);
+        impl->fCanonIterData->mutableTrie = nullptr;
     }
     if (U_FAILURE(errorCode)) {
         delete impl->fCanonIterData;
@@ -2430,7 +2430,7 @@ void Normalizer2Impl::makeCanonIterDataFromNorm16(UChar32 start, UChar32 end, co
         return;
     }
     for(UChar32 c=start; c<=end; ++c) {
-        uint32_t oldValue = ucptriebld_get(newData.builder, c);
+        uint32_t oldValue = umutablecptrie_get(newData.mutableTrie, c);
         uint32_t newValue=oldValue;
         if(isMaybeOrNonZeroCC(norm16)) {
             // not a segment starter if it occurs in a decomposition or has cc!=0
@@ -2475,10 +2475,10 @@ void Normalizer2Impl::makeCanonIterDataFromNorm16(UChar32 start, UChar32 end, co
                     if(norm16_2>=minNoNo) {
                         while(i<length) {
                             U16_NEXT_UNSAFE(mapping, i, c2);
-                            uint32_t c2Value = ucptriebld_get(newData.builder, c2);
+                            uint32_t c2Value = umutablecptrie_get(newData.mutableTrie, c2);
                             if((c2Value&CANON_NOT_SEGMENT_STARTER)==0) {
-                                ucptriebld_set(newData.builder, c2, c2Value|CANON_NOT_SEGMENT_STARTER,
-                                               &errorCode);
+                                umutablecptrie_set(newData.mutableTrie, c2,
+                                                   c2Value|CANON_NOT_SEGMENT_STARTER, &errorCode);
                             }
                         }
                     }
@@ -2489,7 +2489,7 @@ void Normalizer2Impl::makeCanonIterDataFromNorm16(UChar32 start, UChar32 end, co
             }
         }
         if(newValue!=oldValue) {
-            ucptriebld_set(newData.builder, c, newValue, &errorCode);
+            umutablecptrie_set(newData.mutableTrie, c, newValue, &errorCode);
         }
     }
 }

@@ -1,29 +1,32 @@
 // © 2018 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
+
+// created: 2018may04 Markus W. Scherer
+
 package com.ibm.icu.util;
 
-import java.util.Iterator;
+// TODO: Add intermediate abstract class MutableCodePointMap with abstract set() & setRange()?
 
 /**
- * Unicode code point trie builder.
+ * Mutable Unicode code point trie.
  * Fast map from Unicode code points (U+0000..U+10FFFF) to 32-bit integer values.
  * For details see http://site.icu-project.org/design/struct/utrie
  *
  * <p>Setting values (especially ranges) and lookup is fast.
- * The builder is only somewhat space-efficient.
+ * The mutable trie is only somewhat space-efficient.
  * It builds a compacted, immutable {@link CodePointTrie}.
  *
- * @internal ICU 62 technology preview
+ * @draft ICU 63
  * @provisional This API might change or be removed in a future release.
  */
-public final class CodePointTrieBuilder implements Cloneable, Iterable<CodePointTrie.Range> {
-    public CodePointTrieBuilder(int initialValue, int errorValue) {
+public final class MutableCodePointTrie extends CodePointMap {
+    public MutableCodePointTrie(int initialValue, int errorValue) {
     }
 
     @Override
-    public CodePointTrieBuilder clone() {
+    public MutableCodePointTrie clone() {
         try {
-            CodePointTrieBuilder builder = (CodePointTrieBuilder) super.clone();
+            MutableCodePointTrie builder = (MutableCodePointTrie) super.clone();
             // TODO
             return builder;
         } catch (CloneNotSupportedException ignored) {
@@ -32,29 +35,22 @@ public final class CodePointTrieBuilder implements Cloneable, Iterable<CodePoint
         }
     }
 
-    public CodePointTrieBuilder fromCodePointTrie(CodePointTrie trie) {
+    public MutableCodePointTrie fromCodePointMap(CodePointMap map) {
         return null;
     }
 
     // with range check
+    @Override
     public int get(int c) {
         return c & 3;
     }
 
+    @Override
     public boolean getRange(int start, CodePointTrie.HandleValue handleValue,
             CodePointTrie.Range range) {
         range.start = range.end = start;
         range.value = 0;
         return true;
-    }
-
-    @Override
-    public Iterator<CodePointTrie.Range> iterator() {
-        return null;
-    }
-
-    public Iterator<CodePointTrie.Range> iterator(int start, CodePointTrie.HandleValue handleValue) {
-        return null;
     }
 
     public void set(int c, int value) {
@@ -65,7 +61,7 @@ public final class CodePointTrieBuilder implements Cloneable, Iterable<CodePoint
 
     }
 
-    public CodePointTrie build(CodePointTrie.Type type, CodePointTrie.ValueBits valueBits) {
+    public CodePointTrie buildImmutable(CodePointTrie.Type type, CodePointTrie.ValueWidth valueWidth) {
         return null;
     }
 }

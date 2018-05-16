@@ -21,7 +21,7 @@
 /* Public UCPTrie API implementation ----------------------------------------- */
 
 U_CAPI UCPTrie * U_EXPORT2
-ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueBits valueBits,
+ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueWidth valueWidth,
                        const void *data, int32_t length, int32_t *pActualLength,
                        UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
@@ -30,7 +30,7 @@ ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueBits valueBits,
 
     if (length <= 0 || (U_POINTER_MASK_LSB(data, 3) != 0) ||
             type < UCPTRIE_TYPE_ANY || UCPTRIE_TYPE_SMALL < type ||
-            valueBits < UCPTRIE_VALUE_BITS_ANY || UCPTRIE_VALUE_BITS_8 < valueBits) {
+            valueWidth < UCPTRIE_VALUE_BITS_ANY || UCPTRIE_VALUE_BITS_8 < valueWidth) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
@@ -50,15 +50,15 @@ ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueBits valueBits,
 
     int32_t options = header->options;
     UCPTrieType actualType = (UCPTrieType)((options >> 6) & 3);
-    UCPTrieValueBits actualValueBits = (UCPTrieValueBits)(options & UCPTRIE_OPTIONS_VALUE_BITS_MASK);
+    UCPTrieValueWidth actualValueWidth = (UCPTrieValueWidth)(options & UCPTRIE_OPTIONS_VALUE_BITS_MASK);
     if (type == UCPTRIE_TYPE_ANY) {
         type = actualType;
     }
-    if (valueBits == UCPTRIE_VALUE_BITS_ANY) {
-        valueBits = actualValueBits;
+    if (valueWidth == UCPTRIE_VALUE_BITS_ANY) {
+        valueWidth = actualValueWidth;
     }
     if (type != actualType || (options & UCPTRIE_OPTIONS_RESERVED_MASK) != 0 ||
-            valueBits != actualValueBits) {
+            valueWidth != actualValueWidth) {
         *pErrorCode = U_INVALID_FORMAT_ERROR;
         return 0;
     }
@@ -79,9 +79,9 @@ ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueBits valueBits,
 
     // Calculate the actual length.
     int32_t actualLength = (int32_t)sizeof(UCPTrieHeader) + tempTrie.indexLength * 2;
-    if (valueBits == UCPTRIE_VALUE_BITS_16) {
+    if (valueWidth == UCPTRIE_VALUE_BITS_16) {
         actualLength += tempTrie.dataLength * 2;
-    } else if (valueBits == UCPTRIE_VALUE_BITS_32) {
+    } else if (valueWidth == UCPTRIE_VALUE_BITS_32) {
         actualLength += tempTrie.dataLength * 4;
     } else {
         actualLength += tempTrie.dataLength;
@@ -110,7 +110,7 @@ ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueBits valueBits,
     if (nullValueOffset >= trie->dataLength) {
         nullValueOffset = trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET;
     }
-    switch (valueBits) {
+    switch (valueWidth) {
     case UCPTRIE_VALUE_BITS_16:
         trie->data16 = p16;
         trie->data32 = nullptr;
@@ -150,8 +150,8 @@ ucptrie_getType(const UCPTrie *trie) {
     return trie->type;
 }
 
-U_CAPI UCPTrieValueBits U_EXPORT2
-ucptrie_getValueBits(const UCPTrie *trie) {
+U_CAPI UCPTrieValueWidth U_EXPORT2
+ucptrie_getValueWidth(const UCPTrie *trie) {
     if (trie->data16 != nullptr) {
         return UCPTRIE_VALUE_BITS_16;
     } else if (trie->data32 != nullptr) {
@@ -453,16 +453,16 @@ ucptrie_toBinary(const UCPTrie *trie,
         return 0;
     }
 
-    UCPTrieValueBits valueBits;
+    UCPTrieValueWidth valueWidth;
     int32_t length = (int32_t)sizeof(UCPTrieHeader) + trie->indexLength * 2;
     if (trie->data16 != nullptr) {
-        valueBits = UCPTRIE_VALUE_BITS_16;
+        valueWidth = UCPTRIE_VALUE_BITS_16;
         length += trie->dataLength * 2;
     } else if (trie->data32 != nullptr) {
-        valueBits = UCPTRIE_VALUE_BITS_32;
+        valueWidth = UCPTRIE_VALUE_BITS_32;
         length += trie->dataLength * 4;
     } else {
-        valueBits = UCPTRIE_VALUE_BITS_8;
+        valueWidth = UCPTRIE_VALUE_BITS_8;
         length += trie->dataLength;
     }
     if (capacity < length) {
@@ -477,7 +477,7 @@ ucptrie_toBinary(const UCPTrie *trie,
         ((trie->dataLength & 0xf0000) >> 4) |
         ((trie->dataNullOffset & 0xf0000) >> 8) |
         (trie->type << 6) |
-        valueBits);
+        valueWidth);
     header->indexLength = (uint16_t)trie->indexLength;
     header->dataLength = (uint16_t)trie->dataLength;
     header->index3NullOffset = trie->index3NullOffset;
@@ -577,7 +577,7 @@ ucptrie_swap(const UDataSwapper *ds,
     const UCPTrieHeader *inTrie;
     UCPTrieHeader trie;
     int32_t dataLength, size;
-    UCPTrieValueBits valueBits;
+    UCPTrieValueWidth valueWidth;
 
     if(U_FAILURE(*pErrorCode)) {
         return 0;
@@ -600,7 +600,7 @@ ucptrie_swap(const UDataSwapper *ds,
     trie.dataLength = ds->readUInt16(inTrie->dataLength);
 
     UCPTrieType type = (UCPTrieType)((trie.options >> 6) & 3);
-    valueBits=(UCPTrieValueBits)(trie.options&UCPTRIE_OPTIONS_VALUE_BITS_MASK);
+    valueWidth = (UCPTrieValueWidth)(trie.options & UCPTRIE_OPTIONS_VALUE_BITS_MASK);
     dataLength = ((int32_t)(trie.options & UCPTRIE_OPTIONS_DATA_LENGTH_MASK) << 4) | trie.dataLength;
 
     int32_t minIndexLength = type == UCPTRIE_TYPE_FAST ?
@@ -608,7 +608,7 @@ ucptrie_swap(const UDataSwapper *ds,
     if( trie.signature!=UCPTRIE_SIG ||
         type > UCPTRIE_TYPE_SMALL ||
         (trie.options & UCPTRIE_OPTIONS_RESERVED_MASK) != 0 ||
-        valueBits > UCPTRIE_VALUE_BITS_8 ||
+        valueWidth > UCPTRIE_VALUE_BITS_8 ||
         trie.indexLength < minIndexLength ||
         dataLength < ASCII_LIMIT
     ) {
@@ -617,7 +617,7 @@ ucptrie_swap(const UDataSwapper *ds,
     }
 
     size=sizeof(UCPTrieHeader)+trie.indexLength*2;
-    switch(valueBits) {
+    switch(valueWidth) {
     case UCPTRIE_VALUE_BITS_16:
         size+=dataLength*2;
         break;
@@ -647,7 +647,7 @@ ucptrie_swap(const UDataSwapper *ds,
         ds->swapArray16(ds, &inTrie->options, 12, &outTrie->options, pErrorCode);
 
         /* swap the index and the data */
-        switch(valueBits) {
+        switch(valueWidth) {
         case UCPTRIE_VALUE_BITS_16:
             ds->swapArray16(ds, inTrie+1, (trie.indexLength+dataLength)*2, outTrie+1, pErrorCode);
             break;

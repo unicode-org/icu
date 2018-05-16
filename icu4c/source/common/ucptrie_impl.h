@@ -8,7 +8,7 @@
 #define __UCPTRIE_IMPL_H__
 
 #include "unicode/ucptrie.h"
-#include "unicode/ucptriebuilder.h"  // TODO
+#include "unicode/umutablecptrie.h"  // TODO
 
 // UCPTrie signature values, in platform endianness and opposite endianness.
 #define UCPTRIE_SIG     0x54726933
@@ -32,7 +32,7 @@ typedef struct UCPTrieHeader {
      * Bits 11..8: Data null block offset bits 19..16.
      * Bits 7..6: UCPTrieType
      * Bits 5..3: Reserved (0).
-     * Bits 2..0: UCPTrieValueBits
+     * Bits 2..0: UCPTrieValueWidth
      */
     uint16_t options;
 
@@ -169,7 +169,7 @@ ucptrie_swapAnyVersion(const UDataSwapper *ds,
 U_CFUNC void
 ucptrie_printLengths(const UCPTrie *trie, const char *which);
 
-U_CFUNC void ucptriebld_setName(UCPTrieBuilder *builder, const char *name);
+U_CFUNC void umutablecptrie_setName(UMutableCPTrie *builder, const char *name);
 #endif
 
 /*
@@ -208,7 +208,7 @@ U_CFUNC void ucptriebld_setName(UCPTrieBuilder *builder, const char *name);
  * assembling supplementary code points only when there is non-trivial data
  * available.
  *
- * At build-time, use ucptriebld_getRange() starting from U+10000 to see if there
+ * At build-time, use umutablecptrie_getRange() starting from U+10000 to see if there
  * is non-trivial data for any of the supplementary code points
  * associated with a lead surrogate.
  * If so, then set a special (application-specific) value for the
