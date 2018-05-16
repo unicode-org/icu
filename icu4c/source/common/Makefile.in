@@ -112,7 +112,7 @@ ulist.o uloc_tag.o icudataver.o icuplug.o listformatter.o ulistformatter.o \
 sharedobject.o simpleformatter.o unifiedcache.o uloc_keytype.o \
 ubiditransform.o \
 pluralmap.o \
-numparse_unisets.o
+static_unicode_sets.o
 
 ## Header files to install
 HEADERS = $(srcdir)/unicode/*.h

@@ -9,7 +9,7 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
-#include "numparse_unisets.h"
+#include "static_unicode_sets.h"
 #include "umutex.h"
 #include "ucln_cmn.h"
 #include "unicode/uniset.h"
@@ -18,22 +18,35 @@
 #include "uassert.h"
 
 using namespace icu;
-using namespace icu::numparse;
-using namespace icu::numparse::impl;
-using namespace icu::numparse::impl::unisets;
+using namespace icu::unisets;
 
 
 namespace {
 
-static UnicodeSet* gUnicodeSets[COUNT] = {};
+UnicodeSet* gUnicodeSets[COUNT] = {};
+
+// Save the empty instance in static memory to have well-defined behavior if a
+// regular UnicodeSet cannot be allocated.
+char gEmptyUnicodeSet[sizeof(UnicodeSet)];
+
+// Whether the gEmptyUnicodeSet is initialized and ready to use.
+UBool gEmptyUnicodeSetInitialized = FALSE;
+
+inline UnicodeSet* getImpl(Key key) {
+    UnicodeSet* candidate = gUnicodeSets[key];
+    if (candidate == nullptr) {
+        return reinterpret_cast<UnicodeSet*>(gEmptyUnicodeSet);
+    }
+    return candidate;
+}
 
 UnicodeSet* computeUnion(Key k1, Key k2) {
     UnicodeSet* result = new UnicodeSet();
     if (result == nullptr) {
         return nullptr;
     }
-    result->addAll(*gUnicodeSets[k1]);
-    result->addAll(*gUnicodeSets[k2]);
+    result->addAll(*getImpl(k1));
+    result->addAll(*getImpl(k2));
     result->freeze();
     return result;
 }
@@ -43,9 +56,9 @@ UnicodeSet* computeUnion(Key k1, Key k2, Key k3) {
     if (result == nullptr) {
         return nullptr;
     }
-    result->addAll(*gUnicodeSets[k1]);
-    result->addAll(*gUnicodeSets[k2]);
-    result->addAll(*gUnicodeSets[k3]);
+    result->addAll(*getImpl(k1));
+    result->addAll(*getImpl(k2));
+    result->addAll(*getImpl(k3));
     result->freeze();
     return result;
 }
@@ -104,6 +117,10 @@ class ParseDataSink : public ResourceSink {
 icu::UInitOnce gNumberParseUniSetsInitOnce = U_INITONCE_INITIALIZER;
 
 UBool U_CALLCONV cleanupNumberParseUniSets() {
+    if (gEmptyUnicodeSetInitialized) {
+        reinterpret_cast<UnicodeSet*>(gEmptyUnicodeSet)->~UnicodeSet();
+        gEmptyUnicodeSetInitialized = FALSE;
+    }
     for (int32_t i = 0; i < COUNT; i++) {
         delete gUnicodeSets[i];
         gUnicodeSets[i] = nullptr;
@@ -115,7 +132,10 @@ UBool U_CALLCONV cleanupNumberParseUniSets() {
 void U_CALLCONV initNumberParseUniSets(UErrorCode& status) {
     ucln_common_registerCleanup(UCLN_COMMON_NUMPARSE_UNISETS, cleanupNumberParseUniSets);
 
-    gUnicodeSets[EMPTY] = new UnicodeSet();
+    // Initialize the empty instance for well-defined fallback behavior
+    new(gEmptyUnicodeSet) UnicodeSet();
+    reinterpret_cast<UnicodeSet*>(gEmptyUnicodeSet)->freeze();
+    gEmptyUnicodeSetInitialized = TRUE;
 
     // These sets were decided after discussion with icu-design@. See tickets #13084 and #13309.
     // Zs+TAB is "horizontal whitespace" according to UTS #18 (blank property).
@@ -129,7 +149,7 @@ void U_CALLCONV initNumberParseUniSets(UErrorCode& status) {
     ures_getAllItemsWithFallback(rb.getAlias(), "parse", sink, status);
     if (U_FAILURE(status)) { return; }
 
-    // TODO: Should there be fallback behavior if for some reason these sets didn't get populated?
+    // NOTE: It is OK for these assertions to fail if there was a no-data build.
     U_ASSERT(gUnicodeSets[COMMA] != nullptr);
     U_ASSERT(gUnicodeSets[STRICT_COMMA] != nullptr);
     U_ASSERT(gUnicodeSets[PERIOD] != nullptr);
@@ -158,8 +178,10 @@ void U_CALLCONV initNumberParseUniSets(UErrorCode& status) {
     gUnicodeSets[DIGITS_OR_ALL_SEPARATORS] = computeUnion(DIGITS, ALL_SEPARATORS);
     gUnicodeSets[DIGITS_OR_STRICT_ALL_SEPARATORS] = computeUnion(DIGITS, STRICT_ALL_SEPARATORS);
 
-    for (int32_t i = 0; i < COUNT; i++) {
-        gUnicodeSets[i]->freeze();
+    for (auto* uniset : gUnicodeSets) {
+        if (uniset != nullptr) {
+            uniset->freeze();
+        }
     }
 }
 
@@ -169,14 +191,13 @@ const UnicodeSet* unisets::get(Key key) {
     UErrorCode localStatus = U_ZERO_ERROR;
     umtx_initOnce(gNumberParseUniSetsInitOnce, &initNumberParseUniSets, localStatus);
     if (U_FAILURE(localStatus)) {
-        // TODO: This returns non-null in Java, and callers assume that.
-        return nullptr;
+        return reinterpret_cast<UnicodeSet*>(gEmptyUnicodeSet);
     }
-    return gUnicodeSets[key];
+    return getImpl(key);
 }
 
 Key unisets::chooseFrom(UnicodeString str, Key key1) {
-    return get(key1)->contains(str) ? key1 : COUNT;
+    return get(key1)->contains(str) ? key1 : NONE;
 }
 
 Key unisets::chooseFrom(UnicodeString str, Key key1, Key key2) {
@@ -193,7 +214,7 @@ Key unisets::chooseFrom(UnicodeString str, Key key1, Key key2) {
 //    } else if (get(YEN_SIGN)->contains(str)) {
 //        return YEN_SIGN;
 //    } else {
-//        return COUNT;
+//        return NONE;
 //    }
 //}
 

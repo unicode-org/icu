@@ -607,7 +607,7 @@
     <ClCompile Include="ubiditransform.cpp">
       <Filter>bidi</Filter>
     </ClCompile>
-    <ClCompile Include="numparse_unisets.cpp">
+    <ClCompile Include="static_unicode_sets.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
   </ItemGroup>
@@ -939,7 +939,7 @@
     <ClInclude Include="unicode\ubiditransform.h">
       <Filter>bidi</Filter>
     </ClInclude>
-    <ClInclude Include="numparse_unisets.h">
+    <ClInclude Include="static_unicode_sets.h">
       <Filter>formatting</Filter>
     </ClInclude>
   </ItemGroup>

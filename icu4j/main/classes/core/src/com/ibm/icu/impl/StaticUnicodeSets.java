@@ -1,29 +1,26 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
-package com.ibm.icu.impl.number.parse;
+package com.ibm.icu.impl;
 
 import java.util.EnumMap;
 import java.util.Map;
 
-import com.ibm.icu.impl.ICUData;
-import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.UResource;
 import com.ibm.icu.impl.UResource.Value;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
 /**
- * This class statically initializes UnicodeSets useful for number parsing. Microbenchmarks show this to
- * bring a very sizeable performance boost.
+ * This class statically initializes UnicodeSets, originally built for number parsing. Microbenchmarks
+ * show this to bring a very sizeable performance boost.
  *
- * IMPORTANT ASSUMPTION: All of the sets contain code points (no strings) and they are all case-folded.
- * If this assumption were ever broken, logic in classes such as SymbolMatcher would need to be updated
- * in order to return well-formed sets upon calls to getLeadCodePoints().
+ * IMPORTANT ASSUMPTION FOR NUMBER PARSING: All of the sets contain code points (no strings) and they are
+ * all case-folded. If this assumption were ever broken, logic in classes such as SymbolMatcher would
+ * need to be updated in order to return well-formed sets upon calls to getLeadCodePoints().
  *
  * @author sffc
  */
-public class UnicodeSetStaticCache {
+public class StaticUnicodeSets {
     public static enum Key {
         // Ignorables
         DEFAULT_IGNORABLES,
@@ -67,18 +64,57 @@ public class UnicodeSetStaticCache {
 
     private static final Map<Key, UnicodeSet> unicodeSets = new EnumMap<Key, UnicodeSet>(Key.class);
 
+    /**
+     * Gets the static-allocated UnicodeSet according to the provided key.
+     *
+     * @param key
+     *            The desired UnicodeSet according to the enum in this file.
+     * @return The requested UnicodeSet. Guaranteed to be frozen and non-null, but may be empty if an
+     *         error occurred during data loading.
+     */
     public static UnicodeSet get(Key key) {
-        return unicodeSets.get(key);
+        UnicodeSet candidate = unicodeSets.get(key);
+        if (candidate == null) {
+            return UnicodeSet.EMPTY;
+        }
+        return candidate;
     }
 
+    /**
+     * Checks if the UnicodeSet given by key1 contains the given string.
+     *
+     * @param str
+     *            The string to check.
+     * @param key1
+     *            The set to check.
+     * @return key1 if the set contains str, or COUNT if not.
+     */
     public static Key chooseFrom(String str, Key key1) {
         return get(key1).contains(str) ? key1 : null;
     }
 
+    /**
+     * Checks if the UnicodeSet given by either key1 or key2 contains the string.
+     *
+     * Exported as U_COMMON_API for numparse_decimal.cpp
+     *
+     * @param str
+     *            The string to check.
+     * @param key1
+     *            The first set to check.
+     * @param key2
+     *            The second set to check.
+     * @return key1 if that set contains str; key2 if that set contains str; or COUNT if neither set
+     *         contains str.
+     */
     public static Key chooseFrom(String str, Key key1, Key key2) {
         return get(key1).contains(str) ? key1 : chooseFrom(str, key2);
     }
 
+    /**
+     * Looks through all Currency-related sets for the given string, returning the first match or null if
+     * no match was round.
+     */
     public static Key chooseCurrency(String str) {
         if (get(Key.DOLLAR_SIGN).contains(str)) {
             return Key.DOLLAR_SIGN;
@@ -187,7 +223,7 @@ public class UnicodeSetStaticCache {
                 .getBundleInstance(ICUData.ICU_BASE_NAME, ULocale.ROOT);
         rb.getAllItemsWithFallback("parse", new ParseDataSink());
 
-        // TODO: Should there be fallback behavior if for some reason these sets didn't get populated?
+        // NOTE: It is OK for these assertions to fail if there was a no-data build.
         assert unicodeSets.containsKey(Key.COMMA);
         assert unicodeSets.containsKey(Key.STRICT_COMMA);
         assert unicodeSets.containsKey(Key.PERIOD);

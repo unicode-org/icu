@@ -30,7 +30,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SoftCache;
 import com.ibm.icu.impl.TextTrieMap;
-import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache;
+import com.ibm.icu.impl.StaticUnicodeSets;
 import com.ibm.icu.text.CurrencyDisplayNames;
 import com.ibm.icu.text.CurrencyMetaInfo;
 import com.ibm.icu.text.CurrencyMetaInfo.CurrencyDigits;
@@ -772,10 +772,10 @@ public class Currency extends MeasureUnit {
             String isoCode = e.getValue();
             // Register under not just symbol, but under every equivalent symbol as well
             // e.g short width yen and long width yen.
-            UnicodeSetStaticCache.Key key = UnicodeSetStaticCache.chooseCurrency(symbol);
+            StaticUnicodeSets.Key key = StaticUnicodeSets.chooseCurrency(symbol);
             CurrencyStringInfo value = new CurrencyStringInfo(isoCode, symbol);
             if (key != null) {
-                UnicodeSet equivalents = UnicodeSetStaticCache.get(key);
+                UnicodeSet equivalents = StaticUnicodeSets.get(key);
                 // The symbol itself is included in the UnicodeSet
                 for (String equivalentSymbol : equivalents) {
                     symTrie.put(equivalentSymbol, value);

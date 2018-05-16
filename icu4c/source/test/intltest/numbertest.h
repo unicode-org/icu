@@ -214,19 +214,6 @@ class StringSegmentTest : public IntlTest {
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 };
 
-class UniSetsTest : public IntlTest {
-  public:
-    void testSetCoverage();
-
-    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
-
-  private:
-    void assertInSet(const UnicodeString& localeName, const UnicodeString &setName,
-                     const UnicodeSet& set, const UnicodeString& str);
-    void assertInSet(const UnicodeString& localeName, const UnicodeString &setName,
-                     const UnicodeSet& set, UChar32 cp);
-};
-
 class NumberParserTest : public IntlTest {
   public:
     void testBasic();
@@ -287,9 +274,8 @@ class NumberTest : public IntlTest {
         TESTCLASS(6, NumberStringBuilderTest);
         TESTCLASS(7, DoubleConversionTest);
         TESTCLASS(8, StringSegmentTest);
-        TESTCLASS(9, UniSetsTest);
-        TESTCLASS(10, NumberParserTest);
-        TESTCLASS(11, NumberSkeletonTest);
+        TESTCLASS(9, NumberParserTest);
+        TESTCLASS(10, NumberSkeletonTest);
         default: name = ""; break; // needed to end loop
         }
     }

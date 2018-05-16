@@ -23,7 +23,7 @@
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
-#include "numparse_unisets.h"
+#include "static_unicode_sets.h"
 #include "uassert.h"
 #include "umutex.h"
 #include "ucln_cmn.h"
@@ -2201,7 +2201,6 @@ static void U_CALLCONV initIsoCodes(UErrorCode &status) {
 }
 
 static void populateCurrSymbolsEquiv(icu::Hashtable *hash, UErrorCode &status) {
-    using namespace icu::numparse::impl;
     if (U_FAILURE(status)) { return; }
     for (auto& entry : unisets::kCurrencyEntries) {
         UnicodeString exemplar(entry.exemplar);

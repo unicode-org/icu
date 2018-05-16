@@ -334,7 +334,7 @@
     <ClCompile Include="utf_impl.cpp" />
     <ClCompile Include="listformatter.cpp" />
     <ClCompile Include="ulistformatter.cpp" />
-    <ClCompile Include="numparse_unisets.cpp" />
+    <ClCompile Include="static_unicode_sets.cpp" />
     <ClInclude Include="localsvc.h" />
     <ClInclude Include="msvcres.h" />
     <ClInclude Include="pluralmap.h" />
@@ -440,7 +440,7 @@
     <ClInclude Include="uinvchar.h" />
     <ClInclude Include="ustr_cnv.h" />
     <ClInclude Include="ustr_imp.h" />
-    <ClInclude Include="numparse_unisets.h" />
+    <ClInclude Include="static_unicode_sets.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="common.rc" />

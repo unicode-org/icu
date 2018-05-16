@@ -3,9 +3,10 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.StringSegment;
+import com.ibm.icu.impl.StaticUnicodeSets;
+import com.ibm.icu.impl.StaticUnicodeSets.Key;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.Grouper;
-import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.Key;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
@@ -63,12 +64,12 @@ public class DecimalMatcher implements NumberParseMatcher {
 
         // Attempt to find separators in the static cache
 
-        groupingUniSet = UnicodeSetStaticCache.get(groupingKey);
-        Key decimalKey = UnicodeSetStaticCache.chooseFrom(decimalSeparator,
+        groupingUniSet = StaticUnicodeSets.get(groupingKey);
+        Key decimalKey = StaticUnicodeSets.chooseFrom(decimalSeparator,
                 strictSeparators ? Key.STRICT_COMMA : Key.COMMA,
                 strictSeparators ? Key.STRICT_PERIOD : Key.PERIOD);
         if (decimalKey != null) {
-            decimalUniSet = UnicodeSetStaticCache.get(decimalKey);
+            decimalUniSet = StaticUnicodeSets.get(decimalKey);
         } else {
             decimalUniSet = new UnicodeSet().add(decimalSeparator.codePointAt(0)).freeze();
         }
@@ -76,7 +77,7 @@ public class DecimalMatcher implements NumberParseMatcher {
         if (groupingKey != null && decimalKey != null) {
             // Everything is available in the static cache
             separatorSet = groupingUniSet;
-            leadSet = UnicodeSetStaticCache.get(strictSeparators ? Key.DIGITS_OR_ALL_SEPARATORS
+            leadSet = StaticUnicodeSets.get(strictSeparators ? Key.DIGITS_OR_ALL_SEPARATORS
                     : Key.DIGITS_OR_STRICT_ALL_SEPARATORS);
         } else {
             separatorSet = new UnicodeSet().addAll(groupingUniSet).addAll(decimalUniSet).freeze();

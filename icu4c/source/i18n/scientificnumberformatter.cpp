@@ -16,7 +16,7 @@
 #include "unicode/utf16.h"
 #include "unicode/uniset.h"
 #include "unicode/decimfmt.h"
-#include "numparse_unisets.h"
+#include "static_unicode_sets.h"
 
 U_NAMESPACE_BEGIN
 

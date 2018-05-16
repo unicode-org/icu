@@ -6,21 +6,40 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "numbertest.h"
-#include "numparse_unisets.h"
+#include "static_unicode_sets.h"
 #include "unicode/dcfmtsym.h"
 
-using icu::numparse::impl::unisets::get;
+using icu::unisets::get;
 
-void UniSetsTest::runIndexedTest(int32_t index, UBool exec, const char*&name, char*) {
+class StaticUnicodeSetsTest : public IntlTest {
+  public:
+    void testSetCoverage();
+    void testNonEmpty();
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+
+  private:
+    void assertInSet(const UnicodeString& localeName, const UnicodeString &setName,
+                     const UnicodeSet& set, const UnicodeString& str);
+    void assertInSet(const UnicodeString& localeName, const UnicodeString &setName,
+                     const UnicodeSet& set, UChar32 cp);
+};
+
+extern IntlTest *createStaticUnicodeSetsTest() {
+    return new StaticUnicodeSetsTest();
+}
+
+void StaticUnicodeSetsTest::runIndexedTest(int32_t index, UBool exec, const char*&name, char*) {
     if (exec) {
-        logln("TestSuite UniSetsTest: ");
+        logln("TestSuite StaticUnicodeSetsTest: ");
     }
     TESTCASE_AUTO_BEGIN;
         TESTCASE_AUTO(testSetCoverage);
+        TESTCASE_AUTO(testNonEmpty);
     TESTCASE_AUTO_END;
 }
 
-void UniSetsTest::testSetCoverage() {
+void StaticUnicodeSetsTest::testSetCoverage() {
     UErrorCode status = U_ZERO_ERROR;
 
     // Lenient comma/period should be supersets of strict comma/period;
@@ -67,7 +86,18 @@ void UniSetsTest::testSetCoverage() {
     }
 }
 
-void UniSetsTest::assertInSet(const UnicodeString &localeName, const UnicodeString &setName,
+void StaticUnicodeSetsTest::testNonEmpty() {
+    for (int32_t i=0; i<unisets::COUNT; i++) {
+        if (i == unisets::EMPTY) {
+            continue;
+        }
+        const UnicodeSet* uset = get(static_cast<unisets::Key>(i));
+        // Can fail if no data:
+        assertFalse(UnicodeString("Set should not be empty: ") + i, uset->isEmpty(), FALSE, TRUE);
+    }
+}
+
+void StaticUnicodeSetsTest::assertInSet(const UnicodeString &localeName, const UnicodeString &setName,
                               const UnicodeSet &set, const UnicodeString &str) {
     if (str.countChar32(0, str.length()) != 1) {
         // Ignore locale strings with more than one code point (usually a bidi mark)
@@ -76,7 +106,7 @@ void UniSetsTest::assertInSet(const UnicodeString &localeName, const UnicodeStri
     assertInSet(localeName, setName, set, str.char32At(0));
 }
 
-void UniSetsTest::assertInSet(const UnicodeString &localeName, const UnicodeString &setName,
+void StaticUnicodeSetsTest::assertInSet(const UnicodeString &localeName, const UnicodeString &setName,
                               const UnicodeSet &set, UChar32 cp) {
     // If this test case fails, add the specified code point to the corresponding set in
     // UnicodeSetStaticCache.java and numparse_unisets.cpp

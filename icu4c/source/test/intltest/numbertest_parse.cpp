@@ -7,14 +7,14 @@
 
 #include "numbertest.h"
 #include "numparse_impl.h"
-#include "numparse_unisets.h"
+#include "static_unicode_sets.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/testlog.h"
 
 #include <cmath>
 #include <numparse_affixes.h>
 
-using icu::numparse::impl::unisets::get;
+using icu::unisets::get;
 
 void NumberParserTest::runIndexedTest(int32_t index, UBool exec, const char*& name, char*) {
     if (exec) {

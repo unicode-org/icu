@@ -8,7 +8,7 @@
 #define __SOURCE_NUMPARSE_VALIDATORS_H__
 
 #include "numparse_types.h"
-#include "numparse_unisets.h"
+#include "static_unicode_sets.h"
 
 U_NAMESPACE_BEGIN namespace numparse {
 namespace impl {
