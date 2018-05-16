@@ -3,6 +3,7 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.StringSegment;
+import com.ibm.icu.impl.StaticUnicodeSets;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -37,11 +38,11 @@ public class ScientificMatcher implements NumberParseMatcher {
     }
 
     private static UnicodeSet minusSignSet() {
-        return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.MINUS_SIGN);
+        return StaticUnicodeSets.get(StaticUnicodeSets.Key.MINUS_SIGN);
     }
 
     private static UnicodeSet plusSignSet() {
-        return UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.PLUS_SIGN);
+        return StaticUnicodeSets.get(StaticUnicodeSets.Key.PLUS_SIGN);
     }
 
     @Override

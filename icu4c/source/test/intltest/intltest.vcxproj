@@ -253,7 +253,6 @@
     <ClCompile Include="numbertest_patternstring.cpp" />
     <ClCompile Include="numbertest_stringbuilder.cpp" />
     <ClCompile Include="numbertest_stringsegment.cpp" />
-    <ClCompile Include="numbertest_unisets.cpp" />
     <ClCompile Include="numbertest_parse.cpp" />
     <ClCompile Include="numbertest_doubleconversion.cpp" />
     <ClCompile Include="numbertest_skeletons.cpp" />
@@ -270,8 +269,9 @@
     <ClCompile Include="scientificnumberformattertest.cpp" />
     <ClCompile Include="sdtfmtts.cpp" />
     <ClCompile Include="selfmts.cpp" />
-    <ClCompile Include="tchcfmt.cpp" />
     <ClCompile Include="simpleformattertest.cpp" />
+    <ClCompile Include="static_unisets_test.cpp" />
+    <ClCompile Include="tchcfmt.cpp" />
     <ClCompile Include="tfsmalls.cpp" />
     <ClCompile Include="tmsgfmt.cpp" />
     <ClCompile Include="tsdate.cpp" />

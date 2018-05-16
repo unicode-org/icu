@@ -3,6 +3,7 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.StringSegment;
+import com.ibm.icu.impl.StaticUnicodeSets;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -22,9 +23,9 @@ public abstract class SymbolMatcher implements NumberParseMatcher {
         uniSet = symbolUniSet;
     }
 
-    protected SymbolMatcher(UnicodeSetStaticCache.Key key) {
+    protected SymbolMatcher(StaticUnicodeSets.Key key) {
         string = "";
-        uniSet = UnicodeSetStaticCache.get(key);
+        uniSet = StaticUnicodeSets.get(key);
     }
 
     public UnicodeSet getSet() {

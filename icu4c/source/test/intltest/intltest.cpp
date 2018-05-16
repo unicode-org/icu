@@ -1901,9 +1901,13 @@ UBool IntlTest::assertTrue(const char* message, UBool condition, UBool quiet, UB
     return condition;
 }
 
-UBool IntlTest::assertFalse(const char* message, UBool condition, UBool quiet) {
+UBool IntlTest::assertFalse(const char* message, UBool condition, UBool quiet, UBool possibleDataError) {
     if (condition) {
-        errln("FAIL: assertFalse() failed: %s", message);
+        if (possibleDataError) {
+            dataerrln("FAIL: assertTrue() failed: %s", message);
+        } else {
+            errln("FAIL: assertTrue() failed: %s", message);
+        }
     } else if (!quiet) {
         logln("Ok: %s", message);
     }
@@ -2111,12 +2115,12 @@ static const char* extractToAssertBuf(const UnicodeString& message) {
     return ASSERT_BUF;
 }
 
-UBool IntlTest::assertTrue(const UnicodeString& message, UBool condition, UBool quiet) {
-    return assertTrue(extractToAssertBuf(message), condition, quiet);
+UBool IntlTest::assertTrue(const UnicodeString& message, UBool condition, UBool quiet, UBool possibleDataError) {
+    return assertTrue(extractToAssertBuf(message), condition, quiet, possibleDataError);
 }
 
-UBool IntlTest::assertFalse(const UnicodeString& message, UBool condition, UBool quiet) {
-    return assertFalse(extractToAssertBuf(message), condition, quiet);
+UBool IntlTest::assertFalse(const UnicodeString& message, UBool condition, UBool quiet, UBool possibleDataError) {
+    return assertFalse(extractToAssertBuf(message), condition, quiet, possibleDataError);
 }
 
 UBool IntlTest::assertSuccess(const UnicodeString& message, UErrorCode ec) {

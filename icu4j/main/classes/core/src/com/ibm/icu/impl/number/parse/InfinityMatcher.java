@@ -3,6 +3,7 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.StringSegment;
+import com.ibm.icu.impl.StaticUnicodeSets;
 import com.ibm.icu.text.DecimalFormatSymbols;
 
 /**
@@ -27,7 +28,7 @@ public class InfinityMatcher extends SymbolMatcher {
     }
 
     private InfinityMatcher() {
-        super(UnicodeSetStaticCache.Key.INFINITY);
+        super(StaticUnicodeSets.Key.INFINITY);
     }
 
     @Override

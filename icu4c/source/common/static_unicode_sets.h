@@ -6,18 +6,20 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef __NUMPARSE_UNISETS_H__
-#define __NUMPARSE_UNISETS_H__
+#ifndef __STATIC_UNICODE_SETS_H__
+#define __STATIC_UNICODE_SETS_H__
 
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
 
-U_NAMESPACE_BEGIN namespace numparse {
-namespace impl {
+U_NAMESPACE_BEGIN
 namespace unisets {
 
 enum Key {
-    EMPTY,
+    // NONE is used to indicate null in chooseFrom().
+    // EMPTY is used to get an empty UnicodeSet.
+    NONE = -1,
+    EMPTY = 0,
 
     // Ignorables
     DEFAULT_IGNORABLES,
@@ -57,17 +59,44 @@ enum Key {
     DIGITS_OR_ALL_SEPARATORS,
     DIGITS_OR_STRICT_ALL_SEPARATORS,
 
-    // The number of elements in the enum.  Also used to indicate null.
+    // The number of elements in the enum.
     COUNT
 };
 
-// Exported as U_COMMON_API for ucurr.cpp
+/**
+ * Gets the static-allocated UnicodeSet according to the provided key. The
+ * pointer will be deleted during u_cleanup(); the caller should NOT delete it.
+ *
+ * Exported as U_COMMON_API for ucurr.cpp
+ *
+ * @param key The desired UnicodeSet according to the enum in this file.
+ * @return The requested UnicodeSet. Guaranteed to be frozen and non-null, but
+ *         may be empty if an error occurred during data loading.
+ */
 U_COMMON_API const UnicodeSet* get(Key key);
 
-// Exported as U_COMMON_API for numparse_decimal.cpp
+/**
+ * Checks if the UnicodeSet given by key1 contains the given string.
+ *
+ * Exported as U_COMMON_API for numparse_decimal.cpp
+ *
+ * @param str The string to check.
+ * @param key1 The set to check.
+ * @return key1 if the set contains str, or NONE if not.
+ */
 U_COMMON_API Key chooseFrom(UnicodeString str, Key key1);
 
-// Exported as U_COMMON_API for numparse_decimal.cpp
+/**
+ * Checks if the UnicodeSet given by either key1 or key2 contains the string.
+ *
+ * Exported as U_COMMON_API for numparse_decimal.cpp
+ *
+ * @param str The string to check.
+ * @param key1 The first set to check.
+ * @param key2 The second set to check.
+ * @return key1 if that set contains str; key2 if that set contains str; or
+ *         NONE if neither set contains str.
+ */
 U_COMMON_API Key chooseFrom(UnicodeString str, Key key1, Key key2);
 
 // Unused in C++:
@@ -84,9 +113,7 @@ static const struct {
 };
 
 } // namespace unisets
-} // namespace impl
-} // namespace numparse
 U_NAMESPACE_END
 
-#endif //__NUMPARSE_UNISETS_H__
+#endif //__STATIC_UNICODE_SETS_H__
 #endif /* #if !UCONFIG_NO_FORMATTING */

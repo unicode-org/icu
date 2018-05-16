@@ -11,7 +11,7 @@
 
 #include "numparse_types.h"
 #include "numparse_decimal.h"
-#include "numparse_unisets.h"
+#include "static_unicode_sets.h"
 #include "numparse_utils.h"
 #include "unicode/uchar.h"
 #include "putilimp.h"
@@ -41,7 +41,7 @@ DecimalMatcher::DecimalMatcher(const DecimalFormatSymbols& symbols, const Groupe
             decimalSeparator,
             strictSeparators ? unisets::STRICT_COMMA : unisets::COMMA,
             strictSeparators ? unisets::STRICT_PERIOD : unisets::PERIOD);
-    if (decimalKey != unisets::COUNT) {
+    if (decimalKey >= 0) {
         decimalUniSet = unisets::get(decimalKey);
     } else {
         auto* set = new UnicodeSet();
@@ -51,7 +51,7 @@ DecimalMatcher::DecimalMatcher(const DecimalFormatSymbols& symbols, const Groupe
         fLocalDecimalUniSet.adoptInstead(set);
     }
 
-    if (groupingKey != unisets::COUNT && decimalKey != unisets::COUNT) {
+    if (groupingKey >= 0 && decimalKey >= 0) {
         // Everything is available in the static cache
         separatorSet = groupingUniSet;
         leadSet = unisets::get(

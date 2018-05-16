@@ -11,7 +11,7 @@
 
 #include "numparse_types.h"
 #include "numparse_validators.h"
-#include "numparse_unisets.h"
+#include "static_unicode_sets.h"
 
 using namespace icu;
 using namespace icu::numparse;

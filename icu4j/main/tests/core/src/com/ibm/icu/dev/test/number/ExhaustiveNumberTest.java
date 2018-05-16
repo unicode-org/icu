@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.dev.test.number;
 
-import static com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.get;
+import static com.ibm.icu.impl.StaticUnicodeSets.get;
 
 import java.math.BigDecimal;
 import java.util.Random;
@@ -11,8 +11,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.StaticUnicodeSets.Key;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
-import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache.Key;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.number.Precision;

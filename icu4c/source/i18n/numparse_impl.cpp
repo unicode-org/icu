@@ -21,7 +21,7 @@
 #include "unicode/numberformatter.h"
 #include "cstr.h"
 #include "number_mapper.h"
-#include "numparse_unisets.h"
+#include "static_unicode_sets.h"
 
 using namespace icu;
 using namespace icu::number;

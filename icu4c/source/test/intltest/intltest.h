@@ -282,7 +282,7 @@ public:
 
     /* JUnit-like assertions. Each returns TRUE if it succeeds. */
     UBool assertTrue(const char* message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE, const char *file=NULL, int line=0);
-    UBool assertFalse(const char* message, UBool condition, UBool quiet=FALSE);
+    UBool assertFalse(const char* message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE);
     /**
      * @param possibleDataError - if TRUE, use dataerrln instead of errcheckln on failure
      * @return TRUE on success, FALSE on failure.
@@ -303,8 +303,8 @@ public:
     UBool assertEquals(const UnicodeString& message, const Formattable& expected,
                        const Formattable& actual);
 #endif
-    UBool assertTrue(const UnicodeString& message, UBool condition, UBool quiet=FALSE);
-    UBool assertFalse(const UnicodeString& message, UBool condition, UBool quiet=FALSE);
+    UBool assertTrue(const UnicodeString& message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE);
+    UBool assertFalse(const UnicodeString& message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE);
     UBool assertSuccess(const UnicodeString& message, UErrorCode ec);
     UBool assertEquals(const UnicodeString& message, const UnicodeString& expected,
                        const UnicodeString& actual, UBool possibleDataError=FALSE);

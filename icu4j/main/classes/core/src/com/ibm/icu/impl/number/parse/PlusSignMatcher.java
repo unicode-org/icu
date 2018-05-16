@@ -3,6 +3,7 @@
 package com.ibm.icu.impl.number.parse;
 
 import com.ibm.icu.impl.StringSegment;
+import com.ibm.icu.impl.StaticUnicodeSets;
 import com.ibm.icu.text.DecimalFormatSymbols;
 
 /**
@@ -31,7 +32,7 @@ public class PlusSignMatcher extends SymbolMatcher {
     }
 
     private PlusSignMatcher(boolean allowTrailing) {
-        super(UnicodeSetStaticCache.Key.PLUS_SIGN);
+        super(StaticUnicodeSets.Key.PLUS_SIGN);
         this.allowTrailing = allowTrailing;
     }
 

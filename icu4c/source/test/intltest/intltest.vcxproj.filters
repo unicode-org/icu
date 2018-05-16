@@ -280,9 +280,6 @@
     <ClCompile Include="numbertest_stringsegment.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="numbertest_unisets.cpp">
-      <Filter>formatting</Filter>
-    </ClCompile>
     <ClCompile Include="numbertest_parse.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -326,6 +323,9 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="simpleformattertest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="static_unisets_test.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="tchcfmt.cpp">

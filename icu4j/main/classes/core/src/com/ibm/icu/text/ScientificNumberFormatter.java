@@ -13,7 +13,7 @@ import java.text.AttributedCharacterIterator.Attribute;
 import java.text.CharacterIterator;
 import java.util.Map;
 
-import com.ibm.icu.impl.number.parse.UnicodeSetStaticCache;
+import com.ibm.icu.impl.StaticUnicodeSets;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.util.ULocale;
 
@@ -230,14 +230,14 @@ public final class ScientificNumberFormatter {
                     int start = iterator.getRunStart(NumberFormat.Field.EXPONENT_SIGN);
                     int limit = iterator.getRunLimit(NumberFormat.Field.EXPONENT_SIGN);
                     int aChar = char32AtAndAdvance(iterator);
-                    if (UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.MINUS_SIGN).contains(aChar)) {
+                    if (StaticUnicodeSets.get(StaticUnicodeSets.Key.MINUS_SIGN).contains(aChar)) {
                         append(
                                 iterator,
                                 copyFromOffset,
                                 start,
                                 result);
                         result.append(SUPERSCRIPT_MINUS_SIGN);
-                    } else if (UnicodeSetStaticCache.get(UnicodeSetStaticCache.Key.PLUS_SIGN).contains(aChar)) {
+                    } else if (StaticUnicodeSets.get(StaticUnicodeSets.Key.PLUS_SIGN).contains(aChar)) {
                         append(
                                 iterator,
                                 copyFromOffset,
