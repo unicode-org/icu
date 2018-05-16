@@ -1397,28 +1397,31 @@ public final class UCharacterCaseTest extends TestFmwk
         // Demonstrate the iterator next() method:
         Edits.Iterator fineIterator = edits.getFineIterator();
         int i = 0;
-        int toStringOffset = fineIterator.toString().indexOf('{');
         while (fineIterator.next()) {
             String expected = fineIteratorExpected[i++];
-            assertEquals("Iteration #" + i, expected, fineIterator.toString().substring(toStringOffset));
+            String actual = fineIterator.toString();
+            assertEquals("Iteration #" + i, expected, actual.substring(actual.length() - expected.length()));
         }
         Edits.Iterator fineChangesIterator = edits.getFineChangesIterator();
         i = 0;
         while (fineChangesIterator.next()) {
             String expected = fineChangesIteratorExpected[i++];
-            assertEquals("Iteration #" + i, expected, fineChangesIterator.toString().substring(toStringOffset));
+            String actual = fineChangesIterator.toString();
+            assertEquals("Iteration #" + i, expected, actual.substring(actual.length() - expected.length()));
         }
         Edits.Iterator coarseIterator = edits.getCoarseIterator();
         i = 0;
         while (coarseIterator.next()) {
             String expected = coarseIteratorExpected[i++];
-            assertEquals("Iteration #" + i, expected, coarseIterator.toString().substring(toStringOffset));
+            String actual = coarseIterator.toString();
+            assertEquals("Iteration #" + i, expected, actual.substring(actual.length() - expected.length()));
         }
         Edits.Iterator coarseChangesIterator = edits.getCoarseChangesIterator();
         i = 0;
         while (coarseChangesIterator.next()) {
             String expected = coarseChangesIteratorExpected[i++];
-            assertEquals("Iteration #" + i, expected, coarseChangesIterator.toString().substring(toStringOffset));
+            String actual = coarseChangesIterator.toString();
+            assertEquals("Iteration #" + i, expected, actual.substring(actual.length() - expected.length()));
         }
 
         // Demonstrate the iterator indexing methods:
