@@ -121,6 +121,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestDayPeriodWithLocales);
     TESTCASE_AUTO(TestMinuteSecondFieldsInOddPlaces);
     TESTCASE_AUTO(TestDayPeriodParsing);
+    TESTCASE_AUTO(TestParseRegression13744);
 
     TESTCASE_AUTO_END;
 }
