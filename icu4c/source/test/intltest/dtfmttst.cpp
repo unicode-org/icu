@@ -5539,6 +5539,15 @@ void DateFormatTest::TestDayPeriodParsing() {
         k150000, sdf.parse(UnicodeString("2015-11-13 03:00 noon"), errorCode));
 }
 
+void DateFormatTest::TestParseRegression13744() {
+    LocalPointer<DateFormat> dfmt(DateFormat::createDateTimeInstance(
+            DateFormat::SHORT, DateFormat::SHORT, Locale("en", "US")));
+    ParsePosition pos(0);
+    UnicodeString inDate("4/27/18");
+    dfmt->parse(inDate, pos);
+    assertEquals("Error index", inDate.length(), pos.getErrorIndex());
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
