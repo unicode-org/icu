@@ -2845,7 +2845,7 @@ public class SimpleDateFormat extends DateFormat {
                     char afterType = ((PatternItem) after).type;
                     if (DATE_PATTERN_TYPE.contains(beforeType) != DATE_PATTERN_TYPE.contains(afterType)) {
                         int newPos = originalPos;
-                        while (true) {
+                        while (newPos < tlen) {
                             char ich = text.charAt(newPos);
                             if (!PatternProps.isWhiteSpace(ich)) {
                                 break;

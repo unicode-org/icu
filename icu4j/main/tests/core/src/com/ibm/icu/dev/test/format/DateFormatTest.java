@@ -5422,4 +5422,13 @@ public class DateFormatTest extends TestFmwk {
         assertEquals("yyyy-MM-dd hh:mm b | 2015-11-13 03:00 midnight", k030000, sdf.parse("2015-11-13 03:00 midnight"));
         assertEquals("yyyy-MM-dd hh:mm b | 2015-11-13 03:00 noon", k150000, sdf.parse("2015-11-13 03:00 noon"));
     }
+
+    @Test
+    public void TestParseRegression13744() {
+        DateFormat dfmt = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
+        ParsePosition pos = new ParsePosition(0);
+        final String inDate = "4/27/18";    // date only, no time
+        dfmt.parse(inDate, pos);
+        assertEquals("Error index", inDate.length(), pos.getErrorIndex());
+    }
 }
