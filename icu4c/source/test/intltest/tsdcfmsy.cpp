@@ -354,16 +354,18 @@ void IntlTestDecimalFormatSymbols::testNumberingSystem() {
         const char16_t* expected1; // Expected number format string
         const char16_t* expected2; // Expected pattern separator
     };
-    static const testcase cases[9] = {
-            {"en", "latn", u"1,234.56", u";"},
-            {"en", "arab", u"١٬٢٣٤٫٥٦", u"؛"},
-            {"en", "mathsanb", u"𝟭,𝟮𝟯𝟰.𝟱𝟲", u";"},
-            {"en", "mymr", u"၁,၂၃၄.၅၆", u";"},
-            {"my", "latn", u"1,234.56", u";"},
-            {"my", "arab", u"١٬٢٣٤٫٥٦", u"؛"},
-            {"my", "mathsanb", u"𝟭,𝟮𝟯𝟰.𝟱𝟲", u";"},
-            {"my", "mymr", u"၁,၂၃၄.၅၆", u"၊"},
-            {"en@numbers=thai", "mymr", u"၁,၂၃၄.၅၆", u";"}, // conflicting numbering system
+    static const testcase cases[] = {
+            {"en", "latn", u"1,234.56", u"%"},
+            {"en", "arab", u"١٬٢٣٤٫٥٦", u"٪\u061C"},
+            {"en", "mathsanb", u"𝟭,𝟮𝟯𝟰.𝟱𝟲", u"%"},
+            {"en", "mymr", u"၁,၂၃၄.၅၆", u"%"},
+            {"my", "latn", u"1,234.56", u"%"},
+            {"my", "arab", u"١٬٢٣٤٫٥٦", u"٪\u061C"},
+            {"my", "mathsanb", u"𝟭,𝟮𝟯𝟰.𝟱𝟲", u"%"},
+            {"my", "mymr", u"၁,၂၃၄.၅၆", u"%"},
+            {"ar", "latn", u"1,234.56", u"\u200E%\u200E"},
+            {"ar", "arab", u"١٬٢٣٤٫٥٦", u"٪\u061C"},
+            {"en@numbers=thai", "mymr", u"၁,၂၃၄.၅၆", u"%"}, // conflicting numbering system
     };
 
     for (int i=0; i<8; i++) {
@@ -380,12 +382,11 @@ void IntlTestDecimalFormatSymbols::testNumberingSystem() {
             return;
         }
         Verify(1234.56, "#,##0.##", dfs, expected1);
-        // The pattern separator is something that differs by numbering system in my@numbers=mymr.
-        UnicodeString actual2 = dfs.getSymbol(DecimalFormatSymbols::kPatternSeparatorSymbol);
-        if (expected2 != actual2) {
-            errln((UnicodeString)"ERROR: DecimalFormatSymbols returned pattern separator " + actual2
-                + " but we expected " + expected2);
-        }
+        // The percent sign differs by numbering system.
+        UnicodeString actual2 = dfs.getSymbol(DecimalFormatSymbols::kPercentSymbol);
+        assertEquals((UnicodeString) "Percent sign with " + cas.locid + " and " + cas.nsname,
+            expected2,
+            actual2);
     }
 }
 
