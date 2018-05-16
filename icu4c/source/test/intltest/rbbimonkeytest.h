@@ -32,7 +32,7 @@
 //              intltest rbbi/RBBIMonkeyTest@loop=-1,rules=word.txt
 //         will run word break testing in an infinite loop.
 //         Summary of options
-//               test=name             Test against the named reference rule file.
+//               rules=name             Test against the named reference rule file.
 //                                     Files are found in source/test/testdata/break_rules
 //               loop=nnn              Loop nnn times. -1 for no limit. loop of 1 is useful for debugging.
 //               seed=nnnn             Random number generator seed. Allows recreation of a failure.

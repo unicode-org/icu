@@ -2551,8 +2551,6 @@ private:
     UnicodeSet  *fEB;
     UnicodeSet  *fEM;
     UnicodeSet  *fZJ;
-    UnicodeSet  *fExtendedPict;
-    UnicodeSet  *fEmojiNRK;
 
     BreakIterator        *fCharBI;
     const UnicodeString  *fText;
@@ -2618,8 +2616,6 @@ RBBILineMonkey::RBBILineMonkey() :
     fEB    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EB}]"), status);
     fEM    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EM}]"), status);
     fZJ    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=ZWJ}]"), status);
-    fEmojiNRK = new UnicodeSet(UNICODE_STRING_SIMPLE("[[\\p{Emoji}]-[\\p{Line_break=RI}*#0-9\\u00a9\\u00ae\\u2122\\u3030\\u303d]]"), status);
-    fExtendedPict = new UnicodeSet(u"[:Extended_Pictographic:]", status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2674,8 +2670,6 @@ RBBILineMonkey::RBBILineMonkey() :
     fSets->addElement(fEB, status);
     fSets->addElement(fEM, status);
     fSets->addElement(fZJ, status);
-    fSets->addElement(fExtendedPict, status);
-    fSets->addElement(fEmojiNRK, status);
 
 
     const char *rules =
@@ -2863,14 +2857,40 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             break;
         }
 
-        // LB 8a ZWJ x (ID | ExtendedPict | Emoji)
+        // LB 25    Numbers
+        //          Move this test up, before LB8a, because numbers can match a longer sequence that would
+        //          also match 8a.  e.g. NU ZWJ IS PO     (ZWJ acts like CM)
+        if (fNumberMatcher->lookingAt(prevPos, status)) {
+            if (U_FAILURE(status)) {
+                break;
+            }
+            // Matched a number.  But could have been just a single digit, which would
+            //    not represent a "no break here" between prevChar and thisChar
+            int32_t numEndIdx = fNumberMatcher->end(status);  // idx of first char following num
+            if (numEndIdx > pos) {
+                // Number match includes at least our two chars being checked
+                if (numEndIdx > nextPos) {
+                    // Number match includes additional chars.  Update pos and nextPos
+                    //   so that next loop iteration will continue at the end of the number,
+                    //   checking for breaks between last char in number & whatever follows.
+                    pos = nextPos = numEndIdx;
+                    do {
+                        pos = fText->moveIndex32(pos, -1);
+                        thisChar = fText->char32At(pos);
+                    } while (fCM->contains(thisChar));
+                }
+                continue;
+            }
+        }
+
+        // LB 8a ZWJ x
         //       The monkey test's way of ignoring combining characters doesn't work
         //       for this rule. ZJ is also a CM. Need to get the actual character
         //       preceding "thisChar", not ignoring combining marks, possibly ZJ.
         {
             int32_t prevIdx = fText->moveIndex32(pos, -1);
             UChar32 prevC = fText->char32At(prevIdx);
-            if (fZJ->contains(prevC) && (fID->contains(thisChar) || fExtendedPict->contains(thisChar) || fEmojiNRK->contains(thisChar))) {
+            if (fZJ->contains(prevC)) {
                 continue;
             }
         }
@@ -3070,32 +3090,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
-
-
-        // LB 25    Numbers
-        if (fNumberMatcher->lookingAt(prevPos, status)) {
-            if (U_FAILURE(status)) {
-                break;
-            }
-            // Matched a number.  But could have been just a single digit, which would
-            //    not represent a "no break here" between prevChar and thisChar
-            int32_t numEndIdx = fNumberMatcher->end(status);  // idx of first char following num
-            if (numEndIdx > pos) {
-                // Number match includes at least our two chars being checked
-                if (numEndIdx > nextPos) {
-                    // Number match includes additional chars.  Update pos and nextPos
-                    //   so that next loop iteration will continue at the end of the number,
-                    //   checking for breaks between last char in number & whatever follows.
-                    pos = nextPos = numEndIdx;
-                    do {
-                        pos = fText->moveIndex32(pos, -1);
-                        thisChar = fText->char32At(pos);
-                    } while (fCM->contains(thisChar));
-                }
-                continue;
-            }
-        }
-
+        // LB 25 numbers match, moved up, before LB 8a,
 
         // LB 26 Do not break a Korean syllable.
         if (fJL->contains(prevChar) && (fJL->contains(thisChar) ||
@@ -3226,8 +3221,6 @@ RBBILineMonkey::~RBBILineMonkey() {
     delete fEB;
     delete fEM;
     delete fZJ;
-    delete fExtendedPict;
-    delete fEmojiNRK;
 
     delete fCharBI;
     delete fNumberMatcher;
