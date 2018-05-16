@@ -683,7 +683,7 @@ sl	#.##0;#.##0−	#,##0;#,##0-	K
 // JDK does not have data for "×10^" in this locale
 en_SE	0,00×10^0;0,00×10^0-	0.00E0;0.00E0-	K
 // JDK does not seem to transform the digits in localized patterns
-ar_SA	#\u066C##\u0660\u066B\u0660\u0660\u061Ba#	#,##0.00;a#,##0.00	K
+ar_SA	#\u066C##\u0660\u066B\u0660\u0660;a#	#,##0.00;a#,##0.00	K
 
 test toPattern
 set locale en
