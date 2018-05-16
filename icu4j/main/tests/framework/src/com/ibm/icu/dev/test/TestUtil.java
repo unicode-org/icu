@@ -236,6 +236,23 @@ public final class TestUtil {
         return vendor;
     }
 
+    public enum JavaRuntimeName {
+        Unknown,
+        OpenJDK,
+        Android
+    }
+
+    public static JavaRuntimeName getJavaRuntimeName() {
+        JavaRuntimeName name = JavaRuntimeName.Unknown;
+        String javaRuntimeNameProp = System.getProperty("java.runtime.name");
+        if (javaRuntimeNameProp.startsWith("OpenJDK")) {
+            name = JavaRuntimeName.OpenJDK;
+        } else if (javaRuntimeNameProp.startsWith("Android")) {
+            name = JavaRuntimeName.Android;
+        }
+        return name;
+    }
+
     public static int getJavaVersion() {
         int ver = -1;
         String verstr = System.getProperty("java.version");
