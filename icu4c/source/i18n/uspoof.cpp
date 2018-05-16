@@ -59,6 +59,10 @@ static void U_CALLCONV initializeStatics(UErrorCode &status) {
         "['\\-.\\:\\u00B7\\u0375\\u058A\\u05F3\\u05F4\\u06FD\\u06FE\\u0F0B\\u200C\\u200D\\u2010\\u"
         "2019\\u2027\\u30A0\\u30FB]";
     gInclusionSet = new UnicodeSet(UnicodeString(inclusionPat, -1, US_INV), status);
+    if (gInclusionSet == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
     gInclusionSet->freeze();
 
     // Note: data from http://unicode.org/Public/security/9.0.0/IdentifierStatus.txt
@@ -124,6 +128,11 @@ static void U_CALLCONV initializeStatics(UErrorCode &status) {
         "002B734\\U0002B740-\\U0002B81D\\U0002B820-\\U0002CEA1]";
 
     gRecommendedSet = new UnicodeSet(UnicodeString(recommendedPat, -1, US_INV), status);
+    if (gRecommendedSet == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        delete gInclusionSet;
+        return;
+    }
     gRecommendedSet->freeze();
     gNfdNormalizer = Normalizer2::getNFDInstance(status);
     ucln_i18n_registerCleanup(UCLN_I18N_SPOOF, uspoof_cleanup);
@@ -140,12 +149,13 @@ uspoof_open(UErrorCode *status) {
         return NULL;
     }
     SpoofImpl *si = new SpoofImpl(*status);
-    if (U_SUCCESS(*status) && si == NULL) {
+    if (si == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
     }
     if (U_FAILURE(*status)) {
         delete si;
-        si = NULL;
+        return NULL;
     }
     return si->asUSpoofChecker();
 }
@@ -157,21 +167,41 @@ uspoof_openFromSerialized(const void *data, int32_t length, int32_t *pActualLeng
     if (U_FAILURE(*status)) {
         return NULL;
     }
+
+    if (data == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
     umtx_initOnce(gSpoofInitStaticsOnce, &initializeStatics, *status);
+    if (U_FAILURE(*status))
+    {
+        return NULL;
+    }
+
     SpoofData *sd = new SpoofData(data, length, *status);
-    SpoofImpl *si = new SpoofImpl(sd, *status);
+    if (sd == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+
     if (U_FAILURE(*status)) {
         delete sd;
-        delete si;
         return NULL;
     }
-    if (sd == NULL || si == NULL) {
+
+    SpoofImpl *si = new SpoofImpl(sd, *status);
+    if (si == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
-        delete sd;
-        delete si;
+        delete sd; // explicit delete as the destructor for si won't be called.
         return NULL;
     }
-        
+
+    if (U_FAILURE(*status)) {
+        delete si; // no delete for sd, as the si destructor will delete it.
+        return NULL;
+    }
+
     if (pActualLength != NULL) {
         *pActualLength = sd->size();
     }
@@ -186,6 +216,10 @@ uspoof_clone(const USpoofChecker *sc, UErrorCode *status) {
         return NULL;
     }
     SpoofImpl *result = new SpoofImpl(*src, *status);   // copy constructor
+    if (result == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
     if (U_FAILURE(*status)) {
         delete result;
         result = NULL;

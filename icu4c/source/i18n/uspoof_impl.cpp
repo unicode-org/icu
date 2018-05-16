@@ -590,6 +590,10 @@ SpoofData::SpoofData(const void *data, int32_t length, UErrorCode &status)
         status = U_INVALID_FORMAT_ERROR;
         return;
     }
+    if (data == NULL) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
     void *ncData = const_cast<void *>(data);
     fRawData = static_cast<SpoofDataHeader *>(ncData);
     if (length < fRawData->fLength) {
