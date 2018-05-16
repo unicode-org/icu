@@ -66,7 +66,7 @@ static const UChar INTL_CURRENCY_SYMBOL_STR[] = {0xa4, 0xa4, 0};
 static const char *gNumberElementKeys[DecimalFormatSymbols::kFormatSymbolCount] = {
     "decimal",
     "group",
-    "list",
+    NULL, /* #11897: the <list> symbol is NOT the pattern separator symbol */
     "percentSign",
     NULL, /* Native zero digit is deprecated from CLDR - get it from the numbering system */
     NULL, /* Pattern digit character is deprecated from CLDR - use # by default always */

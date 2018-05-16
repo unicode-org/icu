@@ -1272,7 +1272,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     private static final String[] SYMBOL_KEYS = {
             "decimal",
             "group",
-            "list",
             "percentSign",
             "minusSign",
             "plusSign",
@@ -1310,7 +1309,6 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     private static final String[] SYMBOL_DEFAULTS = new String[] {
             String.valueOf(DEF_DECIMAL_SEPARATOR),  // decimal
             String.valueOf(DEF_GROUPING_SEPARATOR), // group
-            ";", // list
             String.valueOf(DEF_PERCENT),    // percentSign
             String.valueOf(DEF_MINUS_SIGN), // minusSign
             String.valueOf(DEF_PLUS_SIGN),  // plusSign
@@ -1381,21 +1379,18 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         // Copy data from the numberElements map into instance fields
         setDecimalSeparatorString(numberElements[0]);
         setGroupingSeparatorString(numberElements[1]);
-
-        // See CLDR #9781
-        // assert numberElements[2].length() == 1;
-        patternSeparator = numberElements[2].charAt(0);
-
-        setPercentString(numberElements[3]);
-        setMinusSignString(numberElements[4]);
-        setPlusSignString(numberElements[5]);
-        setExponentSeparator(numberElements[6]);
-        setPerMillString(numberElements[7]);
-        setInfinity(numberElements[8]);
-        setNaN(numberElements[9]);
-        setMonetaryDecimalSeparatorString(numberElements[10]);
-        setMonetaryGroupingSeparatorString(numberElements[11]);
-        setExponentMultiplicationSign(numberElements[12]);
+        // #11897: pattern separator is always ';', not from data
+        patternSeparator = ';';
+        setPercentString(numberElements[2]);
+        setMinusSignString(numberElements[3]);
+        setPlusSignString(numberElements[4]);
+        setExponentSeparator(numberElements[5]);
+        setPerMillString(numberElements[6]);
+        setInfinity(numberElements[7]);
+        setNaN(numberElements[8]);
+        setMonetaryDecimalSeparatorString(numberElements[9]);
+        setMonetaryGroupingSeparatorString(numberElements[10]);
+        setExponentMultiplicationSign(numberElements[11]);
 
         digit = '#';  // Localized pattern character no longer in CLDR
         padEscape = '*';
@@ -1488,11 +1483,11 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
         // If monetary decimal or grouping were not explicitly set, then set them to be the same as
         // their non-monetary counterparts.
-        if (numberElements[10] == null) {
-            numberElements[10] = numberElements[0];
+        if (numberElements[9] == null) {
+            numberElements[9] = numberElements[0];
         }
-        if (numberElements[11] == null) {
-            numberElements[11] = numberElements[1];
+        if (numberElements[10] == null) {
+            numberElements[10] = numberElements[1];
         }
 
         return new CacheData(validLocale, digits, numberElements);

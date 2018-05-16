@@ -5244,6 +5244,34 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test11897_LocalizedPatternSeparator() {
+        // In a locale with a different <list> symbol, like arabic,
+        // kPatternSeparatorSymbol should still be ';'
+        {
+            DecimalFormatSymbols dfs = new DecimalFormatSymbols(new ULocale("ar"));
+            assertEquals("pattern separator symbol should be ;",
+                    ';',
+                    dfs.getPatternSeparator());
+        }
+
+        // However, the custom symbol should be used in localized notation
+        // when set manually via API
+        {
+            DecimalFormatSymbols dfs = new DecimalFormatSymbols(new ULocale("en"));
+            dfs.setPatternSeparator('!');
+            DecimalFormat df = new DecimalFormat("0", dfs);
+            df.applyPattern("a0;b0"); // should not throw
+            assertEquals("should apply the normal pattern",
+                    df.getNegativePrefix(),
+                    "b");
+            df.applyLocalizedPattern("c0!d0"); // should not throw
+            assertEquals("should apply the localized pattern",
+                    df.getNegativePrefix(),
+                    "d");
+        }
+    }
+
+    @Test
     public void Test13055() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getPercentInstance();
         df.setMaximumFractionDigits(0);
