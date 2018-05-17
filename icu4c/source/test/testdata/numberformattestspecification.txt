@@ -470,12 +470,20 @@ set pattern 0
 set format 123456789
 set useGrouping 1
 begin
-output	grouping	breaks	grouping2	minGroupingDigits
+output	grouping	grouping2	breaks
 1,2345,6789	4
-1,23,45,6789	4	K	2
-1,23,45,6789	4	K	2	2
-123,456789	6		6	3
-123456789	6	HK	6	4
+1,23,45,6789	4	2	K
+
+test grouping setters with min grouping digits
+set locale en_US
+set pattern 0
+set format 123456789
+set useGrouping 1
+begin
+output	grouping	grouping2	minGroupingDigits	breaks
+1,23,45,6789	4	2	2	K
+123,456789	6	6	3
+123456789	6	6	4	HK
 
 test multiplier setters
 set locale en_US
@@ -520,10 +528,10 @@ set locale en_US
 set pattern 0.00
 set format 186283
 begin
-output	breaks	useScientific
+output	useScientific	breaks
 186283.00
-1.86E5	K	1
-186283.00		0
+1.86E5	1	K
+186283.00	0
 
 test rounding mode setters
 set locale en_US
@@ -596,11 +604,11 @@ test exponent decimalSeparatorAlwaysShown default
 set locale en_US
 set pattern 0.##E0
 begin
-format	output	breaks	decimalSeparatorAlwaysShown
+format	output	decimalSeparatorAlwaysShown	breaks
 // decimalSeparatorAlwaysShown off by default
 299792458	3E8
 299000000	2.99E8
-299792458	3.E8		1
+299792458	3.E8	1
 
 test pad position setters
 set locale en_US
