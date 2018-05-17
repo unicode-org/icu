@@ -30,7 +30,7 @@
  * <pre>
  * // Setup:
  * UErrorCode ec = U_ZERO_ERROR;
- * UNumberFormatter* uformatter = unumf_openFromSkeletonAndLocale(u"precision-integer", -1, "en", &ec);
+ * UNumberFormatter* uformatter = unumf_openForSkeletonAndLocale(u"precision-integer", -1, "en", &ec);
  * UFormattedNumber* uresult = unumf_openResult(&ec);
  * if (U_FAILURE(ec)) { return; }
  *
@@ -58,17 +58,17 @@
  *
  * <pre>
  * // Setup:
- * LocalUNumberFormatterPointer uformatter(unumf_openFromSkeletonAndLocale(u"percent", -1, "en", &ec));
+ * LocalUNumberFormatterPointer uformatter(unumf_openForSkeletonAndLocale(u"percent", -1, "en", &ec));
  * LocalUFormattedNumberPointer uresult(unumf_openResult(&ec));
  * if (U_FAILURE(ec)) { return; }
  *
  * // Format a decimal number:
- * unumf_formatDecimal(uformatter.getAlias(), "9.87E6", -1, uresult.getAlias(), &ec);
+ * unumf_formatDecimal(uformatter.getAlias(), "9.87E-3", -1, uresult.getAlias(), &ec);
  * if (U_FAILURE(ec)) { return; }
  *
  * // Get the location of the percent sign:
  * UFieldPosition ufpos = {UNUM_PERCENT_FIELD, 0, 0};
- * unumf_resultGetField(uresult.getAlias(), &ufpos, &ec);
+ * unumf_resultNextFieldPosition(uresult.getAlias(), &ufpos, &ec);
  * // ufpos should contain beginIndex=7 and endIndex=8 since the string is "0.00987%"
  *
  * // No need to do any cleanup since we are using LocalPointer.
@@ -413,7 +413,7 @@ typedef struct UFormattedNumber UFormattedNumber;
 
 
 /**
- * Creates a new UNumberFormatter from the given skeleton string and locale. This is currently the only
+ * Creates a new UNumberFormatter for the given skeleton string and locale. This is currently the only
  * method for creating a new UNumberFormatter.
  *
  * Objects of type UNumberFormatter returned by this method are threadsafe.
@@ -430,8 +430,8 @@ typedef struct UFormattedNumber UFormattedNumber;
  * @draft ICU 62
  */
 U_DRAFT UNumberFormatter* U_EXPORT2
-unumf_openFromSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const char* locale,
-                                UErrorCode* ec);
+unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const char* locale,
+                               UErrorCode* ec);
 
 
 /**
@@ -457,7 +457,7 @@ unumf_openResult(UErrorCode* ec);
  *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
- * @param uformatter A formatter object created by unumf_openFromSkeletonAndLocale or similar.
+ * @param uformatter A formatter object created by unumf_openForSkeletonAndLocale or similar.
  * @param value The number to be formatted.
  * @param uresult The object that will be mutated to store the result; see unumf_openResult.
  * @param ec Set if an error occurs.
@@ -477,7 +477,7 @@ unumf_formatInt(const UNumberFormatter* uformatter, int64_t value, UFormattedNum
  *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
- * @param uformatter A formatter object created by unumf_openFromSkeletonAndLocale or similar.
+ * @param uformatter A formatter object created by unumf_openForSkeletonAndLocale or similar.
  * @param value The number to be formatted.
  * @param uresult The object that will be mutated to store the result; see unumf_openResult.
  * @param ec Set if an error occurs.
@@ -500,7 +500,7 @@ unumf_formatDouble(const UNumberFormatter* uformatter, double value, UFormattedN
  *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
- * @param uformatter A formatter object created by unumf_openFromSkeletonAndLocale or similar.
+ * @param uformatter A formatter object created by unumf_openForSkeletonAndLocale or similar.
  * @param value The numeric string to be formatted.
  * @param valueLen The length of the numeric string, or -1 if it is NUL-terminated.
  * @param uresult The object that will be mutated to store the result; see unumf_openResult.
@@ -589,11 +589,11 @@ unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPosition
 
 
 /**
- * Releases the UNumberFormatter created by unumf_openFromSkeletonAndLocale().
+ * Releases the UNumberFormatter created by unumf_openForSkeletonAndLocale().
  *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
- * @param uformatter An object created by unumf_openFromSkeletonAndLocale().
+ * @param uformatter An object created by unumf_openForSkeletonAndLocale().
  * @draft ICU 62
  */
 U_DRAFT void U_EXPORT2
@@ -622,7 +622,7 @@ U_NAMESPACE_BEGIN
  *
  * Usage:
  * <pre>
- * LocalUNumberFormatterPointer uformatter(unumf_openFromSkeletonAndLocale(...));
+ * LocalUNumberFormatterPointer uformatter(unumf_openForSkeletonAndLocale(...));
  * // no need to explicitly call unumf_close()
  * </pre>
  *

@@ -463,7 +463,7 @@ public final class NumberFormatter {
      * @draft ICU 62
      * @provisional This API might change or be removed in a future release.
      */
-    public static UnlocalizedNumberFormatter fromSkeleton(String skeleton) {
+    public static UnlocalizedNumberFormatter forSkeleton(String skeleton) {
         return NumberSkeletonImpl.getOrCreate(skeleton);
     }
 

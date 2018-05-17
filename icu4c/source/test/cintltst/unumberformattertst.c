@@ -37,7 +37,7 @@ static void TestSkeletonFormatToString() {
     UChar buffer[CAPACITY];
 
     // setup:
-    UNumberFormatter* f = unumf_openFromSkeletonAndLocale(
+    UNumberFormatter* f = unumf_openForSkeletonAndLocale(
             u"precision-integer currency/USD sign-accounting", -1, "en", &ec);
     assertSuccess("Should create without error", &ec);
     UFormattedNumber* result = unumf_openResult(&ec);
@@ -74,7 +74,7 @@ static void TestSkeletonFormatToFields() {
     UErrorCode ec = U_ZERO_ERROR;
 
     // setup:
-    UNumberFormatter* uformatter = unumf_openFromSkeletonAndLocale(
+    UNumberFormatter* uformatter = unumf_openForSkeletonAndLocale(
             u".00 measure-unit/length-meter sign-always", -1, "en", &ec);
     assertSuccessCheck("Should create without error", &ec, TRUE);
     if (U_FAILURE(ec)) { return; }
@@ -153,7 +153,7 @@ static void TestExampleCode() {
 
     // Setup:
     UErrorCode ec = U_ZERO_ERROR;
-    UNumberFormatter* uformatter = unumf_openFromSkeletonAndLocale(u"precision-integer", -1, "en", &ec);
+    UNumberFormatter* uformatter = unumf_openForSkeletonAndLocale(u"precision-integer", -1, "en", &ec);
     UFormattedNumber* uresult = unumf_openResult(&ec);
     assertSuccessCheck("There should not be a failure in the example code", &ec, TRUE);
     if (U_FAILURE(ec)) { return; }

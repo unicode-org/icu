@@ -106,7 +106,7 @@ void NumberSkeletonTest::validTokens() {
     for (auto& cas : cases) {
         UnicodeString skeletonString(cas);
         UErrorCode status = U_ZERO_ERROR;
-        NumberFormatter::fromSkeleton(skeletonString, status);
+        NumberFormatter::forSkeleton(skeletonString, status);
         assertSuccess(skeletonString, status);
     }
 }
@@ -199,7 +199,7 @@ void NumberSkeletonTest::stemsRequiringOption() {
         for (auto& suffix : suffixes) {
             UnicodeString skeletonString = UnicodeString(stem) + suffix;
             UErrorCode status = U_ZERO_ERROR;
-            NumberFormatter::fromSkeleton(skeletonString, status);
+            NumberFormatter::forSkeleton(skeletonString, status);
             assertEquals(skeletonString, U_NUMBER_SKELETON_SYNTAX_ERROR, status);
         }
     }
@@ -220,7 +220,7 @@ void NumberSkeletonTest::defaultTokens() {
     for (auto& cas : cases) {
         UnicodeString skeletonString(cas);
         status.setScope(skeletonString);
-        UnicodeString normalized = NumberFormatter::fromSkeleton(
+        UnicodeString normalized = NumberFormatter::forSkeleton(
                 skeletonString, status).toSkeleton(status);
         // Skeleton should become empty when normalized
         assertEquals(skeletonString, u"", normalized);
@@ -242,7 +242,7 @@ void NumberSkeletonTest::flexibleSeparators() {
         UnicodeString skeletonString(cas.skeleton);
         UnicodeString expected(cas.expected);
         status.setScope(skeletonString);
-        UnicodeString actual = NumberFormatter::fromSkeleton(skeletonString, status).locale("en")
+        UnicodeString actual = NumberFormatter::forSkeleton(skeletonString, status).locale("en")
                 .formatDouble(5142.3, status)
                 .toString();
         assertEquals(skeletonString, expected, actual);
@@ -254,7 +254,7 @@ void NumberSkeletonTest::expectedErrorSkeleton(const char16_t** cases, int32_t c
     for (int32_t i = 0; i < casesLen; i++) {
         UnicodeString skeletonString(cases[i]);
         UErrorCode status = U_ZERO_ERROR;
-        NumberFormatter::fromSkeleton(skeletonString, status);
+        NumberFormatter::forSkeleton(skeletonString, status);
         assertEquals(skeletonString, U_NUMBER_SKELETON_SYNTAX_ERROR, status);
     }
 }

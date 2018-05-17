@@ -83,8 +83,8 @@ UFormattedNumber* UFormattedNumberData::exportForC() {
 
 
 U_CAPI UNumberFormatter* U_EXPORT2
-unumf_openFromSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const char* locale,
-                                UErrorCode* ec) {
+unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const char* locale,
+                               UErrorCode* ec) {
     auto* impl = new UNumberFormatterData();
     if (impl == nullptr) {
         *ec = U_MEMORY_ALLOCATION_ERROR;
@@ -92,7 +92,7 @@ unumf_openFromSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, cons
     }
     // Readonly-alias constructor (first argument is whether we are NUL-terminated)
     UnicodeString skeletonString(skeletonLen == -1, skeleton, skeletonLen);
-    impl->fFormatter = NumberFormatter::fromSkeleton(skeletonString, *ec).locale(locale);
+    impl->fFormatter = NumberFormatter::forSkeleton(skeletonString, *ec).locale(locale);
     return impl->exportForC();
 }
 

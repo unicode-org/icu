@@ -2600,7 +2600,7 @@ class U_I18N_API NumberFormatter final {
      * @return An UnlocalizedNumberFormatter, to be used for chaining.
      * @draft ICU 62
      */
-    static UnlocalizedNumberFormatter fromSkeleton(const UnicodeString& skeleton, UErrorCode& status);
+    static UnlocalizedNumberFormatter forSkeleton(const UnicodeString& skeleton, UErrorCode& status);
 
     /**
      * Use factory methods instead of the constructor to create a NumberFormatter.
