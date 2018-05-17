@@ -5,7 +5,8 @@
 
 # file: line.txt
 #
-# Reference Line Break rules for intltest rbbi/RBBIMonkeyTest
+# Reference Line Break rules for intltest rbbi/RBBIMonkeyTest.
+# Rules derived from Unicode Standard Annex #14 Revision 40 for Unicode 11.0
 #
 # Note: Rule syntax and the monkey test itself are still a work in progress.
 #       They are expected to change with review and the addition of support for rule tailoring.

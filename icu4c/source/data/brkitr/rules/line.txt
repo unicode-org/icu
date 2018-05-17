@@ -7,11 +7,8 @@
 #
 #         Line Breaking Rules
 #         Implement default line breaking as defined by
-#         Unicode Standard Annex #14 Revision 37 for Unicode 9.0
+#         Unicode Standard Annex #14 Revision 40 for Unicode 11.0
 #         http://www.unicode.org/reports/tr14/
-#
-#         Includes extensions to the handling of emoji ZWJ sequences from
-#         https://goo.gl/cluFCn
 #
 #         TODO:  Rule LB 8 remains as it was in Unicode 5.2
 #         This is only because of a limitation of ICU break engine implementation,
@@ -321,7 +318,10 @@ $CP $CM* ($ALPlus | $HL | $NU);
 #         Tricky interaction with LB8a: ZWJ x .   together with ZWJ acting like a CM.
 $RI $CM* $RI                 / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS $CM]];
 $RI $CM* $RI $CM* [$CM-$ZWJ] / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS $CM]];
-$RI $CM* $RI $CM* [$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS $ZWJ]?;
+$RI $CM* $RI $CM* [$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS $ZWJ {eof}];
+# note: the preceding rule includes {eof} rather than having the last [set] term qualified with '?'
+#       because of the chain-out behavior difference. The rule must chain out only from the [set characters],
+#       not from the preceding $RI or $CM, which it would be able to do if the set were optional.
 
 # LB 30b Do not break between an Emoji Base and an Emoji Modifier
 $EB $CM* $EM;
