@@ -201,6 +201,11 @@ public class DataDrivenNumberFormatTestUtility extends TestFmwk {
                 } else if (state == 1) {
                     columnNames = splitBy((char) 0x09);
                     state = 2;
+                    // "breaks" column must be last!
+                    if (columnNames.contains("breaks")
+                            && columnNames.indexOf("breaks") != columnNames.size() - 1) {
+                        showError("'breaks' column must be last!");
+                    }
                 // run the tests
                 } else {
                     int columnNamesSize = columnNames.size();
