@@ -172,7 +172,6 @@ public class NumberFormatDataDrivenTest {
          * @return
          */
         private DecimalFormat createDecimalFormat(DataDrivenNumberFormatTestData tuple) {
-
             DecimalFormat fmt = new DecimalFormat(tuple.pattern == null ? "0" : tuple.pattern,
                     new DecimalFormatSymbols(tuple.locale == null ? EN : tuple.locale));
             adjustDecimalFormat(tuple, fmt);
@@ -200,7 +199,7 @@ public class NumberFormatDataDrivenTest {
                 fmt.setCurrency(tuple.currency);
             }
             if (tuple.minGroupingDigits != null) {
-                // Oops we don't support this.
+                fmt.setMinimumGroupingDigits(tuple.minGroupingDigits);
             }
             if (tuple.useSigDigits != null) {
                 fmt.setSignificantDigitsUsed(tuple.useSigDigits != 0);
@@ -266,7 +265,7 @@ public class NumberFormatDataDrivenTest {
                 fmt.setNegativeSuffix(tuple.negativeSuffix);
             }
             if (tuple.signAlwaysShown != null) {
-                // Not supported.
+                fmt.setSignAlwaysShown(tuple.signAlwaysShown != 0);
             }
             if (tuple.localizedPattern != null) {
                 fmt.applyLocalizedPattern(tuple.localizedPattern);
@@ -277,13 +276,13 @@ public class NumberFormatDataDrivenTest {
                 fmt.setParseIntegerOnly(tuple.parseIntegerOnly != 0);
             }
             if (tuple.parseCaseSensitive != null) {
-                // Not supported.
+                fmt.setParseCaseSensitive(tuple.parseCaseSensitive != 0);
             }
             if (tuple.decimalPatternMatchRequired != null) {
                 fmt.setDecimalPatternMatchRequired(tuple.decimalPatternMatchRequired != 0);
             }
             if (tuple.parseNoExponent != null) {
-                // Oops, not supported for now
+                fmt.setParseNoExponent(tuple.parseNoExponent != 0);
             }
         }
     };
@@ -907,11 +906,11 @@ public class NumberFormatDataDrivenTest {
         }
     };
 
-    // @Test
-    // public void TestDataDrivenICU4J() {
-    // DataDrivenNumberFormatTestUtility
-    // .runFormatSuiteIncludingKnownFailures("numberformattestspecification.txt", ICU4J);
-    // }
+    @Test
+    public void TestDataDrivenICU4J() {
+        DataDrivenNumberFormatTestUtility
+                .runFormatSuiteIncludingKnownFailures("numberformattestspecification.txt", ICU4J);
+    }
 
     @Test
     public void TestDataDrivenICU58() {
