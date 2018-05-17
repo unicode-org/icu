@@ -16,6 +16,7 @@
 #include "unicode/numfmt.h"
 #include "unicode/decimfmt.h"
 #include "caltztst.h"
+#include "datadrivennumberformattestsuite.h"
 
 /**
  * Expected field positions from field position iterator. Tests should
@@ -28,6 +29,35 @@ struct NumberFormatTest_Attributes {
     int32_t id;
     int32_t spos;
     int32_t epos;
+};
+
+
+/**
+ * Header for the data-driven test, powered by numberformattestspecification.txt
+ */
+class NumberFormatDataDrivenTest : public DataDrivenNumberFormatTestSuite {
+  public:
+    void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
+    void TestNumberFormatTestTuple();
+    void TestDataDrivenICU4C();
+
+  protected:
+    UBool isFormatPass(
+            const NumberFormatTestTuple &tuple,
+            UnicodeString &appendErrorMessage,
+            UErrorCode &status);
+    UBool isToPatternPass(
+            const NumberFormatTestTuple &tuple,
+            UnicodeString &appendErrorMessage,
+            UErrorCode &status);
+    UBool isParsePass(
+            const NumberFormatTestTuple &tuple,
+            UnicodeString &appendErrorMessage,
+            UErrorCode &status);
+    UBool isParseCurrencyPass(
+            const NumberFormatTestTuple &tuple,
+            UnicodeString &appendErrorMessage,
+            UErrorCode &status);
 };
 
 /**
@@ -200,8 +230,6 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestEquality();
 
     void TestCurrencyUsage();
-    void TestNumberFormatTestTuple();
-    void TestDataDriven();
 
     void TestDoubleLimit11439();
     void TestFastPathConsistent11524();

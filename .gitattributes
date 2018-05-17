@@ -5097,6 +5097,7 @@ icu4c/source/test/intltest/numbertest_patternstring.cpp svneol=native#text/plain
 icu4c/source/test/intltest/numbertest_skeletons.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/numbertest_stringbuilder.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/numbertest_stringsegment.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/test/intltest/numfmtdatadriventest.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/numfmtspectest.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/numfmtst.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/test/intltest/numfmtst.h svneol=native#text/plain%3Bcharset%3Dutf-8

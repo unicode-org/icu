@@ -292,6 +292,9 @@
     <ClCompile Include="numfmtst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="numfmtdatadriventest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="numrgts.cpp">
       <Filter>formatting</Filter>
     </ClCompile>

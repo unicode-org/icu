@@ -257,6 +257,7 @@
     <ClCompile Include="numbertest_doubleconversion.cpp" />
     <ClCompile Include="numbertest_skeletons.cpp" />
     <ClCompile Include="numfmtst.cpp" />
+    <ClCompile Include="numfmtdatadriventest.cpp" />
     <ClCompile Include="numrgts.cpp" />
     <ClCompile Include="pluralmaptest.cpp" />
     <ClCompile Include="plurfmts.cpp" />
