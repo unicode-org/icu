@@ -328,7 +328,7 @@ minIntegerDigits	maxIntegerDigits	minFractionDigits	maxFractionDigits	output	bre
 // JDK gives E0 instead of allowing for unlimited precision
 0	0	0	0	2.99792458E8	K
 // J gives 2.9979E8
-0	1	0	5	2.99792E8	J
+0	1	0	5	2.99792E8	JK
 // JDK gives 300E6	
 0	3	0	0	299.792458E6	K
 // JDK gives 299.8E6 (maybe maxInt + maxFrac instead of minInt + maxFrac)?
@@ -345,7 +345,7 @@ minIntegerDigits	maxIntegerDigits	minFractionDigits	maxFractionDigits	output	bre
 // JDK gives E0
 0	0	1	0	2.99792458E8	K
 // J gives 2.998E8
-0	0	0	4	.29979E9	J
+0	0	0	4	.29979E9	JK
 // According to the spec, if maxInt>minInt and minInt>1, then set
 // Context: #13289
 2	8	1	6	2.9979246E8	K
@@ -391,7 +391,7 @@ begin
 format	maxIntegerDigits	output	breaks
 123	1	3	
 // C obeys maxIntegerDigits and prints after the decimal place
-0	0	.0	Q
+0	0	.0	JKQ
 // C and Q ignore max integer if it is less than zero and prints "123"
 123	-2147483648	0	CQ
 12345	1	5	
@@ -647,7 +647,8 @@ format	output	breaks
 Inf	[\u221e]
 -Inf	(\u221e)	K
 // J does not print the affixes
-NaN	[NaN]	J
+// K prints \uFFFD
+NaN	[NaN]	JK
 
 test nan and infinity with multiplication
 set locale en
@@ -669,10 +670,11 @@ Inf	afterPrefix	$$$   \u221e$	K
 Inf	beforeSuffix	$$$\u221e   $	K
 Inf	afterSuffix	$$$\u221e$   	K
 // J does not print the affixes
-NaN	beforePrefix	 $$$NaN$	J
-NaN	afterPrefix	$$$ NaN$	J
-NaN	beforeSuffix	$$$NaN $	J
-NaN	afterSuffix	$$$NaN$ 	J
+// K prints \uFFFD
+NaN	beforePrefix	 $$$NaN$	JK
+NaN	afterPrefix	$$$ NaN$	JK
+NaN	beforeSuffix	$$$NaN $	JK
+NaN	afterSuffix	$$$NaN$ 	JK
 
 test apply formerly localized patterns
 begin
@@ -1463,11 +1465,11 @@ set locale en
 begin
 pattern	parse	output	breaks
 // K and J return null; S, C, and P return 99
-#,##0	 9 9	99	JK
+#,##0	 9 9	99	K
 // K returns null
 #,##0	 9 999	9999	K
 0	 9 9	9	JK
-0	 9 999	9	K
+0	 9 999	9	JK
 
 test parse ignorables
 set locale ar
@@ -1630,11 +1632,12 @@ begin
 parse	output	outputCurrency	breaks
 USD123	123	USD
 USD 123	123	USD	J
-usd123	123	USD
-usd 123	123	USD	J
-Usd123	123	USD
-Usd 123	123	USD	J
-US$123	123	USD
+// C does not currently accept case-insensitive ISO codes
+usd123	123	USD	C
+usd 123	123	USD	CJ
+Usd123	123	USD	C
+Usd 123	123	USD	CJ
+US$123	123	USD	C
 us$123	fail	fail
 Us$123	fail	fail
 123 US dollars	123	USD
