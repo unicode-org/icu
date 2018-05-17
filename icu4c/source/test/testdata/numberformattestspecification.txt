@@ -751,8 +751,8 @@ parse	output	breaks
 // JDK stops parsing at the spaces. JDK doesn't see space as a grouping separator
 (34  25E-1)	-342.5	K
 (34,,25E-1)	-342.5
-// J doesn't allow trailing separators before E
-(34,,25,E-1)	-342.5	CJ
+// J doesn't allow trailing separators before E but C and P do
+(34,,25,E-1)	-342.5	CJP
 (34  25 E-1)	-342.5	JK
 (34,,25 E-1)	-342.5	JK
 // Spaces are not allowed after exponent symbol
@@ -814,8 +814,8 @@ parse	output	breaks
 // J bails b/c of trailing separators
 1,234,,,+	1234	JK
 1,234-	-1234
-// J bails because of trailing separators
-1,234,-	-1234	CJ
+// J, C, and P bail because of trailing separators
+1,234,-	-1234	CJP
 // J bails here too
 1234  -	-1234	J
 
@@ -1031,7 +1031,7 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	J
+$53.45	fail	USD	JP
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	J
@@ -1049,7 +1049,7 @@ USD(7.92)	-7.92	USD	J
 (8) USD	-8	USD
 -8 USD	-8	USD
 67 USD	67	USD
-53.45$	fail	USD
+53.45$	fail	USD	P
 US Dollars 53.45	53.45	USD	J
 53.45 US Dollars	53.45	USD
 US Dollar 53.45	53.45	USD	J
@@ -1078,7 +1078,7 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	J
+$53.45	fail	USD	JP
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	J
@@ -1092,7 +1092,7 @@ USD -7.926	-7.926	USD	J
 USD-7.92	-7.92	USD	J
 -8 USD	-8	USD
 67 USD	67	USD
-53.45$	fail	USD
+53.45$	fail	USD	P
 US Dollars 53.45	53.45	USD	J
 53.45 US Dollars	53.45	USD
 US Dollar 53.45	53.45	USD	J
@@ -1112,7 +1112,7 @@ parse	output	outputCurrency	breaks
 // J throws a NullPointerException on the first case
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	J
+$53.45	fail	USD	JP
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	J
@@ -1131,7 +1131,7 @@ USD(7.92)	-7.92	USD	J
 -8 USD	-8	USD
 67 USD	67	USD
 // J throws a NullPointerException on the next case
-53.45$	fail	USD
+53.45$	fail	USD	P
 US Dollars 53.45	53.45	USD	J
 53.45 US Dollars	53.45	USD
 US Dollar 53.45	53.45	USD	J
@@ -1150,7 +1150,7 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	J
+$53.45	fail	USD	JP
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	J
@@ -1168,7 +1168,7 @@ USD(7.92)	-7.92	USD	J
 (8) USD	-8	USD
 -8 USD	-8	USD
 67 USD	67	USD
-53.45$	fail	USD
+53.45$	fail	USD	P
 US Dollars 53.45	53.45	USD	J
 53.45 US Dollars	53.45	USD
 US Dollar 53.45	53.45	USD	J
@@ -1187,7 +1187,7 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	J
+$53.45	fail	USD	JP
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	J
@@ -1206,7 +1206,7 @@ USD(7.92)	-7.92	USD	CJP
 (8) USD	-8	USD	CJP
 -8 USD	-8	USD
 67 USD	67	USD
-53.45$	fail	USD
+53.45$	fail	USD	P
 US Dollars 53.45	53.45	USD	J
 53.45 US Dollars	53.45	USD
 US Dollar 53.45	53.45	USD	J
@@ -1622,6 +1622,24 @@ pattern	lenient	parse	output	breaks
 0E0'.'x	1	5E3.x	5000
 0E0'.'x	0	5E3.x	5000
 
+test parse lowercase currency
+set locale en
+set pattern ¤¤0
+set currency USD
+begin
+parse	output	outputCurrency	breaks
+USD123	123	USD
+USD 123	123	USD	J
+usd123	123	USD
+usd 123	123	USD	J
+Usd123	123	USD
+Usd 123	123	USD	J
+US$123	123	USD
+us$123	fail	fail
+Us$123	fail	fail
+123 US dollars	123	USD
+123 US DOLLARS	123	USD
+123 us dollars	123	USD
 
 
 
