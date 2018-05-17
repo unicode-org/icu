@@ -1037,7 +1037,7 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	HJP
+$53.45	53.45	USD	C
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	H
@@ -1055,7 +1055,7 @@ USD(7.92)	-7.92	USD	H
 (8) USD	-8	USD
 -8 USD	-8	USD
 67 USD	67	USD
-53.45$	fail	USD	JP
+53.45$	53.45	USD	CH
 US Dollars 53.45	53.45	USD	H
 53.45 US Dollars	53.45	USD
 US Dollar 53.45	53.45	USD	H
@@ -1084,7 +1084,7 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	HJP
+$53.45	53.45	USD	C
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	H
@@ -1098,7 +1098,7 @@ USD -7.926	-7.926	USD	H
 USD-7.92	-7.92	USD	H
 -8 USD	-8	USD
 67 USD	67	USD
-53.45$	fail	USD	JP
+53.45$	53.45	USD	CH
 US Dollars 53.45	53.45	USD	H
 53.45 US Dollars	53.45	USD
 US Dollar 53.45	53.45	USD	H
@@ -1115,10 +1115,10 @@ set pattern 0.00 \u00a4\u00a4\u00a4;(#) \u00a4\u00a4\u00a4
 set locale en_GB
 begin
 parse	output	outputCurrency	breaks
-// J throws a NullPointerException on the first case
+// H throws a NullPointerException on the first case
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	HJP
+$53.45	53.45	USD	C
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	H
@@ -1136,8 +1136,8 @@ USD(7.92)	-7.92	USD	H
 (8) USD	-8	USD
 -8 USD	-8	USD
 67 USD	67	USD
-// J throws a NullPointerException on the next case
-53.45$	fail	USD	JP
+// H throws a NullPointerException on the next case
+53.45$	53.45	USD	CH
 US Dollars 53.45	53.45	USD	H
 53.45 US Dollars	53.45	USD
 US Dollar 53.45	53.45	USD	H
@@ -1156,7 +1156,7 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	HJP
+$53.45	53.45	USD	C
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	H
@@ -1174,7 +1174,7 @@ USD(7.92)	-7.92	USD	H
 (8) USD	-8	USD
 -8 USD	-8	USD
 67 USD	67	USD
-53.45$	fail	USD	JP
+53.45$	53.45	USD	CH
 US Dollars 53.45	53.45	USD	H
 53.45 US Dollars	53.45	USD
 US Dollar 53.45	53.45	USD	H
@@ -1193,7 +1193,7 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	HJP
+$53.45	53.45	USD	C
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
 USD 53.45	53.45	USD	H
@@ -1212,7 +1212,7 @@ USD(7.92)	-7.92	USD	CHJP
 (8) USD	-8	USD	CHJP
 -8 USD	-8	USD
 67 USD	67	USD
-53.45$	fail	USD	JP
+53.45$	53.45	USD	CH
 US Dollars 53.45	53.45	USD	H
 53.45 US Dollars	53.45	USD
 US Dollar 53.45	53.45	USD	H
