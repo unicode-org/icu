@@ -2411,7 +2411,7 @@ void NumberFormatterApiTest::localPointerCAPI() {
     UErrorCode ec = U_ZERO_ERROR;
 
     // Setup:
-    LocalUNumberFormatterPointer uformatter(unumf_openFromSkeletonAndLocale(u"percent", -1, "en", &ec));
+    LocalUNumberFormatterPointer uformatter(unumf_openForSkeletonAndLocale(u"percent", -1, "en", &ec));
     LocalUFormattedNumberPointer uresult(unumf_openResult(&ec));
     assertSuccess("", ec, TRUE);
     if (U_FAILURE(ec)) { return; }
@@ -2458,9 +2458,9 @@ void NumberFormatterApiTest::assertFormatDescending(const char16_t* umessage, co
         UnicodeString skeleton(TRUE, uskeleton, -1);
         // Only compare normalized skeletons: the tests need not provide the normalized forms.
         // Use the normalized form to construct the testing formatter to guarantee no loss of info.
-        UnicodeString normalized = NumberFormatter::fromSkeleton(skeleton, status).toSkeleton(status);
+        UnicodeString normalized = NumberFormatter::forSkeleton(skeleton, status).toSkeleton(status);
         assertEquals(message + ": Skeleton:", normalized, f.toSkeleton(status));
-        LocalizedNumberFormatter l3 = NumberFormatter::fromSkeleton(normalized, status).locale(locale);
+        LocalizedNumberFormatter l3 = NumberFormatter::forSkeleton(normalized, status).locale(locale);
         for (int32_t i = 0; i < 9; i++) {
             double d = inputs[i];
             UnicodeString actual3 = l3.formatDouble(d, status).toString();
@@ -2499,9 +2499,9 @@ void NumberFormatterApiTest::assertFormatDescendingBig(const char16_t* umessage,
         UnicodeString skeleton(TRUE, uskeleton, -1);
         // Only compare normalized skeletons: the tests need not provide the normalized forms.
         // Use the normalized form to construct the testing formatter to guarantee no loss of info.
-        UnicodeString normalized = NumberFormatter::fromSkeleton(skeleton, status).toSkeleton(status);
+        UnicodeString normalized = NumberFormatter::forSkeleton(skeleton, status).toSkeleton(status);
         assertEquals(message + ": Skeleton:", normalized, f.toSkeleton(status));
-        LocalizedNumberFormatter l3 = NumberFormatter::fromSkeleton(normalized, status).locale(locale);
+        LocalizedNumberFormatter l3 = NumberFormatter::forSkeleton(normalized, status).locale(locale);
         for (int32_t i = 0; i < 9; i++) {
             double d = inputs[i];
             UnicodeString actual3 = l3.formatDouble(d, status).toString();
@@ -2530,9 +2530,9 @@ void NumberFormatterApiTest::assertFormatSingle(const char16_t* umessage, const 
         UnicodeString skeleton(TRUE, uskeleton, -1);
         // Only compare normalized skeletons: the tests need not provide the normalized forms.
         // Use the normalized form to construct the testing formatter to ensure no loss of info.
-        UnicodeString normalized = NumberFormatter::fromSkeleton(skeleton, status).toSkeleton(status);
+        UnicodeString normalized = NumberFormatter::forSkeleton(skeleton, status).toSkeleton(status);
         assertEquals(message + ": Skeleton:", normalized, f.toSkeleton(status));
-        LocalizedNumberFormatter l3 = NumberFormatter::fromSkeleton(normalized, status).locale(locale);
+        LocalizedNumberFormatter l3 = NumberFormatter::forSkeleton(normalized, status).locale(locale);
         UnicodeString actual3 = l3.formatDouble(input, status).toString();
         assertEquals(message + ": Skeleton Path: '" + normalized + "': " + input, expected, actual3);
     } else {

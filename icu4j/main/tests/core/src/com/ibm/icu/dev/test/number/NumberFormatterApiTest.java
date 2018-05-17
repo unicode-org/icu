@@ -2127,8 +2127,8 @@ public class NumberFormatterApiTest {
         public Object[] getTestObjects() {
             return new Object[] {
                     NumberFormatter.withLocale(ULocale.FRENCH).toFormat(),
-                    NumberFormatter.fromSkeleton("percent").locale(ULocale.JAPANESE).toFormat(),
-                    NumberFormatter.fromSkeleton("scientific .000").locale(ULocale.ENGLISH).toFormat() };
+                    NumberFormatter.forSkeleton("percent").locale(ULocale.JAPANESE).toFormat(),
+                    NumberFormatter.forSkeleton("scientific .000").locale(ULocale.ENGLISH).toFormat() };
         }
 
         @Override
@@ -2336,9 +2336,9 @@ public class NumberFormatterApiTest {
         if (skeleton != null) { // if null, skeleton is declared as undefined.
             // Only compare normalized skeletons: the tests need not provide the normalized forms.
             // Use the normalized form to construct the testing formatter to guarantee no loss of info.
-            String normalized = NumberFormatter.fromSkeleton(skeleton).toSkeleton();
+            String normalized = NumberFormatter.forSkeleton(skeleton).toSkeleton();
             assertEquals(message + ": Skeleton:", normalized, f.toSkeleton());
-            LocalizedNumberFormatter l3 = NumberFormatter.fromSkeleton(normalized).locale(locale);
+            LocalizedNumberFormatter l3 = NumberFormatter.forSkeleton(normalized).locale(locale);
             for (int i = 0; i < 9; i++) {
                 double d = inputs[i];
                 String actual3 = l3.format(d).toString();
@@ -2365,9 +2365,9 @@ public class NumberFormatterApiTest {
         if (skeleton != null) { // if null, skeleton is declared as undefined.
             // Only compare normalized skeletons: the tests need not provide the normalized forms.
             // Use the normalized form to construct the testing formatter to ensure no loss of info.
-            String normalized = NumberFormatter.fromSkeleton(skeleton).toSkeleton();
+            String normalized = NumberFormatter.forSkeleton(skeleton).toSkeleton();
             assertEquals(message + ": Skeleton:", normalized, f.toSkeleton());
-            LocalizedNumberFormatter l3 = NumberFormatter.fromSkeleton(normalized).locale(locale);
+            LocalizedNumberFormatter l3 = NumberFormatter.forSkeleton(normalized).locale(locale);
             String actual3 = l3.format(input).toString();
             assertEquals(message + ": Skeleton Path: " + input, expected, actual3);
         } else {
@@ -2391,9 +2391,9 @@ public class NumberFormatterApiTest {
         if (skeleton != null) { // if null, skeleton is declared as undefined.
             // Only compare normalized skeletons: the tests need not provide the normalized forms.
             // Use the normalized form to construct the testing formatter to ensure no loss of info.
-            String normalized = NumberFormatter.fromSkeleton(skeleton).toSkeleton();
+            String normalized = NumberFormatter.forSkeleton(skeleton).toSkeleton();
             assertEquals(message + ": Skeleton:", normalized, f.toSkeleton());
-            LocalizedNumberFormatter l3 = NumberFormatter.fromSkeleton(normalized).locale(locale);
+            LocalizedNumberFormatter l3 = NumberFormatter.forSkeleton(normalized).locale(locale);
             String actual3 = l3.format(input).toString();
             assertEquals(message + ": Skeleton Path: " + input, expected, actual3);
         } else {

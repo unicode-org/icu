@@ -96,7 +96,7 @@ public class NumberSkeletonTest {
 
         for (String cas : cases) {
             try {
-                NumberFormatter.fromSkeleton(cas);
+                NumberFormatter.forSkeleton(cas);
             } catch (SkeletonSyntaxException e) {
                 fail(e.getMessage());
             }
@@ -139,7 +139,7 @@ public class NumberSkeletonTest {
 
         for (String cas : cases) {
             try {
-                NumberFormatter.fromSkeleton(cas);
+                NumberFormatter.forSkeleton(cas);
                 fail(cas);
             } catch (SkeletonSyntaxException expected) {
                 assertTrue(expected.getMessage(), expected.getMessage().contains("Invalid"));
@@ -160,7 +160,7 @@ public class NumberSkeletonTest {
 
         for (String cas : cases) {
             try {
-                NumberFormatter.fromSkeleton(cas);
+                NumberFormatter.forSkeleton(cas);
                 fail(cas);
             } catch (SkeletonSyntaxException expected) {
                 assertTrue(expected.getMessage(), expected.getMessage().contains("Unknown"));
@@ -179,7 +179,7 @@ public class NumberSkeletonTest {
 
         for (String cas : cases) {
             try {
-                NumberFormatter.fromSkeleton(cas);
+                NumberFormatter.forSkeleton(cas);
                 fail(cas);
             } catch (SkeletonSyntaxException expected) {
                 assertTrue(expected.getMessage(), expected.getMessage().contains("Unexpected"));
@@ -200,7 +200,7 @@ public class NumberSkeletonTest {
 
         for (String cas : cases) {
             try {
-                NumberFormatter.fromSkeleton(cas);
+                NumberFormatter.forSkeleton(cas);
                 fail(cas);
             } catch (SkeletonSyntaxException expected) {
                 assertTrue(expected.getMessage(), expected.getMessage().contains("Duplicated"));
@@ -224,7 +224,7 @@ public class NumberSkeletonTest {
             for (String suffix : suffixes) {
                 String skeletonString = stem + suffix;
                 try {
-                    NumberFormatter.fromSkeleton(skeletonString);
+                    NumberFormatter.forSkeleton(skeletonString);
                     fail(skeletonString);
                 } catch (SkeletonSyntaxException expected) {
                     // Success
@@ -245,7 +245,7 @@ public class NumberSkeletonTest {
                 "decimal-auto" };
 
         for (String skeleton : cases) {
-            String normalized = NumberFormatter.fromSkeleton(skeleton).toSkeleton();
+            String normalized = NumberFormatter.forSkeleton(skeleton).toSkeleton();
             assertEquals("Skeleton should become empty when normalized: " + skeleton, "", normalized);
         }
     }
@@ -261,7 +261,7 @@ public class NumberSkeletonTest {
         for (String[] cas : cases) {
             String skeleton = cas[0];
             String expected = cas[1];
-            String actual = NumberFormatter.fromSkeleton(skeleton).locale(ULocale.ENGLISH).format(5142.3)
+            String actual = NumberFormatter.forSkeleton(skeleton).locale(ULocale.ENGLISH).format(5142.3)
                     .toString();
             assertEquals(skeleton, expected, actual);
         }

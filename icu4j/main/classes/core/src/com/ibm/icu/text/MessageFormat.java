@@ -2211,7 +2211,7 @@ public class MessageFormat extends UFormat {
                 for (; PatternProps.isWhiteSpace(style.charAt(i)); i++);
                 if (style.regionMatches(i, "::", 0, 2)) {
                     // Skeleton
-                    newFormat = NumberFormatter.fromSkeleton(style.substring(i + 2)).locale(ulocale).toFormat();
+                    newFormat = NumberFormatter.forSkeleton(style.substring(i + 2)).locale(ulocale).toFormat();
                 } else {
                     // Pattern
                     newFormat = new DecimalFormat(style, new DecimalFormatSymbols(ulocale));

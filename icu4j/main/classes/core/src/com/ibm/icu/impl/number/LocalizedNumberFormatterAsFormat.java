@@ -136,7 +136,7 @@ public class LocalizedNumberFormatterAsFormat extends Format {
         }
 
         private Object readResolve() throws ObjectStreamException {
-            return NumberFormatter.fromSkeleton(skeleton)
+            return NumberFormatter.forSkeleton(skeleton)
                     .locale(ULocale.forLanguageTag(languageTag))
                     .toFormat();
         }

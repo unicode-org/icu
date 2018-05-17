@@ -344,7 +344,7 @@ LocalizedNumberFormatter NumberFormatter::withLocale(const Locale& locale) {
 }
 
 UnlocalizedNumberFormatter
-NumberFormatter::fromSkeleton(const UnicodeString& skeleton, UErrorCode& status) {
+NumberFormatter::forSkeleton(const UnicodeString& skeleton, UErrorCode& status) {
     return skeleton::create(skeleton, status);
 }
 

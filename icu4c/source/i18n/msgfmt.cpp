@@ -1707,7 +1707,7 @@ Format* MessageFormat::createAppropriateFormat(UnicodeString& type, UnicodeStrin
             if (style.compare(i, 2, u"::", 0, 2) == 0) {
                 // Skeleton
                 UnicodeString skeleton = style.tempSubString(i + 2);
-                fmt = number::NumberFormatter::fromSkeleton(skeleton, ec).locale(fLocale).toFormat(ec);
+                fmt = number::NumberFormatter::forSkeleton(skeleton, ec).locale(fLocale).toFormat(ec);
             } else {
                 // Pattern
                 fmt = NumberFormat::createInstance(fLocale, ec);
