@@ -39,6 +39,254 @@ public class NumberFormatDataDrivenTest {
         return new BigDecimal(s);
     }
 
+    /**
+     * Standard function for comparing expected and actual parse results. Handles NaN, Infinity, and
+     * failure cases.
+     */
+    private static String compareParseResult(String expected, Number actual, ParsePosition ppos) {
+        if (actual == null && ppos.getIndex() != 0) {
+            throw new AssertionError("Error: value is null but parse position is not zero");
+        }
+        if (ppos.getIndex() == 0) {
+            return "Parse failed; got " + actual + ", but expected " + expected;
+        }
+        if (expected.equals("NaN")) {
+            if (!Double.isNaN(actual.doubleValue())) {
+                return "Expected NaN, but got: " + actual;
+            }
+            return null;
+        } else if (expected.equals("Inf")) {
+            if (!Double.isInfinite(actual.doubleValue())
+                    || Double.compare(actual.doubleValue(), 0.0) < 0) {
+                return "Expected Inf, but got: " + actual;
+            }
+            return null;
+        } else if (expected.equals("-Inf")) {
+            if (!Double.isInfinite(actual.doubleValue())
+                    || Double.compare(actual.doubleValue(), 0.0) > 0) {
+                return "Expected -Inf, but got: " + actual;
+            }
+            return null;
+        } else if (expected.equals("fail")) {
+            return null;
+        } else if (actual.toString().equals("Infinity")) {
+            return "Expected " + expected + ", but got Infinity";
+        } else {
+            BigDecimal expectedDecimal = new BigDecimal(expected);
+            BigDecimal actualDecimal;
+            try {
+                actualDecimal = new BigDecimal(actual.toString());
+            } catch (NumberFormatException e) {
+                throw new AssertionError("Could not convert to BigDecimal: " + actual.toString(), e);
+            }
+            if (expectedDecimal.compareTo(actualDecimal) != 0) {
+                return "Expected: " + expected + ", got: " + actual;
+            } else {
+                return null;
+            }
+        }
+    }
+
+    /**
+     * Standard function for comparing expected and actual parse-currency results. Handles failure cases.
+     * Does not currently handle NaN or Infinity because there are no parse-currency cases with NaN or
+     * Infinity.
+     */
+    private static String compareParseCurrencyResult(
+            String expected,
+            String expectedCurrency,
+            CurrencyAmount actual,
+            ParsePosition ppos) {
+        if (ppos.getIndex() == 0 || actual.getCurrency().getCurrencyCode().equals("XXX")) {
+            return "Parse failed; got " + actual + ", but expected " + expected;
+        }
+        if (expected.equals("fail")) {
+            return null;
+        }
+        BigDecimal expectedNumber = new BigDecimal(expected);
+        if (expectedNumber.compareTo(new BigDecimal(actual.getNumber().toString())) != 0) {
+            return "Wrong number: Expected: " + expectedNumber + ", got: " + actual;
+        }
+        if (!expectedCurrency.equals(actual.getCurrency().toString())) {
+            return "Wrong currency: Expected: " + expectedCurrency + ", got: " + actual;
+        }
+        return null;
+    }
+
+    private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU4J = new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
+        @Override
+        public Character Id() {
+            return 'J';
+        }
+
+        @Override
+        public String format(DataDrivenNumberFormatTestData tuple) {
+            DecimalFormat fmt = createDecimalFormat(tuple);
+            String actual = fmt.format(toNumber(tuple.format));
+            String expected = tuple.output;
+            if (!expected.equals(actual)) {
+                return "Expected " + expected + ", got " + actual;
+            }
+            return null;
+        }
+
+        @Override
+        public String toPattern(DataDrivenNumberFormatTestData tuple) {
+            DecimalFormat fmt = createDecimalFormat(tuple);
+            StringBuilder result = new StringBuilder();
+            if (tuple.toPattern != null) {
+                String expected = tuple.toPattern;
+                String actual = fmt.toPattern();
+                if (!expected.equals(actual)) {
+                    result.append("Expected toPattern=" + expected + ", got " + actual);
+                }
+            }
+            if (tuple.toLocalizedPattern != null) {
+                String expected = tuple.toLocalizedPattern;
+                String actual = fmt.toLocalizedPattern();
+                if (!expected.equals(actual)) {
+                    result.append("Expected toLocalizedPattern=" + expected + ", got " + actual);
+                }
+            }
+            return result.length() == 0 ? null : result.toString();
+        }
+
+        @Override
+        public String parse(DataDrivenNumberFormatTestData tuple) {
+            DecimalFormat fmt = createDecimalFormat(tuple);
+            ParsePosition ppos = new ParsePosition(0);
+            Number actual = fmt.parse(tuple.parse, ppos);
+            return compareParseResult(tuple.output, actual, ppos);
+        }
+
+        @Override
+        public String parseCurrency(DataDrivenNumberFormatTestData tuple) {
+            DecimalFormat fmt = createDecimalFormat(tuple);
+            ParsePosition ppos = new ParsePosition(0);
+            CurrencyAmount actual = fmt.parseCurrency(tuple.parse, ppos);
+            return compareParseCurrencyResult(tuple.output, tuple.outputCurrency, actual, ppos);
+        }
+
+        /**
+         * @param tuple
+         * @return
+         */
+        private DecimalFormat createDecimalFormat(DataDrivenNumberFormatTestData tuple) {
+
+            DecimalFormat fmt = new DecimalFormat(tuple.pattern == null ? "0" : tuple.pattern,
+                    new DecimalFormatSymbols(tuple.locale == null ? EN : tuple.locale));
+            adjustDecimalFormat(tuple, fmt);
+            return fmt;
+        }
+
+        /**
+         * @param tuple
+         * @param fmt
+         */
+        private void adjustDecimalFormat(DataDrivenNumberFormatTestData tuple, DecimalFormat fmt) {
+            if (tuple.minIntegerDigits != null) {
+                fmt.setMinimumIntegerDigits(tuple.minIntegerDigits);
+            }
+            if (tuple.maxIntegerDigits != null) {
+                fmt.setMaximumIntegerDigits(tuple.maxIntegerDigits);
+            }
+            if (tuple.minFractionDigits != null) {
+                fmt.setMinimumFractionDigits(tuple.minFractionDigits);
+            }
+            if (tuple.maxFractionDigits != null) {
+                fmt.setMaximumFractionDigits(tuple.maxFractionDigits);
+            }
+            if (tuple.currency != null) {
+                fmt.setCurrency(tuple.currency);
+            }
+            if (tuple.minGroupingDigits != null) {
+                // Oops we don't support this.
+            }
+            if (tuple.useSigDigits != null) {
+                fmt.setSignificantDigitsUsed(tuple.useSigDigits != 0);
+            }
+            if (tuple.minSigDigits != null) {
+                fmt.setMinimumSignificantDigits(tuple.minSigDigits);
+            }
+            if (tuple.maxSigDigits != null) {
+                fmt.setMaximumSignificantDigits(tuple.maxSigDigits);
+            }
+            if (tuple.useGrouping != null) {
+                fmt.setGroupingUsed(tuple.useGrouping != 0);
+            }
+            if (tuple.multiplier != null) {
+                fmt.setMultiplier(tuple.multiplier);
+            }
+            if (tuple.roundingIncrement != null) {
+                fmt.setRoundingIncrement(tuple.roundingIncrement.doubleValue());
+            }
+            if (tuple.formatWidth != null) {
+                fmt.setFormatWidth(tuple.formatWidth);
+            }
+            if (tuple.padCharacter != null && tuple.padCharacter.length() > 0) {
+                fmt.setPadCharacter(tuple.padCharacter.charAt(0));
+            }
+            if (tuple.useScientific != null) {
+                fmt.setScientificNotation(tuple.useScientific != 0);
+            }
+            if (tuple.grouping != null) {
+                fmt.setGroupingSize(tuple.grouping);
+            }
+            if (tuple.grouping2 != null) {
+                fmt.setSecondaryGroupingSize(tuple.grouping2);
+            }
+            if (tuple.roundingMode != null) {
+                fmt.setRoundingMode(tuple.roundingMode);
+            }
+            if (tuple.currencyUsage != null) {
+                fmt.setCurrencyUsage(tuple.currencyUsage);
+            }
+            if (tuple.minimumExponentDigits != null) {
+                fmt.setMinimumExponentDigits(tuple.minimumExponentDigits.byteValue());
+            }
+            if (tuple.exponentSignAlwaysShown != null) {
+                fmt.setExponentSignAlwaysShown(tuple.exponentSignAlwaysShown != 0);
+            }
+            if (tuple.decimalSeparatorAlwaysShown != null) {
+                fmt.setDecimalSeparatorAlwaysShown(tuple.decimalSeparatorAlwaysShown != 0);
+            }
+            if (tuple.padPosition != null) {
+                fmt.setPadPosition(tuple.padPosition);
+            }
+            if (tuple.positivePrefix != null) {
+                fmt.setPositivePrefix(tuple.positivePrefix);
+            }
+            if (tuple.positiveSuffix != null) {
+                fmt.setPositiveSuffix(tuple.positiveSuffix);
+            }
+            if (tuple.negativePrefix != null) {
+                fmt.setNegativePrefix(tuple.negativePrefix);
+            }
+            if (tuple.negativeSuffix != null) {
+                fmt.setNegativeSuffix(tuple.negativeSuffix);
+            }
+            if (tuple.signAlwaysShown != null) {
+                // Not supported.
+            }
+            if (tuple.localizedPattern != null) {
+                fmt.applyLocalizedPattern(tuple.localizedPattern);
+            }
+            int lenient = tuple.lenient == null ? 1 : tuple.lenient.intValue();
+            fmt.setParseStrict(lenient == 0);
+            if (tuple.parseIntegerOnly != null) {
+                fmt.setParseIntegerOnly(tuple.parseIntegerOnly != 0);
+            }
+            if (tuple.parseCaseSensitive != null) {
+                // Not supported.
+            }
+            if (tuple.decimalPatternMatchRequired != null) {
+                fmt.setDecimalPatternMatchRequired(tuple.decimalPatternMatchRequired != 0);
+            }
+            if (tuple.parseNoExponent != null) {
+                // Oops, not supported for now
+            }
+        }
+    };
 
     private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU58 = new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
         @Override
@@ -83,46 +331,15 @@ public class NumberFormatDataDrivenTest {
             DecimalFormat_ICU58 fmt = createDecimalFormat(tuple);
             ParsePosition ppos = new ParsePosition(0);
             Number actual = fmt.parse(tuple.parse, ppos);
-            if (ppos.getIndex() == 0) {
-                return "Parse failed; got " + actual + ", but expected " + tuple.output;
-            }
-            if (tuple.output.equals("fail")) {
-                return null;
-            }
-            Number expected = toNumber(tuple.output);
-            // number types cannot be compared, this is the best we can do.
-            if (expected.doubleValue() != actual.doubleValue()
-                    && !Double.isNaN(expected.doubleValue())
-                    && !Double.isNaN(expected.doubleValue())) {
-                return "Expected: " + expected + ", got: " + actual;
-            }
-            return null;
+            return compareParseResult(tuple.output, actual, ppos);
         }
 
         @Override
         public String parseCurrency(DataDrivenNumberFormatTestData tuple) {
             DecimalFormat_ICU58 fmt = createDecimalFormat(tuple);
             ParsePosition ppos = new ParsePosition(0);
-            CurrencyAmount currAmt = fmt.parseCurrency(tuple.parse, ppos);
-            if (ppos.getIndex() == 0) {
-                return "Parse failed; got " + currAmt + ", but expected " + tuple.output;
-            }
-            if (tuple.output.equals("fail")) {
-                return null;
-            }
-            Number expected = toNumber(tuple.output);
-            Number actual = currAmt.getNumber();
-            // number types cannot be compared, this is the best we can do.
-            if (expected.doubleValue() != actual.doubleValue()
-                    && !Double.isNaN(expected.doubleValue())
-                    && !Double.isNaN(expected.doubleValue())) {
-                return "Expected: " + expected + ", got: " + actual;
-            }
-
-            if (!tuple.outputCurrency.equals(currAmt.getCurrency().toString())) {
-                return "Expected currency: " + tuple.outputCurrency + ", got: " + currAmt.getCurrency();
-            }
-            return null;
+            CurrencyAmount actual = fmt.parseCurrency(tuple.parse, ppos);
+            return compareParseCurrencyResult(tuple.output, tuple.outputCurrency, actual, ppos);
         }
 
         /**
@@ -290,20 +507,7 @@ public class NumberFormatDataDrivenTest {
             java.text.DecimalFormat fmt = createDecimalFormat(tuple);
             ParsePosition ppos = new ParsePosition(0);
             Number actual = fmt.parse(tuple.parse, ppos);
-            if (ppos.getIndex() == 0) {
-                return "Parse failed; got " + actual + ", but expected " + tuple.output;
-            }
-            if (tuple.output.equals("fail")) {
-                return null;
-            }
-            Number expected = toNumber(tuple.output);
-            // number types cannot be compared, this is the best we can do.
-            if (expected.doubleValue() != actual.doubleValue()
-                    && !Double.isNaN(expected.doubleValue())
-                    && !Double.isNaN(expected.doubleValue())) {
-                return "Expected: " + expected + ", got: " + actual;
-            }
-            return null;
+            return compareParseResult(tuple.output, actual, ppos);
         }
 
         /**
@@ -606,36 +810,7 @@ public class NumberFormatDataDrivenTest {
             } catch (IllegalArgumentException e) {
                 return "parse exception: " + e.getMessage();
             }
-            if (actual == null && ppos.getIndex() != 0) {
-                throw new AssertionError("Error: value is null but parse position is not zero");
-            }
-            if (ppos.getIndex() == 0) {
-                return "Parse failed; got " + actual + ", but expected " + tuple.output;
-            }
-            if (tuple.output.equals("NaN")) {
-                if (!Double.isNaN(actual.doubleValue())) {
-                    return "Expected NaN, but got: " + actual;
-                }
-                return null;
-            } else if (tuple.output.equals("Inf")) {
-                if (!Double.isInfinite(actual.doubleValue())
-                        || Double.compare(actual.doubleValue(), 0.0) < 0) {
-                    return "Expected Inf, but got: " + actual;
-                }
-                return null;
-            } else if (tuple.output.equals("-Inf")) {
-                if (!Double.isInfinite(actual.doubleValue())
-                        || Double.compare(actual.doubleValue(), 0.0) > 0) {
-                    return "Expected -Inf, but got: " + actual;
-                }
-                return null;
-            } else if (tuple.output.equals("fail")) {
-                return null;
-            } else if (new BigDecimal(tuple.output).compareTo(new BigDecimal(actual.toString())) != 0) {
-                return "Expected: " + tuple.output + ", got: " + actual;
-            } else {
-                return null;
-            }
+            return compareParseResult(tuple.output, actual, ppos);
         }
 
         @Override
@@ -657,21 +832,7 @@ public class NumberFormatDataDrivenTest {
                 e.printStackTrace();
                 return "parse exception: " + e.getMessage();
             }
-            if (ppos.getIndex() == 0 || actual.getCurrency().getCurrencyCode().equals("XXX")) {
-                return "Parse failed; got " + actual + ", but expected " + tuple.output;
-            }
-            if (tuple.output.equals("fail")) {
-                return null;
-            }
-            BigDecimal expectedNumber = new BigDecimal(tuple.output);
-            if (expectedNumber.compareTo(new BigDecimal(actual.getNumber().toString())) != 0) {
-                return "Wrong number: Expected: " + expectedNumber + ", got: " + actual;
-            }
-            String expectedCurrency = tuple.outputCurrency;
-            if (!expectedCurrency.equals(actual.getCurrency().toString())) {
-                return "Wrong currency: Expected: " + expectedCurrency + ", got: " + actual;
-            }
-            return null;
+            return compareParseCurrencyResult(tuple.output, tuple.outputCurrency, actual, ppos);
         }
     };
 
@@ -745,6 +906,12 @@ public class NumberFormatDataDrivenTest {
             return null;
         }
     };
+
+    // @Test
+    // public void TestDataDrivenICU4J() {
+    // DataDrivenNumberFormatTestUtility
+    // .runFormatSuiteIncludingKnownFailures("numberformattestspecification.txt", ICU4J);
+    // }
 
     @Test
     public void TestDataDrivenICU58() {
