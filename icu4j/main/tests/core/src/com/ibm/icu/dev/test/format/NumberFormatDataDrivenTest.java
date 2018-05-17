@@ -39,10 +39,11 @@ public class NumberFormatDataDrivenTest {
         return new BigDecimal(s);
     }
 
+
     private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU58 = new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
         @Override
         public Character Id() {
-            return 'J';
+            return 'H';
         }
 
         @Override

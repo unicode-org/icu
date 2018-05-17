@@ -10,7 +10,7 @@
 // per line.
 //
 // Field names:
-//  J = ICU58
+//  H = ICU58
 //  K = JDK
 //  C = ICU4C
 //  P = ICU4J parsing
@@ -26,7 +26,7 @@ set locale ar-EG
 set pattern +0;-#
 begin
 format	output	breaks
-6	\u061C+\u0666	JK
+6	\u061C+\u0666	HK
 -6	\u061C-\u0666	K
 
 test basic patterns
@@ -188,7 +188,7 @@ pattern	format	output	breaks
 // JDK gives 12,3001E3
 ##0.000#E0	12300.1	12,30E3	K
 ##0.000#E0	12301	12,301E3
-0.05E0	12301.2	1,25E4	JK
+0.05E0	12301.2	1,25E4	HK
 ##0.000#E0	0.17	170,0E-3
 // JDK doesn't support significant digits in exponents
 @@@E0	6.235	6,24E0	K
@@ -247,17 +247,17 @@ $**####,##0	1234	$***1\u00a0234	K
 ####,##0$*x;n#'*'	-1234	n1\u00a0234*xx	K
 *y%4.2######	4.33	yyyy%432,6	K
 // In J ICU adds padding as if 'EUR' is only 2 chars (2 * 0xa4)
-\u00a4\u00a4 **####0.00	433.0	EUR *433,00	JK
+\u00a4\u00a4 **####0.00	433.0	EUR *433,00	HK
 // In J ICU adds padding as if 'EUR' is only 2 chars (2 * 0xa4)
 // Q fails this one because the test code bypasses CurrencyUsage
-\u00a4\u00a4 **#######0	433.0	EUR *433,00	JKQ
+\u00a4\u00a4 **#######0	433.0	EUR *433,00	HKQ
 
 test padding and currencies
 begin
 locale	currency	pattern	format	output	breaks
 // In J, JPY is considered 2 char (2 * 0xa4) even though padding is done
 // after prefix. In C this test works.
-fr	JPY	\u00a4\u00a4 **#######0	433.22	JPY ****433	JK
+fr	JPY	\u00a4\u00a4 **#######0	433.22	JPY ****433	HK
 // JDK doesn't correct rounding for currency, shows USD (433
 en	USD	\u00a4\u00a4 **#######0;\u00a4\u00a4 (#)	-433.22	USD (433.22)	K
 
@@ -289,7 +289,7 @@ begin
 format	output	breaks
 // min grouping digits not supported in any existing implementation
 // but could be easily added to the new DecimalFormat C code.
-1000	1000	JK
+1000	1000	HK
 10000	10,000
 100000	100,000
 1000000	1,000,000
@@ -328,7 +328,7 @@ minIntegerDigits	maxIntegerDigits	minFractionDigits	maxFractionDigits	output	bre
 // JDK gives E0 instead of allowing for unlimited precision
 0	0	0	0	2.99792458E8	K
 // J gives 2.9979E8
-0	1	0	5	2.99792E8	JK
+0	1	0	5	2.99792E8	HK
 // JDK gives 300E6	
 0	3	0	0	299.792458E6	K
 // JDK gives 299.8E6 (maybe maxInt + maxFrac instead of minInt + maxFrac)?
@@ -345,7 +345,7 @@ minIntegerDigits	maxIntegerDigits	minFractionDigits	maxFractionDigits	output	bre
 // JDK gives E0
 0	0	1	0	2.99792458E8	K
 // J gives 2.998E8
-0	0	0	4	.29979E9	JK
+0	0	0	4	.29979E9	HK
 // According to the spec, if maxInt>minInt and minInt>1, then set
 // Context: #13289
 2	8	1	6	2.9979246E8	K
@@ -391,7 +391,7 @@ begin
 format	maxIntegerDigits	output	breaks
 123	1	3	
 // C obeys maxIntegerDigits and prints after the decimal place
-0	0	.0	JKQ
+0	0	.0	HKQ
 // C and Q ignore max integer if it is less than zero and prints "123"
 123	-2147483648	0	CQ
 12345	1	5	
@@ -476,7 +476,7 @@ output	grouping	breaks	grouping2	minGroupingDigits
 1,23,45,6789	4	K	2
 1,23,45,6789	4	K	2	2
 123,456789	6		6	3
-123456789	6	JK	6	4
+123456789	6	HK	6	4
 
 test multiplier setters
 set locale en_US
@@ -484,10 +484,10 @@ begin
 format	multiplier	output	breaks
 23	-12	-276
 23	-1	-23
-// ICU4J throws exception on zero multiplier.
+// H (ICU4J 58) throws exception on zero multiplier.
 // ICU4C prints 23.
 // Q multiplies by zero and prints 0.
-23	0	0	CJ
+23	0	0	CH
 23	1	23
 23	12	276
 -23	12	-276
@@ -559,12 +559,12 @@ begin
 currency	currencyUsage	toPattern	breaks
 // These work in J, but it prepends an extra hash sign to the pattern.
 // K does not support this feature.
-USD	standard	0.00	JK
-CHF	standard	0.00	JK
-CZK	standard	0.00	JK
-USD	cash	0.00	JK
-CHF	cash	0.05	JK
-CZK	cash	0	JK
+USD	standard	0.00	HK
+CHF	standard	0.00	HK
+CZK	standard	0.00	HK
+USD	cash	0.00	HK
+CHF	cash	0.05	HK
+CZK	cash	0	HK
 
 test currency rounding
 set locale en
@@ -648,7 +648,7 @@ Inf	[\u221e]
 -Inf	(\u221e)	K
 // J does not print the affixes
 // K prints \uFFFD
-NaN	[NaN]	JK
+NaN	[NaN]	HK
 
 test nan and infinity with multiplication
 set locale en
@@ -671,10 +671,10 @@ Inf	beforeSuffix	$$$\u221e   $	K
 Inf	afterSuffix	$$$\u221e$   	K
 // J does not print the affixes
 // K prints \uFFFD
-NaN	beforePrefix	 $$$NaN$	JK
-NaN	afterPrefix	$$$ NaN$	JK
-NaN	beforeSuffix	$$$NaN $	JK
-NaN	afterSuffix	$$$NaN$ 	JK
+NaN	beforePrefix	 $$$NaN$	HK
+NaN	afterPrefix	$$$ NaN$	HK
+NaN	beforeSuffix	$$$NaN $	HK
+NaN	afterSuffix	$$$NaN$ 	HK
 
 test apply formerly localized patterns
 begin
@@ -703,7 +703,7 @@ pattern	toPattern	breaks
 // All of the C and S failures in this section are because of functionally equivalent patterns
 // JDK doesn't support any patterns with padding or both negative prefix and suffix
 // Breaks ICU4J See ticket 11671
-**0,000	**0,000	JK
+**0,000	**0,000	HK
 **##0,000	**##0,000	K
 **###0,000	**###0,000	K
 **####0,000	**#,##0,000	CKS
@@ -743,23 +743,23 @@ parse	output	breaks
 +5347,,,	5347
 +5347,,,d8	5347
 (5,347.25)	-5347.25
-// J requires prefix and suffix for lenient parsing, but C doesn't
-5,347.25	5347.25	JK
-(5,347.25	-5347.25	J
+// H requires prefix and suffix for lenient parsing, but C doesn't
+5,347.25	5347.25	HK
+(5,347.25	-5347.25	H
 // S is successful at parsing this as -5347.25 in lenient mode
--5,347.25	-5347.25	JK
+-5,347.25	-5347.25	HK
 +3.52E4	35200
 (34.8E-3)	-0.0348
 // JDK stops parsing at the spaces. JDK doesn't see space as a grouping separator
 (34  25E-1)	-342.5	K
 (34,,25E-1)	-342.5
-// J doesn't allow trailing separators before E but C and P do
-(34,,25,E-1)	-342.5	CJP
-(34  25 E-1)	-342.5	JK
-(34,,25 E-1)	-342.5	JK
+// H doesn't allow trailing separators before E but C and P do
+(34,,25,E-1)	-342.5	CHP
+(34  25 E-1)	-342.5	HK
+(34,,25 E-1)	-342.5	HK
 // Spaces are not allowed after exponent symbol
-// C parses up to the E but J bails
-(34  25E -1)	-3425	JK
+// C parses up to the E but H bails
+(34  25E -1)	-3425	HK
 +3.52EE4	3.52
 +1,234,567.8901	1234567.8901
 +1,23,4567.8901	1234567.8901
@@ -776,28 +776,28 @@ parse	output	breaks
 +,79,,20,3	79203
 +7920d3	7920
 // Whitespace immediately after prefix doesn't count as digit separator
-// in C but is does in J
-+ ,79,,20,3	79203	JK
+// in C but is does in H
++ ,79,,20,3	79203	HK
 (  19 45)	-1945	K
 // C allows trailing separators when there is a prefix and suffix.
-// J allows trailing separators only when there is just a prefix.
-// In this case, J just bails
-(  19 45 )	-1945	JK
+// H allows trailing separators only when there is just a prefix.
+// In this case, H just bails
+(  19 45 )	-1945	HK
 (,,19,45)	-1945
-// C parses to the space, but J bails
-(,,19 45)	-19	J
-// J bails b/c comma different separator than space. C doesn't treat leading spaces
+// C parses to the space, but H bails
+(,,19 45)	-19	H
+// H bails b/c comma different separator than space. C doesn't treat leading spaces
 // as a separator.
-(  19,45)	-1945	JK
-// J bails. Doesn't allow trailing separators when there is prefix and suffix.
-(,,19,45,)	-1945	J
-// J bails on next 4 because J doesn't allow letters inside prefix and suffix.
+(  19,45)	-1945	HK
+// H bails. Doesn't allow trailing separators when there is prefix and suffix.
+(,,19,45,)	-1945	H
+// H bails on next 4 because H doesn't allow letters inside prefix and suffix.
 // C will parse up to the letter.
-(,,19,45,d1)	-1945	J
-(,,19,45d1)	-1945	J
-(  19 45 d1)	-1945	JK
-(  19 45d1)	-1945	JK
-// J does allow trailing separator before a decimal point
+(,,19,45,d1)	-1945	H
+(,,19,45d1)	-1945	H
+(  19 45 d1)	-1945	HK
+(  19 45d1)	-1945	HK
+// H does allow trailing separator before a decimal point
 (19,45,.25)	-1945.25
 // 2nd decimal points are ignored
 +4.12.926	4.12
@@ -808,18 +808,18 @@ set pattern #,##0.0###+;#-
 begin
 parse	output	breaks
 // J and K just bail.
-3426	3426	JK
+3426	3426	HK
 3426+	3426
 // J bails; K sees -34
-34 d1+	34	JK
+34 d1+	34	HK
 // JDK sees this as -1234 for some reason
-// J bails b/c of trailing separators
-1,234,,,+	1234	JK
+// H bails b/c of trailing separators
+1,234,,,+	1234	HK
 1,234-	-1234
-// J, C, and P bail because of trailing separators
-1,234,-	-1234	CJP
+// H, C, and P bail because of trailing separators
+1,234,-	-1234	CHP
 // J bails here too
-1234  -	-1234	J
+1234  -	-1234	H
 
 
 
@@ -845,8 +845,8 @@ parse	output	breaks
 (3425E-1)	-342.5
 // Strict doesn't allow separators in sci notation.
 (63,425)	-63425
-// J does not allow grouping separators in scientific notation.
-(63,425E-1)	-6342.5	J
+// H does not allow grouping separators in scientific notation.
+(63,425E-1)	-6342.5	H
 // Both prefix and suffix needed for strict.
 // JDK accepts this and parses as -342.5
 (3425E-1	fail	K
@@ -870,8 +870,8 @@ parse	output	breaks
 +1,234.5	1234.5
 // Comma after decimal means parse to a comma
 +1,23,456.78,9	123456.78
-// J fails upon seeing the second decimal point
-+1,23,456.78.9	123456.78	J
+// H fails upon seeing the second decimal point
++1,23,456.78.9	123456.78	H
 +79	79
 +79	79
 + 79	fail
@@ -910,7 +910,7 @@ begin
 parse	output	breaks
 35	35
 // S accepts leading plus signs
-+35	35	JK
++35	35	HK
 -35	-35
 2.63	2
 -39.99	-39
@@ -924,8 +924,8 @@ parseNoExponent	parse	output	breaks
 0	5e2	500	K
 0	5.3E2	530
 // See ticket 11725
-1	5e2	5	J
-1	5.3E2	5.3	JK
+1	5e2	5	H
+1	5.3E2	5.3	HK
 
 test parse currency fail
 set pattern 0
@@ -963,11 +963,11 @@ begin
 parse	output	breaks
 // S is the only implementation that passes these cases.
 // C and P consume the '9' as a digit and assumes number is negative
-// J and JDK bail
-6549K	654	CJKP
+// H and JDK bail
+6549K	654	CHKP
 // C and P consume the '9' as a digit and assumes number is negative
-// J and JDK bail
-6549N	-654	CJKP
+// H and JDK bail
+6549N	-654	CHKP
 
 test really strange prefix
 set locale en
@@ -1033,44 +1033,44 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	JP
+$53.45	fail	USD	HP
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
-USD 53.45	53.45	USD	J
-53.45USD	53.45	USD	J
+USD 53.45	53.45	USD	H
+53.45USD	53.45	USD	H
 USD53.45	53.45	USD
 (7.92) USD	-7.92	USD
 (7.92) GBP	-7.92	GBP
 (7.926) USD	-7.926	USD
-(7.926 USD)	-7.926	USD	J
-(USD 7.926)	-7.926	USD	J
-USD (7.926)	-7.926	USD	J
-USD (7.92)	-7.92	USD	J
-(7.92)USD	-7.92	USD	J
-USD(7.92)	-7.92	USD	J
+(7.926 USD)	-7.926	USD	H
+(USD 7.926)	-7.926	USD	H
+USD (7.926)	-7.926	USD	H
+USD (7.92)	-7.92	USD	H
+(7.92)USD	-7.92	USD	H
+USD(7.92)	-7.92	USD	H
 (8) USD	-8	USD
 -8 USD	-8	USD
 67 USD	67	USD
 53.45$	fail	USD	P
-US Dollars 53.45	53.45	USD	J
+US Dollars 53.45	53.45	USD	H
 53.45 US Dollars	53.45	USD
-US Dollar 53.45	53.45	USD	J
+US Dollar 53.45	53.45	USD	H
 53.45 US Dollar	53.45	USD
 US Dollars53.45	53.45	USD
-53.45US Dollars	53.45	USD	J
+53.45US Dollars	53.45	USD	H
 US Dollar53.45	53.45	USD
 US Dollat53.45	fail	USD
-53.45US Dollar	53.45	USD	J
-US Dollars (53.45)	-53.45	USD	J
+53.45US Dollar	53.45	USD	H
+US Dollars (53.45)	-53.45	USD	H
 (53.45) US Dollars	-53.45	USD
 (53.45) Euros	-53.45	EUR
-US Dollar (53.45)	-53.45	USD	J
+US Dollar (53.45)	-53.45	USD	H
 (53.45) US Dollar	-53.45	USD
-US Dollars(53.45)	-53.45	USD	J
-(53.45)US Dollars	-53.45	USD	J
-US Dollar(53.45)	-53.45	USD	J
+US Dollars(53.45)	-53.45	USD	H
+(53.45)US Dollars	-53.45	USD	H
+US Dollar(53.45)	-53.45	USD	H
 US Dollat(53.45)	fail	USD
-(53.45)US Dollar	-53.45	USD	J
+(53.45)US Dollar	-53.45	USD	H
 
 
 test parse currency ISO negative
@@ -1080,30 +1080,30 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	JP
+$53.45	fail	USD	HP
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
-USD 53.45	53.45	USD	J
-53.45USD	53.45	USD	J
+USD 53.45	53.45	USD	H
+53.45USD	53.45	USD	H
 USD53.45	53.45	USD
 -7.92 USD	-7.92	USD
 -7.92 GBP	-7.92	GBP
 -7.926 USD	-7.926	USD
-USD -7.926	-7.926	USD	J
--7.92USD	-7.92	USD	J
-USD-7.92	-7.92	USD	J
+USD -7.926	-7.926	USD	H
+-7.92USD	-7.92	USD	H
+USD-7.92	-7.92	USD	H
 -8 USD	-8	USD
 67 USD	67	USD
 53.45$	fail	USD	P
-US Dollars 53.45	53.45	USD	J
+US Dollars 53.45	53.45	USD	H
 53.45 US Dollars	53.45	USD
-US Dollar 53.45	53.45	USD	J
+US Dollar 53.45	53.45	USD	H
 53.45 US Dollar	53.45	USD
 US Dollars53.45	53.45	USD
-53.45US Dollars	53.45	USD	J
+53.45US Dollars	53.45	USD	H
 US Dollar53.45	53.45	USD
 US Dollat53.45	fail	USD
-53.45US Dollar	53.45	USD	J
+53.45US Dollar	53.45	USD	H
 
 
 test parse currency long
@@ -1114,35 +1114,35 @@ parse	output	outputCurrency	breaks
 // J throws a NullPointerException on the first case
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	JP
+$53.45	fail	USD	HP
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
-USD 53.45	53.45	USD	J
-53.45USD	53.45	USD	J
+USD 53.45	53.45	USD	H
+53.45USD	53.45	USD	H
 USD53.45	53.45	USD
 (7.92) USD	-7.92	USD
 (7.92) GBP	-7.92	GBP
 (7.926) USD	-7.926	USD
-(7.926 USD)	-7.926	USD	J
-(USD 7.926)	-7.926	USD	J
-USD (7.926)	-7.926	USD	J
-USD (7.92)	-7.92	USD	J
-(7.92)USD	-7.92	USD	J
-USD(7.92)	-7.92	USD	J
+(7.926 USD)	-7.926	USD	H
+(USD 7.926)	-7.926	USD	H
+USD (7.926)	-7.926	USD	H
+USD (7.92)	-7.92	USD	H
+(7.92)USD	-7.92	USD	H
+USD(7.92)	-7.92	USD	H
 (8) USD	-8	USD
 -8 USD	-8	USD
 67 USD	67	USD
 // J throws a NullPointerException on the next case
 53.45$	fail	USD	P
-US Dollars 53.45	53.45	USD	J
+US Dollars 53.45	53.45	USD	H
 53.45 US Dollars	53.45	USD
-US Dollar 53.45	53.45	USD	J
+US Dollar 53.45	53.45	USD	H
 53.45 US Dollar	53.45	USD
 US Dollars53.45	53.45	USD
-53.45US Dollars	53.45	USD	J
+53.45US Dollars	53.45	USD	H
 US Dollar53.45	53.45	USD
 US Dollat53.45	fail	USD
-53.45US Dollar	53.45	USD	J
+53.45US Dollar	53.45	USD	H
 
 
 test parse currency short
@@ -1152,34 +1152,34 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	JP
+$53.45	fail	USD	HP
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
-USD 53.45	53.45	USD	J
-53.45USD	53.45	USD	J
+USD 53.45	53.45	USD	H
+53.45USD	53.45	USD	H
 USD53.45	53.45	USD
 (7.92) USD	-7.92	USD
 (7.92) GBP	-7.92	GBP
 (7.926) USD	-7.926	USD
-(7.926 USD)	-7.926	USD	J
-(USD 7.926)	-7.926	USD	J
-USD (7.926)	-7.926	USD	J
-USD (7.92)	-7.92	USD	J
-(7.92)USD	-7.92	USD	J
-USD(7.92)	-7.92	USD	J
+(7.926 USD)	-7.926	USD	H
+(USD 7.926)	-7.926	USD	H
+USD (7.926)	-7.926	USD	H
+USD (7.92)	-7.92	USD	H
+(7.92)USD	-7.92	USD	H
+USD(7.92)	-7.92	USD	H
 (8) USD	-8	USD
 -8 USD	-8	USD
 67 USD	67	USD
 53.45$	fail	USD	P
-US Dollars 53.45	53.45	USD	J
+US Dollars 53.45	53.45	USD	H
 53.45 US Dollars	53.45	USD
-US Dollar 53.45	53.45	USD	J
+US Dollar 53.45	53.45	USD	H
 53.45 US Dollar	53.45	USD
 US Dollars53.45	53.45	USD
-53.45US Dollars	53.45	USD	J
+53.45US Dollars	53.45	USD	H
 US Dollar53.45	53.45	USD
 US Dollat53.45	fail	USD
-53.45US Dollar	53.45	USD	J
+53.45US Dollar	53.45	USD	H
 
 
 test parse currency short prefix
@@ -1189,34 +1189,34 @@ begin
 parse	output	outputCurrency	breaks
 53.45	fail	GBP
 £53.45	53.45	GBP
-$53.45	fail	USD	JP
+$53.45	fail	USD	HP
 53.45 USD	53.45	USD
 53.45 GBP	53.45	GBP
-USD 53.45	53.45	USD	J
-53.45USD	53.45	USD	J
+USD 53.45	53.45	USD	H
+53.45USD	53.45	USD	H
 USD53.45	53.45	USD
 // C and P fail these because '(' is an incomplete prefix.
-(7.92) USD	-7.92	USD	CJP
-(7.92) GBP	-7.92	GBP	CJP
-(7.926) USD	-7.926	USD	CJP
-(7.926 USD)	-7.926	USD	CJP
-(USD 7.926)	-7.926	USD	J
-USD (7.926)	-7.926	USD	CJP
-USD (7.92)	-7.92	USD	CJP
-(7.92)USD	-7.92	USD	CJP
-USD(7.92)	-7.92	USD	CJP
-(8) USD	-8	USD	CJP
+(7.92) USD	-7.92	USD	CHP
+(7.92) GBP	-7.92	GBP	CHP
+(7.926) USD	-7.926	USD	CHP
+(7.926 USD)	-7.926	USD	CHP
+(USD 7.926)	-7.926	USD	H
+USD (7.926)	-7.926	USD	CHP
+USD (7.92)	-7.92	USD	CHP
+(7.92)USD	-7.92	USD	CHP
+USD(7.92)	-7.92	USD	CHP
+(8) USD	-8	USD	CHP
 -8 USD	-8	USD
 67 USD	67	USD
 53.45$	fail	USD	P
-US Dollars 53.45	53.45	USD	J
+US Dollars 53.45	53.45	USD	H
 53.45 US Dollars	53.45	USD
-US Dollar 53.45	53.45	USD	J
+US Dollar 53.45	53.45	USD	H
 53.45 US Dollar	53.45	USD
 US Dollars53.45	53.45	USD
-53.45US Dollars	53.45	USD	J
+53.45US Dollars	53.45	USD	H
 US Dollar53.45	53.45	USD
-53.45US Dollar	53.45	USD	J
+53.45US Dollar	53.45	USD	H
 
 test format foreign currency
 set locale fa_IR
@@ -1332,7 +1332,7 @@ USD (7.92)	fail	USD
 (7.92)USD	fail	USD
 USD(7.92)	fail	USD
 (8) USD	-8	USD
--8 USD	fail	USD	J
+-8 USD	fail	USD	H
 67 USD	67	USD
 53.45$	fail	USD
 US Dollars 53.45	fail	USD
@@ -1361,7 +1361,7 @@ set minFractionDigits 0
 set maxFractionDigits 0
 begin
 format	output	breaks
--0.99	-0	JK
+-0.99	-0	HK
 
 test parse decimalPatternMatchRequired
 set locale en
@@ -1370,11 +1370,11 @@ begin
 pattern	parse	output	breaks
 // K doesn't support this feature.
 0	123	123
-0	123.	fail	JK
-0	1.23	fail	JK
+0	123.	fail	HK
+0	1.23	fail	HK
 0	-513	-513
-0	-513.	fail	JK
-0	-5.13	fail	JK
+0	-513.	fail	HK
+0	-5.13	fail	HK
 0.0	123	fail	K
 0.0	123.	123
 0.0	1.23	1.23
@@ -1388,13 +1388,13 @@ set pattern #
 begin
 pattern	parse	output	breaks
 #	-123	-123
-#	- 123	-123	JK
-#	 -123	-123	JK
-#	 - 123	-123	JK
+#	- 123	-123	HK
+#	 -123	-123	HK
+#	 - 123	-123	HK
 #	123-	123
 #	123 -	123
 #;#-	123-	-123
-#;#-	123 -	-123	JK
+#;#-	123 -	-123	HK
 
 test parse case sensitive
 set locale en
@@ -1405,19 +1405,19 @@ parse	parseCaseSensitive	output	breaks
 Aa1.23	1	1.23
 Aa1.23	0	1.23
 AA1.23	1	fail
-// J and K do not support case-insensitive parsing for prefix/suffix.
-// J supports it for the exponent separator, but not K.
-AA1.23	0	1.23	JK
+// H and K do not support case-insensitive parsing for prefix/suffix.
+// H supports it for the exponent separator, but not K.
+AA1.23	0	1.23	HK
 aa1.23	1	fail
-aa1.23	0	1.23	JK
+aa1.23	0	1.23	HK
 Aa1.23E3	1	1230
 Aa1.23E3	0	1230
-Aa1.23e3	1	1.23	J
+Aa1.23e3	1	1.23	H
 Aa1.23e3	0	1230	K
 NaN	1	NaN	K
 NaN	0	NaN	K
 nan	1	fail
-nan	0	NaN	JK
+nan	0	NaN	HK
 
 test parse infinity and scientific notation overflow
 set locale en
@@ -1468,8 +1468,8 @@ pattern	parse	output	breaks
 #,##0	 9 9	99	K
 // K returns null
 #,##0	 9 999	9999	K
-0	 9 9	9	JK
-0	 9 999	9	JK
+0	 9 9	9	HK
+0	 9 999	9	HK
 
 test parse ignorables
 set locale ar
@@ -1482,36 +1482,36 @@ parse	output	breaks
 x a‎b56c df 	56
 x  a‎b56c df 	56	K
 x ab56c df 	56	K
-x ab56c df	56	JK
+x ab56c df	56	HK
 x ab56c df  	56	K
-x ab56	56	JK
-x a b56	56	JK
-56cdf	56	JK
-56c df	56	JK
-56cd f	56	JK
-56c‎d‎f	56	JK
-56cdf 	56	JK
-56c d‎f 	56	JK
-56‎c df 	56	JK
+x ab56	56	HK
+x a b56	56	HK
+56cdf	56	HK
+56c df	56	HK
+56cd f	56	HK
+56c‎d‎f	56	HK
+56cdf 	56	HK
+56c d‎f 	56	HK
+56‎c df 	56	HK
 y g‎h56i jk 	-56
 y  g‎h56i jk 	-56	K
 y gh56i jk 	-56	K
-y gh56i jk	-56	JK
+y gh56i jk	-56	HK
 y gh56i jk  	-56	K
-y gh56	-56	JK
-y g h56	-56	JK
+y gh56	-56	HK
+y g h56	-56	HK
 // S stops parsing after the 'i' for these and returns -56
 // C stops before the 'i' and gets 56
-56ijk	-56	JK
-56i jk	-56	JK
-56ij k	-56	JK
-56i‎j‎k	-56	JK
-56ijk 	-56	JK
-56i j‎k 	-56	JK
-56‎i jk 	-56	JK
-// S and C get 56 (accepts ' ' gs grouping); J and K get null
+56ijk	-56	HK
+56i jk	-56	HK
+56ij k	-56	HK
+56i‎j‎k	-56	HK
+56ijk 	-56	HK
+56i j‎k 	-56	HK
+56‎i jk 	-56	HK
+// S and C get 56 (accepts ' ' gs grouping); H and K get null
 5 6	fail	CP
-5‎6	5	JK
+5‎6	5	HK
 
 test parse spaces in grouping
 // This test gives the ideal behavior of these cases, which
@@ -1520,9 +1520,9 @@ set locale en
 set pattern #,##0
 begin
 parse	output	breaks
-// C, J, S, and P get "12" here
-1 2	1	CJP
-1 23	1	CJP
+// C, H, S, and P get "12" here
+1 2	1	CHP
+1 23	1	CHP
 // K gets 1 here; doesn't pick up the grouping separator
 1 234	1234	K
 
@@ -1537,7 +1537,7 @@ format	output	breaks
 // C and J get "1"
 // Q gets "1.0"
 // K gets "1.1" (??)
-0.975	0.98	CJKQ
+0.975	0.98	CHKQ
 
 test lenient parse currency match
 // This test is for #13112
@@ -1545,8 +1545,8 @@ set locale en
 set pattern ¤#,##0.00
 begin
 parse	output	breaks
-// J and K get null
-1.23!@#$%^	1.23	JK
+// H and K get null
+1.23!@#$%^	1.23	HK
 
 test percentage parsing multiplier
 // This test is for #13114
@@ -1555,9 +1555,9 @@ set pattern 0%
 begin
 parse	output	breaks
 55%	0.55
-// J and K get null
+// H and K get null
 // C and P scale by 100 even if the percent sign is not present
-55	0.55	JK
+55	0.55	HK
 
 test trailing grouping separators in pattern
 // This test is for #13115
@@ -1576,8 +1576,8 @@ begin
 pattern	format	output	breaks
 0	-15	-15
 0;	-15	-15
-// J and K still prepend a '-' even though the pattern says otherwise
-0;0	-15	15	JK
+// H and K still prepend a '-' even though the pattern says otherwise
+0;0	-15	15	HK
 
 test percentage multiplier parsing
 // This test is for #13129
@@ -1593,9 +1593,9 @@ set pattern 0
 set signAlwaysShown 1
 begin
 format	output	breaks
-// J and K do not support this feature
-42	+42	JK
-0	+0	JK
+// H and K do not support this feature
+42	+42	HK
+0	+0	HK
 -42	-42
 
 test parse strict with plus sign
@@ -1606,14 +1606,14 @@ begin
 lenient	parse	output	breaks
 1	42	42
 1	-42	-42
-1	+42	42	JK
+1	+42	42	HK
 1	0	0
-1	+0	0	JK
-0	42	fail	JK
+1	+0	0	HK
+0	42	fail	HK
 0	-42	-42
-0	+42	42	JK
-0	0	fail	JK
-0	+0	0	JK
+0	+42	42	HK
+0	0	fail	HK
+0	+0	0	HK
 
 test parse with scientific-separator-affix overlap
 set locale en
@@ -1631,12 +1631,12 @@ set currency USD
 begin
 parse	output	outputCurrency	breaks
 USD123	123	USD
-USD 123	123	USD	J
+USD 123	123	USD	H
 // C does not currently accept case-insensitive ISO codes
 usd123	123	USD	C
-usd 123	123	USD	CJ
+usd 123	123	USD	CH
 Usd123	123	USD	C
-Usd 123	123	USD	CJ
+Usd 123	123	USD	CH
 US$123	123	USD	C
 us$123	fail	fail
 Us$123	fail	fail
