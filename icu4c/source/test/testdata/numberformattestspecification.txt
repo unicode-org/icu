@@ -10,12 +10,11 @@
 // per line.
 //
 // Field names:
-//  H = ICU58
-//  K = JDK
-//  C = ICU4C
-//  P = ICU4J parsing
-//  Q = ICU4J formatting
-//  S = ICU4J toPattern
+//  H = ICU4J 58 (archive)
+//  J = ICU4J (current)
+//  K = JDK (ignored if not OpenJDK 1.8)
+//  C = ICU4C (current)
+//  P = Properties-based ICU4J (bypasses DecimalFormat wrapper)
 //
 // For more information on the format of this file, including all the available
 // field names, please see
@@ -248,9 +247,9 @@ $**####,##0	1234	$***1\u00a0234	K
 *y%4.2######	4.33	yyyy%432,6	K
 // In J ICU adds padding as if 'EUR' is only 2 chars (2 * 0xa4)
 \u00a4\u00a4 **####0.00	433.0	EUR *433,00	HK
-// In J ICU adds padding as if 'EUR' is only 2 chars (2 * 0xa4)
-// Q fails this one because the test code bypasses CurrencyUsage
-\u00a4\u00a4 **#######0	433.0	EUR *433,00	HKQ
+// In H ICU adds padding as if 'EUR' is only 2 chars (2 * 0xa4)
+// P fails this one because the test code bypasses CurrencyUsage
+\u00a4\u00a4 **#######0	433.0	EUR *433,00	HKP
 
 test padding and currencies
 begin
@@ -391,13 +390,13 @@ begin
 format	maxIntegerDigits	output	breaks
 123	1	3	
 // C obeys maxIntegerDigits and prints after the decimal place
-0	0	.0	HKQ
-// C and Q ignore max integer if it is less than zero and prints "123"
-123	-2147483648	0	CJQ
+0	0	.0	HKP
+// CJP ignore max integer if it is less than zero and prints "123"
+123	-2147483648	0	CJP
 12345	1	5	
-12345	-2147483648	0	CJQ
+12345	-2147483648	0	CJP
 5.3	1	5.3	
-5.3	-2147483648	.3	CJQ
+5.3	-2147483648	.3	CJP
 
 test patterns with zero
 set locale en
@@ -501,9 +500,9 @@ begin
 format	output	breaks
 -0.35	-0.25	K
 0.35	0.25	K
-// Q doesn't support mixing minFrac with roundingIncrement (prints 0.50).
-0.39	0.5	JKQ
-0.62	0.5	JKQ
+// P doesn't support mixing minFrac with roundingIncrement (prints 0.50).
+0.39	0.5	JKP
+0.62	0.5	JKP
 0.63	0.75	K
 
 test padding setters
@@ -571,7 +570,7 @@ set locale en
 set currency USD
 begin
 pattern	format	output	breaks
-#	123	123	Q
+#	123	123	P
 // Currency rounding should always override the pattern.
 // K prints the currency in ISO format for some reason.
 \u00a4#	123	$123.00	K
@@ -706,19 +705,19 @@ pattern	toPattern	breaks
 **0,000	**0,000	HK
 **##0,000	**##0,000	K
 **###0,000	**###0,000	K
-**####0,000	**#,##0,000	CJKS
+**####0,000	**#,##0,000	CJKP
 ###,000.	#,000.
-0,000	#0,000	CJS
+0,000	#0,000	CJP
 .00	#.00
-000	#000	CJS
-000,000	#,000,000	CJS
+000	#000	CJP
+000,000	#,000,000	CJP
 pp#,000	pp#,000
-00.##	#00.##	CJS
+00.##	#00.##	CJP
 #,#00.025	#,#00.025
 // No secondary grouping in JDK
 #,##,###.02500	#,##,###.02500	K
 pp#,000;(#)	pp#,000;(#,000)	K
-**####,##,##0.0##;(#)	**#,##,##,##0.0##;**(##,##,##0.0##)	CJKS
+**####,##,##0.0##;(#)	**#,##,##,##0.0##;**(##,##,##0.0##)	CJKP
 // No significant digits in JDK
 @@###	@@###	K
 @,@#,###	@,@#,###	K
@@ -1533,9 +1532,9 @@ set maxSigDigits 2
 begin
 format	output	breaks
 // C and J get "1"
-// Q gets "1.0"
+// P gets "1.0"
 // K gets "1.1" (??)
-0.975	0.98	CHJKQ
+0.975	0.98	CHJKP
 
 test lenient parse currency match
 // This test is for #13112

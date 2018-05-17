@@ -113,6 +113,9 @@ public class NumberFormatDataDrivenTest {
         return null;
     }
 
+    /**
+     * Main ICU4J DecimalFormat data-driven test.
+     */
     private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU4J = new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
         @Override
         public Character Id() {
@@ -287,6 +290,9 @@ public class NumberFormatDataDrivenTest {
         }
     };
 
+    /**
+     * Backwards-compatibility test: snapshot of DecimalFormat from ICU 58.
+     */
     private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU58 = new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
         @Override
         public Character Id() {
@@ -463,6 +469,9 @@ public class NumberFormatDataDrivenTest {
         }
     };
 
+    /**
+     * Test of available JDK APIs.
+     */
     private DataDrivenNumberFormatTestUtility.CodeUnderTest JDK = new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
         @Override
         public Character Id() {
@@ -744,13 +753,14 @@ public class NumberFormatDataDrivenTest {
     }
 
     /**
-     * Formatting, but no other features.
+     * Same as ICU4J, but bypasses the DecimalFormat wrapper and goes directly to the
+     * DecimalFormatProperties.
      */
-    private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU60 = new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
+    private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU4J_Properties = new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
 
         @Override
         public Character Id() {
-            return 'Q';
+            return 'P';
         }
 
         /**
@@ -778,71 +788,6 @@ public class NumberFormatDataDrivenTest {
                 return "Expected \"" + expected + "\", got \"" + actual + "\"";
             }
             return null;
-        }
-    };
-
-    /**
-     * Parsing, but no other features.
-     */
-    private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU61_Parsing = new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
-
-        @Override
-        public Character Id() {
-            return 'P';
-        }
-
-        @Override
-        public String parse(DataDrivenNumberFormatTestData tuple) {
-            String pattern = (tuple.pattern == null) ? "0" : tuple.pattern;
-            DecimalFormatProperties properties;
-            ParsePosition ppos = new ParsePosition(0);
-            Number actual;
-            try {
-                properties = PatternStringParser.parseToProperties(pattern,
-                        tuple.currency != null ? PatternStringParser.IGNORE_ROUNDING_ALWAYS
-                                : PatternStringParser.IGNORE_ROUNDING_NEVER);
-                propertiesFromTuple(tuple, properties);
-                actual = NumberParserImpl.parseStatic(tuple.parse,
-                        ppos,
-                        properties,
-                        DecimalFormatSymbols.getInstance(tuple.locale));
-            } catch (IllegalArgumentException e) {
-                return "parse exception: " + e.getMessage();
-            }
-            return compareParseResult(tuple.output, actual, ppos);
-        }
-
-        @Override
-        public String parseCurrency(DataDrivenNumberFormatTestData tuple) {
-            String pattern = (tuple.pattern == null) ? "0" : tuple.pattern;
-            DecimalFormatProperties properties;
-            ParsePosition ppos = new ParsePosition(0);
-            CurrencyAmount actual;
-            try {
-                properties = PatternStringParser.parseToProperties(pattern,
-                        tuple.currency != null ? PatternStringParser.IGNORE_ROUNDING_ALWAYS
-                                : PatternStringParser.IGNORE_ROUNDING_NEVER);
-                propertiesFromTuple(tuple, properties);
-                actual = NumberParserImpl.parseStaticCurrency(tuple.parse,
-                        ppos,
-                        properties,
-                        DecimalFormatSymbols.getInstance(tuple.locale));
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-                return "parse exception: " + e.getMessage();
-            }
-            return compareParseCurrencyResult(tuple.output, tuple.outputCurrency, actual, ppos);
-        }
-    };
-
-    /**
-     * All features except formatting.
-     */
-    private DataDrivenNumberFormatTestUtility.CodeUnderTest ICU59_Other = new DataDrivenNumberFormatTestUtility.CodeUnderTest() {
-
-        @Override
-        public Character Id() {
-            return 'S';
         }
 
         /**
@@ -893,18 +838,54 @@ public class NumberFormatDataDrivenTest {
             return null;
         }
 
-        /**
-         * Runs a single select test. On success, returns null. On failure, returns the error. This
-         * implementation just returns null. Subclasses should override.
-         *
-         * @param tuple
-         *            contains the parameters of the format test.
-         */
         @Override
-        public String select(DataDrivenNumberFormatTestData tuple) {
-            return null;
+        public String parse(DataDrivenNumberFormatTestData tuple) {
+            String pattern = (tuple.pattern == null) ? "0" : tuple.pattern;
+            DecimalFormatProperties properties;
+            ParsePosition ppos = new ParsePosition(0);
+            Number actual;
+            try {
+                properties = PatternStringParser.parseToProperties(pattern,
+                        tuple.currency != null ? PatternStringParser.IGNORE_ROUNDING_ALWAYS
+                                : PatternStringParser.IGNORE_ROUNDING_NEVER);
+                propertiesFromTuple(tuple, properties);
+                actual = NumberParserImpl.parseStatic(tuple.parse,
+                        ppos,
+                        properties,
+                        DecimalFormatSymbols.getInstance(tuple.locale));
+            } catch (IllegalArgumentException e) {
+                return "parse exception: " + e.getMessage();
+            }
+            return compareParseResult(tuple.output, actual, ppos);
+        }
+
+        @Override
+        public String parseCurrency(DataDrivenNumberFormatTestData tuple) {
+            String pattern = (tuple.pattern == null) ? "0" : tuple.pattern;
+            DecimalFormatProperties properties;
+            ParsePosition ppos = new ParsePosition(0);
+            CurrencyAmount actual;
+            try {
+                properties = PatternStringParser.parseToProperties(pattern,
+                        tuple.currency != null ? PatternStringParser.IGNORE_ROUNDING_ALWAYS
+                                : PatternStringParser.IGNORE_ROUNDING_NEVER);
+                propertiesFromTuple(tuple, properties);
+                actual = NumberParserImpl.parseStaticCurrency(tuple.parse,
+                        ppos,
+                        properties,
+                        DecimalFormatSymbols.getInstance(tuple.locale));
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                return "parse exception: " + e.getMessage();
+            }
+            return compareParseCurrencyResult(tuple.output, tuple.outputCurrency, actual, ppos);
         }
     };
+
+    @Test
+    public void TestNoUnknownIDs() {
+        DataDrivenNumberFormatTestUtility.checkNoUnknownIDs("numberformattestspecification.txt", "CHJKP");
+    }
 
     @Test
     public void TestDataDrivenICU4J() {
@@ -934,21 +915,8 @@ public class NumberFormatDataDrivenTest {
     }
 
     @Test
-    public void TestDataDrivenICULatest_Format() {
+    public void TestDataDrivenICU4JProperties() {
         DataDrivenNumberFormatTestUtility
-                .runFormatSuiteIncludingKnownFailures("numberformattestspecification.txt", ICU60);
-    }
-
-    @Test
-    public void TestDataDrivenICULatest_Parsing() {
-        DataDrivenNumberFormatTestUtility.runFormatSuiteIncludingKnownFailures(
-                "numberformattestspecification.txt",
-                ICU61_Parsing);
-    }
-
-    @Test
-    public void TestDataDrivenICULatest_Other() {
-        DataDrivenNumberFormatTestUtility
-                .runFormatSuiteIncludingKnownFailures("numberformattestspecification.txt", ICU59_Other);
+                .runFormatSuiteIncludingKnownFailures("numberformattestspecification.txt", ICU4J_Properties);
     }
 }

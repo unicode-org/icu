@@ -98,10 +98,12 @@ public class DataDrivenNumberFormatTestUtility extends TestFmwk {
 
     private static enum RunMode {
         SKIP_KNOWN_FAILURES,
-        INCLUDE_KNOWN_FAILURES
+        INCLUDE_KNOWN_FAILURES,
+        CHECK_FOR_UNKNOWN_IDS
     }
 
     private final CodeUnderTest codeUnderTest;
+    private final String allowedIDs;
     private String fileLine = null;
     private int fileLineNumber = 0;
     private String fileTestName = "";
@@ -135,15 +137,25 @@ public class DataDrivenNumberFormatTestUtility extends TestFmwk {
                 .run(fileName, RunMode.INCLUDE_KNOWN_FAILURES);
     }
 
-    private DataDrivenNumberFormatTestUtility(
-            CodeUnderTest codeUnderTest) {
+    /**
+     * Checks the data file for no unknown IDs in "breaks" columns.
+     */
+    public static void checkNoUnknownIDs(String fileName, String allowedIDs) {
+        new DataDrivenNumberFormatTestUtility(allowedIDs).run(fileName, RunMode.CHECK_FOR_UNKNOWN_IDS);
+    }
+
+    private DataDrivenNumberFormatTestUtility(CodeUnderTest codeUnderTest) {
         this.codeUnderTest = codeUnderTest;
+        this.allowedIDs = null;
+    }
+
+    private DataDrivenNumberFormatTestUtility(String allowedIDs) {
+        this.codeUnderTest = null;
+        this.allowedIDs = allowedIDs;
     }
 
     private void run(String fileName, RunMode runMode) {
-        Character codeUnderTestIdObj = codeUnderTest.Id();
-        char codeUnderTestId =
-                codeUnderTestIdObj == null ? 0 : Character.toUpperCase(codeUnderTestIdObj.charValue());
+        char codeUnderTestId = (codeUnderTest == null) ? 0 : codeUnderTest.Id();
         BufferedReader in = null;
         try {
             in = TestUtil.getDataReader("numberformattestspecification.txt", "UTF-8");
@@ -204,7 +216,24 @@ public class DataDrivenNumberFormatTestUtility extends TestFmwk {
                             return;
                         }
                     }
-                    if (runMode == RunMode.INCLUDE_KNOWN_FAILURES || !breaks(codeUnderTestId)) {
+                    if (runMode == RunMode.CHECK_FOR_UNKNOWN_IDS) {
+                        String actualIDs = tuple.breaks;
+                        if (actualIDs != null) {
+                            // Make sure there are no IDs in actualIDs that are not in allowedIDs.
+                            // As a bonus, check that actualIDs are in alphabetical order.
+                            char prevID = 0;
+                            for (int i=0; i<actualIDs.length(); i++) {
+                                char currID = actualIDs.charAt(i);
+                                if (allowedIDs.indexOf(currID) == -1) {
+                                    showError("Unknown ID: " + currID);
+                                }
+                                if (prevID > currID) {
+                                    showError("IDs not in alphabetical order: " + actualIDs);
+                                }
+                                prevID = currID;
+                            }
+                        }
+                    } else if (runMode == RunMode.INCLUDE_KNOWN_FAILURES || !breaks(codeUnderTestId)) {
                         String errorMessage;
                         Exception err = null;
                         boolean shouldFail = (tuple.output != null && tuple.output.equals("fail"))
