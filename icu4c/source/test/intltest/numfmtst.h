@@ -275,6 +275,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test11647_PatternCurrencySymbols();
     void Test11913_BigDecimal();
     void Test11020_RoundingInScientificNotation();
+    void Test11640_TripleCurrencySymbol();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);
