@@ -302,6 +302,36 @@ U_CAPI int32_t U_EXPORT2
 ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *pErrorCode);
 
 /**
+ * Macro parameter value for a trie with 16-bit data values.
+ * Use the name of this macro as a "dataAccess" parameter in other macros.
+ * Do not use this macro in any other way.
+ *
+ * @see UCPTRIE_VALUE_BITS_16
+ * @draft ICU 63
+ */
+#define UCPTRIE_16(trie, i) ((trie)->data.ptr16[i])
+
+/**
+ * Macro parameter value for a trie with 32-bit data values.
+ * Use the name of this macro as a "dataAccess" parameter in other macros.
+ * Do not use this macro in any other way.
+ *
+ * @see UCPTRIE_VALUE_BITS_32
+ * @draft ICU 63
+ */
+#define UCPTRIE_32(trie, i) ((trie)->data.ptr32[i])
+
+/**
+ * Macro parameter value for a trie with 8-bit data values.
+ * Use the name of this macro as a "dataAccess" parameter in other macros.
+ * Do not use this macro in any other way.
+ *
+ * @see UCPTRIE_VALUE_BITS_8
+ * @draft ICU 63
+ */
+#define UCPTRIE_8(trie, i) ((trie)->data.ptr8[i])
+
+/**
  * Returns a 16-bit trie value for a code point, with range checking.
  * Returns the trie error value if c is not in the range 0..U+10FFFF.
  *
@@ -339,19 +369,36 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
 
 /**
  * UTF-16: Reads the next code point (UChar32 c, out), post-increments src,
- * and gets a 16-bit value from the trie.
+ * and gets a value from the trie.
  * Sets the trie error value if c is an unpaired surrogate.
  *
  * @param trie (const UCPTrie *, in) the trie; must have type UCPTRIE_TYPE_FAST
+ * @param dataAccess UCPTRIE_16, UCPTRIE_32, or UCPTRIE_8 according to the trie’s value width
  * @param src (const UChar *, in/out) the source text pointer
  * @param limit (const UChar *, in) the limit pointer for the text, or NULL if NUL-terminated
  * @param c (UChar32, out) variable for the code point
  * @param result (uint16_t, out) uint16_t variable for the trie lookup result
  * @draft ICU 63
  */
-#define UCPTRIE_FAST_U16_NEXT16(trie, src, limit, c, result) \
-    _UCPTRIE_FAST_U16_NEXT(trie, data.ptr16, src, limit, c, result)
+#define UCPTRIE_FAST_U16_NEXT(trie, dataAccess, src, limit, c, result) { \
+    (c) = *(src)++; \
+    int32_t __index; \
+    if (!U16_IS_SURROGATE(c)) { \
+        __index = _UCPTRIE_FAST_INDEX(trie, c); \
+    } else { \
+        uint16_t __c2; \
+        if (U16_IS_SURROGATE_LEAD(c) && (src) != (limit) && U16_IS_TRAIL(__c2 = *(src))) { \
+            ++(src); \
+            (c) = U16_GET_SUPPLEMENTARY((c), __c2); \
+            __index = _UCPTRIE_SMALL_INDEX(trie, c); \
+        } else { \
+            __index = (trie)->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET; \
+        } \
+    } \
+    (result) = dataAccess(trie, __index); \
+}
 
+#if 0  // TODO
 /**
  * UTF-16: Reads the next code point (UChar32 c, out), post-increments src,
  * and gets a 32-bit value from the trie.
@@ -368,6 +415,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
     _UCPTRIE_FAST_U16_NEXT(trie, data.ptr32, src, limit, c, result)
 #define UCPTRIE_FAST_U16_NEXT8(trie, src, limit, c, result) \
     _UCPTRIE_FAST_U16_NEXT(trie, data.ptr8, src, limit, c, result)
+#endif
 
 /**
  * UTF-16: Reads the previous code point (UChar32 c, out), pre-decrements src,
@@ -470,16 +518,18 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
 #define UCPTRIE_ASCII_GET8(trie, c) ((trie)->data.ptr8[c])
 
 /**
- * Returns a 16-bit trie value for a BMP code point or UTF-16 code unit (U+0000..U+FFFF),
+ * Returns a trie value for a BMP code point or UTF-16 code unit (U+0000..U+FFFF),
  * without range checking.
  *
  * @param trie (const UCPTrie *, in) the trie; must have type UCPTRIE_TYPE_FAST
+ * @param dataAccess UCPTRIE_16, UCPTRIE_32, or UCPTRIE_8 according to the trie’s value width
  * @param c (UChar32, in) the input code unit, must be U+0000<=c<=U+FFFF
  * @return (uint16_t) The code unit's trie value.
  * @draft ICU 63
  */
-#define UCPTRIE_FAST_BMP_GET16(trie, c) ((trie)->data.ptr16[_UCPTRIE_FAST_INDEX(trie, c)])
+#define UCPTRIE_FAST_BMP_GET(trie, dataAccess, c) dataAccess(trie, _UCPTRIE_FAST_INDEX(trie, c))
 
+#if 0  // TODO
 /**
  * Returns a 32-bit trie value for a BMP code point or UTF-16 code unit (U+0000..U+FFFF),
  * without range checking.
@@ -491,6 +541,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  */
 #define UCPTRIE_FAST_BMP_GET32(trie, c) ((trie)->data.ptr32[_UCPTRIE_FAST_INDEX(trie, c)])
 #define UCPTRIE_FAST_BMP_GET8(trie, c) ((trie)->data.ptr8[_UCPTRIE_FAST_INDEX(trie, c)])
+#endif
 
 /**
  * Returns a 16-bit trie value for a supplementary code point (U+10000..U+10FFFF),
@@ -648,7 +699,7 @@ ucptrie_internalU8PrevIndex(const UCPTrie *trie, UChar32 c,
             _UCPTRIE_SMALL_INDEX(trie, c) : \
             (trie)->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET)
 
-/** Internal next-post-increment: get the next code point (c) and its data. @internal */
+/** Internal next-post-increment: get the next code point (c) and its data. @internal */  // TODO
 #define _UCPTRIE_FAST_U16_NEXT(trie, data, src, limit, c, result) { \
     (c) = *(src)++; \
     int32_t __index; \

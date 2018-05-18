@@ -608,7 +608,7 @@ Normalizer2Impl::decompose(const UChar *src, const UChar *limit,
         // count code units below the minimum or with irrelevant data for the quick check
         for(prevSrc=src; src!=limit;) {
             if( (c=*src)<minNoCP ||
-                isMostDecompYesAndZeroCC(norm16=UCPTRIE_FAST_BMP_GET16(normTrie, c))
+                isMostDecompYesAndZeroCC(norm16=UCPTRIE_FAST_BMP_GET(normTrie, UCPTRIE_16, c))
             ) {
                 ++src;
             } else if(!U16_IS_LEAD(c)) {
@@ -684,7 +684,7 @@ Normalizer2Impl::decomposeShort(const UChar *src, const UChar *limit,
         const UChar *prevSrc = src;
         UChar32 c;
         uint16_t norm16;
-        UCPTRIE_FAST_U16_NEXT16(normTrie, src, limit, c, norm16);
+        UCPTRIE_FAST_U16_NEXT(normTrie, UCPTRIE_16, src, limit, c, norm16);
         if (stopAtCompBoundary && norm16HasCompBoundaryBefore(norm16)) {
             return prevSrc;
         }
@@ -904,7 +904,7 @@ void Normalizer2Impl::decomposeAndAppend(const UChar *src, const UChar *limit,
         const UChar *codePointStart = p;
         UChar32 c;
         uint16_t norm16;
-        UCPTRIE_FAST_U16_NEXT16(normTrie, p, limit, c, norm16);
+        UCPTRIE_FAST_U16_NEXT(normTrie, UCPTRIE_16, p, limit, c, norm16);
         if ((cc = getCC(norm16)) == 0) {
             p = codePointStart;
             break;
@@ -1106,7 +1106,7 @@ void Normalizer2Impl::recompose(ReorderingBuffer &buffer, int32_t recomposeStart
     prevCC=0;
 
     for(;;) {
-        UCPTRIE_FAST_U16_NEXT16(normTrie, p, limit, c, norm16);
+        UCPTRIE_FAST_U16_NEXT(normTrie, UCPTRIE_16, p, limit, c, norm16);
         cc=getCCFromYesOrMaybe(norm16);
         if( // this character combines backward and
             isMaybe(norm16) &&
@@ -1341,7 +1341,7 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
                 return TRUE;
             }
             if( (c=*src)<minNoMaybeCP ||
-                isCompYesAndZeroCC(norm16=UCPTRIE_FAST_BMP_GET16(normTrie, c))
+                isCompYesAndZeroCC(norm16=UCPTRIE_FAST_BMP_GET(normTrie, UCPTRIE_16, c))
             ) {
                 ++src;
             } else {
@@ -1505,7 +1505,7 @@ Normalizer2Impl::compose(const UChar *src, const UChar *limit,
                     }
                     uint8_t prevCC = cc;
                     nextSrc = src;
-                    UCPTRIE_FAST_U16_NEXT16(normTrie, nextSrc, limit, c, n16);
+                    UCPTRIE_FAST_U16_NEXT(normTrie, UCPTRIE_16, nextSrc, limit, c, n16);
                     if (n16 >= MIN_YES_YES_WITH_CC) {
                         cc = getCCFromNormalYesOrMaybe(n16);
                         if (prevCC > cc) {
@@ -1602,7 +1602,7 @@ Normalizer2Impl::composeQuickCheck(const UChar *src, const UChar *limit,
                 return src;
             }
             if( (c=*src)<minNoMaybeCP ||
-                isCompYesAndZeroCC(norm16=UCPTRIE_FAST_BMP_GET16(normTrie, c))
+                isCompYesAndZeroCC(norm16=UCPTRIE_FAST_BMP_GET(normTrie, UCPTRIE_16, c))
             ) {
                 ++src;
             } else {
@@ -1669,7 +1669,7 @@ Normalizer2Impl::composeQuickCheck(const UChar *src, const UChar *limit,
                     }
                     uint8_t prevCC = cc;
                     nextSrc = src;
-                    UCPTRIE_FAST_U16_NEXT16(normTrie, nextSrc, limit, c, norm16);
+                    UCPTRIE_FAST_U16_NEXT(normTrie, UCPTRIE_16, nextSrc, limit, c, norm16);
                     if (isMaybeOrNonZeroCC(norm16)) {
                         cc = getCCFromYesOrMaybe(norm16);
                         if (!(prevCC <= cc || cc == 0)) {
@@ -1993,7 +1993,7 @@ UBool Normalizer2Impl::hasCompBoundaryBefore(const UChar *src, const UChar *limi
     }
     UChar32 c;
     uint16_t norm16;
-    UCPTRIE_FAST_U16_NEXT16(normTrie, src, limit, c, norm16);
+    UCPTRIE_FAST_U16_NEXT(normTrie, UCPTRIE_16, src, limit, c, norm16);
     return norm16HasCompBoundaryBefore(norm16);
 }
 
@@ -2050,7 +2050,7 @@ const UChar *Normalizer2Impl::findNextCompBoundary(const UChar *p, const UChar *
         const UChar *codePointStart = p;
         UChar32 c;
         uint16_t norm16;
-        UCPTRIE_FAST_U16_NEXT16(normTrie, p, limit, c, norm16);
+        UCPTRIE_FAST_U16_NEXT(normTrie, UCPTRIE_16, p, limit, c, norm16);
         if (hasCompBoundaryBefore(c, norm16)) {
             return codePointStart;
         }
@@ -2321,7 +2321,7 @@ const UChar *Normalizer2Impl::findNextFCDBoundary(const UChar *p, const UChar *l
         const UChar *codePointStart=p;
         UChar32 c;
         uint16_t norm16;
-        UCPTRIE_FAST_U16_NEXT16(normTrie, p, limit, c, norm16);
+        UCPTRIE_FAST_U16_NEXT(normTrie, UCPTRIE_16, p, limit, c, norm16);
         if (c < minLcccCP || norm16HasDecompBoundaryBefore(norm16)) {
             return codePointStart;
         }

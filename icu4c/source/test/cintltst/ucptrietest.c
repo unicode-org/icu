@@ -213,11 +213,11 @@ testTrieGetters(const char *testName, const UCPTrie *trie,
             if (type == UCPTRIE_TYPE_FAST) {
                 if(start<=0xffff) {
                     if(valueWidth==UCPTRIE_VALUE_BITS_16) {
-                        value2=UCPTRIE_FAST_BMP_GET16(trie, start);
+                        value2=UCPTRIE_FAST_BMP_GET(trie, UCPTRIE_16, start);
                     } else if(valueWidth==UCPTRIE_VALUE_BITS_32) {
-                        value2=UCPTRIE_FAST_BMP_GET32(trie, start);
+                        value2=UCPTRIE_FAST_BMP_GET(trie, UCPTRIE_32, start);
                     } else {
-                        value2=UCPTRIE_FAST_BMP_GET8(trie, start);
+                        value2=UCPTRIE_FAST_BMP_GET(trie, UCPTRIE_8, start);
                     }
                     if(value!=value2) {
                         log_err("error: %s(%s).fromBMP(U+%04lx)==0x%lx instead of 0x%lx\n",
@@ -433,11 +433,11 @@ testTrieUTF16(const char *testName,
         U16_NEXT(s, sIndex, length, c2);
         c=0x33;
         if(valueWidth==UCPTRIE_VALUE_BITS_16) {
-            UCPTRIE_FAST_U16_NEXT16(trie, p, limit, c, value);
+            UCPTRIE_FAST_U16_NEXT(trie, UCPTRIE_16, p, limit, c, value);
         } else if(valueWidth==UCPTRIE_VALUE_BITS_32) {
-            UCPTRIE_FAST_U16_NEXT32(trie, p, limit, c, value);
+            UCPTRIE_FAST_U16_NEXT(trie, UCPTRIE_32, p, limit, c, value);
         } else {
-            UCPTRIE_FAST_U16_NEXT8(trie, p, limit, c, value);
+            UCPTRIE_FAST_U16_NEXT(trie, UCPTRIE_8, p, limit, c, value);
         }
         expected = U_IS_SURROGATE(c) ? errorValue : values[i];
         if(value!=expected) {
