@@ -603,6 +603,14 @@ void DecimalQuantity::toDecNum(DecNum& output, UErrorCode& status) const {
     output.setTo(ubcd.getAlias(), precision, scale, isNegative(), status);
 }
 
+void DecimalQuantity::truncate() {
+    if (scale < 0) {
+        shiftRight(-scale);
+        scale = 0;
+        compact();
+    }
+}
+
 void DecimalQuantity::roundToMagnitude(int32_t magnitude, RoundingMode roundingMode, UErrorCode& status) {
     // The position in the BCD at which rounding will be performed; digits to the right of position
     // will be rounded away.

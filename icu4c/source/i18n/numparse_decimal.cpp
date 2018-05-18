@@ -108,6 +108,7 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
     UnicodeString actualDecimalString = decimalSeparator;
     int32_t groupedDigitCount = 0; // tracking count of digits delimited by grouping separator
     int32_t backupOffset = -1; // used for preserving the last confirmed position
+    int32_t smallGroupBackupOffset = -1; // used to back up behind groups of size 1
     bool afterFirstGrouping = false;
     bool seenGrouping = false;
     bool seenDecimal = false;
@@ -147,6 +148,8 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
             // Digit was found.
             // Check for grouping size violation
             if (backupOffset != -1) {
+                smallGroupBackupOffset = backupOffset;
+                backupOffset = -1;
                 if (requireGroupingMatch) {
                     // comma followed by digit, so group before comma is a secondary
                     // group. If there was a group separator before that, the group
@@ -157,9 +160,14 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
                         strictFail = true;
                         break;
                     }
+                } else {
+                    // #11230: don't accept groups after the first with only 1 digit.
+                    // The logic to back up and remove the lone digit is lower down.
+                    if (afterFirstGrouping && groupedDigitCount == 1) {
+                        break;
+                    }
                 }
                 afterFirstGrouping = true;
-                backupOffset = -1;
                 groupedDigitCount = 0;
             }
 
@@ -264,6 +272,30 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
     if (requireGroupingMatch && !seenDecimal && seenGrouping && afterFirstGrouping &&
         groupedDigitCount != grouping1) {
         strictFail = true;
+    }
+
+    // #11230: don't accept groups after the first with only 1 digit.
+    // Behavior in this case is to back up before that 1-digit group.
+    if (!seenDecimal && afterFirstGrouping && groupedDigitCount == 1) {
+        if (segment.length() == 0) {
+            // Strings like "9,999" where we looked at only the first 3 chars.
+            // Ask for a longer segment.
+            hasPartialPrefix = true;
+        }
+        segment.setOffset(smallGroupBackupOffset);
+        result.setCharsConsumed(segment);
+        if (smallGroupBackupOffset == initialOffset) {
+            // Strings like ",9"
+            // Reset to no quantity seen.
+            result.quantity.clear();
+            result.quantity.bogus = true;
+        } else {
+            // Strings like "9,9"
+            // Remove the lone digit from the result quantity.
+            U_ASSERT(!result.quantity.bogus);
+            result.quantity.adjustMagnitude(-1);
+            result.quantity.truncate();
+        }
     }
 
     if (requireGroupingMatch && strictFail) {
