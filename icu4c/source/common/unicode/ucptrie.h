@@ -31,10 +31,9 @@ U_CDECL_BEGIN
  *
  * Do not access UCPTrie fields directly; use public functions and macros.
  * TODO: discuss why lots of macros vs. C++, what happens if wrong one used
- * - necessary for the type*bits combinations and avoiding checks & dispatches.
- * - The macros will crash if used on the wrong valueBits because they will use a nullptr.
- * - Using a fast macro on a small trie will fail more subtly --
- *   but at least you will almost always get a bogus value.
+ * - necessary for the type*width combinations unless we use a width parameter
+ * - necessary for avoiding checks & dispatches.
+ * - The macros will return bogus values, or may crash, if used on the wrong type or value width.
  * - use assert.h ??
  *
  * @see UMutableCPTrie
@@ -311,7 +310,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @return (uint16_t) The code point's trie value.
  * @draft ICU 63
  */
-#define UCPTRIE_FAST_GET16(trie, c) (trie)->data16[_UCPTRIE_CP_INDEX(trie, 0xffff, c)]
+#define UCPTRIE_FAST_GET16(trie, c) (trie)->data.ptr16[_UCPTRIE_CP_INDEX(trie, 0xffff, c)]
 
 /**
  * Returns a 32-bit trie value for a code point, with range checking.
@@ -322,8 +321,8 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @return (uint32_t) The code point's trie value.
  * @draft ICU 63
  */
-#define UCPTRIE_FAST_GET32(trie, c) (trie)->data32[_UCPTRIE_CP_INDEX(trie, 0xffff, c)]
-#define UCPTRIE_FAST_GET8(trie, c) (trie)->data8[_UCPTRIE_CP_INDEX(trie, 0xffff, c)]
+#define UCPTRIE_FAST_GET32(trie, c) (trie)->data.ptr32[_UCPTRIE_CP_INDEX(trie, 0xffff, c)]
+#define UCPTRIE_FAST_GET8(trie, c) (trie)->data.ptr8[_UCPTRIE_CP_INDEX(trie, 0xffff, c)]
 
 /**
  * Returns a 16-bit trie value for a code point, with range checking.
@@ -334,9 +333,9 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @return (uint16_t) The code point's trie value.
  * @draft ICU 63
  */
-#define UCPTRIE_SMALL_GET16(trie, c) (trie)->data16[_UCPTRIE_CP_INDEX(trie, UCPTRIE_SMALL_MAX, c)]
-#define UCPTRIE_SMALL_GET32(trie, c) (trie)->data32[_UCPTRIE_CP_INDEX(trie, UCPTRIE_SMALL_MAX, c)]
-#define UCPTRIE_SMALL_GET8(trie, c) (trie)->data8[_UCPTRIE_CP_INDEX(trie, UCPTRIE_SMALL_MAX, c)]
+#define UCPTRIE_SMALL_GET16(trie, c) (trie)->data.ptr16[_UCPTRIE_CP_INDEX(trie, UCPTRIE_SMALL_MAX, c)]
+#define UCPTRIE_SMALL_GET32(trie, c) (trie)->data.ptr32[_UCPTRIE_CP_INDEX(trie, UCPTRIE_SMALL_MAX, c)]
+#define UCPTRIE_SMALL_GET8(trie, c) (trie)->data.ptr8[_UCPTRIE_CP_INDEX(trie, UCPTRIE_SMALL_MAX, c)]
 
 /**
  * UTF-16: Reads the next code point (UChar32 c, out), post-increments src,
@@ -351,7 +350,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @draft ICU 63
  */
 #define UCPTRIE_FAST_U16_NEXT16(trie, src, limit, c, result) \
-    _UCPTRIE_FAST_U16_NEXT(trie, data16, src, limit, c, result)
+    _UCPTRIE_FAST_U16_NEXT(trie, data.ptr16, src, limit, c, result)
 
 /**
  * UTF-16: Reads the next code point (UChar32 c, out), post-increments src,
@@ -366,9 +365,9 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @draft ICU 63
  */
 #define UCPTRIE_FAST_U16_NEXT32(trie, src, limit, c, result) \
-    _UCPTRIE_FAST_U16_NEXT(trie, data32, src, limit, c, result)
+    _UCPTRIE_FAST_U16_NEXT(trie, data.ptr32, src, limit, c, result)
 #define UCPTRIE_FAST_U16_NEXT8(trie, src, limit, c, result) \
-    _UCPTRIE_FAST_U16_NEXT(trie, data8, src, limit, c, result)
+    _UCPTRIE_FAST_U16_NEXT(trie, data.ptr8, src, limit, c, result)
 
 /**
  * UTF-16: Reads the previous code point (UChar32 c, out), pre-decrements src,
@@ -383,7 +382,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @draft ICU 63
  */
 #define UCPTRIE_FAST_U16_PREV16(trie, start, src, c, result) \
-    _UCPTRIE_FAST_U16_PREV(trie, data16, start, src, c, result)
+    _UCPTRIE_FAST_U16_PREV(trie, data.ptr16, start, src, c, result)
 
 /**
  * UTF-16: Reads the previous code point (UChar32 c, out), pre-decrements src,
@@ -398,9 +397,9 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @draft ICU 63
  */
 #define UCPTRIE_FAST_U16_PREV32(trie, start, src, c, result) \
-    _UCPTRIE_FAST_U16_PREV(trie, data32, start, src, c, result)
+    _UCPTRIE_FAST_U16_PREV(trie, data.ptr32, start, src, c, result)
 #define UCPTRIE_FAST_U16_PREV8(trie, start, src, c, result) \
-    _UCPTRIE_FAST_U16_PREV(trie, data8, start, src, c, result)
+    _UCPTRIE_FAST_U16_PREV(trie, data.ptr8, start, src, c, result)
 
 /**
  * UTF-8: Post-increments src and gets a 16-bit value from the trie.
@@ -413,7 +412,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @draft ICU 63
  */
 #define UCPTRIE_FAST_U8_NEXT16(trie, src, limit, result) \
-    _UCPTRIE_FAST_U8_NEXT(trie, data16, src, limit, result)
+    _UCPTRIE_FAST_U8_NEXT(trie, data.ptr16, src, limit, result)
 
 /**
  * UTF-8: Post-increments src and gets a 32-bit value from the trie.
@@ -426,9 +425,9 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @draft ICU 63
  */
 #define UCPTRIE_FAST_U8_NEXT32(trie, src, limit, result) \
-    _UCPTRIE_FAST_U8_NEXT(trie, data32, src, limit, result)
+    _UCPTRIE_FAST_U8_NEXT(trie, data.ptr32, src, limit, result)
 #define UCPTRIE_FAST_U8_NEXT8(trie, src, limit, result) \
-    _UCPTRIE_FAST_U8_NEXT(trie, data8, src, limit, result)
+    _UCPTRIE_FAST_U8_NEXT(trie, data.ptr8, src, limit, result)
 
 /**
  * UTF-8: Pre-decrements src and gets a 16-bit value from the trie.
@@ -441,7 +440,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @draft ICU 63
  */
 #define UCPTRIE_FAST_U8_PREV16(trie, start, src, result) \
-    _UCPTRIE_FAST_U8_PREV(trie, data16, start, src, result)
+    _UCPTRIE_FAST_U8_PREV(trie, data.ptr16, start, src, result)
 
 /**
  * UTF-8: Pre-decrements src and gets a 32-bit value from the trie.
@@ -454,9 +453,9 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @draft ICU 63
  */
 #define UCPTRIE_FAST_U8_PREV32(trie, start, src, result) \
-    _UCPTRIE_FAST_U8_PREV(trie, data32, start, src, result)
+    _UCPTRIE_FAST_U8_PREV(trie, data.ptr32, start, src, result)
 #define UCPTRIE_FAST_U8_PREV8(trie, start, src, result) \
-    _UCPTRIE_FAST_U8_PREV(trie, data8, start, src, result)
+    _UCPTRIE_FAST_U8_PREV(trie, data.ptr8, start, src, result)
 
 /**
  * Returns a 16-bit trie value for an ASCII code point, without range checking.
@@ -466,9 +465,9 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @return (uint16_t) The code point's trie value.
  * @draft ICU 63
  */
-#define UCPTRIE_ASCII_GET16(trie, c) ((trie)->data16[c])
-#define UCPTRIE_ASCII_GET32(trie, c) ((trie)->data32[c])
-#define UCPTRIE_ASCII_GET8(trie, c) ((trie)->data8[c])
+#define UCPTRIE_ASCII_GET16(trie, c) ((trie)->data.ptr16[c])
+#define UCPTRIE_ASCII_GET32(trie, c) ((trie)->data.ptr32[c])
+#define UCPTRIE_ASCII_GET8(trie, c) ((trie)->data.ptr8[c])
 
 /**
  * Returns a 16-bit trie value for a BMP code point or UTF-16 code unit (U+0000..U+FFFF),
@@ -479,7 +478,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @return (uint16_t) The code unit's trie value.
  * @draft ICU 63
  */
-#define UCPTRIE_FAST_BMP_GET16(trie, c) ((trie)->data16[_UCPTRIE_FAST_INDEX(trie, c)])
+#define UCPTRIE_FAST_BMP_GET16(trie, c) ((trie)->data.ptr16[_UCPTRIE_FAST_INDEX(trie, c)])
 
 /**
  * Returns a 32-bit trie value for a BMP code point or UTF-16 code unit (U+0000..U+FFFF),
@@ -490,8 +489,8 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @return (uint32_t) The code unit's trie value.
  * @draft ICU 63
  */
-#define UCPTRIE_FAST_BMP_GET32(trie, c) ((trie)->data32[_UCPTRIE_FAST_INDEX(trie, c)])
-#define UCPTRIE_FAST_BMP_GET8(trie, c) ((trie)->data8[_UCPTRIE_FAST_INDEX(trie, c)])
+#define UCPTRIE_FAST_BMP_GET32(trie, c) ((trie)->data.ptr32[_UCPTRIE_FAST_INDEX(trie, c)])
+#define UCPTRIE_FAST_BMP_GET8(trie, c) ((trie)->data.ptr8[_UCPTRIE_FAST_INDEX(trie, c)])
 
 /**
  * Returns a 16-bit trie value for a supplementary code point (U+10000..U+10FFFF),
@@ -502,7 +501,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @return (uint16_t) The code point's trie value.
  * @draft ICU 63
  */
-#define UCPTRIE_FAST_SUPP_GET16(trie, c) ((trie)->data16[_UCPTRIE_SMALL_INDEX(trie, c)])
+#define UCPTRIE_FAST_SUPP_GET16(trie, c) ((trie)->data.ptr16[_UCPTRIE_SMALL_INDEX(trie, c)])
 
 /**
  * Returns a 32-bit trie value for a supplementary code point (U+10000..U+10FFFF),
@@ -513,10 +512,22 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @return (uint32_t) The code point's trie value.
  * @draft ICU 63
  */
-#define UCPTRIE_FAST_SUPP_GET32(trie, c) ((trie)->data32[_UCPTRIE_SMALL_INDEX(trie, c)])
-#define UCPTRIE_FAST_SUPP_GET8(trie, c) ((trie)->data8[_UCPTRIE_SMALL_INDEX(trie, c)])
+#define UCPTRIE_FAST_SUPP_GET32(trie, c) ((trie)->data.ptr32[_UCPTRIE_SMALL_INDEX(trie, c)])
+#define UCPTRIE_FAST_SUPP_GET8(trie, c) ((trie)->data.ptr8[_UCPTRIE_SMALL_INDEX(trie, c)])
 
 /* Internal definitions ----------------------------------------------------- */
+
+/** @internal */
+typedef union UCPTrieData {
+    /** @internal */
+    const void *ptr0;
+    /** @internal */
+    const uint16_t *ptr16;
+    /** @internal */
+    const uint32_t *ptr32;
+    /** @internal */
+    const uint8_t *ptr8;
+} UCPTrieData;
 
 /**
  * Internal trie structure definition.
@@ -527,11 +538,7 @@ struct UCPTrie {
     /** @internal */
     const uint16_t *index;
     /** @internal */
-    const uint16_t *data16;
-    /** @internal */
-    const uint32_t *data32;
-    /** @internal */
-    const uint8_t *data8;
+    UCPTrieData data;
 
     /** @internal */
     int32_t indexLength, dataLength;
@@ -540,9 +547,15 @@ struct UCPTrie {
     /** highStart>>12 @internal */
     uint16_t shifted12HighStart;
 
-    // TODO: UCPTrieValueWidth valueWidth, and return from getter?
     /** @internal */
-    UCPTrieType type;
+    int8_t type;  // UCPTrieType
+    /** @internal */
+    int8_t valueWidth;  // UCPTrieValueWidth
+
+    /** padding/reserved @internal */
+    uint32_t reserved32;
+    /** padding/reserved @internal */
+    uint16_t reserved16;
 
     /**
      * Internal index-3 null block offset.

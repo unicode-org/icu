@@ -280,11 +280,11 @@ testTrieGetters(const char *testName, const UCPTrie *trie,
 
         while(start<limit && start<=0x7f) {
             if(valueWidth==UCPTRIE_VALUE_BITS_16) {
-                value2=trie->data16[start];
+                value2=trie->data.ptr16[start];
             } else if(valueWidth==UCPTRIE_VALUE_BITS_32) {
-                value2=trie->data32[start];
+                value2=trie->data.ptr32[start];
             } else {
-                value2=trie->data8[start];
+                value2=trie->data.ptr8[start];
             }
             if(value!=value2) {
                 log_err("error: %s(%s).asciiData[U+%04lx]==0x%lx instead of 0x%lx\n",
@@ -810,10 +810,7 @@ testTrieSerialize(const char *testName, UMutableCPTrie *mutableTrie,
             log_err("error: ucptrie_openFromBinary(%s) failed, %s\n", testName, u_errorName(errorCode));
             break;
         }
-        UCPTrieValueWidth fromBinaryValueWidth =
-                trie->data16 != NULL ? UCPTRIE_VALUE_BITS_16 :
-                trie->data32 != NULL ? UCPTRIE_VALUE_BITS_32 : UCPTRIE_VALUE_BITS_8;
-        if(valueWidth != fromBinaryValueWidth) {
+        if(valueWidth != trie->valueWidth) {
             log_err("error: trie serialization (%s) did not preserve data value width\n", testName);
             break;
         }

@@ -22,7 +22,7 @@
  * uint16_t data[header.shiftedDataLength<<2];  -- or uint32_t data[...]
  * @internal
  */
-typedef struct UCPTrieHeader {
+struct UCPTrieHeader {
     /** "Tri3" in big-endian US-ASCII (0x54726933) */
     uint32_t signature;
 
@@ -53,7 +53,7 @@ typedef struct UCPTrieHeader {
      * rounded up and then shifted right by UCPTRIE_SHIFT_2.
      */
     uint16_t shiftedHighStart;
-} UCPTrieHeader;
+};
 
 /**
  * Constants for use with UCPTrieHeader.options.

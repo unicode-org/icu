@@ -168,15 +168,23 @@ MutableCodePointTrie *MutableCodePointTrie::fromUCPTrie(const UCPTrie *trie, UEr
     // Use the highValue as the initialValue to reduce the highStart.
     uint32_t errorValue;
     uint32_t initialValue;
-    if (trie->data16 != nullptr) {
-        errorValue = trie->data16[trie->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET];
-        initialValue = trie->data16[trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET];
-    } else if (trie->data32 != nullptr) {
-        errorValue = trie->data32[trie->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET];
-        initialValue = trie->data32[trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET];
-    } else {
-        errorValue = trie->data8[trie->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET];
-        initialValue = trie->data8[trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET];
+    switch (trie->valueWidth) {
+    case UCPTRIE_VALUE_BITS_16:
+        errorValue = trie->data.ptr16[trie->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET];
+        initialValue = trie->data.ptr16[trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET];
+        break;
+    case UCPTRIE_VALUE_BITS_32:
+        errorValue = trie->data.ptr32[trie->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET];
+        initialValue = trie->data.ptr32[trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET];
+        break;
+    case UCPTRIE_VALUE_BITS_8:
+        errorValue = trie->data.ptr8[trie->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET];
+        initialValue = trie->data.ptr8[trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET];
+        break;
+    default:
+        // Unreachable if the trie is properly initialized.
+        errorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
     }
     MutableCodePointTrie *mutableTrie = new MutableCodePointTrie(initialValue, errorValue, errorCode);
     if (U_FAILURE(errorCode)) {
@@ -1418,6 +1426,7 @@ UCPTrie *MutableCodePointTrie::build(UCPTrieType type, UCPTrieValueWidth valueWi
     // Runtime code needs to then test for the real highStart as well.
     trie->shifted12HighStart = (highStart + 0xfff) >> 12;
     trie->type = type;
+    trie->valueWidth = valueWidth;
 
     trie->index3NullOffset = index3NullOffset;
     trie->dataNullOffset = dataNullOffset;
@@ -1445,25 +1454,19 @@ UCPTrie *MutableCodePointTrie::build(UCPTrieType type, UCPTrieValueWidth valueWi
     switch (valueWidth) {
     case UCPTRIE_VALUE_BITS_16:
         // Write 16-bit data values.
-        trie->data16 = dest16;
-        trie->data32 = nullptr;
-        trie->data8 = nullptr;
+        trie->data.ptr16 = dest16;
         for (int32_t i = dataLength; i > 0; --i) {
             *dest16++ = (uint16_t)*p++;
         }
         break;
     case UCPTRIE_VALUE_BITS_32:
         // Write 32-bit data values.
-        trie->data16 = nullptr;
-        trie->data32 = (uint32_t *)bytes;
-        trie->data8 = nullptr;
+        trie->data.ptr32 = (uint32_t *)bytes;
         uprv_memcpy(bytes, p, (size_t)dataLength * 4);
         break;
     case UCPTRIE_VALUE_BITS_8:
         // Write 8-bit data values.
-        trie->data16 = nullptr;
-        trie->data32 = nullptr;
-        trie->data8 = bytes;
+        trie->data.ptr8 = bytes;
         for (int32_t i = dataLength; i > 0; --i) {
             *bytes++ = (uint8_t)*p++;
         }

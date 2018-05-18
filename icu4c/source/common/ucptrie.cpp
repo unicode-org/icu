@@ -18,8 +18,6 @@
 #include "uassert.h"
 #include "ucptrie_impl.h"
 
-/* Public UCPTrie API implementation ----------------------------------------- */
-
 U_CAPI UCPTrie * U_EXPORT2
 ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueWidth valueWidth,
                        const void *data, int32_t length, int32_t *pActualLength,
@@ -76,6 +74,7 @@ ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueWidth valueWidth,
     tempTrie.highStart = header->shiftedHighStart << UCPTRIE_SHIFT_2;
     tempTrie.shifted12HighStart = (tempTrie.highStart + 0xfff) >> 12;
     tempTrie.type = type;
+    tempTrie.valueWidth = valueWidth;
 
     // Calculate the actual length.
     int32_t actualLength = (int32_t)sizeof(UCPTrieHeader) + tempTrie.indexLength * 2;
@@ -112,22 +111,16 @@ ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueWidth valueWidth,
     }
     switch (valueWidth) {
     case UCPTRIE_VALUE_BITS_16:
-        trie->data16 = p16;
-        trie->data32 = nullptr;
-        trie->data8 = nullptr;
-        trie->nullValue = trie->data16[nullValueOffset];
+        trie->data.ptr16 = p16;
+        trie->nullValue = trie->data.ptr16[nullValueOffset];
         break;
     case UCPTRIE_VALUE_BITS_32:
-        trie->data16 = nullptr;
-        trie->data32 = (const uint32_t *)p16;
-        trie->data8 = nullptr;
-        trie->nullValue = trie->data32[nullValueOffset];
+        trie->data.ptr32 = (const uint32_t *)p16;
+        trie->nullValue = trie->data.ptr32[nullValueOffset];
         break;
     case UCPTRIE_VALUE_BITS_8:
-        trie->data16 = nullptr;
-        trie->data32 = nullptr;
-        trie->data8 = (const uint8_t *)p16;
-        trie->nullValue = trie->data8[nullValueOffset];
+        trie->data.ptr8 = (const uint8_t *)p16;
+        trie->nullValue = trie->data.ptr8[nullValueOffset];
         break;
     default:
         *pErrorCode = U_INVALID_FORMAT_ERROR;
@@ -147,18 +140,12 @@ ucptrie_close(UCPTrie *trie) {
 
 U_CAPI UCPTrieType U_EXPORT2
 ucptrie_getType(const UCPTrie *trie) {
-    return trie->type;
+    return (UCPTrieType)trie->type;
 }
 
 U_CAPI UCPTrieValueWidth U_EXPORT2
 ucptrie_getValueWidth(const UCPTrie *trie) {
-    if (trie->data16 != nullptr) {
-        return UCPTRIE_VALUE_BITS_16;
-    } else if (trie->data32 != nullptr) {
-        return UCPTRIE_VALUE_BITS_32;
-    } else {
-        return UCPTRIE_VALUE_BITS_8;
-    }
+    return (UCPTrieValueWidth)trie->valueWidth;
 }
 
 U_CAPI int32_t U_EXPORT2
@@ -214,6 +201,24 @@ ucptrie_internalU8PrevIndex(const UCPTrie *trie, UChar32 c,
     return (idx << 3) | i;
 }
 
+namespace {
+
+inline uint32_t getValue(UCPTrieData data, UCPTrieValueWidth valueWidth, int32_t dataIndex) {
+    switch (valueWidth) {
+    case UCPTRIE_VALUE_BITS_16:
+        return data.ptr16[dataIndex];
+    case UCPTRIE_VALUE_BITS_32:
+        return data.ptr32[dataIndex];
+    case UCPTRIE_VALUE_BITS_8:
+        return data.ptr8[dataIndex];
+    default:
+        // Unreachable if the trie is properly initialized.
+        return 0xffffffff;
+    }
+}
+
+}  // namespace
+
 U_CAPI uint32_t U_EXPORT2
 ucptrie_get(const UCPTrie *trie, UChar32 c) {
     int32_t dataIndex;
@@ -224,13 +229,7 @@ ucptrie_get(const UCPTrie *trie, UChar32 c) {
         UChar32 fastMax = trie->type == UCPTRIE_TYPE_FAST ? 0xffff : UCPTRIE_SMALL_MAX;
         dataIndex = _UCPTRIE_CP_INDEX(trie, fastMax, c);
     }
-    if (trie->data16 != nullptr) {
-        return trie->data16[dataIndex];
-    } else if (trie->data32 != nullptr) {
-        return trie->data32[dataIndex];
-    } else {
-        return trie->data8[dataIndex];
-    }
+    return getValue(trie->data, (UCPTrieValueWidth)trie->valueWidth, dataIndex);
 }
 
 namespace {
@@ -249,11 +248,6 @@ inline uint32_t maybeHandleValue(uint32_t value, uint32_t trieNullValue, uint32_
     return value;
 }
 
-inline uint32_t getValue(const uint16_t *data16, const uint32_t *data32, const uint8_t *data8,
-                         int32_t di) {
-    return data16 != nullptr ? data16[di] : data32 != nullptr ? data32[di] : data8[di];
-}
-
 }  // namespace
 
 U_CAPI UChar32 U_EXPORT2
@@ -262,13 +256,11 @@ ucptrie_getRange(const UCPTrie *trie, UChar32 start,
     if ((uint32_t)start > MAX_UNICODE) {
         return U_SENTINEL;
     }
-    const uint16_t *data16 = trie->data16;
-    const uint32_t *data32 = trie->data32;
-    const uint8_t *data8 = trie->data8;
+    UCPTrieValueWidth valueWidth = (UCPTrieValueWidth)trie->valueWidth;
     if (start >= trie->highStart) {
         if (pValue != nullptr) {
             int32_t di = trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET;
-            uint32_t value = getValue(data16, data32, data8, di);
+            uint32_t value = getValue(trie->data, valueWidth, di);
             if (handleValue != nullptr) { value = handleValue(context, value); }
             *pValue = value;
         }
@@ -365,7 +357,7 @@ ucptrie_getRange(const UCPTrie *trie, UChar32 start,
                     c = (c + dataBlockLength) & ~dataMask;
                 } else {
                     int32_t di = block + (c & dataMask);
-                    uint32_t value2 = getValue(data16, data32, data8, di);
+                    uint32_t value2 = getValue(trie->data, valueWidth, di);
                     value2 = maybeHandleValue(value2, trie->nullValue, nullValue,
                                               handleValue, context);
                     if (haveValue) {
@@ -378,7 +370,7 @@ ucptrie_getRange(const UCPTrie *trie, UChar32 start,
                         haveValue = true;
                     }
                     while ((++c & dataMask) != 0) {
-                        if (maybeHandleValue(getValue(data16, data32, data8, ++di),
+                        if (maybeHandleValue(getValue(trie->data, valueWidth, ++di),
                                              trie->nullValue, nullValue,
                                              handleValue, context) != value) {
                             return c - 1;
@@ -390,7 +382,7 @@ ucptrie_getRange(const UCPTrie *trie, UChar32 start,
     } while (c < trie->highStart);
     U_ASSERT(haveValue);
     int32_t di = trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET;
-    uint32_t highValue = getValue(data16, data32, data8, di);
+    uint32_t highValue = getValue(trie->data, valueWidth, di);
     if (maybeHandleValue(highValue, trie->nullValue, nullValue,
                          handleValue, context) != value) {
         return c - 1;
@@ -448,22 +440,30 @@ ucptrie_toBinary(const UCPTrie *trie,
         return 0;
     }
 
-    if (capacity < 0 || (capacity > 0 && (data == nullptr || (U_POINTER_MASK_LSB(data, 3) != 0)))) {
+    UCPTrieType type = (UCPTrieType)trie->type;
+    UCPTrieValueWidth valueWidth = (UCPTrieValueWidth)trie->valueWidth;
+    if (type < UCPTRIE_TYPE_FAST || UCPTRIE_TYPE_SMALL < type ||
+            valueWidth < UCPTRIE_VALUE_BITS_16 || UCPTRIE_VALUE_BITS_8 < valueWidth ||
+            capacity < 0 ||
+            (capacity > 0 && (data == nullptr || (U_POINTER_MASK_LSB(data, 3) != 0)))) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
 
-    UCPTrieValueWidth valueWidth;
     int32_t length = (int32_t)sizeof(UCPTrieHeader) + trie->indexLength * 2;
-    if (trie->data16 != nullptr) {
-        valueWidth = UCPTRIE_VALUE_BITS_16;
+    switch (valueWidth) {
+    case UCPTRIE_VALUE_BITS_16:
         length += trie->dataLength * 2;
-    } else if (trie->data32 != nullptr) {
-        valueWidth = UCPTRIE_VALUE_BITS_32;
+        break;
+    case UCPTRIE_VALUE_BITS_32:
         length += trie->dataLength * 4;
-    } else {
-        valueWidth = UCPTRIE_VALUE_BITS_8;
+        break;
+    case UCPTRIE_VALUE_BITS_8:
         length += trie->dataLength;
+        break;
+    default:
+        // unreachable
+        break;
     }
     if (capacity < length) {
         *pErrorCode = U_BUFFER_OVERFLOW_ERROR;
@@ -488,12 +488,19 @@ ucptrie_toBinary(const UCPTrie *trie,
     uprv_memcpy(bytes, trie->index, trie->indexLength * 2);
     bytes += trie->indexLength * 2;
 
-    if (trie->data16 != nullptr) {
-        uprv_memcpy(bytes, trie->data16, trie->dataLength * 2);
-    } else if (trie->data32 != nullptr) {
-        uprv_memcpy(bytes, trie->data32, trie->dataLength * 4);
-    } else {
-        uprv_memcpy(bytes, trie->data8, trie->dataLength);
+    switch (valueWidth) {
+    case UCPTRIE_VALUE_BITS_16:
+        uprv_memcpy(bytes, trie->data.ptr16, trie->dataLength * 2);
+        break;
+    case UCPTRIE_VALUE_BITS_32:
+        uprv_memcpy(bytes, trie->data.ptr32, trie->dataLength * 4);
+        break;
+    case UCPTRIE_VALUE_BITS_8:
+        uprv_memcpy(bytes, trie->data.ptr8, trie->dataLength);
+        break;
+    default:
+        // unreachable
+        break;
     }
     return length;
 }
@@ -541,18 +548,25 @@ long countNull(const UCPTrie *trie) {
     uint32_t nullValue=trie->nullValue;
     int32_t length=trie->dataLength;
     long count=0;
-    if(trie->data16!=nullptr) {
+    switch (trie->valueWidth) {
+    case UCPTRIE_VALUE_BITS_16:
         for(int32_t i=0; i<length; ++i) {
-            if(trie->data16[i]==nullValue) { ++count; }
+            if(trie->data.ptr16[i]==nullValue) { ++count; }
         }
-    } else if(trie->data32!=nullptr) {
+        break;
+    case UCPTRIE_VALUE_BITS_32:
         for(int32_t i=0; i<length; ++i) {
-            if(trie->data32[i]==nullValue) { ++count; }
+            if(trie->data.ptr32[i]==nullValue) { ++count; }
         }
-    } else {
+        break;
+    case UCPTRIE_VALUE_BITS_8:
         for(int32_t i=0; i<length; ++i) {
-            if(trie->data8[i]==nullValue) { ++count; }
+            if(trie->data.ptr8[i]==nullValue) { ++count; }
         }
+        break;
+    default:
+        // unreachable
+        break;
     }
     return count;
 }
@@ -562,7 +576,8 @@ ucptrie_printLengths(const UCPTrie *trie, const char *which) {
     long indexLength=trie->indexLength;
     long dataLength=(long)trie->dataLength;
     long totalLength=(long)sizeof(UCPTrieHeader)+indexLength*2+
-            dataLength*(trie->data16!=nullptr ? 2 : trie->data32!=nullptr ? 4 : 1);
+            dataLength*(trie->valueWidth==UCPTRIE_VALUE_BITS_16 ? 2 :
+                        trie->valueWidth==UCPTRIE_VALUE_BITS_32 ? 4 : 1);
     printf("**UCPTrieLengths(%s %s)** index:%6ld  data:%6ld  countNull:%6ld  serialized:%6ld\n",
            which, trie->name, indexLength, dataLength, countNull(trie), totalLength);
 }
