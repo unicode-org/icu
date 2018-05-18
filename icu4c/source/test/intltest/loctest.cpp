@@ -14,14 +14,15 @@
 #include "unicode/dtfmtsym.h"
 #include "unicode/brkiter.h"
 #include "unicode/coll.h"
+#include "unicode/ustring.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include <stdio.h>
 #include <string.h>
 #include "putilimp.h"
-#include "unicode/ustring.h"
 #include "hash.h"
+#include "locmap.h"
 
 static const char* const rawData[33][8] = {
 
@@ -231,6 +232,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestGetVariantWithKeywords);
     TESTCASE_AUTO(TestIsRightToLeft);
     TESTCASE_AUTO(TestBug13277);
+    TESTCASE_AUTO(TestBug13554);
     TESTCASE_AUTO_END;
 }
 
@@ -2731,4 +2733,19 @@ void LocaleTest::TestBug13277() {
         Locale loc(name.data(), nullptr, nullptr, nullptr);
     }
 }
+
+// TestBug13554 Check for read past end of array in getPosixID().
+//              The bug shows as an Address Sanitizer failure.
+
+void LocaleTest::TestBug13554() {
+    UErrorCode status = U_ZERO_ERROR;
+    const int BUFFER_SIZE = 100;
+    char  posixID[BUFFER_SIZE];
+
+    for (uint32_t hostid = 0; hostid < 0x500; ++hostid) {
+        status = U_ZERO_ERROR;
+        uprv_convertToPosix(hostid, posixID, BUFFER_SIZE, &status);
+    }
+}
+
 
