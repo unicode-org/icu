@@ -2846,6 +2846,7 @@ public class NumberFormatTest extends TestFmwk {
 
     @Test
     public void TestStrictParse() {
+        // Pass both strict and lenient:
         String[] pass = {
                 "0",           // single zero before end of text is not leading
                 "0 ",          // single zero at end of number is not leading
@@ -2869,10 +2870,9 @@ public class NumberFormatTest extends TestFmwk {
                 "-999,999",    // see ticket #6863
                 "-9,999,999",  // see ticket #6863
         };
+        // Pass lenient, fail strict:
         String[] fail = {
                 "1,2",       // wrong number of digits after group separator
-                ",0",        // leading group separator before zero
-                ",1",        // leading group separator before digit
                 ",.02",      // leading group separator before decimal
                 "1,.02",     // group separator before decimal
                 "1,45",      // wrong number of digits in primary group
@@ -2882,9 +2882,14 @@ public class NumberFormatTest extends TestFmwk {
                 "12,34,567", // wrong number of digits in secondary group
                 "1,23,456,7890", // wrong number of digits in primary and secondary groups
         };
+        // Fail both lenient and strict:
+        String[] failBoth = {
+                ",0",        // leading group separator before a single digit
+                ",1",        // leading group separator before a single digit
+        };
 
         DecimalFormat nf = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
-        runStrictParseBatch(nf, pass, fail);
+        runStrictParseBatch(nf, pass, fail, failBoth);
 
         String[] scientificPass = {
                 "0E2",      // single zero before exponent is ok
@@ -2894,9 +2899,11 @@ public class NumberFormatTest extends TestFmwk {
         };
         String[] scientificFail = {
         };
+        String[] scientificFailBoth = {
+        };
 
         nf = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);
-        runStrictParseBatch(nf, scientificPass, scientificFail);
+        runStrictParseBatch(nf, scientificPass, scientificFail, scientificFailBoth);
 
         String[] mixedPass = {
                 "12,34,567",
@@ -2910,18 +2917,22 @@ public class NumberFormatTest extends TestFmwk {
                 "12,34,56, that ",
                 "12,34,56 that",
         };
+        String[] mixedFailBoth = {
+        };
 
         nf = new DecimalFormat("#,##,##0.#");
-        runStrictParseBatch(nf, mixedPass, mixedFail);
+        runStrictParseBatch(nf, mixedPass, mixedFail, mixedFailBoth);
     }
 
-    void runStrictParseBatch(DecimalFormat nf, String[] pass, String[] fail) {
+    void runStrictParseBatch(DecimalFormat nf, String[] pass, String[] fail, String[] failBoth) {
         nf.setParseStrict(false);
         runStrictParseTests("should pass", nf, pass, true);
         runStrictParseTests("should also pass", nf, fail, true);
+        runStrictParseTests("should fail", nf, failBoth, false);
         nf.setParseStrict(true);
         runStrictParseTests("should still pass", nf, pass, true);
         runStrictParseTests("should fail", nf, fail, false);
+        runStrictParseTests("should still fail", nf, failBoth, false);
     }
 
     void runStrictParseTests(String msg, DecimalFormat nf, String[] tests, boolean pass) {

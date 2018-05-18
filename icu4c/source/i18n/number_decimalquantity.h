@@ -81,6 +81,9 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     void roundToIncrement(double roundingIncrement, RoundingMode roundingMode,
                           int32_t maxFrac, UErrorCode& status);
 
+    /** Removes all fraction digits. */
+    void truncate();
+
     /**
      * Rounds the number to a specified magnitude (power of ten).
      *

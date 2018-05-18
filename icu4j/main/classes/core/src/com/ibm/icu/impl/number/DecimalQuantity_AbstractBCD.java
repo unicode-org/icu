@@ -732,6 +732,15 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     private static final int SECTION_LOWER_EDGE = -1;
     private static final int SECTION_UPPER_EDGE = -2;
 
+    /** Removes all fraction digits. */
+    public void truncate() {
+        if (scale < 0) {
+            shiftRight(-scale);
+            scale = 0;
+            compact();
+        }
+    }
+
     @Override
     public void roundToMagnitude(int magnitude, MathContext mathContext) {
         // The position in the BCD at which rounding will be performed; digits to the right of position
@@ -1042,7 +1051,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      * is the caller's responsibility to follow-up with a call to {@link #compact}.
      *
      * @param numDigits
-     *            The number of zeros to add.
+     *            The number of digits to remove.
      */
     protected abstract void shiftRight(int numDigits);
 
