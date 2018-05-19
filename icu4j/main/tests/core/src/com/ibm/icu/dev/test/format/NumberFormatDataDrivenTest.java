@@ -77,7 +77,7 @@ public class NumberFormatDataDrivenTest {
             try {
                 actualDecimal = new BigDecimal(actual.toString());
             } catch (NumberFormatException e) {
-                throw new AssertionError("Could not convert to BigDecimal: " + actual.toString(), e);
+                throw new AssertionError("Could not convert to BigDecimal: " + actual.toString() + " - " + e.getMessage());
             }
             if (expectedDecimal.compareTo(actualDecimal) != 0) {
                 return "Expected: " + expected + ", got: " + actual;
