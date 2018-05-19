@@ -1518,7 +1518,7 @@ private:
     /**
      * Lazy TimeZoneFormat instantiation, semantically const
      */
-    TimeZoneFormat *tzFormat() const;
+    TimeZoneFormat *tzFormat(UErrorCode &status) const;
 
     const NumberFormat* getNumberFormatByIndex(UDateFormatField index) const;
 
