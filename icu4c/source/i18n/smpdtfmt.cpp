@@ -1695,100 +1695,101 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             UnicodeString zoneString(zsbuf, 0, UPRV_LENGTHOF(zsbuf));
             const TimeZone& tz = cal.getTimeZone();
             UDate date = cal.getTime(status);
+            const TimeZoneFormat *tzfmt = tzFormat(status);
             if (U_SUCCESS(status)) {
                 if (patternCharIndex == UDAT_TIMEZONE_FIELD) {
                     if (count < 4) {
                         // "z", "zz", "zzz"
-                        tzFormat()->format(UTZFMT_STYLE_SPECIFIC_SHORT, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_SPECIFIC_SHORT, tz, date, zoneString);
                         capContextUsageType = DateFormatSymbols::kCapContextUsageMetazoneShort;
                     } else {
                         // "zzzz" or longer
-                        tzFormat()->format(UTZFMT_STYLE_SPECIFIC_LONG, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_SPECIFIC_LONG, tz, date, zoneString);
                         capContextUsageType = DateFormatSymbols::kCapContextUsageMetazoneLong;
                     }
                 }
                 else if (patternCharIndex == UDAT_TIMEZONE_RFC_FIELD) {
                     if (count < 4) {
                         // "Z"
-                        tzFormat()->format(UTZFMT_STYLE_ISO_BASIC_LOCAL_FULL, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ISO_BASIC_LOCAL_FULL, tz, date, zoneString);
                     } else if (count == 5) {
                         // "ZZZZZ"
-                        tzFormat()->format(UTZFMT_STYLE_ISO_EXTENDED_FULL, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ISO_EXTENDED_FULL, tz, date, zoneString);
                     } else {
                         // "ZZ", "ZZZ", "ZZZZ"
-                        tzFormat()->format(UTZFMT_STYLE_LOCALIZED_GMT, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_LOCALIZED_GMT, tz, date, zoneString);
                     }
                 }
                 else if (patternCharIndex == UDAT_TIMEZONE_GENERIC_FIELD) {
                     if (count == 1) {
                         // "v"
-                        tzFormat()->format(UTZFMT_STYLE_GENERIC_SHORT, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_GENERIC_SHORT, tz, date, zoneString);
                         capContextUsageType = DateFormatSymbols::kCapContextUsageMetazoneShort;
                     } else if (count == 4) {
                         // "vvvv"
-                        tzFormat()->format(UTZFMT_STYLE_GENERIC_LONG, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_GENERIC_LONG, tz, date, zoneString);
                         capContextUsageType = DateFormatSymbols::kCapContextUsageMetazoneLong;
                     }
                 }
                 else if (patternCharIndex == UDAT_TIMEZONE_SPECIAL_FIELD) {
                     if (count == 1) {
                         // "V"
-                        tzFormat()->format(UTZFMT_STYLE_ZONE_ID_SHORT, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ZONE_ID_SHORT, tz, date, zoneString);
                     } else if (count == 2) {
                         // "VV"
-                        tzFormat()->format(UTZFMT_STYLE_ZONE_ID, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ZONE_ID, tz, date, zoneString);
                     } else if (count == 3) {
                         // "VVV"
-                        tzFormat()->format(UTZFMT_STYLE_EXEMPLAR_LOCATION, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_EXEMPLAR_LOCATION, tz, date, zoneString);
                     } else if (count == 4) {
                         // "VVVV"
-                        tzFormat()->format(UTZFMT_STYLE_GENERIC_LOCATION, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_GENERIC_LOCATION, tz, date, zoneString);
                         capContextUsageType = DateFormatSymbols::kCapContextUsageZoneLong;
                     }
                 }
                 else if (patternCharIndex == UDAT_TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD) {
                     if (count == 1) {
                         // "O"
-                        tzFormat()->format(UTZFMT_STYLE_LOCALIZED_GMT_SHORT, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_LOCALIZED_GMT_SHORT, tz, date, zoneString);
                     } else if (count == 4) {
                         // "OOOO"
-                        tzFormat()->format(UTZFMT_STYLE_LOCALIZED_GMT, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_LOCALIZED_GMT, tz, date, zoneString);
                     }
                 }
                 else if (patternCharIndex == UDAT_TIMEZONE_ISO_FIELD) {
                     if (count == 1) {
                         // "X"
-                        tzFormat()->format(UTZFMT_STYLE_ISO_BASIC_SHORT, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ISO_BASIC_SHORT, tz, date, zoneString);
                     } else if (count == 2) {
                         // "XX"
-                        tzFormat()->format(UTZFMT_STYLE_ISO_BASIC_FIXED, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ISO_BASIC_FIXED, tz, date, zoneString);
                     } else if (count == 3) {
                         // "XXX"
-                        tzFormat()->format(UTZFMT_STYLE_ISO_EXTENDED_FIXED, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ISO_EXTENDED_FIXED, tz, date, zoneString);
                     } else if (count == 4) {
                         // "XXXX"
-                        tzFormat()->format(UTZFMT_STYLE_ISO_BASIC_FULL, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ISO_BASIC_FULL, tz, date, zoneString);
                     } else if (count == 5) {
                         // "XXXXX"
-                        tzFormat()->format(UTZFMT_STYLE_ISO_EXTENDED_FULL, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ISO_EXTENDED_FULL, tz, date, zoneString);
                     }
                 }
                 else if (patternCharIndex == UDAT_TIMEZONE_ISO_LOCAL_FIELD) {
                     if (count == 1) {
                         // "x"
-                        tzFormat()->format(UTZFMT_STYLE_ISO_BASIC_LOCAL_SHORT, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ISO_BASIC_LOCAL_SHORT, tz, date, zoneString);
                     } else if (count == 2) {
                         // "xx"
-                        tzFormat()->format(UTZFMT_STYLE_ISO_BASIC_LOCAL_FIXED, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ISO_BASIC_LOCAL_FIXED, tz, date, zoneString);
                     } else if (count == 3) {
                         // "xxx"
-                        tzFormat()->format(UTZFMT_STYLE_ISO_EXTENDED_LOCAL_FIXED, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ISO_EXTENDED_LOCAL_FIXED, tz, date, zoneString);
                     } else if (count == 4) {
                         // "xxxx"
-                        tzFormat()->format(UTZFMT_STYLE_ISO_BASIC_LOCAL_FULL, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ISO_BASIC_LOCAL_FULL, tz, date, zoneString);
                     } else if (count == 5) {
                         // "xxxxx"
-                        tzFormat()->format(UTZFMT_STYLE_ISO_EXTENDED_LOCAL_FULL, tz, date, zoneString);
+                        tzfmt->format(UTZFMT_STYLE_ISO_EXTENDED_LOCAL_FULL, tz, date, zoneString);
                     }
                 }
                 else {
@@ -3393,31 +3394,41 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     case UDAT_TIMEZONE_FIELD: // 'z'
         {
             UTimeZoneFormatStyle style = (count < 4) ? UTZFMT_STYLE_SPECIFIC_SHORT : UTZFMT_STYLE_SPECIFIC_LONG;
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
-            if (tz != NULL) {
-                cal.adoptTimeZone(tz);
-                return pos.getIndex();
+            const TimeZoneFormat *tzfmt = tzFormat(status);
+            if (U_SUCCESS(status)) {
+                TimeZone *tz = tzfmt->parse(style, text, pos, tzTimeType);
+                if (tz != NULL) {
+                    cal.adoptTimeZone(tz);
+                    return pos.getIndex();
+                }
             }
-        }
+            return -start;
+    }
         break;
     case UDAT_TIMEZONE_RFC_FIELD: // 'Z'
         {
             UTimeZoneFormatStyle style = (count < 4) ?
                 UTZFMT_STYLE_ISO_BASIC_LOCAL_FULL : ((count == 5) ? UTZFMT_STYLE_ISO_EXTENDED_FULL: UTZFMT_STYLE_LOCALIZED_GMT);
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
-            if (tz != NULL) {
-                cal.adoptTimeZone(tz);
-                return pos.getIndex();
+            const TimeZoneFormat *tzfmt = tzFormat(status);
+            if (U_SUCCESS(status)) {
+                TimeZone *tz = tzfmt->parse(style, text, pos, tzTimeType);
+                if (tz != NULL) {
+                    cal.adoptTimeZone(tz);
+                    return pos.getIndex();
+                }
             }
             return -start;
         }
     case UDAT_TIMEZONE_GENERIC_FIELD: // 'v'
         {
             UTimeZoneFormatStyle style = (count < 4) ? UTZFMT_STYLE_GENERIC_SHORT : UTZFMT_STYLE_GENERIC_LONG;
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
-            if (tz != NULL) {
-                cal.adoptTimeZone(tz);
-                return pos.getIndex();
+            const TimeZoneFormat *tzfmt = tzFormat(status);
+            if (U_SUCCESS(status)) {
+                TimeZone *tz = tzfmt->parse(style, text, pos, tzTimeType);
+                if (tz != NULL) {
+                    cal.adoptTimeZone(tz);
+                    return pos.getIndex();
+                }
             }
             return -start;
         }
@@ -3438,20 +3449,26 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 style = UTZFMT_STYLE_GENERIC_LOCATION;
                 break;
             }
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
-            if (tz != NULL) {
-                cal.adoptTimeZone(tz);
-                return pos.getIndex();
+            const TimeZoneFormat *tzfmt = tzFormat(status);
+            if (U_SUCCESS(status)) {
+                TimeZone *tz = tzfmt->parse(style, text, pos, tzTimeType);
+                if (tz != NULL) {
+                    cal.adoptTimeZone(tz);
+                    return pos.getIndex();
+                }
             }
             return -start;
         }
     case UDAT_TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD: // 'O'
         {
             UTimeZoneFormatStyle style = (count < 4) ? UTZFMT_STYLE_LOCALIZED_GMT_SHORT : UTZFMT_STYLE_LOCALIZED_GMT;
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
-            if (tz != NULL) {
-                cal.adoptTimeZone(tz);
-                return pos.getIndex();
+            const TimeZoneFormat *tzfmt = tzFormat(status);
+            if (U_SUCCESS(status)) {
+                TimeZone *tz = tzfmt->parse(style, text, pos, tzTimeType);
+                if (tz != NULL) {
+                    cal.adoptTimeZone(tz);
+                    return pos.getIndex();
+                }
             }
             return -start;
         }
@@ -3475,10 +3492,13 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 style = UTZFMT_STYLE_ISO_EXTENDED_FULL;
                 break;
             }
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
-            if (tz != NULL) {
-                cal.adoptTimeZone(tz);
-                return pos.getIndex();
+            const TimeZoneFormat *tzfmt = tzFormat(status);
+            if (U_SUCCESS(status)) {
+                TimeZone *tz = tzfmt->parse(style, text, pos, tzTimeType);
+                if (tz != NULL) {
+                    cal.adoptTimeZone(tz);
+                    return pos.getIndex();
+                }
             }
             return -start;
         }
@@ -3502,10 +3522,13 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 style = UTZFMT_STYLE_ISO_EXTENDED_LOCAL_FULL;
                 break;
             }
-            TimeZone *tz  = tzFormat()->parse(style, text, pos, tzTimeType);
-            if (tz != NULL) {
-                cal.adoptTimeZone(tz);
-                return pos.getIndex();
+            const TimeZoneFormat *tzfmt = tzFormat(status);
+            if (U_SUCCESS(status)) {
+                TimeZone *tz = tzfmt->parse(style, text, pos, tzTimeType);
+                if (tz != NULL) {
+                    cal.adoptTimeZone(tz);
+                    return pos.getIndex();
+                }
             }
             return -start;
         }
@@ -3856,7 +3879,13 @@ SimpleDateFormat::setDateFormatSymbols(const DateFormatSymbols& newFormatSymbols
 //----------------------------------------------------------------------
 const TimeZoneFormat*
 SimpleDateFormat::getTimeZoneFormat(void) const {
-    return (const TimeZoneFormat*)tzFormat();
+    // TimeZoneFormat initialization might fail when out of memory.
+    // If we always initialize TimeZoneFormat instance, we can return
+    // such status there. For now, this implementation lazily instantiates
+    // a TimeZoneFormat for performance optimization reasons, but cannot
+    // propagate such error (probably just out of memory case) to the caller.
+    UErrorCode status = U_ZERO_ERROR;
+    return (const TimeZoneFormat*)tzFormat(status);
 }
 
 //----------------------------------------------------------------------
@@ -4123,12 +4152,11 @@ SimpleDateFormat::skipUWhiteSpace(const UnicodeString& text, int32_t pos) const 
 
 // Lazy TimeZoneFormat instantiation, semantically const.
 TimeZoneFormat *
-SimpleDateFormat::tzFormat() const {
+SimpleDateFormat::tzFormat(UErrorCode &status) const {
     if (fTimeZoneFormat == NULL) {
         umtx_lock(&LOCK);
         {
             if (fTimeZoneFormat == NULL) {
-                UErrorCode status = U_ZERO_ERROR;
                 TimeZoneFormat *tzfmt = TimeZoneFormat::createInstance(fLocale, status);
                 if (U_FAILURE(status)) {
                     return NULL;
