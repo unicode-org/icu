@@ -5018,7 +5018,7 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
-    public void Test11640() {
+    public void Test11640_TripleCurrencySymbol() {
         DecimalFormat df = (DecimalFormat) NumberFormat.getInstance();
         df.applyPattern("¤¤¤ 0");
         String result = df.getPositivePrefix();

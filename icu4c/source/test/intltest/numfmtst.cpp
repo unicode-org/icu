@@ -9026,19 +9026,20 @@ void NumberFormatTest::Test11020_RoundingInScientificNotation() {
     fmt.format(12301.2, result);
     assertEquals("Rounding increment should be applied after magnitude scaling", u"1,25E4", result);
 }
+
 void NumberFormatTest::Test11640_TripleCurrencySymbol() {
-  IcuTestErrorCode status(*this, "PercentageRounding");
-  UnicodeString actual;
-  DecimalFormat *dFormat = new DecimalFormat("¤¤¤ 0", status);
-  if (U_FAILURE(status)) {
-      dataerrln("Failure creating DecimalFormat %s", u_errorName(status));
-      return;
-  }
-  dFormat->setCurrency(u"USD");
-  UnicodeString result;
-  dFormat->getPositivePrefix(result);
-  assertEquals("Tryple-currency should give long name on getPositivePrefix",
-               "US dollars ", result);
+    IcuTestErrorCode status(*this, "Test11640_TripleCurrencySymbol");
+    UnicodeString actual;
+    DecimalFormat *dFormat = new DecimalFormat("¤¤¤ 0", status);
+    if (U_FAILURE(status)) {
+        dataerrln("Failure creating DecimalFormat %s", u_errorName(status));
+        return;
+    }
+    dFormat->setCurrency(u"USD");
+    UnicodeString result;
+    dFormat->getPositivePrefix(result);
+    assertEquals("Triple-currency should give long name on getPositivePrefix",
+                "US dollars ", result);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
