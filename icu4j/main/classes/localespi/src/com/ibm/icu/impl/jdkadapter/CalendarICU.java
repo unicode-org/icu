@@ -26,7 +26,7 @@ public class CalendarICU extends java.util.Calendar {
     private static final long serialVersionUID = -8641226371713600671L;
 
     private Calendar fIcuCal;
-    
+
     private CalendarICU(Calendar icuCal) {
         fIcuCal = icuCal;
         init();
@@ -64,7 +64,7 @@ public class CalendarICU extends java.util.Calendar {
     //          calendar fields.  See private void sync().
     //public void clear()
     //public void clear(int field)
-    
+
     @Override
     public Object clone() {
         sync();
@@ -152,6 +152,11 @@ public class CalendarICU extends java.util.Calendar {
             }
         }
         return result;
+    }
+
+    @Override
+    public int getFirstDayOfWeek() {
+        return fIcuCal.getFirstDayOfWeek();
     }
 
     @Override
