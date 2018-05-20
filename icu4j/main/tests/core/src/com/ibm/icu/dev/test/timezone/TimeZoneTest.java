@@ -27,6 +27,7 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.BasicTimeZone;
 import com.ibm.icu.util.Calendar;
@@ -2307,6 +2308,19 @@ public class TimeZoneTest extends TestFmwk
             assertEquals("Fail: Windows ID=" + data[0] + ", Region=" + data[1],
                     data[2], id);
         }
+    }
+
+    @Test
+    public void TestTimeZoneAdapterEquals() {
+        String idChicago = "America/Chicago";
+        TimeZone icuChicago = TimeZone.getTimeZone(idChicago);
+        TimeZone icuChicago2 = TimeZone.getTimeZone(idChicago);
+        java.util.TimeZone icuChicagoWrapped = TimeZoneAdapter.wrap(icuChicago);
+        java.util.TimeZone icuChicagoWrapped2 = TimeZoneAdapter.wrap(icuChicago2);
+
+        assertFalse("Compare TimeZone and TimeZoneAdapter", icuChicago.equals(icuChicagoWrapped));
+        assertFalse("Compare TimeZoneAdapter with TimeZone", icuChicagoWrapped.equals(icuChicago));
+        assertTrue("Compare two TimeZoneAdapters", icuChicagoWrapped.equals(icuChicagoWrapped2));
     }
 }
 
