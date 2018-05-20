@@ -143,10 +143,14 @@ public class TimeZoneAdapter extends java.util.TimeZone {
      */
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof TimeZoneAdapter) {
-            obj = ((TimeZoneAdapter) obj).zone;
+        if (this == obj) {
+            return true;
         }
-        return zone.equals(obj);
+        if (obj instanceof TimeZoneAdapter) {
+            TimeZone anotherZone = ((TimeZoneAdapter) obj).zone;
+            return zone.equals(anotherZone);
+        }
+        return false;
     }
 
     /**
