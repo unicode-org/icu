@@ -646,8 +646,6 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet  fEB;
         UnicodeSet  fEM;
         UnicodeSet  fZWJ;
-        UnicodeSet  fExtendedPict;
-        UnicodeSet  fEmojiNRK;
 
         StringBuffer  fText;
         int           fOrigPositions;
@@ -701,9 +699,6 @@ public class RBBITestMonkey extends TestFmwk {
             fEB    = new UnicodeSet("[\\p{Line_break=EB}]");
             fEM    = new UnicodeSet("[\\p{Line_break=EM}]");
             fZWJ   = new UnicodeSet("[\\p{Line_break=ZWJ}]");
-            fEmojiNRK = new UnicodeSet("[[\\p{Emoji}]-[\\p{Line_break=RI}*#0-9©®™〰〽]]");
-            fExtendedPict = new UnicodeSet("[:Extended_Pictographic:]");
-
 
             // Remove dictionary characters.
             // The monkey test reference implementation of line break does not replicate the dictionary behavior,
@@ -760,8 +755,6 @@ public class RBBITestMonkey extends TestFmwk {
             fSets.add(fEB);
             fSets.add(fEM);
             fSets.add(fZWJ);
-            fSets.add(fExtendedPict);
-            fSets.add(fEmojiNRK);
         }
 
         @Override
@@ -897,13 +890,39 @@ public class RBBITestMonkey extends TestFmwk {
                     break;
                 }
 
+                // LB 25    Numbers
+                //          Move this test up, before LB8a, because numbers can match a longer sequence that would
+                //          also match 8a.  e.g. NU ZWJ IS PO     (ZWJ acts like CM)
+                matchVals = LBNumberCheck(fText, prevPos, matchVals);
+                if (matchVals[0] != -1) {
+                    // Matched a number.  But could have been just a single digit, which would
+                    //    not represent a "no break here" between prevChar and thisChar
+                    int numEndIdx = matchVals[1];  // idx of first char following num
+                    if (numEndIdx > pos) {
+                        // Number match includes at least the two chars being checked
+                        if (numEndIdx > nextPos) {
+                            // Number match includes additional chars.  Update pos and nextPos
+                            //   so that next loop iteration will continue at the end of the number,
+                            //   checking for breaks between last char in number & whatever follows.
+                            nextPos = numEndIdx;
+                            pos     = numEndIdx;
+                            do {
+                                pos = moveIndex32(fText, pos, -1);
+                                thisChar = UTF16.charAt(fText, pos);
+                            }
+                            while (fCM.contains(thisChar));
+                        }
+                        continue;
+                    }
+                }
+
                 // LB 8a:  ZWJ x (ID | Extended_Pictographic | Emoji)
                 //       The monkey test's way of ignoring combining characters doesn't work
                 //       for this rule. ZWJ is also a CM. Need to get the actual character
                 //       preceding "thisChar", not ignoring combining marks, possibly ZWJ.
                 {
                     int prevC = fText.codePointBefore(pos);
-                    if (fZWJ.contains(prevC) && (fID.contains(thisChar) || fExtendedPict.contains(thisChar) || fEmojiNRK.contains(thisChar))) {
+                    if (fZWJ.contains(prevC)) {
                         continue;
                     }
                 }
@@ -1088,31 +1107,7 @@ public class RBBITestMonkey extends TestFmwk {
                     continue;
                 }
 
-
-                // LB 25    Numbers
-                matchVals = LBNumberCheck(fText, prevPos, matchVals);
-                if (matchVals[0] != -1) {
-                    // Matched a number.  But could have been just a single digit, which would
-                    //    not represent a "no break here" between prevChar and thisChar
-                    int numEndIdx = matchVals[1];  // idx of first char following num
-                    if (numEndIdx > pos) {
-                        // Number match includes at least the two chars being checked
-                        if (numEndIdx > nextPos) {
-                            // Number match includes additional chars.  Update pos and nextPos
-                            //   so that next loop iteration will continue at the end of the number,
-                            //   checking for breaks between last char in number & whatever follows.
-                            nextPos = numEndIdx;
-                            pos     = numEndIdx;
-                            do {
-                                pos = moveIndex32(fText, pos, -1);
-                                thisChar = UTF16.charAt(fText, pos);
-                            }
-                            while (fCM.contains(thisChar));
-                        }
-                        continue;
-                    }
-                }
-
+                // LB 25  Numbers  match, moved up, before LB 8a.
 
                 // LB 26  Do not break Korean Syllables
                 if (fJL.contains(prevChar) && (fJL.contains(thisChar) ||
