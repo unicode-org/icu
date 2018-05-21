@@ -1965,7 +1965,7 @@ void TestAmbiguousWallTime() {
     UDate t, expected;
 
     u_uastrcpy(tzID, "America/New_York");
-    ucal = ucal_open(tzID, -1, NULL, UCAL_DEFAULT, &status);
+    ucal = ucal_open(tzID, -1, "en_US", UCAL_DEFAULT, &status);
     if (U_FAILURE(status)) {
         log_err("FAIL: Failed to create a calendar");
         return;
