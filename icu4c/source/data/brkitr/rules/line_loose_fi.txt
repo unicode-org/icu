@@ -7,12 +7,9 @@
 #
 #         Line Breaking Rules
 #         Implement default line breaking as defined by
-#         Unicode Standard Annex #14 Revision 37 for Unicode 9.0
+#         Unicode Standard Annex #14 Revision 40 for Unicode 11.0
 #         http://www.unicode.org/reports/tr14/
 #         tailored as noted in 3rd paragraph below.
-#
-#         Includes extensions to the handling of emoji ZWJ sequences from
-#         https://goo.gl/cluFCn
 #
 #         TODO:  Rule LB 8 remains as it was in Unicode 5.2
 #         This is only because of a limitation of ICU break engine implementation,
@@ -76,9 +73,6 @@ $WJ = [:LineBreak =  Word_Joiner:];
 $XX = [:LineBreak =  Unknown:];
 $ZW = [:LineBreak =  ZWSpace:];
 $ZWJ = [:LineBreak = ZWJ:];
-
-$EmojiNRK = [[\p{Emoji}] - [$RI \u002a\u00230-9©®™〰〽]];
-$Extended_Pict = [:ExtPict:];
 
 # By LB9, a ZWJ also behaves as a CM. Including it in the definition of CM avoids having to explicitly
 #         list it in the numerous rules that use CM.
@@ -150,9 +144,9 @@ $CAN_CM $CM*  [$SP $ZW];
 $LB8Breaks    = [$LB4Breaks $ZW];
 $LB8NonBreaks = [[$LB4NonBreaks] - [$ZW]];
 
-# LB 8a        ZWJ x (ID | Extended_Pict | EmojiNRK)   Emoji ZWJ sequences.
+# LB 8a        ZWJ x            Do not break Emoji ZWJ sequences.
 #
-$ZWJ ($ID | $Extended_Pict | $EmojiNRK);
+$ZWJ [^$CM];
 
 # LB 9     Combining marks.      X   $CM needs to behave like X, where X is not $SP, $BK $CR $LF $NL
 #                                $CM not covered by the above needs to behave like $AL
@@ -332,13 +326,13 @@ $IS $CM* ($ALPlus | $HL);
 $CP $CM* ($ALPlus | $HL | $NU);
 
 # LB 30a  Do not break between regional indicators. Break after pairs of them.
-#         Tricky interaction with LB8a: ZWJ x ID
-$RI $CM* $RI                / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS $CM] {eof}];
-$RI $CM* $RI $CM*  $ZWJ     / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS $CM $ID $Extended_Pict $EmojiNRK] {eof}];
-$RI $CM* $RI $CM* [$CM-$ZWJ] / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS $CM] {eof}];
-
-$RI $CM* $RI $CM* [$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS {eof}];
-$RI $CM* $RI $CM* $ZWJ ($ID | $Extended_Pict | $EmojiNRK);
+#         Tricky interaction with LB8a: ZWJ x .   together with ZWJ acting like a CM.
+$RI $CM* $RI                 / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS $CM]];
+$RI $CM* $RI $CM* [$CM-$ZWJ] / [[^$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS $CM]];
+$RI $CM* $RI $CM* [$BK $CR $LF $NL $SP $ZW $WJ $CL $CP $EX $IS $SY $GL $QU $BA $HY $NS $ZWJ {eof}];
+# note: the preceding rule includes {eof} rather than having the last [set] term qualified with '?'
+#       because of the chain-out behavior difference. The rule must chain out only from the [set characters],
+#       not from the preceding $RI or $CM, which it would be able to do if the set were optional.
 
 # LB 30b Do not break between an Emoji Base and an Emoji Modifier
 $EB $CM* $EM;

@@ -5,7 +5,8 @@
 #
 #  file:  line_loose_cj.txt
 #
-# Reference Line Break rules for intltest rbbi/RBBIMonkeyTest
+# Reference Line Break rules for intltest rbbi/RBBIMonkeyTest.
+# Rules derived from Unicode Standard Annex #14 Revision 40 for Unicode 11.0
 #
 # Note: Rule syntax and the monkey test itself are still a work in progress.
 #       They are expected to change with review and the addition of support for rule tailoring.
@@ -84,9 +85,6 @@ XX = [:LineBreak =  Unknown:];
 ZW = [:LineBreak =  ZWSpace:];
 ZWJ = [:LineBreak =  ZWJ:];
 
-EmojiNRK = [[\p{Emoji}] - [[RI]\u002a\u00230-9©®™〰〽]];
-Extended_Pict = [:ExtPict:];
-
 # LB1 - Resolve AI, CB, CJ, SA, SG, and XX into other line breaking classes
 AL = [AL AI SG XX ];
 dictionary = SA;
@@ -122,8 +120,10 @@ LB7.2:      [ZW SP] [SP ZW];
 LB8:        ZW ÷;
 
 # LB8a
-#      ZWJ x (ID | Extended_Pict | EmojiNRK)
-LB8a:       ZWJ (ID | Extended_Pict | EmojiNRK);
+#      ZWJ x
+#      Don't match a CM on the right - let other rules pick up CM sequences, where
+#      the ZWJ behaves as just another generic CM.
+LB8a:       ZWJ [^CM];
 
 
 # LB9:  X CM -> X
@@ -132,7 +132,7 @@ LB8a:       ZWJ (ID | Extended_Pict | EmojiNRK);
 #LB11:       × WJ;
 #            WJ ×
 
-LB11.1:      [^BK CR LF NL SP ZW] CM* WJ;
+LB11.1:      [^SP] CM* WJ;
 LB11.2:      SP WJ;
 LB11.3:      WJ CM* [^CM];
 
@@ -158,12 +158,14 @@ LB19:        . CM* QU;
 LB19.1:      QU CM* [^CM];
 
 # LB 20   Break before and after CB.
-#         Interaction with LB8a:  ZWJ x ID is tricky because CM includes ZWJ.
+#         Interaction with LB8a:  ZWJ x . is tricky because CM includes ZWJ.
 #                                 ZWJ acts like a CM to the left, combining with CB.
-#                                 ZWJ acts independently to the right, no break from ID by LB8a.
-LB20:        . CM* ÷ CB;
-LB20.1a:     CB CM* ZWJ (ID | Extended_Pict | EmojiNRK);
-LB20.1b:      CB CM* ÷;
+#                                 ZWJ acts independently to the right, no break after by LB8a.
+LB20.1:      . CM* ZWJ CB;
+LB20.2:      . CM* ÷ CB;
+
+LB20.3:      CB CM* ZWJ [^CM];
+LB20.4:      CB CM* ÷;
 
 # Note: Rule 21a must come before 21 to prevent 21.1 from matching HL BA, then
 #       not picking up the continuing match after the BA from 21a.
@@ -214,15 +216,15 @@ LB29:        IS CM* (AL | HL);
 LB30.1:      (AL | CM | HL | NU) CM* OP;
 LB30.2:      CP CM* (AL | HL | NU);
 
-# LB31  keep pairs of RI together.
-LB30a.1:     RI CM* RI CM* [BK CR LF NL SP ZW WJ GL CL CP EX IS SY QU BA HY NS];
-LB30a.2:     RI CM* RI CM* ZWJ (ID | Extended_Pict | EmojiNRK);
-LB30a.3:     RI CM* RI CM* ÷;
+# LB30a  keep pairs of RI together.
+LB30a.1:     RI CM* RI              ÷ [^BK CR LF NL SP ZW WJ CL CP EX IS SY GL QU BA HY NS CM];
+LB30a.2:     RI CM* RI CM* [CM-ZWJ] ÷ [^BK CR LF NL SP ZW WJ CL CP EX IS SY GL QU BA HY NS CM];
+LB30a.3:     RI CM* RI CM* [BK CR LF NL SP ZW WJ GL CL CP EX IS SY QU BA HY NS ZWJ]?;
 
 # LB30b Do not break between Emoji Base and Emoji Modifier
 LB30b:       EB CM* EM;
 
 # LB31 Break Everywhere Else.
 #      Include combining marks
-LB31.1:        . CM* ZWJ (ID | Extended_Pict | EmojiNRK);
+LB31.1:        . CM* ZWJ [^CM];
 LB31.2:        . CM* ÷;
