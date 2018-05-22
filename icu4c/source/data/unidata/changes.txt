@@ -59,7 +59,7 @@ http://www.unicode.org/reports/tr44/tr44-21.html
 
 * Command-line environment setup
 
-UNICODE_DATA=~/unidata/uni11/20180402
+UNICODE_DATA=~/unidata/uni11/20180521
 CLDR_SRC=~/svn.cldr/uni
 ICU_ROOT=~/svn.icu/uni
 ICU_SRC=$ICU_ROOT/src
@@ -155,6 +155,7 @@ export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
     GCB; LinkC                            ; LinkingConsonant
     GCB; Virama                           ; Virama
   -> uchar.h & UCharacter.GraphemeClusterBreak
+  -> these two later removed again: http://www.unicode.org/L2/L2018/18115.htm#155-A76
 
     InSC; Consonant_Initial_Postfixed     ; Consonant_Initial_Postfixed
   -> ignore: ICU does not yet support this property
@@ -403,7 +404,7 @@ or
     cd $ICU_SRC/icu4c/source/data/unidata
     cp confusables.txt confusablesWholeScript.txt NormalizationCorrections.txt NormalizationTest.txt SpecialCasing.txt UnicodeData.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
     cd ../../test/testdata
-    cp BidiCharacterTest.txt BidiTest.txt IdnaTest.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
+    cp BidiCharacterTest.txt BidiTest.txt IdnaTestV2.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
     cp $UNICODE_DATA/ucd/CompositionExclusions.txt $ICU_SRC/icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode
 
 * run & fix ICU4J tests
