@@ -855,4 +855,41 @@ public class SpoofCheckerTest extends TestFmwk {
                 SpoofChecker.RESTRICTION_LEVEL,
                 checkResult.checks);
     }
+
+    @Test
+    public void testCombiningDot() {
+        SpoofChecker sc = new SpoofChecker.Builder().setChecks(SpoofChecker.HIDDEN_OVERLAY).build();
+
+        Object[][] cases = new Object[][] {
+                {false, "i"},
+                {false, "j"},
+                {false, "l"},
+                {true, "i\u0307"},
+                {true, "j\u0307"},
+                {true, "l\u0307"},
+                {true, "ı\u0307"},
+                {true, "ȷ\u0307"},
+                {true, "𝚤\u0307"},
+                {true, "𝑗\u0307"},
+                {false, "m\u0307"},
+                {true, "1\u0307"},
+                {true, "ĳ\u0307"},
+                {true, "i\u0307\u0307"},
+                {true, "abci\u0307def"},
+                {false, "i\u0301\u0307"}, // U+0301 has combining class ABOVE (230)
+                {true, "i\u0320\u0307"}, // U+0320 has combining class BELOW
+                {true, "i\u0320\u0321\u0307"}, // U+0321 also has combining class BELOW
+                {false, "i\u0320\u0301\u0307"},
+                {false, "iz\u0307"},
+        };
+
+        for (Object[] cas : cases) {
+            boolean shouldFail = (Boolean) cas[0];
+            String input = (String) cas[1];
+            CheckResult result = new CheckResult();
+            sc.failsChecks(input, result);
+            int expected = shouldFail ? SpoofChecker.HIDDEN_OVERLAY : 0;
+            assertEquals(input, expected, result.checks);
+        }
+    }
 }

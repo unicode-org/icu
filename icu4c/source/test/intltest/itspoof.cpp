@@ -92,6 +92,7 @@ void IntlTestSpoof::runIndexedTest( int32_t index, UBool exec, const char* &name
     TESTCASE_AUTO(testBug12815);
     TESTCASE_AUTO(testBug13314_MixedNumbers);
     TESTCASE_AUTO(testBug13328_MixedCombiningMarks);
+    TESTCASE_AUTO(testCombiningDot);
     TESTCASE_AUTO_END;
 }
 
@@ -708,6 +709,47 @@ void IntlTestSpoof::testBug13328_MixedCombiningMarks() {
             "The mismatched combining marks string fails spoof",
             USPOOF_RESTRICTION_LEVEL,
             failedChecks);
+}
+
+void IntlTestSpoof::testCombiningDot() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalUSpoofCheckerPointer sc(uspoof_open(&status));
+    TEST_ASSERT_SUCCESS(status);
+    uspoof_setChecks(sc.getAlias(), USPOOF_HIDDEN_OVERLAY, &status);
+    TEST_ASSERT_SUCCESS(status);
+
+    static const struct TestCase {
+        bool shouldFail;
+        const char16_t* input;
+    } cases[] = {
+            {false, u"i"},
+            {false, u"j"},
+            {false, u"l"},
+            {true, u"i\u0307"},
+            {true, u"j\u0307"},
+            {true, u"l\u0307"},
+            {true, u"ı\u0307"},
+            {true, u"ȷ\u0307"},
+            {true, u"𝚤\u0307"},
+            {true, u"𝑗\u0307"},
+            {false, u"m\u0307"},
+            {true, u"1\u0307"},
+            {true, u"ĳ\u0307"},
+            {true, u"i\u0307\u0307"},
+            {true, u"abci\u0307def"},
+            {false, u"i\u0301\u0307"}, // U+0301 has combining class ABOVE (230)
+            {true, u"i\u0320\u0307"}, // U+0320 has combining class BELOW
+            {true, u"i\u0320\u0321\u0307"}, // U+0321 also has combining class BELOW
+            {false, u"i\u0320\u0301\u0307"},
+            {false, u"iz\u0307"},
+    };
+
+    for (auto& cas : cases) {
+        int32_t failedChecks = uspoof_check2(sc.getAlias(), cas.input, -1, nullptr, &status);
+        TEST_ASSERT_SUCCESS(status);
+        int32_t expected = cas.shouldFail ? USPOOF_HIDDEN_OVERLAY : 0;
+        assertEquals(cas.input, expected, failedChecks);
+    }
 }
 
 #endif /* !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_NORMALIZATION && !UCONFIG_NO_FILE_IO */
