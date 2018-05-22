@@ -101,8 +101,6 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     Grouper grouper = Grouper::forProperties(properties);
     int parseFlags = 0;
     if (affixProvider == nullptr || U_FAILURE(status)) { return nullptr; }
-    // Fraction grouping is disabled by default because it has never been supported in DecimalFormat
-    parseFlags |= PARSE_FLAG_FRACTION_GROUPING_DISABLED;
     if (!properties.parseCaseSensitive) {
         parseFlags |= PARSE_FLAG_IGNORE_CASE;
     }
