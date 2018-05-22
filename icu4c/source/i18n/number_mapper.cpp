@@ -55,7 +55,9 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     // PLURAL RULES //
     //////////////////
 
-    // TODO
+    if (!properties.currencyPluralInfo.fPtr.isNull()) {
+        macros.rules = properties.currencyPluralInfo.fPtr->getPluralRules();
+    }
 
     /////////////
     // AFFIXES //

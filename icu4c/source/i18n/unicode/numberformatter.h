@@ -1386,13 +1386,13 @@ struct U_I18N_API MacroProps : public UMemory {
     Scale scale;  // = Scale();  (benign value)
 
     /** @internal */
-    AffixPatternProvider* affixProvider = nullptr;  // no ownership
+    const AffixPatternProvider* affixProvider = nullptr;  // no ownership
 
     /** @internal */
-    PluralRules *rules = nullptr;  // no ownership
+    const PluralRules* rules = nullptr;  // no ownership
 
     /** @internal */
-    CurrencySymbols *currencySymbols = nullptr;  // no ownership
+    const CurrencySymbols* currencySymbols = nullptr;  // no ownership
 
     /** @internal */
     int32_t threshold = DEFAULT_THRESHOLD;
