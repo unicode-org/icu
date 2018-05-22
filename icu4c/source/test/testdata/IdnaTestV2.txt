@@ -1,51 +1,56 @@
 # IdnaTestV2.txt
-# Date: 2018-03-14, 16:49:08 GMT
+# Date: 2018-05-22, 05:53:13 GMT
 # © 2018 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
-#
-# Contains test cases for verifying UTS46 conformance. For more information,
+# Contains test cases for verifying UTS #46 conformance. For more information,
 # see http://www.unicode.org/reports/tr46/
 #
 # FORMAT:
 #
-# This file is in UTF8, with certain characters escaped using the \uXXXX or \x{XXXX}
+# This file is in UTF-8, where characters may be escaped using the \uXXXX or \x{XXXX}
 # convention where they could otherwise have a confusing display.
-# These characters include:
-# 
-# - General Categories C, Z, and M
-# - Default ignorable characters
-# - Bidi categories R, AL, AN
+# These characters include control codes and combining marks.
 # 
 # Columns (c1, c2,...) are separated by semicolons.
 # Leading and trailing spaces and tabs in each column are ignored.
 # Comments are indicated with hash marks.
 #
 # Column 1: source -          The source string to be tested
-# Column 2: toUnicode -       The result of applying toUnicode to the source, with Transitional_Processing=false.
+# Column 2: toUnicode -       The result of applying toUnicode to the source,
+#                             with Transitional_Processing=false.
 #                             A blank value means the same as the source value.
 # Column 3: toUnicodeStatus - A set of status codes, each corresponding to a particular test.
-#                             A blank value means [].
-# Column 4: toAsciiN -        The result of applying toASCII to the source, with Transitional_Processing=false.
+#                             A blank value means [] (no errors).
+# Column 4: toAsciiN -        The result of applying toASCII to the source,
+#                             with Transitional_Processing=false.
 #                             A blank value means the same as the toUnicode value.
 # Column 5: toAsciiNStatus -  A set of status codes, each corresponding to a particular test.
 #                             A blank value means the same as the toUnicodeStatus value.
-# Column 6: toAsciiT -        The result of applying toASCII to the source, with Transitional_Processing=true.
+#                             An explicit [] means no errors.
+# Column 6: toAsciiT -        The result of applying toASCII to the source,
+#                             with Transitional_Processing=true.
 #                             A blank value means the same as the toAsciiN value.
 # Column 7: toAsciiTStatus -  A set of status codes, each corresponding to a particular test.
 #                             A blank value means the same as the toAsciiNStatus value.
+#                             An explicit [] means no errors.
 #
-# The line comments currently show visible characters that have been escaped 
-# (after removing default-ignorables and controls, except for whitespace)
-#
+# The line comments currently show visible characters that have been escaped. 
+# 
 # CONFORMANCE:
 #
-# To test for conformance to UTS46, an implementation will perform the toUnicode, toAsciiN, and toAsciiT
-# operations on the source string, then verify the resulting strings and relevant status values.
+# To test for conformance to UTS #46, an implementation will perform the toUnicode, toAsciiN, and
+# toAsciiT operations on the source string, then verify the resulting strings and relevant status 
+# values.
 #
-# A status in toUnicode, toAsciiN or toAsciiT is indicated by a value in square brackets, such as "[B5 B6]".
-# In such a case, the contents is a list of status codes based on the step numbers in UTS46 and IDNA2008,
-# with the following formats:
+# If the implementation converts illegal code points into U+FFFD (as per
+# http://www.unicode.org/reports/tr46/proposed.html#Processing) then the string comparisons need to
+# account for that by treating U+FFFD in the actual value as a wildcard when comparing to the 
+# expected value in the test file.
+#
+# A status in toUnicode, toAsciiN or toAsciiT is indicated by a value in square brackets,
+# such as "[B5 B6]". In such a case, the contents is a list of status codes based on the step 
+# numbers in UTS #46 and IDNA2008, with the following formats.
 #
 #   Pn for Section 4 Processing step n
 #   Vn for 4.1 Validity Criteria step n
@@ -53,6 +58,7 @@
 #   An for 4.2 ToASCII step n
 #   Bn for Bidi (in IDNA2008)
 #   Cn for ContextJ (in IDNA2008)
+#   Xn for toUnicode issues (see below)
 #
 # Thus C1 = Appendix A.1. ZERO WIDTH NON-JOINER, and C2 = Appendix A.2. ZERO WIDTH JOINER. 
 # (The CONTEXTO tests are optional for client software, and not tested here.)
@@ -65,15 +71,25 @@
 # CheckBidi:         V8
 # CheckJoiners:      V7
 # UseSTD3ASCIIRules: U1
-# Idna2008:          NV8
 #
-# Implementations may be more strict than the default settings for UTS46.
-# In particular, an implementation conformant to IDNA2008 would disallow the input for lines marked with NV8.
+# Implementations may be more strict than the default settings for UTS #46.
+# In particular, an implementation conformant to IDNA2008 would disallow the input for lines
+# marked with NV8.
 #
-# Implementations need only record that there is an error: they need not reproduce the precise status codes
-# (after removing the ignored status values).
+# Implementations need only record that there is an error: they need not reproduce the
+# precise status codes (after removing the ignored status values).
 #
-# ====================================================================================================
+# Compatibility errors
+#
+# The special error codes X3 and X4_2 are now returned where a toASCII error code
+# was formerly being generated in toUnicode due to an empty label.
+#
+# A3 was being generated in the following cases (in addition to its normal usage).
+#   • an empty label in toUnicode. In this case, it is replaced by X3.
+#
+# A4_2 was being generated in the following case (in addition to its normal usage).
+#   • an empty label in V8 (CheckBidi). In this case, it is being replaced by X4_2.
+# ============================================================================================
 fass.de; ; ; ; ; ;  # fass.de
 faß.de; ; ; xn--fa-hia.de; ; fass.de;  # faß.de
 Faß.de; faß.de; ; xn--fa-hia.de; ; fass.de;  # faß.de
@@ -172,8 +188,8 @@ xn--ab-uuba211bca5157b; aب̈‍̈بb; [B5, C2]; xn--ab-uuba211bca5157b; ; ;  # 
 xn--7a; ¡; ; xn--7a; ; ;  # ¡
 ᧚; ; ; xn--pkf; ; ;  # ᧚
 xn--pkf; ᧚; ; xn--pkf; ; ;  # ᧚
-。; .; [A4_2]; ; ; ;  # .
-.; ; [A4_2]; ; ; ;  # .
+。; .; [X4_2]; ; [A4_2]; ;  # .
+.; ; [X4_2]; ; [A4_2]; ;  # .
 ꭠ; ; ; xn--3y9a; ; ;  # ꭠ
 xn--3y9a; ꭠ; ; xn--3y9a; ; ;  # ꭠ
 1234567890ä1234567890123456789012345678901234567890123456; ; ; xn--12345678901234567890123456789012345678901234567890123456-fxe; [A4_2]; ;  # 1234567890ä1234567890123456789012345678901234567890123456
@@ -267,16 +283,16 @@ A⒈COM; a⒈com; [P1, V6]; xn--acom-0w1b; ; ;  # a⒈com
 A⒈Com; a⒈com; [P1, V6]; xn--acom-0w1b; ; ;  # a⒈com
 xn--acom-0w1b; a⒈com; [V6]; xn--acom-0w1b; ; ;  # a⒈com
 xn--a-ecp.ru; a⒈.ru; [V6]; xn--a-ecp.ru; ; ;  # a⒈.ru
-xn--0.pt; ; [A3]; ; ; ;  # xn--0.pt
+xn--0.pt; ; [P4]; ; ; ;  # xn--0.pt
 xn--a.pt; .pt; [V6]; xn--a.pt; ; ;  # .pt
-xn--a-Ä.pt; xn--a-ä.pt; [A3]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
-xn--a-Ä.pt; xn--a-ä.pt; [A3]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
-xn--a-ä.pt; xn--a-ä.pt; [A3]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
-xn--a-ä.pt; ; [A3]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
-XN--A-Ä.PT; xn--a-ä.pt; [A3]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
-XN--A-Ä.PT; xn--a-ä.pt; [A3]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
-Xn--A-Ä.pt; xn--a-ä.pt; [A3]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
-Xn--A-Ä.pt; xn--a-ä.pt; [A3]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
+xn--a-Ä.pt; xn--a-ä.pt; [P4]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
+xn--a-Ä.pt; xn--a-ä.pt; [P4]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
+xn--a-ä.pt; xn--a-ä.pt; [P4]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
+xn--a-ä.pt; ; [P4]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
+XN--A-Ä.PT; xn--a-ä.pt; [P4]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
+XN--A-Ä.PT; xn--a-ä.pt; [P4]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
+Xn--A-Ä.pt; xn--a-ä.pt; [P4]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
+Xn--A-Ä.pt; xn--a-ä.pt; [P4]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
 xn--xn--a--gua.pt; xn--a-ä.pt; [V2]; xn--xn--a--gua.pt; ; ;  # xn--a-ä.pt
 日本語。ＪＰ; 日本語.jp; ; xn--wgv71a119e.jp; ; ;  # 日本語.jp
 日本語。JP; 日本語.jp; ; xn--wgv71a119e.jp; ; ;  # 日本語.jp
@@ -367,24 +383,24 @@ xn--1234567890123456789012345678901234567890123456789012345-9te; ä1234567890123
 123456789012345678901234567890123456789012345678901234567890123.1234567890Ä1234567890123456789012345678901234567890123456.123456789012345678901234567890123456789012345678901234567890123.1234567890123456789012345678901234567890123456789012345678901; 123456789012345678901234567890123456789012345678901234567890123.1234567890ä1234567890123456789012345678901234567890123456.123456789012345678901234567890123456789012345678901234567890123.1234567890123456789012345678901234567890123456789012345678901; ; 123456789012345678901234567890123456789012345678901234567890123.xn--12345678901234567890123456789012345678901234567890123456-fxe.123456789012345678901234567890123456789012345678901234567890123.1234567890123456789012345678901234567890123456789012345678901; [A4_1, A4_2]; ;  # 123456789012345678901234567890123456789012345678901234567890123.1234567890ä1234567890123456789012345678901234567890123456.123456789012345678901234567890123456789012345678901234567890123.1234567890123456789012345678901234567890123456789012345678901
 123456789012345678901234567890123456789012345678901234567890123.1234567890Ä1234567890123456789012345678901234567890123456.123456789012345678901234567890123456789012345678901234567890123.1234567890123456789012345678901234567890123456789012345678901; 123456789012345678901234567890123456789012345678901234567890123.1234567890ä1234567890123456789012345678901234567890123456.123456789012345678901234567890123456789012345678901234567890123.1234567890123456789012345678901234567890123456789012345678901; ; 123456789012345678901234567890123456789012345678901234567890123.xn--12345678901234567890123456789012345678901234567890123456-fxe.123456789012345678901234567890123456789012345678901234567890123.1234567890123456789012345678901234567890123456789012345678901; [A4_1, A4_2]; ;  # 123456789012345678901234567890123456789012345678901234567890123.1234567890ä1234567890123456789012345678901234567890123456.123456789012345678901234567890123456789012345678901234567890123.1234567890123456789012345678901234567890123456789012345678901
 123456789012345678901234567890123456789012345678901234567890123.xn--12345678901234567890123456789012345678901234567890123456-fxe.123456789012345678901234567890123456789012345678901234567890123.1234567890123456789012345678901234567890123456789012345678901; 123456789012345678901234567890123456789012345678901234567890123.1234567890ä1234567890123456789012345678901234567890123456.123456789012345678901234567890123456789012345678901234567890123.1234567890123456789012345678901234567890123456789012345678901; ; 123456789012345678901234567890123456789012345678901234567890123.xn--12345678901234567890123456789012345678901234567890123456-fxe.123456789012345678901234567890123456789012345678901234567890123.1234567890123456789012345678901234567890123456789012345678901; [A4_1, A4_2]; ;  # 123456789012345678901234567890123456789012345678901234567890123.1234567890ä1234567890123456789012345678901234567890123456.123456789012345678901234567890123456789012345678901234567890123.1234567890123456789012345678901234567890123456789012345678901
-a.b..-q--a-.e; ; [V2, V3, A4_2]; ; ; ;  # a.b..-q--a-.e
-a.b..-q--ä-.e; ; [V2, V3, A4_2]; a.b..xn---q----jra.e; ; ;  # a.b..-q--ä-.e
-a.b..-q--ä-.e; a.b..-q--ä-.e; [V2, V3, A4_2]; a.b..xn---q----jra.e; ; ;  # a.b..-q--ä-.e
-A.B..-Q--Ä-.E; a.b..-q--ä-.e; [V2, V3, A4_2]; a.b..xn---q----jra.e; ; ;  # a.b..-q--ä-.e
-A.B..-Q--Ä-.E; a.b..-q--ä-.e; [V2, V3, A4_2]; a.b..xn---q----jra.e; ; ;  # a.b..-q--ä-.e
-A.b..-Q--Ä-.E; a.b..-q--ä-.e; [V2, V3, A4_2]; a.b..xn---q----jra.e; ; ;  # a.b..-q--ä-.e
-A.b..-Q--Ä-.E; a.b..-q--ä-.e; [V2, V3, A4_2]; a.b..xn---q----jra.e; ; ;  # a.b..-q--ä-.e
-a.b..xn---q----jra.e; a.b..-q--ä-.e; [V2, V3, A4_2]; a.b..xn---q----jra.e; ; ;  # a.b..-q--ä-.e
-a..c; ; [A4_2]; ; ; ;  # a..c
+a.b..-q--a-.e; ; [V2, V3, X4_2]; ; [V2, V3, A4_2]; ;  # a.b..-q--a-.e
+a.b..-q--ä-.e; ; [V2, V3, X4_2]; a.b..xn---q----jra.e; [V2, V3, A4_2]; ;  # a.b..-q--ä-.e
+a.b..-q--ä-.e; a.b..-q--ä-.e; [V2, V3, X4_2]; a.b..xn---q----jra.e; [V2, V3, A4_2]; ;  # a.b..-q--ä-.e
+A.B..-Q--Ä-.E; a.b..-q--ä-.e; [V2, V3, X4_2]; a.b..xn---q----jra.e; [V2, V3, A4_2]; ;  # a.b..-q--ä-.e
+A.B..-Q--Ä-.E; a.b..-q--ä-.e; [V2, V3, X4_2]; a.b..xn---q----jra.e; [V2, V3, A4_2]; ;  # a.b..-q--ä-.e
+A.b..-Q--Ä-.E; a.b..-q--ä-.e; [V2, V3, X4_2]; a.b..xn---q----jra.e; [V2, V3, A4_2]; ;  # a.b..-q--ä-.e
+A.b..-Q--Ä-.E; a.b..-q--ä-.e; [V2, V3, X4_2]; a.b..xn---q----jra.e; [V2, V3, A4_2]; ;  # a.b..-q--ä-.e
+a.b..xn---q----jra.e; a.b..-q--ä-.e; [V2, V3, X4_2]; a.b..xn---q----jra.e; [V2, V3, A4_2]; ;  # a.b..-q--ä-.e
+a..c; ; [X4_2]; ; [A4_2]; ;  # a..c
 a.-b.; ; [V3]; ; ; ;  # a.-b.
 a.b-.c; ; [V3]; ; ; ;  # a.b-.c
 a.-.c; ; [V3]; ; ; ;  # a.-.c
 a.bc--de.f; ; [V2]; ; ; ;  # a.bc--de.f
-ä.­.c; ä..c; [A4_2]; xn--4ca..c; ; ;  # ä..c
-ä.­.c; ä..c; [A4_2]; xn--4ca..c; ; ;  # ä..c
-Ä.­.C; ä..c; [A4_2]; xn--4ca..c; ; ;  # ä..c
-Ä.­.C; ä..c; [A4_2]; xn--4ca..c; ; ;  # ä..c
-xn--4ca..c; ä..c; [A4_2]; xn--4ca..c; ; ;  # ä..c
+ä.­.c; ä..c; [X4_2]; xn--4ca..c; [A4_2]; ;  # ä..c
+ä.­.c; ä..c; [X4_2]; xn--4ca..c; [A4_2]; ;  # ä..c
+Ä.­.C; ä..c; [X4_2]; xn--4ca..c; [A4_2]; ;  # ä..c
+Ä.­.C; ä..c; [X4_2]; xn--4ca..c; [A4_2]; ;  # ä..c
+xn--4ca..c; ä..c; [X4_2]; xn--4ca..c; [A4_2]; ;  # ä..c
 ä.-b.; ; [V3]; xn--4ca.-b.; ; ;  # ä.-b.
 ä.-b.; ä.-b.; [V3]; xn--4ca.-b.; ; ;  # ä.-b.
 Ä.-B.; ä.-b.; [V3]; xn--4ca.-b.; ; ;  # ä.-b.
@@ -464,7 +480,7 @@ xn--dmc; ஹ; ; xn--dmc; ; ;  # ஹ
 ஹ; ; ; xn--dmc; ; ;  # ஹ
 xn--dmc225h; ஹ‍; [C2]; xn--dmc225h; ; ;  # ஹ
 ‍; ; [C2]; xn--1ug; ; ; [A4_2] # 
-; ; [A4_2]; ; ; ;  # 
+; ; [X4_2]; ; [A4_2]; ;  # 
 xn--1ug; ‍; [C2]; xn--1ug; ; ;  # 
 ஹ்‌; ; ; xn--dmc4by94h; ; xn--dmc4b;  # ஹ்
 xn--dmc4by94h; ஹ்‌; ; xn--dmc4by94h; ; ;  # ஹ்
@@ -500,12 +516,12 @@ xn--cmba004q; ۯ‌ۯ; [C1]; xn--cmba004q; ; ;  # ۯۯ
 xn--ghb; ل; ; xn--ghb; ; ;  # ل
 ل; ; ; xn--ghb; ; ;  # ل
 xn--ghb413k; ل‌; [B3, C1]; xn--ghb413k; ; ;  # ل
-a。。b; a..b; [A4_2]; ; ; ;  # a..b
-A。。B; a..b; [A4_2]; ; ; ;  # a..b
-a..b; ; [A4_2]; ; ; ;  # a..b
-‍。。ڹ‌; ‍..ڹ‌; [B1, B3, C1, C2, A4_2]; xn--1ug..xn--skb080k; ; ..xn--skb; [A4_2] # ..ڹ
-..xn--skb; ..ڹ; [A4_2]; ..xn--skb; ; ;  # ..ڹ
-xn--1ug..xn--skb080k; ‍..ڹ‌; [B1, B3, C1, C2, A4_2]; xn--1ug..xn--skb080k; ; ;  # ..ڹ
+a。。b; a..b; [X4_2]; ; [A4_2]; ;  # a..b
+A。。B; a..b; [X4_2]; ; [A4_2]; ;  # a..b
+a..b; ; [X4_2]; ; [A4_2]; ;  # a..b
+‍。。ڹ‌; ‍..ڹ‌; [B1, B3, C1, C2, X4_2]; xn--1ug..xn--skb080k; [B1, B3, C1, C2, A4_2]; ..xn--skb; [A4_2] # ..ڹ
+..xn--skb; ..ڹ; [X4_2]; ..xn--skb; [A4_2]; ;  # ..ڹ
+xn--1ug..xn--skb080k; ‍..ڹ‌; [B1, B3, C1, C2, X4_2]; xn--1ug..xn--skb080k; [B1, B3, C1, C2, A4_2]; ;  # ..ڹ
 א0٠; ; [B4]; xn--0-zhc74b; ; ;  # א0٠
 xn--0-zhc74b; א0٠; [B4]; xn--0-zhc74b; ; ;  # א0٠
 $; ; [P1, V6]; ; ; ;  # $
@@ -592,9 +608,9 @@ xn--1ug6928ac48e.8.; 繱𑖿‍.8.; ; xn--1ug6928ac48e.8.; ; ;  # 繱𑖿.8.
 繱𑖿‍.8.; ; ; xn--1ug6928ac48e.8.; ; xn--gl0as212a.8.;  # 繱𑖿.8.
 xn--gl0as212a.xn--8-o89h; 繱𑖿.8︒; [V6]; xn--gl0as212a.xn--8-o89h; ; ;  # 繱𑖿.8︒
 xn--1ug6928ac48e.xn--8-o89h; 繱𑖿‍.8︒; [V6]; xn--1ug6928ac48e.xn--8-o89h; ; ;  # 繱𑖿.8︒
-󠆾．𞀈; .𞀈; [V5, A4_2]; .xn--ph4h; ; ;  # .𞀈
-󠆾.𞀈; .𞀈; [V5, A4_2]; .xn--ph4h; ; ;  # .𞀈
-.xn--ph4h; .𞀈; [V5, A4_2]; .xn--ph4h; ; ;  # .𞀈
+󠆾．𞀈; .𞀈; [V5, X4_2]; .xn--ph4h; [V5, A4_2]; ;  # .𞀈
+󠆾.𞀈; .𞀈; [V5, X4_2]; .xn--ph4h; [V5, A4_2]; ;  # .𞀈
+.xn--ph4h; .𞀈; [V5, X4_2]; .xn--ph4h; [V5, A4_2]; ;  # .𞀈
 ß۫。‍; ß۫.‍; [C2]; xn--zca012a.xn--1ug; ; xn--ss-59d.; [] # ß۫.
 SS۫。‍; ss۫.‍; [C2]; xn--ss-59d.xn--1ug; ; xn--ss-59d.; [] # ss۫.
 ss۫。‍; ss۫.‍; [C2]; xn--ss-59d.xn--1ug; ; xn--ss-59d.; [] # ss۫.
@@ -606,9 +622,9 @@ Ss۫.; ss۫.; ; xn--ss-59d.; ; ;  # ss۫.
 xn--ss-59d.xn--1ug; ss۫.‍; [C2]; xn--ss-59d.xn--1ug; ; ;  # ss۫.
 xn--zca012a.xn--1ug; ß۫.‍; [C2]; xn--zca012a.xn--1ug; ; ;  # ß۫.
 󠐵‌⒈．󠎇; 󠐵‌⒈.󠎇; [C1, P1, V6]; xn--0ug88o47900b.xn--tv36e; ; xn--tshz2001k.xn--tv36e; [P1, V6] # ⒈.
-󠐵‌1..󠎇; ; [C1, P1, V6, A4_2]; xn--1-rgn37671n..xn--tv36e; ; xn--1-bs31m..xn--tv36e; [P1, V6, A4_2] # 1..
-xn--1-bs31m..xn--tv36e; 󠐵1..󠎇; [V6, A4_2]; xn--1-bs31m..xn--tv36e; ; ;  # 1..
-xn--1-rgn37671n..xn--tv36e; 󠐵‌1..󠎇; [C1, V6, A4_2]; xn--1-rgn37671n..xn--tv36e; ; ;  # 1..
+󠐵‌1..󠎇; ; [C1, P1, V6, X4_2]; xn--1-rgn37671n..xn--tv36e; [C1, P1, V6, A4_2]; xn--1-bs31m..xn--tv36e; [P1, V6, A4_2] # 1..
+xn--1-bs31m..xn--tv36e; 󠐵1..󠎇; [V6, X4_2]; xn--1-bs31m..xn--tv36e; [V6, A4_2]; ;  # 1..
+xn--1-rgn37671n..xn--tv36e; 󠐵‌1..󠎇; [C1, V6, X4_2]; xn--1-rgn37671n..xn--tv36e; [C1, V6, A4_2]; ;  # 1..
 xn--tshz2001k.xn--tv36e; 󠐵⒈.󠎇; [V6]; xn--tshz2001k.xn--tv36e; ; ;  # ⒈.
 xn--0ug88o47900b.xn--tv36e; 󠐵‌⒈.󠎇; [C1, V6]; xn--0ug88o47900b.xn--tv36e; ; ;  # ⒈.
 󟈣ٟꪲß。󌓧; 󟈣ٟꪲß.󌓧; [P1, V6]; xn--zca92z0t7n5w96j.xn--bb79d; ; xn--ss-3xd2839nncy1m.xn--bb79d;  # ٟꪲß.
@@ -623,15 +639,15 @@ xn--4pb2977v.xn--z0nt555ukbnv; ݴ𞤿.𽘐䉜񿤼; [V6]; xn--4pb2977v.xn--z0nt55
 xn--4pb607jjt73a.xn--1ug236ke314donv1a; ݴ‌𞤿.𽘐䉜‍񿤼; [C1, C2, V6]; xn--4pb607jjt73a.xn--1ug236ke314donv1a; ; ;  # ݴ𞤿.䉜
 򔭜ςᡱ⒈.≮𑄳‍𐮍; ; [B1, P1, V6]; xn--3xa407hkzinr77u.xn--1ug85gn777ahze; ; xn--4xa207hkzinr77u.xn--gdh5392g6sd;  # ςᡱ⒈.≮𑄳𐮍
 򔭜ςᡱ⒈.≮𑄳‍𐮍; 򔭜ςᡱ⒈.≮𑄳‍𐮍; [B1, P1, V6]; xn--3xa407hkzinr77u.xn--1ug85gn777ahze; ; xn--4xa207hkzinr77u.xn--gdh5392g6sd;  # ςᡱ⒈.≮𑄳𐮍
-򔭜ςᡱ1..≮𑄳‍𐮍; ; [B1, P1, V6, A4_2]; xn--1-xmb999meq63t..xn--1ug85gn777ahze; ; xn--1-zmb699meq63t..xn--gdh5392g6sd;  # ςᡱ1..≮𑄳𐮍
-򔭜ςᡱ1..≮𑄳‍𐮍; 򔭜ςᡱ1..≮𑄳‍𐮍; [B1, P1, V6, A4_2]; xn--1-xmb999meq63t..xn--1ug85gn777ahze; ; xn--1-zmb699meq63t..xn--gdh5392g6sd;  # ςᡱ1..≮𑄳𐮍
-򔭜Σᡱ1..≮𑄳‍𐮍; 򔭜σᡱ1..≮𑄳‍𐮍; [B1, P1, V6, A4_2]; xn--1-zmb699meq63t..xn--1ug85gn777ahze; ; xn--1-zmb699meq63t..xn--gdh5392g6sd;  # σᡱ1..≮𑄳𐮍
-򔭜Σᡱ1..≮𑄳‍𐮍; 򔭜σᡱ1..≮𑄳‍𐮍; [B1, P1, V6, A4_2]; xn--1-zmb699meq63t..xn--1ug85gn777ahze; ; xn--1-zmb699meq63t..xn--gdh5392g6sd;  # σᡱ1..≮𑄳𐮍
-򔭜σᡱ1..≮𑄳‍𐮍; ; [B1, P1, V6, A4_2]; xn--1-zmb699meq63t..xn--1ug85gn777ahze; ; xn--1-zmb699meq63t..xn--gdh5392g6sd;  # σᡱ1..≮𑄳𐮍
-򔭜σᡱ1..≮𑄳‍𐮍; 򔭜σᡱ1..≮𑄳‍𐮍; [B1, P1, V6, A4_2]; xn--1-zmb699meq63t..xn--1ug85gn777ahze; ; xn--1-zmb699meq63t..xn--gdh5392g6sd;  # σᡱ1..≮𑄳𐮍
-xn--1-zmb699meq63t..xn--gdh5392g6sd; 򔭜σᡱ1..≮𑄳𐮍; [B1, V6, A4_2]; xn--1-zmb699meq63t..xn--gdh5392g6sd; ; ;  # σᡱ1..≮𑄳𐮍
-xn--1-zmb699meq63t..xn--1ug85gn777ahze; 򔭜σᡱ1..≮𑄳‍𐮍; [B1, V6, A4_2]; xn--1-zmb699meq63t..xn--1ug85gn777ahze; ; ;  # σᡱ1..≮𑄳𐮍
-xn--1-xmb999meq63t..xn--1ug85gn777ahze; 򔭜ςᡱ1..≮𑄳‍𐮍; [B1, V6, A4_2]; xn--1-xmb999meq63t..xn--1ug85gn777ahze; ; ;  # ςᡱ1..≮𑄳𐮍
+򔭜ςᡱ1..≮𑄳‍𐮍; ; [B1, P1, V6, X4_2]; xn--1-xmb999meq63t..xn--1ug85gn777ahze; [B1, P1, V6, A4_2]; xn--1-zmb699meq63t..xn--gdh5392g6sd;  # ςᡱ1..≮𑄳𐮍
+򔭜ςᡱ1..≮𑄳‍𐮍; 򔭜ςᡱ1..≮𑄳‍𐮍; [B1, P1, V6, X4_2]; xn--1-xmb999meq63t..xn--1ug85gn777ahze; [B1, P1, V6, A4_2]; xn--1-zmb699meq63t..xn--gdh5392g6sd;  # ςᡱ1..≮𑄳𐮍
+򔭜Σᡱ1..≮𑄳‍𐮍; 򔭜σᡱ1..≮𑄳‍𐮍; [B1, P1, V6, X4_2]; xn--1-zmb699meq63t..xn--1ug85gn777ahze; [B1, P1, V6, A4_2]; xn--1-zmb699meq63t..xn--gdh5392g6sd;  # σᡱ1..≮𑄳𐮍
+򔭜Σᡱ1..≮𑄳‍𐮍; 򔭜σᡱ1..≮𑄳‍𐮍; [B1, P1, V6, X4_2]; xn--1-zmb699meq63t..xn--1ug85gn777ahze; [B1, P1, V6, A4_2]; xn--1-zmb699meq63t..xn--gdh5392g6sd;  # σᡱ1..≮𑄳𐮍
+򔭜σᡱ1..≮𑄳‍𐮍; ; [B1, P1, V6, X4_2]; xn--1-zmb699meq63t..xn--1ug85gn777ahze; [B1, P1, V6, A4_2]; xn--1-zmb699meq63t..xn--gdh5392g6sd;  # σᡱ1..≮𑄳𐮍
+򔭜σᡱ1..≮𑄳‍𐮍; 򔭜σᡱ1..≮𑄳‍𐮍; [B1, P1, V6, X4_2]; xn--1-zmb699meq63t..xn--1ug85gn777ahze; [B1, P1, V6, A4_2]; xn--1-zmb699meq63t..xn--gdh5392g6sd;  # σᡱ1..≮𑄳𐮍
+xn--1-zmb699meq63t..xn--gdh5392g6sd; 򔭜σᡱ1..≮𑄳𐮍; [B1, V6, X4_2]; xn--1-zmb699meq63t..xn--gdh5392g6sd; [B1, V6, A4_2]; ;  # σᡱ1..≮𑄳𐮍
+xn--1-zmb699meq63t..xn--1ug85gn777ahze; 򔭜σᡱ1..≮𑄳‍𐮍; [B1, V6, X4_2]; xn--1-zmb699meq63t..xn--1ug85gn777ahze; [B1, V6, A4_2]; ;  # σᡱ1..≮𑄳𐮍
+xn--1-xmb999meq63t..xn--1ug85gn777ahze; 򔭜ςᡱ1..≮𑄳‍𐮍; [B1, V6, X4_2]; xn--1-xmb999meq63t..xn--1ug85gn777ahze; [B1, V6, A4_2]; ;  # ςᡱ1..≮𑄳𐮍
 򔭜Σᡱ⒈.≮𑄳‍𐮍; 򔭜σᡱ⒈.≮𑄳‍𐮍; [B1, P1, V6]; xn--4xa207hkzinr77u.xn--1ug85gn777ahze; ; xn--4xa207hkzinr77u.xn--gdh5392g6sd;  # σᡱ⒈.≮𑄳𐮍
 򔭜Σᡱ⒈.≮𑄳‍𐮍; 򔭜σᡱ⒈.≮𑄳‍𐮍; [B1, P1, V6]; xn--4xa207hkzinr77u.xn--1ug85gn777ahze; ; xn--4xa207hkzinr77u.xn--gdh5392g6sd;  # σᡱ⒈.≮𑄳𐮍
 򔭜σᡱ⒈.≮𑄳‍𐮍; ; [B1, P1, V6]; xn--4xa207hkzinr77u.xn--1ug85gn777ahze; ; xn--4xa207hkzinr77u.xn--gdh5392g6sd;  # σᡱ⒈.≮𑄳𐮍
@@ -687,7 +703,7 @@ xn---f-mz8b08788k.xn--1-ybd.xn--bib; 󟇇-䟖f.ߋ1.٢; [B1, V6]; xn---f-mz8b0878
 xn---f-mz8b08788k.xn--bib53ev44d; 󟇇-䟖f.ߋ⒈٢; [B4, V6]; xn---f-mz8b08788k.xn--bib53ev44d; ; ;  # -䟖f.ߋ⒈٢
 ‌｡𐹺; ‌.𐹺; [B1, C1]; xn--0ug.xn--yo0d; ; .xn--yo0d; [B1, A4_2] # .𐹺
 ‌。𐹺; ‌.𐹺; [B1, C1]; xn--0ug.xn--yo0d; ; .xn--yo0d; [B1, A4_2] # .𐹺
-.xn--yo0d; .𐹺; [B1, A4_2]; .xn--yo0d; ; ;  # .𐹺
+.xn--yo0d; .𐹺; [B1, X4_2]; .xn--yo0d; [B1, A4_2]; ;  # .𐹺
 xn--0ug.xn--yo0d; ‌.𐹺; [B1, C1]; xn--0ug.xn--yo0d; ; ;  # .𐹺
 𐡆.≯‌-𞥀; ; [B1, C1, P1, V6]; xn--le9c.xn----rgn40iy359e; ; xn--le9c.xn----ogo9956r; [B1, P1, V6] # 𐡆.≯-𞥀
 𐡆.≯‌-𞥀; 𐡆.≯‌-𞥀; [B1, C1, P1, V6]; xn--le9c.xn----rgn40iy359e; ; xn--le9c.xn----ogo9956r; [B1, P1, V6] # 𐡆.≯-𞥀
@@ -739,11 +755,11 @@ xn----9pc551nk39n.xn--4fb6o571degg; ١᭄-킼.᮪ؖ٬≯; [B1, B5, B6, V5, V6]; 
 xn--b726ey18m.xn--ldb8734fg0qcyzzg; 󯑖󠁐.ֽ𙮰ꡝ𐋡; [V5, V6]; xn--b726ey18m.xn--ldb8734fg0qcyzzg; ; ;  # .ֽꡝ𐋡
 xn--1ug66101lt8me.xn--ldb8734fg0qcyzzg; ‍󯑖󠁐.ֽ𙮰ꡝ𐋡; [C2, V5, V6]; xn--1ug66101lt8me.xn--ldb8734fg0qcyzzg; ; ;  # .ֽꡝ𐋡
 ︒􃈵ς񀠇｡𐮈; ︒􃈵ς񀠇.𐮈; [B1, P1, V6]; xn--3xa3729jwz5t7gl5f.xn--f29c; ; xn--4xa1729jwz5t7gl5f.xn--f29c;  # ︒ς.𐮈
-。􃈵ς񀠇。𐮈; .􃈵ς񀠇.𐮈; [P1, V6, A4_2]; .xn--3xa88573c7n64d.xn--f29c; ; .xn--4xa68573c7n64d.xn--f29c;  # .ς.𐮈
-。􃈵Σ񀠇。𐮈; .􃈵σ񀠇.𐮈; [P1, V6, A4_2]; .xn--4xa68573c7n64d.xn--f29c; ; ;  # .σ.𐮈
-。􃈵σ񀠇。𐮈; .􃈵σ񀠇.𐮈; [P1, V6, A4_2]; .xn--4xa68573c7n64d.xn--f29c; ; ;  # .σ.𐮈
-.xn--4xa68573c7n64d.xn--f29c; .􃈵σ񀠇.𐮈; [V6, A4_2]; .xn--4xa68573c7n64d.xn--f29c; ; ;  # .σ.𐮈
-.xn--3xa88573c7n64d.xn--f29c; .􃈵ς񀠇.𐮈; [V6, A4_2]; .xn--3xa88573c7n64d.xn--f29c; ; ;  # .ς.𐮈
+。􃈵ς񀠇。𐮈; .􃈵ς񀠇.𐮈; [P1, V6, X4_2]; .xn--3xa88573c7n64d.xn--f29c; [P1, V6, A4_2]; .xn--4xa68573c7n64d.xn--f29c;  # .ς.𐮈
+。􃈵Σ񀠇。𐮈; .􃈵σ񀠇.𐮈; [P1, V6, X4_2]; .xn--4xa68573c7n64d.xn--f29c; [P1, V6, A4_2]; ;  # .σ.𐮈
+。􃈵σ񀠇。𐮈; .􃈵σ񀠇.𐮈; [P1, V6, X4_2]; .xn--4xa68573c7n64d.xn--f29c; [P1, V6, A4_2]; ;  # .σ.𐮈
+.xn--4xa68573c7n64d.xn--f29c; .􃈵σ񀠇.𐮈; [V6, X4_2]; .xn--4xa68573c7n64d.xn--f29c; [V6, A4_2]; ;  # .σ.𐮈
+.xn--3xa88573c7n64d.xn--f29c; .􃈵ς񀠇.𐮈; [V6, X4_2]; .xn--3xa88573c7n64d.xn--f29c; [V6, A4_2]; ;  # .ς.𐮈
 ︒􃈵Σ񀠇｡𐮈; ︒􃈵σ񀠇.𐮈; [B1, P1, V6]; xn--4xa1729jwz5t7gl5f.xn--f29c; ; ;  # ︒σ.𐮈
 ︒􃈵σ񀠇｡𐮈; ︒􃈵σ񀠇.𐮈; [B1, P1, V6]; xn--4xa1729jwz5t7gl5f.xn--f29c; ; ;  # ︒σ.𐮈
 xn--4xa1729jwz5t7gl5f.xn--f29c; ︒􃈵σ񀠇.𐮈; [B1, V6]; xn--4xa1729jwz5t7gl5f.xn--f29c; ; ;  # ︒σ.𐮈
@@ -781,9 +797,9 @@ xn--3gb910r.; ⴙظ.; [B5, B6]; xn--3gb910r.; ; ;  # ⴙظ.
 xn--3gb910r.xn--1ug; ⴙظ.‍; [B1, B5, B6, C2]; xn--3gb910r.xn--1ug; ; ;  # ⴙظ.
 xn--3gb194c.; Ⴙظ.; [B5, B6, V6]; xn--3gb194c.; ; ;  # Ⴙظ.
 xn--3gb194c.xn--1ug; Ⴙظ.‍; [B1, B5, B6, C2, V6]; xn--3gb194c.xn--1ug; ; ;  # Ⴙظ.
-󠆸｡₆０𐺧ݖ; .60𐺧ݖ; [B1, P1, V6, A4_2]; .xn--60-cke9470y; ; ;  # .60ݖ
-󠆸。60𐺧ݖ; .60𐺧ݖ; [B1, P1, V6, A4_2]; .xn--60-cke9470y; ; ;  # .60ݖ
-.xn--60-cke9470y; .60𐺧ݖ; [B1, V6, A4_2]; .xn--60-cke9470y; ; ;  # .60ݖ
+󠆸｡₆０𐺧ݖ; .60𐺧ݖ; [B1, P1, V6, X4_2]; .xn--60-cke9470y; [B1, P1, V6, A4_2]; ;  # .60ݖ
+󠆸。60𐺧ݖ; .60𐺧ݖ; [B1, P1, V6, X4_2]; .xn--60-cke9470y; [B1, P1, V6, A4_2]; ;  # .60ݖ
+.xn--60-cke9470y; .60𐺧ݖ; [B1, V6, X4_2]; .xn--60-cke9470y; [B1, V6, A4_2]; ;  # .60ݖ
 6ࡏ｡-𑈴; 6ࡏ.-𑈴; [B1, V3]; xn--6-jjd.xn----6n8i; ; ;  # 6ࡏ.-𑈴
 6ࡏ。-𑈴; 6ࡏ.-𑈴; [B1, V3]; xn--6-jjd.xn----6n8i; ; ;  # 6ࡏ.-𑈴
 xn--6-jjd.xn----6n8i; 6ࡏ.-𑈴; [B1, V3]; xn--6-jjd.xn----6n8i; ; ;  # 6ࡏ.-𑈴
@@ -834,7 +850,7 @@ xn--ybc101g3m1p.xn--740a; 𐹯ᯛ੍.脥; [B1]; xn--ybc101g3m1p.xn--740a; ; ;  #
 xn--osd971cpx70btgt8b.-; ᭄ᅟ𞷿򃀍.-; [B1, B5, V3, V5, V6]; xn--osd971cpx70btgt8b.-; ; ;  # ᭄.-
 ‌｡͔; ‌.͔; [C1, V5]; xn--0ug.xn--yua; ; .xn--yua; [V5, A4_2] # .͔
 ‌。͔; ‌.͔; [C1, V5]; xn--0ug.xn--yua; ; .xn--yua; [V5, A4_2] # .͔
-.xn--yua; .͔; [V5, A4_2]; .xn--yua; ; ;  # .͔
+.xn--yua; .͔; [V5, X4_2]; .xn--yua; [V5, A4_2]; ;  # .͔
 xn--0ug.xn--yua; ‌.͔; [C1, V5]; xn--0ug.xn--yua; ; ;  # .͔
 𞤥󠅮．ᡄႮ; 𞤥.ᡄႮ; [P1, V6]; xn--de6h.xn--mnd799a; ; ;  # 𞤥.ᡄႮ
 𞤥󠅮.ᡄႮ; 𞤥.ᡄႮ; [P1, V6]; xn--de6h.xn--mnd799a; ; ;  # 𞤥.ᡄႮ
@@ -876,9 +892,9 @@ xn----e3j425bsk1o.xn--jlj4997dhgh; ᠆몆‌-.ⴛ𐦅︒; [B1, B5, B6, C1, V3, V
 xn----e3j6620g.xn--znd2362jhgh; ᠆몆-.Ⴛ𐦅︒; [B1, B5, B6, V3, V6]; xn----e3j6620g.xn--znd2362jhgh; ; ;  # ᠆몆-.Ⴛ𐦅︒
 xn----e3j425bsk1o.xn--znd2362jhgh; ᠆몆‌-.Ⴛ𐦅︒; [B1, B5, B6, C1, V3, V6]; xn----e3j425bsk1o.xn--znd2362jhgh; ; ;  # ᠆몆-.Ⴛ𐦅︒
 󠾳.︒⥱‌𐹬; ; [B1, C1, P1, V6]; xn--uf66e.xn--0ugz28axl3pqxna; ; xn--uf66e.xn--qtiz073e3ik; [B1, P1, V6] # .︒⥱𐹬
-󠾳.。⥱‌𐹬; 󠾳..⥱‌𐹬; [B1, C1, P1, V6, A4_2]; xn--uf66e..xn--0ugz28as66q; ; xn--uf66e..xn--qti2829e; [B1, P1, V6, A4_2] # ..⥱𐹬
-xn--uf66e..xn--qti2829e; 󠾳..⥱𐹬; [B1, V6, A4_2]; xn--uf66e..xn--qti2829e; ; ;  # ..⥱𐹬
-xn--uf66e..xn--0ugz28as66q; 󠾳..⥱‌𐹬; [B1, C1, V6, A4_2]; xn--uf66e..xn--0ugz28as66q; ; ;  # ..⥱𐹬
+󠾳.。⥱‌𐹬; 󠾳..⥱‌𐹬; [B1, C1, P1, V6, X4_2]; xn--uf66e..xn--0ugz28as66q; [B1, C1, P1, V6, A4_2]; xn--uf66e..xn--qti2829e; [B1, P1, V6, A4_2] # ..⥱𐹬
+xn--uf66e..xn--qti2829e; 󠾳..⥱𐹬; [B1, V6, X4_2]; xn--uf66e..xn--qti2829e; [B1, V6, A4_2]; ;  # ..⥱𐹬
+xn--uf66e..xn--0ugz28as66q; 󠾳..⥱‌𐹬; [B1, C1, V6, X4_2]; xn--uf66e..xn--0ugz28as66q; [B1, C1, V6, A4_2]; ;  # ..⥱𐹬
 xn--uf66e.xn--qtiz073e3ik; 󠾳.︒⥱𐹬; [B1, V6]; xn--uf66e.xn--qtiz073e3ik; ; ;  # .︒⥱𐹬
 xn--uf66e.xn--0ugz28axl3pqxna; 󠾳.︒⥱‌𐹬; [B1, C1, V6]; xn--uf66e.xn--0ugz28axl3pqxna; ; ;  # .︒⥱𐹬
 𐯖.𐹠Ⴑ񚇜𐫊; ; [B1, P1, V6]; xn--n49c.xn--pnd4619jwicl862o; ; ;  # .𐹠Ⴑ𐫊
@@ -946,10 +962,10 @@ xn--wnd558a.xn--lfb465c1v87a; ᠇Ⴘ.؃Ⴈ𝆊; [B1, V6]; xn--wnd558a.xn--lfb465
 xn--cthy466n29j3e.xn--gib285gtxo2l9d; ⒚󠋑𞤰.牣٧ⴜᣥ; [B1, B5, V6]; xn--cthy466n29j3e.xn--gib285gtxo2l9d; ; ;  # ⒚𞤰.牣٧ⴜᣥ
 xn--cthy466n29j3e.xn--gib404ccxgh00h; ⒚󠋑𞤰.牣٧Ⴜᣥ; [B1, B5, V6]; xn--cthy466n29j3e.xn--gib404ccxgh00h; ; ;  # ⒚𞤰.牣٧Ⴜᣥ
 -𐋱𐰽⒈.Ⴓ; ; [B1, P1, V3, V6]; xn----ecp0206g90h.xn--rnd; ; ;  # -𐋱𐰽⒈.Ⴓ
--𐋱𐰽1..Ⴓ; ; [B1, P1, V3, V6, A4_2]; xn---1-895nq11a..xn--rnd; ; ;  # -𐋱𐰽1..Ⴓ
--𐋱𐰽1..ⴓ; ; [B1, V3, A4_2]; xn---1-895nq11a..xn--blj; ; ;  # -𐋱𐰽1..ⴓ
-xn---1-895nq11a..xn--blj; -𐋱𐰽1..ⴓ; [B1, V3, A4_2]; xn---1-895nq11a..xn--blj; ; ;  # -𐋱𐰽1..ⴓ
-xn---1-895nq11a..xn--rnd; -𐋱𐰽1..Ⴓ; [B1, V3, V6, A4_2]; xn---1-895nq11a..xn--rnd; ; ;  # -𐋱𐰽1..Ⴓ
+-𐋱𐰽1..Ⴓ; ; [B1, P1, V3, V6, X4_2]; xn---1-895nq11a..xn--rnd; [B1, P1, V3, V6, A4_2]; ;  # -𐋱𐰽1..Ⴓ
+-𐋱𐰽1..ⴓ; ; [B1, V3, X4_2]; xn---1-895nq11a..xn--blj; [B1, V3, A4_2]; ;  # -𐋱𐰽1..ⴓ
+xn---1-895nq11a..xn--blj; -𐋱𐰽1..ⴓ; [B1, V3, X4_2]; xn---1-895nq11a..xn--blj; [B1, V3, A4_2]; ;  # -𐋱𐰽1..ⴓ
+xn---1-895nq11a..xn--rnd; -𐋱𐰽1..Ⴓ; [B1, V3, V6, X4_2]; xn---1-895nq11a..xn--rnd; [B1, V3, V6, A4_2]; ;  # -𐋱𐰽1..Ⴓ
 -𐋱𐰽⒈.ⴓ; ; [B1, P1, V3, V6]; xn----ecp0206g90h.xn--blj; ; ;  # -𐋱𐰽⒈.ⴓ
 xn----ecp0206g90h.xn--blj; -𐋱𐰽⒈.ⴓ; [B1, V3, V6]; xn----ecp0206g90h.xn--blj; ; ;  # -𐋱𐰽⒈.ⴓ
 xn----ecp0206g90h.xn--rnd; -𐋱𐰽⒈.Ⴓ; [B1, V3, V6]; xn----ecp0206g90h.xn--rnd; ; ;  # -𐋱𐰽⒈.Ⴓ
@@ -1001,12 +1017,12 @@ xn--pw9c.xn--mkj83l4v899a; 𐫀.⳻󠙾ㅤ; [B1, V6]; xn--pw9c.xn--mkj83l4v899a;
 xn--7qb6383d.xn----20c3154q; ޚ舛.ܞ-𐋰; [B2, B3]; xn--7qb6383d.xn----20c3154q; ; ;  # ޚ舛.ܞ-𐋰
 Ⴉ猕󹛫≮．︒; Ⴉ猕󹛫≮.︒; [P1, V6]; xn--hnd212gz32d54x5r.xn--y86c; ; ;  # Ⴉ猕≮.︒
 Ⴉ猕󹛫≮．︒; Ⴉ猕󹛫≮.︒; [P1, V6]; xn--hnd212gz32d54x5r.xn--y86c; ; ;  # Ⴉ猕≮.︒
-Ⴉ猕󹛫≮.。; Ⴉ猕󹛫≮..; [P1, V6, A4_2]; xn--hnd212gz32d54x5r..; ; ;  # Ⴉ猕≮..
-Ⴉ猕󹛫≮.。; Ⴉ猕󹛫≮..; [P1, V6, A4_2]; xn--hnd212gz32d54x5r..; ; ;  # Ⴉ猕≮..
-ⴉ猕󹛫≮.。; ⴉ猕󹛫≮..; [P1, V6, A4_2]; xn--gdh892bbz0d5438s..; ; ;  # ⴉ猕≮..
-ⴉ猕󹛫≮.。; ⴉ猕󹛫≮..; [P1, V6, A4_2]; xn--gdh892bbz0d5438s..; ; ;  # ⴉ猕≮..
-xn--gdh892bbz0d5438s..; ⴉ猕󹛫≮..; [V6, A4_2]; xn--gdh892bbz0d5438s..; ; ;  # ⴉ猕≮..
-xn--hnd212gz32d54x5r..; Ⴉ猕󹛫≮..; [V6, A4_2]; xn--hnd212gz32d54x5r..; ; ;  # Ⴉ猕≮..
+Ⴉ猕󹛫≮.。; Ⴉ猕󹛫≮..; [P1, V6, X4_2]; xn--hnd212gz32d54x5r..; [P1, V6, A4_2]; ;  # Ⴉ猕≮..
+Ⴉ猕󹛫≮.。; Ⴉ猕󹛫≮..; [P1, V6, X4_2]; xn--hnd212gz32d54x5r..; [P1, V6, A4_2]; ;  # Ⴉ猕≮..
+ⴉ猕󹛫≮.。; ⴉ猕󹛫≮..; [P1, V6, X4_2]; xn--gdh892bbz0d5438s..; [P1, V6, A4_2]; ;  # ⴉ猕≮..
+ⴉ猕󹛫≮.。; ⴉ猕󹛫≮..; [P1, V6, X4_2]; xn--gdh892bbz0d5438s..; [P1, V6, A4_2]; ;  # ⴉ猕≮..
+xn--gdh892bbz0d5438s..; ⴉ猕󹛫≮..; [V6, X4_2]; xn--gdh892bbz0d5438s..; [V6, A4_2]; ;  # ⴉ猕≮..
+xn--hnd212gz32d54x5r..; Ⴉ猕󹛫≮..; [V6, X4_2]; xn--hnd212gz32d54x5r..; [V6, A4_2]; ;  # Ⴉ猕≮..
 ⴉ猕󹛫≮．︒; ⴉ猕󹛫≮.︒; [P1, V6]; xn--gdh892bbz0d5438s.xn--y86c; ; ;  # ⴉ猕≮.︒
 ⴉ猕󹛫≮．︒; ⴉ猕󹛫≮.︒; [P1, V6]; xn--gdh892bbz0d5438s.xn--y86c; ; ;  # ⴉ猕≮.︒
 xn--gdh892bbz0d5438s.xn--y86c; ⴉ猕󹛫≮.︒; [V6]; xn--gdh892bbz0d5438s.xn--y86c; ; ;  # ⴉ猕≮.︒
@@ -1112,9 +1128,9 @@ xn--1ch.xn----vqc597q; ≠.‌-٫; [B1, C1, V6]; xn--1ch.xn----vqc597q; ; ;  # �
 ٠۱。󠳶𞠁٥; ٠۱.󠳶𞠁٥; [B1, P1, V6]; xn--8hb40a.xn--eib7967vner3e; ; ;  # ٠۱.𞠁٥
 xn--8hb40a.xn--eib7967vner3e; ٠۱.󠳶𞠁٥; [B1, V6]; xn--8hb40a.xn--eib7967vner3e; ; ;  # ٠۱.𞠁٥
 ‌٣⒖。󱅉𽷛᯳; ‌٣⒖.󱅉𽷛᯳; [B1, C1, P1, V6]; xn--cib152kwgd.xn--1zf13512buy41d; ; xn--cib675m.xn--1zf13512buy41d; [B1, P1, V6] # ٣⒖.᯳
-‌٣15.。󱅉𽷛᯳; ‌٣15..󱅉𽷛᯳; [B1, C1, P1, V6, A4_2]; xn--15-gyd983x..xn--1zf13512buy41d; ; xn--15-gyd..xn--1zf13512buy41d; [B1, P1, V6, A4_2] # ٣15..᯳
-xn--15-gyd..xn--1zf13512buy41d; ٣15..󱅉𽷛᯳; [B1, V6, A4_2]; xn--15-gyd..xn--1zf13512buy41d; ; ;  # ٣15..᯳
-xn--15-gyd983x..xn--1zf13512buy41d; ‌٣15..󱅉𽷛᯳; [B1, C1, V6, A4_2]; xn--15-gyd983x..xn--1zf13512buy41d; ; ;  # ٣15..᯳
+‌٣15.。󱅉𽷛᯳; ‌٣15..󱅉𽷛᯳; [B1, C1, P1, V6, X4_2]; xn--15-gyd983x..xn--1zf13512buy41d; [B1, C1, P1, V6, A4_2]; xn--15-gyd..xn--1zf13512buy41d; [B1, P1, V6, A4_2] # ٣15..᯳
+xn--15-gyd..xn--1zf13512buy41d; ٣15..󱅉𽷛᯳; [B1, V6, X4_2]; xn--15-gyd..xn--1zf13512buy41d; [B1, V6, A4_2]; ;  # ٣15..᯳
+xn--15-gyd983x..xn--1zf13512buy41d; ‌٣15..󱅉𽷛᯳; [B1, C1, V6, X4_2]; xn--15-gyd983x..xn--1zf13512buy41d; [B1, C1, V6, A4_2]; ;  # ٣15..᯳
 xn--cib675m.xn--1zf13512buy41d; ٣⒖.󱅉𽷛᯳; [B1, V6]; xn--cib675m.xn--1zf13512buy41d; ; ;  # ٣⒖.᯳
 xn--cib152kwgd.xn--1zf13512buy41d; ‌٣⒖.󱅉𽷛᯳; [B1, C1, V6]; xn--cib152kwgd.xn--1zf13512buy41d; ; ;  # ٣⒖.᯳
 ᯳.-逋񳦭󙙮; ; [P1, V3, V5, V6]; xn--1zf.xn----483d46987byr50b; ; ;  # ᯳.-逋
@@ -1287,8 +1303,8 @@ xn--f-tgn9761i.xn--7656e.xn--fqb4175k; ‍f𑓂.󠺨.ݾ𐹢; [B1, C2, V6]; xn--f
 xn--f-kq9i.xn--fqb1637j8hky9452a; f𑓂.󠺨︒ݾ𐹢; [B1, V6]; xn--f-kq9i.xn--fqb1637j8hky9452a; ; ;  # f𑓂.︒ݾ𐹢
 xn--f-tgn9761i.xn--fqb1637j8hky9452a; ‍f𑓂.󠺨︒ݾ𐹢; [B1, C2, V6]; xn--f-tgn9761i.xn--fqb1637j8hky9452a; ; ;  # f𑓂.︒ݾ𐹢
 ࡅ🄇𐼗︒｡𐹻𑜫; ࡅ🄇𐼗︒.𐹻𑜫; [B1, B3, P1, V6]; xn--3vb4696jpxkjh7s.xn--zo0di2m; ; ;  # ࡅ🄇𐼗︒.𐹻𑜫
-ࡅ6,𐼗。。𐹻𑜫; ࡅ6,𐼗..𐹻𑜫; [B1, P1, V6, A4_2]; xn--6,-r4e4420y..xn--zo0di2m; ; ;  # ࡅ6,𐼗..𐹻𑜫
-xn--6,-r4e4420y..xn--zo0di2m; ࡅ6,𐼗..𐹻𑜫; [B1, P1, V6, A4_2]; xn--6,-r4e4420y..xn--zo0di2m; ; ;  # ࡅ6,𐼗..𐹻𑜫
+ࡅ6,𐼗。。𐹻𑜫; ࡅ6,𐼗..𐹻𑜫; [B1, P1, V6, X4_2]; xn--6,-r4e4420y..xn--zo0di2m; [B1, P1, V6, A4_2]; ;  # ࡅ6,𐼗..𐹻𑜫
+xn--6,-r4e4420y..xn--zo0di2m; ࡅ6,𐼗..𐹻𑜫; [B1, P1, V6, X4_2]; xn--6,-r4e4420y..xn--zo0di2m; [B1, P1, V6, A4_2]; ;  # ࡅ6,𐼗..𐹻𑜫
 xn--3vb4696jpxkjh7s.xn--zo0di2m; ࡅ🄇𐼗︒.𐹻𑜫; [B1, B3, V6]; xn--3vb4696jpxkjh7s.xn--zo0di2m; ; ;  # ࡅ🄇𐼗︒.𐹻𑜫
 𐹈.᷀𑈱𐦭; ; [B1, P1, V5, V6]; xn--jn0d.xn--7dg0871h3lf; ; ;  # .᷀𑈱𐦭
 xn--jn0d.xn--7dg0871h3lf; 𐹈.᷀𑈱𐦭; [B1, V5, V6]; xn--jn0d.xn--7dg0871h3lf; ; ;  # .᷀𑈱𐦭
@@ -1298,8 +1314,8 @@ xn--tkj638f.xn--pjb9818vg4xno967d; ⴂ䠺.𞤥񅏎󙮦ړ; [B2, V6]; xn--tkj638f.
 xn--9md875z.xn--pjb9818vg4xno967d; Ⴂ䠺.𞤥񅏎󙮦ړ; [B2, V6]; xn--9md875z.xn--pjb9818vg4xno967d; ; ;  # Ⴂ䠺.𞤥ړ
 ⴂ䠺。𞤃񅏎󙮦ړ; ⴂ䠺.𞤥񅏎󙮦ړ; [B2, P1, V6]; xn--tkj638f.xn--pjb9818vg4xno967d; ; ;  # ⴂ䠺.𞤥ړ
 🄇伐︒.𜙚꣄; ; [P1, V6]; xn--woqs083bel0g.xn--0f9ao925c; ; ;  # 🄇伐︒.꣄
-6,伐。.𜙚꣄; 6,伐..𜙚꣄; [P1, V6, A4_2]; xn--6,-7i3c..xn--0f9ao925c; ; ;  # 6,伐..꣄
-xn--6,-7i3c..xn--0f9ao925c; 6,伐..𜙚꣄; [P1, V6, A4_2]; xn--6,-7i3c..xn--0f9ao925c; ; ;  # 6,伐..꣄
+6,伐。.𜙚꣄; 6,伐..𜙚꣄; [P1, V6, X4_2]; xn--6,-7i3c..xn--0f9ao925c; [P1, V6, A4_2]; ;  # 6,伐..꣄
+xn--6,-7i3c..xn--0f9ao925c; 6,伐..𜙚꣄; [P1, V6, X4_2]; xn--6,-7i3c..xn--0f9ao925c; [P1, V6, A4_2]; ;  # 6,伐..꣄
 xn--woqs083bel0g.xn--0f9ao925c; 🄇伐︒.𜙚꣄; [V6]; xn--woqs083bel0g.xn--0f9ao925c; ; ;  # 🄇伐︒.꣄
 ‍𐹠꯭￻。‍𐫓Ⴚ𑂹; ‍𐹠꯭￻.‍𐫓Ⴚ𑂹; [B1, C2, P1, V6]; xn--1ugz126coy7bdbm.xn--ynd959evs1pv6e; ; xn--429az70n29i.xn--ynd3619jqyd; [B1, B2, B3, P1, V6] # 𐹠꯭.𐫓Ⴚ𑂹
 ‍𐹠꯭￻。‍𐫓ⴚ𑂹; ‍𐹠꯭￻.‍𐫓ⴚ𑂹; [B1, C2, P1, V6]; xn--1ugz126coy7bdbm.xn--1ug062chv7ov6e; ; xn--429az70n29i.xn--ilj7702eqyd; [B1, B2, B3, P1, V6] # 𐹠꯭.𐫓ⴚ𑂹
@@ -1307,9 +1323,9 @@ xn--429az70n29i.xn--ilj7702eqyd; 𐹠꯭￻.𐫓ⴚ𑂹; [B1, B2, B3, V6]; xn--4
 xn--1ugz126coy7bdbm.xn--1ug062chv7ov6e; ‍𐹠꯭￻.‍𐫓ⴚ𑂹; [B1, C2, V6]; xn--1ugz126coy7bdbm.xn--1ug062chv7ov6e; ; ;  # 𐹠꯭.𐫓ⴚ𑂹
 xn--429az70n29i.xn--ynd3619jqyd; 𐹠꯭￻.𐫓Ⴚ𑂹; [B1, B2, B3, V6]; xn--429az70n29i.xn--ynd3619jqyd; ; ;  # 𐹠꯭.𐫓Ⴚ𑂹
 xn--1ugz126coy7bdbm.xn--ynd959evs1pv6e; ‍𐹠꯭￻.‍𐫓Ⴚ𑂹; [B1, C2, V6]; xn--1ugz126coy7bdbm.xn--ynd959evs1pv6e; ; ;  # 𐹠꯭.𐫓Ⴚ𑂹
-󠆠．񷐴󌟈; .񷐴󌟈; [P1, V6, A4_2]; .xn--rx21bhv12i; ; ;  # .
-󠆠.񷐴󌟈; .񷐴󌟈; [P1, V6, A4_2]; .xn--rx21bhv12i; ; ;  # .
-.xn--rx21bhv12i; .񷐴󌟈; [V6, A4_2]; .xn--rx21bhv12i; ; ;  # .
+󠆠．񷐴󌟈; .񷐴󌟈; [P1, V6, X4_2]; .xn--rx21bhv12i; [P1, V6, A4_2]; ;  # .
+󠆠.񷐴󌟈; .񷐴󌟈; [P1, V6, X4_2]; .xn--rx21bhv12i; [P1, V6, A4_2]; ;  # .
+.xn--rx21bhv12i; .񷐴󌟈; [V6, X4_2]; .xn--rx21bhv12i; [V6, A4_2]; ;  # .
 𐫃‌Ⴆ.≠𞷙; ; [B1, B2, B3, C1, P1, V6]; xn--end799ekr1p.xn--1ch2802p; ; xn--end1719j.xn--1ch2802p; [B1, B2, B3, P1, V6] # 𐫃Ⴆ.≠
 𐫃‌Ⴆ.≠𞷙; 𐫃‌Ⴆ.≠𞷙; [B1, B2, B3, C1, P1, V6]; xn--end799ekr1p.xn--1ch2802p; ; xn--end1719j.xn--1ch2802p; [B1, B2, B3, P1, V6] # 𐫃Ⴆ.≠
 𐫃‌ⴆ.≠𞷙; 𐫃‌ⴆ.≠𞷙; [B1, B2, B3, C1, P1, V6]; xn--0ug132csv7o.xn--1ch2802p; ; xn--xkjz802e.xn--1ch2802p; [B1, B2, B3, P1, V6] # 𐫃ⴆ.≠
@@ -1399,9 +1415,9 @@ xn--0ug3766p5nm1b.xn--3xa578i1mfjw7y; 򇽭‌🜭.𑖿᪻ς≠; [C1, V5, V6]; xn
 󠅯򇽭‌🜭｡𑖿᪻σ≠; 򇽭‌🜭.𑖿᪻σ≠; [C1, P1, V5, V6]; xn--0ug3766p5nm1b.xn--4xa378i1mfjw7y; ; xn--zb9h5968x.xn--4xa378i1mfjw7y; [P1, V5, V6] # 🜭.𑖿᪻σ≠
 󠅯򇽭‌🜭｡𑖿᪻σ≠; 򇽭‌🜭.𑖿᪻σ≠; [C1, P1, V5, V6]; xn--0ug3766p5nm1b.xn--4xa378i1mfjw7y; ; xn--zb9h5968x.xn--4xa378i1mfjw7y; [P1, V5, V6] # 🜭.𑖿᪻σ≠
 ⒋｡⒈‍򳴢; ⒋.⒈‍򳴢; [C2, P1, V6]; xn--wsh.xn--1ug58o74922a; ; xn--wsh.xn--tsh07994h; [P1, V6] # ⒋.⒈
-4.。1.‍򳴢; 4..1.‍򳴢; [C2, P1, V6, A4_2]; 4..1.xn--1ug64613i; ; 4..1.xn--sf51d; [P1, V6, A4_2] # 4..1.
-4..1.xn--sf51d; 4..1.򳴢; [V6, A4_2]; 4..1.xn--sf51d; ; ;  # 4..1.
-4..1.xn--1ug64613i; 4..1.‍򳴢; [C2, V6, A4_2]; 4..1.xn--1ug64613i; ; ;  # 4..1.
+4.。1.‍򳴢; 4..1.‍򳴢; [C2, P1, V6, X4_2]; 4..1.xn--1ug64613i; [C2, P1, V6, A4_2]; 4..1.xn--sf51d; [P1, V6, A4_2] # 4..1.
+4..1.xn--sf51d; 4..1.򳴢; [V6, X4_2]; 4..1.xn--sf51d; [V6, A4_2]; ;  # 4..1.
+4..1.xn--1ug64613i; 4..1.‍򳴢; [C2, V6, X4_2]; 4..1.xn--1ug64613i; [C2, V6, A4_2]; ;  # 4..1.
 xn--wsh.xn--tsh07994h; ⒋.⒈򳴢; [V6]; xn--wsh.xn--tsh07994h; ; ;  # ⒋.⒈
 xn--wsh.xn--1ug58o74922a; ⒋.⒈‍򳴢; [C2, V6]; xn--wsh.xn--1ug58o74922a; ; ;  # ⒋.⒈
 لß｡᩠𐇽򾅢𞤾; لß.᩠𐇽򾅢𞤾; [B1, B2, B3, P1, V5, V6]; xn--zca57y.xn--jof2298hn83fln78f; ; xn--ss-svd.xn--jof2298hn83fln78f;  # لß.᩠𐇽𞤾
@@ -1516,10 +1532,10 @@ xn--c0e34564d.xn--9ca207st53lg3f; 񏁇᜴.𐨺é⬓𑄴; [V5, V6]; xn--c0e34564d
 񏁇᜴．𐨺é⬓𑄴; 񏁇᜴.𐨺é⬓𑄴; [P1, V5, V6]; xn--c0e34564d.xn--9ca207st53lg3f; ; ;  # ᜴.𐨺é⬓𑄴
 񏁇᜴．𐨺é⬓𑄴; 񏁇᜴.𐨺é⬓𑄴; [P1, V5, V6]; xn--c0e34564d.xn--9ca207st53lg3f; ; ;  # ᜴.𐨺é⬓𑄴
 ᢇ‍꣄｡︒𞤺; ᢇ‍꣄.︒𞤺; [B1, B6, C2, P1, V6]; xn--09e669a6x8j.xn--y86cv562b; ; xn--09e4694e.xn--y86cv562b; [B1, P1, V6] # ᢇ꣄.︒𞤺
-ᢇ‍꣄。。𞤺; ᢇ‍꣄..𞤺; [B6, C2, A4_2]; xn--09e669a6x8j..xn--ye6h; ; xn--09e4694e..xn--ye6h; [A4_2] # ᢇ꣄..𞤺
-ᢇ‍꣄。。𞤘; ᢇ‍꣄..𞤺; [B6, C2, A4_2]; xn--09e669a6x8j..xn--ye6h; ; xn--09e4694e..xn--ye6h; [A4_2] # ᢇ꣄..𞤺
-xn--09e4694e..xn--ye6h; ᢇ꣄..𞤺; [A4_2]; xn--09e4694e..xn--ye6h; ; ;  # ᢇ꣄..𞤺
-xn--09e669a6x8j..xn--ye6h; ᢇ‍꣄..𞤺; [B6, C2, A4_2]; xn--09e669a6x8j..xn--ye6h; ; ;  # ᢇ꣄..𞤺
+ᢇ‍꣄。。𞤺; ᢇ‍꣄..𞤺; [B6, C2, X4_2]; xn--09e669a6x8j..xn--ye6h; [B6, C2, A4_2]; xn--09e4694e..xn--ye6h; [A4_2] # ᢇ꣄..𞤺
+ᢇ‍꣄。。𞤘; ᢇ‍꣄..𞤺; [B6, C2, X4_2]; xn--09e669a6x8j..xn--ye6h; [B6, C2, A4_2]; xn--09e4694e..xn--ye6h; [A4_2] # ᢇ꣄..𞤺
+xn--09e4694e..xn--ye6h; ᢇ꣄..𞤺; [X4_2]; xn--09e4694e..xn--ye6h; [A4_2]; ;  # ᢇ꣄..𞤺
+xn--09e669a6x8j..xn--ye6h; ᢇ‍꣄..𞤺; [B6, C2, X4_2]; xn--09e669a6x8j..xn--ye6h; [B6, C2, A4_2]; ;  # ᢇ꣄..𞤺
 ᢇ‍꣄｡︒𞤘; ᢇ‍꣄.︒𞤺; [B1, B6, C2, P1, V6]; xn--09e669a6x8j.xn--y86cv562b; ; xn--09e4694e.xn--y86cv562b; [B1, P1, V6] # ᢇ꣄.︒𞤺
 xn--09e4694e.xn--y86cv562b; ᢇ꣄.︒𞤺; [B1, V6]; xn--09e4694e.xn--y86cv562b; ; ;  # ᢇ꣄.︒𞤺
 xn--09e669a6x8j.xn--y86cv562b; ᢇ‍꣄.︒𞤺; [B1, B6, C2, V6]; xn--09e669a6x8j.xn--y86cv562b; ; ;  # ᢇ꣄.︒𞤺
@@ -1587,9 +1603,9 @@ xn----m9j3429kxmy7e.xn--nfb7950kdihrp812a; 򠿯ᡳ-𑐻.𐹴𐋫؅󑎳; [B1, B6,
 򠶆ࡅੑ.넨-󶧈; 򠶆ࡅੑ.넨-󶧈; [B5, B6, P1, V6]; xn--3vb26hb6834b.xn----i37ez0957g; ; ;  # ࡅੑ.넨-
 xn--3vb26hb6834b.xn----i37ez0957g; 򠶆ࡅੑ.넨-󶧈; [B5, B6, V6]; xn--3vb26hb6834b.xn----i37ez0957g; ; ;  # ࡅੑ.넨-
 ꡦᡑ‍⒈。𐋣-; ꡦᡑ‍⒈.𐋣-; [C2, P1, V3, V6]; xn--h8e470bl0d838o.xn----381i; ; xn--h8e863drj7h.xn----381i; [P1, V3, V6] # ꡦᡑ⒈.𐋣-
-ꡦᡑ‍1.。𐋣-; ꡦᡑ‍1..𐋣-; [C2, V3, A4_2]; xn--1-o7j663bdl7m..xn----381i; ; xn--1-o7j0610f..xn----381i; [V3, A4_2] # ꡦᡑ1..𐋣-
-xn--1-o7j0610f..xn----381i; ꡦᡑ1..𐋣-; [V3, A4_2]; xn--1-o7j0610f..xn----381i; ; ;  # ꡦᡑ1..𐋣-
-xn--1-o7j663bdl7m..xn----381i; ꡦᡑ‍1..𐋣-; [C2, V3, A4_2]; xn--1-o7j663bdl7m..xn----381i; ; ;  # ꡦᡑ1..𐋣-
+ꡦᡑ‍1.。𐋣-; ꡦᡑ‍1..𐋣-; [C2, V3, X4_2]; xn--1-o7j663bdl7m..xn----381i; [C2, V3, A4_2]; xn--1-o7j0610f..xn----381i; [V3, A4_2] # ꡦᡑ1..𐋣-
+xn--1-o7j0610f..xn----381i; ꡦᡑ1..𐋣-; [V3, X4_2]; xn--1-o7j0610f..xn----381i; [V3, A4_2]; ;  # ꡦᡑ1..𐋣-
+xn--1-o7j663bdl7m..xn----381i; ꡦᡑ‍1..𐋣-; [C2, V3, X4_2]; xn--1-o7j663bdl7m..xn----381i; [C2, V3, A4_2]; ;  # ꡦᡑ1..𐋣-
 xn--h8e863drj7h.xn----381i; ꡦᡑ⒈.𐋣-; [V3, V6]; xn--h8e863drj7h.xn----381i; ; ;  # ꡦᡑ⒈.𐋣-
 xn--h8e470bl0d838o.xn----381i; ꡦᡑ‍⒈.𐋣-; [C2, V3, V6]; xn--h8e470bl0d838o.xn----381i; ; ;  # ꡦᡑ⒈.𐋣-
 Ⴌ。􍼠ﭩ; Ⴌ.􍼠ٹ; [B5, B6, P1, V6]; xn--knd.xn--yib19191t; ; ;  # Ⴌ.ٹ
@@ -1710,13 +1726,13 @@ xn----8cd.xn--r5g; -ߡ.ↄ; [B1, V3]; xn----8cd.xn--r5g; ; ;  # -ߡ.ↄ
 xn----8cd.xn--q5g; -ߡ.Ↄ; [B1, V3, V6]; xn----8cd.xn--q5g; ; ;  # -ߡ.Ↄ
 -ߡ｡ↄ; -ߡ.ↄ; [B1, V3]; xn----8cd.xn--r5g; ; ;  # -ߡ.ↄ
 ‍-︒󠄄。ß哑‌𐵿; ‍-︒.ß哑‌𐵿; [B1, B5, B6, C1, C2, P1, V6]; xn----tgnt341h.xn--zca670n5f0binyk; ; xn----o89h.xn--ss-h46c5711e; [B1, B5, B6, P1, V3, V6] # -︒.ß哑
-‍-。󠄄。ß哑‌𐵿; ‍-..ß哑‌𐵿; [B1, B5, B6, C1, C2, P1, V3, V6, A4_2]; xn----tgn..xn--zca670n5f0binyk; ; -..xn--ss-h46c5711e; [B1, B5, B6, P1, V3, V6, A4_2] # -..ß哑
-‍-。󠄄。SS哑‌𐵿; ‍-..ss哑‌𐵿; [B1, B5, B6, C1, C2, P1, V3, V6, A4_2]; xn----tgn..xn--ss-k1ts75zb8ym; ; -..xn--ss-h46c5711e; [B1, B5, B6, P1, V3, V6, A4_2] # -..ss哑
-‍-。󠄄。ss哑‌𐵿; ‍-..ss哑‌𐵿; [B1, B5, B6, C1, C2, P1, V3, V6, A4_2]; xn----tgn..xn--ss-k1ts75zb8ym; ; -..xn--ss-h46c5711e; [B1, B5, B6, P1, V3, V6, A4_2] # -..ss哑
-‍-。󠄄。Ss哑‌𐵿; ‍-..ss哑‌𐵿; [B1, B5, B6, C1, C2, P1, V3, V6, A4_2]; xn----tgn..xn--ss-k1ts75zb8ym; ; -..xn--ss-h46c5711e; [B1, B5, B6, P1, V3, V6, A4_2] # -..ss哑
--..xn--ss-h46c5711e; -..ss哑𐵿; [B1, B5, B6, V3, V6, A4_2]; -..xn--ss-h46c5711e; ; ;  # -..ss哑
-xn----tgn..xn--ss-k1ts75zb8ym; ‍-..ss哑‌𐵿; [B1, B5, B6, C1, C2, V3, V6, A4_2]; xn----tgn..xn--ss-k1ts75zb8ym; ; ;  # -..ss哑
-xn----tgn..xn--zca670n5f0binyk; ‍-..ß哑‌𐵿; [B1, B5, B6, C1, C2, V3, V6, A4_2]; xn----tgn..xn--zca670n5f0binyk; ; ;  # -..ß哑
+‍-。󠄄。ß哑‌𐵿; ‍-..ß哑‌𐵿; [B1, B5, B6, C1, C2, P1, V3, V6, X4_2]; xn----tgn..xn--zca670n5f0binyk; [B1, B5, B6, C1, C2, P1, V3, V6, A4_2]; -..xn--ss-h46c5711e; [B1, B5, B6, P1, V3, V6, A4_2] # -..ß哑
+‍-。󠄄。SS哑‌𐵿; ‍-..ss哑‌𐵿; [B1, B5, B6, C1, C2, P1, V3, V6, X4_2]; xn----tgn..xn--ss-k1ts75zb8ym; [B1, B5, B6, C1, C2, P1, V3, V6, A4_2]; -..xn--ss-h46c5711e; [B1, B5, B6, P1, V3, V6, A4_2] # -..ss哑
+‍-。󠄄。ss哑‌𐵿; ‍-..ss哑‌𐵿; [B1, B5, B6, C1, C2, P1, V3, V6, X4_2]; xn----tgn..xn--ss-k1ts75zb8ym; [B1, B5, B6, C1, C2, P1, V3, V6, A4_2]; -..xn--ss-h46c5711e; [B1, B5, B6, P1, V3, V6, A4_2] # -..ss哑
+‍-。󠄄。Ss哑‌𐵿; ‍-..ss哑‌𐵿; [B1, B5, B6, C1, C2, P1, V3, V6, X4_2]; xn----tgn..xn--ss-k1ts75zb8ym; [B1, B5, B6, C1, C2, P1, V3, V6, A4_2]; -..xn--ss-h46c5711e; [B1, B5, B6, P1, V3, V6, A4_2] # -..ss哑
+-..xn--ss-h46c5711e; -..ss哑𐵿; [B1, B5, B6, V3, V6, X4_2]; -..xn--ss-h46c5711e; [B1, B5, B6, V3, V6, A4_2]; ;  # -..ss哑
+xn----tgn..xn--ss-k1ts75zb8ym; ‍-..ss哑‌𐵿; [B1, B5, B6, C1, C2, V3, V6, X4_2]; xn----tgn..xn--ss-k1ts75zb8ym; [B1, B5, B6, C1, C2, V3, V6, A4_2]; ;  # -..ss哑
+xn----tgn..xn--zca670n5f0binyk; ‍-..ß哑‌𐵿; [B1, B5, B6, C1, C2, V3, V6, X4_2]; xn----tgn..xn--zca670n5f0binyk; [B1, B5, B6, C1, C2, V3, V6, A4_2]; ;  # -..ß哑
 ‍-︒󠄄。SS哑‌𐵿; ‍-︒.ss哑‌𐵿; [B1, B5, B6, C1, C2, P1, V6]; xn----tgnt341h.xn--ss-k1ts75zb8ym; ; xn----o89h.xn--ss-h46c5711e; [B1, B5, B6, P1, V3, V6] # -︒.ss哑
 ‍-︒󠄄。ss哑‌𐵿; ‍-︒.ss哑‌𐵿; [B1, B5, B6, C1, C2, P1, V6]; xn----tgnt341h.xn--ss-k1ts75zb8ym; ; xn----o89h.xn--ss-h46c5711e; [B1, B5, B6, P1, V3, V6] # -︒.ss哑
 ‍-︒󠄄。Ss哑‌𐵿; ‍-︒.ss哑‌𐵿; [B1, B5, B6, C1, C2, P1, V6]; xn----tgnt341h.xn--ss-k1ts75zb8ym; ; xn----o89h.xn--ss-h46c5711e; [B1, B5, B6, P1, V3, V6] # -︒.ss哑
@@ -1725,8 +1741,8 @@ xn----tgnt341h.xn--ss-k1ts75zb8ym; ‍-︒.ss哑‌𐵿; [B1, B5, B6, C1, C2, V6
 xn----tgnt341h.xn--zca670n5f0binyk; ‍-︒.ß哑‌𐵿; [B1, B5, B6, C1, C2, V6]; xn----tgnt341h.xn--zca670n5f0binyk; ; ;  # -︒.ß哑
 ︒．𑑂︯; ︒.𑑂︯; [P1, V5, V6]; xn--y86c.xn--s96cu30b; ; ;  # ︒.𑑂︯
 ︒．𑑂︯; ︒.𑑂︯; [P1, V5, V6]; xn--y86c.xn--s96cu30b; ; ;  # ︒.𑑂︯
-。.𑑂︯; ..𑑂︯; [V5, A4_2]; ..xn--s96cu30b; ; ;  # ..𑑂︯
-..xn--s96cu30b; ..𑑂︯; [V5, A4_2]; ..xn--s96cu30b; ; ;  # ..𑑂︯
+。.𑑂︯; ..𑑂︯; [V5, X4_2]; ..xn--s96cu30b; [V5, A4_2]; ;  # ..𑑂︯
+..xn--s96cu30b; ..𑑂︯; [V5, X4_2]; ..xn--s96cu30b; [V5, A4_2]; ;  # ..𑑂︯
 xn--y86c.xn--s96cu30b; ︒.𑑂︯; [V5, V6]; xn--y86c.xn--s96cu30b; ; ;  # ︒.𑑂︯
 ꤬。‍; ꤬.‍; [C2, V5]; xn--zi9a.xn--1ug; ; xn--zi9a.; [V5] # ꤬.
 xn--zi9a.; ꤬.; [V5]; xn--zi9a.; ; ;  # ꤬.
@@ -1842,7 +1858,7 @@ xn--3j9al6189a.xn--0ib8893fegvj; 򊉆꥓.𞤻ٻꡘ; [B2, B3, V6]; xn--3j9al6189a
 xn--0ug8815chtz0e.xn--0ib8893fegvj; 򊉆‌꥓.𞤻ٻꡘ; [B2, B3, C1, V6]; xn--0ug8815chtz0e.xn--0ib8893fegvj; ; ;  # ꥓.𞤻ٻꡘ
 ‌.≯; ; [C1, P1, V6]; xn--0ug.xn--hdh; ; .xn--hdh; [P1, V6, A4_2] # .≯
 ‌.≯; ‌.≯; [C1, P1, V6]; xn--0ug.xn--hdh; ; .xn--hdh; [P1, V6, A4_2] # .≯
-.xn--hdh; .≯; [V6, A4_2]; .xn--hdh; ; ;  # .≯
+.xn--hdh; .≯; [V6, X4_2]; .xn--hdh; [V6, A4_2]; ;  # .≯
 xn--0ug.xn--hdh; ‌.≯; [C1, V6]; xn--0ug.xn--hdh; ; ;  # .≯
 𰅧񣩠-．꯭-悜; 𰅧񣩠-.꯭-悜; [P1, V3, V5, V6]; xn----7m53aj640l.xn----8f4br83t; ; ;  # -.꯭-悜
 𰅧񣩠-.꯭-悜; ; [P1, V3, V5, V6]; xn----7m53aj640l.xn----8f4br83t; ; ;  # -.꯭-悜
@@ -1939,7 +1955,7 @@ xn--ph26c.xn--281b; 򣿈.뙏; [V6]; xn--ph26c.xn--281b; ; ;  # .뙏
 xn--z7e98100evc01b.xn--czb; 񕨚󑽀ᡀ.ࢶ; [V6]; xn--z7e98100evc01b.xn--czb; ; ;  # ᡀ.ࢶ
 ‍｡񅁛; ‍.񅁛; [C2, P1, V6]; xn--1ug.xn--6x4u; ; .xn--6x4u; [P1, V6, A4_2] # .
 ‍。񅁛; ‍.񅁛; [C2, P1, V6]; xn--1ug.xn--6x4u; ; .xn--6x4u; [P1, V6, A4_2] # .
-.xn--6x4u; .񅁛; [V6, A4_2]; .xn--6x4u; ; ;  # .
+.xn--6x4u; .񅁛; [V6, X4_2]; .xn--6x4u; [V6, A4_2]; ;  # .
 xn--1ug.xn--6x4u; ‍.񅁛; [C2, V6]; xn--1ug.xn--6x4u; ; ;  # .
 ࡋ皥．-; ࡋ皥.-; [B1, B2, B3, V3]; xn--9vb4167c.-; ; ;  # ࡋ皥.-
 ࡋ皥.-; ; [B1, B2, B3, V3]; xn--9vb4167c.-; ; ;  # ࡋ皥.-
@@ -1976,16 +1992,16 @@ xn--vn7c.xn--hdh501y8wvfs5h; ￹.曳襾𐋰≯; [V6]; xn--vn7c.xn--hdh501y8wvfs5
 xn--0ug2139f.xn--hdh501y8wvfs5h; ￹‌.曳襾𐋰≯; [C1, V6]; xn--0ug2139f.xn--hdh501y8wvfs5h; ; ;  # .曳襾𐋰≯
 ≯⒈。ß; ≯⒈.ß; [P1, V6]; xn--hdh84f.xn--zca; ; xn--hdh84f.ss;  # ≯⒈.ß
 ≯⒈。ß; ≯⒈.ß; [P1, V6]; xn--hdh84f.xn--zca; ; xn--hdh84f.ss;  # ≯⒈.ß
-≯1.。ß; ≯1..ß; [P1, V6, A4_2]; xn--1-ogo..xn--zca; ; xn--1-ogo..ss;  # ≯1..ß
-≯1.。ß; ≯1..ß; [P1, V6, A4_2]; xn--1-ogo..xn--zca; ; xn--1-ogo..ss;  # ≯1..ß
-≯1.。SS; ≯1..ss; [P1, V6, A4_2]; xn--1-ogo..ss; ; ;  # ≯1..ss
-≯1.。SS; ≯1..ss; [P1, V6, A4_2]; xn--1-ogo..ss; ; ;  # ≯1..ss
-≯1.。ss; ≯1..ss; [P1, V6, A4_2]; xn--1-ogo..ss; ; ;  # ≯1..ss
-≯1.。ss; ≯1..ss; [P1, V6, A4_2]; xn--1-ogo..ss; ; ;  # ≯1..ss
-≯1.。Ss; ≯1..ss; [P1, V6, A4_2]; xn--1-ogo..ss; ; ;  # ≯1..ss
-≯1.。Ss; ≯1..ss; [P1, V6, A4_2]; xn--1-ogo..ss; ; ;  # ≯1..ss
-xn--1-ogo..ss; ≯1..ss; [V6, A4_2]; xn--1-ogo..ss; ; ;  # ≯1..ss
-xn--1-ogo..xn--zca; ≯1..ß; [V6, A4_2]; xn--1-ogo..xn--zca; ; ;  # ≯1..ß
+≯1.。ß; ≯1..ß; [P1, V6, X4_2]; xn--1-ogo..xn--zca; [P1, V6, A4_2]; xn--1-ogo..ss;  # ≯1..ß
+≯1.。ß; ≯1..ß; [P1, V6, X4_2]; xn--1-ogo..xn--zca; [P1, V6, A4_2]; xn--1-ogo..ss;  # ≯1..ß
+≯1.。SS; ≯1..ss; [P1, V6, X4_2]; xn--1-ogo..ss; [P1, V6, A4_2]; ;  # ≯1..ss
+≯1.。SS; ≯1..ss; [P1, V6, X4_2]; xn--1-ogo..ss; [P1, V6, A4_2]; ;  # ≯1..ss
+≯1.。ss; ≯1..ss; [P1, V6, X4_2]; xn--1-ogo..ss; [P1, V6, A4_2]; ;  # ≯1..ss
+≯1.。ss; ≯1..ss; [P1, V6, X4_2]; xn--1-ogo..ss; [P1, V6, A4_2]; ;  # ≯1..ss
+≯1.。Ss; ≯1..ss; [P1, V6, X4_2]; xn--1-ogo..ss; [P1, V6, A4_2]; ;  # ≯1..ss
+≯1.。Ss; ≯1..ss; [P1, V6, X4_2]; xn--1-ogo..ss; [P1, V6, A4_2]; ;  # ≯1..ss
+xn--1-ogo..ss; ≯1..ss; [V6, X4_2]; xn--1-ogo..ss; [V6, A4_2]; ;  # ≯1..ss
+xn--1-ogo..xn--zca; ≯1..ß; [V6, X4_2]; xn--1-ogo..xn--zca; [V6, A4_2]; ;  # ≯1..ß
 ≯⒈。SS; ≯⒈.ss; [P1, V6]; xn--hdh84f.ss; ; ;  # ≯⒈.ss
 ≯⒈。SS; ≯⒈.ss; [P1, V6]; xn--hdh84f.ss; ; ;  # ≯⒈.ss
 ≯⒈。ss; ≯⒈.ss; [P1, V6]; xn--hdh84f.ss; ; ;  # ≯⒈.ss
@@ -2006,7 +2022,7 @@ xn--gib6m343e.xn---6-lve002g; ٧‍ڳ.ߚ-6Ⴙ; [B1, B2, B3, C2, V6]; xn--gib6m34
 ‌｡≠; ‌.≠; [C1, P1, V6]; xn--0ug.xn--1ch; ; .xn--1ch; [P1, V6, A4_2] # .≠
 ‌。≠; ‌.≠; [C1, P1, V6]; xn--0ug.xn--1ch; ; .xn--1ch; [P1, V6, A4_2] # .≠
 ‌。≠; ‌.≠; [C1, P1, V6]; xn--0ug.xn--1ch; ; .xn--1ch; [P1, V6, A4_2] # .≠
-.xn--1ch; .≠; [V6, A4_2]; .xn--1ch; ; ;  # .≠
+.xn--1ch; .≠; [V6, X4_2]; .xn--1ch; [V6, A4_2]; ;  # .≠
 xn--0ug.xn--1ch; ‌.≠; [C1, V6]; xn--0ug.xn--1ch; ; ;  # .≠
 𑖿𝨔.ᡟ𑖿ᭂ‌; ; [C1, V5]; xn--461dw464a.xn--v8e29ldzfo952a; ; xn--461dw464a.xn--v8e29loy65a; [V5] # 𑖿𝨔.ᡟ𑖿ᭂ
 xn--461dw464a.xn--v8e29loy65a; 𑖿𝨔.ᡟ𑖿ᭂ; [V5]; xn--461dw464a.xn--v8e29loy65a; ; ;  # 𑖿𝨔.ᡟ𑖿ᭂ
@@ -2039,8 +2055,8 @@ xn----mod.xn--5o9n; -ࢨ.𱠖; [B1, V3, V6]; xn----mod.xn--5o9n; ; ;  # -ࢨ.
 xn--hdh7151p.xn--1-dy1d.; ≯𞱸.誆1.; [B1, V6]; xn--hdh7151p.xn--1-dy1d.; ; ;  # ≯𞱸.誆1.
 xn--hdh7151p.xn--tsh1248a; ≯𞱸.誆⒈; [B1, V6]; xn--hdh7151p.xn--tsh1248a; ; ;  # ≯𞱸.誆⒈
 ؖ𞥙䐊ِ．︒م↺ڜ; ؖ𞥙䐊ِ.︒م↺ڜ; [B1, P1, V5, V6]; xn--4fb0j490qjg4x.xn--hhb8o948euo5r; ; ;  # ؖ𞥙䐊ِ.︒م↺ڜ
-ؖ𞥙䐊ِ.。م↺ڜ; ؖ𞥙䐊ِ..م↺ڜ; [B1, V5, A4_2]; xn--4fb0j490qjg4x..xn--hhb8o948e; ; ;  # ؖ𞥙䐊ِ..م↺ڜ
-xn--4fb0j490qjg4x..xn--hhb8o948e; ؖ𞥙䐊ِ..م↺ڜ; [B1, V5, A4_2]; xn--4fb0j490qjg4x..xn--hhb8o948e; ; ;  # ؖ𞥙䐊ِ..م↺ڜ
+ؖ𞥙䐊ِ.。م↺ڜ; ؖ𞥙䐊ِ..م↺ڜ; [B1, V5, X4_2]; xn--4fb0j490qjg4x..xn--hhb8o948e; [B1, V5, A4_2]; ;  # ؖ𞥙䐊ِ..م↺ڜ
+xn--4fb0j490qjg4x..xn--hhb8o948e; ؖ𞥙䐊ِ..م↺ڜ; [B1, V5, X4_2]; xn--4fb0j490qjg4x..xn--hhb8o948e; [B1, V5, A4_2]; ;  # ؖ𞥙䐊ِ..م↺ڜ
 xn--4fb0j490qjg4x.xn--hhb8o948euo5r; ؖ𞥙䐊ِ.︒م↺ڜ; [B1, V5, V6]; xn--4fb0j490qjg4x.xn--hhb8o948euo5r; ; ;  # ؖ𞥙䐊ِ.︒م↺ڜ
 퀬-?񶳒.‌ૅ󩸤۴; ; [C1, P1, V6]; 퀬-?񶳒.xn--hmb76q48y18505a; [C1, P1, V6, A3]; 퀬-?񶳒.xn--hmb76q74166b; [P1, V5, V6, A3] # 퀬-.ૅ۴
 퀬-?񶳒.‌ૅ󩸤۴; 퀬-?񶳒.‌ૅ󩸤۴; [C1, P1, V6]; 퀬-?񶳒.xn--hmb76q48y18505a; [C1, P1, V6, A3]; 퀬-?񶳒.xn--hmb76q74166b; [P1, V5, V6, A3] # 퀬-.ૅ۴
@@ -2087,22 +2103,24 @@ xn--6-gsc2270akm6f.xn--0gb6bxkx18g; ڇ6ⴔ辘.صيڇ‌; [B2, B3, C1]; xn--6-gsc
 xn--6-gsc039eqq6k.xn--0gb6bxk; ڇ6Ⴔ辘.صيڇ; [B2, B3, V6]; xn--6-gsc039eqq6k.xn--0gb6bxk; ; ;  # ڇ6Ⴔ辘.صيڇ
 xn--6-gsc039eqq6k.xn--0gb6bxkx18g; ڇ6Ⴔ辘.صيڇ‌; [B2, B3, C1, V6]; xn--6-gsc039eqq6k.xn--0gb6bxkx18g; ; ;  # ڇ6Ⴔ辘.صيڇ
 ڇ６ⴔ辘.ﴢڇ‌; ڇ6ⴔ辘.صيڇ‌; [B2, B3, C1]; xn--6-gsc2270akm6f.xn--0gb6bxkx18g; ; xn--6-gsc2270akm6f.xn--0gb6bxk; [B2, B3] # ڇ6ⴔ辘.صيڇ
-󠄍.𐮭𞰬򻫞۹; .𐮭𞰬򻫞۹; [B2, P1, V6, A4_2]; .xn--mmb3954kd0uf1zx7f; ; ;  # .𐮭۹
-.xn--mmb3954kd0uf1zx7f; .𐮭𞰬򻫞۹; [B2, V6, A4_2]; .xn--mmb3954kd0uf1zx7f; ; ;  # .𐮭۹
+󠄍.𐮭𞰬򻫞۹; .𐮭𞰬򻫞۹; [B2, P1, V6, X4_2]; .xn--mmb3954kd0uf1zx7f; [B2, P1, V6, A4_2]; ;  # .𐮭۹
+.xn--mmb3954kd0uf1zx7f; .𐮭𞰬򻫞۹; [B2, V6, X4_2]; .xn--mmb3954kd0uf1zx7f; [B2, V6, A4_2]; ;  # .𐮭۹
 ꡽≯．򻲀򒳄; ꡽≯.򻲀򒳄; [P1, V6]; xn--hdh8193c.xn--5z40cp629b; ; ;  # ≯.
 ꡽≯．򻲀򒳄; ꡽≯.򻲀򒳄; [P1, V6]; xn--hdh8193c.xn--5z40cp629b; ; ;  # ≯.
 ꡽≯.򻲀򒳄; ; [P1, V6]; xn--hdh8193c.xn--5z40cp629b; ; ;  # ≯.
 ꡽≯.򻲀򒳄; ꡽≯.򻲀򒳄; [P1, V6]; xn--hdh8193c.xn--5z40cp629b; ; ;  # ≯.
 xn--hdh8193c.xn--5z40cp629b; ꡽≯.򻲀򒳄; [V6]; xn--hdh8193c.xn--5z40cp629b; ; ;  # ≯.
 ςოٻ.ςܔ; ; [B5, B6]; xn--3xa80l26n.xn--3xa41o; ; xn--4xa60l26n.xn--4xa21o;  # ςოٻ.ςܔ
-Σოٻ.Σܔ; σოٻ.σܔ; [B5, B6]; xn--4xa60l26n.xn--4xa21o; ; ;  # σოٻ.σܔ
+ΣᲝٻ.Σܔ; σᲝٻ.σܔ; [B5, B6, P1, V6]; xn--4xa60lw94a.xn--4xa21o; ; ;  # σᲝٻ.σܔ
 σოٻ.σܔ; ; [B5, B6]; xn--4xa60l26n.xn--4xa21o; ; ;  # σოٻ.σܔ
 Σოٻ.σܔ; σოٻ.σܔ; [B5, B6]; xn--4xa60l26n.xn--4xa21o; ; ;  # σოٻ.σܔ
 xn--4xa60l26n.xn--4xa21o; σოٻ.σܔ; [B5, B6]; xn--4xa60l26n.xn--4xa21o; ; ;  # σოٻ.σܔ
+xn--4xa60lw94a.xn--4xa21o; σᲝٻ.σܔ; [B5, B6, V6]; xn--4xa60lw94a.xn--4xa21o; ; ;  # σᲝٻ.σܔ
 Σოٻ.ςܔ; σოٻ.ςܔ; [B5, B6]; xn--4xa60l26n.xn--3xa41o; ; xn--4xa60l26n.xn--4xa21o;  # σოٻ.ςܔ
 σოٻ.ςܔ; ; [B5, B6]; xn--4xa60l26n.xn--3xa41o; ; xn--4xa60l26n.xn--4xa21o;  # σოٻ.ςܔ
 xn--4xa60l26n.xn--3xa41o; σოٻ.ςܔ; [B5, B6]; xn--4xa60l26n.xn--3xa41o; ; ;  # σოٻ.ςܔ
 xn--3xa80l26n.xn--3xa41o; ςოٻ.ςܔ; [B5, B6]; xn--3xa80l26n.xn--3xa41o; ; ;  # ςოٻ.ςܔ
+Σოٻ.Σܔ; σოٻ.σܔ; [B5, B6]; xn--4xa60l26n.xn--4xa21o; ; ;  # σოٻ.σܔ
 򄖚݈𠄯ݟ｡󠛩; 򄖚݈𠄯ݟ.󠛩; [B1, B5, B6, P1, V6]; xn--vob0c4369twfv8b.xn--kl46e; ; ;  # ݈𠄯ݟ.
 򄖚݈𠄯ݟ。󠛩; 򄖚݈𠄯ݟ.󠛩; [B1, B5, B6, P1, V6]; xn--vob0c4369twfv8b.xn--kl46e; ; ;  # ݈𠄯ݟ.
 xn--vob0c4369twfv8b.xn--kl46e; 򄖚݈𠄯ݟ.󠛩; [B1, B5, B6, V6]; xn--vob0c4369twfv8b.xn--kl46e; ; ;  # ݈𠄯ݟ.
@@ -2118,9 +2136,9 @@ xn--1t56e.xn--2nd141ghl2a; 󠳛.䤫≠Ⴞ; [V6]; xn--1t56e.xn--2nd141ghl2a; ; ; 
 xn--1t56e.xn--2nd159e9vb743e; 󠳛.‍䤫≠Ⴞ; [C2, V6]; xn--1t56e.xn--2nd159e9vb743e; ; ;  # .䤫≠Ⴞ
 󠳛．‍䤫≠ⴞ; 󠳛.‍䤫≠ⴞ; [C2, P1, V6]; xn--1t56e.xn--1ug73gzzpwi3a; ; xn--1t56e.xn--1ch153bqvw; [P1, V6] # .䤫≠ⴞ
 󠳛．‍䤫≠ⴞ; 󠳛.‍䤫≠ⴞ; [C2, P1, V6]; xn--1t56e.xn--1ug73gzzpwi3a; ; xn--1t56e.xn--1ch153bqvw; [P1, V6] # .䤫≠ⴞ
-𐽘𑈵．𐹣🕥; 𐽘𑈵.𐹣🕥; [B1, B2, B3, P1, V6]; xn--bv0d02c.xn--bo0dq650b; ; ;  # 𐽘𑈵.𐹣🕥
-𐽘𑈵.𐹣🕥; ; [B1, B2, B3, P1, V6]; xn--bv0d02c.xn--bo0dq650b; ; ;  # 𐽘𑈵.𐹣🕥
-xn--bv0d02c.xn--bo0dq650b; 𐽘𑈵.𐹣🕥; [B1, B2, B3, V6]; xn--bv0d02c.xn--bo0dq650b; ; ;  # 𐽘𑈵.𐹣🕥
+𐽘𑈵．𐹣🕥; 𐽘𑈵.𐹣🕥; [B1, B2, B3]; xn--bv0d02c.xn--bo0dq650b; ; ;  # 𐽘𑈵.𐹣🕥
+𐽘𑈵.𐹣🕥; ; [B1, B2, B3]; xn--bv0d02c.xn--bo0dq650b; ; ;  # 𐽘𑈵.𐹣🕥
+xn--bv0d02c.xn--bo0dq650b; 𐽘𑈵.𐹣🕥; [B1, B2, B3]; xn--bv0d02c.xn--bo0dq650b; ; ;  # 𐽘𑈵.𐹣🕥
 ⒊⒈𑁄。9; ⒊⒈𑁄.9; [P1, V6]; xn--tshd3512p.9; ; ;  # ⒊⒈𑁄.9
 3.1.𑁄。9; 3.1.𑁄.9; [V5]; 3.1.xn--110d.9; ; ;  # 3.1.𑁄.9
 3.1.xn--110d.9; 3.1.𑁄.9; [V5]; 3.1.xn--110d.9; ; ;  # 3.1.𑁄.9
@@ -2256,14 +2274,14 @@ xn---18-9m0a.xn--rx9c.xn--382h; -‌18.𐫥.𝨵; [C1, V3, V5]; xn---18-9m0a.xn-
 xn----ddps939g.xn--382h; -⒙𐫥.𝨵; [V3, V5, V6]; xn----ddps939g.xn--382h; ; ;  # -⒙𐫥.𝨵
 xn----sgn18r3191a.xn--382h; -‌⒙𐫥.𝨵; [C1, V3, V5, V6]; xn----sgn18r3191a.xn--382h; ; ;  # -⒙𐫥.𝨵
 ︒.ʌᠣ-𐹽; ; [B1, B5, B6, P1, V6]; xn--y86c.xn----73a596nuh9t; ; ;  # ︒.ʌᠣ-𐹽
-。.ʌᠣ-𐹽; ..ʌᠣ-𐹽; [B5, B6, A4_2]; ..xn----73a596nuh9t; ; ;  # ..ʌᠣ-𐹽
-。.Ʌᠣ-𐹽; ..ʌᠣ-𐹽; [B5, B6, A4_2]; ..xn----73a596nuh9t; ; ;  # ..ʌᠣ-𐹽
-..xn----73a596nuh9t; ..ʌᠣ-𐹽; [B5, B6, A4_2]; ..xn----73a596nuh9t; ; ;  # ..ʌᠣ-𐹽
+。.ʌᠣ-𐹽; ..ʌᠣ-𐹽; [B5, B6, X4_2]; ..xn----73a596nuh9t; [B5, B6, A4_2]; ;  # ..ʌᠣ-𐹽
+。.Ʌᠣ-𐹽; ..ʌᠣ-𐹽; [B5, B6, X4_2]; ..xn----73a596nuh9t; [B5, B6, A4_2]; ;  # ..ʌᠣ-𐹽
+..xn----73a596nuh9t; ..ʌᠣ-𐹽; [B5, B6, X4_2]; ..xn----73a596nuh9t; [B5, B6, A4_2]; ;  # ..ʌᠣ-𐹽
 ︒.Ʌᠣ-𐹽; ︒.ʌᠣ-𐹽; [B1, B5, B6, P1, V6]; xn--y86c.xn----73a596nuh9t; ; ;  # ︒.ʌᠣ-𐹽
 xn--y86c.xn----73a596nuh9t; ︒.ʌᠣ-𐹽; [B1, B5, B6, V6]; xn--y86c.xn----73a596nuh9t; ; ;  # ︒.ʌᠣ-𐹽
 ︅︒。𦀾᳠; ︒.𦀾᳠; [P1, V6]; xn--y86c.xn--t6f5138v; ; ;  # ︒.𦀾᳠
-︅。。𦀾᳠; ..𦀾᳠; [A4_2]; ..xn--t6f5138v; ; ;  # ..𦀾᳠
-..xn--t6f5138v; ..𦀾᳠; [A4_2]; ..xn--t6f5138v; ; ;  # ..𦀾᳠
+︅。。𦀾᳠; ..𦀾᳠; [X4_2]; ..xn--t6f5138v; [A4_2]; ;  # ..𦀾᳠
+..xn--t6f5138v; ..𦀾᳠; [X4_2]; ..xn--t6f5138v; [A4_2]; ;  # ..𦀾᳠
 xn--y86c.xn--t6f5138v; ︒.𦀾᳠; [V6]; xn--y86c.xn--t6f5138v; ; ;  # ︒.𦀾᳠
 xn--t6f5138v; 𦀾᳠; ; xn--t6f5138v; ; ;  # 𦀾᳠
 𦀾᳠; ; ; xn--t6f5138v; ; ;  # 𦀾᳠
@@ -2331,7 +2349,7 @@ xn--ofg13qyr21c.xn--0f9au6706d; ≯ᷳ𞤥.꣄󠪉; [B1, V5, V6]; xn--ofg13qyr21
 xn--ofg13qyr21c.xn--0ugc0116hix29k; ≯ᷳ𞤥.‌꣄󠪉‍; [B1, C1, C2, V6]; xn--ofg13qyr21c.xn--0ugc0116hix29k; ; ;  # ≯ᷳ𞤥.꣄
 ‌󠄷｡򒑁; ‌.򒑁; [C1, P1, V6]; xn--0ug.xn--w720c; ; .xn--w720c; [P1, V6, A4_2] # .
 ‌󠄷。򒑁; ‌.򒑁; [C1, P1, V6]; xn--0ug.xn--w720c; ; .xn--w720c; [P1, V6, A4_2] # .
-.xn--w720c; .򒑁; [V6, A4_2]; .xn--w720c; ; ;  # .
+.xn--w720c; .򒑁; [V6, X4_2]; .xn--w720c; [V6, A4_2]; ;  # .
 xn--0ug.xn--w720c; ‌.򒑁; [C1, V6]; xn--0ug.xn--w720c; ; ;  # .
 ⒈ූ焅.󗡙‍ꡟ; ; [C2, P1, V6]; xn--t1c337io97c.xn--1ugz184c9lw7i; ; xn--t1c337io97c.xn--4c9a21133d; [P1, V6] # ⒈ූ焅.ꡟ
 1.ූ焅.󗡙‍ꡟ; ; [C2, P1, V5, V6]; 1.xn--t1c6981c.xn--1ugz184c9lw7i; ; 1.xn--t1c6981c.xn--4c9a21133d; [P1, V5, V6] # 1.ූ焅.ꡟ
@@ -2391,11 +2409,11 @@ xn--46e6675axzzhota.xn--0ug06gu8f; ᠢ𐮂𐫘寐.‌≯✳; [B1, B5, C1, V6]; x
 ‍。󸲜ႺႴ𞨇; ‍.󸲜ႺႴ𞨇; [B1, B5, B6, C2, P1, V6]; xn--1ug.xn--sndl01647an3h1h; ; .xn--sndl01647an3h1h; [B5, B6, P1, V6, A4_2] # .ႺႴ
 ‍。󸲜ⴚⴔ𞨇; ‍.󸲜ⴚⴔ𞨇; [B1, B5, B6, C2, P1, V6]; xn--1ug.xn--cljl81825an3r4h; ; .xn--cljl81825an3r4h; [B5, B6, P1, V6, A4_2] # .ⴚⴔ
 ‍。󸲜Ⴚⴔ𞨇; ‍.󸲜Ⴚⴔ𞨇; [B1, B5, B6, C2, P1, V6]; xn--1ug.xn--ynd036lq981an3r4h; ; .xn--ynd036lq981an3r4h; [B5, B6, P1, V6, A4_2] # .Ⴚⴔ
-.xn--ynd036lq981an3r4h; .󸲜Ⴚⴔ𞨇; [B5, B6, V6, A4_2]; .xn--ynd036lq981an3r4h; ; ;  # .Ⴚⴔ
+.xn--ynd036lq981an3r4h; .󸲜Ⴚⴔ𞨇; [B5, B6, V6, X4_2]; .xn--ynd036lq981an3r4h; [B5, B6, V6, A4_2]; ;  # .Ⴚⴔ
 xn--1ug.xn--ynd036lq981an3r4h; ‍.󸲜Ⴚⴔ𞨇; [B1, B5, B6, C2, V6]; xn--1ug.xn--ynd036lq981an3r4h; ; ;  # .Ⴚⴔ
-.xn--cljl81825an3r4h; .󸲜ⴚⴔ𞨇; [B5, B6, V6, A4_2]; .xn--cljl81825an3r4h; ; ;  # .ⴚⴔ
+.xn--cljl81825an3r4h; .󸲜ⴚⴔ𞨇; [B5, B6, V6, X4_2]; .xn--cljl81825an3r4h; [B5, B6, V6, A4_2]; ;  # .ⴚⴔ
 xn--1ug.xn--cljl81825an3r4h; ‍.󸲜ⴚⴔ𞨇; [B1, B5, B6, C2, V6]; xn--1ug.xn--cljl81825an3r4h; ; ;  # .ⴚⴔ
-.xn--sndl01647an3h1h; .󸲜ႺႴ𞨇; [B5, B6, V6, A4_2]; .xn--sndl01647an3h1h; ; ;  # .ႺႴ
+.xn--sndl01647an3h1h; .󸲜ႺႴ𞨇; [B5, B6, V6, X4_2]; .xn--sndl01647an3h1h; [B5, B6, V6, A4_2]; ;  # .ႺႴ
 xn--1ug.xn--sndl01647an3h1h; ‍.󸲜ႺႴ𞨇; [B1, B5, B6, C2, V6]; xn--1ug.xn--sndl01647an3h1h; ; ;  # .ႺႴ
 ‍｡󸲜ⴚⴔ𞨇; ‍.󸲜ⴚⴔ𞨇; [B1, B5, B6, C2, P1, V6]; xn--1ug.xn--cljl81825an3r4h; ; .xn--cljl81825an3r4h; [B5, B6, P1, V6, A4_2] # .ⴚⴔ
 ‍｡󸲜Ⴚⴔ𞨇; ‍.󸲜Ⴚⴔ𞨇; [B1, B5, B6, C2, P1, V6]; xn--1ug.xn--ynd036lq981an3r4h; ; .xn--ynd036lq981an3r4h; [B5, B6, P1, V6, A4_2] # .Ⴚⴔ
@@ -2526,9 +2544,9 @@ xn--vcb.xn--0kb623hm1d; ֤.ہ᪳‌; [B1, B3, B6, C1, V5]; xn--vcb.xn--0kb623hm1
 xn--4vb80kq29ayo62l.xn--8g6h; 񢭏ࡆ≮્.𞦊; [B5, B6, V6]; xn--4vb80kq29ayo62l.xn--8g6h; ; ;  # ࡆ≮્.
 ‍。𞀘⒈ꡍ擉; ‍.𞀘⒈ꡍ擉; [C2, P1, V5, V6]; xn--1ug.xn--tsh026uql4bew9p; ; .xn--tsh026uql4bew9p; [P1, V5, V6, A4_2] # .𞀘⒈ꡍ擉
 ‍。𞀘1.ꡍ擉; ‍.𞀘1.ꡍ擉; [C2, V5]; xn--1ug.xn--1-1p4r.xn--s7uv61m; ; .xn--1-1p4r.xn--s7uv61m; [V5, A4_2] # .𞀘1.ꡍ擉
-.xn--1-1p4r.xn--s7uv61m; .𞀘1.ꡍ擉; [V5, A4_2]; .xn--1-1p4r.xn--s7uv61m; ; ;  # .𞀘1.ꡍ擉
+.xn--1-1p4r.xn--s7uv61m; .𞀘1.ꡍ擉; [V5, X4_2]; .xn--1-1p4r.xn--s7uv61m; [V5, A4_2]; ;  # .𞀘1.ꡍ擉
 xn--1ug.xn--1-1p4r.xn--s7uv61m; ‍.𞀘1.ꡍ擉; [C2, V5]; xn--1ug.xn--1-1p4r.xn--s7uv61m; ; ;  # .𞀘1.ꡍ擉
-.xn--tsh026uql4bew9p; .𞀘⒈ꡍ擉; [V5, V6, A4_2]; .xn--tsh026uql4bew9p; ; ;  # .𞀘⒈ꡍ擉
+.xn--tsh026uql4bew9p; .𞀘⒈ꡍ擉; [V5, V6, X4_2]; .xn--tsh026uql4bew9p; [V5, V6, A4_2]; ;  # .𞀘⒈ꡍ擉
 xn--1ug.xn--tsh026uql4bew9p; ‍.𞀘⒈ꡍ擉; [C2, V5, V6]; xn--1ug.xn--tsh026uql4bew9p; ; ;  # .𞀘⒈ꡍ擉
 ₈ߋ．ﭤ≠; 8ߋ.ٿ≠; [B1, B3, P1, V6]; xn--8-zbd.xn--4ib883l; ; ;  # 8ߋ.ٿ≠
 ₈ߋ．ﭤ≠; 8ߋ.ٿ≠; [B1, B3, P1, V6]; xn--8-zbd.xn--4ib883l; ; ;  # 8ߋ.ٿ≠
@@ -2625,14 +2643,14 @@ xn--o7e997h.xn--mmb9ml895e; ⴔᠵ.𐹧݇۹; [B1]; xn--o7e997h.xn--mmb9ml895e; ;
 xn--snd659a.xn--mmb9ml895e; Ⴔᠵ.𐹧݇۹; [B1, V6]; xn--snd659a.xn--mmb9ml895e; ; ;  # Ⴔᠵ.𐹧݇۹
 ⴔᠵ｡𐹧݇۹; ⴔᠵ.𐹧݇۹; [B1]; xn--o7e997h.xn--mmb9ml895e; ; ;  # ⴔᠵ.𐹧݇۹
 ፟ᡈ‌．︒-𖾐-; ፟ᡈ‌.︒-𖾐-; [C1, P1, V3, V5, V6]; xn--b7d82wo4h.xn-----c82nz547a; ; xn--b7d82w.xn-----c82nz547a; [P1, V3, V5, V6] # ፟ᡈ.︒-𖾐-
-፟ᡈ‌.。-𖾐-; ፟ᡈ‌..-𖾐-; [C1, V3, V5, A4_2]; xn--b7d82wo4h..xn-----pe4u; ; xn--b7d82w..xn-----pe4u; [V3, V5, A4_2] # ፟ᡈ..-𖾐-
-xn--b7d82w..xn-----pe4u; ፟ᡈ..-𖾐-; [V3, V5, A4_2]; xn--b7d82w..xn-----pe4u; ; ;  # ፟ᡈ..-𖾐-
-xn--b7d82wo4h..xn-----pe4u; ፟ᡈ‌..-𖾐-; [C1, V3, V5, A4_2]; xn--b7d82wo4h..xn-----pe4u; ; ;  # ፟ᡈ..-𖾐-
+፟ᡈ‌.。-𖾐-; ፟ᡈ‌..-𖾐-; [C1, V3, V5, X4_2]; xn--b7d82wo4h..xn-----pe4u; [C1, V3, V5, A4_2]; xn--b7d82w..xn-----pe4u; [V3, V5, A4_2] # ፟ᡈ..-𖾐-
+xn--b7d82w..xn-----pe4u; ፟ᡈ..-𖾐-; [V3, V5, X4_2]; xn--b7d82w..xn-----pe4u; [V3, V5, A4_2]; ;  # ፟ᡈ..-𖾐-
+xn--b7d82wo4h..xn-----pe4u; ፟ᡈ‌..-𖾐-; [C1, V3, V5, X4_2]; xn--b7d82wo4h..xn-----pe4u; [C1, V3, V5, A4_2]; ;  # ፟ᡈ..-𖾐-
 xn--b7d82w.xn-----c82nz547a; ፟ᡈ.︒-𖾐-; [V3, V5, V6]; xn--b7d82w.xn-----c82nz547a; ; ;  # ፟ᡈ.︒-𖾐-
 xn--b7d82wo4h.xn-----c82nz547a; ፟ᡈ‌.︒-𖾐-; [C1, V3, V5, V6]; xn--b7d82wo4h.xn-----c82nz547a; ; ;  # ፟ᡈ.︒-𖾐-
 ⒈؁⒖‌.ᷰߛ; ; [B1, C1, P1, V5, V6]; xn--jfb844kmfdwb.xn--2sb914i; ; xn--jfb347mib.xn--2sb914i; [B1, P1, V5, V6] # ⒈⒖.ᷰߛ
 1.؁15.‌.ᷰߛ; ; [B1, C1, P1, V5, V6]; 1.xn--15-1pd.xn--0ug.xn--2sb914i; ; 1.xn--15-1pd..xn--2sb914i; [B1, P1, V5, V6, A4_2] # 1.15..ᷰߛ
-1.xn--15-1pd..xn--2sb914i; 1.؁15..ᷰߛ; [B1, V5, V6, A4_2]; 1.xn--15-1pd..xn--2sb914i; ; ;  # 1.15..ᷰߛ
+1.xn--15-1pd..xn--2sb914i; 1.؁15..ᷰߛ; [B1, V5, V6, X4_2]; 1.xn--15-1pd..xn--2sb914i; [B1, V5, V6, A4_2]; ;  # 1.15..ᷰߛ
 1.xn--15-1pd.xn--0ug.xn--2sb914i; 1.؁15.‌.ᷰߛ; [B1, C1, V5, V6]; 1.xn--15-1pd.xn--0ug.xn--2sb914i; ; ;  # 1.15..ᷰߛ
 xn--jfb347mib.xn--2sb914i; ⒈؁⒖.ᷰߛ; [B1, V5, V6]; xn--jfb347mib.xn--2sb914i; ; ;  # ⒈⒖.ᷰߛ
 xn--jfb844kmfdwb.xn--2sb914i; ⒈؁⒖‌.ᷰߛ; [B1, C1, V5, V6]; xn--jfb844kmfdwb.xn--2sb914i; ; ;  # ⒈⒖.ᷰߛ
@@ -2693,8 +2711,8 @@ xn--9-mfs8024b.xn--0ug; 9隁⯮.‌; [C1]; xn--9-mfs8024b.xn--0ug; ; ;  # 9隁�
 xn--0sh2466f.xn--3ed972m6o8a; ⒏𐹧.ⴣ྄彦; [B1, V6]; xn--0sh2466f.xn--3ed972m6o8a; ; ;  # ⒏𐹧.ⴣ྄彦
 xn--0sh2466f.xn--3ed15dt93o; ⒏𐹧.Ⴣ྄彦; [B1, V6]; xn--0sh2466f.xn--3ed15dt93o; ; ;  # ⒏𐹧.Ⴣ྄彦
 -问񬰔⒛。؄-񜗉橬; -问񬰔⒛.؄-񜗉橬; [B1, P1, V3, V6]; xn----hdpu849bhis3e.xn----ykc7228efm46d; ; ;  # -问⒛.-橬
--问񬰔20.。؄-񜗉橬; -问񬰔20..؄-񜗉橬; [B1, P1, V3, V6, A4_2]; xn---20-658jx1776d..xn----ykc7228efm46d; ; ;  # -问20..-橬
-xn---20-658jx1776d..xn----ykc7228efm46d; -问񬰔20..؄-񜗉橬; [B1, V3, V6, A4_2]; xn---20-658jx1776d..xn----ykc7228efm46d; ; ;  # -问20..-橬
+-问񬰔20.。؄-񜗉橬; -问񬰔20..؄-񜗉橬; [B1, P1, V3, V6, X4_2]; xn---20-658jx1776d..xn----ykc7228efm46d; [B1, P1, V3, V6, A4_2]; ;  # -问20..-橬
+xn---20-658jx1776d..xn----ykc7228efm46d; -问񬰔20..؄-񜗉橬; [B1, V3, V6, X4_2]; xn---20-658jx1776d..xn----ykc7228efm46d; [B1, V3, V6, A4_2]; ;  # -问20..-橬
 xn----hdpu849bhis3e.xn----ykc7228efm46d; -问񬰔⒛.؄-񜗉橬; [B1, V3, V6]; xn----hdpu849bhis3e.xn----ykc7228efm46d; ; ;  # -问⒛.-橬
 ᮬႬ‌̥。𝟸; ᮬႬ‌̥.2; [C1, P1, V5, V6]; xn--mta930emribme.2; ; xn--mta930emri.2; [P1, V5, V6] # ᮬႬ̥.2
 ᮬႬ‌̥。2; ᮬႬ‌̥.2; [C1, P1, V5, V6]; xn--mta930emribme.2; ; xn--mta930emri.2; [P1, V5, V6] # ᮬႬ̥.2
@@ -2739,9 +2757,9 @@ xn--4--e4j7831r.xn--gdh8754cz40c; 4်-𐹸.ꨩ𐹴≮; [B1, V5, V6]; xn--4--e4j
 xn--4--e4j7831r.xn--0ugy6gjy5sl3ud; 4်-𐹸.ꨩ‌𐹴≮; [B1, C1, V5, V6]; xn--4--e4j7831r.xn--0ugy6gjy5sl3ud; ; ;  # 4်-𐹸.ꨩ𐹴≮
 ‌。ﾠ྄ྖ; ‌.ﾠ྄ྖ; [C1, P1, V6]; xn--0ug.xn--3ed0by082k; ; .xn--3ed0by082k; [P1, V6, A4_2] # .྄ྖ
 ‌。ᅠ྄ྖ; ‌.ᅠ྄ྖ; [C1, P1, V6]; xn--0ug.xn--3ed0b20h; ; .xn--3ed0b20h; [P1, V6, A4_2] # .྄ྖ
-.xn--3ed0b20h; .ᅠ྄ྖ; [V6, A4_2]; .xn--3ed0b20h; ; ;  # .྄ྖ
+.xn--3ed0b20h; .ᅠ྄ྖ; [V6, X4_2]; .xn--3ed0b20h; [V6, A4_2]; ;  # .྄ྖ
 xn--0ug.xn--3ed0b20h; ‌.ᅠ྄ྖ; [C1, V6]; xn--0ug.xn--3ed0b20h; ; ;  # .྄ྖ
-.xn--3ed0by082k; .ﾠ྄ྖ; [V6, A4_2]; .xn--3ed0by082k; ; ;  # .྄ྖ
+.xn--3ed0by082k; .ﾠ྄ྖ; [V6, X4_2]; .xn--3ed0by082k; [V6, A4_2]; ;  # .྄ྖ
 xn--0ug.xn--3ed0by082k; ‌.ﾠ྄ྖ; [C1, V6]; xn--0ug.xn--3ed0by082k; ; ;  # .྄ྖ
 ≯򍘅．‍𐅼򲇛; ≯򍘅.‍𐅼򲇛; [C2, P1, V6]; xn--hdh84488f.xn--1ug8099fbjp4e; ; xn--hdh84488f.xn--xy7cw2886b; [P1, V6] # ≯.𐅼
 ≯򍘅．‍𐅼򲇛; ≯򍘅.‍𐅼򲇛; [C2, P1, V6]; xn--hdh84488f.xn--1ug8099fbjp4e; ; xn--hdh84488f.xn--xy7cw2886b; [P1, V6] # ≯.𐅼
@@ -2860,8 +2878,8 @@ xn--kgd7493jee34a.xn--3j9au7544a; 񗪨ﾠྷ.񸞰꥓; [V6]; xn--kgd7493jee34a.xn
 xn--6fb.xn--gmb0524f; ؘ.۳꥓; [V5]; xn--6fb.xn--gmb0524f; ; ;  # ؘ.۳꥓
 xn--6fb.xn--gmb469jjf1h; ؘ.۳‌꥓; [C1, V5]; xn--6fb.xn--gmb469jjf1h; ; ;  # ؘ.۳꥓
 ᡌ．︒ᢑ; ᡌ.︒ᢑ; [P1, V6]; xn--c8e.xn--bbf9168i; ; ;  # ᡌ.︒ᢑ
-ᡌ.。ᢑ; ᡌ..ᢑ; [A4_2]; xn--c8e..xn--bbf; ; ;  # ᡌ..ᢑ
-xn--c8e..xn--bbf; ᡌ..ᢑ; [A4_2]; xn--c8e..xn--bbf; ; ;  # ᡌ..ᢑ
+ᡌ.。ᢑ; ᡌ..ᢑ; [X4_2]; xn--c8e..xn--bbf; [A4_2]; ;  # ᡌ..ᢑ
+xn--c8e..xn--bbf; ᡌ..ᢑ; [X4_2]; xn--c8e..xn--bbf; [A4_2]; ;  # ᡌ..ᢑ
 xn--c8e.xn--bbf9168i; ᡌ.︒ᢑ; [V6]; xn--c8e.xn--bbf9168i; ; ;  # ᡌ.︒ᢑ
 𑋪ၳ｡𞽧; 𑋪ၳ.𞽧; [B1, B3, B6, P1, V5, V6]; xn--xld7443k.xn--4o7h; ; ;  # 𑋪ၳ.
 𑋪ၳ。𞽧; 𑋪ၳ.𞽧; [B1, B3, B6, P1, V5, V6]; xn--xld7443k.xn--4o7h; ; ;  # 𑋪ၳ.
@@ -2891,19 +2909,19 @@ xn--n3b542bb085j.xn--1ug6815co9wc; ᅟ񙯠्.‍꥓𐪤; [B1, C2, V6]; xn--n3b5
 򌋔󠆎󠆗𑲕。≮; 򌋔𑲕.≮; [P1, V6]; xn--4m3dv4354a.xn--gdh; ; ;  # 𑲕.≮
 򌋔󠆎󠆗𑲕。≮; 򌋔𑲕.≮; [P1, V6]; xn--4m3dv4354a.xn--gdh; ; ;  # 𑲕.≮
 xn--4m3dv4354a.xn--gdh; 򌋔𑲕.≮; [V6]; xn--4m3dv4354a.xn--gdh; ; ;  # 𑲕.≮
-󠆦.ࣣ暀≠; .ࣣ暀≠; [P1, V5, V6, A4_2]; .xn--m0b461k3g2c; ; ;  # .ࣣ暀≠
-󠆦.ࣣ暀≠; .ࣣ暀≠; [P1, V5, V6, A4_2]; .xn--m0b461k3g2c; ; ;  # .ࣣ暀≠
-.xn--m0b461k3g2c; .ࣣ暀≠; [V5, V6, A4_2]; .xn--m0b461k3g2c; ; ;  # .ࣣ暀≠
+󠆦.ࣣ暀≠; .ࣣ暀≠; [P1, V5, V6, X4_2]; .xn--m0b461k3g2c; [P1, V5, V6, A4_2]; ;  # .ࣣ暀≠
+󠆦.ࣣ暀≠; .ࣣ暀≠; [P1, V5, V6, X4_2]; .xn--m0b461k3g2c; [P1, V5, V6, A4_2]; ;  # .ࣣ暀≠
+.xn--m0b461k3g2c; .ࣣ暀≠; [V5, V6, X4_2]; .xn--m0b461k3g2c; [V5, V6, A4_2]; ;  # .ࣣ暀≠
 𐡤꯭｡ﴰ򜖅ᷰ; 𐡤꯭.شم򜖅ᷰ; [B2, B3, P1, V6]; xn--429ak76o.xn--zgb8a701kox37t; ; ;  # 𐡤꯭.شمᷰ
 𐡤꯭。شم򜖅ᷰ; 𐡤꯭.شم򜖅ᷰ; [B2, B3, P1, V6]; xn--429ak76o.xn--zgb8a701kox37t; ; ;  # 𐡤꯭.شمᷰ
 xn--429ak76o.xn--zgb8a701kox37t; 𐡤꯭.شم򜖅ᷰ; [B2, B3, V6]; xn--429ak76o.xn--zgb8a701kox37t; ; ;  # 𐡤꯭.شمᷰ
 𝉃‍⒈｡Ⴌ𞱓; 𝉃‍⒈.Ⴌ𞱓; [B1, B5, B6, C2, P1, V5, V6]; xn--1ug68oq348b.xn--knd8464v; ; xn--tshz828m.xn--knd8464v; [B1, B5, B6, P1, V5, V6] # 𝉃⒈.Ⴌ
-𝉃‍1.。Ⴌ𞱓; 𝉃‍1..Ⴌ𞱓; [B1, B5, B6, C2, P1, V5, V6, A4_2]; xn--1-tgn9827q..xn--knd8464v; ; xn--1-px8q..xn--knd8464v; [B1, B5, B6, P1, V5, V6, A4_2] # 𝉃1..Ⴌ
-𝉃‍1.。ⴌ𞱓; 𝉃‍1..ⴌ𞱓; [B1, B5, B6, C2, P1, V5, V6, A4_2]; xn--1-tgn9827q..xn--3kj4524l; ; xn--1-px8q..xn--3kj4524l; [B1, B5, B6, P1, V5, V6, A4_2] # 𝉃1..ⴌ
-xn--1-px8q..xn--3kj4524l; 𝉃1..ⴌ𞱓; [B1, B5, B6, V5, V6, A4_2]; xn--1-px8q..xn--3kj4524l; ; ;  # 𝉃1..ⴌ
-xn--1-tgn9827q..xn--3kj4524l; 𝉃‍1..ⴌ𞱓; [B1, B5, B6, C2, V5, V6, A4_2]; xn--1-tgn9827q..xn--3kj4524l; ; ;  # 𝉃1..ⴌ
-xn--1-px8q..xn--knd8464v; 𝉃1..Ⴌ𞱓; [B1, B5, B6, V5, V6, A4_2]; xn--1-px8q..xn--knd8464v; ; ;  # 𝉃1..Ⴌ
-xn--1-tgn9827q..xn--knd8464v; 𝉃‍1..Ⴌ𞱓; [B1, B5, B6, C2, V5, V6, A4_2]; xn--1-tgn9827q..xn--knd8464v; ; ;  # 𝉃1..Ⴌ
+𝉃‍1.。Ⴌ𞱓; 𝉃‍1..Ⴌ𞱓; [B1, B5, B6, C2, P1, V5, V6, X4_2]; xn--1-tgn9827q..xn--knd8464v; [B1, B5, B6, C2, P1, V5, V6, A4_2]; xn--1-px8q..xn--knd8464v; [B1, B5, B6, P1, V5, V6, A4_2] # 𝉃1..Ⴌ
+𝉃‍1.。ⴌ𞱓; 𝉃‍1..ⴌ𞱓; [B1, B5, B6, C2, P1, V5, V6, X4_2]; xn--1-tgn9827q..xn--3kj4524l; [B1, B5, B6, C2, P1, V5, V6, A4_2]; xn--1-px8q..xn--3kj4524l; [B1, B5, B6, P1, V5, V6, A4_2] # 𝉃1..ⴌ
+xn--1-px8q..xn--3kj4524l; 𝉃1..ⴌ𞱓; [B1, B5, B6, V5, V6, X4_2]; xn--1-px8q..xn--3kj4524l; [B1, B5, B6, V5, V6, A4_2]; ;  # 𝉃1..ⴌ
+xn--1-tgn9827q..xn--3kj4524l; 𝉃‍1..ⴌ𞱓; [B1, B5, B6, C2, V5, V6, X4_2]; xn--1-tgn9827q..xn--3kj4524l; [B1, B5, B6, C2, V5, V6, A4_2]; ;  # 𝉃1..ⴌ
+xn--1-px8q..xn--knd8464v; 𝉃1..Ⴌ𞱓; [B1, B5, B6, V5, V6, X4_2]; xn--1-px8q..xn--knd8464v; [B1, B5, B6, V5, V6, A4_2]; ;  # 𝉃1..Ⴌ
+xn--1-tgn9827q..xn--knd8464v; 𝉃‍1..Ⴌ𞱓; [B1, B5, B6, C2, V5, V6, X4_2]; xn--1-tgn9827q..xn--knd8464v; [B1, B5, B6, C2, V5, V6, A4_2]; ;  # 𝉃1..Ⴌ
 𝉃‍⒈｡ⴌ𞱓; 𝉃‍⒈.ⴌ𞱓; [B1, B5, B6, C2, P1, V5, V6]; xn--1ug68oq348b.xn--3kj4524l; ; xn--tshz828m.xn--3kj4524l; [B1, B5, B6, P1, V5, V6] # 𝉃⒈.ⴌ
 xn--tshz828m.xn--3kj4524l; 𝉃⒈.ⴌ𞱓; [B1, B5, B6, V5, V6]; xn--tshz828m.xn--3kj4524l; ; ;  # 𝉃⒈.ⴌ
 xn--1ug68oq348b.xn--3kj4524l; 𝉃‍⒈.ⴌ𞱓; [B1, B5, B6, C2, V5, V6]; xn--1ug68oq348b.xn--3kj4524l; ; ;  # 𝉃⒈.ⴌ
@@ -2935,12 +2953,12 @@ xn--7m9an32q.xn--rpb6081w; ꧀𐹲.ݧ🄉; [B5, B6, V5, V6]; xn--7m9an32q.xn--rp
 xn--0uga8686hdgvd.xn--rpb6081w; ꧀‌𐹲‌.ݧ🄉; [B5, B6, C1, V5, V6]; xn--0uga8686hdgvd.xn--rpb6081w; ; ;  # ꧀𐹲.ݧ🄉
 ︒｡Ⴃ≯; ︒.Ⴃ≯; [P1, V6]; xn--y86c.xn--bnd622g; ; ;  # ︒.Ⴃ≯
 ︒｡Ⴃ≯; ︒.Ⴃ≯; [P1, V6]; xn--y86c.xn--bnd622g; ; ;  # ︒.Ⴃ≯
-。。Ⴃ≯; ..Ⴃ≯; [P1, V6, A4_2]; ..xn--bnd622g; ; ;  # ..Ⴃ≯
-。。Ⴃ≯; ..Ⴃ≯; [P1, V6, A4_2]; ..xn--bnd622g; ; ;  # ..Ⴃ≯
-。。ⴃ≯; ..ⴃ≯; [P1, V6, A4_2]; ..xn--hdh782b; ; ;  # ..ⴃ≯
-。。ⴃ≯; ..ⴃ≯; [P1, V6, A4_2]; ..xn--hdh782b; ; ;  # ..ⴃ≯
-..xn--hdh782b; ..ⴃ≯; [V6, A4_2]; ..xn--hdh782b; ; ;  # ..ⴃ≯
-..xn--bnd622g; ..Ⴃ≯; [V6, A4_2]; ..xn--bnd622g; ; ;  # ..Ⴃ≯
+。。Ⴃ≯; ..Ⴃ≯; [P1, V6, X4_2]; ..xn--bnd622g; [P1, V6, A4_2]; ;  # ..Ⴃ≯
+。。Ⴃ≯; ..Ⴃ≯; [P1, V6, X4_2]; ..xn--bnd622g; [P1, V6, A4_2]; ;  # ..Ⴃ≯
+。。ⴃ≯; ..ⴃ≯; [P1, V6, X4_2]; ..xn--hdh782b; [P1, V6, A4_2]; ;  # ..ⴃ≯
+。。ⴃ≯; ..ⴃ≯; [P1, V6, X4_2]; ..xn--hdh782b; [P1, V6, A4_2]; ;  # ..ⴃ≯
+..xn--hdh782b; ..ⴃ≯; [V6, X4_2]; ..xn--hdh782b; [V6, A4_2]; ;  # ..ⴃ≯
+..xn--bnd622g; ..Ⴃ≯; [V6, X4_2]; ..xn--bnd622g; [V6, A4_2]; ;  # ..Ⴃ≯
 ︒｡ⴃ≯; ︒.ⴃ≯; [P1, V6]; xn--y86c.xn--hdh782b; ; ;  # ︒.ⴃ≯
 ︒｡ⴃ≯; ︒.ⴃ≯; [P1, V6]; xn--y86c.xn--hdh782b; ; ;  # ︒.ⴃ≯
 xn--y86c.xn--hdh782b; ︒.ⴃ≯; [V6]; xn--y86c.xn--hdh782b; ; ;  # ︒.ⴃ≯
@@ -2950,15 +2968,15 @@ xn--y86c.xn--bnd622g; ︒.Ⴃ≯; [V6]; xn--y86c.xn--bnd622g; ; ;  # ︒.Ⴃ≯
 xn--mo0d.xn--wy46e; 𐹮.󠢼; [B1, V6]; xn--mo0d.xn--wy46e; ; ;  # 𐹮.
 xn--mo0d.xn--1ug18431l; 𐹮.󠢼‍; [B1, C2, V6]; xn--mo0d.xn--1ug18431l; ; ;  # 𐹮.
 Ⴞ𐹨｡︒ݽ‍Ⴏ; Ⴞ𐹨.︒ݽ‍Ⴏ; [B1, B5, B6, C2, P1, V6]; xn--2nd0990k.xn--eqb228bgzmvp0t; ; xn--2nd0990k.xn--eqb228b583r; [B1, B5, B6, P1, V6] # Ⴞ𐹨.︒ݽႯ
-Ⴞ𐹨。。ݽ‍Ⴏ; Ⴞ𐹨..ݽ‍Ⴏ; [B2, B3, B5, B6, C2, P1, V6, A4_2]; xn--2nd0990k..xn--eqb228bgzm; ; xn--2nd0990k..xn--eqb228b; [B2, B3, B5, B6, P1, V6, A4_2] # Ⴞ𐹨..ݽႯ
-ⴞ𐹨。。ݽ‍ⴏ; ⴞ𐹨..ݽ‍ⴏ; [B2, B3, B5, B6, C2, A4_2]; xn--mlju223e..xn--eqb096jpgj; ; xn--mlju223e..xn--eqb053q; [B2, B3, B5, B6, A4_2] # ⴞ𐹨..ݽⴏ
-Ⴞ𐹨。。ݽ‍ⴏ; Ⴞ𐹨..ݽ‍ⴏ; [B2, B3, B5, B6, C2, P1, V6, A4_2]; xn--2nd0990k..xn--eqb096jpgj; ; xn--2nd0990k..xn--eqb053q; [B2, B3, B5, B6, P1, V6, A4_2] # Ⴞ𐹨..ݽⴏ
-xn--2nd0990k..xn--eqb053q; Ⴞ𐹨..ݽⴏ; [B2, B3, B5, B6, V6, A4_2]; xn--2nd0990k..xn--eqb053q; ; ;  # Ⴞ𐹨..ݽⴏ
-xn--2nd0990k..xn--eqb096jpgj; Ⴞ𐹨..ݽ‍ⴏ; [B2, B3, B5, B6, C2, V6, A4_2]; xn--2nd0990k..xn--eqb096jpgj; ; ;  # Ⴞ𐹨..ݽⴏ
-xn--mlju223e..xn--eqb053q; ⴞ𐹨..ݽⴏ; [B2, B3, B5, B6, A4_2]; xn--mlju223e..xn--eqb053q; ; ;  # ⴞ𐹨..ݽⴏ
-xn--mlju223e..xn--eqb096jpgj; ⴞ𐹨..ݽ‍ⴏ; [B2, B3, B5, B6, C2, A4_2]; xn--mlju223e..xn--eqb096jpgj; ; ;  # ⴞ𐹨..ݽⴏ
-xn--2nd0990k..xn--eqb228b; Ⴞ𐹨..ݽႯ; [B2, B3, B5, B6, V6, A4_2]; xn--2nd0990k..xn--eqb228b; ; ;  # Ⴞ𐹨..ݽႯ
-xn--2nd0990k..xn--eqb228bgzm; Ⴞ𐹨..ݽ‍Ⴏ; [B2, B3, B5, B6, C2, V6, A4_2]; xn--2nd0990k..xn--eqb228bgzm; ; ;  # Ⴞ𐹨..ݽႯ
+Ⴞ𐹨。。ݽ‍Ⴏ; Ⴞ𐹨..ݽ‍Ⴏ; [B2, B3, B5, B6, C2, P1, V6, X4_2]; xn--2nd0990k..xn--eqb228bgzm; [B2, B3, B5, B6, C2, P1, V6, A4_2]; xn--2nd0990k..xn--eqb228b; [B2, B3, B5, B6, P1, V6, A4_2] # Ⴞ𐹨..ݽႯ
+ⴞ𐹨。。ݽ‍ⴏ; ⴞ𐹨..ݽ‍ⴏ; [B2, B3, B5, B6, C2, X4_2]; xn--mlju223e..xn--eqb096jpgj; [B2, B3, B5, B6, C2, A4_2]; xn--mlju223e..xn--eqb053q; [B2, B3, B5, B6, A4_2] # ⴞ𐹨..ݽⴏ
+Ⴞ𐹨。。ݽ‍ⴏ; Ⴞ𐹨..ݽ‍ⴏ; [B2, B3, B5, B6, C2, P1, V6, X4_2]; xn--2nd0990k..xn--eqb096jpgj; [B2, B3, B5, B6, C2, P1, V6, A4_2]; xn--2nd0990k..xn--eqb053q; [B2, B3, B5, B6, P1, V6, A4_2] # Ⴞ𐹨..ݽⴏ
+xn--2nd0990k..xn--eqb053q; Ⴞ𐹨..ݽⴏ; [B2, B3, B5, B6, V6, X4_2]; xn--2nd0990k..xn--eqb053q; [B2, B3, B5, B6, V6, A4_2]; ;  # Ⴞ𐹨..ݽⴏ
+xn--2nd0990k..xn--eqb096jpgj; Ⴞ𐹨..ݽ‍ⴏ; [B2, B3, B5, B6, C2, V6, X4_2]; xn--2nd0990k..xn--eqb096jpgj; [B2, B3, B5, B6, C2, V6, A4_2]; ;  # Ⴞ𐹨..ݽⴏ
+xn--mlju223e..xn--eqb053q; ⴞ𐹨..ݽⴏ; [B2, B3, B5, B6, X4_2]; xn--mlju223e..xn--eqb053q; [B2, B3, B5, B6, A4_2]; ;  # ⴞ𐹨..ݽⴏ
+xn--mlju223e..xn--eqb096jpgj; ⴞ𐹨..ݽ‍ⴏ; [B2, B3, B5, B6, C2, X4_2]; xn--mlju223e..xn--eqb096jpgj; [B2, B3, B5, B6, C2, A4_2]; ;  # ⴞ𐹨..ݽⴏ
+xn--2nd0990k..xn--eqb228b; Ⴞ𐹨..ݽႯ; [B2, B3, B5, B6, V6, X4_2]; xn--2nd0990k..xn--eqb228b; [B2, B3, B5, B6, V6, A4_2]; ;  # Ⴞ𐹨..ݽႯ
+xn--2nd0990k..xn--eqb228bgzm; Ⴞ𐹨..ݽ‍Ⴏ; [B2, B3, B5, B6, C2, V6, X4_2]; xn--2nd0990k..xn--eqb228bgzm; [B2, B3, B5, B6, C2, V6, A4_2]; ;  # Ⴞ𐹨..ݽႯ
 ⴞ𐹨｡︒ݽ‍ⴏ; ⴞ𐹨.︒ݽ‍ⴏ; [B1, B5, B6, C2, P1, V6]; xn--mlju223e.xn--eqb096jpgj9y7r; ; xn--mlju223e.xn--eqb053qjk7l; [B1, B5, B6, P1, V6] # ⴞ𐹨.︒ݽⴏ
 Ⴞ𐹨｡︒ݽ‍ⴏ; Ⴞ𐹨.︒ݽ‍ⴏ; [B1, B5, B6, C2, P1, V6]; xn--2nd0990k.xn--eqb096jpgj9y7r; ; xn--2nd0990k.xn--eqb053qjk7l; [B1, B5, B6, P1, V6] # Ⴞ𐹨.︒ݽⴏ
 xn--2nd0990k.xn--eqb053qjk7l; Ⴞ𐹨.︒ݽⴏ; [B1, B5, B6, V6]; xn--2nd0990k.xn--eqb053qjk7l; ; ;  # Ⴞ𐹨.︒ݽⴏ
@@ -2989,7 +3007,7 @@ xn----11g3013fy8x5m.xn----tfot873s; 箃Ⴡ-󠁝.≠-🤖; [V6]; xn----11g3013fy8
 xn--dtb.xn--okb; ߥ.ڵ; ; xn--dtb.xn--okb; ; ;  # ߥ.ڵ
 ‌‍.𞤿; ; [B1, C1, C2]; xn--0ugc.xn--3e6h; ; .xn--3e6h; [A4_2] # .𞤿
 ‌‍.𞤝; ‌‍.𞤿; [B1, C1, C2]; xn--0ugc.xn--3e6h; ; .xn--3e6h; [A4_2] # .𞤿
-.xn--3e6h; .𞤿; [A4_2]; .xn--3e6h; ; ;  # .𞤿
+.xn--3e6h; .𞤿; [X4_2]; .xn--3e6h; [A4_2]; ;  # .𞤿
 xn--0ugc.xn--3e6h; ‌‍.𞤿; [B1, C1, C2]; xn--0ugc.xn--3e6h; ; ;  # .𞤿
 xn--3e6h; 𞤿; ; xn--3e6h; ; ;  # 𞤿
 𞤿; ; ; xn--3e6h; ; ;  # 𞤿
@@ -3019,8 +3037,8 @@ xn--8hb852ke991q.xn--bpb; ٠򪓵‌.ݗ; [B1, C1, V6]; xn--8hb852ke991q.xn--bpb; 
 xn--bkd.-; ်.-; [V3, V5]; xn--bkd.-; ; ;  # ်.-
 xn--bkd412fca.xn----sgn; ်‍‌.-‌; [C1, V3, V5]; xn--bkd412fca.xn----sgn; ; ;  # ်.-
 ︒｡᭄ᡉ; ︒.᭄ᡉ; [P1, V5, V6]; xn--y86c.xn--87e93m; ; ;  # ︒.᭄ᡉ
-。。᭄ᡉ; ..᭄ᡉ; [V5, A4_2]; ..xn--87e93m; ; ;  # ..᭄ᡉ
-..xn--87e93m; ..᭄ᡉ; [V5, A4_2]; ..xn--87e93m; ; ;  # ..᭄ᡉ
+。。᭄ᡉ; ..᭄ᡉ; [V5, X4_2]; ..xn--87e93m; [V5, A4_2]; ;  # ..᭄ᡉ
+..xn--87e93m; ..᭄ᡉ; [V5, X4_2]; ..xn--87e93m; [V5, A4_2]; ;  # ..᭄ᡉ
 xn--y86c.xn--87e93m; ︒.᭄ᡉ; [V5, V6]; xn--y86c.xn--87e93m; ; ;  # ︒.᭄ᡉ
 ݘß。ጫᢊݨ𝟐; ݘß.ጫᢊݨ2; [B2, B3, B5]; xn--zca724a.xn--2-b5c641gfmf; ; xn--ss-gke.xn--2-b5c641gfmf;  # ݘß.ጫᢊݨ2
 ݘß。ጫᢊݨ2; ݘß.ጫᢊݨ2; [B2, B3, B5]; xn--zca724a.xn--2-b5c641gfmf; ; xn--ss-gke.xn--2-b5c641gfmf;  # ݘß.ጫᢊݨ2
@@ -3037,7 +3055,7 @@ xn--zca724a.xn--2-b5c641gfmf; ݘß.ጫᢊݨ2; [B2, B3, B5]; xn--zca724a.xn--2-b5
 xn--esb067enh07a.xn--2-lgb874bjxa; ߃𞶇ᚲ.ं͓2্; [B1, B2, B3, V5, V6]; xn--esb067enh07a.xn--2-lgb874bjxa; ; ;  # ߃ᚲ.ं͓2্
 -᮫︒‍.񒶈񥹓; ; [C2, P1, V3, V6]; xn----qmlv7tw180a.xn--x50zy803a; ; xn----qml1407i.xn--x50zy803a; [P1, V3, V6] # -᮫︒.
 -᮫。‍.񒶈񥹓; -᮫.‍.񒶈񥹓; [C2, P1, V3, V6]; xn----qml.xn--1ug.xn--x50zy803a; ; xn----qml..xn--x50zy803a; [P1, V3, V6, A4_2] # -᮫..
-xn----qml..xn--x50zy803a; -᮫..񒶈񥹓; [V3, V6, A4_2]; xn----qml..xn--x50zy803a; ; ;  # -᮫..
+xn----qml..xn--x50zy803a; -᮫..񒶈񥹓; [V3, V6, X4_2]; xn----qml..xn--x50zy803a; [V3, V6, A4_2]; ;  # -᮫..
 xn----qml.xn--1ug.xn--x50zy803a; -᮫.‍.񒶈񥹓; [C2, V3, V6]; xn----qml.xn--1ug.xn--x50zy803a; ; ;  # -᮫..
 xn----qml1407i.xn--x50zy803a; -᮫︒.񒶈񥹓; [V3, V6]; xn----qml1407i.xn--x50zy803a; ; ;  # -᮫︒.
 xn----qmlv7tw180a.xn--x50zy803a; -᮫︒‍.񒶈񥹓; [C2, V3, V6]; xn----qmlv7tw180a.xn--x50zy803a; ; ;  # -᮫︒.
@@ -3050,8 +3068,8 @@ xn----p26i72em2894c.xn--zw6h; -𑄳󠊗𐹩.𞮱; [B1, V3, V6]; xn----p26i72em28
 ڹ.ᡳᅟ; ; [P1, V6]; xn--skb.xn--osd737a; ; ;  # ڹ.ᡳ
 xn--skb.xn--osd737a; ڹ.ᡳᅟ; [V6]; xn--skb.xn--osd737a; ; ;  # ڹ.ᡳ
 㨛𘱎.︒𝟕ഁ; 㨛𘱎.︒7ഁ; [P1, V6]; xn--mbm8237g.xn--7-7hf1526p; ; ;  # 㨛.︒7ഁ
-㨛𘱎.。7ഁ; 㨛𘱎..7ഁ; [P1, V6, A4_2]; xn--mbm8237g..xn--7-7hf; ; ;  # 㨛..7ഁ
-xn--mbm8237g..xn--7-7hf; 㨛𘱎..7ഁ; [V6, A4_2]; xn--mbm8237g..xn--7-7hf; ; ;  # 㨛..7ഁ
+㨛𘱎.。7ഁ; 㨛𘱎..7ഁ; [P1, V6, X4_2]; xn--mbm8237g..xn--7-7hf; [P1, V6, A4_2]; ;  # 㨛..7ഁ
+xn--mbm8237g..xn--7-7hf; 㨛𘱎..7ഁ; [V6, X4_2]; xn--mbm8237g..xn--7-7hf; [V6, A4_2]; ;  # 㨛..7ഁ
 xn--mbm8237g.xn--7-7hf1526p; 㨛𘱎.︒7ഁ; [V6]; xn--mbm8237g.xn--7-7hf1526p; ; ;  # 㨛.︒7ഁ
 ۝𻱧-｡𞷁⁤𞤣≮; ۝𻱧-.𞷁𞤣≮; [B1, B3, P1, V3, V6]; xn----dxc06304e.xn--gdh5020pk5c; ; ;  # -.𞤣≮
 ۝𻱧-｡𞷁⁤𞤣≮; ۝𻱧-.𞷁𞤣≮; [B1, B3, P1, V3, V6]; xn----dxc06304e.xn--gdh5020pk5c; ; ;  # -.𞤣≮
@@ -3086,7 +3104,7 @@ Ss‌꫶ᢥ．⊶Ⴡⴖ; ss‌꫶ᢥ.⊶Ⴡⴖ; [C1, P1, V6]; xn--ss-4ep585bkm5p
 ‍。ς󠁉; ‍.ς󠁉; [C2, P1, V6]; xn--1ug.xn--3xa44344p; ; .xn--4xa24344p; [P1, V6, A4_2] # .ς
 ‍。Σ󠁉; ‍.σ󠁉; [C2, P1, V6]; xn--1ug.xn--4xa24344p; ; .xn--4xa24344p; [P1, V6, A4_2] # .σ
 ‍。σ󠁉; ‍.σ󠁉; [C2, P1, V6]; xn--1ug.xn--4xa24344p; ; .xn--4xa24344p; [P1, V6, A4_2] # .σ
-.xn--4xa24344p; .σ󠁉; [V6, A4_2]; .xn--4xa24344p; ; ;  # .σ
+.xn--4xa24344p; .σ󠁉; [V6, X4_2]; .xn--4xa24344p; [V6, A4_2]; ;  # .σ
 xn--1ug.xn--4xa24344p; ‍.σ󠁉; [C2, V6]; xn--1ug.xn--4xa24344p; ; ;  # .σ
 xn--1ug.xn--3xa44344p; ‍.ς󠁉; [C2, V6]; xn--1ug.xn--3xa44344p; ; ;  # .ς
 𞵑ß.ݑ‍𞤛-; 𞵑ß.ݑ‍𞤽-; [B2, B3, C2, P1, V3, V6]; xn--zca5423w.xn----z3c011q9513b; ; xn--ss-2722a.xn----z3c03218a; [B2, B3, P1, V3, V6] # ß.ݑ𞤽-
@@ -3149,9 +3167,9 @@ xn--3-ep59g.xn--jhb5904fcp0h; 򒲧3.ꡚ𛇑ه; [B5, B6, V6]; xn--3-ep59g.xn--jhb
 xn--ehb015lnt1e.ss; 蓸ق≠.ss; [B5, B6, V6]; xn--ehb015lnt1e.ss; ; ;  # 蓸ق≠.ss
 xn--ehb015lnt1e.xn--zca; 蓸ق≠.ß; [B5, B6, V6]; xn--ehb015lnt1e.xn--zca; ; ;  # 蓸ق≠.ß
 ࡎٺී⒊.𐹹𞱩󠃪‌; ; [B1, C1, P1, V6]; xn--zib94gfziuq1a.xn--0ug3205g7eyf3c96h; ; xn--zib94gfziuq1a.xn--xo0dw109an237f; [B1, P1, V6] # ࡎٺී⒊.𐹹
-ࡎٺී3..𐹹𞱩󠃪‌; ; [B1, C1, P1, V6, A4_2]; xn--3-prc71ls9j..xn--0ug3205g7eyf3c96h; ; xn--3-prc71ls9j..xn--xo0dw109an237f; [B1, P1, V6, A4_2] # ࡎٺී3..𐹹
-xn--3-prc71ls9j..xn--xo0dw109an237f; ࡎٺී3..𐹹𞱩󠃪; [B1, V6, A4_2]; xn--3-prc71ls9j..xn--xo0dw109an237f; ; ;  # ࡎٺී3..𐹹
-xn--3-prc71ls9j..xn--0ug3205g7eyf3c96h; ࡎٺී3..𐹹𞱩󠃪‌; [B1, C1, V6, A4_2]; xn--3-prc71ls9j..xn--0ug3205g7eyf3c96h; ; ;  # ࡎٺී3..𐹹
+ࡎٺී3..𐹹𞱩󠃪‌; ; [B1, C1, P1, V6, X4_2]; xn--3-prc71ls9j..xn--0ug3205g7eyf3c96h; [B1, C1, P1, V6, A4_2]; xn--3-prc71ls9j..xn--xo0dw109an237f; [B1, P1, V6, A4_2] # ࡎٺී3..𐹹
+xn--3-prc71ls9j..xn--xo0dw109an237f; ࡎٺී3..𐹹𞱩󠃪; [B1, V6, X4_2]; xn--3-prc71ls9j..xn--xo0dw109an237f; [B1, V6, A4_2]; ;  # ࡎٺී3..𐹹
+xn--3-prc71ls9j..xn--0ug3205g7eyf3c96h; ࡎٺී3..𐹹𞱩󠃪‌; [B1, C1, V6, X4_2]; xn--3-prc71ls9j..xn--0ug3205g7eyf3c96h; [B1, C1, V6, A4_2]; ;  # ࡎٺී3..𐹹
 xn--zib94gfziuq1a.xn--xo0dw109an237f; ࡎٺී⒊.𐹹𞱩󠃪; [B1, V6]; xn--zib94gfziuq1a.xn--xo0dw109an237f; ; ;  # ࡎٺී⒊.𐹹
 xn--zib94gfziuq1a.xn--0ug3205g7eyf3c96h; ࡎٺී⒊.𐹹𞱩󠃪‌; [B1, C1, V6]; xn--zib94gfziuq1a.xn--0ug3205g7eyf3c96h; ; ;  # ࡎٺී⒊.𐹹
 ς‍-.Ⴣ𦟙; ; [C2, P1, V3, V6]; xn----xmb348s.xn--7nd64871a; ; xn----zmb.xn--7nd64871a; [P1, V3, V6] # ς-.Ⴣ𦟙
@@ -3227,9 +3245,9 @@ xn--4-kvc5601q2h50i.xn--1ch; 4ڽ︒󠑥.≠; [B1, V6]; xn--4-kvc5601q2h50i.xn--1
 xn--i183d.xn--6g3a; 򺸩.谷; [V6]; xn--i183d.xn--6g3a; ; ;  # .谷
 xn--0ug26167i.xn--6g3a; ‌򺸩.谷; [C1, V6]; xn--0ug26167i.xn--6g3a; ; ;  # .谷
 ︒󎰇‍.-ܼ‌; ; [C1, C2, P1, V3, V6]; xn--1ug1658ftw26f.xn----t2c071q; ; xn--y86c71305c.xn----t2c; [P1, V3, V6] # ︒.-ܼ
-。󎰇‍.-ܼ‌; .󎰇‍.-ܼ‌; [C1, C2, P1, V3, V6, A4_2]; .xn--1ug05310k.xn----t2c071q; ; .xn--hh50e.xn----t2c; [P1, V3, V6, A4_2] # ..-ܼ
-.xn--hh50e.xn----t2c; .󎰇.-ܼ; [V3, V6, A4_2]; .xn--hh50e.xn----t2c; ; ;  # ..-ܼ
-.xn--1ug05310k.xn----t2c071q; .󎰇‍.-ܼ‌; [C1, C2, V3, V6, A4_2]; .xn--1ug05310k.xn----t2c071q; ; ;  # ..-ܼ
+。󎰇‍.-ܼ‌; .󎰇‍.-ܼ‌; [C1, C2, P1, V3, V6, X4_2]; .xn--1ug05310k.xn----t2c071q; [C1, C2, P1, V3, V6, A4_2]; .xn--hh50e.xn----t2c; [P1, V3, V6, A4_2] # ..-ܼ
+.xn--hh50e.xn----t2c; .󎰇.-ܼ; [V3, V6, X4_2]; .xn--hh50e.xn----t2c; [V3, V6, A4_2]; ;  # ..-ܼ
+.xn--1ug05310k.xn----t2c071q; .󎰇‍.-ܼ‌; [C1, C2, V3, V6, X4_2]; .xn--1ug05310k.xn----t2c071q; [C1, C2, V3, V6, A4_2]; ;  # ..-ܼ
 xn--y86c71305c.xn----t2c; ︒󎰇.-ܼ; [V3, V6]; xn--y86c71305c.xn----t2c; ; ;  # ︒.-ܼ
 xn--1ug1658ftw26f.xn----t2c071q; ︒󎰇‍.-ܼ‌; [C1, C2, V3, V6]; xn--1ug1658ftw26f.xn----t2c071q; ; ;  # ︒.-ܼ
 ≯𞤟。ᡨ; ≯𞥁.ᡨ; [B1, P1, V6]; xn--hdhz520p.xn--48e; ; ;  # ≯𞥁.ᡨ
@@ -3244,7 +3262,7 @@ xn--ned8985uo92e.xn--dnb6395k; ུ𫫰𝨄.ܓ𐹦; [B1, V5]; xn--ned8985uo92e.xn
 xn--73-9yb648b.0; ̼ߛ73.0; [B1, V5]; xn--73-9yb648b.0; ; ;  # ̼ߛ73.0
 ‍．𝟗; ‍.9; [C2]; xn--1ug.9; ; .9; [A4_2] # .9
 ‍.9; ; [C2]; xn--1ug.9; ; .9; [A4_2] # .9
-.9; ; [A4_2]; ; ; ;  # .9
+.9; ; [X4_2]; ; [A4_2]; ;  # .9
 xn--1ug.9; ‍.9; [C2]; xn--1ug.9; ; ;  # .9
 9; ; ; ; ; ;  # 9
 ݹᡭ𪕈。ڶࣙ; ݹᡭ𪕈.ڶࣙ; [B2, B3]; xn--9pb497fs270c.xn--pkb80i; ; ;  # ݹᡭ𪕈.ڶࣙ
@@ -3559,10 +3577,10 @@ xn--dnd2167fnet0io02g.xn--3-55c6803r.; Ⴅ󲬹릖󠶚.ݷ𐹳3.; [B4, B6, V6]; xn
 xn--wkj8016bne45io02g.xn--7pb000mwm4n; ⴅ󲬹릖󠶚.ݷ𐹳⒊; [B4, B6, V6]; xn--wkj8016bne45io02g.xn--7pb000mwm4n; ; ;  # ⴅ릖.ݷ𐹳⒊
 xn--dnd2167fnet0io02g.xn--7pb000mwm4n; Ⴅ󲬹릖󠶚.ݷ𐹳⒊; [B4, B6, V6]; xn--dnd2167fnet0io02g.xn--7pb000mwm4n; ; ;  # Ⴅ릖.ݷ𐹳⒊
 ‌｡︒; ‌.︒; [C1, P1, V6]; xn--0ug.xn--y86c; ; .xn--y86c; [P1, V6, A4_2] # .︒
-‌。。; ‌..; [C1, A4_2]; xn--0ug..; ; ..; [A4_2] # ..
-..; ; [A4_2]; ; ; ;  # ..
-xn--0ug..; ‌..; [C1, A4_2]; xn--0ug..; ; ;  # ..
-.xn--y86c; .︒; [V6, A4_2]; .xn--y86c; ; ;  # .︒
+‌。。; ‌..; [C1, X4_2]; xn--0ug..; [C1, A4_2]; ..; [A4_2] # ..
+..; ; [X4_2]; ; [A4_2]; ;  # ..
+xn--0ug..; ‌..; [C1, X4_2]; xn--0ug..; [C1, A4_2]; ;  # ..
+.xn--y86c; .︒; [V6, X4_2]; .xn--y86c; [V6, A4_2]; ;  # .︒
 xn--0ug.xn--y86c; ‌.︒; [C1, V6]; xn--0ug.xn--y86c; ; ;  # .︒
 ≯ݭ．₄; ≯ݭ.4; [B1, P1, V6]; xn--xpb149k.4; ; ;  # ≯ݭ.4
 ≯ݭ．₄; ≯ݭ.4; [B1, P1, V6]; xn--xpb149k.4; ; ;  # ≯ݭ.4
@@ -3627,10 +3645,10 @@ xn--3-rj42h.1.xn--2-13k96240l; 򗆧3.1.᩶2򠘌; [V5, V6]; xn--3-rj42h.1.xn--2-1
 xn--3-rj42h.xn--2-13k746cq465x; 򗆧3.⒈᩶2򠘌; [V6]; xn--3-rj42h.xn--2-13k746cq465x; ; ;  # 3.⒈᩶2
 ‍₅⒈。≯𝟴‍; ‍5⒈.≯8‍; [C2, P1, V6]; xn--5-tgnz5r.xn--8-ugn00i; ; xn--5-ecp.xn--8-ogo; [P1, V6] # 5⒈.≯8
 ‍₅⒈。≯𝟴‍; ‍5⒈.≯8‍; [C2, P1, V6]; xn--5-tgnz5r.xn--8-ugn00i; ; xn--5-ecp.xn--8-ogo; [P1, V6] # 5⒈.≯8
-‍51.。≯8‍; ‍51..≯8‍; [C2, P1, V6, A4_2]; xn--51-l1t..xn--8-ugn00i; ; 51..xn--8-ogo; [P1, V6, A4_2] # 51..≯8
-‍51.。≯8‍; ‍51..≯8‍; [C2, P1, V6, A4_2]; xn--51-l1t..xn--8-ugn00i; ; 51..xn--8-ogo; [P1, V6, A4_2] # 51..≯8
-51..xn--8-ogo; 51..≯8; [V6, A4_2]; 51..xn--8-ogo; ; ;  # 51..≯8
-xn--51-l1t..xn--8-ugn00i; ‍51..≯8‍; [C2, V6, A4_2]; xn--51-l1t..xn--8-ugn00i; ; ;  # 51..≯8
+‍51.。≯8‍; ‍51..≯8‍; [C2, P1, V6, X4_2]; xn--51-l1t..xn--8-ugn00i; [C2, P1, V6, A4_2]; 51..xn--8-ogo; [P1, V6, A4_2] # 51..≯8
+‍51.。≯8‍; ‍51..≯8‍; [C2, P1, V6, X4_2]; xn--51-l1t..xn--8-ugn00i; [C2, P1, V6, A4_2]; 51..xn--8-ogo; [P1, V6, A4_2] # 51..≯8
+51..xn--8-ogo; 51..≯8; [V6, X4_2]; 51..xn--8-ogo; [V6, A4_2]; ;  # 51..≯8
+xn--51-l1t..xn--8-ugn00i; ‍51..≯8‍; [C2, V6, X4_2]; xn--51-l1t..xn--8-ugn00i; [C2, V6, A4_2]; ;  # 51..≯8
 xn--5-ecp.xn--8-ogo; 5⒈.≯8; [V6]; xn--5-ecp.xn--8-ogo; ; ;  # 5⒈.≯8
 xn--5-tgnz5r.xn--8-ugn00i; ‍5⒈.≯8‍; [C2, V6]; xn--5-tgnz5r.xn--8-ugn00i; ; ;  # 5⒈.≯8
 ꡰڗႆ．򪘙ܯ≠‌; ꡰڗႆ.򪘙ܯ≠‌; [B5, B6, C1, P1, V6]; xn--tjb002cn51k.xn--5nb448jcubcz547b; ; xn--tjb002cn51k.xn--5nb630lbj91q; [B5, B6, P1, V6] # ꡰڗႆ.ܯ≠
@@ -3649,10 +3667,10 @@ xn--3-rkc.xn--kob; 3؀.ܽ; [B1, B3, B6, V5, V6]; xn--3-rkc.xn--kob; ; ;  # 3.ܽ
 ط𐹣٦.ݭ긷; ط𐹣٦.ݭ긷; [B2, B3]; xn--2gb8gu829f.xn--xpb0156f; ; ;  # ط𐹣٦.ݭ긷
 xn--2gb8gu829f.xn--xpb0156f; ط𐹣٦.ݭ긷; [B2, B3]; xn--2gb8gu829f.xn--xpb0156f; ; ;  # ط𐹣٦.ݭ긷
 ︒Ↄⷧ򾀃．Ⴗ𐣞; ︒Ↄⷧ򾀃.Ⴗ𐣞; [B1, B5, B6, P1, V6]; xn--q5g000c056n0226g.xn--vnd8618j; ; ;  # ︒Ↄⷧ.Ⴗ
-。Ↄⷧ򾀃.Ⴗ𐣞; .Ↄⷧ򾀃.Ⴗ𐣞; [B5, B6, P1, V6, A4_2]; .xn--q5g000cll06u.xn--vnd8618j; ; ;  # .Ↄⷧ.Ⴗ
-。ↄⷧ򾀃.ⴗ𐣞; .ↄⷧ򾀃.ⴗ𐣞; [B5, B6, P1, V6, A4_2]; .xn--r5gy00cll06u.xn--flj4541e; ; ;  # .ↄⷧ.ⴗ
-.xn--r5gy00cll06u.xn--flj4541e; .ↄⷧ򾀃.ⴗ𐣞; [B5, B6, V6, A4_2]; .xn--r5gy00cll06u.xn--flj4541e; ; ;  # .ↄⷧ.ⴗ
-.xn--q5g000cll06u.xn--vnd8618j; .Ↄⷧ򾀃.Ⴗ𐣞; [B5, B6, V6, A4_2]; .xn--q5g000cll06u.xn--vnd8618j; ; ;  # .Ↄⷧ.Ⴗ
+。Ↄⷧ򾀃.Ⴗ𐣞; .Ↄⷧ򾀃.Ⴗ𐣞; [B5, B6, P1, V6, X4_2]; .xn--q5g000cll06u.xn--vnd8618j; [B5, B6, P1, V6, A4_2]; ;  # .Ↄⷧ.Ⴗ
+。ↄⷧ򾀃.ⴗ𐣞; .ↄⷧ򾀃.ⴗ𐣞; [B5, B6, P1, V6, X4_2]; .xn--r5gy00cll06u.xn--flj4541e; [B5, B6, P1, V6, A4_2]; ;  # .ↄⷧ.ⴗ
+.xn--r5gy00cll06u.xn--flj4541e; .ↄⷧ򾀃.ⴗ𐣞; [B5, B6, V6, X4_2]; .xn--r5gy00cll06u.xn--flj4541e; [B5, B6, V6, A4_2]; ;  # .ↄⷧ.ⴗ
+.xn--q5g000cll06u.xn--vnd8618j; .Ↄⷧ򾀃.Ⴗ𐣞; [B5, B6, V6, X4_2]; .xn--q5g000cll06u.xn--vnd8618j; [B5, B6, V6, A4_2]; ;  # .Ↄⷧ.Ⴗ
 ︒ↄⷧ򾀃．ⴗ𐣞; ︒ↄⷧ򾀃.ⴗ𐣞; [B1, B5, B6, P1, V6]; xn--r5gy00c056n0226g.xn--flj4541e; ; ;  # ︒ↄⷧ.ⴗ
 xn--r5gy00c056n0226g.xn--flj4541e; ︒ↄⷧ򾀃.ⴗ𐣞; [B1, B5, B6, V6]; xn--r5gy00c056n0226g.xn--flj4541e; ; ;  # ︒ↄⷧ.ⴗ
 xn--q5g000c056n0226g.xn--vnd8618j; ︒Ↄⷧ򾀃.Ⴗ𐣞; [B1, B5, B6, V6]; xn--q5g000c056n0226g.xn--vnd8618j; ; ;  # ︒Ↄⷧ.Ⴗ
@@ -3748,8 +3766,8 @@ xn--5-24jyf768b.xn--lqw213ime95g; ᡃ5≯ᠣ.氁񨏱ꁫ; [V6]; xn--5-24jyf768b.x
 𐹬𝩇.ྲྀ; ; [B1, B3, B6, V5]; xn--ko0d8295a.xn--zed3h; ; ;  # 𐹬𝩇.ྲྀ
 xn--ko0d8295a.xn--zed3h; 𐹬𝩇.ྲྀ; [B1, B3, B6, V5]; xn--ko0d8295a.xn--zed3h; ; ;  # 𐹬𝩇.ྲྀ
 -𑈶⒏．⒎𰛢󠎭; -𑈶⒏.⒎𰛢󠎭; [P1, V3, V6]; xn----scp6252h.xn--zshy411yzpx2d; ; ;  # -𑈶⒏.⒎
--𑈶8..7.𰛢󠎭; ; [P1, V3, V6, A4_2]; xn---8-bv5o..7.xn--c35nf1622b; ; ;  # -𑈶8..7.
-xn---8-bv5o..7.xn--c35nf1622b; -𑈶8..7.𰛢󠎭; [V3, V6, A4_2]; xn---8-bv5o..7.xn--c35nf1622b; ; ;  # -𑈶8..7.
+-𑈶8..7.𰛢󠎭; ; [P1, V3, V6, X4_2]; xn---8-bv5o..7.xn--c35nf1622b; [P1, V3, V6, A4_2]; ;  # -𑈶8..7.
+xn---8-bv5o..7.xn--c35nf1622b; -𑈶8..7.𰛢󠎭; [V3, V6, X4_2]; xn---8-bv5o..7.xn--c35nf1622b; [V3, V6, A4_2]; ;  # -𑈶8..7.
 xn----scp6252h.xn--zshy411yzpx2d; -𑈶⒏.⒎𰛢󠎭; [V3, V6]; xn----scp6252h.xn--zshy411yzpx2d; ; ;  # -𑈶⒏.⒎
 ‌Ⴁ畝‍．≮; ‌Ⴁ畝‍.≮; [C1, C2, P1, V6]; xn--8md700fea3748f.xn--gdh; ; xn--8md0962c.xn--gdh; [P1, V6] # Ⴁ畝.≮
 ‌Ⴁ畝‍．≮; ‌Ⴁ畝‍.≮; [C1, C2, P1, V6]; xn--8md700fea3748f.xn--gdh; ; xn--8md0962c.xn--gdh; [P1, V6] # Ⴁ畝.≮
@@ -3833,9 +3851,9 @@ xn--l0b9413d.xn--kl1h; 舌࣢.𝈴; [B1, B5, B6, V6]; xn--l0b9413d.xn--kl1h; ; ;
 xn--53ix188et88b.xn--1-h6r.; ⫞𐹶𖫴.⭠1.; [B1]; xn--53ix188et88b.xn--1-h6r.; ; ;  # ⫞𐹶𖫴.⭠1.
 xn--53ix188et88b.xn--tsh52w; ⫞𐹶𖫴.⭠⒈; [B1, V6]; xn--53ix188et88b.xn--tsh52w; ; ;  # ⫞𐹶𖫴.⭠⒈
 ⒈‌ꫬ︒．્; ⒈‌ꫬ︒.્; [C1, P1, V5, V6]; xn--0ug78o720myr1c.xn--mfc; ; xn--tsh0720cse8b.xn--mfc; [P1, V5, V6] # ⒈ꫬ︒.્
-1.‌ꫬ。.્; 1.‌ꫬ..્; [C1, V5, A4_2]; 1.xn--0ug7185c..xn--mfc; ; 1.xn--sv9a..xn--mfc; [V5, A4_2] # 1.ꫬ..્
-1.xn--sv9a..xn--mfc; 1.ꫬ..્; [V5, A4_2]; 1.xn--sv9a..xn--mfc; ; ;  # 1.ꫬ..્
-1.xn--0ug7185c..xn--mfc; 1.‌ꫬ..્; [C1, V5, A4_2]; 1.xn--0ug7185c..xn--mfc; ; ;  # 1.ꫬ..્
+1.‌ꫬ。.્; 1.‌ꫬ..્; [C1, V5, X4_2]; 1.xn--0ug7185c..xn--mfc; [C1, V5, A4_2]; 1.xn--sv9a..xn--mfc; [V5, A4_2] # 1.ꫬ..્
+1.xn--sv9a..xn--mfc; 1.ꫬ..્; [V5, X4_2]; 1.xn--sv9a..xn--mfc; [V5, A4_2]; ;  # 1.ꫬ..્
+1.xn--0ug7185c..xn--mfc; 1.‌ꫬ..્; [C1, V5, X4_2]; 1.xn--0ug7185c..xn--mfc; [C1, V5, A4_2]; ;  # 1.ꫬ..્
 xn--tsh0720cse8b.xn--mfc; ⒈ꫬ︒.્; [V5, V6]; xn--tsh0720cse8b.xn--mfc; ; ;  # ⒈ꫬ︒.્
 xn--0ug78o720myr1c.xn--mfc; ⒈‌ꫬ︒.્; [C1, V5, V6]; xn--0ug78o720myr1c.xn--mfc; ; ;  # ⒈ꫬ︒.્
 ె。䰀٨𞭅󠅼; ె.䰀٨𞭅; [B1, B3, B5, B6, P1, V5, V6]; xn--eqc.xn--hib5476aim6t; ; ;  # ె.䰀٨
@@ -4034,8 +4052,8 @@ xn--8tc969gzn94a4lm8a.xn--dqb689l; ‍񫶩𞪯್.ݼ⒈; [B1, C2, V6]; xn--8tc96
 xn--zqf.xn--ysb9657vuiz5bj0ep; ᪶.𞤳򓢖򻉒ߗ; [B1, B2, B3, B6, V5, V6]; xn--zqf.xn--ysb9657vuiz5bj0ep; ; ;  # ᪶.𞤳ߗ
 ᪶．𞤑򓢖򻉒ߗ; ᪶.𞤳򓢖򻉒ߗ; [B1, B2, B3, B6, P1, V5, V6]; xn--zqf.xn--ysb9657vuiz5bj0ep; ; ;  # ᪶.𞤳ߗ
 ࡂ𞩚⒈．󠬌８򏳏ݰ; ࡂ𞩚⒈.󠬌8򏳏ݰ; [B1, P1, V6]; xn--0vb095ldg52a.xn--8-s5c22427ox454a; ; ;  # ࡂ⒈.8ݰ
-ࡂ𞩚1..󠬌8򏳏ݰ; ; [B1, P1, V6, A4_2]; xn--1-rid26318a..xn--8-s5c22427ox454a; ; ;  # ࡂ1..8ݰ
-xn--1-rid26318a..xn--8-s5c22427ox454a; ࡂ𞩚1..󠬌8򏳏ݰ; [B1, V6, A4_2]; xn--1-rid26318a..xn--8-s5c22427ox454a; ; ;  # ࡂ1..8ݰ
+ࡂ𞩚1..󠬌8򏳏ݰ; ; [B1, P1, V6, X4_2]; xn--1-rid26318a..xn--8-s5c22427ox454a; [B1, P1, V6, A4_2]; ;  # ࡂ1..8ݰ
+xn--1-rid26318a..xn--8-s5c22427ox454a; ࡂ𞩚1..󠬌8򏳏ݰ; [B1, V6, X4_2]; xn--1-rid26318a..xn--8-s5c22427ox454a; [B1, V6, A4_2]; ;  # ࡂ1..8ݰ
 xn--0vb095ldg52a.xn--8-s5c22427ox454a; ࡂ𞩚⒈.󠬌8򏳏ݰ; [B1, V6]; xn--0vb095ldg52a.xn--8-s5c22427ox454a; ; ;  # ࡂ⒈.8ݰ
 ͡𐫫ͩᡷ。-󠰛鞰; ͡𐫫ͩᡷ.-󠰛鞰; [B1, P1, V3, V5, V6]; xn--cvaq482npv5t.xn----yg7dt1332g; ; ;  # ͡𐫫ͩᡷ.-鞰
 xn--cvaq482npv5t.xn----yg7dt1332g; ͡𐫫ͩᡷ.-󠰛鞰; [B1, V3, V5, V6]; xn--cvaq482npv5t.xn----yg7dt1332g; ; ;  # ͡𐫫ͩᡷ.-鞰
@@ -4152,9 +4170,9 @@ xn--3xa45ks2jenu.-; ς‍ු٠.-; [B1, B5, B6, C2, V3]; xn--3xa45ks2jenu.-; ; ; 
 ‌.SSႩ-; ‌.ssႩ-; [C1, P1, V3, V6]; xn--0ug.xn--ss--4rn; ; .xn--ss--4rn; [P1, V3, V6, A4_2] # .ssႩ-
 ‌.ssⴉ-; ; [C1, V3]; xn--0ug.xn--ss--bi1b; ; .xn--ss--bi1b; [V3, A4_2] # .ssⴉ-
 ‌.Ssⴉ-; ‌.ssⴉ-; [C1, V3]; xn--0ug.xn--ss--bi1b; ; .xn--ss--bi1b; [V3, A4_2] # .ssⴉ-
-.xn--ss--bi1b; .ssⴉ-; [V3, A4_2]; .xn--ss--bi1b; ; ;  # .ssⴉ-
+.xn--ss--bi1b; .ssⴉ-; [V3, X4_2]; .xn--ss--bi1b; [V3, A4_2]; ;  # .ssⴉ-
 xn--0ug.xn--ss--bi1b; ‌.ssⴉ-; [C1, V3]; xn--0ug.xn--ss--bi1b; ; ;  # .ssⴉ-
-.xn--ss--4rn; .ssႩ-; [V3, V6, A4_2]; .xn--ss--4rn; ; ;  # .ssႩ-
+.xn--ss--4rn; .ssႩ-; [V3, V6, X4_2]; .xn--ss--4rn; [V3, V6, A4_2]; ;  # .ssႩ-
 xn--0ug.xn--ss--4rn; ‌.ssႩ-; [C1, V3, V6]; xn--0ug.xn--ss--4rn; ; ;  # .ssႩ-
 xn--0ug.xn----pfa2305a; ‌.ßⴉ-; [C1, V3]; xn--0ug.xn----pfa2305a; ; ;  # .ßⴉ-
 xn--0ug.xn----pfa042j; ‌.ßႩ-; [C1, V3, V6]; xn--0ug.xn----pfa042j; ; ;  # .ßႩ-
@@ -4230,8 +4248,8 @@ xn--0ugc90904y.xn--gdh992byu01p; ‌󠉹‍.򌿧≮ⴉ; [C1, C2, V6]; xn--0ugc90
 xn--3n36e.xn--hnd112gpz83n; 󠉹.򌿧≮Ⴉ; [V6]; xn--3n36e.xn--hnd112gpz83n; ; ;  # .≮Ⴉ
 xn--0ugc90904y.xn--hnd112gpz83n; ‌󠉹‍.򌿧≮Ⴉ; [C1, C2, V6]; xn--0ugc90904y.xn--hnd112gpz83n; ; ;  # .≮Ⴉ
 𐹯-𑄴ࢼ。︒䖐⾆; 𐹯-𑄴ࢼ.︒䖐舌; [B1, P1, V6]; xn----rpd7902rclc.xn--fpo216mn07e; ; ;  # 𐹯-𑄴ࢼ.︒䖐舌
-𐹯-𑄴ࢼ。。䖐舌; 𐹯-𑄴ࢼ..䖐舌; [B1, A4_2]; xn----rpd7902rclc..xn--fpo216m; ; ;  # 𐹯-𑄴ࢼ..䖐舌
-xn----rpd7902rclc..xn--fpo216m; 𐹯-𑄴ࢼ..䖐舌; [B1, A4_2]; xn----rpd7902rclc..xn--fpo216m; ; ;  # 𐹯-𑄴ࢼ..䖐舌
+𐹯-𑄴ࢼ。。䖐舌; 𐹯-𑄴ࢼ..䖐舌; [B1, X4_2]; xn----rpd7902rclc..xn--fpo216m; [B1, A4_2]; ;  # 𐹯-𑄴ࢼ..䖐舌
+xn----rpd7902rclc..xn--fpo216m; 𐹯-𑄴ࢼ..䖐舌; [B1, X4_2]; xn----rpd7902rclc..xn--fpo216m; [B1, A4_2]; ;  # 𐹯-𑄴ࢼ..䖐舌
 xn----rpd7902rclc.xn--fpo216mn07e; 𐹯-𑄴ࢼ.︒䖐舌; [B1, V6]; xn----rpd7902rclc.xn--fpo216mn07e; ; ;  # 𐹯-𑄴ࢼ.︒䖐舌
 𝪞Ⴐ｡쪡; 𝪞Ⴐ.쪡; [P1, V5, V6]; xn--ond3755u.xn--pi6b; ; ;  # 𝪞Ⴐ.쪡
 𝪞Ⴐ｡쪡; 𝪞Ⴐ.쪡; [P1, V5, V6]; xn--ond3755u.xn--pi6b; ; ;  # 𝪞Ⴐ.쪡
@@ -4265,9 +4283,9 @@ xn--9-i0j5967eg3qz.xn--zca770n; 𲮚9ꍩ៓.‍ß; [C2, V6]; xn--9-i0j5967eg3qz.
 xn--ju8a625r.xn--hpb0073k; ꗷ𑆀.ݝ𐩒; ; xn--ju8a625r.xn--hpb0073k; ; ;  # ꗷ𑆀.ݝ𐩒
 ⒐≯-。︒򩑣-񞛠; ⒐≯-.︒򩑣-񞛠; [P1, V3, V6]; xn----ogot9g.xn----n89hl0522az9u2a; ; ;  # ⒐≯-.︒-
 ⒐≯-。︒򩑣-񞛠; ⒐≯-.︒򩑣-񞛠; [P1, V3, V6]; xn----ogot9g.xn----n89hl0522az9u2a; ; ;  # ⒐≯-.︒-
-9.≯-。。򩑣-񞛠; 9.≯-..򩑣-񞛠; [P1, V3, V6, A4_2]; 9.xn----ogo..xn----xj54d1s69k; ; ;  # 9.≯-..-
-9.≯-。。򩑣-񞛠; 9.≯-..򩑣-񞛠; [P1, V3, V6, A4_2]; 9.xn----ogo..xn----xj54d1s69k; ; ;  # 9.≯-..-
-9.xn----ogo..xn----xj54d1s69k; 9.≯-..򩑣-񞛠; [V3, V6, A4_2]; 9.xn----ogo..xn----xj54d1s69k; ; ;  # 9.≯-..-
+9.≯-。。򩑣-񞛠; 9.≯-..򩑣-񞛠; [P1, V3, V6, X4_2]; 9.xn----ogo..xn----xj54d1s69k; [P1, V3, V6, A4_2]; ;  # 9.≯-..-
+9.≯-。。򩑣-񞛠; 9.≯-..򩑣-񞛠; [P1, V3, V6, X4_2]; 9.xn----ogo..xn----xj54d1s69k; [P1, V3, V6, A4_2]; ;  # 9.≯-..-
+9.xn----ogo..xn----xj54d1s69k; 9.≯-..򩑣-񞛠; [V3, V6, X4_2]; 9.xn----ogo..xn----xj54d1s69k; [V3, V6, A4_2]; ;  # 9.≯-..-
 xn----ogot9g.xn----n89hl0522az9u2a; ⒐≯-.︒򩑣-񞛠; [V3, V6]; xn----ogot9g.xn----n89hl0522az9u2a; ; ;  # ⒐≯-.︒-
 򈪚ೣჁ󠢏．؝; 򈪚ೣჁ󠢏.؝; [B6, P1, V6]; xn--vuc49qvu85xmju7a.xn--cgb; ; ;  # ೣჁ.
 򈪚ೣჁ󠢏.؝; ; [B6, P1, V6]; xn--vuc49qvu85xmju7a.xn--cgb; ; ;  # ೣჁ.
@@ -4469,12 +4487,12 @@ xn--cl7c.xn--ss-je6eq954cp25j; ﾠ.𐫭🠗ss玉; [B2, B3, V6]; xn--cl7c.xn--ss-
 xn--0ug7719f.xn--ss-je6eq954cp25j; ‌ﾠ.𐫭🠗ss玉; [B1, B2, B3, C1, V6]; xn--0ug7719f.xn--ss-je6eq954cp25j; ; ;  # .𐫭🠗ss玉
 xn--0ug7719f.xn--zca2289c550e0iwi; ‌ﾠ.𐫭🠗ß玉; [B1, B2, B3, C1, V6]; xn--0ug7719f.xn--zca2289c550e0iwi; ; ;  # .𐫭🠗ß玉
 ︒Ⴖͦ．‌; ︒Ⴖͦ.‌; [C1, P1, V6]; xn--hva929dl29p.xn--0ug; ; xn--hva929dl29p.; [P1, V6] # ︒Ⴖͦ.
-。Ⴖͦ.‌; .Ⴖͦ.‌; [C1, P1, V6, A4_2]; .xn--hva929d.xn--0ug; ; .xn--hva929d.; [P1, V6, A4_2] # .Ⴖͦ.
-。ⴖͦ.‌; .ⴖͦ.‌; [C1, A4_2]; .xn--hva754s.xn--0ug; ; .xn--hva754s.; [A4_2] # .ⴖͦ.
-.xn--hva754s.; .ⴖͦ.; [A4_2]; .xn--hva754s.; ; ;  # .ⴖͦ.
-.xn--hva754s.xn--0ug; .ⴖͦ.‌; [C1, A4_2]; .xn--hva754s.xn--0ug; ; ;  # .ⴖͦ.
-.xn--hva929d.; .Ⴖͦ.; [V6, A4_2]; .xn--hva929d.; ; ;  # .Ⴖͦ.
-.xn--hva929d.xn--0ug; .Ⴖͦ.‌; [C1, V6, A4_2]; .xn--hva929d.xn--0ug; ; ;  # .Ⴖͦ.
+。Ⴖͦ.‌; .Ⴖͦ.‌; [C1, P1, V6, X4_2]; .xn--hva929d.xn--0ug; [C1, P1, V6, A4_2]; .xn--hva929d.; [P1, V6, A4_2] # .Ⴖͦ.
+。ⴖͦ.‌; .ⴖͦ.‌; [C1, X4_2]; .xn--hva754s.xn--0ug; [C1, A4_2]; .xn--hva754s.; [A4_2] # .ⴖͦ.
+.xn--hva754s.; .ⴖͦ.; [X4_2]; .xn--hva754s.; [A4_2]; ;  # .ⴖͦ.
+.xn--hva754s.xn--0ug; .ⴖͦ.‌; [C1, X4_2]; .xn--hva754s.xn--0ug; [C1, A4_2]; ;  # .ⴖͦ.
+.xn--hva929d.; .Ⴖͦ.; [V6, X4_2]; .xn--hva929d.; [V6, A4_2]; ;  # .Ⴖͦ.
+.xn--hva929d.xn--0ug; .Ⴖͦ.‌; [C1, V6, X4_2]; .xn--hva929d.xn--0ug; [C1, V6, A4_2]; ;  # .Ⴖͦ.
 ︒ⴖͦ．‌; ︒ⴖͦ.‌; [C1, P1, V6]; xn--hva754sy94k.xn--0ug; ; xn--hva754sy94k.; [P1, V6] # ︒ⴖͦ.
 xn--hva754sy94k.; ︒ⴖͦ.; [V6]; xn--hva754sy94k.; ; ;  # ︒ⴖͦ.
 xn--hva754sy94k.xn--0ug; ︒ⴖͦ.‌; [C1, V6]; xn--hva754sy94k.xn--0ug; ; ;  # ︒ⴖͦ.
@@ -4496,7 +4514,7 @@ xn--hzb.xn--bnd300f7225a; ࢻ.‌Ⴃ𞀒; [B1, C1, V6]; xn--hzb.xn--bnd300f7225a
 ࢻ．‌ⴃ𞀒; ࢻ.‌ⴃ𞀒; [B1, C1]; xn--hzb.xn--0ug822cp045a; ; xn--hzb.xn--ukj4430l; [] # ࢻ.ⴃ𞀒
 ‍‌。２䫷󠧷; ‍‌.2䫷󠧷; [C1, C2, P1, V6]; xn--0ugb.xn--2-me5ay1273i; ; .xn--2-me5ay1273i; [P1, V6, A4_2] # .2䫷
 ‍‌。2䫷󠧷; ‍‌.2䫷󠧷; [C1, C2, P1, V6]; xn--0ugb.xn--2-me5ay1273i; ; .xn--2-me5ay1273i; [P1, V6, A4_2] # .2䫷
-.xn--2-me5ay1273i; .2䫷󠧷; [V6, A4_2]; .xn--2-me5ay1273i; ; ;  # .2䫷
+.xn--2-me5ay1273i; .2䫷󠧷; [V6, X4_2]; .xn--2-me5ay1273i; [V6, A4_2]; ;  # .2䫷
 xn--0ugb.xn--2-me5ay1273i; ‍‌.2䫷󠧷; [C1, C2, V6]; xn--0ugb.xn--2-me5ay1273i; ; ;  # .2䫷
 -𞀤󜠐。򈬖; -𞀤󜠐.򈬖; [P1, V3, V6]; xn----rq4re4997d.xn--l707b; ; ;  # -𞀤.
 xn----rq4re4997d.xn--l707b; -𞀤󜠐.򈬖; [V3, V6]; xn----rq4re4997d.xn--l707b; ; ;  # -𞀤.
@@ -4517,9 +4535,9 @@ xn--lsb5482l7nre.xn----ugn; 𑲜ߊ𝅼.-‍; [B1, C2, V3, V5]; xn--lsb5482l7nre.
 ‌.Ⴉ≠𐫶; ‌.Ⴉ≠𐫶; [B1, B5, B6, C1, P1, V6]; xn--0ug.xn--hnd481gv73o; ; .xn--hnd481gv73o; [B5, B6, P1, V6, A4_2] # .Ⴉ≠𐫶
 ‌.ⴉ≠𐫶; ‌.ⴉ≠𐫶; [B1, B5, B6, C1, P1, V6]; xn--0ug.xn--1chx23bzj4p; ; .xn--1chx23bzj4p; [B5, B6, P1, V6, A4_2] # .ⴉ≠𐫶
 ‌.ⴉ≠𐫶; ; [B1, B5, B6, C1, P1, V6]; xn--0ug.xn--1chx23bzj4p; ; .xn--1chx23bzj4p; [B5, B6, P1, V6, A4_2] # .ⴉ≠𐫶
-.xn--1chx23bzj4p; .ⴉ≠𐫶; [B5, B6, V6, A4_2]; .xn--1chx23bzj4p; ; ;  # .ⴉ≠𐫶
+.xn--1chx23bzj4p; .ⴉ≠𐫶; [B5, B6, V6, X4_2]; .xn--1chx23bzj4p; [B5, B6, V6, A4_2]; ;  # .ⴉ≠𐫶
 xn--0ug.xn--1chx23bzj4p; ‌.ⴉ≠𐫶; [B1, B5, B6, C1, V6]; xn--0ug.xn--1chx23bzj4p; ; ;  # .ⴉ≠𐫶
-.xn--hnd481gv73o; .Ⴉ≠𐫶; [B5, B6, V6, A4_2]; .xn--hnd481gv73o; ; ;  # .Ⴉ≠𐫶
+.xn--hnd481gv73o; .Ⴉ≠𐫶; [B5, B6, V6, X4_2]; .xn--hnd481gv73o; [B5, B6, V6, A4_2]; ;  # .Ⴉ≠𐫶
 xn--0ug.xn--hnd481gv73o; ‌.Ⴉ≠𐫶; [B1, B5, B6, C1, V6]; xn--0ug.xn--hnd481gv73o; ; ;  # .Ⴉ≠𐫶
 ‌．ⴉ≠𐫶; ‌.ⴉ≠𐫶; [B1, B5, B6, C1, P1, V6]; xn--0ug.xn--1chx23bzj4p; ; .xn--1chx23bzj4p; [B5, B6, P1, V6, A4_2] # .ⴉ≠𐫶
 ‌．ⴉ≠𐫶; ‌.ⴉ≠𐫶; [B1, B5, B6, C1, P1, V6]; xn--0ug.xn--1chx23bzj4p; ; .xn--1chx23bzj4p; [B5, B6, P1, V6, A4_2] # .ⴉ≠𐫶
@@ -4649,9 +4667,9 @@ xn--9ic246gs21p.xn--2-nws2918ndrjr; ୍𑄴ᷩ.2ⴘ𞀨񃥇; [V5, V6]; xn--9ic24
 xn--9ic246gs21p.xn--2-k1g43076adrwq; ୍𑄴ᷩ.2Ⴘ𞀨񃥇; [V5, V6]; xn--9ic246gs21p.xn--2-k1g43076adrwq; ; ;  # ୍𑄴ᷩ.2Ⴘ𞀨
 ୍𑄴ᷩ。𝟮ⴘ𞀨񃥇; ୍𑄴ᷩ.2ⴘ𞀨񃥇; [P1, V5, V6]; xn--9ic246gs21p.xn--2-nws2918ndrjr; ; ;  # ୍𑄴ᷩ.2ⴘ𞀨
 򓠭‌‌⒈。勉𑁅; 򓠭‌‌⒈.勉𑁅; [C1, P1, V6]; xn--0uga855aez302a.xn--4grs325b; ; xn--tsh11906f.xn--4grs325b; [P1, V6] # ⒈.勉𑁅
-򓠭‌‌1.。勉𑁅; 򓠭‌‌1..勉𑁅; [C1, P1, V6, A4_2]; xn--1-rgna61159u..xn--4grs325b; ; xn--1-yi00h..xn--4grs325b; [P1, V6, A4_2] # 1..勉𑁅
-xn--1-yi00h..xn--4grs325b; 򓠭1..勉𑁅; [V6, A4_2]; xn--1-yi00h..xn--4grs325b; ; ;  # 1..勉𑁅
-xn--1-rgna61159u..xn--4grs325b; 򓠭‌‌1..勉𑁅; [C1, V6, A4_2]; xn--1-rgna61159u..xn--4grs325b; ; ;  # 1..勉𑁅
+򓠭‌‌1.。勉𑁅; 򓠭‌‌1..勉𑁅; [C1, P1, V6, X4_2]; xn--1-rgna61159u..xn--4grs325b; [C1, P1, V6, A4_2]; xn--1-yi00h..xn--4grs325b; [P1, V6, A4_2] # 1..勉𑁅
+xn--1-yi00h..xn--4grs325b; 򓠭1..勉𑁅; [V6, X4_2]; xn--1-yi00h..xn--4grs325b; [V6, A4_2]; ;  # 1..勉𑁅
+xn--1-rgna61159u..xn--4grs325b; 򓠭‌‌1..勉𑁅; [C1, V6, X4_2]; xn--1-rgna61159u..xn--4grs325b; [C1, V6, A4_2]; ;  # 1..勉𑁅
 xn--tsh11906f.xn--4grs325b; 򓠭⒈.勉𑁅; [V6]; xn--tsh11906f.xn--4grs325b; ; ;  # ⒈.勉𑁅
 xn--0uga855aez302a.xn--4grs325b; 򓠭‌‌⒈.勉𑁅; [C1, V6]; xn--0uga855aez302a.xn--4grs325b; ; ;  # ⒈.勉𑁅
 ᡃ.玿񫈜󕞐; ; [P1, V6]; xn--27e.xn--7cy81125a0yq4a; ; ;  # ᡃ.玿
@@ -4660,9 +4678,9 @@ xn--27e.xn--7cy81125a0yq4a; ᡃ.玿񫈜󕞐; [V6]; xn--27e.xn--7cy81125a0yq4a; ;
 ‌‌｡⒈≯𝟵; ‌‌.⒈≯9; [C1, P1, V6]; xn--0uga.xn--9-ogo37g; ; .xn--9-ogo37g; [P1, V6, A4_2] # .⒈≯9
 ‌‌。1.≯9; ‌‌.1.≯9; [C1, P1, V6]; xn--0uga.1.xn--9-ogo; ; .1.xn--9-ogo; [P1, V6, A4_2] # .1.≯9
 ‌‌。1.≯9; ‌‌.1.≯9; [C1, P1, V6]; xn--0uga.1.xn--9-ogo; ; .1.xn--9-ogo; [P1, V6, A4_2] # .1.≯9
-.1.xn--9-ogo; .1.≯9; [V6, A4_2]; .1.xn--9-ogo; ; ;  # .1.≯9
+.1.xn--9-ogo; .1.≯9; [V6, X4_2]; .1.xn--9-ogo; [V6, A4_2]; ;  # .1.≯9
 xn--0uga.1.xn--9-ogo; ‌‌.1.≯9; [C1, V6]; xn--0uga.1.xn--9-ogo; ; ;  # .1.≯9
-.xn--9-ogo37g; .⒈≯9; [V6, A4_2]; .xn--9-ogo37g; ; ;  # .⒈≯9
+.xn--9-ogo37g; .⒈≯9; [V6, X4_2]; .xn--9-ogo37g; [V6, A4_2]; ;  # .⒈≯9
 xn--0uga.xn--9-ogo37g; ‌‌.⒈≯9; [C1, V6]; xn--0uga.xn--9-ogo37g; ; ;  # .⒈≯9
 ᅟᷠ򐀁.𺻆≯𐮁; ; [B5, B6, P1, V6]; xn--osd615d5659o.xn--hdh5192gkm6r; ; ;  # ᷠ.≯𐮁
 ᅟᷠ򐀁.𺻆≯𐮁; ᅟᷠ򐀁.𺻆≯𐮁; [B5, B6, P1, V6]; xn--osd615d5659o.xn--hdh5192gkm6r; ; ;  # ᷠ.≯𐮁
@@ -4894,18 +4912,18 @@ xn--dib0653l2i02d.xn--k736e.xn--1ch; ٤򤽎𑲛.󠔢.≠; [B1, V6]; xn--dib0653l
 xn--dib0653l2i02d.xn--1ch7467f14u4g; ٤򤽎𑲛.󠔢︒≠; [B1, V6]; xn--dib0653l2i02d.xn--1ch7467f14u4g; ; ;  # ٤𑲛.︒≠
 ➆񷧕ỗ⒈．򑬒񡘮࡛𝟫; ➆񷧕ỗ⒈.򑬒񡘮࡛9; [P1, V6]; xn--6lg26tvvc6v99z.xn--9-6jd87310jtcqs; ; ;  # ➆ỗ⒈.࡛9
 ➆񷧕ỗ⒈．򑬒񡘮࡛𝟫; ➆񷧕ỗ⒈.򑬒񡘮࡛9; [P1, V6]; xn--6lg26tvvc6v99z.xn--9-6jd87310jtcqs; ; ;  # ➆ỗ⒈.࡛9
-➆񷧕ỗ1..򑬒񡘮࡛9; ; [P1, V6, A4_2]; xn--1-3xm292b6044r..xn--9-6jd87310jtcqs; ; ;  # ➆ỗ1..࡛9
-➆񷧕ỗ1..򑬒񡘮࡛9; ➆񷧕ỗ1..򑬒񡘮࡛9; [P1, V6, A4_2]; xn--1-3xm292b6044r..xn--9-6jd87310jtcqs; ; ;  # ➆ỗ1..࡛9
-➆񷧕Ỗ1..򑬒񡘮࡛9; ➆񷧕ỗ1..򑬒񡘮࡛9; [P1, V6, A4_2]; xn--1-3xm292b6044r..xn--9-6jd87310jtcqs; ; ;  # ➆ỗ1..࡛9
-➆񷧕Ỗ1..򑬒񡘮࡛9; ➆񷧕ỗ1..򑬒񡘮࡛9; [P1, V6, A4_2]; xn--1-3xm292b6044r..xn--9-6jd87310jtcqs; ; ;  # ➆ỗ1..࡛9
-xn--1-3xm292b6044r..xn--9-6jd87310jtcqs; ➆񷧕ỗ1..򑬒񡘮࡛9; [V6, A4_2]; xn--1-3xm292b6044r..xn--9-6jd87310jtcqs; ; ;  # ➆ỗ1..࡛9
+➆񷧕ỗ1..򑬒񡘮࡛9; ; [P1, V6, X4_2]; xn--1-3xm292b6044r..xn--9-6jd87310jtcqs; [P1, V6, A4_2]; ;  # ➆ỗ1..࡛9
+➆񷧕ỗ1..򑬒񡘮࡛9; ➆񷧕ỗ1..򑬒񡘮࡛9; [P1, V6, X4_2]; xn--1-3xm292b6044r..xn--9-6jd87310jtcqs; [P1, V6, A4_2]; ;  # ➆ỗ1..࡛9
+➆񷧕Ỗ1..򑬒񡘮࡛9; ➆񷧕ỗ1..򑬒񡘮࡛9; [P1, V6, X4_2]; xn--1-3xm292b6044r..xn--9-6jd87310jtcqs; [P1, V6, A4_2]; ;  # ➆ỗ1..࡛9
+➆񷧕Ỗ1..򑬒񡘮࡛9; ➆񷧕ỗ1..򑬒񡘮࡛9; [P1, V6, X4_2]; xn--1-3xm292b6044r..xn--9-6jd87310jtcqs; [P1, V6, A4_2]; ;  # ➆ỗ1..࡛9
+xn--1-3xm292b6044r..xn--9-6jd87310jtcqs; ➆񷧕ỗ1..򑬒񡘮࡛9; [V6, X4_2]; xn--1-3xm292b6044r..xn--9-6jd87310jtcqs; [V6, A4_2]; ;  # ➆ỗ1..࡛9
 ➆񷧕Ỗ⒈．򑬒񡘮࡛𝟫; ➆񷧕ỗ⒈.򑬒񡘮࡛9; [P1, V6]; xn--6lg26tvvc6v99z.xn--9-6jd87310jtcqs; ; ;  # ➆ỗ⒈.࡛9
 ➆񷧕Ỗ⒈．򑬒񡘮࡛𝟫; ➆񷧕ỗ⒈.򑬒񡘮࡛9; [P1, V6]; xn--6lg26tvvc6v99z.xn--9-6jd87310jtcqs; ; ;  # ➆ỗ⒈.࡛9
 xn--6lg26tvvc6v99z.xn--9-6jd87310jtcqs; ➆񷧕ỗ⒈.򑬒񡘮࡛9; [V6]; xn--6lg26tvvc6v99z.xn--9-6jd87310jtcqs; ; ;  # ➆ỗ⒈.࡛9
 ‍｡𞤘; ‍.𞤺; [B1, C2]; xn--1ug.xn--ye6h; ; .xn--ye6h; [A4_2] # .𞤺
 ‍。𞤘; ‍.𞤺; [B1, C2]; xn--1ug.xn--ye6h; ; .xn--ye6h; [A4_2] # .𞤺
 ‍。𞤺; ‍.𞤺; [B1, C2]; xn--1ug.xn--ye6h; ; .xn--ye6h; [A4_2] # .𞤺
-.xn--ye6h; .𞤺; [A4_2]; .xn--ye6h; ; ;  # .𞤺
+.xn--ye6h; .𞤺; [X4_2]; .xn--ye6h; [A4_2]; ;  # .𞤺
 xn--1ug.xn--ye6h; ‍.𞤺; [B1, C2]; xn--1ug.xn--ye6h; ; ;  # .𞤺
 ‍｡𞤺; ‍.𞤺; [B1, C2]; xn--1ug.xn--ye6h; ; .xn--ye6h; [A4_2] # .𞤺
 xn--ye6h; 𞤺; ; xn--ye6h; ; ;  # 𞤺
@@ -4921,12 +4939,12 @@ xn----s2c.xn--ss-066q; ܼ-.𓐾ss; [V3, V5, V6]; xn----s2c.xn--ss-066q; ; ;  # �
 xn----s2c071q.xn--ss-066q; ܼ‌-.𓐾ss; [C1, V3, V5, V6]; xn----s2c071q.xn--ss-066q; ; ;  # ܼ-.ss
 xn----s2c071q.xn--zca7848m; ܼ‌-.𓐾ß; [C1, V3, V5, V6]; xn----s2c071q.xn--zca7848m; ; ;  # ܼ-.ß
 ‌ς🃡⒗.ೆ仧ݖ; ; [B1, B5, B6, C1, P1, V5, V6]; xn--3xa795lz9czy52d.xn--9ob79ycx2e; ; xn--4xa229nbu92a.xn--9ob79ycx2e; [B5, B6, P1, V5, V6] # ς🃡⒗.ೆ仧ݖ
-‌ς🃡16..ೆ仧ݖ; ; [B1, B5, B6, C1, V5, A4_2]; xn--16-rbc1800avy99b..xn--9ob79ycx2e; ; xn--16-ubc66061c..xn--9ob79ycx2e; [B5, B6, V5, A4_2] # ς🃡16..ೆ仧ݖ
-‌Σ🃡16..ೆ仧ݖ; ‌σ🃡16..ೆ仧ݖ; [B1, B5, B6, C1, V5, A4_2]; xn--16-ubc7700avy99b..xn--9ob79ycx2e; ; xn--16-ubc66061c..xn--9ob79ycx2e; [B5, B6, V5, A4_2] # σ🃡16..ೆ仧ݖ
-‌σ🃡16..ೆ仧ݖ; ; [B1, B5, B6, C1, V5, A4_2]; xn--16-ubc7700avy99b..xn--9ob79ycx2e; ; xn--16-ubc66061c..xn--9ob79ycx2e; [B5, B6, V5, A4_2] # σ🃡16..ೆ仧ݖ
-xn--16-ubc66061c..xn--9ob79ycx2e; σ🃡16..ೆ仧ݖ; [B5, B6, V5, A4_2]; xn--16-ubc66061c..xn--9ob79ycx2e; ; ;  # σ🃡16..ೆ仧ݖ
-xn--16-ubc7700avy99b..xn--9ob79ycx2e; ‌σ🃡16..ೆ仧ݖ; [B1, B5, B6, C1, V5, A4_2]; xn--16-ubc7700avy99b..xn--9ob79ycx2e; ; ;  # σ🃡16..ೆ仧ݖ
-xn--16-rbc1800avy99b..xn--9ob79ycx2e; ‌ς🃡16..ೆ仧ݖ; [B1, B5, B6, C1, V5, A4_2]; xn--16-rbc1800avy99b..xn--9ob79ycx2e; ; ;  # ς🃡16..ೆ仧ݖ
+‌ς🃡16..ೆ仧ݖ; ; [B1, B5, B6, C1, V5, X4_2]; xn--16-rbc1800avy99b..xn--9ob79ycx2e; [B1, B5, B6, C1, V5, A4_2]; xn--16-ubc66061c..xn--9ob79ycx2e; [B5, B6, V5, A4_2] # ς🃡16..ೆ仧ݖ
+‌Σ🃡16..ೆ仧ݖ; ‌σ🃡16..ೆ仧ݖ; [B1, B5, B6, C1, V5, X4_2]; xn--16-ubc7700avy99b..xn--9ob79ycx2e; [B1, B5, B6, C1, V5, A4_2]; xn--16-ubc66061c..xn--9ob79ycx2e; [B5, B6, V5, A4_2] # σ🃡16..ೆ仧ݖ
+‌σ🃡16..ೆ仧ݖ; ; [B1, B5, B6, C1, V5, X4_2]; xn--16-ubc7700avy99b..xn--9ob79ycx2e; [B1, B5, B6, C1, V5, A4_2]; xn--16-ubc66061c..xn--9ob79ycx2e; [B5, B6, V5, A4_2] # σ🃡16..ೆ仧ݖ
+xn--16-ubc66061c..xn--9ob79ycx2e; σ🃡16..ೆ仧ݖ; [B5, B6, V5, X4_2]; xn--16-ubc66061c..xn--9ob79ycx2e; [B5, B6, V5, A4_2]; ;  # σ🃡16..ೆ仧ݖ
+xn--16-ubc7700avy99b..xn--9ob79ycx2e; ‌σ🃡16..ೆ仧ݖ; [B1, B5, B6, C1, V5, X4_2]; xn--16-ubc7700avy99b..xn--9ob79ycx2e; [B1, B5, B6, C1, V5, A4_2]; ;  # σ🃡16..ೆ仧ݖ
+xn--16-rbc1800avy99b..xn--9ob79ycx2e; ‌ς🃡16..ೆ仧ݖ; [B1, B5, B6, C1, V5, X4_2]; xn--16-rbc1800avy99b..xn--9ob79ycx2e; [B1, B5, B6, C1, V5, A4_2]; ;  # ς🃡16..ೆ仧ݖ
 ‌Σ🃡⒗.ೆ仧ݖ; ‌σ🃡⒗.ೆ仧ݖ; [B1, B5, B6, C1, P1, V5, V6]; xn--4xa595lz9czy52d.xn--9ob79ycx2e; ; xn--4xa229nbu92a.xn--9ob79ycx2e; [B5, B6, P1, V5, V6] # σ🃡⒗.ೆ仧ݖ
 ‌σ🃡⒗.ೆ仧ݖ; ; [B1, B5, B6, C1, P1, V5, V6]; xn--4xa595lz9czy52d.xn--9ob79ycx2e; ; xn--4xa229nbu92a.xn--9ob79ycx2e; [B5, B6, P1, V5, V6] # σ🃡⒗.ೆ仧ݖ
 xn--4xa229nbu92a.xn--9ob79ycx2e; σ🃡⒗.ೆ仧ݖ; [B5, B6, V5, V6]; xn--4xa229nbu92a.xn--9ob79ycx2e; ; ;  # σ🃡⒗.ೆ仧ݖ
@@ -4969,8 +4987,8 @@ xn--lsb457kkut.xn----pfa076bys4a; 㸳ߊ≮.ێß-‍; [B2, B3, B5, B6, C2, V6]; x
 xn----b5h1837n2ok9f.xn----mkm.; -򷝬፞𑜧.ᷫ-.; [V3, V5, V6]; xn----b5h1837n2ok9f.xn----mkm.; ; ;  # -፞𑜧.ᷫ-.
 xn----b5h1837n2ok9f.xn----mkmw278h; -򷝬፞𑜧.ᷫ-︒; [V3, V5, V6]; xn----b5h1837n2ok9f.xn----mkmw278h; ; ;  # -፞𑜧.ᷫ-︒
 ︒.򚠡ᩙ; ; [P1, V6]; xn--y86c.xn--cof61594i; ; ;  # ︒.ᩙ
-。.򚠡ᩙ; ..򚠡ᩙ; [P1, V6, A4_2]; ..xn--cof61594i; ; ;  # ..ᩙ
-..xn--cof61594i; ..򚠡ᩙ; [V6, A4_2]; ..xn--cof61594i; ; ;  # ..ᩙ
+。.򚠡ᩙ; ..򚠡ᩙ; [P1, V6, X4_2]; ..xn--cof61594i; [P1, V6, A4_2]; ;  # ..ᩙ
+..xn--cof61594i; ..򚠡ᩙ; [V6, X4_2]; ..xn--cof61594i; [V6, A4_2]; ;  # ..ᩙ
 xn--y86c.xn--cof61594i; ︒.򚠡ᩙ; [V6]; xn--y86c.xn--cof61594i; ; ;  # ︒.ᩙ
 ̣ⷡ。‌⓾‌ڹ; ̣ⷡ.‌⓾‌ڹ; [B1, B3, B6, C1, V5]; xn--kta899s.xn--skb970ka771c; ; xn--kta899s.xn--skb116m; [B1, B3, B6, V5] # ̣ⷡ.⓾ڹ
 xn--kta899s.xn--skb116m; ̣ⷡ.⓾ڹ; [B1, B3, B6, V5]; xn--kta899s.xn--skb116m; ; ;  # ̣ⷡ.⓾ڹ
@@ -5165,7 +5183,7 @@ xn--kfb866llx01a.xn--wp1gm3570b; ؂𝌪≯.𚋲򵁨; [B1, V6]; xn--kfb866llx01a.
 򫾥ࢷ៌꧀.𞼠; ; [B5, P1, V6]; xn--dzb638ewm4i1iy1h.xn--3m7h; ; ;  # ࢷ៌꧀.
 xn--dzb638ewm4i1iy1h.xn--3m7h; 򫾥ࢷ៌꧀.𞼠; [B5, V6]; xn--dzb638ewm4i1iy1h.xn--3m7h; ; ;  # ࢷ៌꧀.
 ‌.񟛤; ; [C1, P1, V6]; xn--0ug.xn--q823a; ; .xn--q823a; [P1, V6, A4_2] # .
-.xn--q823a; .񟛤; [V6, A4_2]; .xn--q823a; ; ;  # .
+.xn--q823a; .񟛤; [V6, X4_2]; .xn--q823a; [V6, A4_2]; ;  # .
 xn--0ug.xn--q823a; ‌.񟛤; [C1, V6]; xn--0ug.xn--q823a; ; ;  # .
 򺛕Ⴃ䠅．𐸑; 򺛕Ⴃ䠅.𐸑; [P1, V6]; xn--bnd074zr557n.xn--yl0d; ; ;  # Ⴃ䠅.
 򺛕Ⴃ䠅.𐸑; ; [P1, V6]; xn--bnd074zr557n.xn--yl0d; ; ;  # Ⴃ䠅.
@@ -5182,8 +5200,8 @@ xn--zzfy954hga2415t.xn--6-h0g; ᯱ𐹳𐹵𞤼.6Ⴅ; [B1, V5, V6]; xn--zzfy954hg
 ᯱ𐹳𐹵𞤼｡𝟨ⴅ; ᯱ𐹳𐹵𞤼.6ⴅ; [B1, V5]; xn--zzfy954hga2415t.xn--6-kvs; ; ;  # ᯱ𐹳𐹵𞤼.6ⴅ
 ᯱ𐹳𐹵𞤚｡𝟨ⴅ; ᯱ𐹳𐹵𞤼.6ⴅ; [B1, V5]; xn--zzfy954hga2415t.xn--6-kvs; ; ;  # ᯱ𐹳𐹵𞤼.6ⴅ
 -｡︒; -.︒; [P1, V3, V6]; -.xn--y86c; ; ;  # -.︒
--。。; -..; [V3, A4_2]; ; ; ;  # -..
--..; ; [V3, A4_2]; ; ; ;  # -..
+-。。; -..; [V3, X4_2]; ; [V3, A4_2]; ;  # -..
+-..; ; [V3, X4_2]; ; [V3, A4_2]; ;  # -..
 -.xn--y86c; -.︒; [V3, V6]; -.xn--y86c; ; ;  # -.︒
 ߛჀ｡-⁵--; ߛჀ.-5--; [B1, B2, B3, P1, V2, V3, V6]; xn--2sb866b.-5--; ; ;  # ߛჀ.-5--
 ߛჀ。-5--; ߛჀ.-5--; [B1, B2, B3, P1, V2, V3, V6]; xn--2sb866b.-5--; ; ;  # ߛჀ.-5--
@@ -5208,7 +5226,7 @@ xn--dqb73el09fncab4h.xn--kua81ls548d3608b; ルーブルࣦݼ.͆򁳊𝅶؄; [B1, 
 xn--dqb73ec22c9kp8cb1j.xn--kua81ls548d3608b; ルーブルࣦݼ‍.͆򁳊𝅶؄; [B1, B5, B6, C2, V5, V6]; xn--dqb73ec22c9kp8cb1j.xn--kua81ls548d3608b; ; ;  # ルーブルࣦݼ.͆
 ‍.F; ‍.f; [C2]; xn--1ug.f; ; .f; [A4_2] # .f
 ‍.f; ; [C2]; xn--1ug.f; ; .f; [A4_2] # .f
-.f; ; [A4_2]; ; ; ;  # .f
+.f; ; [X4_2]; ; [A4_2]; ;  # .f
 xn--1ug.f; ‍.f; [C2]; xn--1ug.f; ; ;  # .f
 f; ; ; ; ; ;  # f
 ‍㨲｡ß; ‍㨲.ß; [C2]; xn--1ug914h.xn--zca; ; xn--9bm.ss; [] # 㨲.ß
@@ -5243,7 +5261,7 @@ xn----xmb015tuo34l.xn----53c4874j; 񦴻ς-⃫.ݔ-ꡛ; [B2, B3, B6, V6]; xn----xm
 񦴻σ-⃫｡ݔ-ꡛ; 񦴻σ-⃫.ݔ-ꡛ; [B2, B3, B6, P1, V6]; xn----zmb705tuo34l.xn----53c4874j; ; ;  # σ-⃫.ݔ-ꡛ
 ‍．􀸨; ‍.􀸨; [C2, P1, V6]; xn--1ug.xn--h327f; ; .xn--h327f; [P1, V6, A4_2] # .
 ‍.􀸨; ; [C2, P1, V6]; xn--1ug.xn--h327f; ; .xn--h327f; [P1, V6, A4_2] # .
-.xn--h327f; .􀸨; [V6, A4_2]; .xn--h327f; ; ;  # .
+.xn--h327f; .􀸨; [V6, X4_2]; .xn--h327f; [V6, A4_2]; ;  # .
 xn--1ug.xn--h327f; ‍.􀸨; [C2, V6]; xn--1ug.xn--h327f; ; ;  # .
 񣭻񌥁｡≠𝟲; 񣭻񌥁.≠6; [P1, V6]; xn--h79w4z99a.xn--6-tfo; ; ;  # .≠6
 񣭻񌥁｡≠𝟲; 񣭻񌥁.≠6; [P1, V6]; xn--h79w4z99a.xn--6-tfo; ; ;  # .≠6
@@ -5349,8 +5367,8 @@ xn--vnd.xn--qdb0605f14ycrms3c; Ⴗ.𑄴ׂꦷ񘃨; [V5, V6]; xn--vnd.xn--qdb0605f
 8𾤘.򇕛٬; ; [B1, B5, B6, P1, V6]; xn--8-kh23b.xn--lib78461i; ; ;  # 8.٬
 xn--8-kh23b.xn--lib78461i; 8𾤘.򇕛٬; [B1, B5, B6, V6]; xn--8-kh23b.xn--lib78461i; ; ;  # 8.٬
 ⒈酫︒。ࣖ; ⒈酫︒.ࣖ; [P1, V5, V6]; xn--tsh4490bfe8c.xn--8zb; ; ;  # ⒈酫︒.ࣖ
-1.酫。。ࣖ; 1.酫..ࣖ; [V5, A4_2]; 1.xn--8j4a..xn--8zb; ; ;  # 1.酫..ࣖ
-1.xn--8j4a..xn--8zb; 1.酫..ࣖ; [V5, A4_2]; 1.xn--8j4a..xn--8zb; ; ;  # 1.酫..ࣖ
+1.酫。。ࣖ; 1.酫..ࣖ; [V5, X4_2]; 1.xn--8j4a..xn--8zb; [V5, A4_2]; ;  # 1.酫..ࣖ
+1.xn--8j4a..xn--8zb; 1.酫..ࣖ; [V5, X4_2]; 1.xn--8j4a..xn--8zb; [V5, A4_2]; ;  # 1.酫..ࣖ
 xn--tsh4490bfe8c.xn--8zb; ⒈酫︒.ࣖ; [V5, V6]; xn--tsh4490bfe8c.xn--8zb; ; ;  # ⒈酫︒.ࣖ
 ⷣ‌≮ᩫ.‌ฺ; ; [C1, P1, V5, V6]; xn--uof63xk4bf3s.xn--o4c732g; ; xn--uof548an0j.xn--o4c; [P1, V5, V6] # ⷣ≮ᩫ.ฺ
 ⷣ‌≮ᩫ.‌ฺ; ⷣ‌≮ᩫ.‌ฺ; [C1, P1, V5, V6]; xn--uof63xk4bf3s.xn--o4c732g; ; xn--uof548an0j.xn--o4c; [P1, V5, V6] # ⷣ≮ᩫ.ฺ
@@ -5433,9 +5451,9 @@ xn--hnd7245bd56p.xn----3gd37096apmwa; 朶Ⴉ𞪡.𝨽ࠥ📻-; [B1, B5, B6, V3, 
 xn--bk9c.xn--gdhx6802k; 𐤎.󑿰≮; [B6, V6]; xn--bk9c.xn--gdhx6802k; ; ;  # 𐤎.≮
 xn--bk9c.xn--0ugc04p2u638c; 𐤎.󑿰‌≮‍; [B6, C1, C2, V6]; xn--bk9c.xn--0ugc04p2u638c; ; ;  # 𐤎.≮
 񭜎⒈｡‌𝟤; 񭜎⒈.‌2; [C1, P1, V6]; xn--tsh94183d.xn--2-rgn; ; xn--tsh94183d.2; [P1, V6] # ⒈.2
-񭜎1.。‌2; 񭜎1..‌2; [C1, P1, V6, A4_2]; xn--1-ex54e..xn--2-rgn; ; xn--1-ex54e..2; [P1, V6, A4_2] # 1..2
-xn--1-ex54e..2; 񭜎1..2; [V6, A4_2]; xn--1-ex54e..2; ; ;  # 1..2
-xn--1-ex54e..xn--2-rgn; 񭜎1..‌2; [C1, V6, A4_2]; xn--1-ex54e..xn--2-rgn; ; ;  # 1..2
+񭜎1.。‌2; 񭜎1..‌2; [C1, P1, V6, X4_2]; xn--1-ex54e..xn--2-rgn; [C1, P1, V6, A4_2]; xn--1-ex54e..2; [P1, V6, A4_2] # 1..2
+xn--1-ex54e..2; 񭜎1..2; [V6, X4_2]; xn--1-ex54e..2; [V6, A4_2]; ;  # 1..2
+xn--1-ex54e..xn--2-rgn; 񭜎1..‌2; [C1, V6, X4_2]; xn--1-ex54e..xn--2-rgn; [C1, V6, A4_2]; ;  # 1..2
 xn--tsh94183d.2; 񭜎⒈.2; [V6]; xn--tsh94183d.2; ; ;  # ⒈.2
 xn--tsh94183d.xn--2-rgn; 񭜎⒈.‌2; [C1, V6]; xn--tsh94183d.xn--2-rgn; ; ;  # ⒈.2
 󠟊𐹤‍．𐹳󙄵𐹶; 󠟊𐹤‍.𐹳󙄵𐹶; [B1, C2, P1, V6]; xn--1ugy994g7k93g.xn--ro0dga22807v; ; xn--co0d98977c.xn--ro0dga22807v; [B1, P1, V6] # 𐹤.𐹳𐹶
@@ -5457,7 +5475,7 @@ xn--psd85033d.xn--8-otc61545t; ᅠ񍀜.8򶾵ڜ; [B1, V6]; xn--psd85033d.xn--8-ot
 ‍‌󠆪。SS𑓃; ‍‌.ss𑓃; [C1, C2]; xn--0ugb.xn--ss-bh7o; ; .xn--ss-bh7o; [A4_2] # .ss𑓃
 ‍‌󠆪。ss𑓃; ‍‌.ss𑓃; [C1, C2]; xn--0ugb.xn--ss-bh7o; ; .xn--ss-bh7o; [A4_2] # .ss𑓃
 ‍‌󠆪。Ss𑓃; ‍‌.ss𑓃; [C1, C2]; xn--0ugb.xn--ss-bh7o; ; .xn--ss-bh7o; [A4_2] # .ss𑓃
-.xn--ss-bh7o; .ss𑓃; [A4_2]; .xn--ss-bh7o; ; ;  # .ss𑓃
+.xn--ss-bh7o; .ss𑓃; [X4_2]; .xn--ss-bh7o; [A4_2]; ;  # .ss𑓃
 xn--0ugb.xn--ss-bh7o; ‍‌.ss𑓃; [C1, C2]; xn--0ugb.xn--ss-bh7o; ; ;  # .ss𑓃
 xn--0ugb.xn--zca0732l; ‍‌.ß𑓃; [C1, C2]; xn--0ugb.xn--zca0732l; ; ;  # .ß𑓃
 ‍‌󠆪｡SS𑓃; ‍‌.ss𑓃; [C1, C2]; xn--0ugb.xn--ss-bh7o; ; .xn--ss-bh7o; [A4_2] # .ss𑓃
@@ -5468,9 +5486,9 @@ ss𑓃; ; ; xn--ss-bh7o; ; ;  # ss𑓃
 SS𑓃; ss𑓃; ; xn--ss-bh7o; ; ;  # ss𑓃
 Ss𑓃; ss𑓃; ; xn--ss-bh7o; ; ;  # ss𑓃
 ︒‌ヶ䒩.ꡪ; ; [C1, P1, V6]; xn--0ug287dj0or48o.xn--gd9a; ; xn--qekw60dns9k.xn--gd9a; [P1, V6] # ︒ヶ䒩.ꡪ
-。‌ヶ䒩.ꡪ; .‌ヶ䒩.ꡪ; [C1, A4_2]; .xn--0ug287dj0o.xn--gd9a; ; .xn--qekw60d.xn--gd9a; [A4_2] # .ヶ䒩.ꡪ
-.xn--qekw60d.xn--gd9a; .ヶ䒩.ꡪ; [A4_2]; .xn--qekw60d.xn--gd9a; ; ;  # .ヶ䒩.ꡪ
-.xn--0ug287dj0o.xn--gd9a; .‌ヶ䒩.ꡪ; [C1, A4_2]; .xn--0ug287dj0o.xn--gd9a; ; ;  # .ヶ䒩.ꡪ
+。‌ヶ䒩.ꡪ; .‌ヶ䒩.ꡪ; [C1, X4_2]; .xn--0ug287dj0o.xn--gd9a; [C1, A4_2]; .xn--qekw60d.xn--gd9a; [A4_2] # .ヶ䒩.ꡪ
+.xn--qekw60d.xn--gd9a; .ヶ䒩.ꡪ; [X4_2]; .xn--qekw60d.xn--gd9a; [A4_2]; ;  # .ヶ䒩.ꡪ
+.xn--0ug287dj0o.xn--gd9a; .‌ヶ䒩.ꡪ; [C1, X4_2]; .xn--0ug287dj0o.xn--gd9a; [C1, A4_2]; ;  # .ヶ䒩.ꡪ
 xn--qekw60dns9k.xn--gd9a; ︒ヶ䒩.ꡪ; [V6]; xn--qekw60dns9k.xn--gd9a; ; ;  # ︒ヶ䒩.ꡪ
 xn--0ug287dj0or48o.xn--gd9a; ︒‌ヶ䒩.ꡪ; [C1, V6]; xn--0ug287dj0or48o.xn--gd9a; ; ;  # ︒ヶ䒩.ꡪ
 xn--qekw60d.xn--gd9a; ヶ䒩.ꡪ; ; xn--qekw60d.xn--gd9a; ; ;  # ヶ䒩.ꡪ
@@ -5517,9 +5535,9 @@ xn--4-xn17i.xn--rpb459k; 4򭆥.ݧ≯; [B1, B3, V6]; xn--4-xn17i.xn--rpb459k; ; ;
 xn--lcz1610fn78gk609a.xn--gkb; 𲔏𞫨񺿂硲.ڭ; [B5, V6]; xn--lcz1610fn78gk609a.xn--gkb; ; ;  # 硲.ڭ
 ‌.︈٦Ⴆ℮; ‌.٦Ⴆ℮; [B1, C1, P1, V6]; xn--0ug.xn--fib263c0yn; ; .xn--fib263c0yn; [B1, P1, V6, A4_2] # .٦Ⴆ℮
 ‌.︈٦ⴆ℮; ‌.٦ⴆ℮; [B1, C1]; xn--0ug.xn--fib628k4li; ; .xn--fib628k4li; [B1, A4_2] # .٦ⴆ℮
-.xn--fib628k4li; .٦ⴆ℮; [B1, A4_2]; .xn--fib628k4li; ; ;  # .٦ⴆ℮
+.xn--fib628k4li; .٦ⴆ℮; [B1, X4_2]; .xn--fib628k4li; [B1, A4_2]; ;  # .٦ⴆ℮
 xn--0ug.xn--fib628k4li; ‌.٦ⴆ℮; [B1, C1]; xn--0ug.xn--fib628k4li; ; ;  # .٦ⴆ℮
-.xn--fib263c0yn; .٦Ⴆ℮; [B1, V6, A4_2]; .xn--fib263c0yn; ; ;  # .٦Ⴆ℮
+.xn--fib263c0yn; .٦Ⴆ℮; [B1, V6, X4_2]; .xn--fib263c0yn; [B1, V6, A4_2]; ;  # .٦Ⴆ℮
 xn--0ug.xn--fib263c0yn; ‌.٦Ⴆ℮; [B1, C1, V6]; xn--0ug.xn--fib263c0yn; ; ;  # .٦Ⴆ℮
 ڣ．്‍Ϟ; ڣ.്‍ϟ; [B1, V5]; xn--5jb.xn--xya149bpvp; ; xn--5jb.xn--xya149b;  # ڣ.്ϟ
 ڣ.്‍Ϟ; ڣ.്‍ϟ; [B1, V5]; xn--5jb.xn--xya149bpvp; ; xn--5jb.xn--xya149b;  # ڣ.്ϟ
@@ -5559,9 +5577,12 @@ xn-----bk9hu24z.xn--o4e6836dpxudz0v1c; ꡰ︒--.៌靈𐹢񘳮; [B1, B6, V2, V3,
 ᅟႿႵრ｡୍; ᅟႿႵრ.୍; [P1, V5, V6]; xn--tndt4hvw.xn--9ic; ; ;  # ႿႵრ.୍
 ᅟႿႵრ。୍; ᅟႿႵრ.୍; [P1, V5, V6]; xn--tndt4hvw.xn--9ic; ; ;  # ႿႵრ.୍
 ᅟⴟⴕრ。୍; ᅟⴟⴕრ.୍; [P1, V5, V6]; xn--1od7wz74eeb.xn--9ic; ; ;  # ⴟⴕრ.୍
+ᅟႿႵᲠ。୍; ᅟႿႵᲠ.୍; [P1, V5, V6]; xn--tndt39bg47a.xn--9ic; ; ;  # ႿႵᲠ.୍
+xn--tndt39bg47a.xn--9ic; ᅟႿႵᲠ.୍; [V5, V6]; xn--tndt39bg47a.xn--9ic; ; ;  # ႿႵᲠ.୍
 xn--1od7wz74eeb.xn--9ic; ᅟⴟⴕრ.୍; [V5, V6]; xn--1od7wz74eeb.xn--9ic; ; ;  # ⴟⴕრ.୍
 xn--tndt4hvw.xn--9ic; ᅟႿႵრ.୍; [V5, V6]; xn--tndt4hvw.xn--9ic; ; ;  # ႿႵრ.୍
 ᅟⴟⴕრ｡୍; ᅟⴟⴕრ.୍; [P1, V5, V6]; xn--1od7wz74eeb.xn--9ic; ; ;  # ⴟⴕრ.୍
+ᅟႿႵᲠ｡୍; ᅟႿႵᲠ.୍; [P1, V5, V6]; xn--tndt39bg47a.xn--9ic; ; ;  # ႿႵᲠ.୍
 ᅟႿⴕრ。୍; ᅟႿⴕრ.୍; [P1, V5, V6]; xn--3nd0etsm92g.xn--9ic; ; ;  # Ⴟⴕრ.୍
 xn--3nd0etsm92g.xn--9ic; ᅟႿⴕრ.୍; [V5, V6]; xn--3nd0etsm92g.xn--9ic; ; ;  # Ⴟⴕრ.୍
 ᅟႿⴕრ｡୍; ᅟႿⴕრ.୍; [P1, V5, V6]; xn--3nd0etsm92g.xn--9ic; ; ;  # Ⴟⴕრ.୍
@@ -5731,8 +5752,8 @@ xn--9-1mcp570dl51a.xn--3ob977jmfd; ఀ9‍بح.‍ݐ⒈; [B1, C2, V5, V6]; xn--9
 xn--2v9a.xn--ss-q40dp97m; ꫶.嬶ss葽; [V5]; xn--2v9a.xn--ss-q40dp97m; ; ;  # ꫶.嬶ss葽
 xn--2v9a.xn--zca7637b14za; ꫶.嬶ß葽; [V5]; xn--2v9a.xn--zca7637b14za; ; ;  # ꫶.嬶ß葽
 𑚶⒈。񞻡𐹺; 𑚶⒈.񞻡𐹺; [B5, B6, P1, V5, V6]; xn--tshz969f.xn--yo0d5914s; ; ;  # 𑚶⒈.𐹺
-𑚶1.。񞻡𐹺; 𑚶1..񞻡𐹺; [B5, B6, P1, V5, V6, A4_2]; xn--1-3j0j..xn--yo0d5914s; ; ;  # 𑚶1..𐹺
-xn--1-3j0j..xn--yo0d5914s; 𑚶1..񞻡𐹺; [B5, B6, V5, V6, A4_2]; xn--1-3j0j..xn--yo0d5914s; ; ;  # 𑚶1..𐹺
+𑚶1.。񞻡𐹺; 𑚶1..񞻡𐹺; [B5, B6, P1, V5, V6, X4_2]; xn--1-3j0j..xn--yo0d5914s; [B5, B6, P1, V5, V6, A4_2]; ;  # 𑚶1..𐹺
+xn--1-3j0j..xn--yo0d5914s; 𑚶1..񞻡𐹺; [B5, B6, V5, V6, X4_2]; xn--1-3j0j..xn--yo0d5914s; [B5, B6, V5, V6, A4_2]; ;  # 𑚶1..𐹺
 xn--tshz969f.xn--yo0d5914s; 𑚶⒈.񞻡𐹺; [B5, B6, V5, V6]; xn--tshz969f.xn--yo0d5914s; ; ;  # 𑚶⒈.𐹺
 𑜤︒≮．񚕽ט𞾩; 𑜤︒≮.񚕽ט𞾩; [B1, B5, B6, P1, V5, V6]; xn--gdh5267fdzpa.xn--deb0091w5q9u; ; ;  # 𑜤︒≮.ט
 𑜤︒≮．񚕽ט𞾩; 𑜤︒≮.񚕽ט𞾩; [B1, B5, B6, P1, V5, V6]; xn--gdh5267fdzpa.xn--deb0091w5q9u; ; ;  # 𑜤︒≮.ט
@@ -5781,7 +5802,7 @@ xn--9n0d.xn--98-7ek; 𐹢.Ⴍ98; [B1, V6]; xn--9n0d.xn--98-7ek; ; ;  # 𐹢.Ⴍ9
 ‌͏。ss࣢19.≯; ‌.ss࣢19.≯; [B1, B5, C1, P1, V6]; xn--0ug.xn--ss19-w0i.xn--hdh; ; .xn--ss19-w0i.xn--hdh; [B1, B5, P1, V6, A4_2] # .ss19.≯
 ‌͏。Ss࣢19.≯; ‌.ss࣢19.≯; [B1, B5, C1, P1, V6]; xn--0ug.xn--ss19-w0i.xn--hdh; ; .xn--ss19-w0i.xn--hdh; [B1, B5, P1, V6, A4_2] # .ss19.≯
 ‌͏。Ss࣢19.≯; ‌.ss࣢19.≯; [B1, B5, C1, P1, V6]; xn--0ug.xn--ss19-w0i.xn--hdh; ; .xn--ss19-w0i.xn--hdh; [B1, B5, P1, V6, A4_2] # .ss19.≯
-.xn--ss19-w0i.xn--hdh; .ss࣢19.≯; [B1, B5, V6, A4_2]; .xn--ss19-w0i.xn--hdh; ; ;  # .ss19.≯
+.xn--ss19-w0i.xn--hdh; .ss࣢19.≯; [B1, B5, V6, X4_2]; .xn--ss19-w0i.xn--hdh; [B1, B5, V6, A4_2]; ;  # .ss19.≯
 xn--0ug.xn--ss19-w0i.xn--hdh; ‌.ss࣢19.≯; [B1, B5, C1, V6]; xn--0ug.xn--ss19-w0i.xn--hdh; ; ;  # .ss19.≯
 xn--0ug.xn--19-fia813f.xn--hdh; ‌.ß࣢19.≯; [B1, B5, C1, V6]; xn--0ug.xn--19-fia813f.xn--hdh; ; ;  # .ß19.≯
 ‌͏｡SS࣢⒚≯; ‌.ss࣢⒚≯; [B1, B5, B6, C1, P1, V6]; xn--0ug.xn--ss-9if872xjjc; ; .xn--ss-9if872xjjc; [B5, B6, P1, V6, A4_2] # .ss⒚≯
@@ -5790,7 +5811,7 @@ xn--0ug.xn--19-fia813f.xn--hdh; ‌.ß࣢19.≯; [B1, B5, C1, V6]; xn--0ug.xn--1
 ‌͏｡ss࣢⒚≯; ‌.ss࣢⒚≯; [B1, B5, B6, C1, P1, V6]; xn--0ug.xn--ss-9if872xjjc; ; .xn--ss-9if872xjjc; [B5, B6, P1, V6, A4_2] # .ss⒚≯
 ‌͏｡Ss࣢⒚≯; ‌.ss࣢⒚≯; [B1, B5, B6, C1, P1, V6]; xn--0ug.xn--ss-9if872xjjc; ; .xn--ss-9if872xjjc; [B5, B6, P1, V6, A4_2] # .ss⒚≯
 ‌͏｡Ss࣢⒚≯; ‌.ss࣢⒚≯; [B1, B5, B6, C1, P1, V6]; xn--0ug.xn--ss-9if872xjjc; ; .xn--ss-9if872xjjc; [B5, B6, P1, V6, A4_2] # .ss⒚≯
-.xn--ss-9if872xjjc; .ss࣢⒚≯; [B5, B6, V6, A4_2]; .xn--ss-9if872xjjc; ; ;  # .ss⒚≯
+.xn--ss-9if872xjjc; .ss࣢⒚≯; [B5, B6, V6, X4_2]; .xn--ss-9if872xjjc; [B5, B6, V6, A4_2]; ;  # .ss⒚≯
 xn--0ug.xn--ss-9if872xjjc; ‌.ss࣢⒚≯; [B1, B5, B6, C1, V6]; xn--0ug.xn--ss-9if872xjjc; ; ;  # .ss⒚≯
 xn--0ug.xn--zca612bx9vo5b; ‌.ß࣢⒚≯; [B1, B5, B6, C1, V6]; xn--0ug.xn--zca612bx9vo5b; ; ;  # .ß⒚≯
 ‌𞥍ᡌ．𣃔; ‌𞥍ᡌ.𣃔; [B1, C1, P1, V6]; xn--c8e180bqz13b.xn--od1j; ; xn--c8e5919u.xn--od1j; [B2, B3, P1, V6] # ᡌ.𣃔
@@ -5830,9 +5851,9 @@ xn--0ug83gn618a21ov.xn--ynd49496l; ≠𐸁𹏁‌.Ⴚ򳄠; [B1, C1, V6]; xn--0ug
 xn--iib.xn--6d1d; ٩.𑇊; [B1, B3, B6, V5]; xn--iib.xn--6d1d; ; ;  # ٩.𑇊
 ႆ𞶀≯⒍。-; ႆ𞶀≯⒍.-; [B1, P1, V3, V5, V6]; xn--hmd482gqqb8730g.-; ; ;  # ႆ≯⒍.-
 ႆ𞶀≯⒍。-; ႆ𞶀≯⒍.-; [B1, P1, V3, V5, V6]; xn--hmd482gqqb8730g.-; ; ;  # ႆ≯⒍.-
-ႆ𞶀≯6.。-; ႆ𞶀≯6..-; [B1, P1, V3, V5, V6, A4_2]; xn--6-oyg968k7h74b..-; ; ;  # ႆ≯6..-
-ႆ𞶀≯6.。-; ႆ𞶀≯6..-; [B1, P1, V3, V5, V6, A4_2]; xn--6-oyg968k7h74b..-; ; ;  # ႆ≯6..-
-xn--6-oyg968k7h74b..-; ႆ𞶀≯6..-; [B1, V3, V5, V6, A4_2]; xn--6-oyg968k7h74b..-; ; ;  # ႆ≯6..-
+ႆ𞶀≯6.。-; ႆ𞶀≯6..-; [B1, P1, V3, V5, V6, X4_2]; xn--6-oyg968k7h74b..-; [B1, P1, V3, V5, V6, A4_2]; ;  # ႆ≯6..-
+ႆ𞶀≯6.。-; ႆ𞶀≯6..-; [B1, P1, V3, V5, V6, X4_2]; xn--6-oyg968k7h74b..-; [B1, P1, V3, V5, V6, A4_2]; ;  # ႆ≯6..-
+xn--6-oyg968k7h74b..-; ႆ𞶀≯6..-; [B1, V3, V5, V6, X4_2]; xn--6-oyg968k7h74b..-; [B1, V3, V5, V6, A4_2]; ;  # ႆ≯6..-
 xn--hmd482gqqb8730g.-; ႆ𞶀≯⒍.-; [B1, V3, V5, V6]; xn--hmd482gqqb8730g.-; ; ;  # ႆ≯⒍.-
 ឴.쮇-; ; [P1, V3, V5, V6]; xn--z3e.xn----938f; ; ;  # .쮇-
 ឴.쮇-; ឴.쮇-; [P1, V3, V5, V6]; xn--z3e.xn----938f; ; ;  # .쮇-
@@ -5868,7 +5889,7 @@ xn--nfb98ai25e.xn--imb3805fxt8b; ⒎ہ؅.꫶۵𐇽; [B1, V5, V6]; xn--nfb98ai25e
 -ᡥ᠆󍲭。؅ᩝ𐹡; -ᡥ᠆󍲭.؅ᩝ𐹡; [B1, P1, V3, V6]; xn----f3j6s87156i.xn--nfb035hoo2p; ; ;  # -ᡥ᠆.ᩝ𐹡
 xn----f3j6s87156i.xn--nfb035hoo2p; -ᡥ᠆󍲭.؅ᩝ𐹡; [B1, V3, V6]; xn----f3j6s87156i.xn--nfb035hoo2p; ; ;  # -ᡥ᠆.ᩝ𐹡
 ‍.ڽ٣֖; ; [B1, C2]; xn--1ug.xn--hcb32bni; ; .xn--hcb32bni; [A4_2] # .ڽ٣֖
-.xn--hcb32bni; .ڽ٣֖; [A4_2]; .xn--hcb32bni; ; ;  # .ڽ٣֖
+.xn--hcb32bni; .ڽ٣֖; [X4_2]; .xn--hcb32bni; [A4_2]; ;  # .ڽ٣֖
 xn--1ug.xn--hcb32bni; ‍.ڽ٣֖; [B1, C2]; xn--1ug.xn--hcb32bni; ; ;  # .ڽ٣֖
 xn--hcb32bni; ڽ٣֖; ; xn--hcb32bni; ; ;  # ڽ٣֖
 ڽ٣֖; ; ; xn--hcb32bni; ; ;  # ڽ٣֖
@@ -5923,8 +5944,8 @@ xn----qi38c.xn----jxc827k; -񕉴.۠ᢚ-; [V3, V5, V6]; xn----qi38c.xn----jxc827k
 xn--nhh5394g.xn--7-xqc; ⌁𑄴.7٬; [B1]; xn--nhh5394g.xn--7-xqc; ; ;  # ⌁𑄴.7٬
 xn--1ug38i2093a.xn--7-xqc297q; ⌁‍𑄴.‌7٬; [B1, C1, C2]; xn--1ug38i2093a.xn--7-xqc297q; ; ;  # ⌁𑄴.7٬
 ︒ﴅืﻼ。岓᯲󠾃ᡂ; ︒صىืلا.岓᯲󠾃ᡂ; [B1, P1, V6]; xn--mgb1a7bt462hf267a.xn--17e10qe61f9r71s; ; ;  # ︒صىืلا.岓᯲ᡂ
-。صىืلا。岓᯲󠾃ᡂ; .صىืلا.岓᯲󠾃ᡂ; [P1, V6, A4_2]; .xn--mgb1a7bt462h.xn--17e10qe61f9r71s; ; ;  # .صىืلا.岓᯲ᡂ
-.xn--mgb1a7bt462h.xn--17e10qe61f9r71s; .صىืلا.岓᯲󠾃ᡂ; [V6, A4_2]; .xn--mgb1a7bt462h.xn--17e10qe61f9r71s; ; ;  # .صىืلا.岓᯲ᡂ
+。صىืلا。岓᯲󠾃ᡂ; .صىืلا.岓᯲󠾃ᡂ; [P1, V6, X4_2]; .xn--mgb1a7bt462h.xn--17e10qe61f9r71s; [P1, V6, A4_2]; ;  # .صىืلا.岓᯲ᡂ
+.xn--mgb1a7bt462h.xn--17e10qe61f9r71s; .صىืلا.岓᯲󠾃ᡂ; [V6, X4_2]; .xn--mgb1a7bt462h.xn--17e10qe61f9r71s; [V6, A4_2]; ;  # .صىืلا.岓᯲ᡂ
 xn--mgb1a7bt462hf267a.xn--17e10qe61f9r71s; ︒صىืلا.岓᯲󠾃ᡂ; [B1, V6]; xn--mgb1a7bt462hf267a.xn--17e10qe61f9r71s; ; ;  # ︒صىืلا.岓᯲ᡂ
 𐹨。8𑁆; 𐹨.8𑁆; [B1]; xn--go0d.xn--8-yu7i; ; ;  # 𐹨.8𑁆
 xn--go0d.xn--8-yu7i; 𐹨.8𑁆; [B1]; xn--go0d.xn--8-yu7i; ; ;  # 𐹨.8𑁆
@@ -5949,9 +5970,9 @@ xn--gqb918b.; Ⴐݿ.; [B5, B6, V6]; xn--gqb918b.; ; ;  # Ⴐݿ.
 xn--gqb918b.xn--0ug; Ⴐݿ.‌; [B1, B5, B6, C1, V6]; xn--gqb918b.xn--0ug; ; ;  # Ⴐݿ.
 ⴐݿ．‌; ⴐݿ.‌; [B1, B5, B6, C1]; xn--gqb743q.xn--0ug; ; xn--gqb743q.; [B5, B6] # ⴐݿ.
 🄅𑲞-⒈。‍ᠩڥ; 🄅𑲞-⒈.‍ᠩڥ; [B1, C2, P1, V6]; xn----ecp8796hjtvg.xn--7jb180gexf; ; xn----ecp8796hjtvg.xn--7jb180g; [B1, B5, B6, P1, V6] # 🄅𑲞-⒈.ᠩڥ
-4,𑲞-1.。‍ᠩڥ; 4,𑲞-1..‍ᠩڥ; [B1, C2, P1, V6, A4_2]; xn--4,-1-w401a..xn--7jb180gexf; ; xn--4,-1-w401a..xn--7jb180g; [B1, B5, B6, P1, V6, A4_2] # 4,𑲞-1..ᠩڥ
-xn--4,-1-w401a..xn--7jb180g; 4,𑲞-1..ᠩڥ; [B1, B5, B6, P1, V6, A4_2]; xn--4,-1-w401a..xn--7jb180g; ; ;  # 4,𑲞-1..ᠩڥ
-xn--4,-1-w401a..xn--7jb180gexf; 4,𑲞-1..‍ᠩڥ; [B1, C2, P1, V6, A4_2]; xn--4,-1-w401a..xn--7jb180gexf; ; ;  # 4,𑲞-1..ᠩڥ
+4,𑲞-1.。‍ᠩڥ; 4,𑲞-1..‍ᠩڥ; [B1, C2, P1, V6, X4_2]; xn--4,-1-w401a..xn--7jb180gexf; [B1, C2, P1, V6, A4_2]; xn--4,-1-w401a..xn--7jb180g; [B1, B5, B6, P1, V6, A4_2] # 4,𑲞-1..ᠩڥ
+xn--4,-1-w401a..xn--7jb180g; 4,𑲞-1..ᠩڥ; [B1, B5, B6, P1, V6, X4_2]; xn--4,-1-w401a..xn--7jb180g; [B1, B5, B6, P1, V6, A4_2]; ;  # 4,𑲞-1..ᠩڥ
+xn--4,-1-w401a..xn--7jb180gexf; 4,𑲞-1..‍ᠩڥ; [B1, C2, P1, V6, X4_2]; xn--4,-1-w401a..xn--7jb180gexf; [B1, C2, P1, V6, A4_2]; ;  # 4,𑲞-1..ᠩڥ
 xn----ecp8796hjtvg.xn--7jb180g; 🄅𑲞-⒈.ᠩڥ; [B1, B5, B6, V6]; xn----ecp8796hjtvg.xn--7jb180g; ; ;  # 🄅𑲞-⒈.ᠩڥ
 xn----ecp8796hjtvg.xn--7jb180gexf; 🄅𑲞-⒈.‍ᠩڥ; [B1, C2, V6]; xn----ecp8796hjtvg.xn--7jb180gexf; ; ;  # 🄅𑲞-⒈.ᠩڥ
 񗀤。𞤪򮿋; 񗀤.𞤪򮿋; [B2, B3, P1, V6]; xn--4240a.xn--ie6h83808a; ; ;  # .𞤪
@@ -6066,9 +6087,9 @@ xn--7pj.xn--ss-n1t; ⶿.ss‍; [C2, V6]; xn--7pj.xn--ss-n1t; ; ;  # .ss
 xn--7pj.xn--zca870n; ⶿.ß‍; [C2, V6]; xn--7pj.xn--zca870n; ; ;  # .ß
 ᯳︒.ت≯ꡂ; ; [B2, B3, B6, P1, V5, V6]; xn--1zf8957g.xn--pgb885lry5g; ; ;  # ᯳︒.ت≯ꡂ
 ᯳︒.ت≯ꡂ; ᯳︒.ت≯ꡂ; [B2, B3, B6, P1, V5, V6]; xn--1zf8957g.xn--pgb885lry5g; ; ;  # ᯳︒.ت≯ꡂ
-᯳。.ت≯ꡂ; ᯳..ت≯ꡂ; [B2, B3, P1, V5, V6, A4_2]; xn--1zf..xn--pgb885lry5g; ; ;  # ᯳..ت≯ꡂ
-᯳。.ت≯ꡂ; ᯳..ت≯ꡂ; [B2, B3, P1, V5, V6, A4_2]; xn--1zf..xn--pgb885lry5g; ; ;  # ᯳..ت≯ꡂ
-xn--1zf..xn--pgb885lry5g; ᯳..ت≯ꡂ; [B2, B3, V5, V6, A4_2]; xn--1zf..xn--pgb885lry5g; ; ;  # ᯳..ت≯ꡂ
+᯳。.ت≯ꡂ; ᯳..ت≯ꡂ; [B2, B3, P1, V5, V6, X4_2]; xn--1zf..xn--pgb885lry5g; [B2, B3, P1, V5, V6, A4_2]; ;  # ᯳..ت≯ꡂ
+᯳。.ت≯ꡂ; ᯳..ت≯ꡂ; [B2, B3, P1, V5, V6, X4_2]; xn--1zf..xn--pgb885lry5g; [B2, B3, P1, V5, V6, A4_2]; ;  # ᯳..ت≯ꡂ
+xn--1zf..xn--pgb885lry5g; ᯳..ت≯ꡂ; [B2, B3, V5, V6, X4_2]; xn--1zf..xn--pgb885lry5g; [B2, B3, V5, V6, A4_2]; ;  # ᯳..ت≯ꡂ
 xn--1zf8957g.xn--pgb885lry5g; ᯳︒.ت≯ꡂ; [B2, B3, B6, V5, V6]; xn--1zf8957g.xn--pgb885lry5g; ; ;  # ᯳︒.ت≯ꡂ
 ≮≠񏻃｡-𫠆ڷ𐹪; ≮≠񏻃.-𫠆ڷ𐹪; [B1, P1, V3, V6]; xn--1ch1a29470f.xn----7uc5363rc1rn; ; ;  # ≮≠.-𫠆ڷ𐹪
 ≮≠񏻃｡-𫠆ڷ𐹪; ≮≠񏻃.-𫠆ڷ𐹪; [B1, P1, V3, V6]; xn--1ch1a29470f.xn----7uc5363rc1rn; ; ;  # ≮≠.-𫠆ڷ𐹪
@@ -6194,8 +6215,8 @@ xn--ix9c26l.xn--q0s; 𐫜𑌼.婀; ; xn--ix9c26l.xn--q0s; ; ;  # 𐫜𑌼.婀
 𐫜𑌼.婀; ; ; xn--ix9c26l.xn--q0s; ; ;  # 𐫜𑌼.婀
 xn--1ugx063g1if.xn--q0s; 𐫜𑌼‍.婀; [B3, C2]; xn--1ugx063g1if.xn--q0s; ; ;  # 𐫜𑌼.婀
 󠅽︒︒𐹯｡⬳᩸; ︒︒𐹯.⬳᩸; [B1, P1, V6]; xn--y86ca186j.xn--7of309e; ; ;  # ︒︒𐹯.⬳᩸
-󠅽。。𐹯。⬳᩸; ..𐹯.⬳᩸; [B1, A4_2]; ..xn--no0d.xn--7of309e; ; ;  # ..𐹯.⬳᩸
-..xn--no0d.xn--7of309e; ..𐹯.⬳᩸; [B1, A4_2]; ..xn--no0d.xn--7of309e; ; ;  # ..𐹯.⬳᩸
+󠅽。。𐹯。⬳᩸; ..𐹯.⬳᩸; [B1, X4_2]; ..xn--no0d.xn--7of309e; [B1, A4_2]; ;  # ..𐹯.⬳᩸
+..xn--no0d.xn--7of309e; ..𐹯.⬳᩸; [B1, X4_2]; ..xn--no0d.xn--7of309e; [B1, A4_2]; ;  # ..𐹯.⬳᩸
 xn--y86ca186j.xn--7of309e; ︒︒𐹯.⬳᩸; [B1, V6]; xn--y86ca186j.xn--7of309e; ; ;  # ︒︒𐹯.⬳᩸
 𝟖ß．󠄐-?Ⴏ; 8ß.-?Ⴏ; [P1, V3, V6]; xn--8-qfa.-?Ⴏ; [P1, V3, V6, A3]; 8ss.-?Ⴏ;  # 8ß.-Ⴏ
 8ß.󠄐-?Ⴏ; 8ß.-?Ⴏ; [P1, V3, V6]; xn--8-qfa.-?Ⴏ; [P1, V3, V6, A3]; 8ss.-?Ⴏ;  # 8ß.-Ⴏ
@@ -6247,9 +6268,9 @@ xn--meb44b57607c.xn--1ug232c; 򒈣סڸ.ⴈ‍; [B5, B6, C2, V6]; xn--meb44b57607
 xn--meb44b57607c.xn--gnd; 򒈣סڸ.Ⴈ; [B5, B6, V6]; xn--meb44b57607c.xn--gnd; ; ;  # סڸ.Ⴈ
 xn--meb44b57607c.xn--gnd699e; 򒈣סڸ.Ⴈ‍; [B5, B6, C2, V6]; xn--meb44b57607c.xn--gnd699e; ; ;  # סڸ.Ⴈ
 󀚶𝨱ߦ⒈．𑗝髯‌; 󀚶𝨱ߦ⒈.𑗝髯‌; [B1, B5, C1, P1, V5, V6]; xn--etb477lq931a1f58e.xn--0ugx259bocxd; ; xn--etb477lq931a1f58e.xn--uj6at43v; [B1, B5, P1, V5, V6] # 𝨱ߦ⒈.𑗝髯
-󀚶𝨱ߦ1..𑗝髯‌; ; [B1, B5, C1, P1, V5, V6, A4_2]; xn--1-idd62296a1fr6e..xn--0ugx259bocxd; ; xn--1-idd62296a1fr6e..xn--uj6at43v; [B1, B5, P1, V5, V6, A4_2] # 𝨱ߦ1..𑗝髯
-xn--1-idd62296a1fr6e..xn--uj6at43v; 󀚶𝨱ߦ1..𑗝髯; [B1, B5, V5, V6, A4_2]; xn--1-idd62296a1fr6e..xn--uj6at43v; ; ;  # 𝨱ߦ1..𑗝髯
-xn--1-idd62296a1fr6e..xn--0ugx259bocxd; 󀚶𝨱ߦ1..𑗝髯‌; [B1, B5, C1, V5, V6, A4_2]; xn--1-idd62296a1fr6e..xn--0ugx259bocxd; ; ;  # 𝨱ߦ1..𑗝髯
+󀚶𝨱ߦ1..𑗝髯‌; ; [B1, B5, C1, P1, V5, V6, X4_2]; xn--1-idd62296a1fr6e..xn--0ugx259bocxd; [B1, B5, C1, P1, V5, V6, A4_2]; xn--1-idd62296a1fr6e..xn--uj6at43v; [B1, B5, P1, V5, V6, A4_2] # 𝨱ߦ1..𑗝髯
+xn--1-idd62296a1fr6e..xn--uj6at43v; 󀚶𝨱ߦ1..𑗝髯; [B1, B5, V5, V6, X4_2]; xn--1-idd62296a1fr6e..xn--uj6at43v; [B1, B5, V5, V6, A4_2]; ;  # 𝨱ߦ1..𑗝髯
+xn--1-idd62296a1fr6e..xn--0ugx259bocxd; 󀚶𝨱ߦ1..𑗝髯‌; [B1, B5, C1, V5, V6, X4_2]; xn--1-idd62296a1fr6e..xn--0ugx259bocxd; [B1, B5, C1, V5, V6, A4_2]; ;  # 𝨱ߦ1..𑗝髯
 xn--etb477lq931a1f58e.xn--uj6at43v; 󀚶𝨱ߦ⒈.𑗝髯; [B1, B5, V5, V6]; xn--etb477lq931a1f58e.xn--uj6at43v; ; ;  # 𝨱ߦ⒈.𑗝髯
 xn--etb477lq931a1f58e.xn--0ugx259bocxd; 󀚶𝨱ߦ⒈.𑗝髯‌; [B1, B5, C1, V5, V6]; xn--etb477lq931a1f58e.xn--0ugx259bocxd; ; ;  # 𝨱ߦ⒈.𑗝髯
 𐫀．ډ𑌀; 𐫀.ډ𑌀; ; xn--pw9c.xn--fjb8658k; ; ;  # 𐫀.ډ𑌀
