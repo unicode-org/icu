@@ -2064,10 +2064,6 @@ typedef enum UGraphemeClusterBreak {
     U_GCB_GLUE_AFTER_ZWJ = 16,  /*[GAZ]*/
     /** @stable ICU 58 */
     U_GCB_ZWJ = 17,             /*[ZWJ]*/
-    /** @stable ICU 62 */
-    U_GCB_LINKING_CONSONANT = 18,   /*[LinkC]*/
-    /** @stable ICU 62 */
-    U_GCB_VIRAMA = 19,          /*[Virama]*/
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -2076,7 +2072,7 @@ typedef enum UGraphemeClusterBreak {
      *
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    U_GCB_COUNT = 20
+    U_GCB_COUNT = 18
 #endif  // U_HIDE_DEPRECATED_API
 } UGraphemeClusterBreak;
 

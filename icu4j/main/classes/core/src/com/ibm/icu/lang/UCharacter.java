@@ -3231,10 +3231,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int GLUE_AFTER_ZWJ = 16;  /*[GAZ]*/
         /** @stable ICU 58 */
         public static final int ZWJ = 17;             /*[ZWJ]*/
-        /** @stable ICU 62 */
-        public static final int LINKING_CONSONANT = 18;   /*[LinkC]*/
-        /** @stable ICU 62 */
-        public static final int VIRAMA = 19;          /*[Virama]*/
 
         /**
          * One more than the highest normal GraphemeClusterBreak value.
@@ -3243,7 +3239,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 20;
+        public static final int COUNT = 18;
     }
 
     /**

@@ -964,7 +964,7 @@ static const Value VALUES_tccc[57] = {
     Value(240, "IS Iota_Subscript"),
 };
 
-static const Value VALUES_GCB[20] = {
+static const Value VALUES_GCB[18] = {
     Value(U_GCB_OTHER, "XX Other"),
     Value(U_GCB_CONTROL, "CN Control"),
     Value(U_GCB_CR, "CR CR"),
@@ -983,8 +983,6 @@ static const Value VALUES_GCB[20] = {
     Value(U_GCB_E_MODIFIER, "EM E_Modifier"),
     Value(U_GCB_GLUE_AFTER_ZWJ, "GAZ Glue_After_Zwj"),
     Value(U_GCB_ZWJ, "ZWJ ZWJ"),
-    Value(U_GCB_LINKING_CONSONANT, "LinkC LinkingConsonant"),
-    Value(U_GCB_VIRAMA, "Virama Virama"),
 };
 
 static const Value VALUES_SB[15] = {
@@ -1162,7 +1160,7 @@ static const Property PROPERTIES[104] = {
     Property(UCHAR_NFKC_QUICK_CHECK, "NFKC_QC NFKC_Quick_Check", VALUES_NFKC_QC, 3),
     Property(UCHAR_LEAD_CANONICAL_COMBINING_CLASS, "lccc Lead_Canonical_Combining_Class", VALUES_lccc, 57),
     Property(UCHAR_TRAIL_CANONICAL_COMBINING_CLASS, "tccc Trail_Canonical_Combining_Class", VALUES_tccc, 57),
-    Property(UCHAR_GRAPHEME_CLUSTER_BREAK, "GCB Grapheme_Cluster_Break", VALUES_GCB, 20),
+    Property(UCHAR_GRAPHEME_CLUSTER_BREAK, "GCB Grapheme_Cluster_Break", VALUES_GCB, 18),
     Property(UCHAR_SENTENCE_BREAK, "SB Sentence_Break", VALUES_SB, 15),
     Property(UCHAR_WORD_BREAK, "WB Word_Break", VALUES_WB, 23),
     Property(UCHAR_BIDI_PAIRED_BRACKET_TYPE, "bpt Bidi_Paired_Bracket_Type", VALUES_bpt, 3),

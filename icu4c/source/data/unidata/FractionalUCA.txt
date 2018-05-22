@@ -1,5 +1,5 @@
 # Fractional UCA Table, generated from the UCA DUCET
-# 2018-04-03 [MS]
+# 2018-05-21 [MS]
 # VERSION: UCA=11.0.0, UCD=11.0.0
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
