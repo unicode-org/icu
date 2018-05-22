@@ -159,7 +159,7 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     if (isCurrency) {
         currency = CurrencyUnit(macros.unit, status); // Restore CurrencyUnit from MeasureUnit
     }
-    CurrencySymbols* currencySymbols;
+    const CurrencySymbols* currencySymbols;
     if (macros.currencySymbols != nullptr) {
         // Used by the DecimalFormat code path
         currencySymbols = macros.currencySymbols;

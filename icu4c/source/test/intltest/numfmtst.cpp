@@ -201,7 +201,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test10354);
   TESTCASE_AUTO(Test11645_ApplyPatternEquality);
   TESTCASE_AUTO(Test12567);
-  TESTCASE_AUTO(TestCurrencyPluralInfoAndCustomPluralRules);
+  TESTCASE_AUTO(Test11626_CustomizeCurrencyPluralInfo);
   TESTCASE_AUTO(Test13056_GroupingSize);
   TESTCASE_AUTO(Test11025_CurrencyPadding);
   TESTCASE_AUTO(Test11648_ExpDecFormatMalPattern);
@@ -8872,38 +8872,44 @@ void NumberFormatTest::Test12567() {
     IcuTestErrorCode errorCode(*this, "Test12567");
     // Ticket #12567: DecimalFormat.equals() may not be symmetric
     LocalPointer<DecimalFormat> df1((DecimalFormat *)
-        NumberFormat::createInstance(Locale::getUS(), UNUM_CURRENCY_PLURAL, errorCode));
+        NumberFormat::createInstance(Locale::getUS(), UNUM_CURRENCY, errorCode));
     LocalPointer<DecimalFormat> df2((DecimalFormat *)
         NumberFormat::createInstance(Locale::getUS(), UNUM_DECIMAL, errorCode));
-    df2->setCurrency(df1->getCurrency());
-    df2->setCurrencyPluralInfo(*df1->getCurrencyPluralInfo());
+    // NOTE: CurrencyPluralInfo equality not tested in C++ because its operator== is not defined.
     df1->applyPattern(u"0.00", errorCode);
     df2->applyPattern(u"0.00", errorCode);
-    // TODO(shane): assertTrue("df1 == df2", *df1 == *df2);
-    // TODO(shane): assertTrue("df2 == df1", *df2 == *df1);
+    assertTrue("df1 == df2", *df1 == *df2);
+    assertTrue("df2 == df1", *df2 == *df1);
     df2->setPositivePrefix(u"abc");
     assertTrue("df1 != df2", *df1 != *df2);
     assertTrue("df2 != df1", *df2 != *df1);
 }
 
-void NumberFormatTest::TestCurrencyPluralInfoAndCustomPluralRules() {
-    IcuTestErrorCode errorCode(*this, "TestCurrencyPluralInfoAndCustomPluralRules");
+void NumberFormatTest::Test11626_CustomizeCurrencyPluralInfo() {
+    IcuTestErrorCode errorCode(*this, "Test11626_CustomizeCurrencyPluralInfo");
     // Ticket #11626: No unit test demonstrating how to use CurrencyPluralInfo to
     // change formatting spelled out currencies
-    LocalPointer<DecimalFormatSymbols> symbols(
-        new DecimalFormatSymbols(Locale::getEnglish(), errorCode));
-    CurrencyPluralInfo info(Locale::getEnglish(), errorCode);
+    // Use locale sr because it has interesting plural rules.
+    Locale locale("sr");
+    LocalPointer<DecimalFormatSymbols> symbols(new DecimalFormatSymbols(locale, errorCode));
+    CurrencyPluralInfo info(locale, errorCode);
     info.setCurrencyPluralPattern(u"one", u"0 qwerty", errorCode);
     info.setCurrencyPluralPattern(u"few", u"0 dvorak", errorCode);
-    info.setPluralRules(u"one: n is 1; few: n in 2..4", errorCode);
     DecimalFormat df(u"#", symbols.orphan(), UNUM_CURRENCY_PLURAL, errorCode);
     df.setCurrencyPluralInfo(info);
     df.setCurrency(u"USD");
+    df.setMaximumFractionDigits(0);
 
     UnicodeString result;
-    // TODO(shane): assertEquals("Plural one", u"1.00 qwerty", df.format(1, result, errorCode));
-    // TODO(shane): assertEquals("Plural few", u"3.00 dvorak", df.format(3, result.remove(), errorCode));
-    assertEquals("Plural other", u"5.80 US dollars", df.format(5.8, result.remove(), errorCode));
+    assertEquals("Plural one", u"1 qwerty", df.format(1, result, errorCode));
+    assertEquals("Plural few", u"3 dvorak", df.format(3, result.remove(), errorCode));
+    assertEquals("Plural other", u"99 америчких долара", df.format(99, result.remove(), errorCode));
+
+    info.setPluralRules(u"few: n is 1; one: n in 2..4", errorCode);
+    df.setCurrencyPluralInfo(info);
+    assertEquals("Plural one", u"1 dvorak", df.format(1, result.remove(), errorCode));
+    assertEquals("Plural few", u"3 qwerty", df.format(3, result.remove(), errorCode));
+    assertEquals("Plural other", u"99 америчких долара", df.format(99, result.remove(), errorCode));
 }
 
 void NumberFormatTest::Test13056_GroupingSize() {

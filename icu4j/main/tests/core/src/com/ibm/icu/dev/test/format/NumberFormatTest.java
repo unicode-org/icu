@@ -48,13 +48,11 @@ import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.data.TokenIterator;
-import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.text.CompactDecimalFormat;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DecimalFormat;
-import com.ibm.icu.text.DecimalFormat.PropertySetter;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.MeasureFormat;
@@ -62,7 +60,6 @@ import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.NumberFormatFactory;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
 import com.ibm.icu.text.NumberingSystem;
-import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Currency;
@@ -5918,24 +5915,26 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
-    public void TestCurrencyPluralInfoAndCustomPluralRules() throws ParseException {
-        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
-        final PluralRules rules = PluralRules.parseDescription("one: n is 1; few: n in 2..4");
-        CurrencyPluralInfo info = CurrencyPluralInfo.getInstance(ULocale.ENGLISH);
+    public void Test11626_CustomizeCurrencyPluralInfo() throws ParseException {
+        // Use locale sr because it has interesting plural rules.
+        ULocale locale = ULocale.forLanguageTag("sr");
+        DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
+        CurrencyPluralInfo info = CurrencyPluralInfo.getInstance(locale);
         info.setCurrencyPluralPattern("one", "0 qwerty");
         info.setCurrencyPluralPattern("few", "0 dvorak");
         DecimalFormat df = new DecimalFormat("#", symbols, info, NumberFormat.CURRENCYSTYLE);
         df.setCurrency(Currency.getInstance("USD"));
-        df.setProperties(new PropertySetter(){
-            @Override
-            public void set(DecimalFormatProperties props) {
-                props.setPluralRules(rules);
-            }
-        });
+        df.setMaximumFractionDigits(0);
 
-        assertEquals("Plural one", "1.00 qwerty", df.format(1));
-        assertEquals("Plural few", "3.00 dvorak", df.format(3));
-        assertEquals("Plural other", "5.80 US dollars", df.format(5.8));
+        assertEquals("Plural one", "1 qwerty", df.format(1));
+        assertEquals("Plural few", "3 dvorak", df.format(3));
+        assertEquals("Plural other", "99 америчких долара", df.format(99));
+
+        info.setPluralRules("few: n is 1; one: n in 2..4");
+        df.setCurrencyPluralInfo(info);
+        assertEquals("Plural one", "1 dvorak", df.format(1));
+        assertEquals("Plural few", "3 qwerty", df.format(3));
+        assertEquals("Plural other", "99 америчких долара", df.format(99));
     }
 
     @Test

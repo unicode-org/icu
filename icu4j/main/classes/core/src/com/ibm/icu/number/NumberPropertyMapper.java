@@ -22,6 +22,7 @@ import com.ibm.icu.number.Precision.IncrementRounderImpl;
 import com.ibm.icu.number.Precision.SignificantRounderImpl;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Currency.CurrencyUsage;
 import com.ibm.icu.util.ULocale;
@@ -92,7 +93,11 @@ final class NumberPropertyMapper {
         // PLURAL RULES //
         //////////////////
 
-        macros.rules = properties.getPluralRules();
+        PluralRules rules = properties.getPluralRules();
+        if (rules == null && properties.getCurrencyPluralInfo() != null) {
+            rules = properties.getCurrencyPluralInfo().getPluralRules();
+        }
+        macros.rules = rules;
 
         /////////////
         // AFFIXES //
