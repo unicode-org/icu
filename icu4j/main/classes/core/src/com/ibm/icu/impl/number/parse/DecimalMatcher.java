@@ -23,8 +23,9 @@ public class DecimalMatcher implements NumberParseMatcher {
     /** If true, do not accept grouping separators at all */
     private final boolean groupingDisabled;
 
-    /** If true, do not accept fraction grouping separators */
-    private final boolean fractionGroupingDisabled;
+    // Fraction grouping parsing is disabled for now but could be enabled later.
+    // See http://bugs.icu-project.org/trac/ticket/10794
+    // private final boolean fractionGrouping;
 
     /** If true, do not accept numbers in the fraction */
     private final boolean integerOnly;
@@ -93,11 +94,13 @@ public class DecimalMatcher implements NumberParseMatcher {
 
         requireGroupingMatch = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_STRICT_GROUPING_SIZE);
         groupingDisabled = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_GROUPING_DISABLED);
-        fractionGroupingDisabled = 0 != (parseFlags
-                & ParsingUtils.PARSE_FLAG_FRACTION_GROUPING_DISABLED);
         integerOnly = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_INTEGER_ONLY);
         grouping1 = grouper.getPrimary();
         grouping2 = grouper.getSecondary();
+
+        // Fraction grouping parsing is disabled for now but could be enabled later.
+        // See http://bugs.icu-project.org/trac/ticket/10794
+        // fractionGrouping = 0 != (parseFlags & ParsingUtils.PARSE_FLAG_FRACTION_GROUPING_ENABLED);
     }
 
     @Override
@@ -120,28 +123,46 @@ public class DecimalMatcher implements NumberParseMatcher {
             assert result.quantity != null;
         }
 
-        ParsedNumber backupResult = null;
-        if (requireGroupingMatch) {
-            backupResult = new ParsedNumber();
-            backupResult.copyFrom(result);
-        }
-
-        // strict parsing
-        boolean strictFail = false; // did we exit with a strict parse failure?
-        String actualGroupingString = groupingSeparator;
-        String actualDecimalString = decimalSeparator;
-        int groupedDigitCount = 0; // tracking count of digits delimited by grouping separator
-        int backupOffset = -1; // used for preserving the last confirmed position
-        int smallGroupBackupOffset = -1; // used to back up behind groups of size 1
-        boolean afterFirstGrouping = false;
-        boolean seenGrouping = false;
-        boolean seenDecimal = false;
-        int digitsAfterDecimal = 0;
+        // Initial offset before any character consumption.
         int initialOffset = segment.getOffset();
-        int exponent = 0;
-        boolean hasPartialPrefix = false;
+
+        // Return value: whether to ask for more characters.
+        boolean maybeMore = false;
+
+        // All digits consumed so far.
+        DecimalQuantity_DualStorageBCD digitsConsumed = null;
+
+        // The total number of digits after the decimal place, used for scaling the result.
+        int digitsAfterDecimalPlace = 0;
+
+        // The actual grouping and decimal separators used in the string.
+        // If non-null, we have seen that token.
+        String actualGroupingString = null;
+        String actualDecimalString = null;
+
+        // Information for two groups: the previous group and the current group.
+        //
+        // Each group has three pieces of information:
+        //
+        // Offset: the string position of the beginning of the group, including a leading separator
+        // if there was a leading separator. This is needed in case we need to rewind the parse to
+        // that position.
+        //
+        // Separator type:
+        // 0 => beginning of string
+        // 1 => lead separator is a grouping separator
+        // 2 => lead separator is a decimal separator
+        //
+        // Count: the number of digits in the group. If -1, the group has been validated.
+        int currGroupOffset = 0;
+        int currGroupSepType = 0;
+        int currGroupCount = 0;
+        int prevGroupOffset = -1;
+        int prevGroupSepType = -1;
+        int prevGroupCount = -1;
+
         while (segment.length() > 0) {
-            hasPartialPrefix = false;
+            maybeMore = false;
 
             // Attempt to match a digit.
             byte digit = -1;
@@ -162,194 +183,207 @@ public class DecimalMatcher implements NumberParseMatcher {
                         segment.adjustOffset(overlap);
                         digit = (byte) i;
                         break;
-                    } else if (overlap == segment.length()) {
-                        hasPartialPrefix = true;
                     }
+                    maybeMore = maybeMore || (overlap == segment.length());
                 }
             }
 
             if (digit >= 0) {
                 // Digit was found.
-                // Check for grouping size violation
-                if (backupOffset != -1) {
-                    smallGroupBackupOffset = backupOffset;
-                    backupOffset = -1;
-                    if (requireGroupingMatch) {
-                        // comma followed by digit, so group before comma is a secondary
-                        // group. If there was a group separator before that, the group
-                        // must == the secondary group length, else it can be <= the the
-                        // secondary group length.
-                        if ((afterFirstGrouping && groupedDigitCount != grouping2)
-                                || (!afterFirstGrouping && groupedDigitCount > grouping2)) {
-                            strictFail = true;
-                            break;
-                        }
-                    } else {
-                        // #11230: don't accept groups after the first with only 1 digit.
-                        // The logic to back up and remove the lone digit is lower down.
-                        if (afterFirstGrouping && groupedDigitCount == 1) {
-                            break;
-                        }
-                    }
-                    afterFirstGrouping = true;
-                    groupedDigitCount = 0;
+                if (digitsConsumed == null) {
+                    digitsConsumed = new DecimalQuantity_DualStorageBCD();
                 }
-
-                // Save the digit in the DecimalQuantity or scientific adjustment.
-                if (exponentSign != 0) {
-                    int nextExponent = digit + exponent * 10;
-                    if (nextExponent < exponent) {
-                        // Overflow
-                        exponent = Integer.MAX_VALUE;
-                    } else {
-                        exponent = nextExponent;
-                    }
-                } else {
-                    if (result.quantity == null) {
-                        result.quantity = new DecimalQuantity_DualStorageBCD();
-                    }
-                    result.quantity.appendDigit(digit, 0, true);
-                }
-                result.setCharsConsumed(segment);
-                groupedDigitCount++;
-                if (seenDecimal) {
-                    digitsAfterDecimal++;
+                digitsConsumed.appendDigit(digit, 0, true);
+                currGroupCount++;
+                if (actualDecimalString != null) {
+                    digitsAfterDecimalPlace++;
                 }
                 continue;
             }
 
-            // Attempt to match a literal grouping or decimal separator
-            int decimalOverlap = segment.getCommonPrefixLength(actualDecimalString);
-            boolean decimalStringMatch = decimalOverlap == actualDecimalString.length();
-            int groupingOverlap = segment.getCommonPrefixLength(actualGroupingString);
-            boolean groupingStringMatch = groupingOverlap == actualGroupingString.length();
+            // Attempt to match a literal grouping or decimal separator.
+            boolean isDecimal = false;
+            boolean isGrouping = false;
 
-            hasPartialPrefix = (decimalOverlap == segment.length())
-                    || (groupingOverlap == segment.length());
-
-            if (!seenDecimal
-                    && !groupingStringMatch
-                    && (decimalStringMatch || (!seenDecimal && decimalUniSet.contains(cp)))) {
-                // matched a decimal separator
-                if (requireGroupingMatch) {
-                    if (backupOffset != -1 || (seenGrouping && groupedDigitCount != grouping1)) {
-                        strictFail = true;
-                        break;
-                    }
+            // 1) Attempt the decimal separator string literal.
+            // if (we have not seen a decimal separator yet) { ... }
+            if (actualDecimalString == null) {
+                int overlap = segment.getCommonPrefixLength(decimalSeparator);
+                maybeMore = maybeMore || (overlap == segment.length());
+                if (overlap == decimalSeparator.length()) {
+                    isDecimal = true;
+                    actualDecimalString = decimalSeparator;
                 }
+            }
 
-                // If we're only parsing integers, then don't parse this one.
-                if (integerOnly) {
-                    break;
+            // 2) Attempt to match the actual grouping string literal.
+            if (actualGroupingString != null) {
+                int overlap = segment.getCommonPrefixLength(actualGroupingString);
+                maybeMore = maybeMore || (overlap == segment.length());
+                if (overlap == actualGroupingString.length()) {
+                    isGrouping = true;
                 }
+            }
 
-                seenDecimal = true;
-                if (!decimalStringMatch) {
+            // 2.5) Attempt to match a new the grouping separator string literal.
+            // if (we have not seen a grouping or decimal separator yet) { ... }
+            if (!groupingDisabled && actualGroupingString == null && actualDecimalString == null) {
+                int overlap = segment.getCommonPrefixLength(groupingSeparator);
+                maybeMore = maybeMore || (overlap == segment.length());
+                if (overlap == groupingSeparator.length()) {
+                    isGrouping = true;
+                    actualGroupingString = groupingSeparator;
+                }
+            }
+
+            // 3) Attempt to match a decimal separator from the equivalence set.
+            // if (we have not seen a decimal separator yet) { ... }
+            // The !isGrouping is to confirm that we haven't yet matched the current character.
+            if (!isGrouping && actualDecimalString == null) {
+                if (decimalUniSet.contains(cp)) {
+                    isDecimal = true;
                     actualDecimalString = UCharacter.toString(cp);
                 }
-                segment.adjustOffset(actualDecimalString.length());
-                result.setCharsConsumed(segment);
-                result.flags |= ParsedNumber.FLAG_HAS_DECIMAL_SEPARATOR;
-                continue;
             }
 
-            if (!groupingDisabled
-                    && !decimalStringMatch
-                    && (groupingStringMatch || (!seenGrouping && groupingUniSet.contains(cp)))) {
-                // matched a grouping separator
-                if (requireGroupingMatch) {
-                    if (groupedDigitCount == 0) {
-                        // leading group
-                        strictFail = true;
-                        break;
-                    } else if (backupOffset != -1) {
-                        // two group separators in a row
-                        break;
-                    }
-                }
-
-                if (fractionGroupingDisabled && seenDecimal) {
-                    // Stop parsing here.
-                    break;
-                }
-
-                seenGrouping = true;
-                if (!groupingStringMatch) {
+            // 4) Attempt to match a grouping separator from the equivalence set.
+            // if (we have not seen a grouping or decimal separator yet) { ... }
+            if (!groupingDisabled && actualGroupingString == null && actualDecimalString == null) {
+                if (groupingUniSet.contains(cp)) {
+                    isGrouping = true;
                     actualGroupingString = UCharacter.toString(cp);
                 }
-                backupOffset = segment.getOffset();
-                segment.adjustOffset(actualGroupingString.length());
-                // Note: do NOT set charsConsumed
-                continue;
             }
 
-            // Not a digit and not a separator
-            break;
-        }
-
-        // Back up if there was a trailing grouping separator
-        if (backupOffset != -1) {
-            segment.setOffset(backupOffset);
-            hasPartialPrefix = true; // redundant with `groupingOverlap == segment.length()`
-        }
-
-        // Check the final grouping for validity
-        if (requireGroupingMatch
-                && !seenDecimal
-                && seenGrouping
-                && afterFirstGrouping
-                && groupedDigitCount != grouping1) {
-            strictFail = true;
-        }
-
-        // #11230: don't accept groups after the first with only 1 digit.
-        // Behavior in this case is to back up before that 1-digit group.
-        if (!seenDecimal && afterFirstGrouping && groupedDigitCount == 1) {
-            if (segment.length() == 0) {
-                // Strings like "9,999" where we looked at only the first 3 chars.
-                // Ask for a longer segment.
-                hasPartialPrefix = true;
+            // Leave if we failed to match this as a separator.
+            if (!isDecimal && !isGrouping) {
+                break;
             }
-            segment.setOffset(smallGroupBackupOffset);
-            result.setCharsConsumed(segment);
-            if (smallGroupBackupOffset == initialOffset) {
-                // Strings like ",9"
-                // Reset to no quantity seen.
-                result.quantity = null;
+
+            // Check for conditions when we don't want to accept the separator.
+            if (isDecimal && integerOnly) {
+                break;
+            } else if (currGroupSepType == 2 && isGrouping) {
+                // Fraction grouping
+                break;
+            }
+
+            // Validate intermediate grouping sizes.
+            boolean prevValidSecondary = validateGroup(prevGroupSepType, prevGroupCount, false);
+            boolean currValidPrimary = validateGroup(currGroupSepType, currGroupCount, true);
+            if (!prevValidSecondary || (isDecimal && !currValidPrimary)) {
+                // Invalid grouping sizes.
+                if (isGrouping && currGroupCount == 0) {
+                    // Trailing grouping separators: these are taken care of below
+                    assert currGroupSepType == 1;
+                } else if (requireGroupingMatch) {
+                    // Strict mode: reject the parse
+                    digitsConsumed = null;
+                }
+                break;
+            } else if (requireGroupingMatch && currGroupCount == 0 && currGroupSepType == 1) {
+                break;
             } else {
-                // Strings like "9,9"
-                // Remove the lone digit from the result quantity.
-                assert result.quantity != null;
-                result.quantity.adjustMagnitude(-1);
-                result.quantity.truncate();
+                // Grouping sizes OK so far.
+                prevGroupOffset = currGroupOffset;
+                prevGroupCount = currGroupCount;
+                if (isDecimal) {
+                    // Do not validate this group any more.
+                    prevGroupSepType = -1;
+                } else {
+                    prevGroupSepType = currGroupSepType;
+                }
+            }
+
+            // OK to accept the separator.
+            // Special case: don't update currGroup if it is empty. This is to allow
+            // adjacent grouping separators in lenient mode: "1,,234"
+            if (currGroupCount != 0) {
+                currGroupOffset = segment.getOffset();
+            }
+            currGroupSepType = isGrouping ? 1 : 2;
+            currGroupCount = 0;
+            if (isGrouping) {
+                segment.adjustOffset(actualGroupingString.length());
+            } else {
+                segment.adjustOffset(actualDecimalString.length());
             }
         }
 
-        if (requireGroupingMatch && strictFail) {
-            result.copyFrom(backupResult);
+        // End of main loop.
+        // Back up if there was a trailing grouping separator.
+        // Shift prev -> curr so we can check it as a final group.
+        if (currGroupSepType != 2 && currGroupCount == 0) {
+            maybeMore = true;
+            segment.setOffset(currGroupOffset);
+            currGroupOffset = prevGroupOffset;
+            currGroupSepType = prevGroupSepType;
+            currGroupCount = prevGroupCount;
+            prevGroupOffset = -1;
+            prevGroupSepType = 0;
+            prevGroupCount = 1;
+        }
+
+        // Validate final grouping sizes.
+        boolean prevValidSecondary = validateGroup(prevGroupSepType, prevGroupCount, false);
+        boolean currValidPrimary = validateGroup(currGroupSepType, currGroupCount, true);
+        if (!requireGroupingMatch) {
+            // The cases we need to handle here are lone digits.
+            // Examples: "1,1"  "1,1,"  "1,1,1"  "1,1,1,"  ",1" (all parse as 1)
+            // See more examples in numberformattestspecification.txt
+            int digitsToRemove = 0;
+            if (!prevValidSecondary) {
+                segment.setOffset(prevGroupOffset);
+                digitsToRemove += prevGroupCount;
+                digitsToRemove += currGroupCount;
+            } else if (!currValidPrimary && (prevGroupSepType != 0 || prevGroupCount != 0)) {
+                maybeMore = true;
+                segment.setOffset(currGroupOffset);
+                digitsToRemove += currGroupCount;
+            }
+            if (digitsToRemove != 0) {
+                digitsConsumed.adjustMagnitude(-digitsToRemove);
+                digitsConsumed.truncate();
+            }
+            prevValidSecondary = true;
+            currValidPrimary = true;
+        }
+        if (currGroupSepType != 2 && (!prevValidSecondary || !currValidPrimary)) {
+            // Grouping failure.
+            digitsConsumed = null;
+        }
+
+        // Strings that start with a separator but have no digits,
+        // or strings that failed a grouping size check.
+        if (digitsConsumed == null) {
+            maybeMore = maybeMore || (segment.length() == 0);
             segment.setOffset(initialOffset);
+            return maybeMore;
         }
 
-        if (result.quantity == null && segment.getOffset() != initialOffset) {
-            // Strings that start with a separator but have no digits.
-            // We don't need a backup of ParsedNumber because no changes could have been made to it.
-            segment.setOffset(initialOffset);
-            hasPartialPrefix = true;
-        }
+        // We passed all inspections. Start post-processing.
 
-        if (result.quantity != null) {
-            // The final separator was a decimal separator.
-            result.quantity.adjustMagnitude(-digitsAfterDecimal);
-        }
+        // Adjust for fraction part.
+        digitsConsumed.adjustMagnitude(-digitsAfterDecimalPlace);
 
+        // Set the digits, either normal or exponent.
         if (exponentSign != 0 && segment.getOffset() != initialOffset) {
-            boolean overflow = (exponent == Integer.MAX_VALUE);
-            if (!overflow) {
-                try {
-                    result.quantity.adjustMagnitude(exponentSign * exponent);
-                } catch (ArithmeticException e) {
+            boolean overflow = false;
+            if (digitsConsumed.fitsInLong()) {
+                long exponentLong = digitsConsumed.toLong(false);
+                assert exponentLong >= 0;
+                if (exponentLong <= Integer.MAX_VALUE) {
+                    int exponentInt = (int) exponentLong;
+                    try {
+                        result.quantity.adjustMagnitude(exponentSign * exponentInt);
+                    } catch (ArithmeticException e) {
+                        overflow = true;
+                    }
+                } else {
                     overflow = true;
                 }
+            } else {
+                overflow = true;
             }
             if (overflow) {
                 if (exponentSign == -1) {
@@ -361,9 +395,51 @@ public class DecimalMatcher implements NumberParseMatcher {
                     result.flags |= ParsedNumber.FLAG_INFINITY;
                 }
             }
+        } else {
+            result.quantity = digitsConsumed;
         }
 
-        return segment.length() == 0 || hasPartialPrefix;
+        // Set other information into the result and return.
+        if (actualDecimalString != null) {
+            result.flags |= ParsedNumber.FLAG_HAS_DECIMAL_SEPARATOR;
+        }
+        result.setCharsConsumed(segment);
+        return segment.length() == 0 || maybeMore;
+    }
+
+    private boolean validateGroup(int sepType, int count, boolean isPrimary) {
+        if (requireGroupingMatch) {
+            if (sepType == -1) {
+                // No such group (prevGroup before first shift).
+                return true;
+            } else if (sepType == 0) {
+                // First group.
+                if (isPrimary) {
+                    // No grouping separators is OK.
+                    return true;
+                } else {
+                    return count != 0 && count <= grouping2;
+                }
+            } else if (sepType == 1) {
+                // Middle group.
+                if (isPrimary) {
+                    return count == grouping1;
+                } else {
+                    return count == grouping2;
+                }
+            } else {
+                assert sepType == 2;
+                // After the decimal separator.
+                return true;
+            }
+        } else {
+            if (sepType == 1) {
+                // #11230: don't accept middle groups with only 1 digit.
+                return count != 1;
+            } else {
+                return true;
+            }
+        }
     }
 
     @Override

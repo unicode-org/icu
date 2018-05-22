@@ -760,8 +760,10 @@ parse	output	breaks
 // JDK stops parsing at the spaces. JDK doesn't see space as a grouping separator
 (34  25E-1)	-342.5	K
 (34,,25E-1)	-342.5
-// H doesn't allow trailing separators before E but C and P do
-(34,,25,E-1)	-342.5	CHJP
+// Trailing grouping separators are not OK.
+// H fails; C/J/P stop at the offending separator.
+(34,,25,E-1)	fail	CJKP
+(34,,25,E-1)	-3425	HK
 (34  25 E-1)	-342.5	HK
 (34,,25 E-1)	-342.5	HK
 // Spaces are not allowed after exponent symbol
@@ -999,7 +1001,7 @@ parse	output	breaks
 १३	13	
 १३.३१‍	13.31	
 123'456	123456
-524'1.3	5241.3
+524'11.3	52411.3
 ३'११‍	311
 
 test parse with European-style comma/period
@@ -1442,8 +1444,8 @@ NaN	NaN	K
 1E2147483646	1E+2147483646	HJK
 1E-2147483649	0
 1E-2147483648	0
-// H, K, C and P return zero here
-1E-2147483647	1E-2147483647	CHJKP
+// H and K return zero here
+1E-2147483647	1E-2147483647	HJK
 1E-2147483646	1E-2147483646	HJK
 
 test format push limits
@@ -1476,26 +1478,43 @@ pattern	lenient	parse	output	breaks
 #,##0	1	9 99	999	K
 #,##0	1	9 999	9999	K
 #,##0	1	9 9 9	9	H
-#,##0	1	,9	fail	HK
+#,##0	1	,9	9
 #,##0	1	99,.0	99
+#,##0	1	9 9.	9	H
+#,##0	1	9 99.	999	K
 0	1	9 9	9
 0	1	9 99	9
 0	1	9 999	9
 0	1	9 9 9	9
 0	1	,9	fail
 0	1	99,.0	99
+0	1	9 9.	9
+0	1	9 99.	9
 #,##0	0	9 9	fail	K
 #,##0	0	9 99	fail	K
 #,##0	0	9 999	9999	K
 #,##0	0	9 9 9	fail	K
 #,##0	0	,9	fail	K
 #,##0	0	99,.0	fail	K
+#,##0	0	9 9.	fail	K
+#,##0	0	9 99.	fail	K
 0	0	9 9	9
 0	0	9 99	9
 0	0	9 999	9
 0	0	9 9 9	9
 0	0	,9	fail
 0	0	99,.0	99
+0	0	9 9.	9
+0	0	9 99.	9
+
+test more strict grouping parse
+set locale en
+set pattern #,##,##0
+begin
+lenient	parse	output	breaks
+1	1,23,,	123
+0	9999, 	9999
+0	1,23,,	fail	K
 
 test parse ignorables
 set locale ar

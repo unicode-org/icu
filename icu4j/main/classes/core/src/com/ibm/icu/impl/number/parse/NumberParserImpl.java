@@ -147,8 +147,6 @@ public class NumberParserImpl {
         boolean isStrict = properties.getParseMode() == ParseMode.STRICT;
         Grouper grouper = Grouper.forProperties(properties);
         int parseFlags = 0;
-        // Fraction grouping is disabled by default because it has never been supported in DecimalFormat
-        parseFlags |= ParsingUtils.PARSE_FLAG_FRACTION_GROUPING_DISABLED;
         if (!properties.getParseCaseSensitive()) {
             parseFlags |= ParsingUtils.PARSE_FLAG_IGNORE_CASE;
         }

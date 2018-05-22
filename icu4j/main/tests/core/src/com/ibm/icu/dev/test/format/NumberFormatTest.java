@@ -2875,6 +2875,8 @@ public class NumberFormatTest extends TestFmwk {
                 "1,2",       // wrong number of digits after group separator
                 ",.02",      // leading group separator before decimal
                 "1,.02",     // group separator before decimal
+                ",0",        // leading group separator before a single digit
+                ",1",        // leading group separator before a single digit
                 "1,45",      // wrong number of digits in primary group
                 "1,45 that", // wrong number of digits in primary group
                 "1,45.34",   // wrong number of digits in primary group
@@ -2884,8 +2886,6 @@ public class NumberFormatTest extends TestFmwk {
         };
         // Fail both lenient and strict:
         String[] failBoth = {
-                ",0",        // leading group separator before a single digit
-                ",1",        // leading group separator before a single digit
         };
 
         DecimalFormat nf = (DecimalFormat) NumberFormat.getInstance(Locale.ENGLISH);

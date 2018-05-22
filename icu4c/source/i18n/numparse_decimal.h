@@ -38,8 +38,9 @@ class DecimalMatcher : public NumberParseMatcher, public UMemory {
     /** If true, do not accept grouping separators at all */
     bool groupingDisabled;
 
-    /** If true, do not accept fraction grouping separators */
-    bool fractionGroupingDisabled;
+    // Fraction grouping parsing is disabled for now but could be enabled later.
+    // See http://bugs.icu-project.org/trac/ticket/10794
+    // bool fractionGrouping;
 
     /** If true, do not accept numbers in the fraction */
     bool integerOnly;
@@ -62,6 +63,8 @@ class DecimalMatcher : public NumberParseMatcher, public UMemory {
     LocalPointer<const UnicodeSet> fLocalDecimalUniSet;
     LocalPointer<const UnicodeSet> fLocalSeparatorSet;
     LocalArray<const UnicodeString> fLocalDigitStrings;
+
+    bool validateGroup(int32_t sepType, int32_t count, bool isPrimary) const;
 };
 
 
