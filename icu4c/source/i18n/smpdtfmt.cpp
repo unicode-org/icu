@@ -312,57 +312,6 @@ const NumberFormat *SimpleDateFormat::getNumberFormatByIndex(
     return &(**fSharedNumberFormatters[index]);
 }
 
-class SimpleDateFormatMutableNFNode {
- public:
-    const NumberFormat *key;
-    NumberFormat *value;
-    SimpleDateFormatMutableNFNode()
-            : key(NULL), value(NULL) { }
-    ~SimpleDateFormatMutableNFNode() {
-        delete value;
-    }
- private:
-    SimpleDateFormatMutableNFNode(const SimpleDateFormatMutableNFNode &);
-    SimpleDateFormatMutableNFNode &operator=(const SimpleDateFormatMutableNFNode &);
-};
-
-// Single threaded cache of non const NumberFormats. Designed to be stack
-// allocated and used for a single format call.
-class SimpleDateFormatMutableNFs : public UMemory {
- public:
-    SimpleDateFormatMutableNFs() {
-    }
-
-    // Returns a non-const clone of nf which can be safely modified.
-    // Subsequent calls with same nf will return the same non-const clone.
-    // This object maintains ownership of all returned non-const
-    // NumberFormat objects. On memory allocation error returns NULL.
-    // Caller must check for NULL return value.
-    NumberFormat *get(const NumberFormat *nf) {
-        if (nf == NULL) {
-            return NULL;
-        }
-        int32_t idx = 0;
-        while (nodes[idx].value) {
-            if (nf == nodes[idx].key) {
-                return nodes[idx].value;
-            }
-            ++idx;
-        }
-        U_ASSERT(idx < UDAT_FIELD_COUNT);
-        nodes[idx].key = nf;
-        nodes[idx].value = (NumberFormat *) nf->clone();
-        return nodes[idx].value;
-    }
- private:
-    // +1 extra for sentinel. If each field had its own NumberFormat, this
-    // cache would have to allocate UDAT_FIELD_COUNT mutable versions worst
-    // case.
-    SimpleDateFormatMutableNFNode nodes[UDAT_FIELD_COUNT + 1];
-    SimpleDateFormatMutableNFs(const SimpleDateFormatMutableNFs &);
-    SimpleDateFormatMutableNFs &operator=(const SimpleDateFormatMutableNFs &);
-};
-
 //----------------------------------------------------------------------
 
 SimpleDateFormat::~SimpleDateFormat()
@@ -1023,11 +972,6 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo,
     int32_t fieldNum = 0;
     UDisplayContext capitalizationContext = getContext(UDISPCTX_TYPE_CAPITALIZATION, status);
 
-    // Create temporary cache of mutable number format objects. This way
-    // subFormat won't have to clone the const NumberFormat for each field.
-    // if several fields share the same NumberFormat, which will almost
-    // always be the case, this is a big save.
-    SimpleDateFormatMutableNFs mutableNFs;
     // loop through the pattern string character by character
     for (int32_t i = 0; i < fPattern.length() && U_SUCCESS(status); ++i) {
         UChar ch = fPattern[i];
@@ -1035,7 +979,7 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo,
         // Use subFormat() to format a repeated pattern character
         // when a different pattern or non-pattern character is seen
         if (ch != prevCh && count > 0) {
-            subFormat(appendTo, prevCh, count, capitalizationContext, fieldNum++, handler, *workCal, mutableNFs, status);
+            subFormat(appendTo, prevCh, count, capitalizationContext, fieldNum++, handler, *workCal, status);
             count = 0;
         }
         if (ch == QUOTE) {
@@ -1062,7 +1006,7 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo,
 
     // Format the last item in the pattern, if any
     if (count > 0) {
-        subFormat(appendTo, prevCh, count, capitalizationContext, fieldNum++, handler, *workCal, mutableNFs, status);
+        subFormat(appendTo, prevCh, count, capitalizationContext, fieldNum++, handler, *workCal, status);
     }
 
     if (calClone != NULL) {
@@ -1406,7 +1350,6 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                             int32_t fieldNum,
                             FieldPositionHandler& handler,
                             Calendar& cal,
-                            SimpleDateFormatMutableNFs &mutableNFs,
                             UErrorCode& status) const
 {
     if (U_FAILURE(status)) {
@@ -1444,7 +1387,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         return;
     }
 
-    currentNumberFormat = mutableNFs.get(getNumberFormatByIndex(patternCharIndex));
+    currentNumberFormat = dynamic_cast<NumberFormat*>(getNumberFormatByIndex(patternCharIndex)->clone());
     if (currentNumberFormat == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -1853,7 +1796,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         if (toAppend == NULL || toAppend->isBogus()) {
             // Reformat with identical arguments except ch, now changed to 'a'.
             subFormat(appendTo, 0x61, count, capitalizationContext, fieldNum,
-                      handler, cal, mutableNFs, status);
+                      handler, cal, status);
         } else {
             appendTo += *toAppend;
         }
@@ -1874,7 +1817,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             // Data doesn't exist for the locale we're looking for.
             // Falling back to am/pm.
             subFormat(appendTo, 0x61, count, capitalizationContext, fieldNum,
-                      handler, cal, mutableNFs, status);
+                      handler, cal, status);
             break;
         }
 
@@ -1945,7 +1888,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             periodType == DayPeriodRules::DAYPERIOD_PM ||
             toAppend->isBogus()) {
             subFormat(appendTo, 0x61, count, capitalizationContext, fieldNum,
-                      handler, cal, mutableNFs, status);
+                      handler, cal, status);
         }
         else {
             appendTo += *toAppend;
@@ -2129,7 +2072,6 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     int32_t saveHebrewMonth = -1;
     int32_t count = 0;
     UTimeZoneFormatTimeType tzTimeType = UTZFMT_TIME_TYPE_UNKNOWN;
-    SimpleDateFormatMutableNFs mutableNFs;
 
     // For parsing abutting numeric fields. 'abutPat' is the
     // offset into 'pattern' of the first of 2 or more abutting
@@ -2223,7 +2165,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
                 }
 
                 pos = subParse(text, pos, ch, count,
-                               TRUE, FALSE, ambiguousYear, saveHebrewMonth, *workCal, i, numericLeapMonthFormatter, &tzTimeType, mutableNFs);
+                               TRUE, FALSE, ambiguousYear, saveHebrewMonth, *workCal, i, numericLeapMonthFormatter, &tzTimeType);
 
                 // If the parse fails anywhere in the run, back up to the
                 // start of the run and retry.
@@ -2238,7 +2180,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
             // fields.
             else if (ch != 0x6C) { // pattern char 'l' (SMALL LETTER L) just gets ignored
                 int32_t s = subParse(text, pos, ch, count,
-                               FALSE, TRUE, ambiguousYear, saveHebrewMonth, *workCal, i, numericLeapMonthFormatter, &tzTimeType, mutableNFs, &dayPeriodInt);
+                               FALSE, TRUE, ambiguousYear, saveHebrewMonth, *workCal, i, numericLeapMonthFormatter, &tzTimeType, &dayPeriodInt);
 
                 if (s == -pos-1) {
                     // era not present, in special cases allow this to continue
@@ -2856,7 +2798,7 @@ SimpleDateFormat::set2DigitYearStart(UDate d, UErrorCode& status)
  */
 int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UChar ch, int32_t count,
                            UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], int32_t& saveHebrewMonth, Calendar& cal,
-                           int32_t patLoc, MessageFormat * numericLeapMonthFormatter, UTimeZoneFormatTimeType *tzTimeType, SimpleDateFormatMutableNFs &mutableNFs,
+                           int32_t patLoc, MessageFormat * numericLeapMonthFormatter, UTimeZoneFormatTimeType *tzTimeType,
                            int32_t *dayPeriod) const
 {
     Formattable number;
@@ -2878,7 +2820,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         return -start;
     }
 
-    currentNumberFormat = mutableNFs.get(getNumberFormatByIndex(patternCharIndex));
+    currentNumberFormat = dynamic_cast<NumberFormat*>(getNumberFormatByIndex(patternCharIndex)->clone());
     if (currentNumberFormat == NULL) {
         return -start;
     }
@@ -3559,7 +3501,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         U_ASSERT(dayPeriod != NULL);
         int32_t ampmStart = subParse(text, start, 0x61, count,
                            obeyCount, allowNegative, ambiguousYear, saveHebrewMonth, cal,
-                           patLoc, numericLeapMonthFormatter, tzTimeType, mutableNFs);
+                           patLoc, numericLeapMonthFormatter, tzTimeType);
 
         if (ampmStart > 0) {
             return ampmStart;

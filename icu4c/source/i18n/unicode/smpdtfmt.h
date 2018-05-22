@@ -1268,7 +1268,6 @@ private:
                    int32_t fieldNum,
                    FieldPositionHandler& handler,
                    Calendar& cal,
-                   SimpleDateFormatMutableNFs &mutableNFs,
                    UErrorCode& status) const; // in case of illegal argument
 
     /**
@@ -1414,7 +1413,7 @@ private:
      */
     int32_t subParse(const UnicodeString& text, int32_t& start, char16_t ch, int32_t count,
                      UBool obeyCount, UBool allowNegative, UBool ambiguousYear[], int32_t& saveHebrewMonth, Calendar& cal,
-                     int32_t patLoc, MessageFormat * numericLeapMonthFormatter, UTimeZoneFormatTimeType *tzTimeType, SimpleDateFormatMutableNFs &mutableNFs,
+                     int32_t patLoc, MessageFormat * numericLeapMonthFormatter, UTimeZoneFormatTimeType *tzTimeType,
                      int32_t *dayPeriod=NULL) const;
 
     void parseInt(const UnicodeString& text,
