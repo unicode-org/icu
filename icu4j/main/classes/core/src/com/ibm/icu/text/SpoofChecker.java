@@ -441,6 +441,28 @@ public class SpoofChecker {
      */
     public static final int MIXED_NUMBERS = 128;
 
+    /**
+     * Check that an identifier does not have a combining character following a character in which that
+     * combining character would be hidden; for example 'i' followed by a U+0307 combining dot.
+     * <p>
+     * More specifically, the following characters are forbidden from preceding a U+0307:
+     * <ul>
+     * <li>Those with the Soft_Dotted Unicode property (which includes 'i' and 'j')</li>
+     * <li>Latin lowercase letter 'l'</li>
+     * <li>Dotless 'i' and 'j' ('ı' and 'ȷ', U+0131 and U+0237)</li>
+     * <li>Any character whose confusable prototype ends with such a character
+     * (Soft_Dotted, 'l', 'ı', or 'ȷ')</li>
+     * </ul>
+     * In addition, combining characters are allowed between the above characters and U+0307 except those
+     * with combining class 0 or combining class "Above" (230, same class as U+0307).
+     * <p>
+     * This list and the number of combing characters considered by this check may grow over time.
+     *
+     * @draft ICU 62
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int HIDDEN_OVERLAY = 256;
+
     // Update CheckResult.toString() when a new check is added.
 
     /**
@@ -1300,6 +1322,13 @@ public class SpoofChecker {
             }
         }
 
+        if (0 != (this.fChecks & HIDDEN_OVERLAY)) {
+            int index = findHiddenOverlay(text);
+            if (index != -1) {
+                result |= HIDDEN_OVERLAY;
+            }
+        }
+
         if (0 != (this.fChecks & CHAR_LIMIT)) {
             int i;
             int c;
@@ -1655,6 +1684,44 @@ public class SpoofChecker {
 
         // Section 5.2 step 8:
         return RestrictionLevel.MINIMALLY_RESTRICTIVE;
+    }
+
+    int findHiddenOverlay(String input) {
+        boolean sawLeadCharacter = false;
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i<input.length();) {
+            int cp = input.codePointAt(i);
+            if (sawLeadCharacter && cp == 0x0307) {
+                return i;
+            }
+            int combiningClass = UCharacter.getCombiningClass(cp);
+            // Skip over characters except for those with combining class 0 (non-combining characters) or with
+            // combining class 230 (same class as U+0307)
+            assert UCharacter.getCombiningClass(0x0307) == 230;
+            if (combiningClass == 0 || combiningClass == 230) {
+                sawLeadCharacter = isIllegalCombiningDotLeadCharacter(cp, sb);
+            }
+            i += UCharacter.charCount(cp);
+        }
+        return -1;
+    }
+
+    boolean isIllegalCombiningDotLeadCharacterNoLookup(int cp) {
+        return cp == 'i' || cp == 'j' || cp == 'ı' || cp == 'ȷ' || cp == 'l' ||
+               UCharacter.hasBinaryProperty(cp, UProperty.SOFT_DOTTED);
+    }
+
+    boolean isIllegalCombiningDotLeadCharacter(int cp, StringBuilder sb) {
+        if (isIllegalCombiningDotLeadCharacterNoLookup(cp)) {
+            return true;
+        }
+        sb.setLength(0);
+        fSpoofData.confusableLookup(cp, sb);
+        int finalCp = UCharacter.codePointBefore(sb, sb.length());
+        if (finalCp != cp && isIllegalCombiningDotLeadCharacterNoLookup(finalCp)) {
+            return true;
+        }
+        return false;
     }
 
     // Data Members

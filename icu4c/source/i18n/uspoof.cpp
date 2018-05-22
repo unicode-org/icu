@@ -558,6 +558,13 @@ int32_t checkImpl(const SpoofImpl* This, const UnicodeString& id, CheckResult* c
         checkResult->fNumerics = numerics;  // UnicodeSet::operator=
     }
 
+    if (0 != (This->fChecks & USPOOF_HIDDEN_OVERLAY)) {
+        int32_t index = This->findHiddenOverlay(id, *status);
+        if (index != -1) {
+            result |= USPOOF_HIDDEN_OVERLAY;
+        }
+    }
+
 
     if (0 != (This->fChecks & USPOOF_CHAR_LIMIT)) {
         int32_t i;
