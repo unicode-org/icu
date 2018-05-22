@@ -1566,18 +1566,15 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     case UDAT_FRACTIONAL_SECOND_FIELD:
         // Fractional seconds left-justify
         {
-            currentNumberFormat->setMinimumIntegerDigits((count > 3) ? 3 : count);
-            currentNumberFormat->setMaximumIntegerDigits(maxIntCount);
+            int32_t minDigits = (count > 3) ? 3 : count;
             if (count == 1) {
                 value /= 100;
             } else if (count == 2) {
                 value /= 10;
             }
-            FieldPosition p(FieldPosition::DONT_CARE);
-            currentNumberFormat->format(value, appendTo, p);
+            zeroPaddingNumber(currentNumberFormat, appendTo, value, minDigits, maxIntCount);
             if (count > 3) {
-                currentNumberFormat->setMinimumIntegerDigits(count - 3);
-                currentNumberFormat->format((int32_t)0, appendTo, p);
+                zeroPaddingNumber(currentNumberFormat, appendTo, 0, count - 3, maxIntCount);
             }
         }
         break;
