@@ -53,6 +53,7 @@
 #include "unicode/vtzone.h"
 #include "unicode/udisplaycontext.h"
 #include "unicode/brkiter.h"
+#include "unicode/rbnf.h"
 #include "uresimp.h"
 #include "olsontz.h"
 #include "patternprops.h"
@@ -2069,7 +2070,6 @@ SimpleDateFormat::zeroPaddingNumber(
             }
         }
     }
-
     if (fastFormatter != nullptr) {
         // Can use fast path
         number::impl::UFormattedNumberData result;
@@ -2080,9 +2080,19 @@ SimpleDateFormat::zeroPaddingNumber(
             return;
         }
         appendTo.append(result.string.toTempUnicodeString());
+        return;
+    }
 
-    } else if (currentNumberFormat != nullptr) {
-        // Fall back to slow path
+    // Check for RBNF (no clone necessary)
+    auto* rbnf = dynamic_cast<const RuleBasedNumberFormat*>(currentNumberFormat);
+    if (rbnf != nullptr) {
+        FieldPosition pos(FieldPosition::DONT_CARE);
+        rbnf->format(value, appendTo, pos);  // 3rd arg is there to speed up processing
+        return;
+    }
+
+    // Fall back to slow path (clone and mutate the NumberFormat)
+    if (currentNumberFormat != nullptr) {
         FieldPosition pos(FieldPosition::DONT_CARE);
         LocalPointer<NumberFormat> nf(dynamic_cast<NumberFormat*>(currentNumberFormat->clone()));
         nf->setMinimumIntegerDigits(minDigits);
