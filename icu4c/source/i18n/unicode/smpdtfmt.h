@@ -1420,14 +1420,14 @@ private:
                   Formattable& number,
                   ParsePosition& pos,
                   UBool allowNegative,
-                  NumberFormat *fmt) const;
+                  const NumberFormat *fmt) const;
 
     void parseInt(const UnicodeString& text,
                   Formattable& number,
                   int32_t maxDigits,
                   ParsePosition& pos,
                   UBool allowNegative,
-                  NumberFormat *fmt) const;
+                  const NumberFormat *fmt) const;
 
     int32_t checkIntSuffix(const UnicodeString& text, int32_t start,
                            int32_t patLoc, UBool isNegative) const;
