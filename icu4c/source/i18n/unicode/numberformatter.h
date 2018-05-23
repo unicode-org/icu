@@ -80,6 +80,7 @@ U_NAMESPACE_BEGIN
 
 // Forward declarations:
 class IFixedDecimal;
+class FieldPositionIteratorHandler;
 
 namespace numparse {
 namespace impl {
@@ -2514,6 +2515,12 @@ class U_I18N_API FormattedNumber : public UMemory {
      *  @internal
      */
     void getDecimalQuantity(impl::DecimalQuantity& output, UErrorCode& status) const;
+
+    /**
+     * Populates the mutable builder type FieldPositionIteratorHandler.
+     * @internal
+     */
+    void getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
 
 #endif
 

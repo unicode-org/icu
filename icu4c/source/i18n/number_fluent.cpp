@@ -14,6 +14,7 @@
 #include "number_utils.h"
 #include "number_utypes.h"
 #include "util.h"
+#include "fphdlimp.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -813,17 +814,16 @@ UBool FormattedNumber::nextFieldPosition(FieldPosition& fieldPosition, UErrorCod
 }
 
 void FormattedNumber::populateFieldPositionIterator(FieldPositionIterator& iterator, UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    if (fResults == nullptr) {
-        status = fErrorCode;
-        return;
-    }
-    fResults->string.getAllFieldPositions(iterator, status);
+    getAllFieldPositions(iterator, status);
 }
 
 void FormattedNumber::getAllFieldPositions(FieldPositionIterator& iterator, UErrorCode& status) const {
+    FieldPositionIteratorHandler fpih(&iterator, status);
+    getAllFieldPositionsImpl(fpih, status);
+}
+
+void FormattedNumber::getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpih,
+                                               UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return;
     }
@@ -831,7 +831,7 @@ void FormattedNumber::getAllFieldPositions(FieldPositionIterator& iterator, UErr
         status = fErrorCode;
         return;
     }
-    fResults->string.getAllFieldPositions(iterator, status);
+    fResults->string.getAllFieldPositions(fpih, status);
 }
 
 void FormattedNumber::getDecimalQuantity(DecimalQuantity& output, UErrorCode& status) const {

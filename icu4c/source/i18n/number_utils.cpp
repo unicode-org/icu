@@ -17,6 +17,7 @@
 #include "decContext.h"
 #include "decNumber.h"
 #include "double-conversion.h"
+#include "fphdlimp.h"
 #include "uresimp.h"
 #include "ureslocs.h"
 #include "number_utypes.h"
@@ -111,7 +112,8 @@ UnicodeString& LocalizedNumberFormatterAsFormat::format(const Formattable& obj, 
     }
     appendTo.append(data.string.toTempUnicodeString());
     if (posIter != nullptr) {
-        data.string.getAllFieldPositions(*posIter, status);
+        FieldPositionIteratorHandler fpih(posIter, status);
+        data.string.getAllFieldPositions(fpih, status);
     }
     return appendTo;
 }

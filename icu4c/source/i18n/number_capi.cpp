@@ -9,6 +9,7 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
+#include "fphdlimp.h"
 #include "number_utypes.h"
 #include "numparse_types.h"
 #include "unicode/numberformatter.h"
@@ -189,8 +190,9 @@ unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPosition
         return;
     }
 
-    auto* helper = reinterpret_cast<FieldPositionIterator*>(ufpositer);
-    result->string.getAllFieldPositions(*helper, *ec);
+    auto* fpi = reinterpret_cast<FieldPositionIterator*>(ufpositer);
+    FieldPositionIteratorHandler fpih(fpi, *ec);
+    result->string.getAllFieldPositions(fpih, *ec);
 }
 
 U_CAPI void U_EXPORT2

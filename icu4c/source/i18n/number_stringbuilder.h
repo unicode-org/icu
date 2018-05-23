@@ -14,6 +14,7 @@
 #include "cstring.h"
 #include "uassert.h"
 #include "number_types.h"
+#include "fphdlimp.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
@@ -103,7 +104,7 @@ class U_I18N_API NumberStringBuilder : public UMemory {
 
     bool nextFieldPosition(FieldPosition& fp, UErrorCode& status) const;
 
-    void getAllFieldPositions(FieldPositionIterator& fpi, UErrorCode& status) const;
+    void getAllFieldPositions(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
 
   private:
     bool fUsingHeap = false;
