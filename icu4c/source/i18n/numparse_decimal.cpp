@@ -68,7 +68,7 @@ DecimalMatcher::DecimalMatcher(const DecimalFormatSymbols& symbols, const Groupe
         leadSet = nullptr;
     }
 
-    int cpZero = symbols.getCodePointZero();
+    UChar32 cpZero = symbols.getCodePointZero();
     if (cpZero == -1 || !u_isdigit(cpZero) || u_digit(cpZero, 10) != 0) {
         // Uncommon case: okay to allocate.
         auto digitStrings = new UnicodeString[10];
@@ -159,9 +159,9 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
 
         // Try by digit string.
         if (digit == -1 && !fLocalDigitStrings.isNull()) {
-            for (int i = 0; i < 10; i++) {
+            for (int32_t i = 0; i < 10; i++) {
                 const UnicodeString& str = fLocalDigitStrings[i];
-                int overlap = segment.getCommonPrefixLength(str);
+                int32_t overlap = segment.getCommonPrefixLength(str);
                 if (overlap == str.length()) {
                     segment.adjustOffset(overlap);
                     digit = static_cast<int8_t>(i);
@@ -192,7 +192,7 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
         // 1) Attempt the decimal separator string literal.
         // if (we have not seen a decimal separator yet) { ... }
         if (actualDecimalString.isBogus()) {
-            int overlap = segment.getCommonPrefixLength(decimalSeparator);
+            int32_t overlap = segment.getCommonPrefixLength(decimalSeparator);
             maybeMore = maybeMore || (overlap == segment.length());
             if (overlap == decimalSeparator.length()) {
                 isDecimal = true;
@@ -202,7 +202,7 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
 
         // 2) Attempt to match the actual grouping string literal.
         if (!actualGroupingString.isBogus()) {
-            int overlap = segment.getCommonPrefixLength(actualGroupingString);
+            int32_t overlap = segment.getCommonPrefixLength(actualGroupingString);
             maybeMore = maybeMore || (overlap == segment.length());
             if (overlap == actualGroupingString.length()) {
                 isGrouping = true;
@@ -212,7 +212,7 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
         // 2.5) Attempt to match a new the grouping separator string literal.
         // if (we have not seen a grouping or decimal separator yet) { ... }
         if (!groupingDisabled && actualGroupingString.isBogus() && actualDecimalString.isBogus()) {
-            int overlap = segment.getCommonPrefixLength(groupingSeparator);
+            int32_t overlap = segment.getCommonPrefixLength(groupingSeparator);
             maybeMore = maybeMore || (overlap == segment.length());
             if (overlap == groupingSeparator.length()) {
                 isGrouping = true;
@@ -316,7 +316,7 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
         // The cases we need to handle here are lone digits.
         // Examples: "1,1"  "1,1,"  "1,1,1"  "1,1,1,"  ",1" (all parse as 1)
         // See more examples in numberformattestspecification.txt
-        int digitsToRemove = 0;
+        int32_t digitsToRemove = 0;
         if (!prevValidSecondary) {
             segment.setOffset(prevGroupOffset);
             digitsToRemove += prevGroupCount;
@@ -355,7 +355,7 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
     if (exponentSign != 0 && segment.getOffset() != initialOffset) {
         bool overflow = false;
         if (digitsConsumed.fitsInLong()) {
-            long exponentLong = digitsConsumed.toLong(false);
+            int64_t exponentLong = digitsConsumed.toLong(false);
             U_ASSERT(exponentLong >= 0);
             if (exponentLong <= INT32_MAX) {
                 auto exponentInt = static_cast<int32_t>(exponentLong);
@@ -436,7 +436,7 @@ bool DecimalMatcher::smokeTest(const StringSegment& segment) const {
     if (fLocalDigitStrings.isNull()) {
         return false;
     }
-    for (int i = 0; i < 10; i++) {
+    for (int32_t i = 0; i < 10; i++) {
         if (segment.startsWith(fLocalDigitStrings[i])) {
             return true;
         }
