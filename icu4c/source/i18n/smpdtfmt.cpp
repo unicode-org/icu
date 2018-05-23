@@ -72,6 +72,7 @@
 #include "cstr.h"
 #include "dayperiodrules.h"
 #include "tznames_impl.h"   // ZONE_NAME_U16_MAX
+#include "number_utypes.h"
 
 #if defined( U_DEBUG_CALSVC ) || defined (U_DEBUG_CAL)
 #include <stdio.h>
@@ -323,6 +324,7 @@ SimpleDateFormat::~SimpleDateFormat()
     if (fTimeZoneFormat) {
         delete fTimeZoneFormat;
     }
+    freeFastNumberFormatters();
 
 #if !UCONFIG_NO_BREAK_ITERATION
     delete fCapitalizationBrkIter;
@@ -608,6 +610,10 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
         }
     }
 
+    UErrorCode localStatus = U_ZERO_ERROR;
+    freeFastNumberFormatters();
+    initFastNumberFormatters(localStatus);
+
     return *this;
 }
 
@@ -857,7 +863,8 @@ SimpleDateFormat::initialize(const Locale& locale,
         fixNumberFormatForDates(*fNumberFormat);
         //fNumberFormat->setLenient(TRUE); // Java uses a custom DateNumberFormat to format/parse
 
-        initNumberFormatters(locale,status);
+        initNumberFormatters(locale, status);
+        initFastNumberFormatters(status);
 
     }
     else if (U_SUCCESS(status))
@@ -1201,6 +1208,43 @@ _appendSymbolWithMonthPattern(UnicodeString& dst, int32_t value, const UnicodeSt
 }
 
 //----------------------------------------------------------------------
+
+static number::LocalizedNumberFormatter*
+createFastFormatter(const DecimalFormat* df, int32_t minInt, int32_t maxInt) {
+    return new number::LocalizedNumberFormatter(
+            df->toNumberFormatter()
+                    .integerWidth(number::IntegerWidth::zeroFillTo(minInt).truncateAt(maxInt)));
+}
+
+void SimpleDateFormat::initFastNumberFormatters(UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    auto* df = dynamic_cast<const DecimalFormat*>(fNumberFormat);
+    if (df == nullptr) {
+        return;
+    }
+    fFastNumberFormatters[SMPDTFMT_NF_1x10] = createFastFormatter(df, 1, 10);
+    fFastNumberFormatters[SMPDTFMT_NF_2x10] = createFastFormatter(df, 2, 10);
+    fFastNumberFormatters[SMPDTFMT_NF_3x10] = createFastFormatter(df, 3, 10);
+    fFastNumberFormatters[SMPDTFMT_NF_4x10] = createFastFormatter(df, 4, 10);
+    fFastNumberFormatters[SMPDTFMT_NF_2x2] = createFastFormatter(df, 2, 2);
+}
+
+void SimpleDateFormat::freeFastNumberFormatters() {
+    delete fFastNumberFormatters[SMPDTFMT_NF_1x10];
+    delete fFastNumberFormatters[SMPDTFMT_NF_2x10];
+    delete fFastNumberFormatters[SMPDTFMT_NF_3x10];
+    delete fFastNumberFormatters[SMPDTFMT_NF_4x10];
+    delete fFastNumberFormatters[SMPDTFMT_NF_2x2];
+    fFastNumberFormatters[SMPDTFMT_NF_1x10] = nullptr;
+    fFastNumberFormatters[SMPDTFMT_NF_2x10] = nullptr;
+    fFastNumberFormatters[SMPDTFMT_NF_3x10] = nullptr;
+    fFastNumberFormatters[SMPDTFMT_NF_4x10] = nullptr;
+    fFastNumberFormatters[SMPDTFMT_NF_2x2] = nullptr;
+}
+
+
 void
 SimpleDateFormat::initNumberFormatters(const Locale &locale,UErrorCode &status) {
     if (U_FAILURE(status)) {
@@ -1945,6 +1989,11 @@ void SimpleDateFormat::adoptNumberFormat(NumberFormat *formatToAdopt) {
         freeSharedNumberFormatters(fSharedNumberFormatters);
         fSharedNumberFormatters = NULL;
     }
+
+    // Also re-compute the fast formatters.
+    UErrorCode localStatus = U_ZERO_ERROR;
+    freeFastNumberFormatters();
+    initFastNumberFormatters(localStatus);
 }
 
 void SimpleDateFormat::adoptNumberFormat(const UnicodeString& fields, NumberFormat *formatToAdopt, UErrorCode &status){
@@ -2000,9 +2049,41 @@ SimpleDateFormat::zeroPaddingNumber(
         UnicodeString &appendTo,
         int32_t value, int32_t minDigits, int32_t maxDigits) const
 {
-    if (currentNumberFormat!=NULL) {
-        FieldPosition pos(FieldPosition::DONT_CARE);
+    const number::LocalizedNumberFormatter* fastFormatter = nullptr;
+    // NOTE: This uses the heuristic that these five min/max int settings account for the vast majority
+    // of SimpleDateFormat number formatting cases at the time of writing (ICU 62).
+    if (currentNumberFormat == fNumberFormat) {
+        if (maxDigits == 10) {
+            if (minDigits == 1) {
+                fastFormatter = fFastNumberFormatters[SMPDTFMT_NF_1x10];
+            } else if (minDigits == 2) {
+                fastFormatter = fFastNumberFormatters[SMPDTFMT_NF_2x10];
+            } else if (minDigits == 3) {
+                fastFormatter = fFastNumberFormatters[SMPDTFMT_NF_3x10];
+            } else if (minDigits == 4) {
+                fastFormatter = fFastNumberFormatters[SMPDTFMT_NF_4x10];
+            }
+        } else if (maxDigits == 2) {
+            if (minDigits == 2) {
+                fastFormatter = fFastNumberFormatters[SMPDTFMT_NF_2x2];
+            }
+        }
+    }
 
+    if (fastFormatter != nullptr) {
+        // Can use fast path
+        number::impl::UFormattedNumberData result;
+        result.quantity.setToInt(value);
+        UErrorCode localStatus = U_ZERO_ERROR;
+        fastFormatter->formatImpl(&result, localStatus);
+        if (U_FAILURE(localStatus)) {
+            return;
+        }
+        appendTo.append(result.string.toTempUnicodeString());
+
+    } else if (currentNumberFormat != nullptr) {
+        // Fall back to slow path
+        FieldPosition pos(FieldPosition::DONT_CARE);
         LocalPointer<NumberFormat> nf(dynamic_cast<NumberFormat*>(currentNumberFormat->clone()));
         nf->setMinimumIntegerDigits(minDigits);
         nf->setMaximumIntegerDigits(maxDigits);

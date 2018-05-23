@@ -50,6 +50,10 @@ class TimeZoneFormat;
 class SharedNumberFormat;
 class SimpleDateFormatMutableNFs;
 
+namespace number {
+class LocalizedNumberFormatter;
+}
+
 /**
  *
  * SimpleDateFormat is a concrete class for formatting and parsing dates in a
@@ -1495,6 +1499,16 @@ private:
     int32_t skipUWhiteSpace(const UnicodeString& text, int32_t pos) const;
 
     /**
+     * Initialize LocalizedNumberFormatter instances used for speedup.
+     */
+    void initFastNumberFormatters(UErrorCode& status);
+
+    /**
+     * Delete the LocalizedNumberFormatter instances used for speedup.
+     */
+    void freeFastNumberFormatters();
+
+    /**
      * Initialize NumberFormat instances used for numbering system overrides.
      */
     void initNumberFormatters(const Locale &locale,UErrorCode &status);
@@ -1609,6 +1623,20 @@ private:
      * to fNumberFormat in DateFormat.
      */
     const SharedNumberFormat    **fSharedNumberFormatters;
+
+    enum NumberFormatterKey {
+        SMPDTFMT_NF_1x10,
+        SMPDTFMT_NF_2x10,
+        SMPDTFMT_NF_3x10,
+        SMPDTFMT_NF_4x10,
+        SMPDTFMT_NF_2x2,
+        SMPDTFMT_NF_COUNT
+    };
+
+    /**
+     * Number formatters pre-allocated for fast performance on the most common integer lengths.
+     */
+    const number::LocalizedNumberFormatter* fFastNumberFormatters[SMPDTFMT_NF_COUNT] = {};
 
     UBool fHaveDefaultCentury;
 
