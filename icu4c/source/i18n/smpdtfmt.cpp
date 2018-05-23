@@ -2809,7 +2809,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     UErrorCode status = U_ZERO_ERROR;
     ParsePosition pos(0);
     UDateFormatField patternCharIndex = DateFormatSymbols::getPatternCharIndex(ch);
-    NumberFormat *currentNumberFormat;
+    const NumberFormat *currentNumberFormat;
     UnicodeString temp;
     UBool gotNumber = FALSE;
 
@@ -2821,7 +2821,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         return -start;
     }
 
-    currentNumberFormat = dynamic_cast<NumberFormat*>(getNumberFormatByIndex(patternCharIndex)->clone());
+    currentNumberFormat = getNumberFormatByIndex(patternCharIndex);
     if (currentNumberFormat == NULL) {
         return -start;
     }
@@ -3649,7 +3649,7 @@ void SimpleDateFormat::parseInt(const UnicodeString& text,
                                 Formattable& number,
                                 ParsePosition& pos,
                                 UBool allowNegative,
-                                NumberFormat *fmt) const {
+                                const NumberFormat *fmt) const {
     parseInt(text, number, -1, pos, allowNegative,fmt);
 }
 
@@ -3661,16 +3661,21 @@ void SimpleDateFormat::parseInt(const UnicodeString& text,
                                 int32_t maxDigits,
                                 ParsePosition& pos,
                                 UBool allowNegative,
-                                NumberFormat *fmt) const {
+                                const NumberFormat *fmt) const {
     UnicodeString oldPrefix;
-    DecimalFormat* df = NULL;
-    if (!allowNegative && (df = dynamic_cast<DecimalFormat*>(fmt)) != NULL) {
+    const DecimalFormat* fmtAsDF = dynamic_cast<const DecimalFormat*>(fmt);
+    LocalPointer<DecimalFormat> df;
+    if (fmtAsDF != nullptr) {
+        df.adoptInstead(dynamic_cast<DecimalFormat*>(fmtAsDF->clone()));
+    }
+    if (!allowNegative && !df.isNull()) {
+        fmt = df.getAlias();
         df->getNegativePrefix(oldPrefix);
         df->setNegativePrefix(UnicodeString(TRUE, SUPPRESS_NEGATIVE_PREFIX, -1));
     }
     int32_t oldPos = pos.getIndex();
     fmt->parse(text, number, pos);
-    if (df != NULL) {
+    if (!df.isNull()) {
         df->setNegativePrefix(oldPrefix);
     }
 
