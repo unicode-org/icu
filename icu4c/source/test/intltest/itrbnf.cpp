@@ -76,6 +76,7 @@ void IntlTestRBNF::runIndexedTest(int32_t index, UBool exec, const char* &name, 
         TESTCASE(24, TestLargeNumbers);
         TESTCASE(25, TestCompactDecimalFormatStyle);
         TESTCASE(26, TestParseFailure);
+        TESTCASE(27, TestMinMaxIntegerDigitsIgnored);
 #else
         TESTCASE(0, TestRBNFDisabled);
 #endif
@@ -2298,6 +2299,21 @@ void IntlTestRBNF::TestParseFailure() {
             errln("FAIL: string should be unparseable index=%d %s", i, u_errorName(status));
         }
     }
+}
+
+void IntlTestRBNF::TestMinMaxIntegerDigitsIgnored() {
+    IcuTestErrorCode status(*this, "TestMinMaxIntegerDigitsIgnored");
+
+    // NOTE: SimpleDateFormat has an optimization that depends on the fact that min/max integer digits
+    // do not affect RBNF (see SimpleDateFormat#zeroPaddingNumber).
+    RuleBasedNumberFormat rbnf(URBNF_SPELLOUT, "en", status);
+    rbnf.setMinimumIntegerDigits(2);
+    rbnf.setMaximumIntegerDigits(3);
+    UnicodeString result;
+    rbnf.format(3, result.remove(), status);
+    assertEquals("Min integer digits are ignored", u"three", result);
+    rbnf.format(1012, result.remove(), status);
+    assertEquals("Max integer digits are ignored", u"one thousand twelve", result);
 }
 
 void 
