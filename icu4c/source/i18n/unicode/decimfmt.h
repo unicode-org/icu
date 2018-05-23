@@ -2130,6 +2130,9 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     static void fieldPositionHelper(const number::FormattedNumber& formatted, FieldPosition& fieldPosition,
                                     int32_t offset, UErrorCode& status);
 
+    static void fieldPositionIteratorHelper(const number::FormattedNumber& formatted,
+                                            FieldPositionIterator* fpi, int32_t offset, UErrorCode& status);
+
     void setupFastFormat();
 
     bool fastFormatDouble(double input, UnicodeString& output) const;

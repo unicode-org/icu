@@ -212,6 +212,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11913_BigDecimal);
   TESTCASE_AUTO(Test11020_RoundingInScientificNotation);
   TESTCASE_AUTO(Test11640_TripleCurrencySymbol);
+  TESTCASE_AUTO(Test13763_FieldPositionIteratorOffset);
   TESTCASE_AUTO_END;
 }
 
@@ -9046,6 +9047,24 @@ void NumberFormatTest::Test11640_TripleCurrencySymbol() {
     dFormat.getPositivePrefix(result);
     assertEquals("Triple-currency should give long name on getPositivePrefix",
                 "US dollars ", result);
+}
+
+
+void NumberFormatTest::Test13763_FieldPositionIteratorOffset() {
+    IcuTestErrorCode status(*this, "Test13763_FieldPositionIteratorOffset");
+    FieldPositionIterator fpi;
+    UnicodeString result(u"foo\U0001F4FBbar"); // 8 code units
+    LocalPointer<NumberFormat> nf(NumberFormat::createInstance("en", status));
+    nf->format(5142.3, result, &fpi, status);
+
+    int32_t expected[] = {
+      UNUM_GROUPING_SEPARATOR_FIELD, 9, 10,
+      UNUM_INTEGER_FIELD, 8, 13,
+      UNUM_DECIMAL_SEPARATOR_FIELD, 13, 14,
+      UNUM_FRACTION_FIELD, 14, 15,
+    };
+    int32_t tupleCount = UPRV_LENGTHOF(expected)/3;
+    expectPositions(fpi, expected, tupleCount, result);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

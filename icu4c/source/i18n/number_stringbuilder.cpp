@@ -7,7 +7,6 @@
 
 #include "number_stringbuilder.h"
 #include "unicode/utf16.h"
-#include "uvectr32.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -461,29 +460,18 @@ bool NumberStringBuilder::nextFieldPosition(FieldPosition& fp, UErrorCode& statu
     return seenStart;
 }
 
-void NumberStringBuilder::getAllFieldPositions(FieldPositionIterator& fpi, UErrorCode& status) const {
-    // TODO: Set an initial capacity on uvec?
-    LocalPointer <UVector32> uvec(new UVector32(status), status);
-    if (U_FAILURE(status)) {
-        return;
-    }
-
+void NumberStringBuilder::getAllFieldPositions(FieldPositionIteratorHandler& fpih,
+                                               UErrorCode& status) const {
     Field current = UNUM_FIELD_COUNT;
     int32_t currentStart = -1;
     for (int32_t i = 0; i < fLength; i++) {
         Field field = fieldAt(i);
         if (current == UNUM_INTEGER_FIELD && field == UNUM_GROUPING_SEPARATOR_FIELD) {
             // Special case: GROUPING_SEPARATOR counts as an INTEGER.
-            // Add the field, followed by the start index, followed by the end index to uvec.
-            uvec->addElement(UNUM_GROUPING_SEPARATOR_FIELD, status);
-            uvec->addElement(i, status);
-            uvec->addElement(i + 1, status);
+            fpih.addAttribute(UNUM_GROUPING_SEPARATOR_FIELD, i, i + 1);
         } else if (current != field) {
             if (current != UNUM_FIELD_COUNT) {
-                // Add the field, followed by the start index, followed by the end index to uvec.
-                uvec->addElement(current, status);
-                uvec->addElement(currentStart, status);
-                uvec->addElement(i, status);
+                fpih.addAttribute(current, currentStart, i);
             }
             current = field;
             currentStart = i;
@@ -493,14 +481,8 @@ void NumberStringBuilder::getAllFieldPositions(FieldPositionIterator& fpi, UErro
         }
     }
     if (current != UNUM_FIELD_COUNT) {
-        // Add the field, followed by the start index, followed by the end index to uvec.
-        uvec->addElement(current, status);
-        uvec->addElement(currentStart, status);
-        uvec->addElement(fLength, status);
+        fpih.addAttribute(current, currentStart, fLength);
     }
-
-    // Give uvec to the FieldPositionIterator, which adopts it.
-    fpi.setData(uvec.orphan(), status);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

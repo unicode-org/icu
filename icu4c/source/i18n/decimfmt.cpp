@@ -453,9 +453,7 @@ DecimalFormat::format(double number, UnicodeString& appendTo, FieldPositionItera
         return appendTo;
     }
     FormattedNumber output = fields->formatter->formatDouble(number, status);
-    if (posIter != nullptr) {
-        output.populateFieldPositionIterator(*posIter, status);
-    }
+    fieldPositionIteratorHelper(output, posIter, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable);
     return appendTo;
@@ -507,9 +505,7 @@ DecimalFormat::format(int64_t number, UnicodeString& appendTo, FieldPositionIter
         return appendTo;
     }
     FormattedNumber output = fields->formatter->formatInt(number, status);
-    if (posIter != nullptr) {
-        output.populateFieldPositionIterator(*posIter, status);
-    }
+    fieldPositionIteratorHelper(output, posIter, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable);
     return appendTo;
@@ -519,9 +515,7 @@ UnicodeString&
 DecimalFormat::format(StringPiece number, UnicodeString& appendTo, FieldPositionIterator* posIter,
                       UErrorCode& status) const {
     FormattedNumber output = fields->formatter->formatDecimal(number, status);
-    if (posIter != nullptr) {
-        output.populateFieldPositionIterator(*posIter, status);
-    }
+    fieldPositionIteratorHelper(output, posIter, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable);
     return appendTo;
@@ -530,9 +524,7 @@ DecimalFormat::format(StringPiece number, UnicodeString& appendTo, FieldPosition
 UnicodeString& DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo,
                                      FieldPositionIterator* posIter, UErrorCode& status) const {
     FormattedNumber output = fields->formatter->formatDecimalQuantity(number, status);
-    if (posIter != nullptr) {
-        output.populateFieldPositionIterator(*posIter, status);
-    }
+    fieldPositionIteratorHelper(output, posIter, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
     output.appendTo(appendable);
     return appendTo;
@@ -1237,8 +1229,18 @@ DecimalFormat::fieldPositionHelper(const number::FormattedNumber& formatted, Fie
     fieldPosition.setEndIndex(0);
     bool found = formatted.nextFieldPosition(fieldPosition, status);
     if (found && offset != 0) {
-        fieldPosition.setBeginIndex(fieldPosition.getBeginIndex() + offset);
-        fieldPosition.setEndIndex(fieldPosition.getEndIndex() + offset);
+        FieldPositionOnlyHandler fpoh(fieldPosition);
+        fpoh.shiftLast(offset);
+    }
+}
+
+void
+DecimalFormat::fieldPositionIteratorHelper(const number::FormattedNumber& formatted, FieldPositionIterator* fpi,
+                                           int32_t offset, UErrorCode& status) {
+    if (fpi != nullptr) {
+        FieldPositionIteratorHandler fpih(fpi, status);
+        fpih.setShift(offset);
+        formatted.getAllFieldPositionsImpl(fpih, status);
     }
 }
 
