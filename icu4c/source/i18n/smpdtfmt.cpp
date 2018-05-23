@@ -3754,21 +3754,19 @@ void SimpleDateFormat::parseInt(const UnicodeString& text,
                                 UBool allowNegative,
                                 const NumberFormat *fmt) const {
     UnicodeString oldPrefix;
-    const DecimalFormat* fmtAsDF = dynamic_cast<const DecimalFormat*>(fmt);
+    auto* fmtAsDF = dynamic_cast<const DecimalFormat*>(fmt);
     LocalPointer<DecimalFormat> df;
-    if (fmtAsDF != nullptr) {
+    if (!allowNegative && fmtAsDF != nullptr) {
         df.adoptInstead(dynamic_cast<DecimalFormat*>(fmtAsDF->clone()));
-    }
-    if (!allowNegative && !df.isNull()) {
-        fmt = df.getAlias();
-        df->getNegativePrefix(oldPrefix);
+        if (df.isNull()) {
+            // Memory allocation error
+            return;
+        }
         df->setNegativePrefix(UnicodeString(TRUE, SUPPRESS_NEGATIVE_PREFIX, -1));
+        fmt = df.getAlias();
     }
     int32_t oldPos = pos.getIndex();
     fmt->parse(text, number, pos);
-    if (!df.isNull()) {
-        df->setNegativePrefix(oldPrefix);
-    }
 
     if (maxDigits > 0) {
         // adjust the result to fit into
