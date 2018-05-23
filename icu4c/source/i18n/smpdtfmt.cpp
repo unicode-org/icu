@@ -1362,7 +1362,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     UDateFormatField patternCharIndex = DateFormatSymbols::getPatternCharIndex(ch);
     const int32_t maxIntCount = 10;
     int32_t beginOffset = appendTo.length();
-    NumberFormat *currentNumberFormat;
+    const NumberFormat *currentNumberFormat;
     DateFormatSymbols::ECapitalizationContextUsageType capContextUsageType = DateFormatSymbols::kCapContextUsageOther;
 
     UBool isHebrewCalendar = (uprv_strcmp(cal.getType(),"hebrew") == 0);
@@ -1387,9 +1387,9 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         return;
     }
 
-    currentNumberFormat = dynamic_cast<NumberFormat*>(getNumberFormatByIndex(patternCharIndex)->clone());
+    currentNumberFormat = getNumberFormatByIndex(patternCharIndex);
     if (currentNumberFormat == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+        status = U_INTERNAL_PROGRAM_ERROR;
         return;
     }
     UnicodeString hebr("hebr", 4, US_INV);
@@ -1996,16 +1996,17 @@ SimpleDateFormat::getNumberFormatForField(UChar field) const {
 //----------------------------------------------------------------------
 void
 SimpleDateFormat::zeroPaddingNumber(
-        NumberFormat *currentNumberFormat,
+        const NumberFormat *currentNumberFormat,
         UnicodeString &appendTo,
         int32_t value, int32_t minDigits, int32_t maxDigits) const
 {
     if (currentNumberFormat!=NULL) {
         FieldPosition pos(FieldPosition::DONT_CARE);
 
-        currentNumberFormat->setMinimumIntegerDigits(minDigits);
-        currentNumberFormat->setMaximumIntegerDigits(maxDigits);
-        currentNumberFormat->format(value, appendTo, pos);  // 3rd arg is there to speed up processing
+        LocalPointer<NumberFormat> nf(dynamic_cast<NumberFormat*>(currentNumberFormat->clone()));
+        nf->setMinimumIntegerDigits(minDigits);
+        nf->setMaximumIntegerDigits(maxDigits);
+        nf->format(value, appendTo, pos);  // 3rd arg is there to speed up processing
     }
 }
 
