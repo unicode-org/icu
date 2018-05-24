@@ -6154,4 +6154,11 @@ public class NumberFormatTest extends TestFmwk {
         df.applyLocalizedPattern("c0!d0"); // should not throw
         assertEquals("should apply the localized pattern", df.getNegativePrefix(), "d");
     }
+
+    @Test
+    public void test13777_ParseLongNameNonCurrencyMode() {
+        // Currency long name should round-trip even when non-currency parsing is used.
+        NumberFormat df = NumberFormat.getInstance(ULocale.US, NumberFormat.PLURALCURRENCYSTYLE);
+        expect2(df, 1.5, "1.50 US dollars");
+    }
 }

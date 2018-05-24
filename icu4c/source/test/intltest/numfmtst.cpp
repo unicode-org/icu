@@ -213,6 +213,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11020_RoundingInScientificNotation);
   TESTCASE_AUTO(Test11640_TripleCurrencySymbol);
   TESTCASE_AUTO(Test13763_FieldPositionIteratorOffset);
+  TESTCASE_AUTO(Test13777_ParseLongNameNonCurrencyMode);
   TESTCASE_AUTO_END;
 }
 
@@ -9065,6 +9066,14 @@ void NumberFormatTest::Test13763_FieldPositionIteratorOffset() {
     };
     int32_t tupleCount = UPRV_LENGTHOF(expected)/3;
     expectPositions(fpi, expected, tupleCount, result);
+}
+
+void NumberFormatTest::Test13777_ParseLongNameNonCurrencyMode() {
+    IcuTestErrorCode status(*this, "Test13777_ParseLongNameNonCurrencyMode");
+
+    LocalPointer<NumberFormat> df(
+        NumberFormat::createInstance("en-us", UNumberFormatStyle::UNUM_CURRENCY_PLURAL, status));
+    expect2(*df, 1.5, u"1.50 US dollars");
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
