@@ -8833,7 +8833,7 @@ void NumberFormatTest::Test11645_ApplyPatternEquality() {
     fmt->applyPattern(pattern, status);
     LocalPointer<DecimalFormat> fmtCopy;
 
-    static int32_t newMultiplier = 37;
+    static const int32_t newMultiplier = 37;
     fmtCopy.adoptInstead(new DecimalFormat(*fmt));
     assertFalse("Value before setter", fmtCopy->getMultiplier() == newMultiplier);
     fmtCopy->setMultiplier(newMultiplier);
@@ -8842,7 +8842,7 @@ void NumberFormatTest::Test11645_ApplyPatternEquality() {
     assertEquals("Value after applyPattern", fmtCopy->getMultiplier(), newMultiplier);
     assertFalse("multiplier", *fmt == *fmtCopy);
 
-    static NumberFormat::ERoundingMode newRoundingMode = NumberFormat::ERoundingMode::kRoundCeiling;
+    static const NumberFormat::ERoundingMode newRoundingMode = NumberFormat::ERoundingMode::kRoundCeiling;
     fmtCopy.adoptInstead(new DecimalFormat(*fmt));
     assertFalse("Value before setter", fmtCopy->getRoundingMode() == newRoundingMode);
     fmtCopy->setRoundingMode(newRoundingMode);
@@ -8851,7 +8851,7 @@ void NumberFormatTest::Test11645_ApplyPatternEquality() {
     assertEquals("Value after applyPattern", fmtCopy->getRoundingMode(), newRoundingMode);
     assertFalse("roundingMode", *fmt == *fmtCopy);
 
-    static const char16_t* newCurrency = u"EAT";
+    static const char16_t *const newCurrency = u"EAT";
     fmtCopy.adoptInstead(new DecimalFormat(*fmt));
     assertFalse("Value before setter", fmtCopy->getCurrency() == newCurrency);
     fmtCopy->setCurrency(newCurrency);
@@ -8860,7 +8860,7 @@ void NumberFormatTest::Test11645_ApplyPatternEquality() {
     assertEquals("Value after applyPattern", fmtCopy->getCurrency(), newCurrency);
     assertFalse("currency", *fmt == *fmtCopy);
 
-    static UCurrencyUsage newCurrencyUsage = UCurrencyUsage::UCURR_USAGE_CASH;
+    static const UCurrencyUsage newCurrencyUsage = UCurrencyUsage::UCURR_USAGE_CASH;
     fmtCopy.adoptInstead(new DecimalFormat(*fmt));
     assertFalse("Value before setter", fmtCopy->getCurrencyUsage() == newCurrencyUsage);
     fmtCopy->setCurrencyUsage(newCurrencyUsage, status);
