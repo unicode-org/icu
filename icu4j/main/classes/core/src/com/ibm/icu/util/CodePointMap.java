@@ -10,6 +10,7 @@ import java.util.NoSuchElementException;
 
 /**
  * Abstract map from Unicode code points (U+0000..U+10FFFF) to integer values.
+ * This does not implement java.util.Map.
  *
  * @draft ICU 63
  * @provisional This API might change or be removed in a future release.
@@ -66,10 +67,22 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
 
     /**
      * Iterates over code points of a string and fetches trie values.
+     * This does not implement java.util.Iterator.
+     *
+     * <pre>
+     * void onString(CodePointMap map, CharSequence s, int start) {
+     *     CodePointMap.StringIterator iter = map.stringIterator(s, start);
+     *     while (iter.next()) {
+     *         int end = iter.getIndex();  // code point from between start and end
+     *         useValue(s, start, end, iter.getCodePoint(), iter.getValue());
+     *         start = end;
+     *     }
+     * }
+     * </pre>
      *
      * <p>This class is not intended for public subclassing.
      */
-    public class StringIterator implements Iterator<StringIterator> {
+    public class StringIterator {
         /** @internal */
         protected CharSequence s;
         /** @internal */
@@ -94,48 +107,28 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
             value = 0;
         }
 
-        @Override
-        public final boolean hasNext() {
-            return sIndex < s.length();
-        }
-
-        public final boolean hasPrevious() {
-            return sIndex > 0;
-        }
-
-        @Override
-        public StringIterator next() {
+        public boolean next() {
             if (sIndex >= s.length()) {
-                throw new NoSuchElementException();
+                return false;
             }
             c = Character.codePointAt(s, sIndex);
             sIndex += Character.charCount(c);
             value = get(c);
-            return this;
+            return true;
         }
 
-        public StringIterator previous() {
+        public boolean previous() {
             if (sIndex <= 0) {
-                throw new NoSuchElementException();
+                return false;
             }
             c = Character.codePointBefore(s, sIndex);
             sIndex -= Character.charCount(c);
             value = get(c);
-            return this;
+            return true;
         }
         public final int getIndex() { return sIndex; }
         public final int getCodePoint() { return c; }
         public final int getValue() { return value; }
-
-        /**
-         * Not implemented.
-         *
-         * @throws UnsupportedOperationException because there is nothing to remove.
-         */
-        @Override
-        public final void remove() {
-            throw new UnsupportedOperationException();
-        }
     }
 
     public abstract int get(int c);

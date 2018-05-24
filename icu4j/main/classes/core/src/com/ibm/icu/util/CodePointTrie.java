@@ -8,7 +8,6 @@ package com.ibm.icu.util;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.NoSuchElementException;
 
 import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
 
@@ -140,9 +139,9 @@ public abstract class CodePointTrie extends CodePointMap {
             }
 
             @Override
-            public StringIterator next() {
+            public boolean next() {
                 if (sIndex >= s.length()) {
-                    throw new NoSuchElementException();
+                    return false;
                 }
                 char lead = s.charAt(sIndex++);
                 c = lead;
@@ -159,13 +158,13 @@ public abstract class CodePointTrie extends CodePointMap {
                         value = getFromIndex(errorIndex());
                     }
                 }
-                return this;
+                return true;
             }
 
             @Override
-            public StringIterator previous() {
+            public boolean previous() {
                 if (sIndex <= 0) {
-                    throw new NoSuchElementException();
+                    return false;
                 }
                 char trail = s.charAt(--sIndex);
                 c = trail;
@@ -182,7 +181,7 @@ public abstract class CodePointTrie extends CodePointMap {
                         value = getFromIndex(errorIndex());
                     }
                 }
-                return this;
+                return true;
             }
         }
     }
@@ -199,6 +198,63 @@ public abstract class CodePointTrie extends CodePointMap {
         @Override
         protected final int cpIndex(int c) {
             return 0;
+        }
+
+        @Override
+        public StringIterator stringIterator(CharSequence s, int sIndex) {
+            return new SmallStringIterator(s, sIndex);
+        }
+
+        private final class SmallStringIterator extends StringIterator {
+            private SmallStringIterator(CharSequence s, int sIndex) {
+                super(s, sIndex);
+            }
+
+            @Override
+            public boolean next() {
+                if (sIndex >= s.length()) {
+                    return false;
+                }
+                char lead = s.charAt(sIndex++);
+                c = lead;
+                if (!Character.isSurrogate(lead)) {
+                    value = get(c);
+                } else {
+                    char trail;
+                    if (UTF16Plus.isSurrogateLead(lead) && sIndex < s.length() &&
+                            Character.isLowSurrogate(trail = s.charAt(sIndex))) {
+                        ++sIndex;
+                        c = Character.toCodePoint(lead, trail);
+                        value = get(c);
+                    } else {
+                        value = getFromIndex(errorIndex());
+                    }
+                }
+                return true;
+            }
+
+            @Override
+            public boolean previous() {
+                if (sIndex <= 0) {
+                    return false;
+                }
+                char trail = s.charAt(--sIndex);
+                c = trail;
+                if (!Character.isSurrogate(trail)) {
+                    value = get(c);
+                } else {
+                    char lead;
+                    if (!UTF16Plus.isSurrogateLead(trail) && sIndex > 0 &&
+                            Character.isHighSurrogate(lead = s.charAt(sIndex - 1))) {
+                        --sIndex;
+                        c = Character.toCodePoint(lead, trail);
+                        value = get(c);
+                    } else {
+                        value = getFromIndex(errorIndex());
+                    }
+                }
+                return true;
+            }
         }
     }
 
