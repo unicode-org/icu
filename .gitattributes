@@ -71,6 +71,7 @@ icu4c/source/data/locales/pool.res -text
 icu4c/source/data/region/pool.res -text
 icu4c/source/data/unit/pool.res -text
 icu4c/source/data/zone/pool.res -text
+icu4c/source/samples/all/samplecheck.bat -text
 icu4c/source/samples/ucnv/data02.bin -text
 icu4c/source/test/depstest/icu-dependencies-mode.el -text
 icu4c/source/test/perf/README -text
