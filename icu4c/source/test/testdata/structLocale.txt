@@ -536,6 +536,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        BYN{
+            "",
+            "",
+        }
         BYR{
             "",
             "",
@@ -573,6 +577,10 @@ structLocale:table(nofallback){
             "",
         }
         CLP{
+            "",
+            "",
+        }
+        CNH{
             "",
             "",
         }
@@ -1004,6 +1012,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        MRU{
+            "",
+            "",
+        }
         MTL{
             "",
             "",
@@ -1233,6 +1245,10 @@ structLocale:table(nofallback){
             "",
         }
         STD{
+            "",
+            "",
+        }
+        STN{
             "",
             "",
         }
