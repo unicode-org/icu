@@ -44,7 +44,7 @@ public abstract class Precision implements Cloneable {
      * <p>
      * http://www.serpentine.com/blog/2011/06/29/here-be-dragons-advances-in-problems-you-didnt-even-know-you-had/
      *
-     * @return A Precision for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
@@ -56,7 +56,7 @@ public abstract class Precision implements Cloneable {
     /**
      * Show numbers rounded if necessary to the nearest integer.
      *
-     * @return A FractionPrecision for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
@@ -90,7 +90,7 @@ public abstract class Precision implements Cloneable {
      * @param minMaxFractionPlaces
      *            The minimum and maximum number of numerals to display after the decimal separator
      *            (rounding if too long or padding with zeros if too short).
-     * @return A FractionPrecision for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
@@ -116,7 +116,7 @@ public abstract class Precision implements Cloneable {
      * @param minFractionPlaces
      *            The minimum number of numerals to display after the decimal separator (padding with
      *            zeros if necessary).
-     * @return A FractionPrecision for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
@@ -139,7 +139,7 @@ public abstract class Precision implements Cloneable {
      * @param maxFractionPlaces
      *            The maximum number of numerals to display after the decimal mark (rounding if
      *            necessary).
-     * @return A FractionPrecision for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
@@ -165,7 +165,7 @@ public abstract class Precision implements Cloneable {
      * @param maxFractionPlaces
      *            The maximum number of numerals to display after the decimal separator (rounding if
      *            necessary).
-     * @return A FractionPrecision for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A FractionPrecision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
@@ -193,7 +193,7 @@ public abstract class Precision implements Cloneable {
      * @param minMaxSignificantDigits
      *            The minimum and maximum number of significant digits to display (rounding if too long
      *            or padding with zeros if too short).
-     * @return A Precision for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 62
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
@@ -218,7 +218,7 @@ public abstract class Precision implements Cloneable {
      *
      * @param minSignificantDigits
      *            The minimum number of significant digits to display (padding with zeros if too short).
-     * @return A Precision for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 62
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
@@ -238,7 +238,7 @@ public abstract class Precision implements Cloneable {
      *
      * @param maxSignificantDigits
      *            The maximum number of significant digits to display (rounding if too long).
-     * @return A Precision for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 62
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
@@ -261,7 +261,7 @@ public abstract class Precision implements Cloneable {
      *            The minimum number of significant digits to display (padding with zeros if necessary).
      * @param maxSignificantDigits
      *            The maximum number of significant digits to display (rounding if necessary).
-     * @return A Precision for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 62
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
@@ -333,7 +333,7 @@ public abstract class Precision implements Cloneable {
      *
      * @param roundingIncrement
      *            The increment to which to round numbers.
-     * @return A Precision for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A Precision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter
@@ -348,7 +348,7 @@ public abstract class Precision implements Cloneable {
 
     /**
      * Show numbers rounded and padded according to the rules for the currency unit. The most common
-     * rounding settings for currencies include <code>Precision.fixedFraction(2)</code>,
+     * rounding precision settings for currencies include <code>Precision.fixedFraction(2)</code>,
      * <code>Precision.integer()</code>, and <code>Precision.increment(0.05)</code> for cash transactions
      * ("nickel rounding").
      *
@@ -361,7 +361,7 @@ public abstract class Precision implements Cloneable {
      * @param currencyUsage
      *            Either STANDARD (for digital transactions) or CASH (for transactions where the rounding
      *            increment may be limited by the available denominations of cash or coins).
-     * @return A CurrencyPrecision for chaining or passing to the NumberFormatter rounding() setter.
+     * @return A CurrencyPrecision for chaining or passing to the NumberFormatter precision() setter.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
      * @see NumberFormatter

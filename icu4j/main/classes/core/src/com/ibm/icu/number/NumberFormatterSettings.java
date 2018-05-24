@@ -205,7 +205,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      *            The rounding precision to use.
      * @return The fluent chain.
      * @see Precision
-     * @draft ICU 60
+     * @draft ICU 62
      * @provisional This API might change or be removed in a future release.
      */
     public T precision(Precision precision) {
@@ -239,7 +239,7 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
      *            The rounding mode to use.
      * @return The fluent chain.
      * @see Precision
-     * @draft ICU 60
+     * @draft ICU 62
      * @provisional This API might change or be removed in a future release.
      */
     public T roundingMode(RoundingMode roundingMode) {

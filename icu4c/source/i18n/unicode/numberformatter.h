@@ -626,9 +626,10 @@ class U_I18N_API Precision : public UMemory {
     static IncrementPrecision increment(double roundingIncrement);
 
     /**
-     * Show numbers rounded and padded according to the rules for the currency unit. The most common rounding settings
-     * for currencies include <code>Precision::fixedFraction(2)</code>, <code>Precision::integer()</code>, and
-     * <code>Precision::increment(0.05)</code> for cash transactions ("nickel rounding").
+     * Show numbers rounded and padded according to the rules for the currency unit. The most common
+     * rounding precision settings for currencies include <code>Precision::fixedFraction(2)</code>,
+     * <code>Precision::integer()</code>, and <code>Precision::increment(0.05)</code> for cash transactions
+     * ("nickel rounding").
      *
      * <p>
      * The exact rounding details will be resolved at runtime based on the currency unit specified in the
@@ -1637,7 +1638,7 @@ class U_I18N_API NumberFormatterSettings {
      *            The rounding precision to use.
      * @return The fluent chain.
      * @see Precision
-     * @draft ICU 60
+     * @draft ICU 62
      */
     Derived precision(const Precision& precision) const &;
 
