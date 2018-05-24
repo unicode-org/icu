@@ -4679,6 +4679,7 @@ icu4c/source/layoutex/playout.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/layoutex/plruns.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/mkinstalldirs eol=lf
 icu4c/source/runConfigureICU eol=lf
+icu4c/source/samples/all/samplecheck.bat -text
 icu4c/source/samples/break/break.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/samples/break/readme.txt svneol=native#text/plain
 icu4c/source/samples/break/ubreak.c svneol=native#text/plain%3Bcharset%3Dutf-8
