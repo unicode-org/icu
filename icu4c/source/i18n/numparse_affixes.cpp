@@ -190,7 +190,7 @@ NumberParseMatcher& AffixTokenMatcherWarehouse::permille() {
 }
 
 NumberParseMatcher& AffixTokenMatcherWarehouse::currency(UErrorCode& status) {
-    return fCurrency = {fSetupData->currencySymbols, fSetupData->dfs, status};
+    return fCurrency = {fSetupData->currencySymbols, fSetupData->dfs, fSetupData->parseFlags, status};
 }
 
 IgnorablesMatcher& AffixTokenMatcherWarehouse::ignorables() {

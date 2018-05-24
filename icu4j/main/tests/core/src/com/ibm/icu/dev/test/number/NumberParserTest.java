@@ -251,33 +251,52 @@ public class NumberParserTest {
     @Test
     public void testCombinedCurrencyMatcher() {
         AffixTokenMatcherFactory factory = new AffixTokenMatcherFactory();
-        factory.locale = ULocale.ENGLISH;
+        factory.locale = ULocale.US;
         CustomSymbolCurrency currency = new CustomSymbolCurrency("ICU", "IU$", "ICU");
         factory.currency = currency;
-        factory.symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        factory.symbols = DecimalFormatSymbols.getInstance(ULocale.US);
+        factory.parseFlags = 0;
         CombinedCurrencyMatcher matcher = factory.currency();
+        factory.parseFlags = ParsingUtils.PARSE_FLAG_NO_FOREIGN_CURRENCIES;
+        CombinedCurrencyMatcher matcherNoForeignCurrencies = factory.currency();
 
         Object[][] cases = new Object[][] {
-                { "", null },
-                { "FOO", null },
-                { "USD", "USD" },
-                { "$", "USD" },
-                { "US dollars", "USD" },
-                { "eu", null },
-                { "euros", "EUR" },
-                { "ICU", "ICU" },
-                { "IU$", "ICU" } };
+                { "", null, null },
+                { "FOO", null, null },
+                { "USD", "USD", null },
+                { "$", "USD", null },
+                { "US dollars", "USD", null },
+                { "eu", null, null },
+                { "euros", "EUR", null },
+                { "ICU", "ICU", "ICU" },
+                { "IU$", "ICU", "ICU" } };
         for (Object[] cas : cases) {
             String input = (String) cas[0];
             String expectedCurrencyCode = (String) cas[1];
+            String expectedNoForeignCurrencyCode = (String) cas[2];
 
-            StringSegment segment = new StringSegment(input, true);
-            ParsedNumber result = new ParsedNumber();
-            matcher.match(segment, result);
-            assertEquals("Parsing " + input, expectedCurrencyCode, result.currencyCode);
-            assertEquals("Whole string on " + input,
-                    expectedCurrencyCode == null ? 0 : input.length(),
-                    result.charEnd);
+            {
+                StringSegment segment = new StringSegment(input, true);
+                ParsedNumber result = new ParsedNumber();
+                matcher.match(segment, result);
+                assertEquals("Parsing " + input,
+                        expectedCurrencyCode,
+                        result.currencyCode);
+                assertEquals("Whole string on " + input,
+                        expectedCurrencyCode == null ? 0 : input.length(),
+                        result.charEnd);
+            }
+            {
+                StringSegment segment = new StringSegment(input, true);
+                ParsedNumber result = new ParsedNumber();
+                matcherNoForeignCurrencies.match(segment, result);
+                assertEquals("[no foreign] Parsing " + input,
+                        expectedNoForeignCurrencyCode,
+                        result.currencyCode);
+                assertEquals("[no foreign] Whole string on " + input,
+                        expectedNoForeignCurrencyCode == null ? 0 : input.length(),
+                        result.charEnd);
+            }
         }
     }
 
@@ -288,6 +307,7 @@ public class NumberParserTest {
         factory.symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
         factory.ignorables = IgnorablesMatcher.DEFAULT;
         factory.locale = ULocale.ENGLISH;
+        factory.parseFlags = 0;
 
         Object[][] cases = {
                 { false, "-", 1, "-" },
