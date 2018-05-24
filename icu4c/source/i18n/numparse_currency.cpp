@@ -20,14 +20,24 @@ using namespace icu::numparse;
 using namespace icu::numparse::impl;
 
 
-CombinedCurrencyMatcher::CombinedCurrencyMatcher(const CurrencySymbols& currencySymbols,
-                                                 const DecimalFormatSymbols& dfs, UErrorCode& status)
+CombinedCurrencyMatcher::CombinedCurrencyMatcher(const CurrencySymbols& currencySymbols, const DecimalFormatSymbols& dfs,
+                                                 parse_flags_t parseFlags, UErrorCode& status)
         : fCurrency1(currencySymbols.getCurrencySymbol(status)),
           fCurrency2(currencySymbols.getIntlCurrencySymbol(status)),
+          fUseFullCurrencyData(0 == (parseFlags & PARSE_FLAG_NO_FOREIGN_CURRENCY)),
           afterPrefixInsert(dfs.getPatternForCurrencySpacing(UNUM_CURRENCY_INSERT, false, status)),
           beforeSuffixInsert(dfs.getPatternForCurrencySpacing(UNUM_CURRENCY_INSERT, true, status)),
           fLocaleName(dfs.getLocale().getName(), -1, status) {
     utils::copyCurrencyCode(fCurrencyCode, currencySymbols.getIsoCode());
+
+    // Pre-load the long names for the current locale and currency
+    // if we are parsing without the full currency data.
+    if (!fUseFullCurrencyData) {
+        for (int32_t i=0; i<StandardPlural::COUNT; i++) {
+            auto plural = static_cast<StandardPlural::Form>(i);
+            fLocalLongNames[i] = currencySymbols.getPluralName(plural, status);
+        }
+    }
 
     // TODO: Figure out how to make this faster and re-enable.
     // Computing the "lead code points" set for fastpathing is too slow to use in production.
@@ -83,47 +93,73 @@ CombinedCurrencyMatcher::match(StringSegment& segment, ParsedNumber& result, UEr
 
 bool CombinedCurrencyMatcher::matchCurrency(StringSegment& segment, ParsedNumber& result,
                                             UErrorCode& status) const {
+    bool maybeMore = false;
 
     int32_t overlap1 = segment.getCaseSensitivePrefixLength(fCurrency1);
+    maybeMore = maybeMore || overlap1 == segment.length();
     if (overlap1 == fCurrency1.length()) {
         utils::copyCurrencyCode(result.currencyCode, fCurrencyCode);
         segment.adjustOffset(overlap1);
         result.setCharsConsumed(segment);
-        return segment.length() == 0;
+        return maybeMore;
     }
 
     int32_t overlap2 = segment.getCaseSensitivePrefixLength(fCurrency2);
+    maybeMore = maybeMore || overlap2 == segment.length();
     if (overlap2 == fCurrency2.length()) {
         utils::copyCurrencyCode(result.currencyCode, fCurrencyCode);
         segment.adjustOffset(overlap2);
         result.setCharsConsumed(segment);
-        return segment.length() == 0;
+        return maybeMore;
     }
 
-    // NOTE: This call site should be improved with #13584.
-    const UnicodeString segmentString = segment.toTempUnicodeString();
+    if (fUseFullCurrencyData) {
+        // Use the full currency data.
+        // NOTE: This call site should be improved with #13584.
+        const UnicodeString segmentString = segment.toTempUnicodeString();
 
-    // Try to parse the currency
-    ParsePosition ppos(0);
-    int32_t partialMatchLen = 0;
-    uprv_parseCurrency(
-            fLocaleName.data(),
-            segmentString,
-            ppos,
-            UCURR_SYMBOL_NAME, // checks for both UCURR_SYMBOL_NAME and UCURR_LONG_NAME
-            &partialMatchLen,
-            result.currencyCode,
-            status);
+        // Try to parse the currency
+        ParsePosition ppos(0);
+        int32_t partialMatchLen = 0;
+        uprv_parseCurrency(
+                fLocaleName.data(),
+                segmentString,
+                ppos,
+                UCURR_SYMBOL_NAME, // checks for both UCURR_SYMBOL_NAME and UCURR_LONG_NAME
+                &partialMatchLen,
+                result.currencyCode,
+                status);
+        maybeMore = maybeMore || partialMatchLen == segment.length();
 
-    if (U_SUCCESS(status) && ppos.getIndex() != 0) {
-        // Complete match.
-        // NOTE: The currency code should already be saved in the ParsedNumber.
-        segment.adjustOffset(ppos.getIndex());
-        result.setCharsConsumed(segment);
+        if (U_SUCCESS(status) && ppos.getIndex() != 0) {
+            // Complete match.
+            // NOTE: The currency code should already be saved in the ParsedNumber.
+            segment.adjustOffset(ppos.getIndex());
+            result.setCharsConsumed(segment);
+            return maybeMore;
+        }
+
+    } else {
+        // Use the locale long names.
+        int32_t longestFullMatch = 0;
+        for (int32_t i=0; i<StandardPlural::COUNT; i++) {
+            const UnicodeString& name = fLocalLongNames[i];
+            int32_t overlap = segment.getCommonPrefixLength(name);
+            if (overlap == name.length() && name.length() > longestFullMatch) {
+                longestFullMatch = name.length();
+            }
+            maybeMore = maybeMore || overlap > 0;
+        }
+        if (longestFullMatch > 0) {
+            utils::copyCurrencyCode(result.currencyCode, fCurrencyCode);
+            segment.adjustOffset(longestFullMatch);
+            result.setCharsConsumed(segment);
+            return maybeMore;
+        }
     }
 
-    return overlap1 == segment.length() || overlap2 == segment.length() ||
-           partialMatchLen == segment.length();
+    // No match found.
+    return maybeMore;
 }
 
 bool CombinedCurrencyMatcher::smokeTest(const StringSegment&) const {

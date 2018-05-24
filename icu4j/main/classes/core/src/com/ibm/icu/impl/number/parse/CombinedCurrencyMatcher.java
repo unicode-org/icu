@@ -4,6 +4,7 @@ package com.ibm.icu.impl.number.parse;
 
 import java.util.Iterator;
 
+import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.StringSegment;
 import com.ibm.icu.impl.TextTrieMap;
 import com.ibm.icu.text.DecimalFormatSymbols;
@@ -27,6 +28,8 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
     private final String currency1;
     private final String currency2;
 
+    private final String[] localLongNames;
+
     private final String afterPrefixInsert;
     private final String beforeSuffixInsert;
 
@@ -36,12 +39,12 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
     // TODO: See comments in constructor.
     // private final UnicodeSet leadCodePoints;
 
-    public static CombinedCurrencyMatcher getInstance(Currency currency, DecimalFormatSymbols dfs) {
+    public static CombinedCurrencyMatcher getInstance(Currency currency, DecimalFormatSymbols dfs, int parseFlags) {
         // TODO: Cache these instances. They are somewhat expensive.
-        return new CombinedCurrencyMatcher(currency, dfs);
+        return new CombinedCurrencyMatcher(currency, dfs, parseFlags);
     }
 
-    private CombinedCurrencyMatcher(Currency currency, DecimalFormatSymbols dfs) {
+    private CombinedCurrencyMatcher(Currency currency, DecimalFormatSymbols dfs, int parseFlags) {
         this.isoCode = currency.getSubtype();
         this.currency1 = currency.getSymbol(dfs.getULocale());
         this.currency2 = currency.getCurrencyCode();
@@ -51,10 +54,23 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
         beforeSuffixInsert = dfs.getPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT,
                 true);
 
-        // TODO: Currency trie does not currently have an option for case folding. It defaults to use
-        // case folding on long-names but not symbols.
-        longNameTrie = Currency.getParsingTrie(dfs.getULocale(), Currency.LONG_NAME);
-        symbolTrie = Currency.getParsingTrie(dfs.getULocale(), Currency.SYMBOL_NAME);
+        if (0 == (parseFlags & ParsingUtils.PARSE_FLAG_NO_FOREIGN_CURRENCIES)) {
+            // TODO: Currency trie does not currently have an option for case folding. It defaults to use
+            // case folding on long-names but not symbols.
+            longNameTrie = Currency.getParsingTrie(dfs.getULocale(), Currency.LONG_NAME);
+            symbolTrie = Currency.getParsingTrie(dfs.getULocale(), Currency.SYMBOL_NAME);
+            localLongNames = null;
+
+        } else {
+            longNameTrie = null;
+            symbolTrie = null;
+            localLongNames = new String[StandardPlural.COUNT];
+            for (int i = 0; i < StandardPlural.COUNT; i++) {
+                String pluralKeyword = StandardPlural.VALUES.get(i).getKeyword();
+                localLongNames[i] = currency
+                        .getName(dfs.getLocale(), Currency.PLURAL_LONG_NAME, pluralKeyword, null);
+            }
+        }
 
         // TODO: Figure out how to make this faster and re-enable.
         // Computing the "lead code points" set for fastpathing is too slow to use in production.
@@ -112,34 +128,63 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
 
     /** Matches the currency string without concern for currency spacing. */
     private boolean matchCurrency(StringSegment segment, ParsedNumber result) {
+        boolean maybeMore = false;
+
         int overlap1 = segment.getCaseSensitivePrefixLength(currency1);
+        maybeMore = maybeMore || overlap1 == segment.length();
         if (overlap1 == currency1.length()) {
             result.currencyCode = isoCode;
             segment.adjustOffset(overlap1);
             result.setCharsConsumed(segment);
-            return segment.length() == 0;
+            return maybeMore;
         }
 
         int overlap2 = segment.getCaseSensitivePrefixLength(currency2);
+        maybeMore = maybeMore || overlap2 == segment.length();
         if (overlap2 == currency2.length()) {
             result.currencyCode = isoCode;
             segment.adjustOffset(overlap2);
             result.setCharsConsumed(segment);
-            return segment.length() == 0;
+            return maybeMore;
         }
 
-        TextTrieMap.Output trieOutput = new TextTrieMap.Output();
-        Iterator<CurrencyStringInfo> values = longNameTrie.get(segment, 0, trieOutput);
-        if (values == null) {
-            values = symbolTrie.get(segment, 0, trieOutput);
-        }
-        if (values != null) {
-            result.currencyCode = values.next().getISOCode();
-            segment.adjustOffset(trieOutput.matchLength);
-            result.setCharsConsumed(segment);
+        if (longNameTrie != null) {
+            // Use the full currency data.
+            TextTrieMap.Output trieOutput = new TextTrieMap.Output();
+            Iterator<CurrencyStringInfo> values = longNameTrie.get(segment, 0, trieOutput);
+            maybeMore = maybeMore || trieOutput.partialMatch;
+            if (values == null) {
+                values = symbolTrie.get(segment, 0, trieOutput);
+                maybeMore = maybeMore || trieOutput.partialMatch;
+            }
+            if (values != null) {
+                result.currencyCode = values.next().getISOCode();
+                segment.adjustOffset(trieOutput.matchLength);
+                result.setCharsConsumed(segment);
+                return maybeMore;
+            }
+
+        } else {
+            // Use the locale long names.
+            int longestFullMatch = 0;
+            for (int i=0; i<StandardPlural.COUNT; i++) {
+                String name = localLongNames[i];
+                int overlap = segment.getCommonPrefixLength(name);
+                if (overlap == name.length() && name.length() > longestFullMatch) {
+                    longestFullMatch = name.length();
+                }
+                maybeMore = maybeMore || overlap > 0;
+            }
+            if (longestFullMatch > 0) {
+                result.currencyCode = isoCode;
+                segment.adjustOffset(longestFullMatch);
+                result.setCharsConsumed(segment);
+                return maybeMore;
+            }
         }
 
-        return overlap1 == segment.length() || overlap2 == segment.length() || trieOutput.partialMatch;
+        // No match found.
+        return maybeMore;
     }
 
     @Override

@@ -49,6 +49,7 @@ public class NumberParserImpl {
         factory.symbols = symbols;
         factory.ignorables = ignorables;
         factory.locale = locale;
+        factory.parseFlags = parseFlags;
 
         ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(pattern);
         AffixMatcher.createMatchers(patternInfo, parser, factory, ignorables, parseFlags);
@@ -65,7 +66,7 @@ public class NumberParserImpl {
         parser.addMatcher(InfinityMatcher.getInstance(symbols));
         parser.addMatcher(PaddingMatcher.getInstance("@"));
         parser.addMatcher(ScientificMatcher.getInstance(symbols, grouper));
-        parser.addMatcher(CombinedCurrencyMatcher.getInstance(currency, symbols));
+        parser.addMatcher(CombinedCurrencyMatcher.getInstance(currency, symbols, parseFlags));
         parser.addMatcher(new RequireNumberValidator());
 
         parser.freeze();
@@ -173,6 +174,9 @@ public class NumberParserImpl {
         if (parseCurrency || affixProvider.hasCurrencySign()) {
             parseFlags |= ParsingUtils.PARSE_FLAG_MONETARY_SEPARATORS;
         }
+        if (!parseCurrency) {
+            parseFlags |= ParsingUtils.PARSE_FLAG_NO_FOREIGN_CURRENCIES;
+        }
         IgnorablesMatcher ignorables = isStrict ? IgnorablesMatcher.STRICT : IgnorablesMatcher.DEFAULT;
 
         NumberParserImpl parser = new NumberParserImpl(parseFlags);
@@ -182,6 +186,7 @@ public class NumberParserImpl {
         factory.symbols = symbols;
         factory.ignorables = ignorables;
         factory.locale = locale;
+        factory.parseFlags = parseFlags;
 
         //////////////////////
         /// AFFIX MATCHERS ///
@@ -195,7 +200,7 @@ public class NumberParserImpl {
         ////////////////////////
 
         if (parseCurrency || affixProvider.hasCurrencySign()) {
-            parser.addMatcher(CombinedCurrencyMatcher.getInstance(currency, symbols));
+            parser.addMatcher(CombinedCurrencyMatcher.getInstance(currency, symbols, parseFlags));
         }
 
         ///////////////

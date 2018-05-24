@@ -53,7 +53,7 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
 
     // The following statements set up the affix matchers.
     AffixTokenMatcherSetupData affixSetupData = {
-            currencySymbols, symbols, ignorables, locale};
+            currencySymbols, symbols, ignorables, locale, parseFlags};
     parser->fLocalMatchers.affixTokenMatcherWarehouse = {&affixSetupData};
     parser->fLocalMatchers.affixMatcherWarehouse = {&parser->fLocalMatchers.affixTokenMatcherWarehouse};
     parser->fLocalMatchers.affixMatcherWarehouse.createAffixMatchers(
@@ -72,7 +72,7 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     parser->addMatcher(parser->fLocalMatchers.infinity = {symbols});
     parser->addMatcher(parser->fLocalMatchers.padding = {u"@"});
     parser->addMatcher(parser->fLocalMatchers.scientific = {symbols, grouper});
-    parser->addMatcher(parser->fLocalMatchers.currency = {currencySymbols, symbols, status});
+    parser->addMatcher(parser->fLocalMatchers.currency = {currencySymbols, symbols, parseFlags, status});
 //    parser.addMatcher(new RequireNumberMatcher());
 
     parser->freeze();
@@ -124,6 +124,9 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     if (parseCurrency || affixProvider->hasCurrencySign()) {
         parseFlags |= PARSE_FLAG_MONETARY_SEPARATORS;
     }
+    if (!parseCurrency) {
+        parseFlags |= PARSE_FLAG_NO_FOREIGN_CURRENCY;
+    }
 
     LocalPointer<NumberParserImpl> parser(new NumberParserImpl(parseFlags));
 
@@ -137,7 +140,7 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
 
     // The following statements set up the affix matchers.
     AffixTokenMatcherSetupData affixSetupData = {
-            currencySymbols, symbols, ignorables, locale};
+            currencySymbols, symbols, ignorables, locale, parseFlags};
     parser->fLocalMatchers.affixTokenMatcherWarehouse = {&affixSetupData};
     parser->fLocalMatchers.affixMatcherWarehouse = {&parser->fLocalMatchers.affixTokenMatcherWarehouse};
     parser->fLocalMatchers.affixMatcherWarehouse.createAffixMatchers(
@@ -148,7 +151,7 @@ NumberParserImpl::createParserFromProperties(const number::impl::DecimalFormatPr
     ////////////////////////
 
     if (parseCurrency || affixProvider->hasCurrencySign()) {
-        parser->addMatcher(parser->fLocalMatchers.currency = {currencySymbols, symbols, status});
+        parser->addMatcher(parser->fLocalMatchers.currency = {currencySymbols, symbols, parseFlags, status});
     }
 
     ///////////////

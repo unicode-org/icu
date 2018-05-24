@@ -34,7 +34,8 @@ class U_I18N_API CombinedCurrencyMatcher : public NumberParseMatcher, public UMe
   public:
     CombinedCurrencyMatcher() = default;  // WARNING: Leaves the object in an unusable state
 
-    CombinedCurrencyMatcher(const CurrencySymbols& currencySymbols, const DecimalFormatSymbols& dfs, UErrorCode& status);
+    CombinedCurrencyMatcher(const CurrencySymbols& currencySymbols, const DecimalFormatSymbols& dfs,
+                            parse_flags_t parseFlags, UErrorCode& status);
 
     bool match(StringSegment& segment, ParsedNumber& result, UErrorCode& status) const override;
 
@@ -46,6 +47,9 @@ class U_I18N_API CombinedCurrencyMatcher : public NumberParseMatcher, public UMe
     UChar fCurrencyCode[4];
     UnicodeString fCurrency1;
     UnicodeString fCurrency2;
+
+    bool fUseFullCurrencyData;
+    UnicodeString fLocalLongNames[StandardPlural::COUNT];
 
     UnicodeString afterPrefixInsert;
     UnicodeString beforeSuffixInsert;

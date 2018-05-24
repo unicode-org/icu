@@ -16,6 +16,7 @@ public class AffixTokenMatcherFactory {
     public DecimalFormatSymbols symbols;
     public IgnorablesMatcher ignorables;
     public ULocale locale;
+    public int parseFlags;
 
     public MinusSignMatcher minusSign() {
         return MinusSignMatcher.getInstance(symbols, true);
@@ -34,7 +35,7 @@ public class AffixTokenMatcherFactory {
     }
 
     public CombinedCurrencyMatcher currency() {
-        return CombinedCurrencyMatcher.getInstance(currency, symbols);
+        return CombinedCurrencyMatcher.getInstance(currency, symbols, parseFlags);
     }
 
     public IgnorablesMatcher ignorables() {

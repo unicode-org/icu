@@ -87,6 +87,7 @@ struct AffixTokenMatcherSetupData {
     const DecimalFormatSymbols& dfs;
     IgnorablesMatcher& ignorables;
     const Locale& locale;
+    parse_flags_t parseFlags;
 };
 
 

@@ -242,33 +242,55 @@ void NumberParserTest::testCombinedCurrencyMatcher() {
     CurrencySymbols currencySymbols({u"ICU", status}, locale, dfs, status);
 
     AffixTokenMatcherSetupData affixSetupData = {
-            currencySymbols, {"en", status}, ignorables, "en"};
+            currencySymbols, {"en", status}, ignorables, "en", 0};
     AffixTokenMatcherWarehouse warehouse(&affixSetupData);
     NumberParseMatcher& matcher = warehouse.currency(status);
+    affixSetupData.parseFlags = PARSE_FLAG_NO_FOREIGN_CURRENCY;
+    AffixTokenMatcherWarehouse warehouseNoForeign(&affixSetupData);
+    NumberParseMatcher& matcherNoForeign = warehouseNoForeign.currency(status);
 
     static const struct TestCase {
         const char16_t* input;
         const char16_t* expectedCurrencyCode;
-    } cases[]{{u"", u"\x00"},
-              {u"FOO", u"\x00"},
-              {u"USD", u"USD"},
-              {u"$", u"USD"},
-              {u"US dollars", u"USD"},
-              {u"eu", u"\x00"},
-              {u"euros", u"EUR"},
-              {u"ICU", u"ICU"},
-              {u"IU$", u"ICU"}};
+        const char16_t* expectedNoForeignCurrencyCode;
+    } cases[]{{u"", u"", u""},
+              {u"FOO", u"", u""},
+              {u"USD", u"USD", u""},
+              {u"$", u"USD", u""},
+              {u"US dollars", u"USD", u""},
+              {u"eu", u"", u""},
+              {u"euros", u"EUR", u""},
+              {u"ICU", u"ICU", u"ICU"},
+              {u"IU$", u"ICU", u"ICU"}};
     for (auto& cas : cases) {
         UnicodeString input(cas.input);
 
-        StringSegment segment(input, false);
-        ParsedNumber result;
-        matcher.match(segment, result, status);
-        assertEquals("Parsing " + input, cas.expectedCurrencyCode, result.currencyCode);
-        assertEquals(
-                "Whole string on " + input,
-                cas.expectedCurrencyCode[0] == 0 ? 0 : input.length(),
-                result.charEnd);
+        {
+            StringSegment segment(input, false);
+            ParsedNumber result;
+            matcher.match(segment, result, status);
+            assertEquals(
+                    "Parsing " + input,
+                    cas.expectedCurrencyCode,
+                    result.currencyCode);
+            assertEquals(
+                    "Whole string on " + input,
+                    cas.expectedCurrencyCode[0] == 0 ? 0 : input.length(),
+                    result.charEnd);
+        }
+        {
+            StringSegment segment(input, false);
+            ParsedNumber result;
+            matcherNoForeign.match(segment, result, status);
+            assertEquals(
+                    "[no foreign] Parsing " + input,
+                    cas.expectedNoForeignCurrencyCode,
+                    result.currencyCode);
+            assertEquals(
+                    "[no foreign] Whole string on " + input,
+                    cas.expectedNoForeignCurrencyCode[0] == 0 ? 0 : input.length(),
+                    result.charEnd);
+        }
     }
 }
 
@@ -283,7 +305,7 @@ void NumberParserTest::testAffixPatternMatcher() {
     CurrencySymbols currencySymbols({u"ICU", status}, locale, dfs, status);
 
     AffixTokenMatcherSetupData affixSetupData = {
-            currencySymbols, {"en", status}, ignorables, "en"};
+            currencySymbols, {"en", status}, ignorables, "en", 0};
     AffixTokenMatcherWarehouse warehouse(&affixSetupData);
 
     static const struct TestCase {

@@ -1304,17 +1304,16 @@ Euros 7.82	7.82	EUR
 test parse currency without currency mode
 // Should accept a symbol associated with the currency specified by the API,
 // but should not traverse the full currency data.
-// P always traverses full currency data.
 set locale en_US
 set pattern \u00a4#,##0.00
 begin
 parse	currency	output	breaks
 $52.41	USD	52.41
 USD52.41	USD	52.41	K
-\u20ac52.41	USD	fail	CJP
-EUR52.41	USD	fail	CJP
-$52.41	EUR	fail	CJP
-USD52.41	EUR	fail	CJP
+\u20ac52.41	USD	fail
+EUR52.41	USD	fail
+$52.41	EUR	fail
+USD52.41	EUR	fail
 \u20ac52.41	EUR	52.41	K
 EUR52.41	EUR	52.41
 
