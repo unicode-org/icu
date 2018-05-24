@@ -1500,7 +1500,7 @@ getCacheEntry(const char* locale, UErrorCode& ec) {
             cacheEntry->totalCurrencySymbolCount = total_currency_symbol_count;
             cacheEntry->refCount = 2; // one for cache, one for reference
             currentCacheEntryIndex = (currentCacheEntryIndex + 1) % CURRENCY_NAME_CACHE_NUM;
-            ucln_common_registerCleanup(UCLN_COMMON_CURRENCY, currency_cache_cleanup);
+            ucln_common_registerCleanup(UCLN_COMMON_CURRENCY, currency_cleanup);
         } else {
             deleteCurrencyNames(currencyNames, total_currency_name_count);
             deleteCurrencyNames(currencySymbols, total_currency_symbol_count);
