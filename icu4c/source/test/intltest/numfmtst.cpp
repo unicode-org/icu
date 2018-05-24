@@ -8288,6 +8288,7 @@ void NumberFormatTest::Test10727_RoundingZero() {
 void NumberFormatTest::Test11739_ParseLongCurrency() {
     IcuTestErrorCode status(*this, "Test11739_ParseLongCurrency");
     LocalPointer<NumberFormat> nf(NumberFormat::createCurrencyInstance("sr_BA", status));
+    if (status.errDataIfFailureAndReset()) { return; }
     ((DecimalFormat*) nf.getAlias())->applyPattern(u"#,##0.0 ¤¤¤", status);
     ParsePosition ppos(0);
     LocalPointer<CurrencyAmount> result(nf->parseCurrency(u"1.500 амерички долар", ppos));
