@@ -11,6 +11,7 @@ package com.ibm.icu.dev.test.format;
 import java.text.ParseException;
 import java.util.Locale;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -128,6 +129,7 @@ public class RBNFParseTest extends TestFmwk {
     }
 
     @Test
+    @Ignore("http://bugs.icu-project.org/trac/ticket/13793")
     public void TestLenientParse() throws Exception {
         RuleBasedNumberFormat rbnf_en, rbnf_fr;
 
