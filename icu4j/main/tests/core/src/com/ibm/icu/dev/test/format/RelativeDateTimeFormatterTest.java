@@ -642,7 +642,22 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
 
     @Test
     public void TestRelativeDateTimeUnitFormatters() {
-        double[] offsets = { -5.0, -2.2, -2.0, -1.0, -0.7, 0.0, 0.7, 1.0, 2.0, 5.0 };
+        double[] offsets = { -5.0, -2.2, -2.0, -1.0, -0.7, -0.0, 0.0, 0.7, 1.0, 2.0, 5.0 };
+
+        String[] en_decDef_long_midSent_sec = {
+        /*  text                    numeric */
+            "5 seconds ago",        "5 seconds ago",      /* -5   */
+            "2.2 seconds ago",      "2.2 seconds ago",    /* -2.2 */
+            "2 seconds ago",        "2 seconds ago",      /* -2   */
+            "1 second ago",         "1 second ago",       /* -1   */
+            "0.7 seconds ago",      "0.7 seconds ago",    /* -0.7 */
+            "now",                  "0 seconds ago",      /*  -0  */
+            "now",                  "in 0 seconds",       /*  0   */
+            "in 0.7 seconds",       "in 0.7 seconds",     /*  0.7 */
+            "in 1 second",          "in 1 second",        /*  1   */
+            "in 2 seconds",         "in 2 seconds",       /*  2   */
+            "in 5 seconds",         "in 5 seconds"        /*  5   */
+        };
 
         String[] en_decDef_long_midSent_week = {
         /*  text                    numeric */
@@ -651,6 +666,7 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
             "2 weeks ago",          "2 weeks ago",        /* -2   */
             "last week",            "1 week ago",         /* -1   */
             "0.7 weeks ago",        "0.7 weeks ago",      /* -0.7 */
+            "this week",            "0 weeks ago",        /* -0   */
             "this week",            "in 0 weeks",         /*  0   */
             "in 0.7 weeks",         "in 0.7 weeks",       /*  0.7 */
             "next week",            "in 1 week",          /*  1   */
@@ -665,6 +681,7 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
             "2 weeks ago",          "2 weeks ago",        /* -2   */
             "last week",            "1 week ago",         /* -1   */
             "0 weeks ago",          "0 weeks ago",        /* -0.7 */
+            "this week",            "0 weeks ago",        /* -0   */
             "this week",            "in 0 weeks",         /*  0   */
             "in 0 weeks",           "in 0 weeks",         /*  0.7 */
             "next week",            "in 1 week",          /*  1   */
@@ -679,6 +696,7 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
             "2 wk. ago",            "2 wk. ago",          /* -2   */
             "last wk.",             "1 wk. ago",          /* -1   */
             "0.7 wk. ago",          "0.7 wk. ago",        /* -0.7 */
+            "this wk.",             "0 wk. ago",          /* -0   */
             "this wk.",             "in 0 wk.",           /*  0   */
             "in 0.7 wk.",           "in 0.7 wk.",         /*  0.7 */
             "next wk.",             "in 1 wk.",           /*  1   */
@@ -693,6 +711,7 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
             "2 minutes ago",        "2 minutes ago",      /* -2   */
             "1 minute ago",         "1 minute ago",       /* -1   */
             "0.7 minutes ago",      "0.7 minutes ago",    /* -0.7 */
+            "0 minutes ago",        "0 minutes ago",      /* -0   */
             "in 0 minutes",         "in 0 minutes",       /*  0   */
             "in 0.7 minutes",       "in 0.7 minutes",     /*  0.7 */
             "in 1 minute",          "in 1 minute",        /*  1   */
@@ -702,16 +721,17 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
 
         String[] en_dec0_long_midSent_tues = {
         /*  text                    numeric */
-            ""/*no data */,         ""/*no data */,       /* -5   */
+            "5 Tuesdays ago",       "5 Tuesdays ago",     /* -5   */
             ""/*no data */,         ""/*no data */,       /* -2.2 */
-            ""/*no data */,         ""/*no data */,       /* -2   */
-            "last Tuesday",         ""/*no data */,       /* -1   */
+            "2 Tuesdays ago",       "2 Tuesdays ago",     /* -2   */
+            "last Tuesday",         "1 Tuesday ago",      /* -1   */
             ""/*no data */,         ""/*no data */,       /* -0.7 */
-            "this Tuesday",         ""/*no data */,       /*  0   */
+            "this Tuesday",         "0 Tuesdays ago",     /* -0   */
+            "this Tuesday",         "in 0 Tuesdays",      /*  0   */
             ""/*no data */,         ""/*no data */,       /*  0.7 */
-            "next Tuesday",         ""/*no data */,       /*  1   */
-            ""/*no data */,         ""/*no data */,       /*  2   */
-            ""/*no data */,         ""/*no data */,       /*  5   */
+            "next Tuesday",         "in 1 Tuesday",       /*  1   */
+            "in 2 Tuesdays",        "in 2 Tuesdays",      /*  2   */
+            "in 5 Tuesdays",        "in 5 Tuesdays",      /*  5   */
         };
 
         String[] fr_decDef_long_midSent_day = {
@@ -721,6 +741,7 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
             "avant-hier",           "il y a 2 jours",     /* -2   */
             "hier",                 "il y a 1 jour",      /* -1   */
             "il y a 0,7 jour",      "il y a 0,7 jour",    /* -0.7 */
+            "aujourd’hui",          "il y a 0 jour",      /* -0   */
             "aujourd’hui",          "dans 0 jour",        /*  0   */
             "dans 0,7 jour",        "dans 0,7 jour",      /*  0.7 */
             "demain",               "dans 1 jour",        /*  1   */
@@ -746,6 +767,8 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
             }
         };
         final TestRelativeDateTimeUnitItem[] items = {
+            new TestRelativeDateTimeUnitItem("en", -1, Style.LONG,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+                                                                    RelativeDateTimeUnit.SECOND, en_decDef_long_midSent_sec),
             new TestRelativeDateTimeUnitItem("en", -1, Style.LONG,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
                                                                     RelativeDateTimeUnit.WEEK, en_decDef_long_midSent_week),
             new TestRelativeDateTimeUnitItem("en",  0, Style.LONG,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,

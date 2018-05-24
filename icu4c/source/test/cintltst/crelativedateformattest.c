@@ -30,8 +30,23 @@ void addRelativeDateFormatTest(TestNode** root)
     TESTCASE(TestCombineDateTime);
 }
 
-static const double offsets[] = { -5.0, -2.2, -2.0, -1.0, -0.7, 0.0, 0.7, 1.0, 2.0, 5.0 };
+static const double offsets[] = { -5.0, -2.2, -2.0, -1.0, -0.7, -0.0, 0.0, 0.7, 1.0, 2.0, 5.0 };
 enum { kNumOffsets = UPRV_LENGTHOF(offsets) };
+
+static const char* en_decDef_long_midSent_sec[kNumOffsets*2] = {
+/*  text                    numeric */
+    "5 seconds ago",        "5 seconds ago",      /* -5   */
+    "2.2 seconds ago",      "2.2 seconds ago",    /* -2.2 */
+    "2 seconds ago",        "2 seconds ago",      /* -2   */
+    "1 second ago",         "1 second ago",       /* -1   */
+    "0.7 seconds ago",      "0.7 seconds ago",    /* -0.7 */
+    "now",                  "0 seconds ago",      /*  -0  */
+    "now",                  "in 0 seconds",       /*  0   */
+    "in 0.7 seconds",       "in 0.7 seconds",     /*  0.7 */
+    "in 1 second",          "in 1 second",        /*  1   */
+    "in 2 seconds",         "in 2 seconds",       /*  2   */
+    "in 5 seconds",         "in 5 seconds"        /*  5   */
+};
 
 static const char* en_decDef_long_midSent_week[kNumOffsets*2] = {
 /*  text                    numeric */
@@ -40,6 +55,7 @@ static const char* en_decDef_long_midSent_week[kNumOffsets*2] = {
     "2 weeks ago",          "2 weeks ago",        /* -2   */
     "last week",            "1 week ago",         /* -1   */
     "0.7 weeks ago",        "0.7 weeks ago",      /* -0.7 */
+    "this week",            "0 weeks ago",        /*  -0  */
     "this week",            "in 0 weeks",         /*  0   */
     "in 0.7 weeks",         "in 0.7 weeks",       /*  0.7 */
     "next week",            "in 1 week",          /*  1   */
@@ -54,6 +70,7 @@ static const char* en_dec0_long_midSent_week[kNumOffsets*2] = {
     "2 weeks ago",          "2 weeks ago",        /* -2  */
     "last week",            "1 week ago",         /* -1   */
     "0 weeks ago",          "0 weeks ago",        /* -0.7 */
+    "this week",            "0 weeks ago",        /* -0  */
     "this week",            "in 0 weeks",         /*  0   */
     "in 0 weeks",           "in 0 weeks",         /*  0.7 */
     "next week",            "in 1 week",          /*  1   */
@@ -68,6 +85,7 @@ static const char* en_decDef_short_midSent_week[kNumOffsets*2] = {
     "2 wk. ago",            "2 wk. ago",          /* -2   */
     "last wk.",             "1 wk. ago",          /* -1   */
     "0.7 wk. ago",          "0.7 wk. ago",        /* -0.7 */
+    "this wk.",             "0 wk. ago",          /* -0   */
     "this wk.",             "in 0 wk.",           /*  0   */
     "in 0.7 wk.",           "in 0.7 wk.",         /*  0.7 */
     "next wk.",             "in 1 wk.",           /*  1   */
@@ -82,6 +100,7 @@ static const char* en_decDef_long_midSent_min[kNumOffsets*2] = {
     "2 minutes ago",        "2 minutes ago",      /* -2   */
     "1 minute ago",         "1 minute ago",       /* -1   */
     "0.7 minutes ago",      "0.7 minutes ago",    /* -0.7 */
+    "0 minutes ago",        "0 minutes ago",      /* -0   */
     "in 0 minutes",         "in 0 minutes",       /*  0   */
     "in 0.7 minutes",       "in 0.7 minutes",     /*  0.7 */
     "in 1 minute",          "in 1 minute",        /*  1   */
@@ -91,16 +110,17 @@ static const char* en_decDef_long_midSent_min[kNumOffsets*2] = {
 
 static const char* en_dec0_long_midSent_tues[kNumOffsets*2] = {
 /*  text                    numeric */
-    ""/*no data */,         ""/*no data */,       /* -5   */
+    "5 Tuesdays ago",       "5 Tuesdays ago",     /* -5   */
     ""/*no data */,         ""/*no data */,       /* -2.2 */
-    ""/*no data */,         ""/*no data */,       /* -2   */
-    "last Tuesday",         ""/*no data */,       /* -1   */
+    "2 Tuesdays ago",       "2 Tuesdays ago",     /* -2   */
+    "last Tuesday",         "1 Tuesday ago",      /* -1   */
     ""/*no data */,         ""/*no data */,       /* -0.7 */
-    "this Tuesday",         ""/*no data */,       /*  0   */
+    "this Tuesday",         "0 Tuesdays ago",     /* -0   */
+    "this Tuesday",         "in 0 Tuesdays",      /*  0   */
     ""/*no data */,         ""/*no data */,       /*  0.7 */
-    "next Tuesday",         ""/*no data */,       /*  1   */
-    ""/*no data */,         ""/*no data */,       /*  2   */
-    ""/*no data */,         ""/*no data */,       /*  5   */
+    "next Tuesday",         "in 1 Tuesday",       /*  1   */
+    "in 2 Tuesdays",        "in 2 Tuesdays",      /*  2   */
+    "in 5 Tuesdays",        "in 5 Tuesdays",      /*  5   */
 };
 
 static const char* fr_decDef_long_midSent_day[kNumOffsets*2] = {
@@ -110,6 +130,7 @@ static const char* fr_decDef_long_midSent_day[kNumOffsets*2] = {
     "avant-hier",           "il y a 2 jours",     /* -2   */
     "hier",                 "il y a 1 jour",      /* -1   */
     "il y a 0,7 jour",      "il y a 0,7 jour",    /* -0.7 */
+    "aujourd\\u2019hui",    "il y a 0 jour",      /* -0   */
     "aujourd\\u2019hui",    "dans 0 jour",        /*  0   */
     "dans 0,7 jour",        "dans 0,7 jour",      /*  0.7 */
     "demain",               "dans 1 jour",        /*  1   */
@@ -128,6 +149,7 @@ typedef struct {
 } RelDateTimeFormatTestItem;
 
 static const RelDateTimeFormatTestItem fmtTestItems[] = {
+    { "en", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_SECOND,  en_decDef_long_midSent_sec  },
     { "en", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_WEEK,    en_decDef_long_midSent_week  },
     { "en",  0, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_WEEK,    en_dec0_long_midSent_week    },
     { "en", -1, UDAT_STYLE_SHORT, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_WEEK,    en_decDef_short_midSent_week },

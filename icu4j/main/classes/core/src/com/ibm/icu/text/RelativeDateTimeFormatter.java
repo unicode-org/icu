@@ -552,7 +552,7 @@ public final class RelativeDateTimeFormatter {
                 throw new UnsupportedOperationException("formatNumeric does not currently support RelativeUnit.SUNDAY..SATURDAY");
         }
         Direction direction = Direction.NEXT;
-        if (offset < 0) {
+        if (Double.compare(offset,0.0) < 0) { // needed to handle -0.0
             direction = Direction.LAST;
             offset = -offset;
         }
