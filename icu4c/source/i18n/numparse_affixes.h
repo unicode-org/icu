@@ -15,7 +15,8 @@
 
 #include <array>
 
-U_NAMESPACE_BEGIN namespace numparse {
+U_NAMESPACE_BEGIN
+namespace numparse {
 namespace impl {
 
 // Forward-declaration of implementation classes for friending
@@ -43,13 +44,6 @@ class CodePointMatcher : public NumberParseMatcher, public UMemory {
     UChar32 fCp;
 };
 
-
-// Export an explicit template instantiation of the MaybeStackArray that is used as a data member of CodePointMatcherWarehouse.
-// When building DLLs for Windows this is required even though no direct access to the MaybeStackArray leaks out of the i18n library.
-// (See numparse_compositions.h, digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.)
-#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-template class U_I18N_API MaybeStackArray<CodePointMatcher*, 3>;
-#endif
 
 /**
  * A warehouse to retain ownership of CodePointMatchers.
@@ -163,14 +157,6 @@ class AffixPatternMatcherBuilder : public TokenConsumer, public MutableMatcherCo
     void addMatcher(NumberParseMatcher& matcher) override;
 };
 
-// Export an explicit template instantiation of the CompactUnicodeString that is used as a data member of AffixPatternMatcher.
-// Also an explicit template instantiation of the MaybeStackArray that is used inside of the CompactUnicodeString.
-// When building DLLs for Windows this is required even though no direct access to the CompactUnicodeString leaks out of the i18n library.
-// (See digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.)
-#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-template class U_I18N_API MaybeStackArray<UChar, 4>;
-template class U_I18N_API CompactUnicodeString<4>;
-#endif
 
 // Exported as U_I18N_API for tests
 class U_I18N_API AffixPatternMatcher : public ArraySeriesMatcher {
@@ -248,6 +234,16 @@ class AffixMatcherWarehouse {
 
 } // namespace impl
 } // namespace numparse
+
+// Export a explicit template instantiations of MaybeStackArray and CompactUnicodeString.
+// When building DLLs for Windows this is required even though no direct access leaks out of the i18n library.
+// (See digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.)
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API MaybeStackArray<UChar, 4>;
+template class U_I18N_API MaybeStackArray<numparse::impl::CodePointMatcher*, 3>;
+template class U_I18N_API numparse::impl::CompactUnicodeString<4>;
+#endif
+
 U_NAMESPACE_END
 
 #endif //__NUMPARSE_AFFIXES_H__
