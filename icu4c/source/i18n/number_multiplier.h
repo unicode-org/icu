@@ -20,6 +20,8 @@ namespace impl {
 // Exported as U_I18N_API for tests
 class U_I18N_API MultiplierFormatHandler : public MicroPropsGenerator, public UMemory {
   public:
+    MultiplierFormatHandler() = default; // WARNING: Leaves object in an unusable state; call setAndChain()
+
     void setAndChain(const Scale& multiplier, const MicroPropsGenerator* parent);
 
     void processQuantity(DecimalQuantity& quantity, MicroProps& micros,
