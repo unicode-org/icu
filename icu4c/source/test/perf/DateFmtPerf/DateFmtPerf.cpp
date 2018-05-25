@@ -278,7 +278,7 @@ int main(int argc, const char* argv[]){
 
 
     if(U_FAILURE(status)){   // ERROR HERE!!!
-		cout << "initialize failed! " << status << endl;
+		cout << "initialize failed! " << u_errorName(status) << endl;
         return status;
     }
 	//cout << "Done initializing!\n" << endl;
