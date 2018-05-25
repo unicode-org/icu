@@ -74,7 +74,7 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\bin\iculx61.dll</OutputFile>
+      <OutputFile>..\..\bin\iculx62.dll</OutputFile>
       <AdditionalDependencies>icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>.\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\..\..\lib\iculx.pdb</ProgramDatabaseFile>
@@ -100,7 +100,7 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\bin\iculx61d.dll</OutputFile>
+      <OutputFile>..\..\bin\iculx62d.dll</OutputFile>
       <AdditionalDependencies>icuucd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>.\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -126,7 +126,7 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\bin64\iculx61.dll</OutputFile>
+      <OutputFile>..\..\bin64\iculx62.dll</OutputFile>
       <AdditionalDependencies>icuuc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>.\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\..\..\lib64\iculx.pdb</ProgramDatabaseFile>
@@ -149,7 +149,7 @@
       <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\bin64\iculx61d.dll</OutputFile>
+      <OutputFile>..\..\bin64\iculx62d.dll</OutputFile>
       <AdditionalDependencies>icuucd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>.\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>

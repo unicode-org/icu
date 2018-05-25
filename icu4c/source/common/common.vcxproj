@@ -85,7 +85,7 @@
       <ProgramDataBaseFileName>.\x86\Release/</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\bin\icuuc61.dll</OutputFile>
+      <OutputFile>..\..\bin\icuuc62.dll</OutputFile>
       <AdditionalLibraryDirectories>.\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\..\..\lib\icuuc.pdb</ProgramDatabaseFile>
       <DataExecutionPrevention>
@@ -105,7 +105,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\bin\icuuc61d.dll</OutputFile>
+      <OutputFile>..\..\bin\icuuc62d.dll</OutputFile>
       <AdditionalLibraryDirectories>.\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\..\..\lib\icuucd.pdb</ProgramDatabaseFile>
       <DataExecutionPrevention>
@@ -124,7 +124,7 @@
       <ProgramDataBaseFileName>.\x64\Release/</ProgramDataBaseFileName>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\bin64\icuuc61.dll</OutputFile>
+      <OutputFile>..\..\bin64\icuuc62.dll</OutputFile>
       <AdditionalLibraryDirectories>.\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\..\..\lib64\icuuc.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\lib64\icuuc.lib</ImportLibrary>
@@ -142,7 +142,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <OutputFile>..\..\bin64\icuuc61d.dll</OutputFile>
+      <OutputFile>..\..\bin64\icuuc62d.dll</OutputFile>
       <AdditionalLibraryDirectories>.\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ProgramDatabaseFile>.\..\..\lib64\icuucd.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\lib64\icuucd.lib</ImportLibrary>
