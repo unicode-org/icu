@@ -43,16 +43,6 @@
 #include "unicode/curramt.h"
 #include "unicode/enumset.h"
 
-#ifndef U_HIDE_INTERNAL_API
-/**
- * \def UNUM_DECIMALFORMAT_INTERNAL_SIZE
- * @internal
- */
-#if UCONFIG_FORMAT_FASTPATHS_49
-#define UNUM_DECIMALFORMAT_INTERNAL_SIZE 16
-#endif
-#endif  /* U_HIDE_INTERNAL_API */
-
 U_NAMESPACE_BEGIN
 
 class CurrencyPluralInfo;

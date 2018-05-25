@@ -16,16 +16,6 @@
 
 U_NAMESPACE_BEGIN
 
-/**
- * @internal
- */
-struct FmtStackData {
-  icu::number::impl::DecimalQuantity stackDecimalNum;   // 128
-  //CharString stackDecimalStr;  // 64
-  //                         -----
-  //                         192 total
-};
-
 /** 
  * Maximum int64_t value that can be stored in a double without chancing losing precision.
  *   IEEE doubles have 53 bits of mantissa, 10 bits exponent, 1 bit sign.
