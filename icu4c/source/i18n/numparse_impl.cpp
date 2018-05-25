@@ -11,7 +11,6 @@
 
 #include <typeinfo>
 #include <array>
-#include <iostream>
 #include "number_types.h"
 #include "number_patternstring.h"
 #include "numparse_types.h"
