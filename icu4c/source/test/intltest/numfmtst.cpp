@@ -6956,21 +6956,7 @@ NumberFormatTest::Test9087(void)
     unum_close(fmt);
 }
 
-#include "dcfmtimp.h"
-
 void NumberFormatTest::TestFormatFastpaths() {
-#if UCONFIG_FORMAT_FASTPATHS_49
-    logln("Sizeof DecimalFormat = %d, Sizeof DecimalFormatInternal=%d, UNUM_DECIMALFORMAT_INTERNAL_SIZE=%d\n",
-        sizeof(DecimalFormat), sizeof(DecimalFormatInternal), UNUM_DECIMALFORMAT_INTERNAL_SIZE);
-    if(UNUM_DECIMALFORMAT_INTERNAL_SIZE < sizeof(DecimalFormatInternal)) {
-        errln("Error: sizeof(DecimalFormatInternal)=%d but UNUM_DECIMALFORMAT_INTERNAL_SIZE is only %d. Increase the #define?\n", sizeof(DecimalFormatInternal), UNUM_DECIMALFORMAT_INTERNAL_SIZE);
-    } else if(UNUM_DECIMALFORMAT_INTERNAL_SIZE > (sizeof(DecimalFormatInternal)+16)) {
-        infoln("Note: sizeof(DecimalFormatInternal)=%d but UNUM_DECIMALFORMAT_INTERNAL_SIZE is %d. Decrease the #define? sizeof(DecimalFormat)=%d\n", sizeof(DecimalFormatInternal), UNUM_DECIMALFORMAT_INTERNAL_SIZE, sizeof(DecimalFormat));
-    }
-#else
-    infoln("NOTE: UCONFIG_FORMAT_FASTPATHS not set, test skipped.");
-#endif
-
     // get some additional case
     {
         UErrorCode status=U_ZERO_ERROR;
@@ -7081,15 +7067,15 @@ void NumberFormatTest::TestFormatFastpaths() {
 
 
 void NumberFormatTest::TestFormattableSize(void) {
-  if(sizeof(FmtStackData) > UNUM_INTERNAL_STACKARRAY_SIZE) {
-    errln("Error: sizeof(FmtStackData)=%d, UNUM_INTERNAL_STACKARRAY_SIZE=%d\n",
-          sizeof(FmtStackData), UNUM_INTERNAL_STACKARRAY_SIZE);
-  } else if(sizeof(FmtStackData) < UNUM_INTERNAL_STACKARRAY_SIZE) {
-    logln("Warning: sizeof(FmtStackData)=%d, UNUM_INTERNAL_STACKARRAY_SIZE=%d\n",
-        sizeof(FmtStackData), UNUM_INTERNAL_STACKARRAY_SIZE);
+  if(sizeof(Formattable) > 112) {
+    errln("Error: sizeof(Formattable)=%d, 112=%d\n",
+          sizeof(Formattable), 112);
+  } else if(sizeof(Formattable) < 112) {
+    logln("Warning: sizeof(Formattable)=%d, 112=%d\n",
+        sizeof(Formattable), 112);
   } else {
-    logln("sizeof(FmtStackData)=%d, UNUM_INTERNAL_STACKARRAY_SIZE=%d\n",
-        sizeof(FmtStackData), UNUM_INTERNAL_STACKARRAY_SIZE);
+    logln("sizeof(Formattable)=%d, 112=%d\n",
+        sizeof(Formattable), 112);
   }
 }
 

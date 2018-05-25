@@ -4272,7 +4272,6 @@ icu4c/source/i18n/dangical.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/datefmt.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/dayperiodrules.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/dayperiodrules.h svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/i18n/dcfmtimp.h svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/dcfmtsym.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/decContext.cpp svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/i18n/decContext.h svneol=native#text/plain%3Bcharset%3Dutf-8
