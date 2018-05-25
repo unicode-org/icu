@@ -9,6 +9,7 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
+#include "number_decnum.h"
 #include "number_skeletons.h"
 #include "umutex.h"
 #include "ucln_in.h"

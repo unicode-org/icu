@@ -10,6 +10,7 @@
 #include "number_decimalquantity.h"
 #include "number_formatimpl.h"
 #include "umutex.h"
+#include "number_asformat.h"
 #include "number_skeletons.h"
 #include "number_utils.h"
 #include "number_utypes.h"

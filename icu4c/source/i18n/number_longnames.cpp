@@ -11,6 +11,7 @@
 #include "charstr.h"
 #include "uresimp.h"
 #include "number_longnames.h"
+#include "number_microprops.h"
 #include <algorithm>
 #include "cstring.h"
 
@@ -261,7 +262,7 @@ void LongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &mic
     // TODO: Avoid the copy here?
     DecimalQuantity copy(quantity);
     micros.rounder.apply(copy, status);
-    micros.modOuter = &fModifiers[copy.getStandardPlural(rules)];
+    micros.modOuter = &fModifiers[utils::getStandardPlural(rules, copy)];
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

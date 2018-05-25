@@ -5,12 +5,13 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "resource.h"
-#include "number_compact.h"
 #include "unicode/ustring.h"
 #include "unicode/ures.h"
 #include "cstring.h"
 #include "charstr.h"
+#include "resource.h"
+#include "number_compact.h"
+#include "number_microprops.h"
 #include "uresimp.h"
 
 using namespace icu;
@@ -283,7 +284,7 @@ void CompactHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micr
         magnitude -= multiplier;
     }
 
-    StandardPlural::Form plural = quantity.getStandardPlural(rules);
+    StandardPlural::Form plural = utils::getStandardPlural(rules, quantity);
     const UChar *patternString = data.getPattern(magnitude, plural);
     if (patternString == nullptr) {
         // Use the default (non-compact) modifier.

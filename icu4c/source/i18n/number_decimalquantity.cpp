@@ -12,6 +12,7 @@
 
 #include "unicode/plurrule.h"
 #include "cmemory.h"
+#include "number_decnum.h"
 #include "putilimp.h"
 #include "number_decimalquantity.h"
 #include "number_roundingutils.h"
@@ -68,6 +69,7 @@ static double DOUBLE_MULTIPLIERS[] = {
 
 }  // namespace
 
+icu::IFixedDecimal::~IFixedDecimal() = default;
 
 DecimalQuantity::DecimalQuantity() {
     setBcdToZero();
@@ -234,16 +236,6 @@ bool DecimalQuantity::adjustMagnitude(int32_t delta) {
         return overflow;
     }
     return false;
-}
-
-StandardPlural::Form DecimalQuantity::getStandardPlural(const PluralRules *rules) const {
-    if (rules == nullptr) {
-        // Fail gracefully if the user didn't provide a PluralRules
-        return StandardPlural::Form::OTHER;
-    } else {
-        UnicodeString ruleString = rules->select(*this);
-        return StandardPlural::orOtherFromString(ruleString);
-    }
 }
 
 double DecimalQuantity::getPluralOperand(PluralOperand operand) const {
