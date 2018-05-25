@@ -195,6 +195,15 @@ export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
     (not strictly necessary for NOT_ENCODED scripts)
   $ICU_SRC/tools/unicode$ py/parsescriptmetadata.py $ICU_SRC/icu4c/source/common/unicode/uscript.h $CLDR_SRC/common/properties/scriptMetadata.txt
 
+* update spoof checker UnicodeSet initializers:
+    inclusionPat & recommendedPat in uspoof.cpp
+    INCLUSION & RECOMMENDED in SpoofChecker.java
+- make sure that the Unicode Tools tree contains the latest security data files
+- go to Unicode Tools org.unicode.text.tools.RecommendedSetGenerator
+- update the hardcoded version number there in the DIRECTORY path
+- run the tool (no special environment variables needed)
+- copy & paste from the Console output into the .cpp & .java files
+
 * generate normalization data files
   cd $ICU_ROOT/dbg/icu4c
   bin/gennorm2 -o $ICU_SRC/icu4c/source/common/norm2_nfc_data.h -s $ICU4C_UNIDATA/norm2 nfc.txt --csource
