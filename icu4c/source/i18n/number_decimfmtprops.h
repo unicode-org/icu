@@ -88,7 +88,7 @@ enum ParseMode {
 };
 
 // Exported as U_I18N_API because it is needed for the unit test PatternStringTest
-struct U_I18N_API DecimalFormatProperties {
+struct U_I18N_API DecimalFormatProperties : public UMemory {
 
   public:
     NullableValue<UNumberCompactStyle> compactStyle;
