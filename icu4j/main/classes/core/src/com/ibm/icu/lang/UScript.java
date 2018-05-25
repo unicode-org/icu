@@ -1344,7 +1344,7 @@ public final class UScript {
             0x0EA5 | RECOMMENDED | LB_LETTERS,  // Laoo
             0x004C | RECOMMENDED | CASED,  // Latn
             0x0D15 | RECOMMENDED,  // Mlym
-            0x1826 | LIMITED_USE,  // Mong
+            0x1826 | EXCLUSION,  // Mong
             0x1000 | RECOMMENDED | LB_LETTERS,  // Mymr
             0x168F | EXCLUSION,  // Ogam
             0x10300 | EXCLUSION,  // Ital
