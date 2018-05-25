@@ -253,6 +253,7 @@
     <ClCompile Include="nfsubs.cpp" />
     <ClCompile Include="nounit.cpp" />
     <ClCompile Include="number_affixutils.cpp" />
+    <ClCompile Include="number_asformat.cpp" />
     <ClCompile Include="number_compact.cpp" />
     <ClCompile Include="number_decimalquantity.cpp" />
     <ClCompile Include="number_decimfmtprops.cpp" />
@@ -515,11 +516,14 @@
     <ClInclude Include="uspoof_conf.h" />
     <ClInclude Include="uspoof_impl.h" />
     <ClInclude Include="number_affixutils.h" />
+    <ClInclude Include="number_asformat.h" />
     <ClInclude Include="number_compact.h" />
     <ClInclude Include="number_decimalquantity.h" />
     <ClInclude Include="number_decimfmtprops.h" />
+    <ClInclude Include="number_decnum.h" />
     <ClInclude Include="number_formatimpl.h" />
     <ClInclude Include="number_longnames.h" />
+    <ClInclude Include="number_microprops.h" />
     <ClInclude Include="number_modifiers.h" />
     <ClInclude Include="number_patternmodifier.h" />
     <ClInclude Include="number_patternstring.h" />

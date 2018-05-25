@@ -194,15 +194,6 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      */
     void appendDigit(int8_t value, int32_t leadingZeros, bool appendAsInteger);
 
-    /**
-     * Computes the plural form for this number based on the specified set of rules.
-     *
-     * @param rules A {@link PluralRules} object representing the set of rules.
-     * @return The {@link StandardPlural} according to the PluralRules. If the plural form is not in
-     *     the set of standard plurals, {@link StandardPlural#OTHER} is returned instead.
-     */
-    StandardPlural::Form getStandardPlural(const PluralRules *rules) const;
-
     double getPluralOperand(PluralOperand operand) const U_OVERRIDE;
 
     bool hasIntegerValue() const U_OVERRIDE;

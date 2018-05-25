@@ -519,6 +519,9 @@
     <ClCompile Include="number_affixutils.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="number_asformat.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="number_compact.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -803,6 +806,9 @@
     <ClInclude Include="number_affixutils.h">
       <Filter>formatting</Filter>
     </ClInclude>
+    <ClInclude Include="number_asformat.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
     <ClInclude Include="number_compact.h">
       <Filter>formatting</Filter>
     </ClInclude>
@@ -812,10 +818,16 @@
     <ClInclude Include="number_decimfmtprops.h">
       <Filter>formatting</Filter>
     </ClInclude>
+    <ClInclude Include="number_decnum.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
     <ClInclude Include="number_formatimpl.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="number_longnames.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="number_microprops.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="number_modifiers.h">

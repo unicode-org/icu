@@ -6,6 +6,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "number_decimalquantity.h"
+#include "number_decnum.h"
 #include "math.h"
 #include <cmath>
 #include "number_utils.h"

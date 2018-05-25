@@ -10,6 +10,7 @@
 #include <cmath>
 #include "unicode/unum.h"
 #include "unicode/numberformatter.h"
+#include "number_asformat.h"
 #include "number_types.h"
 #include "number_utils.h"
 #include "numbertest.h"

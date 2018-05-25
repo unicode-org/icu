@@ -10,6 +10,7 @@
 #include "unicode/dcfmtsym.h"
 #include "unicode/ucurr.h"
 #include "unicode/unistr.h"
+#include "number_microprops.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -136,7 +137,7 @@ void ImmutablePatternModifier::applyToMicros(MicroProps& micros, DecimalQuantity
         // TODO: Fix this. Avoid the copy.
         DecimalQuantity copy(quantity);
         copy.roundToInfinity();
-        StandardPlural::Form plural = copy.getStandardPlural(rules);
+        StandardPlural::Form plural = utils::getStandardPlural(rules, copy);
         micros.modMiddle = pm->getModifier(quantity.signum(), plural);
     }
 }
@@ -166,7 +167,7 @@ void MutablePatternModifier::processQuantity(DecimalQuantity& fq, MicroProps& mi
         // TODO: Fix this. Avoid the copy.
         DecimalQuantity copy(fq);
         micros.rounder.apply(copy, status);
-        nonConstThis->setNumberProperties(fq.signum(), copy.getStandardPlural(rules));
+        nonConstThis->setNumberProperties(fq.signum(), utils::getStandardPlural(rules, copy));
     } else {
         nonConstThis->setNumberProperties(fq.signum(), StandardPlural::Form::COUNT);
     }

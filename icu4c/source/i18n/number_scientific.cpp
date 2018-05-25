@@ -10,6 +10,7 @@
 #include "number_utils.h"
 #include "number_stringbuilder.h"
 #include "unicode/unum.h"
+#include "number_microprops.h"
 
 using namespace icu;
 using namespace icu::number;

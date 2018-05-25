@@ -249,26 +249,6 @@ PluralRules::select(double number) const {
 }
 
 UnicodeString
-PluralRules::select(const Formattable& obj, const NumberFormat& fmt, UErrorCode& status) const {
-    if (U_SUCCESS(status)) {
-        const DecimalFormat *decFmt = dynamic_cast<const DecimalFormat *>(&fmt);
-        if (decFmt != NULL) {
-            number::impl::DecimalQuantity dq;
-            decFmt->formatToDecimalQuantity(obj, dq, status);
-            if (U_SUCCESS(status)) {
-                return select(dq);
-            }
-        } else {
-            double number = obj.getDouble(status);
-            if (U_SUCCESS(status)) {
-                return select(number);
-            }
-        }
-    }
-    return UnicodeString();
-}
-
-UnicodeString
 PluralRules::select(const IFixedDecimal &number) const {
     if (mRules == NULL) {
         return UnicodeString(TRUE, PLURAL_DEFAULT_RULE, -1);
@@ -1417,8 +1397,6 @@ PluralOperand tokenTypeToPluralOperand(tokenType tt) {
         return PLURAL_OPERAND_N;
     }
 }
-
-IFixedDecimal::~IFixedDecimal() = default;
 
 FixedDecimal::FixedDecimal(double n, int32_t v, int64_t f) {
     init(n, v, f);

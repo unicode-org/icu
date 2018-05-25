@@ -9,6 +9,7 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
+#include "number_decnum.h"
 #include "number_types.h"
 #include "number_multiplier.h"
 #include "numparse_validators.h"
@@ -151,22 +152,5 @@ void MultiplierFormatHandler::processQuantity(DecimalQuantity& quantity, MicroPr
     parent->processQuantity(quantity, micros, status);
     multiplier.applyTo(quantity);
 }
-
-
-// NOTE: MultiplierParseHandler is declared in the header numparse_validators.h
-MultiplierParseHandler::MultiplierParseHandler(::icu::number::Scale multiplier)
-        : fMultiplier(std::move(multiplier)) {}
-
-void MultiplierParseHandler::postProcess(ParsedNumber& result) const {
-    if (!result.quantity.bogus) {
-        fMultiplier.applyReciprocalTo(result.quantity);
-        // NOTE: It is okay if the multiplier was negative.
-    }
-}
-
-UnicodeString MultiplierParseHandler::toString() const {
-    return u"<Scale>";
-}
-
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -11,6 +11,7 @@
 
 #include <stdlib.h>
 #include <cmath>
+#include "number_decnum.h"
 #include "number_types.h"
 #include "number_utils.h"
 #include "charstr.h"
@@ -20,7 +21,6 @@
 #include "fphdlimp.h"
 #include "uresimp.h"
 #include "ureslocs.h"
-#include "number_utypes.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -46,86 +46,6 @@ doGetPattern(UResourceBundle* res, const char* nsName, const char* patternKey, U
     return ures_getStringByKeyWithFallback(res, key.data(), nullptr, &localStatus);
 }
 
-}
-
-
-LocalizedNumberFormatterAsFormat::LocalizedNumberFormatterAsFormat(
-        const LocalizedNumberFormatter& formatter, const Locale& locale)
-        : fFormatter(formatter), fLocale(locale) {
-    const char* localeName = locale.getName();
-    setLocaleIDs(localeName, localeName);
-}
-
-LocalizedNumberFormatterAsFormat::~LocalizedNumberFormatterAsFormat() = default;
-
-UBool LocalizedNumberFormatterAsFormat::operator==(const Format& other) const {
-    auto* _other = dynamic_cast<const LocalizedNumberFormatterAsFormat*>(&other);
-    if (_other == nullptr) {
-        return false;
-    }
-    // TODO: Change this to use LocalizedNumberFormatter::operator== if it is ever proposed.
-    // This implementation is fine, but not particularly efficient.
-    UErrorCode localStatus = U_ZERO_ERROR;
-    return fFormatter.toSkeleton(localStatus) == _other->fFormatter.toSkeleton(localStatus);
-}
-
-Format* LocalizedNumberFormatterAsFormat::clone() const {
-    return new LocalizedNumberFormatterAsFormat(*this);
-}
-
-UnicodeString& LocalizedNumberFormatterAsFormat::format(const Formattable& obj, UnicodeString& appendTo,
-                                                        FieldPosition& pos, UErrorCode& status) const {
-    if (U_FAILURE(status)) { return appendTo; }
-    UFormattedNumberData data;
-    obj.populateDecimalQuantity(data.quantity, status);
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    fFormatter.formatImpl(&data, status);
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    // always return first occurrence:
-    pos.setBeginIndex(0);
-    pos.setEndIndex(0);
-    bool found = data.string.nextFieldPosition(pos, status);
-    if (found && appendTo.length() != 0) {
-        pos.setBeginIndex(pos.getBeginIndex() + appendTo.length());
-        pos.setEndIndex(pos.getEndIndex() + appendTo.length());
-    }
-    appendTo.append(data.string.toTempUnicodeString());
-    return appendTo;
-}
-
-UnicodeString& LocalizedNumberFormatterAsFormat::format(const Formattable& obj, UnicodeString& appendTo,
-                                                        FieldPositionIterator* posIter,
-                                                        UErrorCode& status) const {
-    if (U_FAILURE(status)) { return appendTo; }
-    UFormattedNumberData data;
-    obj.populateDecimalQuantity(data.quantity, status);
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    fFormatter.formatImpl(&data, status);
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    appendTo.append(data.string.toTempUnicodeString());
-    if (posIter != nullptr) {
-        FieldPositionIteratorHandler fpih(posIter, status);
-        data.string.getAllFieldPositions(fpih, status);
-    }
-    return appendTo;
-}
-
-void LocalizedNumberFormatterAsFormat::parseObject(const UnicodeString&, Formattable&,
-                                                   ParsePosition& parse_pos) const {
-    // Not supported.
-    parse_pos.setErrorIndex(0);
-}
-
-const LocalizedNumberFormatter& LocalizedNumberFormatterAsFormat::getNumberFormatter() const {
-    return fFormatter;
 }
 
 
@@ -329,7 +249,5 @@ bool DecNum::isNegative() const {
 bool DecNum::isZero() const {
     return decNumberIsZero(fData.getAlias());
 }
-
-
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

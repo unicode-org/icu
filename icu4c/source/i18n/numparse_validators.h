@@ -71,8 +71,6 @@ class RequireNumberValidator : public ValidationMatcher, public UMemory {
 
 /**
  * Wraps a {@link Multiplier} for use in the number parsing pipeline.
- *
- * NOTE: Implemented in number_multiplier.cpp
  */
 class MultiplierParseHandler : public ValidationMatcher, public UMemory {
   public:

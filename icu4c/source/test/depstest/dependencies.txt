@@ -18,7 +18,7 @@ system_symbols:
     # C
     PIC system_misc system_debug malloc_functions ubsan
     c_strings c_string_formatting
-    floating_point trigonometry
+    int_functions floating_point trigonometry
     stdlib_qsort
     pthread system_locale
     stdio_input stdio_output file_io readlink_function dir_io mmap_functions dlfcn
@@ -58,8 +58,11 @@ group: c_string_formatting
     # Additional symbols in an optimized build.
     __sprintf_chk
 
+group: int_functions
+    div
+
 group: floating_point
-    abs fabs floor ceil modf fmod log pow round sqrt
+    abs fabs floor ceil modf fmod log pow round sqrt trunc
 
 group: trigonometry
     acos asin atan atan2 cos sin tan
@@ -154,6 +157,7 @@ library: common
     unistr_props unistr_case unistr_case_locale unistr_titlecase_brkiter unistr_cnv
     cstr
     uniset_core uniset_props uniset_closure usetiter uset uset_props
+    static_unicode_sets
     uiter edits
     ucasemap ucasemap_titlecase_brkiter script_runs
     uprops ubidi_props ucase uscript uscript_props
@@ -280,6 +284,11 @@ group: punycode
     punycode.o
   deps
     platform
+
+group: static_unicode_sets
+    static_unicode_sets.o
+  deps
+    resourcebundle uniset_props
 
 group: uset_props
     uset_props.o
@@ -475,6 +484,8 @@ group: ustr_titlecase_brkiter
 group: edits
     edits.o
   deps
+    # Edits::Iterator::toString() calls ICU_Utility::appendNumber()
+    icu_utility
     platform
 
 group: ucasemap_titlecase_brkiter
@@ -574,6 +585,7 @@ group: currency
   deps
     loclikely resourcebundle ulist ustring_case_locale
     stdlib_qsort  # for ucurr.o (which does not use ICU's uarrsort.o)
+    static_unicode_sets usetiter
 
 group: icudataver  # u_getDataVersion()
     icudataver.o
@@ -804,7 +816,7 @@ library: i18n
     alphabetic_index collation collation_builder string_search
     dayperiodrules
     formatting formattable_cnv regex regex_cnv translit
-    double_conversion numberformatter
+    double_conversion number_representation numberformatter numberparser
     universal_time_scale
     uclean_i18n
 
@@ -881,39 +893,57 @@ group: dayperiodrules
 group: double_conversion
     double-conversion.o double-conversion-bignum.o double-conversion-bignum-dtoa.o
     double-conversion-cached-powers.o double-conversion-diy-fp.o
-    double-conversion-fast-dtoa.o
+    double-conversion-fast-dtoa.o double-conversion-strtod.o
   deps
     platform
 
+group: number_representation
+    number_decimalquantity.o number_stringbuilder.o numparse_stringsegment.o number_utils.o
+  deps
+    decnumber double_conversion
+    # for data loading; that could be split off
+    resourcebundle
+    int_functions
+    ucase uniset_core
+
 group: numberformatter
     # ICU 60+ NumberFormatter API
-    number_affixutils.o number_compact.o number_decimalquantity.o
-    number_decimfmtprops.o number_fluent.o number_formatimpl.o
+    number_affixutils.o number_asformat.o
+    number_capi.o number_compact.o number_currencysymbols.o
+    number_decimfmtprops.o
+    number_fluent.o number_formatimpl.o
     number_grouping.o number_integerwidth.o number_longnames.o
-    number_modifiers.o number_notation.o number_padding.o
+    number_mapper.o number_modifiers.o number_multiplier.o
+    number_notation.o number_padding.o
     number_patternmodifier.o number_patternstring.o number_rounding.o
-    number_scientific.o number_stringbuilder.o
+    number_scientific.o number_skeletons.o
+    currpinf.o dcfmtsym.o numsys.o
+    # pluralrules
+    standardplural.o plurrule.o
   deps
-    digitlist formattable format units
-    # TODO: fix: dependency on formatting needed for circular dependency pluralrules <-> decimfmt.o
-    # We should be able to have a small pluralrules group and depend on that here.
-    formatting
+    decnumber double_conversion formattable format units
+    number_representation
     uclean_i18n common
+
+group: numberparser
+    numparse_affixes.o numparse_compositions.o numparse_currency.o
+    numparse_decimal.o numparse_impl.o numparse_parsednumber.o
+    numparse_scientific.o numparse_symbols.o
+    numparse_validators.o
+  deps
+    numberformatter
 
 group: formatting
     # TODO: Try to subdivide this ball of wax.
     # currencyformat
-    curramt.o currfmt.o currpinf.o
+    curramt.o currfmt.o
+    # pluralrules C API
+    upluralrules.o
     # decimalformat
-    dcfmtsym.o numsys.o unumsys.o
-    affixpatternparser.o decimfmtimpl.o digitaffix.o digitaffixesandpadding.o
-    digitformatter.o digitgrouping.o digitinterval.o
-    pluralaffix.o precision.o smallintformatter.o valueformatter.o
-    decfmtst.o decimfmt.o decimalformatpattern.o compactdecimalformat.o
+    unumsys.o
+    decimfmt.o compactdecimalformat.o
     numfmt.o unum.o
     winnmfmt.o
-    # pluralrules
-    standardplural.o plurrule.o upluralrules.o
     # scientificnumberformatter - would depend on dcfmtsym, so would be circular.
     scientificnumberformatter.o
     # rbnf
@@ -934,7 +964,7 @@ group: formatting
     # messageformat
     choicfmt.o msgfmt.o plurfmt.o selfmt.o umsg.o
   deps
-    digitlist formattable format units
+    decnumber formattable format units numberformatter numberparser
     dayperiodrules
     collation collation_builder  # for rbnf
     common
@@ -953,8 +983,8 @@ group: units
   deps
     stringenumeration
 
-group: digitlist
-    digitlst.o decContext.o decNumber.o visibledigits.o
+group: decnumber
+    decContext.o decNumber.o
   deps
     double_conversion uclean_i18n
 
@@ -962,7 +992,7 @@ group: formattable
     fmtable.o
     measure.o
   deps
-    digitlist
+    decnumber number_representation
 
 group: formattable_cnv
     fmtable_cnv.o

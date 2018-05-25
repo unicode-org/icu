@@ -68,5 +68,18 @@ UnicodeString RequireNumberValidator::toString() const {
     return u"<ReqNumber>";
 }
 
+MultiplierParseHandler::MultiplierParseHandler(::icu::number::Scale multiplier)
+        : fMultiplier(std::move(multiplier)) {}
+
+void MultiplierParseHandler::postProcess(ParsedNumber& result) const {
+    if (!result.quantity.bogus) {
+        fMultiplier.applyReciprocalTo(result.quantity);
+        // NOTE: It is okay if the multiplier was negative.
+    }
+}
+
+UnicodeString MultiplierParseHandler::toString() const {
+    return u"<Scale>";
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

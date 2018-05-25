@@ -6,6 +6,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "numbertest.h"
+#include "number_microprops.h"
 #include "number_patternmodifier.h"
 
 void PatternModifierTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *) {

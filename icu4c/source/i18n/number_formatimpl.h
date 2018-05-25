@@ -14,6 +14,7 @@
 #include "number_patternmodifier.h"
 #include "number_longnames.h"
 #include "number_compact.h"
+#include "number_microprops.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
