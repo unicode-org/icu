@@ -1038,7 +1038,7 @@ case "${host}" in
     ;;
 esac
 
-# GCC >= 4.4 supports UTF16 string literals. As of spring 2018, all tested compilers support them.
+# GCC >= 4.4 supports UTF16 string literals. As of ICU 62, both C and C++ files require them.
 if test "$CHECK_UTF16_STRING_RESULT" = "unknown"; then
     if test "$GCC" = yes; then
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
