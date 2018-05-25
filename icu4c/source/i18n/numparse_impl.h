@@ -32,7 +32,7 @@ namespace numparse {
 namespace impl {
 
 // Exported as U_I18N_API for tests
-class U_I18N_API NumberParserImpl : public MutableMatcherCollection {
+class U_I18N_API NumberParserImpl : public MutableMatcherCollection, public UMemory {
   public:
     virtual ~NumberParserImpl();
 
