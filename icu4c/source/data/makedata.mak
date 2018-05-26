@@ -38,7 +38,7 @@ ICU_LIB_TARGET=$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll
 
 ICUOUT=$(ICUMAKE)\out
 
-#  the prefix "icudt61_" for use in filenames
+#  the prefix "icudt62_" for use in filenames
 ICUPKG=$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX)
 
 # need to nuke \\ for .NET...
