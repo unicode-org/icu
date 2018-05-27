@@ -408,7 +408,7 @@ DecimalFormat::~DecimalFormat() {
     delete fields->atomicParser.exchange(nullptr);
     delete fields->atomicCurrencyParser.exchange(nullptr);
 	delete fields;
-};
+}
 
 Format* DecimalFormat::clone() const {
     return new DecimalFormat(*this);
