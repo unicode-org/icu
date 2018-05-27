@@ -44,6 +44,21 @@ class CodePointMatcher : public NumberParseMatcher, public UMemory {
     UChar32 fCp;
 };
 
+} // namespace impl
+} // namespace numparse
+
+// Export a explicit template instantiations of MaybeStackArray and CompactUnicodeString.
+// When building DLLs for Windows this is required even though no direct access leaks out of the i18n library.
+// (See digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.)
+// Note: These need to be outside of the impl::numparse namespace, or Clang will generate a compile error.
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template class U_I18N_API MaybeStackArray<UChar, 4>;
+template class U_I18N_API MaybeStackArray<numparse::impl::CodePointMatcher*, 3>;
+template class U_I18N_API numparse::impl::CompactUnicodeString<4>;
+#endif
+
+namespace numparse {
+namespace impl {
 
 /**
  * A warehouse to retain ownership of CodePointMatchers.
@@ -234,16 +249,6 @@ class AffixMatcherWarehouse {
 
 } // namespace impl
 } // namespace numparse
-
-// Export a explicit template instantiations of MaybeStackArray and CompactUnicodeString.
-// When building DLLs for Windows this is required even though no direct access leaks out of the i18n library.
-// (See digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.)
-#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-template class U_I18N_API MaybeStackArray<UChar, 4>;
-template class U_I18N_API MaybeStackArray<numparse::impl::CodePointMatcher*, 3>;
-template class U_I18N_API numparse::impl::CompactUnicodeString<4>;
-#endif
-
 U_NAMESPACE_END
 
 #endif //__NUMPARSE_AFFIXES_H__
