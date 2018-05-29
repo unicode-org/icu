@@ -43,8 +43,8 @@ NumberParserImpl::createSimpleParser(const Locale& locale, const UnicodeString& 
     IgnorablesMatcher& ignorables = parser->fLocalMatchers.ignorables;
 
     DecimalFormatSymbols dfs(locale, status);
-    dfs.setSymbol(DecimalFormatSymbols::kCurrencySymbol, u"IU$", status);
-    dfs.setSymbol(DecimalFormatSymbols::kIntlCurrencySymbol, u"ICU", status);
+    dfs.setSymbol(DecimalFormatSymbols::kCurrencySymbol, u"IU$");
+    dfs.setSymbol(DecimalFormatSymbols::kIntlCurrencySymbol, u"ICU");
     CurrencySymbols currencySymbols({u"ICU", status}, locale, dfs, status);
 
     ParsedPatternInfo patternInfo;
