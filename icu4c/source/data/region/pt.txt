@@ -311,5 +311,5 @@ pt{
         MK{"Macedônia (ARIM)"}
         TL{"República Democrática de Timor-Leste"}
     }
-    Version{"2.1.39.20"}
+    Version{"2.1.41.58"}
 }

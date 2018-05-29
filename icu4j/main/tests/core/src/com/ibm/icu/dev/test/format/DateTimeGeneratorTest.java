@@ -415,7 +415,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"MMMd", "13. Jan."},
         new String[] {"MMMMd", "13. Januar"},
         new String[] {"yQQQ", "Q1 1999"},
-        new String[] {"hhmm", "11:58 nachm."},
+        new String[] {"hhmm", "11:58 PM"},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},

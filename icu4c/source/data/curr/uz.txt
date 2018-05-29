@@ -600,6 +600,10 @@ uz{
         }
         VEF{
             "VEF",
+            "Venesuela bolivari (2008–2018)",
+        }
+        VES{
+            "VES",
             "Venesuela bolivari",
         }
         VND{
@@ -1345,6 +1349,10 @@ uz{
             other{"O‘zbekiston so‘mi"}
         }
         VEF{
+            one{"Venesuela bolivari (2008–2018)"}
+            other{"Venesuela bolivari (2008–2018)"}
+        }
+        VES{
             one{"Venesuela bolivari"}
             other{"Venesuela bolivari"}
         }
@@ -1397,5 +1405,5 @@ uz{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.39.11"}
+    Version{"2.1.41.58"}
 }

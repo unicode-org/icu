@@ -600,6 +600,10 @@ sq{
         }
         VEF{
             "VEF",
+            "Bolivari venezuelian (2008–2018)",
+        }
+        VES{
+            "VES",
             "Bolivari venezuelian",
         }
         VND{
@@ -1249,6 +1253,10 @@ sq{
             other{"soma uzbeke"}
         }
         VEF{
+            one{"bolivar venezuelian (2008–2018)"}
+            other{"bolivarë venezuelian (2008–2018)"}
+        }
+        VES{
             one{"bolivar venezuelian"}
             other{"bolivarë venezuelian"}
         }
@@ -1301,5 +1309,5 @@ sq{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.39.11"}
+    Version{"2.1.41.58"}
 }

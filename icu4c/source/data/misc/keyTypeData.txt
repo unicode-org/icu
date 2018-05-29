@@ -425,6 +425,7 @@ keyTypeData:table(nofallback){
             uzs{""}
             veb{""}
             vef{""}
+            ves{""}
             vnd{""}
             vnn{""}
             vuv{""}
@@ -611,6 +612,7 @@ keyTypeData:table(nofallback){
             finance{""}
             fullwide{""}
             geor{""}
+            gong{""}
             gonm{""}
             grek{""}
             greklow{""}
@@ -655,6 +657,7 @@ keyTypeData:table(nofallback){
             olck{""}
             orya{""}
             osma{""}
+            rohg{""}
             roman{""}
             romanlow{""}
             saur{""}

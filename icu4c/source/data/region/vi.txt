@@ -312,5 +312,5 @@ vi{
         MK{"Macedonia (FYROM)"}
         TL{"Đông Timor"}
     }
-    Version{"2.1.39.20"}
+    Version{"2.1.41.58"}
 }

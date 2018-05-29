@@ -205,7 +205,7 @@ ko{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.39.20"}
+    Version{"2.1.41.58"}
     calendar{
         buddhist{
             eras{

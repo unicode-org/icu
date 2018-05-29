@@ -313,5 +313,5 @@ sr_Latn{
         MK{"Makedonija (BJRM)"}
         TL{"Istočni Timor"}
     }
-    Version{"2.1.39.37"}
+    Version{"2.1.41.58"}
 }

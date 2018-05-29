@@ -4348,10 +4348,21 @@ supplementalData:table(nofallback){
         VE{
             {
                 from:intvector{
+                    355,
+                    -937957376,
+                }
+                id{"VES"}
+            }
+            {
+                from:intvector{
                     279,
                     849724416,
                 }
                 id{"VEF"}
+                to:intvector{
+                    355,
+                    -937957377,
+                }
             }
             {
                 from:intvector{
@@ -5115,6 +5126,12 @@ supplementalData:table(nofallback){
         }
         UZS:intvector{
             0,
+            0,
+            0,
+            0,
+        }
+        VEF:intvector{
+            2,
             0,
             0,
             0,
