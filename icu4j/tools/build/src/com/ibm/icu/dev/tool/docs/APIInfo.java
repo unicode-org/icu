@@ -63,10 +63,12 @@ class APIInfo {
 
     private boolean includeStatusVer = false;
 
+    @Override
     public int hashCode() {
         return (((pack.hashCode() << 3) ^ cls.hashCode()) << 3) ^ name.hashCode();
     }
 
+    @Override
     public boolean equals(Object rhs) {
         if (rhs == this) return true;
         if (rhs == null) return false;
@@ -331,6 +333,7 @@ class APIInfo {
      */
     public static Comparator defaultComparator() {
         final Comparator c = new Comparator() {
+                @Override
                 public int compare(Object lhs, Object rhs) {
                     APIInfo lhi = (APIInfo)lhs;
                     APIInfo rhi = (APIInfo)rhs;
@@ -362,6 +365,7 @@ class APIInfo {
      */
     public static Comparator changedComparator() {
         final Comparator c = new Comparator() {
+                @Override
                 public int compare(Object lhs, Object rhs) {
                     APIInfo lhi = (APIInfo)lhs;
                     APIInfo rhi = (APIInfo)rhs;
@@ -394,6 +398,7 @@ class APIInfo {
      */
     public static Comparator classFirstComparator() {
         final Comparator c = new Comparator() {
+                @Override
                 public int compare(Object lhs, Object rhs) {
                     APIInfo lhi = (APIInfo)lhs;
                     APIInfo rhi = (APIInfo)rhs;
@@ -437,7 +442,6 @@ class APIInfo {
 
     public void format(StringBuilder buf, boolean detail, boolean html, boolean withStatus) {
         // remove all occurrences of icu packages from the param string
-        // fortunately, all the packages have 4 chars (lang, math, text, util).
         String xsig = sig;
         if (!detail) {
             final String ICUPACK = "com.ibm.icu.";
@@ -449,7 +453,12 @@ class APIInfo {
                     break;
                 }
                 tbuf.append(sig.substring(i, n));
-                i = n + ICUPACK.length() + 5; // trailing 'xxxx.'
+                i = n + ICUPACK.length();
+                // skip icu public package lang/math/number/text/util
+                n = sig.indexOf('.', i);
+                if (n >= 0) {
+                    i = n + 1;
+                }
             }
             xsig = tbuf.toString();
         }
@@ -624,6 +633,7 @@ class APIInfo {
         }
     }
 
+    @Override
     public String toString() {
         return get(NAM, true);
     }
