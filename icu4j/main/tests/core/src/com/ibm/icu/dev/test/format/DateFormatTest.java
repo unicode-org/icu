@@ -5165,8 +5165,8 @@ public class DateFormatTest extends TestFmwk {
         sdf.applyPattern("hh:mm:ss bbbb");
 
 //        assertEquals("hh:mm:ss bbbb | 00:00:00 | de", "12:00:00 Mitternacht", sdf.format(k000000));
-        assertEquals("hh:mm:ss bbbb | 00:00:00 | de", "12:00:00 vorm.", sdf.format(k000000));
-        assertEquals("hh:mm:ss bbbb | 12:00:00 | de", "12:00:00 nachm.", sdf.format(k120000));
+        assertEquals("hh:mm:ss bbbb | 00:00:00 | de", "12:00:00 AM", sdf.format(k000000));
+        assertEquals("hh:mm:ss bbbb | 12:00:00 | de", "12:00:00 PM", sdf.format(k120000));
 
         // Locale ee has a rule that wraps around midnight (21h - 4h).
         sdf = new SimpleDateFormat("", new ULocale("ee"));

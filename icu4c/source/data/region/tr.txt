@@ -311,5 +311,5 @@ tr{
         MK{"Makedonya (EYMC)"}
         TL{"Doğu Timor"}
     }
-    Version{"2.1.39.20"}
+    Version{"2.1.41.58"}
 }

@@ -704,6 +704,7 @@ en{
         Cyrl{"Cyrillic"}
         Cyrs{"Old Church Slavonic Cyrillic"}
         Deva{"Devanagari"}
+        Dogr{"Dogra"}
         Dsrt{"Deseret"}
         Dupl{"Duployan shorthand"}
         Egyd{"Egyptian demotic"}
@@ -714,6 +715,7 @@ en{
         Geok{"Georgian Khutsuri"}
         Geor{"Georgian"}
         Glag{"Glagolitic"}
+        Gong{"Gunjala Gondi"}
         Gonm{"Masaram Gondi"}
         Goth{"Gothic"}
         Gran{"Grantha"}
@@ -762,10 +764,12 @@ en{
         Lyci{"Lycian"}
         Lydi{"Lydian"}
         Mahj{"Mahajani"}
+        Maka{"Makasar"}
         Mand{"Mandaean"}
         Mani{"Manichaean"}
         Marc{"Marchen"}
         Maya{"Mayan hieroglyphs"}
+        Medf{"Medefaidrin"}
         Mend{"Mende"}
         Merc{"Meroitic Cursive"}
         Mero{"Meroitic"}
@@ -800,6 +804,7 @@ en{
         Plrd{"Pollard Phonetic"}
         Prti{"Inscriptional Parthian"}
         Rjng{"Rejang"}
+        Rohg{"Hanifi Rohingya"}
         Roro{"Rongorongo"}
         Runr{"Runic"}
         Samr{"Samaritan"}
@@ -812,6 +817,8 @@ en{
         Sidd{"Siddham"}
         Sind{"Khudawadi"}
         Sinh{"Sinhala"}
+        Sogd{"Sogdian"}
+        Sogo{"Old Sogdian"}
         Sora{"Sora Sompeng"}
         Soyo{"Soyombo"}
         Sund{"Sundanese"}
@@ -1082,6 +1089,7 @@ en{
             finance{"Financial Numerals"}
             fullwide{"Full-Width Digits"}
             geor{"Georgian Numerals"}
+            gong{"Gunjala Gondi digits"}
             gonm{"Masaram Gondi digits"}
             grek{"Greek Numerals"}
             greklow{"Greek Lowercase Numerals"}
@@ -1126,6 +1134,7 @@ en{
             olck{"Ol Chiki Digits"}
             orya{"Odia Digits"}
             osma{"Osmanya Digits"}
+            rohg{"Hanifi Rohingya digits"}
             roman{"Roman Numerals"}
             romanlow{"Roman Lowercase Numerals"}
             saur{"Saurashtra Digits"}
@@ -1227,7 +1236,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.39.27"}
+    Version{"2.1.41.58"}
     characterLabelPattern{
         all{"{0} — all"}
         category-list{"{0}: {1}"}

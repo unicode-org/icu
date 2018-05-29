@@ -314,5 +314,5 @@ en{
         MK{"Macedonia (FYROM)"}
         TL{"East Timor"}
     }
-    Version{"2.1.39.27"}
+    Version{"2.1.41.58"}
 }

@@ -1040,6 +1040,10 @@ gd{
         }
         VEF{
             "VEF",
+            "Bolívar Bheinisealach (2008–2018)",
+        }
+        VES{
+            "VES",
             "Bolívar Bheinisealach",
         }
         VND{
@@ -2862,6 +2866,12 @@ gd{
             two{"bholívar Bheinisealach (1871–2008)"}
         }
         VEF{
+            few{"bolívar Bheinisealach (2008–2018)"}
+            one{"bholívar Bheinisealach (2008–2018)"}
+            other{"bolívar Bheinisealach (2008–2018)"}
+            two{"bholívar Bheinisealach (2008–2018)"}
+        }
+        VES{
             few{"bolívar Bheinisealach"}
             one{"bholívar Bheinisealach"}
             other{"bolívar Bheinisealach"}
@@ -3114,5 +3124,5 @@ gd{
         other{"{0} {1}"}
         two{"{0} {1}"}
     }
-    Version{"2.1.39.11"}
+    Version{"2.1.41.58"}
 }

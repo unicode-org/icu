@@ -1,6 +1,6 @@
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-RBNF_CLDR_VERSION = 33
+RBNF_CLDR_VERSION = 33.1
 # A list of txt's to build
 # Note:
 #

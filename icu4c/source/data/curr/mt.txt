@@ -564,7 +564,11 @@ mt{
         }
         VEF{
             "VEF",
-            "VEF",
+            "VEF (2008–2018)",
+        }
+        VES{
+            "VES",
+            "VES",
         }
         VND{
             "₫",
@@ -1529,10 +1533,16 @@ mt{
             other{"UZS"}
         }
         VEF{
-            few{"VEF"}
-            many{"VEF"}
-            one{"VEF"}
-            other{"VEF"}
+            few{"VEF (2008–2018)"}
+            many{"VEF (2008–2018)"}
+            one{"VEF (2008–2018)"}
+            other{"VEF (2008–2018)"}
+        }
+        VES{
+            few{"VES"}
+            many{"VES"}
+            one{"VES"}
+            other{"VES"}
         }
         VND{
             few{"VND"}
@@ -1607,5 +1617,5 @@ mt{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.39.11"}
+    Version{"2.1.41.58"}
 }

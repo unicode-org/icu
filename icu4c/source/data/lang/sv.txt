@@ -1097,7 +1097,7 @@ sv{
         WADEGILE{"Wade-Giles"}
         XSISTEMO{"x-system"}
     }
-    Version{"2.1.39.20"}
+    Version{"2.1.41.58"}
     characterLabelPattern{
         all{"{0} — alla"}
         category-list{"{0}: {1}"}

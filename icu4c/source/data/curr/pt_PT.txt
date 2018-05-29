@@ -457,6 +457,10 @@ pt_PT{
         }
         VEF{
             "VEF",
+            "bolívar (2008–2018)",
+        }
+        VES{
+            "VES",
             "bolívar",
         }
         VUV{
@@ -910,6 +914,10 @@ pt_PT{
             other{"Sons do Uzbequistão"}
         }
         VEF{
+            one{"bolívar (2008–2018)"}
+            other{"bolívares (2008–2018)"}
+        }
+        VES{
             one{"bolívar"}
             other{"bolívares"}
         }
@@ -938,5 +946,5 @@ pt_PT{
             other{"Kwachas zambianos (1968–2012)"}
         }
     }
-    Version{"2.1.39.11"}
+    Version{"2.1.41.58"}
 }

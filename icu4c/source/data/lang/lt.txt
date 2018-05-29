@@ -1023,7 +1023,7 @@ lt{
         VALENCIA{"Valenciečiai"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.39.11"}
+    Version{"2.1.41.58"}
     characterLabelPattern{
         all{"{0} – visi"}
         category-list{"{0}: {1}"}

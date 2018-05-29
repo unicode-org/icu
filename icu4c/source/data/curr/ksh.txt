@@ -628,6 +628,10 @@ ksh{
         }
         VEF{
             "VEF",
+            "venezuelaanesche Bolívar (2008–2018)",
+        }
+        VES{
+            "VES",
             "venezuelaanesche Bolívar",
         }
         VND{
@@ -908,5 +912,5 @@ ksh{
         other{"{0} {1}"}
         zero{"{0} {1}"}
     }
-    Version{"2.1.39.11"}
+    Version{"2.1.41.58"}
 }

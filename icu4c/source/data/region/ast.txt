@@ -310,5 +310,5 @@ ast{
         MK{"Macedonia (ARYDM)"}
         TL{"Timor Este"}
     }
-    Version{"2.1.39.11"}
+    Version{"2.1.41.58"}
 }

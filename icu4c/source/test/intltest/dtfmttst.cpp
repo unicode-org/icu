@@ -5181,9 +5181,9 @@ void DateFormatTest::TestDayPeriodWithLocales() {
 
     // assertEquals("hh:mm:ss bbbb | 00:00:00 | de", "12:00:00 Mitternacht",
     //     sdf.format(k000000, out.remove()));
-    assertEquals("hh:mm:ss bbbb | 00:00:00 | de", "12:00:00 vorm.",
+    assertEquals("hh:mm:ss bbbb | 00:00:00 | de", "12:00:00 AM",
         sdf.format(k000000, out.remove()));
-    assertEquals("hh:mm:ss bbbb | 12:00:00 | de", "12:00:00 nachm.",
+    assertEquals("hh:mm:ss bbbb | 12:00:00 | de", "12:00:00 PM",
         sdf.format(k120000, out.remove()));
 
     // Locale ee has a rule that wraps around midnight (21h - 4h).

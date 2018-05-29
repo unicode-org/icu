@@ -310,5 +310,5 @@ ca{
         FK{"Illes Malvines (Illes Falkland)"}
         MK{"Macedònia (Antiga República Iugoslava de Macedònia)"}
     }
-    Version{"2.1.39.20"}
+    Version{"2.1.41.58"}
 }
