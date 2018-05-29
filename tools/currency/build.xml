@@ -13,7 +13,7 @@
     <property name="res.dir" value="${out.dir}/res"/>
     <property name="xml.dir" value="${out.dir}/xml"/>
 
-    <property name="base.url" value="http://www.currency-iso.org/dam/downloads/lists/"/>
+    <property name="base.url" value="https://www.currency-iso.org/dam/downloads/lists/"/>
     <property name="current.xml" value="list_one.xml"/>
     <property name="historic.xml" value="list_three.xml"/>
 
