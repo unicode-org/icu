@@ -8,4 +8,8 @@ package com.ibm.icu.number;
  */
 @Deprecated
 public abstract class Rounder extends Precision {
+    // package private constructor just for blocking
+    // java compiler to generate public no-arg constructor.
+    Rounder() {
+    }
 }

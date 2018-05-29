@@ -12,7 +12,6 @@ import com.ibm.icu.impl.StringSegment;
  * matchers in the series succeed. Performs greedy matches within the context of the series.
  *
  * @author sffc
- * @see AnyMatcher
  */
 public class SeriesMatcher implements NumberParseMatcher {
 
