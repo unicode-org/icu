@@ -105,7 +105,6 @@ public class FormattedNumber {
      * <p>
      * If a field occurs just once, calling this method will find that occurrence and return it. If a
      * field occurs multiple times, this method may be called repeatedly with the following pattern:
-     * <p>
      *
      * <pre>
      * FieldPosition fpos = new FieldPosition(NumberFormat.Field.GROUPING_SEPARATOR);

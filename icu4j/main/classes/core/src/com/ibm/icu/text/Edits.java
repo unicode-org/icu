@@ -19,7 +19,6 @@ import java.util.Arrays;
  * {@link Edits.Iterator} can be used for queries.
  * <p>
  * There are four flavors of Edits.Iterator:
- * <p>
  * <ul>
  * <li>{@link #getFineIterator()} retains full granularity of change edits.
  * <li>{@link #getFineChangesIterator()} retains full granularity of change edits, and when calling
@@ -822,7 +821,10 @@ public final class Edits {
         /**
          * A string representation of the current edit represented by the iterator for debugging. You
          * should not depend on the contents of the return string.
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
+        @Deprecated
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder();

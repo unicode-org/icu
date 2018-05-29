@@ -74,7 +74,6 @@ public class Scale {
 
     /**
      * Multiply numbers by 100 before formatting. Useful for combining with a percent unit:
-     * <p>
      *
      * <pre>
      * NumberFormatter.with().unit(NoUnit.PERCENT).multiplier(Multiplier.powerOfTen(2))

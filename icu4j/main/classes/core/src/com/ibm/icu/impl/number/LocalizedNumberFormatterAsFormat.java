@@ -23,6 +23,8 @@ import com.ibm.icu.util.ULocale;
  */
 public class LocalizedNumberFormatterAsFormat extends Format {
 
+    private static final long serialVersionUID = 1L;
+
     private final transient LocalizedNumberFormatter formatter;
 
     // Even though the locale is inside the LocalizedNumberFormatter, we have to keep it here, too, because
@@ -114,6 +116,8 @@ public class LocalizedNumberFormatterAsFormat extends Format {
     }
 
     static class Proxy implements Externalizable {
+        private static final long serialVersionUID = 1L;
+
         String languageTag;
         String skeleton;
 
