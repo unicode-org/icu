@@ -87,6 +87,9 @@ class U_I18N_API LocalizedNumberFormatterAsFormat : public Format {
      */
     const LocalizedNumberFormatter& getNumberFormatter() const;
 
+    UClassID getDynamicClassID() const U_OVERRIDE;
+    static UClassID U_EXPORT2 getStaticClassID();
+
   private:
     LocalizedNumberFormatter fFormatter;
 
