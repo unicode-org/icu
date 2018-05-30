@@ -517,14 +517,6 @@ public class MeasureUnit implements Serializable {
      */
     public static final MeasureUnit MILE_PER_GALLON_IMPERIAL = MeasureUnit.internalGetInstance("consumption", "mile-per-gallon-imperial");
 
-    /*
-     * at-draft ICU 58, withdrawn
-     * public static final MeasureUnit EAST = MeasureUnit.internalGetInstance("coordinate", "east");
-     * public static final MeasureUnit NORTH = MeasureUnit.internalGetInstance("coordinate", "north");
-     * public static final MeasureUnit SOUTH = MeasureUnit.internalGetInstance("coordinate", "south");
-     * public static final MeasureUnit WEST = MeasureUnit.internalGetInstance("coordinate", "west");
-     */
-
     /**
      * Constant for unit of digital: bit
      * @stable ICU 54

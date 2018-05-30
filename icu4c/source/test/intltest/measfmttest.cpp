@@ -1039,6 +1039,9 @@ void MeasureFormatTest::TestCompatible59() {
     assertSuccess("", status);
 }
 
+// Note that TestCompatible60(), TestCompatible61(), TestCompatible62()
+// would be the same as TestCompatible59(), no need to add them.
+
 void MeasureFormatTest::TestBasic() {
     UErrorCode status = U_ZERO_ERROR;
     MeasureUnit *ptr1 = MeasureUnit::createArcMinute(status);
