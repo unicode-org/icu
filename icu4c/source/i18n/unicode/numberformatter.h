@@ -108,7 +108,6 @@ class IntegerWidth;
 
 namespace impl {
 
-#ifndef U_HIDE_INTERNAL_API
 /**
  * Datatype for minimum/maximum fraction digits. Must be able to hold kMaxIntFracSig.
  *
@@ -123,7 +122,6 @@ typedef int16_t digits_t;
  * @internal
  */
 static constexpr int32_t DEFAULT_THRESHOLD = 3;
-#endif  // U_HIDE_INTERNAL_API
 
 // Forward declarations:
 class Padder;
@@ -1164,6 +1162,8 @@ class U_I18N_API SymbolsWrapper : public UMemory {
      */
     const NumberingSystem *getNumberingSystem() const;
 
+#endif  // U_HIDE_INTERNAL_API
+
     /** @internal */
     UBool copyErrorTo(UErrorCode &status) const {
         if (fType == SYMPTR_DFS && fPtr.dfs == nullptr) {
@@ -1175,8 +1175,6 @@ class U_I18N_API SymbolsWrapper : public UMemory {
         }
         return FALSE;
     }
-
-#endif  // U_HIDE_INTERNAL_API
 
   private:
     enum SymbolsPointerType {
