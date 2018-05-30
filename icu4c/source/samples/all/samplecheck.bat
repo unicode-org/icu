@@ -173,7 +173,9 @@ if ERRORLEVEL 1 goto :SampleError
 @set THT=ucnv
 @echo.
 @echo ==== %THT% =========================================================================
+pushd %ICU_SAMPLESDIR%\ucnv
 %SAMPLE_UCNV%
+popd
 if ERRORLEVEL 1 goto :SampleError
 
 REM TODO: udata needs changes to the vcxproj file to fix the output locations for writer/reader.
