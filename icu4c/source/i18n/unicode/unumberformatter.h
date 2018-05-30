@@ -76,6 +76,7 @@
  */
 
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * An enum declaring how to render units, including currencies. Example outputs when formatting 123 USD and 123
  * meters in <em>en-CA</em>:
@@ -162,7 +163,9 @@ typedef enum UNumberUnitWidth {
      */
             UNUM_UNIT_WIDTH_COUNT
 } UNumberUnitWidth;
+#endif  /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * An enum declaring the strategy for when and how to display grouping separators (i.e., the
  * separator, often a comma or period, after every 2-3 powers of ten). The choices are several
@@ -254,14 +257,16 @@ typedef enum UGroupingStrategy {
             UNUM_GROUPING_THOUSANDS,
 
     /**
-     * One more than the highest UNumberSignDisplay value.
+     * One more than the highest UGroupingStrategy value.
      *
      * @internal ICU 62: The numeric value may change over time; see ICU ticket #12420.
      */
             UNUM_GROUPING_COUNT
 
 } UGroupingStrategy;
+#endif  /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * An enum declaring how to denote positive and negative numbers. Example outputs when formatting
  * 123, 0, and -123 in <em>en-US</em>:
@@ -355,7 +360,9 @@ typedef enum UNumberSignDisplay {
      */
             UNUM_SIGN_COUNT
 } UNumberSignDisplay;
+#endif  /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * An enum declaring how to render the decimal separator.
  *
@@ -388,8 +395,9 @@ typedef enum UNumberDecimalSeparatorDisplay {
      */
             UNUM_DECIMAL_SEPARATOR_COUNT
 } UNumberDecimalSeparatorDisplay;
+#endif  /* U_HIDE_DRAFT_API */
 
-
+#ifndef U_HIDE_DRAFT_API
 /**
  * C-compatible version of icu::number::LocalizedNumberFormatter.
  *
@@ -652,6 +660,7 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalUFormattedNumberPointer, UFormattedNumber, unum
 U_NAMESPACE_END
 #endif // U_SHOW_CPLUSPLUS_API
 
+#endif  /* U_HIDE_DRAFT_API */
 
 #endif //__UNUMBERFORMATTER_H__
 #endif /* #if !UCONFIG_NO_FORMATTING */
