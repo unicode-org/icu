@@ -407,25 +407,21 @@ enum_to_stem_string::decimalSeparatorDisplay(UNumberDecimalSeparatorDisplay valu
 
 
 UnlocalizedNumberFormatter skeleton::create(const UnicodeString& skeletonString, UErrorCode& status) {
-    if (U_FAILURE(status)) { return {}; }
     umtx_initOnce(gNumberSkeletonsInitOnce, &initNumberSkeletons, status);
-    if (U_FAILURE(status)) { return {}; }
-
     MacroProps macros = parseSkeleton(skeletonString, status);
     return NumberFormatter::with().macros(macros);
 }
 
 UnicodeString skeleton::generate(const MacroProps& macros, UErrorCode& status) {
-    if (U_FAILURE(status)) { return {}; }
     umtx_initOnce(gNumberSkeletonsInitOnce, &initNumberSkeletons, status);
-    if (U_FAILURE(status)) { return {}; }
-
     UnicodeString sb;
     GeneratorHelpers::generateSkeleton(macros, sb, status);
     return sb;
 }
 
 MacroProps skeleton::parseSkeleton(const UnicodeString& skeletonString, UErrorCode& status) {
+    if (U_FAILURE(status)) { return {}; }
+
     // Add a trailing whitespace to the end of the skeleton string to make code cleaner.
     UnicodeString tempSkeletonString(skeletonString);
     tempSkeletonString.append(u' ');
@@ -713,8 +709,14 @@ ParseState skeleton::parseOption(ParseState stem, const StringSegment& segment, 
             if (blueprint_helpers::parseExponentWidthOption(segment, macros, status)) {
                 return STATE_SCIENTIFIC;
             }
+            if (U_FAILURE(status)) {
+                return {};
+            }
             if (blueprint_helpers::parseExponentSignOption(segment, macros, status)) {
                 return STATE_SCIENTIFIC;
+            }
+            if (U_FAILURE(status)) {
+                return {};
             }
             break;
         default:
@@ -726,6 +728,9 @@ ParseState skeleton::parseOption(ParseState stem, const StringSegment& segment, 
         case STATE_FRACTION_PRECISION:
             if (blueprint_helpers::parseFracSigOption(segment, macros, status)) {
                 return STATE_NULL;
+            }
+            if (U_FAILURE(status)) {
+                return {};
             }
             break;
         default:
@@ -739,6 +744,8 @@ ParseState skeleton::parseOption(ParseState stem, const StringSegment& segment, 
 }
 
 void GeneratorHelpers::generateSkeleton(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
+    if (U_FAILURE(status)) { return; }
+
     // Supported options
     if (GeneratorHelpers::notation(macros, sb, status)) {
         sb.append(u' ');
@@ -902,7 +909,7 @@ void blueprint_helpers::parseMeasureUnitOption(const StringSegment& segment, Mac
     }
 
     // Need to do char <-> UChar conversion...
-    if (U_FAILURE(status)) { return; }
+    U_ASSERT(U_SUCCESS(status));
     CharString type;
     SKELETON_UCHAR_TO_CHAR(type, stemString, 0, firstHyphen, status);
     CharString subType;
@@ -944,6 +951,7 @@ void blueprint_helpers::parseMeasurePerUnitOption(const StringSegment& segment, 
     // parsing code, put back the numerator unit, and put the new unit into per-unit.
     MeasureUnit numerator = macros.unit;
     parseMeasureUnitOption(segment, macros, status);
+    if (U_FAILURE(status)) { return; }
     macros.perUnit = macros.unit;
     macros.unit = numerator;
 }
@@ -1039,6 +1047,7 @@ blueprint_helpers::parseDigitsStem(const StringSegment& segment, MacroProps& mac
     if (offset < segment.length()) {
         // throw new SkeletonSyntaxException("Invalid significant digits stem", segment);
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+        return;
     }
     // Use the public APIs to enforce bounds checking
     if (maxSig == -1) {
@@ -1121,6 +1130,7 @@ bool blueprint_helpers::parseFracSigOption(const StringSegment& segment, MacroPr
 void blueprint_helpers::parseIncrementOption(const StringSegment& segment, MacroProps& macros,
                                              UErrorCode& status) {
     // Need to do char <-> UChar conversion...
+    U_ASSERT(U_SUCCESS(status));
     CharString buffer;
     SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
 
@@ -1218,11 +1228,13 @@ void blueprint_helpers::generateIntegerWidthOption(int32_t minInt, int32_t maxIn
 void blueprint_helpers::parseNumberingSystemOption(const StringSegment& segment, MacroProps& macros,
                                                    UErrorCode& status) {
     // Need to do char <-> UChar conversion...
+    U_ASSERT(U_SUCCESS(status));
     CharString buffer;
     SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
 
     NumberingSystem* ns = NumberingSystem::createInstanceByName(buffer.data(), status);
-    if (ns == nullptr) {
+    if (ns == nullptr || U_FAILURE(status)) {
+        // This is a skeleton syntax error; don't bubble up the low-level NumberingSystem error
         // throw new SkeletonSyntaxException("Unknown numbering system", segment);
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return;
@@ -1239,6 +1251,7 @@ void blueprint_helpers::generateNumberingSystemOption(const NumberingSystem& ns,
 void blueprint_helpers::parseScaleOption(const StringSegment& segment, MacroProps& macros,
                                               UErrorCode& status) {
     // Need to do char <-> UChar conversion...
+    U_ASSERT(U_SUCCESS(status));
     CharString buffer;
     SKELETON_UCHAR_TO_CHAR(buffer, segment.toTempUnicodeString(), 0, segment.length(), status);
 
@@ -1246,6 +1259,7 @@ void blueprint_helpers::parseScaleOption(const StringSegment& segment, MacroProp
     if (U_FAILURE(status)) { return; }
     decnum->setTo({buffer.data(), buffer.length()}, status);
     if (U_FAILURE(status)) {
+        // This is a skeleton syntax error; don't let the low-level decnum error bubble up
         status = U_NUMBER_SKELETON_SYNTAX_ERROR;
         return;
     }
@@ -1254,13 +1268,13 @@ void blueprint_helpers::parseScaleOption(const StringSegment& segment, MacroProp
     macros.scale = {0, decnum.orphan()};
 }
 
-void
-blueprint_helpers::generateScaleOption(int32_t magnitude, const DecNum* arbitrary, UnicodeString& sb,
+void blueprint_helpers::generateScaleOption(int32_t magnitude, const DecNum* arbitrary, UnicodeString& sb,
                                             UErrorCode& status) {
     // Utilize DecimalQuantity/double_conversion to format this for us.
     DecimalQuantity dq;
     if (arbitrary != nullptr) {
         dq.setToDecNum(*arbitrary, status);
+        if (U_FAILURE(status)) { return; }
     } else {
         dq.setToInt(1);
     }
@@ -1295,6 +1309,9 @@ bool GeneratorHelpers::notation(const MacroProps& macros, UnicodeString& sb, UEr
         if (impl.fMinExponentDigits > 1) {
             sb.append(u'/');
             blueprint_helpers::generateExponentWidthOption(impl.fMinExponentDigits, sb, status);
+            if (U_FAILURE(status)) {
+                return false;
+            }
         }
         if (impl.fExponentSignDisplay != UNUM_SIGN_AUTO) {
             sb.append(u'/');
@@ -1310,7 +1327,11 @@ bool GeneratorHelpers::notation(const MacroProps& macros, UnicodeString& sb, UEr
 bool GeneratorHelpers::unit(const MacroProps& macros, UnicodeString& sb, UErrorCode& status) {
     if (utils::unitIsCurrency(macros.unit)) {
         sb.append(u"currency/", -1);
-        blueprint_helpers::generateCurrencyOption({macros.unit, status}, sb, status);
+        CurrencyUnit currency(macros.unit, status);
+        if (U_FAILURE(status)) {
+            return false;
+        }
+        blueprint_helpers::generateCurrencyOption(currency, sb, status);
         return true;
     } else if (utils::unitIsNoUnit(macros.unit)) {
         if (utils::unitIsPercent(macros.unit)) {

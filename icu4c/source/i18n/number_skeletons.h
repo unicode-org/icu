@@ -141,7 +141,7 @@ UnicodeString generate(const MacroProps& macros, UErrorCode& status);
 MacroProps parseSkeleton(const UnicodeString& skeletonString, UErrorCode& status);
 
 /**
- * Given that the current segment represents an stem, parse it and save the result.
+ * Given that the current segment represents a stem, parse it and save the result.
  *
  * @return The next state after parsing this stem, corresponding to what subset of options to expect.
  */
