@@ -31,6 +31,8 @@ void NumberSkeletonTest::runIndexedTest(int32_t index, UBool exec, const char*& 
 }
 
 void NumberSkeletonTest::validTokens() {
+    IcuTestErrorCode status(*this, "validTokens");
+
     // This tests only if the tokens are valid, not their behavior.
     // Most of these are from the design doc.
     static const char16_t* cases[] = {
@@ -105,9 +107,10 @@ void NumberSkeletonTest::validTokens() {
 
     for (auto& cas : cases) {
         UnicodeString skeletonString(cas);
-        UErrorCode status = U_ZERO_ERROR;
+        status.setScope(skeletonString);
         NumberFormatter::forSkeleton(skeletonString, status);
         assertSuccess(skeletonString, status);
+        status.errIfFailureAndReset();
     }
 }
 
@@ -144,7 +147,7 @@ void NumberSkeletonTest::invalidTokens() {
             u"integer-width/+0#",
             u"scientific/foo"};
 
-    expectedErrorSkeleton(cases, sizeof(cases) / sizeof(*cases));
+    expectedErrorSkeleton(cases, UPRV_LENGTHOF(cases));
 }
 
 void NumberSkeletonTest::unknownTokens() {
@@ -157,7 +160,7 @@ void NumberSkeletonTest::unknownTokens() {
             u"numbering-system/français", // non-invariant characters for C++
             u"currency-USD"};
 
-    expectedErrorSkeleton(cases, sizeof(cases) / sizeof(*cases));
+    expectedErrorSkeleton(cases, UPRV_LENGTHOF(cases));
 }
 
 void NumberSkeletonTest::unexpectedTokens() {
@@ -168,7 +171,7 @@ void NumberSkeletonTest::unexpectedTokens() {
             u"precision-integer/ group-off",
             u"precision-integer// group-off"};
 
-    expectedErrorSkeleton(cases, sizeof(cases) / sizeof(*cases));
+    expectedErrorSkeleton(cases, UPRV_LENGTHOF(cases));
 }
 
 void NumberSkeletonTest::duplicateValues() {
@@ -181,7 +184,7 @@ void NumberSkeletonTest::duplicateValues() {
             u"engineering compact-long",
             u"sign-auto sign-always"};
 
-    expectedErrorSkeleton(cases, sizeof(cases) / sizeof(*cases));
+    expectedErrorSkeleton(cases, UPRV_LENGTHOF(cases));
 }
 
 void NumberSkeletonTest::stemsRequiringOption() {
@@ -224,6 +227,7 @@ void NumberSkeletonTest::defaultTokens() {
                 skeletonString, status).toSkeleton(status);
         // Skeleton should become empty when normalized
         assertEquals(skeletonString, u"", normalized);
+        status.errIfFailureAndReset();
     }
 }
 
@@ -246,6 +250,7 @@ void NumberSkeletonTest::flexibleSeparators() {
                 .formatDouble(5142.3, status)
                 .toString();
         assertEquals(skeletonString, expected, actual);
+        status.errIfFailureAndReset();
     }
 }
 
