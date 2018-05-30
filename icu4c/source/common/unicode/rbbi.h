@@ -55,7 +55,7 @@ class U_COMMON_API RuleBasedBreakIterator /*U_FINAL*/ : public BreakIterator {
 private:
     /**
      * The UText through which this BreakIterator accesses the text
-     * @internal
+     * @internal (private)
      */
     UText  fText;
 
@@ -621,13 +621,13 @@ private:
     /**
      * Dumps caches and performs other actions associated with a complete change
      * in text or iteration position.
-     * @internal
+     * @internal (private)
      */
     void reset(void);
 
     /**
       * Common initialization function, used by constructors and bufferClone.
-      * @internal
+      * @internal (private)
       */
     void init(UErrorCode &status);
 
@@ -638,7 +638,7 @@ private:
      * will operate correctly. A Safe Position is not necessarily a boundary itself.
      *
      * @param fromPosition the position in the input text to begin the iteration.
-     * @internal
+     * @internal (private)
      */
     int32_t handleSafePrevious(int32_t fromPosition);
 
@@ -652,7 +652,7 @@ private:
      *                         If > 0, the segment will be further subdivided
      *    fRuleStatusIndex     Info from the state table indicating which rules caused the boundary.
      *
-     * @internal
+     * @internal (private)
      */
     int32_t handleNext();
 
@@ -661,7 +661,7 @@ private:
      * This function returns the appropriate LanguageBreakEngine for a
      * given character c.
      * @param c         A character in the dictionary set
-     * @internal
+     * @internal (private)
      */
     const LanguageBreakEngine *getLanguageBreakEngine(UChar32 c);
 

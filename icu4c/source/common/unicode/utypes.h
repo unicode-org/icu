@@ -541,6 +541,8 @@ typedef enum UErrorCode {
     U_FORMAT_INEXACT_ERROR,           /**< Cannot format a number exactly and rounding mode is ROUND_UNNECESSARY @stable ICU 4.8 */
 #ifndef U_HIDE_DRAFT_API
     U_NUMBER_ARG_OUTOFBOUNDS_ERROR,   /**< The argument to a NumberFormatter helper method was out of bounds; the bounds are usually 0 to 999. @draft ICU 61 */
+#endif  // U_HIDE_DRAFT_API
+#ifndef U_HIDE_DRAFT_API
     U_NUMBER_SKELETON_SYNTAX_ERROR,   /**< The number skeleton passed to C++ NumberFormatter or C UNumberFormatter was invalid or contained a syntax error. @draft ICU 62 */
 #endif  // U_HIDE_DRAFT_API
 #ifndef U_HIDE_DEPRECATED_API
