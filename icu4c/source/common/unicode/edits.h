@@ -392,12 +392,14 @@ public:
          */
         int32_t destinationIndex() const { return destIndex; }
 
+#ifndef U_HIDE_INTERNAL_API
         /**
          * A string representation of the current edit represented by the iterator for debugging. You
          * should not depend on the contents of the return string.
          * @internal
          */
         UnicodeString& toString(UnicodeString& appendTo) const;
+#endif  // U_HIDE_INTERNAL_API
 
     private:
         friend class Edits;
