@@ -21,6 +21,8 @@ using namespace icu;
 using namespace icu::number;
 using namespace icu::number::impl;
 
+UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LocalizedNumberFormatterAsFormat)
+
 LocalizedNumberFormatterAsFormat::LocalizedNumberFormatterAsFormat(
         const LocalizedNumberFormatter& formatter, const Locale& locale)
         : fFormatter(formatter), fLocale(locale) {
