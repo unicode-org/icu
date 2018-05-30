@@ -198,7 +198,7 @@
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::rounding(const Rounder&amp;)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
+<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::rounding(const Precision&amp;)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row0">
@@ -226,23 +226,7 @@
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Rounder icu::number::CurrencyRounder::withCurrency(const CurrencyUnit&amp;)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Rounder icu::number::FractionRounder::withMaxDigits(int32_t)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Rounder icu::number::FractionRounder::withMinDigits(int32_t)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Rounder icu::number::IncrementRounder::withMinFraction(int32_t)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Rounder icu::number::Rounder::withMode(UNumberFormatRoundingMode)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
+<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::CurrencyRounder::withCurrency(const CurrencyUnit&amp;)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row1">
@@ -250,70 +234,26 @@
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> CurrencyRounder icu::number::Rounder::currency(UCurrencyUsage)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> CurrencyRounder icu::number::Precision::currency(UCurrencyUsage)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> DigitRounder icu::number::Rounder::fixedDigits(int32_t)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> DigitRounder icu::number::Rounder::maxDigits(int32_t)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> DigitRounder icu::number::Rounder::minDigits(int32_t)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> DigitRounder icu::number::Rounder::minMaxDigits(int32_t, int32_t)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionRounder icu::number::Rounder::fixedFraction(int32_t)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionRounder icu::number::Rounder::integer()</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionRounder icu::number::Rounder::maxFraction(int32_t)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionRounder icu::number::Rounder::minFraction(int32_t)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionRounder icu::number::Rounder::minMaxFraction(int32_t, int32_t)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> IncrementRounder icu::number::Rounder::increment(double)</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> Rounder icu::number::Rounder::unlimited()</td><td class="">Draft<br>ICU 60</td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
 <td class="file">numfmt.h</td><td class="proto">UnicodeString&amp; icu::NumberFormat::format(const DigitList&amp;, UnicodeString&amp;, FieldPosition&amp;, UErrorCode&amp;)</td><td class="">Internal</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numfmt.h</td><td class="proto">UnicodeString&amp; icu::NumberFormat::format(const DigitList&amp;, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;)</td><td class="">Internal</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">platform.h</td><td class="proto"><tt>#define</tt> UPRV_INCOMPLETE_CPP11_SUPPORT</td><td class="">Internal</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">plurrule.h</td><td class="proto">UnicodeString icu::PluralRules::select(const Formattable&amp;, const NumberFormat&amp;, UErrorCode&amp;)</td><td class="">Internal<br>ICU 59</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">plurrule.h</td><td class="proto">UnicodeString icu::PluralRules::select(const VisibleDigitsWithExponent&amp;)</td><td class="">Internal</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
@@ -338,28 +278,28 @@
 <span class=""><span>ICU 62</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::Precision::withMode(UNumberFormatRoundingMode)</td><td class="">(missing)</td><td>Deprecated<br>
-<span class=""><span>ICU 62</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::Precision::withMode(UNumberFormatRoundingMode)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 62</span></span></td>
 </tr>
 <tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">UnicodeString icu::number::FormattedNumber::toString()</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
 <span class="verchange"><span>ICU 62</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::fixedDigits(int32_t)</td><td class="">(missing)</td><td>Deprecated<br>
-<span class=""><span>ICU 62</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::fixedDigits(int32_t)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 62</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::maxDigits(int32_t)</td><td class="">(missing)</td><td>Deprecated<br>
-<span class=""><span>ICU 62</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::maxDigits(int32_t)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 62</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::minDigits(int32_t)</td><td class="">(missing)</td><td>Deprecated<br>
-<span class=""><span>ICU 62</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::minDigits(int32_t)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 62</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::minMaxDigits(int32_t, int32_t)</td><td class="">(missing)</td><td>Deprecated<br>
-<span class=""><span>ICU 62</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::minMaxDigits(int32_t, int32_t)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 62</span></span></td>
 </tr>
 <tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">void icu::number::FormattedNumber::populateFieldPosition(FieldPosition&amp;, UErrorCode&amp;)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
@@ -386,14 +326,34 @@
 <span class="verchange"><span>ICU 62</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">UnicodeString icu::number::FormattedNumber::toString()</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
+<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::Precision::withMode(UNumberFormatRoundingMode)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
 <span class="verchange"><span>ICU 62</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">void icu::number::FormattedNumber::populateFieldPosition(FieldPosition&amp;, UErrorCode&amp;)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
+<td class="file">numberformatter.h</td><td class="proto">UnicodeString icu::number::FormattedNumber::toString()</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
 <span class="verchange"><span>ICU 62</span></span></td>
 </tr>
 <tr class="row0">
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::fixedDigits(int32_t)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 62</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::maxDigits(int32_t)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 62</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::minDigits(int32_t)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 62</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::minMaxDigits(int32_t, int32_t)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 62</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">numberformatter.h</td><td class="proto">void icu::number::FormattedNumber::populateFieldPosition(FieldPosition&amp;, UErrorCode&amp;)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
+<span class="verchange"><span>ICU 62</span></span></td>
+</tr>
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">void icu::number::FormattedNumber::populateFieldPositionIterator(FieldPositionIterator&amp;, UErrorCode&amp;)</td><td class="">Draft<br>ICU 60</td><td>Deprecated<br>
 <span class="verchange"><span>ICU 62</span></span></td>
 </tr>
@@ -542,442 +502,383 @@
 <span class=""><span>ICU 62</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">decimfmt.h</td><td class="proto">icu::DecimalFormat::DecimalFormat(const DecimalFormatSymbols*, UErrorCode&amp;)</td><td class="">(missing)</td><td>
-<br>
-<span class=""><span></span>
-<br>
-<b class="bigwarn" title="A new API was introduced that was not tagged.">(untagged)</b></span></td>
-</tr>
-<tr class="row1">
 <td class="file">decimfmt.h</td><td class="proto">int32_t icu::DecimalFormat::getMultiplierScale()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">decimfmt.h</td><td class="proto">void icu::DecimalFormat::formatToDecimalQuantity(const Formattable&amp;, number::impl::DecimalQuantity&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">decimfmt.h</td><td class="proto">void icu::DecimalFormat::formatToDecimalQuantity(double, number::impl::DecimalQuantity&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">decimfmt.h</td><td class="proto">void icu::DecimalFormat::setFormatFailIfMoreThanMaxDigits(UBool)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">decimfmt.h</td><td class="proto">void icu::DecimalFormat::setLenient(UBool)</td><td class="">(missing)</td><td>Stable<br>
 <span class=""><span>ICU 4.8</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">decimfmt.h</td><td class="proto">void icu::DecimalFormat::setMultiplierScale(int32_t)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">decimfmt.h</td><td class="proto">void icu::DecimalFormat::setParseCaseSensitive(UBool)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">decimfmt.h</td><td class="proto">void icu::DecimalFormat::setParseNoExponent(UBool)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">decimfmt.h</td><td class="proto">void icu::DecimalFormat::setSignAlwaysShown(UBool)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">fmtable.h</td><td class="proto">number::impl::DecimalQuantity* icu::Formattable::getDecimalQuantity()</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">fmtable.h</td><td class="proto">void icu::Formattable::adoptDecimalQuantity(number::impl::DecimalQuantity*)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">fmtable.h</td><td class="proto">void icu::Formattable::populateDecimalQuantity(number::impl::DecimalQuantity&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Appendable&amp; icu::number::FormattedNumber::appendTo(Appendable&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptPerUnit(icu::MeasureUnit*) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 61</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptPerUnit(icu::MeasureUnit*)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptSymbols(NumberingSystem*) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptSymbols(NumberingSystem*)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptUnit(icu::MeasureUnit*) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::adoptUnit(icu::MeasureUnit*)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::decimal(UNumberDecimalSeparatorDisplay) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::decimal(UNumberDecimalSeparatorDisplay)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::grouping(UGroupingStrategy) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 61</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::grouping(UGroupingStrategy)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::integerWidth(const IntegerWidth&amp;) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::integerWidth(const IntegerWidth&amp;)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::macros(const impl::MacroProps&amp;) const&amp;</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span>ICU 60</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::macros(const impl::MacroProps&amp;)&amp;&amp;</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::macros(impl::MacroProps&amp;&amp;) const&amp;</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::macros(impl::MacroProps&amp;&amp;)&amp;&amp;</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::notation(const Notation&amp;) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::notation(const Notation&amp;)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::padding(const impl::Padder&amp;) const&amp;</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span>ICU 60</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::padding(const impl::Padder&amp;)&amp;&amp;</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::perUnit(const icu::MeasureUnit&amp;) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 61</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::perUnit(const icu::MeasureUnit&amp;)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::precision(const Precision&amp;) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::precision(const Precision&amp;)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::rounding(const Rounder&amp;) const&amp;</td><td class="">(missing)</td><td>Deprecated<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::roundingMode(UNumberFormatRoundingMode) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::roundingMode(UNumberFormatRoundingMode)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::scale(const Scale&amp;) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::scale(const Scale&amp;)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::sign(UNumberSignDisplay) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::sign(UNumberSignDisplay)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::symbols(const DecimalFormatSymbols&amp;) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::symbols(const DecimalFormatSymbols&amp;)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::threshold(int32_t) const&amp;</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span>ICU 60</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::threshold(int32_t)&amp;&amp;</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::unit(const icu::MeasureUnit&amp;) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::unit(const icu::MeasureUnit&amp;)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::unitWidth(UNumberUnitWidth) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::unitWidth(UNumberUnitWidth)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Format* icu::number::LocalizedNumberFormatter::toFormat(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">FormattedNumber icu::number::LocalizedNumberFormatter::formatDecimalQuantity(const impl::DecimalQuantity&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">FormattedNumber&amp; icu::number::FormattedNumber::operator=(FormattedNumber&amp;&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">FormattedNumber&amp; icu::number::FormattedNumber::operator=(const FormattedNumber&amp;)=delete</td><td class="">(missing)</td><td>
 <br>
 <span class=""><span></span>
 <br>
 <b class="bigwarn" title="A new API was introduced that was not tagged.">(untagged)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">LocalizedNumberFormatter icu::number::UnlocalizedNumberFormatter::locale(const icu::Locale&amp;) const&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">LocalizedNumberFormatter icu::number::UnlocalizedNumberFormatter::locale(const icu::Locale&amp;)&amp;&amp;</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">LocalizedNumberFormatter&amp; icu::number::LocalizedNumberFormatter::operator=(LocalizedNumberFormatter&amp;&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">LocalizedNumberFormatter&amp; icu::number::LocalizedNumberFormatter::operator=(const LocalizedNumberFormatter&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Precision icu::number::CurrencyPrecision::withCurrency(const CurrencyUnit&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
-<tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::FractionPrecision::withMaxDigits(int32_t)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 60</span>
-<br>
-<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
-</tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::FractionPrecision::withMinDigits(int32_t)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 60</span>
-<br>
-<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
-</tr>
-<tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::IncrementPrecision::withMinFraction(int32_t)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 60</span>
-<br>
-<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::Precision::withMode(UNumberFormatRoundingMode)</td><td class="">(missing)</td><td>Deprecated<br>
-<span class=""><span>ICU 62</span></span></td>
-</tr>
-<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Scale&amp; icu::number::Scale::operator=(Scale&amp;&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Scale&amp; icu::number::Scale::operator=(const Scale&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">SymbolsWrapper&amp; icu::number::impl::SymbolsWrapper::operator=(SymbolsWrapper&amp;&amp;)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">UBool icu::number::FormattedNumber::nextFieldPosition(FieldPosition&amp;, UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">UnicodeString icu::number::FormattedNumber::toString(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">UnicodeString icu::number::NumberFormatterSettings&lt; Derived &gt;::toSkeleton(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">UnlocalizedNumberFormatter&amp; icu::number::UnlocalizedNumberFormatter::operator=(UnlocalizedNumberFormatter&amp;&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">UnlocalizedNumberFormatter&amp; icu::number::UnlocalizedNumberFormatter::operator=(const UnlocalizedNumberFormatter&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">const impl::NumberFormatterImpl* icu::number::LocalizedNumberFormatter::getCompiled()</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::FormattedNumber::FormattedNumber(FormattedNumber&amp;&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::FormattedNumber::FormattedNumber(const FormattedNumber&amp;)=delete</td><td class="">(missing)</td><td>
 <br>
 <span class=""><span></span>
 <br>
 <b class="bigwarn" title="A new API was introduced that was not tagged.">(untagged)</b></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::LocalizedNumberFormatter::LocalizedNumberFormatter()=default</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::LocalizedNumberFormatter::LocalizedNumberFormatter(LocalizedNumberFormatter&amp;&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::Scale::Scale(Scale&amp;&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::Scale::Scale(const Scale&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::Scale::Scale(int32_t, impl::DecNum*)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::Scale::~Scale()</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::UnlocalizedNumberFormatter::UnlocalizedNumberFormatter()=default</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UnlocalizedNumberFormatter&amp;&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::impl::Grouper::Grouper(int16_t, int16_t, int16_t, UGroupingStrategy)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">icu::number::impl::SymbolsWrapper::SymbolsWrapper(SymbolsWrapper&amp;&amp;)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">int16_t icu::number::impl::Grouper::getPrimary()</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">int16_t icu::number::impl::Grouper::getSecondary()</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row1">
+<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">int32_t icu::number::LocalizedNumberFormatter::getCallCount()</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
-<tr class="row0">
+<tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> CurrencyPrecision icu::number::Precision::currency(UCurrencyUsage)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 60</span>
-<br>
-<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::fixedFraction(int32_t)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 60</span>
-<br>
-<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
-</tr>
-<tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::integer()</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 60</span>
-<br>
-<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::maxFraction(int32_t)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 60</span>
-<br>
-<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
-</tr>
-<tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::minFraction(int32_t)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 60</span>
-<br>
-<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::minMaxFraction(int32_t, int32_t)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 60</span>
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
@@ -987,20 +888,8 @@
 <span class=""><span></span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> IncrementPrecision icu::number::Precision::increment(double)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 60</span>
-<br>
-<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
-</tr>
-<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> Padder icu::number::impl::Padder::forProperties(const DecimalFormatProperties&amp;)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> Precision icu::number::Precision::unlimited()</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 60</span>
-<br>
-<b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 62)</b></span></td>
 </tr>
 <tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> Scale icu::number::Scale::byDecimal(StringPiece)</td><td class="">(missing)</td><td>Draft<br>
@@ -1023,27 +912,11 @@
 <span class=""><span>ICU 62</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::fixedDigits(int32_t)</td><td class="">(missing)</td><td>Deprecated<br>
-<span class=""><span>ICU 62</span></span></td>
-</tr>
-<tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::fixedSignificantDigits(int32_t)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 62</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::maxDigits(int32_t)</td><td class="">(missing)</td><td>Deprecated<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
 <tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::maxSignificantDigits(int32_t)</td><td class="">(missing)</td><td>Draft<br>
-<span class=""><span>ICU 62</span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::minDigits(int32_t)</td><td class="">(missing)</td><td>Deprecated<br>
-<span class=""><span>ICU 62</span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> SignificantDigitsPrecision icu::number::Precision::minMaxDigits(int32_t, int32_t)</td><td class="">(missing)</td><td>Deprecated<br>
 <span class=""><span>ICU 62</span></span></td>
 </tr>
 <tr class="row1">
@@ -1427,19 +1300,13 @@
 <span class=""><span>ICU 60</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::FractionPrecision::withMaxDigits(int32_t)</td><td class="">(missing)<br>
-</td><td>Draft<br>
-<span class=""><span>ICU 60</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::FractionPrecision::withMaxDigits(int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::FractionPrecision::withMinDigits(int32_t)</td><td class="">(missing)<br>
-</td><td>Draft<br>
-<span class=""><span>ICU 60</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::FractionPrecision::withMinDigits(int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::IncrementPrecision::withMinFraction(int32_t)</td><td class="">(missing)<br>
-</td><td>Draft<br>
-<span class=""><span>ICU 60</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto">Precision icu::number::IncrementPrecision::withMinFraction(int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
 </tr>
 <tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">ScientificNotation icu::number::ScientificNotation::withExponentSignDisplay(UNumberSignDisplay)</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
@@ -1477,34 +1344,22 @@
 <span class=""><span>ICU 60</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::fixedFraction(int32_t)</td><td class="">(missing)<br>
-</td><td>Draft<br>
-<span class=""><span>ICU 60</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::fixedFraction(int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::integer()</td><td class="">(missing)<br>
-</td><td>Draft<br>
-<span class=""><span>ICU 60</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::integer()</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::maxFraction(int32_t)</td><td class="">(missing)<br>
-</td><td>Draft<br>
-<span class=""><span>ICU 60</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::maxFraction(int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::minFraction(int32_t)</td><td class="">(missing)<br>
-</td><td>Draft<br>
-<span class=""><span>ICU 60</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::minFraction(int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::minMaxFraction(int32_t, int32_t)</td><td class="">(missing)<br>
-</td><td>Draft<br>
-<span class=""><span>ICU 60</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> FractionPrecision icu::number::Precision::minMaxFraction(int32_t, int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
 </tr>
 <tr class="row1">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> IncrementPrecision icu::number::Precision::increment(double)</td><td class="">(missing)<br>
-</td><td>Draft<br>
-<span class=""><span>ICU 60</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> IncrementPrecision icu::number::Precision::increment(double)</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
 </tr>
 <tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> IntegerWidth icu::number::IntegerWidth::zeroFillTo(int32_t)</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
@@ -1513,9 +1368,7 @@
 <td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> LocalizedNumberFormatter icu::number::NumberFormatter::withLocale(const Locale&amp;)</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
 </tr>
 <tr class="row0">
-<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> Precision icu::number::Precision::unlimited()</td><td class="">(missing)<br>
-</td><td>Draft<br>
-<span class=""><span>ICU 60</span></span></td>
+<td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> Precision icu::number::Precision::unlimited()</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
 </tr>
 <tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> ScientificNotation icu::number::Notation::engineering()</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
@@ -1662,7 +1515,7 @@
 <a href="#_top">(jump back to top)</a>
 <hr>
 <p>
-<i><font size="-1">Contents generated by StableAPI tool on Wed May 30 04:02:37 UTC 2018<br>Copyright (C) 2018, International Business Machines Corporation, All Rights Reserved.</font></i>
+<i><font size="-1">Contents generated by StableAPI tool on Wed May 30 15:07:37 PDT 2018<br>Copyright (C) 2018, International Business Machines Corporation, All Rights Reserved.</font></i>
 </p>
 </body>
 </html>
