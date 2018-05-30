@@ -128,6 +128,7 @@ public:
      */
     void parse(const UnicodeString& text, Formattable& result, UErrorCode& status) const U_OVERRIDE;
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Parses text from the given string as a currency amount.  Unlike
      * the parse() method, this method will attempt to parse a generic
@@ -149,6 +150,7 @@ public:
      * @internal
      */
     CurrencyAmount* parseCurrency(const UnicodeString& text, ParsePosition& pos) const U_OVERRIDE;
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Return the class ID for this class.  This is useful only for

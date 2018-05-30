@@ -579,6 +579,7 @@ class U_I18N_API Precision : public UMemory {
     static SignificantDigitsPrecision minMaxSignificantDigits(int32_t minSignificantDigits,
                                                               int32_t maxSignificantDigits);
 
+#ifndef U_HIDE_DEPRECATED_API
     // Compatiblity methods that will be removed in ICU 64.
     // See http://bugs.icu-project.org/trac/ticket/13746
 
@@ -601,6 +602,7 @@ class U_I18N_API Precision : public UMemory {
     static inline SignificantDigitsPrecision minMaxDigits(int32_t a, int32_t b) {
         return minMaxSignificantDigits(a, b);
     }
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Show numbers rounded if necessary to the closest multiple of a certain rounding increment. For example, if the
@@ -642,6 +644,7 @@ class U_I18N_API Precision : public UMemory {
      */
     static CurrencyPrecision currency(UCurrencyUsage currencyUsage);
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * Sets the rounding mode to use when picking the direction to round (up or down). Common values
      * include HALF_EVEN, HALF_UP, and FLOOR. The default is HALF_EVEN.
@@ -654,6 +657,7 @@ class U_I18N_API Precision : public UMemory {
      *            See http://bugs.icu-project.org/trac/ticket/13746
      */
     Precision withMode(UNumberFormatRoundingMode roundingMode) const;
+#endif  /* U_HIDE_DEPRECATED_API */
 
   private:
     enum PrecisionType {
@@ -1054,8 +1058,10 @@ class U_I18N_API Scale : public UMemory {
     /** @draft ICU 62 */
     ~Scale();
 
+#ifndef U_HIDE_INTERNAL_API
     /** @internal */
     Scale(int32_t magnitude, impl::DecNum* arbitraryToAdopt);
+#endif  /* U_HIDE_INTERNAL_API */
 
   private:
     int32_t fMagnitude;
@@ -1651,6 +1657,7 @@ class U_I18N_API NumberFormatterSettings {
      */
     Derived precision(const Precision& precision) &&;
 
+#ifndef U_HIDE_DEPRECATED_API
     // Compatibility method that will be removed in ICU 64.
     // Use precision() instead.
     // See http://bugs.icu-project.org/trac/ticket/13746
@@ -1658,6 +1665,7 @@ class U_I18N_API NumberFormatterSettings {
     Derived rounding(const Rounder& rounder) const & {
         return precision(rounder);
     }
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Specifies how to determine the direction to round a number when it has more digits than fit in the
@@ -2374,15 +2382,17 @@ class U_I18N_API LocalizedNumberFormatter
  */
 class U_I18N_API FormattedNumber : public UMemory {
   public:
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * Returns a UnicodeString representation of the formatted number.
      *
      * @return a UnicodeString containing the localized number.
      * @deprecated ICU 62 Use the version of this method with an error code instead.
- *                    This method was never @stable and will be removed in a future release.
+     *                This method was never @stable and will be removed in a future release.
      *                See http://bugs.icu-project.org/trac/ticket/13746
      */
     UnicodeString toString() const;
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Returns a UnicodeString representation of the formatted number.
@@ -2394,6 +2404,7 @@ class U_I18N_API FormattedNumber : public UMemory {
      */
     UnicodeString toString(UErrorCode& status) const;
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * Appends the formatted number to an Appendable.
      *
@@ -2401,11 +2412,12 @@ class U_I18N_API FormattedNumber : public UMemory {
      *            The Appendable to which to append the formatted number string.
      * @return The same Appendable, for chaining.
      * @deprecated ICU 62 Use the version of this method with an error code instead.
- *                    This method was never @stable and will be removed in a future release.
+     *                This method was never @stable and will be removed in a future release.
      *                See http://bugs.icu-project.org/trac/ticket/13746
      * @see Appendable
      */
     Appendable &appendTo(Appendable &appendable);
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Appends the formatted number to an Appendable.
@@ -2420,6 +2432,7 @@ class U_I18N_API FormattedNumber : public UMemory {
      */
     Appendable &appendTo(Appendable &appendable, UErrorCode& status);
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * Determine the start and end indices of the first occurrence of the given <em>field</em> in the output string.
      * This allows you to determine the locations of the integer part, fraction part, and sign.
@@ -2441,6 +2454,7 @@ class U_I18N_API FormattedNumber : public UMemory {
      * @see UNumberFormatFields
      */
     void populateFieldPosition(FieldPosition &fieldPosition, UErrorCode &status);
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Determines the start and end indices of the next occurrence of the given <em>field</em> in the
@@ -2475,6 +2489,7 @@ class U_I18N_API FormattedNumber : public UMemory {
      */
     UBool nextFieldPosition(FieldPosition& fieldPosition, UErrorCode& status) const;
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * Export the formatted number to a FieldPositionIterator. This allows you to determine which characters in
      * the output string correspond to which <em>fields</em>, such as the integer part, fraction part, and sign.
@@ -2491,6 +2506,7 @@ class U_I18N_API FormattedNumber : public UMemory {
      * @see UNumberFormatFields
      */
     void populateFieldPositionIterator(FieldPositionIterator &iterator, UErrorCode &status);
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Export the formatted number to a FieldPositionIterator. This allows you to determine which characters in

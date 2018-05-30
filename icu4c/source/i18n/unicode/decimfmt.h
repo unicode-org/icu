@@ -759,6 +759,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     /**
      * This API is for ICU use only.
      * Default internal constructor for DecimalFormat.
+     * @internal
      */
     DecimalFormat(const DecimalFormatSymbols* symbolsToAdopt, UErrorCode& status);
 
@@ -928,7 +929,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     UnicodeString& format(double number, UnicodeString& appendTo, FieldPosition& pos) const U_OVERRIDE;
 
-
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Format a double or long number using base-10 representation.
      *
@@ -943,6 +944,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     UnicodeString& format(double number, UnicodeString& appendTo, FieldPosition& pos,
                           UErrorCode& status) const U_OVERRIDE;
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Format a double or long number using base-10 representation.
@@ -973,6 +975,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     UnicodeString& format(int32_t number, UnicodeString& appendTo, FieldPosition& pos) const U_OVERRIDE;
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Format a long number using base-10 representation.
      *
@@ -986,6 +989,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     UnicodeString& format(int32_t number, UnicodeString& appendTo, FieldPosition& pos,
                           UErrorCode& status) const U_OVERRIDE;
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Format a long number using base-10 representation.
@@ -1016,6 +1020,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     UnicodeString& format(int64_t number, UnicodeString& appendTo, FieldPosition& pos) const U_OVERRIDE;
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Format an int64 number using base-10 representation.
      *
@@ -1029,6 +1034,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     UnicodeString& format(int64_t number, UnicodeString& appendTo, FieldPosition& pos,
                           UErrorCode& status) const U_OVERRIDE;
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Format an int64 number using base-10 representation.
@@ -1277,11 +1283,13 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     virtual void setNegativeSuffix(const UnicodeString& newValue);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Whether to show the plus sign on positive (non-negative) numbers; for example, "+12"
      * @internal Technical Preview
      */
     UBool isSignAlwaysShown() const;
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Set whether to show the plus sign on positive (non-negative) numbers; for example, "+12"
@@ -1319,6 +1327,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     virtual void setMultiplier(int32_t newValue);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Gets the power of ten by which number should be multiplied before formatting, which
      * can be combined with setMultiplier() to multiply by any arbitrary decimal value.
@@ -1332,6 +1341,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @draft ICU 62
      */
     int32_t getMultiplierScale(void) const;
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Sets a power of ten by which number should be multiplied before formatting, which
@@ -2040,6 +2050,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
 
 #endif
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Converts this DecimalFormat to a NumberFormatter.  Starting in ICU 60,
      * NumberFormatter is the recommended way to format numbers.
@@ -2064,6 +2075,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @draft ICU 62
      */
     const number::LocalizedNumberFormatter& toNumberFormatter() const;
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Return the class ID for this class.  This is useful only for
