@@ -756,13 +756,6 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     DecimalFormat(const UnicodeString& pattern, DecimalFormatSymbols* symbolsToAdopt,
                   UNumberFormatStyle style, UErrorCode& status);
 
-    /**
-     * This API is for ICU use only.
-     * Default internal constructor for DecimalFormat.
-     * @internal
-     */
-    DecimalFormat(const DecimalFormatSymbols* symbolsToAdopt, UErrorCode& status);
-
 #if UCONFIG_HAVE_PARSEALLINPUT
 
     /**
@@ -774,6 +767,15 @@ class U_I18N_API DecimalFormat : public NumberFormat {
 
 #endif  /* U_HIDE_INTERNAL_API */
 
+  private:
+
+    /**
+     * Internal constructor for DecimalFormat; sets up internal fields. All public constructors should
+     * call this constructor.
+     */
+    DecimalFormat(const DecimalFormatSymbols* symbolsToAdopt, UErrorCode& status);
+
+  public:
 
     /**
      * Set an integer attribute on this DecimalFormat.
