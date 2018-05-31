@@ -2010,7 +2010,7 @@ class U_I18N_API NumberFormatterSettings {
      * @param scale
      *            The scale to apply when rendering numbers.
      * @return The fluent chain
-     * @draft ICU 60
+     * @draft ICU 62
      */
     Derived scale(const Scale &scale) const &;
 
