@@ -78,8 +78,10 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
     TESTCASE_AUTO(TestAnyTranslit);
     TESTCASE_AUTO(TestConditionVariables);
     TESTCASE_AUTO(TestUnifiedCache);
+#if !UCONFIG_NO_TRANSLITERATION
     TESTCASE_AUTO(TestBreakTranslit);
     TESTCASE_AUTO(TestIncDec);
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
     TESTCASE_AUTO_END
 }
 
