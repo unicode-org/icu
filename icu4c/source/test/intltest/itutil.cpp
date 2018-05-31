@@ -40,7 +40,9 @@ extern IntlTest *createSimpleFormatterTest();
 extern IntlTest *createUnifiedCacheTest();
 extern IntlTest *createQuantityFormatterTest();
 extern IntlTest *createPluralMapTest();
+#if !UCONFIG_NO_FORMATTING
 extern IntlTest *createStaticUnicodeSetsTest();
+#endif
 
 
 #define CASE(id, test) case id:                               \
@@ -138,11 +140,13 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             break;
         case 24:
             name = "StaticUnicodeSetsTest";
+#if !UCONFIG_NO_FORMATTING
             if (exec) {
                 logln("TestSuite StaticUnicodeSetsTest---"); logln();
                 LocalPointer<IntlTest> test(createStaticUnicodeSetsTest());
                 callTest(*test, par);
             }
+#endif
             break;
         default: name = ""; break; //needed to end loop
     }

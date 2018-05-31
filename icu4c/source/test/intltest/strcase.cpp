@@ -1534,6 +1534,7 @@ void StringCaseTest::TestInPlaceTitle() {
     assertEquals("u_strToTitle(in-place) length", u_strlen(expected), length);
     assertEquals("u_strToTitle(in-place)", expected, s);
 }
+#endif
 
 void StringCaseTest::TestCaseMapEditsIteratorDocs() {
     IcuTestErrorCode status(*this, "TestCaseMapEditsIteratorDocs");
@@ -1684,4 +1685,4 @@ void StringCaseTest::TestCaseMapEditsIteratorDocs() {
     }
 }
 
-#endif
+//#endif
