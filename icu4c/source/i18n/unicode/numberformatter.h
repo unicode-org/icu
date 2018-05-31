@@ -2539,8 +2539,14 @@ class U_I18N_API FormattedNumber : public UMemory {
 
 #endif
 
-    // Don't allow copying of FormattedNumber, but moving is okay.
+    /**
+     * Copying not supported; use move constructor instead.
+     */
     FormattedNumber(const FormattedNumber&) = delete;
+
+    /**
+     * Copying not supported; use move assignment instead.
+     */
     FormattedNumber& operator=(const FormattedNumber&) = delete;
 
     /**
@@ -2626,7 +2632,6 @@ class U_I18N_API NumberFormatter final {
 
     /**
      * Use factory methods instead of the constructor to create a NumberFormatter.
-     * @draft ICU 60
      */
     NumberFormatter() = delete;
 };
