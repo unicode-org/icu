@@ -73,20 +73,17 @@ public class StringSegmentTest {
         assertEquals(4, segment.getCommonPrefixLength("📻 r"));
         assertEquals(3, segment.getCommonPrefixLength("📻 x"));
         assertEquals(0, segment.getCommonPrefixLength("x"));
-        assertEquals(0, segment.getCommonPrefixLength(""));
         segment.adjustOffset(3);
         assertEquals(5, segment.getCommonPrefixLength("raDio"));
         assertEquals(5, segment.getCommonPrefixLength("radio"));
         assertEquals(2, segment.getCommonPrefixLength("rafio"));
         assertEquals(0, segment.getCommonPrefixLength("fadio"));
-        assertEquals(0, segment.getCommonPrefixLength(""));
         assertEquals(5, segment.getCaseSensitivePrefixLength("radio"));
         assertEquals(2, segment.getCaseSensitivePrefixLength("raDio"));
         segment.setLength(3);
         assertEquals(3, segment.getCommonPrefixLength("radio"));
         assertEquals(2, segment.getCommonPrefixLength("rafio"));
         assertEquals(0, segment.getCommonPrefixLength("fadio"));
-        assertEquals(0, segment.getCommonPrefixLength(""));
         segment.resetLength();
         segment.setOffset(11); // end of string
         assertEquals(0, segment.getCommonPrefixLength("foo"));
