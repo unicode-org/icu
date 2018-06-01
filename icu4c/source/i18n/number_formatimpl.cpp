@@ -93,6 +93,7 @@ void NumberFormatterImpl::apply(DecimalQuantity& inValue, NumberStringBuilder& o
                                 UErrorCode& status) const {
     if (U_FAILURE(status)) { return; }
     MicroProps micros;
+    if (!fMicroPropsGenerator) { return; }
     fMicroPropsGenerator->processQuantity(inValue, micros, status);
     if (U_FAILURE(status)) { return; }
     microsToString(micros, inValue, outString, status);

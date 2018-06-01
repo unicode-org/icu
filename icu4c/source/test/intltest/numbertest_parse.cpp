@@ -128,6 +128,9 @@ void NumberParserTest::testBasic() {
         LocalPointer<const NumberParserImpl> parser(
                 NumberParserImpl::createSimpleParser(
                         Locale("en"), patternString, parseFlags, status));
+        if (status.errDataIfFailureAndReset("createSimpleParser() failed")) {
+            continue;
+        }
         UnicodeString message =
                 UnicodeString("Input <") + inputString + UnicodeString("> Parser ") + parser->toString();
 
@@ -180,7 +183,9 @@ void NumberParserTest::testSeriesMatcher() {
     IcuTestErrorCode status(*this, "testSeriesMatcher");
 
     DecimalFormatSymbols symbols("en", status);
-
+    if (status.errDataIfFailureAndReset("Failure in DecimalFormtSymbols constructor")) {
+        return;
+    }
     PlusSignMatcher m0(symbols, false);
     MinusSignMatcher m1(symbols, false);
     IgnorablesMatcher m2(unisets::DEFAULT_IGNORABLES);
@@ -237,6 +242,9 @@ void NumberParserTest::testCombinedCurrencyMatcher() {
     Locale locale = Locale::getEnglish();
 
     DecimalFormatSymbols dfs(locale, status);
+    if (status.errDataIfFailureAndReset("Failure in DecimalFormtSymbols constructor")) {
+        return;
+    }
     dfs.setSymbol(DecimalFormatSymbols::kCurrencySymbol, u"IU$", status);
     dfs.setSymbol(DecimalFormatSymbols::kIntlCurrencySymbol, u"ICU", status);
     CurrencySymbols currencySymbols({u"ICU", status}, locale, dfs, status);
@@ -328,16 +336,17 @@ void NumberParserTest::testAffixPatternMatcher() {
         bool success;
         AffixPatternMatcher matcher = AffixPatternMatcher::fromAffixPattern(
                 affixPattern, warehouse, parseFlags, &success, status);
-        assertTrue("Creation should be successful", success);
+        if (!status.errDataIfFailureAndReset("Creation should be successful")) {
 
-        // Check that the matcher has the expected number of children
-        assertEquals(affixPattern + " " + cas.exactMatch, cas.expectedMatcherLength, matcher.length());
+            // Check that the matcher has the expected number of children
+            assertEquals(affixPattern + " " + cas.exactMatch, cas.expectedMatcherLength, matcher.length());
 
-        // Check that the matcher works on a sample string
-        StringSegment segment(sampleParseableString, false);
-        ParsedNumber result;
-        matcher.match(segment, result, status);
-        assertEquals(affixPattern + " " + cas.exactMatch, sampleParseableString.length(), result.charEnd);
+            // Check that the matcher works on a sample string
+            StringSegment segment(sampleParseableString, false);
+            ParsedNumber result;
+            matcher.match(segment, result, status);
+            assertEquals(affixPattern + " " + cas.exactMatch, sampleParseableString.length(), result.charEnd);
+        }
     }
 }
 

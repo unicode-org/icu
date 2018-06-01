@@ -5,11 +5,13 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "putilimp.h"
 #include "unicode/dcfmtsym.h"
+
+#include "cstr.h"
 #include "numbertest.h"
 #include "number_utils.h"
 #include "number_skeletons.h"
+#include "putilimp.h"
 
 using namespace icu::number::impl;
 
@@ -109,7 +111,7 @@ void NumberSkeletonTest::validTokens() {
         UnicodeString skeletonString(cas);
         status.setScope(skeletonString);
         NumberFormatter::forSkeleton(skeletonString, status);
-        assertSuccess(skeletonString, status);
+        assertSuccess(CStr(skeletonString)(), status, true);
         status.errIfFailureAndReset();
     }
 }
@@ -247,9 +249,11 @@ void NumberSkeletonTest::flexibleSeparators() {
         UnicodeString expected(cas.expected);
         status.setScope(skeletonString);
         UnicodeString actual = NumberFormatter::forSkeleton(skeletonString, status).locale("en")
-                .formatDouble(5142.3, status)
-                .toString();
-        assertEquals(skeletonString, expected, actual);
+                               .formatDouble(5142.3, status)
+                               .toString();
+        if (!status.errDataIfFailureAndReset()) {
+            assertEquals(skeletonString, expected, actual);
+        }
         status.errIfFailureAndReset();
     }
 }

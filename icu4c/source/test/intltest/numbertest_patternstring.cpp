@@ -23,6 +23,7 @@ void PatternStringTest::runIndexedTest(int32_t index, UBool exec, const char*& n
 void PatternStringTest::testLocalized() {
     IcuTestErrorCode status(*this, "testLocalized");
     DecimalFormatSymbols symbols(Locale::getEnglish(), status);
+    if (status.isFailure()) { return; }
     symbols.setSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol, u"a", status);
     symbols.setSymbol(DecimalFormatSymbols::kPercentSymbol, u"b", status);
     symbols.setSymbol(DecimalFormatSymbols::kMinusSignSymbol, u".", status);

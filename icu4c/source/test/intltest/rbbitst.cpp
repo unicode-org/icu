@@ -1059,7 +1059,7 @@ void RBBITest::TestExtended() {
 
 
         if (U_FAILURE(status)) {
-            errln("ICU Error %s while parsing test file at line %d.",
+            dataerrln("ICU Error %s while parsing test file at line %d.",
                 u_errorName(status), lineNum);
             status = U_ZERO_ERROR;
             goto end_test; // Stop the test
@@ -4472,21 +4472,23 @@ void RBBITest::TestReverse() {
 
     TestReverse(std::unique_ptr<RuleBasedBreakIterator>((RuleBasedBreakIterator *)
             BreakIterator::createCharacterInstance(Locale::getEnglish(), status)));
-    assertSuccess(WHERE, status);
+    assertSuccess(WHERE, status, true);
+    status = U_ZERO_ERROR;
     TestReverse(std::unique_ptr<RuleBasedBreakIterator>((RuleBasedBreakIterator *)
             BreakIterator::createWordInstance(Locale::getEnglish(), status)));
-    assertSuccess(WHERE, status);
+    assertSuccess(WHERE, status, true);
+    status = U_ZERO_ERROR;
     TestReverse(std::unique_ptr<RuleBasedBreakIterator>((RuleBasedBreakIterator *)
             BreakIterator::createLineInstance(Locale::getEnglish(), status)));
-    assertSuccess(WHERE, status);
+    assertSuccess(WHERE, status, true);
+    status = U_ZERO_ERROR;
     TestReverse(std::unique_ptr<RuleBasedBreakIterator>((RuleBasedBreakIterator *)
             BreakIterator::createSentenceInstance(Locale::getEnglish(), status)));
-    assertSuccess(WHERE, status);
+    assertSuccess(WHERE, status, true);
 }
 
 void RBBITest::TestReverse(std::unique_ptr<RuleBasedBreakIterator>bi) {
     if (!bi) {
-        errln(WHERE);
         return;
     }
 
@@ -4546,6 +4548,9 @@ void RBBITest::TestBug13692() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedBreakIterator> bi ((RuleBasedBreakIterator *)
             BreakIterator::createWordInstance(Locale::getEnglish(), status), status);
+    if (!assertSuccess(WHERE, status, true)) {
+        return;
+    }
     constexpr int32_t LENGTH = 1000000;
     UnicodeString longNumber(LENGTH, (UChar32)u'3', LENGTH);
     for (int i=0; i<20; i+=2) {
@@ -4565,6 +4570,9 @@ void RBBITest::TestDebug(void) {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedBreakIterator> bi ((RuleBasedBreakIterator *)
             BreakIterator::createCharacterInstance(Locale::getEnglish(), status), status);
+    if (!assertSuccess(WHERE, status, true)) {
+        return;
+    }
     const UnicodeString &rules = bi->getRules();
     UParseError pe;
     LocalPointer<RuleBasedBreakIterator> newbi(new RuleBasedBreakIterator(rules, pe, status));

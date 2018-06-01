@@ -931,9 +931,9 @@ void RBBIMonkeyTest::testMonkey() {
     int32_t i;
     for (i=0; tests[i] != NULL; ++i) {
         logln("beginning testing of %s", tests[i]);
-        RBBIMonkeyImpl *test = new RBBIMonkeyImpl(status);
+        LocalPointer<RBBIMonkeyImpl> test(new RBBIMonkeyImpl(status));
         if (U_FAILURE(status)) {
-            errln("%s:%d: error %s while starting test %s.", __FILE__, __LINE__, u_errorName(status), tests[i]);
+            dataerrln("%s:%d: error %s while starting test %s.", __FILE__, __LINE__, u_errorName(status), tests[i]);
             break;
         }
         test->fDumpExpansions = dumpExpansions;
@@ -942,11 +942,11 @@ void RBBIMonkeyTest::testMonkey() {
         test->fLoopCount = loopCount;
         test->setup(tests[i], status);
         if (U_FAILURE(status)) {
-            errln("%s:%d: error %s while starting test %s.", __FILE__, __LINE__, u_errorName(status), tests[i]);
+            dataerrln("%s:%d: error %s while starting test %s.", __FILE__, __LINE__, u_errorName(status), tests[i]);
             break;
         }
         test->startTest();
-        startedTests.addElement(test, status);
+        startedTests.addElement(test.orphan(), status);
         if (U_FAILURE(status)) {
             errln("%s:%d: error %s while starting test %s.", __FILE__, __LINE__, u_errorName(status), tests[i]);
             break;

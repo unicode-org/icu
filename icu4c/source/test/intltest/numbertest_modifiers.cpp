@@ -101,7 +101,9 @@ void ModifiersTest::testSimpleModifier() {
 void ModifiersTest::testCurrencySpacingEnabledModifier() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormatSymbols symbols(Locale("en"), status);
-    assertSuccess("Spot 1", status);
+    if (!assertSuccess("Spot 1", status, true)) {
+        return;
+    }
 
     NumberStringBuilder prefix;
     NumberStringBuilder suffix;
