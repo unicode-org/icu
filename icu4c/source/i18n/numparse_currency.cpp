@@ -62,7 +62,7 @@ CombinedCurrencyMatcher::match(StringSegment& segment, ParsedNumber& result, UEr
     // Try to match a currency spacing separator.
     int32_t initialOffset = segment.getOffset();
     bool maybeMore = false;
-    if (result.seenNumber()) {
+    if (result.seenNumber() && !beforeSuffixInsert.isEmpty()) {
         int32_t overlap = segment.getCommonPrefixLength(beforeSuffixInsert);
         if (overlap == beforeSuffixInsert.length()) {
             segment.adjustOffset(overlap);
@@ -79,7 +79,7 @@ CombinedCurrencyMatcher::match(StringSegment& segment, ParsedNumber& result, UEr
     }
 
     // Try to match a currency spacing separator.
-    if (!result.seenNumber()) {
+    if (!result.seenNumber() && !afterPrefixInsert.isEmpty()) {
         int32_t overlap = segment.getCommonPrefixLength(afterPrefixInsert);
         if (overlap == afterPrefixInsert.length()) {
             segment.adjustOffset(overlap);
@@ -95,7 +95,12 @@ bool CombinedCurrencyMatcher::matchCurrency(StringSegment& segment, ParsedNumber
                                             UErrorCode& status) const {
     bool maybeMore = false;
 
-    int32_t overlap1 = segment.getCaseSensitivePrefixLength(fCurrency1);
+    int32_t overlap1;
+    if (!fCurrency1.isEmpty()) {
+        overlap1 = segment.getCaseSensitivePrefixLength(fCurrency1);
+    } else {
+        overlap1 = -1;
+    }
     maybeMore = maybeMore || overlap1 == segment.length();
     if (overlap1 == fCurrency1.length()) {
         utils::copyCurrencyCode(result.currencyCode, fCurrencyCode);
@@ -104,7 +109,12 @@ bool CombinedCurrencyMatcher::matchCurrency(StringSegment& segment, ParsedNumber
         return maybeMore;
     }
 
-    int32_t overlap2 = segment.getCaseSensitivePrefixLength(fCurrency2);
+    int32_t overlap2;
+    if (!fCurrency2.isEmpty()) {
+        overlap2 = segment.getCaseSensitivePrefixLength(fCurrency2);
+    } else {
+        overlap2 = -1;
+    }
     maybeMore = maybeMore || overlap2 == segment.length();
     if (overlap2 == fCurrency2.length()) {
         utils::copyCurrencyCode(result.currencyCode, fCurrencyCode);

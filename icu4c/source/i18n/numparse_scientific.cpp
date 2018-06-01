@@ -57,6 +57,7 @@ bool ScientificMatcher::match(StringSegment& segment, ParsedNumber& result, UErr
     }
 
     // First match the scientific separator, and then match another number after it.
+    // NOTE: This is guarded by the smoke test; no need to check fExponentSeparatorString length again.
     int overlap1 = segment.getCommonPrefixLength(fExponentSeparatorString);
     if (overlap1 == fExponentSeparatorString.length()) {
         // Full exponent separator match.
@@ -75,6 +76,7 @@ bool ScientificMatcher::match(StringSegment& segment, ParsedNumber& result, UErr
         } else if (segment.startsWith(plusSignSet())) {
             segment.adjustOffsetByCodePoint();
         } else if (segment.startsWith(fCustomMinusSign)) {
+            // Note: call site is guarded with startsWith, which returns false on empty string
             int32_t overlap2 = segment.getCommonPrefixLength(fCustomMinusSign);
             if (overlap2 != fCustomMinusSign.length()) {
                 // Partial custom sign match; un-match the exponent separator.
@@ -84,6 +86,7 @@ bool ScientificMatcher::match(StringSegment& segment, ParsedNumber& result, UErr
             exponentSign = -1;
             segment.adjustOffset(overlap2);
         } else if (segment.startsWith(fCustomPlusSign)) {
+            // Note: call site is guarded with startsWith, which returns false on empty string
             int32_t overlap2 = segment.getCommonPrefixLength(fCustomPlusSign);
             if (overlap2 != fCustomPlusSign.length()) {
                 // Partial custom sign match; un-match the exponent separator.

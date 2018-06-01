@@ -247,7 +247,13 @@ class U_I18N_API StringSegment : public UMemory {
      * since the first 2 characters are the same.
      *
      * <p>
-     * This method will perform case folding if case folding is enabled for the parser.
+     * This method only returns offsets along code point boundaries.
+     *
+     * <p>
+     * This method will perform case folding if case folding was enabled in the constructor.
+     *
+     * <p>
+     * IMPORTANT: The given UnicodeString must not be empty! It is the caller's responsibility to check.
      */
     int32_t getCommonPrefixLength(const UnicodeString& other);
 

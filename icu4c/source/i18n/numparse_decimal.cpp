@@ -44,12 +44,14 @@ DecimalMatcher::DecimalMatcher(const DecimalFormatSymbols& symbols, const Groupe
             strictSeparators ? unisets::STRICT_PERIOD : unisets::PERIOD);
     if (decimalKey >= 0) {
         decimalUniSet = unisets::get(decimalKey);
-    } else {
+    } else if (!decimalSeparator.isEmpty()) {
         auto* set = new UnicodeSet();
         set->add(decimalSeparator.char32At(0));
         set->freeze();
         decimalUniSet = set;
         fLocalDecimalUniSet.adoptInstead(set);
+    } else {
+        decimalUniSet = unisets::get(unisets::EMPTY);
     }
 
     if (groupingKey >= 0 && decimalKey >= 0) {
@@ -161,6 +163,9 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
         if (digit == -1 && !fLocalDigitStrings.isNull()) {
             for (int32_t i = 0; i < 10; i++) {
                 const UnicodeString& str = fLocalDigitStrings[i];
+                if (str.isEmpty()) {
+                    continue;
+                }
                 int32_t overlap = segment.getCommonPrefixLength(str);
                 if (overlap == str.length()) {
                     segment.adjustOffset(overlap);
@@ -191,7 +196,7 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
 
         // 1) Attempt the decimal separator string literal.
         // if (we have not seen a decimal separator yet) { ... }
-        if (actualDecimalString.isBogus()) {
+        if (actualDecimalString.isBogus() && !decimalSeparator.isEmpty()) {
             int32_t overlap = segment.getCommonPrefixLength(decimalSeparator);
             maybeMore = maybeMore || (overlap == segment.length());
             if (overlap == decimalSeparator.length()) {
@@ -211,7 +216,8 @@ bool DecimalMatcher::match(StringSegment& segment, ParsedNumber& result, int8_t 
 
         // 2.5) Attempt to match a new the grouping separator string literal.
         // if (we have not seen a grouping or decimal separator yet) { ... }
-        if (!groupingDisabled && actualGroupingString.isBogus() && actualDecimalString.isBogus()) {
+        if (!groupingDisabled && actualGroupingString.isBogus() && actualDecimalString.isBogus() &&
+            !groupingSeparator.isEmpty()) {
             int32_t overlap = segment.getCommonPrefixLength(groupingSeparator);
             maybeMore = maybeMore || (overlap == segment.length());
             if (overlap == groupingSeparator.length()) {

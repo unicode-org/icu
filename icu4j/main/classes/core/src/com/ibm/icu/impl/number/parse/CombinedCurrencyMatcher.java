@@ -97,7 +97,7 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
         // Try to match a currency spacing separator.
         int initialOffset = segment.getOffset();
         boolean maybeMore = false;
-        if (result.seenNumber()) {
+        if (result.seenNumber() && !beforeSuffixInsert.isEmpty()) {
             int overlap = segment.getCommonPrefixLength(beforeSuffixInsert);
             if (overlap == beforeSuffixInsert.length()) {
                 segment.adjustOffset(overlap);
@@ -114,7 +114,7 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
         }
 
         // Try to match a currency spacing separator.
-        if (!result.seenNumber()) {
+        if (!result.seenNumber() && !afterPrefixInsert.isEmpty()) {
             int overlap = segment.getCommonPrefixLength(afterPrefixInsert);
             if (overlap == afterPrefixInsert.length()) {
                 segment.adjustOffset(overlap);
@@ -130,7 +130,12 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
     private boolean matchCurrency(StringSegment segment, ParsedNumber result) {
         boolean maybeMore = false;
 
-        int overlap1 = segment.getCaseSensitivePrefixLength(currency1);
+        int overlap1;
+        if (!currency1.isEmpty()) {
+            overlap1 = segment.getCaseSensitivePrefixLength(currency1);
+        } else {
+            overlap1 = -1;
+        }
         maybeMore = maybeMore || overlap1 == segment.length();
         if (overlap1 == currency1.length()) {
             result.currencyCode = isoCode;
@@ -139,7 +144,12 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
             return maybeMore;
         }
 
-        int overlap2 = segment.getCaseSensitivePrefixLength(currency2);
+        int overlap2;
+        if (!currency2.isEmpty()) {
+            overlap2 = segment.getCaseSensitivePrefixLength(currency2);
+        } else {
+            overlap2 = -1;
+        }
         maybeMore = maybeMore || overlap2 == segment.length();
         if (overlap2 == currency2.length()) {
             result.currencyCode = isoCode;
@@ -169,6 +179,9 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
             int longestFullMatch = 0;
             for (int i=0; i<StandardPlural.COUNT; i++) {
                 String name = localLongNames[i];
+                if (name.isEmpty()) {
+                    continue;
+                }
                 int overlap = segment.getCommonPrefixLength(name);
                 if (overlap == name.length() && name.length() > longestFullMatch) {
                     longestFullMatch = name.length();

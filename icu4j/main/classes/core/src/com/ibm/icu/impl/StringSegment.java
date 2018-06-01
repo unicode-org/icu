@@ -156,6 +156,9 @@ public class StringSegment implements CharSequence {
      *
      * <p>
      * This method will perform case folding if case folding was enabled in the constructor.
+     *
+     * <p>
+     * IMPORTANT: The given CharSequence must not be empty! It is the caller's responsibility to check.
      */
     public int getCommonPrefixLength(CharSequence other) {
         return getPrefixLengthInternal(other, foldCase);
@@ -170,8 +173,10 @@ public class StringSegment implements CharSequence {
     }
 
     private int getPrefixLengthInternal(CharSequence other, boolean foldCase) {
+        assert other.length() != 0;
         int offset = 0;
         for (; offset < Math.min(length(), other.length());) {
+            // TODO: case-fold code points, not chars
             int cp1 = Character.codePointAt(this, offset);
             int cp2 = Character.codePointAt(other, offset);
             if (!codePointsEqual(cp1, cp2, foldCase)) {

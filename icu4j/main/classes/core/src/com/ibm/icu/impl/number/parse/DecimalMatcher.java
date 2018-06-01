@@ -71,8 +71,10 @@ public class DecimalMatcher implements NumberParseMatcher {
                 strictSeparators ? Key.STRICT_PERIOD : Key.PERIOD);
         if (decimalKey != null) {
             decimalUniSet = StaticUnicodeSets.get(decimalKey);
-        } else {
+        } else if (!decimalSeparator.isEmpty()) {
             decimalUniSet = new UnicodeSet().add(decimalSeparator.codePointAt(0)).freeze();
+        } else {
+            decimalUniSet = UnicodeSet.EMPTY;
         }
 
         if (groupingKey != null && decimalKey != null) {
@@ -178,6 +180,9 @@ public class DecimalMatcher implements NumberParseMatcher {
             if (digit == -1 && digitStrings != null) {
                 for (int i = 0; i < digitStrings.length; i++) {
                     String str = digitStrings[i];
+                    if (str.isEmpty()) {
+                        continue;
+                    }
                     int overlap = segment.getCommonPrefixLength(str);
                     if (overlap == str.length()) {
                         segment.adjustOffset(overlap);
@@ -207,7 +212,7 @@ public class DecimalMatcher implements NumberParseMatcher {
 
             // 1) Attempt the decimal separator string literal.
             // if (we have not seen a decimal separator yet) { ... }
-            if (actualDecimalString == null) {
+            if (actualDecimalString == null && !decimalSeparator.isEmpty()) {
                 int overlap = segment.getCommonPrefixLength(decimalSeparator);
                 maybeMore = maybeMore || (overlap == segment.length());
                 if (overlap == decimalSeparator.length()) {
@@ -227,7 +232,10 @@ public class DecimalMatcher implements NumberParseMatcher {
 
             // 2.5) Attempt to match a new the grouping separator string literal.
             // if (we have not seen a grouping or decimal separator yet) { ... }
-            if (!groupingDisabled && actualGroupingString == null && actualDecimalString == null) {
+            if (!groupingDisabled
+                    && actualGroupingString == null
+                    && actualDecimalString == null
+                    && !groupingSeparator.isEmpty()) {
                 int overlap = segment.getCommonPrefixLength(groupingSeparator);
                 maybeMore = maybeMore || (overlap == segment.length());
                 if (overlap == groupingSeparator.length()) {

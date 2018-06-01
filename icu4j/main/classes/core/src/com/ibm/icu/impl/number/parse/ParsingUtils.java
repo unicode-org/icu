@@ -40,4 +40,9 @@ public class ParsingUtils {
         }
     }
 
+    // TODO: Remove this helper function (and update call sites) when #13805 is fixed
+    public static boolean safeContains(UnicodeSet uniset, CharSequence str) {
+        return str.length() != 0 && uniset.contains(str);
+    }
+
 }
