@@ -6170,4 +6170,57 @@ public class NumberFormatTest extends TestFmwk {
         NumberFormat df = NumberFormat.getInstance(ULocale.US, NumberFormat.PLURALCURRENCYSTYLE);
         expect2(df, 1.5, "1.50 US dollars");
     }
+
+    @Test
+    public void test13804_EmptyStringsWhenParsing() {
+        DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
+        dfs.setCurrencySymbol("");
+        dfs.setDecimalSeparatorString("");
+        dfs.setDigitStrings(new String[] { "", "", "", "", "", "", "", "", "", "" });
+        dfs.setExponentMultiplicationSign("");
+        dfs.setExponentSeparator("");
+        dfs.setGroupingSeparatorString("");
+        dfs.setInfinity("");
+        dfs.setInternationalCurrencySymbol("");
+        dfs.setMinusSignString("");
+        dfs.setMonetaryDecimalSeparatorString("");
+        dfs.setMonetaryGroupingSeparatorString("");
+        dfs.setNaN("");
+        dfs.setPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT, false, "");
+        dfs.setPatternForCurrencySpacing(DecimalFormatSymbols.CURRENCY_SPC_INSERT, true, "");
+        dfs.setPercentString("");
+        dfs.setPerMillString("");
+        dfs.setPlusSignString("");
+
+        DecimalFormat df = new DecimalFormat("0", dfs);
+        df.setGroupingUsed(true);
+        df.setScientificNotation(true);
+        df.setParseStrict(false); // enable all matchers
+        df.format(0); // should not throw or hit infinite loop
+        String[] samples = new String[] {
+                "",
+                "123",
+                "$123",
+                "-",
+                "+",
+                "44%",
+                "1E+2.3"
+        };
+        for (String sample : samples) {
+            logln("Attempting parse on: " + sample);
+            // We don't care about the results, only that we don't throw and don't loop.
+            ParsePosition ppos = new ParsePosition(0);
+            df.parse(sample, ppos);
+            ppos = new ParsePosition(0);
+            df.parseCurrency(sample, ppos);
+        }
+
+        // Test with a nonempty exponent separator symbol to cover more code
+        dfs.setExponentSeparator("E");
+        df.setDecimalFormatSymbols(dfs);
+        {
+            ParsePosition ppos = new ParsePosition(0);
+            df.parse("1E+2.3", ppos);
+        }
+    }
 }

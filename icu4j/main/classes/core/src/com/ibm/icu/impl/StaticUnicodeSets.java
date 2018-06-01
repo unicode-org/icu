@@ -2,6 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl;
 
+import static com.ibm.icu.impl.number.parse.ParsingUtils.safeContains;
+
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -90,7 +92,7 @@ public class StaticUnicodeSets {
      * @return key1 if the set contains str, or COUNT if not.
      */
     public static Key chooseFrom(String str, Key key1) {
-        return get(key1).contains(str) ? key1 : null;
+        return safeContains(get(key1), str) ? key1 : null;
     }
 
     /**
@@ -108,7 +110,7 @@ public class StaticUnicodeSets {
      *         contains str.
      */
     public static Key chooseFrom(String str, Key key1, Key key2) {
-        return get(key1).contains(str) ? key1 : chooseFrom(str, key2);
+        return safeContains(get(key1), str) ? key1 : chooseFrom(str, key2);
     }
 
     /**
