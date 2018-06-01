@@ -5543,6 +5543,10 @@ void DateFormatTest::TestDayPeriodParsing() {
 void DateFormatTest::TestParseRegression13744() {
     LocalPointer<DateFormat> dfmt(DateFormat::createDateTimeInstance(
             DateFormat::SHORT, DateFormat::SHORT, Locale("en", "US")));
+    if (dfmt.isNull()) {
+        dataerrln("DateFormat::createDateTimeInstance() failed");
+        return;
+    }
     ParsePosition pos(0);
     UnicodeString inDate("4/27/18");
     dfmt->parse(inDate, pos);

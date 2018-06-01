@@ -648,7 +648,7 @@ void IntlTestSpoof::testMixedNumbers() {
 void IntlTestSpoof::testBug12153() {
     UErrorCode status = U_ZERO_ERROR;
     LocalUSpoofCheckerPointer sc(uspoof_open(&status));
-    TEST_ASSERT_SUCCESS(status);
+    if (!assertSuccess("", status, true, __FILE__, __LINE__)) { return; }
     int32_t checks = uspoof_getChecks(sc.getAlias(), &status);
     TEST_ASSERT((checks & USPOOF_RESTRICTION_LEVEL) != 0);
     checks &= ~USPOOF_RESTRICTION_LEVEL;
@@ -688,7 +688,7 @@ void IntlTestSpoof::testBug12815() {
 void IntlTestSpoof::testBug13314_MixedNumbers() {
     UErrorCode status = U_ZERO_ERROR;
     LocalUSpoofCheckerPointer sc(uspoof_open(&status));
-    TEST_ASSERT_SUCCESS(status);
+    if (!assertSuccess("", status, true, __FILE__, __LINE__)) { return; }
     uspoof_setChecks(sc.getAlias(), USPOOF_ALL_CHECKS, &status);
     TEST_ASSERT_SUCCESS(status);
     int32_t failedChecks = uspoof_areConfusableUnicodeString(sc.getAlias(), u"列", u"列", &status);
@@ -702,7 +702,7 @@ void IntlTestSpoof::testBug13314_MixedNumbers() {
 void IntlTestSpoof::testBug13328_MixedCombiningMarks() {
     UErrorCode status = U_ZERO_ERROR;
     LocalUSpoofCheckerPointer sc(uspoof_open(&status));
-    TEST_ASSERT_SUCCESS(status);
+    if (!assertSuccess("", status, true, __FILE__, __LINE__)) { return; }
     int32_t failedChecks = uspoof_check2UnicodeString(sc.getAlias(), u"\u0061\u0F84", nullptr, &status);
     TEST_ASSERT_SUCCESS(status);
     assertEquals(
@@ -714,7 +714,7 @@ void IntlTestSpoof::testBug13328_MixedCombiningMarks() {
 void IntlTestSpoof::testCombiningDot() {
     UErrorCode status = U_ZERO_ERROR;
     LocalUSpoofCheckerPointer sc(uspoof_open(&status));
-    TEST_ASSERT_SUCCESS(status);
+    if (!assertSuccess("", status, true, __FILE__, __LINE__)) { return; }
     uspoof_setChecks(sc.getAlias(), USPOOF_HIDDEN_OVERLAY, &status);
     TEST_ASSERT_SUCCESS(status);
 

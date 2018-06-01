@@ -2338,7 +2338,8 @@ void NumberFormatterApiTest::copyMove() {
 
     // Default constructors
     LocalizedNumberFormatter l1;
-    assertEquals("Initial behavior", u"10", l1.formatInt(10, status).toString());
+    assertEquals("Initial behavior", u"10", l1.formatInt(10, status).toString(), true);
+    if (status.errDataIfFailureAndReset()) { return; }
     assertEquals("Initial call count", 1, l1.getCallCount());
     assertTrue("Initial compiled", l1.getCompiled() == nullptr);
 
@@ -2414,12 +2415,11 @@ void NumberFormatterApiTest::localPointerCAPI() {
     // Setup:
     LocalUNumberFormatterPointer uformatter(unumf_openForSkeletonAndLocale(u"percent", -1, "en", &ec));
     LocalUFormattedNumberPointer uresult(unumf_openResult(&ec));
-    assertSuccess("", ec, TRUE);
-    if (U_FAILURE(ec)) { return; }
+    if (!assertSuccess("", ec, true, __FILE__, __LINE__)) { return; }
 
     // Format a decimal number:
     unumf_formatDecimal(uformatter.getAlias(), "9.87E-3", -1, uresult.getAlias(), &ec);
-    assertSuccess("", ec);
+    if (!assertSuccess("", ec, true, __FILE__, __LINE__)) { return; }
 
     // Get the location of the percent sign:
     UFieldPosition ufpos = {UNUM_PERCENT_FIELD, 0, 0};

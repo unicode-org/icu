@@ -3070,6 +3070,7 @@ static void Test12052_NullPointer() {
     static const UChar input[] = u"199a";
     UChar currency[200] = {0};
     UNumberFormat *theFormatter = unum_open(UNUM_CURRENCY, NULL, 0, "en_US", NULL, &status);
+    if (!assertSuccessCheck("unum_open() failed", &status, TRUE)) { return; }
     status = U_ZERO_ERROR;
     unum_setAttribute(theFormatter, UNUM_LENIENT_PARSE, 1);
     int32_t pos = 1;

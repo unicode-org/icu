@@ -473,6 +473,10 @@ void TestIDNA::testAPI(const UChar* src, const UChar* expected, const char* test
 
     // test null-terminated source and return value of number of UChars required
     destLen = func(src,-1,NULL,0,options, &parseError , &status);
+    if (status == U_FILE_ACCESS_ERROR) {
+        dataerrln("U_FILE_ACCESS_ERROR. Skipping the remainder of this test.");
+        return;
+    }
     if(status == U_BUFFER_OVERFLOW_ERROR){
         status = U_ZERO_ERROR; // reset error code
         if(destLen+1 < MAX_DEST_SIZE){
@@ -1297,17 +1301,25 @@ void TestIDNA::TestIDNToUnicode(){
     testIDNToUnicode("uidna_IDNToUnicode", uidna_IDNToUnicode);
 }
 void TestIDNA::TestCompare(){
-    testCompare("uidna_compare",uidna_compare);
+    UErrorCode status = U_ZERO_ERROR;
+    uidna_close(uidna_openUTS46(0, &status));   // Fail quickly if no data.
+    if (assertSuccess("", status, true, __FILE__, __LINE__)) {
+        testCompare("uidna_compare",uidna_compare);
+    }
 }
 void TestIDNA::TestErrorCases(){
     testErrorCases( "uidna_IDNToASCII",uidna_IDNToASCII,
                     "uidna_IDNToUnicode",uidna_IDNToUnicode);
 }
 void TestIDNA::TestRootLabelSeparator(){
-    testRootLabelSeparator( "uidna_compare",uidna_compare,
-                            "uidna_IDNToASCII", uidna_IDNToASCII,
-                            "uidna_IDNToUnicode",uidna_IDNToUnicode
-                            );
+    UErrorCode status = U_ZERO_ERROR;
+    uidna_close(uidna_openUTS46(0, &status));   // Fail quickly if no data.
+    if (assertSuccess("", status, true, __FILE__, __LINE__)) {
+        testRootLabelSeparator( "uidna_compare",uidna_compare,
+                                "uidna_IDNToASCII", uidna_IDNToASCII,
+                                "uidna_IDNToUnicode",uidna_IDNToUnicode
+                              );
+    }
 }
 void TestIDNA::TestChaining(){
     testChaining("uidna_toASCII",uidna_toASCII, "uidna_toUnicode", uidna_toUnicode);
@@ -1529,14 +1541,14 @@ void TestIDNA::TestCompareReferenceImpl(){
     int32_t srcLen = 0;
 
     // data even OK?
-    {
-      UErrorCode dataStatus = U_ZERO_ERROR;
-      loadTestData(dataStatus);
-      if(U_FAILURE(dataStatus)) {
+    UErrorCode dataStatus = U_ZERO_ERROR;
+    loadTestData(dataStatus);
+    if(U_FAILURE(dataStatus)) {
         dataerrln("Couldn't load test data: %s\n", u_errorName(dataStatus)); // save us from thousands and thousands of errors
         return;
-      }
     }
+    uidna_close(uidna_openUTS46(0, &dataStatus));   // Fail quickly if no data.
+    if (!assertSuccess("", dataStatus, true, __FILE__, __LINE__)) { return; }
 
     for (int32_t i = 0; i <= 0x10FFFF; i++){
         if (quick == TRUE && i > 0x0FFF){
@@ -1561,13 +1573,9 @@ void TestIDNA::TestCompareReferenceImpl(){
 
 void TestIDNA::TestRefIDNA(){
     UErrorCode status = U_ZERO_ERROR;
-    getInstance(status);    // Init prep
-    if (U_FAILURE(status)) {
-        if (status == U_FILE_ACCESS_ERROR) {
-            dataerrln("Test could not initialize. Got %s", u_errorName(status));
-        }
-        return;
-    }
+
+    getInstance(status);    // Init prep. Abort test early if no data.
+    if (!assertSuccess("", status, true, __FILE__, __LINE__)) { return; }
 
     testToASCII("idnaref_toASCII", idnaref_toASCII);
     testToUnicode("idnaref_toUnicode", idnaref_toUnicode);

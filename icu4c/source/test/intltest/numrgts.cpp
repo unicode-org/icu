@@ -22,6 +22,7 @@
 #include "unicode/datefmt.h"
 #include "unicode/ucurr.h"
 #include "cmemory.h"
+#include "cstr.h"
 #include "putilimp.h"
 #include "uassert.h"
 
@@ -1177,30 +1178,28 @@ void NumberFormatRegressionTest::Test4071859 (void)
 void NumberFormatRegressionTest::Test4093610(void)
 {
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormat *df = new DecimalFormat("#0.#", status);
+    DecimalFormat df("#0.#", status);
     if (!failure(status, "new DecimalFormat")) {
         UnicodeString s("12.4");
-        roundingTest(df, 12.35, s);
-        roundingTest(df, 12.45, s);
+        roundingTest(&df, 12.35, s);
+        roundingTest(&df, 12.45, s);
         s = "12.5";
-        roundingTest(df, 12.452,s);
+        roundingTest(&df, 12.452,s);
         s = "12.6";
-        roundingTest(df, 12.55, s);
-        roundingTest(df, 12.65, s);
+        roundingTest(&df, 12.55, s);
+        roundingTest(&df, 12.65, s);
         s = "12.7";
-        roundingTest(df, 12.652,s);
+        roundingTest(&df, 12.652,s);
         s = "12.8";
-        roundingTest(df, 12.75, s);
-        roundingTest(df, 12.752,s);
-        roundingTest(df, 12.85, s);
+        roundingTest(&df, 12.75, s);
+        roundingTest(&df, 12.752,s);
+        roundingTest(&df, 12.85, s);
         s = "12.9";
-        roundingTest(df, 12.852,s);
+        roundingTest(&df, 12.852,s);
         s = "13";
-        roundingTest(df, 12.95, s);
-        roundingTest(df, 12.952,s);
+        roundingTest(&df, 12.95, s);
+        roundingTest(&df, 12.952,s);
     }
-
-    delete df;
 }
 
 void NumberFormatRegressionTest::roundingTest(DecimalFormat *df, double x, UnicodeString& expected)
@@ -1209,8 +1208,9 @@ void NumberFormatRegressionTest::roundingTest(DecimalFormat *df, double x, Unico
     FieldPosition pos(FieldPosition::DONT_CARE);
     out = df->format(x, out, pos);
     logln(UnicodeString("") + x + " formats with 1 fractional digits to " + out);
-    if (out != expected) 
-        errln("FAIL: Expected " + expected);
+    if (out != expected) {
+        dataerrln("FAIL: Expected '%s'; got '%s'", CStr(expected)(), CStr(out)());
+    }
 }
 /* @bug 4098741
  * Tests the setMaximumFractionDigits limit.
@@ -1892,9 +1892,11 @@ void NumberFormatRegressionTest::Test4134300(void) {
 void NumberFormatRegressionTest::Test4140009(void) 
 {
     UErrorCode status = U_ZERO_ERROR;
-    DecimalFormatSymbols *syms = new DecimalFormatSymbols(Locale::getEnglish(), status);
-    failure(status, "new DecimalFormatSymbols");
-    DecimalFormat *f = new DecimalFormat(UnicodeString(""), syms, status);
+    LocalPointer<DecimalFormatSymbols> syms(new DecimalFormatSymbols(Locale::getEnglish(), status), status);
+    if (failure(status, "new DecimalFormatSymbols")) {
+        return;
+    }
+    DecimalFormat *f = new DecimalFormat(UnicodeString(u""), syms.orphan(), status);
     if (!failure(status, "new DecimalFormat")) {
         UnicodeString s;
         FieldPosition pos(FieldPosition::DONT_CARE);
@@ -2216,6 +2218,9 @@ void NumberFormatRegressionTest::Test4170798(void) {
     IcuTestErrorCode status(*this, "Test4170798");
     LocalPointer<DecimalFormat> df(dynamic_cast<DecimalFormat*>(
             NumberFormat::createInstance(Locale::getUS(), status)), status);
+    if (!assertSuccess("", status, true, __FILE__, __LINE__)) {
+        return;
+    }
     {
         Formattable n;
         ParsePosition pos(0);

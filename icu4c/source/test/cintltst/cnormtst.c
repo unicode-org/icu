@@ -1409,6 +1409,10 @@ TestQuickCheckPerCP() {
         }
 
         length=unorm_normalize(s, length, UNORM_NFD, 0, nfd, UPRV_LENGTHOF(nfd), &errorCode);
+        if (U_FAILURE(errorCode)) {
+            log_data_err("%s:%d errorCode=%s\n", __FILE__, __LINE__, u_errorName(errorCode));
+            break;
+        }
         /* length-length == 0 is used to get around a compiler warning. */
         U16_GET(nfd, 0, length-length, length, lead);
         U16_GET(nfd, 0, length-1, length, trail);

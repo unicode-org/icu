@@ -485,15 +485,16 @@ void CompactDecimalFormatTest::TestBug12975() {
 	IcuTestErrorCode status(*this, "TestBug12975");
     Locale locale("it");
     LocalPointer<CompactDecimalFormat> cdf(CompactDecimalFormat::createInstance(locale, UNUM_SHORT, status));
-    UnicodeString resultCdf;
-    cdf->format(120000, resultCdf);
-    LocalPointer<DecimalFormat> df((DecimalFormat*) DecimalFormat::createInstance(locale, status));
-    UnicodeString resultDefault;
-    df->format(120000, resultDefault);
-    assertEquals("CompactDecimalFormat should use default pattern when compact pattern is unavailable",
-                 resultDefault, resultCdf);
+    if (assertSuccess("", status, true, __FILE__, __LINE__)) {
+        UnicodeString resultCdf;
+        cdf->format(120000, resultCdf);
+        LocalPointer<DecimalFormat> df((DecimalFormat*) DecimalFormat::createInstance(locale, status));
+        UnicodeString resultDefault;
+        df->format(120000, resultDefault);
+        assertEquals("CompactDecimalFormat should use default pattern when compact pattern is unavailable",
+                     resultDefault, resultCdf);
+    }
 }
-
 
 
 // End test cases. Helpers:
