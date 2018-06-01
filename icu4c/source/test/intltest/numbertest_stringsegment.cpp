@@ -77,18 +77,15 @@ void StringSegmentTest::testCommonPrefixLength() {
     assertEquals("", 4, segment.getCommonPrefixLength(u"📻 r"));
     assertEquals("", 3, segment.getCommonPrefixLength(u"📻 x"));
     assertEquals("", 0, segment.getCommonPrefixLength(u"x"));
-    assertEquals("", 0, segment.getCommonPrefixLength(u""));
     segment.adjustOffset(3);
     assertEquals("", 0, segment.getCommonPrefixLength(u"RADiO"));
     assertEquals("", 5, segment.getCommonPrefixLength(u"radio"));
     assertEquals("", 2, segment.getCommonPrefixLength(u"rafio"));
     assertEquals("", 0, segment.getCommonPrefixLength(u"fadio"));
-    assertEquals("", 0, segment.getCommonPrefixLength(u""));
     segment.setLength(3);
     assertEquals("", 3, segment.getCommonPrefixLength(u"radio"));
     assertEquals("", 2, segment.getCommonPrefixLength(u"rafio"));
     assertEquals("", 0, segment.getCommonPrefixLength(u"fadio"));
-    assertEquals("", 0, segment.getCommonPrefixLength(u""));
     segment.resetLength();
     segment.setOffset(11); // end of string
     assertEquals("", 0, segment.getCommonPrefixLength(u"foo"));
