@@ -9127,7 +9127,7 @@ void NumberFormatTest::Test13804_EmptyStringsWhenParsing() {
         ParsePosition ppos(0);
         df.parse(sample, result, ppos);
         ppos = ParsePosition(0);
-        df.parseCurrency(sample, ppos);
+        LocalPointer<CurrencyAmount> curramt(df.parseCurrency(sample, ppos));
         status.errIfFailureAndReset();
     }
 
