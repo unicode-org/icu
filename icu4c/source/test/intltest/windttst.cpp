@@ -88,7 +88,8 @@ void Win32DateTimeTest::testLocales(DateFormatTest *log)
         for (int z = 0; z < ec; z += 1) {
             UnicodeString equiv = TimeZone::getEquivalentID(zoneID, z);
 
-            if (found = uprv_getWindowsTimeZoneInfo(&tzi, equiv.getBuffer(), equiv.length())) {
+            found = uprv_getWindowsTimeZoneInfo(&tzi, equiv.getBuffer(), equiv.length());
+            if (found) {
                 break;
             }
         }
