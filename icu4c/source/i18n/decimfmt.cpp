@@ -96,17 +96,21 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern, DecimalFormatSymbols*
 }
 
 DecimalFormat::DecimalFormat(const DecimalFormatSymbols* symbolsToAdopt, UErrorCode& status) {
+    LocalPointer<const DecimalFormatSymbols> adoptedSymbols(symbolsToAdopt);
     fields = new DecimalFormatFields();
+    if (U_FAILURE(status)) {
+        return;
+    }
     if (fields == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
     fields->properties.adoptInsteadAndCheckErrorCode(new DecimalFormatProperties(), status);
     fields->exportedProperties.adoptInsteadAndCheckErrorCode(new DecimalFormatProperties(), status);
-    if (symbolsToAdopt == nullptr) {
+    if (adoptedSymbols.isNull()) {
         fields->symbols.adoptInsteadAndCheckErrorCode(new DecimalFormatSymbols(status), status);
     } else {
-        fields->symbols.adoptInsteadAndCheckErrorCode(symbolsToAdopt, status);
+        fields->symbols.adoptInsteadAndCheckErrorCode(adoptedSymbols.orphan(), status);
     }
 }
 
@@ -968,9 +972,11 @@ void DecimalFormat::applyLocalizedPattern(const UnicodeString& localizedPattern,
 }
 
 void DecimalFormat::applyLocalizedPattern(const UnicodeString& localizedPattern, UErrorCode& status) {
-    UnicodeString pattern = PatternStringUtils::convertLocalized(
-            localizedPattern, *fields->symbols, false, status);
-    applyPattern(pattern, status);
+    if (U_SUCCESS(status)) {
+        UnicodeString pattern = PatternStringUtils::convertLocalized(
+                localizedPattern, *fields->symbols, false, status);
+        applyPattern(pattern, status);
+    }
 }
 
 void DecimalFormat::setMaximumIntegerDigits(int32_t newValue) {
@@ -1080,6 +1086,9 @@ void DecimalFormat::setCurrency(const char16_t* theCurrency) {
 }
 
 void DecimalFormat::setCurrencyUsage(UCurrencyUsage newUsage, UErrorCode* ec) {
+    if (U_FAILURE(*ec)) {
+        return;
+    }
     if (!fields->properties->currencyUsage.isNull() && newUsage == fields->properties->currencyUsage.getNoError()) {
         return;
     }
@@ -1158,9 +1167,11 @@ void DecimalFormat::touchNoError() {
 
 void DecimalFormat::setPropertiesFromPattern(const UnicodeString& pattern, int32_t ignoreRounding,
                                              UErrorCode& status) {
-    // Cast workaround to get around putting the enum in the public header file
-    auto actualIgnoreRounding = static_cast<IgnoreRounding>(ignoreRounding);
-    PatternParser::parseToExistingProperties(pattern, *fields->properties, actualIgnoreRounding, status);
+    if (U_SUCCESS(status)) {
+        // Cast workaround to get around putting the enum in the public header file
+        auto actualIgnoreRounding = static_cast<IgnoreRounding>(ignoreRounding);
+        PatternParser::parseToExistingProperties(pattern, *fields->properties,  actualIgnoreRounding, status);
+    }
 }
 
 const numparse::impl::NumberParserImpl* DecimalFormat::getParser(UErrorCode& status) const {
