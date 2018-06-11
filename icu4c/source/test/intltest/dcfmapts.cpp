@@ -89,6 +89,12 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, const 
                TestRequiredDecimalPoint();
             }
             break;
+         case 8: name = "testErrorCode";
+            if(exec) {
+               logln((UnicodeString)"testErrorCode ---");
+               testErrorCode();
+            }
+            break;
        default: name = ""; break;
     }
 }
@@ -1019,6 +1025,116 @@ void IntlTestDecimalFormatAPI::TestRequiredDecimalPoint() {
     df->parse(text, result1, status);
     if(U_SUCCESS(status)) {
         errln((UnicodeString)"ERROR: unexpected parse(2)");
+    }
+}
+
+// WHERE Macro yields a literal string of the form "source_file_name:line number "
+#define WHERE __FILE__ ":" XLINE(__LINE__) " "
+#define XLINE(s) LINE(s)
+#define LINE(s) #s
+
+void IntlTestDecimalFormatAPI::testErrorCode() {
+    // Try each DecimalFormat constructor with an errorCode set on input,
+    // Verify no crashes or leaks, and that the errorCode is not altered.
+
+    UErrorCode status = U_ZERO_ERROR;
+    const UnicodeString pattern(u"0.###E0");
+    UParseError pe;
+    DecimalFormatSymbols symbols(Locale::getUS(), status);
+    assertSuccess(WHERE, status);
+
+    {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        DecimalFormat df(status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+    }
+    {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        DecimalFormat df(pattern, status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+    }
+    {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        DecimalFormat df(pattern, new DecimalFormatSymbols(symbols), status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+    }
+    {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        DecimalFormat df(pattern, new DecimalFormatSymbols(symbols), UNUM_DECIMAL_COMPACT_LONG, status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+    }
+    {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        DecimalFormat df(pattern, new DecimalFormatSymbols(symbols), pe, status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+    }
+    {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        DecimalFormat df(pattern, symbols ,status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+    }
+
+    // Try each DecimalFormat method with an error code parameter, verifying that
+    //  an input error is not altered.
+
+    status = U_INTERNAL_PROGRAM_ERROR;
+    DecimalFormat dfBogus(status);
+    assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+
+    status = U_ZERO_ERROR;
+    DecimalFormat dfGood(pattern, new DecimalFormatSymbols(symbols), status);
+    assertSuccess(WHERE, status);
+
+    for (DecimalFormat *df: {&dfBogus, &dfGood}) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        df->setAttribute(UNUM_PARSE_INT_ONLY, 0, status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+
+        status = U_INTERNAL_PROGRAM_ERROR;
+        df->getAttribute(UNUM_MAX_FRACTION_DIGITS, status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+
+        status = U_INTERNAL_PROGRAM_ERROR;
+        UnicodeString dest;
+        FieldPosition fp;
+        df->format(1.2, dest, fp, status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+
+        status = U_INTERNAL_PROGRAM_ERROR;
+        df->format(1.2, dest, nullptr, status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+
+        status = U_INTERNAL_PROGRAM_ERROR;
+        df->format((int32_t)666, dest, nullptr, status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+
+        status = U_INTERNAL_PROGRAM_ERROR;
+        df->format((int64_t)666, dest, nullptr, status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+
+        status = U_INTERNAL_PROGRAM_ERROR;
+        df->format(StringPiece("3.1415926535897932384626"), dest, nullptr, status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+
+        status = U_INTERNAL_PROGRAM_ERROR;
+        df->applyPattern(pattern, status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+
+        status = U_INTERNAL_PROGRAM_ERROR;
+        df->applyLocalizedPattern(pattern, pe, status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+
+        status = U_INTERNAL_PROGRAM_ERROR;
+        df->applyLocalizedPattern(pattern, status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+
+        status = U_INTERNAL_PROGRAM_ERROR;
+        df->setCurrency(u"USD", status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
+
+        status = U_INTERNAL_PROGRAM_ERROR;
+        df->setCurrencyUsage(UCURR_USAGE_CASH, &status);
+        assertEquals(WHERE, U_INTERNAL_PROGRAM_ERROR, status);
     }
 }
 
