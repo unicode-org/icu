@@ -651,6 +651,15 @@ public final class ICUBinary {
         }
     }
 
+    public static byte[] getBytes(ByteBuffer bytes, int length, int additionalSkipLength) {
+        byte[] dest = new byte[length];
+        bytes.get(dest);
+        if (additionalSkipLength > 0) {
+            skipBytes(bytes, additionalSkipLength);
+        }
+        return dest;
+    }
+
     public static String getString(ByteBuffer bytes, int length, int additionalSkipLength) {
         CharSequence cs = bytes.asCharBuffer();
         String s = cs.subSequence(0, length).toString();

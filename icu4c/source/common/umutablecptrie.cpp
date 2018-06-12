@@ -995,7 +995,7 @@ int32_t MutableCodePointTrie::compactIndex(int32_t fastILimit, UErrorCode &error
     if ((highStart >> UCPTRIE_FAST_SHIFT) <= fastIndexLength) {
         // Only the linear BMP index, no supplementary index tables.
         // TODO: fix BMP/supp comments
-        index3NullOffset = UCPTRIE_NO_INDEX2_NULL_OFFSET;
+        index3NullOffset = UCPTRIE_NO_INDEX3_NULL_OFFSET;
         return fastIndexLength;
     }
 
@@ -1199,9 +1199,9 @@ int32_t MutableCodePointTrie::compactIndex(int32_t fastILimit, UErrorCode &error
     U_ASSERT(indexLength <= index3Start + index3Capacity);
 
     if (index3NullOffset < 0) {
-        index3NullOffset = UCPTRIE_NO_INDEX2_NULL_OFFSET;
+        index3NullOffset = UCPTRIE_NO_INDEX3_NULL_OFFSET;
     }
-    if (indexLength >= (UCPTRIE_NO_INDEX2_NULL_OFFSET + UCPTRIE_INDEX_3_BLOCK_LENGTH)) {
+    if (indexLength >= (UCPTRIE_NO_INDEX3_NULL_OFFSET + UCPTRIE_INDEX_3_BLOCK_LENGTH)) {
         // The index-3 offsets exceed 15 bits, or
         // the last one cannot be distinguished from the no-null-block value.
         errorCode = U_INDEX_OUTOFBOUNDS_ERROR;

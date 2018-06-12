@@ -23,42 +23,48 @@ ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueWidth valueWidth,
                        const void *data, int32_t length, int32_t *pActualLength,
                        UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
-        return 0;
+        return nullptr;
     }
 
     if (length <= 0 || (U_POINTER_MASK_LSB(data, 3) != 0) ||
             type < UCPTRIE_TYPE_ANY || UCPTRIE_TYPE_SMALL < type ||
             valueWidth < UCPTRIE_VALUE_BITS_ANY || UCPTRIE_VALUE_BITS_8 < valueWidth) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+        return nullptr;
     }
 
-    // enough data for a trie header?
+    // Enough data for a trie header?
     if (length < (int32_t)sizeof(UCPTrieHeader)) {
         *pErrorCode = U_INVALID_FORMAT_ERROR;
-        return 0;
+        return nullptr;
     }
 
     // Check the signature.
     const UCPTrieHeader *header = (const UCPTrieHeader *)data;
     if (header->signature != UCPTRIE_SIG) {
         *pErrorCode = U_INVALID_FORMAT_ERROR;
-        return 0;
+        return nullptr;
     }
 
     int32_t options = header->options;
-    UCPTrieType actualType = (UCPTrieType)((options >> 6) & 3);
-    UCPTrieValueWidth actualValueWidth = (UCPTrieValueWidth)(options & UCPTRIE_OPTIONS_VALUE_BITS_MASK);
-    if (type == UCPTRIE_TYPE_ANY) {
+    int32_t typeInt = (options >> 6) & 3;
+    int32_t valueWidthInt = options & UCPTRIE_OPTIONS_VALUE_BITS_MASK;
+    if (typeInt > UCPTRIE_TYPE_SMALL || valueWidthInt > UCPTRIE_VALUE_BITS_8 ||
+            (options & UCPTRIE_OPTIONS_RESERVED_MASK) != 0) {
+        *pErrorCode = U_INVALID_FORMAT_ERROR;
+        return nullptr;
+    }
+    UCPTrieType actualType = (UCPTrieType)typeInt;
+    UCPTrieValueWidth actualValueWidth = (UCPTrieValueWidth)valueWidthInt;
+    if (type < 0) {
         type = actualType;
     }
-    if (valueWidth == UCPTRIE_VALUE_BITS_ANY) {
+    if (valueWidth < 0) {
         valueWidth = actualValueWidth;
     }
-    if (type != actualType || (options & UCPTRIE_OPTIONS_RESERVED_MASK) != 0 ||
-            valueWidth != actualValueWidth) {
+    if (type != actualType || valueWidth != actualValueWidth) {
         *pErrorCode = U_INVALID_FORMAT_ERROR;
-        return 0;
+        return nullptr;
     }
 
     // Get the length values and offsets.
@@ -87,14 +93,14 @@ ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueWidth valueWidth,
     }
     if (length < actualLength) {
         *pErrorCode = U_INVALID_FORMAT_ERROR;  // Not enough bytes.
-        return 0;
+        return nullptr;
     }
 
     // Allocate the trie.
     UCPTrie *trie = (UCPTrie *)uprv_malloc(sizeof(UCPTrie));
     if (trie == nullptr) {
         *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-        return 0;
+        return nullptr;
     }
     uprv_memcpy(trie, &tempTrie, sizeof(tempTrie));
     trie->name = "fromSerialized";
@@ -124,7 +130,7 @@ ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueWidth valueWidth,
         break;
     default:
         *pErrorCode = U_INVALID_FORMAT_ERROR;
-        return 0;
+        return nullptr;
     }
 
     if (pActualLength != nullptr) {
@@ -155,7 +161,7 @@ ucptrie_internalSmallIndex(const UCPTrie *trie, UChar32 c) {
         U_ASSERT(0xffff < c && c < trie->highStart);
         i1 += UCPTRIE_BMP_INDEX_LENGTH - UCPTRIE_OMITTED_BMP_INDEX_1_LENGTH;
     } else {
-        U_ASSERT(c < trie->highStart && trie->highStart > UCPTRIE_SMALL_LIMIT);
+        U_ASSERT((uint32_t)c < (uint32_t)trie->highStart && trie->highStart > UCPTRIE_SMALL_LIMIT);
         i1 += UCPTRIE_SMALL_INDEX_LENGTH;
     }
     int32_t i3Block = trie->index[trie->index[i1] + ((c >> UCPTRIE_SHIFT_2) & UCPTRIE_INDEX_2_MASK)];

@@ -69,7 +69,7 @@ enum {
      * Bit 15 is unused for this value because this bit is used if the index-3 contains
      * 18-bit indexes.
      */
-    UCPTRIE_NO_INDEX2_NULL_OFFSET = 0x7fff,
+    UCPTRIE_NO_INDEX3_NULL_OFFSET = 0x7fff,
     UCPTRIE_NO_DATA_NULL_OFFSET = 0xfffff
 };
 
