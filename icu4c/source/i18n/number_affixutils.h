@@ -50,6 +50,8 @@ struct AffixTag {
 
 class TokenConsumer {
   public:
+    virtual ~TokenConsumer();
+
     virtual void consumeToken(AffixPatternType type, UChar32 cp, UErrorCode& status) = 0;
 };
 
