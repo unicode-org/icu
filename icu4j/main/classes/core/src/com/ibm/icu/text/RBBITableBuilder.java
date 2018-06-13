@@ -1032,14 +1032,19 @@ class RBBITableBuilder {
 
        /**
         *  Check for, and remove duplicate states (table rows).
+        *  @return the number of states removed.
         *  @internal
         */
-       void removeDuplicateStates() {
+       int removeDuplicateStates() {
            IntPair dupls = new IntPair(3, 0);
+           int numStatesRemoved = 0;
+
            while (findDuplicateState(dupls)) {
                // System.out.printf("Removing duplicate states (%d, %d)\n", dupls.first, dupls.second);
                removeState(dupls);
+               ++numStatesRemoved;
            }
+           return numStatesRemoved;
        }
 
 

@@ -151,12 +151,11 @@ $CAN_CM $CM*  [$SP $ZW];
 
 #
 # LB 8         Break after zero width space
-#              TODO:  ZW SP* <break>
-#              An engine change is required to write the reverse rule for this.
-#              For now, leave the Unicode 5.2 rule, ZW <break>
+#              ZW SP* ÷
 #
 $LB8Breaks    = [$LB4Breaks $ZW];
 $LB8NonBreaks = [[$LB4NonBreaks] - [$ZW]];
+$ZW $SP* / [^$SP $ZW $LB4Breaks];
 
 # LB 8a        ZWJ x            Do not break Emoji ZWJ sequences.
 #

@@ -1245,12 +1245,16 @@ void RBBITableBuilder::removeSafeState(IntPair duplStates) {
 /*
  * RemoveDuplicateStates
  */
-void RBBITableBuilder::removeDuplicateStates() {
+int32_t RBBITableBuilder::removeDuplicateStates() {
     IntPair dupls = {3, 0};
+    int32_t numStatesRemoved = 0;
+
     while (findDuplicateState(&dupls)) {
         // printf("Removing duplicate states (%d, %d)\n", dupls.first, dupls.second);
         removeState(dupls);
+        ++numStatesRemoved;
     }
+    return numStatesRemoved;
 }
 
 
