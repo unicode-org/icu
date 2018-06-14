@@ -305,5 +305,5 @@ ksh{
         FK{"de malleviinesche Enselle"}
         MK{"de vörmaals ens jugoßlaawesch jewääse Republik Mazedoonije"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

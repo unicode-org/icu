@@ -1044,10 +1044,6 @@ nl{
         }
         VEF{
             "VEF",
-            "Venezolaanse bolivar (2008–2018)",
-        }
-        VES{
-            "VES",
             "Venezolaanse bolivar",
         }
         VND{
@@ -2355,10 +2351,6 @@ nl{
             other{"Venezolaanse bolivar (1871–2008)"}
         }
         VEF{
-            one{"Venezolaanse bolivar (2008–2018)"}
-            other{"Venezolaanse bolivar (2008–2018)"}
-        }
-        VES{
             one{"Venezolaanse bolivar"}
             other{"Venezolaanse bolivar"}
         }
@@ -2527,5 +2519,5 @@ nl{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.41.63"}
+    Version{"2.1.41.97"}
 }

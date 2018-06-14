@@ -82,5 +82,5 @@ pt_PT{
         FK{"Ilhas Malvinas"}
         MK{"Macedónia (ARJM)"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

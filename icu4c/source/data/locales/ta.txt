@@ -236,7 +236,7 @@ ta{
         }
         traditional{"taml"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
     calendar{
         buddhist{
             eras{

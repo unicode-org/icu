@@ -220,7 +220,7 @@ sq{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
     calendar{
         generic{
             DateTimePatterns{

@@ -783,7 +783,7 @@ he{
         SCOTLAND{"אנגלית סקוטית סטנדרטית"}
         WADEGILE{"ווייד-גיילס, שיטה לתעתוק סינית לאותיות לטיניות"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
     characterLabelPattern{
         all{"{0} - הכל"}
         category-list{"{0}: {1}"}

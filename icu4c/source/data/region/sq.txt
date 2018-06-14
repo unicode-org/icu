@@ -312,5 +312,5 @@ sq{
         MK{"Maqedoni (IRJM)"}
         TL{"Timori Lindor"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

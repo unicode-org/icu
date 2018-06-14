@@ -425,7 +425,6 @@ keyTypeData:table(nofallback){
             uzs{""}
             veb{""}
             vef{""}
-            ves{""}
             vnd{""}
             vnn{""}
             vuv{""}
