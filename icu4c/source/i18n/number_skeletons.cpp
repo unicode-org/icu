@@ -420,7 +420,7 @@ UnicodeString skeleton::generate(const MacroProps& macros, UErrorCode& status) {
 }
 
 MacroProps skeleton::parseSkeleton(const UnicodeString& skeletonString, UErrorCode& status) {
-    if (U_FAILURE(status)) { return {}; }
+    if (U_FAILURE(status)) { return MacroProps(); }
 
     // Add a trailing whitespace to the end of the skeleton string to make code cleaner.
     UnicodeString tempSkeletonString(skeletonString);
