@@ -824,10 +824,6 @@ is{
         }
         VEF{
             "VEF",
-            "venesúelskur bólívari (2008–2018)",
-        }
-        VES{
-            "VES",
             "venesúelskur bólívari",
         }
         VND{
@@ -1621,10 +1617,6 @@ is{
             other{"úsbeksk súm"}
         }
         VEF{
-            one{"venesúelskur bólívari (2008–2018)"}
-            other{"venesúelskir bólívarar (2008–2018)"}
-        }
-        VES{
             one{"venesúelskur bólívari"}
             other{"venesúelskir bólívarar"}
         }
@@ -1677,5 +1669,5 @@ is{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

@@ -1047,7 +1047,7 @@ ja{
         VALLADER{"ヴァラダー"}
         WADEGILE{"ウェード式ローマ字表記法"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
     characterLabelPattern{
         all{"{0} — すべて"}
         category-list{"{0}: {1}"}

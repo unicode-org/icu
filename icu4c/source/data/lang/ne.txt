@@ -797,7 +797,7 @@ ne{
         AREVELA{"पूर्वी आर्मेनियाली"}
         POSIX{"कम्प्युटर"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
     characterLabelPattern{
         all{"{0}-सबै"}
         category-list{"{0}: {1}"}

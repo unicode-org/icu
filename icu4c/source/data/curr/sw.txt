@@ -620,10 +620,6 @@ sw{
         }
         VEF{
             "VEF",
-            "Bolivar ya Venezuela (2008–2018)",
-        }
-        VES{
-            "VES",
             "Bolivar ya Venezuela",
         }
         VND{
@@ -1385,10 +1381,6 @@ sw{
             other{"som za Uzbekistan"}
         }
         VEF{
-            one{"Bolivar ya Venezuela (2008–2018)"}
-            other{"Bolivar za Venezuela (2008–2018)"}
-        }
-        VES{
             one{"Bolivar ya Venezuela"}
             other{"Bolivar za Venezuela"}
         }
@@ -1441,5 +1433,5 @@ sw{
         one{"{1} {0}"}
         other{"{1} {0}"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

@@ -1132,7 +1132,7 @@ nl{
         WADEGILE{"Wade-Giles-romanisering"}
         XSISTEMO{"X-sistemo"}
     }
-    Version{"2.1.41.63"}
+    Version{"2.1.41.97"}
     characterLabelPattern{
         all{"{0} — alle"}
         category-list{"{0}: {1}"}

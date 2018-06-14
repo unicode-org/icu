@@ -311,5 +311,5 @@ da{
         MK{"Den tidligere jugoslaviske republik Makedonien"}
         TL{"Østtimor"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

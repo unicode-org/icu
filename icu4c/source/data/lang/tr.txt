@@ -1038,7 +1038,7 @@ tr{
         VALENCIA{"Valensiyaca"}
         WADEGILE{"Wade-Giles (Latin Alfabesinde Yazımı)"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
     characterLabelPattern{
         all{"{0} — tümü"}
         category-list{"{0}: {1}"}

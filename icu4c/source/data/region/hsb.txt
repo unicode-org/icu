@@ -307,5 +307,5 @@ hsb{
         MK{"Makedonska (FYROM)"}
         TL{"Wuchodny Timor"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }
