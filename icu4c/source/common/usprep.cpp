@@ -726,7 +726,7 @@ usprep_prepare(   const UStringPrepProfile* profile,
             ((result < _SPREP_TYPE_THRESHOLD) && (result & 0x01) /* first bit says it the code point is prohibited*/)
            ){
             *status = U_STRINGPREP_PROHIBITED_ERROR;
-            uprv_syntaxError(b1, b2Index-U16_LENGTH(ch), b2Len, parseError);
+            uprv_syntaxError(b2, b2Index-U16_LENGTH(ch), b2Len, parseError);
             return 0;
         }
 
