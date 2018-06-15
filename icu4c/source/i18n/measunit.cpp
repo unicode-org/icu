@@ -41,21 +41,21 @@ static const int32_t gOffsets[] = {
     16,
     20,
     24,
-    322,
-    332,
-    343,
-    347,
-    353,
-    357,
+    321,
+    331,
+    342,
+    346,
+    352,
+    356,
+    376,
     377,
-    378,
-    389,
-    392,
-    398,
-    403,
-    407,
-    411,
-    436
+    388,
+    391,
+    397,
+    402,
+    406,
+    410,
+    435
 };
 
 static const int32_t gIndexes[] = {
@@ -391,7 +391,6 @@ static const char * const gSubTypes[] = {
     "UZS",
     "VEB",
     "VEF",
-    "VES",
     "VNC",
     "VND",
     "VUV",
@@ -548,14 +547,14 @@ static const char * const gSubTypes[] = {
 
 // Must be sorted by first value and then second value.
 static int32_t unitPerUnitToSingleUnit[][4] = {
-        {364, 334, 17, 0},
-        {366, 340, 17, 2},
-        {368, 334, 17, 3},
-        {368, 425, 4, 2},
-        {368, 426, 4, 3},
-        {383, 423, 3, 1},
-        {386, 11, 16, 4},
-        {428, 364, 4, 1}
+        {363, 333, 17, 0},
+        {365, 339, 17, 2},
+        {367, 333, 17, 3},
+        {367, 424, 4, 2},
+        {367, 425, 4, 3},
+        {382, 422, 3, 1},
+        {385, 11, 16, 4},
+        {427, 363, 4, 1}
 };
 
 // Shortcuts to the base unit in order to make the default constructor fast
