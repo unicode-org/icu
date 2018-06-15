@@ -311,5 +311,5 @@ cs{
         FK{"Falklandské ostrovy (Malvíny)"}
         MK{"Makedonie (FYROM)"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

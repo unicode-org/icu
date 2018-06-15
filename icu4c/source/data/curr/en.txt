@@ -1044,10 +1044,6 @@ en{
         }
         VEF{
             "VEF",
-            "Venezuelan Bolívar (2008–2018)",
-        }
-        VES{
-            "VES",
             "Venezuelan Bolívar",
         }
         VND{
@@ -2253,10 +2249,6 @@ en{
             other{"Venezuelan bolívars (1871–2008)"}
         }
         VEF{
-            one{"Venezuelan bolívar (2008–2018)"}
-            other{"Venezuelan bolívars (2008–2018)"}
-        }
-        VES{
             one{"Venezuelan bolívar"}
             other{"Venezuelan bolívars"}
         }
@@ -2425,5 +2417,5 @@ en{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

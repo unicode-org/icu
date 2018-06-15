@@ -309,5 +309,5 @@ nb{
         FK{"Falklandsøyene (Islas Malvinas)"}
         MK{"Den tidligere jugoslaviske republikk Makedonia"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

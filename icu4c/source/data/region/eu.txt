@@ -311,5 +311,5 @@ eu{
         MK{"Mazedoniako Jugoslaviar Errepublika Ohia"}
         TL{"TL"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

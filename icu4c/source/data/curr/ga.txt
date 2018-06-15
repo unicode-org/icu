@@ -1000,10 +1000,6 @@ ga{
         }
         VEF{
             "VEF",
-            "Bolívar Veiniséala (2008–2018)",
-        }
-        VES{
-            "VES",
             "Bolívar Veiniséala",
         }
         VND{
@@ -2936,13 +2932,6 @@ ga{
             two{"bholívar Veiniséala (1871–2008)"}
         }
         VEF{
-            few{"bholívar Veiniséala (2008–2018)"}
-            many{"mbolívar Veiniséala (2008–2018)"}
-            one{"bholívar Veiniséala (2008–2018)"}
-            other{"bolívar Veiniséala (2008–2018)"}
-            two{"bholívar Veiniséala (2008–2018)"}
-        }
-        VES{
             few{"bholívar Veiniséala"}
             many{"mbolívar Veiniséala"}
             one{"bholívar Veiniséala"}
@@ -3188,5 +3177,5 @@ ga{
         other{"{0} {1}"}
         two{"{0} {1}"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

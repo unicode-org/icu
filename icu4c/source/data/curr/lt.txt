@@ -1044,10 +1044,6 @@ lt{
         }
         VEF{
             "VEF",
-            "Venesuelos bolivaras (2008–2018)",
-        }
-        VES{
-            "VES",
             "Venesuelos bolivaras",
         }
         VND{
@@ -2874,12 +2870,6 @@ lt{
             other{"Venesuelos bolivarų (1871–2008)"}
         }
         VEF{
-            few{"Venesuelos bolivarai (2008–2018)"}
-            many{"Venesuelos bolivaro (2008–2018)"}
-            one{"Venesuelos bolivaras (2008–2018)"}
-            other{"Venesuelos bolivarų (2008–2018)"}
-        }
-        VES{
             few{"Venesuelos bolivarai"}
             many{"Venesuelos bolivaro"}
             one{"Venesuelos bolivaras"}
@@ -3126,5 +3116,5 @@ lt{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

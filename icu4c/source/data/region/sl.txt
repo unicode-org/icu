@@ -312,5 +312,5 @@ sl{
         MK{"Makedonija (FYROM)"}
         TL{"Vzhodni Timor"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

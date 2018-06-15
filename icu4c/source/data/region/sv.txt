@@ -312,5 +312,5 @@ sv{
         MK{"f.d. jugoslaviska republiken Makedonien"}
         TL{"TL"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }

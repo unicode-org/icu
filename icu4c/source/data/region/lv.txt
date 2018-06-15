@@ -311,5 +311,5 @@ lv{
         FK{"Folklenda (Malvinu) salas"}
         MK{"bijusī Dienvidslāvijas Maķedonijas Republika"}
     }
-    Version{"2.1.41.58"}
+    Version{"2.1.41.97"}
 }
