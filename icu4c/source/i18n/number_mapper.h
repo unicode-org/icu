@@ -150,7 +150,7 @@ struct DecimalFormatFields : public UMemory {
     LocalPointer<DecimalFormatProperties> exportedProperties;
 
     // Data for fastpath
-    bool canUseFastFormat;
+    bool canUseFastFormat = false;
     struct FastFormatData {
         char16_t cpZero;
         char16_t cpGroupingSeparator;
