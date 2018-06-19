@@ -1058,7 +1058,7 @@ void DecimalQuantity::ensureCapacity(int32_t capacity) {
         auto bcd1 = static_cast<int8_t*>(uprv_malloc(capacity * 2 * sizeof(int8_t)));
         uprv_memcpy(bcd1, fBCD.bcdBytes.ptr, oldCapacity * sizeof(int8_t));
         // Initialize the rest of the byte array to zeros (this is done automatically in Java)
-        uprv_memset(fBCD.bcdBytes.ptr + oldCapacity, 0, (capacity - oldCapacity) * sizeof(int8_t));
+        uprv_memset(bcd1 + oldCapacity, 0, (capacity - oldCapacity) * sizeof(int8_t));
         uprv_free(fBCD.bcdBytes.ptr);
         fBCD.bcdBytes.ptr = bcd1;
         fBCD.bcdBytes.len = capacity * 2;
