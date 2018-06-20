@@ -6223,4 +6223,27 @@ public class NumberFormatTest extends TestFmwk {
             df.parse("1E+2.3", ppos);
         }
     }
+
+    @Test
+    public void test13840_ParseLongStringCrash() throws ParseException {
+        NumberFormat nf = NumberFormat.getInstance(ULocale.ENGLISH);
+        String bigString =
+            "111111111111111111111111111111111111111111111111111111111111111111111" +
+            "111111111111111111111111111111111111111111111111111111111111111111111" +
+            "111111111111111111111111111111111111111111111111111111111111111111111" +
+            "111111111111111111111111111111111111111111111111111111111111111111111" +
+            "111111111111111111111111111111111111111111111111111111111111111111111" +
+            "111111111111111111111111111111111111111111111111111111111111111111111";
+        Number result = nf.parse(bigString);
+
+        // Normalize the input string:
+        BigDecimal expectedBigDecimal = new BigDecimal(bigString);
+        String expectedUString = expectedBigDecimal.toString();
+
+        // Get the output string:
+        BigDecimal actualBigDecimal = (BigDecimal) result;
+        String actualUString = actualBigDecimal.toString();
+
+        assertEquals("Should round-trip without crashing", expectedUString, actualUString);
+    }
 }
