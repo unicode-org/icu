@@ -343,7 +343,6 @@ public class UnicodeMapTest extends TestFmwk {
         checkNext(map1, map2, LIMIT);
     }
 
-    private static final int SET_LIMIT = 0x10FFFF;
     private static final int propEnum = UProperty.GENERAL_CATEGORY;
 
     @Test
@@ -354,12 +353,23 @@ public class UnicodeMapTest extends TestFmwk {
         //Map<Integer, String> map3 = new TreeMap<Integer, String>();
         map1 = new UnicodeMap<String>();
         map2 = new TreeMap<Integer,String>();
-        for (int cp = 0; cp <= SET_LIMIT; ++cp) {
+        for (int cp = 0;;) {
               int enumValue = UCharacter.getIntPropertyValue(cp, propEnum);
               //if (enumValue <= 0) continue; // for smaller set
               String value = UCharacter.getPropertyValueName(propEnum,enumValue, UProperty.NameChoice.LONG);
               map1.put(cp, value);
               map2.put(cp, value);
+              cp++;
+              // Unicode is huge, skip over large parts of it.
+              if (cp == 0x08FF) {           // General Scripts Area.
+                  cp = 0xD700;              // Hangul Syllables Area.
+              } else if (cp == 0x100FF) {   // General Scripts Area.
+                  cp = 0x1F000;             // Symbols Area.
+              } else if (cp == 0x200FF) {   // CJK Unified Ideographs Extensions.
+                  cp = 0x10FF00;            // Supplementary Private Use Area-B.
+              } else if (cp == 0x10FFFF) {  // The end of Unicode.
+                  break;
+              }
         }
         checkNext(map1, map2, Integer.MAX_VALUE);
 
