@@ -216,6 +216,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test13777_ParseLongNameNonCurrencyMode);
   TESTCASE_AUTO(Test13804_EmptyStringsWhenParsing);
   TESTCASE_AUTO(Test13840_ParseLongStringCrash);
+  TESTCASE_AUTO(Test13850_EmptyStringCurrency);
   TESTCASE_AUTO_END;
 }
 
@@ -9183,6 +9184,27 @@ void NumberFormatTest::Test13840_ParseLongStringCrash() {
     UnicodeString actualUString = UnicodeString(actualChars.data(), actualChars.length(), US_INV);
 
     assertEquals("Should round-trip without crashing", expectedUString, actualUString);
+}
+
+void NumberFormatTest::Test13850_EmptyStringCurrency() {
+    IcuTestErrorCode status(*this, "Test13840_EmptyStringCurrency");
+
+    LocalPointer<NumberFormat> nf(NumberFormat::createCurrencyInstance("en-US", status), status);
+    if (status.errIfFailureAndReset()) { return; }
+    UnicodeString actual;
+    nf->format(1, actual, status);
+    assertEquals("Should format with US currency", u"$1.00", actual);
+    nf->setCurrency(u"", status);
+    nf->format(1, actual.remove(), status);
+    assertEquals("Should unset the currency on empty string", u"XXX\u00A01.00", actual);
+
+    // Try with nullptr
+    nf.adoptInstead(NumberFormat::createCurrencyInstance("en-US", status));
+    nf->format(1, actual.remove(), status);
+    assertEquals("Should format with US currency", u"$1.00", actual);
+    nf->setCurrency(nullptr, status);
+    nf->format(1, actual.remove(), status);
+    assertEquals("Should unset the currency on nullptr", u"XXX\u00A01.00", actual);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -280,6 +280,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test13777_ParseLongNameNonCurrencyMode();
     void Test13804_EmptyStringsWhenParsing();
     void Test13840_ParseLongStringCrash();
+    void Test13850_EmptyStringCurrency();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);
