@@ -318,6 +318,7 @@ public final class UCaseProps {
                 }
             }
             if(hasSlot(excWord, EXC_DELTA)) {
+                excOffset=excOffset0;
                 int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
                 set.add((excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta);
             }
@@ -1131,7 +1132,7 @@ public final class UCaseProps {
             }
 
             if(hasSlot(excWord, EXC_DELTA) && isUpperOrTitleFromProps(props)) {
-                int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
+                int delta=getSlotValue(excWord, EXC_DELTA, excOffset2);
                 return (excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta;
             }
             if(hasSlot(excWord, EXC_LOWER)) {
@@ -1227,7 +1228,7 @@ public final class UCaseProps {
             }
 
             if(hasSlot(excWord, EXC_DELTA) && getTypeFromProps(props)==LOWER) {
-                int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
+                int delta=getSlotValue(excWord, EXC_DELTA, excOffset2);
                 return (excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta;
             }
             if(!upperNotTitle && hasSlot(excWord, EXC_TITLE)) {
@@ -1448,7 +1449,7 @@ public final class UCaseProps {
                 return ~c;
             }
             if(hasSlot(excWord, EXC_DELTA) && isUpperOrTitleFromProps(props)) {
-                int delta=getSlotValue(excWord, EXC_DELTA, excOffset);
+                int delta=getSlotValue(excWord, EXC_DELTA, excOffset2);
                 return (excWord&EXC_DELTA_IS_NEGATIVE)==0 ? c+delta : c-delta;
             }
             if(hasSlot(excWord, EXC_FOLD)) {
