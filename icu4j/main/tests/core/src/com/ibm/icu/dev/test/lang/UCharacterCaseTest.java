@@ -1493,6 +1493,16 @@ public final class UCharacterCaseTest extends TestFmwk
         }
     }
 
+    @Test
+    public void TestCaseMapGreekExtended() {
+        // Ticket 13851
+        String s = "\u1F80\u1F88\u1FFC";
+        String result = CaseMap.toLower().apply(Locale.ROOT,  s);
+        assertEquals("lower", "\u1F80\u1F80\u1FF3", result);
+        result = CaseMap.toTitle().apply(Locale.ROOT, null, s);
+        assertEquals("title", "\u1F88\u1F80\u1FF3", result);
+    }
+
     // private data members - test data --------------------------------------
 
     private static final Locale TURKISH_LOCALE_ = new Locale("tr", "TR");

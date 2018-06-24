@@ -68,6 +68,7 @@ public:
     void TestBug13127();
     void TestInPlaceTitle();
     void TestCaseMapEditsIteratorDocs();
+    void TestCaseMapGreekExtended();
 
 private:
     void assertGreekUpper(const char16_t *s, const char16_t *expected);
@@ -113,6 +114,7 @@ StringCaseTest::runIndexedTest(int32_t index, UBool exec, const char *&name, cha
     TESTCASE_AUTO(TestInPlaceTitle);
 #endif
     TESTCASE_AUTO(TestCaseMapEditsIteratorDocs);
+    TESTCASE_AUTO(TestCaseMapGreekExtended);
     TESTCASE_AUTO_END;
 }
 
@@ -1683,6 +1685,19 @@ void StringCaseTest::TestCaseMapEditsIteratorDocs() {
                 expectedSrcCoarseStringIndices[destIndex],
                 coarseChangesIterator.sourceIndexFromDestinationIndex(destIndex, status));
     }
+}
+
+void StringCaseTest::TestCaseMapGreekExtended() {
+    // Ticket 13851
+    UnicodeString s(u"\u1F80\u1F88\u1FFC");
+    UnicodeString result(s);
+    result.toLower(Locale::getRoot());
+    assertEquals(u"lower", u"\u1F80\u1F80\u1FF3", result);
+#if !UCONFIG_NO_BREAK_ITERATION
+    result = s;
+    result.toTitle(nullptr, Locale::getRoot());
+    assertEquals(u"title", u"\u1F88\u1F80\u1FF3", result);
+#endif
 }
 
 //#endif
