@@ -7474,3 +7474,4 @@ vendor/double-conversion/upstream/test/cctest/test-fast-dtoa.cc svneol=native#te
 vendor/double-conversion/upstream/test/cctest/test-fixed-dtoa.cc svneol=native#text/plain%3Bcharset%3Dutf-8
 vendor/double-conversion/upstream/test/cctest/test-ieee.cc svneol=native#text/plain%3Bcharset%3Dutf-8
 vendor/double-conversion/upstream/test/cctest/test-strtod.cc svneol=native#text/plain%3Bcharset%3Dutf-8
+*.jar filter=lfs diff=lfs merge=lfs -text
