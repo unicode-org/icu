@@ -437,7 +437,9 @@ public class DateFormatRegressionTest extends TestFmwk {
     public void Test4089106() {
         TimeZone def = TimeZone.getDefault();
         try {
-            TimeZone z = new SimpleTimeZone((int) (1.25 * 3600000), "FAKEZONE");
+            // It's necessary to use a real existing time zone here, some systems (Android) will not
+            // accept any arbitrary TimeZone object to be used as the default.
+            TimeZone z = new SimpleTimeZone(-12 * 60 * 60 * 1000, "GMT-12:00");
             TimeZone.setDefault(z);
             SimpleDateFormat f = new SimpleDateFormat();
             if (!f.getTimeZone().equals(z))

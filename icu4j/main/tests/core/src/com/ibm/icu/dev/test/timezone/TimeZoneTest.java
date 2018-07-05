@@ -495,8 +495,10 @@ public class TimeZoneTest extends TestFmwk
 
     @Test
     public void TestGenericAPI() {
-        String id = "NewGMT";
-        int offset = 12345;
+        // It's necessary to use a real existing time zone here, some systems (Android) will not
+        // accept any arbitrary TimeZone object to be used as the default.
+        String id = "GMT-12:00";
+        int offset = -12 * 60 * 60 * 1000;
 
         SimpleTimeZone zone = new SimpleTimeZone(offset, id);
         if (zone.useDaylightTime()) errln("FAIL: useDaylightTime should return false");
