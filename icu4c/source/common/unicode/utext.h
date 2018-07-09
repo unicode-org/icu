@@ -701,7 +701,7 @@ utext_extract(UText *ut,
  * Returns U_SENTINEL (-1) if the position is at the end of the
  * text.
  *
- * @internal ICU 4.4 technology preview
+ * @preview ICU 4.4
  */
 #define UTEXT_CURRENT32(ut)  \
     ((ut)->chunkOffset < (ut)->chunkLength && ((ut)->chunkContents)[(ut)->chunkOffset]<0xd800 ? \
