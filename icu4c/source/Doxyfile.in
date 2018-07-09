@@ -38,7 +38,8 @@ ALIASES                = "memo=\par Note:\n" \
                          "deprecated=\xrefitem deprecated \"Deprecated\" \"Deprecated List\"" \
                          "obsolete=\xrefitem obsolete \"Obsolete\" \"Obsolete List\"" \
                          "system=\xrefitem system \"System\" \"System List\" \n Do not use unless you know what you are doing." \
-                         "internal=\xrefitem internal \"Internal\"  \"Internal List\"  Do not use. This API is for internal use only." 
+                         "internal=\xrefitem internal \"Internal\"  \"Internal List\"  Do not use. This API is for internal use only." \
+                         "preview=\xrefitem preview \"Preview\"  \"Preview List\"  This API is a technical preview. It may change in an upcoming release."
 
 OPTIMIZE_OUTPUT_FOR_C  = YES
 OPTIMIZE_OUTPUT_JAVA   = NO
