@@ -1113,21 +1113,21 @@ public:
      * The caller should not delete the TimeZoneFormat object after
      * it is adopted by this call.
      * @param timeZoneFormatToAdopt The TimeZoneFormat object to be adopted.
-     * @internal ICU 49 technology preview
+     * @preview ICU 49
      */
     virtual void adoptTimeZoneFormat(TimeZoneFormat* timeZoneFormatToAdopt);
 
     /**
      * Sets the TimeZoneFormat to be used by this date/time formatter.
      * @param newTimeZoneFormat The TimeZoneFormat object to copy.
-     * @internal ICU 49 technology preview
+     * @preview ICU 49
      */
     virtual void setTimeZoneFormat(const TimeZoneFormat& newTimeZoneFormat);
 
     /**
      * Gets the time zone format object associated with this date/time formatter.
      * @return the time zone format associated with this date/time formatter.
-     * @internal ICU 49 technology preview
+     * @preview ICU 49
      */
     virtual const TimeZoneFormat* getTimeZoneFormat(void) const;
 

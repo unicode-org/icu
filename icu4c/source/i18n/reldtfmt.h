@@ -194,7 +194,7 @@ public:
      * date and time formatters associated with this object.
      * @param result Output param to receive the pattern.
      * @return       A reference to 'result'.
-     * @internal ICU 4.2 technology preview
+     * @preview ICU 4.2
      */
     virtual UnicodeString& toPattern(UnicodeString& result, UErrorCode& status) const;
 
@@ -202,7 +202,7 @@ public:
      * Get the date pattern for the the date formatter associated with this object.
      * @param result Output param to receive the date pattern.
      * @return       A reference to 'result'.
-     * @internal ICU 4.2 technology preview
+     * @preview ICU 4.2
      */
     virtual UnicodeString& toPatternDate(UnicodeString& result, UErrorCode& status) const;
 
@@ -210,7 +210,7 @@ public:
      * Get the time pattern for the the time formatter associated with this object.
      * @param result Output param to receive the time pattern.
      * @return       A reference to 'result'.
-     * @internal ICU 4.2 technology preview
+     * @preview ICU 4.2
      */
     virtual UnicodeString& toPatternTime(UnicodeString& result, UErrorCode& status) const;
 
@@ -221,7 +221,7 @@ public:
      *
      * @param datePattern   The date pattern to be applied.
      * @param timePattern   The time pattern to be applied.
-     * @internal ICU 4.2 technology preview
+     * @preview ICU 4.2
      */
     virtual void applyPatterns(const UnicodeString& datePattern, const UnicodeString& timePattern, UErrorCode &status);
 

@@ -1027,7 +1027,7 @@ typedef enum UNumberFormatAttribute {
    * Minimum grouping digits, technology preview.
    * See DecimalFormat::getMinimumGroupingDigits().
    *
-   * @internal technology preview
+   * @preview
    */
   UNUM_MINIMUM_GROUPING_DIGITS = 22,
   /* TODO: test C API when it becomes @draft */
@@ -1079,14 +1079,14 @@ typedef enum UNumberFormatAttribute {
   /**
    * Whether parsing is sensitive to case (lowercase/uppercase).
    * TODO: Add to the test suite.
-   * @internal This API is a technical preview. It may change in an upcoming release.
+   * @preview
    */
   UNUM_PARSE_CASE_SENSITIVE = 0x1004,
 
   /**
    * Formatting: whether to show the plus sign on non-negative numbers.
    * TODO: Add to the test suite.
-   * @internal This API is a technical preview. It may change in an upcoming release.
+   * @preview
    */
   UNUM_SIGN_ALWAYS_SHOWN = 0x1005,
 } UNumberFormatAttribute;
