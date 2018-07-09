@@ -14,8 +14,8 @@
  */
 
 /*
- * Note: This module was incldued in ICU 4.0.1 as @internal technology preview for supporting
- * Boyer-Moore string search API. For now, only SSearchTest depends on this module. I temporaly
+ * Note: This module was incldued in ICU 4.0.1 as technology @preview for supporting
+ * Boyer-Moore string search API. For now, only SSearchTest depends on this module. I temporarily
  * moved the module from i18n directory to intltest, because we have no plan to publish this
  * as public API. (2012-12-18 yoshito)
  */
