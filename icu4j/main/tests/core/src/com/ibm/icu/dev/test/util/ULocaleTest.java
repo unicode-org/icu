@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -1001,13 +1002,16 @@ public class ULocaleTest extends TestFmwk {
     }
 
     @Test
-    public void TestGetAvailable(){
+    public void TestGetAvailable() {
         ULocale[] locales = ULocale.getAvailableLocales();
-        if(locales.length<10){
-            errln("Did not get the correct result from getAvailableLocales");
+        if (locales.length < 1) {
+            errln("Did not get any results from getAvailableLocales");
         }
-        if(!locales[locales.length-1].getName().equals("zu_ZA")){
-            errln("Did not get the expected result");
+        final Pattern PATTERN = Pattern.compile("^\\p{Lower}{2,3}$");
+        for (ULocale locale : locales) {
+            if (!PATTERN.matcher(locale.getLanguage()).matches()) {
+                errln("Got impossible locale from getAvailableLocales: " + locale.getName());
+            }
         }
     }
 
