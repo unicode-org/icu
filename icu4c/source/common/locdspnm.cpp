@@ -98,7 +98,7 @@ ICUDataTable::ICUDataTable(const char* path, const Locale& locale)
     : path(NULL), locale(Locale::getRoot())
 {
   if (path) {
-    int32_t len = uprv_strlen(path);
+    int32_t len = static_cast<int32_t>(uprv_strlen(path));
     this->path = (const char*) uprv_malloc(len + 1);
     if (this->path) {
       uprv_strcpy((char *)this->path, path);

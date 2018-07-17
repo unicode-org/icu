@@ -628,7 +628,7 @@ int32_t RuleBasedBreakIterator::preceding(int32_t offset) {
     // or on a trail byte if the input is UTF-8.
 
     utext_setNativeIndex(&fText, offset);
-    int32_t adjustedOffset = utext_getNativeIndex(&fText);
+    int32_t adjustedOffset = static_cast<int32_t>(utext_getNativeIndex(&fText));
 
     UErrorCode status = U_ZERO_ERROR;
     fBreakCache->preceding(adjustedOffset, status);
@@ -655,7 +655,7 @@ UBool RuleBasedBreakIterator::isBoundary(int32_t offset) {
     // But we still need the side effect of leaving iteration at the following boundary.
 
     utext_setNativeIndex(&fText, offset);
-    int32_t adjustedOffset = utext_getNativeIndex(&fText);
+    int32_t adjustedOffset = static_cast<int32_t>(utext_getNativeIndex(&fText));
 
     bool result = false;
     UErrorCode status = U_ZERO_ERROR;
@@ -848,7 +848,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
 
        #ifdef RBBI_DEBUG
             if (gTrace) {
-                RBBIDebugPrintf("             %4ld   ", utext_getNativeIndex(&fText));
+                RBBIDebugPrintf("             %lld   ", utext_getNativeIndex(&fText));
                 if (0x20<=c && c<0x7f) {
                     RBBIDebugPrintf("\"%c\"  ", c);
                 } else {

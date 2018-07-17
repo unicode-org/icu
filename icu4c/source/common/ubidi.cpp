@@ -624,7 +624,7 @@ getDirProps(UBiDi *pBiDi) {
         pBiDi->paras[pBiDi->paraCount-1].level=1;
     }
     if(isDefaultLevel) {
-        pBiDi->paraLevel=pBiDi->paras[0].level;
+        pBiDi->paraLevel=static_cast<UBiDiLevel>(pBiDi->paras[0].level);
     }
     /* The following is needed to resolve the text direction for default level
        paragraphs containing no strong character */
@@ -825,21 +825,21 @@ bracketProcessClosing(BracketData *bd, int32_t openIdx, int32_t position) {
        N0c1. */
 
     if((direction==0 && pOpening->flags&FOUND_L) ||
-       (direction==1 && pOpening->flags&FOUND_R)) { /* N0b */
-        newProp=direction;
+       (direction==1 && pOpening->flags&FOUND_R)) {							/* N0b */
+        newProp=static_cast<DirProp>(direction);
     }
-    else if(pOpening->flags&(FOUND_L|FOUND_R)) {    /* N0c */
+    else if(pOpening->flags&(FOUND_L|FOUND_R)) {							/* N0c */
         /* it is stable if there is no containing pair or in
            conditions too complicated and not worth checking */
         stable=(openIdx==pLastIsoRun->start);
         if(direction!=pOpening->contextDir)
-            newProp=pOpening->contextDir;           /* N0c1 */
+            newProp= static_cast<DirProp>(pOpening->contextDir);           /* N0c1 */
         else
-            newProp=direction;                      /* N0c2 */
+            newProp= static_cast<DirProp>(direction);                      /* N0c2 */
     } else {
         /* forget this and any brackets nested within this pair */
         pLastIsoRun->limit=openIdx;
-        return ON;                                  /* N0d */
+        return ON;															/* N0d */
     }
     bd->pBiDi->dirProps[pOpening->position]=newProp;
     bd->pBiDi->dirProps[position]=newProp;
