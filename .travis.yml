@@ -1,0 +1,40 @@
+matrix:
+  include:
+    - language: java
+      env:      BUILD=ICU4J
+      script:   cd icu4j && ant init && ant check
+      after_failure:
+          -  cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`
+
+    - language: cpp
+      env:      BUILD=ICU4C_GCC
+      compiler: gcc
+      script:   cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+
+    - language: cpp
+      env:      BUILD=ICU4C_CLANG
+      compiler: clang
+      script:   cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+
+    - language: cpp
+      env:      BUILD=MACINTOSH
+      os:       osx
+      compiler: clang
+      script:   cd icu4c/source && ./runConfigureICU MacOSX && make -j2 check
+
+    - language: cpp
+      os:       linux
+      dist:     trusty
+      compiler: clang
+      addons:
+          apt:
+              update: true
+              sources:
+                  - llvm-toolchain-trusty-5.0
+              packages:
+                  - clang-5.0
+      env:
+          - BUILD=ASAN
+      script:
+          - echo not yet
+          # - cd icu4c/source && CPPFLAGS="-fsanitize=address" LDFLAGS="-fsanitize=address" ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming && make -j2 check
