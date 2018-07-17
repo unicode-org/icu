@@ -986,8 +986,8 @@ Collator::internalCompareUTF8(const char *left, int32_t leftLength,
         return UCOL_EQUAL;
     }
     return compareUTF8(
-            StringPiece(left, (leftLength < 0) ? uprv_strlen(left) : leftLength),
-            StringPiece(right, (rightLength < 0) ? uprv_strlen(right) : rightLength),
+            StringPiece(left, (leftLength < 0) ? static_cast<int32_t>(uprv_strlen(left)) : leftLength),
+            StringPiece(right, (rightLength < 0) ? static_cast<int32_t>(uprv_strlen(right)) : rightLength),
             errorCode);
 }
 
