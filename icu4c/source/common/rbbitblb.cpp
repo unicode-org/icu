@@ -428,8 +428,8 @@ void RBBITableBuilder::calcChainedFollowPos(RBBINode *tree) {
     addRuleRootNodes(&ruleRootNodes, tree);
 
     UVector matchStartNodes(*fStatus);
-    for (int i=0; i<ruleRootNodes.size(); ++i) {
-        RBBINode *node = static_cast<RBBINode *>(ruleRootNodes.elementAt(i));
+    for (int j=0; j<ruleRootNodes.size(); ++j) {
+        RBBINode *node = static_cast<RBBINode *>(ruleRootNodes.elementAt(j));
         if (node->fChainIn) {
             setAdd(&matchStartNodes, node->fFirstPosSet);
         }
@@ -1236,7 +1236,7 @@ void RBBITableBuilder::removeSafeState(IntPair duplStates) {
             } else if (existingVal > duplState) {
                 newVal = existingVal - 1;
             }
-            sd->setCharAt(col, newVal);
+            sd->setCharAt(col, static_cast<char16_t>(newVal));
         }
     }
 }
@@ -1411,7 +1411,7 @@ void RBBITableBuilder::buildSafeReverseTable(UErrorCode &status) {
     UnicodeString &startState = *static_cast<UnicodeString *>(fSafeTable->elementAt(1));
     for (int32_t charClass=0; charClass < numCharClasses; ++charClass) {
         // Note: +2 for the start & stop state.
-        startState.setCharAt(charClass, charClass+2);
+        startState.setCharAt(charClass, static_cast<char16_t>(charClass+2));
     }
 
     // Initially make every other state table row look like the start state row,

@@ -2421,7 +2421,7 @@ ures_loc_nextLocale(UEnumeration* en,
     UResourceBundle *k = NULL;
     const char *result = NULL;
     int32_t len = 0;
-    if(ures_hasNext(res) && (k = ures_getNextResource(res, &ctx->curr, status))) {
+    if(ures_hasNext(res) && (k = ures_getNextResource(res, &ctx->curr, status)) != 0) {
         result = ures_getKey(k);
         len = (int32_t)uprv_strlen(result);
     }
@@ -2843,7 +2843,7 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
     valuesBuf[0]=0;
     valuesBuf[1]=0;
     
-    while((locale = uenum_next(locs, &locLen, status))) {
+    while((locale = uenum_next(locs, &locLen, status)) != 0) {
         UResourceBundle   *bund = NULL;
         UResourceBundle   *subPtr = NULL;
         UErrorCode subStatus = U_ZERO_ERROR; /* don't fail if a bundle is unopenable */
@@ -2868,7 +2868,7 @@ ures_getKeywordValues(const char *path, const char *keyword, UErrorCode *status)
             continue;
         }
         
-        while((subPtr = ures_getNextResource(&item,&subItem,&subStatus))
+        while((subPtr = ures_getNextResource(&item,&subItem,&subStatus)) != 0
             && U_SUCCESS(subStatus)) {
             const char *k;
             int32_t i;

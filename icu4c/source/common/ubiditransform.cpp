@@ -395,7 +395,7 @@ resolveBaseDirection(const UChar *text, uint32_t length,
         case UBIDI_DEFAULT_RTL: {
             UBiDiLevel level = static_cast<UBiDiLevel>(ubidi_getBaseDirection(text, length));
             *pInLevel = static_cast<UBiDiLevel>(level != UBIDI_NEUTRAL) ? level
-                    : *pInLevel == UBIDI_DEFAULT_RTL ? RTL : LTR;
+                    : *pInLevel == UBIDI_DEFAULT_RTL ? static_cast<UBiDiLevel>(RTL) : static_cast<UBiDiLevel>(LTR);
             break;
         }
         default:

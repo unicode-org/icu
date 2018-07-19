@@ -472,7 +472,6 @@ isSpecialTypeRgKeyValue(const char* val) {
         p++;
     }
     return (subtagLen == 6);
-    return TRUE;
 }
 
 U_CFUNC const char*

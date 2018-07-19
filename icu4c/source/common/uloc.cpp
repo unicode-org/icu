@@ -1500,7 +1500,7 @@ _deleteVariant(char* variants, int32_t variantsLen,
         }
         if (uprv_strncmp(variants, toDelete, toDeleteLen) == 0 &&
             (variantsLen == toDeleteLen ||
-             (flag=(variants[toDeleteLen] == '_'))))
+             (flag=(variants[toDeleteLen] == '_')) != 0))
         {
             int32_t d = toDeleteLen + (flag?1:0);
             variantsLen -= d;

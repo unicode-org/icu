@@ -218,7 +218,7 @@ _uhash_allocate(UHashtable *hash,
 
     U_ASSERT(primeIndex >= 0 && primeIndex < PRIMES_LENGTH);
 
-    hash->primeIndex = primeIndex;
+    hash->primeIndex = static_cast<int8_t>(primeIndex);
     hash->length = PRIMES[primeIndex];
 
     p = hash->elements = (UHashElement*)
