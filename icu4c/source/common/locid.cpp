@@ -444,6 +444,8 @@ Locale &Locale::operator=(const Locale &other)
     if(other.fullName != other.fullNameBuffer) {
         fullName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(other.fullName)+1));
         if (fullName == NULL) {
+            // if memory allocation fails, set this object to bogus.
+            fIsBogus = TRUE;
             return *this;
         }
     }
