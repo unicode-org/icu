@@ -716,6 +716,7 @@ CFLAGS
 CC
 ENABLE_RELEASE
 ENABLE_DEBUG
+INSTALL_ICU_CONFIG
 CPPFLAGS
 host_os
 host_vendor
@@ -775,6 +776,7 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+enable_icu_config
 enable_debug
 enable_release
 with_cross_build
@@ -1443,6 +1445,7 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-icu-config     install icu-config
   --enable-debug          build debug libraries and enable the U_DEBUG define default=no
   --enable-release        build release libraries default=yes
   --enable-strict         compile with strict compiler options default=yes
@@ -2796,6 +2799,21 @@ UCONFIG_CPPFLAGS=""
 # UCONFIG_CFLAGS: contains a copy of anything that needs to be set by end users
 # such as -std
 UCONFIG_CFLAGS=""
+
+# Check whether to install icu-config
+# Check whether --enable-icu-config was given.
+if test "${enable_icu_config+set}" = set; then :
+  enableval=$enable_icu_config; case "${enableval}" in
+            yes) enable_icu_config=true ;;
+            no) enable_icu_config=false ;;
+            *) as_fn_error $? "bad value '${enableval}' for --enable-icu-config" "$LINENO" 5 ;;
+        esac
+else
+  enable_icu_config=true
+fi
+
+INSTALL_ICU_CONFIG=$enable_icu_config
+
 
 # Check whether to build debug libraries
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build debug libraries" >&5
