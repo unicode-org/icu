@@ -1082,21 +1082,21 @@ bool RBBITableBuilder::findDuplCharClassFrom(IntPair *categories) {
     int32_t numStates = fDStates->size();
     int32_t numCols = fRB->fSetBuilder->getNumCharCategories();
 
-    uint16_t table_base;
-    uint16_t table_dupl;
     for (; categories->first < numCols-1; categories->first++) {
         for (categories->second=categories->first+1; categories->second < numCols; categories->second++) {
-             for (int32_t state=0; state<numStates; state++) {
-                 RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(state);
-                 table_base = (uint16_t)sd->fDtran->elementAti(categories->first);
-                 table_dupl = (uint16_t)sd->fDtran->elementAti(categories->second);
-                 if (table_base != table_dupl) {
-                     break;
-                 }
-             }
-             if (table_base == table_dupl) {
-                 return true;
-             }
+			uint16_t table_base = 0;
+			uint16_t table_dupl = 1;
+            for (int32_t state=0; state<numStates; state++) {
+                RBBIStateDescriptor *sd = (RBBIStateDescriptor *)fDStates->elementAt(state);
+                table_base = (uint16_t)sd->fDtran->elementAti(categories->first);
+                table_dupl = (uint16_t)sd->fDtran->elementAti(categories->second);
+                if (table_base != table_dupl) {
+                    break;
+                }
+            }
+            if (table_base == table_dupl) {
+                return true;
+            }
         }
     }
     return false;
