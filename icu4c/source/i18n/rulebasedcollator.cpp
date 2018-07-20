@@ -862,9 +862,9 @@ public:
         } else {
             str.setTo(text, (int32_t)(spanLimit - text));
             {
-                ReorderingBuffer buffer(nfcImpl, str);
-                if(buffer.init(str.length(), errorCode)) {
-                    nfcImpl.makeFCD(spanLimit, textLimit, &buffer, errorCode);
+                ReorderingBuffer r_buffer(nfcImpl, str);
+                if(r_buffer.init(str.length(), errorCode)) {
+                    nfcImpl.makeFCD(spanLimit, textLimit, &r_buffer, errorCode);
                 }
             }
             if(U_SUCCESS(errorCode)) {

@@ -1095,7 +1095,7 @@ private:
     void format(double number, NFRuleSet& rs, UnicodeString& toAppendTo, UErrorCode& status) const;
 
 private:
-    NFRuleSet **ruleSets;
+    NFRuleSet **mRuleSets;
     UnicodeString* ruleSetDescriptions;
     int32_t numRuleSets;
     NFRuleSet *defaultRuleSet;
@@ -1104,7 +1104,7 @@ private:
     DecimalFormatSymbols* decimalFormatSymbols;
     NFRule *defaultInfinityRule;
     NFRule *defaultNaNRule;
-    ERoundingMode roundingMode;
+    ERoundingMode mRoundingMode;
     UBool lenient;
     UnicodeString* lenientParseRules;
     LocalizationInfo* localizations;

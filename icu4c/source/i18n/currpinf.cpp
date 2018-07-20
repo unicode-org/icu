@@ -298,12 +298,12 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
         const char* pluralCount;
         while ((pluralCount = keywords->next(NULL, ec)) != NULL) {
             if ( U_SUCCESS(ec) ) {
-                int32_t ptnLen;
+                int32_t ptnLength;
                 UErrorCode err = U_ZERO_ERROR;
                 const UChar* patternChars = ures_getStringByKeyWithFallback(
-                    currencyRes, pluralCount, &ptnLen, &err);
-                if (U_SUCCESS(err) && ptnLen > 0) {
-                    UnicodeString* pattern = new UnicodeString(patternChars, ptnLen);
+                    currencyRes, pluralCount, &ptnLength, &err);
+                if (U_SUCCESS(err) && ptnLength > 0) {
+                    UnicodeString* pattern = new UnicodeString(patternChars, ptnLength);
 #ifdef CURRENCY_PLURAL_INFO_DEBUG
                     char result_1[1000];
                     pattern->extract(0, pattern->length(), result_1, "UTF-8");
@@ -314,7 +314,7 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
                     pattern->findAndReplace(UnicodeString(TRUE, gPart1, 3), UnicodeString(TRUE, gTripleCurrencySign, 3));
 
                     if (hasSeparator) {
-                        UnicodeString negPattern(patternChars, ptnLen);
+                        UnicodeString negPattern(patternChars, ptnLength);
                         negPattern.findAndReplace(UnicodeString(TRUE, gPart0, 3), 
                           UnicodeString(negNumberStylePattern, negNumberStylePatternLen));
                         negPattern.findAndReplace(UnicodeString(TRUE, gPart1, 3), UnicodeString(TRUE, gTripleCurrencySign, 3));

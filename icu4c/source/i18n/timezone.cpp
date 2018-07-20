@@ -1031,8 +1031,8 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
         UResourceBundle *ares = ures_getByKey(top, kNAMES, NULL, &ec); // dereference Zones section
         if (U_SUCCESS(ec)) {
             int32_t idLen = 0;
-            const UChar* id = ures_getStringByIndex(ares, zone, &idLen, &ec);
-            result.fastCopyFrom(UnicodeString(TRUE, id, idLen));
+            const UChar* id2 = ures_getStringByIndex(ares, zone, &idLen, &ec);
+            result.fastCopyFrom(UnicodeString(TRUE, id2, idLen));
             U_DEBUG_TZ_MSG(("gei(%d) -> %d, len%d, %s\n", index, zone, result.length(), u_errorName(ec)));
         }
         ures_close(ares);

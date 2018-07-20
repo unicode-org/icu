@@ -51,7 +51,7 @@
     <ClCompile>
       <PreprocessorDefinitions>U_ATTRIBUTE_DEPRECATED=;U_I18N_IMPLEMENTATION;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <AdditionalIncludeDirectories>..\..\include;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <CompileAs>Default</CompileAs>
     </ClCompile>

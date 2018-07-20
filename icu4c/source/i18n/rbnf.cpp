@@ -680,7 +680,7 @@ StringLocalizationInfo::getDisplayName(int32_t localeIndex, int32_t ruleIndex) c
 RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
                                              const UnicodeString& locs,
                                              const Locale& alocale, UParseError& perror, UErrorCode& status)
-  : ruleSets(NULL)
+  : mRuleSets(NULL)
   , ruleSetDescriptions(NULL)
   , numRuleSets(0)
   , defaultRuleSet(NULL)
@@ -689,7 +689,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , decimalFormatSymbols(NULL)
   , defaultInfinityRule(NULL)
   , defaultNaNRule(NULL)
-  , roundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
+  , mRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
@@ -705,7 +705,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
 RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
                                              const UnicodeString& locs,
                                              UParseError& perror, UErrorCode& status)
-  : ruleSets(NULL)
+  : mRuleSets(NULL)
   , ruleSetDescriptions(NULL)
   , numRuleSets(0)
   , defaultRuleSet(NULL)
@@ -714,7 +714,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , decimalFormatSymbols(NULL)
   , defaultInfinityRule(NULL)
   , defaultNaNRule(NULL)
-  , roundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
+  , mRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
@@ -730,7 +730,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
 RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
                                              LocalizationInfo* info,
                                              const Locale& alocale, UParseError& perror, UErrorCode& status)
-  : ruleSets(NULL)
+  : mRuleSets(NULL)
   , ruleSetDescriptions(NULL)
   , numRuleSets(0)
   , defaultRuleSet(NULL)
@@ -739,7 +739,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , decimalFormatSymbols(NULL)
   , defaultInfinityRule(NULL)
   , defaultNaNRule(NULL)
-  , roundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
+  , mRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
@@ -754,7 +754,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
 RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description, 
                          UParseError& perror, 
                          UErrorCode& status) 
-  : ruleSets(NULL)
+  : mRuleSets(NULL)
   , ruleSetDescriptions(NULL)
   , numRuleSets(0)
   , defaultRuleSet(NULL)
@@ -763,7 +763,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , decimalFormatSymbols(NULL)
   , defaultInfinityRule(NULL)
   , defaultNaNRule(NULL)
-  , roundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
+  , mRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
@@ -779,7 +779,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
                          const Locale& aLocale,
                          UParseError& perror, 
                          UErrorCode& status) 
-  : ruleSets(NULL)
+  : mRuleSets(NULL)
   , ruleSetDescriptions(NULL)
   , numRuleSets(0)
   , defaultRuleSet(NULL)
@@ -788,7 +788,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
   , decimalFormatSymbols(NULL)
   , defaultInfinityRule(NULL)
   , defaultNaNRule(NULL)
-  , roundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
+  , mRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
@@ -801,7 +801,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const UnicodeString& description,
 }
 
 RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& alocale, UErrorCode& status)
-  : ruleSets(NULL)
+  : mRuleSets(NULL)
   , ruleSetDescriptions(NULL)
   , numRuleSets(0)
   , defaultRuleSet(NULL)
@@ -810,7 +810,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
   , decimalFormatSymbols(NULL)
   , defaultInfinityRule(NULL)
   , defaultNaNRule(NULL)
-  , roundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
+  , mRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
@@ -868,7 +868,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(URBNFRuleSetTag tag, const Locale& 
 
 RuleBasedNumberFormat::RuleBasedNumberFormat(const RuleBasedNumberFormat& rhs)
   : NumberFormat(rhs)
-  , ruleSets(NULL)
+  , mRuleSets(NULL)
   , ruleSetDescriptions(NULL)
   , numRuleSets(0)
   , defaultRuleSet(NULL)
@@ -877,7 +877,7 @@ RuleBasedNumberFormat::RuleBasedNumberFormat(const RuleBasedNumberFormat& rhs)
   , decimalFormatSymbols(NULL)
   , defaultInfinityRule(NULL)
   , defaultNaNRule(NULL)
-  , roundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
+  , mRoundingMode(DecimalFormat::ERoundingMode::kRoundUnnecessary)
   , lenient(FALSE)
   , lenientParseRules(NULL)
   , localizations(NULL)
@@ -950,8 +950,8 @@ RuleBasedNumberFormat::operator==(const Format& other) const
                     ? FALSE
                     : *localizations == rhs.localizations))) {
 
-            NFRuleSet** p = ruleSets;
-            NFRuleSet** q = rhs.ruleSets;
+            NFRuleSet** p = mRuleSets;
+            NFRuleSet** q = rhs.mRuleSets;
             if (p == NULL) {
                 return q == NULL;
             } else if (q == NULL) {
@@ -972,8 +972,8 @@ UnicodeString
 RuleBasedNumberFormat::getRules() const
 {
     UnicodeString result;
-    if (ruleSets != NULL) {
-        for (NFRuleSet** p = ruleSets; *p; ++p) {
+    if (mRuleSets != NULL) {
+        for (NFRuleSet** p = mRuleSets; *p; ++p) {
             (*p)->appendRules(result);
         }
     }
@@ -987,9 +987,9 @@ RuleBasedNumberFormat::getRuleSetName(int32_t index) const
         UnicodeString string(TRUE, localizations->getRuleSetName(index), (int32_t)-1);
         return string;
     }
-    else if (ruleSets) {
+    else if (mRuleSets) {
         UnicodeString result;
-        for (NFRuleSet** p = ruleSets; *p; ++p) {
+        for (NFRuleSet** p = mRuleSets; *p; ++p) {
             NFRuleSet* rs = *p;
             if (rs->isPublic()) {
                 if (--index == -1) {
@@ -1010,8 +1010,8 @@ RuleBasedNumberFormat::getNumberOfRuleSetNames() const
     if (localizations) {
         result = localizations->getNumberOfRuleSets();
     }
-    else if (ruleSets) {
-        for (NFRuleSet** p = ruleSets; *p; ++p) {
+    else if (mRuleSets) {
+        for (NFRuleSet** p = mRuleSets; *p; ++p) {
             if ((**p).isPublic()) {
                 ++result;
             }
@@ -1098,8 +1098,8 @@ RuleBasedNumberFormat::getRuleSetDisplayName(const UnicodeString& ruleSetName, c
 NFRuleSet*
 RuleBasedNumberFormat::findRuleSet(const UnicodeString& name, UErrorCode& status) const
 {
-    if (U_SUCCESS(status) && ruleSets) {
-        for (NFRuleSet** p = ruleSets; *p; ++p) {
+    if (U_SUCCESS(status) && mRuleSets) {
+        for (NFRuleSet** p = mRuleSets; *p; ++p) {
             NFRuleSet* rs = *p;
             if (rs->isNamed(name)) {
                 return rs;
@@ -1358,7 +1358,7 @@ RuleBasedNumberFormat::parse(const UnicodeString& text,
                              Formattable& result,
                              ParsePosition& parsePosition) const
 {
-    if (!ruleSets) {
+    if (!mRuleSets) {
         parsePosition.setErrorIndex(0);
         return;
     }
@@ -1369,7 +1369,7 @@ RuleBasedNumberFormat::parse(const UnicodeString& text,
     ParsePosition high_pp(0);
     Formattable high_result;
 
-    for (NFRuleSet** p = ruleSets; *p; ++p) {
+    for (NFRuleSet** p = mRuleSets; *p; ++p) {
         NFRuleSet *rp = *p;
         if (rp->isPublic() && rp->isParseable()) {
             ParsePosition working_pp(0);
@@ -1457,7 +1457,7 @@ void
 RuleBasedNumberFormat::initDefaultRuleSet()
 {
     defaultRuleSet = NULL;
-    if (!ruleSets) {
+    if (!mRuleSets) {
         return;
     }
 
@@ -1465,7 +1465,7 @@ RuleBasedNumberFormat::initDefaultRuleSet()
     const UnicodeString ordinal(UNICODE_STRING_SIMPLE("%digits-ordinal"));
     const UnicodeString duration(UNICODE_STRING_SIMPLE("%duration"));
 
-    NFRuleSet**p = &ruleSets[0];
+    NFRuleSet**p = &mRuleSets[0];
     while (*p) {
         if ((*p)->isNamed(spellout) || (*p)->isNamed(ordinal) || (*p)->isNamed(duration)) {
             defaultRuleSet = *p;
@@ -1477,7 +1477,7 @@ RuleBasedNumberFormat::initDefaultRuleSet()
 
     defaultRuleSet = *--p;
     if (!defaultRuleSet->isPublic()) {
-        while (p != ruleSets) {
+        while (p != mRuleSets) {
             if ((*--p)->isPublic()) {
                 defaultRuleSet = *p;
                 break;
@@ -1568,15 +1568,15 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     ++numRuleSets;
 
     // our rule list is an array of the appropriate size
-    ruleSets = (NFRuleSet **)uprv_malloc((numRuleSets + 1) * sizeof(NFRuleSet *));
+	mRuleSets = (NFRuleSet **)uprv_malloc((numRuleSets + 1) * sizeof(NFRuleSet *));
     /* test for NULL */
-    if (ruleSets == 0) {
+    if (mRuleSets == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
 
     for (int i = 0; i <= numRuleSets; ++i) {
-        ruleSets[i] = NULL;
+		mRuleSets[i] = NULL;
     }
 
     // divide up the descriptions into individual rule-set descriptions
@@ -1602,8 +1602,8 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
         int32_t start = 0;
         for (int32_t p = description.indexOf(gSemiPercent, 2, 0); p != -1; p = description.indexOf(gSemiPercent, 2, start)) {
             ruleSetDescriptions[curRuleSet].setTo(description, start, p + 1 - start);
-            ruleSets[curRuleSet] = new NFRuleSet(this, ruleSetDescriptions, curRuleSet, status);
-            if (ruleSets[curRuleSet] == 0) {
+			mRuleSets[curRuleSet] = new NFRuleSet(this, ruleSetDescriptions, curRuleSet, status);
+            if (mRuleSets[curRuleSet] == 0) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
@@ -1611,8 +1611,8 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
             start = p + 1;
         }
         ruleSetDescriptions[curRuleSet].setTo(description, start, description.length() - start);
-        ruleSets[curRuleSet] = new NFRuleSet(this, ruleSetDescriptions, curRuleSet, status);
-        if (ruleSets[curRuleSet] == 0) {
+		mRuleSets[curRuleSet] = new NFRuleSet(this, ruleSetDescriptions, curRuleSet, status);
+        if (mRuleSets[curRuleSet] == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -1634,7 +1634,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     // away the temporary descriptions as we go)
     {
         for (int i = 0; i < numRuleSets; i++) {
-            ruleSets[i]->parseRules(ruleSetDescriptions[i], status);
+			mRuleSets[i]->parseRules(ruleSetDescriptions[i], status);
         }
     }
 
@@ -1680,9 +1680,9 @@ RuleBasedNumberFormat::setContext(UDisplayContext value, UErrorCode& status)
         if ( capitalizationBrkIter == NULL && (value==UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
                 (value==UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU && capitalizationForUIListMenu) ||
                 (value==UDISPCTX_CAPITALIZATION_FOR_STANDALONE && capitalizationForStandAlone)) ) {
-            UErrorCode status = U_ZERO_ERROR;
-            capitalizationBrkIter = BreakIterator::createSentenceInstance(locale, status);
-            if (U_FAILURE(status)) {
+            UErrorCode status2 = U_ZERO_ERROR;
+            capitalizationBrkIter = BreakIterator::createSentenceInstance(locale, status2);
+            if (U_FAILURE(status2)) {
                 delete capitalizationBrkIter;
                 capitalizationBrkIter = NULL;
             }
@@ -1704,8 +1704,8 @@ RuleBasedNumberFormat::initCapitalizationContextInfo(const Locale& thelocale)
         int32_t len = 0;
         const int32_t * intVector = ures_getIntVector(rb, &len, &status);
         if (U_SUCCESS(status) && intVector != NULL && len >= 2) {
-            capitalizationForUIListMenu = intVector[0];
-            capitalizationForStandAlone = intVector[1];
+            capitalizationForUIListMenu = static_cast<UBool>(intVector[0]);
+            capitalizationForStandAlone = static_cast<UBool>(intVector[1]);
         }
     }
     ures_close(rb);
@@ -1756,12 +1756,12 @@ RuleBasedNumberFormat::stripWhitespace(UnicodeString& description)
 void
 RuleBasedNumberFormat::dispose()
 {
-    if (ruleSets) {
-        for (NFRuleSet** p = ruleSets; *p; ++p) {
+    if (mRuleSets) {
+        for (NFRuleSet** p = mRuleSets; *p; ++p) {
             delete *p;
         }
-        uprv_free(ruleSets);
-        ruleSets = NULL;
+        uprv_free(mRuleSets);
+		mRuleSets = NULL;
     }
 
     if (ruleSetDescriptions) {
@@ -1811,7 +1811,7 @@ const RuleBasedCollator*
 RuleBasedNumberFormat::getCollator() const
 {
 #if !UCONFIG_NO_COLLATION
-    if (!ruleSets) {
+    if (!mRuleSets) {
         return NULL;
     }
 
@@ -1963,9 +1963,9 @@ RuleBasedNumberFormat::adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsTo
         defaultNaNRule = NULL;
         initializeDefaultNaNRule(status); // Reset with the new DecimalFormatSymbols
 
-        if (ruleSets) {
+        if (mRuleSets) {
             for (int32_t i = 0; i < numRuleSets; i++) {
-                ruleSets[i]->setDecimalFormatSymbols(*symbolsToAdopt, status);
+				mRuleSets[i]->setDecimalFormatSymbols(*symbolsToAdopt, status);
             }
         }
     }
@@ -1991,7 +1991,7 @@ RuleBasedNumberFormat::createPluralFormat(UPluralType pluralType,
  * @return A rounding mode
  */
 DecimalFormat::ERoundingMode RuleBasedNumberFormat::getRoundingMode() const {
-    return roundingMode;
+    return mRoundingMode;
 }
 
 /**
@@ -2000,7 +2000,7 @@ DecimalFormat::ERoundingMode RuleBasedNumberFormat::getRoundingMode() const {
  * @param roundingMode A rounding mode
  */
 void RuleBasedNumberFormat::setRoundingMode(DecimalFormat::ERoundingMode roundingMode) {
-    this->roundingMode = roundingMode;
+	mRoundingMode = roundingMode;
 }
 
 U_NAMESPACE_END

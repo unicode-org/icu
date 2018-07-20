@@ -1944,8 +1944,8 @@ TZDBNameSearchHandler::handleMatch(int32_t matchLength, const CharacterNode *nod
                     // metazone mapping for "CST" is America_Central,
                     // but if region is one of CN/MO/TW, "CST" is parsed
                     // as metazone China (China Standard Time).
-                    for (int32_t i = 0; i < ninfo->nRegions; i++) {
-                        const char *region = ninfo->parseRegions[i];
+                    for (int32_t j = 0; j < ninfo->nRegions; j++) {
+                        const char *region = ninfo->parseRegions[j];
                         if (uprv_strcmp(fRegion, region) == 0) {
                             match = ninfo;
                             matchRegion = TRUE;
@@ -2059,7 +2059,7 @@ static void U_CALLCONV prepareFind(UErrorCode &status) {
     const UnicodeString *mzID;
     StringEnumeration *mzIDs = TimeZoneNamesImpl::_getAvailableMetaZoneIDs(status);
     if (U_SUCCESS(status)) {
-        while ((mzID = mzIDs->snext(status)) && U_SUCCESS(status)) {
+        while ((mzID = mzIDs->snext(status)) != 0 && U_SUCCESS(status)) {
             const TZDBNames *names = TZDBTimeZoneNames::getMetaZoneNames(*mzID, status);
             if (U_FAILURE(status)) {
                 break;

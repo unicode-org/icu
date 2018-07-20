@@ -658,8 +658,8 @@ PluralRules::getRuleFromResource(const Locale& locale, UPluralType type, UErrorC
         // Check parent locales.
         UErrorCode status = U_ZERO_ERROR;
         char parentLocaleName[ULOC_FULLNAME_CAPACITY];
-        const char *curLocaleName=locale.getName();
-        uprv_strcpy(parentLocaleName, curLocaleName);
+        const char *curLocaleName2=locale.getName();
+        uprv_strcpy(parentLocaleName, curLocaleName2);
 
         while (uloc_getParent(parentLocaleName, parentLocaleName,
                                        ULOC_FULLNAME_CAPACITY, &status) > 0) {

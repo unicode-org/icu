@@ -618,7 +618,7 @@ MeasureFormat::MeasureFormat(
         : cache(NULL),
           numberFormat(NULL),
           pluralRules(NULL),
-          width(w),
+          mWidth(w),
           listFormatter(NULL) {
     initMeasureFormat(locale, w, NULL, status);
 }
@@ -631,7 +631,7 @@ MeasureFormat::MeasureFormat(
         : cache(NULL),
           numberFormat(NULL),
           pluralRules(NULL),
-          width(w),
+          mWidth(w),
           listFormatter(NULL) {
     initMeasureFormat(locale, w, nfToAdopt, status);
 }
@@ -641,7 +641,7 @@ MeasureFormat::MeasureFormat(const MeasureFormat &other) :
         cache(other.cache),
         numberFormat(other.numberFormat),
         pluralRules(other.pluralRules),
-        width(other.width),
+        mWidth(other.mWidth),
         listFormatter(NULL) {
     cache->addRef();
     numberFormat->addRef();
@@ -659,7 +659,7 @@ MeasureFormat &MeasureFormat::operator=(const MeasureFormat &other) {
     SharedObject::copyPtr(other.cache, cache);
     SharedObject::copyPtr(other.numberFormat, numberFormat);
     SharedObject::copyPtr(other.pluralRules, pluralRules);
-    width = other.width;
+	mWidth = other.mWidth;
     delete listFormatter;
     if (other.listFormatter != NULL) {
         listFormatter = new ListFormatter(*other.listFormatter);
@@ -673,7 +673,7 @@ MeasureFormat::MeasureFormat() :
         cache(NULL),
         numberFormat(NULL),
         pluralRules(NULL),
-        width(UMEASFMT_WIDTH_SHORT),
+        mWidth(UMEASFMT_WIDTH_SHORT),
         listFormatter(NULL) {
 }
 
@@ -703,7 +703,7 @@ UBool MeasureFormat::operator==(const Format &other) const {
     // don't have to check it here.
 
     // differing widths aren't equivalent
-    if (width != rhs.width) {
+    if (mWidth != rhs.mWidth) {
         return FALSE;
     }
     // Width the same check locales.
@@ -805,7 +805,7 @@ UnicodeString &MeasureFormat::formatMeasures(
     if (measureCount == 1) {
         return formatMeasure(measures[0], **numberFormat, appendTo, pos, status);
     }
-    if (width == UMEASFMT_WIDTH_NUMERIC) {
+    if (mWidth == UMEASFMT_WIDTH_NUMERIC) {
         Formattable hms[3];
         int32_t bitMap = toHMS(measures, measureCount, hms, status);
         if (bitMap > 0) {
@@ -839,7 +839,7 @@ UnicodeString &MeasureFormat::formatMeasures(
 }
 
 UnicodeString MeasureFormat::getUnitDisplayName(const MeasureUnit& unit, UErrorCode& /*status*/) const {
-    UMeasureFormatWidth width = getRegularWidth(this->width);
+    UMeasureFormatWidth width = getRegularWidth(mWidth);
     const UChar* const* styleToDnam = cache->dnams[unit.getIndex()];
     const UChar* dnam = styleToDnam[width];
     if (dnam == NULL) {
@@ -895,11 +895,11 @@ void MeasureFormat::initMeasureFormat(
             return;
         }
     }
-    width = w;
+    mWidth = w;
     delete listFormatter;
     listFormatter = ListFormatter::createInstance(
             locale,
-            listStyles[getRegularWidth(width)],
+            listStyles[getRegularWidth(mWidth)],
             status);
 }
 
@@ -922,7 +922,7 @@ UBool MeasureFormat::setMeasureFormatLocale(const Locale &locale, UErrorCode &st
     if (U_FAILURE(status) || locale == getLocale(status)) {
         return FALSE;
     }
-    initMeasureFormat(locale, width, NULL, status);
+    initMeasureFormat(locale, mWidth, NULL, status);
     return U_SUCCESS(status);
 } 
 
@@ -956,7 +956,7 @@ UnicodeString &MeasureFormat::formatMeasure(
     if (isCurrency(amtUnit)) {
         UChar isoCode[4];
         u_charsToUChars(amtUnit.getSubtype(), isoCode, 4);
-        return cache->getCurrencyFormat(width)->format(
+        return cache->getCurrencyFormat(mWidth)->format(
                 new CurrencyAmount(amtNumber, isoCode, status),
                 appendTo,
                 pos,
@@ -965,7 +965,7 @@ UnicodeString &MeasureFormat::formatMeasure(
     UnicodeString formattedNumber;
     StandardPlural::Form pluralForm = QuantityFormatter::selectPlural(
             amtNumber, nf, **pluralRules, formattedNumber, pos, status);
-    const SimpleFormatter *formatter = getPluralFormatter(amtUnit, width, pluralForm, status);
+    const SimpleFormatter *formatter = getPluralFormatter(amtUnit, mWidth, pluralForm, status);
     return QuantityFormatter::format(*formatter, formattedNumber, appendTo, pos, status);
 }
 
@@ -1016,7 +1016,6 @@ UnicodeString &MeasureFormat::formatNumeric(
         return appendTo;
         break;
     }
-    return appendTo;
 }
 
 static void appendRange(
@@ -1104,7 +1103,7 @@ UnicodeString &MeasureFormat::formatNumeric(
 
 const SimpleFormatter *MeasureFormat::getFormatterOrNull(
         const MeasureUnit &unit, UMeasureFormatWidth width, int32_t index) const {
-    width = getRegularWidth(width);
+	width = getRegularWidth(width);
     SimpleFormatter *const (*unitPatterns)[PATTERN_COUNT] = &cache->patterns[unit.getIndex()][0];
     if (unitPatterns[width][index] != NULL) {
         return unitPatterns[width][index];
@@ -1150,7 +1149,7 @@ const SimpleFormatter *MeasureFormat::getPerFormatter(
     if (U_FAILURE(status)) {
         return NULL;
     }
-    width = getRegularWidth(width);
+	width = getRegularWidth(width);
     const SimpleFormatter * perFormatters = cache->perFormatters;
     if (perFormatters[width].getArgumentLimit() == 2) {
         return &perFormatters[width];
@@ -1173,7 +1172,7 @@ int32_t MeasureFormat::withPerUnitAndAppend(
     if (U_FAILURE(status)) {
         return offset;
     }
-    const SimpleFormatter *perUnitFormatter = getFormatterOrNull(perUnit, width, PER_UNIT_INDEX);
+    const SimpleFormatter *perUnitFormatter = getFormatterOrNull(perUnit, mWidth, PER_UNIT_INDEX);
     if (perUnitFormatter != NULL) {
         const UnicodeString *params[] = {&formatted};
         perUnitFormatter->formatAndAppend(
@@ -1185,9 +1184,9 @@ int32_t MeasureFormat::withPerUnitAndAppend(
                 status);
         return offset;
     }
-    const SimpleFormatter *perFormatter = getPerFormatter(width, status);
+    const SimpleFormatter *perFormatter = getPerFormatter(mWidth, status);
     const SimpleFormatter *pattern =
-            getPluralFormatter(perUnit, width, StandardPlural::ONE, status);
+            getPluralFormatter(perUnit, mWidth, StandardPlural::ONE, status);
     if (U_FAILURE(status)) {
         return offset;
     }
