@@ -156,6 +156,7 @@ MutableCodePointTrie::MutableCodePointTrie(const MutableCodePointTrie &other, UE
     uprv_memcpy(index, other.index, iLimit * 4);
     uprv_memcpy(data, other.data, (size_t)other.dataLength * 4);
     dataLength = other.dataLength;
+    U_ASSERT(other.index16 == nullptr);
 }
 
 MutableCodePointTrie::~MutableCodePointTrie() {
@@ -659,7 +660,7 @@ int32_t getAllSameOverlap(const uint32_t *p, int32_t length, uint32_t value,
 
 /**
  * Finds the start of the last range in the trie by enumerating backward.
- * Indexes for supplementary code points higher than this will be omitted.
+ * Indexes for code points higher than this will be omitted.
  */
 UChar32 MutableCodePointTrie::findHighStart() const {
     int32_t i = highStart >> UCPTRIE_SHIFT_3;
@@ -793,7 +794,7 @@ int32_t MutableCodePointTrie::compactWholeDataBlocks(int32_t fastILimit, AllSame
         } else {
             U_ASSERT(flags[i] == ALL_SAME);
             if (inc > 1) {
-                // Do all of the BMP data block's ALL_SAME parts have the same value?
+                // Do all of the fast-range data block's ALL_SAME parts have the same value?
                 bool allSame = true;
                 int32_t next_i = i + inc;
                 for (int32_t j = i + 1; j < next_i; ++j) {
@@ -905,7 +906,8 @@ void printBlock(const uint32_t *block, int32_t blockLength, uint32_t value,
  * The compaction
  * - removes blocks that are identical with earlier ones
  * - overlaps each new non-duplicate block as much as possible with the previously-written one
- * - works with BMP data blocks whose length is a multiple of that of supplementary data blocks
+ * - works with fast-range data blocks whose length is a multiple of that of
+ *   higher-code-point data blocks
  *
  * It does not try to find an optimal order of writing, deduplicating, and overlapping blocks.
  */
@@ -993,8 +995,7 @@ int32_t MutableCodePointTrie::compactData(int32_t fastILimit, uint32_t *newData)
 int32_t MutableCodePointTrie::compactIndex(int32_t fastILimit, UErrorCode &errorCode) {
     int32_t fastIndexLength = fastILimit >> (UCPTRIE_FAST_SHIFT - UCPTRIE_SHIFT_3);
     if ((highStart >> UCPTRIE_FAST_SHIFT) <= fastIndexLength) {
-        // Only the linear BMP index, no supplementary index tables.
-        // TODO: fix BMP/supp comments
+        // Only the linear fast index, no multi-stage index tables.
         index3NullOffset = UCPTRIE_NO_INDEX3_NULL_OFFSET;
         return fastIndexLength;
     }
@@ -1025,9 +1026,9 @@ int32_t MutableCodePointTrie::compactIndex(int32_t fastILimit, UErrorCode &error
         }
     }
 
-    // Examine supplementary index-3 blocks. For each determine one of:
+    // Examine index-3 blocks. For each determine one of:
     // - same as the index-3 null block
-    // - same as a BMP index block
+    // - same as a fast-index block
     // - 16-bit indexes
     // - 18-bit indexes
     // We store this in the first flags entry for the index-3 block.
@@ -1264,8 +1265,8 @@ int32_t MutableCodePointTrie::compactTrie(int32_t fastILimit, UErrorCode &errorC
             (long)realHighStart, (long)highValue, (long)initialValue);
 #endif
 
-    // We always store indexes and data values for the BMP.
-    // Pin highStart to the supplementary range while building.
+    // We always store indexes and data values for the fast range.
+    // Pin highStart to the top of that range while building.
     UChar32 fastLimit = fastILimit << UCPTRIE_SHIFT_3;
     if (realHighStart < fastLimit) {
         for (int32_t i = (realHighStart >> UCPTRIE_SHIFT_3); i < fastILimit; ++i) {
@@ -1364,7 +1365,7 @@ UCPTrie *MutableCodePointTrie::build(UCPTrieType type, UCPTrieValueWidth valueWi
 
     // Ensure data table alignment: The index length must be even for uint32_t data.
     if (valueWidth == UCPTRIE_VALUE_BITS_32 && (indexLength & 1) != 0) {
-        index16[indexLength++] = 0xffee;  // arbitary value
+        index16[indexLength++] = 0xffee;  // arbitrary value
     }
 
     // Make the total trie structure length a multiple of 4 bytes by padding the data table,

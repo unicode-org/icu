@@ -810,7 +810,11 @@ testTrieSerialize(const char *testName, UMutableCPTrie *mutableTrie,
             log_err("error: ucptrie_openFromBinary(%s) failed, %s\n", testName, u_errorName(errorCode));
             break;
         }
-        if(valueWidth != trie->valueWidth) {
+        if(type != ucptrie_getType(trie)) {
+            log_err("error: trie serialization (%s) did not preserve trie type\n", testName);
+            break;
+        }
+        if(valueWidth != ucptrie_getValueWidth(trie)) {
             log_err("error: trie serialization (%s) did not preserve data value width\n", testName);
             break;
         }

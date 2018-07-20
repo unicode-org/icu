@@ -172,22 +172,22 @@ public abstract class CodePointTrie extends CodePointMap {
             char[] index = ICUBinary.getChars(bytes, indexLength, 0);
             switch (valueWidth) {
             case BITS_16: {
-                Data16 data = new Data16(ICUBinary.getChars(bytes, dataLength, 0));
+                char[] data16 = ICUBinary.getChars(bytes, dataLength, 0);
                 return type == Type.FAST ?
-                        new Fast16(index, data, highStart, index3NullOffset, dataNullOffset) :
-                            new Small16(index, data, highStart, index3NullOffset, dataNullOffset);
+                        new Fast16(index, data16, highStart, index3NullOffset, dataNullOffset) :
+                            new Small16(index, data16, highStart, index3NullOffset, dataNullOffset);
             }
             case BITS_32: {
-                Data32 data = new Data32(ICUBinary.getInts(bytes, dataLength, 0));
+                int[] data32 = ICUBinary.getInts(bytes, dataLength, 0);
                 return type == Type.FAST ?
-                        new Fast32(index, data, highStart, index3NullOffset, dataNullOffset) :
-                            new Small32(index, data, highStart, index3NullOffset, dataNullOffset);
+                        new Fast32(index, data32, highStart, index3NullOffset, dataNullOffset) :
+                            new Small32(index, data32, highStart, index3NullOffset, dataNullOffset);
             }
             case BITS_8: {
-                Data8 data = new Data8(ICUBinary.getBytes(bytes, dataLength, 0));
+                byte[] data8 = ICUBinary.getBytes(bytes, dataLength, 0);
                 return type == Type.FAST ?
-                        new Fast8(index, data, highStart, index3NullOffset, dataNullOffset) :
-                            new Small8(index, data, highStart, index3NullOffset, dataNullOffset);
+                        new Fast8(index, data8, highStart, index3NullOffset, dataNullOffset) :
+                            new Small8(index, data8, highStart, index3NullOffset, dataNullOffset);
             }
             default:
                 throw new AssertionError("should be unreachable");
@@ -390,10 +390,10 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     /** @internal */
-    private static final int FAST_SHIFT = 6;
+    static final int FAST_SHIFT = 6;
 
     /** Number of entries in a data block for code points below the fast limit. 64=0x40 @internal */
-    private static final int FAST_DATA_BLOCK_LENGTH = 1 << FAST_SHIFT;
+    static final int FAST_DATA_BLOCK_LENGTH = 1 << FAST_SHIFT;
 
     /** Mask for getting the lower bits for the in-fast-data-block offset. @internal */
     private static final int FAST_DATA_MASK = FAST_DATA_BLOCK_LENGTH - 1;
@@ -419,11 +419,11 @@ public abstract class CodePointTrie extends CodePointMap {
     /** The length of the BMP index table. 1024=0x400 */
     private static final int BMP_INDEX_LENGTH = 0x10000 >> FAST_SHIFT;
 
-    private static final int SMALL_LIMIT = 0x1000;
+    static final int SMALL_LIMIT = 0x1000;
     private static final int SMALL_INDEX_LENGTH = SMALL_LIMIT >> FAST_SHIFT;
 
     /** Shift size for getting the index-3 table offset. */
-    private static final int SHIFT_3 = 4;
+    static final int SHIFT_3 = 4;
 
     /** Shift size for getting the index-2 table offset. */
     private static final int SHIFT_2 = 5 + SHIFT_3;
@@ -435,13 +435,13 @@ public abstract class CodePointTrie extends CodePointMap {
      * Difference between two shift sizes,
      * for getting an index-2 offset from an index-3 offset. 5=9-4
      */
-    private static final int SHIFT_2_3 = SHIFT_2 - SHIFT_3;
+    static final int SHIFT_2_3 = SHIFT_2 - SHIFT_3;
 
     /**
      * Difference between two shift sizes,
      * for getting an index-1 offset from an index-2 offset. 5=14-9
      */
-    private static final int SHIFT_1_2 = SHIFT_1 - SHIFT_2;
+    static final int SHIFT_1_2 = SHIFT_1 - SHIFT_2;
 
     /**
      * Number of index-1 entries for the BMP. (4)
@@ -450,25 +450,25 @@ public abstract class CodePointTrie extends CodePointMap {
     private static final int OMITTED_BMP_INDEX_1_LENGTH = 0x10000 >> SHIFT_1;
 
     /** Number of entries in an index-2 block. 32=0x20 */
-    private static final int INDEX_2_BLOCK_LENGTH = 1 << SHIFT_1_2;
+    static final int INDEX_2_BLOCK_LENGTH = 1 << SHIFT_1_2;
 
     /** Mask for getting the lower bits for the in-index-2-block offset. */
-    private static final int INDEX_2_MASK = INDEX_2_BLOCK_LENGTH - 1;
+    static final int INDEX_2_MASK = INDEX_2_BLOCK_LENGTH - 1;
 
     /** Number of code points per index-2 table entry. 512=0x200 */
-    private static final int CP_PER_INDEX_2_ENTRY = 1 << SHIFT_2;
+    static final int CP_PER_INDEX_2_ENTRY = 1 << SHIFT_2;
 
     /** Number of entries in an index-3 block. 32=0x20 */
-    private static final int INDEX_3_BLOCK_LENGTH = 1 << SHIFT_2_3;
+    static final int INDEX_3_BLOCK_LENGTH = 1 << SHIFT_2_3;
 
     /** Mask for getting the lower bits for the in-index-3-block offset. */
     private static final int INDEX_3_MASK = INDEX_3_BLOCK_LENGTH - 1;
 
     /** Number of entries in a small data block. 16=0x10 */
-    private static final int SMALL_DATA_BLOCK_LENGTH = 1 << SHIFT_3;
+    static final int SMALL_DATA_BLOCK_LENGTH = 1 << SHIFT_3;
 
     /** Mask for getting the lower bits for the in-small-data-block offset. */
-    private static final int SMALL_DATA_MASK = SMALL_DATA_BLOCK_LENGTH - 1;
+    static final int SMALL_DATA_MASK = SMALL_DATA_BLOCK_LENGTH - 1;
 
     // ucptrie_impl.h: Constants for use with UCPTrieHeader.options.
     private static final int OPTIONS_DATA_LENGTH_MASK = 0xf000;
@@ -480,8 +480,8 @@ public abstract class CodePointTrie extends CodePointMap {
      * Bit 15 is unused for this value because this bit is used if the index-3 contains
      * 18-bit indexes.
      */
-    // vate static final int NO_INDEX3_NULL_OFFSET = 0x7fff;
-    // vate static final int NO_DATA_NULL_OFFSET = 0xfffff;
+    static final int NO_INDEX3_NULL_OFFSET = 0x7fff;
+    static final int NO_DATA_NULL_OFFSET = 0xfffff;
 
     private static abstract class Data {
         abstract ValueWidth getValueWidth();
@@ -509,7 +509,7 @@ public abstract class CodePointTrie extends CodePointMap {
         @Override int getDataLength() { return array.length; }
         @Override int getFromIndex(int index) { return array[index]; }
         @Override int write(DataOutputStream dos) throws IOException {
-            for (int v : array) { dos.writeChar(v); }
+            for (int v : array) { dos.writeInt(v); }
             return array.length * 4;
         }
     }
@@ -521,7 +521,7 @@ public abstract class CodePointTrie extends CodePointMap {
         @Override int getDataLength() { return array.length; }
         @Override int getFromIndex(int index) { return array[index] & 0xff; }
         @Override int write(DataOutputStream dos) throws IOException {
-            for (byte v : array) { dos.writeChar(v); }
+            for (byte v : array) { dos.writeByte(v); }
             return array.length;
         }
     }
@@ -780,10 +780,10 @@ public abstract class CodePointTrie extends CodePointMap {
     public static final class Fast16 extends Fast {
         private final char[] dataArray;
 
-        private Fast16(char[] index, Data16 data, int highStart,
+        Fast16(char[] index, char[] data16, int highStart,
                 int index3NullOffset, int dataNullOffset) {
-            super(index, data, highStart, index3NullOffset, dataNullOffset);
-            this.dataArray = data.array;
+            super(index, new Data16(data16), highStart, index3NullOffset, dataNullOffset);
+            this.dataArray = data16;
         }
 
         public static Fast16 fromBinary(ByteBuffer bytes) {
@@ -811,10 +811,10 @@ public abstract class CodePointTrie extends CodePointMap {
     public static final class Fast32 extends Fast {
         private final int[] dataArray;
 
-        private Fast32(char[] index, Data32 data, int highStart,
+        Fast32(char[] index, int[] data32, int highStart,
                 int index3NullOffset, int dataNullOffset) {
-            super(index, data, highStart, index3NullOffset, dataNullOffset);
-            this.dataArray = data.array;
+            super(index, new Data32(data32), highStart, index3NullOffset, dataNullOffset);
+            this.dataArray = data32;
         }
 
         public static Fast32 fromBinary(ByteBuffer bytes) {
@@ -842,10 +842,10 @@ public abstract class CodePointTrie extends CodePointMap {
     public static final class Fast8 extends Fast {
         private final byte[] dataArray;
 
-        private Fast8(char[] index, Data8 data, int highStart,
+        Fast8(char[] index, byte[] data8, int highStart,
                 int index3NullOffset, int dataNullOffset) {
-            super(index, data, highStart, index3NullOffset, dataNullOffset);
-            this.dataArray = data.array;
+            super(index, new Data8(data8), highStart, index3NullOffset, dataNullOffset);
+            this.dataArray = data8;
         }
 
         public static Fast8 fromBinary(ByteBuffer bytes) {
@@ -871,9 +871,9 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     public static final class Small16 extends Small {
-        private Small16(char[] index, Data16 data, int highStart,
+        Small16(char[] index, char[] data16, int highStart,
                 int index3NullOffset, int dataNullOffset) {
-            super(index, data, highStart, index3NullOffset, dataNullOffset);
+            super(index, new Data16(data16), highStart, index3NullOffset, dataNullOffset);
         }
 
         public static Small16 fromBinary(ByteBuffer bytes) {
@@ -882,9 +882,9 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     public static final class Small32 extends Small {
-        private Small32(char[] index, Data32 data, int highStart,
+        Small32(char[] index, int[] data32, int highStart,
                 int index3NullOffset, int dataNullOffset) {
-            super(index, data, highStart, index3NullOffset, dataNullOffset);
+            super(index, new Data32(data32), highStart, index3NullOffset, dataNullOffset);
         }
 
         public static Small32 fromBinary(ByteBuffer bytes) {
@@ -893,9 +893,9 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     public static final class Small8 extends Small {
-        private Small8(char[] index, Data8 data, int highStart,
+        Small8(char[] index, byte[] data8, int highStart,
                 int index3NullOffset, int dataNullOffset) {
-            super(index, data, highStart, index3NullOffset, dataNullOffset);
+            super(index, new Data8(data8), highStart, index3NullOffset, dataNullOffset);
         }
 
         public static Small8 fromBinary(ByteBuffer bytes) {

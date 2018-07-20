@@ -23,9 +23,9 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
 
     // For getRange() & Iterator.
     public static final class Range {
-        int start;
-        int end;
-        int value;
+        private int start;
+        private int end;
+        private int value;
 
         public Range() {
             start = end = -1;

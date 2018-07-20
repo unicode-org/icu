@@ -679,7 +679,7 @@ ucptrie_internalU8PrevIndex(const UCPTrie *trie, UChar32 c,
 
 /** Internal trie getter for a code point below the fast limit. Returns the data index. @internal */
 #define _UCPTRIE_FAST_INDEX(trie, c) \
-    (((int32_t)(trie)->index[(c) >> UCPTRIE_FAST_SHIFT]) + ((c) & UCPTRIE_FAST_DATA_MASK))
+    ((int32_t)(trie)->index[(c) >> UCPTRIE_FAST_SHIFT] + ((c) & UCPTRIE_FAST_DATA_MASK))
 
 /** Internal trie getter for a code point at or above the fast limit. Returns the data index. @internal */
 #define _UCPTRIE_SMALL_INDEX(trie, c) \
@@ -759,7 +759,7 @@ ucptrie_internalU8PrevIndex(const UCPTrie *trie, UChar32 c,
                         ucptrie_internalSmallU8Index((trie), __lead, __t2, __t3), 1) \
             :  /* U+0080..U+07FF */ \
                 __lead >= 0xc2 && (__t1 = *(src) - 0x80) <= 0x3f && \
-                (__lead = (trie)->index[__lead & 0x1f] + __t1, 1))) { \
+                (__lead = (int32_t)(trie)->index[__lead & 0x1f] + __t1, 1))) { \
             ++(src); \
         } else { \
             __lead = (trie)->dataLength - UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET;  /* ill-formed*/ \

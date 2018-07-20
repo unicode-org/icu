@@ -34,6 +34,12 @@ U_CDECL_BEGIN
  * The mutable trie is only somewhat space-efficient.
  * It builds a compacted, immutable UCPTrie.
  *
+ * This trie can be modified while iterating over its contents.
+ * For example, it is possible to merge its values with those from another
+ * set of ranges (e.g., another mutable or immutable trie):
+ * Iterate over those source ranges; for each of them iterate over this trie;
+ * add the source value into the value of each trie range.
+ *
  * @see UCPTrie
  * @see umutablecptrie_buildImmutable
  * @draft ICU 63

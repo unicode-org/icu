@@ -10,6 +10,7 @@ package com.ibm.icu.impl;
 
 import java.util.EnumSet;
 
+import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
@@ -223,19 +224,31 @@ public final class UTS46 extends IDNA {
                 promoteAndResetLabelErrors(info);
                 destLength+=newLength-labelLength;
                 labelLimit=labelStart+=newLength+1;
-            } else if(0xdf<=c && c<=0x200d && (c==0xdf || c==0x3c2 || c>=0x200c)) {
+                continue;
+            } else if(c<0xdf) {
+                // pass
+            } else if(c<=0x200d && (c==0xdf || c==0x3c2 || c>=0x200c)) {
                 setTransitionalDifferent(info);
                 if(doMapDevChars) {
                     destLength=mapDevChars(dest, labelStart, labelLimit);
-                    // Do not increment labelLimit in case c was removed.
                     // All deviation characters have been mapped, no need to check for them again.
                     doMapDevChars=false;
-                } else {
-                    ++labelLimit;
+                    // Do not increment labelLimit in case c was removed.
+                    continue;
                 }
-            } else {
-                ++labelLimit;
+            } else if(Character.isSurrogate(c)) {
+                if(UTF16Plus.isSurrogateLead(c) ?
+                        (labelLimit+1)==destLength ||
+                            !Character.isLowSurrogate(dest.charAt(labelLimit+1)) :
+                        labelLimit==labelStart ||
+                            !Character.isHighSurrogate(dest.charAt(labelLimit-1))) {
+                    // Map an unpaired surrogate to U+FFFD before normalization so that when
+                    // that removes characters we do not turn two unpaired ones into a pair.
+                    addLabelError(info, Error.DISALLOWED);
+                    dest.setCharAt(labelLimit, '\ufffd');
+                }
             }
+            ++labelLimit;
         }
         // Permit an empty label at the end (0<labelStart==labelLimit==destLength is ok)
         // but not an empty label elsewhere nor a completely empty domain name.

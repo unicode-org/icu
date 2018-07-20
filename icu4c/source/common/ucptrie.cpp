@@ -164,7 +164,8 @@ ucptrie_internalSmallIndex(const UCPTrie *trie, UChar32 c) {
         U_ASSERT((uint32_t)c < (uint32_t)trie->highStart && trie->highStart > UCPTRIE_SMALL_LIMIT);
         i1 += UCPTRIE_SMALL_INDEX_LENGTH;
     }
-    int32_t i3Block = trie->index[trie->index[i1] + ((c >> UCPTRIE_SHIFT_2) & UCPTRIE_INDEX_2_MASK)];
+    int32_t i3Block = trie->index[
+        (int32_t)trie->index[i1] + ((c >> UCPTRIE_SHIFT_2) & UCPTRIE_INDEX_2_MASK)];
     int32_t i3 = (c >> UCPTRIE_SHIFT_3) & UCPTRIE_INDEX_3_MASK;
     int32_t dataBlock;
     if ((i3Block & 0x8000) == 0) {
@@ -174,7 +175,7 @@ ucptrie_internalSmallIndex(const UCPTrie *trie, UChar32 c) {
         // 18-bit indexes stored in groups of 9 entries per 8 indexes.
         i3Block = (i3Block & 0x7fff) + (i3 & ~7) + (i3 >> 3);
         i3 &= 7;
-        dataBlock = (trie->index[i3Block++] << (2 + (2 * i3))) & 0x30000;
+        dataBlock = ((int32_t)trie->index[i3Block++] << (2 + (2 * i3))) & 0x30000;
         dataBlock |= trie->index[i3Block + i3];
     }
     return dataBlock + (c & UCPTRIE_SMALL_DATA_MASK);
@@ -303,7 +304,8 @@ ucptrie_getRange(const UCPTrie *trie, UChar32 start,
                 U_ASSERT(c < trie->highStart && trie->highStart > UCPTRIE_SMALL_LIMIT);
                 i1 += UCPTRIE_SMALL_INDEX_LENGTH;
             }
-            i3Block = trie->index[trie->index[i1] + ((c >> UCPTRIE_SHIFT_2) & UCPTRIE_INDEX_2_MASK)];
+            i3Block = trie->index[
+                (int32_t)trie->index[i1] + ((c >> UCPTRIE_SHIFT_2) & UCPTRIE_INDEX_2_MASK)];
             if (i3Block == prevI3Block && (c - start) >= UCPTRIE_CP_PER_INDEX_2_ENTRY) {
                 // The index-3 block is the same as the previous one, and filled with value.
                 U_ASSERT((c & (UCPTRIE_CP_PER_INDEX_2_ENTRY - 1)) == 0);
@@ -339,7 +341,7 @@ ucptrie_getRange(const UCPTrie *trie, UChar32 start,
                 // 18-bit indexes stored in groups of 9 entries per 8 indexes.
                 int32_t group = (i3Block & 0x7fff) + (i3 & ~7) + (i3 >> 3);
                 int32_t gi = i3 & 7;
-                block = (index[group++] << (2 + (2 * gi))) & 0x30000;
+                block = ((int32_t)index[group++] << (2 + (2 * gi))) & 0x30000;
                 block |= index[group + gi];
             }
             if (block == prevBlock && (c - start) >= dataBlockLength) {
