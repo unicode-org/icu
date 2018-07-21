@@ -458,6 +458,11 @@ Locale &Locale::operator=(const Locale &other)
     } else {
         if (other.baseName) {
             baseName = uprv_strdup(other.baseName);
+            if (baseName == nullptr) {
+                // if memory allocation fails, set this object to bogus.
+                fIsBogus = TRUE;
+                return *this;
+            }
         }
     }
 
