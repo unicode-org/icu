@@ -1,6 +1,6 @@
 #  International Components for Unicode
 
-This is the source repository for the [International Components for Unicode](https://ssl.icu-project.org). The ICU-TC is a technical committee of [The Unicode Consortium](https://unicode.org).
+This is the repository for the [International Components for Unicode](https://ssl.icu-project.org). The ICU-TC is a technical committee of [The Unicode Consortium](https://unicode.org).
 
 [![Build Status](https://travis-ci.org/unicode-org/icu.svg?branch=master)](https://travis-ci.org/unicode-org/icu)
 
