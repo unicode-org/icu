@@ -771,8 +771,8 @@ public:
          * @stable ICU 4.8
          */
         UMessagePatternArgType getArgType() const {
-            UMessagePatternPartType m_type=getType();
-            if(m_type==UMSGPAT_PART_TYPE_ARG_START || m_type==UMSGPAT_PART_TYPE_ARG_LIMIT) {
+            UMessagePatternPartType msgType=getType();
+            if(msgType ==UMSGPAT_PART_TYPE_ARG_START || msgType ==UMSGPAT_PART_TYPE_ARG_LIMIT) {
                 return (UMessagePatternArgType)value;
             } else {
                 return UMSGPAT_ARG_TYPE_NONE;

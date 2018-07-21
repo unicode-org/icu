@@ -3571,21 +3571,21 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             static const UChar alt_sep = DateFormatSymbols::ALTERNATE_TIME_SEPARATOR;
 
             // Try matching a time separator.
-            int32_t count = 1;
+            int32_t count_sep = 1;
             UnicodeString data[3];
             fSymbols->getTimeSeparatorString(data[0]);
 
             // Add the default, if different from the locale.
             if (data[0].compare(&def_sep, 1) != 0) {
-                data[count++].setTo(def_sep);
+                data[count_sep++].setTo(def_sep);
             }
 
             // If lenient, add also the alternate, if different from the locale.
             if (isLenient() && data[0].compare(&alt_sep, 1) != 0) {
-                data[count++].setTo(alt_sep);
+                data[count_sep++].setTo(alt_sep);
             }
 
-            return matchString(text, start, UCAL_FIELD_COUNT /* => nothing to set */, data, count, NULL, cal);
+            return matchString(text, start, UCAL_FIELD_COUNT /* => nothing to set */, data, count_sep, NULL, cal);
         }
 
     case UDAT_AM_PM_MIDNIGHT_NOON_FIELD:
@@ -3674,7 +3674,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     }
     parseInt(*src, number, pos, allowNegative,currentNumberFormat);
     if (pos.getIndex() != parseStart) {
-        int32_t value = number.getLong();
+        int32_t val = number.getLong();
 
         // Don't need suffix processing here (as in number processing at the beginning of the function);
         // the new fields being handled as numeric values (month, weekdays, quarters) should not have suffixes.
@@ -3682,7 +3682,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status)) {
             // Check the range of the value
             int32_t bias = gFieldRangeBias[patternCharIndex];
-            if (bias >= 0 && (value > cal.getMaximum(field) + bias || value < cal.getMinimum(field) + bias)) {
+            if (bias >= 0 && (val > cal.getMaximum(field) + bias || val < cal.getMinimum(field) + bias)) {
                 return -start;
             }
         }
@@ -3696,35 +3696,35 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             if (!strcmp(cal.getType(),"hebrew")) {
                 HebrewCalendar *hc = (HebrewCalendar*)&cal;
                 if (cal.isSet(UCAL_YEAR)) {
-                   UErrorCode status = U_ZERO_ERROR;
-                   if (!hc->isLeapYear(hc->get(UCAL_YEAR,status)) && value >= 6) {
-                       cal.set(UCAL_MONTH, value);
+                   UErrorCode monthStatus = U_ZERO_ERROR;
+                   if (!hc->isLeapYear(hc->get(UCAL_YEAR, monthStatus)) && val >= 6) {
+                       cal.set(UCAL_MONTH, val);
                    } else {
-                       cal.set(UCAL_MONTH, value - 1);
+                       cal.set(UCAL_MONTH, val - 1);
                    }
                 } else {
-                    saveHebrewMonth = value;
+                    saveHebrewMonth = val;
                 }
             } else {
-                cal.set(UCAL_MONTH, value - 1);
+                cal.set(UCAL_MONTH, val - 1);
             }
             break;
         case UDAT_STANDALONE_MONTH_FIELD:
-            cal.set(UCAL_MONTH, value - 1);
+            cal.set(UCAL_MONTH, val - 1);
             break;
         case UDAT_DOW_LOCAL_FIELD:
         case UDAT_STANDALONE_DAY_FIELD:
-            cal.set(UCAL_DOW_LOCAL, value);
+            cal.set(UCAL_DOW_LOCAL, val);
             break;
         case UDAT_QUARTER_FIELD:
         case UDAT_STANDALONE_QUARTER_FIELD:
-             cal.set(UCAL_MONTH, (value - 1) * 3);
+             cal.set(UCAL_MONTH, (val - 1) * 3);
              break;
         case UDAT_RELATED_YEAR_FIELD:
-            cal.setRelatedYear(value);
+            cal.setRelatedYear(val);
             break;
         default:
-            cal.set(field, value);
+            cal.set(field, val);
             break;
         }
         return pos.getIndex();
@@ -3971,9 +3971,9 @@ SimpleDateFormat::setContext(UDisplayContext value, UErrorCode& status)
     if (U_SUCCESS(status)) {
         if ( fCapitalizationBrkIter == NULL && (value==UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
                 value==UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU || value==UDISPCTX_CAPITALIZATION_FOR_STANDALONE) ) {
-            UErrorCode status = U_ZERO_ERROR;
-            fCapitalizationBrkIter = BreakIterator::createSentenceInstance(fLocale, status);
-            if (U_FAILURE(status)) {
+            UErrorCode newStatus = U_ZERO_ERROR;
+            fCapitalizationBrkIter = BreakIterator::createSentenceInstance(fLocale, newStatus);
+            if (U_FAILURE(newStatus)) {
                 delete fCapitalizationBrkIter;
                 fCapitalizationBrkIter = NULL;
             }

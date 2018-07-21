@@ -1225,7 +1225,7 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
         // Generic format many use Localized GMT as the final fallback.
         // When Localized GMT format is used, the result might not be
         // appropriate for the requested daylight value.
-        if ((daylight && timeType == UTZFMT_TIME_TYPE_STANDARD) || (!daylight && timeType == UTZFMT_TIME_TYPE_DAYLIGHT)) {
+        if (&timeType != NULL && ((daylight && timeType == UTZFMT_TIME_TYPE_STANDARD) || (!daylight && timeType == UTZFMT_TIME_TYPE_DAYLIGHT))) {
             offset = daylight ? getRawOffset() + getDSTSavings() : getRawOffset();
             if (style == SHORT_GENERIC) {
                 tzfmt->formatOffsetShortLocalizedGMT(offset, result, status);
