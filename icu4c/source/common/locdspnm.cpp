@@ -47,7 +47,7 @@ static int32_t ncat(char *buffer, uint32_t buflen, ...) {
   va_start(args, buflen);
   while ((str = va_arg(args, char *)) != 0) {
     char c;
-    while (p != e && (c = *str++)) {
+    while (p != e && (c = *str++) != 0) {
       *p++ = c;
     }
   }

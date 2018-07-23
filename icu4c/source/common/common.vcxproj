@@ -51,7 +51,7 @@
     <ClCompile>
       <PreprocessorDefinitions>U_ATTRIBUTE_DEPRECATED=;U_COMMON_IMPLEMENTATION;U_PLATFORM_USES_ONLY_WIN32_API=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
-      <WarningLevel>Level4</WarningLevel>
+      <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
       <AdditionalDependencies>icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
