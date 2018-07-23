@@ -808,11 +808,11 @@ UBool RegexMatcher::find(UErrorCode &status) {
                     return TRUE;
                 }
                 UTEXT_SETNATIVEINDEX(fInputText, startPos);
-				ch = UTEXT_NEXT32(fInputText);
+                ch = UTEXT_NEXT32(fInputText);
                 startPos = UTEXT_GETNATIVEINDEX(fInputText);
             } else {
                 UTEXT_SETNATIVEINDEX(fInputText, startPos);
-				ch = UTEXT_PREVIOUS32(fInputText);
+                ch = UTEXT_PREVIOUS32(fInputText);
                 UTEXT_SETNATIVEINDEX(fInputText, startPos);
             }
 
@@ -833,7 +833,7 @@ UBool RegexMatcher::find(UErrorCode &status) {
                         fHitEnd = TRUE;
                         return FALSE;
                     }
-					ch = UTEXT_NEXT32(fInputText);
+                    ch = UTEXT_NEXT32(fInputText);
                     startPos = UTEXT_GETNATIVEINDEX(fInputText);
                     // Note that it's perfectly OK for a pattern to have a zero-length
                     //   match at the end of a string, so we must make sure that the loop
@@ -862,7 +862,7 @@ UBool RegexMatcher::find(UErrorCode &status) {
                         fHitEnd = TRUE;
                         return FALSE;
                     }
-					ch = UTEXT_NEXT32(fInputText);
+                    ch = UTEXT_NEXT32(fInputText);
                     startPos = UTEXT_GETNATIVEINDEX(fInputText);
                     // Note that it's perfectly OK for a pattern to have a zero-length
                     //   match at the end of a string, so we must make sure that the loop
@@ -1075,7 +1075,7 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
 
         if (fPattern->fFlags & UREGEX_UNIX_LINES) {
             for (;;) {
-				ch = inputBuf[startPos-1];
+                ch = inputBuf[startPos-1];
                 if (ch == 0x0a) {
                     MatchChunkAt(startPos, FALSE, status);
                     if (U_FAILURE(status)) {

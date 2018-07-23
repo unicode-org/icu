@@ -825,10 +825,10 @@ bracketProcessClosing(BracketData *bd, int32_t openIdx, int32_t position) {
        N0c1. */
 
     if((direction==0 && pOpening->flags&FOUND_L) ||
-       (direction==1 && pOpening->flags&FOUND_R)) {							/* N0b */
+       (direction==1 && pOpening->flags&FOUND_R)) {                         /* N0b */
         newProp=static_cast<DirProp>(direction);
     }
-    else if(pOpening->flags&(FOUND_L|FOUND_R)) {							/* N0c */
+    else if(pOpening->flags&(FOUND_L|FOUND_R)) {                            /* N0c */
         /* it is stable if there is no containing pair or in
            conditions too complicated and not worth checking */
         stable=(openIdx==pLastIsoRun->start);
@@ -839,7 +839,7 @@ bracketProcessClosing(BracketData *bd, int32_t openIdx, int32_t position) {
     } else {
         /* forget this and any brackets nested within this pair */
         pLastIsoRun->limit= static_cast<uint16_t>(openIdx);
-        return ON;															/* N0d */
+        return ON;                                                          /* N0d */
     }
     bd->pBiDi->dirProps[pOpening->position]=newProp;
     bd->pBiDi->dirProps[position]=newProp;

@@ -1568,7 +1568,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     ++numRuleSets;
 
     // our rule list is an array of the appropriate size
-	mRuleSets = (NFRuleSet **)uprv_malloc((numRuleSets + 1) * sizeof(NFRuleSet *));
+    mRuleSets = (NFRuleSet **)uprv_malloc((numRuleSets + 1) * sizeof(NFRuleSet *));
     /* test for NULL */
     if (mRuleSets == 0) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -1576,7 +1576,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     }
 
     for (int i = 0; i <= numRuleSets; ++i) {
-		mRuleSets[i] = NULL;
+        mRuleSets[i] = NULL;
     }
 
     // divide up the descriptions into individual rule-set descriptions
@@ -1602,7 +1602,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
         int32_t start = 0;
         for (int32_t p = description.indexOf(gSemiPercent, 2, 0); p != -1; p = description.indexOf(gSemiPercent, 2, start)) {
             ruleSetDescriptions[curRuleSet].setTo(description, start, p + 1 - start);
-			mRuleSets[curRuleSet] = new NFRuleSet(this, ruleSetDescriptions, curRuleSet, status);
+            mRuleSets[curRuleSet] = new NFRuleSet(this, ruleSetDescriptions, curRuleSet, status);
             if (mRuleSets[curRuleSet] == 0) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
@@ -1611,7 +1611,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
             start = p + 1;
         }
         ruleSetDescriptions[curRuleSet].setTo(description, start, description.length() - start);
-		mRuleSets[curRuleSet] = new NFRuleSet(this, ruleSetDescriptions, curRuleSet, status);
+        mRuleSets[curRuleSet] = new NFRuleSet(this, ruleSetDescriptions, curRuleSet, status);
         if (mRuleSets[curRuleSet] == 0) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
@@ -1634,7 +1634,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     // away the temporary descriptions as we go)
     {
         for (int i = 0; i < numRuleSets; i++) {
-			mRuleSets[i]->parseRules(ruleSetDescriptions[i], status);
+            mRuleSets[i]->parseRules(ruleSetDescriptions[i], status);
         }
     }
 
@@ -1761,7 +1761,7 @@ RuleBasedNumberFormat::dispose()
             delete *p;
         }
         uprv_free(mRuleSets);
-		mRuleSets = NULL;
+        mRuleSets = NULL;
     }
 
     if (ruleSetDescriptions) {
@@ -1965,7 +1965,7 @@ RuleBasedNumberFormat::adoptDecimalFormatSymbols(DecimalFormatSymbols* symbolsTo
 
         if (mRuleSets) {
             for (int32_t i = 0; i < numRuleSets; i++) {
-				mRuleSets[i]->setDecimalFormatSymbols(*symbolsToAdopt, status);
+                mRuleSets[i]->setDecimalFormatSymbols(*symbolsToAdopt, status);
             }
         }
     }
@@ -2000,7 +2000,7 @@ DecimalFormat::ERoundingMode RuleBasedNumberFormat::getRoundingMode() const {
  * @param roundingMode A rounding mode
  */
 void RuleBasedNumberFormat::setRoundingMode(DecimalFormat::ERoundingMode roundingMode) {
-	mRoundingMode = roundingMode;
+    mRoundingMode = roundingMode;
 }
 
 U_NAMESPACE_END
