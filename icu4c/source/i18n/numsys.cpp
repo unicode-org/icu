@@ -95,6 +95,10 @@ NumberingSystem::createInstance(int32_t radix_in, UBool isAlgorithmic_in, const 
     }
 
     NumberingSystem *ns = new NumberingSystem();
+    if (ns == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
 
     ns->setRadix(radix_in);
     ns->setDesc(desc_in);
@@ -165,9 +169,12 @@ NumberingSystem::createInstance(const Locale & inLocale, UErrorCode& status) {
     if (usingFallback) {
         status = U_USING_FALLBACK_WARNING;
         NumberingSystem *ns = new NumberingSystem();
+        if (ns == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
         return ns;
     } else {
-        return NumberingSystem::createInstanceByName(buffer,status);
+        return NumberingSystem::createInstanceByName(buffer, status);
     }
  }
 
@@ -205,7 +212,14 @@ NumberingSystem::createInstanceByName(const char *name, UErrorCode& status) {
         return NULL;
     }
 
-    NumberingSystem* ns = NumberingSystem::createInstance(radix,isAlgorithmic,nsd,status);
+    NumberingSystem* ns = NumberingSystem::createInstance(radix, isAlgorithmic, nsd, status);
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
+    if (ns == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
     ns->setName(name);
     return ns;
 }
@@ -276,10 +290,23 @@ StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &status) {
             return NULL;
         }
 
-        while ( ures_hasNext(numberingSystemsInfo) ) {
-            UResourceBundle *nsCurrent = ures_getNextResource(numberingSystemsInfo,NULL,&rbstatus);
+        while ( ures_hasNext(numberingSystemsInfo) && U_SUCCESS(status) ) {
+            UResourceBundle *nsCurrent = ures_getNextResource(numberingSystemsInfo, NULL, &rbstatus);
+            if (rbstatus == U_MEMORY_ALLOCATION_ERROR) {
+                status = rbstatus;
+                break;
+            }
             const char *nsName = ures_getKey(nsCurrent);
-            numsysNames->addElement(new UnicodeString(nsName, -1, US_INV),status);
+            auto newElem = new UnicodeString(nsName, -1, US_INV);
+            if (newElem == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+            }
+            else {
+                numsysNames->addElement(newElem, status);
+                if (U_FAILURE(status)) {
+                    delete newElem;
+                }
+            }
             ures_close(nsCurrent);
         }
 
