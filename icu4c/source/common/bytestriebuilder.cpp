@@ -485,10 +485,10 @@ BytesTrieBuilder::writeDeltaTo(int32_t jumpTarget) {
             length=2;
         } else {
             if(i<=0xffffff) {
-                intBytes[0]=0xfeu;
+                intBytes[0]=(char)BytesTrie::kFourByteDeltaLead;
                 length=3;
             } else {
-                intBytes[0]=0xffu;
+                intBytes[0]=(char)BytesTrie::kFiveByteDeltaLead;
                 intBytes[1]=(char)(i>>24);
                 length=4;
             }
