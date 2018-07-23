@@ -518,7 +518,7 @@ NFRule::extractSubstitution(const NFRuleSet* ruleSet,
         this->formatter, subToken, status);
 
     // remove the substitution from the rule text
-	mRuleText.removeBetween(subStart, subEnd+1);
+    mRuleText.removeBetween(subStart, subEnd+1);
 
     return result;
 }

@@ -637,7 +637,7 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& loc,
     const char* key;
     while ((key = e->next((int32_t *)0, status)) != NULL) {
       value[0] = 0;
-	  loc.getKeywordValue(key, value, ULOC_KEYWORD_AND_VALUES_CAPACITY, status);
+      loc.getKeywordValue(key, value, ULOC_KEYWORD_AND_VALUES_CAPACITY, status);
       if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
         return result;
       }

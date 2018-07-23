@@ -28,7 +28,7 @@ void MutablePatternModifier::setPatternInfo(const AffixPatternProvider* patternI
 }
 
 void MutablePatternModifier::setPatternAttributes(UNumberSignDisplay signDisplay, bool perMille) {
-	mSignDisplay = signDisplay;
+    mSignDisplay = signDisplay;
     this->perMilleReplacesPercent = perMille;
 }
 
@@ -36,15 +36,15 @@ void MutablePatternModifier::setSymbols(const DecimalFormatSymbols* symbols,
                                         const CurrencySymbols* currencySymbols,
                                         const UNumberUnitWidth unitWidth, const PluralRules* rules) {
     U_ASSERT((rules != nullptr) == needsPlurals());
-	mSymbols = symbols;
-	mCurrencySymbols = currencySymbols;
-	mUnitWidth = unitWidth;
-	mRules = rules;
+    mSymbols = symbols;
+    mCurrencySymbols = currencySymbols;
+    mUnitWidth = unitWidth;
+    mRules = rules;
 }
 
 void MutablePatternModifier::setNumberProperties(int8_t signum, StandardPlural::Form plural) {
-	mSignum = signum;
-	mPlural = plural;
+    mSignum = signum;
+    mPlural = plural;
 }
 
 bool MutablePatternModifier::needsPlurals() const {
@@ -153,13 +153,13 @@ const Modifier* ImmutablePatternModifier::getModifier(int8_t signum, StandardPlu
 
 /** Used by the unsafe code path. */
 MicroPropsGenerator& MutablePatternModifier::addToChain(const MicroPropsGenerator* parent) {
-	mParent = parent;
+    mParent = parent;
     return *this;
 }
 
 void MutablePatternModifier::processQuantity(DecimalQuantity& fq, MicroProps& micros,
                                              UErrorCode& status) const {
-	mParent->processQuantity(fq, micros, status);
+    mParent->processQuantity(fq, micros, status);
     // The unsafe code path performs self-mutation, so we need a const_cast.
     // This method needs to be const because it overrides a const method in the parent class.
     auto nonConstThis = const_cast<MutablePatternModifier*>(this);

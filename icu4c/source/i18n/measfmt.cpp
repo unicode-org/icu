@@ -659,7 +659,7 @@ MeasureFormat &MeasureFormat::operator=(const MeasureFormat &other) {
     SharedObject::copyPtr(other.cache, cache);
     SharedObject::copyPtr(other.numberFormat, numberFormat);
     SharedObject::copyPtr(other.pluralRules, pluralRules);
-	mWidth = other.mWidth;
+    mWidth = other.mWidth;
     delete listFormatter;
     if (other.listFormatter != NULL) {
         listFormatter = new ListFormatter(*other.listFormatter);
@@ -1103,7 +1103,7 @@ UnicodeString &MeasureFormat::formatNumeric(
 
 const SimpleFormatter *MeasureFormat::getFormatterOrNull(
         const MeasureUnit &unit, UMeasureFormatWidth width, int32_t index) const {
-	width = getRegularWidth(width);
+    width = getRegularWidth(width);
     SimpleFormatter *const (*unitPatterns)[PATTERN_COUNT] = &cache->patterns[unit.getIndex()][0];
     if (unitPatterns[width][index] != NULL) {
         return unitPatterns[width][index];
@@ -1149,7 +1149,7 @@ const SimpleFormatter *MeasureFormat::getPerFormatter(
     if (U_FAILURE(status)) {
         return NULL;
     }
-	width = getRegularWidth(width);
+    width = getRegularWidth(width);
     const SimpleFormatter * perFormatters = cache->perFormatters;
     if (perFormatters[width].getArgumentLimit() == 2) {
         return &perFormatters[width];
