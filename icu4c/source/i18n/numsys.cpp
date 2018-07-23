@@ -79,18 +79,18 @@ NumberingSystem* U_EXPORT2
 NumberingSystem::createInstance(int32_t radix_in, UBool isAlgorithmic_in, const UnicodeString & desc_in, UErrorCode &status) {
 
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
 
     if ( radix_in < 2 ) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return NULL;
+        return nullptr;
     }
 
     if ( !isAlgorithmic_in ) {
        if ( desc_in.countChar32() != radix_in ) {
            status = U_ILLEGAL_ARGUMENT_ERROR;
-           return NULL;
+           return nullptr;
        }
     }
 
@@ -103,7 +103,7 @@ NumberingSystem::createInstance(int32_t radix_in, UBool isAlgorithmic_in, const 
     ns->setRadix(radix_in);
     ns->setDesc(desc_in);
     ns->setAlgorithmic(isAlgorithmic_in);
-    ns->setName(NULL);
+    ns->setName(nullptr);
     return ns;
     
 }
@@ -113,13 +113,13 @@ NumberingSystem* U_EXPORT2
 NumberingSystem::createInstance(const Locale & inLocale, UErrorCode& status) {
 
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
 
     UBool nsResolved = TRUE;
     UBool usingFallback = FALSE;
     char buffer[ULOC_KEYWORDS_CAPACITY];
-    int32_t count = inLocale.getKeywordValue("numbers",buffer, sizeof(buffer),status);
+    int32_t count = inLocale.getKeywordValue("numbers", buffer, sizeof(buffer), status);
     if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
         // the "numbers" keyword exceeds ULOC_KEYWORDS_CAPACITY; ignore and use default.
         count = 0;
@@ -139,8 +139,8 @@ NumberingSystem::createInstance(const Locale & inLocale, UErrorCode& status) {
 
     if (!nsResolved) { // Resolve the numbering system ( default, native, traditional or finance ) into a "real" numbering system
         UErrorCode localStatus = U_ZERO_ERROR;
-        UResourceBundle *resource = ures_open(NULL, inLocale.getName(), &localStatus);
-        UResourceBundle *numberElementsRes = ures_getByKey(resource,gNumberElements,NULL,&localStatus);
+        UResourceBundle *resource = ures_open(nullptr, inLocale.getName(), &localStatus);
+        UResourceBundle *numberElementsRes = ures_getByKey(resource, gNumberElements, nullptr, &localStatus);
         while (!nsResolved) {
             localStatus = U_ZERO_ERROR;
             count = 0;
@@ -185,21 +185,21 @@ NumberingSystem::createInstance(UErrorCode& status) {
 
 NumberingSystem* U_EXPORT2
 NumberingSystem::createInstanceByName(const char *name, UErrorCode& status) {
-    UResourceBundle *numberingSystemsInfo = NULL;
+    UResourceBundle *numberingSystemsInfo = nullptr;
     UResourceBundle *nsTop, *nsCurrent;
     int32_t radix = 10;
     int32_t algorithmic = 0;
 
-    numberingSystemsInfo = ures_openDirect(NULL,gNumberingSystems, &status);
-    nsCurrent = ures_getByKey(numberingSystemsInfo,gNumberingSystems,NULL,&status);
-    nsTop = ures_getByKey(nsCurrent,name,NULL,&status);
-    UnicodeString nsd = ures_getUnicodeStringByKey(nsTop,gDesc,&status);
+    numberingSystemsInfo = ures_openDirect(nullptr,gNumberingSystems, &status);
+    nsCurrent = ures_getByKey(numberingSystemsInfo, gNumberingSystems, nullptr, &status);
+    nsTop = ures_getByKey(nsCurrent, name, nullptr, &status);
+    UnicodeString nsd = ures_getUnicodeStringByKey(nsTop, gDesc, &status);
 
-    ures_getByKey(nsTop,gRadix,nsCurrent,&status);
+    ures_getByKey(nsTop, gRadix, nsCurrent, &status);
     radix = ures_getInt(nsCurrent,&status);
 
-    ures_getByKey(nsTop,gAlgorithmic,nsCurrent,&status);
-    algorithmic = ures_getInt(nsCurrent,&status);
+    ures_getByKey(nsTop, gAlgorithmic, nsCurrent, &status);
+    algorithmic = ures_getInt(nsCurrent, &status);
 
     UBool isAlgorithmic = ( algorithmic == 1 );
 
@@ -209,7 +209,7 @@ NumberingSystem::createInstanceByName(const char *name, UErrorCode& status) {
 
     if (U_FAILURE(status)) {
         status = U_UNSUPPORTED_ERROR;
-        return NULL;
+        return nullptr;
     }
 
     NumberingSystem* ns = NumberingSystem::createInstance(radix, isAlgorithmic, nsd, status);
@@ -255,7 +255,7 @@ void NumberingSystem::setDesc(const UnicodeString &d) {
     desc.setTo(d);
 }
 void NumberingSystem::setName(const char *n) {
-    if ( n == NULL ) {
+    if ( n == nullptr ) {
         name[0] = (char) 0;
     } else {
         uprv_strncpy(name,n,NUMSYS_NAME_CAPACITY);
@@ -268,30 +268,30 @@ UBool NumberingSystem::isAlgorithmic() const {
 
 StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &status) {
     // TODO(ticket #11908): Init-once static cache, with u_cleanup() callback.
-    static StringEnumeration* availableNames = NULL;
+    static StringEnumeration* availableNames = nullptr;
 
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
 
-    if ( availableNames == NULL ) {
+    if ( availableNames == nullptr ) {
         // TODO: Simple array of UnicodeString objects, based on length of table resource?
-        LocalPointer<UVector> numsysNames(new UVector(uprv_deleteUObject, NULL, status), status);
+        LocalPointer<UVector> numsysNames(new UVector(uprv_deleteUObject, nullptr, status), status);
         if (U_FAILURE(status)) {
-            return NULL;
+            return nullptr;
         }
         
         UErrorCode rbstatus = U_ZERO_ERROR;
-        UResourceBundle *numberingSystemsInfo = ures_openDirect(NULL, "numberingSystems", &rbstatus);
-        numberingSystemsInfo = ures_getByKey(numberingSystemsInfo,"numberingSystems",numberingSystemsInfo,&rbstatus);
+        UResourceBundle *numberingSystemsInfo = ures_openDirect(nullptr, "numberingSystems", &rbstatus);
+        numberingSystemsInfo = ures_getByKey(numberingSystemsInfo, "numberingSystems", numberingSystemsInfo, &rbstatus);
         if(U_FAILURE(rbstatus)) {
             status = U_MISSING_RESOURCE_ERROR;
             ures_close(numberingSystemsInfo);
-            return NULL;
+            return nullptr;
         }
 
         while ( ures_hasNext(numberingSystemsInfo) && U_SUCCESS(status) ) {
-            UResourceBundle *nsCurrent = ures_getNextResource(numberingSystemsInfo, NULL, &rbstatus);
+            UResourceBundle *nsCurrent = ures_getNextResource(numberingSystemsInfo, nullptr, &rbstatus);
             if (rbstatus == U_MEMORY_ALLOCATION_ERROR) {
                 status = rbstatus;
                 break;
@@ -312,12 +312,12 @@ StringEnumeration* NumberingSystem::getAvailableNames(UErrorCode &status) {
 
         ures_close(numberingSystemsInfo);
         if (U_FAILURE(status)) {
-            return NULL;
+            return nullptr;
         }
         availableNames = new NumsysNameEnumeration(numsysNames.getAlias(), status);
-        if (availableNames == NULL) {
+        if (availableNames == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
+            return nullptr;
         }
         numsysNames.orphan();  // The names got adopted.
     }
@@ -335,7 +335,7 @@ NumsysNameEnumeration::snext(UErrorCode& status) {
     if (U_SUCCESS(status) && pos < fNumsysNames->size()) {
         return (const UnicodeString*)fNumsysNames->elementAt(pos++);
     }
-    return NULL;
+    return nullptr;
 }
 
 void
@@ -345,7 +345,7 @@ NumsysNameEnumeration::reset(UErrorCode& /*status*/) {
 
 int32_t
 NumsysNameEnumeration::count(UErrorCode& /*status*/) const {
-    return (fNumsysNames==NULL) ? 0 : fNumsysNames->size();
+    return (fNumsysNames==nullptr) ? 0 : fNumsysNames->size();
 }
 
 NumsysNameEnumeration::~NumsysNameEnumeration() {
