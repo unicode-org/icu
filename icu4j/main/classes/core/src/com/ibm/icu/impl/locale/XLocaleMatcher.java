@@ -2,13 +2,6 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.locale;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
 import com.ibm.icu.impl.locale.XCldrStub.ImmutableMultimap;
 import com.ibm.icu.impl.locale.XCldrStub.ImmutableSet;
 import com.ibm.icu.impl.locale.XCldrStub.LinkedHashMultimap;
@@ -18,6 +11,12 @@ import com.ibm.icu.impl.locale.XLocaleDistance.DistanceOption;
 import com.ibm.icu.util.LocalePriorityList;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 /**
  * Immutable class that picks best match between user's desired locales and application's supported locales.
@@ -39,7 +38,6 @@ public class XLocaleMatcher {
     private final Map<LSR, Set<ULocale>> supportedLanguages; // the locales in the collection are ordered!
     private final Set<ULocale> exactSupportedLocales; // the locales in the collection are ordered!
     private final ULocale defaultLanguage;
-
 
     public static class Builder {
         private Set<ULocale> supportedLanguagesList;

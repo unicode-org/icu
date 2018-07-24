@@ -739,7 +739,7 @@ public class XLocaleDistance {
      * ULocales must be in canonical, addLikelySubtags format. Returns distance
      */
     public int distanceRaw(
-            String desiredLang, String supportedlang,
+            String desiredLang, String supportedLang,
             String desiredScript, String supportedScript,
             String desiredRegion, String supportedRegion,
             int threshold,
@@ -747,7 +747,7 @@ public class XLocaleDistance {
 
         Output<DistanceTable> subtable = new Output<DistanceTable>();
 
-        int distance = languageDesired2Supported.getDistance(desiredLang, supportedlang, subtable, true);
+        int distance = languageDesired2Supported.getDistance(desiredLang, supportedLang, subtable, true);
         boolean scriptFirst = distanceOption == DistanceOption.SCRIPT_FIRST;
         if (scriptFirst) {
             distance >>= 2;
