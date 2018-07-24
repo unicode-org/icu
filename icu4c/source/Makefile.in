@@ -48,6 +48,8 @@ ALL_PKGCONFIG_SUFFIX=uc i18n
 DOXYGEN = @DOXYGEN@
 DOCZIP = icu-docs.zip
 
+INSTALL_ICU_CONFIG = @INSTALL_ICU_CONFIG@
+
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
@@ -64,7 +66,9 @@ SUBDIRS =  stubdata common i18n $(LAYOUTEX) $(ICUIO) $(TOOLS) $(DATASUBDIR) $(EX
 
 SECTION = 1
 
+ifeq ($(INSTALL_ICU_CONFIG),true)
 MANX_FILES = config/icu-config.$(SECTION)
+endif
 
 ALL_MAN_FILES = $(MANX_FILES)
 
@@ -187,7 +191,9 @@ install-icu: $(INSTALLED_BUILT_FILES)
 	@$(MKINSTALLDIRS) $(DESTDIR)$(libdir)/pkgconfig
 	$(INSTALL_DATA) $(ALL_PKGCONFIG_FILES) $(DESTDIR)$(libdir)/pkgconfig/
 	$(INSTALL_DATA) $(top_srcdir)/../LICENSE $(DESTDIR)$(pkgdatadir)/LICENSE
+ifeq ($(INSTALL_ICU_CONFIG),true)
 	$(INSTALL_SCRIPT) $(top_builddir)/config/icu-config $(DESTDIR)$(bindir)/icu-config
+endif
 	$(INSTALL_DATA) $(top_builddir)/config/Makefile.inc $(DESTDIR)$(pkglibdir)/Makefile.inc
 	$(INSTALL_DATA) $(top_builddir)/config/pkgdata.inc $(DESTDIR)$(pkglibdir)/pkgdata.inc
 #	@echo icuinfo.xml is built after make check.
@@ -350,7 +356,9 @@ config.status: $(srcdir)/configure $(srcdir)/common/unicode/uvernum.h
 
 install-manx: $(MANX_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
+ifneq ($(MANX_FILES),)
 	$(INSTALL_DATA) $? $(DESTDIR)$(mandir)/man$(SECTION)
+endif
 
 config/%.$(SECTION): $(srcdir)/config/%.$(SECTION).in
 	cd $(top_builddir) \

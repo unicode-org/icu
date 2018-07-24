@@ -100,6 +100,16 @@ UCONFIG_CPPFLAGS=""
 # such as -std
 UCONFIG_CFLAGS=""
 
+# Check whether to install icu-config
+AC_ARG_ENABLE([icu-config],
+    AS_HELP_STRING([--enable-icu-config], [install icu-config]),
+        [case "${enableval}" in
+            yes) enable_icu_config=true ;;
+            no) enable_icu_config=false ;;
+            *) AC_MSG_ERROR([bad value '${enableval}' for --enable-icu-config]) ;;
+        esac], [enable_icu_config=true])
+AC_SUBST(INSTALL_ICU_CONFIG, [$enable_icu_config])
+
 # Check whether to build debug libraries
 AC_MSG_CHECKING([whether to build debug libraries])
 enabled=no
