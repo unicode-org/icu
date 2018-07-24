@@ -217,6 +217,29 @@ public class RegexUtilitiesTest extends TestFmwk {
     }
 
     /**
+     * Check {@code \Q} and {@code \E}.
+     */
+    @Test
+    public void TestTransformQuotation() {
+        String[][] tests = {
+                {"a\\Qb", "a\\Qb"},
+                {"a\\Eb", "a\\Eb"},
+                {"\\Q[ba]", "\\Q[ba]"},
+                {"\\\\Q[ba]", "\\\\Q[ab]"},
+                {"\\Q[ba]\\e[ba]", "\\Q[ba]\\e[ba]"},
+                {"\\Q[ba]\\E[ba]", "\\Q[ba]\\E[ab]"},
+                {"\\Q[ba]\\\\E[ba]", "\\Q[ba]\\\\E[ab]"},
+        };
+        UnicodeRegex regex = new UnicodeRegex();
+        for (int i = 0; i < tests.length; ++i) {
+            final String source = tests[i][0];
+            String expected = tests[i][1];
+            String actual = regex.transform(source);
+            assertEquals(source, expected, actual);
+        }
+    }
+
+    /**
      * Utility for checking patterns
      */
     private void checkCharPattern(Pattern pat, String matchTitle, String shouldMatch, String shouldNotMatch) {
