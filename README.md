@@ -1,10 +1,18 @@
 #  International Components for Unicode
 
-This is the repository for the [International Components for Unicode](https://ssl.icu-project.org). The ICU-TC is a technical committee of [The Unicode Consortium](https://unicode.org).
-
-[![Build Status](https://travis-ci.org/unicode-org/icu.svg?branch=master)](https://travis-ci.org/unicode-org/icu)
+This is the repository for the [International Components for Unicode](https://ssl.icu-project.org). 
+The ICU project is under the stewardship of [The Unicode Consortium](https://unicode.org).
 
 ![ICU Logo](./tools/images/iculogo_64.png)
+
+### Build Status
+
+Build | Status
+------|-------
+TravisCI | [![Build Status](https://travis-ci.org/unicode-org/icu.svg?branch=master)](https://travis-ci.org/unicode-org/icu)
+Win x64 Release | [![Build status](https://unicode-icu.visualstudio.com/ICU/_apis/build/status/ICU4C%20Build%20and%20Test%20%5Bx64%20Release%5D%20(CI))](https://unicode-icu.visualstudio.com/ICU/_build/latest?definitionId=8)
+Win x86 Release | [![Build status](https://unicode-icu.visualstudio.com/ICU/_apis/build/status/ICU4C%20Build%20and%20Test%20%5Bx86%20Release%5D%20(CI))](https://unicode-icu.visualstudio.com/ICU/_build/latest?definitionId=7)
+
 
 ### Subdirectories and Information
 
