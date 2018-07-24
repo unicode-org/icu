@@ -1133,8 +1133,17 @@ RuleBasedNumberFormat::format(const DecimalQuantity &number,
 
             // TODO this section should probably be optimized. The DecimalFormat is shared in ICU4J.
             NumberFormat *decimalFormat = NumberFormat::createInstance(locale, UNUM_DECIMAL, status);
+            if (decimalFormat == nullptr) {
+                return appendTo;
+            }
             Formattable f;
-            f.adoptDecimalQuantity(new DecimalQuantity(number));
+            auto *decimalQuantity = new DecimalQuantity(number);
+            if (decimalQuantity == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                delete decimalFormat;
+                return appendTo;
+            }
+            f.adoptDecimalQuantity(decimalQuantity); // f now owns decimalQuantity.
             decimalFormat->format(f, appendTo, posIter, status);
             delete decimalFormat;
         }
@@ -1166,8 +1175,17 @@ RuleBasedNumberFormat::format(const DecimalQuantity &number,
 
             // TODO this section should probably be optimized. The DecimalFormat is shared in ICU4J.
             NumberFormat *decimalFormat = NumberFormat::createInstance(locale, UNUM_DECIMAL, status);
+            if (decimalFormat == nullptr) {
+                return appendTo;
+            }
             Formattable f;
-            f.adoptDecimalQuantity(new DecimalQuantity(number));
+            auto *decimalQuantity = new DecimalQuantity(number);
+            if (decimalQuantity == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                delete decimalFormat;
+                return appendTo;
+            }
+            f.adoptDecimalQuantity(decimalQuantity); // f now owns decimalQuantity.
             decimalFormat->format(f, appendTo, pos, status);
             delete decimalFormat;
         }
@@ -1312,11 +1330,19 @@ RuleBasedNumberFormat::format(int64_t number, NFRuleSet *ruleSet, UnicodeString&
 
             // TODO this section should probably be optimized. The DecimalFormat is shared in ICU4J.
             NumberFormat *decimalFormat = NumberFormat::createInstance(locale, UNUM_DECIMAL, status);
+            if (decimalFormat == nullptr) {
+                return toAppendTo;
+            }
             Formattable f;
             FieldPosition pos(FieldPosition::DONT_CARE);
-            DecimalQuantity *digitList = new DecimalQuantity();
-            digitList->setToLong(number);
-            f.adoptDecimalQuantity(digitList);
+            DecimalQuantity *decimalQuantity = new DecimalQuantity();
+            if (decimalQuantity == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                delete decimalFormat;
+                return toAppendTo;
+            }
+            decimalQuantity->setToLong(number);
+            f.adoptDecimalQuantity(decimalQuantity); // f now owns decimalQuantity.
             decimalFormat->format(f, toAppendTo, pos, status);
             delete decimalFormat;
         }
@@ -1547,7 +1573,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
             // from the description
             lenientParseRules = new UnicodeString();
             /* test for NULL */
-            if (lenientParseRules == 0) {
+            if (lenientParseRules == nullptr) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
@@ -1592,7 +1618,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
     }
 
     ruleSetDescriptions = new UnicodeString[numRuleSets];
-    if (ruleSetDescriptions == 0) {
+    if (ruleSetDescriptions == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
@@ -1603,7 +1629,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
         for (int32_t p = description.indexOf(gSemiPercent, 2, 0); p != -1; p = description.indexOf(gSemiPercent, 2, start)) {
             ruleSetDescriptions[curRuleSet].setTo(description, start, p + 1 - start);
             ruleSets[curRuleSet] = new NFRuleSet(this, ruleSetDescriptions, curRuleSet, status);
-            if (ruleSets[curRuleSet] == 0) {
+            if (ruleSets[curRuleSet] == nullptr) {
                 status = U_MEMORY_ALLOCATION_ERROR;
                 return;
             }
@@ -1612,7 +1638,7 @@ RuleBasedNumberFormat::init(const UnicodeString& rules, LocalizationInfo* locali
         }
         ruleSetDescriptions[curRuleSet].setTo(description, start, description.length() - start);
         ruleSets[curRuleSet] = new NFRuleSet(this, ruleSetDescriptions, curRuleSet, status);
-        if (ruleSets[curRuleSet] == 0) {
+        if (ruleSets[curRuleSet] == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -1863,13 +1889,10 @@ RuleBasedNumberFormat::initializeDecimalFormatSymbols(UErrorCode &status)
     // lazy-evaluate the DecimalFormatSymbols object.  This object
     // is shared by all DecimalFormat instances belonging to this
     // formatter
-    if (decimalFormatSymbols == NULL) {
-        DecimalFormatSymbols* temp = new DecimalFormatSymbols(locale, status);
+    if (decimalFormatSymbols == nullptr) {
+        LocalPointer<DecimalFormatSymbols> temp(new DecimalFormatSymbols(locale, status), status);
         if (U_SUCCESS(status)) {
-            decimalFormatSymbols = temp;
-        }
-        else {
-            delete temp;
+            decimalFormatSymbols = temp.orphan();
         }
     }
     return decimalFormatSymbols;
@@ -1889,17 +1912,14 @@ NFRule*
 RuleBasedNumberFormat::initializeDefaultInfinityRule(UErrorCode &status)
 {
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     if (defaultInfinityRule == NULL) {
         UnicodeString rule(UNICODE_STRING_SIMPLE("Inf: "));
         rule.append(getDecimalFormatSymbols()->getSymbol(DecimalFormatSymbols::kInfinitySymbol));
-        NFRule* temp = new NFRule(this, rule, status);
+        LocalPointer<NFRule> temp(new NFRule(this, rule, status), status);
         if (U_SUCCESS(status)) {
-            defaultInfinityRule = temp;
-        }
-        else {
-            delete temp;
+            defaultInfinityRule = temp.orphan();
         }
     }
     return defaultInfinityRule;
@@ -1983,7 +2003,11 @@ RuleBasedNumberFormat::createPluralFormat(UPluralType pluralType,
                                           const UnicodeString &pattern,
                                           UErrorCode& status) const
 {
-    return new PluralFormat(locale, pluralType, pattern, status);
+    auto *pf = new PluralFormat(locale, pluralType, pattern, status);
+    if (pf == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return pf;
 }
 
 /**
