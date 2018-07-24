@@ -1,7 +1,10 @@
 #  International Components for Unicode
 
-This is the repository for the [International Components for Unicode](https://ssl.icu-project.org). 
-The ICU project is under the stewardship of [The Unicode Consortium](https://unicode.org).
+This is the repository for the [International Components for Unicode](http://site.icu-project.org). 
+The ICU project is under the stewardship of [The Unicode Consortium](https://www.unicode.org).
+
+- Source: https://github.com/unicode-org/icu
+- Bugs: https://unicode-org.atlassian.net/projects/ICU
 
 ![ICU Logo](./tools/images/iculogo_64.png)
 
@@ -20,12 +23,6 @@ Win x86 Release | [![Build status](https://unicode-icu.visualstudio.com/ICU/_api
 - [`icu4j/`](./icu4j/) [ICU for Java](./icu4j/readme.html)
 - [`tools/`](./tools/) Tools
 - [`vendor/`](./vendor/) Vendor dependencies
-
-### Project Information
-
-- Web page: http://icu-project.org
-- Source: https://github.com/unicode-org/icu
-- Bugs: https://unicode-org.atlassian.net/projects/ICU
 
 ### License
 
