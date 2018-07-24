@@ -65,13 +65,15 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralKeywordEnumeration)
 
 PluralRules::PluralRules(UErrorCode& /*status*/)
 :   UObject(),
-    mRules(NULL)
+    mRules(NULL),
+    mInternalStatus(U_ZERO_ERROR)
 {
 }
 
 PluralRules::PluralRules(const PluralRules& other)
 : UObject(other),
-    mRules(NULL)
+    mRules(NULL),
+    mInternalStatus(U_ZERO_ERROR)
 {
     *this=other;
 }
@@ -86,18 +88,33 @@ SharedPluralRules::~SharedPluralRules() {
 
 PluralRules*
 PluralRules::clone() const {
-    return new PluralRules(*this);
+    PluralRules* newObj = new PluralRules(*this);
+    // Since clone doesn't have a 'status' parameter, the best we can do is return nullptr if
+    // the newly created object was not fully constructed properly (an error occurred).
+    if (newObj != nullptr && U_FAILURE(newObj->mInternalStatus)) {
+        delete newObj;
+        newObj = nullptr;
+    }
+    return newObj;
 }
 
 PluralRules&
 PluralRules::operator=(const PluralRules& other) {
     if (this != &other) {
         delete mRules;
-        if (other.mRules==NULL) {
-            mRules = NULL;
+        mInternalStatus = other.mInternalStatus;
+        if (U_FAILURE(mInternalStatus)) {
+            // bail out early if the object we were copying from was already 'invalid'.
+            return *this;
+        }
+        if (other.mRules == nullptr) {
+            mRules = nullptr;
         }
         else {
             mRules = new RuleChain(*other.mRules);
+            if (mRules == nullptr) {
+                mInternalStatus = U_MEMORY_ALLOCATION_ERROR;
+            }
         }
     }
 
@@ -105,6 +122,9 @@ PluralRules::operator=(const PluralRules& other) {
 }
 
 StringEnumeration* PluralRules::getAvailableLocales(UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
     StringEnumeration *result = new PluralAvailableLocalesEnumeration(status);
     if (result == NULL && U_SUCCESS(status)) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -214,10 +234,9 @@ PluralRules::internalForLocale(const Locale& locale, UPluralType type, UErrorCod
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
     }
-    PluralRules *newObj = new PluralRules(status);
-    if (newObj==NULL || U_FAILURE(status)) {
-        delete newObj;
-        return NULL;
+    LocalPointer<PluralRules> newObj(new PluralRules(status), status);
+    if (U_FAILURE(status)) {
+        return nullptr;
     }
     UnicodeString locRule = newObj->getRuleFromResource(locale, type, status);
     // TODO: which errors, if any, should be returned?
@@ -229,13 +248,13 @@ PluralRules::internalForLocale(const Locale& locale, UPluralType type, UErrorCod
         status = U_ZERO_ERROR;
     }
     PluralRuleParser parser;
-    parser.parse(locRule, newObj, status);
+    parser.parse(locRule, newObj.getAlias(), status);
         //  TODO: should rule parse errors be returned, or
         //        should we silently use default rules?
         //        Original impl used default rules.
         //        Ask the question to ICU Core.
 
-    return newObj;
+    return newObj.orphan();
 }
 
 UnicodeString
@@ -262,14 +281,18 @@ PluralRules::select(const IFixedDecimal &number) const {
 
 StringEnumeration*
 PluralRules::getKeywords(UErrorCode& status) const {
-    if (U_FAILURE(status))  return NULL;
-    StringEnumeration* nameEnumerator = new PluralKeywordEnumeration(mRules, status);
     if (U_FAILURE(status)) {
-      delete nameEnumerator;
-      return NULL;
+        return NULL;
     }
-
-    return nameEnumerator;
+    if (U_FAILURE(mInternalStatus)) {
+        status = mInternalStatus;
+        return nullptr;
+    }
+    LocalPointer<StringEnumeration> nameEnumerator(new PluralKeywordEnumeration(mRules, status), status);
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    return nameEnumerator.orphan();
 }
 
 double
@@ -367,8 +390,15 @@ getSamplesFromString(const UnicodeString &samples, double *dest,
 int32_t
 PluralRules::getSamples(const UnicodeString &keyword, double *dest,
                         int32_t destCapacity, UErrorCode& status) {
+    if (destCapacity == 0 || U_FAILURE(status)) {
+        return 0;
+    }
+    if (U_FAILURE(mInternalStatus)) {
+        status = mInternalStatus;
+        return 0;
+    }
     RuleChain *rc = rulesForKeyword(keyword);
-    if (rc == NULL || destCapacity == 0 || U_FAILURE(status)) {
+    if (rc == NULL) {
         return 0;
     }
     int32_t numSamples = getSamplesFromString(rc->fIntegerSamples, dest, destCapacity, status);
@@ -471,6 +501,10 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
                     orNode = orNode->next;
                 }
                 orNode->next= new OrConstraint();
+                if (orNode->next == nullptr) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                    break;
+                }
                 orNode=orNode->next;
                 orNode->next=NULL;
                 curAndConstraint = orNode->add();
@@ -494,6 +528,10 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
         case tEqual:
             U_ASSERT(curAndConstraint != NULL);
             curAndConstraint->rangeList = new UVector32(status);
+            if (curAndConstraint->rangeList == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                break;
+            }
             curAndConstraint->rangeList->addElement(-1, status);  // range Low
             curAndConstraint->rangeList->addElement(-1, status);  // range Hi
             rangeLowIdx = 0;
@@ -578,6 +616,10 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
                 insertAfter->fNext = newChain;
             }
             OrConstraint *orNode = new OrConstraint();
+            if (orNode == nullptr) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                break;
+            }
             newChain->ruleHeader = orNode;
             curAndConstraint = orNode->add();
             currentChain = newChain;
@@ -1341,21 +1383,36 @@ PluralKeywordEnumeration::PluralKeywordEnumeration(RuleChain *header, UErrorCode
         return;
     }
     fKeywordNames.setDeleter(uprv_deleteUObject);
-    UBool  addKeywordOther=TRUE;
-    RuleChain *node=header;
-    while(node!=NULL) {
-        fKeywordNames.addElement(new UnicodeString(node->fKeyword), status);
+    UBool  addKeywordOther = TRUE;
+    RuleChain *node = header;
+    while (node != NULL) {
+        auto newElem = new UnicodeString(node->fKeyword);
+        if (newElem == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        fKeywordNames.addElement(newElem, status);
         if (U_FAILURE(status)) {
+            delete newElem;
             return;
         }
         if (0 == node->fKeyword.compare(PLURAL_KEYWORD_OTHER, 5)) {
-            addKeywordOther= FALSE;
+            addKeywordOther = FALSE;
         }
-        node=node->fNext;
+        node = node->fNext;
     }
 
     if (addKeywordOther) {
-        fKeywordNames.addElement(new UnicodeString(PLURAL_KEYWORD_OTHER), status);
+        auto newElem = new UnicodeString(PLURAL_KEYWORD_OTHER);
+        if (newElem == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        fKeywordNames.addElement(newElem, status);
+        if (U_FAILURE(status)) {
+            delete newElem;
+            return;
+        }
     }
 }
 
