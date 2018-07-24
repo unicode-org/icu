@@ -115,9 +115,12 @@ PluralRules::operator=(const PluralRules& other) {
             if (mRules == nullptr) {
                 mInternalStatus = U_MEMORY_ALLOCATION_ERROR;
             }
+            else if (U_FAILURE(mRules->fInternalStatus)) {
+                // If the RuleChain wasn't fully copied, then set our status to failure as well.
+                mInternalStatus = mRules->fInternalStatus;
+            }
         }
     }
-
     return *this;
 }
 
@@ -144,16 +147,15 @@ PluralRules::createRules(const UnicodeString& description, UErrorCode& status) {
     }
 
     PluralRuleParser parser;
-    PluralRules *newRules = new PluralRules(status);
-    if (U_SUCCESS(status) && newRules == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
-    parser.parse(description, newRules, status);
+    LocalPointer<PluralRules> newRules(new PluralRules(status), status);
     if (U_FAILURE(status)) {
-        delete newRules;
-        newRules = NULL;
+        return NULL;
     }
-    return newRules;
+    parser.parse(description, newRules.getAlias(), status);
+    if (U_FAILURE(status)) {
+        newRules.adoptInstead(NULL);
+    }
+    return newRules.orphan();
 }
 
 
@@ -491,7 +493,7 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
         switch (type) {
         case tAnd:
             U_ASSERT(curAndConstraint != NULL);
-            curAndConstraint = curAndConstraint->add();
+            curAndConstraint = curAndConstraint->add(status);
             break;
         case tOr:
             {
@@ -507,7 +509,7 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
                 }
                 orNode=orNode->next;
                 orNode->next=NULL;
-                curAndConstraint = orNode->add();
+                curAndConstraint = orNode->add(status);
             }
             break;
         case tIs:
@@ -526,18 +528,20 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
         case tIn:
         case tWithin:
         case tEqual:
-            U_ASSERT(curAndConstraint != NULL);
-            curAndConstraint->rangeList = new UVector32(status);
-            if (curAndConstraint->rangeList == nullptr) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                break;
+            {
+                U_ASSERT(curAndConstraint != NULL);
+                LocalPointer<UVector32> newRangeList(new UVector32(status), status);
+                if (U_FAILURE(status)) {
+                    break;
+                }
+                curAndConstraint->rangeList = newRangeList.orphan();
+                curAndConstraint->rangeList->addElement(-1, status);  // range Low
+                curAndConstraint->rangeList->addElement(-1, status);  // range Hi
+                rangeLowIdx = 0;
+                rangeHiIdx  = 1;
+                curAndConstraint->value=PLURAL_RANGE_HIGH;
+                curAndConstraint->integerOnly = (type != tWithin);
             }
-            curAndConstraint->rangeList->addElement(-1, status);  // range Low
-            curAndConstraint->rangeList->addElement(-1, status);  // range Hi
-            rangeLowIdx = 0;
-            rangeHiIdx  = 1;
-            curAndConstraint->value=PLURAL_RANGE_HIGH;
-            curAndConstraint->integerOnly = (type != tWithin);
             break;
         case tNumber:
             U_ASSERT(curAndConstraint != NULL);
@@ -621,7 +625,7 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
                 break;
             }
             newChain->ruleHeader = orNode;
-            curAndConstraint = orNode->add();
+            curAndConstraint = orNode->add(status);
             currentChain = newChain;
             }
             break;
@@ -755,7 +759,6 @@ PluralRules::getRules() const {
     return rules;
 }
 
-
 AndConstraint::AndConstraint() {
     op = AndConstraint::NONE;
     opNum=-1;
@@ -764,19 +767,26 @@ AndConstraint::AndConstraint() {
     negated = FALSE;
     integerOnly = FALSE;
     digitsType = none;
-    next=NULL;
+    next = NULL;
+    fInternalStatus = U_ZERO_ERROR;
 }
 
-
 AndConstraint::AndConstraint(const AndConstraint& other) {
+    this->fInternalStatus = other.fInternalStatus;
+    if (U_FAILURE(fInternalStatus)) {
+        return; // stop early if the object we are copying from is invalid.
+    }
     this->op = other.op;
     this->opNum=other.opNum;
     this->value=other.value;
     this->rangeList=NULL;
     if (other.rangeList != NULL) {
-        UErrorCode status = U_ZERO_ERROR;
-        this->rangeList = new UVector32(status);
-        this->rangeList->assign(*other.rangeList, status);
+        LocalPointer<UVector32> newRangeList(new UVector32(fInternalStatus), fInternalStatus);
+        if (U_FAILURE(fInternalStatus)) {
+            return;
+        }
+        this->rangeList = newRangeList.orphan();
+        this->rangeList->assign(*other.rangeList, fInternalStatus);
     }
     this->integerOnly=other.integerOnly;
     this->negated=other.negated;
@@ -786,16 +796,18 @@ AndConstraint::AndConstraint(const AndConstraint& other) {
     }
     else {
         this->next = new AndConstraint(*other.next);
+        if (this->next == nullptr) {
+            fInternalStatus = U_MEMORY_ALLOCATION_ERROR;
+        }
     }
 }
 
 AndConstraint::~AndConstraint() {
     delete rangeList;
-    if (next!=NULL) {
-        delete next;
-    }
+    rangeList = nullptr;
+    delete next;
+    next = nullptr;
 }
-
 
 UBool
 AndConstraint::isFulfilled(const IFixedDecimal &number) {
@@ -838,46 +850,69 @@ AndConstraint::isFulfilled(const IFixedDecimal &number) {
     return result;
 }
 
-
 AndConstraint*
-AndConstraint::add()
-{
+AndConstraint::add(UErrorCode& status) {
+    if (U_FAILURE(fInternalStatus)) {
+        status = fInternalStatus;
+        return nullptr;
+    }
     this->next = new AndConstraint();
+    if (this->next == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
     return this->next;
 }
 
+
 OrConstraint::OrConstraint() {
-    childNode=NULL;
-    next=NULL;
+    childNode = NULL;
+    next = NULL;
+    fInternalStatus = U_ZERO_ERROR;
 }
 
 OrConstraint::OrConstraint(const OrConstraint& other) {
+    this->fInternalStatus = other.fInternalStatus;
+    if (U_FAILURE(fInternalStatus)) {
+        return; // stop early if the object we are copying from is invalid.
+    }
     if ( other.childNode == NULL ) {
         this->childNode = NULL;
     }
     else {
         this->childNode = new AndConstraint(*(other.childNode));
+        if (this->childNode == nullptr) {
+            fInternalStatus = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
     }
     if (other.next == NULL ) {
         this->next = NULL;
     }
     else {
         this->next = new OrConstraint(*(other.next));
+        if (this->next == nullptr) {
+            fInternalStatus = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+        if (U_FAILURE(this->next->fInternalStatus)) {
+            this->fInternalStatus = this->next->fInternalStatus;
+        }
     }
 }
 
 OrConstraint::~OrConstraint() {
-    if (childNode!=NULL) {
-        delete childNode;
-    }
-    if (next!=NULL) {
-        delete next;
-    }
+    delete childNode;
+    childNode = nullptr;
+    delete next;
+    next = nullptr;
 }
 
 AndConstraint*
-OrConstraint::add()
-{
+OrConstraint::add(UErrorCode& status) {
+    if (U_FAILURE(fInternalStatus)) {
+        status = fInternalStatus;
+        return nullptr;
+    }
     OrConstraint *curOrConstraint=this;
     {
         while (curOrConstraint->next!=NULL) {
@@ -885,6 +920,9 @@ OrConstraint::add()
         }
         U_ASSERT(curOrConstraint->childNode == NULL);
         curOrConstraint->childNode = new AndConstraint();
+        if (curOrConstraint->childNode == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        }
     }
     return curOrConstraint->childNode;
 }
@@ -909,18 +947,36 @@ OrConstraint::isFulfilled(const IFixedDecimal &number) {
 
 
 RuleChain::RuleChain(): fKeyword(), fNext(NULL), ruleHeader(NULL), fDecimalSamples(), fIntegerSamples(),
-                        fDecimalSamplesUnbounded(FALSE), fIntegerSamplesUnbounded(FALSE) {
+                        fDecimalSamplesUnbounded(FALSE), fIntegerSamplesUnbounded(FALSE), fInternalStatus(U_ZERO_ERROR) {
 }
 
 RuleChain::RuleChain(const RuleChain& other) :
         fKeyword(other.fKeyword), fNext(NULL), ruleHeader(NULL), fDecimalSamples(other.fDecimalSamples),
         fIntegerSamples(other.fIntegerSamples), fDecimalSamplesUnbounded(other.fDecimalSamplesUnbounded),
-        fIntegerSamplesUnbounded(other.fIntegerSamplesUnbounded) {
+        fIntegerSamplesUnbounded(other.fIntegerSamplesUnbounded), fInternalStatus(other.fInternalStatus) {
+    if (U_FAILURE(this->fInternalStatus)) {
+        return; // stop early if the object we are copying from is invalid. 
+    }
     if (other.ruleHeader != NULL) {
         this->ruleHeader = new OrConstraint(*(other.ruleHeader));
+        if (this->ruleHeader == nullptr) {
+            this->fInternalStatus = U_MEMORY_ALLOCATION_ERROR;
+        }
+        else if (U_FAILURE(this->ruleHeader->fInternalStatus)) {
+            // If the OrConstraint wasn't fully copied, then set our status to failure as well.
+            this->fInternalStatus = this->ruleHeader->fInternalStatus;
+            return; // exit early.
+        }
     }
     if (other.fNext != NULL ) {
         this->fNext = new RuleChain(*other.fNext);
+        if (this->fNext == nullptr) {
+            this->fInternalStatus = U_MEMORY_ALLOCATION_ERROR;
+        }
+        else if (U_FAILURE(this->fNext->fInternalStatus)) {
+            // If the RuleChain wasn't fully copied, then set our status to failure as well.
+            this->fInternalStatus = this->fNext->fInternalStatus;
+        }
     }
 }
 
@@ -928,7 +984,6 @@ RuleChain::~RuleChain() {
     delete fNext;
     delete ruleHeader;
 }
-
 
 UnicodeString
 RuleChain::select(const IFixedDecimal &number) const {
@@ -1053,6 +1108,9 @@ RuleChain::dumpRules(UnicodeString& result) {
 
 UErrorCode
 RuleChain::getKeywords(int32_t capacityOfKeywords, UnicodeString* keywords, int32_t& arraySize) const {
+    if (U_FAILURE(fInternalStatus)) {
+        return fInternalStatus;
+    }
     if ( arraySize < capacityOfKeywords-1 ) {
         keywords[arraySize++]=fKeyword;
     }

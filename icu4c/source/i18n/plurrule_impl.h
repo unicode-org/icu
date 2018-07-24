@@ -181,7 +181,6 @@ private:
        kRangeList,
        kSamples
     };
-
 };
 
 enum PluralOperand {
@@ -319,11 +318,12 @@ public:
     UBool   integerOnly;     // TRUE for 'within' rules.
     tokenType digitsType;    // n | i | v | f constraint.
     AndConstraint *next;
+    UErrorCode fInternalStatus;
 
     AndConstraint();
     AndConstraint(const AndConstraint& other);
     virtual ~AndConstraint();
-    AndConstraint* add();
+    AndConstraint* add(UErrorCode& status);
     // UBool isFulfilled(double number);
     UBool isFulfilled(const IFixedDecimal &number);
 };
@@ -332,11 +332,12 @@ class OrConstraint : public UMemory  {
 public:
     AndConstraint *childNode;
     OrConstraint *next;
+    UErrorCode fInternalStatus;
     OrConstraint();
 
     OrConstraint(const OrConstraint& other);
     virtual ~OrConstraint();
-    AndConstraint* add();
+    AndConstraint* add(UErrorCode& status);
     // UBool isFulfilled(double number);
     UBool isFulfilled(const IFixedDecimal &number);
 };
@@ -350,7 +351,7 @@ public:
     UnicodeString   fIntegerSamples;  //   without @decimal or @integer, otherwise unprocessed.
     UBool           fDecimalSamplesUnbounded;
     UBool           fIntegerSamplesUnbounded;
-
+    UErrorCode      fInternalStatus;
 
     RuleChain();
     RuleChain(const RuleChain& other);
