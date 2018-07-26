@@ -128,15 +128,11 @@ StringEnumeration* PluralRules::getAvailableLocales(UErrorCode &status) {
     if (U_FAILURE(status)) {
         return nullptr;
     }
-    StringEnumeration *result = new PluralAvailableLocalesEnumeration(status);
-    if (result == nullptr && U_SUCCESS(status)) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
+    LocalPointer<StringEnumeration> result(new PluralAvailableLocalesEnumeration(status), status);
     if (U_FAILURE(status)) {
-        delete result;
-        result = nullptr;
+        return nullptr;
     }
-    return result;
+    return result.orphan();
 }
 
 
@@ -145,7 +141,6 @@ PluralRules::createRules(const UnicodeString& description, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return nullptr;
     }
-
     PluralRuleParser parser;
     LocalPointer<PluralRules> newRules(new PluralRules(status), status);
     if (U_FAILURE(status)) {
@@ -171,19 +166,17 @@ template<> U_I18N_API
 const SharedPluralRules *LocaleCacheKey<SharedPluralRules>::createObject(
         const void * /*unused*/, UErrorCode &status) const {
     const char *localeId = fLoc.getName();
-    PluralRules *pr = PluralRules::internalForLocale(
-            localeId, UPLURAL_TYPE_CARDINAL, status);
+    LocalPointer<PluralRules> pr(PluralRules::internalForLocale(localeId, UPLURAL_TYPE_CARDINAL, status), status);
     if (U_FAILURE(status)) {
         return nullptr;
     }
-    SharedPluralRules *result = new SharedPluralRules(pr);
-    if (result == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        delete pr;
+    LocalPointer<SharedPluralRules> result(new SharedPluralRules(pr.getAlias()), status);
+    if (U_FAILURE(status)) {
         return nullptr;
     }
+    pr.orphan(); // result was successfully created so it nows pr.
     result->addRef();
-    return result;
+    return result.orphan();
 }
 
 /* end plural rules cache */
@@ -1489,7 +1482,7 @@ PluralKeywordEnumeration::reset(UErrorCode& /*status*/) {
 
 int32_t
 PluralKeywordEnumeration::count(UErrorCode& /*status*/) const {
-       return fKeywordNames.size();
+    return fKeywordNames.size();
 }
 
 PluralKeywordEnumeration::~PluralKeywordEnumeration() {
