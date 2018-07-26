@@ -417,20 +417,15 @@ CurrencyPluralInfo::deleteHash(Hashtable* hTable) {
 
 Hashtable*
 CurrencyPluralInfo::initHash(UErrorCode& status) {
-    if ( U_FAILURE(status) ) {
-        return NULL;
+    if (U_FAILURE(status)) {
+        return nullptr;
     }
-    Hashtable* hTable;
-    if ( (hTable = new Hashtable(TRUE, status)) == NULL ) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    }
-    if ( U_FAILURE(status) ) {
-        delete hTable; 
-        return NULL;
+    LocalPointer<Hashtable> hTable(new Hashtable(TRUE, status), status);
+    if (U_FAILURE(status)) {
+        return nullptr;
     }
     hTable->setValueComparator(ValueComparator);
-    return hTable;
+    return hTable.orphan();
 }
 
 void
@@ -448,14 +443,13 @@ CurrencyPluralInfo::copyHash(const Hashtable* source,
             const UnicodeString* key = (UnicodeString*)keyTok.pointer;
             const UHashTok valueTok = element->value;
             const UnicodeString* value = (UnicodeString*)valueTok.pointer;
-            UnicodeString* copy = new UnicodeString(*value);
-            if (copy == nullptr) {
-                status = U_MEMORY_ALLOCATION_ERROR;
+            LocalPointer<UnicodeString> copy(new UnicodeString(*value), status);
+            if (U_FAILURE(status)) {
                 return;
             }
             // The HashTable owns the 'copy' object after the call to put().
-            target->put(UnicodeString(*key), copy, status);
-            if ( U_FAILURE(status) ) {
+            target->put(UnicodeString(*key), copy.orphan(), status);
+            if (U_FAILURE(status)) {
                 return;
             }
         }
