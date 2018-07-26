@@ -65,26 +65,26 @@ static const char gDecimalFormatTag[]="decimalFormat";
 static const char gCurrUnitPtnTag[]="CurrencyUnitPatterns";
 
 CurrencyPluralInfo::CurrencyPluralInfo(UErrorCode& status)
-:   fPluralCountToCurrencyUnitPattern(NULL),
-    fPluralRules(NULL),
-    fLocale(NULL),
+:   fPluralCountToCurrencyUnitPattern(nullptr),
+    fPluralRules(nullptr),
+    fLocale(nullptr),
     fInternalStatus(U_ZERO_ERROR) {
     initialize(Locale::getDefault(), status);
 }
 
 CurrencyPluralInfo::CurrencyPluralInfo(const Locale& locale, UErrorCode& status)
-:   fPluralCountToCurrencyUnitPattern(NULL),
-    fPluralRules(NULL),
-    fLocale(NULL),
+:   fPluralCountToCurrencyUnitPattern(nullptr),
+    fPluralRules(nullptr),
+    fLocale(nullptr),
     fInternalStatus(U_ZERO_ERROR) {
     initialize(locale, status);
 }
 
 CurrencyPluralInfo::CurrencyPluralInfo(const CurrencyPluralInfo& info) 
 :   UObject(info),
-    fPluralCountToCurrencyUnitPattern(NULL),
-    fPluralRules(NULL),
-    fLocale(NULL),
+    fPluralCountToCurrencyUnitPattern(nullptr),
+    fPluralRules(nullptr),
+    fLocale(nullptr),
     fInternalStatus(U_ZERO_ERROR) {
     *this = info;
 }
@@ -120,7 +120,7 @@ CurrencyPluralInfo::operator=(const CurrencyPluralInfo& info) {
             return *this;
         }
     } else {
-        fPluralRules = NULL;
+        fPluralRules = nullptr;
     }
     if (info.fLocale) {
         fLocale = info.fLocale->clone();
@@ -135,7 +135,7 @@ CurrencyPluralInfo::operator=(const CurrencyPluralInfo& info) {
             return *this;
         }
     } else {
-        fLocale = NULL;
+        fLocale = nullptr;
     }
     return *this;
 }
@@ -143,11 +143,11 @@ CurrencyPluralInfo::operator=(const CurrencyPluralInfo& info) {
 
 CurrencyPluralInfo::~CurrencyPluralInfo() {
     deleteHash(fPluralCountToCurrencyUnitPattern);
-    fPluralCountToCurrencyUnitPattern = NULL;
+    fPluralCountToCurrencyUnitPattern = nullptr;
     delete fPluralRules;
     delete fLocale;
-    fPluralRules = NULL;
-    fLocale = NULL;
+    fPluralRules = nullptr;
+    fLocale = nullptr;
 }
 
 UBool
@@ -191,13 +191,13 @@ CurrencyPluralInfo::getCurrencyPluralPattern(const UnicodeString&  pluralCount,
                                              UnicodeString& result) const {
     const UnicodeString* currencyPluralPattern = 
         (UnicodeString*)fPluralCountToCurrencyUnitPattern->get(pluralCount);
-    if (currencyPluralPattern == NULL) {
+    if (currencyPluralPattern == nullptr) {
         // fall back to "other"
         if (pluralCount.compare(gPluralCountOther, 5)) {
             currencyPluralPattern = 
                 (UnicodeString*)fPluralCountToCurrencyUnitPattern->get(UnicodeString(TRUE, gPluralCountOther, 5));
         }
-        if (currencyPluralPattern == NULL) {
+        if (currencyPluralPattern == nullptr) {
             // no currencyUnitPatterns defined, 
             // fallback to predefined defult.
             // This should never happen when ICU resource files are
@@ -295,8 +295,8 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
         return;
     }
     UErrorCode ec = U_ZERO_ERROR;
-    UResourceBundle *rb = ures_open(NULL, loc.getName(), &ec);
-    UResourceBundle *numElements = ures_getByKeyWithFallback(rb, gNumberElementsTag, NULL, &ec);
+    UResourceBundle *rb = ures_open(nullptr, loc.getName(), &ec);
+    UResourceBundle *numElements = ures_getByKeyWithFallback(rb, gNumberElementsTag, nullptr, &ec);
     rb = ures_getByKeyWithFallback(numElements, ns->getName(), rb, &ec);
     rb = ures_getByKeyWithFallback(rb, gPatternsTag, rb, &ec);
     int32_t ptnLen;
@@ -309,7 +309,7 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
         numberStylePattern = ures_getStringByKeyWithFallback(rb, gDecimalFormatTag, &ptnLen, &ec);
     }
     int32_t numberStylePatternLen = ptnLen;
-    const UChar* negNumberStylePattern = NULL;
+    const UChar* negNumberStylePattern = nullptr;
     int32_t negNumberStylePatternLen = 0;
     // TODO: Java
     // parse to check whether there is ";" separator in the numberStylePattern
@@ -339,7 +339,7 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
     }
 
     UResourceBundle *currRb = ures_open(U_ICUDATA_CURR, loc.getName(), &ec);
-    UResourceBundle *currencyRes = ures_getByKeyWithFallback(currRb, gCurrUnitPtnTag, NULL, &ec);
+    UResourceBundle *currencyRes = ures_getByKeyWithFallback(currRb, gCurrUnitPtnTag, nullptr, &ec);
     
 #ifdef CURRENCY_PLURAL_INFO_DEBUG
     std::cout << "in set up\n";
@@ -347,7 +347,7 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
     StringEnumeration* keywords = fPluralRules->getKeywords(ec);
     if (U_SUCCESS(ec)) {
         const char* pluralCount;
-        while (((pluralCount = keywords->next(NULL, ec)) != NULL) && U_SUCCESS(ec)) {
+        while (((pluralCount = keywords->next(nullptr, ec)) != nullptr) && U_SUCCESS(ec)) {
             int32_t ptnLen;
             UErrorCode err = U_ZERO_ERROR;
             const UChar* patternChars = ures_getStringByKeyWithFallback(currencyRes, pluralCount, &ptnLen, &err);
@@ -401,18 +401,18 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
 
 void
 CurrencyPluralInfo::deleteHash(Hashtable* hTable) {
-    if ( hTable == NULL ) {
+    if ( hTable == nullptr ) {
         return;
     }
     int32_t pos = UHASH_FIRST;
-    const UHashElement* element = NULL;
-    while ( (element = hTable->nextElement(pos)) != NULL ) {
+    const UHashElement* element = nullptr;
+    while ( (element = hTable->nextElement(pos)) != nullptr ) {
         const UHashTok valueTok = element->value;
         const UnicodeString* value = (UnicodeString*)valueTok.pointer;
         delete value;
     }
     delete hTable;
-    hTable = NULL;
+    hTable = nullptr;
 }
 
 Hashtable*
@@ -436,9 +436,9 @@ CurrencyPluralInfo::copyHash(const Hashtable* source,
         return;
     }
     int32_t pos = UHASH_FIRST;
-    const UHashElement* element = NULL;
+    const UHashElement* element = nullptr;
     if ( source ) {
-        while ( (element = source->nextElement(pos)) != NULL ) {
+        while ( (element = source->nextElement(pos)) != nullptr ) {
             const UHashTok keyTok = element->key;
             const UnicodeString* key = (UnicodeString*)keyTok.pointer;
             const UHashTok valueTok = element->value;
