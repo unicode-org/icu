@@ -86,10 +86,6 @@
     <property name="external-jars" value="lib"/>
 
     <!-- Java version check -->
-    <condition property="is.java6">
-        <matches string="${java.version}" pattern="1\.6\.\d.*"/>
-    </condition>
-
     <condition property="is.java7">
         <matches string="${java.version}" pattern="1\.7\.\d.*"/>
     </condition>
@@ -131,16 +127,10 @@
         </or>
     </condition>
 
-    <condition property="is.java6.plus">
-        <or>
-            <isset property="is.java6"/>
-            <isset property="is.java7.plus"/>
-        </or>
-    </condition>
     <fail message="The JDK version is too old or unknown.">
         <condition>
             <not>
-                <isset property="is.java6.plus"/>
+                <isset property="is.java7.plus"/>
             </not>
         </condition>
     </fail>
@@ -660,7 +650,7 @@
         </icu-junit>
     </target>
 
-    <target name="localespiCheck" if="is.java6.plus" depends="info, localespi, localespi-tests" description="Run the ICU4J Locale SPI test suite">
+    <target name="localespiCheck" depends="info, localespi, localespi-tests" description="Run the ICU4J Locale SPI test suite">
         <antcall target="_localespiCheck"/>
         <fail message="test failed" if="icu-junit-failure" />
     </target>
@@ -750,7 +740,7 @@
         <condition property="release.build.config.ok">
             <and>
                 <isset property="is.java8"/>
-                <isset property="java6.bootclasspath"/>
+                <isset property="java7.bootclasspath"/>
                 <isset property="jcite.libs"/>
             </and>
         </condition>
@@ -760,8 +750,8 @@
         <condition property="disp.is.java8" value="${java.version}" else="${java.version} - Must be 1.8!">
             <isset property="is.java8"/>
         </condition>
-        <condition property="disp.java6.bootclasspath" value="${java6.bootclasspath}" else="Not Defined!">
-            <isset property="java6.bootclasspath"/>
+        <condition property="disp.java7.bootclasspath" value="${java7.bootclasspath}" else="Not Defined!">
+            <isset property="java7.bootclasspath"/>
         </condition>
         <condition property="disp.jcite.libs" value="${jcite.libs}" else="Not Defined!">
             <isset property="jcite.libs"/>
@@ -769,8 +759,8 @@
 
         <echo message="################################################################"/>
         <echo message="[WARNING] Insufficient Build Configuration for ICU4J Release"/>
-        <echo message="JDK Tools Version:              ${disp.is.java8}"/>
-        <echo message="JRE 6 System Library Path:      ${disp.java6.bootclasspath}"/>
+        <echo message="JDK 8 Tools:                    ${disp.is.java8}"/>
+        <echo message="JRE 7 System Library Path:      ${disp.java7.bootclasspath}"/>
         <echo message="JCite Library Path:             ${disp.jcite.libs}"/>
         <echo message="################################################################"/>
     </target>
@@ -1192,11 +1182,7 @@
         <ant dir="${icu4j.langdata.dir}" inheritAll="false"/>
     </target>
 
-    <target name="localespi" if="is.java6.plus" description="Build Locale SPI classes">
-        <antcall target="_build-localespi"/>
-    </target>
-
-    <target name="_build-localespi" depends="core, collate, currdata, langdata, regiondata">
+    <target name="localespi" depends="core, collate, currdata, langdata, regiondata" description="Build Locale SPI classes">
         <ant dir="${icu4j.localespi.dir}" inheritAll="false"/>
     </target>
 
@@ -1232,11 +1218,7 @@
         </ant>
     </target>
 
-    <target name="localespi-tests" if="is.java6.plus" description="Build Locale SPI tests">
-        <antcall target="_build-localespi-tests"/>
-    </target>
-
-    <target name="_build-localespi-tests" depends="localespi, test-framework">
+    <target name="localespi-tests" depends="localespi, test-framework" description="Build Locale SPI tests">
         <ant dir="${icu4j.localespi-tests.dir}" inheritAll="false">
             <reference refid="junit.jars"/>
         </ant>
@@ -1270,7 +1252,7 @@
         <ant dir="${icu4j.tools.dir}" inheritAll="false"/>
     </target>
 
-    <target name="perf-tests" if="is.java6.plus" depends="core, charset, collate, tools" description="Build performance test classes">
+    <target name="perf-tests" depends="core, charset, collate, tools" description="Build performance test classes">
         <ant dir="${icu4j.perf-tests.dir}" inheritAll="false"/>
     </target>
 
@@ -1300,9 +1282,6 @@
     </target>
 
     <target name="_docsStyleSheet">
-        <condition property="docs.style.sheet" value="stylesheet6.css">
-            <isset property="is.java6"/>
-        </condition>
         <condition property="docs.style.sheet" value="stylesheet7.css">
             <isset property="is.java7"/>
         </condition>
@@ -1620,8 +1599,8 @@
 
     <!-- Release management targets -->
     <target name="checktags" depends="info, build-tools" description="Check API tags before release">
-        <javadoc source="1.6"
-                 bootclasspath="${java6.bootclasspath}"
+        <javadoc source="1.7"
+                 bootclasspath="${java7.bootclasspath}"
                  encoding="${java.src.encoding}">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
@@ -1642,8 +1621,8 @@
 
     <target name="gatherapi" depends="info, build-tools" description="Run API database generator tool">
         <mkdir dir="${out.dir}"/>
-        <javadoc source="1.6"
-                 bootclasspath="${java6.bootclasspath}"
+        <javadoc source="1.7"
+                 bootclasspath="${java7.bootclasspath}"
                  encoding="${java.src.encoding}">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
@@ -1688,8 +1667,8 @@
 
     <target name="gatherapiOld" depends="info, build-tools" description="Run API database generator tool (Pre Java 5 style)">
         <mkdir dir="${out.dir}"/>
-        <javadoc source="1.6"
-                 bootclasspath="${java6.bootclasspath}"
+        <javadoc source="1.7"
+                 bootclasspath="${java7.bootclasspath}"
                  encoding="${java.src.encoding}">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
