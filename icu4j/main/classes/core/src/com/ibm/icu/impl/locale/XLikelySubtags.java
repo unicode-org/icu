@@ -3,7 +3,6 @@
 package com.ibm.icu.impl.locale;
 
 import java.util.Collection;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
