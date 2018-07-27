@@ -15,8 +15,8 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.text.PluralRules.FixedDecimal;
@@ -834,10 +834,10 @@ public class PluralFormat extends UFormat {
         }
         PluralFormat pf = (PluralFormat)rhs;
         return
-            Utility.objectEquals(ulocale, pf.ulocale) &&
-            Utility.objectEquals(pluralRules, pf.pluralRules) &&
-            Utility.objectEquals(msgPattern, pf.msgPattern) &&
-            Utility.objectEquals(numberFormat, pf.numberFormat);
+            Objects.equals(ulocale, pf.ulocale) &&
+            Objects.equals(pluralRules, pf.pluralRules) &&
+            Objects.equals(msgPattern, pf.msgPattern) &&
+            Objects.equals(numberFormat, pf.numberFormat);
     }
 
     /**

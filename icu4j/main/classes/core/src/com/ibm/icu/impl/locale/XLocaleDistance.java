@@ -14,6 +14,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -21,7 +22,6 @@ import java.util.TreeSet;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Row.R4;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.locale.XCldrStub.CollectionUtilities;
 import com.ibm.icu.impl.locale.XCldrStub.ImmutableMap;
 import com.ibm.icu.impl.locale.XCldrStub.ImmutableMultimap;
@@ -56,7 +56,7 @@ public class XLocaleDistance {
     static final LocaleDisplayNames english = LocaleDisplayNames.getInstance(ULocale.ENGLISH);
 
     private static List<R4<String, String, Integer, Boolean>> xGetLanguageMatcherData() {
-        List<R4<String, String, Integer, Boolean>> distanceList = new ArrayList<R4<String, String, Integer, Boolean>>();
+        List<R4<String, String, Integer, Boolean>> distanceList = new ArrayList<>();
 
         ICUResourceBundle suppData = LocaleMatcher.getICUSupplementalData();
         ICUResourceBundle languageMatchingNew = suppData.findTopLevel("languageMatchingNew");
@@ -84,7 +84,7 @@ public class XLocaleDistance {
         ICUResourceBundle writtenParadigmLocales = (ICUResourceBundle) languageMatchingInfo.get("written")
                 .get("paradigmLocales");
         //      paradigmLocales{ "en", "en-GB",... }
-        HashSet<String> paradigmLocales = new HashSet<String>(Arrays.asList(writtenParadigmLocales.getStringArray()));
+        HashSet<String> paradigmLocales = new HashSet<>(Arrays.asList(writtenParadigmLocales.getStringArray()));
         return Collections.unmodifiableSet(paradigmLocales);
     }
 
@@ -96,7 +96,7 @@ public class XLocaleDistance {
                 .get("matchVariable");
         //        matchVariable{ americas{"019"} cnsar{"HK+MO"} ...}
 
-        HashMap<String,String> matchVariables = new HashMap<String,String>();
+        HashMap<String,String> matchVariables = new HashMap<>();
         for (Enumeration<String> enumer = writtenMatchVariables.getKeys(); enumer.hasMoreElements(); ) {
             String key = enumer.nextElement();
             matchVariables.put(key, writtenMatchVariables.getString(key));
@@ -255,8 +255,8 @@ public class XLocaleDistance {
     }
 
     static class IdMakerFull<T> implements IdMapper<T,Integer> {
-        private final Map<T, Integer> objectToInt = new HashMap<T, Integer>();
-        private final List<T> intToObject = new ArrayList<T>();
+        private final Map<T, Integer> objectToInt = new HashMap<>();
+        private final List<T> intToObject = new ArrayList<>();
         final String name; // for debugging
 
         IdMakerFull(String name) {
@@ -358,12 +358,12 @@ public class XLocaleDistance {
                     (obj != null
                     && obj.getClass() == this.getClass()
                     && distance == (other = (StringDistanceNode) obj).distance
-                    && Utility.equals(distanceTable, other.distanceTable)
+                    && Objects.equals(distanceTable, other.distanceTable)
                     && super.equals(other));
         }
         @Override
         public int hashCode() {
-            return distance ^ Utility.hashCode(distanceTable);
+            return distance ^ Objects.hashCode(distanceTable);
         }
 
         StringDistanceNode(int distance) {
@@ -511,7 +511,7 @@ public class XLocaleDistance {
             DistanceNode node = getNode(desired, supported);
             if (node == null) {
                 // get the distance it would have
-                Output<DistanceTable> node2 = new Output<DistanceTable>();
+                Output<DistanceTable> node2 = new Output<>();
                 int distance = getDistance(desired, supported, node2, true);
                 // now add it
                 node = addSubtable(desired, supported, distance);
@@ -589,7 +589,7 @@ public class XLocaleDistance {
 
         @Override
         public String toString(boolean abbreviate) {
-            return toString(abbreviate, "", new IdMakerFull<Object>("interner"), new StringBuilder()).toString();
+            return toString(abbreviate, "", new IdMakerFull<>("interner"), new StringBuilder()).toString();
         }
 
         public StringBuilder toString(boolean abbreviate, String indent, IdMakerFull<Object> intern, StringBuilder buffer) {
@@ -638,7 +638,7 @@ public class XLocaleDistance {
 
         @Override
         public Set<String> getCloser(int threshold) {
-            Set<String> result = new HashSet<String>();
+            Set<String> result = new HashSet<>();
             for (Entry<String, Map<String, DistanceNode>> e1 : subtables.entrySet()) {
                 String desired = e1.getKey();
                 for (Entry<String, DistanceNode> e2 : e1.getValue().entrySet()) {
@@ -671,9 +671,9 @@ public class XLocaleDistance {
 
         @Override
         public Map<String, Set<String>> getInternalMatches() {
-            Map<String, Set<String>> result = new LinkedHashMap<String, Set<String>>();
+            Map<String, Set<String>> result = new LinkedHashMap<>();
             for (Entry<String, Map<String, DistanceNode>> entry : subtables.entrySet()) {
-                result.put(entry.getKey(), new LinkedHashSet<String>(entry.getValue().keySet()));
+                result.put(entry.getKey(), new LinkedHashSet<>(entry.getValue().keySet()));
             }
             return result;
         }
@@ -745,7 +745,7 @@ public class XLocaleDistance {
             int threshold,
             DistanceOption distanceOption) {
 
-        Output<DistanceTable> subtable = new Output<DistanceTable>();
+        Output<DistanceTable> subtable = new Output<>();
 
         int distance = languageDesired2Supported.getDistance(desiredLang, supportedlang, subtable, true);
         boolean scriptFirst = distanceOption == DistanceOption.SCRIPT_FIRST;
@@ -874,9 +874,9 @@ public class XLocaleDistance {
 
         @SuppressWarnings({"unchecked", "rawtypes"})
         List<Row.R4<List<String>, List<String>, Integer, Boolean>>[] sorted = new ArrayList[3];
-        sorted[0] = new ArrayList<Row.R4<List<String>, List<String>, Integer, Boolean>>();
-        sorted[1] = new ArrayList<Row.R4<List<String>, List<String>, Integer, Boolean>>();
-        sorted[2] = new ArrayList<Row.R4<List<String>, List<String>, Integer, Boolean>>();
+        sorted[0] = new ArrayList<>();
+        sorted[1] = new ArrayList<>();
+        sorted[2] = new ArrayList<>();
 
         // sort the rules so that the language-only are first, then the language-script, and finally the language-script-region.
         for (R4<String, String, Integer, Boolean> info : xGetLanguageMatcherData()) {
@@ -920,8 +920,8 @@ public class XLocaleDistance {
             //            if (rule[0].equals("en_*_*") || rule[1].equals("*_*_*")) {
             //                int debug = 0;
             //            }
-            List<String> desiredBase = new ArrayList<String>(bar.splitToList(rule[0]));
-            List<String> supportedBase = new ArrayList<String>(bar.splitToList(rule[1]));
+            List<String> desiredBase = new ArrayList<>(bar.splitToList(rule[0]));
+            List<String> supportedBase = new ArrayList<>(bar.splitToList(rule[1]));
             Integer distance = 100-Integer.parseInt(rule[2]);
             printMatchXml(desiredBase, supportedBase, distance, false);
 
@@ -971,7 +971,7 @@ public class XLocaleDistance {
     }
 
     private static String fixedName(List<String> match) {
-        List<String> alt = new ArrayList<String>(match);
+        List<String> alt = new ArrayList<>(match);
         int size = alt.size();
         assert size >= 1 && size <= 3;
 
@@ -1132,7 +1132,7 @@ public class XLocaleDistance {
         static class Builder {
             final private Multimap<String, String> regionToRawPartition = TreeMultimap.create();
             final private RegionSet regionSet = new RegionSet();
-            final private Set<ULocale> paradigms = new LinkedHashSet<ULocale>();
+            final private Set<ULocale> paradigms = new LinkedHashSet<>();
 
             void add(String variable, String barString) {
                 Set<String> tempRegions = regionSet.parseSet(barString);
@@ -1158,9 +1158,9 @@ public class XLocaleDistance {
             }
 
             RegionMapper build() {
-                final IdMakerFull<Collection<String>> id = new IdMakerFull<Collection<String>>("partition");
+                final IdMakerFull<Collection<String>> id = new IdMakerFull<>("partition");
                 Multimap<String,String> variableToPartitions = TreeMultimap.create();
-                Map<String,String> regionToPartition = new TreeMap<String,String>();
+                Map<String,String> regionToPartition = new TreeMap<>();
                 Multimap<String,String> partitionToRegions = TreeMultimap.create();
 
                 for (Entry<String, Set<String>> e : regionToRawPartition.asMap().entrySet()) {
@@ -1207,7 +1207,7 @@ public class XLocaleDistance {
     private static class RegionSet {
         private enum Operation {add, remove}
         // temporaries used in processing
-        final private Set<String> tempRegions = new TreeSet<String>();
+        final private Set<String> tempRegions = new TreeSet<>();
         private Operation operation = null;
 
         private Set<String> parseSet(String barString) {
@@ -1235,7 +1235,7 @@ public class XLocaleDistance {
         }
 
         private Set<String> inverse() {
-            TreeSet<String> result = new TreeSet<String>(ALL_FINAL_REGIONS);
+            TreeSet<String> result = new TreeSet<>(ALL_FINAL_REGIONS);
             result.removeAll(tempRegions);
             return result;
         }
@@ -1295,7 +1295,7 @@ public class XLocaleDistance {
             if (toId(item) != null) {
                 return (Map<K, T>) intern(item);
             }
-            Map<K,T> copy = new LinkedHashMap<K,T>();
+            Map<K,T> copy = new LinkedHashMap<>();
             for (Entry<K,T> entry : item.entrySet()) {
                 T value = entry.getValue();
                 if (value instanceof Map) {
