@@ -3,6 +3,15 @@
 package com.ibm.icu.impl.locale;
 
 import java.util.Collection;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
+
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Utility;
@@ -13,13 +22,6 @@ import com.ibm.icu.util.ICUException;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Minimize;
 import com.ibm.icu.util.UResourceBundle;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeMap;
 
 public class XLikelySubtags {
 
