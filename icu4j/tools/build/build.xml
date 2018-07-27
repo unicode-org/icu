@@ -13,7 +13,6 @@
     <!-- before importing common-targets.xml -->
     <condition property="alt.src.dir" value="out/tmp-src-pre8">
         <or>
-            <equals arg1="${ant.java.version}" arg2="1.6"/>
             <equals arg1="${ant.java.version}" arg2="1.7"/>
         </or>
     </condition>
