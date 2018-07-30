@@ -143,8 +143,8 @@ public class XLikelySubtags {
                 throw new ICUException("too many subtags");
             }
             String lang = parts[0].toLowerCase();
-            String p2 = parts.length < 2 ? "": parts[1];
-            String p3 = parts.length < 3 ? "": parts[2];
+            String p2 = parts.length < 2 ? "" : parts[1];
+            String p3 = parts.length < 3 ? "" : parts[2];
             return p2.length() < 4 ? new LSR(lang, "", p2) : new LSR(lang, p2, p3);
 
             //            Matcher matcher = LANGUAGE_PATTERN.matcher(languageIdentifier);
@@ -166,7 +166,7 @@ public class XLikelySubtags {
         public static LSR fromMaximalized(String language, String script, String region) {
             String canonicalLanguage = LANGUAGE_ALIASES.getCanonical(language);
             // script is ok
-            String canonicalRegion = REGION_ALIASES.getCanonical(region); // getCanonical(REGION_ALIASES.get(region));
+            String canonicalRegion = REGION_ALIASES.getCanonical(region);
 
             return DEFAULT.maximize(canonicalLanguage, script, canonicalRegion);
         }

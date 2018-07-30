@@ -40,7 +40,6 @@ public class XLocaleMatcher {
     private final Set<ULocale> exactSupportedLocales; // the locales in the collection are ordered!
     private final ULocale defaultLanguage;
 
-
     public static class Builder {
         private Set<ULocale> supportedLanguagesList;
         private int thresholdDistance = -1;
