@@ -16,8 +16,63 @@ import java.util.NoSuchElementException;
  * @provisional This API might change or be removed in a future release.
  */
 public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
+    /**
+     * Selectors for how getRange() should report value ranges overlapping with surrogates.
+     * Most users should use NORMAL.
+     *
+     * @see #getRange
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
+    public enum RangeOption {
+        /**
+         * getRange() enumerates all same-value ranges as stored in the trie.
+         * Most users should use this option.
+         *
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
+        NORMAL,
+        /**
+         * getRange() enumerates all same-value ranges as stored in the trie,
+         * except that lead surrogates (U+D800..U+DBFF) are treated as having the
+         * surrogateValue, which is passed to getRange() as a separate parameter.
+         * The surrogateValue is not transformed via filter().
+         * See {@link Character#isHighSurrogate}.
+         *
+         * <p>Most users should use NORMAL instead.
+         *
+         * <p>This option is useful for tries that map surrogate code *units* to
+         * special values optimized for UTF-16 string processing
+         * or for special error behavior for unpaired surrogates,
+         * but those values are not to be associated with the lead surrogate code *points*.
+         *
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
+        FIXED_LEAD_SURROGATES,
+        /**
+         * getRange() enumerates all same-value ranges as stored in the trie,
+         * except that all surrogates (U+D800..U+DFFF) are treated as having the
+         * surrogateValue, which is passed to getRange() as a separate parameter.
+         * The surrogateValue is not transformed via filter().
+         * See {@link Character#isSurrogate}.
+         *
+         * <p>Most users should use NORMAL instead.
+         *
+         * <p>This option is useful for tries that map surrogate code *units* to
+         * special values optimized for UTF-16 string processing
+         * or for special error behavior for unpaired surrogates,
+         * but those values are not to be associated with the lead surrogate code *points*.
+         *
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
+        FIXED_ALL_SURROGATES
+    }
+
     // For getRange() & Iterator.
-    public interface HandleValue {
+    public interface FilterValue {
         public int apply(int value);
     }
 
@@ -81,6 +136,9 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * </pre>
      *
      * <p>This class is not intended for public subclassing.
+     *
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
      */
     public class StringIterator {
         /** @internal */
@@ -133,20 +191,24 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
 
     public abstract int get(int c);
 
-    public abstract boolean getRange(int start, HandleValue handleValue, Range range);
+    public abstract boolean getRange(int start, FilterValue filter, Range range);
 
-    public boolean getRangeFixedSurr(int start, boolean allSurr, int surrValue,
-            HandleValue handleValue, Range range) {
-        if (!getRange(start, handleValue, range)) {
+    public boolean getRange(int start, RangeOption option, int surrogateValue,
+            FilterValue filter, Range range) {
+        assert option != null;
+        if (!getRange(start, filter, range)) {
             return false;
         }
-        int surrEnd = allSurr ? 0xdfff : 0xdbff;
+        if (option == RangeOption.NORMAL) {
+            return true;
+        }
+        int surrEnd = option == RangeOption.FIXED_ALL_SURROGATES ? 0xdfff : 0xdbff;
         int end = range.end;
         if (end < 0xd7ff || start > surrEnd) {
             return true;
         }
         // The range overlaps with surrogates, or ends just before the first one.
-        if (range.value == surrValue) {
+        if (range.value == surrogateValue) {
             if (end >= surrEnd) {
                 // Surrogates followed by a non-surrValue range,
                 // or surrogates are part of a larger surrValue range.
@@ -159,24 +221,36 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
             }
             // Start is a surrogate with a non-surrValue code *unit* value.
             // Return a surrValue code *point* range.
-            range.value = surrValue;
+            range.value = surrogateValue;
             if (end > surrEnd) {
-                range.end = surrEnd;  // Inert surrogate range ends before non-surrValue rest of range.
+                range.end = surrEnd;  // Surrogate range ends before non-surrValue rest of range.
                 return true;
             }
         }
         // See if the surrValue surrogate range can be merged with
         // an immediately following range.
-        if (getRange(surrEnd + 1, handleValue, range) && range.value == surrValue) {
+        if (getRange(surrEnd + 1, filter, range) && range.value == surrogateValue) {
             range.start = start;
             return true;
         }
         range.start = start;
         range.end = surrEnd;
-        range.value = surrValue;
+        range.value = surrogateValue;
         return true;
     }
 
+    /**
+     * Convenience iterator over same-trie-value code point ranges.
+     * Same as looping over all ranges with getRange()
+     * (simple overload or using {@value RangeOption#NORMAL}) without filtering.
+     * Adjacent ranges have different trie values.
+     *
+     * <p>The iterator always returns the same Range object.
+     *
+     * @return a Range iterator
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public Iterator<Range> iterator() {
         return new RangeIterator();

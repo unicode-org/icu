@@ -156,7 +156,8 @@ UBool Norms::combinesWithCCBetween(const Norm &norm, uint8_t lowCC, int32_t high
 void Norms::enumRanges(Enumerator &e) {
     UChar32 start = 0, end;
     uint32_t i;
-    while ((end = umutablecptrie_getRange(normTrie, start, nullptr, nullptr, &i)) >= 0) {
+    while ((end = umutablecptrie_getRange(normTrie, start, UCPTRIE_RANGE_NORMAL, 0,
+                                          nullptr, nullptr, &i)) >= 0) {
         if (i > 0) {
             e.rangeHandler(start, end, norms[i]);
         }

@@ -131,6 +131,16 @@ enum {
     UCPTRIE_SMALL_DATA_MASK = UCPTRIE_SMALL_DATA_BLOCK_LENGTH - 1
 };
 
+typedef UChar32
+UCPTrieGetRange(const void *trie, UChar32 start,
+                UCPTrieFilterValue *filter, const void *context, uint32_t *pValue);
+
+U_CFUNC UChar32
+ucptrie_internalGetRange(UCPTrieGetRange *getRange,
+                         const void *trie, UChar32 start,
+                         UCPTrieRangeOption option, uint32_t surrogateValue,
+                         UCPTrieFilterValue *filter, const void *context, uint32_t *pValue);
+
 /**
  * Get the UTrie version from 32-bit-aligned memory containing the serialized form
  * of either a UTrie (version 1) or a UCPTrie (version 2).

@@ -90,13 +90,13 @@ public final class CodePointTrieTest extends TestFmwk {
     }
 
     /* ucptrie_enum() callback, modifies a value */
-    private static class TestHandleValue implements CodePointMap.HandleValue {
+    private static class TestFilterValue implements CodePointMap.FilterValue {
         @Override
         public int apply(int value) {
             return value ^ 0x5555;
         }
     }
-    private static final TestHandleValue testHandleValue = new TestHandleValue();
+    private static final TestFilterValue testFilter = new TestFilterValue();
 
     private boolean
     doCheckRange(String name, String variant,
@@ -131,13 +131,9 @@ public final class CodePointTrieTest extends TestFmwk {
 
     private void
     testTrieGetRanges(String testName, CodePointMap trie,
-                      byte fixedSurr, int surrValue,
+                      CodePointMap.RangeOption option, int surrValue,
                       CheckRange checkRanges[]) {
-        String typeName =
-            trie instanceof MutableCodePointTrie ? "mutableTrie" :
-            fixedSurr < 0 ? "trie" :
-            fixedSurr == 0 ? "trie/fixedLeadSurr" :
-            "trie/fixedAllSurr";
+        String typeName = trie instanceof MutableCodePointTrie ? "mutableTrie" : "trie";
         CodePointMap.Range range = new CodePointMap.Range();
         int s;
         for (s = 0; s < iterStarts.length; ++s) {
@@ -147,7 +143,7 @@ public final class CodePointTrieTest extends TestFmwk {
             int expValue;
             boolean getRangeResult;
 
-            String name = String.format("%s(%s) min=U+%04x", typeName, testName, start);
+            String name = String.format("%s/%s(%s) min=U+%04x", typeName, option, testName, start);
 
             // Skip over special values and low ranges.
             for (i = 0; i < checkRanges.length && checkRanges[i].limit <= start; ++i) {}
@@ -161,8 +157,8 @@ public final class CodePointTrieTest extends TestFmwk {
                     expEnd = -1;
                     expValue = 0x5005;
                 }
-                getRangeResult = fixedSurr >= 0 ?
-                        trie.getRangeFixedSurr(start, fixedSurr > 0, surrValue, null, range) :
+                getRangeResult = option != CodePointMap.RangeOption.NORMAL ?
+                        trie.getRange(start, option, surrValue, null, range) :
                         trie.getRange(start, null, range);
                 if (!doCheckRange(name, "without value handler",
                         start, getRangeResult, range, expEnd, expValue)) {
@@ -178,9 +174,7 @@ public final class CodePointTrieTest extends TestFmwk {
                     expEnd = -1;
                     expValue = 0x5005;
                 }
-                getRangeResult = fixedSurr >= 0 ?
-                        trie.getRangeFixedSurr(start, fixedSurr > 0, surrValue ^ 0x5555, testHandleValue, range) :
-                        trie.getRange(start, testHandleValue, range);
+                getRangeResult = trie.getRange(start, option, surrValue ^ 0x5555, testFilter, range);
                 if (!doCheckRange(name, "with value handler",
                         start, getRangeResult, range, expEnd, expValue)) {
                     break;
@@ -405,7 +399,7 @@ public final class CodePointTrieTest extends TestFmwk {
              CodePointTrie.Type type, CodePointTrie.ValueWidth valueWidth,
              CheckRange checkRanges[]) {
         testTrieGetters(testName, trie, type, valueWidth, checkRanges);
-        testTrieGetRanges(testName, trie, (byte) -1, 0, checkRanges);
+        testTrieGetRanges(testName, trie, CodePointMap.RangeOption.NORMAL, 0, checkRanges);
         if (type == CodePointTrie.Type.FAST) {
             testTrieUTF16(testName, trie, valueWidth, checkRanges);
             // Java: no testTrieUTF8(testName, trie, valueWidth, checkRanges);
@@ -415,7 +409,7 @@ public final class CodePointTrieTest extends TestFmwk {
     private void
     testBuilder(String testName, MutableCodePointTrie mutableTrie, CheckRange checkRanges[]) {
         testBuilderGetters(testName, mutableTrie, checkRanges);
-        testTrieGetRanges(testName, mutableTrie, (byte) -1, 0, checkRanges);
+        testTrieGetRanges(testName, mutableTrie, CodePointMap.RangeOption.NORMAL, 0, checkRanges);
     }
 
     private void
@@ -886,12 +880,13 @@ public final class CodePointTrieTest extends TestFmwk {
                           checkRanges);
     }
 
-    private void testGetRangesFixedSurr(String testName, MutableCodePointTrie mutableTrie, boolean allSurr,
-             CheckRange checkRanges[]) {
+    private void testGetRangesFixedSurr(String testName, MutableCodePointTrie mutableTrie,
+             CodePointMap.RangeOption option, CheckRange checkRanges[]) {
+        testTrieGetRanges(testName, mutableTrie, option, 5, checkRanges);
         MutableCodePointTrie clone = mutableTrie.clone();
-        CodePointTrie trie;
-        trie = clone.buildImmutable(CodePointTrie.Type.FAST, CodePointTrie.ValueWidth.BITS_16);
-        testTrieGetRanges(testName, trie, (byte) (allSurr ? 1 : 0), 5, checkRanges);
+        CodePointTrie trie =
+                clone.buildImmutable(CodePointTrie.Type.FAST, CodePointTrie.ValueWidth.BITS_16);
+        testTrieGetRanges(testName, trie, option, 5, checkRanges);
     }
 
     @Test
@@ -957,17 +952,23 @@ public final class CodePointTrieTest extends TestFmwk {
 
         MutableCodePointTrie mutableTrie = makeTrieWithRanges(
             "fixedSurr", false, setRangesFixedSurr, checkRangesFixedLeadSurr1);
-        testGetRangesFixedSurr("fixedLeadSurr1", mutableTrie, false, checkRangesFixedLeadSurr1);
-        testGetRangesFixedSurr("fixedAllSurr1", mutableTrie, true, checkRangesFixedAllSurr1);
+        testGetRangesFixedSurr("fixedLeadSurr1", mutableTrie,
+                CodePointMap.RangeOption.FIXED_LEAD_SURROGATES, checkRangesFixedLeadSurr1);
+        testGetRangesFixedSurr("fixedAllSurr1", mutableTrie,
+                CodePointMap.RangeOption.FIXED_ALL_SURROGATES, checkRangesFixedAllSurr1);
         // Setting a range in the middle of lead surrogates makes no difference.
         mutableTrie.setRange(0xd844, 0xd899, 5);
-        testGetRangesFixedSurr("fixedLeadSurr2", mutableTrie, false, checkRangesFixedLeadSurr1);
+        testGetRangesFixedSurr("fixedLeadSurr2", mutableTrie,
+                CodePointMap.RangeOption.FIXED_LEAD_SURROGATES, checkRangesFixedLeadSurr1);
         // Bridge the gap before the lead surrogates.
         mutableTrie.set(0xd7ff, 5);
-        testGetRangesFixedSurr("fixedLeadSurr3", mutableTrie, false, checkRangesFixedLeadSurr3);
-        testGetRangesFixedSurr("fixedAllSurr3", mutableTrie, true, checkRangesFixedAllSurr3);
+        testGetRangesFixedSurr("fixedLeadSurr3", mutableTrie,
+                CodePointMap.RangeOption.FIXED_LEAD_SURROGATES, checkRangesFixedLeadSurr3);
+        testGetRangesFixedSurr("fixedAllSurr3", mutableTrie,
+                CodePointMap.RangeOption.FIXED_ALL_SURROGATES, checkRangesFixedAllSurr3);
         // Bridge the gap after the trail surrogates.
         mutableTrie.set(0xe000, 5);
-        testGetRangesFixedSurr("fixedSurr4", mutableTrie, true, checkRangesFixedSurr4);
+        testGetRangesFixedSurr("fixedSurr4", mutableTrie,
+                CodePointMap.RangeOption.FIXED_ALL_SURROGATES, checkRangesFixedSurr4);
     }
 }

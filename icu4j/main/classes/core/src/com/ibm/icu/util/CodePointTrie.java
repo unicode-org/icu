@@ -59,7 +59,7 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     // type can be null for "any"
-    // valueBits can be null for "any"
+    // valueWidth can be null for "any"
     public static CodePointTrie fromBinary(Type type, ValueWidth valueWidth, ByteBuffer bytes) {
         ByteOrder outerByteOrder = bytes.order();
         try {
@@ -214,31 +214,31 @@ public abstract class CodePointTrie extends CodePointMap {
 
     private static final int ASCII_LIMIT = 0x80;
 
-    private static final int maybeHandleValue(int value, int trieNullValue, int nullValue,
-            HandleValue handleValue) {
+    private static final int maybeFilterValue(int value, int trieNullValue, int nullValue,
+            FilterValue filter) {
         if (value == trieNullValue) {
             value = nullValue;
-        } else if (handleValue != null) {
-            value = handleValue.apply(value);
+        } else if (filter != null) {
+            value = filter.apply(value);
         }
         return value;
     }
 
     @Override
-    public final boolean getRange(int start, HandleValue handleValue, Range range) {
+    public final boolean getRange(int start, FilterValue filter, Range range) {
         if (start < 0 || MAX_UNICODE < start) {
             return false;
         }
         if (start >= highStart) {
             int di = dataLength - HIGH_VALUE_NEG_DATA_OFFSET;
             int value = data.getFromIndex(di);
-            if (handleValue != null) { value = handleValue.apply(value); }
+            if (filter != null) { value = filter.apply(value); }
             range.set(start, MAX_UNICODE, value);
             return true;
         }
 
         int nullValue = this.nullValue;
-        if (handleValue != null) { nullValue = handleValue.apply(nullValue); }
+        if (filter != null) { nullValue = filter.apply(nullValue); }
         Type type = getType();
 
         int prevI3Block = -1;
@@ -327,7 +327,7 @@ public abstract class CodePointTrie extends CodePointMap {
                     } else {
                         int di = block + (c & dataMask);
                         int value2 = data.getFromIndex(di);
-                        value2 = maybeHandleValue(value2, this.nullValue, nullValue, handleValue);
+                        value2 = maybeFilterValue(value2, this.nullValue, nullValue, filter);
                         if (haveValue) {
                             if (value2 != value) {
                                 range.set(start, c - 1, value);
@@ -338,9 +338,9 @@ public abstract class CodePointTrie extends CodePointMap {
                             haveValue = true;
                         }
                         while ((++c & dataMask) != 0) {
-                            if (maybeHandleValue(data.getFromIndex(++di),
+                            if (maybeFilterValue(data.getFromIndex(++di),
                                                  this.nullValue, nullValue,
-                                                 handleValue) != value) {
+                                                 filter) != value) {
                                 range.set(start, c - 1, value);
                                 return true;
                             }
@@ -352,7 +352,7 @@ public abstract class CodePointTrie extends CodePointMap {
         assert(haveValue);
         int di = dataLength - HIGH_VALUE_NEG_DATA_OFFSET;
         int highValue = data.getFromIndex(di);
-        if (maybeHandleValue(highValue, this.nullValue, nullValue, handleValue) != value) {
+        if (maybeFilterValue(highValue, this.nullValue, nullValue, filter) != value) {
             --c;
         } else {
             c = MAX_UNICODE;

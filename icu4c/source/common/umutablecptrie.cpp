@@ -73,7 +73,7 @@ public:
     static MutableCodePointTrie *fromUCPTrie(const UCPTrie *trie, UErrorCode &errorCode);
 
     uint32_t get(UChar32 c) const;
-    int32_t getRange(UChar32 start, UCPTrieHandleValue *handleValue, const void *context,
+    int32_t getRange(UChar32 start, UCPTrieFilterValue *filter, const void *context,
                      uint32_t *pValue) const;
 
     void set(UChar32 c, uint32_t value, UErrorCode &errorCode);
@@ -194,7 +194,8 @@ MutableCodePointTrie *MutableCodePointTrie::fromUCPTrie(const UCPTrie *trie, UEr
     }
     UChar32 start = 0, end;
     uint32_t value;
-    while ((end = ucptrie_getRange(trie, start, nullptr, nullptr, &value)) >= 0) {
+    while ((end = ucptrie_getRange(trie, start, UCPTRIE_RANGE_NORMAL, 0,
+                                   nullptr, nullptr, &value)) >= 0) {
         if (value != initialValue) {
             if (start == end) {
                 mutableTrie->set(start, value, errorCode);
@@ -236,18 +237,18 @@ uint32_t MutableCodePointTrie::get(UChar32 c) const {
     }
 }
 
-inline uint32_t maybeHandleValue(uint32_t value, uint32_t initialValue, uint32_t nullValue,
-                                 UCPTrieHandleValue *handleValue, const void *context) {
+inline uint32_t maybeFilterValue(uint32_t value, uint32_t initialValue, uint32_t nullValue,
+                                 UCPTrieFilterValue *filter, const void *context) {
     if (value == initialValue) {
         value = nullValue;
-    } else if (handleValue != nullptr) {
-        value = handleValue(context, value);
+    } else if (filter != nullptr) {
+        value = filter(context, value);
     }
     return value;
 }
 
 UChar32 MutableCodePointTrie::getRange(
-        UChar32 start, UCPTrieHandleValue *handleValue, const void *context,
+        UChar32 start, UCPTrieFilterValue *filter, const void *context,
         uint32_t *pValue) const {
     if ((uint32_t)start > MAX_UNICODE) {
         return U_SENTINEL;
@@ -255,21 +256,21 @@ UChar32 MutableCodePointTrie::getRange(
     if (start >= highStart) {
         if (pValue != nullptr) {
             uint32_t value = highValue;
-            if (handleValue != nullptr) { value = handleValue(context, value); }
+            if (filter != nullptr) { value = filter(context, value); }
             *pValue = value;
         }
         return MAX_UNICODE;
     }
     uint32_t nullValue = initialValue;
-    if (handleValue != nullptr) { nullValue = handleValue(context, nullValue); }
+    if (filter != nullptr) { nullValue = filter(context, nullValue); }
     UChar32 c = start;
     uint32_t value;
     bool haveValue = false;
     int32_t i = c >> UCPTRIE_SHIFT_3;
     do {
         if (flags[i] == ALL_SAME) {
-            uint32_t value2 = maybeHandleValue(index[i], initialValue, nullValue,
-                                               handleValue, context);
+            uint32_t value2 = maybeFilterValue(index[i], initialValue, nullValue,
+                                               filter, context);
             if (haveValue) {
                 if (value2 != value) {
                     return c - 1;
@@ -282,8 +283,8 @@ UChar32 MutableCodePointTrie::getRange(
             c = (c + UCPTRIE_SMALL_DATA_BLOCK_LENGTH) & ~UCPTRIE_SMALL_DATA_MASK;
         } else /* MIXED */ {
             int32_t di = index[i] + (c & UCPTRIE_SMALL_DATA_MASK);
-            uint32_t value2 = maybeHandleValue(data[di], initialValue, nullValue,
-                                               handleValue, context);
+            uint32_t value2 = maybeFilterValue(data[di], initialValue, nullValue,
+                                               filter, context);
             if (haveValue) {
                 if (value2 != value) {
                     return c - 1;
@@ -294,8 +295,8 @@ UChar32 MutableCodePointTrie::getRange(
                 haveValue = true;
             }
             while ((++c & UCPTRIE_SMALL_DATA_MASK) != 0) {
-                if (maybeHandleValue(data[++di], initialValue, nullValue,
-                                     handleValue, context) != value) {
+                if (maybeFilterValue(data[++di], initialValue, nullValue,
+                                     filter, context) != value) {
                     return c - 1;
                 }
             }
@@ -303,8 +304,8 @@ UChar32 MutableCodePointTrie::getRange(
         ++i;
     } while (c < highStart);
     U_ASSERT(haveValue);
-    if (maybeHandleValue(highValue, initialValue, nullValue,
-                         handleValue, context) != value) {
+    if (maybeFilterValue(highValue, initialValue, nullValue,
+                         filter, context) != value) {
         return c - 1;
     } else {
         return MAX_UNICODE;
@@ -1545,11 +1546,23 @@ umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c) {
     return reinterpret_cast<const MutableCodePointTrie *>(trie)->get(c);
 }
 
-U_CAPI int32_t U_EXPORT2
-umutablecptrie_getRange(const UMutableCPTrie *trie, UChar32 start,
-                        UCPTrieHandleValue *handleValue, const void *context, uint32_t *pValue) {
+namespace {
+
+UChar32 getRange(const void *trie, UChar32 start,
+                 UCPTrieFilterValue *filter, const void *context, uint32_t *pValue) {
     return reinterpret_cast<const MutableCodePointTrie *>(trie)->
-        getRange(start, handleValue, context, pValue);
+        getRange(start, filter, context, pValue);
+}
+
+}  // namespace
+
+U_CAPI UChar32 U_EXPORT2
+umutablecptrie_getRange(const UMutableCPTrie *trie, UChar32 start,
+                        UCPTrieRangeOption option, uint32_t surrogateValue,
+                        UCPTrieFilterValue *filter, const void *context, uint32_t *pValue) {
+    return ucptrie_internalGetRange(getRange, trie, start,
+                                    option, surrogateValue,
+                                    filter, context, pValue);
 }
 
 U_CAPI void U_EXPORT2

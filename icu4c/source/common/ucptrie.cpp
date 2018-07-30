@@ -245,37 +245,35 @@ constexpr int32_t MAX_UNICODE = 0x10ffff;
 
 constexpr int32_t ASCII_LIMIT = 0x80;
 
-inline uint32_t maybeHandleValue(uint32_t value, uint32_t trieNullValue, uint32_t nullValue,
-                                 UCPTrieHandleValue *handleValue, const void *context) {
+inline uint32_t maybeFilterValue(uint32_t value, uint32_t trieNullValue, uint32_t nullValue,
+                                 UCPTrieFilterValue *filter, const void *context) {
     if (value == trieNullValue) {
         value = nullValue;
-    } else if (handleValue != nullptr) {
-        value = handleValue(context, value);
+    } else if (filter != nullptr) {
+        value = filter(context, value);
     }
     return value;
 }
 
-}  // namespace
-
-U_CAPI UChar32 U_EXPORT2
-ucptrie_getRange(const UCPTrie *trie, UChar32 start,
-                 UCPTrieHandleValue *handleValue, const void *context, uint32_t *pValue) {
+UChar32 getRange(const void *t, UChar32 start,
+                 UCPTrieFilterValue *filter, const void *context, uint32_t *pValue) {
     if ((uint32_t)start > MAX_UNICODE) {
         return U_SENTINEL;
     }
+    const UCPTrie *trie = reinterpret_cast<const UCPTrie *>(t);
     UCPTrieValueWidth valueWidth = (UCPTrieValueWidth)trie->valueWidth;
     if (start >= trie->highStart) {
         if (pValue != nullptr) {
             int32_t di = trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET;
             uint32_t value = getValue(trie->data, valueWidth, di);
-            if (handleValue != nullptr) { value = handleValue(context, value); }
+            if (filter != nullptr) { value = filter(context, value); }
             *pValue = value;
         }
         return MAX_UNICODE;
     }
 
     uint32_t nullValue = trie->nullValue;
-    if (handleValue != nullptr) { nullValue = handleValue(context, nullValue); }
+    if (filter != nullptr) { nullValue = filter(context, nullValue); }
     const uint16_t *index = trie->index;
 
     int32_t prevI3Block = -1;
@@ -366,8 +364,8 @@ ucptrie_getRange(const UCPTrie *trie, UChar32 start,
                 } else {
                     int32_t di = block + (c & dataMask);
                     uint32_t value2 = getValue(trie->data, valueWidth, di);
-                    value2 = maybeHandleValue(value2, trie->nullValue, nullValue,
-                                              handleValue, context);
+                    value2 = maybeFilterValue(value2, trie->nullValue, nullValue,
+                                              filter, context);
                     if (haveValue) {
                         if (value2 != value) {
                             return c - 1;
@@ -378,9 +376,9 @@ ucptrie_getRange(const UCPTrie *trie, UChar32 start,
                         haveValue = true;
                     }
                     while ((++c & dataMask) != 0) {
-                        if (maybeHandleValue(getValue(trie->data, valueWidth, ++di),
+                        if (maybeFilterValue(getValue(trie->data, valueWidth, ++di),
                                              trie->nullValue, nullValue,
-                                             handleValue, context) != value) {
+                                             filter, context) != value) {
                             return c - 1;
                         }
                     }
@@ -391,53 +389,69 @@ ucptrie_getRange(const UCPTrie *trie, UChar32 start,
     U_ASSERT(haveValue);
     int32_t di = trie->dataLength - UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET;
     uint32_t highValue = getValue(trie->data, valueWidth, di);
-    if (maybeHandleValue(highValue, trie->nullValue, nullValue,
-                         handleValue, context) != value) {
+    if (maybeFilterValue(highValue, trie->nullValue, nullValue,
+                         filter, context) != value) {
         return c - 1;
     } else {
         return MAX_UNICODE;
     }
 }
 
-U_CAPI UChar32 U_EXPORT2
-ucptrie_getRangeFixedSurr(const UCPTrie *trie, UChar32 start, UBool allSurr, uint32_t surrValue,
-                          UCPTrieHandleValue *handleValue, const void *context, uint32_t *pValue) {
+}  // namespace
+
+U_CFUNC UChar32
+ucptrie_internalGetRange(UCPTrieGetRange *getRange,
+                         const void *trie, UChar32 start,
+                         UCPTrieRangeOption option, uint32_t surrogateValue,
+                         UCPTrieFilterValue *filter, const void *context, uint32_t *pValue) {
+    if (option == UCPTRIE_RANGE_NORMAL) {
+        return getRange(trie, start, filter, context, pValue);
+    }
     uint32_t value;
     if (pValue == nullptr) {
         // We need to examine the range value even if the caller does not want it.
         pValue = &value;
     }
-    UChar32 surrEnd = allSurr ? 0xdfff : 0xdbff;
-    UChar32 end = ucptrie_getRange(trie, start, handleValue, context, pValue);
+    UChar32 surrEnd = option == UCPTRIE_RANGE_FIXED_ALL_SURROGATES ? 0xdfff : 0xdbff;
+    UChar32 end = getRange(trie, start, filter, context, pValue);
     if (end < 0xd7ff || start > surrEnd) {
         return end;
     }
     // The range overlaps with surrogates, or ends just before the first one.
-    if (*pValue == surrValue) {
+    if (*pValue == surrogateValue) {
         if (end >= surrEnd) {
-            // Surrogates followed by a non-surrValue range,
-            // or surrogates are part of a larger surrValue range.
+            // Surrogates followed by a non-surrogateValue range,
+            // or surrogates are part of a larger surrogateValue range.
             return end;
         }
     } else {
         if (start <= 0xd7ff) {
-            return 0xd7ff;  // Non-surrValue range ends before surrValue surrogates.
+            return 0xd7ff;  // Non-surrogateValue range ends before surrogateValue surrogates.
         }
-        // Start is a surrogate with a non-surrValue code *unit* value.
-        // Return a surrValue code *point* range.
-        *pValue = surrValue;
+        // Start is a surrogate with a non-surrogateValue code *unit* value.
+        // Return a surrogateValue code *point* range.
+        *pValue = surrogateValue;
         if (end > surrEnd) {
-            return surrEnd;  // Inert surrogate range ends before non-surrValue rest of range.
+            return surrEnd;  // Surrogate range ends before non-surrogateValue rest of range.
         }
     }
-    // See if the surrValue surrogate range can be merged with
+    // See if the surrogateValue surrogate range can be merged with
     // an immediately following range.
     uint32_t value2;
-    UChar32 end2 = ucptrie_getRange(trie, surrEnd + 1, handleValue, context, &value2);
-    if (value2 == surrValue) {
+    UChar32 end2 = getRange(trie, surrEnd + 1, filter, context, &value2);
+    if (value2 == surrogateValue) {
         return end2;
     }
     return surrEnd;
+}
+
+U_CAPI UChar32 U_EXPORT2
+ucptrie_getRange(const UCPTrie *trie, UChar32 start,
+                 UCPTrieRangeOption option, uint32_t surrogateValue,
+                 UCPTrieFilterValue *filter, const void *context, uint32_t *pValue) {
+    return ucptrie_internalGetRange(getRange, trie, start,
+                                    option, surrogateValue,
+                                    filter, context, pValue);
 }
 
 U_CAPI int32_t U_EXPORT2

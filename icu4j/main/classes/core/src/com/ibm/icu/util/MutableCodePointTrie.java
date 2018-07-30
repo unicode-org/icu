@@ -115,37 +115,37 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         }
     }
 
-    private static final int maybeHandleValue(int value, int initialValue, int nullValue,
-            HandleValue handleValue) {
+    private static final int maybeFilterValue(int value, int initialValue, int nullValue,
+            FilterValue filter) {
         if (value == initialValue) {
             value = nullValue;
-        } else if (handleValue != null) {
-            value = handleValue.apply(value);
+        } else if (filter != null) {
+            value = filter.apply(value);
         }
         return value;
     }
 
     @Override
-    public boolean getRange(int start, CodePointTrie.HandleValue handleValue,
+    public boolean getRange(int start, CodePointTrie.FilterValue filter,
             CodePointTrie.Range range) {
         if (start < 0 || MAX_UNICODE < start) {
             return false;
         }
         if (start >= highStart) {
             int value = highValue;
-            if (handleValue != null) { value = handleValue.apply(value); }
+            if (filter != null) { value = filter.apply(value); }
             range.set(start, MAX_UNICODE, value);
             return true;
         }
         int nullValue = initialValue;
-        if (handleValue != null) { nullValue = handleValue.apply(nullValue); }
+        if (filter != null) { nullValue = filter.apply(nullValue); }
         int c = start;
         int value = 0;  // Initialize to make compiler happy. Real value when haveValue is true.
         boolean haveValue = false;
         int i = c >> CodePointTrie.SHIFT_3;
         do {
             if (flags[i] == ALL_SAME) {
-                int value2 = maybeHandleValue(index[i], initialValue, nullValue, handleValue);
+                int value2 = maybeFilterValue(index[i], initialValue, nullValue, filter);
                 if (haveValue) {
                     if (value2 != value) {
                         range.set(start, c - 1, value);
@@ -158,7 +158,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                 c = (c + CodePointTrie.SMALL_DATA_BLOCK_LENGTH) & ~CodePointTrie.SMALL_DATA_MASK;
             } else /* MIXED */ {
                 int di = index[i] + (c & CodePointTrie.SMALL_DATA_MASK);
-                int value2 = maybeHandleValue(data[di], initialValue, nullValue, handleValue);
+                int value2 = maybeFilterValue(data[di], initialValue, nullValue, filter);
                 if (haveValue) {
                     if (value2 != value) {
                         range.set(start, c - 1, value);
@@ -169,8 +169,8 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                     haveValue = true;
                 }
                 while ((++c & CodePointTrie.SMALL_DATA_MASK) != 0) {
-                    if (maybeHandleValue(data[++di], initialValue, nullValue,
-                                         handleValue) != value) {
+                    if (maybeFilterValue(data[++di], initialValue, nullValue,
+                                         filter) != value) {
                         range.set(start, c - 1, value);
                         return true;
                     }
@@ -179,7 +179,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
             ++i;
         } while (c < highStart);
         assert(haveValue);
-        if (maybeHandleValue(highValue, initialValue, nullValue, handleValue) != value) {
+        if (maybeFilterValue(highValue, initialValue, nullValue, filter) != value) {
             range.set(start, c - 1, value);
         } else {
             range.set(start, MAX_UNICODE, value);

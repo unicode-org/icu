@@ -131,7 +131,7 @@ umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c);
  * Can be used to efficiently iterate over all same-value ranges in a trie.
  * The trie can be modified between calls to this function.
  *
- * If the UCPTrieHandleValue function pointer is not NULL, then
+ * If the UCPTrieFilterValue function pointer is not NULL, then
  * the value to be delivered is passed through that function, and the return value is the end
  * of the range where all values are modified to the same actual value.
  * The value is unchanged if that function pointer is NULL.
@@ -140,18 +140,22 @@ umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c);
  *
  * @param trie the trie
  * @param start range start
- * @param handleValue a pointer to a function that may modify the trie data value,
+ * @param option defines whether surrogates are treated normally,
+ *               or as having the surrogateValue; usually UCPTRIE_RANGE_NORMAL
+ * @param surrogateValue value for surrogates; ignored if option==UCPTRIE_RANGE_NORMAL
+ * @param filter a pointer to a function that may modify the trie data value,
  *     or NULL if the values from the trie are to be used unmodified
- * @param context an opaque pointer that is passed on to the handleValue function
+ * @param context an opaque pointer that is passed on to the filter function
  * @param pValue if not NULL, receives the value that every code point start..end has;
- *     may have been modified by handleValue(context, trie value)
+ *     may have been modified by filter(context, trie value)
  *     if that function pointer is not NULL
  * @return the range end code point, or -1 if start is not a valid code point
  * @draft ICU 63
  */
 U_CAPI UChar32 U_EXPORT2
 umutablecptrie_getRange(const UMutableCPTrie *trie, UChar32 start,
-                        UCPTrieHandleValue *handleValue, const void *context, uint32_t *pValue);
+                        UCPTrieRangeOption option, uint32_t surrogateValue,
+                        UCPTrieFilterValue *filter, const void *context, uint32_t *pValue);
 
 /**
  * Sets a value for a code point.

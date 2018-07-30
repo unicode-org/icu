@@ -513,7 +513,8 @@ public final class Normalizer2Impl {
     public void addLcccChars(UnicodeSet set) {
         int start = 0;
         CodePointMap.Range range = new CodePointMap.Range();
-        while (normTrie.getRangeFixedSurr(start, false, INERT, null, range)) {
+        while (normTrie.getRange(start, CodePointMap.RangeOption.FIXED_LEAD_SURROGATES, INERT,
+                null, range)) {
             int end = range.getEnd();
             int norm16 = range.getValue();
             if (norm16 > MIN_NORMAL_MAYBE_YES && norm16 != JAMO_VT) {
@@ -530,7 +531,8 @@ public final class Normalizer2Impl {
         // Add the start code point of each same-value range of the trie.
         int start = 0;
         CodePointMap.Range range = new CodePointMap.Range();
-        while (normTrie.getRangeFixedSurr(start, false, INERT, null, range)) {
+        while (normTrie.getRange(start, CodePointMap.RangeOption.FIXED_LEAD_SURROGATES, INERT,
+                null, range)) {
             int end = range.getEnd();
             int value = range.getValue();
             set.add(start);
@@ -569,8 +571,8 @@ public final class Normalizer2Impl {
             start = range.getEnd() + 1;
         }
     }
-    private static final CodePointMap.HandleValue segmentStarterMapper =
-            new CodePointMap.HandleValue() {
+    private static final CodePointMap.FilterValue segmentStarterMapper =
+            new CodePointMap.FilterValue() {
         @Override
         public int apply(int value) {
             return value & CANON_NOT_SEGMENT_STARTER;
@@ -600,7 +602,8 @@ public final class Normalizer2Impl {
             canonStartSets=new ArrayList<UnicodeSet>();
             int start = 0;
             CodePointMap.Range range = new CodePointMap.Range();
-            while (normTrie.getRangeFixedSurr(start, false, INERT, null, range)) {
+            while (normTrie.getRange(start, CodePointMap.RangeOption.FIXED_LEAD_SURROGATES, INERT,
+                    null, range)) {
                 final int end = range.getEnd();
                 final int norm16 = range.getValue();
                 if(isInert(norm16) || (minYesNo<=norm16 && norm16<minNoNo)) {

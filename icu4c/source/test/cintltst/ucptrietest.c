@@ -66,7 +66,7 @@ getSpecialValues(const CheckRange checkRanges[], int32_t countCheckRanges,
 
 /* ucptrie_enum() callback, modifies a value */
 static uint32_t U_CALLCONV
-testHandleValue(const void *context, uint32_t value) {
+testFilter(const void *context, uint32_t value) {
     return value ^ 0x5555;
 }
 
@@ -100,13 +100,11 @@ static UChar32 iterStarts[] = { 0, 0xd888, 0xdddd, 0x10000, 0x12345, 0x110000 };
 
 static void
 testTrieGetRanges(const char *testName, const UCPTrie *trie, const UMutableCPTrie *mutableTrie,
-                  int8_t fixedSurr, uint32_t surrValue,
+                  UCPTrieRangeOption option, uint32_t surrValue,
                   const CheckRange checkRanges[], int32_t countCheckRanges) {
-    const char *const typeName =
-        trie == NULL ? "mutableTrie" :
-        fixedSurr < 0 ? "trie" :
-        fixedSurr == 0 ? "trie/fixedLeadSurr" :
-        "trie/fixedAllSurr";
+    const char *const typeName = trie == NULL ? "mutableTrie" : "trie";
+    const char *const optionName = option == UCPTRIE_RANGE_NORMAL ? "normal" :
+        option == UCPTRIE_RANGE_FIXED_LEAD_SURROGATES ? "fixedLeadSurr" : "fixedAllSurr";
     char name[80];
     int32_t s;
     for (s = 0; s < UPRV_LENGTHOF(iterStarts); ++s) {
@@ -115,7 +113,7 @@ testTrieGetRanges(const char *testName, const UCPTrie *trie, const UMutableCPTri
         UChar32 end, expEnd;
         uint32_t value, expValue;
 
-        sprintf(name, "%s(%s) min=U+%04lx", typeName, testName, (long)start);
+        sprintf(name, "%s/%s(%s) min=U+%04lx", typeName, optionName, testName, (long)start);
 
         // Skip over special values and low ranges.
         for (i = 0; i < countCheckRanges && checkRanges[i].limit <= start; ++i) {}
@@ -130,10 +128,8 @@ testTrieGetRanges(const char *testName, const UCPTrie *trie, const UMutableCPTri
                 expValue = value = 0x5005;
             }
             end = trie != NULL ?
-                (fixedSurr >= 0 ? ucptrie_getRangeFixedSurr(trie, start, fixedSurr, surrValue,
-                                                            NULL, NULL, &value) :
-                    ucptrie_getRange(trie, start, NULL, NULL, &value)) :
-                umutablecptrie_getRange(mutableTrie, start, NULL, NULL, &value);
+                ucptrie_getRange(trie, start, option, surrValue, NULL, NULL, &value) :
+                umutablecptrie_getRange(mutableTrie, start, option, surrValue, NULL, NULL, &value);
             if (!doCheckRange(name, "without value handler", start, end, value, expEnd, expValue)) {
                 break;
             }
@@ -148,11 +144,9 @@ testTrieGetRanges(const char *testName, const UCPTrie *trie, const UMutableCPTri
                 expValue = value = 0x5005;
             }
             end = trie != NULL ?
-                (fixedSurr >= 0 ? ucptrie_getRangeFixedSurr(trie, start,
-                                                            fixedSurr, surrValue ^ 0x5555,
-                                                            testHandleValue, NULL, &value) :
-                    ucptrie_getRange(trie, start, testHandleValue, NULL, &value)) :
-                umutablecptrie_getRange(mutableTrie, start, testHandleValue, NULL, &value);
+                ucptrie_getRange(trie, start, option, surrValue ^ 0x5555, testFilter, NULL, &value) :
+                umutablecptrie_getRange(mutableTrie, start, option, surrValue ^ 0x5555,
+                                        testFilter, NULL, &value);
             if (!doCheckRange(name, "with value handler", start, end, value, expEnd, expValue)) {
                 break;
             }
@@ -165,10 +159,8 @@ testTrieGetRanges(const char *testName, const UCPTrie *trie, const UMutableCPTri
                 expEnd = -1;
             }
             end = trie != NULL ?
-                (fixedSurr >= 0 ? ucptrie_getRangeFixedSurr(trie, start, fixedSurr, surrValue,
-                                                            NULL, NULL, NULL) :
-                    ucptrie_getRange(trie, start, NULL, NULL, NULL)) :
-                umutablecptrie_getRange(mutableTrie, start, NULL, NULL, NULL);
+                ucptrie_getRange(trie, start, option, surrValue, NULL, NULL, NULL) :
+                umutablecptrie_getRange(mutableTrie, start, option, surrValue, NULL, NULL, NULL);
             if (!doCheckRange(name, "without value", start, end, 0, expEnd, 0)) {
                 break;
             }
@@ -198,11 +190,11 @@ testTrieGetters(const char *testName, const UCPTrie *trie,
         while(start<limit) {
             if (start <= 0x7f) {
                 if (valueWidth == UCPTRIE_VALUE_BITS_16) {
-                    value2 = UCPTRIE_ASCII_GET16(trie, start);
+                    value2 = UCPTRIE_ASCII_GET(trie, UCPTRIE_16, start);
                 } else if (valueWidth == UCPTRIE_VALUE_BITS_32) {
-                    value2 = UCPTRIE_ASCII_GET32(trie, start);
+                    value2 = UCPTRIE_ASCII_GET(trie, UCPTRIE_32, start);
                 } else {
-                    value2 = UCPTRIE_ASCII_GET8(trie, start);
+                    value2 = UCPTRIE_ASCII_GET(trie, UCPTRIE_8, start);
                 }
                 if (value != value2) {
                     log_err("error: %s(%s).fromASCII(U+%04lx)==0x%lx instead of 0x%lx\n",
@@ -226,11 +218,11 @@ testTrieGetters(const char *testName, const UCPTrie *trie,
                     }
                 } else {
                     if(valueWidth==UCPTRIE_VALUE_BITS_16) {
-                        value2 = UCPTRIE_FAST_SUPP_GET16(trie, start);
+                        value2 = UCPTRIE_FAST_SUPP_GET(trie, UCPTRIE_16, start);
                     } else if(valueWidth==UCPTRIE_VALUE_BITS_32) {
-                        value2 = UCPTRIE_FAST_SUPP_GET32(trie, start);
+                        value2 = UCPTRIE_FAST_SUPP_GET(trie, UCPTRIE_32, start);
                     } else {
-                        value2 = UCPTRIE_FAST_SUPP_GET8(trie, start);
+                        value2 = UCPTRIE_FAST_SUPP_GET(trie, UCPTRIE_8, start);
                     }
                     if(value!=value2) {
                         log_err("error: %s(%s).fromSupp(U+%04lx)==0x%lx instead of 0x%lx\n",
@@ -239,19 +231,19 @@ testTrieGetters(const char *testName, const UCPTrie *trie,
                     }
                 }
                 if(valueWidth==UCPTRIE_VALUE_BITS_16) {
-                    value2 = UCPTRIE_FAST_GET16(trie, start);
+                    value2 = UCPTRIE_FAST_GET(trie, UCPTRIE_16, start);
                 } else if(valueWidth==UCPTRIE_VALUE_BITS_32) {
-                    value2 = UCPTRIE_FAST_GET32(trie, start);
+                    value2 = UCPTRIE_FAST_GET(trie, UCPTRIE_32, start);
                 } else {
-                    value2 = UCPTRIE_FAST_GET8(trie, start);
+                    value2 = UCPTRIE_FAST_GET(trie, UCPTRIE_8, start);
                 }
             } else {
                 if(valueWidth==UCPTRIE_VALUE_BITS_16) {
-                    value2 = UCPTRIE_SMALL_GET16(trie, start);
+                    value2 = UCPTRIE_SMALL_GET(trie, UCPTRIE_16, start);
                 } else if(valueWidth==UCPTRIE_VALUE_BITS_32) {
-                    value2 = UCPTRIE_SMALL_GET32(trie, start);
+                    value2 = UCPTRIE_SMALL_GET(trie, UCPTRIE_32, start);
                 } else {
-                    value2 = UCPTRIE_SMALL_GET8(trie, start);
+                    value2 = UCPTRIE_SMALL_GET(trie, UCPTRIE_8, start);
                 }
             }
             if(value!=value2) {
@@ -301,25 +293,25 @@ testTrieGetters(const char *testName, const UCPTrie *trie,
     /* test errorValue */
     if (type == UCPTRIE_TYPE_FAST) {
         if(valueWidth==UCPTRIE_VALUE_BITS_16) {
-            value = UCPTRIE_FAST_GET16(trie, -1);
-            value2 = UCPTRIE_FAST_GET16(trie, 0x110000);
+            value = UCPTRIE_FAST_GET(trie, UCPTRIE_16, -1);
+            value2 = UCPTRIE_FAST_GET(trie, UCPTRIE_16, 0x110000);
         } else if(valueWidth==UCPTRIE_VALUE_BITS_32) {
-            value = UCPTRIE_FAST_GET32(trie, -1);
-            value2 = UCPTRIE_FAST_GET32(trie, 0x110000);
+            value = UCPTRIE_FAST_GET(trie, UCPTRIE_32, -1);
+            value2 = UCPTRIE_FAST_GET(trie, UCPTRIE_32, 0x110000);
         } else {
-            value = UCPTRIE_FAST_GET8(trie, -1);
-            value2 = UCPTRIE_FAST_GET8(trie, 0x110000);
+            value = UCPTRIE_FAST_GET(trie, UCPTRIE_8, -1);
+            value2 = UCPTRIE_FAST_GET(trie, UCPTRIE_8, 0x110000);
         }
     } else {
         if(valueWidth==UCPTRIE_VALUE_BITS_16) {
-            value = UCPTRIE_SMALL_GET16(trie, -1);
-            value2 = UCPTRIE_SMALL_GET16(trie, 0x110000);
+            value = UCPTRIE_SMALL_GET(trie, UCPTRIE_16, -1);
+            value2 = UCPTRIE_SMALL_GET(trie, UCPTRIE_16, 0x110000);
         } else if(valueWidth==UCPTRIE_VALUE_BITS_32) {
-            value = UCPTRIE_SMALL_GET32(trie, -1);
-            value2 = UCPTRIE_SMALL_GET32(trie, 0x110000);
+            value = UCPTRIE_SMALL_GET(trie, UCPTRIE_32, -1);
+            value2 = UCPTRIE_SMALL_GET(trie, UCPTRIE_32, 0x110000);
         } else {
-            value = UCPTRIE_SMALL_GET8(trie, -1);
-            value2 = UCPTRIE_SMALL_GET8(trie, 0x110000);
+            value = UCPTRIE_SMALL_GET(trie, UCPTRIE_8, -1);
+            value2 = UCPTRIE_SMALL_GET(trie, UCPTRIE_8, 0x110000);
         }
     }
     if(value!=errorValue || value2!=errorValue) {
@@ -461,11 +453,11 @@ testTrieUTF16(const char *testName,
         U16_PREV(s, 0, sIndex, c2);
         c=0x33;
         if(valueWidth==UCPTRIE_VALUE_BITS_16) {
-            UCPTRIE_FAST_U16_PREV16(trie, s, p, c, value);
+            UCPTRIE_FAST_U16_PREV(trie, UCPTRIE_16, s, p, c, value);
         } else if(valueWidth==UCPTRIE_VALUE_BITS_32) {
-            UCPTRIE_FAST_U16_PREV32(trie, s, p, c, value);
+            UCPTRIE_FAST_U16_PREV(trie, UCPTRIE_32, s, p, c, value);
         } else {
-            UCPTRIE_FAST_U16_PREV8(trie, s, p, c, value);
+            UCPTRIE_FAST_U16_PREV(trie, UCPTRIE_8, s, p, c, value);
         }
         expected = U_IS_SURROGATE(c) ? errorValue : values[i];
         if(value!=expected) {
@@ -597,11 +589,11 @@ testTrieUTF8(const char *testName,
         prev8=i8=(int32_t)(p-s);
         U8_NEXT(s, i8, length, c);
         if(valueWidth==UCPTRIE_VALUE_BITS_16) {
-            UCPTRIE_FAST_U8_NEXT16(trie, p, limit, value);
+            UCPTRIE_FAST_U8_NEXT(trie, UCPTRIE_16, p, limit, value);
         } else if(valueWidth==UCPTRIE_VALUE_BITS_32) {
-            UCPTRIE_FAST_U8_NEXT32(trie, p, limit, value);
+            UCPTRIE_FAST_U8_NEXT(trie, UCPTRIE_32, p, limit, value);
         } else {
-            UCPTRIE_FAST_U8_NEXT8(trie, p, limit, value);
+            UCPTRIE_FAST_U8_NEXT(trie, UCPTRIE_8, p, limit, value);
         }
         expectedBytes=0;
         if(value!=values[i] || i8!=(p-s)) {
@@ -643,11 +635,11 @@ testTrieUTF8(const char *testName,
         prev8=i8=(int32_t)(p-s);
         U8_PREV(s, 0, i8, c);
         if(valueWidth==UCPTRIE_VALUE_BITS_16) {
-            UCPTRIE_FAST_U8_PREV16(trie, s, p, value);
+            UCPTRIE_FAST_U8_PREV(trie, UCPTRIE_16, s, p, value);
         } else if(valueWidth==UCPTRIE_VALUE_BITS_32) {
-            UCPTRIE_FAST_U8_PREV32(trie, s, p, value);
+            UCPTRIE_FAST_U8_PREV(trie, UCPTRIE_32, s, p, value);
         } else {
-            UCPTRIE_FAST_U8_PREV8(trie, s, p, value);
+            UCPTRIE_FAST_U8_PREV(trie, UCPTRIE_8, s, p, value);
         }
         expectedBytes=0;
         if(value!=values[i] || i8!=(p-s)) {
@@ -686,7 +678,7 @@ testTrie(const char *testName, const UCPTrie *trie,
          UCPTrieType type, UCPTrieValueWidth valueWidth,
          const CheckRange checkRanges[], int32_t countCheckRanges) {
     testTrieGetters(testName, trie, type, valueWidth, checkRanges, countCheckRanges);
-    testTrieGetRanges(testName, trie, NULL, -1, 0, checkRanges, countCheckRanges);
+    testTrieGetRanges(testName, trie, NULL, UCPTRIE_RANGE_NORMAL, 0, checkRanges, countCheckRanges);
     if (type == UCPTRIE_TYPE_FAST) {
         testTrieUTF16(testName, trie, valueWidth, checkRanges, countCheckRanges);
         testTrieUTF8(testName, trie, valueWidth, checkRanges, countCheckRanges);
@@ -697,7 +689,7 @@ static void
 testBuilder(const char *testName, const UMutableCPTrie *mutableTrie,
             const CheckRange checkRanges[], int32_t countCheckRanges) {
     testBuilderGetters(testName, mutableTrie, checkRanges, countCheckRanges);
-    testTrieGetRanges(testName, NULL, mutableTrie, -1, 0, checkRanges, countCheckRanges);
+    testTrieGetRanges(testName, NULL, mutableTrie, UCPTRIE_RANGE_NORMAL, 0, checkRanges, countCheckRanges);
 }
 
 static uint32_t storage[120000];
@@ -1360,8 +1352,10 @@ MuchDataTest(void) {
     umutablecptrie_close(mutableTrie);
 }
 
-static void testGetRangesFixedSurr(const char *testName, const UMutableCPTrie *mutableTrie, UBool allSurr,
+static void testGetRangesFixedSurr(const char *testName, const UMutableCPTrie *mutableTrie,
+                                   UCPTrieRangeOption option,
                                    const CheckRange checkRanges[], int32_t countCheckRanges) {
+    testTrieGetRanges(testName, NULL, mutableTrie, option, 5, checkRanges, countCheckRanges);
     UErrorCode errorCode = U_ZERO_ERROR;
     UMutableCPTrie *clone = umutablecptrie_clone(mutableTrie, &errorCode);
     UCPTrie *trie;
@@ -1375,7 +1369,7 @@ static void testGetRangesFixedSurr(const char *testName, const UMutableCPTrie *m
         log_err("error: umutablecptrie_buildImmutable(%s) failed: %s\n", testName, u_errorName(errorCode));
         return;
     }
-    testTrieGetRanges(testName, trie, NULL, allSurr, 5, checkRanges, countCheckRanges);
+    testTrieGetRanges(testName, trie, NULL, option, 5, checkRanges, countCheckRanges);
     ucptrie_close(trie);
 }
 
@@ -1447,9 +1441,9 @@ TrieTestGetRangesFixedSurr(void) {
     if (mutableTrie == NULL) {
         return;
     }
-    testGetRangesFixedSurr("fixedLeadSurr1", mutableTrie, FALSE,
+    testGetRangesFixedSurr("fixedLeadSurr1", mutableTrie, UCPTRIE_RANGE_FIXED_LEAD_SURROGATES,
                            checkRangesFixedLeadSurr1, UPRV_LENGTHOF(checkRangesFixedLeadSurr1));
-    testGetRangesFixedSurr("fixedAllSurr1", mutableTrie, TRUE,
+    testGetRangesFixedSurr("fixedAllSurr1", mutableTrie, UCPTRIE_RANGE_FIXED_ALL_SURROGATES,
                            checkRangesFixedAllSurr1, UPRV_LENGTHOF(checkRangesFixedAllSurr1));
     // Setting a range in the middle of lead surrogates makes no difference.
     umutablecptrie_setRange(mutableTrie, 0xd844, 0xd899, 5, &errorCode);
@@ -1458,7 +1452,7 @@ TrieTestGetRangesFixedSurr(void) {
         umutablecptrie_close(mutableTrie);
         return;
     }
-    testGetRangesFixedSurr("fixedLeadSurr2", mutableTrie, FALSE,
+    testGetRangesFixedSurr("fixedLeadSurr2", mutableTrie, UCPTRIE_RANGE_FIXED_LEAD_SURROGATES,
                            checkRangesFixedLeadSurr1, UPRV_LENGTHOF(checkRangesFixedLeadSurr1));
     // Bridge the gap before the lead surrogates.
     umutablecptrie_set(mutableTrie, 0xd7ff, 5, &errorCode);
@@ -1467,9 +1461,9 @@ TrieTestGetRangesFixedSurr(void) {
         umutablecptrie_close(mutableTrie);
         return;
     }
-    testGetRangesFixedSurr("fixedLeadSurr3", mutableTrie, FALSE,
+    testGetRangesFixedSurr("fixedLeadSurr3", mutableTrie, UCPTRIE_RANGE_FIXED_LEAD_SURROGATES,
                            checkRangesFixedLeadSurr3, UPRV_LENGTHOF(checkRangesFixedLeadSurr3));
-    testGetRangesFixedSurr("fixedAllSurr3", mutableTrie, TRUE,
+    testGetRangesFixedSurr("fixedAllSurr3", mutableTrie, UCPTRIE_RANGE_FIXED_ALL_SURROGATES,
                            checkRangesFixedAllSurr3, UPRV_LENGTHOF(checkRangesFixedAllSurr3));
     // Bridge the gap after the trail surrogates.
     umutablecptrie_set(mutableTrie, 0xe000, 5, &errorCode);
@@ -1478,7 +1472,7 @@ TrieTestGetRangesFixedSurr(void) {
         umutablecptrie_close(mutableTrie);
         return;
     }
-    testGetRangesFixedSurr("fixedSurr4", mutableTrie, TRUE,
+    testGetRangesFixedSurr("fixedSurr4", mutableTrie, UCPTRIE_RANGE_FIXED_ALL_SURROGATES,
                            checkRangesFixedSurr4, UPRV_LENGTHOF(checkRangesFixedSurr4));
     umutablecptrie_close(mutableTrie);
 }
