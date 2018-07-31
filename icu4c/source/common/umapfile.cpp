@@ -232,6 +232,7 @@
 #endif
         close(fd); /* no longer needed */
         if(data==MAP_FAILED) {
+            // Possibly check for errno for ENOMEM, and report U_MEMORY_ALLOCATION_ERROR?
             return FALSE;
         }
 
@@ -297,6 +298,7 @@
         p=uprv_malloc(fileLength);
         if(p==NULL) {
             fclose(file);
+            // Possibly return U_MEMORY_ALLOCATION_ERROR?
             return FALSE;
         }
 
@@ -441,6 +443,7 @@
             data=mmap(0, length, PROT_READ, MAP_PRIVATE, fd, 0);
             close(fd); /* no longer needed */
             if(data==MAP_FAILED) {
+                // Possibly check errorno for ENOMEM, and report U_MEMORY_ALLOCATION_ERROR?
                 return FALSE;
             }
             pData->map = (char *)data + length;
