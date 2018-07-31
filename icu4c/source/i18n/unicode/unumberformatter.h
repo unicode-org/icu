@@ -559,7 +559,8 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
  *
  * NOTE: All fields of the UFieldPosition must be initialized before calling this method.
  *
- * @param fieldPosition
+ * @param uresult The object containing the formatted number.
+ * @param ufpos
  *            Input+output variable. On input, the "field" property determines which field to look up,
  *            and the "endIndex" property determines where to begin the search. On output, the
  *            "beginIndex" field is set to the beginning of the first occurrence of the field after the
@@ -580,7 +581,7 @@ unumf_resultNextFieldPosition(const UFormattedNumber* uresult, UFieldPosition* u
  * If you need information on only one field, use unumf_resultNextFieldPosition().
  *
  * @param uresult The object containing the formatted number.
- * @param fpositer
+ * @param ufpositer
  *         A pointer to a UFieldPositionIterator created by {@link #ufieldpositer_open}. Iteration
  *         information already present in the UFieldPositionIterator is deleted, and the iterator is reset
  *         to apply to the fields in the formatted string created by this function call. The field values

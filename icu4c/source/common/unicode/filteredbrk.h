@@ -95,7 +95,7 @@ class U_COMMON_API FilteredBreakIteratorBuilder : public UObject {
    * This function does not create any new segment boundaries, but only serves to un-do
    * the effect of earlier calls to suppressBreakAfter, or to un-do the effect of
    * locale data which may be suppressing certain strings.
-   * @param exception the exception to remove
+   * @param string the exception to remove
    * @param status error code
    * @return returns TRUE if the string was present and now removed,
    * FALSE if the call was a no-op because the string was not being suppressed.
