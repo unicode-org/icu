@@ -102,15 +102,13 @@ PluralRules&
 PluralRules::operator=(const PluralRules& other) {
     if (this != &other) {
         delete mRules;
+        mRules = nullptr;
         mInternalStatus = other.mInternalStatus;
         if (U_FAILURE(mInternalStatus)) {
             // bail out early if the object we were copying from was already 'invalid'.
             return *this;
         }
-        if (other.mRules == nullptr) {
-            mRules = nullptr;
-        }
-        else {
+        if (other.mRules != nullptr) {
             mRules = new RuleChain(*other.mRules);
             if (mRules == nullptr) {
                 mInternalStatus = U_MEMORY_ALLOCATION_ERROR;
