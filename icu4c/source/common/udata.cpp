@@ -751,12 +751,19 @@ openCommonData(const char *path,          /*  Path from OpenChoice?          */
 
     UDataPathIterator iter(u_getDataDirectory(), inBasename, path, ".dat", TRUE, pErrorCode);
 
+    UErrorCode mapFileStatus = U_ZERO_ERROR;
+
     while((UDataMemory_isLoaded(&tData)==FALSE) && (pathBuffer = iter.next(pErrorCode)) != NULL)
     {
 #ifdef UDATA_DEBUG
         fprintf(stderr, "ocd: trying path %s - ", pathBuffer);
 #endif
-        uprv_mapFile(&tData, pathBuffer);
+        uprv_mapFile(&tData, pathBuffer, &mapFileStatus);
+        // Stop as soon as we hit a memory allocation failure.
+        if (mapFileStatus == U_MEMORY_ALLOCATION_ERROR) {
+            *pErrorCode = mapFileStatus;
+            return NULL; 
+        }
 #ifdef UDATA_DEBUG
         fprintf(stderr, "%s\n", UDataMemory_isLoaded(&tData)?"LOADED":"not loaded");
 #endif
@@ -769,7 +776,8 @@ openCommonData(const char *path,          /*  Path from OpenChoice?          */
         uprv_strncpy(ourPathBuffer, path, 1019);
         ourPathBuffer[1019]=0;
         uprv_strcat(ourPathBuffer, ".dat");
-        uprv_mapFile(&tData, ourPathBuffer);
+        uprv_mapFile(&tData, ourPathBuffer, &mapFileStatus);
+        // Possibly want to check for OOM here too?
     }
 #endif
 
@@ -991,7 +999,7 @@ static UDataMemory *doLoadFromIndividualFiles(const char *pkgName,
 #ifdef UDATA_DEBUG
         fprintf(stderr, "UDATA: trying individual file %s\n", pathBuffer);
 #endif
-        if(uprv_mapFile(&dataMemory, pathBuffer))
+        if(uprv_mapFile(&dataMemory, pathBuffer, pErrorCode))
         {
             pEntryData = checkDataItem(dataMemory.pHeader, isAcceptable, context, type, name, subErrorCode, pErrorCode);
             if (pEntryData != NULL) {
@@ -1075,6 +1083,11 @@ static UDataMemory *doLoadFromCommonData(UBool isICUData, const char * /*pkgName
                     return pEntryData;
                 }
             }
+        }
+        // If we failed due to being out-of-memory, then stop early and report the error.
+        if (*subErrorCode == U_MEMORY_ALLOCATION_ERROR) {
+            *pErrorCode = *subErrorCode;
+            return NULL;
         }
         /* Data wasn't found.  If we were looking for an ICUData item and there is
          * more data available, load it and try again,

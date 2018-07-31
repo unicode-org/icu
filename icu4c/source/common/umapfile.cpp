@@ -84,7 +84,7 @@
  *----------------------------------------------------------------------------*/
 #if MAP_IMPLEMENTATION==MAP_NONE
     U_CFUNC UBool
-    uprv_mapFile(UDataMemory *pData, const char *path) {
+    uprv_mapFile(UDataMemory *pData, const char *path, UErrorCode *ec) {
         UDataMemory_init(pData); /* Clear the output struct. */
         return FALSE;            /* no file access */
     }
@@ -97,7 +97,8 @@
     uprv_mapFile(
          UDataMemory *pData,    /* Fill in with info on the result doing the mapping. */
                                 /*   Output only; any original contents are cleared.  */
-         const char *path       /* File path to be opened/mapped                      */
+         const char *path,      /* File path to be opened/mapped.                     */
+         UErrorCode *ec         /* Error status, used to report out-of-memory errors. */
          )
     {
         HANDLE map;
@@ -132,7 +133,12 @@
         // TODO: Is it worth setting extended parameters to specify random access?
         file = CreateFile2(utf16Path, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, NULL);
 #endif
-        if(file==INVALID_HANDLE_VALUE) {
+        if (file == INVALID_HANDLE_VALUE) {
+            // If we failed to open the file due to an out-of-memory error, then we want
+            // to report that error back to the caller.
+            if (HRESULT_FROM_WIN32(GetLastError()) == E_OUTOFMEMORY) {
+                *ec = U_MEMORY_ALLOCATION_ERROR;
+            }
             return FALSE;
         }
 
@@ -165,7 +171,12 @@
         map = CreateFileMappingFromApp(file, NULL, PAGE_READONLY, 0, NULL);
 #endif
         CloseHandle(file);
-        if(map==NULL) {
+        if (map == NULL) {
+            // If we failed to create the mapping due to an out-of-memory error, then 
+            // we want to report that error back to the caller.
+            if (HRESULT_FROM_WIN32(GetLastError()) == E_OUTOFMEMORY) {
+                *ec = U_MEMORY_ALLOCATION_ERROR;
+            }
             return FALSE;
         }
 
@@ -193,7 +204,7 @@
 
 #elif MAP_IMPLEMENTATION==MAP_POSIX
     U_CFUNC UBool
-    uprv_mapFile(UDataMemory *pData, const char *path) {
+    uprv_mapFile(UDataMemory *pData, const char *path, UErrorCode *ec) {
         int fd;
         int length;
         struct stat mystat;
@@ -263,7 +274,7 @@
     }
 
     U_CFUNC UBool
-    uprv_mapFile(UDataMemory *pData, const char *path) {
+    uprv_mapFile(UDataMemory *pData, const char *path, UErrorCode *ec) {
         FILE *file;
         int32_t fileLength;
         void *p;
@@ -391,7 +402,7 @@
 
 #   define DATA_TYPE "dat"
 
-    U_CFUNC UBool uprv_mapFile(UDataMemory *pData, const char *path) {
+    U_CFUNC UBool uprv_mapFile(UDataMemory *pData, const char *path, UErrorCode *ec) {
         const char *inBasename;
         char *basename;
         char pathBuffer[1024];
