@@ -42,13 +42,11 @@ U_NAMESPACE_BEGIN
  *
  * Clients can use this to break a paragraph into lines, and to display the glyphs in each line.
  *
- * Note that {@link icu::LayoutEngine} is deprecated, but this class is not.
+ * Note that the ICU layout engine has been deprecated and removed.
  * You may use this class with the HarfBuzz icu-le-hb wrapper,
  *  see http://www.freedesktop.org/wiki/Software/HarfBuzz/
  *
  *  See http://userguide.icu-project.org/layoutengine for special build instructions.
- *
- * @see icu::LayoutEngine
  */
 class U_LAYOUTEX_API ParagraphLayout : public UObject
 {

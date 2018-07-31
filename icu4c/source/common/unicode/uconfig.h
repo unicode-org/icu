@@ -183,7 +183,7 @@
  */
 #ifdef U_HAVE_LIB_SUFFIX
     /* Use the predefined value. */
-#elif defined(U_LIB_SUFFIX_C_NAME)
+#elif defined(U_LIB_SUFFIX_C_NAME) || defined(U_IN_DOXYGEN)
 #   define U_HAVE_LIB_SUFFIX 1
 #endif
 

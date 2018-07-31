@@ -43,13 +43,17 @@ U_NAMESPACE_BEGIN
 class TimeZone;
 class DateTimePatternGenerator;
 
-// explicit template instantiation. see digitlst.h
-// (When building DLLs for Windows this is required.)
-#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+/**
+ * \cond
+ * explicit template instantiation. see digitlst.h
+ * (When building DLLs for Windows this is required.)
+ */
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN && not defined(U_IN_DOXYGEN)
 template class U_I18N_API EnumSet<UDateFormatBooleanAttribute,
             0, 
             UDAT_BOOLEAN_ATTRIBUTE_COUNT>;
 #endif
+/** \endcond */
 
 /**
  * DateFormat is an abstract class for a family of classes that convert dates and
