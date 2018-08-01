@@ -232,8 +232,12 @@ PluralRules::internalForLocale(const Locale& locale, UPluralType type, UErrorCod
         return nullptr;
     }
     UnicodeString locRule = newObj->getRuleFromResource(locale, type, status);
-    // TODO: which errors, if any, should be returned?
+    // TODO: which other errors, if any, should be returned?
     if (locRule.length() == 0) {
+        // If an out-of-memory error occurred, then stop and report the failure.
+        if (status == U_MEMORY_ALLOCATION_ERROR) {
+            return nullptr;
+        }
         // Locales with no specific rules (all numbers have the "other" category
         //   will return a U_MISSING_RESOURCE_ERROR at this point. This is not
         //   an error.
@@ -750,18 +754,6 @@ PluralRules::getRules() const {
     return rules;
 }
 
-AndConstraint::AndConstraint() {
-    op = AndConstraint::NONE;
-    opNum=-1;
-    value = -1;
-    rangeList = nullptr;
-    negated = FALSE;
-    integerOnly = FALSE;
-    digitsType = none;
-    next = nullptr;
-    fInternalStatus = U_ZERO_ERROR;
-}
-
 AndConstraint::AndConstraint(const AndConstraint& other) {
     this->fInternalStatus = other.fInternalStatus;
     if (U_FAILURE(fInternalStatus)) {
@@ -770,7 +762,6 @@ AndConstraint::AndConstraint(const AndConstraint& other) {
     this->op = other.op;
     this->opNum=other.opNum;
     this->value=other.value;
-    this->rangeList=nullptr;
     if (other.rangeList != nullptr) {
         LocalPointer<UVector32> newRangeList(new UVector32(fInternalStatus), fInternalStatus);
         if (U_FAILURE(fInternalStatus)) {
@@ -782,10 +773,7 @@ AndConstraint::AndConstraint(const AndConstraint& other) {
     this->integerOnly=other.integerOnly;
     this->negated=other.negated;
     this->digitsType = other.digitsType;
-    if (other.next==nullptr) {
-        this->next=nullptr;
-    }
-    else {
+    if (other.next != nullptr) {
         this->next = new AndConstraint(*other.next);
         if (this->next == nullptr) {
             fInternalStatus = U_MEMORY_ALLOCATION_ERROR;
@@ -855,31 +843,19 @@ AndConstraint::add(UErrorCode& status) {
 }
 
 
-OrConstraint::OrConstraint() {
-    childNode = nullptr;
-    next = nullptr;
-    fInternalStatus = U_ZERO_ERROR;
-}
-
 OrConstraint::OrConstraint(const OrConstraint& other) {
     this->fInternalStatus = other.fInternalStatus;
     if (U_FAILURE(fInternalStatus)) {
         return; // stop early if the object we are copying from is invalid.
     }
-    if ( other.childNode == nullptr ) {
-        this->childNode = nullptr;
-    }
-    else {
+    if ( other.childNode != nullptr ) {
         this->childNode = new AndConstraint(*(other.childNode));
         if (this->childNode == nullptr) {
             fInternalStatus = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
     }
-    if (other.next == nullptr ) {
-        this->next = nullptr;
-    }
-    else {
+    if (other.next != nullptr ) {
         this->next = new OrConstraint(*(other.next));
         if (this->next == nullptr) {
             fInternalStatus = U_MEMORY_ALLOCATION_ERROR;
@@ -937,12 +913,8 @@ OrConstraint::isFulfilled(const IFixedDecimal &number) {
 }
 
 
-RuleChain::RuleChain(): fKeyword(), fNext(nullptr), ruleHeader(nullptr), fDecimalSamples(), fIntegerSamples(),
-                        fDecimalSamplesUnbounded(FALSE), fIntegerSamplesUnbounded(FALSE), fInternalStatus(U_ZERO_ERROR) {
-}
-
 RuleChain::RuleChain(const RuleChain& other) :
-        fKeyword(other.fKeyword), fNext(nullptr), ruleHeader(nullptr), fDecimalSamples(other.fDecimalSamples),
+        fKeyword(other.fKeyword), fDecimalSamples(other.fDecimalSamples),
         fIntegerSamples(other.fIntegerSamples), fDecimalSamplesUnbounded(other.fDecimalSamplesUnbounded),
         fIntegerSamplesUnbounded(other.fIntegerSamplesUnbounded), fInternalStatus(other.fInternalStatus) {
     if (U_FAILURE(this->fInternalStatus)) {
@@ -1740,13 +1712,11 @@ int32_t FixedDecimal::getVisibleFractionDigitCount() const {
 
 
 PluralAvailableLocalesEnumeration::PluralAvailableLocalesEnumeration(UErrorCode &status) {
-    fLocales = nullptr;
-    fRes = nullptr;
     fOpenStatus = status;
     if (U_FAILURE(status)) {
         return;
     }
-    fOpenStatus = U_ZERO_ERROR;
+    fOpenStatus = U_ZERO_ERROR; // clear any warnings.
     LocalUResourceBundlePointer rb(ures_openDirect(nullptr, "plurals", &fOpenStatus));
     fLocales = ures_getByKey(rb.getAlias(), "locales", nullptr, &fOpenStatus);
 }

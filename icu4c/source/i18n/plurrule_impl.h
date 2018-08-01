@@ -310,17 +310,18 @@ public:
         NONE,
         MOD
     } RuleOp;
-    RuleOp  op;
-    int32_t opNum;           // for mod expressions, the right operand of the mod.
-    int32_t     value;       // valid for 'is' rules only.
-    UVector32   *rangeList;  // for 'in', 'within' rules. Null otherwise.
-    UBool   negated;           // TRUE for negated rules.
-    UBool   integerOnly;     // TRUE for 'within' rules.
-    tokenType digitsType;    // n | i | v | f constraint.
-    AndConstraint *next;
-    UErrorCode fInternalStatus;
+    RuleOp op = AndConstraint::NONE;
+    int32_t opNum = -1;             // for mod expressions, the right operand of the mod.
+    int32_t value = -1;             // valid for 'is' rules only.
+    UVector32 *rangeList = nullptr; // for 'in', 'within' rules. Null otherwise.
+    UBool negated = FALSE;          // TRUE for negated rules.
+    UBool integerOnly = FALSE;      // TRUE for 'within' rules.
+    tokenType digitsType = none;    // n | i | v | f constraint.
+    AndConstraint *next = nullptr;
+    // Internal error status, used for errors that occur during the copy constructor.
+    UErrorCode fInternalStatus = U_ZERO_ERROR;    
 
-    AndConstraint();
+    AndConstraint() = default;
     AndConstraint(const AndConstraint& other);
     virtual ~AndConstraint();
     AndConstraint* add(UErrorCode& status);
@@ -330,11 +331,12 @@ public:
 
 class OrConstraint : public UMemory  {
 public:
-    AndConstraint *childNode;
-    OrConstraint *next;
-    UErrorCode fInternalStatus;
-    OrConstraint();
+    AndConstraint *childNode = nullptr;
+    OrConstraint *next = nullptr;
+    // Internal error status, used for errors that occur during the copy constructor.
+    UErrorCode fInternalStatus = U_ZERO_ERROR;
 
+    OrConstraint() = default;
     OrConstraint(const OrConstraint& other);
     virtual ~OrConstraint();
     AndConstraint* add(UErrorCode& status);
@@ -345,15 +347,16 @@ public:
 class RuleChain : public UMemory  {
 public:
     UnicodeString   fKeyword;
-    RuleChain      *fNext;
-    OrConstraint   *ruleHeader;
+    RuleChain      *fNext = nullptr;
+    OrConstraint   *ruleHeader = nullptr;
     UnicodeString   fDecimalSamples;  // Samples strings from rule source
     UnicodeString   fIntegerSamples;  //   without @decimal or @integer, otherwise unprocessed.
-    UBool           fDecimalSamplesUnbounded;
-    UBool           fIntegerSamplesUnbounded;
-    UErrorCode      fInternalStatus;
+    UBool           fDecimalSamplesUnbounded = FALSE;
+    UBool           fIntegerSamplesUnbounded = FALSE;
+    // Internal error status, used for errors that occur during the copy constructor.
+    UErrorCode      fInternalStatus = U_ZERO_ERROR;
 
-    RuleChain();
+    RuleChain() = default;
     RuleChain(const RuleChain& other);
     virtual ~RuleChain();
 
@@ -387,8 +390,8 @@ class U_I18N_API PluralAvailableLocalesEnumeration: public StringEnumeration {
     virtual int32_t count(UErrorCode& status) const;
   private:
     UErrorCode      fOpenStatus;
-    UResourceBundle *fLocales;
-    UResourceBundle *fRes;
+    UResourceBundle *fLocales = nullptr;
+    UResourceBundle *fRes = nullptr;
 };
 
 U_NAMESPACE_END
