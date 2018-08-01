@@ -191,7 +191,7 @@ umutablecptrie_setRange(UMutableCPTrie *trie,
  *
  * Not every possible set of mappings can be built into a UCPTrie,
  * because of limitations resulting from speed and space optimizations.
- * Every assigned character can be mapped to a unique value.
+ * Every Unicode assigned character can be mapped to a unique value.
  * Typical data yields data structures far smaller than the limitations.
  *
  * It is possible to construct extremely unusual mappings that exceed the data structure limits.
@@ -199,8 +199,8 @@ umutablecptrie_setRange(UMutableCPTrie *trie,
  *
  * @param trie the trie trie
  * @param type selects the trie type
- * @param valueWidth selects the number of bits in a trie data value; if smaller than 32 bits, then
- *                   the values stored in the trie will be truncated first
+ * @param valueWidth selects the number of bits in a trie data value; if smaller than 32 bits,
+ *                   then the values stored in the trie will be truncated first
  * @param pErrorCode an in/out ICU UErrorCode
  *
  * @see umutablecptrie_fromUCPTrie

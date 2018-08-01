@@ -7,8 +7,6 @@ package com.ibm.icu.util;
 
 import java.util.Arrays;
 
-// TODO: Add intermediate abstract class MutableCodePointMap with abstract set() & setRange()?
-
 /**
  * Mutable Unicode code point trie.
  * Fast map from Unicode code points (U+0000..U+10FFFF) to 32-bit integer values.
@@ -28,6 +26,19 @@ import java.util.Arrays;
  * @provisional This API might change or be removed in a future release.
  */
 public final class MutableCodePointTrie extends CodePointMap implements Cloneable {
+    /**
+     * Constructs a mutable trie that initially maps each Unicode code point to the same value.
+     * It uses 32-bit data values until
+     * {@link #buildImmutable(com.ibm.icu.util.CodePointTrie.Type, com.ibm.icu.util.CodePointTrie.ValueWidth)}
+     * is called.
+     * buildImmutable() takes a valueWidth parameter which
+     * determines the number of bits in the data value in the resulting {@link CodePointTrie}.
+     *
+     * @param initialValue the initial value that is set for all code points
+     * @param errorValue the value for out-of-range code points and ill-formed UTF-8/16
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public MutableCodePointTrie(int initialValue, int errorValue) {
         index = new int[BMP_I_LIMIT];
         index3NullOffset = -1;
@@ -39,6 +50,13 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         highValue = initialValue;
     }
 
+    /**
+     * Clones this mutable trie.
+     *
+     * @return the clone
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public MutableCodePointTrie clone() {
         try {
@@ -67,6 +85,14 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         }
     }
 
+    /**
+     * Creates a mutable trie with the same contents as the {@link CodePointMap}.
+     *
+     * @param map the source map or trie
+     * @return the mutable trie
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public static MutableCodePointTrie fromCodePointMap(CodePointMap map) {
         // TODO: Consider special code branch for map instanceof CodePointTrie?
         // Use the highValue as the initialValue to reduce the highStart.
@@ -98,7 +124,11 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         index16 = null;
     }
 
-    // with range check
+    /**
+     * {@inheritDoc}
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public int get(int c) {
         if (c < 0 || MAX_UNICODE < c) {
@@ -125,6 +155,11 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         return value;
     }
 
+    /**
+     * {@inheritDoc}
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public boolean getRange(int start, CodePointTrie.FilterValue filter,
             CodePointTrie.Range range) {
@@ -192,6 +227,14 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         Arrays.fill(data, block, limit, value);
     }
 
+    /**
+     * Sets a value for a code point.
+     *
+     * @param c the code point
+     * @param value the value
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public void set(int c, int value) {
         if (c < 0 || MAX_UNICODE < c) {
             throw new IllegalArgumentException("invalid code point");
@@ -206,6 +249,16 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         Arrays.fill(data, block + start, block + limit, value);
     }
 
+    /**
+     * Sets a value for each code point [start..end].
+     * Faster and more space-efficient than setting the value for each code point separately.
+     *
+     * @param start the first code point to get the value
+     * @param end the last code point to get the value (inclusive)
+     * @param value the value
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public void setRange(int start, int end, int value) {
         if (start < 0 || MAX_UNICODE < start || end < 0 || MAX_UNICODE < end || start > end) {
             throw new IllegalArgumentException("invalid code point range");
@@ -252,6 +305,27 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         }
     }
 
+    /**
+     * Compacts the data and builds an immutable {@link CodePointTrie} according to the parameters.
+     * After this, the mutable trie will be empty.
+     *
+     * <p>Not every possible set of mappings can be built into a CodePointTrie,
+     * because of limitations resulting from speed and space optimizations.
+     * Every Unicode assigned character can be mapped to a unique value.
+     * Typical data yields data structures far smaller than the limitations.
+     *
+     * <p>It is possible to construct extremely unusual mappings that exceed the
+     * data structure limits.
+     * In such a case this function will throw an exception.
+     *
+     * @param type selects the trie type
+     * @param valueWidth selects the number of bits in a trie data value; if smaller than 32 bits,
+     *                   then the values stored in the trie will be truncated first
+     *
+     * @see #fromCodePointMap(CodePointMap)
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public CodePointTrie buildImmutable(CodePointTrie.Type type, CodePointTrie.ValueWidth valueWidth) {
         if (type == null || valueWidth == null) {
             throw new IllegalArgumentException("The type and valueWidth must be specified.");

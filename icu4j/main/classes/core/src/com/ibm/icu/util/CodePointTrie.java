@@ -26,14 +26,69 @@ import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
  * @provisional This API might change or be removed in a future release.
  */
 public abstract class CodePointTrie extends CodePointMap {
+    /**
+     * Selectors for the type of a CodePointTrie.
+     * Different trade-offs for size vs. speed.
+     *
+     * <p>Use null for {@link #fromBinary} to accept any type;
+     * {@link #getType} will return the actual type.
+     *
+     * @see MutableCodePointTrie#buildImmutable(Type, ValueWidth)
+     * @see #fromBinary
+     * @see #getType
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public enum Type {
+        /**
+         * Fast/simple/larger BMP data structure.
+         * The {@link Fast} subclasses have additional functions for lookup for BMP and supplementary code points.
+         *
+         * @see Fast
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         FAST,
+        /**
+         * Small/slower BMP data structure.
+         *
+         * @see Small
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         SMALL
     }
 
+    /**
+     * Selectors for the number of bits in a CodePointTrie data value.
+     *
+     * <p>Use null for {@link #fromBinary} to accept any data value width;
+     * {@link #getValueWidth} will return the actual data value width.
+     *
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public enum ValueWidth {
+        /**
+         * 16 bits per CodePointTrie data value.
+         *
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         BITS_16,
+        /**
+         * 32 bits per CodePointTrie data value.
+         *
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         BITS_32,
+        /**
+         * 8 bits per CodePointTrie data value.
+         *
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         BITS_8
     }
 
@@ -58,8 +113,29 @@ public abstract class CodePointTrie extends CodePointMap {
         nullValue = data.getFromIndex(nullValueOffset);
     }
 
-    // type can be null for "any"
-    // valueWidth can be null for "any"
+    /**
+     * Creates a trie from its binary form,
+     * stored in the ByteBuffer starting at the current position.
+     * Advances the buffer position to just after the trie data.
+     * Inverse of {@link #toBinary(OutputStream)}.
+     *
+     * <p>The data is copied from the buffer;
+     * later modification of the buffer will not affect the trie.
+     *
+     * @param type selects the trie type; this method throws an exception
+     *             if the type does not match the binary data;
+     *             use null to accept any type
+     * @param valueWidth selects the number of bits in a data value; this method throws an exception
+     *                  if the valueWidth does not match the binary data;
+     *                  use null to accept any data value width
+     * @param bytes a buffer containing the binary data of a CodePointTrie
+     * @return the trie
+     * @see MutableCodePointTrie#MutableCodePointTrie(int, int)
+     * @see MutableCodePointTrie#buildImmutable(Type, ValueWidth)
+     * @see #toBinary(OutputStream)
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public static CodePointTrie fromBinary(Type type, ValueWidth valueWidth, ByteBuffer bytes) {
         ByteOrder outerByteOrder = bytes.order();
         try {
@@ -197,15 +273,41 @@ public abstract class CodePointTrie extends CodePointMap {
         }
     }
 
+    /**
+     * Returns the trie type.
+     *
+     * @return the trie type
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public abstract Type getType();
+    /**
+     * Returns the number of bits in a trie data value.
+     *
+     * @return the number of bits in a trie data value
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public final ValueWidth getValueWidth() { return data.getValueWidth(); }
 
-    // with range check
+    /**
+     * {@inheritDoc}
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public int get(int c) {
         return data.getFromIndex(cpIndex(c));
     }
 
+    /**
+     * Returns a trie value for an ASCII code point, without range checking.
+     *
+     * @param c the input code point; must be U+0000..U+007F
+     * @return The ASCII code point's trie value.
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public final int asciiGet(int c) {
         return ascii[c];
     }
@@ -224,6 +326,11 @@ public abstract class CodePointTrie extends CodePointMap {
         return value;
     }
 
+    /**
+     * {@inheritDoc}
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public final boolean getRange(int start, FilterValue filter, Range range) {
         if (start < 0 || MAX_UNICODE < start) {
@@ -361,7 +468,15 @@ public abstract class CodePointTrie extends CodePointMap {
         return true;
     }
 
-    // @return number of bytes written
+    /**
+     * Writes a representation of the trie to the output stream.
+     * Inverse of {@link #fromBinary}.
+     *
+     * @param os the output stream
+     * @return the number of bytes written
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public final int toBinary(OutputStream os) {
         try {
             DataOutputStream dos = new DataOutputStream(os);
@@ -532,11 +647,24 @@ public abstract class CodePointTrie extends CodePointMap {
     /** @internal */
     private final char[] index;
 
-    /** @internal */
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
     protected final Data data;
-    /** @internal */
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
     protected final int dataLength;
-    /** Start of the last range which ends at U+10FFFF. @internal */
+    /**
+     * Start of the last range which ends at U+10FFFF.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
     protected final int highStart;
 
     /**
@@ -554,12 +682,20 @@ public abstract class CodePointTrie extends CodePointMap {
     /** @internal */
     private final int nullValue;
 
-    /** @internal */
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
     protected final int fastIndex(int c) {
         return index[c >> FAST_SHIFT] + (c & FAST_DATA_MASK);
     }
 
-    /** @internal */
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
     protected final int smallIndex(Type type, int c) {
         // Split into two methods to make this part inline-friendly.
         // In C, this part is a macro.
@@ -594,27 +730,78 @@ public abstract class CodePointTrie extends CodePointMap {
         return dataBlock + (c & SMALL_DATA_MASK);
     }
 
-    /** @internal */
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
     protected abstract int cpIndex(int c);
 
+    /**
+     * A CodePointTrie with {@value Type#FAST}.
+     *
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public static abstract class Fast extends CodePointTrie {
         private Fast(char[] index, Data data, int highStart,
                 int index3NullOffset, int dataNullOffset) {
             super(index, data, highStart, index3NullOffset, dataNullOffset);
         }
 
+        /**
+         * Creates a trie from its binary form.
+         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
+         * with {@value Type#FAST}.
+         *
+         * @param valueWidth selects the number of bits in a data value; this method throws an exception
+         *                  if the valueWidth does not match the binary data;
+         *                  use null to accept any data value width
+         * @param bytes a buffer containing the binary data of a CodePointTrie
+         * @return the trie
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public static Fast fromBinary(ValueWidth valueWidth, ByteBuffer bytes) {
             return (Fast) CodePointTrie.fromBinary(Type.FAST, valueWidth, bytes);
         }
 
+        /**
+         * @return {@value Type#FAST}
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public final Type getType() { return Type.FAST; }
 
+        /**
+         * Returns a trie value for a BMP code point (U+0000..U+FFFF), without range checking.
+         * Can be used to look up a value for a UTF-16 code unit if other parts of
+         * the string processing check for surrogates.
+         *
+         * @param c the input code point, must be U+0000..U+FFFF
+         * @return The BMP code point's trie value.
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public abstract int bmpGet(int c);
 
+        /**
+         * Returns a trie value for a supplementary code point (U+10000..U+10FFFF),
+         * without range checking.
+         *
+         * @param c the input code point, must be U+10000..U+10FFFF
+         * @return The supplementary code point's trie value.
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public abstract int suppGet(int c);
 
-        /** @internal */
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         @Override
         protected final int cpIndex(int c) {
             if (c >= 0) {
@@ -627,6 +814,11 @@ public abstract class CodePointTrie extends CodePointMap {
             return dataLength - ERROR_VALUE_NEG_DATA_OFFSET;
         }
 
+        /**
+         * {@inheritDoc}
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public final StringIterator stringIterator(CharSequence s, int sIndex) {
             return new FastStringIterator(s, sIndex);
@@ -689,20 +881,48 @@ public abstract class CodePointTrie extends CodePointMap {
         }
     }
 
+    /**
+     * A CodePointTrie with {@value Type#SMALL}.
+     *
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public static abstract class Small extends CodePointTrie {
         private Small(char[] index, Data data, int highStart,
                 int index3NullOffset, int dataNullOffset) {
             super(index, data, highStart, index3NullOffset, dataNullOffset);
         }
 
+        /**
+         * Creates a trie from its binary form.
+         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
+         * with {@value Type#SMALL}.
+         *
+         * @param valueWidth selects the number of bits in a data value; this method throws an exception
+         *                  if the valueWidth does not match the binary data;
+         *                  use null to accept any data value width
+         * @param bytes a buffer containing the binary data of a CodePointTrie
+         * @return the trie
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public static Small fromBinary(ValueWidth valueWidth, ByteBuffer bytes) {
             return (Small) CodePointTrie.fromBinary(Type.SMALL, valueWidth, bytes);
         }
 
+        /**
+         * @return {@value Type#SMALL}
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public final Type getType() { return Type.SMALL; }
 
-        /** @internal */
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         @Override
         protected final int cpIndex(int c) {
             if (c >= 0) {
@@ -715,6 +935,11 @@ public abstract class CodePointTrie extends CodePointMap {
             return dataLength - ERROR_VALUE_NEG_DATA_OFFSET;
         }
 
+        /**
+         * {@inheritDoc}
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public final StringIterator stringIterator(CharSequence s, int sIndex) {
             return new SmallStringIterator(s, sIndex);
@@ -777,6 +1002,12 @@ public abstract class CodePointTrie extends CodePointMap {
         }
     }
 
+    /**
+     * A CodePointTrie with {@value Type#FAST} and {@value ValueWidth#BITS_16}.
+     *
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final class Fast16 extends Fast {
         private final char[] dataArray;
 
@@ -786,21 +1017,46 @@ public abstract class CodePointTrie extends CodePointMap {
             this.dataArray = data16;
         }
 
+        /**
+         * Creates a trie from its binary form.
+         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
+         * with {@value Type#FAST} and {@value ValueWidth#BITS_16}.
+         *
+         * @param bytes a buffer containing the binary data of a CodePointTrie
+         * @return the trie
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public static Fast16 fromBinary(ByteBuffer bytes) {
             return (Fast16) CodePointTrie.fromBinary(Type.FAST, ValueWidth.BITS_16, bytes);
         }
 
+        /**
+         * {@inheritDoc}
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public final int get(int c) {
             return dataArray[cpIndex(c)];
         }
 
+        /**
+         * {@inheritDoc}
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public final int bmpGet(int c) {
             assert 0 <= c && c <= 0xffff;
             return dataArray[fastIndex(c)];
         }
 
+        /**
+         * {@inheritDoc}
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public final int suppGet(int c) {
             assert 0x10000 <= c && c <= 0x10ffff;
@@ -808,6 +1064,12 @@ public abstract class CodePointTrie extends CodePointMap {
         }
     }
 
+    /**
+     * A CodePointTrie with {@value Type#FAST} and {@value ValueWidth#BITS_32}.
+     *
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final class Fast32 extends Fast {
         private final int[] dataArray;
 
@@ -817,21 +1079,46 @@ public abstract class CodePointTrie extends CodePointMap {
             this.dataArray = data32;
         }
 
+        /**
+         * Creates a trie from its binary form.
+         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
+         * with {@value Type#FAST} and {@value ValueWidth#BITS_32}.
+         *
+         * @param bytes a buffer containing the binary data of a CodePointTrie
+         * @return the trie
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public static Fast32 fromBinary(ByteBuffer bytes) {
             return (Fast32) CodePointTrie.fromBinary(Type.FAST, ValueWidth.BITS_32, bytes);
         }
 
+        /**
+         * {@inheritDoc}
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public final int get(int c) {
             return dataArray[cpIndex(c)];
         }
 
+        /**
+         * {@inheritDoc}
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public final int bmpGet(int c) {
             assert 0 <= c && c <= 0xffff;
             return dataArray[fastIndex(c)];
         }
 
+        /**
+         * {@inheritDoc}
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public final int suppGet(int c) {
             assert 0x10000 <= c && c <= 0x10ffff;
@@ -839,6 +1126,12 @@ public abstract class CodePointTrie extends CodePointMap {
         }
     }
 
+    /**
+     * A CodePointTrie with {@value Type#FAST} and {@value ValueWidth#BITS_8}.
+     *
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final class Fast8 extends Fast {
         private final byte[] dataArray;
 
@@ -848,21 +1141,46 @@ public abstract class CodePointTrie extends CodePointMap {
             this.dataArray = data8;
         }
 
+        /**
+         * Creates a trie from its binary form.
+         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
+         * with {@value Type#FAST} and {@value ValueWidth#BITS_8}.
+         *
+         * @param bytes a buffer containing the binary data of a CodePointTrie
+         * @return the trie
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public static Fast8 fromBinary(ByteBuffer bytes) {
             return (Fast8) CodePointTrie.fromBinary(Type.FAST, ValueWidth.BITS_8, bytes);
         }
 
+        /**
+         * {@inheritDoc}
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public final int get(int c) {
             return dataArray[cpIndex(c)] & 0xff;
         }
 
+        /**
+         * {@inheritDoc}
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public final int bmpGet(int c) {
             assert 0 <= c && c <= 0xffff;
             return dataArray[fastIndex(c)] & 0xff;
         }
 
+        /**
+         * {@inheritDoc}
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         @Override
         public final int suppGet(int c) {
             assert 0x10000 <= c && c <= 0x10ffff;
@@ -870,34 +1188,82 @@ public abstract class CodePointTrie extends CodePointMap {
         }
     }
 
+    /**
+     * A CodePointTrie with {@value Type#SMALL} and {@value ValueWidth#BITS_16}.
+     *
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final class Small16 extends Small {
         Small16(char[] index, char[] data16, int highStart,
                 int index3NullOffset, int dataNullOffset) {
             super(index, new Data16(data16), highStart, index3NullOffset, dataNullOffset);
         }
 
+        /**
+         * Creates a trie from its binary form.
+         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
+         * with {@value Type#SMALL} and {@value ValueWidth#BITS_16}.
+         *
+         * @param bytes a buffer containing the binary data of a CodePointTrie
+         * @return the trie
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public static Small16 fromBinary(ByteBuffer bytes) {
             return (Small16) CodePointTrie.fromBinary(Type.SMALL, ValueWidth.BITS_16, bytes);
         }
     }
 
+    /**
+     * A CodePointTrie with {@value Type#SMALL} and {@value ValueWidth#BITS_32}.
+     *
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final class Small32 extends Small {
         Small32(char[] index, int[] data32, int highStart,
                 int index3NullOffset, int dataNullOffset) {
             super(index, new Data32(data32), highStart, index3NullOffset, dataNullOffset);
         }
 
+        /**
+         * Creates a trie from its binary form.
+         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
+         * with {@value Type#SMALL} and {@value ValueWidth#BITS_32}.
+         *
+         * @param bytes a buffer containing the binary data of a CodePointTrie
+         * @return the trie
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public static Small32 fromBinary(ByteBuffer bytes) {
             return (Small32) CodePointTrie.fromBinary(Type.SMALL, ValueWidth.BITS_32, bytes);
         }
     }
 
+    /**
+     * A CodePointTrie with {@value Type#SMALL} and {@value ValueWidth#BITS_8}.
+     *
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final class Small8 extends Small {
         Small8(char[] index, byte[] data8, int highStart,
                 int index3NullOffset, int dataNullOffset) {
             super(index, new Data8(data8), highStart, index3NullOffset, dataNullOffset);
         }
 
+        /**
+         * Creates a trie from its binary form.
+         * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
+         * with {@value Type#SMALL} and {@value ValueWidth#BITS_8}.
+         *
+         * @param bytes a buffer containing the binary data of a CodePointTrie
+         * @return the trie
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public static Small8 fromBinary(ByteBuffer bytes) {
             return (Small8) CodePointTrie.fromBinary(Type.SMALL, ValueWidth.BITS_8, bytes);
         }

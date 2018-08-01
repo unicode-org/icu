@@ -243,7 +243,8 @@ ucptrie_getValueWidth(const UCPTrie *trie);
  *
  * @param trie the trie
  * @param c the code point
- * @return the value
+ * @return the trie value,
+ *         or the trie error value if the code point is not in the range 0..U+10FFFF
  * @draft ICU 63
  */
 U_CAPI uint32_t U_EXPORT2
@@ -519,7 +520,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @param trie (const UCPTrie *, in) the trie (of either fast or small type)
  * @param dataAccess UCPTRIE_16, UCPTRIE_32, or UCPTRIE_8 according to the trie’s value width
  * @param c (UChar32, in) the input code point; must be U+0000..U+007F
- * @return The code point's trie value.
+ * @return The ASCII code point's trie value.
  * @draft ICU 63
  */
 #define UCPTRIE_ASCII_GET(trie, dataAccess, c) dataAccess(trie, c)

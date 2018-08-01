@@ -71,25 +71,87 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
         FIXED_ALL_SURROGATES
     }
 
-    // For getRange() & Iterator.
+    /**
+     * Callback function interface: Modifies a trie value.
+     * Optionally called by getRange().
+     * The modified value will be returned by the getRange() function.
+     *
+     * <p>Can be used to ignore some of the value bits,
+     * make a filter for one of several values,
+     * return a value index computed from the trie value, etc.
+     *
+     * @see #getRange
+     * @see #iterator
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public interface FilterValue {
+        /**
+         * Modifies the trie value.
+         *
+         * @param value trie value
+         * @return modified value
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public int apply(int value);
     }
 
-    // For getRange() & Iterator.
+    /**
+     * Range iteration result data.
+     * Code points from start to end map to the same value.
+     * The value may have been modified by {@link FilterValue#apply(int)},
+     * or it may be the surrogateValue if a RangeOption other than "normal" was used.
+     *
+     * @see #getRange
+     * @see #iterator
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public static final class Range {
         private int start;
         private int end;
         private int value;
 
+        /**
+         * Constructor. Sets start and end to -1 and value to 0.
+         *
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public Range() {
             start = end = -1;
             value = 0;
         }
 
+        /**
+         * @return the start code point
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public int getStart() { return start; }
+        /**
+         * @return the (inclusive) end code point
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public int getEnd() { return end; }
+        /**
+         * @return the range value
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public int getValue() { return value; }
+        /**
+         * Sets the range. When using {@link #iterator()},
+         * iteration will resume after the newly set end.
+         *
+         * @param start new start code point
+         * @param end new end code point
+         * @param value new value
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public void set(int start, int end, int value) {
             this.start = start;
             this.end = end;
@@ -141,16 +203,36 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * @provisional This API might change or be removed in a future release.
      */
     public class StringIterator {
-        /** @internal */
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         protected CharSequence s;
-        /** @internal */
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         protected int sIndex;
-        /** @internal */
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         protected int c;
-        /** @internal */
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         protected int value;
 
-        /** @internal */
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
         protected StringIterator(CharSequence s, int sIndex) {
             this.s = s;
             this.sIndex = sIndex;
@@ -158,6 +240,14 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
             value = 0;
         }
 
+        /**
+         * Resets the iterator to a new string and/or a new string index.
+         *
+         * @param s string to iterate over
+         * @param sIndex string index where the iteration will start
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public void reset(CharSequence s, int sIndex) {
             this.s = s;
             this.sIndex = sIndex;
@@ -165,6 +255,16 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
             value = 0;
         }
 
+        /**
+         * Reads the next code point, post-increments the string index,
+         * and gets a value from the trie.
+         * Sets the trie error value if the code point is an unpaired surrogate.
+         *
+         * @return true if the string index was not yet at the end of the string;
+         *         otherwise the iterator did not advance
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public boolean next() {
             if (sIndex >= s.length()) {
                 return false;
@@ -175,6 +275,16 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
             return true;
         }
 
+        /**
+         * Reads the previous code point, pre-decrements the string index,
+         * and gets a value from the trie.
+         * Sets the trie error value if the code point is an unpaired surrogate.
+         *
+         * @return true if the string index was not yet at the start of the string;
+         *         otherwise the iterator did not advance
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public boolean previous() {
             if (sIndex <= 0) {
                 return false;
@@ -184,15 +294,93 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
             value = get(c);
             return true;
         }
+        /**
+         * @return the string index
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public final int getIndex() { return sIndex; }
+        /**
+         * @return the code point
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public final int getCodePoint() { return c; }
+        /**
+         * @return the trie value,
+         *         or the trie error value if the code point is an unpaired surrogate
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         */
         public final int getValue() { return value; }
     }
 
+    /**
+     * Returns the value for a code point as stored in the trie, with range checking.
+     * Returns the trie error value if c is not in the range 0..U+10FFFF.
+     *
+     * @param c the code point
+     * @return the trie value,
+     *         or the trie error value if the code point is not in the range 0..U+10FFFF
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public abstract int get(int c);
 
+    /**
+     * Sets the range object to a range of code points beginning with the start parameter.
+     * The range end is the the last code point such that
+     * all those from start to there have the same value.
+     * Returns false if start is not 0..U+10FFFF.
+     * Can be used to efficiently iterate over all same-value ranges in a trie.
+     *
+     * <p>If the {@link FilterValue} parameter is not null, then
+     * the value to be delivered is passed through that filter, and the return value is the end
+     * of the range where all values are modified to the same actual value.
+     * The value is unchanged if that parameter is null.
+     *
+     * <p>Example:
+     * <pre>
+     * int start = 0;
+     * CodePointMap.Range range = new CodePointMap.Range();
+     * while (trie.getRange(start, null, range)) {
+     *     int end = range.getEnd();
+     *     int value = range.getValue();
+     *     // Work with the range start..end and its value.
+     *     start = end + 1;
+     * }
+     * </pre>
+     *
+     * @param start range start
+     * @param filter an object that may modify the trie data value,
+     *     or null if the values from the trie are to be used unmodified
+     * @param range the range object that will be set to the code point range and value
+     * @return true if start is 0..U+10FFFF; otherwise no new range is fetched
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public abstract boolean getRange(int start, FilterValue filter, Range range);
 
+    /**
+     * Sets the range object to a range of code points beginning with the start parameter.
+     * The range end is the the last code point such that
+     * all those from start to there have the same value.
+     * Returns false if start is not 0..U+10FFFF.
+     *
+     * <p>Same as the simpler {@link #getRange(int, FilterValue, Range)} but optionally
+     * modifies the range if it overlaps with surrogate code points.
+     *
+     * @param start range start
+     * @param option defines whether surrogates are treated normally,
+     *               or as having the surrogateValue; usually {@value RangeOption#NORMAL}
+     * @param surrogateValue value for surrogates; ignored if option=={@value RangeOption#NORMAL}
+     * @param filter an object that may modify the trie data value,
+     *     or null if the values from the trie are to be used unmodified
+     * @param range the range object that will be set to the code point range and value
+     * @return true if start is 0..U+10FFFF; otherwise no new range is fetched
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public boolean getRange(int start, RangeOption option, int surrogateValue,
             FilterValue filter, Range range) {
         assert option != null;
@@ -241,8 +429,8 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
 
     /**
      * Convenience iterator over same-trie-value code point ranges.
-     * Same as looping over all ranges with getRange()
-     * (simple overload or using {@value RangeOption#NORMAL}) without filtering.
+     * Same as looping over all ranges with {@link #getRange(int, FilterValue, Range)}
+     * without filtering.
      * Adjacent ranges have different trie values.
      *
      * <p>The iterator always returns the same Range object.
@@ -256,6 +444,16 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
         return new RangeIterator();
     }
 
+    /**
+     * Returns an iterator (not a java.util.Iterator) over code points of a string
+     * for fetching trie values.
+     *
+     * @param s string to iterate over
+     * @param sIndex string index where the iteration will start
+     * @return the iterator
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
     public StringIterator stringIterator(CharSequence s, int sIndex) {
         return new StringIterator(s, sIndex);
     }
