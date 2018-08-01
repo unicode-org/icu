@@ -431,17 +431,6 @@
 #   define UCONFIG_HAVE_PARSEALLINPUT 1
 #endif
 
-
-/**
- * \def UCONFIG_FORMAT_FASTPATHS_49
- * This switch turns on other formatting fastpaths. Binary incompatible in object DecimalFormat and DecimalFormatSymbols
- *
- * @internal
- */
-#ifndef UCONFIG_FORMAT_FASTPATHS_49
-#   define UCONFIG_FORMAT_FASTPATHS_49 1
-#endif
-
 /**
  * \def UCONFIG_NO_FILTERED_BREAK_ITERATION
  * This switch turns off filtered break iteration code.
