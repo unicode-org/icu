@@ -10,16 +10,15 @@
 #include "unicode/ucptrie.h"
 #include "unicode/umutablecptrie.h"  // TODO
 
-// UCPTrie signature values, in platform endianness and opposite endianness.
+/**
+ * UCPTrie signature values, in platform endianness and opposite endianness.
+ * Their ASCII byte values spell "Trie3".
+ */
 #define UCPTRIE_SIG     0x54726933
 #define UCPTRIE_OE_SIG  0x33697254
 
 /**
- * Trie data structure in serialized form:
- *
- * UCPTrieHeader header;
- * uint16_t index[header.index2Length];
- * uint16_t data[header.shiftedDataLength<<2];  -- or uint32_t data[...]
+ * Header data for the binary, memory-mappable representation of a UCPTrie/CodePointTrie.
  * @internal
  */
 struct UCPTrieHeader {
@@ -74,7 +73,6 @@ enum {
 };
 
 // Internal constants.
-// TODO: doc complete data structure
 enum {
     /** The length of the BMP index table. 1024=0x400 */
     UCPTRIE_BMP_INDEX_LENGTH = 0x10000 >> UCPTRIE_FAST_SHIFT,
@@ -183,19 +181,71 @@ U_CFUNC void umutablecptrie_setName(UMutableCPTrie *builder, const char *name);
 #endif
 
 /*
+ * Format of the binary, memory-mappable representation of a UCPTrie/CodePointTrie.
+ * For overview information see http://site.icu-project.org/design/struct/utrie
+ *
+ * The binary trie data should be 32-bit-aligned.
+ * The overall layout is:
+ *
+ * UCPTrieHeader header; -- 16 bytes, see struct definition above
+ * uint16_t index[header.indexLength];
+ * uintXY_t data[header.dataLength];
+ *
+ * The trie data array is an array of uint16_t, uint32_t, or uint8_t,
+ * specified via the UCPTrieValueWidth when building the trie.
+ * The data array is 32-bit-aligned for uint32_t, otherwise 16-bit-aligned.
+ * The overall length of the trie data is a multiple of 4 bytes.
+ * (Padding is added at the end of the index array and/or near the end of the data array as needed.)
+ *
+ * The length of the data array (dataLength) is stored as an integer split across two fields
+ * of the header struct (high bits in header.options).
+ *
+ * The trie type can be "fast" or "small" which determines the index structure,
+ * specified via the UCPTrieType when building the trie.
+ *
+ * The type and valueWidth are stored in the header.options.
+ * There are reserved type and valueWidth values, and reserved header.options bits.
+ * They could be used in future format extensions.
+ * Code reading the trie structure must fail with an error when unknown values or options are set.
+ *
+ * Values for ASCII character (U+0000..U+007F) can always be found at the start of the data array.
+ *
+ * Values for code points below a type-specific fast-indexing limit are found via two-stage lookup.
+ * For a "fast" trie, the limit is the BMP/supplementary boundary at U+10000.
+ * For a "small" trie, the limit is UCPTRIE_SMALL_MAX+1=U+1000.
+ *
+ * All code points in the range highStart..U+10FFFF map to a single highValue
+ * which is stored at the second-to-last position of the data array.
+ * (See UCPTRIE_HIGH_VALUE_NEG_DATA_OFFSET.)
+ * The highStart value is header.shiftedHighStart<<UCPTRIE_SHIFT_2.
+ * (UCPTRIE_SHIFT_2=9)
+ *
+ * Values for code points fast_limit..highStart-1 are found via four-stage lookup.
+ *
+ * There is also a trie error value stored at the last position of the data array.
+ * (See UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET.)
+ * It is intended to be returned for inputs that are not Unicode code points
+ * (outside U+0000..U+10FFFF), or in string processing for ill-formed input
+ * (unpaired surrogate in UTF-16, ill-formed UTF-8 subsequence).
+ *
  * For a "fast" trie:
  *
- * The supplementary index-1 table follows the BMP index table at offset 1024=0x400.
- * Variable length, for code points up to highStart, where the last single-value range starts.
+ * The index array starts with the BMP index table for BMP code point lookup.
+ * Its length is 1024=0x400.
+ *
+ * The supplementary index-1 table follows the BMP index table.
+ * Variable length, for code points up to highStart-1.
  * Maximum length 64=0x40=0x100000>>UCPTRIE_SHIFT_1.
  * (For 0x100000 supplementary code points U+10000..U+10ffff.)
  *
- * After this index-1 table follow the index-3 and index-2 tables.
+ * After this index-1 table follow the variable-length index-3 and index-2 tables.
  *
  * The supplementary index tables are omitted completely
- * if there is only BMP data (highStart<=0x10000).
+ * if there is only BMP data (highStart<=U+10000).
  *
  * For a "small" trie:
+ *
+ * The index array starts with a fast-index table for lookup of code points U+0000..U+0FFF.
  *
  * The "supplementary" index tables are always stored.
  * The index-1 table starts from U+0000, its maximum length is 68=0x44=0x110000>>UCPTRIE_SHIFT_1.
@@ -204,6 +254,62 @@ U_CFUNC void umutablecptrie_setName(UMutableCPTrie *builder, const char *name);
  *
  * The last index-2 block may be a partial block, storing indexes only for code points
  * below highStart.
+ *
+ * Lookup for ASCII code point c:
+ *
+ * Linear access from the start of the data array.
+ *
+ * value = data[c];
+ *
+ * Lookup for fast-range code point c:
+ *
+ * Shift the code point right by UCPTRIE_FAST_SHIFT=6 bits,
+ * fetch the index array value at that offset,
+ * add the lower code point bits, index into the data array.
+ *
+ * value = data[index[c>>6] + (c&0x3f)];
+ *
+ * (This works for ASCII as well.)
+ *
+ * Lookup for small-range code point c below highStart:
+ *
+ * Split the code point into four bit fields using several sets of shifts & masks
+ * to read consecutive values from the index-1, index-2, index-3 and data tables.
+ *
+ * If all of the data block offsets in an index-3 block fit within 16 bits (up to 0xffff),
+ * then the data block offsets are stored directly as uint16_t.
+ *
+ * Otherwise (this is very unusual but possible), the index-2 entry for the index-3 block
+ * has bit 15 (0x8000) set, and each set of 8 index-3 entries is preceded by
+ * an additional uint16_t word. Data block offsets are 18 bits wide, with the top 2 bits stored
+ * in the additional word.
+ *
+ * See ucptrie_internalSmallIndex() for details.
+ *
+ * (In a "small" trie, this works for ASCII and below-fast_limit code points as well.)
+ *
+ * Compaction:
+ *
+ * Multiple code point ranges ("blocks") that are aligned on certain boundaries
+ * (determined by the shifting/bit fields of code points) and
+ * map to the same data values normally share a single subsequence of the data array.
+ * Data blocks can also overlap partially.
+ * (Depending on the builder code finding duplicate and overlapping blocks.)
+ *
+ * Iteration over same-value ranges:
+ *
+ * Range iteration (ucptrie_getRange()) walks the structure from a start code point
+ * until some code point is found that maps to a different value;
+ * the end of the returned range is just before that.
+ *
+ * The header.dataNullOffset (split across two header fields, high bits in header.options)
+ * is the offset of a widely shared data block filled with one single value.
+ * It helps quickly skip over large ranges of data with that value.
+ * Similarly, the header.index3NullOffset is the index-array offset of an index-3 block
+ * where all index entries point to the dataNullOffset.
+ * If there is no such data or index-3 block, then these offsets are set to
+ * values that cannot be reached (data offset out of range/reserved index offset),
+ * normally UCPTRIE_NO_DATA_NULL_OFFSET or UCPTRIE_NO_INDEX3_NULL_OFFSET respectively.
  */
 
 /*
@@ -212,7 +318,7 @@ U_CFUNC void umutablecptrie_setName(UMutableCPTrie *builder, const char *name);
  * Public UCPTrie API: optimized UTF-16 access
  *
  * The following function and macros are used for highly optimized UTF-16
- * text processing. The UCPTRIE_FAST_U16_NEXTxy() macros do not depend on these.
+ * text processing. The UCPTRIE_FAST_U16_NEXT() macros do not depend on these.
  *
  * UTF-16 text processing can be optimized by detecting surrogate pairs and
  * assembling supplementary code points only when there is non-trivial data
@@ -224,12 +330,11 @@ U_CFUNC void umutablecptrie_setName(UMutableCPTrie *builder, const char *name);
  * If so, then set a special (application-specific) value for the
  * lead surrogate.
  *
- * At runtime, use UCPTRIE_FAST_BMP_GET16() or
- * UCPTRIE_FAST_BMP_GET32() per code unit. If there is non-trivial
+ * At runtime, use UCPTRIE_FAST_BMP_GET() per code unit. If there is non-trivial
  * data and the code unit is a lead surrogate, then check if a trail surrogate
  * follows. If so, assemble the supplementary code point with
- * U16_GET_SUPPLEMENTARY() and look up its value with UCPTRIE_FAST_SUPP_GET16()
- * or UCPTRIE_FAST_SUPP_GET32(); otherwise deal with the unpaired surrogate in some way.
+ * U16_GET_SUPPLEMENTARY() and look up its value with UCPTRIE_FAST_SUPP_GET();
+ * otherwise deal with the unpaired surrogate in some way.
  *
  * If there is only trivial data for lead and trail surrogates, then processing
  * can often skip them. For example, in normalization or case mapping

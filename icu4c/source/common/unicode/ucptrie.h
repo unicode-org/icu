@@ -503,11 +503,11 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @param result (out) variable for the trie lookup result
  * @draft ICU 63
  */
-#define UCPTRIE_FAST_U8_PREV(trie, dataAccess, start, src, result)  { \
+#define UCPTRIE_FAST_U8_PREV(trie, dataAccess, start, src, result) { \
     int32_t __index = (uint8_t)*--(src); \
     if (!U8_IS_SINGLE(__index)) { \
         __index = ucptrie_internalU8PrevIndex((trie), __index, (const uint8_t *)(start), \
-                                                              (const uint8_t *)(src)); \
+                                              (const uint8_t *)(src)); \
         (src) -= __index & 7; \
         __index >>= 3; \
     } \
