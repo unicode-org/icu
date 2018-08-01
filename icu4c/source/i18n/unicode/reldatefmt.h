@@ -328,7 +328,7 @@ public:
      * @param nfToAdopt Constructed object takes ownership of this pointer.
      *   It is an error for caller to delete this pointer or change its
      *   contents after calling this constructor.
-     * @status Any error is returned here.
+     * @param status Any error is returned here.
      * @stable ICU 53
      */
     RelativeDateTimeFormatter(
@@ -346,7 +346,7 @@ public:
      * @param style the format style. The UDAT_RELATIVE bit field has no effect.
      * @param capitalizationContext A value from UDisplayContext that pertains to
      * capitalization.
-     * @status Any error is returned here. 
+     * @param status Any error is returned here.
      * @stable ICU 54
      */
     RelativeDateTimeFormatter(

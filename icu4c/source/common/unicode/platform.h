@@ -38,7 +38,7 @@
  * and/or from other macros that are predefined by the compiler
  * or defined in standard (POSIX or platform or compiler) headers.
  *
- * As a temporary workaround, you can add an explicit <code>#define</code> for some macros
+ * As a temporary workaround, you can add an explicit \#define for some macros
  * before it is first tested, or add an equivalent -D macro definition
  * to the compiler's command line.
  *
@@ -207,6 +207,9 @@
 #   define CYGWINMSVC
 #endif
 */
+#ifdef U_IN_DOXYGEN
+#   define CYGWINMSVC
+#endif
 
 /**
  * \def U_PLATFORM_USES_ONLY_WIN32_API
@@ -493,13 +496,8 @@ namespace std {
  */
 #ifdef U_NOEXCEPT
     /* Use the predefined value. */
-#elif defined(_HAS_EXCEPTIONS) && !_HAS_EXCEPTIONS  /* Visual Studio */
-#   define U_NOEXCEPT
-#elif U_CPLUSPLUS_VERSION >= 11 || __has_feature(cxx_noexcept) || __has_extension(cxx_noexcept) \
-        || (defined(_MSC_VER) && _MSC_VER >= 1900)  /* Visual Studio 2015 */
-#   define U_NOEXCEPT noexcept
 #else
-#   define U_NOEXCEPT
+#   define U_NOEXCEPT noexcept
 #endif
 
 /**
@@ -763,7 +761,8 @@ namespace std {
 #elif U_HAVE_CHAR16_T \
     || (defined(__xlC__) && defined(__IBM_UTF_LITERAL) && U_SIZEOF_WCHAR_T != 2) \
     || (defined(__HP_aCC) && __HP_aCC >= 035000) \
-    || (defined(__HP_cc) && __HP_cc >= 111106)
+    || (defined(__HP_cc) && __HP_cc >= 111106) \
+    || (defined(U_IN_DOXYGEN))
 #   define U_DECLARE_UTF16(string) u ## string
 #elif U_SIZEOF_WCHAR_T == 2 \
     && (U_CHARSET_FAMILY == 0 || (U_PF_OS390 <= U_PLATFORM && U_PLATFORM <= U_PF_OS400 && defined(__UCS2__)))
