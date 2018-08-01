@@ -542,6 +542,7 @@ icu4c/source/test/perf/normperf/normperf.vcproj.*.*.user
 icu4c/source/test/perf/normperf/release
 icu4c/source/test/perf/normperf/x64
 icu4c/source/test/perf/normperf/x86
+icu4c/source/test/perf/perldriver/Common.pl
 icu4c/source/test/perf/strsrchperf/*.vcxproj.user
 icu4c/source/test/perf/strsrchperf/Makefile
 icu4c/source/test/perf/strsrchperf/x64
