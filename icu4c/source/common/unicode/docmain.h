@@ -208,9 +208,9 @@
  *     <td>C API</td>
  *   </tr>
  *   <tr>
- *     <td>Layout Engine/Complex Text Layout</td>
- *     <td>loengine.h</td>
- *     <td>icu::LayoutEngine,icu::ParagraphLayout</td>
+ *     <td>Paragraph Layout / Complex Text Layout</td>
+ *     <td>playout.h</td>
+ *     <td>icu::ParagraphLayout</td>
  *   </tr>
  *   <tr>
  *     <td>ICU I/O</td>

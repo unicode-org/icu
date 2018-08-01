@@ -199,7 +199,7 @@ class NumberFormat;
  *       <td><code>DateFormat.createDateInstance(kFull, getLocale(), status)</code>
  *    <tr>
  *       <td><i>argStyleText</i>
- *       <td><code>new SimpleDateFormat(argStyleText, getLocale(), status)
+ *       <td><code>new SimpleDateFormat(argStyleText, getLocale(), status)</code>
  *    <tr>
  *       <td rowspan=6><code>time</code>
  *       <td><i>(none)</i>
@@ -218,7 +218,7 @@ class NumberFormat;
  *       <td><code>DateFormat.createTimeInstance(kFull, getLocale(), status)</code>
  *    <tr>
  *       <td><i>argStyleText</i>
- *       <td><code>new SimpleDateFormat(argStyleText, getLocale(), status)
+ *       <td><code>new SimpleDateFormat(argStyleText, getLocale(), status)</code>
  *    <tr>
  *       <td><code>spellout</code>
  *       <td><i>argStyleText (optional)</i>
