@@ -497,6 +497,12 @@ private:
     UnicodeString   getRuleFromResource(const Locale& locale, UPluralType type, UErrorCode& status);
     RuleChain      *rulesForKeyword(const UnicodeString &keyword) const;
 
+    /**
+    * An internal status variable used to indicate that the object is in an 'invalid' state.
+    * Used by copy constructor, the assignment operator and the clone method.
+    */
+    UErrorCode mInternalStatus;
+
     friend class PluralRuleParser;
 };
 
