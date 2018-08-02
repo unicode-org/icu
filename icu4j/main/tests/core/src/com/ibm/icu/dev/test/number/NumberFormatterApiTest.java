@@ -983,6 +983,21 @@ public class NumberFormatterApiTest {
                 "0.01",
                 "0.00");
 
+        assertFormatDescending(
+                "FracSig minFrac maxSig",
+                ".0+/@#",
+                NumberFormatter.with().precision(Precision.minFraction(1).withMaxDigits(2)),
+                ULocale.ENGLISH,
+                "88,000.0",
+                "8,800.0",
+                "880.0",
+                "88.0",
+                "8.8",
+                "0.88",
+                "0.088",
+                "0.0088",
+                "0.0");
+
         assertFormatSingle(
                 "FracSig with trailing zeros A",
                 ".00/@@@+",
