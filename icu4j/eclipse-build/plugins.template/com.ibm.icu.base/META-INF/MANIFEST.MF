@@ -12,4 +12,4 @@ Export-Package: com.ibm.icu.text;base=true;version="@IMPL_VERSION@",
  com.ibm.icu.impl;x-internal:=true,
  com.ibm.icu.impl.locale;x-internal:=true
 Eclipse-LazyStart: true
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7
