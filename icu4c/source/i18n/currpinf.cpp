@@ -17,7 +17,6 @@
 #include <iostream>
 #endif
 
-
 #include "unicode/locid.h"
 #include "unicode/plurrule.h"
 #include "unicode/strenum.h"
@@ -29,7 +28,6 @@
 #include "ureslocs.h"
 
 U_NAMESPACE_BEGIN
-
 
 static const UChar gNumberPatternSeparator = 0x3B; // ;
 
@@ -287,18 +285,18 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
         return;
     }
     UErrorCode ec = U_ZERO_ERROR;
-    UResourceBundle *rb = ures_open(nullptr, loc.getName(), &ec);
-    UResourceBundle *numElements = ures_getByKeyWithFallback(rb, gNumberElementsTag, nullptr, &ec);
-    rb = ures_getByKeyWithFallback(numElements, ns->getName(), rb, &ec);
-    rb = ures_getByKeyWithFallback(rb, gPatternsTag, rb, &ec);
+    LocalUResourceBundlePointer rb(ures_open(nullptr, loc.getName(), &ec));
+    LocalUResourceBundlePointer numElements(ures_getByKeyWithFallback(rb.getAlias(), gNumberElementsTag, nullptr, &ec));
+    LocalUResourceBundlePointer numSystemScript(ures_getByKeyWithFallback(numElements.getAlias(), ns->getName(), nullptr, &ec));
+    LocalUResourceBundlePointer scriptPatterns(ures_getByKeyWithFallback(numSystemScript.getAlias(), gPatternsTag, nullptr, &ec));
     int32_t ptnLen;
-    const UChar* numberStylePattern = ures_getStringByKeyWithFallback(rb, gDecimalFormatTag, &ptnLen, &ec);
+    const UChar* numberStylePattern = ures_getStringByKeyWithFallback(scriptPatterns.getAlias(), gDecimalFormatTag, &ptnLen, &ec);
     // Fall back to "latn" if num sys specific pattern isn't there.
-    if ( ec == U_MISSING_RESOURCE_ERROR && uprv_strcmp(ns->getName(),gLatnTag)) {
+    if ( ec == U_MISSING_RESOURCE_ERROR && (uprv_strcmp(ns->getName(), gLatnTag) != 0)) {
         ec = U_ZERO_ERROR;
-        rb = ures_getByKeyWithFallback(numElements, gLatnTag, rb, &ec);
-        rb = ures_getByKeyWithFallback(rb, gPatternsTag, rb, &ec);
-        numberStylePattern = ures_getStringByKeyWithFallback(rb, gDecimalFormatTag, &ptnLen, &ec);
+        numSystemScript.adoptInstead(ures_getByKeyWithFallback(numElements.getAlias(), gLatnTag, nullptr, &ec));
+        scriptPatterns.adoptInstead(ures_getByKeyWithFallback(numSystemScript.getAlias(), gPatternsTag, nullptr, &ec));
+        numberStylePattern = ures_getStringByKeyWithFallback(scriptPatterns.getAlias(), gDecimalFormatTag, &ptnLen, &ec);
     }
     int32_t numberStylePatternLen = ptnLen;
     const UChar* negNumberStylePattern = nullptr;
@@ -318,9 +316,6 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
         }
     }
 
-    ures_close(numElements);
-    ures_close(rb);
-
     if (U_FAILURE(ec)) {
         // If OOM occurred during the above code, then we want to report that back to the caller.
         if (ec == U_MEMORY_ALLOCATION_ERROR) {
@@ -329,19 +324,19 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
         return;
     }
 
-    UResourceBundle *currRb = ures_open(U_ICUDATA_CURR, loc.getName(), &ec);
-    UResourceBundle *currencyRes = ures_getByKeyWithFallback(currRb, gCurrUnitPtnTag, nullptr, &ec);
+    LocalUResourceBundlePointer currRb(ures_open(U_ICUDATA_CURR, loc.getName(), &ec));
+    LocalUResourceBundlePointer currencyRes(ures_getByKeyWithFallback(currRb.getAlias(), gCurrUnitPtnTag, nullptr, &ec));
     
 #ifdef CURRENCY_PLURAL_INFO_DEBUG
     std::cout << "in set up\n";
 #endif
-    StringEnumeration* keywords = fPluralRules->getKeywords(ec);
+    LocalPointer<StringEnumeration> keywords(fPluralRules->getKeywords(ec), ec);
     if (U_SUCCESS(ec)) {
         const char* pluralCount;
         while (((pluralCount = keywords->next(nullptr, ec)) != nullptr) && U_SUCCESS(ec)) {
             int32_t ptnLen;
             UErrorCode err = U_ZERO_ERROR;
-            const UChar* patternChars = ures_getStringByKeyWithFallback(currencyRes, pluralCount, &ptnLen, &err);
+            const UChar* patternChars = ures_getStringByKeyWithFallback(currencyRes.getAlias(), pluralCount, &ptnLen, &err);
             if (err == U_MEMORY_ALLOCATION_ERROR || patternChars == nullptr) {
                 ec = err;
                 break;
@@ -383,12 +378,7 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
     if (ec == U_MEMORY_ALLOCATION_ERROR) {
         status = ec;
     }
-    delete keywords;
-    ures_close(currencyRes);
-    ures_close(currRb);
 }
-
-
 
 void
 CurrencyPluralInfo::deleteHash(Hashtable* hTable) {
