@@ -216,7 +216,6 @@ CurrencyPluralInfo::setPluralRules(const UnicodeString& ruleDescription,
                                    UErrorCode& status) {
     if (U_SUCCESS(status)) {
         delete fPluralRules;
-        fPluralRules = nullptr;
         fPluralRules = PluralRules::createRules(ruleDescription, status);
     }
 }
@@ -413,12 +412,12 @@ void
 CurrencyPluralInfo::copyHash(const Hashtable* source,
                            Hashtable* target,
                            UErrorCode& status) {
-    if ( U_FAILURE(status) ) {
+    if (U_FAILURE(status)) {
         return;
     }
     int32_t pos = UHASH_FIRST;
     const UHashElement* element = nullptr;
-    if ( source ) {
+    if (source) {
         while ( (element = source->nextElement(pos)) != nullptr ) {
             const UHashTok keyTok = element->key;
             const UnicodeString* key = (UnicodeString*)keyTok.pointer;
