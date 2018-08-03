@@ -751,22 +751,18 @@ openCommonData(const char *path,          /*  Path from OpenChoice?          */
 
     UDataPathIterator iter(u_getDataDirectory(), inBasename, path, ".dat", TRUE, pErrorCode);
 
-    UErrorCode mapFileStatus = U_ZERO_ERROR;
-
-    while((UDataMemory_isLoaded(&tData)==FALSE) && (pathBuffer = iter.next(pErrorCode)) != NULL)
+    while ((UDataMemory_isLoaded(&tData)==FALSE) && (pathBuffer = iter.next(pErrorCode)) != NULL)
     {
 #ifdef UDATA_DEBUG
         fprintf(stderr, "ocd: trying path %s - ", pathBuffer);
 #endif
-        uprv_mapFile(&tData, pathBuffer, &mapFileStatus);
-        // Stop as soon as we hit a memory allocation failure.
-        if (mapFileStatus == U_MEMORY_ALLOCATION_ERROR) {
-            *pErrorCode = mapFileStatus;
-            return NULL; 
-        }
+        uprv_mapFile(&tData, pathBuffer, pErrorCode);
 #ifdef UDATA_DEBUG
         fprintf(stderr, "%s\n", UDataMemory_isLoaded(&tData)?"LOADED":"not loaded");
 #endif
+    }
+    if (U_FAILURE(*pErrorCode)) {
+        return NULL;
     }
 
 #if defined(OS390_STUBDATA) && defined(OS390BATCH)
@@ -776,8 +772,7 @@ openCommonData(const char *path,          /*  Path from OpenChoice?          */
         uprv_strncpy(ourPathBuffer, path, 1019);
         ourPathBuffer[1019]=0;
         uprv_strcat(ourPathBuffer, ".dat");
-        uprv_mapFile(&tData, ourPathBuffer, &mapFileStatus);
-        // Possibly want to check for OOM here too?
+        uprv_mapFile(&tData, ourPathBuffer, pErrorCode);
     }
 #endif
 
@@ -868,7 +863,7 @@ static UBool extendICUData(UErrorCode *pErr)
     umtx_unlock(&extendICUDataMutex);
 #endif
     return didUpdate;               /* Return true if ICUData pointer was updated.   */
-                                    /*   (Could potentialy have been done by another thread racing */
+                                    /*   (Could potentially have been done by another thread racing */
                                     /*   us through here, but that's fine, we still return true    */
                                     /*   so that current thread will also examine extended data.   */
 }
@@ -994,12 +989,12 @@ static UDataMemory *doLoadFromIndividualFiles(const char *pkgName,
     /* init path iterator for individual files */
     UDataPathIterator iter(dataPath, pkgName, path, tocEntryPathSuffix, FALSE, pErrorCode);
 
-    while((pathBuffer = iter.next(pErrorCode)) != NULL)
+    while ((pathBuffer = iter.next(pErrorCode)) != NULL)
     {
 #ifdef UDATA_DEBUG
         fprintf(stderr, "UDATA: trying individual file %s\n", pathBuffer);
 #endif
-        if(uprv_mapFile(&dataMemory, pathBuffer, pErrorCode))
+        if (uprv_mapFile(&dataMemory, pathBuffer, pErrorCode))
         {
             pEntryData = checkDataItem(dataMemory.pHeader, isAcceptable, context, type, name, subErrorCode, pErrorCode);
             if (pEntryData != NULL) {
@@ -1015,7 +1010,7 @@ static UDataMemory *doLoadFromIndividualFiles(const char *pkgName,
                 return pEntryData;
             }
 
-            /* the data is not acceptable, or some error occured.  Either way, unmap the memory */
+            /* the data is not acceptable, or some error occurred.  Either way, unmap the memory */
             udata_close(&dataMemory);
 
             /* If we had a nasty error, bail out completely.  */
