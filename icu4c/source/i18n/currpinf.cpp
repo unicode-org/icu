@@ -102,7 +102,6 @@ CurrencyPluralInfo::operator=(const CurrencyPluralInfo& info) {
     }
 
     deleteHash(fPluralCountToCurrencyUnitPattern);
-    
     fPluralCountToCurrencyUnitPattern = initHash(fInternalStatus);
     copyHash(info.fPluralCountToCurrencyUnitPattern, 
              fPluralCountToCurrencyUnitPattern, fInternalStatus);
@@ -197,7 +196,7 @@ CurrencyPluralInfo::getCurrencyPluralPattern(const UnicodeString&  pluralCount,
         }
         if (currencyPluralPattern == nullptr) {
             // no currencyUnitPatterns defined, 
-            // fallback to predefined defult.
+            // fallback to predefined default.
             // This should never happen when ICU resource files are
             // available, since currencyUnitPattern of "other" is always
             // defined in root.
@@ -218,10 +217,8 @@ void
 CurrencyPluralInfo::setPluralRules(const UnicodeString& ruleDescription,
                                    UErrorCode& status) {
     if (U_SUCCESS(status)) {
-        if (fPluralRules) {
-            delete fPluralRules;
-            fPluralRules = nullptr;
-        }
+        delete fPluralRules;
+        fPluralRules = nullptr;
         fPluralRules = PluralRules::createRules(ruleDescription, status);
     }
 }
@@ -253,20 +250,17 @@ CurrencyPluralInfo::initialize(const Locale& loc, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
-    if (fLocale) {
-        delete fLocale;
-        fLocale = nullptr;
-    }
-    if (fPluralRules) {
-        delete fPluralRules;
-        fPluralRules = nullptr;
-    }
+    delete fLocale;
+    fLocale = nullptr;    
+    delete fPluralRules;
+    fPluralRules = nullptr;
+
     fLocale = loc.clone();
     if (fLocale == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    // If the locale passed in wasn't bogus, but our clone is bogus, then OOM happened
+    // If the locale passed in wasn't bogus, but our clone'd locale is bogus, then OOM happened
     // during the call to loc.clone().
     if (!loc.isBogus() && fLocale->isBogus()) {
         status = U_MEMORY_ALLOCATION_ERROR;
@@ -275,7 +269,6 @@ CurrencyPluralInfo::initialize(const Locale& loc, UErrorCode& status) {
     fPluralRules = PluralRules::forLocale(loc, status);
     setupCurrencyPluralPattern(loc, status);
 }
-
    
 void
 CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& status) {
@@ -283,9 +276,7 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
         return;
     }
 
-    if (fPluralCountToCurrencyUnitPattern) {
-        deleteHash(fPluralCountToCurrencyUnitPattern);
-    }
+    deleteHash(fPluralCountToCurrencyUnitPattern);
     fPluralCountToCurrencyUnitPattern = initHash(status);
     if (U_FAILURE(status)) {
         return;
