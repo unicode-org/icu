@@ -418,7 +418,8 @@ private:
     const char *path;                              /* working path (u_icudata_Dir) */
     const char *nextPath;                          /* path following this one */
     const char *basename;                          /* item's basename (icudt22e_mt.res)*/
-    const char *suffix;                            /* item suffix (can be null) */
+
+    StringPiece suffix;                            /* item suffix (can be null) */
 
     uint32_t    basenameLen;                       /* length of basename */
 
@@ -432,13 +433,15 @@ private:
 };
 
 /**
- * @param iter  The iterator to be initialized. Its current state does not matter. 
- * @param path  The full pathname to be iterated over.  If NULL, defaults to U_ICUDATA_NAME 
- * @param pkg   Package which is being searched for, ex "icudt28l".  Will ignore leave directories such as /icudt28l 
- * @param item  Item to be searched for.  Can include full path, such as /a/b/foo.dat 
- * @param suffix  Optional item suffix, if not-null (ex. ".dat") then 'path' can contain 'item' explicitly.
- *               Ex:   'stuff.dat' would be found in '/a/foo:/tmp/stuff.dat:/bar/baz' as item #2.   
- *                     '/blarg/stuff.dat' would also be found.
+ * @param iter    The iterator to be initialized. Its current state does not matter.
+ * @param inPath  The full pathname to be iterated over.  If NULL, defaults to U_ICUDATA_NAME 
+ * @param pkg     Package which is being searched for, ex "icudt28l".  Will ignore leaf directories such as /icudt28l 
+ * @param item    Item to be searched for.  Can include full path, such as /a/b/foo.dat 
+ * @param inSuffix  Optional item suffix, if not-null (ex. ".dat") then 'path' can contain 'item' explicitly.
+ *             Ex:   'stuff.dat' would be found in '/a/foo:/tmp/stuff.dat:/bar/baz' as item #2.   
+ *                   '/blarg/stuff.dat' would also be found.
+ *  Note: inSuffix may also be the 'item' being searched for as well, (ex: "ibm-5348_P100-1997.cnv"), in which case 
+ *        the 'item' parameter is often the same as pkg. (Though sometimes might have a tree part as well, ex: "icudt62l-curr").
  */
 UDataPathIterator::UDataPathIterator(const char *inPath, const char *pkg,
                                      const char *item, const char *inSuffix, UBool doCheckLastFour,
@@ -566,7 +569,7 @@ const char *UDataPathIterator::next(UErrorCode *pErrorCode)
 
         if(checkLastFour == TRUE && 
            (pathLen>=4) &&
-           uprv_strncmp(pathBuffer.data() +(pathLen-4), suffix, 4)==0 && /* suffix matches */
+           uprv_strncmp(pathBuffer.data() +(pathLen-4), suffix.data(), 4)==0 && /* suffix matches */
            uprv_strncmp(findBasename(pathBuffer.data()), basename, basenameLen)==0  && /* base matches */
            uprv_strlen(pathBasename)==(basenameLen+4)) { /* base+suffix = full len */
 
@@ -602,9 +605,13 @@ const char *UDataPathIterator::next(UErrorCode *pErrorCode)
             /* + basename */
             pathBuffer.append(packageStub.data()+1, packageStub.length()-1, *pErrorCode);
 
-            if(*suffix)  /* tack on suffix */
+            if (!suffix.empty())  /* tack on suffix */
             {
-                pathBuffer.ensureEndsWithFileSeparator(*pErrorCode);
+                if (suffix.length() > 4) {
+                    // If the suffix is actually an item ("ibm-5348_P100-1997.cnv") and not an extension (".res")
+                    // then we need to ensure that the path ends with a separator.
+                    pathBuffer.ensureEndsWithFileSeparator(*pErrorCode);
+                }
                 pathBuffer.append(suffix, *pErrorCode);
             }
         }
