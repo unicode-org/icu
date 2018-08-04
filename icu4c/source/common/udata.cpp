@@ -604,6 +604,7 @@ const char *UDataPathIterator::next(UErrorCode *pErrorCode)
 
             if(*suffix)  /* tack on suffix */
             {
+                pathBuffer.ensureEndsWithFileSeparator(*pErrorCode);
                 pathBuffer.append(suffix, *pErrorCode);
             }
         }
