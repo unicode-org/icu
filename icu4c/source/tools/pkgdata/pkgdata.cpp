@@ -904,7 +904,8 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
         if (IN_DLL_MODE(mode)) {
             sprintf(libFileNames[LIB_FILE], "%s", libName);
         } else {
-            sprintf(libFileNames[LIB_FILE], "%s%s",
+            sprintf(libFileNames[LIB_FILE], "%s%s%s",
+                    (strstr(libName, "icudt") ? "lib" : ""),
                     pkgDataFlags[LIBPREFIX],
                     libName);
         }
