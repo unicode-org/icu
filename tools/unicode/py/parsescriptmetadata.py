@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python -B
 # -*- coding: utf-8 -*-
 #
 # Copyright (C) 2017 and later: Unicode, Inc. and others.
