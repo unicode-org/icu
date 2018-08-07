@@ -313,7 +313,6 @@ enum URBNFRuleSetTag {
  *     <td>The rule for an IEEE 754 NaN (not a number).</td>
  *   </tr>
  *   <tr>
- *   <tr>
  *     <td><em>nothing</em></td>
  *     <td>If the rule's rule descriptor is left out, the base value is one plus the
  *     preceding rule's base value (or zero if this is the first rule in the list) in a normal

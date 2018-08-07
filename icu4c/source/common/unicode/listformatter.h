@@ -33,7 +33,10 @@ class Hashtable;
 struct ListFormatInternal;
 
 /* The following can't be #ifndef U_HIDE_INTERNAL_API, needed for other .h file declarations */
-/** @internal */
+/**
+ * @internal
+ * \cond
+ */
 struct ListFormatData : public UMemory {
     UnicodeString twoPattern;
     UnicodeString startPattern;
@@ -43,6 +46,7 @@ struct ListFormatData : public UMemory {
   ListFormatData(const UnicodeString& two, const UnicodeString& start, const UnicodeString& middle, const UnicodeString& end) :
       twoPattern(two), startPattern(start), middlePattern(middle), endPattern(end) {}
 };
+/** \endcond */
 
 
 /**

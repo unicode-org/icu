@@ -24,8 +24,8 @@ class UnicodeString;
  * in linear progression. Does not support moving/reordering of text.
  *
  * There are two types of edits: <em>change edits</em> and <em>no-change edits</em>. Add edits to
- * instances of this class using {@link #addReplace(int, int)} (for change edits) and
- * {@link #addUnchanged(int)} (for no-change edits). Change edits are retained with full granularity,
+ * instances of this class using {@link #addReplace(int32_t, int32_t)} (for change edits) and
+ * {@link #addUnchanged(int32_t)} (for no-change edits). Change edits are retained with full granularity,
  * whereas adjacent no-change edits are always merged together. In no-change edits, there is a one-to-one
  * mapping between code points in the source and destination strings.
  *
@@ -62,11 +62,11 @@ class UnicodeString;
  * </ul>
  *
  * The "fine changes" and "coarse changes" iterators will step through only the change edits when their
- * {@link Edits::Iterator#next()} methods are called. They are identical to the non-change iterators when
- * their {@link Edits::Iterator#findSourceIndex(int)} or {@link Edits::Iterator#findDestinationIndex(int)}
+ * `Edits::Iterator::next()` methods are called. They are identical to the non-change iterators when
+ * their `Edits::Iterator::findSourceIndex()` or `Edits::Iterator::findDestinationIndex()`
  * methods are used to walk through the string.
  *
- * For examples of how to use this class, see the test <code>TestCaseMapEditsIteratorDocs</code> in
+ * For examples of how to use this class, see the test `TestCaseMapEditsIteratorDocs` in
  * UCharacterCaseTest.java.
  *
  * An Edits object tracks a separate UErrorCode, but ICU string transformation functions
@@ -189,9 +189,9 @@ public:
      * starts at {@link #sourceIndex()} and runs for {@link #oldLength()} chars; the destination string
      * span starts at {@link #destinationIndex()} and runs for {@link #newLength()} chars.
      *
-     * The iterator can be moved between edits using the {@link #next()}, {@link #findSourceIndex(int)},
-     * and {@link #findDestinationIndex(int)} methods. Calling any of these methods mutates the iterator
-     * to make it point to the corresponding edit.
+     * The iterator can be moved between edits using the `next()`, `findSourceIndex(int32_t, UErrorCode &)`,
+     * and `findDestinationIndex(int32_t, UErrorCode &)` methods.
+     * Calling any of these methods mutates the iterator to make it point to the corresponding edit.
      *
      * For more information, see the documentation for {@link Edits}.
      *
@@ -366,13 +366,13 @@ public:
         /**
          * The start index of the current span in the replacement string; the span has length
          * {@link #newLength}. Well-defined only if the current edit is a change edit.
-         * <p>
-         * The <em>replacement string</em> is the concatenation of all substrings of the destination
+         *
+         * The *replacement string* is the concatenation of all substrings of the destination
          * string corresponding to change edits.
-         * <p>
+         *
          * This method is intended to be used together with operations that write only replacement
-         * characters (e.g., {@link CaseMap#omitUnchangedText()}). The source string can then be modified
-         * in-place.
+         * characters (e.g. operations specifying the \ref U_OMIT_UNCHANGED_TEXT option).
+         * The source string can then be modified in-place.
          *
          * @return the current index into the replacement-characters-only string,
          *         not counting unchanged spans

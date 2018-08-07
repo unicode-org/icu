@@ -77,8 +77,7 @@ class TransliteratorIDParser;
  * transliteration.  For example, given a string <code>input</code>
  * and a transliterator <code>t</code>, the call
  *
- * \htmlonly<blockquote>\endhtmlonly<code>String result = t.transliterate(input);
- * </code>\htmlonly</blockquote>\endhtmlonly
+ *     String result = t.transliterate(input);
  *
  * will transliterate it and return the result.  Other methods allow
  * the client to specify a substring to be transliterated and to use
@@ -98,22 +97,18 @@ class TransliteratorIDParser;
  * contents of the buffer may show text being modified as each new
  * character arrives.
  *
- * <p>Consider the simple <code>RuleBasedTransliterator</code>:
+ * <p>Consider the simple `RuleBasedTransliterator`:
  *
- * \htmlonly<blockquote>\endhtmlonly<code>
- * th&gt;{theta}<br>
- * t&gt;{tau}
- * </code>\htmlonly</blockquote>\endhtmlonly
+ *     th>{theta}
+ *     t>{tau}
  *
  * When the user types 't', nothing will happen, since the
  * transliterator is waiting to see if the next character is 'h'.  To
  * remedy this, we introduce the notion of a cursor, marked by a '|'
  * in the output string:
  *
- * \htmlonly<blockquote>\endhtmlonly<code>
- * t&gt;|{tau}<br>
- * {tau}h&gt;{theta}
- * </code>\htmlonly</blockquote>\endhtmlonly
+ *     t>|{tau}
+ *     {tau}h>{theta}
  *
  * Now when the user types 't', tau appears, and if the next character
  * is 'h', the tau changes to a theta.  This is accomplished by
@@ -499,9 +494,9 @@ public:
      * for details.
      * @param text the buffer holding transliterated and
      * untransliterated text
-     * @param index an array of three integers.  See {@link #transliterate(Replaceable&, UTransPosition&, const UnicodeString*, UErrorCode&) const }.
+     * @param index an array of three integers.
      * @param status    Output param to filled in with a success or an error.
-     * @see #transliterate(Replaceable, int[], String)
+     * @see #transliterate(Replaceable&, UTransPosition&, const UnicodeString&, UErrorCode &) const
      * @stable ICU 2.0
      */
     virtual void transliterate(Replaceable& text, UTransPosition& index,

@@ -406,7 +406,7 @@ public:
      * returning a const reference to one of the symbol strings.
      * The returned reference becomes invalid when the symbol is changed
      * or when the DecimalFormatSymbols are destroyed.
-     * Note: moved #ifndef U_HIDE_INTERNAL_API after this, since this is needed for inline in DecimalFormat
+     * Note: moved \#ifndef U_HIDE_INTERNAL_API after this, since this is needed for inline in DecimalFormat
      *
      * This is not currently stable API, but if you think it should be stable,
      * post a comment on the following ticket and the ICU team will take a look:
