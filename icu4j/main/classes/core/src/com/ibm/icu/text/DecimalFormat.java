@@ -1857,9 +1857,6 @@ public class DecimalFormat extends NumberFormat {
    * <p>For example, if grouping is enabled, 12345 will be printed as "12,345" in <em>en-US</em>. If
    * grouping were disabled, it would instead be printed as simply "12345".
    *
-   * <p>Calling <code>df.setGroupingUsed(true)</code> is functionally equivalent to setting grouping
-   * size to 3, as in <code>df.setGroupingSize(3)</code>.
-   *
    * @param enabled true to enable grouping separators; false to disable them.
    * @see #setGroupingSize
    * @see #setSecondaryGroupingSize
