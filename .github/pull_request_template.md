@@ -11,7 +11,7 @@ You will be automatically asked to sign the contributors license before the PR i
 ##### Checklist
 
 - [ ] Issue filed at https://unicode-org.atlassian.net :  ICU-______
-- [ ] Rename PR to include Issue number
+- [ ] Update PR title to include Issue number
 - [ ] Issue accepted
 - [ ] Tests included
 - [ ] Documentation is changed or added
