@@ -32,21 +32,21 @@
 /**
  * The opaque type for a paragraph layout.
  *
- * @internal
+ * @preview
  */
 typedef void pl_paragraph;
 
 /**
  * The opaque type for a line in a paragraph layout.
  *
- * @internal
+ * @preview
  */
 typedef void pl_line;
 
 /**
  * The opaque type for a visual run in a line.
  *
- * @internal
+ * @preview
  */
 typedef void pl_visualRun;
 
@@ -93,7 +93,7 @@ typedef void pl_visualRun;
  * @see longine.h
  * @see plruns.h
  *
- * @internal
+ * @preview
  */
 U_INTERNAL pl_paragraph * U_EXPORT2
 pl_create(const LEUnicode chars[],
@@ -113,7 +113,7 @@ pl_create(const LEUnicode chars[],
  *                  closed. Once this routine returns the object
  *                  can no longer be referenced
  *
- * @internal
+ * @preview
  */
 U_INTERNAL void U_EXPORT2
 pl_close(pl_paragraph *paragraph);
@@ -128,7 +128,7 @@ pl_close(pl_paragraph *paragraph);
  *
  * @return <code>TRUE</code> if any of the text requires complex processing.
  *
- * @internal
+ * @preview
  */
 
 U_INTERNAL le_bool U_EXPORT2
@@ -144,7 +144,7 @@ pl_isComplex(const LEUnicode chars[],
  *
  * @return the resolved paragraph level.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL UBiDiLevel U_EXPORT2
 pl_getParagraphLevel(pl_paragraph *paragraph);
@@ -158,7 +158,7 @@ pl_getParagraphLevel(pl_paragraph *paragraph);
  *         <code>UBIDI_RTL</code> if the text is all right to left,
  *         or <code>UBIDI_MIXED</code> if the text has mixed direction.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL UBiDiDirection U_EXPORT2
 pl_getTextDirection(pl_paragraph *paragraph);
@@ -176,7 +176,7 @@ pl_getTextDirection(pl_paragraph *paragraph);
  *
  * @return the ascent value.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL le_int32 U_EXPORT2
 pl_getAscent(const pl_paragraph *paragraph);
@@ -189,7 +189,7 @@ pl_getAscent(const pl_paragraph *paragraph);
  *
  * @return the decent value.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL le_int32 U_EXPORT2
 pl_getDescent(const pl_paragraph *paragraph);
@@ -202,7 +202,7 @@ pl_getDescent(const pl_paragraph *paragraph);
  *
  * @return the leading value.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL le_int32 U_EXPORT2
 pl_getLeading(const pl_paragraph *paragraph);
@@ -212,7 +212,7 @@ pl_getLeading(const pl_paragraph *paragraph);
  *
  * @param paragraph the <code>pl_paragraph</code>
  *
- * @internal
+ * @preview
  */
 U_INTERNAL void U_EXPORT2
 pl_reflow(pl_paragraph *paragraph);
@@ -233,7 +233,7 @@ pl_reflow(pl_paragraph *paragraph);
  *
  * @see pl_line
  *
- * @internal
+ * @preview
  */
 U_INTERNAL pl_line * U_EXPORT2
 pl_nextLine(pl_paragraph *paragraph, float width);
@@ -245,7 +245,7 @@ pl_nextLine(pl_paragraph *paragraph, float width);
  *
  * @param line the <code>pl_line</code> object to close.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL void U_EXPORT2
 pl_closeLine(pl_line *line);
@@ -257,7 +257,7 @@ pl_closeLine(pl_line *line);
  *
  * @return the number of visual runs.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL le_int32 U_EXPORT2
 pl_countLineRuns(const pl_line *line);
@@ -270,7 +270,7 @@ pl_countLineRuns(const pl_line *line);
  *
  * @return the ascent of the line.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL le_int32 U_EXPORT2
 pl_getLineAscent(const pl_line *line);
@@ -283,7 +283,7 @@ pl_getLineAscent(const pl_line *line);
  *
  * @return the descent of the line.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL le_int32 U_EXPORT2
 pl_getLineDescent(const pl_line *line);
@@ -296,7 +296,7 @@ pl_getLineDescent(const pl_line *line);
  *
  * @return the leading of the line.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL le_int32 U_EXPORT2
 pl_getLineLeading(const pl_line *line);
@@ -310,7 +310,7 @@ pl_getLineLeading(const pl_line *line);
  *
  * @return the width of the line.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL le_int32 U_EXPORT2
 pl_getLineWidth(const pl_line *line);
@@ -329,7 +329,7 @@ pl_getLineWidth(const pl_line *line);
  *
  * @see pl_visualRun
  *
- * @internal
+ * @preview
  */
 U_INTERNAL const pl_visualRun * U_EXPORT2
 pl_getLineVisualRun(const pl_line *line, le_int32 runIndex);
@@ -346,7 +346,7 @@ pl_getLineVisualRun(const pl_line *line, le_int32 runIndex);
  *
  * @see le_font
  *
- * @internal
+ * @preview
  */
 U_INTERNAL const le_font * U_EXPORT2
 pl_getVisualRunFont(const pl_visualRun *run);
@@ -359,7 +359,7 @@ pl_getVisualRunFont(const pl_visualRun *run);
  * @return the direction of the run. This will be <code>UBIDI_LTR</code> if the
  *         run is left-to-right and <code>UBIDI_RTL</code> if the line is right-to-left.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL UBiDiDirection U_EXPORT2
 pl_getVisualRunDirection(const pl_visualRun *run);
@@ -371,7 +371,7 @@ pl_getVisualRunDirection(const pl_visualRun *run);
  *
  * @return the number of glyphs.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL le_int32 U_EXPORT2
 pl_getVisualRunGlyphCount(const pl_visualRun *run);
@@ -386,7 +386,7 @@ pl_getVisualRunGlyphCount(const pl_visualRun *run);
  *         is owned by the <code>pl_visualRun</code> object and must not be deleted.
  *         It will remain valid as long as the <code>pl_visualRun</code> object is valid.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL const LEGlyphID * U_EXPORT2
 pl_getVisualRunGlyphs(const pl_visualRun *run);
@@ -404,7 +404,7 @@ pl_getVisualRunGlyphs(const pl_visualRun *run);
  *         is owned by the <code>pl_visualRun</code> object and must not be deleted.
  *         It will remain valid as long as the <code>pl_visualRun</code> object is valid.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL const float * U_EXPORT2
 pl_getVisualRunPositions(const pl_visualRun *run);
@@ -419,7 +419,7 @@ pl_getVisualRunPositions(const pl_visualRun *run);
  *         is owned by the <code>pl_visualRun</code> object and must not be deleted.
  *         It will remain valid as long as the <code>pl_visualRun</code> object is valid.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL const le_int32 * U_EXPORT2
 pl_getVisualRunGlyphToCharMap(const pl_visualRun *run);
@@ -432,7 +432,7 @@ pl_getVisualRunGlyphToCharMap(const pl_visualRun *run);
  *
  * @return the ascent value of this run's font.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL le_int32 U_EXPORT2
 pl_getVisualRunAscent(const pl_visualRun *run);
@@ -445,7 +445,7 @@ pl_getVisualRunAscent(const pl_visualRun *run);
  *
  * @return the descent value of this run's font.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL le_int32 U_EXPORT2
 pl_getVisualRunDescent(const pl_visualRun *run);
@@ -458,7 +458,7 @@ pl_getVisualRunDescent(const pl_visualRun *run);
  *
  * @return the leading value of this run's font.
  *
- * @internal
+ * @preview
  */
 U_INTERNAL le_int32 U_EXPORT2
 pl_getVisualRunLeading(const pl_visualRun *run);
