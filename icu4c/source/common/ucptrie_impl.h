@@ -221,6 +221,9 @@ U_CFUNC void umutablecptrie_setName(UMutableCPTrie *builder, const char *name);
  * (UCPTRIE_SHIFT_2=9)
  *
  * Values for code points fast_limit..highStart-1 are found via four-stage lookup.
+ * The data block size is smaller for this range than for the fast range.
+ * This together with more index stages with small blocks makes this range
+ * more easily compactable.
  *
  * There is also a trie error value stored at the last position of the data array.
  * (See UCPTRIE_ERROR_VALUE_NEG_DATA_OFFSET.)

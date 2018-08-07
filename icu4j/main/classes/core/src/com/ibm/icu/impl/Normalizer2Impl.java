@@ -442,7 +442,7 @@ public final class Normalizer2Impl {
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         @Override
         public boolean isDataVersionAcceptable(byte version[]) {
-            return version[0]==3;
+            return version[0]==4;
         }
     }
     private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();

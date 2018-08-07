@@ -769,7 +769,7 @@ unorm_getFCD16(UChar32 c);
 
 /**
  * Format of Normalizer2 .nrm data files.
- * Format version 3.0.
+ * Format version 4.0.
  *
  * Normalizer2 .nrm data files provide data for the Unicode Normalization algorithms.
  * ICU ships with data files for standard Unicode Normalization Forms
@@ -951,6 +951,20 @@ unorm_getFCD16(UChar32 c);
  *   which is artificially assigned "worst case" values lccc=1 and tccc=255.
  *
  * - A mapping to an empty string has explicit lccc=1 and tccc=255 values.
+ *
+ * Changes from format version 3 to format version 4 (ICU 63) ------------------
+ *
+ * Switched from UTrie2 to UCPTrie/CodePointTrie.
+ *
+ * The new trie no longer stores different values for surrogate code *units* vs.
+ * surrogate code *points*.
+ * Lead surrogates still have values for optimized UTF-16 string processing.
+ * When looking up code point properties, the code now checks for lead surrogates and
+ * treats them as inert.
+ *
+ * gennorm2 now has to reject mappings for surrogate code points.
+ * UTS #46 maps unpaired surrogates to U+FFFD in code rather than via its
+ * custom normalization data file.
  */
 
 #endif  /* !UCONFIG_NO_NORMALIZATION */

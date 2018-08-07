@@ -59,8 +59,8 @@ static UDataInfo dataInfo={
     0,
 
     { 0x4e, 0x72, 0x6d, 0x32 }, /* dataFormat="Nrm2" */
-    { 3, 0, 0, 0 },             /* formatVersion */
-    { 10, 0, 0, 0 }             /* dataVersion (Unicode version) */
+    { 4, 0, 0, 0 },             /* formatVersion */
+    { 11, 0, 0, 0 }             /* dataVersion (Unicode version) */
 };
 
 U_NAMESPACE_BEGIN

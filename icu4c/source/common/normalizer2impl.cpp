@@ -2574,7 +2574,7 @@ unorm2_swap(const UDataSwapper *ds,
         pInfo->dataFormat[1]==0x72 &&
         pInfo->dataFormat[2]==0x6d &&
         pInfo->dataFormat[3]==0x32 &&
-        (1<=formatVersion0 && formatVersion0<=3)
+        (1<=formatVersion0 && formatVersion0<=4)
     )) {
         udata_printError(ds, "unorm2_swap(): data format %02x.%02x.%02x.%02x (format version %02x) is not recognized as Normalizer2 data\n",
                          pInfo->dataFormat[0], pInfo->dataFormat[1],

@@ -2632,7 +2632,7 @@ public class BasicTest extends TestFmwk {
     @Test
     public void TestCustomComp() {
         String [][] pairs={
-            // ICU 62 normalization with CodePointTrie requires inert surrogate code points.
+            // ICU 63 normalization with CodePointTrie requires inert surrogate code points.
             // { "\\uD801\\uE000\\uDFFE", "" },
             // { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD7FF\\uFFFF" },
             // { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD7FF\\U000107FE\\uFFFF" },
@@ -2666,7 +2666,7 @@ public class BasicTest extends TestFmwk {
     @Test
     public void TestCustomFCC() {
         String[][] pairs={
-            // ICU 62 normalization with CodePointTrie requires inert surrogate code points.
+            // ICU 63 normalization with CodePointTrie requires inert surrogate code points.
             // { "\\uD801\\uE000\\uDFFE", "" },
             // { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD7FF\\uFFFF" },
             // { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD7FF\\U000107FE\\uFFFF" },
