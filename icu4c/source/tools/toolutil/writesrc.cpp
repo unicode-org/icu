@@ -22,6 +22,7 @@
 #include <time.h>
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
+#include "unicode/ucptrie.h"
 #include "utrie2.h"
 #include "cstring.h"
 #include "writesrc.h"
@@ -223,6 +224,52 @@ usrc_writeUTrie2Struct(FILE *f,
         (short)pTrie->index2NullOffset, (short)pTrie->dataNullOffset,
         (long)pTrie->initialValue, (long)pTrie->errorValue,
         (long)pTrie->highStart, (long)pTrie->highValueIndex);
+    if(postfix!=NULL) {
+        fputs(postfix, f);
+    }
+}
+
+U_CAPI void U_EXPORT2
+usrc_writeUCPTrieArrays(FILE *f,
+                        const char *indexPrefix, const char *dataPrefix,
+                        const UCPTrie *pTrie,
+                        const char *postfix) {
+    usrc_writeArray(f, indexPrefix, pTrie->index, 16, pTrie->indexLength, postfix);
+    int32_t width=
+        pTrie->valueWidth==UCPTRIE_VALUE_BITS_16 ? 16 :
+        pTrie->valueWidth==UCPTRIE_VALUE_BITS_32 ? 32 :
+        pTrie->valueWidth==UCPTRIE_VALUE_BITS_8 ? 8 : 0;
+    usrc_writeArray(f, dataPrefix, pTrie->data.ptr0, width, pTrie->dataLength, postfix);
+}
+
+U_CAPI void U_EXPORT2
+usrc_writeUCPTrieStruct(FILE *f,
+                        const char *prefix,
+                        const UCPTrie *pTrie,
+                        const char *indexName, const char *dataName,
+                        const char *postfix) {
+    if(prefix!=NULL) {
+        fputs(prefix, f);
+    }
+    fprintf(
+        f,
+        "    %s,\n"             // index
+        "    { %s },\n",        // data (union)
+        indexName,
+        dataName);
+    fprintf(
+        f,
+        "    %ld, %ld,\n"       // indexLength, dataLength
+        "    0x%lx, 0x%x,\n"    // highStart, shifted12HighStart
+        "    %d, %d,\n"         // type, valueWidth
+        "    0, 0,\n"           // reserved32, reserved16
+        "    0x%x, 0x%lx,\n"    // index3NullOffset, dataNullOffset
+        "    0x%lx,\n",         // nullValue
+        (long)pTrie->indexLength, (long)pTrie->dataLength,
+        (long)pTrie->highStart, pTrie->shifted12HighStart,
+        pTrie->type, pTrie->valueWidth,
+        pTrie->index3NullOffset, (long)pTrie->dataNullOffset,
+        (long)pTrie->nullValue);
     if(postfix!=NULL) {
         fputs(postfix, f);
     }

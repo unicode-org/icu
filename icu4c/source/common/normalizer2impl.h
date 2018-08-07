@@ -32,6 +32,8 @@
 #include "mutex.h"
 #include "uset_imp.h"
 
+#define NORM2_HARDCODE_NFC_DATA 1
+
 U_NAMESPACE_BEGIN
 
 struct CanonIterData;
@@ -823,7 +825,7 @@ unorm_getFCD16(UChar32 c);
  *          minMaybeYes=indexes[IX_MIN_MAYBE_YES];
  *      See the normTrie description below and the design doc for details.
  *
- * UTrie2 normTrie; -- see utrie2_impl.h and utrie2.h  TODO
+ * UCPTrie normTrie; -- see ucptrie_impl.h and ucptrie.h, same as Java CodePointTrie
  *
  *      The trie holds the main normalization data. Each code point is mapped to a 16-bit value.
  *      Rather than using independent bits in the value (which would require more than 16 bits),

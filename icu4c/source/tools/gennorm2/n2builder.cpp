@@ -816,6 +816,7 @@ Normalizer2DataBuilder::writeCSourceFile(const char *filename) {
     if(extension!=NULL) {
         dataName.truncate((int32_t)(extension-basename));
     }
+    const char *name=dataName.data();
     errorCode.assertSuccess();
 
     FILE *f=usrc_create(path.data(), basename, "icu/source/tools/gennorm2/n2builder.cpp");
@@ -825,42 +826,29 @@ Normalizer2DataBuilder::writeCSourceFile(const char *filename) {
         exit(U_FILE_ACCESS_ERROR);
     }
     fputs("#ifdef INCLUDED_FROM_NORMALIZER2_CPP\n\n", f);
-    char line[100];
-    sprintf(line, "static const UVersionInfo %s_formatVersion={", dataName.data());
+
+    char line[100], line2[100], line3[100];
+    sprintf(line, "static const UVersionInfo %s_formatVersion={", name);
     usrc_writeArray(f, line, dataInfo.formatVersion, 8, 4, "};\n");
-    sprintf(line, "static const UVersionInfo %s_dataVersion={", dataName.data());
+    sprintf(line, "static const UVersionInfo %s_dataVersion={", name);
     usrc_writeArray(f, line, dataInfo.dataVersion, 8, 4, "};\n\n");
-    sprintf(line, "static const int32_t %s_indexes[Normalizer2Impl::IX_COUNT]={\n",
-            dataName.data());
-    usrc_writeArray(f,
-        line,
-        indexes, 32, Normalizer2Impl::IX_COUNT,
-        "\n};\n\n");
-#if 0  // TODO...
-    sprintf(line, "static const uint16_t %s_trieIndex[%%ld]={\n", dataName.data());
-    usrc_writeUCPTrieArrays(f,
-        line, NULL,
-        norm16Trie.getAlias(),
-        "\n};\n\n");
-    sprintf(line, "static const uint16_t %s_extraData[%%ld]={\n", dataName.data());
-    usrc_writeArray(f,
-        line,
-        extraData.getBuffer(), 16, extraData.length(),
-        "\n};\n\n");
-    sprintf(line, "static const uint8_t %s_smallFCD[%%ld]={\n", dataName.data());
-    usrc_writeArray(f,
-        line,
-        smallFCD, 8, sizeof(smallFCD),
-        "\n};\n\n");
-    sprintf(line, "static const UCPTrie %s_trie={\n", dataName.data());
-    char line2[100];
-    sprintf(line2, "%s_trieIndex", dataName.data());
-    usrc_writeUCPTrieStruct(f,
-        line,
-        norm16Trie.getAlias(), line2, NULL,
-        "};\n");
-#endif  // ...TODO
-    fputs("\n#endif  // INCLUDED_FROM_NORMALIZER2_CPP\n", f);
+    sprintf(line, "static const int32_t %s_indexes[Normalizer2Impl::IX_COUNT]={\n", name);
+    usrc_writeArray(f, line, indexes, 32, Normalizer2Impl::IX_COUNT, "\n};\n\n");
+
+    sprintf(line, "static const uint16_t %s_trieIndex[%%ld]={\n", name);
+    sprintf(line2, "static const uint16_t %s_trieData[%%ld]={\n", name);
+    usrc_writeUCPTrieArrays(f, line, line2, norm16Trie.getAlias(), "\n};\n\n");
+    sprintf(line, "static const UCPTrie %s_trie={\n", name);
+    sprintf(line2, "%s_trieIndex", name);
+    sprintf(line3, "%s_trieData", name);
+    usrc_writeUCPTrieStruct(f, line, norm16Trie.getAlias(), line2, line3, "};\n\n");
+
+    sprintf(line, "static const uint16_t %s_extraData[%%ld]={\n", name);
+    usrc_writeArray(f, line, extraData.getBuffer(), 16, extraData.length(), "\n};\n\n");
+    sprintf(line, "static const uint8_t %s_smallFCD[%%ld]={\n", name);
+    usrc_writeArray(f, line, smallFCD, 8, sizeof(smallFCD), "\n};\n\n");
+
+    fputs("#endif  // INCLUDED_FROM_NORMALIZER2_CPP\n", f);
     fclose(f);
 }
 

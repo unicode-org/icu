@@ -132,20 +132,26 @@ U_CDECL_BEGIN
 static UBool U_CALLCONV uprv_loaded_normalizer2_cleanup();
 U_CDECL_END
 
-static Norm2AllModes *nfcSingleton;  // TODO
-static Norm2AllModes *nfkcSingleton;
-static Norm2AllModes *nfkc_cfSingleton;
-static UHashtable    *cache=NULL;
+#if !NORM2_HARDCODE_NFC_DATA
+static Norm2AllModes *nfcSingleton;
+static icu::UInitOnce nfcInitOnce = U_INITONCE_INITIALIZER;
+#endif
 
-static icu::UInitOnce nfcInitOnce = U_INITONCE_INITIALIZER;  // TODO
+static Norm2AllModes *nfkcSingleton;
 static icu::UInitOnce nfkcInitOnce = U_INITONCE_INITIALIZER;
+
+static Norm2AllModes *nfkc_cfSingleton;
 static icu::UInitOnce nfkc_cfInitOnce = U_INITONCE_INITIALIZER;
+
+static UHashtable    *cache=NULL;
 
 // UInitOnce singleton initialization function
 static void U_CALLCONV initSingletons(const char *what, UErrorCode &errorCode) {
-    if (uprv_strcmp(what, "nfc") == 0) {  // TODO...
+#if !NORM2_HARDCODE_NFC_DATA
+    if (uprv_strcmp(what, "nfc") == 0) {
         nfcSingleton    = Norm2AllModes::createInstance(NULL, "nfc", errorCode);
-    } else  // ...TODO
+    } else
+#endif
     if (uprv_strcmp(what, "nfkc") == 0) {
         nfkcSingleton    = Norm2AllModes::createInstance(NULL, "nfkc", errorCode);
     } else if (uprv_strcmp(what, "nfkc_cf") == 0) {
@@ -163,27 +169,35 @@ static void U_CALLCONV deleteNorm2AllModes(void *allModes) {
 }
 
 static UBool U_CALLCONV uprv_loaded_normalizer2_cleanup() {
-    delete nfcSingleton; nfcSingleton = NULL;  // TODO
+#if !NORM2_HARDCODE_NFC_DATA
+    delete nfcSingleton;
+    nfcSingleton = NULL;
+    nfcInitOnce.reset();
+#endif
+
     delete nfkcSingleton;
     nfkcSingleton = NULL;
+    nfkcInitOnce.reset();
+
     delete nfkc_cfSingleton;
     nfkc_cfSingleton = NULL;
+    nfkc_cfInitOnce.reset();
+
     uhash_close(cache);
     cache=NULL;
-    nfcInitOnce.reset();  // TODO
-    nfkcInitOnce.reset();
-    nfkc_cfInitOnce.reset();
     return TRUE;
 }
 
 U_CDECL_END
 
+#if !NORM2_HARDCODE_NFC_DATA
 const Norm2AllModes *
-Norm2AllModes::getNFCInstance(UErrorCode &errorCode) {  // TODO
+Norm2AllModes::getNFCInstance(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return NULL; }
     umtx_initOnce(nfcInitOnce, &initSingletons, "nfc", errorCode);
     return nfcSingleton;
 }
+#endif
 
 const Norm2AllModes *
 Norm2AllModes::getNFKCInstance(UErrorCode &errorCode) {
@@ -199,7 +213,8 @@ Norm2AllModes::getNFKC_CFInstance(UErrorCode &errorCode) {
     return nfkc_cfSingleton;
 }
 
-const Normalizer2 *  // TODO...
+#if !NORM2_HARDCODE_NFC_DATA
+const Normalizer2 *
 Normalizer2::getNFCInstance(UErrorCode &errorCode) {
     const Norm2AllModes *allModes=Norm2AllModes::getNFCInstance(errorCode);
     return allModes!=NULL ? &allModes->comp : NULL;
@@ -225,7 +240,8 @@ const Normalizer2Impl *
 Normalizer2Factory::getNFCImpl(UErrorCode &errorCode) {
     const Norm2AllModes *allModes=Norm2AllModes::getNFCInstance(errorCode);
     return allModes!=NULL ? allModes->impl : NULL;
-}  // ...TODO
+}
+#endif
 
 const Normalizer2 *
 Normalizer2::getNFKCInstance(UErrorCode &errorCode) {

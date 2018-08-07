@@ -23,6 +23,7 @@
 
 #include <stdio.h>
 #include "unicode/utypes.h"
+#include "unicode/ucptrie.h"
 #include "utrie2.h"
 
 /**
@@ -74,6 +75,27 @@ usrc_writeUTrie2Struct(FILE *f,
                        const UTrie2 *pTrie,
                        const char *indexName, const char *dataName,
                        const char *postfix);
+
+/**
+ * Calls usrc_writeArray() for the index and data arrays of a UCPTrie.
+ */
+U_CAPI void U_EXPORT2
+usrc_writeUCPTrieArrays(FILE *f,
+                        const char *indexPrefix, const char *dataPrefix,
+                        const UCPTrie *pTrie,
+                        const char *postfix);
+
+/**
+ * Writes the UCPTrie struct values.
+ * The {} and declaration etc. need to be included in prefix/postfix or
+ * printed before and after the array contents.
+ */
+U_CAPI void U_EXPORT2
+usrc_writeUCPTrieStruct(FILE *f,
+                        const char *prefix,
+                        const UCPTrie *pTrie,
+                        const char *indexName, const char *dataName,
+                        const char *postfix);
 
 /**
  * Writes the contents of an array of mostly invariant characters.
