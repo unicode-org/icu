@@ -164,7 +164,7 @@ uplrules_select(const UPluralRules *uplrules,
  * @param capacity The capacity of the keyword buffer.
  * @param status A pointer to a UErrorCode to receive any errors.
  * @return The length of keyword.
- * @internal ICU 59 technology preview, may be removed in the future
+ * @preview ICU 59
  */
 U_INTERNAL int32_t U_EXPORT2
 uplrules_selectWithFormat(const UPluralRules *uplrules,
