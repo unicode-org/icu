@@ -2768,7 +2768,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
     int64_t             *pat           = fPattern->fCompiledPat->getBuffer();
 
     const UChar         *litText       = fPattern->fLiteralText.getBuffer();
-    UVector             *fSets          = fPattern->fSets;
+    UVector             *fSets         = fPattern->fSets;
 
     fFrameSize = fPattern->fFrameSize;
     REStackFrame        *fp            = resetStack();
@@ -4344,7 +4344,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
     int64_t             *pat           = fPattern->fCompiledPat->getBuffer();
 
     const UChar         *litText       = fPattern->fLiteralText.getBuffer();
-    UVector             *fSets          = fPattern->fSets;
+    UVector             *fSets         = fPattern->fSets;
 
     const UChar         *inputBuf      = fInputText->chunkContents;
 

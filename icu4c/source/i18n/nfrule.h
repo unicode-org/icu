@@ -109,7 +109,7 @@ private:
     int32_t radix;
     int16_t exponent;
     UChar decimalPoint;
-    UnicodeString mRuleText;
+    UnicodeString fRuleText;
     NFSubstitution* sub1;
     NFSubstitution* sub2;
     const RuleBasedNumberFormat* formatter;

@@ -28,8 +28,8 @@ class U_I18N_API MultiplierFormatHandler : public MicroPropsGenerator, public UM
                          UErrorCode& status) const U_OVERRIDE;
 
   private:
-    Scale mMultiplier;
-    const MicroPropsGenerator *mParent;
+    Scale fMultiplier;
+    const MicroPropsGenerator *fParent;
 };
 
 

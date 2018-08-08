@@ -196,22 +196,22 @@ class U_I18N_API MutablePatternModifier
     const bool fStrong;
 
     // Pattern details (initialized in setPatternInfo and setPatternAttributes)
-    const AffixPatternProvider *mPatternInfo;
-    UNumberSignDisplay mSignDisplay;
+    const AffixPatternProvider *fPatternInfo;
+    UNumberSignDisplay fSignDisplay;
     bool perMilleReplacesPercent;
 
     // Symbol details (initialized in setSymbols)
-    const DecimalFormatSymbols *mSymbols;
-    UNumberUnitWidth mUnitWidth;
-    const CurrencySymbols *mCurrencySymbols;
-    const PluralRules *mRules;
+    const DecimalFormatSymbols *fSymbols;
+    UNumberUnitWidth fUnitWidth;
+    const CurrencySymbols *fCurrencySymbols;
+    const PluralRules *fRules;
 
     // Number details (initialized in setNumberProperties)
-    int8_t mSignum;
-    StandardPlural::Form mPlural;
+    int8_t fSignum;
+    StandardPlural::Form fPlural;
 
     // QuantityChain details (initialized in addToChain)
-    const MicroPropsGenerator *mParent;
+    const MicroPropsGenerator *fParent;
 
     // Transient fields for rendering
     UnicodeString currentAffix;
