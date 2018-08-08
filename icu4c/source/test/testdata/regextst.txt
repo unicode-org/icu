@@ -1363,6 +1363,62 @@
 "abc"                  Z3       "abc abc <0>abc</0> xyz"
 "abc"                  z4       "abc abc abc xyz"
 
+# Bug #13844  Verify that non-standard Java property names are recognized.
+"[\p{IsAlphabetic}]"            " <0>A</0>"
+"[\P{IsAlphabetic}]"            "A<0> </0>"
+"[\p{IsIdeographic}]"           "A<0>〆</0>"
+"[\P{IsIdeographic}]"           "〆<0>A</0>"
+"[\p{IsLetter}]"                " <0>A</0>"
+"[\P{IsLetter}]"                "A<0> </0>"
+"[\p{Letter}]"                  " <0>A</0>"
+"[\p{IsLowercase}]"             "A<0>a</0>"
+"[\P{IsLowercase}]"             "a<0>A</0>"
+"[\p{IsUppercase}]"             "a<0>A</0>"
+"[\P{IsUppercase}]"             "A<0>a</0>"
+"[\p{IsTitlecase}]"             "D<0>ǲ</0>"
+"[\P{IsTitlecase}]"             "ǲ<0>D</0>"
+"[\p{IsPunctuation}]"           " <0>&</0>"
+"[\P{IsPunctuation}]"           "&<0> </0>"
+"[\p{IsControl}]"               " <0>\x{82}</0>"
+"[\P{IsControl}]"               "\x{82}<0> </0>"
+"[\p{IsWhite_Space}]"           "x<0> </0>"
+"[\P{IsWhite_Space}]"           " <0>x</0>"
+"[\p{IsDigit}]"                 " <0>4</0>"
+"[\P{IsDigit}]"                 "4<0> </0>"
+"[\p{IsHex_Digit}]"             " <0>F</0>"
+"[\P{IsHex_Digit}]"             "F<0> </0>"
+"[\p{IsJoin_Control}]"          " <0>\x{200d}</0>"
+"[\P{IsJoin_Control}]"          "\x{200d}<0> </0>"
+"[\p{IsNoncharacter_Code_Point}]"     "A<0>\x{5fffe}</0>"
+"[\p{IsAssigned}]"              "\x{10ffff}<0>a</0>"
+"[\P{IsAssigned}]"              "a<0>\x{10ffff}</0>"
+
+"[\p{InBasic Latin}]"           "〆<0>A</0>"
+"[\p{InBasicLatin}]"            "〆<0>A</0>"
+"[\p{InBasic-Latin}]"           "〆<0>A</0>"    # ICU accepts '-'; Java does not.
+"[\p{InBasic_Latin}]"           "〆<0>A</0>"
+"[\p{Inbasiclatin}]"            "〆<0>A</0>"
+"[\p{inbasiclatin}]"       E    "〆<0>A</0>"    # "In" must be cased as shown. Property name part is case insensitive.
+"[\p{InCombining_Marks_for_Symbols}]"    "a<0>\x{20DD}</0>"    # COMBINING ENCLOSING CIRCLE
+
+"[\p{all}]*"                    "<0>\x{00}abc\x{10ffff}</0>"
+"[\p{javaBadProperty}]"    E    "whatever"
+"[\p{IsBadProperty}]"      E    "whatever"
+"[\p{InBadBlock}]"         E    "whatever"
+"[\p{In}]"                 E    "whatever"
+"[\p{Is}]"                 E    "whatever"
+"[\p{java}]"                    "x<0>ꦉ</0>"      # Note: "java" is a valid script code.
+
+"[\p{javaLowerCase}]+"             "A<0>a</0>"
+"[\p{javaLowerCase}]+"     i       "<0>Aa</0>"
+"[\P{javaLowerCase}]+"             "<0>A</0>a"
+"[\P{javaLowerCase}]+"     i       "Aa"          # No Match because case fold of the set happens first, then negation.
+                                                 #  JDK is not case insensitive w named properties, even though
+                                                 #  the insensitive match flag is set. A JDK bug?
+
+"[a-z]+"                   i       "<0>Aa</0>"   # Matches JDK behavior.
+"[^a-z]+"                  i       "Aa"          # (no match) which is JDK behavior. Case fold first, then negation.
+
 #  Random debugging, Temporary
 #
 
