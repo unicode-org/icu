@@ -32,6 +32,10 @@
 #include "mutex.h"
 #include "uset_imp.h"
 
+// When the nfc.nrm data is *not* hardcoded into the common library
+// (with this constant set to 0),
+// then it needs to be built into the data package:
+// Add nfc.nrm to icu4c/source/data/Makefile.in DAT_FILES_SHORT
 #define NORM2_HARDCODE_NFC_DATA 1
 
 U_NAMESPACE_BEGIN
