@@ -389,6 +389,7 @@ CollationDataBuilder::setPrimaryRangeAndReturnNext(UChar32 start, UChar32 end,
             primary = Collation::incThreeBytePrimaryByOffset(primary, isCompressible, step);
             if(start > end) { return primary; }
         }
+        modified = TRUE;
     }
 }
 

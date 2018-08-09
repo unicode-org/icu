@@ -3971,9 +3971,9 @@ SimpleDateFormat::setContext(UDisplayContext value, UErrorCode& status)
     if (U_SUCCESS(status)) {
         if ( fCapitalizationBrkIter == NULL && (value==UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
                 value==UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU || value==UDISPCTX_CAPITALIZATION_FOR_STANDALONE) ) {
-            UErrorCode newStatus = U_ZERO_ERROR;
-            fCapitalizationBrkIter = BreakIterator::createSentenceInstance(fLocale, newStatus);
-            if (U_FAILURE(newStatus)) {
+            status = U_ZERO_ERROR;
+            fCapitalizationBrkIter = BreakIterator::createSentenceInstance(fLocale, status);
+            if (U_FAILURE(status)) {
                 delete fCapitalizationBrkIter;
                 fCapitalizationBrkIter = NULL;
             }
