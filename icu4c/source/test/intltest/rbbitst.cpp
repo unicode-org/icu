@@ -1283,35 +1283,28 @@ void RBBITest::TestUnicodeFiles() {
 
 
 // Check for test cases from the Unicode test data files that are known to fail
-// and should be skipped because ICU is not yet able to fully implement the spec.
-// See ticket #7270.
+// and should be skipped as known issues because ICU does not fully implement
+// the Unicode specifications.
+//
+// Test cases are identified by the test data sequence, which tends to be more stable
+// across Unicode versions than the test file line numbers.
+//
+// The test case with ticket "10666" is a dummy, included as an example.
 
 UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *fileName) {
     static struct TestCase {
+        const char *fTicketNum;
         const char *fFileName;
         const UChar *fString;
-    } badTestCases[] = {                                // Line Numbers from Unicode 7.0.0 file.
-        {"LineBreakTest.txt", u"\u200B\u0020}"},        // Line 5198
-        {"LineBreakTest.txt", u"\u200B\u0020)"},        // Line 5202
-        {"LineBreakTest.txt", u"\u200B\u0020!"},        // Line 5214
-        {"LineBreakTest.txt", u"\u200B\u0020,"},        // Line 5246
-        {"LineBreakTest.txt", u"\u200B\u0020/"},        // Line 5298
-        {"LineBreakTest.txt", u"\u200B\u0020\u2060"},   // Line 5302
-                                                        // Line Numbers from pre-release verion of GraphemeBreakTest-10.0.0.txt
-        {"GraphemeBreakTest.txt", u"\u200D\u2640"},     // Line 656, old GB 11 test ZWJ x GAZ
-        {"GraphemeBreakTest.txt", u"\u200D\U0001F466"}, // Line 658, old GB 11 test ZWJ x EBG
-        {"GraphemeBreakTest.txt", u"\u200D\U0001F466\U0001F3FB"}, // Line 842, old GB 11 test ZWJ x EBG x EModifier
-
-                                                        // Line Numbers from pre-release verion of WordBreakTest-10.0.0.txt
-        {"WordBreakTest.txt", u"\u200D\u261D"},         // Line 1356, ZWJ x EmojiNRK
-        {"WordBreakTest.txt", u"\u200D\U0001F3FB"},     // Line 1358, ZWJ x EmojiNRK
+    } badTestCases[] = {
+        {"10666", "GraphemeBreakTest.txt", u"\u0020\u0020\u0033"}    // Fake example, for illustration.
     };
 
     for (int n=0; n<UPRV_LENGTHOF(badTestCases); n++) {
         const TestCase &badCase = badTestCases[n];
         if (!strcmp(fileName, badCase.fFileName) &&
                 testCase == UnicodeString(badCase.fString)) {
-            return logKnownIssue("7270");
+            return logKnownIssue(badCase.fTicketNum);
         }
     }
     return FALSE;
@@ -2550,7 +2543,7 @@ private:
     UnicodeSet  *fXX;
     UnicodeSet  *fEB;
     UnicodeSet  *fEM;
-    UnicodeSet  *fZJ;
+    UnicodeSet  *fZWJ;
 
     BreakIterator        *fCharBI;
     const UnicodeString  *fText;
@@ -2615,7 +2608,7 @@ RBBILineMonkey::RBBILineMonkey() :
     fXX    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=XX}]"), status);
     fEB    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EB}]"), status);
     fEM    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=EM}]"), status);
-    fZJ    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=ZWJ}]"), status);
+    fZWJ    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=ZWJ}]"), status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2627,7 +2620,7 @@ RBBILineMonkey::RBBILineMonkey() :
     fAL->addAll(*fSG);     // Default behavior for SG is identical to AL.
 
     fNS->addAll(*fCJ);     // Default behavior for CJ is identical to NS.
-    fCM->addAll(*fZJ);     // ZWJ behaves as a CM.
+    fCM->addAll(*fZWJ);     // ZWJ behaves as a CM.
 
     fSets->addElement(fBK, status);
     fSets->addElement(fCR, status);
@@ -2669,7 +2662,7 @@ RBBILineMonkey::RBBILineMonkey() :
     fSets->addElement(fSG, status);
     fSets->addElement(fEB, status);
     fSets->addElement(fEM, status);
-    fSets->addElement(fZJ, status);
+    fSets->addElement(fZWJ, status);
 
 
     const char *rules =
@@ -2853,7 +2846,13 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         }
 
         // LB 8  Break after zero width space
-        if (fZW->contains(prevChar)) {
+        //       ZW SP* ÷
+        //       Scan backwards from prevChar for SP* ZW
+        tPos = prevPos;
+        while (tPos>0 && fSP->contains(fText->char32At(tPos))) {
+            tPos = fText->moveIndex32(tPos, -1);
+        }
+        if (fZW->contains(fText->char32At(tPos))) {
             break;
         }
 
@@ -2890,7 +2889,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         {
             int32_t prevIdx = fText->moveIndex32(pos, -1);
             UChar32 prevC = fText->char32At(prevIdx);
-            if (fZJ->contains(prevC)) {
+            if (fZWJ->contains(prevC)) {
                 continue;
             }
         }
@@ -3148,12 +3147,16 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
-        // LB30a    RI RI <break> RI
-        //             RI    x    RI
+        // LB30a    RI RI  ÷  RI
+        //             RI  x  RI
         if (fRI->contains(prevCharX2) && fRI->contains(prevChar) && fRI->contains(thisChar)) {
             break;
         }
         if (fRI->contains(prevChar) && fRI->contains(thisChar)) {
+            // Two Regional Indicators have been paired.
+            // Over-write the trailing one (thisChar) to prevent it from forming another pair with a
+            // following RI. This is a hack.
+            thisChar = -1;
             continue;
         }
 
@@ -3220,7 +3223,7 @@ RBBILineMonkey::~RBBILineMonkey() {
     delete fXX;
     delete fEB;
     delete fEM;
-    delete fZJ;
+    delete fZWJ;
 
     delete fCharBI;
     delete fNumberMatcher;
