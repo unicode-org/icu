@@ -46,7 +46,7 @@ B2 = [:LineBreak =  Break_Both:];
 CB = [:LineBreak =  Contingent_Break:];
 CJ = [:LineBreak =  Conditional_Japanese_Starter:];
 CL = [:LineBreak =  Close_Punctuation:];
-CM_ = [:LineBreak =  Combining_Mark:];
+CMS = [:LineBreak =  Combining_Mark:];
 CP = [:LineBreak =  Close_Parenthesis:];
 CR = [:LineBreak =  Carriage_Return:];
 EB = [:LineBreak =  EB:];
@@ -91,7 +91,7 @@ dictionary = SA;
 
 # By LB9, a ZWJ also behaves as a CM. Including it in the definition of CM avoids having to explicitly
 #         list it in the numerous rules that use CM.
-CM = [CM_ ZWJ];
+CM = [CMS ZWJ];
 
 LB4:        BK ÷;
 LB5:        CR LF;
@@ -111,13 +111,15 @@ LB15:        QU CM* SP* OP;
 LB16:        (CL | CP)CM* SP* NS;
 LB17:        B2 CM* SP* B2;
 
+# LB8, break after ZW SP*, precedes LB7 because they will both match the sequences like ZW SP,
+# and LB8 should take precedence.
+
+LB8:        ZW SP* ÷ [^ZW SP BK CR LF NL];
+
+# LB7 Do not break before spaces or zero width space.
+
 LB7.1:      [^ZW SP] CM* [SP ZW];
 LB7.2:      [ZW SP] [SP ZW];
-
-# LB8, ICU differs from UAX-14,
-#    ICU:    ZW ÷;
-#    UAX 14: ZW SP* ÷;
-LB8:        ZW ÷;
 
 # LB8a
 #      ZWJ x
@@ -217,8 +219,8 @@ LB30.1:      (AL | CM | HL | NU) CM* OP;
 LB30.2:      CP CM* (AL | HL | NU);
 
 # LB30a  keep pairs of RI together.
-LB30a.1:     RI CM* RI              ÷ [^BK CR LF NL SP ZW WJ CL CP EX IS SY GL QU BA HY NS CM];
-LB30a.2:     RI CM* RI CM* CM_ ÷ [^BK CR LF NL SP ZW WJ CL CP EX IS SY GL QU BA HY NS CM];
+LB30a.1:     RI CM* RI         ÷ [^BK CR LF NL SP ZW WJ CL CP EX IS SY GL QU BA HY NS CM];
+LB30a.2:     RI CM* RI CM* CMS ÷ [^BK CR LF NL SP ZW WJ CL CP EX IS SY GL QU BA HY NS CM];
 LB30a.3:     RI CM* RI CM* [BK CR LF NL SP ZW WJ GL CL CP EX IS SY QU BA HY NS ZWJ]?;
 
 # LB30b Do not break between Emoji Base and Emoji Modifier

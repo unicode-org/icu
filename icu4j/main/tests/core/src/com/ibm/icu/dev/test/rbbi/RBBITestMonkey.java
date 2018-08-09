@@ -651,54 +651,68 @@ public class RBBITestMonkey extends TestFmwk {
         int           fOrigPositions;
 
 
+        // XUnicodeSet is like UnicodeSet, except that the method contains(int codePoint) does not
+        // throw exceptions on out-of-range codePoints. This matches ICU4C behavior.
+        // The LineMonkey test (ported from ICU4C) relies on this behavior, it uses a value of -1
+        // to represent a non-codepoint that is not included in any of the property sets.
+        // This happens for rule 30a.
+
+        class XUnicodeSet extends UnicodeSet {
+            XUnicodeSet(String pattern) { super(pattern); }
+            @Override
+            public boolean contains(int codePoint) {
+                return codePoint < UnicodeSet.MIN_VALUE || codePoint > UnicodeSet.MAX_VALUE ?
+                        false : super.contains(codePoint);
+            }
+        }
 
         RBBILineMonkey()
         {
             fCharProperty  = UProperty.LINE_BREAK;
             fSets          = new ArrayList();
 
-            fBK    = new UnicodeSet("[\\p{Line_Break=BK}]");
-            fCR    = new UnicodeSet("[\\p{Line_break=CR}]");
-            fLF    = new UnicodeSet("[\\p{Line_break=LF}]");
-            fCM    = new UnicodeSet("[\\p{Line_break=CM}]");
-            fNL    = new UnicodeSet("[\\p{Line_break=NL}]");
-            fSG    = new UnicodeSet("[\\ud800-\\udfff]");
-            fWJ    = new UnicodeSet("[\\p{Line_break=WJ}]");
-            fZW    = new UnicodeSet("[\\p{Line_break=ZW}]");
-            fGL    = new UnicodeSet("[\\p{Line_break=GL}]");
-            fSP    = new UnicodeSet("[\\p{Line_break=SP}]");
-            fB2    = new UnicodeSet("[\\p{Line_break=B2}]");
-            fBA    = new UnicodeSet("[\\p{Line_break=BA}]");
-            fBB    = new UnicodeSet("[\\p{Line_break=BB}]");
-            fHY    = new UnicodeSet("[\\p{Line_break=HY}]");
-            fCB    = new UnicodeSet("[\\p{Line_break=CB}]");
-            fCL    = new UnicodeSet("[\\p{Line_break=CL}]");
-            fCP    = new UnicodeSet("[\\p{Line_break=CP}]");
-            fEX    = new UnicodeSet("[\\p{Line_break=EX}]");
-            fIN    = new UnicodeSet("[\\p{Line_break=IN}]");
-            fNS    = new UnicodeSet("[\\p{Line_break=NS}]");
-            fOP    = new UnicodeSet("[\\p{Line_break=OP}]");
-            fQU    = new UnicodeSet("[\\p{Line_break=QU}]");
-            fIS    = new UnicodeSet("[\\p{Line_break=IS}]");
-            fNU    = new UnicodeSet("[\\p{Line_break=NU}]");
-            fPO    = new UnicodeSet("[\\p{Line_break=PO}]");
-            fPR    = new UnicodeSet("[\\p{Line_break=PR}]");
-            fSY    = new UnicodeSet("[\\p{Line_break=SY}]");
-            fAI    = new UnicodeSet("[\\p{Line_break=AI}]");
-            fAL    = new UnicodeSet("[\\p{Line_break=AL}]");
-            fCJ    = new UnicodeSet("[\\p{Line_break=CJ}]");
-            fH2    = new UnicodeSet("[\\p{Line_break=H2}]");
-            fH3    = new UnicodeSet("[\\p{Line_break=H3}]");
-            fHL    = new UnicodeSet("[\\p{Line_break=HL}]");
-            fID    = new UnicodeSet("[\\p{Line_break=ID}]");
-            fJL    = new UnicodeSet("[\\p{Line_break=JL}]");
-            fJV    = new UnicodeSet("[\\p{Line_break=JV}]");
-            fJT    = new UnicodeSet("[\\p{Line_break=JT}]");
-            fRI    = new UnicodeSet("[\\p{Line_break=RI}]");
-            fXX    = new UnicodeSet("[\\p{Line_break=XX}]");
-            fEB    = new UnicodeSet("[\\p{Line_break=EB}]");
-            fEM    = new UnicodeSet("[\\p{Line_break=EM}]");
-            fZWJ   = new UnicodeSet("[\\p{Line_break=ZWJ}]");
+            fBK    = new XUnicodeSet("[\\p{Line_Break=BK}]");
+            fCR    = new XUnicodeSet("[\\p{Line_break=CR}]");
+            fLF    = new XUnicodeSet("[\\p{Line_break=LF}]");
+            fCM    = new XUnicodeSet("[\\p{Line_break=CM}]");
+            fNL    = new XUnicodeSet("[\\p{Line_break=NL}]");
+            fSG    = new XUnicodeSet("[\\ud800-\\udfff]");
+            fWJ    = new XUnicodeSet("[\\p{Line_break=WJ}]");
+            fZW    = new XUnicodeSet("[\\p{Line_break=ZW}]");
+            fGL    = new XUnicodeSet("[\\p{Line_break=GL}]");
+            fSP    = new XUnicodeSet("[\\p{Line_break=SP}]");
+            fB2    = new XUnicodeSet("[\\p{Line_break=B2}]");
+            fBA    = new XUnicodeSet("[\\p{Line_break=BA}]");
+            fBB    = new XUnicodeSet("[\\p{Line_break=BB}]");
+            fHY    = new XUnicodeSet("[\\p{Line_break=HY}]");
+            fCB    = new XUnicodeSet("[\\p{Line_break=CB}]");
+            fCL    = new XUnicodeSet("[\\p{Line_break=CL}]");
+            fCP    = new XUnicodeSet("[\\p{Line_break=CP}]");
+            fEX    = new XUnicodeSet("[\\p{Line_break=EX}]");
+            fIN    = new XUnicodeSet("[\\p{Line_break=IN}]");
+            fNS    = new XUnicodeSet("[\\p{Line_break=NS}]");
+            fOP    = new XUnicodeSet("[\\p{Line_break=OP}]");
+            fQU    = new XUnicodeSet("[\\p{Line_break=QU}]");
+            fIS    = new XUnicodeSet("[\\p{Line_break=IS}]");
+            fNU    = new XUnicodeSet("[\\p{Line_break=NU}]");
+            fPO    = new XUnicodeSet("[\\p{Line_break=PO}]");
+            fPR    = new XUnicodeSet("[\\p{Line_break=PR}]");
+            fSY    = new XUnicodeSet("[\\p{Line_break=SY}]");
+            fAI    = new XUnicodeSet("[\\p{Line_break=AI}]");
+            fAL    = new XUnicodeSet("[\\p{Line_break=AL}]");
+            fCJ    = new XUnicodeSet("[\\p{Line_break=CJ}]");
+            fH2    = new XUnicodeSet("[\\p{Line_break=H2}]");
+            fH3    = new XUnicodeSet("[\\p{Line_break=H3}]");
+            fHL    = new XUnicodeSet("[\\p{Line_break=HL}]");
+            fID    = new XUnicodeSet("[\\p{Line_break=ID}]");
+            fJL    = new XUnicodeSet("[\\p{Line_break=JL}]");
+            fJV    = new XUnicodeSet("[\\p{Line_break=JV}]");
+            fJT    = new XUnicodeSet("[\\p{Line_break=JT}]");
+            fRI    = new XUnicodeSet("[\\p{Line_break=RI}]");
+            fXX    = new XUnicodeSet("[\\p{Line_break=XX}]");
+            fEB    = new XUnicodeSet("[\\p{Line_break=EB}]");
+            fEM    = new XUnicodeSet("[\\p{Line_break=EM}]");
+            fZWJ   = new XUnicodeSet("[\\p{Line_break=ZWJ}]");
 
             // Remove dictionary characters.
             // The monkey test reference implementation of line break does not replicate the dictionary behavior,
@@ -886,7 +900,13 @@ public class RBBITestMonkey extends TestFmwk {
                 }
 
                 // LB 8  Break after zero width space
-                if (fZW.contains(prevChar)) {
+                //       ZW SP* ÷
+                //       Scan backwards from prevChar for SP* ZW
+                tPos = prevPos;
+                while (tPos > 0 && fSP.contains(UTF16.charAt(fText, tPos))) {
+                    tPos = moveIndex32(fText, tPos, -1);
+                }
+                if (fZW.contains(UTF16.charAt(fText, tPos))) {
                     break;
                 }
 
@@ -1166,12 +1186,16 @@ public class RBBITestMonkey extends TestFmwk {
                 }
 
                 // LB 30a   Break between pairs of Regional Indicators.
-                //             RI RI <break> RI
-                //             RI    x    RI
+                //             RI RI  ÷  RI
+                //                RI  x  RI
                 if (fRI.contains(prevCharX2) && fRI.contains(prevChar) && fRI.contains(thisChar)) {
                     break;
                 }
                 if (fRI.contains(prevChar) && fRI.contains(thisChar)) {
+                    // Two Regional Indicators have been paired.
+                    // Over-write the trailing one (thisChar) to prevent it from forming another pair with a
+                    // following RI. This is a hack.
+                    thisChar = -1;
                     continue;
                 }
 
