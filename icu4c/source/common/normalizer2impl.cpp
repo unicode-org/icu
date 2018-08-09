@@ -16,7 +16,7 @@
 *   created by: Markus W. Scherer
 */
 
-#define UCPTRIE_DEBUG  // TODO
+// #define UCPTRIE_DEBUG
 
 #include "unicode/utypes.h"
 
@@ -2406,7 +2406,9 @@ void InitCanonIterData::doInit(Normalizer2Impl *impl, UErrorCode &errorCode) {
             }
             start = end + 1;
         }
+#ifdef UCPTRIE_DEBUG
         umutablecptrie_setName(impl->fCanonIterData->mutableTrie, "CanonIterData");
+#endif
         impl->fCanonIterData->trie = umutablecptrie_buildImmutable(
             impl->fCanonIterData->mutableTrie, UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_32, &errorCode);
         umutablecptrie_close(impl->fCanonIterData->mutableTrie);
@@ -2637,7 +2639,7 @@ unorm2_swap(const UDataSwapper *ds,
 
         /* swap the trie */
         nextOffset=indexes[Normalizer2Impl::IX_EXTRA_DATA_OFFSET];
-        ucptrie_swap(ds, inBytes+offset, nextOffset-offset, outBytes+offset, pErrorCode);
+        utrie_swapAnyVersion(ds, inBytes+offset, nextOffset-offset, outBytes+offset, pErrorCode);
         offset=nextOffset;
 
         /* swap the uint16_t extraData[] */

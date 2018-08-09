@@ -24,21 +24,23 @@
 *   This file contains only the builder code.
 *   See utrie2.c for the runtime and enumeration code.
 */
-#define UTRIE2_DEBUG  // TODO
+// #define UTRIE2_DEBUG
 #ifdef UTRIE2_DEBUG
 #   include <stdio.h>
 #endif
-#define UCPTRIE_DEBUG  // TODO
+// #define UCPTRIE_DEBUG
 
 #include "unicode/utypes.h"
-#include "unicode/ucptrie.h"  // TODO
-#include "unicode/umutablecptrie.h"  // TODO
-#include "ucptrie_impl.h"  // TODO
+#ifdef UCPTRIE_DEBUG
+#include "unicode/ucptrie.h"
+#include "unicode/umutablecptrie.h"
+#include "ucptrie_impl.h"
+#endif
 #include "cmemory.h"
 #include "utrie2.h"
 #include "utrie2_impl.h"
 
-#include "utrie.h" /* for utrie2_fromUTrie() and utrie_swap() */
+#include "utrie.h"  // for utrie2_fromUTrie()
 
 /* Implementation notes ----------------------------------------------------- */
 
@@ -137,10 +139,14 @@ utrie2_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErrorCode) 
     trie->errorValue=errorValue;
     trie->highStart=0x110000;
     trie->newTrie=newTrie;
+#ifdef UTRIE2_DEBUG
     trie->name="open";
+#endif
 
     newTrie->data=data;
+#ifdef UCPTRIE_DEBUG
     newTrie->t3=umutablecptrie_open(initialValue, errorValue, pErrorCode);
+#endif
     newTrie->dataCapacity=UNEWTRIE2_INITIAL_DATA_LENGTH;
     newTrie->initialValue=initialValue;
     newTrie->errorValue=errorValue;
@@ -253,12 +259,14 @@ cloneBuilder(const UNewTrie2 *other) {
         uprv_free(trie);
         return NULL;
     }
+#ifdef UCPTRIE_DEBUG
     if(other->t3==nullptr) {
         trie->t3=nullptr;
     } else {
         UErrorCode errorCode=U_ZERO_ERROR;
         trie->t3=umutablecptrie_clone(other->t3, &errorCode);
     }
+#endif
     trie->dataCapacity=other->dataCapacity;
 
     /* clone data */
@@ -651,7 +659,9 @@ set32(UNewTrie2 *trie,
         *pErrorCode=U_NO_WRITE_PERMISSION;
         return;
     }
+#ifdef UCPTRIE_DEBUG
     umutablecptrie_set(trie->t3, c, value, pErrorCode);
+#endif
 
     block=getDataBlock(trie, c, forLSCP);
     if(block<0) {
@@ -747,7 +757,9 @@ utrie2_setRange32(UTrie2 *trie,
         *pErrorCode=U_NO_WRITE_PERMISSION;
         return;
     }
+#ifdef UCPTRIE_DEBUG
     umutablecptrie_setRange(newTrie->t3, start, end, value, pErrorCode);
+#endif
     if(!overwrite && value==newTrie->initialValue) {
         return; /* nothing to do */
     }
@@ -1466,27 +1478,4 @@ utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
     uprv_free(newTrie->data);
     uprv_free(newTrie);
     trie->newTrie=NULL;
-}
-
-/*
- * This is here to avoid a dependency from utrie2.cpp on utrie.c.
- * This file already depends on utrie.c.
- * Otherwise, this should be in utrie2.cpp right after utrie2_swap().
- */
-U_CAPI int32_t U_EXPORT2
-utrie2_swapAnyVersion(const UDataSwapper *ds,
-                      const void *inData, int32_t length, void *outData,
-                      UErrorCode *pErrorCode) {
-    if(U_SUCCESS(*pErrorCode)) {
-        switch(utrie2_getVersion(inData, length, TRUE)) {
-        case 1:
-            return utrie_swap(ds, inData, length, outData, pErrorCode);
-        case 2:
-            return utrie2_swap(ds, inData, length, outData, pErrorCode);
-        default:
-            *pErrorCode=U_INVALID_FORMAT_ERROR;
-            return 0;
-        }
-    }
-    return 0;
 }

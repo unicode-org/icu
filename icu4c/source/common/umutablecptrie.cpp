@@ -4,7 +4,7 @@
 // umutablecptrie.cpp (inspired by utrie2_builder.cpp)
 // created: 2017dec29 Markus W. Scherer
 
-#define UCPTRIE_DEBUG  // TODO
+// #define UCPTRIE_DEBUG
 #ifdef UCPTRIE_DEBUG
 #   include <stdio.h>
 #endif
@@ -109,7 +109,7 @@ private:
     uint32_t highValue;
 #ifdef UCPTRIE_DEBUG
 public:
-    const char *name;  // TODO
+    const char *name;
 #endif
 private:
     /** Temporary array while building the final data. */
@@ -121,7 +121,11 @@ MutableCodePointTrie::MutableCodePointTrie(uint32_t iniValue, uint32_t errValue,
         index(nullptr), indexCapacity(0), index3NullOffset(-1),
         data(nullptr), dataCapacity(0), dataLength(0), dataNullOffset(-1),
         origInitialValue(iniValue), initialValue(iniValue), errorValue(errValue),
-        highStart(0), highValue(initialValue), name("open"), index16(nullptr) {
+        highStart(0), highValue(initialValue),
+#ifdef UCPTRIE_DEBUG
+        name("open"),
+#endif
+        index16(nullptr) {
     if (U_FAILURE(errorCode)) { return; }
     index = (uint32_t *)uprv_malloc(BMP_I_LIMIT * 4);
     data = (uint32_t *)uprv_malloc(INITIAL_DATA_LENGTH * 4);
@@ -138,7 +142,10 @@ MutableCodePointTrie::MutableCodePointTrie(const MutableCodePointTrie &other, UE
         data(nullptr), dataCapacity(0), dataLength(0), dataNullOffset(other.dataNullOffset),
         origInitialValue(other.origInitialValue), initialValue(other.initialValue),
         errorValue(other.errorValue),
-        highStart(other.highStart), highValue(other.highValue), name("mutable clone"),
+        highStart(other.highStart), highValue(other.highValue),
+#ifdef UCPTRIE_DEBUG
+        name("mutable clone"),
+#endif
         index16(nullptr) {
     if (U_FAILURE(errorCode)) { return; }
     int32_t iCapacity = highStart <= BMP_LIMIT ? BMP_I_LIMIT : I_LIMIT;
@@ -1478,9 +1485,9 @@ UCPTrie *MutableCodePointTrie::build(UCPTrieType type, UCPTrieValueWidth valueWi
         break;
     }
 
+#ifdef UCPTRIE_DEBUG
     trie->name = name;
 
-#ifdef UCPTRIE_DEBUG
     ucptrie_printLengths(trie, "");
 #endif
 
@@ -1592,32 +1599,8 @@ umutablecptrie_buildImmutable(UMutableCPTrie *trie, UCPTrieType type, UCPTrieVal
     return reinterpret_cast<MutableCodePointTrie *>(trie)->build(type, valueWidth, *pErrorCode);
 }
 
+#ifdef UCPTRIE_DEBUG
 U_CFUNC void umutablecptrie_setName(UMutableCPTrie *trie, const char *name) {
-    reinterpret_cast<MutableCodePointTrie *>(trie)->name = name;  // TODO
+    reinterpret_cast<MutableCodePointTrie *>(trie)->name = name;
 }
-
-/*
- * This is here to avoid a dependency from ucptrie.cpp on utrie.cpp.
- * This file already depends on utrie.cpp.
- * Otherwise, this should be in ucptrie.cpp right after ucptrie_swap().
- * TODO: find a better place
- */
-U_CAPI int32_t U_EXPORT2
-ucptrie_swapAnyVersion(const UDataSwapper *ds,
-                      const void *inData, int32_t length, void *outData,
-                      UErrorCode *pErrorCode) {
-    if(U_SUCCESS(*pErrorCode)) {
-        switch(ucptrie_getVersion(inData, length, TRUE)) {
-//         case 1:
-//             return utrie_swap(ds, inData, length, outData, pErrorCode);
-//         case 2:  TODO
-//             return utrie2_swap(ds, inData, length, outData, pErrorCode);
-        case 3:
-            return ucptrie_swap(ds, inData, length, outData, pErrorCode);
-        default:
-            *pErrorCode=U_INVALID_FORMAT_ERROR;
-            return 0;
-        }
-    }
-    return 0;
-}
+#endif

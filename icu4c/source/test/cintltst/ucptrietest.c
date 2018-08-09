@@ -1477,49 +1477,6 @@ TrieTestGetRangesFixedSurr(void) {
     umutablecptrie_close(mutableTrie);
 }
 
-/* versions 1 and 2 --------------------------------------------------------- */
-
-static void
-GetVersionTest(void) {
-    uint32_t data[4];
-    // version 1
-    if( (data[0]=0x54726965, 1!=ucptrie_getVersion(data, sizeof(data), FALSE)) ||
-        (data[0]=0x54726965, 1!=ucptrie_getVersion(data, sizeof(data), TRUE)) ||
-        (data[0]=0x65697254, 0!=ucptrie_getVersion(data, sizeof(data), FALSE)) ||
-        (data[0]=0x65697254, 1!=ucptrie_getVersion(data, sizeof(data), TRUE))) {
-        log_err("error: ucptrie_getVersion(v1) is not working as expected\n");
-    }
-
-    // version 2
-    if( (data[0]=0x54726932, 2!=ucptrie_getVersion(data, sizeof(data), FALSE)) ||
-        (data[0]=0x54726932, 2!=ucptrie_getVersion(data, sizeof(data), TRUE)) ||
-        (data[0]=0x32697254, 0!=ucptrie_getVersion(data, sizeof(data), FALSE)) ||
-        (data[0]=0x32697254, 2!=ucptrie_getVersion(data, sizeof(data), TRUE))) {
-        log_err("error: ucptrie_getVersion(v2) is not working as expected\n");
-    }
-
-    // version 3
-    if( (data[0]=0x54726933, 3!=ucptrie_getVersion(data, sizeof(data), FALSE)) ||
-        (data[0]=0x54726933, 3!=ucptrie_getVersion(data, sizeof(data), TRUE)) ||
-        (data[0]=0x33697254, 0!=ucptrie_getVersion(data, sizeof(data), FALSE)) ||
-        (data[0]=0x33697254, 3!=ucptrie_getVersion(data, sizeof(data), TRUE))) {
-        log_err("error: ucptrie_getVersion(v3) is not working as expected\n");
-    }
-
-    // illegal arguments
-    if( (data[0]=0x54726932, 0!=ucptrie_getVersion(NULL, sizeof(data), FALSE)) ||
-        (data[0]=0x54726932, 0!=ucptrie_getVersion(data, 3, FALSE)) ||
-        (data[0]=0x54726932, 0!=ucptrie_getVersion((char *)data+1, sizeof(data), FALSE))) {
-        log_err("error: ucptrie_getVersion(illegal) is not working as expected\n");
-    }
-
-    // unknown signature values
-    if( (data[0]=0x11223344, 0!=ucptrie_getVersion(data, sizeof(data), FALSE)) ||
-        (data[0]=0x54726934, 0!=ucptrie_getVersion(data, sizeof(data), FALSE))) {
-        log_err("error: ucptrie_getVersion(unknown) is not working as expected\n");
-    }
-}
-
 void
 addUCPTrieTest(TestNode** root) {
     addTest(root, &TrieTestSet1, "tsutil/ucptrietest/TrieTestSet1");
@@ -1533,5 +1490,4 @@ addUCPTrieTest(TestNode** root) {
     addTest(root, &ManyAllSameBlocksTest, "tsutil/ucptrietest/ManyAllSameBlocksTest");
     addTest(root, &MuchDataTest, "tsutil/ucptrietest/MuchDataTest");
     addTest(root, &TrieTestGetRangesFixedSurr, "tsutil/ucptrietest/TrieTestGetRangesFixedSurr");
-    addTest(root, &GetVersionTest, "tsutil/ucptrietest/GetVersionTest");
 }

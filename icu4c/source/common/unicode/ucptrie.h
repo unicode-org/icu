@@ -30,11 +30,13 @@ U_CDECL_BEGIN
  * For details see http://site.icu-project.org/design/struct/utrie
  *
  * Do not access UCPTrie fields directly; use public functions and macros.
- * TODO: discuss why lots of macros vs. C++, what happens if wrong one used
- * - necessary for the type*width combinations unless we use a width parameter
- * - necessary for avoiding checks & dispatches.
- * - The macros will return bogus values, or may crash, if used on the wrong type or value width.
- * - use assert.h ??
+ * Functions are easy to use: They support all trie types and value widths.
+ *
+ * When performance is really important, macros provide faster access.
+ * Most macros are specific to either "fast" or "small" tries, see UCPTrieType.
+ * There are "fast" macros for special optimized use cases.
+ *
+ * The macros will return bogus values, or may crash, if used on the wrong type or value width.
  *
  * @see UMutableCPTrie
  * @draft ICU 63
@@ -607,7 +609,9 @@ struct UCPTrie {
     /** @internal */
     uint32_t nullValue;
 
-    const char *name;  // TODO
+#ifdef UCPTRIE_DEBUG
+    const char *name;
+#endif
 };
 
 /**

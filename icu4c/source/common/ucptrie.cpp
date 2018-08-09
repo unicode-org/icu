@@ -4,7 +4,7 @@
 // ucptrie.cpp (modified from utrie2.cpp)
 // created: 2017dec29 Markus W. Scherer
 
-#define UCPTRIE_DEBUG  // TODO
+// #define UCPTRIE_DEBUG
 #ifdef UCPTRIE_DEBUG
 #   include <stdio.h>
 #endif
@@ -103,7 +103,9 @@ ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueWidth valueWidth,
         return nullptr;
     }
     uprv_memcpy(trie, &tempTrie, sizeof(tempTrie));
+#ifdef UCPTRIE_DEBUG
     trie->name = "fromSerialized";
+#endif
 
     // Set the pointers to its index and data arrays.
     const uint16_t *p16 = (const uint16_t *)(header + 1);
@@ -242,8 +244,6 @@ ucptrie_get(const UCPTrie *trie, UChar32 c) {
 namespace {
 
 constexpr int32_t MAX_UNICODE = 0x10ffff;
-
-constexpr int32_t ASCII_LIMIT = 0x80;
 
 inline uint32_t maybeFilterValue(uint32_t value, uint32_t trieNullValue, uint32_t nullValue,
                                  UCPTrieFilterValue *filter, const void *context) {
@@ -527,42 +527,6 @@ ucptrie_toBinary(const UCPTrie *trie,
     return length;
 }
 
-// UTrie and UTrie2 signature values,
-// in platform endianness and opposite endianness.
-#define UTRIE_SIG       0x54726965
-#define UTRIE_OE_SIG    0x65697254
-
-#define UTRIE2_SIG      0x54726932
-#define UTRIE2_OE_SIG   0x32697254
-
-U_CAPI int32_t U_EXPORT2
-ucptrie_getVersion(const void *data, int32_t length, UBool anyEndianOk) {
-    uint32_t signature;
-    if(length<16 || data==nullptr || (U_POINTER_MASK_LSB(data, 3)!=0)) {
-        return 0;
-    }
-    signature=*(const uint32_t *)data;
-    if(signature==UCPTRIE_SIG) {
-        return 3;
-    }
-    if(anyEndianOk && signature==UCPTRIE_OE_SIG) {
-        return 3;
-    }
-    if(signature==UTRIE2_SIG) {
-        return 2;
-    }
-    if(anyEndianOk && signature==UTRIE2_OE_SIG) {
-        return 2;
-    }
-    if(signature==UTRIE_SIG) {
-        return 1;
-    }
-    if(anyEndianOk && signature==UTRIE_OE_SIG) {
-        return 1;
-    }
-    return 0;
-}
-
 namespace {
 
 #ifdef UCPTRIE_DEBUG
@@ -606,107 +570,3 @@ ucptrie_printLengths(const UCPTrie *trie, const char *which) {
 #endif
 
 }  // namespace
-
-U_CAPI int32_t U_EXPORT2
-ucptrie_swap(const UDataSwapper *ds,
-             const void *inData, int32_t length, void *outData,
-             UErrorCode *pErrorCode) {
-    const UCPTrieHeader *inTrie;
-    UCPTrieHeader trie;
-    int32_t dataLength, size;
-    UCPTrieValueWidth valueWidth;
-
-    if(U_FAILURE(*pErrorCode)) {
-        return 0;
-    }
-    if(ds==nullptr || inData==nullptr || (length>=0 && outData==nullptr)) {
-        *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-
-    /* setup and swapping */
-    if(length>=0 && length<(int32_t)sizeof(UCPTrieHeader)) {
-        *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-        return 0;
-    }
-
-    inTrie=(const UCPTrieHeader *)inData;
-    trie.signature=ds->readUInt32(inTrie->signature);
-    trie.options=ds->readUInt16(inTrie->options);
-    trie.indexLength=ds->readUInt16(inTrie->indexLength);
-    trie.dataLength = ds->readUInt16(inTrie->dataLength);
-
-    UCPTrieType type = (UCPTrieType)((trie.options >> 6) & 3);
-    valueWidth = (UCPTrieValueWidth)(trie.options & UCPTRIE_OPTIONS_VALUE_BITS_MASK);
-    dataLength = ((int32_t)(trie.options & UCPTRIE_OPTIONS_DATA_LENGTH_MASK) << 4) | trie.dataLength;
-
-    int32_t minIndexLength = type == UCPTRIE_TYPE_FAST ?
-        UCPTRIE_BMP_INDEX_LENGTH : UCPTRIE_SMALL_INDEX_LENGTH;
-    if( trie.signature!=UCPTRIE_SIG ||
-        type > UCPTRIE_TYPE_SMALL ||
-        (trie.options & UCPTRIE_OPTIONS_RESERVED_MASK) != 0 ||
-        valueWidth > UCPTRIE_VALUE_BITS_8 ||
-        trie.indexLength < minIndexLength ||
-        dataLength < ASCII_LIMIT
-    ) {
-        *pErrorCode=U_INVALID_FORMAT_ERROR; /* not a UCPTrie */
-        return 0;
-    }
-
-    size=sizeof(UCPTrieHeader)+trie.indexLength*2;
-    switch(valueWidth) {
-    case UCPTRIE_VALUE_BITS_16:
-        size+=dataLength*2;
-        break;
-    case UCPTRIE_VALUE_BITS_32:
-        size+=dataLength*4;
-        break;
-    case UCPTRIE_VALUE_BITS_8:
-        size+=dataLength;
-        break;
-    default:
-        *pErrorCode=U_INVALID_FORMAT_ERROR;
-        return 0;
-    }
-
-    if(length>=0) {
-        UCPTrieHeader *outTrie;
-
-        if(length<size) {
-            *pErrorCode=U_INDEX_OUTOFBOUNDS_ERROR;
-            return 0;
-        }
-
-        outTrie=(UCPTrieHeader *)outData;
-
-        /* swap the header */
-        ds->swapArray32(ds, &inTrie->signature, 4, &outTrie->signature, pErrorCode);
-        ds->swapArray16(ds, &inTrie->options, 12, &outTrie->options, pErrorCode);
-
-        /* swap the index and the data */
-        switch(valueWidth) {
-        case UCPTRIE_VALUE_BITS_16:
-            ds->swapArray16(ds, inTrie+1, (trie.indexLength+dataLength)*2, outTrie+1, pErrorCode);
-            break;
-        case UCPTRIE_VALUE_BITS_32:
-            ds->swapArray16(ds, inTrie+1, trie.indexLength*2, outTrie+1, pErrorCode);
-            ds->swapArray32(ds, (const uint16_t *)(inTrie+1)+trie.indexLength, dataLength*4,
-                                     (uint16_t *)(outTrie+1)+trie.indexLength, pErrorCode);
-            break;
-        case UCPTRIE_VALUE_BITS_8:
-            ds->swapArray16(ds, inTrie+1, trie.indexLength*2, outTrie+1, pErrorCode);
-            if(inTrie!=outTrie) {
-                uprv_memmove((outTrie+1)+trie.indexLength, (inTrie+1)+trie.indexLength, dataLength);
-            }
-            break;
-        default:
-            *pErrorCode=U_INVALID_FORMAT_ERROR;
-            return 0;
-        }
-    }
-
-    return size;
-}
-
-// ucptrie_swapAnyVersion() should be defined here but lives in ucptrie_builder.cpp
-// to avoid a dependency from ucptrie.cpp on utrie.cpp.
