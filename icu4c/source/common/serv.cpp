@@ -702,9 +702,9 @@ ICUService::getDisplayName(const UnicodeString& id, UnicodeString& result, const
             }
 
             // fallback
-            UErrorCode fallbackStatus = U_ZERO_ERROR;
-            ICUServiceKey* fallbackKey = createKey(&id, fallbackStatus);
-            while (fallbackKey->fallback()) {
+            status = U_ZERO_ERROR;
+            ICUServiceKey* fallbackKey = createKey(&id, status);
+            while (fallbackKey != NULL && fallbackKey->fallback()) {
                 UnicodeString us;
                 fallbackKey->currentID(us);
                 f = (ICUServiceFactory*)map->get(us);

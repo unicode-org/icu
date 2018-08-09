@@ -430,9 +430,9 @@ RelativeDateFormat::setContext(UDisplayContext value, UErrorCode& status)
         if ( fCapitalizationBrkIter == NULL && (value==UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
                 (value==UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU && fCapitalizationOfRelativeUnitsForUIListMenu) ||
                 (value==UDISPCTX_CAPITALIZATION_FOR_STANDALONE && fCapitalizationOfRelativeUnitsForStandAlone)) ) {
-            UErrorCode status2 = U_ZERO_ERROR;
-            fCapitalizationBrkIter = BreakIterator::createSentenceInstance(fLocale, status2);
-            if (U_FAILURE(status2)) {
+            status = U_ZERO_ERROR;
+            fCapitalizationBrkIter = BreakIterator::createSentenceInstance(fLocale, status);
+            if (U_FAILURE(status)) {
                 delete fCapitalizationBrkIter;
                 fCapitalizationBrkIter = NULL;
             }

@@ -717,6 +717,7 @@ UBool RegexMatcher::find(UErrorCode &status) {
             if  (findProgressInterrupt(startPos, status))
                 return FALSE;
         }
+        U_ASSERT(FALSE);
 
     case START_START:
         // Matches are only possible at the start of the input string
@@ -764,6 +765,7 @@ UBool RegexMatcher::find(UErrorCode &status) {
                     return FALSE;
             }
         }
+        U_ASSERT(FALSE);
 
     case START_STRING:
     case START_CHAR:
@@ -795,6 +797,7 @@ UBool RegexMatcher::find(UErrorCode &status) {
                     return FALSE;
            }
         }
+        U_ASSERT(FALSE);
 
     case START_LINE:
         {
@@ -989,6 +992,7 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
             if  (findProgressInterrupt(startPos, status))
                 return FALSE;
         }
+        U_ASSERT(FALSE);
 
     case START_START:
         // Matches are only possible at the start of the input string
@@ -1030,6 +1034,7 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
                 return FALSE;
         }
     }
+    U_ASSERT(FALSE);
 
     case START_STRING:
     case START_CHAR:
@@ -1058,6 +1063,7 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
                 return FALSE;
         }
     }
+    U_ASSERT(FALSE);
 
     case START_LINE:
     {
