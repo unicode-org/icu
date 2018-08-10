@@ -1084,6 +1084,7 @@ bool RBBITableBuilder::findDuplCharClassFrom(IntPair *categories) {
 
     for (; categories->first < numCols-1; categories->first++) {
         for (categories->second=categories->first+1; categories->second < numCols; categories->second++) {
+            // Initialized to different values to prevent returning true if numStates = 0 (implies no duplicates).
             uint16_t table_base = 0;
             uint16_t table_dupl = 1;
             for (int32_t state=0; state<numStates; state++) {

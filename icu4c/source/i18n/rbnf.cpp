@@ -1700,9 +1700,9 @@ RuleBasedNumberFormat::setContext(UDisplayContext value, UErrorCode& status)
         if ( capitalizationBrkIter == NULL && (value==UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
                 (value==UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU && capitalizationForUIListMenu) ||
                 (value==UDISPCTX_CAPITALIZATION_FOR_STANDALONE && capitalizationForStandAlone)) ) {
-            UErrorCode status2 = U_ZERO_ERROR;
-            capitalizationBrkIter = BreakIterator::createSentenceInstance(locale, status2);
-            if (U_FAILURE(status2)) {
+            status = U_ZERO_ERROR;
+            capitalizationBrkIter = BreakIterator::createSentenceInstance(locale, status);
+            if (U_FAILURE(status)) {
                 delete capitalizationBrkIter;
                 capitalizationBrkIter = NULL;
             }

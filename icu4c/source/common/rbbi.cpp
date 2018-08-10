@@ -848,7 +848,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
 
        #ifdef RBBI_DEBUG
             if (gTrace) {
-                RBBIDebugPrintf("             %lld   ", utext_getNativeIndex(&fText));
+                RBBIDebugPrintf("             %4lld   ", utext_getNativeIndex(&fText));
                 if (0x20<=c && c<0x7f) {
                     RBBIDebugPrintf("\"%c\"  ", c);
                 } else {
