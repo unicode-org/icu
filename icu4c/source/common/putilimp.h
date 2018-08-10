@@ -204,29 +204,17 @@ typedef size_t uintptr_t;
 
 /**
  * \def U_HAVE_STD_ATOMICS
- * Defines whether the standard C++11 <atomic> is available.
- * ICU will use this when available,
- * otherwise will fall back to compiler or platform specific alternatives.
+ * Defines whether to use the standard C++11 <atomic> functions
+ * If false, ICU will fall back to compiler or platform specific alternatives.
+ * Note: support for these fall back options for atomics will be removed in a future version
+ *       of ICU, and the use of C++ 11 atomics will be required.
  * @internal
  */
 #ifdef U_HAVE_STD_ATOMICS
     /* Use the predefined value. */
-#elif U_CPLUSPLUS_VERSION < 11
-    /* Not C++11, disable use of atomics */
-#   define U_HAVE_STD_ATOMICS 0
-#elif __clang__ && __clang_major__==3 && __clang_minor__<=1
-    /* Clang 3.1, has atomic variable initializer bug. */
-#   define U_HAVE_STD_ATOMICS 0
-#else 
-    /* U_HAVE_ATOMIC is typically set by an autoconf test of #include <atomic>  */
-    /*   Can be set manually, or left undefined, on platforms without autoconf. */
-#   if defined(U_HAVE_ATOMIC) &&  U_HAVE_ATOMIC 
-#      define U_HAVE_STD_ATOMICS 1
-#   else
-#      define U_HAVE_STD_ATOMICS 0
-#   endif
+#else
+#    define U_HAVE_STD_ATOMICS 1
 #endif
-
 
 /**
  *  \def U_HAVE_CLANG_ATOMICS
