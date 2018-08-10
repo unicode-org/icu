@@ -127,7 +127,14 @@ public final class CodePointTrieTest extends TestFmwk {
         return true;
     }
 
-    private static int iterStarts[] = { 0, 0xd888, 0xdddd, 0x10000, 0x12345, 0x110000 };
+    // Test iteration starting from various UTF-8/16 and trie structure boundaries.
+    // Also test starting partway through lead & trail surrogates for fixed-surrogate-value options,
+    // and partway through supplementary code points.
+    private static int iterStarts[] = {
+        0, 0x7f, 0x80, 0x7ff, 0x800, 0xfff, 0x1000,
+        0xd7ff, 0xd800, 0xd888, 0xdddd, 0xdfff, 0xe000,
+        0xffff, 0x10000, 0x12345, 0x10ffff, 0x110000
+    };
 
     private void
     testTrieGetRanges(String testName, CodePointMap trie,
@@ -135,13 +142,14 @@ public final class CodePointTrieTest extends TestFmwk {
                       CheckRange checkRanges[]) {
         String typeName = trie instanceof MutableCodePointTrie ? "mutableTrie" : "trie";
         CodePointMap.Range range = new CodePointMap.Range();
-        int s;
-        for (s = 0; s < iterStarts.length; ++s) {
+        for (int s = 0; s < iterStarts.length; ++s) {
             int start = iterStarts[s];
             int i, i0;
             int expEnd;
             int expValue;
             boolean getRangeResult;
+            // No need to go from each iteration start to the very end.
+            int innerLoopCount;
 
             String name = String.format("%s/%s(%s) min=U+%04x", typeName, option, testName, start);
 
@@ -149,7 +157,7 @@ public final class CodePointTrieTest extends TestFmwk {
             for (i = 0; i < checkRanges.length && checkRanges[i].limit <= start; ++i) {}
             i0 = i;
             // without value handler
-            for (;; ++i, start = range.getEnd() + 1) {
+            for (innerLoopCount = 0;; ++i, start = range.getEnd() + 1) {
                 if (i < checkRanges.length) {
                     expEnd = checkRanges[i].limit - 1;
                     expValue = checkRanges[i].value;
@@ -164,9 +172,11 @@ public final class CodePointTrieTest extends TestFmwk {
                         start, getRangeResult, range, expEnd, expValue)) {
                     break;
                 }
+                if (s != 0 && ++innerLoopCount == 5) { break; }
             }
             // with value handler
-            for (i = i0, start = iterStarts[s];; ++i, start = range.getEnd() + 1) {
+            for (i = i0, start = iterStarts[s], innerLoopCount = 0;;
+                    ++i, start = range.getEnd() + 1) {
                 if (i < checkRanges.length) {
                     expEnd = checkRanges[i].limit - 1;
                     expValue = checkRanges[i].value ^ 0x5555;
@@ -179,6 +189,7 @@ public final class CodePointTrieTest extends TestFmwk {
                         start, getRangeResult, range, expEnd, expValue)) {
                     break;
                 }
+                if (s != 0 && ++innerLoopCount == 5) { break; }
             }
             // C also tests without value (with a NULL value pointer),
             // but that does not apply to Java.
