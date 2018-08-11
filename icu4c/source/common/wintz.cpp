@@ -380,7 +380,7 @@ uprv_detectWindowsTimeZone()
      */
     if (tmpid[0] != 0) 
     {
-        len = uprv_strlen(tmpid);
+        len = static_cast<int32_t>(uprv_strlen(tmpid));
         icuid = (char*)uprv_calloc(len + 1, sizeof(char));
         if (icuid != NULL) 
         {

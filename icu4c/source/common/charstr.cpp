@@ -79,7 +79,7 @@ CharString &CharString::append(const char *s, int32_t sLength, UErrorCode &error
         return *this;
     }
     if(sLength<0) {
-        sLength=uprv_strlen(s);
+        sLength= static_cast<int32_t>(uprv_strlen(s));
     }
     if(sLength>0) {
         if(s==(buffer.getAlias()+len)) {

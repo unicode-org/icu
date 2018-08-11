@@ -122,7 +122,7 @@ int32_t getJamoTMinusBase(const uint8_t *src, const uint8_t *limit) {
             }
         } else if (src[1] == 0x87) {
             uint8_t t = src[2];
-            if ((int8_t)t <= (int8_t)0x82) {
+            if ((int8_t)t <= (int8_t)0x82u) {
                 return t - (0xa7 - 0x40);
             }
         }
@@ -422,20 +422,20 @@ Normalizer2Impl::~Normalizer2Impl() {
 void
 Normalizer2Impl::init(const int32_t *inIndexes, const UTrie2 *inTrie,
                       const uint16_t *inExtraData, const uint8_t *inSmallFCD) {
-    minDecompNoCP=inIndexes[IX_MIN_DECOMP_NO_CP];
-    minCompNoMaybeCP=inIndexes[IX_MIN_COMP_NO_MAYBE_CP];
-    minLcccCP=inIndexes[IX_MIN_LCCC_CP];
+    minDecompNoCP = static_cast<UChar>(inIndexes[IX_MIN_DECOMP_NO_CP]);
+    minCompNoMaybeCP = static_cast<UChar>(inIndexes[IX_MIN_COMP_NO_MAYBE_CP]);
+    minLcccCP = static_cast<UChar>(inIndexes[IX_MIN_LCCC_CP]);
 
-    minYesNo=inIndexes[IX_MIN_YES_NO];
-    minYesNoMappingsOnly=inIndexes[IX_MIN_YES_NO_MAPPINGS_ONLY];
-    minNoNo=inIndexes[IX_MIN_NO_NO];
-    minNoNoCompBoundaryBefore=inIndexes[IX_MIN_NO_NO_COMP_BOUNDARY_BEFORE];
-    minNoNoCompNoMaybeCC=inIndexes[IX_MIN_NO_NO_COMP_NO_MAYBE_CC];
-    minNoNoEmpty=inIndexes[IX_MIN_NO_NO_EMPTY];
-    limitNoNo=inIndexes[IX_LIMIT_NO_NO];
-    minMaybeYes=inIndexes[IX_MIN_MAYBE_YES];
-    U_ASSERT((minMaybeYes&7)==0);  // 8-aligned for noNoDelta bit fields
-    centerNoNoDelta=(minMaybeYes>>DELTA_SHIFT)-MAX_DELTA-1;
+    minYesNo = static_cast<uint16_t>(inIndexes[IX_MIN_YES_NO]);
+    minYesNoMappingsOnly = static_cast<uint16_t>(inIndexes[IX_MIN_YES_NO_MAPPINGS_ONLY]);
+    minNoNo = static_cast<uint16_t>(inIndexes[IX_MIN_NO_NO]);
+    minNoNoCompBoundaryBefore = static_cast<uint16_t>(inIndexes[IX_MIN_NO_NO_COMP_BOUNDARY_BEFORE]);
+    minNoNoCompNoMaybeCC = static_cast<uint16_t>(inIndexes[IX_MIN_NO_NO_COMP_NO_MAYBE_CC]);
+    minNoNoEmpty = static_cast<uint16_t>(inIndexes[IX_MIN_NO_NO_EMPTY]);
+    limitNoNo = static_cast<uint16_t>(inIndexes[IX_LIMIT_NO_NO]);
+    minMaybeYes = static_cast<uint16_t>(inIndexes[IX_MIN_MAYBE_YES]);
+    U_ASSERT((minMaybeYes & 7) == 0);  // 8-aligned for noNoDelta bit fields
+    centerNoNoDelta = (minMaybeYes >> DELTA_SHIFT) - MAX_DELTA - 1;
 
     normTrie=inTrie;
 

@@ -56,7 +56,7 @@ static UBool defaultContains(const BinaryProperty &prop, UChar32 c, UProperty /*
 }
 
 static UBool caseBinaryPropertyContains(const BinaryProperty &/*prop*/, UChar32 c, UProperty which) {
-    return ucase_hasBinaryProperty(c, which);
+    return static_cast<UBool>(ucase_hasBinaryProperty(c, which));
 }
 
 static UBool isBidiControl(const BinaryProperty &/*prop*/, UChar32 c, UProperty /*which*/) {

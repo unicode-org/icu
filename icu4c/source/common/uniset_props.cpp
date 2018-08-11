@@ -1030,13 +1030,13 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     p == UCHAR_TRAIL_CANONICAL_COMBINING_CLASS ||
                     p == UCHAR_LEAD_CANONICAL_COMBINING_CLASS) {
                     char* end;
-                    double value = uprv_strtod(vname.data(), &end);
+                    double val = uprv_strtod(vname.data(), &end);
                     // Anything between 0 and 255 is valid even if unused.
                     // Cast double->int only after range check.
                     // We catch NaN here because comparing it with both 0 and 255 will be false
                     // (as are all comparisons with NaN).
-                    if (*end != 0 || !(0 <= value && value <= 255) ||
-                            (v = (int32_t)value) != value) {
+                    if (*end != 0 || !(0 <= val && val <= 255) ||
+                            (v = (int32_t)val) != val) {
                         // non-integral value or outside 0..255, or trailing junk
                         FAIL(ec);
                     }
@@ -1052,11 +1052,11 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
             case UCHAR_NUMERIC_VALUE:
                 {
                     char* end;
-                    double value = uprv_strtod(vname.data(), &end);
+                    double val = uprv_strtod(vname.data(), &end);
                     if (*end != 0) {
                         FAIL(ec);
                     }
-                    applyFilter(numericValueFilter, &value, UPROPS_SRC_CHAR, ec);
+                    applyFilter(numericValueFilter, &val, UPROPS_SRC_CHAR, ec);
                     return *this;
                 }
             case UCHAR_NAME:

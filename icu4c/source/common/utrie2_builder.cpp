@@ -1334,7 +1334,7 @@ utrie2_freeze(UTrie2 *trie, UTrie2ValueBits valueBits, UErrorCode *pErrorCode) {
     if(highStart<=0x10000) {
         trie->index2NullOffset=0xffff;
     } else {
-        trie->index2NullOffset=UTRIE2_INDEX_2_OFFSET+newTrie->index2NullOffset;
+        trie->index2NullOffset=static_cast<uint16_t>(UTRIE2_INDEX_2_OFFSET+newTrie->index2NullOffset);
     }
     trie->dataNullOffset=(uint16_t)(dataMove+newTrie->dataNullOffset);
     trie->highValueIndex=dataMove+trie->dataLength-UTRIE2_DATA_GRANULARITY;

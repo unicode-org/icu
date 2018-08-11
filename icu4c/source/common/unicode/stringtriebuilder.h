@@ -66,7 +66,7 @@ class U_COMMON_API StringTrieBuilder : public UObject {
 public:
 #ifndef U_HIDE_INTERNAL_API
     /** @internal */
-    static UBool hashNode(const void *node);
+    static int32_t hashNode(const void *node);
     /** @internal */
     static UBool equalNodes(const void *left, const void *right);
 #endif  /* U_HIDE_INTERNAL_API */

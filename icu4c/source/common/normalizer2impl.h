@@ -118,7 +118,7 @@ public:
             buffer[0]=(UChar)(JAMO_L_BASE+c/JAMO_V_COUNT);
             buffer[1]=(UChar)(JAMO_V_BASE+c%JAMO_V_COUNT);
         } else {
-            buffer[0]=orig-c2;  // LV syllable
+            buffer[0]=(UChar)(orig-c2);  // LV syllable
             buffer[1]=(UChar)(JAMO_T_BASE+c2);
         }
     }

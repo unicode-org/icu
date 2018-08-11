@@ -312,7 +312,7 @@ struct RelDateTimeFmtDataSink : public ResourceSink {
 
     // Utility functions
     static UDateRelativeDateTimeFormatterStyle styleFromString(const char *s) {
-        int32_t len = uprv_strlen(s);
+        int32_t len = static_cast<int32_t>(uprv_strlen(s));
         if (len >= 7 && uprv_strcmp(s + len - 7, "-narrow") == 0) {
             return UDAT_STYLE_NARROW;
         }
@@ -546,7 +546,7 @@ struct RelDateTimeFmtDataSink : public ResourceSink {
                 consumeAlias(key, value, errorCode);
             } else {
                 style = styleFromString(key);
-                int32_t unitSize = uprv_strlen(key) - styleSuffixLength(style);
+                int32_t unitSize = static_cast<int32_t>(uprv_strlen(key)) - styleSuffixLength(style);
                 genericUnit = unitOrNegativeFromString(key, unitSize);
                 if (style >= 0 && genericUnit != INVALID_UNIT) {
                     consumeTimeUnit(key, value, errorCode);
