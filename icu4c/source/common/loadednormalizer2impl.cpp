@@ -247,7 +247,7 @@ Normalizer2::getInstance(const char *packageName,
                 }
                 void *temp=uhash_get(cache, name);
                 if(temp==NULL) {
-                    int32_t keyLength=uprv_strlen(name)+1;
+                    int32_t keyLength= static_cast<int32_t>(uprv_strlen(name)+1);
                     char *nameCopy=(char *)uprv_malloc(keyLength);
                     if(nameCopy==NULL) {
                         errorCode=U_MEMORY_ALLOCATION_ERROR;

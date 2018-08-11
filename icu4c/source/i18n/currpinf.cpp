@@ -333,15 +333,15 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
     if (U_SUCCESS(ec)) {
         const char* pluralCount;
         while (((pluralCount = keywords->next(nullptr, ec)) != nullptr) && U_SUCCESS(ec)) {
-            int32_t ptnLen;
+            int32_t ptnLength;
             UErrorCode err = U_ZERO_ERROR;
-            const UChar* patternChars = ures_getStringByKeyWithFallback(currencyRes.getAlias(), pluralCount, &ptnLen, &err);
+            const UChar* patternChars = ures_getStringByKeyWithFallback(currencyRes.getAlias(), pluralCount, &ptnLength, &err);
             if (err == U_MEMORY_ALLOCATION_ERROR || patternChars == nullptr) {
                 ec = err;
                 break;
             }
-            if (U_SUCCESS(err) && ptnLen > 0) {
-                UnicodeString* pattern = new UnicodeString(patternChars, ptnLen);
+            if (U_SUCCESS(err) && ptnLength > 0) {
+                UnicodeString* pattern = new UnicodeString(patternChars, ptnLength);
                 if (pattern == nullptr) {
                     ec = U_MEMORY_ALLOCATION_ERROR;
                     break;
@@ -356,7 +356,7 @@ CurrencyPluralInfo::setupCurrencyPluralPattern(const Locale& loc, UErrorCode& st
                 pattern->findAndReplace(UnicodeString(TRUE, gPart1, 3), UnicodeString(TRUE, gTripleCurrencySign, 3));
 
                 if (hasSeparator) {
-                    UnicodeString negPattern(patternChars, ptnLen);
+                    UnicodeString negPattern(patternChars, ptnLength);
                     negPattern.findAndReplace(UnicodeString(TRUE, gPart0, 3), 
                         UnicodeString(negNumberStylePattern, negNumberStylePatternLen));
                     negPattern.findAndReplace(UnicodeString(TRUE, gPart1, 3), UnicodeString(TRUE, gTripleCurrencySign, 3));

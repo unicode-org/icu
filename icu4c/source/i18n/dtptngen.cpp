@@ -629,10 +629,10 @@ void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErro
 UnicodeString
 DateTimePatternGenerator::getSkeleton(const UnicodeString& pattern, UErrorCode&
 /*status*/) {
-    FormatParser fp;
+    FormatParser fp2;
     DateTimeMatcher matcher;
     PtnSkeleton localSkeleton;
-    matcher.set(pattern, &fp, localSkeleton);
+    matcher.set(pattern, &fp2, localSkeleton);
     return localSkeleton.getSkeleton();
 }
 
@@ -648,10 +648,10 @@ DateTimePatternGenerator::staticGetSkeleton(
 
 UnicodeString
 DateTimePatternGenerator::getBaseSkeleton(const UnicodeString& pattern, UErrorCode& /*status*/) {
-    FormatParser fp;
+    FormatParser fp2;
     DateTimeMatcher matcher;
     PtnSkeleton localSkeleton;
-    matcher.set(pattern, &fp, localSkeleton);
+    matcher.set(pattern, &fp2, localSkeleton);
     return localSkeleton.getBaseSkeleton();
 }
 
@@ -888,9 +888,9 @@ struct DateTimePatternGenerator::AppendItemNamesSink : public ResourceSink {
                 valueStr.getTerminatedBuffer();
             }
             for (int32_t j = 1; j < UDATPG_WIDTH_COUNT; j++) {
-                UnicodeString& valueStr = dtpg.getMutableFieldDisplayName((UDateTimePatternField)i, (UDateTimePGDisplayWidth)j);
-                if (valueStr.isEmpty()) {
-                    valueStr = dtpg.getFieldDisplayName((UDateTimePatternField)i, (UDateTimePGDisplayWidth)(j-1));
+                UnicodeString& valueStr2 = dtpg.getMutableFieldDisplayName((UDateTimePatternField)i, (UDateTimePGDisplayWidth)j);
+                if (valueStr2.isEmpty()) {
+                    valueStr2 = dtpg.getFieldDisplayName((UDateTimePatternField)i, (UDateTimePGDisplayWidth)(j-1));
                 }
             }
         }
