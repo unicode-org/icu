@@ -93,6 +93,8 @@ static void TestFCDCrash(void);
 
 static void TestJ5298(void);
 
+static void TestBadKey(void);
+
 const UCollationResult results[] = {
     UCOL_LESS,
     UCOL_LESS, /*UCOL_GREATER,*/
@@ -210,6 +212,7 @@ void addAllCollTest(TestNode** root)
     addTest(root, &TestJitterbug1098, "tscoll/callcoll/TestJitterbug1098");
     addTest(root, &TestFCDCrash, "tscoll/callcoll/TestFCDCrash");
     addTest(root, &TestJ5298, "tscoll/callcoll/TestJ5298");
+    addTest(root, &TestBadKey, "tscoll/callcoll/TestBadKey");
 }
 
 UBool hasCollationElements(const char *locName) {
@@ -1342,5 +1345,37 @@ static void TestJ5298(void)
     }
     uenum_close(values);
     log_verbose("\n");
+}
+
+static const char* badKeyLocales[] = {
+	"@calendar=japanese;collation=search", // ucol_open OK
+	"@calendar=japanese", // ucol_open OK
+	"en@calendar=x", // ucol_open OK
+	"ja@calendar=x", // ucol_open OK
+	"en@collation=x", // ucol_open OK
+	"ja@collation=x", // ucol_open OK
+	"ja@collation=private-kana", // ucol_open fails, verify it does not crash
+	"en@collation=\x80", // (x80 undef in ASCII,EBCDIC) ucol_open fails, verify it does not crash
+	NULL
+};
+
+// Mainly this is to check that we don't have a crash, but we check
+// for correct NULL return and FAILURE/SUCCESS status as a bonus.
+static void TestBadKey(void)
+{
+    const char* badLoc;
+    const char** badLocsPtr = badKeyLocales;
+    while ((badLoc = *badLocsPtr++) != NULL) {
+        UErrorCode status = U_ZERO_ERROR;
+        UCollator* uc = ucol_open(badLoc, &status);
+        if ( U_SUCCESS(status) ) {
+            if (uc == NULL) {
+                log_err("ucol_open sets SUCCESS but returns NULL, locale: %s\n", badLoc);
+            }
+            ucol_close(uc);
+        } else if (uc != NULL) {
+            log_err("ucol_open sets FAILURE but returns non-NULL, locale: %s\n", badLoc);
+        }
+    }
 }
 #endif /* #if !UCONFIG_NO_COLLATION */
