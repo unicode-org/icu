@@ -210,10 +210,11 @@ public class KeyTypeData {
     }
 
     private static void initFromResourceBundle() {
-        UResourceBundle keyTypeDataRes = UResourceBundle.getBundleInstance(
+        UResourceBundle keyTypeDataRes = ICUResourceBundle.getBundleInstance(
                 ICUData.ICU_BASE_NAME,
                 "keyTypeData",
-                ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+                ICUResourceBundle.ICU_DATA_CLASS_LOADER,
+                ICUResourceBundle.OpenType.DIRECT);
 
         getKeyInfo(keyTypeDataRes.get("keyInfo"));
         getTypeInfo(keyTypeDataRes.get("typeInfo"));
