@@ -450,8 +450,8 @@ Collator* U_EXPORT2 Collator::createInstance(const Locale& desiredLocale,
         coll = makeInstance(desiredLocale, status);
         // Either returns NULL with U_FAILURE(status), or non-NULL with U_SUCCESS(status)
     }
-    // The use of *coll in setAttributesFromKeywords can cause causes the NULL check
-    // to be optimized out of the delete even though setAttributesFromKeywords returns
+    // The use of *coll in setAttributesFromKeywords can cause the NULL check to be
+    // optimized out of the delete even though setAttributesFromKeywords returns
     // immediately if U_FAILURE(status), so we add a check here.
     if (U_FAILURE(status)) {
         return NULL;
