@@ -26,6 +26,7 @@ public class ParsingUtils {
     public static final int PARSE_FLAG_NO_FOREIGN_CURRENCIES = 0x2000;
     public static final int PARSE_FLAG_ALLOW_INFINITE_RECURSION = 0x4000;
     public static final int PARSE_FLAG_STRICT_IGNORABLES = 0x8000;
+    public static final int PARSE_FLAG_JAVA_COMPATIBILITY_IGNORABLES = 0x10000;
 
     public static void putLeadCodePoints(UnicodeSet input, UnicodeSet output) {
         for (EntryRange range : input.ranges()) {

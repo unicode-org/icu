@@ -2195,6 +2195,15 @@ public class DecimalFormat extends NumberFormat {
   }
 
   /**
+   * Android libcore uses this internal method to set {@link ParseMode#JAVA_COMPATIBILITY}.
+   * @internal
+   */
+  public synchronized void setParseStrictMode(ParseMode parseMode) {
+    properties.setParseMode(parseMode);
+    refreshFormatter();
+  }
+
+  /**
    * {@inheritDoc}
    *
    * @see #setParseIntegerOnly
