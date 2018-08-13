@@ -4080,6 +4080,19 @@ public class ULocaleTest extends TestFmwk {
     }
 
     @Test
+    public void TestForLanguageTagBug13776() {
+        final Locale backupDefault = Locale.getDefault();
+        try {
+            Locale loc = Locale.forLanguageTag("ar-EG-u-nu-latn");
+            Locale.setDefault(loc);
+            ULocale uloc = ULocale.forLocale(loc);
+            assertEquals("getKeywordValue(\"numbers\")", "latn", uloc.getKeywordValue("numbers"));
+        } finally {
+            Locale.setDefault(backupDefault);
+        }
+    }
+
+    @Test
     public void TestForLanguageTag() {
         final Integer NOERROR = Integer.valueOf(-1);
 
