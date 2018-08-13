@@ -18,8 +18,13 @@ public class IgnorablesMatcher extends SymbolMatcher implements NumberParseMatch
     private static final IgnorablesMatcher STRICT = new IgnorablesMatcher(
             StaticUnicodeSets.get(StaticUnicodeSets.Key.STRICT_IGNORABLES));
 
+    private static final IgnorablesMatcher JAVA_COMPATIBILITY = new IgnorablesMatcher(
+            StaticUnicodeSets.get(StaticUnicodeSets.Key.EMPTY));
+
     public static IgnorablesMatcher getInstance(int parseFlags) {
-        if (0 != (parseFlags & ParsingUtils.PARSE_FLAG_STRICT_IGNORABLES)) {
+        if (0 != (parseFlags & ParsingUtils.PARSE_FLAG_JAVA_COMPATIBILITY_IGNORABLES)) {
+            return JAVA_COMPATIBILITY;
+        } else if (0 != (parseFlags & ParsingUtils.PARSE_FLAG_STRICT_IGNORABLES)) {
             return STRICT;
         } else {
             return DEFAULT;

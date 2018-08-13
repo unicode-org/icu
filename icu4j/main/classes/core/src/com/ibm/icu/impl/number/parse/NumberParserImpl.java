@@ -145,7 +145,10 @@ public class NumberParserImpl {
             affixProvider = new CurrencyPluralInfoAffixProvider(properties.getCurrencyPluralInfo(), properties);
         }
         Currency currency = CustomSymbolCurrency.resolve(properties.getCurrency(), locale, symbols);
-        boolean isStrict = properties.getParseMode() == ParseMode.STRICT;
+        ParseMode parseMode = properties.getParseMode();
+        if (parseMode == null) {
+            parseMode = ParseMode.LENIENT;
+        }
         Grouper grouper = Grouper.forProperties(properties);
         int parseFlags = 0;
         if (!properties.getParseCaseSensitive()) {
@@ -160,7 +163,12 @@ public class NumberParserImpl {
         if (properties.getSignAlwaysShown()) {
             parseFlags |= ParsingUtils.PARSE_FLAG_PLUS_SIGN_ALLOWED;
         }
-        if (isStrict) {
+        if (parseMode == ParseMode.JAVA_COMPATIBILITY) {
+            parseFlags |= ParsingUtils.PARSE_FLAG_STRICT_SEPARATORS;
+            parseFlags |= ParsingUtils.PARSE_FLAG_USE_FULL_AFFIXES;
+            parseFlags |= ParsingUtils.PARSE_FLAG_EXACT_AFFIX;
+            parseFlags |= ParsingUtils.PARSE_FLAG_JAVA_COMPATIBILITY_IGNORABLES;
+        } else if (parseMode == ParseMode.STRICT) {
             parseFlags |= ParsingUtils.PARSE_FLAG_STRICT_GROUPING_SIZE;
             parseFlags |= ParsingUtils.PARSE_FLAG_STRICT_SEPARATORS;
             parseFlags |= ParsingUtils.PARSE_FLAG_USE_FULL_AFFIXES;
@@ -210,10 +218,10 @@ public class NumberParserImpl {
 
         // ICU-TC meeting, April 11, 2018: accept percent/permille only if it is in the pattern,
         // and to maintain regressive behavior, divide by 100 even if no percent sign is present.
-        if (!isStrict && affixProvider.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
+        if (parseMode == ParseMode.LENIENT && affixProvider.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
             parser.addMatcher(PercentMatcher.getInstance(symbols));
         }
-        if (!isStrict && affixProvider.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
+        if (parseMode == ParseMode.LENIENT && affixProvider.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
             parser.addMatcher(PermilleMatcher.getInstance(symbols));
         }
 
@@ -221,7 +229,7 @@ public class NumberParserImpl {
         /// OTHER STANDARD MATCHERS ///
         ///////////////////////////////
 
-        if (!isStrict) {
+        if (parseMode == ParseMode.LENIENT) {
             parser.addMatcher(PlusSignMatcher.getInstance(symbols, false));
             parser.addMatcher(MinusSignMatcher.getInstance(symbols, false));
         }
@@ -243,7 +251,7 @@ public class NumberParserImpl {
         //////////////////
 
         parser.addMatcher(new RequireNumberValidator());
-        if (isStrict) {
+        if (parseMode != ParseMode.LENIENT) {
             parser.addMatcher(new RequireAffixValidator());
         }
         if (parseCurrency) {
