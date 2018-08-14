@@ -1861,7 +1861,6 @@ public final class RuleBasedCollator extends Collator {
         assert (valid == null) == (actual == null);
         // Another check we could do is that the actual locale is at
         // the same level or less specific than the valid locale.
-        // TODO: Starting with Java 7, use Objects.equals(a, b).
         if(Objects.equals(actual, tailoring.actualLocale)) {
             actualLocaleIsSameAsValid = false;
         } else {

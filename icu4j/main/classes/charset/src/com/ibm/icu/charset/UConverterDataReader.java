@@ -407,7 +407,6 @@ final class UConverterDataReader {
     //private final static boolean debug = ICUDebug.enabled("UConverterDataReader");
 
     private static final class IsAcceptable implements ICUBinary.Authenticate {
-        // @Override when we switch to Java 6
         @Override
         public boolean isDataVersionAcceptable(byte formatVersion[]) {
             return formatVersion[0] == 6;
