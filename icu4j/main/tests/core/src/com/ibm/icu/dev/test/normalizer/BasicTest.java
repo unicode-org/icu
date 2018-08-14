@@ -2632,9 +2632,14 @@ public class BasicTest extends TestFmwk {
     @Test
     public void TestCustomComp() {
         String [][] pairs={
-            { "\\uD801\\uE000\\uDFFE", "" },
-            { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD7FF\\uFFFF" },
-            { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD7FF\\U000107FE\\uFFFF" },
+            // ICU 63 normalization with CodePointTrie requires inert surrogate code points.
+            // { "\\uD801\\uE000\\uDFFE", "" },
+            // { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD7FF\\uFFFF" },
+            // { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD7FF\\U000107FE\\uFFFF" },
+            { "\\uD801\\uE000\\uDFFE", "\\uD801\\uDFFE" },
+            { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD800\\uD801\\uDFFE\\uDFFF" },
+            { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD800\\U000107FE\\uDFFF" },
+
             { "\\uE001\\U000110B9\\u0345\\u0308\\u0327", "\\uE002\\U000110B9\\u0327\\u0345" },
             { "\\uE010\\U000F0011\\uE012", "\\uE011\\uE012" },
             { "\\uE010\\U000F0011\\U000F0011\\uE012", "\\uE011\\U000F0010" },
@@ -2661,9 +2666,14 @@ public class BasicTest extends TestFmwk {
     @Test
     public void TestCustomFCC() {
         String[][] pairs={
-            { "\\uD801\\uE000\\uDFFE", "" },
-            { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD7FF\\uFFFF" },
-            { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD7FF\\U000107FE\\uFFFF" },
+            // ICU 63 normalization with CodePointTrie requires inert surrogate code points.
+            // { "\\uD801\\uE000\\uDFFE", "" },
+            // { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD7FF\\uFFFF" },
+            // { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD7FF\\U000107FE\\uFFFF" },
+            { "\\uD801\\uE000\\uDFFE", "\\uD801\\uDFFE" },
+            { "\\uD800\\uD801\\uE000\\uDFFE\\uDFFF", "\\uD800\\uD801\\uDFFE\\uDFFF" },
+            { "\\uD800\\uD801\\uDFFE\\uDFFF", "\\uD800\\U000107FE\\uDFFF" },
+
             // The following expected result is different from CustomComp
             // because of only-contiguous composition.
             { "\\uE001\\U000110B9\\u0345\\u0308\\u0327", "\\uE001\\U000110B9\\u0327\\u0308\\u0345" },

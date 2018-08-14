@@ -12,11 +12,13 @@ package com.ibm.icu.impl;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.CodePointMap;
+import com.ibm.icu.util.CodePointTrie;
 import com.ibm.icu.util.ICUUncheckedIOException;
+import com.ibm.icu.util.MutableCodePointTrie;
 import com.ibm.icu.util.VersionInfo;
 
 /**
@@ -180,8 +182,7 @@ public final class Normalizer2Impl {
                 insert(c, cc);
             }
         }
-        // s must be in NFD, otherwise change the implementation.
-        public void append(CharSequence s, int start, int limit,
+        public void append(CharSequence s, int start, int limit, boolean isNFD,
                            int leadCC, int trailCC) {
             if(start==limit) {
                 return;
@@ -202,8 +203,11 @@ public final class Normalizer2Impl {
                     c=Character.codePointAt(s, start);
                     start+=Character.charCount(c);
                     if(start<limit) {
-                        // s must be in NFD, otherwise we need to use getCC().
-                        leadCC=getCCFromYesOrMaybe(impl.getNorm16(c));
+                        if (isNFD) {
+                            leadCC = getCCFromYesOrMaybe(impl.getNorm16(c));
+                        } else {
+                            leadCC = impl.getCC(impl.getNorm16(c));
+                        }
                     } else {
                         leadCC=trailCC;
                     }
@@ -360,6 +364,24 @@ public final class Normalizer2Impl {
     // TODO: Propose widening UTF16 methods that take String to take CharSequence.
     public static final class UTF16Plus {
         /**
+         * Is this code point a lead surrogate (U+d800..U+dbff)?
+         * @param c code unit or code point
+         * @return true or false
+         */
+        public static boolean isLeadSurrogate(int c) { return (c & 0xfffffc00) == 0xd800; }
+        /**
+         * Is this code point a trail surrogate (U+dc00..U+dfff)?
+         * @param c code unit or code point
+         * @return true or false
+         */
+        public static boolean isTrailSurrogate(int c) { return (c & 0xfffffc00) == 0xdc00; }
+        /**
+         * Is this code point a surrogate (U+d800..U+dfff)?
+         * @param c code unit or code point
+         * @return true or false
+         */
+        public static boolean isSurrogate(int c) { return (c & 0xfffff800) == 0xd800; }
+        /**
          * Assuming c is a surrogate code point (UTF16.isSurrogate(c)),
          * is it a lead surrogate?
          * @param c code unit or code point
@@ -420,7 +442,7 @@ public final class Normalizer2Impl {
     private static final class IsAcceptable implements ICUBinary.Authenticate {
         @Override
         public boolean isDataVersionAcceptable(byte version[]) {
-            return version[0]==3;
+            return version[0]==4;
         }
     }
     private static final IsAcceptable IS_ACCEPTABLE = new IsAcceptable();
@@ -457,8 +479,9 @@ public final class Normalizer2Impl {
             // Read the normTrie.
             int offset=inIndexes[IX_NORM_TRIE_OFFSET];
             int nextOffset=inIndexes[IX_EXTRA_DATA_OFFSET];
-            normTrie=Trie2_16.createFromSerialized(bytes);
-            int trieLength=normTrie.getSerializedLength();
+            int triePosition = bytes.position();
+            normTrie = CodePointTrie.Fast16.fromBinary(bytes);
+            int trieLength = bytes.position() - triePosition;
             if(trieLength>(nextOffset-offset)) {
                 throw new ICUUncheckedIOException("Normalizer2 data: not enough bytes for normTrie");
             }
@@ -487,46 +510,46 @@ public final class Normalizer2Impl {
         return load(ICUBinary.getRequiredData(name));
     }
 
-    private void enumLcccRange(int start, int end, int norm16, UnicodeSet set) {
-        if (norm16 > MIN_NORMAL_MAYBE_YES && norm16 != JAMO_VT) {
-            set.add(start, end);
-        } else if (minNoNoCompNoMaybeCC <= norm16 && norm16 < limitNoNo) {
-            int fcd16=getFCD16(start);
-            if(fcd16>0xff) { set.add(start, end); }
-        }
-    }
-
-    private void enumNorm16PropertyStartsRange(int start, int end, int value, UnicodeSet set) {
-        /* add the start code point to the USet */
-        set.add(start);
-        if(start!=end && isAlgorithmicNoNo(value) && (value & DELTA_TCCC_MASK) > DELTA_TCCC_1) {
-            // Range of code points with same-norm16-value algorithmic decompositions.
-            // They might have different non-zero FCD16 values.
-            int prevFCD16=getFCD16(start);
-            while(++start<=end) {
-                int fcd16=getFCD16(start);
-                if(fcd16!=prevFCD16) {
-                    set.add(start);
-                    prevFCD16=fcd16;
-                }
-            }
-        }
-    }
-
     public void addLcccChars(UnicodeSet set) {
-        Iterator<Trie2.Range> trieIterator=normTrie.iterator();
-        Trie2.Range range;
-        while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
-            enumLcccRange(range.startCodePoint, range.endCodePoint, range.value, set);
+        int start = 0;
+        CodePointMap.Range range = new CodePointMap.Range();
+        while (normTrie.getRange(start, CodePointMap.RangeOption.FIXED_LEAD_SURROGATES, INERT,
+                null, range)) {
+            int end = range.getEnd();
+            int norm16 = range.getValue();
+            if (norm16 > MIN_NORMAL_MAYBE_YES && norm16 != JAMO_VT) {
+                set.add(start, end);
+            } else if (minNoNoCompNoMaybeCC <= norm16 && norm16 < limitNoNo) {
+                int fcd16 = getFCD16(start);
+                if (fcd16 > 0xff) { set.add(start, end); }
+            }
+            start = end + 1;
         }
     }
 
     public void addPropertyStarts(UnicodeSet set) {
-        /* add the start code point of each same-value range of each trie */
-        Iterator<Trie2.Range> trieIterator=normTrie.iterator();
-        Trie2.Range range;
-        while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
-            enumNorm16PropertyStartsRange(range.startCodePoint, range.endCodePoint, range.value, set);
+        // Add the start code point of each same-value range of the trie.
+        int start = 0;
+        CodePointMap.Range range = new CodePointMap.Range();
+        while (normTrie.getRange(start, CodePointMap.RangeOption.FIXED_LEAD_SURROGATES, INERT,
+                null, range)) {
+            int end = range.getEnd();
+            int value = range.getValue();
+            set.add(start);
+            if (start != end && isAlgorithmicNoNo(value) &&
+                    (value & DELTA_TCCC_MASK) > DELTA_TCCC_1) {
+                // Range of code points with same-norm16-value algorithmic decompositions.
+                // They might have different non-zero FCD16 values.
+                int prevFCD16 = getFCD16(start);
+                while (++start <= end) {
+                    int fcd16 = getFCD16(start);
+                    if (fcd16 != prevFCD16) {
+                        set.add(start);
+                        prevFCD16 = fcd16;
+                    }
+                }
+            }
+            start = end + 1;
         }
 
         /* add Hangul LV syllables and LV+1 because of skippables */
@@ -538,20 +561,21 @@ public final class Normalizer2Impl {
     }
 
     public void addCanonIterPropertyStarts(UnicodeSet set) {
-        /* add the start code point of each same-value range of the canonical iterator data trie */
+        // Add the start code point of each same-value range of the canonical iterator data trie.
         ensureCanonIterData();
-        // currently only used for the SEGMENT_STARTER property
-        Iterator<Trie2.Range> trieIterator=canonIterData.iterator(segmentStarterMapper);
-        Trie2.Range range;
-        while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
-            /* add the start code point to the USet */
-            set.add(range.startCodePoint);
+        // Currently only used for the SEGMENT_STARTER property.
+        int start = 0;
+        CodePointMap.Range range = new CodePointMap.Range();
+        while (canonIterData.getRange(start, segmentStarterMapper, range)) {
+            set.add(start);
+            start = range.getEnd() + 1;
         }
     }
-    private static final Trie2.ValueMapper segmentStarterMapper=new Trie2.ValueMapper() {
+    private static final CodePointMap.ValueFilter segmentStarterMapper =
+            new CodePointMap.ValueFilter() {
         @Override
-        public int map(int in) {
-            return in&CANON_NOT_SEGMENT_STARTER;
+        public int apply(int value) {
+            return value & CANON_NOT_SEGMENT_STARTER;
         }
     };
 
@@ -574,12 +598,14 @@ public final class Normalizer2Impl {
      */
     public synchronized Normalizer2Impl ensureCanonIterData() {
         if(canonIterData==null) {
-            Trie2Writable newData=new Trie2Writable(0, 0);
+            MutableCodePointTrie mutableTrie = new MutableCodePointTrie(0, 0);
             canonStartSets=new ArrayList<UnicodeSet>();
-            Iterator<Trie2.Range> trieIterator=normTrie.iterator();
-            Trie2.Range range;
-            while(trieIterator.hasNext() && !(range=trieIterator.next()).leadSurrogate) {
-                final int norm16=range.value;
+            int start = 0;
+            CodePointMap.Range range = new CodePointMap.Range();
+            while (normTrie.getRange(start, CodePointMap.RangeOption.FIXED_LEAD_SURROGATES, INERT,
+                    null, range)) {
+                final int end = range.getEnd();
+                final int norm16 = range.getValue();
                 if(isInert(norm16) || (minYesNo<=norm16 && norm16<minNoNo)) {
                     // Inert, or 2-way mapping (including Hangul syllable).
                     // We do not write a canonStartSet for any yesNo character.
@@ -587,10 +613,11 @@ public final class Normalizer2Impl {
                     // starter's compositions list, and the other characters in
                     // 2-way mappings get CANON_NOT_SEGMENT_STARTER set because they are
                     // "maybe" characters.
+                    start = end + 1;
                     continue;
                 }
-                for(int c=range.startCodePoint; c<=range.endCodePoint; ++c) {
-                    final int oldValue=newData.get(c);
+                for (int c = start; c <= end; ++c) {
+                    final int oldValue = mutableTrie.get(c);
                     int newValue=oldValue;
                     if(isMaybeOrNonZeroCC(norm16)) {
                         // not a segment starter if it occurs in a decomposition or has cc!=0
@@ -608,7 +635,7 @@ public final class Normalizer2Impl {
                         if (isDecompNoAlgorithmic(norm16_2)) {
                             // Maps to an isCompYesAndZeroCC.
                             c2 = mapAlgorithmic(c2, norm16_2);
-                            norm16_2 = getNorm16(c2);
+                            norm16_2 = getRawNorm16(c2);
                             // No compatibility mappings for the CanonicalIterator.
                             assert(!(isHangulLV(norm16_2) || isHangulLVT(norm16_2)));
                         }
@@ -628,36 +655,43 @@ public final class Normalizer2Impl {
                                 // add c to first code point's start set
                                 int limit=mapping+length;
                                 c2=extraData.codePointAt(mapping);
-                                addToStartSet(newData, c, c2);
+                                addToStartSet(mutableTrie, c, c2);
                                 // Set CANON_NOT_SEGMENT_STARTER for each remaining code point of a
                                 // one-way mapping. A 2-way mapping is possible here after
                                 // intermediate algorithmic mapping.
                                 if(norm16_2>=minNoNo) {
                                     while((mapping+=Character.charCount(c2))<limit) {
                                         c2=extraData.codePointAt(mapping);
-                                        int c2Value=newData.get(c2);
+                                        int c2Value = mutableTrie.get(c2);
                                         if((c2Value&CANON_NOT_SEGMENT_STARTER)==0) {
-                                            newData.set(c2, c2Value|CANON_NOT_SEGMENT_STARTER);
+                                            mutableTrie.set(c2, c2Value|CANON_NOT_SEGMENT_STARTER);
                                         }
                                     }
                                 }
                             }
                         } else {
                             // c decomposed to c2 algorithmically; c has cc==0
-                            addToStartSet(newData, c, c2);
+                            addToStartSet(mutableTrie, c, c2);
                         }
                     }
                     if(newValue!=oldValue) {
-                        newData.set(c, newValue);
+                        mutableTrie.set(c, newValue);
                     }
                 }
+                start = end + 1;
             }
-            canonIterData=newData.toTrie2_32();
+            canonIterData = mutableTrie.buildImmutable(
+                    CodePointTrie.Type.SMALL, CodePointTrie.ValueWidth.BITS_32);
         }
         return this;
     }
 
-    public int getNorm16(int c) { return normTrie.get(c); }
+    // The trie stores values for lead surrogate code *units*.
+    // Surrogate code *points* are inert.
+    public int getNorm16(int c) {
+        return UTF16Plus.isLeadSurrogate(c) ? INERT : normTrie.get(c);
+    }
+    public int getRawNorm16(int c) { return normTrie.get(c); }
 
     public int getCompQuickCheck(int norm16) {
         if(norm16<minNoNo || MIN_YES_YES_WITH_CC<=norm16) {
@@ -730,7 +764,7 @@ public final class Normalizer2Impl {
                 }
                 // Maps to an isCompYesAndZeroCC.
                 c=mapAlgorithmic(c, norm16);
-                norm16=getNorm16(c);
+                norm16 = getRawNorm16(c);
             }
         }
         if(norm16<=minYesNo || isHangulLVT(norm16)) {
@@ -763,7 +797,7 @@ public final class Normalizer2Impl {
             // Maps to an isCompYesAndZeroCC.
             decomp=c=mapAlgorithmic(c, norm16);
             // The mapping might decompose further.
-            norm16 = getNorm16(c);
+            norm16 = getRawNorm16(c);
         }
         if (norm16 < minYesNo) {
             if(decomp<0) {
@@ -857,7 +891,7 @@ public final class Normalizer2Impl {
             set.add(value);
         }
         if((canonValue&CANON_HAS_COMPOSITIONS)!=0) {
-            int norm16=getNorm16(c);
+            int norm16 = getRawNorm16(c);
             if(norm16==JAMO_L) {
                 int syllable=Hangul.HANGUL_BASE+(c-Hangul.JAMO_L_BASE)*Hangul.JAMO_VT_COUNT;
                 set.add(syllable, syllable+Hangul.JAMO_VT_COUNT-1);
@@ -975,27 +1009,23 @@ public final class Normalizer2Impl {
             // count code units below the minimum or with irrelevant data for the quick check
             for(prevSrc=src; src!=limit;) {
                 if( (c=s.charAt(src))<minNoCP ||
-                    isMostDecompYesAndZeroCC(norm16=normTrie.getFromU16SingleLead((char)c))
+                    isMostDecompYesAndZeroCC(norm16=normTrie.bmpGet(c))
                 ) {
                     ++src;
-                } else if(!UTF16.isSurrogate((char)c)) {
+                } else if (!UTF16Plus.isLeadSurrogate(c)) {
                     break;
                 } else {
                     char c2;
-                    if(UTF16Plus.isSurrogateLead(c)) {
-                        if((src+1)!=limit && Character.isLowSurrogate(c2=s.charAt(src+1))) {
-                            c=Character.toCodePoint((char)c, c2);
+                    if ((src + 1) != limit && Character.isLowSurrogate(c2 = s.charAt(src + 1))) {
+                        c = Character.toCodePoint((char)c, c2);
+                        norm16 = normTrie.suppGet(c);
+                        if (isMostDecompYesAndZeroCC(norm16)) {
+                            src += 2;
+                        } else {
+                            break;
                         }
-                    } else /* trail surrogate */ {
-                        if(prevSrc<src && Character.isHighSurrogate(c2=s.charAt(src-1))) {
-                            --src;
-                            c=Character.toCodePoint(c2, (char)c);
-                        }
-                    }
-                    if(isMostDecompYesAndZeroCC(norm16=getNorm16(c))) {
-                        src+=Character.charCount(c);
                     } else {
-                        break;
+                        ++src;  // unpaired lead surrogate: inert
                     }
                 }
             }
@@ -1055,7 +1085,7 @@ public final class Normalizer2Impl {
             c=Character.codePointAt(s, src);
             cc=getCC(getNorm16(c));
         };
-        buffer.append(s, 0, src, firstCC, prevCC);
+        buffer.append(s, 0, src, false, firstCC, prevCC);
         buffer.append(s, src, limit);
     }
 
@@ -1083,28 +1113,22 @@ public final class Normalizer2Impl {
                     return true;
                 }
                 if( (c=s.charAt(src))<minNoMaybeCP ||
-                    isCompYesAndZeroCC(norm16=normTrie.getFromU16SingleLead((char)c))
+                    isCompYesAndZeroCC(norm16=normTrie.bmpGet(c))
                 ) {
                     ++src;
                 } else {
                     prevSrc = src++;
-                    if(!UTF16.isSurrogate((char)c)) {
+                    if (!UTF16Plus.isLeadSurrogate(c)) {
                         break;
                     } else {
                         char c2;
-                        if(UTF16Plus.isSurrogateLead(c)) {
-                            if(src!=limit && Character.isLowSurrogate(c2=s.charAt(src))) {
-                                ++src;
-                                c=Character.toCodePoint((char)c, c2);
+                        if (src != limit && Character.isLowSurrogate(c2 = s.charAt(src))) {
+                            ++src;
+                            c = Character.toCodePoint((char)c, c2);
+                            norm16 = normTrie.suppGet(c);
+                            if (!isCompYesAndZeroCC(norm16)) {
+                                break;
                             }
-                        } else /* trail surrogate */ {
-                            if(prevBoundary<prevSrc && Character.isHighSurrogate(c2=s.charAt(prevSrc-1))) {
-                                --prevSrc;
-                                c=Character.toCodePoint(c2, (char)c);
-                            }
-                        }
-                        if(!isCompYesAndZeroCC(norm16=getNorm16(c))) {
-                            break;
                         }
                     }
                 }
@@ -1325,28 +1349,22 @@ public final class Normalizer2Impl {
                     return (src<<1)|qcResult;  // "yes" or "maybe"
                 }
                 if( (c=s.charAt(src))<minNoMaybeCP ||
-                    isCompYesAndZeroCC(norm16=normTrie.getFromU16SingleLead((char)c))
+                    isCompYesAndZeroCC(norm16=normTrie.bmpGet(c))
                 ) {
                     ++src;
                 } else {
                     prevSrc = src++;
-                    if(!UTF16.isSurrogate((char)c)) {
+                    if (!UTF16Plus.isLeadSurrogate(c)) {
                         break;
                     } else {
                         char c2;
-                        if(UTF16Plus.isSurrogateLead(c)) {
-                            if(src!=limit && Character.isLowSurrogate(c2=s.charAt(src))) {
-                                ++src;
-                                c=Character.toCodePoint((char)c, c2);
+                        if (src != limit && Character.isLowSurrogate(c2 = s.charAt(src))) {
+                            ++src;
+                            c = Character.toCodePoint((char)c, c2);
+                            norm16 = normTrie.suppGet(c);
+                            if (!isCompYesAndZeroCC(norm16)) {
+                                break;
                             }
-                        } else /* trail surrogate */ {
-                            if(prevBoundary<prevSrc && Character.isHighSurrogate(c2=s.charAt(prevSrc-1))) {
-                                --prevSrc;
-                                c=Character.toCodePoint(c2, (char)c);
-                            }
-                        }
-                        if(!isCompYesAndZeroCC(norm16=getNorm16(c))) {
-                            break;
                         }
                     }
                 }
@@ -1468,17 +1486,10 @@ public final class Normalizer2Impl {
                     prevFCD16=0;
                     ++src;
                 } else {
-                    if(UTF16.isSurrogate((char)c)) {
+                    if (UTF16Plus.isLeadSurrogate(c)) {
                         char c2;
-                        if(UTF16Plus.isSurrogateLead(c)) {
-                            if((src+1)!=limit && Character.isLowSurrogate(c2=s.charAt(src+1))) {
-                                c=Character.toCodePoint((char)c, c2);
-                            }
-                        } else /* trail surrogate */ {
-                            if(prevSrc<src && Character.isHighSurrogate(c2=s.charAt(src-1))) {
-                                --src;
-                                c=Character.toCodePoint(c2, (char)c);
-                            }
+                        if ((src + 1) != limit && Character.isLowSurrogate(c2 = s.charAt(src + 1))) {
+                            c = Character.toCodePoint((char)c, c2);
                         }
                     }
                     if((fcd16=getFCD16FromNormData(c))<=0xff) {
@@ -1810,7 +1821,7 @@ public final class Normalizer2Impl {
             }
             // Maps to an isCompYesAndZeroCC.
             c=mapAlgorithmic(c, norm16);
-            norm16=getNorm16(c);
+            norm16 = getRawNorm16(c);
         }
         if (norm16 < minYesNo) {
             // c does not decompose
@@ -1831,7 +1842,7 @@ public final class Normalizer2Impl {
                 leadCC=0;
             }
             ++mapping;  // skip over the firstUnit
-            buffer.append(extraData, mapping, mapping+length, leadCC, trailCC);
+            buffer.append(extraData, mapping, mapping+length, true, leadCC, trailCC);
         }
     }
 
@@ -1921,7 +1932,7 @@ public final class Normalizer2Impl {
             }
             int composite=compositeAndFwd>>1;
             if((compositeAndFwd&1)!=0) {
-                addComposites(getCompositionsListForComposite(getNorm16(composite)), set);
+                addComposites(getCompositionsListForComposite(getRawNorm16(composite)), set);
             }
             set.add(composite);
         } while((firstUnit&COMP_1_LAST_TUPLE)==0);
@@ -2045,7 +2056,7 @@ public final class Normalizer2Impl {
                     // Is the composite a starter that combines forward?
                     if((compositeAndFwd&1)!=0) {
                         compositionsList=
-                            getCompositionsListForComposite(getNorm16(composite));
+                            getCompositionsListForComposite(getRawNorm16(composite));
                     } else {
                         compositionsList=-1;
                     }
@@ -2083,7 +2094,7 @@ public final class Normalizer2Impl {
     }
 
     public int composePair(int a, int b) {
-        int norm16=getNorm16(a);  // maps an out-of-range 'a' to inert norm16=0
+        int norm16=getNorm16(a);  // maps an out-of-range 'a' to inert norm16
         int list;
         if(isInert(norm16)) {
             return -1;
@@ -2220,19 +2231,19 @@ public final class Normalizer2Impl {
         return getFCD16(Character.codePointBefore(s, p));
     }
 
-    private void addToStartSet(Trie2Writable newData, int origin, int decompLead) {
-        int canonValue=newData.get(decompLead);
+    private void addToStartSet(MutableCodePointTrie mutableTrie, int origin, int decompLead) {
+        int canonValue = mutableTrie.get(decompLead);
         if((canonValue&(CANON_HAS_SET|CANON_VALUE_MASK))==0 && origin!=0) {
             // origin is the first character whose decomposition starts with
             // the character for which we are setting the value.
-            newData.set(decompLead, canonValue|origin);
+            mutableTrie.set(decompLead, canonValue|origin);
         } else {
             // origin is not the first character, or it is U+0000.
             UnicodeSet set;
             if((canonValue&CANON_HAS_SET)==0) {
                 int firstOrigin=canonValue&CANON_VALUE_MASK;
                 canonValue=(canonValue&~CANON_VALUE_MASK)|CANON_HAS_SET|canonStartSets.size();
-                newData.set(decompLead, canonValue);
+                mutableTrie.set(decompLead, canonValue);
                 canonStartSets.add(set=new UnicodeSet());
                 if(firstOrigin!=0) {
                     set.add(firstOrigin);
@@ -2263,12 +2274,12 @@ public final class Normalizer2Impl {
     private int centerNoNoDelta;
     private int minMaybeYes;
 
-    private Trie2_16 normTrie;
+    private CodePointTrie.Fast16 normTrie;
     private String maybeYesCompositions;
     private String extraData;  // mappings and/or compositions for yesYes, yesNo & noNo characters
     private byte[] smallFCD;  // [0x100] one bit per 32 BMP code points, set if any FCD!=0
 
-    private Trie2_32 canonIterData;
+    private CodePointTrie canonIterData;
     private ArrayList<UnicodeSet> canonStartSets;
 
     // bits in canonIterData

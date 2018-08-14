@@ -304,6 +304,7 @@
     <ClCompile Include="ustack.cpp" />
     <ClCompile Include="ustrenum.cpp" />
     <ClCompile Include="utrie.cpp" />
+    <ClCompile Include="utrie_swap.cpp" />
     <ClCompile Include="utrie2.cpp" />
     <ClCompile Include="utrie2_builder.cpp" />
     <ClCompile Include="uvector.cpp" />
@@ -439,9 +440,11 @@
     <ClCompile Include="ucharstrie.cpp" />
     <ClCompile Include="ucharstriebuilder.cpp" />
     <ClCompile Include="ucharstrieiterator.cpp" />
+    <ClCompile Include="ucptrie.cpp" />
     <ClCompile Include="uchriter.cpp" />
     <ClCompile Include="uinvchar.cpp" />
     <ClCompile Include="uiter.cpp" />
+    <ClCompile Include="umutablecptrie.cpp" />
     <ClCompile Include="unistr.cpp" />
     <ClCompile Include="unistr_case.cpp" />
     <ClCompile Include="unistr_case_locale.cpp" />

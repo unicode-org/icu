@@ -182,6 +182,7 @@
     <ClCompile Include="sorttest.c" />
     <ClCompile Include="trie2test.c" />
     <ClCompile Include="trietest.c" />
+    <ClCompile Include="ucptrietest.c" />
     <ClCompile Include="uenumtst.c" />
     <ClCompile Include="bocu1tst.c" />
     <ClCompile Include="ccapitst.c" />

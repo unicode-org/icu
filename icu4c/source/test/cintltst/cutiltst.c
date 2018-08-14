@@ -27,6 +27,7 @@ void addHashtableTest(TestNode** root);
 void addCStringTest(TestNode** root);
 void addTrieTest(TestNode** root);
 void addTrie2Test(TestNode** root);
+void addUCPTrieTest(TestNode** root);
 void addEnumerationTest(TestNode** root);
 void addPosixTest(TestNode** root);
 void addSortTest(TestNode** root);
@@ -38,6 +39,7 @@ void addUtility(TestNode** root)
     addCStringTest(root);
     addTrieTest(root);
     addTrie2Test(root);
+    addUCPTrieTest(root);
     addLocaleTest(root);
     addCLDRTest(root);
     addUnicodeTest(root);

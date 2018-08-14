@@ -44,9 +44,10 @@
 0360..0361:234
 0362:233
 0363..036F:230
-D802:2  # surrogates with non-zero combining classes
-D803:3
-D804:4
+# ICU 63 normalization with UCPTrie requires inert surrogate code points.
+# D802:2  # surrogates with non-zero combining classes
+# D803:3
+# D804:4
 110B9:9
 110BA:7
 
@@ -58,10 +59,11 @@ D804:4
 00C4=0041 0308
 00C5=0041 030A
 00C7=0043 0327
-D800>D7FF  # surrogates with mappings, and mappings to empty strings
-D801>
-DFFE>
-DFFF>FFFF
+# ICU 63 normalization with UCPTrie requires inert surrogate code points.
+# D800>D7FF  # surrogates with mappings, and mappings to empty strings
+# D801>
+# DFFE>
+# DFFF>FFFF
 E000>
 E001=61 338  # composition with trail<=33FF and composite>7FFF
 E002=E001 308  # recursive mapping needs reordering
