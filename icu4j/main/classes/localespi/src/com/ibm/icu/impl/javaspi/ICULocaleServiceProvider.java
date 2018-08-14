@@ -64,7 +64,7 @@ public class ICULocaleServiceProvider {
             return ULocale.forLocale(spLoc);
         }
 
-        // The locale may have script field on Java 7+.
+        // The locale may have script field.
         // So we once convert it to ULocale, then strip the ICU suffix off
         // if necessary.
         ULocale result = ULocale.forLocale(locale);
@@ -115,7 +115,7 @@ public class ICULocaleServiceProvider {
             return SPECIAL_LOCALES_MAP;
         }
 
-        Map<Locale, Locale> splocs = new HashMap<Locale, Locale>();
+        Map<Locale, Locale> splocs = new HashMap<>();
         for (Locale spLoc : SPECIAL_LOCALES) {
             String var = spLoc.getVariant();
             if (var.length() > 0) {
@@ -131,7 +131,7 @@ public class ICULocaleServiceProvider {
             return LOCALES;
         }
 
-        Set<Locale> localeSet = new HashSet<Locale>();
+        Set<Locale> localeSet = new HashSet<>();
         ULocale[] icuLocales = ICUResourceBundle.getAvailableULocales();
 
         for (ULocale uloc : icuLocales) {
@@ -183,14 +183,6 @@ public class ICULocaleServiceProvider {
     }
 
     private static void addULocale(ULocale uloc, Set<Locale> locales) {
-        // special case - nn
-        // ULocale#toLocale on Java 6 maps "nn" to "no_NO_NY"
-        if (uloc.getLanguage().equals("nn") && uloc.getScript().length() == 0) {
-            Locale locNN = new Locale(uloc.getLanguage(), uloc.getCountry(), uloc.getVariant());
-            addLocale(locNN, locales);
-            return;
-        }
-
         locales.add(uloc.toLocale());
 
         if (enableIcuVariants()) {

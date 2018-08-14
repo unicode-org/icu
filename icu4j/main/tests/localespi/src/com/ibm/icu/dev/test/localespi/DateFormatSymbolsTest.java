@@ -192,16 +192,8 @@ public class DateFormatSymbolsTest extends TestFmwk {
     @Test
     public void TestCalendarKeyword() {
         // ICU provider variant is appended
-        ULocale uloc0 = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@calendar=japanese");
-        Locale loc = uloc0.toLocale();
-        // On Java 7+, locale extension is preserved
-        ULocale uloc = ULocale.forLocale(loc);
-        String calType = uloc.getKeywordValue("calendar");
-        if (calType == null) {
-            // Java 6 - skip this test
-            return;
-        }
-
+        ULocale uloc = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@calendar=japanese");
+        Locale loc = uloc.toLocale();
         DateFormatSymbols jdkDfs = DateFormatSymbols.getInstance(loc);
         com.ibm.icu.text.DateFormatSymbols icuDfs = com.ibm.icu.text.DateFormatSymbols.getInstance(uloc);
 

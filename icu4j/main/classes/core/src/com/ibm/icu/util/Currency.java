@@ -64,7 +64,7 @@ public class Currency extends MeasureUnit {
 
     // Cache to save currency name trie
     private static ICUCache<ULocale, List<TextTrieMap<CurrencyStringInfo>>> CURRENCY_NAME_CACHE =
-        new SimpleCache<ULocale, List<TextTrieMap<CurrencyStringInfo>>>();
+        new SimpleCache<>();
 
     /**
      * Selector for getName() indicating a symbolic name for a
@@ -229,7 +229,7 @@ public class Currency extends MeasureUnit {
     public static Set<Currency> getAvailableCurrencies() {
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
         List<String> list = info.currencies(CurrencyFilter.all());
-        HashSet<Currency> resultSet = new HashSet<Currency>(list.size());
+        HashSet<Currency> resultSet = new HashSet<>(list.size());
         for (String code : list) {
             resultSet.add(getInstance(code));
         }
@@ -657,7 +657,6 @@ public class Currency extends MeasureUnit {
      * @see #getName(Locale, int, boolean[])
      * @stable ICU 49
      */
-    @SuppressWarnings("javadoc")    // java.util.Currency#getDisplayName() is introduced in Java 7
     public String getDisplayName() {
         return getName(Locale.getDefault(), LONG_NAME, null);
     }
@@ -677,7 +676,6 @@ public class Currency extends MeasureUnit {
      * @see #getName(Locale, int, boolean[])
      * @stable ICU 49
      */
-    @SuppressWarnings("javadoc")    // java.util.Currency#getDisplayName() is introduced in Java 7
     public String getDisplayName(Locale locale) {
         return getName(locale, LONG_NAME, null);
     }
@@ -748,10 +746,10 @@ public class Currency extends MeasureUnit {
         List<TextTrieMap<CurrencyStringInfo>> currencyTrieVec = CURRENCY_NAME_CACHE.get(locale);
         if (currencyTrieVec == null) {
             TextTrieMap<CurrencyStringInfo> currencyNameTrie =
-                new TextTrieMap<CurrencyStringInfo>(true);
+                new TextTrieMap<>(true);
             TextTrieMap<CurrencyStringInfo> currencySymbolTrie =
-                new TextTrieMap<CurrencyStringInfo>(false);
-            currencyTrieVec = new ArrayList<TextTrieMap<CurrencyStringInfo>>();
+                new TextTrieMap<>(false);
+            currencyTrieVec = new ArrayList<>();
             currencyTrieVec.add(currencySymbolTrie);
             currencyTrieVec.add(currencyNameTrie);
             setupCurrencyTrieVec(locale, currencyTrieVec);
@@ -971,7 +969,7 @@ public class Currency extends MeasureUnit {
             //CurrencyFilter filter = CurrencyFilter.onDateRange(null, new Date(253373299200000L));
             CurrencyFilter filter = CurrencyFilter.all();
             all = Collections.unmodifiableList(getTenderCurrencies(filter));
-            ALL_TENDER_CODES = new SoftReference<List<String>>(all);
+            ALL_TENDER_CODES = new SoftReference<>(all);
         }
         return all;
     }
@@ -981,8 +979,8 @@ public class Currency extends MeasureUnit {
         if (all == null) {
             CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
             all = Collections.unmodifiableSet(
-                    new HashSet<String>(info.currencies(CurrencyFilter.all())));
-            ALL_CODES_AS_SET = new SoftReference<Set<String>>(all);
+                    new HashSet<>(info.currencies(CurrencyFilter.all())));
+            ALL_CODES_AS_SET = new SoftReference<>(all);
         }
         return all;
     }

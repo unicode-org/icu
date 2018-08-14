@@ -73,10 +73,10 @@ public class RBBIMonkeyTest extends TestFmwk {
     static class BreakRules {
         BreakRules(RBBIMonkeyImpl monkeyImpl) {
             fMonkeyImpl = monkeyImpl;
-            fBreakRules = new ArrayList<BreakRule>();
+            fBreakRules = new ArrayList<>();
             fType = BreakIterator.KIND_TITLE;
-            fCharClasses = new HashMap<String, CharClass>();
-            fCharClassList = new ArrayList<CharClass>();
+            fCharClasses = new HashMap<>();
+            fCharClassList = new ArrayList<>();
             fDictionarySet = new UnicodeSet();
 
             // Match an alpha-numeric identifier in a rule. Will be a set name.
@@ -293,25 +293,12 @@ public class RBBIMonkeyTest extends TestFmwk {
 
             thisRule.fExpandedRule = thisRule.fExpandedRule.replace("[]", "[a&&[^a]]");
 
-            // Change Unicode escape syntax for compatibility with Java regular expressions (Java 7 or newer)
+            // Change Unicode escape syntax for compatibility with Java regular expressions
             //    \udddd     => \x{dddd}
             //    \U00hhhhhh => \x{hhhhhh}
 
-            // thisRule.fExpandedRule = thisRule.fExpandedRule.replaceAll("\\\\u([0-9A-Fa-f]{4})", "\\\\x{$1}");
-            // thisRule.fExpandedRule = thisRule.fExpandedRule.replaceAll("\\\\U00([0-9A-Fa-f]{6})", "\\\\x{$1}");
-
-            // Java 6 compatibility troubles - there is no syntax for escaping a supplementary character
-            // within a regular expression character class. Put them in as unescaped literal chars.
-            StringBuilder sb = new StringBuilder(thisRule.fExpandedRule);
-            while (true) {
-                int where = sb.indexOf("\\U00");
-                if (where < 0) {
-                    break;
-                }
-                String cp = hexToCodePoint(sb.substring(where+2, where+10));
-                sb.replace(where, where+10, cp);
-            }
-            thisRule.fExpandedRule = sb.toString();
+             thisRule.fExpandedRule = thisRule.fExpandedRule.replaceAll("\\\\u([0-9A-Fa-f]{4})", "\\\\x{$1}");
+             thisRule.fExpandedRule = thisRule.fExpandedRule.replaceAll("\\\\U00([0-9A-Fa-f]{6})", "\\\\x{$1}");
 
             // Escape any literal '#' in the rule expression. Without escaping, these introduce a comment.
             // UnicodeSet._generatePattern() inserts un-escaped "#"s
@@ -1014,7 +1001,7 @@ public class RBBIMonkeyTest extends TestFmwk {
         boolean verbose = getBooleanProperty("verbose", false);
         int seed = getIntProperty("seed", 1);
 
-        List<RBBIMonkeyImpl> startedTests = new ArrayList<RBBIMonkeyImpl>();
+        List<RBBIMonkeyImpl> startedTests = new ArrayList<>();
 
         // Monkey testing is multi-threaded.
         // Each set of break rules to be tested is run in a separate thread.
