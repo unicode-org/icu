@@ -95,12 +95,13 @@ private:
     int32_t compactIndex(int32_t fastILimit, UErrorCode &errorCode);
     int32_t compactTrie(int32_t fastILimit, UErrorCode &errorCode);
 
-    uint32_t *index;
-    int32_t indexCapacity;
-    int32_t index3NullOffset;
-    uint32_t *data;
-    int32_t dataCapacity, dataLength;
-    int32_t dataNullOffset;
+    uint32_t *index = nullptr;
+    int32_t indexCapacity = 0;
+    int32_t index3NullOffset = -1;
+    uint32_t *data = nullptr;
+    int32_t dataCapacity = 0;
+    int32_t dataLength = 0;
+    int32_t dataNullOffset = -1;
 
     uint32_t origInitialValue;
     uint32_t initialValue;
@@ -113,19 +114,17 @@ public:
 #endif
 private:
     /** Temporary array while building the final data. */
-    uint16_t *index16;
+    uint16_t *index16 = nullptr;
     uint8_t flags[UNICODE_LIMIT >> UCPTRIE_SHIFT_3];
 };
 
 MutableCodePointTrie::MutableCodePointTrie(uint32_t iniValue, uint32_t errValue, UErrorCode &errorCode) :
-        index(nullptr), indexCapacity(0), index3NullOffset(-1),
-        data(nullptr), dataCapacity(0), dataLength(0), dataNullOffset(-1),
         origInitialValue(iniValue), initialValue(iniValue), errorValue(errValue),
-        highStart(0), highValue(initialValue),
+        highStart(0), highValue(initialValue)
 #ifdef UCPTRIE_DEBUG
-        name("open"),
+        , name("open")
 #endif
-        index16(nullptr) {
+        {
     if (U_FAILURE(errorCode)) { return; }
     index = (uint32_t *)uprv_malloc(BMP_I_LIMIT * 4);
     data = (uint32_t *)uprv_malloc(INITIAL_DATA_LENGTH * 4);
@@ -138,15 +137,15 @@ MutableCodePointTrie::MutableCodePointTrie(uint32_t iniValue, uint32_t errValue,
 }
 
 MutableCodePointTrie::MutableCodePointTrie(const MutableCodePointTrie &other, UErrorCode &errorCode) :
-        index(nullptr), indexCapacity(0), index3NullOffset(other.index3NullOffset),
-        data(nullptr), dataCapacity(0), dataLength(0), dataNullOffset(other.dataNullOffset),
+        index3NullOffset(other.index3NullOffset),
+        dataNullOffset(other.dataNullOffset),
         origInitialValue(other.origInitialValue), initialValue(other.initialValue),
         errorValue(other.errorValue),
-        highStart(other.highStart), highValue(other.highValue),
+        highStart(other.highStart), highValue(other.highValue)
 #ifdef UCPTRIE_DEBUG
-        name("mutable clone"),
+        , name("mutable clone")
 #endif
-        index16(nullptr) {
+        {
     if (U_FAILURE(errorCode)) { return; }
     int32_t iCapacity = highStart <= BMP_LIMIT ? BMP_I_LIMIT : I_LIMIT;
     index = (uint32_t *)uprv_malloc(iCapacity * 4);
@@ -194,9 +193,10 @@ MutableCodePointTrie *MutableCodePointTrie::fromUCPTrie(const UCPTrie *trie, UEr
         errorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
-    MutableCodePointTrie *mutableTrie = new MutableCodePointTrie(initialValue, errorValue, errorCode);
+    LocalPointer<MutableCodePointTrie> mutableTrie(
+        new MutableCodePointTrie(initialValue, errorValue, errorCode),
+        errorCode);
     if (U_FAILURE(errorCode)) {
-        delete mutableTrie;
         return nullptr;
     }
     UChar32 start = 0, end;
@@ -213,9 +213,8 @@ MutableCodePointTrie *MutableCodePointTrie::fromUCPTrie(const UCPTrie *trie, UEr
         start = end + 1;
     }
     if (U_SUCCESS(errorCode)) {
-        return mutableTrie;
+        return mutableTrie.orphan();
     } else {
-        delete mutableTrie;
         return nullptr;
     }
 }

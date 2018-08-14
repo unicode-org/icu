@@ -447,7 +447,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * UTF-8: Post-increments src and gets a value from the trie.
  * Sets the trie error value for an ill-formed byte sequence.
  *
- * Unlike UCPTRIE_FAST_U16_NEXT() this UTF-8 macro does provide the code point
+ * Unlike UCPTRIE_FAST_U16_NEXT() this UTF-8 macro does not provide the code point
  * because it would be more work to do so and is often not needed.
  * If the trie value differs from the error value, then the byte sequence is well-formed,
  * and the code point can be assembled without revalidation.
@@ -493,7 +493,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * UTF-8: Pre-decrements src and gets a value from the trie.
  * Sets the trie error value for an ill-formed byte sequence.
  *
- * Unlike UCPTRIE_FAST_U16_PREV() this UTF-8 macro does provide the code point
+ * Unlike UCPTRIE_FAST_U16_PREV() this UTF-8 macro does not provide the code point
  * because it would be more work to do so and is often not needed.
  * If the trie value differs from the error value, then the byte sequence is well-formed,
  * and the code point can be assembled without revalidation.
@@ -578,7 +578,9 @@ struct UCPTrie {
     UCPTrieData data;
 
     /** @internal */
-    int32_t indexLength, dataLength;
+    int32_t indexLength;
+    /** @internal */
+    int32_t dataLength;
     /** Start of the last range which ends at U+10FFFF. @internal */
     UChar32 highStart;
     /** highStart>>12 @internal */
@@ -610,6 +612,7 @@ struct UCPTrie {
     uint32_t nullValue;
 
 #ifdef UCPTRIE_DEBUG
+    /** @internal */
     const char *name;
 #endif
 };

@@ -131,6 +131,7 @@ ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueWidth valueWidth,
         trie->nullValue = trie->data.ptr8[nullValueOffset];
         break;
     default:
+        // Unreachable because valueWidth was checked above.
         *pErrorCode = U_INVALID_FORMAT_ERROR;
         return nullptr;
     }
