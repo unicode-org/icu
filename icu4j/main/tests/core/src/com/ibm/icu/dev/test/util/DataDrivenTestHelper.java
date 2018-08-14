@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import com.ibm.icu.dev.test.AbstractTestLog;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.util.CollectionUtilities;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.locale.XCldrStub.FileUtilities;
 import com.ibm.icu.impl.locale.XCldrStub.Splitter;
 import com.ibm.icu.util.ICUUncheckedIOException;
@@ -26,8 +26,8 @@ abstract public class DataDrivenTestHelper {
     protected TestFmwk framework = null;
     protected int minArgumentCount = 3;
     protected int maxArgumentCount = 4;
-    private List<List<String>> lines = new ArrayList<List<String>>();
-    private List<String> comments = new ArrayList<String>();
+    private List<List<String>> lines = new ArrayList<>();
+    private List<String> comments = new ArrayList<>();
 
     public DataDrivenTestHelper setFramework(TestFmwk testFramework) {
         this.framework = testFramework;
@@ -165,7 +165,7 @@ abstract public class DataDrivenTestHelper {
     }
 
     protected boolean assertEquals(String message, Object expected, Object actual) {
-        return TestFmwk.handleAssert(Utility.equals(expected, actual), message, stringFor(expected), stringFor(actual), null, false);
+        return TestFmwk.handleAssert(Objects.equals(expected, actual), message, stringFor(expected), stringFor(actual), null, false);
     }
 
     private final String stringFor(Object obj) {

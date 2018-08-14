@@ -137,9 +137,7 @@ public final class CollationSettings extends SharedObject {
         if(codesLength == codesAndRanges.length) {
             codes = codesAndRanges;
         } else {
-            // TODO: Java 6: Arrays.copyOf(codes, codesLength);
-            codes = new int[codesLength];
-            System.arraycopy(codesAndRanges, 0, codes, 0, codesLength);
+            codes = Arrays.copyOf(codesAndRanges, codesLength);
         }
         int rangesStart = codesLength;
         int rangesLimit = codesAndRanges.length;

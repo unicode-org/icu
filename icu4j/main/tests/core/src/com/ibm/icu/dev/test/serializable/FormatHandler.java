@@ -13,12 +13,12 @@ import java.text.AttributedCharacterIterator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Objects;
 
 import com.ibm.icu.impl.DateNumberFormat;
 import com.ibm.icu.impl.TZDBTimeZoneNames;
 import com.ibm.icu.impl.TimeZoneGenericNames;
 import com.ibm.icu.impl.TimeZoneGenericNames.GenericNameType;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.ChineseDateFormat;
 import com.ibm.icu.text.ChineseDateFormatSymbols;
 import com.ibm.icu.text.CompactDecimalFormat;
@@ -2378,7 +2378,7 @@ public class FormatHandler
                     for (long date : DATES) {
                         String nameA = tzgna.getDisplayName(tz, nt, date);
                         String nameB = tzgnb.getDisplayName(tz, nt, date);
-                        if (!Utility.objectEquals(nameA, nameB)) {
+                        if (!Objects.equals(nameA, nameB)) {
                             return false;
                         }
                     }
@@ -2424,7 +2424,7 @@ public class FormatHandler
                     for (long date : DATES) {
                         String nameA = tzdbna.getDisplayName(tzid, nt, date);
                         String nameB = tzdbnb.getDisplayName(tzid, nt, date);
-                        if (!Utility.objectEquals(nameA, nameB)) {
+                        if (!Objects.equals(nameA, nameB)) {
                             return false;
                         }
                     }

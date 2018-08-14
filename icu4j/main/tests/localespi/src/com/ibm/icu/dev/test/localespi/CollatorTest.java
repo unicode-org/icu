@@ -140,16 +140,8 @@ public class CollatorTest extends TestFmwk {
     @Test
     public void TestCollationKeyword() {
         // ICU provider variant is appended
-        ULocale uloc0 = new ULocale("de_DE_" + TestUtil.ICU_VARIANT + "@collation=phonebook");
-        Locale loc = uloc0.toLocale();
-        // On Java 7+, locale extension is preserved
-        ULocale uloc = ULocale.forLocale(loc);
-        String nsType = uloc.getKeywordValue("collation");
-        if (nsType == null) {
-            // Java 6 - skip this test
-            return;
-        }
-
+        ULocale uloc = new ULocale("de_DE_" + TestUtil.ICU_VARIANT + "@collation=phonebook");
+        Locale loc = uloc.toLocale();
         Collator jdkColl = Collator.getInstance(loc);
         boolean isPhonebook = false;
         if (jdkColl instanceof CollatorICU) {

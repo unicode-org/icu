@@ -25,11 +25,11 @@
 
     <target name="@compile">
         <echo message="build-local:     ${global.build-local.properties}"/>
-        <!-- set java 6 bootclasspath to empty if not set -->
-        <property name="java6.bootclasspath" value=""/>
+        <!-- set java 7 bootclasspath to empty if not set -->
+        <property name="java7.bootclasspath" value=""/>
 
-        <condition property="javac.bootclasspath" value="${java6.bootclasspath}" else="">
-            <equals arg1="${javac.target}" arg2="1.6"/>
+        <condition property="javac.bootclasspath" value="${java7.bootclasspath}" else="">
+            <equals arg1="${javac.target}" arg2="1.7"/>
         </condition>
 
         <echo message="--- java compiler arguments ------------------------"/>

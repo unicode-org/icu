@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -24,7 +25,6 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Relation;
 import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Row.R3;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.locale.XLocaleDistance.DistanceOption;
 import com.ibm.icu.impl.locale.XLocaleMatcher;
 import com.ibm.icu.impl.locale.XLocaleMatcher.Builder;
@@ -338,7 +338,7 @@ public class LocaleMatcher {
     private void addFiltered(String desired, R3<ULocale, ULocale, Double> localeToMaxAndWeight) {
         Set<R3<ULocale, ULocale, Double>> map = desiredLanguageToPossibleLocalesToMaxLocaleToData.get(desired);
         if (map == null) {
-            desiredLanguageToPossibleLocalesToMaxLocaleToData.put(desired, map = new LinkedHashSet<R3<ULocale, ULocale, Double>>());
+            desiredLanguageToPossibleLocalesToMaxLocaleToData.put(desired, map = new LinkedHashSet<>());
         }
         map.add(localeToMaxAndWeight);
         if (DEBUG) {
@@ -346,9 +346,9 @@ public class LocaleMatcher {
         }
     }
 
-    Set<Row.R3<ULocale, ULocale, Double>> localeToMaxLocaleAndWeight = new LinkedHashSet<Row.R3<ULocale, ULocale, Double>>();
+    Set<Row.R3<ULocale, ULocale, Double>> localeToMaxLocaleAndWeight = new LinkedHashSet<>();
     Map<String,Set<Row.R3<ULocale, ULocale, Double>>> desiredLanguageToPossibleLocalesToMaxLocaleToData
-    = new LinkedHashMap<String,Set<Row.R3<ULocale, ULocale, Double>>>();
+    = new LinkedHashMap<>();
 
     // =============== Special Mapping Information ==============
 
@@ -472,10 +472,10 @@ public class LocaleMatcher {
                 return false;
             }
             LocalePatternMatcher other = (LocalePatternMatcher) obj;
-            return Utility.objectEquals(level, other.level)
-                && Utility.objectEquals(lang, other.lang)
-                && Utility.objectEquals(script, other.script)
-                && Utility.objectEquals(region, other.region);
+            return Objects.equals(level, other.level)
+                && Objects.equals(lang, other.lang)
+                && Objects.equals(script, other.script)
+                && Objects.equals(region, other.region);
         }
 
         /* (non-Javadoc)
@@ -509,7 +509,7 @@ public class LocaleMatcher {
         @SuppressWarnings("unused")
         private static final double maxUnequal_changeEqual = 0.75;
 
-        LinkedHashSet<Row.R3<LocalePatternMatcher,LocalePatternMatcher,Double>> scores = new LinkedHashSet<R3<LocalePatternMatcher, LocalePatternMatcher, Double>>();
+        LinkedHashSet<Row.R3<LocalePatternMatcher,LocalePatternMatcher,Double>> scores = new LinkedHashSet<>();
         final Level level;
 
         public ScoreData(Level level) {
@@ -810,7 +810,7 @@ public class LocaleMatcher {
 
     private static final LanguageMatcherData defaultWritten;
 
-    private static HashMap<String,String> canonicalMap = new HashMap<String, String>();
+    private static HashMap<String,String> canonicalMap = new HashMap<>();
 
 
     static {

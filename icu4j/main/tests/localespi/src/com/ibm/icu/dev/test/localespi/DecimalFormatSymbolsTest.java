@@ -167,16 +167,8 @@ public class DecimalFormatSymbolsTest extends TestFmwk {
     @Test
     public void TestKeywords() {
         // ICU provider variant is appended
-        ULocale uloc0 = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@numbers=Arab;currency=EUR");
-        Locale loc = uloc0.toLocale();
-        // On Java 7+, locale extension is preserved
-        ULocale uloc = ULocale.forLocale(loc);
-        String nsType = uloc.getKeywordValue("numbers");
-        if (nsType == null) {
-            // Java 6 - skip this test
-            return;
-        }
-
+        ULocale uloc = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@numbers=Arab;currency=EUR");
+        Locale loc = uloc.toLocale();
         DecimalFormatSymbols jdkDecfs = DecimalFormatSymbols.getInstance(loc);
         com.ibm.icu.text.DecimalFormatSymbols icuDecfs = com.ibm.icu.text.DecimalFormatSymbols.getInstance(uloc);
         // Check digit 0

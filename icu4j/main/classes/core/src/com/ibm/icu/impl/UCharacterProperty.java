@@ -1283,7 +1283,6 @@ public final class UCharacterProperty
     }
 
     private static final class IsAcceptable implements ICUBinary.Authenticate {
-        // @Override when we switch to Java 6
         @Override
         public boolean isDataVersionAcceptable(byte version[]) {
             return version[0] == 7;

@@ -7,4 +7,4 @@ Bundle-Vendor: %providerName
 Fragment-Host: com.ibm.icu.base
 Bundle-Copyright: @COPYRIGHT@
 Require-Bundle: org.junit
-Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

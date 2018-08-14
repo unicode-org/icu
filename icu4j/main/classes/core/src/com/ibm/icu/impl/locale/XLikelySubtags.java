@@ -8,12 +8,12 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.locale.XCldrStub.HashMultimap;
 import com.ibm.icu.impl.locale.XCldrStub.Multimap;
 import com.ibm.icu.impl.locale.XCldrStub.Multimaps;
@@ -45,14 +45,14 @@ public class XLikelySubtags {
         static final Maker HASHMAP = new Maker() {
             @Override
             public Map<Object,Object> make() {
-                return new HashMap<Object,Object>();
+                return new HashMap<>();
             }
         };
 
         static final Maker TREEMAP = new Maker() {
             @Override
             public Map<Object,Object> make() {
-                return new TreeMap<Object,Object>();
+                return new TreeMap<>();
             }
         };
     }
@@ -72,7 +72,7 @@ public class XLikelySubtags {
             UResourceBundle metadata = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,"metadata",ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle metadataAlias = metadata.get("alias");
             UResourceBundle territoryAlias = metadataAlias.get(key);
-            Map<String, String> toCanonical1 = new HashMap<String, String>();
+            Map<String, String> toCanonical1 = new HashMap<>();
             for ( int i = 0 ; i < territoryAlias.getSize(); i++ ) {
                 UResourceBundle res = territoryAlias.get(i);
                 String aliasFrom = res.getKey();
@@ -207,7 +207,7 @@ public class XLikelySubtags {
         }
         @Override
         public int hashCode() {
-            return Utility.hash(language, script, region);
+            return Objects.hash(language, script, region);
         }
     }
 
@@ -218,7 +218,7 @@ public class XLikelySubtags {
     }
 
     private static Map<String, String> getDefaultRawData() {
-        Map<String, String> rawData = new TreeMap<String, String>();
+        Map<String, String> rawData = new TreeMap<>();
         UResourceBundle bundle = UResourceBundle.getBundleInstance( ICUData.ICU_BASE_NAME, "likelySubtags");
         for (Enumeration<String> enumer = bundle.getKeys(); enumer.hasMoreElements();) {
             String key = enumer.nextElement();
@@ -247,7 +247,7 @@ public class XLikelySubtags {
         //        Splitter bar = Splitter.on('_');
         //        int last = -1;
         // set the base data
-        Map<LSR,LSR> internCache = new HashMap<LSR,LSR>();
+        Map<LSR,LSR> internCache = new HashMap<>();
         for (Entry<String, String> sourceTarget : rawData.entrySet()) {
             LSR ltp = LSR.from(sourceTarget.getKey());
             final String language = ltp.language;
@@ -483,7 +483,7 @@ public class XLikelySubtags {
             if (value instanceof Map) {
                 show((Map<?,?>)value, indent+"\t", output);
             } else {
-                output.append("\t" + Utility.toString(value)).append("\n");
+                output.append("\t" + Objects.toString(value)).append("\n");
             }
             first = indent;
         }
