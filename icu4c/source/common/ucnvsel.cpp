@@ -41,6 +41,7 @@
 #include "propsvec.h"
 #include "uassert.h"
 #include "ucmndata.h"
+#include "udataswp.h"
 #include "uenumimp.h"
 #include "cmemory.h"
 #include "cstring.h"

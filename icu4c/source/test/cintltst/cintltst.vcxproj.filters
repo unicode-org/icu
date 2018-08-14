@@ -123,6 +123,9 @@
     <ClCompile Include="trietest.c">
       <Filter>collections</Filter>
     </ClCompile>
+    <ClCompile Include="ucptrietest.c">
+      <Filter>collections</Filter>
+    </ClCompile>
     <ClCompile Include="uenumtst.c">
       <Filter>collections</Filter>
     </ClCompile>

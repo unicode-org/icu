@@ -139,6 +139,9 @@
     <ClCompile Include="utrie.cpp">
       <Filter>collections</Filter>
     </ClCompile>
+    <ClCompile Include="utrie_swap.cpp">
+      <Filter>collections</Filter>
+    </ClCompile>
     <ClCompile Include="utrie2.cpp">
       <Filter>collections</Filter>
     </ClCompile>
@@ -587,6 +590,12 @@
       <Filter>collections</Filter>
     </ClCompile>
     <ClCompile Include="ucharstrieiterator.cpp">
+      <Filter>collections</Filter>
+    </ClCompile>
+    <ClCompile Include="ucptrie.cpp">
+      <Filter>collections</Filter>
+    </ClCompile>
+    <ClCompile Include="umutablecptrie.cpp">
       <Filter>collections</Filter>
     </ClCompile>
     <ClCompile Include="patternprops.cpp">
@@ -1202,6 +1211,12 @@
       <Filter>collections</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\ucharstriebuilder.h">
+      <Filter>collections</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\ucptrie.h">
+      <Filter>collections</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\umutablecptrie.h">
       <Filter>collections</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\enumset.h">

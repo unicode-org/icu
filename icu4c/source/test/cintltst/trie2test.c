@@ -421,7 +421,7 @@ testTrieUTF8(const char *testName,
         prevCP=c;
         --c;                                    /* end of the range */
         U8_APPEND_UNSAFE(s, length, c);
-        if(U_IS_SURROGATE(prevCP)) {
+        if(U_IS_SURROGATE(c)) {
             // A surrogate byte sequence counts as 3 single-byte errors.
             values[countValues++]=errorValue;
             values[countValues++]=errorValue;
@@ -1287,31 +1287,6 @@ GrowDataArrayTest(void) {
 
 /* versions 1 and 2 --------------------------------------------------------- */
 
-static void
-GetVersionTest(void) {
-    uint32_t data[4];
-    if( /* version 1 */
-        (data[0]=0x54726965, 1!=utrie2_getVersion(data, sizeof(data), FALSE)) ||
-        (data[0]=0x54726965, 1!=utrie2_getVersion(data, sizeof(data), TRUE)) ||
-        (data[0]=0x65697254, 0!=utrie2_getVersion(data, sizeof(data), FALSE)) ||
-        (data[0]=0x65697254, 1!=utrie2_getVersion(data, sizeof(data), TRUE)) ||
-        /* version 2 */
-        (data[0]=0x54726932, 2!=utrie2_getVersion(data, sizeof(data), FALSE)) ||
-        (data[0]=0x54726932, 2!=utrie2_getVersion(data, sizeof(data), TRUE)) ||
-        (data[0]=0x32697254, 0!=utrie2_getVersion(data, sizeof(data), FALSE)) ||
-        (data[0]=0x32697254, 2!=utrie2_getVersion(data, sizeof(data), TRUE)) ||
-        /* illegal arguments */
-        (data[0]=0x54726932, 0!=utrie2_getVersion(NULL, sizeof(data), FALSE)) ||
-        (data[0]=0x54726932, 0!=utrie2_getVersion(data, 3, FALSE)) ||
-        (data[0]=0x54726932, 0!=utrie2_getVersion((char *)data+1, sizeof(data), FALSE)) ||
-        /* unknown signature values */
-        (data[0]=0x11223344, 0!=utrie2_getVersion(data, sizeof(data), FALSE)) ||
-        (data[0]=0x54726933, 0!=utrie2_getVersion(data, sizeof(data), FALSE))
-    ) {
-        log_err("error: utrie2_getVersion() is not working as expected\n");
-    }
-}
-
 static UNewTrie *
 makeNewTrie1WithRanges(const char *testName,
                        const SetRange setRanges[], int32_t countSetRanges,
@@ -1455,6 +1430,5 @@ addTrie2Test(TestNode** root) {
     addTest(root, &DummyTrieTest, "tsutil/trie2test/DummyTrieTest");
     addTest(root, &FreeBlocksTest, "tsutil/trie2test/FreeBlocksTest");
     addTest(root, &GrowDataArrayTest, "tsutil/trie2test/GrowDataArrayTest");
-    addTest(root, &GetVersionTest, "tsutil/trie2test/GetVersionTest");
     addTest(root, &Trie12ConversionTest, "tsutil/trie2test/Trie12ConversionTest");
 }
