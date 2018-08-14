@@ -673,7 +673,6 @@ U_HAVE_INTTYPES_H
 GENCCODE_ASSEMBLY
 HAVE_MMAP
 LIB_THREAD
-U_HAVE_ATOMIC
 ENABLE_RPATH
 U_ENABLE_DYLOAD
 U_HAVE_PLUGINS
@@ -6058,37 +6057,6 @@ $as_echo "$as_me: Adding CXXFLAGS option -std=c++11" >&6;}
         esac
     fi
 fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking if #include <atomic> works" >&5
-$as_echo_n "checking if #include <atomic> works... " >&6; }
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-#include <atomic>
-int
-main ()
-{
-
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_cxx_try_compile "$LINENO"; then :
-  ac_cv_header_atomic=yes
-else
-  ac_cv_header_atomic=no
-fi
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_header_atomic" >&5
-$as_echo "$ac_cv_header_atomic" >&6; }
-if test $ac_cv_header_atomic = yes
-then
-	U_HAVE_ATOMIC=1
-else
-        U_HAVE_ATOMIC=0
-fi
-# Make this available via CPPFLAGS
-CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_ATOMIC=${U_HAVE_ATOMIC}"
-
 
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
