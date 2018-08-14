@@ -85,7 +85,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
      */
-    public interface FilterValue {
+    public interface ValueFilter {
         /**
          * Modifies the trie value.
          *
@@ -100,7 +100,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     /**
      * Range iteration result data.
      * Code points from start to end map to the same value.
-     * The value may have been modified by {@link FilterValue#apply(int)},
+     * The value may have been modified by {@link ValueFilter#apply(int)},
      * or it may be the surrogateValue if a RangeOption other than "normal" was used.
      *
      * @see #getRange
@@ -334,7 +334,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * Returns false if start is not 0..U+10FFFF.
      * Can be used to efficiently iterate over all same-value ranges in a trie.
      *
-     * <p>If the {@link FilterValue} parameter is not null, then
+     * <p>If the {@link ValueFilter} parameter is not null, then
      * the value to be delivered is passed through that filter, and the return value is the end
      * of the range where all values are modified to the same actual value.
      * The value is unchanged if that parameter is null.
@@ -359,7 +359,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
      */
-    public abstract boolean getRange(int start, FilterValue filter, Range range);
+    public abstract boolean getRange(int start, ValueFilter filter, Range range);
 
     /**
      * Sets the range object to a range of code points beginning with the start parameter.
@@ -367,7 +367,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * all those from start to there have the same value.
      * Returns false if start is not 0..U+10FFFF.
      *
-     * <p>Same as the simpler {@link #getRange(int, FilterValue, Range)} but optionally
+     * <p>Same as the simpler {@link #getRange(int, ValueFilter, Range)} but optionally
      * modifies the range if it overlaps with surrogate code points.
      *
      * @param start range start
@@ -382,7 +382,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * @provisional This API might change or be removed in a future release.
      */
     public boolean getRange(int start, RangeOption option, int surrogateValue,
-            FilterValue filter, Range range) {
+            ValueFilter filter, Range range) {
         assert option != null;
         if (!getRange(start, filter, range)) {
             return false;
@@ -429,7 +429,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
 
     /**
      * Convenience iterator over same-trie-value code point ranges.
-     * Same as looping over all ranges with {@link #getRange(int, FilterValue, Range)}
+     * Same as looping over all ranges with {@link #getRange(int, ValueFilter, Range)}
      * without filtering.
      * Adjacent ranges have different trie values.
      *

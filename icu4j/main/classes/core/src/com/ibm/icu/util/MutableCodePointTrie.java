@@ -146,7 +146,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
     }
 
     private static final int maybeFilterValue(int value, int initialValue, int nullValue,
-            FilterValue filter) {
+            ValueFilter filter) {
         if (value == initialValue) {
             value = nullValue;
         } else if (filter != null) {
@@ -161,7 +161,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
      * @provisional This API might change or be removed in a future release.
      */
     @Override
-    public boolean getRange(int start, CodePointTrie.FilterValue filter,
+    public boolean getRange(int start, CodePointTrie.ValueFilter filter,
             CodePointTrie.Range range) {
         if (start < 0 || MAX_UNICODE < start) {
             return false;

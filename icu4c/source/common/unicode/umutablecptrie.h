@@ -131,7 +131,7 @@ umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c);
  * Can be used to efficiently iterate over all same-value ranges in a trie.
  * The trie can be modified between calls to this function.
  *
- * If the UCPTrieFilterValue function pointer is not NULL, then
+ * If the UCPTrieValueFilter function pointer is not NULL, then
  * the value to be delivered is passed through that function, and the return value is the end
  * of the range where all values are modified to the same actual value.
  * The value is unchanged if that function pointer is NULL.
@@ -155,7 +155,7 @@ umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c);
 U_CAPI UChar32 U_EXPORT2
 umutablecptrie_getRange(const UMutableCPTrie *trie, UChar32 start,
                         UCPTrieRangeOption option, uint32_t surrogateValue,
-                        UCPTrieFilterValue *filter, const void *context, uint32_t *pValue);
+                        UCPTrieValueFilter *filter, const void *context, uint32_t *pValue);
 
 /**
  * Sets a value for a code point.

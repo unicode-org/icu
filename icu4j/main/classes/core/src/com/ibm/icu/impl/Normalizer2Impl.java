@@ -571,8 +571,8 @@ public final class Normalizer2Impl {
             start = range.getEnd() + 1;
         }
     }
-    private static final CodePointMap.FilterValue segmentStarterMapper =
-            new CodePointMap.FilterValue() {
+    private static final CodePointMap.ValueFilter segmentStarterMapper =
+            new CodePointMap.ValueFilter() {
         @Override
         public int apply(int value) {
             return value & CANON_NOT_SEGMENT_STARTER;

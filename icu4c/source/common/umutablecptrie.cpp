@@ -73,7 +73,7 @@ public:
     static MutableCodePointTrie *fromUCPTrie(const UCPTrie *trie, UErrorCode &errorCode);
 
     uint32_t get(UChar32 c) const;
-    int32_t getRange(UChar32 start, UCPTrieFilterValue *filter, const void *context,
+    int32_t getRange(UChar32 start, UCPTrieValueFilter *filter, const void *context,
                      uint32_t *pValue) const;
 
     void set(UChar32 c, uint32_t value, UErrorCode &errorCode);
@@ -244,7 +244,7 @@ uint32_t MutableCodePointTrie::get(UChar32 c) const {
 }
 
 inline uint32_t maybeFilterValue(uint32_t value, uint32_t initialValue, uint32_t nullValue,
-                                 UCPTrieFilterValue *filter, const void *context) {
+                                 UCPTrieValueFilter *filter, const void *context) {
     if (value == initialValue) {
         value = nullValue;
     } else if (filter != nullptr) {
@@ -254,7 +254,7 @@ inline uint32_t maybeFilterValue(uint32_t value, uint32_t initialValue, uint32_t
 }
 
 UChar32 MutableCodePointTrie::getRange(
-        UChar32 start, UCPTrieFilterValue *filter, const void *context,
+        UChar32 start, UCPTrieValueFilter *filter, const void *context,
         uint32_t *pValue) const {
     if ((uint32_t)start > MAX_UNICODE) {
         return U_SENTINEL;
@@ -1555,7 +1555,7 @@ umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c) {
 namespace {
 
 UChar32 getRange(const void *trie, UChar32 start,
-                 UCPTrieFilterValue *filter, const void *context, uint32_t *pValue) {
+                 UCPTrieValueFilter *filter, const void *context, uint32_t *pValue) {
     return reinterpret_cast<const MutableCodePointTrie *>(trie)->
         getRange(start, filter, context, pValue);
 }
@@ -1565,7 +1565,7 @@ UChar32 getRange(const void *trie, UChar32 start,
 U_CAPI UChar32 U_EXPORT2
 umutablecptrie_getRange(const UMutableCPTrie *trie, UChar32 start,
                         UCPTrieRangeOption option, uint32_t surrogateValue,
-                        UCPTrieFilterValue *filter, const void *context, uint32_t *pValue) {
+                        UCPTrieValueFilter *filter, const void *context, uint32_t *pValue) {
     return ucptrie_internalGetRange(getRange, trie, start,
                                     option, surrogateValue,
                                     filter, context, pValue);

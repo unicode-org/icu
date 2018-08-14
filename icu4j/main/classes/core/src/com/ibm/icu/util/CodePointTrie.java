@@ -317,7 +317,7 @@ public abstract class CodePointTrie extends CodePointMap {
     private static final int ASCII_LIMIT = 0x80;
 
     private static final int maybeFilterValue(int value, int trieNullValue, int nullValue,
-            FilterValue filter) {
+            ValueFilter filter) {
         if (value == trieNullValue) {
             value = nullValue;
         } else if (filter != null) {
@@ -332,7 +332,7 @@ public abstract class CodePointTrie extends CodePointMap {
      * @provisional This API might change or be removed in a future release.
      */
     @Override
-    public final boolean getRange(int start, FilterValue filter, Range range) {
+    public final boolean getRange(int start, ValueFilter filter, Range range) {
         if (start < 0 || MAX_UNICODE < start) {
             return false;
         }

@@ -247,7 +247,7 @@ namespace {
 constexpr int32_t MAX_UNICODE = 0x10ffff;
 
 inline uint32_t maybeFilterValue(uint32_t value, uint32_t trieNullValue, uint32_t nullValue,
-                                 UCPTrieFilterValue *filter, const void *context) {
+                                 UCPTrieValueFilter *filter, const void *context) {
     if (value == trieNullValue) {
         value = nullValue;
     } else if (filter != nullptr) {
@@ -257,7 +257,7 @@ inline uint32_t maybeFilterValue(uint32_t value, uint32_t trieNullValue, uint32_
 }
 
 UChar32 getRange(const void *t, UChar32 start,
-                 UCPTrieFilterValue *filter, const void *context, uint32_t *pValue) {
+                 UCPTrieValueFilter *filter, const void *context, uint32_t *pValue) {
     if ((uint32_t)start > MAX_UNICODE) {
         return U_SENTINEL;
     }
@@ -404,7 +404,7 @@ U_CFUNC UChar32
 ucptrie_internalGetRange(UCPTrieGetRange *getRange,
                          const void *trie, UChar32 start,
                          UCPTrieRangeOption option, uint32_t surrogateValue,
-                         UCPTrieFilterValue *filter, const void *context, uint32_t *pValue) {
+                         UCPTrieValueFilter *filter, const void *context, uint32_t *pValue) {
     if (option == UCPTRIE_RANGE_NORMAL) {
         return getRange(trie, start, filter, context, pValue);
     }
@@ -449,7 +449,7 @@ ucptrie_internalGetRange(UCPTrieGetRange *getRange,
 U_CAPI UChar32 U_EXPORT2
 ucptrie_getRange(const UCPTrie *trie, UChar32 start,
                  UCPTrieRangeOption option, uint32_t surrogateValue,
-                 UCPTrieFilterValue *filter, const void *context, uint32_t *pValue) {
+                 UCPTrieValueFilter *filter, const void *context, uint32_t *pValue) {
     return ucptrie_internalGetRange(getRange, trie, start,
                                     option, surrogateValue,
                                     filter, context, pValue);

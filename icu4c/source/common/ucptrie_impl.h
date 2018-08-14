@@ -131,13 +131,13 @@ enum {
 
 typedef UChar32
 UCPTrieGetRange(const void *trie, UChar32 start,
-                UCPTrieFilterValue *filter, const void *context, uint32_t *pValue);
+                UCPTrieValueFilter *filter, const void *context, uint32_t *pValue);
 
 U_CFUNC UChar32
 ucptrie_internalGetRange(UCPTrieGetRange *getRange,
                          const void *trie, UChar32 start,
                          UCPTrieRangeOption option, uint32_t surrogateValue,
-                         UCPTrieFilterValue *filter, const void *context, uint32_t *pValue);
+                         UCPTrieValueFilter *filter, const void *context, uint32_t *pValue);
 
 #ifdef UCPTRIE_DEBUG
 U_CFUNC void

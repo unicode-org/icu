@@ -90,13 +90,13 @@ public final class CodePointTrieTest extends TestFmwk {
     }
 
     /* ucptrie_enum() callback, modifies a value */
-    private static class TestFilterValue implements CodePointMap.FilterValue {
+    private static class TestValueFilter implements CodePointMap.ValueFilter {
         @Override
         public int apply(int value) {
             return value ^ 0x5555;
         }
     }
-    private static final TestFilterValue testFilter = new TestFilterValue();
+    private static final TestValueFilter testFilter = new TestValueFilter();
 
     private boolean
     doCheckRange(String name, String variant,
