@@ -298,16 +298,8 @@ public class NumberFormatTest extends TestFmwk {
     @Test
     public void TestKeywords() {
         // ICU provider variant is appended
-        ULocale uloc0 = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@numbers=Arab;currency=EUR");
-        Locale loc = uloc0.toLocale();
-        // On Java 7+, locale extension is preserved
-        ULocale uloc = ULocale.forLocale(loc);
-        String nsType = uloc.getKeywordValue("numbers");
-        if (nsType == null) {
-            // Java 6 - skip this test
-            return;
-        }
-
+        ULocale uloc = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@numbers=arab;currency=EUR");
+        Locale loc = uloc.toLocale();
         NumberFormat jdkNfmt = NumberFormat.getCurrencyInstance(loc);
         com.ibm.icu.text.NumberFormat icuNfmt = com.ibm.icu.text.NumberFormat.getCurrencyInstance(uloc);
 

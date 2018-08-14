@@ -205,16 +205,8 @@ public class DateFormatTest extends TestFmwk {
     @Test
     public void TestCalendarKeyword() {
         // ICU provider variant is appended
-        ULocale uloc0 = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@calendar=buddhist");
-        Locale loc = uloc0.toLocale();
-        // On Java 7+, locale extension is preserved
-        ULocale uloc = ULocale.forLocale(loc);
-        String calType = uloc.getKeywordValue("calendar");
-        if (calType == null) {
-            // Java 6 - skip this test
-            return;
-        }
-
+        ULocale uloc = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@calendar=buddhist");
+        Locale loc = uloc.toLocale();
         DateFormat jdkDfmt = DateFormat.getDateInstance(DateFormat.FULL, loc);
         Calendar cal = jdkDfmt.getCalendar();
         boolean isBuddhist = false;

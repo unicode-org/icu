@@ -8,8 +8,6 @@
  */
 package com.ibm.icu.impl.icuadapter;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -30,29 +28,18 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
 
     private TimeZone fJdkTz;
     private transient Calendar fJdkCal;
-    private static Method mObservesDaylightTime;
-
-    static {
-        try {
-            mObservesDaylightTime = TimeZone.class.getMethod("observesDaylightTime", (Class[]) null);
-        } catch (NoSuchMethodException e) {
-            // Java 6 or older
-        } catch (SecurityException e) {
-            // not visible
-        }
-    }
 
     private TimeZoneJDK(TimeZone jdkTz) {
         fJdkTz = (TimeZone)jdkTz.clone();
     }
-    
+
     public static com.ibm.icu.util.TimeZone wrap(TimeZone jdkTz) {
         if (jdkTz instanceof TimeZoneICU) {
             return ((TimeZoneICU)jdkTz).unwrap();
         }
         return new TimeZoneJDK(jdkTz);
     }
-    
+
     public TimeZone unwrap() {
         return (TimeZone)fJdkTz.clone();
     }
@@ -81,7 +68,7 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
     public String getDisplayName(boolean daylight, int style, Locale locale) {
         return fJdkTz.getDisplayName(daylight, style, locale);
     }
-    
+
     @Override
     public String getDisplayName(boolean daylight, int style, ULocale locale) {
         return fJdkTz.getDisplayName(daylight, style, locale.toLocale());
@@ -196,16 +183,7 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
 
     @Override
     public boolean observesDaylightTime() {
-        if (mObservesDaylightTime != null) {
-            // Java 7+
-            try {
-                return (Boolean)mObservesDaylightTime.invoke(fJdkTz, (Object[]) null);
-            } catch (IllegalAccessException e) {
-            } catch (IllegalArgumentException e) {
-            } catch (InvocationTargetException e) {
-            }
-        }
-        return super.observesDaylightTime();
+        return fJdkTz.observesDaylightTime();
     }
 
     // Freezable stuffs

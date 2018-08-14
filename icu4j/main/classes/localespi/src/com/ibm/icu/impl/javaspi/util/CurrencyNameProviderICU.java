@@ -26,8 +26,7 @@ public class CurrencyNameProviderICU extends CurrencyNameProvider {
         return sym;
     }
 
-    // Not available in Java 6
-    // @Override
+    @Override
     public String getDisplayName(String currencyCode, Locale locale) {
         CurrencyDisplayNames curDispNames = CurrencyDisplayNames.getInstance(ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
         String name = curDispNames.getName(currencyCode);

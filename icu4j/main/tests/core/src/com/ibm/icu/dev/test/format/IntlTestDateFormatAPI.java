@@ -29,8 +29,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.TestUtil;
-import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Calendar;
@@ -158,15 +156,16 @@ public class IntlTestDateFormatAPI extends TestFmwk
         long count = locales.length;
         logln("Got " + count + " locales" );
 
-        // Ticket #6280, #8078 and #11674
-        // These locales should be included in the result
-        boolean missingLocaleNotFatal =
-                TestUtil.getJavaVendor() == JavaVendor.Android || TestUtil.getJavaVersion() >= 7;
+        // These test cases used to check Locales without a script tag.
+        // Java 6 Locale did not support script tags, such as zh_CN and zh_TW.
+        // Because ICU 63+ supports Java 7 as minimum Java version, sample
+        // Locales below were updated with ones with script tags.
+        // See ticket #6280, #8078 and #11674 for the history.
         final Locale[] samples = {
-                new Locale("zh", "CN"),
-                new Locale("zh", "TW"),
-                new Locale("zh", "HK"),
-                new Locale("sr", "RS"),
+                Locale.forLanguageTag("zh-Hans-CN"),
+                Locale.forLanguageTag("zh-Hant-TW"),
+                Locale.forLanguageTag("zh-Hant-HK"),
+                Locale.forLanguageTag("sr-Cyrl-RS"),
         };
         boolean[] available = new boolean[samples.length];
         for(int i = 0; i < count; i++) {
@@ -182,13 +181,7 @@ public class IntlTestDateFormatAPI extends TestFmwk
         }
         for (int i = 0; i < available.length; i++) {
             if (!available[i]) {
-                if (missingLocaleNotFatal) {
-                    // Java 7 supports script field, so zh_Hans_CN is included
-                    // in the available locale list.
-                    logln("INFO: missing Locale: " + samples[i]);
-                } else {
-                    errln("ERROR: missing Locale: " + samples[i]);
-                }
+                errln("ERROR: missing Locale: " + samples[i]);
             }
         }
 

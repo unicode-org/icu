@@ -218,13 +218,13 @@ public class TestUScript extends TestFmwk {
             UnicodeSet scriptSet = new UnicodeSet();
             scriptSet.applyIntPropertyValue(UProperty.SCRIPT, sc);
             if(usage == ScriptUsage.NOT_ENCODED) {
-                assertTrue(sn + " not encoded, no sample", sample.length() == 0);  // Java 6: sample.isEmpty()
+                assertTrue(sn + " not encoded, no sample", sample.isEmpty());
                 assertFalse(sn + " not encoded, not RTL", UScript.isRightToLeft(sc));
                 assertFalse(sn + " not encoded, not LB letters", UScript.breaksBetweenLetters(sc));
                 assertFalse(sn + " not encoded, not cased", UScript.isCased(sc));
                 assertTrue(sn + " not encoded, no characters", scriptSet.isEmpty());
             } else {
-                assertFalse(sn + " encoded, has a sample character", sample.length() == 0);  // Java 6: sample.isEmpty()
+                assertFalse(sn + " encoded, has a sample character", sample.isEmpty());
                 int firstChar = sample.codePointAt(0);
                 int charScript = getCharScript(sc);
                 assertEquals(sn + " script(sample(script))",

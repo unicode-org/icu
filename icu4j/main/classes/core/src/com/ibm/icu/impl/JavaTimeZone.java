@@ -10,8 +10,6 @@ package com.ibm.icu.impl;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.TreeSet;
 
@@ -35,21 +33,12 @@ public class JavaTimeZone extends TimeZone {
 
     private java.util.TimeZone javatz;
     private transient java.util.Calendar javacal;
-    private static Method mObservesDaylightTime;
 
     static {
-        AVAILABLESET = new TreeSet<String>();
+        AVAILABLESET = new TreeSet<>();
         String[] availableIds = java.util.TimeZone.getAvailableIDs();
         for (int i = 0; i < availableIds.length; i++) {
             AVAILABLESET.add(availableIds[i]);
-        }
-
-        try {
-            mObservesDaylightTime = java.util.TimeZone.class.getMethod("observesDaylightTime", (Class[]) null);
-        } catch (NoSuchMethodException e) {
-            // Java 6 or older
-        } catch (SecurityException e) {
-            // not visible
         }
     }
 
@@ -198,16 +187,7 @@ public class JavaTimeZone extends TimeZone {
      */
     @Override
     public boolean observesDaylightTime() {
-        if (mObservesDaylightTime != null) {
-            // Java 7+
-            try {
-                return (Boolean)mObservesDaylightTime.invoke(javatz, (Object[]) null);
-            } catch (IllegalAccessException e) {
-            } catch (IllegalArgumentException e) {
-            } catch (InvocationTargetException e) {
-            }
-        }
-        return super.observesDaylightTime();
+        return javatz.observesDaylightTime();
     }
 
     /* (non-Javadoc)
