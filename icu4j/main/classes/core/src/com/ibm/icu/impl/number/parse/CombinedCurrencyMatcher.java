@@ -146,7 +146,9 @@ public class CombinedCurrencyMatcher implements NumberParseMatcher {
 
         int overlap2;
         if (!currency2.isEmpty()) {
-            overlap2 = segment.getCaseSensitivePrefixLength(currency2);
+            // ISO codes should be accepted case-insensitive.
+            // https://unicode-org.atlassian.net/browse/ICU-13696
+            overlap2 = segment.getCommonPrefixLength(currency2);
         } else {
             overlap2 = -1;
         }

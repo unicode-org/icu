@@ -817,7 +817,7 @@ public class NumberFormatTest extends TestFmwk {
                 {"1.00 UAE dirha", "4", "-1", "0", "4"},
                 {"1.00 us dollar", "14", "-1", "14", "-1"},
                 {"1.00 US DOLLAR", "14", "-1", "14", "-1"},
-                {"1.00 usd", "4", "-1", "8", "-1"},
+                {"1.00 usd", "8", "-1", "8", "-1"},
                 {"1.00 USD", "8", "-1", "8", "-1"},
         };
         ULocale locale = new ULocale("en_US");
@@ -6092,8 +6092,8 @@ public class NumberFormatTest extends TestFmwk {
         df.setCurrency(Currency.getInstance("ICU"));
         ParsePosition ppos = new ParsePosition(0);
         df.parseCurrency("icu123", ppos);
-        assertEquals("Should fail to parse", 0, ppos.getIndex());
-        assertEquals("Should fail to parse", 0, ppos.getErrorIndex());
+        assertEquals("Should succeed", 6, ppos.getIndex());
+        assertEquals("Should succeed", -1, ppos.getErrorIndex());
     }
 
     @Test
