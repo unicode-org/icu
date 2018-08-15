@@ -1505,12 +1505,12 @@ umutablecptrie_open(uint32_t initialValue, uint32_t errorValue, UErrorCode *pErr
     if (U_FAILURE(*pErrorCode)) {
         return nullptr;
     }
-    MutableCodePointTrie *trie = new MutableCodePointTrie(initialValue, errorValue, *pErrorCode);
+    LocalPointer<MutableCodePointTrie> trie(
+        new MutableCodePointTrie(initialValue, errorValue, *pErrorCode), *pErrorCode);
     if (U_FAILURE(*pErrorCode)) {
-        delete trie;
         return nullptr;
     }
-    return reinterpret_cast<UMutableCPTrie *>(trie);
+    return reinterpret_cast<UMutableCPTrie *>(trie.orphan());
 }
 
 U_CAPI UMutableCPTrie * U_EXPORT2
@@ -1521,13 +1521,12 @@ umutablecptrie_clone(const UMutableCPTrie *other, UErrorCode *pErrorCode) {
     if (other == nullptr) {
         return nullptr;
     }
-    MutableCodePointTrie *clone = new MutableCodePointTrie(
-        *reinterpret_cast<const MutableCodePointTrie *>(other), *pErrorCode);
+    LocalPointer<MutableCodePointTrie> clone(
+        new MutableCodePointTrie(*reinterpret_cast<const MutableCodePointTrie *>(other), *pErrorCode), *pErrorCode);
     if (U_FAILURE(*pErrorCode)) {
-        delete clone;
         return nullptr;
     }
-    return reinterpret_cast<UMutableCPTrie *>(clone);
+    return reinterpret_cast<UMutableCPTrie *>(clone.orphan());
 }
 
 U_CAPI void U_EXPORT2
