@@ -1676,10 +1676,10 @@ begin
 parse	output	breaks
 USD123	123
 USD 123	123	HK
-usd123	123	CK
-usd 123	123	CHK
-Usd123	123	CK
-Usd 123	123	CHK
+usd123	123	K
+usd 123	123	HK
+Usd123	123	K
+Usd 123	123	HK
 // US$ is not used for US dollars in en-US
 US$123	fail	H
 us$123	fail
@@ -1689,7 +1689,7 @@ Us$123	fail
 123 us dollars	123	K
 // Foreign currencies are not accepted in .parse()
 GBP123	fail
-gbp123	fail	C
+gbp123	fail
 British pounds 123	fail
 british POUNDS 123	fail
 
@@ -1701,10 +1701,10 @@ begin
 parse	output	outputCurrency	breaks
 USD123	123	USD
 USD 123	123	USD	H
-usd123	123	USD	C
-usd 123	123	USD	CH
-Usd123	123	USD	C
-Usd 123	123	USD	CH
+usd123	123	USD
+usd 123	123	USD	H
+Usd123	123	USD
+Usd 123	123	USD	H
 US$123	123	USD	C
 us$123	fail	fail
 Us$123	fail	fail

@@ -3861,6 +3861,7 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
         "1.00 US DOLLAR",  // case in-sensitive
         "$1.00",
         "USD1.00",
+        "usd1.00", // case in-sensitive: #13696
         "US dollar1.00",
         "US dollars1.00",
         "$1.00",
@@ -5876,7 +5877,6 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
 
     const char* WRONG_DATA[] = {
         // Following are missing one last char in the currency name
-        "usd1.00", // case sensitive
         "1.00 Nicaraguan Cordob",
         "1.00 Namibian Dolla",
         "1.00 Namibian dolla",
