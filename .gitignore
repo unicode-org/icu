@@ -422,7 +422,6 @@ icu4c/source/test/cintltst/release
 icu4c/source/test/cintltst/x64
 icu4c/source/test/cintltst/x86
 icu4c/source/test/compat/Makefile
-icu4c/source/test/depstest/*.pyc
 icu4c/source/test/hdrtst/*.[co]
 icu4c/source/test/hdrtst/Makefile
 icu4c/source/test/hdrtst/cfiles.txt
