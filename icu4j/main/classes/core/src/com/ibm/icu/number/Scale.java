@@ -40,8 +40,9 @@ public class Scale {
     private Scale(int magnitude, BigDecimal arbitrary, MathContext mc) {
         if (arbitrary != null) {
             // Attempt to convert the BigDecimal to a magnitude multiplier.
+            // ICU-20000: JDKs have inconsistent behavior on stripTrailingZeros() for Zero.
             arbitrary =
-                arbitrary.unscaledValue().equals(BigInteger.ZERO)
+                arbitrary.compareTo(BigInteger.ZERO) == 0
                     ? BigDecimal.ZERO
                     : arbitrary.stripTrailingZeros();
             if (arbitrary.precision() == 1 && arbitrary.unscaledValue().equals(BigInteger.ONE)) {
