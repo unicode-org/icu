@@ -364,12 +364,12 @@ UBool UnicodeSet::operator==(const UnicodeSet& o) const {
  * @see Object#hashCode()
  */
 int32_t UnicodeSet::hashCode(void) const {
-    int32_t result = len;
+    uint32_t result = static_cast<uint32_t>(len);
     for (int32_t i = 0; i < len; ++i) {
-        result *= 1000003;
+        result *= 1000003u;
         result += list[i];
     }
-    return result;
+    return static_cast<int32_t>(result);
 }
 
 //----------------------------------------------------------------

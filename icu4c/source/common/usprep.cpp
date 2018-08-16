@@ -112,7 +112,9 @@ hashEntry(const UHashTok parm) {
     UHashTok namekey, pathkey;
     namekey.pointer = b->name;
     pathkey.pointer = b->path;
-    return uhash_hashChars(namekey)+37*uhash_hashChars(pathkey);
+    uint32_t unsignedHash = static_cast<uint32_t>(uhash_hashChars(namekey)) +
+            37u * static_cast<uint32_t>(uhash_hashChars(pathkey));
+    return static_cast<int32_t>(unsignedHash);
 }
 
 /* compares two entries */
