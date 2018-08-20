@@ -37,8 +37,8 @@
 /**
 * Main Windows time zone detection function.  Returns the Windows
 * time zone, translated to an ICU time zone, or NULL upon failure.
-* It is GetDynamicTimeZoneInformation to get the current time zone info.
-* The API returns non-localized 
+* It is calling GetDynamicTimeZoneInformation to get the current time zone info.
+* The API returns non-localized time zone name so it can be used for mapping ICU time zone name.
 */
 U_CFUNC const char* U_EXPORT2
 uprv_detectWindowsTimeZone()
