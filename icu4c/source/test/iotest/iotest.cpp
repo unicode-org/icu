@@ -178,18 +178,18 @@ char* DataDrivenLogger::fgTestDataPath = NULL;
 static int64_t
 uto64(const UChar     *buffer)
 {
-    int64_t result = 0;
+    uint64_t result = 0;
     /* iterate through buffer */
     while(*buffer) {
         /* read the next digit */
-        result *= 16;
+        result *= 16u;
         if (!u_isxdigit(*buffer)) {
             log_err("\\u%04X is not a valid hex digit for this test\n", (UChar)*buffer);
         }
         result += *buffer - 0x0030 - (*buffer >= 0x0041 ? (*buffer >= 0x0061 ? 39 : 7) : 0);
         buffer++;
     }
-    return result;
+    return (int64_t)result;
 }
 #endif
 

@@ -11,6 +11,7 @@
 
 #include "numrgts.h"
 
+#include <cmath>   // std::signbit
 #include <float.h> // DBL_MIN, DBL_MAX
 #include <stdio.h>
 
@@ -2142,8 +2143,9 @@ NumberFormatRegressionTest::Test4162852(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     for(int32_t i=0; i < 2; ++i) {
-        NumberFormat *f = (i == 0) ? NumberFormat::createInstance(status)
-            : NumberFormat::createPercentInstance(status);
+        LocalPointer<NumberFormat> f(
+            ((i == 0) ? NumberFormat::createInstance(status) : NumberFormat::createPercentInstance(status)),
+            status);
         if(U_FAILURE(status)) {
             dataerrln("Couldn't create number format - %s", u_errorName(status));
             return;
@@ -2154,20 +2156,19 @@ NumberFormatRegressionTest::Test4162852(void)
         f->format(d, s);
         Formattable n;
         f->parse(s, n, status);
-        if(U_FAILURE(status))
+        if(U_FAILURE(status)) {
             errln("Couldn't parse!");
+            return;
+        }
         double e = n.getDouble();
-        logln(UnicodeString("") +
-              d + " -> " +
-              '"' + s + '"' + " -> " + e);
+        logln("%f -> \"%s\" -> %f", d, CStr(s)(), e);
 #if (U_PLATFORM == U_PF_OS390 && !defined(IEEE_754)) || U_PLATFORM == U_PF_OS400
         if (e != 0.0) {
 #else
-        if (e != 0.0 || 1.0/e > 0.0) {
+        if (e != 0.0 || (std::signbit(e) == false)) {
 #endif
-            logln("Failed to parse negative zero");
+            errln("Failed to parse negative zero");
         }
-        delete f;
     }
 }
 
