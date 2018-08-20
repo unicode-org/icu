@@ -319,9 +319,7 @@
     <ClCompile Include="umutex.cpp" />
     <ClCompile Include="utrace.cpp" />
     <ClCompile Include="utypes.cpp" />
-    <ClCompile Include="wintz.cpp">
-      <ExcludedFromBuild>true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="wintz.cpp" />
     <ClCompile Include="ucnv.cpp" />
     <ClCompile Include="ucnv2022.cpp" />
     <ClCompile Include="ucnv_bld.cpp" />
