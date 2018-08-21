@@ -1668,7 +1668,32 @@ pattern	lenient	parse	output	breaks
 0E0'.'x	1	5E3.x	5000
 0E0'.'x	0	5E3.x	5000
 
-test parse lowercase currency
+test parse() lowercase currency
+set locale en
+set pattern ¤¤0
+set currency USD
+begin
+parse	output	breaks
+USD123	123
+USD 123	123	HK
+usd123	123	K
+usd 123	123	HK
+Usd123	123	K
+Usd 123	123	HK
+// US$ is not used for US dollars in en-US
+US$123	fail	H
+us$123	fail
+Us$123	fail
+123 US dollars	123	K
+123 US DOLLARS	123	K
+123 us dollars	123	K
+// Foreign currencies are not accepted in .parse()
+GBP123	fail
+gbp123	fail
+British pounds 123	fail
+british POUNDS 123	fail
+
+test parseCurrency() lowercase currency
 set locale en
 set pattern ¤¤0
 set currency USD
@@ -1676,17 +1701,20 @@ begin
 parse	output	outputCurrency	breaks
 USD123	123	USD
 USD 123	123	USD	H
-// C does not currently accept case-insensitive ISO codes
-usd123	123	USD	C
-usd 123	123	USD	CH
-Usd123	123	USD	C
-Usd 123	123	USD	CH
+usd123	123	USD
+usd 123	123	USD	H
+Usd123	123	USD
+Usd 123	123	USD	H
 US$123	123	USD	C
 us$123	fail	fail
 Us$123	fail	fail
 123 US dollars	123	USD
 123 US DOLLARS	123	USD
 123 us dollars	123	USD
+GBP123	123	GBP
+gbp123	123	GBP	C
+British pounds 123	123	GBP	H
+british POUNDS 123	123	GBP	H
 
 
 
