@@ -32,7 +32,8 @@
 #   define NOMCX
 #include <windows.h>
 
-#define MAX_LENGTH_ID 128
+// The value of MAX_TIMEZONE_ID_LENGTH is 128, which is defined in DYNAMIC_TIME_ZONE_INFORMATION
+#define MAX_TIMEZONE_ID_LENGTH 128
 
 /**
 * Main Windows time zone detection function.  Returns the Windows
@@ -46,8 +47,8 @@ uprv_detectWindowsTimeZone()
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle* bundle = NULL;
     char* icuid = NULL;
-    char dynamicTZKeyName[MAX_LENGTH_ID] = {};
-    char tmpid[MAX_LENGTH_ID] = {};
+    char dynamicTZKeyName[MAX_TIMEZONE_ID_LENGTH] = {};
+    char tmpid[MAX_TIMEZONE_ID_LENGTH] = {};
     int32_t len;
     int id;
     int errorCode;
@@ -71,7 +72,7 @@ uprv_detectWindowsTimeZone()
 
     /* Convert the wchar_t* standard name to char* */
     uprv_memset(dynamicTZKeyName, 0, sizeof(dynamicTZKeyName));
-    u_strToUTF8(dynamicTZKeyName, MAX_LENGTH_ID, NULL, (const UChar *)dynamicTZI.TimeZoneKeyName, MAX_LENGTH_ID, &status);
+    u_strToUTF8(dynamicTZKeyName, MAX_TIMEZONE_ID_LENGTH, NULL, (const UChar *)dynamicTZI.TimeZoneKeyName, MAX_TIMEZONE_ID_LENGTH, &status);
 
     if (dynamicTZI.TimeZoneKeyName[0] != 0)
     {
