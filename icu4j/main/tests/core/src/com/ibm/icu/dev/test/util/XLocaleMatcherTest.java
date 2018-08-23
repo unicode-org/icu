@@ -282,7 +282,7 @@ public class XLocaleMatcherTest extends TestFmwk {
     class MyTestFileHandler extends DataDrivenTestHelper {
 
         Output<ULocale> bestDesired = new Output<ULocale>();
-        DistanceOption distanceOption = DistanceOption.NORMAL;
+        DistanceOption distanceOption = DistanceOption.REGION_FIRST;
         int threshold = -1;
 
         @Override
@@ -305,8 +305,7 @@ public class XLocaleMatcherTest extends TestFmwk {
             if (breakpoint) {
                 breakpoint = false; // put debugger breakpoint here to break at @debug in test file
             }
-
-            XLocaleMatcher matcher = threshold < 0 && distanceOption == DistanceOption.NORMAL
+            XLocaleMatcher matcher = threshold < 0 && distanceOption == DistanceOption.REGION_FIRST
                 ? newXLocaleMatcher(supportedList)
                 : newXLocaleMatcher(supportedList, threshold, distanceOption);
             commentBase = "(" + lineNumber + ") " + commentBase;

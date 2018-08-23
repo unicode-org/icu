@@ -334,8 +334,8 @@ und, no ; 	nn-BE-fonipa ; 	no ; 	no-BE-fonipa
 und, en-GB-u-sd-gbsct ; 	en-fonipa-u-nu-Arab-ca-buddhist-t-m0-iso-i0-pinyin ; 	en-GB-u-sd-gbsct ; 	en-GB-fonipa-u-nu-Arab-ca-buddhist-t-m0-iso-i0-pinyin
 
 en-PSCRACK, de-PSCRACK, fr-PSCRACK, pt-PT-PSCRACK ; 	fr-PSCRACK ; 	fr-PSCRACK
-en-PSCRACK, de-PSCRACK, fr-PSCRACK, pt-PT-PSCRACK ; 	fr ; 	fr-PSCRACK
-en-PSCRACK, de-PSCRACK, fr-PSCRACK, pt-PT-PSCRACK ; 	de-CH ; 	de-PSCRACK
+en-PSCRACK, de-PSCRACK, fr-PSCRACK, pt-PT-PSCRACK ; 	fr ; 	en-PSCRACK           # was: fr-PSCRACK
+en-PSCRACK, de-PSCRACK, fr-PSCRACK, pt-PT-PSCRACK ; 	de-CH ; 	en-PSCRACK   # was: de-PSCRACK
 
 ##################################################
 # testClusters
