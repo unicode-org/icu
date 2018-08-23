@@ -37,7 +37,7 @@
 
 /**
 * Main Windows time zone detection function.  Returns the Windows
-* time zone, translated to an ICU time zone, or NULL upon failure.
+* time zone, translated to an ICU time zone, or nullptr upon failure.
 * It is calling GetDynamicTimeZoneInformation to get the current time zone info.
 * The API returns non-localized time zone name so it can be used for mapping ICU time zone name.
 */
@@ -45,8 +45,8 @@ U_CFUNC const char* U_EXPORT2
 uprv_detectWindowsTimeZone()
 {
     UErrorCode status = U_ZERO_ERROR;
-    UResourceBundle* bundle = NULL;
-    char* icuid = NULL;
+    UResourceBundle* bundle = nullptr;
+    char* icuid = nullptr;
     char dynamicTZKeyName[MAX_TIMEZONE_ID_LENGTH] = {};
     char tmpid[MAX_TIMEZONE_ID_LENGTH] = {};
     int32_t len;
@@ -59,32 +59,35 @@ uprv_detectWindowsTimeZone()
 
     /* Obtain TIME_ZONE_INFORMATION from the API and get the non-localized time zone name. */
     uprv_memset(&dynamicTZI, 0, sizeof(dynamicTZI));
-    GetDynamicTimeZoneInformation(&dynamicTZI);
+    if (TIME_ZONE_ID_INVALID == GetDynamicTimeZoneInformation(&dynamicTZI))
+    {
+        return nullptr;
+    }
 
     tmpid[0] = 0;
 
     id = GetUserGeoID(GEOCLASS_NATION);
     errorCode = GetGeoInfoW(id, GEO_ISO2, ISOcodeW, 3, 0);
-    u_strToUTF8(ISOcodeA, 3, NULL, (const UChar *)ISOcodeW, 3, &status);
+    u_strToUTF8(ISOcodeA, 3, nullptr, (const UChar *)ISOcodeW, 3, &status);
 
-    bundle = ures_openDirect(NULL, "windowsZones", &status);
+    bundle = ures_openDirect(nullptr, "windowsZones", &status);
     ures_getByKey(bundle, "mapTimezones", bundle, &status);
 
     /* Convert the wchar_t* standard name to char* */
     uprv_memset(dynamicTZKeyName, 0, sizeof(dynamicTZKeyName));
-    u_strToUTF8(dynamicTZKeyName, MAX_TIMEZONE_ID_LENGTH, NULL, (const UChar *)dynamicTZI.TimeZoneKeyName, MAX_TIMEZONE_ID_LENGTH, &status);
+    u_strToUTF8(dynamicTZKeyName, MAX_TIMEZONE_ID_LENGTH, nullptr, (const UChar *)dynamicTZI.TimeZoneKeyName, MAX_TIMEZONE_ID_LENGTH, &status);
 
     if (dynamicTZI.TimeZoneKeyName[0] != 0)
     {
-        UResourceBundle* winTZ = ures_getByKey(bundle, dynamicTZKeyName, NULL, &status);
+        UResourceBundle* winTZ = ures_getByKey(bundle, dynamicTZKeyName, nullptr, &status);
         if (U_SUCCESS(status))
         {
-            const UChar* icuTZ = NULL;
+            const UChar* icuTZ = nullptr;
             if (errorCode != 0)
             {
                 icuTZ = ures_getStringByKey(winTZ, ISOcodeA, &len, &status);
             }
-            if (errorCode == 0 || icuTZ == NULL)
+            if (errorCode == 0 || icuTZ == nullptr)
             {
                 /* fallback to default "001" and reset status */
                 status = U_ZERO_ERROR;
@@ -111,7 +114,7 @@ uprv_detectWindowsTimeZone()
     {
         len = uprv_strlen(tmpid);
         icuid = (char*)uprv_calloc(len + 1, sizeof(char));
-        if (icuid != NULL)
+        if (icuid != nullptr)
         {
             uprv_strcpy(icuid, tmpid);
         }
