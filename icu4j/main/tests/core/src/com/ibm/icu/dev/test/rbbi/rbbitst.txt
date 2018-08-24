@@ -768,6 +768,16 @@ Calls to xxx will return an implementor of this interface.  \u2029•</data>
 <line>
 <data>•</data>
 
+# Bug #13664 Mixed Thai & English text had different boundaries between forward & reverse.
+#
+<line>
+<data>•Northern •Thailand •is •a •mountainous •area. •Parallel •mountain •ranges •extend •from •the •\
+Daen •Lao •Range •(ทิว•เขา•แดน•ลาว), •in •the •southern •region •of •the •Shan •Hills, •in •a •\
+north/•south •direction, •the •Dawna •Range •(ทิว•เขา•ดอย•มอน•กุ•จู) •forming •the •western •border •of •Thailand •\
+between •Mae •Hong •Son •and •the •Salween •River, •the •Thanon •Thong •Chai •Range •(เทือก•เขา•ถนน•ธงชัย), •\
+the •Khun •Tan •Range •(ดอย•ขุน•ตาน), •the •Phi •Pan •Nam •Range •(ทิว•เขา•ผี•ปัน•น้ำ), •as •well •as •the •western •\
+part •of •the •Luang •Prabang •Range •(ทิว•เขา•หลวง•พระ•บาง).•</data>
+
 
 ########################################################################################
 #
