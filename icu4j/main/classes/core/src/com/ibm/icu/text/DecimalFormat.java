@@ -1123,6 +1123,8 @@ public class DecimalFormat extends NumberFormat {
    *
    * @param multiplier The number by which all numbers passed to {@link #format} will be multiplied.
    * @throws IllegalArgumentException If the given multiplier is zero.
+   * @throws ArithmeticException when inverting multiplier produces a non-terminating decimal result
+   *         in conjunction with MathContext of unlimited precision.
    * @category Multipliers
    * @stable ICU 2.0
    */
@@ -1296,6 +1298,8 @@ public class DecimalFormat extends NumberFormat {
    * method.
    *
    * @param mathContext The MathContext to use when rounding numbers.
+   * @throws ArithmeticException when inverting multiplier produces a non-terminating decimal result
+   *         in conjunction with MathContext of unlimited precision.
    * @see java.math.MathContext
    * @category Rounding
    * @stable ICU 4.2
@@ -1330,6 +1334,8 @@ public class DecimalFormat extends NumberFormat {
    * {@link com.ibm.icu.math.MathContext}.
    *
    * @param mathContextICU The MathContext to use when rounding numbers.
+   * @throws ArithmeticException when inverting multiplier produces a non-terminating decimal result
+   *         in conjunction with MathContext of unlimited precision.
    * @see #setMathContext(java.math.MathContext)
    * @category Rounding
    * @stable ICU 4.2
