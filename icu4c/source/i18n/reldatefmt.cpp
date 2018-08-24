@@ -54,7 +54,7 @@ public:
     RelativeDateTimeCacheData() : combinedDateAndTime(NULL) {
         // Initialize the cache arrays
         for (int32_t style = 0; style < UDAT_STYLE_COUNT; ++style) {
-            for (int32_t relUnit = 0; relUnit < UDAT_RELATIVE_UNIT_COUNT; ++relUnit) {
+            for (int32_t relUnit = 0; relUnit < UDAT_REL_UNIT_COUNT; ++relUnit) {
                 for (int32_t pl = 0; pl < StandardPlural::COUNT; ++pl) {
                     relativeUnitsFormatters[style][relUnit][0][pl] = NULL;
                     relativeUnitsFormatters[style][relUnit][1][pl] = NULL;
@@ -74,13 +74,17 @@ public:
     // e.g., Next Tuesday; Yesterday; etc. For third index, 0
     // means past, e.g., 5 days ago; 1 means future, e.g., in 5 days.
     SimpleFormatter *relativeUnitsFormatters[UDAT_STYLE_COUNT]
-        [UDAT_RELATIVE_UNIT_COUNT][2][StandardPlural::COUNT];
+        [UDAT_REL_UNIT_COUNT][2][StandardPlural::COUNT];
 
     const UnicodeString& getAbsoluteUnitString(int32_t fStyle,
                                                UDateAbsoluteUnit unit,
                                                UDateDirection direction) const;
     const SimpleFormatter* getRelativeUnitFormatter(int32_t fStyle,
                                                     UDateRelativeUnit unit,
+                                                    int32_t pastFutureIndex,
+                                                    int32_t pluralUnit) const;
+    const SimpleFormatter* getRelativeDateTimeUnitFormatter(int32_t fStyle,
+                                                    URelativeDateTimeUnit unit,
                                                     int32_t pastFutureIndex,
                                                     int32_t pluralUnit) const;
 
@@ -107,7 +111,7 @@ private:
 RelativeDateTimeCacheData::~RelativeDateTimeCacheData() {
     // clear out the cache arrays
     for (int32_t style = 0; style < UDAT_STYLE_COUNT; ++style) {
-        for (int32_t relUnit = 0; relUnit < UDAT_RELATIVE_UNIT_COUNT; ++relUnit) {
+        for (int32_t relUnit = 0; relUnit < UDAT_REL_UNIT_COUNT; ++relUnit) {
             for (int32_t pl = 0; pl < StandardPlural::COUNT; ++pl) {
                 delete relativeUnitsFormatters[style][relUnit][0][pl];
                 delete relativeUnitsFormatters[style][relUnit][1][pl];
@@ -131,10 +135,31 @@ const UnicodeString& RelativeDateTimeCacheData::getAbsoluteUnitString(
     return emptyString;
 }
 
- // Use fallback cache for SimpleFormatter relativeUnits.
  const SimpleFormatter* RelativeDateTimeCacheData::getRelativeUnitFormatter(
         int32_t fStyle,
         UDateRelativeUnit unit,
+        int32_t pastFutureIndex,
+        int32_t pluralUnit) const {
+   URelativeDateTimeUnit rdtunit = UDAT_REL_UNIT_COUNT;
+   switch (unit) {
+       case UDAT_RELATIVE_YEARS:   rdtunit = UDAT_REL_UNIT_YEAR; break;
+       case UDAT_RELATIVE_MONTHS:  rdtunit = UDAT_REL_UNIT_MONTH; break;
+       case UDAT_RELATIVE_WEEKS:   rdtunit = UDAT_REL_UNIT_WEEK; break;
+       case UDAT_RELATIVE_DAYS:    rdtunit = UDAT_REL_UNIT_DAY; break;
+       case UDAT_RELATIVE_HOURS:   rdtunit = UDAT_REL_UNIT_HOUR; break;
+       case UDAT_RELATIVE_MINUTES: rdtunit = UDAT_REL_UNIT_MINUTE; break;
+       case UDAT_RELATIVE_SECONDS: rdtunit = UDAT_REL_UNIT_SECOND; break;
+       default: // a unit that the above method does not handle
+            return NULL;
+   }
+
+   return getRelativeDateTimeUnitFormatter(fStyle, rdtunit, pastFutureIndex, pluralUnit);
+ }
+
+ // Use fallback cache for SimpleFormatter relativeUnits.
+ const SimpleFormatter* RelativeDateTimeCacheData::getRelativeDateTimeUnitFormatter(
+        int32_t fStyle,
+        URelativeDateTimeUnit unit,
         int32_t pastFutureIndex,
         int32_t pluralUnit) const {
     int32_t style = fStyle;
@@ -217,23 +242,35 @@ struct RelDateTimeFmtDataSink : public ResourceSink {
         // Converts the generic units to UDAT_RELATIVE version.
         switch (genUnit) {
             case SECOND:
-                return UDAT_RELATIVE_SECONDS;
+                return UDAT_REL_UNIT_SECOND;
             case MINUTE:
-                return UDAT_RELATIVE_MINUTES;
+                return UDAT_REL_UNIT_MINUTE;
             case HOUR:
-                return UDAT_RELATIVE_HOURS;
+                return UDAT_REL_UNIT_HOUR;
             case DAY:
-                return UDAT_RELATIVE_DAYS;
+                return UDAT_REL_UNIT_DAY;
             case WEEK:
-                return UDAT_RELATIVE_WEEKS;
+                return UDAT_REL_UNIT_WEEK;
             case MONTH:
-                return UDAT_RELATIVE_MONTHS;
-            /*
-             * case QUARTER:
-             * return UDATE_RELATIVE_QUARTERS;
-             */
+                return UDAT_REL_UNIT_MONTH;
+            case QUARTER:
+                return UDAT_REL_UNIT_QUARTER;
             case YEAR:
-                return UDAT_RELATIVE_YEARS;
+                return UDAT_REL_UNIT_YEAR;
+            case SUNDAY:
+                return UDAT_REL_UNIT_SUNDAY;
+            case MONDAY:
+                return UDAT_REL_UNIT_MONDAY;
+            case TUESDAY:
+                return UDAT_REL_UNIT_TUESDAY;
+            case WEDNESDAY:
+                return UDAT_REL_UNIT_WEDNESDAY;
+            case THURSDAY:
+                return UDAT_REL_UNIT_THURSDAY;
+            case FRIDAY:
+                return UDAT_REL_UNIT_FRIDAY;
+            case SATURDAY:
+                return UDAT_REL_UNIT_SATURDAY;
             default:
                 return -1;
         }
@@ -430,7 +467,7 @@ struct RelDateTimeFmtDataSink : public ResourceSink {
                 }
 
                 int32_t relUnitIndex = relUnitFromGeneric(genericUnit);
-                if (relUnitIndex == UDAT_RELATIVE_SECONDS && uprv_strcmp(key, "0") == 0 &&
+                if (relUnitIndex == UDAT_REL_UNIT_SECOND && uprv_strcmp(key, "0") == 0 &&
                     outputData.absoluteUnits[style][UDAT_ABSOLUTE_NOW][UDAT_DIRECTION_PLAIN].isEmpty()) {
                     // Handle "NOW"
                     outputData.absoluteUnits[style][UDAT_ABSOLUTE_NOW]
@@ -828,33 +865,35 @@ UnicodeString& RelativeDateTimeFormatter::formatNumeric(
     if (U_FAILURE(status)) {
         return appendTo;
     }
-    // TODO:
-    // The full implementation of this depends on CLDR data that is not yet available,
-    // see: http://unicode.org/cldr/trac/ticket/9165 Add more relative field data.
-    // In the meantime do a quick bring-up by calling the old format method; this
-    // leaves some holes (even for data that is currently available, such as quarter).
-    // When the new CLDR data is available, update the data storage accordingly,
-    // rewrite this to use it directly, and rewrite the old format method to call this
-    // new one; that is covered by http://bugs.icu-project.org/trac/ticket/12171.
-    UDateRelativeUnit relunit = UDAT_RELATIVE_UNIT_COUNT;
-    switch (unit) {
-        case UDAT_REL_UNIT_YEAR:    relunit = UDAT_RELATIVE_YEARS; break;
-        case UDAT_REL_UNIT_MONTH:   relunit = UDAT_RELATIVE_MONTHS; break;
-        case UDAT_REL_UNIT_WEEK:    relunit = UDAT_RELATIVE_WEEKS; break;
-        case UDAT_REL_UNIT_DAY:     relunit = UDAT_RELATIVE_DAYS; break;
-        case UDAT_REL_UNIT_HOUR:    relunit = UDAT_RELATIVE_HOURS; break;
-        case UDAT_REL_UNIT_MINUTE:  relunit = UDAT_RELATIVE_MINUTES; break;
-        case UDAT_REL_UNIT_SECOND:  relunit = UDAT_RELATIVE_SECONDS; break;
-        default: // a unit that the above method does not handle
-            status = U_UNSUPPORTED_ERROR;
-            return appendTo;
-    }
     UDateDirection direction = UDAT_DIRECTION_NEXT;
     if (std::signbit(offset)) { // needed to handle -0.0
         direction = UDAT_DIRECTION_LAST;
         offset = -offset;
     }
-    return format(offset, direction, relunit, appendTo, status);
+    if (direction != UDAT_DIRECTION_LAST && direction != UDAT_DIRECTION_NEXT) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return appendTo;
+    }
+    int32_t bFuture = direction == UDAT_DIRECTION_NEXT ? 1 : 0;
+    FieldPosition pos(FieldPosition::DONT_CARE);
+
+    UnicodeString result;
+    UnicodeString formattedNumber;
+
+    StandardPlural::Form pluralIndex = QuantityFormatter::selectPlural(
+        offset, **fNumberFormat, **fPluralRules, formattedNumber, pos,
+        status);
+
+    const SimpleFormatter* formatter =
+        fCache->getRelativeDateTimeUnitFormatter(fStyle, unit, bFuture, pluralIndex);
+    if (formatter == NULL) {
+        // TODO: WARN - look at quantity formatter's action with an error.
+        status = U_INVALID_FORMAT_ERROR;
+        return appendTo;
+    }
+    formatter->format(formattedNumber, result, status);
+    adjustForContext(result);
+    return appendTo.append(result);
 }
 
 UnicodeString& RelativeDateTimeFormatter::format(
