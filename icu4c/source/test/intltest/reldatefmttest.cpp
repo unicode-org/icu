@@ -474,7 +474,7 @@ typedef struct WithQuantityExpectedRelativeDateTimeUnit {
     const char *expected;
 } WithQuantityExpectedRelativeDateTimeUnit;
 
-static WithQuantityExpectedRelativeDateTimeUnit kEnglishRelativeDateTimeUnit[] = {
+static WithQuantityExpectedRelativeDateTimeUnit kEnglishFormatNumeric[] = {
         {0.0, UDAT_REL_UNIT_SECOND, "in 0 seconds"},
         {0.5, UDAT_REL_UNIT_SECOND, "in 0.5 seconds"},
         {1.0, UDAT_REL_UNIT_SECOND, "in 1 second"},
@@ -598,6 +598,130 @@ static WithQuantityExpectedRelativeDateTimeUnit kEnglishRelativeDateTimeUnit[] =
         {-2.0, UDAT_REL_UNIT_SATURDAY, "2 Saturdays ago"}
 };
 
+static WithQuantityExpectedRelativeDateTimeUnit kEnglishFormat[] = {
+        {0.0, UDAT_REL_UNIT_SECOND, "now"},
+        {0.5, UDAT_REL_UNIT_SECOND, "in 0.5 seconds"},
+        {1.0, UDAT_REL_UNIT_SECOND, "in 1 second"},
+        {2.0, UDAT_REL_UNIT_SECOND, "in 2 seconds"},
+        {0.0, UDAT_REL_UNIT_MINUTE, "in 0 minutes"},
+        {0.5, UDAT_REL_UNIT_MINUTE, "in 0.5 minutes"},
+        {1.0, UDAT_REL_UNIT_MINUTE, "in 1 minute"},
+        {2.0, UDAT_REL_UNIT_MINUTE, "in 2 minutes"},
+        {0.0, UDAT_REL_UNIT_HOUR, "in 0 hours"},
+        {0.5, UDAT_REL_UNIT_HOUR, "in 0.5 hours"},
+        {1.0, UDAT_REL_UNIT_HOUR, "in 1 hour"},
+        {2.0, UDAT_REL_UNIT_HOUR, "in 2 hours"},
+        {0.0, UDAT_REL_UNIT_DAY, "today"},
+        {0.5, UDAT_REL_UNIT_DAY, "in 0.5 days"},
+        {1.0, UDAT_REL_UNIT_DAY, "tomorrow"},
+        {2.0, UDAT_REL_UNIT_DAY, "in 2 days"},
+        {0.0, UDAT_REL_UNIT_WEEK, "this week"},
+        {0.5, UDAT_REL_UNIT_WEEK, "in 0.5 weeks"},
+        {1.0, UDAT_REL_UNIT_WEEK, "next week"},
+        {2.0, UDAT_REL_UNIT_WEEK, "in 2 weeks"},
+        {0.0, UDAT_REL_UNIT_MONTH, "this month"},
+        {0.5, UDAT_REL_UNIT_MONTH, "in 0.5 months"},
+        {1.0, UDAT_REL_UNIT_MONTH, "next month"},
+        {2.0, UDAT_REL_UNIT_MONTH, "in 2 months"},
+        {0.0, UDAT_REL_UNIT_QUARTER, "this quarter"},
+        {0.5, UDAT_REL_UNIT_QUARTER, "in 0.5 quarters"},
+        {1.0, UDAT_REL_UNIT_QUARTER, "next quarter"},
+        {2.0, UDAT_REL_UNIT_QUARTER, "in 2 quarters"},
+        {0.0, UDAT_REL_UNIT_YEAR, "this year"},
+        {0.5, UDAT_REL_UNIT_YEAR, "in 0.5 years"},
+        {1.0, UDAT_REL_UNIT_YEAR, "next year"},
+        {2.0, UDAT_REL_UNIT_YEAR, "in 2 years"},
+        {0.0, UDAT_REL_UNIT_SUNDAY, "this Sunday"},
+        {0.5, UDAT_REL_UNIT_SUNDAY, "in 0.5 Sundays"},
+        {1.0, UDAT_REL_UNIT_SUNDAY, "next Sunday"},
+        {2.0, UDAT_REL_UNIT_SUNDAY, "in 2 Sundays"},
+        {0.0, UDAT_REL_UNIT_MONDAY, "this Monday"},
+        {0.5, UDAT_REL_UNIT_MONDAY, "in 0.5 Mondays"},
+        {1.0, UDAT_REL_UNIT_MONDAY, "next Monday"},
+        {2.0, UDAT_REL_UNIT_MONDAY, "in 2 Mondays"},
+        {0.0, UDAT_REL_UNIT_TUESDAY, "this Tuesday"},
+        {0.5, UDAT_REL_UNIT_TUESDAY, "in 0.5 Tuesdays"},
+        {1.0, UDAT_REL_UNIT_TUESDAY, "next Tuesday"},
+        {2.0, UDAT_REL_UNIT_TUESDAY, "in 2 Tuesdays"},
+        {0.0, UDAT_REL_UNIT_WEDNESDAY, "this Wednesday"},
+        {0.5, UDAT_REL_UNIT_WEDNESDAY, "in 0.5 Wednesdays"},
+        {1.0, UDAT_REL_UNIT_WEDNESDAY, "next Wednesday"},
+        {2.0, UDAT_REL_UNIT_WEDNESDAY, "in 2 Wednesdays"},
+        {0.0, UDAT_REL_UNIT_THURSDAY, "this Thursday"},
+        {0.5, UDAT_REL_UNIT_THURSDAY, "in 0.5 Thursdays"},
+        {1.0, UDAT_REL_UNIT_THURSDAY, "next Thursday"},
+        {2.0, UDAT_REL_UNIT_THURSDAY, "in 2 Thursdays"},
+        {0.0, UDAT_REL_UNIT_FRIDAY, "this Friday"},
+        {0.5, UDAT_REL_UNIT_FRIDAY, "in 0.5 Fridays"},
+        {1.0, UDAT_REL_UNIT_FRIDAY, "next Friday"},
+        {2.0, UDAT_REL_UNIT_FRIDAY, "in 2 Fridays"},
+        {0.0, UDAT_REL_UNIT_SATURDAY, "this Saturday"},
+        {0.5, UDAT_REL_UNIT_SATURDAY, "in 0.5 Saturdays"},
+        {1.0, UDAT_REL_UNIT_SATURDAY, "next Saturday"},
+        {2.0, UDAT_REL_UNIT_SATURDAY, "in 2 Saturdays"},
+
+        {-0.0, UDAT_REL_UNIT_SECOND, "now"},
+        {-0.5, UDAT_REL_UNIT_SECOND, "0.5 seconds ago"},
+        {-1.0, UDAT_REL_UNIT_SECOND, "1 second ago"},
+        {-2.0, UDAT_REL_UNIT_SECOND, "2 seconds ago"},
+        {-0.0, UDAT_REL_UNIT_MINUTE, "0 minutes ago"},
+        {-0.5, UDAT_REL_UNIT_MINUTE, "0.5 minutes ago"},
+        {-1.0, UDAT_REL_UNIT_MINUTE, "1 minute ago"},
+        {-2.0, UDAT_REL_UNIT_MINUTE, "2 minutes ago"},
+        {-0.0, UDAT_REL_UNIT_HOUR, "0 hours ago"},
+        {-0.5, UDAT_REL_UNIT_HOUR, "0.5 hours ago"},
+        {-1.0, UDAT_REL_UNIT_HOUR, "1 hour ago"},
+        {-2.0, UDAT_REL_UNIT_HOUR, "2 hours ago"},
+        {-0.0, UDAT_REL_UNIT_DAY, "today"},
+        {-0.5, UDAT_REL_UNIT_DAY, "0.5 days ago"},
+        {-1.0, UDAT_REL_UNIT_DAY, "yesterday"},
+        {-2.0, UDAT_REL_UNIT_DAY, "2 days ago"},
+        {-0.0, UDAT_REL_UNIT_WEEK, "this week"},
+        {-0.5, UDAT_REL_UNIT_WEEK, "0.5 weeks ago"},
+        {-1.0, UDAT_REL_UNIT_WEEK, "last week"},
+        {-2.0, UDAT_REL_UNIT_WEEK, "2 weeks ago"},
+        {-0.0, UDAT_REL_UNIT_MONTH, "this month"},
+        {-0.5, UDAT_REL_UNIT_MONTH, "0.5 months ago"},
+        {-1.0, UDAT_REL_UNIT_MONTH, "last month"},
+        {-2.0, UDAT_REL_UNIT_MONTH, "2 months ago"},
+        {-0.0, UDAT_REL_UNIT_QUARTER, "this quarter"},
+        {-0.5, UDAT_REL_UNIT_QUARTER, "0.5 quarters ago"},
+        {-1.0, UDAT_REL_UNIT_QUARTER, "last quarter"},
+        {-2.0, UDAT_REL_UNIT_QUARTER, "2 quarters ago"},
+        {-0.0, UDAT_REL_UNIT_YEAR, "this year"},
+        {-0.5, UDAT_REL_UNIT_YEAR, "0.5 years ago"},
+        {-1.0, UDAT_REL_UNIT_YEAR, "last year"},
+        {-2.0, UDAT_REL_UNIT_YEAR, "2 years ago"},
+        {-0.0, UDAT_REL_UNIT_SUNDAY, "this Sunday"},
+        {-0.5, UDAT_REL_UNIT_SUNDAY, "0.5 Sundays ago"},
+        {-1.0, UDAT_REL_UNIT_SUNDAY, "last Sunday"},
+        {-2.0, UDAT_REL_UNIT_SUNDAY, "2 Sundays ago"},
+        {-0.0, UDAT_REL_UNIT_MONDAY, "this Monday"},
+        {-0.5, UDAT_REL_UNIT_MONDAY, "0.5 Mondays ago"},
+        {-1.0, UDAT_REL_UNIT_MONDAY, "last Monday"},
+        {-2.0, UDAT_REL_UNIT_MONDAY, "2 Mondays ago"},
+        {-0.0, UDAT_REL_UNIT_TUESDAY, "this Tuesday"},
+        {-0.5, UDAT_REL_UNIT_TUESDAY, "0.5 Tuesdays ago"},
+        {-1.0, UDAT_REL_UNIT_TUESDAY, "last Tuesday"},
+        {-2.0, UDAT_REL_UNIT_TUESDAY, "2 Tuesdays ago"},
+        {-0.0, UDAT_REL_UNIT_WEDNESDAY, "this Wednesday"},
+        {-0.5, UDAT_REL_UNIT_WEDNESDAY, "0.5 Wednesdays ago"},
+        {-1.0, UDAT_REL_UNIT_WEDNESDAY, "last Wednesday"},
+        {-2.0, UDAT_REL_UNIT_WEDNESDAY, "2 Wednesdays ago"},
+        {-0.0, UDAT_REL_UNIT_THURSDAY, "this Thursday"},
+        {-0.5, UDAT_REL_UNIT_THURSDAY, "0.5 Thursdays ago"},
+        {-1.0, UDAT_REL_UNIT_THURSDAY, "last Thursday"},
+        {-2.0, UDAT_REL_UNIT_THURSDAY, "2 Thursdays ago"},
+        {-0.0, UDAT_REL_UNIT_FRIDAY, "this Friday"},
+        {-0.5, UDAT_REL_UNIT_FRIDAY, "0.5 Fridays ago"},
+        {-1.0, UDAT_REL_UNIT_FRIDAY, "last Friday"},
+        {-2.0, UDAT_REL_UNIT_FRIDAY, "2 Fridays ago"},
+        {-0.0, UDAT_REL_UNIT_SATURDAY, "this Saturday"},
+        {-0.5, UDAT_REL_UNIT_SATURDAY, "0.5 Saturdays ago"},
+        {-1.0, UDAT_REL_UNIT_SATURDAY, "last Saturday"},
+        {-2.0, UDAT_REL_UNIT_SATURDAY, "2 Saturdays ago"}
+};
+
 
 class RelativeDateTimeFormatterTest : public IntlTest {
 public:
@@ -623,6 +747,7 @@ private:
     void TestGetters();
     void TestCombineDateAndTime();
     void TestBadDisplayContext();
+    void TestFormat();
     void TestFormatNumeric();
     void RunTest(
             const Locale& locale,
@@ -631,7 +756,8 @@ private:
     void RunTest(
             const Locale& locale,
             const WithQuantityExpectedRelativeDateTimeUnit* expectedResults,
-            int32_t expectedResultLength);
+            int32_t expectedResultLength,
+            bool numeric);
     void RunTest(
             const Locale& locale,
             UDateRelativeDateTimeFormatterStyle style,
@@ -655,7 +781,8 @@ private:
             const RelativeDateTimeFormatter& fmt,
             const WithQuantityExpectedRelativeDateTimeUnit* expectedResults,
             int32_t expectedResultLength,
-            const char *description);
+            const char *description,
+            bool numeric);
     void RunTest(
             const RelativeDateTimeFormatter& fmt,
             const WithoutQuantityExpected* expectedResults,
@@ -668,7 +795,8 @@ private:
     void CheckExpectedResult(
             const RelativeDateTimeFormatter& fmt,
             const WithQuantityExpectedRelativeDateTimeUnit& expectedResults,
-            const char* description);
+            const char* description,
+            bool numeric);
     void CheckExpectedResult(
             const RelativeDateTimeFormatter& fmt,
             const WithoutQuantityExpected& expectedResult,
@@ -708,6 +836,7 @@ void RelativeDateTimeFormatterTest::runIndexedTest(
     TESTCASE_AUTO(TestCombineDateAndTime);
     TESTCASE_AUTO(TestBadDisplayContext);
     TESTCASE_AUTO(TestSidewaysDataLoading);
+    TESTCASE_AUTO(TestFormat);
     TESTCASE_AUTO(TestFormatNumeric);
     TESTCASE_AUTO_END;
 }
@@ -915,14 +1044,15 @@ void RelativeDateTimeFormatterTest::RunTest(
 void RelativeDateTimeFormatterTest::RunTest(
         const Locale& locale,
         const WithQuantityExpectedRelativeDateTimeUnit* expectedResults,
-        int32_t expectedResultLength) {
+        int32_t expectedResultLength,
+        bool numeric) {
     UErrorCode status = U_ZERO_ERROR;
     RelativeDateTimeFormatter fmt(locale, status);
     if (U_FAILURE(status)) {
         dataerrln("Unable to create format object - %s", u_errorName(status));
         return;
     }
-    RunTest(fmt, expectedResults, expectedResultLength, locale.getName());
+    RunTest(fmt, expectedResults, expectedResultLength, locale.getName(), numeric);
 }
 
 
@@ -983,9 +1113,10 @@ void RelativeDateTimeFormatterTest::RunTest(
         const RelativeDateTimeFormatter& fmt,
         const WithQuantityExpectedRelativeDateTimeUnit* expectedResults,
         int32_t expectedResultLength,
-        const char *description) {
+        const char *description,
+        bool numeric) {
     for (int32_t i = 0; i < expectedResultLength; ++i) {
-        CheckExpectedResult(fmt, expectedResults[i], description);
+        CheckExpectedResult(fmt, expectedResults[i], description, numeric);
     }
 }
 
@@ -1026,10 +1157,15 @@ void RelativeDateTimeFormatterTest::CheckExpectedResult(
 void RelativeDateTimeFormatterTest::CheckExpectedResult(
         const RelativeDateTimeFormatter& fmt,
         const WithQuantityExpectedRelativeDateTimeUnit& expectedResult,
-        const char* description) {
+        const char* description,
+        bool numeric) {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString actual;
-    fmt.formatNumeric(expectedResult.value, expectedResult.unit, actual, status);
+    if (numeric) {
+      fmt.formatNumeric(expectedResult.value, expectedResult.unit, actual, status);
+    } else {
+      fmt.format(expectedResult.value, expectedResult.unit, actual, status);
+    }
     UnicodeString expected(expectedResult.expected, -1, US_INV);
     expected = expected.unescape();
     char buffer[256];
@@ -1137,7 +1273,11 @@ void RelativeDateTimeFormatterTest::TestSidewaysDataLoading(void) {
 }
 
 void RelativeDateTimeFormatterTest::TestFormatNumeric() {
-    RunTest("en", kEnglishRelativeDateTimeUnit, UPRV_LENGTHOF(kEnglishRelativeDateTimeUnit));
+    RunTest("en", kEnglishFormatNumeric, UPRV_LENGTHOF(kEnglishFormatNumeric), true);
+}
+
+void RelativeDateTimeFormatterTest::TestFormat() {
+    RunTest("en", kEnglishFormat, UPRV_LENGTHOF(kEnglishFormat), false);
 }
 
 static const char *kLast2 = "Last_2";
@@ -1155,6 +1295,13 @@ static const char *kWeeks = "Weeks";
 static const char *kMonths = "Months";
 static const char *kQuarters = "Quarters";
 static const char *kYears = "Years";
+static const char *kSundays = "Sundays";
+static const char *kMondays = "Mondays";
+static const char *kTuesdays = "Tuesdays";
+static const char *kWednesdays = "Wednesdays";
+static const char *kThursdays = "Thursdays";
+static const char *kFridays = "Fridays";
+static const char *kSaturdays = "Saturdays";
 
 static const char *kSunday = "Sunday";
 static const char *kMonday = "Monday";
@@ -1234,6 +1381,20 @@ static const char *RelativeDateTimeUnitStr(
             return kQuarters;
         case UDAT_REL_UNIT_YEAR:
             return kYears;
+        case UDAT_REL_UNIT_SUNDAY:
+            return kSundays;
+        case UDAT_REL_UNIT_MONDAY:
+            return kMondays;
+        case UDAT_REL_UNIT_TUESDAY:
+            return kTuesdays;
+        case UDAT_REL_UNIT_WEDNESDAY:
+            return kWednesdays;
+        case UDAT_REL_UNIT_THURSDAY:
+            return kThursdays;
+        case UDAT_REL_UNIT_FRIDAY:
+            return kFridays;
+        case UDAT_REL_UNIT_SATURDAY:
+            return kSaturdays;
         default:
             return kUndefined;
     }

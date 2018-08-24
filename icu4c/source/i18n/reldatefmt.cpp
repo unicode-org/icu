@@ -285,10 +285,8 @@ struct RelDateTimeFmtDataSink : public ResourceSink {
                 return UDAT_ABSOLUTE_WEEK;
             case MONTH:
                 return UDAT_ABSOLUTE_MONTH;
-            /* TODO: Add in QUARTER
-             *  case QUARTER:
-             * return UDAT_ABSOLUTE_QUARTER;
-             */
+            case QUARTER:
+                return UDAT_ABSOLUTE_QUARTER;
             case YEAR:
                 return UDAT_ABSOLUTE_YEAR;
             case SUNDAY:
@@ -947,6 +945,7 @@ UnicodeString& RelativeDateTimeFormatter::format(
     UDateAbsoluteUnit absunit = UDAT_ABSOLUTE_UNIT_COUNT;
     switch (unit) {
         case UDAT_REL_UNIT_YEAR:    absunit = UDAT_ABSOLUTE_YEAR; break;
+        case UDAT_REL_UNIT_QUARTER: absunit = UDAT_ABSOLUTE_QUARTER; break;
         case UDAT_REL_UNIT_MONTH:   absunit = UDAT_ABSOLUTE_MONTH; break;
         case UDAT_REL_UNIT_WEEK:    absunit = UDAT_ABSOLUTE_WEEK; break;
         case UDAT_REL_UNIT_DAY:     absunit = UDAT_ABSOLUTE_DAY; break;
