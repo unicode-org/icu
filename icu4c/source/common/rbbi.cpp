@@ -18,6 +18,8 @@
 
 #if !UCONFIG_NO_BREAK_ITERATION
 
+#include <cinttypes>
+
 #include "unicode/rbbi.h"
 #include "unicode/schriter.h"
 #include "unicode/uchriter.h"
@@ -848,7 +850,7 @@ int32_t RuleBasedBreakIterator::handleNext() {
 
        #ifdef RBBI_DEBUG
             if (gTrace) {
-                RBBIDebugPrintf("             %4lld   ", utext_getNativeIndex(&fText));
+                RBBIDebugPrintf("             %4" PRId64 "   ", utext_getNativeIndex(&fText));
                 if (0x20<=c && c<0x7f) {
                     RBBIDebugPrintf("\"%c\"  ", c);
                 } else {
