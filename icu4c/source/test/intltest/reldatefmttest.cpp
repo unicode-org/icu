@@ -245,6 +245,7 @@ static WithoutQuantityExpected kEnglishNoQuantity[] = {
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_DAY, "tomorrow"},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_WEEK, "next week"},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_MONTH, "next month"},
+        {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_QUARTER, "next quarter"},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_YEAR, "next year"},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_MONDAY, "next Monday"},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_TUESDAY, "next Tuesday"},
@@ -259,6 +260,7 @@ static WithoutQuantityExpected kEnglishNoQuantity[] = {
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_DAY, "yesterday"},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_WEEK, "last week"},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_MONTH, "last month"},
+        {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_QUARTER, "last quarter"},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_YEAR, "last year"},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_MONDAY, "last Monday"},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_TUESDAY, "last Tuesday"},
@@ -271,6 +273,7 @@ static WithoutQuantityExpected kEnglishNoQuantity[] = {
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_DAY, "today"},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_WEEK, "this week"},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_MONTH, "this month"},
+        {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_QUARTER, "this quarter"},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_YEAR, "this year"},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_MONDAY, "this Monday"},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_TUESDAY, "this Tuesday"},
@@ -283,6 +286,7 @@ static WithoutQuantityExpected kEnglishNoQuantity[] = {
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_DAY, "day"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_WEEK, "week"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_MONTH, "month"},
+        {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_QUARTER, "quarter"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_YEAR, "year"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_MONDAY, "Monday"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_TUESDAY, "Tuesday"},
@@ -301,6 +305,7 @@ static WithoutQuantityExpected kEnglishNoQuantityCaps[] = {
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_DAY, "Tomorrow"},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_WEEK, "Next week"},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_MONTH, "Next month"},
+        {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_QUARTER, "Next quarter"},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_YEAR, "Next year"},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_MONDAY, "Next Monday"},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_TUESDAY, "Next Tuesday"},
@@ -315,6 +320,7 @@ static WithoutQuantityExpected kEnglishNoQuantityCaps[] = {
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_DAY, "Yesterday"},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_WEEK, "Last week"},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_MONTH, "Last month"},
+        {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_QUARTER, "Last quarter"},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_YEAR, "Last year"},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_MONDAY, "Last Monday"},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_TUESDAY, "Last Tuesday"},
@@ -327,6 +333,7 @@ static WithoutQuantityExpected kEnglishNoQuantityCaps[] = {
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_DAY, "Today"},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_WEEK, "This week"},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_MONTH, "This month"},
+        {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_QUARTER, "This quarter"},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_YEAR, "This year"},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_MONDAY, "This Monday"},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_TUESDAY, "This Tuesday"},
@@ -339,6 +346,7 @@ static WithoutQuantityExpected kEnglishNoQuantityCaps[] = {
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_DAY, "Day"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_WEEK, "Week"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_MONTH, "Month"},
+        {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_QUARTER, "Quarter"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_YEAR, "Year"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_MONDAY, "Monday"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_TUESDAY, "Tuesday"},
@@ -357,6 +365,7 @@ static WithoutQuantityExpected kEnglishNoQuantityShort[] = {
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_DAY, "tomorrow"},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_WEEK, "next wk."},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_MONTH, "next mo."},
+        {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_QUARTER, "next qtr."},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_YEAR, "next yr."},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_MONDAY, "next Mon."},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_TUESDAY, "next Tue."},
@@ -371,6 +380,7 @@ static WithoutQuantityExpected kEnglishNoQuantityShort[] = {
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_DAY, "yesterday"},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_WEEK, "last wk."},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_MONTH, "last mo."},
+        {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_QUARTER, "last qtr."},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_YEAR, "last yr."},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_MONDAY, "last Mon."},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_TUESDAY, "last Tue."},
@@ -383,6 +393,7 @@ static WithoutQuantityExpected kEnglishNoQuantityShort[] = {
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_DAY, "today"},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_WEEK, "this wk."},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_MONTH, "this mo."},
+        {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_QUARTER, "this qtr."},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_YEAR, "this yr."},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_MONDAY, "this Mon."},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_TUESDAY, "this Tue."},
@@ -395,6 +406,7 @@ static WithoutQuantityExpected kEnglishNoQuantityShort[] = {
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_DAY, "day"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_WEEK, "wk."},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_MONTH, "mo."},
+        {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_QUARTER, "qtr."},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_YEAR, "yr."},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_MONDAY, "Mo"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_TUESDAY, "Tu"},
@@ -413,6 +425,7 @@ static WithoutQuantityExpected kEnglishNoQuantityNarrow[] = {
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_DAY, "tomorrow"},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_WEEK, "next wk."},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_MONTH, "next mo."},
+        {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_QUARTER, "next qtr."},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_YEAR, "next yr."},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_MONDAY, "next M"},
         {UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_TUESDAY, "next Tu"},
@@ -427,6 +440,7 @@ static WithoutQuantityExpected kEnglishNoQuantityNarrow[] = {
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_DAY, "yesterday"},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_WEEK, "last wk."},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_MONTH, "last mo."},
+        {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_QUARTER, "last qtr."},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_YEAR, "last yr."},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_MONDAY, "last M"},
         {UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_TUESDAY, "last Tu"},
@@ -439,6 +453,7 @@ static WithoutQuantityExpected kEnglishNoQuantityNarrow[] = {
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_DAY, "today"},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_WEEK, "this wk."},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_MONTH, "this mo."},
+        {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_QUARTER, "this qtr."},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_YEAR, "this yr."},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_MONDAY, "this M"},
         {UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_TUESDAY, "this Tu"},
@@ -451,6 +466,7 @@ static WithoutQuantityExpected kEnglishNoQuantityNarrow[] = {
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_DAY, "day"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_WEEK, "wk."},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_MONTH, "mo."},
+        {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_QUARTER, "qtr."},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_YEAR, "yr."},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_MONDAY, "M"},
         {UDAT_DIRECTION_PLAIN, UDAT_ABSOLUTE_TUESDAY, "T"},
@@ -1313,6 +1329,7 @@ static const char *kSaturday = "Saturday";
 static const char *kDay = "Day";
 static const char *kWeek = "Week";
 static const char *kMonth = "Month";
+static const char *kQuarter = "Quarter";
 static const char *kYear = "Year";
 static const char *kNow = "Now";
 
@@ -1424,6 +1441,8 @@ static const char *AbsoluteUnitStr(
             return kWeek;
         case UDAT_ABSOLUTE_MONTH:
             return kMonth;
+        case UDAT_ABSOLUTE_QUARTER:
+            return kQuarter;
         case UDAT_ABSOLUTE_YEAR:
             return kYear;
         case UDAT_ABSOLUTE_NOW:
