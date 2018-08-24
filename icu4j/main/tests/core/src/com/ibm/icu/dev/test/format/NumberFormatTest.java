@@ -4962,10 +4962,51 @@ public class NumberFormatTest extends TestFmwk {
         df.setMathContext(fourDigits);
         BigInteger actual4Digits = ((BigDecimal) df.parse(hugeNumberString)).toBigIntegerExact();
         assertEquals("Extreme division with fourDigits", huge4Digits, actual4Digits);
+    }
+
+    /**
+     * ArithmeticException is thrown when inverting multiplier produces a non-terminating
+     * decimal result in conjunction with MathContext of unlimited precision.
+     */
+    @Test
+    public void testSetMathContextArithmeticException() {
+        DecimalFormat df = new DecimalFormat();
+        df.setMultiplier(7);
         try {
-            df.setMathContext(unlimitedCeiling);
-            df.parse(hugeNumberString);
-            fail("Extreme division with unlimitedCeiling should throw ArithmeticException");
+            df.setMathContext(java.math.MathContext.UNLIMITED);
+            fail("Extreme division with unlimited precision should throw ArithmeticException");
+        } catch (ArithmeticException e) {
+            // expected
+        }
+    }
+
+    /**
+     * ArithmeticException is thrown when inverting multiplier produces a non-terminating
+     * decimal result in conjunction with MathContext of unlimited precision.
+     */
+    @Test
+    public void testSetMathContextICUArithmeticException() {
+        DecimalFormat df = new DecimalFormat();
+        df.setMultiplier(7);
+        try {
+            df.setMathContextICU(new MathContext(0));
+            fail("Extreme division with unlimited precision should throw ArithmeticException");
+        } catch (ArithmeticException e) {
+            // expected
+        }
+    }
+
+    /**
+     * ArithmeticException is thrown when inverting multiplier produces a non-terminating
+     * decimal result in conjunction with MathContext of unlimited precision.
+     */
+    @Test
+    public void testSetMultiplierArithmeticException() {
+        DecimalFormat df = new DecimalFormat();
+        df.setMathContext(java.math.MathContext.UNLIMITED);
+        try {
+            df.setMultiplier(7);
+            fail("Extreme division with unlimited precision should throw ArithmeticException");
         } catch (ArithmeticException e) {
             // expected
         }
