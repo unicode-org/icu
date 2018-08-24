@@ -24,6 +24,7 @@
 
 static const char *DirectionStr(UDateDirection direction);
 static const char *RelativeUnitStr(UDateRelativeUnit unit);
+static const char *RelativeDateTimeUnitStr(URelativeDateTimeUnit unit);
 static const char *AbsoluteUnitStr(UDateAbsoluteUnit unit);
 
 typedef struct WithQuantityExpected {
@@ -467,6 +468,85 @@ static WithoutQuantityExpected kSpanishNoQuantity[] = {
         {UDAT_DIRECTION_LAST_2, UDAT_ABSOLUTE_DAY, "anteayer"}
 };
 
+typedef struct WithQuantityExpectedRelativeDateTimeUnit {
+    double value;
+    URelativeDateTimeUnit unit;
+    const char *expected;
+} WithQuantityExpectedRelativeDateTimeUnit;
+
+static WithQuantityExpectedRelativeDateTimeUnit kEnglishRelativeDateTimeUnit[] = {
+        {0.0, UDAT_REL_UNIT_SECOND, "in 0 seconds"},
+        {0.5, UDAT_REL_UNIT_SECOND, "in 0.5 seconds"},
+        {1.0, UDAT_REL_UNIT_SECOND, "in 1 second"},
+        {2.0, UDAT_REL_UNIT_SECOND, "in 2 seconds"},
+        {0.0, UDAT_REL_UNIT_MINUTE, "in 0 minutes"},
+        {0.5, UDAT_REL_UNIT_MINUTE, "in 0.5 minutes"},
+        {1.0, UDAT_REL_UNIT_MINUTE, "in 1 minute"},
+        {2.0, UDAT_REL_UNIT_MINUTE, "in 2 minutes"},
+        {0.0, UDAT_REL_UNIT_HOUR, "in 0 hours"},
+        {0.5, UDAT_REL_UNIT_HOUR, "in 0.5 hours"},
+        {1.0, UDAT_REL_UNIT_HOUR, "in 1 hour"},
+        {2.0, UDAT_REL_UNIT_HOUR, "in 2 hours"},
+        {0.0, UDAT_REL_UNIT_DAY, "in 0 days"},
+        {0.5, UDAT_REL_UNIT_DAY, "in 0.5 days"},
+        {1.0, UDAT_REL_UNIT_DAY, "in 1 day"},
+        {2.0, UDAT_REL_UNIT_DAY, "in 2 days"},
+        {0.0, UDAT_REL_UNIT_WEEK, "in 0 weeks"},
+        {0.5, UDAT_REL_UNIT_WEEK, "in 0.5 weeks"},
+        {1.0, UDAT_REL_UNIT_WEEK, "in 1 week"},
+        {2.0, UDAT_REL_UNIT_WEEK, "in 2 weeks"},
+        {0.0, UDAT_REL_UNIT_MONTH, "in 0 months"},
+        {0.5, UDAT_REL_UNIT_MONTH, "in 0.5 months"},
+        {1.0, UDAT_REL_UNIT_MONTH, "in 1 month"},
+        {2.0, UDAT_REL_UNIT_MONTH, "in 2 months"},
+        /**  comments out till we fix ICU-20022
+        {0.0, UDAT_REL_UNIT_QUARTER, "in 0 quarters"},
+        {0.5, UDAT_REL_UNIT_QUARTER, "in 0.5 quarters"},
+        {1.0, UDAT_REL_UNIT_QUARTER, "in 1 quarter"},
+        {2.0, UDAT_REL_UNIT_QUARTER, "in 2 quarters"},
+        */
+        {0.0, UDAT_REL_UNIT_YEAR, "in 0 years"},
+        {0.5, UDAT_REL_UNIT_YEAR, "in 0.5 years"},
+        {1.0, UDAT_REL_UNIT_YEAR, "in 1 year"},
+        {2.0, UDAT_REL_UNIT_YEAR, "in 2 years"},
+
+        {-0.0, UDAT_REL_UNIT_SECOND, "0 seconds ago"},
+        {-0.5, UDAT_REL_UNIT_SECOND, "0.5 seconds ago"},
+        {-1.0, UDAT_REL_UNIT_SECOND, "1 second ago"},
+        {-2.0, UDAT_REL_UNIT_SECOND, "2 seconds ago"},
+        {-0.0, UDAT_REL_UNIT_MINUTE, "0 minutes ago"},
+        {-0.5, UDAT_REL_UNIT_MINUTE, "0.5 minutes ago"},
+        {-1.0, UDAT_REL_UNIT_MINUTE, "1 minute ago"},
+        {-2.0, UDAT_REL_UNIT_MINUTE, "2 minutes ago"},
+        {-0.0, UDAT_REL_UNIT_HOUR, "0 hours ago"},
+        {-0.5, UDAT_REL_UNIT_HOUR, "0.5 hours ago"},
+        {-1.0, UDAT_REL_UNIT_HOUR, "1 hour ago"},
+        {-2.0, UDAT_REL_UNIT_HOUR, "2 hours ago"},
+        {-0.0, UDAT_REL_UNIT_DAY, "0 days ago"},
+        {-0.5, UDAT_REL_UNIT_DAY, "0.5 days ago"},
+        {-1.0, UDAT_REL_UNIT_DAY, "1 day ago"},
+        {-2.0, UDAT_REL_UNIT_DAY, "2 days ago"},
+        {-0.0, UDAT_REL_UNIT_WEEK, "0 weeks ago"},
+        {-0.5, UDAT_REL_UNIT_WEEK, "0.5 weeks ago"},
+        {-1.0, UDAT_REL_UNIT_WEEK, "1 week ago"},
+        {-2.0, UDAT_REL_UNIT_WEEK, "2 weeks ago"},
+        {-0.0, UDAT_REL_UNIT_MONTH, "0 months ago"},
+        {-0.5, UDAT_REL_UNIT_MONTH, "0.5 months ago"},
+        {-1.0, UDAT_REL_UNIT_MONTH, "1 month ago"},
+        {-2.0, UDAT_REL_UNIT_MONTH, "2 months ago"},
+        /**  comments out till we fix ICU-20022
+        {-0.0, UDAT_REL_UNIT_QUARTER, "0 quarters ago"},
+        {-0.5, UDAT_REL_UNIT_QUARTER, "0.5 quarters ago"},
+        {-1.0, UDAT_REL_UNIT_QUARTER, "1 quarter ago"},
+        {-2.0, UDAT_REL_UNIT_QUARTER, "2 quarters ago"},
+        */
+        {-0.0, UDAT_REL_UNIT_YEAR, "0 years ago"},
+        {-0.5, UDAT_REL_UNIT_YEAR, "0.5 years ago"},
+        {-1.0, UDAT_REL_UNIT_YEAR, "1 year ago"},
+        {-2.0, UDAT_REL_UNIT_YEAR, "2 years ago"}
+};
+
+
 class RelativeDateTimeFormatterTest : public IntlTest {
 public:
     RelativeDateTimeFormatterTest() {
@@ -491,9 +571,14 @@ private:
     void TestGetters();
     void TestCombineDateAndTime();
     void TestBadDisplayContext();
+    void TestFormatNumeric();
     void RunTest(
             const Locale& locale,
             const WithQuantityExpected* expectedResults,
+            int32_t expectedResultLength);
+    void RunTest(
+            const Locale& locale,
+            const WithQuantityExpectedRelativeDateTimeUnit* expectedResults,
             int32_t expectedResultLength);
     void RunTest(
             const Locale& locale,
@@ -512,6 +597,11 @@ private:
     void RunTest(
             const RelativeDateTimeFormatter& fmt,
             const WithQuantityExpected* expectedResults,
+            int32_t expectedResultLength,
+            const char *description);
+    void RunTest(
+            const RelativeDateTimeFormatter& fmt,
+            const WithQuantityExpectedRelativeDateTimeUnit* expectedResults,
             int32_t expectedResultLength,
             const char *description);
     void RunTest(
@@ -522,6 +612,10 @@ private:
     void CheckExpectedResult(
             const RelativeDateTimeFormatter& fmt,
             const WithQuantityExpected& expectedResult,
+            const char* description);
+    void CheckExpectedResult(
+            const RelativeDateTimeFormatter& fmt,
+            const WithQuantityExpectedRelativeDateTimeUnit& expectedResults,
             const char* description);
     void CheckExpectedResult(
             const RelativeDateTimeFormatter& fmt,
@@ -562,6 +656,7 @@ void RelativeDateTimeFormatterTest::runIndexedTest(
     TESTCASE_AUTO(TestCombineDateAndTime);
     TESTCASE_AUTO(TestBadDisplayContext);
     TESTCASE_AUTO(TestSidewaysDataLoading);
+    TESTCASE_AUTO(TestFormatNumeric);
     TESTCASE_AUTO_END;
 }
 
@@ -767,6 +862,20 @@ void RelativeDateTimeFormatterTest::RunTest(
 
 void RelativeDateTimeFormatterTest::RunTest(
         const Locale& locale,
+        const WithQuantityExpectedRelativeDateTimeUnit* expectedResults,
+        int32_t expectedResultLength) {
+    UErrorCode status = U_ZERO_ERROR;
+    RelativeDateTimeFormatter fmt(locale, status);
+    if (U_FAILURE(status)) {
+        dataerrln("Unable to create format object - %s", u_errorName(status));
+        return;
+    }
+    RunTest(fmt, expectedResults, expectedResultLength, locale.getName());
+}
+
+
+void RelativeDateTimeFormatterTest::RunTest(
+        const Locale& locale,
         UDateRelativeDateTimeFormatterStyle style,
         const WithQuantityExpected* expectedResults,
         int32_t expectedResultLength) {
@@ -820,6 +929,16 @@ void RelativeDateTimeFormatterTest::RunTest(
 
 void RelativeDateTimeFormatterTest::RunTest(
         const RelativeDateTimeFormatter& fmt,
+        const WithQuantityExpectedRelativeDateTimeUnit* expectedResults,
+        int32_t expectedResultLength,
+        const char *description) {
+    for (int32_t i = 0; i < expectedResultLength; ++i) {
+        CheckExpectedResult(fmt, expectedResults[i], description);
+    }
+}
+
+void RelativeDateTimeFormatterTest::RunTest(
+        const RelativeDateTimeFormatter& fmt,
         const WithoutQuantityExpected* expectedResults,
         int32_t expectedResultLength,
         const char *description) {
@@ -845,6 +964,29 @@ void RelativeDateTimeFormatterTest::CheckExpectedResult(
             expectedResult.value,
             DirectionStr(expectedResult.direction),
             RelativeUnitStr(expectedResult.unit));
+    if (actual != expected) {
+        errln(UnicodeString("Fail: Expected: ") + expected
+                + ", Got: " + actual
+                + ", For: " + buffer);
+    }
+}
+
+void RelativeDateTimeFormatterTest::CheckExpectedResult(
+        const RelativeDateTimeFormatter& fmt,
+        const WithQuantityExpectedRelativeDateTimeUnit& expectedResult,
+        const char* description) {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString actual;
+    fmt.formatNumeric(expectedResult.value, expectedResult.unit, actual, status);
+    UnicodeString expected(expectedResult.expected, -1, US_INV);
+    expected = expected.unescape();
+    char buffer[256];
+    sprintf(
+            buffer,
+            "%s, %f, %s",
+            description,
+            expectedResult.value,
+            RelativeDateTimeUnitStr(expectedResult.unit));
     if (actual != expected) {
         errln(UnicodeString("Fail: Expected: ") + expected
                 + ", Got: " + actual
@@ -942,6 +1084,10 @@ void RelativeDateTimeFormatterTest::TestSidewaysDataLoading(void) {
     assertEquals("next year: ", expected, actual);
 }
 
+void RelativeDateTimeFormatterTest::TestFormatNumeric() {
+    RunTest("en", kEnglishRelativeDateTimeUnit, UPRV_LENGTHOF(kEnglishRelativeDateTimeUnit));
+}
+
 static const char *kLast2 = "Last_2";
 static const char *kLast = "Last";
 static const char *kThis = "This";
@@ -955,6 +1101,7 @@ static const char *kHours = "Hours";
 static const char *kDays = "Days";
 static const char *kWeeks = "Weeks";
 static const char *kMonths = "Months";
+static const char *kQuarters = "Quarters";
 static const char *kYears = "Years";
 
 static const char *kSunday = "Sunday";
@@ -1009,6 +1156,31 @@ static const char *RelativeUnitStr(
         case UDAT_RELATIVE_MONTHS:
             return kMonths;
         case UDAT_RELATIVE_YEARS:
+            return kYears;
+        default:
+            return kUndefined;
+    }
+    return kUndefined;
+}
+
+static const char *RelativeDateTimeUnitStr(
+        URelativeDateTimeUnit  unit) {
+    switch (unit) {
+        case UDAT_REL_UNIT_SECOND:
+            return kSeconds;
+        case UDAT_REL_UNIT_MINUTE:
+            return kMinutes;
+        case UDAT_REL_UNIT_HOUR:
+            return kHours;
+        case UDAT_REL_UNIT_DAY:
+            return kDays;
+        case UDAT_REL_UNIT_WEEK:
+            return kWeeks;
+        case UDAT_REL_UNIT_MONTH:
+            return kMonths;
+        case UDAT_REL_UNIT_QUARTER:
+            return kQuarters;
+        case UDAT_REL_UNIT_YEAR:
             return kYears;
         default:
             return kUndefined;
