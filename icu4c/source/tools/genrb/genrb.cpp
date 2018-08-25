@@ -99,7 +99,7 @@ UOption options[]={
                       UOPTION_DEF("language",  'l', UOPT_REQUIRES_ARG), /* 16 */
                       UOPTION_DEF("omitCollationRules", 'R', UOPT_NO_ARG),/* 17 */
                       UOPTION_DEF("formatVersion", '\x01', UOPT_REQUIRES_ARG),/* 18 */
-                      UOPTION_DEF("writePoolBundle", '\x01', UOPT_NO_ARG),/* 19 */
+                      UOPTION_DEF("writePoolBundle", '\x01', UOPT_OPTIONAL_ARG),/* 19 */
                       UOPTION_DEF("usePoolBundle", '\x01', UOPT_OPTIONAL_ARG),/* 20 */
                       UOPTION_DEF("includeUnihanColl", '\x01', UOPT_NO_ARG),/* 21 */ /* temporary, don't display in usage info */
                   };
@@ -224,8 +224,8 @@ main(int argc,
                 "\t      --formatVersion      write a .res file compatible with the requested formatVersion (single digit);\n"
                 "\t                           for example, --formatVersion 1\n");
         fprintf(stderr,
-                "\t      --writePoolBundle    write a pool.res file with all of the keys of all input bundles\n"
-                "\t      --usePoolBundle [path-to-pool.res]  point to keys from the pool.res keys pool bundle if they are available there;\n"
+                "\t      --writePoolBundle [directory]  write a pool.res file with all of the keys of all input bundles\n"
+                "\t      --usePoolBundle [directory]  point to keys from the pool.res keys pool bundle if they are available there;\n"
                 "\t                           makes .res files smaller but dependent on the pool bundle\n"
                 "\t                           (--writePoolBundle and --usePoolBundle cannot be combined)\n");
 
@@ -532,8 +532,14 @@ main(int argc,
     poolBundle.close();
 
     if(U_SUCCESS(status) && options[WRITE_POOL_BUNDLE].doesOccur) {
+        const char* writePoolDir;
+        if (options[WRITE_POOL_BUNDLE].value!=NULL) {
+            writePoolDir = options[WRITE_POOL_BUNDLE].value;
+        } else {
+            writePoolDir = outputDir;
+        }
         char outputFileName[256];
-        newPoolBundle->write(outputDir, NULL, outputFileName, sizeof(outputFileName), status);
+        newPoolBundle->write(writePoolDir, NULL, outputFileName, sizeof(outputFileName), status);
         if(U_FAILURE(status)) {
             fprintf(stderr, "unable to write the pool bundle: %s\n", u_errorName(status));
         }
