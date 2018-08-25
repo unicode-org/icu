@@ -195,7 +195,7 @@ fi
 #AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
 #AC_CHECK_PROG(STRIP, strip, strip, true)
 
-AC_CHECK_PROGS(PYTHON3, python3)
+AC_CHECK_PROGS(PYTHON3, python3 "py -3")
 
 # Check for the platform make
 AC_PATH_PROGS(U_MAKE, gmake gnumake, make)
@@ -1385,6 +1385,24 @@ AC_CONFIG_FILES([icudefs.mk \
 		samples/cal/Makefile samples/layout/Makefile])
 AC_OUTPUT
 
+if test -z "$PYTHON3";
+then
+    echo "" > data/rules.mk
+else
+    echo "Spawning Python to generate data/rules.mk..."
+    PYTHONPATH="$srcdir/data" $PYTHON3 -m buildtool \
+        --format gnumake \
+        --seqmode parallel \
+        --glob_dir "$srcdir/data" \
+        > data/rules.mk
+    echo "Spawning Python to generate test/testdata/rules.mk..."
+    PYTHONPATH="$srcdir/test/testdata:$srcdir/data" $PYTHON3 -m buildtool \
+        --format gnumake \
+        --seqmode parallel \
+        --glob_dir "$srcdir/test/testdata" \
+        > test/testdata/rules.mk
+fi
+
 echo
 echo "ICU for C/C++ $VERSION is ready to be built."
 echo "=== Important Notes: ==="
@@ -1466,15 +1484,7 @@ fi
 
 if test -z "$PYTHON3";
 then
-    echo ""
-    echo "NOTICE: Unable to find Python 3. ICU versions 64 and later will require Python 3 to build."
-    echo "See ICU-10923 for more information: https://unicode-org.atlassian.net/browse/ICU-10923"
-    echo ""
-else
-    echo ""
-    echo "Found Python 3. You are all set for ICU 64, which will require Python 3 to build."
-    echo "For more info on Python 3 requirement, see: https://unicode-org.atlassian.net/browse/ICU-10923"
-    echo ""
+    echo "** Note: Python 3 not found. You will not be able to build data from source."
 fi
 
 $as_unset _CXX_CXXSUFFIX

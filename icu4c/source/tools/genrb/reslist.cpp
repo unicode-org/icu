@@ -1037,14 +1037,15 @@ void SRBRoot::write(const char *outputDir, const char *outputPkg,
                 // Swap to big-endian so we get the same checksum on all platforms
                 // (except for charset family, due to the key strings).
                 UnicodeString s(f16BitUnits);
-                s.append((UChar)1);  // Ensure that we own this buffer.
                 assert(!s.isBogus());
-                uint16_t *p = const_cast<uint16_t *>(reinterpret_cast<const uint16_t *>(s.getBuffer()));
+                // .getBuffer(capacity) returns a mutable buffer
+                char16_t* p = s.getBuffer(f16BitUnits.length());
                 for (int32_t count = f16BitUnits.length(); count > 0; --count) {
                     uint16_t x = *p;
                     *p++ = (uint16_t)((x << 8) | (x >> 8));
                 }
-                checksum = computeCRC((const char *)p,
+                s.releaseBuffer(f16BitUnits.length());
+                checksum = computeCRC((const char *)s.getBuffer(),
                                       (uint32_t)f16BitUnits.length() * 2, checksum);
             }
             indexes[URES_INDEX_POOL_CHECKSUM] = (int32_t)checksum;

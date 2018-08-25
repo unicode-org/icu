@@ -263,23 +263,22 @@ main(int argc, char* argv[]) {
         quiet = TRUE;
     }
 
-    if(argc>=2) {
-        path=argv[1];
+    if (argc >= 2) {
+        path = argv[1];
     } else {
-        path=options[SOURCEDIR].value;
-        if(path!=NULL && *path!=0) {
-            char *end;
+        path = "convrtrs.txt";
+    }
 
-            uprv_strcpy(pathBuf, path);
-            end = uprv_strchr(pathBuf, 0);
-            if(*(end-1)!=U_FILE_SEP_CHAR) {
-                *(end++)=U_FILE_SEP_CHAR;
-            }
-            uprv_strcpy(end, "convrtrs.txt");
-            path=pathBuf;
-        } else {
-            path = "convrtrs.txt";
+    const char* sourcedir = options[SOURCEDIR].value;
+    if (sourcedir != NULL && *sourcedir != 0) {
+        char *end;
+        uprv_strcpy(pathBuf, sourcedir);
+        end = uprv_strchr(pathBuf, 0);
+        if(*(end-1)!=U_FILE_SEP_CHAR) {
+            *(end++)=U_FILE_SEP_CHAR;
         }
+        uprv_strcpy(end, path);
+        path = pathBuf;
     }
 
     uprv_memset(stringStore, 0, sizeof(stringStore));

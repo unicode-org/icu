@@ -1,3 +1,8 @@
+# Global ignores
+__pycache__/
+*.pyc
+
+# Specific file name ignores
 /.git
 icu4c/bin
 icu4c/bin32uwp
@@ -77,6 +82,7 @@ icu4c/source/data/obj
 icu4c/source/data/out
 icu4c/source/data/packagedata
 icu4c/source/data/pkgdataMakefile
+icu4c/source/data/rules.mk
 icu4c/source/data/uni-core-data
 icu4c/source/data/x64
 icu4c/source/data/x86
@@ -621,6 +627,7 @@ icu4c/source/test/testdata/Makefile
 icu4c/source/test/testdata/out
 icu4c/source/test/testdata/pkgdata.inc
 icu4c/source/test/testdata/pkgdataMakefile
+icu4c/source/test/testdata/rules.mk
 icu4c/source/test/testmap/*.d
 icu4c/source/test/testmap/Debug
 icu4c/source/test/testmap/Makefile
