@@ -10,6 +10,7 @@ package com.ibm.icu.dev.test.util;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.Test;
@@ -18,9 +19,14 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Normalizer2Impl.UTF16Plus;
+import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.CodePointMap;
 import com.ibm.icu.util.CodePointTrie;
 import com.ibm.icu.util.MutableCodePointTrie;
+import com.ibm.icu.util.VersionInfo;
 
 @RunWith(JUnit4.class)
 public final class CodePointTrieTest extends TestFmwk {
@@ -30,6 +36,11 @@ public final class CodePointTrieTest extends TestFmwk {
             this.start = start;
             this.limit = limit;
             this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return Utility.hex(start) + ".." + Utility.hex(limit - 1) + ':' + Utility.hex(value);
         }
 
         final int start, limit;
@@ -61,6 +72,11 @@ public final class CodePointTrieTest extends TestFmwk {
         CheckRange(int limit, int value) {
             this.limit = limit;
             this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return "≤" + Utility.hex(limit - 1) + ':' + Utility.hex(value);
         }
 
         final int limit;
@@ -981,5 +997,101 @@ public final class CodePointTrieTest extends TestFmwk {
         mutableTrie.set(0xe000, 5);
         testGetRangesFixedSurr("fixedSurr4", mutableTrie,
                 CodePointMap.RangeOption.FIXED_ALL_SURROGATES, checkRangesFixedSurr4);
+    }
+
+    @Test
+    public void TestSmallNullBlockMatchesFast() {
+        // The initial builder+getRange code had a bug:
+        // When there is no null data block in the fast-index range,
+        // but a fast-range data block starts with enough values to match a small data block,
+        // then getRange() got confused.
+        // The builder must prevent this.
+        final SetRange setRanges[] = {
+            new SetRange(0, 0x880, 1),
+            // U+0880..U+088F map to initial value 0, potential match for small null data block.
+            new SetRange(0x890, 0x1040, 2),
+            // U+1040..U+1050 map to 0.
+            // First small null data block in a small-type trie.
+            // In a fast-type trie, it is ok to match a small null data block at U+1041
+            // but not at U+1040.
+            new SetRange(0x1051, 0x10000, 3),
+            // No fast data block (block length 64) filled with 0 regardless of trie type.
+            // Need more blocks filled with 0 than the largest range above,
+            // and need a highStart above that so that it actually counts.
+            new SetRange(0x20000, 0x110000, 9)
+        };
+
+        final CheckRange checkRanges[] = {
+            new CheckRange(0x0880, 1),
+            new CheckRange(0x0890, 0),
+            new CheckRange(0x1040, 2),
+            new CheckRange(0x1051, 0),
+            new CheckRange(0x10000, 3),
+            new CheckRange(0x20000, 0),
+            new CheckRange(0x110000, 9)
+        };
+
+        testTrieRanges("small0-in-fast", false, setRanges, checkRanges);
+    }
+
+    private void testIntProperty(String testName, int property) {
+        // Use a fixed set of characters to make the tested scenario more or less stable.
+        UnicodeSet uni11 = new UnicodeSet("[:age=11:]");
+        MutableCodePointTrie mutableTrie = new MutableCodePointTrie(0, 0xad);
+        ArrayList<CheckRange> checkRanges = new ArrayList<>();
+        int start = 0;
+        int prev = -1;
+        int prevValue = 0;
+        for (UnicodeSet.EntryRange range : uni11.ranges()) {
+            // Ranges are in ascending order, each range is non-empty,
+            // and there is a gap from one to the next.
+            // Each code point in a range could have a different value.
+            // Any of them can be 0.
+            // We keep initial value 0 between ranges.
+            for (int c = range.codepoint; c <= range.codepointEnd; ++c) {
+                int value;
+                if (property == UProperty.AGE) {
+                    VersionInfo version = UCharacter.getAge(c);
+                    value = (version.getMajor() << 4) | version.getMinor();
+                } else {
+                    value = UCharacter.getIntPropertyValue(c, property);
+                }
+                // Check for any kind of range/value transition.
+                if (c != (prev + 1) || value != prevValue) {
+                    if (prevValue != 0) {
+                        mutableTrie.setRange(start, prev, prevValue);
+                        checkRanges.add(new CheckRange(prev + 1, prevValue));
+                    }
+                    if (c != (prev + 1) && value != 0) {
+                        checkRanges.add(new CheckRange(c, 0));
+                        prevValue = 0;
+                    }
+                    if (value != prevValue) {
+                        start = c;
+                        prevValue = value;
+                    }
+                }
+                prev = c;
+            }
+        }
+        if (prevValue != 0) {
+            mutableTrie.setRange(start, prev, prevValue);
+            checkRanges.add(new CheckRange(prev + 1, prevValue));
+        }
+        if (prev < 0x10ffff) {
+            checkRanges.add(new CheckRange(0x10ffff, 0));
+        }
+        testTrieSerializeAllValueWidth(testName, mutableTrie, false,
+                checkRanges.toArray(new CheckRange[checkRanges.size()]));
+    }
+
+    @Test
+    public void AgePropertyTest() {
+        testIntProperty("age", UProperty.AGE);
+    }
+
+    @Test
+    public void BlockPropertyTest() {
+        testIntProperty("block", UProperty.BLOCK);
     }
 }
