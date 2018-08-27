@@ -88,6 +88,11 @@
  *     <td>icu::UnicodeSet</td>
  *   </tr>
  *   <tr>
+ *     <td>Maps from Unicode Code Points to Integer Values</td>
+ *     <td>ucptrie.h, umutablecptrie.h</td>
+ *     <td>C API</td>
+ *   </tr>
+ *   <tr>
  *     <td>Maps from Strings to Integer Values</td>
  *     <td>(no C API)</td>
  *     <td>icu::BytesTrie, icu::UCharsTrie</td>
