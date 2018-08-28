@@ -1040,7 +1040,7 @@ public final class CodePointTrieTest extends TestFmwk {
         MutableCodePointTrie mutableTrie = new MutableCodePointTrie(0, 0xad);
         ArrayList<CheckRange> checkRanges = new ArrayList<>();
         int start = 0;
-        int prev = -1;
+        int limit = 0;
         int prevValue = 0;
         for (UnicodeSet.EntryRange range : uni11.ranges()) {
             // Ranges are in ascending order, each range is non-empty,
@@ -1048,7 +1048,14 @@ public final class CodePointTrieTest extends TestFmwk {
             // Each code point in a range could have a different value.
             // Any of them can be 0.
             // We keep initial value 0 between ranges.
-            for (int c = range.codepoint; c <= range.codepointEnd; ++c) {
+            if (prevValue != 0) {
+                mutableTrie.setRange(start, limit - 1, prevValue);
+                checkRanges.add(new CheckRange(limit, prevValue));
+                start = limit;
+                prevValue = 0;
+            }
+            int c = limit = range.codepoint;
+            do {
                 int value;
                 if (property == UProperty.AGE) {
                     VersionInfo version = UCharacter.getAge(c);
@@ -1056,30 +1063,25 @@ public final class CodePointTrieTest extends TestFmwk {
                 } else {
                     value = UCharacter.getIntPropertyValue(c, property);
                 }
-                // Check for any kind of range/value transition.
-                if (c != (prev + 1) || value != prevValue) {
-                    if (prevValue != 0) {
-                        mutableTrie.setRange(start, prev, prevValue);
-                        checkRanges.add(new CheckRange(prev + 1, prevValue));
+                if (value != prevValue) {
+                    if (start < limit) {
+                        if (prevValue != 0) {
+                            mutableTrie.setRange(start, limit - 1, prevValue);
+                        }
+                        checkRanges.add(new CheckRange(limit, prevValue));
                     }
-                    if (c != (prev + 1) && value != 0) {
-                        checkRanges.add(new CheckRange(c, 0));
-                        prevValue = 0;
-                    }
-                    if (value != prevValue) {
-                        start = c;
-                        prevValue = value;
-                    }
+                    start = c;
+                    prevValue = value;
                 }
-                prev = c;
-            }
+                limit = ++c;
+            } while (c <= range.codepointEnd);
         }
         if (prevValue != 0) {
-            mutableTrie.setRange(start, prev, prevValue);
-            checkRanges.add(new CheckRange(prev + 1, prevValue));
+            mutableTrie.setRange(start, limit - 1, prevValue);
+            checkRanges.add(new CheckRange(limit, prevValue));
         }
-        if (prev < 0x10ffff) {
-            checkRanges.add(new CheckRange(0x10ffff, 0));
+        if (limit < 0x110000) {
+            checkRanges.add(new CheckRange(0x110000, 0));
         }
         testTrieSerializeAllValueWidth(testName, mutableTrie, false,
                 checkRanges.toArray(new CheckRange[checkRanges.size()]));
