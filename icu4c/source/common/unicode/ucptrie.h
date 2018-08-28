@@ -89,17 +89,19 @@ enum UCPTrieValueWidth {
      */
     UCPTRIE_VALUE_BITS_ANY = -1,
     /**
-     * 16 bits per UCPTrie data value.
+     * The trie stores 16 bits per data value.
+     * It returns them as unsigned values 0..0xffff=65535.
      * @draft ICU 63
      */
     UCPTRIE_VALUE_BITS_16,
     /**
-     * 32 bits per UCPTrie data value.
+     * The trie stores 32 bits per data value.
      * @draft ICU 63
      */
     UCPTRIE_VALUE_BITS_32,
     /**
-     * 8 bits per UCPTrie data value.
+     * The trie stores 8 bits per data value.
+     * It returns them as unsigned values 0..0xff=255.
      * @draft ICU 63
      */
     UCPTRIE_VALUE_BITS_8
@@ -272,6 +274,8 @@ UCPTrieValueFilter(const void *context, uint32_t value);
 /**
  * Returns the last code point such that all those from start to there have the same value.
  * Can be used to efficiently iterate over all same-value ranges in a trie.
+ * (This is normally faster than iterating over code points and get()ting each value,
+ * but much slower than a data structure that stores ranges directly.)
  *
  * If the UCPTrieValueFilter function pointer is not NULL, then
  * the value to be delivered is passed through that function, and the return value is the end
