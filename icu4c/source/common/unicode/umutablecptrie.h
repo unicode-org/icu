@@ -198,7 +198,7 @@ umutablecptrie_setRange(UMutableCPTrie *trie,
  * For example, when the mutable trie contains values 0x81, -0x7f, and 0xa581,
  * and the value width is 8 bits, then each of these is stored as 0x81
  * and the immutable trie will return that as an unsigned value.
- * (A builder can make productive temporary use of the upper bits
+ * (Some implementations may want to make productive temporary use of the upper bits
  * until buildImmutable() discards them.)
  *
  * Not every possible set of mappings can be built into a UCPTrie,
