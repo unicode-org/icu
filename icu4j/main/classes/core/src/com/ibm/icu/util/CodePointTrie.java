@@ -70,21 +70,23 @@ public abstract class CodePointTrie extends CodePointMap {
      */
     public enum ValueWidth {
         /**
-         * 16 bits per CodePointTrie data value.
+         * The trie stores 16 bits per data value.
+         * It returns them as unsigned values 0..0xffff=65535.
          *
          * @draft ICU 63
          * @provisional This API might change or be removed in a future release.
          */
         BITS_16,
         /**
-         * 32 bits per CodePointTrie data value.
+         * The trie stores 32 bits per data value.
          *
          * @draft ICU 63
          * @provisional This API might change or be removed in a future release.
          */
         BITS_32,
         /**
-         * 8 bits per CodePointTrie data value.
+         * The trie stores 8 bits per data value.
+         * It returns them as unsigned values 0..0xff=255.
          *
          * @draft ICU 63
          * @provisional This API might change or be removed in a future release.

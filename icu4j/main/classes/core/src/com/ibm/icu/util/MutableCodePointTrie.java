@@ -157,6 +157,9 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
 
     /**
      * {@inheritDoc}
+     *
+     * <p>The trie can be modified between calls to this function.
+     *
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
      */
@@ -308,6 +311,15 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
     /**
      * Compacts the data and builds an immutable {@link CodePointTrie} according to the parameters.
      * After this, the mutable trie will be empty.
+     *
+     * <p>The mutable trie stores 32-bit values until buildImmutable() is called.
+     * If values shorter than 32 bits are to be stored in the immutable trie,
+     * then the upper bits are discarded.
+     * For example, when the mutable trie contains values 0x81, -0x7f, and 0xa581,
+     * and the value width is 8 bits, then each of these is stored as 0x81
+     * and the immutable trie will return that as an unsigned value.
+     * (A builder can make productive temporary use of the upper bits
+     * until buildImmutable() discards them.)
      *
      * <p>Not every possible set of mappings can be built into a CodePointTrie,
      * because of limitations resulting from speed and space optimizations.
