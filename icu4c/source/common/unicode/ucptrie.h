@@ -41,7 +41,6 @@ U_CDECL_BEGIN
  * @see UMutableCPTrie
  * @draft ICU 63
  */
-struct UCPTrie;
 typedef struct UCPTrie UCPTrie;
 
 /**
@@ -53,7 +52,7 @@ typedef struct UCPTrie UCPTrie;
  * @see ucptrie_getType
  * @draft ICU 63
  */
-enum UCPTrieType {
+typedef enum UCPTrieType {
     /**
      * For ucptrie_openFromBinary() to accept any type.
      * ucptrie_getType() will return the actual type.
@@ -70,8 +69,7 @@ enum UCPTrieType {
      * @draft ICU 63
      */
     UCPTRIE_TYPE_SMALL
-};
-typedef enum UCPTrieType UCPTrieType;
+} UCPTrieType;
 
 /**
  * Selectors for the number of bits in a UCPTrie data value.
@@ -81,7 +79,7 @@ typedef enum UCPTrieType UCPTrieType;
  * @see ucptrie_getValueWidth
  * @draft ICU 63
  */
-enum UCPTrieValueWidth {
+typedef enum UCPTrieValueWidth {
     /**
      * For ucptrie_openFromBinary() to accept any data value width.
      * ucptrie_getValueWidth() will return the actual data value width.
@@ -105,8 +103,7 @@ enum UCPTrieValueWidth {
      * @draft ICU 63
      */
     UCPTRIE_VALUE_BITS_8
-};
-typedef enum UCPTrieValueWidth UCPTrieValueWidth;
+} UCPTrieValueWidth;
 
 /**
  * Selectors for how ucptrie_getRange() should report value ranges overlapping with surrogates.
@@ -115,7 +112,7 @@ typedef enum UCPTrieValueWidth UCPTrieValueWidth;
  * @see ucptrie_getRange
  * @draft ICU 63
  */
-enum UCPTrieRangeOption {
+typedef enum UCPTrieRangeOption {
     /**
      * ucptrie_getRange() enumerates all same-value ranges as stored in the trie.
      * Most users should use this option.
@@ -151,8 +148,7 @@ enum UCPTrieRangeOption {
      * but those values are not to be associated with the lead surrogate code *points*.
      */
     UCPTRIE_RANGE_FIXED_ALL_SURROGATES
-};
-typedef enum UCPTrieRangeOption UCPTrieRangeOption;
+} UCPTrieRangeOption;
 
 /**
  * Opens a trie from its binary form, stored in 32-bit-aligned memory.
