@@ -4414,29 +4414,10 @@ UnicodeSet *RegexCompile::createSetForProperty(const UnicodeString &propName, UB
         }
 
 
-        //    Do Java fixes for InBlock expressions -
-        //       InGreek -> InGreek or Coptic, that being the official Unicode name for that block.
-        //       InCombiningMarksforSymbols -> InCombiningDiacriticalMarksforSymbols.
-        //
-        //       Note on Spaces:  either "InCombiningMarksForSymbols" or "InCombining Marks for Symbols"
-        //                        is accepted by Java.  The property part of the name is compared
-        //                        case-insenstively.  The spaces must be exactly as shown, either
-        //                        all there, or all omitted, with exactly one at each position
-        //                        if they are present.  From checking against JDK 1.6
-        //
-        //       This code should be removed when ICU properties support the Java  compatibility names
+        //    Do Java InBlock expressions
         //
         UnicodeString mPropName = propName;
         if (mPropName.startsWith(u"In", 2) && mPropName.length() >= 3) {
-            if (mPropName.caseCompare(u"InGreek", -1, 0) == 0) {
-                mPropName.setTo(u"InGreek and Coptic", -1);
-            }
-            else if (mPropName.caseCompare(u"InCombining Marks for Symbols", -1, 0) == 0 ||
-                     mPropName.caseCompare(u"InCombining_Marks_for_Symbols", -1, 0) == 0 ||
-                     mPropName.caseCompare(u"InCombiningMarksforSymbols", -1, 0) == 0) {
-                mPropName.setTo(u"InCombining_Diacritical_Marks_for_Symbols", -1);
-            }
-
             status = U_ZERO_ERROR;
             set.adoptInsteadAndCheckErrorCode(new UnicodeSet(), status);
             if (U_FAILURE(status)) {
@@ -4452,7 +4433,7 @@ UnicodeSet *RegexCompile::createSetForProperty(const UnicodeString &propName, UB
         //  a General Category or a Script Name.
 
         if (propName.startsWith(u"Is", 2) && propName.length()>=3) {
-            mPropName.setTo(propName, 2);      // Strip the "Is"
+            mPropName.remove(0, 2);      // Strip the "Is"
             if (mPropName.indexOf(u'=') >= 0) {
                 // Reject any "Is..." property expression containing an '=', that is,
                 // any non-binary property expression.
