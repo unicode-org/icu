@@ -24,6 +24,20 @@ U_CDECL_BEGIN
  * @see UMutableCPTrie
  */
 
+#ifndef U_IN_DOXYGEN
+/** @internal */
+typedef union UCPTrieData {
+    /** @internal */
+    const void *ptr0;
+    /** @internal */
+    const uint16_t *ptr16;
+    /** @internal */
+    const uint32_t *ptr32;
+    /** @internal */
+    const uint8_t *ptr8;
+} UCPTrieData;
+#endif
+
 /**
  * Immutable Unicode code point trie structure.
  * Fast, reasonably compact, map from Unicode code points (U+0000..U+10FFFF) to integer values.
@@ -41,8 +55,56 @@ U_CDECL_BEGIN
  * @see UMutableCPTrie
  * @draft ICU 63
  */
-struct UCPTrie;
+struct UCPTrie {
+#ifndef U_IN_DOXYGEN
+    /** @internal */
+    const uint16_t *index;
+    /** @internal */
+    UCPTrieData data;
+
+    /** @internal */
+    int32_t indexLength;
+    /** @internal */
+    int32_t dataLength;
+    /** Start of the last range which ends at U+10FFFF. @internal */
+    UChar32 highStart;
+    /** highStart>>12 @internal */
+    uint16_t shifted12HighStart;
+
+    /** @internal */
+    int8_t type;  // UCPTrieType
+    /** @internal */
+    int8_t valueWidth;  // UCPTrieValueWidth
+
+    /** padding/reserved @internal */
+    uint32_t reserved32;
+    /** padding/reserved @internal */
+    uint16_t reserved16;
+
+    /**
+     * Internal index-3 null block offset.
+     * Set to an impossibly high value (e.g., 0xffff) if there is no dedicated index-3 null block.
+     * @internal
+     */
+    uint16_t index3NullOffset;
+    /**
+     * Internal data null block offset, not shifted.
+     * Set to an impossibly high value (e.g., 0xfffff) if there is no dedicated data null block.
+     * @internal
+     */
+    int32_t dataNullOffset;
+    /** @internal */
+    uint32_t nullValue;
+
+#ifdef UCPTRIE_DEBUG
+    /** @internal */
+    const char *name;
+#endif
+#endif
+};
+#ifndef U_IN_DOXYGEN
 typedef struct UCPTrie UCPTrie;
+#endif
 
 /**
  * Selectors for the type of a UCPTrie.
@@ -71,7 +133,9 @@ enum UCPTrieType {
      */
     UCPTRIE_TYPE_SMALL
 };
+#ifndef U_IN_DOXYGEN
 typedef enum UCPTrieType UCPTrieType;
+#endif
 
 /**
  * Selectors for the number of bits in a UCPTrie data value.
@@ -106,7 +170,9 @@ enum UCPTrieValueWidth {
      */
     UCPTRIE_VALUE_BITS_8
 };
+#ifndef U_IN_DOXYGEN
 typedef enum UCPTrieValueWidth UCPTrieValueWidth;
+#endif
 
 /**
  * Selectors for how ucptrie_getRange() should report value ranges overlapping with surrogates.
@@ -152,7 +218,9 @@ enum UCPTrieRangeOption {
      */
     UCPTRIE_RANGE_FIXED_ALL_SURROGATES
 };
+#ifndef U_IN_DOXYGEN
 typedef enum UCPTrieRangeOption UCPTrieRangeOption;
+#endif
 
 /**
  * Opens a trie from its binary form, stored in 32-bit-aligned memory.
@@ -558,68 +626,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
 
 /* Internal definitions ----------------------------------------------------- */
 
-/** @internal */
-typedef union UCPTrieData {
-    /** @internal */
-    const void *ptr0;
-    /** @internal */
-    const uint16_t *ptr16;
-    /** @internal */
-    const uint32_t *ptr32;
-    /** @internal */
-    const uint8_t *ptr8;
-} UCPTrieData;
-
-/**
- * Internal trie structure definition.
- * Visible only for use by API macros.
- * @internal
- */
-struct UCPTrie {
-    /** @internal */
-    const uint16_t *index;
-    /** @internal */
-    UCPTrieData data;
-
-    /** @internal */
-    int32_t indexLength;
-    /** @internal */
-    int32_t dataLength;
-    /** Start of the last range which ends at U+10FFFF. @internal */
-    UChar32 highStart;
-    /** highStart>>12 @internal */
-    uint16_t shifted12HighStart;
-
-    /** @internal */
-    int8_t type;  // UCPTrieType
-    /** @internal */
-    int8_t valueWidth;  // UCPTrieValueWidth
-
-    /** padding/reserved @internal */
-    uint32_t reserved32;
-    /** padding/reserved @internal */
-    uint16_t reserved16;
-
-    /**
-     * Internal index-3 null block offset.
-     * Set to an impossibly high value (e.g., 0xffff) if there is no dedicated index-3 null block.
-     * @internal
-     */
-    uint16_t index3NullOffset;
-    /**
-     * Internal data null block offset, not shifted.
-     * Set to an impossibly high value (e.g., 0xfffff) if there is no dedicated data null block.
-     * @internal
-     */
-    int32_t dataNullOffset;
-    /** @internal */
-    uint32_t nullValue;
-
-#ifdef UCPTRIE_DEBUG
-    /** @internal */
-    const char *name;
-#endif
-};
+#ifndef U_IN_DOXYGEN
 
 /**
  * Internal implementation constants.
@@ -696,4 +703,5 @@ ucptrie_internalU8PrevIndex(const UCPTrie *trie, UChar32 c,
 
 U_CDECL_END
 
+#endif  // U_IN_DOXYGEN
 #endif

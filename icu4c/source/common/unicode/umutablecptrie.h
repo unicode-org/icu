@@ -44,7 +44,6 @@ U_CDECL_BEGIN
  * @see umutablecptrie_buildImmutable
  * @draft ICU 63
  */
-struct UMutableCPTrie;
 typedef struct UMutableCPTrie UMutableCPTrie;
 
 /**
