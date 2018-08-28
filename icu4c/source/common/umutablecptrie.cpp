@@ -784,6 +784,9 @@ int32_t MutableCodePointTrie::compactWholeDataBlocks(int32_t fastILimit, AllSame
     // ASCII data will be stored as a linear table, even if the following code
     // does not yet count it that way.
     int32_t newDataCapacity = ASCII_LIMIT;
+    // Add room for a small data null block in case it would match the start of
+    // a fast data block where dataNullOffset must not be set in that case.
+    newDataCapacity += UCPTRIE_SMALL_DATA_BLOCK_LENGTH;
     // Add room for special values (errorValue, highValue) and padding.
     newDataCapacity += 4;
     int32_t iLimit = highStart >> UCPTRIE_SHIFT_3;
@@ -825,6 +828,7 @@ int32_t MutableCodePointTrie::compactWholeDataBlocks(int32_t fastILimit, AllSame
                     if (getDataBlock(i) < 0) {
                         return -1;
                     }
+                    newDataCapacity += blockLength;
                     continue;
                 }
             }

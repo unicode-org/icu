@@ -1034,9 +1034,26 @@ public final class CodePointTrieTest extends TestFmwk {
         testTrieRanges("small0-in-fast", false, setRanges, checkRanges);
     }
 
-    private void testIntProperty(String testName, int property) {
-        // Use a fixed set of characters to make the tested scenario more or less stable.
-        UnicodeSet uni11 = new UnicodeSet("[:age=11:]");
+    @Test
+    public void ShortAllSameBlocksTest() {
+        // Many all-same-value blocks but only of the small block length used in the mutable trie.
+        // The builder code needs to turn a group of short ALL_SAME blocks below fastLimit
+        // into a MIXED block, and reserve data array capacity for that.
+        MutableCodePointTrie mutableTrie = new MutableCodePointTrie(0, 0xad);
+        CheckRange[] checkRanges = new CheckRange[0x101];
+        for (int i = 0; i < 0x1000; i += 0x10) {
+            int value = i >> 4;
+            mutableTrie.setRange(i, i + 0xf, value);
+            checkRanges[value] = new CheckRange(i + 0x10, value);
+        }
+        checkRanges[0x100] = new CheckRange(0x110000, 0);
+
+        mutableTrie = testTrieSerializeAllValueWidth(
+                "short-all-same", mutableTrie, false, checkRanges);
+    }
+
+    private void testIntProperty(String testName, String baseSetPattern, int property) {
+        UnicodeSet uni11 = new UnicodeSet(baseSetPattern);
         MutableCodePointTrie mutableTrie = new MutableCodePointTrie(0, 0xad);
         ArrayList<CheckRange> checkRanges = new ArrayList<>();
         int start = 0;
@@ -1089,11 +1106,11 @@ public final class CodePointTrieTest extends TestFmwk {
 
     @Test
     public void AgePropertyTest() {
-        testIntProperty("age", UProperty.AGE);
+        testIntProperty("age", "[:age=11:]", UProperty.AGE);
     }
 
     @Test
     public void BlockPropertyTest() {
-        testIntProperty("block", UProperty.BLOCK);
+        testIntProperty("block", "[:^blk=No_Block:]", UProperty.BLOCK);
     }
 }

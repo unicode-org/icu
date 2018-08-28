@@ -730,6 +730,9 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         // ASCII data will be stored as a linear table, even if the following code
         // does not yet count it that way.
         int newDataCapacity = ASCII_LIMIT;
+        // Add room for a small data null block in case it would match the start of
+        // a fast data block where dataNullOffset must not be set in that case.
+        newDataCapacity += CodePointTrie.SMALL_DATA_BLOCK_LENGTH;
         // Add room for special values (errorValue, highValue) and padding.
         newDataCapacity += 4;
         int iLimit = highStart >> CodePointTrie.SHIFT_3;
@@ -771,6 +774,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                         if (getDataBlock(i) < 0) {
                             return -1;
                         }
+                        newDataCapacity += blockLength;
                         continue;
                     }
                 }

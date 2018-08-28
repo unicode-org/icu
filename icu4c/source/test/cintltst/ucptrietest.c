@@ -1526,6 +1526,39 @@ static void TestSmallNullBlockMatchesFast(void) {
         checkRanges, UPRV_LENGTHOF(checkRanges));
 }
 
+static void ShortAllSameBlocksTest(void) {
+    static const char *const testName = "short-all-same";
+    // Many all-same-value blocks but only of the small block length used in the mutable trie.
+    // The builder code needs to turn a group of short ALL_SAME blocks below fastLimit
+    // into a MIXED block, and reserve data array capacity for that.
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UMutableCPTrie *mutableTrie = umutablecptrie_open(0, 0xad, &errorCode);
+    CheckRange checkRanges[0x101];
+    int32_t i;
+    if (U_FAILURE(errorCode)) {
+        log_err("error: umutablecptrie_open(%s) failed: %s\n", testName, u_errorName(errorCode));
+        return;
+    }
+    for (i = 0; i < 0x1000; i += 0x10) {
+        uint32_t value = i >> 4;
+        umutablecptrie_setRange(mutableTrie, i, i + 0xf, value, &errorCode);
+        checkRanges[value].limit = i + 0x10;
+        checkRanges[value].value = value;
+    }
+    checkRanges[0x100].limit = 0x110000;
+    checkRanges[0x100].value = 0;
+    if (U_FAILURE(errorCode)) {
+        log_err("error: setting values into a mutable trie (%s) failed - %s\n",
+                testName, u_errorName(errorCode));
+        umutablecptrie_close(mutableTrie);
+        return;
+    }
+
+    mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, FALSE,
+                                                 checkRanges, UPRV_LENGTHOF(checkRanges));
+    umutablecptrie_close(mutableTrie);
+}
+
 void
 addUCPTrieTest(TestNode** root) {
     addTest(root, &TrieTestSet1, "tsutil/ucptrietest/TrieTestSet1");
@@ -1540,4 +1573,5 @@ addUCPTrieTest(TestNode** root) {
     addTest(root, &MuchDataTest, "tsutil/ucptrietest/MuchDataTest");
     addTest(root, &TrieTestGetRangesFixedSurr, "tsutil/ucptrietest/TrieTestGetRangesFixedSurr");
     addTest(root, &TestSmallNullBlockMatchesFast, "tsutil/ucptrietest/TestSmallNullBlockMatchesFast");
+    addTest(root, &ShortAllSameBlocksTest, "tsutil/ucptrietest/ShortAllSameBlocksTest");
 }
