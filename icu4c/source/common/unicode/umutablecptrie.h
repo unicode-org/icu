@@ -129,6 +129,9 @@ umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c);
 /**
  * Returns the last code point such that all those from start to there have the same value.
  * Can be used to efficiently iterate over all same-value ranges in a trie.
+ * (This is normally faster than iterating over code points and get()ting each value,
+ * but much slower than a data structure that stores ranges directly.)
+ *
  * The trie can be modified between calls to this function.
  *
  * If the UCPTrieValueFilter function pointer is not NULL, then
@@ -188,6 +191,15 @@ umutablecptrie_setRange(UMutableCPTrie *trie,
 /**
  * Compacts the data and builds an immutable UCPTrie according to the parameters.
  * After this, the mutable trie will be empty.
+ *
+ * The mutable trie stores 32-bit values until buildImmutable() is called.
+ * If values shorter than 32 bits are to be stored in the immutable trie,
+ * then the upper bits are discarded.
+ * For example, when the mutable trie contains values 0x81, -0x7f, and 0xa581,
+ * and the value width is 8 bits, then each of these is stored as 0x81
+ * and the immutable trie will return that as an unsigned value.
+ * (Some implementations may want to make productive temporary use of the upper bits
+ * until buildImmutable() discards them.)
  *
  * Not every possible set of mappings can be built into a UCPTrie,
  * because of limitations resulting from speed and space optimizations.

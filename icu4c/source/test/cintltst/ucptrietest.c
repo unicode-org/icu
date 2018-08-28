@@ -1490,6 +1490,75 @@ TrieTestGetRangesFixedSurr(void) {
     umutablecptrie_close(mutableTrie);
 }
 
+static void TestSmallNullBlockMatchesFast(void) {
+    // The initial builder+getRange code had a bug:
+    // When there is no null data block in the fast-index range,
+    // but a fast-range data block starts with enough values to match a small data block,
+    // then getRange() got confused.
+    // The builder must prevent this.
+    static const SetRange setRanges[] = {
+        { 0, 0x880, 1 },
+        // U+0880..U+088F map to initial value 0, potential match for small null data block.
+        { 0x890, 0x1040, 2 },
+        // U+1040..U+1050 map to 0.
+        // First small null data block in a small-type trie.
+        // In a fast-type trie, it is ok to match a small null data block at U+1041
+        // but not at U+1040.
+        { 0x1051, 0x10000, 3 },
+        // No fast data block (block length 64) filled with 0 regardless of trie type.
+        // Need more blocks filled with 0 than the largest range above,
+        // and need a highStart above that so that it actually counts.
+        { 0x20000, 0x110000, 9 }
+    };
+
+    static const CheckRange checkRanges[] = {
+        { 0x0880, 1 },
+        { 0x0890, 0 },
+        { 0x1040, 2 },
+        { 0x1051, 0 },
+        { 0x10000, 3 },
+        { 0x20000, 0 },
+        { 0x110000, 9 }
+    };
+
+    testTrieRanges("small0-in-fast", FALSE,
+        setRanges, UPRV_LENGTHOF(setRanges),
+        checkRanges, UPRV_LENGTHOF(checkRanges));
+}
+
+static void ShortAllSameBlocksTest(void) {
+    static const char *const testName = "short-all-same";
+    // Many all-same-value blocks but only of the small block length used in the mutable trie.
+    // The builder code needs to turn a group of short ALL_SAME blocks below fastLimit
+    // into a MIXED block, and reserve data array capacity for that.
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UMutableCPTrie *mutableTrie = umutablecptrie_open(0, 0xad, &errorCode);
+    CheckRange checkRanges[0x101];
+    int32_t i;
+    if (U_FAILURE(errorCode)) {
+        log_err("error: umutablecptrie_open(%s) failed: %s\n", testName, u_errorName(errorCode));
+        return;
+    }
+    for (i = 0; i < 0x1000; i += 0x10) {
+        uint32_t value = i >> 4;
+        umutablecptrie_setRange(mutableTrie, i, i + 0xf, value, &errorCode);
+        checkRanges[value].limit = i + 0x10;
+        checkRanges[value].value = value;
+    }
+    checkRanges[0x100].limit = 0x110000;
+    checkRanges[0x100].value = 0;
+    if (U_FAILURE(errorCode)) {
+        log_err("error: setting values into a mutable trie (%s) failed - %s\n",
+                testName, u_errorName(errorCode));
+        umutablecptrie_close(mutableTrie);
+        return;
+    }
+
+    mutableTrie = testTrieSerializeAllValueWidth(testName, mutableTrie, FALSE,
+                                                 checkRanges, UPRV_LENGTHOF(checkRanges));
+    umutablecptrie_close(mutableTrie);
+}
+
 void
 addUCPTrieTest(TestNode** root) {
     addTest(root, &TrieTestSet1, "tsutil/ucptrietest/TrieTestSet1");
@@ -1503,4 +1572,6 @@ addUCPTrieTest(TestNode** root) {
     addTest(root, &ManyAllSameBlocksTest, "tsutil/ucptrietest/ManyAllSameBlocksTest");
     addTest(root, &MuchDataTest, "tsutil/ucptrietest/MuchDataTest");
     addTest(root, &TrieTestGetRangesFixedSurr, "tsutil/ucptrietest/TrieTestGetRangesFixedSurr");
+    addTest(root, &TestSmallNullBlockMatchesFast, "tsutil/ucptrietest/TestSmallNullBlockMatchesFast");
+    addTest(root, &ShortAllSameBlocksTest, "tsutil/ucptrietest/ShortAllSameBlocksTest");
 }

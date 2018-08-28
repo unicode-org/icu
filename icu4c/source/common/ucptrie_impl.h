@@ -274,6 +274,11 @@ U_CFUNC void umutablecptrie_setName(UMutableCPTrie *builder, const char *name);
  * The header.dataNullOffset (split across two header fields, high bits in header.options)
  * is the offset of a widely shared data block filled with one single value.
  * It helps quickly skip over large ranges of data with that value.
+ * The builder must ensure that if the start of any data block (fast or small)
+ * matches the dataNullOffset, then the whole block must be filled with the null value.
+ * Special care must be taken if there is no fast null data block
+ * but a small one, which is shorter, and it matches the *start* of some fast data block.
+ *
  * Similarly, the header.index3NullOffset is the index-array offset of an index-3 block
  * where all index entries point to the dataNullOffset.
  * If there is no such data or index-3 block, then these offsets are set to

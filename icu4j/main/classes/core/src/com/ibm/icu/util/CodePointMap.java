@@ -331,10 +331,14 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
 
     /**
      * Sets the range object to a range of code points beginning with the start parameter.
-     * The range end is the the last code point such that
+     * The range start is the same as the start input parameter
+     * (even if there are preceding code points that have the same value).
+     * The range end is the last code point such that
      * all those from start to there have the same value.
      * Returns false if start is not 0..U+10FFFF.
      * Can be used to efficiently iterate over all same-value ranges in a map.
+     * (This is normally faster than iterating over code points and get()ting each value,
+     * but may be much slower than a data structure that stores ranges directly.)
      *
      * <p>If the {@link ValueFilter} parameter is not null, then
      * the value to be delivered is passed through that filter, and the return value is the end
@@ -365,7 +369,9 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
 
     /**
      * Sets the range object to a range of code points beginning with the start parameter.
-     * The range end is the the last code point such that
+     * The range start is the same as the start input parameter
+     * (even if there are preceding code points that have the same value).
+     * The range end is the last code point such that
      * all those from start to there have the same value.
      * Returns false if start is not 0..U+10FFFF.
      *

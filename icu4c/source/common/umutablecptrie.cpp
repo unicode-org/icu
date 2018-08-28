@@ -91,7 +91,7 @@ private:
     void maskValues(uint32_t mask);
     UChar32 findHighStart() const;
     int32_t compactWholeDataBlocks(int32_t fastILimit, AllSameBlocks &allSameBlocks);
-    int32_t compactData(int32_t fastILimit, uint32_t *newData);
+    int32_t compactData(int32_t fastILimit, uint32_t *newData, int32_t dataNullIndex);
     int32_t compactIndex(int32_t fastILimit, UErrorCode &errorCode);
     int32_t compactTrie(int32_t fastILimit, UErrorCode &errorCode);
 
@@ -599,12 +599,12 @@ int32_t findSameBlock(const uint16_t *p, int32_t pStart, int32_t length,
     return -1;
 }
 
-int32_t findAllSameBlock(const uint32_t *p, int32_t length, uint32_t value,
-                         int32_t blockLength) {
-    // Ensure that we do not even partially get past length.
-    length -= blockLength;
+int32_t findAllSameBlock(const uint32_t *p, int32_t start, int32_t limit,
+                         uint32_t value, int32_t blockLength) {
+    // Ensure that we do not even partially get past limit.
+    limit -= blockLength;
 
-    for (int32_t block = 0; block <= length; ++block) {
+    for (int32_t block = start; block <= limit; ++block) {
         if (p[block] == value) {
             for (int32_t i = 1;; ++i) {
                 if (i == blockLength) {
@@ -663,6 +663,15 @@ int32_t getAllSameOverlap(const uint32_t *p, int32_t length, uint32_t value,
     int32_t i = length;
     while (min < i && p[i - 1] == value) { --i; }
     return length - i;
+}
+
+bool isStartOfSomeFastBlock(uint32_t dataOffset, const uint32_t index[], int32_t fastILimit) {
+    for (int32_t i = 0; i < fastILimit; i += SMALL_DATA_BLOCKS_PER_BMP_BLOCK) {
+        if (index[i] == dataOffset) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
@@ -775,6 +784,9 @@ int32_t MutableCodePointTrie::compactWholeDataBlocks(int32_t fastILimit, AllSame
     // ASCII data will be stored as a linear table, even if the following code
     // does not yet count it that way.
     int32_t newDataCapacity = ASCII_LIMIT;
+    // Add room for a small data null block in case it would match the start of
+    // a fast data block where dataNullOffset must not be set in that case.
+    newDataCapacity += UCPTRIE_SMALL_DATA_BLOCK_LENGTH;
     // Add room for special values (errorValue, highValue) and padding.
     newDataCapacity += 4;
     int32_t iLimit = highStart >> UCPTRIE_SHIFT_3;
@@ -816,6 +828,7 @@ int32_t MutableCodePointTrie::compactWholeDataBlocks(int32_t fastILimit, AllSame
                     if (getDataBlock(i) < 0) {
                         return -1;
                     }
+                    newDataCapacity += blockLength;
                     continue;
                 }
             }
@@ -918,7 +931,8 @@ void printBlock(const uint32_t *block, int32_t blockLength, uint32_t value,
  *
  * It does not try to find an optimal order of writing, deduplicating, and overlapping blocks.
  */
-int32_t MutableCodePointTrie::compactData(int32_t fastILimit, uint32_t *newData) {
+int32_t MutableCodePointTrie::compactData(int32_t fastILimit,
+                                          uint32_t *newData, int32_t dataNullIndex) {
 #ifdef UCPTRIE_DEBUG
     int32_t countSame=0, sumOverlaps=0;
     bool printData = dataLength == 29088 /* line.brk */ ||
@@ -941,14 +955,31 @@ int32_t MutableCodePointTrie::compactData(int32_t fastILimit, uint32_t *newData)
     int32_t iLimit = highStart >> UCPTRIE_SHIFT_3;
     int32_t blockLength = UCPTRIE_FAST_DATA_BLOCK_LENGTH;
     int32_t inc = SMALL_DATA_BLOCKS_PER_BMP_BLOCK;
+    int32_t fastLength = 0;
     for (int32_t i = ASCII_I_LIMIT; i < iLimit; i += inc) {
         if (i == fastILimit) {
             blockLength = UCPTRIE_SMALL_DATA_BLOCK_LENGTH;
             inc = 1;
+            fastLength = newDataLength;
         }
         if (flags[i] == ALL_SAME) {
             uint32_t value = index[i];
-            int32_t n = findAllSameBlock(newData, newDataLength, value, blockLength);
+            int32_t n;
+            // Find an earlier part of the data array of length blockLength
+            // that is filled with this value.
+            // If we find a match, and the current block is the data null block,
+            // and it is not a fast block but matches the start of a fast block,
+            // then we need to continue looking.
+            // This is because this small block is shorter than the fast block,
+            // and not all of the rest of the fast block is filled with this value.
+            // Otherwise trie.getRange() would detect that the fast block starts at
+            // dataNullOffset and assume incorrectly that it is filled with the null value.
+            for (int32_t start = 0;
+                    (n = findAllSameBlock(newData, start, newDataLength,
+                                value, blockLength)) >= 0 &&
+                            i == dataNullIndex && i >= fastILimit && n < fastLength &&
+                            isStartOfSomeFastBlock(n, index, fastILimit);
+                    start = n + 1) {}
             if (n >= 0) {
                 DEBUG_DO(++countSame);
                 index[i] = n;
@@ -1306,7 +1337,8 @@ int32_t MutableCodePointTrie::compactTrie(int32_t fastILimit, UErrorCode &errorC
     }
     uprv_memcpy(newData, asciiData, sizeof(asciiData));
 
-    int32_t newDataLength = compactData(fastILimit, newData);
+    int32_t dataNullIndex = allSameBlocks.findMostUsed();
+    int32_t newDataLength = compactData(fastILimit, newData, dataNullIndex);
     U_ASSERT(newDataLength <= newDataCapacity);
     uprv_free(data);
     data = newData;
@@ -1318,7 +1350,6 @@ int32_t MutableCodePointTrie::compactTrie(int32_t fastILimit, UErrorCode &errorC
         return 0;
     }
 
-    int32_t dataNullIndex = allSameBlocks.findMostUsed();
     if (dataNullIndex >= 0) {
         dataNullOffset = index[dataNullIndex];
 #ifdef UCPTRIE_DEBUG
