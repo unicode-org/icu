@@ -153,8 +153,8 @@ public class NumberRangeFormatterTest {
 
     private static void assertFormattedRangeEquals(String message, LocalizedNumberRangeFormatter l, Number first,
             Number second, String expected) {
-        String actual1 = l.formatRange(first, second).toString();
-        assertEquals(message + ": " + first + ", " + second, expected, actual1);
+        String actual = l.formatRange(first, second).toString();
+        assertEquals(message + ": " + first + ", " + second, expected, actual);
     }
 
 }

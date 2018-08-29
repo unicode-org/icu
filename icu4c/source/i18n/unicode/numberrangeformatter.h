@@ -162,6 +162,22 @@ U_NAMESPACE_BEGIN
 
 namespace number {  // icu::number
 
+// Forward declarations:
+class UnlocalizedNumberRangeFormatter;
+class LocalizedNumberRangeFormatter;
+class FormattedNumberRange;
+
+namespace impl {
+
+// Forward declarations:
+struct RangeMacroProps;
+class DecimalQuantity;
+struct UFormattedNumberRangeData;
+
+} // namespace impl
+
+// Other helper classes would go here, but there are none.
+
 namespace impl {  // icu::number::impl
 
 // Do not enclose entire MacroProps with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
@@ -177,7 +193,7 @@ struct U_I18N_API RangeMacroProps : public UMemory {
     UNumberRangeCollapse collapse = UNUM_RANGE_COLLAPSE_AUTO;
 
     /** @internal */
-    UNumberIdentityFallback identityFallback = UNUM_IDENTITY_APPROXIMATELY;
+    UNumberIdentityFallback identityFallback = UNUM_IDENTITY_FALLBACK_APPROXIMATELY;
 
     /** @internal */
     Locale locale;
@@ -532,7 +548,7 @@ class U_I18N_API LocalizedNumberRangeFormatter
      * @draft ICU 63
      */
     FormattedNumberRange formatFormattableRange(
-        const Formattable& first, const Formattable& second) const;
+        const Formattable& first, const Formattable& second, UErrorCode& status) const;
 
     /**
      * Default constructor: puts the formatter into a valid but undefined state.
@@ -586,10 +602,6 @@ class U_I18N_API LocalizedNumberRangeFormatter
     ~LocalizedNumberRangeFormatter();
 
   private:
-    // Note: fCompiled can't be a LocalPointer because impl::NumberFormatterImpl is defined in an internal
-    // header, and LocalPointer needs the full class definition in order to delete the instance.
-    const impl::NumberFormatterImpl* fCompiled {nullptr};
-    char fUnsafeCallCount[8] {};  // internally cast to u_atomic_int32_t
 
     explicit LocalizedNumberRangeFormatter(
         const NumberRangeFormatterSettings<LocalizedNumberRangeFormatter>& other);
@@ -701,7 +713,7 @@ class U_I18N_API FormattedNumberRange : public UMemory {
      * @see NumberRangeFormatter
      * @see #getSecondDecimal
      */
-    UnicodeString getFirstDecimal() const;
+    UnicodeString getFirstDecimal(UErrorCode& status) const;
 
     /**
      * Export the second formatted number as a decimal number. This endpoint
@@ -718,7 +730,7 @@ class U_I18N_API FormattedNumberRange : public UMemory {
      * @see NumberRangeFormatter
      * @see #getFirstDecimal
      */
-    UnicodeString getSecondDecimal() const;
+    UnicodeString getSecondDecimal(UErrorCode& status) const;
 
     /**
      * Returns whether the pair of numbers was successfully formatted as a range or whether an identity fallback was
@@ -730,7 +742,7 @@ class U_I18N_API FormattedNumberRange : public UMemory {
      * @provisional This API might change or be removed in a future release.
      * @see UNumberRangeIdentityFallback
      */
-    UNumberRangeIdentityType getIdentityType() const;
+    UNumberRangeIdentityType getIdentityType(UErrorCode& status) const;
 
     /**
      * Copying not supported; use move constructor instead.
@@ -779,6 +791,8 @@ class U_I18N_API FormattedNumberRange : public UMemory {
     explicit FormattedNumberRange(UErrorCode errorCode)
         : fResults(nullptr), fErrorCode(errorCode) {};
 
+    void getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
+
     // To give LocalizedNumberRangeFormatter format methods access to this class's constructor:
     friend class LocalizedNumberRangeFormatter;
 };
@@ -797,7 +811,7 @@ class U_I18N_API NumberRangeFormatter final {
      * @return An {@link UnlocalizedNumberRangeFormatter}, to be used for chaining.
      * @draft ICU 63
      */
-    static UnlocalizedNumberFormatter with();
+    static UnlocalizedNumberRangeFormatter with();
 
     /**
      * Call this method at the beginning of a NumberRangeFormatter fluent chain in which the locale is known at the call
@@ -808,7 +822,7 @@ class U_I18N_API NumberRangeFormatter final {
      * @return A {@link LocalizedNumberRangeFormatter}, to be used for chaining.
      * @draft ICU 63
      */
-    static LocalizedNumberFormatter withLocale(const Locale &locale);
+    static LocalizedNumberRangeFormatter withLocale(const Locale &locale);
 
     /**
      * Use factory methods instead of the constructor to create a NumberFormatter.
