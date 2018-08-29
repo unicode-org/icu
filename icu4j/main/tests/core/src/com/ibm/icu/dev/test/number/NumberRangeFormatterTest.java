@@ -61,7 +61,7 @@ public class NumberRangeFormatterTest {
     public void testNullBehavior() {
         assertFormatRange(
                 "Basic",
-                NumberRangeFormatter.with().numberFormatter(null),
+                NumberRangeFormatter.with().numberFormatterBoth(null),
                 ULocale.US,
                 "1 --- 5",
                 "5 --- 5",
@@ -76,7 +76,7 @@ public class NumberRangeFormatterTest {
 
         assertFormatRange(
                 "Basic",
-                NumberRangeFormatter.with().numberFormatters(null, null),
+                NumberRangeFormatter.with().numberFormatterFirst(null),
                 ULocale.US,
                 "1 --- 5",
                 "5 --- 5",
@@ -91,10 +91,9 @@ public class NumberRangeFormatterTest {
 
         assertFormatRange(
                 "Basic",
-                NumberRangeFormatter.with().numberFormatters(
-                        NumberFormatter.with().grouping(GroupingStrategy.OFF),
-                        null
-                ),
+                NumberRangeFormatter.with()
+                    .numberFormatterFirst(NumberFormatter.with().grouping(GroupingStrategy.OFF))
+                    .numberFormatterSecond(null),
                 ULocale.US,
                 "1 --- 5",
                 "5 --- 5",
@@ -109,10 +108,9 @@ public class NumberRangeFormatterTest {
 
         assertFormatRange(
                 "Basic",
-                NumberRangeFormatter.with().numberFormatters(
-                        null,
-                        NumberFormatter.with().grouping(GroupingStrategy.OFF)
-                ),
+                NumberRangeFormatter.with()
+                    .numberFormatterFirst(null)
+                    .numberFormatterSecond(NumberFormatter.with().grouping(GroupingStrategy.OFF)),
                 ULocale.US,
                 "1 --- 5",
                 "5 --- 5",

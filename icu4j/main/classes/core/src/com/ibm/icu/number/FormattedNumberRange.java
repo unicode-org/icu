@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.NumberStringBuilder;
+import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityType;
 import com.ibm.icu.util.ICUUncheckedIOException;
 
 /**
@@ -17,7 +18,7 @@ import com.ibm.icu.util.ICUUncheckedIOException;
  * including a String, an AttributedCharacterIterator, and a BigDecimal.
  *
  * @author sffc
- * @draft ICU 62
+ * @draft ICU 63
  * @provisional This API might change or be removed in a future release.
  * @see NumberRangeFormatter
  */
@@ -26,10 +27,6 @@ public class FormattedNumberRange {
     final DecimalQuantity first;
     final DecimalQuantity second;
     final RangeIdentityType identityType;
-
-    public static enum RangeIdentityType {
-        EQUAL_BEFORE_ROUNDING, EQUAL_AFTER_ROUNDING, NOT_EQUAL
-    }
 
     FormattedNumberRange(NumberStringBuilder nsb, DecimalQuantity first, DecimalQuantity second,
             RangeIdentityType identityType) {
@@ -89,8 +86,8 @@ public class FormattedNumberRange {
      * multiple times, this method may be called repeatedly with the following pattern:
      *
      * <pre>
-     * FieldPosition fpos = new FieldPosition(NumberFormat.Field.GROUPING_SEPARATOR);
-     * while (formattedNumber.nextFieldPosition(fpos, status)) {
+     * FieldPosition fpos = new FieldPosition(NumberFormat.Field.INTEGER);
+     * while (formattedNumberRange.nextFieldPosition(fpos, status)) {
      *     // do something with fpos.
      * }
      * </pre>
@@ -162,7 +159,7 @@ public class FormattedNumberRange {
      * used. For example, if the first and second number were the same either before or after rounding occurred, an
      * identity fallback was used.
      *
-     * @return A IdentityType indicating the resulting identity situation in the formatted number range.
+     * @return A RangeIdentityType indicating the resulting identity situation in the formatted number range.
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
      * @see NumberRangeFormatter

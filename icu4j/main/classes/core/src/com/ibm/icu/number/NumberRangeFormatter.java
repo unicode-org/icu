@@ -8,6 +8,20 @@ import com.ibm.icu.util.ULocale;
 
 /**
  * The main entrypoint to the formatting of ranges of numbers, including currencies and other units of measurement.
+ * <p>
+ * Usage example:
+ * <p>
+ *
+ * <pre>
+ * NumberRangeFormatter.with().identityFallback(RangeIdentityFallback.APPROXIMATELY_OR_SINGLE_VALUE)
+ *         .numberFormatterFirst(NumberFormatter.with().unit(MeasureUnit.METER))
+ *         .numberFormatterSecond(NumberFormatter.with().unit(MeasureUnit.KILOMETER)).locale(ULocale.UK)
+ *         .formatRange(750, 1.2).toString();
+ * // => "750 m - 1.2 km"
+ * </pre>
+ * <p>
+ * Like NumberFormatter, NumberRangeFormatter instances are immutable and thread-safe. This API is based on the
+ * <em>fluent</em> design pattern popularized by libraries such as Google's Guava.
  *
  * @author sffc
  * @draft ICU 63
@@ -72,7 +86,7 @@ public abstract class NumberRangeFormatter {
      * @provisional This API might change or be removed in a future release.
      * @see NumberRangeFormatter
      */
-    public enum IdentityFallback {
+    public static enum RangeIdentityFallback {
         /**
          * Show the number as a single value rather than a range. Example: "$5"
          *
@@ -114,41 +128,64 @@ public abstract class NumberRangeFormatter {
     }
 
     /**
-     * Defines the behavior when the two numbers in the range are identical after rounding. To programmatically detect
-     * when the identity fallback is used, compare the lower and upper BigDecimals via FormattedNumber.
+     * Used in the result class FormattedNumberRange to indicate to the user whether the numbers formatted in the range
+     * were equal or not, and whether or not the identity fallback was applied.
+     *
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberRangeFormatter
      */
-
-    public static enum RangeIdentityFallback {
+    public static enum RangeIdentityType {
         /**
-         * Show the number as a single value rather than a range. Example: "$5"
+         * Used to indicate that the two numbers in the range were equal, even before any rounding rules were applied.
+         *
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         * @see NumberRangeFormatter
          */
-        SINGLE_VALUE,
-
-        /**
-         * Show the number using a locale-sensitive approximation pattern. If the numbers were the same before rounding,
-         * show the single value. Example: "~$5" or "$5"
-         */
-        APPROXIMATELY_OR_SINGLE_VALUE,
+        EQUAL_BEFORE_ROUNDING,
 
         /**
-         * Show the number using a locale-sensitive approximation pattern. Use the range pattern always, even if the
-         * inputs are the same. Example: "~$5"
+         * Used to indicate that the two numbers in the range were equal, but only after rounding rules were applied.
+         *
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         * @see NumberRangeFormatter
          */
-        APPROXIMATELY,
+        EQUAL_AFTER_ROUNDING,
 
         /**
-         * Show the number as the range of two equal values. Use the range pattern always, even if the inputs are the
-         * same. Example (with RangeCollapse.NONE): "$5 – $5"
+         * Used to indicate that the two numbers in the range were not equal, even after rounding rules were applied.
+         *
+         * @draft ICU 63
+         * @provisional This API might change or be removed in a future release.
+         * @see NumberRangeFormatter
          */
-        RANGE
+        NOT_EQUAL
     }
 
     private static final UnlocalizedNumberRangeFormatter BASE = new UnlocalizedNumberRangeFormatter();
 
+    /**
+     * Call this method at the beginning of a NumberRangeFormatter fluent chain in which the locale is not currently
+     * known at the call site.
+     *
+     * @return An {@link UnlocalizedNumberRangeFormatter}, to be used for chaining.
+     * @draft ICU 63
+     */
     public static UnlocalizedNumberRangeFormatter with() {
         return BASE;
     }
 
+    /**
+     * Call this method at the beginning of a NumberRangeFormatter fluent chain in which the locale is known at the call
+     * site.
+     *
+     * @param locale
+     *            The locale from which to load formats and symbols for number range formatting.
+     * @return A {@link LocalizedNumberRangeFormatter}, to be used for chaining.
+     * @draft ICU 63
+     */
     public static LocalizedNumberRangeFormatter withLocale(Locale locale) {
         return BASE.locale(locale);
     }
