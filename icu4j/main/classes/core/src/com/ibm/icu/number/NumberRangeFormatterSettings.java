@@ -53,19 +53,35 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * @see NumberFormatter
      * @see NumberRangeFormatter
      */
-    public T numberFormatter(UnlocalizedNumberFormatter formatter) {
-        return numberFormatters(formatter, formatter);
+    public T numberFormatterBoth(UnlocalizedNumberFormatter formatter) {
+        return (T) numberFormatterFirst(formatter).numberFormatterSecond(formatter);
+    }
+
+    /**
+     * Sets the NumberFormatter instance to use for the first number in the range.
+     * <p>
+     * The NumberFormatter instance must not have a locale applied yet; the locale specified on the
+     * NumberRangeFormatter will be used.
+     *
+     * @param formatterFirst
+     *            The formatter to use for the first number in the range.
+     * @return The fluent chain.
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberFormatter
+     * @see NumberRangeFormatter
+     */
+    public T numberFormatterFirst(UnlocalizedNumberFormatter formatterFirst) {
+        return create(KEY_FORMATTER_1, formatterFirst);
     }
 
     /**
      * Sets the NumberFormatter instances to use for the numbers in the range. This method allows you to set a different
      * formatter for the first and second numbers.
      * <p>
-     * The NumberFormatter instances must not have a locale applied yet; the locale specified on the
+     * The NumberFormatter instance must not have a locale applied yet; the locale specified on the
      * NumberRangeFormatter will be used.
      *
-     * @param formatterFirst
-     *            The formatter to use for the first number in the range.
      * @param formatterSecond
      *            The formatter to use for the second number in the range.
      * @return The fluent chain.
@@ -74,9 +90,8 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * @see NumberFormatter
      * @see NumberRangeFormatter
      */
-    public T numberFormatters(UnlocalizedNumberFormatter formatterFirst, UnlocalizedNumberFormatter formatterSecond) {
-        T intermediate = create(KEY_FORMATTER_1, formatterFirst);
-        return (T) intermediate.create(KEY_FORMATTER_2, formatterSecond);
+    public T numberFormatterSecond(UnlocalizedNumberFormatter formatterSecond) {
+        return create(KEY_FORMATTER_2, formatterSecond);
     }
 
     /**
@@ -113,7 +128,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * <li>APPROXIMATELY: "~5 miles"</li>
      * <li>RANGE: "5-5 miles" (with collapse=UNIT)</li>
      * <p>
-     * The default value is AUTO.
+     * The default value is APPROXIMATELY.
      *
      * @param identityFallback
      *            The strategy to use when formatting two numbers that end up being the same.

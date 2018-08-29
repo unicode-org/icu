@@ -6,7 +6,7 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.range.RangeMacroProps;
-import com.ibm.icu.number.FormattedNumberRange.RangeIdentityType;
+import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityType;
 
 /**
  * A NumberRangeFormatter that has a locale associated with it; this means .formatRange() methods are available.
@@ -30,7 +30,7 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
      *            The first number in the range, usually to the left in LTR locales.
      * @param second
      *            The second number in the range, usually to the right in LTR locales.
-     * @return A FormattedNumber object; call .toString() to get the string.
+     * @return A FormattedNumberRange object; call .toString() to get the string.
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
      * @see NumberRangeFormatter
@@ -49,7 +49,7 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
      *            The first number in the range, usually to the left in LTR locales.
      * @param second
      *            The second number in the range, usually to the right in LTR locales.
-     * @return A FormattedNumber object; call .toString() to get the string.
+     * @return A FormattedNumberRange object; call .toString() to get the string.
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
      * @see NumberRangeFormatter
@@ -70,7 +70,7 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
      *            The first number in the range, usually to the left in LTR locales.
      * @param second
      *            The second number in the range, usually to the right in LTR locales.
-     * @return A FormattedNumber object; call .toString() to get the string.
+     * @return A FormattedNumberRange object; call .toString() to get the string.
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
      * @see NumberRangeFormatter
