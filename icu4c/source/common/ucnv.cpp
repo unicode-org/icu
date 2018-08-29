@@ -1743,10 +1743,18 @@ ucnv_fromUChars(UConverter *cnv,
     }
     if(srcLength>0) {
         srcLimit=src+srcLength;
+
+        // Trim destCapacity such that computing the destLimit cannot
+        // overflow and wrap the pointer around. Which would be undefined behavior,
+        // meaning that compilers can optimize away attempts to check for it.
+        int32_t pinnedDestCapacity = (char *)U_MAX_PTR(dest) - dest;
+        if (pinnedDestCapacity < destCapacity) {
+            destCapacity = pinnedDestCapacity;
+        }
         destLimit=dest+destCapacity;
 
-        /* pin the destination limit to U_MAX_PTR; NULL check is for OS/400 */
-        if(destLimit<dest || (destLimit==NULL && dest!=NULL)) {
+        /* NULL check is for OS/400 */
+        if(destLimit==NULL && dest!=NULL) {
             destLimit=(char *)U_MAX_PTR(dest);
         }
 
@@ -1803,10 +1811,18 @@ ucnv_toUChars(UConverter *cnv,
     }
     if(srcLength>0) {
         srcLimit=src+srcLength;
+
+        // Trim destCapacity such that computing the destLimit cannot
+        // overflow and wrap the pointer around. Which would be undefined behavior,
+        // meaning that compilers can optimize away attempts to check for it.
+        int32_t pinnedDestCapacity = (UChar *)U_MAX_PTR(dest) - (UChar *)dest;
+        if (pinnedDestCapacity < destCapacity) {
+            destCapacity = pinnedDestCapacity;
+        }
         destLimit=dest+destCapacity;
 
-        /* pin the destination limit to U_MAX_PTR; NULL check is for OS/400 */
-        if(destLimit<dest || (destLimit==NULL && dest!=NULL)) {
+        /* NULL check is for OS/400 */
+        if(destLimit==NULL && dest!=NULL) {
             destLimit=(UChar *)U_MAX_PTR(dest);
         }
 
