@@ -38,19 +38,90 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
         this.value = value;
     }
 
+    /**
+     * Sets the NumberFormatter instance to use for the numbers in the range. The same formatter is applied to both
+     * sides of the range.
+     * <p>
+     * The NumberFormatter instances must not have a locale applied yet; the locale specified on the
+     * NumberRangeFormatter will be used.
+     *
+     * @param formatter
+     *            The formatter to use for both numbers in the range.
+     * @return The fluent chain.
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberFormatter
+     * @see NumberRangeFormatter
+     */
     public T numberFormatter(UnlocalizedNumberFormatter formatter) {
         return numberFormatters(formatter, formatter);
     }
 
+    /**
+     * Sets the NumberFormatter instances to use for the numbers in the range. This method allows you to set a different
+     * formatter for the first and second numbers.
+     * <p>
+     * The NumberFormatter instances must not have a locale applied yet; the locale specified on the
+     * NumberRangeFormatter will be used.
+     *
+     * @param formatterFirst
+     *            The formatter to use for the first number in the range.
+     * @param formatterSecond
+     *            The formatter to use for the second number in the range.
+     * @return The fluent chain.
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberFormatter
+     * @see NumberRangeFormatter
+     */
     public T numberFormatters(UnlocalizedNumberFormatter formatterFirst, UnlocalizedNumberFormatter formatterSecond) {
         T intermediate = create(KEY_FORMATTER_1, formatterFirst);
         return (T) intermediate.create(KEY_FORMATTER_2, formatterSecond);
     }
 
+    /**
+     * Sets the aggressiveness of "collapsing" fields across the range separator. Possible values:
+     * <p>
+     * <ul>
+     * <li>ALL: "3-5K miles"</li>
+     * <li>UNIT: "3K - 5K miles"</li>
+     * <li>NONE: "3K miles - 5K miles"</li>
+     * <li>AUTO: usually UNIT or NONE, depending on the locale and formatter settings</li>
+     * <p>
+     * The default value is AUTO.
+     *
+     * @param collapse
+     *            The collapsing strategy to use for this range.
+     * @return The fluent chain.
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberRangeFormatter
+     */
     public T collapse(RangeCollapse collapse) {
         return create(KEY_COLLAPSE, collapse);
     }
 
+    /**
+     * Sets the behavior when the two sides of the range are the same. This could happen if the same two numbers are
+     * passed to the formatRange function, or if different numbers are passed to the function but they become the same
+     * after rounding rules are applied. Possible values:
+     * <p>
+     * <ul>
+     * <li>SINGLE_VALUE: "5 miles"</li>
+     * <li>APPROXIMATELY_OR_SINGLE_VALUE: "~5 miles" or "5 miles", depending on whether the number was the same before
+     * rounding was applied</li>
+     * <li>APPROXIMATELY: "~5 miles"</li>
+     * <li>RANGE: "5-5 miles" (with collapse=UNIT)</li>
+     * <p>
+     * The default value is AUTO.
+     *
+     * @param identityFallback
+     *            The strategy to use when formatting two numbers that end up being the same.
+     * @return The fluent chain.
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberRangeFormatter
+     */
     public T identityFallback(RangeIdentityFallback identityFallback) {
         return create(KEY_IDENTITY_FALLBACK, identityFallback);
     }

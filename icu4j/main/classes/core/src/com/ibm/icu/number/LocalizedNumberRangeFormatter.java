@@ -38,7 +38,7 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
     public FormattedNumberRange formatRange(int first, int second) {
         DecimalQuantity dq1 = new DecimalQuantity_DualStorageBCD(first);
         DecimalQuantity dq2 = new DecimalQuantity_DualStorageBCD(second);
-        return formatImpl(dq1, dq2);
+        return formatImpl(dq1, dq2, first == second);
     }
 
     /**
@@ -57,7 +57,9 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
     public FormattedNumberRange formatRange(double first, double second) {
         DecimalQuantity dq1 = new DecimalQuantity_DualStorageBCD(first);
         DecimalQuantity dq2 = new DecimalQuantity_DualStorageBCD(second);
-        return formatImpl(dq1, dq2);
+        // Note: double equality could be changed to epsilon equality later if there is demand.
+        // The epsilon should be set via an API method.
+        return formatImpl(dq1, dq2, first == second);
     }
 
     /**
@@ -74,12 +76,15 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
      * @see NumberRangeFormatter
      */
     public FormattedNumberRange formatRange(Number first, Number second) {
+        if (first == null || second == null) {
+            throw new IllegalArgumentException("Cannot format null values in range");
+        }
         DecimalQuantity dq1 = new DecimalQuantity_DualStorageBCD(first);
         DecimalQuantity dq2 = new DecimalQuantity_DualStorageBCD(second);
-        return formatImpl(dq1, dq2);
+        return formatImpl(dq1, dq2, first.equals(second));
     }
 
-    FormattedNumberRange formatImpl(DecimalQuantity first, DecimalQuantity second) {
+    FormattedNumberRange formatImpl(DecimalQuantity first, DecimalQuantity second, boolean equalBeforeRounding) {
         // TODO: This is a placeholder implementation.
         RangeMacroProps macros = resolve();
         LocalizedNumberFormatter f1 , f2;
@@ -99,7 +104,7 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
         nsb.append(r1.nsb);
         nsb.append(" --- ", null);
         nsb.append(r2.nsb);
-        RangeIdentityType identityType = (first == second) ? RangeIdentityType.EQUAL_BEFORE_ROUNDING
+        RangeIdentityType identityType = equalBeforeRounding ? RangeIdentityType.EQUAL_BEFORE_ROUNDING
                 : RangeIdentityType.NOT_EQUAL;
         return new FormattedNumberRange(nsb, first, second, identityType);
     }
