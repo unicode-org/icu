@@ -11,6 +11,8 @@
 #include "number_affixutils.h"
 #include "numparse_stringsegment.h"
 #include "unicode/locid.h"
+#include "unicode/numberformatter.h"
+#include "unicode/numberrangeformatter.h"
 
 using namespace icu::number;
 using namespace icu::number::impl;
@@ -244,6 +246,37 @@ class NumberSkeletonTest : public IntlTest {
     void expectedErrorSkeleton(const char16_t** cases, int32_t casesLen);
 };
 
+class NumberRangeFormatterTest : public IntlTest {
+  public:
+    void testSanity();
+    void testBasic();
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+
+  private:
+    void assertFormatRange(
+      const char16_t* message,
+      const UnlocalizedNumberRangeFormatter& f,
+      Locale locale,
+      const char16_t* expected_10_50,
+      const char16_t* expected_49_51,
+      const char16_t* expected_50_50,
+      const char16_t* expected_00_30,
+      const char16_t* expected_00_00,
+      const char16_t* expected_30_3K,
+      const char16_t* expected_30K_50K,
+      const char16_t* expected_49K_51K,
+      const char16_t* expected_50K_50K,
+      const char16_t* expected_50K_50M);
+    
+    void assertFormattedRangeEquals(
+      const char16_t* message,
+      const LocalizedNumberRangeFormatter& l,
+      double first,
+      double second,
+      const char16_t* expected);
+};
+
 
 // NOTE: This macro is identical to the one in itformat.cpp
 #define TESTCLASS(id, TestClass)          \
@@ -276,6 +309,7 @@ class NumberTest : public IntlTest {
         TESTCLASS(8, StringSegmentTest);
         TESTCLASS(9, NumberParserTest);
         TESTCLASS(10, NumberSkeletonTest);
+        TESTCLASS(11, NumberRangeFormatterTest);
         default: name = ""; break; // needed to end loop
         }
     }
