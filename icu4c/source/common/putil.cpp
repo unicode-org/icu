@@ -1716,12 +1716,9 @@ The leftmost codepage (.xxx) wins.
     // No cached value, need to determine the current value
     static WCHAR windowsLocale[LOCALE_NAME_MAX_LENGTH];
     int length = GetLocaleInfoEx(LOCALE_NAME_USER_DEFAULT, LOCALE_SNAME, windowsLocale, LOCALE_NAME_MAX_LENGTH);
-    if (length == 0)
-    {
-        return nullptr;
-    }
+
     // Now we should have a Windows locale name that needs converted to the POSIX style,
-    else
+    if (length > 0) // If length is 0, GetLocaleInfoEx failed.
     {
         // First we need to go from UTF-16 to char (and also convert from _ to - while we're at it.)
         char modifiedWindowsLocale[LOCALE_NAME_MAX_LENGTH];
