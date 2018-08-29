@@ -11,6 +11,7 @@
 #include "unicode/utf8.h"
 #include "unicode/utf16.h"
 #include "bytesinkutil.h"
+#include "charstr.h"
 #include "cmemory.h"
 #include "uassert.h"
 
@@ -118,6 +119,37 @@ ByteSinkUtil::appendUnchanged(const uint8_t *s, const uint8_t *limit,
         appendNonEmptyUnchanged(s, length, sink, options, edits);
     }
     return TRUE;
+}
+
+CharStringByteSink::CharStringByteSink(CharString* dest, UErrorCode& status)
+        : dest_(dest), status_(status) {
+    if (U_SUCCESS(status_) && dest_ == nullptr) {
+        status_ = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+}
+
+CharStringByteSink::~CharStringByteSink() = default;
+
+void
+CharStringByteSink::Append(const char* bytes, int32_t n) {
+    if (U_SUCCESS(status_)) {
+        dest_->append(bytes, n, status_);
+    }
+}
+
+char*
+CharStringByteSink::GetAppendBuffer(int32_t min_capacity,
+                                    int32_t desired_capacity_hint,
+                                    char* /*scratch*/,
+                                    int32_t /*scratch_capacity*/,
+                                    int32_t* result_capacity) {
+  return U_FAILURE(status_)
+             ? nullptr
+             : dest_->getAppendBuffer(
+                     min_capacity,
+                     desired_capacity_hint,
+                     *result_capacity,
+                     status_);
 }
 
 U_NAMESPACE_END
