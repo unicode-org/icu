@@ -1423,7 +1423,8 @@ struct U_I18N_API MacroProps : public UMemory {
 
 /**
  * An abstract base class for specifying settings related to number formatting. This class is implemented by
- * {@link UnlocalizedNumberFormatter} and {@link LocalizedNumberFormatter}.
+ * {@link UnlocalizedNumberFormatter} and {@link LocalizedNumberFormatter}. This class is not intended for
+ * public subclassing.
  */
 template<typename Derived>
 class U_I18N_API NumberFormatterSettings {
@@ -2123,13 +2124,6 @@ class U_I18N_API UnlocalizedNumberFormatter
     /**
      * Associate the given locale with the number formatter. The locale is used for picking the appropriate symbols,
      * formats, and other data for number display.
-     *
-     * <p>
-     * To use the Java default locale, call Locale::getDefault():
-     *
-     * <pre>
-     * NumberFormatter::with(). ... .locale(Locale::getDefault())
-     * </pre>
      *
      * @param locale
      *            The locale to use when loading data for number formatting.
