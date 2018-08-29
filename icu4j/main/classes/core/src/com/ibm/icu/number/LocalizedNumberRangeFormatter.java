@@ -5,8 +5,8 @@ package com.ibm.icu.number;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.NumberStringBuilder;
+import com.ibm.icu.impl.number.range.RangeMacroProps;
 import com.ibm.icu.number.FormattedNumberRange.RangeIdentityType;
-import com.ibm.icu.text.NumberFormat;
 
 /**
  * A NumberRangeFormatter that has a locale associated with it; this means .formatRange() methods are available.
@@ -36,16 +36,72 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
      * @see NumberRangeFormatter
      */
     public FormattedNumberRange formatRange(int first, int second) {
-        // TODO: This is a placeholder implementation.
         DecimalQuantity dq1 = new DecimalQuantity_DualStorageBCD(first);
         DecimalQuantity dq2 = new DecimalQuantity_DualStorageBCD(second);
+        return formatImpl(dq1, dq2);
+    }
+
+    /**
+     * Format the given doubles to a string using the settings specified in the NumberRangeFormatter fluent setting
+     * chain.
+     *
+     * @param first
+     *            The first number in the range, usually to the left in LTR locales.
+     * @param second
+     *            The second number in the range, usually to the right in LTR locales.
+     * @return A FormattedNumber object; call .toString() to get the string.
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberRangeFormatter
+     */
+    public FormattedNumberRange formatRange(double first, double second) {
+        DecimalQuantity dq1 = new DecimalQuantity_DualStorageBCD(first);
+        DecimalQuantity dq2 = new DecimalQuantity_DualStorageBCD(second);
+        return formatImpl(dq1, dq2);
+    }
+
+    /**
+     * Format the given Numbers to a string using the settings specified in the NumberRangeFormatter fluent setting
+     * chain.
+     *
+     * @param first
+     *            The first number in the range, usually to the left in LTR locales.
+     * @param second
+     *            The second number in the range, usually to the right in LTR locales.
+     * @return A FormattedNumber object; call .toString() to get the string.
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     * @see NumberRangeFormatter
+     */
+    public FormattedNumberRange formatRange(Number first, Number second) {
+        DecimalQuantity dq1 = new DecimalQuantity_DualStorageBCD(first);
+        DecimalQuantity dq2 = new DecimalQuantity_DualStorageBCD(second);
+        return formatImpl(dq1, dq2);
+    }
+
+    FormattedNumberRange formatImpl(DecimalQuantity first, DecimalQuantity second) {
+        // TODO: This is a placeholder implementation.
+        RangeMacroProps macros = resolve();
+        LocalizedNumberFormatter f1 , f2;
+        if (macros.formatter1 != null) {
+            f1 = macros.formatter1.locale(macros.loc);
+        } else {
+            f1 = NumberFormatter.withLocale(macros.loc);
+        }
+        if (macros.formatter2 != null) {
+            f2 = macros.formatter2.locale(macros.loc);
+        } else {
+            f2 = NumberFormatter.withLocale(macros.loc);
+        }
+        FormattedNumber r1 = f1.format(first);
+        FormattedNumber r2 = f2.format(second);
         NumberStringBuilder nsb = new NumberStringBuilder();
-        nsb.append(dq1.toPlainString(), NumberFormat.Field.INTEGER);
+        nsb.append(r1.nsb);
         nsb.append(" --- ", null);
-        nsb.append(dq2.toPlainString(), NumberFormat.Field.INTEGER);
+        nsb.append(r2.nsb);
         RangeIdentityType identityType = (first == second) ? RangeIdentityType.EQUAL_BEFORE_ROUNDING
                 : RangeIdentityType.NOT_EQUAL;
-        return new FormattedNumberRange(nsb, dq1, dq2, identityType);
+        return new FormattedNumberRange(nsb, first, second, identityType);
     }
 
     @Override

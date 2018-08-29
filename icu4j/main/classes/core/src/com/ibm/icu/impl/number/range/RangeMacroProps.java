@@ -4,9 +4,9 @@ package com.ibm.icu.impl.number.range;
 
 import java.util.Objects;
 
-import com.ibm.icu.number.NumberFormatterSettings;
 import com.ibm.icu.number.NumberRangeFormatter.RangeCollapse;
 import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityFallback;
+import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -14,8 +14,8 @@ import com.ibm.icu.util.ULocale;
  *
  */
 public class RangeMacroProps {
-    public NumberFormatterSettings<?> formatter1;
-    public NumberFormatterSettings<?> formatter2;
+    public UnlocalizedNumberFormatter formatter1;
+    public UnlocalizedNumberFormatter formatter2;
     public RangeCollapse collapse;
     public RangeIdentityFallback identityFallback;
     public ULocale loc;
