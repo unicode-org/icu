@@ -167,7 +167,7 @@ typedef enum UDateAbsoluteUnit {
 
     /**
      * Quarter
-     * @stable ICU 63
+     * @draft ICU 63
      */
     UDAT_ABSOLUTE_QUARTER,
 
