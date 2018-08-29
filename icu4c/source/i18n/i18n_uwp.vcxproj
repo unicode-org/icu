@@ -351,6 +351,8 @@
     <ClCompile Include="indiancal.cpp" />
     <ClCompile Include="islamcal.cpp" />
     <ClCompile Include="japancal.cpp" />
+    <ClCompile Include="listformatter.cpp" />
+    <ClCompile Include="ulistformatter.cpp" />
     <ClCompile Include="measfmt.cpp" />
     <ClCompile Include="measunit.cpp" />
     <ClCompile Include="measure.cpp" />
