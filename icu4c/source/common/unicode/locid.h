@@ -31,6 +31,11 @@
 #ifndef LOCID_H
 #define LOCID_H
 
+#ifndef U_HIDE_DRAFT_API
+#include "unicode/bytestream.h"
+#include "unicode/stringpiece.h"
+#endif  // U_HIDE_DRAFT_API
+
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/putil.h"
@@ -361,6 +366,55 @@ public:
     static void U_EXPORT2 setDefault(const Locale& newLocale,
                                      UErrorCode&   success);
 #endif  /* U_HIDE_SYSTEM_API */
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns a Locale for the specified BCP47 language tag string.
+     * If the specified language tag contains any ill-formed subtags,
+     * the first such subtag and all following subtags are ignored.
+     * <p>
+     * This implements the 'Language-Tag' production of BCP47, and so
+     * supports grandfathered (regular and irregular) as well as private
+     * use language tags.  Private use tags are represented as 'x-whatever',
+     * and grandfathered tags are converted to their canonical replacements
+     * where they exist.  Note that a few grandfathered tags have no modern
+     * replacement, these will be converted using the fallback described in
+     * the first paragraph, so some information might be lost.
+     * @param tag     the input BCP47 language tag.
+     * @param status  error information if creating the Locale failed.
+     * @return        the Locale for the specified BCP47 language tag.
+     * @draft ICU 63
+     */
+    static Locale U_EXPORT2 forLanguageTag(StringPiece tag, UErrorCode& status);
+
+    /**
+     * Returns a well-formed language tag for this Locale.
+     * <p>
+     * <b>Note</b>: Any locale fields which do not satisfy the BCP47 syntax
+     * requirement will be silently omitted from the result.
+     * @param sink    the output sink receiving the BCP47 language
+     *                tag for this Locale.
+     * @param status  error information if creating the language tag failed.
+     * @draft ICU 63
+     */
+    void toLanguageTag(ByteSink& sink, UErrorCode& status) const;
+
+    /**
+     * Returns a well-formed language tag for this Locale.
+     * <p>
+     * <b>Note</b>: When <code>strict</code> is FALSE, any locale
+     * fields which do not satisfy the BCP47 syntax requirement will
+     * be omitted from the result.  When <code>strict</code> is
+     * TRUE, this function sets U_ILLEGAL_ARGUMENT_ERROR to the
+     * <code>status</code> if any locale fields do not satisfy the
+     * BCP47 syntax requirement.
+     * @param status  error information if creating the language tag failed.
+     * @return        the BCP47 language tag for this Locale.
+     * @draft ICU 63
+     */
+    template<typename StringClass>
+    inline StringClass toLanguageTag(UErrorCode& status) const;
+#endif  // U_HIDE_DRAFT_API
 
     /**
      * Creates a locale which has had minimal canonicalization
@@ -774,6 +828,17 @@ Locale::operator!=(const    Locale&     other) const
 {
     return !operator==(other);
 }
+
+#ifndef U_HIDE_DRAFT_API
+template<typename StringClass> inline StringClass
+Locale::toLanguageTag(UErrorCode& status) const
+{
+    StringClass result;
+    StringByteSink<StringClass> sink(&result);
+    toLanguageTag(sink, status);
+    return result;
+}
+#endif  // U_HIDE_DRAFT_API
 
 inline const char *
 Locale::getCountry() const

@@ -108,6 +108,9 @@ public:
     void TestBug13277();
     void TestBug13554();
 
+    void TestForLanguageTag();
+    void TestToLanguageTag();
+
 private:
     void _checklocs(const char* label,
                     const char* req,
