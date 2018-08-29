@@ -99,8 +99,8 @@ public class XLocaleDistanceTest extends TestFmwk {
                 newLikelyTime += System.nanoTime()-temp;
 
                 temp = System.nanoTime();
-                int dist1 = localeMatcher.distanceRaw(desiredLSR, supportedLSR, 1000, DistanceOption.NORMAL);
-                int dist2 = localeMatcher.distanceRaw(supportedLSR, desiredLSR, 1000, DistanceOption.NORMAL);
+                int dist1 = localeMatcher.distanceRaw(desiredLSR, supportedLSR, 1000, DistanceOption.REGION_FIRST);
+                int dist2 = localeMatcher.distanceRaw(supportedLSR, desiredLSR, 1000, DistanceOption.REGION_FIRST);
                 newTimeMinusLikely += System.nanoTime()-temp;
             }
         }
@@ -178,7 +178,7 @@ public class XLocaleDistanceTest extends TestFmwk {
     class MyTestFileHandler extends DataDrivenTestHelper {
         final XLocaleDistance distance = XLocaleDistance.getDefault();
         Output<ULocale> bestDesired = new Output<ULocale>();
-        private DistanceOption distanceOption = DistanceOption.NORMAL;
+        private DistanceOption distanceOption = DistanceOption.REGION_FIRST;
         private Integer threshold = distance.getDefaultScriptDistance();
 
         @Override
