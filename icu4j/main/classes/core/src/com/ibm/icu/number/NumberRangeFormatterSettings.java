@@ -38,11 +38,11 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
         this.value = value;
     }
 
-    public T numberFormatter(NumberFormatterSettings<?> formatter) {
+    public T numberFormatter(UnlocalizedNumberFormatter formatter) {
         return numberFormatters(formatter, formatter);
     }
 
-    public T numberFormatters(NumberFormatterSettings<?> formatterFirst, NumberFormatterSettings<?> formatterSecond) {
+    public T numberFormatters(UnlocalizedNumberFormatter formatterFirst, UnlocalizedNumberFormatter formatterSecond) {
         T intermediate = create(KEY_FORMATTER_1, formatterFirst);
         return (T) intermediate.create(KEY_FORMATTER_2, formatterSecond);
     }
@@ -79,12 +79,12 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
                 break;
             case KEY_FORMATTER_1:
                 if (macros.formatter1 == null) {
-                    macros.formatter1 = (NumberFormatterSettings<?>) current.value;
+                    macros.formatter1 = (UnlocalizedNumberFormatter) current.value;
                 }
                 break;
             case KEY_FORMATTER_2:
                 if (macros.formatter2 == null) {
-                    macros.formatter2 = (NumberFormatterSettings<?>) current.value;
+                    macros.formatter2 = (UnlocalizedNumberFormatter) current.value;
                 }
                 break;
             case KEY_COLLAPSE:
@@ -131,9 +131,9 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
         if (other == null) {
             return false;
         }
-        if (!(other instanceof NumberFormatterSettings)) {
+        if (!(other instanceof NumberRangeFormatterSettings)) {
             return false;
         }
-        return resolve().equals(((NumberFormatterSettings<?>) other).resolve());
+        return resolve().equals(((NumberRangeFormatterSettings<?>) other).resolve());
     }
 }
