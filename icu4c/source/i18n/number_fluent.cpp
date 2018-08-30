@@ -776,7 +776,7 @@ Appendable& FormattedNumber::appendTo(Appendable& appendable) {
     return appendTo(appendable, localStatus);
 }
 
-Appendable& FormattedNumber::appendTo(Appendable& appendable, UErrorCode& status) {
+Appendable& FormattedNumber::appendTo(Appendable& appendable, UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return appendable;
     }
