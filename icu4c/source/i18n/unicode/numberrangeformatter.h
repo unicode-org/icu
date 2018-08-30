@@ -52,6 +52,8 @@ typedef enum UNumberRangeCollapse {
      * Use locale data and heuristics to determine how much of the string to collapse. Could end up collapsing none,
      * some, or all repeated pieces in a locale-sensitive way.
      *
+     * The heuristics used for this option are subject to change over time.
+     *
      * @draft ICU 63
      */
     UNUM_RANGE_COLLAPSE_AUTO,
@@ -85,7 +87,6 @@ typedef enum UNumberRangeCollapse {
  * when the identity fallback is used, compare the lower and upper BigDecimals via FormattedNumber.
  *
  * @draft ICU 63
- * @provisional This API might change or be removed in a future release.
  * @see NumberRangeFormatter
  */
 typedef enum UNumberRangeIdentityFallback {
@@ -126,37 +127,33 @@ typedef enum UNumberRangeIdentityFallback {
  * were equal or not, and whether or not the identity fallback was applied.
  *
  * @draft ICU 63
- * @provisional This API might change or be removed in a future release.
  * @see NumberRangeFormatter
  */
-typedef enum UNumberRangeIdentityType {
+typedef enum UNumberRangeIdentityResult {
     /**
      * Used to indicate that the two numbers in the range were equal, even before any rounding rules were applied.
      *
      * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
      * @see NumberRangeFormatter
      */
-    UNUM_IDENTITY_TYPE_EQUAL_BEFORE_ROUNDING,
+    UNUM_IDENTITY_RESULT_EQUAL_BEFORE_ROUNDING,
 
     /**
      * Used to indicate that the two numbers in the range were equal, but only after rounding rules were applied.
      *
      * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
      * @see NumberRangeFormatter
      */
-    UNUM_IDENTITY_TYPE_EQUAL_AFTER_ROUNDING,
+    UNUM_IDENTITY_RESULT_EQUAL_AFTER_ROUNDING,
 
     /**
      * Used to indicate that the two numbers in the range were not equal, even after rounding rules were applied.
      *
      * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
      * @see NumberRangeFormatter
      */
-    UNUM_IDENTITY_TYPE_NOT_EQUAL
-} UNumberRangeIdentityType;
+    UNUM_IDENTITY_RESULT_NOT_EQUAL
+} UNumberRangeIdentityResult;
 
 U_NAMESPACE_BEGIN
 
@@ -366,6 +363,7 @@ class U_I18N_API NumberRangeFormatterSettings {
      * <li>UNIT: "3K - 5K miles"</li>
      * <li>NONE: "3K miles - 5K miles"</li>
      * <li>AUTO: usually UNIT or NONE, depending on the locale and formatter settings</li>
+     * </ul>
      * <p>
      * The default value is AUTO.
      *
@@ -398,6 +396,7 @@ class U_I18N_API NumberRangeFormatterSettings {
      * rounding was applied</li>
      * <li>APPROXIMATELY: "~5 miles"</li>
      * <li>RANGE: "5-5 miles" (with collapse=UNIT)</li>
+     * </ul>
      * <p>
      * The default value is APPROXIMATELY.
      *
@@ -436,10 +435,9 @@ class U_I18N_API NumberRangeFormatterSettings {
 
     // NOTE: Uses default copy and move constructors.
 
-  protected:
+  private:
     impl::RangeMacroProps fMacros;
 
-  private:
     // Don't construct me directly!  Use (Un)LocalizedNumberFormatter.
     NumberRangeFormatterSettings() = default;
 
@@ -544,6 +542,8 @@ class U_I18N_API LocalizedNumberRangeFormatter
      *            The first number in the range, usually to the left in LTR locales.
      * @param second
      *            The second number in the range, usually to the right in LTR locales.
+     * @param status
+     *            Set if an error occurs while formatting.
      * @return A FormattedNumberRange object; call .toString() to get the string.
      * @draft ICU 63
      */
@@ -589,6 +589,8 @@ class U_I18N_API LocalizedNumberRangeFormatter
     /**
      * @param results
      *            The results object. This method will mutate it to save the results.
+     * @param status
+     *            Set if an error occurs while formatting.
      * @internal
      */
     void formatImpl(impl::UFormattedNumberRangeData* results, UErrorCode& status) const;
@@ -674,7 +676,7 @@ class U_I18N_API FormattedNumberRange : public UMemory {
      * information, use #getAllFieldPositions().
      *
      * @param fieldPosition
-     *            Input+output variable. See {@link FormattedNumber#nextFieldPosition(FieldPosition)}.
+     *            Input+output variable. See {@link FormattedNumber#nextFieldPosition}.
      * @param status
      *            Set if an error occurs while populating the FieldPosition.
      * @return TRUE if a new occurrence of the field was found; FALSE otherwise.
@@ -709,7 +711,6 @@ class U_I18N_API FormattedNumberRange : public UMemory {
      *
      * @return A decimal representation of the first formatted number.
      * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
      * @see NumberRangeFormatter
      * @see #getSecondDecimal
      */
@@ -726,7 +727,6 @@ class U_I18N_API FormattedNumberRange : public UMemory {
      *
      * @return A decimal representation of the second formatted number.
      * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
      * @see NumberRangeFormatter
      * @see #getFirstDecimal
      */
@@ -739,10 +739,9 @@ class U_I18N_API FormattedNumberRange : public UMemory {
      *
      * @return An indication the resulting identity situation in the formatted number range.
      * @draft ICU 63
-     * @provisional This API might change or be removed in a future release.
      * @see UNumberRangeIdentityFallback
      */
-    UNumberRangeIdentityType getIdentityType(UErrorCode& status) const;
+    UNumberRangeIdentityResult getIdentityResult(UErrorCode& status) const;
 
     /**
      * Copying not supported; use move constructor instead.

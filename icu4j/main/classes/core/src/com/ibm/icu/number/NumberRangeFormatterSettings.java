@@ -102,6 +102,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * <li>UNIT: "3K - 5K miles"</li>
      * <li>NONE: "3K miles - 5K miles"</li>
      * <li>AUTO: usually UNIT or NONE, depending on the locale and formatter settings</li>
+     * </ul>
      * <p>
      * The default value is AUTO.
      *
@@ -127,6 +128,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * rounding was applied</li>
      * <li>APPROXIMATELY: "~5 miles"</li>
      * <li>RANGE: "5-5 miles" (with collapse=UNIT)</li>
+     * </ul>
      * <p>
      * The default value is APPROXIMATELY.
      *
@@ -195,7 +197,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 60
+     * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
      */
     @Override
@@ -206,7 +208,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
     /**
      * {@inheritDoc}
      *
-     * @draft ICU 60
+     * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
      */
     @Override

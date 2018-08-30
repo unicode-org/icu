@@ -6,7 +6,7 @@ import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.range.RangeMacroProps;
-import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityType;
+import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityResult;
 
 /**
  * A NumberRangeFormatter that has a locale associated with it; this means .formatRange() methods are available.
@@ -104,9 +104,9 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
         nsb.append(r1.nsb);
         nsb.append(" --- ", null);
         nsb.append(r2.nsb);
-        RangeIdentityType identityType = equalBeforeRounding ? RangeIdentityType.EQUAL_BEFORE_ROUNDING
-                : RangeIdentityType.NOT_EQUAL;
-        return new FormattedNumberRange(nsb, first, second, identityType);
+        RangeIdentityResult identityResult = equalBeforeRounding ? RangeIdentityResult.EQUAL_BEFORE_ROUNDING
+                : RangeIdentityResult.NOT_EQUAL;
+        return new FormattedNumberRange(nsb, first, second, identityResult);
     }
 
     @Override

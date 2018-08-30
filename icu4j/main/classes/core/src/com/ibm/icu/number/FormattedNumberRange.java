@@ -10,7 +10,7 @@ import java.util.Arrays;
 
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.NumberStringBuilder;
-import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityType;
+import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityResult;
 import com.ibm.icu.util.ICUUncheckedIOException;
 
 /**
@@ -26,14 +26,14 @@ public class FormattedNumberRange {
     final NumberStringBuilder nsb;
     final DecimalQuantity first;
     final DecimalQuantity second;
-    final RangeIdentityType identityType;
+    final RangeIdentityResult identityResult;
 
     FormattedNumberRange(NumberStringBuilder nsb, DecimalQuantity first, DecimalQuantity second,
-            RangeIdentityType identityType) {
+            RangeIdentityResult identityResult) {
         this.nsb = nsb;
         this.first = first;
         this.second = second;
-        this.identityType = identityType;
+        this.identityResult = identityResult;
     }
 
     /**
@@ -165,8 +165,8 @@ public class FormattedNumberRange {
      * @see NumberRangeFormatter
      * @see NumberRangeFormatter.RangeIdentityFallback
      */
-    public RangeIdentityType getIdentityType() {
-        return identityType;
+    public RangeIdentityResult getIdentityResult() {
+        return identityResult;
     }
 
     /**
