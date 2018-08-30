@@ -298,7 +298,7 @@ UnicodeString FormattedNumberRange::toString(UErrorCode& status) const {
     return fResults->string.toUnicodeString();
 }
 
-Appendable& FormattedNumberRange::appendTo(Appendable& appendable, UErrorCode& status) {
+Appendable& FormattedNumberRange::appendTo(Appendable& appendable, UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return appendable;
     }

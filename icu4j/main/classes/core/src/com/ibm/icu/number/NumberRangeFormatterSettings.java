@@ -77,7 +77,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
     }
 
     /**
-     * Sets the NumberFormatter instances to use for the numbers in the range.
+     * Sets the NumberFormatter instances to use for the second number in the range.
      * <p>
      * The NumberFormatter instance must not have a locale applied yet; the locale specified on the
      * NumberRangeFormatter will be used.

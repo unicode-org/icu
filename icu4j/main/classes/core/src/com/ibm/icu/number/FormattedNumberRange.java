@@ -76,8 +76,9 @@ public class FormattedNumberRange {
     }
 
     /**
-     * Determines the start and end indices of the next occurrence of the given <em>field</em> in the output string.
-     * This allows you to determine the locations of, for example, the integer part, fraction part, or symbols.
+     * Determines the start (inclusive) and end (exclusive) indices of the next occurrence of the given
+     * <em>field</em> in the output string. This allows you to determine the locations of, for example,
+     * the integer part, fraction part, or symbols.
      * <p>
      * If both sides of the range have the same field, the field will occur twice, once before the range separator and
      * once after the range separator, if applicable.
