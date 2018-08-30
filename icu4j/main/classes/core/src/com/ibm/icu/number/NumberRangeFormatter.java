@@ -10,8 +10,6 @@ import com.ibm.icu.util.ULocale;
  * The main entrypoint to the formatting of ranges of numbers, including currencies and other units of measurement.
  * <p>
  * Usage example:
- * <p>
- *
  * <pre>
  * NumberRangeFormatter.with()
  *         .identityFallback(RangeIdentityFallback.APPROXIMATELY_OR_SINGLE_VALUE)
