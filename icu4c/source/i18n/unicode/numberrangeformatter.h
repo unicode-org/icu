@@ -34,10 +34,6 @@
  * Like NumberFormatter, NumberRangeFormatter instances are immutable and thread-safe. This API is based on the
  * <em>fluent</em> design pattern popularized by libraries such as Google's Guava.
  *
- * <p>
- * This API is based on the <em>fluent</em> design pattern popularized by libraries such as Google's Guava. For
- * extensive details on the design of this API, read <a href="https://goo.gl/szi5VB">the design doc</a>.
- *
  * @author Shane Carr
  */
 
@@ -280,7 +276,7 @@ class U_I18N_API NumberRangeFormatterSettings {
      * Overload of numberFormatterFirst() for use on an rvalue reference.
      *
      * @param formatterFirst
-     *            The formatter to use for both numbers in the range.
+     *            The formatter to use for the first number in the range.
      * @return The fluent chain.
      * @see #numberFormatterFirst
      * @draft ICU 63
@@ -291,7 +287,7 @@ class U_I18N_API NumberRangeFormatterSettings {
      * Overload of numberFormatterFirst() for use on an rvalue reference.
      *
      * @param formatterFirst
-     *            The formatter to use for both numbers in the range.
+     *            The formatter to use for the first number in the range.
      * @return The fluent chain.
      * @see #numberFormatterFirst
      * @draft ICU 63
@@ -302,7 +298,7 @@ class U_I18N_API NumberRangeFormatterSettings {
      * Overload of numberFormatterFirst() for use on an rvalue reference.
      *
      * @param formatterFirst
-     *            The formatter to use for both numbers in the range.
+     *            The formatter to use for the first number in the range.
      * @return The fluent chain.
      * @see #numberFormatterFirst
      * @draft ICU 63
@@ -326,7 +322,7 @@ class U_I18N_API NumberRangeFormatterSettings {
      * Overload of numberFormatterSecond() for use on an rvalue reference.
      *
      * @param formatterSecond
-     *            The formatter to use for both numbers in the range.
+     *            The formatter to use for the second number in the range.
      * @return The fluent chain.
      * @see #numberFormatterSecond
      * @draft ICU 63
@@ -337,7 +333,7 @@ class U_I18N_API NumberRangeFormatterSettings {
      * Overload of numberFormatterSecond() for use on an rvalue reference.
      *
      * @param formatterSecond
-     *            The formatter to use for both numbers in the range.
+     *            The formatter to use for the second number in the range.
      * @return The fluent chain.
      * @see #numberFormatterSecond
      * @draft ICU 63
@@ -348,7 +344,7 @@ class U_I18N_API NumberRangeFormatterSettings {
      * Overload of numberFormatterSecond() for use on an rvalue reference.
      *
      * @param formatterSecond
-     *            The formatter to use for both numbers in the range.
+     *            The formatter to use for the second number in the range.
      * @return The fluent chain.
      * @see #numberFormatterSecond
      * @draft ICU 63
@@ -652,12 +648,12 @@ class U_I18N_API FormattedNumberRange : public UMemory {
      * @draft ICU 63
      * @see Appendable
      */
-    Appendable &appendTo(Appendable &appendable, UErrorCode& status);
+    Appendable &appendTo(Appendable &appendable, UErrorCode& status) const;
 
     /**
-     * Determines the start and end indices of the next occurrence of the given <em>field</em> in the
-     * output string. This allows you to determine the locations of, for example, the integer part,
-     * fraction part, or symbols.
+     * Determines the start (inclusive) and end (exclusive) indices of the next occurrence of the given
+     * <em>field</em> in the output string. This allows you to determine the locations of, for example,
+     * the integer part, fraction part, or symbols.
      *
      * If both sides of the range have the same field, the field will occur twice, once before the
      * range separator and once after the range separator, if applicable.
