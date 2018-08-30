@@ -127,12 +127,12 @@
         u_strFromUTF8(reinterpret_cast<UChar*>(utf16Path), static_cast<int32_t>(UPRV_LENGTHOF(utf16Path)), &pathUtf16Len, path, -1, &status);
 
         if (U_FAILURE(status)) {
-            //*ec = status;
+            *ec = status;
             return FALSE;
         }
         if (status == U_STRING_NOT_TERMINATED_WARNING) {
             // Report back an error instead of a warning.
-            //*ec = U_BUFFER_OVERFLOW_ERROR;
+            *ec = U_BUFFER_OVERFLOW_ERROR;
             return FALSE;
         }
 
