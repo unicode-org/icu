@@ -53,6 +53,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * @see NumberFormatter
      * @see NumberRangeFormatter
      */
+    @SuppressWarnings("unchecked")
     public T numberFormatterBoth(UnlocalizedNumberFormatter formatter) {
         return (T) numberFormatterFirst(formatter).numberFormatterSecond(formatter);
     }
@@ -76,8 +77,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
     }
 
     /**
-     * Sets the NumberFormatter instances to use for the numbers in the range. This method allows you to set a different
-     * formatter for the first and second numbers.
+     * Sets the NumberFormatter instances to use for the numbers in the range.
      * <p>
      * The NumberFormatter instance must not have a locale applied yet; the locale specified on the
      * NumberRangeFormatter will be used.
@@ -96,7 +96,6 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
 
     /**
      * Sets the aggressiveness of "collapsing" fields across the range separator. Possible values:
-     * <p>
      * <ul>
      * <li>ALL: "3-5K miles"</li>
      * <li>UNIT: "3K - 5K miles"</li>
@@ -121,7 +120,6 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * Sets the behavior when the two sides of the range are the same. This could happen if the same two numbers are
      * passed to the formatRange function, or if different numbers are passed to the function but they become the same
      * after rounding rules are applied. Possible values:
-     * <p>
      * <ul>
      * <li>SINGLE_VALUE: "5 miles"</li>
      * <li>APPROXIMATELY_OR_SINGLE_VALUE: "~5 miles" or "5 miles", depending on whether the number was the same before
