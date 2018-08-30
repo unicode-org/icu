@@ -13,10 +13,13 @@ import com.ibm.icu.util.ULocale;
  * <p>
  *
  * <pre>
- * NumberRangeFormatter.with().identityFallback(RangeIdentityFallback.APPROXIMATELY_OR_SINGLE_VALUE)
+ * NumberRangeFormatter.with()
+ *         .identityFallback(RangeIdentityFallback.APPROXIMATELY_OR_SINGLE_VALUE)
  *         .numberFormatterFirst(NumberFormatter.with().unit(MeasureUnit.METER))
- *         .numberFormatterSecond(NumberFormatter.with().unit(MeasureUnit.KILOMETER)).locale(ULocale.UK)
- *         .formatRange(750, 1.2).toString();
+ *         .numberFormatterSecond(NumberFormatter.with().unit(MeasureUnit.KILOMETER))
+ *         .locale(ULocale.UK)
+ *         .formatRange(750, 1.2)
+ *         .toString();
  * // => "750 m - 1.2 km"
  * </pre>
  * <p>
@@ -41,6 +44,8 @@ public abstract class NumberRangeFormatter {
         /**
          * Use locale data and heuristics to determine how much of the string to collapse. Could end up collapsing none,
          * some, or all repeated pieces in a locale-sensitive way.
+         * <p>
+         * The heuristics used for this option are subject to change over time.
          *
          * @draft ICU 63
          * @provisional This API might change or be removed in a future release.
@@ -135,7 +140,7 @@ public abstract class NumberRangeFormatter {
      * @provisional This API might change or be removed in a future release.
      * @see NumberRangeFormatter
      */
-    public static enum RangeIdentityType {
+    public static enum RangeIdentityResult {
         /**
          * Used to indicate that the two numbers in the range were equal, even before any rounding rules were applied.
          *
@@ -190,6 +195,15 @@ public abstract class NumberRangeFormatter {
         return BASE.locale(locale);
     }
 
+    /**
+     * Call this method at the beginning of a NumberRangeFormatter fluent chain in which the locale is known at the call
+     * site.
+     *
+     * @param locale
+     *            The locale from which to load formats and symbols for number range formatting.
+     * @return A {@link LocalizedNumberRangeFormatter}, to be used for chaining.
+     * @draft ICU 63
+     */
     public static LocalizedNumberRangeFormatter withLocale(ULocale locale) {
         return BASE.locale(locale);
     }

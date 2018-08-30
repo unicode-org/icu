@@ -36,7 +36,7 @@ struct UFormattedNumberRangeData : public UMemory {
     DecimalQuantity quantity1;
     DecimalQuantity quantity2;
     NumberStringBuilder string;
-    UNumberRangeIdentityType identityType = UNUM_IDENTITY_TYPE_EQUAL_BEFORE_ROUNDING;
+    UNumberRangeIdentityResult identityResult = UNUM_IDENTITY_RESULT_EQUAL_BEFORE_ROUNDING;
 
     // No C conversion methods (no C API yet)
 };

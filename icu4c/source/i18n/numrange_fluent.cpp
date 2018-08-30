@@ -266,7 +266,7 @@ void LocalizedNumberRangeFormatter::formatImpl(
         return;
     }
 
-    results->identityType = UNUM_IDENTITY_TYPE_NOT_EQUAL;
+    results->identityResult = UNUM_IDENTITY_RESULT_NOT_EQUAL;
 }
 
 
@@ -361,15 +361,15 @@ UnicodeString FormattedNumberRange::getSecondDecimal(UErrorCode& status) const {
     return fResults->quantity2.toScientificString();
 }
 
-UNumberRangeIdentityType FormattedNumberRange::getIdentityType(UErrorCode& status) const {
+UNumberRangeIdentityResult FormattedNumberRange::getIdentityResult(UErrorCode& status) const {
     if (U_FAILURE(status)) {
-        return UNUM_IDENTITY_TYPE_NOT_EQUAL;
+        return UNUM_IDENTITY_RESULT_NOT_EQUAL;
     }
     if (fResults == nullptr) {
         status = fErrorCode;
-        return UNUM_IDENTITY_TYPE_NOT_EQUAL;
+        return UNUM_IDENTITY_RESULT_NOT_EQUAL;
     }
-    return fResults->identityType;
+    return fResults->identityResult;
 }
 
 FormattedNumberRange::~FormattedNumberRange() {
