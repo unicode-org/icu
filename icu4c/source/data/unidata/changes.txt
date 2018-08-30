@@ -49,6 +49,68 @@ For new script codes see http://www.unicode.org/iso15924/codechanges.html
 
 ---------------------------------------------------------------------------- ***
 
+ICU 63 addition of ICU support of InPC, InSC, vo
+
+* Command-line environment setup
+
+UNICODE_DATA=~/unidata/uni11/20180609
+CLDR_SRC=~/svn.cldr/uni
+ICU_ROOT=~/icu/mine
+ICU_SRC=$ICU_ROOT/src
+ICUDT=icudt62b
+ICU4C_DATA_IN=$ICU_SRC/icu4c/source/data/in
+ICU4C_UNIDATA=$ICU_SRC/icu4c/source/data/unidata
+export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
+
+*** Links
+
+https://unicode-org.atlassian.net/browse/ICU-8966 InPC & InSC
+https://unicode-org.atlassian.net/browse/ICU-12850 vo
+
+*** data files & enums & parser code
+
+* process and/or copy files
+- $ICU_SRC/tools/unicode$ py/preparseucd.py $UNICODE_DATA $ICU_SRC
+  + This writes files (especially ppucd.txt) to the ICU4C unidata and testdata subfolders.
+  + It also writes tools/unicode/c/genprops/pnames_data.h with property and value
+    names and aliases.
+  + For debugging, and tweaking how ppucd.txt is written,
+    the tool has an --only_ppucd option:
+    py/preparseucd.py $UNICODE_DATA --only_ppucd path/to/ppucd/outputfile
+
+* preparseucd.py changes
+- add new property short names (uppercase) to _prop_and_value_re
+  so that ParseUCharHeader() parses the new enum constants
+
+* build ICU (make install)
+  so that the tools build can pick up the new definitions from the installed header files.
+
+  $ICU_ROOT/dbg/icu4c$ echo;echo; make -j7 install > out.txt 2>&1 ; tail -n 30 out.txt ; date
+
+* build Unicode tools using CMake+make
+
+$ICU_SRC/tools/unicode/c/icudefs.txt:
+
+# Location (--prefix) of where ICU was installed.
+set(ICU_INST_DIR /usr/local/google/home/mscherer/icu/mine/inst/icu4c)
+# Location of the ICU4C source tree.
+set(ICU4C_SRC_DIR /usr/local/google/home/mscherer/icu/mine/src/icu4c)
+
+  $ICU_ROOT/dbg$
+    mkdir -p tools/unicode/c
+    cd tools/unicode/c
+
+  $ICU_ROOT/dbg/tools/unicode/c$
+    cmake ../../../../../src/tools/unicode/c
+    make
+
+* generate core properties data files
+  $ICU_ROOT/dbg/tools/unicode/c$
+    genprops/genprops $ICU_SRC/icu4c
+- rebuild ICU (make install) & tools
+
+---------------------------------------------------------------------------- ***
+
 Unicode 11.0 update for ICU 62
 
 http://www.unicode.org/versions/Unicode11.0.0/

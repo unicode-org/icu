@@ -22,7 +22,9 @@
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
+#include "unicode/ucptrie.h"
 #include "unicode/udata.h"
+#include "unicode/umutablecptrie.h"
 #include "unicode/uniset.h"
 #include "unicode/unistr.h"
 #include "unicode/usetiter.h"
@@ -31,6 +33,7 @@
 #include "cstring.h"
 #include "genprops.h"
 #include "propsvec.h"
+#include "toolutil.h"
 #include "uassert.h"
 #include "unewdata.h"
 #include "uprops.h"
@@ -310,6 +313,11 @@ private:
     UTrie2 *props2Trie;
     UPropsVectors *pv;
     UnicodeString scriptExtensions;
+
+    UMutableCPTrie *inpcTrie;
+    UMutableCPTrie *inscTrie;
+    UMutableCPTrie *voTrie;
+    UMutableCPTrie *layoutTrie;
 };
 
 CorePropsBuilder::CorePropsBuilder(UErrorCode &errorCode)
@@ -324,18 +332,67 @@ CorePropsBuilder::CorePropsBuilder(UErrorCode &errorCode)
         fprintf(stderr, "genprops error: corepropsbuilder upvec_open() failed - %s\n",
                 u_errorName(errorCode));
     }
+    inpcTrie = umutablecptrie_open(0, 0, &errorCode);
+    inscTrie = umutablecptrie_open(0, 0, &errorCode);
+    voTrie = umutablecptrie_open(0, 0, &errorCode);
+    layoutTrie = umutablecptrie_open(0, 0, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops error: corepropsbuilder umutablecptrie_open() failed - %s\n",
+                u_errorName(errorCode));
+    }
 }
 
 CorePropsBuilder::~CorePropsBuilder() {
     utrie2_close(pTrie);
     utrie2_close(props2Trie);
     upvec_close(pv);
+    umutablecptrie_close(inpcTrie);
+    umutablecptrie_close(inscTrie);
+    umutablecptrie_close(voTrie);
+    umutablecptrie_close(layoutTrie);
 }
 
 void
 CorePropsBuilder::setUnicodeVersion(const UVersionInfo version) {
     uprv_memcpy(dataInfo.dataVersion, version, 4);
 }
+
+namespace {
+
+U_CDECL_BEGIN
+
+static uint32_t U_CALLCONV
+maskFilter(const void *context, uint32_t value) {
+    uint32_t mask = *(const uint32_t *)context;
+    return value & ~mask;
+}
+
+U_CDECL_END
+
+// - logically: for each c in start..end, get(c), &~mask, |value, set(c)
+// - value is normally limited to mask (value & ~mask == 0)
+//   but this is neither checked nor enforced
+// - enumerate with getRange(); in C use ValueFilter (value & ~mask)
+//   but in Java that would be one additional memory allocation
+void setRangeBitField(UMutableCPTrie *trie, UChar32 start, UChar32 end,
+                      uint32_t mask, uint32_t value, UErrorCode &errorCode) {
+    while (U_SUCCESS(errorCode) && start <= end) {
+        uint32_t trieValue;
+        UChar32 trieEnd = umutablecptrie_getRange(trie, start, UCPTRIE_RANGE_NORMAL, 0,
+                                                  maskFilter, &mask, &trieValue);
+        if (trieEnd < 0) {
+            break;
+        }
+        if (trieEnd > end) {
+            trieEnd = end;
+        }
+        trieValue |= value;
+        umutablecptrie_setRange(trie, start, trieEnd, trieValue, &errorCode);
+        start = trieEnd + 1;
+    }
+}
+
+}  // namespace
 
 static int32_t encodeFractional20(int32_t value, int32_t den) {
     if(den<20 || 640<den) { return -1; }
@@ -617,6 +674,50 @@ CorePropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
 
     UChar32 start=props.start;
     UChar32 end=props.end;
+
+    if (newValues.contains(UCHAR_INDIC_POSITIONAL_CATEGORY)) {
+        uint32_t value = props.getIntProp(UCHAR_INDIC_POSITIONAL_CATEGORY);
+        if (start == end) {
+            umutablecptrie_set(inpcTrie, start, value, &errorCode);
+        } else {
+            umutablecptrie_setRange(inpcTrie, start, end, value, &errorCode);
+        }
+        // value 0..3f
+        setRangeBitField(layoutTrie, start, end, 0x3f, value, errorCode);
+        if (U_FAILURE(errorCode)) {
+            fprintf(stderr, "error: umutablecptrie_set(inpc trie %04lX..%04lX) failed - %s\n",
+                    (long)start, (long)end, u_errorName(errorCode));
+        }
+    }
+    if (newValues.contains(UCHAR_INDIC_SYLLABIC_CATEGORY)) {
+        uint32_t value = props.getIntProp(UCHAR_INDIC_SYLLABIC_CATEGORY);
+        if (start == end) {
+            umutablecptrie_set(inscTrie, start, value, &errorCode);
+        } else {
+            umutablecptrie_setRange(inscTrie, start, end, value, &errorCode);
+        }
+        // value 0..7f
+        setRangeBitField(layoutTrie, start, end, 0x1fc0, value << 6, errorCode);
+        if (U_FAILURE(errorCode)) {
+            fprintf(stderr, "error: umutablecptrie_set(insc trie %04lX..%04lX) failed - %s\n",
+                    (long)start, (long)end, u_errorName(errorCode));
+        }
+    }
+    if (newValues.contains(UCHAR_VERTICAL_ORIENTATION)) {
+        uint32_t value = props.getIntProp(UCHAR_VERTICAL_ORIENTATION);
+        if (start == end) {
+            umutablecptrie_set(voTrie, start, value, &errorCode);
+        } else {
+            umutablecptrie_setRange(voTrie, start, end, value, &errorCode);
+        }
+        // value 0..7
+        setRangeBitField(layoutTrie, start, end, 0xe000, value << 13, errorCode);
+        if (U_FAILURE(errorCode)) {
+            fprintf(stderr, "error: umutablecptrie_set(vo trie %04lX..%04lX) failed - %s\n",
+                    (long)start, (long)end, u_errorName(errorCode));
+        }
+    }
+
     if(start==0 && end==0x10ffff) {
         // Also set bits for initialValue and errorValue.
         end=UPVEC_MAX_CP;
@@ -738,6 +839,25 @@ static int32_t props2TrieSize;
 
 static int32_t totalSize;
 
+namespace {
+
+void printSize(UMutableCPTrie *mutableTrie, const char *name,
+               UCPTrieType type, UCPTrieValueWidth valueWidth) {
+    IcuToolErrorCode errorCode("genprops printSize()");
+    LocalUCPTriePointer trie(
+        umutablecptrie_buildImmutable(mutableTrie, type, valueWidth, errorCode));
+    if (errorCode.isFailure()) {
+        fprintf(stderr, "genprops error: %s trie buildImmutable() failed: %s\n",
+                errorCode.errorName());
+        return;
+    }
+    int32_t size = ucptrie_toBinary(trie.getAlias(),
+                                    trieBlock, UPRV_LENGTHOF(trieBlock), errorCode);
+    printf("+++ size of %s trie: %6ld bytes +++\n", name, (long)size);
+}
+
+}  // namespace
+
 void
 CorePropsBuilder::build(UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
@@ -823,6 +943,10 @@ CorePropsBuilder::build(UErrorCode &errorCode) {
         printf("number of 16-bit scriptExtensions:     %5u\n", (int)scriptExtensions.length());
         printf("data size:                            %6ld\n", (long)totalSize);
     }
+    printSize(inpcTrie, "InPC", UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_8);
+    printSize(inscTrie, "InSC", UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_8);
+    printSize(voTrie, "vo", UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_8);
+    printSize(layoutTrie, "layout", UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_16);
 }
 
 void

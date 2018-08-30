@@ -996,4 +996,5 @@ tools/unicode/c/genuca/genuca.vcproj.*.*.user
 tools/unicode/c/genuca/release
 tools/unicode/c/genuca/x64
 tools/unicode/c/genuca/x86
+tools/unicode/c/icudefs.txt
 tools/unicodetools/com/ibm/rbm/lib
