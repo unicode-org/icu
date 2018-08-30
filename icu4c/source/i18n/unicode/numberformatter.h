@@ -2430,7 +2430,7 @@ class U_I18N_API FormattedNumber : public UMemory {
      * @draft ICU 62
      * @see Appendable
      */
-    Appendable &appendTo(Appendable &appendable, UErrorCode& status);
+    Appendable &appendTo(Appendable &appendable, UErrorCode& status) const;
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
