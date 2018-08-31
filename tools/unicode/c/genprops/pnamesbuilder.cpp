@@ -489,7 +489,7 @@ PNamesBuilderImpl::writeBinaryData(const char *path, UBool withCopyright, UError
 void
 PNamesBuilderImpl::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
-    FILE *f=usrc_create(path, "propname_data.h",
+    FILE *f=usrc_create(path, "propname_data.h", 2016,
                         "icu/tools/unicode/c/genprops/pnamesbuilder.cpp");
     if(f==NULL) {
         errorCode=U_FILE_ACCESS_ERROR;

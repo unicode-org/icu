@@ -49,6 +49,7 @@ PNamesBuilder *createPNamesBuilder(UErrorCode &errorCode);
 PropsBuilder *createCorePropsBuilder(UErrorCode &errorCode);
 PropsBuilder *createBiDiPropsBuilder(UErrorCode &errorCode);
 PropsBuilder *createCasePropsBuilder(UErrorCode &errorCode);
+PropsBuilder *createLayoutPropsBuilder(UErrorCode &errorCode);
 PropsBuilder *createNamesPropsBuilder(UErrorCode &errorCode);
 
 /* global flags */
