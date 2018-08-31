@@ -136,9 +136,31 @@ set(ICU4C_SRC_DIR /usr/local/google/home/mscherer/icu/mine/src/icu4c)
 - uprops.h: add UPropertySource constants
 - uprops.cpp: add uprops_addPropertyStarts(src)
 - uniset_props.cpp: add to UnicodeSet_initInclusion()
-- intltest/ucdtest.cpp: write unit test
+- intltest/ucdtest.cpp: write unit tests
+
+* update Java data files
+- refresh just the pnames.icu file with the new property [value] names, just to be safe
+- see $ICU_SRC/icu4c/source/data/icu4j-readme.txt
+- mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT
+- $ICU_ROOT/dbg/icu4c$ make ICU4J_ROOT=/tmp/icu4j icu4j-data-install
+- copy the big-endian Unicode data files to another location,
+  separate from the other data files,
+  and then refresh ICU4J
+    cd $ICU_ROOT/dbg/icu4c/data/out/icu4j
+    cp com/ibm/icu/impl/data/$ICUDT/pnames.icu /tmp/icu4j/com/ibm/icu/impl/data/$ICUDT
+    jar uvf $ICU_SRC/icu4j/main/shared/data/icudata.jar -C /tmp/icu4j com/ibm/icu/impl/data/$ICUDT
 
 * wire into Java
+- UCharacterProperty.java: add new SRC_INPC etc. constants as in C++
+- UCharacterProperty.java: for each new property
+  + create a nested class to hold its CodePointTrie
+  + initialize it from a string literal
+  + paste in the initializer printed by genprops
+  + add a new IntProperty object to the intProps[] array
+  + use the correct max int value for each property, also printed by genprops
+- UCharacterProperty.java: add ulayout_addPropertyStarts(src, set)
+- UnicodeSet.java: add to getInclusions()
+- UCharacterTest.java: write unit tests
 
 ---------------------------------------------------------------------------- ***
 

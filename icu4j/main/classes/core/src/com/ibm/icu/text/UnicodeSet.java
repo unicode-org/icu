@@ -325,7 +325,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
     // NOTE: normally the field should be of type SortedSet; but that is missing a public clone!!
     // is not private so that UnicodeSetIterator can get access
-    TreeSet<String> strings = new TreeSet<String>();
+    TreeSet<String> strings = new TreeSet<>();
 
     /**
      * The pattern representation of this set.  This may not be the
@@ -545,7 +545,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         list = other.list.clone();
         len = other.len;
         pat = other.pat;
-        strings = new TreeSet<String>(other.strings);
+        strings = new TreeSet<>(other.strings);
         return this;
     }
 
@@ -3281,6 +3281,11 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             case UCharacterProperty.SRC_BIDI:
                 UBiDiProps.INSTANCE.addPropertyStarts(incl);
                 break;
+            case UCharacterProperty.SRC_INPC:
+            case UCharacterProperty.SRC_INSC:
+            case UCharacterProperty.SRC_VO:
+                UCharacterProperty.INSTANCE.ulayout_addPropertyStarts(src, incl);
+                break;
             default:
                 throw new IllegalStateException("UnicodeSet.getInclusions(unknown src "+src+")");
             }
@@ -4019,7 +4024,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
 
             // Optimize contains() and span() and similar functions.
             if (!strings.isEmpty()) {
-                stringSpan = new UnicodeSetStringSpan(this, new ArrayList<String>(strings), UnicodeSetStringSpan.ALL);
+                stringSpan = new UnicodeSetStringSpan(this, new ArrayList<>(strings), UnicodeSetStringSpan.ALL);
             }
             if (stringSpan == null || !stringSpan.needsStringSpanUTF16()) {
                 // Optimize for code point spans.
@@ -4073,7 +4078,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         } else if (!strings.isEmpty()) {
             int which = spanCondition == SpanCondition.NOT_CONTAINED ? UnicodeSetStringSpan.FWD_UTF16_NOT_CONTAINED
                     : UnicodeSetStringSpan.FWD_UTF16_CONTAINED;
-            UnicodeSetStringSpan strSpan = new UnicodeSetStringSpan(this, new ArrayList<String>(strings), which);
+            UnicodeSetStringSpan strSpan = new UnicodeSetStringSpan(this, new ArrayList<>(strings), which);
             if (strSpan.needsStringSpanUTF16()) {
                 return strSpan.span(s, start, spanCondition);
             }
@@ -4111,7 +4116,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             int which = spanCondition == SpanCondition.NOT_CONTAINED ? UnicodeSetStringSpan.FWD_UTF16_NOT_CONTAINED
                     : UnicodeSetStringSpan.FWD_UTF16_CONTAINED;
             which |= UnicodeSetStringSpan.WITH_COUNT;
-            UnicodeSetStringSpan strSpan = new UnicodeSetStringSpan(this, new ArrayList<String>(strings), which);
+            UnicodeSetStringSpan strSpan = new UnicodeSetStringSpan(this, new ArrayList<>(strings), which);
             return strSpan.spanAndCount(s, start, spanCondition, outCount);
         }
 
@@ -4179,7 +4184,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             int which = (spanCondition == SpanCondition.NOT_CONTAINED)
                     ? UnicodeSetStringSpan.BACK_UTF16_NOT_CONTAINED
                             : UnicodeSetStringSpan.BACK_UTF16_CONTAINED;
-            UnicodeSetStringSpan strSpan = new UnicodeSetStringSpan(this, new ArrayList<String>(strings), which);
+            UnicodeSetStringSpan strSpan = new UnicodeSetStringSpan(this, new ArrayList<>(strings), which);
             if (strSpan.needsStringSpanUTF16()) {
                 return strSpan.spanBack(s, fromIndex, spanCondition);
             }
