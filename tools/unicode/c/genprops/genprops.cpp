@@ -44,6 +44,7 @@ void PropsBuilder::setAlgNamesRange(UChar32, UChar32,
 void PropsBuilder::setProps(const UniProps &, const UnicodeSet &, UErrorCode &) {}
 void PropsBuilder::build(UErrorCode &) {}
 void PropsBuilder::writeCSourceFile(const char *, UErrorCode &) {}
+void PropsBuilder::writeJavaSourceFile(const char *, UErrorCode &) {}
 void PropsBuilder::writeBinaryData(const char *, UBool, UErrorCode &) {}
 
 enum {
@@ -204,6 +205,7 @@ main(int argc, char* argv[]) {
     casePropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
     namesPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
     layoutPropsBuilder->writeCSourceFile(sourceCommon.data(), errorCode);
+    layoutPropsBuilder->writeJavaSourceFile("", errorCode);
 
     return errorCode;
 }

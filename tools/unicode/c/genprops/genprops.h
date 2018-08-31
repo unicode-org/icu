@@ -37,6 +37,7 @@ public:
     virtual void setProps(const icu::UniProps &props, const icu::UnicodeSet &newValues, UErrorCode &errorCode);
     virtual void build(UErrorCode &errorCode);
     virtual void writeCSourceFile(const char *path, UErrorCode &errorCode);
+    virtual void writeJavaSourceFile(const char *path, UErrorCode &errorCode);
     virtual void writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode);
 };
 
