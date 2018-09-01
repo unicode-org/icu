@@ -62,6 +62,9 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestScriptMetadata);
     TESTCASE_AUTO(TestBidiPairedBracketType);
     TESTCASE_AUTO(TestEmojiProperties);
+    TESTCASE_AUTO(TestIndicPositionalCategory);
+    TESTCASE_AUTO(TestIndicSyllabicCategory);
+    TESTCASE_AUTO(TestVerticalOrientation);
     TESTCASE_AUTO(TestDefaultScriptExtensions);
     TESTCASE_AUTO(TestInvalidCodePointFolding);
     TESTCASE_AUTO_END;
@@ -533,6 +536,50 @@ void UnicodeTest::TestEmojiProperties() {
                u_hasBinaryProperty(0x2A, UCHAR_EMOJI_COMPONENT));
     assertTrue("copyright is Extended_Pictographic",
                u_hasBinaryProperty(0xA9, UCHAR_EXTENDED_PICTOGRAPHIC));
+}
+
+void UnicodeTest::TestIndicPositionalCategory() {
+    IcuTestErrorCode errorCode(*this, "TestIndicPositionalCategory()");
+    UnicodeSet na(u"[:InPC=NA:]", errorCode);
+    assertTrue("mostly NA", 1000000 <= na.size() && na.size() <= UCHAR_MAX_VALUE - 500);
+    UnicodeSet vol(u"[:InPC=Visual_Order_Left:]", errorCode);
+    assertTrue("some Visual_Order_Left", 19 <= vol.size() && vol.size() <= 100);
+    assertEquals("U+08FF: NA", U_INPC_NA,
+                 u_getIntPropertyValue(0x08FF, UCHAR_INDIC_POSITIONAL_CATEGORY));
+    assertEquals("U+0900: Top", U_INPC_TOP,
+                 u_getIntPropertyValue(0x0900, UCHAR_INDIC_POSITIONAL_CATEGORY));
+    assertEquals("U+10A06: Overstruck", U_INPC_OVERSTRUCK,
+                 u_getIntPropertyValue(0x10A06, UCHAR_INDIC_POSITIONAL_CATEGORY));
+}
+
+void UnicodeTest::TestIndicSyllabicCategory() {
+    IcuTestErrorCode errorCode(*this, "TestIndicSyllabicCategory()");
+    UnicodeSet other(u"[:InSC=Other:]", errorCode);
+    assertTrue("mostly Other", 1000000 <= other.size() && other.size() <= UCHAR_MAX_VALUE - 500);
+    UnicodeSet ava(u"[:InSC=Avagraha:]", errorCode);
+    assertTrue("some Avagraha", 16 <= ava.size() && ava.size() <= 100);
+    assertEquals("U+08FF: Other", U_INSC_OTHER,
+                 u_getIntPropertyValue(0x08FF, UCHAR_INDIC_SYLLABIC_CATEGORY));
+    assertEquals("U+0900: Bindu", U_INSC_BINDU,
+                 u_getIntPropertyValue(0x0900, UCHAR_INDIC_SYLLABIC_CATEGORY));
+    assertEquals("U+11065: Brahmi_Joining_Number", U_INSC_BRAHMI_JOINING_NUMBER,
+                 u_getIntPropertyValue(0x11065, UCHAR_INDIC_SYLLABIC_CATEGORY));
+}
+
+void UnicodeTest::TestVerticalOrientation() {
+    IcuTestErrorCode errorCode(*this, "TestVerticalOrientation()");
+    UnicodeSet r(u"[:vo=R:]", errorCode);
+    assertTrue("mostly R", 0xc0000 <= r.size() && r.size() <= 0xd0000);
+    UnicodeSet u(u"[:vo=U:]", errorCode);
+    assertTrue("much U", 0x40000 <= u.size() && u.size() <= 0x50000);
+    UnicodeSet tu(u"[:vo=Tu:]", errorCode);
+    assertTrue("some Tu", 147 <= tu.size() && tu.size() <= 300);
+    assertEquals("U+0E01: Rotated", U_VO_ROTATED,
+                 u_getIntPropertyValue(0x0E01, UCHAR_VERTICAL_ORIENTATION));
+    assertEquals("U+3008: Transformed_Rotated", U_VO_TRANSFORMED_ROTATED,
+                 u_getIntPropertyValue(0x3008, UCHAR_VERTICAL_ORIENTATION));
+    assertEquals("U+33333: Upright", U_VO_UPRIGHT,
+                 u_getIntPropertyValue(0x33333, UCHAR_VERTICAL_ORIENTATION));
 }
 
 void UnicodeTest::TestDefaultScriptExtensions() {

@@ -397,6 +397,10 @@ enum UPropertySource {
     UPROPS_SRC_NFKC_CF,
     /** From normalizer2impl.cpp/nfc.nrm canonical iterator data */
     UPROPS_SRC_NFC_CANON_ITER,
+    // Text layout properties.
+    UPROPS_SRC_INPC,
+    UPROPS_SRC_INSC,
+    UPROPS_SRC_VO,
     /** One more than the highest UPropertySource (UPROPS_SRC_) constant. */
     UPROPS_SRC_COUNT
 };
@@ -424,6 +428,9 @@ uchar_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
  */
 U_CFUNC void U_EXPORT2
 upropsvec_addPropertyStarts(const USetAdder *sa, UErrorCode *pErrorCode);
+
+U_CFUNC void U_EXPORT2
+uprops_addPropertyStarts(UPropertySource src, const USetAdder *sa, UErrorCode *pErrorCode);
 
 /**
  * Return a set of characters for property enumeration.

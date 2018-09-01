@@ -2590,7 +2590,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 m = mref.get();
             }
             if (m == null) {
-                m = new HashMap<String, UnicodeBlock>(BLOCKS_.length);
+                m = new HashMap<>(BLOCKS_.length);
                 for (int i = 0; i < BLOCKS_.length; ++i) {
                     UnicodeBlock b = BLOCKS_[i];
                     String name = trimBlockName(
@@ -2598,7 +2598,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                                     UProperty.NameChoice.LONG));
                     m.put(name, b);
                 }
-                mref = new SoftReference<Map<String, UnicodeBlock>>(m);
+                mref = new SoftReference<>(m);
             }
             UnicodeBlock b = m.get(trimBlockName(blockName));
             if (b == null) {
@@ -3692,6 +3692,143 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          */
         @Deprecated
         public static final int COUNT = 3;
+    }
+
+    /**
+     * Indic Positional Category constants.
+     *
+     * @see UProperty#INDIC_POSITIONAL_CATEGORY
+     * @stable ICU 63
+     */
+    public static interface IndicPositionalCategory {
+        /** @stable ICU 63 */
+        public static final int NA = 0;
+        /** @stable ICU 63 */
+        public static final int BOTTOM = 1;
+        /** @stable ICU 63 */
+        public static final int BOTTOM_AND_LEFT = 2;
+        /** @stable ICU 63 */
+        public static final int BOTTOM_AND_RIGHT = 3;
+        /** @stable ICU 63 */
+        public static final int LEFT = 4;
+        /** @stable ICU 63 */
+        public static final int LEFT_AND_RIGHT = 5;
+        /** @stable ICU 63 */
+        public static final int OVERSTRUCK = 6;
+        /** @stable ICU 63 */
+        public static final int RIGHT = 7;
+        /** @stable ICU 63 */
+        public static final int TOP = 8;
+        /** @stable ICU 63 */
+        public static final int TOP_AND_BOTTOM = 9;
+        /** @stable ICU 63 */
+        public static final int TOP_AND_BOTTOM_AND_RIGHT = 10;
+        /** @stable ICU 63 */
+        public static final int TOP_AND_LEFT = 11;
+        /** @stable ICU 63 */
+        public static final int TOP_AND_LEFT_AND_RIGHT = 12;
+        /** @stable ICU 63 */
+        public static final int TOP_AND_RIGHT = 13;
+        /** @stable ICU 63 */
+        public static final int VISUAL_ORDER_LEFT = 14;
+    }
+
+    /**
+     * Indic Syllabic Category constants.
+     *
+     * @see UProperty#INDIC_SYLLABIC_CATEGORY
+     * @stable ICU 63
+     */
+    public static interface IndicSyllabicCategory {
+        /** @stable ICU 63 */
+        public static final int OTHER = 0;
+        /** @stable ICU 63 */
+        public static final int AVAGRAHA = 1;
+        /** @stable ICU 63 */
+        public static final int BINDU = 2;
+        /** @stable ICU 63 */
+        public static final int BRAHMI_JOINING_NUMBER = 3;
+        /** @stable ICU 63 */
+        public static final int CANTILLATION_MARK = 4;
+        /** @stable ICU 63 */
+        public static final int CONSONANT = 5;
+        /** @stable ICU 63 */
+        public static final int CONSONANT_DEAD = 6;
+        /** @stable ICU 63 */
+        public static final int CONSONANT_FINAL = 7;
+        /** @stable ICU 63 */
+        public static final int CONSONANT_HEAD_LETTER = 8;
+        /** @stable ICU 63 */
+        public static final int CONSONANT_INITIAL_POSTFIXED = 9;
+        /** @stable ICU 63 */
+        public static final int CONSONANT_KILLER = 10;
+        /** @stable ICU 63 */
+        public static final int CONSONANT_MEDIAL = 11;
+        /** @stable ICU 63 */
+        public static final int CONSONANT_PLACEHOLDER = 12;
+        /** @stable ICU 63 */
+        public static final int CONSONANT_PRECEDING_REPHA = 13;
+        /** @stable ICU 63 */
+        public static final int CONSONANT_PREFIXED = 14;
+        /** @stable ICU 63 */
+        public static final int CONSONANT_SUBJOINED = 15;
+        /** @stable ICU 63 */
+        public static final int CONSONANT_SUCCEEDING_REPHA = 16;
+        /** @stable ICU 63 */
+        public static final int CONSONANT_WITH_STACKER = 17;
+        /** @stable ICU 63 */
+        public static final int GEMINATION_MARK = 18;
+        /** @stable ICU 63 */
+        public static final int INVISIBLE_STACKER = 19;
+        /** @stable ICU 63 */
+        public static final int JOINER = 20;
+        /** @stable ICU 63 */
+        public static final int MODIFYING_LETTER = 21;
+        /** @stable ICU 63 */
+        public static final int NON_JOINER = 22;
+        /** @stable ICU 63 */
+        public static final int NUKTA = 23;
+        /** @stable ICU 63 */
+        public static final int NUMBER = 24;
+        /** @stable ICU 63 */
+        public static final int NUMBER_JOINER = 25;
+        /** @stable ICU 63 */
+        public static final int PURE_KILLER = 26;
+        /** @stable ICU 63 */
+        public static final int REGISTER_SHIFTER = 27;
+        /** @stable ICU 63 */
+        public static final int SYLLABLE_MODIFIER = 28;
+        /** @stable ICU 63 */
+        public static final int TONE_LETTER = 29;
+        /** @stable ICU 63 */
+        public static final int TONE_MARK = 30;
+        /** @stable ICU 63 */
+        public static final int VIRAMA = 31;
+        /** @stable ICU 63 */
+        public static final int VISARGA = 32;
+        /** @stable ICU 63 */
+        public static final int VOWEL = 33;
+        /** @stable ICU 63 */
+        public static final int VOWEL_DEPENDENT = 34;
+        /** @stable ICU 63 */
+        public static final int VOWEL_INDEPENDENT = 35;
+    }
+
+    /**
+     * Vertical Orientation constants.
+     *
+     * @see UProperty#VERTICAL_ORIENTATION
+     * @stable ICU 63
+     */
+    public static interface VerticalOrientation {
+        /** @stable ICU 63 */
+        public static final int ROTATED = 0;
+        /** @stable ICU 63 */
+        public static final int TRANSFORMED_ROTATED = 1;
+        /** @stable ICU 63 */
+        public static final int TRANSFORMED_UPRIGHT = 2;
+        /** @stable ICU 63 */
+        public static final int UPRIGHT = 3;
     }
 
     // public data members -----------------------------------------------

@@ -31,7 +31,7 @@
  * Writes a C/Java-style comment with the generator name.
  */
 U_CAPI FILE * U_EXPORT2
-usrc_create(const char *path, const char *filename, const char *generator);
+usrc_create(const char *path, const char *filename, int32_t copyrightYear, const char *generator);
 
 /**
  * Creates a source text file and writes a header comment with the ICU copyright.
@@ -96,6 +96,12 @@ usrc_writeUCPTrieStruct(FILE *f,
                         const UCPTrie *pTrie,
                         const char *indexName, const char *dataName,
                         const char *postfix);
+
+/**
+ * Writes the UCPTrie arrays and struct values.
+ */
+U_CAPI void U_EXPORT2
+usrc_writeUCPTrie(FILE *f, const char *name, const UCPTrie *pTrie);
 
 /**
  * Writes the contents of an array of mostly invariant characters.

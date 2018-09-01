@@ -41,6 +41,9 @@ public:
     void TestScriptMetadata();
     void TestBidiPairedBracketType();
     void TestEmojiProperties();
+    void TestIndicPositionalCategory();
+    void TestIndicSyllabicCategory();
+    void TestVerticalOrientation();
     void TestDefaultScriptExtensions();
     void TestInvalidCodePointFolding();
 

@@ -546,12 +546,34 @@ typedef enum UProperty {
         (http://www.unicode.org/reports/tr9/)
         Returns UBidiPairedBracketType values. @stable ICU 52 */
     UCHAR_BIDI_PAIRED_BRACKET_TYPE=0x1015,
+    /**
+     * Enumerated property Indic_Positional_Category.
+     * New in Unicode 6.0 as provisional property Indic_Matra_Category;
+     * renamed and changed to informative in Unicode 8.0.
+     * See http://www.unicode.org/reports/tr44/#IndicPositionalCategory.txt
+     * @stable ICU 63
+     */
+    UCHAR_INDIC_POSITIONAL_CATEGORY=0x1016,
+    /**
+     * Enumerated property Indic_Syllabic_Category.
+     * New in Unicode 6.0 as provisional; informative since Unicode 8.0.
+     * See http://www.unicode.org/reports/tr44/#IndicSyllabicCategory.txt
+     * @stable ICU 63
+     */
+    UCHAR_INDIC_SYLLABIC_CATEGORY=0x1017,
+    /**
+     * Enumerated property Vertical_Orientation.
+     * Used for UAX #50 Unicode Vertical Text Layout (https://www.unicode.org/reports/tr50/).
+     * New as a UCD property in Unicode 10.0.
+     * @stable ICU 63
+     */
+    UCHAR_VERTICAL_ORIENTATION=0x1018,
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the last constant for enumerated/integer Unicode properties.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    UCHAR_INT_LIMIT=0x1016,
+    UCHAR_INT_LIMIT=0x1019,
 #endif  // U_HIDE_DEPRECATED_API
 
     /** Bitmask property General_Category_Mask.
@@ -2319,6 +2341,161 @@ typedef enum UHangulSyllableType {
     U_HST_COUNT
 #endif  // U_HIDE_DEPRECATED_API
 } UHangulSyllableType;
+
+/**
+ * Indic Positional Category constants.
+ *
+ * @see UCHAR_INDIC_POSITIONAL_CATEGORY
+ * @stable ICU 63
+ */
+typedef enum UIndicPositionalCategory {
+    /*
+     * Note: UIndicPositionalCategory constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_INPC_<Unicode Indic_Positional_Category value name>
+     */
+
+    /** @stable ICU 63 */
+    U_INPC_NA,
+    /** @stable ICU 63 */
+    U_INPC_BOTTOM,
+    /** @stable ICU 63 */
+    U_INPC_BOTTOM_AND_LEFT,
+    /** @stable ICU 63 */
+    U_INPC_BOTTOM_AND_RIGHT,
+    /** @stable ICU 63 */
+    U_INPC_LEFT,
+    /** @stable ICU 63 */
+    U_INPC_LEFT_AND_RIGHT,
+    /** @stable ICU 63 */
+    U_INPC_OVERSTRUCK,
+    /** @stable ICU 63 */
+    U_INPC_RIGHT,
+    /** @stable ICU 63 */
+    U_INPC_TOP,
+    /** @stable ICU 63 */
+    U_INPC_TOP_AND_BOTTOM,
+    /** @stable ICU 63 */
+    U_INPC_TOP_AND_BOTTOM_AND_RIGHT,
+    /** @stable ICU 63 */
+    U_INPC_TOP_AND_LEFT,
+    /** @stable ICU 63 */
+    U_INPC_TOP_AND_LEFT_AND_RIGHT,
+    /** @stable ICU 63 */
+    U_INPC_TOP_AND_RIGHT,
+    /** @stable ICU 63 */
+    U_INPC_VISUAL_ORDER_LEFT,
+} UIndicPositionalCategory;
+
+/**
+ * Indic Syllabic Category constants.
+ *
+ * @see UCHAR_INDIC_SYLLABIC_CATEGORY
+ * @stable ICU 63
+ */
+typedef enum UIndicSyllabicCategory {
+    /*
+     * Note: UIndicSyllabicCategory constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_INSC_<Unicode Indic_Syllabic_Category value name>
+     */
+
+    /** @stable ICU 63 */
+    U_INSC_OTHER,
+    /** @stable ICU 63 */
+    U_INSC_AVAGRAHA,
+    /** @stable ICU 63 */
+    U_INSC_BINDU,
+    /** @stable ICU 63 */
+    U_INSC_BRAHMI_JOINING_NUMBER,
+    /** @stable ICU 63 */
+    U_INSC_CANTILLATION_MARK,
+    /** @stable ICU 63 */
+    U_INSC_CONSONANT,
+    /** @stable ICU 63 */
+    U_INSC_CONSONANT_DEAD,
+    /** @stable ICU 63 */
+    U_INSC_CONSONANT_FINAL,
+    /** @stable ICU 63 */
+    U_INSC_CONSONANT_HEAD_LETTER,
+    /** @stable ICU 63 */
+    U_INSC_CONSONANT_INITIAL_POSTFIXED,
+    /** @stable ICU 63 */
+    U_INSC_CONSONANT_KILLER,
+    /** @stable ICU 63 */
+    U_INSC_CONSONANT_MEDIAL,
+    /** @stable ICU 63 */
+    U_INSC_CONSONANT_PLACEHOLDER,
+    /** @stable ICU 63 */
+    U_INSC_CONSONANT_PRECEDING_REPHA,
+    /** @stable ICU 63 */
+    U_INSC_CONSONANT_PREFIXED,
+    /** @stable ICU 63 */
+    U_INSC_CONSONANT_SUBJOINED,
+    /** @stable ICU 63 */
+    U_INSC_CONSONANT_SUCCEEDING_REPHA,
+    /** @stable ICU 63 */
+    U_INSC_CONSONANT_WITH_STACKER,
+    /** @stable ICU 63 */
+    U_INSC_GEMINATION_MARK,
+    /** @stable ICU 63 */
+    U_INSC_INVISIBLE_STACKER,
+    /** @stable ICU 63 */
+    U_INSC_JOINER,
+    /** @stable ICU 63 */
+    U_INSC_MODIFYING_LETTER,
+    /** @stable ICU 63 */
+    U_INSC_NON_JOINER,
+    /** @stable ICU 63 */
+    U_INSC_NUKTA,
+    /** @stable ICU 63 */
+    U_INSC_NUMBER,
+    /** @stable ICU 63 */
+    U_INSC_NUMBER_JOINER,
+    /** @stable ICU 63 */
+    U_INSC_PURE_KILLER,
+    /** @stable ICU 63 */
+    U_INSC_REGISTER_SHIFTER,
+    /** @stable ICU 63 */
+    U_INSC_SYLLABLE_MODIFIER,
+    /** @stable ICU 63 */
+    U_INSC_TONE_LETTER,
+    /** @stable ICU 63 */
+    U_INSC_TONE_MARK,
+    /** @stable ICU 63 */
+    U_INSC_VIRAMA,
+    /** @stable ICU 63 */
+    U_INSC_VISARGA,
+    /** @stable ICU 63 */
+    U_INSC_VOWEL,
+    /** @stable ICU 63 */
+    U_INSC_VOWEL_DEPENDENT,
+    /** @stable ICU 63 */
+    U_INSC_VOWEL_INDEPENDENT,
+} UIndicSyllabicCategory;
+
+/**
+ * Vertical Orientation constants.
+ *
+ * @see UCHAR_VERTICAL_ORIENTATION
+ * @stable ICU 63
+ */
+typedef enum UVerticalOrientation {
+    /*
+     * Note: UVerticalOrientation constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_VO_<Unicode Vertical_Orientation value name>
+     */
+
+    /** @stable ICU 63 */
+    U_VO_ROTATED,
+    /** @stable ICU 63 */
+    U_VO_TRANSFORMED_ROTATED,
+    /** @stable ICU 63 */
+    U_VO_TRANSFORMED_UPRIGHT,
+    /** @stable ICU 63 */
+    U_VO_UPRIGHT,
+} UVerticalOrientation;
 
 /**
  * Check a binary Unicode property for a code point.
