@@ -819,7 +819,7 @@ Normalizer2DataBuilder::writeCSourceFile(const char *filename) {
     const char *name=dataName.data();
     errorCode.assertSuccess();
 
-    FILE *f=usrc_create(path.data(), basename, "icu/source/tools/gennorm2/n2builder.cpp");
+    FILE *f=usrc_create(path.data(), basename, 2016, "icu/source/tools/gennorm2/n2builder.cpp");
     if(f==NULL) {
         fprintf(stderr, "gennorm2/writeCSourceFile() error: unable to create the output file %s\n",
                 filename);
@@ -827,7 +827,7 @@ Normalizer2DataBuilder::writeCSourceFile(const char *filename) {
     }
     fputs("#ifdef INCLUDED_FROM_NORMALIZER2_CPP\n\n", f);
 
-    char line[100], line2[100], line3[100];
+    char line[100];
     sprintf(line, "static const UVersionInfo %s_formatVersion={", name);
     usrc_writeArray(f, line, dataInfo.formatVersion, 8, 4, "};\n");
     sprintf(line, "static const UVersionInfo %s_dataVersion={", name);
@@ -835,13 +835,7 @@ Normalizer2DataBuilder::writeCSourceFile(const char *filename) {
     sprintf(line, "static const int32_t %s_indexes[Normalizer2Impl::IX_COUNT]={\n", name);
     usrc_writeArray(f, line, indexes, 32, Normalizer2Impl::IX_COUNT, "\n};\n\n");
 
-    sprintf(line, "static const uint16_t %s_trieIndex[%%ld]={\n", name);
-    sprintf(line2, "static const uint16_t %s_trieData[%%ld]={\n", name);
-    usrc_writeUCPTrieArrays(f, line, line2, norm16Trie.getAlias(), "\n};\n\n");
-    sprintf(line, "static const UCPTrie %s_trie={\n", name);
-    sprintf(line2, "%s_trieIndex", name);
-    sprintf(line3, "%s_trieData", name);
-    usrc_writeUCPTrieStruct(f, line, norm16Trie.getAlias(), line2, line3, "};\n\n");
+    usrc_writeUCPTrie(f, name, norm16Trie.getAlias());
 
     sprintf(line, "static const uint16_t %s_extraData[%%ld]={\n", name);
     usrc_writeArray(f, line, extraData.getBuffer(), 16, extraData.length(), "\n};\n\n");

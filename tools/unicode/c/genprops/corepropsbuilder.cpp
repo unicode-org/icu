@@ -833,7 +833,7 @@ CorePropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     const uint32_t *pvArray=upvec_getArray(pv, &pvRows, NULL);
     int32_t pvCount=pvRows*UPROPS_VECTOR_WORDS;
 
-    FILE *f=usrc_create(path, "uchar_props_data.h",
+    FILE *f=usrc_create(path, "uchar_props_data.h", 2016,
                         "icu/tools/unicode/c/genprops/corepropsbuilder.cpp");
     if(f==NULL) {
         errorCode=U_FILE_ACCESS_ERROR;

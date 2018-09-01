@@ -1,4 +1,3 @@
-#
 # Copyright (C) 2017 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
 #
@@ -12,5 +11,6 @@
 add_executable(genprops genprops.cpp
                pnamesbuilder.cpp corepropsbuilder.cpp
                bidipropsbuilder.cpp casepropsbuilder.cpp
+               layoutpropsbuilder.cpp
                namespropsbuilder.cpp)
 target_link_libraries(genprops icuuc icutu)

@@ -1035,6 +1035,70 @@ static const Value VALUES_bpt[3] = {
     Value(U_BPT_CLOSE, "c Close"),
 };
 
+static const Value VALUES_InPC[15] = {
+    Value(U_INPC_NA, "NA NA"),
+    Value(U_INPC_BOTTOM, "Bottom Bottom"),
+    Value(U_INPC_BOTTOM_AND_LEFT, "Bottom_And_Left Bottom_And_Left"),
+    Value(U_INPC_BOTTOM_AND_RIGHT, "Bottom_And_Right Bottom_And_Right"),
+    Value(U_INPC_LEFT, "Left Left"),
+    Value(U_INPC_LEFT_AND_RIGHT, "Left_And_Right Left_And_Right"),
+    Value(U_INPC_OVERSTRUCK, "Overstruck Overstruck"),
+    Value(U_INPC_RIGHT, "Right Right"),
+    Value(U_INPC_TOP, "Top Top"),
+    Value(U_INPC_TOP_AND_BOTTOM, "Top_And_Bottom Top_And_Bottom"),
+    Value(U_INPC_TOP_AND_BOTTOM_AND_RIGHT, "Top_And_Bottom_And_Right Top_And_Bottom_And_Right"),
+    Value(U_INPC_TOP_AND_LEFT, "Top_And_Left Top_And_Left"),
+    Value(U_INPC_TOP_AND_LEFT_AND_RIGHT, "Top_And_Left_And_Right Top_And_Left_And_Right"),
+    Value(U_INPC_TOP_AND_RIGHT, "Top_And_Right Top_And_Right"),
+    Value(U_INPC_VISUAL_ORDER_LEFT, "Visual_Order_Left Visual_Order_Left"),
+};
+
+static const Value VALUES_InSC[36] = {
+    Value(U_INSC_OTHER, "Other Other"),
+    Value(U_INSC_AVAGRAHA, "Avagraha Avagraha"),
+    Value(U_INSC_BINDU, "Bindu Bindu"),
+    Value(U_INSC_BRAHMI_JOINING_NUMBER, "Brahmi_Joining_Number Brahmi_Joining_Number"),
+    Value(U_INSC_CANTILLATION_MARK, "Cantillation_Mark Cantillation_Mark"),
+    Value(U_INSC_CONSONANT, "Consonant Consonant"),
+    Value(U_INSC_CONSONANT_DEAD, "Consonant_Dead Consonant_Dead"),
+    Value(U_INSC_CONSONANT_FINAL, "Consonant_Final Consonant_Final"),
+    Value(U_INSC_CONSONANT_HEAD_LETTER, "Consonant_Head_Letter Consonant_Head_Letter"),
+    Value(U_INSC_CONSONANT_INITIAL_POSTFIXED, "Consonant_Initial_Postfixed Consonant_Initial_Postfixed"),
+    Value(U_INSC_CONSONANT_KILLER, "Consonant_Killer Consonant_Killer"),
+    Value(U_INSC_CONSONANT_MEDIAL, "Consonant_Medial Consonant_Medial"),
+    Value(U_INSC_CONSONANT_PLACEHOLDER, "Consonant_Placeholder Consonant_Placeholder"),
+    Value(U_INSC_CONSONANT_PRECEDING_REPHA, "Consonant_Preceding_Repha Consonant_Preceding_Repha"),
+    Value(U_INSC_CONSONANT_PREFIXED, "Consonant_Prefixed Consonant_Prefixed"),
+    Value(U_INSC_CONSONANT_SUBJOINED, "Consonant_Subjoined Consonant_Subjoined"),
+    Value(U_INSC_CONSONANT_SUCCEEDING_REPHA, "Consonant_Succeeding_Repha Consonant_Succeeding_Repha"),
+    Value(U_INSC_CONSONANT_WITH_STACKER, "Consonant_With_Stacker Consonant_With_Stacker"),
+    Value(U_INSC_GEMINATION_MARK, "Gemination_Mark Gemination_Mark"),
+    Value(U_INSC_INVISIBLE_STACKER, "Invisible_Stacker Invisible_Stacker"),
+    Value(U_INSC_JOINER, "Joiner Joiner"),
+    Value(U_INSC_MODIFYING_LETTER, "Modifying_Letter Modifying_Letter"),
+    Value(U_INSC_NON_JOINER, "Non_Joiner Non_Joiner"),
+    Value(U_INSC_NUKTA, "Nukta Nukta"),
+    Value(U_INSC_NUMBER, "Number Number"),
+    Value(U_INSC_NUMBER_JOINER, "Number_Joiner Number_Joiner"),
+    Value(U_INSC_PURE_KILLER, "Pure_Killer Pure_Killer"),
+    Value(U_INSC_REGISTER_SHIFTER, "Register_Shifter Register_Shifter"),
+    Value(U_INSC_SYLLABLE_MODIFIER, "Syllable_Modifier Syllable_Modifier"),
+    Value(U_INSC_TONE_LETTER, "Tone_Letter Tone_Letter"),
+    Value(U_INSC_TONE_MARK, "Tone_Mark Tone_Mark"),
+    Value(U_INSC_VIRAMA, "Virama Virama"),
+    Value(U_INSC_VISARGA, "Visarga Visarga"),
+    Value(U_INSC_VOWEL, "Vowel Vowel"),
+    Value(U_INSC_VOWEL_DEPENDENT, "Vowel_Dependent Vowel_Dependent"),
+    Value(U_INSC_VOWEL_INDEPENDENT, "Vowel_Independent Vowel_Independent"),
+};
+
+static const Value VALUES_vo[4] = {
+    Value(U_VO_ROTATED, "R Rotated"),
+    Value(U_VO_TRANSFORMED_ROTATED, "Tr Transformed_Rotated"),
+    Value(U_VO_TRANSFORMED_UPRIGHT, "Tu Transformed_Upright"),
+    Value(U_VO_UPRIGHT, "U Upright"),
+};
+
 static const Value VALUES_gcm[38] = {
     Value((int32_t)U_GC_C_MASK, "C Other"),
     Value((int32_t)U_GC_CC_MASK, "Cc Control cntrl"),
@@ -1076,7 +1140,7 @@ static const Value VALUES_gcm[38] = {
     Value((int32_t)U_GC_ZS_MASK, "Zs Space_Separator"),
 };
 
-static const Property PROPERTIES[104] = {
+static const Property PROPERTIES[107] = {
     Property(UCHAR_ALPHABETIC, "Alpha Alphabetic"),
     Property(UCHAR_ASCII_HEX_DIGIT, "AHex ASCII_Hex_Digit"),
     Property(UCHAR_BIDI_CONTROL, "Bidi_C Bidi_Control"),
@@ -1164,6 +1228,9 @@ static const Property PROPERTIES[104] = {
     Property(UCHAR_SENTENCE_BREAK, "SB Sentence_Break", VALUES_SB, 15),
     Property(UCHAR_WORD_BREAK, "WB Word_Break", VALUES_WB, 23),
     Property(UCHAR_BIDI_PAIRED_BRACKET_TYPE, "bpt Bidi_Paired_Bracket_Type", VALUES_bpt, 3),
+    Property(UCHAR_INDIC_POSITIONAL_CATEGORY, "InPC Indic_Positional_Category", VALUES_InPC, 15),
+    Property(UCHAR_INDIC_SYLLABIC_CATEGORY, "InSC Indic_Syllabic_Category", VALUES_InSC, 36),
+    Property(UCHAR_VERTICAL_ORIENTATION, "vo Vertical_Orientation", VALUES_vo, 4),
     Property(UCHAR_GENERAL_CATEGORY_MASK, "gcm General_Category_Mask", VALUES_gcm, 38),
     Property(UCHAR_NUMERIC_VALUE, "nv Numeric_Value"),
     Property(UCHAR_AGE, "age Age"),
