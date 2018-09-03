@@ -27,6 +27,24 @@
 
 #include "unicode/utypes.h"
 #include "unicode/stringoptions.h"
+#include "unicode/ucpmap.h"
+
+#if !defined(USET_DEFINED) && !defined(U_IN_DOXYGEN)
+
+#define USET_DEFINED
+
+/**
+ * USet is the C API type corresponding to C++ class UnicodeSet.
+ * It is forward-declared here to avoid including unicode/uset.h file if related
+ * conversion APIs are not used.
+ *
+ * @see ucnv_getUnicodeSet
+ * @stable ICU 2.4
+ */
+typedef struct USet USet;
+
+#endif
+
 
 U_CDECL_BEGIN
 
@@ -2519,12 +2537,32 @@ typedef enum UVerticalOrientation {
  *         does not have data for the property at all, or not for this code point.
  *
  * @see UProperty
+ * @see u_getBinaryPropertySet
  * @see u_getIntPropertyValue
  * @see u_getUnicodeVersion
  * @stable ICU 2.1
  */
 U_STABLE UBool U_EXPORT2
 u_hasBinaryProperty(UChar32 c, UProperty which);
+
+#ifndef U_HIDE_DRAFT_API
+
+/**
+ * Returns a frozen USet for a binary property.
+ * The library retains ownership over the returned object.
+ * Sets an error code if the property number is not one for a binary property.
+ *
+ * @param property UCHAR_BINARY_START..UCHAR_BINARY_LIMIT-1
+ * @param pErrorCode an in/out ICU UErrorCode
+ * @return the property as a set
+ * @see UProperty
+ * @see u_hasBinaryProperty
+ * @see Unicode::fromUSet
+ */
+U_CAPI const USet * U_EXPORT2
+u_getBinaryPropertySet(UProperty property, UErrorCode *pErrorCode);
+
+#endif  // U_HIDE_DRAFT_API
 
 /**
  * Check if a code point has the Alphabetic Unicode property.
@@ -2626,6 +2664,7 @@ u_isUWhiteSpace(UChar32 c);
  * @see u_hasBinaryProperty
  * @see u_getIntPropertyMinValue
  * @see u_getIntPropertyMaxValue
+ * @see u_getIntPropertyMap
  * @see u_getUnicodeVersion
  * @stable ICU 2.2
  */
@@ -2681,6 +2720,24 @@ u_getIntPropertyMinValue(UProperty which);
  */
 U_STABLE int32_t U_EXPORT2
 u_getIntPropertyMaxValue(UProperty which);
+
+#ifndef U_HIDE_DRAFT_API
+
+/**
+ * Returns an immutable UCPMap for an enumerated/catalog/int-valued property.
+ * The library retains ownership over the returned object.
+ * Sets an error code if the property number is not one for an "int property".
+ *
+ * @param property UCHAR_INT_START..UCHAR_INT_LIMIT-1
+ * @param pErrorCode an in/out ICU UErrorCode
+ * @return the property as a map
+ * @see UProperty
+ * @see u_getIntPropertyValue
+ */
+U_CAPI const UCPMap * U_EXPORT2
+u_getIntPropertyMap(UProperty property, UErrorCode *pErrorCode);
+
+#endif  // U_HIDE_DRAFT_API
 
 /**
  * Get the numeric value for a Unicode code point as defined in the

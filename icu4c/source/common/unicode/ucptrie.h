@@ -8,6 +8,9 @@
 #define __UCPTRIE_H__
 
 #include "unicode/utypes.h"
+
+#ifndef U_HIDE_DRAFT_API
+
 #include "unicode/localpointer.h"
 #include "unicode/ucpmap.h"
 #include "unicode/utf8.h"
@@ -638,4 +641,5 @@ ucptrie_internalU8PrevIndex(const UCPTrie *trie, UChar32 c,
 U_CDECL_END
 
 #endif  // U_IN_DOXYGEN
+#endif  // U_HIDE_DRAFT_API
 #endif

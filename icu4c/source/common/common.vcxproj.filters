@@ -388,6 +388,9 @@
     <ClCompile Include="bmpset.cpp">
       <Filter>properties &amp; sets</Filter>
     </ClCompile>
+    <ClCompile Include="characterproperties.cpp">
+      <Filter>properties &amp; sets</Filter>
+    </ClCompile>
     <ClCompile Include="propname.cpp">
       <Filter>properties &amp; sets</Filter>
     </ClCompile>

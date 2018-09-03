@@ -9,6 +9,8 @@
 
 #include "unicode/utypes.h"
 
+#ifndef U_HIDE_DRAFT_API
+
 U_CDECL_BEGIN
 
 /**
@@ -153,4 +155,5 @@ ucpmap_getRange(const UCPMap *map, UChar32 start,
 
 U_CDECL_END
 
+#endif  // U_HIDE_DRAFT_API
 #endif

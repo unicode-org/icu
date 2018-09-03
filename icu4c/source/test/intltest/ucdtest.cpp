@@ -7,13 +7,16 @@
 
 #include "unicode/ustring.h"
 #include "unicode/uchar.h"
+#include "unicode/ucpmap.h"
 #include "unicode/uniset.h"
 #include "unicode/putil.h"
 #include "unicode/uscript.h"
+#include "unicode/uset.h"
 #include "cstring.h"
 #include "hash.h"
 #include "patternprops.h"
 #include "normalizer2impl.h"
+#include "testutil.h"
 #include "uparse.h"
 #include "ucdtest.h"
 
@@ -67,6 +70,8 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestVerticalOrientation);
     TESTCASE_AUTO(TestDefaultScriptExtensions);
     TESTCASE_AUTO(TestInvalidCodePointFolding);
+    TESTCASE_AUTO(TestBinaryCharacterProperties);
+    TESTCASE_AUTO(TestIntCharacterProperties);
     TESTCASE_AUTO_END;
 }
 
@@ -613,5 +618,75 @@ void UnicodeTest::TestInvalidCodePointFolding(void) {
                 cp, u_foldCase(cp, U_FOLD_CASE_DEFAULT));
         assertEquals("Invalid code points should be echoed back",
                 cp, u_foldCase(cp, U_FOLD_CASE_EXCLUDE_SPECIAL_I));
+    }
+}
+
+void UnicodeTest::TestBinaryCharacterProperties() {
+    IcuTestErrorCode errorCode(*this, "TestBinaryCharacterProperties()");
+    // Spot-check getBinaryPropertySet() vs. hasBinaryProperty().
+    for (int32_t prop = 0; prop < UCHAR_BINARY_LIMIT; ++prop) {
+        const USet *uset = u_getBinaryPropertySet((UProperty)prop, errorCode);
+        if (errorCode.errIfFailureAndReset("u_getBinaryPropertySet(%d)", (int)prop)) {
+            continue;
+        }
+        const UnicodeSet &set = *UnicodeSet::fromUSet(uset);
+        int32_t size = set.size();
+        if (size == 0) {
+            assertFalse(UnicodeString("!hasBinaryProperty(U+0020, ") + prop + u")",
+                u_hasBinaryProperty(0x20, (UProperty)prop));
+            assertFalse(UnicodeString("!hasBinaryProperty(U+0061, ") + prop + u")",
+                u_hasBinaryProperty(0x61, (UProperty)prop));
+            assertFalse(UnicodeString("!hasBinaryProperty(U+4E00, ") + prop + u")",
+                u_hasBinaryProperty(0x4e00, (UProperty)prop));
+        } else {
+            UChar32 c = set.charAt(0);
+            if (c > 0) {
+                assertFalse(
+                    UnicodeString("!hasBinaryProperty(") + TestUtility::hex(c - 1) +
+                        u", " + prop + u")",
+                    u_hasBinaryProperty(c - 1, (UProperty)prop));
+            }
+            assertTrue(
+                UnicodeString("hasBinaryProperty(") + TestUtility::hex(c) +
+                    u", " + prop + u")",
+                u_hasBinaryProperty(c, (UProperty)prop));
+            c = set.charAt(size - 1);
+            assertTrue(
+                UnicodeString("hasBinaryProperty(") + TestUtility::hex(c) +
+                    u", " + prop + u")",
+                u_hasBinaryProperty(c, (UProperty)prop));
+            if (c < 0x10ffff) {
+                assertFalse(
+                    UnicodeString("!hasBinaryProperty(") + TestUtility::hex(c + 1) +
+                        u", " + prop + u")",
+                    u_hasBinaryProperty(c + 1, (UProperty)prop));
+            }
+        }
+    }
+}
+
+void UnicodeTest::TestIntCharacterProperties() {
+    IcuTestErrorCode errorCode(*this, "TestIntCharacterProperties()");
+    // Spot-check getIntPropertyMap() vs. getIntPropertyValue().
+    for (int32_t prop = UCHAR_INT_START; prop < UCHAR_INT_LIMIT; ++prop) {
+        const UCPMap *map = u_getIntPropertyMap((UProperty)prop, errorCode);
+        if (errorCode.errIfFailureAndReset("u_getIntPropertyMap(%d)", (int)prop)) {
+            continue;
+        }
+        uint32_t value;
+        UChar32 end = ucpmap_getRange(map, 0, UCPMAP_RANGE_NORMAL, 0, nullptr, nullptr, &value);
+        assertTrue("int property first range", end >= 0);
+        UChar32 c = end / 2;
+        assertEquals(UnicodeString("int property first range value at ") + TestUtility::hex(c),
+            u_getIntPropertyValue(c, (UProperty)prop), value);
+        end = ucpmap_getRange(map, 0x5000, UCPMAP_RANGE_NORMAL, 0, nullptr, nullptr, &value);
+        assertTrue("int property later range", end >= 0);
+        assertEquals(UnicodeString("int property later range value at ") + TestUtility::hex(end),
+            u_getIntPropertyValue(end, (UProperty)prop), value);
+        // ucpmap_get() API coverage
+        // TODO: move to cucdtst.c
+        assertEquals(
+            "int property upcmap_get(U+0061)",
+            u_getIntPropertyValue(0x61, (UProperty)prop), ucpmap_get(map, 0x61));
     }
 }

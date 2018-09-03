@@ -3177,7 +3177,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         boolean contains(int codePoint);
     }
 
-    private static class NumericValueFilter implements Filter {
+    private static final class NumericValueFilter implements Filter {
         double value;
         NumericValueFilter(double value) { this.value = value; }
         @Override
@@ -3186,7 +3186,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         }
     }
 
-    private static class ScriptExtensionsFilter implements Filter {
+    private static final class ScriptExtensionsFilter implements Filter {
         int script;
         ScriptExtensionsFilter(int script) { this.script = script; }
         @Override
@@ -3198,7 +3198,7 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
     // VersionInfo for unassigned characters
     private static final VersionInfo NO_VERSION = VersionInfo.getInstance(0, 0, 0, 0);
 
-    private static class VersionFilter implements Filter {
+    private static final class VersionFilter implements Filter {
         VersionInfo version;
         VersionFilter(VersionInfo version) { this.version = version; }
         @Override
@@ -3222,8 +3222,8 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         // To improve performance, use an inclusions set which
         // encodes information about character ranges that are known
         // to have identical properties.
-        // getInclusions(src) contains exactly the first characters of
-        // same-value ranges for the given properties "source".
+        // inclusions contains the first characters of
+        // same-value ranges for the given property.
 
         clear();
 
@@ -3338,12 +3338,12 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
      * @stable ICU 2.4
      */
     public UnicodeSet applyIntPropertyValue(int prop, int value) {
-        UnicodeSet inclusions = CharacterPropertiesImpl.getInclusionsForProperty(prop);
         // All of the following include checkFrozen() before modifying this set.
         if (prop == UProperty.GENERAL_CATEGORY_MASK) {
             CodePointMap map = CharacterProperties.getIntPropertyMap(UProperty.GENERAL_CATEGORY);
             applyIntPropertyValue(map, new GeneralCategoryMaskFilter(value));
         } else if (prop == UProperty.SCRIPT_EXTENSIONS) {
+            UnicodeSet inclusions = CharacterPropertiesImpl.getInclusionsForProperty(prop);
             applyFilter(new ScriptExtensionsFilter(value), inclusions);
         } else if (0 <= prop && prop < UProperty.BINARY_LIMIT) {
             if (value == 0 || value == 1) {
@@ -3358,9 +3358,11 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
             CodePointMap map = CharacterProperties.getIntPropertyMap(prop);
             applyIntPropertyValue(map, new IntValueFilter(value));
         } else {
-            // Not supported; getIntPropertyValue(c, prop) returns 0 for all code points
-            // and getInclusionsForSource() throws an exception.
-            clear();
+            // This code used to always call getInclusions(property source)
+            // which throws an exception for an unsupported property.
+            throw new IllegalArgumentException("unsupported property " + prop);
+            // Otherwise we would just clear() this set because
+            // getIntPropertyValue(c, prop) returns 0 for all code points.
         }
         return this;
     }

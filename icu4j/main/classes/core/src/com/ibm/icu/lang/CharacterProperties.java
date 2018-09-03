@@ -53,7 +53,7 @@ public final class CharacterProperties {
 
     private static CodePointMap makeMap(int property) {
         int nullValue = property == UProperty.SCRIPT ? UScript.UNKNOWN : 0;
-        MutableCodePointTrie mutableTrie = new MutableCodePointTrie(nullValue, 0);
+        MutableCodePointTrie mutableTrie = new MutableCodePointTrie(nullValue, nullValue);
         UnicodeSet inclusions = CharacterPropertiesImpl.getInclusionsForProperty(property);
         int numRanges = inclusions.getRangeCount();
         int start = 0;
