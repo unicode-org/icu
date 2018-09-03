@@ -9,9 +9,8 @@
 
 #include "unicode/utypes.h"
 #include "unicode/localpointer.h"
+#include "unicode/ucpmap.h"
 #include "unicode/utf8.h"
-#include "putilimp.h"
-#include "udataswp.h"
 
 U_CDECL_BEGIN
 
@@ -175,54 +174,6 @@ typedef enum UCPTrieValueWidth UCPTrieValueWidth;
 #endif
 
 /**
- * Selectors for how ucptrie_getRange() should report value ranges overlapping with surrogates.
- * Most users should use UCPTRIE_RANGE_NORMAL.
- *
- * @see ucptrie_getRange
- * @draft ICU 63
- */
-enum UCPTrieRangeOption {
-    /**
-     * ucptrie_getRange() enumerates all same-value ranges as stored in the trie.
-     * Most users should use this option.
-     */
-    UCPTRIE_RANGE_NORMAL,
-    /**
-     * ucptrie_getRange() enumerates all same-value ranges as stored in the trie,
-     * except that lead surrogates (U+D800..U+DBFF) are treated as having the
-     * surrogateValue, which is passed to getRange() as a separate parameter.
-     * The surrogateValue is not transformed via filter().
-     * See U_IS_LEAD(c).
-     *
-     * Most users should use UCPTRIE_RANGE_NORMAL instead.
-     *
-     * This option is useful for tries that map surrogate code *units* to
-     * special values optimized for UTF-16 string processing
-     * or for special error behavior for unpaired surrogates,
-     * but those values are not to be associated with the lead surrogate code *points*.
-     */
-    UCPTRIE_RANGE_FIXED_LEAD_SURROGATES,
-    /**
-     * ucptrie_getRange() enumerates all same-value ranges as stored in the trie,
-     * except that all surrogates (U+D800..U+DFFF) are treated as having the
-     * surrogateValue, which is passed to getRange() as a separate parameter.
-     * The surrogateValue is not transformed via filter().
-     * See U_IS_SURROGATE(c).
-     *
-     * Most users should use UCPTRIE_RANGE_NORMAL instead.
-     *
-     * This option is useful for tries that map surrogate code *units* to
-     * special values optimized for UTF-16 string processing
-     * or for special error behavior for unpaired surrogates,
-     * but those values are not to be associated with the lead surrogate code *points*.
-     */
-    UCPTRIE_RANGE_FIXED_ALL_SURROGATES
-};
-#ifndef U_IN_DOXYGEN
-typedef enum UCPTrieRangeOption UCPTrieRangeOption;
-#endif
-
-/**
  * Opens a trie from its binary form, stored in 32-bit-aligned memory.
  * Inverse of ucptrie_toBinary().
  *
@@ -323,29 +274,12 @@ U_CAPI uint32_t U_EXPORT2
 ucptrie_get(const UCPTrie *trie, UChar32 c);
 
 /**
- * Callback function type: Modifies a trie value.
- * Optionally called by ucptrie_getRange() or umutablecptrie_getRange().
- * The modified value will be returned by the getRange function.
- *
- * Can be used to ignore some of the value bits,
- * make a filter for one of several values,
- * return a value index computed from the trie value, etc.
- *
- * @param context an opaque pointer, as passed into the getRange function
- * @param value a value from the trie
- * @return the modified value
- * @draft ICU 63
- */
-typedef uint32_t U_CALLCONV
-UCPTrieValueFilter(const void *context, uint32_t value);
-
-/**
  * Returns the last code point such that all those from start to there have the same value.
  * Can be used to efficiently iterate over all same-value ranges in a trie.
  * (This is normally faster than iterating over code points and get()ting each value,
  * but much slower than a data structure that stores ranges directly.)
  *
- * If the UCPTrieValueFilter function pointer is not NULL, then
+ * If the UCPMapValueFilter function pointer is not NULL, then
  * the value to be delivered is passed through that function, and the return value is the end
  * of the range where all values are modified to the same actual value.
  * The value is unchanged if that function pointer is NULL.
@@ -354,7 +288,7 @@ UCPTrieValueFilter(const void *context, uint32_t value);
  * \code
  * UChar32 start = 0, end;
  * uint32_t value;
- * while ((end = ucptrie_getRange(trie, start, UCPTRIE_RANGE_NORMAL, 0,
+ * while ((end = ucptrie_getRange(trie, start, UCPMAP_RANGE_NORMAL, 0,
  *                                NULL, NULL, &value)) >= 0) {
  *     // Work with the range start..end and its value.
  *     start = end + 1;
@@ -364,8 +298,8 @@ UCPTrieValueFilter(const void *context, uint32_t value);
  * @param trie the trie
  * @param start range start
  * @param option defines whether surrogates are treated normally,
- *               or as having the surrogateValue; usually UCPTRIE_RANGE_NORMAL
- * @param surrogateValue value for surrogates; ignored if option==UCPTRIE_RANGE_NORMAL
+ *               or as having the surrogateValue; usually UCPMAP_RANGE_NORMAL
+ * @param surrogateValue value for surrogates; ignored if option==UCPMAP_RANGE_NORMAL
  * @param filter a pointer to a function that may modify the trie data value,
  *     or NULL if the values from the trie are to be used unmodified
  * @param context an opaque pointer that is passed on to the filter function
@@ -377,8 +311,8 @@ UCPTrieValueFilter(const void *context, uint32_t value);
  */
 U_CAPI UChar32 U_EXPORT2
 ucptrie_getRange(const UCPTrie *trie, UChar32 start,
-                 UCPTrieRangeOption option, uint32_t surrogateValue,
-                 UCPTrieValueFilter *filter, const void *context, uint32_t *pValue);
+                 UCPMapRangeOption option, uint32_t surrogateValue,
+                 UCPMapValueFilter *filter, const void *context, uint32_t *pValue);
 
 /**
  * Writes a memory-mappable form of the trie into 32-bit aligned memory.

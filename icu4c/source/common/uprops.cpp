@@ -605,7 +605,7 @@ uprops_addPropertyStarts(UPropertySource src, const USetAdder *sa, UErrorCode *p
 
     // Add the start code point of each same-value range of the trie.
     UChar32 start = 0, end;
-    while ((end = ucptrie_getRange(trie, start, UCPTRIE_RANGE_NORMAL, 0,
+    while ((end = ucptrie_getRange(trie, start, UCPMAP_RANGE_NORMAL, 0,
                                    nullptr, nullptr, nullptr)) >= 0) {
         sa->add(sa->set, start);
         start = end + 1;

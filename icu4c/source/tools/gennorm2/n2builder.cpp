@@ -650,7 +650,7 @@ LocalUCPTriePointer Normalizer2DataBuilder::processData() {
     // First check that surrogate code *points* are inert.
     // The parser should have rejected values/mappings for them.
     uint32_t value;
-    UChar32 end = umutablecptrie_getRange(norm16Trie, 0xd800, UCPTRIE_RANGE_NORMAL, 0,
+    UChar32 end = umutablecptrie_getRange(norm16Trie, 0xd800, UCPMAP_RANGE_NORMAL, 0,
                                           nullptr, nullptr, &value);
     if (value != Normalizer2Impl::INERT || end < 0xdfff) {
         fprintf(stderr,
@@ -665,7 +665,7 @@ LocalUCPTriePointer Normalizer2DataBuilder::processData() {
     end = 0;
     for (UChar32 start = 0x10000;;) {
         if (start > end) {
-            end = umutablecptrie_getRange(norm16Trie, start, UCPTRIE_RANGE_NORMAL, 0,
+            end = umutablecptrie_getRange(norm16Trie, start, UCPMAP_RANGE_NORMAL, 0,
                                           nullptr, nullptr, &value);
             if (end < 0) { break; }
         }

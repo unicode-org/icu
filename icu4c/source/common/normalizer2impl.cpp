@@ -466,7 +466,7 @@ void
 Normalizer2Impl::addLcccChars(UnicodeSet &set) const {
     UChar32 start = 0, end;
     uint32_t norm16;
-    while ((end = ucptrie_getRange(normTrie, start, UCPTRIE_RANGE_FIXED_LEAD_SURROGATES, INERT,
+    while ((end = ucptrie_getRange(normTrie, start, UCPMAP_RANGE_FIXED_LEAD_SURROGATES, INERT,
                                    nullptr, nullptr, &norm16)) >= 0) {
         if (norm16 > Normalizer2Impl::MIN_NORMAL_MAYBE_YES &&
                 norm16 != Normalizer2Impl::JAMO_VT) {
@@ -484,7 +484,7 @@ Normalizer2Impl::addPropertyStarts(const USetAdder *sa, UErrorCode & /*errorCode
     // Add the start code point of each same-value range of the trie.
     UChar32 start = 0, end;
     uint32_t value;
-    while ((end = ucptrie_getRange(normTrie, start, UCPTRIE_RANGE_FIXED_LEAD_SURROGATES, INERT,
+    while ((end = ucptrie_getRange(normTrie, start, UCPMAP_RANGE_FIXED_LEAD_SURROGATES, INERT,
                                    nullptr, nullptr, &value)) >= 0) {
         sa->add(sa->set, start);
         if (start != end && isAlgorithmicNoNo((uint16_t)value) &&
@@ -518,7 +518,7 @@ Normalizer2Impl::addCanonIterPropertyStarts(const USetAdder *sa, UErrorCode &err
     // Currently only used for the SEGMENT_STARTER property.
     UChar32 start = 0, end;
     uint32_t value;
-    while ((end = ucptrie_getRange(fCanonIterData->trie, start, UCPTRIE_RANGE_NORMAL, 0,
+    while ((end = ucptrie_getRange(fCanonIterData->trie, start, UCPMAP_RANGE_NORMAL, 0,
                                    segmentStarterMapper, nullptr, &value)) >= 0) {
         sa->add(sa->set, start);
         start = end + 1;
@@ -2398,7 +2398,7 @@ void InitCanonIterData::doInit(Normalizer2Impl *impl, UErrorCode &errorCode) {
         UChar32 start = 0, end;
         uint32_t value;
         while ((end = ucptrie_getRange(impl->normTrie, start,
-                                       UCPTRIE_RANGE_FIXED_LEAD_SURROGATES, Normalizer2Impl::INERT,
+                                       UCPMAP_RANGE_FIXED_LEAD_SURROGATES, Normalizer2Impl::INERT,
                                        nullptr, nullptr, &value)) >= 0) {
             // Call Normalizer2Impl::makeCanonIterDataFromNorm16() for a range of same-norm16 characters.
             if (value != Normalizer2Impl::INERT) {

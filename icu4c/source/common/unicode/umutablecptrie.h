@@ -9,6 +9,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/localpointer.h"
+#include "unicode/ucpmap.h"
 #include "unicode/ucptrie.h"
 #include "unicode/utf8.h"
 #include "putilimp.h"
@@ -103,6 +104,18 @@ U_NAMESPACE_END
 #endif
 
 /**
+ * Creates a mutable trie with the same contents as the UCPMap.
+ * You must umutablecptrie_close() the mutable trie once you are done using it.
+ *
+ * @param map the source map
+ * @param pErrorCode an in/out ICU UErrorCode
+ * @return the mutable trie
+ * @draft ICU 63
+ */
+U_CAPI UMutableCPTrie * U_EXPORT2
+umutablecptrie_fromUCPMap(const UCPMap *map, UErrorCode *pErrorCode);
+
+/**
  * Creates a mutable trie with the same contents as the immutable one.
  * You must umutablecptrie_close() the mutable trie once you are done using it.
  *
@@ -133,7 +146,7 @@ umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c);
  *
  * The trie can be modified between calls to this function.
  *
- * If the UCPTrieValueFilter function pointer is not NULL, then
+ * If the UCPMapValueFilter function pointer is not NULL, then
  * the value to be delivered is passed through that function, and the return value is the end
  * of the range where all values are modified to the same actual value.
  * The value is unchanged if that function pointer is NULL.
@@ -143,8 +156,8 @@ umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c);
  * @param trie the trie
  * @param start range start
  * @param option defines whether surrogates are treated normally,
- *               or as having the surrogateValue; usually UCPTRIE_RANGE_NORMAL
- * @param surrogateValue value for surrogates; ignored if option==UCPTRIE_RANGE_NORMAL
+ *               or as having the surrogateValue; usually UCPMAP_RANGE_NORMAL
+ * @param surrogateValue value for surrogates; ignored if option==UCPMAP_RANGE_NORMAL
  * @param filter a pointer to a function that may modify the trie data value,
  *     or NULL if the values from the trie are to be used unmodified
  * @param context an opaque pointer that is passed on to the filter function
@@ -156,8 +169,8 @@ umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c);
  */
 U_CAPI UChar32 U_EXPORT2
 umutablecptrie_getRange(const UMutableCPTrie *trie, UChar32 start,
-                        UCPTrieRangeOption option, uint32_t surrogateValue,
-                        UCPTrieValueFilter *filter, const void *context, uint32_t *pValue);
+                        UCPMapRangeOption option, uint32_t surrogateValue,
+                        UCPMapValueFilter *filter, const void *context, uint32_t *pValue);
 
 /**
  * Sets a value for a code point.
