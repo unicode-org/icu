@@ -916,7 +916,7 @@ Locale::createFromName (const char *name)
     if (name) {
         Locale l("");
         l.init(name, FALSE);
-        return static_cast<Locale&&>(l);
+        return l;
     }
     else {
         return getDefault();
@@ -927,7 +927,7 @@ Locale U_EXPORT2
 Locale::createCanonical(const char* name) {
     Locale loc("");
     loc.init(name, TRUE);
-    return static_cast<Locale&&>(loc);
+    return loc;
 }
 
 const char *
