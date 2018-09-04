@@ -426,6 +426,12 @@ Locale::Locale(const Locale &other)
     *this = other;
 }
 
+Locale::Locale(Locale&& other) U_NOEXCEPT
+    : UObject(other), fullName(fullNameBuffer), baseName(fullName) {
+  // Not using std::move() for that would require STL header files.
+  *this = static_cast<Locale&&>(other);
+}
+
 Locale &Locale::operator=(const Locale &other)
 {
     if (this == &other) {
@@ -476,6 +482,42 @@ Locale &Locale::operator=(const Locale &other)
     /* The variantBegin is an offset, just copy it */
     variantBegin = other.variantBegin;
     fIsBogus = other.fIsBogus;
+    return *this;
+}
+
+Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
+    if (this == &other) {
+        return *this;
+    }
+
+    if (fullName != fullNameBuffer) {
+        uprv_free(fullName);
+    }
+
+    if (baseName != fullName) {
+        uprv_free(baseName);
+    }
+
+    fullName = other.fullName == other.fullNameBuffer ? fullNameBuffer
+                                                      : other.fullName;
+
+    baseName = other.baseName == other.fullName ? fullName
+                                                : other.baseName;
+
+    if (fullName == fullNameBuffer) {
+        uprv_strcpy(fullNameBuffer, other.fullNameBuffer);
+    }
+
+    uprv_strcpy(language, other.language);
+    uprv_strcpy(script, other.script);
+    uprv_strcpy(country, other.country);
+
+    variantBegin = other.variantBegin;
+    fIsBogus = other.fIsBogus;
+
+    other.baseName = other.fullName = other.fullNameBuffer;
+    other.fIsBogus = TRUE;
+
     return *this;
 }
 
@@ -874,7 +916,7 @@ Locale::createFromName (const char *name)
     if (name) {
         Locale l("");
         l.init(name, FALSE);
-        return l;
+        return static_cast<Locale&&>(l);
     }
     else {
         return getDefault();
@@ -885,7 +927,7 @@ Locale U_EXPORT2
 Locale::createCanonical(const char* name) {
     Locale loc("");
     loc.init(name, TRUE);
-    return loc;
+    return static_cast<Locale&&>(loc);
 }
 
 const char *

@@ -6,6 +6,8 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <utility>
+
 #include "loctest.h"
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
@@ -236,6 +238,8 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestBug13554);
     TESTCASE_AUTO(TestForLanguageTag);
     TESTCASE_AUTO(TestToLanguageTag);
+    TESTCASE_AUTO(TestMoveAssign);
+    TESTCASE_AUTO(TestMoveCtor);
     TESTCASE_AUTO_END;
 }
 
@@ -2844,4 +2848,70 @@ void LocaleTest::TestToLanguageTag() {
     std::string result_bogus = loc_bogus.toLanguageTag<std::string>(status);
     assertEquals("bogus", U_ILLEGAL_ARGUMENT_ERROR, status.reset());
     assertTrue(result_bogus.c_str(), result_bogus.empty());
+}
+
+void LocaleTest::TestMoveAssign() {
+    // ULOC_FULLNAME_CAPACITY == 157 (uloc.h)
+    Locale l1("de@collation=phonebook;x="
+              "aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
+              "aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
+              "aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
+              "aaaaabbbbbzz");
+
+    Locale l2;
+    {
+        Locale l3(l1);
+        assertTrue("l1 == l3", l1 == l3);
+        assertTrue("!l3.isBogus()", !l3.isBogus());
+        l2 = std::move(l3);
+        assertTrue("l1 == l2", l1 == l2);
+        assertTrue("l3.isBogus()", l3.isBogus());
+        assertTrue("l3.getName()", l3.getName() != nullptr);
+    }
+
+    // This should remain true also after l3 has been destructed.
+    assertTrue("l1 == l2, again", l1 == l2);
+
+    Locale l4("vo", "Cyrl", "AQ");
+
+    Locale l5;
+    {
+        Locale l6(l4);
+        assertTrue("l4 == l6", l4 == l6);
+        assertTrue("!l6.isBogus()", !l6.isBogus());
+        l5 = std::move(l6);
+        assertTrue("l4 == l5", l4 == l5);
+        assertTrue("l6.isBogus()", l6.isBogus());
+        assertTrue("l6.getName()", l6.getName() != nullptr);
+    }
+
+    // This should remain true also after l6 has been destructed.
+    assertTrue("l4 == l5, again", l4 == l5);
+}
+
+void LocaleTest::TestMoveCtor() {
+    // ULOC_FULLNAME_CAPACITY == 157 (uloc.h)
+    Locale l1("de@collation=phonebook;x="
+              "aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
+              "aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
+              "aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
+              "aaaaabbbbbzz");
+
+    Locale l3(l1);
+    assertTrue("l1 == l3", l1 == l3);
+    assertTrue("!l3.isBogus()", !l3.isBogus());
+    Locale l2(std::move(l3));
+    assertTrue("l1 == l2", l1 == l2);
+    assertTrue("l3.isBogus()", l3.isBogus());
+    assertTrue("l3.getName()", l3.getName() != nullptr);
+
+    Locale l4("vo", "Cyrl", "AQ");
+
+    Locale l6(l4);
+    assertTrue("l4 == l6", l4 == l6);
+    assertTrue("!l6.isBogus()", !l6.isBogus());
+    Locale l5(std::move(l6));
+    assertTrue("l4 == l5", l4 == l5);
+    assertTrue("l6.isBogus()", l6.isBogus());
+    assertTrue("l6.getName()", l6.getName() != nullptr);
 }

@@ -282,6 +282,14 @@ public:
      */
     Locale(const    Locale& other);
 
+    /**
+     * Initializes a Locale object from another Locale object.
+     * Takes ownership of data, and sets the other Locale object to bogus.
+     *
+     * @param other The Locale object being moved in.
+     * @draft ICU 63
+     */
+    Locale(Locale&& other) U_NOEXCEPT;
 
     /**
      * Destructor
@@ -297,6 +305,16 @@ public:
      * @stable ICU 2.0
      */
     Locale& operator=(const Locale& other);
+
+    /**
+     * Replaces the entire contents of *this with the specified value.
+     * Takes ownership of data, and sets the other Locale object to bogus.
+     *
+     * @param other The Locale object being moved in.
+     * @return      *this
+     * @draft ICU 63
+     */
+    Locale& operator=(Locale&& other) U_NOEXCEPT;
 
     /**
      * Checks if two locale keys are the same.
