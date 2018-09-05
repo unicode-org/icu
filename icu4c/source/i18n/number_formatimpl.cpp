@@ -76,7 +76,7 @@ void NumberFormatterImpl::formatStatic(const MacroProps& macros, DecimalQuantity
     NumberFormatterImpl impl(macros, false, status);
     MicroProps& micros = impl.preProcessUnsafe(inValue, status);
     if (U_FAILURE(status)) { return; }
-    int32_t length = formatNumber(micros, inValue, outString, 0, status);
+    int32_t length = writeNumber(micros, inValue, outString, 0, status);
     writeAffixes(micros, outString, 0, length, status);
 }
 
@@ -97,7 +97,7 @@ void NumberFormatterImpl::format(DecimalQuantity& inValue, NumberStringBuilder& 
     MicroProps micros;
     preProcess(inValue, micros, status);
     if (U_FAILURE(status)) { return; }
-    int32_t length = formatNumber(micros, inValue, outString, 0, status);
+    int32_t length = writeNumber(micros, inValue, outString, 0, status);
     writeAffixes(micros, outString, 0, length, status);
 }
 
@@ -109,6 +109,8 @@ void NumberFormatterImpl::preProcess(DecimalQuantity& inValue, MicroProps& micro
         return;
     }
     fMicroPropsGenerator->processQuantity(inValue, microsOut, status);
+    microsOut.rounder.apply(inValue, status);
+    microsOut.integerWidth.apply(inValue, status);
 }
 
 MicroProps& NumberFormatterImpl::preProcessUnsafe(DecimalQuantity& inValue, UErrorCode& status) {
@@ -120,6 +122,8 @@ MicroProps& NumberFormatterImpl::preProcessUnsafe(DecimalQuantity& inValue, UErr
         return fMicros; // must always return a value
     }
     fMicroPropsGenerator->processQuantity(inValue, fMicros, status);
+    fMicros.rounder.apply(inValue, status);
+    fMicros.integerWidth.apply(inValue, status);
     return fMicros;
 }
 
@@ -418,15 +422,6 @@ NumberFormatterImpl::resolvePluralRules(const PluralRules* rulesPtr, const Local
         fRules.adoptInstead(PluralRules::forLocale(locale, status));
     }
     return fRules.getAlias();
-}
-
-int32_t NumberFormatterImpl::formatNumber(const MicroProps& micros, DecimalQuantity& quantity,
-                                          NumberStringBuilder& string, int32_t index,
-                                          UErrorCode& status) {
-    micros.rounder.apply(quantity, status);
-    micros.integerWidth.apply(quantity, status);
-    int32_t length = writeNumber(micros, quantity, string, index, status);
-    return length;
 }
 
 int32_t NumberFormatterImpl::writeAffixes(const MicroProps& micros, NumberStringBuilder& string,
