@@ -657,9 +657,9 @@ LocalizedNumberFormatter::formatDecimalQuantity(const DecimalQuantity& dq, UErro
 
 void LocalizedNumberFormatter::formatImpl(impl::UFormattedNumberData* results, UErrorCode& status) const {
     if (computeCompiled(status)) {
-        fCompiled->apply(results->quantity, results->string, status);
+        fCompiled->format(results->quantity, results->string, status);
     } else {
-        NumberFormatterImpl::applyStatic(fMacros, results->quantity, results->string, status);
+        NumberFormatterImpl::formatStatic(fMacros, results->quantity, results->string, status);
     }
 }
 
