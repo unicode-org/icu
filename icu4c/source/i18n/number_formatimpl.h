@@ -68,8 +68,8 @@ class NumberFormatterImpl : public UMemory {
      * Synthesizes the output string from a MicroProps and DecimalQuantity.
      * This method formats only the main number, not affixes.
      */
-    static int32_t formatNumber(const MicroProps& micros, DecimalQuantity& quantity,
-                                NumberStringBuilder& string, int32_t index, UErrorCode& status);
+    static int32_t writeNumber(const MicroProps& micros, DecimalQuantity& quantity,
+                               NumberStringBuilder& string, int32_t index, UErrorCode& status);
 
     /**
      * Adds the affixes.  Intended to be called immediately after formatNumber.
@@ -130,10 +130,6 @@ class NumberFormatterImpl : public UMemory {
      */
     const MicroPropsGenerator *
     macrosToMicroGenerator(const MacroProps &macros, bool safe, UErrorCode &status);
-
-    static int32_t
-    writeNumber(const MicroProps &micros, DecimalQuantity &quantity, NumberStringBuilder &string,
-                int32_t index, UErrorCode &status);
 
     static int32_t
     writeIntegerDigits(const MicroProps &micros, DecimalQuantity &quantity, NumberStringBuilder &string,
