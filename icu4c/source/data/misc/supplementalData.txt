@@ -531,7 +531,7 @@ supplementalData:table(nofallback){
                     start:intvector{
                         1293,
                         8,
-                        55,
+                        5,
                     }
                 }
                 142{
@@ -718,9 +718,9 @@ supplementalData:table(nofallback){
                 }
                 166{
                     start:intvector{
-                        1384,
-                        2,
-                        27,
+                        1387,
+                        8,
+                        22,
                     }
                 }
                 167{
