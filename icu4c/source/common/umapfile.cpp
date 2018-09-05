@@ -122,17 +122,15 @@
 #else
         // Convert from UTF-8 string to UTF-16 string.
         wchar_t utf16Path[MAX_PATH];
-        UErrorCode status = U_ZERO_ERROR;
         int32_t pathUtf16Len = 0;
-        u_strFromUTF8(reinterpret_cast<UChar*>(utf16Path), static_cast<int32_t>(UPRV_LENGTHOF(utf16Path)), &pathUtf16Len, path, -1, &status);
+        u_strFromUTF8(reinterpret_cast<UChar*>(utf16Path), static_cast<int32_t>(UPRV_LENGTHOF(utf16Path)), &pathUtf16Len, path, -1, status);
 
-        if (U_FAILURE(status)) {
-            *ec = status;
+        if (U_FAILURE(*status)) {
             return FALSE;
         }
-        if (status == U_STRING_NOT_TERMINATED_WARNING) {
+        if (*status == U_STRING_NOT_TERMINATED_WARNING) {
             // Report back an error instead of a warning.
-            *ec = U_BUFFER_OVERFLOW_ERROR;
+            *status = U_BUFFER_OVERFLOW_ERROR;
             return FALSE;
         }
 
