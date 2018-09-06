@@ -34,7 +34,7 @@ class NumberFormatterImpl : public UMemory {
     /**
      * Builds and evaluates an "unsafe" MicroPropsGenerator, which is cheaper but can be used only once.
      */
-    static void
+    static int32_t
     formatStatic(const MacroProps &macros, DecimalQuantity &inValue, NumberStringBuilder &outString,
                  UErrorCode &status);
 
@@ -51,7 +51,7 @@ class NumberFormatterImpl : public UMemory {
     /**
      * Evaluates the "safe" MicroPropsGenerator created by "fromMacros".
      */
-    void format(DecimalQuantity& inValue, NumberStringBuilder& outString, UErrorCode& status) const;
+    int32_t format(DecimalQuantity& inValue, NumberStringBuilder& outString, UErrorCode& status) const;
 
     /**
      * Like format(), but saves the result into an output MicroProps without additional processing.

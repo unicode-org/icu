@@ -9,6 +9,7 @@
 
 #include "unicode/numberformatter.h"
 #include "unicode/numberrangeformatter.h"
+#include "unicode/simpleformatter.h"
 #include "number_types.h"
 #include "number_decimalquantity.h"
 #include "number_formatimpl.h"
@@ -43,6 +44,12 @@ struct UFormattedNumberRangeData : public UMemory {
 };
 
 
+struct NumberRangeData {
+    SimpleFormatter rangePattern;
+    SimpleFormatter approximatelyPattern;
+};
+
+
 class NumberRangeFormatterImpl : public UMemory {
   public:
     NumberRangeFormatterImpl(const RangeMacroProps& macros, UErrorCode& status);
@@ -56,6 +63,9 @@ class NumberRangeFormatterImpl : public UMemory {
 
     UNumberRangeCollapse fCollapse;
     UNumberRangeIdentityFallback fIdentityFallback;
+
+    SimpleFormatter fRangeFormatter;
+    SimpleModifier fApproximatelyModifier;
 
     void formatSingleValue(UFormattedNumberRangeData& data,
                            MicroProps& micros1, MicroProps& micros2,
