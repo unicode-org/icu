@@ -163,12 +163,12 @@ class U_I18N_API Modifier {
      *
      * @return The number of characters (UTF-16 code units) in the prefix.
      */
-    virtual int32_t getPrefixLength(UErrorCode& status) const = 0;
+    virtual int32_t getPrefixLength() const = 0;
 
     /**
      * Returns the number of code points in the modifier, prefix plus suffix.
      */
-    virtual int32_t getCodePointCount(UErrorCode& status) const = 0;
+    virtual int32_t getCodePointCount() const = 0;
 
     /**
      * Whether this modifier is strong. If a modifier is strong, it should always be applied immediately and not allowed

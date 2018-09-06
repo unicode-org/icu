@@ -62,19 +62,36 @@ int32_t ConstantAffixModifier::apply(NumberStringBuilder &output, int leftIndex,
     return length;
 }
 
-int32_t ConstantAffixModifier::getPrefixLength(UErrorCode &status) const {
-    (void)status;
+int32_t ConstantAffixModifier::getPrefixLength() const {
     return fPrefix.length();
 }
 
-int32_t ConstantAffixModifier::getCodePointCount(UErrorCode &status) const {
-    (void)status;
+int32_t ConstantAffixModifier::getCodePointCount() const {
     return fPrefix.countChar32() + fSuffix.countChar32();
 }
 
 bool ConstantAffixModifier::isStrong() const {
     return fStrong;
 }
+
+bool ConstantAffixModifier::containsField(UNumberFormatFields field) const {
+    (void)field;
+    // This method is not currently used.
+    U_ASSERT(false);
+    return false;
+}
+
+bool ConstantAffixModifier::operator==(const Modifier& other) const {
+    auto* _other = dynamic_cast<const ConstantAffixModifier*>(&other);
+    if (_other == nullptr) {
+        return false;
+    }
+    return fPrefix == _other->fPrefix
+        && fSuffix == _other->fSuffix
+        && fField == _other->fField
+        && fStrong == _other->fStrong;
+}
+
 
 SimpleModifier::SimpleModifier(const SimpleFormatter &simpleFormatter, Field field, bool strong)
         : fCompiledPattern(simpleFormatter.compiledPattern), fField(field), fStrong(strong) {
@@ -113,13 +130,11 @@ int32_t SimpleModifier::apply(NumberStringBuilder &output, int leftIndex, int ri
     return formatAsPrefixSuffix(output, leftIndex, rightIndex, fField, status);
 }
 
-int32_t SimpleModifier::getPrefixLength(UErrorCode &status) const {
-    (void)status;
+int32_t SimpleModifier::getPrefixLength() const {
     return fPrefixLength;
 }
 
-int32_t SimpleModifier::getCodePointCount(UErrorCode &status) const {
-    (void)status;
+int32_t SimpleModifier::getCodePointCount() const {
     int32_t count = 0;
     if (fPrefixLength > 0) {
         count += fCompiledPattern.countChar32(2, fPrefixLength);
@@ -133,6 +148,24 @@ int32_t SimpleModifier::getCodePointCount(UErrorCode &status) const {
 bool SimpleModifier::isStrong() const {
     return fStrong;
 }
+
+bool SimpleModifier::containsField(UNumberFormatFields field) const {
+    (void)field;
+    // This method is not currently used.
+    U_ASSERT(false);
+    return false;
+}
+
+bool SimpleModifier::operator==(const Modifier& other) const {
+    auto* _other = dynamic_cast<const SimpleModifier*>(&other);
+    if (_other == nullptr) {
+        return false;
+    }
+    return fCompiledPattern == _other->fCompiledPattern
+        && fField == _other->fField
+        && fStrong == _other->fStrong;
+}
+
 
 int32_t
 SimpleModifier::formatAsPrefixSuffix(NumberStringBuilder &result, int32_t startIndex, int32_t endIndex,
@@ -171,19 +204,36 @@ int32_t ConstantMultiFieldModifier::apply(NumberStringBuilder &output, int leftI
     return length;
 }
 
-int32_t ConstantMultiFieldModifier::getPrefixLength(UErrorCode &status) const {
-    (void)status;
+int32_t ConstantMultiFieldModifier::getPrefixLength() const {
     return fPrefix.length();
 }
 
-int32_t ConstantMultiFieldModifier::getCodePointCount(UErrorCode &status) const {
-    (void)status;
+int32_t ConstantMultiFieldModifier::getCodePointCount() const {
     return fPrefix.codePointCount() + fSuffix.codePointCount();
 }
 
 bool ConstantMultiFieldModifier::isStrong() const {
     return fStrong;
 }
+
+bool ConstantMultiFieldModifier::containsField(UNumberFormatFields field) const {
+    (void)field;
+    // This method is not currently used.
+    U_ASSERT(false);
+    return false;
+}
+
+bool ConstantMultiFieldModifier::operator==(const Modifier& other) const {
+    auto* _other = dynamic_cast<const ConstantMultiFieldModifier*>(&other);
+    if (_other == nullptr) {
+        return false;
+    }
+    return fPrefix.contentEquals(_other->fPrefix)
+        && fSuffix.contentEquals(_other->fSuffix)
+        && fOverwrite == _other->fOverwrite
+        && fStrong == _other->fStrong;
+}
+
 
 CurrencySpacingEnabledModifier::CurrencySpacingEnabledModifier(const NumberStringBuilder &prefix,
                                                                const NumberStringBuilder &suffix,

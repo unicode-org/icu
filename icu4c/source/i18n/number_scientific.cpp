@@ -76,14 +76,12 @@ int32_t ScientificModifier::apply(NumberStringBuilder &output, int32_t /*leftInd
     return i - rightIndex;
 }
 
-int32_t ScientificModifier::getPrefixLength(UErrorCode &status) const {
-    (void)status;
+int32_t ScientificModifier::getPrefixLength() const {
     // TODO: Localized exponent separator location.
     return 0;
 }
 
-int32_t ScientificModifier::getCodePointCount(UErrorCode &status) const {
-    (void)status;
+int32_t ScientificModifier::getCodePointCount() const {
     // This method is not used for strong modifiers.
     U_ASSERT(false);
     return 0;
@@ -92,6 +90,22 @@ int32_t ScientificModifier::getCodePointCount(UErrorCode &status) const {
 bool ScientificModifier::isStrong() const {
     // Scientific is always strong
     return true;
+}
+
+bool ScientificModifier::containsField(UNumberFormatFields field) const {
+    (void)field;
+    // This method is not used for inner modifiers.
+    U_ASSERT(false);
+    return false;
+}
+
+bool ScientificModifier::operator==(const Modifier& other) const {
+    auto* _other = dynamic_cast<const ScientificModifier*>(&other);
+    if (_other == nullptr) {
+        return false;
+    }
+    // TODO: Check for locale symbols and settings as well? Could be less efficient.
+    return fExponent == _other->fExponent;
 }
 
 // Note: Visual Studio does not compile this function without full name space. Why?

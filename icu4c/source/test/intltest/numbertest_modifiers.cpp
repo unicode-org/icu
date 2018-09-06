@@ -162,12 +162,12 @@ void ModifiersTest::assertModifierEquals(const Modifier &mod, NumberStringBuilde
                                          UErrorCode &status) {
     int32_t oldCount = sb.codePointCount();
     mod.apply(sb, 0, sb.length(), status);
-    assertEquals("Prefix length", expectedPrefixLength, mod.getPrefixLength(status));
+    assertEquals("Prefix length", expectedPrefixLength, mod.getPrefixLength());
     assertEquals("Strong", expectedStrong, mod.isStrong());
     if (dynamic_cast<const CurrencySpacingEnabledModifier*>(&mod) == nullptr) {
         // i.e., if mod is not a CurrencySpacingEnabledModifier
         assertEquals("Code point count equals actual code point count",
-                sb.codePointCount() - oldCount, mod.getCodePointCount(status));
+                sb.codePointCount() - oldCount, mod.getCodePointCount());
     }
 
     UnicodeString debugString;
