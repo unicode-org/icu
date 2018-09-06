@@ -148,7 +148,16 @@ typedef enum UNumberRangeIdentityResult {
      * @draft ICU 63
      * @see NumberRangeFormatter
      */
-    UNUM_IDENTITY_RESULT_NOT_EQUAL
+    UNUM_IDENTITY_RESULT_NOT_EQUAL,
+
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * The number of entries in this enum.
+     * @internal
+     */
+    UNUM_IDENTITY_RESULT_COUNT
+#endif
+
 } UNumberRangeIdentityResult;
 
 U_NAMESPACE_BEGIN

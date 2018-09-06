@@ -184,6 +184,10 @@ class U_I18N_API MutablePatternModifier
 
     bool isStrong() const U_OVERRIDE;
 
+    bool containsField(UNumberFormatFields field) const U_OVERRIDE;
+
+    bool operator==(const Modifier& other) const U_OVERRIDE;
+
     /**
      * Returns the string that substitutes a given symbol type in a pattern.
      */

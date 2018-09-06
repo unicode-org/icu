@@ -9,7 +9,7 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
-#include "numrange_types.h"
+#include "numrange_impl.h"
 #include "util.h"
 #include "number_utypes.h"
 
@@ -241,7 +241,9 @@ FormattedNumberRange LocalizedNumberRangeFormatter::formatFormattableRange(
 
 void LocalizedNumberRangeFormatter::formatImpl(
         UFormattedNumberRangeData* results, UErrorCode& status) const {
-    // TODO: This is a placeholder implementation.
+
+    MicroProps microsFirst;
+    MicroProps microsSecond;
 
     UFormattedNumberData r1;
     r1.quantity = results->quantity1;

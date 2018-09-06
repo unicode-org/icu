@@ -37,6 +37,10 @@ class U_I18N_API ConstantAffixModifier : public Modifier, public UObject {
 
     bool isStrong() const U_OVERRIDE;
 
+    bool containsField(UNumberFormatFields field) const U_OVERRIDE;
+
+    bool operator==(const Modifier& other) const U_OVERRIDE;
+
   private:
     UnicodeString fPrefix;
     UnicodeString fSuffix;
@@ -63,6 +67,10 @@ class U_I18N_API SimpleModifier : public Modifier, public UMemory {
     int32_t getCodePointCount(UErrorCode &status) const U_OVERRIDE;
 
     bool isStrong() const U_OVERRIDE;
+
+    bool containsField(UNumberFormatFields field) const U_OVERRIDE;
+
+    bool operator==(const Modifier& other) const U_OVERRIDE;
 
     /**
      * TODO: This belongs in SimpleFormatterImpl. The only reason I haven't moved it there yet is because
@@ -121,6 +129,10 @@ class U_I18N_API ConstantMultiFieldModifier : public Modifier, public UMemory {
     int32_t getCodePointCount(UErrorCode &status) const U_OVERRIDE;
 
     bool isStrong() const U_OVERRIDE;
+
+    bool containsField(UNumberFormatFields field) const U_OVERRIDE;
+
+    bool operator==(const Modifier& other) const U_OVERRIDE;
 
   protected:
     // NOTE: In Java, these are stored as array pointers. In C++, the NumberStringBuilder is stored by
@@ -204,6 +216,16 @@ class U_I18N_API EmptyModifier : public Modifier, public UMemory {
 
     bool isStrong() const U_OVERRIDE {
         return fStrong;
+    }
+
+    bool containsField(UNumberFormatFields field) const U_OVERRIDE {
+        (void)field;
+        return false;
+    }
+
+    bool operator==(const Modifier& other) const U_OVERRIDE {
+        UErrorCode status = U_ZERO_ERROR;
+        return other.getCodePointCount(status) == 0;
     }
 
   private:
