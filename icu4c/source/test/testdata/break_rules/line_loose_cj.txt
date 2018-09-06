@@ -37,9 +37,10 @@ locale = ja@lb=loose;
 
 
 AI = [:LineBreak =  Ambiguous:];
-AL = [[:LineBreak =  Alphabetic:]];
+AL = [:LineBreak =  Alphabetic:];
 BAX = [\u2010 \u2013];
 BA = [[:LineBreak =  Break_After:] - BAX];
+HH = [\u2010];      # \u2010 is HYPHEN, default line break is BA.
 BB = [:LineBreak =  Break_Before:];
 BK = [:LineBreak =  Mandatory_Break:];
 B2 = [:LineBreak =  Break_Both:];
@@ -168,6 +169,9 @@ LB20.2:      . CM* ÷ CB;
 
 LB20.3:      CB CM* ZWJ [^CM];
 LB20.4:      CB CM* ÷;
+
+# LB 20.09    Don't break between Hyphens and Letters when there is a break preceding the hyphen.
+LB20.09:     ^(HY | HH) CM* AL;
 
 # Note: Rule 21a must come before 21 to prevent 21.1 from matching HL BA, then
 #       not picking up the continuing match after the BA from 21a.

@@ -1086,23 +1086,21 @@ Bangkok)•</data>
 # Finnish line breaking
 #
 # These rules deal with hyphens when there is a space on the leading side.
-# There should be a break opportunity between the space and the hyphen, and not after the hyphen.
+# When followed by a letter, there should be a break opportunity between
+# the space and the hyphen, and not after the hyphen.
 # See CLDR ticket 3029.
 # See ICU ticket 8151
+# As of ICU 63, the Finnish tailoring behavior is moved to root.
 
 <locale root>
 <line>
-<data>•abc •- •def    •abc •-•def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
-<data>•abc •‐ •def    •abc •‐•def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
+<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
+<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
 
 <locale fi>
 <line>
-# TODO: problems with Finnish line break rules cause these two lines to fail.
-#<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
-#<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
-
-<data>•abc •- •def    •abc •-def    •abc- •def   •</data>   # With ASCII hyphen
-<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •</data>   # With Unicode u2010 hyphen
+<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
+<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
 
 # Test for #10176 (in fi)
 <line>

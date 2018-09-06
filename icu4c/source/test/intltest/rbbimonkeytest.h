@@ -102,6 +102,7 @@ class BreakRule: public UObject {
     UnicodeString    fRule;                            // Rule expression, excluding the name, as written in user source.
     UnicodeString    fExpandedRule;                    // Rule expression after expanding the set definitions.
     LocalPointer<RegexMatcher>  fRuleMatcher;          // Regular expression that matches the rule.
+    bool             fInitialMatchOnly = false;        // True if rule begins with '^', meaning no chaining.
 };
 
 
