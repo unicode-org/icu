@@ -4152,7 +4152,7 @@ public class ULocaleTest extends TestFmwk {
                 {"en-a-bar-u-ca-islamic-civil-x-u-foo", "en@a=bar;calendar=islamic-civil;x=u-foo",  NOERROR},
                 {"en-a-bar-u-baz-ca-islamic-civil-x-u-foo", "en@a=bar;attribute=baz;calendar=islamic-civil;x=u-foo",    NOERROR},
                 /* #20098 */
-                {"hant-cmn-cn", "hant", Integer.valueOf(4)},
+                {"hant-cmn-cn", "hant", Integer.valueOf(5)},
                 {"zh-cmn-TW", "cmn_TW", NOERROR},
         };
 
