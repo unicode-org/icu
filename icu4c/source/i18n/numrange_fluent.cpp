@@ -114,6 +114,34 @@ Derived NumberRangeFormatterSettings<Derived>::numberFormatterSecond(Unlocalized
     return move;
 }
 
+template<typename Derived>
+Derived NumberRangeFormatterSettings<Derived>::collapse(UNumberRangeCollapse collapse) const& {
+    Derived copy(*this);
+    copy.fMacros.collapse = collapse;
+    return copy;
+}
+
+template<typename Derived>
+Derived NumberRangeFormatterSettings<Derived>::collapse(UNumberRangeCollapse collapse) && {
+    Derived move(std::move(*this));
+    move.fMacros.collapse = collapse;
+    return move;
+}
+
+template<typename Derived>
+Derived NumberRangeFormatterSettings<Derived>::identityFallback(UNumberRangeIdentityFallback identityFallback) const& {
+    Derived copy(*this);
+    copy.fMacros.identityFallback = identityFallback;
+    return copy;
+}
+
+template<typename Derived>
+Derived NumberRangeFormatterSettings<Derived>::identityFallback(UNumberRangeIdentityFallback identityFallback) && {
+    Derived move(std::move(*this));
+    move.fMacros.identityFallback = identityFallback;
+    return move;
+}
+
 // Declare all classes that implement NumberRangeFormatterSettings
 // See https://stackoverflow.com/a/495056/1407170
 template

@@ -21,7 +21,7 @@ using namespace icu::number::impl;
 namespace {
 
 // Helper function for 2-dimensional switch statement
-constexpr int8_t identity2d(UNumberIdentityFallback a, UNumberRangeIdentityResult b) {
+constexpr int8_t identity2d(UNumberRangeIdentityFallback a, UNumberRangeIdentityResult b) {
     return static_cast<int8_t>(a) | (static_cast<int8_t>(b) << 4);
 }
 
@@ -111,10 +111,18 @@ void NumberRangeFormatterImpl::format(UFormattedNumberRangeData& data, bool equa
         formatterImpl1.preProcess(data.quantity1, micros1, status);
         formatterImpl1.preProcess(data.quantity2, micros2, status);
     } else {
-        // If the formatters are different, an identity is not possible.
-        // Always use formatRange().
         formatterImpl1.preProcess(data.quantity1, micros1, status);
         formatterImpl2.preProcess(data.quantity2, micros2, status);
+    }
+
+    // If any of the affixes are different, an identity is not possible
+    // and we must use formatRange().
+    // TODO: Write this as MicroProps operator==() ?
+    // TODO: Avoid the redundancy of these equality operations with the
+    // ones in formatRange?
+    if (!(*micros1.modInner == *micros2.modInner)
+            || !(*micros1.modMiddle == *micros2.modMiddle)
+            || !(*micros1.modOuter == *micros2.modOuter)) {
         formatRange(data, micros1, micros2, status);
         return;
     }
@@ -174,7 +182,8 @@ void NumberRangeFormatterImpl::formatSingleValue(UFormattedNumberRangeData& data
                                                  UErrorCode& status) const {
     if (U_FAILURE(status)) { return; }
     if (fSameFormatters) {
-        formatterImpl1.format(data.quantity1, data.string, status);
+        int32_t length = formatterImpl1.writeNumber(micros1, data.quantity1, data.string, 0, status);
+        formatterImpl1.writeAffixes(micros1, data.string, 0, length, status);
     } else {
         formatRange(data, micros1, micros2, status);
     }
@@ -186,7 +195,8 @@ void NumberRangeFormatterImpl::formatApproximately (UFormattedNumberRangeData& d
                                                     UErrorCode& status) const {
     if (U_FAILURE(status)) { return; }
     if (fSameFormatters) {
-        int32_t length = formatterImpl1.format(data.quantity1, data.string, status);
+        int32_t length = formatterImpl1.writeNumber(micros1, data.quantity1, data.string, 0, status);
+        length += formatterImpl1.writeAffixes(micros1, data.string, 0, length, status);
         fApproximatelyModifier.apply(data.string, 0, length, status);
     } else {
         formatRange(data, micros1, micros2, status);
@@ -242,8 +252,8 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
                     collapseMiddle = false;
                 }
             } else if (fCollapse == UNUM_RANGE_COLLAPSE_AUTO) {
-                // Heuristic as of ICU 63: collapse only if the modifier is exactly one code point.
-                if (mm->getCodePointCount() != 1) {
+                // Heuristic as of ICU 63: collapse only if the modifier is more than one code point.
+                if (mm->getCodePointCount() <= 1) {
                     collapseMiddle = false;
                 }
             }
@@ -273,6 +283,8 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
     int32_t lengthInfix = 0;
     int32_t length2 = 0;
     int32_t lengthSuffix = 0;
+
+    // Use #define so that these are evaluated at the call site.
     #define UPRV_INDEX_0 (lengthPrefix)
     #define UPRV_INDEX_1 (lengthPrefix + length1)
     #define UPRV_INDEX_2 (lengthPrefix + length1 + lengthInfix)
@@ -291,6 +303,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
 
     // SPACING HEURISTIC
     // Add spacing unless all modifiers are collapsed.
+    // TODO: add API to control this?
     {
         bool repeatInner = !collapseInner && micros1.modInner->getCodePointCount() > 0;
         bool repeatMiddle = !collapseMiddle && micros1.modMiddle->getCodePointCount() > 0;

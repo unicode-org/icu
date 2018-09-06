@@ -488,4 +488,13 @@ void NumberStringBuilder::getAllFieldPositions(FieldPositionIteratorHandler& fpi
     }
 }
 
+bool NumberStringBuilder::containsField(Field field) const {
+    for (int32_t i = 0; i < fLength; i++) {
+        if (field == fieldAt(i)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */

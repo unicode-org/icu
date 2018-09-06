@@ -44,6 +44,9 @@ void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const c
     TESTCASE_AUTO_BEGIN;
         TESTCASE_AUTO(testSanity);
         TESTCASE_AUTO(testBasic);
+        TESTCASE_AUTO(testCollapse);
+        TESTCASE_AUTO(testIdentity);
+        TESTCASE_AUTO(testDifferentFormatters);
     TESTCASE_AUTO_END;
 }
 
@@ -104,6 +107,376 @@ void NumberRangeFormatterTest::testBasic() {
         u"4,999 m – 5,001 km",
         u"5,000 m – 5,000 km",
         u"5,000 m – 5,000,000 km");
+}
+
+void NumberRangeFormatterTest::testCollapse() {
+    assertFormatRange(
+        u"Default collapse on currency (default rounding)",
+        NumberRangeFormatter::with()
+            .numberFormatterBoth(NumberFormatter::with().unit(USD)),
+        Locale("en-us"),
+        u"$1.00 – $5.00",
+        u"~$5.00",
+        u"~$5.00",
+        u"$0.00 – $3.00",
+        u"~$0.00",
+        u"$3.00 – $3,000.00",
+        u"$3,000.00 – $5,000.00",
+        u"$4,999.00 – $5,001.00",
+        u"~$5,000.00",
+        u"$5,000.00 – $5,000,000.00");
+
+    assertFormatRange(
+        u"Default collapse on currency",
+        NumberRangeFormatter::with()
+            .numberFormatterBoth(NumberFormatter::with().unit(USD).precision(Precision::integer())),
+        Locale("en-us"),
+        u"$1 – $5",
+        u"~$5",
+        u"~$5",
+        u"$0 – $3",
+        u"~$0",
+        u"$3 – $3,000",
+        u"$3,000 – $5,000",
+        u"$4,999 – $5,001",
+        u"~$5,000",
+        u"$5,000 – $5,000,000");
+
+    assertFormatRange(
+        u"No collapse on currency",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_NONE)
+            .numberFormatterBoth(NumberFormatter::with().unit(USD).precision(Precision::integer())),
+        Locale("en-us"),
+        u"$1 – $5",
+        u"~$5",
+        u"~$5",
+        u"$0 – $3",
+        u"~$0",
+        u"$3 – $3,000",
+        u"$3,000 – $5,000",
+        u"$4,999 – $5,001",
+        u"~$5,000",
+        u"$5,000 – $5,000,000");
+
+    assertFormatRange(
+        u"Unit collapse on currency",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_UNIT)
+            .numberFormatterBoth(NumberFormatter::with().unit(USD).precision(Precision::integer())),
+        Locale("en-us"),
+        u"$1–5",
+        u"~$5",
+        u"~$5",
+        u"$0–3",
+        u"~$0",
+        u"$3–3,000",
+        u"$3,000–5,000",
+        u"$4,999–5,001",
+        u"~$5,000",
+        u"$5,000–5,000,000");
+
+    assertFormatRange(
+        u"All collapse on currency",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_ALL)
+            .numberFormatterBoth(NumberFormatter::with().unit(USD).precision(Precision::integer())),
+        Locale("en-us"),
+        u"$1–5",
+        u"~$5",
+        u"~$5",
+        u"$0–3",
+        u"~$0",
+        u"$3–3,000",
+        u"$3,000–5,000",
+        u"$4,999–5,001",
+        u"~$5,000",
+        u"$5,000–5,000,000");
+
+    assertFormatRange(
+        u"Default collapse on currency ISO code",
+        NumberRangeFormatter::with()
+            .numberFormatterBoth(NumberFormatter::with()
+                .unit(GBP)
+                .unitWidth(UNUM_UNIT_WIDTH_ISO_CODE)
+                .precision(Precision::integer())),
+        Locale("en-us"),
+        u"GBP 1–5",
+        u"~GBP 5",  // TODO: Fix this at some point
+        u"~GBP 5",
+        u"GBP 0–3",
+        u"~GBP 0",
+        u"GBP 3–3,000",
+        u"GBP 3,000–5,000",
+        u"GBP 4,999–5,001",
+        u"~GBP 5,000",
+        u"GBP 5,000–5,000,000");
+
+    assertFormatRange(
+        u"No collapse on currency ISO code",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_NONE)
+            .numberFormatterBoth(NumberFormatter::with()
+                .unit(GBP)
+                .unitWidth(UNUM_UNIT_WIDTH_ISO_CODE)
+                .precision(Precision::integer())),
+        Locale("en-us"),
+        u"GBP 1 – GBP 5",
+        u"~GBP 5",  // TODO: Fix this at some point
+        u"~GBP 5",
+        u"GBP 0 – GBP 3",
+        u"~GBP 0",
+        u"GBP 3 – GBP 3,000",
+        u"GBP 3,000 – GBP 5,000",
+        u"GBP 4,999 – GBP 5,001",
+        u"~GBP 5,000",
+        u"GBP 5,000 – GBP 5,000,000");
+
+    assertFormatRange(
+        u"Unit collapse on currency ISO code",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_UNIT)
+            .numberFormatterBoth(NumberFormatter::with()
+                .unit(GBP)
+                .unitWidth(UNUM_UNIT_WIDTH_ISO_CODE)
+                .precision(Precision::integer())),
+        Locale("en-us"),
+        u"GBP 1–5",
+        u"~GBP 5",  // TODO: Fix this at some point
+        u"~GBP 5",
+        u"GBP 0–3",
+        u"~GBP 0",
+        u"GBP 3–3,000",
+        u"GBP 3,000–5,000",
+        u"GBP 4,999–5,001",
+        u"~GBP 5,000",
+        u"GBP 5,000–5,000,000");
+
+    assertFormatRange(
+        u"All collapse on currency ISO code",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_ALL)
+            .numberFormatterBoth(NumberFormatter::with()
+                .unit(GBP)
+                .unitWidth(UNUM_UNIT_WIDTH_ISO_CODE)
+                .precision(Precision::integer())),
+        Locale("en-us"),
+        u"GBP 1–5",
+        u"~GBP 5",  // TODO: Fix this at some point
+        u"~GBP 5",
+        u"GBP 0–3",
+        u"~GBP 0",
+        u"GBP 3–3,000",
+        u"GBP 3,000–5,000",
+        u"GBP 4,999–5,001",
+        u"~GBP 5,000",
+        u"GBP 5,000–5,000,000");
+
+    // Default collapse on measurement unit is in testBasic()
+
+    assertFormatRange(
+        u"No collapse on measurement unit",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_NONE)
+            .numberFormatterBoth(NumberFormatter::with().unit(METER)),
+        Locale("en-us"),
+        u"1 m – 5 m",
+        u"~5 m",
+        u"~5 m",
+        u"0 m – 3 m",
+        u"~0 m",
+        u"3 m – 3,000 m",
+        u"3,000 m – 5,000 m",
+        u"4,999 m – 5,001 m",
+        u"~5,000 m",
+        u"5,000 m – 5,000,000 m");
+
+    assertFormatRange(
+        u"Unit collapse on measurement unit",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_UNIT)
+            .numberFormatterBoth(NumberFormatter::with().unit(METER)),
+        Locale("en-us"),
+        u"1–5 m",
+        u"~5 m",
+        u"~5 m",
+        u"0–3 m",
+        u"~0 m",
+        u"3–3,000 m",
+        u"3,000–5,000 m",
+        u"4,999–5,001 m",
+        u"~5,000 m",
+        u"5,000–5,000,000 m");
+
+    assertFormatRange(
+        u"All collapse on measurement unit",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_ALL)
+            .numberFormatterBoth(NumberFormatter::with().unit(METER)),
+        Locale("en-us"),
+        u"1–5 m",
+        u"~5 m",
+        u"~5 m",
+        u"0–3 m",
+        u"~0 m",
+        u"3–3,000 m",
+        u"3,000–5,000 m",
+        u"4,999–5,001 m",
+        u"~5,000 m",
+        u"5,000–5,000,000 m");
+
+    assertFormatRange(
+        u"Default collapse on measurement unit with compact-short notation",
+        NumberRangeFormatter::with()
+            .numberFormatterBoth(NumberFormatter::with().notation(Notation::compactShort()).unit(METER)),
+        Locale("en-us"),
+        u"1–5 m",
+        u"~5 m",
+        u"~5 m",
+        u"0–3 m",
+        u"~0 m",
+        u"3–3K m",
+        u"3K – 5K m",
+        u"~5K m",
+        u"~5K m",
+        u"5K – 5M m");
+
+    assertFormatRange(
+        u"No collapse on measurement unit with compact-short notation",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_NONE)
+            .numberFormatterBoth(NumberFormatter::with().notation(Notation::compactShort()).unit(METER)),
+        Locale("en-us"),
+        u"1 m – 5 m",
+        u"~5 m",
+        u"~5 m",
+        u"0 m – 3 m",
+        u"~0 m",
+        u"3 m – 3K m",
+        u"3K m – 5K m",
+        u"~5K m",
+        u"~5K m",
+        u"5K m – 5M m");
+
+    assertFormatRange(
+        u"Unit collapse on measurement unit with compact-short notation",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_UNIT)
+            .numberFormatterBoth(NumberFormatter::with().notation(Notation::compactShort()).unit(METER)),
+        Locale("en-us"),
+        u"1–5 m",
+        u"~5 m",
+        u"~5 m",
+        u"0–3 m",
+        u"~0 m",
+        u"3–3K m",
+        u"3K – 5K m",
+        u"~5K m",
+        u"~5K m",
+        u"5K – 5M m");
+
+    assertFormatRange(
+        u"All collapse on measurement unit with compact-short notation",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_ALL)
+            .numberFormatterBoth(NumberFormatter::with().notation(Notation::compactShort()).unit(METER)),
+        Locale("en-us"),
+        u"1–5 m",
+        u"~5 m",
+        u"~5 m",
+        u"0–3 m",
+        u"~0 m",
+        u"3–3K m",
+        u"3–5K m",  // this one is the key use case for ALL
+        u"~5K m",
+        u"~5K m",
+        u"5K – 5M m");
+
+    // TODO: Test compact currency?
+    // The code is not smart enough to differentiate the notation from the unit.
+}
+
+void NumberRangeFormatterTest::testIdentity() {
+    assertFormatRange(
+        u"Identity fallback Range",
+        NumberRangeFormatter::with().identityFallback(UNUM_IDENTITY_FALLBACK_RANGE),
+        Locale("en-us"),
+        u"1–5",
+        u"5–5",
+        u"5–5",
+        u"0–3",
+        u"0–0",
+        u"3–3,000",
+        u"3,000–5,000",
+        u"4,999–5,001",
+        u"5,000–5,000",
+        u"5,000–5,000,000");
+
+    assertFormatRange(
+        u"Identity fallback Approximately or Single Value",
+        NumberRangeFormatter::with().identityFallback(UNUM_IDENTITY_FALLBACK_APPROXIMATELY_OR_SINGLE_VALUE),
+        Locale("en-us"),
+        u"1–5",
+        u"~5",
+        u"5",
+        u"0–3",
+        u"0",
+        u"3–3,000",
+        u"3,000–5,000",
+        u"4,999–5,001",
+        u"5,000",
+        u"5,000–5,000,000");
+
+    assertFormatRange(
+        u"Identity fallback  Single Value",
+        NumberRangeFormatter::with().identityFallback(UNUM_IDENTITY_FALLBACK_SINGLE_VALUE),
+        Locale("en-us"),
+        u"1–5",
+        u"5",
+        u"5",
+        u"0–3",
+        u"0",
+        u"3–3,000",
+        u"3,000–5,000",
+        u"4,999–5,001",
+        u"5,000",
+        u"5,000–5,000,000");
+
+    assertFormatRange(
+        u"Identity fallback Approximately or Single Value with compact notation",
+        NumberRangeFormatter::with()
+            .identityFallback(UNUM_IDENTITY_FALLBACK_APPROXIMATELY_OR_SINGLE_VALUE)
+            .numberFormatterBoth(NumberFormatter::with().notation(Notation::compactShort())),
+        Locale("en-us"),
+        u"1–5",
+        u"~5",
+        u"5",
+        u"0–3",
+        u"0",
+        u"3–3K",
+        u"3K – 5K",
+        u"~5K",
+        u"5K",
+        u"5K – 5M");
+}
+
+void NumberRangeFormatterTest::testDifferentFormatters() {
+    assertFormatRange(
+        u"Different rounding rules",
+        NumberRangeFormatter::with()
+            .numberFormatterFirst(NumberFormatter::with().precision(Precision::integer()))
+            .numberFormatterSecond(NumberFormatter::with().precision(Precision::fixedDigits(2))),
+        Locale("en-us"),
+        u"1–5.0",
+        u"5–5.0",
+        u"5–5.0",
+        u"0–3.0",
+        u"0–0.0",
+        u"3–3,000",
+        u"3,000–5,000",
+        u"4,999–5,000",
+        u"5,000–5,000",  // TODO: Should this one be ~5,000?
+        u"5,000–5,000,000");
 }
 
 void  NumberRangeFormatterTest::assertFormatRange(

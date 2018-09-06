@@ -1155,7 +1155,7 @@ const char16_t* DecimalQuantity::checkHealth() const {
 
 bool DecimalQuantity::operator==(const DecimalQuantity& other) const {
     // FIXME: Make a faster implementation.
-    return toString() == other.toString();
+    return toScientificString() == other.toScientificString();
 }
 
 UnicodeString DecimalQuantity::toString() const {
