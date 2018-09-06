@@ -580,7 +580,7 @@ U_INTERNAL void * U_EXPORT2 uprv_maximumPtr(void *base);
  * Pin a buffer capacity such that doing pointer arithmetic
  * on the destination pointer and capacity cannot overflow.
  *
- * The pinned capacity must fulfill lthe following conditions (for positive capacities):
+ * The pinned capacity must fulfill the following conditions (for positive capacities):
  *   - dest + capacity is a valid pointer according to the machine arcitecture (AS/400, 64-bit, etc.)
  *   - (dest + capacity) >= dest
  *   - The size (in bytes) of T[capacity] does not exceed 0x7fffffff
