@@ -193,6 +193,9 @@ struct U_I18N_API RangeMacroProps : public UMemory {
     UnlocalizedNumberFormatter formatter2; // = NumberFormatter::with();
 
     /** @internal */
+    bool singleFormatter = true;
+
+    /** @internal */
     UNumberRangeCollapse collapse = UNUM_RANGE_COLLAPSE_AUTO;
 
     /** @internal */

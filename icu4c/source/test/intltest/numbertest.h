@@ -248,12 +248,24 @@ class NumberSkeletonTest : public IntlTest {
 
 class NumberRangeFormatterTest : public IntlTest {
   public:
+    NumberRangeFormatterTest();
+    NumberRangeFormatterTest(UErrorCode &status);
+
     void testSanity();
     void testBasic();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
   private:
+    CurrencyUnit USD;
+    CurrencyUnit GBP;
+    CurrencyUnit PTE;
+
+    MeasureUnit METER;
+    MeasureUnit KILOMETER;
+    MeasureUnit FAHRENHEIT;
+    MeasureUnit KELVIN;
+
     void assertFormatRange(
       const char16_t* message,
       const UnlocalizedNumberRangeFormatter& f,
