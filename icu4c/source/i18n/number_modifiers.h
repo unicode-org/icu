@@ -74,7 +74,7 @@ class U_I18N_API SimpleModifier : public Modifier, public UMemory {
 
     /**
      * TODO: This belongs in SimpleFormatterImpl. The only reason I haven't moved it there yet is because
-     * DoubleSidedStringBuilder is an internal class and SimpleFormatterImpl feels like it should not depend on it.
+     * NumberStringBuilder is an internal class and SimpleFormatterImpl feels like it should not depend on it.
      *
      * <p>
      * Formats a value that is already stored inside the StringBuilder <code>result</code> between the indices
@@ -93,16 +93,32 @@ class U_I18N_API SimpleModifier : public Modifier, public UMemory {
      * @return The number of characters (UTF-16 code points) that were added to the StringBuilder.
      */
     int32_t
-    formatAsPrefixSuffix(NumberStringBuilder &result, int32_t startIndex, int32_t endIndex, Field field,
-                         UErrorCode &status) const;
+    formatAsPrefixSuffix(NumberStringBuilder& result, int32_t startIndex, int32_t endIndex, Field field,
+                         UErrorCode& status) const;
+
+    /**
+     * TODO: Like above, this belongs with the rest of the SimpleFormatterImpl code.
+     * I put it here so that the SimpleFormatter uses in NumberStringBuilder are near each other.
+     *
+     * <p>
+     * Applies the compiled two-argument pattern to the NumberStringBuilder.
+     *
+     * <p>
+     * This method is optimized for the case where the prefix and suffix are often empty, such as
+     * in the range pattern like "{0}-{1}".
+     */
+    static int32_t
+    formatTwoArgPattern(const SimpleFormatter& compiled, NumberStringBuilder& result,
+                        int32_t index, int32_t* outPrefixLength, int32_t* outSuffixLength,
+                        Field field, UErrorCode& status);
 
   private:
     UnicodeString fCompiledPattern;
     Field fField;
-    bool fStrong;
-    int32_t fPrefixLength;
-    int32_t fSuffixOffset;
-    int32_t fSuffixLength;
+    bool fStrong = false;
+    int32_t fPrefixLength = 0;
+    int32_t fSuffixOffset = -1;
+    int32_t fSuffixLength = 0;
 };
 
 /**

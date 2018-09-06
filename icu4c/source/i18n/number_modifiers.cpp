@@ -107,15 +107,19 @@ SimpleModifier::SimpleModifier(const SimpleFormatter &simpleFormatter, Field fie
     } else {
         U_ASSERT(argLimit == 1);
         if (fCompiledPattern.charAt(1) != 0) {
+            // Found prefix
             fPrefixLength = fCompiledPattern.charAt(1) - ARG_NUM_LIMIT;
             fSuffixOffset = 3 + fPrefixLength;
         } else {
+            // No prefix
             fPrefixLength = 0;
             fSuffixOffset = 2;
         }
         if (3 + fPrefixLength < fCompiledPattern.length()) {
+            // Found suffix
             fSuffixLength = fCompiledPattern.charAt(fSuffixOffset) - ARG_NUM_LIMIT;
         } else {
+            // No suffix
             fSuffixLength = 0;
         }
     }
@@ -170,7 +174,7 @@ bool SimpleModifier::operator==(const Modifier& other) const {
 int32_t
 SimpleModifier::formatAsPrefixSuffix(NumberStringBuilder &result, int32_t startIndex, int32_t endIndex,
                                      Field field, UErrorCode &status) const {
-    if (fSuffixOffset == -1) {
+    if (fSuffixOffset == -1 && fPrefixLength + fSuffixLength > 0) {
         // There is no argument for the inner number; overwrite the entire segment with our string.
         return result.splice(startIndex, endIndex, fCompiledPattern, 2, 2 + fPrefixLength, field, status);
     } else {
@@ -189,6 +193,65 @@ SimpleModifier::formatAsPrefixSuffix(NumberStringBuilder &result, int32_t startI
         return fPrefixLength + fSuffixLength;
     }
 }
+
+
+int32_t
+SimpleModifier::formatTwoArgPattern(const SimpleFormatter& compiled, NumberStringBuilder& result,
+                                    int32_t index, int32_t* outPrefixLength, int32_t* outSuffixLength,
+                                    Field field, UErrorCode& status) {
+    const UnicodeString& compiledPattern = compiled.compiledPattern;
+    int32_t argLimit = SimpleFormatter::getArgumentLimit(
+            compiledPattern.getBuffer(), compiledPattern.length());
+    if (argLimit != 2) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return 0;
+    }
+    int32_t offset = 1; // offset into compiledPattern
+    int32_t length = 0; // chars added to result
+
+    int32_t prefixLength = compiledPattern.charAt(offset);
+    offset++;
+    if (prefixLength < ARG_NUM_LIMIT) {
+        // No prefix
+        prefixLength = 0;
+    } else {
+        prefixLength -= ARG_NUM_LIMIT;
+        result.insert(index + length, compiledPattern, offset, offset + prefixLength, field, status);
+        offset += prefixLength;
+        length += prefixLength;
+        offset++;
+    }
+
+    int32_t infixLength = compiledPattern.charAt(offset);
+    offset++;
+    if (infixLength < ARG_NUM_LIMIT) {
+        // No infix
+        infixLength = 0;
+    } else {
+        infixLength -= ARG_NUM_LIMIT;
+        result.insert(index + length, compiledPattern, offset, offset + infixLength, field, status);
+        offset += infixLength;
+        length += infixLength;
+        offset++;
+    }
+
+    int32_t suffixLength;
+    if (offset == compiledPattern.length()) {
+        // No suffix
+        suffixLength = 0;
+    } else {
+        suffixLength = compiledPattern.charAt(offset) -  ARG_NUM_LIMIT;
+        offset++;
+        result.insert(index + length, compiledPattern, offset, offset + suffixLength, field, status);
+        length += suffixLength;
+    }
+
+    *outPrefixLength = prefixLength;
+    *outSuffixLength = suffixLength;
+
+    return length;
+}
+
 
 int32_t ConstantMultiFieldModifier::apply(NumberStringBuilder &output, int leftIndex, int rightIndex,
                                           UErrorCode &status) const {

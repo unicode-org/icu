@@ -71,13 +71,14 @@ NumberFormatterImpl::NumberFormatterImpl(const MacroProps& macros, UErrorCode& s
     : NumberFormatterImpl(macros, true, status) {
 }
 
-void NumberFormatterImpl::formatStatic(const MacroProps& macros, DecimalQuantity& inValue,
+int32_t NumberFormatterImpl::formatStatic(const MacroProps& macros, DecimalQuantity& inValue,
                                        NumberStringBuilder& outString, UErrorCode& status) {
     NumberFormatterImpl impl(macros, false, status);
     MicroProps& micros = impl.preProcessUnsafe(inValue, status);
-    if (U_FAILURE(status)) { return; }
+    if (U_FAILURE(status)) { return 0; }
     int32_t length = writeNumber(micros, inValue, outString, 0, status);
-    writeAffixes(micros, outString, 0, length, status);
+    length += writeAffixes(micros, outString, 0, length, status);
+    return length;
 }
 
 int32_t NumberFormatterImpl::getPrefixSuffixStatic(const MacroProps& macros, int8_t signum,
@@ -92,13 +93,14 @@ int32_t NumberFormatterImpl::getPrefixSuffixStatic(const MacroProps& macros, int
 // The "unsafe" method simply re-uses fMicros, eliminating the extra copy operation.
 // See MicroProps::processQuantity() for details.
 
-void NumberFormatterImpl::format(DecimalQuantity& inValue, NumberStringBuilder& outString,
+int32_t NumberFormatterImpl::format(DecimalQuantity& inValue, NumberStringBuilder& outString,
                                 UErrorCode& status) const {
     MicroProps micros;
     preProcess(inValue, micros, status);
-    if (U_FAILURE(status)) { return; }
+    if (U_FAILURE(status)) { return 0; }
     int32_t length = writeNumber(micros, inValue, outString, 0, status);
-    writeAffixes(micros, outString, 0, length, status);
+    length += writeAffixes(micros, outString, 0, length, status);
+    return length;
 }
 
 void NumberFormatterImpl::preProcess(DecimalQuantity& inValue, MicroProps& microsOut,
