@@ -156,13 +156,14 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
                 // pass
             } else if (fCollapse == UNUM_RANGE_COLLAPSE_UNIT) {
                 // Only collapse if the modifier is a unit.
+                // TODO: Make a better way to check for a unit?
                 // TODO: Handle case where the modifier has both notation and unit (compact currency)?
                 if (!mm->containsField(UNUM_CURRENCY_FIELD) && !mm->containsField(UNUM_PERCENT_FIELD)) {
                     collapseMiddle = false;
                 }
             } else if (fCollapse == UNUM_RANGE_COLLAPSE_AUTO) {
                 // Heuristic as of ICU 63: collapse only if the modifier is exactly one code point.
-                if (mm->getCodePointCount(status) != 1) {
+                if (mm->getCodePointCount() != 1) {
                     collapseMiddle = false;
                 }
             }

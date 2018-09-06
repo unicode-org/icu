@@ -204,23 +204,25 @@ int32_t MutablePatternModifier::apply(NumberStringBuilder& output, int32_t leftI
     return prefixLen + overwriteLen + suffixLen;
 }
 
-int32_t MutablePatternModifier::getPrefixLength(UErrorCode& status) const {
+int32_t MutablePatternModifier::getPrefixLength() const {
     // The unsafe code path performs self-mutation, so we need a const_cast.
     // This method needs to be const because it overrides a const method in the parent class.
     auto nonConstThis = const_cast<MutablePatternModifier*>(this);
 
     // Enter and exit CharSequence Mode to get the length.
+    UErrorCode status = U_ZERO_ERROR; // status fails only with an iilegal argument exception
     nonConstThis->prepareAffix(true);
     int result = AffixUtils::unescapedCodePointCount(currentAffix, *this, status);  // prefix length
     return result;
 }
 
-int32_t MutablePatternModifier::getCodePointCount(UErrorCode& status) const {
+int32_t MutablePatternModifier::getCodePointCount() const {
     // The unsafe code path performs self-mutation, so we need a const_cast.
     // This method needs to be const because it overrides a const method in the parent class.
     auto nonConstThis = const_cast<MutablePatternModifier*>(this);
 
     // Render the affixes to get the length
+    UErrorCode status = U_ZERO_ERROR; // status fails only with an iilegal argument exception
     nonConstThis->prepareAffix(true);
     int result = AffixUtils::unescapedCodePointCount(currentAffix, *this, status);  // prefix length
     nonConstThis->prepareAffix(false);
@@ -230,6 +232,20 @@ int32_t MutablePatternModifier::getCodePointCount(UErrorCode& status) const {
 
 bool MutablePatternModifier::isStrong() const {
     return fStrong;
+}
+
+bool MutablePatternModifier::containsField(UNumberFormatFields field) const {
+    (void)field;
+    // This method is not currently used.
+    U_ASSERT(false);
+    return false;
+}
+
+bool MutablePatternModifier::operator==(const Modifier& other) const {
+    (void)other;
+    // This method is not currently used.
+    U_ASSERT(false);
+    return false;
 }
 
 int32_t MutablePatternModifier::insertPrefix(NumberStringBuilder& sb, int position, UErrorCode& status) {

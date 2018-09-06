@@ -31,9 +31,9 @@ class U_I18N_API ConstantAffixModifier : public Modifier, public UObject {
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
                   UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getPrefixLength(UErrorCode &status) const U_OVERRIDE;
+    int32_t getPrefixLength() const U_OVERRIDE;
 
-    int32_t getCodePointCount(UErrorCode &status) const U_OVERRIDE;
+    int32_t getCodePointCount() const U_OVERRIDE;
 
     bool isStrong() const U_OVERRIDE;
 
@@ -62,9 +62,9 @@ class U_I18N_API SimpleModifier : public Modifier, public UMemory {
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
                   UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getPrefixLength(UErrorCode &status) const U_OVERRIDE;
+    int32_t getPrefixLength() const U_OVERRIDE;
 
-    int32_t getCodePointCount(UErrorCode &status) const U_OVERRIDE;
+    int32_t getCodePointCount() const U_OVERRIDE;
 
     bool isStrong() const U_OVERRIDE;
 
@@ -124,9 +124,9 @@ class U_I18N_API ConstantMultiFieldModifier : public Modifier, public UMemory {
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
                   UErrorCode &status) const U_OVERRIDE;
 
-    int32_t getPrefixLength(UErrorCode &status) const U_OVERRIDE;
+    int32_t getPrefixLength() const U_OVERRIDE;
 
-    int32_t getCodePointCount(UErrorCode &status) const U_OVERRIDE;
+    int32_t getCodePointCount() const U_OVERRIDE;
 
     bool isStrong() const U_OVERRIDE;
 
@@ -204,13 +204,11 @@ class U_I18N_API EmptyModifier : public Modifier, public UMemory {
         return 0;
     }
 
-    int32_t getPrefixLength(UErrorCode &status) const U_OVERRIDE {
-        (void)status;
+    int32_t getPrefixLength() const U_OVERRIDE {
         return 0;
     }
 
-    int32_t getCodePointCount(UErrorCode &status) const U_OVERRIDE {
-        (void)status;
+    int32_t getCodePointCount() const U_OVERRIDE {
         return 0;
     }
 
@@ -224,8 +222,7 @@ class U_I18N_API EmptyModifier : public Modifier, public UMemory {
     }
 
     bool operator==(const Modifier& other) const U_OVERRIDE {
-        UErrorCode status = U_ZERO_ERROR;
-        return other.getCodePointCount(status) == 0;
+        return other.getCodePointCount() == 0;
     }
 
   private:

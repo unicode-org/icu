@@ -135,7 +135,7 @@ int32_t NumberFormatterImpl::getPrefixSuffix(int8_t signum, StandardPlural::Form
     const Modifier* modifier = fImmutablePatternModifier->getModifier(signum, plural);
     modifier->apply(outString, 0, 0, status);
     if (U_FAILURE(status)) { return 0; }
-    return modifier->getPrefixLength(status);
+    return modifier->getPrefixLength();
 }
 
 int32_t NumberFormatterImpl::getPrefixSuffixUnsafe(int8_t signum, StandardPlural::Form plural,
@@ -146,7 +146,7 @@ int32_t NumberFormatterImpl::getPrefixSuffixUnsafe(int8_t signum, StandardPlural
     fPatternModifier->setNumberProperties(signum, plural);
     fPatternModifier->apply(outString, 0, 0, status);
     if (U_FAILURE(status)) { return 0; }
-    return fPatternModifier->getPrefixLength(status);
+    return fPatternModifier->getPrefixLength();
 }
 
 NumberFormatterImpl::NumberFormatterImpl(const MacroProps& macros, bool safe, UErrorCode& status) {
