@@ -1901,7 +1901,9 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                 t->language = T_CString_toLowerCase(pSubtag);
 
                 pLastGoodPosition = pSep;
-                next = EXTL | SCRT | REGN | VART | EXTS | PRIV;
+                next = SCRT | REGN | VART | EXTS | PRIV;
+                if (subtagLen <= 3)
+                  next |= EXTL;
                 continue;
             }
         }
