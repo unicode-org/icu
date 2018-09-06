@@ -574,6 +574,49 @@ U_INTERNAL void * U_EXPORT2 uprv_maximumPtr(void *base);
 #  endif
 #endif
 
+
+#ifdef __cplusplus
+/**
+ * Pin a buffer capacity such that doing pointer arithmetic
+ * on the destination pointer and capacity cannot overflow.
+ *
+ * The pinned capacity must fulfill lthe following conditions (for positive capacities):
+ *   - dest + capacity is a valid pointer according to the machine arcitecture (AS/400, 64-bit, etc.)
+ *   - (dest + capacity) >= dest
+ *   - The size (in bytes) of T[capacity] does not exceed 0x7fffffff
+ *
+ * @param dest the destination buffer pointer.
+ * @param capacity the requested buffer capacity, in units of type T.
+ * @return the pinned capacity.
+ * @internal
+ */
+template <typename T>
+inline int32_t pinCapacity(T *dest, int32_t capacity) {
+    if (capacity <= 0) { return capacity; }
+
+    uintptr_t destInt = (uintptr_t)dest;
+    uintptr_t maxInt;
+
+#  if U_PLATFORM == U_PF_OS390 && !defined(_LP64)
+    // We have 31-bit pointers.
+    maxInt = 0x7fffffff;
+#  elif U_PLATFORM == U_PF_OS400
+    maxInt = (uintptr_t)uprv_maximumPtr((void *)dest);
+#  else
+    maxInt = destInt + 0x7fffffffu;
+    if (maxInt < destInt) {
+        // Less than 2GB to the end of the address space.
+        // Pin to that to prevent address overflow.
+        maxInt = (uintptr_t)-1;
+    }
+#  endif
+
+    uintptr_t maxBytes = maxInt - destInt;  // max. 2GB
+    int32_t maxCapacity = (int32_t)(maxBytes / sizeof(T));
+    return capacity <= maxCapacity ? capacity : maxCapacity;
+}
+#endif   // __cplusplus
+
 /*  Dynamic Library Functions */
 
 typedef void (UVoidFunction)(void);
