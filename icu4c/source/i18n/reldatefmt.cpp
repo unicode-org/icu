@@ -51,13 +51,13 @@ U_NAMESPACE_BEGIN
 // RelativeDateTimeFormatter specific data for a single locale
 class RelativeDateTimeCacheData: public SharedObject {
 public:
-    RelativeDateTimeCacheData() : combinedDateAndTime(NULL) {
+    RelativeDateTimeCacheData() : combinedDateAndTime(nullptr) {
         // Initialize the cache arrays
         for (int32_t style = 0; style < UDAT_STYLE_COUNT; ++style) {
             for (int32_t relUnit = 0; relUnit < UDAT_REL_UNIT_COUNT; ++relUnit) {
                 for (int32_t pl = 0; pl < StandardPlural::COUNT; ++pl) {
-                    relativeUnitsFormatters[style][relUnit][0][pl] = NULL;
-                    relativeUnitsFormatters[style][relUnit][1][pl] = NULL;
+                    relativeUnitsFormatters[style][relUnit][0][pl] = nullptr;
+                    relativeUnitsFormatters[style][relUnit][1][pl] = nullptr;
                 }
             }
         }
@@ -150,7 +150,7 @@ const UnicodeString& RelativeDateTimeCacheData::getAbsoluteUnitString(
        case UDAT_RELATIVE_MINUTES: rdtunit = UDAT_REL_UNIT_MINUTE; break;
        case UDAT_RELATIVE_SECONDS: rdtunit = UDAT_REL_UNIT_SECOND; break;
        default: // a unit that the above method does not handle
-            return NULL;
+            return nullptr;
    }
 
    return getRelativeDateTimeUnitFormatter(fStyle, rdtunit, pastFutureIndex, pluralUnit);
@@ -164,12 +164,12 @@ const UnicodeString& RelativeDateTimeCacheData::getAbsoluteUnitString(
         int32_t pluralUnit) const {
     int32_t style = fStyle;
     do {
-        if (relativeUnitsFormatters[style][unit][pastFutureIndex][pluralUnit] != NULL) {
+        if (relativeUnitsFormatters[style][unit][pastFutureIndex][pluralUnit] != nullptr) {
             return relativeUnitsFormatters[style][unit][pastFutureIndex][pluralUnit];
         }
         style = fallBackCache[style];
     } while (style != -1);
-    return NULL;  // No formatter found.
+    return nullptr;  // No formatter found.
  }
 
 static UBool getStringWithFallback(
@@ -498,10 +498,10 @@ struct RelDateTimeFmtDataSink : public ResourceSink {
                         outputData.relativeUnitsFormatters[style][relUnitIndex]
                         [pastFutureIndex];
                     // Only set if not already established.
-                    if (patterns[pluralIndex] == NULL) {
+                    if (patterns[pluralIndex] == nullptr) {
                         patterns[pluralIndex] = new SimpleFormatter(
                             value.getUnicodeString(errorCode), 0, 1, errorCode);
-                        if (patterns[pluralIndex] == NULL) {
+                        if (patterns[pluralIndex] == nullptr) {
                             errorCode = U_MEMORY_ALLOCATION_ERROR;
                         }
                     }
@@ -654,7 +654,7 @@ static UBool getDateTimePattern(
             .append("/DateTimePatterns", status);
     LocalUResourceBundlePointer topLevel(
             ures_getByKeyWithFallback(
-                    resource, pathBuffer.data(), NULL, &status));
+                    resource, pathBuffer.data(), nullptr, &status));
     if (U_FAILURE(status)) {
         return FALSE;
     }
@@ -671,68 +671,68 @@ static UBool getDateTimePattern(
 template<> U_I18N_API
 const RelativeDateTimeCacheData *LocaleCacheKey<RelativeDateTimeCacheData>::createObject(const void * /*unused*/, UErrorCode &status) const {
     const char *localeId = fLoc.getName();
-    LocalUResourceBundlePointer topLevel(ures_open(NULL, localeId, &status));
+    LocalUResourceBundlePointer topLevel(ures_open(nullptr, localeId, &status));
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     LocalPointer<RelativeDateTimeCacheData> result(
             new RelativeDateTimeCacheData());
     if (result.isNull()) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
+        return nullptr;
     }
     if (!loadUnitData(
             topLevel.getAlias(),
             *result,
             localeId,
             status)) {
-        return NULL;
+        return nullptr;
     }
     UnicodeString dateTimePattern;
     if (!getDateTimePattern(topLevel.getAlias(), dateTimePattern, status)) {
-        return NULL;
+        return nullptr;
     }
     result->adoptCombinedDateAndTime(
             new SimpleFormatter(dateTimePattern, 2, 2, status));
     if (U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
     result->addRef();
     return result.orphan();
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(UErrorCode& status) :
-        fCache(NULL),
-        fNumberFormat(NULL),
-        fPluralRules(NULL),
+        fCache(nullptr),
+        fNumberFormat(nullptr),
+        fPluralRules(nullptr),
         fStyle(UDAT_STYLE_LONG),
         fContext(UDISPCTX_CAPITALIZATION_NONE),
-        fOptBreakIterator(NULL) {
-    init(NULL, NULL, status);
+        fOptBreakIterator(nullptr) {
+    init(nullptr, nullptr, status);
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(
         const Locale& locale, UErrorCode& status) :
-        fCache(NULL),
-        fNumberFormat(NULL),
-        fPluralRules(NULL),
+        fCache(nullptr),
+        fNumberFormat(nullptr),
+        fPluralRules(nullptr),
         fStyle(UDAT_STYLE_LONG),
         fContext(UDISPCTX_CAPITALIZATION_NONE),
-        fOptBreakIterator(NULL),
+        fOptBreakIterator(nullptr),
         fLocale(locale) {
-    init(NULL, NULL, status);
+    init(nullptr, nullptr, status);
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(
         const Locale& locale, NumberFormat *nfToAdopt, UErrorCode& status) :
-        fCache(NULL),
-        fNumberFormat(NULL),
-        fPluralRules(NULL),
+        fCache(nullptr),
+        fNumberFormat(nullptr),
+        fPluralRules(nullptr),
         fStyle(UDAT_STYLE_LONG),
         fContext(UDISPCTX_CAPITALIZATION_NONE),
-        fOptBreakIterator(NULL),
+        fOptBreakIterator(nullptr),
         fLocale(locale) {
-    init(nfToAdopt, NULL, status);
+    init(nfToAdopt, nullptr, status);
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(
@@ -741,12 +741,12 @@ RelativeDateTimeFormatter::RelativeDateTimeFormatter(
         UDateRelativeDateTimeFormatterStyle styl,
         UDisplayContext capitalizationContext,
         UErrorCode& status) :
-        fCache(NULL),
-        fNumberFormat(NULL),
-        fPluralRules(NULL),
+        fCache(nullptr),
+        fNumberFormat(nullptr),
+        fPluralRules(nullptr),
         fStyle(styl),
         fContext(capitalizationContext),
-        fOptBreakIterator(NULL),
+        fOptBreakIterator(nullptr),
         fLocale(locale) {
     if (U_FAILURE(status)) {
         return;
@@ -762,7 +762,7 @@ RelativeDateTimeFormatter::RelativeDateTimeFormatter(
         }
         init(nfToAdopt, bi, status);
     } else {
-        init(nfToAdopt, NULL, status);
+        init(nfToAdopt, nullptr, status);
     }
 }
 
@@ -779,7 +779,7 @@ RelativeDateTimeFormatter::RelativeDateTimeFormatter(
     fCache->addRef();
     fNumberFormat->addRef();
     fPluralRules->addRef();
-    if (fOptBreakIterator != NULL) {
+    if (fOptBreakIterator != nullptr) {
       fOptBreakIterator->addRef();
     }
 }
@@ -799,16 +799,16 @@ RelativeDateTimeFormatter& RelativeDateTimeFormatter::operator=(
 }
 
 RelativeDateTimeFormatter::~RelativeDateTimeFormatter() {
-    if (fCache != NULL) {
+    if (fCache != nullptr) {
         fCache->removeRef();
     }
-    if (fNumberFormat != NULL) {
+    if (fNumberFormat != nullptr) {
         fNumberFormat->removeRef();
     }
-    if (fPluralRules != NULL) {
+    if (fPluralRules != nullptr) {
         fPluralRules->removeRef();
     }
-    if (fOptBreakIterator != NULL) {
+    if (fOptBreakIterator != nullptr) {
         fOptBreakIterator->removeRef();
     }
 }
@@ -847,7 +847,7 @@ UnicodeString& RelativeDateTimeFormatter::format(
 
     const SimpleFormatter* formatter =
         fCache->getRelativeUnitFormatter(fStyle, unit, bFuture, pluralIndex);
-    if (formatter == NULL) {
+    if (formatter == nullptr) {
         // TODO: WARN - look at quantity formatter's action with an error.
         status = U_INVALID_FORMAT_ERROR;
         return appendTo;
@@ -884,7 +884,7 @@ UnicodeString& RelativeDateTimeFormatter::formatNumeric(
 
     const SimpleFormatter* formatter =
         fCache->getRelativeDateTimeUnitFormatter(fStyle, unit, bFuture, pluralIndex);
-    if (formatter == NULL) {
+    if (formatter == nullptr) {
         // TODO: WARN - look at quantity formatter's action with an error.
         status = U_INVALID_FORMAT_ERROR;
         return appendTo;
@@ -908,7 +908,7 @@ UnicodeString& RelativeDateTimeFormatter::format(
     // Get string using fallback.
     UnicodeString result;
     result.fastCopyFrom(fCache->getAbsoluteUnitString(fStyle, unit, direction));
-    if (fOptBreakIterator != NULL) {
+    if (fOptBreakIterator != nullptr) {
         adjustForContext(result);
     }
     return appendTo.append(result);
@@ -968,7 +968,7 @@ UnicodeString& RelativeDateTimeFormatter::format(
         const UnicodeString &unitFormatString =
             fCache->getAbsoluteUnitString(fStyle, absunit, direction);
         if (!unitFormatString.isEmpty()) {
-            if (fOptBreakIterator != NULL) {
+            if (fOptBreakIterator != nullptr) {
                 UnicodeString result(unitFormatString);
                 adjustForContext(result);
                 return appendTo.append(result);
@@ -989,7 +989,7 @@ UnicodeString& RelativeDateTimeFormatter::combineDateAndTime(
 }
 
 void RelativeDateTimeFormatter::adjustForContext(UnicodeString &str) const {
-    if (fOptBreakIterator == NULL
+    if (fOptBreakIterator == nullptr
         || str.length() == 0 || !u_islower(str.char32At(0))) {
         return;
     }
@@ -1030,7 +1030,7 @@ void RelativeDateTimeFormatter::init(
         shared->removeRef();
     } else {
         SharedNumberFormat *shared = new SharedNumberFormat(nf.getAlias());
-        if (shared == NULL) {
+        if (shared == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -1041,7 +1041,7 @@ void RelativeDateTimeFormatter::init(
         SharedObject::clearPtr(fOptBreakIterator);
     } else {
         SharedBreakIterator *shared = new SharedBreakIterator(bi.getAlias());
-        if (shared == NULL) {
+        if (shared == nullptr) {
             status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
@@ -1064,13 +1064,13 @@ ureldatefmt_open( const char*          locale,
                   UErrorCode*          status )
 {
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
     LocalPointer<RelativeDateTimeFormatter> formatter(new RelativeDateTimeFormatter(Locale(locale),
                                                               (NumberFormat*)nfToAdopt, width,
                                                               capitalizationContext, *status), *status);
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
     return (URelativeDateTimeFormatter*)formatter.orphan();
 }
@@ -1092,13 +1092,13 @@ ureldatefmt_formatNumeric( const URelativeDateTimeFormatter* reldatefmt,
     if (U_FAILURE(*status)) {
         return 0;
     }
-    if (result == NULL ? resultCapacity != 0 : resultCapacity < 0) {
+    if (result == nullptr ? resultCapacity != 0 : resultCapacity < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
     UnicodeString res;
-    if (result != NULL) {
-        // NULL destination for pure preflighting: empty dummy string
+    if (result != nullptr) {
+        // nullptr destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer (copied from udat_format)
         res.setTo(result, 0, resultCapacity);
     }
@@ -1120,13 +1120,13 @@ ureldatefmt_format( const URelativeDateTimeFormatter* reldatefmt,
     if (U_FAILURE(*status)) {
         return 0;
     }
-    if (result == NULL ? resultCapacity != 0 : resultCapacity < 0) {
+    if (result == nullptr ? resultCapacity != 0 : resultCapacity < 0) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
     UnicodeString res;
-    if (result != NULL) {
-        // NULL destination for pure preflighting: empty dummy string
+    if (result != nullptr) {
+        // nullptr destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer (copied from udat_format)
         res.setTo(result, 0, resultCapacity);
     }
@@ -1150,9 +1150,9 @@ ureldatefmt_combineDateAndTime( const URelativeDateTimeFormatter* reldatefmt,
     if (U_FAILURE(*status)) {
         return 0;
     }
-    if (result == NULL ? resultCapacity != 0 : resultCapacity < 0 ||
-            (relativeDateString == NULL ? relativeDateStringLen != 0 : relativeDateStringLen < -1) ||
-            (timeString == NULL ? timeStringLen != 0 : timeStringLen < -1)) {
+    if (result == nullptr ? resultCapacity != 0 : resultCapacity < 0 ||
+            (relativeDateString == nullptr ? relativeDateStringLen != 0 : relativeDateStringLen < -1) ||
+            (timeString == nullptr ? timeStringLen != 0 : timeStringLen < -1)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
