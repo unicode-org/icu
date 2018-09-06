@@ -19,6 +19,7 @@
 #ifndef __LISTFORMATTERTEST_H__
 #define __LISTFORMATTERTEST_H__
 
+#include "unicode/fpositer.h"
 #include "unicode/listformatter.h"
 #include "intltest.h"
 
@@ -41,9 +42,20 @@ class ListFormatterTest : public IntlTest {
     void TestZulu();
     void TestOutOfOrderPatterns();
     void Test9946();
+    void TestFieldPositionIteratorWontCrash();
+    void TestFieldPositionIteratorWith1Item();
+    void TestFieldPositionIteratorWith2Items();
+    void TestFieldPositionIteratorWith3Items();
+    void TestFieldPositionIteratorWith1ItemAndDataBefore();
+    void TestFieldPositionIteratorWith2ItemsAndDataBefore();
+    void TestFieldPositionIteratorWith3ItemsAndDataBefore();
 
   private:
     void CheckFormatting(const ListFormatter* formatter, UnicodeString data[], int32_t data_size, const UnicodeString& expected_result);
+    void ExpectPositions(FieldPositionIterator& iter, int32_t *values, int32_t tupleCount);
+    void RunTestFieldPositionIteratorWithNItems(
+        UnicodeString *data, int32_t n, int32_t *values, int32_t tupleCount,
+        UnicodeString& appendTo, const char* testName);
     void CheckFourCases(
         const char* locale_string,
         UnicodeString one,
