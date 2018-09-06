@@ -41,7 +41,7 @@ public class LanguageTag {
     // Map contains grandfathered tags and its preferred mappings from
     // http://www.ietf.org/rfc/rfc5646.txt
     private static final Map<AsciiUtil.CaseInsensitiveKey, String[]> GRANDFATHERED =
-        new HashMap<AsciiUtil.CaseInsensitiveKey, String[]>();
+        new HashMap<>();
 
     static {
         // grandfathered = irregular           ; non-redundant tags registered
@@ -234,6 +234,10 @@ public class LanguageTag {
         if (itr.isDone() || sts.isError()) {
             return false;
         }
+        if (_language.length() > 3) {
+            // extlang might be used with 2*3ALPHA language subtag only.
+            return false;
+        }
 
         boolean found = false;
 
@@ -244,7 +248,7 @@ public class LanguageTag {
             }
             found = true;
             if (_extlangs.isEmpty()) {
-                _extlangs = new ArrayList<String>(3);
+                _extlangs = new ArrayList<>(3);
             }
             _extlangs.add(s);
             sts._parseLength = itr.currentEnd();
@@ -309,7 +313,7 @@ public class LanguageTag {
             }
             found = true;
             if (_variants.isEmpty()) {
-                _variants = new ArrayList<String>(3);
+                _variants = new ArrayList<>(3);
             }
             _variants.add(s);
             sts._parseLength = itr.currentEnd();
@@ -352,7 +356,7 @@ public class LanguageTag {
                 }
 
                 if (_extensions.size() == 0) {
-                    _extensions = new ArrayList<String>(4);
+                    _extensions = new ArrayList<>(4);
                 }
                 _extensions.add(sb.toString());
                 found = true;
@@ -452,7 +456,7 @@ public class LanguageTag {
                     break;
                 }
                 if (variants == null) {
-                    variants = new ArrayList<String>();
+                    variants = new ArrayList<>();
                 }
                 if (JDKIMPL) {
                     variants.add(var);  // Do not canonicalize!
@@ -499,7 +503,7 @@ public class LanguageTag {
                 privateuse = ext.getValue();
             } else {
                 if (extensions == null) {
-                    extensions = new ArrayList<String>();
+                    extensions = new ArrayList<>();
                 }
                 extensions.add(locextKey.toString() + SEP + ext.getValue());
             }

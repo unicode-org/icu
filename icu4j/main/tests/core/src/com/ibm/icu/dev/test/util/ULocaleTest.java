@@ -4151,7 +4151,9 @@ public class ULocaleTest extends TestFmwk {
                 {"en-u-baz-ca-islamic-civil",   "en@attribute=baz;calendar=islamic-civil",  NOERROR},
                 {"en-a-bar-u-ca-islamic-civil-x-u-foo", "en@a=bar;calendar=islamic-civil;x=u-foo",  NOERROR},
                 {"en-a-bar-u-baz-ca-islamic-civil-x-u-foo", "en@a=bar;attribute=baz;calendar=islamic-civil;x=u-foo",    NOERROR},
-
+                /* #20098 */
+                {"hant-cmn-TW",         "hant",                 Integer.valueOf(5)},
+                {"zh-cmn-TW",           "cmn_TW",               NOERROR},
         };
 
         for (int i = 0; i < langtag_to_locale.length; i++) {
@@ -4306,7 +4308,7 @@ public class ULocaleTest extends TestFmwk {
         for (String[] testcase : TESTCASES) {
             ULocale loc = ULocale.forLanguageTag(testcase[0]);
 
-            Set<String> expectedAttributes = new HashSet<String>();
+            Set<String> expectedAttributes = new HashSet<>();
             if (testcase[1] != null) {
                 String[] attrs = testcase[1].split(",");
                 for (String s : attrs) {
@@ -4314,7 +4316,7 @@ public class ULocaleTest extends TestFmwk {
                 }
             }
 
-            Map<String, String> expectedKeywords = new HashMap<String, String>();
+            Map<String, String> expectedKeywords = new HashMap<>();
             if (testcase[2] != null) {
                 String[] ukeys = testcase[2].split(",");
                 for (int i = 0; i < ukeys.length; i++) {
@@ -4646,7 +4648,7 @@ public class ULocaleTest extends TestFmwk {
                 "zh_Hant_TW",
         };
 
-        TreeSet<ULocale> sortedLocales = new TreeSet<ULocale>();
+        TreeSet<ULocale> sortedLocales = new TreeSet<>();
         for (ULocale locale : locales) {
             sortedLocales.add(locale);
         }
