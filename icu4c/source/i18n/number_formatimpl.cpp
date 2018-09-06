@@ -67,8 +67,8 @@ getCurrencyFormatInfo(const Locale& locale, const char* isoCode, UErrorCode& sta
 MicroPropsGenerator::~MicroPropsGenerator() = default;
 
 
-NumberFormatterImpl* NumberFormatterImpl::fromMacros(const MacroProps& macros, UErrorCode& status) {
-    return new NumberFormatterImpl(macros, true, status);
+NumberFormatterImpl::NumberFormatterImpl(const MacroProps& macros, UErrorCode& status)
+    : NumberFormatterImpl(macros, true, status) {
 }
 
 void NumberFormatterImpl::formatStatic(const MacroProps& macros, DecimalQuantity& inValue,

@@ -38,14 +38,14 @@ void NumberRangeFormatterTest::testBasic() {
         NumberRangeFormatter::with(),
         Locale("en-us"),
         u"1 --- 5",
-        u"5 --- 5",
-        u"5 --- 5",
+        u"~5",
+        u"~5",
         u"0 --- 3",
-        u"0 --- 0",
+        u"~0",
         u"3 --- 3,000",
         u"3,000 --- 5,000",
         u"4,999 --- 5,001",
-        u"5,000 --- 5,000",
+        u"~5,000",
         u"5,000 --- 5,000,000");
 }
 

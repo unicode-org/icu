@@ -29,7 +29,7 @@ class NumberFormatterImpl : public UMemory {
      * Builds a "safe" MicroPropsGenerator, which is thread-safe and can be used repeatedly.
      * The caller owns the returned NumberFormatterImpl.
      */
-    static NumberFormatterImpl *fromMacros(const MacroProps &macros, UErrorCode &status);
+    NumberFormatterImpl(const MacroProps &macros, UErrorCode &status);
 
     /**
      * Builds and evaluates an "unsafe" MicroPropsGenerator, which is cheaper but can be used only once.

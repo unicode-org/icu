@@ -9,6 +9,7 @@
 // Helpful in toString methods and elsewhere.
 #define UNISTR_FROM_STRING_EXPLICIT
 
+#include "unicode/numberrangeformatter.h"
 #include "numrange_impl.h"
 
 using namespace icu;
@@ -23,6 +24,15 @@ constexpr int8_t identity2d(UNumberIdentityFallback a, UNumberRangeIdentityResul
 }
 
 } // namespace
+
+
+NumberRangeFormatterImpl::NumberRangeFormatterImpl(const RangeMacroProps& macros, UErrorCode& status)
+    : formatterImpl1(macros.formatter1.fMacros, status),
+      formatterImpl2(macros.formatter2.fMacros, status),
+      fSameFormatters(true), // FIXME
+      fCollapse(macros.collapse),
+      fIdentityFallback(macros.identityFallback) {
+}
 
 void NumberRangeFormatterImpl::format(UFormattedNumberRangeData& data, bool equalBeforeRounding, UErrorCode& status) const {
     if (U_FAILURE(status)) {
@@ -199,7 +209,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
     // TODO: Use localized pattern
     lengthShared += string.insert(UPRV_INDEX_0, u" --- ", UNUM_FIELD_COUNT, status);
     length1 += NumberFormatterImpl::writeNumber(micros1, data.quantity1, string, UPRV_INDEX_0, status);
-    length2 += NumberFormatterImpl::writeNumber(micros2, data.quantity2, string, UPRV_INDEX_0, status);
+    length2 += NumberFormatterImpl::writeNumber(micros2, data.quantity2, string, UPRV_INDEX_2, status);
 
     // TODO: Support padding?
 
