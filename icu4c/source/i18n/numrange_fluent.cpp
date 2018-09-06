@@ -22,7 +22,7 @@ template<typename Derived>
 Derived NumberRangeFormatterSettings<Derived>::numberFormatterBoth(const UnlocalizedNumberFormatter& formatter) const& {
     Derived copy(*this);
     copy.fMacros.formatter1 = formatter;
-    copy.fMacros.formatter2 = formatter;
+    copy.fMacros.singleFormatter = true;
     return copy;
 }
 
@@ -30,23 +30,23 @@ template<typename Derived>
 Derived NumberRangeFormatterSettings<Derived>::numberFormatterBoth(const UnlocalizedNumberFormatter& formatter) && {
     Derived move(std::move(*this));
     move.fMacros.formatter1 = formatter;
-    move.fMacros.formatter2 = formatter;
+    move.fMacros.singleFormatter = true;
     return move;
 }
 
 template<typename Derived>
 Derived NumberRangeFormatterSettings<Derived>::numberFormatterBoth(UnlocalizedNumberFormatter&& formatter) const& {
     Derived copy(*this);
-    copy.fMacros.formatter1 = formatter;
-    copy.fMacros.formatter2 = std::move(formatter);
+    copy.fMacros.formatter1 = std::move(formatter);
+    copy.fMacros.singleFormatter = true;
     return copy;
 }
 
 template<typename Derived>
 Derived NumberRangeFormatterSettings<Derived>::numberFormatterBoth(UnlocalizedNumberFormatter&& formatter) && {
     Derived move(std::move(*this));
-    move.fMacros.formatter1 = formatter;
-    move.fMacros.formatter2 = std::move(formatter);
+    move.fMacros.formatter1 = std::move(formatter);
+    move.fMacros.singleFormatter = true;
     return move;
 }
 
@@ -54,6 +54,7 @@ template<typename Derived>
 Derived NumberRangeFormatterSettings<Derived>::numberFormatterFirst(const UnlocalizedNumberFormatter& formatter) const& {
     Derived copy(*this);
     copy.fMacros.formatter1 = formatter;
+    copy.fMacros.singleFormatter = false;
     return copy;
 }
 
@@ -61,6 +62,7 @@ template<typename Derived>
 Derived NumberRangeFormatterSettings<Derived>::numberFormatterFirst(const UnlocalizedNumberFormatter& formatter) && {
     Derived move(std::move(*this));
     move.fMacros.formatter1 = formatter;
+    move.fMacros.singleFormatter = false;
     return move;
 }
 
@@ -68,6 +70,7 @@ template<typename Derived>
 Derived NumberRangeFormatterSettings<Derived>::numberFormatterFirst(UnlocalizedNumberFormatter&& formatter) const& {
     Derived copy(*this);
     copy.fMacros.formatter1 = std::move(formatter);
+    copy.fMacros.singleFormatter = false;
     return copy;
 }
 
@@ -75,6 +78,7 @@ template<typename Derived>
 Derived NumberRangeFormatterSettings<Derived>::numberFormatterFirst(UnlocalizedNumberFormatter&& formatter) && {
     Derived move(std::move(*this));
     move.fMacros.formatter1 = std::move(formatter);
+    move.fMacros.singleFormatter = false;
     return move;
 }
 
@@ -82,6 +86,7 @@ template<typename Derived>
 Derived NumberRangeFormatterSettings<Derived>::numberFormatterSecond(const UnlocalizedNumberFormatter& formatter) const& {
     Derived copy(*this);
     copy.fMacros.formatter2 = formatter;
+    copy.fMacros.singleFormatter = false;
     return copy;
 }
 
@@ -89,6 +94,7 @@ template<typename Derived>
 Derived NumberRangeFormatterSettings<Derived>::numberFormatterSecond(const UnlocalizedNumberFormatter& formatter) && {
     Derived move(std::move(*this));
     move.fMacros.formatter2 = formatter;
+    move.fMacros.singleFormatter = false;
     return move;
 }
 
@@ -96,6 +102,7 @@ template<typename Derived>
 Derived NumberRangeFormatterSettings<Derived>::numberFormatterSecond(UnlocalizedNumberFormatter&& formatter) const& {
     Derived copy(*this);
     copy.fMacros.formatter2 = std::move(formatter);
+    copy.fMacros.singleFormatter = false;
     return copy;
 }
 
@@ -103,6 +110,7 @@ template<typename Derived>
 Derived NumberRangeFormatterSettings<Derived>::numberFormatterSecond(UnlocalizedNumberFormatter&& formatter) && {
     Derived move(std::move(*this));
     move.fMacros.formatter2 = std::move(formatter);
+    move.fMacros.singleFormatter = false;
     return move;
 }
 

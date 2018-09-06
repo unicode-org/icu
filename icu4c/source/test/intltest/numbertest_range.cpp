@@ -11,7 +11,31 @@
 #include <cmath>
 #include <numparse_affixes.h>
 
-using icu::unisets::get;
+// Horrible workaround for the lack of a status code in the constructor...
+// (Also affects numbertest_api.cpp)
+UErrorCode globalNumberRangeFormatterTestStatus = U_ZERO_ERROR;
+
+NumberRangeFormatterTest::NumberRangeFormatterTest()
+        : NumberRangeFormatterTest(globalNumberRangeFormatterTestStatus) {
+}
+
+NumberRangeFormatterTest::NumberRangeFormatterTest(UErrorCode& status)
+        : USD(u"USD", status),
+          GBP(u"GBP", status),
+          PTE(u"PTE", status) {
+
+    // Check for error on the first MeasureUnit in case there is no data
+    LocalPointer<MeasureUnit> unit(MeasureUnit::createMeter(status));
+    if (U_FAILURE(status)) {
+        dataerrln("%s %d status = %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+    METER = *unit;
+
+    KILOMETER = *LocalPointer<MeasureUnit>(MeasureUnit::createKilometer(status));
+    FAHRENHEIT = *LocalPointer<MeasureUnit>(MeasureUnit::createFahrenheit(status));
+    KELVIN = *LocalPointer<MeasureUnit>(MeasureUnit::createKelvin(status));
+}
 
 void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const char*& name, char*) {
     if (exec) {
@@ -37,16 +61,49 @@ void NumberRangeFormatterTest::testBasic() {
         u"Basic",
         NumberRangeFormatter::with(),
         Locale("en-us"),
-        u"1 --- 5",
+        u"1–5",
         u"~5",
         u"~5",
-        u"0 --- 3",
+        u"0–3",
         u"~0",
-        u"3 --- 3,000",
-        u"3,000 --- 5,000",
-        u"4,999 --- 5,001",
+        u"3–3,000",
+        u"3,000–5,000",
+        u"4,999–5,001",
         u"~5,000",
-        u"5,000 --- 5,000,000");
+        u"5,000–5,000,000");
+
+    assertFormatRange(
+        u"Basic with units",
+        NumberRangeFormatter::with()
+            .numberFormatterBoth(NumberFormatter::with().unit(METER)),
+        Locale("en-us"),
+        u"1–5 m",
+        u"~5 m",
+        u"~5 m",
+        u"0–3 m",
+        u"~0 m",
+        u"3–3,000 m",
+        u"3,000–5,000 m",
+        u"4,999–5,001 m",
+        u"~5,000 m",
+        u"5,000–5,000,000 m");
+
+    assertFormatRange(
+        u"Basic with different units",
+        NumberRangeFormatter::with()
+            .numberFormatterFirst(NumberFormatter::with().unit(METER))
+            .numberFormatterSecond(NumberFormatter::with().unit(KILOMETER)),
+        Locale("en-us"),
+        u"1 m – 5 km",
+        u"5 m – 5 km",
+        u"5 m – 5 km",
+        u"0 m – 3 km",
+        u"0 m – 0 km",
+        u"3 m – 3,000 km",
+        u"3,000 m – 5,000 km",
+        u"4,999 m – 5,001 km",
+        u"5,000 m – 5,000 km",
+        u"5,000 m – 5,000,000 km");
 }
 
 void  NumberRangeFormatterTest::assertFormatRange(

@@ -17,6 +17,7 @@
 #include "unicode/utypes.h"
 
 // Horrible workaround for the lack of a status code in the constructor...
+// (Also affects numbertest_range.cpp)
 UErrorCode globalNumberFormatterApiTestStatus = U_ZERO_ERROR;
 
 NumberFormatterApiTest::NumberFormatterApiTest()

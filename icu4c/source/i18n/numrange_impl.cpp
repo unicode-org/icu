@@ -35,12 +35,12 @@ class NumberRangeDataSink : public ResourceSink {
         if (U_FAILURE(status)) { return; }
         for (int i = 0; miscTable.getKeyAndValue(i, key, value); i++) {
             if (uprv_strcmp(key, "range") == 0) {
-                if (fData.rangePattern.getArgumentLimit() == 0) {
+                if (fData.rangePattern.getArgumentLimit() != 0) {
                     continue; // have already seen this pattern
                 }
                 fData.rangePattern = {value.getUnicodeString(status), status};
             } else if (uprv_strcmp(key, "approximately") == 0) {
-                if (fData.approximatelyPattern.getArgumentLimit() == 0) {
+                if (fData.approximatelyPattern.getArgumentLimit() != 0) {
                     continue; // have already seen this pattern
                 }
                 fData.approximatelyPattern = {value.getUnicodeString(status), status};
@@ -65,12 +65,7 @@ void getNumberRangeData(const char* localeName, const char* nsName, NumberRangeD
     ures_getAllItemsWithFallback(rb.getAlias(), dataPath.data(), sink, status);
     if (U_FAILURE(status)) { return; }
 
-    if (uprv_strcmp(nsName, "latn") != 0 && (data.rangePattern.getArgumentLimit() == 0
-            || data.approximatelyPattern.getArgumentLimit() == 0)) {
-        // fall back to Latin data
-        ures_getAllItemsWithFallback(rb.getAlias(), "NumberElements/latn/miscPatterns", sink, status);
-        if (U_FAILURE(status)) { return; }
-    }
+    // TODO: Is it necessary to maually fall back to latn, or does the data sink take care of that?
 
     if (data.rangePattern.getArgumentLimit() == 0) {
         // No data!
@@ -88,10 +83,16 @@ void getNumberRangeData(const char* localeName, const char* nsName, NumberRangeD
 NumberRangeFormatterImpl::NumberRangeFormatterImpl(const RangeMacroProps& macros, UErrorCode& status)
     : formatterImpl1(macros.formatter1.fMacros, status),
       formatterImpl2(macros.formatter2.fMacros, status),
-      fSameFormatters(true), // FIXME
+      fSameFormatters(macros.singleFormatter),
       fCollapse(macros.collapse),
       fIdentityFallback(macros.identityFallback) {
-    // TODO: get local ns
+
+    // TODO: As of this writing (ICU 63), there is no locale that has different number miscPatterns
+    // based on numbering system.  Therefore, data is loaded only from latn.  If this changes,
+    // this part of the code should be updated to load from the local numbering system.
+    // The numbering system could come from the one specified in the NumberFormatter passed to
+    // numberFormatterBoth() or similar.
+
     NumberRangeData data;
     getNumberRangeData(macros.locale.getName(), "latn", data, status);
     if (U_FAILURE(status)) { return; }
@@ -104,15 +105,17 @@ void NumberRangeFormatterImpl::format(UFormattedNumberRangeData& data, bool equa
         return;
     }
 
-    // Identity case 1: equal before rounding
-    if (equalBeforeRounding) {
-    }
-
     MicroProps micros1;
     MicroProps micros2;
-    formatterImpl1.preProcess(data.quantity1, micros1, status);
-    formatterImpl2.preProcess(data.quantity2, micros2, status);
-    if (U_FAILURE(status)) {
+    if (fSameFormatters) {
+        formatterImpl1.preProcess(data.quantity1, micros1, status);
+        formatterImpl1.preProcess(data.quantity2, micros2, status);
+    } else {
+        // If the formatters are different, an identity is not possible.
+        // Always use formatRange().
+        formatterImpl1.preProcess(data.quantity1, micros1, status);
+        formatterImpl2.preProcess(data.quantity2, micros2, status);
+        formatRange(data, micros1, micros2, status);
         return;
     }
 
@@ -169,6 +172,7 @@ void NumberRangeFormatterImpl::format(UFormattedNumberRangeData& data, bool equa
 void NumberRangeFormatterImpl::formatSingleValue(UFormattedNumberRangeData& data,
                                                  MicroProps& micros1, MicroProps& micros2,
                                                  UErrorCode& status) const {
+    if (U_FAILURE(status)) { return; }
     if (fSameFormatters) {
         formatterImpl1.format(data.quantity1, data.string, status);
     } else {
@@ -180,6 +184,7 @@ void NumberRangeFormatterImpl::formatSingleValue(UFormattedNumberRangeData& data
 void NumberRangeFormatterImpl::formatApproximately (UFormattedNumberRangeData& data,
                                                     MicroProps& micros1, MicroProps& micros2,
                                                     UErrorCode& status) const {
+    if (U_FAILURE(status)) { return; }
     if (fSameFormatters) {
         int32_t length = formatterImpl1.format(data.quantity1, data.string, status);
         fApproximatelyModifier.apply(data.string, 0, length, status);
@@ -192,6 +197,7 @@ void NumberRangeFormatterImpl::formatApproximately (UFormattedNumberRangeData& d
 void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
                                            MicroProps& micros1, MicroProps& micros2,
                                            UErrorCode& status) const {
+    if (U_FAILURE(status)) { return; }
 
     // modInner is always notation (scientific); collapsable in ALL.
     // modOuter is always units; collapsable in ALL, AUTO, and UNIT.
@@ -283,6 +289,19 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
     if (U_FAILURE(status)) { return; }
     lengthInfix = lengthRange - lengthPrefix - lengthSuffix;
 
+    // SPACING HEURISTIC
+    // Add spacing unless all modifiers are collapsed.
+    {
+        bool repeatInner = !collapseInner && micros1.modInner->getCodePointCount() > 0;
+        bool repeatMiddle = !collapseMiddle && micros1.modMiddle->getCodePointCount() > 0;
+        bool repeatOuter = !collapseOuter && micros1.modOuter->getCodePointCount() > 0;
+        if (repeatInner || repeatMiddle || repeatOuter) {
+            // Add spacing
+            lengthInfix += string.insertCodePoint(UPRV_INDEX_1, u'\u0020', UNUM_FIELD_COUNT, status);
+            lengthInfix += string.insertCodePoint(UPRV_INDEX_2, u'\u0020', UNUM_FIELD_COUNT, status);
+        }
+    }
+
     length1 += NumberFormatterImpl::writeNumber(micros1, data.quantity1, string, UPRV_INDEX_0, status);
     length2 += NumberFormatterImpl::writeNumber(micros2, data.quantity2, string, UPRV_INDEX_2, status);
 
@@ -292,21 +311,21 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
         lengthInfix += micros1.modInner->apply(string, UPRV_INDEX_0, UPRV_INDEX_3, status);
     } else {
         length1 += micros1.modInner->apply(string, UPRV_INDEX_0, UPRV_INDEX_1, status);
-        length2 += micros1.modInner->apply(string, UPRV_INDEX_2, UPRV_INDEX_3, status);
+        length2 += micros2.modInner->apply(string, UPRV_INDEX_2, UPRV_INDEX_3, status);
     }
 
     if (collapseMiddle) {
         lengthInfix += micros1.modMiddle->apply(string, UPRV_INDEX_0, UPRV_INDEX_3, status);
     } else {
         length1 += micros1.modMiddle->apply(string, UPRV_INDEX_0, UPRV_INDEX_1, status);
-        length2 += micros1.modMiddle->apply(string, UPRV_INDEX_2, UPRV_INDEX_3, status);
+        length2 += micros2.modMiddle->apply(string, UPRV_INDEX_2, UPRV_INDEX_3, status);
     }
 
     if (collapseOuter) {
-        micros1.modOuter->apply(string, UPRV_INDEX_0, UPRV_INDEX_3, status);
+        lengthInfix += micros1.modOuter->apply(string, UPRV_INDEX_0, UPRV_INDEX_3, status);
     } else {
-        micros1.modOuter->apply(string, UPRV_INDEX_0, UPRV_INDEX_1, status);
-        micros1.modOuter->apply(string, UPRV_INDEX_2, UPRV_INDEX_3, status);
+        length1 += micros1.modOuter->apply(string, UPRV_INDEX_0, UPRV_INDEX_1, status);
+        length2 += micros2.modOuter->apply(string, UPRV_INDEX_2, UPRV_INDEX_3, status);
     }
 }
 
