@@ -116,7 +116,7 @@ typedef enum UNumberRangeIdentityFallback {
      * @draft ICU 63
      */
     UNUM_IDENTITY_FALLBACK_RANGE
-} UNumberIdentityFallback;
+} UNumberRangeIdentityFallback;
 
 /**
  * Used in the result class FormattedNumberRange to indicate to the user whether the numbers formatted in the range
@@ -199,7 +199,7 @@ struct U_I18N_API RangeMacroProps : public UMemory {
     UNumberRangeCollapse collapse = UNUM_RANGE_COLLAPSE_AUTO;
 
     /** @internal */
-    UNumberIdentityFallback identityFallback = UNUM_IDENTITY_FALLBACK_APPROXIMATELY;
+    UNumberRangeIdentityFallback identityFallback = UNUM_IDENTITY_FALLBACK_APPROXIMATELY;
 
     /** @internal */
     Locale locale;
@@ -414,7 +414,7 @@ class U_I18N_API NumberRangeFormatterSettings {
      * @return The fluent chain.
      * @draft ICU 63
      */
-    Derived identityFallback(UNumberIdentityFallback identityFallback) const &;
+    Derived identityFallback(UNumberRangeIdentityFallback identityFallback) const &;
 
     /**
      * Overload of identityFallback() for use on an rvalue reference.
@@ -425,7 +425,7 @@ class U_I18N_API NumberRangeFormatterSettings {
      * @see #identityFallback
      * @draft ICU 63
      */
-    Derived identityFallback(UNumberIdentityFallback identityFallback) &&;
+    Derived identityFallback(UNumberRangeIdentityFallback identityFallback) &&;
 
     /**
      * Sets the UErrorCode if an error occurred in the fluent chain.

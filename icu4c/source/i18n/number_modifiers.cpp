@@ -280,10 +280,7 @@ bool ConstantMultiFieldModifier::isStrong() const {
 }
 
 bool ConstantMultiFieldModifier::containsField(UNumberFormatFields field) const {
-    (void)field;
-    // This method is not currently used.
-    U_ASSERT(false);
-    return false;
+    return fPrefix.containsField(field) || fSuffix.containsField(field);
 }
 
 bool ConstantMultiFieldModifier::operator==(const Modifier& other) const {
