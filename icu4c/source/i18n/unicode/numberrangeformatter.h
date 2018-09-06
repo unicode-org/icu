@@ -175,6 +175,7 @@ namespace impl {
 struct RangeMacroProps;
 class DecimalQuantity;
 struct UFormattedNumberRangeData;
+class NumberRangeFormatterImpl;
 
 } // namespace impl
 
@@ -598,7 +599,8 @@ class U_I18N_API LocalizedNumberRangeFormatter
      *            Set if an error occurs while formatting.
      * @internal
      */
-    void formatImpl(impl::UFormattedNumberRangeData* results, UErrorCode& status) const;
+    void formatImpl(impl::UFormattedNumberRangeData& results, bool equalBeforeRounding,
+                    UErrorCode& status) const;
 
 #endif
 
@@ -609,6 +611,8 @@ class U_I18N_API LocalizedNumberRangeFormatter
     ~LocalizedNumberRangeFormatter();
 
   private:
+    // TODO: This is not thread-safe! Do NOT check this in without an atomic here.
+    impl::NumberRangeFormatterImpl* fImpl = nullptr;
 
     explicit LocalizedNumberRangeFormatter(
         const NumberRangeFormatterSettings<LocalizedNumberRangeFormatter>& other);

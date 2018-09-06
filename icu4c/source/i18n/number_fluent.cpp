@@ -706,7 +706,11 @@ bool LocalizedNumberFormatter::computeCompiled(UErrorCode& status) const {
 
     if (currentCount == fMacros.threshold && fMacros.threshold > 0) {
         // Build the data structure and then use it (slow to fast path).
-        const NumberFormatterImpl* compiled = NumberFormatterImpl::fromMacros(fMacros, status);
+        const NumberFormatterImpl* compiled = new NumberFormatterImpl(fMacros, status);
+        if (compiled == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return false;
+        }
         U_ASSERT(fCompiled == nullptr);
         const_cast<LocalizedNumberFormatter*>(this)->fCompiled = compiled;
         umtx_storeRelease(*callCount, INT32_MIN);

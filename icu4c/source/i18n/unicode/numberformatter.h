@@ -2110,6 +2110,9 @@ class U_I18N_API NumberFormatterSettings {
 
     friend class LocalizedNumberFormatter;
     friend class UnlocalizedNumberFormatter;
+
+    // Give NumberRangeFormatter access to the MacroProps
+    friend class impl::NumberRangeFormatterImpl;
 };
 
 /**
@@ -2189,9 +2192,6 @@ class U_I18N_API UnlocalizedNumberFormatter
 
     // To give NumberFormatter::with() access to this class's constructor:
     friend class NumberFormatter;
-
-    // Give NumberRangeFormatter access to the MacroProps
-    friend class NumberRangeFormatterImpl;
 };
 
 /**

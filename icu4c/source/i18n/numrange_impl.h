@@ -45,6 +45,8 @@ struct UFormattedNumberRangeData : public UMemory {
 
 class NumberRangeFormatterImpl : public UMemory {
   public:
+    NumberRangeFormatterImpl(const RangeMacroProps& macros, UErrorCode& status);
+
     void format(UFormattedNumberRangeData& data, bool equalBeforeRounding, UErrorCode& status) const;
 
   private:

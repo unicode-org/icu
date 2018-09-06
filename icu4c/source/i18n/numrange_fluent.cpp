@@ -228,7 +228,7 @@ FormattedNumberRange LocalizedNumberRangeFormatter::formatFormattableRange(
         return FormattedNumberRange(status);
     }
 
-    formatImpl(results, status);
+    formatImpl(*results, first == second, status);
 
     // Do not save the results object if we encountered a failure.
     if (U_SUCCESS(status)) {
@@ -240,35 +240,20 @@ FormattedNumberRange LocalizedNumberRangeFormatter::formatFormattableRange(
 }
 
 void LocalizedNumberRangeFormatter::formatImpl(
-        UFormattedNumberRangeData* results, UErrorCode& status) const {
-
-    MicroProps microsFirst;
-    MicroProps microsSecond;
-
-    UFormattedNumberData r1;
-    r1.quantity = results->quantity1;
-    fMacros.formatter1.locale(fMacros.locale).formatImpl(&r1, status);
-    if (U_FAILURE(status)) {
-        return;
+        UFormattedNumberRangeData& results, bool equalBeforeRounding, UErrorCode& status) const {
+    if (fImpl == nullptr) {
+        // TODO: Fix this once the atomic is ready!
+        auto* nonConstThis = const_cast<LocalizedNumberRangeFormatter*>(this);
+        nonConstThis->fImpl = new NumberRangeFormatterImpl(fMacros, status);
+        if (U_FAILURE(status)) {
+            return;
+        }
+        if (fImpl == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
     }
-    results->quantity1 = r1.quantity;
-
-    UFormattedNumberData r2;
-    r2.quantity = results->quantity2;
-    fMacros.formatter2.locale(fMacros.locale).formatImpl(&r2, status);
-    if (U_FAILURE(status)) {
-        return;
-    }
-    results->quantity2 = r2.quantity;
-
-    results->string.append(r1.string, status);
-    results->string.append(u" --- ", UNUM_FIELD_COUNT, status);
-    results->string.append(r2.string, status);
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    results->identityResult = UNUM_IDENTITY_RESULT_NOT_EQUAL;
+    fImpl->format(results, equalBeforeRounding, status);
 }
 
 
