@@ -144,6 +144,7 @@ class MultiplierFormatHandler;
 class CurrencySymbols;
 class GeneratorHelpers;
 class DecNum;
+class NumberRangeFormatterImpl;
 
 } // namespace impl
 
@@ -2188,6 +2189,9 @@ class U_I18N_API UnlocalizedNumberFormatter
 
     // To give NumberFormatter::with() access to this class's constructor:
     friend class NumberFormatter;
+
+    // Give NumberRangeFormatter access to the MacroProps
+    friend class NumberRangeFormatterImpl;
 };
 
 /**

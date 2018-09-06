@@ -127,6 +127,7 @@ class U_I18N_API AffixPatternProvider {
     virtual bool hasBody() const = 0;
 };
 
+
 /**
  * A Modifier is an object that can be passed through the formatting pipeline until it is finally applied to the string
  * builder. A Modifier usually contains a prefix and a suffix that are applied, but it could contain something else,
@@ -177,6 +178,16 @@ class U_I18N_API Modifier {
      * @return Whether the modifier is strong.
      */
     virtual bool isStrong() const = 0;
+
+    /**
+     * Whether the modifier contains at least one occurrence of the given field.
+     */
+    virtual bool containsField(UNumberFormatFields field) const = 0;
+
+    /**
+     * Returns whether the affixes owned by this modifier are equal to the ones owned by the given modifier.
+     */
+    virtual bool operator==(const Modifier& other) const = 0;
 };
 
 /**

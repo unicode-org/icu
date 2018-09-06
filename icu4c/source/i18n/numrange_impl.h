@@ -11,6 +11,7 @@
 #include "unicode/numberrangeformatter.h"
 #include "number_types.h"
 #include "number_decimalquantity.h"
+#include "number_formatimpl.h"
 #include "number_stringbuilder.h"
 
 U_NAMESPACE_BEGIN namespace number {
@@ -36,9 +37,35 @@ struct UFormattedNumberRangeData : public UMemory {
     DecimalQuantity quantity1;
     DecimalQuantity quantity2;
     NumberStringBuilder string;
-    UNumberRangeIdentityResult identityResult = UNUM_IDENTITY_RESULT_EQUAL_BEFORE_ROUNDING;
+    UNumberRangeIdentityResult identityResult = UNUM_IDENTITY_RESULT_COUNT;
 
     // No C conversion methods (no C API yet)
+};
+
+
+class NumberRangeFormatterImpl : public UMemory {
+  public:
+    void format(UFormattedNumberRangeData& data, bool equalBeforeRounding, UErrorCode& status) const;
+
+  private:
+    NumberFormatterImpl formatterImpl1;
+    NumberFormatterImpl formatterImpl2;
+    bool fSameFormatters;
+
+    UNumberRangeCollapse fCollapse;
+    UNumberRangeIdentityFallback fIdentityFallback;
+
+    void formatSingleValue(UFormattedNumberRangeData& data,
+                           MicroProps& micros1, MicroProps& micros2,
+                           UErrorCode& status) const;
+
+    void formatApproximately(UFormattedNumberRangeData& data,
+                             MicroProps& micros1, MicroProps& micros2,
+                             UErrorCode& status) const;
+
+    void formatRange(UFormattedNumberRangeData& data,
+                     MicroProps& micros1, MicroProps& micros2,
+                     UErrorCode& status) const;
 };
 
 

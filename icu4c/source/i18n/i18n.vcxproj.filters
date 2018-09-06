@@ -920,7 +920,7 @@
     <ClInclude Include="numparse_utils.h">
       <Filter>formatting</Filter>
     </ClInclude>
-    <ClInclude Include="numrange_types.h">
+    <ClInclude Include="numrange_impl.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="olsontz.h">
