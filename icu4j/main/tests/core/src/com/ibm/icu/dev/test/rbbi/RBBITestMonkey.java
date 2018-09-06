@@ -617,6 +617,7 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet  fB2;
         UnicodeSet  fBA;
         UnicodeSet  fBB;
+        UnicodeSet  fHH;
         UnicodeSet  fHY;
         UnicodeSet  fCB;
         UnicodeSet  fCL;
@@ -659,6 +660,7 @@ public class RBBITestMonkey extends TestFmwk {
 
         class XUnicodeSet extends UnicodeSet {
             XUnicodeSet(String pattern) { super(pattern); }
+            XUnicodeSet() { super(); }
             @Override
             public boolean contains(int codePoint) {
                 return codePoint < UnicodeSet.MIN_VALUE || codePoint > UnicodeSet.MAX_VALUE ?
@@ -684,6 +686,7 @@ public class RBBITestMonkey extends TestFmwk {
             fB2    = new XUnicodeSet("[\\p{Line_break=B2}]");
             fBA    = new XUnicodeSet("[\\p{Line_break=BA}]");
             fBB    = new XUnicodeSet("[\\p{Line_break=BB}]");
+            fHH    = new XUnicodeSet();
             fHY    = new XUnicodeSet("[\\p{Line_break=HY}]");
             fCB    = new XUnicodeSet("[\\p{Line_break=CB}]");
             fCL    = new XUnicodeSet("[\\p{Line_break=CL}]");
@@ -727,6 +730,8 @@ public class RBBITestMonkey extends TestFmwk {
 
             fNS.addAll(fCJ);     // Default behavior for CJ is identical to NS.
             fCM.addAll(fZWJ);    // ZWJ behaves as a CM.
+
+            fHH.add('\u2010');   // Hyphen, '‐'
 
             fSets.add(fBK);
             fSets.add(fCR);
@@ -786,12 +791,14 @@ public class RBBITestMonkey extends TestFmwk {
 
             int    prevPos;   //  Index of the char preceding a potential break position
             int    prevChar;  //  Character at above position.  Note that prevChar
-            //   and thisChar may not be adjacent because combining
-            //   characters between them will be ignored.
-            int    prevCharX2; //  Character before prevChar, more contex for LB 21a
+            //                //  and thisChar may not be adjacent because combining
+            //                //  characters between them will be ignored.
+
+            int    prevPosX2;
+            int    prevCharX2; //  Character before prevChar, more context for LB 21a
 
             int    nextPos;   //  Index of the next character following pos.
-            //     Usually skips over combining marks.
+            //                //  Usually skips over combining marks.
             int    tPos;      //  temp value.
             int    matchVals[]  = null;       // Number  Expression Match Results
 
@@ -804,8 +811,8 @@ public class RBBITestMonkey extends TestFmwk {
             // Initial values for loop.  Loop will run the first time without finding breaks,
             //                           while the invalid values shift out and the "this" and
             //                           "prev" positions are filled in with good values.
-            pos      = prevPos   = -1;    // Invalid value, serves as flag for initial loop iteration.
-            thisChar = prevChar  = prevCharX2 = 0;
+            pos      = prevPos   = prevPosX2  = -1;    // Invalid value, serves as flag for initial loop iteration.
+            thisChar = prevChar  = prevCharX2 =  0;
             nextPos  = startPos;
 
 
@@ -816,6 +823,7 @@ public class RBBITestMonkey extends TestFmwk {
             //  "prevPos" can be arbitrarily far before "pos".
             for (;;) {
                 // Advance to the next position to be tested.
+                prevPosX2  = prevPos;
                 prevCharX2 = prevChar;
                 prevPos   = pos;
                 prevChar  = thisChar;
@@ -1064,6 +1072,15 @@ public class RBBITestMonkey extends TestFmwk {
                 // LB 20  Break around a CB
                 if (fCB.contains(thisChar) || fCB.contains(prevChar)) {
                     break;
+                }
+
+                // LB 20.09  Don't break between Hyphens and letters if a break precedes the hyphen.
+                //           Formerly this was a Finnish tailoring.
+                //           Moved to root in ICU 63. This is an ICU customization, not in UAX-14.
+                //    ^($HY | $HH) $AL;
+                if (fAL.contains(thisChar) && (fHY.contains(prevChar) || fHH.contains(prevChar)) &&
+                        prevPosX2 == -1) {
+                    continue;
                 }
 
                 // LB 21

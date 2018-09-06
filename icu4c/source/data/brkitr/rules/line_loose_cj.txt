@@ -8,13 +8,10 @@
 #         Line Breaking Rules
 #         Implement default line breaking as defined by
 #         Unicode Standard Annex #14 Revision 40 for Unicode 11.0
-#         http://www.unicode.org/reports/tr14/
+#         http://www.unicode.org/reports/tr14/, with the following modification:
 #
-#         tailored as noted in 2nd paragraph below.
-#
-#         TODO:  Rule LB 8 remains as it was in Unicode 5.2
-#         This is only because of a limitation of ICU break engine implementation,
-#         not because the older behavior is desirable.
+#         Boundaries between hyphens and following letters are suppressed when
+#         there is a boundary preceding the hyphen. See rule 20.9
 #
 #         This tailors the line break behavior to correspond to CSS
 #         line-break=loose (BCP47 -u-lb-loose) as defined for Chinese & Japanese.
@@ -42,6 +39,7 @@ $AI = [:LineBreak =  Ambiguous:];
 $AL = [:LineBreak =  Alphabetic:];
 $BAX = [\u2010 \u2013];
 $BA = [[:LineBreak =  Break_After:] - $BAX];
+$HH = [\u2010];     # \u2010 is HYPHEN, default line break is BA.
 $BB = [:LineBreak =  Break_Before:];
 $BK = [:LineBreak =  Mandatory_Break:];
 $B2 = [:LineBreak =  Break_Both:];
@@ -250,18 +248,25 @@ $LB18NonBreaks $CM* $QU;
 #         QU  x
 $QU $CM* .;
 
-
 # LB 20
 #        <break>  $CB
 #        $CB   <break>
-
+#
 $LB20NonBreaks = [$LB18NonBreaks - $CB];
+
+# LB 20.09    Don't break between Hyphens and Letters when there is a break preceding the hyphen.
+#             Originally added as a Finnish tailoring, now promoted to default ICU behavior.
+#             Note: this is not default UAX-14 behaviour. See issue ICU-8151.
+#
+^($HY | $HH) $CM* $ALPlus;
 
 # LB 21        x   (BA | HY | NS)
 #           BB x
 #
 # DO allow breaks here before $BAX and $NSX, so don't include them
 $LB20NonBreaks $CM* ($BA | $HY | $NS);
+
+
 ^$CM+ ($BA | $HY | $NS);
 
 $BB $CM* [^$CB];                                  #  $BB  x

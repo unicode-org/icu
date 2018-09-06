@@ -1284,7 +1284,8 @@ void RBBITest::TestUnicodeFiles() {
 
 // Check for test cases from the Unicode test data files that are known to fail
 // and should be skipped as known issues because ICU does not fully implement
-// the Unicode specifications.
+// the Unicode specifications, or because ICU includes tailorings that differ from
+// the Unicode standard.
 //
 // Test cases are identified by the test data sequence, which tends to be more stable
 // across Unicode versions than the test file line numbers.
@@ -1297,7 +1298,18 @@ UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *
         const char *fFileName;
         const UChar *fString;
     } badTestCases[] = {
-        {"10666", "GraphemeBreakTest.txt", u"\u0020\u0020\u0033"}    // Fake example, for illustration.
+        {"10666", "GraphemeBreakTest.txt", u"\u0020\u0020\u0033"},    // Fake example, for illustration.
+        // Issue 8151, move the Finnish tailoring of the line break of hyphens to root.
+        // This probably ultimately wants to be resolved by updating UAX-14, but in the mean time
+        // ICU is out of sync with Unicode.
+        {"8151",  "LineBreakTest.txt", u"-#"},
+        {"8151",  "LineBreakTest.txt", u"\u002d\u0308\u0023"},
+        {"8151",  "LineBreakTest.txt", u"\u002d\u00a7"},
+        {"8151",  "LineBreakTest.txt", u"\u002d\u0308\u00a7"},
+        {"8151",  "LineBreakTest.txt", u"\u002d\U00050005"},
+        {"8151",  "LineBreakTest.txt", u"\u002d\u0308\U00050005"},
+        {"8151",  "LineBreakTest.txt", u"\u002d\u0e01"},
+        {"8151",  "LineBreakTest.txt", u"\u002d\u0308\u0e01"},
     };
 
     for (int n=0; n<UPRV_LENGTHOF(badTestCases); n++) {
@@ -2516,6 +2528,7 @@ private:
     UnicodeSet  *fB2;
     UnicodeSet  *fBA;
     UnicodeSet  *fBB;
+    UnicodeSet  *fHH;
     UnicodeSet  *fHY;
     UnicodeSet  *fH2;
     UnicodeSet  *fH3;
@@ -2580,6 +2593,7 @@ RBBILineMonkey::RBBILineMonkey() :
     fB2    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=B2}]"), status);
     fBA    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=BA}]"), status);
     fBB    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=BB}]"), status);
+    fHH    = new UnicodeSet();
     fHY    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=HY}]"), status);
     fH2    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=H2}]"), status);
     fH3    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=H3}]"), status);
@@ -2620,7 +2634,9 @@ RBBILineMonkey::RBBILineMonkey() :
     fAL->addAll(*fSG);     // Default behavior for SG is identical to AL.
 
     fNS->addAll(*fCJ);     // Default behavior for CJ is identical to NS.
-    fCM->addAll(*fZWJ);     // ZWJ behaves as a CM.
+    fCM->addAll(*fZWJ);    // ZWJ behaves as a CM.
+
+    fHH->add(u'\u2010');   // Hyphen, '‐'
 
     fSets->addElement(fBK, status);
     fSets->addElement(fCR, status);
@@ -3024,6 +3040,15 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             break;
         }
 
+        // LB 20.09  Don't break between Hyphens and letters if a break precedes the hyphen.
+        //           Formerly this was a Finnish tailoring.
+        //           Moved to root in ICU 63. This is an ICU customization, not in UAX-14.
+        //    ^($HY | $HH) $AL;
+        if (fAL->contains(thisChar) && (fHY->contains(prevChar) || fHH->contains(prevChar)) &&
+                prevPosX2 == -1) {
+            continue;
+        }
+
         // LB 21
         if (fBA->contains(thisChar) ||
             fHY->contains(thisChar) ||
@@ -3195,6 +3220,7 @@ RBBILineMonkey::~RBBILineMonkey() {
     delete fB2;
     delete fBA;
     delete fBB;
+    delete fHH;
     delete fHY;
     delete fH2;
     delete fH3;
