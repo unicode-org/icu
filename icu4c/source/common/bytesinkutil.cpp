@@ -121,35 +121,41 @@ ByteSinkUtil::appendUnchanged(const uint8_t *s, const uint8_t *limit,
     return TRUE;
 }
 
-CharStringByteSink::CharStringByteSink(CharString* dest, UErrorCode& status)
-        : dest_(dest), status_(status) {
-    if (U_SUCCESS(status_) && dest_ == nullptr) {
-        status_ = U_ILLEGAL_ARGUMENT_ERROR;
-    }
+CharStringByteSink::CharStringByteSink(CharString* dest) : dest_(*dest) {
 }
 
 CharStringByteSink::~CharStringByteSink() = default;
 
 void
 CharStringByteSink::Append(const char* bytes, int32_t n) {
-    if (U_SUCCESS(status_)) {
-        dest_->append(bytes, n, status_);
-    }
+    UErrorCode status;
+    dest_.append(bytes, n, status);
+    // Any errors are silently ignored.
 }
 
 char*
 CharStringByteSink::GetAppendBuffer(int32_t min_capacity,
                                     int32_t desired_capacity_hint,
-                                    char* /*scratch*/,
-                                    int32_t /*scratch_capacity*/,
+                                    char* scratch,
+                                    int32_t scratch_capacity,
                                     int32_t* result_capacity) {
-  return U_FAILURE(status_)
-             ? nullptr
-             : dest_->getAppendBuffer(
-                     min_capacity,
-                     desired_capacity_hint,
-                     *result_capacity,
-                     status_);
+  if (min_capacity < 1 || scratch_capacity < min_capacity) {
+    *result_capacity = 0;
+    return nullptr;
+  }
+
+  UErrorCode status;
+  char* result = dest_.getAppendBuffer(
+          min_capacity,
+          desired_capacity_hint,
+          *result_capacity,
+          status);
+  if (U_SUCCESS(status)) {
+      return result;
+  }
+
+  *result_capacity = scratch_capacity;
+  return scratch;
 }
 
 U_NAMESPACE_END

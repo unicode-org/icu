@@ -61,7 +61,7 @@ private:
 
 class CharStringByteSink : public ByteSink {
  public:
-  CharStringByteSink(CharString* dest, UErrorCode& status);
+  CharStringByteSink(CharString* dest);
   ~CharStringByteSink() override;
 
   CharStringByteSink() = delete;
@@ -72,13 +72,12 @@ class CharStringByteSink : public ByteSink {
 
   char* GetAppendBuffer(int32_t min_capacity,
                         int32_t desired_capacity_hint,
-                        char* /*scratch*/,
-                        int32_t /*scratch_capacity*/,
+                        char* scratch,
+                        int32_t scratch_capacity,
                         int32_t* result_capacity) override;
 
  private:
-  CharString* const dest_;
-  UErrorCode& status_;
+  CharString& dest_;
 };
 
 U_NAMESPACE_END
