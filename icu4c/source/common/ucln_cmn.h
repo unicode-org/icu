@@ -52,7 +52,6 @@ typedef enum ECleanupCommonType {
     UCLN_COMMON_UCNV_IO,
     UCLN_COMMON_UDATA,
     UCLN_COMMON_PUTIL,
-    UCLN_COMMON_LIST_FORMATTER,
     UCLN_COMMON_UINIT,
 
     /*

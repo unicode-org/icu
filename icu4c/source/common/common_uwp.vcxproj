@@ -458,8 +458,6 @@
     <ClCompile Include="ustrtrns.cpp" />
     <ClCompile Include="utext.cpp" />
     <ClCompile Include="utf_impl.cpp" />
-    <ClCompile Include="listformatter.cpp" />
-    <ClCompile Include="ulistformatter.cpp" />
     <ClCompile Include="static_unicode_sets.cpp" />
   </ItemGroup>
   <ItemGroup>

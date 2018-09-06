@@ -183,6 +183,12 @@
     <ClCompile Include="japancal.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="listformatter.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="ulistformatter.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="measfmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>

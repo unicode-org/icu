@@ -65,7 +65,7 @@ struct ListFormatData : public UMemory {
  * The ListFormatter class is not intended for public subclassing.
  * @stable ICU 50
  */
-class U_COMMON_API ListFormatter : public UObject{
+class U_I18N_API ListFormatter : public UObject{
 
   public:
 
