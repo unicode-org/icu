@@ -221,7 +221,9 @@ LocalizedNumberRangeFormatter& LocalizedNumberRangeFormatter::operator=(LNF&& sr
 }
 
 
-LocalizedNumberRangeFormatter::~LocalizedNumberRangeFormatter() = default;
+LocalizedNumberRangeFormatter::~LocalizedNumberRangeFormatter() {
+    delete fImpl;
+}
 
 LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(const RangeMacroProps& macros, const Locale& locale) {
     fMacros = macros;
