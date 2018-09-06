@@ -23,7 +23,7 @@
 #include "cstring.h"
 #include "ulocimp.h"
 #include "charstr.h"
-#include "ucln_cmn.h"
+#include "ucln_in.h"
 #include "uresimp.h"
 #include "resource.h"
 
@@ -114,7 +114,7 @@ void ListFormatter::initializeHash(UErrorCode& errorCode) {
     }
 
     listPatternHash->setValueDeleter(uprv_deleteListFormatInternal);
-    ucln_common_registerCleanup(UCLN_COMMON_LIST_FORMATTER, uprv_listformatter_cleanup);
+    ucln_i18n_registerCleanup(UCLN_I18N_LIST_FORMATTER, uprv_listformatter_cleanup);
 
 }
 

@@ -81,6 +81,7 @@ collationsets.o \
 collationcompare.o collationfastlatin.o collationkeys.o rulebasedcollator.o collationroot.o \
 collationrootelements.o collationdatabuilder.o \
 collationweights.o collationruleparser.o collationbuilder.o collationfastlatinbuilder.o \
+listformatter.o ulistformatter.o \
 strmatch.o usearch.o search.o stsearch.o \
 translit.o utrans.o esctrn.o unesctrn.o funcrepl.o strrepl.o tridpars.o \
 cpdtrans.o rbt.o rbt_data.o rbt_pars.o rbt_rule.o rbt_set.o \
