@@ -8,6 +8,8 @@ The ICU project is under the stewardship of [The Unicode Consortium](https://www
 
 ![ICU Logo](./tools/images/iculogo_64.png)
 
+This is a test PR.
+
 ### Build Status
 
 Build | Status
