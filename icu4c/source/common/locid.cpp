@@ -31,6 +31,7 @@
 ******************************************************************************
 */
 
+#include <utility>
 
 #include "unicode/bytestream.h"
 #include "unicode/locid.h"
@@ -428,8 +429,7 @@ Locale::Locale(const Locale &other)
 
 Locale::Locale(Locale&& other) U_NOEXCEPT
     : UObject(other), fullName(fullNameBuffer), baseName(fullName) {
-  // Not using std::move() for that would require STL header files.
-  *this = static_cast<Locale&&>(other);
+  *this = std::move(other);
 }
 
 Locale &Locale::operator=(const Locale &other)
@@ -490,23 +490,15 @@ Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
         return *this;
     }
 
-    if (fullName != fullNameBuffer) {
-        uprv_free(fullName);
-    }
+    setToBogus();
 
-    if (baseName != fullName) {
-        uprv_free(baseName);
-    }
-
-    fullName = other.fullName == other.fullNameBuffer ? fullNameBuffer
-                                                      : other.fullName;
-
-    baseName = other.baseName == other.fullName ? fullName
-                                                : other.baseName;
-
-    if (fullName == fullNameBuffer) {
+    if (other.fullName == other.fullNameBuffer) {
         uprv_strcpy(fullNameBuffer, other.fullNameBuffer);
+    } else {
+        fullName = other.fullName;
     }
+
+    baseName = other.baseName == other.fullName ? fullName : other.baseName;
 
     uprv_strcpy(language, other.language);
     uprv_strcpy(script, other.script);
@@ -516,7 +508,7 @@ Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
     fIsBogus = other.fIsBogus;
 
     other.baseName = other.fullName = other.fullNameBuffer;
-    other.fIsBogus = TRUE;
+    other.setToBogus();
 
     return *this;
 }
