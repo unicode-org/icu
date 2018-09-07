@@ -32,47 +32,44 @@ const char* attrString(int32_t attrId) {
 
 void ListFormatterTest::ExpectPositions(FieldPositionIterator& iter,
                                         int32_t *values, int32_t tupleCount) {
-  UBool found[10];
-  FieldPosition fp;
-   if (tupleCount > 10) {
-    assertTrue("internal error, tupleCount too large", FALSE);
-  } else {
+    UBool found[10];
+    FieldPosition fp;
+    if (tupleCount > 10) {
+      assertTrue("internal error, tupleCount too large", FALSE);
+    } else {
+        for (int i = 0; i < tupleCount; ++i) {
+            found[i] = FALSE;
+        }
+    }
+    while (iter.next(fp)) {
+        UBool ok = FALSE;
+        int32_t id = fp.getField();
+        int32_t start = fp.getBeginIndex();
+        int32_t limit = fp.getEndIndex();
+        char buf[128];
+        sprintf(buf, "%24s %3d %3d %3d", attrString(id), id, start, limit);
+        logln(buf);
+        for (int i = 0; i < tupleCount; ++i) {
+            if (found[i]) {
+                continue;
+            }
+            if (values[i*3] == id && values[i*3+1] == start && values[i*3+2] == limit) {
+                found[i] = ok = TRUE;
+                break;
+            }
+        }
+        assertTrue((UnicodeString)"found [" + attrString(id) + "," + start + "," + limit + "]", ok);
+    }
+    // check that all were found
+    UBool ok = TRUE;
     for (int i = 0; i < tupleCount; ++i) {
-      found[i] = FALSE;
+        if (!found[i]) {
+            ok = FALSE;
+            assertTrue((UnicodeString) "missing [" + attrString(values[i*3]) + "," + values[i*3+1] +
+                       "," + values[i*3+2] + "]", found[i]);
+        }
     }
-  }
-   while (iter.next(fp)) {
-    UBool ok = FALSE;
-    int32_t id = fp.getField();
-    int32_t start = fp.getBeginIndex();
-    int32_t limit = fp.getEndIndex();
-    char buf[128];
-    sprintf(buf, "%24s %3d %3d %3d", attrString(id), id, start, limit);
-    logln(buf);
-     for (int i = 0; i < tupleCount; ++i) {
-      if (found[i]) {
-        continue;
-      }
-      if (values[i*3] == id &&
-          values[i*3+1] == start &&
-          values[i*3+2] == limit) {
-        found[i] = ok = TRUE;
-        break;
-      }
-    }
-     assertTrue((UnicodeString)"found [" + attrString(id) + "," + start + "," + limit + "]",
-               ok);
-  }
-   // check that all were found
-  UBool ok = TRUE;
-  for (int i = 0; i < tupleCount; ++i) {
-    if (!found[i]) {
-      ok = FALSE;
-      assertTrue((UnicodeString) "missing [" + attrString(values[i*3]) + "," + values[i*3+1]
-                 + "," + values[i*3+2] + "]", found[i]);
-    }
-  }
-  assertTrue("no expected values were missing", ok);
+    assertTrue("no expected values were missing", ok);
 }
 
 ListFormatterTest::ListFormatterTest() :
@@ -271,11 +268,11 @@ void ListFormatterTest::TestFieldPositionIteratorWith3ItemsAndDataBefore() {
     // "Hello World: a, bbb, and cc"
     UnicodeString data[3] = {"a", "bbb", "cc"};
     int32_t expected[] = {
-      ULISTFMT_ELEMENT_FIELD, 13, 14,
-      ULISTFMT_LITERAL_FIELD, 14, 16,
-      ULISTFMT_ELEMENT_FIELD, 16, 19,
-      ULISTFMT_LITERAL_FIELD, 19, 25,
-      ULISTFMT_ELEMENT_FIELD, 25, 27
+        ULISTFMT_ELEMENT_FIELD, 13, 14,
+        ULISTFMT_LITERAL_FIELD, 14, 16,
+        ULISTFMT_ELEMENT_FIELD, 16, 19,
+        ULISTFMT_LITERAL_FIELD, 19, 25,
+        ULISTFMT_ELEMENT_FIELD, 25, 27
     };
     int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
     UnicodeString appendTo(u"Hello World: ");
@@ -290,11 +287,11 @@ void ListFormatterTest::TestFieldPositionIteratorWith3Items() {
     // "a, bbb, and cc"
     UnicodeString data[3] = {"a", "bbb", "cc"};
     int32_t expected[] = {
-      ULISTFMT_ELEMENT_FIELD, 0, 1,
-      ULISTFMT_LITERAL_FIELD, 1, 3,
-      ULISTFMT_ELEMENT_FIELD, 3, 6,
-      ULISTFMT_LITERAL_FIELD, 6, 12,
-      ULISTFMT_ELEMENT_FIELD, 12, 14
+        ULISTFMT_ELEMENT_FIELD, 0, 1,
+        ULISTFMT_LITERAL_FIELD, 1, 3,
+        ULISTFMT_ELEMENT_FIELD, 3, 6,
+        ULISTFMT_LITERAL_FIELD, 6, 12,
+        ULISTFMT_ELEMENT_FIELD, 12, 14
     };
     int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
     UnicodeString appendTo;
@@ -309,9 +306,9 @@ void ListFormatterTest::TestFieldPositionIteratorWith2ItemsAndDataBefore() {
     // "Foo: bbb and cc"
     UnicodeString data[2] = {"bbb", "cc"};
     int32_t expected[] = {
-      ULISTFMT_ELEMENT_FIELD, 5, 8,
-      ULISTFMT_LITERAL_FIELD, 8, 13,
-      ULISTFMT_ELEMENT_FIELD, 13, 15
+        ULISTFMT_ELEMENT_FIELD, 5, 8,
+        ULISTFMT_LITERAL_FIELD, 8, 13,
+        ULISTFMT_ELEMENT_FIELD, 13, 15
     };
     int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
     UnicodeString appendTo("Foo: ");
@@ -326,9 +323,9 @@ void ListFormatterTest::TestFieldPositionIteratorWith2Items() {
     // "bbb and cc"
     UnicodeString data[2] = {"bbb", "cc"};
     int32_t expected[] = {
-      ULISTFMT_ELEMENT_FIELD, 0, 3,
-      ULISTFMT_LITERAL_FIELD, 3, 8,
-      ULISTFMT_ELEMENT_FIELD, 8, 10
+        ULISTFMT_ELEMENT_FIELD, 0, 3,
+        ULISTFMT_LITERAL_FIELD, 3, 8,
+        ULISTFMT_ELEMENT_FIELD, 8, 10
     };
     int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
     UnicodeString appendTo;
@@ -342,7 +339,7 @@ void ListFormatterTest::TestFieldPositionIteratorWith1ItemAndDataBefore() {
     // "Hello cc"
     UnicodeString data[1] = {"cc"};
     int32_t expected[] = {
-      ULISTFMT_ELEMENT_FIELD, 6, 8
+        ULISTFMT_ELEMENT_FIELD, 6, 8
     };
     int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
     UnicodeString appendTo("Hello ");
@@ -356,7 +353,7 @@ void ListFormatterTest::TestFieldPositionIteratorWith1Item() {
     // "cc"
     UnicodeString data[1] = {"cc"};
     int32_t expected[] = {
-      ULISTFMT_ELEMENT_FIELD, 0, 2
+        ULISTFMT_ELEMENT_FIELD, 0, 2
     };
     int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
     UnicodeString appendTo;
