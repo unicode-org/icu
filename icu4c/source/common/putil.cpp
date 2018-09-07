@@ -1706,7 +1706,7 @@ The leftmost codepage (.xxx) wins.
 #elif U_PLATFORM_HAS_WIN32_API
 #define POSIX_LOCALE_CAPACITY 64
     UErrorCode status = U_ZERO_ERROR;
-    char *correctedPOSIXLocale = 0;
+    char *correctedPOSIXLocale = nullptr;
 
     // If we have already figured this out just use the cached value
     if (gCorrectedPOSIXLocale != NULL) {
@@ -1714,14 +1714,14 @@ The leftmost codepage (.xxx) wins.
     }
 
     // No cached value, need to determine the current value
-    static WCHAR windowsLocale[LOCALE_NAME_MAX_LENGTH];
+    static WCHAR windowsLocale[LOCALE_NAME_MAX_LENGTH] = {};
     int length = GetLocaleInfoEx(LOCALE_NAME_USER_DEFAULT, LOCALE_SNAME, windowsLocale, LOCALE_NAME_MAX_LENGTH);
 
-    // Now we should have a Windows locale name that needs converted to the POSIX style,
-    if (length > 0) // If length is 0, GetLocaleInfoEx failed.
+    // Now we should have a Windows locale name that needs converted to the POSIX style.
+    if (length > 0) // If length is 0, then the GetLocaleInfoEx failed.
     {
         // First we need to go from UTF-16 to char (and also convert from _ to - while we're at it.)
-        char modifiedWindowsLocale[LOCALE_NAME_MAX_LENGTH];
+        char modifiedWindowsLocale[LOCALE_NAME_MAX_LENGTH] = {};
 
         int32_t i;
         for (i = 0; i < UPRV_LENGTHOF(modifiedWindowsLocale); i++)
