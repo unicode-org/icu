@@ -1161,7 +1161,8 @@ bool DecimalQuantity::operator==(const DecimalQuantity& other) const {
             && lOptPos == other.lOptPos
             && lReqPos == other.lReqPos
             && rReqPos == other.rReqPos
-            && rOptPos == other.rOptPos;
+            && rOptPos == other.rOptPos
+            && isApproximate == other.isApproximate;
     if (!basicEquals) {
         return false;
     }

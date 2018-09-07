@@ -1034,7 +1034,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                 && lOptPos == _other.lOptPos
                 && lReqPos == _other.lReqPos
                 && rReqPos == _other.rReqPos
-                && rOptPos == _other.rOptPos;
+                && rOptPos == _other.rOptPos
+                && isApproximate == _other.isApproximate;
         if (!basicEquals) {
             return false;
         }
