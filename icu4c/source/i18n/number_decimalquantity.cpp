@@ -1154,8 +1154,13 @@ const char16_t* DecimalQuantity::checkHealth() const {
 }
 
 bool DecimalQuantity::operator==(const DecimalQuantity& other) const {
-    bool basicEquals = scale == other.scale && precision == other.precision && flags == other.flags
-            && lOptPos == other.lOptPos && lReqPos == other.lReqPos && rReqPos == other.rReqPos
+    bool basicEquals =
+            scale == other.scale
+            && precision == other.precision
+            && flags == other.flags
+            && lOptPos == other.lOptPos
+            && lReqPos == other.lReqPos
+            && rReqPos == other.rReqPos
             && rOptPos == other.rOptPos;
     if (!basicEquals) {
         return false;
@@ -1163,13 +1168,16 @@ bool DecimalQuantity::operator==(const DecimalQuantity& other) const {
 
     if (precision == 0) {
         return true;
-    }
-    for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
-        if (getDigit(m) != other.getDigit(m)) {
-            return false;
+    } else if (isApproximate) {
+        return origDouble == other.origDouble && origDelta == other.origDelta;
+    } else {
+        for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
+            if (getDigit(m) != other.getDigit(m)) {
+                return false;
+            }
         }
+        return true;
     }
-    return true;
 }
 
 UnicodeString DecimalQuantity::toString() const {

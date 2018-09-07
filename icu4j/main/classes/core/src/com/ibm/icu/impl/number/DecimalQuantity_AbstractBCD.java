@@ -1027,8 +1027,13 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         }
         DecimalQuantity_AbstractBCD _other = (DecimalQuantity_AbstractBCD) other;
 
-        boolean basicEquals = scale == _other.scale && precision == _other.precision && flags == _other.flags
-                && lOptPos == _other.lOptPos && lReqPos == _other.lReqPos && rReqPos == _other.rReqPos
+        boolean basicEquals =
+                scale == _other.scale
+                && precision == _other.precision
+                && flags == _other.flags
+                && lOptPos == _other.lOptPos
+                && lReqPos == _other.lReqPos
+                && rReqPos == _other.rReqPos
                 && rOptPos == _other.rOptPos;
         if (!basicEquals) {
             return false;
@@ -1036,13 +1041,16 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
         if (precision == 0) {
             return true;
-        }
-        for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
-            if (getDigit(m) != _other.getDigit(m)) {
-                return false;
+        } else if (isApproximate) {
+            return origDouble == _other.origDouble && origDelta == _other.origDelta;
+        } else {
+            for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
+                if (getDigit(m) != _other.getDigit(m)) {
+                    return false;
+                }
             }
+            return true;
         }
-        return true;
     }
 
     /**
