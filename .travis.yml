@@ -2,7 +2,11 @@ matrix:
   include:
     - language: java
       env:      BUILD=ICU4J
-      script:   cd icu4j && ant init && ant check
+      before_script:
+        - cd icu4j
+        - ant init
+      script:
+        - ant check
       after_failure:
           -  cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`
 
