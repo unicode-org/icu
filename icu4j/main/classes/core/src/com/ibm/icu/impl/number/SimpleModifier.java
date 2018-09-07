@@ -3,7 +3,9 @@
 package com.ibm.icu.impl.number;
 
 import com.ibm.icu.impl.SimpleFormatterImpl;
+import com.ibm.icu.impl.number.range.PrefixInfixSuffixLengthHelper;
 import com.ibm.icu.text.NumberFormat.Field;
+import com.ibm.icu.util.ICUException;
 
 /**
  * The second primary implementation of {@link Modifier}, this one consuming a
@@ -80,6 +82,22 @@ public class SimpleModifier implements Modifier {
         return strong;
     }
 
+    @Override
+    public boolean containsField(Field field) {
+        // This method is not currently used.
+        assert false;
+        return false;
+    }
+
+    @Override
+    public boolean equalsModifier(Modifier other) {
+        if (!(other instanceof SimpleModifier)) {
+            return false;
+        }
+        SimpleModifier _other = (SimpleModifier) other;
+        return compiledPattern.equals(_other.compiledPattern) && field == _other.field && strong == _other.strong;
+    }
+
     /**
      * TODO: This belongs in SimpleFormatterImpl. The only reason I haven't moved it there yet is because
      * DoubleSidedStringBuilder is an internal class and SimpleFormatterImpl feels like it should not
@@ -122,5 +140,67 @@ public class SimpleModifier implements Modifier {
             }
             return prefixLength + suffixLength;
         }
+    }
+
+    /**
+     * TODO: Like above, this belongs with the rest of the SimpleFormatterImpl code.
+     * I put it here so that the SimpleFormatter uses in NumberStringBuilder are near each other.
+     *
+     * <p>
+     * Applies the compiled two-argument pattern to the NumberStringBuilder.
+     *
+     * <p>
+     * This method is optimized for the case where the prefix and suffix are often empty, such as
+     * in the range pattern like "{0}-{1}".
+     */
+    public static void formatTwoArgPattern(String compiledPattern, NumberStringBuilder result, int index, PrefixInfixSuffixLengthHelper h,
+            Field field) {
+        int argLimit = SimpleFormatterImpl.getArgumentLimit(compiledPattern);
+        if (argLimit != 2) {
+            throw new ICUException();
+        }
+        int offset = 1; // offset into compiledPattern
+        int length = 0; // chars added to result
+
+        int prefixLength = compiledPattern.charAt(offset);
+        offset++;
+        if (prefixLength < ARG_NUM_LIMIT) {
+            // No prefix
+            prefixLength = 0;
+        } else {
+            prefixLength -= ARG_NUM_LIMIT;
+            result.insert(index + length, compiledPattern, offset, offset + prefixLength, field);
+            offset += prefixLength;
+            length += prefixLength;
+            offset++;
+        }
+
+        int infixLength = compiledPattern.charAt(offset);
+        offset++;
+        if (infixLength < ARG_NUM_LIMIT) {
+            // No infix
+            infixLength = 0;
+        } else {
+            infixLength -= ARG_NUM_LIMIT;
+            result.insert(index + length, compiledPattern, offset, offset + infixLength, field);
+            offset += infixLength;
+            length += infixLength;
+            offset++;
+        }
+
+        int suffixLength;
+        if (offset == compiledPattern.length()) {
+            // No suffix
+            suffixLength = 0;
+        } else {
+            suffixLength = compiledPattern.charAt(offset) -  ARG_NUM_LIMIT;
+            offset++;
+            result.insert(index + length, compiledPattern, offset, offset + suffixLength, field);
+            length += suffixLength;
+        }
+
+        h.lengthPrefix = prefixLength;
+        h.lengthInfix = infixLength;
+        h.lengthSuffix = suffixLength;
     }
 }

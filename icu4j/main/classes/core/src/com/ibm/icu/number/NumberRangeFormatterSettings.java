@@ -23,14 +23,15 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
     static final int KEY_LOCALE = 1;
     static final int KEY_FORMATTER_1 = 2;
     static final int KEY_FORMATTER_2 = 3;
-    static final int KEY_COLLAPSE = 4;
-    static final int KEY_IDENTITY_FALLBACK = 5;
-    static final int KEY_MAX = 6;
+    static final int KEY_SAME_FORMATTERS = 4;
+    static final int KEY_COLLAPSE = 5;
+    static final int KEY_IDENTITY_FALLBACK = 6;
+    static final int KEY_MAX = 7;
 
-    final NumberRangeFormatterSettings<?> parent;
-    final int key;
-    final Object value;
-    volatile RangeMacroProps resolvedMacros;
+    private final NumberRangeFormatterSettings<?> parent;
+    private final int key;
+    private final Object value;
+    private volatile RangeMacroProps resolvedMacros;
 
     NumberRangeFormatterSettings(NumberRangeFormatterSettings<?> parent, int key, Object value) {
         this.parent = parent;
@@ -55,7 +56,7 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      */
     @SuppressWarnings("unchecked")
     public T numberFormatterBoth(UnlocalizedNumberFormatter formatter) {
-        return (T) numberFormatterFirst(formatter).numberFormatterSecond(formatter);
+        return (T) create(KEY_SAME_FORMATTERS, true).create(KEY_FORMATTER_1, formatter);
     }
 
     /**
@@ -72,8 +73,9 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * @see NumberFormatter
      * @see NumberRangeFormatter
      */
+    @SuppressWarnings("unchecked")
     public T numberFormatterFirst(UnlocalizedNumberFormatter formatterFirst) {
-        return create(KEY_FORMATTER_1, formatterFirst);
+        return (T) create(KEY_SAME_FORMATTERS, false).create(KEY_FORMATTER_1, formatterFirst);
     }
 
     /**
@@ -90,8 +92,9 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
      * @see NumberFormatter
      * @see NumberRangeFormatter
      */
+    @SuppressWarnings("unchecked")
     public T numberFormatterSecond(UnlocalizedNumberFormatter formatterSecond) {
-        return create(KEY_FORMATTER_2, formatterSecond);
+        return (T) create(KEY_SAME_FORMATTERS, false).create(KEY_FORMATTER_2, formatterSecond);
     }
 
     /**
@@ -173,6 +176,11 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
                     macros.formatter2 = (UnlocalizedNumberFormatter) current.value;
                 }
                 break;
+            case KEY_SAME_FORMATTERS:
+                if (macros.sameFormatters == -1) {
+                    macros.sameFormatters = (boolean) current.value ? 1 : 0;
+                }
+                break;
             case KEY_COLLAPSE:
                 if (macros.collapse == null) {
                     macros.collapse = (RangeCollapse) current.value;
@@ -187,6 +195,13 @@ public abstract class NumberRangeFormatterSettings<T extends NumberRangeFormatte
                 throw new AssertionError("Unknown key: " + current.key);
             }
             current = current.parent;
+        }
+        // Copy the locale into the children (see touchRangeLocales in C++)
+        if (macros.formatter1 != null) {
+            macros.formatter1.resolve().loc = macros.loc;
+        }
+        if (macros.formatter2 != null) {
+            macros.formatter2.resolve().loc = macros.loc;
         }
         resolvedMacros = macros;
         return macros;

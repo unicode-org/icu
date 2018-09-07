@@ -47,10 +47,10 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     static final int KEY_PER_UNIT = 15;
     static final int KEY_MAX = 16;
 
-    final NumberFormatterSettings<?> parent;
-    final int key;
-    final Object value;
-    volatile MacroProps resolvedMacros;
+    private final NumberFormatterSettings<?> parent;
+    private final int key;
+    private final Object value;
+    private volatile MacroProps resolvedMacros;
 
     NumberFormatterSettings(NumberFormatterSettings<?> parent, int key, Object value) {
         this.parent = parent;

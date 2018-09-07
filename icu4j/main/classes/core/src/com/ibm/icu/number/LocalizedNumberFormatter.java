@@ -152,9 +152,9 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
     public FormattedNumber format(DecimalQuantity fq) {
         NumberStringBuilder string = new NumberStringBuilder();
         if (computeCompiled()) {
-            compiled.apply(fq, string);
+            compiled.format(fq, string);
         } else {
-            NumberFormatterImpl.applyStatic(resolve(), fq, string);
+            NumberFormatterImpl.formatStatic(resolve(), fq, string);
         }
         return new FormattedNumber(string, fq);
     }
@@ -190,7 +190,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
         // Further benchmarking is required.
         long currentCount = callCount.incrementAndGet(this);
         if (currentCount == macros.threshold.longValue()) {
-            compiled = NumberFormatterImpl.fromMacros(macros);
+            compiled = new NumberFormatterImpl(macros);
             return true;
         } else if (compiled != null) {
             return true;

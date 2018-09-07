@@ -1154,8 +1154,22 @@ const char16_t* DecimalQuantity::checkHealth() const {
 }
 
 bool DecimalQuantity::operator==(const DecimalQuantity& other) const {
-    // FIXME: Make a faster implementation.
-    return toString() == other.toString();
+    bool basicEquals = scale == other.scale && precision == other.precision && flags == other.flags
+            && lOptPos == other.lOptPos && lReqPos == other.lReqPos && rReqPos == other.rReqPos
+            && rOptPos == other.rOptPos;
+    if (!basicEquals) {
+        return false;
+    }
+
+    if (precision == 0) {
+        return true;
+    }
+    for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
+        if (getDigit(m) != other.getDigit(m)) {
+            return false;
+        }
+    }
+    return true;
 }
 
 UnicodeString DecimalQuantity::toString() const {

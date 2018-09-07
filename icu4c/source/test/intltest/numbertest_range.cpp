@@ -107,6 +107,54 @@ void NumberRangeFormatterTest::testBasic() {
         u"4,999 m – 5,001 km",
         u"5,000 m – 5,000 km",
         u"5,000 m – 5,000,000 km");
+
+    assertFormatRange(
+        u"Basic long unit",
+        NumberRangeFormatter::with()
+            .numberFormatterBoth(NumberFormatter::with().unit(METER).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)),
+        Locale("en-us"),
+        u"1 meter – 5 meters",  // TODO: This doesn't collapse because the plurals are different.  Fix?
+        u"~5 meters",
+        u"~5 meters",
+        u"0–3 meters",  // Note: It collapses when the plurals are the same
+        u"~0 meters",
+        u"3–3,000 meters",
+        u"3,000–5,000 meters",
+        u"4,999–5,001 meters",
+        u"~5,000 meters",
+        u"5,000–5,000,000 meters");
+
+    assertFormatRange(
+        u"Non-English locale and unit",
+        NumberRangeFormatter::with()
+            .numberFormatterBoth(NumberFormatter::with().unit(FAHRENHEIT).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)),
+        Locale("fr-FR"),
+        u"1 degré Fahrenheit – 5 degrés Fahrenheit",
+        u"~5 degrés Fahrenheit",
+        u"~5 degrés Fahrenheit",
+        u"0 degré Fahrenheit – 3 degrés Fahrenheit",
+        u"~0 degré Fahrenheit",
+        u"3–3 000 degrés Fahrenheit",
+        u"3 000–5 000 degrés Fahrenheit",
+        u"4 999–5 001 degrés Fahrenheit",
+        u"~5 000 degrés Fahrenheit",
+        u"5 000–5 000 000 degrés Fahrenheit");
+
+    assertFormatRange(
+        u"Portuguese currency",
+        NumberRangeFormatter::with()
+            .numberFormatterBoth(NumberFormatter::with().unit(PTE)),
+        Locale("pt-PT"),
+        u"1$00 - 5$00 \u200B",
+        u"~5$00 \u200B",
+        u"~5$00 \u200B",
+        u"0$00 - 3$00 \u200B",
+        u"~0$00 \u200B",
+        u"3$00 - 3000$00 \u200B",
+        u"3000$00 - 5000$00 \u200B",
+        u"4999$00 - 5001$00 \u200B",
+        u"~5000$00 \u200B",
+        u"5000$00 - 5,000,000$00 \u200B");
 }
 
 void NumberRangeFormatterTest::testCollapse() {
@@ -391,6 +439,40 @@ void NumberRangeFormatterTest::testCollapse() {
         u"~5K m",
         u"~5K m",
         u"5K – 5M m");
+
+    assertFormatRange(
+        u"No collapse on scientific notation",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_NONE)
+            .numberFormatterBoth(NumberFormatter::with().notation(Notation::scientific())),
+        Locale("en-us"),
+        u"1E0 – 5E0",
+        u"~5E0",
+        u"~5E0",
+        u"0E0 – 3E0",
+        u"~0E0",
+        u"3E0 – 3E3",
+        u"3E3 – 5E3",
+        u"4.999E3 – 5.001E3",
+        u"~5E3",
+        u"5E3 – 5E6");
+
+    assertFormatRange(
+        u"All collapse on scientific notation",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_ALL)
+            .numberFormatterBoth(NumberFormatter::with().notation(Notation::scientific())),
+        Locale("en-us"),
+        u"1–5E0",
+        u"~5E0",
+        u"~5E0",
+        u"0–3E0",
+        u"~0E0",
+        u"3E0 – 3E3",
+        u"3–5E3",
+        u"4.999–5.001E3",
+        u"~5E3",
+        u"5E3 – 5E6");
 
     // TODO: Test compact currency?
     // The code is not smart enough to differentiate the notation from the unit.

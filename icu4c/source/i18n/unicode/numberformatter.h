@@ -145,6 +145,8 @@ class CurrencySymbols;
 class GeneratorHelpers;
 class DecNum;
 class NumberRangeFormatterImpl;
+struct RangeMacroProps;
+void touchRangeLocales(impl::RangeMacroProps& macros);
 
 } // namespace impl
 
@@ -2112,6 +2114,7 @@ class U_I18N_API NumberFormatterSettings {
     friend class UnlocalizedNumberFormatter;
 
     // Give NumberRangeFormatter access to the MacroProps
+    friend void impl::touchRangeLocales(impl::RangeMacroProps& macros);
     friend class impl::NumberRangeFormatterImpl;
 };
 

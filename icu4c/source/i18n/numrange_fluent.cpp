@@ -18,11 +18,20 @@ using namespace icu::number;
 using namespace icu::number::impl;
 
 
+// This function needs to be declared in this namespace so it can be friended.
+// NOTE: In Java, this logic is handled in the resolve() function.
+void icu::number::impl::touchRangeLocales(RangeMacroProps& macros) {
+    macros.formatter1.fMacros.locale = macros.locale;
+    macros.formatter2.fMacros.locale = macros.locale;
+}
+
+
 template<typename Derived>
 Derived NumberRangeFormatterSettings<Derived>::numberFormatterBoth(const UnlocalizedNumberFormatter& formatter) const& {
     Derived copy(*this);
     copy.fMacros.formatter1 = formatter;
     copy.fMacros.singleFormatter = true;
+    touchRangeLocales(copy.fMacros);
     return copy;
 }
 
@@ -31,6 +40,7 @@ Derived NumberRangeFormatterSettings<Derived>::numberFormatterBoth(const Unlocal
     Derived move(std::move(*this));
     move.fMacros.formatter1 = formatter;
     move.fMacros.singleFormatter = true;
+    touchRangeLocales(move.fMacros);
     return move;
 }
 
@@ -39,6 +49,7 @@ Derived NumberRangeFormatterSettings<Derived>::numberFormatterBoth(UnlocalizedNu
     Derived copy(*this);
     copy.fMacros.formatter1 = std::move(formatter);
     copy.fMacros.singleFormatter = true;
+    touchRangeLocales(copy.fMacros);
     return copy;
 }
 
@@ -47,6 +58,7 @@ Derived NumberRangeFormatterSettings<Derived>::numberFormatterBoth(UnlocalizedNu
     Derived move(std::move(*this));
     move.fMacros.formatter1 = std::move(formatter);
     move.fMacros.singleFormatter = true;
+    touchRangeLocales(move.fMacros);
     return move;
 }
 
@@ -55,6 +67,7 @@ Derived NumberRangeFormatterSettings<Derived>::numberFormatterFirst(const Unloca
     Derived copy(*this);
     copy.fMacros.formatter1 = formatter;
     copy.fMacros.singleFormatter = false;
+    touchRangeLocales(copy.fMacros);
     return copy;
 }
 
@@ -63,6 +76,7 @@ Derived NumberRangeFormatterSettings<Derived>::numberFormatterFirst(const Unloca
     Derived move(std::move(*this));
     move.fMacros.formatter1 = formatter;
     move.fMacros.singleFormatter = false;
+    touchRangeLocales(move.fMacros);
     return move;
 }
 
@@ -71,6 +85,7 @@ Derived NumberRangeFormatterSettings<Derived>::numberFormatterFirst(UnlocalizedN
     Derived copy(*this);
     copy.fMacros.formatter1 = std::move(formatter);
     copy.fMacros.singleFormatter = false;
+    touchRangeLocales(copy.fMacros);
     return copy;
 }
 
@@ -79,6 +94,7 @@ Derived NumberRangeFormatterSettings<Derived>::numberFormatterFirst(UnlocalizedN
     Derived move(std::move(*this));
     move.fMacros.formatter1 = std::move(formatter);
     move.fMacros.singleFormatter = false;
+    touchRangeLocales(move.fMacros);
     return move;
 }
 
@@ -87,6 +103,7 @@ Derived NumberRangeFormatterSettings<Derived>::numberFormatterSecond(const Unloc
     Derived copy(*this);
     copy.fMacros.formatter2 = formatter;
     copy.fMacros.singleFormatter = false;
+    touchRangeLocales(copy.fMacros);
     return copy;
 }
 
@@ -95,6 +112,7 @@ Derived NumberRangeFormatterSettings<Derived>::numberFormatterSecond(const Unloc
     Derived move(std::move(*this));
     move.fMacros.formatter2 = formatter;
     move.fMacros.singleFormatter = false;
+    touchRangeLocales(move.fMacros);
     return move;
 }
 
@@ -103,6 +121,7 @@ Derived NumberRangeFormatterSettings<Derived>::numberFormatterSecond(Unlocalized
     Derived copy(*this);
     copy.fMacros.formatter2 = std::move(formatter);
     copy.fMacros.singleFormatter = false;
+    touchRangeLocales(copy.fMacros);
     return copy;
 }
 
@@ -111,6 +130,7 @@ Derived NumberRangeFormatterSettings<Derived>::numberFormatterSecond(Unlocalized
     Derived move(std::move(*this));
     move.fMacros.formatter2 = std::move(formatter);
     move.fMacros.singleFormatter = false;
+    touchRangeLocales(move.fMacros);
     return move;
 }
 
@@ -228,11 +248,13 @@ LocalizedNumberRangeFormatter::~LocalizedNumberRangeFormatter() {
 LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(const RangeMacroProps& macros, const Locale& locale) {
     fMacros = macros;
     fMacros.locale = locale;
+    touchRangeLocales(fMacros);
 }
 
 LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(RangeMacroProps&& macros, const Locale& locale) {
     fMacros = std::move(macros);
     fMacros.locale = locale;
+    touchRangeLocales(fMacros);
 }
 
 LocalizedNumberRangeFormatter UnlocalizedNumberRangeFormatter::locale(const Locale& locale) const& {
