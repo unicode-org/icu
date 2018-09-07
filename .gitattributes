@@ -9,7 +9,7 @@
 #  The only difference between the two is that git will do EOL conversion for text files.
 #  "!eol" is the equivalent of "svneol=native".
 
-*.bat text eol=crlf
+*.bat text !eol
 *.c text !eol diff=cpp
 *.cc text !eol diff=cpp
 *.classpath text !eol
