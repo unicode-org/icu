@@ -1709,7 +1709,7 @@ The leftmost codepage (.xxx) wins.
     char *correctedPOSIXLocale = nullptr;
 
     // If we have already figured this out just use the cached value
-    if (gCorrectedPOSIXLocale != NULL) {
+    if (gCorrectedPOSIXLocale != nullptr) {
         return gCorrectedPOSIXLocale;
     }
 
@@ -1769,7 +1769,7 @@ The leftmost codepage (.xxx) wins.
     }
 
     // If unable to find a locale we can agree upon, use en-US by default
-    if (gCorrectedPOSIXLocale == NULL) {
+    if (gCorrectedPOSIXLocale == nullptr) {
         gCorrectedPOSIXLocale = "en_US";
     }
     return gCorrectedPOSIXLocale;
