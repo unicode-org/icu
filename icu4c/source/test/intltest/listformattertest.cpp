@@ -231,16 +231,54 @@ void ListFormatterTest::TestFieldPositionIteratorWontCrash() {
     formatter->format(data, 3, actualResult, nullptr, errorCode);
     if (U_FAILURE(errorCode)) {
         dataerrln(
-            "ListFormatter::format(Locale(\"en\"), data, 3, nullptr, errorCode) "
+            "ListFormatter::format(data, 3, nullptr, errorCode) "
             "failed in TestFieldPositionIteratorWontCrash: %s",
             u_errorName(errorCode));
         return;
     }
 }
 
+void ListFormatterTest::RunTestFieldPositionIteratorWithFormatter(
+        ListFormatter* formatter,
+        UnicodeString data[], int32_t n, int32_t expected[], int32_t tupleCount,
+        UnicodeString& appendTo, const char16_t *expectedFormatted,
+        const char* testName) {
+    IcuTestErrorCode errorCode(*this, testName);
+    FieldPositionIterator iter;
+    formatter->format(data, n, appendTo, &iter, errorCode);
+    if (U_FAILURE(errorCode)) {
+        dataerrln(
+            "ListFormatter::format(data, %d, &iter, errorCode) "
+            "failed in %s: %s", n, testName, u_errorName(errorCode));
+        return;
+    }
+    if (appendTo != expectedFormatted) {
+        errln(UnicodeString("Expected: |") + expectedFormatted +  "|, Actual: |" + appendTo + "|");
+    }
+    ExpectPositions(iter, expected, tupleCount);
+}
+
+void ListFormatterTest::RunTestFieldPositionIteratorWithNItemsPatternShift(
+        UnicodeString data[], int32_t n, int32_t expected[], int32_t tupleCount,
+        UnicodeString& appendTo, const char16_t *expectedFormatted,
+        const char* testName) {
+    IcuTestErrorCode errorCode(*this, testName);
+    LocalPointer<ListFormatter> formatter(
+        ListFormatter::createInstance(Locale("ur", "IN"), "unit-narrow", errorCode));
+    if (U_FAILURE(errorCode)) {
+        dataerrln(
+            "ListFormatter::createInstance(Locale(\"ur\", \"IN\"), \"unit-narrow\", errorCode) failed in "
+            "%s: %s", testName, u_errorName(errorCode));
+        return;
+    }
+    RunTestFieldPositionIteratorWithFormatter(
+        formatter.getAlias(),
+        data, n, expected, tupleCount, appendTo, expectedFormatted, testName);
+}
+
 void ListFormatterTest::RunTestFieldPositionIteratorWithNItems(
         UnicodeString data[], int32_t n, int32_t expected[], int32_t tupleCount,
-        UnicodeString& appendTo,
+        UnicodeString& appendTo, const char16_t *expectedFormatted,
         const char* testName) {
     IcuTestErrorCode errorCode(*this, testName);
     LocalPointer<ListFormatter> formatter(
@@ -251,15 +289,9 @@ void ListFormatterTest::RunTestFieldPositionIteratorWithNItems(
             "%s: %s", testName, u_errorName(errorCode));
         return;
     }
-    FieldPositionIterator iter;
-    formatter->format(data, n, appendTo, &iter, errorCode);
-    if (U_FAILURE(errorCode)) {
-        dataerrln(
-            "ListFormatter::format(Locale(\"en\"), data, %d, &iter, errorCode) "
-            "failed in %s: %s", n, testName, u_errorName(errorCode));
-        return;
-    }
-    ExpectPositions(iter, expected, tupleCount);
+    RunTestFieldPositionIteratorWithFormatter(
+        formatter.getAlias(),
+        data, n, expected, tupleCount, appendTo, expectedFormatted, testName);
 }
 
 void ListFormatterTest::TestFieldPositionIteratorWith3ItemsAndDataBefore() {
@@ -278,6 +310,7 @@ void ListFormatterTest::TestFieldPositionIteratorWith3ItemsAndDataBefore() {
     UnicodeString appendTo(u"Hello World: ");
     RunTestFieldPositionIteratorWithNItems(
         data, 3, expected, tupleCount, appendTo,
+        u"Hello World: a, bbb, and cc",
         "TestFieldPositionIteratorWith3ItemsAndDataBefore");
 }
 
@@ -297,7 +330,28 @@ void ListFormatterTest::TestFieldPositionIteratorWith3Items() {
     UnicodeString appendTo;
     RunTestFieldPositionIteratorWithNItems(
         data, 3, expected, tupleCount, appendTo,
+        u"a, bbb, and cc",
         "TestFieldPositionIteratorWith3Items");
+}
+
+void ListFormatterTest::TestFieldPositionIteratorWith3ItemsPatternShift() {
+    //  0         1
+    //  012345678901234
+    // "cc bbb a"
+    UnicodeString data[3] = {"a", "bbb", "cc"};
+    int32_t expected[] = {
+        ULISTFMT_ELEMENT_FIELD, 7, 8,
+        ULISTFMT_LITERAL_FIELD, 6, 7,
+        ULISTFMT_ELEMENT_FIELD, 3, 6,
+        ULISTFMT_LITERAL_FIELD, 2, 3,
+        ULISTFMT_ELEMENT_FIELD, 0, 2
+    };
+    int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
+    UnicodeString appendTo;
+    RunTestFieldPositionIteratorWithNItemsPatternShift(
+        data, 3, expected, tupleCount, appendTo,
+        u"cc bbb a",
+        "TestFieldPositionIteratorWith3ItemsPatternShift");
 }
 
 void ListFormatterTest::TestFieldPositionIteratorWith2ItemsAndDataBefore() {
@@ -314,6 +368,7 @@ void ListFormatterTest::TestFieldPositionIteratorWith2ItemsAndDataBefore() {
     UnicodeString appendTo("Foo: ");
     RunTestFieldPositionIteratorWithNItems(
         data, 2, expected, tupleCount, appendTo,
+        u"Foo: bbb and cc",
         "TestFieldPositionIteratorWith2ItemsAndDataBefore");
 }
 
@@ -331,7 +386,26 @@ void ListFormatterTest::TestFieldPositionIteratorWith2Items() {
     UnicodeString appendTo;
     RunTestFieldPositionIteratorWithNItems(
         data, 2, expected, tupleCount, appendTo,
+        u"bbb and cc",
         "TestFieldPositionIteratorWith2Items");
+}
+
+void ListFormatterTest::TestFieldPositionIteratorWith2ItemsPatternShift() {
+    //  0         1
+    //  01234567890
+    // "cc bbb"
+    UnicodeString data[2] = {"bbb", "cc"};
+    int32_t expected[] = {
+        ULISTFMT_ELEMENT_FIELD, 3, 6,
+        ULISTFMT_LITERAL_FIELD, 2, 3,
+        ULISTFMT_ELEMENT_FIELD, 0, 2
+    };
+    int32_t tupleCount = sizeof(expected)/(3 * sizeof(*expected));
+    UnicodeString appendTo;
+    RunTestFieldPositionIteratorWithNItemsPatternShift(
+        data, 2, expected, tupleCount, appendTo,
+        u"cc bbb",
+        "TestFieldPositionIteratorWith2ItemsPatternShift");
 }
 
 void ListFormatterTest::TestFieldPositionIteratorWith1ItemAndDataBefore() {
@@ -345,6 +419,7 @@ void ListFormatterTest::TestFieldPositionIteratorWith1ItemAndDataBefore() {
     UnicodeString appendTo("Hello ");
     RunTestFieldPositionIteratorWithNItems(
         data, 1, expected, tupleCount, appendTo,
+        u"Hello cc",
         "TestFieldPositionIteratorWith1ItemAndDataBefore");
 }
 
@@ -359,6 +434,7 @@ void ListFormatterTest::TestFieldPositionIteratorWith1Item() {
     UnicodeString appendTo;
     RunTestFieldPositionIteratorWithNItems(
         data, 1, expected, tupleCount, appendTo,
+        u"cc",
         "TestFieldPositionIteratorWith1Item");
 }
 
@@ -492,11 +568,17 @@ void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
         case 16: name = "TestFieldPositionIteratorWith2ItemsAndDataBefore";
                  if (exec) TestFieldPositionIteratorWith2ItemsAndDataBefore();
                  break;
-        case 17: name = "TestFieldPositionIteratorWith3Items";
+        case 17: name = "TestFieldPositionIteratorWith2ItemsPatternShift";
+                 if (exec) TestFieldPositionIteratorWith2ItemsPatternShift();
+                 break;
+        case 18: name = "TestFieldPositionIteratorWith3Items";
                  if (exec) TestFieldPositionIteratorWith3Items();
                  break;
-        case 18: name = "TestFieldPositionIteratorWith3ItemsAndDataBefore";
+        case 19: name = "TestFieldPositionIteratorWith3ItemsAndDataBefore";
                  if (exec) TestFieldPositionIteratorWith3ItemsAndDataBefore();
+                 break;
+        case 20: name = "TestFieldPositionIteratorWith3ItemsPatternShift";
+                 if (exec) TestFieldPositionIteratorWith3ItemsPatternShift();
                  break;
         default: name = ""; break;
     }

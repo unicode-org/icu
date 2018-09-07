@@ -25,6 +25,7 @@
 #include "mutex.h"
 #include "hash.h"
 #include "cstring.h"
+#include "uarrsort.h"
 #include "ulocimp.h"
 #include "charstr.h"
 #include "ucln_in.h"
@@ -427,7 +428,9 @@ UnicodeString& ListFormatter::format_(
     int32_t offsetFirst;
     int32_t offsetSecond;
     int32_t prefixLength = 0;
-    MaybeStackArray<int32_t, 10> offsets((handler != nullptr) ? nItems : 0);
+    // for n items, there are 2 * (n + 1) boundary including 0 and the upper
+    // edge.
+    MaybeStackArray<int32_t, 10> offsets((handler != nullptr) ? 2 * (nItems + 1): 0);
     joinStringsAndReplace(
             nItems == 2 ? data->twoPattern : data->startPattern,
             result,
@@ -439,8 +442,8 @@ UnicodeString& ListFormatter::format_(
             &offsetSecond,
             errorCode);
     if (handler != nullptr) {
+        offsets[0] = 0;
         prefixLength += offsetFirst;
-        offsets[0] = offsetFirst;
         offsets[1] = offsetSecond - prefixLength;
     }
     if (nItems > 2) {
@@ -479,26 +482,32 @@ UnicodeString& ListFormatter::format_(
         // If there are already some data in appendTo, we need to adjust the index
         // by shifting that lenght while insert into handler.
         int32_t shift = appendTo.length() + prefixLength;
-        int32_t lastAdded = 0;
+        // Output the ULISTFMT_ELEMENT_FIELD in the order of the input elements
         for (int32_t i = 0; i < nItems; ++i) {
-            if (offsets[i] > lastAdded) {
-                handler->addAttribute(
-                    ULISTFMT_LITERAL_FIELD,  // id
-                    shift + lastAdded,  // index
-                    shift + offsets[i]);  // limit
-            }
-            lastAdded = offsets[i] + items[i].length();
+            offsets[i + nItems] = offsets[i] + items[i].length() + shift;
+            offsets[i] += shift;
             handler->addAttribute(
                 ULISTFMT_ELEMENT_FIELD,  // id
-                shift + offsets[i],  // index
-                shift + lastAdded);  // limit
+                offsets[i],  // index
+                offsets[i + nItems]);  // limit
         }
-        // If there are text after the last itme, we should also insert a literal.
-        if (result.length() > lastAdded) {
+        // The locale pattern may reorder the items (such as in ur-IN locale),
+        // so we cannot assume the array is in accendning order.
+        // To handle the edging case, just insert the two ends into the array
+        // and sort. Then we output ULISTFMT_LITERAL_FIELD if the indecies
+        // between the even and odd position are not the same in the sorted array.
+        offsets[2 * nItems] = shift - prefixLength;
+        offsets[2 * nItems + 1] = result.length() + shift - prefixLength;
+        uprv_sortArray(offsets.getAlias(), 2 * (nItems + 1), sizeof(int32_t),
+               uprv_int32Comparator, nullptr,
+               false, &errorCode);
+        for (int32_t i = 0; i <= nItems; ++i) {
+          if (offsets[i * 2] != offsets[i * 2 + 1]) {
             handler->addAttribute(
                 ULISTFMT_LITERAL_FIELD,  // id
-                shift + lastAdded,  // index
-                shift + result.length());  // limit
+                offsets[i * 2],  // index
+                offsets[i * 2 + 1]);  // limit
+          }
         }
     }
     if (U_SUCCESS(errorCode)) {

@@ -49,6 +49,8 @@ class ListFormatterTest : public IntlTest {
     void TestFieldPositionIteratorWith1ItemAndDataBefore();
     void TestFieldPositionIteratorWith2ItemsAndDataBefore();
     void TestFieldPositionIteratorWith3ItemsAndDataBefore();
+    void TestFieldPositionIteratorWith2ItemsPatternShift();
+    void TestFieldPositionIteratorWith3ItemsPatternShift();
 
   private:
     void CheckFormatting(
@@ -57,10 +59,35 @@ class ListFormatterTest : public IntlTest {
         int32_t data_size,
         const UnicodeString& expected_result,
         const char* testName);
-    void ExpectPositions(FieldPositionIterator& iter, int32_t *values, int32_t tupleCount);
+    void ExpectPositions(
+        FieldPositionIterator& iter,
+        int32_t *values,
+        int32_t tupleCount);
     void RunTestFieldPositionIteratorWithNItems(
-        UnicodeString *data, int32_t n, int32_t *values, int32_t tupleCount,
-        UnicodeString& appendTo, const char* testName);
+        UnicodeString *data,
+        int32_t n,
+        int32_t *values,
+        int32_t tupleCount,
+        UnicodeString& appendTo,
+        const char16_t *expectedFormatted,
+        const char* testName);
+    void RunTestFieldPositionIteratorWithNItemsPatternShift(
+        UnicodeString *data,
+        int32_t n,
+        int32_t *values,
+        int32_t tupleCount,
+        UnicodeString& appendTo,
+        const char16_t *expectedFormatted,
+        const char* testName);
+    void RunTestFieldPositionIteratorWithFormatter(
+        ListFormatter* formatter,
+        UnicodeString *data,
+        int32_t n,
+        int32_t *values,
+        int32_t tupleCount,
+        UnicodeString& appendTo,
+        const char16_t *expectedFormatted,
+        const char* testName);
     void CheckFourCases(
         const char* locale_string,
         UnicodeString one,
