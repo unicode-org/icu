@@ -184,6 +184,14 @@ void BreakRules::addRule(const UnicodeString &name, const UnicodeString &definit
     }
     fSetRefsMatcher->appendTail(thisRule->fExpandedRule);
 
+    // If rule begins with a '^' rule chaining is disallowed.
+    // Strip off the '^' from the rule expression, and set the flag.
+    if (thisRule->fExpandedRule.charAt(0) == u'^') {
+        thisRule->fInitialMatchOnly = true;
+        thisRule->fExpandedRule.remove(0, 1);
+        thisRule->fExpandedRule.trim();
+    }
+
     // Replace the divide sign (\u00f7) with a regular expression named capture.
     // When running the rules, a match that includes this group means we found a break position.
 
@@ -442,6 +450,8 @@ void MonkeyTestData::set(BreakRules *rules, IntlTest::icu_rand &rand, UErrorCode
                                              // ICU always reports a break there.
                                              // The reference rules do not have a means to do so.
     int32_t strIdx = 0;
+    bool    initialMatch = true;             // True at start of text, and immediately after each boundary,
+                                             // for control over rule chaining.
     while (strIdx < fString.length()) {
         BreakRule *matchingRule = NULL;
         UBool      hasBreak = FALSE;
@@ -451,6 +461,10 @@ void MonkeyTestData::set(BreakRules *rules, IntlTest::icu_rand &rand, UErrorCode
         int32_t breakGroup = 0;
         for (ruleNum=0; ruleNum<rules->fBreakRules.size(); ruleNum++) {
             BreakRule *rule = static_cast<BreakRule *>(rules->fBreakRules.elementAt(ruleNum));
+            if (rule->fInitialMatchOnly && !initialMatch) {
+                // Skip checking this '^' rule. (No rule chaining)
+                continue;
+            }
             rule->fRuleMatcher->reset();
             if (rule->fRuleMatcher->lookingAt(strIdx, status)) {
                 // A candidate rule match, check further to see if we take it or continue to check other rules.
@@ -512,10 +526,12 @@ void MonkeyTestData::set(BreakRules *rules, IntlTest::icu_rand &rand, UErrorCode
             // which may differ from end of the match. The matching rule may have included
             // context following the boundary that needs to be looked at again.
             strIdx = matchingRule->fRuleMatcher->end(breakGroup, status);
+            initialMatch = true;
         } else {
             // Original rule didn't specify a break.
             // Continue applying rules starting on the last code point of this match.
             strIdx = fString.moveIndex32(matchEnd, -1);
+            initialMatch = false;
             if (strIdx == matchStart) {
                 // Match was only one code point, no progress if we continue.
                 // Shouldn't get here, case is filtered out at top of loop.

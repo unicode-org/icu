@@ -64,7 +64,7 @@
 #       include "unicode/udata.h"
 #       define LIB_PREFIX "lib"
 #       define LIB_SUFFIX ".dll"
-        /* This is inconvienient until we figure out what to do with U_ICUDATA_NAME in utypes.h */
+        /* This is inconvenient until we figure out what to do with U_ICUDATA_NAME in utypes.h */
 #       define U_ICUDATA_ENTRY_NAME "icudt" U_ICU_VERSION_SHORT U_LIB_SUFFIX_C_NAME_STRING "_dat"
 #   endif
 #elif MAP_IMPLEMENTATION==MAP_STDIO
@@ -84,7 +84,10 @@
  *----------------------------------------------------------------------------*/
 #if MAP_IMPLEMENTATION==MAP_NONE
     U_CFUNC UBool
-    uprv_mapFile(UDataMemory *pData, const char *path) {
+    uprv_mapFile(UDataMemory *pData, const char *path, UErrorCode *status) {
+        if (U_FAILURE(*status)) {
+            return FALSE;
+        }
         UDataMemory_init(pData); /* Clear the output struct. */
         return FALSE;            /* no file access */
     }
@@ -97,12 +100,17 @@
     uprv_mapFile(
          UDataMemory *pData,    /* Fill in with info on the result doing the mapping. */
                                 /*   Output only; any original contents are cleared.  */
-         const char *path       /* File path to be opened/mapped                      */
+         const char *path,      /* File path to be opened/mapped.                     */
+         UErrorCode *status     /* Error status, used to report out-of-memory errors. */
          )
     {
         HANDLE map;
         HANDLE file;
-        
+
+        if (U_FAILURE(*status)) {
+            return FALSE;
+        }
+
         UDataMemory_init(pData); /* Clear the output struct.        */
 
         /* open the input file */
@@ -132,7 +140,12 @@
         // TODO: Is it worth setting extended parameters to specify random access?
         file = CreateFile2(utf16Path, GENERIC_READ, FILE_SHARE_READ, OPEN_EXISTING, NULL);
 #endif
-        if(file==INVALID_HANDLE_VALUE) {
+        if (file == INVALID_HANDLE_VALUE) {
+            // If we failed to open the file due to an out-of-memory error, then we want
+            // to report that error back to the caller.
+            if (HRESULT_FROM_WIN32(GetLastError()) == E_OUTOFMEMORY) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+            }
             return FALSE;
         }
 
@@ -165,7 +178,12 @@
         map = CreateFileMappingFromApp(file, NULL, PAGE_READONLY, 0, NULL);
 #endif
         CloseHandle(file);
-        if(map==NULL) {
+        if (map == NULL) {
+            // If we failed to create the mapping due to an out-of-memory error, then 
+            // we want to report that error back to the caller.
+            if (HRESULT_FROM_WIN32(GetLastError()) == E_OUTOFMEMORY) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+            }
             return FALSE;
         }
 
@@ -193,11 +211,15 @@
 
 #elif MAP_IMPLEMENTATION==MAP_POSIX
     U_CFUNC UBool
-    uprv_mapFile(UDataMemory *pData, const char *path) {
+    uprv_mapFile(UDataMemory *pData, const char *path, UErrorCode *status) {
         int fd;
         int length;
         struct stat mystat;
         void *data;
+
+        if (U_FAILURE(*status)) {
+            return FALSE;
+        }
 
         UDataMemory_init(pData); /* Clear the output struct.        */
 
@@ -221,6 +243,7 @@
 #endif
         close(fd); /* no longer needed */
         if(data==MAP_FAILED) {
+            // Possibly check the errno value for ENOMEM, and report U_MEMORY_ALLOCATION_ERROR?
             return FALSE;
         }
 
@@ -263,10 +286,14 @@
     }
 
     U_CFUNC UBool
-    uprv_mapFile(UDataMemory *pData, const char *path) {
+    uprv_mapFile(UDataMemory *pData, const char *path, UErrorCode *status) {
         FILE *file;
         int32_t fileLength;
         void *p;
+
+        if (U_FAILURE(*status)) {
+            return FALSE;
+        }
 
         UDataMemory_init(pData); /* Clear the output struct.        */
         /* open the input file */
@@ -286,6 +313,7 @@
         p=uprv_malloc(fileLength);
         if(p==NULL) {
             fclose(file);
+            *status = U_MEMORY_ALLOCATION_ERROR;
             return FALSE;
         }
 
@@ -351,7 +379,7 @@
      *
      *                    TODO:  This works the way ICU historically has, but the
      *                           whole data fallback search path is so complicated that
-     *                           proabably almost no one will ever really understand it,
+     *                           probably almost no one will ever really understand it,
      *                           the potential for confusion is large.  (It's not just 
      *                           this one function, but the whole scheme.)
      *                            
@@ -391,13 +419,17 @@
 
 #   define DATA_TYPE "dat"
 
-    U_CFUNC UBool uprv_mapFile(UDataMemory *pData, const char *path) {
+    U_CFUNC UBool uprv_mapFile(UDataMemory *pData, const char *path, UErrorCode *status) {
         const char *inBasename;
         char *basename;
         char pathBuffer[1024];
         const DataHeader *pHeader;
         dllhandle *handle;
         void *val=0;
+
+        if (U_FAILURE(*status)) {
+            return FALSE;
+        }
 
         inBasename=uprv_strrchr(path, U_FILE_SEP_CHAR);
         if(inBasename==NULL) {
@@ -430,6 +462,7 @@
             data=mmap(0, length, PROT_READ, MAP_PRIVATE, fd, 0);
             close(fd); /* no longer needed */
             if(data==MAP_FAILED) {
+                // Possibly check the errorno value for ENOMEM, and report U_MEMORY_ALLOCATION_ERROR?
                 return FALSE;
             }
             pData->map = (char *)data + length;

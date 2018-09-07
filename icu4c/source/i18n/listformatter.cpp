@@ -412,9 +412,9 @@ UnicodeString& ListFormatter::format_(
             offset = appendTo.length();
         }
         if (handler != nullptr) {
-          handler->addAttribute(ULISTFMT_ELEMENT_FIELD,
-                                appendTo.length(),
-                                appendTo.length() + items[0].length());
+            handler->addAttribute(ULISTFMT_ELEMENT_FIELD,
+                                  appendTo.length(),
+                                  appendTo.length() + items[0].length());
         }
         appendTo.append(items[0]);
         return appendTo;
@@ -427,7 +427,7 @@ UnicodeString& ListFormatter::format_(
     int32_t offsetSecond;
     int32_t *offsets = nullptr;
     if (handler != nullptr) {
-      offsets = static_cast<int32_t *>(uprv_malloc(sizeof(int32_t) * nItems));
+        offsets = static_cast<int32_t *>(uprv_malloc(sizeof(int32_t) * nItems));
     }
     joinStringsAndReplace(
             nItems == 2 ? data->twoPattern : data->startPattern,
@@ -440,8 +440,8 @@ UnicodeString& ListFormatter::format_(
             &offsetSecond,
             errorCode);
     if (offsets != nullptr) {
-      offsets[0] = offsetFirst;
-      offsets[1] = offsetSecond;
+        offsets[0] = offsetFirst;
+        offsets[1] = offsetSecond;
     }
     if (nItems > 2) {
         for (int32_t i = 2; i < nItems - 1; ++i) {
@@ -455,12 +455,14 @@ UnicodeString& ListFormatter::format_(
                      &offsetFirst,
                      &offsetSecond,
                      errorCode);
-          if (offsets != nullptr) {
-            offsets[i] = offsetSecond;
-            // Adjust the offset since the joinStringsAndReplace may shift
-            // the starting point of the first item depending on the pattern.
-            for (int32_t j = 0; j < i - 1; ++j) offsets[j] += offsetFirst;
-          }
+            if (offsets != nullptr) {
+                offsets[i] = offsetSecond;
+                // Adjust the offset since the joinStringsAndReplace may shift
+                // the starting point of the first item depending on the pattern.
+                for (int32_t j = 0; j < i - 1; ++j) {
+                    offsets[j] += offsetFirst;
+                }
+            }
         }
         joinStringsAndReplace(
                 data->endPattern,
@@ -473,37 +475,39 @@ UnicodeString& ListFormatter::format_(
                 &offsetSecond,
                 errorCode);
         if (offsets != nullptr) {
-          offsets[nItems - 1] = offsetSecond;
-          // Adjust the offset since the joinStringsAndReplace may shift
-          // the starting point of the first item depending on the pattern.
-          for (int32_t j = 0; j < nItems - 1; ++j) offsets[j] += offsetFirst;
+            offsets[nItems - 1] = offsetSecond;
+            // Adjust the offset since the joinStringsAndReplace may shift
+            // the starting point of the first item depending on the pattern.
+            for (int32_t j = 0; j < nItems - 1; ++j) {
+                offsets[j] += offsetFirst;
+            }
         }
     }
     if (offsets != nullptr && handler != nullptr) {
-      // If there are already some data in appendTo, we need to adjust the index
-      // by shifting that lenght while insert into handler.
-      int32_t shift = appendTo.length();
-      int32_t lastAdded = 0;
-      for (int32_t i = 0; i < nItems; ++i) {
-        if (offsets[i] > lastAdded) {
-          handler->addAttribute(
-              ULISTFMT_LITERAL_FIELD,  // id
-              shift + lastAdded,  // index
-              shift + offsets[i]);  // limit
+        // If there are already some data in appendTo, we need to adjust the index
+        // by shifting that lenght while insert into handler.
+        int32_t shift = appendTo.length();
+        int32_t lastAdded = 0;
+        for (int32_t i = 0; i < nItems; ++i) {
+            if (offsets[i] > lastAdded) {
+                handler->addAttribute(
+                    ULISTFMT_LITERAL_FIELD,  // id
+                    shift + lastAdded,  // index
+                    shift + offsets[i]);  // limit
+            }
+            lastAdded = offsets[i] + items[i].length();
+            handler->addAttribute(
+                ULISTFMT_ELEMENT_FIELD,  // id
+                shift + offsets[i],  // index
+                shift + lastAdded);  // limit
         }
-        lastAdded = offsets[i] + items[i].length();
-        handler->addAttribute(
-            ULISTFMT_ELEMENT_FIELD,  // id
-            shift + offsets[i],  // index
-            shift + lastAdded);  // limit
-      }
-      // If there are text after the last itme, we should also insert a literal.
-      if (result.length() > lastAdded) {
-        handler->addAttribute(
-            ULISTFMT_LITERAL_FIELD,  // id
-            shift + lastAdded,  // index
-            shift + result.length());  // limit
-      }
+        // If there are text after the last itme, we should also insert a literal.
+        if (result.length() > lastAdded) {
+            handler->addAttribute(
+                ULISTFMT_LITERAL_FIELD,  // id
+                shift + lastAdded,  // index
+                shift + result.length());  // limit
+        }
     }
     uprv_free(offsets);
     if (U_SUCCESS(errorCode)) {

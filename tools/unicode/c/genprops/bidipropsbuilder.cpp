@@ -500,7 +500,7 @@ void
 BiDiPropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
     if(U_FAILURE(errorCode)) { return; }
 
-    FILE *f=usrc_create(path, "ubidi_props_data.h",
+    FILE *f=usrc_create(path, "ubidi_props_data.h", 2016,
                         "icu/tools/unicode/c/genprops/bidipropsbuilder.cpp");
     if(f==NULL) {
         errorCode=U_FILE_ACCESS_ERROR;

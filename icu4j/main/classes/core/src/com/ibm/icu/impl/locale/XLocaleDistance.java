@@ -46,6 +46,10 @@ public class XLocaleDistance {
 
     public static final int ABOVE_THRESHOLD = 100;
 
+    // Activates debugging output to stderr with details of GetBestMatch.
+    // Be sure to set this to false before checking this in for production!
+    private static final boolean TRACE_DISTANCE = false;
+
     @Deprecated
     public static final String ANY = "�"; // matches any character. Uses value above any subtag.
 
@@ -441,6 +445,10 @@ public class XLocaleDistance {
 
         @Override
         public int getDistance(String desired, String supported, Output<DistanceTable> distanceTable, boolean starEquals) {
+            if (TRACE_DISTANCE) {
+                System.err.printf("    Entering       getDistance: desired=%s supported=%s starEquals=%s\n",
+                    desired, supported, Boolean.toString(starEquals));
+            }
             boolean star = false;
             Map<String, DistanceNode> sub2 = subtables.get(desired);
             if (sub2 == null) {
@@ -462,7 +470,11 @@ public class XLocaleDistance {
             if (distanceTable != null) {
                 distanceTable.value = ((StringDistanceNode) value).distanceTable;
             }
-            return starEquals && star && desired.equals(supported) ? 0 : value.distance;
+            int result = starEquals && star && desired.equals(supported) ? 0 : value.distance;
+            if (TRACE_DISTANCE) {
+                System.err.printf("    Returning from getDistance: %d\n", result);
+            }
+            return result;
         }
 
         public void copy(StringDistanceTable other) {
@@ -619,6 +631,7 @@ public class XLocaleDistance {
                                 buffer.append('\t').append('#').append(id).append('\n');
                             } else {
                                 ((StringDistanceTable)distanceTable).toString(abbreviate, indent+"\t\t\t", intern, buffer);
+                                buffer.append('\n');
                             }
                         } else {
                             buffer.append('\n');
@@ -726,17 +739,31 @@ public class XLocaleDistance {
      * ULocales must be in canonical, addLikelySubtags format. Returns distance
      */
     public int distanceRaw(LSR desired, LSR supported, int threshold, DistanceOption distanceOption) {
-        return distanceRaw(desired.language, supported.language,
+        if (TRACE_DISTANCE) {
+            System.err.printf("  Entering       distanceRaw: desired=%s supported=%s "
+            + "threshold=%d preferred=%s\n",
+            desired, supported, threshold,
+            distanceOption.name());
+        }
+        int result = distanceRaw(desired.language, supported.language,
                 desired.script, supported.script,
                 desired.region, supported.region,
                 threshold, distanceOption);
+        if (TRACE_DISTANCE) {
+            System.err.printf("  Returning from distanceRaw: %d\n", result);
+        }
+        return result;
     }
 
-    public enum DistanceOption {NORMAL, SCRIPT_FIRST}
+    public enum DistanceOption {REGION_FIRST, SCRIPT_FIRST}
+    // NOTE: Replaced "NORMAL" with "REGION_FIRST". By default, scripts have greater weight
+    // than regions, so they might be considered the "normal" case.
 
     /**
      * Returns distance, from 0 to ABOVE_THRESHOLD.
-     * ULocales must be in canonical, addLikelySubtags format. Returns distance
+     * ULocales must be in canonical, addLikelySubtags format.
+     * (Exception: internal calls may pass any strings. They do this for pseudo-locales.)
+     * Returns distance.
      */
     public int distanceRaw(
             String desiredLang, String supportedLang,
@@ -942,6 +969,28 @@ public class XLocaleDistance {
                 }
             }
         }
+
+        // Pseudo regions should match no other regions.
+        // {"*-*-XA", "*-*-*", "0"},
+        // {"*-*-XB", "*-*-*", "0"},
+        // {"*-*-XC", "*-*-*", "0"},
+        // {"x1-*-*", "*-*-*", "0"},
+        // {"x2-*-*", "*-*-*", "0"},
+        // ...
+        // {"x8-*-*", "*-*-*", "0"},
+        List<String> supported = Arrays.asList("*", "*", "*");
+        for (String x : Arrays.asList("XA", "XB", "XC")) {
+            List<String> desired = Arrays.asList("*", "*", x);
+            add(defaultDistanceTable, desired, supported, 100);
+            add(defaultDistanceTable, supported, desired, 100);
+        }
+        // See XLikelySubtags.java for the mapping of pseudo-locales to x1 ... x8.
+        for (int i = 1; i <= 8; ++i) {
+            List<String> desired = Arrays.asList("x" + String.valueOf(i), "*", "*");
+            add(defaultDistanceTable, desired, supported, 100);
+            add(defaultDistanceTable, supported, desired, 100);
+        }
+
         if (PRINT_OVERRIDES) {
             System.out.println("\t\t</languageMatches>");
         }

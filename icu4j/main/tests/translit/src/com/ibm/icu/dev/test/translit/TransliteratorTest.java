@@ -15,7 +15,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map.Entry;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,14 +22,11 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
-import com.ibm.icu.dev.util.UnicodeMap;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
 import com.ibm.icu.lang.CharSequences;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
-import com.ibm.icu.text.CanonicalIterator;
-import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.text.ReplaceableString;
 import com.ibm.icu.text.StringTransform;
@@ -2990,218 +2986,6 @@ public class TransliteratorTest extends TestFmwk {
     }
 
     @Test
-    public void TestSourceTargetSet2() {
-
-
-        Normalizer2 nfc = Normalizer2.getNFCInstance();
-        Normalizer2 nfd = Normalizer2.getNFDInstance();
-
-        //        Normalizer2 nfkd = Normalizer2.getInstance(null, "nfkd", Mode.DECOMPOSE);
-        //        UnicodeSet nfkdSource = new UnicodeSet();
-        //        UnicodeSet nfkdTarget = new UnicodeSet();
-        //        for (int i = 0; i <= 0x10FFFF; ++i) {
-        //            if (nfkd.isInert(i)) {
-        //                continue;
-        //            }
-        //            nfkdSource.add(i);
-        //            String t = nfkd.getDecomposition(i);
-        //            if (t != null) {
-        //                nfkdTarget.addAll(t);
-        //            } else {
-        //                nfkdTarget.add(i);
-        //            }
-        //        }
-        //        nfkdSource.freeze();
-        //        nfkdTarget.freeze();
-        //        logln("NFKD Source: " + nfkdSource.toPattern(false));
-        //        logln("NFKD Target: " + nfkdTarget.toPattern(false));
-
-        UnicodeMap<UnicodeSet> leadToTrail = new UnicodeMap();
-        UnicodeMap<UnicodeSet> leadToSources = new UnicodeMap();
-        UnicodeSet nonStarters = new UnicodeSet("[:^ccc=0:]").freeze();
-        CanonicalIterator can = new CanonicalIterator("");
-
-        UnicodeSet disorderedMarks = new UnicodeSet();
-
-        for (int i = 0; i <= 0x10FFFF; ++i) {
-            String s = nfd.getDecomposition(i);
-            if (s == null) {
-                continue;
-            }
-
-            can.setSource(s);
-            for (String t = can.next(); t != null; t = can.next()) {
-                disorderedMarks.add(t);
-            }
-
-            // if s has two code points, (or more), add the lead/trail information
-            int first = s.codePointAt(0);
-            int firstCount = Character.charCount(first);
-            if (s.length() == firstCount) continue;
-            String trailString = s.substring(firstCount);
-
-            // add all the trail characters
-            if (!nonStarters.containsSome(trailString)) {
-                continue;
-            }
-            UnicodeSet trailSet = leadToTrail.get(first);
-            if (trailSet == null) {
-                leadToTrail.put(first, trailSet = new UnicodeSet());
-            }
-            trailSet.addAll(trailString); // add remaining trails
-
-            // add the sources
-            UnicodeSet sourcesSet = leadToSources.get(first);
-            if (sourcesSet == null) {
-                leadToSources.put(first, sourcesSet = new UnicodeSet());
-            }
-            sourcesSet.add(i);
-        }
-
-
-        for (Entry<String, UnicodeSet> x : leadToSources.entrySet()) {
-            String lead = x.getKey();
-            UnicodeSet sources = x.getValue();
-            UnicodeSet trailSet = leadToTrail.get(lead);
-            for (String source : sources) {
-                for (String trail : trailSet) {
-                    can.setSource(source + trail);
-                    for (String t = can.next(); t != null; t = can.next()) {
-                        if (t.endsWith(trail)) continue;
-                        disorderedMarks.add(t);
-                    }
-                }
-            }
-        }
-
-
-        for (String s : nonStarters) {
-            disorderedMarks.add("\u0345" + s);
-            disorderedMarks.add(s+"\u0323");
-            String xx = nfc.normalize("\u01EC" + s);
-            if (!xx.startsWith("\u01EC")) {
-                logln("??");
-            }
-        }
-
-        //        for (int i = 0; i <= 0x10FFFF; ++i) {
-        //            String s = nfkd.getDecomposition(i);
-        //            if (s != null) {
-        //                disorderedMarks.add(s);
-        //                disorderedMarks.add(nfc.normalize(s));
-        //                addDerivedStrings(nfc, disorderedMarks, s);
-        //            }
-        //            s = nfd.getDecomposition(i);
-        //            if (s != null) {
-        //                disorderedMarks.add(s);
-        //            }
-        //            if (!nfc.isInert(i)) {
-        //                if (i == 0x00C0) {
-        //                    logln("\u00C0");
-        //                }
-        //                can.setSource(s+"\u0334");
-        //                for (String t = can.next(); t != null; t = can.next()) {
-        //                    addDerivedStrings(nfc, disorderedMarks, t);
-        //                }
-        //                can.setSource(s+"\u0345");
-        //                for (String t = can.next(); t != null; t = can.next()) {
-        //                    addDerivedStrings(nfc, disorderedMarks, t);
-        //                }
-        //                can.setSource(s+"\u0323");
-        //                for (String t = can.next(); t != null; t = can.next()) {
-        //                    addDerivedStrings(nfc, disorderedMarks, t);
-        //                }
-        //            }
-        //        }
-        logln("Test cases: " + disorderedMarks.size());
-        disorderedMarks.addAll(0,0x10FFFF).freeze();
-        logln("isInert \u0104 " + nfc.isInert('\u0104'));
-
-        Object[][] rules = {
-                {":: [:sc=COMMON:] any-name;", null},
-
-                {":: [:Greek:] hex-any/C;", null},
-                {":: [:Greek:] any-hex/C;", null},
-
-                {":: [[:Mn:][:Me:]] remove;", null},
-                {":: [[:Mn:][:Me:]] null;", null},
-
-
-                {":: lower;", null},
-                {":: upper;", null},
-                {":: title;", null},
-                {":: CaseFold;", null},
-
-                {":: NFD;", null},
-                {":: NFC;", null},
-                {":: NFKD;", null},
-                {":: NFKC;", null},
-
-                {":: [[:Mn:][:Me:]] NFKD;", null},
-                {":: Latin-Greek;", null},
-                {":: [:Latin:] NFKD;", null},
-                {":: NFKD;", null},
-                {":: NFKD;\n" +
-                    ":: [[:Mn:][:Me:]] remove;\n" +
-                    ":: NFC;", null},
-        };
-        for (Object[] rulex : rules) {
-            String rule = (String) rulex[0];
-            Transliterator trans = Transliterator.createFromRules("temp", rule, Transliterator.FORWARD);
-            UnicodeSet actualSource = trans.getSourceSet();
-            UnicodeSet actualTarget = trans.getTargetSet();
-            UnicodeSet empiricalSource = new UnicodeSet();
-            UnicodeSet empiricalTarget = new UnicodeSet();
-            String ruleDisplay = rule.replace("\n", "\t\t");
-            UnicodeSet toTest = disorderedMarks;
-            //            if (rulex[1] != null) {
-            //                toTest = new UnicodeSet(disorderedMarks);
-            //                toTest.addAll((UnicodeSet) rulex[1]);
-            //            }
-
-            String test = nfd.normalize("\u0104");
-            boolean DEBUG = true;
-            @SuppressWarnings("unused")
-            int count = 0; // for debugging
-            for (String s : toTest) {
-                if (s.equals(test)) {
-                    logln(test);
-                }
-                String t = trans.transform(s);
-                if (!s.equals(t)) {
-                    if (!isAtomic(s, t, trans)) {
-                        isAtomic(s, t, trans);
-                        continue;
-                    }
-
-                    // only keep the part that changed; so skip the front and end.
-                    //                    int start = findSharedStartLength(s,t);
-                    //                    int end = findSharedEndLength(s,t);
-                    //                    if (start != 0 || end != 0) {
-                    //                        s = s.substring(start, s.length() - end);
-                    //                        t = t.substring(start, t.length() - end);
-                    //                    }
-                    if (DEBUG) {
-                        if (!actualSource.containsAll(s)) {
-                            count++;
-                        }
-                        if (!actualTarget.containsAll(t)) {
-                            count++;
-                        }
-                    }
-                    addSourceTarget(s, empiricalSource, t, empiricalTarget);
-                }
-            }
-            if (rule.contains("title")) {
-                // See the comment in TestCasing() about the iota subscript.
-                empiricalSource.remove(0x345);
-            }
-            assertEquals("getSource(" + ruleDisplay + ")", empiricalSource, actualSource, SetAssert.MISSING_OK);
-            assertEquals("getTarget(" + ruleDisplay + ")", empiricalTarget, actualTarget, SetAssert.MISSING_OK);
-        }
-    }
-
-    @Test
     public void TestSourceTargetSetFilter() {
         String[][] tests = {
                 // rules, expectedTarget-FORWARD, expectedTarget-REVERSE
@@ -3256,7 +3040,7 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
-    private boolean isAtomic(String s, String t, Transliterator trans) {
+    static boolean isAtomic(String s, String t, Transliterator trans) {
         for (int i = 1; i < s.length(); ++i) {
             if (!CharSequences.onCharacterBoundary(s, i)) {
                 continue;
@@ -3285,7 +3069,7 @@ public class TransliteratorTest extends TestFmwk {
         //        }
     }
 
-    private void addSourceTarget(String s, UnicodeSet expectedSource, String t, UnicodeSet expectedTarget) {
+    static void addSourceTarget(String s, UnicodeSet expectedSource, String t, UnicodeSet expectedTarget) {
         expectedSource.addAll(s);
         if (t.length() > 0) {
             expectedTarget.addAll(t);
@@ -3378,7 +3162,7 @@ public class TransliteratorTest extends TestFmwk {
 
     enum SetAssert {EQUALS, MISSING_OK, EXTRA_OK}
 
-    void assertEquals(String message, UnicodeSet empirical, UnicodeSet actual, SetAssert setAssert) {
+    static void assertEquals(String message, UnicodeSet empirical, UnicodeSet actual, SetAssert setAssert) {
         boolean haveError = false;
         if (!actual.containsAll(empirical)) {
             UnicodeSet missing = new UnicodeSet(empirical).removeAll(actual);
@@ -3395,7 +3179,7 @@ public class TransliteratorTest extends TestFmwk {
         }
     }
 
-    private String toPattern(UnicodeSet missing) {
+    private static String toPattern(UnicodeSet missing) {
         String result = missing.toPattern(false);
         if (result.length() < 200) {
             return result;

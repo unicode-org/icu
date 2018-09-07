@@ -157,6 +157,9 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
 
     /**
      * {@inheritDoc}
+     *
+     * <p>The trie can be modified between calls to this function.
+     *
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
      */
@@ -308,6 +311,15 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
     /**
      * Compacts the data and builds an immutable {@link CodePointTrie} according to the parameters.
      * After this, the mutable trie will be empty.
+     *
+     * <p>The mutable trie stores 32-bit values until buildImmutable() is called.
+     * If values shorter than 32 bits are to be stored in the immutable trie,
+     * then the upper bits are discarded.
+     * For example, when the mutable trie contains values 0x81, -0x7f, and 0xa581,
+     * and the value width is 8 bits, then each of these is stored as 0x81
+     * and the immutable trie will return that as an unsigned value.
+     * (Some implementations may want to make productive temporary use of the upper bits
+     * until buildImmutable() discards them.)
      *
      * <p>Not every possible set of mappings can be built into a CodePointTrie,
      * because of limitations resulting from speed and space optimizations.
@@ -556,11 +568,12 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         return -1;
     }
 
-    private static int findAllSameBlock(int[] p, int length, int value, int blockLength) {
-        // Ensure that we do not even partially get past length.
-        length -= blockLength;
+    private static int findAllSameBlock(int[] p, int start, int limit,
+            int value, int blockLength) {
+        // Ensure that we do not even partially get past limit.
+        limit -= blockLength;
 
-        for (int block = 0; block <= length; ++block) {
+        for (int block = start; block <= limit; ++block) {
             if (p[block] == value) {
                 for (int i = 1;; ++i) {
                     if (i == blockLength) {
@@ -612,6 +625,15 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         int i = length;
         while (min < i && p[i - 1] == value) { --i; }
         return length - i;
+    }
+
+    private static boolean isStartOfSomeFastBlock(int dataOffset, int[] index, int fastILimit) {
+        for (int i = 0; i < fastILimit; i += SMALL_DATA_BLOCKS_PER_BMP_BLOCK) {
+            if (index[i] == dataOffset) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -720,6 +742,9 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         // ASCII data will be stored as a linear table, even if the following code
         // does not yet count it that way.
         int newDataCapacity = ASCII_LIMIT;
+        // Add room for a small data null block in case it would match the start of
+        // a fast data block where dataNullOffset must not be set in that case.
+        newDataCapacity += CodePointTrie.SMALL_DATA_BLOCK_LENGTH;
         // Add room for special values (errorValue, highValue) and padding.
         newDataCapacity += 4;
         int iLimit = highStart >> CodePointTrie.SHIFT_3;
@@ -761,6 +786,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
                         if (getDataBlock(i) < 0) {
                             return -1;
                         }
+                        newDataCapacity += blockLength;
                         continue;
                     }
                 }
@@ -810,7 +836,7 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
      *
      * It does not try to find an optimal order of writing, deduplicating, and overlapping blocks.
      */
-    private int compactData(int fastILimit, int[] newData) {
+    private int compactData(int fastILimit, int[] newData, int dataNullIndex) {
         // The linear ASCII data has been copied into newData already.
         int newDataLength = 0;
         for (int i = 0; newDataLength < ASCII_LIMIT;
@@ -821,14 +847,31 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         int iLimit = highStart >> CodePointTrie.SHIFT_3;
         int blockLength = CodePointTrie.FAST_DATA_BLOCK_LENGTH;
         int inc = SMALL_DATA_BLOCKS_PER_BMP_BLOCK;
+        int fastLength = 0;
         for (int i = ASCII_I_LIMIT; i < iLimit; i += inc) {
             if (i == fastILimit) {
                 blockLength = CodePointTrie.SMALL_DATA_BLOCK_LENGTH;
                 inc = 1;
+                fastLength = newDataLength;
             }
             if (flags[i] == ALL_SAME) {
                 int value = index[i];
-                int n = findAllSameBlock(newData, newDataLength, value, blockLength);
+                // Find an earlier part of the data array of length blockLength
+                // that is filled with this value.
+                // If we find a match, and the current block is the data null block,
+                // and it is not a fast block but matches the start of a fast block,
+                // then we need to continue looking.
+                // This is because this small block is shorter than the fast block,
+                // and not all of the rest of the fast block is filled with this value.
+                // Otherwise trie.getRange() would detect that the fast block starts at
+                // dataNullOffset and assume incorrectly that it is filled with the null value.
+                int n;
+                for (int start = 0;
+                        (n = findAllSameBlock(newData, start, newDataLength,
+                                    value, blockLength)) >= 0 &&
+                                i == dataNullIndex && i >= fastILimit && n < fastLength &&
+                                isStartOfSomeFastBlock(n, index, fastILimit);
+                        start = n + 1) {}
                 if (n >= 0) {
                     index[i] = n;
                 } else {
@@ -1068,7 +1111,6 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         if (indexLength >= (CodePointTrie.NO_INDEX3_NULL_OFFSET + CodePointTrie.INDEX_3_BLOCK_LENGTH)) {
             // The index-3 offsets exceed 15 bits, or
             // the last one cannot be distinguished from the no-null-block value.
-            // TODO: review exceptions / error codes
             throw new IndexOutOfBoundsException(
                     "The trie data exceeds limitations of the data structure.");
         }
@@ -1143,18 +1185,17 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         int newDataCapacity = compactWholeDataBlocks(fastILimit, allSameBlocks);
         int[] newData = Arrays.copyOf(asciiData, newDataCapacity);
 
-        int newDataLength = compactData(fastILimit, newData);
+        int dataNullIndex = allSameBlocks.findMostUsed();
+        int newDataLength = compactData(fastILimit, newData, dataNullIndex);
         assert(newDataLength <= newDataCapacity);
         data = newData;
         dataLength = newDataLength;
         if (dataLength > (0x3ffff + CodePointTrie.SMALL_DATA_BLOCK_LENGTH)) {
             // The offset of the last data block is too high to be stored in the index table.
-            // TODO: review exceptions / error codes
             throw new IndexOutOfBoundsException(
                     "The trie data exceeds limitations of the data structure.");
         }
 
-        int dataNullIndex = allSameBlocks.findMostUsed();
         if (dataNullIndex >= 0) {
             dataNullOffset = index[dataNullIndex];
             initialValue = data[dataNullOffset];

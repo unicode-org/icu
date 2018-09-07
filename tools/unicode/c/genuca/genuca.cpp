@@ -1215,7 +1215,7 @@ buildAndWriteFCDData(const char *path, UErrorCode &errorCode) {
 
     if(U_FAILURE(errorCode)) { return; }
 
-    FILE *f=usrc_create(path, "collationfcd.cpp",
+    FILE *f=usrc_create(path, "collationfcd.cpp", 2016,
                         "icu/tools/unicode/c/genuca/genuca.cpp");
     if(f==NULL) {
         errorCode=U_FILE_ACCESS_ERROR;

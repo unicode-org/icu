@@ -2530,6 +2530,50 @@ public final class UCharacterTest extends TestFmwk
     }
 
     @Test
+    public void TestIndicPositionalCategory() {
+        UnicodeSet na = new UnicodeSet("[:InPC=NA:]");
+        assertTrue("mostly NA", 1000000 <= na.size() && na.size() <= Character.MAX_CODE_POINT - 500);
+        UnicodeSet vol = new UnicodeSet("[:InPC=Visual_Order_Left:]");
+        assertTrue("some Visual_Order_Left", 19 <= vol.size() && vol.size() <= 100);
+        assertEquals("U+08FF: NA", UCharacter.IndicPositionalCategory.NA,
+                UCharacter.getIntPropertyValue(0x08FF, UProperty.INDIC_POSITIONAL_CATEGORY));
+        assertEquals("U+0900: Top", UCharacter.IndicPositionalCategory.TOP,
+                UCharacter.getIntPropertyValue(0x0900, UProperty.INDIC_POSITIONAL_CATEGORY));
+        assertEquals("U+10A06: Overstruck", UCharacter.IndicPositionalCategory.OVERSTRUCK,
+                UCharacter.getIntPropertyValue(0x10A06, UProperty.INDIC_POSITIONAL_CATEGORY));
+    }
+
+    @Test
+    public void TestIndicSyllabicCategory() {
+        UnicodeSet other = new UnicodeSet("[:InSC=Other:]");
+        assertTrue("mostly Other", 1000000 <= other.size() && other.size() <= Character.MAX_CODE_POINT - 500);
+        UnicodeSet ava = new UnicodeSet("[:InSC=Avagraha:]");
+        assertTrue("some Avagraha", 16 <= ava.size() && ava.size() <= 100);
+        assertEquals("U+08FF: Other", UCharacter.IndicSyllabicCategory.OTHER,
+                UCharacter.getIntPropertyValue(0x08FF, UProperty.INDIC_SYLLABIC_CATEGORY));
+        assertEquals("U+0900: Bindu", UCharacter.IndicSyllabicCategory.BINDU,
+                UCharacter.getIntPropertyValue(0x0900, UProperty.INDIC_SYLLABIC_CATEGORY));
+        assertEquals("U+11065: Brahmi_Joining_Number", UCharacter.IndicSyllabicCategory.BRAHMI_JOINING_NUMBER,
+                UCharacter.getIntPropertyValue(0x11065, UProperty.INDIC_SYLLABIC_CATEGORY));
+    }
+
+    @Test
+    public void TestVerticalOrientation() {
+        UnicodeSet r = new UnicodeSet("[:vo=R:]");
+        assertTrue("mostly R", 0xc0000 <= r.size() && r.size() <= 0xd0000);
+        UnicodeSet u = new UnicodeSet("[:vo=U:]");
+        assertTrue("much U", 0x40000 <= u.size() && u.size() <= 0x50000);
+        UnicodeSet tu = new UnicodeSet("[:vo=Tu:]");
+        assertTrue("some Tu", 147 <= tu.size() && tu.size() <= 300);
+        assertEquals("U+0E01: Rotated", UCharacter.VerticalOrientation.ROTATED,
+                UCharacter.getIntPropertyValue(0x0E01, UProperty.VERTICAL_ORIENTATION));
+        assertEquals("U+3008: Transformed_Rotated", UCharacter.VerticalOrientation.TRANSFORMED_ROTATED,
+                UCharacter.getIntPropertyValue(0x3008, UProperty.VERTICAL_ORIENTATION));
+        assertEquals("U+33333: Upright", UCharacter.VerticalOrientation.UPRIGHT,
+                UCharacter.getIntPropertyValue(0x33333, UProperty.VERTICAL_ORIENTATION));
+    }
+
+    @Test
     public void TestIsBMP()
     {
         int ch[] = {0x0, -1, 0xffff, 0x10ffff, 0xff, 0x1ffff};

@@ -27,6 +27,9 @@ public class XLocaleMatcher {
     private static final LSR UND = new LSR("und","","");
     private static final ULocale UND_LOCALE = new ULocale("und");
 
+    // Activates debugging output to stderr with details of GetBestMatch.
+    private static final boolean TRACE_MATCHER = false;
+
     // normally the default values, but can be set via constructor
 
     private final XLocaleDistance localeDistance;
@@ -60,7 +63,9 @@ public class XLocaleMatcher {
             return this;
         }
         public Builder setSupportedLocales(Set<ULocale> languagePriorityList) {
-            this.supportedLanguagesList = languagePriorityList;
+            Set<ULocale> temp = new LinkedHashSet<ULocale>(); // maintain order
+            temp.addAll(languagePriorityList);
+            this.supportedLanguagesList = temp;
             return this;
         }
 
@@ -113,6 +118,22 @@ public class XLocaleMatcher {
 
         public XLocaleMatcher build() {
             return new XLocaleMatcher(this);
+        }
+
+        @Override
+        public String toString() {
+          StringBuilder s = new StringBuilder().append("{XLocaleMatcher.Builder");
+          if (!supportedLanguagesList.isEmpty()) {
+            s.append(" supported={").append(supportedLanguagesList.toString()).append("}");
+          }
+          if (defaultLanguage != null) {
+            s.append(" default=").append(defaultLanguage.toString());
+          }
+          if (thresholdDistance >= 0) {
+            s.append(String.format(" thresholdDistance=%d", thresholdDistance));
+          }
+          s.append(" preference=").append(distanceOption.name());
+          return s.append("}").toString();
         }
     }
 
@@ -176,7 +197,8 @@ public class XLocaleMatcher {
     private Multimap<LSR,ULocale> extractLsrMap(Set<ULocale> languagePriorityList, Set<LSR> priorities) {
         Multimap<LSR, ULocale> builder = LinkedHashMultimap.create();
         for (ULocale item : languagePriorityList) {
-            final LSR max = item.equals(UND_LOCALE) ? UND : LSR.fromMaximalized(item);
+            final LSR max = item.equals(UND_LOCALE) ? UND :
+            LSR.fromMaximalized(item);
             builder.put(max, item);
         }
         if (builder.size() > 1 && priorities != null) {
@@ -255,45 +277,64 @@ public class XLocaleMatcher {
         ULocale bestDesiredLocale = null;
         Collection<ULocale> bestSupportedLocales = null;
         int delta = 0;
-        mainLoop:
-            for (final Entry<LSR, ULocale> desiredLsrAndLocale : desiredLSRs.entries()) {
-                // quick check for exact match
-                ULocale desiredLocale = desiredLsrAndLocale.getValue();
-                LSR desiredLSR = desiredLsrAndLocale.getKey();
-                if (delta < bestDistance) {
-                    if (exactSupportedLocales.contains(desiredLocale)) {
-                        if (outputBestDesired != null) {
-                            outputBestDesired.value = desiredLocale;
-                        }
-                        return desiredLocale;
-                    }
-                    // quick check for maximized locale
-                    Collection<ULocale> found = supportedLanguages.get(desiredLSR);
-                    if (found != null) {
-                        // if we find one in the set, return first (lowest). We already know the exact one isn't there.
-                        if (outputBestDesired != null) {
-                            outputBestDesired.value = desiredLocale;
-                        }
-                        return found.iterator().next();
-                    }
+    mainLoop:
+        for (final Entry<LSR, Set<ULocale>> desiredLsrAndLocales : desiredLSRs.asMap().entrySet()) {
+          LSR desiredLSR = desiredLsrAndLocales.getKey();
+          for (ULocale desiredLocale : desiredLsrAndLocales.getValue()) {
+            // quick check for exact match
+            if (delta < bestDistance) {
+              if (exactSupportedLocales.contains(desiredLocale)) {
+                if (outputBestDesired != null) {
+                  outputBestDesired.value = desiredLocale;
                 }
-                for (final Entry<LSR, Set<ULocale>> supportedLsrAndLocale : supportedLanguages.entrySet()) {
-                    int distance = delta + localeDistance.distanceRaw(desiredLSR, supportedLsrAndLocale.getKey(),
-                        thresholdDistance, distanceOption);
-                    if (distance < bestDistance) {
-                        bestDistance = distance;
-                        bestDesiredLocale = desiredLocale;
-                        bestSupportedLocales = supportedLsrAndLocale.getValue();
-                        if (distance == 0) {
-                            break mainLoop;
-                        }
-                    }
+                if (TRACE_MATCHER) {
+                    System.err.printf(
+                              "Returning %s, which is an exact match for a supported language\n",
+                              desiredLocale);
+                 }
+                return desiredLocale;
+              }
+              // quick check for maximized locale
+              Collection<ULocale> found = supportedLanguages.get(desiredLSR);
+              if (found != null) {
+                // if we find one in the set, return first (lowest). We already know the exact one isn't
+                // there.
+                if (outputBestDesired != null) {
+                  outputBestDesired.value = desiredLocale;
                 }
-                delta += demotionPerAdditionalDesiredLocale;
+                ULocale result = found.iterator().next();
+                if (TRACE_MATCHER) {
+                  System.err.printf("Returning %s\n", result.toString());
+                }
+                return result;
+              }
             }
+            for (final Entry<LSR, Set<ULocale>> supportedLsrAndLocale : supportedLanguages.entrySet()) {
+              int distance =
+                  delta
+                      + localeDistance.distanceRaw(
+                          desiredLSR,
+                          supportedLsrAndLocale.getKey(),
+                          thresholdDistance,
+                          distanceOption);
+              if (distance < bestDistance) {
+                bestDistance = distance;
+                bestDesiredLocale = desiredLocale;
+                bestSupportedLocales = supportedLsrAndLocale.getValue();
+                if (distance == 0) {
+                  break mainLoop;
+                }
+              }
+            }
+            delta += demotionPerAdditionalDesiredLocale;
+          }
+        }
         if (bestDistance >= thresholdDistance) {
             if (outputBestDesired != null) {
                 outputBestDesired.value = null;
+            }
+            if (TRACE_MATCHER) {
+              System.err.printf("Returning default %s\n", defaultLanguage.toString());
             }
             return defaultLanguage;
         }
@@ -302,10 +343,18 @@ public class XLocaleMatcher {
         }
         // pick exact match if there is one
         if (bestSupportedLocales.contains(bestDesiredLocale)) {
+            if (TRACE_MATCHER) {
+              System.err.printf(
+                  "Returning %s which matches a supported language\n", bestDesiredLocale.toString());
+            }
             return bestDesiredLocale;
         }
         // otherwise return first supported, combining variants and extensions from bestDesired
-        return bestSupportedLocales.iterator().next();
+        ULocale result = bestSupportedLocales.iterator().next();
+        if (TRACE_MATCHER) {
+          System.err.printf("Returning first supported language %s\n", result.toString());
+        }
+        return result;
     }
 
     /**
@@ -327,17 +376,24 @@ public class XLocaleMatcher {
             if (outputBestDesired != null) {
                 outputBestDesired.value = desiredLocale;
             }
+            if (TRACE_MATCHER) {
+              System.err.printf("Exact match with a supported locale.\n");
+            }
             return desiredLocale;
         }
         // quick check for maximized locale
-        if (distanceOption == DistanceOption.NORMAL) {
+        if (distanceOption == DistanceOption.REGION_FIRST) {
             Collection<ULocale> found = supportedLanguages.get(desiredLSR);
             if (found != null) {
                 // if we find one in the set, return first (lowest). We already know the exact one isn't there.
                 if (outputBestDesired != null) {
                     outputBestDesired.value = desiredLocale;
                 }
-                return found.iterator().next();
+                ULocale result = found.iterator().next();
+                if (TRACE_MATCHER) {
+                  System.err.printf("Matches a maximized supported locale: %s\n", result);
+                }
+                return result;
             }
         }
         for (final Entry<LSR, Set<ULocale>> supportedLsrAndLocale : supportedLanguages.entrySet()) {
@@ -356,6 +412,11 @@ public class XLocaleMatcher {
             if (outputBestDesired != null) {
                 outputBestDesired.value = null;
             }
+            if (TRACE_MATCHER) {
+              System.err.printf(
+                  "Returning default %s because everything exceeded the threshold of %d.\n",
+                  defaultLanguage, thresholdDistance);
+            }
             return defaultLanguage;
         }
         if (outputBestDesired != null) {
@@ -366,7 +427,11 @@ public class XLocaleMatcher {
             return bestDesiredLocale;
         }
         // otherwise return first supported, combining variants and extensions from bestDesired
-        return bestSupportedLocales.iterator().next();
+        ULocale result = bestSupportedLocales.iterator().next();
+        if (TRACE_MATCHER) {
+          System.err.printf("First in the list of supported locales: %s\n", result);
+        }
+        return result;
     }
 
     /** Combine features of the desired locale into those of the supported, and return result. */

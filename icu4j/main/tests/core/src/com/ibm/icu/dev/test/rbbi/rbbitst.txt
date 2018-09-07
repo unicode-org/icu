@@ -768,6 +768,16 @@ Calls to xxx will return an implementor of this interface.  \u2029•</data>
 <line>
 <data>•</data>
 
+# Bug #13664 Mixed Thai & English text had different boundaries between forward & reverse.
+#
+<line>
+<data>•Northern •Thailand •is •a •mountainous •area. •Parallel •mountain •ranges •extend •from •the •\
+Daen •Lao •Range •(ทิว•เขา•แดน•ลาว), •in •the •southern •region •of •the •Shan •Hills, •in •a •\
+north/•south •direction, •the •Dawna •Range •(ทิว•เขา•ดอย•มอน•กุ•จู) •forming •the •western •border •of •Thailand •\
+between •Mae •Hong •Son •and •the •Salween •River, •the •Thanon •Thong •Chai •Range •(เทือก•เขา•ถนน•ธงชัย), •\
+the •Khun •Tan •Range •(ดอย•ขุน•ตาน), •the •Phi •Pan •Nam •Range •(ทิว•เขา•ผี•ปัน•น้ำ), •as •well •as •the •western •\
+part •of •the •Luang •Prabang •Range •(ทิว•เขา•หลวง•พระ•บาง).•</data>
+
 
 ########################################################################################
 #
@@ -1076,23 +1086,21 @@ Bangkok)•</data>
 # Finnish line breaking
 #
 # These rules deal with hyphens when there is a space on the leading side.
-# There should be a break opportunity between the space and the hyphen, and not after the hyphen.
+# When followed by a letter, there should be a break opportunity between
+# the space and the hyphen, and not after the hyphen.
 # See CLDR ticket 3029.
 # See ICU ticket 8151
+# As of ICU 63, the Finnish tailoring behavior is moved to root.
 
 <locale root>
 <line>
-<data>•abc •- •def    •abc •-•def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
-<data>•abc •‐ •def    •abc •‐•def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
+<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
+<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
 
 <locale fi>
 <line>
-# TODO: problems with Finnish line break rules cause these two lines to fail.
-#<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
-#<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
-
-<data>•abc •- •def    •abc •-def    •abc- •def   •</data>   # With ASCII hyphen
-<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •</data>   # With Unicode u2010 hyphen
+<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
+<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
 
 # Test for #10176 (in fi)
 <line>

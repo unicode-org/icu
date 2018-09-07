@@ -136,7 +136,9 @@ public class XLikelySubtags {
         //                //new UnicodeRegex().compileBnf(pat)
         //                );
         //
-        // TODO: fix this to check for format. Not required, since this is only called internally, but safer for the future.
+        // NOTE: Should we fix this to check for format?
+        // ANSWER: Not required, since this is only called internally. Moreover, we deliberately
+        // use invalid language tags ("x1", "x2", etc.) to represent pseudo-locales. See below.
         static LSR from(String languageIdentifier) {
             String[] parts = languageIdentifier.split("[-_]");
             if (parts.length < 1 || parts.length > 3) {
@@ -147,19 +149,64 @@ public class XLikelySubtags {
             String p3 = parts.length < 3 ? "" : parts[2];
             return p2.length() < 4 ? new LSR(lang, "", p2) : new LSR(lang, p2, p3);
 
-            //            Matcher matcher = LANGUAGE_PATTERN.matcher(languageIdentifier);
-            //            if (!matcher.matches()) {
-            //                return new LSR(matcher.group(1), matcher.group(2), matcher.group(3));
-            //            }
-            //            System.out.println(RegexUtilities.showMismatch(matcher, languageIdentifier));
-            //            throw new ICUException("invalid language id");
+            //        Matcher matcher = LANGUAGE_PATTERN.matcher(languageIdentifier);
+            //        if (!matcher.matches()) {
+            //            return new LSR(matcher.group(1), matcher.group(2), matcher.group(3));
+            //        }
+            //        System.out.println(RegexUtilities.showMismatch(matcher, languageIdentifier));
+            //        throw new ICUException("invalid language id");
+        }
+
+        private static final HashMap<ULocale, LSR> pseudoReplacements = new HashMap<ULocale, LSR>(11);
+
+        // Note code in XLocaledistance.java handle pseudo-regions XA, XB, and XC, making them
+        // very distant from any other locale. Similarly, it establishes that any of the
+        // invalid locales below ("x1", "x2", ..., "x7", and "x8-en") are very distant
+        // from any other locale.
+        static {
+      String[][] source = {
+        {"x-bork", "x1", "", ""},
+        {"x-elmer", "x2", "", ""},
+        {"x-hacker", "x3", "", ""},
+        {"x-piglatin", "x4", "", ""},
+        {"x-pirate", "x5", "", ""},
+        {"en-XA", "x6", "", ""},
+        {"en-PSACCENT", "x6", "", ""}, // Note: same as for ex-XA
+        {"ar-XB", "x7", "", ""},
+        {"ar-PSBIDI", "x7", "", ""}, // Note: same as for ar-XB
+        {"en-XC", "x8", "en", ""}, // Note: language is stored in LSR.script field
+        {"en-PSCRACK", "x8", "en", ""}, // Note: same as for en-XC
+      };
+            for (int i = 0; i < source.length; ++i) {
+                pseudoReplacements.put(new ULocale(source[i][0]),
+                    new LSR(source[i][1], source[i][2], source[i][3]));
+            }
+
         }
 
         public static LSR from(ULocale locale) {
+            LSR replacement = pseudoReplacements.get(locale);
+            if (replacement != null) {
+                return replacement;
+            }
+            // Map *-*-*-PSCRACK to x8-***, same as for en-PSCRACK.
+            if ("PSCRACK".equals(locale.getVariant())) {
+                return new LSR(
+                    "x8", locale.getLanguage() + locale.getScript() + locale.getCountry(), "");
+            }
             return new LSR(locale.getLanguage(), locale.getScript(), locale.getCountry());
         }
 
         public static LSR fromMaximalized(ULocale locale) {
+            LSR replacement = pseudoReplacements.get(locale);
+            if (replacement != null) {
+                return replacement;
+            }
+            // Map *-*-*-PSCRACK to x8-***, same as for en-PSCRACK.
+            if ("PSCRACK".equals(locale.getVariant())) {
+                return new LSR(
+                    "x8", locale.getLanguage() + locale.getScript() + locale.getCountry(), "");
+            }
             return fromMaximalized(locale.getLanguage(), locale.getScript(), locale.getCountry());
         }
 

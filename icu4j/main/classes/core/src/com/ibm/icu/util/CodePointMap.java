@@ -26,7 +26,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      */
     public enum RangeOption {
         /**
-         * getRange() enumerates all same-value ranges as stored in the trie.
+         * getRange() enumerates all same-value ranges as stored in the map.
          * Most users should use this option.
          *
          * @draft ICU 63
@@ -34,7 +34,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          */
         NORMAL,
         /**
-         * getRange() enumerates all same-value ranges as stored in the trie,
+         * getRange() enumerates all same-value ranges as stored in the map,
          * except that lead surrogates (U+D800..U+DBFF) are treated as having the
          * surrogateValue, which is passed to getRange() as a separate parameter.
          * The surrogateValue is not transformed via filter().
@@ -42,7 +42,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          *
          * <p>Most users should use NORMAL instead.
          *
-         * <p>This option is useful for tries that map surrogate code *units* to
+         * <p>This option is useful for maps that map surrogate code *units* to
          * special values optimized for UTF-16 string processing
          * or for special error behavior for unpaired surrogates,
          * but those values are not to be associated with the lead surrogate code *points*.
@@ -52,7 +52,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          */
         FIXED_LEAD_SURROGATES,
         /**
-         * getRange() enumerates all same-value ranges as stored in the trie,
+         * getRange() enumerates all same-value ranges as stored in the map,
          * except that all surrogates (U+D800..U+DFFF) are treated as having the
          * surrogateValue, which is passed to getRange() as a separate parameter.
          * The surrogateValue is not transformed via filter().
@@ -60,7 +60,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          *
          * <p>Most users should use NORMAL instead.
          *
-         * <p>This option is useful for tries that map surrogate code *units* to
+         * <p>This option is useful for maps that map surrogate code *units* to
          * special values optimized for UTF-16 string processing
          * or for special error behavior for unpaired surrogates,
          * but those values are not to be associated with the lead surrogate code *points*.
@@ -72,13 +72,13 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     }
 
     /**
-     * Callback function interface: Modifies a trie value.
+     * Callback function interface: Modifies a map value.
      * Optionally called by getRange().
      * The modified value will be returned by the getRange() function.
      *
      * <p>Can be used to ignore some of the value bits,
      * make a filter for one of several values,
-     * return a value index computed from the trie value, etc.
+     * return a value index computed from the map value, etc.
      *
      * @see #getRange
      * @see #iterator
@@ -87,9 +87,9 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      */
     public interface ValueFilter {
         /**
-         * Modifies the trie value.
+         * Modifies the map value.
          *
-         * @param value trie value
+         * @param value map value
          * @return modified value
          * @draft ICU 63
          * @provisional This API might change or be removed in a future release.
@@ -183,7 +183,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     }
 
     /**
-     * Iterates over code points of a string and fetches trie values.
+     * Iterates over code points of a string and fetches map values.
      * This does not implement java.util.Iterator.
      *
      * <pre>
@@ -257,8 +257,8 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
 
         /**
          * Reads the next code point, post-increments the string index,
-         * and gets a value from the trie.
-         * Sets the trie error value if the code point is an unpaired surrogate.
+         * and gets a value from the map.
+         * Sets an implementation-defined error value if the code point is an unpaired surrogate.
          *
          * @return true if the string index was not yet at the end of the string;
          *         otherwise the iterator did not advance
@@ -277,8 +277,8 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
 
         /**
          * Reads the previous code point, pre-decrements the string index,
-         * and gets a value from the trie.
-         * Sets the trie error value if the code point is an unpaired surrogate.
+         * and gets a value from the map.
+         * Sets an implementation-defined error value if the code point is an unpaired surrogate.
          *
          * @return true if the string index was not yet at the start of the string;
          *         otherwise the iterator did not advance
@@ -307,8 +307,9 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
          */
         public final int getCodePoint() { return c; }
         /**
-         * @return the trie value,
-         *         or the trie error value if the code point is an unpaired surrogate
+         * @return the map value,
+         *         or an implementation-defined error value if
+         *         the code point is an unpaired surrogate
          * @draft ICU 63
          * @provisional This API might change or be removed in a future release.
          */
@@ -316,12 +317,13 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     }
 
     /**
-     * Returns the value for a code point as stored in the trie, with range checking.
-     * Returns the trie error value if c is not in the range 0..U+10FFFF.
+     * Returns the value for a code point as stored in the map, with range checking.
+     * Returns an implementation-defined error value if c is not in the range 0..U+10FFFF.
      *
      * @param c the code point
-     * @return the trie value,
-     *         or the trie error value if the code point is not in the range 0..U+10FFFF
+     * @return the map value,
+     *         or an implementation-defined error value if
+     *         the code point is not in the range 0..U+10FFFF
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
      */
@@ -329,10 +331,14 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
 
     /**
      * Sets the range object to a range of code points beginning with the start parameter.
-     * The range end is the the last code point such that
+     * The range start is the same as the start input parameter
+     * (even if there are preceding code points that have the same value).
+     * The range end is the last code point such that
      * all those from start to there have the same value.
      * Returns false if start is not 0..U+10FFFF.
-     * Can be used to efficiently iterate over all same-value ranges in a trie.
+     * Can be used to efficiently iterate over all same-value ranges in a map.
+     * (This is normally faster than iterating over code points and get()ting each value,
+     * but may be much slower than a data structure that stores ranges directly.)
      *
      * <p>If the {@link ValueFilter} parameter is not null, then
      * the value to be delivered is passed through that filter, and the return value is the end
@@ -343,7 +349,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * <pre>
      * int start = 0;
      * CodePointMap.Range range = new CodePointMap.Range();
-     * while (trie.getRange(start, null, range)) {
+     * while (map.getRange(start, null, range)) {
      *     int end = range.getEnd();
      *     int value = range.getValue();
      *     // Work with the range start..end and its value.
@@ -352,8 +358,8 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * </pre>
      *
      * @param start range start
-     * @param filter an object that may modify the trie data value,
-     *     or null if the values from the trie are to be used unmodified
+     * @param filter an object that may modify the map data value,
+     *     or null if the values from the map are to be used unmodified
      * @param range the range object that will be set to the code point range and value
      * @return true if start is 0..U+10FFFF; otherwise no new range is fetched
      * @draft ICU 63
@@ -363,7 +369,9 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
 
     /**
      * Sets the range object to a range of code points beginning with the start parameter.
-     * The range end is the the last code point such that
+     * The range start is the same as the start input parameter
+     * (even if there are preceding code points that have the same value).
+     * The range end is the last code point such that
      * all those from start to there have the same value.
      * Returns false if start is not 0..U+10FFFF.
      *
@@ -374,8 +382,8 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      * @param option defines whether surrogates are treated normally,
      *               or as having the surrogateValue; usually {@value RangeOption#NORMAL}
      * @param surrogateValue value for surrogates; ignored if option=={@value RangeOption#NORMAL}
-     * @param filter an object that may modify the trie data value,
-     *     or null if the values from the trie are to be used unmodified
+     * @param filter an object that may modify the map data value,
+     *     or null if the values from the map are to be used unmodified
      * @param range the range object that will be set to the code point range and value
      * @return true if start is 0..U+10FFFF; otherwise no new range is fetched
      * @draft ICU 63
@@ -428,10 +436,10 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     }
 
     /**
-     * Convenience iterator over same-trie-value code point ranges.
+     * Convenience iterator over same-map-value code point ranges.
      * Same as looping over all ranges with {@link #getRange(int, ValueFilter, Range)}
      * without filtering.
-     * Adjacent ranges have different trie values.
+     * Adjacent ranges have different map values.
      *
      * <p>The iterator always returns the same Range object.
      *
@@ -446,7 +454,7 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
 
     /**
      * Returns an iterator (not a java.util.Iterator) over code points of a string
-     * for fetching trie values.
+     * for fetching map values.
      *
      * @param s string to iterate over
      * @param sIndex string index where the iteration will start
