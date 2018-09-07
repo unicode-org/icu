@@ -79,6 +79,18 @@ U_CDECL_BEGIN
  * "About the Unicode Character Database" (http://www.unicode.org/ucd/)
  * and the ICU User Guide chapter on Properties (http://icu-project.org/userguide/properties.html).
  *
+ * Many properties are accessible via generic functions that take a UProperty selector.
+ * - u_hasBinaryProperty() returns a binary value (TRUE/FALSE) per property and code point.
+ * - u_getIntPropertyValue() returns an integer value per property and code point.
+ *   For each supported enumerated or catalog property, there is
+ *   an enum type for all of the property's values, and
+ *   u_getIntPropertyValue() returns the numeric values of those constants.
+ * - u_getBinaryPropertySet() returns a set for each ICU-supported binary property with
+ *   all code points for which the property is true.
+ * - u_getIntPropertyMap() returns a map for each
+ *   ICU-supported enumerated/catalog/int-valued property which
+ *   maps all Unicode code points to their values for that property.
+ *
  * Many functions are designed to match java.lang.Character functions.
  * See the individual function documentation,
  * and see the JDK 1.4 java.lang.Character documentation
@@ -2552,6 +2564,8 @@ u_hasBinaryProperty(UChar32 c, UProperty which);
  * The library retains ownership over the returned object.
  * Sets an error code if the property number is not one for a binary property.
  *
+ * The returned set contains all code points for which the property is true.
+ *
  * @param property UCHAR_BINARY_START..UCHAR_BINARY_LIMIT-1
  * @param pErrorCode an in/out ICU UErrorCode
  * @return the property as a set
@@ -2727,6 +2741,9 @@ u_getIntPropertyMaxValue(UProperty which);
  * Returns an immutable UCPMap for an enumerated/catalog/int-valued property.
  * The library retains ownership over the returned object.
  * Sets an error code if the property number is not one for an "int property".
+ *
+ * The returned object maps all Unicode code points to their values for that property.
+ * For documentation of the integer values see u_getIntPropertyValue().
  *
  * @param property UCHAR_INT_START..UCHAR_INT_LIMIT-1
  * @param pErrorCode an in/out ICU UErrorCode

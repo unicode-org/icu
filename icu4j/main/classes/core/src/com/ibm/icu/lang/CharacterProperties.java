@@ -10,7 +10,13 @@ import com.ibm.icu.util.CodePointTrie;
 import com.ibm.icu.util.MutableCodePointTrie;
 
 /**
- * Access to whole Unicode properties.
+ * Sets and maps for Unicode properties.
+ * The methods here return an object per property:
+ * A set for each ICU-supported binary property with all code points for which the property is true.
+ * A map for each ICU-supported enumerated/catalog/int-valued property
+ * which maps all Unicode code points to their values for that property.
+ *
+ * <p>For details see the method descriptions.
  * For lookup of property values by code point see class {@link UCharacter}.
  *
  * @draft ICU 63
@@ -100,6 +106,8 @@ public final class CharacterProperties {
      * Returns a frozen UnicodeSet for a binary property.
      * Throws an exception if the property number is not one for a binary property.
      *
+     * <p>The returned set contains all code points for which the property is true.
+     *
      * @param property {@link UProperty#BINARY_START}..{@link UProperty#BINARY_LIMIT}-1
      * @return the property as a set
      * @see UProperty
@@ -122,6 +130,9 @@ public final class CharacterProperties {
     /**
      * Returns an immutable CodePointMap for an enumerated/catalog/int-valued property.
      * Throws an exception if the property number is not one for an "int property".
+     *
+     * <p>The returned object maps all Unicode code points to their values for that property.
+     * For documentation of the integer values see {@link UCharacter#getIntPropertyValue(int, int)}.
      *
      * <p>The actual type of the returned object differs between properties
      * and may change over time.

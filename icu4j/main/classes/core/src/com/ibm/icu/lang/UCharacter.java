@@ -5802,8 +5802,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *        UProperty.MASK_START &lt;= type &lt; UProperty.MASK_LIMIT.
      * @return numeric value that is directly the property value or,
      *         for enumerated properties, corresponds to the numeric value of
-     *         the enumerated constant of the respective property value
-     *         enumeration type (cast to enum type if necessary).
+     *         the enumerated constant of the respective property value type
+     *         ({@link ECharacterCategory}, {@link ECharacterDirection},
+     *         {@link DecompositionType}, etc.).
      *         Returns 0 or 1 (for false / true) for binary Unicode properties.
      *         Returns a bit-mask for mask properties.
      *         Returns 0 if 'type' is out of bounds or if the Unicode version
