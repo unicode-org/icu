@@ -13,6 +13,7 @@
 #include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "indiancal.h"
 #include "uparse.h"
 #include "unicode/localpointer.h"
 #include "unicode/resbund.h"
@@ -82,6 +83,7 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
     TESTCASE_AUTO(TestBreakTranslit);
     TESTCASE_AUTO(TestIncDec);
 #endif /* #if !UCONFIG_NO_TRANSLITERATION */
+    TESTCASE_AUTO(Test20104);
     TESTCASE_AUTO_END
 }
 
@@ -1546,6 +1548,36 @@ void MultithreadTest::TestIncDec()
         thread.join();
     }
     assertEquals("TestIncDec", NUM_THREADS, gIncDecCounter);
+}
+
+
+Calendar  *gSharedCalendar = {};
+
+class Test20104Thread : public SimpleThread {
+public:
+    Test20104Thread() { };
+    virtual void run();
+};
+
+void Test20104Thread::run() {
+    gSharedCalendar->defaultCenturyStartYear();
+}
+
+void MultithreadTest::Test20104() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale loc("hi_IN");
+    gSharedCalendar = new IndianCalendar(loc, status);
+    assertSuccess("Test20104", status);
+
+    static constexpr int NUM_THREADS = 4;
+    Test20104Thread threads[NUM_THREADS];
+    for (auto &thread:threads) {
+        thread.start();
+    }
+    for (auto &thread:threads) {
+        thread.join();
+    }
+    // Note: failure is reported by Thread Sanitizer. Test itself succeeds.
 }
 
 
