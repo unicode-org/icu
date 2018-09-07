@@ -444,7 +444,7 @@ Locale& Locale::operator=(const Locale& other) {
 
     if (other.baseName == other.fullName) {
       baseName = fullName;
-    } else {
+    } else if (other.baseName != nullptr) {
       baseName = uprv_strdup(other.baseName);
       if (baseName == nullptr) return *this;
     }
