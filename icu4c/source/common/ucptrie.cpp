@@ -247,7 +247,7 @@ namespace {
 constexpr int32_t MAX_UNICODE = 0x10ffff;
 
 inline uint32_t maybeFilterValue(uint32_t value, uint32_t trieNullValue, uint32_t nullValue,
-                                 UCPTrieValueFilter *filter, const void *context) {
+                                 UCPMapValueFilter *filter, const void *context) {
     if (value == trieNullValue) {
         value = nullValue;
     } else if (filter != nullptr) {
@@ -257,7 +257,7 @@ inline uint32_t maybeFilterValue(uint32_t value, uint32_t trieNullValue, uint32_
 }
 
 UChar32 getRange(const void *t, UChar32 start,
-                 UCPTrieValueFilter *filter, const void *context, uint32_t *pValue) {
+                 UCPMapValueFilter *filter, const void *context, uint32_t *pValue) {
     if ((uint32_t)start > MAX_UNICODE) {
         return U_SENTINEL;
     }
@@ -403,9 +403,9 @@ UChar32 getRange(const void *t, UChar32 start,
 U_CFUNC UChar32
 ucptrie_internalGetRange(UCPTrieGetRange *getRange,
                          const void *trie, UChar32 start,
-                         UCPTrieRangeOption option, uint32_t surrogateValue,
-                         UCPTrieValueFilter *filter, const void *context, uint32_t *pValue) {
-    if (option == UCPTRIE_RANGE_NORMAL) {
+                         UCPMapRangeOption option, uint32_t surrogateValue,
+                         UCPMapValueFilter *filter, const void *context, uint32_t *pValue) {
+    if (option == UCPMAP_RANGE_NORMAL) {
         return getRange(trie, start, filter, context, pValue);
     }
     uint32_t value;
@@ -413,7 +413,7 @@ ucptrie_internalGetRange(UCPTrieGetRange *getRange,
         // We need to examine the range value even if the caller does not want it.
         pValue = &value;
     }
-    UChar32 surrEnd = option == UCPTRIE_RANGE_FIXED_ALL_SURROGATES ? 0xdfff : 0xdbff;
+    UChar32 surrEnd = option == UCPMAP_RANGE_FIXED_ALL_SURROGATES ? 0xdfff : 0xdbff;
     UChar32 end = getRange(trie, start, filter, context, pValue);
     if (end < 0xd7ff || start > surrEnd) {
         return end;
@@ -448,8 +448,8 @@ ucptrie_internalGetRange(UCPTrieGetRange *getRange,
 
 U_CAPI UChar32 U_EXPORT2
 ucptrie_getRange(const UCPTrie *trie, UChar32 start,
-                 UCPTrieRangeOption option, uint32_t surrogateValue,
-                 UCPTrieValueFilter *filter, const void *context, uint32_t *pValue) {
+                 UCPMapRangeOption option, uint32_t surrogateValue,
+                 UCPMapValueFilter *filter, const void *context, uint32_t *pValue) {
     return ucptrie_internalGetRange(getRange, trie, start,
                                     option, surrogateValue,
                                     filter, context, pValue);
@@ -571,3 +571,20 @@ ucptrie_printLengths(const UCPTrie *trie, const char *which) {
 #endif
 
 }  // namespace
+
+// UCPMap ----
+// Initially, this is the same as UCPTrie. This may well change.
+
+U_CAPI uint32_t U_EXPORT2
+ucpmap_get(const UCPMap *map, UChar32 c) {
+    return ucptrie_get(reinterpret_cast<const UCPTrie *>(map), c);
+}
+
+U_CAPI UChar32 U_EXPORT2
+ucpmap_getRange(const UCPMap *map, UChar32 start,
+                UCPMapRangeOption option, uint32_t surrogateValue,
+                UCPMapValueFilter *filter, const void *context, uint32_t *pValue) {
+    return ucptrie_getRange(reinterpret_cast<const UCPTrie *>(map), start,
+                            option, surrogateValue,
+                            filter, context, pValue);
+}

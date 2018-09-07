@@ -107,11 +107,11 @@ static UChar32 iterStarts[] = {
 
 static void
 testTrieGetRanges(const char *testName, const UCPTrie *trie, const UMutableCPTrie *mutableTrie,
-                  UCPTrieRangeOption option, uint32_t surrValue,
+                  UCPMapRangeOption option, uint32_t surrValue,
                   const CheckRange checkRanges[], int32_t countCheckRanges) {
     const char *const typeName = trie == NULL ? "mutableTrie" : "trie";
-    const char *const optionName = option == UCPTRIE_RANGE_NORMAL ? "normal" :
-        option == UCPTRIE_RANGE_FIXED_LEAD_SURROGATES ? "fixedLeadSurr" : "fixedAllSurr";
+    const char *const optionName = option == UCPMAP_RANGE_NORMAL ? "normal" :
+        option == UCPMAP_RANGE_FIXED_LEAD_SURROGATES ? "fixedLeadSurr" : "fixedAllSurr";
     char name[80];
     int32_t s;
     for (s = 0; s < UPRV_LENGTHOF(iterStarts); ++s) {
@@ -690,7 +690,7 @@ testTrie(const char *testName, const UCPTrie *trie,
          UCPTrieType type, UCPTrieValueWidth valueWidth,
          const CheckRange checkRanges[], int32_t countCheckRanges) {
     testTrieGetters(testName, trie, type, valueWidth, checkRanges, countCheckRanges);
-    testTrieGetRanges(testName, trie, NULL, UCPTRIE_RANGE_NORMAL, 0, checkRanges, countCheckRanges);
+    testTrieGetRanges(testName, trie, NULL, UCPMAP_RANGE_NORMAL, 0, checkRanges, countCheckRanges);
     if (type == UCPTRIE_TYPE_FAST) {
         testTrieUTF16(testName, trie, valueWidth, checkRanges, countCheckRanges);
         testTrieUTF8(testName, trie, valueWidth, checkRanges, countCheckRanges);
@@ -701,7 +701,7 @@ static void
 testBuilder(const char *testName, const UMutableCPTrie *mutableTrie,
             const CheckRange checkRanges[], int32_t countCheckRanges) {
     testBuilderGetters(testName, mutableTrie, checkRanges, countCheckRanges);
-    testTrieGetRanges(testName, NULL, mutableTrie, UCPTRIE_RANGE_NORMAL, 0, checkRanges, countCheckRanges);
+    testTrieGetRanges(testName, NULL, mutableTrie, UCPMAP_RANGE_NORMAL, 0, checkRanges, countCheckRanges);
 }
 
 static uint32_t storage[120000];
@@ -1366,7 +1366,7 @@ MuchDataTest(void) {
 }
 
 static void testGetRangesFixedSurr(const char *testName, const UMutableCPTrie *mutableTrie,
-                                   UCPTrieRangeOption option,
+                                   UCPMapRangeOption option,
                                    const CheckRange checkRanges[], int32_t countCheckRanges) {
     testTrieGetRanges(testName, NULL, mutableTrie, option, 5, checkRanges, countCheckRanges);
     UErrorCode errorCode = U_ZERO_ERROR;
@@ -1454,9 +1454,9 @@ TrieTestGetRangesFixedSurr(void) {
     if (mutableTrie == NULL) {
         return;
     }
-    testGetRangesFixedSurr("fixedLeadSurr1", mutableTrie, UCPTRIE_RANGE_FIXED_LEAD_SURROGATES,
+    testGetRangesFixedSurr("fixedLeadSurr1", mutableTrie, UCPMAP_RANGE_FIXED_LEAD_SURROGATES,
                            checkRangesFixedLeadSurr1, UPRV_LENGTHOF(checkRangesFixedLeadSurr1));
-    testGetRangesFixedSurr("fixedAllSurr1", mutableTrie, UCPTRIE_RANGE_FIXED_ALL_SURROGATES,
+    testGetRangesFixedSurr("fixedAllSurr1", mutableTrie, UCPMAP_RANGE_FIXED_ALL_SURROGATES,
                            checkRangesFixedAllSurr1, UPRV_LENGTHOF(checkRangesFixedAllSurr1));
     // Setting a range in the middle of lead surrogates makes no difference.
     umutablecptrie_setRange(mutableTrie, 0xd844, 0xd899, 5, &errorCode);
@@ -1465,7 +1465,7 @@ TrieTestGetRangesFixedSurr(void) {
         umutablecptrie_close(mutableTrie);
         return;
     }
-    testGetRangesFixedSurr("fixedLeadSurr2", mutableTrie, UCPTRIE_RANGE_FIXED_LEAD_SURROGATES,
+    testGetRangesFixedSurr("fixedLeadSurr2", mutableTrie, UCPMAP_RANGE_FIXED_LEAD_SURROGATES,
                            checkRangesFixedLeadSurr1, UPRV_LENGTHOF(checkRangesFixedLeadSurr1));
     // Bridge the gap before the lead surrogates.
     umutablecptrie_set(mutableTrie, 0xd7ff, 5, &errorCode);
@@ -1474,9 +1474,9 @@ TrieTestGetRangesFixedSurr(void) {
         umutablecptrie_close(mutableTrie);
         return;
     }
-    testGetRangesFixedSurr("fixedLeadSurr3", mutableTrie, UCPTRIE_RANGE_FIXED_LEAD_SURROGATES,
+    testGetRangesFixedSurr("fixedLeadSurr3", mutableTrie, UCPMAP_RANGE_FIXED_LEAD_SURROGATES,
                            checkRangesFixedLeadSurr3, UPRV_LENGTHOF(checkRangesFixedLeadSurr3));
-    testGetRangesFixedSurr("fixedAllSurr3", mutableTrie, UCPTRIE_RANGE_FIXED_ALL_SURROGATES,
+    testGetRangesFixedSurr("fixedAllSurr3", mutableTrie, UCPMAP_RANGE_FIXED_ALL_SURROGATES,
                            checkRangesFixedAllSurr3, UPRV_LENGTHOF(checkRangesFixedAllSurr3));
     // Bridge the gap after the trail surrogates.
     umutablecptrie_set(mutableTrie, 0xe000, 5, &errorCode);
@@ -1485,7 +1485,7 @@ TrieTestGetRangesFixedSurr(void) {
         umutablecptrie_close(mutableTrie);
         return;
     }
-    testGetRangesFixedSurr("fixedSurr4", mutableTrie, UCPTRIE_RANGE_FIXED_ALL_SURROGATES,
+    testGetRangesFixedSurr("fixedSurr4", mutableTrie, UCPMAP_RANGE_FIXED_ALL_SURROGATES,
                            checkRangesFixedSurr4, UPRV_LENGTHOF(checkRangesFixedSurr4));
     umutablecptrie_close(mutableTrie);
 }

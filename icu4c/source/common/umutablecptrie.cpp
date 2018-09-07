@@ -70,10 +70,11 @@ public:
 
     MutableCodePointTrie &operator=(const MutableCodePointTrie &other) = delete;
 
+    static MutableCodePointTrie *fromUCPMap(const UCPMap *map, UErrorCode &errorCode);
     static MutableCodePointTrie *fromUCPTrie(const UCPTrie *trie, UErrorCode &errorCode);
 
     uint32_t get(UChar32 c) const;
-    int32_t getRange(UChar32 start, UCPTrieValueFilter *filter, const void *context,
+    int32_t getRange(UChar32 start, UCPMapValueFilter *filter, const void *context,
                      uint32_t *pValue) const;
 
     void set(UChar32 c, uint32_t value, UErrorCode &errorCode);
@@ -171,6 +172,36 @@ MutableCodePointTrie::~MutableCodePointTrie() {
     uprv_free(index16);
 }
 
+MutableCodePointTrie *MutableCodePointTrie::fromUCPMap(const UCPMap *map, UErrorCode &errorCode) {
+    // Use the highValue as the initialValue to reduce the highStart.
+    uint32_t errorValue = ucpmap_get(map, -1);
+    uint32_t initialValue = ucpmap_get(map, 0x10ffff);
+    LocalPointer<MutableCodePointTrie> mutableTrie(
+        new MutableCodePointTrie(initialValue, errorValue, errorCode),
+        errorCode);
+    if (U_FAILURE(errorCode)) {
+        return nullptr;
+    }
+    UChar32 start = 0, end;
+    uint32_t value;
+    while ((end = ucpmap_getRange(map, start, UCPMAP_RANGE_NORMAL, 0,
+                                  nullptr, nullptr, &value)) >= 0) {
+        if (value != initialValue) {
+            if (start == end) {
+                mutableTrie->set(start, value, errorCode);
+            } else {
+                mutableTrie->setRange(start, end, value, errorCode);
+            }
+        }
+        start = end + 1;
+    }
+    if (U_SUCCESS(errorCode)) {
+        return mutableTrie.orphan();
+    } else {
+        return nullptr;
+    }
+}
+
 MutableCodePointTrie *MutableCodePointTrie::fromUCPTrie(const UCPTrie *trie, UErrorCode &errorCode) {
     // Use the highValue as the initialValue to reduce the highStart.
     uint32_t errorValue;
@@ -201,7 +232,7 @@ MutableCodePointTrie *MutableCodePointTrie::fromUCPTrie(const UCPTrie *trie, UEr
     }
     UChar32 start = 0, end;
     uint32_t value;
-    while ((end = ucptrie_getRange(trie, start, UCPTRIE_RANGE_NORMAL, 0,
+    while ((end = ucptrie_getRange(trie, start, UCPMAP_RANGE_NORMAL, 0,
                                    nullptr, nullptr, &value)) >= 0) {
         if (value != initialValue) {
             if (start == end) {
@@ -244,7 +275,7 @@ uint32_t MutableCodePointTrie::get(UChar32 c) const {
 }
 
 inline uint32_t maybeFilterValue(uint32_t value, uint32_t initialValue, uint32_t nullValue,
-                                 UCPTrieValueFilter *filter, const void *context) {
+                                 UCPMapValueFilter *filter, const void *context) {
     if (value == initialValue) {
         value = nullValue;
     } else if (filter != nullptr) {
@@ -254,7 +285,7 @@ inline uint32_t maybeFilterValue(uint32_t value, uint32_t initialValue, uint32_t
 }
 
 UChar32 MutableCodePointTrie::getRange(
-        UChar32 start, UCPTrieValueFilter *filter, const void *context,
+        UChar32 start, UCPMapValueFilter *filter, const void *context,
         uint32_t *pValue) const {
     if ((uint32_t)start > MAX_UNICODE) {
         return U_SENTINEL;
@@ -1566,6 +1597,18 @@ umutablecptrie_close(UMutableCPTrie *trie) {
 }
 
 U_CAPI UMutableCPTrie * U_EXPORT2
+umutablecptrie_fromUCPMap(const UCPMap *map, UErrorCode *pErrorCode) {
+    if (U_FAILURE(*pErrorCode)) {
+        return nullptr;
+    }
+    if (map == nullptr) {
+        *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
+    }
+    return reinterpret_cast<UMutableCPTrie *>(MutableCodePointTrie::fromUCPMap(map, *pErrorCode));
+}
+
+U_CAPI UMutableCPTrie * U_EXPORT2
 umutablecptrie_fromUCPTrie(const UCPTrie *trie, UErrorCode *pErrorCode) {
     if (U_FAILURE(*pErrorCode)) {
         return nullptr;
@@ -1585,7 +1628,7 @@ umutablecptrie_get(const UMutableCPTrie *trie, UChar32 c) {
 namespace {
 
 UChar32 getRange(const void *trie, UChar32 start,
-                 UCPTrieValueFilter *filter, const void *context, uint32_t *pValue) {
+                 UCPMapValueFilter *filter, const void *context, uint32_t *pValue) {
     return reinterpret_cast<const MutableCodePointTrie *>(trie)->
         getRange(start, filter, context, pValue);
 }
@@ -1594,8 +1637,8 @@ UChar32 getRange(const void *trie, UChar32 start,
 
 U_CAPI UChar32 U_EXPORT2
 umutablecptrie_getRange(const UMutableCPTrie *trie, UChar32 start,
-                        UCPTrieRangeOption option, uint32_t surrogateValue,
-                        UCPTrieValueFilter *filter, const void *context, uint32_t *pValue) {
+                        UCPMapRangeOption option, uint32_t surrogateValue,
+                        UCPMapValueFilter *filter, const void *context, uint32_t *pValue) {
     return ucptrie_internalGetRange(getRange, trie, start,
                                     option, surrogateValue,
                                     filter, context, pValue);

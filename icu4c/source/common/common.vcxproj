@@ -268,6 +268,7 @@
     <ClCompile Include="ruleiter.cpp" />
     <ClCompile Include="ucase.cpp" />
     <ClCompile Include="uchar.cpp" />
+    <ClCompile Include="characterproperties.cpp" />
     <ClCompile Include="unames.cpp" />
     <ClCompile Include="unifiedcache.cpp" />
     <ClCompile Include="unifilt.cpp" />

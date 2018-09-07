@@ -5698,7 +5698,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * {@icu} <p>Check a binary Unicode property for a code point.
+     * {@icu} Check a binary Unicode property for a code point.
      * <p>Unicode, especially in version 3.2, defines many more properties
      * than the original set in UnicodeData.txt.
      * <p>This API is intended to reflect Unicode properties as defined in
@@ -5720,6 +5720,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *         Unicode version does not have data for the property at all, or
      *         not for this code point.
      * @see com.ibm.icu.lang.UProperty
+     * @see CharacterProperties#getBinaryPropertySet(int)
      * @stable ICU 2.6
      */
     public static boolean hasBinaryProperty(int ch, int property)
@@ -5777,7 +5778,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     }
 
     /**
-     * {@icu} <p>Returns the property value for an Unicode property type of a code point.
+     * {@icu} Returns the property value for a Unicode property type of a code point.
      * Also returns binary and mask property values.
      * <p>Unicode, especially in version 3.2, defines many more properties than
      * the original set in UnicodeData.txt.
@@ -5801,8 +5802,9 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      *        UProperty.MASK_START &lt;= type &lt; UProperty.MASK_LIMIT.
      * @return numeric value that is directly the property value or,
      *         for enumerated properties, corresponds to the numeric value of
-     *         the enumerated constant of the respective property value
-     *         enumeration type (cast to enum type if necessary).
+     *         the enumerated constant of the respective property value type
+     *         ({@link ECharacterCategory}, {@link ECharacterDirection},
+     *         {@link DecompositionType}, etc.).
      *         Returns 0 or 1 (for false / true) for binary Unicode properties.
      *         Returns a bit-mask for mask properties.
      *         Returns 0 if 'type' is out of bounds or if the Unicode version
@@ -5812,6 +5814,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * @see #hasBinaryProperty
      * @see #getIntPropertyMinValue
      * @see #getIntPropertyMaxValue
+     * @see CharacterProperties#getIntPropertyMap(int)
      * @see #getUnicodeVersion
      * @stable ICU 2.4
      */
