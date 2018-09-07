@@ -139,23 +139,23 @@ CharStringByteSink::GetAppendBuffer(int32_t min_capacity,
                                     char* scratch,
                                     int32_t scratch_capacity,
                                     int32_t* result_capacity) {
-  if (min_capacity < 1 || scratch_capacity < min_capacity) {
-    *result_capacity = 0;
-    return nullptr;
-  }
+    if (min_capacity < 1 || scratch_capacity < min_capacity) {
+        *result_capacity = 0;
+        return nullptr;
+    }
 
-  UErrorCode status = U_ZERO_ERROR;
-  char* result = dest_.getAppendBuffer(
-          min_capacity,
-          desired_capacity_hint,
-          *result_capacity,
-          status);
-  if (U_SUCCESS(status)) {
-      return result;
-  }
+    UErrorCode status = U_ZERO_ERROR;
+    char* result = dest_.getAppendBuffer(
+            min_capacity,
+            desired_capacity_hint,
+            *result_capacity,
+            status);
+    if (U_SUCCESS(status)) {
+        return result;
+    }
 
-  *result_capacity = scratch_capacity;
-  return scratch;
+    *result_capacity = scratch_capacity;
+    return scratch;
 }
 
 U_NAMESPACE_END
