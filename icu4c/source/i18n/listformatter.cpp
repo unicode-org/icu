@@ -16,6 +16,7 @@
 *   created by: Umesh P. Nair
 */
 
+#include "cmemory.h"
 #include "unicode/fpositer.h"  // FieldPositionIterator
 #include "unicode/listformatter.h"
 #include "unicode/simpleformatter.h"
@@ -425,10 +426,8 @@ UnicodeString& ListFormatter::format_(
     }
     int32_t offsetFirst;
     int32_t offsetSecond;
-    int32_t *offsets = nullptr;
-    if (handler != nullptr) {
-        offsets = static_cast<int32_t *>(uprv_malloc(sizeof(int32_t) * nItems));
-    }
+    int32_t prefixLength = 0;
+    MaybeStackArray<int32_t, 10> offsets((handler != nullptr) ? nItems : 0);
     joinStringsAndReplace(
             nItems == 2 ? data->twoPattern : data->startPattern,
             result,
@@ -439,9 +438,10 @@ UnicodeString& ListFormatter::format_(
             &offsetFirst,
             &offsetSecond,
             errorCode);
-    if (offsets != nullptr) {
+    if (handler != nullptr) {
+        prefixLength += offsetFirst;
         offsets[0] = offsetFirst;
-        offsets[1] = offsetSecond;
+        offsets[1] = offsetSecond - prefixLength;
     }
     if (nItems > 2) {
         for (int32_t i = 2; i < nItems - 1; ++i) {
@@ -455,13 +455,9 @@ UnicodeString& ListFormatter::format_(
                      &offsetFirst,
                      &offsetSecond,
                      errorCode);
-            if (offsets != nullptr) {
-                offsets[i] = offsetSecond;
-                // Adjust the offset since the joinStringsAndReplace may shift
-                // the starting point of the first item depending on the pattern.
-                for (int32_t j = 0; j < i - 1; ++j) {
-                    offsets[j] += offsetFirst;
-                }
+            if (handler != nullptr) {
+                prefixLength += offsetFirst;
+                offsets[i] = offsetSecond - prefixLength;
             }
         }
         joinStringsAndReplace(
@@ -474,19 +470,15 @@ UnicodeString& ListFormatter::format_(
                 &offsetFirst,
                 &offsetSecond,
                 errorCode);
-        if (offsets != nullptr) {
-            offsets[nItems - 1] = offsetSecond;
-            // Adjust the offset since the joinStringsAndReplace may shift
-            // the starting point of the first item depending on the pattern.
-            for (int32_t j = 0; j < nItems - 1; ++j) {
-                offsets[j] += offsetFirst;
-            }
+        if (handler != nullptr) {
+            prefixLength += offsetFirst;
+            offsets[nItems - 1] = offsetSecond - prefixLength;
         }
     }
-    if (offsets != nullptr && handler != nullptr) {
+    if (handler != nullptr) {
         // If there are already some data in appendTo, we need to adjust the index
         // by shifting that lenght while insert into handler.
-        int32_t shift = appendTo.length();
+        int32_t shift = appendTo.length() + prefixLength;
         int32_t lastAdded = 0;
         for (int32_t i = 0; i < nItems; ++i) {
             if (offsets[i] > lastAdded) {
@@ -509,7 +501,6 @@ UnicodeString& ListFormatter::format_(
                 shift + result.length());  // limit
         }
     }
-    uprv_free(offsets);
     if (U_SUCCESS(errorCode)) {
         if (offset >= 0) {
             offset += appendTo.length();

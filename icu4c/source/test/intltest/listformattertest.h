@@ -51,7 +51,12 @@ class ListFormatterTest : public IntlTest {
     void TestFieldPositionIteratorWith3ItemsAndDataBefore();
 
   private:
-    void CheckFormatting(const ListFormatter* formatter, UnicodeString data[], int32_t data_size, const UnicodeString& expected_result);
+    void CheckFormatting(
+        const ListFormatter* formatter,
+        UnicodeString data[],
+        int32_t data_size,
+        const UnicodeString& expected_result,
+        const char* testName);
     void ExpectPositions(FieldPositionIterator& iter, int32_t *values, int32_t tupleCount);
     void RunTestFieldPositionIteratorWithNItems(
         UnicodeString *data, int32_t n, int32_t *values, int32_t tupleCount,
@@ -62,14 +67,16 @@ class ListFormatterTest : public IntlTest {
         UnicodeString two,
         UnicodeString three,
         UnicodeString four,
-        UnicodeString results[4]);
+        UnicodeString results[4],
+        const char* testName);
     UBool RecordFourCases(
         const Locale& locale,
         UnicodeString one,
         UnicodeString two,
         UnicodeString three,
         UnicodeString four,
-        UnicodeString results[4]);
+        UnicodeString results[4],
+        const char* testName);
 
   private:
     // Reused test data.

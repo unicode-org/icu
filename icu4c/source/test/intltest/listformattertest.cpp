@@ -79,9 +79,9 @@ ListFormatterTest::ListFormatterTest() :
 }
 
 void ListFormatterTest::CheckFormatting(const ListFormatter* formatter, UnicodeString data[], int32_t dataSize,
-                                        const UnicodeString& expected_result) {
+                                        const UnicodeString& expected_result, const char* testName) {
     UnicodeString actualResult(prefix);
-    UErrorCode errorCode = U_ZERO_ERROR;
+    IcuTestErrorCode errorCode(*this, testName);
     formatter->format(data, dataSize, actualResult, errorCode);
     UnicodeString expectedStringWithPrefix = prefix + expected_result;
     if (expectedStringWithPrefix != actualResult) {
@@ -90,29 +90,29 @@ void ListFormatterTest::CheckFormatting(const ListFormatter* formatter, UnicodeS
 }
 
 void ListFormatterTest::CheckFourCases(const char* locale_string, UnicodeString one, UnicodeString two,
-        UnicodeString three, UnicodeString four, UnicodeString results[4]) {
-    UErrorCode errorCode = U_ZERO_ERROR;
+        UnicodeString three, UnicodeString four, UnicodeString results[4], const char* testName) {
+    IcuTestErrorCode errorCode(*this, testName);
     LocalPointer<ListFormatter> formatter(ListFormatter::createInstance(Locale(locale_string), errorCode));
     if (U_FAILURE(errorCode)) {
         dataerrln("ListFormatter::createInstance(Locale(\"%s\"), errorCode) failed in CheckFourCases: %s", locale_string, u_errorName(errorCode));
         return;
     }
     UnicodeString input1[] = {one};
-    CheckFormatting(formatter.getAlias(), input1, 1, results[0]);
+    CheckFormatting(formatter.getAlias(), input1, 1, results[0], testName);
 
     UnicodeString input2[] = {one, two};
-    CheckFormatting(formatter.getAlias(), input2, 2, results[1]);
+    CheckFormatting(formatter.getAlias(), input2, 2, results[1], testName);
 
     UnicodeString input3[] = {one, two, three};
-    CheckFormatting(formatter.getAlias(), input3, 3, results[2]);
+    CheckFormatting(formatter.getAlias(), input3, 3, results[2], testName);
 
     UnicodeString input4[] = {one, two, three, four};
-    CheckFormatting(formatter.getAlias(), input4, 4, results[3]);
+    CheckFormatting(formatter.getAlias(), input4, 4, results[3], testName);
 }
 
 UBool ListFormatterTest::RecordFourCases(const Locale& locale, UnicodeString one, UnicodeString two,
-        UnicodeString three, UnicodeString four, UnicodeString results[4])  {
-    UErrorCode errorCode = U_ZERO_ERROR;
+        UnicodeString three, UnicodeString four, UnicodeString results[4], const char* testName)  {
+    IcuTestErrorCode errorCode(*this, testName);
     LocalPointer<ListFormatter> formatter(ListFormatter::createInstance(locale, errorCode));
     if (U_FAILURE(errorCode)) {
         dataerrln("ListFormatter::createInstance(\"%s\", errorCode) failed in RecordFourCases: %s", locale.getName(), u_errorName(errorCode));
@@ -141,14 +141,14 @@ void ListFormatterTest::TestRoot() {
         one + ", " + two + ", " + three + ", " + four
     };
 
-    CheckFourCases("", one, two, three, four, results);
+    CheckFourCases("", one, two, three, four, results, "TestRoot()");
 }
 
 // Bogus locale should fallback to root.
 void ListFormatterTest::TestBogus() {
     UnicodeString results[4];
-    if (RecordFourCases(Locale::getDefault(), one, two, three, four, results)) {
-      CheckFourCases("ex_PY", one, two, three, four, results);
+    if (RecordFourCases(Locale::getDefault(), one, two, three, four, results, "TestBogus()")) {
+      CheckFourCases("ex_PY", one, two, three, four, results, "TestBogus()");
     }
 }
 
@@ -162,11 +162,11 @@ void ListFormatterTest::TestEnglish() {
         one + ", " + two + ", " + three + ", and " + four
     };
 
-    CheckFourCases("en", one, two, three, four, results);
+    CheckFourCases("en", one, two, three, four, results, "TestEnglish()");
 }
 
 void ListFormatterTest::Test9946() {
-    UErrorCode errorCode = U_ZERO_ERROR;
+    IcuTestErrorCode errorCode(*this, "Test9946()");
     LocalPointer<ListFormatter> formatter(ListFormatter::createInstance(Locale("en"), errorCode));
     if (U_FAILURE(errorCode)) {
         dataerrln(
@@ -197,7 +197,7 @@ void ListFormatterTest::TestEnglishUS() {
         one + ", " + two + ", " + three + ", and " + four
     };
 
-    CheckFourCases("en_US", one, two, three, four, results);
+    CheckFourCases("en_US", one, two, three, four, results, "TestEnglishUS()");
 }
 
 // Tests resource loading and inheritance when region sublocale
@@ -211,11 +211,11 @@ void ListFormatterTest::TestEnglishGB() {
         one + ", " + two + ", " + three + " and " + four
     };
 
-    CheckFourCases("en_GB", one, two, three, four, results);
+    CheckFourCases("en_GB", one, two, three, four, results, "TestEnglishGB()");
 }
 
 void ListFormatterTest::TestFieldPositionIteratorWontCrash() {
-    UErrorCode errorCode = U_ZERO_ERROR;
+    IcuTestErrorCode errorCode(*this, "TestFieldPositionIteratorWontCrash()");
     LocalPointer<ListFormatter> formatter(
         ListFormatter::createInstance(Locale("en"), errorCode));
     if (U_FAILURE(errorCode)) {
@@ -242,7 +242,7 @@ void ListFormatterTest::RunTestFieldPositionIteratorWithNItems(
         UnicodeString data[], int32_t n, int32_t expected[], int32_t tupleCount,
         UnicodeString& appendTo,
         const char* testName) {
-    UErrorCode errorCode = U_ZERO_ERROR;
+    IcuTestErrorCode errorCode(*this, testName);
     LocalPointer<ListFormatter> formatter(
         ListFormatter::createInstance(Locale("en"), errorCode));
     if (U_FAILURE(errorCode)) {
@@ -373,7 +373,7 @@ void ListFormatterTest::TestNynorsk() {
         one + ", " + two + ", " + three + " og " + four
     };
 
-    CheckFourCases("nn", one, two, three, four, results);
+    CheckFourCases("nn", one, two, three, four, results, "TestNynorsk()");
 }
 
 // Tests resource loading and inheritance when region sublocale
@@ -389,7 +389,7 @@ void ListFormatterTest::TestChineseTradHK() {
         one + comma_string + two + comma_string + three + and_string + four
     };
 
-    CheckFourCases("zh_Hant_HK", one, two, three, four, results);
+    CheckFourCases("zh_Hant_HK", one, two, three, four, results, "TestChineseTradHK()");
 }
 
 // Formatting in Russian.
@@ -403,7 +403,7 @@ void ListFormatterTest::TestRussian() {
         one + ", " + two + ", " + three + and_string + four
     };
 
-    CheckFourCases("ru", one, two, three, four, results);
+    CheckFourCases("ru", one, two, three, four, results, "TestRussian()");
 }
 
 // Formatting in Malayalam.
@@ -420,7 +420,7 @@ void ListFormatterTest::TestMalayalam() {
         one + ", " + two + ", " + three + ", " + four + total_string
     };
 
-    CheckFourCases("ml", one, two, three, four, results);
+    CheckFourCases("ml", one, two, three, four, results, "TestMalayalam()");
 }
 
 // Formatting in Zulu.
@@ -433,7 +433,7 @@ void ListFormatterTest::TestZulu() {
         one + ", " + two + ", " + three + ", ne-" + four
     };
 
-    CheckFourCases("zu", one, two, three, four, results);
+    CheckFourCases("zu", one, two, three, four, results, "TestZulu()");
 }
 
 void ListFormatterTest::TestOutOfOrderPatterns() {
@@ -444,22 +444,22 @@ void ListFormatterTest::TestOutOfOrderPatterns() {
         four + " in the last after " + three + " after " + two + " after the first " + one
     };
 
-    UErrorCode errorCode = U_ZERO_ERROR;
+    IcuTestErrorCode errorCode(*this, "TestOutOfOrderPatterns()");
     ListFormatData data("{1} after {0}", "{1} after the first {0}",
                         "{1} after {0}", "{1} in the last after {0}");
     ListFormatter formatter(data, errorCode);
 
     UnicodeString input1[] = {one};
-    CheckFormatting(&formatter, input1, 1, results[0]);
+    CheckFormatting(&formatter, input1, 1, results[0], "TestOutOfOrderPatterns()");
 
     UnicodeString input2[] = {one, two};
-    CheckFormatting(&formatter, input2, 2, results[1]);
+    CheckFormatting(&formatter, input2, 2, results[1], "TestOutOfOrderPatterns()");
 
     UnicodeString input3[] = {one, two, three};
-    CheckFormatting(&formatter, input3, 3, results[2]);
+    CheckFormatting(&formatter, input3, 3, results[2], "TestOutOfOrderPatterns()");
 
     UnicodeString input4[] = {one, two, three, four};
-    CheckFormatting(&formatter, input4, 4, results[3]);
+    CheckFormatting(&formatter, input4, 4, results[3], "TestOutOfOrderPatterns()");
 }
 
 void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
