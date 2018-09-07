@@ -128,7 +128,7 @@ CharStringByteSink::~CharStringByteSink() = default;
 
 void
 CharStringByteSink::Append(const char* bytes, int32_t n) {
-    UErrorCode status;
+    UErrorCode status = U_ZERO_ERROR;
     dest_.append(bytes, n, status);
     // Any errors are silently ignored.
 }
@@ -144,7 +144,7 @@ CharStringByteSink::GetAppendBuffer(int32_t min_capacity,
     return nullptr;
   }
 
-  UErrorCode status;
+  UErrorCode status = U_ZERO_ERROR;
   char* result = dest_.getAppendBuffer(
           min_capacity,
           desired_capacity_hint,
