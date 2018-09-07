@@ -1703,73 +1703,25 @@ The leftmost codepage (.xxx) wins.
 
     return posixID;
 
-#elif U_PLATFORM_USES_ONLY_WIN32_API
+#elif U_PLATFORM_HAS_WIN32_API
 #define POSIX_LOCALE_CAPACITY 64
     UErrorCode status = U_ZERO_ERROR;
-    char *correctedPOSIXLocale = 0;
+    char *correctedPOSIXLocale = nullptr;
 
     // If we have already figured this out just use the cached value
-    if (gCorrectedPOSIXLocale != NULL) {
+    if (gCorrectedPOSIXLocale != nullptr) {
         return gCorrectedPOSIXLocale;
     }
 
     // No cached value, need to determine the current value
-    static WCHAR windowsLocale[LOCALE_NAME_MAX_LENGTH];
-#if U_PLATFORM_HAS_WINUWP_API == 0 
-    // If not a Universal Windows App, we'll need user default language.
-    // Vista and above should use Locale Names instead of LCIDs
-    int length = GetUserDefaultLocaleName(windowsLocale, UPRV_LENGTHOF(windowsLocale));
-#else
-    // In a UWP app, we want the top language that the application and user agreed upon
-    ComPtr<ABI::Windows::Foundation::Collections::IVectorView<HSTRING>> languageList;
+    static WCHAR windowsLocale[LOCALE_NAME_MAX_LENGTH] = {};
+    int length = GetLocaleInfoEx(LOCALE_NAME_USER_DEFAULT, LOCALE_SNAME, windowsLocale, LOCALE_NAME_MAX_LENGTH);
 
-    ComPtr<ABI::Windows::Globalization::IApplicationLanguagesStatics> applicationLanguagesStatics;
-    HRESULT hr = GetActivationFactory(
-        HStringReference(RuntimeClass_Windows_Globalization_ApplicationLanguages).Get(),
-        &applicationLanguagesStatics);
-    if (SUCCEEDED(hr))
-    {
-        hr = applicationLanguagesStatics->get_Languages(&languageList);
-    }
-
-    if (FAILED(hr))
-    {
-        // If there is no application context, then use the top language from the user language profile
-        ComPtr<ABI::Windows::System::UserProfile::IGlobalizationPreferencesStatics> globalizationPreferencesStatics;
-        hr = GetActivationFactory(
-            HStringReference(RuntimeClass_Windows_System_UserProfile_GlobalizationPreferences).Get(),
-            &globalizationPreferencesStatics);
-        if (SUCCEEDED(hr))
-        {
-            hr = globalizationPreferencesStatics->get_Languages(&languageList);
-        }
-    }
-
-    // We have a list of languages, ICU knows one, so use the top one for our locale
-    HString topLanguage;
-    if (SUCCEEDED(hr))
-    {
-        hr = languageList->GetAt(0, topLanguage.GetAddressOf());
-    }
-
-    if (FAILED(hr))
-    {
-        // Unexpected, use en-US by default
-        if (gCorrectedPOSIXLocale == NULL) {
-            gCorrectedPOSIXLocale = "en_US";
-        }
-
-        return gCorrectedPOSIXLocale;
-    }
-
-    // ResolveLocaleName will get a likely subtags form consistent with Windows behavior.
-    int length = ResolveLocaleName(topLanguage.GetRawBuffer(NULL), windowsLocale, UPRV_LENGTHOF(windowsLocale));
-#endif
-    // Now we should have a Windows locale name that needs converted to the POSIX style,
-    if (length > 0)
+    // Now we should have a Windows locale name that needs converted to the POSIX style.
+    if (length > 0) // If length is 0, then the GetLocaleInfoEx failed.
     {
         // First we need to go from UTF-16 to char (and also convert from _ to - while we're at it.)
-        char modifiedWindowsLocale[LOCALE_NAME_MAX_LENGTH];
+        char modifiedWindowsLocale[LOCALE_NAME_MAX_LENGTH] = {};
 
         int32_t i;
         for (i = 0; i < UPRV_LENGTHOF(modifiedWindowsLocale); i++)
@@ -1817,7 +1769,7 @@ The leftmost codepage (.xxx) wins.
     }
 
     // If unable to find a locale we can agree upon, use en-US by default
-    if (gCorrectedPOSIXLocale == NULL) {
+    if (gCorrectedPOSIXLocale == nullptr) {
         gCorrectedPOSIXLocale = "en_US";
     }
     return gCorrectedPOSIXLocale;
