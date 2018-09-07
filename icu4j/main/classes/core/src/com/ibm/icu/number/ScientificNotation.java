@@ -296,8 +296,10 @@ public class ScientificNotation extends Notation implements Cloneable {
 
         @Override
         public int getCodePointCount() {
-            // This method is not used for strong modifiers.
-            throw new AssertionError();
+            // NOTE: This method is only called one place, NumberRangeFormatterImpl.
+            // The call site only cares about != 0 and != 1.
+            // Return a very large value so that if this method is used elsewhere, we should notice.
+            return 999;
         }
 
         @Override
@@ -315,10 +317,10 @@ public class ScientificNotation extends Notation implements Cloneable {
 
         @Override
         public boolean equalsModifier(Modifier other) {
-            if (!(other instanceof ScientificHandler)) {
+            if (!(other instanceof ScientificModifier)) {
                 return false;
             }
-            ScientificHandler _other = (ScientificHandler) other;
+            ScientificModifier _other = (ScientificModifier) other;
             // TODO: Check for locale symbols and settings as well? Could be less efficient.
             return exponent == _other.exponent;
         }

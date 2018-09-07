@@ -239,7 +239,7 @@ class NumberRangeFormatterImpl {
                     // Only collapse if the modifier is a unit.
                     // TODO: Make a better way to check for a unit?
                     // TODO: Handle case where the modifier has both notation and unit (compact currency)?
-                    if (mm.containsField(NumberFormat.Field.CURRENCY) && mm.containsField(NumberFormat.Field.PERCENT)) {
+                    if (!mm.containsField(NumberFormat.Field.CURRENCY) && !mm.containsField(NumberFormat.Field.PERCENT)) {
                         collapseMiddle = false;
                     }
                 } else if (fCollapse == RangeCollapse.AUTO) {
