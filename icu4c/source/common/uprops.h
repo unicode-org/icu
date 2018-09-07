@@ -459,6 +459,13 @@ U_NAMESPACE_BEGIN
 
 class UnicodeSet;
 
+class CharacterProperties {
+public:
+    CharacterProperties() = delete;
+    static void U_CALLCONV initInclusion(UPropertySource src, UErrorCode &errorCode);
+    static const UnicodeSet *getInclusionsForProperty(UProperty prop, UErrorCode &errorCode);
+};
+
 // implemented in uniset_props.cpp
 U_CFUNC UnicodeSet *
 uniset_getUnicode32Instance(UErrorCode &errorCode);

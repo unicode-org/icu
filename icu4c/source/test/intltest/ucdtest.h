@@ -46,6 +46,8 @@ public:
     void TestVerticalOrientation();
     void TestDefaultScriptExtensions();
     void TestInvalidCodePointFolding();
+    void TestBinaryCharacterProperties();
+    void TestIntCharacterProperties();
 
 private:
 

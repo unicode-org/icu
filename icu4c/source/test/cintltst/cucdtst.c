@@ -61,6 +61,8 @@ static void TestPropertyNames(void);
 static void TestPropertyValues(void);
 static void TestConsistency(void);
 static void TestCaseFolding(void);
+static void TestBinaryCharacterPropertiesAPI(void);
+static void TestIntCharacterPropertiesAPI(void);
 
 /* internal methods used */
 static int32_t MakeProp(char* str);
@@ -196,6 +198,10 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestPropertyValues, "tsutil/cucdtst/TestPropertyValues");
     addTest(root, &TestConsistency, "tsutil/cucdtst/TestConsistency");
     addTest(root, &TestCaseFolding, "tsutil/cucdtst/TestCaseFolding");
+    addTest(root, &TestBinaryCharacterPropertiesAPI,
+            "tsutil/cucdtst/TestBinaryCharacterPropertiesAPI");
+    addTest(root, &TestIntCharacterPropertiesAPI,
+            "tsutil/cucdtst/TestIntCharacterPropertiesAPI");
 }
 
 /*==================================================== */
@@ -3521,4 +3527,42 @@ TestCaseFolding() {
     }
 
     uset_close(data.notSeen);
+}
+
+static void TestBinaryCharacterPropertiesAPI() {
+    // API test only. See intltest/ucdtest.cpp for functional test.
+    UErrorCode errorCode = U_ZERO_ERROR;
+    const USet *set = u_getBinaryPropertySet(-1, &errorCode);
+    if (U_SUCCESS(errorCode)) {
+        log_err("u_getBinaryPropertySet(-1) did not fail\n");
+    }
+    errorCode = U_ZERO_ERROR;
+    set = u_getBinaryPropertySet(UCHAR_BINARY_LIMIT, &errorCode);
+    if (U_SUCCESS(errorCode)) {
+        log_err("u_getBinaryPropertySet(UCHAR_BINARY_LIMIT) did not fail\n");
+    }
+    errorCode = U_ZERO_ERROR;
+    set = u_getBinaryPropertySet(UCHAR_WHITE_SPACE, &errorCode);
+    if (!uset_contains(set, 0x20) || uset_contains(set, 0x61)) {
+        log_err("u_getBinaryPropertySet(UCHAR_WHITE_SPACE) wrong contents\n");
+    }
+}
+
+static void TestIntCharacterPropertiesAPI() {
+    // API test only. See intltest/ucdtest.cpp for functional test.
+    UErrorCode errorCode = U_ZERO_ERROR;
+    const UCPMap *map = u_getIntPropertyMap(UCHAR_INT_START - 1, &errorCode);
+    if (U_SUCCESS(errorCode)) {
+        log_err("u_getIntPropertyMap(UCHAR_INT_START - 1) did not fail\n");
+    }
+    errorCode = U_ZERO_ERROR;
+    map = u_getIntPropertyMap(UCHAR_INT_LIMIT, &errorCode);
+    if (U_SUCCESS(errorCode)) {
+        log_err("u_getIntPropertyMap(UCHAR_INT_LIMIT) did not fail\n");
+    }
+    errorCode = U_ZERO_ERROR;
+    map = u_getIntPropertyMap(UCHAR_GENERAL_CATEGORY, &errorCode);
+    if (ucpmap_get(map, 0x20) != U_SPACE_SEPARATOR || ucpmap_get(map, 0x23456) != U_OTHER_LETTER) {
+        log_err("u_getIntPropertyMap(UCHAR_GENERAL_CATEGORY) wrong contents\n");
+    }
 }

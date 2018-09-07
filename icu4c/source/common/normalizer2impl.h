@@ -30,6 +30,7 @@
 #include "unicode/utf.h"
 #include "unicode/utf16.h"
 #include "mutex.h"
+#include "udataswp.h"
 #include "uset_imp.h"
 
 // When the nfc.nrm data is *not* hardcoded into the common library

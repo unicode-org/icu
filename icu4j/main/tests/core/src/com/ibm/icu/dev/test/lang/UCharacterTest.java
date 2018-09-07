@@ -25,6 +25,7 @@ import com.ibm.icu.impl.Normalizer2Impl;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.UCharacterName;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.CharacterProperties;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UCharacterDirection;
@@ -35,6 +36,7 @@ import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.text.UnicodeSetIterator;
+import com.ibm.icu.util.CodePointMap;
 import com.ibm.icu.util.RangeValueIterator;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ValueIterator;
@@ -3640,5 +3642,68 @@ public final class UCharacterTest extends TestFmwk
         assertEquals("Wrong name alias", "LATIN CAPITAL LETTER GHA", alias);
         int output = UCharacter.getCharFromNameAlias(alias);
         assertEquals("alias for '" + input + "'", input, output);
+    }
+
+    @Test
+    public void TestBinaryCharacterProperties() {
+        try {
+            CharacterProperties.getBinaryPropertySet(-1);
+            fail("getBinaryPropertySet(-1) did not throw an exception");
+            CharacterProperties.getBinaryPropertySet(UProperty.BINARY_LIMIT);
+            fail("getBinaryPropertySet(BINARY_LIMIT) did not throw an exception");
+        } catch(Exception expected) {
+        }
+        // Spot-check getBinaryPropertySet() vs. hasBinaryProperty().
+        for (int prop = 0; prop < UProperty.BINARY_LIMIT; ++prop) {
+            UnicodeSet set = CharacterProperties.getBinaryPropertySet(prop);
+            int size = set.size();
+            if (size == 0) {
+                assertFalse("!hasBinaryProperty(U+0020, " + prop + ')',
+                        UCharacter.hasBinaryProperty(0x20, prop));
+                assertFalse("!hasBinaryProperty(U+0061, " + prop + ')',
+                        UCharacter.hasBinaryProperty(0x61, prop));
+                assertFalse("!hasBinaryProperty(U+4E00, " + prop + ')',
+                        UCharacter.hasBinaryProperty(0x4e00, prop));
+            } else {
+                int c = set.charAt(0);
+                if (c > 0) {
+                    assertFalse("!hasBinaryProperty(" + Utility.hex(c - 1) + ", " + prop + ')',
+                            UCharacter.hasBinaryProperty(c - 1, prop));
+                }
+                assertTrue("hasBinaryProperty(" + Utility.hex(c) + ", " + prop + ')',
+                        UCharacter.hasBinaryProperty(c, prop));
+                c = set.charAt(size - 1);
+                assertTrue("hasBinaryProperty(" + Utility.hex(c) + ", " + prop + ')',
+                        UCharacter.hasBinaryProperty(c, prop));
+                if (c < 0x10ffff) {
+                    assertFalse("!hasBinaryProperty(" + Utility.hex(c + 1) + ", " + prop + ')',
+                            UCharacter.hasBinaryProperty(c + 1, prop));
+                }
+            }
+        }
+    }
+
+    @Test
+    public void TestIntCharacterProperties() {
+        try {
+            CharacterProperties.getIntPropertyMap(UProperty.INT_START - 1);
+            fail("getIntPropertyMap(INT_START-1) did not throw an exception");
+            CharacterProperties.getIntPropertyMap(UProperty.INT_LIMIT);
+            fail("getIntPropertyMap(INT_LIMIT) did not throw an exception");
+        } catch(Exception expected) {
+        }
+        // Spot-check getIntPropertyMap() vs. getIntPropertyValue().
+        CodePointMap.Range range = new CodePointMap.Range();
+        for (int prop = UProperty.INT_START; prop < UProperty.INT_LIMIT; ++prop) {
+            CodePointMap map = CharacterProperties.getIntPropertyMap(prop);
+            assertTrue("int property first range", map.getRange(0, null, range));
+            int c = (range.getStart() + range.getEnd()) / 2;
+            assertEquals("int property first range value at " + Utility.hex(c),
+                    UCharacter.getIntPropertyValue(c, prop), range.getValue());
+            assertTrue("int property later range", map.getRange(0x5000, null, range));
+            int end = range.getEnd();
+            assertEquals("int property later range value at " + Utility.hex(end),
+                    UCharacter.getIntPropertyValue(end, prop), range.getValue());
+        }
     }
 }

@@ -1535,7 +1535,7 @@ public final class UCharacterProperty
         return -1; // undefined
     }
 
-    public final int getSource(int which) {
+    final int getSource(int which) {
         if(which<UProperty.BINARY_START) {
             return SRC_NONE; /* undefined */
         } else if(which<UProperty.BINARY_LIMIT) {

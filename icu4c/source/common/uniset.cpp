@@ -276,6 +276,10 @@ UnicodeSet::~UnicodeSet() {
  * Assigns this object to be a copy of another.
  */
 UnicodeSet& UnicodeSet::operator=(const UnicodeSet& o) {
+    return copyFrom(o, FALSE);
+}
+
+UnicodeSet& UnicodeSet::copyFrom(const UnicodeSet& o, UBool asThawed) {
     if (this == &o) {
         return *this;
     }
@@ -294,7 +298,7 @@ UnicodeSet& UnicodeSet::operator=(const UnicodeSet& o) {
     }
     len = o.len;
     uprv_memcpy(list, o.list, (size_t)len*sizeof(UChar32));
-    if (o.bmpSet == NULL) {
+    if (o.bmpSet == NULL || asThawed) {
         bmpSet = NULL;
     } else {
         bmpSet = new BMPSet(*o.bmpSet, list, len);
@@ -309,7 +313,7 @@ UnicodeSet& UnicodeSet::operator=(const UnicodeSet& o) {
         setToBogus();
         return *this;
     }
-    if (o.stringSpan == NULL) {
+    if (o.stringSpan == NULL || asThawed) {
         stringSpan = NULL;
     } else {
         stringSpan = new UnicodeSetStringSpan(*o.stringSpan, *strings);
