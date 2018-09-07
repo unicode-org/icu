@@ -431,29 +431,18 @@ Locale& Locale::operator=(const Locale& other) {
         return *this;
     }
 
-    if (fullName != fullNameBuffer) {
-        uprv_free(fullName);
-    }
+    setToBogus();
 
-    if (baseName != fullName) {
-        uprv_free(baseName);
-    }
-
-    baseName = fullName = fullNameBuffer;
-    fIsBogus = TRUE;
-
-    if (other.fullName == nullptr) {
-      fullName = nullptr;
-    } else if (other.fullName == other.fullNameBuffer) {
+    if (other.fullName == other.fullNameBuffer) {
       uprv_strcpy(fullNameBuffer, other.fullNameBuffer);
+    } else if (other.fullName == nullptr) {
+      fullName = nullptr;
     } else {
       fullName = uprv_strdup(other.fullName);
       if (fullName == nullptr) return *this;
     }
 
-    if (other.baseName == nullptr) {
-      baseName = nullptr;
-    } else if (other.baseName == other.fullName) {
+    if (other.baseName == other.fullName) {
       baseName = fullName;
     } else {
       baseName = uprv_strdup(other.baseName);
