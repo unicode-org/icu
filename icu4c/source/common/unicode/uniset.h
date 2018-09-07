@@ -584,8 +584,8 @@ public:
     //----------------------------------------------------------------
 
     /**
-     * Make this object represent the range <code>start - end</code>.
-     * If <code>end > start</code> then this object is set to an empty range.
+     * Make this object represent the range `start - end`.
+     * If `end > start` then this object is set to an empty range.
      * A frozen set will not be modified.
      *
      * @param start first character in the set, inclusive

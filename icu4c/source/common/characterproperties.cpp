@@ -5,6 +5,7 @@
 // created: 2018sep03 Markus W. Scherer
 
 #include "unicode/utypes.h"
+#include "unicode/localpointer.h"
 #include "unicode/uchar.h"
 #include "unicode/ucpmap.h"
 #include "unicode/ucptrie.h"
@@ -37,13 +38,9 @@ struct Inclusion {
 };
 Inclusion gInclusions[UPROPS_SRC_COUNT]; // cached getInclusions()
 
-UnicodeSet *sets[UCHAR_BINARY_LIMIT] = {
-    nullptr
-};
+UnicodeSet *sets[UCHAR_BINARY_LIMIT] = {};
 
-UCPMap *maps[UCHAR_INT_LIMIT - UCHAR_INT_START] = {
-    nullptr
-};
+UCPMap *maps[UCHAR_INT_LIMIT - UCHAR_INT_START] = {};
 
 UMutex cpMutex = U_MUTEX_INITIALIZER;
 
@@ -69,8 +66,7 @@ _set_addString(USet *set, const UChar *str, int32_t length) {
 }
 
 UBool U_CALLCONV characterproperties_cleanup() {
-    for (int32_t i = 0; i < UPRV_LENGTHOF(gInclusions); ++i) {
-        Inclusion &in = gInclusions[i];
+    for (Inclusion &in: gInclusions) {
         delete in.fSet;
         in.fSet = nullptr;
         in.fInitOnce.reset();
@@ -96,7 +92,7 @@ U_NAMESPACE_BEGIN
 Reduce excessive reallocation, and make it easier to detect initialization problems.
 Usually you don't see smaller sets than this for Unicode 5.0.
 */
-#define DEFAULT_INCLUSION_CAPACITY 3072
+constexpr int32_t DEFAULT_INCLUSION_CAPACITY = 3072;
 
 void U_CALLCONV CharacterProperties::initInclusion(UPropertySource src, UErrorCode &errorCode) {
     // This function is invoked only via umtx_initOnce().
@@ -224,8 +220,8 @@ namespace {
 
 UnicodeSet *makeSet(UProperty property, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return nullptr; }
-    UnicodeSet *set = new UnicodeSet();
-    if (set == nullptr) {
+    icu::LocalPointer<UnicodeSet> set(new UnicodeSet());
+    if (set.isNull()) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
@@ -255,7 +251,7 @@ UnicodeSet *makeSet(UProperty property, UErrorCode &errorCode) {
         set->add(startHasProperty, 0x10FFFF);
     }
     set->freeze();
-    return set;
+    return set.orphan();
 }
 
 UCPMap *makeMap(UProperty property, UErrorCode &errorCode) {
