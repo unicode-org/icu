@@ -65,7 +65,7 @@ void getNumberRangeData(const char* localeName, const char* nsName, NumberRangeD
     ures_getAllItemsWithFallback(rb.getAlias(), dataPath.data(), sink, status);
     if (U_FAILURE(status)) { return; }
 
-    // TODO: Is it necessary to maually fall back to latn, or does the data sink take care of that?
+    // TODO: Is it necessary to manually fall back to latn, or does the data sink take care of that?
 
     if (data.rangePattern.getArgumentLimit() == 0) {
         // No data!
@@ -107,11 +107,10 @@ void NumberRangeFormatterImpl::format(UFormattedNumberRangeData& data, bool equa
 
     MicroProps micros1;
     MicroProps micros2;
+    formatterImpl1.preProcess(data.quantity1, micros1, status);
     if (fSameFormatters) {
-        formatterImpl1.preProcess(data.quantity1, micros1, status);
         formatterImpl1.preProcess(data.quantity2, micros2, status);
     } else {
-        formatterImpl1.preProcess(data.quantity1, micros1, status);
         formatterImpl2.preProcess(data.quantity2, micros2, status);
     }
 
@@ -124,6 +123,7 @@ void NumberRangeFormatterImpl::format(UFormattedNumberRangeData& data, bool equa
             || !(*micros1.modMiddle == *micros2.modMiddle)
             || !(*micros1.modOuter == *micros2.modOuter)) {
         formatRange(data, micros1, micros2, status);
+        data.identityResult = UNUM_IDENTITY_RESULT_NOT_EQUAL;
         return;
     }
 
@@ -182,8 +182,8 @@ void NumberRangeFormatterImpl::formatSingleValue(UFormattedNumberRangeData& data
                                                  UErrorCode& status) const {
     if (U_FAILURE(status)) { return; }
     if (fSameFormatters) {
-        int32_t length = formatterImpl1.writeNumber(micros1, data.quantity1, data.string, 0, status);
-        formatterImpl1.writeAffixes(micros1, data.string, 0, length, status);
+        int32_t length = NumberFormatterImpl::writeNumber(micros1, data.quantity1, data.string, 0, status);
+        NumberFormatterImpl::writeAffixes(micros1, data.string, 0, length, status);
     } else {
         formatRange(data, micros1, micros2, status);
     }
@@ -195,8 +195,8 @@ void NumberRangeFormatterImpl::formatApproximately (UFormattedNumberRangeData& d
                                                     UErrorCode& status) const {
     if (U_FAILURE(status)) { return; }
     if (fSameFormatters) {
-        int32_t length = formatterImpl1.writeNumber(micros1, data.quantity1, data.string, 0, status);
-        length += formatterImpl1.writeAffixes(micros1, data.string, 0, length, status);
+        int32_t length = NumberFormatterImpl::writeNumber(micros1, data.quantity1, data.string, 0, status);
+        length += NumberFormatterImpl::writeAffixes(micros1, data.string, 0, length, status);
         fApproximatelyModifier.apply(data.string, 0, length, status);
     } else {
         formatRange(data, micros1, micros2, status);
@@ -242,9 +242,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
             // (could disable collapsing of the middle modifier)
             // The modifiers are equal by this point, so we can look at just one of them.
             const Modifier* mm = micros1.modMiddle;
-            if (mm == nullptr) {
-                // pass
-            } else if (fCollapse == UNUM_RANGE_COLLAPSE_UNIT) {
+            if (fCollapse == UNUM_RANGE_COLLAPSE_UNIT) {
                 // Only collapse if the modifier is a unit.
                 // TODO: Make a better way to check for a unit?
                 // TODO: Handle case where the modifier has both notation and unit (compact currency)?
@@ -321,6 +319,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
     // TODO: Support padding?
 
     if (collapseInner) {
+        // Note: this is actually a mix of prefix and suffix, but adding to infix length works
         lengthInfix += micros1.modInner->apply(string, UPRV_INDEX_0, UPRV_INDEX_3, status);
     } else {
         length1 += micros1.modInner->apply(string, UPRV_INDEX_0, UPRV_INDEX_1, status);
@@ -328,6 +327,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
     }
 
     if (collapseMiddle) {
+        // Note: this is actually a mix of prefix and suffix, but adding to infix length works
         lengthInfix += micros1.modMiddle->apply(string, UPRV_INDEX_0, UPRV_INDEX_3, status);
     } else {
         length1 += micros1.modMiddle->apply(string, UPRV_INDEX_0, UPRV_INDEX_1, status);
@@ -335,6 +335,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
     }
 
     if (collapseOuter) {
+        // Note: this is actually a mix of prefix and suffix, but adding to infix length works
         lengthInfix += micros1.modOuter->apply(string, UPRV_INDEX_0, UPRV_INDEX_3, status);
     } else {
         length1 += micros1.modOuter->apply(string, UPRV_INDEX_0, UPRV_INDEX_1, status);

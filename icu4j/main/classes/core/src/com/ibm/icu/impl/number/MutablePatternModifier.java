@@ -7,6 +7,7 @@ import com.ibm.icu.impl.number.AffixUtils.SymbolProvider;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.NumberFormatter.UnitWidth;
 import com.ibm.icu.text.DecimalFormatSymbols;
+import com.ibm.icu.text.NumberFormat.Field;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.Currency;
 
@@ -317,6 +318,20 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     @Override
     public boolean isStrong() {
         return isStrong;
+    }
+
+    @Override
+    public boolean containsField(Field field) {
+        // This method is not currently used. (unsafe path not used in range formatting)
+        assert false;
+        return false;
+    }
+
+    @Override
+    public boolean equalsModifier(Modifier other) {
+        // This method is not currently used. (unsafe path not used in range formatting)
+        assert false;
+        return false;
     }
 
     private int insertPrefix(NumberStringBuilder sb, int position) {

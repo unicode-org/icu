@@ -23,16 +23,16 @@ import com.ibm.icu.util.ICUUncheckedIOException;
  * @see NumberRangeFormatter
  */
 public class FormattedNumberRange {
-    final NumberStringBuilder nsb;
-    final DecimalQuantity first;
-    final DecimalQuantity second;
+    final NumberStringBuilder string;
+    final DecimalQuantity quantity1;
+    final DecimalQuantity quantity2;
     final RangeIdentityResult identityResult;
 
-    FormattedNumberRange(NumberStringBuilder nsb, DecimalQuantity first, DecimalQuantity second,
+    FormattedNumberRange(NumberStringBuilder string, DecimalQuantity quantity1, DecimalQuantity quantity2,
             RangeIdentityResult identityResult) {
-        this.nsb = nsb;
-        this.first = first;
-        this.second = second;
+        this.string = string;
+        this.quantity1 = quantity1;
+        this.quantity2 = quantity2;
         this.identityResult = identityResult;
     }
 
@@ -46,7 +46,7 @@ public class FormattedNumberRange {
      */
     @Override
     public String toString() {
-        return nsb.toString();
+        return string.toString();
     }
 
     /**
@@ -67,7 +67,7 @@ public class FormattedNumberRange {
      */
     public <A extends Appendable> A appendTo(A appendable) {
         try {
-            appendable.append(nsb);
+            appendable.append(string);
         } catch (IOException e) {
             // Throw as an unchecked exception to avoid users needing try/catch
             throw new ICUUncheckedIOException(e);
@@ -105,7 +105,7 @@ public class FormattedNumberRange {
      * @see NumberRangeFormatter
      */
     public boolean nextFieldPosition(FieldPosition fieldPosition) {
-        return nsb.nextFieldPosition(fieldPosition);
+        return string.nextFieldPosition(fieldPosition);
     }
 
     /**
@@ -124,7 +124,7 @@ public class FormattedNumberRange {
      * @see NumberRangeFormatter
      */
     public AttributedCharacterIterator toCharacterIterator() {
-        return nsb.toCharacterIterator();
+        return string.toCharacterIterator();
     }
 
     /**
@@ -138,7 +138,7 @@ public class FormattedNumberRange {
      * @see #getSecondBigDecimal
      */
     public BigDecimal getFirstBigDecimal() {
-        return first.toBigDecimal();
+        return quantity1.toBigDecimal();
     }
 
     /**
@@ -152,7 +152,7 @@ public class FormattedNumberRange {
      * @see #getFirstBigDecimal
      */
     public BigDecimal getSecondBigDecimal() {
-        return second.toBigDecimal();
+        return quantity2.toBigDecimal();
     }
 
     /**
@@ -180,8 +180,8 @@ public class FormattedNumberRange {
     public int hashCode() {
         // NumberStringBuilder and BigDecimal are mutable, so we can't call
         // #equals() or #hashCode() on them directly.
-        return Arrays.hashCode(nsb.toCharArray()) ^ Arrays.hashCode(nsb.toFieldArray())
-                ^ first.toBigDecimal().hashCode() ^ second.toBigDecimal().hashCode();
+        return Arrays.hashCode(string.toCharArray()) ^ Arrays.hashCode(string.toFieldArray())
+                ^ quantity1.toBigDecimal().hashCode() ^ quantity2.toBigDecimal().hashCode();
     }
 
     /**
@@ -201,9 +201,9 @@ public class FormattedNumberRange {
         // NumberStringBuilder and BigDecimal are mutable, so we can't call
         // #equals() or #hashCode() on them directly.
         FormattedNumberRange _other = (FormattedNumberRange) other;
-        return Arrays.equals(nsb.toCharArray(), _other.nsb.toCharArray())
-                && Arrays.equals(nsb.toFieldArray(), _other.nsb.toFieldArray())
-                && first.toBigDecimal().equals(_other.first.toBigDecimal())
-                && second.toBigDecimal().equals(_other.second.toBigDecimal());
+        return Arrays.equals(string.toCharArray(), _other.string.toCharArray())
+                && Arrays.equals(string.toFieldArray(), _other.string.toFieldArray())
+                && quantity1.toBigDecimal().equals(_other.quantity1.toBigDecimal())
+                && quantity2.toBigDecimal().equals(_other.quantity2.toBigDecimal());
     }
 }

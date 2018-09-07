@@ -82,9 +82,10 @@ int32_t ScientificModifier::getPrefixLength() const {
 }
 
 int32_t ScientificModifier::getCodePointCount() const {
-    // This method is not used for strong modifiers.
-    U_ASSERT(false);
-    return 0;
+    // NOTE: This method is only called one place, NumberRangeFormatterImpl.
+    // The call site only cares about != 0 and != 1.
+    // Return a very large value so that if this method is used elsewhere, we should notice.
+    return 999;
 }
 
 bool ScientificModifier::isStrong() const {

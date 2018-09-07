@@ -4,9 +4,6 @@ package com.ibm.icu.number;
 
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
-import com.ibm.icu.impl.number.NumberStringBuilder;
-import com.ibm.icu.impl.number.range.RangeMacroProps;
-import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityResult;
 
 /**
  * A NumberRangeFormatter that has a locale associated with it; this means .formatRange() methods are available.
@@ -17,6 +14,8 @@ import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityResult;
  * @see NumberRangeFormatter
  */
 public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<LocalizedNumberRangeFormatter> {
+
+    private volatile NumberRangeFormatterImpl fImpl;
 
     LocalizedNumberRangeFormatter(NumberRangeFormatterSettings<?> parent, int key, Object value) {
         super(parent, key, value);
@@ -85,28 +84,10 @@ public class LocalizedNumberRangeFormatter extends NumberRangeFormatterSettings<
     }
 
     FormattedNumberRange formatImpl(DecimalQuantity first, DecimalQuantity second, boolean equalBeforeRounding) {
-        // TODO: This is a placeholder implementation.
-        RangeMacroProps macros = resolve();
-        LocalizedNumberFormatter f1 , f2;
-        if (macros.formatter1 != null) {
-            f1 = macros.formatter1.locale(macros.loc);
-        } else {
-            f1 = NumberFormatter.withLocale(macros.loc);
+        if (fImpl == null) {
+            fImpl = new NumberRangeFormatterImpl(resolve());
         }
-        if (macros.formatter2 != null) {
-            f2 = macros.formatter2.locale(macros.loc);
-        } else {
-            f2 = NumberFormatter.withLocale(macros.loc);
-        }
-        FormattedNumber r1 = f1.format(first);
-        FormattedNumber r2 = f2.format(second);
-        NumberStringBuilder nsb = new NumberStringBuilder();
-        nsb.append(r1.nsb);
-        nsb.append(" --- ", null);
-        nsb.append(r2.nsb);
-        RangeIdentityResult identityResult = equalBeforeRounding ? RangeIdentityResult.EQUAL_BEFORE_ROUNDING
-                : RangeIdentityResult.NOT_EQUAL;
-        return new FormattedNumberRange(nsb, first, second, identityResult);
+        return fImpl.format(first, second, equalBeforeRounding);
     }
 
     @Override

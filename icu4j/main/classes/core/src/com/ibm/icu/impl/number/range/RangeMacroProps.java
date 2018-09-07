@@ -16,6 +16,7 @@ import com.ibm.icu.util.ULocale;
 public class RangeMacroProps {
     public UnlocalizedNumberFormatter formatter1;
     public UnlocalizedNumberFormatter formatter2;
+    public int sameFormatters = -1; // -1 for unset, 0 for false, 1 for true
     public RangeCollapse collapse;
     public RangeIdentityFallback identityFallback;
     public ULocale loc;

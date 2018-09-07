@@ -2,6 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
+import com.ibm.icu.text.NumberFormat.Field;
+
 /**
  * A Modifier is an object that can be passed through the formatting pipeline until it is finally applied
  * to the string builder. A Modifier usually contains a prefix and a suffix that are applied, but it
@@ -48,4 +50,14 @@ public interface Modifier {
      * @return Whether the modifier is strong.
      */
     public boolean isStrong();
+
+    /**
+     * Whether the modifier contains at least one occurrence of the given field.
+     */
+    public boolean containsField(Field currency);
+
+    /**
+     * Returns whether the affixes owned by this modifier are equal to the ones owned by the given modifier.
+     */
+    public boolean equalsModifier(Modifier other);
 }
