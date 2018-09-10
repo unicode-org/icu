@@ -116,7 +116,7 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
 
             case 1: // we are after a \
                 if (ch == 'Q') {
-                    state = 1;
+                    state = 2;
                 } else {
                     state = 0;
                 }
@@ -128,11 +128,12 @@ public class UnicodeRegex implements Cloneable, Freezable<UnicodeRegex>, StringT
                 }
                 break;
 
-            case 3: // we are in at \Q...\
+            case 3: // we are in a \Q...\
                 if (ch == 'E') {
                     state = 0;
+                } else if (ch != '\\') {
+                    state = 2;
                 }
-                state = 2;
                 break;
             }
             result.append(ch);
