@@ -274,10 +274,10 @@ public:
    * @return   The class ID for all objects of this class.
    * @internal
    */
-  U_I18N_API static UClassID U_EXPORT2 getStaticClassID(void);
+  static UClassID U_EXPORT2 getStaticClassID(void);
 
   /**
-   * return the calendar type, "buddhist".
+   * return the calendar type, "indian".
    *
    * @return calendar type
    * @internal
