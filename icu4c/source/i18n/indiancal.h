@@ -68,7 +68,7 @@ U_NAMESPACE_BEGIN
  */
 
 
-class IndianCalendar : public Calendar {
+class U_I18N_API IndianCalendar : public Calendar {
 public:
   /**
    * Useful constants for IndianCalendar.
