@@ -60,24 +60,24 @@ private:
 };
 
 class CharStringByteSink : public ByteSink {
- public:
-  CharStringByteSink(CharString* dest);
-  ~CharStringByteSink() override;
+public:
+    CharStringByteSink(CharString* dest);
+    ~CharStringByteSink() override;
 
-  CharStringByteSink() = delete;
-  CharStringByteSink(const CharStringByteSink&) = delete;
-  CharStringByteSink& operator=(const CharStringByteSink&) = delete;
+    CharStringByteSink() = delete;
+    CharStringByteSink(const CharStringByteSink&) = delete;
+    CharStringByteSink& operator=(const CharStringByteSink&) = delete;
 
-  void Append(const char* bytes, int32_t n) override;
+    void Append(const char* bytes, int32_t n) override;
 
-  char* GetAppendBuffer(int32_t min_capacity,
-                        int32_t desired_capacity_hint,
-                        char* scratch,
-                        int32_t scratch_capacity,
-                        int32_t* result_capacity) override;
+    char* GetAppendBuffer(int32_t min_capacity,
+                          int32_t desired_capacity_hint,
+                          char* scratch,
+                          int32_t scratch_capacity,
+                          int32_t* result_capacity) override;
 
- private:
-  CharString& dest_;
+private:
+    CharString& dest_;
 };
 
 U_NAMESPACE_END
