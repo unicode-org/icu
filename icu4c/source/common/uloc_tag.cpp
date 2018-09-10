@@ -2037,7 +2037,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
             }
         }
         if (next & PRIV) {
-            if (uprv_tolower(*pSubtag) == PRIVATEUSE) {
+            if (uprv_tolower(*pSubtag) == PRIVATEUSE && subtagLen == 1) {
                 char *pPrivuseVal;
 
                 if (pExtension != NULL) {

@@ -6045,6 +6045,8 @@ static const struct {
     // #20098
     {"hant-cmn-cn", "hant", 4},
     {"zh-cmn-TW", "cmn_TW", FULL_LENGTH},
+    {"zh-x_t-ab", "zh", 2},
+    {"zh-hans-cn-u-ca-x_t-u", "zh_Hans_CN@calendar=yes",  15},
     {NULL,          NULL,           0}
 };
 

@@ -4154,6 +4154,8 @@ public class ULocaleTest extends TestFmwk {
                 /* #20098 */
                 {"hant-cmn-cn", "hant", Integer.valueOf(5)},
                 {"zh-cmn-TW", "cmn_TW", NOERROR},
+                {"zh-x_t-ab", "zh", Integer.valueOf(3)},
+                {"zh-hans-cn-u-ca-x_t-u", "zh_Hans_CN@calendar=yes",  Integer.valueOf(16)},
         };
 
         for (int i = 0; i < langtag_to_locale.length; i++) {
