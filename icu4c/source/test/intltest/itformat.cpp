@@ -60,6 +60,7 @@
 #include "listformattertest.h"  // ListFormatterTest
 #include "regiontst.h"      // RegionTest
 #include "numbertest.h"     // NumberTest
+#include "erarulestest.h"   // EraRulesTest
 
 extern IntlTest *createCompactDecimalFormatTest();
 extern IntlTest *createGenderInfoTest();
@@ -215,6 +216,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
           break;
         TESTCLASS(50,NumberFormatDataDrivenTest);
         TESTCLASS(51,NumberTest);
+        TESTCLASS(52,EraRulesTest);
         default: name = ""; break; //needed to end loop
     }
     if (exec) {
