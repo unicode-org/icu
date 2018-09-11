@@ -434,19 +434,19 @@ Locale& Locale::operator=(const Locale& other) {
     setToBogus();
 
     if (other.fullName == other.fullNameBuffer) {
-      uprv_strcpy(fullNameBuffer, other.fullNameBuffer);
+        uprv_strcpy(fullNameBuffer, other.fullNameBuffer);
     } else if (other.fullName == nullptr) {
-      fullName = nullptr;
+        fullName = nullptr;
     } else {
-      fullName = uprv_strdup(other.fullName);
-      if (fullName == nullptr) return *this;
+        fullName = uprv_strdup(other.fullName);
+        if (fullName == nullptr) return *this;
     }
 
     if (other.baseName == other.fullName) {
-      baseName = fullName;
+        baseName = fullName;
     } else if (other.baseName != nullptr) {
-      baseName = uprv_strdup(other.baseName);
-      if (baseName == nullptr) return *this;
+        baseName = uprv_strdup(other.baseName);
+        if (baseName == nullptr) return *this;
     }
 
     uprv_strcpy(language, other.language);
