@@ -152,7 +152,7 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
             ures_close(eraRuleRes);
             goto error;
         }
-        if (isSet(eraIdx)) {
+        if (isSet(startDates[eraIdx])) {
             // start date of the index was already set
             status = U_INVALID_FORMAT_ERROR;
             ures_close(eraRuleRes);

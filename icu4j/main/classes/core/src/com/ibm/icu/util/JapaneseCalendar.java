@@ -231,7 +231,10 @@ public class JapaneseCalendar extends GregorianCalendar {
     private static final EraRules ERA_RULES;
 
     static {
-        // ICU_ENABLE_TENTATIVE_ERA is initialized by following priorities.
+        // Although start date of next Japanese era is planned ahead, a name of
+        // new era might not be available. This implementation allows tester to
+        // check a new era without era names by settings below (in priority order).
+        // By default, such tentative era is disabled.
         //
         // 1. System property ICU_ENABLE_TENTATIVE_ERA=true or false
         // 2. Environment variable ICU_ENABLE_TENTATIVE_ERA=true or false
@@ -439,10 +442,10 @@ public class JapaneseCalendar extends GregorianCalendar {
                 // TODO: Investigate what value should be used here - revisit after 4.0.
                 return handleGetLimit(YEAR, MAXIMUM);
             } else {
-                int[] eraStart = ERA_RULES.getStartDate(era + 1, null);
-                int nextEraYear = eraStart[0];
-                int nextEraMonth = eraStart[1];
-                int nextEraDate = eraStart[2];
+                int[] nextEraStart = ERA_RULES.getStartDate(era + 1, null);
+                int nextEraYear = nextEraStart[0];
+                int nextEraMonth = nextEraStart[1]; // 1-base
+                int nextEraDate = nextEraStart[2];
 
                 int maxYear = nextEraYear - ERA_RULES.getStartYear(era) + 1; // 1-base
                 if (nextEraMonth == 1 && nextEraDate == 1) {
