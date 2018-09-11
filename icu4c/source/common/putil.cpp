@@ -1325,6 +1325,43 @@ uprv_pathIsAbsolute(const char *path)
 # endif
 #endif
 
+#if U_PLATFORM_HAS_WINUWP_API != 0
+// Helper function to get the ICU Data Directory under the Windows directory location.
+static BOOL U_CALLCONV getIcuDataDirectoryUnderWindowsDirectory(char* directoryBuffer, UINT bufferLength)
+{
+#if defined(ICU_DATA_DIR_WINDOWS)
+    wchar_t windowsPath[MAX_PATH];
+    char windowsPathUtf8[MAX_PATH];
+
+    UINT length = GetSystemWindowsDirectoryW(windowsPath, UPRV_LENGTHOF(windowsPath));
+    if ((length > 0) && (length < (UPRV_LENGTHOF(windowsPath) - 1))) {
+        // Convert UTF-16 to a UTF-8 string.
+        UErrorCode status = U_ZERO_ERROR;
+        int32_t windowsPathUtf8Len = 0;
+        u_strToUTF8(windowsPathUtf8, static_cast<int32_t>(UPRV_LENGTHOF(windowsPathUtf8)),
+            &windowsPathUtf8Len, reinterpret_cast<const UChar*>(windowsPath), -1, &status);
+
+        if (U_SUCCESS(status) && (status != U_STRING_NOT_TERMINATED_WARNING) &&
+            (windowsPathUtf8Len < (UPRV_LENGTHOF(windowsPathUtf8) - 1))) {
+            // Ensure it always has a separator, so we can append the ICU data path.
+            if (windowsPathUtf8[windowsPathUtf8Len - 1] != U_FILE_SEP_CHAR) {
+                windowsPathUtf8[windowsPathUtf8Len++] = U_FILE_SEP_CHAR;
+                windowsPathUtf8[windowsPathUtf8Len] = '\0';
+            }
+            // Check if the concatenated string will fit.
+            if ((windowsPathUtf8Len + UPRV_LENGTHOF(ICU_DATA_DIR_WINDOWS)) < bufferLength) {
+                uprv_strcpy(directoryBuffer, windowsPathUtf8);
+                uprv_strcat(directoryBuffer, ICU_DATA_DIR_WINDOWS);
+                return TRUE;
+            }
+        }
+    }
+#endif
+
+    return FALSE;
+}
+#endif
+
 static void U_CALLCONV dataDirectoryInitFn() {
     /* If we already have the directory, then return immediately. Will happen if user called
      * u_setDataDirectory().
@@ -1384,24 +1421,10 @@ static void U_CALLCONV dataDirectoryInitFn() {
     }
 #endif
 
-#if defined(ICU_DATA_DIR_WINDOWS) && U_PLATFORM_HAS_WINUWP_API != 0
-    // Use data from the %windir%\globalization\icu directory
-    // This is only available if ICU is built as a system component
+#if U_PLATFORM_HAS_WINUWP_API != 0  && defined(ICU_DATA_DIR_WINDOWS)
     char datadir_path_buffer[MAX_PATH];
-    UINT length = GetWindowsDirectoryA(datadir_path_buffer, UPRV_LENGTHOF(datadir_path_buffer));
-    if (length > 0 && length < (UPRV_LENGTHOF(datadir_path_buffer) - sizeof(ICU_DATA_DIR_WINDOWS) - 1))
-    {
-        if (datadir_path_buffer[length - 1] != '\\')
-        {
-            datadir_path_buffer[length++] = '\\';
-            datadir_path_buffer[length] = '\0';
-        }
-
-        if ((length + 1 + sizeof(ICU_DATA_DIR_WINDOWS)) < UPRV_LENGTHOF(datadir_path_buffer))
-        {
-            uprv_strcat(datadir_path_buffer, ICU_DATA_DIR_WINDOWS);
-            path = datadir_path_buffer;
-        }
+    if (getIcuDataDirectoryUnderWindowsDirectory(datadir_path_buffer, UPRV_LENGTHOF(datadir_path_buffer))) {
+        path = datadir_path_buffer;
     }
 #endif
 
@@ -1450,20 +1473,30 @@ static void U_CALLCONV TimeZoneDataDirInitFn(UErrorCode &status) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-#if U_PLATFORM_HAS_WINUWP_API == 0
-    const char *dir = getenv("ICU_TIMEZONE_FILES_DIR");
-#else
-    // TODO: UWP does not support alternate timezone data directories at this time
+
     const char *dir = "";
+
+#if U_PLATFORM_HAS_WINUWP_API != 0
+    // The UWP version does not support the environment variable setting, but can possibly pick them up from the Windows directory.
+    char datadir_path_buffer[MAX_PATH];
+    if (getIcuDataDirectoryUnderWindowsDirectory(datadir_path_buffer, UPRV_LENGTHOF(datadir_path_buffer))) {
+        dir = datadir_path_buffer;
+    }
+#else
+    dir = getenv("ICU_TIMEZONE_FILES_DIR");
 #endif // U_PLATFORM_HAS_WINUWP_API
+
 #if defined(U_TIMEZONE_FILES_DIR)
     if (dir == NULL) {
+        // Build time configuration setting.
         dir = TO_STRING(U_TIMEZONE_FILES_DIR);
     }
 #endif
+
     if (dir == NULL) {
         dir = "";
     }
+
     setTimeZoneFilesDir(dir, status);
 }
 

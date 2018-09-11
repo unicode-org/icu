@@ -22,6 +22,7 @@
 #include "uposixdefs.h"
 
 #include "unicode/putil.h"
+#include "unicode/ustring.h"
 #include "udatamem.h"
 #include "umapfile.h"
 
@@ -119,22 +120,18 @@
             OPEN_EXISTING,
             FILE_ATTRIBUTE_NORMAL|FILE_FLAG_RANDOM_ACCESS, NULL);
 #else
-        // First we need to go from char to UTF-16
-        // u_UCharsToChars could work but it requires length.
-        WCHAR utf16Path[MAX_PATH];
-        int32_t i;
-        for (i = 0; i < UPRV_LENGTHOF(utf16Path); i++)
-        {
-            utf16Path[i] = path[i];
-            if (path[i] == '\0')
-            {
-                break;
-            }
+        // Convert from UTF-8 string to UTF-16 string.
+        wchar_t utf16Path[MAX_PATH];
+        int32_t pathUtf16Len = 0;
+        u_strFromUTF8(reinterpret_cast<UChar*>(utf16Path), static_cast<int32_t>(UPRV_LENGTHOF(utf16Path)), &pathUtf16Len, path, -1, status);
+
+        if (U_FAILURE(*status)) {
+            return FALSE;
         }
-        if (i >= UPRV_LENGTHOF(utf16Path))
-        {
-            // Ran out of room, unlikely but be safe
-            utf16Path[UPRV_LENGTHOF(utf16Path) - 1] = '\0';
+        if (*status == U_STRING_NOT_TERMINATED_WARNING) {
+            // Report back an error instead of a warning.
+            *status = U_BUFFER_OVERFLOW_ERROR;
+            return FALSE;
         }
 
         // TODO: Is it worth setting extended parameters to specify random access?
