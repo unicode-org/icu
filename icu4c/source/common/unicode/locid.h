@@ -283,8 +283,8 @@ public:
     Locale(const    Locale& other);
 
     /**
-     * Initializes a Locale object from another Locale object.
-     * Takes ownership of data, and sets the other Locale object to bogus.
+     * Move constructor; might leave source in bogus state.
+     * This locale will have the same contents that the source locale had.
      *
      * @param other The Locale object being moved in.
      * @draft ICU 63
@@ -307,8 +307,9 @@ public:
     Locale& operator=(const Locale& other);
 
     /**
-     * Replaces the entire contents of *this with the specified value.
-     * Takes ownership of data, and sets the other Locale object to bogus.
+     * Move assignment operator; might leave source in bogus state.
+     * This locale will have the same contents that the source locale had.
+     * The behavior is undefined if *this and the source are the same object.
      *
      * @param other The Locale object being moved in.
      * @return      *this

@@ -486,10 +486,6 @@ Locale &Locale::operator=(const Locale &other)
 }
 
 Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
-    if (this == &other) {
-        return *this;
-    }
-
     setToBogus();
 
     if (other.fullName == other.fullNameBuffer) {
