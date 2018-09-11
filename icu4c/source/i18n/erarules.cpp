@@ -110,91 +110,77 @@ EraRules::~EraRules() {
 
 EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEra, UErrorCode& status) {
     if(U_FAILURE(status)) {
-        return NULL;
+        return nullptr;
     }
-    UResourceBundle *rb = ures_openDirect(NULL, "supplementalData", &status);
-    ures_getByKey(rb, "calendarData", rb, &status);
-    ures_getByKey(rb, calType, rb, &status);
-    ures_getByKey(rb, "eras", rb, &status);
+    LocalUResourceBundlePointer rb(ures_openDirect(nullptr, "supplementalData", &status));
+    ures_getByKey(rb.getAlias(), "calendarData", rb.getAlias(), &status);
+    ures_getByKey(rb.getAlias(), calType, rb.getAlias(), &status);
+    ures_getByKey(rb.getAlias(), "eras", rb.getAlias(), &status);
 
     if (U_FAILURE(status)) {
-        ures_close(rb);
-        return NULL;
+        return nullptr;
     }
 
-    int32_t numEras = ures_getSize(rb);
+    int32_t numEras = ures_getSize(rb.getAlias());
     int32_t firstTentativeIdx = MAX_INT32;
 
     int32_t *startDates = (int32_t*)uprv_malloc(numEras * sizeof(int32_t));
-    if (startDates == NULL) {
+    if (startDates == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
-        ures_close(rb);
-        return NULL;
+        return nullptr;
     }
     uprv_memset(startDates, 0, numEras * sizeof(int32_t));
 
-    while (ures_hasNext(rb)) {
-        UResourceBundle *eraRuleRes = ures_getNextResource(rb, NULL, &status);
+    while (ures_hasNext(rb.getAlias())) {
+        LocalUResourceBundlePointer eraRuleRes(ures_getNextResource(rb.getAlias(), nullptr, &status));
         if (U_FAILURE(status)) {
-            ures_close(eraRuleRes);
             goto error;
         }
-        const char *eraIdxStr = ures_getKey(eraRuleRes);
+        const char *eraIdxStr = ures_getKey(eraRuleRes.getAlias());
         char *endp;
         int32_t eraIdx = (int32_t)strtol(eraIdxStr, &endp, 10);
         if ((size_t)(endp - eraIdxStr) != uprv_strlen(eraIdxStr)) {
             status = U_INVALID_FORMAT_ERROR;
-            ures_close(eraRuleRes);
             goto error;
         }
         if (eraIdx < 0 || eraIdx >= numEras) {
             status = U_INVALID_FORMAT_ERROR;
-            ures_close(eraRuleRes);
             goto error;
         }
         if (isSet(startDates[eraIdx])) {
             // start date of the index was already set
             status = U_INVALID_FORMAT_ERROR;
-            ures_close(eraRuleRes);
             goto error;
         }
 
         UBool hasName = TRUE;
         UBool hasEnd = TRUE;
         int32_t len;
-        while (ures_hasNext(eraRuleRes)) {
-            UResourceBundle *res = ures_getNextResource(eraRuleRes, NULL, &status);
+        while (ures_hasNext(eraRuleRes.getAlias())) {
+            LocalUResourceBundlePointer res(ures_getNextResource(eraRuleRes.getAlias(), nullptr, &status));
             if (U_FAILURE(status)) {
-                ures_close(eraRuleRes);
-                ures_close(res);
                 goto error;
             }
-            const char *key = ures_getKey(res);
+            const char *key = ures_getKey(res.getAlias());
             if (uprv_strcmp(key, "start") == 0) {
-                const int32_t *fields = ures_getIntVector(res, &len, &status);
+                const int32_t *fields = ures_getIntVector(res.getAlias(), &len, &status);
                 if (U_FAILURE(status)) {
-                    ures_close(eraRuleRes);
-                    ures_close(res);
                     goto error;
                 }
                 if (len != 3 || !isValidRuleStartDate(fields[0], fields[1], fields[2])) {
                     status = U_INVALID_FORMAT_ERROR;
-                    ures_close(eraRuleRes);
-                    ures_close(res);
                     goto error;
                 }
                 startDates[eraIdx] = encodeDate(fields[0], fields[1], fields[2]);
-            } else if (uprv_strcmp(key, "name") == 0) {
-                const UChar *val = ures_getString(res, &len, &status);
+            } else if (uprv_strcmp(key, "named") == 0) {
+                const UChar *val = ures_getString(res.getAlias(), &len, &status);
                 if (u_strncmp(val, VAL_FALSE, VAL_FALSE_LEN) == 0) {
                     hasName = FALSE;
                 }
             } else if (uprv_strcmp(key, "end") == 0) {
                 hasEnd = TRUE;
             }
-            ures_close(res);
         }
-        ures_close(eraRuleRes);
 
         if (isSet(startDates[eraIdx])) {
             if (hasEnd) {
@@ -228,7 +214,6 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
             }
         }
     }
-    ures_close(rb);
 
     EraRules *result;
     if (firstTentativeIdx < MAX_INT32 && !includeTentativeEra) {
@@ -237,15 +222,14 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
         result = new EraRules(startDates, numEras);
     }
 
-    if (result == NULL) {
+    if (result == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
 
 error:
     uprv_free(startDates);
-    ures_close(rb);
-    return NULL;
+    return nullptr;
 }
 
 void EraRules::getStartDate(int32_t eraIdx, int32_t (&fields)[3], UErrorCode& status) const {

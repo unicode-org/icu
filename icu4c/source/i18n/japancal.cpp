@@ -28,7 +28,7 @@
 #include "ucln_in.h"
 #include "cstring.h"
 
-static icu::EraRules * gJapaneseEraRules = NULL;
+static icu::EraRules * gJapaneseEraRules = nullptr;
 static icu::UInitOnce gJapaneseEraRulesInitOnce = U_INITONCE_INITIALIZER;
 static int32_t gCurrentEra = 0;
 
@@ -36,7 +36,7 @@ U_CDECL_BEGIN
 static UBool japanese_calendar_cleanup(void) {
     if (gJapaneseEraRules) {
         delete gJapaneseEraRules;
-        gJapaneseEraRules = NULL;
+        gJapaneseEraRules = nullptr;
     }
     gCurrentEra = 0;
     gJapaneseEraRulesInitOnce.reset();
@@ -65,7 +65,7 @@ static void U_CALLCONV initializeEras(UErrorCode &status) {
 
 #if U_PLATFORM_HAS_WINUWP_API == 0
     char *envVarVal = getenv(TENTATIVE_ERA_VAR_NAME);
-    if (envVarVal != NULL && uprv_stricmp(envVarVal, "true")) {
+    if (envVarVal != NULL && uprv_stricmp(envVarVal, "true") == 0) {
         includeTentativeEra = TRUE;
     }
 #endif
@@ -101,7 +101,7 @@ JapaneseCalendar::JapaneseCalendar(const JapaneseCalendar& source)
 : GregorianCalendar(source)
 {
     UErrorCode status = U_ZERO_ERROR;
-    initializeEras(status);
+    init(status);
     U_ASSERT(U_SUCCESS(status));
 }
 
