@@ -181,7 +181,9 @@ public class LanguageTag {
 
         // langtag must start with either language or privateuse
         if (tag.parseLanguage(itr, sts)) {
-            tag.parseExtlangs(itr, sts);
+            // ExtLang can only be preceded by 2-3 letter language subtag.
+            if (tag._language.length() <= 3)
+                tag.parseExtlangs(itr, sts);
             tag.parseScript(itr, sts);
             tag.parseRegion(itr, sts);
             tag.parseVariants(itr, sts);

@@ -4151,7 +4151,11 @@ public class ULocaleTest extends TestFmwk {
                 {"en-u-baz-ca-islamic-civil",   "en@attribute=baz;calendar=islamic-civil",  NOERROR},
                 {"en-a-bar-u-ca-islamic-civil-x-u-foo", "en@a=bar;calendar=islamic-civil;x=u-foo",  NOERROR},
                 {"en-a-bar-u-baz-ca-islamic-civil-x-u-foo", "en@a=bar;attribute=baz;calendar=islamic-civil;x=u-foo",    NOERROR},
-
+                /* #20098 */
+                {"hant-cmn-cn", "hant", Integer.valueOf(5)},
+                {"zh-cmn-TW", "cmn_TW", NOERROR},
+                {"zh-x_t-ab", "zh", Integer.valueOf(3)},
+                {"zh-hans-cn-u-ca-x_t-u", "zh_Hans_CN@calendar=yes",  Integer.valueOf(16)},
         };
 
         for (int i = 0; i < langtag_to_locale.length; i++) {

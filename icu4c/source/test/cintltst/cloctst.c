@@ -6042,6 +6042,11 @@ static const struct {
     {"und-Latn-DE-u-em-emoji", "_Latn_DE@em=emoji", FULL_LENGTH},
     {"und-Zzzz-DE-u-em-emoji", "_Zzzz_DE@em=emoji", FULL_LENGTH},
     {"und-DE-u-em-emoji", "_DE@em=emoji", FULL_LENGTH},
+    // #20098
+    {"hant-cmn-cn", "hant", 4},
+    {"zh-cmn-TW", "cmn_TW", FULL_LENGTH},
+    {"zh-x_t-ab", "zh", 2},
+    {"zh-hans-cn-u-ca-x_t-u", "zh_Hans_CN@calendar=yes",  15},
     {NULL,          NULL,           0}
 };
 
