@@ -757,11 +757,6 @@ Locale::forLanguageTag(StringPiece tag, UErrorCode& status)
             return result;
         }
 
-        if (buffer == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return result;
-        }
-
         reslen = uloc_forLanguageTag(
                 tag_nul.data(),
                 buffer,
@@ -773,19 +768,16 @@ Locale::forLanguageTag(StringPiece tag, UErrorCode& status)
             break;
         }
 
-        // This should be impossible, but in case we ever get a bug that causes
-        // it to happen anyway this will then avoid an infinite loop.
-        if (resultCapacity >= reslen) {
-            status = U_INTERNAL_PROGRAM_ERROR;
-            return result;
-        }
-
         // For all BCP-47 language tags that use extensions, the corresponding
         // ICU locale ID will be longer but uloc_forLanguageTag() does compute
         // the exact length needed so this memory reallocation will be done at
         // most once.
         resultCapacity = reslen;
         status = U_ZERO_ERROR;
+    }
+
+    if (U_FAILURE(status)) {
+        return result;
     }
 
     if (parsedLength != tag.size()) {
@@ -827,7 +819,7 @@ Locale::toLanguageTag(ByteSink& sink, UErrorCode& status) const
     int32_t scratch_capacity = uprv_strlen(fullName);
 
     if (scratch_capacity == 0) {
-        return;
+        scratch_capacity = 3;  // "und"
     }
 
     char* buffer;
@@ -846,11 +838,6 @@ Locale::toLanguageTag(ByteSink& sink, UErrorCode& status) const
                 scratch_capacity,
                 &result_capacity);
 
-        if (buffer == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-
         reslen = uloc_toLanguageTag(
                 fullName,
                 buffer,
@@ -862,26 +849,22 @@ Locale::toLanguageTag(ByteSink& sink, UErrorCode& status) const
             break;
         }
 
-        // This should be impossible, but in case we ever get a bug that causes
-        // it to happen anyway this will then avoid an infinite loop.
-        if (scratch_capacity >= reslen) {
-            status = U_INTERNAL_PROGRAM_ERROR;
-            return;
-        }
-
         // For some very few edge cases a language tag will be longer as a
         // BCP-47 string than it is as an ICU locale ID. Most notoriously "C"
         // expands to the BCP-47 tag "en-US-u-va-posix", 16 times longer, and
         // it'll take several calls to uloc_toLanguageTag() to figure that out.
+        // https://unicode-org.atlassian.net/browse/ICU-20132
         scratch_capacity = reslen;
         status = U_ZERO_ERROR;
     }
 
-    if (U_SUCCESS(status)) {
-        sink.Append(buffer, reslen);
-        if (status == U_STRING_NOT_TERMINATED_WARNING) {
-            status = U_ZERO_ERROR;  // Terminators not used.
-        }
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    sink.Append(buffer, reslen);
+    if (status == U_STRING_NOT_TERMINATED_WARNING) {
+        status = U_ZERO_ERROR;  // Terminators not used.
     }
 }
 

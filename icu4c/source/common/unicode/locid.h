@@ -31,11 +31,8 @@
 #ifndef LOCID_H
 #define LOCID_H
 
-#ifndef U_HIDE_DRAFT_API
 #include "unicode/bytestream.h"
 #include "unicode/stringpiece.h"
-#endif  // U_HIDE_DRAFT_API
-
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/putil.h"
@@ -392,6 +389,9 @@ public:
      * <p>
      * <b>Note</b>: Any locale fields which do not satisfy the BCP47 syntax
      * requirement will be silently omitted from the result.
+     *
+     * If this function fails, partial output may have been written to the sink.
+     *
      * @param sink    the output sink receiving the BCP47 language
      *                tag for this Locale.
      * @param status  error information if creating the language tag failed.
@@ -402,12 +402,9 @@ public:
     /**
      * Returns a well-formed language tag for this Locale.
      * <p>
-     * <b>Note</b>: When <code>strict</code> is FALSE, any locale
-     * fields which do not satisfy the BCP47 syntax requirement will
-     * be omitted from the result.  When <code>strict</code> is
-     * TRUE, this function sets U_ILLEGAL_ARGUMENT_ERROR to the
-     * <code>status</code> if any locale fields do not satisfy the
-     * BCP47 syntax requirement.
+     * <b>Note</b>: Any locale fields which do not satisfy the BCP47 syntax
+     * requirement will be silently omitted from the result.
+     *
      * @param status  error information if creating the language tag failed.
      * @return        the BCP47 language tag for this Locale.
      * @draft ICU 63

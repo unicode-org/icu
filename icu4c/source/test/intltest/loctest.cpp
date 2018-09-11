@@ -2789,13 +2789,13 @@ void LocaleTest::TestForLanguageTag() {
     StringPiece sp_substr(tag_oed, 5);  // "en-GB", no NUL.
     Locale result_substr = Locale::forLanguageTag(sp_substr, status);
     status.errIfFailureAndReset("\"%.*s\"", sp_substr.size(), sp_substr.data());
-    assertEquals(UnicodeString::fromUTF8(sp_substr),
+    assertEquals(CharString(sp_substr, status).data(),
             loc_gb.getName(), result_substr.getName());
 
     StringPiece sp_no_nul(tag_no_nul, sizeof tag_no_nul);  // "en-GB", no NUL.
     Locale result_no_nul = Locale::forLanguageTag(sp_no_nul, status);
     status.errIfFailureAndReset("\"%.*s\"", sp_no_nul.size(), sp_no_nul.data());
-    assertEquals(UnicodeString::fromUTF8(sp_no_nul),
+    assertEquals(CharString(sp_no_nul, status).data(),
             loc_gb.getName(), result_no_nul.getName());
 }
 
@@ -2827,7 +2827,7 @@ void LocaleTest::TestToLanguageTag() {
 
     std::string result_empty = loc_empty.toLanguageTag<std::string>(status);
     status.errIfFailureAndReset("\"%s\"", loc_empty.getName());
-    assertTrue(result_empty.c_str(), result_empty.empty());
+    assertEquals(loc_empty.getName(), tag_und, result_empty.c_str());
 
     std::string result_ill = loc_ill.toLanguageTag<std::string>(status);
     status.errIfFailureAndReset("\"%s\"", loc_ill.getName());
