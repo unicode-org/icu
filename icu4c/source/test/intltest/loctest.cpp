@@ -2872,7 +2872,7 @@ void LocaleTest::TestMoveAssign() {
     // This should remain true also after l3 has been destructed.
     assertTrue("l1 == l2, again", l1 == l2);
 
-    Locale l4("vo", "Cyrl", "AQ");
+    Locale l4("de@collation=phonebook");
 
     Locale l5;
     {
@@ -2887,6 +2887,22 @@ void LocaleTest::TestMoveAssign() {
 
     // This should remain true also after l6 has been destructed.
     assertTrue("l4 == l5, again", l4 == l5);
+
+    Locale l7("vo", "Cyrl", "AQ");
+
+    Locale l8;
+    {
+        Locale l9(l7);
+        assertTrue("l7 == l9", l7 == l9);
+        assertTrue("!l9.isBogus()", !l9.isBogus());
+        l8 = std::move(l9);
+        assertTrue("l7 == l8", l7 == l8);
+        assertTrue("l9.isBogus()", l9.isBogus());
+        assertTrue("l9.getName()", l9.getName() != nullptr);
+    }
+
+    // This should remain true also after l9 has been destructed.
+    assertTrue("l7 == l8, again", l7 == l8);
 }
 
 void LocaleTest::TestMoveCtor() {
@@ -2905,7 +2921,7 @@ void LocaleTest::TestMoveCtor() {
     assertTrue("l3.isBogus()", l3.isBogus());
     assertTrue("l3.getName()", l3.getName() != nullptr);
 
-    Locale l4("vo", "Cyrl", "AQ");
+    Locale l4("de@collation=phonebook");
 
     Locale l6(l4);
     assertTrue("l4 == l6", l4 == l6);
@@ -2914,4 +2930,14 @@ void LocaleTest::TestMoveCtor() {
     assertTrue("l4 == l5", l4 == l5);
     assertTrue("l6.isBogus()", l6.isBogus());
     assertTrue("l6.getName()", l6.getName() != nullptr);
+
+    Locale l7("vo", "Cyrl", "AQ");
+
+    Locale l9(l7);
+    assertTrue("l7 == l9", l7 == l9);
+    assertTrue("!l9.isBogus()", !l9.isBogus());
+    Locale l8(std::move(l9));
+    assertTrue("l7 == l8", l7 == l8);
+    assertTrue("l9.isBogus()", l9.isBogus());
+    assertTrue("l9.getName()", l9.getName() != nullptr);
 }
