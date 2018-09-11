@@ -2897,7 +2897,7 @@ void LocaleTest::TestMoveAssign() {
         assertTrue("!l9.isBogus()", !l9.isBogus());
         l8 = std::move(l9);
         assertTrue("l7 == l8", l7 == l8);
-        assertTrue("l9.isBogus()", l9.isBogus());
+        assertTrue("!l9.isBogus()", !l9.isBogus());
         assertTrue("l9.getName()", l9.getName() != nullptr);
     }
 
@@ -2938,6 +2938,6 @@ void LocaleTest::TestMoveCtor() {
     assertTrue("!l9.isBogus()", !l9.isBogus());
     Locale l8(std::move(l9));
     assertTrue("l7 == l8", l7 == l8);
-    assertTrue("l9.isBogus()", l9.isBogus());
+    assertTrue("!l9.isBogus()", !l9.isBogus());
     assertTrue("l9.getName()", l9.getName() != nullptr);
 }
