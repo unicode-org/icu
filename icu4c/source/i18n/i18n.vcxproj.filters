@@ -621,6 +621,9 @@
     <ClCompile Include="dayperiodrules.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="erarules.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="bocsu.cpp">
@@ -1177,6 +1180,9 @@
     </ClInclude>
     <ClInclude Include="utf8collationiterator.h">
       <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="erarules.h">
+      <Filter>formatting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

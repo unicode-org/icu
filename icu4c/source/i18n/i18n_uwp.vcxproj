@@ -87,7 +87,7 @@
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
-    <ResourceCompile>      
+    <ResourceCompile>
       <Culture>0x0409</Culture>
       <AdditionalIncludeDirectories>../common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
@@ -267,6 +267,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="erarules.cpp" />
     <ClCompile Include="region.cpp" />
     <ClCompile Include="uregion.cpp" />
     <ClCompile Include="alphaindex.cpp" />
@@ -513,6 +514,7 @@
     <ClInclude Include="collationtailoring.h" />
     <ClInclude Include="collationweights.h" />
     <ClInclude Include="dayperiodrules.h" />
+    <ClInclude Include="erarules.h" />
     <ClInclude Include="numsys_impl.h" />
     <ClInclude Include="region_impl.h" />
     <ClInclude Include="selfmtimpl.h" />
