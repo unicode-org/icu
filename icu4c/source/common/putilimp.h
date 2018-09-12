@@ -132,7 +132,7 @@ typedef size_t uintptr_t;
 #   define U_TIMEZONE timezone
 #endif
 
-#ifdef U_TZNAME
+#if defined(U_TZNAME) || defined(U_HAVE_TZNAME)
     /* Use the predefined value. */
 #elif U_PLATFORM_USES_ONLY_WIN32_API
     /* not usable on all windows platforms */
