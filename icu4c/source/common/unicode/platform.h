@@ -517,6 +517,8 @@ namespace std {
             (__has_feature(cxx_attributes) && __has_warning("-Wimplicit-fallthrough"))
 #       define U_FALLTHROUGH [[clang::fallthrough]]
 #   endif
+#elif defined(__GNUC__) && (__GNUC__ >= 7)
+#   define U_FALLTHROUGH __attribute__((fallthrough))
 #endif
 
 #ifndef U_FALLTHROUGH
