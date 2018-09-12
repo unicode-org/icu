@@ -2813,6 +2813,12 @@ void LocaleTest::TestToLanguageTag() {
     static const char tag_af[] = "af-t-ar-i0-handwrit-u-ca-coptic-x-foo";
     static const char tag_und[] = "und";
 
+    std::string result;
+    StringByteSink<std::string> sink(&result);
+    loc_c.toLanguageTag(sink, status);
+    status.errIfFailureAndReset("\"%s\"", loc_c.getName());
+    assertEquals(loc_c.getName(), tag_c, result.c_str());
+
     std::string result_c = loc_c.toLanguageTag<std::string>(status);
     status.errIfFailureAndReset("\"%s\"", loc_c.getName());
     assertEquals(loc_c.getName(), tag_c, result_c.c_str());
