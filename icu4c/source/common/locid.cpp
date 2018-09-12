@@ -503,11 +503,8 @@ Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
     variantBegin = other.variantBegin;
     fIsBogus = other.fIsBogus;
 
-    if (other.fullName != other.fullNameBuffer ||
-        other.baseName != other.fullName) {
-        other.baseName = other.fullName = other.fullNameBuffer;
-        other.setToBogus();
-    }
+    other.baseName = other.fullName = other.fullNameBuffer;
+    other.fIsBogus = TRUE;
 
     return *this;
 }
