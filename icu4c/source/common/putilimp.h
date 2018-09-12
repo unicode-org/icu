@@ -94,7 +94,7 @@ typedef size_t uintptr_t;
 #   define U_NL_LANGINFO_CODESET CODESET
 #endif
 
-#ifdef U_TZSET
+#if defined(U_TZSET) || defined(U_HAVE_TZSET)
     /* Use the predefined value. */
 #elif U_PLATFORM_USES_ONLY_WIN32_API
     // UWP doesn't support tzset or environment variables for tz
