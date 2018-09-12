@@ -141,7 +141,7 @@
  *
  * <p>
  * The Japanese calendar uses a combination of era name and year number.
- * When an empror of Japan abdicates and a new emperor ascends the throne,
+ * When an emperor of Japan abdicates and a new emperor ascends the throne,
  * a new era is declared and year number is reset to 1. Even if the date of
  * abdication is scheduled ahead of time, the new era name might not be
  * announced until just before the date. In such case, ICU4C may include
