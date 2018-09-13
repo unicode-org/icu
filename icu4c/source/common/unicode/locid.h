@@ -494,6 +494,20 @@ public:
      */
     StringEnumeration * createKeywords(UErrorCode &status) const;
 
+#ifndef U_HIDE_DRAFT_API
+
+    /**
+     * Gets the list of Unicode keywords for the specified locale.
+     *
+     * @param status the status code
+     * @return pointer to StringEnumeration class, or NULL if there are no keywords.
+     * Client must dispose of it by calling delete.
+     * @draft ICU 63
+     */
+    StringEnumeration * createUnicodeKeywords(UErrorCode &status) const;
+
+#endif  // U_HIDE_DRAFT_API
+
     /**
      * Gets the value for a keyword.
      *
