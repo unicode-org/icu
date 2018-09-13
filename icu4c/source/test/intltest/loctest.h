@@ -77,9 +77,15 @@ public:
 
    /* Test getting keyword values */
    void TestKeywordVariantParsing(void);
+   void TestGetKeywordValueStdString(void);
+   void TestGetUnicodeKeywordValue(void);
+   void TestGetUnicodeKeywordValueStdString(void);
 
    /* Test setting keyword values */
    void TestSetKeywordValue(void);
+   void TestSetKeywordValueStringPiece(void);
+   void TestSetUnicodeKeywordValue(void);
+   void TestSetUnicodeKeywordValueStringPiece(void);
 
    /* Test getting the locale base name */
    void TestGetBaseName(void);

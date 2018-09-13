@@ -507,6 +507,60 @@ public:
      */
     int32_t getKeywordValue(const char* keywordName, char *buffer, int32_t bufferCapacity, UErrorCode &status) const;
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Gets the value for a keyword.
+     *
+     * @param keywordName  name of the keyword for which we want the value.
+     * @param sink         the sink to receive the keyword value.
+     * @param status       error information if getting the value failed.
+     * @draft ICU 63
+     */
+    void getKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& status) const;
+
+    /**
+     * Gets the value for a keyword.
+     *
+     * @param keywordName  name of the keyword for which we want the value.
+     * @param status       error information if getting the value failed.
+     * @return             the keyword value.
+     * @draft ICU 63
+     */
+    template<typename StringClass>
+    inline StringClass getKeywordValue(StringPiece keywordName, UErrorCode& status) const;
+
+    /**
+     * Gets the Unicode value for a Unicode keyword.
+     *
+     * @param keywordName  name of the keyword for which we want the value.
+     * @param status       error information if getting the value failed.
+     * @return             the keyword value.
+     * @draft ICU 63
+     */
+    const char* getUnicodeKeywordValue(const char* keywordName, UErrorCode& status) const;
+
+    /**
+     * Gets the Unicode value for a Unicode keyword.
+     *
+     * @param keywordName  name of the keyword for which we want the value.
+     * @param sink         the sink to receive the keyword value.
+     * @param status       error information if getting the value failed.
+     * @draft ICU 63
+     */
+    void getUnicodeKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& status) const;
+
+    /**
+     * Gets the Unicode value for a Unicode keyword.
+     *
+     * @param keywordName  name of the keyword for which we want the value.
+     * @param status       error information if getting the value failed.
+     * @return             the keyword value.
+     * @draft ICU 63
+     */
+    template<typename StringClass>
+    inline StringClass getUnicodeKeywordValue(StringPiece keywordName, UErrorCode& status) const;
+#endif  // U_HIDE_DRAFT_API
+
     /**
      * Sets or removes the value for a keyword.
      *
@@ -522,6 +576,54 @@ public:
      * @stable ICU 49
      */
     void setKeywordValue(const char* keywordName, const char* keywordValue, UErrorCode &status);
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Sets or removes the value for a keyword.
+     *
+     * For removing all keywords, use getBaseName(),
+     * and construct a new Locale if it differs from getName().
+     *
+     * @param keywordName name of the keyword to be set.
+     * @param keywordValue value of the keyword to be set. If 0-length or
+     *  NULL, will result in the keyword being removed. No error is given if
+     *  that keyword does not exist.
+     * @param status Returns any error information while performing this operation.
+     * @draft ICU 63
+     */
+    void setKeywordValue(StringPiece keywordName, StringPiece keywordValue, UErrorCode& status);
+
+    /**
+     * Sets or removes the Unicode value for a Unicode keyword.
+     *
+     * For removing all keywords, use getBaseName(),
+     * and construct a new Locale if it differs from getName().
+     *
+     * @param keywordName name of the keyword to be set.
+     * @param keywordValue value of the keyword to be set. If 0-length or
+     *  NULL, will result in the keyword being removed. No error is given if
+     *  that keyword does not exist.
+     * @param status Returns any error information while performing this operation.
+     *
+     * @draft ICU 63
+     */
+    void setUnicodeKeywordValue(const char* keywordName, const char* keywordValue, UErrorCode& status);
+
+    /**
+     * Sets or removes the Unicode value for a Unicode keyword.
+     *
+     * For removing all keywords, use getBaseName(),
+     * and construct a new Locale if it differs from getName().
+     *
+     * @param keywordName name of the keyword to be set.
+     * @param keywordValue value of the keyword to be set. If 0-length or
+     *  NULL, will result in the keyword being removed. No error is given if
+     *  that keyword does not exist.
+     * @param status Returns any error information while performing this operation.
+     * @draft ICU 63
+     */
+    void setUnicodeKeywordValue(StringPiece keywordName, StringPiece keywordValue, UErrorCode& status);
+#endif  // U_HIDE_DRAFT_API
 
     /**
      * returns the locale's three-letter language code, as specified
@@ -866,6 +968,28 @@ Locale::getName() const
 {
     return fullName;
 }
+
+#ifndef U_HIDE_DRAFT_API
+
+template<typename StringClass> inline StringClass
+Locale::getKeywordValue(StringPiece keywordName, UErrorCode& status) const
+{
+    StringClass result;
+    StringByteSink<StringClass> sink(&result);
+    getKeywordValue(keywordName, sink, status);
+    return result;
+}
+
+template<typename StringClass> inline StringClass
+Locale::getUnicodeKeywordValue(StringPiece keywordName, UErrorCode& status) const
+{
+    StringClass result;
+    StringByteSink<StringClass> sink(&result);
+    getUnicodeKeywordValue(keywordName, sink, status);
+    return result;
+}
+
+#endif  // U_HIDE_DRAFT_API
 
 inline UBool
 Locale::isBogus(void) const {

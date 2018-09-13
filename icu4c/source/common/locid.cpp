@@ -48,6 +48,7 @@
 #include "ucln_cmn.h"
 #include "ustr_imp.h"
 #include "charstr.h"
+#include "bytesinkutil.h"
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV locale_cleanup(void);
@@ -1203,6 +1204,130 @@ Locale::getKeywordValue(const char* keywordName, char *buffer, int32_t bufLen, U
 }
 
 void
+Locale::getKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    if (fIsBogus) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    // TODO: Remove the need for a const char* to a NUL terminated buffer.
+    const CharString keywordName_nul(keywordName, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    LocalMemory<char> scratch;
+    int32_t scratch_capacity = 8;  // Arbitrarily chosen default size.
+
+    char* buffer;
+    int32_t result_capacity, reslen;
+
+    for (;;) {
+        if (scratch.allocateInsteadAndReset(scratch_capacity) == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return;
+        }
+
+        buffer = sink.GetAppendBuffer(
+                /*min_capacity=*/scratch_capacity,
+                /*desired_capacity_hint=*/scratch_capacity,
+                scratch.getAlias(),
+                scratch_capacity,
+                &result_capacity);
+
+        reslen = uloc_getKeywordValue(
+                fullName,
+                keywordName_nul.data(),
+                buffer,
+                result_capacity,
+                &status);
+
+        if (status != U_BUFFER_OVERFLOW_ERROR) {
+            break;
+        }
+
+        scratch_capacity = reslen;
+        status = U_ZERO_ERROR;
+    }
+
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    sink.Append(buffer, reslen);
+    if (status == U_STRING_NOT_TERMINATED_WARNING) {
+        status = U_ZERO_ERROR;  // Terminators not used.
+    }
+}
+
+const char*
+Locale::getUnicodeKeywordValue(const char* keywordName, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
+
+    const char* legacy_key = uloc_toLegacyKey(keywordName);
+
+    if (legacy_key == nullptr) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
+    }
+
+    CharString legacy_value;
+    {
+        CharStringByteSink sink(&legacy_value);
+        getKeywordValue(legacy_key, sink, status);
+    }
+
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
+
+    const char* unicode_value = uloc_toUnicodeLocaleType(
+            keywordName, legacy_value.data());
+
+    if (unicode_value == nullptr) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return nullptr;
+    }
+
+    return unicode_value;
+}
+
+void
+Locale::getUnicodeKeywordValue(StringPiece keywordName,
+                               ByteSink& sink,
+                               UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    // TODO: Remove the need for a const char* to a NUL terminated buffer.
+    const CharString keywordName_nul(keywordName, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    const char* unicode_value =
+        getUnicodeKeywordValue(keywordName_nul.data(), status);
+
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    if (unicode_value == nullptr) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    sink.Append(unicode_value, uprv_strlen(unicode_value));
+}
+
+void
 Locale::setKeywordValue(const char* keywordName, const char* keywordValue, UErrorCode &status)
 {
     uloc_setKeywordValue(keywordName, keywordValue, fullName, ULOC_FULLNAME_CAPACITY, &status);
@@ -1210,6 +1335,74 @@ Locale::setKeywordValue(const char* keywordName, const char* keywordValue, UErro
         // May have added the first keyword, meaning that the fullName is no longer also the baseName.
         initBaseName(status);
     }
+}
+
+void
+Locale::setKeywordValue(StringPiece keywordName,
+                        StringPiece keywordValue,
+                        UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    // TODO: Remove the need for a const char* to a NUL terminated buffer.
+    const CharString keywordName_nul(keywordName, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    const CharString keywordValue_nul(keywordValue, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    setKeywordValue(keywordName_nul.data(), keywordValue_nul.data(), status);
+}
+
+void
+Locale::setUnicodeKeywordValue(const char* keywordName,
+                               const char* keywordValue,
+                               UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    const char* legacy_key = uloc_toLegacyKey(keywordName);
+
+    if (legacy_key == nullptr) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    const char* legacy_value = uloc_toLegacyType(keywordName, keywordValue);
+
+    if (legacy_value == nullptr) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    setKeywordValue(legacy_key, legacy_value, status);
+}
+
+void
+Locale::setUnicodeKeywordValue(StringPiece keywordName,
+                               StringPiece keywordValue,
+                               UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    // TODO: Remove the need for a const char* to a NUL terminated buffer.
+    const CharString keywordName_nul(keywordName, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    const CharString keywordValue_nul(keywordValue, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+
+    setUnicodeKeywordValue(
+            keywordName_nul.data(), keywordValue_nul.data(), status);
 }
 
 const char *
