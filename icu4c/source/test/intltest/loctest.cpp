@@ -15,6 +15,7 @@
 #include "unicode/brkiter.h"
 #include "unicode/coll.h"
 #include "unicode/ustring.h"
+#include "unicode/std_string.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
@@ -233,6 +234,8 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestIsRightToLeft);
     TESTCASE_AUTO(TestBug13277);
     TESTCASE_AUTO(TestBug13554);
+    TESTCASE_AUTO(TestForLanguageTag);
+    TESTCASE_AUTO(TestToLanguageTag);
     TESTCASE_AUTO_END;
 }
 
@@ -2748,4 +2751,97 @@ void LocaleTest::TestBug13554() {
     }
 }
 
+void LocaleTest::TestForLanguageTag() {
+    IcuTestErrorCode status(*this, "TestForLanguageTag()");
 
+    static const char tag_en[] = "en-US";
+    static const char tag_oed[] = "en-GB-oed";
+    static const char tag_af[] = "af-t-ar-i0-handwrit-u-ca-coptic-x-foo";
+    static const char tag_ill[] = "!";
+    static const char tag_no_nul[] = { 'e', 'n', '-', 'G', 'B' };
+
+    static const Locale loc_en("en_US");
+    static const Locale loc_oed("en_GB@x=oed");
+    static const Locale loc_af("af@calendar=coptic;t=ar-i0-handwrit;x=foo");
+    static const Locale loc_null("");
+    static const Locale loc_gb("en_GB");
+
+    Locale result_en = Locale::forLanguageTag(tag_en, status);
+    status.errIfFailureAndReset("\"%s\"", tag_en);
+    assertEquals(tag_en, loc_en.getName(), result_en.getName());
+
+    Locale result_oed = Locale::forLanguageTag(tag_oed, status);
+    status.errIfFailureAndReset("\"%s\"", tag_oed);
+    assertEquals(tag_oed, loc_oed.getName(), result_oed.getName());
+
+    Locale result_af = Locale::forLanguageTag(tag_af, status);
+    status.errIfFailureAndReset("\"%s\"", tag_af);
+    assertEquals(tag_af, loc_af.getName(), result_af.getName());
+
+    Locale result_ill = Locale::forLanguageTag(tag_ill, status);
+    assertEquals(tag_ill, U_ILLEGAL_ARGUMENT_ERROR, status.reset());
+    assertTrue(result_ill.getName(), result_ill.isBogus());
+
+    Locale result_null = Locale::forLanguageTag(nullptr, status);
+    status.errIfFailureAndReset("nullptr");
+    assertEquals("nullptr", loc_null.getName(), result_null.getName());
+
+    StringPiece sp_substr(tag_oed, 5);  // "en-GB", no NUL.
+    Locale result_substr = Locale::forLanguageTag(sp_substr, status);
+    status.errIfFailureAndReset("\"%.*s\"", sp_substr.size(), sp_substr.data());
+    assertEquals(CharString(sp_substr, status).data(),
+            loc_gb.getName(), result_substr.getName());
+
+    StringPiece sp_no_nul(tag_no_nul, sizeof tag_no_nul);  // "en-GB", no NUL.
+    Locale result_no_nul = Locale::forLanguageTag(sp_no_nul, status);
+    status.errIfFailureAndReset("\"%.*s\"", sp_no_nul.size(), sp_no_nul.data());
+    assertEquals(CharString(sp_no_nul, status).data(),
+            loc_gb.getName(), result_no_nul.getName());
+}
+
+void LocaleTest::TestToLanguageTag() {
+    IcuTestErrorCode status(*this, "TestToLanguageTag()");
+
+    static const Locale loc_c("C");
+    static const Locale loc_en("en_US");
+    static const Locale loc_af("af@calendar=coptic;t=ar-i0-handwrit;x=foo");
+    static const Locale loc_empty("");
+    static const Locale loc_ill("!");
+
+    static const char tag_c[] = "en-US-u-va-posix";
+    static const char tag_en[] = "en-US";
+    static const char tag_af[] = "af-t-ar-i0-handwrit-u-ca-coptic-x-foo";
+    static const char tag_und[] = "und";
+
+    std::string result;
+    StringByteSink<std::string> sink(&result);
+    loc_c.toLanguageTag(sink, status);
+    status.errIfFailureAndReset("\"%s\"", loc_c.getName());
+    assertEquals(loc_c.getName(), tag_c, result.c_str());
+
+    std::string result_c = loc_c.toLanguageTag<std::string>(status);
+    status.errIfFailureAndReset("\"%s\"", loc_c.getName());
+    assertEquals(loc_c.getName(), tag_c, result_c.c_str());
+
+    std::string result_en = loc_en.toLanguageTag<std::string>(status);
+    status.errIfFailureAndReset("\"%s\"", loc_en.getName());
+    assertEquals(loc_en.getName(), tag_en, result_en.c_str());
+
+    std::string result_af = loc_af.toLanguageTag<std::string>(status);
+    status.errIfFailureAndReset("\"%s\"", loc_af.getName());
+    assertEquals(loc_af.getName(), tag_af, result_af.c_str());
+
+    std::string result_empty = loc_empty.toLanguageTag<std::string>(status);
+    status.errIfFailureAndReset("\"%s\"", loc_empty.getName());
+    assertEquals(loc_empty.getName(), tag_und, result_empty.c_str());
+
+    std::string result_ill = loc_ill.toLanguageTag<std::string>(status);
+    status.errIfFailureAndReset("\"%s\"", loc_ill.getName());
+    assertEquals(loc_ill.getName(), tag_und, result_ill.c_str());
+
+    Locale loc_bogus;
+    loc_bogus.setToBogus();
+    std::string result_bogus = loc_bogus.toLanguageTag<std::string>(status);
+    assertEquals("bogus", U_ILLEGAL_ARGUMENT_ERROR, status.reset());
+    assertTrue(result_bogus.c_str(), result_bogus.empty());
+}
