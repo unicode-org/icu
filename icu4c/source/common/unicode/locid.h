@@ -483,6 +483,69 @@ public:
      */
     const char * getBaseName() const;
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Add the likely subtags for this Locale, per the algorithm described
+     * in the following CLDR technical report:
+     *
+     *   http://www.unicode.org/reports/tr35/#Likely_Subtags
+     *
+     * If this Locale is already in the maximal form, or not valid, or there is
+     * no data available for maximization, the Locale will be unchanged.
+     *
+     * For example, "und-Zzzz" cannot be maximized, since there is no
+     * reasonable maximization.
+     *
+     * Examples:
+     *
+     * "en" maximizes to "en_Latn_US"
+     *
+     * "de" maximizes to "de_Latn_US"
+     *
+     * "sr" maximizes to "sr_Cyrl_RS"
+     *
+     * "sh" maximizes to "sr_Latn_RS" (Note this will not reverse.)
+     *
+     * "zh_Hani" maximizes to "zh_Hans_CN" (Note this will not reverse.)
+     *
+     * @param status  error information if maximizing this Locale failed.
+     *                If this Locale is not well-formed, the error code is
+     *                U_ILLEGAL_ARGUMENT_ERROR.
+     * @draft ICU 63
+     */
+    void addLikelySubtags(UErrorCode& status);
+
+    /**
+     * Minimize the subtags for this Locale, per the algorithm described
+     * in the following CLDR technical report:
+     *
+     *   http://www.unicode.org/reports/tr35/#Likely_Subtags
+     *
+     * If this Locale is already in the minimal form, or not valid, or there is
+     * no data available for minimization, the Locale will be unchanged.
+     *
+     * Since the minimization algorithm relies on proper maximization, see the
+     * comments for addLikelySubtags for reasons why there might not be any
+     * data.
+     *
+     * Examples:
+     *
+     * "en_Latn_US" minimizes to "en"
+     *
+     * "de_Latn_US" minimizes to "de"
+     *
+     * "sr_Cyrl_RS" minimizes to "sr"
+     *
+     * "zh_Hant_TW" minimizes to "zh_TW" (The region is preferred to the
+     * script, and minimizing to "zh" would imply "zh_Hans_CN".)
+     *
+     * @param status  error information if maximizing this Locale failed.
+     *                If this Locale is not well-formed, the error code is
+     *                U_ILLEGAL_ARGUMENT_ERROR.
+     * @draft ICU 63
+     */
+    void minimizeSubtags(UErrorCode& status);
+#endif  // U_HIDE_DRAFT_API
 
     /**
      * Gets the list of keywords for the specified locale.
