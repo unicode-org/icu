@@ -1551,7 +1551,7 @@ void MultithreadTest::TestIncDec()
 }
 
 
-Calendar  *gSharedCalendar = {};
+static Calendar  *gSharedCalendar = {};
 
 class Test20104Thread : public SimpleThread {
 public:
@@ -1577,6 +1577,7 @@ void MultithreadTest::Test20104() {
     for (auto &thread:threads) {
         thread.join();
     }
+    delete gSharedCalendar;
     // Note: failure is reported by Thread Sanitizer. Test itself succeeds.
 }
 
