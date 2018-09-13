@@ -488,12 +488,19 @@ public abstract class BreakIterator implements Cloneable
 
     /**
      * Returns a CharacterIterator over the text being analyzed.
-     * For at least some subclasses of BreakIterator, this is a reference
-     * to the <b>actual iterator being used</b> by the BreakIterator,
-     * and therefore, this function's return value should be treated as
-     * <tt>const</tt>.  No guarantees are made about the current position
-     * of this iterator when it is returned.  If you need to move that
+     * <p>
+     * <b><i>Caution:</i></b>The state of the returned CharacterIterator
+     * must not be modified in any way while the BreakIterator is still in use.
+     * Doing so will lead to undefined behavior of the BreakIterator.
+     * Clone the returned CharacterIterator first and work with that.
+     * <p>
+     * The returned CharacterIterator is a reference
+     * to the <b>actual iterator being used</b> by the BreakIterator.
+     * No guarantees are made about the current position
+     * of this iterator when it is returned; it may differ from the
+     * BreakIterators current position.  If you need to move that
      * position to examine the text, clone this function's return value first.
+     *
      * @return A CharacterIterator over the text being analyzed.
      * @stable ICU 2.0
      */
@@ -518,6 +525,10 @@ public abstract class BreakIterator implements Cloneable
      * piece of text is passed in as a CharSequence, and the current
      * iteration position is reset to the beginning of the text.
      * (The old text is dropped.)
+     * <p>
+     * The text underlying the CharSequence must not be be modified while
+     * the BreakIterator holds a references to it. (As could possibly occur
+     * with a StringBuilder, for example).
      * @param newText A CharSequence containing the text to analyze with
      * this BreakIterator.
      * @draft ICU 60
@@ -527,11 +538,15 @@ public abstract class BreakIterator implements Cloneable
     }
 
     /**
-     * Sets the iterator to analyze a new piece of text.  The
-     * BreakIterator is passed a CharacterIterator through which
-     * it will access the text itself.  The current iteration
-     * position is reset to the CharacterIterator's start index.
+     * Sets the iterator to analyze a new piece of text. This function resets
+     * the current iteration position to the beginning of the text.
      * (The old iterator is dropped.)
+     * <p>
+     * <b><i>Caution:</i></b> The supplied CharacterIterator is used
+     * directly by the BreakIterator, and must not be altered in any
+     * way by code outside of the BreakIterator.
+     * Doing so will lead to undefined behavior of the BreakIterator.
+     *
      * @param newText A CharacterIterator referring to the text
      * to analyze with this BreakIterator (the iterator's current
      * position is ignored, but its other state is significant).
