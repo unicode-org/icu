@@ -72,8 +72,9 @@ public:
     
     void TestVariantParsing(void);
 
-   /* Test getting keyword enumeratin */
+   /* Test getting keyword enumeration */
    void TestKeywordVariants(void);
+   void TestCreateUnicodeKeywords(void);
 
    /* Test getting keyword values */
    void TestKeywordVariantParsing(void);

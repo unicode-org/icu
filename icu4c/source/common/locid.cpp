@@ -1174,6 +1174,29 @@ KeywordEnumeration::~KeywordEnumeration() {
     uprv_free(keywords);
 }
 
+// A wrapper around KeywordEnumeration that calls uloc_toUnicodeLocaleKey() in
+// the next() method for each keyword before returning it.
+class UnicodeKeywordEnumeration : public KeywordEnumeration {
+public:
+    using KeywordEnumeration::KeywordEnumeration;
+    virtual ~UnicodeKeywordEnumeration() = default;
+
+    virtual const char* next(int32_t* resultLength, UErrorCode& status) {
+        const char* legacy_key = KeywordEnumeration::next(nullptr, status);
+        if (U_SUCCESS(status) && legacy_key != nullptr) {
+            const char* key = uloc_toUnicodeLocaleKey(legacy_key);
+            if (key == nullptr) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+            } else {
+                if (resultLength != nullptr) *resultLength = uprv_strlen(key);
+                return key;
+            }
+        }
+        if (resultLength != nullptr) *resultLength = 0;
+        return nullptr;
+    }
+};
+
 StringEnumeration *
 Locale::createKeywords(UErrorCode &status) const
 {
@@ -1188,6 +1211,28 @@ Locale::createKeywords(UErrorCode &status) const
             int32_t keyLen = locale_getKeywords(variantStart+1, '@', keywords, keywordCapacity, NULL, 0, NULL, FALSE, &status);
             if(keyLen) {
                 result = new KeywordEnumeration(keywords, keyLen, 0, status);
+            }
+        } else {
+            status = U_INVALID_FORMAT_ERROR;
+        }
+    }
+    return result;
+}
+
+StringEnumeration *
+Locale::createUnicodeKeywords(UErrorCode &status) const
+{
+    char keywords[256];
+    int32_t keywordCapacity = 256;
+    StringEnumeration *result = NULL;
+
+    const char* variantStart = uprv_strchr(fullName, '@');
+    const char* assignment = uprv_strchr(fullName, '=');
+    if(variantStart) {
+        if(assignment > variantStart) {
+            int32_t keyLen = locale_getKeywords(variantStart+1, '@', keywords, keywordCapacity, NULL, 0, NULL, FALSE, &status);
+            if(keyLen) {
+                result = new UnicodeKeywordEnumeration(keywords, keyLen, 0, status);
             }
         } else {
             status = U_INVALID_FORMAT_ERROR;

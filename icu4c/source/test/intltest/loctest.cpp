@@ -7,6 +7,7 @@
  ********************************************************************/
 
 #include "loctest.h"
+#include "unicode/localpointer.h"
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
 #include "unicode/smpdtfmt.h"
@@ -221,6 +222,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestSetIsBogus);
     TESTCASE_AUTO(TestParallelAPIValues);
     TESTCASE_AUTO(TestKeywordVariants);
+    TESTCASE_AUTO(TestCreateUnicodeKeywords);
     TESTCASE_AUTO(TestKeywordVariantParsing);
     TESTCASE_AUTO(TestSetKeywordValue);
     TESTCASE_AUTO(TestGetBaseName);
@@ -1707,6 +1709,55 @@ LocaleTest::TestKeywordVariants(void) {
     }
 
 }
+
+
+void
+LocaleTest::TestCreateUnicodeKeywords(void) {
+    IcuTestErrorCode status(*this, "TestCreateUnicodeKeywords()");
+
+    static const Locale l("de@calendar=buddhist;collation=phonebook");
+
+    LocalPointer<StringEnumeration> keys(l.createUnicodeKeywords(status));
+    status.errIfFailureAndReset("\"%s\"", l.getName());
+
+    const char* key;
+    int32_t resultLength;
+
+    key = keys->next(&resultLength, status);
+    status.errIfFailureAndReset("key #1");
+    assertEquals("resultLength", 2, resultLength);
+    assertTrue("key != nullptr", key != nullptr);
+    assertEquals("calendar", "ca", key);
+
+    key = keys->next(&resultLength, status);
+    status.errIfFailureAndReset("key #2");
+    assertEquals("resultLength", 2, resultLength);
+    assertTrue("key != nullptr", key != nullptr);
+    assertEquals("collation", "co", key);
+
+    key = keys->next(&resultLength, status);
+    status.errIfFailureAndReset("end of keys");
+    assertEquals("resultLength", 0, resultLength);
+    assertTrue("key == nullptr", key == nullptr);
+
+    const UnicodeString* skey;
+    keys->reset(status);  // KeywordEnumeration::reset() never touches status.
+
+    skey = keys->snext(status);
+    status.errIfFailureAndReset("skey #1");
+    assertTrue("skey != nullptr", skey != nullptr);
+    assertEquals("calendar", "ca", *skey);
+
+    skey = keys->snext(status);
+    status.errIfFailureAndReset("skey #2");
+    assertTrue("skey != nullptr", skey != nullptr);
+    assertEquals("collation", "co", *skey);
+
+    skey = keys->snext(status);
+    status.errIfFailureAndReset("end of keys");
+    assertTrue("skey == nullptr", skey == nullptr);
+}
+
 
 void
 LocaleTest::TestKeywordVariantParsing(void) {
