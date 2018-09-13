@@ -221,6 +221,8 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
 #endif
     TESTCASE_AUTO(TestSetIsBogus);
     TESTCASE_AUTO(TestParallelAPIValues);
+    TESTCASE_AUTO(TestAddLikelySubtags);
+    TESTCASE_AUTO(TestMinimizeSubtags);
     TESTCASE_AUTO(TestKeywordVariants);
     TESTCASE_AUTO(TestCreateUnicodeKeywords);
     TESTCASE_AUTO(TestKeywordVariantParsing);
@@ -1604,6 +1606,34 @@ LocaleTest::TestSetIsBogus() {
     if(l.isBogus() != FALSE) {
         errln("After resetting bogus, didn't return FALSE");
     }
+}
+
+
+void
+LocaleTest::TestAddLikelySubtags() {
+    IcuTestErrorCode status(*this, "TestAddLikelySubtags()");
+
+    static const Locale min("sv");
+    static const Locale max("sv_Latn_SE");
+
+    Locale result(min);
+    result.addLikelySubtags(status);
+    status.errIfFailureAndReset("\"%s\"", min.getName());
+    assertEquals("addLikelySubtags", max.getName(), result.getName());
+}
+
+
+void
+LocaleTest::TestMinimizeSubtags() {
+    IcuTestErrorCode status(*this, "TestMinimizeSubtags()");
+
+    static const Locale max("zh_Hant_TW");
+    static const Locale min("zh_TW");
+
+    Locale result(max);
+    result.minimizeSubtags(status);
+    status.errIfFailureAndReset("\"%s\"", max.getName());
+    assertEquals("minimizeSubtags", min.getName(), result.getName());
 }
 
 
