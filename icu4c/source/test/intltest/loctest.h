@@ -109,6 +109,9 @@ public:
     void TestBug13277();
     void TestBug13554();
 
+    void TestAddLikelySubtags();
+    void TestMinimizeSubtags();
+
     void TestForLanguageTag();
     void TestToLanguageTag();
 
