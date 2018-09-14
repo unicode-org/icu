@@ -59,7 +59,7 @@
         </taskdef>
     </target>
     <!-- target for generating ICU data -->
-    <target name="all" depends="locales, collation, rbnf, supplementalData, metadata, metaZones, windowsZones, likelySubtags, plurals, numberingSystems, translit, brkitr, keyTypeData, genderList, dayPeriods" />
+    <target name="all" depends="locales, collation, rbnf, supplementalData, metadata, metaZones, windowsZones, likelySubtags, plurals, pluralRanges, numberingSystems, translit, brkitr, keyTypeData, genderList, dayPeriods" />
     <!-- parallel target -->
     <target name="pall" depends="init">
         <parallel threadsPerProcessor ="1">
@@ -425,6 +425,9 @@
             </fileset>
             <fileset id="plurals" dir="${env.ICU4C_DIR}/source/data/misc">
                 <include name="plurals.txt" />
+            </fileset>
+            <fileset id="pluralRanges" dir="${env.ICU4C_DIR}/source/data/misc">
+                <include name="pluralRanges.txt" />
             </fileset>
             <fileset id="numberingSystems" dir="${env.ICU4C_DIR}/source/data/misc">
                 <include name="numberingSystems.txt" />
