@@ -16,6 +16,7 @@
 #include "uassert.h"
 #include "unicode/platform.h"
 #include "unicode/uniset.h"
+#include "standardplural.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
@@ -45,6 +46,7 @@ class Modifier;
 class MutablePatternModifier;
 class DecimalQuantity;
 class NumberStringBuilder;
+class ModifierStore;
 struct MicroProps;
 
 
@@ -133,7 +135,7 @@ class U_I18N_API AffixPatternProvider {
  * builder. A Modifier usually contains a prefix and a suffix that are applied, but it could contain something else,
  * like a {@link com.ibm.icu.text.SimpleFormatter} pattern.
  *
- * A Modifier is usually immutable, except in cases such as {@link MurkyModifier}, which are mutable for performance
+ * A Modifier is usually immutable, except in cases such as {@link MutablePatternModifier}, which are mutable for performance
  * reasons.
  *
  * Exported as U_I18N_API because it is a base class for other exported types
@@ -185,10 +187,44 @@ class U_I18N_API Modifier {
     virtual bool containsField(UNumberFormatFields field) const = 0;
 
     /**
-     * Returns whether the affixes owned by this modifier are equal to the ones owned by the given modifier.
+     * A fill-in for getParameters(). obj will always be set; if non-null, the other
+     * two fields are also safe to read.
      */
-    virtual bool operator==(const Modifier& other) const = 0;
+    struct Parameters {
+        const ModifierStore* obj = nullptr;
+        int8_t signum;
+        StandardPlural::Form plural;
+    };
+
+    /**
+     * Gets a set of "parameters" for this Modifier.
+     */
+    virtual void getParameters(Parameters& output) const = 0;
+
+    /**
+     * Returns whether this Modifier is *semantically equivalent* to the other Modifier;
+     * in many cases, this is the same as equal, but parameters should be ignored.
+     */
+    virtual bool semanticallyEquivalent(const Modifier& other) const = 0;
 };
+
+
+/**
+ * This is *not* a modifier; rather, it is an object that can return modifiers
+ * based on given parameters.
+ *
+ * Exported as U_I18N_API because it is a base class for other exported types.
+ */
+class U_I18N_API ModifierStore {
+  public:
+    virtual ~ModifierStore();
+
+    /**
+     * Returns a Modifier with the given parameters (best-effort).
+     */
+    virtual const Modifier* getModifier(int8_t signum, StandardPlural::Form plural) const = 0;
+};
+
 
 /**
  * This interface is used when all number formatting settings, including the locale, are known, except for the quantity

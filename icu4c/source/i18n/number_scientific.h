@@ -32,7 +32,9 @@ class U_I18N_API ScientificModifier : public UMemory, public Modifier {
 
     bool containsField(UNumberFormatFields field) const U_OVERRIDE;
 
-    bool operator==(const Modifier& other) const U_OVERRIDE;
+    void getParameters(Parameters& output) const U_OVERRIDE;
+
+    bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE;
 
   private:
     int32_t fExponent;

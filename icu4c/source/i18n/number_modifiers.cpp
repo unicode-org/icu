@@ -53,6 +53,14 @@ void U_CALLCONV initDefaultCurrencySpacing(UErrorCode &status) {
 
 Modifier::~Modifier() = default;
 
+ModifierStore::~ModifierStore() = default;
+
+AdoptingModifierStore::~AdoptingModifierStore()  {
+    for (const Modifier *mod : mods) {
+        delete mod;
+    }
+}
+
 
 int32_t ConstantAffixModifier::apply(NumberStringBuilder &output, int leftIndex, int rightIndex,
                                      UErrorCode &status) const {
@@ -81,7 +89,13 @@ bool ConstantAffixModifier::containsField(UNumberFormatFields field) const {
     return false;
 }
 
-bool ConstantAffixModifier::operator==(const Modifier& other) const {
+void ConstantAffixModifier::getParameters(Parameters& output) const {
+    (void)output;
+    // This method is not currently used.
+    U_ASSERT(false);
+}
+
+bool ConstantAffixModifier::semanticallyEquivalent(const Modifier& other) const {
     auto* _other = dynamic_cast<const ConstantAffixModifier*>(&other);
     if (_other == nullptr) {
         return false;
@@ -160,7 +174,13 @@ bool SimpleModifier::containsField(UNumberFormatFields field) const {
     return false;
 }
 
-bool SimpleModifier::operator==(const Modifier& other) const {
+void SimpleModifier::getParameters(Parameters& output) const {
+    (void)output;
+    // This method is not currently used.
+    U_ASSERT(false);
+}
+
+bool SimpleModifier::semanticallyEquivalent(const Modifier& other) const {
     auto* _other = dynamic_cast<const SimpleModifier*>(&other);
     if (_other == nullptr) {
         return false;
@@ -283,7 +303,13 @@ bool ConstantMultiFieldModifier::containsField(UNumberFormatFields field) const 
     return fPrefix.containsField(field) || fSuffix.containsField(field);
 }
 
-bool ConstantMultiFieldModifier::operator==(const Modifier& other) const {
+void ConstantMultiFieldModifier::getParameters(Parameters& output) const {
+    (void)output;
+    // This method is not currently used.
+    U_ASSERT(false);
+}
+
+bool ConstantMultiFieldModifier::semanticallyEquivalent(const Modifier& other) const {
     auto* _other = dynamic_cast<const ConstantMultiFieldModifier*>(&other);
     if (_other == nullptr) {
         return false;

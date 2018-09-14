@@ -119,9 +119,9 @@ void NumberRangeFormatterImpl::format(UFormattedNumberRangeData& data, bool equa
     // TODO: Write this as MicroProps operator==() ?
     // TODO: Avoid the redundancy of these equality operations with the
     // ones in formatRange?
-    if (!(*micros1.modInner == *micros2.modInner)
-            || !(*micros1.modMiddle == *micros2.modMiddle)
-            || !(*micros1.modOuter == *micros2.modOuter)) {
+    if (!micros1.modInner->semanticallyEquivalent(*micros2.modInner)
+            || !micros1.modMiddle->semanticallyEquivalent(*micros2.modMiddle)
+            || !micros1.modOuter->semanticallyEquivalent(*micros2.modOuter)) {
         formatRange(data, micros1, micros2, status);
         data.identityResult = UNUM_IDENTITY_RESULT_NOT_EQUAL;
         return;
@@ -220,7 +220,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
         case UNUM_RANGE_COLLAPSE_UNIT:
         {
             // OUTER MODIFIER
-            collapseOuter = *micros1.modOuter == *micros2.modOuter;
+            collapseOuter = micros1.modOuter->semanticallyEquivalent(*micros2.modOuter);
 
             if (!collapseOuter) {
                 // Never collapse inner mods if outer mods are not collapsable
@@ -230,7 +230,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
             }
 
             // MIDDLE MODIFIER
-            collapseMiddle = *micros1.modMiddle == *micros2.modMiddle;
+            collapseMiddle = micros1.modMiddle->semanticallyEquivalent(*micros2.modMiddle);
 
             if (!collapseMiddle) {
                 // Never collapse inner mods if outer mods are not collapsable
@@ -262,7 +262,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
             }
 
             // INNER MODIFIER
-            collapseInner = *micros1.modInner == *micros2.modInner;
+            collapseInner = micros1.modInner->semanticallyEquivalent(*micros2.modInner);
 
             // All done checking for collapsability.
             break;

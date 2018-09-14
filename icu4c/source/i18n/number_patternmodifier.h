@@ -18,13 +18,13 @@
 U_NAMESPACE_BEGIN
 
 // Export an explicit template instantiation of the LocalPointer that is used as a
-// data member of ParameterizedModifier.
+// data member of AdoptingModifierStore.
 // (When building DLLs for Windows this is required.)
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
 // Ignore warning 4661 as LocalPointerBase does not use operator== or operator!=
 #pragma warning(suppress: 4661)
-template class U_I18N_API LocalPointerBase<number::impl::ParameterizedModifier>;
-template class U_I18N_API LocalPointer<number::impl::ParameterizedModifier>;
+template class U_I18N_API LocalPointerBase<number::impl::AdoptingModifierStore>;
+template class U_I18N_API LocalPointer<number::impl::AdoptingModifierStore>;
 #endif
 
 namespace number {
@@ -45,10 +45,10 @@ class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator, public U
     const Modifier* getModifier(int8_t signum, StandardPlural::Form plural) const;
 
   private:
-    ImmutablePatternModifier(ParameterizedModifier* pm, const PluralRules* rules,
+    ImmutablePatternModifier(AdoptingModifierStore* pm, const PluralRules* rules,
                              const MicroPropsGenerator* parent);
 
-    const LocalPointer<ParameterizedModifier> pm;
+    const LocalPointer<AdoptingModifierStore> pm;
     const PluralRules* rules;
     const MicroPropsGenerator* parent;
 
@@ -186,7 +186,9 @@ class U_I18N_API MutablePatternModifier
 
     bool containsField(UNumberFormatFields field) const U_OVERRIDE;
 
-    bool operator==(const Modifier& other) const U_OVERRIDE;
+    void getParameters(Parameters& output) const U_OVERRIDE;
+
+    bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE;
 
     /**
      * Returns the string that substitutes a given symbol type in a pattern.
