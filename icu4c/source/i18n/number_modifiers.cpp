@@ -53,11 +53,12 @@ void U_CALLCONV initDefaultCurrencySpacing(UErrorCode &status) {
 
 Modifier::~Modifier() = default;
 
-Modifier::Parameters Modifier::Parameters::getBogus() {
-    Modifier::Parameters result;
-    result.obj = nullptr;
-    return result;
-}
+Modifier::Parameters::Parameters()
+        : obj(nullptr) {}
+
+Modifier::Parameters::Parameters(
+    const ModifierStore* _obj, int8_t _signum, StandardPlural::Form _plural)
+        : obj(_obj), signum(_signum), plural(_plural) {}
 
 ModifierStore::~ModifierStore() = default;
 
@@ -65,14 +66,6 @@ AdoptingModifierStore::~AdoptingModifierStore()  {
     for (const Modifier *mod : mods) {
         delete mod;
     }
-}
-
-
-ModifierWithParameters::ModifierWithParameters(const Modifier::Parameters& parameters)
-    : fParameters(parameters) {}
-
-void ModifierWithParameters::getParameters(Parameters& output) const {
-    output = fParameters;
 }
 
 
@@ -122,12 +115,12 @@ bool ConstantAffixModifier::semanticallyEquivalent(const Modifier& other) const 
 
 
 SimpleModifier::SimpleModifier(const SimpleFormatter &simpleFormatter, Field field, bool strong)
-        : SimpleModifier(simpleFormatter, field, strong, Modifier::Parameters::getBogus()) {}
+        : SimpleModifier(simpleFormatter, field, strong, {}) {}
 
 SimpleModifier::SimpleModifier(const SimpleFormatter &simpleFormatter, Field field, bool strong,
                                const Modifier::Parameters parameters)
-        : ModifierWithParameters(parameters),
-          fCompiledPattern(simpleFormatter.compiledPattern), fField(field), fStrong(strong) {
+        : fCompiledPattern(simpleFormatter.compiledPattern), fField(field), fStrong(strong),
+          fParameters(parameters) {
     int32_t argLimit = SimpleFormatter::getArgumentLimit(
             fCompiledPattern.getBuffer(), fCompiledPattern.length());
     if (argLimit == 0) {
@@ -159,8 +152,7 @@ SimpleModifier::SimpleModifier(const SimpleFormatter &simpleFormatter, Field fie
 }
 
 SimpleModifier::SimpleModifier()
-        : ModifierWithParameters(Modifier::Parameters::getBogus()),
-          fField(UNUM_FIELD_COUNT), fStrong(false), fPrefixLength(0), fSuffixLength(0) {
+        : fField(UNUM_FIELD_COUNT), fStrong(false), fPrefixLength(0), fSuffixLength(0) {
 }
 
 int32_t SimpleModifier::apply(NumberStringBuilder &output, int leftIndex, int rightIndex,
@@ -194,10 +186,17 @@ bool SimpleModifier::containsField(UNumberFormatFields field) const {
     return false;
 }
 
+void SimpleModifier::getParameters(Parameters& output) const {
+    output = fParameters;
+}
+
 bool SimpleModifier::semanticallyEquivalent(const Modifier& other) const {
     auto* _other = dynamic_cast<const SimpleModifier*>(&other);
     if (_other == nullptr) {
         return false;
+    }
+    if (fParameters.obj != nullptr) {
+        return fParameters.obj == _other->fParameters.obj;
     }
     return fCompiledPattern == _other->fCompiledPattern
         && fField == _other->fField
@@ -317,10 +316,17 @@ bool ConstantMultiFieldModifier::containsField(UNumberFormatFields field) const 
     return fPrefix.containsField(field) || fSuffix.containsField(field);
 }
 
+void ConstantMultiFieldModifier::getParameters(Parameters& output) const {
+    output = fParameters;
+}
+
 bool ConstantMultiFieldModifier::semanticallyEquivalent(const Modifier& other) const {
     auto* _other = dynamic_cast<const ConstantMultiFieldModifier*>(&other);
     if (_other == nullptr) {
         return false;
+    }
+    if (fParameters.obj != nullptr) {
+        return fParameters.obj == _other->fParameters.obj;
     }
     return fPrefix.contentEquals(_other->fPrefix)
         && fSuffix.contentEquals(_other->fSuffix)

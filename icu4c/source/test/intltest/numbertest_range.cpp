@@ -113,10 +113,10 @@ void NumberRangeFormatterTest::testBasic() {
         NumberRangeFormatter::with()
             .numberFormatterBoth(NumberFormatter::with().unit(METER).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)),
         Locale("en-us"),
-        u"1 meter – 5 meters",  // TODO: This doesn't collapse because the plurals are different.  Fix?
+        u"1–5 meters",
         u"~5 meters",
         u"~5 meters",
-        u"0–3 meters",  // Note: It collapses when the plurals are the same
+        u"0–3 meters",
         u"~0 meters",
         u"3–3,000 meters",
         u"3,000–5,000 meters",
@@ -129,10 +129,10 @@ void NumberRangeFormatterTest::testBasic() {
         NumberRangeFormatter::with()
             .numberFormatterBoth(NumberFormatter::with().unit(FAHRENHEIT).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)),
         Locale("fr-FR"),
-        u"1 degré Fahrenheit – 5 degrés Fahrenheit",
+        u"1–5 degrés Fahrenheit",
         u"~5 degrés Fahrenheit",
         u"~5 degrés Fahrenheit",
-        u"0 degré Fahrenheit – 3 degrés Fahrenheit",
+        u"0–3 degrés Fahrenheit",
         u"~0 degré Fahrenheit",
         u"3–3 000 degrés Fahrenheit",
         u"3 000–5 000 degrés Fahrenheit",
