@@ -256,6 +256,7 @@ class NumberRangeFormatterTest : public IntlTest {
     void testCollapse();
     void testIdentity();
     void testDifferentFormatters();
+    void testPlurals();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 

@@ -47,6 +47,7 @@ void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const c
         TESTCASE_AUTO(testCollapse);
         TESTCASE_AUTO(testIdentity);
         TESTCASE_AUTO(testDifferentFormatters);
+        TESTCASE_AUTO(testPlurals);
     TESTCASE_AUTO_END;
 }
 
@@ -374,6 +375,39 @@ void NumberRangeFormatterTest::testCollapse() {
         u"5,000–5,000,000 m");
 
     assertFormatRange(
+        u"Default collapse, long-form compact notation",
+        NumberRangeFormatter::with()
+            .numberFormatterBoth(NumberFormatter::with().notation(Notation::compactLong())),
+        Locale("de-CH"),
+        u"1–5",
+        u"~5",
+        u"~5",
+        u"0–3",
+        u"~0",
+        u"3–3 Tausend",
+        u"3–5 Tausend",
+        u"~5 Tausend",
+        u"~5 Tausend",
+        u"5 Tausend – 5 Millionen");
+
+    assertFormatRange(
+        u"Unit collapse, long-form compact notation",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_UNIT)
+            .numberFormatterBoth(NumberFormatter::with().notation(Notation::compactLong())),
+        Locale("de-CH"),
+        u"1–5",
+        u"~5",
+        u"~5",
+        u"0–3",
+        u"~0",
+        u"3–3 Tausend",
+        u"3 Tausend – 5 Tausend",
+        u"~5 Tausend",
+        u"~5 Tausend",
+        u"5 Tausend – 5 Millionen");
+
+    assertFormatRange(
         u"Default collapse on measurement unit with compact-short notation",
         NumberRangeFormatter::with()
             .numberFormatterBoth(NumberFormatter::with().notation(Notation::compactShort()).unit(METER)),
@@ -559,6 +593,69 @@ void NumberRangeFormatterTest::testDifferentFormatters() {
         u"4,999–5,000",
         u"5,000–5,000",  // TODO: Should this one be ~5,000?
         u"5,000–5,000,000");
+}
+
+void NumberRangeFormatterTest::testPlurals() {
+    IcuTestErrorCode status(*this, "testPlurals");
+
+    // Locale sl has interesting plural forms:
+    // GBP{
+    //     one{"britanski funt"}
+    //     two{"britanska funta"}
+    //     few{"britanski funti"}
+    //     other{"britanskih funtov"}
+    // }
+    Locale locale("sl");
+
+    UnlocalizedNumberFormatter unf = NumberFormatter::with()
+        .unit(GBP)
+        .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)
+        .precision(Precision::integer());
+    LocalizedNumberFormatter lnf = unf.locale(locale);
+
+    // For comparison, run the non-range version of the formatter
+    assertEquals(Int64ToUnicodeString(1), u"1 britanski funt", lnf.formatDouble(1, status).toString(status));
+    assertEquals(Int64ToUnicodeString(2), u"2 britanska funta", lnf.formatDouble(2, status).toString(status));
+    assertEquals(Int64ToUnicodeString(3), u"3 britanski funti", lnf.formatDouble(3, status).toString(status));
+    assertEquals(Int64ToUnicodeString(5), u"5 britanskih funtov", lnf.formatDouble(5, status).toString(status));
+    if (status.errIfFailureAndReset()) { return; }
+
+    LocalizedNumberRangeFormatter lnrf = NumberRangeFormatter::with()
+        .numberFormatterBoth(unf)
+        .identityFallback(UNUM_IDENTITY_FALLBACK_RANGE)
+        .locale(locale);
+
+    struct TestCase {
+        double first;
+        double second;
+        const char16_t* expected;
+    } cases[] = {
+        {1, 1, u"1–1 britanski funti"}, // one + one -> few
+        {1, 2, u"1–2 britanska funta"}, // one + two -> two
+        {1, 3, u"1–3 britanski funti"}, // one + few -> few
+        {1, 5, u"1–5 britanskih funtov"}, // one + other -> other
+        {2, 1, u"2–1 britanski funti"}, // two + one -> few
+        {2, 2, u"2–2 britanska funta"}, // two + two -> two
+        {2, 3, u"2–3 britanski funti"}, // two + few -> few
+        {2, 5, u"2–5 britanskih funtov"}, // two + other -> other
+        {3, 1, u"3–1 britanski funti"}, // few + one -> few
+        {3, 2, u"3–2 britanska funta"}, // few + two -> two
+        {3, 3, u"3–3 britanski funti"}, // few + few -> few
+        {3, 5, u"3–5 britanskih funtov"}, // few + other -> other
+        {5, 1, u"5–1 britanski funti"}, // other + one -> few
+        {5, 2, u"5–2 britanska funta"}, // other + two -> two
+        {5, 3, u"5–3 britanski funti"}, // other + few -> few
+        {5, 5, u"5–5 britanskih funtov"}, // other + other -> other
+    };
+    for (auto& cas : cases) {
+        UnicodeString message = Int64ToUnicodeString(cas.first);
+        message += u" ";
+        message += Int64ToUnicodeString(cas.second);
+        status.setScope(message);
+        UnicodeString actual = lnrf.formatFormattableRange(cas.first, cas.second, status).toString(status);
+        assertEquals(message, cas.expected, actual);
+        status.errIfFailureAndReset();
+    }
 }
 
 void  NumberRangeFormatterTest::assertFormatRange(
