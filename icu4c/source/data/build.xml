@@ -258,6 +258,18 @@
             </run>
         </cldr-build>
     </target>
+    <target name="pluralRanges" depends="init,setup" description="builds pluralRanges.txt from pluralRanges.xml">
+        <cldr-build toolName="org.unicode.cldr.icu.NewLdml2IcuConverter" destFile="pluralRanges.txt" noArgs="true">
+            <!-- launch the tool and generate the data after reading the config file -->
+            <run>
+                <args>
+                    <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
+                    <arg name="-t" value="pluralRanges"/>
+                </args>
+            </run>
+        </cldr-build>
+    </target>
     <target name="numberingSystems" depends="init,setup" description="builds numberingSystems.txt from numberingSystems.xml">
         <cldr-build toolName="org.unicode.cldr.icu.NewLdml2IcuConverter" destFile="numberingSystems.txt" noArgs="true">
             <!-- launch the tool and generate the data after reading the config file -->
