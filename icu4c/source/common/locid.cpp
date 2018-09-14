@@ -1201,16 +1201,23 @@ StringEnumeration *
 Locale::createKeywords(UErrorCode &status) const
 {
     char keywords[256];
-    int32_t keywordCapacity = 256;
+    int32_t keywordCapacity = sizeof keywords;
     StringEnumeration *result = NULL;
+
+    if (U_FAILURE(status)) {
+        return result;
+    }
 
     const char* variantStart = uprv_strchr(fullName, '@');
     const char* assignment = uprv_strchr(fullName, '=');
     if(variantStart) {
         if(assignment > variantStart) {
             int32_t keyLen = locale_getKeywords(variantStart+1, '@', keywords, keywordCapacity, NULL, 0, NULL, FALSE, &status);
-            if(keyLen) {
+            if(U_SUCCESS(status) && keyLen) {
                 result = new KeywordEnumeration(keywords, keyLen, 0, status);
+                if (!result) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                }
             }
         } else {
             status = U_INVALID_FORMAT_ERROR;
@@ -1223,16 +1230,23 @@ StringEnumeration *
 Locale::createUnicodeKeywords(UErrorCode &status) const
 {
     char keywords[256];
-    int32_t keywordCapacity = 256;
+    int32_t keywordCapacity = sizeof keywords;
     StringEnumeration *result = NULL;
+
+    if (U_FAILURE(status)) {
+        return result;
+    }
 
     const char* variantStart = uprv_strchr(fullName, '@');
     const char* assignment = uprv_strchr(fullName, '=');
     if(variantStart) {
         if(assignment > variantStart) {
             int32_t keyLen = locale_getKeywords(variantStart+1, '@', keywords, keywordCapacity, NULL, 0, NULL, FALSE, &status);
-            if(keyLen) {
+            if(U_SUCCESS(status) && keyLen) {
                 result = new UnicodeKeywordEnumeration(keywords, keyLen, 0, status);
+                if (!result) {
+                    status = U_MEMORY_ALLOCATION_ERROR;
+                }
             }
         } else {
             status = U_INVALID_FORMAT_ERROR;
