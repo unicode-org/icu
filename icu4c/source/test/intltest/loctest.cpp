@@ -224,7 +224,11 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestKeywordVariants);
     TESTCASE_AUTO(TestCreateUnicodeKeywords);
     TESTCASE_AUTO(TestKeywordVariantParsing);
+    TESTCASE_AUTO(TestGetKeywordValueStdString);
+    TESTCASE_AUTO(TestGetUnicodeKeywordValueStdString);
     TESTCASE_AUTO(TestSetKeywordValue);
+    TESTCASE_AUTO(TestSetKeywordValueStringPiece);
+    TESTCASE_AUTO(TestSetUnicodeKeywordValueStringPiece);
     TESTCASE_AUTO(TestGetBaseName);
 #if !UCONFIG_NO_FILE_IO
     TESTCASE_AUTO(TestGetLocale);
@@ -1791,6 +1795,36 @@ LocaleTest::TestKeywordVariantParsing(void) {
 }
 
 void
+LocaleTest::TestGetKeywordValueStdString(void) {
+    IcuTestErrorCode status(*this, "TestGetKeywordValueStdString()");
+
+    static const char tag[] = "fa-u-nu-latn";
+    static const char keyword[] = "numbers";
+    static const char expected[] = "latn";
+
+    Locale l = Locale::forLanguageTag(tag, status);
+    status.errIfFailureAndReset("\"%s\"", tag);
+
+    std::string result = l.getKeywordValue<std::string>(keyword, status);
+    status.errIfFailureAndReset("\"%s\"", keyword);
+    assertEquals(keyword, expected, result.c_str());
+}
+
+void
+LocaleTest::TestGetUnicodeKeywordValueStdString(void) {
+    IcuTestErrorCode status(*this, "TestGetUnicodeKeywordValueStdString()");
+
+    static const char keyword[] = "co";
+    static const char expected[] = "phonebk";
+
+    static const Locale l("de@calendar=buddhist;collation=phonebook");
+
+    std::string result = l.getUnicodeKeywordValue<std::string>(keyword, status);
+    status.errIfFailureAndReset("\"%s\"", keyword);
+    assertEquals(keyword, expected, result.c_str());
+}
+
+void
 LocaleTest::TestSetKeywordValue(void) {
     static const struct {
         const char *keyword;
@@ -1823,6 +1857,33 @@ LocaleTest::TestSetKeywordValue(void) {
                 testCases[i].value, testCases[i].keyword, buffer);
         }
     }
+}
+
+void
+LocaleTest::TestSetKeywordValueStringPiece(void) {
+    IcuTestErrorCode status(*this, "TestSetKeywordValueStringPiece()");
+    Locale l(Locale::getGerman());
+
+    l.setKeywordValue(StringPiece("collation"), StringPiece("phonebook"), status);
+    l.setKeywordValue(StringPiece("calendarxxx", 8), StringPiece("buddhistxxx", 8), status);
+
+    static const char expected[] = "de@calendar=buddhist;collation=phonebook";
+    assertEquals("", expected, l.getName());
+}
+
+void
+LocaleTest::TestSetUnicodeKeywordValueStringPiece(void) {
+    IcuTestErrorCode status(*this, "TestSetUnicodeKeywordValueStringPiece()");
+    Locale l(Locale::getGerman());
+
+    l.setUnicodeKeywordValue(StringPiece("co"), StringPiece("phonebk"), status);
+    status.errIfFailureAndReset();
+
+    l.setUnicodeKeywordValue(StringPiece("caxxx", 2), StringPiece("buddhistxxx", 8), status);
+    status.errIfFailureAndReset();
+
+    static const char expected[] = "de@calendar=buddhist;collation=phonebook";
+    assertEquals("", expected, l.getName());
 }
 
 void
