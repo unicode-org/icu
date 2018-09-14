@@ -31,6 +31,7 @@
 ******************************************************************************
 */
 
+#include <algorithm>
 
 #include "unicode/bytestream.h"
 #include "unicode/locid.h"
@@ -1264,38 +1265,38 @@ Locale::getKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& sta
     }
 }
 
-const char*
-Locale::getUnicodeKeywordValue(const char* keywordName, UErrorCode& status) const {
+int32_t
+Locale::getUnicodeKeywordValue(const char* keywordName,
+                               char* buffer,
+                               int32_t bufferCapacity,
+                               UErrorCode& status) const {
     if (U_FAILURE(status)) {
-        return nullptr;
+        return 0;
     }
 
-    const char* legacy_key = uloc_toLegacyKey(keywordName);
-
-    if (legacy_key == nullptr) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return nullptr;
-    }
-
-    CharString legacy_value;
+    CharString unicode_value;
     {
-        CharStringByteSink sink(&legacy_value);
-        getKeywordValue(legacy_key, sink, status);
+        CharStringByteSink sink(&unicode_value);
+        getUnicodeKeywordValue(keywordName, sink, status);
     }
 
     if (U_FAILURE(status)) {
-        return nullptr;
+        return 0;
     }
 
-    const char* unicode_value = uloc_toUnicodeLocaleType(
-            keywordName, legacy_value.data());
+    int32_t length = unicode_value.length();
+    int32_t copied = std::min(length, bufferCapacity);
+    uprv_memcpy(buffer, unicode_value.data(), copied);
 
-    if (unicode_value == nullptr) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return nullptr;
+    if (copied < length) {
+        status = U_BUFFER_OVERFLOW_ERROR;
+    } else if (length < bufferCapacity) {
+        buffer[length] = '\0';
+    } else {
+        status = U_STRING_NOT_TERMINATED_WARNING;
     }
 
-    return unicode_value;
+    return length;
 }
 
 void

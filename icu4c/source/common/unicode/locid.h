@@ -532,12 +532,15 @@ public:
     /**
      * Gets the Unicode value for a Unicode keyword.
      *
-     * @param keywordName  name of the keyword for which we want the value.
-     * @param status       error information if getting the value failed.
-     * @return             the keyword value.
+     * @param keywordName name of the keyword for which we want the value.
+     * @param buffer The buffer to receive the keyword value.
+     * @param bufferCapacity The capacity of receiving buffer
+     * @param status Returns any error information while performing this operation.
+     * @return the length of the keyword value
+     *
      * @draft ICU 63
      */
-    const char* getUnicodeKeywordValue(const char* keywordName, UErrorCode& status) const;
+    int32_t getUnicodeKeywordValue(const char* keywordName, char* buffer, int32_t bufferCapacity, UErrorCode& status) const;
 
     /**
      * Gets the Unicode value for a Unicode keyword.

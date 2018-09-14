@@ -1770,9 +1770,38 @@ LocaleTest::TestGetUnicodeKeywordValue(void) {
 
     static const Locale l("de@calendar=buddhist;collation=phonebook");
 
-    std::string result = l.getUnicodeKeywordValue<std::string>(keyword, status);
+    char buffer[16];
+    int32_t resultLen = 0;
+
+    uprv_memset(buffer, '!', sizeof buffer);
+    resultLen =
+        l.getUnicodeKeywordValue(keyword, buffer, sizeof buffer, status);
     status.errIfFailureAndReset("\"%s\"", keyword);
-    assertEquals(keyword, expected, result.c_str());
+    assertEquals("resultLen", sizeof expected - 1, resultLen);
+    assertTrue("buffer[resultLen] == '\\0'", buffer[resultLen] == '\0');
+    assertEquals(keyword, expected, buffer);
+
+    uprv_memset(buffer, '!', sizeof buffer);
+    resultLen =
+        l.getUnicodeKeywordValue(keyword, buffer, sizeof expected - 1, status);
+    assertTrue("status == U_STRING_NOT_TERMINATED_WARNING",
+            status == U_STRING_NOT_TERMINATED_WARNING);
+    status.errIfFailureAndReset("\"%s\"", keyword);
+    assertEquals("resultLen", sizeof expected - 1, resultLen);
+    assertTrue("buffer[resultLen] == '!'", buffer[resultLen] == '!');
+    buffer[sizeof expected - 1] = '\0';
+    assertEquals(keyword, expected, buffer);
+
+    uprv_memset(buffer, '!', sizeof buffer);
+    resultLen =
+        l.getUnicodeKeywordValue(keyword, buffer, sizeof expected - 2, status);
+    assertTrue("status == U_BUFFER_OVERFLOW_ERROR",
+            status == U_BUFFER_OVERFLOW_ERROR);
+    status.reset();
+    assertEquals("resultLen", sizeof expected - 1, resultLen);
+    assertTrue("buffer[resultLen] == '!'", buffer[resultLen] == '!');
+    buffer[sizeof expected - 1] = '\0';
+    assertEquals(keyword, "phoneb!", buffer);
 }
 
 void
