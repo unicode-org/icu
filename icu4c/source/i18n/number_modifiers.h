@@ -39,7 +39,9 @@ class U_I18N_API ConstantAffixModifier : public Modifier, public UObject {
 
     bool containsField(UNumberFormatFields field) const U_OVERRIDE;
 
-    bool operator==(const Modifier& other) const U_OVERRIDE;
+    void getParameters(Parameters& output) const U_OVERRIDE;
+
+    bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE;
 
   private:
     UnicodeString fPrefix;
@@ -70,7 +72,9 @@ class U_I18N_API SimpleModifier : public Modifier, public UMemory {
 
     bool containsField(UNumberFormatFields field) const U_OVERRIDE;
 
-    bool operator==(const Modifier& other) const U_OVERRIDE;
+    void getParameters(Parameters& output) const U_OVERRIDE;
+
+    bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE;
 
     /**
      * TODO: This belongs in SimpleFormatterImpl. The only reason I haven't moved it there yet is because
@@ -148,7 +152,9 @@ class U_I18N_API ConstantMultiFieldModifier : public Modifier, public UMemory {
 
     bool containsField(UNumberFormatFields field) const U_OVERRIDE;
 
-    bool operator==(const Modifier& other) const U_OVERRIDE;
+    void getParameters(Parameters& output) const U_OVERRIDE;
+
+    bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE;
 
   protected:
     // NOTE: In Java, these are stored as array pointers. In C++, the NumberStringBuilder is stored by
@@ -237,7 +243,11 @@ class U_I18N_API EmptyModifier : public Modifier, public UMemory {
         return false;
     }
 
-    bool operator==(const Modifier& other) const U_OVERRIDE {
+    void getParameters(Parameters& output) const U_OVERRIDE {
+        output.obj = nullptr;
+    }
+
+    bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE {
         return other.getCodePointCount() == 0;
     }
 
@@ -246,50 +256,55 @@ class U_I18N_API EmptyModifier : public Modifier, public UMemory {
 };
 
 /**
- * A ParameterizedModifier by itself is NOT a Modifier. Rather, it wraps a data structure containing two or more
- * Modifiers and returns the modifier appropriate for the current situation.
+ * This implementation of ModifierStore adopts Modifer pointers.
  */
-class U_I18N_API ParameterizedModifier : public UMemory {
+class U_I18N_API AdoptingModifierStore : public ModifierStore, public UMemory {
   public:
-    // NOTE: mods is zero-initialized (to nullptr)
-    ParameterizedModifier() : mods() {
-    }
+    virtual ~AdoptingModifierStore();
+
+    static constexpr StandardPlural::Form DEFAULT_STANDARD_PLURAL = StandardPlural::OTHER;
+
+    AdoptingModifierStore() = default;
 
     // No copying!
-    ParameterizedModifier(const ParameterizedModifier &other) = delete;
+    AdoptingModifierStore(const AdoptingModifierStore &other) = delete;
 
-    ~ParameterizedModifier() {
-        for (const Modifier *mod : mods) {
-            delete mod;
-        }
-    }
-
-    void adoptPositiveNegativeModifiers(
-            const Modifier *positive, const Modifier *zero, const Modifier *negative) {
-        mods[2] = positive;
-        mods[1] = zero;
-        mods[0] = negative;
-    }
-
-    /** The modifier is ADOPTED. */
-    void adoptSignPluralModifier(int8_t signum, StandardPlural::Form plural, const Modifier *mod) {
+    /**
+     * Sets the Modifier with the specified signum and plural form.
+     */
+    void adoptModifier(int8_t signum, StandardPlural::Form plural, const Modifier *mod) {
         mods[getModIndex(signum, plural)] = mod;
     }
 
-    /** Returns a reference to the modifier; no ownership change. */
-    const Modifier *getModifier(int8_t signum) const {
-        return mods[signum + 1];
+    /**
+     * Sets the Modifier with the specified signum.
+     * The modifier will apply to all plural forms.
+     */
+    void adoptModifierWithoutPlural(int8_t signum, const Modifier *mod) {
+        mods[getModIndex(signum, DEFAULT_STANDARD_PLURAL)] = mod;
     }
 
     /** Returns a reference to the modifier; no ownership change. */
-    const Modifier *getModifier(int8_t signum, StandardPlural::Form plural) const {
-        return mods[getModIndex(signum, plural)];
+    const Modifier *getModifier(int8_t signum, StandardPlural::Form plural) const U_OVERRIDE {
+        const Modifier* modifier = mods[getModIndex(signum, plural)];
+        if (modifier == nullptr && plural != DEFAULT_STANDARD_PLURAL) {
+            modifier = mods[getModIndex(signum, DEFAULT_STANDARD_PLURAL)];
+        }
+        return modifier;
+    }
+
+    /** Returns a reference to the modifier; no ownership change. */
+    const Modifier *getModifierWithoutPlural(int8_t signum) const {
+        return mods[getModIndex(signum, DEFAULT_STANDARD_PLURAL)];
     }
 
   private:
-    const Modifier *mods[3 * StandardPlural::COUNT];
+    // NOTE: mods is zero-initialized (to nullptr)
+    const Modifier *mods[3 * StandardPlural::COUNT] = {};
 
     inline static int32_t getModIndex(int8_t signum, StandardPlural::Form plural) {
+        U_ASSERT(signum >= -1 && signum <= 1);
+        U_ASSERT(plural >= 0 && plural < StandardPlural::COUNT);
         return static_cast<int32_t>(plural) * 3 + (signum + 1);
     }
 };

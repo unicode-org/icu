@@ -100,7 +100,13 @@ bool ScientificModifier::containsField(UNumberFormatFields field) const {
     return false;
 }
 
-bool ScientificModifier::operator==(const Modifier& other) const {
+void ScientificModifier::getParameters(Parameters& output) const {
+    (void)output;
+    // This method is not used for inner modifiers.
+    U_ASSERT(false);
+}
+
+bool ScientificModifier::semanticallyEquivalent(const Modifier& other) const {
     auto* _other = dynamic_cast<const ScientificModifier*>(&other);
     if (_other == nullptr) {
         return false;
