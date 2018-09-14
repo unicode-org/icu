@@ -366,25 +366,23 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     // Outer modifier (CLDR units and currency long names)
     if (isCldrUnit) {
         fLongNameHandler.adoptInstead(
-                new LongNameHandler(
-                        LongNameHandler::forMeasureUnit(
-                                macros.locale,
-                                macros.unit,
-                                macros.perUnit,
-                                unitWidth,
-                                resolvePluralRules(macros.rules, macros.locale, status),
-                                chain,
-                                status)));
+                LongNameHandler::forMeasureUnit(
+                        macros.locale,
+                        macros.unit,
+                        macros.perUnit,
+                        unitWidth,
+                        resolvePluralRules(macros.rules, macros.locale, status),
+                        chain,
+                        status));
         chain = fLongNameHandler.getAlias();
     } else if (isCurrency && unitWidth == UNUM_UNIT_WIDTH_FULL_NAME) {
         fLongNameHandler.adoptInstead(
-                new LongNameHandler(
-                        LongNameHandler::forCurrencyLongNames(
-                                macros.locale,
-                                currency,
-                                resolvePluralRules(macros.rules, macros.locale, status),
-                                chain,
-                                status)));
+                LongNameHandler::forCurrencyLongNames(
+                        macros.locale,
+                        currency,
+                        resolvePluralRules(macros.rules, macros.locale, status),
+                        chain,
+                        status));
         chain = fLongNameHandler.getAlias();
     } else {
         // No outer modifier required

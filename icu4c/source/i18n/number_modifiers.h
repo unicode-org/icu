@@ -18,17 +18,10 @@
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
 
-/**
- * A base class for modifiers that need to be able to keep a reference to a ModifierStore.
- */
-class U_I18N_API ModifierWithParameters : public Modifier, public UMemory {
+class ReferencingPluralsModifierStore : public ModifierStore {
   public:
-    ModifierWithParameters(const Modifier::Parameters& parameters);
-
-    void getParameters(Parameters& output) const U_OVERRIDE;
-
-  private:
-    Modifier::Parameters fParameters;
+    virtual const Modifier* getModifier(int8_t signum, StandardPlural::Form plural) const;
+    const Modifier* mods[StandardPlural::COUNT] = {};
 };
 
 /**
@@ -67,7 +60,7 @@ class U_I18N_API ConstantAffixModifier : public Modifier, public UObject {
  * The second primary implementation of {@link Modifier}, this one consuming a {@link SimpleFormatter}
  * pattern.
  */
-class U_I18N_API SimpleModifier : public ModifierWithParameters {
+class U_I18N_API SimpleModifier : public Modifier, public UMemory {
   public:
     SimpleModifier(const SimpleFormatter &simpleFormatter, Field field, bool strong);
 
@@ -87,6 +80,8 @@ class U_I18N_API SimpleModifier : public ModifierWithParameters {
     bool isStrong() const U_OVERRIDE;
 
     bool containsField(UNumberFormatFields field) const U_OVERRIDE;
+
+    void getParameters(Parameters& output) const U_OVERRIDE;
 
     bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE;
 
@@ -137,13 +132,14 @@ class U_I18N_API SimpleModifier : public ModifierWithParameters {
     int32_t fPrefixLength = 0;
     int32_t fSuffixOffset = -1;
     int32_t fSuffixLength = 0;
+    Modifier::Parameters fParameters;
 };
 
 /**
  * An implementation of {@link Modifier} that allows for multiple types of fields in the same modifier. Constructed
  * based on the contents of two {@link NumberStringBuilder} instances (one for the prefix, one for the suffix).
  */
-class U_I18N_API ConstantMultiFieldModifier :public ModifierWithParameters {
+class U_I18N_API ConstantMultiFieldModifier : public Modifier, public UMemory {
   public:
     ConstantMultiFieldModifier(
             const NumberStringBuilder &prefix,
@@ -151,18 +147,21 @@ class U_I18N_API ConstantMultiFieldModifier :public ModifierWithParameters {
             bool overwrite,
             bool strong,
             const Modifier::Parameters parameters)
-      : ModifierWithParameters(parameters),
-        fPrefix(prefix),
+      : fPrefix(prefix),
         fSuffix(suffix),
         fOverwrite(overwrite),
-        fStrong(strong) {}
+        fStrong(strong),
+        fParameters(parameters) {}
 
     ConstantMultiFieldModifier(
             const NumberStringBuilder &prefix,
             const NumberStringBuilder &suffix,
             bool overwrite,
             bool strong)
-      : ConstantMultiFieldModifier(prefix, suffix, overwrite, strong, Modifier::Parameters::getBogus()) {}
+      : fPrefix(prefix),
+        fSuffix(suffix),
+        fOverwrite(overwrite),
+        fStrong(strong) {}
 
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
                   UErrorCode &status) const U_OVERRIDE;
@@ -175,6 +174,8 @@ class U_I18N_API ConstantMultiFieldModifier :public ModifierWithParameters {
 
     bool containsField(UNumberFormatFields field) const U_OVERRIDE;
 
+    void getParameters(Parameters& output) const U_OVERRIDE;
+
     bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE;
 
   protected:
@@ -184,6 +185,7 @@ class U_I18N_API ConstantMultiFieldModifier :public ModifierWithParameters {
     NumberStringBuilder fSuffix;
     bool fOverwrite;
     bool fStrong;
+    Modifier::Parameters fParameters;
 };
 
 /** Identical to {@link ConstantMultiFieldModifier}, but supports currency spacing. */

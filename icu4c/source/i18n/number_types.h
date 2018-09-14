@@ -195,7 +195,8 @@ class U_I18N_API Modifier {
         int8_t signum;
         StandardPlural::Form plural;
 
-        static Parameters getBogus();
+        Parameters();
+        Parameters(const ModifierStore* _obj, int8_t _signum, StandardPlural::Form _plural);
     };
 
     /**
