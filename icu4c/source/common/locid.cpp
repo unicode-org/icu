@@ -31,7 +31,6 @@
 ******************************************************************************
 */
 
-#include <algorithm>
 
 #include "unicode/bytestream.h"
 #include "unicode/locid.h"
@@ -1274,29 +1273,24 @@ Locale::getUnicodeKeywordValue(const char* keywordName,
         return 0;
     }
 
-    CharString unicode_value;
-    {
-        CharStringByteSink sink(&unicode_value);
-        getUnicodeKeywordValue(keywordName, sink, status);
-    }
+    CheckedArrayByteSink sink(buffer, bufferCapacity);
+    getUnicodeKeywordValue(keywordName, sink, status);
+
+    int32_t reslen = sink.NumberOfBytesAppended();
 
     if (U_FAILURE(status)) {
-        return 0;
+        return reslen;
     }
 
-    int32_t length = unicode_value.length();
-    int32_t copied = std::min(length, bufferCapacity);
-    uprv_memcpy(buffer, unicode_value.data(), copied);
-
-    if (copied < length) {
+    if (sink.Overflowed()) {
         status = U_BUFFER_OVERFLOW_ERROR;
-    } else if (length < bufferCapacity) {
-        buffer[length] = '\0';
-    } else {
+    } else if (reslen == bufferCapacity) {
         status = U_STRING_NOT_TERMINATED_WARNING;
+    } else {
+        buffer[reslen] = '\0';
     }
 
-    return length;
+    return reslen;
 }
 
 void
