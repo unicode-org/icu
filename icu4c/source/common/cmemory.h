@@ -279,6 +279,10 @@ inline T *LocalMemory<T>::allocateInsteadAndCopy(int32_t newCapacity, int32_t le
  *
  * Unlike LocalMemory and LocalArray, this class never adopts
  * (takes ownership of) another array.
+ *
+ * WARNING: MaybeStackArray only works with primitive (plain-old data) types.
+ * It does NOT know how to call a destructor! If you work with classes with
+ * destructors, consider LocalArray in localpointer.h.
  */
 template<typename T, int32_t stackCapacity>
 class MaybeStackArray {
