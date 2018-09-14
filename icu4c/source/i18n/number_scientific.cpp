@@ -101,9 +101,8 @@ bool ScientificModifier::containsField(UNumberFormatFields field) const {
 }
 
 void ScientificModifier::getParameters(Parameters& output) const {
-    (void)output;
-    // This method is not used for inner modifiers.
-    U_ASSERT(false);
+    // Not part of any plural sets
+    output.obj = nullptr;
 }
 
 bool ScientificModifier::semanticallyEquivalent(const Modifier& other) const {

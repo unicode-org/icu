@@ -44,9 +44,33 @@ struct UFormattedNumberRangeData : public UMemory {
 };
 
 
-struct NumberRangeData {
-    SimpleFormatter rangePattern;
-    SimpleFormatter approximatelyPattern;
+class StandardPluralRanges : public UMemory {
+  public:
+    void initialize(const Locale& locale, UErrorCode& status);
+    StandardPlural::Form resolve(StandardPlural::Form first, StandardPlural::Form second) const;
+
+    /** Used for data loading. */
+    void addPluralRange(
+        StandardPlural::Form first,
+        StandardPlural::Form second,
+        StandardPlural::Form result);
+
+    /** Used for data loading. */
+    void setCapacity(int32_t length);
+
+  private:
+    struct StandardPluralRangeTriple {
+        StandardPlural::Form first;
+        StandardPlural::Form second;
+        StandardPlural::Form result;
+    };
+
+    // TODO: An array is simple here, but it results in linear lookup time.
+    // Certain locales have 20-30 entries in this list.
+    // Consider changing to a smarter data structure.
+    typedef MaybeStackArray<StandardPluralRangeTriple, 3> PluralRangeTriples;
+    PluralRangeTriples fTriples;
+    int32_t fTriplesLen = 0;
 };
 
 
@@ -67,6 +91,8 @@ class NumberRangeFormatterImpl : public UMemory {
     SimpleFormatter fRangeFormatter;
     SimpleModifier fApproximatelyModifier;
 
+    StandardPluralRanges fPluralRanges;
+
     void formatSingleValue(UFormattedNumberRangeData& data,
                            MicroProps& micros1, MicroProps& micros2,
                            UErrorCode& status) const;
@@ -78,6 +104,8 @@ class NumberRangeFormatterImpl : public UMemory {
     void formatRange(UFormattedNumberRangeData& data,
                      MicroProps& micros1, MicroProps& micros2,
                      UErrorCode& status) const;
+
+    const Modifier& resolveModifierPlurals(const Modifier& first, const Modifier& second) const;
 };
 
 

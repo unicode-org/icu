@@ -53,12 +53,26 @@ void U_CALLCONV initDefaultCurrencySpacing(UErrorCode &status) {
 
 Modifier::~Modifier() = default;
 
+Modifier::Parameters Modifier::Parameters::getBogus() {
+    Modifier::Parameters result;
+    result.obj = nullptr;
+    return result;
+}
+
 ModifierStore::~ModifierStore() = default;
 
 AdoptingModifierStore::~AdoptingModifierStore()  {
     for (const Modifier *mod : mods) {
         delete mod;
     }
+}
+
+
+ModifierWithParameters::ModifierWithParameters(const Modifier::Parameters& parameters)
+    : fParameters(parameters) {}
+
+void ModifierWithParameters::getParameters(Parameters& output) const {
+    output = fParameters;
 }
 
 
@@ -108,7 +122,12 @@ bool ConstantAffixModifier::semanticallyEquivalent(const Modifier& other) const 
 
 
 SimpleModifier::SimpleModifier(const SimpleFormatter &simpleFormatter, Field field, bool strong)
-        : fCompiledPattern(simpleFormatter.compiledPattern), fField(field), fStrong(strong) {
+        : SimpleModifier(simpleFormatter, field, strong, Modifier::Parameters::getBogus()) {}
+
+SimpleModifier::SimpleModifier(const SimpleFormatter &simpleFormatter, Field field, bool strong,
+                               const Modifier::Parameters parameters)
+        : ModifierWithParameters(parameters),
+          fCompiledPattern(simpleFormatter.compiledPattern), fField(field), fStrong(strong) {
     int32_t argLimit = SimpleFormatter::getArgumentLimit(
             fCompiledPattern.getBuffer(), fCompiledPattern.length());
     if (argLimit == 0) {
@@ -140,7 +159,8 @@ SimpleModifier::SimpleModifier(const SimpleFormatter &simpleFormatter, Field fie
 }
 
 SimpleModifier::SimpleModifier()
-        : fField(UNUM_FIELD_COUNT), fStrong(false), fPrefixLength(0), fSuffixLength(0) {
+        : ModifierWithParameters(Modifier::Parameters::getBogus()),
+          fField(UNUM_FIELD_COUNT), fStrong(false), fPrefixLength(0), fSuffixLength(0) {
 }
 
 int32_t SimpleModifier::apply(NumberStringBuilder &output, int leftIndex, int rightIndex,
@@ -172,12 +192,6 @@ bool SimpleModifier::containsField(UNumberFormatFields field) const {
     // This method is not currently used.
     U_ASSERT(false);
     return false;
-}
-
-void SimpleModifier::getParameters(Parameters& output) const {
-    (void)output;
-    // This method is not currently used.
-    U_ASSERT(false);
 }
 
 bool SimpleModifier::semanticallyEquivalent(const Modifier& other) const {
@@ -301,12 +315,6 @@ bool ConstantMultiFieldModifier::isStrong() const {
 
 bool ConstantMultiFieldModifier::containsField(UNumberFormatFields field) const {
     return fPrefix.containsField(field) || fSuffix.containsField(field);
-}
-
-void ConstantMultiFieldModifier::getParameters(Parameters& output) const {
-    (void)output;
-    // This method is not currently used.
-    U_ASSERT(false);
 }
 
 bool ConstantMultiFieldModifier::semanticallyEquivalent(const Modifier& other) const {

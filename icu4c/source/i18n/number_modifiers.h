@@ -19,6 +19,19 @@ U_NAMESPACE_BEGIN namespace number {
 namespace impl {
 
 /**
+ * A base class for modifiers that need to be able to keep a reference to a ModifierStore.
+ */
+class U_I18N_API ModifierWithParameters : public Modifier, public UMemory {
+  public:
+    ModifierWithParameters(const Modifier::Parameters& parameters);
+
+    void getParameters(Parameters& output) const U_OVERRIDE;
+
+  private:
+    Modifier::Parameters fParameters;
+};
+
+/**
  * The canonical implementation of {@link Modifier}, containing a prefix and suffix string.
  * TODO: This is not currently being used by real code and could be removed.
  */
@@ -54,9 +67,12 @@ class U_I18N_API ConstantAffixModifier : public Modifier, public UObject {
  * The second primary implementation of {@link Modifier}, this one consuming a {@link SimpleFormatter}
  * pattern.
  */
-class U_I18N_API SimpleModifier : public Modifier, public UMemory {
+class U_I18N_API SimpleModifier : public ModifierWithParameters {
   public:
     SimpleModifier(const SimpleFormatter &simpleFormatter, Field field, bool strong);
+
+    SimpleModifier(const SimpleFormatter &simpleFormatter, Field field, bool strong,
+                   const Modifier::Parameters parameters);
 
     // Default constructor for LongNameHandler.h
     SimpleModifier();
@@ -71,8 +87,6 @@ class U_I18N_API SimpleModifier : public Modifier, public UMemory {
     bool isStrong() const U_OVERRIDE;
 
     bool containsField(UNumberFormatFields field) const U_OVERRIDE;
-
-    void getParameters(Parameters& output) const U_OVERRIDE;
 
     bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE;
 
@@ -129,17 +143,26 @@ class U_I18N_API SimpleModifier : public Modifier, public UMemory {
  * An implementation of {@link Modifier} that allows for multiple types of fields in the same modifier. Constructed
  * based on the contents of two {@link NumberStringBuilder} instances (one for the prefix, one for the suffix).
  */
-class U_I18N_API ConstantMultiFieldModifier : public Modifier, public UMemory {
+class U_I18N_API ConstantMultiFieldModifier :public ModifierWithParameters {
   public:
     ConstantMultiFieldModifier(
             const NumberStringBuilder &prefix,
             const NumberStringBuilder &suffix,
             bool overwrite,
-            bool strong)
-      : fPrefix(prefix),
+            bool strong,
+            const Modifier::Parameters parameters)
+      : ModifierWithParameters(parameters),
+        fPrefix(prefix),
         fSuffix(suffix),
         fOverwrite(overwrite),
         fStrong(strong) {}
+
+    ConstantMultiFieldModifier(
+            const NumberStringBuilder &prefix,
+            const NumberStringBuilder &suffix,
+            bool overwrite,
+            bool strong)
+      : ConstantMultiFieldModifier(prefix, suffix, overwrite, strong, Modifier::Parameters::getBogus()) {}
 
     int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
                   UErrorCode &status) const U_OVERRIDE;
@@ -151,8 +174,6 @@ class U_I18N_API ConstantMultiFieldModifier : public Modifier, public UMemory {
     bool isStrong() const U_OVERRIDE;
 
     bool containsField(UNumberFormatFields field) const U_OVERRIDE;
-
-    void getParameters(Parameters& output) const U_OVERRIDE;
 
     bool semanticallyEquivalent(const Modifier& other) const U_OVERRIDE;
 
