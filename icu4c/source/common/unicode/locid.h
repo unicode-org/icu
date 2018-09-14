@@ -497,6 +497,11 @@ public:
     /**
      * Gets the value for a keyword.
      *
+     * This uses legacy keyword=value pairs, like "collation=phonebook".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
+     *
      * @param keywordName name of the keyword for which we want the value. Case insensitive.
      * @param buffer The buffer to receive the keyword value.
      * @param bufferCapacity The capacity of receiving buffer
@@ -511,6 +516,11 @@ public:
     /**
      * Gets the value for a keyword.
      *
+     * This uses legacy keyword=value pairs, like "collation=phonebook".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
+     *
      * @param keywordName  name of the keyword for which we want the value.
      * @param sink         the sink to receive the keyword value.
      * @param status       error information if getting the value failed.
@@ -520,6 +530,11 @@ public:
 
     /**
      * Gets the value for a keyword.
+     *
+     * This uses legacy keyword=value pairs, like "collation=phonebook".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
      *
      * @param keywordName  name of the keyword for which we want the value.
      * @param status       error information if getting the value failed.
@@ -531,6 +546,11 @@ public:
 
     /**
      * Gets the Unicode value for a Unicode keyword.
+     *
+     * This uses Unicode key-value pairs, like "co-phonebk".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
      *
      * @param keywordName name of the keyword for which we want the value.
      * @param buffer The buffer to receive the keyword value.
@@ -545,6 +565,11 @@ public:
     /**
      * Gets the Unicode value for a Unicode keyword.
      *
+     * This uses Unicode key-value pairs, like "co-phonebk".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
+     *
      * @param keywordName  name of the keyword for which we want the value.
      * @param sink         the sink to receive the keyword value.
      * @param status       error information if getting the value failed.
@@ -554,6 +579,11 @@ public:
 
     /**
      * Gets the Unicode value for a Unicode keyword.
+     *
+     * This uses Unicode key-value pairs, like "co-phonebk".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
      *
      * @param keywordName  name of the keyword for which we want the value.
      * @param status       error information if getting the value failed.
@@ -569,6 +599,11 @@ public:
      *
      * For removing all keywords, use getBaseName(),
      * and construct a new Locale if it differs from getName().
+     *
+     * This uses legacy keyword=value pairs, like "collation=phonebook".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
      *
      * @param keywordName name of the keyword to be set. Case insensitive.
      * @param keywordValue value of the keyword to be set. If 0-length or
@@ -587,6 +622,11 @@ public:
      * For removing all keywords, use getBaseName(),
      * and construct a new Locale if it differs from getName().
      *
+     * This uses legacy keyword=value pairs, like "collation=phonebook".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
+     *
      * @param keywordName name of the keyword to be set.
      * @param keywordValue value of the keyword to be set. If 0-length or
      *  NULL, will result in the keyword being removed. No error is given if
@@ -601,6 +641,11 @@ public:
      *
      * For removing all keywords, use getBaseName(),
      * and construct a new Locale if it differs from getName().
+     *
+     * This uses Unicode key-value pairs, like "co-phonebk".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
      *
      * @param keywordName name of the keyword to be set.
      * @param keywordValue value of the keyword to be set. If 0-length or
@@ -617,6 +662,11 @@ public:
      *
      * For removing all keywords, use getBaseName(),
      * and construct a new Locale if it differs from getName().
+     *
+     * This uses Unicode key-value pairs, like "co-phonebk".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
      *
      * @param keywordName name of the keyword to be set.
      * @param keywordValue value of the keyword to be set. If 0-length or
