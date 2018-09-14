@@ -1221,7 +1221,7 @@ Locale::getKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& sta
     }
 
     LocalMemory<char> scratch;
-    int32_t scratch_capacity = 8;  // Arbitrarily chosen default size.
+    int32_t scratch_capacity = 16;  // Arbitrarily chosen default size.
 
     char* buffer;
     int32_t result_capacity, reslen;
