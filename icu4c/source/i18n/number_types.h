@@ -194,6 +194,8 @@ class U_I18N_API Modifier {
         const ModifierStore* obj = nullptr;
         int8_t signum;
         StandardPlural::Form plural;
+
+        static Parameters getBogus();
     };
 
     /**

@@ -265,4 +265,8 @@ void LongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &mic
     micros.modOuter = &fModifiers[utils::getStandardPlural(rules, copy)];
 }
 
+const Modifier* LongNameHandler::getModifier(int8_t /*signum*/, StandardPlural::Form plural) const {
+    return &fModifiers[plural];
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
