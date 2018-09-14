@@ -1268,10 +1268,6 @@ void
 Locale::getUnicodeKeywordValue(StringPiece keywordName,
                                ByteSink& sink,
                                UErrorCode& status) const {
-    if (U_FAILURE(status)) {
-        return;
-    }
-
     // TODO: Remove the need for a const char* to a NUL terminated buffer.
     const CharString keywordName_nul(keywordName, status);
     if (U_FAILURE(status)) {
@@ -1320,20 +1316,9 @@ void
 Locale::setKeywordValue(StringPiece keywordName,
                         StringPiece keywordValue,
                         UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-
     // TODO: Remove the need for a const char* to a NUL terminated buffer.
     const CharString keywordName_nul(keywordName, status);
-    if (U_FAILURE(status)) {
-        return;
-    }
     const CharString keywordValue_nul(keywordValue, status);
-    if (U_FAILURE(status)) {
-        return;
-    }
-
     setKeywordValue(keywordName_nul.data(), keywordValue_nul.data(), status);
 }
 
@@ -1341,12 +1326,10 @@ void
 Locale::setUnicodeKeywordValue(StringPiece keywordName,
                                StringPiece keywordValue,
                                UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-
     // TODO: Remove the need for a const char* to a NUL terminated buffer.
     const CharString keywordName_nul(keywordName, status);
+    const CharString keywordValue_nul(keywordValue, status);
+
     if (U_FAILURE(status)) {
         return;
     }
@@ -1355,12 +1338,6 @@ Locale::setUnicodeKeywordValue(StringPiece keywordName,
 
     if (legacy_key == nullptr) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-
-    // TODO: Remove the need for a const char* to a NUL terminated buffer.
-    const CharString keywordValue_nul(keywordValue, status);
-    if (U_FAILURE(status)) {
         return;
     }
 
