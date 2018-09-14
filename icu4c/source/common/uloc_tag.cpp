@@ -2416,6 +2416,23 @@ uloc_forLanguageTag(const char* langtag,
                     int32_t localeIDCapacity,
                     int32_t* parsedLength,
                     UErrorCode* status) {
+    return uloc_forLanguageTagImpl(
+            langtag,
+            -1,
+            localeID,
+            localeIDCapacity,
+            parsedLength,
+            status);
+}
+
+
+U_CAPI int32_t U_EXPORT2
+uloc_forLanguageTagImpl(const char* langtag,
+                        int32_t tagLen,
+                        char* localeID,
+                        int32_t localeIDCapacity,
+                        int32_t* parsedLength,
+                        UErrorCode* status) {
     ULanguageTag *lt;
     int32_t reslen = 0;
     const char *subtag, *p;
@@ -2423,7 +2440,7 @@ uloc_forLanguageTag(const char* langtag,
     int32_t i, n;
     UBool noRegion = TRUE;
 
-    lt = ultag_parse(langtag, -1, parsedLength, status);
+    lt = ultag_parse(langtag, tagLen, parsedLength, status);
     if (U_FAILURE(*status)) {
         return 0;
     }

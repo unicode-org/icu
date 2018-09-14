@@ -1142,6 +1142,16 @@ uloc_forLanguageTag(const char* langtag,
                     int32_t* parsedLength,
                     UErrorCode* err);
 
+#ifndef U_HIDE_SYSTEM_API
+U_STABLE int32_t U_EXPORT2
+uloc_forLanguageTagImpl(const char* langtag,
+                        int32_t tagLen,
+                        char* localeID,
+                        int32_t localeIDCapacity,
+                        int32_t* parsedLength,
+                        UErrorCode* err);
+#endif  /* U_HIDE_SYSTEM_API */
+
 /**
  * Returns a well-formed language tag for this locale ID. 
  * <p> 
