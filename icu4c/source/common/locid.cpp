@@ -1264,35 +1264,6 @@ Locale::getKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& sta
     }
 }
 
-int32_t
-Locale::getUnicodeKeywordValue(const char* keywordName,
-                               char* buffer,
-                               int32_t bufferCapacity,
-                               UErrorCode& status) const {
-    if (U_FAILURE(status)) {
-        return 0;
-    }
-
-    CheckedArrayByteSink sink(buffer, bufferCapacity);
-    getUnicodeKeywordValue(keywordName, sink, status);
-
-    int32_t reslen = sink.NumberOfBytesAppended();
-
-    if (U_FAILURE(status)) {
-        return reslen;
-    }
-
-    if (sink.Overflowed()) {
-        status = U_BUFFER_OVERFLOW_ERROR;
-    } else if (reslen == bufferCapacity) {
-        status = U_STRING_NOT_TERMINATED_WARNING;
-    } else {
-        buffer[reslen] = '\0';
-    }
-
-    return reslen;
-}
-
 void
 Locale::getUnicodeKeywordValue(StringPiece keywordName,
                                ByteSink& sink,
@@ -1367,31 +1338,6 @@ Locale::setKeywordValue(StringPiece keywordName,
 }
 
 void
-Locale::setUnicodeKeywordValue(const char* keywordName,
-                               const char* keywordValue,
-                               UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    const char* legacy_key = uloc_toLegacyKey(keywordName);
-
-    if (legacy_key == nullptr) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-
-    const char* legacy_value = uloc_toLegacyType(keywordName, keywordValue);
-
-    if (legacy_value == nullptr) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-
-    setKeywordValue(legacy_key, legacy_value, status);
-}
-
-void
 Locale::setUnicodeKeywordValue(StringPiece keywordName,
                                StringPiece keywordValue,
                                UErrorCode& status) {
@@ -1404,13 +1350,29 @@ Locale::setUnicodeKeywordValue(StringPiece keywordName,
     if (U_FAILURE(status)) {
         return;
     }
+
+    const char* legacy_key = uloc_toLegacyKey(keywordName_nul.data());
+
+    if (legacy_key == nullptr) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    // TODO: Remove the need for a const char* to a NUL terminated buffer.
     const CharString keywordValue_nul(keywordValue, status);
     if (U_FAILURE(status)) {
         return;
     }
 
-    setUnicodeKeywordValue(
-            keywordName_nul.data(), keywordValue_nul.data(), status);
+    const char* legacy_value =
+        uloc_toLegacyType(keywordName_nul.data(), keywordValue_nul.data());
+
+    if (legacy_value == nullptr) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    setKeywordValue(legacy_key, legacy_value, status);
 }
 
 const char *

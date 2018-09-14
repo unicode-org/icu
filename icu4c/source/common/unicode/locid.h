@@ -552,24 +552,6 @@ public:
      * ICU4C doesn't do automatic conversion between legacy and Unicode
      * keywords and values in getters and setters (as opposed to ICU4J).
      *
-     * @param keywordName name of the keyword for which we want the value.
-     * @param buffer The buffer to receive the keyword value.
-     * @param bufferCapacity The capacity of receiving buffer
-     * @param status Returns any error information while performing this operation.
-     * @return the length of the keyword value
-     *
-     * @draft ICU 63
-     */
-    int32_t getUnicodeKeywordValue(const char* keywordName, char* buffer, int32_t bufferCapacity, UErrorCode& status) const;
-
-    /**
-     * Gets the Unicode value for a Unicode keyword.
-     *
-     * This uses Unicode key-value pairs, like "co-phonebk".
-     *
-     * ICU4C doesn't do automatic conversion between legacy and Unicode
-     * keywords and values in getters and setters (as opposed to ICU4J).
-     *
      * @param keywordName  name of the keyword for which we want the value.
      * @param sink         the sink to receive the keyword value.
      * @param status       error information if getting the value failed.
@@ -635,27 +617,6 @@ public:
      * @draft ICU 63
      */
     void setKeywordValue(StringPiece keywordName, StringPiece keywordValue, UErrorCode& status);
-
-    /**
-     * Sets or removes the Unicode value for a Unicode keyword.
-     *
-     * For removing all keywords, use getBaseName(),
-     * and construct a new Locale if it differs from getName().
-     *
-     * This uses Unicode key-value pairs, like "co-phonebk".
-     *
-     * ICU4C doesn't do automatic conversion between legacy and Unicode
-     * keywords and values in getters and setters (as opposed to ICU4J).
-     *
-     * @param keywordName name of the keyword to be set.
-     * @param keywordValue value of the keyword to be set. If 0-length or
-     *  NULL, will result in the keyword being removed. No error is given if
-     *  that keyword does not exist.
-     * @param status Returns any error information while performing this operation.
-     *
-     * @draft ICU 63
-     */
-    void setUnicodeKeywordValue(const char* keywordName, const char* keywordValue, UErrorCode& status);
 
     /**
      * Sets or removes the Unicode value for a Unicode keyword.

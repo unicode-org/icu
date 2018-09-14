@@ -223,11 +223,9 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestKeywordVariants);
     TESTCASE_AUTO(TestKeywordVariantParsing);
     TESTCASE_AUTO(TestGetKeywordValueStdString);
-    TESTCASE_AUTO(TestGetUnicodeKeywordValue);
     TESTCASE_AUTO(TestGetUnicodeKeywordValueStdString);
     TESTCASE_AUTO(TestSetKeywordValue);
     TESTCASE_AUTO(TestSetKeywordValueStringPiece);
-    TESTCASE_AUTO(TestSetUnicodeKeywordValue);
     TESTCASE_AUTO(TestSetUnicodeKeywordValueStringPiece);
     TESTCASE_AUTO(TestGetBaseName);
 #if !UCONFIG_NO_FILE_IO
@@ -1762,49 +1760,6 @@ LocaleTest::TestGetKeywordValueStdString(void) {
 }
 
 void
-LocaleTest::TestGetUnicodeKeywordValue(void) {
-    IcuTestErrorCode status(*this, "TestGetUnicodeKeywordValue()");
-
-    static const char keyword[] = "co";
-    static const char expected[] = "phonebk";
-
-    static const Locale l("de@calendar=buddhist;collation=phonebook");
-
-    char buffer[16];
-    int32_t resultLen = 0;
-
-    uprv_memset(buffer, '!', sizeof buffer);
-    resultLen =
-        l.getUnicodeKeywordValue(keyword, buffer, sizeof buffer, status);
-    status.errIfFailureAndReset("\"%s\"", keyword);
-    assertEquals("resultLen", sizeof expected - 1, resultLen);
-    assertTrue("buffer[resultLen] == '\\0'", buffer[resultLen] == '\0');
-    assertEquals(keyword, expected, buffer);
-
-    uprv_memset(buffer, '!', sizeof buffer);
-    resultLen =
-        l.getUnicodeKeywordValue(keyword, buffer, sizeof expected - 1, status);
-    assertTrue("status == U_STRING_NOT_TERMINATED_WARNING",
-            status == U_STRING_NOT_TERMINATED_WARNING);
-    status.errIfFailureAndReset("\"%s\"", keyword);
-    assertEquals("resultLen", sizeof expected - 1, resultLen);
-    assertTrue("buffer[resultLen] == '!'", buffer[resultLen] == '!');
-    buffer[sizeof expected - 1] = '\0';
-    assertEquals(keyword, expected, buffer);
-
-    uprv_memset(buffer, '!', sizeof buffer);
-    resultLen =
-        l.getUnicodeKeywordValue(keyword, buffer, sizeof expected - 2, status);
-    assertTrue("status == U_BUFFER_OVERFLOW_ERROR",
-            status == U_BUFFER_OVERFLOW_ERROR);
-    status.reset();
-    assertEquals("resultLen", sizeof expected - 1, resultLen);
-    assertTrue("buffer[resultLen] == '!'", buffer[resultLen] == '!');
-    buffer[sizeof expected - 1] = '\0';
-    assertEquals(keyword, "phoneb!", buffer);
-}
-
-void
 LocaleTest::TestGetUnicodeKeywordValueStdString(void) {
     IcuTestErrorCode status(*this, "TestGetUnicodeKeywordValueStdString()");
 
@@ -1860,21 +1815,6 @@ LocaleTest::TestSetKeywordValueStringPiece(void) {
 
     l.setKeywordValue(StringPiece("collation"), StringPiece("phonebook"), status);
     l.setKeywordValue(StringPiece("calendarxxx", 8), StringPiece("buddhistxxx", 8), status);
-
-    static const char expected[] = "de@calendar=buddhist;collation=phonebook";
-    assertEquals("", expected, l.getName());
-}
-
-void
-LocaleTest::TestSetUnicodeKeywordValue(void) {
-    IcuTestErrorCode status(*this, "TestSetUnicodeKeywordValue()");
-    Locale l(Locale::getGerman());
-
-    l.setUnicodeKeywordValue("co", "phonebk", status);
-    status.errIfFailureAndReset();
-
-    l.setUnicodeKeywordValue("ca", "buddhist", status);
-    status.errIfFailureAndReset();
 
     static const char expected[] = "de@calendar=buddhist;collation=phonebook";
     assertEquals("", expected, l.getName());
