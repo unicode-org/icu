@@ -2862,11 +2862,9 @@ void LocaleTest::TestMoveAssign() {
     {
         Locale l3(l1);
         assertTrue("l1 == l3", l1 == l3);
-        assertTrue("!l3.isBogus()", !l3.isBogus());
         l2 = std::move(l3);
         assertTrue("l1 == l2", l1 == l2);
-        assertTrue("l3.isBogus()", l3.isBogus());
-        assertTrue("l3.getName()", l3.getName() != nullptr);
+        assertTrue("l2 != l3", l2.getName() != l3.getName());
     }
 
     // This should remain true also after l3 has been destructed.
@@ -2878,31 +2876,33 @@ void LocaleTest::TestMoveAssign() {
     {
         Locale l6(l4);
         assertTrue("l4 == l6", l4 == l6);
-        assertTrue("!l6.isBogus()", !l6.isBogus());
         l5 = std::move(l6);
         assertTrue("l4 == l5", l4 == l5);
-        assertTrue("l6.isBogus()", l6.isBogus());
-        assertTrue("l6.getName()", l6.getName() != nullptr);
+        assertTrue("l5 != l6", l5.getName() != l6.getName());
     }
 
     // This should remain true also after l6 has been destructed.
     assertTrue("l4 == l5, again", l4 == l5);
 
-    Locale l7("vo", "Cyrl", "AQ");
+    Locale l7("vo_Cyrl_AQ_EURO");
 
     Locale l8;
     {
         Locale l9(l7);
         assertTrue("l7 == l9", l7 == l9);
-        assertTrue("!l9.isBogus()", !l9.isBogus());
         l8 = std::move(l9);
         assertTrue("l7 == l8", l7 == l8);
-        assertTrue("l9.isBogus()", l9.isBogus());
-        assertTrue("l9.getName()", l9.getName() != nullptr);
+        assertTrue("l8 != l9", l8.getName() != l9.getName());
     }
 
     // This should remain true also after l9 has been destructed.
     assertTrue("l7 == l8, again", l7 == l8);
+
+    assertEquals("language", l7.getLanguage(), l8.getLanguage());
+    assertEquals("script", l7.getScript(), l8.getScript());
+    assertEquals("country", l7.getCountry(), l8.getCountry());
+    assertEquals("variant", l7.getVariant(), l8.getVariant());
+    assertEquals("bogus", l7.isBogus(), l8.isBogus());
 }
 
 void LocaleTest::TestMoveCtor() {
@@ -2915,29 +2915,29 @@ void LocaleTest::TestMoveCtor() {
 
     Locale l3(l1);
     assertTrue("l1 == l3", l1 == l3);
-    assertTrue("!l3.isBogus()", !l3.isBogus());
     Locale l2(std::move(l3));
     assertTrue("l1 == l2", l1 == l2);
-    assertTrue("l3.isBogus()", l3.isBogus());
-    assertTrue("l3.getName()", l3.getName() != nullptr);
+    assertTrue("l2 != l3", l2.getName() != l3.getName());
 
     Locale l4("de@collation=phonebook");
 
     Locale l6(l4);
     assertTrue("l4 == l6", l4 == l6);
-    assertTrue("!l6.isBogus()", !l6.isBogus());
     Locale l5(std::move(l6));
     assertTrue("l4 == l5", l4 == l5);
-    assertTrue("l6.isBogus()", l6.isBogus());
-    assertTrue("l6.getName()", l6.getName() != nullptr);
+    assertTrue("l5 != l6", l5.getName() != l6.getName());
 
-    Locale l7("vo", "Cyrl", "AQ");
+    Locale l7("vo_Cyrl_AQ_EURO");
 
     Locale l9(l7);
     assertTrue("l7 == l9", l7 == l9);
-    assertTrue("!l9.isBogus()", !l9.isBogus());
     Locale l8(std::move(l9));
     assertTrue("l7 == l8", l7 == l8);
-    assertTrue("l9.isBogus()", l9.isBogus());
-    assertTrue("l9.getName()", l9.getName() != nullptr);
+    assertTrue("l8 != l9", l8.getName() != l9.getName());
+
+    assertEquals("language", l7.getLanguage(), l8.getLanguage());
+    assertEquals("script", l7.getScript(), l8.getScript());
+    assertEquals("country", l7.getCountry(), l8.getCountry());
+    assertEquals("variant", l7.getVariant(), l8.getVariant());
+    assertEquals("bogus", l7.isBogus(), l8.isBogus());
 }

@@ -486,15 +486,23 @@ Locale &Locale::operator=(const Locale &other)
 }
 
 Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
-    setToBogus();
+    if (baseName != fullName) uprv_free(baseName);
+    if (fullName != fullNameBuffer) uprv_free(fullName);
 
     if (other.fullName == other.fullNameBuffer) {
         uprv_strcpy(fullNameBuffer, other.fullNameBuffer);
+        fullName = fullNameBuffer;
     } else {
         fullName = other.fullName;
+        other.fullName = nullptr;
     }
 
-    baseName = other.baseName == other.fullName ? fullName : other.baseName;
+    if (other.baseName == other.fullName) {
+        baseName = fullName;
+    } else {
+        baseName = other.baseName;
+        other.baseName = nullptr;
+    }
 
     uprv_strcpy(language, other.language);
     uprv_strcpy(script, other.script);
@@ -502,9 +510,6 @@ Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
 
     variantBegin = other.variantBegin;
     fIsBogus = other.fIsBogus;
-
-    other.baseName = other.fullName = other.fullNameBuffer;
-    other.fIsBogus = TRUE;
 
     return *this;
 }
