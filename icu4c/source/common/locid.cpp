@@ -1312,12 +1312,25 @@ Locale::getUnicodeKeywordValue(StringPiece keywordName,
         return;
     }
 
-    const char* unicode_value =
-        getUnicodeKeywordValue(keywordName_nul.data(), status);
+    const char* legacy_key = uloc_toLegacyKey(keywordName_nul.data());
+
+    if (legacy_key == nullptr) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+
+    CharString legacy_value;
+    {
+        CharStringByteSink sink(&legacy_value);
+        getKeywordValue(legacy_key, sink, status);
+    }
 
     if (U_FAILURE(status)) {
         return;
     }
+
+    const char* unicode_value = uloc_toUnicodeLocaleType(
+            keywordName_nul.data(), legacy_value.data());
 
     if (unicode_value == nullptr) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
