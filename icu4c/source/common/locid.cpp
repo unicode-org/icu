@@ -494,14 +494,12 @@ Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
         fullName = fullNameBuffer;
     } else {
         fullName = other.fullName;
-        other.fullName = nullptr;
     }
 
     if (other.baseName == other.fullName) {
         baseName = fullName;
     } else {
         baseName = other.baseName;
-        other.baseName = nullptr;
     }
 
     uprv_strcpy(language, other.language);
@@ -510,6 +508,8 @@ Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
 
     variantBegin = other.variantBegin;
     fIsBogus = other.fIsBogus;
+
+    other.baseName = other.fullName = other.fullNameBuffer;
 
     return *this;
 }
