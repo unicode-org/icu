@@ -18,12 +18,6 @@
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
 
-class ReferencingPluralsModifierStore : public ModifierStore {
-  public:
-    virtual const Modifier* getModifier(int8_t signum, StandardPlural::Form plural) const;
-    const Modifier* mods[StandardPlural::COUNT] = {};
-};
-
 /**
  * The canonical implementation of {@link Modifier}, containing a prefix and suffix string.
  * TODO: This is not currently being used by real code and could be removed.
@@ -296,6 +290,7 @@ class U_I18N_API AdoptingModifierStore : public ModifierStore, public UMemory {
      * Sets the Modifier with the specified signum and plural form.
      */
     void adoptModifier(int8_t signum, StandardPlural::Form plural, const Modifier *mod) {
+        U_ASSERT(mods[getModIndex(signum, plural)] == nullptr);
         mods[getModIndex(signum, plural)] = mod;
     }
 
@@ -304,6 +299,7 @@ class U_I18N_API AdoptingModifierStore : public ModifierStore, public UMemory {
      * The modifier will apply to all plural forms.
      */
     void adoptModifierWithoutPlural(int8_t signum, const Modifier *mod) {
+        U_ASSERT(mods[getModIndex(signum, DEFAULT_STANDARD_PLURAL)] == nullptr);
         mods[getModIndex(signum, DEFAULT_STANDARD_PLURAL)] = mod;
     }
 
