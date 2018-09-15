@@ -48,7 +48,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     private RuleBasedBreakIterator() {
         fDictionaryCharCount  = 0;
         synchronized(gAllBreakEngines) {
-            fBreakEngines = new ArrayList<LanguageBreakEngine>(gAllBreakEngines);
+            fBreakEngines = new ArrayList<>(gAllBreakEngines);
         }
     }
 
@@ -136,7 +136,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
             result.fText = (CharacterIterator)(fText.clone());
         }
         synchronized (gAllBreakEngines)  {
-            result.fBreakEngines = new ArrayList<LanguageBreakEngine>(gAllBreakEngines);
+            result.fBreakEngines = new ArrayList<>(gAllBreakEngines);
         }
         result.fLookAheadMatches = new LookAheadResults();
         result.fBreakCache = result.new BreakCache(fBreakCache);
@@ -300,7 +300,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
     static {
         gUnhandledBreakEngine = new UnhandledBreakEngine();
-        gAllBreakEngines = new ArrayList<LanguageBreakEngine>();
+        gAllBreakEngines = new ArrayList<>();
         gAllBreakEngines.add(gUnhandledBreakEngine);
     }
 
@@ -617,10 +617,19 @@ public class RuleBasedBreakIterator extends BreakIterator {
     }
 
     /**
-     * Return a CharacterIterator over the text being analyzed.  This version
-     * of this method returns the actual CharacterIterator we're using internally.
-     * Changing the state of this iterator can have undefined consequences.  If
-     * you need to change it, clone it first.
+     * Returns a CharacterIterator over the text being analyzed.
+     * <p>
+     * <b><i>Caution:</i></b>The state of the returned CharacterIterator
+     * must not be modified in any way while the BreakIterator is still in use.
+     * Doing so will lead to undefined behavior of the BreakIterator.
+     * Clone the returned CharacterIterator first and work with that.
+     * <p>
+     * The returned CharacterIterator is a reference
+     * to the <b>actual iterator being used</b> by the BreakIterator.
+     * No guarantees are made about the current position
+     * of this iterator when it is returned; it may differ from the
+     * BreakIterators current position.  If you need to move that
+     * position to examine the text, clone this function's return value first.
      * @return An iterator over the text being analyzed.
      * @stable ICU 2.0
      */
@@ -632,6 +641,13 @@ public class RuleBasedBreakIterator extends BreakIterator {
     /**
      * Set the iterator to analyze a new piece of text.  This function resets
      * the current iteration position to the beginning of the text.
+     * (The old iterator is dropped.)
+     * <p>
+     * <b><i>Caution:</i></b> The supplied CharacterIterator is used
+     * directly by the BreakIterator, and must not be altered in any
+     * way by code outside of the BreakIterator.
+     * Doing so will lead to undefined behavior of the BreakIterator.
+     *
      * @param newText An iterator over the text to analyze.
      * @stable ICU 2.0
      */

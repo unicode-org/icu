@@ -6,9 +6,12 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <iterator>
+#include <set>
 #include <utility>
 
 #include "loctest.h"
+#include "unicode/localpointer.h"
 #include "unicode/decimfmt.h"
 #include "unicode/ucurr.h"
 #include "unicode/smpdtfmt.h"
@@ -222,9 +225,18 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
 #endif
     TESTCASE_AUTO(TestSetIsBogus);
     TESTCASE_AUTO(TestParallelAPIValues);
+    TESTCASE_AUTO(TestAddLikelySubtags);
+    TESTCASE_AUTO(TestMinimizeSubtags);
     TESTCASE_AUTO(TestKeywordVariants);
+    TESTCASE_AUTO(TestCreateUnicodeKeywords);
     TESTCASE_AUTO(TestKeywordVariantParsing);
+    TESTCASE_AUTO(TestCreateKeywordSet);
+    TESTCASE_AUTO(TestCreateUnicodeKeywordSet);
+    TESTCASE_AUTO(TestGetKeywordValueStdString);
+    TESTCASE_AUTO(TestGetUnicodeKeywordValueStdString);
     TESTCASE_AUTO(TestSetKeywordValue);
+    TESTCASE_AUTO(TestSetKeywordValueStringPiece);
+    TESTCASE_AUTO(TestSetUnicodeKeywordValueStringPiece);
     TESTCASE_AUTO(TestGetBaseName);
 #if !UCONFIG_NO_FILE_IO
     TESTCASE_AUTO(TestGetLocale);
@@ -1606,6 +1618,34 @@ LocaleTest::TestSetIsBogus() {
 
 
 void
+LocaleTest::TestAddLikelySubtags() {
+    IcuTestErrorCode status(*this, "TestAddLikelySubtags()");
+
+    static const Locale min("sv");
+    static const Locale max("sv_Latn_SE");
+
+    Locale result(min);
+    result.addLikelySubtags(status);
+    status.errIfFailureAndReset("\"%s\"", min.getName());
+    assertEquals("addLikelySubtags", max.getName(), result.getName());
+}
+
+
+void
+LocaleTest::TestMinimizeSubtags() {
+    IcuTestErrorCode status(*this, "TestMinimizeSubtags()");
+
+    static const Locale max("zh_Hant_TW");
+    static const Locale min("zh_TW");
+
+    Locale result(max);
+    result.minimizeSubtags(status);
+    status.errIfFailureAndReset("\"%s\"", max.getName());
+    assertEquals("minimizeSubtags", min.getName(), result.getName());
+}
+
+
+void
 LocaleTest::TestKeywordVariants(void) {
     static const struct {
         const char *localeID;
@@ -1712,6 +1752,55 @@ LocaleTest::TestKeywordVariants(void) {
 
 }
 
+
+void
+LocaleTest::TestCreateUnicodeKeywords(void) {
+    IcuTestErrorCode status(*this, "TestCreateUnicodeKeywords()");
+
+    static const Locale l("de@calendar=buddhist;collation=phonebook");
+
+    LocalPointer<StringEnumeration> keys(l.createUnicodeKeywords(status));
+    status.errIfFailureAndReset("\"%s\"", l.getName());
+
+    const char* key;
+    int32_t resultLength;
+
+    key = keys->next(&resultLength, status);
+    status.errIfFailureAndReset("key #1");
+    assertEquals("resultLength", 2, resultLength);
+    assertTrue("key != nullptr", key != nullptr);
+    assertEquals("calendar", "ca", key);
+
+    key = keys->next(&resultLength, status);
+    status.errIfFailureAndReset("key #2");
+    assertEquals("resultLength", 2, resultLength);
+    assertTrue("key != nullptr", key != nullptr);
+    assertEquals("collation", "co", key);
+
+    key = keys->next(&resultLength, status);
+    status.errIfFailureAndReset("end of keys");
+    assertEquals("resultLength", 0, resultLength);
+    assertTrue("key == nullptr", key == nullptr);
+
+    const UnicodeString* skey;
+    keys->reset(status);  // KeywordEnumeration::reset() never touches status.
+
+    skey = keys->snext(status);
+    status.errIfFailureAndReset("skey #1");
+    assertTrue("skey != nullptr", skey != nullptr);
+    assertEquals("calendar", "ca", *skey);
+
+    skey = keys->snext(status);
+    status.errIfFailureAndReset("skey #2");
+    assertTrue("skey != nullptr", skey != nullptr);
+    assertEquals("collation", "co", *skey);
+
+    skey = keys->snext(status);
+    status.errIfFailureAndReset("end of keys");
+    assertTrue("skey == nullptr", skey == nullptr);
+}
+
+
 void
 LocaleTest::TestKeywordVariantParsing(void) {
     static const struct {
@@ -1741,6 +1830,74 @@ LocaleTest::TestKeywordVariantParsing(void) {
                 testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
         }
     }
+}
+
+void
+LocaleTest::TestCreateKeywordSet(void) {
+    IcuTestErrorCode status(*this, "TestCreateKeywordSet()");
+
+    static const Locale l("de@calendar=buddhist;collation=phonebook");
+
+    std::set<std::string> result;
+    l.getKeywords<std::string>(
+            std::insert_iterator<decltype(result)>(result, result.begin()),
+            status);
+    status.errIfFailureAndReset("\"%s\"", l.getName());
+
+    assertEquals("set::size()", 2, result.size());
+    assertTrue("set::find(\"calendar\")",
+               result.find("calendar") != result.end());
+    assertTrue("set::find(\"collation\")",
+               result.find("collation") != result.end());
+}
+
+void
+LocaleTest::TestCreateUnicodeKeywordSet(void) {
+    IcuTestErrorCode status(*this, "TestCreateUnicodeKeywordSet()");
+
+    static const Locale l("de@calendar=buddhist;collation=phonebook");
+
+    std::set<std::string> result;
+    l.getUnicodeKeywords<std::string>(
+            std::insert_iterator<decltype(result)>(result, result.begin()),
+            status);
+    status.errIfFailureAndReset("\"%s\"", l.getName());
+
+    assertEquals("set::size()", 2, result.size());
+    assertTrue("set::find(\"ca\")",
+               result.find("ca") != result.end());
+    assertTrue("set::find(\"co\")",
+               result.find("co") != result.end());
+}
+
+void
+LocaleTest::TestGetKeywordValueStdString(void) {
+    IcuTestErrorCode status(*this, "TestGetKeywordValueStdString()");
+
+    static const char tag[] = "fa-u-nu-latn";
+    static const char keyword[] = "numbers";
+    static const char expected[] = "latn";
+
+    Locale l = Locale::forLanguageTag(tag, status);
+    status.errIfFailureAndReset("\"%s\"", tag);
+
+    std::string result = l.getKeywordValue<std::string>(keyword, status);
+    status.errIfFailureAndReset("\"%s\"", keyword);
+    assertEquals(keyword, expected, result.c_str());
+}
+
+void
+LocaleTest::TestGetUnicodeKeywordValueStdString(void) {
+    IcuTestErrorCode status(*this, "TestGetUnicodeKeywordValueStdString()");
+
+    static const char keyword[] = "co";
+    static const char expected[] = "phonebk";
+
+    static const Locale l("de@calendar=buddhist;collation=phonebook");
+
+    std::string result = l.getUnicodeKeywordValue<std::string>(keyword, status);
+    status.errIfFailureAndReset("\"%s\"", keyword);
+    assertEquals(keyword, expected, result.c_str());
 }
 
 void
@@ -1776,6 +1933,33 @@ LocaleTest::TestSetKeywordValue(void) {
                 testCases[i].value, testCases[i].keyword, buffer);
         }
     }
+}
+
+void
+LocaleTest::TestSetKeywordValueStringPiece(void) {
+    IcuTestErrorCode status(*this, "TestSetKeywordValueStringPiece()");
+    Locale l(Locale::getGerman());
+
+    l.setKeywordValue(StringPiece("collation"), StringPiece("phonebook"), status);
+    l.setKeywordValue(StringPiece("calendarxxx", 8), StringPiece("buddhistxxx", 8), status);
+
+    static const char expected[] = "de@calendar=buddhist;collation=phonebook";
+    assertEquals("", expected, l.getName());
+}
+
+void
+LocaleTest::TestSetUnicodeKeywordValueStringPiece(void) {
+    IcuTestErrorCode status(*this, "TestSetUnicodeKeywordValueStringPiece()");
+    Locale l(Locale::getGerman());
+
+    l.setUnicodeKeywordValue(StringPiece("co"), StringPiece("phonebk"), status);
+    status.errIfFailureAndReset();
+
+    l.setUnicodeKeywordValue(StringPiece("caxxx", 2), StringPiece("buddhistxxx", 8), status);
+    status.errIfFailureAndReset();
+
+    static const char expected[] = "de@calendar=buddhist;collation=phonebook";
+    assertEquals("", expected, l.getName());
 }
 
 void

@@ -32,6 +32,8 @@
 #define LOCID_H
 
 #include "unicode/bytestream.h"
+#include "unicode/localpointer.h"
+#include "unicode/strenum.h"
 #include "unicode/stringpiece.h"
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
@@ -502,6 +504,69 @@ public:
      */
     const char * getBaseName() const;
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Add the likely subtags for this Locale, per the algorithm described
+     * in the following CLDR technical report:
+     *
+     *   http://www.unicode.org/reports/tr35/#Likely_Subtags
+     *
+     * If this Locale is already in the maximal form, or not valid, or there is
+     * no data available for maximization, the Locale will be unchanged.
+     *
+     * For example, "und-Zzzz" cannot be maximized, since there is no
+     * reasonable maximization.
+     *
+     * Examples:
+     *
+     * "en" maximizes to "en_Latn_US"
+     *
+     * "de" maximizes to "de_Latn_US"
+     *
+     * "sr" maximizes to "sr_Cyrl_RS"
+     *
+     * "sh" maximizes to "sr_Latn_RS" (Note this will not reverse.)
+     *
+     * "zh_Hani" maximizes to "zh_Hans_CN" (Note this will not reverse.)
+     *
+     * @param status  error information if maximizing this Locale failed.
+     *                If this Locale is not well-formed, the error code is
+     *                U_ILLEGAL_ARGUMENT_ERROR.
+     * @draft ICU 63
+     */
+    void addLikelySubtags(UErrorCode& status);
+
+    /**
+     * Minimize the subtags for this Locale, per the algorithm described
+     * in the following CLDR technical report:
+     *
+     *   http://www.unicode.org/reports/tr35/#Likely_Subtags
+     *
+     * If this Locale is already in the minimal form, or not valid, or there is
+     * no data available for minimization, the Locale will be unchanged.
+     *
+     * Since the minimization algorithm relies on proper maximization, see the
+     * comments for addLikelySubtags for reasons why there might not be any
+     * data.
+     *
+     * Examples:
+     *
+     * "en_Latn_US" minimizes to "en"
+     *
+     * "de_Latn_US" minimizes to "de"
+     *
+     * "sr_Cyrl_RS" minimizes to "sr"
+     *
+     * "zh_Hant_TW" minimizes to "zh_TW" (The region is preferred to the
+     * script, and minimizing to "zh" would imply "zh_Hans_CN".)
+     *
+     * @param status  error information if maximizing this Locale failed.
+     *                If this Locale is not well-formed, the error code is
+     *                U_ILLEGAL_ARGUMENT_ERROR.
+     * @draft ICU 63
+     */
+    void minimizeSubtags(UErrorCode& status);
+#endif  // U_HIDE_DRAFT_API
 
     /**
      * Gets the list of keywords for the specified locale.
@@ -509,12 +574,63 @@ public:
      * @param status the status code
      * @return pointer to StringEnumeration class, or NULL if there are no keywords. 
      * Client must dispose of it by calling delete.
+     * @see getKeywords
      * @stable ICU 2.8
      */
     StringEnumeration * createKeywords(UErrorCode &status) const;
 
+#ifndef U_HIDE_DRAFT_API
+
+    /**
+     * Gets the list of Unicode keywords for the specified locale.
+     *
+     * @param status the status code
+     * @return pointer to StringEnumeration class, or NULL if there are no keywords.
+     * Client must dispose of it by calling delete.
+     * @see getUnicodeKeywords
+     * @draft ICU 63
+     */
+    StringEnumeration * createUnicodeKeywords(UErrorCode &status) const;
+
+    /**
+     * Gets the set of keywords for this Locale.
+     *
+     * A wrapper to call createKeywords() and write the resulting
+     * keywords as standard strings (or compatible objects) into any kind of
+     * container that can be written to by an STL style output iterator.
+     *
+     * @param iterator  an STL style output iterator to write the keywords to.
+     * @param status    error information if creating set of keywords failed.
+     * @return          a set of strings with all keywords.
+     * @draft ICU 63
+     */
+    template<typename StringClass, typename OutputIterator>
+    inline void getKeywords(OutputIterator iterator, UErrorCode& status) const;
+
+    /**
+     * Gets the set of Unicode keywords for this Locale.
+     *
+     * A wrapper to call createUnicodeKeywords() and write the resulting
+     * keywords as standard strings (or compatible objects) into any kind of
+     * container that can be written to by an STL style output iterator.
+     *
+     * @param iterator  an STL style output iterator to write the keywords to.
+     * @param status    error information if creating set of keywords failed.
+     * @return          a set of strings with all keywords.
+     * @draft ICU 63
+     */
+    template<typename StringClass, typename OutputIterator>
+    inline void getUnicodeKeywords(OutputIterator iterator, UErrorCode& status) const;
+
+#endif  // U_HIDE_DRAFT_API
+
     /**
      * Gets the value for a keyword.
+     *
+     * This uses legacy keyword=value pairs, like "collation=phonebook".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
      *
      * @param keywordName name of the keyword for which we want the value. Case insensitive.
      * @param buffer The buffer to receive the keyword value.
@@ -526,11 +642,80 @@ public:
      */
     int32_t getKeywordValue(const char* keywordName, char *buffer, int32_t bufferCapacity, UErrorCode &status) const;
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Gets the value for a keyword.
+     *
+     * This uses legacy keyword=value pairs, like "collation=phonebook".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
+     *
+     * @param keywordName  name of the keyword for which we want the value.
+     * @param sink         the sink to receive the keyword value.
+     * @param status       error information if getting the value failed.
+     * @draft ICU 63
+     */
+    void getKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& status) const;
+
+    /**
+     * Gets the value for a keyword.
+     *
+     * This uses legacy keyword=value pairs, like "collation=phonebook".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
+     *
+     * @param keywordName  name of the keyword for which we want the value.
+     * @param status       error information if getting the value failed.
+     * @return             the keyword value.
+     * @draft ICU 63
+     */
+    template<typename StringClass>
+    inline StringClass getKeywordValue(StringPiece keywordName, UErrorCode& status) const;
+
+    /**
+     * Gets the Unicode value for a Unicode keyword.
+     *
+     * This uses Unicode key-value pairs, like "co-phonebk".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
+     *
+     * @param keywordName  name of the keyword for which we want the value.
+     * @param sink         the sink to receive the keyword value.
+     * @param status       error information if getting the value failed.
+     * @draft ICU 63
+     */
+    void getUnicodeKeywordValue(StringPiece keywordName, ByteSink& sink, UErrorCode& status) const;
+
+    /**
+     * Gets the Unicode value for a Unicode keyword.
+     *
+     * This uses Unicode key-value pairs, like "co-phonebk".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
+     *
+     * @param keywordName  name of the keyword for which we want the value.
+     * @param status       error information if getting the value failed.
+     * @return             the keyword value.
+     * @draft ICU 63
+     */
+    template<typename StringClass>
+    inline StringClass getUnicodeKeywordValue(StringPiece keywordName, UErrorCode& status) const;
+#endif  // U_HIDE_DRAFT_API
+
     /**
      * Sets or removes the value for a keyword.
      *
      * For removing all keywords, use getBaseName(),
      * and construct a new Locale if it differs from getName().
+     *
+     * This uses legacy keyword=value pairs, like "collation=phonebook".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
      *
      * @param keywordName name of the keyword to be set. Case insensitive.
      * @param keywordValue value of the keyword to be set. If 0-length or
@@ -541,6 +726,48 @@ public:
      * @stable ICU 49
      */
     void setKeywordValue(const char* keywordName, const char* keywordValue, UErrorCode &status);
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Sets or removes the value for a keyword.
+     *
+     * For removing all keywords, use getBaseName(),
+     * and construct a new Locale if it differs from getName().
+     *
+     * This uses legacy keyword=value pairs, like "collation=phonebook".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
+     *
+     * @param keywordName name of the keyword to be set.
+     * @param keywordValue value of the keyword to be set. If 0-length or
+     *  NULL, will result in the keyword being removed. No error is given if
+     *  that keyword does not exist.
+     * @param status Returns any error information while performing this operation.
+     * @draft ICU 63
+     */
+    void setKeywordValue(StringPiece keywordName, StringPiece keywordValue, UErrorCode& status);
+
+    /**
+     * Sets or removes the Unicode value for a Unicode keyword.
+     *
+     * For removing all keywords, use getBaseName(),
+     * and construct a new Locale if it differs from getName().
+     *
+     * This uses Unicode key-value pairs, like "co-phonebk".
+     *
+     * ICU4C doesn't do automatic conversion between legacy and Unicode
+     * keywords and values in getters and setters (as opposed to ICU4J).
+     *
+     * @param keywordName name of the keyword to be set.
+     * @param keywordValue value of the keyword to be set. If 0-length or
+     *  NULL, will result in the keyword being removed. No error is given if
+     *  that keyword does not exist.
+     * @param status Returns any error information while performing this operation.
+     * @draft ICU 63
+     */
+    void setUnicodeKeywordValue(StringPiece keywordName, StringPiece keywordValue, UErrorCode& status);
+#endif  // U_HIDE_DRAFT_API
 
     /**
      * returns the locale's three-letter language code, as specified
@@ -885,6 +1112,62 @@ Locale::getName() const
 {
     return fullName;
 }
+
+#ifndef U_HIDE_DRAFT_API
+
+template<typename StringClass, typename OutputIterator> inline void
+Locale::getKeywords(OutputIterator iterator, UErrorCode& status) const
+{
+    LocalPointer<StringEnumeration> keys(createKeywords(status));
+    if (U_FAILURE(status)) {
+        return;
+    }
+    for (;;) {
+        int32_t resultLength;
+        const char* buffer = keys->next(&resultLength, status);
+        if (U_FAILURE(status) || buffer == nullptr) {
+            return;
+        }
+        *iterator++ = StringClass(buffer, resultLength);
+    }
+}
+
+template<typename StringClass, typename OutputIterator> inline void
+Locale::getUnicodeKeywords(OutputIterator iterator, UErrorCode& status) const
+{
+    LocalPointer<StringEnumeration> keys(createUnicodeKeywords(status));
+    if (U_FAILURE(status)) {
+        return;
+    }
+    for (;;) {
+        int32_t resultLength;
+        const char* buffer = keys->next(&resultLength, status);
+        if (U_FAILURE(status) || buffer == nullptr) {
+            return;
+        }
+        *iterator++ = StringClass(buffer, resultLength);
+    }
+}
+
+template<typename StringClass> inline StringClass
+Locale::getKeywordValue(StringPiece keywordName, UErrorCode& status) const
+{
+    StringClass result;
+    StringByteSink<StringClass> sink(&result);
+    getKeywordValue(keywordName, sink, status);
+    return result;
+}
+
+template<typename StringClass> inline StringClass
+Locale::getUnicodeKeywordValue(StringPiece keywordName, UErrorCode& status) const
+{
+    StringClass result;
+    StringByteSink<StringClass> sink(&result);
+    getUnicodeKeywordValue(keywordName, sink, status);
+    return result;
+}
+
+#endif  // U_HIDE_DRAFT_API
 
 inline UBool
 Locale::isBogus(void) const {
