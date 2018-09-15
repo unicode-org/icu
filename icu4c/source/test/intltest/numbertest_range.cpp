@@ -142,6 +142,54 @@ void NumberRangeFormatterTest::testBasic() {
         u"5 000–5 000 000 degrés Fahrenheit");
 
     assertFormatRange(
+        u"Locale with custom range separator",
+        NumberRangeFormatter::with(),
+        Locale("ja"),
+        u"1～5",
+        u"~5",
+        u"~5",
+        u"0～3",
+        u"~0",
+        u"3～3,000",
+        u"3,000～5,000",
+        u"4,999～5,001",
+        u"~5,000",
+        u"5,000～5,000,000");
+
+    assertFormatRange(
+        u"Locale that already has spaces around range separator",
+        NumberRangeFormatter::with()
+            .collapse(UNUM_RANGE_COLLAPSE_NONE)
+            .numberFormatterBoth(NumberFormatter::with().unit(KELVIN)),
+        Locale("hr"),
+        u"1 K – 5 K",
+        u"~5 K",
+        u"~5 K",
+        u"0 K – 3 K",
+        u"~0 K",
+        u"3 K – 3.000 K",
+        u"3.000 K – 5.000 K",
+        u"4.999 K – 5.001 K",
+        u"~5.000 K",
+        u"5.000 K – 5.000.000 K");
+
+    assertFormatRange(
+        u"Locale with custom numbering system and no plural ranges data",
+        NumberRangeFormatter::with(),
+        Locale("shn@numbers=beng"),
+        // 012459 = ০১৩৪৫৯
+        u"১–৫",
+        u"~৫",
+        u"~৫",
+        u"০–৩",
+        u"~০",
+        u"৩–৩,০০০",
+        u"৩,০০০–৫,০০০",
+        u"৪,৯৯৯–৫,০০১",
+        u"~৫,০০০",
+        u"৫,০০০–৫,০০০,০০০");
+
+    assertFormatRange(
         u"Portuguese currency",
         NumberRangeFormatter::with()
             .numberFormatterBoth(NumberFormatter::with().unit(PTE)),

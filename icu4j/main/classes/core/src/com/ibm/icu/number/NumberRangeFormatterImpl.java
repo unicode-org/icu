@@ -4,6 +4,7 @@ package com.ibm.icu.number;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.UResource;
@@ -287,18 +288,25 @@ class NumberRangeFormatterImpl {
         PrefixInfixSuffixLengthHelper h = new PrefixInfixSuffixLengthHelper();
 
         SimpleModifier.formatTwoArgPattern(fRangePattern, string, 0, h, null);
+        assert h.lengthInfix > 0;
 
         // SPACING HEURISTIC
         // Add spacing unless all modifiers are collapsed.
         // TODO: add API to control this?
+        // TODO: Use a data-driven heuristic like currency spacing?
+        // TODO: Use Unicode [:whitespace:] instead of PatternProps whitespace? (consider speed implications)
         {
             boolean repeatInner = !collapseInner && micros1.modInner.getCodePointCount() > 0;
             boolean repeatMiddle = !collapseMiddle && micros1.modMiddle.getCodePointCount() > 0;
             boolean repeatOuter = !collapseOuter && micros1.modOuter.getCodePointCount() > 0;
             if (repeatInner || repeatMiddle || repeatOuter) {
-                // Add spacing
-                h.lengthInfix += string.insertCodePoint(h.index1(), '\u0020', null);
-                h.lengthInfix += string.insertCodePoint(h.index2(), '\u0020', null);
+                // Add spacing if there is not already spacing
+                if (!PatternProps.isWhiteSpace(string.charAt(h.index1()))) {
+                    h.lengthInfix += string.insertCodePoint(h.index1(), '\u0020', null);
+                }
+                if (!PatternProps.isWhiteSpace(string.charAt(h.index2() - 1))) {
+                    h.lengthInfix += string.insertCodePoint(h.index2(), '\u0020', null);
+                }
             }
         }
 
