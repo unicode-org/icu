@@ -8,6 +8,7 @@
 
 #include <iterator>
 #include <set>
+#include <utility>
 
 #include "loctest.h"
 #include "unicode/localpointer.h"
@@ -249,6 +250,8 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestBug13554);
     TESTCASE_AUTO(TestForLanguageTag);
     TESTCASE_AUTO(TestToLanguageTag);
+    TESTCASE_AUTO(TestMoveAssign);
+    TESTCASE_AUTO(TestMoveCtor);
     TESTCASE_AUTO_END;
 }
 
@@ -3029,4 +3032,96 @@ void LocaleTest::TestToLanguageTag() {
     std::string result_bogus = loc_bogus.toLanguageTag<std::string>(status);
     assertEquals("bogus", U_ILLEGAL_ARGUMENT_ERROR, status.reset());
     assertTrue(result_bogus.c_str(), result_bogus.empty());
+}
+
+void LocaleTest::TestMoveAssign() {
+    // ULOC_FULLNAME_CAPACITY == 157 (uloc.h)
+    Locale l1("de@collation=phonebook;x="
+              "aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
+              "aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
+              "aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
+              "aaaaabbbbbzz");
+
+    Locale l2;
+    {
+        Locale l3(l1);
+        assertTrue("l1 == l3", l1 == l3);
+        l2 = std::move(l3);
+        assertTrue("l1 == l2", l1 == l2);
+        assertTrue("l2 != l3", l2.getName() != l3.getName());
+    }
+
+    // This should remain true also after l3 has been destructed.
+    assertTrue("l1 == l2, again", l1 == l2);
+
+    Locale l4("de@collation=phonebook");
+
+    Locale l5;
+    {
+        Locale l6(l4);
+        assertTrue("l4 == l6", l4 == l6);
+        l5 = std::move(l6);
+        assertTrue("l4 == l5", l4 == l5);
+        assertTrue("l5 != l6", l5.getName() != l6.getName());
+    }
+
+    // This should remain true also after l6 has been destructed.
+    assertTrue("l4 == l5, again", l4 == l5);
+
+    Locale l7("vo_Cyrl_AQ_EURO");
+
+    Locale l8;
+    {
+        Locale l9(l7);
+        assertTrue("l7 == l9", l7 == l9);
+        l8 = std::move(l9);
+        assertTrue("l7 == l8", l7 == l8);
+        assertTrue("l8 != l9", l8.getName() != l9.getName());
+    }
+
+    // This should remain true also after l9 has been destructed.
+    assertTrue("l7 == l8, again", l7 == l8);
+
+    assertEquals("language", l7.getLanguage(), l8.getLanguage());
+    assertEquals("script", l7.getScript(), l8.getScript());
+    assertEquals("country", l7.getCountry(), l8.getCountry());
+    assertEquals("variant", l7.getVariant(), l8.getVariant());
+    assertEquals("bogus", l7.isBogus(), l8.isBogus());
+}
+
+void LocaleTest::TestMoveCtor() {
+    // ULOC_FULLNAME_CAPACITY == 157 (uloc.h)
+    Locale l1("de@collation=phonebook;x="
+              "aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
+              "aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
+              "aaaaabbbbbcccccdddddeeeeefffffggggghhhhh"
+              "aaaaabbbbbzz");
+
+    Locale l3(l1);
+    assertTrue("l1 == l3", l1 == l3);
+    Locale l2(std::move(l3));
+    assertTrue("l1 == l2", l1 == l2);
+    assertTrue("l2 != l3", l2.getName() != l3.getName());
+
+    Locale l4("de@collation=phonebook");
+
+    Locale l6(l4);
+    assertTrue("l4 == l6", l4 == l6);
+    Locale l5(std::move(l6));
+    assertTrue("l4 == l5", l4 == l5);
+    assertTrue("l5 != l6", l5.getName() != l6.getName());
+
+    Locale l7("vo_Cyrl_AQ_EURO");
+
+    Locale l9(l7);
+    assertTrue("l7 == l9", l7 == l9);
+    Locale l8(std::move(l9));
+    assertTrue("l7 == l8", l7 == l8);
+    assertTrue("l8 != l9", l8.getName() != l9.getName());
+
+    assertEquals("language", l7.getLanguage(), l8.getLanguage());
+    assertEquals("script", l7.getScript(), l8.getScript());
+    assertEquals("country", l7.getCountry(), l8.getCountry());
+    assertEquals("variant", l7.getVariant(), l8.getVariant());
+    assertEquals("bogus", l7.isBogus(), l8.isBogus());
 }

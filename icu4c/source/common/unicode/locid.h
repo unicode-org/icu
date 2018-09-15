@@ -284,6 +284,14 @@ public:
      */
     Locale(const    Locale& other);
 
+    /**
+     * Move constructor; might leave source in bogus state.
+     * This locale will have the same contents that the source locale had.
+     *
+     * @param other The Locale object being moved in.
+     * @draft ICU 63
+     */
+    Locale(Locale&& other) U_NOEXCEPT;
 
     /**
      * Destructor
@@ -299,6 +307,17 @@ public:
      * @stable ICU 2.0
      */
     Locale& operator=(const Locale& other);
+
+    /**
+     * Move assignment operator; might leave source in bogus state.
+     * This locale will have the same contents that the source locale had.
+     * The behavior is undefined if *this and the source are the same object.
+     *
+     * @param other The Locale object being moved in.
+     * @return      *this
+     * @draft ICU 63
+     */
+    Locale& operator=(Locale&& other) U_NOEXCEPT;
 
     /**
      * Checks if two locale keys are the same.

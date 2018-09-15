@@ -121,6 +121,9 @@ public:
     void TestForLanguageTag();
     void TestToLanguageTag();
 
+    void TestMoveAssign();
+    void TestMoveCtor();
+
 private:
     void _checklocs(const char* label,
                     const char* req,
