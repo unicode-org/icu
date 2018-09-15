@@ -166,7 +166,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
         NumberStringBuilder b = new NumberStringBuilder();
         if (needsPlurals()) {
             // Slower path when we require the plural keyword.
-            ParameterizedModifier pm = new ParameterizedModifier();
+            AdoptingModifierStore pm = new AdoptingModifierStore();
             for (StandardPlural plural : StandardPlural.VALUES) {
                 setNumberProperties(1, plural);
                 pm.setModifier(1, plural, createConstantModifier(a, b));
@@ -185,7 +185,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
             Modifier zero = createConstantModifier(a, b);
             setNumberProperties(-1, null);
             Modifier negative = createConstantModifier(a, b);
-            ParameterizedModifier pm = new ParameterizedModifier(positive, zero, negative);
+            AdoptingModifierStore pm = new AdoptingModifierStore(positive, zero, negative);
             return new ImmutablePatternModifier(pm, null, parent);
         }
     }
@@ -214,12 +214,12 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     }
 
     public static class ImmutablePatternModifier implements MicroPropsGenerator {
-        final ParameterizedModifier pm;
+        final AdoptingModifierStore pm;
         final PluralRules rules;
         final MicroPropsGenerator parent;
 
         ImmutablePatternModifier(
-                ParameterizedModifier pm,
+                AdoptingModifierStore pm,
                 PluralRules rules,
                 MicroPropsGenerator parent) {
             this.pm = pm;
@@ -236,7 +236,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
 
         public void applyToMicros(MicroProps micros, DecimalQuantity quantity) {
             if (rules == null) {
-                micros.modMiddle = pm.getModifier(quantity.signum());
+                micros.modMiddle = pm.getModifierWithoutPlural(quantity.signum());
             } else {
                 // TODO: Fix this. Avoid the copy.
                 DecimalQuantity copy = quantity.createCopy();
@@ -328,7 +328,14 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     }
 
     @Override
-    public boolean equalsModifier(Modifier other) {
+    public Parameters getParameters() {
+        // This method is not currently used.
+        assert false;
+        return null;
+    }
+
+    @Override
+    public boolean semanticallyEquivalent(Modifier other) {
         // This method is not currently used. (unsafe path not used in range formatting)
         assert false;
         return false;

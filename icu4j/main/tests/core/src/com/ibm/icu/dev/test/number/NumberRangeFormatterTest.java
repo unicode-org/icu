@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import org.junit.Test;
 
+import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.LocalizedNumberRangeFormatter;
 import com.ibm.icu.number.Notation;
 import com.ibm.icu.number.NumberFormatter;
@@ -16,6 +17,7 @@ import com.ibm.icu.number.NumberRangeFormatter;
 import com.ibm.icu.number.NumberRangeFormatter.RangeCollapse;
 import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityFallback;
 import com.ibm.icu.number.Precision;
+import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.number.UnlocalizedNumberRangeFormatter;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.MeasureUnit;
@@ -100,10 +102,10 @@ public class NumberRangeFormatterTest {
             NumberRangeFormatter.with()
                 .numberFormatterBoth(NumberFormatter.with().unit(MeasureUnit.METER).unitWidth(UnitWidth.FULL_NAME)),
             new ULocale("en-us"),
-            "1 meter – 5 meters",  // TODO: This doesn't collapse because the plurals are different.  Fix?
+            "1–5 meters",
             "~5 meters",
             "~5 meters",
-            "0–3 meters",  // Note: It collapses when the plurals are the same
+            "0–3 meters",
             "~0 meters",
             "3–3,000 meters",
             "3,000–5,000 meters",
@@ -116,10 +118,10 @@ public class NumberRangeFormatterTest {
             NumberRangeFormatter.with()
                 .numberFormatterBoth(NumberFormatter.with().unit(MeasureUnit.FAHRENHEIT).unitWidth(UnitWidth.FULL_NAME)),
             new ULocale("fr-FR"),
-            "1 degré Fahrenheit – 5 degrés Fahrenheit",
+            "1–5 degrés Fahrenheit",
             "~5 degrés Fahrenheit",
             "~5 degrés Fahrenheit",
-            "0 degré Fahrenheit – 3 degrés Fahrenheit",
+            "0–3 degrés Fahrenheit",
             "~0 degré Fahrenheit",
             "3–3 000 degrés Fahrenheit",
             "3 000–5 000 degrés Fahrenheit",
@@ -362,6 +364,39 @@ public class NumberRangeFormatterTest {
             "5,000–5,000,000 m");
 
         assertFormatRange(
+            "Default collapse, long-form compact notation",
+            NumberRangeFormatter.with()
+                .numberFormatterBoth(NumberFormatter.with().notation(Notation.compactLong())),
+            new ULocale("de-CH"),
+            "1–5",
+            "~5",
+            "~5",
+            "0–3",
+            "~0",
+            "3–3 Tausend",
+            "3–5 Tausend",
+            "~5 Tausend",
+            "~5 Tausend",
+            "5 Tausend – 5 Millionen");
+
+        assertFormatRange(
+            "Unit collapse, long-form compact notation",
+            NumberRangeFormatter.with()
+                .collapse(RangeCollapse.UNIT)
+                .numberFormatterBoth(NumberFormatter.with().notation(Notation.compactLong())),
+                new ULocale("de-CH"),
+            "1–5",
+            "~5",
+            "~5",
+            "0–3",
+            "~0",
+            "3–3 Tausend",
+            "3 Tausend – 5 Tausend",
+            "~5 Tausend",
+            "~5 Tausend",
+            "5 Tausend – 5 Millionen");
+
+        assertFormatRange(
             "Default collapse on measurement unit with compact-short notation",
             NumberRangeFormatter.with()
                 .numberFormatterBoth(NumberFormatter.with().notation(Notation.compactShort()).unit(MeasureUnit.METER)),
@@ -549,6 +584,62 @@ public class NumberRangeFormatterTest {
             "4,999–5,000",
             "5,000–5,000",  // TODO: Should this one be ~5,000?
             "5,000–5,000,000");
+    }
+
+    @Test
+    public void testPlurals() {
+        // Locale sl has interesting plural forms:
+        // GBP{
+        //     one{"britanski funt"}
+        //     two{"britanska funta"}
+        //     few{"britanski funti"}
+        //     other{"britanskih funtov"}
+        // }
+        ULocale locale = new ULocale("sl");
+
+        UnlocalizedNumberFormatter unf = NumberFormatter.with()
+            .unit(GBP)
+            .unitWidth(UnitWidth.FULL_NAME)
+            .precision(Precision.integer());
+        LocalizedNumberFormatter lnf = unf.locale(locale);
+
+        // For comparison, run the non-range version of the formatter
+        assertEquals(Integer.toString(1), "1 britanski funt", lnf.format(1).toString());
+        assertEquals(Integer.toString(2), "2 britanska funta", lnf.format(2).toString());
+        assertEquals(Integer.toString(3), "3 britanski funti", lnf.format(3).toString());
+        assertEquals(Integer.toString(5), "5 britanskih funtov", lnf.format(5).toString());
+
+        LocalizedNumberRangeFormatter lnrf = NumberRangeFormatter.with()
+            .numberFormatterBoth(unf)
+            .identityFallback(RangeIdentityFallback.RANGE)
+            .locale(locale);
+
+        Object[][] cases = new Object[][] {
+            {1, 1, "1–1 britanski funti"}, // one + one -> few
+            {1, 2, "1–2 britanska funta"}, // one + two -> two
+            {1, 3, "1–3 britanski funti"}, // one + few -> few
+            {1, 5, "1–5 britanskih funtov"}, // one + other -> other
+            {2, 1, "2–1 britanski funti"}, // two + one -> few
+            {2, 2, "2–2 britanska funta"}, // two + two -> two
+            {2, 3, "2–3 britanski funti"}, // two + few -> few
+            {2, 5, "2–5 britanskih funtov"}, // two + other -> other
+            {3, 1, "3–1 britanski funti"}, // few + one -> few
+            {3, 2, "3–2 britanska funta"}, // few + two -> two
+            {3, 3, "3–3 britanski funti"}, // few + few -> few
+            {3, 5, "3–5 britanskih funtov"}, // few + other -> other
+            {5, 1, "5–1 britanski funti"}, // other + one -> few
+            {5, 2, "5–2 britanska funta"}, // other + two -> two
+            {5, 3, "5–3 britanski funti"}, // other + few -> few
+            {5, 5, "5–5 britanskih funtov"}, // other + other -> other
+        };
+        for (Object[] cas : cases) {
+            int first = (Integer) cas[0];
+            int second = (Integer) cas[1];
+            String expected = (String) cas[2];
+            String message = Integer.toString(first) + " " + Integer.toString(second);
+            String actual = lnrf.formatRange(first, second).toString();
+            assertEquals(message, expected, actual);
+        }
     }
 
     static void assertFormatRange(

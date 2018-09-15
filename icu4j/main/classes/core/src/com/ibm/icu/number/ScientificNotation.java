@@ -242,7 +242,14 @@ public class ScientificNotation extends Notation implements Cloneable {
         }
 
         @Override
-        public boolean equalsModifier(Modifier other) {
+        public Parameters getParameters() {
+            // This method is not currently used.
+            assert false;
+            return null;
+        }
+
+        @Override
+        public boolean semanticallyEquivalent(Modifier other) {
             // This method is not currently used. (unsafe path not used in range formatting)
             assert false;
             return false;
@@ -316,7 +323,12 @@ public class ScientificNotation extends Notation implements Cloneable {
         }
 
         @Override
-        public boolean equalsModifier(Modifier other) {
+        public Parameters getParameters() {
+            return null;
+        }
+
+        @Override
+        public boolean semanticallyEquivalent(Modifier other) {
             if (!(other instanceof ScientificModifier)) {
                 return false;
             }
