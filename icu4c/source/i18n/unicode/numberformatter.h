@@ -2157,7 +2157,6 @@ class U_I18N_API UnlocalizedNumberFormatter
      */
     UnlocalizedNumberFormatter() = default;
 
-    // Make default copy constructor call the NumberFormatterSettings copy constructor.
     /**
      * Returns a copy of this UnlocalizedNumberFormatter.
      * @draft ICU 60
@@ -2296,7 +2295,6 @@ class U_I18N_API LocalizedNumberFormatter
      */
     LocalizedNumberFormatter() = default;
 
-    // Make default copy constructor call the NumberFormatterSettings copy constructor.
     /**
      * Returns a copy of this LocalizedNumberFormatter.
      * @draft ICU 60
