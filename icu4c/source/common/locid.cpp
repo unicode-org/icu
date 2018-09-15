@@ -433,56 +433,36 @@ Locale::Locale(Locale&& other) U_NOEXCEPT
   *this = std::move(other);
 }
 
-Locale &Locale::operator=(const Locale &other)
-{
+Locale& Locale::operator=(const Locale& other) {
     if (this == &other) {
         return *this;
     }
 
-    /* Free our current storage */
-    if (baseName != fullName) {
-        uprv_free(baseName);
-    }
-    baseName = NULL;
-    if(fullName != fullNameBuffer) {
-        uprv_free(fullName);
-        fullName = fullNameBuffer;
+    setToBogus();
+
+    if (other.fullName == other.fullNameBuffer) {
+        uprv_strcpy(fullNameBuffer, other.fullNameBuffer);
+    } else if (other.fullName == nullptr) {
+        fullName = nullptr;
+    } else {
+        fullName = uprv_strdup(other.fullName);
+        if (fullName == nullptr) return *this;
     }
 
-    /* Allocate the full name if necessary */
-    if(other.fullName != other.fullNameBuffer) {
-        fullName = (char *)uprv_malloc(sizeof(char)*(uprv_strlen(other.fullName)+1));
-        if (fullName == NULL) {
-            // if memory allocation fails, set this object to bogus.
-            fIsBogus = TRUE;
-            return *this;
-        }
-    }
-    /* Copy the full name */
-    uprv_strcpy(fullName, other.fullName);
-
-    /* Copy the baseName if it differs from fullName. */
     if (other.baseName == other.fullName) {
         baseName = fullName;
-    } else {
-        if (other.baseName) {
-            baseName = uprv_strdup(other.baseName);
-            if (baseName == nullptr) {
-                // if memory allocation fails, set this object to bogus.
-                fIsBogus = TRUE;
-                return *this;
-            }
-        }
+    } else if (other.baseName != nullptr) {
+        baseName = uprv_strdup(other.baseName);
+        if (baseName == nullptr) return *this;
     }
 
-    /* Copy the language and country fields */
     uprv_strcpy(language, other.language);
     uprv_strcpy(script, other.script);
     uprv_strcpy(country, other.country);
 
-    /* The variantBegin is an offset, just copy it */
     variantBegin = other.variantBegin;
     fIsBogus = other.fIsBogus;
+
     return *this;
 }
 
