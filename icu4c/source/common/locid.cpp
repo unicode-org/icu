@@ -31,6 +31,7 @@
 ******************************************************************************
 */
 
+#include <utility>
 
 #include "unicode/bytestream.h"
 #include "unicode/locid.h"
@@ -427,6 +428,11 @@ Locale::Locale(const Locale &other)
     *this = other;
 }
 
+Locale::Locale(Locale&& other) U_NOEXCEPT
+    : UObject(other), fullName(fullNameBuffer), baseName(fullName) {
+  *this = std::move(other);
+}
+
 Locale& Locale::operator=(const Locale& other) {
     if (this == &other) {
         return *this;
@@ -456,6 +462,35 @@ Locale& Locale::operator=(const Locale& other) {
 
     variantBegin = other.variantBegin;
     fIsBogus = other.fIsBogus;
+
+    return *this;
+}
+
+Locale& Locale::operator=(Locale&& other) U_NOEXCEPT {
+    if (baseName != fullName) uprv_free(baseName);
+    if (fullName != fullNameBuffer) uprv_free(fullName);
+
+    if (other.fullName == other.fullNameBuffer) {
+        uprv_strcpy(fullNameBuffer, other.fullNameBuffer);
+        fullName = fullNameBuffer;
+    } else {
+        fullName = other.fullName;
+    }
+
+    if (other.baseName == other.fullName) {
+        baseName = fullName;
+    } else {
+        baseName = other.baseName;
+    }
+
+    uprv_strcpy(language, other.language);
+    uprv_strcpy(script, other.script);
+    uprv_strcpy(country, other.country);
+
+    variantBegin = other.variantBegin;
+    fIsBogus = other.fIsBogus;
+
+    other.baseName = other.fullName = other.fullNameBuffer;
 
     return *this;
 }
