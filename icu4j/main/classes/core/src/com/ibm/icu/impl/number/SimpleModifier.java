@@ -19,15 +19,24 @@ public class SimpleModifier implements Modifier {
     private final int suffixOffset;
     private final int suffixLength;
 
+    // Parameters: used for number range formatting
+    private final Parameters parameters;
+
     /** TODO: This is copied from SimpleFormatterImpl. */
     private static final int ARG_NUM_LIMIT = 0x100;
 
     /** Creates a modifier that uses the SimpleFormatter string formats. */
     public SimpleModifier(String compiledPattern, Field field, boolean strong) {
+        this(compiledPattern, field, strong, null);
+    }
+
+    /** Creates a modifier that uses the SimpleFormatter string formats. */
+    public SimpleModifier(String compiledPattern, Field field, boolean strong, Parameters parameters) {
         assert compiledPattern != null;
         this.compiledPattern = compiledPattern;
         this.field = field;
         this.strong = strong;
+        this.parameters = parameters;
 
         int argLimit = SimpleFormatterImpl.getArgumentLimit(compiledPattern);
         if (argLimit == 0) {
@@ -90,11 +99,19 @@ public class SimpleModifier implements Modifier {
     }
 
     @Override
-    public boolean equalsModifier(Modifier other) {
+    public Parameters getParameters() {
+        return parameters;
+    }
+
+    @Override
+    public boolean semanticallyEquivalent(Modifier other) {
         if (!(other instanceof SimpleModifier)) {
             return false;
         }
         SimpleModifier _other = (SimpleModifier) other;
+        if (parameters != null && _other.parameters != null && parameters.obj == _other.parameters.obj) {
+            return true;
+        }
         return compiledPattern.equals(_other.compiledPattern) && field == _other.field && strong == _other.strong;
     }
 

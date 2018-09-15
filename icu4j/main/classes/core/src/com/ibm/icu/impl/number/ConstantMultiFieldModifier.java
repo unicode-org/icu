@@ -22,17 +22,30 @@ public class ConstantMultiFieldModifier implements Modifier {
     private final boolean overwrite;
     private final boolean strong;
 
+    // Parameters: used for number range formatting
+    private final Parameters parameters;
+
     public ConstantMultiFieldModifier(
             NumberStringBuilder prefix,
             NumberStringBuilder suffix,
             boolean overwrite,
             boolean strong) {
+        this(prefix, suffix, overwrite, strong, null);
+    }
+
+    public ConstantMultiFieldModifier(
+            NumberStringBuilder prefix,
+            NumberStringBuilder suffix,
+            boolean overwrite,
+            boolean strong,
+            Parameters parameters) {
         prefixChars = prefix.toCharArray();
         suffixChars = suffix.toCharArray();
         prefixFields = prefix.toFieldArray();
         suffixFields = suffix.toFieldArray();
         this.overwrite = overwrite;
         this.strong = strong;
+        this.parameters = parameters;
     }
 
     @Override
@@ -77,11 +90,19 @@ public class ConstantMultiFieldModifier implements Modifier {
     }
 
     @Override
-    public boolean equalsModifier(Modifier other) {
+    public Parameters getParameters() {
+        return parameters;
+    }
+
+    @Override
+    public boolean semanticallyEquivalent(Modifier other) {
         if (!(other instanceof ConstantMultiFieldModifier)) {
             return false;
         }
         ConstantMultiFieldModifier _other = (ConstantMultiFieldModifier) other;
+        if (parameters != null && _other.parameters != null && parameters.obj == _other.parameters.obj) {
+            return true;
+        }
         return Arrays.equals(prefixChars, _other.prefixChars) && Arrays.equals(prefixFields, _other.prefixFields)
                 && Arrays.equals(suffixChars, _other.suffixChars) && Arrays.equals(suffixFields, _other.suffixFields)
                 && overwrite == _other.overwrite && strong == _other.strong;

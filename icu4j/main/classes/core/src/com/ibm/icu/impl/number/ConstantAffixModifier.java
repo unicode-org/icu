@@ -82,7 +82,12 @@ public class ConstantAffixModifier implements Modifier {
     }
 
     @Override
-    public boolean equalsModifier(Modifier other) {
+    public Parameters getParameters() {
+        return null;
+    }
+
+    @Override
+    public boolean semanticallyEquivalent(Modifier other) {
         if (!(other instanceof ConstantAffixModifier)) {
             return false;
         }

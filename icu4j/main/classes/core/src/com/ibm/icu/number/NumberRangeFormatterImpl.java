@@ -5,6 +5,7 @@ package com.ibm.icu.number;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleFormatterImpl;
+import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.UResource;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.MicroProps;
@@ -13,6 +14,7 @@ import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.SimpleModifier;
 import com.ibm.icu.impl.number.range.PrefixInfixSuffixLengthHelper;
 import com.ibm.icu.impl.number.range.RangeMacroProps;
+import com.ibm.icu.impl.number.range.StandardPluralRanges;
 import com.ibm.icu.number.NumberRangeFormatter.RangeCollapse;
 import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityFallback;
 import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityResult;
@@ -25,15 +27,21 @@ import com.ibm.icu.util.UResourceBundle;
  */
 class NumberRangeFormatterImpl {
 
-    NumberFormatterImpl formatterImpl1;
-    NumberFormatterImpl formatterImpl2;
-    boolean fSameFormatters;
+    final NumberFormatterImpl formatterImpl1;
+    final NumberFormatterImpl formatterImpl2;
+    final boolean fSameFormatters;
 
-    NumberRangeFormatter.RangeCollapse fCollapse;
-    NumberRangeFormatter.RangeIdentityFallback fIdentityFallback;
+    final NumberRangeFormatter.RangeCollapse fCollapse;
+    final NumberRangeFormatter.RangeIdentityFallback fIdentityFallback;
 
-    String fRangePattern;
-    SimpleModifier fApproximatelyModifier;
+    // Should be final, but they are set in a helper function, not the constructor proper.
+    // TODO: Clean up to make these fields actually final.
+    /* final */ String fRangePattern;
+    /* final */ SimpleModifier fApproximatelyModifier;
+
+    final StandardPluralRanges fPluralRanges;
+
+    ////////////////////
 
      // Helper function for 2-dimensional switch statement
      int identity2d(RangeIdentityFallback a, RangeIdentityResult b) {
@@ -95,6 +103,8 @@ class NumberRangeFormatterImpl {
         out.fApproximatelyModifier = new SimpleModifier(sink.approximatelyPattern, null, false);
     }
 
+    ////////////////////
+
     public NumberRangeFormatterImpl(RangeMacroProps macros) {
         formatterImpl1 = new NumberFormatterImpl(macros.formatter1 != null ? macros.formatter1.resolve()
                 : NumberFormatter.withLocale(macros.loc).resolve());
@@ -112,6 +122,9 @@ class NumberRangeFormatterImpl {
         // numberFormatterBoth() or similar.
 
         getNumberRangeData(macros.loc, "latn", this);
+
+        // TODO: Get locale from PluralRules instead?
+        fPluralRanges = new StandardPluralRanges(macros.loc);
     }
 
     public FormattedNumberRange format(DecimalQuantity quantity1, DecimalQuantity quantity2, boolean equalBeforeRounding) {
@@ -129,9 +142,9 @@ class NumberRangeFormatterImpl {
         // TODO: Write this as MicroProps operator==() ?
         // TODO: Avoid the redundancy of these equality operations with the
         // ones in formatRange?
-        if (!micros1.modInner.equalsModifier(micros2.modInner)
-                || !micros1.modMiddle.equalsModifier(micros2.modMiddle)
-                || !micros1.modOuter.equalsModifier(micros2.modOuter)) {
+        if (!micros1.modInner.semanticallyEquivalent(micros2.modInner)
+                || !micros1.modMiddle.semanticallyEquivalent(micros2.modMiddle)
+                || !micros1.modOuter.semanticallyEquivalent(micros2.modOuter)) {
             formatRange(quantity1, quantity2, string, micros1, micros2);
             return new FormattedNumberRange(string, quantity1, quantity2, RangeIdentityResult.NOT_EQUAL);
         }
@@ -213,7 +226,7 @@ class NumberRangeFormatterImpl {
             case UNIT:
             {
                 // OUTER MODIFIER
-                collapseOuter = micros1.modOuter.equalsModifier(micros2.modOuter);
+                collapseOuter = micros1.modOuter.semanticallyEquivalent(micros2.modOuter);
 
                 if (!collapseOuter) {
                     // Never collapse inner mods if outer mods are not collapsable
@@ -223,7 +236,7 @@ class NumberRangeFormatterImpl {
                 }
 
                 // MIDDLE MODIFIER
-                collapseMiddle = micros1.modMiddle.equalsModifier(micros2.modMiddle);
+                collapseMiddle = micros1.modMiddle.semanticallyEquivalent(micros2.modMiddle);
 
                 if (!collapseMiddle) {
                     // Never collapse inner mods if outer mods are not collapsable
@@ -255,7 +268,7 @@ class NumberRangeFormatterImpl {
                 }
 
                 // INNER MODIFIER
-                collapseInner = micros1.modInner.equalsModifier(micros2.modInner);
+                collapseInner = micros1.modInner.semanticallyEquivalent(micros2.modInner);
 
                 // All done checking for collapsability.
                 break;
@@ -295,7 +308,8 @@ class NumberRangeFormatterImpl {
 
         if (collapseInner) {
             // Note: this is actually a mix of prefix and suffix, but adding to infix length works
-            h.lengthInfix += micros1.modInner.apply(string, h.index0(), h.index3());
+            Modifier mod = resolveModifierPlurals(micros1.modInner, micros2.modInner);
+            h.lengthInfix += mod.apply(string, h.index0(), h.index3());
         } else {
             h.length1 += micros1.modInner.apply(string, h.index0(), h.index1());
             h.length2 += micros2.modInner.apply(string, h.index2(), h.index3());
@@ -303,7 +317,8 @@ class NumberRangeFormatterImpl {
 
         if (collapseMiddle) {
             // Note: this is actually a mix of prefix and suffix, but adding to infix length works
-            h.lengthInfix += micros1.modMiddle.apply(string, h.index0(), h.index3());
+            Modifier mod = resolveModifierPlurals(micros1.modMiddle, micros2.modMiddle);
+            h.lengthInfix += mod.apply(string, h.index0(), h.index3());
         } else {
             h.length1 += micros1.modMiddle.apply(string, h.index0(), h.index1());
             h.length2 += micros2.modMiddle.apply(string, h.index2(), h.index3());
@@ -311,11 +326,36 @@ class NumberRangeFormatterImpl {
 
         if (collapseOuter) {
             // Note: this is actually a mix of prefix and suffix, but adding to infix length works
-            h.lengthInfix += micros1.modOuter.apply(string, h.index0(), h.index3());
+            Modifier mod = resolveModifierPlurals(micros1.modOuter, micros2.modOuter);
+            h.lengthInfix += mod.apply(string, h.index0(), h.index3());
         } else {
             h.length1 += micros1.modOuter.apply(string, h.index0(), h.index1());
             h.length2 += micros2.modOuter.apply(string, h.index2(), h.index3());
         }
+    }
+
+    Modifier resolveModifierPlurals(Modifier first, Modifier second) {
+        Modifier.Parameters firstParameters = first.getParameters();
+        if (firstParameters == null) {
+            // No plural form; return a fallback (e.g., the first)
+            return first;
+        }
+
+        Modifier.Parameters secondParameters = second.getParameters();
+        if (secondParameters == null) {
+            // No plural form; return a fallback (e.g., the first)
+            return first;
+        }
+
+        // Get the required plural form from data
+        StandardPlural resultPlural = fPluralRanges.resolve(firstParameters.plural, secondParameters.plural);
+
+        // Get and return the new Modifier
+        assert firstParameters.obj == secondParameters.obj;
+        assert firstParameters.signum == secondParameters.signum;
+        Modifier mod = firstParameters.obj.getModifier(firstParameters.signum, resultPlural);
+        assert mod != null;
+        return mod;
     }
 
 }
