@@ -74,7 +74,7 @@ void getNumberRangeData(const char* localeName, const char* nsName, NumberRangeD
 
     if (data.rangePattern.getArgumentLimit() == 0) {
         // No data!
-        data.rangePattern = {u"{0} --- {1}", status};
+        data.rangePattern = {u"{0}–{1}", status};
     }
     if (data.approximatelyPattern.getArgumentLimit() == 0) {
         // No data!

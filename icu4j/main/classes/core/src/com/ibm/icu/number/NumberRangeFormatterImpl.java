@@ -93,7 +93,7 @@ class NumberRangeFormatterImpl {
         // TODO: Is it necessary to manually fall back to latn, or does the data sink take care of that?
 
         if (sink.rangePattern == null) {
-            sink.rangePattern = SimpleFormatterImpl.compileToStringMinMaxArguments("{0} --- {1}", sb, 2, 2);
+            sink.rangePattern = SimpleFormatterImpl.compileToStringMinMaxArguments("{0}–{1}", sb, 2, 2);
         }
         if (sink.approximatelyPattern == null) {
             sink.approximatelyPattern = SimpleFormatterImpl.compileToStringMinMaxArguments("~{0}", sb, 1, 1);
