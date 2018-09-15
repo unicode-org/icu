@@ -11,6 +11,7 @@
 
 #include "unicode/numberrangeformatter.h"
 #include "numrange_impl.h"
+#include "patternprops.h"
 #include "uresimp.h"
 #include "util.h"
 
@@ -207,6 +208,9 @@ void NumberRangeFormatterImpl::format(UFormattedNumberRangeData& data, bool equa
     } else {
         formatterImpl2.preProcess(data.quantity2, micros2, status);
     }
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     // If any of the affixes are different, an identity is not possible
     // and we must use formatRange().
@@ -392,18 +396,25 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
         status);
     if (U_FAILURE(status)) { return; }
     lengthInfix = lengthRange - lengthPrefix - lengthSuffix;
+    U_ASSERT(lengthInfix > 0);
 
     // SPACING HEURISTIC
     // Add spacing unless all modifiers are collapsed.
     // TODO: add API to control this?
+    // TODO: Use a data-driven heuristic like currency spacing?
+    // TODO: Use Unicode [:whitespace:] instead of PatternProps whitespace? (consider speed implications)
     {
         bool repeatInner = !collapseInner && micros1.modInner->getCodePointCount() > 0;
         bool repeatMiddle = !collapseMiddle && micros1.modMiddle->getCodePointCount() > 0;
         bool repeatOuter = !collapseOuter && micros1.modOuter->getCodePointCount() > 0;
         if (repeatInner || repeatMiddle || repeatOuter) {
-            // Add spacing
-            lengthInfix += string.insertCodePoint(UPRV_INDEX_1, u'\u0020', UNUM_FIELD_COUNT, status);
-            lengthInfix += string.insertCodePoint(UPRV_INDEX_2, u'\u0020', UNUM_FIELD_COUNT, status);
+            // Add spacing if there is not already spacing
+            if (!PatternProps::isWhiteSpace(string.charAt(UPRV_INDEX_1))) {
+                lengthInfix += string.insertCodePoint(UPRV_INDEX_1, u'\u0020', UNUM_FIELD_COUNT, status);
+            }
+            if (!PatternProps::isWhiteSpace(string.charAt(UPRV_INDEX_2 - 1))) {
+                lengthInfix += string.insertCodePoint(UPRV_INDEX_2, u'\u0020', UNUM_FIELD_COUNT, status);
+            }
         }
     }
 

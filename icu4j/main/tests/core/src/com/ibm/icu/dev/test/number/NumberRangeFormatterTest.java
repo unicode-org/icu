@@ -130,6 +130,54 @@ public class NumberRangeFormatterTest {
             "5 000–5 000 000 degrés Fahrenheit");
 
         assertFormatRange(
+            "Locale with custom range separator",
+            NumberRangeFormatter.with(),
+            new ULocale("ja"),
+            "1～5",
+            "~5",
+            "~5",
+            "0～3",
+            "~0",
+            "3～3,000",
+            "3,000～5,000",
+            "4,999～5,001",
+            "~5,000",
+            "5,000～5,000,000");
+
+        assertFormatRange(
+            "Locale that already has spaces around range separator",
+            NumberRangeFormatter.with()
+                .collapse(RangeCollapse.NONE)
+                .numberFormatterBoth(NumberFormatter.with().unit(MeasureUnit.KELVIN)),
+            new ULocale("hr"),
+            "1 K – 5 K",
+            "~5 K",
+            "~5 K",
+            "0 K – 3 K",
+            "~0 K",
+            "3 K – 3.000 K",
+            "3.000 K – 5.000 K",
+            "4.999 K – 5.001 K",
+            "~5.000 K",
+            "5.000 K – 5.000.000 K");
+
+        assertFormatRange(
+            "Locale with custom numbering system and no plural ranges data",
+            NumberRangeFormatter.with(),
+            new ULocale("shn@numbers=beng"),
+            // 012459 = ০১৩৪৫৯
+            "১–৫",
+            "~৫",
+            "~৫",
+            "০–৩",
+            "~০",
+            "৩–৩,০০০",
+            "৩,০০০–৫,০০০",
+            "৪,৯৯৯–৫,০০১",
+            "~৫,০০০",
+            "৫,০০০–৫,০০০,০০০");
+
+        assertFormatRange(
             "Portuguese currency",
             NumberRangeFormatter.with()
                 .numberFormatterBoth(NumberFormatter.with().unit(PTE)),
