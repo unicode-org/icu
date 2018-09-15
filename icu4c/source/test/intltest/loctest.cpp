@@ -6,6 +6,9 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <iterator>
+#include <set>
+
 #include "loctest.h"
 #include "unicode/localpointer.h"
 #include "unicode/decimfmt.h"
@@ -226,6 +229,8 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestKeywordVariants);
     TESTCASE_AUTO(TestCreateUnicodeKeywords);
     TESTCASE_AUTO(TestKeywordVariantParsing);
+    TESTCASE_AUTO(TestCreateKeywordSet);
+    TESTCASE_AUTO(TestCreateUnicodeKeywordSet);
     TESTCASE_AUTO(TestGetKeywordValueStdString);
     TESTCASE_AUTO(TestGetUnicodeKeywordValueStdString);
     TESTCASE_AUTO(TestSetKeywordValue);
@@ -1822,6 +1827,44 @@ LocaleTest::TestKeywordVariantParsing(void) {
                 testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
         }
     }
+}
+
+void
+LocaleTest::TestCreateKeywordSet(void) {
+    IcuTestErrorCode status(*this, "TestCreateKeywordSet()");
+
+    static const Locale l("de@calendar=buddhist;collation=phonebook");
+
+    std::set<std::string> result;
+    l.getKeywords<std::string>(
+            std::insert_iterator<decltype(result)>(result, result.begin()),
+            status);
+    status.errIfFailureAndReset("\"%s\"", l.getName());
+
+    assertEquals("set::size()", 2, result.size());
+    assertTrue("set::find(\"calendar\")",
+               result.find("calendar") != result.end());
+    assertTrue("set::find(\"collation\")",
+               result.find("collation") != result.end());
+}
+
+void
+LocaleTest::TestCreateUnicodeKeywordSet(void) {
+    IcuTestErrorCode status(*this, "TestCreateUnicodeKeywordSet()");
+
+    static const Locale l("de@calendar=buddhist;collation=phonebook");
+
+    std::set<std::string> result;
+    l.getUnicodeKeywords<std::string>(
+            std::insert_iterator<decltype(result)>(result, result.begin()),
+            status);
+    status.errIfFailureAndReset("\"%s\"", l.getName());
+
+    assertEquals("set::size()", 2, result.size());
+    assertTrue("set::find(\"ca\")",
+               result.find("ca") != result.end());
+    assertTrue("set::find(\"co\")",
+               result.find("co") != result.end());
 }
 
 void

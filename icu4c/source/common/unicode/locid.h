@@ -32,6 +32,8 @@
 #define LOCID_H
 
 #include "unicode/bytestream.h"
+#include "unicode/localpointer.h"
+#include "unicode/strenum.h"
 #include "unicode/stringpiece.h"
 #include "unicode/utypes.h"
 #include "unicode/uobject.h"
@@ -553,6 +555,7 @@ public:
      * @param status the status code
      * @return pointer to StringEnumeration class, or NULL if there are no keywords. 
      * Client must dispose of it by calling delete.
+     * @see getKeywords
      * @stable ICU 2.8
      */
     StringEnumeration * createKeywords(UErrorCode &status) const;
@@ -565,9 +568,40 @@ public:
      * @param status the status code
      * @return pointer to StringEnumeration class, or NULL if there are no keywords.
      * Client must dispose of it by calling delete.
+     * @see getUnicodeKeywords
      * @draft ICU 63
      */
     StringEnumeration * createUnicodeKeywords(UErrorCode &status) const;
+
+    /**
+     * Gets the set of keywords for this Locale.
+     *
+     * A wrapper to call createKeywords() and write the resulting
+     * keywords as standard strings (or compatible objects) into any kind of
+     * container that can be written to by an STL style output iterator.
+     *
+     * @param iterator  an STL style output iterator to write the keywords to.
+     * @param status    error information if creating set of keywords failed.
+     * @return          a set of strings with all keywords.
+     * @draft ICU 63
+     */
+    template<typename StringClass, typename OutputIterator>
+    inline void getKeywords(OutputIterator iterator, UErrorCode& status) const;
+
+    /**
+     * Gets the set of Unicode keywords for this Locale.
+     *
+     * A wrapper to call createUnicodeKeywords() and write the resulting
+     * keywords as standard strings (or compatible objects) into any kind of
+     * container that can be written to by an STL style output iterator.
+     *
+     * @param iterator  an STL style output iterator to write the keywords to.
+     * @param status    error information if creating set of keywords failed.
+     * @return          a set of strings with all keywords.
+     * @draft ICU 63
+     */
+    template<typename StringClass, typename OutputIterator>
+    inline void getUnicodeKeywords(OutputIterator iterator, UErrorCode& status) const;
 
 #endif  // U_HIDE_DRAFT_API
 
@@ -1061,6 +1095,40 @@ Locale::getName() const
 }
 
 #ifndef U_HIDE_DRAFT_API
+
+template<typename StringClass, typename OutputIterator> inline void
+Locale::getKeywords(OutputIterator iterator, UErrorCode& status) const
+{
+    LocalPointer<StringEnumeration> keys(createKeywords(status));
+    if (U_FAILURE(status)) {
+        return;
+    }
+    for (;;) {
+        int32_t resultLength;
+        const char* buffer = keys->next(&resultLength, status);
+        if (U_FAILURE(status) || buffer == nullptr) {
+            return;
+        }
+        *iterator++ = StringClass(buffer, resultLength);
+    }
+}
+
+template<typename StringClass, typename OutputIterator> inline void
+Locale::getUnicodeKeywords(OutputIterator iterator, UErrorCode& status) const
+{
+    LocalPointer<StringEnumeration> keys(createUnicodeKeywords(status));
+    if (U_FAILURE(status)) {
+        return;
+    }
+    for (;;) {
+        int32_t resultLength;
+        const char* buffer = keys->next(&resultLength, status);
+        if (U_FAILURE(status) || buffer == nullptr) {
+            return;
+        }
+        *iterator++ = StringClass(buffer, resultLength);
+    }
+}
 
 template<typename StringClass> inline StringClass
 Locale::getKeywordValue(StringPiece keywordName, UErrorCode& status) const
