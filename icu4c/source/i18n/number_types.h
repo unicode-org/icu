@@ -201,6 +201,8 @@ class U_I18N_API Modifier {
 
     /**
      * Gets a set of "parameters" for this Modifier.
+     *
+     * TODO: Make this return a `const Parameters*` more like Java?
      */
     virtual void getParameters(Parameters& output) const = 0;
 
