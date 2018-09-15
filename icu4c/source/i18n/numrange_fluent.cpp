@@ -3,7 +3,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
+#if !UCONFIG_NO_FORMATTING
 
 // Allow implicit conversion from char16_t* to UnicodeString for this file:
 // Helpful in toString methods and elsewhere.
@@ -192,6 +192,7 @@ UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(const NFS<UNF>&
     // No additional fields to assign
 }
 
+// Make default copy constructor call the NumberRangeFormatterSettings copy constructor.
 UnlocalizedNumberRangeFormatter::UnlocalizedNumberRangeFormatter(UNF&& src) U_NOEXCEPT
         : UNF(static_cast<NFS<UNF>&&>(src)) {}
 
@@ -212,6 +213,7 @@ UnlocalizedNumberRangeFormatter& UnlocalizedNumberRangeFormatter::operator=(UNF&
     return *this;
 }
 
+// Make default copy constructor call the NumberRangeFormatterSettings copy constructor.
 LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(const LNF& other)
         : LNF(static_cast<const NFS<LNF>&>(other)) {}
 

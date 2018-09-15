@@ -3,7 +3,7 @@
 
 #include "unicode/utypes.h"
 
-#if !UCONFIG_NO_FORMATTING && !UPRV_INCOMPLETE_CPP11_SUPPORT
+#if !UCONFIG_NO_FORMATTING
 
 // Allow implicit conversion from char16_t* to UnicodeString for this file:
 // Helpful in toString methods and elsewhere.
@@ -181,6 +181,7 @@ NumberRangeFormatterImpl::NumberRangeFormatterImpl(const RangeMacroProps& macros
     // this part of the code should be updated to load from the local numbering system.
     // The numbering system could come from the one specified in the NumberFormatter passed to
     // numberFormatterBoth() or similar.
+    // See ICU-20144
 
     NumberRangeData data;
     getNumberRangeData(macros.locale.getName(), "latn", data, status);

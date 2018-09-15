@@ -493,7 +493,6 @@ class U_I18N_API UnlocalizedNumberRangeFormatter
      */
     UnlocalizedNumberRangeFormatter() = default;
 
-    // Make default copy constructor call the NumberFormatterSettings copy constructor.
     /**
      * Returns a copy of this UnlocalizedNumberRangeFormatter.
      * @draft ICU 63
@@ -566,7 +565,6 @@ class U_I18N_API LocalizedNumberRangeFormatter
      */
     LocalizedNumberRangeFormatter() = default;
 
-    // Make default copy constructor call the NumberRangeFormatterSettings copy constructor.
     /**
      * Returns a copy of this LocalizedNumberRangeFormatter.
      * @draft ICU 63

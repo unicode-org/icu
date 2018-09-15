@@ -363,6 +363,7 @@ UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(const NFS<UNF>& other)
     // No additional fields to assign
 }
 
+// Make default copy constructor call the NumberFormatterSettings copy constructor.
 UnlocalizedNumberFormatter::UnlocalizedNumberFormatter(UNF&& src) U_NOEXCEPT
         : UNF(static_cast<NFS<UNF>&&>(src)) {}
 
@@ -383,6 +384,7 @@ UnlocalizedNumberFormatter& UnlocalizedNumberFormatter::operator=(UNF&& src) U_N
     return *this;
 }
 
+// Make default copy constructor call the NumberFormatterSettings copy constructor.
 LocalizedNumberFormatter::LocalizedNumberFormatter(const LNF& other)
         : LNF(static_cast<const NFS<LNF>&>(other)) {}
 

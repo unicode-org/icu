@@ -20,13 +20,10 @@ namespace impl {
 
 
 /**
- * Implementation class for UFormattedNumber with magic number for safety.
+ * Class similar to UFormattedNumberData.
  *
- * This struct is also held internally by the C++ version FormattedNumber since the member types are not
- * declared in the public header file.
- *
- * The DecimalQuantity is not currently being used by FormattedNumber, but at some point it could be used
- * to add a toDecNumber() or similar method.
+ * Has incomplete magic number logic that will need to be finished
+ * if this is to be exposed as C API in the future.
  */
 struct UFormattedNumberRangeData : public UMemory {
     // The magic number to identify incoming objects.

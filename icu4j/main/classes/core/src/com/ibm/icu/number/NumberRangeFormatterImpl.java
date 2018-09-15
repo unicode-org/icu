@@ -120,6 +120,7 @@ class NumberRangeFormatterImpl {
         // this part of the code should be updated to load from the local numbering system.
         // The numbering system could come from the one specified in the NumberFormatter passed to
         // numberFormatterBoth() or similar.
+        // See ICU-20144
 
         getNumberRangeData(macros.loc, "latn", this);
 
