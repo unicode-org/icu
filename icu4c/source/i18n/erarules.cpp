@@ -99,13 +99,13 @@ static int32_t compareEncodedDateWithYMD(int encoded, int year, int month, int d
     }
 }
 
-EraRules::EraRules(int32_t *startDates, int32_t numEras)
-    : startDates(startDates), numEras(numEras) {
+EraRules::EraRules(LocalArray<int32_t>& eraStartDates, int32_t numEras)
+    : numEras(numEras) {
+    startDates.moveFrom(eraStartDates);
     initCurrentEra();
 }
 
 EraRules::~EraRules() {
-    uprv_free(startDates);
 }
 
 EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEra, UErrorCode& status) {
@@ -216,16 +216,13 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
 
     EraRules *result;
     if (firstTentativeIdx < MAX_INT32 && !includeTentativeEra) {
-        result = new EraRules(startDates.getAlias(), firstTentativeIdx);
+        result = new EraRules(startDates, firstTentativeIdx);
     } else {
-        result = new EraRules(startDates.getAlias(), numEras);
+        result = new EraRules(startDates, numEras);
     }
 
     if (result == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
-    } else {
-        // successful memory allocation, so EraRules now owns startDates.
-        startDates.orphan();
     }
     return result;
 }
