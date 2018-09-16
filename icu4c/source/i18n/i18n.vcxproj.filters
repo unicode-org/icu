@@ -624,6 +624,12 @@
     <ClCompile Include="numparse_validators.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="numrange_fluent.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="numrange_impl.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="dayperiodrules.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -912,6 +918,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="numparse_utils.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="numrange_impl.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="olsontz.h">

@@ -170,14 +170,14 @@ void PatternModifierTest::testMutableEqualsImmutable() {
 UnicodeString PatternModifierTest::getPrefix(const MutablePatternModifier &mod, UErrorCode &status) {
     NumberStringBuilder nsb;
     mod.apply(nsb, 0, 0, status);
-    int32_t prefixLength = mod.getPrefixLength(status);
+    int32_t prefixLength = mod.getPrefixLength();
     return UnicodeString(nsb.toUnicodeString(), 0, prefixLength);
 }
 
 UnicodeString PatternModifierTest::getSuffix(const MutablePatternModifier &mod, UErrorCode &status) {
     NumberStringBuilder nsb;
     mod.apply(nsb, 0, 0, status);
-    int32_t prefixLength = mod.getPrefixLength(status);
+    int32_t prefixLength = mod.getPrefixLength();
     return UnicodeString(nsb.toUnicodeString(), prefixLength, nsb.length() - prefixLength);
 }
 
