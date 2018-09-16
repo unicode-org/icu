@@ -69,7 +69,7 @@ MutablePatternModifier::createImmutableAndChain(const MicroPropsGenerator* paren
             StandardPlural::Form::MANY,
             StandardPlural::Form::OTHER};
 
-    auto pm = new ParameterizedModifier();
+    auto pm = new AdoptingModifierStore();
     if (pm == nullptr) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
@@ -79,11 +79,11 @@ MutablePatternModifier::createImmutableAndChain(const MicroPropsGenerator* paren
         // Slower path when we require the plural keyword.
         for (StandardPlural::Form plural : STANDARD_PLURAL_VALUES) {
             setNumberProperties(1, plural);
-            pm->adoptSignPluralModifier(1, plural, createConstantModifier(status));
+            pm->adoptModifier(1, plural, createConstantModifier(status));
             setNumberProperties(0, plural);
-            pm->adoptSignPluralModifier(0, plural, createConstantModifier(status));
+            pm->adoptModifier(0, plural, createConstantModifier(status));
             setNumberProperties(-1, plural);
-            pm->adoptSignPluralModifier(-1, plural, createConstantModifier(status));
+            pm->adoptModifier(-1, plural, createConstantModifier(status));
         }
         if (U_FAILURE(status)) {
             delete pm;
@@ -93,12 +93,11 @@ MutablePatternModifier::createImmutableAndChain(const MicroPropsGenerator* paren
     } else {
         // Faster path when plural keyword is not needed.
         setNumberProperties(1, StandardPlural::Form::COUNT);
-        Modifier* positive = createConstantModifier(status);
+        pm->adoptModifierWithoutPlural(1, createConstantModifier(status));
         setNumberProperties(0, StandardPlural::Form::COUNT);
-        Modifier* zero = createConstantModifier(status);
+        pm->adoptModifierWithoutPlural(0, createConstantModifier(status));
         setNumberProperties(-1, StandardPlural::Form::COUNT);
-        Modifier* negative = createConstantModifier(status);
-        pm->adoptPositiveNegativeModifiers(positive, zero, negative);
+        pm->adoptModifierWithoutPlural(-1, createConstantModifier(status));
         if (U_FAILURE(status)) {
             delete pm;
             return nullptr;
@@ -120,7 +119,7 @@ ConstantMultiFieldModifier* MutablePatternModifier::createConstantModifier(UErro
     }
 }
 
-ImmutablePatternModifier::ImmutablePatternModifier(ParameterizedModifier* pm, const PluralRules* rules,
+ImmutablePatternModifier::ImmutablePatternModifier(AdoptingModifierStore* pm, const PluralRules* rules,
                                                    const MicroPropsGenerator* parent)
         : pm(pm), rules(rules), parent(parent) {}
 
@@ -132,7 +131,7 @@ void ImmutablePatternModifier::processQuantity(DecimalQuantity& quantity, MicroP
 
 void ImmutablePatternModifier::applyToMicros(MicroProps& micros, DecimalQuantity& quantity) const {
     if (rules == nullptr) {
-        micros.modMiddle = pm->getModifier(quantity.signum());
+        micros.modMiddle = pm->getModifierWithoutPlural(quantity.signum());
     } else {
         // TODO: Fix this. Avoid the copy.
         DecimalQuantity copy(quantity);
@@ -144,7 +143,7 @@ void ImmutablePatternModifier::applyToMicros(MicroProps& micros, DecimalQuantity
 
 const Modifier* ImmutablePatternModifier::getModifier(int8_t signum, StandardPlural::Form plural) const {
     if (rules == nullptr) {
-        return pm->getModifier(signum);
+        return pm->getModifierWithoutPlural(signum);
     } else {
         return pm->getModifier(signum, plural);
     }
@@ -204,23 +203,25 @@ int32_t MutablePatternModifier::apply(NumberStringBuilder& output, int32_t leftI
     return prefixLen + overwriteLen + suffixLen;
 }
 
-int32_t MutablePatternModifier::getPrefixLength(UErrorCode& status) const {
+int32_t MutablePatternModifier::getPrefixLength() const {
     // The unsafe code path performs self-mutation, so we need a const_cast.
     // This method needs to be const because it overrides a const method in the parent class.
     auto nonConstThis = const_cast<MutablePatternModifier*>(this);
 
     // Enter and exit CharSequence Mode to get the length.
+    UErrorCode status = U_ZERO_ERROR; // status fails only with an iilegal argument exception
     nonConstThis->prepareAffix(true);
     int result = AffixUtils::unescapedCodePointCount(currentAffix, *this, status);  // prefix length
     return result;
 }
 
-int32_t MutablePatternModifier::getCodePointCount(UErrorCode& status) const {
+int32_t MutablePatternModifier::getCodePointCount() const {
     // The unsafe code path performs self-mutation, so we need a const_cast.
     // This method needs to be const because it overrides a const method in the parent class.
     auto nonConstThis = const_cast<MutablePatternModifier*>(this);
 
     // Render the affixes to get the length
+    UErrorCode status = U_ZERO_ERROR; // status fails only with an iilegal argument exception
     nonConstThis->prepareAffix(true);
     int result = AffixUtils::unescapedCodePointCount(currentAffix, *this, status);  // prefix length
     nonConstThis->prepareAffix(false);
@@ -230,6 +231,26 @@ int32_t MutablePatternModifier::getCodePointCount(UErrorCode& status) const {
 
 bool MutablePatternModifier::isStrong() const {
     return fStrong;
+}
+
+bool MutablePatternModifier::containsField(UNumberFormatFields field) const {
+    (void)field;
+    // This method is not currently used.
+    U_ASSERT(false);
+    return false;
+}
+
+void MutablePatternModifier::getParameters(Parameters& output) const {
+    (void)output;
+    // This method is not currently used.
+    U_ASSERT(false);
+}
+
+bool MutablePatternModifier::semanticallyEquivalent(const Modifier& other) const {
+    (void)other;
+    // This method is not currently used.
+    U_ASSERT(false);
+    return false;
 }
 
 int32_t MutablePatternModifier::insertPrefix(NumberStringBuilder& sb, int position, UErrorCode& status) {

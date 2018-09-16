@@ -70,9 +70,9 @@ public class FormattedNumber {
     }
 
     /**
-     * Determine the start and end indices of the first occurrence of the given <em>field</em> in the
-     * output string. This allows you to determine the locations of the integer part, fraction part, and
-     * sign.
+     * Determines the start (inclusive) and end (exclusive) indices of the next occurrence of the given
+     * <em>field</em> in the output string. This allows you to determine the locations of, for example,
+     * the integer part, fraction part, or symbols.
      *
      * <p>
      * If multiple different field attributes are needed, this method can be called repeatedly, or if
