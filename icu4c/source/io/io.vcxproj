@@ -2,7 +2,8 @@
 <Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <!-- The following import will include the 'default' configuration options for VS projects. -->
   <Import Project="..\allinone\Build.Windows.ProjectConfiguration.props" />
-
+  <!-- The following import will include the library configuration options for VS projects. -->
+  <Import Project="..\allinone\Build.Windows.Library.ProjectConfiguration.props" />
   <PropertyGroup Label="Globals">
     <ProjectGuid>{C2B04507-2521-4801-BF0D-5FD79D6D518C}</ProjectGuid>
   </PropertyGroup>
