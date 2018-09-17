@@ -288,8 +288,7 @@ ListFormatter* ListFormatter::createInstance(const Locale& locale, UErrorCode& e
 }
 
 ListFormatter* ListFormatter::createInstance(const Locale& locale, const char *style, UErrorCode& errorCode) {
-    Locale tempLocale = locale;
-    const ListFormatInternal* listFormatInternal = getListFormatInternal(tempLocale, style, errorCode);
+    const ListFormatInternal* listFormatInternal = getListFormatInternal(locale, style, errorCode);
     if (U_FAILURE(errorCode)) {
         return nullptr;
     }
