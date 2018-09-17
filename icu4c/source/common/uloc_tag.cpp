@@ -2416,7 +2416,7 @@ uloc_forLanguageTag(const char* langtag,
                     int32_t localeIDCapacity,
                     int32_t* parsedLength,
                     UErrorCode* status) {
-    return uloc_forLanguageTagImpl(
+    return ulocimp_forLanguageTag(
             langtag,
             -1,
             localeID,
@@ -2427,12 +2427,12 @@ uloc_forLanguageTag(const char* langtag,
 
 
 U_CAPI int32_t U_EXPORT2
-uloc_forLanguageTagImpl(const char* langtag,
-                        int32_t tagLen,
-                        char* localeID,
-                        int32_t localeIDCapacity,
-                        int32_t* parsedLength,
-                        UErrorCode* status) {
+ulocimp_forLanguageTag(const char* langtag,
+                       int32_t tagLen,
+                       char* localeID,
+                       int32_t localeIDCapacity,
+                       int32_t* parsedLength,
+                       UErrorCode* status) {
     ULanguageTag *lt;
     int32_t reslen = 0;
     const char *subtag, *p;

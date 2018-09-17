@@ -46,6 +46,7 @@
 #include "cstring.h"
 #include "uassert.h"
 #include "uhash.h"
+#include "ulocimp.h"
 #include "ucln_cmn.h"
 #include "ustr_imp.h"
 #include "charstr.h"
@@ -887,7 +888,7 @@ Locale::forLanguageTag(StringPiece tag, UErrorCode& status)
             return result;
         }
 
-        reslen = uloc_forLanguageTagImpl(
+        reslen = ulocimp_forLanguageTag(
                 tag.data(),
                 tag.length(),
                 buffer,
