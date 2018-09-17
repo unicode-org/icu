@@ -99,13 +99,13 @@ static int32_t compareEncodedDateWithYMD(int encoded, int year, int month, int d
     }
 }
 
-EraRules::EraRules(int32_t *startDates, int32_t numEras)
-    : startDates(startDates), numEras(numEras) {
+EraRules::EraRules(LocalArray<int32_t>& eraStartDates, int32_t numEras)
+    : numEras(numEras) {
+    startDates.moveFrom(eraStartDates);
     initCurrentEra();
 }
 
 EraRules::~EraRules() {
-    uprv_free(startDates);
 }
 
 EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEra, UErrorCode& status) {
@@ -116,7 +116,7 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
     ures_getByKey(rb.getAlias(), "calendarData", rb.getAlias(), &status);
     ures_getByKey(rb.getAlias(), calType, rb.getAlias(), &status);
     ures_getByKey(rb.getAlias(), "eras", rb.getAlias(), &status);
-
+        
     if (U_FAILURE(status)) {
         return nullptr;
     }
@@ -124,33 +124,32 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
     int32_t numEras = ures_getSize(rb.getAlias());
     int32_t firstTentativeIdx = MAX_INT32;
 
-    int32_t *startDates = (int32_t*)uprv_malloc(numEras * sizeof(int32_t));
-    if (startDates == nullptr) {
-        status = U_MEMORY_ALLOCATION_ERROR;
+    LocalArray<int32_t> startDates(new int32_t[numEras], status);
+    if (U_FAILURE(status)) {
         return nullptr;
     }
-    uprv_memset(startDates, 0, numEras * sizeof(int32_t));
+    uprv_memset(startDates.getAlias(), 0 , numEras * sizeof(int32_t));
 
     while (ures_hasNext(rb.getAlias())) {
         LocalUResourceBundlePointer eraRuleRes(ures_getNextResource(rb.getAlias(), nullptr, &status));
         if (U_FAILURE(status)) {
-            goto error;
+            return nullptr;
         }
         const char *eraIdxStr = ures_getKey(eraRuleRes.getAlias());
         char *endp;
         int32_t eraIdx = (int32_t)strtol(eraIdxStr, &endp, 10);
         if ((size_t)(endp - eraIdxStr) != uprv_strlen(eraIdxStr)) {
             status = U_INVALID_FORMAT_ERROR;
-            goto error;
+            return nullptr;
         }
         if (eraIdx < 0 || eraIdx >= numEras) {
             status = U_INVALID_FORMAT_ERROR;
-            goto error;
+            return nullptr;
         }
         if (isSet(startDates[eraIdx])) {
             // start date of the index was already set
             status = U_INVALID_FORMAT_ERROR;
-            goto error;
+            return nullptr;
         }
 
         UBool hasName = TRUE;
@@ -159,17 +158,17 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
         while (ures_hasNext(eraRuleRes.getAlias())) {
             LocalUResourceBundlePointer res(ures_getNextResource(eraRuleRes.getAlias(), nullptr, &status));
             if (U_FAILURE(status)) {
-                goto error;
+                return nullptr;
             }
             const char *key = ures_getKey(res.getAlias());
             if (uprv_strcmp(key, "start") == 0) {
                 const int32_t *fields = ures_getIntVector(res.getAlias(), &len, &status);
                 if (U_FAILURE(status)) {
-                    goto error;
+                    return nullptr;
                 }
                 if (len != 3 || !isValidRuleStartDate(fields[0], fields[1], fields[2])) {
                     status = U_INVALID_FORMAT_ERROR;
-                    goto error;
+                    return nullptr;
                 }
                 startDates[eraIdx] = encodeDate(fields[0], fields[1], fields[2]);
             } else if (uprv_strcmp(key, "named") == 0) {
@@ -193,20 +192,20 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
                     // This implementation does not support end only rule for eras other than
                     // the first one.
                     status = U_INVALID_FORMAT_ERROR;
-                    goto error;
+                    return nullptr;
                 }
                 U_ASSERT(eraIdx == 0);
                 startDates[eraIdx] = MIN_ENCODED_START;
             } else {
                 status = U_INVALID_FORMAT_ERROR;
-                goto error;
+                return nullptr;
             }
         }
 
         if (hasName) {
             if (eraIdx >= firstTentativeIdx) {
                 status = U_INVALID_FORMAT_ERROR;
-                goto error;
+                return nullptr;
             }
         } else {
             if (eraIdx < firstTentativeIdx) {
@@ -226,10 +225,6 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
         status = U_MEMORY_ALLOCATION_ERROR;
     }
     return result;
-
-error:
-    uprv_free(startDates);
-    return nullptr;
 }
 
 void EraRules::getStartDate(int32_t eraIdx, int32_t (&fields)[3], UErrorCode& status) const {

@@ -130,7 +130,7 @@ class BasicTimeZone;
  *
  * **Note:** for some non-Gregorian calendars, different
  * fields may be necessary for complete disambiguation. For example, a full
- * specification of the historial Arabic astronomical calendar requires year,
+ * specification of the historical Arabic astronomical calendar requires year,
  * month, day-of-month *and* day-of-week in some cases.
  *
  * **Note:** There are certain possible ambiguities in
@@ -886,7 +886,7 @@ public:
     /**
      * Sets the behavior for handling wall time repeating multiple times
      * at negative time zone offset transitions. For example, 1:30 AM on
-     * November 6, 2011 in US Eastern time (Ameirca/New_York) occurs twice;
+     * November 6, 2011 in US Eastern time (America/New_York) occurs twice;
      * 1:30 AM EDT, then 1:30 AM EST one hour later. When <code>UCAL_WALLTIME_FIRST</code>
      * is used, the wall time 1:30AM in this example will be interpreted as 1:30 AM EDT
      * (first occurrence). When <code>UCAL_WALLTIME_LAST</code> is used, it will be
@@ -2152,7 +2152,7 @@ private:
     TimeZone*   fZone;
 
     /**
-     * Option for rpeated wall time
+     * Option for repeated wall time
      * @see #setRepeatedWallTimeOption
      */
     UCalendarWallTimeOption fRepeatedWallTime;
@@ -2437,7 +2437,7 @@ private:
     BasicTimeZone* getBasicTimeZone() const;
 
     /**
-     * Find the previous zone transtion near the given time.
+     * Find the previous zone transition near the given time.
      * @param base The base time, inclusive
      * @param transitionTime Receives the result time
      * @param status The error status
