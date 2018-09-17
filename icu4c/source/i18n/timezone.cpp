@@ -390,7 +390,8 @@ createSystemTimeZone(const UnicodeString& id, UErrorCode& ec) {
     if (U_SUCCESS(ec)) {
         z = new OlsonTimeZone(top, &res, id, ec);
         if (z == NULL) {
-          U_DEBUG_TZ_MSG(("cstz: olson time zone failed to initialize - err %s\n", u_errorName(ec)));
+            ec = U_MEMORY_ALLOCATION_ERROR;
+            U_DEBUG_TZ_MSG(("cstz: olson time zone failed to initialize - err %s\n", u_errorName(ec)));
         }
     }
     ures_close(&res);
@@ -398,7 +399,7 @@ createSystemTimeZone(const UnicodeString& id, UErrorCode& ec) {
     if (U_FAILURE(ec)) {
         U_DEBUG_TZ_MSG(("cstz: failed to create, err %s\n", u_errorName(ec)));
         delete z;
-        z = 0;
+        z = NULL;
     }
     return z;
 }
