@@ -1057,12 +1057,19 @@ UBool DecimalFormat::areSignificantDigitsUsed() const {
 
 void DecimalFormat::setSignificantDigitsUsed(UBool useSignificantDigits) {
     // These are the default values from the old implementation.
+    if (useSignificantDigits) {
+        if (fields->properties->minimumSignificantDigits != -1 ||
+            fields->properties->maximumSignificantDigits != -1) {
+            return;
+        }
+    } else {
+        if (fields->properties->minimumSignificantDigits == -1 &&
+            fields->properties->maximumSignificantDigits == -1) {
+            return;
+        }
+    }
     int32_t minSig = useSignificantDigits ? 1 : -1;
     int32_t maxSig = useSignificantDigits ? 6 : -1;
-    if (fields->properties->minimumSignificantDigits == minSig &&
-        fields->properties->maximumSignificantDigits == maxSig) {
-        return;
-    }
     fields->properties->minimumSignificantDigits = minSig;
     fields->properties->maximumSignificantDigits = maxSig;
     touchNoError();
