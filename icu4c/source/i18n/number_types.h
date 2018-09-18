@@ -190,7 +190,7 @@ class U_I18N_API Modifier {
      * A fill-in for getParameters(). obj will always be set; if non-null, the other
      * two fields are also safe to read.
      */
-    struct Parameters {
+    struct U_I18N_API Parameters {
         const ModifierStore* obj = nullptr;
         int8_t signum;
         StandardPlural::Form plural;

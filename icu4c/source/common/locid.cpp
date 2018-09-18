@@ -738,7 +738,7 @@ Locale::addLikelySubtags(UErrorCode& status) {
     // The maximized locale ID string is often longer, but there is no good
     // heuristic to estimate just how much longer. Leave that to CharString.
     CharString maximizedLocaleID;
-    int32_t maximizedLocaleIDCapacity = uprv_strlen(fullName);
+    int32_t maximizedLocaleIDCapacity = static_cast<int32_t>(uprv_strlen(fullName));
 
     char* buffer;
     int32_t reslen;
@@ -797,7 +797,7 @@ Locale::minimizeSubtags(UErrorCode& status) {
     // "en__POSIX"), minimized locale ID strings will be either the same length
     // or shorter than their input.
     CharString minimizedLocaleID;
-    int32_t minimizedLocaleIDCapacity = uprv_strlen(fullName);
+    int32_t minimizedLocaleIDCapacity = static_cast<int32_t>(uprv_strlen(fullName));
 
     char* buffer;
     int32_t reslen;
@@ -952,7 +952,7 @@ Locale::toLanguageTag(ByteSink& sink, UErrorCode& status) const
     // All simple language tags will have the exact same length as BCP-47
     // strings as they have as ICU locale IDs (like "en-US" for "en_US").
     LocalMemory<char> scratch;
-    int32_t scratch_capacity = uprv_strlen(fullName);
+    int32_t scratch_capacity = static_cast<int32_t>(uprv_strlen(fullName));
 
     if (scratch_capacity == 0) {
         scratch_capacity = 3;  // "und"
@@ -1324,7 +1324,9 @@ public:
             if (key == nullptr) {
                 status = U_ILLEGAL_ARGUMENT_ERROR;
             } else {
-                if (resultLength != nullptr) *resultLength = uprv_strlen(key);
+                if (resultLength != nullptr) {
+                    *resultLength = static_cast<int32_t>(uprv_strlen(key));
+                }
                 return key;
             }
         }
@@ -1493,7 +1495,7 @@ Locale::getUnicodeKeywordValue(StringPiece keywordName,
         return;
     }
 
-    sink.Append(unicode_value, uprv_strlen(unicode_value));
+    sink.Append(unicode_value, static_cast<int32_t>(uprv_strlen(unicode_value)));
 }
 
 void
