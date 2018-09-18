@@ -2372,8 +2372,15 @@ void NumberFormatterApiTest::copyMove() {
     assertTrue("[constructor] Source should be reset after move", l1.getCompiled() == nullptr);
 
     // Reset l1 and l2 to check for macro-props copying for behavior testing
+    // Make the test more interesting: also warm them up with a compiled formatter.
     l1 = NumberFormatter::withLocale("en");
+    l1.formatInt(1, status);
+    l1.formatInt(1, status);
+    l1.formatInt(1, status);
     l2 = NumberFormatter::withLocale("en");
+    l2.formatInt(1, status);
+    l2.formatInt(1, status);
+    l2.formatInt(1, status);
 
     // Copy assignment
     l1 = l3;

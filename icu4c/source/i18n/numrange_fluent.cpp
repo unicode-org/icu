@@ -227,18 +227,26 @@ LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(LocalizedNumberRang
 
 LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(NFS<LNF>&& src) U_NOEXCEPT
         : NFS<LNF>(std::move(src)) {
-    // No additional fields to assign
+    // Steal the compiled formatter
+    LNF&& _src = static_cast<LNF&&>(src);
+    fImpl = _src.fImpl;
+    _src.fImpl = nullptr;
 }
 
 LocalizedNumberRangeFormatter& LocalizedNumberRangeFormatter::operator=(const LNF& other) {
     NFS<LNF>::operator=(static_cast<const NFS<LNF>&>(other));
-    // No additional fields to assign
+    // Do not steal; just clear
+    delete fImpl;
+    fImpl = nullptr;
     return *this;
 }
 
 LocalizedNumberRangeFormatter& LocalizedNumberRangeFormatter::operator=(LNF&& src) U_NOEXCEPT {
     NFS<LNF>::operator=(static_cast<NFS<LNF>&&>(src));
-    // No additional fields to assign
+    // Steal the compiled formatter
+    delete fImpl;
+    fImpl = src.fImpl;
+    src.fImpl = nullptr;
     return *this;
 }
 

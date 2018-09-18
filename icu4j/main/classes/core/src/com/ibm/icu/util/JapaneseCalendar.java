@@ -50,7 +50,7 @@ import com.ibm.icu.impl.EraRules;
  *     names in OpenJDK. ICU4J implementation enables the CLDR tentative era when
  *     this property is defined, but it does not use the start date and names specified
  *     by the property value.)</li>
- * </nl>
+ * </ol>
  * <p>
  * This class should not be subclassed.</p>
  * <p>
