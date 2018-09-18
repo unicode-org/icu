@@ -37,11 +37,11 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
     Object[] setComparatorParam;
 
     public static <K, V> Relation<K, V> of(Map<K, Set<V>> map, Class<?> setCreator) {
-        return new Relation<K, V>(map, setCreator);
+        return new Relation<>(map, setCreator);
     }
 
     public static <K,V> Relation<K, V> of(Map<K, Set<V>> map, Class<?> setCreator, Comparator<V> setComparator) {
-        return new Relation<K, V>(map, setCreator, setComparator);
+        return new Relation<>(map, setCreator, setComparator);
     }
 
     public Relation(Map<K, Set<V>> map, Class<?> setCreator) {
@@ -91,10 +91,10 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
     }
 
     public Set<Entry<K, V>> keyValueSet() {
-        Set<Entry<K, V>> result = new LinkedHashSet<Entry<K, V>>();
+        Set<Entry<K, V>> result = new LinkedHashSet<>();
         for (K key : data.keySet()) {
             for (V value : data.get(key)) {
-                result.add(new SimpleEntry<K, V>(key, value));
+                result.add(new SimpleEntry<>(key, value));
             }
         }
         return result;
@@ -320,7 +320,9 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
         return result;
     }
 
-    public Set<V> removeAll(K... keys) {
+    @SafeVarargs
+    @SuppressWarnings("varargs")    // Not supported by Eclipse, but we need this for javac
+    public final Set<V> removeAll(K... keys) {
         return removeAll(Arrays.asList(keys));
     }
 
@@ -333,7 +335,7 @@ public class Relation<K, V> implements Freezable<Relation<K,V>> { // TODO: add ,
     }
 
     public Set<V> removeAll(Collection<K> toBeRemoved) {
-        Set<V> result = new LinkedHashSet<V>();
+        Set<V> result = new LinkedHashSet<>();
         for (K key : toBeRemoved) {
             try {
                 final Set<V> removals = data.remove(key);

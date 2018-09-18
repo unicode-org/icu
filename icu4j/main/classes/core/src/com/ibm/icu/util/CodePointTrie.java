@@ -33,7 +33,7 @@ public abstract class CodePointTrie extends CodePointMap {
      * <p>Use null for {@link #fromBinary} to accept any type;
      * {@link #getType} will return the actual type.
      *
-     * @see MutableCodePointTrie#buildImmutable(Type, ValueWidth)
+     * @see MutableCodePointTrie#buildImmutable(CodePointTrie.Type, CodePointTrie.ValueWidth)
      * @see #fromBinary
      * @see #getType
      * @draft ICU 63
@@ -133,7 +133,7 @@ public abstract class CodePointTrie extends CodePointMap {
      * @param bytes a buffer containing the binary data of a CodePointTrie
      * @return the trie
      * @see MutableCodePointTrie#MutableCodePointTrie(int, int)
-     * @see MutableCodePointTrie#buildImmutable(Type, ValueWidth)
+     * @see MutableCodePointTrie#buildImmutable(CodePointTrie.Type, CodePointTrie.ValueWidth)
      * @see #toBinary(OutputStream)
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
@@ -740,7 +740,7 @@ public abstract class CodePointTrie extends CodePointMap {
     protected abstract int cpIndex(int c);
 
     /**
-     * A CodePointTrie with {@value Type#FAST}.
+     * A CodePointTrie with {@link Type#FAST}.
      *
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
@@ -754,7 +754,7 @@ public abstract class CodePointTrie extends CodePointMap {
         /**
          * Creates a trie from its binary form.
          * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@value Type#FAST}.
+         * with {@link Type#FAST}.
          *
          * @param valueWidth selects the number of bits in a data value; this method throws an exception
          *                  if the valueWidth does not match the binary data;
@@ -769,7 +769,7 @@ public abstract class CodePointTrie extends CodePointMap {
         }
 
         /**
-         * @return {@value Type#FAST}
+         * @return {@link Type#FAST}
          * @draft ICU 63
          * @provisional This API might change or be removed in a future release.
          */
@@ -884,7 +884,7 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     /**
-     * A CodePointTrie with {@value Type#SMALL}.
+     * A CodePointTrie with {@link Type#SMALL}.
      *
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
@@ -898,7 +898,7 @@ public abstract class CodePointTrie extends CodePointMap {
         /**
          * Creates a trie from its binary form.
          * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@value Type#SMALL}.
+         * with {@link Type#SMALL}.
          *
          * @param valueWidth selects the number of bits in a data value; this method throws an exception
          *                  if the valueWidth does not match the binary data;
@@ -913,7 +913,7 @@ public abstract class CodePointTrie extends CodePointMap {
         }
 
         /**
-         * @return {@value Type#SMALL}
+         * @return {@link Type#SMALL}
          * @draft ICU 63
          * @provisional This API might change or be removed in a future release.
          */
@@ -1005,7 +1005,7 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     /**
-     * A CodePointTrie with {@value Type#FAST} and {@value ValueWidth#BITS_16}.
+     * A CodePointTrie with {@link Type#FAST} and {@link ValueWidth#BITS_16}.
      *
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
@@ -1022,7 +1022,7 @@ public abstract class CodePointTrie extends CodePointMap {
         /**
          * Creates a trie from its binary form.
          * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@value Type#FAST} and {@value ValueWidth#BITS_16}.
+         * with {@link Type#FAST} and {@link ValueWidth#BITS_16}.
          *
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie
@@ -1067,7 +1067,7 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     /**
-     * A CodePointTrie with {@value Type#FAST} and {@value ValueWidth#BITS_32}.
+     * A CodePointTrie with {@link Type#FAST} and {@link ValueWidth#BITS_32}.
      *
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
@@ -1084,7 +1084,7 @@ public abstract class CodePointTrie extends CodePointMap {
         /**
          * Creates a trie from its binary form.
          * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@value Type#FAST} and {@value ValueWidth#BITS_32}.
+         * with {@link Type#FAST} and {@link ValueWidth#BITS_32}.
          *
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie
@@ -1129,7 +1129,7 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     /**
-     * A CodePointTrie with {@value Type#FAST} and {@value ValueWidth#BITS_8}.
+     * A CodePointTrie with {@link Type#FAST} and {@link ValueWidth#BITS_8}.
      *
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
@@ -1146,7 +1146,7 @@ public abstract class CodePointTrie extends CodePointMap {
         /**
          * Creates a trie from its binary form.
          * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@value Type#FAST} and {@value ValueWidth#BITS_8}.
+         * with {@link Type#FAST} and {@link ValueWidth#BITS_8}.
          *
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie
@@ -1191,7 +1191,7 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     /**
-     * A CodePointTrie with {@value Type#SMALL} and {@value ValueWidth#BITS_16}.
+     * A CodePointTrie with {@link Type#SMALL} and {@link ValueWidth#BITS_16}.
      *
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
@@ -1205,7 +1205,7 @@ public abstract class CodePointTrie extends CodePointMap {
         /**
          * Creates a trie from its binary form.
          * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@value Type#SMALL} and {@value ValueWidth#BITS_16}.
+         * with {@link Type#SMALL} and {@link ValueWidth#BITS_16}.
          *
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie
@@ -1218,7 +1218,7 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     /**
-     * A CodePointTrie with {@value Type#SMALL} and {@value ValueWidth#BITS_32}.
+     * A CodePointTrie with {@link Type#SMALL} and {@link ValueWidth#BITS_32}.
      *
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
@@ -1232,7 +1232,7 @@ public abstract class CodePointTrie extends CodePointMap {
         /**
          * Creates a trie from its binary form.
          * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@value Type#SMALL} and {@value ValueWidth#BITS_32}.
+         * with {@link Type#SMALL} and {@link ValueWidth#BITS_32}.
          *
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie
@@ -1245,7 +1245,7 @@ public abstract class CodePointTrie extends CodePointMap {
     }
 
     /**
-     * A CodePointTrie with {@value Type#SMALL} and {@value ValueWidth#BITS_8}.
+     * A CodePointTrie with {@link Type#SMALL} and {@link ValueWidth#BITS_8}.
      *
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
@@ -1259,7 +1259,7 @@ public abstract class CodePointTrie extends CodePointMap {
         /**
          * Creates a trie from its binary form.
          * Same as {@link CodePointTrie#fromBinary(Type, ValueWidth, ByteBuffer)}
-         * with {@value Type#SMALL} and {@value ValueWidth#BITS_8}.
+         * with {@link Type#SMALL} and {@link ValueWidth#BITS_8}.
          *
          * @param bytes a buffer containing the binary data of a CodePointTrie
          * @return the trie
