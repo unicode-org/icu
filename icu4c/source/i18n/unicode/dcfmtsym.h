@@ -181,7 +181,6 @@ public:
      */
     DecimalFormatSymbols(const Locale& locale, UErrorCode& status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Creates a DecimalFormatSymbols instance for the given locale with digits and symbols
      * corresponding to the given NumberingSystem.
@@ -196,10 +195,9 @@ public:
      * @param ns        The numbering system.
      * @param status    Input/output parameter, set to success or
      *                  failure code upon return.
-     * @draft ICU 60
+     * @stable ICU 60
      */
     DecimalFormatSymbols(const Locale& locale, const NumberingSystem& ns, UErrorCode& status);
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Create a DecimalFormatSymbols object for the default locale.
