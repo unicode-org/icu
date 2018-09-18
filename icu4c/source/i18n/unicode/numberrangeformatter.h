@@ -625,6 +625,8 @@ class U_I18N_API LocalizedNumberRangeFormatter
 
     LocalizedNumberRangeFormatter(impl::RangeMacroProps &&macros, const Locale &locale);
 
+    void clear();
+
     // To give the fluent setters access to this class's constructor:
     friend class NumberRangeFormatterSettings<UnlocalizedNumberRangeFormatter>;
     friend class NumberRangeFormatterSettings<LocalizedNumberRangeFormatter>;
