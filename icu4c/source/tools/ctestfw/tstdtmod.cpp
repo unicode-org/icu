@@ -81,7 +81,7 @@ UBool IcuTestErrorCode::errDataIfFailureAndReset(const char *fmt, ...) {
 
 UBool IcuTestErrorCode::expectErrorAndReset(UErrorCode expectedError) {
     if(get() != expectedError) {
-        errlog(TRUE, UnicodeString(u"expected: ") + u_errorName(expectedError), nullptr);
+        errlog(FALSE, UnicodeString(u"expected: ") + u_errorName(expectedError), nullptr);
     }
     UBool retval = isFailure();
     reset();
@@ -95,7 +95,7 @@ UBool IcuTestErrorCode::expectErrorAndReset(UErrorCode expectedError, const char
         va_start(ap, fmt);
         vsprintf(buffer, fmt, ap);
         va_end(ap);
-        errlog(TRUE, UnicodeString(u"expected: ") + u_errorName(expectedError), buffer);
+        errlog(FALSE, UnicodeString(u"expected: ") + u_errorName(expectedError), buffer);
     }
     UBool retval = isFailure();
     reset();
