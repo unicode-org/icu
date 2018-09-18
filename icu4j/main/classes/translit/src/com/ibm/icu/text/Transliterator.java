@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.Objects;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -372,16 +373,11 @@ public abstract class Transliterator implements StringTransform  {
         }
 
         /**
-         * Mock implementation of hashCode(). This implementation always returns a constant
-         * value. When Java assertion is enabled, this method triggers an assertion failure.
-         * @internal
-         * @deprecated This API is ICU internal only.
+         * @draft ICU 63
          */
         @Override
-        @Deprecated
         public int hashCode() {
-            assert false : "hashCode not designed";
-            return 42;
+            return Objects.hash(contextStart, contextLimit, start, limit);
         }
 
         /**
