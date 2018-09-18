@@ -6266,6 +6266,23 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test20037_ScientificIntegerOverflow() throws ParseException {
+        NumberFormat nf = NumberFormat.getInstance(ULocale.US);
+
+        // Test overflow of exponent
+        Number result = nf.parse("1E-2147483648");
+        assertEquals("Should not overflow",
+                "0", result.toString());
+
+        // Test edge case overflow of exponent
+        // Note: the behavior is different from C++; this is probably due to the
+        // intermediate BigDecimal form, which has its own restrictions
+        result = nf.parse("1E-2147483647E-1");
+        assertEquals("Should not overflow and should parse only the first exponent",
+                "0.0", result.toString());
+    }
+
+    @Test
     public void test13840_ParseLongStringCrash() throws ParseException {
         NumberFormat nf = NumberFormat.getInstance(ULocale.ENGLISH);
         String bigString =
