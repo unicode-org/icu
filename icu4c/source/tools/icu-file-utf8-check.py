@@ -14,7 +14,7 @@
 #     It only works correctly on platforms where the native line ending is a plain \n
 #
 #  usage:
-#     icu-svnprops-check.py  [options]
+#     icu-file-utf8-check.py  [options]
 #
 #  options:
 #     -h | --help    Print a usage line and exit.
@@ -97,12 +97,8 @@ def main(argv):
             print "Repository file not in working copy: " + f
             continue;
 
-        if source_file_re.match(f):
-            source_file = True
-            check_file(f, source_file);
-        else:
-            source_file = False
-            check_file(f, source_file)
+        source_file = source_file_re.match(f)
+        check_file(f, source_file)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
