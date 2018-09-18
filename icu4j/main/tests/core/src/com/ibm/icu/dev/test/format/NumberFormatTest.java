@@ -6271,7 +6271,7 @@ public class NumberFormatTest extends TestFmwk {
 
         // Test overflow of exponent
         Number result = nf.parse("1E-2147483648");
-        assertEquals("Should not overflow",
+        assertEquals("Should snap to zero",
                 "0", result.toString());
 
         // Test edge case overflow of exponent

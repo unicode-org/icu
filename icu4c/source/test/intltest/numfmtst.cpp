@@ -9166,7 +9166,7 @@ void NumberFormatTest::Test20037_ScientificIntegerOverflow() {
     // Test overflow of exponent
     nf->parse(u"1E-2147483648", result, status);
     StringPiece sp = result.getDecimalNumber(status);
-    assertEquals(u"Should not overflow",
+    assertEquals(u"Should snap to zero",
         u"0",
         {sp.data(), sp.length(), US_INV});
 
