@@ -407,7 +407,8 @@ LocalizedNumberFormatter::LocalizedNumberFormatter(NFS<LNF>&& src) U_NOEXCEPT
 
 LocalizedNumberFormatter& LocalizedNumberFormatter::operator=(const LNF& other) {
     NFS<LNF>::operator=(static_cast<const NFS<LNF>&>(other));
-    // No additional fields to assign (let call count and compiled formatter reset to defaults)
+    // Reset to default values.
+    clear();
     return *this;
 }
 
@@ -419,12 +420,17 @@ LocalizedNumberFormatter& LocalizedNumberFormatter::operator=(LNF&& src) U_NOEXC
         // Formatter is compiled
         lnfMoveHelper(static_cast<LNF&&>(src));
     } else {
-        // Reset to default values.
-        auto* callCount = reinterpret_cast<u_atomic_int32_t*>(fUnsafeCallCount);
-        umtx_storeRelease(*callCount, 0);
-        fCompiled = nullptr;
+        clear();
     }
     return *this;
+}
+
+void LocalizedNumberFormatter::clear() {
+    // Reset to default values.
+    auto* callCount = reinterpret_cast<u_atomic_int32_t*>(fUnsafeCallCount);
+    umtx_storeRelease(*callCount, 0);
+    delete fCompiled;
+    fCompiled = nullptr;
 }
 
 void LocalizedNumberFormatter::lnfMoveHelper(LNF&& src) {
@@ -433,6 +439,7 @@ void LocalizedNumberFormatter::lnfMoveHelper(LNF&& src) {
     // The bits themselves appear to be platform-dependent, so copying them might not be safe.
     auto* callCount = reinterpret_cast<u_atomic_int32_t*>(fUnsafeCallCount);
     umtx_storeRelease(*callCount, INT32_MIN);
+    delete fCompiled;
     fCompiled = src.fCompiled;
     // Reset the source object to leave it in a safe state.
     auto* srcCallCount = reinterpret_cast<u_atomic_int32_t*>(src.fUnsafeCallCount);
