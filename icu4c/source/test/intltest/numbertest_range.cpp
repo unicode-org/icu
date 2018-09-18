@@ -48,6 +48,7 @@ void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const c
         TESTCASE_AUTO(testIdentity);
         TESTCASE_AUTO(testDifferentFormatters);
         TESTCASE_AUTO(testPlurals);
+        TESTCASE_AUTO(testCopyMove);
     TESTCASE_AUTO_END;
 }
 
@@ -704,6 +705,48 @@ void NumberRangeFormatterTest::testPlurals() {
         assertEquals(message, cas.expected, actual);
         status.errIfFailureAndReset();
     }
+}
+
+void NumberRangeFormatterTest::testCopyMove() {
+    IcuTestErrorCode status(*this, "testCopyMove");
+
+    // Default constructors
+    LocalizedNumberRangeFormatter l1;
+    assertEquals("Initial behavior", u"1–5", l1.formatFormattableRange(1, 5, status).toString(status));
+    if (status.errDataIfFailureAndReset()) { return; }
+
+    // Setup
+    l1 = NumberRangeFormatter::withLocale("fr-FR")
+        .numberFormatterBoth(NumberFormatter::with().unit(USD));
+    assertEquals("Currency behavior", u"1,00–5,00 $US", l1.formatFormattableRange(1, 5, status).toString(status));
+
+    // Copy constructor
+    LocalizedNumberRangeFormatter l2 = l1;
+    assertEquals("Copy constructor", u"1,00–5,00 $US", l2.formatFormattableRange(1, 5, status).toString(status));
+
+    // Move constructor
+    LocalizedNumberRangeFormatter l3 = std::move(l1);
+    assertEquals("Move constructor", u"1,00–5,00 $US", l3.formatFormattableRange(1, 5, status).toString(status));
+
+    // Reset objects for assignment tests
+    l1 = NumberRangeFormatter::withLocale("en-us");
+    l2 = NumberRangeFormatter::withLocale("en-us");
+    assertEquals("Rest behavior, l1", u"1–5", l1.formatFormattableRange(1, 5, status).toString(status));
+    assertEquals("Rest behavior, l2", u"1–5", l2.formatFormattableRange(1, 5, status).toString(status));
+
+    // Copy assignment
+    l1 = l3;
+    assertEquals("Copy constructor", u"1,00–5,00 $US", l1.formatFormattableRange(1, 5, status).toString(status));
+
+    // Move assignment
+    l2 = std::move(l3);
+    assertEquals("Copy constructor", u"1,00–5,00 $US", l2.formatFormattableRange(1, 5, status).toString(status));
+
+    // FormattedNumberRange
+    FormattedNumberRange result = l1.formatFormattableRange(1, 5, status);
+    assertEquals("FormattedNumberRange move constructor", u"1,00–5,00 $US", result.toString(status));
+    result = l1.formatFormattableRange(3, 6, status);
+    assertEquals("FormattedNumberRange move assignment", u"3,00–6,00 $US", result.toString(status));
 }
 
 void  NumberRangeFormatterTest::assertFormatRange(
