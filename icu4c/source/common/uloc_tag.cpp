@@ -1460,9 +1460,9 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                     kwd->value = pType;
 
                     if (!_addExtensionToList(&kwdFirst, kwd, FALSE)) {
-                        *status = U_ILLEGAL_ARGUMENT_ERROR;
+                        // duplicate keyword is allowed, Only the first
+                        // is honored.
                         uprv_free(kwd);
-                        goto cleanup;
                     }
                 }
 
