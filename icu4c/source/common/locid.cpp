@@ -46,6 +46,7 @@
 #include "cstring.h"
 #include "uassert.h"
 #include "uhash.h"
+#include "ulocimp.h"
 #include "ucln_cmn.h"
 #include "ustr_imp.h"
 #include "charstr.h"
@@ -858,12 +859,6 @@ Locale::forLanguageTag(StringPiece tag, UErrorCode& status)
         return result;
     }
 
-    // TODO: Remove the need for a const char* to a NUL terminated buffer.
-    const CharString tag_nul(tag, status);
-    if (U_FAILURE(status)) {
-        return result;
-    }
-
     // If a BCP-47 language tag is passed as the language parameter to the
     // normal Locale constructor, it will actually fall back to invoking
     // uloc_forLanguageTag() to parse it if it somehow is able to detect that
@@ -893,8 +888,9 @@ Locale::forLanguageTag(StringPiece tag, UErrorCode& status)
             return result;
         }
 
-        reslen = uloc_forLanguageTag(
-                tag_nul.data(),
+        reslen = ulocimp_forLanguageTag(
+                tag.data(),
+                tag.length(),
                 buffer,
                 resultCapacity,
                 &parsedLength,
