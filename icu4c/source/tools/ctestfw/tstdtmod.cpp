@@ -111,13 +111,12 @@ void IcuTestErrorCode::setScope(const UnicodeString& message) {
 }
 
 void IcuTestErrorCode::handleFailure() const {
-    errlog(FALSE, u"", nullptr);
+    errlog(FALSE, u"(handleFailure)", nullptr);
 }
 
-void IcuTestErrorCode::errlog(UBool dataErr, UnicodeString mainMessage, const char* extraMessage) const {
+void IcuTestErrorCode::errlog(UBool dataErr, const UnicodeString& mainMessage, const char* extraMessage) const {
     UnicodeString msg(testName, -1, US_INV);
-    msg.append(u" ");
-    msg.append(mainMessage);
+    msg.append(u' ').append(mainMessage);
     msg.append(u" but got error: ").append(UnicodeString(errorName(), -1, US_INV));
 
     if (!scopeMessage.isEmpty()) {

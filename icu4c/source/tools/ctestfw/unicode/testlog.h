@@ -56,7 +56,7 @@ private:
     const char *const testName;
     UnicodeString scopeMessage;
 
-    void errlog(UBool dataErr, UnicodeString mainMessage, const char* extraMessage) const;
+    void errlog(UBool dataErr, const UnicodeString& mainMessage, const char* extraMessage) const;
 };
 
 #endif

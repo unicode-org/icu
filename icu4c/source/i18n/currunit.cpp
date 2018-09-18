@@ -33,7 +33,7 @@ CurrencyUnit::CurrencyUnit(ConstChar16Ptr _isoCode, UErrorCode& ec) {
     if (U_FAILURE(ec) || _isoCode == nullptr || _isoCode[0] == 0) {
         isoCodeToUse = kDefaultCurrency;
     } else if (_isoCode[1] == 0 || _isoCode[2] == 0) {
-        isoCodeToUse = _isoCode;
+        isoCodeToUse = kDefaultCurrency;
         ec = U_ILLEGAL_ARGUMENT_ERROR;
     } else if (!uprv_isInvariantUString(_isoCode, 3)) {
         // TODO: Perform a more strict ASCII check like in ICU4J isAlpha3Code?
