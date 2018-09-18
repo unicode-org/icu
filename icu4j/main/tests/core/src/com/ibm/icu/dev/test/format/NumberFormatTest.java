@@ -6280,6 +6280,11 @@ public class NumberFormatTest extends TestFmwk {
         result = nf.parse("1E-2147483647E-1");
         assertEquals("Should not overflow and should parse only the first exponent",
                 "0.0", result.toString());
+
+        // For Java, we should get *pretty close* to 2^31.
+        result = nf.parse("1E-547483647");
+        assertEquals("Should *not* snap to zero",
+                "1E-547483647", result.toString());
     }
 
     @Test
