@@ -7367,6 +7367,35 @@ void NumberFormatTest::TestSignificantDigits(void) {
         }
         result.remove();
     }
+
+    // Test for ICU-20063
+    {
+        DecimalFormat df({"en-us", status}, status);
+        df.setSignificantDigitsUsed(TRUE);
+        expect(df, 9.87654321, u"9.87654");
+        df.setMaximumSignificantDigits(3);
+        expect(df, 9.87654321, u"9.88");
+        // setSignificantDigitsUsed with maxSig only
+        df.setSignificantDigitsUsed(TRUE);
+        expect(df, 9.87654321, u"9.88");
+        df.setMinimumSignificantDigits(2);
+        expect(df, 9, u"9.0");
+        // setSignificantDigitsUsed with both minSig and maxSig
+        df.setSignificantDigitsUsed(TRUE);
+        expect(df, 9, u"9.0");
+        // setSignificantDigitsUsed to false: should revert to fraction rounding
+        df.setSignificantDigitsUsed(FALSE);
+        expect(df, 9.87654321, u"9.876543");
+        expect(df, 9, u"9");
+        df.setSignificantDigitsUsed(TRUE);
+        df.setMinimumSignificantDigits(2);
+        expect(df, 9.87654321, u"9.87654");
+        expect(df, 9, u"9.0");
+        // setSignificantDigitsUsed with minSig only
+        df.setSignificantDigitsUsed(TRUE);
+        expect(df, 9.87654321, u"9.87654");
+        expect(df, 9, u"9.0");
+    }
 }
 
 void NumberFormatTest::TestShowZero() {

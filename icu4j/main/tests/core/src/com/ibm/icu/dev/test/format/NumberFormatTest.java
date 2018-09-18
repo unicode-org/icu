@@ -3975,6 +3975,35 @@ public class NumberFormatTest extends TestFmwk {
         for (int i = 0; i < input.length; i++) {
             assertEquals("TestSignificantDigits", expected[i], numberFormat.format(input[i]));
         }
+
+        // Test for ICU-20063
+        {
+            DecimalFormat df = new DecimalFormat("0.######", DecimalFormatSymbols.getInstance(ULocale.US));
+            df.setSignificantDigitsUsed(true);
+            expect(df, 9.87654321, "9.87654");
+            df.setMaximumSignificantDigits(3);
+            expect(df, 9.87654321, "9.88");
+            // setSignificantDigitsUsed with maxSig only
+            df.setSignificantDigitsUsed(true);
+            expect(df, 9.87654321, "9.88");
+            df.setMinimumSignificantDigits(2);
+            expect(df, 9, "9.0");
+            // setSignificantDigitsUsed with both minSig and maxSig
+            df.setSignificantDigitsUsed(true);
+            expect(df, 9, "9.0");
+            // setSignificantDigitsUsed to false: should revert to fraction rounding
+            df.setSignificantDigitsUsed(false);
+            expect(df, 9.87654321, "9.876543");
+            expect(df, 9, "9");
+            df.setSignificantDigitsUsed(true);
+            df.setMinimumSignificantDigits(2);
+            expect(df, 9.87654321, "9.87654");
+            expect(df, 9, "9.0");
+            // setSignificantDigitsUsed with minSig only
+            df.setSignificantDigitsUsed(true);
+            expect(df, 9.87654321, "9.87654");
+            expect(df, 9, "9.0");
+        }
     }
 
     @Test
@@ -4501,7 +4530,7 @@ public class NumberFormatTest extends TestFmwk {
     private void CompareAttributedCharacterFormatOutput(AttributedCharacterIterator iterator,
         List<FieldContainer> expected, String formattedOutput) {
 
-        List<FieldContainer> result = new ArrayList<FieldContainer>();
+        List<FieldContainer> result = new ArrayList<>();
         while (iterator.getIndex() != iterator.getEndIndex()) {
             int start = iterator.getRunStart();
             int end = iterator.getRunLimit();
@@ -4540,7 +4569,7 @@ public class NumberFormatTest extends TestFmwk {
     @Test
     public void TestNPEIssue11914() {
         // First test: Double value with grouping separators.
-        List<FieldContainer> v1 = new ArrayList<FieldContainer>(7);
+        List<FieldContainer> v1 = new ArrayList<>(7);
         v1.add(new FieldContainer(0, 3, NumberFormat.Field.INTEGER));
         v1.add(new FieldContainer(3, 4, NumberFormat.Field.GROUPING_SEPARATOR));
         v1.add(new FieldContainer(4, 7, NumberFormat.Field.INTEGER));
@@ -4560,7 +4589,7 @@ public class NumberFormatTest extends TestFmwk {
         CompareAttributedCharacterFormatOutput(iterator, v1, numFmtted);
 
         // Second test: Double with scientific notation formatting.
-        List<FieldContainer> v2 = new ArrayList<FieldContainer>(7);
+        List<FieldContainer> v2 = new ArrayList<>(7);
         v2.add(new FieldContainer(0, 1, NumberFormat.Field.INTEGER));
         v2.add(new FieldContainer(1, 2, NumberFormat.Field.DECIMAL_SEPARATOR));
         v2.add(new FieldContainer(2, 5, NumberFormat.Field.FRACTION));
@@ -4574,7 +4603,7 @@ public class NumberFormatTest extends TestFmwk {
         CompareAttributedCharacterFormatOutput(iterator, v2, numFmtted);
 
         // Third test. BigInteger with grouping separators.
-        List<FieldContainer> v3 = new ArrayList<FieldContainer>(7);
+        List<FieldContainer> v3 = new ArrayList<>(7);
         v3.add(new FieldContainer(0, 1, NumberFormat.Field.SIGN));
         v3.add(new FieldContainer(1, 2, NumberFormat.Field.INTEGER));
         v3.add(new FieldContainer(2, 3, NumberFormat.Field.GROUPING_SEPARATOR));
@@ -4596,7 +4625,7 @@ public class NumberFormatTest extends TestFmwk {
         CompareAttributedCharacterFormatOutput(iterator, v3, fmtNumberBigInt);
 
         // Fourth test: BigDecimal with exponential formatting.
-        List<FieldContainer> v4 = new ArrayList<FieldContainer>(7);
+        List<FieldContainer> v4 = new ArrayList<>(7);
         v4.add(new FieldContainer(0, 1, NumberFormat.Field.SIGN));
         v4.add(new FieldContainer(1, 2, NumberFormat.Field.INTEGER));
         v4.add(new FieldContainer(2, 3, NumberFormat.Field.DECIMAL_SEPARATOR));
