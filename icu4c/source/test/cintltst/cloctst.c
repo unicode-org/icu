@@ -6031,6 +6031,7 @@ static const struct {
     {"ja-u-ijkl-efgh-abcd-ca-japanese-xx-yyy-zzz-kn",   "ja@attribute=abcd-efgh-ijkl;calendar=japanese;colnumeric=yes;xx=yyy-zzz",  FULL_LENGTH},
     {"de-u-xc-xphonebk-co-phonebk-ca-buddhist-mo-very-lo-extensi-xd-that-de-should-vc-probably-xz-killthebuffer",
      "de@calendar=buddhist;collation=phonebook;de=should;lo=extensi;mo=very;vc=probably;xc=xphonebk;xd=that;xz=yes", 91},
+    {"de-1901-1901", "de__1901", 7},
     {"de-DE-1901-1901", "de_DE_1901", 10},
     {"en-a-bbb-a-ccc", "en@a=bbb", 8},
     /* #12761 */
@@ -6050,7 +6051,7 @@ static const struct {
     {"zh-cmn-TW", "cmn_TW", FULL_LENGTH},
     {"zh-x_t-ab", "zh", 2},
     {"zh-hans-cn-u-ca-x_t-u", "zh_Hans_CN@calendar=yes",  15},
-    // #20140 dupe keys in U-extension
+    /* #20140 dupe keys in U-extension */
     {"zh-u-ca-chinese-ca-gregory", "zh@calendar=chinese", FULL_LENGTH},
     {"zh-u-ca-gregory-co-pinyin-ca-chinese", "zh@calendar=gregorian;collation=pinyin", FULL_LENGTH},
     {"de-latn-DE-1901-u-co-phonebk-co-pinyin-ca-gregory", "de_Latn_DE_1901@calendar=gregorian;collation=phonebook", FULL_LENGTH},
@@ -6089,6 +6090,10 @@ static void TestForLanguageTag(void) {
     }
 }
 
+/* See https://unicode-org.atlassian.net/browse/ICU-20149 .
+ * Depending on the resolution of that bug, this test may have
+ * to be revised.
+ */
 static void TestInvalidLanguageTag(void) {
     static const char* invalid_lang_tags[] = {
         "zh-u-foo-foo-co-pinyin", /* duplicate attribute in U extension */
