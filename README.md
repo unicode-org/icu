@@ -19,8 +19,8 @@ Win x86 Release | [![Build status](https://unicode-icu.visualstudio.com/ICU/_api
 
 ### Subdirectories and Information
 
-- [`icu4c/`](./icu4c/) [ICU for C/C++](./icu4c/readme.html)
-- [`icu4j/`](./icu4j/) [ICU for Java](./icu4j/readme.html)
+- [`icu4c/`](./icu4c/) [ICU for C/C++](https://rawgit.com/unicode-org/icu/master/icu4c/readme.html)
+- [`icu4j/`](./icu4j/) [ICU for Java](https://rawgit.com/unicode-org/icu/master/icu4j/readme.html)
 - [`tools/`](./tools/) Tools
 - [`vendor/`](./vendor/) Vendor dependencies
 
