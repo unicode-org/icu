@@ -380,8 +380,8 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
      *
      * @param start range start
      * @param option defines whether surrogates are treated normally,
-     *               or as having the surrogateValue; usually {@value RangeOption#NORMAL}
-     * @param surrogateValue value for surrogates; ignored if option=={@value RangeOption#NORMAL}
+     *               or as having the surrogateValue; usually {@link RangeOption#NORMAL}
+     * @param surrogateValue value for surrogates; ignored if option=={@link RangeOption#NORMAL}
      * @param filter an object that may modify the map data value,
      *     or null if the values from the map are to be used unmodified
      * @param range the range object that will be set to the code point range and value

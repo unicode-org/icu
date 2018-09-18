@@ -53,6 +53,7 @@ public:
     void TestUnifiedCache();
     void TestBreakTranslit();
     void TestIncDec();
+    void Test20104();
 };
 
 #endif

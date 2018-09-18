@@ -1560,14 +1560,22 @@ public class DecimalFormat extends NumberFormat {
    * @stable ICU 3.0
    */
   public synchronized void setSignificantDigitsUsed(boolean useSignificantDigits) {
+    int oldMinSig = properties.getMinimumSignificantDigits();
+    int oldMaxSig = properties.getMaximumSignificantDigits();
+    // These are the default values from the old implementation.
     if (useSignificantDigits) {
-      // These are the default values from the old implementation.
-      properties.setMinimumSignificantDigits(1);
-      properties.setMaximumSignificantDigits(6);
+      if (oldMinSig != -1 || oldMaxSig != -1) {
+        return;
+      }
     } else {
-      properties.setMinimumSignificantDigits(-1);
-      properties.setMaximumSignificantDigits(-1);
+      if (oldMinSig == -1 && oldMaxSig == -1) {
+        return;
+      }
     }
+    int minSig = useSignificantDigits ? 1 : -1;
+    int maxSig = useSignificantDigits ? 6 : -1;
+    properties.setMinimumSignificantDigits(minSig);
+    properties.setMaximumSignificantDigits(maxSig);
     refreshFormatter();
   }
 
