@@ -420,6 +420,9 @@
 #ifndef __has_cpp_attribute
 #    define __has_cpp_attribute(x) 0
 #endif
+#ifndef __has_declspec_attribute
+#    define __has_declspec_attribute(x) 0
+#endif
 #ifndef __has_builtin
 #    define __has_builtin(x) 0
 #endif
@@ -783,6 +786,8 @@ namespace std {
     /* Use the predefined value. */
 #elif defined(U_STATIC_IMPLEMENTATION)
 #   define U_EXPORT
+#elif defined(_MSC_VER) || (__has_declspec_attribute(dllexport) && __has_declspec_attribute(dllimport))
+#   define U_EXPORT __declspec(dllexport)
 #elif defined(__GNUC__)
 #   define U_EXPORT __attribute__((visibility("default")))
 #elif (defined(__SUNPRO_CC) && __SUNPRO_CC >= 0x550) \
@@ -790,8 +795,6 @@ namespace std {
 #   define U_EXPORT __global
 /*#elif defined(__HP_aCC) || defined(__HP_cc)
 #   define U_EXPORT __declspec(dllexport)*/
-#elif defined(_MSC_VER)
-#   define U_EXPORT __declspec(dllexport)
 #else
 #   define U_EXPORT
 #endif
@@ -807,7 +810,7 @@ namespace std {
 
 #ifdef U_IMPORT
     /* Use the predefined value. */
-#elif defined(_MSC_VER)
+#elif defined(_MSC_VER) || (__has_declspec_attribute(dllexport) && __has_declspec_attribute(dllimport))
     /* Windows needs to export/import data. */
 #   define U_IMPORT __declspec(dllimport)
 #else
