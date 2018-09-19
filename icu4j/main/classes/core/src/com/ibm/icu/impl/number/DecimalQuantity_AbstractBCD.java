@@ -1014,6 +1014,46 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         }
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null) {
+            return false;
+        }
+        if (!(other instanceof DecimalQuantity_AbstractBCD)) {
+            return false;
+        }
+        DecimalQuantity_AbstractBCD _other = (DecimalQuantity_AbstractBCD) other;
+
+        boolean basicEquals =
+                scale == _other.scale
+                && precision == _other.precision
+                && flags == _other.flags
+                && lOptPos == _other.lOptPos
+                && lReqPos == _other.lReqPos
+                && rReqPos == _other.rReqPos
+                && rOptPos == _other.rOptPos
+                && isApproximate == _other.isApproximate;
+        if (!basicEquals) {
+            return false;
+        }
+
+        if (precision == 0) {
+            return true;
+        } else if (isApproximate) {
+            return origDouble == _other.origDouble && origDelta == _other.origDelta;
+        } else {
+            for (int m = getUpperDisplayMagnitude(); m >= getLowerDisplayMagnitude(); m--) {
+                if (getDigit(m) != _other.getDigit(m)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
     /**
      * Returns a single digit from the BCD list. No internal state is changed by calling this method.
      *

@@ -123,6 +123,7 @@ static void TestLikelySubtags(void);
  * lanuage tag
  */
 static void TestForLanguageTag(void);
+static void TestInvalidLanguageTag(void);
 static void TestToLanguageTag(void);
 
 static void TestToUnicodeLocaleKey(void);

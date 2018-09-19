@@ -1460,9 +1460,9 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                     kwd->value = pType;
 
                     if (!_addExtensionToList(&kwdFirst, kwd, FALSE)) {
-                        *status = U_ILLEGAL_ARGUMENT_ERROR;
+                        // duplicate keyword is allowed, Only the first
+                        // is honored.
                         uprv_free(kwd);
-                        goto cleanup;
                     }
                 }
 
@@ -2416,6 +2416,23 @@ uloc_forLanguageTag(const char* langtag,
                     int32_t localeIDCapacity,
                     int32_t* parsedLength,
                     UErrorCode* status) {
+    return ulocimp_forLanguageTag(
+            langtag,
+            -1,
+            localeID,
+            localeIDCapacity,
+            parsedLength,
+            status);
+}
+
+
+U_CAPI int32_t U_EXPORT2
+ulocimp_forLanguageTag(const char* langtag,
+                       int32_t tagLen,
+                       char* localeID,
+                       int32_t localeIDCapacity,
+                       int32_t* parsedLength,
+                       UErrorCode* status) {
     ULanguageTag *lt;
     int32_t reslen = 0;
     const char *subtag, *p;
@@ -2423,7 +2440,7 @@ uloc_forLanguageTag(const char* langtag,
     int32_t i, n;
     UBool noRegion = TRUE;
 
-    lt = ultag_parse(langtag, -1, parsedLength, status);
+    lt = ultag_parse(langtag, tagLen, parsedLength, status);
     if (U_FAILURE(*status)) {
         return 0;
     }

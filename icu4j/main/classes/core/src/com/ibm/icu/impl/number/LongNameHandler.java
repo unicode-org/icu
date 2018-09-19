@@ -21,7 +21,7 @@ import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
-public class LongNameHandler implements MicroPropsGenerator {
+public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
 
     private static final int DNAM_INDEX = StandardPlural.COUNT;
     private static final int PER_INDEX = StandardPlural.COUNT + 1;
@@ -175,10 +175,11 @@ public class LongNameHandler implements MicroPropsGenerator {
         String[] simpleFormats = new String[ARRAY_LENGTH];
         getCurrencyLongNameData(locale, currency, simpleFormats);
         // TODO(ICU4J): Reduce the number of object creations here?
-        Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<StandardPlural, SimpleModifier>(
+        Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<>(
                 StandardPlural.class);
-        simpleFormatsToModifiers(simpleFormats, null, modifiers);
-        return new LongNameHandler(modifiers, rules, parent);
+        LongNameHandler result = new LongNameHandler(modifiers, rules, parent);
+        result.simpleFormatsToModifiers(simpleFormats, null);
+        return result;
     }
 
     public static LongNameHandler forMeasureUnit(
@@ -203,10 +204,11 @@ public class LongNameHandler implements MicroPropsGenerator {
         getMeasureData(locale, unit, width, simpleFormats);
         // TODO: What field to use for units?
         // TODO(ICU4J): Reduce the number of object creations here?
-        Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<StandardPlural, SimpleModifier>(
+        Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<>(
                 StandardPlural.class);
-        simpleFormatsToModifiers(simpleFormats, null, modifiers);
-        return new LongNameHandler(modifiers, rules, parent);
+        LongNameHandler result = new LongNameHandler(modifiers, rules, parent);
+        result.simpleFormatsToModifiers(simpleFormats, null);
+        return result;
     }
 
     private static LongNameHandler forCompoundUnit(
@@ -238,29 +240,32 @@ public class LongNameHandler implements MicroPropsGenerator {
             perUnitFormat = SimpleFormatterImpl.formatCompiledPattern(compiled, "{0}", secondaryString);
         }
         // TODO: What field to use for units?
-        Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<StandardPlural, SimpleModifier>(
+        Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<>(
                 StandardPlural.class);
-        multiSimpleFormatsToModifiers(primaryData, perUnitFormat, null, modifiers);
-        return new LongNameHandler(modifiers, rules, parent);
+        LongNameHandler result = new LongNameHandler(modifiers, rules, parent);
+        result.multiSimpleFormatsToModifiers(primaryData, perUnitFormat, null);
+        return result;
     }
 
-    private static void simpleFormatsToModifiers(
+    private void simpleFormatsToModifiers(
             String[] simpleFormats,
-            NumberFormat.Field field,
-            Map<StandardPlural, SimpleModifier> output) {
+            NumberFormat.Field field) {
         StringBuilder sb = new StringBuilder();
         for (StandardPlural plural : StandardPlural.VALUES) {
             String simpleFormat = getWithPlural(simpleFormats, plural);
             String compiled = SimpleFormatterImpl.compileToStringMinMaxArguments(simpleFormat, sb, 0, 1);
-            output.put(plural, new SimpleModifier(compiled, field, false));
+            Modifier.Parameters parameters = new Modifier.Parameters();
+            parameters.obj = this;
+            parameters.signum = 0;
+            parameters.plural = plural;
+            modifiers.put(plural, new SimpleModifier(compiled, field, false, parameters));
         }
     }
 
-    private static void multiSimpleFormatsToModifiers(
+    private void multiSimpleFormatsToModifiers(
             String[] leadFormats,
             String trailFormat,
-            NumberFormat.Field field,
-            Map<StandardPlural, SimpleModifier> output) {
+            NumberFormat.Field field) {
         StringBuilder sb = new StringBuilder();
         String trailCompiled = SimpleFormatterImpl.compileToStringMinMaxArguments(trailFormat, sb, 1, 1);
         for (StandardPlural plural : StandardPlural.VALUES) {
@@ -268,7 +273,11 @@ public class LongNameHandler implements MicroPropsGenerator {
             String compoundFormat = SimpleFormatterImpl.formatCompiledPattern(trailCompiled, leadFormat);
             String compoundCompiled = SimpleFormatterImpl
                     .compileToStringMinMaxArguments(compoundFormat, sb, 0, 1);
-            output.put(plural, new SimpleModifier(compoundCompiled, field, false));
+            Modifier.Parameters parameters = new Modifier.Parameters();
+            parameters.obj = this;
+            parameters.signum = 0;
+            parameters.plural = plural;
+            modifiers.put(plural, new SimpleModifier(compoundCompiled, field, false, parameters));
         }
     }
 
@@ -280,5 +289,10 @@ public class LongNameHandler implements MicroPropsGenerator {
         micros.rounder.apply(copy);
         micros.modOuter = modifiers.get(copy.getStandardPlural(rules));
         return micros;
+    }
+
+    @Override
+    public Modifier getModifier(int signum, StandardPlural plural) {
+        return modifiers.get(plural);
     }
 }

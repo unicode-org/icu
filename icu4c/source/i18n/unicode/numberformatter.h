@@ -144,6 +144,9 @@ class MultiplierFormatHandler;
 class CurrencySymbols;
 class GeneratorHelpers;
 class DecNum;
+class NumberRangeFormatterImpl;
+struct RangeMacroProps;
+void touchRangeLocales(impl::RangeMacroProps& macros);
 
 } // namespace impl
 
@@ -1423,7 +1426,8 @@ struct U_I18N_API MacroProps : public UMemory {
 
 /**
  * An abstract base class for specifying settings related to number formatting. This class is implemented by
- * {@link UnlocalizedNumberFormatter} and {@link LocalizedNumberFormatter}.
+ * {@link UnlocalizedNumberFormatter} and {@link LocalizedNumberFormatter}. This class is not intended for
+ * public subclassing.
  */
 template<typename Derived>
 class U_I18N_API NumberFormatterSettings {
@@ -2108,6 +2112,10 @@ class U_I18N_API NumberFormatterSettings {
 
     friend class LocalizedNumberFormatter;
     friend class UnlocalizedNumberFormatter;
+
+    // Give NumberRangeFormatter access to the MacroProps
+    friend void impl::touchRangeLocales(impl::RangeMacroProps& macros);
+    friend class impl::NumberRangeFormatterImpl;
 };
 
 /**
@@ -2123,13 +2131,6 @@ class U_I18N_API UnlocalizedNumberFormatter
     /**
      * Associate the given locale with the number formatter. The locale is used for picking the appropriate symbols,
      * formats, and other data for number display.
-     *
-     * <p>
-     * To use the Java default locale, call Locale::getDefault():
-     *
-     * <pre>
-     * NumberFormatter::with(). ... .locale(Locale::getDefault())
-     * </pre>
      *
      * @param locale
      *            The locale to use when loading data for number formatting.
@@ -2156,7 +2157,6 @@ class U_I18N_API UnlocalizedNumberFormatter
      */
     UnlocalizedNumberFormatter() = default;
 
-    // Make default copy constructor call the NumberFormatterSettings copy constructor.
     /**
      * Returns a copy of this UnlocalizedNumberFormatter.
      * @draft ICU 60
@@ -2295,7 +2295,6 @@ class U_I18N_API LocalizedNumberFormatter
      */
     LocalizedNumberFormatter() = default;
 
-    // Make default copy constructor call the NumberFormatterSettings copy constructor.
     /**
      * Returns a copy of this LocalizedNumberFormatter.
      * @draft ICU 60
@@ -2358,6 +2357,8 @@ class U_I18N_API LocalizedNumberFormatter
     LocalizedNumberFormatter(const impl::MacroProps &macros, const Locale &locale);
 
     LocalizedNumberFormatter(impl::MacroProps &&macros, const Locale &locale);
+
+    void clear();
 
     void lnfMoveHelper(LocalizedNumberFormatter&& src);
 
@@ -2457,9 +2458,9 @@ class U_I18N_API FormattedNumber : public UMemory {
 #endif  /* U_HIDE_DEPRECATED_API */
 
     /**
-     * Determines the start and end indices of the next occurrence of the given <em>field</em> in the
-     * output string. This allows you to determine the locations of, for example, the integer part,
-     * fraction part, or symbols.
+     * Determines the start (inclusive) and end (exclusive) indices of the next occurrence of the given
+     * <em>field</em> in the output string. This allows you to determine the locations of, for example,
+     * the integer part, fraction part, or symbols.
      *
      * If a field occurs just once, calling this method will find that occurrence and return it. If a
      * field occurs multiple times, this method may be called repeatedly with the following pattern:
@@ -2478,7 +2479,7 @@ class U_I18N_API FormattedNumber : public UMemory {
      *            Input+output variable. On input, the "field" property determines which field to look
      *            up, and the "beginIndex" and "endIndex" properties determine where to begin the search.
      *            On output, the "beginIndex" is set to the beginning of the first occurrence of the
-     *            field with either begin or end indices after the input indices, "endIndex" is set to
+     *            field with either begin or end indices after the input indices; "endIndex" is set to
      *            the end of that occurrence of the field (exclusive index). If a field position is not
      *            found, the method returns FALSE and the FieldPosition may or may not be changed.
      * @param status

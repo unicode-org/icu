@@ -5,10 +5,11 @@ package com.ibm.icu.impl.number;
 import com.ibm.icu.impl.StandardPlural;
 
 /**
- * A ParameterizedModifier by itself is NOT a Modifier. Rather, it wraps a data structure containing two
- * or more Modifiers and returns the modifier appropriate for the current situation.
+ * This implementation of ModifierStore adopts references to Modifiers.
+ *
+ * (This is named "adopting" because in C++, this class takes ownership of the Modifiers.)
  */
-public class ParameterizedModifier {
+public class AdoptingModifierStore implements ModifierStore {
     private final Modifier positive;
     private final Modifier zero;
     private final Modifier negative;
@@ -21,7 +22,7 @@ public class ParameterizedModifier {
      * <p>
      * If this constructor is used, a plural form CANNOT be passed to {@link #getModifier}.
      */
-    public ParameterizedModifier(Modifier positive, Modifier zero, Modifier negative) {
+    public AdoptingModifierStore(Modifier positive, Modifier zero, Modifier negative) {
         this.positive = positive;
         this.zero = zero;
         this.negative = negative;
@@ -36,7 +37,7 @@ public class ParameterizedModifier {
      * <p>
      * If this constructor is used, a plural form MUST be passed to {@link #getModifier}.
      */
-    public ParameterizedModifier() {
+    public AdoptingModifierStore() {
         this.positive = null;
         this.zero = null;
         this.negative = null;
@@ -53,7 +54,7 @@ public class ParameterizedModifier {
         frozen = true;
     }
 
-    public Modifier getModifier(int signum) {
+    public Modifier getModifierWithoutPlural(int signum) {
         assert frozen;
         assert mods == null;
         return signum == 0 ? zero : signum < 0 ? negative : positive;
@@ -66,6 +67,8 @@ public class ParameterizedModifier {
     }
 
     private static int getModIndex(int signum, StandardPlural plural) {
+        assert signum >= -1 && signum <= 1;
+        assert plural != null;
         return plural.ordinal() * 3 + (signum + 1);
     }
 }

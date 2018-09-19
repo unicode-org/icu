@@ -279,6 +279,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test13763_FieldPositionIteratorOffset();
     void Test13777_ParseLongNameNonCurrencyMode();
     void Test13804_EmptyStringsWhenParsing();
+    void Test20037_ScientificIntegerOverflow();
     void Test13840_ParseLongStringCrash();
     void Test13850_EmptyStringCurrency();
 

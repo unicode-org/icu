@@ -54,6 +54,11 @@ public class ScientificMatcher implements NumberParseMatcher {
             return false;
         }
 
+        // Only accept one exponent per string.
+        if (0 != (result.flags & ParsedNumber.FLAG_HAS_EXPONENT)) {
+            return false;
+        }
+
         // First match the scientific separator, and then match another number after it.
         // NOTE: This is guarded by the smoke test; no need to check exponentSeparatorString length again.
         int overlap1 = segment.getCommonPrefixLength(exponentSeparatorString);
