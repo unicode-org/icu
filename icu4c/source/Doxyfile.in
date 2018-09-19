@@ -243,7 +243,7 @@ ALIASES                = "memo=\par Note:\n" \
                          "obsolete=\xrefitem obsolete \"Obsolete\" \"Obsolete List\"" \
                          "system=\xrefitem system \"System\" \"System List\" \n Do not use unless you know what you are doing." \
                          "internal=\xrefitem internal \"Internal\"  \"Internal List\"  Do not use. This API is for internal use only." \
-                         "preview=\xrefitem preview \"Preview\"  \"Preview List\"  This API is a technical preview. It may change in an upcoming release.
+                         "preview=\xrefitem preview \"Preview\"  \"Preview List\"  This API is a technical preview. It may change in an upcoming release."
 
 # This tag can be used to specify a number of word-keyword mappings (TCL only).
 # A mapping has the form "name=value". For example adding "class=itcl::class"

@@ -596,6 +596,9 @@ class U_I18N_API LocalizedNumberRangeFormatter
     /**
      * @param results
      *            The results object. This method will mutate it to save the results.
+     * @param equalBeforeRounding
+     *            Whether the number was equal before copying it into a DecimalQuantity.
+     *            Used for determining the identity fallback behavior.
      * @param status
      *            Set if an error occurs while formatting.
      * @internal

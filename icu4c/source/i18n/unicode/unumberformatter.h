@@ -91,7 +91,7 @@
  * </ul>
  *
  * <p>
- * This enum is similar to {@link com.ibm.icu.text.MeasureFormat.FormatWidth}.
+ * This enum is similar to {@link UMeasureFormatWidth}.
  *
  * @draft ICU 60
  */
@@ -398,6 +398,8 @@ typedef enum UNumberDecimalSeparatorDisplay {
 #endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DRAFT_API
+
+struct UNumberFormatter;
 /**
  * C-compatible version of icu::number::LocalizedNumberFormatter.
  *
@@ -405,10 +407,9 @@ typedef enum UNumberDecimalSeparatorDisplay {
  *
  * @draft ICU 62
  */
-struct UNumberFormatter;
 typedef struct UNumberFormatter UNumberFormatter;
 
-
+struct UFormattedNumber;
 /**
  * C-compatible version of icu::number::FormattedNumber.
  *
@@ -416,7 +417,6 @@ typedef struct UNumberFormatter UNumberFormatter;
  *
  * @draft ICU 62
  */
-struct UFormattedNumber;
 typedef struct UFormattedNumber UFormattedNumber;
 
 

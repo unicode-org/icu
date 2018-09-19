@@ -146,12 +146,29 @@ class GeneratorHelpers;
 class DecNum;
 class NumberRangeFormatterImpl;
 struct RangeMacroProps;
+
+/**
+ * Used for NumberRangeFormatter and implemented in numrange_fluent.cpp.
+ * Declared here so it can be friended.
+ *
+ * @internal
+ */
 void touchRangeLocales(impl::RangeMacroProps& macros);
 
 } // namespace impl
 
-// Reserve extra names in case they are added as classes in the future:
+/**
+ * Extra name reserved in case it is needed in the future.
+ *
+ * @draft ICU 63
+ */
 typedef Notation CompactNotation;
+
+/**
+ * Extra name reserved in case it is needed in the future.
+ *
+ * @draft ICU 63
+ */
 typedef Notation SimpleNotation;
 
 /**
@@ -311,10 +328,15 @@ class U_I18N_API Notation : public UMemory {
 
     union NotationUnion {
         // For NTN_SCIENTIFIC
+        /** @internal */
         struct ScientificSettings {
+            /** @internal */
             int8_t fEngineeringInterval;
+            /** @internal */
             bool fRequireMinInt;
+            /** @internal */
             impl::digits_t fMinExponentDigits;
+            /** @internal */
             UNumberSignDisplay fExponentSignDisplay;
         } scientific;
 
@@ -410,15 +432,39 @@ class U_I18N_API ScientificNotation : public Notation {
     friend class impl::NumberPropertyMapper;
 };
 
-// Reserve extra names in case they are added as classes in the future:
+/**
+ * Extra name reserved in case it is needed in the future.
+ *
+ * @draft ICU 63
+ */
 typedef Precision SignificantDigitsPrecision;
 
 // Typedefs for ICU 60/61 compatibility.
 // These will be removed in ICU 64.
 // See http://bugs.icu-project.org/trac/ticket/13746
+
+/**
+ * This will be removed in ICU 64.  See ICU-13746.
+ * @deprecated ICU 63
+ */
 typedef Precision Rounder;
+
+/**
+ * This will be removed in ICU 64.  See ICU-13746.
+ * @deprecated ICU 63
+ */
 typedef FractionPrecision FractionRounder;
+
+/**
+ * This will be removed in ICU 64.  See ICU-13746.
+ * @deprecated ICU 63
+ */
 typedef IncrementPrecision IncrementRounder;
+
+/**
+ * This will be removed in ICU 64.  See ICU-13746.
+ * @deprecated ICU 63
+ */
 typedef CurrencyPrecision CurrencyRounder;
 
 /**
@@ -675,16 +721,25 @@ class U_I18N_API Precision : public UMemory {
     } fType;
 
     union PrecisionUnion {
+        /** @internal */
         struct FractionSignificantSettings {
             // For RND_FRACTION, RND_SIGNIFICANT, and RND_FRACTION_SIGNIFICANT
+            /** @internal */
             impl::digits_t fMinFrac;
+            /** @internal */
             impl::digits_t fMaxFrac;
+            /** @internal */
             impl::digits_t fMinSig;
+            /** @internal */
             impl::digits_t fMaxSig;
         } fracSig;
+        /** @internal */
         struct IncrementSettings {
+            /** @internal */
             double fIncrement;
+            /** @internal */
             impl::digits_t fMinFrac;
+            /** @internal */
             impl::digits_t fMaxFrac;
         } increment; // For RND_INCREMENT
         UCurrencyUsage currencyUsage; // For RND_CURRENCY
@@ -1737,7 +1792,6 @@ class U_I18N_API NumberFormatterSettings {
      *            The grouping strategy to use.
      * @return The fluent chain.
      * @see #grouping
-     * @provisional This API might change or be removed in a future release.
      * @draft ICU 62
      */
     Derived grouping(UGroupingStrategy strategy) &&;
@@ -1752,7 +1806,7 @@ class U_I18N_API NumberFormatterSettings {
      * </ul>
      *
      * <p>
-     * Pass this method the return value of {@link IntegerWidth#zeroFillTo(int)}. For example:
+     * Pass this method the return value of {@link IntegerWidth#zeroFillTo}. For example:
      *
      * <pre>
      * NumberFormatter::with().integerWidth(IntegerWidth::zeroFillTo(2))
@@ -2103,10 +2157,9 @@ class U_I18N_API NumberFormatterSettings {
 
     // NOTE: Uses default copy and move constructors.
 
-  protected:
+  private:
     impl::MacroProps fMacros;
 
-  private:
     // Don't construct me directly!  Use (Un)LocalizedNumberFormatter.
     NumberFormatterSettings() = default;
 
@@ -2332,6 +2385,7 @@ class U_I18N_API LocalizedNumberFormatter
      *
      * @param results
      *            The results object. This method will mutate it to save the results.
+     * @param status
      * @internal
      */
     void formatImpl(impl::UFormattedNumberData *results, UErrorCode &status) const;
