@@ -56,6 +56,13 @@ U_NAMESPACE_END
 
 U_NAMESPACE_BEGIN
 
+// Export an explicit template instantiation of std::atomic<int32_t>. 
+// When building DLLs for Windows this is required as it is used as a data member of the exported SharedObject class.
+// See digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+template struct U_COMMON_API std::atomic<int32_t>;
+#endif
+
 typedef std::atomic<int32_t> u_atomic_int32_t;
 #define ATOMIC_INT32_T_INITIALIZER(val) ATOMIC_VAR_INIT(val)
 
