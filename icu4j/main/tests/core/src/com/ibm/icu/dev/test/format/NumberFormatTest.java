@@ -5991,6 +5991,17 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void Test20073_StrictPercentParseErrorIndex() {
+        ParsePosition parsePosition = new ParsePosition(0);
+        DecimalFormat df = new DecimalFormat("0%", DecimalFormatSymbols.getInstance(Locale.US));
+        df.setParseStrict(true);
+        Number number = df.parse("%2%", parsePosition);
+        assertNull("", number);
+        assertEquals("", 0, parsePosition.getIndex());
+        assertEquals("", 0, parsePosition.getErrorIndex());
+    }
+
+    @Test
     public void Test11626_CustomizeCurrencyPluralInfo() throws ParseException {
         // Use locale sr because it has interesting plural rules.
         ULocale locale = ULocale.forLanguageTag("sr");
