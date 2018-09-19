@@ -4,6 +4,7 @@
 #ifndef ERARULES_H_
 #define ERARULES_H_
 
+#include "unicode/localpointer.h"
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
