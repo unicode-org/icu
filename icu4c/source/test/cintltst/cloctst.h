@@ -126,6 +126,7 @@ static void TestLikelySubtags(void);
 static void TestForLanguageTag(void);
 static void TestInvalidLanguageTag(void);
 static void TestToLanguageTag(void);
+static void TestLangAndRegionCanonicalize(void);
 
 static void TestToUnicodeLocaleKey(void);
 static void TestToLegacyKey(void);

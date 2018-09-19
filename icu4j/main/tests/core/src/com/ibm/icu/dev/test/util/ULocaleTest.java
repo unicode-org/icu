@@ -4111,6 +4111,7 @@ public class ULocaleTest extends TestFmwk {
                 {"art-lojban",          "jbo",                  NOERROR},
                 {"zh-hakka",            "hak",                  NOERROR},
                 {"zh-cmn-CH",           "cmn_CH",               NOERROR},
+                {"zh-cmn-CH-u-co-pinyin", "cmn_CH@collation=pinyin", NOERROR},
                 {"xxx-yy",              "xxx_YY",               NOERROR},
                 {"fr-234",              "fr_234",               NOERROR},
                 {"i-default",           "en@x=i-default",       NOERROR},
