@@ -62,7 +62,7 @@ se_FI{
             }
         }
     }
-    Version{"2.1.38.73"}
+    Version{"2.1.43.65"}
     calendar{
         generic{
             DateTimePatterns{
@@ -1279,6 +1279,10 @@ se_FI{
         }
         year-short{
             dn{"j."}
+            relative{
+                "0"{"dán jagi"}
+                "1"{"boahtte jagi"}
+            }
             relativeTime{
                 future{
                     one{"{0} j. siste"}

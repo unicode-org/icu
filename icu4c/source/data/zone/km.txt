@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 km{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"អាប៊ីដ្យាន"}
@@ -507,6 +507,9 @@ km{
         "America:Puerto_Rico"{
             ec{"ព័រតូរីកូ"}
         }
+        "America:Punta_Arenas"{
+            ec{"ពុនតា អារ៉េណា"}
+        }
         "America:Rainy_River"{
             ec{"រ៉េនីរីវើ"}
         }
@@ -657,6 +660,9 @@ km{
         "Asia:Ashgabat"{
             ec{"អាសហ្គាបាត"}
         }
+        "Asia:Atyrau"{
+            ec{"អាទីរ៉ូ"}
+        }
         "Asia:Baghdad"{
             ec{"បាកដាដ"}
         }
@@ -707,6 +713,9 @@ km{
         }
         "Asia:Dushanbe"{
             ec{"ឌូស្ហាន់បេ"}
+        }
+        "Asia:Famagusta"{
+            ec{"ហ្វ៉ាម៉ាហ្គុស្តា"}
         }
         "Asia:Gaza"{
             ec{"កាសា"}

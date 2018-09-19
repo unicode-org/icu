@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 th{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.89"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"อาบีจาน"}
@@ -676,7 +676,7 @@ th{
             ec{"กรุงเทพ"}
         }
         "Asia:Barnaul"{
-            ec{"บราโมล"}
+            ec{"บาร์เนาว์"}
         }
         "Asia:Beirut"{
             ec{"เบรุต"}
@@ -955,7 +955,7 @@ th{
             ls{"เวลาสากลเชิงพิกัด"}
         }
         "Etc:Unknown"{
-            ec{"เมืองที่ไม่รู้จัก"}
+            ec{"ไม่ทราบชื่อเมือง"}
         }
         "Europe:Amsterdam"{
             ec{"อัมสเตอดัม"}

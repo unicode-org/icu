@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 af{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -910,7 +910,7 @@ af{
             ec{"Suid-Georgië"}
         }
         "Atlantic:St_Helena"{
-            ec{"St. Helena"}
+            ec{"Sint Helena"}
         }
         "Atlantic:Stanley"{
             ec{"Stanley"}
@@ -1287,7 +1287,7 @@ af{
             ec{"Wake"}
         }
         "Pacific:Wallis"{
-            ec{"Wallis"}
+            ec{"Mata-Utu"}
         }
         "meta:Afghanistan"{
             ls{"Afganistan-tyd"}

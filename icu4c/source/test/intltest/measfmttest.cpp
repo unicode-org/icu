@@ -1166,39 +1166,39 @@ void MeasureFormatTest::TestExamplesInDocs() {
             fmtFr,
             &measureC,
             1,
-            "23 \\u00B0C");
+            "23\\u202F\\u00B0C");
     verifyFormatWithPrefix(
             "Celsius",
             fmtFr,
             "Prefix: ",
             &measureC,
             1,
-            "Prefix: 23 \\u00B0C");
+            "Prefix: 23\\u202F\\u00B0C");
     verifyFormat(
             "Fahrenheit",
             fmtFr,
             &measureF,
             1,
-            "70 \\u00B0F");
+            "70\\u202F\\u00B0F");
     verifyFormat(
             "Feet and inches",
             fmtFrFull,
             feetAndInches,
             UPRV_LENGTHOF(feetAndInches),
-            "70 pieds et 5,3 pouces");
+            "70 pieds et 5,3\\u00A0pouces");
     verifyFormatWithPrefix(
             "Feet and inches",
             fmtFrFull,
             "Prefix: ",
             feetAndInches,
             UPRV_LENGTHOF(feetAndInches),
-            "Prefix: 70 pieds et 5,3 pouces");
+            "Prefix: 70 pieds et 5,3\\u00A0pouces");
     verifyFormat(
             "Foot and inch",
             fmtFrFull,
             footAndInch,
             UPRV_LENGTHOF(footAndInch),
-            "1 pied et 1 pouce");
+            "1\\u00A0pied et 1\\u00A0pouce");
     verifyFormat(
             "Foot and inch narrow",
             fmtFrNarrow,
@@ -1799,11 +1799,11 @@ void MeasureFormatTest::TestManyLocaleDurations() {
     helperTestManyLocaleDurations("es", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
     helperTestManyLocaleDurations("fi", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5t 37min");
     helperTestManyLocaleDurations("fi", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5.37");
-    helperTestManyLocaleDurations("fr", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5h 37 min");
+    helperTestManyLocaleDurations("fr", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5h 37\\u202Fmin");
     helperTestManyLocaleDurations("fr", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
     helperTestManyLocaleDurations("is", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5 klst. og 37 m\\u00EDn.");
     helperTestManyLocaleDurations("is", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
-    helperTestManyLocaleDurations("ja", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5\\u6642\\u959337\\u5206");
+    helperTestManyLocaleDurations("ja", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5h37m");
     helperTestManyLocaleDurations("ja", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");
     helperTestManyLocaleDurations("nb", UMEASFMT_WIDTH_NARROW,  measures, UPRV_LENGTHOF(measures), "5t, 37m");
     helperTestManyLocaleDurations("nb", UMEASFMT_WIDTH_NUMERIC, measures, UPRV_LENGTHOF(measures), "5:37");

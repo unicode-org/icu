@@ -323,6 +323,7 @@ gd{
         ln{"Lingala"}
         lo{"Làtho"}
         lol{"Mongo"}
+        lou{"Crìtheol Louisiana"}
         loz{"Lozi"}
         lrc{"Luri Thuathach"}
         lt{"Liotuainis"}
@@ -642,6 +643,7 @@ gd{
         Cyrl{"Cirilis"}
         Cyrs{"Cirilis Seann-Slàbhais na h-Eaglaise"}
         Deva{"Devanagari"}
+        Dogr{"Dogra"}
         Dsrt{"Deseret"}
         Dupl{"Gearr-sgrìobhadh Duployé"}
         Egyp{"Sealbh-sgrìobhadh Èipheiteach"}
@@ -649,6 +651,7 @@ gd{
         Ethi{"Ge’ez"}
         Geor{"Cairtbheilis"}
         Glag{"Glagoliticeach"}
+        Gong{"Gunjala Gondi"}
         Gonm{"Masaram Gondi"}
         Goth{"Gotais"}
         Gran{"Grantha"}
@@ -696,10 +699,12 @@ gd{
         Lyci{"Lycian"}
         Lydi{"Lydian"}
         Mahj{"Mahajani"}
+        Maka{"Makasar"}
         Mand{"Mandaean"}
         Mani{"Manichaean"}
         Marc{"Marchen"}
         Maya{"Dealbh-sgrìobhadh Mayach"}
+        Medf{"Medefaidrin"}
         Mend{"Mende"}
         Merc{"Meroiticeach ceangailte"}
         Mero{"Meroiticeach"}
@@ -731,8 +736,8 @@ gd{
         Phnx{"Pheniceach"}
         Plrd{"Miao Phollard"}
         Prti{"Partais snaidh-sgrìobhte"}
-        Qaac{"Qaac"}
         Rjng{"Rejang"}
+        Rohg{"Hanifi Rohingya"}
         Roro{"Rongorongo"}
         Runr{"Rùn-sgrìobhadh"}
         Samr{"Samaritanais"}
@@ -745,6 +750,8 @@ gd{
         Sidd{"Siddham"}
         Sind{"Khudawadi"}
         Sinh{"Sinhala"}
+        Sogd{"Sogdianais"}
+        Sogo{"Seann-Sogdianais"}
         Sora{"Sora Sompeng"}
         Soyo{"Soyombo"}
         Sund{"Sunda"}
@@ -857,6 +864,7 @@ gd{
             ussystem{"Tomhas nan Stàitean Aonaichte"}
         }
         numbers{
+            ahom{"Àireamhan Ahom"}
             arab{"Àireamhan Arabach-Innseanach"}
             arabext{"Àireamhan Arabach-Innseanach leudaichte"}
             armn{"Àireamhan na h-Airmeinise"}
@@ -866,10 +874,13 @@ gd{
             brah{"Àireamhan Brahmi"}
             cakm{"Àireamhan Chakma"}
             cham{"Àireamhan Cham"}
+            cyrl{"Àireamhan na Cirilise"}
             deva{"Àireamhan Devanagari"}
             ethi{"Àireamhan Itiopach"}
             fullwide{"Àireamhan làn-leud"}
             geor{"Àireamhan na Cairtbheilise"}
+            gong{"Àireamhan Gunjala Gondi"}
+            gonm{"Àireamhan Masaram Gondi"}
             grek{"Àireamhan na Greugaise"}
             greklow{"Àireamhan beaga na Greugaise"}
             gujr{"Àireamhan Gujarati"}
@@ -880,6 +891,7 @@ gd{
             hant{"Àireamhan na Sìnise Thradaiseanta"}
             hantfin{"Àireamhan ionmhasail na Sìnise Thradaiseanta"}
             hebr{"Àireamhan na h-Eabhra"}
+            hmng{"Àireamhan Pahawh Hmong"}
             java{"Àireamhan na Deàbhanaise"}
             jpan{"Àireamhan na Seapanaise"}
             jpanfin{"Àireamhan ionmhasail na Seapanaise"}
@@ -892,19 +904,30 @@ gd{
             latn{"Àireamhan Siarach"}
             lepc{"Àireamhan Lepcha"}
             limb{"Àireamhan Limbu"}
+            mathbold{"Àireamhan matamataig troma"}
+            mathdbl{"Àireamhan matamataig le loidhne dhùbailte"}
+            mathmono{"Àireamhan matamataig aon-leud"}
+            mathsanb{"Àireamhan matamataig sans-serif troma"}
+            mathsans{"Àireamhan matamataig sans-serif"}
             mlym{"Àireamhan Malayalam"}
+            modi{"Àireamhan Modi"}
             mong{"Àireamhan na Mongolaise"}
+            mroo{"Àireamhan Mro"}
             mtei{"Àireamhan Meetei Mayek"}
             mymr{"Àireamhan Miànmar"}
             mymrshan{"Àireamhan Shan Miànmar"}
+            mymrtlng{"Àireamhan Tai Laing Miànmar"}
             nkoo{"Àireamhan N’Ko"}
             olck{"Àireamhan Ol Chiki"}
             orya{"Àireamhan Odia"}
             osma{"Àireamhan Osmanya"}
+            rohg{"Àireamhan Hanifi Rohingya"}
             roman{"Àireamhan Ròmanach"}
             romanlow{"Àireamhan beaga Ròmanach"}
             saur{"Àireamhan Saurashtra"}
             shrd{"Àireamhan Sharada"}
+            sind{"Àireamhan Khudawadi"}
+            sinh{"Àireamhan Lith na Sinhala"}
             sora{"Àireamhan Sora Sompeng"}
             sund{"Àireamhan Sunda"}
             takr{"Àireamhan Takri"}
@@ -914,7 +937,9 @@ gd{
             telu{"Àireamhan Telugu"}
             thai{"Àireamhan Tàidh"}
             tibt{"Àireamhan na Tibeitise"}
+            tirh{"Àireamhan Tirhuta"}
             vaii{"Àireamhan Vai"}
+            wara{"Àireamhan Warang Citi"}
         }
     }
     Variants{
@@ -925,11 +950,13 @@ gd{
         1994{"Litreachadh stannardach dual-chainnt Resia"}
         1996{"Litreachadh na Gearmailtise 1996"}
         ABL1943{"Gnàthas-litreachaidh 1943"}
+        AKUAPEM{"AKUAPEM"}
         ALALC97{"Ròmanachadh ALA-LC 1997"}
         ALUKU{"Dual-chainnt Aluku"}
         AO1990{"Aonta litreachadh na Portagailise 1990"}
         AREVELA{"Airmeinis an Ear"}
         AREVMDA{"Airmeinis an Iar"}
+        ASANTE{"ASANTE"}
         BAKU1926{"Abidil Laideann aonaichte na Turcaise"}
         BALANKA{"Dual-chainnt Balanka de Anii"}
         BARLA{"Dual-chainntean Barlavento de Kabuverdianu"}
@@ -953,6 +980,7 @@ gd{
         HSISTEMO{"HSISTEMO"}
         IJEKAVSK{"Sèirbis le fuaimneachadh Ijekavia"}
         ITIHASA{"Itihasa"}
+        IVANCHOV{"IVANCHOV"}
         JAUER{"Jauer"}
         JYUTPING{"Jyutping"}
         KKCOR{"Litreachadh coitcheann"}
@@ -1004,7 +1032,7 @@ gd{
         WADEGILE{"Ròmanachadh Wade-Giles"}
         XSISTEMO{"XSISTEMO"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.44.18"}
     characterLabelPattern{
         all{"{0} – na h-uile"}
         category-list{"{0}: {1}"}

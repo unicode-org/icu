@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ca{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -814,7 +814,7 @@ ca{
             ec{"Kizil-Orda"}
         }
         "Asia:Rangoon"{
-            ec{"Rangoon"}
+            ec{"Yangôn"}
         }
         "Asia:Riyadh"{
             ec{"Al-Riyād"}
@@ -862,7 +862,7 @@ ca{
             ec{"Tomsk"}
         }
         "Asia:Ulaanbaatar"{
-            ec{"Ulaanbaatar"}
+            ec{"Ulan Bator"}
         }
         "Asia:Urumqi"{
             ec{"Urumchi"}
@@ -1332,9 +1332,9 @@ ca{
             ls{"Hora estàndard de muntanya d’Amèrica del Nord"}
         }
         "meta:America_Pacific"{
-            ld{"Hora d’estiu del Pacífic"}
-            lg{"Hora del Pacífic"}
-            ls{"Hora estàndard del Pacífic"}
+            ld{"Hora d’estiu del Pacífic d’Amèrica del Nord"}
+            lg{"Hora del Pacífic d’Amèrica del Nord"}
+            ls{"Hora estàndard del Pacífic d’Amèrica del Nord"}
         }
         "meta:Anadyr"{
             ld{"Horari d’estiu d’Anadyr"}
@@ -1473,7 +1473,7 @@ ca{
             ls{"Hora de Davis"}
         }
         "meta:DumontDUrville"{
-            ls{"Hora de Dumont-d’Urville"}
+            ls{"Hora de Dumont d’Urville"}
         }
         "meta:East_Timor"{
             ls{"Hora de Timor Oriental"}
@@ -1579,7 +1579,7 @@ ca{
             ls{"Hora estàndard de Hovd"}
         }
         "meta:India"{
-            ls{"Hora estàndard de l’Índia"}
+            ls{"Hora de l’Índia"}
         }
         "meta:Indian_Ocean"{
             ls{"Hora de l’oceà Índic"}
@@ -1779,9 +1779,9 @@ ca{
             ls{"Hora de les illes Phoenix"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"Hora d’estiu de Saint-Pierre i Miquelon"}
-            lg{"Hora de Saint-Pierre i Miquelon"}
-            ls{"Hora estàndard de Saint-Pierre i Miquelon"}
+            ld{"Hora d’estiu de Saint-Pierre-et-Miquelon"}
+            lg{"Hora de Saint-Pierre-et-Miquelon"}
+            ls{"Hora estàndard de Saint-Pierre-et-Miquelon"}
         }
         "meta:Pitcairn"{
             ls{"Hora de Pitcairn"}
@@ -1913,7 +1913,7 @@ ca{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Hora de: {0}"}
-        regionFormatDaylight{"Horari d’estiu, {0}"}
+        regionFormatDaylight{"Hora d’estiu, {0}"}
         regionFormatStandard{"Hora estàndard, {0}"}
     }
 }

@@ -19,7 +19,9 @@ sr{
         default{"latn"}
         latn{
             miscPatterns{
-                atLeast{"⩾{0}"}
+                approximately{"~{0}"}
+                atLeast{"≥{0}"}
+                atMost{"≤{0}"}
                 range{"{0}–{1}"}
             }
             patterns{
@@ -247,7 +249,7 @@ sr{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     calendar{
         buddhist{
             eras{
@@ -1408,6 +1410,13 @@ sr{
         }
         day-narrow{
             dn{"д."}
+            relative{
+                "-1"{"јуче"}
+                "-2"{"прекјуче"}
+                "0"{"данас"}
+                "1"{"сутра"}
+                "2"{"прекосутра"}
+            }
             relativeTime{
                 future{
                     few{"за {0} д."}
@@ -1423,6 +1432,13 @@ sr{
         }
         day-short{
             dn{"д."}
+            relative{
+                "-1"{"јуче"}
+                "-2"{"прекјуче"}
+                "0"{"данас"}
+                "1"{"сутра"}
+                "2"{"прекосутра"}
+            }
             relativeTime{
                 future{
                     few{"за {0} д."}
@@ -2339,8 +2355,13 @@ sr{
         general{
             lenient{
                 "[.․。︒﹒．｡]",
+                "['ʼ՚᾽᾿’＇]",
+                "[%٪﹪％]",
+                "[؉‰]",
                 "[\$﹩＄$]",
                 "[£₤]",
+                "[¥￥]",
+                "[₩￦]",
                 "[₨₹{Rp}{Rs}]",
             }
         }

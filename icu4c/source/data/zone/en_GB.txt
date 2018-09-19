@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en_GB{
     %%Parent{"en_001"}
-    Version{"2.1.38.73"}
+    Version{"2.1.44.18"}
     zoneStrings{
         "America:St_Barthelemy"{
             ec{"St Barthélemy"}
@@ -22,21 +22,11 @@ en_GB{
         "America:St_Vincent"{
             ec{"St Vincent"}
         }
-        "Asia:Rangoon"{
-            ec{"Rangoon"}
-        }
         "Atlantic:St_Helena"{
             ec{"St Helena"}
         }
         "Europe:London"{
             sd{"BST"}
-        }
-        "Pacific:Honolulu"{
-            ec{"Honolulu"}
-        }
-        "meta:Australia_Central"{
-            lg{"Central Australia Time"}
-            ls{"Australian Central Standard Time"}
         }
         "meta:Europe_Central"{
             sd{"CEST"}
@@ -52,14 +42,6 @@ en_GB{
             sd{"WEST"}
             sg{"WET"}
             ss{"WET"}
-        }
-        "meta:Kyrgystan"{
-            ls{"Kyrgystan Time"}
-        }
-        "meta:Mongolia"{
-            ld{"Ulan Bator Summer Time"}
-            lg{"Ulan Bator Time"}
-            ls{"Ulan Bator Standard Time"}
         }
         "meta:Pierre_Miquelon"{
             ld{"St Pierre & Miquelon Daylight Time"}

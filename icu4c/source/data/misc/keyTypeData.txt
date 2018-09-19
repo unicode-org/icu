@@ -425,6 +425,7 @@ keyTypeData:table(nofallback){
             uzs{""}
             veb{""}
             vef{""}
+            ves{""}
             vnd{""}
             vnn{""}
             vuv{""}
@@ -488,6 +489,7 @@ keyTypeData:table(nofallback){
             remove{""}
             title{""}
             upper{""}
+            zawgyi{""}
         }
         em{
             default{""}

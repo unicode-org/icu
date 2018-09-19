@@ -59,7 +59,7 @@ ms{
         BH{"Bahrain"}
         BI{"Burundi"}
         BJ{"Benin"}
-        BL{"Saint Barthélemy"}
+        BL{"St. Barthelemy"}
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
@@ -312,5 +312,5 @@ ms{
         MK{"Macedonia (FYROM)"}
         TL{"Timor Timur"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
 }

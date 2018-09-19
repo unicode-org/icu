@@ -133,7 +133,7 @@ cy{
         GU{"Guam"}
         GW{"Guiné-Bissau"}
         GY{"Guyana"}
-        HK{"Hong Kong RhGA Tsieina"}
+        HK{"Hong Kong SAR Tseina"}
         HM{"Ynys Heard ac Ynysoedd McDonald"}
         HN{"Honduras"}
         HR{"Croatia"}
@@ -312,5 +312,5 @@ cy{
         MK{"Macedonia (CWIM)"}
         TL{"Dwyrain Timor"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.61"}
 }

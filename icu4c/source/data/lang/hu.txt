@@ -833,7 +833,7 @@ hu{
             orya{"Orija számjegyek"}
             roman{"Római számok"}
             romanlow{"Római kisbetűs számok"}
-            taml{"Tamil hagyományos számok"}
+            taml{"Hagyományos tamil számjegyek"}
             tamldec{"Tamil számjegyek"}
             telu{"Telugu számjegyek"}
             thai{"Thai számjegyek"}
@@ -900,7 +900,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     characterLabelPattern{
         all{"{0} – összes"}
         category-list{"{0}: {1}"}

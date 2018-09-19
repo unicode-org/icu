@@ -629,9 +629,9 @@ public:
                 FormatThreadTestData( 1.0, CharsToUnicodeString("100\\u00a0%")),
                 FormatThreadTestData( 0.26, CharsToUnicodeString("26\\u00a0%")),
                 FormatThreadTestData(
-                   16384.99, CharsToUnicodeString("1\\u00a0638\\u00a0499\\u00a0%")), // U+00a0 = NBSP
+                   16384.99, CharsToUnicodeString("1\\u202F638\\u202F499\\u00a0%")), // U+202F = NNBSP
                 FormatThreadTestData(
-                    81890.23, CharsToUnicodeString("8\\u00a0189\\u00a0023\\u00a0%")),
+                    81890.23, CharsToUnicodeString("8\\u202F189\\u202F023\\u00a0%")),
         };
         int32_t kPercentFormatTestDataLength = UPRV_LENGTHOF(kPercentFormatTestData);
         int32_t iteration;

@@ -75,7 +75,7 @@ es{
         CC{"Islas Cocos"}
         CD{"República Democrática del Congo"}
         CF{"República Centroafricana"}
-        CG{"República del Congo"}
+        CG{"Congo"}
         CH{"Suiza"}
         CI{"Côte d’Ivoire"}
         CK{"Islas Cook"}
@@ -303,7 +303,7 @@ es{
         US{"EE. UU."}
     }
     Countries%variant{
-        CD{"Congo (República Democrática del Congo)"}
+        CD{"Congo (RDC)"}
         CG{"Congo (República)"}
         CI{"Costa de Marfil"}
         CZ{"República Checa"}
@@ -311,5 +311,5 @@ es{
         MK{"Macedonia (ERYM)"}
         TL{"Timor Oriental"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
 }

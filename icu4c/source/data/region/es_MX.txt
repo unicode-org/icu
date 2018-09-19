@@ -20,6 +20,7 @@ es_MX{
         CI{"Côte d’Ivoire"}
         EZ{"zona euro"}
         GG{"Guernsey"}
+        SA{"Arabia Saudita"}
         TA{"Tristán de Acuña"}
         TL{"Timor-Leste"}
         UM{"Islas menores alejadas de EE. UU."}
@@ -29,5 +30,5 @@ es_MX{
     Countries%short{
         GB{"RU"}
     }
-    Version{"2.1.38.73"}
+    Version{"2.1.44.5"}
 }

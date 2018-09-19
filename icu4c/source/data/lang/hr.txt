@@ -916,17 +916,17 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     characterLabelPattern{
-        all{"{0} — Sve"}
+        all{"{0} – sve"}
         category-list{"{0}: {1}"}
-        compatibility{"{0} — Kompatibilnost"}
-        enclosed{"{0} — Priloženo"}
-        extended{"{0} — Prošireno"}
-        historic{"{0} — Povijesno"}
-        miscellaneous{"{0} — Razno"}
-        other{"{0} — Ostalo"}
-        scripts{"Pisma — {0}"}
+        compatibility{"{0} – kompatibilnost"}
+        enclosed{"{0} – priloženo"}
+        extended{"{0} – prošireno"}
+        historic{"{0} – povijesno"}
+        miscellaneous{"{0} – razno"}
+        other{"{0} – ostalo"}
+        scripts{"pisma – {0}"}
         strokes{
             few{"{0} poteza"}
             one{"{0} potez"}

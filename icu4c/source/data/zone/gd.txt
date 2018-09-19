@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 gd{
-    Version{"2.1.41.97"}
+    Version{"2.1.44.18"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -953,6 +953,7 @@ gd{
         }
         "Etc:UTC"{
             ls{"Àm Uile-choitcheann Co-òrdanaichte"}
+            ss{"UTC"}
         }
         "Etc:Unknown"{
             ec{"Baile neo-aithnichte"}

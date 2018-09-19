@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 be{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"hh:mm"}
         hms{"hh:mm:ss"}
@@ -163,6 +163,20 @@ be{
                 one{"{0} частка на мільён"}
                 other{"{0} часткі на мільён"}
             }
+            percent{
+                dnam{"працэнтаў"}
+                few{"{0}%"}
+                many{"{0}%"}
+                one{"{0} працэнт"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"праміле"}
+                few{"{0}‰"}
+                many{"{0}‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -195,6 +209,7 @@ be{
             }
         }
         coordinate{
+            dnam{"кірунак свету"}
             east{"{0} У"}
             north{"{0} Пн"}
             south{"{0} Пд"}
@@ -256,6 +271,13 @@ be{
                 many{"{0} МБ"}
                 one{"{0} МБ"}
                 other{"{0} МБ"}
+            }
+            petabyte{
+                dnam{"петабайты"}
+                few{"{0} ПБ"}
+                many{"{0} ПБ"}
+                one{"{0} ПБ"}
+                other{"{0} ПБ"}
             }
             terabit{
                 dnam{"тэрабіты"}
@@ -725,6 +747,13 @@ be{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"атмасферы"}
+                few{"{0} атм"}
+                many{"{0} атм"}
+                one{"{0} атм"}
+                other{"{0} атм"}
+            }
             hectopascal{
                 dnam{"гектапаскалі"}
                 few{"{0} гПа"}
@@ -1001,6 +1030,15 @@ be{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                few{"{0}%"}
+                many{"{0}%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"л/100 км"}
@@ -1011,6 +1049,7 @@ be{
             }
         }
         coordinate{
+            dnam{"кірунак"}
             east{"{0} У"}
             north{"{0} Пн"}
             south{"{0} Пд"}
@@ -1304,6 +1343,20 @@ be{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                few{"{0}%"}
+                many{"{0}%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"праміле"}
+                few{"{0}‰"}
+                many{"{0}‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1336,6 +1389,7 @@ be{
             }
         }
         coordinate{
+            dnam{"кірунак"}
             east{"{0} У"}
             north{"{0} Пн"}
             south{"{0} Пд"}
@@ -1397,6 +1451,13 @@ be{
                 many{"{0} МБ"}
                 one{"{0} МБ"}
                 other{"{0} МБ"}
+            }
+            petabyte{
+                dnam{"ПБайт"}
+                few{"{0} ПБ"}
+                many{"{0} ПБ"}
+                one{"{0} ПБ"}
+                other{"{0} ПБ"}
             }
             terabit{
                 dnam{"Тбіт"}
@@ -1866,6 +1927,13 @@ be{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"атм"}
+                few{"{0} атм"}
+                many{"{0} атм"}
+                one{"{0} атм"}
+                other{"{0} атм"}
+            }
             hectopascal{
                 dnam{"гПа"}
                 few{"{0} гПа"}

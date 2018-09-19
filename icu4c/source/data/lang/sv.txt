@@ -397,7 +397,7 @@ sv{
         mye{"myene"}
         myv{"erjya"}
         mzn{"mazanderani"}
-        na{"nauriska"}
+        na{"nauruanska"}
         nan{"min nan"}
         nap{"napolitanska"}
         naq{"nama"}
@@ -688,6 +688,7 @@ sv{
         Geok{"kutsuri"}
         Geor{"georgiska"}
         Glag{"glagolitiska"}
+        Gong{"gunjalgondiska"}
         Gonm{"masaram-gondi"}
         Goth{"gotiska"}
         Gran{"gammaltamilska"}
@@ -774,6 +775,7 @@ sv{
         Plrd{"pollardtecken"}
         Prti{"tidig parthianska"}
         Rjng{"rejang"}
+        Rohg{"hanifiska"}
         Roro{"rongo-rongo"}
         Runr{"runor"}
         Samr{"samaritiska"}
@@ -786,6 +788,8 @@ sv{
         Sidd{"siddhamska"}
         Sind{"sindhiska"}
         Sinh{"singalesiska"}
+        Sogd{"sogdiska"}
+        Sogo{"gammalsogdiska"}
         Sora{"sora sompeng"}
         Soyo{"soyombo"}
         Sund{"sundanesiska"}
@@ -949,6 +953,8 @@ sv{
             finance{"finansiella siffror"}
             fullwide{"fullbreddssiffror"}
             geor{"georgiska taltecken"}
+            gong{"gunjalagondiska siffror"}
+            gonm{"masaramgondiska siffror"}
             grek{"grekiska taltecken"}
             greklow{"små grekiska taltecken"}
             gujr{"gujaratiska siffror"}
@@ -990,6 +996,7 @@ sv{
             olck{"ol chiki-siffror"}
             orya{"oriyiska siffror"}
             osma{"osmanya-siffror"}
+            rohg{"hanifisiffror"}
             roman{"romerska taltecken"}
             romanlow{"små romerska taltecken"}
             saur{"saurashtra-siffror"}
@@ -1046,6 +1053,7 @@ sv{
         HSISTEMO{"h-system"}
         IJEKAVSK{"ijekavisk dialekt"}
         ITIHASA{"itihasa-dialekt"}
+        IVANCHOV{"bulgariska i 1899 års stavning"}
         JAUER{"jauer-dialekt"}
         JYUTPING{"jyutping"}
         KKCOR{"vanlig stavning"}
@@ -1097,17 +1105,17 @@ sv{
         WADEGILE{"Wade-Giles"}
         XSISTEMO{"x-system"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     characterLabelPattern{
-        all{"{0} — alla"}
+        all{"{0} – alla"}
         category-list{"{0}: {1}"}
-        compatibility{"{0} — kompatibilitet"}
-        enclosed{"{0} — omringande"}
-        extended{"{0} — utvidgat"}
+        compatibility{"{0} – kompatibilitet"}
+        enclosed{"{0} – omringande"}
+        extended{"{0} – utvidgat"}
         historic{"{0} — historiska"}
-        miscellaneous{"{0} — diverse"}
-        other{"{0} — övriga"}
-        scripts{"skrift — {0}"}
+        miscellaneous{"{0} – diverse"}
+        other{"{0} – övriga"}
+        scripts{"{0} – övriga"}
         strokes{
             one{"{0} streck"}
             other{"{0} streck"}

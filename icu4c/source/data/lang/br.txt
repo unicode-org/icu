@@ -591,6 +591,7 @@ br{
         Hira{"hiragana"}
         Hluw{"hieroglifoù Anatolia"}
         Hrkt{"silabennaouegoù japanek"}
+        Hung{"henhungarek"}
         Ital{"henitalek"}
         Jamo{"jamo"}
         Java{"javanek"}
@@ -602,13 +603,19 @@ br{
         Laoo{"laosek"}
         Latg{"latin gouezelek"}
         Latn{"latin"}
+        Lyci{"likiek"}
+        Lydi{"lidiek"}
+        Mani{"manikeek"}
         Maya{"hieroglifoù mayaek"}
         Mlym{"malayalam"}
         Mong{"mongolek"}
         Mymr{"myanmar"}
+        Narb{"henarabek an Norzh"}
         Ogam{"ogam"}
         Orya{"oriya"}
         Runr{"runek"}
+        Samr{"samaritek"}
+        Sarb{"henarabek ar Su"}
         Sinh{"singhalek"}
         Sund{"sundanek"}
         Syrc{"siriek"}
@@ -624,6 +631,7 @@ br{
         Ugar{"ougaritek"}
         Vaii{"vai"}
         Xpeo{"persek kozh"}
+        Xsux{"gennheñvel"}
         Zmth{"notadur jedoniel"}
         Zsye{"fromlunioù"}
         Zsym{"arouezioù"}
@@ -784,6 +792,7 @@ br{
         HSISTEMO{"esperanteg sistem H"}
         IJEKAVSK{"serbeg gant distagadur ijekavian"}
         ITIHASA{"sanskriteg itihâsa"}
+        IVANCHOV{"reizhskrivadur Ivanchov"}
         JAUER{"rannyezh romañchek Jauer"}
         JYUTPING{"romanekadur kantonek Jyutping"}
         KKCOR{"kerneveureg kumun"}
@@ -835,7 +844,7 @@ br{
         WADEGILE{"romanekadur Wade-Giles"}
         XSISTEMO{"esperanteg sistem X"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

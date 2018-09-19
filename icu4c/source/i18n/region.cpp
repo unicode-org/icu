@@ -168,10 +168,18 @@ void U_CALLCONV Region::loadRegionData(UErrorCode &status) {
         continents->addElement(continentName,status);
     }
 
+    UResourceBundle *groupingBundle = nullptr;
     while ( ures_hasNext(groupingContainment.getAlias()) ) {
-        UnicodeString *groupingName = new UnicodeString(ures_getNextUnicodeString(groupingContainment.getAlias(),NULL,&status));
-        groupings->addElement(groupingName,status);
+        groupingBundle = ures_getNextResource(groupingContainment.getAlias(), groupingBundle, &status);
+        if (U_FAILURE(status)) {
+            break;
+        }
+        UnicodeString *groupingName = new UnicodeString(ures_getKey(groupingBundle), -1, US_INV);
+        if (groupingName) {
+            groupings->addElement(groupingName,status);
+        }
     }
+    ures_close(groupingBundle);
 
     for ( int32_t i = 0 ; i < allRegions->size() ; i++ ) {
         LocalPointer<Region> r(new Region(), status);

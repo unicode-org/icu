@@ -625,7 +625,9 @@ zh_Hant{
         }
         latn{
             miscPatterns{
+                approximately{"~{0}"}
                 atLeast{"{0}+"}
+                atMost{"≤{0}"}
                 range{"{0}-{1}"}
             }
             patterns{
@@ -1374,7 +1376,7 @@ zh_Hant{
             }
         }
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -4319,7 +4321,7 @@ zh_Hant{
                 yQQQ{"y年QQQ"}
                 yQQQQ{"y年QQQQ"}
                 yw{
-                    other{"Y年的第w週"}
+                    other{"y年的第w週"}
                 }
             }
             dayNames{
@@ -4696,6 +4698,12 @@ zh_Hant{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "第1季",
+                        "第2季",
+                        "第3季",
+                        "第4季",
+                    }
                     narrow{
                         "1",
                         "2",

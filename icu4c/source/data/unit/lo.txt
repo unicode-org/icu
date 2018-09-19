@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 lo{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -103,6 +103,14 @@ lo{
                 dnam{"ພາດຕໍ່ລ້ານ"}
                 other{"{0} ພາດຕໍ່ລ້ານ"}
             }
+            percent{
+                dnam{"ເປີເຊັນ"}
+                other{"{0} ເປີເຊັນ"}
+            }
+            permille{
+                dnam{"ຕໍ່ພັນ"}
+                other{"{0} ຕໍ່ພັນ"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -123,6 +131,7 @@ lo{
             }
         }
         coordinate{
+            dnam{"ທິດທາງຕາມລຳດັບ"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -160,6 +169,10 @@ lo{
             megabyte{
                 dnam{"MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"ເພຕາໄບຕ໌"}
+                other{"{0} ເພຕາໄບຕ໌"}
             }
             terabit{
                 dnam{"Tb"}
@@ -443,6 +456,10 @@ lo{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmospheres"}
+                other{"{0} atmospheres"}
+            }
             hectopascal{
                 dnam{"hectopascals"}
                 other{"{0} hectopascals"}
@@ -641,6 +658,12 @@ lo{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"ລ/ 100 ກມ"}
@@ -648,6 +671,7 @@ lo{
             }
         }
         coordinate{
+            dnam{"ທິດທາງ"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -901,6 +925,14 @@ lo{
                 dnam{"ພາດ/ລ້ານ"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"ເປີເຊັນ"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"ຕໍ່ພັນ"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -921,6 +953,7 @@ lo{
             }
         }
         coordinate{
+            dnam{"ທິດທາງ"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -958,6 +991,10 @@ lo{
             megabyte{
                 dnam{"MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PByte"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1241,6 +1278,10 @@ lo{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPA"}
                 other{"{0} hPA"}

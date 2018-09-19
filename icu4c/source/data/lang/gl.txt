@@ -11,7 +11,7 @@ gl{
         colNormalization{"Clasificación normalizada"}
         colNumeric{"Clasificación numérica"}
         colStrength{"Forza de clasificación"}
-        collation{"orde de clasificación"}
+        collation{"criterio de ordenación"}
         currency{"moeda"}
         hc{"ciclo horario (12 ou 24)"}
         lb{"estilo de quebra de liña"}
@@ -49,7 +49,7 @@ gl{
         awa{"awadhi"}
         ay{"aimará"}
         az{"acerbaixano"}
-        ba{"baskir"}
+        ba{"baxkir"}
         ban{"balinés"}
         bas{"basaa"}
         be{"bielorruso"}
@@ -61,7 +61,7 @@ gl{
         bi{"bislama"}
         bin{"bini"}
         bla{"siksiká"}
-        bm{"bambaro"}
+        bm{"bambara"}
         bn{"bengalí"}
         bo{"tibetano"}
         br{"bretón"}
@@ -74,7 +74,7 @@ gl{
         ceb{"cebuano"}
         cgg{"kiga"}
         ch{"chamorro"}
-        chk{"chuukese"}
+        chk{"chuuk"}
         chm{"mari"}
         cho{"choctaw"}
         chr{"cherokee"}
@@ -124,7 +124,7 @@ gl{
         ff{"fula"}
         fi{"finés"}
         fil{"filipino"}
-        fj{"fidxiano"}
+        fj{"fixiano"}
         fo{"feroés"}
         fon{"fon"}
         fr{"francés"}
@@ -143,7 +143,7 @@ gl{
         gor{"gorontalo"}
         grc{"grego antigo"}
         gsw{"alemán suízo"}
-        gu{"guxaratí"}
+        gu{"guxarati"}
         guz{"gusii"}
         gv{"manx"}
         gwi{"gwichʼin"}
@@ -164,7 +164,7 @@ gl{
         iba{"iban"}
         ibb{"ibibio"}
         id{"indonesio"}
-        ig{"ibo"}
+        ig{"igbo"}
         ii{"yi sichuanés"}
         ilo{"ilocano"}
         inh{"inguxo"}
@@ -198,16 +198,16 @@ gl{
         kln{"kalenjin"}
         km{"khmer"}
         kmb{"kimbundu"}
-        kn{"canarés"}
+        kn{"kannará"}
         ko{"coreano"}
         koi{"komi permio"}
         kok{"konkani"}
         kpe{"kpelle"}
-        kr{"canuri"}
+        kr{"kanuri"}
         krc{"carachaio-bálcara"}
         krl{"carelio"}
         kru{"kurukh"}
-        ks{"cachemir"}
+        ks{"caxemirés"}
         ksb{"shambala"}
         ksf{"bafia"}
         ksh{"kölsch"}
@@ -289,16 +289,16 @@ gl{
         nog{"nogai"}
         nqo{"n’ko"}
         nr{"ndebele meridional"}
-        nso{"sesotho sa leboa"}
+        nso{"sesotho do norte"}
         nus{"nuer"}
         nv{"navajo"}
         ny{"nyanja"}
         nyn{"nyankole"}
         oc{"occitano"}
         om{"oromo"}
-        or{"oriya"}
+        or{"odiá"}
         os{"ossetio"}
-        pa{"panxabiano"}
+        pa{"panxabí"}
         pag{"pangasinan"}
         pam{"pampanga"}
         pap{"papiamento"}
@@ -322,11 +322,11 @@ gl{
         root{"raíz"}
         ru{"ruso"}
         rup{"aromanés"}
-        rw{"ruandés"}
+        rw{"kiñaruanda"}
         rwk{"rwa"}
         sa{"sánscrito"}
         sad{"sandawe"}
-        sah{"sakha"}
+        sah{"iacuto"}
         saq{"samburu"}
         sat{"santali"}
         sba{"ngambay"}
@@ -357,7 +357,7 @@ gl{
         sq{"albanés"}
         sr{"serbio"}
         srn{"sranan tongo"}
-        ss{"swazi"}
+        ss{"suazi"}
         ssy{"saho"}
         st{"sesotho"}
         su{"sundanés"}
@@ -387,7 +387,7 @@ gl{
         ts{"tsonga"}
         tt{"tártaro"}
         tum{"tumbuka"}
-        tvl{"tuvaluano"}
+        tvl{"tuvalés"}
         tw{"twi"}
         twq{"tasawaq"}
         ty{"tahitiano"}
@@ -412,12 +412,12 @@ gl{
         wbp{"walrpiri"}
         wo{"wólof"}
         xal{"calmuco"}
-        xh{"xosa"}
+        xh{"xhosa"}
         xog{"soga"}
         yav{"yangben"}
         ybb{"yemba"}
         yi{"yiddish"}
-        yo{"yoruba"}
+        yo{"ioruba"}
         yue{"cantonés"}
         zgh{"tamazight marroquí estándar"}
         zh{"chinés"}
@@ -626,7 +626,7 @@ gl{
             vaii{"Díxitos Vai"}
         }
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     characterLabelPattern{
         all{"{0} (todo)"}
         category-list{"{0}: {1}"}
