@@ -593,7 +593,7 @@ void NumberRangeFormatterTest::testIdentity() {
         u"5,000–5,000,000");
 
     assertFormatRange(
-        u"Identity fallback  Single Value",
+        u"Identity fallback Single Value",
         NumberRangeFormatter::with().identityFallback(UNUM_IDENTITY_FALLBACK_SINGLE_VALUE),
         Locale("en-us"),
         u"1–5",
@@ -623,6 +623,22 @@ void NumberRangeFormatterTest::testIdentity() {
         u"~5K",
         u"5K",
         u"5K – 5M");
+
+    assertFormatRange(
+        u"Approximately in middle of unit string",
+        NumberRangeFormatter::with().numberFormatterBoth(
+            NumberFormatter::with().unit(FAHRENHEIT).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)),
+        Locale("zh-Hant"),
+        u"華氏 1-5 度",
+        u"華氏 ~5 度",
+        u"華氏 ~5 度",
+        u"華氏 0-3 度",
+        u"華氏 ~0 度",
+        u"華氏 3-3,000 度",
+        u"華氏 3,000-5,000 度",
+        u"華氏 4,999-5,001 度",
+        u"華氏 ~5,000 度",
+        u"華氏 5,000-5,000,000 度");
 }
 
 void NumberRangeFormatterTest::testDifferentFormatters() {
