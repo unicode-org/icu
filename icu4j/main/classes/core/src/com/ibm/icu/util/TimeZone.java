@@ -1052,7 +1052,8 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
 
     /**
      * Overrides equals.
-     * @stable ICU 3.6
+     * @return <code>true</code> if this object is the same as the obj argument; <code>false</code> otherwise.
+     * @stable ICU 2.0
      */
     @Override
     public boolean equals(Object obj){
@@ -1063,7 +1064,8 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
 
     /**
      * Overrides hashCode.
-     * @stable ICU 3.6
+     * @return a hash code value for this object.
+     * @stable ICU 2.0
      */
     @Override
     public int hashCode(){

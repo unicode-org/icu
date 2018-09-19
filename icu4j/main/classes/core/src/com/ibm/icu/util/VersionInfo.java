@@ -482,7 +482,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      *
      * @return the hash code value for this set.
      * @see java.lang.Object#hashCode()
-     * @stable ICU 58
+     * @stable ICU 2.6
      */
     @Override
     public int hashCode() {
@@ -527,7 +527,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
     /**
      * Map of singletons
      */
-    private static final ConcurrentHashMap<Integer, VersionInfo> MAP_ = new ConcurrentHashMap<Integer, VersionInfo>();
+    private static final ConcurrentHashMap<Integer, VersionInfo> MAP_ = new ConcurrentHashMap<>();
     /**
      * Last byte mask
      */
