@@ -3949,4 +3949,18 @@ the ::BEGIN/::END stuff)
             "exception for a rule of '\\'");
         }
     }
+
+    /**
+     * Tests equals and hashCode implementation of Transliterator.Position
+     */
+    @Test
+    public void TestPositionEquals() {
+        Transliterator.Position position1 = new Transliterator.Position(1, 0, 0, 0);
+        Transliterator.Position position2 = new Transliterator.Position(0, 0, 0, 0);
+        assertNotEquals("2 different positions are not equal", position1, position2);
+        assertNotEquals("2 different positions have different hash codes", position1.hashCode(), position2.hashCode());
+        Transliterator.Position position3 = new Transliterator.Position(1, 0, 0, 0);
+        assertEquals("2 positions are equal", position1, position3);
+        assertEquals("2 positions have the same hash codes", position1.hashCode(), position3.hashCode());
+    }
 }

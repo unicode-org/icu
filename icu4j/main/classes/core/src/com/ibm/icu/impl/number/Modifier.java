@@ -2,6 +2,9 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
+import com.ibm.icu.impl.StandardPlural;
+import com.ibm.icu.text.NumberFormat.Field;
+
 /**
  * A Modifier is an object that can be passed through the formatting pipeline until it is finally applied
  * to the string builder. A Modifier usually contains a prefix and a suffix that are applied, but it
@@ -48,4 +51,30 @@ public interface Modifier {
      * @return Whether the modifier is strong.
      */
     public boolean isStrong();
+
+    /**
+     * Whether the modifier contains at least one occurrence of the given field.
+     */
+    public boolean containsField(Field currency);
+
+    /**
+     * A fill-in for getParameters(). obj will always be set; if non-null, the other
+     * two fields are also safe to read.
+     */
+    public static class Parameters {
+        public ModifierStore obj;
+        public int signum;
+        public StandardPlural plural;
+    }
+
+    /**
+     * Gets a set of "parameters" for this Modifier.
+     */
+    public Parameters getParameters();
+
+    /**
+     * Returns whether this Modifier is *semantically equivalent* to the other Modifier;
+     * in many cases, this is the same as equal, but parameters should be ignored.
+     */
+    public boolean semanticallyEquivalent(Modifier other);
 }

@@ -75,6 +75,28 @@ public class ConstantAffixModifier implements Modifier {
     }
 
     @Override
+    public boolean containsField(Field field) {
+        // This method is not currently used.
+        assert false;
+        return false;
+    }
+
+    @Override
+    public Parameters getParameters() {
+        return null;
+    }
+
+    @Override
+    public boolean semanticallyEquivalent(Modifier other) {
+        if (!(other instanceof ConstantAffixModifier)) {
+            return false;
+        }
+        ConstantAffixModifier _other = (ConstantAffixModifier) other;
+        return prefix.equals(_other.prefix) && suffix.equals(_other.suffix) && field == _other.field
+                && strong == _other.strong;
+    }
+
+    @Override
     public String toString() {
         return String.format("<ConstantAffixModifier prefix:'%s' suffix:'%s'>", prefix, suffix);
     }

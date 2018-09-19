@@ -42,21 +42,21 @@ import com.ibm.icu.util.MeasureUnit;
 class NumberFormatterImpl {
 
     /** Builds a "safe" MicroPropsGenerator, which is thread-safe and can be used repeatedly. */
-    public static NumberFormatterImpl fromMacros(MacroProps macros) {
-        MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, true);
-        return new NumberFormatterImpl(microPropsGenerator);
+    public NumberFormatterImpl(MacroProps macros) {
+        this(macrosToMicroGenerator(macros, true));
     }
 
     /**
      * Builds and evaluates an "unsafe" MicroPropsGenerator, which is cheaper but can be used only once.
      */
-    public static void applyStatic(
+    public static int formatStatic(
             MacroProps macros,
             DecimalQuantity inValue,
             NumberStringBuilder outString) {
-        MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, false);
-        MicroProps micros = microPropsGenerator.processQuantity(inValue);
-        microsToString(micros, inValue, outString);
+        MicroProps micros = preProcessUnsafe(macros, inValue);
+        int length = writeNumber(micros, inValue, outString, 0);
+        length += writeAffixes(micros, outString, 0, length);
+        return length;
     }
 
     /**
@@ -82,9 +82,40 @@ class NumberFormatterImpl {
         this.microPropsGenerator = microPropsGenerator;
     }
 
-    public void apply(DecimalQuantity inValue, NumberStringBuilder outString) {
+    /**
+     * Evaluates the "safe" MicroPropsGenerator created by "fromMacros".
+     */
+    public int format(DecimalQuantity inValue, NumberStringBuilder outString) {
+        MicroProps micros = preProcess(inValue);
+        int length = writeNumber(micros, inValue, outString, 0);
+        length += writeAffixes(micros, outString, 0, length);
+        return length;
+    }
+
+    /**
+     * Like format(), but saves the result into an output MicroProps without additional processing.
+     */
+    public MicroProps preProcess(DecimalQuantity inValue) {
         MicroProps micros = microPropsGenerator.processQuantity(inValue);
-        microsToString(micros, inValue, outString);
+        micros.rounder.apply(inValue);
+        if (micros.integerWidth.maxInt == -1) {
+            inValue.setIntegerLength(micros.integerWidth.minInt, Integer.MAX_VALUE);
+        } else {
+            inValue.setIntegerLength(micros.integerWidth.minInt, micros.integerWidth.maxInt);
+        }
+        return micros;
+    }
+
+    private static MicroProps preProcessUnsafe(MacroProps macros, DecimalQuantity inValue) {
+        MicroPropsGenerator microPropsGenerator = macrosToMicroGenerator(macros, false);
+        MicroProps micros = microPropsGenerator.processQuantity(inValue);
+        micros.rounder.apply(inValue);
+        if (micros.integerWidth.maxInt == -1) {
+            inValue.setIntegerLength(micros.integerWidth.minInt, Integer.MAX_VALUE);
+        } else {
+            inValue.setIntegerLength(micros.integerWidth.minInt, micros.integerWidth.maxInt);
+        }
+        return micros;
     }
 
     public int getPrefixSuffix(byte signum, StandardPlural plural, NumberStringBuilder output) {
@@ -350,64 +381,55 @@ class NumberFormatterImpl {
     //////////
 
     /**
-     * Synthesizes the output string from a MicroProps and DecimalQuantity.
-     *
-     * @param micros
-     *            The MicroProps after the quantity has been consumed. Will not be mutated.
-     * @param quantity
-     *            The DecimalQuantity to be rendered. May be mutated.
-     * @param string
-     *            The output string. Will be mutated.
+     * Adds the affixes.  Intended to be called immediately after formatNumber.
      */
-    private static void microsToString(
+    public static int writeAffixes(
             MicroProps micros,
-            DecimalQuantity quantity,
-            NumberStringBuilder string) {
-        micros.rounder.apply(quantity);
-        if (micros.integerWidth.maxInt == -1) {
-            quantity.setIntegerLength(micros.integerWidth.minInt, Integer.MAX_VALUE);
-        } else {
-            quantity.setIntegerLength(micros.integerWidth.minInt, micros.integerWidth.maxInt);
-        }
-        int length = writeNumber(micros, quantity, string);
-        // NOTE: When range formatting is added, these modifiers can bubble up.
-        // For now, apply them all here at once.
+            NumberStringBuilder string,
+            int start,
+            int end) {
         // Always apply the inner modifier (which is "strong").
-        length += micros.modInner.apply(string, 0, length);
+        int length = micros.modInner.apply(string, start, end);
         if (micros.padding.isValid()) {
-            micros.padding.padAndApply(micros.modMiddle, micros.modOuter, string, 0, length);
+            micros.padding.padAndApply(micros.modMiddle, micros.modOuter, string, start, end + length);
         } else {
-            length += micros.modMiddle.apply(string, 0, length);
-            length += micros.modOuter.apply(string, 0, length);
+            length += micros.modMiddle.apply(string, start, end + length);
+            length += micros.modOuter.apply(string, start, end + length);
         }
+        return length;
     }
 
-    private static int writeNumber(
+    /**
+     * Synthesizes the output string from a MicroProps and DecimalQuantity.
+     * This method formats only the main number, not affixes.
+     */
+    public static int writeNumber(
             MicroProps micros,
             DecimalQuantity quantity,
-            NumberStringBuilder string) {
+            NumberStringBuilder string,
+            int index) {
         int length = 0;
         if (quantity.isInfinite()) {
-            length += string.insert(length, micros.symbols.getInfinity(), NumberFormat.Field.INTEGER);
+            length += string.insert(length + index, micros.symbols.getInfinity(), NumberFormat.Field.INTEGER);
 
         } else if (quantity.isNaN()) {
-            length += string.insert(length, micros.symbols.getNaN(), NumberFormat.Field.INTEGER);
+            length += string.insert(length + index, micros.symbols.getNaN(), NumberFormat.Field.INTEGER);
 
         } else {
             // Add the integer digits
-            length += writeIntegerDigits(micros, quantity, string);
+            length += writeIntegerDigits(micros, quantity, string, length + index);
 
             // Add the decimal point
             if (quantity.getLowerDisplayMagnitude() < 0
                     || micros.decimal == DecimalSeparatorDisplay.ALWAYS) {
-                length += string.insert(length,
+                length += string.insert(length + index,
                         micros.useCurrency ? micros.symbols.getMonetaryDecimalSeparatorString()
                                 : micros.symbols.getDecimalSeparatorString(),
                         NumberFormat.Field.DECIMAL_SEPARATOR);
             }
 
             // Add the fraction digits
-            length += writeFractionDigits(micros, quantity, string);
+            length += writeFractionDigits(micros, quantity, string, length + index);
         }
 
         return length;
@@ -416,13 +438,14 @@ class NumberFormatterImpl {
     private static int writeIntegerDigits(
             MicroProps micros,
             DecimalQuantity quantity,
-            NumberStringBuilder string) {
+            NumberStringBuilder string,
+            int index) {
         int length = 0;
         int integerCount = quantity.getUpperDisplayMagnitude() + 1;
         for (int i = 0; i < integerCount; i++) {
             // Add grouping separator
             if (micros.grouping.groupAtPosition(i, quantity)) {
-                length += string.insert(0,
+                length += string.insert(index,
                         micros.useCurrency ? micros.symbols.getMonetaryGroupingSeparatorString()
                                 : micros.symbols.getGroupingSeparatorString(),
                         NumberFormat.Field.GROUPING_SEPARATOR);
@@ -431,11 +454,11 @@ class NumberFormatterImpl {
             // Get and append the next digit value
             byte nextDigit = quantity.getDigit(i);
             if (micros.symbols.getCodePointZero() != -1) {
-                length += string.insertCodePoint(0,
+                length += string.insertCodePoint(index,
                         micros.symbols.getCodePointZero() + nextDigit,
                         NumberFormat.Field.INTEGER);
             } else {
-                length += string.insert(0,
+                length += string.insert(index,
                         micros.symbols.getDigitStringsLocal()[nextDigit],
                         NumberFormat.Field.INTEGER);
             }
@@ -446,17 +469,18 @@ class NumberFormatterImpl {
     private static int writeFractionDigits(
             MicroProps micros,
             DecimalQuantity quantity,
-            NumberStringBuilder string) {
+            NumberStringBuilder string,
+            int index) {
         int length = 0;
         int fractionCount = -quantity.getLowerDisplayMagnitude();
         for (int i = 0; i < fractionCount; i++) {
             // Get and append the next digit value
             byte nextDigit = quantity.getDigit(-i - 1);
             if (micros.symbols.getCodePointZero() != -1) {
-                length += string.appendCodePoint(micros.symbols.getCodePointZero() + nextDigit,
+                length += string.insertCodePoint(length + index, micros.symbols.getCodePointZero() + nextDigit,
                         NumberFormat.Field.FRACTION);
             } else {
-                length += string.append(micros.symbols.getDigitStringsLocal()[nextDigit],
+                length += string.insert(length + index, micros.symbols.getDigitStringsLocal()[nextDigit],
                         NumberFormat.Field.FRACTION);
             }
         }

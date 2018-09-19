@@ -164,7 +164,6 @@ library: common
     ubidi ushape ubiditransform
     listformatter
     resourcebundle service_registration resbund_cnv ures_cnv icudataver ucat
-    loclikely
     currency
     locale_display_names2
     conversion converter_selector ucnv_set ucnvdisp
@@ -383,7 +382,7 @@ group: cstr
 group: uscript
     uscript.o  # uscript_getCode() accepts a locale ID and loads its script code data
   deps
-    propname loclikely
+    propname resourcebundle
 
 group: uscript_props  # script metadata properties
     uscript_props.o
@@ -583,7 +582,7 @@ group: locale_display_names2
 group: currency
     ucurr.o
   deps
-    loclikely resourcebundle ulist ustring_case_locale
+    resourcebundle ulist ustring_case_locale
     stdlib_qsort  # for ucurr.o (which does not use ICU's uarrsort.o)
     static_unicode_sets usetiter
 
@@ -591,11 +590,6 @@ group: icudataver  # u_getDataVersion()
     icudataver.o
   deps
     resourcebundle
-
-group: loclikely
-    loclikely.o
-  deps
-    resourcebundle uscript_props propname
 
 group: locresdata
     # This was intended to collect locale functions that load resource bundle data.
@@ -631,9 +625,12 @@ group: resourcebundle
     locid.o locmap.o wintz.o
     # Do we need class LocaleBased? http://bugs.icu-project.org/trac/ticket/8608
     locbased.o
+    loclikely.o
   deps
     udata ucol_swp
     sort stringenumeration uhash uvector
+    uscript_props propname
+    bytesinkutil
 
 group: udata
     udata.o ucmndata.o udatamem.o
@@ -832,7 +829,6 @@ group: localedata
   deps
     uniset_props resourcebundle
     uset_props  # TODO: change to using C++ UnicodeSet, remove this dependency
-    loclikely
 
 group: genderinfo
     gender.o

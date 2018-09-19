@@ -2,6 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
+import java.util.Arrays;
+
 import com.ibm.icu.text.NumberFormat.Field;
 
 /**
@@ -20,17 +22,30 @@ public class ConstantMultiFieldModifier implements Modifier {
     private final boolean overwrite;
     private final boolean strong;
 
+    // Parameters: used for number range formatting
+    private final Parameters parameters;
+
     public ConstantMultiFieldModifier(
             NumberStringBuilder prefix,
             NumberStringBuilder suffix,
             boolean overwrite,
             boolean strong) {
+        this(prefix, suffix, overwrite, strong, null);
+    }
+
+    public ConstantMultiFieldModifier(
+            NumberStringBuilder prefix,
+            NumberStringBuilder suffix,
+            boolean overwrite,
+            boolean strong,
+            Parameters parameters) {
         prefixChars = prefix.toCharArray();
         suffixChars = suffix.toCharArray();
         prefixFields = prefix.toFieldArray();
         suffixFields = suffix.toFieldArray();
         this.overwrite = overwrite;
         this.strong = strong;
+        this.parameters = parameters;
     }
 
     @Override
@@ -57,6 +72,40 @@ public class ConstantMultiFieldModifier implements Modifier {
     @Override
     public boolean isStrong() {
         return strong;
+    }
+
+    @Override
+    public boolean containsField(Field field) {
+        for (int i = 0; i < prefixFields.length; i++) {
+            if (prefixFields[i] == field) {
+                return true;
+            }
+        }
+        for (int i = 0; i < suffixFields.length; i++) {
+            if (suffixFields[i] == field) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public Parameters getParameters() {
+        return parameters;
+    }
+
+    @Override
+    public boolean semanticallyEquivalent(Modifier other) {
+        if (!(other instanceof ConstantMultiFieldModifier)) {
+            return false;
+        }
+        ConstantMultiFieldModifier _other = (ConstantMultiFieldModifier) other;
+        if (parameters != null && _other.parameters != null && parameters.obj == _other.parameters.obj) {
+            return true;
+        }
+        return Arrays.equals(prefixChars, _other.prefixChars) && Arrays.equals(prefixFields, _other.prefixFields)
+                && Arrays.equals(suffixChars, _other.suffixChars) && Arrays.equals(suffixFields, _other.suffixFields)
+                && overwrite == _other.overwrite && strong == _other.strong;
     }
 
     @Override

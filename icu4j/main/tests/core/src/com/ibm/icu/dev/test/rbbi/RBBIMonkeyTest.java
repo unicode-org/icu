@@ -332,6 +332,7 @@ public class RBBIMonkeyTest extends TestFmwk {
             fBreakRules.add(thisRule);
         };
 
+        @SuppressWarnings("unused")
         private static String hexToCodePoint(String hex) {
             int cp = Integer.parseInt(hex, 16);
             return new StringBuilder().appendCodePoint(cp).toString();

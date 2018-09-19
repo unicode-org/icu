@@ -289,6 +289,9 @@
     <ClCompile Include="numbertest_skeletons.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="numbertest_range.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="numfmtst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
