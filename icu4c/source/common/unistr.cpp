@@ -1454,10 +1454,11 @@ UnicodeString::doReplace(int32_t start,
   }
 
   // Check for insertion into ourself
-  if (getArrayStart() < srcChars + srcStart + srcLength
+  if (isBufferWritable()
+      && getArrayStart() < srcChars + srcStart + srcLength
       && srcChars + srcStart < getArrayStart() + this->length()) {
     // Copy into a new UnicodeString and start over
-    UnicodeString copy(*this, srcStart, srcLength);
+    UnicodeString copy(srcChars + srcStart, srcLength);
     return doReplace(start, length, copy.getArrayStart(), 0, srcLength);
   }
 
@@ -1552,10 +1553,11 @@ UnicodeString::doAppend(const UChar *srcChars, int32_t srcStart, int32_t srcLeng
   }
 
   // Check for append onto ourself
-  if (getArrayStart() < srcChars + srcStart + srcLength
+  if (isBufferWritable()
+      && getArrayStart() < srcChars + srcStart + srcLength
       && srcChars + srcStart < getArrayStart() + length()) {
     // Copy into a new UnicodeString and start over
-    UnicodeString copy(*this, srcStart, srcLength);
+    UnicodeString copy(srcChars + srcStart, srcLength);
     return doAppend(copy.getArrayStart(), 0, srcLength);
   }
 

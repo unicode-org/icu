@@ -1123,23 +1123,25 @@ UnicodeStringTest::TestMiscellaneous()
         errln("UnicodeString(u[-1]).getTerminatedBuffer() returns a bad buffer");
     }
 
-    test1=UNICODE_STRING("la", 2);
-    test1.append(UNICODE_STRING(" lila", 5).getTerminatedBuffer(), 0, -1);
+    // NOTE: Some compilers will optimize u"la" to point to the same static memory
+    // as u"lila", offset by 3 code units
+    test1=UnicodeString(TRUE, u"la", 2);
+    test1.append(UnicodeString(TRUE, u" lila", 5).getTerminatedBuffer(), 0, -1);
     assertEquals("UnicodeString::append(const UChar *, start, length) failed",
-        UNICODE_STRING("la lila", 7), test1);
+        u"la lila", test1);
 
-    test1.insert(3, UNICODE_STRING("dudum ", 6), 0, INT32_MAX);
+    test1.insert(3, UnicodeString(TRUE, u"dudum ", 6), 0, INT32_MAX);
     assertEquals("UnicodeString::insert(start, const UniStr &, start, length) failed",
-        UNICODE_STRING("la dudum lila", 13), test1);
+        u"la dudum lila", test1);
 
     static const UChar ucs[]={ 0x68, 0x6d, 0x20, 0 };
     test1.insert(9, ucs, -1);
     assertEquals("UnicodeString::insert(start, const UChar *, length) failed",
-        UNICODE_STRING("la dudum hm lila", 16), test1);
+        u"la dudum hm lila", test1);
 
     test1.replace(9, 2, (UChar)0x2b);
     assertEquals("UnicodeString::replace(start, length, UChar) failed",
-        UNICODE_STRING("la dudum + lila", 15), test1);
+        u"la dudum + lila", test1);
 
     if(test1.hasMetaData() || UnicodeString().hasMetaData()) {
         errln("UnicodeString::hasMetaData() returns TRUE");
