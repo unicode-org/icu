@@ -215,6 +215,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test13763_FieldPositionIteratorOffset);
   TESTCASE_AUTO(Test13777_ParseLongNameNonCurrencyMode);
   TESTCASE_AUTO(Test13804_EmptyStringsWhenParsing);
+  TESTCASE_AUTO(Test20037_ScientificIntegerOverflow);
   TESTCASE_AUTO(Test13840_ParseLongStringCrash);
   TESTCASE_AUTO(Test13850_EmptyStringCurrency);
   TESTCASE_AUTO_END;
@@ -9183,6 +9184,28 @@ void NumberFormatTest::Test13804_EmptyStringsWhenParsing() {
         ParsePosition ppos(0);
         df.parse(u"1E+2.3", result, ppos);
     }
+}
+
+void NumberFormatTest::Test20037_ScientificIntegerOverflow() {
+    IcuTestErrorCode status(*this, "Test20037_ScientificIntegerOverflow");
+
+    LocalPointer<NumberFormat> nf(NumberFormat::createInstance(status));
+    Formattable result;
+
+    // Test overflow of exponent
+    nf->parse(u"1E-2147483648", result, status);
+    StringPiece sp = result.getDecimalNumber(status);
+    assertEquals(u"Should snap to zero",
+        u"0",
+        {sp.data(), sp.length(), US_INV});
+
+    // Test edge case overflow of exponent
+    result = Formattable();
+    nf->parse(u"1E-2147483647E-1", result, status);
+    sp = result.getDecimalNumber(status);
+    assertEquals(u"Should not overflow and should parse only the first exponent",
+        u"1E-2147483647",
+        {sp.data(), sp.length(), US_INV});
 }
 
 void NumberFormatTest::Test13840_ParseLongStringCrash() {
