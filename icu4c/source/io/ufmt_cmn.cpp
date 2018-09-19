@@ -235,7 +235,7 @@ ufmt_defaultCPToUnicode(const char *s, int32_t sSize,
         return 0;
 
     if(sSize <= 0) {
-        sSize = uprv_strlen(s) + 1;
+        sSize = static_cast<int32_t>(uprv_strlen(s)) + 1;
     }
     
     /* perform the conversion in one swoop */
