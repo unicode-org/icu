@@ -183,6 +183,7 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
     TESTCASE_AUTO(TestCharString);
     TESTCASE_AUTO(TestCStr);
     TESTCASE_AUTO(Testctou);
+    TESTCASE_AUTO(TestUnicodeStringAppendToSelf);
     TESTCASE_AUTO_END;
 }
 
@@ -590,4 +591,22 @@ StringTest::Testctou() {
   UnicodeString u = ctou(cs);
   assertEquals("Testing unescape@0", (int32_t)0x0046, u.charAt(0));
   assertEquals("Testing unescape@2", (int32_t)295, u.charAt(2));
+}
+
+void StringTest::TestUnicodeStringAppendToSelf() {
+    IcuTestErrorCode status(*this, "TestUnicodeStringAppendToSelf");
+
+    // Test append operation
+    UnicodeString str(u"foo ");
+    str.append(str);
+    str.append(str);
+    str.append(str);
+    assertEquals("", u"foo foo foo foo foo foo foo foo ", str);
+
+    // Test insert operation
+    str = u"a-*b";
+    str.insert(2, str);
+    str.insert(4, str);
+    str.insert(8, str);
+    assertEquals("", u"a-a-a-a-a-a-a-a-*b*b*b*b*b*b*b*b", str);
 }

@@ -49,6 +49,7 @@ private:
     void TestCharString();
     void TestCStr();
     void Testctou();
+    void TestUnicodeStringAppendToSelf();
 };
 
 #endif

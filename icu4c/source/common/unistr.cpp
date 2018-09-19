@@ -1453,6 +1453,14 @@ UnicodeString::doReplace(int32_t start,
     srcLength = u_strlen(srcChars + srcStart);
   }
 
+  // Check for insertion into ourself
+  if (getArrayStart() < srcChars + srcStart + srcLength
+      && srcChars + srcStart < getArrayStart() + this->length()) {
+    // Copy into a new UnicodeString and start over
+    UnicodeString copy(*this, srcStart, srcLength);
+    return doReplace(start, length, copy.getArrayStart(), 0, srcLength);
+  }
+
   // pin the indices to legal values
   pinIndices(start, length);
 
@@ -1541,6 +1549,14 @@ UnicodeString::doAppend(const UChar *srcChars, int32_t srcStart, int32_t srcLeng
     if((srcLength = u_strlen(srcChars + srcStart)) == 0) {
       return *this;
     }
+  }
+
+  // Check for append onto ourself
+  if (getArrayStart() < srcChars + srcStart + srcLength
+      && srcChars + srcStart < getArrayStart() + length()) {
+    // Copy into a new UnicodeString and start over
+    UnicodeString copy(*this, srcStart, srcLength);
+    return doAppend(copy.getArrayStart(), 0, srcLength);
   }
 
   int32_t oldLength = length();
