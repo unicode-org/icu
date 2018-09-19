@@ -1729,6 +1729,32 @@
         </java>
     </target>
 
+    <target name="checkAPIStatusConsistency" depends="info, build-tools, gatherapi"
+        description="Check consistency between API class status and methods overriding java.lang.Object">
+        <!--
+            If you need classes excluded from this check, define followig property in build-local.properties.
+            e.g. checkAPIStatusConsistency.skip.classes=com.ibm.icu.text.Normalizer;com.ibm.icu.util.ULocale
+        -->
+        <property name="checkAPIStatusConsistency.skip.classes" value=""/>
+        <java classname="com.ibm.icu.dev.tool.docs.APIStatusConsistencyChecker"
+                failonerror="true">
+            <arg value="${out.dir}/icu4j${api.report.version}.api3.gz" />
+            <arg value="${checkAPIStatusConsistency.skip.classes}" />
+            <classpath>
+                <pathelement location="${icu4j.build-tools.jar}"/>
+                <pathelement location="${icu4j.core.jar}"/>
+                <pathelement location="${icu4j.collate.jar}"/>
+                <pathelement location="${icu4j.charset.jar}"/>
+                <pathelement location="${icu4j.currdata.jar}"/>
+                <pathelement location="${icu4j.langdata.jar}"/>
+                <pathelement location="${icu4j.regiondata.jar}"/>
+                <pathelement location="${icu4j.translit.jar}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="checkAPIStatus" depends="checkAPIStatusConsistency, checkDeprecated"/>
+
     <target name="draftAPIs" depends="info, gatherapi" description="Run API collector tool and generate draft API report in html">
         <java classname="com.ibm.icu.dev.tool.docs.CollectAPI"
                 classpath="${icu4j.build-tools.jar}"

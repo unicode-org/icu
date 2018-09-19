@@ -358,7 +358,7 @@ public abstract class Transliterator implements StringTransform  {
 
         /**
          * Returns true if this Position is equal to the given object.
-         * @stable ICU 2.6
+         * @stable ICU 2.0
          */
         @Override
         public boolean equals(Object obj) {
@@ -373,7 +373,8 @@ public abstract class Transliterator implements StringTransform  {
         }
 
         /**
-         * @draft ICU 63
+         * {@inheritDoc}
+         * @stable ICU 2.0
          */
         @Override
         public int hashCode() {
@@ -382,7 +383,8 @@ public abstract class Transliterator implements StringTransform  {
 
         /**
          * Returns a string representation of this Position.
-         * @stable ICU 2.6
+         * @return a string representation of the object.
+         * @stable ICU 2.0
          */
         @Override
         public String toString() {
@@ -1343,7 +1345,7 @@ public abstract class Transliterator implements StringTransform  {
     public static Transliterator getInstance(String ID,
                                              int dir) {
         StringBuffer canonID = new StringBuffer();
-        List<SingleID> list = new ArrayList<SingleID>();
+        List<SingleID> list = new ArrayList<>();
         UnicodeSet[] globalFilter = new UnicodeSet[1];
         if (!TransliteratorIDParser.parseCompoundID(ID, dir, canonID, list, globalFilter)) {
             throw new IllegalArgumentException("Invalid ID " + ID);
@@ -1435,7 +1437,7 @@ public abstract class Transliterator implements StringTransform  {
             }
         }
         else {
-            List<Transliterator> transliterators = new ArrayList<Transliterator>();
+            List<Transliterator> transliterators = new ArrayList<>();
             int passNumber = 1;
 
             int limit = Math.max(parser.idBlockVector.size(), parser.dataVector.size());

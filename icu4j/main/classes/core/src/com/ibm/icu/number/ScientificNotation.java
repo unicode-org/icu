@@ -93,10 +93,9 @@ public class ScientificNotation extends Notation implements Cloneable {
     }
 
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
      */
-    @Deprecated
     @Override
     public Object clone() {
         try {

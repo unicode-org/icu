@@ -112,6 +112,8 @@ public final class CharacterProperties {
      * @return the property as a set
      * @see UProperty
      * @see UCharacter#hasBinaryProperty
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
      */
     public static final UnicodeSet getBinaryPropertySet(int property) {
         if (property < 0 || UProperty.BINARY_LIMIT <= property) {
@@ -141,6 +143,8 @@ public final class CharacterProperties {
      * @return the property as a map
      * @see UProperty
      * @see UCharacter#getIntPropertyValue
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
      */
     public static final CodePointMap getIntPropertyMap(int property) {
         if (property < UProperty.INT_START || UProperty.INT_LIMIT <= property) {

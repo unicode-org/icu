@@ -408,10 +408,10 @@ public abstract class Precision implements Cloneable {
     }
 
     /**
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * {@inheritDoc}
+     * @draft ICU 62
+     * @provisional This API might change or be removed in a future release.
      */
-    @Deprecated
     @Override
     public Object clone() {
         try {

@@ -317,6 +317,15 @@ public abstract class CodePointMap implements Iterable<CodePointMap.Range> {
     }
 
     /**
+     * Protected no-args constructor.
+     *
+     * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
+     */
+    protected CodePointMap() {
+    }
+
+    /**
      * Returns the value for a code point as stored in the map, with range checking.
      * Returns an implementation-defined error value if c is not in the range 0..U+10FFFF.
      *

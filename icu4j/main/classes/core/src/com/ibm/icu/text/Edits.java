@@ -821,7 +821,8 @@ public final class Edits {
         /**
          * A string representation of the current edit represented by the iterator for debugging. You
          * should not depend on the contents of the return string; it may change over time.
-         * @internal
+         * @return a string representation of the object.
+         * @stable ICU 59
          */
         @Override
         public String toString() {
