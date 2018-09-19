@@ -1125,25 +1125,21 @@ UnicodeStringTest::TestMiscellaneous()
 
     test1=UNICODE_STRING("la", 2);
     test1.append(UNICODE_STRING(" lila", 5).getTerminatedBuffer(), 0, -1);
-    if(test1!=UNICODE_STRING("la lila", 7)) {
-        errln("UnicodeString::append(const UChar *, start, length) failed");
-    }
+    assertEquals("UnicodeString::append(const UChar *, start, length) failed",
+        UNICODE_STRING("la lila", 7), test1);
 
     test1.insert(3, UNICODE_STRING("dudum ", 6), 0, INT32_MAX);
-    if(test1!=UNICODE_STRING("la dudum lila", 13)) {
-        errln("UnicodeString::insert(start, const UniStr &, start, length) failed");
-    }
+    assertEquals("UnicodeString::insert(start, const UniStr &, start, length) failed",
+        UNICODE_STRING("la dudum lila", 13), test1);
 
     static const UChar ucs[]={ 0x68, 0x6d, 0x20, 0 };
     test1.insert(9, ucs, -1);
-    if(test1!=UNICODE_STRING("la dudum hm lila", 16)) {
-        errln("UnicodeString::insert(start, const UChar *, length) failed");
-    }
+    assertEquals("UnicodeString::insert(start, const UChar *, length) failed",
+        UNICODE_STRING("la dudum hm lila", 16), test1);
 
     test1.replace(9, 2, (UChar)0x2b);
-    if(test1!=UNICODE_STRING("la dudum + lila", 15)) {
-        errln("UnicodeString::replace(start, length, UChar) failed");
-    }
+    assertEquals("UnicodeString::replace(start, length, UChar) failed",
+        UNICODE_STRING("la dudum + lila", 15), test1);
 
     if(test1.hasMetaData() || UnicodeString().hasMetaData()) {
         errln("UnicodeString::hasMetaData() returns TRUE");
