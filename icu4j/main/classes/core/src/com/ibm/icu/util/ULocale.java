@@ -668,7 +668,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     /**
      * This is for compatibility with Locale-- in actuality, since ULocale is
      * immutable, there is no reason to clone it, so this API returns 'this'.
-     * @stable ICU 3.0
+     * @stable ICU 2.8
      */
     @Override
     public Object clone() {
@@ -677,7 +677,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
     /**
      * Returns the hashCode.
-     * @stable ICU 3.0
+     * @return a hash code value for this object.
+     * @stable ICU 2.8
      */
     @Override
     public int hashCode() {
@@ -691,7 +692,7 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * function identically might not compare equal.
      *
      * @return true if this Locale is equal to the specified object.
-     * @stable ICU 3.0
+     * @stable ICU 2.8
      */
     @Override
     public boolean equals(Object obj) {
@@ -1071,7 +1072,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
     /**
      * Returns a string representation of this object.
-     * @stable ICU 3.0
+     * @return a string representation of the object.
+     * @stable ICU 2.8
      */
     @Override
     public String toString() {
