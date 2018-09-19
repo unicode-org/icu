@@ -2421,11 +2421,6 @@ uloc_toLanguageTag(const char* localeID,
         char* buffer;
 
         for (;;) {
-            // TODO: There's a bug in uloc_canonicalize() causing it to not
-            // write any extensions at all if the buffer is an exact fit that
-            // results in U_STRING_NOT_TERMINATED_WARNING. Work around that by
-            // adding space for the terminator to the required buffer size.
-            resultCapacity++;
             buffer = canonical.getAppendBuffer(
                     /*minCapacity=*/resultCapacity,
                     /*desiredCapacityHint=*/resultCapacity,
