@@ -180,17 +180,21 @@ namespace {
 // Only ever stack-allocated, does not need to inherit UMemory.
 class CharStringPool {
 public:
-    CharStringPool() : status(U_ZERO_ERROR), pool(&Deleter, nullptr, status) {}
+    CharStringPool() : status(U_ZERO_ERROR), pool(&deleter, nullptr, status) {}
     ~CharStringPool() = default;
 
     CharStringPool(const CharStringPool&) = delete;
     CharStringPool& operator=(const CharStringPool&) = delete;
 
-    icu::CharString* New() {
+    icu::CharString* create() {
         if (U_FAILURE(status)) {
             return nullptr;
         }
         icu::CharString* const obj = new icu::CharString;
+        if (obj == nullptr) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return nullptr;
+        }
         pool.addElement(obj, status);
         if (U_FAILURE(status)) {
             delete obj;
@@ -200,7 +204,7 @@ public:
     }
 
 private:
-    static void U_CALLCONV Deleter(void* obj) {
+    static void U_CALLCONV deleter(void* obj) {
         delete static_cast<icu::CharString*>(obj);
     }
 
@@ -995,6 +999,10 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
             }
 
             if (U_FAILURE(tmpStatus)) {
+                if (tmpStatus == U_MEMORY_ALLOCATION_ERROR) {
+                    *status = U_MEMORY_ALLOCATION_ERROR;
+                    break;
+                }
                 if (strict) {
                     *status = U_ILLEGAL_ARGUMENT_ERROR;
                     break;
@@ -1019,8 +1027,8 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                     while (TRUE) {
                         attrBufLength = 0;
                         for (; i < len; i++) {
-                            if (buf.data()[i] != '-') {
-                                attrBuf[attrBufLength++] = buf.data()[i];
+                            if (buf[i] != '-') {
+                                attrBuf[attrBufLength++] = buf[i];
                             } else {
                                 i++;
                                 break;
@@ -1084,9 +1092,9 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                     When uloc_toUnicodeLocaleType(key, buf) returns the
                     input value as is, the value is well-formed, but has
                     no known mapping. This implementation normalizes the
-                    the value to lower case
+                    value to lower case
                     */
-                    icu::CharString* extBuf = extBufPool.New();
+                    icu::CharString* extBuf = extBufPool.create();
                     if (extBuf == nullptr) {
                         *status = U_MEMORY_ALLOCATION_ERROR;
                         break;
@@ -1133,7 +1141,7 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                     }
                 }
                 bcpKey = key;
-                icu::CharString* extBuf = extBufPool.New();
+                icu::CharString* extBuf = extBufPool.create();
                 if (extBuf == nullptr) {
                     *status = U_MEMORY_ALLOCATION_ERROR;
                     break;
@@ -2451,6 +2459,11 @@ uloc_toLanguageTag(const char* localeID,
         canonical.append(buffer, reslen, tmpStatus);
         if (tmpStatus == U_STRING_NOT_TERMINATED_WARNING) {
             tmpStatus = U_ZERO_ERROR;  // Terminators provided by CharString.
+        }
+
+        if (U_FAILURE(tmpStatus)) {
+            *status = tmpStatus;
+            return 0;
         }
     }
 
