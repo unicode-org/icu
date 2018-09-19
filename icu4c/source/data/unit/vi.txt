@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 vi{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -103,6 +103,14 @@ vi{
                 dnam{"ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -123,6 +131,7 @@ vi{
             }
         }
         coordinate{
+            dnam{"phương trời"}
             east{"{0}Đ"}
             north{"{0}B"}
             south{"{0}N"}
@@ -160,6 +169,10 @@ vi{
             megabyte{
                 dnam{"megabyte"}
                 other{"{0} megabyte"}
+            }
+            petabyte{
+                dnam{"petabyte"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"terabit"}
@@ -443,6 +456,10 @@ vi{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                other{"{0} átmốtphe"}
+            }
             hectopascal{
                 dnam{"héctô pascal"}
                 other{"{0} héctô pascal"}
@@ -644,6 +661,12 @@ vi{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100km"}
@@ -651,6 +674,7 @@ vi{
             }
         }
         coordinate{
+            dnam{"hướng"}
             east{"{0}Đ"}
             north{"{0}B"}
             south{"{0}N"}
@@ -894,6 +918,14 @@ vi{
                 dnam{"ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -914,6 +946,7 @@ vi{
             }
         }
         coordinate{
+            dnam{"hướng"}
             east{"{0}Đ"}
             north{"{0}B"}
             south{"{0}N"}
@@ -951,6 +984,10 @@ vi{
             megabyte{
                 dnam{"MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PByte"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1234,6 +1271,10 @@ vi{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 other{"{0} hPa"}
@@ -1386,7 +1427,7 @@ vi{
                 other{"{0} qt"}
             }
             tablespoon{
-                dnam{"tbsp"}
+                dnam{"thìa xúp"}
                 other{"{0} tbsp"}
             }
             teaspoon{

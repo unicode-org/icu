@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en_CA{
     %%Parent{"en_001"}
-    Version{"2.1.38.73"}
+    Version{"2.1.44.18"}
     units{
         concentr{
             karat{
@@ -105,11 +105,6 @@ en_CA{
             }
         }
         speed{
-            kilometer-per-hour{
-                dnam{"km/h"}
-                one{"{0}km/h"}
-                other{"{0}km/h"}
-            }
             mile-per-hour{
                 dnam{"mi./hr."}
             }
@@ -397,10 +392,6 @@ en_CA{
             }
         }
         speed{
-            kilometer-per-hour{
-                one{"{0} km/h"}
-                other{"{0} km/h"}
-            }
             knot{
                 dnam{"kn."}
                 one{"{0} kn."}

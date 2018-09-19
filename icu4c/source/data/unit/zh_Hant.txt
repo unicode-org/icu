@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh_Hant{
     %%Parent{"root"}
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -104,6 +104,14 @@ zh_Hant{
                 dnam{"百萬分率"}
                 other{"{0} 百萬分率"}
             }
+            percent{
+                dnam{"百分比"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"千分比"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -124,6 +132,7 @@ zh_Hant{
             }
         }
         coordinate{
+            dnam{"基本方向"}
             east{"東經{0}"}
             north{"北緯{0}"}
             south{"南緯{0}"}
@@ -161,6 +170,10 @@ zh_Hant{
             megabyte{
                 dnam{"MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -456,6 +469,10 @@ zh_Hant{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"氣壓"}
+                other{"{0} 大氣壓"}
+            }
             hectopascal{
                 dnam{"百帕"}
                 other{"{0} 百帕"}
@@ -717,6 +734,10 @@ zh_Hant{
                 dnam{"百萬分率"}
                 other{"{0}ppm"}
             }
+            percent{
+                dnam{"百分比"}
+                other{"{0}%"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -737,6 +758,7 @@ zh_Hant{
             }
         }
         coordinate{
+            dnam{"方向"}
             east{"東經{0}"}
             north{"北緯{0}"}
             south{"南緯{0}"}
@@ -915,7 +937,7 @@ zh_Hant{
             }
             fathom{
                 dnam{"英尋"}
-                other{"{0}fm"}
+                other{"{0}ftm"}
             }
             foot{
                 dnam{"英尺"}
@@ -1329,6 +1351,14 @@ zh_Hant{
                 dnam{"百萬分率"}
                 other{"{0} 百萬分率"}
             }
+            percent{
+                dnam{"百分比"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"千分比"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1349,6 +1379,7 @@ zh_Hant{
             }
         }
         coordinate{
+            dnam{"方向"}
             east{"東經{0}"}
             north{"北緯{0}"}
             south{"南緯{0}"}
@@ -1386,6 +1417,10 @@ zh_Hant{
             megabyte{
                 dnam{"MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1681,6 +1716,10 @@ zh_Hant{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"百帕"}
                 other{"{0} 百帕"}

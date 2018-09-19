@@ -31,13 +31,14 @@ pt{
         151{"Europa Oriental"}
         154{"Europa Setentrional"}
         155{"Europa Ocidental"}
+        202{"África Subsaariana"}
         419{"América Latina"}
         AC{"Ilha de Ascensão"}
         AD{"Andorra"}
         AE{"Emirados Árabes Unidos"}
         AF{"Afeganistão"}
         AG{"Antígua e Barbuda"}
-        AI{"Anguilla"}
+        AI{"Anguila"}
         AL{"Albânia"}
         AM{"Armênia"}
         AO{"Angola"}
@@ -74,7 +75,7 @@ pt{
         CC{"Ilhas Cocos (Keeling)"}
         CD{"Congo - Kinshasa"}
         CF{"República Centro-Africana"}
-        CG{"Congo - Brazzaville"}
+        CG{"República do Congo"}
         CH{"Suíça"}
         CI{"Costa do Marfim"}
         CK{"Ilhas Cook"}
@@ -97,7 +98,7 @@ pt{
         DM{"Dominica"}
         DO{"República Dominicana"}
         DZ{"Argélia"}
-        EA{"Ceuta e Melilha"}
+        EA{"Ceuta e Melilla"}
         EC{"Equador"}
         EE{"Estônia"}
         EG{"Egito"}
@@ -177,7 +178,7 @@ pt{
         LY{"Líbia"}
         MA{"Marrocos"}
         MC{"Mônaco"}
-        MD{"Moldávia"}
+        MD{"Moldova"}
         ME{"Montenegro"}
         MF{"São Martinho"}
         MG{"Madagascar"}
@@ -186,7 +187,7 @@ pt{
         ML{"Mali"}
         MM{"Mianmar (Birmânia)"}
         MN{"Mongólia"}
-        MO{"Macau, RAE da China"}
+        MO{"RAE de Macau (China)"}
         MP{"Ilhas Marianas do Norte"}
         MQ{"Martinica"}
         MR{"Mauritânia"}
@@ -204,7 +205,7 @@ pt{
         NF{"Ilha Norfolk"}
         NG{"Nigéria"}
         NI{"Nicarágua"}
-        NL{"Holanda"}
+        NL{"Países Baixos"}
         NO{"Noruega"}
         NP{"Nepal"}
         NR{"Nauru"}
@@ -254,7 +255,7 @@ pt{
         SY{"Síria"}
         SZ{"Suazilândia"}
         TA{"Tristão da Cunha"}
-        TC{"Ilhas Turks e Caicos"}
+        TC{"Ilhas Turcas e Caicos"}
         TD{"Chade"}
         TF{"Territórios Franceses do Sul"}
         TG{"Togo"}
@@ -311,5 +312,5 @@ pt{
         MK{"Macedônia (ARIM)"}
         TL{"República Democrática de Timor-Leste"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
 }

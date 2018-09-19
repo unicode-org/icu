@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ml{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,14 @@ ml{
                 one{"പാർട്ട് / മില്ല്യൺ"}
                 other{"{0} പാർട്‌സ് / മില്ല്യൺ"}
             }
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"പ്രതിമില്ലി"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -192,6 +200,10 @@ ml{
                 dnam{"മെഗാബൈറ്റ്"}
                 one{"{0} മെഗാബൈറ്റ്"}
                 other{"{0} മെഗാബൈറ്റ്"}
+            }
+            petabyte{
+                one{"{0} പെറ്റാബൈറ്റ്"}
+                other{"{0} പെറ്റാബൈറ്റ്"}
             }
             terabit{
                 dnam{"ടെറാബിറ്റ്"}
@@ -552,6 +564,11 @@ ml{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"അറ്റ്‌മോസ്‌ഫിയർ"}
+                one{"{0} അറ്റ്‌മോസ്‌ഫിയർ"}
+                other{"{0} അറ്റ്‌മോസ്‌ഫിയർ"}
+            }
             hectopascal{
                 dnam{"ഹെക്‌ടോപാസ്‌ക്കൽ"}
                 one{"{0} ഹെക്‌ടോപാസ്‌ക്കൽ"}
@@ -806,6 +823,13 @@ ml{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"ലി./100 കി.മീ."}
@@ -814,6 +838,7 @@ ml{
             }
         }
         coordinate{
+            dnam{"ദിശ"}
             east{"{0}കി."}
             north{"{0}വ."}
             south{"{0}തെ."}
@@ -884,6 +909,11 @@ ml{
             }
         }
         length{
+            astronomical-unit{
+                dnam{"ജ്യോ.യൂ."}
+                one{"{0}ജ്യോ.യൂ"}
+                other{"{0}ജ്യോ.യൂ"}
+            }
             centimeter{
                 dnam{"സെ.മീ."}
                 one{"{0} സെ.മീ."}
@@ -959,6 +989,11 @@ ml{
                 one{"{0} നാ.മീ."}
                 other{"{0} നാ.മീ."}
             }
+            nautical-mile{
+                dnam{"നോ.മൈ."}
+                one{"{0}ന.മൈ."}
+                other{"{0}ന.മൈ."}
+            }
             parsec{
                 dnam{"പാർസെക്"}
                 one{"{0} പാ.സെ."}
@@ -1019,6 +1054,9 @@ ml{
                 other{"{0} ഔ"}
                 per{"{0}/ഔ."}
             }
+            ounce-troy{
+                dnam{"ട്രോ.ഔ."}
+            }
             pound{
                 dnam{"പൗ"}
                 one{"{0} പൗ"}
@@ -1070,6 +1108,9 @@ ml{
                 dnam{"മിമീ.മെ."}
                 one{"{0}മിമീ.മെ."}
                 other{"{0}മിമീ.മെ."}
+            }
+            pound-per-square-inch{
+                dnam{"പിഎസ്ഐ"}
             }
         }
         speed{
@@ -1248,6 +1289,16 @@ ml{
                 one{"{0} പാ.പെ.മി."}
                 other{"{0} പാ.പെ.മി."}
             }
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1272,10 +1323,11 @@ ml{
             }
         }
         coordinate{
-            east{"{0}കി."}
-            north{"{0}വ."}
-            south{"{0}തെ."}
-            west{"{0}പ."}
+            dnam{"ദിശ"}
+            east{"{0} കി."}
+            north{"{0} വ."}
+            south{"{0} തെ."}
+            west{"{0} പ."}
         }
         digital{
             bit{
@@ -1317,6 +1369,10 @@ ml{
                 dnam{"മെ.ബൈറ്റ്"}
                 one{"{0} മെ.ബൈ."}
                 other{"{0} മെ.ബൈ."}
+            }
+            petabyte{
+                one{"{0} PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"ടെ.ബിറ്റ്"}
@@ -1677,6 +1733,11 @@ ml{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"ഹെ.പാ."}
                 one{"{0} ഹെ.പാ."}

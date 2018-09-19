@@ -142,8 +142,8 @@ sl{
         enm{"srednja angleščina"}
         eo{"esperanto"}
         es{"španščina"}
-        es_419{"latinskoameriška španščina"}
         es_ES{"evropska španščina"}
+        es_MX{"mehiška španščina"}
         et{"estonščina"}
         eu{"baskovščina"}
         ewo{"evondovščina"}
@@ -434,7 +434,7 @@ sl{
         sma{"južna samijščina"}
         smj{"luleška samijščina"}
         smn{"inarska samijščina"}
-        sms{"samijščina Skolt"}
+        sms{"skoltska samijščina"}
         sn{"šonščina"}
         snk{"soninke"}
         so{"somalščina"}
@@ -451,6 +451,7 @@ sl{
         sux{"sumerščina"}
         sv{"švedščina"}
         sw{"svahili"}
+        sw_CD{"kongoški svahili"}
         swb{"šikomor"}
         syc{"klasična sirščina"}
         syr{"sirščina"}
@@ -485,7 +486,7 @@ sl{
         twq{"tasawaq"}
         ty{"tahitščina"}
         tyv{"tuvinščina"}
-        tzm{"tamašek (srednji atlas)"}
+        tzm{"tamašek (Srednji Atlas)"}
         udm{"udmurtščina"}
         ug{"ujgurščina"}
         uga{"ugaritski jezik"}
@@ -878,7 +879,7 @@ sl{
         VALENCIA{"valencijski pravopis"}
         WADEGILE{"romanizacija Wade-Giles"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     characterLabelPattern{
         all{"{0} – vse"}
         category-list{"{0}: {1}"}

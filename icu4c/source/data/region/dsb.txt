@@ -307,5 +307,5 @@ dsb{
         MK{"Makedońska (PRJ)"}
         TL{"Pódzajtšny Timor"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.41.34"}
 }

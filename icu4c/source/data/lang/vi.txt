@@ -846,8 +846,8 @@ vi{
             strict{"Kiểu xuống dòng hẹp"}
         }
         m0{
-            bgn{"BGN"}
-            ungegn{"UNGEGN"}
+            bgn{"Chuyển tự US BGN"}
+            ungegn{"Chuyển tự UN GEGN"}
         }
         ms{
             metric{"Hệ mét"}
@@ -983,7 +983,7 @@ vi{
         VALLADER{"VALLADER"}
         WADEGILE{"La Mã hóa Wade-Giles"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     characterLabelPattern{
         all{"{0} — tất cả"}
         category-list{"{0}: {1}"}

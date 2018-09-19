@@ -9,9 +9,6 @@
 #    - CLDR (the source of most of the data, and some Java tools)
 #    - ICU4J  (used only for checking the converted data)
 #    - ICU4C  (the destination for the new data, and the source for some of it)
-#             (Either check out ICU4C from Subversion, or download the additional 
-#              icu4c-*-data.zip file so that the icu/source/data/ directory is fully
-#              populated.)
 #
 # For an official CLDR data integration into ICU, these should be clean, freshly
 # checked-out. For released CLDR sources, an alternative to checking out sources
@@ -44,7 +41,7 @@
 #
 # IP address whitelisting
 #
-# Parts of the build process (notably building the new ICU data filescin step 4)
+# Parts of the build process (notably building the new ICU data files in step 4)
 # require http: access to files in the CLDR repository; for example, processing
 # the files in icu4c/source/data/xml/ may require access to
 # http://www.unicode.org/repos/cldr/trunk/common/dtd/ldml.dtd
@@ -184,7 +181,7 @@ ant all 2>&1 | tee /tmp/cldr-newData-buildLog.txt
 # (if there are no changes, you may not need to proceed further). Make sure the
 # list seems reasonable.
 
-svn status
+git status
 
 # 6. Fix any errors, investigate any warnings. Some warnings are expected,
 # including  warnings for missing versions in locale names which specify some
@@ -258,11 +255,11 @@ ant check 2>&1 | tee /tmp/icu4j-newData-antCheck.txt
 # commit the changes.
 
 cd $ICU4C_DIR/source
-svn status
+git status
 # add or remove as necessary
 
 cd $ICU4J_ROOT
-svn status
+git status
 # add or remove as necessary
 
 cd $HOME/icu/trunk/

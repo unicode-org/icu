@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fa{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,16 @@ fa{
                 one{"{0} بخش در میلیون"}
                 other{"{0} بخش در میلیون"}
             }
+            percent{
+                dnam{"درصد"}
+                one{"{0} درصد"}
+                other{"{0} درصد"}
+            }
+            permille{
+                dnam{"هزارم"}
+                one{"{0} هزارم"}
+                other{"{0} هزارم"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ fa{
             }
         }
         coordinate{
+            dnam{"جهت اصلی"}
             east{"{0} شرقی"}
             north{"{0} شمالی"}
             south{"{0} جنوبی"}
@@ -192,6 +203,11 @@ fa{
                 dnam{"مگابایت"}
                 one{"{0} مگابایت"}
                 other{"{0} مگابایت"}
+            }
+            petabyte{
+                dnam{"پتابایت"}
+                one{"{0} پتابایت"}
+                other{"{0} پتابایت"}
             }
             terabit{
                 dnam{"ترابیت"}
@@ -537,6 +553,11 @@ fa{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"اتمسفر"}
+                one{"{0} اتمسفر"}
+                other{"{0} اتمسفر"}
+            }
             hectopascal{
                 dnam{"هکتوپاسکال"}
                 one{"{0} هکتوپاسکال"}
@@ -800,6 +821,13 @@ fa{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"٪"}
+                one{"{0}٪"}
+                other{"{0}٪"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"لیتر/۱۰۰ کیلومتر"}
@@ -808,6 +836,7 @@ fa{
             }
         }
         coordinate{
+            dnam{"جهت"}
             east{"{0} شرقی"}
             north{"{0} شمالی"}
             south{"{0} جنوبی"}
@@ -1248,6 +1277,16 @@ fa{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"درصد"}
+                one{"{0}٪"}
+                other{"{0}٪"}
+            }
+            permille{
+                dnam{"هزارم"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1272,6 +1311,7 @@ fa{
             }
         }
         coordinate{
+            dnam{"جهت"}
             east{"{0} شرقی"}
             north{"{0} شمالی"}
             south{"{0} جنوبی"}
@@ -1317,6 +1357,11 @@ fa{
                 dnam{"مگابایت"}
                 one{"{0} مگابایت"}
                 other{"{0} مگابایت"}
+            }
+            petabyte{
+                dnam{"پتابایت"}
+                one{"{0} پتابایت"}
+                other{"{0} پتابایت"}
             }
             terabit{
                 dnam{"ترابیت"}
@@ -1662,6 +1707,11 @@ fa{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"اتمسفر"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"هکتوپاسکال"}
                 one{"{0}‎ hPa"}

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 es_419{
-    Version{"2.1.38.39"}
+    Version{"2.1.43.65"}
     units{
         angle{
             revolution{
@@ -57,9 +57,9 @@ es_419{
                 other{"{0} kilojules"}
             }
             kilowatt-hour{
-                dnam{"kilowatts-horas"}
+                dnam{"kilowatts-hora"}
                 one{"{0} kilowatt-hora"}
-                other{"{0} kilowatts-horas"}
+                other{"{0} kilowatts-hora"}
             }
         }
         frequency{
@@ -81,6 +81,11 @@ es_419{
                 dnam{"megahertz"}
                 one{"{0} megahertz"}
                 other{"{0} megahertz"}
+            }
+        }
+        length{
+            mile-scandinavian{
+                dnam{"milla escandinava"}
             }
         }
         mass{
@@ -131,7 +136,7 @@ es_419{
         }
         volume{
             acre-foot{
-                dnam{"acre pie"}
+                dnam{"acre-pies"}
                 one{"{0} acre pie"}
                 other{"{0} acres pies"}
             }
@@ -221,6 +226,11 @@ es_419{
                 other{"{0}kn"}
             }
         }
+        volume{
+            cup{
+                one{"{0} tza."}
+            }
+        }
     }
     unitsShort{
         acceleration{
@@ -295,6 +305,9 @@ es_419{
             }
             parsec{
                 dnam{"parsecs"}
+            }
+            point{
+                dnam{"pto."}
             }
             yard{
                 dnam{"yardas"}

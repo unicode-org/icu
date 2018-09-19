@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fr_CA{
-    Version{"2.1.38.73"}
+    Version{"2.1.43.65"}
     zoneStrings{
         "Africa:Ndjamena"{
             ec{"Ndjamena"}
@@ -32,6 +32,9 @@ fr_CA{
         }
         "America:St_Thomas"{
             ec{"Saint Thomas"}
+        }
+        "Asia:Dhaka"{
+            ec{"Dacca"}
         }
         "Asia:Thimphu"{
             ec{"Thimphou"}

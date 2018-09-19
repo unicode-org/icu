@@ -1139,7 +1139,7 @@ LocaleTest::TestThaiCurrencyFormat()
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *thaiCurrency = (DecimalFormat*)NumberFormat::createCurrencyInstance(
                     Locale("th", "TH"), status);
-    UnicodeString posPrefix("THB", 3, US_INV);  // per cldrbug 7618
+    UnicodeString posPrefix(u"\u0E3F");
     UnicodeString temp;
 
     if(U_FAILURE(status) || !thaiCurrency)
@@ -1148,7 +1148,7 @@ LocaleTest::TestThaiCurrencyFormat()
         return;
     }
     if (thaiCurrency->getPositivePrefix(temp) != posPrefix)
-        errln("Thai currency prefix wrong: expected THB, got \"" +
+        errln("Thai currency prefix wrong: expected Baht sign, got \"" +
                         thaiCurrency->getPositivePrefix(temp) + "\"");
     if (thaiCurrency->getPositiveSuffix(temp) != "")
         errln("Thai currency suffix wrong: expected \"\", got \"" +

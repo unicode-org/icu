@@ -619,7 +619,7 @@ id{
         Grek{"Yunani"}
         Gujr{"Gujarat"}
         Guru{"Gurmukhi"}
-        Hanb{"Hanb"}
+        Hanb{"Han dengan Bopomofo"}
         Hang{"Hangul"}
         Hani{"Han"}
         Hano{"Hanunoo"}
@@ -964,7 +964,7 @@ id{
         VALLADER{"VALLADER"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.44.20"}
     characterLabelPattern{
         all{"{0} — Semua"}
         category-list{"{0}: {1}"}

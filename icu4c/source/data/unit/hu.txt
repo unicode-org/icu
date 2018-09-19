@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 hu{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,16 @@ hu{
                 one{"{0} részecske/millió"}
                 other{"{0} részecske/millió"}
             }
+            percent{
+                dnam{"százalék"}
+                one{"{0} százalék"}
+                other{"{0} százalék"}
+            }
+            permille{
+                dnam{"ezrelék"}
+                one{"{0} ezrelék"}
+                other{"{0} ezrelék"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ hu{
             }
         }
         coordinate{
+            dnam{"kardinális irány"}
             east{"{0} K"}
             north{"{0} É"}
             south{"{0} D"}
@@ -192,6 +203,11 @@ hu{
                 dnam{"megabájt"}
                 one{"{0} megabájt"}
                 other{"{0} megabájt"}
+            }
+            petabyte{
+                dnam{"petabájt"}
+                one{"{0} petabájt"}
+                other{"{0} petabájt"}
             }
             terabit{
                 dnam{"terabit"}
@@ -537,6 +553,11 @@ hu{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmoszféra"}
+                one{"{0} atmoszféra"}
+                other{"{0} atmoszféra"}
+            }
             hectopascal{
                 dnam{"hektopascal"}
                 one{"{0} hektopascal"}
@@ -785,6 +806,13 @@ hu{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"l/100 km"}
@@ -793,6 +821,7 @@ hu{
             }
         }
         coordinate{
+            dnam{"irány"}
             east{"{0} K"}
             north{"{0} É"}
             south{"{0} D"}
@@ -1157,6 +1186,16 @@ hu{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"százalék"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"ezrelék"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1181,6 +1220,7 @@ hu{
             }
         }
         coordinate{
+            dnam{"irány"}
             east{"{0} K"}
             north{"{0} É"}
             south{"{0} D"}
@@ -1226,6 +1266,11 @@ hu{
                 dnam{"MB"}
                 one{"{0} MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                one{"{0} PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1571,6 +1616,11 @@ hu{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 one{"{0} hPa"}

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sk{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -163,6 +163,20 @@ sk{
                 one{"{0} milióntina"}
                 other{"{0} milióntin"}
             }
+            percent{
+                dnam{"percentá"}
+                few{"{0} percentá"}
+                many{"{0} percenta"}
+                one{"{0} percento"}
+                other{"{0} percent"}
+            }
+            permille{
+                dnam{"promile"}
+                few{"{0} promile"}
+                many{"{0} promile"}
+                one{"{0} promile"}
+                other{"{0} promile"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -195,6 +209,7 @@ sk{
             }
         }
         coordinate{
+            dnam{"svetová strana"}
             east{"{0} E"}
             north{"{0} N"}
             south{"{0} S"}
@@ -256,6 +271,13 @@ sk{
                 many{"{0} megabajtu"}
                 one{"{0} megabajt"}
                 other{"{0} megabajtov"}
+            }
+            petabyte{
+                dnam{"petabajty"}
+                few{"{0} petabajty"}
+                many{"{0} petabajtu"}
+                one{"{0} petabajt"}
+                other{"{0} petabajtov"}
             }
             terabit{
                 dnam{"terabity"}
@@ -732,6 +754,13 @@ sk{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmosféry"}
+                few{"{0} atmosféry"}
+                many{"{0} atmosféry"}
+                one{"{0} atmosféra"}
+                other{"{0} atmosfér"}
+            }
             hectopascal{
                 dnam{"hektopascaly"}
                 few{"{0} hektopascaly"}
@@ -1113,6 +1142,13 @@ sk{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
+            percent{
+                dnam{"%"}
+                few{"{0} %"}
+                many{"{0} %"}
+                one{"{0} %"}
+                other{"{0} %"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1136,6 +1172,7 @@ sk{
             }
         }
         coordinate{
+            dnam{"svetová strana"}
             east{"{0} E"}
             north{"{0} N"}
             south{"{0} S"}
@@ -1880,6 +1917,20 @@ sk{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                few{"{0} %"}
+                many{"{0} %"}
+                one{"{0} %"}
+                other{"{0} %"}
+            }
+            permille{
+                dnam{"‰"}
+                few{"{0} ‰"}
+                many{"{0} ‰"}
+                one{"{0} ‰"}
+                other{"{0} ‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1912,6 +1963,7 @@ sk{
             }
         }
         coordinate{
+            dnam{"svetová strana"}
             east{"{0} E"}
             north{"{0} N"}
             south{"{0} S"}
@@ -1973,6 +2025,13 @@ sk{
                 many{"{0} MB"}
                 one{"{0} MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                few{"{0} PB"}
+                many{"{0} PB"}
+                one{"{0} PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -2449,6 +2508,13 @@ sk{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                few{"{0} atm"}
+                many{"{0} atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 few{"{0} hPa"}

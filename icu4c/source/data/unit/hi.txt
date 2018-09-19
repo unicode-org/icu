@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 hi{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -15,7 +15,7 @@ hi{
                 other{"{0} गु–बल"}
             }
             meter-per-second-squared{
-                dnam{"मीटर प्रति सेकंड वर्ग"}
+                dnam{"मीटर/से²"}
                 one{"{0} मीटर प्रति सेकंड वर्ग"}
                 other{"{0} मीटर प्रति सेकंड वर्ग"}
             }
@@ -123,6 +123,16 @@ hi{
                 one{"{0} ppm"}
                 other{"{0} हिस्सा प्रति दस लाख"}
             }
+            percent{
+                dnam{"प्रतिशत"}
+                one{"{0} प्रतिशत"}
+                other{"{0} प्रतिशत"}
+            }
+            permille{
+                dnam{"प्रति हज़ार"}
+                one{"{0} प्रति हज़ार"}
+                other{"{0} प्रति हज़ार"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ hi{
             }
         }
         coordinate{
+            dnam{"प्रधान दिशा"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -192,6 +203,11 @@ hi{
                 dnam{"मेगाबाइट"}
                 one{"{0} मेगाबाइट"}
                 other{"{0} मेगाबाइट"}
+            }
+            petabyte{
+                dnam{"पेटाबाइट"}
+                one{"{0} पेटाबाइट"}
+                other{"{0} पेटाबाइट"}
             }
             terabit{
                 dnam{"टेराबिट"}
@@ -537,6 +553,11 @@ hi{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"वायुमण्डलीय दबाव"}
+                one{"{0} वायुमंडलीय दबाव"}
+                other{"{0} वायुमंडलीय दबाव"}
+            }
             hectopascal{
                 dnam{"हैक्टोपास्कल"}
                 one{"{0} हैक्टोपास्कल"}
@@ -786,6 +807,13 @@ hi{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"ली॰/100 कि॰मी॰"}
@@ -794,6 +822,7 @@ hi{
             }
         }
         coordinate{
+            dnam{"दिशा"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -981,8 +1010,8 @@ hi{
         acceleration{
             g-force{
                 dnam{"गु–बल"}
-                one{"{0} गु॰"}
-                other{"{0} गु॰"}
+                one{"{0} G"}
+                other{"{0} G"}
             }
             meter-per-second-squared{
                 dnam{"मीटर/से²"}
@@ -1093,6 +1122,16 @@ hi{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"प्रतिशत"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"प्रति हज़ार"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1117,6 +1156,7 @@ hi{
             }
         }
         coordinate{
+            dnam{"दिशा"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -1162,6 +1202,11 @@ hi{
                 dnam{"MB"}
                 one{"{0} MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"पेटाबाइट"}
+                one{"{0} PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1453,8 +1498,8 @@ hi{
             }
             ounce{
                 dnam{"औंस"}
-                one{"{0} औं॰"}
-                other{"{0} औं॰"}
+                one{"{0} औंस"}
+                other{"{0} औंस"}
                 per{"{0}/औंस"}
             }
             ounce-troy{
@@ -1507,6 +1552,11 @@ hi{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 one{"{0} hPa"}
@@ -1536,8 +1586,8 @@ hi{
         speed{
             kilometer-per-hour{
                 dnam{"कि॰मी॰/घं॰"}
-                one{"{0} कि॰मी॰ प्रति घं॰"}
-                other{"{0} कि॰मी॰ प्रति घं॰"}
+                one{"{0} कि॰मी॰/घं॰"}
+                other{"{0} कि॰मी॰/घं॰"}
             }
             knot{
                 dnam{"नॉट"}
@@ -1545,7 +1595,7 @@ hi{
                 other{"{0} नॉट"}
             }
             meter-per-second{
-                dnam{"मी॰/से॰"}
+                dnam{"मीटर/से॰"}
                 one{"{0} मी॰/से॰"}
                 other{"{0} मी॰/से॰"}
             }
@@ -1563,8 +1613,8 @@ hi{
             }
             fahrenheit{
                 dnam{"डिग्री फ़ेरनहाइट"}
-                one{"{0}°फेरन॰"}
-                other{"{0}°फेरन॰"}
+                one{"{0}°फ़ेरन"}
+                other{"{0}°फ़ेरन"}
             }
             generic{
                 dnam{"°"}

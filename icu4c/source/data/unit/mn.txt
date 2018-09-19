@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 mn{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     durationUnits{
         hm{"hh:mm"}
         hms{"hh:mm:ss"}
@@ -123,6 +123,14 @@ mn{
                 one{"{0} хэсэг/саяд"}
                 other{"{0} хэсэг/саяд"}
             }
+            percent{
+                dnam{"хувь"}
+                one{"{0} хувь"}
+                other{"{0} хувь"}
+            }
+            permille{
+                dnam{"‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -192,6 +200,11 @@ mn{
                 dnam{"мегабайт"}
                 one{"{0} мегабайт"}
                 other{"{0} мегабайт"}
+            }
+            petabyte{
+                dnam{"петабайт"}
+                one{"{0} петабайт"}
+                other{"{0} петабайт"}
             }
             terabit{
                 dnam{"терабит"}
@@ -537,6 +550,11 @@ mn{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"уур амьсгал"}
+                one{"{0} уур амьсгал"}
+                other{"{0} уур амьсгал"}
+            }
             hectopascal{
                 dnam{"гектопаскал"}
                 one{"{0} гектопаскал"}
@@ -785,6 +803,13 @@ mn{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"л/100км"}
@@ -793,6 +818,7 @@ mn{
             }
         }
         coordinate{
+            dnam{"чиглэл"}
             east{"{0}Зүүн"}
             north{"{0}Умард"}
             south{"{0}Өмнөд"}
@@ -1092,6 +1118,16 @@ mn{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"хувь"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1116,6 +1152,7 @@ mn{
             }
         }
         coordinate{
+            dnam{"чиглэл"}
             east{"{0}Зүүн"}
             north{"{0}Умард"}
             south{"{0}Өмнөд"}
@@ -1161,6 +1198,11 @@ mn{
                 dnam{"Мбайт"}
                 one{"{0} МБ"}
                 other{"{0} МБ"}
+            }
+            petabyte{
+                dnam{"ПБайт"}
+                one{"{0} ПБ"}
+                other{"{0} ПБ"}
             }
             terabit{
                 dnam{"Тбит"}
@@ -1506,6 +1548,11 @@ mn{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"гПа"}
                 one{"{0} гПа"}

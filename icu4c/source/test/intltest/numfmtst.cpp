@@ -972,19 +972,19 @@ void NumberFormatTest::TestCurrencyObject() {
         return;
     }
 
-    expectCurrency(*fmt, null, 1234.56, CharsToUnicodeString("1 234,56 \\u20AC"));
+    expectCurrency(*fmt, null, 1234.56, CharsToUnicodeString("1\\u202F234,56 \\u20AC"));
 
     expectCurrency(*fmt, Locale::getJapan(),
-                   1234.56, CharsToUnicodeString("1 235 JPY")); // Yen
+                   1234.56, CharsToUnicodeString("1\\u202F235 JPY")); // Yen
 
     expectCurrency(*fmt, Locale("fr", "CH", ""),
-                   1234.56, "1 234,56 CHF"); // no more 0.05 rounding here, see cldrbug 5548
+                   1234.56, CharsToUnicodeString("1\\u202F234,56 CHF")); // no more 0.05 rounding here, see cldrbug 5548
 
     expectCurrency(*fmt, Locale::getUS(),
-                   1234.56, "1 234,56 $US");
+                   1234.56, CharsToUnicodeString("1\\u202F234,56 $US"));
 
     expectCurrency(*fmt, Locale::getFrance(),
-                   1234.56, CharsToUnicodeString("1 234,56 \\u20AC")); // Euro
+                   1234.56, CharsToUnicodeString("1\\u202F234,56 \\u20AC")); // Euro
 
     delete fmt;
 }
@@ -3562,7 +3562,7 @@ void NumberFormatTest::TestMismatchedCurrencyFormatFail() {
             u"\u00A4#,##0.00",
             df->toPattern(pattern));
     // Should round-trip on the correct currency format:
-    expect2(*df, 1.23, u"XXX\u00A01.23");
+    expect2(*df, 1.23, u"\u00A41.23");
     df->setCurrency(u"EUR", status);
     expect2(*df, 1.23, u"\u20AC1.23");
     // Should parse with currency in the wrong place in lenient mode
@@ -7895,22 +7895,22 @@ void NumberFormatTest::TestCurrencyUsage() {
 
     // compare the Currency and Currency Cash Digits
     // Note that as of CLDR 26:
-    // * TWD switches from 0 decimals to 2; PKR still has 0, so change test to that
+    // * TWD and PKR switched from 0 decimals to 2; ISK still has 0, so change test to that
     // * CAD rounds to .05 in cash mode only
     // 1st time for getter/setter, 2nd time for factory method
-    Locale enUS_PKR("en_US@currency=PKR");
+    Locale enUS_ISK("en_US@currency=ISK");
 
     for(int i=0; i<2; i++){
         status = U_ZERO_ERROR;
         if(i == 0){
-            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_PKR, UNUM_CURRENCY, status);
-            if (assertSuccess("en_US@currency=PKR/CURRENCY", status, TRUE) == FALSE) {
+            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_ISK, UNUM_CURRENCY, status);
+            if (assertSuccess("en_US@currency=ISK/CURRENCY", status, TRUE) == FALSE) {
                 continue;
             }
 
             UnicodeString original;
             fmt->format(agent,original);
-            assertEquals("Test Currency Usage 1", u"PKR\u00A0124", original);
+            assertEquals("Test Currency Usage 1", u"ISK\u00A0124", original);
 
             // test the getter here
             UCurrencyUsage curUsage = fmt->getCurrencyUsage();
@@ -7918,8 +7918,8 @@ void NumberFormatTest::TestCurrencyUsage() {
 
             fmt->setCurrencyUsage(UCURR_USAGE_CASH, &status);
         }else{
-            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_PKR, UNUM_CASH_CURRENCY, status);
-            if (assertSuccess("en_US@currency=PKR/CASH", status, TRUE) == FALSE) {
+            fmt = (DecimalFormat *) NumberFormat::createInstance(enUS_ISK, UNUM_CASH_CURRENCY, status);
+            if (assertSuccess("en_US@currency=ISK/CASH", status, TRUE) == FALSE) {
                 continue;
             }
         }
@@ -7930,7 +7930,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
         UnicodeString cash_currency;
         fmt->format(agent,cash_currency);
-        assertEquals("Test Currency Usage 2", u"PKR\u00A0124", cash_currency);
+        assertEquals("Test Currency Usage 2", u"ISK\u00A0124", cash_currency);
         delete fmt;
     }
 
@@ -7990,7 +7990,7 @@ void NumberFormatTest::TestCurrencyUsage() {
 
         UnicodeString PKR_changed;
         fmt->format(agent, PKR_changed);
-        assertEquals("Test Currency Usage 6", u"PKR\u00A0124", PKR_changed);
+        assertEquals("Test Currency Usage 6", u"PKR\u00A0123.57", PKR_changed);
         delete fmt;
     }
 }
@@ -9196,7 +9196,7 @@ void NumberFormatTest::Test13850_EmptyStringCurrency() {
     assertEquals("Should format with US currency", u"$1.00", actual);
     nf->setCurrency(u"", status);
     nf->format(1, actual.remove(), status);
-    assertEquals("Should unset the currency on empty string", u"XXX\u00A01.00", actual);
+    assertEquals("Should unset the currency on empty string", u"\u00A41.00", actual);
 
     // Try with nullptr
     nf.adoptInstead(NumberFormat::createCurrencyInstance("en-US", status));
@@ -9204,7 +9204,7 @@ void NumberFormatTest::Test13850_EmptyStringCurrency() {
     assertEquals("Should format with US currency", u"$1.00", actual);
     nf->setCurrency(nullptr, status);
     nf->format(1, actual.remove(), status);
-    assertEquals("Should unset the currency on nullptr", u"XXX\u00A01.00", actual);
+    assertEquals("Should unset the currency on nullptr", u"\u00A41.00", actual);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

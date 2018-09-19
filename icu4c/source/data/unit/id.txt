@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 id{
-    Version{"2.1.41.97"}
+    Version{"2.1.44.20"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -103,6 +103,14 @@ id{
                 dnam{"bagian per juta"}
                 other{"{0} bagian per juta"}
             }
+            percent{
+                dnam{"persen"}
+                other{"{0} persen"}
+            }
+            permille{
+                dnam{"permil"}
+                other{"{0} permil"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -123,6 +131,7 @@ id{
             }
         }
         coordinate{
+            dnam{"arah mata angin"}
             east{"{0}T"}
             north{"{0}U"}
             south{"{0}S"}
@@ -160,6 +169,10 @@ id{
             megabyte{
                 dnam{"megabyte"}
                 other{"{0} megabyte"}
+            }
+            petabyte{
+                dnam{"petabyte"}
+                other{"{0} petabyte"}
             }
             terabit{
                 dnam{"terabit"}
@@ -455,6 +468,10 @@ id{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmosfer"}
+                other{"{0} atmosfer"}
+            }
             hectopascal{
                 dnam{"hektopaskal"}
                 other{"{0} hektopaskal"}
@@ -661,6 +678,12 @@ id{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100km"}
@@ -668,6 +691,7 @@ id{
             }
         }
         coordinate{
+            dnam{"arah"}
             east{"{0}T"}
             north{"{0}U"}
             south{"{0}S"}
@@ -1041,6 +1065,14 @@ id{
                 dnam{"bagian/juta"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"persen"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"permil"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1061,6 +1093,7 @@ id{
             }
         }
         coordinate{
+            dnam{"arah"}
             east{"{0}T"}
             north{"{0}U"}
             south{"{0}S"}
@@ -1098,6 +1131,10 @@ id{
             megabyte{
                 dnam{"MByte"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PByte"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tbit"}
@@ -1393,6 +1430,10 @@ id{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 other{"{0} hPa"}

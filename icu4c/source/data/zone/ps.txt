@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ps{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"ابيجان"}
@@ -105,8 +105,14 @@ ps{
         "Africa:Malabo"{
             ec{"مالابو"}
         }
+        "Africa:Maputo"{
+            ec{"ماپوټو"}
+        }
         "Africa:Maseru"{
             ec{"مسرو"}
+        }
+        "Africa:Mbabane"{
+            ec{"Mbabane"}
         }
         "Africa:Mogadishu"{
             ec{"موگديشو"}
@@ -116,6 +122,9 @@ ps{
         }
         "Africa:Nairobi"{
             ec{"نايروبي"}
+        }
+        "Africa:Ndjamena"{
+            ec{"نجامینا"}
         }
         "Africa:Niamey"{
             ec{"نیمي"}
@@ -258,6 +267,9 @@ ps{
         "America:Curacao"{
             ec{"کیکاو"}
         }
+        "America:Danmarkshavn"{
+            ec{"ډنمارک هاربر"}
+        }
         "America:Dawson"{
             ec{"داوسن"}
         }
@@ -326,6 +338,9 @@ ps{
         }
         "America:Indiana:Marengo"{
             ec{"مارینګ، انډیانا"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"پیتربورګ، انډيانا"}
         }
         "America:Indiana:Tell_City"{
             ec{"ښار، انډیا ته ووایی"}
@@ -441,6 +456,15 @@ ps{
         "America:Noronha"{
             ec{"نورونها"}
         }
+        "America:North_Dakota:Beulah"{
+            ec{"بيلاه، شمالي داکوتا"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"مرکز، د شمالي ټاپو"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"نوی سلیم، شمالي داکوتا"}
+        }
         "America:Ojinaga"{
             ec{"اوجنګا"}
         }
@@ -500,6 +524,9 @@ ps{
         }
         "America:Sao_Paulo"{
             ec{"ساو پاولو"}
+        }
+        "America:Scoresbysund"{
+            ec{"Ittoqqortoormiit"}
         }
         "America:Sitka"{
             ec{"سیټکا"}
@@ -600,6 +627,9 @@ ps{
         "Asia:Amman"{
             ec{"اممان"}
         }
+        "Asia:Anadyr"{
+            ec{"اناډير"}
+        }
         "Asia:Aqtau"{
             ec{"اکاټو"}
         }
@@ -641,6 +671,9 @@ ps{
         }
         "Asia:Chita"{
             ec{"چيتا"}
+        }
+        "Asia:Choibalsan"{
+            ec{"Choibalsan"}
         }
         "Asia:Colombo"{
             ec{"کولمبو"}
@@ -807,6 +840,9 @@ ps{
         "Asia:Ulaanbaatar"{
             ec{"اللانبیر"}
         }
+        "Asia:Urumqi"{
+            ec{"Urumqi"}
+        }
         "Asia:Ust-Nera"{
             ec{"اوسترا"}
         }
@@ -899,6 +935,9 @@ ps{
         }
         "Europe:Andorra"{
             ec{"اندورا"}
+        }
+        "Europe:Astrakhan"{
+            ec{"آسترخان"}
         }
         "Europe:Athens"{
             ec{"ایترین"}
@@ -1031,6 +1070,12 @@ ps{
         "Europe:Stockholm"{
             ec{"استولوم"}
         }
+        "Europe:Tallinn"{
+            ec{"تالين"}
+        }
+        "Europe:Tirane"{
+            ec{"Tirane"}
+        }
         "Europe:Ulyanovsk"{
             ec{"ایلیانوفس"}
         }
@@ -1162,6 +1207,9 @@ ps{
         }
         "Pacific:Palau"{
             ec{"پلو"}
+        }
+        "Pacific:Pitcairn"{
+            ec{"Pitcairn"}
         }
         "Pacific:Ponape"{
             ec{"پونپي"}
@@ -1324,6 +1372,9 @@ ps{
             lg{"کیپ وردډ وخت"}
             ls{"کیپ وردډ معياري وخت"}
         }
+        "meta:Chamorro"{
+            ls{"چمارو معياري وخت"}
+        }
         "meta:Chatham"{
             ld{"د چتام ورځی وخت"}
             lg{"چامام وخت"}
@@ -1383,7 +1434,7 @@ ps{
             ls{"د اکوادور وخت"}
         }
         "meta:Europe_Central"{
-            ld{"د مرکزي اروپا د اوړي وخت"}
+            ld{"وسطي اروپايي د اوړي وخت"}
             lg{"منځنۍ اروپا وخت"}
             ls{"د مرکزي اروپا معیاري وخت"}
         }
@@ -1419,6 +1470,11 @@ ps{
         }
         "meta:Gambier"{
             ls{"د ګیمبریر وخت"}
+        }
+        "meta:Georgia"{
+            ld{"د جورجيا د اوړي وخت"}
+            lg{"جورجیا وخت"}
+            ls{"جورجیا معیاري وخت"}
         }
         "meta:Gilbert_Islands"{
             ls{"د ګیلبرټ جزیره وخت"}
@@ -1693,7 +1749,7 @@ ps{
             ls{"ټیټيټي وخت"}
         }
         "meta:Taipei"{
-            ld{"تاپي د ورځې د رڼا وخت"}
+            ld{"د تاپي د رڼا ورځۍ وخت"}
             lg{"تاپي وخت"}
             ls{"تاپي معياري وخت"}
         }
@@ -1715,6 +1771,9 @@ ps{
             ld{"ترکمنستان اوړي وخت"}
             lg{"ترکمانستان وخت"}
             ls{"ترکمنستان معياري وخت"}
+        }
+        "meta:Tuvalu"{
+            ls{"د تووالو وخت"}
         }
         "meta:Uruguay"{
             ld{"یوروګوای اوړي وخت"}
@@ -1740,25 +1799,28 @@ ps{
             ls{"ولادیوستکو معياري وخت"}
         }
         "meta:Volgograd"{
-            ld{"د ولگګراډ سمر وخت"}
-            lg{"د ولګاجرا وخت"}
-            ls{"دګګراډر معياري وخت"}
+            ld{"د والګوګراد د اوړي وخت"}
+            lg{"د والګوګراد وخت"}
+            ls{"د والګوګراد معياري وخت"}
         }
         "meta:Vostok"{
             ls{"د واستوک وخت"}
+        }
+        "meta:Wake"{
+            ls{"دک ټاپو وخت"}
         }
         "meta:Wallis"{
             ls{"والیس او فوتونا وخت"}
         }
         "meta:Yakutsk"{
-            ld{"داککوسک سمر وخت"}
-            lg{"داککوس وخت"}
-            ls{"داککوسک معياري وخت"}
+            ld{"ياکوټسک د اوړي وخت"}
+            lg{"ياکوټسک وخت"}
+            ls{"ياکوټسک معياري وخت"}
         }
         "meta:Yekaterinburg"{
-            ld{"د یاراتینګینګ ګرم موسم"}
-            lg{"د یاراتینګینګ وخت"}
-            ls{"د یاراتینګینبرین معياري وخت"}
+            ld{"د ياکټرنبرګ د اوړي وخت"}
+            lg{"د ياکيټرنبرګ وخت"}
+            ls{"د ياکيټرنبرګ معياري وخت"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

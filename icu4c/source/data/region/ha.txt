@@ -58,7 +58,7 @@ ha{
         DZ{"Aljeriya"}
         EC{"Ekwador"}
         EE{"Estoniya"}
-        EG{"Masar, Misira"}
+        EG{"Misira"}
         ER{"Eritireya"}
         ES{"Sipen"}
         ET{"Habasha"}
@@ -227,5 +227,5 @@ ha{
         ZM{"Zambiya"}
         ZW{"Zimbabuwe"}
     }
-    Version{"2.1.39.11"}
+    Version{"2.1.43.2"}
 }

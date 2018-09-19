@@ -28,7 +28,7 @@ eu{
         ach{"acholiera"}
         ada{"adangmera"}
         ady{"adigera"}
-        af{"afrikaansa"}
+        af{"afrikaans"}
         agq{"aghemera"}
         ain{"ainuera"}
         ak{"akanera"}
@@ -39,8 +39,8 @@ eu{
         anp{"angikera"}
         ar{"arabiera"}
         ar_001{"arabiera moderno estandarra"}
-        arn{"maputxea"}
-        arp{"arapahoa"}
+        arn{"maputxe"}
+        arp{"arapaho"}
         as{"assamera"}
         asa{"asua"}
         ast{"asturiera"}
@@ -48,7 +48,7 @@ eu{
         awa{"awadhiera"}
         ay{"aimara"}
         az{"azerbaijanera"}
-        ba{"bashkirrera"}
+        ba{"baxkirera"}
         ban{"baliera"}
         bas{"basaa"}
         be{"bielorrusiera"}
@@ -67,8 +67,8 @@ eu{
         bs{"bosniera"}
         bug{"buginera"}
         byn{"bilena"}
-        ca{"katalana"}
-        ce{"txetxeniera"}
+        ca{"katalan"}
+        ce{"txetxenera"}
         ceb{"cebuera"}
         cgg{"chigera"}
         ch{"chamorrera"}
@@ -79,18 +79,18 @@ eu{
         chy{"cheyennera"}
         ckb{"sorania"}
         co{"korsikera"}
-        crs{"seselwa frantses-kreolera"}
+        crs{"Seychelleetako kreolera"}
         cs{"txekiera"}
-        cu{"Elizako eslaviera"}
-        cv{"chuvashera"}
-        cy{"galesa"}
+        cu{"elizako eslaviera"}
+        cv{"txuvaxera"}
+        cy{"gales"}
         da{"daniera"}
         dak{"dakotera"}
         dar{"dargvera"}
         dav{"taitera"}
-        de{"alemana"}
-        de_AT{"Austriako alemana"}
-        de_CH{"aleman garaia (Suitza)"}
+        de{"aleman"}
+        de_AT{"Austriako aleman"}
+        de_CH{"Suitzako aleman garai"}
         dgr{"dogribera"}
         dje{"zarma"}
         dsb{"behe-sorabiera"}
@@ -104,12 +104,12 @@ eu{
         efi{"efikera"}
         eka{"akajuka"}
         el{"greziera"}
-        en{"ingelesa"}
-        en_AU{"Australiako ingelesa"}
-        en_CA{"Kanadako ingelesa"}
-        en_GB{"Britainia Handiko ingelesa"}
-        en_US{"AEBko ingelesa"}
-        eo{"esperantoa"}
+        en{"ingeles"}
+        en_AU{"Australiako ingeles"}
+        en_CA{"Kanadako ingeles"}
+        en_GB{"Britania Handiko ingeles"}
+        en_US{"AEBko ingeles"}
+        eo{"esperanto"}
         es{"espainiera"}
         es_419{"Latinoamerikako espainiera"}
         es_ES{"espainiera (Europa)"}
@@ -124,21 +124,21 @@ eu{
         fj{"fijiera"}
         fo{"faroera"}
         fon{"fona"}
-        fr{"frantsesa"}
-        fr_CA{"Kanadako frantsesa"}
-        fr_CH{"Suitzako frantsesa"}
+        fr{"frantses"}
+        fr_CA{"Kanadako frantses"}
+        fr_CH{"Suitzako frantses"}
         fur{"friuliera"}
         fy{"frisiera"}
-        ga{"gaelikoa"}
+        ga{"gaeliko"}
         gaa{"ga"}
         gag{"gagauzera"}
-        gd{"Eskoziako gaelikoa"}
+        gd{"Eskoziako gaeliko"}
         gez{"ge’ez"}
         gil{"gilbertera"}
         gl{"galiziera"}
         gn{"guaraniera"}
         gor{"gorontaloa"}
-        gsw{"alemana (Suitza)"}
+        gsw{"Suitzako aleman"}
         gu{"gujaratera"}
         guz{"gusiiera"}
         gv{"manxera"}
@@ -146,8 +146,8 @@ eu{
         ha{"hausa"}
         haw{"hawaiiera"}
         he{"hebreera"}
-        hi{"hindia"}
-        hil{"hiligainona"}
+        hi{"hindi"}
+        hil{"hiligainon"}
         hmn{"hmong"}
         hr{"kroaziera"}
         hsb{"goi-sorabiera"}
@@ -155,7 +155,7 @@ eu{
         hu{"hungariera"}
         hup{"hupera"}
         hy{"armeniera"}
-        hz{"herera"}
+        hz{"hereroera"}
         ia{"interlingua"}
         iba{"ibanera"}
         ibb{"ibibioera"}
@@ -168,7 +168,7 @@ eu{
         io{"ido"}
         is{"islandiera"}
         it{"italiera"}
-        iu{"inuitera"}
+        iu{"inuktitut"}
         ja{"japoniera"}
         jbo{"lojbanera"}
         jgo{"ngomba"}
@@ -182,7 +182,7 @@ eu{
         kbd{"kabardiera"}
         kcg{"kataba"}
         kde{"makondera"}
-        kea{"Cabo Verdeko kreola"}
+        kea{"Cabo Verdeko kreolera"}
         kfo{"koroa"}
         kg{"kikongoa"}
         kha{"kashia"}
@@ -213,8 +213,8 @@ eu{
         kv{"komiera"}
         kw{"kornubiera"}
         ky{"kirgizera"}
-        la{"latina"}
-        lad{"ladinera"}
+        la{"latin"}
+        lad{"ladino"}
         lag{"langiera"}
         lb{"luxenburgera"}
         lez{"lezgiera"}
@@ -242,7 +242,7 @@ eu{
         men{"mendeera"}
         mer{"meruera"}
         mfe{"Mauritaniako kreolera"}
-        mg{"malgaxea"}
+        mg{"malgaxe"}
         mgh{"makhuwa-meettoera"}
         mgo{"metera"}
         mh{"marshallera"}
@@ -268,18 +268,18 @@ eu{
         na{"nauruera"}
         nap{"napoliera"}
         naq{"namera"}
-        nb{"bokmala (Norvegia)"}
+        nb{"bokmål (norvegiera)"}
         nd{"iparraldeko ndebeleera"}
         nds_NL{"behe-saxoiera"}
         ne{"nepalera"}
         new{"newarera"}
         ng{"ndongera"}
-        nia{"niasa"}
-        niu{"niuera"}
+        nia{"niasera"}
+        niu{"niueera"}
         nl{"nederlandera"}
         nl_BE{"flandriera"}
         nmg{"kwasiera"}
-        nn{"nynorsk norvegiera"}
+        nn{"nynorsk (norvegiera)"}
         nnh{"ngiemboonera"}
         no{"norvegiera"}
         nog{"nogaiera"}
@@ -287,7 +287,7 @@ eu{
         nr{"hegoaldeko ndebelera"}
         nso{"pediera"}
         nus{"nuerera"}
-        nv{"navahoera"}
+        nv{"navajoera"}
         ny{"chewera"}
         nyn{"ankolera"}
         oc{"okzitaniera"}
@@ -297,15 +297,15 @@ eu{
         pa{"punjabera"}
         pag{"pangasinanera"}
         pam{"pampangera"}
-        pap{"papiamentoa"}
+        pap{"papiamento"}
         pau{"palauera"}
         pcm{"Nigeriako pidgina"}
         pl{"poloniera"}
         prg{"prusiera"}
         ps{"paxtuera"}
-        pt{"portugesa"}
-        pt_BR{"Brasilgo portugesa"}
-        pt_PT{"portugesa (Europa)"}
+        pt{"portuges"}
+        pt_BR{"Brasilgo portuges"}
+        pt_PT{"Europako portuges"}
         qu{"kitxua"}
         quc{"quicheera"}
         rap{"rapa nui"}
@@ -317,11 +317,11 @@ eu{
         rof{"romboera"}
         root{"erroa"}
         ru{"errusiera"}
-        rup{"aromania"}
+        rup{"aromaniera"}
         rw{"kinyaruanda"}
         rwk{"rwaera"}
-        sa{"sanskritoa"}
-        sad{"sandawea"}
+        sa{"sanskrito"}
+        sad{"sandaweera"}
         sah{"sakhera"}
         saq{"samburuera"}
         sat{"santalera"}
@@ -330,11 +330,11 @@ eu{
         sc{"sardiniera"}
         scn{"siziliera"}
         sco{"eskoziera"}
-        sd{"sindhia"}
+        sd{"sindhi"}
         se{"iparraldeko samiera"}
         seh{"senera"}
         ses{"koyraboro sennia"}
-        sg{"sangoa"}
+        sg{"sango"}
         sh{"serbokroaziera"}
         shi{"tachelhita"}
         shn{"shanera"}
@@ -343,8 +343,8 @@ eu{
         sl{"esloveniera"}
         sm{"samoera"}
         sma{"hegoaldeko samiera"}
-        smj{"lule samiera"}
-        smn{"inari-samiera"}
+        smj{"Luleko samiera"}
+        smn{"Inariko samiera"}
         sms{"skolten samiera"}
         sn{"shonera"}
         snk{"soninkera"}
@@ -361,22 +361,22 @@ eu{
         sw{"swahilia"}
         sw_CD{"Kongoko swahilia"}
         swb{"komoreera"}
-        syr{"asiriera"}
+        syr{"siriera"}
         ta{"tamilera"}
-        te{"telugua"}
+        te{"telugu"}
         tem{"temnea"}
         teo{"tesoera"}
-        tet{"tetuma"}
+        tet{"tetum"}
         tg{"tajikera"}
         th{"thailandiera"}
-        ti{"tigriñera"}
+        ti{"tigrinyera"}
         tig{"tigrea"}
         tk{"turkmenera"}
         tl{"tagalog"}
         tlh{"klingonera"}
         tn{"tswanera"}
         to{"tongera"}
-        tpi{"tok pisina"}
+        tpi{"tok pisin"}
         tr{"turkiera"}
         trv{"tarokoa"}
         ts{"tsongera"}
@@ -384,22 +384,22 @@ eu{
         tum{"tumbukera"}
         tvl{"tuvaluera"}
         tw{"twia"}
-        twq{"tasawaqa"}
+        twq{"tasawaq"}
         ty{"tahitiera"}
         tyv{"tuvera"}
         tzm{"Erdialdeko Atlaseko amazigera"}
         udm{"udmurtera"}
         ug{"uigurrera"}
         uk{"ukrainera"}
-        umb{"umbunduera"}
+        umb{"umbundu"}
         und{"hizkuntza ezezaguna"}
-        ur{"urdua"}
+        ur{"urdu"}
         uz{"uzbekera"}
         vai{"vaiera"}
         ve{"vendera"}
         vi{"vietnamera"}
-        vo{"volapüka"}
-        vun{"vunjoa"}
+        vo{"volapük"}
+        vun{"vunjo"}
         wa{"waloiera"}
         wae{"walserera"}
         wal{"welayta"}
@@ -410,7 +410,7 @@ eu{
         xog{"sogera"}
         yav{"jangbenera"}
         ybb{"yemba"}
-        yi{"yiddisha"}
+        yi{"yiddish"}
         yo{"jorubera"}
         yue{"kantonera"}
         zgh{"amazigera estandarra"}
@@ -420,34 +420,34 @@ eu{
         zu{"zuluera"}
         zun{"zuñia"}
         zxx{"ez dago eduki linguistikorik"}
-        zza{"zazakia"}
+        zza{"zazera"}
     }
     Languages%short{
         az{"azerbaijanera"}
-        en_GB{"Erresuma Batuko ingelesa"}
+        en_GB{"Erresuma Batuko ingeles"}
         en_US{"AEBko ingelesa"}
     }
     Scripts{
         Arab{"arabiarra"}
         Armn{"armeniarra"}
-        Beng{"bengaliarra"}
+        Beng{"bengalarra"}
         Bopo{"bopomofoa"}
         Brai{"braillea"}
         Cyrl{"zirilikoa"}
         Deva{"devanagaria"}
         Ethi{"etiopiarra"}
         Geor{"georgiarra"}
-        Grek{"greziarra"}
-        Gujr{"gujaratera"}
+        Grek{"grekoa"}
+        Gujr{"gujaratarra"}
         Guru{"gurmukhia"}
         Hanb{"hänera"}
         Hang{"hangula"}
         Hani{"idazkera txinatarra"}
         Hans{"sinplifikatua"}
         Hant{"tradizionala"}
-        Hebr{"hebreera"}
+        Hebr{"hebrearra"}
         Hira{"hiragana"}
-        Hrkt{"silaba japoniarrak"}
+        Hrkt{"silabario japoniarrak"}
         Jamo{"jamo-bihurketa"}
         Jpan{"japoniarra"}
         Kana{"katakana"}
@@ -455,8 +455,8 @@ eu{
         Knda{"kanadarra"}
         Kore{"korearra"}
         Laoo{"laosarra"}
-        Latn{"latina"}
-        Mlym{"malayalamera"}
+        Latn{"latinoa"}
+        Mlym{"malayalamarra"}
         Mong{"mongoliarra"}
         Mymr{"birmaniarra"}
         Orya{"oriyarra"}
@@ -567,8 +567,8 @@ eu{
             strict{"Lerro-jauziaren estilo zorrotza"}
         }
         m0{
-            bgn{"BGN bihurketa"}
-            ungegn{"UNGEGN bihurketa"}
+            bgn{"US BGN transliterazioa"}
+            ungegn{"UN GEGN transliterazioa"}
         }
         ms{
             metric{"Sistema metrikoa"}
@@ -580,7 +580,7 @@ eu{
             arabext{"Digitu arabiar-hindiko hedatuak"}
             armn{"Zenbaki armeniarrak"}
             armnlow{"Zenbaki armeniarrak minuskulaz"}
-            beng{"digitu bengalarrak"}
+            beng{"Digitu bengalarrak"}
             deva{"Digitu devanagariak"}
             ethi{"Zenbaki etiopiarrak"}
             finance{"Finantza-zenbakiak"}
@@ -625,7 +625,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     characterLabelPattern{
         all{"{0} — Guztiak"}
         category-list{"{0}: {1}"}

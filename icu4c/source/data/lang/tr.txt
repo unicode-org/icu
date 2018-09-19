@@ -58,7 +58,7 @@ tr{
         as{"Assamca"}
         asa{"Asu"}
         ase{"Amerikan İşaret Dili"}
-        ast{"Asturyasca"}
+        ast{"Asturyasça"}
         av{"Avar Dili"}
         avk{"Kotava"}
         awa{"Awadhi"}
@@ -188,8 +188,8 @@ tr{
         fi{"Fince"}
         fil{"Filipince"}
         fit{"Tornedalin Fincesi"}
-        fj{"Fiji Dili"}
-        fo{"Faroe Dili"}
+        fj{"Fiji dili"}
+        fo{"Faroe dili"}
         fon{"Fon"}
         fr{"Fransızca"}
         fr_CA{"Kanada Fransızcası"}
@@ -1038,7 +1038,7 @@ tr{
         VALENCIA{"Valensiyaca"}
         WADEGILE{"Wade-Giles (Latin Alfabesinde Yazımı)"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     characterLabelPattern{
         all{"{0} — tümü"}
         category-list{"{0}: {1}"}
