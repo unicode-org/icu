@@ -295,12 +295,10 @@ void NumberRangeFormatterImpl::formatApproximately (UFormattedNumberRangeData& d
     if (fSameFormatters) {
         int32_t length = NumberFormatterImpl::writeNumber(micros1, data.quantity1, data.string, 0, status);
         // HEURISTIC: Desired modifier order: inner, middle, approximately, outer.
-        // writeAffixes() assumes only three modifiers.  To work around this,
-        // get the outer mod from micros, and save approximately as outer.
-        const Modifier* realOuter = micros1.modOuter;
-        micros1.modOuter = &fApproximatelyModifier;
-        length += NumberFormatterImpl::writeAffixes(micros1, data.string, 0, length, status);
-        realOuter->apply(data.string, 0, length, status);
+        length += micros1.modInner->apply(data.string, 0, length, status);
+        length += micros1.modMiddle->apply(data.string, 0, length, status);
+        length += fApproximatelyModifier.apply(data.string, 0, length, status);
+        micros1.modOuter->apply(data.string, 0, length, status);
     } else {
         formatRange(data, micros1, micros2, status);
     }

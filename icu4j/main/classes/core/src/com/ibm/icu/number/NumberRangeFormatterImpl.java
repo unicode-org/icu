@@ -209,12 +209,10 @@ class NumberRangeFormatterImpl {
         if (fSameFormatters) {
             int length = NumberFormatterImpl.writeNumber(micros1, quantity1, string, 0);
             // HEURISTIC: Desired modifier order: inner, middle, approximately, outer.
-            // writeAffixes() assumes only three modifiers.  To work around this,
-            // get the outer mod from micros, and save approximately as outer.
-            Modifier realOuter = micros1.modOuter;
-            micros1.modOuter = fApproximatelyModifier;
-            length += NumberFormatterImpl.writeAffixes(micros1, string, 0, length);
-            realOuter.apply(string, 0, length);
+            length += micros1.modInner.apply(string, 0, length);
+            length += micros1.modMiddle.apply(string, 0, length);
+            length += fApproximatelyModifier.apply(string, 0, length);
+            micros1.modOuter.apply(string, 0, length);
         } else {
             formatRange(quantity1, quantity2, string, micros1, micros2);
         }
