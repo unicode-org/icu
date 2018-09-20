@@ -1637,9 +1637,11 @@ private:
                      const UnicodeSet* inclusions,
                      UErrorCode &status);
 
+#ifndef U_HIDE_DRAFT_API   // Skipped: ucpmap.h is draft only.
     void applyIntPropertyValue(const UCPMap *map,
                                UCPMapValueFilter *filter, const void *context,
                                UErrorCode &errorCode);
+#endif
 
     /**
      * Set the new pattern to cache.
