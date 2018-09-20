@@ -10,6 +10,7 @@
 # git stuff
 # .git is ignored by code.
 #.git/*
+.github/*
 .gitignore
 .gitattributes
 .travis.yml
