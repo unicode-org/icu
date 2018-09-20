@@ -209,10 +209,10 @@ public class NumberParserImpl {
 
         // ICU-TC meeting, April 11, 2018: accept percent/permille only if it is in the pattern,
         // and to maintain regressive behavior, divide by 100 even if no percent sign is present.
-        if (affixProvider.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
+        if (!isStrict && affixProvider.containsSymbolType(AffixUtils.TYPE_PERCENT)) {
             parser.addMatcher(PercentMatcher.getInstance(symbols));
         }
-        if (affixProvider.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
+        if (!isStrict && affixProvider.containsSymbolType(AffixUtils.TYPE_PERMILLE)) {
             parser.addMatcher(PermilleMatcher.getInstance(symbols));
         }
 
@@ -274,7 +274,7 @@ public class NumberParserImpl {
      *            The parser settings defined in the PARSE_FLAG_* fields.
      */
     public NumberParserImpl(int parseFlags) {
-        matchers = new ArrayList<NumberParseMatcher>();
+        matchers = new ArrayList<>();
         this.parseFlags = parseFlags;
         frozen = false;
     }
