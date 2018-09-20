@@ -71,6 +71,6 @@ matrix:
           - cd icu4c/source && CPPFLAGS="-fsanitize=thread" LDFLAGS="-fsanitize=thread" ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming && make -j2 check
 
     # copyright scan / future linter
-    - name "lint"
+    - name: "lint"
       script:
           - perl tools/scripts/cpysearch/cpyscan.pl
