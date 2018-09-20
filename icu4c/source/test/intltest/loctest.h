@@ -124,6 +124,8 @@ public:
     void TestMoveAssign();
     void TestMoveCtor();
 
+    void TestBug13417VeryLongLanguageTag();
+
 private:
     void _checklocs(const char* label,
                     const char* req,

@@ -226,6 +226,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestKeywordVariants);
     TESTCASE(TestKeywordVariantParsing);
     TESTCASE(TestCanonicalization);
+    TESTCASE(TestCanonicalizationBuffer);
     TESTCASE(TestKeywordSet);
     TESTCASE(TestKeywordSetError);
     TESTCASE(TestDisplayKeywords);
@@ -2248,6 +2249,42 @@ static void TestCanonicalization(void)
                         label[j], testCases[i].localeID, origResultLen, resultLen);
             }
         }
+    }
+}
+
+static void TestCanonicalizationBuffer(void)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    char buffer[256];
+
+    // ULOC_FULLNAME_CAPACITY == 157 (uloc.h)
+    static const char name[] =
+        "zh@x"
+        "=foo-bar-baz-foo-bar-baz-foo-bar-baz-foo-bar-baz"
+        "-foo-bar-baz-foo-bar-baz-foo-bar-baz-foo-bar-baz"
+        "-foo-bar-baz-foo-bar-baz-foo-bar-baz-foo-bar-baz"
+        "-foo-barz"
+    ;
+    static const size_t len = sizeof name - 1;  // Without NUL terminator.
+
+    int32_t reslen = uloc_canonicalize(name, buffer, len, &status);
+
+    if (U_FAILURE(status)) {
+        log_err("FAIL: uloc_canonicalize(%s) => %s, expected !U_FAILURE()\n",
+                name, u_errorName(status));
+        return;
+    }
+
+    if (reslen != len) {
+        log_err("FAIL: uloc_canonicalize(%s) => \"%i\", expected \"%u\"\n",
+                name, reslen, len);
+        return;
+    }
+
+    if (uprv_strncmp(name, buffer, len) != 0) {
+        log_err("FAIL: uloc_canonicalize(%s) => \"%.*s\", expected \"%s\"\n",
+                name, reslen, buffer, name);
+        return;
     }
 }
 
