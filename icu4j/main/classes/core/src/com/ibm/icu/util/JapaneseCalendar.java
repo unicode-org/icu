@@ -351,31 +351,43 @@ public class JapaneseCalendar extends GregorianCalendar {
     /**
      * @stable ICU 2.8
      */
-    static public final int CURRENT_ERA = ERA_RULES.getCurrentEraIndex();
+    static public final int CURRENT_ERA;
 
     /**
      * Constant for the era starting on Sept. 8, 1868 AD.
      * @stable  ICU 2.8
      */
-    static public final int MEIJI = 232;
+    static public final int MEIJI;
 
     /**
      * Constant for the era starting on July 30, 1912 AD.
      * @stable ICU 2.8
      */
-    static public final int TAISHO = 233;
+    static public final int TAISHO;
 
     /**
      * Constant for the era starting on Dec. 25, 1926 AD.
      * @stable ICU 2.8
      */
-    static public final int SHOWA = 234;
+    static public final int SHOWA;
 
     /**
      * Constant for the era starting on Jan. 7, 1989 AD.
      * @stable ICU 2.8
      */
-    static public final int HEISEI = 235;
+    static public final int HEISEI;
+
+    // We want to make these era constants initialized in a static initializer
+    // block to prevent javac to inline these values in a consumer code.
+    // By doing so, we can keep better binary compatibility across versions even
+    // these values are changed.
+    static {
+        MEIJI = 232;
+        TAISHO = 233;
+        SHOWA = 234;
+        HEISEI = 235;
+        CURRENT_ERA = ERA_RULES.getCurrentEraIndex();
+    }
 
     /**
      * Override GregorianCalendar.  We should really handle YEAR_WOY and
