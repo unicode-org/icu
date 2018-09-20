@@ -1857,9 +1857,14 @@ void MeasureFormatTest::TestGram() {
 }
 
 void MeasureFormatTest::TestCurrencies() {
-    UChar USD[4];
+    UChar USD[4] = {};
     u_uastrcpy(USD, "USD");
     UErrorCode status = U_ZERO_ERROR;
+    CurrencyUnit USD_unit(USD, status);
+    assertEquals("Currency Unit", USD, USD_unit.getISOCurrency());
+    if (!assertSuccess("Error creating CurrencyUnit", status)) {
+        return;
+    }
     CurrencyAmount USD_1(1.0, USD, status);
     assertEquals("Currency Code", USD, USD_1.getISOCurrency());
     CurrencyAmount USD_2(2.0, USD, status);
