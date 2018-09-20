@@ -195,6 +195,8 @@ fi
 #AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
 #AC_CHECK_PROG(STRIP, strip, strip, true)
 
+AC_CHECK_PROGS(PYTHON3, python3)
+
 # Check for the platform make
 AC_PATH_PROGS(U_MAKE, gmake gnumake, make)
 AC_SUBST(U_MAKE)
@@ -1460,6 +1462,13 @@ if test "$tools" = false;
 then
         echo "## Note: you have disabled ICU's tools. This ICU cannot build its own data or tests."
         echo "## Expect build failures in the 'data', 'test', and other directories."
+fi
+
+if test -z "$PYTHON3";
+then
+    echo "##"
+    echo "## Notice: Python 3 not found. ICU 64 will require Python 3 to build. See ICU-10923."
+    echo "##"
 fi
 
 $as_unset _CXX_CXXSUFFIX
