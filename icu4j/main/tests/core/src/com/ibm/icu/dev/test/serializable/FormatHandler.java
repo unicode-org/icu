@@ -1106,8 +1106,10 @@ public class FormatHandler
             NumberFormat format_b = (NumberFormat) b;
             double number = 1234.56;
 
-            String result_a = format_a.format(number);
-            String result_b = format_b.format(number);
+            // In CLDR 34, French changed grouping separator from \u00a0 to \u202f;
+            // here we undo that in formatted result so serialization tests don't fail
+            String result_a = format_a.format(number).replace('\u202f', '\u00a0');
+            String result_b = format_b.format(number).replace('\u202f', '\u00a0');
             boolean equal = result_a.equals(result_b);
             if (!equal) {
                 System.out.println(format_a+" "+format_b);

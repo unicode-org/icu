@@ -2721,9 +2721,23 @@ public class MeasureUnitTest extends TestFmwk {
         {
             MeasureFormat a1 = (MeasureFormat) a;
             MeasureFormat b1 = (MeasureFormat) b;
-            return a1.getLocale().equals(b1.getLocale())
-                    && a1.getWidth().equals(b1.getWidth())
-                    && nfh.hasSameBehavior(a1.getNumberFormat(), b1.getNumberFormat());
+            boolean getLocaleEqual = a1.getLocale().equals(b1.getLocale());
+            boolean getWidthEqual = a1.getWidth().equals(b1.getWidth());
+            boolean numFmtHasSameBehavior = nfh.hasSameBehavior(a1.getNumberFormat(), b1.getNumberFormat());
+            if (getLocaleEqual && getWidthEqual && numFmtHasSameBehavior) {
+                return true;
+            }
+            System.out.println("MeasureFormatHandler.hasSameBehavior fails:");
+            if (!getLocaleEqual) {
+                System.out.println("- getLocale equality fails: old a1: " + a1.getLocale().getName() + "; test b1: " + b1.getLocale().getName());
+            }
+            if (!getWidthEqual) {
+                System.out.println("- getWidth equality fails: old a1: " + a1.getWidth().name() + "; test b1: " + b1.getWidth().name());
+            }
+            if (!numFmtHasSameBehavior) {
+                System.out.println("- getNumberFormat hasSameBehavior fails");
+            }
+            return false;
         }
     }
 }
