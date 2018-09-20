@@ -15,7 +15,6 @@ package Cpy;
 use strict;
 use warnings;
 use base 'Exporter';
-use LWP::Simple;
 
 our @EXPORT = qw(any glob_to_regex should_ignore);
 
@@ -81,19 +80,16 @@ sub glob_to_regex($) {
 }
 
 # Load cpyskip.txt contents.
-# Try local cpyskip.txt first - if not found, try online version
-our $cpyskip_file = "cpyskip.txt";
+# Try local .cpyskip.txt
+# no support for HTTP fetch.
+our $cpyskip_file = ".cpyskip.txt";
 our @cpyskip_lines;
 if (open(our $cpyskip_fh, "<", $cpyskip_file)) {
     @cpyskip_lines = <$cpyskip_fh>;
     close $cpyskip_fh;
-    print "Using local cpyskip.txt\n";
+    # print "Using local cpyskip.txt\n";
 } else {
-    our $cpyskip_url = "http://source.icu-project.org/cpyskip.txt";
-    our $cpyskip = get($cpyskip_url);
-    die "Can't get $cpyskip_url" if (! defined $cpyskip);
-    @cpyskip_lines = split(/\n/, $cpyskip);
-    print "Using " . $cpyskip_url . "\n";
+    die "Could not open $cpyskip_file";
 }
 our @ignore_globs = map  { chomp; glob_to_regex($_) }
                     grep { /^\s*[^#\s]+/ }
