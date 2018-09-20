@@ -71,7 +71,7 @@ class NumberRangeFormatterImpl {
                 }
                 if (key.contentEquals("approximately") && approximatelyPattern == null) {
                     String pattern = value.getString();
-                    approximatelyPattern = SimpleFormatterImpl.compileToStringMinMaxArguments(pattern, sb, 2, 2);
+                    approximatelyPattern = SimpleFormatterImpl.compileToStringMinMaxArguments(pattern, sb, 1, 1); // 1 arg, as in "~{0}"
                 }
             }
         }

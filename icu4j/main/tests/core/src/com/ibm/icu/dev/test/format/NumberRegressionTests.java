@@ -257,14 +257,14 @@ public class NumberRegressionTests extends TestFmwk {
         // Space as group separator
 
         logln("...applyLocalizedPattern # ###,00;(# ###,00) ");
-        ((DecimalFormat)nf).applyLocalizedPattern("#\u00a0###,00;(#\u00a0###,00)");
+        ((DecimalFormat)nf).applyLocalizedPattern("#\u202f###,00;(#\u202f###,00)");
         logln("nf toPattern2: " + ((DecimalFormat)nf).toPattern());
         logln("nf toLocPattern2: " + ((DecimalFormat)nf).toLocalizedPattern());
         String buffer = nf.format(1234);
-        if (!buffer.equals("1\u00a0234,00"))
+        if (!buffer.equals("1\u202f234,00"))
             errln("nf : " + buffer); // Expect 1 234,00
         buffer = nf.format(-1234);
-        if (!buffer.equals("(1\u00a0234,00)"))
+        if (!buffer.equals("(1\u202f234,00)"))
             errln("nf : " + buffer); // Expect (1 234,00)
 
         // Erroneously prints:

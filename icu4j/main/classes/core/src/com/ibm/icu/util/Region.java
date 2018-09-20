@@ -324,9 +324,10 @@ public class Region implements Comparable<Region> {
         for ( int i = 0 ; i < territoryContainment.getSize(); i++ ) {
             UResourceBundle mapping = territoryContainment.get(i);
             String parent = mapping.getKey();
-            if (parent.equals("containedGroupings") || parent.equals("deprecated")) {
+            if (parent.equals("containedGroupings") || parent.equals("deprecated") || parent.equals("grouping")) {
                 continue; // handle new pseudo-parent types added in ICU data per cldrbug 7808; for now just skip.
                 // #11232 is to do something useful with these.
+                // Also skip "grouping" which has multi-level structure below from CLDR 34.
             }
             Region parentRegion = regionIDMap.get(parent);
             for ( int j = 0 ; j < mapping.getSize(); j++ ) {
