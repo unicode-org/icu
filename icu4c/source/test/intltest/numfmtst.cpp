@@ -9196,7 +9196,9 @@ void NumberFormatTest::Test13850_EmptyStringCurrency() {
         {u"", U_ZERO_ERROR},
         {u"U", U_ILLEGAL_ARGUMENT_ERROR},
         {u"Us", U_ILLEGAL_ARGUMENT_ERROR},
-        {nullptr, U_ZERO_ERROR}
+        {nullptr, U_ZERO_ERROR},
+        {u"U$D", U_INVARIANT_CONVERSION_ERROR},
+        {u"Xxx", U_ZERO_ERROR}
     };
     for (const auto& cas : cases) {
         UnicodeString message(u"with currency arg: ");
