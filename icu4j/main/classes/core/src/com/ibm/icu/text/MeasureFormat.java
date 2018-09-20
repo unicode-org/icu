@@ -520,6 +520,9 @@ public class MeasureFormat extends UFormat {
      * @stable ICU 53
      */
     public MeasureFormat.FormatWidth getWidth() {
+        if (formatWidth == MeasureFormat.FormatWidth.DEFAULT_CURRENCY) {
+            return MeasureFormat.FormatWidth.WIDE;
+        }
         return formatWidth;
     }
 
