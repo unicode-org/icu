@@ -126,9 +126,9 @@ public class MeasureFormat extends UFormat {
 
     private final transient LocalizedNumberFormatter numberFormatter;
 
-    private static final SimpleCache<ULocale, NumericFormatters> localeToNumericDurationFormatters = new SimpleCache<ULocale, NumericFormatters>();
+    private static final SimpleCache<ULocale, NumericFormatters> localeToNumericDurationFormatters = new SimpleCache<>();
 
-    private static final Map<MeasureUnit, Integer> hmsTo012 = new HashMap<MeasureUnit, Integer>();
+    private static final Map<MeasureUnit, Integer> hmsTo012 = new HashMap<>();
 
     static {
         hmsTo012.put(MeasureUnit.HOUR, 0);
@@ -486,7 +486,7 @@ public class MeasureFormat extends UFormat {
      * Two MeasureFormats, a and b, are equal if and only if they have the same formatWidth, locale, and
      * equal number formats.
      *
-     * @stable ICU 53
+     * @stable ICU 3.0
      */
     @Override
     public final boolean equals(Object other) {
@@ -506,7 +506,7 @@ public class MeasureFormat extends UFormat {
     /**
      * {@inheritDoc}
      *
-     * @stable ICU 53
+     * @stable ICU 3.0
      */
     @Override
     public final int hashCode() {
@@ -997,7 +997,7 @@ public class MeasureFormat extends UFormat {
             this.formatWidth = width;
             this.numberFormat = numberFormat;
             this.subClass = subClass;
-            this.keyValues = new HashMap<Object, Object>();
+            this.keyValues = new HashMap<>();
         }
 
         // Must have public constructor, to enable Externalizable
@@ -1070,7 +1070,7 @@ public class MeasureFormat extends UFormat {
         return values[ordinal];
     }
 
-    private static final Map<ULocale, String> localeIdToRangeFormat = new ConcurrentHashMap<ULocale, String>();
+    private static final Map<ULocale, String> localeIdToRangeFormat = new ConcurrentHashMap<>();
 
     /**
      * Return a formatter (compiled SimpleFormatter pattern) for a range, such as "{0}–{1}".

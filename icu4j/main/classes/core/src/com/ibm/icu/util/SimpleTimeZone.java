@@ -612,7 +612,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Returns a string representation of this object.
      * @return  a string representation of this object
-     * @stable ICU 3.6
+     * @stable ICU 2.0
      */
     @Override
     public String toString() {
@@ -1140,7 +1140,7 @@ public class SimpleTimeZone extends BasicTimeZone {
     /**
      * Overrides equals.
      * @return true if obj is a SimpleTimeZone equivalent to this
-     * @stable ICU 3.6
+     * @stable ICU 2.0
      */
     @Override
     public boolean equals(Object obj){
@@ -1180,7 +1180,8 @@ public class SimpleTimeZone extends BasicTimeZone {
 
     /**
      * Overrides hashCode.
-     * @stable ICU 3.6
+     * @return a hash code value for this object.
+     * @stable ICU 2.0
      */
     @Override
     public int hashCode(){
@@ -1208,7 +1209,7 @@ public class SimpleTimeZone extends BasicTimeZone {
 
     /**
      * Overrides clone.
-     * @stable ICU 3.6
+     * @stable ICU 2.0
      */
     @Override
     public Object clone() {

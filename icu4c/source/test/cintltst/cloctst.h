@@ -84,6 +84,7 @@ static  void TestDisplayNames(void);
  static void doTestDisplayNames(const char* inLocale, int32_t compareIndex);
 
  static void TestCanonicalization(void);
+ static void TestCanonicalizationBuffer(void);
 
  static void TestDisplayKeywords(void);
 
