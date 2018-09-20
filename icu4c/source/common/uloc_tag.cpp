@@ -943,15 +943,6 @@ _appendScriptToLanguageTag(const char* localeID, char* appendAt, int32_t capacit
                 *(appendAt + reslen) = SEP;
             }
             reslen++;
-           /* resolve deprecated */
-            for (int i = 0; i < UPRV_LENGTHOF(DEPRECATEDREGIONS); i += 2) {
-                if (uprv_compareInvCharsAsAscii(buf, DEPRECATEDREGIONS[i]) == 0) {
-                    uprv_strcpy(buf, DEPRECATEDREGIONS[i + 1]);
-                    len = (int32_t)uprv_strlen(buf);
-                    break;
-                }
-            }
-
             if (reslen < capacity) {
                 uprv_memcpy(appendAt + reslen, buf, uprv_min(len, capacity - reslen));
             }
@@ -993,6 +984,14 @@ _appendRegionToLanguageTag(const char* localeID, char* appendAt, int32_t capacit
                 *(appendAt + reslen) = SEP;
             }
             reslen++;
+           /* resolve deprecated */
+            for (int i = 0; i < UPRV_LENGTHOF(DEPRECATEDREGIONS); i += 2) {
+                if (uprv_compareInvCharsAsAscii(buf, DEPRECATEDREGIONS[i]) == 0) {
+                    uprv_strcpy(buf, DEPRECATEDREGIONS[i + 1]);
+                    len = (int32_t)uprv_strlen(buf);
+                    break;
+                }
+            }
 
             if (reslen < capacity) {
                 uprv_memcpy(appendAt + reslen, buf, uprv_min(len, capacity - reslen));
