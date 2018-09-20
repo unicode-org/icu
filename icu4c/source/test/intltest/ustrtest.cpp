@@ -64,6 +64,7 @@ void UnicodeStringTest::runIndexedTest( int32_t index, UBool exec, const char* &
     TESTCASE_AUTO(TestUInt16Pointers);
     TESTCASE_AUTO(TestWCharPointers);
     TESTCASE_AUTO(TestNullPointers);
+    TESTCASE_AUTO(TestUnicodeStringInsertAppendToSelf);
     TESTCASE_AUTO_END;
 }
 
@@ -1124,7 +1125,7 @@ UnicodeStringTest::TestMiscellaneous()
     }
 
     // NOTE: Some compilers will optimize u"la" to point to the same static memory
-    // as u"lila", offset by 3 code units
+    // as u" lila", offset by 3 code units
     test1=UnicodeString(TRUE, u"la", 2);
     test1.append(UnicodeString(TRUE, u" lila", 5).getTerminatedBuffer(), 0, -1);
     assertEquals("UnicodeString::append(const UChar *, start, length) failed",
@@ -2245,4 +2246,60 @@ UnicodeStringTest::TestNullPointers() {
     UErrorCode errorCode = U_ZERO_ERROR;
     UnicodeString(u"def").extract(nullptr, 0, errorCode);
     assertEquals("buffer overflow extracting to nullptr", U_BUFFER_OVERFLOW_ERROR, errorCode);
+}
+
+void UnicodeStringTest::TestUnicodeStringInsertAppendToSelf() {
+    IcuTestErrorCode status(*this, "TestUnicodeStringAppendToSelf");
+
+    // Test append operation
+    UnicodeString str(u"foo ");
+    str.append(str);
+    str.append(str);
+    str.append(str);
+    assertEquals("", u"foo foo foo foo foo foo foo foo ", str);
+
+    // Test append operation with readonly alias to start
+    str = UnicodeString(TRUE, u"foo ", 4);
+    str.append(str);
+    str.append(str);
+    str.append(str);
+    assertEquals("", u"foo foo foo foo foo foo foo foo ", str);
+
+    // Test append operation with aliased substring
+    str = u"abcde";
+    UnicodeString sub = str.tempSubString(1, 2);
+    str.append(sub);
+    assertEquals("", u"abcdebc", str);
+
+    // Test append operation with double-aliased substring
+    str = UnicodeString(TRUE, u"abcde", 5);
+    sub = str.tempSubString(1, 2);
+    str.append(sub);
+    assertEquals("", u"abcdebc", str);
+
+    // Test insert operation
+    str = u"a-*b";
+    str.insert(2, str);
+    str.insert(4, str);
+    str.insert(8, str);
+    assertEquals("", u"a-a-a-a-a-a-a-a-*b*b*b*b*b*b*b*b", str);
+
+    // Test insert operation with readonly alias to start
+    str = UnicodeString(TRUE, u"a-*b", 4);
+    str.insert(2, str);
+    str.insert(4, str);
+    str.insert(8, str);
+    assertEquals("", u"a-a-a-a-a-a-a-a-*b*b*b*b*b*b*b*b", str);
+
+    // Test insert operation with aliased substring
+    str = u"abcde";
+    sub = str.tempSubString(1, 3);
+    str.insert(2, sub);
+    assertEquals("", u"abbcdcde", str);
+
+    // Test insert operation with double-aliased substring
+    str = UnicodeString(TRUE, u"abcde", 5);
+    sub = str.tempSubString(1, 3);
+    str.insert(2, sub);
+    assertEquals("", u"abbcdcde", str);
 }
