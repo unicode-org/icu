@@ -202,6 +202,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11645_ApplyPatternEquality);
   TESTCASE_AUTO(Test12567);
   TESTCASE_AUTO(Test11626_CustomizeCurrencyPluralInfo);
+  TESTCASE_AUTO(Test20073_StrictPercentParseErrorIndex);
   TESTCASE_AUTO(Test13056_GroupingSize);
   TESTCASE_AUTO(Test11025_CurrencyPadding);
   TESTCASE_AUTO(Test11648_ExpDecFormatMalPattern);
@@ -8940,6 +8941,17 @@ void NumberFormatTest::Test11626_CustomizeCurrencyPluralInfo() {
     assertEquals("Plural one", u"1 dvorak", df.format(1, result.remove(), errorCode));
     assertEquals("Plural few", u"3 qwerty", df.format(3, result.remove(), errorCode));
     assertEquals("Plural other", u"99 америчких долара", df.format(99, result.remove(), errorCode));
+}
+
+void NumberFormatTest::Test20073_StrictPercentParseErrorIndex() {
+    IcuTestErrorCode status(*this, "Test20073_StrictPercentParseErrorIndex");
+    ParsePosition parsePosition(0);
+    DecimalFormat df(u"0%", {"en-us", status}, status);
+    df.setLenient(FALSE);
+    Formattable result;
+    df.parse(u"%2%", result, parsePosition);
+    assertEquals("", 0, parsePosition.getIndex());
+    assertEquals("", 0, parsePosition.getErrorIndex());
 }
 
 void NumberFormatTest::Test13056_GroupingSize() {
