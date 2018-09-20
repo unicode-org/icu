@@ -599,7 +599,7 @@ public class NumberFormatTest extends TestFmwk {
                 "\u00A4#,##0.00",
                 df.toPattern());
         // Should round-trip on the correct currency format:
-        expect2(df, 1.23, "XXX\u00A01.23");
+        expect2(df, 1.23, "\u00A41.23");
         df.setCurrency(Currency.getInstance("EUR"));
         expect2(df, 1.23, "\u20AC1.23");
         // Should parse with currency in the wrong place in lenient mode
@@ -998,19 +998,19 @@ public class NumberFormatTest extends TestFmwk {
 
         fmt = NumberFormat.getCurrencyInstance(Locale.FRANCE);
 
-        expectCurrency(fmt, null, 1234.56, "1 234,56 \u20AC");
+        expectCurrency(fmt, null, 1234.56, "1\u202F234,56 \u20AC");
 
         expectCurrency(fmt, Currency.getInstance(Locale.JAPAN),
-                1234.56, "1 235 JPY"); // Yen
+                1234.56, "1\u202F235 JPY"); // Yen
 
         expectCurrency(fmt, Currency.getInstance(new Locale("fr", "CH", "")),
-                1234.56, "1 234,56 CHF"); // no more rounding here, see cldrbug 5548
+                1234.56, "1\u202F234,56 CHF"); // no more rounding here, see cldrbug 5548
 
         expectCurrency(fmt, Currency.getInstance(Locale.US),
-                1234.56, "1 234,56 $US");
+                1234.56, "1\u202F234,56 $US");
 
         expectCurrency(fmt, Currency.getInstance(Locale.FRANCE),
-                1234.56, "1 234,56 \u20AC"); // Euro
+                1234.56, "1\u202F234,56 \u20AC"); // Euro
     }
 
     @Test
@@ -4260,13 +4260,13 @@ public class NumberFormatTest extends TestFmwk {
         // the 1st one is checking setter/getter, while the 2nd one checks for getInstance
         // compare the Currency and Currency Cash Digits
         // Note that as of CLDR 26:
-        // * TWD switches from 0 decimals to 2; PKR still has 0, so change test to that
+        // * TWD and PKR switched from 0 decimals to 2; ISK still has 0, so change test to that
         // * CAD rounds to .05 in the cash style only.
         for (int i = 0; i < 2; i++) {
-            String original_expected = "PKR 124";
+            String original_expected = "ISK 124";
             DecimalFormat custom = null;
             if (i == 0) {
-                custom = (DecimalFormat) DecimalFormat.getInstance(new ULocale("en_US@currency=PKR"),
+                custom = (DecimalFormat) DecimalFormat.getInstance(new ULocale("en_US@currency=ISK"),
                         DecimalFormat.CURRENCYSTYLE);
 
                 String original = custom.format(123.567);
@@ -4278,7 +4278,7 @@ public class NumberFormatTest extends TestFmwk {
                 custom.setCurrencyUsage(Currency.CurrencyUsage.CASH);
                 assertEquals("Test Currency Context Purpose", custom.getCurrencyUsage(), Currency.CurrencyUsage.CASH);
             } else {
-                custom = (DecimalFormat) DecimalFormat.getInstance(new ULocale("en_US@currency=PKR"),
+                custom = (DecimalFormat) DecimalFormat.getInstance(new ULocale("en_US@currency=ISK"),
                         DecimalFormat.CASHCURRENCYSTYLE);
 
                 // test the getter
@@ -4286,7 +4286,7 @@ public class NumberFormatTest extends TestFmwk {
             }
 
             String cash_currency = custom.format(123.567);
-            String cash_currency_expected = "PKR 124";
+            String cash_currency_expected = "ISK 124";
             assertEquals("Test Currency Context", cash_currency_expected, cash_currency);
         }
 

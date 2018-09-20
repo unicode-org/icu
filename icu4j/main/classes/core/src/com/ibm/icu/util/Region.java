@@ -11,6 +11,7 @@ package com.ibm.icu.util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -186,8 +187,7 @@ public class Region implements Comparable<Region> {
 
         String[] continentsArr = worldContainment.getStringArray();
         List<String> continents = Arrays.asList(continentsArr);
-        String[] groupingArr = groupingContainment.getStringArray();
-        List<String> groupings = Arrays.asList(groupingArr);
+        Enumeration<String> groupings = groupingContainment.getKeys();
         List<String> regionCodes = new ArrayList<String>();
 
         List<String> allRegions = new ArrayList<String>();
@@ -304,7 +304,8 @@ public class Region implements Comparable<Region> {
             }
         }
 
-        for ( String grouping : groupings ) {
+        while ( groupings.hasMoreElements() ) {
+            String grouping = groupings.nextElement();
             if (regionIDMap.containsKey(grouping)) {
                 r = regionIDMap.get(grouping);
                 r.type = RegionType.GROUPING;
