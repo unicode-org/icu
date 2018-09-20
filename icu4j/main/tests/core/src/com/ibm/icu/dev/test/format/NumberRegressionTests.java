@@ -499,9 +499,9 @@ public class NumberRegressionTests extends TestFmwk {
         String expectedCurrency = "5\u00a0789,98\u00a0F";
         String expectedPercent = "-578\u00a0998%";
         */
-        String expectedDefault = "-5\u00a0789,988";
-        String expectedCurrency = "5\u00a0789,99\u00a0" + EURO; // euro
-        String expectedPercent = "-578\u00a0999\u00a0%";
+        String expectedDefault = "-5\u202f789,988";
+        String expectedCurrency = "5\u202f789,99\u00a0" + EURO; // euro
+        String expectedPercent = "-578\u202f999\u00a0%";
 
         formatter = NumberFormat.getNumberInstance(Locale.FRANCE);
         tempString = formatter.format (-5789.9876);

@@ -293,7 +293,7 @@ public class RegionTest extends TestFmwk {
             { "TA" , "-1" , "QO", "TERRITORY", "009" },
             { "TC" , "796", "029", "TERRITORY", "019" },
             { "TD" , "148", "017", "TERRITORY", "002" },
-            { "TF" , "260", "145", "TERRITORY", "142" },
+            { "TF" , "260", "014", "TERRITORY", "002" },
             { "TG" , "768", "011", "TERRITORY", "002" },
             { "TH" , "764", "035", "TERRITORY", "142" },
             { "TJ" , "762", "143", "TERRITORY", "142" },
