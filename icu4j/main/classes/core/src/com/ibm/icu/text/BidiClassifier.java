@@ -86,10 +86,9 @@ public /*abstract*/ class BidiClassifier {
      *
      * @param c Code point to be classified.
      * @return An integer representing directional property / Bidi class for the
-     *         given code point <code>c</code>, or Bidi.CLASS_DEFAULT=UCharacter.getIntPropertyMaxValue(UProperty.BIDI_CLASS)+1
+     *         given code point <code>c</code>, or UCharacter.getIntPropertyMaxValue(UProperty.BIDI_CLASS)+1
      *         to signify that there is no need to override the standard Bidi class for
      *         the given code point.
-     * @see Bidi#CLASS_DEFAULT
      * @stable ICU 3.8
      */
     public int classify(int c) {
