@@ -114,7 +114,11 @@ import com.ibm.icu.lang.UProperty;
  * these special values are designed that way. Also, the implementation
  * assumes that MAX_EXPLICIT_LEVEL is odd.
  *
- * <b>See Also:</b>
+ * <p>Note: The numeric values of the related constants will not change:
+ * They are tied to the use of 7-bit byte values (plus the override bit)
+ * and of the byte data type in this API.
+ *
+ * <p><b>See Also:</b>
  * <ul>
  * <li>{@link #LEVEL_DEFAULT_LTR}
  * <li>{@link #LEVEL_DEFAULT_RTL}
@@ -612,6 +616,8 @@ public class Bidi {
 
     /**
      * Maximum explicit embedding level.
+     * Same as the max_depth value in the
+     * <a href="http://www.unicode.org/reports/tr9/#BD2">Unicode Bidirectional Algorithm</a>.
      * (The maximum resolved level can be up to <code>MAX_EXPLICIT_LEVEL+1</code>).
      * @stable ICU 3.8
      */
@@ -4274,9 +4280,10 @@ public class Bidi {
      * in the paragraph.<p>
      *
      * The BIDI_EMBEDDING attribute in the text, if present, represents
-     * embedding level information. Negative values from -1 to -62 indicate
-     * overrides at the absolute value of the level. Positive values from 1 to
-     * 62 indicate embeddings. Where values are zero or not defined, the base
+     * embedding level information.
+     * Negative values indicate overrides at the absolute value of the level.
+     * Positive values indicate embeddings. (See {@link #MAX_EXPLICIT_LEVEL}.)
+     * Where values are zero or not defined, the base
      * embedding level as determined by the base direction is assumed.<p>
      *
      * The NUMERIC_SHAPING attribute in the text, if present, converts European
@@ -4702,7 +4709,7 @@ public class Bidi {
     /**
      * Retrieves the Bidi class for a given code point.
      * <p>If a <code>BidiClassifier</code> is defined and returns a value
-     * other than <code>CLASS_DEFAULT=UCharacter.getIntPropertyMaxValue(UProperty.BIDI_CLASS)+1</code>,
+     * other than <code>UCharacter.getIntPropertyMaxValue(UProperty.BIDI_CLASS)+1</code>,
      * that value is used; otherwise the default class determination mechanism is invoked.
      *
      * @param c The code point to get a Bidi class for.
@@ -5293,9 +5300,10 @@ public class Bidi {
      * in the paragraph.<p>
      *
      * The BIDI_EMBEDDING attribute in the text, if present, represents
-     * embedding level information. Negative values from -1 to -62 indicate
-     * overrides at the absolute value of the level. Positive values from 1 to
-     * 62 indicate embeddings. Where values are zero or not defined, the base
+     * embedding level information.
+     * Negative values indicate overrides at the absolute value of the level.
+     * Positive values indicate embeddings. (See {@link #MAX_EXPLICIT_LEVEL}.)
+     * Where values are zero or not defined, the base
      * embedding level as determined by the base direction is assumed.<p>
      *
      * The NUMERIC_SHAPING attribute in the text, if present, converts European
@@ -5319,9 +5327,8 @@ public class Bidi {
      *
      * <p>The embeddings array may be null. If present, the values represent
      * embedding level information.
-     * Negative values from -1 to -{@link #MAX_EXPLICIT_LEVEL}
-     * indicate overrides at the absolute value of the level.
-     * Positive values from 1 to {@link #MAX_EXPLICIT_LEVEL} indicate embeddings.
+     * Negative values indicate overrides at the absolute value of the level.
+     * Positive values indicate embeddings. (See {@link #MAX_EXPLICIT_LEVEL}.)
      * Where values are zero, the base embedding level
      * as determined by the base direction is assumed,
      * except for paragraph separators which remain at 0 to prevent reordering of paragraphs.</p>
