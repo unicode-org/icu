@@ -229,30 +229,28 @@ LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(NFS<LNF>&& src) U_N
         : NFS<LNF>(std::move(src)) {
     // Steal the compiled formatter
     LNF&& _src = static_cast<LNF&&>(src);
-    fImpl = _src.fImpl;
-    _src.fImpl = nullptr;
+    auto* stolen = _src.fAtomicFormatter.exchange(nullptr);
+    delete fAtomicFormatter.exchange(stolen);
 }
 
 LocalizedNumberRangeFormatter& LocalizedNumberRangeFormatter::operator=(const LNF& other) {
     NFS<LNF>::operator=(static_cast<const NFS<LNF>&>(other));
     // Do not steal; just clear
-    delete fImpl;
-    fImpl = nullptr;
+    delete fAtomicFormatter.exchange(nullptr);
     return *this;
 }
 
 LocalizedNumberRangeFormatter& LocalizedNumberRangeFormatter::operator=(LNF&& src) U_NOEXCEPT {
     NFS<LNF>::operator=(static_cast<NFS<LNF>&&>(src));
     // Steal the compiled formatter
-    delete fImpl;
-    fImpl = src.fImpl;
-    src.fImpl = nullptr;
+    auto* stolen = src.fAtomicFormatter.exchange(nullptr);
+    delete fAtomicFormatter.exchange(stolen);
     return *this;
 }
 
 
 LocalizedNumberRangeFormatter::~LocalizedNumberRangeFormatter() {
-    delete fImpl;
+    delete fAtomicFormatter.exchange(nullptr);
 }
 
 LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(const RangeMacroProps& macros, const Locale& locale) {
@@ -311,19 +309,55 @@ FormattedNumberRange LocalizedNumberRangeFormatter::formatFormattableRange(
 
 void LocalizedNumberRangeFormatter::formatImpl(
         UFormattedNumberRangeData& results, bool equalBeforeRounding, UErrorCode& status) const {
-    if (fImpl == nullptr) {
-        // TODO: Fix this once the atomic is ready!
-        auto* nonConstThis = const_cast<LocalizedNumberRangeFormatter*>(this);
-        nonConstThis->fImpl = new NumberRangeFormatterImpl(fMacros, status);
-        if (U_FAILURE(status)) {
-            return;
-        }
-        if (fImpl == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
+    auto* impl = getFormatter(status);
+    if (U_FAILURE(status)) {
+        return;
     }
-    fImpl->format(results, equalBeforeRounding, status);
+    if (impl == nullptr) {
+        status = U_INTERNAL_PROGRAM_ERROR;
+        return;
+    }
+    impl->format(results, equalBeforeRounding, status);
+}
+
+const impl::NumberRangeFormatterImpl*
+LocalizedNumberRangeFormatter::getFormatter(UErrorCode& status) const {
+    // TODO: Move this into umutex.h? (similar logic also in decimfmt.cpp)
+    // See ICU-20146
+
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
+
+    // First try to get the pre-computed formatter
+    auto* ptr = fAtomicFormatter.load();
+    if (ptr != nullptr) {
+        return ptr;
+    }
+
+    // Try computing the formatter on our own
+    auto* temp = new NumberRangeFormatterImpl(fMacros, status);
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
+    if (temp == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+
+    // Note: ptr starts as nullptr; during compare_exchange,
+    // it is set to what is actually stored in the atomic
+    // if another thread beat us to computing the formatter object.
+    auto* nonConstThis = const_cast<LocalizedNumberRangeFormatter*>(this);
+    if (!nonConstThis->fAtomicFormatter.compare_exchange_strong(ptr, temp)) {
+        // Another thread beat us to computing the formatter
+        delete temp;
+        return ptr;
+    } else {
+        // Our copy of the formatter got stored in the atomic
+        return temp;
+    }
+
 }
 
 

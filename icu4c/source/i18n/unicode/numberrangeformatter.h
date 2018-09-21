@@ -5,6 +5,7 @@
 #ifndef __NUMBERRANGEFORMATTER_H__
 #define __NUMBERRANGEFORMATTER_H__
 
+#include <atomic>
 #include "unicode/appendable.h"
 #include "unicode/fieldpos.h"
 #include "unicode/fpositer.h"
@@ -615,8 +616,9 @@ class U_I18N_API LocalizedNumberRangeFormatter
     ~LocalizedNumberRangeFormatter();
 
   private:
-    // TODO: This is not thread-safe! Do NOT check this in without an atomic here.
-    impl::NumberRangeFormatterImpl* fImpl = nullptr;
+    std::atomic<impl::NumberRangeFormatterImpl*> fAtomicFormatter = {};
+
+    const impl::NumberRangeFormatterImpl* getFormatter(UErrorCode& stauts) const;
 
     explicit LocalizedNumberRangeFormatter(
         const NumberRangeFormatterSettings<LocalizedNumberRangeFormatter>& other);
