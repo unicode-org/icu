@@ -9205,9 +9205,15 @@ fi
 
 if test -z "$PYTHON3";
 then
-    echo "##"
-    echo "## Notice: Python 3 not found. ICU 64 will require Python 3 to build. See ICU-10923."
-    echo "##"
+    echo ""
+    echo "NOTICE: Unable to find Python 3. ICU versions 64 and later will require Python 3 to build."
+    echo "See ICU-10923 for more information: https://unicode-org.atlassian.net/browse/ICU-10923"
+    echo ""
+else
+    echo ""
+    echo "Found Python 3. You are all set for ICU 64, which will require Python 3 to build."
+    echo "For more info on Python 3 requirement, see: https://unicode-org.atlassian.net/browse/ICU-10923"
+    echo ""
 fi
 
 $as_unset _CXX_CXXSUFFIX
