@@ -294,8 +294,11 @@ void NumberRangeFormatterImpl::formatApproximately (UFormattedNumberRangeData& d
     if (U_FAILURE(status)) { return; }
     if (fSameFormatters) {
         int32_t length = NumberFormatterImpl::writeNumber(micros1, data.quantity1, data.string, 0, status);
-        length += NumberFormatterImpl::writeAffixes(micros1, data.string, 0, length, status);
-        fApproximatelyModifier.apply(data.string, 0, length, status);
+        // HEURISTIC: Desired modifier order: inner, middle, approximately, outer.
+        length += micros1.modInner->apply(data.string, 0, length, status);
+        length += micros1.modMiddle->apply(data.string, 0, length, status);
+        length += fApproximatelyModifier.apply(data.string, 0, length, status);
+        micros1.modOuter->apply(data.string, 0, length, status);
     } else {
         formatRange(data, micros1, micros2, status);
     }

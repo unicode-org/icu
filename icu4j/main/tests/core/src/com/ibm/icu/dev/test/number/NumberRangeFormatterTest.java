@@ -612,6 +612,22 @@ public class NumberRangeFormatterTest {
             "~5K",
             "5K",
             "5K – 5M");
+
+        assertFormatRange(
+            "Approximately in middle of unit string",
+            NumberRangeFormatter.with().numberFormatterBoth(
+                NumberFormatter.with().unit(MeasureUnit.FAHRENHEIT).unitWidth(UnitWidth.FULL_NAME)),
+            new ULocale("zh-Hant"),
+            "華氏 1-5 度",
+            "華氏 ~5 度",
+            "華氏 ~5 度",
+            "華氏 0-3 度",
+            "華氏 ~0 度",
+            "華氏 3-3,000 度",
+            "華氏 3,000-5,000 度",
+            "華氏 4,999-5,001 度",
+            "華氏 ~5,000 度",
+            "華氏 5,000-5,000,000 度");
     }
 
     @Test
