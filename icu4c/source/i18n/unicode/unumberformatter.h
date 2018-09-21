@@ -190,10 +190,9 @@ typedef enum UNumberUnitWidth {
  * Note: This enum specifies the strategy for grouping sizes. To set which character to use as the
  * grouping separator, use the "symbols" setter.
  *
- * @draft ICU 61 -- TODO: This should be renamed to UNumberGroupingStrategy before promoting to stable,
- * for consistency with the other enums.
+ * @draft ICU 63
  */
-typedef enum UGroupingStrategy {
+typedef enum UNumberGroupingStrategy {
     /**
      * Do not display grouping separators in any locale.
      *
@@ -257,13 +256,20 @@ typedef enum UGroupingStrategy {
             UNUM_GROUPING_THOUSANDS,
 
     /**
-     * One more than the highest UGroupingStrategy value.
+     * One more than the highest UNumberGroupingStrategy value.
      *
      * @internal ICU 62: The numeric value may change over time; see ICU ticket #12420.
      */
             UNUM_GROUPING_COUNT
 
-} UGroupingStrategy;
+} UNumberGroupingStrategy;
+
+/**
+ * Old name for compatibility: will be removed in ICU 64.
+ * @deprecated ICU 63
+ */
+typedef UNumberGroupingStrategy UGroupingStrategy;
+
 #endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DRAFT_API

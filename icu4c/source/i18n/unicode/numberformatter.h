@@ -1263,7 +1263,7 @@ class U_I18N_API Grouper : public UMemory {
   public:
 #ifndef U_HIDE_INTERNAL_API
     /** @internal */
-    static Grouper forStrategy(UGroupingStrategy grouping);
+    static Grouper forStrategy(UNumberGroupingStrategy grouping);
 
     /**
      * Resolve the values in Properties to a Grouper object.
@@ -1274,7 +1274,7 @@ class U_I18N_API Grouper : public UMemory {
     // Future: static Grouper forProperties(DecimalFormatProperties& properties);
 
     /** @internal */
-    Grouper(int16_t grouping1, int16_t grouping2, int16_t minGrouping, UGroupingStrategy strategy)
+    Grouper(int16_t grouping1, int16_t grouping2, int16_t minGrouping, UNumberGroupingStrategy strategy)
             : fGrouping1(grouping1),
               fGrouping2(grouping2),
               fMinGrouping(minGrouping),
@@ -1309,10 +1309,10 @@ class U_I18N_API Grouper : public UMemory {
     int16_t fMinGrouping;
 
     /**
-     * The UGroupingStrategy that was used to create this Grouper, or UNUM_GROUPING_COUNT if this
-     * was not created from a UGroupingStrategy.
+     * The UNumberGroupingStrategy that was used to create this Grouper, or UNUM_GROUPING_COUNT if this
+     * was not created from a UNumberGroupingStrategy.
      */
-    UGroupingStrategy fStrategy;
+    UNumberGroupingStrategy fStrategy;
 
     Grouper() : fGrouping1(-3) {};
 
@@ -1769,7 +1769,7 @@ class U_I18N_API NumberFormatterSettings {
      * The exact grouping widths will be chosen based on the locale.
      *
      * <p>
-     * Pass this method an element from the {@link UGroupingStrategy} enum. For example:
+     * Pass this method an element from the {@link UNumberGroupingStrategy} enum. For example:
      *
      * <pre>
      * NumberFormatter::with().grouping(UNUM_GROUPING_MIN2)
@@ -1783,7 +1783,7 @@ class U_I18N_API NumberFormatterSettings {
      * @return The fluent chain.
      * @draft ICU 61
      */
-    Derived grouping(UGroupingStrategy strategy) const &;
+    Derived grouping(UNumberGroupingStrategy strategy) const &;
 
     /**
      * Overload of grouping() for use on an rvalue reference.
@@ -1794,7 +1794,7 @@ class U_I18N_API NumberFormatterSettings {
      * @see #grouping
      * @draft ICU 62
      */
-    Derived grouping(UGroupingStrategy strategy) &&;
+    Derived grouping(UNumberGroupingStrategy strategy) &&;
 
     /**
      * Specifies the minimum and maximum number of digits to render before the decimal mark.
