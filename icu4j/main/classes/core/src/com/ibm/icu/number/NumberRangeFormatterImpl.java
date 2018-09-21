@@ -208,8 +208,11 @@ class NumberRangeFormatterImpl {
             MicroProps micros1, MicroProps micros2) {
         if (fSameFormatters) {
             int length = NumberFormatterImpl.writeNumber(micros1, quantity1, string, 0);
-            length += NumberFormatterImpl.writeAffixes(micros1, string, 0, length);
-            fApproximatelyModifier.apply(string, 0, length);
+            // HEURISTIC: Desired modifier order: inner, middle, approximately, outer.
+            length += micros1.modInner.apply(string, 0, length);
+            length += micros1.modMiddle.apply(string, 0, length);
+            length += fApproximatelyModifier.apply(string, 0, length);
+            micros1.modOuter.apply(string, 0, length);
         } else {
             formatRange(quantity1, quantity2, string, micros1, micros2);
         }
