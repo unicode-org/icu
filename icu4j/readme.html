@@ -525,6 +525,15 @@ these in <code>/usr/local</code>.</p>
     </pre>
   </li>
 </ul>
+<p>
+If you have downloaded ICU4J from the git source repository, an additional step is needed:
+building ICU4C and its data. On POSIX systems, you can run the shell script to automatically
+build and install ICU data:
+<pre>
+  ./tools/build/icu4j-install-data.sh
+</pre>
+Otherwise, see <a href="../icu4c/source/data/icu4j-readme.txt">../icu4c/source/data/icu4j-readme.txt</a>.
+</p>
 <p>Once the JDK and Ant are configured, run the desired target defined in
 <strong>build.xml</strong>. The default target is "jar" which compiles ICU4J library
 class files and create ICU4J jar files. For example:</p>

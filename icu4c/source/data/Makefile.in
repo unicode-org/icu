@@ -878,8 +878,6 @@ $(OUTDIR)/icu4j/icudata.jar: generate-data
 
 ICU4J_DATA=$(OUTDIR)/icu4j/icudata.jar
 
-ifdef ICU4J_ROOT
-
 ICU4J_DATA_INSTALLED=$(ICU4J_ROOT)/main/shared/data/icudata.jar $(ICU4J_ROOT)/main/shared/data/icutzdata.jar
 
 $(ICU4J_ROOT)/main/shared/data/icudata.jar: $(OUTDIR)/icu4j/icudata.jar
@@ -891,15 +889,6 @@ $(ICU4J_ROOT)/main/shared/data/icutzdata.jar: $(OUTDIR)/icu4j/icutzdata.jar
 	cp $(OUTDIR)/icu4j/icutzdata.jar $(ICU4J_ROOT)/main/shared/data
 
 icu4j-data-install: $(ICU4J_DATA_INSTALLED)
-
-else
-
-icu4j-data-install: icu4j-data
-	@echo data is built into $(OUTDIR)/icu4j
-	@echo '** Error:' ICU4J_ROOT was not set, could not install
-	exit 1
-
-endif
 
 icu4j-data: $(ICU4J_DATA) $(ICU4J_TZDATA)
 

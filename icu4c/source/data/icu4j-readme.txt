@@ -8,7 +8,8 @@
 *                                                                              *
 ********************************************************************************
 
-Procedures for building ICU4J data from ICU4C data:
+Procedures for building ICU4J data from ICU4C data.
+This assumes you have checked out the entire ICU repository (both icu4c / icu4j).
 
 *Setup*
 
@@ -17,9 +18,7 @@ In the following,
         $icu4j_root is the ICU4J root directory
         $jdk_bin is the JDK bin directory (for the jar tool)
 
-1. Download and build ICU4C. For more instructions on downloading and building
-        ICU4C, see the ICU4C readme at:
-        http://source.icu-project.org/repos/icu/trunk/icu4c/readme.html#HowToBuild
+1. Build ICU4C.
         (Windows: build as 'x86, Release' otherwise you will have to set 'CFG' differently below.)
 
     *NOTE* You should do a full rebuild after any data changes.
@@ -46,22 +45,15 @@ platform.
         which is $icu4c_root/source in an in-source build.
         (in other words, $icu4c_build is where you ran runConfigureICU or configure)
 
-2c. On the command line, cd to $icu4c_build/data
+2c. On the command line, cd to $icu4c_build
 
 2d. Do
-        make JAR=$jdk_bin/jar ICU4J_ROOT=$icu4j_root icu4j-data-install
+        make icu4j-data-install
 
-       (You can omit the JAR if it's just jar.)
+        ICU4J_ROOT=$icu4j_root 
 
-	Continue with step 3, in Java:
 
 Step 2 on either platform will produce two files: icudata.jar and
 icutzdata.jar in $icu4j_root/main/shared/data.
 
-*Java*
-
-3. After the ICU4C-side steps above, build the main target of the
-        ICU4J ant build to unpack the jar files with the following commands:
-
-        cd $icu4j_root
-        ant main
+You can now proceed to build icu4j normally.

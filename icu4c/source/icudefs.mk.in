@@ -327,5 +327,8 @@ ifneq ($(TEST_STATUS_FILE),)
 TEST_OUTPUT_OPTS="-E$(TEST_STATUS_FILE)"
 endif
 
+# This assumes that icu4j is a sibling of the icu4c directory.
+ICU4J_ROOT=$(top_srcdir)/../../icu4j
+
 # optional include at top
 -include $(top_builddir)/icudefs.local
