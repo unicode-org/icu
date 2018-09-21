@@ -33,6 +33,14 @@ ICU_LIB_TARGET=$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll
 !ENDIF
 !MESSAGE ICU data make path is $(ICUMAKE)
 
+!IF [python3]!=0
+!MESSAGE Information: Unable to find Python 3. ICU versions 64 and later will require Python 3 to build.
+!MESSAGE Information: See ICU-10923 for more information: https://unicode-org.atlassian.net/browse/ICU-10923
+!ELSE
+!MESSAGE Information: Found Python 3. You are all set for ICU 64, which will require Python 3 to build.
+!MESSAGE Information: For more info on Python 3 requirement, see: https://unicode-org.atlassian.net/browse/ICU-10923
+!ENDIF
+
 # Suffixes for data files
 .SUFFIXES : .nrm .icu .ucm .cnv .dll .dat .res .txt .c
 
