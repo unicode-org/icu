@@ -6,7 +6,7 @@ matrix:
       before_script:
         - cd icu4j
         - ant init
-        - ./tools/build/icu4j-install-data.sh
+        - sh ./tools/build/icu4j-install-data.sh
       script:
         - ant check
       after_failure:
