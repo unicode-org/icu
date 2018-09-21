@@ -798,7 +798,7 @@ _getKeywords(const char *localeID,
             }
             keywordsLen += keywordList[i].keywordLen + 1;
             if(valuesToo) {
-                if(keywordsLen + keywordList[i].valueLen < keywordCapacity) {
+                if(keywordsLen + keywordList[i].valueLen <= keywordCapacity) {
                     uprv_strncpy(keywords+keywordsLen, keywordList[i].valueStart, keywordList[i].valueLen);
                 }
                 keywordsLen += keywordList[i].valueLen;

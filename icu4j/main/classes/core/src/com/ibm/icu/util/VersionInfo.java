@@ -194,7 +194,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public static final String ICU_DATA_VERSION_PATH = "62b";
+    public static final String ICU_DATA_VERSION_PATH = "63b";
 
     /**
      * Data version in ICU4J.
@@ -482,7 +482,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
      *
      * @return the hash code value for this set.
      * @see java.lang.Object#hashCode()
-     * @stable ICU 58
+     * @stable ICU 2.6
      */
     @Override
     public int hashCode() {
@@ -527,7 +527,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
     /**
      * Map of singletons
      */
-    private static final ConcurrentHashMap<Integer, VersionInfo> MAP_ = new ConcurrentHashMap<Integer, VersionInfo>();
+    private static final ConcurrentHashMap<Integer, VersionInfo> MAP_ = new ConcurrentHashMap<>();
     /**
      * Last byte mask
      */
@@ -574,7 +574,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
         UNICODE_10_0   = getInstance(10, 0, 0, 0);
         UNICODE_11_0   = getInstance(11, 0, 0, 0);
 
-        ICU_VERSION   = getInstance(62, 1, 0, 0);
+        ICU_VERSION   = getInstance(63, 1, 0, 0);
         ICU_DATA_VERSION = ICU_VERSION;
         UNICODE_VERSION = UNICODE_11_0;
 

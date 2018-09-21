@@ -511,7 +511,7 @@ main(int argc, char* argv[]) {
 static int runCommand(const char* command, UBool specialHandling) {
     char *cmd = NULL;
     char cmdBuffer[SMALL_BUFFER_MAX_SIZE];
-    int32_t len = strlen(command);
+    int32_t len = static_cast<int32_t>(strlen(command));
 
     if (len == 0) {
         return 0;
@@ -1226,7 +1226,7 @@ static int32_t pkg_installFileMode(const char *installDir, const char *srcDir, c
     if (f != NULL) {
         for(;;) {
             if (T_FileStream_readLine(f, buffer, SMALL_BUFFER_MAX_SIZE) != NULL) {
-                bufferLength = uprv_strlen(buffer);
+                bufferLength = static_cast<int32_t>(uprv_strlen(buffer));
                 /* Remove new line character. */
                 if (bufferLength > 0) {
                     buffer[bufferLength-1] = 0;

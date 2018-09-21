@@ -329,7 +329,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
      * Subclasses should override this implementation.
      *
      * @return a hash code value.
-     * @stable ICU 58
+     * @stable ICU 2.8
      */
     @Override
     public int hashCode() {
@@ -477,7 +477,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
 
     /**
      * Clones the collator.
-     * @stable ICU 2.6
+     * @stable ICU 2.8
      * @return a clone of this collator.
      */
     @Override
@@ -1016,7 +1016,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
     }
 
     private static final class KeywordsSink extends UResource.Sink {
-        LinkedList<String> values = new LinkedList<String>();
+        LinkedList<String> values = new LinkedList<>();
         boolean hasDefault = false;
 
         @Override

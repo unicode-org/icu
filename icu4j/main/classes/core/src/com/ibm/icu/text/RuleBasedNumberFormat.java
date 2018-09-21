@@ -941,13 +941,10 @@ public class RuleBasedNumberFormat extends NumberFormat {
     }
 
     /**
-     * Mock implementation of hashCode(). This implementation always returns a constant
-     * value. When Java assertion is enabled, this method triggers an assertion failure.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * {@inheritDoc}
+     * @stable ICU 2.0
      */
     @Override
-    @Deprecated
     public int hashCode() {
         return super.hashCode();
     }
@@ -1731,7 +1728,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
 
         // our rule list is an array of the appropriate size
         ruleSets = new NFRuleSet[numRuleSets];
-        ruleSetsMap = new HashMap<String, NFRuleSet>(numRuleSets * 2 + 1);
+        ruleSetsMap = new HashMap<>(numRuleSets * 2 + 1);
         defaultRuleSet = null;
 
         // Used to count the number of public rule sets
@@ -1844,7 +1841,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
         if (localizations != null) {
             publicRuleSetNames = localizations[0].clone();
 
-            Map<String, String[]> m = new HashMap<String, String[]>();
+            Map<String, String[]> m = new HashMap<>();
             for (int i = 1; i < localizations.length; ++i) {
                 String[] data = localizations[i];
                 String loc = data[0];

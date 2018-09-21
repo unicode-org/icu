@@ -26,7 +26,7 @@ import com.ibm.icu.impl.Utility;
 public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
 {
     // public data member ------------------------------------------------
-    
+
     /**
      * Internal byte array.
      * @stable ICU 2.8
@@ -34,16 +34,16 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
     public byte[] bytes;
 
     /**
-     * Size of the internal byte array used. 
-     * Different from bytes.length, size will be &lt;= bytes.length. 
+     * Size of the internal byte array used.
+     * Different from bytes.length, size will be &lt;= bytes.length.
      * Semantics of size is similar to java.util.Vector.size().
      * @stable ICU 2.8
      */
     public int size;
-    
+
     // public constructor ------------------------------------------------
 
-    /** 
+    /**
      * Construct a new ByteArrayWrapper with no data.
      * @stable ICU 2.8
      */
@@ -103,15 +103,15 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
     // public methods ----------------------------------------------------
 
     /**
-     * Ensure that the internal byte array is at least of length capacity.     
-     * If the byte array is null or its length is less than capacity, a new 
-     * byte array of length capacity will be allocated.  
-     * The contents of the array (between 0 and size) remain unchanged. 
+     * Ensure that the internal byte array is at least of length capacity.
+     * If the byte array is null or its length is less than capacity, a new
+     * byte array of length capacity will be allocated.
+     * The contents of the array (between 0 and size) remain unchanged.
      * @param capacity minimum length of internal byte array.
      * @return this ByteArrayWrapper
      * @stable ICU 3.2
      */
-    public ByteArrayWrapper ensureCapacity(int capacity) 
+    public ByteArrayWrapper ensureCapacity(int capacity)
     {
         if (bytes == null || bytes.length < capacity) {
             byte[] newbytes = new byte[capacity];
@@ -122,11 +122,11 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
         }
         return this;
     }
-    
+
     /**
-     * Set the internal byte array from offset 0 to (limit - start) with the 
-     * contents of src from offset start to limit. If the byte array is null or its length is less than capacity, a new 
-     * byte array of length (limit - start) will be allocated.  
+     * Set the internal byte array from offset 0 to (limit - start) with the
+     * contents of src from offset start to limit. If the byte array is null or its length is less than capacity, a new
+     * byte array of length (limit - start) will be allocated.
      * This resets the size of the internal byte array to (limit - start).
      * @param src source byte array to copy from
      * @param start start offset of src to copy from
@@ -134,15 +134,15 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
      * @return this ByteArrayWrapper
      * @stable ICU 3.2
      */
-    public final ByteArrayWrapper set(byte[] src, int start, int limit) 
+    public final ByteArrayWrapper set(byte[] src, int start, int limit)
     {
         size = 0;
         append(src, start, limit);
         return this;
     }
-    
+
     /*
-    public final ByteArrayWrapper get(byte[] target, int start, int limit) 
+    public final ByteArrayWrapper get(byte[] target, int start, int limit)
     {
         int len = limit - start;
         if (len > size) throw new IllegalArgumentException("limit too long");
@@ -152,7 +152,7 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
     */
 
     /**
-     * Appends the internal byte array from offset size with the 
+     * Appends the internal byte array from offset size with the
      * contents of src from offset start to limit. This increases the size of
      * the internal byte array to (size + limit - start).
      * @param src source byte array to copy from
@@ -161,7 +161,7 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
      * @return this ByteArrayWrapper
      * @stable ICU 3.2
      */
-    public final ByteArrayWrapper append(byte[] src, int start, int limit) 
+    public final ByteArrayWrapper append(byte[] src, int start, int limit)
     {
         int len = limit - start;
         ensureCapacity(size + len);
@@ -171,7 +171,7 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
     }
 
     /*
-    public final ByteArrayWrapper append(ByteArrayWrapper other) 
+    public final ByteArrayWrapper append(ByteArrayWrapper other)
     {
         return append(other.bytes, 0, other.size);
     }
@@ -190,13 +190,14 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
         size = 0;
         return result;
     }
-    
+
     // Boilerplate ----------------------------------------------------
-    
+
     /**
      * Returns string value for debugging
-     * @stable ICU 3.2
+     * @stable ICU 2.8
      */
+    @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < size; ++i) {
@@ -210,8 +211,9 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
      * Return true if the bytes in each wrapper are equal.
      * @param other the object to compare to.
      * @return true if the two objects are equal.
-     * @stable ICU 3.2
+     * @stable ICU 2.8
      */
+    @Override
     public boolean equals(Object other) {
         if (this == other) return true;
         if (other == null) return false;
@@ -231,8 +233,9 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
     /**
      * Return the hashcode.
      * @return the hashcode.
-     * @stable ICU 3.2
+     * @stable ICU 2.8
      */
+    @Override
     public int hashCode() {
         int result = bytes.length;
         for (int i = 0; i < size; ++i) {
@@ -249,6 +252,7 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
      * @throws ClassCastException if the other object is not a ByteArrayWrapper
      * @stable ICU 4.4
      */
+    @Override
     public int compareTo(ByteArrayWrapper other) {
         if (this == other) return 0;
         int minSize = size < other.size ? size : other.size;
@@ -259,11 +263,11 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
         }
         return size - other.size;
     }
-    
+
     // private methods -----------------------------------------------------
-    
+
     /**
-     * Copies the contents of src byte array from offset srcoff to the 
+     * Copies the contents of src byte array from offset srcoff to the
      * target of tgt byte array at the offset tgtoff.
      * @param src source byte array to copy from
      * @param srcoff start offset of src to copy from
@@ -271,15 +275,15 @@ public class ByteArrayWrapper implements Comparable<ByteArrayWrapper>
      * @param tgtoff start offset of tgt to copy to
      * @param length size of contents to copy
      */
-    private static final void copyBytes(byte[] src, int srcoff, byte[] tgt, 
+    private static final void copyBytes(byte[] src, int srcoff, byte[] tgt,
                                        int tgtoff, int length) {
         if (length < 64) {
             for (int i = srcoff, n = tgtoff; -- length >= 0; ++ i, ++ n) {
                 tgt[n] = src[i];
             }
-        } 
+        }
         else {
             System.arraycopy(src, srcoff, tgt, tgtoff, length);
         }
-    }      
+    }
 }

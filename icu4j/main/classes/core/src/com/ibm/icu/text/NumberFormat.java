@@ -1141,8 +1141,9 @@ public abstract class NumberFormat extends UFormat {
 
     /**
      * Overrides equals.
-     * Two NumberFormats are equal if they are of the same class
-     * and the settings (groupingUsed, parseIntegerOnly, maximumIntegerDigits, etc.
+     * Two NumberFormats are equal they are of the same class
+     * and the user-specified values for settings
+     * (groupingUsed, parseIntegerOnly, maximumIntegerDigits, etc.)
      * are equal.
      * @param obj the object to compare against
      * @return true if the object is equal to this.

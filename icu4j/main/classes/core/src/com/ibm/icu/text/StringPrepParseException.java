@@ -143,11 +143,10 @@ public class StringPrepParseException extends ParseException {
     /**
      * Mock implementation of hashCode(). This implementation always returns a constant
      * value. When Java assertion is enabled, this method triggers an assertion failure.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @return a hash code value for this object.
+     * @stable ICU 2.8
      */
     @Override
-    @Deprecated
     public int hashCode() {
         assert false : "hashCode not designed";
         return 42;
