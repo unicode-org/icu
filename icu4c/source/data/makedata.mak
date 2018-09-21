@@ -33,7 +33,7 @@ ICU_LIB_TARGET=$(DLL_OUTPUT)\$(U_ICUDATA_NAME).dll
 !ENDIF
 !MESSAGE ICU data make path is $(ICUMAKE)
 
-!IF [python3]!=0
+!IF [py -3]!=0
 !MESSAGE Information: Unable to find Python 3. ICU versions 64 and later will require Python 3 to build.
 !MESSAGE Information: See ICU-10923 for more information: https://unicode-org.atlassian.net/browse/ICU-10923
 !ELSE
