@@ -69,7 +69,7 @@ else
 check-vars:
 endif
 
-.PHONY: check-vars classes clean-docs tmp-old
+.PHONY: check-vars classes clean-docs tmp-old clean
 
 .PRECIOUS: $(TARGET) $(OLD_ICU_BUILD)/$(DOXYFILE) $(NEW_ICU_BUILD)/$(DOXYFILE)
 
@@ -103,3 +103,7 @@ APIChangeReport.xml:
 
 #%/source/Makefile: %/source/Makefile.in
 #	@echo "$@ does not seem to exist - was configure run?" ; false
+
+clean:
+	-rm -f $(TARGET)
+	-$(ANT) clean

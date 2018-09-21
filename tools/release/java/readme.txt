@@ -12,8 +12,9 @@ Requirements:
   - Doxygen (for generating docs).
      Doxygen 1.7.5.1 is recommended for ICU API docs, 
      but an older Doxygen may work for the API Change Report.
-  - Java JDK 1.5+
+  - Java JDK 1.5+ (probably much later)
   - Apache Ant
+  - Maven
   - Note: if you have trouble with null output, put xalan.jar and xercesImpl.jar from <http://xalan.apache.org/xalan-j/downloads.html#latest-release> into ./lib/
 
 To use the utility:

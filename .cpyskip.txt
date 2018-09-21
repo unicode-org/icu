@@ -52,6 +52,9 @@
 *.vcxproj.filters
 *.zip
 
+# local
+Makefile.local
+
 # UnicodeData.txt does not have any header.
 */UnicodeData.txt
 
@@ -98,6 +101,7 @@ icu4j/perf-tests/data/conversion/*
 #
 tools/trac/IcuCodeTools/*
 tools/unicodetools/*
+tools/release/java/target/*
 #
 # vendor
 #
