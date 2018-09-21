@@ -1123,27 +1123,25 @@ UnicodeStringTest::TestMiscellaneous()
         errln("UnicodeString(u[-1]).getTerminatedBuffer() returns a bad buffer");
     }
 
-    test1=UNICODE_STRING("la", 2);
-    test1.append(UNICODE_STRING(" lila", 5).getTerminatedBuffer(), 0, -1);
-    if(test1!=UNICODE_STRING("la lila", 7)) {
-        errln("UnicodeString::append(const UChar *, start, length) failed");
-    }
+    // NOTE: Some compilers will optimize u"la" to point to the same static memory
+    // as u" lila", offset by 3 code units
+    test1=UnicodeString(TRUE, u"la", 2);
+    test1.append(UnicodeString(TRUE, u" lila", 5).getTerminatedBuffer(), 0, -1);
+    assertEquals("UnicodeString::append(const UChar *, start, length) failed",
+        u"la lila", test1);
 
-    test1.insert(3, UNICODE_STRING("dudum ", 6), 0, INT32_MAX);
-    if(test1!=UNICODE_STRING("la dudum lila", 13)) {
-        errln("UnicodeString::insert(start, const UniStr &, start, length) failed");
-    }
+    test1.insert(3, UnicodeString(TRUE, u"dudum ", 6), 0, INT32_MAX);
+    assertEquals("UnicodeString::insert(start, const UniStr &, start, length) failed",
+        u"la dudum lila", test1);
 
     static const UChar ucs[]={ 0x68, 0x6d, 0x20, 0 };
     test1.insert(9, ucs, -1);
-    if(test1!=UNICODE_STRING("la dudum hm lila", 16)) {
-        errln("UnicodeString::insert(start, const UChar *, length) failed");
-    }
+    assertEquals("UnicodeString::insert(start, const UChar *, length) failed",
+        u"la dudum hm lila", test1);
 
     test1.replace(9, 2, (UChar)0x2b);
-    if(test1!=UNICODE_STRING("la dudum + lila", 15)) {
-        errln("UnicodeString::replace(start, length, UChar) failed");
-    }
+    assertEquals("UnicodeString::replace(start, length, UChar) failed",
+        u"la dudum + lila", test1);
 
     if(test1.hasMetaData() || UnicodeString().hasMetaData()) {
         errln("UnicodeString::hasMetaData() returns TRUE");
@@ -2248,3 +2246,121 @@ UnicodeStringTest::TestNullPointers() {
     UnicodeString(u"def").extract(nullptr, 0, errorCode);
     assertEquals("buffer overflow extracting to nullptr", U_BUFFER_OVERFLOW_ERROR, errorCode);
 }
+
+void UnicodeStringTest::TestUnicodeStringInsertAppendToSelf() {
+    IcuTestErrorCode status(*this, "TestUnicodeStringAppendToSelf");
+
+    // Test append operation
+    UnicodeString str(u"foo ");
+    str.append(str);
+    str.append(str);
+    str.append(str);
+    assertEquals("", u"foo foo foo foo foo foo foo foo ", str);
+
+    // Test append operation with readonly alias to start
+    str = UnicodeString(TRUE, u"foo ", 4);
+    str.append(str);
+    str.append(str);
+    str.append(str);
+    assertEquals("", u"foo foo foo foo foo foo foo foo ", str);
+
+    // Test append operation with aliased substring
+    str = u"abcde";
+    UnicodeString sub = str.tempSubString(1, 2);
+    str.append(sub);
+    assertEquals("", u"abcdebc", str);
+
+    // Test append operation with double-aliased substring
+    str = UnicodeString(TRUE, u"abcde", 5);
+    sub = str.tempSubString(1, 2);
+    str.append(sub);
+    assertEquals("", u"abcdebc", str);
+
+    // Test insert operation
+    str = u"a-*b";
+    str.insert(2, str);
+    str.insert(4, str);
+    str.insert(8, str);
+    assertEquals("", u"a-a-a-a-a-a-a-a-*b*b*b*b*b*b*b*b", str);
+
+    // Test insert operation with readonly alias to start
+    str = UnicodeString(TRUE, u"a-*b", 4);
+    str.insert(2, str);
+    str.insert(4, str);
+    str.insert(8, str);
+    assertEquals("", u"a-a-a-a-a-a-a-a-*b*b*b*b*b*b*b*b", str);
+
+    // Test insert operation with aliased substring
+    str = u"abcde";
+    sub = str.tempSubString(1, 3);
+    str.insert(2, sub);
+    assertEquals("", u"abbcdcde", str);
+
+    // Test insert operation with double-aliased substring
+    str = UnicodeString(TRUE, u"abcde", 5);
+    sub = str.tempSubString(1, 3);
+    str.insert(2, sub);
+    assertEquals("", u"abbcdcde", str);
+}
+
+void UnicodeStringTest::TestLargeAppend() {
+    if(quick) return;
+
+    IcuTestErrorCode status(*this, "TestLargeAppend");
+    // Make a large UnicodeString
+    int32_t len = 0xAFFFFFF;
+    UnicodeString str;
+    char16_t *buf = str.getBuffer(len);
+    // A fast way to set buffer to valid Unicode.
+    // 4E4E is a valid unicode character
+    uprv_memset(buf, 0x4e, len * 2);
+    str.releaseBuffer(len);
+    UnicodeString dest;
+    // Append it 16 times
+    // 0xAFFFFFF times 16 is 0xA4FFFFF1,
+    // which is greater than INT32_MAX, which is 0x7FFFFFFF.
+    int64_t total = 0;
+    for (int32_t i = 0; i < 16; i++) {
+        dest.append(str);
+        total += len;
+        if (total <= INT32_MAX) {
+            assertFalse("dest is not bogus", dest.isBogus());
+        } else {
+            assertTrue("dest should be bogus", dest.isBogus());
+        }
+    }
+    dest.remove();
+    total = 0;
+    for (int32_t i = 0; i < 16; i++) {
+        dest.append(str);
+        total += len;
+        if (total + len <= INT32_MAX) {
+            assertFalse("dest is not bogus", dest.isBogus());
+        } else if (total <= INT32_MAX) {
+            // Check that a string of exactly the maximum size works
+            UnicodeString str2;
+            int32_t remain = INT32_MAX - total;
+            char16_t *buf2 = str2.getBuffer(remain);
+            if (buf2 == nullptr) {
+                // if somehow memory allocation fail, return the test
+                return;
+            }
+            uprv_memset(buf2, 0x4e, remain * 2);
+            str2.releaseBuffer(remain);
+            dest.append(str2);
+            total += remain;
+            assertEquals("When a string of exactly the maximum size works", (int64_t)INT32_MAX, total);
+            assertEquals("When a string of exactly the maximum size works", INT32_MAX, dest.length());
+            assertFalse("dest is not bogus", dest.isBogus());
+
+            // Check that a string size+1 goes bogus
+            str2.truncate(1);
+            dest.append(str2);
+            total++;
+            assertTrue("dest should be bogus", dest.isBogus());
+        } else {
+            assertTrue("dest should be bogus", dest.isBogus());
+        }
+    }
+}
+
