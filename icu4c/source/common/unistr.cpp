@@ -1447,10 +1447,15 @@ UnicodeString::doReplace(int32_t start,
   }
 
   if(srcChars == 0) {
-    srcStart = srcLength = 0;
-  } else if(srcLength < 0) {
-    // get the srcLength if necessary
-    srcLength = u_strlen(srcChars + srcStart);
+    srcLength = 0;
+  } else {
+    // Perform all remaining operations relative to srcChars + srcStart.
+    // From this point forward, do not use srcStart.
+    srcChars += srcStart;
+    if (srcLength < 0) {
+      // get the srcLength if necessary
+      srcLength = u_strlen(srcChars);
+    }
   }
 
   // pin the indices to legal values
@@ -1468,10 +1473,10 @@ UnicodeString::doReplace(int32_t start,
   // Check for insertion into ourself
   const UChar *oldArray = getArrayStart();
   if (isBufferWritable() &&
-      oldArray < srcChars + srcStart + srcLength &&
-      srcChars + srcStart < oldArray + oldLength) {
+      oldArray < srcChars + srcLength &&
+      srcChars < oldArray + oldLength) {
     // Copy into a new UnicodeString and start over
-    UnicodeString copy(srcChars + srcStart, srcLength);
+    UnicodeString copy(srcChars, srcLength);
     if (copy.isBogus()) {
       setToBogus();
       return *this;
@@ -1485,7 +1490,7 @@ UnicodeString::doReplace(int32_t start,
   if((fUnion.fFields.fLengthAndFlags&kUsingStackBuffer) && (newLength > US_STACKBUF_SIZE)) {
     // copy the stack buffer contents because it will be overwritten with
     // fUnion.fFields values
-    u_memcpy(oldStackBuffer, fUnion.fStackFields.fBuffer, oldLength);
+    u_memcpy(oldStackBuffer, oldArray, oldLength);
     oldArray = oldStackBuffer;
   }
 
@@ -1514,7 +1519,7 @@ UnicodeString::doReplace(int32_t start,
   }
 
   // now fill in the hole with the new string
-  us_arrayCopy(srcChars, srcStart, newArray, start, srcLength);
+  us_arrayCopy(srcChars, 0, newArray, start, srcLength);
 
   setLength(newLength);
 
@@ -1547,9 +1552,13 @@ UnicodeString::doAppend(const UChar *srcChars, int32_t srcStart, int32_t srcLeng
     return *this;
   }
 
+  // Perform all remaining operations relative to srcChars + srcStart.
+  // From this point forward, do not use srcStart.
+  srcChars += srcStart;
+
   if(srcLength < 0) {
     // get the srcLength if necessary
-    if((srcLength = u_strlen(srcChars + srcStart)) == 0) {
+    if((srcLength = u_strlen(srcChars)) == 0) {
       return *this;
     }
   }
@@ -1560,10 +1569,10 @@ UnicodeString::doAppend(const UChar *srcChars, int32_t srcStart, int32_t srcLeng
   // Check for append onto ourself
   const UChar* oldArray = getArrayStart();
   if (isBufferWritable() &&
-      oldArray < srcChars + srcStart + srcLength &&
-      srcChars + srcStart < oldArray + oldLength) {
+      oldArray < srcChars + srcLength &&
+      srcChars < oldArray + oldLength) {
     // Copy into a new UnicodeString and start over
-    UnicodeString copy(srcChars + srcStart, srcLength);
+    UnicodeString copy(srcChars, srcLength);
     if (copy.isBogus()) {
       setToBogus();
       return *this;
@@ -1582,8 +1591,8 @@ UnicodeString::doAppend(const UChar *srcChars, int32_t srcStart, int32_t srcLeng
     // or
     //   str.appendString(buffer, length)
     // or similar.
-    if(srcChars + srcStart != newArray + oldLength) {
-      us_arrayCopy(srcChars, srcStart, newArray, oldLength, srcLength);
+    if(srcChars != newArray + oldLength) {
+      us_arrayCopy(srcChars, 0, newArray, oldLength, srcLength);
     }
     setLength(newLength);
   }
