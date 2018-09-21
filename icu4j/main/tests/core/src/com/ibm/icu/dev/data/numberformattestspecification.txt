@@ -32,15 +32,16 @@ test basic patterns
 set locale fr_FR
 set format 1234.567
 begin
-pattern	output
-#,##0.##	1\u202f234,57
+pattern	output	breaks
+// K does not use \u202f narrow space
+#,##0.##	1\u202f234,57	K
 0.##	1234,57
 0	1235
-#,##0.###	1\u202f234,567
+#,##0.###	1\u202f234,567	K
 ###0.######	1234,567
 ###0.0000#	1234,5670
 00000.0000	01234,5670
-#,##0.00 \u00a4	1\u202f234,57 \u20ac
+#,##0.00 \u00a4	1\u202f234,57 \u20ac	K
 'tick''bitten '0.00	tick'bitten 1234,57
 'tick' 'bitten '0.00	tick bitten 1234,57
 
