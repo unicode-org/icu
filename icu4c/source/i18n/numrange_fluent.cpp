@@ -229,24 +229,22 @@ LocalizedNumberRangeFormatter::LocalizedNumberRangeFormatter(NFS<LNF>&& src) U_N
         : NFS<LNF>(std::move(src)) {
     // Steal the compiled formatter
     LNF&& _src = static_cast<LNF&&>(src);
-    fImpl = _src.fImpl;
-    _src.fImpl = nullptr;
+    auto* stolen = _src.fAtomicFormatter.exchange(nullptr);
+    delete fAtomicFormatter.exchange(stolen);
 }
 
 LocalizedNumberRangeFormatter& LocalizedNumberRangeFormatter::operator=(const LNF& other) {
     NFS<LNF>::operator=(static_cast<const NFS<LNF>&>(other));
     // Do not steal; just clear
-    delete fImpl;
-    fImpl = nullptr;
+    delete fAtomicFormatter.exchange(nullptr);
     return *this;
 }
 
 LocalizedNumberRangeFormatter& LocalizedNumberRangeFormatter::operator=(LNF&& src) U_NOEXCEPT {
     NFS<LNF>::operator=(static_cast<NFS<LNF>&&>(src));
     // Steal the compiled formatter
-    delete fImpl;
-    fImpl = src.fImpl;
-    src.fImpl = nullptr;
+    auto* stolen = src.fAtomicFormatter.exchange(nullptr);
+    delete fAtomicFormatter.exchange(stolen);
     return *this;
 }
 
