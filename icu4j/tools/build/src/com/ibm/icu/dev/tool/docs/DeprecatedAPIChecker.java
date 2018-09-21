@@ -56,7 +56,7 @@ public class DeprecatedAPIChecker {
     public void checkDeprecated() {
         // Gather API class/enum names and its names that can be
         // used for Class.forName()
-        Map<String, String> apiClassNameMap = new TreeMap<String, String>();
+        Map<String, String> apiClassNameMap = new TreeMap<>();
         for (APIInfo api : apiInfoSet) {
             if (!api.isPublic() && !api.isProtected()) {
                 continue;
@@ -133,6 +133,18 @@ public class DeprecatedAPIChecker {
             }
 
             List<String> paramNames = getParamNames(ctor);
+
+            Class<?> declClass = cls.getDeclaringClass();
+            if (declClass != null && !Modifier.isStatic(cls.getModifiers())) {
+                // This is non-static inner class's constructor.
+                // javac automatically injects instance of declaring class
+                // as the first param of the constructor, but ICU's API
+                // signature is based on javadoc and it generates signature
+                // without the implicit parameter.
+                assert paramNames.get(0).equals(declClass.getName());
+                paramNames.remove(0);
+            }
+
             api = findConstructorInfo(apiInfoSet, clsName, paramNames);
 
             if (api == null) {
@@ -351,7 +363,7 @@ public class DeprecatedAPIChecker {
             throw new IllegalArgumentException(api.toString() + " is not a constructor or a method.");
         }
 
-        List<String> nameList = new ArrayList<String>();
+        List<String> nameList = new ArrayList<>();
         String signature = api.getSignature();
         int start = signature.indexOf('(');
         int end = signature.indexOf(')');
@@ -410,7 +422,7 @@ public class DeprecatedAPIChecker {
     private static char[] PRIMITIVE_SIGNATURES = { 'B', 'S', 'I', 'J', 'F', 'D', 'Z', 'C' };
 
     private static List<String> toTypeNameList(Type[] types) {
-        List<String> nameList = new ArrayList<String>();
+        List<String> nameList = new ArrayList<>();
 
         for (Type t : types) {
             StringBuilder s = new StringBuilder();

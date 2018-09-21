@@ -252,6 +252,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestToLanguageTag);
     TESTCASE_AUTO(TestMoveAssign);
     TESTCASE_AUTO(TestMoveCtor);
+    TESTCASE_AUTO(TestBug13417VeryLongLanguageTag);
     TESTCASE_AUTO_END;
 }
 
@@ -3124,4 +3125,24 @@ void LocaleTest::TestMoveCtor() {
     assertEquals("country", l7.getCountry(), l8.getCountry());
     assertEquals("variant", l7.getVariant(), l8.getVariant());
     assertEquals("bogus", l7.isBogus(), l8.isBogus());
+}
+
+void LocaleTest::TestBug13417VeryLongLanguageTag() {
+    IcuTestErrorCode status(*this, "TestBug13417VeryLongLanguageTag()");
+
+    static const char tag[] =
+        "zh-x"
+        "-foo-bar-baz-foo-bar-baz-foo-bar-baz-foo-bar-baz"
+        "-foo-bar-baz-foo-bar-baz-foo-bar-baz-foo-bar-baz"
+        "-foo-bar-baz-foo-bar-baz-foo-bar-baz-foo-bar-baz"
+        "-foo-bar-baz-fxx"
+    ;
+
+    Locale l = Locale::forLanguageTag(tag, status);
+    status.errIfFailureAndReset("\"%s\"", tag);
+    assertTrue("!l.isBogus()", !l.isBogus());
+
+    std::string result = l.toLanguageTag<std::string>(status);
+    status.errIfFailureAndReset("\"%s\"", l.getName());
+    assertEquals("equals", tag, result.c_str());
 }

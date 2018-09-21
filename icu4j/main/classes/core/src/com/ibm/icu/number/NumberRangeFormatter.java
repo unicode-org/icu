@@ -175,6 +175,7 @@ public abstract class NumberRangeFormatter {
      *
      * @return An {@link UnlocalizedNumberRangeFormatter}, to be used for chaining.
      * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
      */
     public static UnlocalizedNumberRangeFormatter with() {
         return BASE;
@@ -188,6 +189,7 @@ public abstract class NumberRangeFormatter {
      *            The locale from which to load formats and symbols for number range formatting.
      * @return A {@link LocalizedNumberRangeFormatter}, to be used for chaining.
      * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
      */
     public static LocalizedNumberRangeFormatter withLocale(Locale locale) {
         return BASE.locale(locale);
@@ -201,9 +203,15 @@ public abstract class NumberRangeFormatter {
      *            The locale from which to load formats and symbols for number range formatting.
      * @return A {@link LocalizedNumberRangeFormatter}, to be used for chaining.
      * @draft ICU 63
+     * @provisional This API might change or be removed in a future release.
      */
     public static LocalizedNumberRangeFormatter withLocale(ULocale locale) {
         return BASE.locale(locale);
     }
 
+    /**
+     * Private constructor - this class is not designed for instantiation
+     */
+    private NumberRangeFormatter() {
+    }
 }

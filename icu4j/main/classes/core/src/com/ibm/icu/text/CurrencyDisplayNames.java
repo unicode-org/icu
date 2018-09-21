@@ -51,7 +51,7 @@ public abstract class CurrencyDisplayNames {
      * @stable ICU 54
      */
     public static CurrencyDisplayNames getInstance(Locale locale) {
-        return getInstance(locale, true);
+        return getInstance(locale, false);
     }
 
     /**

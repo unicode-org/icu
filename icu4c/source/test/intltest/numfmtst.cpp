@@ -202,6 +202,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test11645_ApplyPatternEquality);
   TESTCASE_AUTO(Test12567);
   TESTCASE_AUTO(Test11626_CustomizeCurrencyPluralInfo);
+  TESTCASE_AUTO(Test20073_StrictPercentParseErrorIndex);
   TESTCASE_AUTO(Test13056_GroupingSize);
   TESTCASE_AUTO(Test11025_CurrencyPadding);
   TESTCASE_AUTO(Test11648_ExpDecFormatMalPattern);
@@ -8942,6 +8943,17 @@ void NumberFormatTest::Test11626_CustomizeCurrencyPluralInfo() {
     assertEquals("Plural other", u"99 америчких долара", df.format(99, result.remove(), errorCode));
 }
 
+void NumberFormatTest::Test20073_StrictPercentParseErrorIndex() {
+    IcuTestErrorCode status(*this, "Test20073_StrictPercentParseErrorIndex");
+    ParsePosition parsePosition(0);
+    DecimalFormat df(u"0%", {"en-us", status}, status);
+    df.setLenient(FALSE);
+    Formattable result;
+    df.parse(u"%2%", result, parsePosition);
+    assertEquals("", 0, parsePosition.getIndex());
+    assertEquals("", 0, parsePosition.getErrorIndex());
+}
+
 void NumberFormatTest::Test13056_GroupingSize() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat df(u"#,##0", status);
@@ -9241,22 +9253,40 @@ void NumberFormatTest::Test13840_ParseLongStringCrash() {
 void NumberFormatTest::Test13850_EmptyStringCurrency() {
     IcuTestErrorCode status(*this, "Test13840_EmptyStringCurrency");
 
-    LocalPointer<NumberFormat> nf(NumberFormat::createCurrencyInstance("en-US", status), status);
-    if (status.errIfFailureAndReset()) { return; }
-    UnicodeString actual;
-    nf->format(1, actual, status);
-    assertEquals("Should format with US currency", u"$1.00", actual);
-    nf->setCurrency(u"", status);
-    nf->format(1, actual.remove(), status);
-    assertEquals("Should unset the currency on empty string", u"\u00A41.00", actual);
-
-    // Try with nullptr
-    nf.adoptInstead(NumberFormat::createCurrencyInstance("en-US", status));
-    nf->format(1, actual.remove(), status);
-    assertEquals("Should format with US currency", u"$1.00", actual);
-    nf->setCurrency(nullptr, status);
-    nf->format(1, actual.remove(), status);
-    assertEquals("Should unset the currency on nullptr", u"\u00A41.00", actual);
+    struct TestCase {
+        const char16_t* currencyArg;
+        UErrorCode expectedError;
+    } cases[] = {
+        {u"", U_ZERO_ERROR},
+        {u"U", U_ILLEGAL_ARGUMENT_ERROR},
+        {u"Us", U_ILLEGAL_ARGUMENT_ERROR},
+        {nullptr, U_ZERO_ERROR},
+        {u"U$D", U_INVARIANT_CONVERSION_ERROR},
+        {u"Xxx", U_ZERO_ERROR}
+    };
+    for (const auto& cas : cases) {
+        UnicodeString message(u"with currency arg: ");
+        if (cas.currencyArg == nullptr) {
+            message += u"nullptr";
+        } else {
+            message += UnicodeString(cas.currencyArg);
+        }
+        status.setScope(message);
+        LocalPointer<NumberFormat> nf(NumberFormat::createCurrencyInstance("en-US", status), status);
+        if (status.errIfFailureAndReset()) { return; }
+        UnicodeString actual;
+        nf->format(1, actual, status);
+        status.errIfFailureAndReset();
+        assertEquals(u"Should format with US currency " + message, u"$1.00", actual);
+        nf->setCurrency(cas.currencyArg, status);
+        if (status.expectErrorAndReset(cas.expectedError)) {
+            // If an error occurred, do not check formatting.
+            continue;
+        }
+        nf->format(1, actual.remove(), status);
+        assertEquals(u"Should unset the currency " + message, u"\u00A41.00", actual);
+        status.errIfFailureAndReset();
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -320,6 +320,18 @@ public class CurrencyTest extends TestFmwk {
         assertNotNull("have currency data for Germany (Java Locale)", cdn);
         assertEquals("de_USD_name (Locale)", "US-Dollar", cdn.getName("USD"));
         assertNull("de_FOO_name (Locale)", cdn.getName("FOO"));
+
+        // Locale version with noSubstitute=false
+        cdn = CurrencyDisplayNames.getInstance(Locale.GERMANY, false);
+        assertNotNull("have currency data for Germany (Java Locale, false)", cdn);
+        assertEquals("de_USD_name (Locale, false)", "US-Dollar", cdn.getName("USD"));
+        assertEquals("de_USD_plural_foo (Locale, false)", "US-Dollar", cdn.getPluralName("USD", "foo"));
+
+        // Locale version with no boolean attribute; should behave the same as noSubstitute=false
+        cdn = CurrencyDisplayNames.getInstance(Locale.GERMANY);
+        assertNotNull("have currency data for Germany (Java Locale, default)", cdn);
+        assertEquals("de_USD_name (Locale, default)", "US-Dollar", cdn.getName("USD"));
+        assertEquals("de_USD_plural_foo (Locale, default)", "US-Dollar", cdn.getPluralName("USD", "foo"));
     }
 
     // Coverage-only test of CurrencyData

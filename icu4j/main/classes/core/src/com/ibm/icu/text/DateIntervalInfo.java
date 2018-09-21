@@ -273,10 +273,8 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
 
         /**
          * {@inheritDoc}
-         * @internal
-         * @deprecated This API is ICU internal only.
+         * @stable ICU 4.0
          */
-        @Deprecated
         @Override
         public String toString() {
             return "{first=«" + fIntervalPatternFirstPart + "», second=«" + fIntervalPatternSecondPart + "», reversed:" + fFirstDateInPtnIsLaterDate + "}";

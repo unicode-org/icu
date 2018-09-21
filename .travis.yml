@@ -1,6 +1,7 @@
 matrix:
   include:
-    - language: java
+    - name: "j"
+      language: java
       env:      BUILD=ICU4J
       before_script:
         - cd icu4j
@@ -10,12 +11,20 @@ matrix:
       after_failure:
           -  cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`
 
-    - language: cpp
+    - name: "c: linux gcc"
+      language: cpp
       env:      BUILD=ICU4C_GCC
       compiler: gcc
       script:   cd icu4c/source && ./runConfigureICU Linux && make -j2 check
 
-    - language: cpp
+    - name: "c: linux clang"
+      language: cpp
+      env:      BUILD=ICU4C_CLANG
+      compiler: clang
+      script:   cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+
+    - name: "c: osx clang"
+      language: cpp
       env:      BUILD=MACINTOSH
       os:       osx
       compiler: clang
@@ -24,7 +33,8 @@ matrix:
     # Clang Linux with address sanitizer.
     # Note - the 'sudo: true' option forces Travis to use a Virtual machine on GCE instead of
     #        a Container on EC2 or Packet. Asan builds of ICU fail otherwise.
-    - language: cpp
+    - name: "c: linux asan"
+      language: cpp
       env:      BUILD=ICU4C_CLANG_ASAN
       os:       linux
       dist:     trusty
@@ -43,7 +53,8 @@ matrix:
 
     # Clang Linux with thread sanitizer.
     #
-    - language: cpp
+    - name: "c: linux tsan"
+      language: cpp
       env:      BUILD=ICU4C_CLANG_THREAD_SAN
       os:       linux
       dist:     trusty
@@ -58,3 +69,8 @@ matrix:
                   - clang-5.0
       script:
           - cd icu4c/source && CPPFLAGS="-fsanitize=thread" LDFLAGS="-fsanitize=thread" ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming && make -j2 check
+
+    # copyright scan / future linter
+    - name: "lint"
+      script:
+          - perl tools/scripts/cpysearch/cpyscan.pl

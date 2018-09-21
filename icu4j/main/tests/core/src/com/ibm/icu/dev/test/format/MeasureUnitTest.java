@@ -2075,7 +2075,7 @@ public class MeasureUnitTest extends TestFmwk {
                         new Measure(5.3, MeasureUnit.INCH)));
         assertEquals("getLocale", ULocale.ENGLISH, mf.getLocale());
         assertEquals("getNumberFormat", ULocale.ENGLISH, mf.getNumberFormat().getLocale(ULocale.VALID_LOCALE));
-        assertEquals("getWidth", MeasureFormat.FormatWidth.DEFAULT_CURRENCY, mf.getWidth());
+        assertEquals("getWidth", MeasureFormat.FormatWidth.WIDE, mf.getWidth());
     }
 
     @Test

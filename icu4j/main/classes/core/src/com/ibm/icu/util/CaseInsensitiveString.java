@@ -17,35 +17,35 @@ import com.ibm.icu.lang.UCharacter;
  * @stable ICU 2.0
  */
 public class CaseInsensitiveString {
-    
+
     private String string;
 
     private int hash = 0;
-    
+
     private String folded = null;
-    
+
     private static String foldCase(String foldee)
     {
         return UCharacter.foldCase(foldee, true);
     }
-    
+
     private void getFolded()
     {
         if (folded == null) {
             folded = foldCase(string);
         }
     }
-    
+
     /**
      * Constructs an CaseInsentiveString object from the given string
-     * @param s The string to construct this object from 
+     * @param s The string to construct this object from
      * @stable ICU 2.0
      */
     public CaseInsensitiveString(String s) {
         string = s;
     }
     /**
-     * returns the underlying string 
+     * returns the underlying string
      * @return String
      * @stable ICU 2.0
      */
@@ -53,10 +53,11 @@ public class CaseInsensitiveString {
         return string;
     }
     /**
-     * Compare the object with this 
-     * @param o Object to compare this object with 
+     * Compare the object with this
+     * @param o Object to compare this object with
      * @stable ICU 2.0
      */
+    @Override
     public boolean equals(Object o) {
         if (o == null) {
             return false;
@@ -72,26 +73,29 @@ public class CaseInsensitiveString {
         }
         return false;
     }
-    
+
     /**
      * Returns the hashCode of this object
      * @return int hashcode
      * @stable ICU 2.0
      */
+    @Override
     public int hashCode() {
         getFolded();
-        
+
         if (hash == 0) {
             hash = folded.hashCode();
         }
-        
+
         return hash;
     }
-    
+
     /**
      * Overrides superclass method
-     * @stable ICU 3.6
+     * @return a string representation of the object.
+     * @stable ICU 2.0
      */
+    @Override
     public String toString() {
         return string;
     }
