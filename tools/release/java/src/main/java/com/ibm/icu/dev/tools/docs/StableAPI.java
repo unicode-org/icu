@@ -52,21 +52,7 @@ import org.xml.sax.SAXException;
 /**
  A utility to report the status change between two ICU releases
 
-To use the utility
-1. Generate the XML files
-    (put the two ICU releases on your machine ^_^ )
-    (generate 'Doxygen' file on Windows platform with Cygwin's help)
-    Edit the generated 'Doxygen' file under ICU4C source directory
-    a) GENERATE_XML           = YES
-    b) Sync the ALIASES definiation
-       (For example, copy the ALIASES defination from ICU 3.6
-       Doxygen file to ICU 3.4 Doxygen file.)
-    c) gerenate the XML files
-2. Build the tool
-    Download Apache Xerces Java Parser
-    Build this file with the library
-3. Edit the api-report-config.xml file & Change the file according your real configuration
-4. Run the tool to generate the report.
+To use the utility, see readme.txt
 
  * @author Raymond Yang
  */
@@ -103,9 +89,9 @@ public class StableAPI {
 	private static final String CPPXSLT = "dumpAllCppFunc.xslt";
 	private static final String RPTXSLT = "genReport.xslt";
 
-    private File dumpCppXslt;
-    private File dumpCXslt;
-    private File reportXsl;
+    private String dumpCppXslt;
+    private String dumpCXslt;
+    private String reportXsl;
     private File resultFile;
 
 
@@ -191,11 +177,11 @@ public class StableAPI {
             } else if (arg.equals("--newdir")) {
                 rightDir = new File(args[++i]);
             } else if (arg.equals("--cxslt") ) {
-                dumpCXslt = new File(args[++i]);
+                dumpCXslt = new String(args[++i]);
             } else if (arg.equals("--cppxslt") ) {
-                dumpCppXslt = new File(args[++i]);
+                dumpCppXslt = new String(args[++i]);
             } else if (arg.equals("--reportxslt") ) {
-                reportXsl = new File(args[++i]);
+                reportXsl = new String(args[++i]);
             } else if (arg.equals("--resultfile")) {
                 resultFile = new File(args[++i]);
             } else {
@@ -214,22 +200,28 @@ public class StableAPI {
 
 
     @SuppressWarnings("resource")
-	private InputStream loadStream(String name, String argName, File argFile) {
+	private InputStream loadStream(String name, String argName, String argFile) {
     	InputStream stream = null;
     	if(argFile != null) {
-    		try {
-	    		stream = new FileInputStream(argFile);
-	    	} catch (IOException ioe) {
-	    		throw new RuntimeException("Error: Could not load " + argName +" " + argFile.getPath() + " - " + ioe.toString(), ioe);
-	    	}
+    		if(argFile.contains("/")) {
+	    		try {
+		    		stream = new FileInputStream(new File(argFile));
+		    		System.out.println("Loaded file " + argFile);    
+		    		return stream;
+		    	} catch (IOException ioe) {
+		    		throw new RuntimeException("Error: Could not load " + argName +" " + argFile + " - " + ioe.toString(), ioe);
+		    	}
+    		} else {
+    			name = argFile;
+    		}
+    	}
+    	
+    	stream = StableAPI.class.getResourceAsStream(name);
+    	if(stream == null) {
+    		throw new InternalError("No resource found for " + StableAPI.class.getPackage().getName()+"/"+ name + " -   use " + argName);
     	} else {
-        	stream = StableAPI.class.getResourceAsStream(name);
-        	if(stream == null) {
-        		throw new InternalError("No resource found for " + StableAPI.class.getPackage().getName()+"/"+ name + " -   use " + argName);
-        	} else {
-        		System.out.println("Loaded resource " + name);
-        	}
-        }
+    		System.out.println("Loaded resource " + name);    		
+    	}
         return stream;
 	}
 
@@ -429,6 +421,8 @@ public class StableAPI {
         System.out.println("    --cxslt         XSLT file for C docs");
         System.out.println("    --cppxslt       XSLT file for C++ docs");
         System.out.println("    --reportxslt    XSLT file for report docs");
+        System.out.println("    (for XSLT paths, if there is a slash (/) in the path it will be an");
+        System.out.println("      absolute file path, otherwise a relative resource name.)");
         System.out.println("    --resultfile    Output file");
         System.exit(-1);
     }
