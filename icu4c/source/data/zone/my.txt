@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 my{
-    Version{"2.1.41.97"}
+    Version{"2.1.44.53"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"အာဘီဂျန်"}
@@ -52,7 +52,7 @@ my{
             ec{"ကိုနာကရီး"}
         }
         "Africa:Dakar"{
-            ec{"ဒက္ကား"}
+            ec{"ဒက်ကား"}
         }
         "Africa:Dar_es_Salaam"{
             ec{"ဒါရက်စ်ဆာလမ်"}
@@ -160,7 +160,7 @@ my{
             ec{"ဗင်းဟူးခ်"}
         }
         "America:Adak"{
-            ec{"အာဒခ်"}
+            ec{"အာဒချ"}
         }
         "America:Anchorage"{
             ec{"အန်ကာရေ့ဂျ်"}
@@ -244,7 +244,7 @@ my{
             ec{"ကာရာကာစ်"}
         }
         "America:Catamarca"{
-            ec{"ကာတာမာရ်ကာ"}
+            ec{"ကာတာမာရျကာ"}
         }
         "America:Cayenne"{
             ec{"ကေညင်န်"}
@@ -406,7 +406,7 @@ my{
             ec{"လိုအာပရင့်စ် ကွာတာ"}
         }
         "America:Maceio"{
-            ec{"မာဆဲသြာ"}
+            ec{"မာဆဲသွာ"}
         }
         "America:Managua"{
             ec{"မာနာဂွါ"}
@@ -439,7 +439,7 @@ my{
             ec{"မက်တ်လာကက်လာ"}
         }
         "America:Mexico_City"{
-            ec{"မက္ကဆီကို စီးတီး"}
+            ec{"မက်ကဆီကို စီးတီး"}
         }
         "America:Miquelon"{
             ec{"မီကွီလွန်"}
@@ -655,7 +655,7 @@ my{
             ec{"အက်တာဥု"}
         }
         "Asia:Aqtobe"{
-            ec{"အာခ်တူးဘီ"}
+            ec{"အာချတူးဘီ"}
         }
         "Asia:Ashgabat"{
             ec{"အာရှ်ဂါဘာဒ်"}
@@ -688,7 +688,7 @@ my{
             ec{"ဘရူနိုင်း"}
         }
         "Asia:Calcutta"{
-            ec{"ကိုလ်ကတ္တား"}
+            ec{"ကိုလျကတ်တား"}
         }
         "Asia:Chita"{
             ec{"ချီတာ"}
@@ -703,7 +703,7 @@ my{
             ec{"ဒမားစကပ်"}
         }
         "Asia:Dhaka"{
-            ec{"ဒက္ကာ"}
+            ec{"ဒက်ကာ"}
         }
         "Asia:Dili"{
             ec{"ဒစ်လီ"}
@@ -727,7 +727,7 @@ my{
             ec{"ဟောင်ကောင်"}
         }
         "Asia:Hovd"{
-            ec{"ဟိုးဗ်"}
+            ec{"ဟိုးဗျ"}
         }
         "Asia:Irkutsk"{
             ec{"အီရူခူတ်"}
@@ -742,7 +742,7 @@ my{
             ec{"ဂျေရုဆလင်"}
         }
         "Asia:Kabul"{
-            ec{"ကဘူးလ်"}
+            ec{"ကဘူးလျ"}
         }
         "Asia:Kamchatka"{
             ec{"ခမ်ချာ့ခါ"}
@@ -751,7 +751,7 @@ my{
             ec{"ကရာချိ"}
         }
         "Asia:Katmandu"{
-            ec{"ခတ္တမန္ဒူ"}
+            ec{"ခတ်တမန်ဒူ"}
         }
         "Asia:Khandyga"{
             ec{"ခန်ဒိုင်ဂါ"}

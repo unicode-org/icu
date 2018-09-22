@@ -98,7 +98,7 @@ tr{
         DM{"Dominika"}
         DO{"Dominik Cumhuriyeti"}
         DZ{"Cezayir"}
-        EA{"Septe ve Melilla"}
+        EA{"Ceuta ve Melilla"}
         EC{"Ekvador"}
         EE{"Estonya"}
         EG{"Mısır"}
@@ -311,5 +311,5 @@ tr{
         MK{"Makedonya (EYMC)"}
         TL{"Doğu Timor"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
 }

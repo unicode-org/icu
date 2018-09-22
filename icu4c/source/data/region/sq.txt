@@ -19,7 +19,7 @@ sq{
         030{"Azia Lindore"}
         034{"Azia Jugore"}
         035{"Azia Juglindore"}
-        039{"Europa Jugore"}
+        039{"Evropa Jugore"}
         053{"Australazia"}
         054{"Melanezia"}
         057{"Rajoni Mikronezian"}
@@ -27,10 +27,10 @@ sq{
         142{"Azi"}
         143{"Azia Qendrore"}
         145{"Azia Perëndimore"}
-        150{"Europë"}
-        151{"Europa Lindore"}
-        154{"Europa Veriore"}
-        155{"Europa Perëndimore"}
+        150{"Evropë"}
+        151{"Evropa Lindore"}
+        154{"Evropa Veriore"}
+        155{"Evropa Perëndimore"}
         202{"Afrika Subsahariane"}
         419{"Amerika Latine"}
         AC{"Ishulli Asenshion"}
@@ -59,13 +59,13 @@ sq{
         BH{"Bahrejn"}
         BI{"Burundi"}
         BJ{"Benin"}
-        BL{"Shën-Bartolome"}
-        BM{"Bermudë"}
+        BL{"Sen-Bartelemi"}
+        BM{"Bermude"}
         BN{"Brunei"}
         BO{"Bolivi"}
         BQ{"Karaibet holandeze"}
         BR{"Brazil"}
-        BS{"Bahamas"}
+        BS{"Bahama"}
         BT{"Butan"}
         BV{"Ishulli Bove"}
         BW{"Botsvanë"}
@@ -87,7 +87,7 @@ sq{
         CR{"Kosta-Rikë"}
         CU{"Kubë"}
         CV{"Kepi i Gjelbër"}
-        CW{"Kuraçao"}
+        CW{"Kurasao"}
         CX{"Ishulli i Krishtlindjes"}
         CY{"Qipro"}
         CZ{"Çeki"}
@@ -106,8 +106,8 @@ sq{
         ER{"Eritre"}
         ES{"Spanjë"}
         ET{"Etiopi"}
-        EU{"Bashkimi Europian"}
-        EZ{"Eurozonë"}
+        EU{"Bashkimi Evropian"}
+        EZ{"Zona euro"}
         FI{"Finlandë"}
         FJ{"Fixhi"}
         FK{"Ishujt Falkland"}
@@ -116,16 +116,16 @@ sq{
         FR{"Francë"}
         GA{"Gabon"}
         GB{"Mbretëria e Bashkuar"}
-        GD{"Grenadë"}
+        GD{"Granadë"}
         GE{"Gjeorgji"}
         GF{"Guajana Franceze"}
         GG{"Gernsej"}
         GH{"Ganë"}
         GI{"Gjibraltar"}
-        GL{"Grenlandë"}
-        GM{"Gambia"}
+        GL{"Grënlandë"}
+        GM{"Gambi"}
         GN{"Guine"}
-        GP{"Guadalupe"}
+        GP{"Guadelupë"}
         GQ{"Guineja Ekuatoriale"}
         GR{"Greqi"}
         GS{"Xhorxha Jugore dhe Ishujt Senduiçë të Jugut"}
@@ -155,13 +155,13 @@ sq{
         JO{"Jordani"}
         JP{"Japoni"}
         KE{"Kenia"}
-        KG{"Kirgistan"}
+        KG{"Kirgizi"}
         KH{"Kamboxhia"}
         KI{"Kiribati"}
         KM{"Komore"}
         KN{"Shën-Kits dhe Nevis"}
-        KP{"Koreja e Veriut"}
-        KR{"Koreja e Jugut"}
+        KP{"Kore e Veriut"}
+        KR{"Kore e Jugut"}
         KW{"Kuvajt"}
         KY{"Ishujt Kajman"}
         KZ{"Kazakistan"}
@@ -180,12 +180,12 @@ sq{
         MC{"Monako"}
         MD{"Moldavi"}
         ME{"Mal i Zi"}
-        MF{"Shën-Martin"}
+        MF{"Sen-Marten"}
         MG{"Madagaskar"}
         MH{"Ishujt Marshall"}
         MK{"Maqedoni"}
         ML{"Mali"}
-        MM{"Mianmar (Burma)"}
+        MM{"Mianmar (Burmë)"}
         MN{"Mongoli"}
         MO{"RPA i Makaos"}
         MP{"Ishujt e Marianës Veriore"}
@@ -200,7 +200,7 @@ sq{
         MY{"Malajzi"}
         MZ{"Mozambik"}
         NA{"Namibi"}
-        NC{"Kaledonia e Re"}
+        NC{"Kaledoni e Re"}
         NE{"Niger"}
         NF{"Ishulli Norfolk"}
         NG{"Nigeri"}
@@ -233,17 +233,17 @@ sq{
         RS{"Serbi"}
         RU{"Rusi"}
         RW{"Ruandë"}
-        SA{"Arabia Saudite"}
+        SA{"Arabi Saudite"}
         SB{"Ishujt Solomon"}
         SC{"Sejshelle"}
         SD{"Sudan"}
         SE{"Suedi"}
         SG{"Singapor"}
-        SH{"Shën-Helenë"}
+        SH{"Shën-Elenë"}
         SI{"Slloveni"}
         SJ{"Svalbard e Jan-Majen"}
         SK{"Sllovaki"}
-        SL{"Siera-Leone"}
+        SL{"Sierra-Leone"}
         SM{"San-Marino"}
         SN{"Senegal"}
         SO{"Somali"}
@@ -253,7 +253,7 @@ sq{
         SV{"Salvador"}
         SX{"Sint-Marten"}
         SY{"Siri"}
-        SZ{"Svazilandë"}
+        SZ{"Suazilend"}
         TA{"Tristan-da-Kuna"}
         TC{"Ishujt Turks dhe Kaikos"}
         TD{"Çad"}
@@ -274,8 +274,8 @@ sq{
         UA{"Ukrainë"}
         UG{"Ugandë"}
         UM{"Ishujt Periferikë të SHBA-së"}
-        UN{"Kombet e Bashkuara"}
-        US{"Shtetet e Bashkuara të Amerikës"}
+        UN{"Organizata e Kombeve të Bashkuara"}
+        US{"SHBA"}
         UY{"Uruguai"}
         UZ{"Uzbekistan"}
         VA{"Vatikan"}
@@ -291,16 +291,16 @@ sq{
         YE{"Jemen"}
         YT{"Majotë"}
         ZA{"Afrika e Jugut"}
-        ZM{"Zambia"}
+        ZM{"Zambi"}
         ZW{"Zimbabve"}
         ZZ{"I panjohur"}
     }
     Countries%short{
-        GB{"Mbretëria e Bashkuar"}
+        GB{"MB"}
         HK{"Hong-Kong"}
         MO{"Makao"}
         PS{"Palestinë"}
-        UN{"Kombet e Bashkuara"}
+        UN{"OKB"}
         US{"SHBA"}
     }
     Countries%variant{
@@ -312,5 +312,5 @@ sq{
         MK{"Maqedoni (IRJM)"}
         TL{"Timori Lindor"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
 }

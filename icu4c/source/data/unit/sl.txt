@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sl{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -163,6 +163,20 @@ sl{
                 other{"{0} delcev na milijon"}
                 two{"{0} delca na milijon"}
             }
+            percent{
+                dnam{"odstotek"}
+                few{"{0} %"}
+                one{"{0} odstotek"}
+                other{"{0} odstotkov"}
+                two{"{0} %"}
+            }
+            permille{
+                dnam{"promile"}
+                few{"{0} ‰"}
+                one{"{0} promile"}
+                other{"{0} promilov"}
+                two{"{0} ‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -195,6 +209,7 @@ sl{
             }
         }
         coordinate{
+            dnam{"stran neba"}
             east{"{0} V"}
             north{"{0} S"}
             south{"{0} J"}
@@ -256,6 +271,13 @@ sl{
                 one{"{0} megabajt"}
                 other{"{0} megabajtov"}
                 two{"{0} megabajta"}
+            }
+            petabyte{
+                dnam{"petabajti"}
+                few{"{0} PB"}
+                one{"{0} petabajt"}
+                other{"{0} petabajtov"}
+                two{"{0} PB"}
             }
             terabit{
                 dnam{"terabiti"}
@@ -487,10 +509,10 @@ sl{
             }
             fathom{
                 dnam{"fm"}
-                few{"{0} fm"}
-                one{"{0} fm"}
-                other{"{0} fm"}
-                two{"{0} fm"}
+                few{"{0} ftm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
+                two{"{0} ftm"}
             }
             foot{
                 dnam{"čevlji"}
@@ -746,6 +768,13 @@ sl{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmosfere"}
+                few{"{0} atmosfere"}
+                one{"{0} atmosfera"}
+                other{"{0} atmosfer"}
+                two{"{0} atmosferi"}
+            }
             hectopascal{
                 dnam{"hektopaskali"}
                 few{"{0} hektopaskali"}
@@ -1096,6 +1125,15 @@ sl{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                few{"{0} %"}
+                one{"{0} %"}
+                other{"{0} %"}
+                two{"{0} %"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"l/100 km"}
@@ -1106,6 +1144,7 @@ sl{
             }
         }
         coordinate{
+            dnam{"smer"}
             east{"{0} V"}
             north{"{0} S"}
             south{"{0} J"}
@@ -1222,10 +1261,10 @@ sl{
             }
             fathom{
                 dnam{"fm"}
-                few{"{0} fm"}
-                one{"{0} fm"}
-                other{"{0} fm"}
-                two{"{0} fm"}
+                few{"{0} ftm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
+                two{"{0} ftm"}
             }
             foot{
                 dnam{"ft"}
@@ -1261,7 +1300,7 @@ sl{
             light-year{
                 dnam{"sv. let"}
                 few{"{0} sv. l."}
-                one{"{0} ly"}
+                one{"{0} sv. l."}
                 other{"{0} sv. l."}
                 two{"{0} sv. l."}
             }
@@ -1722,6 +1761,20 @@ sl{
                 other{"{0} ppm"}
                 two{"{0} ppm"}
             }
+            percent{
+                dnam{"odstotek"}
+                few{"{0} %"}
+                one{"{0} %"}
+                other{"{0} %"}
+                two{"{0} %"}
+            }
+            permille{
+                dnam{"promile"}
+                few{"{0} ‰"}
+                one{"{0} ‰"}
+                other{"{0} ‰"}
+                two{"{0} ‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1754,6 +1807,7 @@ sl{
             }
         }
         coordinate{
+            dnam{"smer"}
             east{"{0} V"}
             north{"{0} S"}
             south{"{0} J"}
@@ -1815,6 +1869,13 @@ sl{
                 one{"{0} MB"}
                 other{"{0} MB"}
                 two{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                few{"{0} PB"}
+                one{"{0} PB"}
+                other{"{0} PB"}
+                two{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -2046,10 +2107,10 @@ sl{
             }
             fathom{
                 dnam{"fm"}
-                few{"{0} fm"}
-                one{"{0} fm"}
-                other{"{0} fm"}
-                two{"{0} fm"}
+                few{"{0} ftm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
+                two{"{0} ftm"}
             }
             foot{
                 dnam{"ft"}
@@ -2305,6 +2366,13 @@ sl{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                few{"{0} atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+                two{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 few{"{0} hPa"}

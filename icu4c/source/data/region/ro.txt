@@ -262,7 +262,7 @@ ro{
         TH{"Thailanda"}
         TJ{"Tadjikistan"}
         TK{"Tokelau"}
-        TL{"Timorul de Est"}
+        TL{"Timor-Leste"}
         TM{"Turkmenistan"}
         TN{"Tunisia"}
         TO{"Tonga"}
@@ -310,7 +310,7 @@ ro{
         CZ{"Republica Cehă"}
         FK{"Insulele Falkland (Insulele Malvine)"}
         MK{"Republica Macedonia (FRIM)"}
-        TL{"TL"}
+        TL{"Timorul de Est"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
 }

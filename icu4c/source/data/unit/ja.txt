@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ja{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.74"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -103,6 +103,14 @@ ja{
                 dnam{"ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"パーセント"}
+                other{"{0} パーセント"}
+            }
+            permille{
+                dnam{"パーミル"}
+                other{"{0} パーミル"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -123,6 +131,7 @@ ja{
             }
         }
         coordinate{
+            dnam{"方位"}
             east{"東経{0}"}
             north{"北緯{0}"}
             south{"南緯{0}"}
@@ -160,6 +169,10 @@ ja{
             megabyte{
                 dnam{"メガバイト"}
                 other{"{0} メガバイト"}
+            }
+            petabyte{
+                dnam{"ペタバイト"}
+                other{"{0} ペタバイト"}
             }
             terabit{
                 dnam{"テラビット"}
@@ -455,6 +468,10 @@ ja{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"気圧"}
+                other{"{0} 気圧"}
+            }
             hectopascal{
                 dnam{"ヘクトパスカル"}
                 other{"{0} ヘクトパスカル"}
@@ -681,6 +698,10 @@ ja{
             karat{
                 other{"{0}K"}
             }
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -695,6 +716,7 @@ ja{
             }
         }
         coordinate{
+            dnam{"方位"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -739,12 +761,12 @@ ja{
             }
             day{
                 dnam{"日"}
-                other{"{0}日"}
+                other{"{0}d"}
                 per{"{0}/日"}
             }
             hour{
                 dnam{"時間"}
-                other{"{0}時間"}
+                other{"{0}h"}
                 per{"{0}/時間"}
             }
             microsecond{
@@ -757,7 +779,7 @@ ja{
             }
             minute{
                 dnam{"分"}
-                other{"{0}分"}
+                other{"{0}m"}
                 per{"{0}/分"}
             }
             month{
@@ -771,7 +793,7 @@ ja{
             }
             second{
                 dnam{"秒"}
-                other{"{0}秒"}
+                other{"{0}s"}
                 per{"{0}/秒"}
             }
             week{
@@ -849,7 +871,7 @@ ja{
             }
             fathom{
                 dnam{"fm"}
-                other{"{0}fm"}
+                other{"{0}ftm"}
             }
             foot{
                 dnam{"フィート"}
@@ -1214,6 +1236,14 @@ ja{
                 dnam{"ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"パーセント"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"パーミル"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1234,6 +1264,7 @@ ja{
             }
         }
         coordinate{
+            dnam{"方位"}
             east{"東経{0}"}
             north{"北緯{0}"}
             south{"南緯{0}"}
@@ -1271,6 +1302,10 @@ ja{
             megabyte{
                 dnam{"MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"ペタバイト"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"テラビット"}
@@ -1412,7 +1447,7 @@ ja{
             }
             fathom{
                 dnam{"ファゾム"}
-                other{"{0} fm"}
+                other{"{0} ftm"}
             }
             foot{
                 dnam{"フィート"}
@@ -1566,6 +1601,10 @@ ja{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"気圧"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 other{"{0} hPa"}

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 to{
-    Version{"2.1.38.39"}
+    Version{"2.1.44.2"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -431,16 +431,16 @@ to{
                 other{"hēkitopasikale ʻe {0}"}
             }
             inch-hg{
-                dnam{"ʻinisi mēkuli"}
-                other{"ʻinisi mēkuli ʻe {0}"}
+                dnam{"ʻinisi meakuli"}
+                other{"ʻinisi meakuli ʻe {0}"}
             }
             millibar{
                 dnam{"milipā"}
                 other{"milipā ʻe {0}"}
             }
             millimeter-of-mercury{
-                dnam{"milimita mēkuli"}
-                other{"milimita mēkuli ʻe {0}"}
+                dnam{"milimita meakuli"}
+                other{"milimita meakuli ʻe {0}"}
             }
             pound-per-square-inch{
                 dnam{"pāuni he ʻinisi sikuea"}
@@ -1269,6 +1269,9 @@ to{
                 dnam{"mekapaiti"}
                 other{"MB ʻe {0}"}
             }
+            petabyte{
+                other{"PB ʻe {0}"}
+            }
             terabit{
                 dnam{"telapiti"}
                 other{"Tb ʻe {0}"}
@@ -1580,6 +1583,9 @@ to{
             fahrenheit{
                 dnam{"°F"}
                 other{"°F ʻe {0}"}
+            }
+            generic{
+                other{"° ʻe {0}"}
             }
             kelvin{
                 dnam{"K"}

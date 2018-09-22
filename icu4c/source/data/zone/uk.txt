@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 uk{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абіджан"}
@@ -16,7 +16,7 @@ uk{
             ec{"Алжир"}
         }
         "Africa:Asmera"{
-            ec{"Асмара"}
+            ec{"Асмера"}
         }
         "Africa:Bamako"{
             ec{"Бамако"}
@@ -31,7 +31,7 @@ uk{
             ec{"Бісау"}
         }
         "Africa:Blantyre"{
-            ec{"Блантир"}
+            ec{"Блантайр"}
         }
         "Africa:Brazzaville"{
             ec{"Браззавіль"}
@@ -217,7 +217,7 @@ uk{
             ec{"Беліз"}
         }
         "America:Blanc-Sablon"{
-            ec{"Бланк-Саблон"}
+            ec{"Блан-Саблон"}
         }
         "America:Boa_Vista"{
             ec{"Боа-Віста"}
@@ -250,7 +250,7 @@ uk{
             ec{"Каєнна"}
         }
         "America:Cayman"{
-            ec{"Кайманові острови"}
+            ec{"Кайманові Острови"}
         }
         "America:Chicago"{
             ec{"Чікаґо"}
@@ -454,7 +454,7 @@ uk{
             ec{"Монтевідео"}
         }
         "America:Montserrat"{
-            ec{"Монсеррат"}
+            ec{"Монтсеррат"}
         }
         "America:Nassau"{
             ec{"Насау"}
@@ -1281,7 +1281,7 @@ uk{
             ec{"Тонґатапу"}
         }
         "Pacific:Truk"{
-            ec{"Трук"}
+            ec{"Чуук"}
         }
         "Pacific:Wake"{
             ec{"Вейк"}
@@ -1818,7 +1818,7 @@ uk{
             ls{"за часом у Сінґапурі"}
         }
         "meta:Solomon"{
-            ls{"за часом на Соломонових островах"}
+            ls{"за часом на Соломонових Островах"}
         }
         "meta:South_Georgia"{
             ls{"за часом на острові Південна Джорджія"}

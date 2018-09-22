@@ -104,7 +104,7 @@ is{
         cop{"koptíska"}
         cr{"krí"}
         crh{"krímtyrkneska"}
-        crs{"Seselwa kreólsk franska"}
+        crs{"seychelles-kreólska"}
         cs{"tékkneska"}
         csb{"kasúbíska"}
         cu{"kirkjuslavneska"}
@@ -174,6 +174,7 @@ is{
         ga{"írska"}
         gaa{"ga"}
         gag{"gagás"}
+        gan{"gan"}
         gay{"gajó"}
         gba{"gbaja"}
         gd{"skosk gelíska"}
@@ -195,6 +196,7 @@ is{
         gwi{"gvísín"}
         ha{"hása"}
         hai{"haída"}
+        hak{"hak"}
         haw{"havaíska"}
         he{"hebreska"}
         hi{"hindí"}
@@ -204,6 +206,7 @@ is{
         ho{"hírímótú"}
         hr{"króatíska"}
         hsb{"hásorbneska"}
+        hsn{"hsn"}
         ht{"haítíska"}
         hu{"ungverska"}
         hup{"húpa"}
@@ -337,6 +340,7 @@ is{
         myv{"ersja"}
         mzn{"masanderaní"}
         na{"nárúska"}
+        nan{"nan"}
         nap{"napólíska"}
         naq{"nama"}
         nb{"norskt bókmál"}
@@ -457,7 +461,7 @@ is{
         sux{"súmerska"}
         sv{"sænska"}
         sw{"svahílí"}
-        sw_CD{"Kongó-svahílí"}
+        sw_CD{"kongósvahílí"}
         swb{"shimaoríska"}
         syc{"klassísk sýrlenska"}
         syr{"sýrlenska"}
@@ -515,6 +519,7 @@ is{
         was{"vasjó"}
         wbp{"varlpiri"}
         wo{"volof"}
+        wuu{"wuu"}
         xal{"kalmúkska"}
         xh{"sósa"}
         xog{"sóga"}
@@ -524,7 +529,7 @@ is{
         ybb{"yemba"}
         yi{"jiddíska"}
         yo{"jórúba"}
-        yue{"kantoneska"}
+        yue{"kantónska"}
         za{"súang"}
         zap{"sapótek"}
         zbl{"blisstákn"}
@@ -546,9 +551,13 @@ is{
     Scripts{
         Arab{"arabískt"}
         Armn{"armenskt"}
+        Bali{"balinesíska"}
+        Batk{"batakíska"}
         Beng{"bengalskt"}
         Bopo{"bopomofo"}
+        Brah{"brahmíska"}
         Brai{"blindraletur"}
+        Copt{"koptíska"}
         Cyrl{"kyrillískt"}
         Deva{"devanagari"}
         Ethi{"eþíópískt"}
@@ -565,6 +574,7 @@ is{
         Hira{"hiragana"}
         Hrkt{"japönsk samstöfuletur"}
         Jamo{"jamo"}
+        Java{"javanesíska"}
         Jpan{"japanskt"}
         Kana{"katakana"}
         Khmr{"kmer"}
@@ -572,11 +582,14 @@ is{
         Kore{"kóreskt"}
         Laoo{"lao"}
         Latn{"latneskt"}
+        Mand{"mandaíska"}
         Mlym{"malalajam"}
         Mong{"mongólskt"}
         Mymr{"mjanmarskt"}
+        Nkoo{"n-kó"}
         Orya{"oriya"}
         Sinh{"sinhala"}
+        Sund{"sundanesíska"}
         Taml{"tamílskt"}
         Telu{"telúgú"}
         Thaa{"thaana"}
@@ -738,7 +751,7 @@ is{
             vaii{"Vai-tölustafir"}
         }
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     characterLabelPattern{
         all{"{0} — allt"}
         category-list{"{0}: {1}"}

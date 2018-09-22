@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ms{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -103,6 +103,14 @@ ms{
                 dnam{"bahagian setiap juta"}
                 other{"{0} bahagian setiap juta"}
             }
+            percent{
+                dnam{"peratus"}
+                other{"{0} peratus"}
+            }
+            permille{
+                dnam{"per seribu"}
+                other{"{0} per seribu"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -123,6 +131,7 @@ ms{
             }
         }
         coordinate{
+            dnam{"arah mata angin"}
             east{"{0} timur"}
             north{"{0} utara"}
             south{"{0} selatan"}
@@ -160,6 +169,10 @@ ms{
             megabyte{
                 dnam{"megabait"}
                 other{"{0} megabait"}
+            }
+            petabyte{
+                dnam{"petabait"}
+                other{"{0} petabait"}
             }
             terabit{
                 dnam{"terabit"}
@@ -455,6 +468,10 @@ ms{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmosfera"}
+                other{"{0} atmosfera"}
+            }
             hectopascal{
                 dnam{"hektopascal"}
                 other{"{0} hektopascal"}
@@ -661,6 +678,12 @@ ms{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100km"}
@@ -668,6 +691,7 @@ ms{
             }
         }
         coordinate{
+            dnam{"arah"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -742,7 +766,7 @@ ms{
             }
             fathom{
                 dnam{"fathom"}
-                other{"{0} fm"}
+                other{"{0} ftm"}
             }
             foot{
                 dnam{"ka"}
@@ -1041,6 +1065,14 @@ ms{
                 dnam{"ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"peratus"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"per seribu"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1061,6 +1093,7 @@ ms{
             }
         }
         coordinate{
+            dnam{"arah"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -1098,6 +1131,10 @@ ms{
             megabyte{
                 dnam{"MBait"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tbit"}
@@ -1393,6 +1430,10 @@ ms{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 other{"{0} hPa"}

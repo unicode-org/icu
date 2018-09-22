@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh{
-    Version{"2.1.41.97"}
+    Version{"2.1.44.76"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -103,6 +103,14 @@ zh{
                 dnam{"ppm"}
                 other{"百万分之{0}"}
             }
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -123,6 +131,7 @@ zh{
             }
         }
         coordinate{
+            dnam{"主方向"}
             east{"东经{0}"}
             north{"北纬{0}"}
             south{"南纬{0}"}
@@ -160,6 +169,10 @@ zh{
             megabyte{
                 dnam{"兆字节"}
                 other{"{0}兆字节"}
+            }
+            petabyte{
+                dnam{"拍字节"}
+                other{"{0}拍字节"}
             }
             terabit{
                 dnam{"太比特"}
@@ -455,6 +468,10 @@ zh{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"标准大气压"}
+                other{"{0}个标准大气压"}
+            }
             hectopascal{
                 dnam{"百帕斯卡"}
                 other{"{0}百帕斯卡"}
@@ -688,6 +705,12 @@ zh{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"升/100千米"}
@@ -695,6 +718,7 @@ zh{
             }
         }
         coordinate{
+            dnam{"方向"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -1126,6 +1150,14 @@ zh{
                 dnam{"ppm"}
                 other{"{0}ppm"}
             }
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1146,6 +1178,7 @@ zh{
             }
         }
         coordinate{
+            dnam{"方向"}
             east{"东经{0}"}
             north{"北纬{0}"}
             south{"南纬{0}"}
@@ -1183,6 +1216,10 @@ zh{
             megabyte{
                 dnam{"兆字节"}
                 other{"{0}兆字节"}
+            }
+            petabyte{
+                dnam{"PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"太比特"}
@@ -1478,6 +1515,10 @@ zh{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"大气压"}
+                other{"{0}个大气压"}
+            }
             hectopascal{
                 dnam{"百帕"}
                 other{"{0}百帕"}

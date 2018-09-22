@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 bn{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"আবিদজান"}
@@ -259,7 +259,7 @@ bn{
             ec{"চিহুয়াহুয়া"}
         }
         "America:Coral_Harbour"{
-            ec{"কোরাল হার্বার"}
+            ec{"আটিকোকান"}
         }
         "America:Cordoba"{
             ec{"কর্ডোবা"}
@@ -1146,7 +1146,7 @@ bn{
             ec{"ছাগোস"}
         }
         "Indian:Christmas"{
-            ec{"বড়দিন"}
+            ec{"ক্রিসমাস"}
         }
         "Indian:Cocos"{
             ec{"কোকোস"}

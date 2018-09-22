@@ -14,6 +14,7 @@ pt_PT{
     }
     Languages{
         af{"africanês"}
+        alt{"altai do sul"}
         ang{"inglês antigo"}
         ar_001{"árabe moderno padrão"}
         arn{"mapuche"}
@@ -21,9 +22,11 @@ pt_PT{
         av{"avaric"}
         bax{"bamun"}
         bbj{"ghomala"}
+        bn{"bengalês"}
         bua{"buriat"}
         chk{"chuquês"}
         chn{"jargão chinook"}
+        chr{"cherokee"}
         chy{"cheyenne"}
         ckb{"sorani curdo"}
         co{"córsico"}
@@ -57,7 +60,7 @@ pt_PT{
         hi{"hindi"}
         hy{"arménio"}
         kbd{"cabardiano"}
-        kea{"crioulo cabo-verdiano"}
+        kl{"gronelandês"}
         krc{"carachaio-bálcaro"}
         lez{"lezghiano"}
         lg{"ganda"}
@@ -72,7 +75,7 @@ pt_PT{
         nb{"norueguês bokmål"}
         nds{"baixo-alemão"}
         nds_NL{"baixo-saxão"}
-        ne{"nepali"}
+        nl{"neerlandês"}
         nn{"norueguês nynorsk"}
         non{"nórdico antigo"}
         oc{"occitano"}
@@ -92,6 +95,7 @@ pt_PT{
         se{"sami do norte"}
         sga{"irlandês antigo"}
         shu{"árabe do Chade"}
+        sma{"sami do sul"}
         smn{"inari sami"}
         sn{"shona"}
         te{"telugu"}
@@ -116,8 +120,10 @@ pt_PT{
     }
     Scripts{
         Armn{"arménio"}
+        Beng{"bengalês"}
         Egyd{"egípcio demótico"}
         Egyh{"egípcio hierático"}
+        Ethi{"etíope"}
         Hanb{"han com bopomofo"}
         Inds{"indus"}
         Orya{"odia"}
@@ -232,7 +238,7 @@ pt_PT{
             hebr{"Numeração hebraica"}
             jpan{"Numeração japonesa"}
             jpanfin{"Numeração financeira japonesa"}
-            khmr{"Algarismos de cmer"}
+            khmr{"Algarismos de khmer"}
             knda{"Algarismos de canarim"}
             mlym{"Algarismos de malaiala"}
             mymr{"Algarismos birmaneses"}
@@ -251,7 +257,7 @@ pt_PT{
         MONOTON{"monotónico"}
         POLYTON{"politónico"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.44.9"}
     characterLabelPattern{
         all{"{0} – tudo"}
         compatibility{"{0} – compatibilidade"}

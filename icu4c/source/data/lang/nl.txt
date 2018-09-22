@@ -660,6 +660,7 @@ nl{
         Cyrl{"Cyrillisch"}
         Cyrs{"Oudkerkslavisch Cyrillisch"}
         Deva{"Devanagari"}
+        Dogr{"Dogra"}
         Dsrt{"Deseret"}
         Dupl{"Duployan snelschrift"}
         Egyd{"Egyptisch demotisch"}
@@ -670,6 +671,7 @@ nl{
         Geok{"Georgisch Khutsuri"}
         Geor{"Georgisch"}
         Glag{"Glagolitisch"}
+        Gong{"Gunjala Gondi"}
         Gonm{"Masaram Gondi"}
         Goth{"Gothisch"}
         Gran{"Grantha"}
@@ -718,10 +720,12 @@ nl{
         Lyci{"Lycisch"}
         Lydi{"Lydisch"}
         Mahj{"Mahajani"}
+        Maka{"Makasar"}
         Mand{"Mandaeans"}
         Mani{"Manicheaans"}
         Marc{"Marchen"}
         Maya{"Mayahiërogliefen"}
+        Medf{"Medefaidrin"}
         Mend{"Mende"}
         Merc{"Meroitisch cursief"}
         Mero{"Meroïtisch"}
@@ -755,55 +759,8 @@ nl{
         Phnx{"Foenicisch"}
         Plrd{"Pollard-fonetisch"}
         Prti{"Inscriptioneel Parthisch"}
-        Qaaa{"Qaaa"}
-        Qaab{"Qaab"}
-        Qaac{"Qaac"}
-        Qaad{"Qaad"}
-        Qaae{"Qaae"}
-        Qaaf{"Qaaf"}
-        Qaag{"Qaag"}
-        Qaah{"Qaah"}
-        Qaak{"Qaak"}
-        Qaal{"Qaal"}
-        Qaam{"Qaam"}
-        Qaan{"Qaan"}
-        Qaao{"Qaao"}
-        Qaap{"Qaap"}
-        Qaaq{"Qaaq"}
-        Qaar{"Qaar"}
-        Qaas{"Qaas"}
-        Qaat{"Qaat"}
-        Qaau{"Qaau"}
-        Qaav{"Qaav"}
-        Qaaw{"Qaaw"}
-        Qaax{"Qaax"}
-        Qaay{"Qaay"}
-        Qaaz{"Qaaz"}
-        Qaba{"Qaba"}
-        Qabb{"Qabb"}
-        Qabc{"Qabc"}
-        Qabd{"Qabd"}
-        Qabe{"Qabe"}
-        Qabf{"Qabf"}
-        Qabg{"Qabg"}
-        Qabh{"Qabh"}
-        Qabi{"Qabi"}
-        Qabj{"Qabj"}
-        Qabk{"Qabk"}
-        Qabl{"Qabl"}
-        Qabm{"Qabm"}
-        Qabn{"Qabn"}
-        Qabo{"Qabo"}
-        Qabp{"Qabp"}
-        Qabq{"Qabq"}
-        Qabr{"Qabr"}
-        Qabs{"Qabs"}
-        Qabt{"Qabt"}
-        Qabu{"Qabu"}
-        Qabv{"Qabv"}
-        Qabw{"Qabw"}
-        Qabx{"Qabx"}
         Rjng{"Rejang"}
+        Rohg{"Hanifi Rohingya"}
         Roro{"Rongorongo"}
         Runr{"Runic"}
         Samr{"Samaritaans"}
@@ -816,6 +773,8 @@ nl{
         Sidd{"Siddham"}
         Sind{"Sindhi"}
         Sinh{"Singalees"}
+        Sogd{"Sogdisch"}
+        Sogo{"Oud Sogdisch"}
         Sora{"Sora Sompeng"}
         Soyo{"Soyombo"}
         Sund{"Soendanees"}
@@ -982,6 +941,7 @@ nl{
             finance{"Financiële cijfers"}
             fullwide{"cijfers met volledige breedte"}
             geor{"Georgische cijfers"}
+            gong{"Gunjala Gondi cijfers"}
             gonm{"Masaram Gondi cijfers"}
             grek{"Griekse cijfers"}
             greklow{"kleine Griekse cijfers"}
@@ -1024,6 +984,7 @@ nl{
             olck{"Ol Chiki cijfers"}
             orya{"Odia cijfers"}
             osma{"Osmanya cijfers"}
+            rohg{"Hanifi Rohingya cijfers"}
             roman{"Romeinse cijfers"}
             romanlow{"kleine Romeinse cijfers"}
             saur{"Saurashtra cijfers"}
@@ -1053,11 +1014,13 @@ nl{
         1994{"Gestandaardiseerde Resiaanse spelling"}
         1996{"Duitse spelling van 1996"}
         ABL1943{"Spellingsformulering van 1943"}
+        AKUAPEM{"Akuapem"}
         ALALC97{"Romanisering ALA-LC, editie 1997"}
         ALUKU{"Aloekoe-dialect"}
         AO1990{"Portugese spellingsovereenkomst van 1990"}
         AREVELA{"Oost-Armeens"}
         AREVMDA{"West-Armeens"}
+        ASANTE{"Asante"}
         BAKU1926{"Eenvormig Turkse Latijnse alfabet"}
         BALANKA{"Balanka-dialect van Anii"}
         BARLA{"Barlavento-dialectgroep van Kabuverdianu"}
@@ -1081,6 +1044,7 @@ nl{
         HSISTEMO{"H-sistemo"}
         IJEKAVSK{"Servisch met Ijekaviaanse uitspraak"}
         ITIHASA{"Episch Sanskriet"}
+        IVANCHOV{"Ivanchov"}
         JAUER{"Jauer"}
         JYUTPING{"Jyutping"}
         KKCOR{"Algemene spelling"}
@@ -1132,7 +1096,7 @@ nl{
         WADEGILE{"Wade-Giles-romanisering"}
         XSISTEMO{"X-sistemo"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.44.2"}
     characterLabelPattern{
         all{"{0} — alle"}
         category-list{"{0}: {1}"}

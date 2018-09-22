@@ -83,7 +83,7 @@ pl{
         CM{"Kamerun"}
         CN{"Chiny"}
         CO{"Kolumbia"}
-        CP{"Clipperton"}
+        CP{"Wyspa Clippertona"}
         CR{"Kostaryka"}
         CU{"Kuba"}
         CV{"Republika Zielonego Przylądka"}
@@ -312,5 +312,5 @@ pl{
         MK{"Była Jugosłowiańska Republika Macedonii"}
         TL{"Timor-Leste"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
 }

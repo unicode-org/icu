@@ -17,6 +17,7 @@ es_US{
         154{"Europa septentrional"}
         155{"Europa occidental"}
         AC{"Isla de la Ascensión"}
+        BA{"Bosnia y Herzegovina"}
         CI{"Côte d’Ivoire"}
         EZ{"zona euro"}
         GG{"Guernsey"}
@@ -32,5 +33,5 @@ es_US{
         CI{"CI"}
         TL{"TL"}
     }
-    Version{"2.1.38.73"}
+    Version{"2.1.43.65"}
 }

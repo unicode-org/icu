@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 et{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,16 @@ et{
                 one{"{0} osa miljoni kohta"}
                 other{"{0} osa miljoni kohta"}
             }
+            percent{
+                dnam{"protsent"}
+                one{"{0} protsent"}
+                other{"{0} protsenti"}
+            }
+            permille{
+                dnam{"promill"}
+                one{"{0} promill"}
+                other{"{0} promilli"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ et{
             }
         }
         coordinate{
+            dnam{"põhiilmakaar"}
             east{"{0} idapikkust"}
             north{"{0} põhjalaiust"}
             south{"{0} lõunalaiust"}
@@ -192,6 +203,11 @@ et{
                 dnam{"megabaidid"}
                 one{"{0} megabait"}
                 other{"{0} megabaiti"}
+            }
+            petabyte{
+                dnam{"petabaidid"}
+                one{"{0} petabait"}
+                other{"{0} petabaiti"}
             }
             terabit{
                 dnam{"terabitid"}
@@ -552,6 +568,11 @@ et{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmosfäärid"}
+                one{"{0} atmosfäär"}
+                other{"{0} atmosfääri"}
+            }
             hectopascal{
                 dnam{"hektopaskalid"}
                 one{"{0} hektopaskal"}
@@ -816,6 +837,11 @@ et{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -825,6 +851,7 @@ et{
             }
         }
         coordinate{
+            dnam{"ilmakaar"}
             east{"{0} E"}
             north{"{0} N"}
             south{"{0} S"}
@@ -914,8 +941,8 @@ et{
             }
             fathom{
                 dnam{"süllad"}
-                one{"{0} fm"}
-                other{"{0} fm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
             }
             foot{
                 dnam{"ft"}
@@ -1280,6 +1307,16 @@ et{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1304,6 +1341,7 @@ et{
             }
         }
         coordinate{
+            dnam{"ilmakaar"}
             east{"{0} ip"}
             north{"{0} pl"}
             south{"{0} ll"}
@@ -1349,6 +1387,11 @@ et{
                 dnam{"MB"}
                 one{"{0} MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                one{"{0} PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1520,8 +1563,8 @@ et{
             }
             fathom{
                 dnam{"süllad"}
-                one{"{0} fm"}
-                other{"{0} fm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
             }
             foot{
                 dnam{"ft"}
@@ -1709,6 +1752,11 @@ et{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 one{"{0} hPa"}

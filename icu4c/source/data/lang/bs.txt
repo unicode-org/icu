@@ -205,7 +205,7 @@ bs{
         inh{"ingušetski"}
         io{"ido"}
         is{"islandski"}
-        it{"talijanski"}
+        it{"italijanski"}
         iu{"inuktitut"}
         ja{"japanski"}
         jbo{"lojban"}
@@ -796,7 +796,7 @@ bs{
         TARASK{"Taraskijevica ortografija"}
         VALENCIA{"Valencijski"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     characterLabelPattern{
         all{"{0} — sve"}
         category-list{"{0}: {1}"}

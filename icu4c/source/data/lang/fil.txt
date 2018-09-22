@@ -664,13 +664,13 @@ fil{
         PINYIN{"Pinyin Romanization"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.61"}
     characterLabelPattern{
         all{"{0} — lahat"}
         category-list{"{0}: {1}"}
         compatibility{"{0} — pagiging nababagay"}
-        enclosed{"{0} — enclosed"}
-        extended{"{0} — extended"}
+        enclosed{"{0} — naka-enclose"}
+        extended{"{0} — pinahaba"}
         historic{"{0} — makasaysayan"}
         miscellaneous{"{0} — miscellaneous"}
         other{"{0} — iba pa"}

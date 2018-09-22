@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 te{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,16 @@ te{
                 one{"{0} భాగం/మిలియన్"}
                 other{"{0} భాగాలు/మిలియన్"}
             }
+            percent{
+                dnam{"శాతం"}
+                one{"{0} శాతం"}
+                other{"{0} శాతం"}
+            }
+            permille{
+                dnam{"మైలుకు"}
+                one{"{0}/మైలుకు"}
+                other{"{0}/మైలుకు"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ te{
             }
         }
         coordinate{
+            dnam{"కార్డినల్ దిశ"}
             east{"{0} తూర్పు"}
             north{"{0} ఉత్తరం"}
             south{"{0} దక్షిణం"}
@@ -192,6 +203,11 @@ te{
                 dnam{"మెగాబైట్లు"}
                 one{"{0} మెగాబైట్"}
                 other{"{0} మెగాబైట్లు"}
+            }
+            petabyte{
+                dnam{"పెటాబైట్లు"}
+                one{"{0} పెటాబైట్"}
+                other{"{0} పెటాబైట్లు"}
             }
             terabit{
                 dnam{"టెరాబిట్లు"}
@@ -542,6 +558,11 @@ te{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"వాతావరణాలు"}
+                one{"{0} వాతావరణం"}
+                other{"{0} వాతావరణాలు"}
+            }
             hectopascal{
                 dnam{"హెక్టోపాస్కల్‌లు"}
                 one{"{0} హెక్టోపాస్కల్"}
@@ -790,6 +811,13 @@ te{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"లీ/100కి.మీ."}
@@ -798,6 +826,7 @@ te{
             }
         }
         coordinate{
+            dnam{"దిశ"}
             east{"{0} తూ."}
             north{"{0} ఉ."}
             south{"{0} ద."}
@@ -1157,6 +1186,16 @@ te{
                 one{"{0} భా./మి."}
                 other{"{0} భా./మి."}
             }
+            percent{
+                dnam{"శాతం"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"మైలుకు"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1181,6 +1220,7 @@ te{
             }
         }
         coordinate{
+            dnam{"దిశ"}
             east{"{0} తూ."}
             north{"{0} ఉ."}
             south{"{0} ద."}
@@ -1226,6 +1266,11 @@ te{
                 dnam{"మె.బైట్"}
                 one{"{0} ఎమ్‌బి"}
                 other{"{0} ఎమ్‌బి"}
+            }
+            petabyte{
+                dnam{"పె.బైట్"}
+                one{"{0} పీబీ"}
+                other{"{0} పీబీ"}
             }
             terabit{
                 dnam{"టె.బిట్"}
@@ -1358,9 +1403,9 @@ te{
         }
         frequency{
             gigahertz{
-                dnam{"గిగా హె"}
-                one{"{0} గిగా హె"}
-                other{"{0} గిగా హె"}
+                dnam{"గిగా హెడ్జ్"}
+                one{"{0} గిగా హెడ్జ్"}
+                other{"{0} గిగా హెడ్జ్"}
             }
             hertz{
                 dnam{"హెర్ట్‌జ్"}
@@ -1466,6 +1511,8 @@ te{
             }
             point{
                 dnam{"పాయింట్‌లు"}
+                one{"{0} pt"}
+                other{"{0} pt"}
             }
             yard{
                 dnam{"గజాలు"}
@@ -1574,6 +1621,11 @@ te{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"వాతావ"}
+                one{"{0} వాతావ"}
+                other{"{0} వాతావ"}
+            }
             hectopascal{
                 dnam{"హె.పా"}
                 one{"{0} హె.పా"}

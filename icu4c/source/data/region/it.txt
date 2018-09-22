@@ -310,7 +310,6 @@ it{
         CZ{"Repubblica Ceca"}
         FK{"Isole Falkland (Isole Malvine)"}
         MK{"Ex Repubblica Jugoslava di Macedonia"}
-        TL{"Timor Leste"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
 }

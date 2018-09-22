@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh_Hant_HK{
-    Version{"2.1.39.11"}
+    Version{"2.1.43.65"}
     units{
         acceleration{
             meter-per-second-squared{
@@ -340,22 +340,29 @@ zh_Hant_HK{
             west{"{0}W"}
         }
         duration{
+            century{
+                other{"{0}世紀"}
+            }
             day{
                 dnam{"日"}
                 other{"{0}日"}
+                per{"{0} 每日"}
             }
             hour{
                 other{"{0}小時"}
+                per{"{0} 每小時"}
             }
             millisecond{
                 other{"{0}毫秒"}
             }
             minute{
                 dnam{"分"}
+                other{"{0}分"}
                 per{"{0} 每分鐘"}
             }
             month{
                 other{"{0}個月"}
+                per{"{0} 每月"}
             }
             nanosecond{
                 dnam{"納秒"}
@@ -368,6 +375,7 @@ zh_Hant_HK{
             }
             year{
                 other{"{0}年"}
+                per{"{0} 每年"}
             }
         }
         energy{
@@ -419,12 +427,22 @@ zh_Hant_HK{
             }
         }
         mass{
+            gram{
+                per{"{0} 每克"}
+            }
+            kilogram{
+                per{"{0} 每公斤"}
+            }
             ounce{
                 dnam{"安士"}
                 other{"{0} 安士"}
+                per{"{0} 每安士"}
             }
             ounce-troy{
                 dnam{"金衡安士"}
+            }
+            pound{
+                per{"{0} 每磅"}
             }
         }
         power{
@@ -465,6 +483,9 @@ zh_Hant_HK{
         volume{
             acre-foot{
                 dnam{"英畝呎"}
+            }
+            centiliter{
+                dnam{"厘升"}
             }
             cubic-centimeter{
                 dnam{"立方厘米"}

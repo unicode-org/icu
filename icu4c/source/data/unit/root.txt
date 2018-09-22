@@ -4,7 +4,7 @@
  * ICU <specials> source: <path>/common/main/root.xml
  */
 root{
-    Version{"2.1.41.58"}
+    Version{"2.1.44.18"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -108,6 +108,14 @@ root{
                 dnam{"ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -128,6 +136,7 @@ root{
             }
         }
         coordinate{
+            dnam{"direction"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -165,6 +174,10 @@ root{
             megabyte{
                 dnam{"MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -306,7 +319,7 @@ root{
             }
             fathom{
                 dnam{"fm"}
-                other{"{0} fm"}
+                other{"{0} ftm"}
             }
             foot{
                 dnam{"ft"}
@@ -460,6 +473,10 @@ root{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 other{"{0} hPa"}

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ka{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"აბიჯანი"}
@@ -889,7 +889,7 @@ ka{
             ec{"აზორის კუნძულები"}
         }
         "Atlantic:Bermuda"{
-            ec{"ბერმუდი"}
+            ec{"ბერმუდა"}
         }
         "Atlantic:Canary"{
             ec{"კანარი"}

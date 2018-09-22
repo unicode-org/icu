@@ -145,7 +145,7 @@ vi{
         IL{"Israel"}
         IM{"Đảo Man"}
         IN{"Ấn Độ"}
-        IO{"Lãnh thổ Ấn độ dương thuộc Anh"}
+        IO{"Lãnh thổ Ấn Độ Dương thuộc Anh"}
         IQ{"Iraq"}
         IR{"Iran"}
         IS{"Iceland"}
@@ -312,5 +312,5 @@ vi{
         MK{"Macedonia (FYROM)"}
         TL{"Đông Timor"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
 }

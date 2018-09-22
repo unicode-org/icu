@@ -952,6 +952,7 @@ en{
             ascii{"To ASCII"}
             casefold{"To Casefolded"}
             charname{"To Unicode Character Names"}
+            digit{"To Digit Form Of Accent"}
             fcc{"To Unicode FCC"}
             fcd{"To Unicode FCD"}
             fwidth{"To Fullwidth"}
@@ -968,6 +969,7 @@ en{
             remove{"To Empty String"}
             title{"To Titlecase"}
             upper{"To Uppercase"}
+            zawgyi{"To Zawgyi Myanmar Encoding"}
         }
         em{
             default{"Use Default Presentation For Emoji Characters"}
@@ -1056,14 +1058,23 @@ en{
             alaloc{"US ALA-LOC Transliteration"}
             bgn{"US BGN Transliteration"}
             buckwalt{"Buckwalter Arabic Transliteration"}
+            c11{"Hex Transforms Using C11 Syntax"}
+            css{"Hex Transforms Using CSS Syntax"}
             din{"German DIN Transliteration"}
             gost{"CIS GOST Transliteration"}
             iso{"ISO Transliteration"}
+            java{"Hex Transforms Using Java Syntax"}
             mcst{"Korean MCST Transliteration"}
             mns{"Mongolian National Standard Transliteration"}
+            percent{"Hex Transforms Using Percent Syntax"}
+            perl{"Hex Transforms Using Perl Syntax"}
+            plain{"Hex Transforms With No Surrounding Syntax"}
             prprname{"Personal Name Transliteration Variant"}
             satts{"Standard Arabic Technical Transliteration"}
             ungegn{"UN GEGN Transliteration"}
+            unicode{"Hex Transforms Using Unicode Syntax"}
+            xml{"Hex Transforms Using XML Syntax"}
+            xml10{"Hex Transforms Using XML Decimal Syntax"}
         }
         ms{
             metric{"Metric System"}
@@ -1236,7 +1247,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.44.61"}
     characterLabelPattern{
         all{"{0} — all"}
         category-list{"{0}: {1}"}

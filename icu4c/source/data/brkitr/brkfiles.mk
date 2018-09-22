@@ -1,6 +1,6 @@
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-BRK_RES_CLDR_VERSION = 33.1
+BRK_RES_CLDR_VERSION = 34
 # A list of txt's to build
 # Note:
 #
@@ -39,13 +39,13 @@ BRK_DICT_SOURCE = burmesedict.txt cjdict.txt khmerdict.txt laodict.txt\
 
 
 # List of break iterator files (brk).
-BRK_SOURCE = char.txt line.txt line_loose.txt\
- line_loose_cj.txt line_normal.txt line_normal_cj.txt\
- sent.txt sent_el.txt title.txt word.txt word_POSIX.txt
+BRK_SOURCE = char.txt line.txt line_loose.txt line_loose_cj.txt\
+ line_normal.txt line_normal_cj.txt sent.txt sent_el.txt title.txt\
+ word.txt word_POSIX.txt
 
 
 # Ordinary resources
 BRK_RES_SOURCE = de.txt el.txt en.txt en_US.txt\
- en_US_POSIX.txt es.txt fr.txt it.txt\
- ja.txt pt.txt ru.txt zh.txt zh_Hant.txt
+ en_US_POSIX.txt es.txt fr.txt it.txt ja.txt\
+ pt.txt ru.txt zh.txt zh_Hant.txt
 

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 my{
-    Version{"2.1.41.97"}
+    Version{"2.1.44.53"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -103,6 +103,14 @@ my{
                 dnam{"တစ်သန်းပုံ တစ်ပုံ"}
                 other{"တစ်သန်းပုံ {0} ပုံ"}
             }
+            percent{
+                dnam{"ရာခိုင်နှုန်း"}
+                other{"{0} ရာခိုင်နှုန်း"}
+            }
+            permille{
+                dnam{"ထောင်လီစိတ်"}
+                other{"{0} ထောင်လီစိတ်"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -123,6 +131,7 @@ my{
             }
         }
         coordinate{
+            dnam{"အရပ် လေးမျက်နှာ"}
             east{"{0} အရှေ့"}
             north{"{0} မြောက်"}
             south{"{0} တောင်"}
@@ -160,6 +169,10 @@ my{
             megabyte{
                 dnam{"မီဂါဘိုက်"}
                 other{"{0} မီဂါဘိုက်"}
+            }
+            petabyte{
+                dnam{"ပက်တာဘိုက်"}
+                other{"{0} ပက်တာဘိုက်"}
             }
             terabit{
                 dnam{"တယ်ရာဘစ်"}
@@ -287,8 +300,8 @@ my{
         }
         length{
             astronomical-unit{
-                dnam{"နက္ခတ္တဗေဒယူနစ်"}
-                other{"{0} နက္ခတ္တဗေဒယူနစ်"}
+                dnam{"နက်ခတ်တဗဒေယူနဈ"}
+                other{"{0} နက်ခတ်တဗဒေယူနဈ"}
             }
             centimeter{
                 dnam{"စင်တီမီတာ"}
@@ -443,6 +456,10 @@ my{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"ကမ္ဘာ့လေထု"}
+                other{"{0} ကမ္ဘာ့လေထု"}
+            }
             hectopascal{
                 dnam{"ဟက်တိုပါစကယ်"}
                 other{"{0} ဟက်တိုပါစကယ်"}
@@ -644,6 +661,12 @@ my{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100km"}
@@ -651,6 +674,7 @@ my{
             }
         }
         coordinate{
+            dnam{"လမ်းကြောင်း"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -894,6 +918,14 @@ my{
                 dnam{"တစ်သန်းပုံ တစ်ပုံ"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -914,6 +946,7 @@ my{
             }
         }
         coordinate{
+            dnam{"လမ်းကြောင်း"}
             east{"{0} E"}
             north{"{0} N"}
             south{"{0} S"}
@@ -951,6 +984,10 @@ my{
             megabyte{
                 dnam{"မီဂါဘိုက်"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"တယ်ရာဘစ်"}
@@ -1078,7 +1115,7 @@ my{
         }
         length{
             astronomical-unit{
-                dnam{"နက္ခတ္တဗေဒယူနစ်"}
+                dnam{"နက်ခတ်တဗဒေယူနဈ"}
                 other{"{0} au"}
             }
             centimeter{
@@ -1234,6 +1271,10 @@ my{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 other{"{0} hPa"}
@@ -1352,8 +1393,8 @@ my{
                 per{"{0}/gal US"}
             }
             gallon-imperial{
-                dnam{"ယူကေဂါလံ"}
-                other{"{0} ယူကေဂါလံ"}
+                dnam{"ယူကဂေါလံ"}
+                other{"{0} ယူကဂေါလံ"}
                 per{"{0}/gal Imp."}
             }
             hectoliter{

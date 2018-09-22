@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en{
-    Version{"2.1.41.97"}
+    Version{"2.1.44.61"}
     units{
         acceleration{
             g-force{
@@ -118,6 +118,16 @@ en{
                 one{"{0} part per million"}
                 other{"{0} parts per million"}
             }
+            percent{
+                dnam{"percent"}
+                one{"{0} percent"}
+                other{"{0} percent"}
+            }
+            permille{
+                dnam{"permille"}
+                one{"{0} permille"}
+                other{"{0} permille"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -142,6 +152,7 @@ en{
             }
         }
         coordinate{
+            dnam{"cardinal direction"}
             east{"{0} east"}
             north{"{0} north"}
             south{"{0} south"}
@@ -187,6 +198,11 @@ en{
                 dnam{"megabytes"}
                 one{"{0} megabyte"}
                 other{"{0} megabytes"}
+            }
+            petabyte{
+                dnam{"petabytes"}
+                one{"{0} petabyte"}
+                other{"{0} petabytes"}
             }
             terabit{
                 dnam{"terabits"}
@@ -547,6 +563,11 @@ en{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmospheres"}
+                one{"{0} atmosphere"}
+                other{"{0} atmospheres"}
+            }
             hectopascal{
                 dnam{"hectopascals"}
                 one{"{0} hectopascal"}
@@ -844,6 +865,16 @@ en{
                 one{"{0}ppm"}
                 other{"{0}ppm"}
             }
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -913,6 +944,11 @@ en{
                 dnam{"MByte"}
                 one{"{0}MB"}
                 other{"{0}MB"}
+            }
+            petabyte{
+                dnam{"PByte"}
+                one{"{0}PB"}
+                other{"{0}PB"}
             }
             terabit{
                 dnam{"Tbit"}
@@ -1071,8 +1107,8 @@ en{
             }
             fathom{
                 dnam{"fathom"}
-                one{"{0}fm"}
-                other{"{0}fm"}
+                one{"{0}ftm"}
+                other{"{0}ftm"}
             }
             foot{
                 dnam{"ft"}
@@ -1252,6 +1288,11 @@ en{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0}atm"}
+                other{"{0}atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 one{"{0}hPa"}
@@ -1566,6 +1607,16 @@ en{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"percent"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"permille"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1590,6 +1641,7 @@ en{
             }
         }
         coordinate{
+            dnam{"direction"}
             east{"{0} E"}
             north{"{0} N"}
             south{"{0} S"}
@@ -1635,6 +1687,11 @@ en{
                 dnam{"MByte"}
                 one{"{0} MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PByte"}
+                one{"{0} PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tbit"}
@@ -1995,6 +2052,11 @@ en{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 one{"{0} hPa"}

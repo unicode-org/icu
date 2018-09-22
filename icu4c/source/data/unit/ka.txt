@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ka{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,16 @@ ka{
                 one{"{0} ნაწილი მილიონზე"}
                 other{"{0} ნაწილი მილიონზე"}
             }
+            percent{
+                dnam{"პროცენტი"}
+                one{"{0} პროცენტი"}
+                other{"{0} პროცენტი"}
+            }
+            permille{
+                dnam{"პრომილე"}
+                one{"{0} პრომილე"}
+                other{"{0} პრომილე"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ ka{
             }
         }
         coordinate{
+            dnam{"კარდინალური მიმართულება"}
             east{"{0} აღმოსავლეთით"}
             north{"{0} ჩრდილოეთით"}
             south{"{0} სამხრეთით"}
@@ -192,6 +203,11 @@ ka{
                 dnam{"მეგაბაიტი"}
                 one{"{0} მეგაბაიტი"}
                 other{"{0} მეგაბაიტი"}
+            }
+            petabyte{
+                dnam{"პბაიტი"}
+                one{"{0} პბაიტი"}
+                other{"{0} პეტაბაიტი"}
             }
             terabit{
                 dnam{"ტერაბიტი"}
@@ -537,6 +553,11 @@ ka{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"ატმოსფეროები"}
+                one{"{0} ატმოსფერო"}
+                other{"{0} ატმოსფერო"}
+            }
             hectopascal{
                 dnam{"ჰექტოპასკალი"}
                 one{"{0} ჰექტოპასკალი"}
@@ -785,6 +806,13 @@ ka{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"ლ/100კმ"}
@@ -793,6 +821,7 @@ ka{
             }
         }
         coordinate{
+            dnam{"მიმართულება"}
             east{"{0}აღმ."}
             north{"{0}ჩრდ."}
             south{"{0} სამხრ."}
@@ -1092,6 +1121,16 @@ ka{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1116,6 +1155,7 @@ ka{
             }
         }
         coordinate{
+            dnam{"მიმართულება"}
             east{"{0}აღმ."}
             north{"{0}ჩრდ."}
             south{"{0} სამხრ."}
@@ -1161,6 +1201,11 @@ ka{
                 dnam{"მბაიტი"}
                 one{"{0} მბაიტი"}
                 other{"{0} მბაიტი"}
+            }
+            petabyte{
+                dnam{"პბაიტი"}
+                one{"{0} პბაიტი"}
+                other{"{0} პბაიტი"}
             }
             terabit{
                 dnam{"ტბიტი"}
@@ -1506,6 +1551,11 @@ ka{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"ატმ."}
+                one{"{0} ატმ."}
+                other{"{0} ატმ."}
+            }
             hectopascal{
                 dnam{"ჰპა"}
                 one{"{0} ჰპა"}

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 as{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,16 @@ as{
                 one{"প্ৰতি মিলিয়নত {0} ভাগ"}
                 other{"প্ৰতি মিলিয়নত {0} ভাগ"}
             }
+            percent{
+                dnam{"%"}
+                one{"{0} শতাংশ"}
+                other{"{0} শতাংশ"}
+            }
+            permille{
+                dnam{"প্ৰতিমাইল"}
+                one{"{0} প্ৰতিমাইল"}
+                other{"{0} প্ৰতিমাইল"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ as{
             }
         }
         coordinate{
+            dnam{"প্ৰধান দিক্-নিৰ্দেশনা"}
             east{"{0} পূব"}
             north{"{0} উত্তৰ"}
             south{"{0} দক্ষিণ"}
@@ -192,6 +203,11 @@ as{
                 dnam{"মেগাবাইট"}
                 one{"{0} মেগাবাইট"}
                 other{"{0} মেগাবাইট"}
+            }
+            petabyte{
+                dnam{"পেটাবাইট"}
+                one{"{0} পেটাবাইট"}
+                other{"{0} পেটাবাইট"}
             }
             terabit{
                 dnam{"টেৰাবিট"}
@@ -537,6 +553,11 @@ as{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"বতৰ"}
+                one{"{0} বতৰ"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"হেক্টোপাছকল"}
                 one{"{0} হেক্টোপাছকল"}
@@ -739,6 +760,13 @@ as{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"ল/১০০ ক.ম."}
@@ -747,6 +775,7 @@ as{
             }
         }
         coordinate{
+            dnam{"দিক্-নিৰ্দেশনা"}
             east{"{0} পূঃ"}
             north{"{0} উঃ"}
             south{"{0} দঃ"}
@@ -966,6 +995,16 @@ as{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"শতাংশ"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"প্ৰতিমাইল"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -990,6 +1029,7 @@ as{
             }
         }
         coordinate{
+            dnam{"দিক্-নিৰ্দেশনা"}
             east{"{0} পূঃ"}
             north{"{0} উঃ"}
             south{"{0} দঃ"}
@@ -1035,6 +1075,11 @@ as{
                 dnam{"মেগাবাইট"}
                 one{"{0} মেঃ বাঃ"}
                 other{"{0} মেঃ বাঃ"}
+            }
+            petabyte{
+                dnam{"PByte"}
+                one{"{0} PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"টেৰাবিট"}
@@ -1380,6 +1425,11 @@ as{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 one{"{0} hPa"}

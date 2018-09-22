@@ -119,15 +119,15 @@ static ExpectedResult kSwahiliShort[] = {
   {1234.0, "elfu\\u00a01.2"},
   {12345.0, "elfu\\u00a012"},
   {123456.0, "elfu\\u00a0120"},
-  {1234567.0, "M1.2"},
-  {12345678.0, "M12"},
-  {123456789.0, "M120"},
-  {1.23456789E9, "B1.2"},
-  {1.23456789E10, "B12"},
-  {1.23456789E11, "B120"},
-  {1.23456789E12, "T1.2"},
-  {1.23456789E13, "T12"},
-  {1.23456789E15, "T1200"}};
+  {1234567.0, "1.2M"},
+  {12345678.0, "12M"},
+  {123456789.0, "120M"},
+  {1.23456789E9, "1.2B"},
+  {1.23456789E10, "12B"},
+  {1.23456789E11, "120B"},
+  {1.23456789E12, "1.2T"},
+  {1.23456789E13, "12T"},
+  {1.23456789E15, "1200T"}};
 
 static ExpectedResult kCsShort[] = {
   {1000.0, "1\\u00a0tis."},
@@ -154,15 +154,15 @@ static ExpectedResult kSwahiliShortNegative[] = {
   {-1234.0, "elfu\\u00a0-1.2"},
   {-12345.0, "elfu\\u00a0-12"},
   {-123456.0, "elfu\\u00a0-120"},
-  {-1234567.0, "M-1.2"},
-  {-12345678.0, "M-12"},
-  {-123456789.0, "M-120"},
-  {-1.23456789E9, "B-1.2"},
-  {-1.23456789E10, "B-12"},
-  {-1.23456789E11, "B-120"},
-  {-1.23456789E12, "T-1.2"},
-  {-1.23456789E13, "T-12"},
-  {-1.23456789E15, "T-1200"}};
+  {-1234567.0, "-1.2M"},
+  {-12345678.0, "-12M"},
+  {-123456789.0, "-120M"},
+  {-1.23456789E9, "-1.2B"},
+  {-1.23456789E10, "-12B"},
+  {-1.23456789E11, "-120B"},
+  {-1.23456789E12, "-1.2T"},
+  {-1.23456789E13, "-12T"},
+  {-1.23456789E15, "-1200T"}};
 
 static ExpectedResult kArabicLong[] = {
   {-5300.0, "\\u061C-\\u0665\\u066B\\u0663 \\u0623\\u0644\\u0641"}};
@@ -188,9 +188,9 @@ static ExpectedResult kGermanCurrencyTestData[] = {
         {1.0, u8"1\\u00A0\\u20AC"},
         {12.0, u8"12\\u00A0\\u20AC"},
         {123.0, u8"120\\u00A0\\u20AC"},
-        {1234.0, u8"1200\\u00A0\\u20AC"},
-        {12345.0, u8"12.000\\u00A0\\u20AC"},
-        {123456.0, u8"120.000\\u00A0\\u20AC"},
+        {1234.0, u8"1,2\\u00A0Tsd.\\u00A0\\u20AC"},
+        {12345.0, u8"12\\u00A0Tsd.\\u00A0\\u20AC"},
+        {123456.0, u8"120\\u00A0Tsd.\\u00A0\\u20AC"},
         {1234567.0, u8"1,2\\u00A0Mio.\\u00A0\\u20AC"},
         {12345678.0, u8"12\\u00A0Mio.\\u00A0\\u20AC"},
         {123456789.0, u8"120\\u00A0Mio.\\u00A0\\u20AC"},
@@ -487,10 +487,10 @@ void CompactDecimalFormatTest::TestBug12975() {
     LocalPointer<CompactDecimalFormat> cdf(CompactDecimalFormat::createInstance(locale, UNUM_SHORT, status));
     if (assertSuccess("", status, true, __FILE__, __LINE__)) {
         UnicodeString resultCdf;
-        cdf->format(120000, resultCdf);
+        cdf->format(12000, resultCdf);
         LocalPointer<DecimalFormat> df((DecimalFormat*) DecimalFormat::createInstance(locale, status));
         UnicodeString resultDefault;
-        df->format(120000, resultDefault);
+        df->format(12000, resultDefault);
         assertEquals("CompactDecimalFormat should use default pattern when compact pattern is unavailable",
                      resultDefault, resultCdf);
     }

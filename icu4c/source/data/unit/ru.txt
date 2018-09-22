@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ru{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -163,6 +163,20 @@ ru{
                 one{"{0} миллионная доля"}
                 other{"{0} миллионной доли"}
             }
+            percent{
+                dnam{"проценты"}
+                few{"{0} процента"}
+                many{"{0} процентов"}
+                one{"{0} процент"}
+                other{"{0} процента"}
+            }
+            permille{
+                dnam{"промилле"}
+                few{"{0} промилле"}
+                many{"{0} промилле"}
+                one{"{0} промилле"}
+                other{"{0} промилле"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -195,6 +209,7 @@ ru{
             }
         }
         coordinate{
+            dnam{"направление"}
             east{"{0} восточной долготы"}
             north{"{0} северной широты"}
             south{"{0} южной широты"}
@@ -256,6 +271,13 @@ ru{
                 many{"{0} мегабайт"}
                 one{"{0} мегабайт"}
                 other{"{0} мегабайта"}
+            }
+            petabyte{
+                dnam{"петабайты"}
+                few{"{0} петабайта"}
+                many{"{0} петабайт"}
+                one{"{0} петабайт"}
+                other{"{0} петабайта"}
             }
             terabit{
                 dnam{"терабиты"}
@@ -746,6 +768,13 @@ ru{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"атмосферы"}
+                few{"{0} атмосферы"}
+                many{"{0} атмосфер"}
+                one{"{0} атмосфера"}
+                other{"{0} атмосферы"}
+            }
             hectopascal{
                 dnam{"гектопаскали"}
                 few{"{0} гектопаскаля"}
@@ -1096,6 +1125,15 @@ ru{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                few{"{0}%"}
+                many{"{0}%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"л/100 км"}
@@ -1106,6 +1144,7 @@ ru{
             }
         }
         coordinate{
+            dnam{"напр."}
             east{"{0} в. д."}
             north{"{0} с. ш."}
             south{"{0} ю. ш."}
@@ -1644,11 +1683,11 @@ ru{
                 per{"{0}/см²"}
             }
             square-foot{
-                dnam{"фут²"}
-                few{"{0} фут²"}
-                many{"{0} фут²"}
-                one{"{0} фут²"}
-                other{"{0} фут²"}
+                dnam{"фт²"}
+                few{"{0} фт²"}
+                many{"{0} фт²"}
+                one{"{0} фт²"}
+                other{"{0} фт²"}
             }
             square-inch{
                 dnam{"дюйм²"}
@@ -1722,6 +1761,20 @@ ru{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                few{"{0} %"}
+                many{"{0} %"}
+                one{"{0} %"}
+                other{"{0} %"}
+            }
+            permille{
+                dnam{"‰"}
+                few{"{0} ‰"}
+                many{"{0} ‰"}
+                one{"{0} ‰"}
+                other{"{0} ‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1754,6 +1807,7 @@ ru{
             }
         }
         coordinate{
+            dnam{"направление"}
             east{"{0} в. д."}
             north{"{0} с. ш."}
             south{"{0} ю. ш."}
@@ -1816,6 +1870,13 @@ ru{
                 one{"{0} МБ"}
                 other{"{0} МБ"}
             }
+            petabyte{
+                dnam{"ПБ"}
+                few{"{0} ПБ"}
+                many{"{0} ПБ"}
+                one{"{0} ПБ"}
+                other{"{0} ПБ"}
+            }
             terabit{
                 dnam{"Тбит"}
                 few{"{0} Тбит"}
@@ -1848,7 +1909,7 @@ ru{
                 per{"{0}/д"}
             }
             hour{
-                dnam{"ч"}
+                dnam{"ч."}
                 few{"{0} ч."}
                 many{"{0} ч."}
                 one{"{0} ч."}
@@ -1893,11 +1954,11 @@ ru{
                 other{"{0} нс"}
             }
             second{
-                dnam{"с"}
-                few{"{0} с."}
-                many{"{0} с."}
-                one{"{0} с."}
-                other{"{0} с."}
+                dnam{"сек."}
+                few{"{0} сек."}
+                many{"{0} сек."}
+                one{"{0} сек."}
+                other{"{0} сек."}
                 per{"{0}/c"}
             }
             week{
@@ -2305,6 +2366,13 @@ ru{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"атм"}
+                few{"{0} атм"}
+                many{"{0} атм"}
+                one{"{0} атм"}
+                other{"{0} атм"}
+            }
             hectopascal{
                 dnam{"гПа"}
                 few{"{0} гПа"}
@@ -2425,11 +2493,11 @@ ru{
                 per{"{0}/см³"}
             }
             cubic-foot{
-                dnam{"фут³"}
-                few{"{0} фут³"}
-                many{"{0} фут³"}
-                one{"{0} фут³"}
-                other{"{0} фут³"}
+                dnam{"фт³"}
+                few{"{0} фт³"}
+                many{"{0} фт³"}
+                one{"{0} фт³"}
+                other{"{0} фт³"}
             }
             cubic-inch{
                 dnam{"дюйм³"}

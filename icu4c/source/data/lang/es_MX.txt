@@ -12,8 +12,10 @@ es_MX{
         arp{"arapaho"}
         bas{"basa"}
         bax{"bamun"}
-        bho{"bhojpuri"}
+        bho{"bhoshpuri"}
         bla{"siksika"}
+        bua{"buriat"}
+        de_AT{"alemán austriaco"}
         dum{"neerlandés medieval"}
         enm{"inglés medieval"}
         eu{"euskera"}
@@ -22,9 +24,12 @@ es_MX{
         gmh{"alemán de la alta edad media"}
         grc{"griego antiguo"}
         hak{"kejia (China)"}
+        hil{"hiligainón"}
         hsn{"xiang (China)"}
+        inh{"ingusetio"}
         kbd{"kabardiano"}
-        krc{"karachay-balkar"}
+        krc{"karachái bálkaro"}
+        kum{"cumuco"}
         lo{"lao"}
         lus{"lushai"}
         mga{"irlandés medieval"}
@@ -57,7 +62,7 @@ es_MX{
     Scripts{
         Hanb{"hanb"}
         Mlym{"malayálam"}
-        Telu{"telugú"}
+        Telu{"telegu"}
     }
     Types{
         calendar{
@@ -112,7 +117,7 @@ es_MX{
             tibt{"Dígitos en tibetano"}
         }
     }
-    Version{"2.1.38.73"}
+    Version{"2.1.44.5"}
     characterLabelPattern{
         historic{"{0} — Históricos"}
         miscellaneous{"{0} — Varios"}

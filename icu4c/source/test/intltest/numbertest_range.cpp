@@ -131,30 +131,30 @@ void NumberRangeFormatterTest::testBasic() {
         NumberRangeFormatter::with()
             .numberFormatterBoth(NumberFormatter::with().unit(FAHRENHEIT).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME)),
         Locale("fr-FR"),
-        u"1–5 degrés Fahrenheit",
-        u"~5 degrés Fahrenheit",
-        u"~5 degrés Fahrenheit",
-        u"0–3 degrés Fahrenheit",
-        u"~0 degré Fahrenheit",
-        u"3–3 000 degrés Fahrenheit",
-        u"3 000–5 000 degrés Fahrenheit",
-        u"4 999–5 001 degrés Fahrenheit",
-        u"~5 000 degrés Fahrenheit",
-        u"5 000–5 000 000 degrés Fahrenheit");
+        u"1–5\u00A0degrés Fahrenheit",
+        u"≈5\u00A0degrés Fahrenheit",
+        u"≈5\u00A0degrés Fahrenheit",
+        u"0–3\u00A0degrés Fahrenheit",
+        u"≈0\u00A0degré Fahrenheit",
+        u"3–3\u202F000\u00A0degrés Fahrenheit",
+        u"3\u202F000–5\u202F000\u00A0degrés Fahrenheit",
+        u"4\u202F999–5\u202F001\u00A0degrés Fahrenheit",
+        u"≈5\u202F000\u00A0degrés Fahrenheit",
+        u"5\u202F000–5\u202F000\u202F000\u00A0degrés Fahrenheit");
 
     assertFormatRange(
         u"Locale with custom range separator",
         NumberRangeFormatter::with(),
         Locale("ja"),
         u"1～5",
-        u"~5",
-        u"~5",
+        u"約 5",
+        u"約 5",
         u"0～3",
-        u"~0",
+        u"約 0",
         u"3～3,000",
         u"3,000～5,000",
         u"4,999～5,001",
-        u"~5,000",
+        u"約 5,000",
         u"5,000～5,000,000");
 
     assertFormatRange(
@@ -429,14 +429,14 @@ void NumberRangeFormatterTest::testCollapse() {
             .numberFormatterBoth(NumberFormatter::with().notation(Notation::compactLong())),
         Locale("de-CH"),
         u"1–5",
-        u"~5",
-        u"~5",
+        u"≈5",
+        u"≈5",
         u"0–3",
-        u"~0",
+        u"≈0",
         u"3–3 Tausend",
         u"3–5 Tausend",
-        u"~5 Tausend",
-        u"~5 Tausend",
+        u"≈5 Tausend",
+        u"≈5 Tausend",
         u"5 Tausend – 5 Millionen");
 
     assertFormatRange(
@@ -446,14 +446,14 @@ void NumberRangeFormatterTest::testCollapse() {
             .numberFormatterBoth(NumberFormatter::with().notation(Notation::compactLong())),
         Locale("de-CH"),
         u"1–5",
-        u"~5",
-        u"~5",
+        u"≈5",
+        u"≈5",
         u"0–3",
-        u"~0",
+        u"≈0",
         u"3–3 Tausend",
         u"3 Tausend – 5 Tausend",
-        u"~5 Tausend",
-        u"~5 Tausend",
+        u"≈5 Tausend",
+        u"≈5 Tausend",
         u"5 Tausend – 5 Millionen");
 
     assertFormatRange(

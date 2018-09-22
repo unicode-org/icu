@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 da{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -123,6 +123,16 @@ da{
                 one{"{0} parts per million"}
                 other{"{0} parts per million"}
             }
+            percent{
+                dnam{"procent"}
+                one{"{0} procent"}
+                other{"{0} procent"}
+            }
+            permille{
+                dnam{"promille"}
+                one{"{0} promille"}
+                other{"{0} promille"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ da{
             }
         }
         coordinate{
+            dnam{"kompasretning"}
             east{"{0} øst"}
             north{"{0} nord"}
             south{"{0} syd"}
@@ -159,9 +170,9 @@ da{
                 other{"{0} bit"}
             }
             byte{
-                dnam{"byte"}
+                dnam{"bytes"}
                 one{"{0} byte"}
-                other{"{0} byte"}
+                other{"{0} bytes"}
             }
             gigabit{
                 dnam{"gigabit"}
@@ -169,9 +180,9 @@ da{
                 other{"{0} gigabit"}
             }
             gigabyte{
-                dnam{"gigabyte"}
+                dnam{"gigabytes"}
                 one{"{0} gigabyte"}
-                other{"{0} GB"}
+                other{"{0} gigabytes"}
             }
             kilobit{
                 dnam{"kilobit"}
@@ -179,9 +190,9 @@ da{
                 other{"{0} kilobit"}
             }
             kilobyte{
-                dnam{"kilobyte"}
+                dnam{"kilobytes"}
                 one{"{0} kilobyte"}
-                other{"{0} kilobyte"}
+                other{"{0} kilobytes"}
             }
             megabit{
                 dnam{"megabit"}
@@ -189,9 +200,14 @@ da{
                 other{"{0} megabit"}
             }
             megabyte{
-                dnam{"megabyte"}
+                dnam{"megabytes"}
                 one{"{0} megabyte"}
-                other{"{0} megabyte"}
+                other{"{0} megabytes"}
+            }
+            petabyte{
+                dnam{"petabytes"}
+                one{"{0} petabyte"}
+                other{"{0} petabytes"}
             }
             terabit{
                 dnam{"terabit"}
@@ -199,9 +215,9 @@ da{
                 other{"{0} terabit"}
             }
             terabyte{
-                dnam{"terabyte"}
+                dnam{"terabytes"}
                 one{"{0} terabyte"}
-                other{"{0} terabyte"}
+                other{"{0} terabytes"}
             }
         }
         duration{
@@ -537,6 +553,11 @@ da{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmosfære"}
+                one{"{0} atmosfære"}
+                other{"{0} atmosfære"}
+            }
             hectopascal{
                 dnam{"hektopascal"}
                 one{"{0} hektopascal"}
@@ -785,6 +806,13 @@ da{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0} %"}
+                other{"{0} %"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"l/100 km"}
@@ -793,6 +821,7 @@ da{
             }
         }
         coordinate{
+            dnam{"retning"}
             east{"{0}Ø"}
             north{"{0}N"}
             south{"{0}S"}
@@ -1072,12 +1101,12 @@ da{
         }
         angle{
             arc-minute{
-                dnam{"bueminutter"}
+                dnam{"buemin."}
                 one{"{0}′"}
                 other{"{0}′"}
             }
             arc-second{
-                dnam{"buesekunder"}
+                dnam{"buesek."}
                 one{"{0}″"}
                 other{"{0}″"}
             }
@@ -1155,8 +1184,8 @@ da{
         concentr{
             karat{
                 dnam{"karat"}
-                one{"{0} kt"}
-                other{"{0} kt"}
+                one{"{0} kt."}
+                other{"{0} kt."}
             }
             milligram-per-deciliter{
                 dnam{"mg/dl"}
@@ -1172,6 +1201,16 @@ da{
                 dnam{"ppm"}
                 one{"{0} ppm"}
                 other{"{0} ppm"}
+            }
+            percent{
+                dnam{"pct."}
+                one{"{0} pct."}
+                other{"{0} pct."}
+            }
+            permille{
+                dnam{"‰"}
+                one{"{0} ‰"}
+                other{"{0} ‰"}
             }
         }
         consumption{
@@ -1197,6 +1236,7 @@ da{
             }
         }
         coordinate{
+            dnam{"retning"}
             east{"{0}Ø"}
             north{"{0}N"}
             south{"{0}S"}
@@ -1224,9 +1264,9 @@ da{
                 other{"{0} GB"}
             }
             kilobit{
-                dnam{"kb"}
-                one{"{0} kb"}
-                other{"{0} kb"}
+                dnam{"kbit"}
+                one{"{0} kbit"}
+                other{"{0} kbit"}
             }
             kilobyte{
                 dnam{"kB"}
@@ -1234,19 +1274,24 @@ da{
                 other{"{0} kB"}
             }
             megabit{
-                dnam{"Mb"}
-                one{"{0} Mb"}
-                other{"{0} Mb"}
+                dnam{"Mbit"}
+                one{"{0} Mbit"}
+                other{"{0} Mbit"}
             }
             megabyte{
                 dnam{"MB"}
                 one{"{0} MB"}
                 other{"{0} MB"}
             }
+            petabyte{
+                dnam{"PB"}
+                one{"{0} PB"}
+                other{"{0} PB"}
+            }
             terabit{
-                dnam{"Tb"}
-                one{"{0} Tb"}
-                other{"{0} Tb"}
+                dnam{"Tbit"}
+                one{"{0} Tbit"}
+                other{"{0} Tbit"}
             }
             terabyte{
                 dnam{"TB"}
@@ -1587,6 +1632,11 @@ da{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 one{"{0} hPa"}

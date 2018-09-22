@@ -475,7 +475,7 @@ static void TestCurrencyPreEuro(void)
     const char* result[]={
         "\\u20A7\\u00A02", "2\\u00A0F",            "IEP\\u00A01.50",                      "1,50\\u00A0mk",   "2\\u00A0F",         "ITL\\u00A02",
         "1$50\\u00A0\\u200B", "\\u00F6S\\u00A01,50",  "1,50\\u00A0\\u0394\\u03C1\\u03C7", "2\\u00A0\\u20A7", "1,50\\u00A0FB",     "IEP\\u00A01.50",
-        "1,50\\u00A0BEF",   "1,50\\u00A0DM",        "1,50\\u00A0BEF",                    "\\u20A7\\u00A02", "1,50\\u00A0F",      "2\\u00A0\\u20A7",
+        "BEF\\u00A01,50",   "1,50\\u00A0DM",        "1,50\\u00A0BEF",                    "\\u20A7\\u00A02", "1,50\\u00A0F",      "2\\u00A0\\u20A7",
         "NLG\\u00A01,50"
     };
 
@@ -546,8 +546,8 @@ static void TestCurrencyObject(void)
     };
 
     const char* result[]={
-        "1\\u00A0234,56\\u00A0\\u20AC",
-        "1\\u00A0235\\u00A0JPY",
+        "1\\u202F234,56\\u00A0\\u20AC",
+        "1\\u202F235\\u00A0JPY",
     };
 
     log_verbose("\nTesting the number format with different currency codes\n");

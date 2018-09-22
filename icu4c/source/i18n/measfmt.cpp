@@ -47,7 +47,7 @@ U_NAMESPACE_BEGIN
 
 static constexpr int32_t PER_UNIT_INDEX = StandardPlural::COUNT;
 static constexpr int32_t PATTERN_COUNT = PER_UNIT_INDEX + 1;
-static constexpr int32_t MEAS_UNIT_COUNT = 138;  // see assertion in MeasureFormatCacheData constructor
+static constexpr int32_t MEAS_UNIT_COUNT = 142;  // see assertion in MeasureFormatCacheData constructor
 static constexpr int32_t WIDTH_INDEX_COUNT = UMEASFMT_WIDTH_NARROW + 1;
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MeasureFormat)

@@ -16,21 +16,21 @@ fr{
         019{"Amériques"}
         021{"Amérique septentrionale"}
         029{"Caraïbes"}
-        030{"Asie orientale"}
+        030{"Asie de l’Est"}
         034{"Asie du Sud"}
         035{"Asie du Sud-Est"}
-        039{"Europe méridionale"}
+        039{"Europe du Sud"}
         053{"Australasie"}
         054{"Mélanésie"}
         057{"région micronésienne"}
         061{"Polynésie"}
         142{"Asie"}
         143{"Asie centrale"}
-        145{"Asie occidentale"}
+        145{"Asie de l’Ouest"}
         150{"Europe"}
         151{"Europe de l’Est"}
-        154{"Europe septentrionale"}
-        155{"Europe occidentale"}
+        154{"Europe du Nord"}
+        155{"Europe de l’Ouest"}
         202{"Afrique subsaharienne"}
         419{"Amérique latine"}
         AC{"Île de l’Ascension"}
@@ -261,7 +261,7 @@ fr{
         TG{"Togo"}
         TH{"Thaïlande"}
         TJ{"Tadjikistan"}
-        TK{"Tokélaou"}
+        TK{"Tokelau"}
         TL{"Timor oriental"}
         TM{"Turkménistan"}
         TN{"Tunisie"}
@@ -312,5 +312,5 @@ fr{
         MK{"Macédoine (ARYM)"}
         TL{"Timor-Oriental"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.44.2"}
 }

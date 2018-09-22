@@ -3,7 +3,7 @@
 ga{
     Countries{
         001{"an Domhan"}
-        002{"An Afraic"}
+        002{"an Afraic"}
         003{"Meiriceá Thuaidh"}
         005{"Meiriceá Theas"}
         009{"an Aigéine"}
@@ -11,7 +11,7 @@ ga{
         013{"Meiriceá Láir"}
         014{"Oirthear na hAfraice"}
         015{"Tuaisceart na hAfraice"}
-        017{"An Afraic Láir"}
+        017{"an Afraic Láir"}
         018{"Deisceart na hAfraice"}
         019{"Críocha Mheiriceá"}
         021{"Tuaisceart Mheiriceá"}
@@ -90,7 +90,7 @@ ga{
         CW{"Curaçao"}
         CX{"Oileán na Nollag"}
         CY{"an Chipir"}
-        CZ{"An tSeicia"}
+        CZ{"an tSeicia"}
         DE{"an Ghearmáin"}
         DG{"Diego Garcia"}
         DJ{"Djibouti"}
@@ -310,6 +310,7 @@ ga{
         CZ{"Poblacht na Seice"}
         FK{"Oileáin Fháclainne (Islas Malvinas)"}
         MK{"an Mhacadóin (PIIM)"}
+        TL{"TL"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
 }
