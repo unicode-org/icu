@@ -220,7 +220,7 @@ nb{
         PK{"Pakistan"}
         PL{"Polen"}
         PM{"Saint-Pierre-et-Miquelon"}
-        PN{"Pitcairn"}
+        PN{"Pitcairnøyene"}
         PR{"Puerto Rico"}
         PS{"Det palestinske området"}
         PT{"Portugal"}
@@ -309,5 +309,5 @@ nb{
         FK{"Falklandsøyene (Islas Malvinas)"}
         MK{"Den tidligere jugoslaviske republikk Makedonia"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.44.2"}
 }

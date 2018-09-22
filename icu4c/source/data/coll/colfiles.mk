@@ -1,6 +1,6 @@
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-COLLATION_CLDR_VERSION = 33.1
+COLLATION_CLDR_VERSION = 34
 # A list of txt's to build
 # Note:
 #
@@ -66,8 +66,8 @@ COLLATION_SOURCE = $(COLLATION_EMPTY_SOURCE) af.txt am.txt ar.txt\
  pa.txt pl.txt ps.txt pt.txt ro.txt\
  ru.txt se.txt si.txt sk.txt sl.txt\
  smn.txt sq.txt sr.txt sr_Latn.txt sv.txt\
- sw.txt ta.txt te.txt th.txt to.txt\
- tr.txt ug.txt uk.txt ur.txt uz.txt\
- vi.txt wae.txt wo.txt yi.txt yo.txt\
- zh.txt zh_Hant.txt zu.txt
+ sw.txt ta.txt te.txt th.txt tk.txt\
+ to.txt tr.txt ug.txt uk.txt ur.txt\
+ uz.txt vi.txt wae.txt wo.txt yi.txt\
+ yo.txt zh.txt zh_Hant.txt zu.txt
 

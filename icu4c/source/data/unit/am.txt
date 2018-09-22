@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 am{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,16 @@ am{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"ፐርሰንት"}
+                one{"{0} ፐርሰንት"}
+                other{"{0} ፐርሰንት"}
+            }
+            permille{
+                dnam{"በማይል"}
+                one{"{0} በማይል"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ am{
             }
         }
         coordinate{
+            dnam{"ዓቢይ አቅጣጫ"}
             east{"{0}ምስ"}
             north{"{0}ሰ"}
             south{"{0}ደ"}
@@ -193,8 +204,13 @@ am{
                 one{"{0} ሜጋባይት"}
                 other{"{0} ሜጋባይት"}
             }
+            petabyte{
+                dnam{"ፔታ ባይት"}
+                one{"{0} ፔታ ባይት"}
+                other{"{0} ፔታ ባይቶች"}
+            }
             terabit{
-                dnam{"ቴባ"}
+                dnam{"ቴራባይትስ"}
                 one{"{0} ቴባ"}
                 other{"{0} ቴባ"}
             }
@@ -537,6 +553,11 @@ am{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"ከባቢ አየር"}
+                one{"{0} ከባቢ አየር"}
+                other{"{0} ከባቢ አየር"}
+            }
             hectopascal{
                 dnam{"ሄክቶፓስካል"}
                 one{"{0} ሄክቶፓስካል"}
@@ -785,6 +806,13 @@ am{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"ሊትር በ100 ኪሎሜትሮች"}
@@ -793,6 +821,7 @@ am{
             }
         }
         coordinate{
+            dnam{"አቅጣጫ"}
             east{"{0}ምስ"}
             north{"{0}ሰ"}
             south{"{0}ደ"}
@@ -1097,6 +1126,16 @@ am{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"ፐርሰንት"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"በማይል"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1121,6 +1160,7 @@ am{
             }
         }
         coordinate{
+            dnam{"አቅጣጫ"}
             east{"{0}ምስ"}
             north{"{0}ሰ"}
             south{"{0}ደ"}
@@ -1166,6 +1206,11 @@ am{
                 dnam{"ሜጋባይት"}
                 one{"{0} ሜጋባይት"}
                 other{"{0} ሜጋባይት"}
+            }
+            petabyte{
+                dnam{"ፔ ባይት"}
+                one{"{0} ፔባ"}
+                other{"{0} ፔባ"}
             }
             terabit{
                 dnam{"ቴባ"}
@@ -1511,6 +1556,11 @@ am{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"ከባቢ አየር"}
+                one{"{0} ከባቢ አየር"}
+                other{"{0} ከባቢ አየር"}
+            }
             hectopascal{
                 dnam{"ሄክቶፓስካል"}
                 one{"{0} ሄክቶፓስካል"}

@@ -428,11 +428,11 @@ public class TimeUnitTest extends TestFmwk {
     public void TestStandInForMeasureFormat() {
         TimeUnitFormat tuf = new TimeUnitFormat(ULocale.FRENCH, TimeUnitFormat.ABBREVIATED_NAME);
         Measure measure = new Measure(23, MeasureUnit.CELSIUS);
-        assertEquals("23 °C", "23 °C", tuf.format(measure));
+        assertEquals("23\u202F°C", "23\u202F°C", tuf.format(measure));
         tuf = new TimeUnitFormat(ULocale.FRENCH, TimeUnitFormat.FULL_NAME);
         assertEquals(
-                "70 pied et 5,3 pouces",
-                "70 pieds et 5,3 pouces",
+                "70 pieds et 5,3\u00A0pouces",
+                "70 pieds et 5,3\u00A0pouces",
                 tuf.formatMeasures(
                         new Measure(70, MeasureUnit.FOOT),
                         new Measure(5.3, MeasureUnit.INCH)));

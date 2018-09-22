@@ -81,7 +81,7 @@ pl{
         bfq{"badaga"}
         bg{"bułgarski"}
         bgn{"beludżi północny"}
-        bho{"bhodźpuri"}
+        bho{"bhodżpuri"}
         bi{"bislama"}
         bik{"bikol"}
         bin{"bini"}
@@ -355,7 +355,7 @@ pl{
         lv{"łotewski"}
         lzh{"chiński klasyczny"}
         lzz{"lazyjski"}
-        mad{"madurajski"}
+        mad{"madurski"}
         maf{"mafa"}
         mag{"magahi"}
         mai{"maithili"}
@@ -397,7 +397,7 @@ pl{
         mye{"myene"}
         myv{"erzja"}
         mzn{"mazanderański"}
-        na{"nauru"}
+        na{"nauruański"}
         nan{"minnański"}
         nap{"neapolitański"}
         naq{"nama"}
@@ -439,7 +439,7 @@ pl{
         osa{"osage"}
         ota{"osmańsko-turecki"}
         pa{"pendżabski"}
-        pag{"pangasino"}
+        pag{"pangasinan"}
         pal{"pahlavi"}
         pam{"pampango"}
         pap{"papiamento"}
@@ -966,7 +966,7 @@ pl{
         VALENCIA{"walencki"}
         WADEGILE{"latynizacja Wade’a i Gilesa"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     characterLabelPattern{
         all{"{0} — wszystko"}
         category-list{"{0}: {1}"}

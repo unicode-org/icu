@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 hy{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,16 @@ hy{
                 one{"{0} մասնիկ միլիոնի վրա"}
                 other{"{0} մասնիկ միլիոնի վրա"}
             }
+            percent{
+                dnam{"տոկոս"}
+                one{"{0} տոկոս"}
+                other{"{0} տոկոս"}
+            }
+            permille{
+                dnam{"պրոմիլ"}
+                one{"{0} պրոմիլ"}
+                other{"{0} պրոմիլ"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ hy{
             }
         }
         coordinate{
+            dnam{"ուղղություն"}
             east{"արևելյան երկարության {0}"}
             north{"հյուսիսային լայնության {0}"}
             south{"հարավային լայնության {0}"}
@@ -192,6 +203,11 @@ hy{
                 dnam{"մեգաբայթեր"}
                 one{"{0} մեգաբայթ"}
                 other{"{0} մեգաբայթ"}
+            }
+            petabyte{
+                dnam{"պետաբայթ"}
+                one{"{0} պետաբայթ"}
+                other{"{0} պետաբայթ"}
             }
             terabit{
                 dnam{"տերաբիթեր"}
@@ -537,6 +553,11 @@ hy{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"մթնոլորտներ"}
+                one{"{0} մթնոլորտ"}
+                other{"{0} մթնոլորտ"}
+            }
             hectopascal{
                 dnam{"հեկտոպասկալ"}
                 one{"{0} հեկտոպասկալ"}
@@ -785,6 +806,13 @@ hy{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"լ/100 կմ"}
@@ -793,6 +821,7 @@ hy{
             }
         }
         coordinate{
+            dnam{"ուղղ․"}
             east{"{0} ավ․ ե․"}
             north{"{0} հս․ լ․"}
             south{"{0} հվ․ լ․"}
@@ -1092,6 +1121,16 @@ hy{
                 one{"{0} մասնիկ/միլիոն"}
                 other{"{0} մասնիկ/միլիոն"}
             }
+            percent{
+                dnam{"տոկոս"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"պրոմիլ"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1116,6 +1155,7 @@ hy{
             }
         }
         coordinate{
+            dnam{"ուղղություն"}
             east{"{0} ավ․ ե․"}
             north{"{0} հս․ լ․"}
             south{"{0} հվ․ լ․"}
@@ -1161,6 +1201,11 @@ hy{
                 dnam{"ՄԲ"}
                 one{"{0} ՄԲ"}
                 other{"{0} ՄԲ"}
+            }
+            petabyte{
+                dnam{"պետաբայթ"}
+                one{"{0} ՊԲ"}
+                other{"{0} ՊԲ"}
             }
             terabit{
                 dnam{"Տբիթ"}
@@ -1506,6 +1551,11 @@ hy{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"մթն"}
+                one{"{0} մթն"}
+                other{"{0} մթն"}
+            }
             hectopascal{
                 dnam{"հՊա"}
                 one{"{0} հՊա"}

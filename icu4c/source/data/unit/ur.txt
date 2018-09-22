@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ur{
-    Version{"2.1.41.97"}
+    Version{"2.1.44.3"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -15,9 +15,9 @@ ur{
                 other{"{0} جی-فورس"}
             }
             meter-per-second-squared{
-                dnam{"m/s²"}
-                one{"{0} m/s²"}
-                other{"{0} m/s²"}
+                dnam{"میٹر فی مربع سیکنڈ"}
+                one{"{0} میٹر فی مربع سیکنڈ"}
+                other{"{0} میٹر فی مربع سیکنڈ"}
             }
         }
         angle{
@@ -37,14 +37,14 @@ ur{
                 other{"{0} ڈگری"}
             }
             radian{
-                dnam{"rad"}
-                one{"{0} rad"}
-                other{"{0} rad"}
+                dnam{"ریڈینس"}
+                one{"{0} ریڈین"}
+                other{"{0} ریڈینس"}
             }
             revolution{
-                dnam{"rev"}
+                dnam{"گردش"}
                 one{"{0} rev"}
-                other{"{0} rev"}
+                other{"{0} گردش"}
             }
         }
         area{
@@ -123,6 +123,16 @@ ur{
                 one{"{0} فی ملین حصے"}
                 other{"{0} فی ملین حصے"}
             }
+            percent{
+                dnam{"فیصد"}
+                one{"{0} فیصد"}
+                other{"{0} فیصد"}
+            }
+            permille{
+                dnam{"فی ہزار"}
+                one{"{0} فی ہزار"}
+                other{"{0} فی ہزار"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ ur{
             }
         }
         coordinate{
+            dnam{"کارڈینل ڈائریکشن"}
             east{"{0} مشرق"}
             north{"{0} شمال"}
             south{"{0} جنوب"}
@@ -192,6 +203,11 @@ ur{
                 dnam{"ميگابائٹس"}
                 one{"{0} میگابائٹ"}
                 other{"{0} ميگابائٹس"}
+            }
+            petabyte{
+                dnam{"پیٹا بائٹس"}
+                one{"{0} پیٹا بائٹ"}
+                other{"{0} پیٹا بائٹس"}
             }
             terabit{
                 dnam{"ٹیرابٹس"}
@@ -483,19 +499,19 @@ ur{
             }
             ounce{
                 dnam{"اونس"}
-                one{"{0} ونس"}
-                other{"{0} ونس"}
+                one{"{0} اونس"}
+                other{"{0} اونس"}
                 per{"{0} فی اونس"}
             }
             ounce-troy{
-                dnam{"oz t"}
-                one{"{0} oz t"}
-                other{"{0} oz t"}
+                dnam{"ٹرائے اونس"}
+                one{"{0} ٹرائے اونس"}
+                other{"{0} ٹرائے اونس"}
             }
             pound{
                 dnam{"پاؤنڈ"}
-                one{"{0} پونڈ"}
-                other{"{0} پونڈ"}
+                one{"{0} پاؤنڈ"}
+                other{"{0} پاؤنڈ"}
                 per{"{0} فی پاؤنڈ"}
             }
             stone{
@@ -542,6 +558,11 @@ ur{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"ماحول"}
+                one{"{0} ماحول"}
+                other{"{0} ماحول"}
+            }
             hectopascal{
                 dnam{"ہیکٹو پاسکل"}
                 one{"{0} ہیکٹو پاسکل"}
@@ -790,6 +811,13 @@ ur{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"لیٹر/100 کلو میٹر"}
@@ -798,6 +826,7 @@ ur{
             }
         }
         coordinate{
+            dnam{"ڈائریکشن"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -1051,12 +1080,12 @@ ur{
         }
         angle{
             arc-minute{
-                dnam{"arcmin"}
+                dnam{"آرک منٹ"}
                 one{"{0} آرک منٹ"}
                 other{"{0} آرک منٹ"}
             }
             arc-second{
-                dnam{"arcsec"}
+                dnam{"آرک سیکنڈ"}
                 one{"{0} آرک سیکنڈ"}
                 other{"{0} آرک سیکنڈ"}
             }
@@ -1066,7 +1095,7 @@ ur{
                 other{"{0} ڈگری"}
             }
             radian{
-                dnam{"rad"}
+                dnam{"ریڈینس"}
                 one{"{0} rad"}
                 other{"{0} rad"}
             }
@@ -1152,6 +1181,16 @@ ur{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"فیصد"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"فی ہزار"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1176,6 +1215,7 @@ ur{
             }
         }
         coordinate{
+            dnam{"ڈائریکشن"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -1221,6 +1261,11 @@ ur{
                 dnam{"MByte"}
                 one{"{0} MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"پی بائٹ"}
+                one{"{0} پی بی"}
+                other{"{0} پی بی"}
             }
             terabit{
                 dnam{"Tbit"}
@@ -1565,12 +1610,17 @@ ur{
                 other{"{0} mW"}
             }
             watt{
-                dnam{"watts"}
+                dnam{"واٹ"}
                 one{"{0} واٹ"}
                 other{"{0} واٹ"}
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 one{"{0} hPa"}
@@ -1664,7 +1714,7 @@ ur{
                 other{"{0} ft³"}
             }
             cubic-inch{
-                dnam{"in³"}
+                dnam{"کیوبک انچ"}
                 one{"{0} in³"}
                 other{"{0} in³"}
             }

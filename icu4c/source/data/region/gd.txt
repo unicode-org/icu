@@ -31,6 +31,7 @@ gd{
         151{"An Roinn-Eòrpa an Ear"}
         154{"An Roinn-Eòrpa a Tuath"}
         155{"An Roinn-Eòrpa an Iar"}
+        202{"Afraga Deas air an t-Sathara"}
         419{"Aimeireaga Laidinneach"}
         AC{"Eilean na Deasgabhalach"}
         AD{"Andorra"}
@@ -221,7 +222,7 @@ gd{
         PM{"Saint Pierre agus Miquelon"}
         PN{"Eileanan Pheit a’ Chàirn"}
         PR{"Porto Rìceo"}
-        PS{"Na Ranntairean Palastaineach"}
+        PS{"Ùghdarras nam Palastaineach"}
         PT{"A’ Phortagail"}
         PW{"Palabh"}
         PY{"Paraguaidh"}
@@ -310,5 +311,5 @@ gd{
         MK{"A’ Mhasadon (FYROM)"}
         TL{"Tìomor an Ear"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.44.18"}
 }

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 kn{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,16 @@ kn{
                 one{"{0} ಪ್ರತಿ ಮಿಲಿಯನ್ ಭಾಗ"}
                 other{"{0} ಪ್ರತಿ ಮಿಲಿಯನ್ ಭಾಗಗಳು"}
             }
+            percent{
+                dnam{"ಶೇಕಡಾ"}
+                one{"{0} ಶೇಕಡಾ"}
+                other{"{0} ಶೇಕಡಾ"}
+            }
+            permille{
+                dnam{"ಪ್ರತಿ ಸಾವಿರಕ್ಕೆ"}
+                one{"{0} ಪ್ರತಿ ಸಾವಿರಕ್ಕೆ"}
+                other{"{0} ಪ್ರತಿ ಸಾವಿರಕ್ಕೆ"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,7 +157,8 @@ kn{
             }
         }
         coordinate{
-            east{"{0}ಪೂ"}
+            dnam{"ಕಾರ್ಡಿನಲ್ ನಿರ್ದೇಶನ"}
+            east{"{0} ಪೂರ್ವ"}
             north{"{0}ಉತ್ತರ"}
             south{"{0}ದಕ್ಷಿಣ"}
             west{"{0}ಪಶ್ಚಿಮ"}
@@ -192,6 +203,11 @@ kn{
                 dnam{"ಮೆಗಾಬೈಟ್‌ಗಳು"}
                 one{"{0} ಮೆಗಾಬೈಟ್‌"}
                 other{"{0} ಮೆಗಾಬೈಟ್‌ಗಳು"}
+            }
+            petabyte{
+                dnam{"ಪೆಟಾಬೈಟ್‌ಗಳು"}
+                one{"{0} ಪೆಟಾಬೈಟ್‌"}
+                other{"{0} ಪೆಟಾಬೈಟ್‌ಗಳು"}
             }
             terabit{
                 dnam{"ಟೆರಾಬಿಟ್‌ಗಳು"}
@@ -257,7 +273,7 @@ kn{
             }
             week{
                 dnam{"ವಾರಗಳು"}
-                one{"{0} ವಾರಗಳು"}
+                one{"{0} ವಾರ"}
                 other{"{0} ವಾರಗಳು"}
                 per{"{0} ಪ್ರತಿ ವಾರಕ್ಕೆ"}
             }
@@ -542,6 +558,11 @@ kn{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"ವಾತಾವರಣಗಳು"}
+                one{"{0} ವಾತಾವರಣ"}
+                other{"{0} ವಾತಾವರಣಗಳು"}
+            }
             hectopascal{
                 dnam{"ಹೆಕ್ಟೋಪ್ಯಾಸ್ಕಲ್‌ಗಳು"}
                 one{"{0} ಹೆಕ್ಟೋಪ್ಯಾಸ್ಕಲ್"}
@@ -790,6 +811,13 @@ kn{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"ಲೀ/100ಕಿ.ಮೀ"}
@@ -798,6 +826,7 @@ kn{
             }
         }
         coordinate{
+            dnam{"ದಿಕ್ಕು"}
             east{"{0}ಪೂ"}
             north{"{0}ಉ"}
             south{"{0}ದ"}
@@ -1158,6 +1187,16 @@ kn{
                 one{"{0} ಭಾಪ್ರಮಿ"}
                 other{"{0} ಭಾಪ್ರಮಿ"}
             }
+            percent{
+                dnam{"ಶೇಕಡಾ"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"ಪ್ರತಿ ಸಾವಿರಕ್ಕೆ"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1182,6 +1221,7 @@ kn{
             }
         }
         coordinate{
+            dnam{"ದಿಕ್ಕು"}
             east{"{0}ಪೂ"}
             north{"{0}ಉ"}
             south{"{0}ದ"}
@@ -1227,6 +1267,11 @@ kn{
                 dnam{"ಮೆ.ಬೈ."}
                 one{"{0} ಮೆ.ಬೈ."}
                 other{"{0} ಮೆ.ಬೈ."}
+            }
+            petabyte{
+                dnam{"ಪೆಬೈ"}
+                one{"{0} ಪೆಬೈ"}
+                other{"{0} ಪೆಬೈ"}
             }
             terabit{
                 dnam{"ಟೆ.ಬಿ."}
@@ -1577,6 +1622,11 @@ kn{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"ವಾತಾವರಣಗಳು"}
+                one{"{0} ವಾತಾವರಣ"}
+                other{"{0} ವಾತಾವರಣ"}
+            }
             hectopascal{
                 dnam{"ಹೆ.ಪ್ಯಾ."}
                 one{"{0} ಹೆ.ಪ್ಯಾ"}

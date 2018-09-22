@@ -3433,6 +3433,16 @@ root {
             }
         }
 
+        my-t-my-d0-zawgyi {
+            alias {"my-Zawgyi"}
+        }
+        my-Zawgyi {
+            file {
+                resource:process(transliterator) {"my_Zawgyi.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         my-t-my-s0-zawgyi {
             alias {"Zawgyi-my"}
         }
@@ -3952,6 +3962,16 @@ root {
         tr-Upper {
             file {
                 resource:process(transliterator) {"tr_Upper.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        ug-fonipa-t-ug {
+            alias {"ug-ug_FONIPA"}
+        }
+        ug-ug_FONIPA {
+            file {
+                resource:process(transliterator) {"ug_ug_FONIPA.txt"}
                 direction {"FORWARD"}
             }
         }

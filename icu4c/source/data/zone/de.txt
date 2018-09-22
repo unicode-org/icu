@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 de{
-    Version{"2.1.41.97"}
+    Version{"2.1.44.73"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -685,7 +685,7 @@ de{
             ec{"Bischkek"}
         }
         "Asia:Brunei"{
-            ec{"Brunei"}
+            ec{"Brunei Darussalam"}
         }
         "Asia:Calcutta"{
             ec{"Kalkutta"}
@@ -769,7 +769,7 @@ de{
             ec{"Kuwait"}
         }
         "Asia:Macau"{
-            ec{"Macao"}
+            ec{"Macau"}
         }
         "Asia:Magadan"{
             ec{"Magadan"}
@@ -889,7 +889,7 @@ de{
             ec{"Azoren"}
         }
         "Atlantic:Bermuda"{
-            ec{"Bermudas"}
+            ec{"Bermuda"}
         }
         "Atlantic:Canary"{
             ec{"Kanaren"}
@@ -1438,7 +1438,7 @@ de{
             ls{"Brasília-Normalzeit"}
         }
         "meta:Brunei"{
-            ls{"Brunei-Zeit"}
+            ls{"Brunei-Darussalam-Zeit"}
         }
         "meta:Cape_Verde"{
             ld{"Cabo-Verde-Sommerzeit"}
@@ -1810,9 +1810,9 @@ de{
             ls{"Phoenixinseln-Zeit"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"Saint-Pierre-und-Miquelon-Sommerzeit"}
-            lg{"Saint-Pierre-und-Miquelon-Zeit"}
-            ls{"Saint-Pierre-und-Miquelon-Normalzeit"}
+            ld{"St.-Pierre-und-Miquelon-Sommerzeit"}
+            lg{"St.-Pierre-und-Miquelon-Zeit"}
+            ls{"St.-Pierre-und-Miquelon-Normalzeit"}
         }
         "meta:Pitcairn"{
             ls{"Pitcairninseln-Zeit"}
@@ -1856,7 +1856,7 @@ de{
             ls{"Singapur-Zeit"}
         }
         "meta:Solomon"{
-            ls{"Salomoninseln-Zeit"}
+            ls{"Salomonen-Zeit"}
         }
         "meta:South_Georgia"{
             ls{"Südgeorgische Zeit"}

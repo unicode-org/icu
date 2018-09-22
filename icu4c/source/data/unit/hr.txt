@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 hr{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -143,6 +143,18 @@ hr{
                 one{"{0} dio na milijun"}
                 other{"{0} dijelova na milijun"}
             }
+            percent{
+                dnam{"postotak"}
+                few{"{0} posto"}
+                one{"{0} posto"}
+                other{"{0} posto"}
+            }
+            permille{
+                dnam{"promil"}
+                few{"{0} promila"}
+                one{"{0} promil"}
+                other{"{0} promila"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -171,6 +183,7 @@ hr{
             }
         }
         coordinate{
+            dnam{"kardinalni smjer"}
             east{"{0}I"}
             north{"{0}S"}
             south{"{0}J"}
@@ -224,6 +237,12 @@ hr{
                 few{"{0} megabajta"}
                 one{"{0} megabajt"}
                 other{"{0} megabajta"}
+            }
+            petabyte{
+                dnam{"petabajti"}
+                few{"{0} petabajta"}
+                one{"{0} petabajt"}
+                other{"{0} petabajta"}
             }
             terabit{
                 dnam{"terabiti"}
@@ -649,6 +668,12 @@ hr{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmosfere"}
+                few{"{0} atmosfere"}
+                one{"{0} atmosfera"}
+                other{"{0} atmosfera"}
+            }
             hectopascal{
                 dnam{"hektopaskali"}
                 few{"{0} hektopaskala"}
@@ -981,6 +1006,18 @@ hr{
                 one{"{0} kt"}
                 other{"{0} kt"}
             }
+            millimole-per-liter{
+                dnam{"mmol/l"}
+                few{"{0} mmol/l"}
+                one{"{0} mmol/l"}
+                other{"{0} mmol/l"}
+            }
+            percent{
+                dnam{"%"}
+                few{"{0} %"}
+                one{"{0} %"}
+                other{"{0} %"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1001,6 +1038,7 @@ hr{
             }
         }
         coordinate{
+            dnam{"smjer"}
             east{"{0}I"}
             north{"{0}S"}
             south{"{0}J"}
@@ -1706,6 +1744,18 @@ hr{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                few{"{0} %"}
+                one{"{0} %"}
+                other{"{0} %"}
+            }
+            permille{
+                dnam{"‰"}
+                few{"{0} ‰"}
+                one{"{0} ‰"}
+                other{"{0} ‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1734,6 +1784,7 @@ hr{
             }
         }
         coordinate{
+            dnam{"smjer"}
             east{"{0}I"}
             north{"{0}S"}
             south{"{0}J"}
@@ -1787,6 +1838,12 @@ hr{
                 few{"{0} MB"}
                 one{"{0} MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                few{"{0} PB"}
+                one{"{0} PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -2212,6 +2269,12 @@ hr{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                few{"{0} atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 few{"{0} hPa"}

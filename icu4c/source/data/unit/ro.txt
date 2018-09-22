@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ro{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -143,6 +143,18 @@ ro{
                 one{"{0} parte pe milion"}
                 other{"{0} de părți pe milion"}
             }
+            percent{
+                dnam{"procent"}
+                few{"{0} procente"}
+                one{"{0} procent"}
+                other{"{0} de procente"}
+            }
+            permille{
+                dnam{"‰"}
+                few{"{0} la mie"}
+                one{"la mie"}
+                other{"{0} la mie"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -171,6 +183,7 @@ ro{
             }
         }
         coordinate{
+            dnam{"punct cardinal"}
             east{"{0} E"}
             north{"{0} N"}
             south{"{0} S"}
@@ -224,6 +237,12 @@ ro{
                 few{"{0} megabyți"}
                 one{"{0} megabyte"}
                 other{"{0} de megabyți"}
+            }
+            petabyte{
+                dnam{"petabyți"}
+                few{"{0} petabyți"}
+                one{"{0} petabyte"}
+                other{"{0} de petabyți"}
             }
             terabit{
                 dnam{"terabiți"}
@@ -631,6 +650,12 @@ ro{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmosfere"}
+                few{"{0} atmosfere"}
+                one{"{0} atmosferă"}
+                other{"{0} de atmosfere"}
+            }
             hectopascal{
                 dnam{"hectopascali"}
                 few{"{0} hectopascali"}
@@ -932,6 +957,14 @@ ro{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                few{"{0}%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"l/100 km"}
@@ -941,6 +974,7 @@ ro{
             }
         }
         coordinate{
+            dnam{"direcție"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -1464,6 +1498,18 @@ ro{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                few{"{0}%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                few{"{0}‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1492,6 +1538,7 @@ ro{
             }
         }
         coordinate{
+            dnam{"direcție"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -1545,6 +1592,12 @@ ro{
                 few{"{0} MB"}
                 one{"{0} MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                few{"{0} PB"}
+                one{"{0} PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1952,6 +2005,12 @@ ro{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                few{"{0} atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 few{"{0} hPa"}

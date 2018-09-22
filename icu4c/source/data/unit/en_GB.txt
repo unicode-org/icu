@@ -2,33 +2,28 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en_GB{
     %%Parent{"en_001"}
-    Version{"2.1.38.73"}
+    Version{"2.1.44.18"}
     units{
-        speed{
-            kilometer-per-hour{
-                one{"{0} kilometre per hour"}
+        concentr{
+            percent{
+                dnam{"per cent"}
+                one{"{0} per cent"}
+                other{"{0} per cent"}
             }
-        }
-    }
-    unitsNarrow{
-        duration{
-            hour{
-                per{"{0}/h"}
-            }
-            second{
-                per{"{0}/s"}
+            permille{
+                dnam{"per mille"}
+                one{"{0} per mille"}
+                other{"{0} per mille"}
             }
         }
     }
     unitsShort{
-        mass{
-            stone{
-                other{"{0} st"}
+        concentr{
+            percent{
+                dnam{"per cent"}
             }
-        }
-        volume{
-            megaliter{
-                other{"{0} Ml"}
+            permille{
+                dnam{"per mille"}
             }
         }
     }

@@ -32,15 +32,16 @@ test basic patterns
 set locale fr_FR
 set format 1234.567
 begin
-pattern	output
-#,##0.##	1\u00a0234,57
+pattern	output	breaks
+// K does not use \u202f narrow space
+#,##0.##	1\u202f234,57	K
 0.##	1234,57
 0	1235
-#,##0.###	1\u00a0234,567
+#,##0.###	1\u202f234,567	K
 ###0.######	1234,567
 ###0.0000#	1234,5670
 00000.0000	01234,5670
-#,##0.00 \u00a4	1\u00a0234,57 \u20ac
+#,##0.00 \u00a4	1\u202f234,57 \u20ac	K
 'tick''bitten '0.00	tick'bitten 1234,57
 'tick' 'bitten '0.00	tick bitten 1234,57
 
@@ -151,7 +152,7 @@ pattern	format	output	breaks
 4	10.0	8	K
 2.70	99.0	99,90	K
 2.73	272.0	273,00	K
-#,#3.70	104.0	1\u00a003,60	K
+#,#3.70	104.0	1\u202f03,60	K
 
 test significant digits
 set locale en
@@ -212,9 +213,9 @@ pattern	format	output	breaks
 p%p0.0	0.573	p%p57,3
 p'%'p0.0	0.573	p%p0,6
 %@@@@	0.0326	%3,260	K
-%#,@@@	15.43	%1\u00a0540	K
+%#,@@@	15.43	%1\u202f540	K
 // JDK does not support rounding increments
-%#,##4.1	16.55	%1\u00a0656,4	K
+%#,##4.1	16.55	%1\u202f656,4	K
 // JDK gives %16,255E3
 %##0.00E0	162.55	%16,3E3	K
 
@@ -227,8 +228,8 @@ pattern	format	output	breaks
 p\u2030p0.0	0.573	p\u2030p573,0
 p'\u2030'p0.0	0.573	p\u2030p0,6
 \u2030@@@@	0.0326	\u203032,60	K
-\u2030#,@@@	15.43	\u203015\u00a0400	K
-\u2030#,##4.1	16.55	\u203016\u00a0551,7	K
+\u2030#,@@@	15.43	\u203015\u202f400	K
+\u2030#,##4.1	16.55	\u203016\u202f551,7	K
 // JDK gives \u2030162,55E3
 \u2030##0.00E0	162.55	\u2030163E3	K
 
@@ -237,13 +238,13 @@ set locale fr_FR
 begin
 pattern	format	output	breaks
 // JDK does not seem to support padding
-$**####,##0	1234	$***1\u00a0234	K
-*x$####,##0	1234	xxx$1\u00a0234	K
-####,##0*x$	1234	1\u00a0234xxx$	K
-####,##0$*x	1234	1\u00a0234$xxx	K
+$**####,##0	1234	$***1\u202f234	K
+*x$####,##0	1234	xxx$1\u202f234	K
+####,##0*x$	1234	1\u202f234xxx$	K
+####,##0$*x	1234	1\u202f234$xxx	K
 // JDK doesn't seem to handle suffixes correctly dropping the 'nx' entirely
-####,##0$*x;ne#n	-1234	ne1\u00a0234nx	K
-####,##0$*x;n#'*'	-1234	n1\u00a0234*xx	K
+####,##0$*x;ne#n	-1234	ne1\u202f234nx	K
+####,##0$*x;n#'*'	-1234	n1\u202f234*xx	K
 *y%4.2######	4.33	yyyy%432,6	K
 // In J ICU adds padding as if 'EUR' is only 2 chars (2 * 0xa4)
 \u00a4\u00a4 **####0.00	433.0	EUR *433,00	HK
@@ -266,10 +267,10 @@ set format 1234.567
 begin
 pattern	currency	output	breaks
 // JDK gives shows EUR instead of the euro symbol in this case
-#,##0.00 \u00a4	EUR	1\u00a0234,57 \u20ac	K
+#,##0.00 \u00a4	EUR	1\u202f234,57 \u20ac	K
 // JDK gives 1\u00A0234,57. JDK doesn't seem to correct rounding
 // based on currency.
-#,##0.00 \u00a4	JPY	1\u00a0235 JPY	K
+#,##0.00 \u00a4	JPY	1\u202f235 JPY	K
 
 test prefixes and suffixes
 set locale en

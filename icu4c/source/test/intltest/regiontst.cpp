@@ -290,7 +290,7 @@ static KnownRegion knownRegions[] = {
     { "TA" ,  -1, "QO",  URGN_TERRITORY, "009" },
     { "TC" , 796, "029", URGN_TERRITORY, "019" },
     { "TD" , 148, "017", URGN_TERRITORY, "002" },
-    { "TF" , 260, "145", URGN_TERRITORY, "142" },
+    { "TF" , 260, "014", URGN_TERRITORY, "002" },
     { "TG" , 768, "011", URGN_TERRITORY, "002" },
     { "TH" , 764, "035", URGN_TERRITORY, "142" },
     { "TJ" , 762, "143", URGN_TERRITORY, "142" },

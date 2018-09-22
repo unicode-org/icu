@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 km{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -103,6 +103,14 @@ km{
                 dnam{"ផ្នែកក្នុងមួយលាន"}
                 other{"{0} ផ្នែកក្នុងមួយលាន"}
             }
+            percent{
+                dnam{"ភាគរយ"}
+                other{"{0} ភាគរយ"}
+            }
+            permille{
+                dnam{"‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -123,6 +131,7 @@ km{
             }
         }
         coordinate{
+            dnam{"ទិសទាំងបួន"}
             east{"{0}កើត"}
             north{"{0}ជើង"}
             south{"{0}ត្បូង"}
@@ -160,6 +169,10 @@ km{
             megabyte{
                 dnam{"មេហ្គាបៃ"}
                 other{"{0} មេហ្គាបៃ"}
+            }
+            petabyte{
+                dnam{"PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"តេរ៉ាប៊ីត"}
@@ -443,6 +456,10 @@ km{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"បរិយាកាស"}
+                other{"បរិយាកាស {0}"}
+            }
             hectopascal{
                 dnam{"ហិចតូប៉ាស្កាល់"}
                 other{"{0} ហិចតូប៉ាស្កាល់"}
@@ -644,6 +661,12 @@ km{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100km"}
@@ -651,6 +674,7 @@ km{
             }
         }
         coordinate{
+            dnam{"ទិស"}
             east{"{0}កើត"}
             north{"{0}ជើង"}
             south{"{0}ត្បូង"}
@@ -894,6 +918,14 @@ km{
                 dnam{"ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"ភាគរយ"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -914,6 +946,7 @@ km{
             }
         }
         coordinate{
+            dnam{"ទិស"}
             east{"{0}កើត"}
             north{"{0}ជើង"}
             south{"{0}ត្បូង"}
@@ -951,6 +984,10 @@ km{
             megabyte{
                 dnam{"MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1234,6 +1271,10 @@ km{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 other{"{0} hPa"}

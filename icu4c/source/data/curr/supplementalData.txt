@@ -2939,6 +2939,17 @@ supplementalData:table(nofallback){
                 }
                 id{"MVR"}
             }
+            {
+                from:intvector{
+                    -169,
+                    3073024,
+                }
+                id{"MVP"}
+                to:intvector{
+                    84,
+                    2102747135,
+                }
+            }
         }
         MW{
             {
@@ -4348,10 +4359,21 @@ supplementalData:table(nofallback){
         VE{
             {
                 from:intvector{
+                    357,
+                    1419875328,
+                }
+                id{"VES"}
+            }
+            {
+                from:intvector{
                     279,
                     849724416,
                 }
                 id{"VEF"}
+                to:intvector{
+                    357,
+                    1506275327,
+                }
             }
             {
                 from:intvector{
@@ -4766,7 +4788,7 @@ supplementalData:table(nofallback){
             0,
         }
         AMD:intvector{
-            0,
+            2,
             0,
             0,
             0,
@@ -4820,7 +4842,7 @@ supplementalData:table(nofallback){
             0,
         }
         COP:intvector{
-            0,
+            2,
             0,
             0,
             0,
@@ -4868,7 +4890,7 @@ supplementalData:table(nofallback){
             0,
         }
         GYD:intvector{
-            0,
+            2,
             0,
             0,
             0,
@@ -4880,7 +4902,7 @@ supplementalData:table(nofallback){
             0,
         }
         IDR:intvector{
-            0,
+            2,
             0,
             0,
             0,
@@ -4988,7 +5010,7 @@ supplementalData:table(nofallback){
             0,
         }
         MNT:intvector{
-            0,
+            2,
             0,
             0,
             0,
@@ -5000,7 +5022,7 @@ supplementalData:table(nofallback){
             0,
         }
         MUR:intvector{
-            0,
+            2,
             0,
             0,
             0,
@@ -5018,7 +5040,7 @@ supplementalData:table(nofallback){
             0,
         }
         PKR:intvector{
-            0,
+            2,
             0,
             0,
             0,
@@ -5096,7 +5118,7 @@ supplementalData:table(nofallback){
             0,
         }
         TZS:intvector{
-            0,
+            2,
             0,
             0,
             0,
@@ -5114,7 +5136,7 @@ supplementalData:table(nofallback){
             0,
         }
         UZS:intvector{
-            0,
+            2,
             0,
             0,
             0,

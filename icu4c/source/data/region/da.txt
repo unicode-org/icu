@@ -13,7 +13,7 @@ da{
         015{"Nordafrika"}
         017{"Centralafrika"}
         018{"Det sydlige Afrika"}
-        019{"Amerika"}
+        019{"Nord-, Mellem- og Sydamerika"}
         021{"Det nordlige Amerika"}
         029{"Caribien"}
         030{"Østasien"}
@@ -31,7 +31,7 @@ da{
         151{"Østeuropa"}
         154{"Nordeuropa"}
         155{"Vesteuropa"}
-        202{"Afrika syd for Sahara"}
+        202{"Subsaharisk Afrika"}
         419{"Latinamerika"}
         AC{"Ascensionøen"}
         AD{"Andorra"}
@@ -257,7 +257,7 @@ da{
         TA{"Tristan da Cunha"}
         TC{"Turks- og Caicosøerne"}
         TD{"Tchad"}
-        TF{"De franske besiddelser i Det Sydlige Indiske Ocean"}
+        TF{"De Franske Besiddelser i Det Sydlige Indiske Ocean"}
         TG{"Togo"}
         TH{"Thailand"}
         TJ{"Tadsjikistan"}
@@ -311,5 +311,5 @@ da{
         MK{"Den tidligere jugoslaviske republik Makedonien"}
         TL{"Østtimor"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
 }

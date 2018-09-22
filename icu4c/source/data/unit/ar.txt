@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ar{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -203,6 +203,24 @@ ar{
                 two{"{0} جزء في المليون"}
                 zero{"{0} جزء في المليون"}
             }
+            percent{
+                dnam{"بالمائة"}
+                few{"{0}٪"}
+                many{"{0}٪"}
+                one{"{0} بالمائة"}
+                other{"{0} بالمائة"}
+                two{"{0}٪"}
+                zero{"{0}٪"}
+            }
+            permille{
+                dnam{"في الألف"}
+                few{"{0}‰"}
+                many{"{0}‰"}
+                one{"{0} في الألف"}
+                other{"{0} في الألف"}
+                two{"{0}‰"}
+                zero{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -320,6 +338,15 @@ ar{
                 other{"{0} ميغابايت"}
                 two{"{0} ميغابايت"}
                 zero{"{0} ميغابايت"}
+            }
+            petabyte{
+                dnam{"بيتابايت"}
+                few{"{0} بيتابايت"}
+                many{"{0} بيتابايت"}
+                one{"{0} بيتابايت"}
+                other{"{0} بيتابايت"}
+                two{"{0} بيتابايت"}
+                zero{"{0} بيتابايت"}
             }
             terabit{
                 dnam{"تيرابت"}
@@ -913,6 +940,15 @@ ar{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"وحدة الضغط الجوي"}
+                few{"{0} ض.ج"}
+                many{"{0} ض.ج"}
+                one{"{0} ضغط جوي"}
+                other{"{0} ضغط جوي"}
+                two{"{0} ض.ج"}
+                zero{"{0} ض.ج"}
+            }
             hectopascal{
                 dnam{"هكتوباسكال"}
                 few{"{0} هكتوباسكال"}
@@ -1349,6 +1385,17 @@ ar{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"٪"}
+                few{"{0}٪"}
+                many{"{0}٪"}
+                one{"{0}٪"}
+                other{"{0}٪"}
+                two{"{0}٪"}
+                zero{"{0}٪"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"ل/١٠٠كم"}
@@ -1361,6 +1408,7 @@ ar{
             }
         }
         coordinate{
+            dnam{"اتجاه"}
             east{"{0} شرق"}
             north{"{0} شمال"}
             south{"{0} ج"}
@@ -1886,6 +1934,24 @@ ar{
                 two{"{0} جزء/مليون"}
                 zero{"{0} جزء/مليون"}
             }
+            percent{
+                dnam{"بالمائة"}
+                few{"{0}٪"}
+                many{"{0}٪"}
+                one{"{0}٪"}
+                other{"{0}٪"}
+                two{"{0}٪"}
+                zero{"{0}٪"}
+            }
+            permille{
+                dnam{"في الألف"}
+                few{"{0}‰"}
+                many{"{0}‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+                two{"{0}‰"}
+                zero{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1926,6 +1992,7 @@ ar{
             }
         }
         coordinate{
+            dnam{"اتجاه"}
             east{"{0} شرق"}
             north{"{0} شمال"}
             south{"{0} ج"}
@@ -2003,6 +2070,15 @@ ar{
                 other{"{0} ميغابايت"}
                 two{"{0} ميغابايت"}
                 zero{"{0} ميغابايت"}
+            }
+            petabyte{
+                dnam{"بيتابايت"}
+                few{"{0} بيتابايت"}
+                many{"{0} بيتابايت"}
+                one{"{0} بيتابايت"}
+                other{"{0} بيتابايت"}
+                two{"{0} بيتابايت"}
+                zero{"{0} بيتابايت"}
             }
             terabit{
                 dnam{"تيرابت"}
@@ -2596,6 +2672,15 @@ ar{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"ض.ج"}
+                few{"{0} ض.ج"}
+                many{"{0} ض.ج"}
+                one{"{0} ض.ج"}
+                other{"{0} ض.ج"}
+                two{"{0} ض.ج"}
+                zero{"{0} ض.ج"}
+            }
             hectopascal{
                 dnam{"هكتوباسكال"}
                 few{"{0} هكتوباسكال"}

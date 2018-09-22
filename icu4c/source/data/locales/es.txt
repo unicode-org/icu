@@ -22,7 +22,9 @@ es{
         default{"latn"}
         latn{
             miscPatterns{
+                approximately{"~{0}"}
                 atLeast{"Más de {0}"}
+                atMost{"≤{0}"}
                 range{"{0}-{1}"}
             }
             patterns{
@@ -213,7 +215,7 @@ es{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     calendar{
         buddhist{
             eras{
@@ -2578,5 +2580,37 @@ es{
         UK{"anglosajón"}
         US{"estadounidense"}
         metric{"métrico"}
+    }
+    parse{
+        date{
+            lenient{
+                "[\\--/]",
+                "[\\:∶]",
+            }
+        }
+        general{
+            lenient{
+                "[.․。︒﹒．｡]",
+                "['ʼ՚᾽᾿’＇]",
+                "[%٪﹪％]",
+                "[؉‰]",
+                "[\$﹩＄$]",
+                "[£₤]",
+                "[¥￥]",
+                "[₩￦]",
+                "[₨₹{Rp}{Rs}]",
+            }
+        }
+        number{
+            lenient{
+                "[\\-‒⁻₋−➖﹣－]",
+                "[,،٫、︐︑﹐﹑，､]",
+                "[+⁺₊➕﬩﹢＋]",
+            }
+            stricter{
+                "[,٫︐﹐，]",
+                "[.․﹒．｡]",
+            }
+        }
     }
 }

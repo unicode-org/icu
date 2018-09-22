@@ -15,5 +15,5 @@ en_IN{
             orya{"Oriya Digits"}
         }
     }
-    Version{"2.1.38.73"}
+    Version{"2.1.44.18"}
 }

@@ -2,8 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh_Hant_HK{
     Keys{
-        hc{"時間週期（12 與 24 小時制"}
         ms{"度量衡系統"}
+        x{"專用區"}
     }
     Languages{
         aa{"阿法爾文"}
@@ -55,7 +55,6 @@ zh_Hant_HK{
         ro_MD{"摩爾多瓦羅馬尼亞文"}
         rup{"阿羅馬尼亞語"}
         rw{"盧旺達文"}
-        sd{"信德語"}
         sl{"斯洛文尼亞文"}
         sn{"修納文"}
         so{"索馬里文"}
@@ -130,7 +129,7 @@ zh_Hant_HK{
         SCOTLAND{"蘇格蘭標準英語"}
         SOTAV{"SOTAV"}
     }
-    Version{"2.1.39.11"}
+    Version{"2.1.43.65"}
     characterLabelPattern{
         enclosed{"{0} — 包含"}
         historic{"{0} — 舊式"}

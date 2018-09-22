@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sw{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,16 @@ sw{
                 one{"ppm {0}"}
                 other{"ppm {0}"}
             }
+            percent{
+                dnam{"asilimia"}
+                one{"asilimia {0}"}
+                other{"asilimia {0}"}
+            }
+            permille{
+                dnam{"kwa elfu"}
+                one{"{0} kwa kila elfu"}
+                other{"{0} kwa kila elfu"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ sw{
             }
         }
         coordinate{
+            dnam{"sehemu kuu za dira"}
             east{"{0} Mashariki"}
             north{"{0} Kaskazini"}
             south{"{0} Kusini"}
@@ -192,6 +203,11 @@ sw{
                 dnam{"megabaiti"}
                 one{"megabaiti {0}"}
                 other{"megabaiti {0}"}
+            }
+            petabyte{
+                dnam{"petabaiti"}
+                one{"petabaiti {0}"}
+                other{"petabaiti {0}"}
             }
             terabit{
                 dnam{"terabiti"}
@@ -537,6 +553,11 @@ sw{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"kanieneo ya hewa"}
+                one{"kanieneo {0}"}
+                other{"kanieneo {0}"}
+            }
             hectopascal{
                 dnam{"hektopaskali"}
                 one{"hektopaskali {0}"}
@@ -785,6 +806,13 @@ sw{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"asilimia"}
+                one{"asilimia {0}"}
+                other{"asilimia {0}"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"lita kwa kilomita 100"}
@@ -793,6 +821,7 @@ sw{
             }
         }
         coordinate{
+            dnam{"mwelekeo"}
             east{"{0} Mashariki"}
             north{"{0} Kaskazini"}
             south{"{0} Kusini"}
@@ -1099,6 +1128,16 @@ sw{
                 one{"ppm {0}"}
                 other{"ppm {0}"}
             }
+            percent{
+                dnam{"asilimia"}
+                one{"asilimia {0}"}
+                other{"asilimia {0}"}
+            }
+            permille{
+                dnam{"kwa elfu"}
+                one{"{0} kwa elfu"}
+                other{"{0} kwa elfu"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1123,6 +1162,7 @@ sw{
             }
         }
         coordinate{
+            dnam{"mwelekeo"}
             east{"{0} Mashariki"}
             north{"{0} Kaskazini"}
             south{"{0} Kusini"}
@@ -1168,6 +1208,11 @@ sw{
                 dnam{"MB"}
                 one{"MB {0}"}
                 other{"MB {0}"}
+            }
+            petabyte{
+                dnam{"petabaiti"}
+                one{"PB {0}"}
+                other{"PB {0}"}
             }
             terabit{
                 dnam{"terabiti"}
@@ -1513,6 +1558,11 @@ sw{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"atm {0}"}
+                other{"atm {0}"}
+            }
             hectopascal{
                 dnam{"hektopaskali"}
                 one{"hPa {0}"}

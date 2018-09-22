@@ -187,21 +187,21 @@ format:table(nofallback) {
                     "",
                     "DATE=RELATIVE_SHORT",
                     "RELATIVE_ADD:DATE=1", // one day from now
-                    "Għada"
+                    "għada"
                },
                {
                     "mt_MT@calendar=gregorian",         
                     "",
                     "DATE=RELATIVE_SHORT",
                     "RELATIVE_MILLIS=0", // today
-                    "Illum"
+                    "illum"
                },
                {
                     "mt_MT@calendar=gregorian",         
                     "",
                     "DATE=RELATIVE_SHORT",
                     "RELATIVE_ADD:DATE=-1", // one day before now
-                    "Ilbieraħ"
+                    "lbieraħ"
                },
                {
                     "ru",
