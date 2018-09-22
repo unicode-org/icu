@@ -403,6 +403,22 @@ void NumberFormatterApiTest::notationCompact() {
             9990000,
             u"10M");
 
+    assertFormatSingle(
+            u"Compact in zh-Hant-HK",
+            u"compact-short",
+            NumberFormatter::with().notation(Notation::compactShort()),
+            Locale("zh-Hant-HK"),
+            1e7,
+            u"10M");
+
+    assertFormatSingle(
+            u"Compact in zh-Hant",
+            u"compact-short",
+            NumberFormatter::with().notation(Notation::compactShort()),
+            Locale("zh-Hant"),
+            1e7,
+            u"1000\u842C");
+
     // NOTE: There is no API for compact custom data in C++
     // and thus no "Compact Somali No Figure" test
 }
