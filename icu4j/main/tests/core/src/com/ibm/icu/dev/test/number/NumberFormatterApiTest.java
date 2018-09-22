@@ -369,6 +369,22 @@ public class NumberFormatterApiTest {
                 9990000,
                 "10M");
 
+        assertFormatSingle(
+                "Compact in zh-Hant-HK",
+                "compact-short",
+                NumberFormatter.with().notation(Notation.compactShort()),
+                new ULocale("zh-Hant-HK"),
+                1e7,
+                "10M");
+
+        assertFormatSingle(
+                "Compact in zh-Hant",
+                "compact-short",
+                NumberFormatter.with().notation(Notation.compactShort()),
+                new ULocale("zh-Hant"),
+                1e7,
+                "1000\u842C");
+
         Map<String, Map<String, String>> compactCustomData = new HashMap<String, Map<String, String>>();
         Map<String, String> entry = new HashMap<String, String>();
         entry.put("one", "Kun");
