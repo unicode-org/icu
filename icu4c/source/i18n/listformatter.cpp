@@ -518,8 +518,8 @@ UnicodeString& ListFormatter::format_(
         }
         appendTo += result;
     }
+#endif  
     return appendTo;
-#endif
 }
 
 U_NAMESPACE_END
