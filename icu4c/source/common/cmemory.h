@@ -172,7 +172,7 @@ public:
      * @return *this
      */
     LocalMemory<T> &moveFrom(LocalMemory<T> &src) U_NOEXCEPT {
-        delete[] LocalPointerBase<T>::ptr;
+        uprv_free(LocalPointerBase<T>::ptr);
         LocalPointerBase<T>::ptr=src.ptr;
         src.ptr=NULL;
         return *this;
