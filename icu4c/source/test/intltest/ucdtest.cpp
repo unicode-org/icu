@@ -70,8 +70,10 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestVerticalOrientation);
     TESTCASE_AUTO(TestDefaultScriptExtensions);
     TESTCASE_AUTO(TestInvalidCodePointFolding);
+#if !UCONFIG_NO_NORMALIZATION
     TESTCASE_AUTO(TestBinaryCharacterProperties);
     TESTCASE_AUTO(TestIntCharacterProperties);
+#endif
     TESTCASE_AUTO_END;
 }
 
@@ -622,6 +624,7 @@ void UnicodeTest::TestInvalidCodePointFolding(void) {
 }
 
 void UnicodeTest::TestBinaryCharacterProperties() {
+#if !UCONFIG_NO_NORMALIZATION
     IcuTestErrorCode errorCode(*this, "TestBinaryCharacterProperties()");
     // Spot-check getBinaryPropertySet() vs. hasBinaryProperty().
     for (int32_t prop = 0; prop < UCHAR_BINARY_LIMIT; ++prop) {
@@ -663,9 +666,11 @@ void UnicodeTest::TestBinaryCharacterProperties() {
             }
         }
     }
+#endif
 }
 
 void UnicodeTest::TestIntCharacterProperties() {
+#if !UCONFIG_NO_NORMALIZATION
     IcuTestErrorCode errorCode(*this, "TestIntCharacterProperties()");
     // Spot-check getIntPropertyMap() vs. getIntPropertyValue().
     for (int32_t prop = UCHAR_INT_START; prop < UCHAR_INT_LIMIT; ++prop) {
@@ -689,4 +694,5 @@ void UnicodeTest::TestIntCharacterProperties() {
             "int property upcmap_get(U+0061)",
             u_getIntPropertyValue(0x61, (UProperty)prop), ucpmap_get(map, 0x61));
     }
+#endif
 }

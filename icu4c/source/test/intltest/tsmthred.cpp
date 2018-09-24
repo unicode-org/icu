@@ -82,8 +82,10 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
 #if !UCONFIG_NO_TRANSLITERATION
     TESTCASE_AUTO(TestBreakTranslit);
     TESTCASE_AUTO(TestIncDec);
-#endif /* #if !UCONFIG_NO_TRANSLITERATION */
+#if !UCONFIG_NO_FORMATTING
     TESTCASE_AUTO(Test20104);
+#endif /* #if !UCONFIG_NO_FORMATTING */
+#endif /* #if !UCONFIG_NO_TRANSLITERATION */
     TESTCASE_AUTO_END
 }
 
@@ -1550,7 +1552,7 @@ void MultithreadTest::TestIncDec()
     assertEquals("TestIncDec", NUM_THREADS, gIncDecCounter);
 }
 
-
+#if !UCONFIG_NO_FORMATTING
 static Calendar  *gSharedCalendar = {};
 
 class Test20104Thread : public SimpleThread {
@@ -1580,6 +1582,6 @@ void MultithreadTest::Test20104() {
     delete gSharedCalendar;
     // Note: failure is reported by Thread Sanitizer. Test itself succeeds.
 }
-
+#endif /* !UCONFIG_NO_FORMATTING */
 
 #endif /* !UCONFIG_NO_TRANSLITERATION */
