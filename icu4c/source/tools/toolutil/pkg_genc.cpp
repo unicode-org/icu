@@ -309,15 +309,10 @@ writeAssemblyCode(const char *filename, const char *destdir, const char *optEntr
     T_FileStream_writeLine(out, assemblyHeader[assemblyHeaderIndex].beginLine);
 
     for(;;) {
+        memset(buffer, 0, sizeof(buffer));
         length=T_FileStream_read(in, buffer, sizeof(buffer));
         if(length==0) {
             break;
-        }
-        if (length != sizeof(buffer)) {
-            /* pad with extra 0's when at the end of the file */
-            for(i=0; i < (length % sizeof(uint32_t)); ++i) {
-                buffer[length+i] = 0;
-            }
         }
         for(i=0; i<(length/sizeof(buffer[0])); i++) {
             column = write32(out, buffer[i], column);
