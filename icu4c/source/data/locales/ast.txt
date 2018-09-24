@@ -45,7 +45,7 @@ ast{
         default{"latn"}
         latn{
             miscPatterns{
-                atLeast{"⩾{0}"}
+                atLeast{"≥{0}"}
                 range{"{0}–{1}"}
             }
             patterns{
@@ -236,7 +236,7 @@ ast{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.44.2"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -3947,8 +3947,13 @@ ast{
         general{
             lenient{
                 "[.․。︒﹒．｡]",
+                "['ʼ՚᾽᾿’＇]",
+                "[%٪﹪％]",
+                "[؉‰]",
                 "[\$﹩＄$]",
                 "[£₤]",
+                "[¥￥]",
+                "[₩￦]",
                 "[₨₹{Rp}{Rs}]",
             }
         }

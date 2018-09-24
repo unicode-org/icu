@@ -406,6 +406,8 @@ sq{
         yue{"kantonezisht"}
         zgh{"tamaziatishte standarde marokene"}
         zh{"kinezisht"}
+        zh_Hans{"kinezishte e thjeshtuar"}
+        zh_Hant{"kinezishte tradicionale"}
         zu{"zuluisht"}
         zun{"zunisht"}
         zxx{"nuk ka përmbajtje gjuhësore"}
@@ -472,7 +474,7 @@ sq{
             chinese{"kalendar kinez"}
             coptic{"Kalendari Koptik"}
             dangi{"kalendar dangi"}
-            ethiopic{"kalendar etiopik"}
+            ethiopic{"kalendar etiopian"}
             ethiopic-amete-alem{"Kalendari Etiopas Amete Alem"}
             gregorian{"kalendar gregorian"}
             hebrew{"kalendar hebraik"}
@@ -484,7 +486,7 @@ sq{
             iso8601{"kalendar ISO-8601"}
             japanese{"kalendar japonez"}
             persian{"kalendar persian"}
-            roc{"kalendar minguoje (kinez)"}
+            roc{"kalendar minguo (i Republikës së Kinës)"}
         }
         cf{
             account{"format valutor llogaritës"}
@@ -524,7 +526,7 @@ sq{
             armnlow{"numra armenë të vegjël"}
             beng{"shifra bengali"}
             deva{"shifra devanagari"}
-            ethi{"numra etiopë"}
+            ethi{"numra etiopianë"}
             fullwide{"shifra me largësi të brendshme"}
             geor{"numra gjeorgjianë"}
             grek{"numra grekë"}
@@ -555,7 +557,7 @@ sq{
             tibt{"shifra tibetiane"}
         }
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.50"}
     characterLabelPattern{
         all{"{0} — Të gjitha"}
         category-list{"{0}: {1}"}

@@ -1058,7 +1058,7 @@ zh_Hant{
         ROZAJ{"雷西亞方言"}
         RUMGR{"羅曼什文"}
         SAAHO{"薩霍文"}
-        SCOTLAND{"英文（蘇格蘭）"}
+        SCOTLAND{"蘇格蘭標準英文"}
         SCOUSE{"利物浦方言"}
         SOLBA{"雷西亞史托維薩方言"}
         SOTAV{"卡布佛得鲁背風群島方言"}
@@ -1074,7 +1074,7 @@ zh_Hant{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     characterLabelPattern{
         all{"{0} — 全部"}
         category-list{"{0}: {1}"}

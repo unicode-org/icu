@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 nl{
-    Version{"2.1.41.97"}
+    Version{"2.1.44.2"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -953,6 +953,7 @@ nl{
         }
         "Etc:UTC"{
             ls{"Gecoördineerde wereldtijd"}
+            ss{"UTC"}
         }
         "Etc:Unknown"{
             ec{"onbekende stad"}

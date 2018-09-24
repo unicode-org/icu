@@ -1198,14 +1198,15 @@ public class ULocaleTest extends TestFmwk {
     @Test
     public void TestDisplayNameWithDialectCoverage() {
         // Coverage test. Implementation is in class LocaleDisplayNames.
+        // In CLDR 63, de removed the dialect names, use fr instead
         assertFalse("en-GB in system default locale: anything but empty",
                 ULocale.UK.getDisplayNameWithDialect().isEmpty());
-        assertEquals("en-GB in de", "Britisches Englisch",
-                ULocale.UK.getDisplayNameWithDialect(ULocale.GERMAN));
-        assertEquals("en-GB (string) in de", "Britisches Englisch",
-                ULocale.getDisplayNameWithDialect("en-GB", ULocale.GERMAN));
-        assertEquals("en-GB (string) in de (string)", "Britisches Englisch",
-                ULocale.getDisplayNameWithDialect("en-GB", "de"));
+        assertEquals("en-GB in fr", "anglais britannique",
+                ULocale.UK.getDisplayNameWithDialect(ULocale.FRENCH));
+        assertEquals("en-GB (string) in fr", "anglais britannique",
+                ULocale.getDisplayNameWithDialect("en-GB", ULocale.FRENCH));
+        assertEquals("en-GB (string) in fr (string)", "anglais britannique",
+                ULocale.getDisplayNameWithDialect("en-GB", "fr"));
     }
 
     @Test

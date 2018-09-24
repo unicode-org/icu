@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 gd{
-    Version{"2.1.41.97"}
+    Version{"2.1.44.18"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -163,6 +163,20 @@ gd{
                 other{"{0} pàirt sa mhillean"}
                 two{"{0} phàirt sa mhillean"}
             }
+            percent{
+                dnam{"sa cheud"}
+                few{"{0} sa cheud"}
+                one{"{0} sa cheud"}
+                other{"{0} sa cheud"}
+                two{"{0} sa cheud"}
+            }
+            permille{
+                dnam{"sa mhìle"}
+                few{"{0} sa mhìle"}
+                one{"{0} sa mhìle"}
+                other{"{0} sa mhìle"}
+                two{"{0} sa mhìle"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -195,6 +209,7 @@ gd{
             }
         }
         coordinate{
+            dnam{"comhair combaist"}
             east{"{0}E"}
             north{"{0}T"}
             south{"{0}D"}
@@ -256,6 +271,13 @@ gd{
                 one{"{0} mheaga-baidht"}
                 other{"{0} meaga-baidht"}
                 two{"{0} mheaga-baidht"}
+            }
+            petabyte{
+                dnam{"peta-baidht"}
+                few{"{0} peta-baidht"}
+                one{"{0} pheta-baidht"}
+                other{"{0} peta-baidht"}
+                two{"{0} pheta-baidht"}
             }
             terabit{
                 dnam{"tera-biod"}
@@ -746,6 +768,13 @@ gd{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"brùthadh-àile"}
+                few{"{0} brùthadh-àile"}
+                one{"{0} bhrùthadh-àile"}
+                other{"{0} brùthadh-àile"}
+                two{"{0} bhrùthadh-àile"}
+            }
             hectopascal{
                 dnam{"heacta pascal"}
                 few{"{0} heacta pascal"}
@@ -1181,6 +1210,20 @@ gd{
                 other{"{0}ppm"}
                 two{"{0}ppm"}
             }
+            percent{
+                dnam{"%"}
+                few{"{0}%"}
+                one{"{0}%"}
+                other{"{0}%"}
+                two{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                few{"{0}‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+                two{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1213,6 +1256,7 @@ gd{
             }
         }
         coordinate{
+            dnam{"comhair"}
             east{"{0}E"}
             north{"{0}T"}
             south{"{0}D"}
@@ -1274,6 +1318,13 @@ gd{
                 one{"{0}MB"}
                 other{"{0}MB"}
                 two{"{0}MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                few{"{0}PB"}
+                one{"{0}PB"}
+                other{"{0}PB"}
+                two{"{0}PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1505,10 +1556,10 @@ gd{
             }
             fathom{
                 dnam{"aitheamh"}
-                few{"{0}fm"}
-                one{"{0}fm"}
-                other{"{0}fm"}
-                two{"{0}fm"}
+                few{"{0}ftm"}
+                one{"{0}ftm"}
+                other{"{0}ftm"}
+                two{"{0}ftm"}
             }
             foot{
                 dnam{"troigh"}
@@ -1764,6 +1815,13 @@ gd{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                few{"{0}atm"}
+                one{"{0}atm"}
+                other{"{0}atm"}
+                two{"{0}atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 few{"{0}hPa"}
@@ -2199,6 +2257,20 @@ gd{
                 other{"{0} ppm"}
                 two{"{0} ppm"}
             }
+            percent{
+                dnam{"sa cheud"}
+                few{"{0}%"}
+                one{"{0}%"}
+                other{"{0}%"}
+                two{"{0}%"}
+            }
+            permille{
+                dnam{"sa mhìle"}
+                few{"{0}‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+                two{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -2231,6 +2303,7 @@ gd{
             }
         }
         coordinate{
+            dnam{"comhair"}
             east{"{0}E"}
             north{"{0}T"}
             south{"{0}D"}
@@ -2292,6 +2365,13 @@ gd{
                 one{"{0} MB"}
                 other{"{0} MB"}
                 two{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                few{"{0} PB"}
+                one{"{0} PB"}
+                other{"{0} PB"}
+                two{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -2782,6 +2862,13 @@ gd{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"àile"}
+                few{"{0} àile"}
+                one{"{0} àile"}
+                other{"{0} àile"}
+                two{"{0} àile"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 few{"{0} hPa"}

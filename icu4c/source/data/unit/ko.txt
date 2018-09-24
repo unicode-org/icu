@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ko{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -103,6 +103,14 @@ ko{
                 dnam{"ppm"}
                 other{"{0}ppm"}
             }
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -123,6 +131,7 @@ ko{
             }
         }
         coordinate{
+            dnam{"방향"}
             east{"동경 {0}"}
             north{"북위 {0}"}
             south{"남위 {0}"}
@@ -160,6 +169,10 @@ ko{
             megabyte{
                 dnam{"메가바이트"}
                 other{"{0}메가바이트"}
+            }
+            petabyte{
+                dnam{"페타바이트"}
+                other{"{0}페타바이트"}
             }
             terabit{
                 dnam{"테라비트"}
@@ -455,6 +468,10 @@ ko{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                other{"{0}atm"}
+            }
             hectopascal{
                 dnam{"헥토파스칼"}
                 other{"{0}헥토파스칼"}
@@ -661,6 +678,12 @@ ko{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100km"}
@@ -668,6 +691,7 @@ ko{
             }
         }
         coordinate{
+            dnam{"쪽"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -742,7 +766,7 @@ ko{
             }
             fathom{
                 dnam{"fm"}
-                other{"{0}fm"}
+                other{"{0}ftm"}
             }
             foot{
                 dnam{"ft"}
@@ -1041,6 +1065,14 @@ ko{
                 dnam{"ppm"}
                 other{"{0}ppm"}
             }
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1061,6 +1093,7 @@ ko{
             }
         }
         coordinate{
+            dnam{"쪽"}
             east{"{0}E"}
             north{"{0}N"}
             south{"{0}S"}
@@ -1098,6 +1131,10 @@ ko{
             megabyte{
                 dnam{"MB"}
                 other{"{0}MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                other{"{0}PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1239,7 +1276,7 @@ ko{
             }
             fathom{
                 dnam{"fm"}
-                other{"{0}fm"}
+                other{"{0}ftm"}
             }
             foot{
                 dnam{"ft"}
@@ -1393,6 +1430,10 @@ ko{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                other{"{0}atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 other{"{0}hPa"}

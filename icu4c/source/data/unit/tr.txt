@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 tr{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,16 @@ tr{
                 one{"{0} parça/milyon"}
                 other{"{0} parça/milyon"}
             }
+            percent{
+                dnam{"yüzde"}
+                one{"yüzde {0}"}
+                other{"yüzde {0}"}
+            }
+            permille{
+                dnam{"binde"}
+                one{"binde {0}"}
+                other{"binde {0}"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ tr{
             }
         }
         coordinate{
+            dnam{"ana yön"}
             east{"{0}Doğu"}
             north{"{0}Kuzey"}
             south{"{0}Güney"}
@@ -192,6 +203,11 @@ tr{
                 dnam{"megabayt"}
                 one{"{0} megabayt"}
                 other{"{0} megabayt"}
+            }
+            petabyte{
+                dnam{"petabayt"}
+                one{"{0} petabayt"}
+                other{"{0} petabayt"}
             }
             terabit{
                 dnam{"terabit"}
@@ -552,6 +568,11 @@ tr{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmosfer"}
+                one{"{0} atmosfer"}
+                other{"{0} atmosfer"}
+            }
             hectopascal{
                 dnam{"hektopaskal"}
                 one{"{0} hektopaskal"}
@@ -770,10 +791,12 @@ tr{
         }
         angle{
             arc-minute{
+                dnam{"açısal dk."}
                 one{"{0}′"}
                 other{"{0}′"}
             }
             arc-second{
+                dnam{"açısal sn."}
                 one{"{0}″"}
                 other{"{0}″"}
             }
@@ -784,6 +807,11 @@ tr{
             radian{
                 one{"{0} rad"}
                 other{"{0} rad"}
+            }
+            revolution{
+                dnam{"dev"}
+                one{"{0} dev"}
+                other{"{0} dev"}
             }
         }
         area{
@@ -843,8 +871,34 @@ tr{
         }
         concentr{
             karat{
+                dnam{"ayar"}
                 one{"{0} ayar"}
                 other{"{0} ayar"}
+            }
+            milligram-per-deciliter{
+                dnam{"mg/dL"}
+                one{"{0} mg/dL"}
+                other{"{0} mg/dL"}
+            }
+            millimole-per-liter{
+                dnam{"mmol/L"}
+                one{"{0} mmol/L"}
+                other{"{0} mmol/L"}
+            }
+            part-per-million{
+                dnam{"ppm"}
+                one{"{0} ppm"}
+                other{"{0} ppm"}
+            }
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
             }
         }
         consumption{
@@ -854,6 +908,7 @@ tr{
                 other{"{0} L/100km"}
             }
             liter-per-kilometer{
+                dnam{"l/km"}
                 one{"{0} l/km"}
                 other{"{0} l/km"}
             }
@@ -863,6 +918,7 @@ tr{
             }
         }
         coordinate{
+            dnam{"yön"}
             east{"{0}D"}
             north{"{0}K"}
             south{"{0}G"}
@@ -870,42 +926,52 @@ tr{
         }
         digital{
             bit{
+                dnam{"bit"}
                 one{"{0} bit"}
                 other{"{0} bit"}
             }
             byte{
+                dnam{"bayt"}
                 one{"{0} byte"}
                 other{"{0} byte"}
             }
             gigabit{
+                dnam{"Gbit"}
                 one{"{0} Gb"}
                 other{"{0} Gb"}
             }
             gigabyte{
+                dnam{"GB"}
                 one{"{0} GB"}
                 other{"{0} GB"}
             }
             kilobit{
+                dnam{"kbit"}
                 one{"{0} kb"}
                 other{"{0} kb"}
             }
             kilobyte{
+                dnam{"kB"}
                 one{"{0} kB"}
                 other{"{0} kB"}
             }
             megabit{
+                dnam{"Mbit"}
                 one{"{0} Mb"}
                 other{"{0} Mb"}
             }
             megabyte{
+                dnam{"MB"}
                 one{"{0} MB"}
                 other{"{0} MB"}
             }
             terabit{
+                dnam{"Tbit"}
                 one{"{0} Tb"}
                 other{"{0} Tb"}
             }
             terabyte{
+                dnam{"TB"}
                 one{"{0} TB"}
                 other{"{0} TB"}
             }
@@ -976,18 +1042,22 @@ tr{
         }
         electric{
             ampere{
+                dnam{"amper"}
                 one{"{0} A"}
                 other{"{0} A"}
             }
             milliampere{
+                dnam{"miliamper"}
                 one{"{0} mA"}
                 other{"{0} mA"}
             }
             ohm{
+                dnam{"ohm"}
                 one{"{0} Ω"}
                 other{"{0} Ω"}
             }
             volt{
+                dnam{"volt"}
                 one{"{0} V"}
                 other{"{0} V"}
             }
@@ -1020,18 +1090,22 @@ tr{
         }
         frequency{
             gigahertz{
+                dnam{"GHz"}
                 one{"{0} GHz"}
                 other{"{0} GHz"}
             }
             hertz{
+                dnam{"Hz"}
                 one{"{0} Hz"}
                 other{"{0} Hz"}
             }
             kilohertz{
+                dnam{"kHz"}
                 one{"{0} kHz"}
                 other{"{0} kHz"}
             }
             megahertz{
+                dnam{"MHz"}
                 one{"{0} MHz"}
                 other{"{0} MHz"}
             }
@@ -1055,8 +1129,8 @@ tr{
             }
             fathom{
                 dnam{"fathom"}
-                one{"{0} fm"}
-                other{"{0} fm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
             }
             foot{
                 dnam{"fit"}
@@ -1145,6 +1219,7 @@ tr{
         }
         light{
             lux{
+                dnam{"lüks"}
                 one{"{0} lüks"}
                 other{"{0} lüks"}
             }
@@ -1517,6 +1592,16 @@ tr{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1541,6 +1626,7 @@ tr{
             }
         }
         coordinate{
+            dnam{"yön"}
             east{"{0}D"}
             north{"{0}K"}
             south{"{0}G"}
@@ -1586,6 +1672,11 @@ tr{
                 dnam{"MB"}
                 one{"{0} MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                one{"{0} PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tbit"}
@@ -1757,8 +1848,8 @@ tr{
             }
             fathom{
                 dnam{"fathom"}
-                one{"{0} fm"}
-                other{"{0} fm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
             }
             foot{
                 dnam{"fit"}
@@ -1946,6 +2037,11 @@ tr{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 one{"{0} hPa"}

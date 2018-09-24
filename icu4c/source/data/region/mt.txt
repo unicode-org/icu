@@ -73,12 +73,12 @@ mt{
         CD{"ir-Repubblika Demokratika tal-Kongo"}
         CF{"ir-Repubblika Ċentru-Afrikana"}
         CG{"il-Kongo - Brazzaville"}
-        CH{"Żvizzera"}
+        CH{"l-Iżvizzera"}
         CI{"il-Kosta tal-Avorju"}
         CK{"Gżejjer Cook"}
         CL{"iċ-Ċili"}
         CM{"il-Kamerun"}
-        CN{"CN"}
+        CN{"iċ-Ċina"}
         CO{"il-Kolombja"}
         CP{"il-Gżira Clipperton"}
         CR{"il-Costa Rica"}
@@ -287,7 +287,7 @@ mt{
         VU{"Vanuatu"}
         WF{"Wallis u Futuna"}
         WS{"Samoa"}
-        XK{"Kosovo"}
+        XK{"il-Kosovo"}
         YE{"il-Jemen"}
         YT{"Mayotte"}
         ZA{"l-Afrika t’Isfel"}
@@ -305,8 +305,10 @@ mt{
     Countries%variant{
         CD{"Kongo (RDK)"}
         CG{"ir-Repubblika tal-Kongo"}
+        CZ{"Ir-Repubblika Ċeka"}
         FK{"Il-Gżejjer Falkland (il-Gżejjer Malvinas)"}
+        MK{"l-Eks Repubblika Jugoslava tal-Maċedonia"}
         TL{"Timor tal-Lvant"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
 }

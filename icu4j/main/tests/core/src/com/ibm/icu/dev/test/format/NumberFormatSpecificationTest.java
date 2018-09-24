@@ -28,14 +28,14 @@ public class NumberFormatSpecificationTest extends TestFmwk {
     @Test
     public void TestBasicPatterns() {
         double num = 1234.567;
-        assertEquals("", "1 234,57", formatFrWithPattern(num, "#,##0.##"));
+        assertEquals("", "1 234,57", formatFrWithPattern(num, "#,##0.##"));
         assertEquals("", "1234,57", formatFrWithPattern(num, "0.##"));
         assertEquals("", "1235", formatFrWithPattern(num, "0"));
-        assertEquals("", "1 234,567", formatFrWithPattern(num, "#,##0.###"));
+        assertEquals("", "1 234,567", formatFrWithPattern(num, "#,##0.###"));
         assertEquals("", "1234,567", formatFrWithPattern(num, "###0.#####"));
         assertEquals("", "1234,5670", formatFrWithPattern(num, "###0.0000#"));
         assertEquals("", "01234,5670", formatFrWithPattern(num, "00000.0000"));
-        assertEquals("", "1 234,57 €", formatFrWithPattern(num, "#,##0.00 ¤"));
+        assertEquals("", "1 234,57 €", formatFrWithPattern(num, "#,##0.00 ¤"));
     }
 
     @Test
@@ -43,8 +43,8 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         NumberFormat nf = nfWithPattern("#,##0.##");
         nf.setMaximumIntegerDigits(5);
         nf.setMinimumIntegerDigits(4);
-        assertEquals("", "34 567,89", format(1234567.89, nf));
-        assertEquals("", "0 034,56", format(34.56, nf));
+        assertEquals("", "34 567,89", format(1234567.89, nf));
+        assertEquals("", "0 034,56", format(34.56, nf));
 
     }
 
@@ -59,21 +59,21 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "8", formatFrWithPattern(10.0, "4"));
         assertEquals("", "99,90", formatFrWithPattern(99.0, "2.70"));
         assertEquals("", "273,00", formatFrWithPattern(272.0, "2.73"));
-        assertEquals("", "1 03,60", formatFrWithPattern(104.0, "#,#3.70"));
+        assertEquals("", "1 03,60", formatFrWithPattern(104.0, "#,#3.70"));
     }
 
     @Test
     public void TestSignificantDigits() {
         assertEquals("", "1230", formatFrWithPattern(1234.0, "@@@"));
-        assertEquals("", "1 234", formatFrWithPattern(1234.0, "@,@@@"));
-        assertEquals("", "1 235 000", formatFrWithPattern(1234567.0, "@,@@@"));
-        assertEquals("", "1 234 567", formatFrWithPattern(1234567.0, "@@@@,@@@"));
-        assertEquals("", "12 34 567,00", formatFrWithPattern(1234567.0, "@@@@,@@,@@@"));
-        assertEquals("", "12 34 567,0", formatFrWithPattern(1234567.0, "@@@@,@@,@@#"));
-        assertEquals("", "12 34 567", formatFrWithPattern(1234567.0, "@@@@,@@,@##"));
-        assertEquals("", "12 34 567", formatFrWithPattern(1234567.001, "@@@@,@@,@##"));
-        assertEquals("", "12 34 567", formatFrWithPattern(1234567.001, "@@@@,@@,###"));
-        assertEquals("", "1 200", formatFrWithPattern(1234.0, "#,#@@"));
+        assertEquals("", "1 234", formatFrWithPattern(1234.0, "@,@@@"));
+        assertEquals("", "1 235 000", formatFrWithPattern(1234567.0, "@,@@@"));
+        assertEquals("", "1 234 567", formatFrWithPattern(1234567.0, "@@@@,@@@"));
+        assertEquals("", "12 34 567,00", formatFrWithPattern(1234567.0, "@@@@,@@,@@@"));
+        assertEquals("", "12 34 567,0", formatFrWithPattern(1234567.0, "@@@@,@@,@@#"));
+        assertEquals("", "12 34 567", formatFrWithPattern(1234567.0, "@@@@,@@,@##"));
+        assertEquals("", "12 34 567", formatFrWithPattern(1234567.001, "@@@@,@@,@##"));
+        assertEquals("", "12 34 567", formatFrWithPattern(1234567.001, "@@@@,@@,###"));
+        assertEquals("", "1 200", formatFrWithPattern(1234.0, "#,#@@"));
     }
 
     @Test
@@ -100,8 +100,8 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "p%p57,3", formatFrWithPattern(0.573, "p%p0.0"));
         assertEquals("", "p%p0,6", formatFrWithPattern(0.573, "p'%'p0.0"));
         assertEquals("", "%3,260", formatFrWithPattern(0.0326, "%@@@@"));
-        assertEquals("", "%1 540", formatFrWithPattern(15.43, "%#,@@@"));
-        assertEquals("", "%1 656,4", formatFrWithPattern(16.55, "%#,##4.1"));
+        assertEquals("", "%1 540", formatFrWithPattern(15.43, "%#,@@@"));
+        assertEquals("", "%1 656,4", formatFrWithPattern(16.55, "%#,##4.1"));
         assertEquals("", "%16,3E3", formatFrWithPattern(162.55, "%##0.00E0"));
     }
 
@@ -112,19 +112,19 @@ public class NumberFormatSpecificationTest extends TestFmwk {
         assertEquals("", "p‰p573,0", formatFrWithPattern(0.573, "p‰p0.0"));
         assertEquals("", "p‰p0,6", formatFrWithPattern(0.573, "p'‰'p0.0"));
         assertEquals("", "‰32,60", formatFrWithPattern(0.0326, "‰@@@@"));
-        assertEquals("", "‰15 400", formatFrWithPattern(15.43, "‰#,@@@"));
-        assertEquals("", "‰16 551,7", formatFrWithPattern(16.55, "‰#,##4.1"));
+        assertEquals("", "‰15 400", formatFrWithPattern(15.43, "‰#,@@@"));
+        assertEquals("", "‰16 551,7", formatFrWithPattern(16.55, "‰#,##4.1"));
         assertEquals("", "‰163E3", formatFrWithPattern(162.55, "‰##0.00E0"));
     }
 
     @Test
     public void TestPadding() {
-        assertEquals("", "$***1 234", formatFrWithPattern(1234, "$**####,##0"));
-        assertEquals("", "xxx$1 234", formatFrWithPattern(1234, "*x$####,##0"));
-        assertEquals("", "1 234xxx$", formatFrWithPattern(1234, "####,##0*x$"));
-        assertEquals("", "1 234$xxx", formatFrWithPattern(1234, "####,##0$*x"));
-        assertEquals("", "ne1 234nx", formatFrWithPattern(-1234, "####,##0$*x;ne#n"));
-        assertEquals("", "n1 234*xx", formatFrWithPattern(-1234, "####,##0$*x;n#'*'"));
+        assertEquals("", "$***1 234", formatFrWithPattern(1234, "$**####,##0"));
+        assertEquals("", "xxx$1 234", formatFrWithPattern(1234, "*x$####,##0"));
+        assertEquals("", "1 234xxx$", formatFrWithPattern(1234, "####,##0*x$"));
+        assertEquals("", "1 234$xxx", formatFrWithPattern(1234, "####,##0$*x"));
+        assertEquals("", "ne1 234nx", formatFrWithPattern(-1234, "####,##0$*x;ne#n"));
+        assertEquals("", "n1 234*xx", formatFrWithPattern(-1234, "####,##0$*x;n#'*'"));
         assertEquals("", "yyyy%432,6", formatFrWithPattern(4.33, "*y%4.2######"));
         if (!logKnownIssue("11025", "Padding broken when used with currencies")) {
             assertEquals("", "EUR *433,00", formatFrWithPattern(433.0, "¤¤ **####0.00"));

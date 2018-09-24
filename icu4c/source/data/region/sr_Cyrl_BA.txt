@@ -19,5 +19,5 @@ sr_Cyrl_BA{
     Countries%variant{
         MK{"БЈР Македонија"}
     }
-    Version{"2.1.38.69"}
+    Version{"2.1.43.65"}
 }

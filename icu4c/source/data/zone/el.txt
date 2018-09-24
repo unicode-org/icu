@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 el{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Αμπιτζάν"}
@@ -880,7 +880,7 @@ el{
             ec{"Γιακούτσκ"}
         }
         "Asia:Yekaterinburg"{
-            ec{"Αικατερίνμπουργκ"}
+            ec{"Αικατερινούπολη"}
         }
         "Asia:Yerevan"{
             ec{"Ερεβάν"}
@@ -913,7 +913,7 @@ el{
             ec{"Αγ. Ελένη"}
         }
         "Atlantic:Stanley"{
-            ec{"Στάνλεϋ"}
+            ec{"Στάνλεϊ"}
         }
         "Australia:Adelaide"{
             ec{"Αδελαΐδα"}
@@ -1287,7 +1287,7 @@ el{
             ec{"Γουέικ"}
         }
         "Pacific:Wallis"{
-            ec{"Ουάλις"}
+            ec{"Γουάλις"}
         }
         "meta:Afghanistan"{
             ls{"Ώρα Αφγανιστάν"}

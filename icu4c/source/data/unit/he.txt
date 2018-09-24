@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 he{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -163,6 +163,20 @@ he{
                 other{"{0} חלקים למיליון"}
                 two{"{0} חלקים למיליון"}
             }
+            percent{
+                dnam{"אחוז"}
+                many{"{0} אחוז"}
+                one{"{0} אחוז"}
+                other{"{0} אחוז"}
+                two{"{0} אחוז"}
+            }
+            permille{
+                dnam{"פרומיל"}
+                many{"{0} פרומיל"}
+                one{"{0} פרומיל"}
+                other{"{0} פרומיל"}
+                two{"{0} פרומיל"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -195,6 +209,7 @@ he{
             }
         }
         coordinate{
+            dnam{"רוחות השמיים"}
             east{"{0} מזרח"}
             north{"{0} צפון"}
             south{"{0} דרום"}
@@ -203,20 +218,20 @@ he{
         digital{
             bit{
                 dnam{"ביט"}
-                many{"{0} סיביות"}
+                many{"ביט {0}"}
                 one{"ביט {0}"}
-                other{"{0} סיביות"}
-                two{"{0} סיביות"}
+                other{"ביט {0}"}
+                two{"ביט {0}"}
             }
             byte{
                 dnam{"בייט"}
                 many{"{0} בייט"}
-                one{"בית {0}"}
+                one{"{0} בייט"}
                 other{"{0} בייט"}
                 two{"{0} בייט"}
             }
             gigabit{
-                dnam{"גיגהסיביות"}
+                dnam{"גיגהביט"}
                 many{"{0} גיגהביט"}
                 one{"{0} גיגהביט"}
                 other{"{0} גיגהביט"}
@@ -231,10 +246,10 @@ he{
             }
             kilobit{
                 dnam{"קילוביט"}
-                many{"{0} קילוסיביות"}
-                one{"{0} קילוסיבית"}
-                other{"{0} קילוסיביות"}
-                two{"{0} קילוסיביות"}
+                many{"{0} קילוביט"}
+                one{"{0} קילוביט"}
+                other{"{0} קילוביט"}
+                two{"{0} קילוביט"}
             }
             kilobyte{
                 dnam{"קילו-בייט"}
@@ -244,11 +259,11 @@ he{
                 two{"{0} קילו-בייט"}
             }
             megabit{
-                dnam{"מגהביט"}
-                many{"{0} מגה-סיביות"}
+                dnam{"מגה-ביט"}
+                many{"מגה-ביט {0}"}
                 one{"מגה-ביט {0}"}
-                other{"{0} מגה-סיביות"}
-                two{"{0} מגה-סיביות"}
+                other{"מגה-ביט {0}"}
+                two{"מגה-ביט {0}"}
             }
             megabyte{
                 dnam{"מגה-בייט"}
@@ -257,19 +272,26 @@ he{
                 other{"{0} מגה-בייט"}
                 two{"{0} מגה-בייט"}
             }
+            petabyte{
+                dnam{"פטה-בייט"}
+                many{"{0} פטה-בייט"}
+                one{"{0} פטה-בייט"}
+                other{"{0} פטה-בייט"}
+                two{"{0} פטה-בייט"}
+            }
             terabit{
                 dnam{"טרה-ביט"}
-                many{"{0} טרה-סיביות"}
+                many{"טרה-ביט {0}"}
                 one{"טרה-ביט {0}"}
-                other{"{0} טרה-סיביות"}
-                two{"{0} טרה-סיביות"}
+                other{"טרה-ביט {0}"}
+                two{"טרה-ביט {0}"}
             }
             terabyte{
                 dnam{"טרה-בייט"}
-                many{"{0} טרה-בתים"}
+                many{"טרה-בייט {0}"}
                 one{"טרה-בייט {0}"}
-                other{"{0} טרה-בתים"}
-                two{"{0} טרה-בתים"}
+                other{"טרה-בייט {0}"}
+                two{"טרה-בייט {0}"}
             }
         }
         duration{
@@ -732,6 +754,13 @@ he{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"אטמוספרות"}
+                many{"{0} אטמוספרה"}
+                one{"{0} אטמוספרה"}
+                other{"{0} אטמוספרות"}
+                two{"{0} אטמוספרה"}
+            }
             hectopascal{
                 dnam{"הקטופסקל"}
                 many{"{0} הקטופסקל"}
@@ -1082,6 +1111,15 @@ he{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                many{"{0}%"}
+                one{"{0}%"}
+                other{"{0}%"}
+                two{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"ל׳/100ק״מ"}
@@ -1099,6 +1137,7 @@ he{
             }
         }
         coordinate{
+            dnam{"כיוון"}
             east{"{0} מז׳"}
             north{"{0} צפ׳"}
             south{"{0} דר׳"}
@@ -1206,11 +1245,11 @@ he{
             }
             year{
                 dnam{"ש׳"}
-                many{"{0} שנים"}
-                one{"שנה {0}"}
-                other{"{0} שנים"}
+                many{"{0} ש′"}
+                one{"ש′ {0}"}
+                other{"{0} ש′"}
                 per{"{0}/שנה"}
-                two{"{0} שנים"}
+                two{"{0} ש′"}
             }
         }
         length{
@@ -1724,6 +1763,20 @@ he{
                 other{"{0} ppm"}
                 two{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                many{"{0}%"}
+                one{"{0}%"}
+                other{"{0}%"}
+                two{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                many{"{0}‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+                two{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1756,6 +1809,7 @@ he{
             }
         }
         coordinate{
+            dnam{"כיוון"}
             east{"{0} מז׳"}
             north{"{0} צפ׳"}
             south{"{0} דר׳"}
@@ -1764,10 +1818,10 @@ he{
         digital{
             bit{
                 dnam{"ביט"}
-                many{"{0} סיביות"}
+                many{"ביט {0}"}
                 one{"ביט {0}"}
-                other{"{0} סיביות"}
-                two{"{0} סיביות"}
+                other{"ביט {0}"}
+                two{"ביט {0}"}
             }
             byte{
                 dnam{"בייט"}
@@ -1817,6 +1871,13 @@ he{
                 one{"{0} MB"}
                 other{"{0} MB"}
                 two{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                many{"{0} PB"}
+                one{"{0} PB"}
+                other{"{0} PB"}
+                two{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -2136,10 +2197,10 @@ he{
             }
             picometer{
                 dnam{"פ״מ"}
-                many{"{0} פיקומטר"}
+                many{"פ“מ {0}"}
                 one{"פ“מ {0}"}
-                other{"{0} פיקומטר"}
-                two{"{0} פיקומטר"}
+                other{"פ“מ {0}"}
+                two{"פ“מ {0}"}
             }
             point{
                 dnam{"נקודות"}
@@ -2293,6 +2354,13 @@ he{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                many{"{0} atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+                two{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 many{"{0} hPa"}

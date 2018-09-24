@@ -718,13 +718,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
 
         for (int i = 0; i < locales.length; ++i) {
-            // The region codes used for pseudolocales don't have display names.
-            // That might however change in the future, in which case skipping
-            // testing of these names here would become irrelevant:
-            // https://unicode.org/cldr/trac/ticket/10880
-            String country = locales[i].getCountry();
-            if (!"XA".equals(country) && !"XB".equals(country)
-                    && !hasLocalizedCountryFor(ULocale.ENGLISH, locales[i])){
+            if (!hasLocalizedCountryFor(ULocale.ENGLISH, locales[i])){
                  errln("Could not get English localized country for " + locales[i]);
             }
             if(!hasLocalizedLanguageFor(ULocale.ENGLISH, locales[i])){

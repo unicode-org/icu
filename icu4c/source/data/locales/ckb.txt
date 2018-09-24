@@ -31,7 +31,7 @@ ckb{
         default{"arab"}
         latn{
             miscPatterns{
-                atLeast{"⩾{0}"}
+                atLeast{"≥{0}"}
                 range{"{0}–{1}"}
             }
             patterns{
@@ -57,7 +57,7 @@ ckb{
         minimumGroupingDigits{"1"}
         native{"arab"}
     }
-    Version{"2.1.38.71"}
+    Version{"2.1.43.94"}
     calendar{
         generic{
             DateTimePatterns{

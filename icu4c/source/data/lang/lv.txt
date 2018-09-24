@@ -110,7 +110,7 @@ lv{
         cop{"koptu"}
         cr{"krī"}
         crh{"Krimas tatāru"}
-        crs{"kreolu franču"}
+        crs{"franciskā kreoliskā valoda (Seišelu salas)"}
         cs{"čehu"}
         csb{"kašubu"}
         cu{"baznīcslāvu"}
@@ -121,7 +121,7 @@ lv{
         dar{"dargu"}
         dav{"taitu"}
         de{"vācu"}
-        de_CH{"Šveices augšvācu"}
+        de_CH{"augšvācu (Šveice)"}
         del{"delavēru"}
         den{"sleivu"}
         dgr{"dogribu"}
@@ -144,6 +144,7 @@ lv{
         el{"grieķu"}
         elx{"elamiešu"}
         en{"angļu"}
+        en_GB{"angļu (Lielbritānija)"}
         enm{"vidusangļu"}
         eo{"esperanto"}
         es{"spāņu"}
@@ -172,7 +173,7 @@ lv{
         gag{"gagauzu"}
         gay{"gajo"}
         gba{"gbaju"}
-        gd{"gēlu"}
+        gd{"skotu gēlu"}
         gez{"gēzu"}
         gil{"kiribatiešu"}
         gl{"galisiešu"}
@@ -380,7 +381,7 @@ lv{
         pam{"pampanganu"}
         pap{"papjamento"}
         pau{"palaviešu"}
-        pcm{"pidžins"}
+        pcm{"Nigērijas pidžinvaloda"}
         peo{"senpersu"}
         phn{"feniķiešu"}
         pi{"pāli"}
@@ -457,7 +458,7 @@ lv{
         sux{"šumeru"}
         sv{"zviedru"}
         sw{"svahili"}
-        sw_CD{"Kongo svahili"}
+        sw_CD{"svahili (Kongo)"}
         swb{"komoru"}
         syc{"klasiskā sīriešu"}
         syr{"sīriešu"}
@@ -529,7 +530,7 @@ lv{
         zap{"sapoteku"}
         zbl{"blissimbolika"}
         zen{"zenagu"}
-        zgh{"standarta marokāņu berberu"}
+        zgh{"standarta tamazigtu (Maroka)"}
         zh{"ķīniešu"}
         zh_Hans{"ķīniešu vienkāršotā"}
         zh_Hant{"ķīniešu tradicionālā"}
@@ -540,6 +541,7 @@ lv{
     }
     Languages%short{
         az{"azerbaidžāņu"}
+        en_GB{"angļu (Lielbritānija)"}
         en_US{"angļu (ASV)"}
     }
     Scripts{
@@ -567,15 +569,15 @@ lv{
         Guru{"pandžabu"}
         Hanb{"haņu ar bopomofo"}
         Hang{"hangils"}
-        Hani{"ķīniešu"}
+        Hani{"haņu"}
         Hans{"vienkāršotā"}
         Hant{"tradicionālā"}
         Hebr{"ivrits"}
         Hira{"hiragana"}
-        Hrkt{"katakana vai hiragana"}
+        Hrkt{"japāņu zilbju alfabēts"}
         Hung{"senungāru"}
         Ital{"vecitāļu"}
-        Jamo{"džamo"}
+        Jamo{"jamo"}
         Java{"javiešu"}
         Jpan{"japāņu"}
         Kana{"katakana"}
@@ -796,7 +798,7 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     characterLabelPattern{
         all{"{0} — visas"}
         category-list{"{0}: {1}"}

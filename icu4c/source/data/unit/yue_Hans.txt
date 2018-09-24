@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 yue_Hans{
     %%Parent{"root"}
-    Version{"2.1.41.97"}
+    Version{"2.1.44.50"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -104,6 +104,14 @@ yue_Hans{
                 dnam{"百万分率"}
                 other{"{0} 百万分率"}
             }
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -124,6 +132,7 @@ yue_Hans{
             }
         }
         coordinate{
+            dnam{"方向"}
             east{"东经{0}"}
             north{"北纬{0}"}
             south{"南纬{0}"}
@@ -161,6 +170,10 @@ yue_Hans{
             megabyte{
                 dnam{"MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -456,6 +469,10 @@ yue_Hans{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"百帕"}
                 other{"{0} 百帕"}
@@ -680,6 +697,10 @@ yue_Hans{
             karat{
                 other{"{0}kt"}
             }
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -694,6 +715,7 @@ yue_Hans{
             }
         }
         coordinate{
+            dnam{"方向"}
             east{"东经{0}"}
             north{"北纬{0}"}
             south{"南纬{0}"}
@@ -832,7 +854,7 @@ yue_Hans{
             }
             fathom{
                 dnam{"英寻"}
-                other{"{0}fm"}
+                other{"{0}ftm"}
             }
             foot{
                 other{"{0}呎"}
@@ -1153,6 +1175,14 @@ yue_Hans{
                 dnam{"百万分率"}
                 other{"{0} 百万分率"}
             }
+            percent{
+                dnam{"%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1173,6 +1203,7 @@ yue_Hans{
             }
         }
         coordinate{
+            dnam{"方向"}
             east{"东经{0}"}
             north{"北纬{0}"}
             south{"南纬{0}"}
@@ -1210,6 +1241,10 @@ yue_Hans{
             megabyte{
                 dnam{"MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1505,6 +1540,10 @@ yue_Hans{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"百帕"}
                 other{"{0} 百帕"}

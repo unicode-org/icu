@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 uk{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -163,6 +163,20 @@ uk{
                 one{"{0} мільйонна доля"}
                 other{"{0} мільйонної долі"}
             }
+            percent{
+                dnam{"відсоток"}
+                few{"{0} відсотки"}
+                many{"{0} відсотків"}
+                one{"{0} відсоток"}
+                other{"{0} відсотка"}
+            }
+            permille{
+                dnam{"проміле"}
+                few{"{0} проміле"}
+                many{"{0} проміле"}
+                one{"{0} проміле"}
+                other{"{0} проміле"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -195,6 +209,7 @@ uk{
             }
         }
         coordinate{
+            dnam{"сторона світу"}
             east{"{0} на Схід"}
             north{"{0} на Північ"}
             south{"{0} на Південь"}
@@ -256,6 +271,13 @@ uk{
                 many{"{0} мегабайтів"}
                 one{"{0} мегабайт"}
                 other{"{0} мегабайта"}
+            }
+            petabyte{
+                dnam{"петабайти"}
+                few{"{0} петабайти"}
+                many{"{0} петабайтів"}
+                one{"{0} петабайт"}
+                other{"{0} петабайту"}
             }
             terabit{
                 dnam{"терабіти"}
@@ -580,6 +602,13 @@ uk{
                 one{"{0} пікометр"}
                 other{"{0} пікометра"}
             }
+            point{
+                dnam{"пункти"}
+                few{"{0} пункти"}
+                many{"{0} пунктів"}
+                one{"{0} пункт"}
+                other{"{0} пункту"}
+            }
             yard{
                 dnam{"ярди"}
                 few{"{0} ярди"}
@@ -725,6 +754,13 @@ uk{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"атмосфери"}
+                few{"{0} атмосфери"}
+                many{"{0} атмосфер"}
+                one{"{0} атмосфера"}
+                other{"{0} атмосфери"}
+            }
             hectopascal{
                 dnam{"гектопаскалі"}
                 few{"{0} гектопаскалі"}
@@ -1075,6 +1111,15 @@ uk{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                few{"{0}%"}
+                many{"{0}%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"л/100 км"}
@@ -1085,6 +1130,7 @@ uk{
             }
         }
         coordinate{
+            dnam{"напрям"}
             east{"{0} Сх"}
             north{"{0} Пн"}
             south{"{0} Пд"}
@@ -1655,6 +1701,20 @@ uk{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"відсоток"}
+                few{"{0}%"}
+                many{"{0}%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"проміле"}
+                few{"{0}‰"}
+                many{"{0}‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1687,6 +1747,7 @@ uk{
             }
         }
         coordinate{
+            dnam{"напрямок"}
             east{"{0} на Сх"}
             north{"{0} на Пн"}
             south{"{0} на Пд"}
@@ -1748,6 +1809,13 @@ uk{
                 many{"{0} МБ"}
                 one{"{0} МБ"}
                 other{"{0} МБ"}
+            }
+            petabyte{
+                dnam{"ПБ"}
+                few{"{0} ПБ"}
+                many{"{0} ПБ"}
+                one{"{0} ПБ"}
+                other{"{0} ПБ"}
             }
             terabit{
                 dnam{"Тбіт"}
@@ -2072,6 +2140,13 @@ uk{
                 one{"{0} пм"}
                 other{"{0} пм"}
             }
+            point{
+                dnam{"пт"}
+                few{"{0} пт"}
+                many{"{0} пт"}
+                one{"{0} пт"}
+                other{"{0} пт"}
+            }
             yard{
                 dnam{"ярди"}
                 few{"{0} ярди"}
@@ -2210,6 +2285,13 @@ uk{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"атм"}
+                few{"{0} атм"}
+                many{"{0} атм"}
+                one{"{0} атм"}
+                other{"{0} атм"}
+            }
             hectopascal{
                 dnam{"гПа"}
                 few{"{0} гПа"}

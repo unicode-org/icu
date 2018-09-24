@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ja{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"アビジャン"}
@@ -556,7 +556,7 @@ ja{
             ec{"セントジョンズ"}
         }
         "America:St_Kitts"{
-            ec{"セントキッツ"}
+            ec{"セントクリストファー"}
         }
         "America:St_Lucia"{
             ec{"セントルシア"}
@@ -1804,9 +1804,9 @@ ja{
             ls{"フェニックス諸島時間"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"サンピエール・ミクロン夏時間"}
-            lg{"サンピエール・ミクロン時間"}
-            ls{"サンピエール・ミクロン標準時"}
+            ld{"サンピエール島・ミクロン島夏時間"}
+            lg{"サンピエール島・ミクロン島時間"}
+            ls{"サンピエール島・ミクロン島標準時"}
         }
         "meta:Pitcairn"{
             ls{"ピトケアン時間"}

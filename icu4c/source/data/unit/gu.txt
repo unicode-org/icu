@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 gu{
-    Version{"2.1.41.97"}
+    Version{"2.1.44.2"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,16 @@ gu{
                 one{"{0} કણ પ્રતિ મિલિયન"}
                 other{"{0} કણ પ્રતિ મિલિયન"}
             }
+            percent{
+                dnam{"ટકા"}
+                one{"{0} ટકા"}
+                other{"{0} ટકા"}
+            }
+            permille{
+                dnam{"પ્રતિમાઈલ"}
+                one{"{0} પ્રતિમાઈલ"}
+                other{"{0} પ્રતિમાઈલ"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ gu{
             }
         }
         coordinate{
+            dnam{"મુખ્ય દિશા"}
             east{"{0}પૂર્વ"}
             north{"{0}ઉત્તર"}
             south{"{0}દક્ષિણ"}
@@ -192,6 +203,11 @@ gu{
                 dnam{"મેગાબાઇટ"}
                 one{"{0} મેગાબાઇટ"}
                 other{"{0} મેગાબાઇટ"}
+            }
+            petabyte{
+                dnam{"પેટાબાઈટ્સ"}
+                one{"{0} પેટાબાઈટ"}
+                other{"{0} પેટાબાઈટ્સ"}
             }
             terabit{
                 dnam{"ટેરાબિટ"}
@@ -542,6 +558,11 @@ gu{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"વાતાવરણ"}
+                one{"{0} વાતાવરણ"}
+                other{"{0} વાતાવરણ"}
+            }
             hectopascal{
                 dnam{"હેક્ટૉપાસ્કલ"}
                 one{"{0} હેક્ટૉપાસ્કલ"}
@@ -791,6 +812,13 @@ gu{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"લિ/100 કિમી"}
@@ -799,6 +827,7 @@ gu{
             }
         }
         coordinate{
+            dnam{"દિશા"}
             east{"{0}પૂ"}
             north{"{0}ઉ"}
             south{"{0}દ"}
@@ -1049,8 +1078,8 @@ gu{
             }
             radian{
                 dnam{"સમત્રિજ્યાકોણ"}
-                one{"{0} rad"}
-                other{"{0} rad"}
+                one{"{0} સમત્રિજ્યાકોણ"}
+                other{"{0} સમત્રિજ્યાકોણ"}
             }
             revolution{
                 dnam{"ક્રાંતિ"}
@@ -1131,8 +1160,18 @@ gu{
             }
             part-per-million{
                 dnam{"કણ/મિલિયન"}
-                one{"{0} ppm"}
-                other{"{0} ppm"}
+                one{"{0} પીપીએમ"}
+                other{"{0} પીપીએમ"}
+            }
+            percent{
+                dnam{"ટકા"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"પ્રતિમાઈલ"}
+                one{"{0}‰"}
+                other{"{0}‰"}
             }
         }
         consumption{
@@ -1158,6 +1197,7 @@ gu{
             }
         }
         coordinate{
+            dnam{"દિશા"}
             east{"{0}પૂ"}
             north{"{0}ઉ"}
             south{"{0}દ"}
@@ -1203,6 +1243,11 @@ gu{
                 dnam{"MB"}
                 one{"{0} MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"પીબાઈટ"}
+                one{"{0} પીબી"}
+                other{"{0} પીબી"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1553,6 +1598,11 @@ gu{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 one{"{0} hPa"}

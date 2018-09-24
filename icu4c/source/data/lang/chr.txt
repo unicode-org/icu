@@ -424,7 +424,7 @@ chr{
         Grek{"ᎪᎢ"}
         Gujr{"ᎫᏣᎳᏘ"}
         Guru{"ᎬᎹᎩ"}
-        Hanb{"ᎭᏂ-ᏆᏉᎼᏬ"}
+        Hanb{"ᎭᏂ ᎾᎿ ᏆᏉᎼᏬ"}
         Hang{"ᎭᏂᎫᎵ"}
         Hani{"ᎭᏂ"}
         Hans{"ᎠᎯᏗᎨ"}
@@ -538,7 +538,7 @@ chr{
             tibt{"ᏘᏇᏔᏂ ᏗᏎᏍᏗ"}
         }
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.2"}
     characterLabelPattern{
         all{"{0} — ᏂᎦᏓ"}
         category-list{"{0}: {1}"}
@@ -560,7 +560,7 @@ chr{
         territory{"ᎢᎬᎾᏕᎾ: {0}"}
     }
     localeDisplayPattern{
-        keyTypePattern{"{0}, {1}"}
+        keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
         separator{"{0}, {1}"}
     }

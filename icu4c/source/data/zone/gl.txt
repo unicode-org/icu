@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 gl{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -550,7 +550,7 @@ gl{
             ec{"Sitka"}
         }
         "America:St_Barthelemy"{
-            ec{"Saint-Barthélemy"}
+            ec{"Saint Barthélemy"}
         }
         "America:St_Johns"{
             ec{"Saint John’s"}
@@ -1774,9 +1774,9 @@ gl{
             ls{"Horario das Illas Fénix"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"Horario de verán de Saint-Pierre-et-Miquelon"}
-            lg{"Horario de Saint-Pierre-et-Miquelon"}
-            ls{"Horario estándar de Saint-Pierre-et-Miquelon"}
+            ld{"Horario de verán de Saint Pierre et Miquelon"}
+            lg{"Horario de Saint Pierre et Miquelon"}
+            ls{"Horario estándar de Saint Pierre et Miquelon"}
         }
         "meta:Pitcairn"{
             ls{"Horario de Pitcairn"}

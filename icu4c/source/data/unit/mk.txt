@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 mk{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -79,13 +79,13 @@ mk{
                 dnam{"квадратни километри"}
                 one{"{0} квадратен километар"}
                 other{"{0} квадратни километри"}
-                per{"{0}/km²"}
+                per{"{0} по квадратен километар"}
             }
             square-meter{
                 dnam{"квадратни метри"}
                 one{"{0} квадратен метар"}
                 other{"{0} квадратни метри"}
-                per{"{0} по метар квадратен"}
+                per{"{0} по квадратен метар"}
             }
             square-mile{
                 dnam{"квадратни милји"}
@@ -104,7 +104,7 @@ mk{
         }
         concentr{
             karat{
-                dnam{"карат"}
+                dnam{"карати"}
                 one{"{0} карат"}
                 other{"{0} карати"}
             }
@@ -122,6 +122,16 @@ mk{
                 dnam{"ppm"}
                 one{"{0} ppm"}
                 other{"{0} ppm"}
+            }
+            percent{
+                dnam{"процент"}
+                one{"{0} процент"}
+                other{"{0} проценти"}
+            }
+            permille{
+                dnam{"промил"}
+                one{"{0} промили"}
+                other{"{0} промили"}
             }
         }
         consumption{
@@ -147,10 +157,11 @@ mk{
             }
         }
         coordinate{
+            dnam{"насока"}
             east{"{0} исток"}
-            north{"{0}С"}
-            south{"{0}Ј"}
-            west{"{0}З"}
+            north{"{0} север"}
+            south{"{0} југ"}
+            west{"{0} запад"}
         }
         digital{
             bit{
@@ -192,6 +203,11 @@ mk{
                 dnam{"мегабајти"}
                 one{"{0} мегабајт"}
                 other{"{0} мегабајти"}
+            }
+            petabyte{
+                dnam{"петабајти"}
+                one{"{0} петабајт"}
+                other{"{0} петабајти"}
             }
             terabit{
                 dnam{"терабитови"}
@@ -552,6 +568,11 @@ mk{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"атмосфери"}
+                one{"{0} атмосфера"}
+                other{"{0} атмосфери"}
+            }
             hectopascal{
                 dnam{"хектопаскали"}
                 one{"{0} хектопаскал"}
@@ -830,6 +851,11 @@ mk{
                 one{"{0} кт"}
                 other{"{0} кт"}
             }
+            percent{
+                dnam{"%"}
+                one{"{0} %"}
+                other{"{0} %"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -847,6 +873,7 @@ mk{
             }
         }
         coordinate{
+            dnam{"насока"}
             east{"{0}И"}
             north{"{0}С"}
             south{"{0}Ј"}
@@ -1427,6 +1454,16 @@ mk{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"процент"}
+                one{"{0} %"}
+                other{"{0} %"}
+            }
+            permille{
+                dnam{"промили"}
+                one{"{0} ‰"}
+                other{"{0} ‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1451,6 +1488,7 @@ mk{
             }
         }
         coordinate{
+            dnam{"насока"}
             east{"{0}И"}
             north{"{0}С"}
             south{"{0}Ј"}
@@ -1496,6 +1534,11 @@ mk{
                 dnam{"MByte"}
                 one{"{0} MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                one{"{0} PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tbit"}
@@ -1856,6 +1899,11 @@ mk{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"атм"}
+                one{"{0} атм"}
+                other{"{0} атм"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 one{"{0} hPa"}

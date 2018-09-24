@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 br{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -1282,11 +1282,11 @@ br{
             }
             fathom{
                 dnam{"fm"}
-                few{"{0} fm"}
-                many{"{0} fm"}
-                one{"{0} fm"}
-                other{"{0} fm"}
-                two{"{0} fm"}
+                few{"{0} ftm"}
+                many{"{0} ftm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
+                two{"{0} ftm"}
             }
             foot{
                 dnam{"′"}
@@ -2219,11 +2219,11 @@ br{
             }
             fathom{
                 dnam{"fm"}
-                few{"{0} fm"}
-                many{"{0} fm"}
-                one{"{0} fm"}
-                other{"{0} fm"}
-                two{"{0} fm"}
+                few{"{0} ftm"}
+                many{"{0} ftm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
+                two{"{0} ftm"}
             }
             foot{
                 dnam{"ft"}

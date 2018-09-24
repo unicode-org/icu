@@ -13,9 +13,9 @@ ca{
         colStrength{"Força de l’ordenació"}
         collation{"ordenació"}
         currency{"moneda"}
-        hc{"sistema horari (12h o 24h)"}
+        hc{"sistema horari (12 h o 24 h)"}
         lb{"estil de salt de línia"}
-        ms{"Sistema de mesures"}
+        ms{"sistema de mesures"}
         numbers{"xifres"}
         timezone{"Zona horària"}
         va{"Variant local"}
@@ -59,7 +59,7 @@ ca{
         av{"àvar"}
         awa{"awadhi"}
         ay{"aimara"}
-        az{"àzeri"}
+        az{"azerbaidjanès"}
         ba{"baixkir"}
         bal{"balutxi"}
         ban{"balinès"}
@@ -67,7 +67,7 @@ ca{
         bas{"basa"}
         bax{"bamum"}
         bbj{"ghomala"}
-        be{"bielorús"}
+        be{"belarús"}
         bej{"beja"}
         bem{"bemba"}
         bez{"bena"}
@@ -78,7 +78,7 @@ ca{
         bho{"bhojpuri"}
         bi{"bislama"}
         bik{"bicol"}
-        bin{"bini"}
+        bin{"edo"}
         bkm{"kom"}
         bla{"blackfoot"}
         bm{"bambara"}
@@ -92,7 +92,7 @@ ca{
         bss{"akoose"}
         bua{"buriat"}
         bug{"bugui"}
-        bum{"seki"}
+        bum{"bulu"}
         byn{"bilin"}
         byv{"medumba"}
         ca{"català"}
@@ -101,7 +101,7 @@ ca{
         cay{"cayuga"}
         cch{"atsam"}
         ce{"txetxè"}
-        ceb{"cebuano"}
+        ceb{"cebuà"}
         cgg{"chiga"}
         ch{"chamorro"}
         chb{"txibtxa"}
@@ -130,7 +130,7 @@ ca{
         dav{"taita"}
         de{"alemany"}
         de_AT{"alemany austríac"}
-        de_CH{"alt alemany suís"}
+        de_CH{"alemany estàndard suís"}
         del{"delaware"}
         den{"slavi"}
         dgr{"dogrib"}
@@ -353,12 +353,12 @@ ca{
         mic{"micmac"}
         min{"minangkabau"}
         mk{"macedoni"}
-        ml{"malaialam"}
+        ml{"malaiàlam"}
         mn{"mongol"}
         mnc{"manxú"}
         mni{"manipurí"}
         moh{"mohawk"}
-        mos{"moré"}
+        mos{"moore"}
         mr{"marathi"}
         mrj{"mari occidental"}
         ms{"malai"}
@@ -413,10 +413,10 @@ ca{
         osa{"osage"}
         ota{"turc otomà"}
         pa{"panjabi"}
-        pag{"pangasi"}
+        pag{"pangasinan"}
         pal{"pahlavi"}
         pam{"pampanga"}
-        pap{"papiamentu"}
+        pap{"papiament"}
         pau{"palauà"}
         pcd{"picard"}
         pcm{"pidgin de Nigèria"}
@@ -564,7 +564,7 @@ ca{
         vun{"vunjo"}
         wa{"való"}
         wae{"walser"}
-        wal{"ameto"}
+        wal{"wolaita"}
         war{"waray"}
         was{"washo"}
         wbp{"warlpiri"}
@@ -578,7 +578,7 @@ ca{
         yap{"yapeà"}
         yav{"yangben"}
         ybb{"yemba"}
-        yi{"jiddisch"}
+        yi{"ídix"}
         yo{"ioruba"}
         yue{"cantonès"}
         za{"zhuang"}
@@ -650,7 +650,7 @@ ca{
         Grek{"grec"}
         Gujr{"gujarati"}
         Guru{"gurmukhi"}
-        Hanb{"hanb"}
+        Hanb{"han amb bopomofo"}
         Hang{"hangul"}
         Hani{"han"}
         Hano{"hanunoo"}
@@ -875,8 +875,8 @@ ca{
             strict{"salt de línia estricte"}
         }
         m0{
-            bgn{"BGN"}
-            ungegn{"UNGEGN"}
+            bgn{"sistema de transliteració BGN"}
+            ungegn{"sistema de transliteració UNGEGN"}
         }
         ms{
             metric{"sistema mètric"}
@@ -902,13 +902,13 @@ ca{
             guru{"dígits gurmukhi"}
             hanidec{"nombres decimals xinesos"}
             hans{"nombres xinesos simplificats"}
-            hansfin{"numerals financers xinesos simplificats"}
-            hant{"numerals xinesos tradicionals"}
-            hantfin{"numerals financers xinesos tradicionals"}
-            hebr{"numerals hebreus"}
+            hansfin{"nombres financers xinesos simplificats"}
+            hant{"nombres xinesos tradicionals"}
+            hantfin{"nombres financers xinesos tradicionals"}
+            hebr{"nombres hebreus"}
             java{"dígits javanesos"}
-            jpan{"numerals japonesos"}
-            jpanfin{"numerals financers japonesos"}
+            jpan{"nombres japonesos"}
+            jpanfin{"nombres financers japonesos"}
             kali{"dígits kayah"}
             khmr{"dígits khmer"}
             knda{"dígits kannada"}
@@ -935,7 +935,7 @@ ca{
             taml{"nombres tamils tradicionals"}
             tamldec{"dígits tamils"}
             telu{"dígits telugu"}
-            thai{"dígits thai"}
+            thai{"dígits tai"}
             tibt{"dígits tibetans"}
             traditional{"Numerals tradicionals"}
             vaii{"dígits vai"}
@@ -999,7 +999,7 @@ ca{
         VALLADER{"baix engiadinès"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     characterLabelPattern{
         all{"{0} — tot"}
         category-list{"{0}: {1}"}

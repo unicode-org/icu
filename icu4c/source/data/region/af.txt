@@ -15,7 +15,7 @@ af{
         018{"Suider-Afrika"}
         019{"Amerikas"}
         021{"Noordelike Amerika"}
-        029{"Karibies"}
+        029{"Karibiese streek"}
         030{"Oos-Asië"}
         034{"Suid-Asië"}
         035{"Suidoos-Asië"}
@@ -227,7 +227,7 @@ af{
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Katar"}
-        QO{"Omliggende Oseanië"}
+        QO{"Afgeleë Oseanië"}
         RE{"Réunion"}
         RO{"Roemenië"}
         RS{"Serwië"}
@@ -310,5 +310,5 @@ af{
         FK{"Falklandeilande (Malvinas)"}
         MK{"Macedonië (VJRM)"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
 }

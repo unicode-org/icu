@@ -446,7 +446,7 @@ public class TestMessageFormat extends TestFmwk {
         // ICU 62: use the unknown currency symbol XXX.
         //String compareStrEng = "At <time> on Aug 8, 1997, you made a deposit of $456.83.";
         String compareStrEng = "At <time> on Aug 8, 1997, you made a deposit of ";
-        compareStrEng += "XXX\u00a0";
+        compareStrEng += "\u00a4";
         compareStrEng += "456.83.";
         // {sfb} to get DM, would need Locale::GERMANY, not Locale::GERMAN
         // Just use unlocalized currency symbol.
@@ -913,7 +913,7 @@ public class TestMessageFormat extends TestFmwk {
         String compareStr = "At <time> on Aug 8, 1997, you made a deposit of $456.83.";
         // the date being German-style, but the currency being English-style
         String compareStr2 = "At <time> on 08.08.1997, you made a deposit of ";
-        compareStr2 += "XXX\u00A0";
+        compareStr2 += "\u00A4";
         compareStr2 += "456.83.";
         // both date and currency formats are German-style
         String compareStr3 = "At <time> on 08.08.1997, you made a deposit of ";

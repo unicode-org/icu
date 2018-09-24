@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ga{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -183,6 +183,22 @@ ga{
                 other{"{0} sa mhilliún"}
                 two{"{0} sa mhilliún"}
             }
+            percent{
+                dnam{"faoin gcéad"}
+                few{"{0}%"}
+                many{"{0}%"}
+                one{"{0} faoin gcéad"}
+                other{"{0} faoin gcéad"}
+                two{"{0}%"}
+            }
+            permille{
+                dnam{"faoin míle"}
+                few{"{0}‰"}
+                many{"{0}‰"}
+                one{"{0} faoin míle"}
+                other{"{0} faoin míle"}
+                two{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -219,6 +235,7 @@ ga{
             }
         }
         coordinate{
+            dnam{"treo chairdinéil"}
             east{"{0}O"}
             north{"{0}T"}
             south{"{0}D"}
@@ -288,6 +305,14 @@ ga{
                 one{"{0} mheigibheart"}
                 other{"{0} meigibheart"}
                 two{"{0} mheigibheart"}
+            }
+            petabyte{
+                dnam{"peitibheart"}
+                few{"{0} PB"}
+                many{"{0} PB"}
+                one{"{0} peitibheart"}
+                other{"{0} petabytes"}
+                two{"{0} PB"}
             }
             terabit{
                 dnam{"teirighiotáin"}
@@ -843,6 +868,14 @@ ga{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmaisféar"}
+                few{"{0} atm"}
+                many{"{0} atm"}
+                one{"{0} atmaisféar"}
+                other{"{0} atmaisféar"}
+                two{"{0} atm"}
+            }
             hectopascal{
                 dnam{"heicteapascail"}
                 few{"{0} heicteapascal"}
@@ -1336,6 +1369,14 @@ ga{
                 other{"{0}/milliún"}
                 two{"{0}/milliún"}
             }
+            percent{
+                dnam{"%"}
+                few{"{0}%"}
+                many{"{0}%"}
+                one{"{0}%"}
+                other{"{0}%"}
+                two{"{0}%"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1372,6 +1413,7 @@ ga{
             }
         }
         coordinate{
+            dnam{"treo"}
             east{"{0}O"}
             north{"{0}T"}
             south{"{0}D"}
@@ -1702,11 +1744,11 @@ ga{
             }
             fathom{
                 dnam{"feá"}
-                few{"{0} fm"}
-                many{"{0} fm"}
-                one{"{0} fm"}
-                other{"{0} fm"}
-                two{"{0} fm"}
+                few{"{0} ftm"}
+                many{"{0} ftm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
+                two{"{0} ftm"}
             }
             foot{
                 dnam{"tr"}
@@ -2489,6 +2531,22 @@ ga{
                 other{"{0}/milliún"}
                 two{"{0}/milliún"}
             }
+            percent{
+                dnam{"faoin gcéad"}
+                few{"{0}%"}
+                many{"{0}%"}
+                one{"{0}%"}
+                other{"{0}%"}
+                two{"{0}%"}
+            }
+            permille{
+                dnam{"faoin míle"}
+                few{"{0}‰"}
+                many{"{0}‰"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+                two{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -2525,6 +2583,7 @@ ga{
             }
         }
         coordinate{
+            dnam{"treo"}
             east{"{0}O"}
             north{"{0}T"}
             south{"{0}D"}
@@ -2594,6 +2653,14 @@ ga{
                 one{"{0} MB"}
                 other{"{0} MB"}
                 two{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PBheart"}
+                few{"{0} PB"}
+                many{"{0} PB"}
+                one{"{0} PB"}
+                other{"{0} PB"}
+                two{"{0} PB"}
             }
             terabit{
                 dnam{"Tb"}
@@ -2855,11 +2922,11 @@ ga{
             }
             fathom{
                 dnam{"feánna"}
-                few{"{0} fm"}
-                many{"{0} fm"}
-                one{"{0} fm"}
-                other{"{0} fm"}
-                two{"{0} fm"}
+                few{"{0} ftm"}
+                many{"{0} ftm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
+                two{"{0} ftm"}
             }
             foot{
                 dnam{"troithe"}
@@ -3149,6 +3216,14 @@ ga{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                few{"{0} atm"}
+                many{"{0} atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+                two{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 few{"{0} hPa"}

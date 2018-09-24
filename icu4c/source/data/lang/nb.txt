@@ -741,7 +741,7 @@ nb{
         Ogam{"ogham"}
         Olck{"ol-chiki"}
         Orkh{"orkhon"}
-        Orya{"oriya"}
+        Orya{"odia"}
         Osma{"osmanya"}
         Palm{"palmyrensk"}
         Pauc{"pau cin hau"}
@@ -753,54 +753,6 @@ nb{
         Phnx{"fønikisk"}
         Plrd{"pollard-fonetisk"}
         Prti{"inskripsjonsparthisk"}
-        Qaaa{"qaaa"}
-        Qaab{"qaab"}
-        Qaac{"qaac"}
-        Qaad{"qaad"}
-        Qaae{"qaae"}
-        Qaaf{"qaaf"}
-        Qaag{"qaag"}
-        Qaah{"qaah"}
-        Qaak{"qaak"}
-        Qaal{"qaal"}
-        Qaam{"qaam"}
-        Qaan{"qaan"}
-        Qaao{"qaao"}
-        Qaap{"qaap"}
-        Qaaq{"qaaq"}
-        Qaar{"qaar"}
-        Qaas{"qaas"}
-        Qaat{"qaat"}
-        Qaau{"qaau"}
-        Qaav{"qaav"}
-        Qaaw{"qaaw"}
-        Qaax{"qaax"}
-        Qaay{"qaay"}
-        Qaaz{"qaaz"}
-        Qaba{"qaba"}
-        Qabb{"qabb"}
-        Qabc{"qabc"}
-        Qabd{"qabd"}
-        Qabe{"qabe"}
-        Qabf{"qafb"}
-        Qabg{"qabg"}
-        Qabh{"qabh"}
-        Qabi{"qabi"}
-        Qabj{"qabj"}
-        Qabk{"qabk"}
-        Qabl{"qabl"}
-        Qabm{"qabm"}
-        Qabn{"qabn"}
-        Qabo{"qabo"}
-        Qabp{"qabp"}
-        Qabq{"qabq"}
-        Qabr{"qabr"}
-        Qabs{"qabs"}
-        Qabt{"qabt"}
-        Qabu{"qabu"}
-        Qabv{"qabv"}
-        Qabw{"qabw"}
-        Qabx{"qabx"}
         Rjng{"rejang"}
         Roro{"rongorongo"}
         Runr{"runer"}
@@ -813,7 +765,7 @@ nb{
         Shrd{"sharada"}
         Sidd{"siddham"}
         Sind{"khudawadi"}
-        Sinh{"sinhala"}
+        Sinh{"singalesisk"}
         Sora{"sora sompeng"}
         Sund{"sundanesisk"}
         Sylo{"syloti nagri"}
@@ -1097,7 +1049,7 @@ nb{
         VALLADER{"vallader"}
         WADEGILE{"Wade-Giles-romanisering"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.44.2"}
     characterLabelPattern{
         all{"{0} – alt"}
         category-list{"{0}: {1}"}

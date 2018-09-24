@@ -61,7 +61,7 @@ ro{
         bas{"basaa"}
         bax{"bamun"}
         bbj{"ghomala"}
-        be{"bielorusă"}
+        be{"belarusă"}
         bej{"beja"}
         bem{"bemba"}
         bez{"bena"}
@@ -147,6 +147,7 @@ ro{
         enm{"engleză medie"}
         eo{"esperanto"}
         es{"spaniolă"}
+        es_ES{"spaniolă (Europa)"}
         et{"estonă"}
         eu{"bască"}
         ewo{"ewondo"}
@@ -214,7 +215,7 @@ ro{
         id{"indoneziană"}
         ie{"interlingue"}
         ig{"igbo"}
-        ii{"sichuan yi"}
+        ii{"yi din Sichuan"}
         ik{"inupiak"}
         ilo{"iloko"}
         inh{"ingușă"}
@@ -287,7 +288,7 @@ ro{
         ln{"lingala"}
         lo{"laoțiană"}
         lol{"mongo"}
-        lou{"creolă louisianeză"}
+        lou{"creolă (Louisiana)"}
         loz{"lozi"}
         lrc{"luri de nord"}
         lt{"lituaniană"}
@@ -394,6 +395,7 @@ ro{
         pro{"provensală veche"}
         ps{"paștună"}
         pt{"portugheză"}
+        pt_PT{"portugheză (Europa)"}
         qu{"quechua"}
         quc{"quiché"}
         raj{"rajasthani"}
@@ -440,9 +442,9 @@ ro{
         sl{"slovenă"}
         sm{"samoană"}
         sma{"sami de sud"}
-        smj{"lule sami"}
-        smn{"inari sami"}
-        sms{"skolt sami"}
+        smj{"sami lule"}
+        smn{"sami inari"}
+        sms{"sami skolt"}
         sn{"shona"}
         snk{"soninke"}
         so{"somaleză"}
@@ -496,7 +498,7 @@ ro{
         twq{"tasawaq"}
         ty{"tahitiană"}
         tyv{"tuvană"}
-        tzm{"tamazight central marocană"}
+        tzm{"tamazight din Altasul Central"}
         udm{"udmurt"}
         ug{"uigură"}
         uga{"ugaritică"}
@@ -535,6 +537,7 @@ ro{
         zen{"zenaga"}
         zgh{"tamazight standard marocană"}
         zh{"chineză"}
+        zh_Hans{"chineză simplificată"}
         zh_Hant{"chineză tradițională"}
         zu{"zulu"}
         zun{"zuni"}
@@ -778,7 +781,7 @@ ro{
         SCOTLAND{"engleză standard scoțiană"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     characterLabelPattern{
         all{"{0} – toate"}
         category-list{"{0}: {1}"}

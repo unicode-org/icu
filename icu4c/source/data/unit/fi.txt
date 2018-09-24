@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fi{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.61"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -123,6 +123,16 @@ fi{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"prosentit"}
+                one{"{0} prosentti"}
+                other{"{0} prosenttia"}
+            }
+            permille{
+                dnam{"promillet"}
+                one{"{0} promille"}
+                other{"{0} promillea"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ fi{
             }
         }
         coordinate{
+            dnam{"pääilmansuunta"}
             east{"{0}I"}
             north{"{0}P"}
             south{"{0}E"}
@@ -192,6 +203,11 @@ fi{
                 dnam{"megatavut"}
                 one{"{0} megatavu"}
                 other{"{0} megatavua"}
+            }
+            petabyte{
+                dnam{"petatavut"}
+                one{"{0} petatavu"}
+                other{"{0} petatavua"}
             }
             terabit{
                 dnam{"terabitit"}
@@ -552,6 +568,11 @@ fi{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"normaali-ilmakehät"}
+                one{"{0} normaali-ilmakehä"}
+                other{"{0} normaali-ilmakehää"}
+            }
             hectopascal{
                 dnam{"hehtopascalit"}
                 one{"{0} hehtopascal"}
@@ -871,6 +892,11 @@ fi{
                 one{"{0}ppm"}
                 other{"{0}ppm"}
             }
+            percent{
+                dnam{"%"}
+                one{"{0} %"}
+                other{"{0} %"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -895,6 +921,7 @@ fi{
             }
         }
         coordinate{
+            dnam{"suunta"}
             east{"{0}I"}
             north{"{0}P"}
             south{"{0}E"}
@@ -940,6 +967,11 @@ fi{
                 dnam{"Mt"}
                 one{"{0}Mt"}
                 other{"{0}Mt"}
+            }
+            petabyte{
+                dnam{"Pt"}
+                one{"{0}Pt"}
+                other{"{0}Pt"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1111,8 +1143,8 @@ fi{
             }
             fathom{
                 dnam{"fm"}
-                one{"{0}fm"}
-                other{"{0}fm"}
+                one{"{0}ftm"}
+                other{"{0}ftm"}
             }
             foot{
                 dnam{"ft"}
@@ -1614,6 +1646,16 @@ fi{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"%"}
+                one{"{0} %"}
+                other{"{0} %"}
+            }
+            permille{
+                dnam{"‰"}
+                one{"{0} ‰"}
+                other{"{0} ‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1638,6 +1680,7 @@ fi{
             }
         }
         coordinate{
+            dnam{"ilmansuunta"}
             east{"{0}I"}
             north{"{0}P"}
             south{"{0}E"}
@@ -1683,6 +1726,11 @@ fi{
                 dnam{"Mt"}
                 one{"{0} Mt"}
                 other{"{0} Mt"}
+            }
+            petabyte{
+                dnam{"Pt"}
+                one{"{0} Pt"}
+                other{"{0} Pt"}
             }
             terabit{
                 dnam{"Tb"}
@@ -1854,8 +1902,8 @@ fi{
             }
             fathom{
                 dnam{"fm"}
-                one{"{0} fm"}
-                other{"{0} fm"}
+                one{"{0} ftm"}
+                other{"{0} ftm"}
             }
             foot{
                 dnam{"ft"}
@@ -2043,6 +2091,11 @@ fi{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"hPa"}
                 one{"{0} hPa"}

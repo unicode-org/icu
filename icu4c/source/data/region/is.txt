@@ -77,7 +77,7 @@ is{
         CF{"Mið-Afríkulýðveldið"}
         CG{"Kongó-Brazzaville"}
         CH{"Sviss"}
-        CI{"Côte d’Ivoire"}
+        CI{"Fílabeinsströndin"}
         CK{"Cooks-eyjar"}
         CL{"Síle"}
         CM{"Kamerún"}
@@ -306,10 +306,9 @@ is{
     Countries%variant{
         CD{"Kongó (Lýðstjórnarlýðveldið)"}
         CG{"Kongó (Lýðveldið)"}
-        CI{"Fílabeinsströndin"}
         FK{"Falklandseyjar (Malvinas)"}
         MK{"Makedónía (Fyrrverandi lýðveldi Júgóslavíu)"}
         TL{"Austur-Tímor"}
     }
-    Version{"2.1.41.97"}
+    Version{"2.1.43.65"}
 }

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 uz{
-    Version{"2.1.41.97"}
+    Version{"2.1.43.94"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -123,6 +123,16 @@ uz{
                 one{"milliondan {0}"}
                 other{"milliondan {0}"}
             }
+            percent{
+                dnam{"foiz"}
+                one{"{0} foiz"}
+                other{"{0} foiz"}
+            }
+            permille{
+                dnam{"promille"}
+                one{"{0} promille"}
+                other{"{0} promille"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -147,6 +157,7 @@ uz{
             }
         }
         coordinate{
+            dnam{"yo‘nalish"}
             east{"{0} sharqiy uzunlik"}
             north{"{0} shimoliy kenglik"}
             south{"{0} janubiy kenglik"}
@@ -192,6 +203,11 @@ uz{
                 dnam{"megabayt"}
                 one{"{0} megabayt"}
                 other{"{0} megabayt"}
+            }
+            petabyte{
+                dnam{"petabayt"}
+                one{"{0} petabayt"}
+                other{"{0} petabayt"}
             }
             terabit{
                 dnam{"terabit"}
@@ -537,6 +553,11 @@ uz{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atmosfera"}
+                one{"{0} atmosfera"}
+                other{"{0} atmosfera"}
+            }
             hectopascal{
                 dnam{"gektopaskal"}
                 one{"{0} gektopaskal"}
@@ -785,6 +806,13 @@ uz{
         compound{
             per{"{0}/{1}"}
         }
+        concentr{
+            percent{
+                dnam{"%"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+        }
         consumption{
             liter-per-100kilometers{
                 dnam{"L/100 km"}
@@ -793,6 +821,7 @@ uz{
             }
         }
         coordinate{
+            dnam{"yo‘nalish"}
             east{"{0} shq. u."}
             north{"{0} shm. k."}
             south{"{0} jan. k."}
@@ -1092,6 +1121,16 @@ uz{
                 one{"{0} ppm"}
                 other{"{0} ppm"}
             }
+            percent{
+                dnam{"foiz"}
+                one{"{0}%"}
+                other{"{0}%"}
+            }
+            permille{
+                dnam{"promille"}
+                one{"{0}‰"}
+                other{"{0}‰"}
+            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1116,6 +1155,7 @@ uz{
             }
         }
         coordinate{
+            dnam{"yo‘nalish"}
             east{"{0} shq. u."}
             north{"{0} shm. k."}
             south{"{0} jan. k."}
@@ -1161,6 +1201,11 @@ uz{
                 dnam{"MB"}
                 one{"{0} MB"}
                 other{"{0} MB"}
+            }
+            petabyte{
+                dnam{"PB"}
+                one{"{0} PB"}
+                other{"{0} PB"}
             }
             terabit{
                 dnam{"Tbit"}
@@ -1506,6 +1551,11 @@ uz{
             }
         }
         pressure{
+            atmosphere{
+                dnam{"atm"}
+                one{"{0} atm"}
+                other{"{0} atm"}
+            }
             hectopascal{
                 dnam{"gPa"}
                 one{"{0} gPa"}

@@ -403,6 +403,22 @@ void NumberFormatterApiTest::notationCompact() {
             9990000,
             u"10M");
 
+    assertFormatSingle(
+            u"Compact in zh-Hant-HK",
+            u"compact-short",
+            NumberFormatter::with().notation(Notation::compactShort()),
+            Locale("zh-Hant-HK"),
+            1e7,
+            u"10M");
+
+    assertFormatSingle(
+            u"Compact in zh-Hant",
+            u"compact-short",
+            NumberFormatter::with().notation(Notation::compactShort()),
+            Locale("zh-Hant"),
+            1e7,
+            u"1000\u842C");
+
     // NOTE: There is no API for compact custom data in C++
     // and thus no "Compact Somali No Figure" test
 }
@@ -1554,8 +1570,8 @@ void NumberFormatterApiTest::symbols() {
             nullptr,
             NumberFormatter::with().symbols(FRENCH_SYMBOLS),
             Locale::getJapan(),
-            u"87 650",
-            u"8 765",
+            u"87\u202F650",
+            u"8\u202F765",
             u"876,5",
             u"87,65",
             u"8,765",
@@ -1592,8 +1608,8 @@ void NumberFormatterApiTest::symbols() {
             u"numbering-system/mathsanb",
             NumberFormatter::with().adoptSymbols(new NumberingSystem(MATHSANB)),
             Locale::getFrench(),
-            u"𝟴𝟳 𝟲𝟱𝟬",
-            u"𝟴 𝟳𝟲𝟱",
+            u"𝟴𝟳\u202F𝟲𝟱𝟬",
+            u"𝟴\u202F𝟳𝟲𝟱",
             u"𝟴𝟳𝟲,𝟱",
             u"𝟴𝟳,𝟲𝟱",
             u"𝟴,𝟳𝟲𝟱",
@@ -2046,7 +2062,7 @@ void NumberFormatterApiTest::locale() {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString actual = NumberFormatter::withLocale(Locale::getFrench()).formatInt(1234, status)
             .toString();
-    assertEquals("Locale withLocale()", u"1 234", actual);
+    assertEquals("Locale withLocale()", u"1\u202f234", actual);
 }
 
 void NumberFormatterApiTest::formatTypes() {
