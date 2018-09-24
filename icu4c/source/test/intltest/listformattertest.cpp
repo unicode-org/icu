@@ -20,6 +20,8 @@
 #include "unicode/ulistformatter.h"
 #include <string.h>
 
+#if !UCONFIG_NO_FORMATTING
+
 namespace {
 const char* attrString(int32_t attrId) {
   switch (attrId) {
@@ -583,3 +585,5 @@ void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
         default: name = ""; break;
     }
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
