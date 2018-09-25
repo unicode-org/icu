@@ -6104,7 +6104,6 @@ static const struct {
     {"sgn-br-u-co-phonebk", "bzs@collation=phonebook", FULL_LENGTH},
     {"ja-latn-hepburn-heploc", "ja_Latn__ALALC97", FULL_LENGTH},
     {"ja-latn-hepburn-heploc-u-ca-japanese", "ja_Latn__ALALC97@calendar=japanese", FULL_LENGTH},
-    {NULL,          NULL,           0}
 };
 
 static void TestForLanguageTag(void) {
@@ -6114,7 +6113,7 @@ static void TestForLanguageTag(void) {
     int32_t parsedLen;
     int32_t expParsedLen;
 
-    for (i = 0; langtag_to_locale[i].bcpID != NULL; i++) {
+    for (i = 0; i < UPRV_LENGTHOF(langtag_to_locale); i++) {
         status = U_ZERO_ERROR;
         locale[0] = 0;
         expParsedLen = langtag_to_locale[i].len;
@@ -6178,7 +6177,6 @@ static const struct {
     {"mo-md", "ro-MD"},
     {"my-bu-u-nu-mymr", "my-MM-u-nu-mymr"},
     {"yuu-ru", "yug-RU"},
-    {NULL, NULL},
 };
 
 
@@ -6187,7 +6185,7 @@ static void TestLangAndRegionCanonicalize(void) {
     char canonical[256];
     int32_t i;
     UErrorCode status;
-    for (i = 0; langtag_to_canonical[i].input != NULL; i++) {
+    for (i = 0; i < UPRV_LENGTHOF(langtag_to_canonical); i++) {
         status = U_ZERO_ERROR;
         const char* input = langtag_to_canonical[i].input;
         uloc_forLanguageTag(input, locale, sizeof(locale), NULL, &status);

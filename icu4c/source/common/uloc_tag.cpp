@@ -130,7 +130,6 @@ static const char* const GRANDFATHERED[] = {
     "i-enochian",   "und-x-i-enochian",
     "i-mingo",      "see-x-i-mingo",
     "zh-min",       "nan-x-zh-min",
-    nullptr,        nullptr
 };
 
 /*
@@ -179,7 +178,6 @@ static const char* const REDUNDANT[] = {
 
     // variant tag with preferred value
     "ja-latn-hepburn-heploc", "ja-latn-alalc97",
-    nullptr,        nullptr
 };
 
 /*
@@ -2103,7 +2101,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     }
 
     /* check if the tag is grandfathered */
-    for (i = 0; GRANDFATHERED[i] != NULL; i += 2) {
+    for (i = 0; i < UPRV_LENGTHOF(GRANDFATHERED); i += 2) {
         if (uprv_stricmp(GRANDFATHERED[i], tagBuf) == 0) {
             int32_t newTagLength;
 
@@ -2127,7 +2125,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
 
     size_t parsedLenDelta = 0;
     if (grandfatheredLen == 0) {
-        for (i = 0; REDUNDANT[i] != nullptr; i += 2) {
+        for (i = 0; i < UPRV_LENGTHOF(REDUNDANT); i += 2) {
             const char* redundantTag = REDUNDANT[i];
             size_t redundantTagLen = uprv_strlen(redundantTag);
             // The preferred tag for a redundant tag is always shorter than redundant
