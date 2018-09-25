@@ -1295,7 +1295,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
 #ifndef U_HIDE_INTERNAL_API
     /**
      * Whether to show the plus sign on positive (non-negative) numbers; for example, "+12"
-     * @preview
+     * @internal Technical Preview
      */
     UBool isSignAlwaysShown() const;
 #endif  /* U_HIDE_INTERNAL_API */
@@ -1303,7 +1303,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     /**
      * Set whether to show the plus sign on positive (non-negative) numbers; for example, "+12"
      * @param value The new setting for whether to show plus sign on positive numbers
-     * @preview
+     * @internal Technical Preview
      */
     virtual void setSignAlwaysShown(UBool value);
 
@@ -1675,7 +1675,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      *
      * @see setMinimumGroupingDigits
      * @see getGroupingSize
-     * @preview
+     * @internal technology preview
      */
     int32_t getMinimumGroupingDigits() const;
 
@@ -1688,7 +1688,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      *
      * @param newValue the new value of minimum grouping digits.
      * @see getMinimumGroupingDigits
-     * @preview
+     * @internal technology preview
      */
     virtual void setMinimumGroupingDigits(int32_t newValue);
 
@@ -1736,7 +1736,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * Returns whether to ignore exponents when parsing.
      *
      * @see #setParseNoExponent
-     * @preview
+     * @internal This API is a technical preview. It may change in an upcoming release.
      */
     virtual UBool isParseNoExponent() const;
 
@@ -1746,7 +1746,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * 5).
      *
      * @param value true to prevent exponents from being parsed; false to allow them to be parsed.
-     * @preview
+     * @internal This API is a technical preview. It may change in an upcoming release.
      */
     virtual void setParseNoExponent(UBool value);
 
@@ -1754,7 +1754,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * Returns whether parsing is sensitive to case (lowercase/uppercase).
      *
      * @see #setParseCaseSensitive
-     * @preview
+     * @internal This API is a technical preview. It may change in an upcoming release.
      */
     virtual UBool isParseCaseSensitive() const;
 
@@ -1765,7 +1765,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * Currency symbols are never case-folded. For example, "us$1.00" will not parse in case-insensitive
      * mode, even though "US$1.00" parses.
      *
-     * @preview
+     * @internal This API is a technical preview. It may change in an upcoming release.
      */
     virtual void setParseCaseSensitive(UBool value);
 
@@ -1774,7 +1774,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * By default, setMaximumIntegerDigits truncates high-order digits silently.
      *
      * @see setFormatFailIfMoreThanMaxDigits
-     * @preview
+     * @internal This API is a technical preview. It may change in an upcoming release.
      */
     virtual UBool isFormatFailIfMoreThanMaxDigits() const;
 
@@ -1782,7 +1782,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * Sets whether truncation of high-order integer digits should result in an error.
      * By default, setMaximumIntegerDigits truncates high-order digits silently.
      *
-     * @preview
+     * @internal This API is a technical preview. It may change in an upcoming release.
      */
     virtual void setFormatFailIfMoreThanMaxDigits(UBool value);
 
