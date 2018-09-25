@@ -1332,7 +1332,7 @@ public:
 };
 
 // Out-of-line virtual destructor to serve as the "key function".
-UnicodeKeywordEnumeration::~UnicodeKeywordEnumeration() {}
+UnicodeKeywordEnumeration::~UnicodeKeywordEnumeration() = default;
 
 StringEnumeration *
 Locale::createKeywords(UErrorCode &status) const
