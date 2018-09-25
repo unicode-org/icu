@@ -124,7 +124,7 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
     int32_t numEras = ures_getSize(rb.getAlias());
     int32_t firstTentativeIdx = MAX_INT32;
 
-    LocalMemory<int32_t> startDates(reinterpret_cast<int32_t *>(uprv_malloc(numEras * 4)));
+    LocalMemory<int32_t> startDates(static_cast<int32_t *>(uprv_malloc(numEras * sizeof(int32_t))));
     if (startDates.isNull()) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
