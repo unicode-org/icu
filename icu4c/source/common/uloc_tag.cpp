@@ -94,8 +94,8 @@ static const char LOCALE_TYPE_YES[] = "yes";
 
 
  The 2nd part is made of five ICU-specific entries. They're kept for
- the backward compatibility for now even though there are no preferred value.
- They may have to be removed for the strict BCP 47 compliance.
+ the backward compatibility for now, even though there are no preferred
+ values. They may have to be removed for the strict BCP 47 compliance.
 
 */
 static const char* const GRANDFATHERED[] = {
