@@ -160,9 +160,8 @@ library: common
     static_unicode_sets
     uiter edits
     ucasemap ucasemap_titlecase_brkiter script_runs
-    uprops ubidi_props ucase uscript uscript_props
+    uprops ubidi_props ucase uscript uscript_props characterproperties
     ubidi ushape ubiditransform
-    listformatter
     resourcebundle service_registration resbund_cnv ures_cnv icudataver ucat
     currency
     locale_display_names2
@@ -174,7 +173,7 @@ library: common
     ucharstriebuilder ucharstrieiterator
     bytestriebuilder bytestrieiterator
     hashtable uhash uvector uvector32 uvector64 ulist
-    propsvec utrie2 utrie2_builder
+    propsvec utrie2 utrie2_builder ucptrie umutablecptrie utrie_swap
     sort
     uinit utypes errorcode
     icuplug
@@ -206,7 +205,7 @@ group: breakiterator
   deps
     resourcebundle service_registration
     schriter utext uniset_core uniset_props
-    uhash ustack utrie
+    uhash ustack utrie2_builder
     ucharstrie bytestrie
     ucharstriebuilder  # for filteredbrk.o
     normlzr  # for dictbe.o, should switch to Normalizer2
@@ -256,7 +255,7 @@ group: stringprep
   deps
     unorm  # could change to use filterednormalizer2 directly for Unicode 3.2 normalization
     normalizer2
-    ubidi_props
+    ubidi_props utrie
 
 group: canonical_iterator
     caniter.o
@@ -274,7 +273,8 @@ group: normalizer2
   deps
     uniset_core
     bytestream bytesinkutil  # for UTF-8 output
-    utrie2_builder  # for building CanonIterData & FCD
+    umutablecptrie  # for building CanonIterData & FCD
+    utrie_swap  # TODO(ICU-20170): move unorm2_swap() to a separate file
     uvector  # for building CanonIterData
     uhash  # for the instance cache
     udata
@@ -307,7 +307,7 @@ group: uniset_closure
 group: uniset_props
     uniset_props.o ruleiter.o
   deps
-    uniset_core uprops unistr_case
+    uniset_core uprops unistr_case characterproperties
     parsepos
     resourcebundle
     propname unames
@@ -397,6 +397,12 @@ group: uprops
     ubidi_props
     unistr_case ustring_case  # only for case folding
     ucase
+
+group: characterproperties
+    characterproperties.o
+  deps
+    uprops
+    uniset_core
 
 group: propname
     propname.o
@@ -524,7 +530,7 @@ group: uinit
 group: converter_selector
     ucnvsel.o
   deps
-    conversion propsvec utrie2_builder uset ucnv_set
+    conversion propsvec utrie2_builder utrie_swap uset ucnv_set
 
 group: ucnvdisp  # ucnv_getDisplayName()
     ucnvdisp.o
@@ -558,11 +564,6 @@ group: service_registration
   deps
     locale_display_names resourcebundle
     hashtable uvector
-
-group: listformatter
-    listformatter.o ulistformatter.o
-  deps
-    resourcebundle simpleformatter
 
 group: ucat  # message-catalog-like API
     ucat.o
@@ -685,20 +686,34 @@ group: propsvec
   deps
     sort utrie2_builder
 
+group: utrie_swap
+    utrie_swap.o
+  deps
+    udata
+
+group: umutablecptrie
+    umutablecptrie.o
+  deps
+    ucptrie
+
+group: ucptrie
+    ucptrie.o
+  deps
+    platform
+
 group: utrie2_builder
     utrie2_builder.o
   deps
     platform
     utrie2
     utrie  # for utrie2_fromUTrie()
-    ucol_swp  # for utrie_swap()
 
-group: utrie2
+group: utrie2  # Try to switch users to ucptrie.
     utrie2.o
   deps
     platform
 
-group: utrie  # Callers should use utrie2 instead.
+group: utrie  # Callers should use ucptrie instead.
     utrie.o
   deps
     platform
@@ -767,7 +782,7 @@ group: icuplug
 group: ucol_swp
     ucol_swp.o
   deps
-    utrie2  # Format version 4 uses UTrie2.
+    utrie_swap
 
 group: errorcode  # ErrorCode base class
     errorcode.o
@@ -812,6 +827,7 @@ library: i18n
     region localedata genderinfo charset_detector spoof_detection
     alphabetic_index collation collation_builder string_search
     dayperiodrules
+    listformatter
     formatting formattable_cnv regex regex_cnv translit
     double_conversion number_representation numberformatter numberparser
     universal_time_scale
@@ -867,7 +883,7 @@ group: collation
     ucol_res.o ucol_sit.o ucoleitr.o
   deps
     bytestream normalizer2 resourcebundle service_registration unifiedcache
-    ucharstrieiterator uiter ulist uset usetiter uvector32 uvector64
+    ucharstrieiterator uiter ulist uset usetiter uvector32 uvector64 utrie2
     uclean_i18n propname
 
 group: collation_builder
@@ -885,6 +901,11 @@ group: dayperiodrules
     dayperiodrules.o
   deps
     resourcebundle uclean_i18n
+
+group: listformatter
+    listformatter.o ulistformatter.o
+  deps
+    resourcebundle simpleformatter format uclean_i18n
 
 group: double_conversion
     double-conversion.o double-conversion-bignum.o double-conversion-bignum-dtoa.o
@@ -914,6 +935,7 @@ group: numberformatter
     number_patternmodifier.o number_patternstring.o number_rounding.o
     number_scientific.o number_skeletons.o
     currpinf.o dcfmtsym.o numsys.o
+    numrange_fluent.o numrange_impl.o
     # pluralrules
     standardplural.o plurrule.o
   deps
@@ -949,6 +971,7 @@ group: formatting
     # dateformat
     astro.o buddhcal.o calendar.o cecal.o chnsecal.o coptccal.o dangical.o ethpccal.o
     gregocal.o gregoimp.o hebrwcal.o indiancal.o islamcal.o japancal.o persncal.o taiwncal.o
+    erarules.o  # mostly for Japanese eras
     ucal.o
     basictz.o olsontz.o rbtz.o simpletz.o timezone.o tzrule.o tztrans.o
     vtzone.o vzone.o wintzimpl.o zonemeta.o zrule.o ztrans.o
@@ -961,6 +984,7 @@ group: formatting
     choicfmt.o msgfmt.o plurfmt.o selfmt.o umsg.o
   deps
     decnumber formattable format units numberformatter numberparser
+    listformatter
     dayperiodrules
     collation collation_builder  # for rbnf
     common

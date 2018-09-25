@@ -99,7 +99,7 @@ static int32_t compareEncodedDateWithYMD(int encoded, int year, int month, int d
     }
 }
 
-EraRules::EraRules(LocalArray<int32_t>& eraStartDates, int32_t numEras)
+EraRules::EraRules(LocalMemory<int32_t>& eraStartDates, int32_t numEras)
     : numEras(numEras) {
     startDates.moveFrom(eraStartDates);
     initCurrentEra();
@@ -116,7 +116,7 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
     ures_getByKey(rb.getAlias(), "calendarData", rb.getAlias(), &status);
     ures_getByKey(rb.getAlias(), calType, rb.getAlias(), &status);
     ures_getByKey(rb.getAlias(), "eras", rb.getAlias(), &status);
-        
+
     if (U_FAILURE(status)) {
         return nullptr;
     }
@@ -124,8 +124,9 @@ EraRules* EraRules::createInstance(const char *calType, UBool includeTentativeEr
     int32_t numEras = ures_getSize(rb.getAlias());
     int32_t firstTentativeIdx = MAX_INT32;
 
-    LocalArray<int32_t> startDates(new int32_t[numEras], status);
-    if (U_FAILURE(status)) {
+    LocalMemory<int32_t> startDates(static_cast<int32_t *>(uprv_malloc(numEras * sizeof(int32_t))));
+    if (startDates.isNull()) {
+        status = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
     uprv_memset(startDates.getAlias(), 0 , numEras * sizeof(int32_t));

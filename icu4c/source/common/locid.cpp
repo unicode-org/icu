@@ -1311,7 +1311,7 @@ KeywordEnumeration::~KeywordEnumeration() {
 class UnicodeKeywordEnumeration : public KeywordEnumeration {
 public:
     using KeywordEnumeration::KeywordEnumeration;
-    virtual ~UnicodeKeywordEnumeration() = default;
+    virtual ~UnicodeKeywordEnumeration();
 
     virtual const char* next(int32_t* resultLength, UErrorCode& status) {
         const char* legacy_key = KeywordEnumeration::next(nullptr, status);
@@ -1330,6 +1330,9 @@ public:
         return nullptr;
     }
 };
+
+// Out-of-line virtual destructor to serve as the "key function".
+UnicodeKeywordEnumeration::~UnicodeKeywordEnumeration() = default;
 
 StringEnumeration *
 Locale::createKeywords(UErrorCode &status) const
