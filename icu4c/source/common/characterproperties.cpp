@@ -28,8 +28,6 @@ using icu::UnicodeSet;
 
 namespace {
 
-U_CDECL_BEGIN
-
 UBool U_CALLCONV characterproperties_cleanup();
 
 struct Inclusion {
@@ -81,8 +79,6 @@ UBool U_CALLCONV characterproperties_cleanup() {
     }
     return TRUE;
 }
-
-U_CDECL_END
 
 }  // namespace
 
