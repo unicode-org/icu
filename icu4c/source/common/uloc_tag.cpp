@@ -1322,6 +1322,7 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
             attrBufIdx += (len + 1);
         } else {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
+            uprv_free(attr);
             goto cleanup;
         }
 
