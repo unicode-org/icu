@@ -637,6 +637,9 @@ public class StableAPI {
         }
 
         private void simplifyPrototype() {
+            if (prototype.startsWith("#define")) {
+                return;
+            }
             final String prototype0 = prototype;
             for (int i = 0; i < simplifyList.length; i+= 2) {
                 prototype = prototype.replaceAll(simplifyList[i+0],simplifyList[i+1]);
