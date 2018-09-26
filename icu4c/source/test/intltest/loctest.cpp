@@ -2950,7 +2950,7 @@ void LocaleTest::TestForLanguageTag() {
     static const char tag_no_nul[] = { 'e', 'n', '-', 'G', 'B' };
 
     static const Locale loc_en("en_US");
-    static const Locale loc_oed("en_GB@x=oed");
+    static const Locale loc_oed("en_GB_OXENDICT");
     static const Locale loc_af("af@calendar=coptic;t=ar-i0-handwrit;x=foo");
     static const Locale loc_null("");
     static const Locale loc_gb("en_GB");
