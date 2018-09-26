@@ -1411,6 +1411,11 @@ void CalendarRegressionTest::test4118384()
 
     delete cal;
     cal = Calendar::createInstance(Locale("th_TH@calendar=buddhist"),status);
+    if(U_FAILURE(status)) {
+      dataerrln("Error creating calendar %s", u_errorName(status));
+      delete cal;
+      return;
+    }    
     // test deprecated functions
     if (cal->getLeastMaximum(Calendar::HOUR) != 11 ||
         cal->getMaximum(Calendar::HOUR) != 11) {
@@ -1425,6 +1430,11 @@ void CalendarRegressionTest::test4118384()
     delete cal;
     // test deprecated functions
     cal = Calendar::createInstance(Locale("ja_JP@calendar=japanese"),status);
+    if(U_FAILURE(status)) {
+      dataerrln("Error creating calendar %s", u_errorName(status));
+      delete cal;
+      return;
+    }    
     if (cal->getLeastMaximum(Calendar::HOUR) != 11 ||
         cal->getMaximum(Calendar::HOUR) != 11) {
         errln("Fail: Japanese:[deprecated functions] maximum of HOUR field should be 11\n");
