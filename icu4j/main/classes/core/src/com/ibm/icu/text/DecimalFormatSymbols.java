@@ -144,8 +144,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @param locale the locale.
      * @param ns the numbering system.
      * @return A DecimalFormatSymbols instance.
-     * @provisional This API might change or be removed in a future release.
-     * @draft ICU 60
+     * @stable ICU 60
      */
     public static DecimalFormatSymbols forNumberingSystem(Locale locale, NumberingSystem ns) {
         return new DecimalFormatSymbols(locale, ns);
@@ -164,8 +163,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * @param locale the locale.
      * @param ns the numbering system.
      * @return A DecimalFormatSymbols instance.
-     * @provisional This API might change or be removed in a future release.
-     * @draft ICU 60
+     * @stable ICU 60
      */
     public static DecimalFormatSymbols forNumberingSystem(ULocale locale, NumberingSystem ns) {
         return new DecimalFormatSymbols(locale, ns);

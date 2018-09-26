@@ -247,8 +247,7 @@ public final class Edits {
 
     /**
      * @return the number of change edits
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      */
     public int numberOfChanges() { return numChanges; }
 
@@ -580,8 +579,7 @@ public final class Edits {
          *
          * @param i destination index
          * @return true if the edit for the destination index was found
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          */
         public boolean findDestinationIndex(int i) {
             return findIndex(i, false) == 0;
@@ -691,8 +689,7 @@ public final class Edits {
          *
          * @param i source index
          * @return destination index; undefined if i is not 0..string length
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          */
         public int destinationIndexFromSourceIndex(int i) {
             int where = findIndex(i, true);
@@ -730,8 +727,7 @@ public final class Edits {
          *
          * @param i destination index
          * @return source index; undefined if i is not 0..string length
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          */
         public int sourceIndexFromDestinationIndex(int i) {
             int where = findIndex(i, false);
@@ -922,8 +918,7 @@ public final class Edits {
      * @param bc reflects how substrings of intermediate string b
      *     map to substrings of output string c.
      * @return this, with the merged edits appended
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      */
     public Edits mergeAndAppend(Edits ab, Edits bc) {
         // Picture string a --(Edits ab)--> string b --(Edits bc)--> string c.

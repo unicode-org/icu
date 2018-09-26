@@ -328,7 +328,7 @@ public class Currency extends MeasureUnit {
      *
      * @param currency The Java currency object to convert.
      * @return An equivalent ICU currency object.
-     * @draft ICU 60
+     * @stable ICU 60
      */
     public static Currency fromJavaCurrency(java.util.Currency currency) {
         return getInstance(currency.getCurrencyCode());
@@ -338,7 +338,7 @@ public class Currency extends MeasureUnit {
      * Returns a java.util.Currency object based on the currency represented by this Currency.
      *
      * @return An equivalent Java currency object.
-     * @draft ICU 60
+     * @stable ICU 60
      */
     public java.util.Currency toJavaCurrency() {
         return java.util.Currency.getInstance(getCurrencyCode());
