@@ -2528,7 +2528,14 @@ void LocaleTest::TestCanonicalization(void)
         /* test cases reflecting internal resource bundle usage */
         { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
         { "@calendar=gregorian", "@calendar=gregorian", "@calendar=gregorian" },
-        { "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese" }
+        { "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese" },
+        { "zho", "zh", "zh" },
+        { "zh-gan", "zh_GAN", "gan" },
+        { "zho-gan", "zh_GAN", "gan" },
+        { "zh-cmn", "zh_CMN", "cmn" },
+        { "zho-cmn", "zh_CMN", "cmn" },
+        { "zh-yue", "zh_YUE", "yue" },
+        { "zho-yue", "zh_YUE", "yue" }
     };
     
     static const char* label[] = { "createFromName", "createCanonical", "Locale" };

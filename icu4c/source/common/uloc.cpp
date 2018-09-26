@@ -505,6 +505,7 @@ static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "uz_UZ_LATN",     "uz_Latn_UZ", NULL, NULL }, /* .NET name */
     { "zh_CHS",         "zh_Hans", NULL, NULL }, /* .NET name */
     { "zh_CHT",         "zh_Hant", NULL, NULL }, /* .NET name */
+    { "zh_CMN",         "cmn", NULL, NULL }, /* registered name */
     { "zh_GAN",         "gan", NULL, NULL }, /* registered name */
     { "zh_GUOYU",       "zh", NULL, NULL }, /* registered name */
     { "zh_HAKKA",       "hak", NULL, NULL }, /* registered name */
