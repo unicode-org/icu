@@ -1581,7 +1581,7 @@ udat_getContext(const UDateFormat* fmt, UDisplayContextType type, UErrorCode* st
 * @param status A pointer to a UErrorCode to receive any errors
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_applyPatternRelative
-* @preview ICU 4.2
+* @internal ICU 4.2 technology preview
 */
 U_INTERNAL int32_t U_EXPORT2
 udat_toPatternRelativeDate(const UDateFormat *fmt,
@@ -1598,7 +1598,7 @@ udat_toPatternRelativeDate(const UDateFormat *fmt,
 * @param status A pointer to a UErrorCode to receive any errors
 * @return The total buffer size needed; if greater than resultLength, the output was truncated.
 * @see udat_applyPatternRelative
-* @preview ICU 4.2
+* @internal ICU 4.2 technology preview
 */
 U_INTERNAL int32_t U_EXPORT2
 udat_toPatternRelativeTime(const UDateFormat *fmt,
@@ -1616,7 +1616,7 @@ udat_toPatternRelativeTime(const UDateFormat *fmt,
 * @param timePatternLength The length of timePattern, or -1 if null-terminated.
 * @param status A pointer to a UErrorCode to receive any errors
 * @see udat_toPatternRelativeDate, udat_toPatternRelativeTime
-* @preview ICU 4.2
+* @internal ICU 4.2 technology preview
 */
 U_INTERNAL void U_EXPORT2
 udat_applyPatternRelative(UDateFormat *format,
