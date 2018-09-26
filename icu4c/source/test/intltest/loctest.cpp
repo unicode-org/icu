@@ -1770,13 +1770,17 @@ LocaleTest::TestCreateUnicodeKeywords(void) {
     status.errIfFailureAndReset("key #1");
     assertEquals("resultLength", 2, resultLength);
     assertTrue("key != nullptr", key != nullptr);
-    assertEquals("calendar", "ca", key);
+    if (key != nullptr) {
+        assertEquals("calendar", "ca", key);
+    }
 
     key = keys->next(&resultLength, status);
     status.errIfFailureAndReset("key #2");
     assertEquals("resultLength", 2, resultLength);
     assertTrue("key != nullptr", key != nullptr);
-    assertEquals("collation", "co", key);
+    if (key != nullptr) {
+        assertEquals("collation", "co", key);
+    }
 
     key = keys->next(&resultLength, status);
     status.errIfFailureAndReset("end of keys");
@@ -1789,12 +1793,16 @@ LocaleTest::TestCreateUnicodeKeywords(void) {
     skey = keys->snext(status);
     status.errIfFailureAndReset("skey #1");
     assertTrue("skey != nullptr", skey != nullptr);
-    assertEquals("calendar", "ca", *skey);
+    if (skey != nullptr) {
+        assertEquals("calendar", "ca", *skey);
+    }
 
     skey = keys->snext(status);
     status.errIfFailureAndReset("skey #2");
     assertTrue("skey != nullptr", skey != nullptr);
-    assertEquals("collation", "co", *skey);
+    if (skey != nullptr) {
+        assertEquals("collation", "co", *skey);
+    }
 
     skey = keys->snext(status);
     status.errIfFailureAndReset("end of keys");
