@@ -253,6 +253,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestToLanguageTag);
     TESTCASE(TestForLanguageTag);
     TESTCASE(TestInvalidLanguageTag);
+    TESTCASE(TestLangAndRegionCanonicalize);
     TESTCASE(TestTrailingNull);
     TESTCASE(TestUnicodeDefines);
     TESTCASE(TestEnglishExemplarCharacters);
@@ -6036,6 +6037,7 @@ static const struct {
     {"art-lojban",          "jbo",                  FULL_LENGTH},
     {"zh-hakka",            "hak",                  FULL_LENGTH},
     {"zh-cmn-CH",           "cmn_CH",               FULL_LENGTH},
+    {"zh-cmn-CH-u-co-pinyin", "cmn_CH@collation=pinyin", FULL_LENGTH},
     {"xxx-yy",              "xxx_YY",               FULL_LENGTH},
     {"fr-234",              "fr_234",               FULL_LENGTH},
     {"i-default",           "en@x=i-default",       FULL_LENGTH},
@@ -6093,7 +6095,15 @@ static const struct {
     {"zh-u-ca-gregory-co-pinyin-ca-chinese", "zh@calendar=gregorian;collation=pinyin", FULL_LENGTH},
     {"de-latn-DE-1901-u-co-phonebk-co-pinyin-ca-gregory", "de_Latn_DE_1901@calendar=gregorian;collation=phonebook", FULL_LENGTH},
     {"th-u-kf-nu-thai-kf-false", "th@colcasefirst=yes;numbers=thai", FULL_LENGTH},
-    {NULL,          NULL,           0}
+    /* #9562 IANA language tag data update */
+    {"en-gb-oed", "en_GB_OXENDICT", FULL_LENGTH},
+    {"i-navajo", "nv", FULL_LENGTH},
+    {"i-navajo-a-foo", "", 0},
+    {"i-navajo-latn-us", "", 0},
+    {"sgn-br", "bzs", FULL_LENGTH},
+    {"sgn-br-u-co-phonebk", "bzs@collation=phonebook", FULL_LENGTH},
+    {"ja-latn-hepburn-heploc", "ja_Latn__ALALC97", FULL_LENGTH},
+    {"ja-latn-hepburn-heploc-u-ca-japanese", "ja_Latn__ALALC97@calendar=japanese", FULL_LENGTH},
 };
 
 static void TestForLanguageTag(void) {
@@ -6103,7 +6113,7 @@ static void TestForLanguageTag(void) {
     int32_t parsedLen;
     int32_t expParsedLen;
 
-    for (i = 0; langtag_to_locale[i].bcpID != NULL; i++) {
+    for (i = 0; i < UPRV_LENGTHOF(langtag_to_locale); i++) {
         status = U_ZERO_ERROR;
         locale[0] = 0;
         expParsedLen = langtag_to_locale[i].len;
@@ -6152,6 +6162,43 @@ static void TestInvalidLanguageTag(void) {
         if (status != U_ILLEGAL_ARGUMENT_ERROR) {
             log_err("Error returned by uloc_forLanguageTag for input language tag [%s] : %s - expected error:  %s\n",
                     *tag, u_errorName(status), u_errorName(U_ILLEGAL_ARGUMENT_ERROR));
+        }
+    }
+}
+
+static const struct {
+    const char  *input;
+    const char  *canonical;
+} langtag_to_canonical[] = {
+    {"de-DD", "de-DE"},
+    {"de-DD-u-co-phonebk", "de-DE-u-co-phonebk"},
+    {"jw-id", "jv-ID"},
+    {"jw-id-u-ca-islamic-civil", "jv-ID-u-ca-islamic-civil"},
+    {"mo-md", "ro-MD"},
+    {"my-bu-u-nu-mymr", "my-MM-u-nu-mymr"},
+    {"yuu-ru", "yug-RU"},
+};
+
+
+static void TestLangAndRegionCanonicalize(void) {
+    char locale[256];
+    char canonical[256];
+    int32_t i;
+    UErrorCode status;
+    for (i = 0; i < UPRV_LENGTHOF(langtag_to_canonical); i++) {
+        status = U_ZERO_ERROR;
+        const char* input = langtag_to_canonical[i].input;
+        uloc_forLanguageTag(input, locale, sizeof(locale), NULL, &status);
+        uloc_toLanguageTag(locale, canonical, sizeof(canonical), TRUE, &status);
+        if (U_FAILURE(status)) {
+            log_err_status(status, "Error returned by uloc_forLanguageTag or uloc_toLanguageTag "
+                           "for language tag [%s] - error: %s\n", input, u_errorName(status));
+        } else {
+            const char* expected_canonical = langtag_to_canonical[i].canonical;
+            if (uprv_strcmp(expected_canonical, canonical) != 0) {
+                log_data_err("input language tag [%s] is canonicalized to [%s] - expected: [%s]\n",
+                    input, canonical, expected_canonical);
+            }
         }
     }
 }
