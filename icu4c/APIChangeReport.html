@@ -45,58 +45,9 @@
 <th>File</th><th>API</th><th>ICU 62</th><th>ICU 63</th>
 </tr>
 </THEAD>
-<tr class="row1">
-<td class="file">enumset.h</td><td class="proto">UBool icu::EnumSet&lt; T, minValue, limitValue &gt;::isValidEnum(T) const</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">enumset.h</td><td class="proto">UBool icu::EnumSet&lt; T, minValue, limitValue &gt;::isValidValue(int32_t) const</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">enumset.h</td><td class="proto">const EnumSet&lt;T, minValue, limitValue&gt;&amp; icu::EnumSet&lt; T, minValue, limitValue &gt;::operator=(const EnumSet&lt;,, limitValue &gt;&amp;)</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">enumset.h</td><td class="proto">icu::EnumSet&lt; T, minValue, limitValue &gt;::EnumSet()</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">enumset.h</td><td class="proto">icu::EnumSet&lt; T, minValue, limitValue &gt;::EnumSet(const EnumSet&lt;,, limitValue &gt;&amp;)</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">enumset.h</td><td class="proto">icu::EnumSet&lt; T, minValue, limitValue &gt;::~EnumSet()</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">enumset.h</td><td class="proto">int32_t icu::EnumSet&lt; T, minValue, limitValue &gt;::contains(T) const</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">enumset.h</td><td class="proto">int32_t icu::EnumSet&lt; T, minValue, limitValue &gt;::get(T) const</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">enumset.h</td><td class="proto">uint32_t icu::EnumSet&lt; T, minValue, limitValue &gt;::getAll() const</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">enumset.h</td><td class="proto">void icu::EnumSet&lt; T, minValue, limitValue &gt;::add(T)</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">enumset.h</td><td class="proto">void icu::EnumSet&lt; T, minValue, limitValue &gt;::clear()</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row0">
-<td class="file">enumset.h</td><td class="proto">void icu::EnumSet&lt; T, minValue, limitValue &gt;::remove(T)</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
-<tr class="row1">
-<td class="file">enumset.h</td><td class="proto">void icu::EnumSet&lt; T, minValue, limitValue &gt;::set(T, int32_t)</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
-<span class=""><span></span></span></td>
-</tr>
+
+<!--    move to "changed in 63 section.
+
 <tr class="row0">
 <td class="file">numberformatter.h</td><td class="proto">Appendable&amp; icu::number::FormattedNumber::appendTo(Appendable&amp;, UErrorCode&amp;)</td><td class="">Draft<br>ICU 62</td><td>(missing)<br>
 <span class=""><span></span></span></td>
@@ -117,6 +68,10 @@
 <td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> Grouper icu::number::impl::Grouper::forStrategy(UGroupingStrategy)</td><td class="">Internal</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
+-->
+
+<!--   plurfmt.h   @internal functions were hidden from docs. Logically, no change.
+
 <tr class="row1">
 <td class="file">plurfmt.h</td><td class="proto">UnicodeString icu::PluralFormat::PluralSelector::select(void*, double, UErrorCode&amp;) const</td><td class="">Internal</td><td>(missing)<br>
 <span class=""><span></span></span></td>
@@ -165,6 +120,11 @@
 <td class="file">plurfmt.h</td><td class="proto">void icu::PluralFormat::parseType(const UnicodeString&amp;, const NFRule*, Formattable&amp;, FieldPosition&amp;) const</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
+
+--> 
+
+<!-- stringtriebuilder.h, hidden internal functions. 
+
 <tr class="row1">
 <td class="file">stringtriebuilder.h</td><td class="proto"><tt>static</tt> UBool icu::StringTrieBuilder::equalNodes(const void*, const void*)</td><td class="">Internal</td><td>(missing)<br>
 <span class=""><span></span></span></td>
@@ -173,10 +133,15 @@
 <td class="file">stringtriebuilder.h</td><td class="proto"><tt>static</tt> UBool icu::StringTrieBuilder::hashNode(const void*)</td><td class="">Internal</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
+-->
+
 <tr class="row1">
 <td class="file">uconfig.h</td><td class="proto"><tt>#define</tt> UCONFIG_FORMAT_FASTPATHS_49</td><td class="">Internal</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
+
+<!-- UGroupingStrategy becomes UNumberGroupingStrategy. Move to changed section.
+
 <tr class="row0">
 <td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UGroupingStrategy::UNUM_GROUPING_AUTO</td><td class="">Draft<br>ICU 61</td><td>(missing)<br>
 <span class=""><span></span></span></td>
@@ -201,10 +166,16 @@
 <td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UGroupingStrategy::UNUM_GROUPING_THOUSANDS</td><td class="">Draft<br>ICU 61</td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
+
+--> 
+
+<!--
 <tr class="row0">
 <td class="file">uspoof.h</td><td class="proto">U_DEFINE_LOCAL_OPEN_POINTER(LocalUSpoofCheckResultPointer,,)</td><td class=""><i>(untagged)</i></td><td>(missing)<br>
 <span class=""><span></span></span></td>
 </tr>
+-->
+
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
@@ -433,6 +404,26 @@
 <tr class="row0">
 <td class="file">normalizer2.h</td><td class="proto">void icu::Normalizer2::normalizeUTF8(uint32_t, StringPiece, ByteSink&amp;, Edits*, UErrorCode&amp;) const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 60</td>
 </tr>
+<tr class="row1">
+
+<!-- start of edited numberformatter stuff -->
+
+<td class="file">numberformatter.h</td><td class="proto">Appendable&amp; icu::number::FormattedNumber::appendTo(Appendable&amp;, UErrorCode&amp;) <b><i>const</i></b></td>
+<td colspan="2" align="center">Draft ICU 62 </td>
+</tr>
+
+<tr class="row0">
+<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::grouping(U<b><i>Number</i></b>GroupingStrategy) const&amp;</td>
+<td colspan="2" align="center">Draft ICU 61 </td>
+</tr>
+
+<tr class="row1">
+<td class="file">numberformatter.h</td><td class="proto">Derived icu::number::NumberFormatterSettings&lt; Derived &gt;::grouping(U<b><i>Number</i></b>GroupingStrategy)&amp;&amp;</td>
+<td colspan="2" align="center">Draft ICU 62 </td>
+</tr>
+
+<!--  End of edited numberformatter stufff -->
+
 <tr class="row1">
 <td class="file">numfmt.h</td><td class="proto">ERoundingMode icu::NumberFormat::getRoundingMode() const</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 60</td>
 </tr>
@@ -708,16 +699,48 @@
 <td class="file">unum.h</td><td class="proto"><tt>enum</tt> UNumberFormatAttribute::UNUM_SIGN_ALWAYS_SHOWN</td><td class="">Internal</td><td>Preview<br>
 <span class=""><span></span></span></td>
 </tr>
+
+<tr class="row1">
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> U<b><i>Number</i></b>GroupingStrategy::UNUM_GROUPING_AUTO</td>
+<td colspan="2" align="center">Draft (renamed)<br>
+<span class=""><span>ICU 61</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> U<b><i>Number</i></b>GroupingStrategy::UNUM_GROUPING_MIN2</td>
+<td colspan="2" align="center">Draft (renamed)<br>
+<span class=""><span>ICU 61</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> U<b><i>Number</i></b>GroupingStrategy::UNUM_GROUPING_OFF</td>
+<td colspan="2" align="center">Draft (renamed)<br>
+<span class=""><span>ICU 61</span></span></td>
+</tr>
+<tr class="row0">
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> U<b><i>Number</i></b>GroupingStrategy::UNUM_GROUPING_ON_ALIGNED</td>
+<td colspan="2" align="center">Draft (renamed)<br>
+<span class=""><span>ICU 61</span></span></td>
+</tr>
+<tr class="row1">
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> U<b><i>Number</i></b>GroupingStrategy::UNUM_GROUPING_THOUSANDS</td>
+<td colspan="2" align="center">Draft (renamed)<br>
+<span class=""><span>ICU 61</span></span></td>
+</tr>
+
+
 <tr class="row0">
 <td class="file">upluralrules.h</td><td class="proto">int32_t uplrules_selectWithFormat(const UPluralRules*, double, const UNumberFormat*, UChar*, int32_t, UErrorCode*)</td><td class="">Internal<br>ICU 59</td><td>Preview<br>
 <span class=""><span>ICU 59</span></span></td>
 </tr>
+
+<!-- usearch.h is stable 4.4 in both versions. Tool failure. Omit this line
 <tr class="row1">
 <td class="file">usearch.h</td><td class="proto"><tt>enum</tt> USearchAttributeValue::USEARCH_ANY_BASE_WEIGHT_IS_WILDCARD</td><td class="stabchange">Stable<br>ICU 2.4</td><td>Stable<br>
 <span class="verchange"><span>ICU 4.4</span>
 <br>
 <b class="bigwarn" title="A stable API changed version.">(changed)</b></span></td>
 </tr>
+-->
+
 <tr class="row0">
 <td class="file">utext.h</td><td class="proto"><tt>#define</tt> UTEXT_CURRENT32</td><td class="">Internal<br>ICU 4.4</td><td>Preview<br>
 <span class=""><span>ICU 4.4</span></span></td>
@@ -1075,10 +1098,14 @@
 <tr class="row1">
 <td class="file">utf16.h</td><td class="proto"><tt>#define</tt> U16_PREV_OR_FFFD</td><td class="" colspan="2" align="center">Draft&rarr;Stable<br>ICU 60</td>
 </tr>
+
+<!-- Tool glitch 
 <tr class="row0">
 <td class="file">utypes.h</td><td class="proto"><tt>#define</tt> U_COMBINED_IMPLEMENTATION</td><td class="">(missing)</td><td>Stable<br>
 <span class=""><span>ICU 2.0</span></span></td>
 </tr>
+-->
+
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
@@ -1091,10 +1118,14 @@
 <th>File</th><th>API</th><th>ICU 62</th><th>ICU 63</th>
 </tr>
 </THEAD>
+
+<!-- Tool glitch 
 <tr class="row1">
 <td class="file">char16ptr.h</td><td class="proto"><tt>#define</tt> U_ALIASING_BARRIER</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
+-->
+
 <tr class="row0">
 <td class="file">listformatter.h</td><td class="proto">UnicodeString&amp; icu::ListFormatter::format(const UnicodeString items[], int32_t, UnicodeString&amp;, FieldPositionIterator*, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 63</span></span></td>
@@ -1179,6 +1210,8 @@
 <td class="file">measunit.h</td><td class="proto"><tt>static</tt> MeasureUnit* icu::MeasureUnit::createPetabyte(UErrorCode&amp;)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 63</span></span></td>
 </tr>
+
+<!-- 
 <tr class="row1">
 <td class="file">numberformatter.h</td><td class="proto">Appendable&amp; icu::number::FormattedNumber::appendTo(Appendable&amp;, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 62</span>
@@ -1205,6 +1238,9 @@
 <td class="file">numberformatter.h</td><td class="proto"><tt>static</tt> Grouper icu::number::impl::Grouper::forStrategy(UNumberGroupingStrategy)</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
+
+-->
+
 <tr class="row0">
 <td class="file">numberrangeformatter.h</td><td class="proto">Appendable&amp; icu::number::FormattedNumberRange::appendTo(Appendable&amp;, UErrorCode&amp;) const</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 63</span></span></td>
@@ -1710,6 +1746,8 @@
 <td class="file">uchar.h</td><td class="proto"><tt>enum</tt> UVerticalOrientation::U_VO_UPRIGHT</td><td class="">(missing)</td><td>Stable<br>
 <span class=""><span>ICU 63</span></span></td><td class="bornstable"><b class="bigwarn" title="A new API was introduced as stable in $rightVer.">(Born Stable)</b></td>
 </tr>
+
+<!-- tool glitch 
 <tr class="row0">
 <td class="file">uconfig.h</td><td class="proto"><tt>#define</tt> UCONFIG_ENABLE_PLUGINS</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
@@ -1718,6 +1756,8 @@
 <td class="file">uconfig.h</td><td class="proto"><tt>#define</tt> U_HAVE_LIB_SUFFIX</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
+-->
+
 <tr class="row0">
 <td class="file">ucpmap.h</td><td class="proto">UChar32 ucpmap_getRange(const UCPMap*, UChar32, UCPMapRangeOption, uint32_t, UCPMapValueFilter*, const void*, uint32_t*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 63</span></span></td>
@@ -1850,6 +1890,9 @@
 <td class="file">ulistformatter.h</td><td class="proto"><tt>enum</tt> UListFormatterField::ULISTFMT_LITERAL_FIELD</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 63</span></span></td>
 </tr>
+
+<!--   Tool Glitch
+
 <tr class="row1">
 <td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_FINAL</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
@@ -1858,6 +1901,8 @@
 <td class="file">umachine.h</td><td class="proto"><tt>#define</tt> U_OVERRIDE</td><td class="">(missing)</td><td>Internal<br>
 <span class=""><span></span></span></td>
 </tr>
+ -->
+
 <tr class="row1">
 <td class="file">umutablecptrie.h</td><td class="proto">UCPTrie* umutablecptrie_buildImmutable(UMutableCPTrie*, UCPTrieType, UCPTrieValueWidth, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 63</span></span></td>
@@ -1898,6 +1943,9 @@
 <td class="file">umutablecptrie.h</td><td class="proto">void umutablecptrie_setRange(UMutableCPTrie*, UChar32, UChar32, uint32_t, UErrorCode*)</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 63</span></span></td>
 </tr>
+
+<!-- UNumberGroupingStrategy not added, but renamed. Remove from here (the added section.)
+
 <tr class="row1">
 <td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberGroupingStrategy::UNUM_GROUPING_AUTO</td><td class="">(missing)</td><td>Draft<br>
 <span class=""><span>ICU 61</span>
@@ -1932,6 +1980,10 @@
 <br>
 <b class="bigwarn" title="A draft API has the wrong version.">(should be ICU 63)</b></span></td>
 </tr>
+-->
+
+<!--  Tool glitch
+
 <tr class="row1">
 <td class="file">uobject.h</td><td class="proto"><tt>#define</tt> U_NO_THROW</td><td class="">(missing)</td><td>Stable<br>
 <span class=""><span>ICU 4.2</span></span></td>
@@ -1940,6 +1992,9 @@
 <td class="file">utypes.h</td><td class="proto"><tt>#define</tt> U_COMBINED_IMPLEMENTATION</td><td class="">(missing)</td><td>Stable<br>
 <span class=""><span>ICU 2.0</span></span></td>
 </tr>
+-->
+
+
 </table>
 <P></P>
 <a href="#_top">(jump back to top)</a>
@@ -2318,32 +2373,37 @@
 </tr>
 <tr class="row0">
 <td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberDecimalSeparatorDisplay::UNUM_DECIMAL_SEPARATOR_AUTO</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
+
+<!-- edited, not new -->
+
 </tr>
 <tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberGroupingStrategy::UNUM_GROUPING_AUTO</td><td class="">(missing)<br>
-</td><td>Draft<br>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberGroupingStrategy::UNUM_GROUPING_AUTO</td>
+<td colspan="2" align="center">Draft<br>
 <span class=""><span>ICU 61</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberGroupingStrategy::UNUM_GROUPING_MIN2</td><td class="">(missing)<br>
-</td><td>Draft<br>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberGroupingStrategy::UNUM_GROUPING_MIN2</td>
+<td colspan="2" align="center">Draft<br>
 <span class=""><span>ICU 61</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberGroupingStrategy::UNUM_GROUPING_OFF</td><td class="">(missing)<br>
-</td><td>Draft<br>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberGroupingStrategy::UNUM_GROUPING_OFF</td>
+<td colspan="2" align="center">Draft<br>
 <span class=""><span>ICU 61</span></span></td>
 </tr>
 <tr class="row0">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberGroupingStrategy::UNUM_GROUPING_ON_ALIGNED</td><td class="">(missing)<br>
-</td><td>Draft<br>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberGroupingStrategy::UNUM_GROUPING_ON_ALIGNED</td>
+<td colspan="2" align="center">Draft<br>
 <span class=""><span>ICU 61</span></span></td>
 </tr>
 <tr class="row1">
-<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberGroupingStrategy::UNUM_GROUPING_THOUSANDS</td><td class="">(missing)<br>
-</td><td>Draft<br>
+<td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberGroupingStrategy::UNUM_GROUPING_THOUSANDS</td>
+<td colspan="2" align="center">Draft<br>
 <span class=""><span>ICU 61</span></span></td>
 </tr>
+
+
 <tr class="row0">
 <td class="file">unumberformatter.h</td><td class="proto"><tt>enum</tt> UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_ALWAYS</td><td class="" colspan="2" align="center">Draft<br>ICU 60</td>
 </tr>
