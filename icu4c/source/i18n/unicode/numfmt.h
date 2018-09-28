@@ -1027,14 +1027,14 @@ public:
      * Get the rounding mode. This will always return NumberFormat::ERoundingMode::kRoundUnnecessary
      * if the subclass does not support rounding. 
      * @return A rounding mode
-     * @draft ICU 60
+     * @stable ICU 60
      */
     virtual ERoundingMode getRoundingMode(void) const;
 
     /**
      * Set the rounding mode. If a subclass does not support rounding, this will do nothing.
      * @param roundingMode A rounding mode
-     * @draft ICU 60
+     * @stable ICU 60
      */
     virtual void setRoundingMode(ERoundingMode roundingMode);
 

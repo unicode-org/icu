@@ -2572,6 +2572,7 @@ u_hasBinaryProperty(UChar32 c, UProperty which);
  * @see UProperty
  * @see u_hasBinaryProperty
  * @see Unicode::fromUSet
+ * @draft ICU 63
  */
 U_CAPI const USet * U_EXPORT2
 u_getBinaryPropertySet(UProperty property, UErrorCode *pErrorCode);
@@ -2750,6 +2751,7 @@ u_getIntPropertyMaxValue(UProperty which);
  * @return the property as a map
  * @see UProperty
  * @see u_getIntPropertyValue
+ * @draft ICU 63
  */
 U_CAPI const UCPMap * U_EXPORT2
 u_getIntPropertyMap(UProperty property, UErrorCode *pErrorCode);
