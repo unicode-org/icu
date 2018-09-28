@@ -311,5 +311,5 @@ it{
         FK{"Isole Falkland (Isole Malvine)"}
         MK{"Ex Repubblica Jugoslava di Macedonia"}
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.44.86"}
 }

@@ -851,7 +851,7 @@ es{
         VALENCIA{"Valenciano"}
         WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"2.1.43.50"}
+    Version{"2.1.44.88"}
     characterLabelPattern{
         all{"{0} — Todo"}
         category-list{"{0}: {1}"}

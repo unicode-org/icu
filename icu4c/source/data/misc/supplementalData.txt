@@ -4245,12 +4245,20 @@ supplementalData:table(nofallback){
             "858",
         }
         {
+            "UYW",
+            "927",
+        }
+        {
             "UZS",
             "860",
         }
         {
             "VEF",
             "937",
+        }
+        {
+            "VES",
+            "928",
         }
         {
             "VND",

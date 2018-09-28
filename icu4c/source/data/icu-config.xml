@@ -453,6 +453,8 @@
 		<include locales="ksf_CM"/>
 		<include locales="ksh"/>
 		<include locales="ksh_DE"/>
+		<include locales="ku"/>
+		<include locales="ku_TR"/>
 		<include locales="kw"/>
 		<include locales="kw_GB"/>
 		<include locales="ky"/>
@@ -749,6 +751,8 @@
 		<include locales="wae_CH"/>
 		<include locales="wo"/>
 		<include locales="wo_SN"/>
+		<include locales="xh"/>
+		<include locales="xh_ZA"/>
 		<include locales="xog"/>
 		<include locales="xog_UG"/>
 		<include locales="yav"/>

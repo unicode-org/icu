@@ -1002,7 +1002,7 @@ gd{
             }
         }
     }
-    Version{"2.1.44.18"}
+    Version{"2.1.44.88"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2088,10 +2088,10 @@ gd{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    few{"'seachdain' w 'dhe' y"}
-                    one{"'seachdain' w 'dhe' y"}
-                    other{"'seachdain' w 'dhe' y"}
-                    two{"'seachdain' w 'dhe' y"}
+                    few{"'seachdain' w 'dhe' Y"}
+                    one{"'seachdain' w 'dhe' Y"}
+                    other{"'seachdain' w 'dhe' Y"}
+                    two{"'seachdain' w 'dhe' Y"}
                 }
             }
             dayNames{

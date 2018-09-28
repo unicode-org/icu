@@ -246,7 +246,7 @@ bs{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.44.88"}
     calendar{
         generic{
             DateTimePatterns{
@@ -457,9 +457,9 @@ bs{
                 yQQQ{"QQQ y."}
                 yQQQQ{"QQQQ y."}
                 yw{
-                    few{"w. 'sedmica' 'u' y."}
-                    one{"w. 'sedmica' 'u' y."}
-                    other{"w. 'sedmica' 'u' y."}
+                    few{"w. 'sedmica' 'u' Y."}
+                    one{"w. 'sedmica' 'u' Y."}
+                    other{"w. 'sedmica' 'u' Y."}
                 }
             }
             dayNames{
