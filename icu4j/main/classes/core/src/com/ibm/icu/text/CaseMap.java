@@ -95,8 +95,7 @@ public abstract class CaseMap {
          * @return the result string.
          *
          * @see UCharacter#toLowerCase(Locale, String)
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          */
         public String apply(Locale locale, CharSequence src) {
             return CaseMapImpl.toLower(getCaseLocale(locale), internalOptions, src);
@@ -156,8 +155,7 @@ public abstract class CaseMap {
          * @return the result string.
          *
          * @see UCharacter#toUpperCase(Locale, String)
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          */
         public String apply(Locale locale, CharSequence src) {
             return CaseMapImpl.toUpper(getCaseLocale(locale), internalOptions, src);
@@ -207,8 +205,7 @@ public abstract class CaseMap {
          *
          * @return an options object with this option.
          * @see #adjustToCased()
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          */
         public Title wholeString() {
             return new Title(CaseMapImpl.addTitleIteratorOption(
@@ -225,8 +222,7 @@ public abstract class CaseMap {
          *
          * @return an options object with this option.
          * @see #adjustToCased()
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          */
         public Title sentences() {
             return new Title(CaseMapImpl.addTitleIteratorOption(
@@ -300,8 +296,7 @@ public abstract class CaseMap {
          *
          * @return an options object with this option.
          * @see #noBreakAdjustment()
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          */
         public Title adjustToCased() {
             return new Title(CaseMapImpl.addTitleAdjustmentOption(
@@ -328,8 +323,7 @@ public abstract class CaseMap {
          * @return the result string.
          *
          * @see UCharacter#toUpperCase(Locale, String)
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          */
         public String apply(Locale locale, BreakIterator iter, CharSequence src) {
             if (iter == null && locale == null) {
@@ -431,8 +425,7 @@ public abstract class CaseMap {
          * @return the result string.
          *
          * @see UCharacter#foldCase(String, int)
-         * @draft ICU 60
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 60
          */
         public String apply(CharSequence src) {
             return CaseMapImpl.fold(internalOptions, src);

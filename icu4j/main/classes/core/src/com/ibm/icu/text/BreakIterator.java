@@ -531,7 +531,7 @@ public abstract class BreakIterator implements Cloneable
      * with a StringBuilder, for example).
      * @param newText A CharSequence containing the text to analyze with
      * this BreakIterator.
-     * @draft ICU 60
+     * @stable ICU 60
      */
     public void setText(CharSequence newText) {
         setText(new CSCharacterIterator(newText));

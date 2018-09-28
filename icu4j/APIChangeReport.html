@@ -4,181 +4,232 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <!-- © 2018 and later: Unicode, Inc. and others. -->
 <!-- License & terms of use: http://www.unicode.org/copyright.html#License -->
-<title>ICU4J API Comparison: ICU4J 61.1 with ICU4J 62.1</title>
+<title>ICU4J API Comparison: ICU4J 62.1 with ICU4J 63.1</title>
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 61.1 with ICU4J 62.1</h1>
+<h1>ICU4J API Comparison: ICU4J 62.1 with ICU4J 63.1</h1>
 
 <hr/>
-<h2>Removed from ICU4J 61.1</h2>
-
-<h3>Package com.ibm.icu.number</h3>
-<ul>
-CurrencyRounder
-<ul>
-<li><span style='color:orange'>(draft)</span> public Rounder <i>withCurrency</i>(Currency)</li>
-</ul>
-FractionRounder
-<ul>
-<li><span style='color:orange'>(draft)</span> public Rounder <i>withMaxDigits</i>(int)</li>
-<li><span style='color:orange'>(draft)</span> public Rounder <i>withMinDigits</i>(int)</li>
-</ul>
-Rounder
-<ul>
-<li><span style='color:orange'>(draft)</span> public static CurrencyRounder <i>currency</i>(Currency.CurrencyUsage)</li>
-<li><span style='color:orange'>(draft)</span> public static Rounder <i>fixedDigits</i>(int)</li>
-<li><span style='color:orange'>(draft)</span> public static FractionRounder <i>fixedFraction</i>(int)</li>
-<li><span style='color:orange'>(draft)</span> public static Rounder <i>increment</i>(java.math.BigDecimal)</li>
-<li><span style='color:orange'>(draft)</span> public static FractionRounder <i>integer</i>()</li>
-<li><span style='color:orange'>(draft)</span> public static Rounder <i>maxDigits</i>(int)</li>
-<li><span style='color:orange'>(draft)</span> public static FractionRounder <i>maxFraction</i>(int)</li>
-<li><span style='color:orange'>(draft)</span> public static Rounder <i>minDigits</i>(int)</li>
-<li><span style='color:orange'>(draft)</span> public static FractionRounder <i>minFraction</i>(int)</li>
-<li><span style='color:orange'>(draft)</span> public static Rounder <i>minMaxDigits</i>(int, int)</li>
-<li><span style='color:orange'>(draft)</span> public static FractionRounder <i>minMaxFraction</i>(int, int)</li>
-<li><span style='color:orange'>(draft)</span> public static Rounder <i>unlimited</i>()</li>
-<li><span style='color:orange'>(draft)</span> public Rounder <i>withMode</i>(java.math.RoundingMode)</li>
-</ul>
-</ul>
-
+<h2>Removed from ICU4J 62.1</h2>
+<p>(no API removed)</p>
 
 <hr/>
-<h2>Deprecated or Obsoleted in ICU4J 62.1</h2>
-
-<h3>Package com.ibm.icu.number</h3>
-<ul>
-FormattedNumber
-<ul>
-<li><span style='color:gray'>(deprecated)</span> public java.text.AttributedCharacterIterator <i>getFieldIterator</i>()</li>
-<li><span style='color:gray'>(deprecated)</span> public void <i>populateFieldPosition</i>(java.text.FieldPosition)</li>
-</ul>
-</ul>
-
+<h2>Deprecated or Obsoleted in ICU4J 63.1</h2>
+<p>(no API obsoleted)</p>
 
 <hr/>
-<h2>Changed in ICU4J 62.1 (old, new)</h2>
-
-<h3>Package com.ibm.icu.number</h3>
-<ul>
-<li>    <span style='color:orange'>(draft)</span> public abstract class <i>CurrencyRounder</i> extends com.ibm.icu.number.Rounder</br>
-<span style='color:gray'>(deprecated)</span> public abstract class <i>CurrencyRounder</i> extends com.ibm.icu.number.CurrencyPrecision</li>
-<li>    <span style='color:orange'>(draft)</span> public abstract class <i>FractionRounder</i> extends com.ibm.icu.number.Rounder</br>
-<span style='color:gray'>(deprecated)</span> public abstract class <i>FractionRounder</i> extends com.ibm.icu.number.FractionPrecision</li>
-NumberFormatterSettings
-<ul>
-<li>    <span style='color:orange'>(draft)</span> public T extends com.ibm.icu.number.NumberFormatterSettings&lt;?&gt; <i>rounding</i>(com.ibm.icu.number.Rounder)</br>
-<span style='color:gray'>(deprecated)</span> public T extends com.ibm.icu.number.NumberFormatterSettings&lt;?&gt; <i>rounding</i>(com.ibm.icu.number.Precision)</li>
-<li>    <span style='color:orange'>(draft)</span> public abstract class <i>Rounder</i> extends java.lang.Object implements java.lang.Cloneable</br>
-<span style='color:gray'>(deprecated)</span> public abstract class <i>Rounder</i> extends com.ibm.icu.number.Precision</li>
-</ul>
-</ul>
-
+<h2>Changed in ICU4J 63.1 (old, new)</h2>
+<p>(no API changed)</p>
 
 <hr/>
-<h2>Promoted to stable in ICU4J 62.1</h2>
-<p>(no API promoted to stable)</p>
-
-<hr/>
-<h2>Added in ICU4J 62.1</h2>
-
-<h3>Package com.ibm.icu.lang</h3>
-<ul>
-UCharacter.JoiningGroup
-<ul>
-<li><span style='color:green'>(stable)</span> public static final int HANIFI_ROHINGYA_KINNA_YA</li>
-<li><span style='color:green'>(stable)</span> public static final int HANIFI_ROHINGYA_PA</li>
-</ul>
-UCharacter.UnicodeBlock
-<ul>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock CHESS_SYMBOLS</li>
-<li><span style='color:green'>(stable)</span> public static final int CHESS_SYMBOLS_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock DOGRA</li>
-<li><span style='color:green'>(stable)</span> public static final int DOGRA_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock GEORGIAN_EXTENDED</li>
-<li><span style='color:green'>(stable)</span> public static final int GEORGIAN_EXTENDED_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock GUNJALA_GONDI</li>
-<li><span style='color:green'>(stable)</span> public static final int GUNJALA_GONDI_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock HANIFI_ROHINGYA</li>
-<li><span style='color:green'>(stable)</span> public static final int HANIFI_ROHINGYA_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock INDIC_SIYAQ_NUMBERS</li>
-<li><span style='color:green'>(stable)</span> public static final int INDIC_SIYAQ_NUMBERS_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock MAKASAR</li>
-<li><span style='color:green'>(stable)</span> public static final int MAKASAR_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock MAYAN_NUMERALS</li>
-<li><span style='color:green'>(stable)</span> public static final int MAYAN_NUMERALS_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock MEDEFAIDRIN</li>
-<li><span style='color:green'>(stable)</span> public static final int MEDEFAIDRIN_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock OLD_SOGDIAN</li>
-<li><span style='color:green'>(stable)</span> public static final int OLD_SOGDIAN_ID</li>
-<li><span style='color:green'>(stable)</span> public static final UCharacter.UnicodeBlock SOGDIAN</li>
-<li><span style='color:green'>(stable)</span> public static final int SOGDIAN_ID</li>
-</ul>
-UCharacter.WordBreak
-<ul>
-<li><span style='color:green'>(stable)</span> public static final int WSEGSPACE</li>
-</ul>
-UProperty
-<ul>
-<li><span style='color:green'>(stable)</span> public static final int EXTENDED_PICTOGRAPHIC</li>
-</ul>
-UScript
-<ul>
-<li><span style='color:green'>(stable)</span> public static final int DOGRA</li>
-<li><span style='color:green'>(stable)</span> public static final int GUNJALA_GONDI</li>
-<li><span style='color:green'>(stable)</span> public static final int HANIFI_ROHINGYA</li>
-<li><span style='color:green'>(stable)</span> public static final int MAKASAR</li>
-<li><span style='color:green'>(stable)</span> public static final int MEDEFAIDRIN</li>
-<li><span style='color:green'>(stable)</span> public static final int OLD_SOGDIAN</li>
-<li><span style='color:green'>(stable)</span> public static final int SOGDIAN</li>
-</ul>
-</ul>
-
-<h3>Package com.ibm.icu.number</h3>
-<ul>
-<li><span style='color:orange'>(draft)</span> public abstract class <i>CurrencyPrecision</i></li>
-<li><span style='color:orange'>(draft)</span> public abstract class <i>FractionPrecision</i></li>
-<li><span style='color:orange'>(draft)</span> public abstract class <i>Precision</i></li>
-<li><span style='color:orange'>(draft)</span> public class <i>Scale</i></li>
-<li><span style='color:orange'>(draft)</span> public class <i>SkeletonSyntaxException</i></li>
-FormattedNumber
-<ul>
-<li><span style='color:orange'>(draft)</span> public boolean <i>nextFieldPosition</i>(java.text.FieldPosition)</li>
-<li><span style='color:orange'>(draft)</span> public java.text.AttributedCharacterIterator <i>toCharacterIterator</i>()</li>
-</ul>
-LocalizedNumberFormatter
-<ul>
-<li><span style='color:orange'>(draft)</span> public java.text.Format <i>toFormat</i>()</li>
-</ul>
-NumberFormatter
-<ul>
-<li><span style='color:orange'>(draft)</span> public static UnlocalizedNumberFormatter <i>forSkeleton</i>(java.lang.String)</li>
-</ul>
-NumberFormatterSettings
-<ul>
-<li><span style='color:orange'>(draft)</span> public T extends NumberFormatterSettings&lt;?&gt; <i>precision</i>(Precision)</li>
-<li><span style='color:orange'>(draft)</span> public T extends NumberFormatterSettings&lt;?&gt; <i>roundingMode</i>(java.math.RoundingMode)</li>
-<li><span style='color:orange'>(draft)</span> public T extends NumberFormatterSettings&lt;?&gt; <i>scale</i>(Scale)</li>
-<li><span style='color:orange'>(draft)</span> public java.lang.String <i>toSkeleton</i>()</li>
-</ul>
-</ul>
+<h2>Promoted to stable in ICU4J 63.1</h2>
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
-SpoofChecker
+<li><span style='color:green'>(stable)</span> public abstract class <i>FilteredBreakIteratorBuilder</i></li>
+BreakIterator
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final int HIDDEN_OVERLAY</li>
+<li><span style='color:green'>(stable)</span> public void <i>setText</i>(java.lang.CharSequence)</li>
+</ul>
+CaseMap.Fold
+<ul>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>apply</i>(java.lang.CharSequence)</li>
+</ul>
+CaseMap.Lower
+<ul>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>apply</i>(java.util.Locale, java.lang.CharSequence)</li>
+</ul>
+CaseMap.Title
+<ul>
+<li><span style='color:green'>(stable)</span> public CaseMap.Title <i>adjustToCased</i>()</li>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>apply</i>(java.util.Locale, BreakIterator, java.lang.CharSequence)</li>
+<li><span style='color:green'>(stable)</span> public CaseMap.Title <i>sentences</i>()</li>
+<li><span style='color:green'>(stable)</span> public CaseMap.Title <i>wholeString</i>()</li>
+</ul>
+CaseMap.Upper
+<ul>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>apply</i>(java.util.Locale, java.lang.CharSequence)</li>
+</ul>
+DecimalFormatSymbols
+<ul>
+<li><span style='color:green'>(stable)</span> public static DecimalFormatSymbols <i>forNumberingSystem</i>(ULocale, NumberingSystem)</li>
+<li><span style='color:green'>(stable)</span> public static DecimalFormatSymbols <i>forNumberingSystem</i>(java.util.Locale, NumberingSystem)</li>
+</ul>
+Edits
+<ul>
+<li><span style='color:green'>(stable)</span> public Edits <i>mergeAndAppend</i>(Edits, Edits)</li>
+<li><span style='color:green'>(stable)</span> public int <i>numberOfChanges</i>()</li>
+</ul>
+Edits.Iterator
+<ul>
+<li><span style='color:green'>(stable)</span> public int <i>destinationIndexFromSourceIndex</i>(int)</li>
+<li><span style='color:green'>(stable)</span> public boolean <i>findDestinationIndex</i>(int)</li>
+<li><span style='color:green'>(stable)</span> public int <i>sourceIndexFromDestinationIndex</i>(int)</li>
+</ul>
+NumberingSystem
+<ul>
+<li><span style='color:green'>(stable)</span> public static final NumberingSystem LATIN</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
-VersionInfo
+Currency
 <ul>
-<li><span style='color:green'>(stable)</span> public static final VersionInfo UNICODE_11_0</li>
+<li><span style='color:green'>(stable)</span> public static Currency <i>fromJavaCurrency</i>(java.util.Currency)</li>
+<li><span style='color:green'>(stable)</span> public java.util.Currency <i>toJavaCurrency</i>()</li>
+</ul>
+CurrencyAmount
+<ul>
+<li><span style='color:green'>(stable)</span> public <i>CurrencyAmount</i>(double, java.util.Currency)</li>
+<li><span style='color:green'>(stable)</span> public <i>CurrencyAmount</i>(java.lang.Number, java.util.Currency)</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Added in ICU4J 63.1</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public final class <i>CharacterProperties</i></li>
+<li><span style='color:green'>(stable)</span> public static interface <i>UCharacter.IndicPositionalCategory</i></li>
+<li><span style='color:green'>(stable)</span> public static interface <i>UCharacter.IndicSyllabicCategory</i></li>
+<li><span style='color:green'>(stable)</span> public static interface <i>UCharacter.VerticalOrientation</i></li>
+UProperty
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int INDIC_POSITIONAL_CATEGORY</li>
+<li><span style='color:green'>(stable)</span> public static final int INDIC_SYLLABIC_CATEGORY</li>
+<li><span style='color:green'>(stable)</span> public static final int VERTICAL_ORIENTATION</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.number</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public class <i>FormattedNumberRange</i></li>
+<li><span style='color:orange'>(draft)</span> public class <i>LocalizedNumberRangeFormatter</i></li>
+<li><span style='color:orange'>(draft)</span> public abstract class <i>NumberRangeFormatter</i></li>
+<li><span style='color:orange'>(draft)</span> public abstract class <i>NumberRangeFormatterSettings</i></li>
+<li><span style='color:orange'>(draft)</span> public class <i>UnlocalizedNumberRangeFormatter</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>NumberRangeFormatter.RangeCollapse</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>NumberRangeFormatter.RangeIdentityFallback</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>NumberRangeFormatter.RangeIdentityResult</i></li>
+NumberRangeFormatter.RangeCollapse
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final NumberRangeFormatter.RangeCollapse ALL</li>
+<li><span style='color:orange'>(draft)</span> public static final NumberRangeFormatter.RangeCollapse AUTO</li>
+<li><span style='color:orange'>(draft)</span> public static final NumberRangeFormatter.RangeCollapse NONE</li>
+<li><span style='color:orange'>(draft)</span> public static final NumberRangeFormatter.RangeCollapse UNIT</li>
+</ul>
+NumberRangeFormatter.RangeIdentityFallback
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final NumberRangeFormatter.RangeIdentityFallback APPROXIMATELY</li>
+<li><span style='color:orange'>(draft)</span> public static final NumberRangeFormatter.RangeIdentityFallback APPROXIMATELY_OR_SINGLE_VALUE</li>
+<li><span style='color:orange'>(draft)</span> public static final NumberRangeFormatter.RangeIdentityFallback RANGE</li>
+<li><span style='color:orange'>(draft)</span> public static final NumberRangeFormatter.RangeIdentityFallback SINGLE_VALUE</li>
+</ul>
+NumberRangeFormatter.RangeIdentityResult
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final NumberRangeFormatter.RangeIdentityResult EQUAL_AFTER_ROUNDING</li>
+<li><span style='color:orange'>(draft)</span> public static final NumberRangeFormatter.RangeIdentityResult EQUAL_BEFORE_ROUNDING</li>
+<li><span style='color:orange'>(draft)</span> public static final NumberRangeFormatter.RangeIdentityResult NOT_EQUAL</li>
+</ul>
+Precision
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.Object <i>clone</i>()</li>
+</ul>
+ScientificNotation
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.Object <i>clone</i>()</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+CollationElementIterator
+<ul>
+<li><span style='color:green'>(stable)</span> public int <i>hashCode</i>()</li>
+</ul>
+CurrencyPluralInfo
+<ul>
+<li><span style='color:green'>(stable)</span> public int <i>hashCode</i>()</li>
+</ul>
+DateIntervalInfo.PatternInfo
+<ul>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>toString</i>()</li>
+</ul>
+Edits.Iterator
+<ul>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>toString</i>()</li>
+</ul>
+PluralRules
+<ul>
+<li><span style='color:green'>(stable)</span> public int <i>hashCode</i>()</li>
+</ul>
+RuleBasedNumberFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public int <i>hashCode</i>()</li>
+</ul>
+StringPrepParseException
+<ul>
+<li><span style='color:green'>(stable)</span> public int <i>hashCode</i>()</li>
+</ul>
+TimeUnitFormat
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public java.lang.Object <i>clone</i>()</li>
+</ul>
+Transliterator.Position
+<ul>
+<li><span style='color:green'>(stable)</span> public int <i>hashCode</i>()</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public abstract class <i>CodePointMap</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>CodePointMap.Range</i></li>
+<li><span style='color:orange'>(draft)</span> public class <i>CodePointMap.StringIterator</i></li>
+<li><span style='color:orange'>(draft)</span> public static interface <i>CodePointMap.ValueFilter</i></li>
+<li><span style='color:orange'>(draft)</span> public abstract class <i>CodePointTrie</i></li>
+<li><span style='color:orange'>(draft)</span> public static abstract class <i>CodePointTrie.Fast</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>CodePointTrie.Fast16</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>CodePointTrie.Fast32</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>CodePointTrie.Fast8</i></li>
+<li><span style='color:orange'>(draft)</span> public static abstract class <i>CodePointTrie.Small</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>CodePointTrie.Small16</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>CodePointTrie.Small32</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>CodePointTrie.Small8</i></li>
+<li><span style='color:orange'>(draft)</span> public final class <i>MutableCodePointTrie</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>CodePointMap.RangeOption</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>CodePointTrie.Type</i></li>
+<li><span style='color:orange'>(draft)</span> public static enum <i>CodePointTrie.ValueWidth</i></li>
+CodePointMap.RangeOption
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final CodePointMap.RangeOption FIXED_ALL_SURROGATES</li>
+<li><span style='color:orange'>(draft)</span> public static final CodePointMap.RangeOption FIXED_LEAD_SURROGATES</li>
+<li><span style='color:orange'>(draft)</span> public static final CodePointMap.RangeOption NORMAL</li>
+</ul>
+CodePointTrie.Type
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final CodePointTrie.Type FAST</li>
+<li><span style='color:orange'>(draft)</span> public static final CodePointTrie.Type SMALL</li>
+</ul>
+CodePointTrie.ValueWidth
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final CodePointTrie.ValueWidth BITS_16</li>
+<li><span style='color:orange'>(draft)</span> public static final CodePointTrie.ValueWidth BITS_32</li>
+<li><span style='color:orange'>(draft)</span> public static final CodePointTrie.ValueWidth BITS_8</li>
+</ul>
+MeasureUnit
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit ATMOSPHERE</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit PERCENT</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit PERMILLE</li>
+<li><span style='color:orange'>(draft)</span> public static final MeasureUnit PETABYTE</li>
 </ul>
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Tue May 29 17:03:55 EDT 2018<br/>© 2018 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Sep 26 19:32:24 PDT 2018<br/>© 2018 and later: Unicode, Inc. and others. License & terms of use: <a href="http://www.unicode.org/copyright.html#License">http://www.unicode.org/copyright.html#License</a></font></i></p>
 </body>
 </html>
