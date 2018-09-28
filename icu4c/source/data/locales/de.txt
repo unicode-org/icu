@@ -92,16 +92,16 @@ de{
             patternsShort{
                 currencyFormat{
                     1000{
-                        one{"0 Tsd'.' ¤"}
-                        other{"0 Tsd'.' ¤"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        one{"00 Tsd'.' ¤"}
-                        other{"00 Tsd'.' ¤"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        one{"000 Tsd'.' ¤"}
-                        other{"000 Tsd'.' ¤"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
                         one{"0 Mio'.' ¤"}
@@ -142,16 +142,16 @@ de{
                 }
                 decimalFormat{
                     1000{
-                        one{"0 Tsd'.'"}
-                        other{"0 Tsd'.'"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        one{"00 Tsd'.'"}
-                        other{"00 Tsd'.'"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        one{"000 Tsd'.'"}
-                        other{"000 Tsd'.'"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
                         one{"0 Mio'.'"}
@@ -218,7 +218,7 @@ de{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.44.73"}
+    Version{"2.1.44.86"}
     calendar{
         buddhist{
             eras{

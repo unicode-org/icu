@@ -202,7 +202,7 @@ ti{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.44.88"}
     calendar{
         generic{
             DateTimePatterns{
@@ -312,8 +312,8 @@ ti{
                 yQQQ{"QQQ y"}
                 yQQQQ{"y QQQQ"}
                 yw{
-                    one{"መበል w ሰሙን ናይ y"}
-                    other{"መበል w ሰሙን ናይ y"}
+                    one{"መበል w ሰሙን ናይ Y"}
+                    other{"መበል w ሰሙን ናይ Y"}
                 }
             }
             dayNames{

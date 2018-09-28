@@ -1247,7 +1247,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.44.61"}
+    Version{"2.1.44.79"}
     characterLabelPattern{
         all{"{0} — all"}
         category-list{"{0}: {1}"}

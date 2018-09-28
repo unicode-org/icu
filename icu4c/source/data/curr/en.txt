@@ -1034,6 +1034,10 @@ en{
             "UYU",
             "Uruguayan Peso",
         }
+        UYW{
+            "UYW",
+            "Uruguayan Nominal Wage Index Unit",
+        }
         UZS{
             "UZS",
             "Uzbekistani Som",
@@ -2244,6 +2248,10 @@ en{
             one{"Uruguayan peso"}
             other{"Uruguayan pesos"}
         }
+        UYW{
+            one{"Uruguayan nominal wage index unit"}
+            other{"Uruguayan nominal wage index units"}
+        }
         UZS{
             one{"Uzbekistani som"}
             other{"Uzbekistani som"}
@@ -2425,5 +2433,5 @@ en{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.44.61"}
+    Version{"2.1.44.79"}
 }

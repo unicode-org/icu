@@ -144,8 +144,8 @@ it{
                         other{"0"}
                     }
                     100000{
-                        one{"000K"}
-                        other{"000K"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
                         one{"0 Mln"}
@@ -213,7 +213,7 @@ it{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.44.86"}
     calendar{
         buddhist{
             eras{

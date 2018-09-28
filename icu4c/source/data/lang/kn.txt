@@ -832,7 +832,7 @@ kn{
             vaii{"ವಾಯ್ ಅಂಕೆಗಳು"}
         }
     }
-    Version{"2.1.43.50"}
+    Version{"2.1.44.88"}
     characterLabelPattern{
         all{"{0} — ಎಲ್ಲ"}
         category-list{"{0}: {1}"}

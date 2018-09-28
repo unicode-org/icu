@@ -178,7 +178,7 @@ km{
         minimumGroupingDigits{"1"}
         native{"khmr"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.44.88"}
     calendar{
         generic{
             DateTimePatterns{
@@ -415,7 +415,7 @@ km{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
                 yw{
-                    other{"សប្តាហ៍ទី w នៃឆ្នាំ y"}
+                    other{"សប្តាហ៍ទី w នៃឆ្នាំ Y"}
                 }
             }
             dayNames{
