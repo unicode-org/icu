@@ -1376,7 +1376,7 @@ zh_Hant{
             }
         }
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.44.88"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -4321,7 +4321,7 @@ zh_Hant{
                 yQQQ{"y年QQQ"}
                 yQQQQ{"y年QQQQ"}
                 yw{
-                    other{"y年的第w週"}
+                    other{"Y年的第w週"}
                 }
             }
             dayNames{

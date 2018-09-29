@@ -484,7 +484,7 @@ testLCID(UResourceBundle *currentBundle,
             log_verbose("WARNING: %-5s resolves to %s (0x%.4x)\n",
                 localeName, lcidStringC, expectedLCID);
         }
-        else {
+        else if (!(strcmp(localeName, "ku") == 0 && log_knownIssue("20181", "ICU-20181 Fix LCID mapping for ckb vs ku"))) {
             log_err("ERROR:   %-5s has 0x%.4x and the number resolves wrongfully to %s\n",
                 localeName, expectedLCID, lcidStringC);
         }

@@ -962,6 +962,10 @@ es{
             "UYU",
             "peso uruguayo",
         }
+        UYW{
+            "UYW",
+            "unidad previsional uruguayo",
+        }
         UZS{
             "UZS",
             "sum",
@@ -2104,6 +2108,10 @@ es{
             one{"peso uruguayo"}
             other{"pesos uruguayos"}
         }
+        UYW{
+            one{"unidad previsional uruguayo"}
+            other{"unidades previsionales uruguayos"}
+        }
         UZS{
             one{"sum"}
             other{"sums"}
@@ -2221,5 +2229,5 @@ es{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.43.50"}
+    Version{"2.1.44.88"}
 }

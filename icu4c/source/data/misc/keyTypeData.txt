@@ -422,6 +422,7 @@ keyTypeData:table(nofallback){
             uyi{""}
             uyp{""}
             uyu{""}
+            uyw{""}
             uzs{""}
             veb{""}
             vef{""}

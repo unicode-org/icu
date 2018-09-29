@@ -24,8 +24,7 @@ import com.ibm.icu.util.ULocale;
  *
  * <p>This class is not intended for public subclassing.
  *
- * @draft ICU 60
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 60
  */
 public abstract class FilteredBreakIteratorBuilder {
 
@@ -38,8 +37,7 @@ public abstract class FilteredBreakIteratorBuilder {
      * of the CLDR exception data.
      * @param where the locale.
      * @return the new builder
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      */
     public static final FilteredBreakIteratorBuilder getInstance(Locale where) {
         return new SimpleFilteredSentenceBreakIterator.Builder(where);
@@ -54,8 +52,7 @@ public abstract class FilteredBreakIteratorBuilder {
      * of the CLDR exception data.
      * @param where the locale.
      * @return the new builder
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      */
     public static final FilteredBreakIteratorBuilder getInstance(ULocale where) {
         return new SimpleFilteredSentenceBreakIterator.Builder(where);
@@ -65,8 +62,7 @@ public abstract class FilteredBreakIteratorBuilder {
      * Construct an empty FilteredBreakIteratorBuilder.
      * In this state, it will not suppress any segment boundaries.
      * @return the new builder
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      */
     public static final FilteredBreakIteratorBuilder getEmptyInstance() {
         return new SimpleFilteredSentenceBreakIterator.Builder();
@@ -79,8 +75,7 @@ public abstract class FilteredBreakIteratorBuilder {
      * @param str the string to suppress, such as "Mr."
      * @return true if the string was not present and now added,
      * false if the call was a no-op because the string was already being suppressed.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      */
     public abstract boolean suppressBreakAfter(CharSequence str);
 
@@ -92,8 +87,7 @@ public abstract class FilteredBreakIteratorBuilder {
      * @param str the str the string to unsuppress, such as "Mr."
      * @return true if the string was present and now removed,
      * false if the call was a no-op because the string was not being suppressed.
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      */
     public abstract boolean unsuppressBreakAfter(CharSequence str);
 
@@ -104,8 +98,7 @@ public abstract class FilteredBreakIteratorBuilder {
      * The FilteredBreakIteratorBuilder may be reused.
      * @param wrappedBreakIterator the break iterator to wrap
      * @return the new BreakIterator
-     * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 60
      */
     public abstract BreakIterator wrapIteratorWithFilter(BreakIterator wrappedBreakIterator);
 

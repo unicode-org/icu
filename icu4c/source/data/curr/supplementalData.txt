@@ -4317,6 +4317,9 @@ supplementalData:table(nofallback){
             {
                 id{"UYI"}
             }
+            {
+                id{"UYW"}
+            }
         }
         UZ{
             {
@@ -5133,6 +5136,12 @@ supplementalData:table(nofallback){
             0,
             0,
             0,
+            0,
+        }
+        UYW:intvector{
+            4,
+            0,
+            4,
             0,
         }
         UZS:intvector{

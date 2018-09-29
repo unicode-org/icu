@@ -45,6 +45,7 @@ enum UCPMapRangeOption {
     /**
      * ucpmap_getRange() enumerates all same-value ranges as stored in the map.
      * Most users should use this option.
+     * @draft ICU 63
      */
     UCPMAP_RANGE_NORMAL,
     /**
@@ -60,6 +61,7 @@ enum UCPMapRangeOption {
      * special values optimized for UTF-16 string processing
      * or for special error behavior for unpaired surrogates,
      * but those values are not to be associated with the lead surrogate code *points*.
+     * @draft ICU 63
      */
     UCPMAP_RANGE_FIXED_LEAD_SURROGATES,
     /**
@@ -75,6 +77,7 @@ enum UCPMapRangeOption {
      * special values optimized for UTF-16 string processing
      * or for special error behavior for unpaired surrogates,
      * but those values are not to be associated with the lead surrogate code *points*.
+     * @draft ICU 63
      */
     UCPMAP_RANGE_FIXED_ALL_SURROGATES
 };

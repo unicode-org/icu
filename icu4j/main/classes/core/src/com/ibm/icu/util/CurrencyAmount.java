@@ -48,7 +48,7 @@ public class CurrencyAmount extends Measure {
      * Constructs a new object given a number and a Java currency.
      * @param number the number
      * @param currency the currency
-     * @draft ICU 60
+     * @stable ICU 60
      */
     public CurrencyAmount(Number number, java.util.Currency currency) {
         this(number, Currency.fromJavaCurrency(currency));
@@ -58,7 +58,7 @@ public class CurrencyAmount extends Measure {
      * Constructs a new object given a double value and a Java currency.
      * @param number a double value
      * @param currency the currency
-     * @draft ICU 60
+     * @stable ICU 60
      */
     public CurrencyAmount(double number, java.util.Currency currency) {
         this(number, Currency.fromJavaCurrency(currency));

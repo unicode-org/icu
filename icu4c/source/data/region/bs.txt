@@ -312,5 +312,5 @@ bs{
         MK{"Makedonija (BJR)"}
         TL{"TL"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.44.88"}
 }

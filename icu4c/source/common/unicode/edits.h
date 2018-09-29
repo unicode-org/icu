@@ -86,7 +86,7 @@ public:
     /**
      * Copy constructor.
      * @param other source edits
-     * @draft ICU 60
+     * @stable ICU 60
      */
     Edits(const Edits &other) :
             array(stackArray), capacity(STACK_CAPACITY), length(other.length),
@@ -98,7 +98,7 @@ public:
      * Move constructor, might leave src empty.
      * This object will have the same contents that the source object had.
      * @param src source edits
-     * @draft ICU 60
+     * @stable ICU 60
      */
     Edits(Edits &&src) U_NOEXCEPT :
             array(stackArray), capacity(STACK_CAPACITY), length(src.length),
@@ -117,7 +117,7 @@ public:
      * Assignment operator.
      * @param other source edits
      * @return *this
-     * @draft ICU 60
+     * @stable ICU 60
      */
     Edits &operator=(const Edits &other);
 
@@ -127,7 +127,7 @@ public:
      * The behavior is undefined if *this and src are the same object.
      * @param src source edits
      * @return *this
-     * @draft ICU 60
+     * @stable ICU 60
      */
     Edits &operator=(Edits &&src) U_NOEXCEPT;
 
@@ -173,13 +173,11 @@ public:
      */
     UBool hasChanges() const { return numChanges != 0; }
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * @return the number of change edits
-     * @draft ICU 60
+     * @stable ICU 60
      */
     int32_t numberOfChanges() const { return numChanges; }
-#endif  // U_HIDE_DRAFT_API
 
     /**
      * Access to the list of edits.
@@ -202,7 +200,7 @@ public:
     struct U_COMMON_API Iterator U_FINAL : public UMemory {
         /**
          * Default constructor, empty iterator.
-         * @draft ICU 60
+         * @stable ICU 60
          */
         Iterator() :
                 array(nullptr), index(0), length(0),
@@ -253,7 +251,6 @@ public:
             return findIndex(i, TRUE, errorCode) == 0;
         }
 
-#ifndef U_HIDE_DRAFT_API
         /**
          * Moves the iterator to the edit that contains the destination index.
          * The destination index may be found in a no-change edit
@@ -271,7 +268,7 @@ public:
          *                  or else the function returns immediately. Check for U_FAILURE()
          *                  on output or use with function chaining. (See User Guide for details.)
          * @return TRUE if the edit for the destination index was found
-         * @draft ICU 60
+         * @stable ICU 60
          */
         UBool findDestinationIndex(int32_t i, UErrorCode &errorCode) {
             return findIndex(i, FALSE, errorCode) == 0;
@@ -297,7 +294,7 @@ public:
          *                  or else the function returns immediately. Check for U_FAILURE()
          *                  on output or use with function chaining. (See User Guide for details.)
          * @return destination index; undefined if i is not 0..string length
-         * @draft ICU 60
+         * @stable ICU 60
          */
         int32_t destinationIndexFromSourceIndex(int32_t i, UErrorCode &errorCode);
 
@@ -321,10 +318,9 @@ public:
          *                  or else the function returns immediately. Check for U_FAILURE()
          *                  on output or use with function chaining. (See User Guide for details.)
          * @return source index; undefined if i is not 0..string length
-         * @draft ICU 60
+         * @stable ICU 60
          */
         int32_t sourceIndexFromDestinationIndex(int32_t i, UErrorCode &errorCode);
-#endif  // U_HIDE_DRAFT_API
 
         /**
          * Returns whether the edit currently represented by the iterator is a change edit.
@@ -475,7 +471,6 @@ public:
         return Iterator(array, length, FALSE, FALSE);
     }
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Merges the two input Edits and appends the result to this object.
      *
@@ -501,10 +496,9 @@ public:
      *                  or else the function returns immediately. Check for U_FAILURE()
      *                  on output or use with function chaining. (See User Guide for details.)
      * @return *this, with the merged edits appended
-     * @draft ICU 60
+     * @stable ICU 60
      */
     Edits &mergeAndAppend(const Edits &ab, const Edits &bc, UErrorCode &errorCode);
-#endif  // U_HIDE_DRAFT_API
 
 private:
     void releaseArray() U_NOEXCEPT;

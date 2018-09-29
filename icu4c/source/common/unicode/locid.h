@@ -284,6 +284,7 @@ public:
      */
     Locale(const    Locale& other);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Move constructor; might leave source in bogus state.
      * This locale will have the same contents that the source locale had.
@@ -292,6 +293,7 @@ public:
      * @draft ICU 63
      */
     Locale(Locale&& other) U_NOEXCEPT;
+#endif  // U_HIDE_DRAFT_API
 
     /**
      * Destructor
@@ -308,6 +310,7 @@ public:
      */
     Locale& operator=(const Locale& other);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Move assignment operator; might leave source in bogus state.
      * This locale will have the same contents that the source locale had.
@@ -318,6 +321,7 @@ public:
      * @draft ICU 63
      */
     Locale& operator=(Locale&& other) U_NOEXCEPT;
+#endif  // U_HIDE_DRAFT_API
 
     /**
      * Checks if two locale keys are the same.
@@ -601,7 +605,6 @@ public:
      *
      * @param iterator  an STL style output iterator to write the keywords to.
      * @param status    error information if creating set of keywords failed.
-     * @return          a set of strings with all keywords.
      * @draft ICU 63
      */
     template<typename StringClass, typename OutputIterator>
@@ -616,7 +619,6 @@ public:
      *
      * @param iterator  an STL style output iterator to write the keywords to.
      * @param status    error information if creating set of keywords failed.
-     * @return          a set of strings with all keywords.
      * @draft ICU 63
      */
     template<typename StringClass, typename OutputIterator>

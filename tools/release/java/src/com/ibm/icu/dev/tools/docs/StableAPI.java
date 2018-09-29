@@ -515,14 +515,11 @@ public class StableAPI {
         }
 
 
-        static private String replList[] = {  "[ ]*\\([ ]*void[ ]*\\)[ ]*",   "()",  // cleanup
-                                              " , ", ", ",                // cleanup
-                                              "[ ]*\\*[ ]*", "* ",
-                                              "[ ]*=[ ]*0[ ]*$", "=0",      // cleanup pure virtual
-                                              "\\)[ ]*const", ") const",  // This just cleans up the spacing.
-
-                                              "^const [ ]*", "const ", // cleanup
-                                              //"([,)])[ ]*const [ ]*", "\1",  // TODO: notify about this difference, separately - remove const from param
+        static private String replList[] = {  "[ ]*\\([ ]*void[ ]*\\)", "() ",       // (void) => ()
+                                              "[ ]*,", ", ",                         // No spaces preceding commas.
+                                              "[ ]*\\*[ ]*", "* ",                   // No spaces preceding '*'.
+                                              "[ ]*=[ ]*0[ ]*$", "=0 ",              // No spaces in " = 0".
+                                              "[ ]{2,}", " ",                        // Multiple spaces collapse to single.
             						};
 
         /**
@@ -530,8 +527,9 @@ public class StableAPI {
          */
         static private String simplifyList[] = {
             "[ ]*=[ ]*0[ ]*$", "",      // remove pure virtual - TODO: notify about this difference, separately
-            "\\)[ ]*const[ ]*$", ")",  // TODO: notify about this difference, separately - remove const from function type
-            "[ ]*U_NOEXCEPT[ ]*", ""  // remove U_NOEXCEPT (this was fixed in Doxyfile, but fixing here so it is retroactive)
+            "[ ]*U_NOEXCEPT", "",       // remove U_NOEXCEPT (this was fixed in Doxyfile, but fixing here so it is retroactive)
+            "[ ]*U_OVERRIDE", "",       // remove U_OVERRIDE
+            "\\s+$", ""                 // remove trailing spaces.
         };
 
         /**
@@ -639,6 +637,9 @@ public class StableAPI {
         }
 
         private void simplifyPrototype() {
+            if (prototype.startsWith("#define")) {
+                return;
+            }
             final String prototype0 = prototype;
             for (int i = 0; i < simplifyList.length; i+= 2) {
                 prototype = prototype.replaceAll(simplifyList[i+0],simplifyList[i+1]);

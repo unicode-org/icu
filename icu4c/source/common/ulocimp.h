@@ -85,7 +85,7 @@ ulocimp_getCountry(const char *localeID,
  * @return          the length of the locale ID.
  * @internal ICU 63
  */
-U_STABLE int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ulocimp_forLanguageTag(const char* langtag,
                        int32_t tagLen,
                        char* localeID,
