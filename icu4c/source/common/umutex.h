@@ -48,6 +48,10 @@ U_NAMESPACE_END
 #if defined (U_USER_ATOMICS_H)
 #include U_MUTEX_XSTR(U_USER_ATOMICS_H)
 
+// TODO: There is direct use of std::atomic<type *> from number__mapper, numberrangeformatter
+//       Either add ICU abstraction, or deprecate U_USER_ATOMICS_H.
+//       See Jira issu ICU-20185.
+
 #elif U_HAVE_STD_ATOMICS
 
 //  C++11 atomics are available.
@@ -320,14 +324,31 @@ U_NAMESPACE_END
 /*************************************************************************************************
  *
  *  Mutex Definitions. Platform Dependent, #if platform chain follows.
- *         TODO:  Add a C++11 version.
- *                Need to convert all mutex using files to C++ first.
  *
  *************************************************************************************************/
 
 #if defined(U_USER_MUTEX_H)
 // #include "U_USER_MUTEX_H"
 #include U_MUTEX_XSTR(U_USER_MUTEX_H)
+
+#elif U_HAVE_STD_MUTEX
+
+#include <mutex>
+#include <condition_variable>
+
+
+struct UMutex {
+    std::mutex   fMutex;
+};
+
+struct UConditionVar {
+    std::condition_variable_any fCV;
+};
+
+#define U_MUTEX_INITIALIZER {}
+#define U_CONDITION_INITIALIZER {}
+
+
 
 #elif U_PLATFORM_USES_ONLY_WIN32_API
 

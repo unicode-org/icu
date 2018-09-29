@@ -39,6 +39,106 @@ static UMutex   globalMutex = U_MUTEX_INITIALIZER;
 // Build time user mutex hook: #include "U_USER_MUTEX_CPP"
 #include U_MUTEX_XSTR(U_USER_MUTEX_CPP)
 
+
+#elif U_HAVE_STD_MUTEX
+
+// C++11 std::mutex based implementation of ICU mutex wrappers.
+//
+
+U_CAPI void  U_EXPORT2
+umtx_lock(UMutex *mutex) {
+    if (mutex == nullptr) {
+        mutex = &globalMutex;
+    }
+    mutex->fMutex.lock();
+}
+
+
+U_CAPI void  U_EXPORT2
+umtx_unlock(UMutex* mutex)
+{
+    if (mutex == nullptr) {
+        mutex = &globalMutex;
+    }
+    mutex->fMutex.unlock();
+}
+
+
+U_CAPI void U_EXPORT2
+umtx_condWait(UConditionVar *cond, UMutex *mutex) {
+    if (mutex == nullptr) {
+        mutex = &globalMutex;
+    }
+    cond->fCV.wait(mutex->fMutex);
+}
+
+
+U_CAPI void U_EXPORT2
+umtx_condBroadcast(UConditionVar *cond) {
+    cond->fCV.notify_all();
+}
+
+
+U_CAPI void U_EXPORT2
+umtx_condSignal(UConditionVar *cond) {
+    cond->fCV.notify_one();
+}
+
+
+U_NAMESPACE_BEGIN
+
+static std::mutex initMutex;
+static std::condition_variable initCondition;
+
+
+// This function is called when a test of a UInitOnce::fState reveals that
+//   initialization has not completed, that we either need to call the init
+//   function on this thread, or wait for some other thread to complete.
+//
+// The actual call to the init function is made inline by template code
+//   that knows the C++ types involved. This function returns true if
+//   the caller needs to call the Init function.
+//
+U_COMMON_API UBool U_EXPORT2
+umtx_initImplPreInit(UInitOnce &uio) {
+    std::unique_lock<std::mutex> lock(initMutex);
+
+    if (umtx_loadAcquire(uio.fState) == 0) {
+        umtx_storeRelease(uio.fState, 1);
+        return true;      // Caller will next call the init function.
+    } else {
+        while (umtx_loadAcquire(uio.fState) == 1) {
+            // Another thread is currently running the initialization.
+            // Wait until it completes.
+            initCondition.wait(lock);
+        }
+        U_ASSERT(uio.fState == 2);
+        return false;
+    }
+}
+
+
+// This function is called by the thread that ran an initialization function,
+// just after completing the function.
+//   Some threads may be waiting on the condition, requiring the broadcast wakeup.
+//   Some threads may be racing to test the fState variable outside of the mutex,
+//   requiring the use of store/release when changing its value.
+
+U_COMMON_API void U_EXPORT2
+umtx_initImplPostInit(UInitOnce &uio) {
+    {
+        std::unique_lock<std::mutex> lock(initMutex);
+        umtx_storeRelease(uio.fState, 2);
+    }
+    initCondition.notify_all();
+}
+
+U_NAMESPACE_END
+
+// End of std::mutex specific umutex implementation.
+
+
+
 #elif U_PLATFORM_USES_ONLY_WIN32_API
 
 #if defined U_NO_PLATFORM_ATOMICS
