@@ -498,27 +498,23 @@ public:
 private:
     /**
      * Constructor.
-     * @stable ICU 3.8
      */
     DateTimePatternGenerator(UErrorCode & status);
 
     /**
      * Constructor.
-     * @stable ICU 3.8
      */
     DateTimePatternGenerator(const Locale& locale, UErrorCode & status);
 
     /**
      * Copy constructor.
      * @param other DateTimePatternGenerator to copy
-     * @stable ICU 3.8
      */
     DateTimePatternGenerator(const DateTimePatternGenerator& other);
 
     /**
      * Default assignment operator.
      * @param other DateTimePatternGenerator to copy
-     * @stable ICU 3.8
      */
     DateTimePatternGenerator& operator=(const DateTimePatternGenerator& other);
 

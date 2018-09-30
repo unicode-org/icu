@@ -2324,7 +2324,7 @@ class U_I18N_API LocalizedNumberFormatter
      */
     int32_t getCallCount() const;
 
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Creates a representation of this LocalizedNumberFormat as an icu::Format, enabling the use
@@ -2390,7 +2390,7 @@ class U_I18N_API LocalizedNumberFormatter
      */
     void formatImpl(impl::UFormattedNumberData *results, UErrorCode &status) const;
 
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Destruct this LocalizedNumberFormatter, cleaning up any memory it might own.
@@ -2592,7 +2592,7 @@ class U_I18N_API FormattedNumber : public UMemory {
      */
     void getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
 
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Copying not supported; use move constructor instead.

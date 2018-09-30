@@ -253,22 +253,27 @@ typedef enum UNumberGroupingStrategy {
      *
      * @draft ICU 61
      */
-            UNUM_GROUPING_THOUSANDS,
+            UNUM_GROUPING_THOUSANDS
 
+#ifndef U_HIDE_INTERNAL_API
+    ,
     /**
      * One more than the highest UNumberGroupingStrategy value.
      *
      * @internal ICU 62: The numeric value may change over time; see ICU ticket #12420.
      */
             UNUM_GROUPING_COUNT
+#endif  /* U_HIDE_INTERNAL_API */
 
 } UNumberGroupingStrategy;
 
+#ifndef U_HIDE_DEPRECATED_API
 /**
  * Old name for compatibility: will be removed in ICU 64.
  * @deprecated ICU 63
  */
 typedef UNumberGroupingStrategy UGroupingStrategy;
+#endif  /* U_HIDE_DEPRECATED_API */
 
 #endif  /* U_HIDE_DRAFT_API */
 

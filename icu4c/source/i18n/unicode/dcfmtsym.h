@@ -529,7 +529,7 @@ inline const UnicodeString& DecimalFormatSymbols::getConstDigitSymbol(int32_t di
     ENumberFormatSymbol key = static_cast<ENumberFormatSymbol>(kOneDigitSymbol + digit - 1);
     return fSymbols[key];
 }
-#endif
+#endif /* U_HIDE_INTERNAL_API */
 
 // -------------------------------------
 

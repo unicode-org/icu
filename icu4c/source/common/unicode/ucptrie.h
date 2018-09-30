@@ -598,6 +598,7 @@ enum {
 };
 
 /* Internal functions and macros -------------------------------------------- */
+// Do not conditionalize with #ifndef U_HIDE_INTERNAL_API, needed for public API
 
 /** @internal */
 U_INTERNAL int32_t U_EXPORT2
