@@ -98,6 +98,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
      **/
     //void TestDigitList(void);
 
+    void Test20186_SpacesAroundSemicolon(void);
+
     /**
      * Test localized currency patterns.
      */
