@@ -257,6 +257,21 @@ public class NumberFormatTest extends TestFmwk {
         }
     }
 
+    @Test
+    public void Test20186_SpacesAroundSemicolon() {
+        DecimalFormat df = new DecimalFormat("0.00 ; -0.00");
+        expect2(df, 1, "1.00 ");
+        expect2(df, -1, " -1.00");
+
+        df = new DecimalFormat("0.00;");
+        expect2(df, 1, "1.00");
+        expect2(df, -1, "-1.00");
+
+        df = new DecimalFormat("0.00;0.00");
+        expect2(df, 1, "1.00");
+        expect(df, -1, "1.00");  // parses as 1, not -1
+    }
+
     // Test exponential pattern
     @Test
     public void TestExponential() {
