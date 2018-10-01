@@ -1641,7 +1641,7 @@ private:
     void applyIntPropertyValue(const UCPMap *map,
                                UCPMapValueFilter *filter, const void *context,
                                UErrorCode &errorCode);
-#endif
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Set the new pattern to cache.

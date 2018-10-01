@@ -1058,12 +1058,12 @@ private:
 
     /**
      * A friend to allow the default locale to be set by either the C or C++ API.
-     * @internal
+     * @internal (private)
      */
     friend Locale *locale_set_default_internal(const char *, UErrorCode& status);
 
     /**
-     * @internal
+     * @internal (private)
      */
     friend void U_CALLCONV locale_available_init();
 };

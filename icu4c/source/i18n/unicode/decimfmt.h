@@ -2058,7 +2058,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     void formatToDecimalQuantity(const Formattable& number, number::impl::DecimalQuantity& output,
                                  UErrorCode& status) const;
 
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 
 #ifndef U_HIDE_DRAFT_API
     /**
