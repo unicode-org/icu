@@ -312,5 +312,5 @@ fr{
         MK{"Macédoine (ARYM)"}
         TL{"Timor-Oriental"}
     }
-    Version{"2.1.44.2"}
+    Version{"2.1.44.91"}
 }

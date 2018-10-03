@@ -272,7 +272,7 @@ nl{
         }
         CNY{
             "CN¥",
-            "Chinese Yuan",
+            "Chinese yuan",
         }
         COP{
             "COP",
@@ -2529,5 +2529,5 @@ nl{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.1.44.2"}
+    Version{"2.1.45.14"}
 }

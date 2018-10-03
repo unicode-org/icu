@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 lt{
-    Version{"2.1.43.94"}
+    Version{"2.1.44.91"}
     durationUnits{
         hm{"hh:mm"}
         hms{"hh:mm:ss"}
@@ -512,7 +512,7 @@ lt{
                 few{"{0} fadomai"}
                 many{"{0} fadomo"}
                 one{"{0} fadomas"}
-                other{"{0} ftm"}
+                other{"{0} fth"}
             }
             foot{
                 dnam{"pėdos"}
@@ -1266,11 +1266,11 @@ lt{
                 other{"{0} dm"}
             }
             fathom{
-                dnam{"ftm"}
-                few{"{0} ftm"}
-                many{"{0} ftm"}
-                one{"{0} ftm"}
-                other{"{0} ftm"}
+                dnam{"fth"}
+                few{"{0} fth"}
+                many{"{0} fth"}
+                one{"{0} fth"}
+                other{"{0} fth"}
             }
             foot{
                 dnam{"pėda"}
@@ -2059,11 +2059,11 @@ lt{
                 other{"{0} dm"}
             }
             fathom{
-                dnam{"ftm"}
-                few{"{0} ftm"}
-                many{"{0} ftm"}
-                one{"{0} ftm"}
-                other{"{0} ftm"}
+                dnam{"fth"}
+                few{"{0} fth"}
+                many{"{0} fth"}
+                one{"{0} fth"}
+                other{"{0} fth"}
             }
             foot{
                 dnam{"pėda"}

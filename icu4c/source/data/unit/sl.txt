@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sl{
-    Version{"2.1.43.94"}
+    Version{"2.1.44.91"}
     durationUnits{
         hm{"h.mm"}
         hms{"h.mm.ss"}
@@ -509,10 +509,10 @@ sl{
             }
             fathom{
                 dnam{"fm"}
-                few{"{0} ftm"}
-                one{"{0} ftm"}
-                other{"{0} ftm"}
-                two{"{0} ftm"}
+                few{"{0} fth"}
+                one{"{0} fth"}
+                other{"{0} fth"}
+                two{"{0} fth"}
             }
             foot{
                 dnam{"čevlji"}
@@ -1261,10 +1261,10 @@ sl{
             }
             fathom{
                 dnam{"fm"}
-                few{"{0} ftm"}
-                one{"{0} ftm"}
-                other{"{0} ftm"}
-                two{"{0} ftm"}
+                few{"{0} fth"}
+                one{"{0} fth"}
+                other{"{0} fth"}
+                two{"{0} fth"}
             }
             foot{
                 dnam{"ft"}
@@ -2107,10 +2107,10 @@ sl{
             }
             fathom{
                 dnam{"fm"}
-                few{"{0} ftm"}
-                one{"{0} ftm"}
-                other{"{0} ftm"}
-                two{"{0} ftm"}
+                few{"{0} fth"}
+                one{"{0} fth"}
+                other{"{0} fth"}
+                two{"{0} fth"}
             }
             foot{
                 dnam{"ft"}

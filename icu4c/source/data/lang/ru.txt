@@ -917,7 +917,7 @@ ru{
         VALENCIA{"Валенсийский"}
         WADEGILE{"Система Уэйда – Джайлза"}
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.45.15"}
     characterLabelPattern{
         all{"{0} — все"}
         category-list{"{0}: {1}"}

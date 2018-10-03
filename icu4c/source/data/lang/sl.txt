@@ -879,7 +879,7 @@ sl{
         VALENCIA{"valencijski pravopis"}
         WADEGILE{"romanizacija Wade-Giles"}
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.44.91"}
     characterLabelPattern{
         all{"{0} – vse"}
         category-list{"{0}: {1}"}
