@@ -1737,7 +1737,7 @@ The leftmost codepage (.xxx) wins.
 
     return posixID;
 
-#elif U_PLATFORM_HAS_WIN32_API
+#elif U_PLATFORM_USES_ONLY_WIN32_API
 #define POSIX_LOCALE_CAPACITY 64
     UErrorCode status = U_ZERO_ERROR;
     char *correctedPOSIXLocale = nullptr;
