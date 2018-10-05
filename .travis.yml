@@ -57,7 +57,9 @@ matrix:
       language: cpp
       env:
           - BUILD=ICU4C_CLANG_THREAD_SAN
-          - INTLTEST_OPTS="utility/MultithreadTest rbbi/RBBIMonkeyTest"
+          - INTLTEST_OPTS="utility/MultithreadTest rbbi/RBBIMonkeyTest format/CalendarLimitTest"
+          - CPPFLAGS="-fsanitize=thread"
+          - LDFLAGS=-fsanitize=thread
       os:       linux
       dist:     trusty
       sudo:     true
@@ -70,7 +72,11 @@ matrix:
               packages:
                   - clang-5.0
       script:
-          - cd icu4c/source && CPPFLAGS="-fsanitize=thread" LDFLAGS="-fsanitize=thread" ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming && make -j2 check
+          - cd icu4c/source &&
+            ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming &&
+            make -j2  &&
+            make -j2 -C test &&
+            make -j2 -C test/intltest check
 
     # copyright scan / future linter
     - name: "lint"
