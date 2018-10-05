@@ -395,7 +395,7 @@ cy{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.43.61"}
+    Version{"2.1.44.91"}
     calendar{
         generic{
             DateTimePatterns{

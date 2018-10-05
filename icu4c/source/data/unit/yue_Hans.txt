@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 yue_Hans{
     %%Parent{"root"}
-    Version{"2.1.44.50"}
+    Version{"2.1.44.91"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -854,7 +854,7 @@ yue_Hans{
             }
             fathom{
                 dnam{"英寻"}
-                other{"{0}ftm"}
+                other{"{0}fth"}
             }
             foot{
                 other{"{0}呎"}

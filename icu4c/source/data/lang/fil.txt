@@ -664,7 +664,7 @@ fil{
         PINYIN{"Pinyin Romanization"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.43.61"}
+    Version{"2.1.44.91"}
     characterLabelPattern{
         all{"{0} — lahat"}
         category-list{"{0}: {1}"}
