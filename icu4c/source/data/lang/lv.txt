@@ -798,7 +798,7 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.44.91"}
     characterLabelPattern{
         all{"{0} — visas"}
         category-list{"{0}: {1}"}

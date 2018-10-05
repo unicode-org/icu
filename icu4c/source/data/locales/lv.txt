@@ -252,7 +252,7 @@ lv{
         minimumGroupingDigits{"2"}
         native{"latn"}
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.44.91"}
     calendar{
         buddhist{
             eras{

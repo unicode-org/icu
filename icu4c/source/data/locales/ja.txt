@@ -235,7 +235,7 @@ ja{
         native{"latn"}
         traditional{"jpan"}
     }
-    Version{"2.1.43.74"}
+    Version{"2.1.44.91"}
     calendar{
         buddhist{
             DateTimePatterns{

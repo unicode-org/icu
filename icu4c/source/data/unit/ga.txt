@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ga{
-    Version{"2.1.43.65"}
+    Version{"2.1.44.91"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -1744,11 +1744,11 @@ ga{
             }
             fathom{
                 dnam{"feá"}
-                few{"{0} ftm"}
-                many{"{0} ftm"}
-                one{"{0} ftm"}
-                other{"{0} ftm"}
-                two{"{0} ftm"}
+                few{"{0} fth"}
+                many{"{0} fth"}
+                one{"{0} fth"}
+                other{"{0} fth"}
+                two{"{0} fth"}
             }
             foot{
                 dnam{"tr"}
@@ -2922,11 +2922,11 @@ ga{
             }
             fathom{
                 dnam{"feánna"}
-                few{"{0} ftm"}
-                many{"{0} ftm"}
-                one{"{0} ftm"}
-                other{"{0} ftm"}
-                two{"{0} ftm"}
+                few{"{0} fth"}
+                many{"{0} fth"}
+                one{"{0} fth"}
+                other{"{0} fth"}
+                two{"{0} fth"}
             }
             foot{
                 dnam{"troithe"}
