@@ -2132,7 +2132,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
             // The preferred tag for a redundant tag is always shorter than redundant
             // tag. A redundant tag may or may not be followed by other subtags.
             // (i.e. "zh-yue" or "zh-yue-u-co-pinyin").
-            if (uprv_strnicmp(redundantTag, tagBuf, redundantTagLen) == 0) {
+            if (uprv_strnicmp(redundantTag, tagBuf, static_cast<uint32_t>(redundantTagLen)) == 0) {
                 const char* redundantTagEnd = tagBuf + redundantTagLen;
                 if (*redundantTagEnd  == '\0' || *redundantTagEnd == SEP) {
                     const char* preferredTag = REDUNDANT[i + 1];
@@ -2644,7 +2644,7 @@ uloc_toLanguageTag(const char* localeID,
     const char* pKeywordStart;
 
     /* Note: uloc_canonicalize returns "en_US_POSIX" for input locale ID "".  See #6835 */
-    int32_t resultCapacity = uprv_strlen(localeID);
+    int32_t resultCapacity = static_cast<int32_t>(uprv_strlen(localeID));
     if (resultCapacity > 0) {
         char* buffer;
 
