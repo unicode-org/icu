@@ -509,11 +509,7 @@ void UObjectTest::testIDs()
 void UObjectTest::testUMemory() {
     // additional tests for code coverage
 #if U_OVERRIDE_CXX_ALLOCATION && U_HAVE_PLACEMENT_NEW
-    union {
-        UAlignedMemory   align_;
-        char             bytes_[sizeof(UnicodeString)];
-    } stackMemory;
-    char *bytes = stackMemory.bytes_;
+    alignas(UnicodeString) char bytes[sizeof(UnicodeString)];
     UnicodeString *p;
     enum { len=20 };
 
@@ -608,6 +604,21 @@ void UObjectTest::TestCompilerRTTI() {
 #endif
 }
 
+void UObjectTest::TestAlignmentPadding() {
+    alignas(std::max_align_t) const char data[40] = {};
+
+    assertEquals("alignmentPadding(data+1)",     7, alignmentPadding(data+1));  // works with pointers
+    assertEquals("alignmentPadding(1)",          7, alignmentPadding(1));       // works with ints.
+    assertEquals("alignmentPadding(0)",          0, alignmentPadding(0));
+    assertEquals("alignmentPadding<int16_t>(1)", 1, alignmentPadding<int16_t>(1));  // non-default align type.
+    assertEquals("alignmentPadding<int16_t>(2)", 0, alignmentPadding<int16_t>(2));
+    assertEquals("alignmentPadding<int32_t>(1)", 3, alignmentPadding<int32_t>(1));
+    assertEquals("alignmentPadding<int32_t>(2)", 2, alignmentPadding<int32_t>(2));
+    assertEquals("alignmentPadding<int32_t>(3)", 1, alignmentPadding<int32_t>(3));
+    assertEquals("alignmentPadding<int32_t>(4)", 0, alignmentPadding<int32_t>(4));
+    assertEquals("alignmentPadding<std::max_align_t>(data)", 0, alignmentPadding<std::max_align_t>(data));
+}
+
 /* --------------- */
 
 void UObjectTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /* par */ )
@@ -618,6 +629,7 @@ void UObjectTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE(1, testUMemory);
     TESTCASE(2, TestMFCCompatibility);
     TESTCASE(3, TestCompilerRTTI);
+    TESTCASE(4, TestAlignmentPadding);
 
     default: name = ""; break; //needed to end loop
     }

@@ -30,6 +30,10 @@
 
 #include <stddef.h>
 #include <string.h>
+#ifdef __cplusplus
+#include <cstddef>
+#include <type_traits>
+#endif
 #include "unicode/localpointer.h"
 
 #if U_DEBUG && defined(UPRV_MALLOC_COUNT)
@@ -64,8 +68,11 @@ U_CAPI void * U_EXPORT2
 uprv_calloc(size_t num, size_t size) U_MALLOC_ATTR U_ALLOC_SIZE_ATTR2(1,2);
 
 /**
- * This should align the memory properly on any machine.
+ * UAlignedMemory aligns memory properly for the types of interest to ICU on any machine.
  * This is very useful for the safeClone functions.
+ * It is conceptually similar to std::max_align_t, which aligns for any type.
+ * On x64, UAlignedMemory aligns to 8 byte boudaries, while max_align_t aligns to 16,
+ * which is the rationale for ICU not using max_align_t.
  */
 typedef union {
     long    t1;
@@ -77,25 +84,39 @@ typedef union {
  * Get the least significant bits of a pointer (a memory address).
  * For example, with a mask of 3, the macro gets the 2 least significant bits,
  * which will be 0 if the pointer is 32-bit (4-byte) aligned.
+ */
+#define U_POINTER_MASK_LSB(ptr, mask) (((uintptr_t)(ptr)) & (mask))
+
+#ifdef __cplusplus
+U_NAMESPACE_BEGIN
+
+/**
+ * Return the number of bytes of padding required following an address or buffer offset to
+ * align properly for the AlignmentType. If AlignmentTypeis omitted,
+ * align to UAlignedMemory, which is suitable for types used by ICU.
  *
- * ptrdiff_t is the most appropriate integer type to cast to.
- * size_t should work too, since on most (or all?) platforms it has the same
- * width as ptrdiff_t.
+ * The address may be either a pointer or an int type.
+ * Examples
+ *    alignmentPadding(offset);                     // return padding for UAlignedMemory alignment.
+ *    alignmentPadding< std::max_align_t>(offset);  // return padding for any type alignment.
+ *    alignmentPadding< int32_t>(offset);           // return padding for 4 byte alignment.
+ *    alignmentPadding(ptr_type);                   // works with pointers as well as offsets.
+ *
+ * This function is useful in buffer clone functions, to align data in user-supplied buffers
+ * of unknown origin & alignment.
  */
-#define U_POINTER_MASK_LSB(ptr, mask) (((ptrdiff_t)(char *)(ptr)) & (mask))
+template<typename AlignmentType = UAlignedMemory, typename T>
+int32_t alignmentPadding(T addressToPad) {
+    uintptr_t inputAddr = (uintptr_t)addressToPad;
+    uint32_t alignOffset = inputAddr % std::alignment_of<AlignmentType>::value;
+    if (alignOffset == 0) {
+        return 0;
+    }
+    return std::alignment_of<AlignmentType>::value - alignOffset;
+}
 
-/**
- * Get the amount of bytes that a pointer is off by from
- * the previous UAlignedMemory-aligned pointer.
- */
-#define U_ALIGNMENT_OFFSET(ptr) U_POINTER_MASK_LSB(ptr, sizeof(UAlignedMemory) - 1)
-
-/**
- * Get the amount of bytes to add to a pointer
- * in order to get the next UAlignedMemory-aligned address.
- */
-#define U_ALIGNMENT_OFFSET_UP(ptr) (sizeof(UAlignedMemory) - U_ALIGNMENT_OFFSET(ptr))
-
+U_NAMESPACE_END
+#endif // __cplusplus
 /**
   *  Heap clean up function, called from u_cleanup()
   *    Clears any user heap functions from u_setMemoryFunctions()

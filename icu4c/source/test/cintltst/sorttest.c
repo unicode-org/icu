@@ -27,6 +27,17 @@
 #include "cintltst.h"
 #include "uarrsort.h"
 
+// Comparator function for sort test of extra-wide (fat) elements.
+// See comments near declaration of fatLarge[], in code below.
+#define FAT_LARGE_EL_LENGTH 60
+static int32_t U_CALLCONV
+fatLargeComparator(const void *context, const void *vleft, const void *vright) {
+    (void)context;
+    const int32_t *left = (const int32_t *)vleft;
+    const int32_t *right = (const int32_t *)vright;
+    return left[FAT_LARGE_EL_LENGTH-1] - right[FAT_LARGE_EL_LENGTH-1];
+}
+
 static void
 SortTest() {
     uint16_t small[]={ 8, 1, 2, 5, 4, 3, 7, 6 };
@@ -80,6 +91,43 @@ SortTest() {
         if(large[i-1]>large[i]) {
             log_err("uprv_sortArray(large) mis-sorted [%d]=%u > [%d]=%u\n", i-1, large[i-1], i, large[i]);
             return;
+        }
+    }
+
+    /* sort a large array, with elements wide enough to overflow the internal stack buffer
+     * of the sort functions. (It has STACK_ITEM_SIZE=200)
+     * Each array element is an int32_t array, filled with the same value.
+     * Values borrowed from the preceding (large) test.
+     */
+    int32_t fatLarge[UPRV_LENGTHOF(large)][FAT_LARGE_EL_LENGTH];
+    for(i=0; i<UPRV_LENGTHOF(large); ++i) {
+        for (int32_t j=0; j<FAT_LARGE_EL_LENGTH; ++j) {
+            fatLarge[i][j] = large[i];
+        }
+    }
+    uprv_sortArray(fatLarge, UPRV_LENGTHOF(large), sizeof(fatLarge[0]), fatLargeComparator, NULL, FALSE, &errorCode);
+    if(U_FAILURE(errorCode)) {
+        log_err("%s:%d uprv_sortArray(fatLarge) failed - %s\n", __FILE__, __LINE__, u_errorName(errorCode));
+        return;
+    }
+    if (fatLarge[0][0] != 1 || fatLarge[UPRV_LENGTHOF(large)-1][FAT_LARGE_EL_LENGTH-1] != 21) {
+        log_err("%s:%d uprv_sortArray(fatLarge) mis-sorted. (fist, last) = (%d, %d)",
+                __FILE__, __LINE__, fatLarge[0][0], fatLarge[UPRV_LENGTHOF(large)-1][FAT_LARGE_EL_LENGTH-1]);
+    }
+    for(i=1; i<UPRV_LENGTHOF(large); ++i) {
+        if(fatLarge[i-1][FAT_LARGE_EL_LENGTH-1]>fatLarge[i][FAT_LARGE_EL_LENGTH-1]) {
+            log_err("%s:%d uprv_sortArray(fatLarge) mis-sorted [%d]=%u > [%d]=%u\n",
+                    __FILE__, __LINE__,
+                    i-1, fatLarge[i-1][FAT_LARGE_EL_LENGTH-1],
+                    i,   fatLarge[i]  [FAT_LARGE_EL_LENGTH-1]);
+            return;
+        }
+        for (int32_t j=1; j<FAT_LARGE_EL_LENGTH; ++j) {
+            if (fatLarge[i][j] != fatLarge[i][j-1]) {
+                log_err("%s:%d whole row should be equal. (i, j) = (%d, %d)",
+                        __FILE__, __LINE__, i, j);
+                return;
+            }
         }
     }
 }

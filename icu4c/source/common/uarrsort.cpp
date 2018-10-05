@@ -18,6 +18,9 @@
 *   Internal function for sorting arrays.
 */
 
+#include <cstddef>
+#include <type_traits>
+
 #include "unicode/utypes.h"
 #include "cmemory.h"
 #include "uarrsort.h"
@@ -33,6 +36,7 @@ enum {
     MIN_QSORT=9,
     STACK_ITEM_SIZE=200
 };
+typedef std::aligned_storage<STACK_ITEM_SIZE>::type StackBufferType;
 
 /* UComparator convenience implementations ---------------------------------- */
 
@@ -134,25 +138,22 @@ doInsertionSort(char *array, int32_t length, int32_t itemSize,
 static void
 insertionSort(char *array, int32_t length, int32_t itemSize,
               UComparator *cmp, const void *context, UErrorCode *pErrorCode) {
-    UAlignedMemory v[STACK_ITEM_SIZE/sizeof(UAlignedMemory)+1];
-    void *pv;
+    if (U_FAILURE(*pErrorCode)) { return; }
 
-    /* allocate an intermediate item variable (v) */
-    if(itemSize<=STACK_ITEM_SIZE) {
-        pv=v;
-    } else {
-        pv=uprv_malloc(itemSize);
-        if(pv==NULL) {
-            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+    /* allocate an intermediate item variable (v) if stack buffer is too small.*/
+    StackBufferType v;
+    void *pv = &v;
+    icu::LocalMemory<char> allocatedStorage;
+    if(itemSize > STACK_ITEM_SIZE) {
+        allocatedStorage.adoptInstead((char *)uprv_malloc(itemSize));
+        if (allocatedStorage.isNull()) {
+            *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
+        pv = allocatedStorage.getAlias();
     }
 
     doInsertionSort(array, length, itemSize, cmp, context, pv);
-
-    if(pv!=v) {
-        uprv_free(pv);
-    }
 }
 
 /* QuickSort ---------------------------------------------------------------- */
@@ -238,27 +239,28 @@ subQuickSort(char *array, int32_t start, int32_t limit, int32_t itemSize,
 static void
 quickSort(char *array, int32_t length, int32_t itemSize,
             UComparator *cmp, const void *context, UErrorCode *pErrorCode) {
-    UAlignedMemory xw[(2*STACK_ITEM_SIZE)/sizeof(UAlignedMemory)+1];
-    void *p;
+    if (U_FAILURE(*pErrorCode)) { return; }
 
-    /* allocate two intermediate item variables (x and w) */
-    if(itemSize<=STACK_ITEM_SIZE) {
-        p=xw;
-    } else {
-        p=uprv_malloc(2*itemSize);
-        if(p==NULL) {
-            *pErrorCode=U_MEMORY_ALLOCATION_ERROR;
+    /* Allocate storage for two intermediate item variables (w and x)
+     * When overflowing into malloc-ed memory (a single allocation for both w and x)
+     * make sure that the second (x) location is properly byte-aligned in the buffer.
+     */
+    StackBufferType sbw, sbx;
+    void *pw = &sbw;
+    void *px = &sbx;
+    icu::LocalMemory<char> allocatedStorage;
+    if(itemSize > STACK_ITEM_SIZE) {
+        int32_t paddingSize = icu::alignmentPadding(itemSize);  // padding after first.
+        allocatedStorage.adoptInstead((char *)uprv_malloc(2 * itemSize + paddingSize));
+        if (allocatedStorage.isNull()) {
+            *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
+        pw = allocatedStorage.getAlias();
+        px = (char *)pw + itemSize + paddingSize;
     }
-
-    subQuickSort(array, 0, length, itemSize,
-                 cmp, context, p, (char *)p+itemSize);
-
-    if(p!=xw) {
-        uprv_free(p);
-    }
-}
+    subQuickSort(array, 0, length, itemSize, cmp, context, pw, px);
+ }
 
 /* uprv_sortArray() API ----------------------------------------------------- */
 

@@ -24,6 +24,7 @@ private:
     void testUMemory();
     void TestMFCCompatibility();
     void TestCompilerRTTI();
+    void TestAlignmentPadding();
 
     //helper
 

@@ -25,6 +25,9 @@
 
 #if !UCONFIG_NO_CONVERSION
 
+#include <cstddef>
+#include <type_traits>
+
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
 #include "unicode/ucnv_err.h"
@@ -224,21 +227,17 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
         }
     }
 
-
-    /* Pointers on 64-bit platforms need to be aligned
-     * on a 64-bit boundary in memory.
+    /* The stack buffer position must be suitably aligned for any type
+     * of interest to ICU.
      */
-    if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
-        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(stackBufferChars);
-        if(stackBufferSize > offsetUp) {
-            stackBufferSize -= offsetUp;
-            stackBufferChars += offsetUp;
-        } else {
-            /* prevent using the stack buffer but keep the size > 0 so that we do not just preflight */
-            stackBufferSize = 1;
-        }
+    int32_t offsetUp = icu::alignmentPadding(stackBufferChars);
+    if(stackBufferSize > offsetUp) {
+        stackBufferSize -= offsetUp;
+        stackBufferChars += offsetUp;
+    } else {
+        /* prevent using the stack buffer but keep the size > 0 so that we do not just preflight */
+        stackBufferSize = 1;
     }
-
     stackBuffer = (void *)stackBufferChars;
     
     /* Now, see if we must allocate any memory */
@@ -475,7 +474,8 @@ ucnv_setSubstString(UConverter *cnv,
                     const UChar *s,
                     int32_t length,
                     UErrorCode *err) {
-    UAlignedMemory cloneBuffer[U_CNV_SAFECLONE_BUFFERSIZE / sizeof(UAlignedMemory) + 1];
+    typedef std::aligned_storage<U_CNV_SAFECLONE_BUFFERSIZE>::type CloneBufferType;
+    CloneBufferType cloneBuffer;
     char chars[UCNV_ERROR_BUFFER_LENGTH];
 
     UConverter *clone;
@@ -484,7 +484,7 @@ ucnv_setSubstString(UConverter *cnv,
 
     /* Let the following functions check all arguments. */
     cloneSize = sizeof(cloneBuffer);
-    clone = ucnv_safeClone(cnv, cloneBuffer, &cloneSize, err);
+    clone = ucnv_safeClone(cnv, &cloneBuffer, &cloneSize, err);
     ucnv_setFromUCallBack(clone, UCNV_FROM_U_CALLBACK_STOP, NULL, NULL, NULL, err);
     length8 = ucnv_fromUChars(clone, chars, (int32_t)sizeof(chars), s, length, err);
     ucnv_close(clone);
