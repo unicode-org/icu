@@ -204,6 +204,29 @@ pattern	format	output	breaks
 #E0	52413	5,2413E4	K
 0E0	52413	5E4
 
+test scientific infinite precision
+// ICU-11511, ICU-7460, CLDR-10103
+set locale en
+begin
+pattern	format	output	breaks
+// From the spec:
+// "0.##E0 means a max of 3 significant digits."
+0.##E0	98760	9.88E4
+// "#.##E0 also means a max of 3 significant digits."
+#.##E0	98760	9.88E4
+// "#.0#E0 means a max of 2 significant digits."
+#.0#E0	98760	9.9E4	K
+// "0E0 means a max of 1 significant digit."
+0E0	98760	1E5
+// "#E0 means infinite precision."
+#E0	98760	9.876E4	K
+// "###E0 means engineering notation with infinite precision."
+###E0	98760	98.76E3	K
+// Additional tests:
+##0.#E0	98760	99E3	K
+###.#E0	98760	99E3	K
+##0E0	98760	100E3	K
+
 test percents
 set locale fr
 begin
