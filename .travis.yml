@@ -55,7 +55,9 @@ matrix:
     #
     - name: "c: linux tsan"
       language: cpp
-      env:      BUILD=ICU4C_CLANG_THREAD_SAN
+      env:
+          - BUILD=ICU4C_CLANG_THREAD_SAN
+          - INTLTEST_OPTS="utility/MultithreadTest rbbi/RBBIMonkeyTest"
       os:       linux
       dist:     trusty
       sudo:     true
