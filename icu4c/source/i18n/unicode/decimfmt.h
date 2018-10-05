@@ -68,7 +68,7 @@ class NumberParserImpl;
  * explicit template instantiation. see digitlst.h
  * (When building DLLs for Windows this is required.)
  */
-#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN && !defined(U_IN_DOXYGEN)
 template class U_I18N_API    EnumSet<UNumberFormatAttribute,
             UNUM_MAX_NONBOOLEAN_ATTRIBUTE+1,
             UNUM_LIMIT_BOOLEAN_ATTRIBUTE>;
