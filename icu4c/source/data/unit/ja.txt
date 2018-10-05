@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ja{
-    Version{"2.1.43.74"}
+    Version{"2.1.44.91"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -871,7 +871,7 @@ ja{
             }
             fathom{
                 dnam{"fm"}
-                other{"{0}ftm"}
+                other{"{0}fth"}
             }
             foot{
                 dnam{"フィート"}
@@ -1447,7 +1447,7 @@ ja{
             }
             fathom{
                 dnam{"ファゾム"}
-                other{"{0} ftm"}
+                other{"{0} fth"}
             }
             foot{
                 dnam{"フィート"}

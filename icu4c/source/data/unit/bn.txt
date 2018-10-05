@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 bn{
-    Version{"2.1.43.65"}
+    Version{"2.1.44.91"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -379,8 +379,8 @@ bn{
             }
             fathom{
                 dnam{"fm"}
-                one{"{0} ftm"}
-                other{"{0} ftm"}
+                one{"{0} fth"}
+                other{"{0} fth"}
             }
             foot{
                 dnam{"ফুট"}
@@ -931,8 +931,8 @@ bn{
             }
             fathom{
                 dnam{"fm"}
-                one{"{0} ftm"}
-                other{"{0} ftm"}
+                one{"{0} fth"}
+                other{"{0} fth"}
             }
             foot{
                 dnam{"ফুট"}
@@ -1553,8 +1553,8 @@ bn{
             }
             fathom{
                 dnam{"fm"}
-                one{"{0} ftm"}
-                other{"{0} ftm"}
+                one{"{0} fth"}
+                other{"{0} fth"}
             }
             foot{
                 dnam{"ফুট"}

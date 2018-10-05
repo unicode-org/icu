@@ -310,5 +310,5 @@ is{
         MK{"Makedónía (Fyrrverandi lýðveldi Júgóslavíu)"}
         TL{"Austur-Tímor"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.44.91"}
 }

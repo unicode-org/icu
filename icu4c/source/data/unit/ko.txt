@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ko{
-    Version{"2.1.43.65"}
+    Version{"2.1.44.91"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -766,7 +766,7 @@ ko{
             }
             fathom{
                 dnam{"fm"}
-                other{"{0}ftm"}
+                other{"{0}fth"}
             }
             foot{
                 dnam{"ft"}
@@ -1276,7 +1276,7 @@ ko{
             }
             fathom{
                 dnam{"fm"}
-                other{"{0}ftm"}
+                other{"{0}fth"}
             }
             foot{
                 dnam{"ft"}

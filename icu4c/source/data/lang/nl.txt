@@ -1096,7 +1096,7 @@ nl{
         WADEGILE{"Wade-Giles-romanisering"}
         XSISTEMO{"X-sistemo"}
     }
-    Version{"2.1.44.2"}
+    Version{"2.1.45.14"}
     characterLabelPattern{
         all{"{0} — alle"}
         category-list{"{0}: {1}"}

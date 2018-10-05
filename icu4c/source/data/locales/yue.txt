@@ -262,7 +262,7 @@ yue{
         native{"hanidec"}
         traditional{"hant"}
     }
-    Version{"2.1.44.76"}
+    Version{"2.1.44.91"}
     calendar{
         buddhist{
             DateTimePatterns{

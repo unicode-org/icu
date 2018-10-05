@@ -236,7 +236,7 @@ ast{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.44.88"}
+    Version{"2.1.44.91"}
     calendar{
         buddhist{
             DateTimePatterns{

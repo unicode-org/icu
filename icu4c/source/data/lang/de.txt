@@ -1008,7 +1008,7 @@ de{
         VALENCIA{"Valencianisch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.44.86"}
+    Version{"2.1.44.91"}
     characterLabelPattern{
         all{"{0} — Alle"}
         category-list{"{0}: {1}"}
