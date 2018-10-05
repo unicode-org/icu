@@ -180,6 +180,16 @@ class NumberRangeFormatterImpl;
 
 } // namespace impl
 
+/**
+ * \cond
+ * Export an explicit template instantiation. See datefmt.h
+ * (When building DLLs for Windows this is required.)
+ */
+#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN && !defined(U_IN_DOXYGEN)
+template struct U_I18N_API std::atomic<impl::NumberRangeFormatterImpl*>;
+#endif
+/** \endcond */
+
 // Other helper classes would go here, but there are none.
 
 namespace impl {  // icu::number::impl

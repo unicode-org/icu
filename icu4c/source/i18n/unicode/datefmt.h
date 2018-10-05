@@ -45,7 +45,7 @@ class DateTimePatternGenerator;
 
 /**
  * \cond
- * explicit template instantiation. see digitlst.h
+ * Export an explicit template instantiation. (See digitlst.h, datefmt.h, and others.)
  * (When building DLLs for Windows this is required.)
  */
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN && !defined(U_IN_DOXYGEN)
