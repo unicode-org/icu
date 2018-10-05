@@ -16,3 +16,4 @@ Bundle-Copyright: @COPYRIGHT@
 Bundle-RequiredExecutionEnvironment: @EXECENV@
 Main-Class: com.ibm.icu.util.VersionInfo
 Export-Package: com.ibm.icu.lang,com.ibm.icu.math,com.ibm.icu.text,com.ibm.icu.util
+Automatic-Module-Name: com.ibm.icu
