@@ -14,3 +14,4 @@ Bundle-Version: @IMPLVERSION@
 Bundle-Vendor: Unicode, Inc.
 Bundle-Copyright: @COPYRIGHT@
 Bundle-RequiredExecutionEnvironment: @EXECENV@
+Automatic-Module-Name: com.ibm.icu.localespi
