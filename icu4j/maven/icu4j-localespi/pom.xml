@@ -17,17 +17,18 @@
   </description>
   <url>http://icu-project.org/</url>
   <inceptionYear>2001</inceptionYear>
+
   <licenses>
     <license>
       <name>Unicode/ICU License</name>
-      <url>http://source.icu-project.org/repos/icu/trunk/icu4j/main/shared/licenses/LICENSE</url>
+      <url>https://raw.githubusercontent.com/unicode-org/icu/master/icu4c/LICENSE</url>
       <distribution>repo</distribution>
     </license>
   </licenses>
 
   <developers>
     <developer>
-      <id>mark</id>
+      <id>macchiati</id>
       <name>Mark Davis</name>
       <organization>Google</organization>
       <roles>
@@ -35,7 +36,7 @@
       </roles>
     </developer>
     <developer>
-      <id>emmons</id>
+      <id>JCEmmons</id>
       <name>John Emmons</name>
       <organization>IBM Corporation</organization>
       <roles>
@@ -43,7 +44,7 @@
       </roles>
     </developer>
     <developer>
-      <id>doug</id>
+      <id>dougfelt</id>
       <name>Doug Felt</name>
       <organization>Google</organization>
       <roles>
@@ -59,7 +60,7 @@
       </roles>
     </developer>
     <developer>
-      <id>srl</id>
+      <id>srl295</id>
       <name>Steven Loomis</name>
       <organization>IBM Corporation</organization>
       <roles>
@@ -67,7 +68,7 @@
       </roles>
     </developer>
     <developer>
-      <id>markus</id>
+      <id>markusicu</id>
       <name>Markus Scherer</name>
       <organization>Google</organization>
       <roles>
@@ -83,7 +84,7 @@
       </roles>
     </developer>
     <developer>
-      <id>yoshito</id>
+      <id>yumaoka</id>
       <name>Yoshito Umaoka</name>
       <organization>IBM Corporation</organization>
       <roles>
@@ -117,13 +118,14 @@
   </mailingLists>
 
   <scm>
-    <connection>scm:svn:http://source.icu-project.org/repos/icu/trunk/icu4j</connection>
-    <developerConnection>scm:svn:http://source.icu-project.org/repos/icu/trunk/icu4j</developerConnection>
-    <url>http://source.icu-project.org/repos/icu/trunk/icu4j</url>
+    <connection>scm:git:git://github.com/unicode-org/icu.git</connection>
+    <developerConnection>scm:git:git@github.com:unicode-org/icu.git</developerConnection>
+    <url>https://github.com/unicode-org/icu</url>
   </scm>
+
   <issueManagement>
-    <system>Trac</system>
-    <url>http://bugs.icu-project.org/trac/</url>
+    <system>JIRA</system>
+    <url>https://unicode-org.atlassian.net/projects/ICU</url>
   </issueManagement>
 
   <distributionManagement>
