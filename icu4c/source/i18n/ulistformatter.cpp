@@ -23,11 +23,11 @@ ulistfmt_open(const char*  locale,
               UErrorCode*  status)
 {
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
     LocalPointer<ListFormatter> listfmt(ListFormatter::createInstance(Locale(locale), *status));
     if (U_FAILURE(*status)) {
-        return NULL;
+        return nullptr;
     }
     return (UListFormatter*)listfmt.orphan();
 }
@@ -49,10 +49,25 @@ ulistfmt_format(const UListFormatter* listfmt,
                 int32_t            resultCapacity,
                 UErrorCode*        status)
 {
+  return ulistfmt_formatForFields(
+      listfmt, strings, stringLengths, stringCount, result, resultCapacity, nullptr, status);
+}
+
+
+U_CAPI int32_t U_EXPORT2
+ulistfmt_formatForFields(const UListFormatter* listfmt,
+                         const UChar* const strings[],
+                         const int32_t *    stringLengths,
+                         int32_t            stringCount,
+                         UChar*             result,
+                         int32_t            resultCapacity,
+                         UFieldPositionIterator* fpositer,
+                         UErrorCode*        status)
+{
     if (U_FAILURE(*status)) {
         return -1;
     }
-    if (stringCount < 0 || (strings == NULL && stringCount > 0) || ((result == NULL)? resultCapacity != 0 : resultCapacity < 0)) {
+    if (stringCount < 0 || (strings == nullptr && stringCount > 0) || ((result == nullptr)? resultCapacity != 0 : resultCapacity < 0)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         return -1;
     }
@@ -60,12 +75,12 @@ ulistfmt_format(const UListFormatter* listfmt,
     UnicodeString* ustrings = ustringsStackBuf;
     if (stringCount > UPRV_LENGTHOF(ustringsStackBuf)) {
         ustrings = new UnicodeString[stringCount];
-        if (ustrings == NULL) {
+        if (ustrings == nullptr) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return -1;
         }
     }
-    if (stringLengths == NULL) {
+    if (stringLengths == nullptr) {
         for (int32_t stringIndex = 0; stringIndex < stringCount; stringIndex++) {
             ustrings[stringIndex].setTo(TRUE, strings[stringIndex], -1);
         }
@@ -75,12 +90,12 @@ ulistfmt_format(const UListFormatter* listfmt,
         }
     }
     UnicodeString res;
-    if (result != NULL) {
-        // NULL destination for pure preflighting: empty dummy string
+    if (result != nullptr) {
+        // nullptr destination for pure preflighting: empty dummy string
         // otherwise, alias the destination buffer (copied from udat_format)
         res.setTo(result, 0, resultCapacity);
     }
-    ((const ListFormatter*)listfmt)->format( ustrings, stringCount, res, *status );
+    ((const ListFormatter*)listfmt)->format( ustrings, stringCount, res, (FieldPositionIterator*)fpositer, *status );
     if (ustrings != ustringsStackBuf) {
         delete[] ustrings;
     }
