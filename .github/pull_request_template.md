@@ -10,8 +10,8 @@ You will be automatically asked to sign the contributors license before the PR i
 
 ##### Checklist
 
-- [ ] Issue filed at https://unicode-org.atlassian.net :  ICU-______
-- [ ] Update PR title to include Issue number
+- [ ] Issue filed: https://unicode-org.atlassian.net/browse/ICU-_____
+- [ ] Updated PR title and link in previous line to include Issue number
 - [ ] Issue accepted
 - [ ] Tests included
 - [ ] Documentation is changed or added
