@@ -1244,6 +1244,8 @@ enumDefaultsRange(const void *context, UChar32 start, UChar32 limit, UCharCatego
         { 0x1E800, U_LEFT_TO_RIGHT },  /* new default-R range in Unicode 5.2: U+1E800 - U+1EFFF */
         { 0x1EC70, U_RIGHT_TO_LEFT },  // Unicode 11 changes U+1EC70..U+1ECBF from R to AL.
         { 0x1ECC0, U_RIGHT_TO_LEFT_ARABIC },
+        { 0x1ED00, U_RIGHT_TO_LEFT },  // Unicode 12 changes U+1ED00..U+1ED4F from R to AL.
+        { 0x1ED50, U_RIGHT_TO_LEFT_ARABIC },
         { 0x1EE00, U_RIGHT_TO_LEFT },
         { 0x1EF00, U_RIGHT_TO_LEFT_ARABIC },  /* Unicode 6.1 changes U+1EE00..U+1EEFF from R to AL */
         { 0x1F000, U_RIGHT_TO_LEFT },

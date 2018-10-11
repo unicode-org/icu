@@ -162,7 +162,11 @@ Encoding of numeric type and value in the 10-bit ntv field:
                                 frac20 = ntv-0x324 = 0..0x17 -> 1|3|5|7 / 20|40|80|160|320|640
                                 numerator: num = 2*(frac20&3)+1
                                 denominator: den = 20<<(frac20>>2)
-    0x34c..0x3ff    reserved
+    0x34c..0x35b    fraction-32 (new in format version 7.6)
+                                frac32 = ntv-0x34c = 0..15 -> 1|3|5|7 / 32|64|128|256
+                                numerator: num = 2*(frac32&3)+1
+                                denominator: den = 32<<(frac32>>2)
+    0x35c..0x3ff    reserved
 
 --- Additional properties (new in format version 2.1) ---
 
@@ -273,6 +277,10 @@ http://www.unicode.org/reports/tr51/#Emoji_Properties
 ICU 62 adds the Extended_Pictographic property to vector word 2, for emoji 11.
 http://www.unicode.org/reports/tr51/#Emoji_Properties
 
+--- Changes in format version 7.6 ---
+
+ICU 64 adds fraction-32 numeric values for new Unicode 12 Tamil fraction characters.
+
 ----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
@@ -288,7 +296,7 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 7, 4, 0, 0 },                             /* formatVersion */
+    { 7, 6, 0, 0 },                             /* formatVersion */
     { 10, 0, 0, 0 }                             /* dataVersion */
 };
 
@@ -350,9 +358,34 @@ static int32_t encodeFractional20(int32_t value, int32_t den) {
         if(den==20) {
             return UPROPS_NTV_FRACTION20_START+frac20;
         }
+        if(den&1) {
+            return -1;  // odd denominator, and we would lose the low bit in den/=2
+        }
         den/=2;
         frac20+=4;
     } while(den>=20);
+    return -1;
+}
+
+static int32_t encodeFractional32(int32_t value, int32_t den) {
+    if(den<32 || 256<den) { return -1; }
+    int32_t frac32;
+    if(value==1 || value==3 || value==5 || value==7) {
+        frac32=value/2;
+    } else {
+        return -1;
+    }
+    // Denominator: 32 times which power of 2: 0..3 into bits 3..2
+    do {
+        if(den==32) {
+            return UPROPS_NTV_FRACTION32_START+frac32;
+        }
+        if(den&1) {
+            return -1;  // odd denominator, and we would lose the low bit in den/=2
+        }
+        den/=2;
+        frac32+=4;
+    } while(den>=32);
     return -1;
 }
 
@@ -451,6 +484,8 @@ encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
         ntv=((value+12)<<4);
     } else if(exp==0 && (ntv=encodeFractional20(value, den))>=0) {
         // fits into fractional-20 format
+    } else if(exp==0 && (ntv=encodeFractional32(value, den))>=0) {
+        // fits into fractional-32 format
     } else {
         ntv=-1;
     }

@@ -1202,6 +1202,27 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         /** @stable ICU 62 */
         public static final int SOGDIAN_ID = 291; /*[10F30]*/
 
+        // New blocks in Unicode 12.0
+
+        /** @stable ICU 64 */
+        public static final int EGYPTIAN_HIEROGLYPH_FORMAT_CONTROLS_ID = 292; /*[13430]*/
+        /** @stable ICU 64 */
+        public static final int ELYMAIC_ID = 293; /*[10FE0]*/
+        /** @stable ICU 64 */
+        public static final int NANDINAGARI_ID = 294; /*[119A0]*/
+        /** @stable ICU 64 */
+        public static final int NYIAKENG_PUACHUE_HMONG_ID = 295; /*[1E100]*/
+        /** @stable ICU 64 */
+        public static final int OTTOMAN_SIYAQ_NUMBERS_ID = 296; /*[1ED00]*/
+        /** @stable ICU 64 */
+        public static final int SMALL_KANA_EXTENSION_ID = 297; /*[1B130]*/
+        /** @stable ICU 64 */
+        public static final int SYMBOLS_AND_PICTOGRAPHS_EXTENDED_A_ID = 298; /*[1FA70]*/
+        /** @stable ICU 64 */
+        public static final int TAMIL_SUPPLEMENT_ID = 299; /*[11FC0]*/
+        /** @stable ICU 64 */
+        public static final int WANCHO_ID = 300; /*[1E2C0]*/
+
         /**
          * One more than the highest normal UnicodeBlock value.
          * The highest value is available via UCharacter.getIntPropertyMaxValue(UProperty.BLOCK).
@@ -1209,7 +1230,7 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
          */
         @Deprecated
-        public static final int COUNT = 292;
+        public static final int COUNT = 301;
 
         // blocks objects ---------------------------------------------------
 
@@ -2521,6 +2542,34 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
                 new UnicodeBlock("OLD_SOGDIAN", OLD_SOGDIAN_ID); /*[10F00]*/
         /** @stable ICU 62 */
         public static final UnicodeBlock SOGDIAN = new UnicodeBlock("SOGDIAN", SOGDIAN_ID); /*[10F30]*/
+
+        // New blocks in Unicode 12.0
+
+        /** @stable ICU 64 */
+        public static final UnicodeBlock EGYPTIAN_HIEROGLYPH_FORMAT_CONTROLS =
+                new UnicodeBlock("EGYPTIAN_HIEROGLYPH_FORMAT_CONTROLS", EGYPTIAN_HIEROGLYPH_FORMAT_CONTROLS_ID); /*[13430]*/
+        /** @stable ICU 64 */
+        public static final UnicodeBlock ELYMAIC = new UnicodeBlock("ELYMAIC", ELYMAIC_ID); /*[10FE0]*/
+        /** @stable ICU 64 */
+        public static final UnicodeBlock NANDINAGARI =
+                new UnicodeBlock("NANDINAGARI", NANDINAGARI_ID); /*[119A0]*/
+        /** @stable ICU 64 */
+        public static final UnicodeBlock NYIAKENG_PUACHUE_HMONG =
+                new UnicodeBlock("NYIAKENG_PUACHUE_HMONG", NYIAKENG_PUACHUE_HMONG_ID); /*[1E100]*/
+        /** @stable ICU 64 */
+        public static final UnicodeBlock OTTOMAN_SIYAQ_NUMBERS =
+                new UnicodeBlock("OTTOMAN_SIYAQ_NUMBERS", OTTOMAN_SIYAQ_NUMBERS_ID); /*[1ED00]*/
+        /** @stable ICU 64 */
+        public static final UnicodeBlock SMALL_KANA_EXTENSION =
+                new UnicodeBlock("SMALL_KANA_EXTENSION", SMALL_KANA_EXTENSION_ID); /*[1B130]*/
+        /** @stable ICU 64 */
+        public static final UnicodeBlock SYMBOLS_AND_PICTOGRAPHS_EXTENDED_A =
+                new UnicodeBlock("SYMBOLS_AND_PICTOGRAPHS_EXTENDED_A", SYMBOLS_AND_PICTOGRAPHS_EXTENDED_A_ID); /*[1FA70]*/
+        /** @stable ICU 64 */
+        public static final UnicodeBlock TAMIL_SUPPLEMENT =
+                new UnicodeBlock("TAMIL_SUPPLEMENT", TAMIL_SUPPLEMENT_ID); /*[11FC0]*/
+        /** @stable ICU 64 */
+        public static final UnicodeBlock WANCHO = new UnicodeBlock("WANCHO", WANCHO_ID); /*[1E2C0]*/
 
         /**
          * @stable ICU 2.4

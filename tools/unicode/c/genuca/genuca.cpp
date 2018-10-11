@@ -208,6 +208,13 @@ static int64_t parseCE(const CollationDataBuilder &builder, char *&s, UErrorCode
     }
 }
 
+namespace {
+
+// Cached, lazy-init mapping from scripts to sample characters.
+UChar32 sampleChars[USCRIPT_CODE_LIMIT] = { U_SENTINEL };
+
+}
+
 // Hardcoded mapping from script sample characters to script codes.
 // Pro: Available without complete and updated UCD scripts data,
 //      easy to add non-script codes specific to collation.
@@ -375,6 +382,22 @@ static const struct {
 };
 
 static int32_t getCharScript(UChar32 c) {
+    if (sampleChars[0] < 0) {
+        // Lazy-init the script->sample cache.
+        for (int32_t script = 0; script < USCRIPT_CODE_LIMIT; ++script) {
+            UnicodeString sample = uscript_getSampleUnicodeString((UScriptCode)script);
+            if (sample.isEmpty() || sample.hasMoreChar32Than(0, INT32_MAX, 1)) {
+                sampleChars[script] = U_SENTINEL;
+            } else {
+                sampleChars[script] = sample.char32At(0);
+            }
+        }
+    }
+    for (int32_t script = 0; script < USCRIPT_CODE_LIMIT; ++script) {
+        if (c == sampleChars[script]) {
+            return script;
+        }
+    }
     for(int32_t i = 0; i < UPRV_LENGTHOF(sampleCharsToScripts); ++i) {
         if(c == sampleCharsToScripts[i].sampleChar) {
             return sampleCharsToScripts[i].script;

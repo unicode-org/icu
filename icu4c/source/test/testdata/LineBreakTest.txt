@@ -1,5 +1,5 @@
-# LineBreakTest-11.0.0.txt
-# Date: 2018-05-20, 09:03:09 GMT
+# LineBreakTest-12.0.0.txt
+# Date: 2018-08-02, 23:37:46 GMT
 # © 2018 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
