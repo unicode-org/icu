@@ -1421,6 +1421,9 @@ _idna_replacements = [
   (re.compile(r"; disallowed_STD3_mapped +; "), ">"),
   # For UTS #46, we do not care about "not valid in IDNA2008".
   (re.compile(r"; *; NV8 +"), ""),
+  # ICU 63+ normalization no longer allows mappings for surrogate code points,
+  # and the UTS #46 code handles them instead.
+  (re.compile(r"^D800..DFFF    ; disallowed"), r"# D800..DFFF disallowed in code"),
   # Normal transformations.
   (re.compile(r"; disallowed"), ">FFFD"),
   (re.compile(r"; ignored"), ">"),
