@@ -973,4 +973,13 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
         String w = fmt.format(6.0, Direction.NEXT, RelativeUnit.QUARTERS);
         assertEquals("narrow: in 6 qtr", "in 6 qtr", w);
     }
+
+@Test
+public void TestLocales() {
+    ULocale[] availableLocales = ULocale.getAvailableLocales();
+    for (ULocale loc: availableLocales) {
+        RelativeDateTimeFormatter.getInstance(loc);
+    }
+}
+
 }
