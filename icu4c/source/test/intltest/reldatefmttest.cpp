@@ -1306,7 +1306,6 @@ void RelativeDateTimeFormatterTest::TestLocales() {
     std::vector<std::unique_ptr<RelativeDateTimeFormatter>> allFormatters;
     for (int localeIdx=0; localeIdx<numLocales; localeIdx++) {
         const Locale &loc = availableLocales[localeIdx];
-        printf("%s\n", loc.getName());
         UErrorCode status = U_ZERO_ERROR;
         std::unique_ptr<RelativeDateTimeFormatter> rdtf(new RelativeDateTimeFormatter(loc, status));
         allFormatters.push_back(std::move(rdtf));
