@@ -610,6 +610,9 @@ static void loadWeekdayNames(UnicodeString absoluteUnits[UDAT_STYLE_COUNT]
     }
     Locale locale(localeId);
     DateFormatSymbols dfSym(locale, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
     for (int32_t style = 0; style < UDAT_STYLE_COUNT; ++style) {
         DateFormatSymbols::DtWidthType dtfmtWidth = styleToDateFormatSymbolWidth[style];
         int32_t count;
