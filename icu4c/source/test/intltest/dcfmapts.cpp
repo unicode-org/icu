@@ -636,8 +636,14 @@ void IntlTestDecimalFormatAPI::TestScale()
 }
 
 
-#define ASSERT_EQUAL(expect, actual) { char tmp[200]; sprintf(tmp, "(%g==%g)", (double)(expect), (double)(actual)); \
-    assertTrue(tmp, ((expect)==(actual)), FALSE, TRUE, __FILE__, __LINE__); }
+#define ASSERT_EQUAL(expect, actual) { \
+    /* ICU-20080: Use temporary variables to avoid strange compiler behaviour \
+       (with the nice side-effect of avoiding repeated function calls too). */ \
+    auto lhs = (expect); \
+    auto rhs = (actual); \
+    char tmp[200]; \
+    sprintf(tmp, "(%g==%g)", (double)lhs, (double)rhs); \
+    assertTrue(tmp, (lhs==rhs), FALSE, TRUE, __FILE__, __LINE__); }
 
 void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     UErrorCode status = U_ZERO_ERROR;
@@ -946,16 +952,7 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     ASSERT_EQUAL(0, fd.getPluralOperand(PLURAL_OPERAND_T));
     // note: going through DigitList path to FixedDecimal, which is trimming
     //       int64_t fields to 18 digits. See ticket Ticket #10374
-    // ASSERT_EQUAL(223372036854775807LL, fd.getPluralOperand(PLURAL_OPERAND_I);
-    if (!(
-            fd.getPluralOperand(PLURAL_OPERAND_I) == 223372036854775807LL ||
-            fd.getPluralOperand(PLURAL_OPERAND_I) == 9223372036854775807LL)) {
-        dataerrln(
-                "File %s, Line %d, fd.getPluralOperand(PLURAL_OPERAND_I = %lld",
-                __FILE__,
-                __LINE__,
-                fd.getPluralOperand(PLURAL_OPERAND_I));
-    }
+    ASSERT_EQUAL(223372036854775807LL, fd.getPluralOperand(PLURAL_OPERAND_I));
     ASSERT_EQUAL(TRUE, fd.hasIntegerValue());
     ASSERT_EQUAL(FALSE, fd.isNegative());
 
