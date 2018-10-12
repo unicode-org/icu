@@ -10,8 +10,10 @@
 *
 *******************************************************************************
 */
+#include <memory>
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 
 #include "intltest.h"
 
@@ -765,6 +767,7 @@ private:
     void TestBadDisplayContext();
     void TestFormat();
     void TestFormatNumeric();
+    void TestLocales();
     void RunTest(
             const Locale& locale,
             const WithQuantityExpected* expectedResults,
@@ -854,6 +857,7 @@ void RelativeDateTimeFormatterTest::runIndexedTest(
     TESTCASE_AUTO(TestSidewaysDataLoading);
     TESTCASE_AUTO(TestFormat);
     TESTCASE_AUTO(TestFormatNumeric);
+    TESTCASE_AUTO(TestLocales);
     TESTCASE_AUTO_END;
 }
 
@@ -1294,6 +1298,19 @@ void RelativeDateTimeFormatterTest::TestFormatNumeric() {
 
 void RelativeDateTimeFormatterTest::TestFormat() {
     RunTest("en", kEnglishFormat, UPRV_LENGTHOF(kEnglishFormat), false);
+}
+
+void RelativeDateTimeFormatterTest::TestLocales() {
+    int32_t numLocales = 0;
+    const Locale *availableLocales = Locale::getAvailableLocales(numLocales);
+    std::vector<std::unique_ptr<RelativeDateTimeFormatter>> allFormatters;
+    for (int localeIdx=0; localeIdx<numLocales; localeIdx++) {
+        const Locale &loc = availableLocales[localeIdx];
+        UErrorCode status = U_ZERO_ERROR;
+        std::unique_ptr<RelativeDateTimeFormatter> rdtf(new RelativeDateTimeFormatter(loc, status));
+        allFormatters.push_back(std::move(rdtf));
+        assertSuccess(loc.getName(), status);
+    }
 }
 
 static const char *kLast2 = "Last_2";

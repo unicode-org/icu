@@ -605,8 +605,14 @@ static void loadWeekdayNames(UnicodeString absoluteUnits[UDAT_STYLE_COUNT]
                                  [UDAT_ABSOLUTE_UNIT_COUNT][UDAT_DIRECTION_COUNT],
                              const char* localeId,
                              UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
     Locale locale(localeId);
     DateFormatSymbols dfSym(locale, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
     for (int32_t style = 0; style < UDAT_STYLE_COUNT; ++style) {
         DateFormatSymbols::DtWidthType dtfmtWidth = styleToDateFormatSymbolWidth[style];
         int32_t count;
@@ -630,6 +636,9 @@ static UBool loadUnitData(
     RelDateTimeFmtDataSink sink(cacheData);
 
     ures_getAllItemsWithFallback(resource, "fields", sink, status);
+    if (U_FAILURE(status)) {
+        return false;
+    }
 
     // Get the weekday names from DateFormatSymbols.
     loadWeekdayNames(cacheData.absoluteUnits, localeId, status);
