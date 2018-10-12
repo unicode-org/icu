@@ -2000,7 +2000,7 @@ pt{
                 }
                 past{
                     one{"há {0} segunda-feira"}
-                    other{"{{0} segundas-feiras atrás"}
+                    other{"{0} segundas-feiras atrás"}
                 }
             }
         }
