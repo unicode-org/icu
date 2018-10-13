@@ -8,6 +8,9 @@
  */
 package com.ibm.icu.text;
 
+import java.io.InvalidObjectException;
+import java.text.AttributedCharacterIterator;
+import java.text.Format;
 import java.util.EnumMap;
 import java.util.Locale;
 
@@ -560,6 +563,26 @@ public final class RelativeDateTimeFormatter {
         return (result != null)? result: "";
     }
 
+    /**
+     * Format a combination of RelativeDateTimeUnit and numeric offset
+     * to an attributed string, and return the corresponding iterator
+     * using a numeric style, e.g. "1 week ago", "in 1 week",
+     * "5 weeks ago", "in 5 weeks".
+     *
+     * @param offset    The signed offset for the specified unit. This
+     *                  will be formatted according to this object's
+     *                  NumberFormat object.
+     * @param unit      The unit to use when formatting the relative
+     *                  date, e.g. RelativeDateTimeUnit.WEEK,
+     *                  RelativeDateTimeUnit.FRIDAY.
+     * @return <code>AttributedCharacterIterator</code> describing the formatted value.
+     * @draft ICU 64
+     */
+    public AttributedCharacterIterator formatNumericToCharacterIterator(
+        double offset, RelativeDateTimeUnit unit) {
+      return null;
+    }
+
     private int[] styleToDateFormatSymbolsWidth = {
                 DateFormatSymbols.WIDE, DateFormatSymbols.SHORT, DateFormatSymbols.NARROW
     };
@@ -669,6 +692,26 @@ public final class RelativeDateTimeFormatter {
         }
         // otherwise fallback to formatNumeric
         return formatNumeric(offset, unit);
+    }
+
+    /**
+     * Format a combination of RelativeDateTimeUnit and numeric offset
+     * to an attributed string, and return the corresponding iterator
+     * using a text style if possible, e.g. "last week", "this week",
+     * "next week", "yesterday", "tomorrow". Falls back to numeric
+     * style if no appropriate text term is available for the specified
+     * offset in the object’s locale.
+     *
+     * @param offset    The signed offset for the specified field.
+     * @param unit      The unit to use when formatting the relative
+     *                  date, e.g. RelativeDateTimeUnit.WEEK,
+     *                  RelativeDateTimeUnit.FRIDAY.
+     * @return <code>AttributedCharacterIterator</code> describing the formatted value.
+     * @draft ICU 64
+     */
+    public AttributedCharacterIterator formatToCharacterIterator(
+        double offset, RelativeDateTimeUnit unit) {
+      return null;
     }
 
     /**
@@ -1255,4 +1298,52 @@ public final class RelativeDateTimeFormatter {
     }
 
     private static final Cache cache = new Cache();
+
+    /**
+     * The instances of this inner class are used as attribute keys and values
+     * in AttributedCharacterIterator that
+     * RelativeDateTimeFormatter.formatToCharacterIterator() method returns.
+     * <p>
+     * There is no public constructor to this class, the only instances are the
+     * constants defined here.
+     * <p>
+     * @draft ICU 64
+     */
+    public static class Field extends Format.Field {
+        static final long serialVersionUID = 1L;
+
+        /**
+         * @stable ICU 64
+         */
+        public static final Field INTEGER = new Field("integer");
+
+        /**
+         * @stable ICU 64
+         */
+        public static final Field LITERAL = new Field("literal");
+
+        /**
+         * Constructs a new instance of RelativeDateTimeFormatter.Field with the given field
+         * name.
+         * @draft ICU 64
+         */
+        protected Field(String fieldName) {
+            super(fieldName);
+        }
+
+        /**
+         * serizalization method resolve instances to the constant
+         * RelativeDateTimeFormatter.Field values
+         * @draft ICU 64
+         */
+        @Override
+        protected Object readResolve() throws InvalidObjectException {
+            if (this.getName().equals(INTEGER.getName()))
+                return INTEGER;
+            if (this.getName().equals(LITERAL.getName()))
+                return LITERAL;
+
+            throw new InvalidObjectException("An invalid object.");
+        }
+    }
 }
