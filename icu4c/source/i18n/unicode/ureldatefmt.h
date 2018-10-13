@@ -16,6 +16,7 @@
 
 #include "unicode/unum.h"
 #include "unicode/udisplaycontext.h"
+#include "unicode/ufieldpositer.h"
 #include "unicode/localpointer.h"
 
 /**
@@ -174,6 +175,28 @@ typedef enum URelativeDateTimeUnit {
 #endif  /* U_HIDE_DEPRECATED_API */
 } URelativeDateTimeUnit;
 
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * FieldPosition and UFieldPosition selectors for format fields
+ * defined by RelativeDateTimeFormatter.
+ * @draft ICU 64
+ */
+typedef enum URelativeDateTimeFormatterField {
+    /**
+     * The literal text in the result which came from the resources.
+     * @draft ICU 64
+     */
+    URDTFMT_LITERAL_FIELD,
+    /**
+     * The element text in the result which came from the input interger.
+     * @draft ICU 64
+     */
+    URDTFMT_INTEGER_FIELD,
+
+} URelativeDateTimeFormatterField;
+#endif // U_HIDE_DRAFT_API
+
 /**
  * Opaque URelativeDateTimeFormatter object for use in C programs.
  * @stable ICU 57
@@ -285,6 +308,54 @@ ureldatefmt_formatNumeric( const URelativeDateTimeFormatter* reldatefmt,
                     int32_t               resultCapacity,
                     UErrorCode*           status);
 
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Format a combination of URelativeDateTimeUnit and numeric
+ * offset using a numeric style, e.g. "1 week ago", "in 1 week",
+ * "5 weeks ago", "in 5 weeks".
+ *
+ * @param reldatefmt
+ *          The URelativeDateTimeFormatter object specifying the
+ *          format conventions.
+ * @param offset
+ *          The signed offset for the specified unit. This will
+ *          be formatted according to this object's UNumberFormat
+ *          object.
+ * @param unit
+ *          The unit to use when formatting the relative
+ *          date, e.g. UDAT_REL_UNIT_WEEK, UDAT_REL_UNIT_FRIDAY.
+ * @param result
+ *          A pointer to a buffer to receive the formatted result.
+ * @param resultCapacity
+ *          The maximum size of result.
+ * @param fpositer
+ *          A pointer to a UFieldPositionIterator created by {@link #ufieldpositer_open}
+ *          (may be NULL if field position information is not needed). Any
+ *          iteration information already present in the UFieldPositionIterator
+ *          will be deleted, and the iterator will be reset to apply to the
+ *          fields in the formatted string created by this function call; the
+ *          field values provided by {@link #ufieldpositer_next} will be from the
+ *          URelativeDateTimeFormatterField enum.
+ * @param status
+ *          A pointer to a UErrorCode to receive any errors. In
+ *          case of error status, the contents of result are
+ *          undefined.
+ * @return
+ *          The length of the formatted result; may be greater
+ *          than resultCapacity, in which case an error is returned.
+ * @draft ICU 64
+ */
+U_STABLE int32_t U_EXPORT2
+ureldatefmt_formatNumericForFields( const URelativeDateTimeFormatter* reldatefmt,
+                    double                offset,
+                    URelativeDateTimeUnit unit,
+                    UChar*                result,
+                    int32_t               resultCapacity,
+                    UFieldPositionIterator* fpositer,
+                    UErrorCode*           status);
+#endif U_HIDE_DRAFT_API
+
+
 /**
  * Format a combination of URelativeDateTimeUnit and numeric offset
  * using a text style if possible, e.g. "last week", "this week",
@@ -320,6 +391,53 @@ ureldatefmt_format( const URelativeDateTimeFormatter* reldatefmt,
                     UChar*                result,
                     int32_t               resultCapacity,
                     UErrorCode*           status);
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Format a combination of URelativeDateTimeUnit and numeric offset
+ * using a text style if possible, e.g. "last week", "this week",
+ * "next week", "yesterday", "tomorrow". Falls back to numeric
+ * style if no appropriate text term is available for the specified
+ * offset in the object's locale.
+ *
+ * @param reldatefmt
+ *          The URelativeDateTimeFormatter object specifying the
+ *          format conventions.
+ * @param offset
+ *          The signed offset for the specified unit.
+ * @param unit
+ *          The unit to use when formatting the relative
+ *          date, e.g. UDAT_REL_UNIT_WEEK, UDAT_REL_UNIT_FRIDAY.
+ * @param result
+ *          A pointer to a buffer to receive the formatted result.
+ * @param resultCapacity
+ *          The maximum size of result.
+ * @param fpositer
+ *          A pointer to a UFieldPositionIterator created by {@link #ufieldpositer_open}
+ *          (may be NULL if field position information is not needed). Any
+ *          iteration information already present in the UFieldPositionIterator
+ *          will be deleted, and the iterator will be reset to apply to the
+ *          fields in the formatted string created by this function call; the
+ *          field values provided by {@link #ufieldpositer_next} will be from the
+ *          URelativeDateTimeFormatterField enum.
+ * @param status
+ *          A pointer to a UErrorCode to receive any errors. In
+ *          case of error status, the contents of result are
+ *          undefined.
+ * @return
+ *          The length of the formatted result; may be greater
+ *          than resultCapacity, in which case an error is returned.
+ * @stable ICU 57
+ */
+U_STABLE int32_t U_EXPORT2
+ureldatefmt_formatForFields( const URelativeDateTimeFormatter* reldatefmt,
+                    double                offset,
+                    URelativeDateTimeUnit unit,
+                    UChar*                result,
+                    int32_t               resultCapacity,
+                    UFieldPositionIterator* fpositer,
+                    UErrorCode*           status);
+#endif U_HIDE_DRAFT_API
 
 /**
  * Combines a relative date string and a time string in this object's

@@ -869,6 +869,13 @@ UnicodeString& RelativeDateTimeFormatter::format(
 UnicodeString& RelativeDateTimeFormatter::formatNumeric(
         double offset, URelativeDateTimeUnit unit,
         UnicodeString& appendTo, UErrorCode& status) const {
+  return formatNumeric(offset, unit, appendTo, nullptr, status);
+}
+
+UnicodeString& RelativeDateTimeFormatter::formatNumeric(
+        double offset, URelativeDateTimeUnit unit,
+        UnicodeString& appendTo, FieldPositionIterator* posIter,
+        UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return appendTo;
     }
@@ -926,6 +933,13 @@ UnicodeString& RelativeDateTimeFormatter::format(
 UnicodeString& RelativeDateTimeFormatter::format(
         double offset, URelativeDateTimeUnit unit,
         UnicodeString& appendTo, UErrorCode& status) const {
+  return format(offset, unit, appendTo, nullptr, status);
+}
+
+UnicodeString& RelativeDateTimeFormatter::format(
+        double offset, URelativeDateTimeUnit unit,
+        UnicodeString& appendTo, FieldPositionIterator* posIter,
+        UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return appendTo;
     }
