@@ -1112,32 +1112,17 @@ ureldatefmt_formatNumeric( const URelativeDateTimeFormatter* reldatefmt,
                     int32_t               resultCapacity,
                     UErrorCode*           status)
 {
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-    if (result == nullptr ? resultCapacity != 0 : resultCapacity < 0) {
-        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-    }
-    UnicodeString res;
-    if (result != nullptr) {
-        // nullptr destination for pure preflighting: empty dummy string
-        // otherwise, alias the destination buffer (copied from udat_format)
-        res.setTo(result, 0, resultCapacity);
-    }
-    ((RelativeDateTimeFormatter*)reldatefmt)->formatNumeric(offset, unit, res, *status);
-    if (U_FAILURE(*status)) {
-        return 0;
-    }
-    return res.extract(result, resultCapacity, *status);
+  return ureldatefmt_formatNumericForFields(
+      reldatefmt, offset, unit, result, resultCapacity, nullptr, status);
 }
 
 U_CAPI int32_t U_EXPORT2
-ureldatefmt_format( const URelativeDateTimeFormatter* reldatefmt,
+ureldatefmt_formatNumericForFields( const URelativeDateTimeFormatter* reldatefmt,
                     double                offset,
                     URelativeDateTimeUnit unit,
                     UChar*                result,
                     int32_t               resultCapacity,
+                    UFieldPositionIterator* fpositer,
                     UErrorCode*           status)
 {
     if (U_FAILURE(*status)) {
@@ -1153,7 +1138,50 @@ ureldatefmt_format( const URelativeDateTimeFormatter* reldatefmt,
         // otherwise, alias the destination buffer (copied from udat_format)
         res.setTo(result, 0, resultCapacity);
     }
-    ((RelativeDateTimeFormatter*)reldatefmt)->format(offset, unit, res, *status);
+    ((RelativeDateTimeFormatter*)reldatefmt)->formatNumeric(
+        offset, unit, res, (FieldPositionIterator*)fpositer, *status);
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    return res.extract(result, resultCapacity, *status);
+}
+
+U_CAPI int32_t U_EXPORT2
+ureldatefmt_format( const URelativeDateTimeFormatter* reldatefmt,
+                    double                offset,
+                    URelativeDateTimeUnit unit,
+                    UChar*                result,
+                    int32_t               resultCapacity,
+                    UErrorCode*           status)
+{
+  return ureldatefmt_formatForFields(
+      reldatefmt, offset, unit, result, resultCapacity, nullptr, status);
+}
+
+U_CAPI int32_t U_EXPORT2
+ureldatefmt_formatForFields( const URelativeDateTimeFormatter* reldatefmt,
+                    double                offset,
+                    URelativeDateTimeUnit unit,
+                    UChar*                result,
+                    int32_t               resultCapacity,
+                    UFieldPositionIterator* fpositer,
+                    UErrorCode*           status)
+{
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    if (result == nullptr ? resultCapacity != 0 : resultCapacity < 0) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    UnicodeString res;
+    if (result != nullptr) {
+        // nullptr destination for pure preflighting: empty dummy string
+        // otherwise, alias the destination buffer (copied from udat_format)
+        res.setTo(result, 0, resultCapacity);
+    }
+    ((RelativeDateTimeFormatter*)reldatefmt)->format(
+        offset, unit, res, (FieldPositionIterator*)fpositer, *status);
     if (U_FAILURE(*status)) {
         return 0;
     }

@@ -171,7 +171,7 @@ typedef enum UDateAbsoluteUnit {
      * @draft ICU 63
      */
     UDAT_ABSOLUTE_QUARTER,
-#endif // U_HIDE_DRAFT_API
+#endif  // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -475,7 +475,7 @@ public:
             UnicodeString& appendTo,
             FieldPositionIterator* posIter,
             UErrorCode& status) const;
-#endif U_HIDE_DRAFT_API
+#endif // U_HIDE_DRAFT_API
 
     /**
      * Format a combination of URelativeDateTimeUnit and numeric offset
@@ -519,7 +519,7 @@ public:
      *                  defined in URelativeDateTimeFormatterField. Can be NULL.
      * @param status    ICU error code returned here.
      * @return          appendTo
-     * @stable ICU 57
+     * @draft ICU 64
      */
     UnicodeString& format(
             double offset,
@@ -527,7 +527,7 @@ public:
             UnicodeString& appendTo,
             FieldPositionIterator* posIter,
             UErrorCode& status) const;
-#endif U_HIDE_DRAFT_API
+#endif // U_HIDE_DRAFT_API
 
     /**
      * Combines a relative date string and a time string in this object's
