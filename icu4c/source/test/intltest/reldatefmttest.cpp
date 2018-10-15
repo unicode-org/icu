@@ -768,6 +768,8 @@ private:
     void TestFormat();
     void TestFormatNumeric();
     void TestLocales();
+    void TestFormatWithFieldPositionIterator();
+    void TestFormatNumericWithFieldPositionIterator();
     void RunTest(
             const Locale& locale,
             const WithQuantityExpected* expectedResults,
@@ -858,6 +860,8 @@ void RelativeDateTimeFormatterTest::runIndexedTest(
     TESTCASE_AUTO(TestFormat);
     TESTCASE_AUTO(TestFormatNumeric);
     TESTCASE_AUTO(TestLocales);
+    TESTCASE_AUTO(TestFormatWithFieldPositionIterator);
+    TESTCASE_AUTO(TestFormatNumericWithFieldPositionIterator);
     TESTCASE_AUTO_END;
 }
 
@@ -1311,6 +1315,10 @@ void RelativeDateTimeFormatterTest::TestLocales() {
         allFormatters.push_back(std::move(rdtf));
         assertSuccess(loc.getName(), status);
     }
+void RelativeDateTimeFormatterTest::TestFormatNumericWithFieldPositionIterator() {
+}
+
+void RelativeDateTimeFormatterTest::TestFormatWithFieldPositionIterator() {
 }
 
 static const char *kLast2 = "Last_2";

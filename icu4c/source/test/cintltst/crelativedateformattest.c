@@ -18,6 +18,7 @@
 #include "cmemory.h"
 
 static void TestRelDateFmt(void);
+static void TestRelDateFmtForFields(void);
 static void TestCombineDateTime(void);
 
 void addRelativeDateFormatTest(TestNode** root);
@@ -27,6 +28,7 @@ void addRelativeDateFormatTest(TestNode** root);
 void addRelativeDateFormatTest(TestNode** root)
 {
     TESTCASE(TestRelDateFmt);
+    TESTCASE(TestRelDateFmtForFields);
     TESTCASE(TestCombineDateTime);
 }
 
@@ -240,6 +242,10 @@ static void TestRelDateFmt()
 
         ureldatefmt_close(reldatefmt);
     }
+}
+
+static void TestRelDateFmtForFields()
+{
 }
 
 typedef struct {
