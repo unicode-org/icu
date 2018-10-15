@@ -67,7 +67,7 @@ typedef enum UDateRelativeDateTimeFormatterStyle {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UDAT_STYLE_COUNT
-#endif  /* U_HIDE_DEPRECATED_API */
+#endif /* U_HIDE_DEPRECATED_API */
 } UDateRelativeDateTimeFormatterStyle;
 
 /**
@@ -78,7 +78,7 @@ typedef enum UDateRelativeDateTimeFormatterStyle {
 typedef enum URelativeDateTimeUnit {
     /**
      * Specifies that relative unit is year, e.g. "last year",
-     * "in 5 years". 
+     * "in 5 years".
      * @stable ICU 57
      */
     UDAT_REL_UNIT_YEAR,
@@ -150,7 +150,7 @@ typedef enum URelativeDateTimeUnit {
     UDAT_REL_UNIT_WEDNESDAY,
     /**
      * Specifies that relative unit is Thursday, e.g. "last Thursday",
-     * "this Thursday", "next Thursday", "in 5 Thursdays". 
+     * "this Thursday", "next Thursday", "in 5 Thursdays".
      * @stable ICU 57
      */
     UDAT_REL_UNIT_THURSDAY,
@@ -172,7 +172,7 @@ typedef enum URelativeDateTimeUnit {
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
     UDAT_REL_UNIT_COUNT
-#endif  /* U_HIDE_DEPRECATED_API */
+#endif /* U_HIDE_DEPRECATED_API */
 } URelativeDateTimeUnit;
 
 
@@ -195,7 +195,7 @@ typedef enum URelativeDateTimeFormatterField {
     URDTFMT_INTEGER_FIELD,
 
 } URelativeDateTimeFormatterField;
-#endif // U_HIDE_DRAFT_API
+#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Opaque URelativeDateTimeFormatter object for use in C programs.
@@ -353,7 +353,7 @@ ureldatefmt_formatNumericForFields( const URelativeDateTimeFormatter* reldatefmt
                     int32_t               resultCapacity,
                     UFieldPositionIterator* fpositer,
                     UErrorCode*           status);
-#endif U_HIDE_DRAFT_API
+#endif /* U_HIDE_DRAFT_API */
 
 
 /**
@@ -427,7 +427,7 @@ ureldatefmt_format( const URelativeDateTimeFormatter* reldatefmt,
  * @return
  *          The length of the formatted result; may be greater
  *          than resultCapacity, in which case an error is returned.
- * @stable ICU 57
+ * @draft ICU 64
  */
 U_STABLE int32_t U_EXPORT2
 ureldatefmt_formatForFields( const URelativeDateTimeFormatter* reldatefmt,
@@ -437,7 +437,7 @@ ureldatefmt_formatForFields( const URelativeDateTimeFormatter* reldatefmt,
                     int32_t               resultCapacity,
                     UFieldPositionIterator* fpositer,
                     UErrorCode*           status);
-#endif U_HIDE_DRAFT_API
+#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Combines a relative date string and a time string in this object's
