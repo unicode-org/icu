@@ -765,6 +765,8 @@ private:
     void TestBadDisplayContext();
     void TestFormat();
     void TestFormatNumeric();
+    void TestFormatWithFieldPositionIterator();
+    void TestFormatNumericWithFieldPositionIterator();
     void RunTest(
             const Locale& locale,
             const WithQuantityExpected* expectedResults,
@@ -854,6 +856,8 @@ void RelativeDateTimeFormatterTest::runIndexedTest(
     TESTCASE_AUTO(TestSidewaysDataLoading);
     TESTCASE_AUTO(TestFormat);
     TESTCASE_AUTO(TestFormatNumeric);
+    TESTCASE_AUTO(TestFormatWithFieldPositionIterator);
+    TESTCASE_AUTO(TestFormatNumericWithFieldPositionIterator);
     TESTCASE_AUTO_END;
 }
 
@@ -1294,6 +1298,12 @@ void RelativeDateTimeFormatterTest::TestFormatNumeric() {
 
 void RelativeDateTimeFormatterTest::TestFormat() {
     RunTest("en", kEnglishFormat, UPRV_LENGTHOF(kEnglishFormat), false);
+}
+
+void RelativeDateTimeFormatterTest::TestFormatNumericWithFieldPositionIterator() {
+}
+
+void RelativeDateTimeFormatterTest::TestFormatWithFieldPositionIterator() {
 }
 
 static const char *kLast2 = "Last_2";
