@@ -184,15 +184,10 @@ typedef enum URelativeDateTimeUnit {
  */
 typedef enum URelativeDateTimeFormatterField {
     /**
-     * The literal text in the result which came from the resources.
+     * The element text in the result which came from the input numeric value.
      * @draft ICU 64
      */
-    URDTFMT_LITERAL_FIELD,
-    /**
-     * The element text in the result which came from the input interger.
-     * @draft ICU 64
-     */
-    URDTFMT_INTEGER_FIELD,
+    UDAT_REL_NUMBER_FIELD,
 
 } URelativeDateTimeFormatterField;
 #endif /* U_HIDE_DRAFT_API */

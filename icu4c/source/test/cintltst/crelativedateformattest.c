@@ -246,6 +246,7 @@ static void TestRelDateFmt()
 
 static void TestRelDateFmtForFields()
 {
+  /* TODO(ftang): write tests */
 }
 
 typedef struct {

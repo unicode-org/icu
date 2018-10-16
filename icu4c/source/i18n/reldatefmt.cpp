@@ -900,27 +900,13 @@ UnicodeString& RelativeDateTimeFormatter::formatNumeric(
     }
     const UnicodeString *values[] = { &formattedNumber };
     int32_t offsets[1];
-    int32_t start = result.length();
     formatter->formatAndAppend(values, 1, result, offsets, 1, status);
     if (posIter != nullptr) {
         FieldPositionIteratorHandler handler(posIter, status);
-        if (offsets[0] == -1) {
-            handler.addAttribute(URDTFMT_LITERAL_FIELD,
-                                 start,
-                                 result.length());
-        } else {
-            if (start != offsets[0]) {
-                handler.addAttribute(URDTFMT_LITERAL_FIELD,
-                                     start,
-                                     offsets[0]);
-            }
-            int32_t numberEnd = offsets[0] + formattedNumber.length();
-            handler.addAttribute(URDTFMT_INTEGER_FIELD, offsets[0], numberEnd);
-            if (numberEnd != result.length()) {
-                handler.addAttribute(URDTFMT_LITERAL_FIELD,
-                                     numberEnd,
-                                     result.length());
-            }
+        if (offsets[0] != -1) {
+            handler.addAttribute(UDAT_REL_NUMBER_FIELD,
+                                 offsets[0],
+                                 offsets[0] + formattedNumber.length());
         }
     }
     adjustForContext(result);
@@ -1008,19 +994,11 @@ UnicodeString& RelativeDateTimeFormatter::format(
         const UnicodeString &unitFormatString =
             fCache->getAbsoluteUnitString(fStyle, absunit, direction);
         if (!unitFormatString.isEmpty()) {
-            FieldPositionIteratorHandler handler(posIter, status);
-            int32_t start = appendTo.length();
             if (fOptBreakIterator != nullptr) {
                 UnicodeString result(unitFormatString);
                 adjustForContext(result);
-                handler.addAttribute(URDTFMT_LITERAL_FIELD,
-                                     start,
-                                     start + result.length());
                 return appendTo.append(result);
             } else {
-                handler.addAttribute(URDTFMT_LITERAL_FIELD,
-                                     start,
-                                     start + unitFormatString.length());
                 return appendTo.append(unitFormatString);
             }
         }
