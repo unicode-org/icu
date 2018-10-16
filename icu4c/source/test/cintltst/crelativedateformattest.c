@@ -246,7 +246,109 @@ static void TestRelDateFmt()
 
 static void TestRelDateFmtForFields()
 {
-  /* TODO(ftang): write tests */
+    const RelDateTimeFormatTestItem *itemPtr;
+    log_verbose("\nTesting ureldatefmt_open(), ureldatefmt_formatForFields(), ureldatefmt_formatNumericForFields() with various parameters\n");
+    for (itemPtr = fmtTestItems; itemPtr->locale != NULL; itemPtr++) {
+        URelativeDateTimeFormatter *reldatefmt = NULL;
+        UNumberFormat* nfToAdopt = NULL;
+        UErrorCode status = U_ZERO_ERROR;
+        int32_t iOffset;
+
+        if (itemPtr->decPlaces >= 0) {
+            nfToAdopt = unum_open(UNUM_DECIMAL, NULL, 0, itemPtr->locale, NULL, &status);
+            if ( U_FAILURE(status) ) {
+                log_data_err("FAIL: unum_open(UNUM_DECIMAL, ...) for locale %s: %s\n", itemPtr->locale, myErrorName(status));
+                continue;
+            }
+		    unum_setAttribute(nfToAdopt, UNUM_MIN_FRACTION_DIGITS, itemPtr->decPlaces);
+		    unum_setAttribute(nfToAdopt, UNUM_MAX_FRACTION_DIGITS, itemPtr->decPlaces);
+		    unum_setAttribute(nfToAdopt, UNUM_ROUNDING_MODE, UNUM_ROUND_DOWN);
+        }
+        reldatefmt = ureldatefmt_open(itemPtr->locale, nfToAdopt, itemPtr->width, itemPtr->capContext, &status);
+        if ( U_FAILURE(status) ) {
+            log_data_err("FAIL: ureldatefmt_open() for locale %s, decPlaces %d, width %d, capContext %d: %s\n",
+                    itemPtr->locale, itemPtr->decPlaces, (int)itemPtr->width, (int)itemPtr->capContext,
+                    myErrorName(status) );
+            continue;
+        }
+
+        for (iOffset = 0; iOffset < kNumOffsets; iOffset++) {
+            UChar ubufget[kUBufMax];
+            int32_t ulenget;
+
+            if (itemPtr->unit >= UDAT_REL_UNIT_SUNDAY && offsets[iOffset] != -1.0 && offsets[iOffset] != 0.0 && offsets[iOffset] != 1.0) {
+                continue; /* we do not currently have data for this */
+            }
+
+            status = U_ZERO_ERROR;
+            /* Test passing NULL as fpositer won't crash */
+            ulenget = ureldatefmt_formatForFields(reldatefmt, offsets[iOffset], itemPtr->unit, ubufget, kUBufMax, NULL, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("FAIL: ureldatefmt_formatForFields() for locale %s, decPlaces %d, width %d, capContext %d, offset %.2f, unit %d: %s\n",
+                    itemPtr->locale, itemPtr->decPlaces, (int)itemPtr->width, (int)itemPtr->capContext,
+                    offsets[iOffset], (int)itemPtr->unit, myErrorName(status) );
+            }
+            /* Depend on the next one to verify the data */
+            status = U_ZERO_ERROR;
+            UFieldPositionIterator* fpositer = ufieldpositer_open(&status);
+            if ( U_FAILURE(status) ) {
+                log_err("ufieldpositer_open fails, status %s\n", u_errorName(status));
+                continue;
+            }
+            ulenget = ureldatefmt_formatForFields(reldatefmt, offsets[iOffset], itemPtr->unit, ubufget, kUBufMax, fpositer, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("FAIL: ureldatefmt_formatForFields() for locale %s, decPlaces %d, width %d, capContext %d, offset %.2f, unit %d: %s\n",
+                    itemPtr->locale, itemPtr->decPlaces, (int)itemPtr->width, (int)itemPtr->capContext,
+                    offsets[iOffset], (int)itemPtr->unit, myErrorName(status) );
+            } else {
+                UChar ubufexp[kUBufMax];
+                int32_t ulenexp = u_unescape(itemPtr->expectedResults[iOffset*2], ubufexp, kUBufMax);
+                if (ulenget != ulenexp || u_strncmp(ubufget, ubufexp, ulenexp) != 0) {
+                    char  bbufget[kBBufMax];
+                    u_austrncpy(bbufget, ubufget, kUBufMax);
+                    log_err("ERROR: ureldatefmt_formatForFields() for locale %s, decPlaces %d, width %d, capContext %d, offset %.2f, unit %d;\n      expected %s\n      get      %s\n",
+                        itemPtr->locale, itemPtr->decPlaces, (int)itemPtr->width, (int)itemPtr->capContext,
+                        offsets[iOffset], (int)itemPtr->unit, itemPtr->expectedResults[iOffset*2], bbufget );
+                }
+            }
+            ufieldpositer_close(fpositer);
+
+            if (itemPtr->unit >= UDAT_REL_UNIT_SUNDAY) {
+                continue; /* we do not currently have numeric-style data for this */
+            }
+
+            status = U_ZERO_ERROR;
+            /* Test passing NULL as fpositer won't crash */
+            ulenget = ureldatefmt_formatNumericForFields(reldatefmt, offsets[iOffset], itemPtr->unit, ubufget, kUBufMax, NULL, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("FAIL: ureldatefmt_formatNumericForFields() for locale %s, decPlaces %d, width %d, capContext %d, offset %.2f, unit %d: %s\n",
+                    itemPtr->locale, itemPtr->decPlaces, (int)itemPtr->width, (int)itemPtr->capContext,
+                    offsets[iOffset], (int)itemPtr->unit, myErrorName(status) );
+            }
+            /* Depend on the next one to verify the data */
+            status = U_ZERO_ERROR;
+            fpositer = ufieldpositer_open(&status);
+            ulenget = ureldatefmt_formatNumericForFields(reldatefmt, offsets[iOffset], itemPtr->unit, ubufget, kUBufMax, fpositer, &status);
+            if ( U_FAILURE(status) ) {
+                log_err("FAIL: ureldatefmt_formatNumericForFields() for locale %s, decPlaces %d, width %d, capContext %d, offset %.2f, unit %d: %s\n",
+                    itemPtr->locale, itemPtr->decPlaces, (int)itemPtr->width, (int)itemPtr->capContext,
+                    offsets[iOffset], (int)itemPtr->unit, myErrorName(status) );
+            } else {
+                UChar ubufexp[kUBufMax];
+                int32_t ulenexp = u_unescape(itemPtr->expectedResults[iOffset*2 + 1], ubufexp, kUBufMax);
+                if (ulenget != ulenexp || u_strncmp(ubufget, ubufexp, ulenexp) != 0) {
+                    char  bbufget[kBBufMax];
+                    u_austrncpy(bbufget, ubufget, kUBufMax);
+                    log_err("ERROR: ureldatefmt_formatNumericForFields() for locale %s, decPlaces %d, width %d, capContext %d, offset %.2f, unit %d;\n      expected %s\n      get      %s\n",
+                        itemPtr->locale, itemPtr->decPlaces, (int)itemPtr->width, (int)itemPtr->capContext,
+                        offsets[iOffset], (int)itemPtr->unit, itemPtr->expectedResults[iOffset*2 + 1], bbufget );
+                }
+            }
+            ufieldpositer_close(fpositer);
+        }
+
+        ureldatefmt_close(reldatefmt);
+    }
 }
 
 typedef struct {
