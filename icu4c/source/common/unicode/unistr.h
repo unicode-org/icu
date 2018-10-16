@@ -222,7 +222,7 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * The UnicodeString class is not suitable for subclassing.
  *
  * For an overview of Unicode strings in C and C++ see the
- * [User Guide Strings chapter](href="http://userguide.icu-project.org/strings#TOC-Strings-in-C-C-").
+ * [User Guide Strings chapter](http://userguide.icu-project.org/strings#TOC-Strings-in-C-C-).
  *
  * In ICU, a Unicode string consists of 16-bit Unicode *code units*.
  * A Unicode character may be stored with either one code unit
@@ -280,7 +280,7 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * significant performance improvements.
  * Also, the internal buffer is accessible via special functions.
  * For details see the
- * [User Guide Strings chapter](href="http://userguide.icu-project.org/strings#TOC-Maximizing-Performance-with-the-UnicodeString-Storage-Model).
+ * [User Guide Strings chapter](http://userguide.icu-project.org/strings#TOC-Maximizing-Performance-with-the-UnicodeString-Storage-Model).
  *
  * @see utf.h
  * @see CharacterIterator
@@ -1407,9 +1407,9 @@ public:
    * The resulting index return value will be in between 0 and length(), inclusively.
    *
    * Examples:
-   *
+   *\code
    *     // s has code points 'a' U+10000 'b' U+10ffff U+2029
-   *     UnicodeString s=UNICODE_STRING("a\\U00010000b\\U0010ffff\\u2029", 31).unescape();
+   *     UnicodeString s(u"a\U00010000b\U0010ffff\u2029");
    *
    *     // initial index: position of U+10000
    *     int32_t index=1;
@@ -1424,7 +1424,7 @@ public:
    *
    *     // go to the next-to-last code point of s
    *     index=s.moveIndex32(s.length(), -2); // backward-skips U+2029 and U+10ffff
-   *
+   *\endcode
    *
    * @param index input code unit index
    * @param delta (signed) code point count to move the index forward or backward
@@ -3274,12 +3274,12 @@ public:
    * Use the macro US_INV as the third, signature-distinguishing parameter.
    *
    * For example:
-   *
+   * \code
    *     void fn(const char *s) {
    *       UnicodeString ustr(s, -1, US_INV);
    *       // use ustr ...
    *     }
-   *
+   * \endcode
    * @param src String using only invariant characters.
    * @param length Length of src, or -1 if NUL-terminated.
    * @param inv Signature-distinguishing paramater, use US_INV.
