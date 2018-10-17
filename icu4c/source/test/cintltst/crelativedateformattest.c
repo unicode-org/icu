@@ -58,7 +58,7 @@ static const char* en_decDef_long_midSent_sec[kNumOffsets*2] = {
 };
 
 static const FieldsDat en_attrDef_long_midSent_sec[kNumOffsets*2] = {
-/*  text                    numeric */
+/*  text           numeric           text                    numeric */
     {NUM,  0,  1}, {NUM,  0,  1}, /* "5 seconds ago",        "5 seconds ago",       -5   */
     {NUM,  0,  3}, {NUM,  0,  3}, /* "2.2 seconds ago",      "2.2 seconds ago",     -2.2 */
     {NUM,  0,  1}, {NUM,  0,  1}, /* "2 seconds ago",        "2 seconds ago",       -2   */
@@ -88,7 +88,7 @@ static const char* en_decDef_long_midSent_week[kNumOffsets*2] = {
 };
 
 static const FieldsDat en_attrDef_long_midSent_week[kNumOffsets*2] = {
-/*  text                    numeric */
+/*  text           numeric           text                    numeric */
     {NUM,  0,  1}, {NUM,  0,  1}, /* "5 weeks ago",          "5 weeks ago",         -5   */
     {NUM,  0,  3}, {NUM,  0,  3}, /* "2.2 weeks ago",        "2.2 weeks ago",       -2.2 */
     {NUM,  0,  1}, {NUM,  0,  1}, /* "2 weeks ago",          "2 weeks ago",         -2   */
@@ -118,7 +118,7 @@ static const char* en_dec0_long_midSent_week[kNumOffsets*2] = {
 };
 
 static const FieldsDat en_attr0_long_midSent_week[kNumOffsets*2] = {
-/*  text                    numeric */
+/*  text           numeric           text                    numeric */
     {NUM,  0,  1}, {NUM,  0,  1}, /* "5 weeks ago",          "5 weeks ago",         -5   */
     {NUM,  0,  1}, {NUM,  0,  1}, /* "2 weeks ago",          "2 weeks ago",         -2.2 */
     {NUM,  0,  1}, {NUM,  0,  1}, /* "2 weeks ago",          "2 weeks ago",         -2  */
@@ -148,7 +148,7 @@ static const char* en_decDef_short_midSent_week[kNumOffsets*2] = {
 };
 
 static const FieldsDat en_attrDef_short_midSent_week[kNumOffsets*2] = {
-/*  text                    numeric */
+/*  text           numeric           text                    numeric */
     {NUM,  0,  1}, {NUM,  0,  1}, /* "5 wk. ago",            "5 wk. ago",           -5   */
     {NUM,  0,  3}, {NUM,  0,  3}, /* "2.2 wk. ago",          "2.2 wk. ago",         -2.2 */
     {NUM,  0,  1}, {NUM,  0,  1}, /* "2 wk. ago",            "2 wk. ago",           -2   */
@@ -178,7 +178,7 @@ static const char* en_decDef_long_midSent_min[kNumOffsets*2] = {
 };
 
 static const FieldsDat en_attrDef_long_midSent_min[kNumOffsets*2] = {
-/*  text                    numeric */
+/*  text           numeric           text                    numeric */
     {NUM,  0,  1}, {NUM,  0,  1}, /* "5 minutes ago",        "5 minutes ago",       -5   */
     {NUM,  0,  3}, {NUM,  0,  3}, /* "2.2 minutes ago",      "2.2 minutes ago",     -2.2 */
     {NUM,  0,  1}, {NUM,  0,  1}, /* "2 minutes ago",        "2 minutes ago",       -2   */
@@ -208,18 +208,18 @@ static const char* en_dec0_long_midSent_tues[kNumOffsets*2] = {
 };
 
 static const FieldsDat en_attr0_long_midSent_tues[kNumOffsets*2] = {
-/*  text                    numeric */
-    { -1, -1, -1}, { -1, -1, -1}, /* "5 Tuesdays ago",       "5 Tuesdays ago",      -5   */
+/*  text           numeric           text                    numeric */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "5 Tuesdays ago",       "5 Tuesdays ago",      -5   */
     { -1, -1, -1}, { -1, -1, -1}, /* ""            ,         ""            ,        -2.2 */
-    { -1, -1, -1}, { -1, -1, -1}, /* "2 Tuesdays ago",       "2 Tuesdays ago",      -2   */
-    { -1, -1, -1}, { -1, -1, -1}, /* "last Tuesday",         "1 Tuesday ago",       -1   */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "2 Tuesdays ago",       "2 Tuesdays ago",      -2   */
+    { -1, -1, -1}, {NUM,  0,  1}, /* "last Tuesday",         "1 Tuesday ago",       -1   */
     { -1, -1, -1}, { -1, -1, -1}, /* ""            ,         ""            ,        -0.7 */
-    { -1, -1, -1}, { -1, -1, -1}, /* "this Tuesday",         "0 Tuesdays ago",      -0   */
-    { -1, -1, -1}, { -1, -1, -1}, /* "this Tuesday",         "in 0 Tuesdays",        0   */
+    { -1, -1, -1}, {NUM,  0,  1}, /* "this Tuesday",         "0 Tuesdays ago",      -0   */
+    { -1, -1, -1}, {NUM,  3,  4}, /* "this Tuesday",         "in 0 Tuesdays",        0   */
     { -1, -1, -1}, { -1, -1, -1}, /* ""            ,         ""            ,         0.7 */
-    { -1, -1, -1}, { -1, -1, -1}, /* "next Tuesday",         "in 1 Tuesday",         1   */
-    { -1, -1, -1}, { -1, -1, -1}, /* "in 2 Tuesdays",        "in 2 Tuesdays",        2   */
-    { -1, -1, -1}, { -1, -1, -1}, /* "in 5 Tuesdays",        "in 5 Tuesdays",        5   */
+    { -1, -1, -1}, {NUM,  3,  4}, /* "next Tuesday",         "in 1 Tuesday",         1   */
+    {NUM,  0,  1}, {NUM,  3,  4}, /* "in 2 Tuesdays",        "in 2 Tuesdays",        2   */
+    {NUM,  0,  1}, {NUM,  3,  4}, /* "in 5 Tuesdays",        "in 5 Tuesdays",        5   */
 };
 
 static const char* fr_decDef_long_midSent_day[kNumOffsets*2] = {
@@ -238,7 +238,7 @@ static const char* fr_decDef_long_midSent_day[kNumOffsets*2] = {
 };
 
 static const FieldsDat fr_attrDef_long_midSent_day[kNumOffsets*2] = {
-/*  text                    numeric */
+/*  text           numeric           text                    numeric */
     {NUM,  7,  8}, {NUM,  7,  8}, /* "il y a 5 jours",       "il y a 5 jours",      -5   */
     {NUM,  7, 10}, {NUM,  7, 10}, /* "il y a 2,2 jours",     "il y a 2,2 jours",    -2.2 */
     { -1, -1, -1}, {NUM,  7,  8}, /* "avant-hier",           "il y a 2 jours",      -2   */
