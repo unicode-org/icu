@@ -240,6 +240,7 @@ public final class RelativeDateTimeFormatter {
         /**
          * Quarter
          * @draft ICU 64
+         * @provisional This API might change or be removed in a future release.
          */
         QUARTER,
     }
