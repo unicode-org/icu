@@ -577,6 +577,7 @@ public final class RelativeDateTimeFormatter {
      *                  RelativeDateTimeUnit.FRIDAY.
      * @return <code>AttributedCharacterIterator</code> describing the formatted value.
      * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
      */
     public AttributedCharacterIterator formatNumericToCharacterIterator(
         double offset, RelativeDateTimeUnit unit) {
@@ -708,6 +709,7 @@ public final class RelativeDateTimeFormatter {
      *                  RelativeDateTimeUnit.FRIDAY.
      * @return <code>AttributedCharacterIterator</code> describing the formatted value.
      * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
      */
     public AttributedCharacterIterator formatToCharacterIterator(
         double offset, RelativeDateTimeUnit unit) {
@@ -1308,24 +1310,22 @@ public final class RelativeDateTimeFormatter {
      * constants defined here.
      * <p>
      * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
      */
     public static class Field extends Format.Field {
         static final long serialVersionUID = 1L;
 
         /**
-         * @stable ICU 64
+         * @draft ICU 64
+         * @provisional This API might change or be removed in a future release.
          */
-        public static final Field INTEGER = new Field("integer");
-
-        /**
-         * @stable ICU 64
-         */
-        public static final Field LITERAL = new Field("literal");
+        public static final Field NUMBER = new Field("number");
 
         /**
          * Constructs a new instance of RelativeDateTimeFormatter.Field with the given field
          * name.
          * @draft ICU 64
+         * @provisional This API might change or be removed in a future release.
          */
         protected Field(String fieldName) {
             super(fieldName);
@@ -1335,13 +1335,12 @@ public final class RelativeDateTimeFormatter {
          * serizalization method resolve instances to the constant
          * RelativeDateTimeFormatter.Field values
          * @draft ICU 64
+         * @provisional This API might change or be removed in a future release.
          */
         @Override
         protected Object readResolve() throws InvalidObjectException {
-            if (this.getName().equals(INTEGER.getName()))
-                return INTEGER;
-            if (this.getName().equals(LITERAL.getName()))
-                return LITERAL;
+            if (this.getName().equals(NUMBER.getName()))
+                return NUMBER;
 
             throw new InvalidObjectException("An invalid object.");
         }
