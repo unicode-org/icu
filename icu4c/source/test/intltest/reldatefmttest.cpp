@@ -774,12 +774,9 @@ private:
     void TestBadDisplayContext();
     void TestFormat();
     void TestFormatNumeric();
-<<<<<<< HEAD
     void TestLocales();
     void TestFormatWithFieldPositionIterator();
     void TestFormatNumericWithFieldPositionIterator();
-=======
->>>>>>> add c++ tests
     void RunTest(
             const Locale& locale,
             const WithQuantityExpected* expectedResults,
@@ -878,12 +875,9 @@ void RelativeDateTimeFormatterTest::runIndexedTest(
     TESTCASE_AUTO(TestSidewaysDataLoading);
     TESTCASE_AUTO(TestFormat);
     TESTCASE_AUTO(TestFormatNumeric);
-<<<<<<< HEAD
     TESTCASE_AUTO(TestLocales);
     TESTCASE_AUTO(TestFormatWithFieldPositionIterator);
     TESTCASE_AUTO(TestFormatNumericWithFieldPositionIterator);
-=======
->>>>>>> add c++ tests
     TESTCASE_AUTO_END;
 }
 
@@ -1371,7 +1365,6 @@ void RelativeDateTimeFormatterTest::TestFormat() {
     RunTest("en", kEnglishFormat, UPRV_LENGTHOF(kEnglishFormat), false);
 }
 
-<<<<<<< HEAD
 void RelativeDateTimeFormatterTest::TestLocales() {
     int32_t numLocales = 0;
     const Locale *availableLocales = Locale::getAvailableLocales(numLocales);
@@ -1383,14 +1376,14 @@ void RelativeDateTimeFormatterTest::TestLocales() {
         allFormatters.push_back(std::move(rdtf));
         assertSuccess(loc.getName(), status);
     }
+}
+
 void RelativeDateTimeFormatterTest::TestFormatNumericWithFieldPositionIterator() {
 }
 
 void RelativeDateTimeFormatterTest::TestFormatWithFieldPositionIterator() {
 }
 
-=======
->>>>>>> add c++ tests
 static const char *kLast2 = "Last_2";
 static const char *kLast = "Last";
 static const char *kThis = "This";
