@@ -216,6 +216,7 @@ final public class ListFormatter {
      * @return <code>AttributedCharacterIterator</code> describing the formatted value.
      *
      * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
      */
     public AttributedCharacterIterator formatToCharacterIterator(Object... items) {
       return null;
@@ -229,6 +230,7 @@ final public class ListFormatter {
      *            items to format. The toString() method is called on each.
      * @return <code>AttributedCharacterIterator</code> describing the formatted value.
      * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
      */
     public AttributedCharacterIterator formatToCharacterIterator(Collection<?> items) {
       return null;
@@ -381,24 +383,22 @@ final public class ListFormatter {
      * constants defined here.
      * <p>
      * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
      */
     public static class Field extends Format.Field {
         static final long serialVersionUID = 1L;
 
         /**
-         * @stable ICU 64
+         * @draft ICU 64
+         * @provisional This API might change or be removed in a future release.
          */
         public static final Field ELEMENT = new Field("element");
-
-        /**
-         * @stable ICU 64
-         */
-        public static final Field LITERAL = new Field("literal");
 
         /**
          * Constructs a new instance of ListFormat.Field with the given field
          * name.
          * @draft ICU 64
+         * @provisional This API might change or be removed in a future release.
          */
         protected Field(String fieldName) {
             super(fieldName);
@@ -408,13 +408,12 @@ final public class ListFormatter {
          * serizalization method resolve instances to the constant
          * ListFormat.Field values
          * @draft ICU 64
+         * @provisional This API might change or be removed in a future release.
          */
         @Override
         protected Object readResolve() throws InvalidObjectException {
             if (this.getName().equals(ELEMENT.getName()))
                 return ELEMENT;
-            if (this.getName().equals(LITERAL.getName()))
-                return LITERAL;
 
             throw new InvalidObjectException("An invalid object.");
         }
