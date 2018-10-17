@@ -178,9 +178,7 @@ public final class UTS46 extends IDNA {
                         ++i;  // '.' was copied to dest already
                         break;
                     }
-                    if(i==labelStart && srcLength1>b/
-                           ) b/
-                            {
+                    if(i==labelStart && srcLength>1) {
                         addLabelError(info, Error.EMPTY_LABEL);
                     }
                     if(toASCII && (i-labelStart)>63) {
