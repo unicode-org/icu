@@ -1264,3 +1264,63 @@ failzone2:
 token: 95537699
 passfail: pass
 type: toascii
+
+=====
+desc: Root domain
+namebase: .
+nameutf8: .
+namezone: .
+failzone1: 
+failzone2: 
+passfail: pass
+type: toascii
+
+=====
+desc: Root domain, non-ASCII seperator
+namebase: .
+nameutf8: <3002>
+namezone: .
+failzone1: 
+failzone2: 
+passfail: pass
+type: toascii
+
+=====
+desc: Root domain
+namebase: .
+nameutf8: .
+namezone: .
+failzone1: 
+failzone2: 
+passfail: pass
+type: tounicode
+
+=====
+desc: Root domain, non-ASCII seperator
+namebase: <3002>
+nameutf8: <3002>
+namezone: <3002>
+failzone1: 
+failzone2: 
+passfail: pass
+type: tounicode
+
+=====
+desc: Leading dot
+namebase: .ibm.com
+nameutf8: 
+namezone: 
+failzone1: .ibm.com 
+failzone2: 
+passfail: fail
+type: tounicode
+
+=====
+desc: Leading dot
+namebase: .ibm.com
+nameutf8: 
+namezone: 
+failzone1: .ibm.com 
+failzone2: 
+passfail: fail
+type: toascii

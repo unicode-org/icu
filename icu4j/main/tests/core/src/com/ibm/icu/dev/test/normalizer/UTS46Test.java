@@ -372,8 +372,8 @@ public class UTS46Test extends TestFmwk {
           "UIDNA_ERROR_LABEL_TOO_LONG|UIDNA_ERROR_DOMAIN_NAME_TOO_LONG" },
         // hyphen errors and empty-label errors
         // Ticket #10883: ToUnicode also checks for empty labels.
-        { ".", "B", ".", "UIDNA_ERROR_EMPTY_LABEL" },
-        { "\uFF0E", "B", ".", "UIDNA_ERROR_EMPTY_LABEL" },
+        { ".", "B", ".", "" },
+        { "\uFF0E", "B", ".", "" },
         // "xn---q----jra"=="-q--a-umlaut-"
         { "a.b..-q--a-.e", "B", "a.b..-q--a-.e",
           "UIDNA_ERROR_EMPTY_LABEL|UIDNA_ERROR_LEADING_HYPHEN|UIDNA_ERROR_TRAILING_HYPHEN|"+
