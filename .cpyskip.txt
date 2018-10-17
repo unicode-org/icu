@@ -15,6 +15,7 @@
 .gitattributes
 .travis.yml
 .appveyor.yml
+.ci-builds/*
 # suffix matches - start with '*'.  They are turned into as RE, '.brk$'
 *.brk
 *.bz2
