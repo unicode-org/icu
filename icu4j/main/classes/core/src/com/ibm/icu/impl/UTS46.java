@@ -178,7 +178,9 @@ public final class UTS46 extends IDNA {
                         ++i;  // '.' was copied to dest already
                         break;
                     }
-                    if(i==labelStart) {
+                    if(i==labelStart && srcLength1>b/
+                           ) b/
+                            {
                         addLabelError(info, Error.EMPTY_LABEL);
                     }
                     if(toASCII && (i-labelStart)>63) {
@@ -218,6 +220,9 @@ public final class UTS46 extends IDNA {
         while(labelLimit<destLength) {
             char c=dest.charAt(labelLimit);
             if(c=='.' && !isLabel) {
+                if(destLength==1) {
+                    return dest;
+                }
                 int labelLength=labelLimit-labelStart;
                 int newLength=processLabel(dest, labelStart, labelLength,
                                                 toASCII, info);

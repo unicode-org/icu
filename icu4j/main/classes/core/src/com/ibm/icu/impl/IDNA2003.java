@@ -271,7 +271,7 @@ public final class IDNA2003 {
             sepIndex = getSeparatorIndex(srcArr,sepIndex,srcArr.length);
             String label = new String(srcArr,oldSepIndex,sepIndex-oldSepIndex);
             //make sure this is not a root label separator.
-            if(!(label.length()==0 && sepIndex==srcArr.length)){
+            if(label.length()>0 || (sepIndex!=srcArr.length && srcArr.length>1)){
                 UCharacterIterator iter = UCharacterIterator.getInstance(label);
                 result.append(convertToASCII(iter,options));
             }
@@ -410,7 +410,7 @@ public final class IDNA2003 {
         for(;;){
             sepIndex = getSeparatorIndex(srcArr,sepIndex,srcArr.length);
             String label = new String(srcArr,oldSepIndex,sepIndex-oldSepIndex);
-            if(label.length()==0 && sepIndex!=srcArr.length ){
+            if(label.length()==0 && sepIndex!=srcArr.length && srcArr.length>1){
                 throw new StringPrepParseException("Found zero length lable after NamePrep.",StringPrepParseException.ZERO_LENGTH_LABEL);
             }
             UCharacterIterator iter = UCharacterIterator.getInstance(label);
