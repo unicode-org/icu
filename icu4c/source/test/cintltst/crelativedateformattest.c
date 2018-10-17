@@ -35,6 +35,13 @@ void addRelativeDateFormatTest(TestNode** root)
 static const double offsets[] = { -5.0, -2.2, -2.0, -1.0, -0.7, -0.0, 0.0, 0.7, 1.0, 2.0, 5.0 };
 enum { kNumOffsets = UPRV_LENGTHOF(offsets) };
 
+typedef struct {
+    int32_t field;
+    int32_t beginPos;
+    int32_t endPos;
+} FieldsDat;
+
+const int32_t NUM = UDAT_REL_NUMBER_FIELD;
 static const char* en_decDef_long_midSent_sec[kNumOffsets*2] = {
 /*  text                    numeric */
     "5 seconds ago",        "5 seconds ago",      /* -5   */
@@ -48,6 +55,21 @@ static const char* en_decDef_long_midSent_sec[kNumOffsets*2] = {
     "in 1 second",          "in 1 second",        /*  1   */
     "in 2 seconds",         "in 2 seconds",       /*  2   */
     "in 5 seconds",         "in 5 seconds"        /*  5   */
+};
+
+static const FieldsDat en_attrDef_long_midSent_sec[kNumOffsets*2] = {
+/*  text                    numeric */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "5 seconds ago",        "5 seconds ago",       -5   */
+    {NUM,  0,  3}, {NUM,  0,  3}, /* "2.2 seconds ago",      "2.2 seconds ago",     -2.2 */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "2 seconds ago",        "2 seconds ago",       -2   */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "1 second ago",         "1 second ago",        -1   */
+    {NUM,  0,  3}, {NUM,  0,  3}, /* "0.7 seconds ago",      "0.7 seconds ago",     -0.7 */
+    { -1, -1, -1}, {NUM,  0,  1}, /* "now",                  "0 seconds ago",        -0  */
+    { -1, -1, -1}, {NUM,  3,  4}, /* "now",                  "in 0 seconds",         0   */
+    {NUM,  3,  6}, {NUM,  3,  6}, /* "in 0.7 seconds",       "in 0.7 seconds",       0.7 */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 1 second",          "in 1 second",          1   */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 2 seconds",         "in 2 seconds",         2   */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 5 seconds",         "in 5 seconds"          5   */
 };
 
 static const char* en_decDef_long_midSent_week[kNumOffsets*2] = {
@@ -65,6 +87,21 @@ static const char* en_decDef_long_midSent_week[kNumOffsets*2] = {
     "in 5 weeks",           "in 5 weeks"          /*  5   */
 };
 
+static const FieldsDat en_attrDef_long_midSent_week[kNumOffsets*2] = {
+/*  text                    numeric */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "5 weeks ago",          "5 weeks ago",         -5   */
+    {NUM,  0,  3}, {NUM,  0,  3}, /* "2.2 weeks ago",        "2.2 weeks ago",       -2.2 */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "2 weeks ago",          "2 weeks ago",         -2   */
+    { -1, -1, -1}, {NUM,  0,  1}, /* "last week",            "1 week ago",          -1   */
+    {NUM,  0,  3}, {NUM,  0,  3}, /* "0.7 weeks ago",        "0.7 weeks ago",       -0.7 */
+    { -1, -1, -1}, {NUM,  0,  1}, /* "this week",            "0 weeks ago",          -0  */
+    { -1, -1, -1}, {NUM,  3,  4}, /* "this week",            "in 0 weeks",           0   */
+    {NUM,  3,  6}, {NUM,  3,  6}, /* "in 0.7 weeks",         "in 0.7 weeks",         0.7 */
+    { -1, -1, -1}, {NUM,  3,  4}, /* "next week",            "in 1 week",            1   */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 2 weeks",           "in 2 weeks",           2   */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 5 weeks",           "in 5 weeks"            5   */
+};
+
 static const char* en_dec0_long_midSent_week[kNumOffsets*2] = {
 /*  text                    numeric */
     "5 weeks ago",          "5 weeks ago",        /* -5   */
@@ -78,6 +115,21 @@ static const char* en_dec0_long_midSent_week[kNumOffsets*2] = {
     "next week",            "in 1 week",          /*  1   */
     "in 2 weeks",           "in 2 weeks",         /*  2   */
     "in 5 weeks",           "in 5 weeks"          /*  5   */
+};
+
+static const FieldsDat en_attr0_long_midSent_week[kNumOffsets*2] = {
+/*  text                    numeric */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "5 weeks ago",          "5 weeks ago",         -5   */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "2 weeks ago",          "2 weeks ago",         -2.2 */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "2 weeks ago",          "2 weeks ago",         -2  */
+    { -1, -1, -1}, {NUM,  0,  1}, /* "last week",            "1 week ago",          -1   */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "0 weeks ago",          "0 weeks ago",         -0.7 */
+    { -1, -1, -1}, {NUM,  0,  1}, /* "this week",            "0 weeks ago",         -0  */
+    { -1, -1, -1}, {NUM,  3,  4}, /* "this week",            "in 0 weeks",           0   */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 0 weeks",           "in 0 weeks",           0.7 */
+    { -1, -1, -1}, {NUM,  3,  4}, /* "next week",            "in 1 week",            1   */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 2 weeks",           "in 2 weeks",           2   */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 5 weeks",           "in 5 weeks"            5   */
 };
 
 static const char* en_decDef_short_midSent_week[kNumOffsets*2] = {
@@ -95,6 +147,21 @@ static const char* en_decDef_short_midSent_week[kNumOffsets*2] = {
     "in 5 wk.",             "in 5 wk."            /*  5   */
 };
 
+static const FieldsDat en_attrDef_short_midSent_week[kNumOffsets*2] = {
+/*  text                    numeric */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "5 wk. ago",            "5 wk. ago",           -5   */
+    {NUM,  0,  3}, {NUM,  0,  3}, /* "2.2 wk. ago",          "2.2 wk. ago",         -2.2 */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "2 wk. ago",            "2 wk. ago",           -2   */
+    { -1, -1, -1}, {NUM,  0,  1}, /* "last wk.",             "1 wk. ago",           -1   */
+    {NUM,  0,  3}, {NUM,  0,  3}, /* "0.7 wk. ago",          "0.7 wk. ago",         -0.7 */
+    { -1, -1, -1}, {NUM,  0,  1}, /* "this wk.",             "0 wk. ago",           -0   */
+    { -1, -1, -1}, {NUM,  3,  4}, /* "this wk.",             "in 0 wk.",             0   */
+    {NUM,  3,  6}, {NUM,  3,  6}, /* "in 0.7 wk.",           "in 0.7 wk.",           0.7 */
+    { -1, -1, -1}, {NUM,  3,  4}, /* "next wk.",             "in 1 wk.",             1   */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 2 wk.",             "in 2 wk.",             2   */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 5 wk.",             "in 5 wk."              5   */
+};
+
 static const char* en_decDef_long_midSent_min[kNumOffsets*2] = {
 /*  text                    numeric */
     "5 minutes ago",        "5 minutes ago",      /* -5   */
@@ -108,6 +175,21 @@ static const char* en_decDef_long_midSent_min[kNumOffsets*2] = {
     "in 1 minute",          "in 1 minute",        /*  1   */
     "in 2 minutes",         "in 2 minutes",       /*  2   */
     "in 5 minutes",         "in 5 minutes"        /*  5   */
+};
+
+static const FieldsDat en_attrDef_long_midSent_min[kNumOffsets*2] = {
+/*  text                    numeric */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "5 minutes ago",        "5 minutes ago",       -5   */
+    {NUM,  0,  3}, {NUM,  0,  3}, /* "2.2 minutes ago",      "2.2 minutes ago",     -2.2 */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "2 minutes ago",        "2 minutes ago",       -2   */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "1 minute ago",         "1 minute ago",        -1   */
+    {NUM,  0,  3}, {NUM,  0,  3}, /* "0.7 minutes ago",      "0.7 minutes ago",     -0.7 */
+    {NUM,  0,  1}, {NUM,  0,  1}, /* "0 minutes ago",        "0 minutes ago",       -0   */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 0 minutes",         "in 0 minutes",         0   */
+    {NUM,  3,  6}, {NUM,  3,  6}, /* "in 0.7 minutes",       "in 0.7 minutes",       0.7 */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 1 minute",          "in 1 minute",          1   */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 2 minutes",         "in 2 minutes",         2   */
+    {NUM,  3,  4}, {NUM,  3,  4}, /* "in 5 minutes",         "in 5 minutes"          5   */
 };
 
 static const char* en_dec0_long_midSent_tues[kNumOffsets*2] = {
@@ -125,6 +207,21 @@ static const char* en_dec0_long_midSent_tues[kNumOffsets*2] = {
     "in 5 Tuesdays",        "in 5 Tuesdays",      /*  5   */
 };
 
+static const FieldsDat en_attr0_long_midSent_tues[kNumOffsets*2] = {
+/*  text                    numeric */
+    { -1, -1, -1}, { -1, -1, -1}, /* "5 Tuesdays ago",       "5 Tuesdays ago",      -5   */
+    { -1, -1, -1}, { -1, -1, -1}, /* ""            ,         ""            ,        -2.2 */
+    { -1, -1, -1}, { -1, -1, -1}, /* "2 Tuesdays ago",       "2 Tuesdays ago",      -2   */
+    { -1, -1, -1}, { -1, -1, -1}, /* "last Tuesday",         "1 Tuesday ago",       -1   */
+    { -1, -1, -1}, { -1, -1, -1}, /* ""            ,         ""            ,        -0.7 */
+    { -1, -1, -1}, { -1, -1, -1}, /* "this Tuesday",         "0 Tuesdays ago",      -0   */
+    { -1, -1, -1}, { -1, -1, -1}, /* "this Tuesday",         "in 0 Tuesdays",        0   */
+    { -1, -1, -1}, { -1, -1, -1}, /* ""            ,         ""            ,         0.7 */
+    { -1, -1, -1}, { -1, -1, -1}, /* "next Tuesday",         "in 1 Tuesday",         1   */
+    { -1, -1, -1}, { -1, -1, -1}, /* "in 2 Tuesdays",        "in 2 Tuesdays",        2   */
+    { -1, -1, -1}, { -1, -1, -1}, /* "in 5 Tuesdays",        "in 5 Tuesdays",        5   */
+};
+
 static const char* fr_decDef_long_midSent_day[kNumOffsets*2] = {
 /*  text                    numeric */
     "il y a 5 jours",       "il y a 5 jours",     /* -5   */
@@ -140,6 +237,20 @@ static const char* fr_decDef_long_midSent_day[kNumOffsets*2] = {
     "dans 5 jours",         "dans 5 jours"        /*  5   */
 };
 
+static const FieldsDat fr_attrDef_long_midSent_day[kNumOffsets*2] = {
+/*  text                    numeric */
+    {NUM,  7,  8}, {NUM,  7,  8}, /* "il y a 5 jours",       "il y a 5 jours",      -5   */
+    {NUM,  7, 10}, {NUM,  7, 10}, /* "il y a 2,2 jours",     "il y a 2,2 jours",    -2.2 */
+    { -1, -1, -1}, {NUM,  7,  8}, /* "avant-hier",           "il y a 2 jours",      -2   */
+    { -1, -1, -1}, {NUM,  7,  8}, /* "hier",                 "il y a 1 jour",       -1   */
+    {NUM,  7, 10}, {NUM,  7, 10}, /* "il y a 0,7 jour",      "il y a 0,7 jour",     -0.7 */
+    { -1, -1, -1}, {NUM,  7,  8}, /* "aujourd\\u2019hui",    "il y a 0 jour",       -0   */
+    { -1, -1, -1}, {NUM,  5,  6}, /* "aujourd\\u2019hui",    "dans 0 jour",          0   */
+    {NUM,  5,  8}, {NUM,  5,  8}, /* "dans 0,7 jour",        "dans 0,7 jour",        0.7 */
+    { -1, -1, -1}, {NUM,  5,  6}, /* "demain",               "dans 1 jour",          1   */
+    { -1, -1, -1}, {NUM,  5,  6}, /* "apr\\u00E8s-demain",   "dans 2 jours",         2   */
+    {NUM,  5,  6}, {NUM,  5,  6}, /* "dans 5 jours",         "dans 5 jours"          5   */
+};
 
 typedef struct {
     const char*                         locale;
@@ -148,17 +259,25 @@ typedef struct {
     UDisplayContext                     capContext;
     URelativeDateTimeUnit               unit;
     const char **                       expectedResults; /* for the various offsets */
+    const FieldsDat*                    expectedAttributes;
 } RelDateTimeFormatTestItem;
 
 static const RelDateTimeFormatTestItem fmtTestItems[] = {
-    { "en", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_SECOND,  en_decDef_long_midSent_sec  },
-    { "en", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_WEEK,    en_decDef_long_midSent_week  },
-    { "en",  0, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_WEEK,    en_dec0_long_midSent_week    },
-    { "en", -1, UDAT_STYLE_SHORT, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_WEEK,    en_decDef_short_midSent_week },
-    { "en", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_MINUTE,  en_decDef_long_midSent_min   },
-    { "en", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_TUESDAY, en_dec0_long_midSent_tues    },
-    { "fr", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_DAY,     fr_decDef_long_midSent_day   },
-    { NULL,  0, (UDateRelativeDateTimeFormatterStyle)0, (UDisplayContext)0, (URelativeDateTimeUnit)0, NULL } /* terminator */
+    { "en", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_SECOND,
+      en_decDef_long_midSent_sec,   en_attrDef_long_midSent_sec },
+    { "en", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_WEEK,
+      en_decDef_long_midSent_week,  en_attrDef_long_midSent_week},
+    { "en",  0, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_WEEK,
+      en_dec0_long_midSent_week,    en_attr0_long_midSent_week},
+    { "en", -1, UDAT_STYLE_SHORT, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_WEEK,
+      en_decDef_short_midSent_week, en_attrDef_short_midSent_week},
+    { "en", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_MINUTE,
+      en_decDef_long_midSent_min,   en_attrDef_long_midSent_min},
+    { "en", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_TUESDAY,
+      en_dec0_long_midSent_tues,    en_attr0_long_midSent_tues},
+    { "fr", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_DAY,
+      fr_decDef_long_midSent_day,   fr_attrDef_long_midSent_day},
+    { NULL,  0, (UDateRelativeDateTimeFormatterStyle)0, (UDisplayContext)0, (URelativeDateTimeUnit)0, NULL, NULL } /* terminator */
 };
 
 enum { kUBufMax = 64, kBBufMax = 256 };
@@ -310,6 +429,29 @@ static void TestRelDateFmtForFields()
                         itemPtr->locale, itemPtr->decPlaces, (int)itemPtr->width, (int)itemPtr->capContext,
                         offsets[iOffset], (int)itemPtr->unit, itemPtr->expectedResults[iOffset*2], bbufget );
                 }
+                FieldsDat expectedAttr = itemPtr->expectedAttributes[iOffset*2];
+                int32_t field, beginPos, endPos;
+                field = ufieldpositer_next(fpositer, &beginPos, &endPos);
+                if (expectedAttr.field == -1) {
+                    if (field >= 0) {
+                        log_err("ureldatefmt_formatForFields as \"%s\"; expect no field, but got %d rang %d-%d\n",
+                                itemPtr->expectedResults[iOffset*2],
+                                field, beginPos, endPos);
+                    }
+                } else {
+                    if (field != expectedAttr.field ||
+                        (field >= 0 && (beginPos != expectedAttr.beginPos || endPos != expectedAttr.endPos))) {
+                        log_err("ureldatefmt_formatForFields as \"%s\"; expect field %d range %d-%d, get field %d range %d-%d\n",
+                                itemPtr->expectedResults[iOffset*2],
+                                expectedAttr.field, expectedAttr.beginPos, expectedAttr.endPos,
+                                field, beginPos, endPos);
+                    }
+                }
+                field = ufieldpositer_next(fpositer, &beginPos, &endPos);
+                if (field >= 0) {
+                    log_err("ureldatefmt_formatForFields as \"%s\"; should not get more field but got %d rang %d-%d\n",
+                             itemPtr->expectedResults[iOffset*2], field, beginPos, endPos);
+                }
             }
             ufieldpositer_close(fpositer);
 
@@ -342,6 +484,29 @@ static void TestRelDateFmtForFields()
                     log_err("ERROR: ureldatefmt_formatNumericForFields() for locale %s, decPlaces %d, width %d, capContext %d, offset %.2f, unit %d;\n      expected %s\n      get      %s\n",
                         itemPtr->locale, itemPtr->decPlaces, (int)itemPtr->width, (int)itemPtr->capContext,
                         offsets[iOffset], (int)itemPtr->unit, itemPtr->expectedResults[iOffset*2 + 1], bbufget );
+                }
+                FieldsDat expectedAttr = itemPtr->expectedAttributes[iOffset*2 + 1];
+                int32_t field, beginPos, endPos;
+                field = ufieldpositer_next(fpositer, &beginPos, &endPos);
+                if (expectedAttr.field == -1) {
+                    if (field >= 0) {
+                        log_err("ureldatefmt_formatForFields as \"%s\"; expect no field, but got %d rang %d-%d\n",
+                                itemPtr->expectedResults[iOffset*2],
+                                field, beginPos, endPos);
+                    }
+                } else {
+                    if (field != expectedAttr.field ||
+                        (field >= 0 && (beginPos != expectedAttr.beginPos || endPos != expectedAttr.endPos))) {
+                        log_err("ureldatefmt_formatForFields as \"%s\"; expect field %d range %d-%d, get field %d range %d-%d\n",
+                                itemPtr->expectedResults[iOffset*2 + 1],
+                                expectedAttr.field, expectedAttr.beginPos, expectedAttr.endPos,
+                                field, beginPos, endPos);
+                    }
+                }
+                field = ufieldpositer_next(fpositer, &beginPos, &endPos);
+                if (field >= 0) {
+                    log_err("ureldatefmt_formatForFields as \"%s\"; should not get more field but got %d rang %d-%d\n",
+                             itemPtr->expectedResults[iOffset*2 + 1], field, beginPos, endPos);
                 }
             }
             ufieldpositer_close(fpositer);
