@@ -239,10 +239,9 @@ public final class RelativeDateTimeFormatter {
 
         /**
          * Quarter
-         * @internal TODO: propose for addition in ICU 57
-         * @deprecated This API is ICU internal only.
+         * @draft ICU 64
+         * @provisional This API might change or be removed in a future release.
          */
-        @Deprecated
         QUARTER,
     }
 
