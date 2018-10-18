@@ -486,258 +486,265 @@ static WithoutQuantityExpected kSpanishNoQuantity[] = {
         {UDAT_DIRECTION_LAST_2, UDAT_ABSOLUTE_DAY, "anteayer"}
 };
 
+struct Test_Attributes {
+    int32_t id;
+    int32_t spos;
+    int32_t epos;
+};
+
 typedef struct WithQuantityExpectedRelativeDateTimeUnit {
     double value;
     URelativeDateTimeUnit unit;
     const char *expected;
+    Test_Attributes attributes;
 } WithQuantityExpectedRelativeDateTimeUnit;
 
 static WithQuantityExpectedRelativeDateTimeUnit kEnglishFormatNumeric[] = {
-        {0.0, UDAT_REL_UNIT_SECOND, "in 0 seconds"},
-        {0.5, UDAT_REL_UNIT_SECOND, "in 0.5 seconds"},
-        {1.0, UDAT_REL_UNIT_SECOND, "in 1 second"},
-        {2.0, UDAT_REL_UNIT_SECOND, "in 2 seconds"},
-        {0.0, UDAT_REL_UNIT_MINUTE, "in 0 minutes"},
-        {0.5, UDAT_REL_UNIT_MINUTE, "in 0.5 minutes"},
-        {1.0, UDAT_REL_UNIT_MINUTE, "in 1 minute"},
-        {2.0, UDAT_REL_UNIT_MINUTE, "in 2 minutes"},
-        {0.0, UDAT_REL_UNIT_HOUR, "in 0 hours"},
-        {0.5, UDAT_REL_UNIT_HOUR, "in 0.5 hours"},
-        {1.0, UDAT_REL_UNIT_HOUR, "in 1 hour"},
-        {2.0, UDAT_REL_UNIT_HOUR, "in 2 hours"},
-        {0.0, UDAT_REL_UNIT_DAY, "in 0 days"},
-        {0.5, UDAT_REL_UNIT_DAY, "in 0.5 days"},
-        {1.0, UDAT_REL_UNIT_DAY, "in 1 day"},
-        {2.0, UDAT_REL_UNIT_DAY, "in 2 days"},
-        {0.0, UDAT_REL_UNIT_WEEK, "in 0 weeks"},
-        {0.5, UDAT_REL_UNIT_WEEK, "in 0.5 weeks"},
-        {1.0, UDAT_REL_UNIT_WEEK, "in 1 week"},
-        {2.0, UDAT_REL_UNIT_WEEK, "in 2 weeks"},
-        {0.0, UDAT_REL_UNIT_MONTH, "in 0 months"},
-        {0.5, UDAT_REL_UNIT_MONTH, "in 0.5 months"},
-        {1.0, UDAT_REL_UNIT_MONTH, "in 1 month"},
-        {2.0, UDAT_REL_UNIT_MONTH, "in 2 months"},
-        {0.0, UDAT_REL_UNIT_QUARTER, "in 0 quarters"},
-        {0.5, UDAT_REL_UNIT_QUARTER, "in 0.5 quarters"},
-        {1.0, UDAT_REL_UNIT_QUARTER, "in 1 quarter"},
-        {2.0, UDAT_REL_UNIT_QUARTER, "in 2 quarters"},
-        {0.0, UDAT_REL_UNIT_YEAR, "in 0 years"},
-        {0.5, UDAT_REL_UNIT_YEAR, "in 0.5 years"},
-        {1.0, UDAT_REL_UNIT_YEAR, "in 1 year"},
-        {2.0, UDAT_REL_UNIT_YEAR, "in 2 years"},
-        {0.0, UDAT_REL_UNIT_SUNDAY, "in 0 Sundays"},
-        {0.5, UDAT_REL_UNIT_SUNDAY, "in 0.5 Sundays"},
-        {1.0, UDAT_REL_UNIT_SUNDAY, "in 1 Sunday"},
-        {2.0, UDAT_REL_UNIT_SUNDAY, "in 2 Sundays"},
-        {0.0, UDAT_REL_UNIT_MONDAY, "in 0 Mondays"},
-        {0.5, UDAT_REL_UNIT_MONDAY, "in 0.5 Mondays"},
-        {1.0, UDAT_REL_UNIT_MONDAY, "in 1 Monday"},
-        {2.0, UDAT_REL_UNIT_MONDAY, "in 2 Mondays"},
-        {0.0, UDAT_REL_UNIT_TUESDAY, "in 0 Tuesdays"},
-        {0.5, UDAT_REL_UNIT_TUESDAY, "in 0.5 Tuesdays"},
-        {1.0, UDAT_REL_UNIT_TUESDAY, "in 1 Tuesday"},
-        {2.0, UDAT_REL_UNIT_TUESDAY, "in 2 Tuesdays"},
-        {0.0, UDAT_REL_UNIT_WEDNESDAY, "in 0 Wednesdays"},
-        {0.5, UDAT_REL_UNIT_WEDNESDAY, "in 0.5 Wednesdays"},
-        {1.0, UDAT_REL_UNIT_WEDNESDAY, "in 1 Wednesday"},
-        {2.0, UDAT_REL_UNIT_WEDNESDAY, "in 2 Wednesdays"},
-        {0.0, UDAT_REL_UNIT_THURSDAY, "in 0 Thursdays"},
-        {0.5, UDAT_REL_UNIT_THURSDAY, "in 0.5 Thursdays"},
-        {1.0, UDAT_REL_UNIT_THURSDAY, "in 1 Thursday"},
-        {2.0, UDAT_REL_UNIT_THURSDAY, "in 2 Thursdays"},
-        {0.0, UDAT_REL_UNIT_FRIDAY, "in 0 Fridays"},
-        {0.5, UDAT_REL_UNIT_FRIDAY, "in 0.5 Fridays"},
-        {1.0, UDAT_REL_UNIT_FRIDAY, "in 1 Friday"},
-        {2.0, UDAT_REL_UNIT_FRIDAY, "in 2 Fridays"},
-        {0.0, UDAT_REL_UNIT_SATURDAY, "in 0 Saturdays"},
-        {0.5, UDAT_REL_UNIT_SATURDAY, "in 0.5 Saturdays"},
-        {1.0, UDAT_REL_UNIT_SATURDAY, "in 1 Saturday"},
-        {2.0, UDAT_REL_UNIT_SATURDAY, "in 2 Saturdays"},
+        {0.0, UDAT_REL_UNIT_SECOND, "in 0 seconds", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_SECOND, "in 0.5 seconds", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_SECOND, "in 1 second", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_SECOND, "in 2 seconds", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_MINUTE, "in 0 minutes", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_MINUTE, "in 0.5 minutes", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_MINUTE, "in 1 minute", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_MINUTE, "in 2 minutes", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_HOUR, "in 0 hours", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_HOUR, "in 0.5 hours", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_HOUR, "in 1 hour", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_HOUR, "in 2 hours", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_DAY, "in 0 days", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_DAY, "in 0.5 days", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_DAY, "in 1 day", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_DAY, "in 2 days", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_WEEK, "in 0 weeks", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_WEEK, "in 0.5 weeks", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_WEEK, "in 1 week", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_WEEK, "in 2 weeks", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_MONTH, "in 0 months", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_MONTH, "in 0.5 months", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_MONTH, "in 1 month", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_MONTH, "in 2 months", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_QUARTER, "in 0 quarters", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_QUARTER, "in 0.5 quarters", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_QUARTER, "in 1 quarter", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_QUARTER, "in 2 quarters", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_YEAR, "in 0 years", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_YEAR, "in 0.5 years", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_YEAR, "in 1 year", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_YEAR, "in 2 years", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_SUNDAY, "in 0 Sundays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_SUNDAY, "in 0.5 Sundays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_SUNDAY, "in 1 Sunday", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_SUNDAY, "in 2 Sundays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_MONDAY, "in 0 Mondays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_MONDAY, "in 0.5 Mondays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_MONDAY, "in 1 Monday", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_MONDAY, "in 2 Mondays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_TUESDAY, "in 0 Tuesdays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_TUESDAY, "in 0.5 Tuesdays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_TUESDAY, "in 1 Tuesday", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_TUESDAY, "in 2 Tuesdays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_WEDNESDAY, "in 0 Wednesdays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_WEDNESDAY, "in 0.5 Wednesdays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_WEDNESDAY, "in 1 Wednesday", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_WEDNESDAY, "in 2 Wednesdays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_THURSDAY, "in 0 Thursdays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_THURSDAY, "in 0.5 Thursdays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_THURSDAY, "in 1 Thursday", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_THURSDAY, "in 2 Thursdays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_FRIDAY, "in 0 Fridays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_FRIDAY, "in 0.5 Fridays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_FRIDAY, "in 1 Friday", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_FRIDAY, "in 2 Fridays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_SATURDAY, "in 0 Saturdays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_SATURDAY, "in 0.5 Saturdays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_SATURDAY, "in 1 Saturday", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_SATURDAY, "in 2 Saturdays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
 
-        {-0.0, UDAT_REL_UNIT_SECOND, "0 seconds ago"},
-        {-0.5, UDAT_REL_UNIT_SECOND, "0.5 seconds ago"},
-        {-1.0, UDAT_REL_UNIT_SECOND, "1 second ago"},
-        {-2.0, UDAT_REL_UNIT_SECOND, "2 seconds ago"},
-        {-0.0, UDAT_REL_UNIT_MINUTE, "0 minutes ago"},
-        {-0.5, UDAT_REL_UNIT_MINUTE, "0.5 minutes ago"},
-        {-1.0, UDAT_REL_UNIT_MINUTE, "1 minute ago"},
-        {-2.0, UDAT_REL_UNIT_MINUTE, "2 minutes ago"},
-        {-0.0, UDAT_REL_UNIT_HOUR, "0 hours ago"},
-        {-0.5, UDAT_REL_UNIT_HOUR, "0.5 hours ago"},
-        {-1.0, UDAT_REL_UNIT_HOUR, "1 hour ago"},
-        {-2.0, UDAT_REL_UNIT_HOUR, "2 hours ago"},
-        {-0.0, UDAT_REL_UNIT_DAY, "0 days ago"},
-        {-0.5, UDAT_REL_UNIT_DAY, "0.5 days ago"},
-        {-1.0, UDAT_REL_UNIT_DAY, "1 day ago"},
-        {-2.0, UDAT_REL_UNIT_DAY, "2 days ago"},
-        {-0.0, UDAT_REL_UNIT_WEEK, "0 weeks ago"},
-        {-0.5, UDAT_REL_UNIT_WEEK, "0.5 weeks ago"},
-        {-1.0, UDAT_REL_UNIT_WEEK, "1 week ago"},
-        {-2.0, UDAT_REL_UNIT_WEEK, "2 weeks ago"},
-        {-0.0, UDAT_REL_UNIT_MONTH, "0 months ago"},
-        {-0.5, UDAT_REL_UNIT_MONTH, "0.5 months ago"},
-        {-1.0, UDAT_REL_UNIT_MONTH, "1 month ago"},
-        {-2.0, UDAT_REL_UNIT_MONTH, "2 months ago"},
-        {-0.0, UDAT_REL_UNIT_QUARTER, "0 quarters ago"},
-        {-0.5, UDAT_REL_UNIT_QUARTER, "0.5 quarters ago"},
-        {-1.0, UDAT_REL_UNIT_QUARTER, "1 quarter ago"},
-        {-2.0, UDAT_REL_UNIT_QUARTER, "2 quarters ago"},
-        {-0.0, UDAT_REL_UNIT_YEAR, "0 years ago"},
-        {-0.5, UDAT_REL_UNIT_YEAR, "0.5 years ago"},
-        {-1.0, UDAT_REL_UNIT_YEAR, "1 year ago"},
-        {-2.0, UDAT_REL_UNIT_YEAR, "2 years ago"},
-        {-0.0, UDAT_REL_UNIT_SUNDAY, "0 Sundays ago"},
-        {-0.5, UDAT_REL_UNIT_SUNDAY, "0.5 Sundays ago"},
-        {-1.0, UDAT_REL_UNIT_SUNDAY, "1 Sunday ago"},
-        {-2.0, UDAT_REL_UNIT_SUNDAY, "2 Sundays ago"},
-        {-0.0, UDAT_REL_UNIT_MONDAY, "0 Mondays ago"},
-        {-0.5, UDAT_REL_UNIT_MONDAY, "0.5 Mondays ago"},
-        {-1.0, UDAT_REL_UNIT_MONDAY, "1 Monday ago"},
-        {-2.0, UDAT_REL_UNIT_MONDAY, "2 Mondays ago"},
-        {-0.0, UDAT_REL_UNIT_TUESDAY, "0 Tuesdays ago"},
-        {-0.5, UDAT_REL_UNIT_TUESDAY, "0.5 Tuesdays ago"},
-        {-1.0, UDAT_REL_UNIT_TUESDAY, "1 Tuesday ago"},
-        {-2.0, UDAT_REL_UNIT_TUESDAY, "2 Tuesdays ago"},
-        {-0.0, UDAT_REL_UNIT_WEDNESDAY, "0 Wednesdays ago"},
-        {-0.5, UDAT_REL_UNIT_WEDNESDAY, "0.5 Wednesdays ago"},
-        {-1.0, UDAT_REL_UNIT_WEDNESDAY, "1 Wednesday ago"},
-        {-2.0, UDAT_REL_UNIT_WEDNESDAY, "2 Wednesdays ago"},
-        {-0.0, UDAT_REL_UNIT_THURSDAY, "0 Thursdays ago"},
-        {-0.5, UDAT_REL_UNIT_THURSDAY, "0.5 Thursdays ago"},
-        {-1.0, UDAT_REL_UNIT_THURSDAY, "1 Thursday ago"},
-        {-2.0, UDAT_REL_UNIT_THURSDAY, "2 Thursdays ago"},
-        {-0.0, UDAT_REL_UNIT_FRIDAY, "0 Fridays ago"},
-        {-0.5, UDAT_REL_UNIT_FRIDAY, "0.5 Fridays ago"},
-        {-1.0, UDAT_REL_UNIT_FRIDAY, "1 Friday ago"},
-        {-2.0, UDAT_REL_UNIT_FRIDAY, "2 Fridays ago"},
-        {-0.0, UDAT_REL_UNIT_SATURDAY, "0 Saturdays ago"},
-        {-0.5, UDAT_REL_UNIT_SATURDAY, "0.5 Saturdays ago"},
-        {-1.0, UDAT_REL_UNIT_SATURDAY, "1 Saturday ago"},
-        {-2.0, UDAT_REL_UNIT_SATURDAY, "2 Saturdays ago"}
+        {-0.0, UDAT_REL_UNIT_SECOND, "0 seconds ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_SECOND, "0.5 seconds ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_SECOND, "1 second ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_SECOND, "2 seconds ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_MINUTE, "0 minutes ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_MINUTE, "0.5 minutes ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_MINUTE, "1 minute ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_MINUTE, "2 minutes ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_HOUR, "0 hours ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_HOUR, "0.5 hours ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_HOUR, "1 hour ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_HOUR, "2 hours ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_DAY, "0 days ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_DAY, "0.5 days ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_DAY, "1 day ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_DAY, "2 days ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_WEEK, "0 weeks ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_WEEK, "0.5 weeks ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_WEEK, "1 week ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_WEEK, "2 weeks ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_MONTH, "0 months ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_MONTH, "0.5 months ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_MONTH, "1 month ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_MONTH, "2 months ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_QUARTER, "0 quarters ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_QUARTER, "0.5 quarters ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_QUARTER, "1 quarter ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_QUARTER, "2 quarters ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_YEAR, "0 years ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_YEAR, "0.5 years ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_YEAR, "1 year ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_YEAR, "2 years ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_SUNDAY, "0 Sundays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_SUNDAY, "0.5 Sundays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_SUNDAY, "1 Sunday ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_SUNDAY, "2 Sundays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_MONDAY, "0 Mondays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_MONDAY, "0.5 Mondays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_MONDAY, "1 Monday ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_MONDAY, "2 Mondays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_TUESDAY, "0 Tuesdays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_TUESDAY, "0.5 Tuesdays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_TUESDAY, "1 Tuesday ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_TUESDAY, "2 Tuesdays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_WEDNESDAY, "0 Wednesdays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_WEDNESDAY, "0.5 Wednesdays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_WEDNESDAY, "1 Wednesday ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_WEDNESDAY, "2 Wednesdays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_THURSDAY, "0 Thursdays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_THURSDAY, "0.5 Thursdays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_THURSDAY, "1 Thursday ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_THURSDAY, "2 Thursdays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_FRIDAY, "0 Fridays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_FRIDAY, "0.5 Fridays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_FRIDAY, "1 Friday ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_FRIDAY, "2 Fridays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_SATURDAY, "0 Saturdays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_SATURDAY, "0.5 Saturdays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_SATURDAY, "1 Saturday ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_SATURDAY, "2 Saturdays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}}
 };
 
 static WithQuantityExpectedRelativeDateTimeUnit kEnglishFormat[] = {
-        {0.0, UDAT_REL_UNIT_SECOND, "now"},
-        {0.5, UDAT_REL_UNIT_SECOND, "in 0.5 seconds"},
-        {1.0, UDAT_REL_UNIT_SECOND, "in 1 second"},
-        {2.0, UDAT_REL_UNIT_SECOND, "in 2 seconds"},
-        {0.0, UDAT_REL_UNIT_MINUTE, "in 0 minutes"},
-        {0.5, UDAT_REL_UNIT_MINUTE, "in 0.5 minutes"},
-        {1.0, UDAT_REL_UNIT_MINUTE, "in 1 minute"},
-        {2.0, UDAT_REL_UNIT_MINUTE, "in 2 minutes"},
-        {0.0, UDAT_REL_UNIT_HOUR, "in 0 hours"},
-        {0.5, UDAT_REL_UNIT_HOUR, "in 0.5 hours"},
-        {1.0, UDAT_REL_UNIT_HOUR, "in 1 hour"},
-        {2.0, UDAT_REL_UNIT_HOUR, "in 2 hours"},
-        {0.0, UDAT_REL_UNIT_DAY, "today"},
-        {0.5, UDAT_REL_UNIT_DAY, "in 0.5 days"},
-        {1.0, UDAT_REL_UNIT_DAY, "tomorrow"},
-        {2.0, UDAT_REL_UNIT_DAY, "in 2 days"},
-        {0.0, UDAT_REL_UNIT_WEEK, "this week"},
-        {0.5, UDAT_REL_UNIT_WEEK, "in 0.5 weeks"},
-        {1.0, UDAT_REL_UNIT_WEEK, "next week"},
-        {2.0, UDAT_REL_UNIT_WEEK, "in 2 weeks"},
-        {0.0, UDAT_REL_UNIT_MONTH, "this month"},
-        {0.5, UDAT_REL_UNIT_MONTH, "in 0.5 months"},
-        {1.0, UDAT_REL_UNIT_MONTH, "next month"},
-        {2.0, UDAT_REL_UNIT_MONTH, "in 2 months"},
-        {0.0, UDAT_REL_UNIT_QUARTER, "this quarter"},
-        {0.5, UDAT_REL_UNIT_QUARTER, "in 0.5 quarters"},
-        {1.0, UDAT_REL_UNIT_QUARTER, "next quarter"},
-        {2.0, UDAT_REL_UNIT_QUARTER, "in 2 quarters"},
-        {0.0, UDAT_REL_UNIT_YEAR, "this year"},
-        {0.5, UDAT_REL_UNIT_YEAR, "in 0.5 years"},
-        {1.0, UDAT_REL_UNIT_YEAR, "next year"},
-        {2.0, UDAT_REL_UNIT_YEAR, "in 2 years"},
-        {0.0, UDAT_REL_UNIT_SUNDAY, "this Sunday"},
-        {0.5, UDAT_REL_UNIT_SUNDAY, "in 0.5 Sundays"},
-        {1.0, UDAT_REL_UNIT_SUNDAY, "next Sunday"},
-        {2.0, UDAT_REL_UNIT_SUNDAY, "in 2 Sundays"},
-        {0.0, UDAT_REL_UNIT_MONDAY, "this Monday"},
-        {0.5, UDAT_REL_UNIT_MONDAY, "in 0.5 Mondays"},
-        {1.0, UDAT_REL_UNIT_MONDAY, "next Monday"},
-        {2.0, UDAT_REL_UNIT_MONDAY, "in 2 Mondays"},
-        {0.0, UDAT_REL_UNIT_TUESDAY, "this Tuesday"},
-        {0.5, UDAT_REL_UNIT_TUESDAY, "in 0.5 Tuesdays"},
-        {1.0, UDAT_REL_UNIT_TUESDAY, "next Tuesday"},
-        {2.0, UDAT_REL_UNIT_TUESDAY, "in 2 Tuesdays"},
-        {0.0, UDAT_REL_UNIT_WEDNESDAY, "this Wednesday"},
-        {0.5, UDAT_REL_UNIT_WEDNESDAY, "in 0.5 Wednesdays"},
-        {1.0, UDAT_REL_UNIT_WEDNESDAY, "next Wednesday"},
-        {2.0, UDAT_REL_UNIT_WEDNESDAY, "in 2 Wednesdays"},
-        {0.0, UDAT_REL_UNIT_THURSDAY, "this Thursday"},
-        {0.5, UDAT_REL_UNIT_THURSDAY, "in 0.5 Thursdays"},
-        {1.0, UDAT_REL_UNIT_THURSDAY, "next Thursday"},
-        {2.0, UDAT_REL_UNIT_THURSDAY, "in 2 Thursdays"},
-        {0.0, UDAT_REL_UNIT_FRIDAY, "this Friday"},
-        {0.5, UDAT_REL_UNIT_FRIDAY, "in 0.5 Fridays"},
-        {1.0, UDAT_REL_UNIT_FRIDAY, "next Friday"},
-        {2.0, UDAT_REL_UNIT_FRIDAY, "in 2 Fridays"},
-        {0.0, UDAT_REL_UNIT_SATURDAY, "this Saturday"},
-        {0.5, UDAT_REL_UNIT_SATURDAY, "in 0.5 Saturdays"},
-        {1.0, UDAT_REL_UNIT_SATURDAY, "next Saturday"},
-        {2.0, UDAT_REL_UNIT_SATURDAY, "in 2 Saturdays"},
+        {0.0, UDAT_REL_UNIT_SECOND, "now", {-1, -1, -1}},
+        {0.5, UDAT_REL_UNIT_SECOND, "in 0.5 seconds", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_SECOND, "in 1 second", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_SECOND, "in 2 seconds", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_MINUTE, "in 0 minutes", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_MINUTE, "in 0.5 minutes", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_MINUTE, "in 1 minute", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_MINUTE, "in 2 minutes", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_HOUR, "in 0 hours", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.5, UDAT_REL_UNIT_HOUR, "in 0.5 hours", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_HOUR, "in 1 hour", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {2.0, UDAT_REL_UNIT_HOUR, "in 2 hours", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_DAY, "today", {-1, -1, -1}},
+        {0.5, UDAT_REL_UNIT_DAY, "in 0.5 days", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_DAY, "tomorrow", {-1, -1, -1}},
+        {2.0, UDAT_REL_UNIT_DAY, "in 2 days", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_WEEK, "this week", {-1, -1, -1}},
+        {0.5, UDAT_REL_UNIT_WEEK, "in 0.5 weeks", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_WEEK, "next week", {-1, -1, -1}},
+        {2.0, UDAT_REL_UNIT_WEEK, "in 2 weeks", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_MONTH, "this month", {-1, -1, -1}},
+        {0.5, UDAT_REL_UNIT_MONTH, "in 0.5 months", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_MONTH, "next month", {-1, -1, -1}},
+        {2.0, UDAT_REL_UNIT_MONTH, "in 2 months", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_QUARTER, "this quarter", {-1, -1, -1}},
+        {0.5, UDAT_REL_UNIT_QUARTER, "in 0.5 quarters", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_QUARTER, "next quarter", {-1, -1, -1}},
+        {2.0, UDAT_REL_UNIT_QUARTER, "in 2 quarters", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_YEAR, "this year", {-1, -1, -1}},
+        {0.5, UDAT_REL_UNIT_YEAR, "in 0.5 years", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_YEAR, "next year", {-1, -1, -1}},
+        {2.0, UDAT_REL_UNIT_YEAR, "in 2 years", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_SUNDAY, "this Sunday", {-1, -1, -1}},
+        {0.5, UDAT_REL_UNIT_SUNDAY, "in 0.5 Sundays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_SUNDAY, "next Sunday", {-1, -1, -1}},
+        {2.0, UDAT_REL_UNIT_SUNDAY, "in 2 Sundays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_MONDAY, "this Monday", {-1, -1, -1}},
+        {0.5, UDAT_REL_UNIT_MONDAY, "in 0.5 Mondays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_MONDAY, "next Monday", {-1, -1, -1}},
+        {2.0, UDAT_REL_UNIT_MONDAY, "in 2 Mondays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_TUESDAY, "this Tuesday", {-1, -1, -1}},
+        {0.5, UDAT_REL_UNIT_TUESDAY, "in 0.5 Tuesdays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_TUESDAY, "next Tuesday", {-1, -1, -1}},
+        {2.0, UDAT_REL_UNIT_TUESDAY, "in 2 Tuesdays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_WEDNESDAY, "this Wednesday", {-1, -1, -1}},
+        {0.5, UDAT_REL_UNIT_WEDNESDAY, "in 0.5 Wednesdays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_WEDNESDAY, "next Wednesday", {-1, -1, -1}},
+        {2.0, UDAT_REL_UNIT_WEDNESDAY, "in 2 Wednesdays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_THURSDAY, "this Thursday", {-1, -1, -1}},
+        {0.5, UDAT_REL_UNIT_THURSDAY, "in 0.5 Thursdays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_THURSDAY, "next Thursday", {-1, -1, -1}},
+        {2.0, UDAT_REL_UNIT_THURSDAY, "in 2 Thursdays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_FRIDAY, "this Friday", {-1, -1, -1}},
+        {0.5, UDAT_REL_UNIT_FRIDAY, "in 0.5 Fridays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_FRIDAY, "next Friday", {-1, -1, -1}},
+        {2.0, UDAT_REL_UNIT_FRIDAY, "in 2 Fridays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
+        {0.0, UDAT_REL_UNIT_SATURDAY, "this Saturday", {-1, -1, -1}},
+        {0.5, UDAT_REL_UNIT_SATURDAY, "in 0.5 Saturdays", {UDAT_REL_NUMBER_FIELD, 3, 6}},
+        {1.0, UDAT_REL_UNIT_SATURDAY, "next Saturday", {-1, -1, -1}},
+        {2.0, UDAT_REL_UNIT_SATURDAY, "in 2 Saturdays", {UDAT_REL_NUMBER_FIELD, 3, 4}},
 
-        {-0.0, UDAT_REL_UNIT_SECOND, "now"},
-        {-0.5, UDAT_REL_UNIT_SECOND, "0.5 seconds ago"},
-        {-1.0, UDAT_REL_UNIT_SECOND, "1 second ago"},
-        {-2.0, UDAT_REL_UNIT_SECOND, "2 seconds ago"},
-        {-0.0, UDAT_REL_UNIT_MINUTE, "0 minutes ago"},
-        {-0.5, UDAT_REL_UNIT_MINUTE, "0.5 minutes ago"},
-        {-1.0, UDAT_REL_UNIT_MINUTE, "1 minute ago"},
-        {-2.0, UDAT_REL_UNIT_MINUTE, "2 minutes ago"},
-        {-0.0, UDAT_REL_UNIT_HOUR, "0 hours ago"},
-        {-0.5, UDAT_REL_UNIT_HOUR, "0.5 hours ago"},
-        {-1.0, UDAT_REL_UNIT_HOUR, "1 hour ago"},
-        {-2.0, UDAT_REL_UNIT_HOUR, "2 hours ago"},
-        {-0.0, UDAT_REL_UNIT_DAY, "today"},
-        {-0.5, UDAT_REL_UNIT_DAY, "0.5 days ago"},
-        {-1.0, UDAT_REL_UNIT_DAY, "yesterday"},
-        {-2.0, UDAT_REL_UNIT_DAY, "2 days ago"},
-        {-0.0, UDAT_REL_UNIT_WEEK, "this week"},
-        {-0.5, UDAT_REL_UNIT_WEEK, "0.5 weeks ago"},
-        {-1.0, UDAT_REL_UNIT_WEEK, "last week"},
-        {-2.0, UDAT_REL_UNIT_WEEK, "2 weeks ago"},
-        {-0.0, UDAT_REL_UNIT_MONTH, "this month"},
-        {-0.5, UDAT_REL_UNIT_MONTH, "0.5 months ago"},
-        {-1.0, UDAT_REL_UNIT_MONTH, "last month"},
-        {-2.0, UDAT_REL_UNIT_MONTH, "2 months ago"},
-        {-0.0, UDAT_REL_UNIT_QUARTER, "this quarter"},
-        {-0.5, UDAT_REL_UNIT_QUARTER, "0.5 quarters ago"},
-        {-1.0, UDAT_REL_UNIT_QUARTER, "last quarter"},
-        {-2.0, UDAT_REL_UNIT_QUARTER, "2 quarters ago"},
-        {-0.0, UDAT_REL_UNIT_YEAR, "this year"},
-        {-0.5, UDAT_REL_UNIT_YEAR, "0.5 years ago"},
-        {-1.0, UDAT_REL_UNIT_YEAR, "last year"},
-        {-2.0, UDAT_REL_UNIT_YEAR, "2 years ago"},
-        {-0.0, UDAT_REL_UNIT_SUNDAY, "this Sunday"},
-        {-0.5, UDAT_REL_UNIT_SUNDAY, "0.5 Sundays ago"},
-        {-1.0, UDAT_REL_UNIT_SUNDAY, "last Sunday"},
-        {-2.0, UDAT_REL_UNIT_SUNDAY, "2 Sundays ago"},
-        {-0.0, UDAT_REL_UNIT_MONDAY, "this Monday"},
-        {-0.5, UDAT_REL_UNIT_MONDAY, "0.5 Mondays ago"},
-        {-1.0, UDAT_REL_UNIT_MONDAY, "last Monday"},
-        {-2.0, UDAT_REL_UNIT_MONDAY, "2 Mondays ago"},
-        {-0.0, UDAT_REL_UNIT_TUESDAY, "this Tuesday"},
-        {-0.5, UDAT_REL_UNIT_TUESDAY, "0.5 Tuesdays ago"},
-        {-1.0, UDAT_REL_UNIT_TUESDAY, "last Tuesday"},
-        {-2.0, UDAT_REL_UNIT_TUESDAY, "2 Tuesdays ago"},
-        {-0.0, UDAT_REL_UNIT_WEDNESDAY, "this Wednesday"},
-        {-0.5, UDAT_REL_UNIT_WEDNESDAY, "0.5 Wednesdays ago"},
-        {-1.0, UDAT_REL_UNIT_WEDNESDAY, "last Wednesday"},
-        {-2.0, UDAT_REL_UNIT_WEDNESDAY, "2 Wednesdays ago"},
-        {-0.0, UDAT_REL_UNIT_THURSDAY, "this Thursday"},
-        {-0.5, UDAT_REL_UNIT_THURSDAY, "0.5 Thursdays ago"},
-        {-1.0, UDAT_REL_UNIT_THURSDAY, "last Thursday"},
-        {-2.0, UDAT_REL_UNIT_THURSDAY, "2 Thursdays ago"},
-        {-0.0, UDAT_REL_UNIT_FRIDAY, "this Friday"},
-        {-0.5, UDAT_REL_UNIT_FRIDAY, "0.5 Fridays ago"},
-        {-1.0, UDAT_REL_UNIT_FRIDAY, "last Friday"},
-        {-2.0, UDAT_REL_UNIT_FRIDAY, "2 Fridays ago"},
-        {-0.0, UDAT_REL_UNIT_SATURDAY, "this Saturday"},
-        {-0.5, UDAT_REL_UNIT_SATURDAY, "0.5 Saturdays ago"},
-        {-1.0, UDAT_REL_UNIT_SATURDAY, "last Saturday"},
-        {-2.0, UDAT_REL_UNIT_SATURDAY, "2 Saturdays ago"}
+        {-0.0, UDAT_REL_UNIT_SECOND, "now", {-1, -1, -1}},
+        {-0.5, UDAT_REL_UNIT_SECOND, "0.5 seconds ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_SECOND, "1 second ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_SECOND, "2 seconds ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_MINUTE, "0 minutes ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_MINUTE, "0.5 minutes ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_MINUTE, "1 minute ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_MINUTE, "2 minutes ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_HOUR, "0 hours ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.5, UDAT_REL_UNIT_HOUR, "0.5 hours ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_HOUR, "1 hour ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-2.0, UDAT_REL_UNIT_HOUR, "2 hours ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_DAY, "today", {-1, -1, -1}},
+        {-0.5, UDAT_REL_UNIT_DAY, "0.5 days ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_DAY, "yesterday", {-1, -1, -1}},
+        {-2.0, UDAT_REL_UNIT_DAY, "2 days ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_WEEK, "this week", {-1, -1, -1}},
+        {-0.5, UDAT_REL_UNIT_WEEK, "0.5 weeks ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_WEEK, "last week", {-1, -1, -1}},
+        {-2.0, UDAT_REL_UNIT_WEEK, "2 weeks ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_MONTH, "this month", {-1, -1, -1}},
+        {-0.5, UDAT_REL_UNIT_MONTH, "0.5 months ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_MONTH, "last month", {-1, -1, -1}},
+        {-2.0, UDAT_REL_UNIT_MONTH, "2 months ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_QUARTER, "this quarter", {-1, -1, -1}},
+        {-0.5, UDAT_REL_UNIT_QUARTER, "0.5 quarters ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_QUARTER, "last quarter", {-1, -1, -1}},
+        {-2.0, UDAT_REL_UNIT_QUARTER, "2 quarters ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_YEAR, "this year", {-1, -1, -1}},
+        {-0.5, UDAT_REL_UNIT_YEAR, "0.5 years ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_YEAR, "last year", {-1, -1, -1}},
+        {-2.0, UDAT_REL_UNIT_YEAR, "2 years ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_SUNDAY, "this Sunday", {-1, -1, -1}},
+        {-0.5, UDAT_REL_UNIT_SUNDAY, "0.5 Sundays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_SUNDAY, "last Sunday", {-1, -1, -1}},
+        {-2.0, UDAT_REL_UNIT_SUNDAY, "2 Sundays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_MONDAY, "this Monday", {-1, -1, -1}},
+        {-0.5, UDAT_REL_UNIT_MONDAY, "0.5 Mondays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_MONDAY, "last Monday", {-1, -1, -1}},
+        {-2.0, UDAT_REL_UNIT_MONDAY, "2 Mondays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_TUESDAY, "this Tuesday", {-1, -1, -1}},
+        {-0.5, UDAT_REL_UNIT_TUESDAY, "0.5 Tuesdays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_TUESDAY, "last Tuesday", {-1, -1, -1}},
+        {-2.0, UDAT_REL_UNIT_TUESDAY, "2 Tuesdays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_WEDNESDAY, "this Wednesday", {-1, -1, -1}},
+        {-0.5, UDAT_REL_UNIT_WEDNESDAY, "0.5 Wednesdays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_WEDNESDAY, "last Wednesday", {-1, -1, -1}},
+        {-2.0, UDAT_REL_UNIT_WEDNESDAY, "2 Wednesdays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_THURSDAY, "this Thursday", {-1, -1, -1}},
+        {-0.5, UDAT_REL_UNIT_THURSDAY, "0.5 Thursdays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_THURSDAY, "last Thursday", {-1, -1, -1}},
+        {-2.0, UDAT_REL_UNIT_THURSDAY, "2 Thursdays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_FRIDAY, "this Friday", {-1, -1, -1}},
+        {-0.5, UDAT_REL_UNIT_FRIDAY, "0.5 Fridays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_FRIDAY, "last Friday", {-1, -1, -1}},
+        {-2.0, UDAT_REL_UNIT_FRIDAY, "2 Fridays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}},
+        {-0.0, UDAT_REL_UNIT_SATURDAY, "this Saturday", {-1, -1, -1}},
+        {-0.5, UDAT_REL_UNIT_SATURDAY, "0.5 Saturdays ago", {UDAT_REL_NUMBER_FIELD, 0, 3}},
+        {-1.0, UDAT_REL_UNIT_SATURDAY, "last Saturday", {-1, -1, -1}},
+        {-2.0, UDAT_REL_UNIT_SATURDAY, "2 Saturdays ago", {UDAT_REL_NUMBER_FIELD, 0, 1}}
 };
 
 
@@ -768,6 +775,8 @@ private:
     void TestFormat();
     void TestFormatNumeric();
     void TestLocales();
+    void TestFormatWithFieldPositionIterator();
+    void TestFormatNumericWithFieldPositionIterator();
     void RunTest(
             const Locale& locale,
             const WithQuantityExpected* expectedResults,
@@ -816,6 +825,11 @@ private:
             const WithQuantityExpectedRelativeDateTimeUnit& expectedResults,
             const char* description,
             bool numeric);
+    void CheckExpectedResultWithPositions(
+            const RelativeDateTimeFormatter& fmt,
+            const WithQuantityExpectedRelativeDateTimeUnit& expectedResults,
+            const char* description,
+            bool numeric);
     void CheckExpectedResult(
             const RelativeDateTimeFormatter& fmt,
             const WithoutQuantityExpected& expectedResult,
@@ -828,6 +842,10 @@ private:
             const RelativeDateTimeFormatter& fmt,
             UDateDirection direction,
             UDateAbsoluteUnit unit);
+    void VerifyFieldPositionIterator(
+            const char* description,
+            Test_Attributes expected, FieldPositionIterator &iter);
+
     void TestSidewaysDataLoading(void);
 };
 
@@ -858,6 +876,8 @@ void RelativeDateTimeFormatterTest::runIndexedTest(
     TESTCASE_AUTO(TestFormat);
     TESTCASE_AUTO(TestFormatNumeric);
     TESTCASE_AUTO(TestLocales);
+    TESTCASE_AUTO(TestFormatWithFieldPositionIterator);
+    TESTCASE_AUTO(TestFormatNumericWithFieldPositionIterator);
     TESTCASE_AUTO_END;
 }
 
@@ -1036,7 +1056,7 @@ void RelativeDateTimeFormatterTest::TestCombineDateAndTime() {
         errln("Expected "+expected+", got "+actual);
     }
 }
-    
+
 void RelativeDateTimeFormatterTest::TestBadDisplayContext() {
     UErrorCode status = U_ZERO_ERROR;
     RelativeDateTimeFormatter fmt(
@@ -1045,8 +1065,6 @@ void RelativeDateTimeFormatterTest::TestBadDisplayContext() {
         errln("Expected U_ILLEGAL_ARGUMENT_ERROR, got %s", u_errorName(status));
     }
 }
-    
-
 
 void RelativeDateTimeFormatterTest::RunTest(
         const Locale& locale,
@@ -1137,6 +1155,7 @@ void RelativeDateTimeFormatterTest::RunTest(
         bool numeric) {
     for (int32_t i = 0; i < expectedResultLength; ++i) {
         CheckExpectedResult(fmt, expectedResults[i], description, numeric);
+        CheckExpectedResultWithPositions(fmt, expectedResults[i], description, numeric);
     }
 }
 
@@ -1202,6 +1221,37 @@ void RelativeDateTimeFormatterTest::CheckExpectedResult(
     }
 }
 
+void RelativeDateTimeFormatterTest::CheckExpectedResultWithPositions(
+        const RelativeDateTimeFormatter& fmt,
+        const WithQuantityExpectedRelativeDateTimeUnit& expectedResult,
+        const char* description,
+        bool numeric) {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString actual;
+    FieldPositionIterator iter;
+    if (numeric) {
+      fmt.formatNumeric(expectedResult.value, expectedResult.unit, actual, &iter, status);
+    } else {
+      fmt.format(expectedResult.value, expectedResult.unit, actual, &iter, status);
+    }
+    UnicodeString expected(expectedResult.expected, -1, US_INV);
+    expected = expected.unescape();
+    char buffer[256];
+    sprintf(
+            buffer,
+            "%s, %f, %s",
+            description,
+            expectedResult.value,
+            RelativeDateTimeUnitStr(expectedResult.unit));
+    if (actual != expected) {
+        errln(UnicodeString("Fail: Expected: ") + expected
+                + ", Got: " + actual
+                + ", For: " + buffer);
+    }
+    VerifyFieldPositionIterator(
+        buffer, expectedResult.attributes, iter);
+}
+
 void RelativeDateTimeFormatterTest::CheckExpectedResult(
         const RelativeDateTimeFormatter& fmt,
         const WithoutQuantityExpected& expectedResult,
@@ -1247,6 +1297,21 @@ void RelativeDateTimeFormatterTest::VerifyIllegalArgument(
     if (status != U_ILLEGAL_ARGUMENT_ERROR) {
         errln("Expected U_ILLEGAL_ARGUMENT_ERROR, got %s", u_errorName(status));
     }
+}
+
+void RelativeDateTimeFormatterTest::VerifyFieldPositionIterator(
+        const char* description,
+        const Test_Attributes expected, FieldPositionIterator &iter) {
+    FieldPosition fp;
+    bool has_position = iter.next(fp);
+    assertEquals(description, has_position, expected.spos != -1);
+    if (expected.spos != -1) {
+      assertEquals("id", expected.id, fp.getField());
+      assertEquals("start", expected.spos, fp.getBeginIndex());
+      assertEquals("end", expected.epos, fp.getEndIndex());
+    }
+    // We should have at most one attribute.
+    assertFalse(description, iter.next(fp));
 }
 
 /* Add tests to check "sideways" data loading. */
@@ -1311,6 +1376,12 @@ void RelativeDateTimeFormatterTest::TestLocales() {
         allFormatters.push_back(std::move(rdtf));
         assertSuccess(loc.getName(), status);
     }
+}
+
+void RelativeDateTimeFormatterTest::TestFormatNumericWithFieldPositionIterator() {
+}
+
+void RelativeDateTimeFormatterTest::TestFormatWithFieldPositionIterator() {
 }
 
 static const char *kLast2 = "Last_2";
