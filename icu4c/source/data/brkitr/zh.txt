@@ -3,9 +3,9 @@
 zh{
     Version{"2.1.19.14"}
     boundaries{
-        line:process(dependency){"line.brk"}
+        line:process(dependency){"line_cj.brk"}
         line_loose:process(dependency){"line_loose_cj.brk"}
         line_normal:process(dependency){"line_normal_cj.brk"}
-        line_strict:process(dependency){"line.brk"}
+        line_strict:process(dependency){"line_cj.brk"}
     }
 }

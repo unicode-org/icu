@@ -26,6 +26,7 @@
 #         It sets characters of class CJ to behave like ID.
 #         In addition, it allows breaks:
 #         * before hyphens 2010 & 2013 (both BA) and 301C, 30A0 (both NS)
+#         It allows breaking before 201C and after 201D, for zh_Hans, zh_Hant, and ja.
 
 type = line;
 locale = ja@lb=normal;
@@ -40,7 +41,7 @@ BK = [:LineBreak =  Mandatory_Break:];
 B2 = [:LineBreak =  Break_Both:];
 CB = [:LineBreak =  Contingent_Break:];
 CJ = [:LineBreak =  Conditional_Japanese_Starter:];
-CL = [:LineBreak =  Close_Punctuation:];
+CL = [[:LineBreak =  Close_Punctuation:] \u201d];
 CMS = [:LineBreak =  Combining_Mark:];
 CP = [:LineBreak =  Close_Parenthesis:];
 CR = [:LineBreak =  Carriage_Return:];
@@ -63,10 +64,10 @@ NL = [:LineBreak =  Next_Line:];
 NSX = [\u301C \u30A0];
 NS = [[:LineBreak =  Nonstarter:] - NSX];
 NU = [:LineBreak =  Numeric:];
-OP = [:LineBreak =  Open_Punctuation:];
+OP = [[:LineBreak =  Open_Punctuation:] \u201c];
 PO = [:LineBreak =  Postfix_Numeric:];
 PR = [:LineBreak =  Prefix_Numeric:];
-QU = [:LineBreak =  Quotation:];
+QU = [[:LineBreak =  Quotation:] - [\u201c\u201d]];
 RI = [:LineBreak =  Regional_Indicator:];
 SA = [:LineBreak =  Complex_Context:];
 SG = [:LineBreak =  Surrogate:];

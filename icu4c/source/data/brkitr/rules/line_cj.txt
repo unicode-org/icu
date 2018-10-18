@@ -3,7 +3,7 @@
 # Copyright (c) 2002-2016  International Business Machines Corporation and
 # others. All Rights Reserved.
 #
-#  file:  line_loose_cj.txt
+#  file:  line_cj.txt
 #
 #         Line Breaking Rules
 #         Implement default line breaking as defined by
@@ -13,21 +13,9 @@
 #         Boundaries between hyphens and following letters are suppressed when
 #         there is a boundary preceding the hyphen. See rule 20.9
 #
-#         This tailors the line break behavior to correspond to CSS
-#         line-break=loose (BCP47 -u-lb-loose) as defined for Chinese & Japanese.
-#         It sets characters of class CJ to behave like ID.
-#         In addition, it allows breaks:
-#         * before hyphens 2010 & 2013 (both BA) and 301C, 30A0 (both NS)
-#         * before iteration marks 3005, 303B, 309D, 309E, 30FD, 30FE (all NS)
-#         * between characters of LineBreak class IN such as 2026
-#         * before some centered punct 203C, 2047, 2048, 2049, 30FB, FF1A, FF1B,
-#           FF65 (all NS) and FF01, FF1F (both EX).
-#         * before suffix characters with LineBreak class PO and EastAsianWidth A,F,W;
-#           this includes: 00B0 2030 2032 2033 2035 2103 2109 FE6A FF05 FFE0
-#         * after prefix characters with LineBreak class PR and EastAsianWidth A,F,W;
-#           this includes: 00A4 00B1 20AC 2116 FE69 FF04 FFE1 FFE5 FFE6
+#         This corresponds to CSS line-break=strict (BCP47 -u-lb-strict).
+#         It sets characters of class CJ to behave like NS.
 #         It allows breaking before 201C and after 201D, for zh_Hans, zh_Hant, and ja.
-
 
 #
 #  Character Classes defined by TR 14.
@@ -38,8 +26,7 @@
 
 $AI = [:LineBreak =  Ambiguous:];
 $AL = [:LineBreak =  Alphabetic:];
-$BAX = [\u2010 \u2013];
-$BA = [[:LineBreak =  Break_After:] - $BAX];
+$BA = [:LineBreak =  Break_After:];
 $HH = [\u2010];     # \u2010 is HYPHEN, default line break is BA.
 $BB = [:LineBreak =  Break_Before:];
 $BK = [:LineBreak =  Mandatory_Break:];
@@ -52,15 +39,13 @@ $CP = [:LineBreak =  Close_Parenthesis:];
 $CR = [:LineBreak =  Carriage_Return:];
 $EB = [:LineBreak =  EB:];
 $EM = [:LineBreak =  EM:];
-$EXX = [\uFF01 \uFF1F];
-$EX = [[:LineBreak =  Exclamation:] - $EXX];
+$EX = [:LineBreak =  Exclamation:];
 $GL = [:LineBreak =  Glue:];
 $HL = [:LineBreak =  Hebrew_Letter:];
 $HY = [:LineBreak =  Hyphen:];
 $H2 = [:LineBreak =  H2:];
 $H3 = [:LineBreak =  H3:];
-# CSS Loose tailoring: CJ resolves to ID
-$ID = [[:LineBreak =  Ideographic:] $CJ];
+$ID = [:LineBreak =  Ideographic:];
 $IN = [:LineBreak =  Inseperable:];
 $IS = [:LineBreak =  Infix_Numeric:];
 $JL = [:LineBreak =  JL:];
@@ -68,14 +53,12 @@ $JV = [:LineBreak =  JV:];
 $JT = [:LineBreak =  JT:];
 $LF = [:LineBreak =  Line_Feed:];
 $NL = [:LineBreak =  Next_Line:];
-$NSX = [\u301C \u30A0 \u3005 \u303B \u309D \u309E \u30FD \u30FE \u203C \u2047 \u2048 \u2049 \u30FB \uFF1A \uFF1B \uFF65];
-$NS = [[:LineBreak =  Nonstarter:] - $NSX];
+# NS includes CJ for CSS strict line breaking.
+$NS = [[:LineBreak =  Nonstarter:] $CJ];
 $NU = [:LineBreak =  Numeric:];
 $OP = [[:LineBreak =  Open_Punctuation:] \u201c];
-$POX = [\u00B0 \u2030 \u2032 \u2033 \u2035 \u2103 \u2109 \uFE6A \uFF05 \uFFE0];
-$PO = [[:LineBreak =  Postfix_Numeric:] - $POX];
-$PRX = [\u00A4 \u00B1 \u20AC \u2116 \uFE69 \uFF04 \uFFE1 \uFFE5 \uFFE6];
-$PR = [[:LineBreak =  Prefix_Numeric:] - $PRX];
+$PO = [:LineBreak =  Postfix_Numeric:];
+$PR = [:LineBreak =  Prefix_Numeric:];
 $QU = [[:LineBreak =  Quotation:] - [\u201c\u201d]];
 $RI = [:LineBreak =  Regional_Indicator:];
 $SA = [:LineBreak =  Complex_Context:];
@@ -125,7 +108,7 @@ $CANT_CM = [ $SP $BK $CR $LF $NL $ZW $CM];       # Bases that can't take CMs
 # AL_FOLLOW  set of chars that can unconditionally follow an AL
 #            Needed in rules where stand-alone $CM s are treated as AL.
 #
-$AL_FOLLOW      = [$BK $CR $LF $NL $ZW $SP $CL $CP $EX $HL $IS $SY $WJ $GL $OP $QU $BA $HY $NS $IN $NU $PR $PO $POX $ALPlus];
+$AL_FOLLOW      = [$BK $CR $LF $NL $ZW $SP $CL $CP $EX $HL $IS $SY $WJ $GL $OP $QU $BA $HY $NS $IN $NU $PR $PO $ALPlus];
 
 
 #
@@ -186,14 +169,14 @@ $GL $CM* .;
 # LB 12a  Do not break before NBSP and related characters ...
 #            [^SP BA HY] x GL
 #
-[[$LB8NonBreaks] - [$SP $BA $BAX $HY]] $CM* $GL;
+[[$LB8NonBreaks] - [$SP $BA $HY]] $CM* $GL;
 ^$CM+ $GL;
+
 
 
 #
 # LB 13   Don't break before ']' or '!' or ';' or '/', even after spaces.
 #
-# Do not include $EXX here
 $LB8NonBreaks $CL;
 $CAN_CM $CM*  $CL;
 ^$CM+         $CL;              # by rule 10, stand-alone CM behaves as AL
@@ -227,8 +210,6 @@ $OP $CM* $SP+ $CM+ $AL_FOLLOW?;    # by rule 10, stand-alone CM behaves as AL
 $QU $CM* $SP* $OP;
 
 # LB 16
-# Do not break between closing punctuation and $NS, even with intervening spaces
-# But DO allow a break between closing punctuation and $NSX, don't include it here
 ($CL | $CP) $CM* $SP* $NS;
 
 # LB 17
@@ -264,7 +245,6 @@ $LB20NonBreaks = [$LB18NonBreaks - $CB];
 # LB 21        x   (BA | HY | NS)
 #           BB x
 #
-# DO allow breaks here before $BAX and $NSX, so don't include them
 $LB20NonBreaks $CM* ($BA | $HY | $NS);
 
 
@@ -276,7 +256,7 @@ $BB $CM* $LB20NonBreaks;
 # LB 21a Don't break after Hebrew + Hyphen
 #   HL (HY | BA) x
 #
-$HL $CM* ($HY | $BA | $BAX) $CM* [^$CB]?;
+$HL $CM* ($HY | $BA) $CM* [^$CB]?;
 
 # LB 21b (forward) Don't break between SY and HL
 # (break between HL and SY already disallowed by LB 13 above)
@@ -287,7 +267,7 @@ $SY $CM* $HL;
 ^$CM+    $IN;     #  by rule 10, any otherwise unattached CM behaves as AL
 $EX $CM*    $IN;
 ($ID | $EB | $EM) $CM*  $IN;
-# $IN $CM*    $IN;  # delete this rule for CSS loose
+$IN $CM*    $IN;
 $NU $CM*    $IN;
 
 
@@ -298,7 +278,6 @@ $NU $CM*    $IN;
 $NU $CM* ($ALPlus | $HL);
 
 # LB 23a
-# Do not include $POX here
 #
 $PR $CM* ($ID | $EB | $EM);
 ($ID | $EB | $EM) $CM*  $PO;
@@ -307,17 +286,15 @@ $PR $CM* ($ID | $EB | $EM);
 #
 # LB 24
 #
-# Do not include $PRX here
-($PR | $PO | $POX) $CM* ($ALPlus | $HL);
-($ALPlus | $HL) $CM* ($PR | $PO | $POX);     # TODO: should this be ($PR | $PRX | $PO)
-^$CM+ ($PR | $PO | $POX);       # Rule 10, any otherwise unattached CM behaves as AL
+($PR | $PO) $CM* ($ALPlus | $HL);
+($ALPlus | $HL) $CM* ($PR | $PO);
+^$CM+ ($PR | $PO);       # Rule 10, any otherwise unattached CM behaves as AL
 
 #
 # LB 25   Numbers.
 #
-# Here do not include $PRX at the beginning or $POX at the end
-(($PR | $PO | $POX) $CM*)? (($OP | $HY) $CM*)? $NU ($CM* ($NU | $SY | $IS))*
-    ($CM* ($CL | $CP))? ($CM* ($PR | $PRX | $PO))?;
+(($PR | $PO) $CM*)? (($OP | $HY) $CM*)? $NU ($CM* ($NU | $SY | $IS))*
+    ($CM* ($CL | $CP))? ($CM* ($PR | $PO))?;
 
 # LB 26  Do not break a Korean syllable
 #
@@ -326,7 +303,6 @@ $JL $CM* ($JL | $JV | $H2 | $H3);
 ($JT | $H3) $CM* $JT;
 
 # LB 27  Treat korean Syllable Block the same as ID  (don't break it)
-# Do not include $POX or $PRX here
 ($JL | $JV | $JT | $H2 | $H3) $CM* $IN;
 ($JL | $JV | $JT | $H2 | $H3) $CM* $PO;
 $PR $CM* ($JL | $JV | $JT | $H2 | $H3);
