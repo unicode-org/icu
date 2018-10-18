@@ -1407,7 +1407,7 @@ public:
    * The resulting index return value will be in between 0 and length(), inclusively.
    *
    * Examples:
-   *\code
+   * \code
    *     // s has code points 'a' U+10000 'b' U+10ffff U+2029
    *     UnicodeString s(u"a\U00010000b\U0010ffff\u2029");
    *
@@ -1424,7 +1424,7 @@ public:
    *
    *     // go to the next-to-last code point of s
    *     index=s.moveIndex32(s.length(), -2); // backward-skips U+2029 and U+10ffff
-   *\endcode
+   * \endcode
    *
    * @param index input code unit index
    * @param delta (signed) code point count to move the index forward or backward
