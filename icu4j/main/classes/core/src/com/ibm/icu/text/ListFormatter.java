@@ -9,6 +9,9 @@
 package com.ibm.icu.text;
 
 import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.text.AttributedCharacterIterator;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -204,6 +207,35 @@ final public class ListFormatter {
         return format(items, -1).toString();
     }
 
+    /**
+     * Format a list of objects to an attributed string, and return the corresponding
+     * iterator
+     *
+     * @param items
+     *            items to format. The toString() method is called on each.
+     * @return <code>AttributedCharacterIterator</code> describing the formatted value.
+     *
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public AttributedCharacterIterator formatToCharacterIterator(Object... items) {
+      return null;
+    }
+
+    /**
+     * Format a collection of objects to an attributed string, and return the corresponding
+     * iterator. The toString() method is called on each.
+     *
+     * @param items
+     *            items to format. The toString() method is called on each.
+     * @return <code>AttributedCharacterIterator</code> describing the formatted value.
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public AttributedCharacterIterator formatToCharacterIterator(Collection<?> items) {
+      return null;
+    }
+
     // Formats a collection of objects and returns the formatted string plus the offset
     // in the string where the index th element appears. index is zero based. If index is
     // negative or greater than or equal to the size of items then this function returns -1 for
@@ -341,4 +373,49 @@ final public class ListFormatter {
     }
 
     static Cache cache = new Cache();
+
+    /**
+     * The instances of this inner class are used as attribute keys and values
+     * in AttributedCharacterIterator that
+     * NumberFormat.formatToCharacterIterator() method returns.
+     * <p>
+     * There is no public constructor to this class, the only instances are the
+     * constants defined here.
+     * <p>
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static class Field extends Format.Field {
+        static final long serialVersionUID = 1L;
+
+        /**
+         * @draft ICU 64
+         * @provisional This API might change or be removed in a future release.
+         */
+        public static final Field ELEMENT = new Field("element");
+
+        /**
+         * Constructs a new instance of ListFormat.Field with the given field
+         * name.
+         * @draft ICU 64
+         * @provisional This API might change or be removed in a future release.
+         */
+        protected Field(String fieldName) {
+            super(fieldName);
+        }
+
+        /**
+         * serizalization method resolve instances to the constant
+         * ListFormat.Field values
+         * @draft ICU 64
+         * @provisional This API might change or be removed in a future release.
+         */
+        @Override
+        protected Object readResolve() throws InvalidObjectException {
+            if (this.getName().equals(ELEMENT.getName()))
+                return ELEMENT;
+
+            throw new InvalidObjectException("An invalid object.");
+        }
+    }
 }
