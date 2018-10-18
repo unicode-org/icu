@@ -110,7 +110,6 @@
 #define _UTF7Data U_ICU_ENTRY_POINT_RENAME(_UTF7Data)
 #define _UTF8Data U_ICU_ENTRY_POINT_RENAME(_UTF8Data)
 #define allowedHourFormatsCleanup U_ICU_ENTRY_POINT_RENAME(allowedHourFormatsCleanup)
-#define checkImpl U_ICU_ENTRY_POINT_RENAME(checkImpl)
 #define cmemory_cleanup U_ICU_ENTRY_POINT_RENAME(cmemory_cleanup)
 #define dayPeriodRulesCleanup U_ICU_ENTRY_POINT_RENAME(dayPeriodRulesCleanup)
 #define deleteAllowedHourFormats U_ICU_ENTRY_POINT_RENAME(deleteAllowedHourFormats)
