@@ -15,6 +15,8 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/localpointer.h"
+#include "unicode/ufieldpositer.h"
+
 
 /**
  * \file
@@ -144,6 +146,61 @@ ulistfmt_format(const UListFormatter* listfmt,
                 UChar*             result,
                 int32_t            resultCapacity,
                 UErrorCode*        status);
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Formats a list of strings using the conventions established for the
+ * UListFormatter object.
+ * @param listfmt
+ *            The UListFormatter object specifying the list conventions.
+ * @param strings
+ *            An array of pointers to UChar strings; the array length is
+ *            specified by stringCount. Must be non-NULL if stringCount > 0.
+ * @param stringLengths
+ *            An array of string lengths corresponding to the strings[]
+ *            parameter; any individual length value may be negative to indicate
+ *            that the corresponding strings[] entry is 0-terminated, or
+ *            stringLengths itself may be NULL if all of the strings are
+ *            0-terminated. If non-NULL, the stringLengths array must have
+ *            stringCount entries.
+ * @param stringCount
+ *            the number of entries in strings[], and the number of entries
+ *            in the stringLengths array if it is not NULL. Must be >= 0.
+ * @param result
+ *            A pointer to a buffer to receive the formatted list.
+ * @param resultCapacity
+ *            The maximum size of result.
+ * @param fpositer
+ *            A pointer to a UFieldPositionIterator created by {@link #ufieldpositer_open}
+ *            (may be NULL if field position information is not needed). Any
+ *            iteration information already present in the UFieldPositionIterator
+ *            will be deleted, and the iterator will be reset to apply to the
+ *            fields in the formatted string created by this function call; the
+ *            field values provided by {@link #ufieldpositer_next} will be from the
+ *            UListFormatterField enum.
+ * @param status
+ *            A pointer to a standard ICU UErrorCode (input/output parameter).
+ *            Its input value must pass the U_SUCCESS() test, or else the
+ *            function returns immediately. The caller should check its output
+ *            value with U_FAILURE(), or use with function chaining (see User
+ *            Guide for details).
+ * @return
+ *            The total buffer size needed; if greater than resultLength, the
+ *            output was truncated. May be <=0 if unable to determine the
+ *            total buffer size needed (e.g. for illegal arguments).
+ * @draft ICU 64
+ */
+U_CAPI int32_t U_EXPORT2
+ulistfmt_formatForFields(const UListFormatter* listfmt,
+                const UChar* const strings[],
+                const int32_t *    stringLengths,
+                int32_t            stringCount,
+                UChar*             result,
+                int32_t            resultCapacity,
+                UFieldPositionIterator* fpositer,
+                UErrorCode*        status);
+
+#endif // U_HIDE_DRAFT_API
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
