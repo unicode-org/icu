@@ -10,6 +10,7 @@
 #include "intltest.h"
 #include "number_affixutils.h"
 #include "numparse_stringsegment.h"
+#include "numrange_impl.h"
 #include "unicode/locid.h"
 #include "unicode/numberformatter.h"
 #include "unicode/numberrangeformatter.h"

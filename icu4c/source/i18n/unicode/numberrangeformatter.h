@@ -185,8 +185,14 @@ class NumberRangeFormatterImpl;
  * Export an explicit template instantiation. See datefmt.h
  * (When building DLLs for Windows this is required.)
  */
-#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM < U_PF_CYGWIN && !defined(U_IN_DOXYGEN)
-template struct U_I18N_API std::atomic<impl::NumberRangeFormatterImpl*>;
+#if U_PLATFORM == U_PF_WINDOWS && !defined(U_IN_DOXYGEN)
+} // namespace icu::number
+U_NAMESPACE_END
+
+template struct U_I18N_API std::atomic< U_NAMESPACE_QUALIFIER number::impl::NumberRangeFormatterImpl*>;
+
+U_NAMESPACE_BEGIN
+namespace number {  // icu::number
 #endif
 /** \endcond */
 
