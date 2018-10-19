@@ -224,6 +224,8 @@ testdata: build-dir $(ALL_TEST_FILES) $(UNPACKAGEDTESTDATA)
 
 #$(ALL_TEST_FILES) $(TESTBUILDDIR)/testtable32.txt $(TESTBUILDDIR)/testdata.lst: build-dir
 
+$(TESTOUTDIR)/testdata.dat: packagetest
+
 packagetest: build-dir testdata pkgdata.inc $(TESTBUILDDIR)/testdata.lst 
 	$(PKGDATA_INVOKE) $(PKGDATA) -T $(TESTBUILDDIR) -d $(TESTOUTDIR) -s $(TESTBUILDDIR) -p $(TESTDATA) -m common $(TESTBUILDDIR)/testdata.lst
 
