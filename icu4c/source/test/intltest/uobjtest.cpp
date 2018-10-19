@@ -7,6 +7,7 @@
  * Copyright (C) 2010 , Yahoo! Inc.
  ********************************************************************/
 
+#include <cstddef>
 #include <stdio.h>
 #include <string.h>
 #include "utypeinfo.h"  // for 'typeid' to work
