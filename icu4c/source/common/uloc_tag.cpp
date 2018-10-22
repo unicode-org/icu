@@ -7,6 +7,7 @@
 **********************************************************************
 */
 
+#include "unicode/bytestream.h"
 #include "unicode/utypes.h"
 #include "unicode/ures.h"
 #include "unicode/putil.h"
@@ -850,22 +851,21 @@ _initializeULanguageTag(ULanguageTag* langtag) {
     langtag->privateuse = EMPTY;
 }
 
-static int32_t
-_appendLanguageToLanguageTag(const char* localeID, char* appendAt, int32_t capacity, UBool strict, UErrorCode* status) {
+static void
+_appendLanguageToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UErrorCode* status) {
     char buf[ULOC_LANG_CAPACITY];
     UErrorCode tmpStatus = U_ZERO_ERROR;
     int32_t len, i;
-    int32_t reslen = 0;
 
     if (U_FAILURE(*status)) {
-        return 0;
+        return;
     }
 
     len = uloc_getLanguage(localeID, buf, sizeof(buf), &tmpStatus);
     if (U_FAILURE(tmpStatus) || tmpStatus == U_STRING_NOT_TERMINATED_WARNING) {
         if (strict) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
-            return 0;
+            return;
         }
         len = 0;
     }
@@ -873,20 +873,14 @@ _appendLanguageToLanguageTag(const char* localeID, char* appendAt, int32_t capac
     /* Note: returned language code is in lower case letters */
 
     if (len == 0) {
-        if (reslen < capacity) {
-            uprv_memcpy(appendAt + reslen, LANG_UND, uprv_min(LANG_UND_LEN, capacity - reslen));
-        }
-        reslen += LANG_UND_LEN;
+        sink.Append(LANG_UND, LANG_UND_LEN);
     } else if (!_isLanguageSubtag(buf, len)) {
             /* invalid language code */
         if (strict) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
-            return 0;
+            return;
         }
-        if (reslen < capacity) {
-            uprv_memcpy(appendAt + reslen, LANG_UND, uprv_min(LANG_UND_LEN, capacity - reslen));
-        }
-        reslen += LANG_UND_LEN;
+        sink.Append(LANG_UND, LANG_UND_LEN);
     } else {
         /* resolve deprecated */
         for (i = 0; i < UPRV_LENGTHOF(DEPRECATEDLANGS); i += 2) {
@@ -901,24 +895,18 @@ _appendLanguageToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                 break;
             }
         }
-        if (reslen < capacity) {
-            uprv_memcpy(appendAt + reslen, buf, uprv_min(len, capacity - reslen));
-        }
-        reslen += len;
+        sink.Append(buf, len);
     }
-    u_terminateChars(appendAt, capacity, reslen, status);
-    return reslen;
 }
 
-static int32_t
-_appendScriptToLanguageTag(const char* localeID, char* appendAt, int32_t capacity, UBool strict, UErrorCode* status) {
+static void
+_appendScriptToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UErrorCode* status) {
     char buf[ULOC_SCRIPT_CAPACITY];
     UErrorCode tmpStatus = U_ZERO_ERROR;
     int32_t len;
-    int32_t reslen = 0;
 
     if (U_FAILURE(*status)) {
-        return 0;
+        return;
     }
 
     len = uloc_getScript(localeID, buf, sizeof(buf), &tmpStatus);
@@ -926,7 +914,7 @@ _appendScriptToLanguageTag(const char* localeID, char* appendAt, int32_t capacit
         if (strict) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        return 0;
+        return;
     }
 
     if (len > 0) {
@@ -935,31 +923,22 @@ _appendScriptToLanguageTag(const char* localeID, char* appendAt, int32_t capacit
             if (strict) {
                 *status = U_ILLEGAL_ARGUMENT_ERROR;
             }
-            return 0;
+            return;
         } else {
-            if (reslen < capacity) {
-                *(appendAt + reslen) = SEP;
-            }
-            reslen++;
-            if (reslen < capacity) {
-                uprv_memcpy(appendAt + reslen, buf, uprv_min(len, capacity - reslen));
-            }
-            reslen += len;
+            sink.Append("-", 1);
+            sink.Append(buf, len);
         }
     }
-    u_terminateChars(appendAt, capacity, reslen, status);
-    return reslen;
 }
 
-static int32_t
-_appendRegionToLanguageTag(const char* localeID, char* appendAt, int32_t capacity, UBool strict, UErrorCode* status) {
+static void
+_appendRegionToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UErrorCode* status) {
     char buf[ULOC_COUNTRY_CAPACITY];
     UErrorCode tmpStatus = U_ZERO_ERROR;
     int32_t len;
-    int32_t reslen = 0;
 
     if (U_FAILURE(*status)) {
-        return 0;
+        return;
     }
 
     len = uloc_getCountry(localeID, buf, sizeof(buf), &tmpStatus);
@@ -967,7 +946,7 @@ _appendRegionToLanguageTag(const char* localeID, char* appendAt, int32_t capacit
         if (strict) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        return 0;
+        return;
     }
 
     if (len > 0) {
@@ -976,13 +955,10 @@ _appendRegionToLanguageTag(const char* localeID, char* appendAt, int32_t capacit
             if (strict) {
                 *status = U_ILLEGAL_ARGUMENT_ERROR;
             }
-            return 0;
+            return;
         } else {
-            if (reslen < capacity) {
-                *(appendAt + reslen) = SEP;
-            }
-            reslen++;
-           /* resolve deprecated */
+            sink.Append("-", 1);
+            /* resolve deprecated */
             for (int i = 0; i < UPRV_LENGTHOF(DEPRECATEDREGIONS); i += 2) {
                 if (uprv_compareInvCharsAsAscii(buf, DEPRECATEDREGIONS[i]) == 0) {
                     uprv_strcpy(buf, DEPRECATEDREGIONS[i + 1]);
@@ -990,26 +966,19 @@ _appendRegionToLanguageTag(const char* localeID, char* appendAt, int32_t capacit
                     break;
                 }
             }
-
-            if (reslen < capacity) {
-                uprv_memcpy(appendAt + reslen, buf, uprv_min(len, capacity - reslen));
-            }
-            reslen += len;
+            sink.Append(buf, len);
         }
     }
-    u_terminateChars(appendAt, capacity, reslen, status);
-    return reslen;
 }
 
-static int32_t
-_appendVariantsToLanguageTag(const char* localeID, char* appendAt, int32_t capacity, UBool strict, UBool *hadPosix, UErrorCode* status) {
+static void
+_appendVariantsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UBool *hadPosix, UErrorCode* status) {
     char buf[ULOC_FULLNAME_CAPACITY];
     UErrorCode tmpStatus = U_ZERO_ERROR;
     int32_t len, i;
-    int32_t reslen = 0;
 
     if (U_FAILURE(*status)) {
-        return 0;
+        return;
     }
 
     len = uloc_getVariant(localeID, buf, sizeof(buf), &tmpStatus);
@@ -1017,7 +986,7 @@ _appendVariantsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
         if (strict) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        return 0;
+        return;
     }
 
     if (len > 0) {
@@ -1094,15 +1063,9 @@ _appendVariantsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                 /* write out validated/normalized variants to the target */
                 var = varFirst;
                 while (var != NULL) {
-                    if (reslen < capacity) {
-                        *(appendAt + reslen) = SEP;
-                    }
-                    reslen++;
+                    sink.Append("-", 1);
                     varLen = (int32_t)uprv_strlen(var->variant);
-                    if (reslen < capacity) {
-                        uprv_memcpy(appendAt + reslen, var->variant, uprv_min(varLen, capacity - reslen));
-                    }
-                    reslen += varLen;
+                    sink.Append(var->variant, varLen);
                     var = var->next;
                 }
             }
@@ -1117,25 +1080,21 @@ _appendVariantsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
         }
 
         if (U_FAILURE(*status)) {
-            return 0;
+            return;
         }
     }
-
-    u_terminateChars(appendAt, capacity, reslen, status);
-    return reslen;
 }
 
-static int32_t
-_appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capacity, UBool strict, UBool hadPosix, UErrorCode* status) {
+static void
+_appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UBool hadPosix, UErrorCode* status) {
     char attrBuf[ULOC_KEYWORD_AND_VALUES_CAPACITY] = { 0 };
     int32_t attrBufLength = 0;
     UEnumeration *keywordEnum = NULL;
-    int32_t reslen = 0;
 
     keywordEnum = uloc_openKeywords(localeID, status);
     if (U_FAILURE(*status) && !hadPosix) {
         uenum_close(keywordEnum);
-        return 0;
+        return;
     }
     if (keywordEnum != NULL || hadPosix) {
         /* reorder extensions */
@@ -1378,15 +1337,7 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
             for (ext = firstExt; ext; ext = ext->next) {
                 if (!startLDMLExtension && uprv_strlen(ext->key) > 1) {
                     /* first LDML u singlton extension */
-                   if (reslen < capacity) {
-                       *(appendAt + reslen) = SEP;
-                   }
-                   reslen++;
-                   if (reslen < capacity) {
-                       *(appendAt + reslen) = LDMLEXT;
-                   }
-                   reslen++;
-
+                   sink.Append("-u", 2);
                    startLDMLExtension = TRUE;
                 }
 
@@ -1394,35 +1345,15 @@ _appendKeywordsToLanguageTag(const char* localeID, char* appendAt, int32_t capac
                 if (uprv_strcmp(ext->key, LOCALE_ATTRIBUTE_KEY) == 0) {
                     /* write the value for the attributes */
                     for (attr = firstAttr; attr; attr = attr->next) {
-                        if (reslen < capacity) {
-                            *(appendAt + reslen) = SEP;
-                        }
-                        reslen++;
-                        len = (int32_t)uprv_strlen(attr->attribute);
-                        if (reslen < capacity) {
-                            uprv_memcpy(appendAt + reslen, attr->attribute, uprv_min(len, capacity - reslen));
-                        }
-                        reslen += len;
+                        sink.Append("-", 1);
+                        sink.Append(
+                                attr->attribute, uprv_strlen(attr->attribute));
                     }
                 } else {
-                    if (reslen < capacity) {
-                        *(appendAt + reslen) = SEP;
-                    }
-                    reslen++;
-                    len = (int32_t)uprv_strlen(ext->key);
-                    if (reslen < capacity) {
-                        uprv_memcpy(appendAt + reslen, ext->key, uprv_min(len, capacity - reslen));
-                    }
-                    reslen += len;
-                    if (reslen < capacity) {
-                        *(appendAt + reslen) = SEP;
-                    }
-                    reslen++;
-                    len = (int32_t)uprv_strlen(ext->value);
-                    if (reslen < capacity) {
-                        uprv_memcpy(appendAt + reslen, ext->value, uprv_min(len, capacity - reslen));
-                    }
-                    reslen += len;
+                    sink.Append("-", 1);
+                    sink.Append(ext->key, uprv_strlen(ext->key));
+                    sink.Append("-", 1);
+                    sink.Append(ext->value, uprv_strlen(ext->value));
                 }
             }
         }
@@ -1447,11 +1378,9 @@ cleanup:
         uenum_close(keywordEnum);
 
         if (U_FAILURE(*status)) {
-            return 0;
+            return;
         }
     }
-
-    return u_terminateChars(appendAt, capacity, reslen, status);
 }
 
 /**
@@ -1906,17 +1835,18 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
     return u_terminateChars(appendAt, capacity, reslen, status);
 }
 
-static int32_t
-_appendPrivateuseToLanguageTag(const char* localeID, char* appendAt, int32_t capacity, UBool strict, UBool hadPosix, UErrorCode* status) {
+static void
+_appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UBool hadPosix, UErrorCode* status) {
     (void)hadPosix;
     char buf[ULOC_FULLNAME_CAPACITY];
     char tmpAppend[ULOC_FULLNAME_CAPACITY];
     UErrorCode tmpStatus = U_ZERO_ERROR;
     int32_t len, i;
     int32_t reslen = 0;
+    int32_t capacity = sizeof tmpAppend;
 
     if (U_FAILURE(*status)) {
-        return 0;
+        return;
     }
 
     len = uloc_getVariant(localeID, buf, sizeof(buf), &tmpStatus);
@@ -1924,7 +1854,7 @@ _appendPrivateuseToLanguageTag(const char* localeID, char* appendAt, int32_t cap
         if (strict) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
         }
-        return 0;
+        return;
     }
 
     if (len > 0) {
@@ -2008,20 +1938,14 @@ _appendPrivateuseToLanguageTag(const char* localeID, char* appendAt, int32_t cap
         }
 
         if (U_FAILURE(*status)) {
-            return 0;
+            return;
         }
     }
 
     if (U_SUCCESS(*status)) {
         len = reslen;
-        if (reslen < capacity) {
-            uprv_memcpy(appendAt, tmpAppend, uprv_min(len, capacity - reslen));
-        }
+        sink.Append(tmpAppend, len);
     }
-
-    u_terminateChars(appendAt, capacity, reslen, status);
-
-    return reslen;
 }
 
 /*
@@ -2637,6 +2561,34 @@ uloc_toLanguageTag(const char* localeID,
                    int32_t langtagCapacity,
                    UBool strict,
                    UErrorCode* status) {
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+
+    icu::CheckedArrayByteSink sink(langtag, langtagCapacity);
+    ulocimp_toLanguageTag(localeID, sink, strict, status);
+
+    int32_t reslen = sink.NumberOfBytesAppended();
+
+    if (U_FAILURE(*status)) {
+        return reslen;
+    }
+
+    if (sink.Overflowed()) {
+        *status = U_BUFFER_OVERFLOW_ERROR;
+    } else {
+        u_terminateChars(langtag, langtagCapacity, reslen, status);
+    }
+
+    return reslen;
+}
+
+
+U_CAPI void U_EXPORT2
+ulocimp_toLanguageTag(const char* localeID,
+                      icu::ByteSink& sink,
+                      UBool strict,
+                      UErrorCode* status) {
     icu::CharString canonical;
     int32_t reslen;
     UErrorCode tmpStatus = U_ZERO_ERROR;
@@ -2657,7 +2609,7 @@ uloc_toLanguageTag(const char* localeID,
 
             if (U_FAILURE(tmpStatus)) {
                 *status = tmpStatus;
-                return 0;
+                return;
             }
 
             reslen =
@@ -2673,7 +2625,7 @@ uloc_toLanguageTag(const char* localeID,
 
         if (U_FAILURE(tmpStatus)) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
-            return 0;
+            return;
         }
 
         canonical.append(buffer, reslen, tmpStatus);
@@ -2683,11 +2635,9 @@ uloc_toLanguageTag(const char* localeID,
 
         if (U_FAILURE(tmpStatus)) {
             *status = tmpStatus;
-            return 0;
+            return;
         }
     }
-
-    reslen = 0;
 
     /* For handling special case - private use only tag */
     pKeywordStart = locale_getKeywordsStart(canonical.data());
@@ -2712,9 +2662,7 @@ uloc_toLanguageTag(const char* localeID,
                     if (U_SUCCESS(tmpStatus)) {
                         if (_isPrivateuseValueSubtags(&buf[2], len)) {
                             /* return private use only tag */
-                            reslen = len + 2;
-                            uprv_memcpy(langtag, buf, uprv_min(reslen, langtagCapacity));
-                            u_terminateChars(langtag, langtagCapacity, reslen, status);
+                            sink.Append(buf, len + 2);
                             done = TRUE;
                         } else if (strict) {
                             *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -2729,19 +2677,17 @@ uloc_toLanguageTag(const char* localeID,
             }
             uenum_close(kwdEnum);
             if (done) {
-                return reslen;
+                return;
             }
         }
     }
 
-    reslen += _appendLanguageToLanguageTag(canonical.data(), langtag, langtagCapacity, strict, status);
-    reslen += _appendScriptToLanguageTag(canonical.data(), langtag + reslen, langtagCapacity - reslen, strict, status);
-    reslen += _appendRegionToLanguageTag(canonical.data(), langtag + reslen, langtagCapacity - reslen, strict, status);
-    reslen += _appendVariantsToLanguageTag(canonical.data(), langtag + reslen, langtagCapacity - reslen, strict, &hadPosix, status);
-    reslen += _appendKeywordsToLanguageTag(canonical.data(), langtag + reslen, langtagCapacity - reslen, strict, hadPosix, status);
-    reslen += _appendPrivateuseToLanguageTag(canonical.data(), langtag + reslen, langtagCapacity - reslen, strict, hadPosix, status);
-
-    return reslen;
+    _appendLanguageToLanguageTag(canonical.data(), sink, strict, status);
+    _appendScriptToLanguageTag(canonical.data(), sink, strict, status);
+    _appendRegionToLanguageTag(canonical.data(), sink, strict, status);
+    _appendVariantsToLanguageTag(canonical.data(), sink, strict, &hadPosix, status);
+    _appendKeywordsToLanguageTag(canonical.data(), sink, strict, hadPosix, status);
+    _appendPrivateuseToLanguageTag(canonical.data(), sink, strict, hadPosix, status);
 }
 
 
