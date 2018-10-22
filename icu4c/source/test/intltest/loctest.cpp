@@ -49,7 +49,7 @@ static const char* const rawData[33][8] = {
         // LCID
         {   "409", "40c", "403", "408", "814", "10",     "0",   "804"  },
 
-        // display langage (English)
+        // display language (English)
         {   "English",  "French",   "Catalan", "Greek",    "Norwegian",    "Italian",  "xx",   "Chinese" },
         // display script (English)
         {   "",     "",     "",     "",     "",   "",     "",   "Simplified Han" },
@@ -62,7 +62,7 @@ static const char* const rawData[33][8] = {
         // (part of Euro support).
         {   "English (United States)", "French (France)", "Catalan (Spain)", "Greek (Greece)", "Norwegian (Norway, NY)", "Italian", "xx (YY)", "Chinese (Simplified, China)" },
 
-        // display langage (French)
+        // display language (French)
         {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "italien", "xx", "chinois" },
         // display script (French)
         {   "",     "",     "",     "",     "",     "",     "",   "sinogrammes simplifi\\u00E9s" },
@@ -86,7 +86,7 @@ static const char* const rawData[33][8] = {
         /* display name (Catalan) */
         {   "angl\\u00E8s (Estats Units)", "franc\\u00E8s (Fran\\u00E7a)", "catal\\u00E0 (Espanya)", "grec (Gr\\u00E8cia)", "noruec (Noruega, NY)", "itali\\u00E0", "", "xin\\u00E8s (simplificat, Xina)" },
 
-        // display langage (Greek)[actual values listed below]
+        // display language (Greek)[actual values listed below]
         {   "\\u0391\\u03b3\\u03b3\\u03bb\\u03b9\\u03ba\\u03ac",
             "\\u0393\\u03b1\\u03bb\\u03bb\\u03b9\\u03ba\\u03ac",
             "\\u039a\\u03b1\\u03c4\\u03b1\\u03bb\\u03b1\\u03bd\\u03b9\\u03ba\\u03ac",
@@ -121,7 +121,7 @@ static const char* const rawData[33][8] = {
             "\\u039A\\u03B9\\u03BD\\u03B5\\u03B6\\u03B9\\u03BA\\u03AC (\\u0391\\u03c0\\u03bb\\u03bf\\u03c0\\u03bf\\u03b9\\u03b7\\u03bc\\u03ad\\u03bd\\u03bf, \\u039A\\u03AF\\u03BD\\u03B1)"
         },
 
-        // display langage (<root>)
+        // display language (<root>)
         {   "English",  "French",   "Catalan", "Greek",    "Norwegian",    "Italian",  "xx", "" },
         // display script (<root>)
         {   "",     "",     "",     "",     "",   "",     "", ""},
