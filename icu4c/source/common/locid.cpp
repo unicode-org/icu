@@ -945,59 +945,7 @@ Locale::toLanguageTag(ByteSink& sink, UErrorCode& status) const
         return;
     }
 
-    // All simple language tags will have the exact same length as BCP-47
-    // strings as they have as ICU locale IDs (like "en-US" for "en_US").
-    LocalMemory<char> scratch;
-    int32_t scratch_capacity = static_cast<int32_t>(uprv_strlen(fullName));
-
-    if (scratch_capacity == 0) {
-        scratch_capacity = 3;  // "und"
-    }
-
-    char* buffer;
-    int32_t result_capacity, reslen;
-
-    for (;;) {
-        if (scratch.allocateInsteadAndReset(scratch_capacity) == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        }
-
-        buffer = sink.GetAppendBuffer(
-                /*min_capacity=*/scratch_capacity,
-                /*desired_capacity_hint=*/scratch_capacity,
-                scratch.getAlias(),
-                scratch_capacity,
-                &result_capacity);
-
-        reslen = uloc_toLanguageTag(
-                fullName,
-                buffer,
-                result_capacity,
-                /*strict=*/FALSE,
-                &status);
-
-        if (status != U_BUFFER_OVERFLOW_ERROR) {
-            break;
-        }
-
-        // For some very few edge cases a language tag will be longer as a
-        // BCP-47 string than it is as an ICU locale ID. Most notoriously "C"
-        // expands to the BCP-47 tag "en-US-u-va-posix", 16 times longer, and
-        // it'll take several calls to uloc_toLanguageTag() to figure that out.
-        // https://unicode-org.atlassian.net/browse/ICU-20132
-        scratch_capacity = reslen;
-        status = U_ZERO_ERROR;
-    }
-
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    sink.Append(buffer, reslen);
-    if (status == U_STRING_NOT_TERMINATED_WARNING) {
-        status = U_ZERO_ERROR;  // Terminators not used.
-    }
+    ulocimp_toLanguageTag(fullName, sink, /*strict=*/FALSE, &status);
 }
 
 Locale U_EXPORT2

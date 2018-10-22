@@ -251,6 +251,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestOrientation);
     TESTCASE(TestLikelySubtags);
     TESTCASE(TestToLanguageTag);
+    TESTCASE(TestBug20132);
     TESTCASE(TestForLanguageTag);
     TESTCASE(TestInvalidLanguageTag);
     TESTCASE(TestLangAndRegionCanonicalize);
@@ -6015,6 +6016,47 @@ static void TestToLanguageTag(void) {
                     langtag, inloc, expected);
             }
         }
+    }
+}
+
+static void TestBug20132(void) {
+    char langtag[256];
+    UErrorCode status;
+    int32_t len;
+
+    static const char inloc[] = "C";
+    static const char expected[] = "en-US-u-va-posix";
+    const int32_t expected_len = uprv_strlen(expected);
+
+    /* Before ICU-20132 was fixed, calling uloc_toLanguageTag() with a too small
+     * buffer would not immediately return the buffer size actually needed, but
+     * instead require several iterations before getting the correct size. */
+
+    status = U_ZERO_ERROR;
+    len = uloc_toLanguageTag(inloc, langtag, 1, FALSE, &status);
+
+    if (U_FAILURE(status) && status != U_BUFFER_OVERFLOW_ERROR) {
+        log_data_err("Error returned by uloc_toLanguageTag for locale id [%s] - error: %s Are you missing data?\n",
+            inloc, u_errorName(status));
+    }
+
+    if (len != expected_len) {
+        log_err("Bad length returned by uloc_toLanguageTag for locale id [%s]: %i != %i\n", inloc, len, expected_len);
+    }
+
+    status = U_ZERO_ERROR;
+    len = uloc_toLanguageTag(inloc, langtag, expected_len, FALSE, &status);
+
+    if (U_FAILURE(status)) {
+        log_data_err("Error returned by uloc_toLanguageTag for locale id [%s] - error: %s Are you missing data?\n",
+            inloc, u_errorName(status));
+    }
+
+    if (len != expected_len) {
+        log_err("Bad length returned by uloc_toLanguageTag for locale id [%s]: %i != %i\n", inloc, len, expected_len);
+    } else if (uprv_strncmp(langtag, expected, expected_len) != 0) {
+        log_data_err("uloc_toLanguageTag returned language tag [%.*s] for input locale [%s] - expected: [%s]. Are you missing data?\n",
+            len, langtag, inloc, expected);
     }
 }
 
