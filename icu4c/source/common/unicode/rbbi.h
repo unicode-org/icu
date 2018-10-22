@@ -107,7 +107,7 @@ private:
      *
      * If present, the special LanguageBreakEngine used for handling
      * characters that are in the dictionary set, but not handled by any
-     * LangugageBreakEngine.
+     * LanguageBreakEngine.
      * @internal (private)
      */
     UnhandledEngine     *fUnhandledBreakEngine;

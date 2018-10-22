@@ -121,7 +121,7 @@ static void TestOrientation(void);
 static void TestLikelySubtags(void);
 
 /**
- * lanuage tag
+ * language tag
  */
 static void TestForLanguageTag(void);
 static void TestInvalidLanguageTag(void);
