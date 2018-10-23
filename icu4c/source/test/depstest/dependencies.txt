@@ -188,6 +188,7 @@ library: common
     uinit utypes errorcode
     icuplug
     platform
+    localebuilder
 
 group: pluralmap
     # TODO: Move to i18n library, ticket #11926.
@@ -642,6 +643,11 @@ group: resourcebundle
     sort stringenumeration uhash uvector
     uscript_props propname
     bytesinkutil
+
+group: localebuilder
+    localebuilder.o
+  deps
+    resourcebundle
 
 group: udata
     udata.o ucmndata.o udatamem.o

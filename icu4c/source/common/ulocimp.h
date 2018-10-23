@@ -148,12 +148,41 @@ ulocimp_getRegionForSupplementalData(const char *localeID, UBool inferRegion,
 U_CAPI const char * U_EXPORT2
 locale_getKeywordsStart(const char *localeID);
 
+U_CFUNC UBool
+ultag_isExtensionSubtags(const char* s, int32_t len);
+
+U_CFUNC UBool
+ultag_isLanguageSubtag(const char* s, int32_t len);
+
+U_CFUNC UBool
+ultag_isPrivateuseValueSubtags(const char* s, int32_t len);
+
+U_CFUNC UBool
+ultag_isRegionSubtag(const char* s, int32_t len);
+
+U_CFUNC UBool
+ultag_isScriptSubtag(const char* s, int32_t len);
+
+U_CFUNC UBool
+ultag_isTransformedExtensionSubtags(const char* s, int32_t len);
+
+U_CFUNC UBool
+ultag_isUnicodeExtensionSubtags(const char* s, int32_t len);
+
+U_CFUNC UBool
+ultag_isUnicodeLocaleAttribute(const char* s, int32_t len);
+
+U_CFUNC UBool
+ultag_isUnicodeLocaleAttributes(const char* s, int32_t len);
 
 U_CFUNC UBool
 ultag_isUnicodeLocaleKey(const char* s, int32_t len);
 
 U_CFUNC UBool
 ultag_isUnicodeLocaleType(const char* s, int32_t len);
+
+U_CFUNC UBool
+ultag_isVariantSubtags(const char* s, int32_t len);
 
 U_CFUNC const char*
 ulocimp_toBcpKey(const char* key);
