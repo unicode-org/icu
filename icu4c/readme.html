@@ -814,8 +814,10 @@
       <li>If you are building using 'Visual Studio 2015' instead, or if you are building the UWP projects and you have a different
       version of the Windows 10 SDK installed you will first need to modify the two "<tt>Build.Windows.*.props</tt>" files
       in the "<tt>allinone</tt>" directory before you can open the "allinone" solution file.
-      Please see the notes below about <a href="#HowToUseOtherVSVersions">building with other versions of Visual Studio</a> or the 
-      notes on <a href="#HowToRetargetTheWin10SDK">re-targeting the Windows 10 SDK for the UWP projects</a> for details.</li>
+      Please see the notes below about <a href="#HowToUseOtherVSVersions">building with other versions of Visual Studio</a> and the 
+      notes on <a href="#HowToRetargetTheWin10SDK">re-targeting the Windows 10 SDK for the UWP projects</a> for details. Alternatively,
+      you can <a href="#HowToSkipBuildingUWP">skip building the UWP projects</a> entirely as well.
+      </li>
       
       <li>Set the active platform to "Win32" or "x64" (See <a href="#HowToBuildWindowsPlatform">Windows platform note</a> below)
       and configuration to "Debug" or "Release" (See <a href="#HowToBuildWindowsConfig">Windows configuration note</a> below).</li>
@@ -859,7 +861,7 @@
           project to "iotest", and press Ctrl+F5 to run it. Make sure that it passes
           without any errors.</li>
         </ol>
-	</li>
+	    </li>
 
       <li>You are now able to develop applications with ICU by using the
       libraries and tools in <tt><i>&lt;ICU&gt;</i>\bin\</tt>. The headers are in
@@ -926,19 +928,34 @@
       <li>You can then use either '<tt>msbuild</tt>' directly, or you can use the '<tt>devenv.com</tt>' command to build ICU.</li>
       <li>Using <tt>MSBUILD</tt>:</li>
       <ul class="no-left-margin">
-        <li>To build the 32-bit Debug version, use the following command line:
+        <li>To build the 32-bit Debug version, use the following command line:<br/>
           <code>'msbuild source\allinone\allinone.sln /p:Configuration=Debug /p:Platform=Win32'</code>.</li>
-        <li>To build the 64-bit Release version, use the following command line: 
+        <li>To build the 64-bit Release version, use the following command line:<br/> 
           <code>'msbuild source\allinone\allinone.sln /p:Configuration=Release /p:Platform=x64'</code>.</li>
       </ul>
       <li>Using <tt>devenv.com</tt>:</li>
       <ul class="no-left-margin">
-        <li>To build the 32-bit Debug version, use the following command line:
+        <li>To build the 32-bit Debug version, use the following command line:<br/>
           <code>'devenv.com source\allinone\allinone.sln /build "Debug|Win32"'</code>.</li>
-        <li>To build the 64-bit Release version, use the following command line: 
+        <li>To build the 64-bit Release version, use the following command line:<br/>
           <code>'devenv.com source\allinone\allinone.sln /build "Release|x64"'</code>.</li>
       </ul>
     </ul>
+    
+    <p><a name="HowToSkipBuildingUWP" id=
+      "HowToSkipBuildingUWP"><strong>Skipping the UWP Projects on the Command Line Note:</strong></a>
+      You can skip (or omit) building the UWP projects on the command line by passing the argument
+      '<code>SkipUWP=true</code>' to either MSBUILD or devenv.</p>
+    
+      <ul>
+        <li>For example, using <tt>MSBUILD</tt>:</li>
+        <ul class="no-left-margin">
+          <li>To skip building the UWP projects with a 32-bit Debug build, use the following command line:<br/>
+            <code>'msbuild source\allinone\allinone.sln /p:Configuration=Debug /p:Platform=Win32 /p:SkipUWP=true'</code>.</li>
+          <li>To skip building the UWP projects with a 64-bit Release version, use the following command line:<br/> 
+            <code>'msbuild source\allinone\allinone.sln /p:Configuration=Release /p:Platform=x64 /p:SkipUWP=true'</code>.</li>
+        </ul>
+      </ul>
     
     <p>You can also use Cygwin with the MSVC compiler to build ICU, and you can refer to the <a href=
     "#HowToBuildCygwin">How To Build And Install On Windows with Cygwin</a>
