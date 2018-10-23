@@ -383,6 +383,7 @@
     <ClCompile Include="uresdata.cpp" />
     <ClCompile Include="resource.cpp" />
     <ClCompile Include="ucurr.cpp" />
+    <ClCompile Include="localebuilder.cpp" />
     <ClCompile Include="caniter.cpp" />
     <ClCompile Include="filterednormalizer2.cpp" />
     <ClCompile Include="loadednormalizer2impl.cpp" />
@@ -572,6 +573,7 @@
     <ClInclude Include="ustr_imp.h" />
     <ClInclude Include="static_unicode_sets.h" />
     <ClInclude Include="capi_helper.h" />
+    <ClInclude Include="unicode\localebuilder.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="common.rc" />

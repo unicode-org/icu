@@ -361,6 +361,9 @@
     <ClCompile Include="resource.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
+    <ClCompile Include="localebuilder.cpp">
+      <Filter>locales &amp; resources</Filter>
+    </ClCompile>
     <ClCompile Include="caniter.cpp">
       <Filter>normalization</Filter>
     </ClCompile>
@@ -1224,6 +1227,9 @@
     </CustomBuild>
     <CustomBuild Include="unicode\stringoptions.h">
       <Filter>strings</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\localebuilder.h">
+      <Filter>locales &amp; resources</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>

@@ -19,6 +19,7 @@
 #include "itutil.h"
 #include "strtest.h"
 #include "loctest.h"
+#include "localebuildertest.h"
 #include "citrtest.h"
 #include "ustrtest.h"
 #include "ucdtest.h"
@@ -149,6 +150,7 @@ void IntlTestUtilities::runIndexedTest( int32_t index, UBool exec, const char* &
             }
 #endif
             break;
+        CASE(25, LocaleBuilderTest);
         default: name = ""; break; //needed to end loop
     }
 }
