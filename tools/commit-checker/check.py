@@ -185,7 +185,10 @@ def main():
     print("=============")
     print()
     print("Environment:")
-    print("- Latest Commit: %s" % commits[0].commit.hexsha)
+    if len(commits) > 0:
+        print("- Latest Commit: %s" % commits[0].commit.hexsha)
+    else:
+        print("- No commits")
     print("- Jira Query: %s" % args.jira_query)
     print("- Authenticated: %s" % "Yes" if authenticated else "No (sensitive tickets not shown)")
     print()
@@ -303,7 +306,10 @@ def main():
 
     print()
     print("## Total Problems: %s" % total_problems)
-
+    if total_problems > 0:
+        return 1
+    else:
+        return 0
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
