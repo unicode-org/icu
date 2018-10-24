@@ -26,6 +26,7 @@ class CommitWanted(Enum):
 
 ICUIssue = namedtuple("ICUIssue", ["issue_id", "is_closed", "commit_wanted", "issue"])
 
+debug = False
 
 flag_parser = argparse.ArgumentParser(
     description = "Generates a Markdown report for commits on master since the 'latest' tag.",
@@ -56,7 +57,15 @@ flag_parser.add_argument(
     help = "JQL query to match with tickets.",
     default = "project=ICU AND fixVersion=63.1"
 )
-
+flag_parser.add_argument(
+    "--repo-path",
+    help = "Path to the git repo root",
+    default = os.path.join(os.path.dirname(__file__), "..", "..")
+)
+flag_parser.add_argument(
+    "--land",
+    help = "Check that the commits are ready to land",
+    action="store_true")
 
 def issue_id_to_url(issue_id, jira_hostname, **kwargs):
     return "https://%s/browse/%s" % (jira_hostname, issue_id)
@@ -71,16 +80,16 @@ def pretty_print_commit(commit, **kwargs):
 
 def pretty_print_issue(issue, **kwargs):
     print("- %s: `%s`" % (issue.issue_id, issue.issue.fields.summary))
+    print("\t- Status: %s" % issue.issue.fields.status.name)
     if issue.issue.fields.assignee and issue.issue.fields.assignee.displayName:
         print("\t- Assigned to %s" % issue.issue.fields.assignee.displayName)
     print("\t- Jira Link: %s" % issue_id_to_url(issue.issue_id, **kwargs))
 
 
-def get_commits(rev_range, **kwargs):
+def get_commits(rev_range, repo_path, **kwargs):
     """
     Yields an ICUCommit for each commit in the user-specified rev-range.
     """
-    repo_path = os.path.join(os.path.dirname(__file__), "..", "..")
     repo = Repo(repo_path)
     for commit in repo.iter_commits(rev_range):
         match = re.search(r"^(ICU-\d+) ", commit.message)
@@ -148,7 +157,8 @@ def get_single_jira_issue(issue_id, **kwargs):
         jira_issue = jira.issue(issue_id)
     except JIRAError as e:
         return None
-    print("Loaded single issue %s" % issue_id, file=sys.stderr)
+    if debug:
+        print("Loaded single issue %s" % issue_id, file=sys.stderr)
     if jira_issue:
         return make_icu_issue(jira_issue)
     else:
@@ -157,9 +167,11 @@ def get_single_jira_issue(issue_id, **kwargs):
 
 def main():
     args = flag_parser.parse_args()
-    print("TIP: Have you pulled the latest master? This script only looks at local commits.", file=sys.stderr)
+    if not args.land:
+        print("TIP: Have you pulled the latest master? This script only looks at local commits.", file=sys.stderr)
     if not args.jira_username or not args.jira_password:
-        print("WARNING: Jira credentials not supplied. Sensitive tickets will not be found.", file=sys.stderr)
+        if not args.land:
+            print("WARNING: Jira credentials not supplied. Sensitive tickets will not be found.", file=sys.stderr)
         authenticated = False
     else:
         authenticated = True
@@ -176,66 +188,71 @@ def main():
     closed_jira_issue_ids = set(issue.issue_id for issue in issues if issue.is_closed)
 
     total_problems = 0
-    print("<!---")
-    print("Copyright (C) 2018 and later: Unicode, Inc. and others.")
-    print("License & terms of use: http://www.unicode.org/copyright.html")
-    print("-->")
-    print()
-    print("Commit Report")
-    print("=============")
-    print()
+    if not args.land:
+        print("<!---")
+        print("Copyright (C) 2018 and later: Unicode, Inc. and others.")
+        print("License & terms of use: http://www.unicode.org/copyright.html")
+        print("-->")
+        print()
+        print("Commit Report")
+        print("=============")
+        print()
     print("Environment:")
     if len(commits) > 0:
         print("- Latest Commit: %s" % commits[0].commit.hexsha)
+        print("- Commits: %d" % len(commits))
     else:
         print("- No commits")
     print("- Jira Query: %s" % args.jira_query)
-    print("- Authenticated: %s" % "Yes" if authenticated else "No (sensitive tickets not shown)")
+    print("- Authenticated: %s" % ("Yes" if authenticated else "No (sensitive tickets not shown)"))
     print()
-    print("## Problem Categories")
-    print("### Closed Issues with No Commit")
-    print("Tip: Tickets with type 'Task' or 'User Guide' or resolution 'Fixed by Other Ticket' are ignored.")
-    print()
-    found = False
-    for issue in issues:
-        if not issue.is_closed:
-            continue
-        if issue.issue_id in commit_issue_ids:
-            continue
-        if issue.commit_wanted == CommitWanted["OPTIONAL"] or issue.commit_wanted == CommitWanted["FORBIDDEN"]:
-            continue
-        found = True
-        total_problems += 1
-        pretty_print_issue(issue, **vars(args))
+    if not args.land:
+        print("## Problem Categories")
+    if args.jira_query != "None":
+        print("### Closed Issues with No Commit")
+        print("Tip: Tickets with type 'Task' or 'User Guide' or resolution 'Fixed by Other Ticket' are ignored.")
         print()
-    if not found:
-        print("*Success: No problems in this category!*")
+        found = False
+        for issue in issues:
+            if not issue.is_closed:
+                continue
+            if issue.issue_id in commit_issue_ids:
+                continue
+            if issue.commit_wanted == CommitWanted["OPTIONAL"] or issue.commit_wanted == CommitWanted["FORBIDDEN"]:
+                continue
+            found = True
+            total_problems += 1
+            pretty_print_issue(issue, **vars(args))
+            print()
+        if not found:
+            print("*Success: No problems in this category!*")
 
-    print("### Closed Issues with Illegal Resolution or Commit")
-    print("Tip: Fixed tickets should have resolution 'Fixed by Other Ticket' or 'Fixed'.")
-    print("Duplicate tickets should have their fixVersion tag removed.")
-    print("Tickets with resolution 'Fixed by Other Ticket' are not allowed to have commits.")
-    print()
-    found = False
-    for issue in issues:
-        if not issue.is_closed:
-            continue
-        if issue.commit_wanted == CommitWanted["OPTIONAL"]:
-            continue
-        if issue.issue_id in commit_issue_ids and issue.commit_wanted == CommitWanted["REQUIRED"]:
-            continue
-        if issue.issue_id not in commit_issue_ids and issue.commit_wanted == CommitWanted["FORBIDDEN"]:
-            continue
-        found = True
-        total_problems += 1
-        pretty_print_issue(issue, **vars(args))
+        print("### Closed Issues with Illegal Resolution or Commit")
+        print("Tip: Fixed tickets should have resolution 'Fixed by Other Ticket' or 'Fixed'.")
+        print("Duplicate tickets should have their fixVersion tag removed.")
+        print("Tickets with resolution 'Fixed by Other Ticket' are not allowed to have commits.")
         print()
-    if not found:
-        print("*Success: No problems in this category!*")
+        found = False
+        for issue in issues:
+            if not issue.is_closed:
+                continue
+            if issue.commit_wanted == CommitWanted["OPTIONAL"]:
+                continue
+            if issue.issue_id in commit_issue_ids and issue.commit_wanted == CommitWanted["REQUIRED"]:
+                continue
+            if issue.issue_id not in commit_issue_ids and issue.commit_wanted == CommitWanted["FORBIDDEN"]:
+                continue
+            found = True
+            total_problems += 1
+            pretty_print_issue(issue, **vars(args))
+            print()
+        if not found:
+            print("*Success: No problems in this category!*")
 
     print()
     print("### Commits without Jira Issue Tag")
-    print("Tip: If you see your name here, make sure to label your commits correctly in the future.")
+    if not args.land:
+        print("Tip: If you see your name here, make sure to label your commits correctly in the future.")
     print()
     found = False
     for commit in commits:
@@ -248,67 +265,102 @@ def main():
     if not found:
         print("*Success: No problems in this category!*")
 
-    print()
-    print("### Commits with Jira Issue Not Found")
-    print("Tip: Check that these tickets have the correct fixVersion tag.")
-    if not authenticated:
-        print("Tip: Authenticate to include sensitive tickets.")
-    print()
-    found = False
-    for issue_id, commits in grouped_commits:
-        if issue_id in jira_issue_ids:
-            continue
-        found = True
-        total_problems += 1
-        print("#### Issue %s" % issue_id)
+    if not args.land:
         print()
-        jira_issue = get_single_jira_issue(issue_id, **vars(args))
-        if jira_issue:
-            pretty_print_issue(jira_issue, **vars(args))
-        elif authenticated:
-            print("*Jira issue does not seem to exist*")
-        else:
-            print("*Jira issue doesn’t exist or requires authentication*")
+        print("### Commits with Jira Issue Not Found")
+        print("Tip: Check that these tickets have the correct fixVersion tag.")
+        if not authenticated:
+            print("Tip: Authenticate to include sensitive tickets.")
         print()
-        print("##### Commits with Issue %s" % issue_id)
-        print()
-        for commit in commits:
-            pretty_print_commit(commit, **vars(args))
+        found = False
+        for issue_id, commits in grouped_commits:
+            if issue_id in jira_issue_ids:
+                continue
+            print("#### Issue %s" % issue_id)
             print()
-    if not found:
-        print("*Success: No problems in this category!*")
+            jira_issue = get_single_jira_issue(issue_id, **vars(args))
+            if jira_issue:
+                pretty_print_issue(jira_issue, **vars(args))
+            elif authenticated:
+                print("*Jira issue does not seem to exist*")
+                found = True
+                total_problems += 1
+            else:
+                print("*Jira issue doesn’t exist or requires authentication*")
+                found = True
+                total_problems += 1
+            print()
+            print("##### Commits with Issue %s" % issue_id)
+            print()
+            for commit in commits:
+                pretty_print_commit(commit, **vars(args))
+                print()
+        if not found:
+            print("*Success: No problems in this category!*")
 
-    print()
-    print("### Commits with Open Jira Issue")
-    print("Tip: Consider closing the ticket if it is fixed.")
-    print()
-    found = False
-    for issue_id, commits in grouped_commits:
-        if issue_id in closed_jira_issue_ids:
-            continue
-        print("#### Issue %s" % issue_id)
+    if not args.land:
         print()
-        jira_issue = get_single_jira_issue(issue_id, **vars(args))
-        if jira_issue:
-            pretty_print_issue(jira_issue, **vars(args))
-        else:
-            print("*Jira issue does not seem to exist*")
+        print("### Commits with Open Jira Issue")
+        print("Tip: Consider closing the ticket if it is fixed.")
         print()
-        print("##### Commits with Issue %s" % issue_id)
-        print()
-        found = True
-        total_problems += 1
-        for commit in commits:
-            pretty_print_commit(commit, **vars(args))
+        found = False
+        for issue_id, commits in grouped_commits:
+            if issue_id in closed_jira_issue_ids:
+                continue
+            print("#### Issue %s" % issue_id)
             print()
-    if not found:
-        print("*Success: No problems in this category!*")
+            jira_issue = get_single_jira_issue(issue_id, **vars(args))
+            if jira_issue:
+                pretty_print_issue(jira_issue, **vars(args))
+            else:
+                print("*Jira issue does not seem to exist*")
+            print()
+            print("##### Commits with Issue %s" % issue_id)
+            print()
+            found = True
+            total_problems += 1
+            for commit in commits:
+                pretty_print_commit(commit, **vars(args))
+                print()
+        if not found:
+            print("*Success: No problems in this category!*")
+    else:
+        print()
+        print("### Commits without Accepted tickets")
+        found = False
+        for issue_id, commits in grouped_commits:
+            jira_issue = get_single_jira_issue(issue_id, **vars(args))
+            if not jira_issue:
+                print("#### ERROR: Issue %s not found" % issue_id)
+                print("*Jira issue does not seem to exist*")
+                found = True
+                total_problems += 1
+                for commit in commits:
+                    pretty_print_commit(commit, **vars(args))
+                    print()
+            elif jira_issue.issue.fields.status.name != "Accepted":
+                print("#### ERROR: Issue %s not in state Accepted" % issue_id)
+                pretty_print_issue(jira_issue, **vars(args))
+                found = True
+                total_problems += 1
+                for commit in commits:
+                    pretty_print_commit(commit, **vars(args))
+                    print()
+            else:
+                print("#### OK: Issue %s %s" % (issue_id, jira_issue.issue.fields.summary))
+        if not found:
+            print("*Success: No problems in this category!*")
+
 
     print()
     print("## Total Problems: %s" % total_problems)
     if total_problems > 0:
+        if args.land:
+            print ("Fix these problems (git rebase -i) before landing.")
         return 1
     else:
+        if args.land:
+            print ("You are ready to land these commits.")
         return 0
 
 if __name__ == "__main__":
