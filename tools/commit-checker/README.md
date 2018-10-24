@@ -11,13 +11,22 @@ Author: Shane Carr
 
 ## Installation
 
+Python 3 and pipenv are required.
+
+	## macOS:
+	$ brew install python@3
+
 Install `pipenv` globally:
 
+	## macOS:
+	$ brew install pipenv
+
+	## Others
 	$ sudo pip3 install pipenv
 
 Install this project's dependencies locally:
 
-	$ pipenv install
+	$ cd tools/commit-checker ; pipenv install
 
 Optional: save your Jira credentials in a `.env` file in this directory:
 
