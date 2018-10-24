@@ -125,6 +125,8 @@ def get_jira_issues(jira_query, **kwargs):
     """
     jira_url, jira = get_jira_instance(**kwargs)
     # Jira limits us to query the API using a limited batch size.
+    if jira_query == "None":
+        return None
     start = 0
     batch_size = 50
     while True:
