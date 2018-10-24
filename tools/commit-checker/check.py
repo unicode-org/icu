@@ -13,6 +13,7 @@ from enum import Enum
 from collections import namedtuple
 from git import Repo
 from jira import JIRA
+from jira.exceptions import JIRAError
 
 
 ICUCommit = namedtuple("ICUCommit", ["issue_id", "commit"])
@@ -70,7 +71,8 @@ def pretty_print_commit(commit, **kwargs):
 
 def pretty_print_issue(issue, **kwargs):
     print("- %s: `%s`" % (issue.issue_id, issue.issue.fields.summary))
-    print("\t- Assigned to %s" % issue.issue.fields.assignee.displayName)
+    if issue.issue.fields.assignee and issue.issue.fields.assignee.displayName:
+        print("\t- Assigned to %s" % issue.issue.fields.assignee.displayName)
     print("\t- Jira Link: %s" % issue_id_to_url(issue.issue_id, **kwargs))
 
 
@@ -83,7 +85,8 @@ def get_commits(rev_range, **kwargs):
     for commit in repo.iter_commits(rev_range):
         match = re.search(r"^(ICU-\d+) ", commit.message)
         if match:
-            yield ICUCommit(match.group(1), commit)
+            # ICU-081 -> ICU-81
+            yield ICUCommit(re.sub("^[0]+", "", match.group(1)), commit)
         else:
             yield ICUCommit(None, commit)
 
@@ -139,7 +142,10 @@ def get_single_jira_issue(issue_id, **kwargs):
     Returns a single ICUIssue for the given issue ID.
     """
     jira_url, jira = get_jira_instance(**kwargs)
-    jira_issue = jira.issue(issue_id)
+    try:
+        jira_issue = jira.issue(issue_id)
+    except JIRAError as e:
+        return None
     print("Loaded single issue %s" % issue_id, file=sys.stderr)
     if jira_issue:
         return make_icu_issue(jira_issue)
@@ -240,6 +246,8 @@ def main():
     print()
     print("### Commits with Jira Issue Not Found")
     print("Tip: Check that these tickets have the correct fixVersion tag.")
+    if not authenticated:
+        print("Tip: Authenticate to include sensitive tickets.")
     print()
     found = False
     for issue_id, commits in grouped_commits:
@@ -252,8 +260,10 @@ def main():
         jira_issue = get_single_jira_issue(issue_id, **vars(args))
         if jira_issue:
             pretty_print_issue(jira_issue, **vars(args))
-        else:
+        elif authenticated:
             print("*Jira issue does not seem to exist*")
+        else:
+            print("*Jira issue doesn’t exist or requires authentication*")
         print()
         print("##### Commits with Issue %s" % issue_id)
         print()
