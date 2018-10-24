@@ -1893,12 +1893,59 @@ void NumberFormatterApiTest::sign() {
     assertFormatSingle(
             u"Sign Accounting Negative Hidden",
             u"currency/USD unit-width-hidden sign-accounting",
-            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING)
+            NumberFormatter::with()
+                    .sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING)
                     .unit(USD)
                     .unitWidth(UNUM_UNIT_WIDTH_HIDDEN),
             Locale::getEnglish(),
             -444444,
             u"(444,444.00)");
+
+    assertFormatSingle(
+            u"Sign Accounting Negative Narrow",
+            u"currency/USD unit-width-narrow sign-accounting",
+            NumberFormatter::with()
+                .sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING)
+                .unit(USD)
+                .unitWidth(UNUM_UNIT_WIDTH_NARROW),
+            Locale::getCanada(),
+            -444444,
+            u"($444,444.00)");
+
+    assertFormatSingle(
+            u"Sign Accounting Negative Short",
+            u"currency/USD sign-accounting",
+            NumberFormatter::with()
+                .sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING)
+                .unit(USD)
+                .unitWidth(UNUM_UNIT_WIDTH_SHORT),
+            Locale::getCanada(),
+            -444444,
+            u"(US$444,444.00)");
+
+    assertFormatSingle(
+            u"Sign Accounting Negative Iso Code",
+            u"currency/USD unit-width-iso-code sign-accounting",
+            NumberFormatter::with()
+                .sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING)
+                .unit(USD)
+                .unitWidth(UNUM_UNIT_WIDTH_ISO_CODE),
+            Locale::getCanada(),
+            -444444,
+            u"(USD 444,444.00)");
+
+    // Note: CLDR does not provide an accounting pattern for long name currency.
+    // We fall back to normal currency format. This may change in the future.
+    assertFormatSingle(
+            u"Sign Accounting Negative Full Name",
+            u"currency/USD unit-width-full-name sign-accounting",
+            NumberFormatter::with()
+                .sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING)
+                .unit(USD)
+                .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale::getCanada(),
+            -444444,
+            u"-444,444.00 US dollars");
 }
 
 void NumberFormatterApiTest::decimal() {

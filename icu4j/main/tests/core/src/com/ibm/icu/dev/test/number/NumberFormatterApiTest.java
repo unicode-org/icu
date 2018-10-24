@@ -385,8 +385,8 @@ public class NumberFormatterApiTest {
                 1e7,
                 "1000\u842C");
 
-        Map<String, Map<String, String>> compactCustomData = new HashMap<String, Map<String, String>>();
-        Map<String, String> entry = new HashMap<String, String>();
+        Map<String, Map<String, String>> compactCustomData = new HashMap<>();
+        Map<String, String> entry = new HashMap<>();
         entry.put("one", "Kun");
         entry.put("other", "0KK");
         compactCustomData.put("1000", entry);
@@ -1887,6 +1887,40 @@ public class NumberFormatterApiTest {
                 ULocale.ENGLISH,
                 -444444,
                 "(444,444.00)");
+
+        assertFormatSingle(
+                "Sign Accounting Negative Narrow",
+                "currency/USD unit-width-narrow sign-accounting",
+                NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD).unitWidth(UnitWidth.NARROW),
+                ULocale.CANADA,
+                -444444,
+                "($444,444.00)");
+
+        assertFormatSingle(
+                "Sign Accounting Negative Short",
+                "currency/USD sign-accounting",
+                NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD).unitWidth(UnitWidth.SHORT),
+                ULocale.CANADA,
+                -444444,
+                "(US$444,444.00)");
+
+        assertFormatSingle(
+                "Sign Accounting Negative Iso Code",
+                "currency/USD unit-width-iso-code sign-accounting",
+                NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD).unitWidth(UnitWidth.ISO_CODE),
+                ULocale.CANADA,
+                -444444,
+                "(USD 444,444.00)");
+
+        // Note: CLDR does not provide an accounting pattern for long name currency.
+        // We fall back to normal currency format. This may change in the future.
+        assertFormatSingle(
+                "Sign Accounting Negative Full Name",
+                "currency/USD unit-width-full-name sign-accounting",
+                NumberFormatter.with().sign(SignDisplay.ACCOUNTING).unit(USD).unitWidth(UnitWidth.FULL_NAME),
+                ULocale.CANADA,
+                -444444,
+                "-444,444.00 US dollars");
     }
 
     @Test
@@ -2256,7 +2290,7 @@ public class NumberFormatterApiTest {
         methodsWithLowerBoundN1.add("truncateAt");
 
         // Some of the methods require an object to be called upon.
-        Map<String, Object> targets = new HashMap<String, Object>();
+        Map<String, Object> targets = new HashMap<>();
         targets.put("withMinDigits", Precision.integer());
         targets.put("withMaxDigits", Precision.integer());
         targets.put("withMinExponentDigits", Notation.scientific());
