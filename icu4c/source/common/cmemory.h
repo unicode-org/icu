@@ -122,6 +122,8 @@ uprv_deleteUObject(void *obj);
 
 #ifdef __cplusplus
 
+#include <utility>
+
 U_NAMESPACE_BEGIN
 
 /**
@@ -674,6 +676,79 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::orphanOrClone(int32_t l
     needToRelease=FALSE;
     return p;
 }
+
+/**
+ * A simple memory management class that creates new heap allocated objects (of
+ * any class that has a public constructor), keeps track of them and eventually
+ * deletes them all in its own destructor.
+ *
+ * A typical use-case would be code like this:
+ *
+ *     MemoryPool<MyType> pool;
+ *
+ *     MyType* o1 = pool.create();
+ *     if (o1 != nullptr) {
+ *         foo(o1);
+ *     }
+ *
+ *     MyType* o2 = pool.create(1, 2, 3);
+ *     if (o2 != nullptr) {
+ *         bar(o2);
+ *     }
+ *
+ *     // MemoryPool will take care of deleting the MyType objects.
+ *
+ * It doesn't do anything more than that, and is intentionally kept minimalist.
+ */
+template<typename T>
+class MemoryPool {
+    enum { STACK_CAPACITY = 8 };
+public:
+    MemoryPool() : count(0), pool() {}
+
+    ~MemoryPool() {
+        for (int32_t i = 0; i < count; ++i) {
+            delete pool[i];
+        }
+    }
+
+    MemoryPool(const MemoryPool&) = delete;
+    MemoryPool& operator=(const MemoryPool&) = delete;
+
+    MemoryPool(MemoryPool&& other) U_NOEXCEPT : count(other.count),
+                                                pool(std::move(other.pool)) {
+        other.count = 0;
+    }
+
+    MemoryPool& operator=(MemoryPool&& other) U_NOEXCEPT {
+        count = other.count;
+        pool = std::move(other.pool);
+        other.count = 0;
+        return *this;
+    }
+
+    /**
+     * Creates a new object of typename T, by forwarding any and all arguments
+     * to the typename T constructor.
+     *
+     * @param args Arguments to be forwarded to the typename T constructor.
+     * @return A pointer to the newly created object, or nullptr on error.
+     */
+    template<typename... Args>
+    T* create(Args&&... args) {
+        int32_t capacity = pool.getCapacity();
+        if (count == capacity &&
+            pool.resize(capacity == STACK_CAPACITY ? 32 : 2 * capacity,
+                        capacity) == nullptr) {
+            return nullptr;
+        }
+        return pool[count++] = new T(std::forward<Args>(args)...);
+    }
+
+private:
+    int32_t count;
+    MaybeStackArray<T*, STACK_CAPACITY> pool;
+};
 
 U_NAMESPACE_END
 
