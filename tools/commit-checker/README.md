@@ -46,3 +46,10 @@ Run the tool and save the result into REPORT.md:
 	$ pipenv run python3 check.py > REPORT.md
 
 Open a pull request so others can view the report easilly.
+
+## Checking commits before landing
+
+This usage model doesn't query any tickets beforehand, but only
+verifies that your local branch is suitable for landing.
+
+    $ pipenv run python check.py --rev-range upstream/master..HEAD --jira-query=None --land
