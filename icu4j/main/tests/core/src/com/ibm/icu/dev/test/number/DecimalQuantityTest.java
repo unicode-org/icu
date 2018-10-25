@@ -168,8 +168,8 @@ public class DecimalQuantityTest extends TestFmwk {
         DecimalQuantity q0 = rq.createCopy();
         // Force an accurate double
         q0.roundToInfinity();
-        q0.setIntegerLength(1, Integer.MAX_VALUE);
-        q0.setFractionLength(1, Integer.MAX_VALUE);
+        q0.setMinInteger(1);
+        q0.setMinFraction(1);
         String actual = q0.toPlainString();
         assertEquals("Unexpected output from simple string conversion (" + q0 + ")", expected, actual);
     }
@@ -305,6 +305,15 @@ public class DecimalQuantityTest extends TestFmwk {
         assertFalse("Should not be using byte array", fq.isUsingBytes());
         assertEquals("Failed on round", "1.23412341234E+16", fq.toScientificString());
         assertNull("Failed health check", fq.checkHealth());
+        // Bytes with popFromLeft
+        fq.setToBigDecimal(new BigDecimal("999999999999999999"));
+        assertToStringAndHealth(fq, "<DecimalQuantity 0:0 bytes 999999999999999999E0>");
+        fq.applyMaxInteger(17);
+        assertToStringAndHealth(fq, "<DecimalQuantity 0:0 bytes 99999999999999999E0>");
+        fq.applyMaxInteger(16);
+        assertToStringAndHealth(fq, "<DecimalQuantity 0:0 long 9999999999999999E0>");
+        fq.applyMaxInteger(15);
+        assertToStringAndHealth(fq, "<DecimalQuantity 0:0 long 999999999999999E0>");
     }
 
     @Test
@@ -389,25 +398,26 @@ public class DecimalQuantityTest extends TestFmwk {
     @Test
     public void testDecimalQuantityBehaviorStandalone() {
         DecimalQuantity_DualStorageBCD fq = new DecimalQuantity_DualStorageBCD();
-        assertToStringAndHealth(fq, "<DecimalQuantity 999:0:0:-999 long 0E0>");
+        assertToStringAndHealth(fq, "<DecimalQuantity 0:0 long 0E0>");
         fq.setToInt(51423);
-        assertToStringAndHealth(fq, "<DecimalQuantity 999:0:0:-999 long 51423E0>");
+        assertToStringAndHealth(fq, "<DecimalQuantity 0:0 long 51423E0>");
         fq.adjustMagnitude(-3);
-        assertToStringAndHealth(fq, "<DecimalQuantity 999:0:0:-999 long 51423E-3>");
-        fq.setToLong(999999999999000L);
-        assertToStringAndHealth(fq, "<DecimalQuantity 999:0:0:-999 long 999999999999E3>");
-        fq.setIntegerLength(2, 5);
-        assertToStringAndHealth(fq, "<DecimalQuantity 5:2:0:-999 long 999999999999E3>");
-        fq.setFractionLength(3, 6);
-        assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 999999999999E3>");
+        assertToStringAndHealth(fq, "<DecimalQuantity 0:0 long 51423E-3>");
+        fq.setToLong(90909090909000L);
+        assertToStringAndHealth(fq, "<DecimalQuantity 0:0 long 90909090909E3>");
+        fq.setMinInteger(2);
+        fq.applyMaxInteger(5);
+        assertToStringAndHealth(fq, "<DecimalQuantity 2:0 long 9E3>");
+        fq.setMinFraction(3);
+        assertToStringAndHealth(fq, "<DecimalQuantity 2:-3 long 9E3>");
         fq.setToDouble(987.654321);
-        assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 987654321E-6>");
+        assertToStringAndHealth(fq, "<DecimalQuantity 2:-3 long 987654321E-6>");
         fq.roundToInfinity();
-        assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 987654321E-6>");
+        assertToStringAndHealth(fq, "<DecimalQuantity 2:-3 long 987654321E-6>");
         fq.roundToIncrement(new BigDecimal("0.005"), MATH_CONTEXT_HALF_EVEN);
-        assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 987655E-3>");
+        assertToStringAndHealth(fq, "<DecimalQuantity 2:-3 long 987655E-3>");
         fq.roundToMagnitude(-2, MATH_CONTEXT_HALF_EVEN);
-        assertToStringAndHealth(fq, "<DecimalQuantity 5:2:-3:-6 long 98766E-2>");
+        assertToStringAndHealth(fq, "<DecimalQuantity 2:-3 long 98766E-2>");
     }
 
     @Test
@@ -501,8 +511,10 @@ public class DecimalQuantityTest extends TestFmwk {
     public void testMaxDigits() {
         DecimalQuantity_DualStorageBCD dq = new DecimalQuantity_DualStorageBCD(876.543);
         dq.roundToInfinity();
-        dq.setIntegerLength(0, 2);
-        dq.setFractionLength(0, 2);
+        dq.setMinInteger(0);
+        dq.applyMaxInteger(2);
+        dq.setMinFraction(0);
+        dq.roundToMagnitude(-2, RoundingUtils.mathContextUnlimited(RoundingMode.FLOOR));
         assertEquals("Should trim, toPlainString", "76.54", dq.toPlainString());
         assertEquals("Should trim, toScientificString", "7.654E+1", dq.toScientificString());
         assertEquals("Should trim, toLong", 76, dq.toLong(true));

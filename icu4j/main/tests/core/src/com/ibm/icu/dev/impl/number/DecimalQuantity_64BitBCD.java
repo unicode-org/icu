@@ -82,6 +82,12 @@ public final class DecimalQuantity_64BitBCD extends DecimalQuantity_AbstractBCD 
   }
 
   @Override
+  protected void popFromLeft(int numDigits) {
+      bcd &= (1L << ((precision - numDigits) * 4)) - 1;
+      precision -= numDigits;
+  }
+
+  @Override
   protected void setBcdToZero() {
     bcd = 0L;
     scale = 0;
@@ -173,11 +179,9 @@ public final class DecimalQuantity_64BitBCD extends DecimalQuantity_AbstractBCD 
   @Override
   public String toString() {
     return String.format(
-        "<DecimalQuantity2 %s:%d:%d:%s %016XE%d>",
-        (lOptPos > 1000 ? "max" : String.valueOf(lOptPos)),
+        "<DecimalQuantity2 %d:%d %016XE%d>",
         lReqPos,
         rReqPos,
-        (rOptPos < -1000 ? "min" : String.valueOf(rOptPos)),
         bcd,
         scale);
   }

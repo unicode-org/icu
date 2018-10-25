@@ -79,45 +79,18 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      */
     protected boolean isApproximate;
 
-    // Four positions: left optional '(', left required '[', right required ']', right optional ')'.
-    // These four positions determine which digits are displayed in the output string. They do NOT
-    // affect rounding. These positions are internal-only and can be specified only by the public
-    // endpoints like setFractionLength, setIntegerLength, and setSignificantDigits, among others.
-    //
-    // * Digits between lReqPos and rReqPos are in the "required zone" and are always displayed.
-    // * Digits between lOptPos and rOptPos but outside the required zone are in the "optional zone"
-    // and are displayed unless they are trailing off the left or right edge of the number and
-    // have a numerical value of zero. In order to be "trailing", the digits need to be beyond
-    // the decimal point in their respective directions.
-    // * Digits outside of the "optional zone" are never displayed.
-    //
-    // See the table below for illustrative examples.
-    //
-    // +---------+---------+---------+---------+------------+------------------------+--------------+
-    // | lOptPos | lReqPos | rReqPos | rOptPos |   number   |        positions       | en-US string |
-    // +---------+---------+---------+---------+------------+------------------------+--------------+
-    // |    5    |    2    |   -1    |   -5    |   1234.567 |     ( 12[34.5]67  )    |   1,234.567  |
-    // |    3    |    2    |   -1    |   -5    |   1234.567 |      1(2[34.5]67  )    |     234.567  |
-    // |    3    |    2    |   -1    |   -2    |   1234.567 |      1(2[34.5]6)7      |     234.56   |
-    // |    6    |    4    |    2    |   -5    | 123456789. |  123(45[67]89.     )   | 456,789.     |
-    // |    6    |    4    |    2    |    1    | 123456789. |     123(45[67]8)9.     | 456,780.     |
-    // |   -1    |   -1    |   -3    |   -4    | 0.123456   |     0.1([23]4)56       |        .0234 |
-    // |    6    |    4    |   -2    |   -2    |     12.3   |     (  [  12.3 ])      |    0012.30   |
-    // +---------+---------+---------+---------+------------+------------------------+--------------+
-    //
-    protected int lOptPos = Integer.MAX_VALUE;
+    // Positions to keep track of leading and trailing zeros.
+    // lReqPos is the magnitude of the first required leading zero.
+    // rReqPos is the magnitude of the last required trailing zero.
     protected int lReqPos = 0;
     protected int rReqPos = 0;
-    protected int rOptPos = Integer.MIN_VALUE;
 
     @Override
     public void copyFrom(DecimalQuantity _other) {
         copyBcdFrom(_other);
         DecimalQuantity_AbstractBCD other = (DecimalQuantity_AbstractBCD) _other;
-        lOptPos = other.lOptPos;
         lReqPos = other.lReqPos;
         rReqPos = other.rReqPos;
-        rOptPos = other.rOptPos;
         scale = other.scale;
         precision = other.precision;
         flags = other.flags;
@@ -127,20 +100,17 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     }
 
     public DecimalQuantity_AbstractBCD clear() {
-        lOptPos = Integer.MAX_VALUE;
         lReqPos = 0;
         rReqPos = 0;
-        rOptPos = Integer.MIN_VALUE;
         flags = 0;
         setBcdToZero(); // sets scale, precision, hasDouble, origDouble, origDelta, and BCD data
         return this;
     }
 
     @Override
-    public void setIntegerLength(int minInt, int maxInt) {
+    public void setMinInteger(int minInt) {
         // Validation should happen outside of DecimalQuantity, e.g., in the Rounder class.
         assert minInt >= 0;
-        assert maxInt >= minInt;
 
         // Special behavior: do not set minInt to be less than what is already set.
         // This is so significant digits rounding can set the integer length.
@@ -149,30 +119,40 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         }
 
         // Save values into internal state
-        // Negation is safe for minFrac/maxFrac because -Integer.MAX_VALUE > Integer.MIN_VALUE
-        lOptPos = maxInt;
         lReqPos = minInt;
     }
 
     @Override
-    public void setFractionLength(int minFrac, int maxFrac) {
+    public void setMinFraction(int minFrac) {
         // Validation should happen outside of DecimalQuantity, e.g., in the Rounder class.
         assert minFrac >= 0;
-        assert maxFrac >= minFrac;
 
         // Save values into internal state
         // Negation is safe for minFrac/maxFrac because -Integer.MAX_VALUE > Integer.MIN_VALUE
         rReqPos = -minFrac;
-        rOptPos = -maxFrac;
+    }
+
+    @Override
+    public void applyMaxInteger(int maxInt) {
+        // Validation should happen outside of DecimalQuantity, e.g., in the Precision class.
+        assert maxInt >= 0;
+
+        if (precision == 0) {
+            return;
+        }
+
+        int magnitude = getMagnitude();
+        if (maxInt <= magnitude) {
+            popFromLeft(magnitude - maxInt + 1);
+            compact();
+        }
     }
 
     @Override
     public long getPositionFingerprint() {
         long fingerprint = 0;
-        fingerprint ^= lOptPos;
         fingerprint ^= (lReqPos << 16);
         fingerprint ^= ((long) rReqPos << 32);
-        fingerprint ^= ((long) rOptPos << 48);
         return fingerprint;
     }
 
@@ -276,7 +256,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         assert !isApproximate;
 
         int magnitude = scale + precision;
-        int result = (lReqPos > magnitude) ? lReqPos : (lOptPos < magnitude) ? lOptPos : magnitude;
+        int result = (lReqPos > magnitude) ? lReqPos : magnitude;
         return result - 1;
     }
 
@@ -287,7 +267,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         assert !isApproximate;
 
         int magnitude = scale;
-        int result = (rReqPos < magnitude) ? rReqPos : (rOptPos > magnitude) ? rOptPos : magnitude;
+        int result = (rReqPos < magnitude) ? rReqPos : magnitude;
         return result;
     }
 
@@ -586,7 +566,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         // Fallback behavior upon truncateIfOverflow is to truncate at 17 digits.
         assert(truncateIfOverflow || fitsInLong());
         long result = 0L;
-        int upperMagnitude = Math.min(scale + precision, lOptPos) - 1;
+        int upperMagnitude = scale + precision - 1;
         if (truncateIfOverflow) {
             upperMagnitude = Math.min(upperMagnitude, 17);
         }
@@ -607,7 +587,7 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
     public long toFractionLong(boolean includeTrailingZeros) {
         long result = 0L;
         int magnitude = -1;
-        int lowerMagnitude = Math.max(scale, rOptPos);
+        int lowerMagnitude = scale;
         if (includeTrailingZeros) {
             lowerMagnitude = Math.min(lowerMagnitude, rReqPos);
         }
@@ -1055,8 +1035,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         }
         // NOTE: It is not safe to add to lOptPos (aka maxInt) or subtract from
         // rOptPos (aka -maxFrac) due to overflow.
-        int upperPos = Math.min(precision + scale, lOptPos) - scale - 1;
-        int lowerPos = Math.max(scale, rOptPos) - scale;
+        int upperPos = precision - 1;
+        int lowerPos = 0;
         int p = upperPos;
         result.append((char) ('0' + getDigitPos(p)));
         if ((--p) >= lowerPos) {
@@ -1105,10 +1085,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
                 scale == _other.scale
                 && precision == _other.precision
                 && flags == _other.flags
-                && lOptPos == _other.lOptPos
                 && lReqPos == _other.lReqPos
                 && rReqPos == _other.rReqPos
-                && rOptPos == _other.rOptPos
                 && isApproximate == _other.isApproximate;
         if (!basicEquals) {
             return false;
@@ -1168,6 +1146,14 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
      *            The number of digits to remove.
      */
     protected abstract void shiftRight(int numDigits);
+
+    /**
+     * Directly removes digits from the front of the BCD list.
+     * Updates precision.
+     *
+     * CAUTION: it is the caller's responsibility to call {@link #compact} after this method.
+     */
+    protected abstract void popFromLeft(int numDigits);
 
     /**
      * Sets the internal representation to zero. Clears any values stored in scale, precision, hasDouble,

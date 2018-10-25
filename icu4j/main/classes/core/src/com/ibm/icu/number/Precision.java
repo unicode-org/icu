@@ -609,7 +609,7 @@ public abstract class Precision implements Cloneable {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToInfinity();
-            value.setFractionLength(0, Integer.MAX_VALUE);
+            value.setMinFraction(0);
         }
     }
 
@@ -625,8 +625,7 @@ public abstract class Precision implements Cloneable {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToMagnitude(getRoundingMagnitudeFraction(maxFrac), mathContext);
-            value.setFractionLength(Math.max(0, -getDisplayMagnitudeFraction(minFrac)),
-                    Integer.MAX_VALUE);
+            value.setMinFraction(Math.max(0, -getDisplayMagnitudeFraction(minFrac)));
         }
     }
 
@@ -642,11 +641,10 @@ public abstract class Precision implements Cloneable {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToMagnitude(getRoundingMagnitudeSignificant(value, maxSig), mathContext);
-            value.setFractionLength(Math.max(0, -getDisplayMagnitudeSignificant(value, minSig)),
-                    Integer.MAX_VALUE);
+            value.setMinFraction(Math.max(0, -getDisplayMagnitudeSignificant(value, minSig)));
             // Make sure that digits are displayed on zero.
             if (value.isZero() && minSig > 0) {
-                value.setIntegerLength(1, Integer.MAX_VALUE);
+                value.setMinInteger(1);
             }
         }
 
@@ -656,7 +654,7 @@ public abstract class Precision implements Cloneable {
          */
         public void apply(DecimalQuantity quantity, int minInt) {
             assert quantity.isZero();
-            quantity.setFractionLength(minSig - minInt, Integer.MAX_VALUE);
+            quantity.setMinFraction(minSig - minInt);
         }
     }
 
@@ -687,7 +685,7 @@ public abstract class Precision implements Cloneable {
                 roundingMag = Math.min(roundingMag, candidate);
             }
             value.roundToMagnitude(roundingMag, mathContext);
-            value.setFractionLength(Math.max(0, -displayMag), Integer.MAX_VALUE);
+            value.setMinFraction(Math.max(0, -displayMag));
         }
     }
 
@@ -701,7 +699,7 @@ public abstract class Precision implements Cloneable {
         @Override
         public void apply(DecimalQuantity value) {
             value.roundToIncrement(increment, mathContext);
-            value.setFractionLength(increment.scale(), increment.scale());
+            value.setMinFraction(increment.scale());
         }
     }
 
