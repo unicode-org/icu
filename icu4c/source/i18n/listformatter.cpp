@@ -377,7 +377,7 @@ UnicodeString& ListFormatter::format(
   int32_t offset;
   FieldPositionIteratorHandler handler(posIter, errorCode);
   return format_(items, nItems, appendTo, -1, offset, &handler, errorCode);
-};
+}
 #endif
 
 UnicodeString& ListFormatter::format(

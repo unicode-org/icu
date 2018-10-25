@@ -90,7 +90,7 @@ static void testContext(void);
 static void doTailTest(void);
 
 static void testBracketOverflow(void);
-static void TestExplicitLevel0();
+static void TestExplicitLevel0(void);
 
 /* new BIDI API */
 static void testReorderingMode(void);
@@ -139,7 +139,7 @@ addComplexTest(TestNode** root) {
     addTest(root, testGetBaseDirection, "complex/bidi/testGetBaseDirection");
     addTest(root, testContext, "complex/bidi/testContext");
     addTest(root, testBracketOverflow, "complex/bidi/TestBracketOverflow");
-    addTest(root, &TestExplicitLevel0, "complex/bidi/TestExplicitLevel0");
+    addTest(root, TestExplicitLevel0, "complex/bidi/TestExplicitLevel0");
 
     addTest(root, doArabicShapingTest, "complex/arabic-shaping/ArabicShapingTest");
     addTest(root, doLamAlefSpecialVLTRArabicShapingTest, "complex/arabic-shaping/lamalef");
@@ -4927,7 +4927,7 @@ testBracketOverflow(void) {
     ubidi_close(bidi);
 }
 
-static void TestExplicitLevel0() {
+static void TestExplicitLevel0(void) {
     // The following used to fail with an error, see ICU ticket #12922.
     static const UChar text[2] = { 0x202d, 0x05d0 };
     static UBiDiLevel embeddings[2] = { 0, 0 };
