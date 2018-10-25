@@ -9,6 +9,8 @@
 #   include <stdio.h>
 #endif
 
+#include <utility>
+
 #include "unicode/utypes.h"
 #include "unicode/ucptrie.h"
 #include "unicode/umutablecptrie.h"
