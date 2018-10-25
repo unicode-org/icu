@@ -27,26 +27,31 @@ import com.ibm.icu.text.UFieldPosition;
  */
 public interface DecimalQuantity extends PluralRules.IFixedDecimal {
     /**
-     * Sets the minimum and maximum integer digits that this {@link DecimalQuantity} should generate.
+     * Sets the minimum integer digits that this {@link DecimalQuantity} should generate.
      * This method does not perform rounding.
      *
      * @param minInt
      *            The minimum number of integer digits.
-     * @param maxInt
-     *            The maximum number of integer digits.
      */
-    public void setIntegerLength(int minInt, int maxInt);
+    public void setMinInteger(int minInt);
 
     /**
-     * Sets the minimum and maximum fraction digits that this {@link DecimalQuantity} should generate.
+     * Sets the minimum fraction digits that this {@link DecimalQuantity} should generate.
      * This method does not perform rounding.
      *
      * @param minFrac
      *            The minimum number of fraction digits.
-     * @param maxFrac
-     *            The maximum number of fraction digits.
      */
-    public void setFractionLength(int minFrac, int maxFrac);
+    public void setMinFraction(int minFrac);
+
+    /**
+     * Truncates digits from the upper magnitude of the number in order to satisfy the
+     * specified maximum number of integer digits.
+     *
+     * @param maxInt
+     *            The maximum number of integer digits.
+     */
+    public void applyMaxInteger(int maxInt);
 
     /**
      * Rounds the number to a specified interval, such as 0.05.

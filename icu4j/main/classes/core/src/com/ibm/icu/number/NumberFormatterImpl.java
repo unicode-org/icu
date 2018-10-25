@@ -99,9 +99,10 @@ class NumberFormatterImpl {
         MicroProps micros = microPropsGenerator.processQuantity(inValue);
         micros.rounder.apply(inValue);
         if (micros.integerWidth.maxInt == -1) {
-            inValue.setIntegerLength(micros.integerWidth.minInt, Integer.MAX_VALUE);
+            inValue.setMinInteger(micros.integerWidth.minInt);
         } else {
-            inValue.setIntegerLength(micros.integerWidth.minInt, micros.integerWidth.maxInt);
+            inValue.setMinInteger(micros.integerWidth.minInt);
+            inValue.applyMaxInteger(micros.integerWidth.maxInt);
         }
         return micros;
     }
@@ -111,9 +112,10 @@ class NumberFormatterImpl {
         MicroProps micros = microPropsGenerator.processQuantity(inValue);
         micros.rounder.apply(inValue);
         if (micros.integerWidth.maxInt == -1) {
-            inValue.setIntegerLength(micros.integerWidth.minInt, Integer.MAX_VALUE);
+            inValue.setMinInteger(micros.integerWidth.minInt);
         } else {
-            inValue.setIntegerLength(micros.integerWidth.minInt, micros.integerWidth.maxInt);
+            inValue.setMinInteger(micros.integerWidth.minInt);
+            inValue.applyMaxInteger(micros.integerWidth.maxInt);
         }
         return micros;
     }

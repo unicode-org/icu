@@ -112,10 +112,8 @@ DecimalQuantity& DecimalQuantity::operator=(DecimalQuantity&& src) U_NOEXCEPT {
 
 void DecimalQuantity::copyFieldsFrom(const DecimalQuantity& other) {
     bogus = other.bogus;
-    lOptPos = other.lOptPos;
     lReqPos = other.lReqPos;
     rReqPos = other.rReqPos;
-    rOptPos = other.rOptPos;
     scale = other.scale;
     precision = other.precision;
     flags = other.flags;
@@ -125,18 +123,15 @@ void DecimalQuantity::copyFieldsFrom(const DecimalQuantity& other) {
 }
 
 void DecimalQuantity::clear() {
-    lOptPos = INT32_MAX;
     lReqPos = 0;
     rReqPos = 0;
-    rOptPos = INT32_MIN;
     flags = 0;
     setBcdToZero(); // sets scale, precision, hasDouble, origDouble, origDelta, and BCD data
 }
 
-void DecimalQuantity::setIntegerLength(int32_t minInt, int32_t maxInt) {
+void DecimalQuantity::setMinInteger(int32_t minInt) {
     // Validation should happen outside of DecimalQuantity, e.g., in the Precision class.
     U_ASSERT(minInt >= 0);
-    U_ASSERT(maxInt >= minInt);
 
     // Special behavior: do not set minInt to be less than what is already set.
     // This is so significant digits rounding can set the integer length.
@@ -145,28 +140,37 @@ void DecimalQuantity::setIntegerLength(int32_t minInt, int32_t maxInt) {
     }
 
     // Save values into internal state
-    // Negation is safe for minFrac/maxFrac because -Integer.MAX_VALUE > Integer.MIN_VALUE
-    lOptPos = maxInt;
     lReqPos = minInt;
 }
 
-void DecimalQuantity::setFractionLength(int32_t minFrac, int32_t maxFrac) {
+void DecimalQuantity::setMinFraction(int32_t minFrac) {
     // Validation should happen outside of DecimalQuantity, e.g., in the Precision class.
     U_ASSERT(minFrac >= 0);
-    U_ASSERT(maxFrac >= minFrac);
 
     // Save values into internal state
     // Negation is safe for minFrac/maxFrac because -Integer.MAX_VALUE > Integer.MIN_VALUE
     rReqPos = -minFrac;
-    rOptPos = -maxFrac;
+}
+
+void DecimalQuantity::applyMaxInteger(int32_t maxInt) {
+    // Validation should happen outside of DecimalQuantity, e.g., in the Precision class.
+    U_ASSERT(maxInt >= 0);
+
+    if (precision == 0) {
+        return;
+    }
+
+    int32_t magnitude = getMagnitude();
+    if (maxInt <= magnitude) {
+        popFromLeft(magnitude - maxInt + 1);
+        compact();
+    }
 }
 
 uint64_t DecimalQuantity::getPositionFingerprint() const {
     uint64_t fingerprint = 0;
-    fingerprint ^= lOptPos;
     fingerprint ^= (lReqPos << 16);
     fingerprint ^= (static_cast<uint64_t>(rReqPos) << 32);
-    fingerprint ^= (static_cast<uint64_t>(rOptPos) << 48);
     return fingerprint;
 }
 
@@ -280,7 +284,7 @@ int32_t DecimalQuantity::getUpperDisplayMagnitude() const {
     U_ASSERT(!isApproximate);
 
     int32_t magnitude = scale + precision;
-    int32_t result = (lReqPos > magnitude) ? lReqPos : (lOptPos < magnitude) ? lOptPos : magnitude;
+    int32_t result = (lReqPos > magnitude) ? lReqPos : magnitude;
     return result - 1;
 }
 
@@ -290,7 +294,7 @@ int32_t DecimalQuantity::getLowerDisplayMagnitude() const {
     U_ASSERT(!isApproximate);
 
     int32_t magnitude = scale;
-    int32_t result = (rReqPos < magnitude) ? rReqPos : (rOptPos > magnitude) ? rOptPos : magnitude;
+    int32_t result = (rReqPos < magnitude) ? rReqPos : magnitude;
     return result;
 }
 
@@ -511,7 +515,7 @@ int64_t DecimalQuantity::toLong(bool truncateIfOverflow) const {
     // if (dq.fitsInLong()) { /* use dq.toLong() */ } else { /* use some fallback */ }
     // Fallback behavior upon truncateIfOverflow is to truncate at 17 digits.
     uint64_t result = 0L;
-    int32_t upperMagnitude = std::min(scale + precision, lOptPos) - 1;
+    int32_t upperMagnitude = scale + precision - 1;
     if (truncateIfOverflow) {
         upperMagnitude = std::min(upperMagnitude, 17);
     }
@@ -527,7 +531,7 @@ int64_t DecimalQuantity::toLong(bool truncateIfOverflow) const {
 uint64_t DecimalQuantity::toFractionLong(bool includeTrailingZeros) const {
     uint64_t result = 0L;
     int32_t magnitude = -1;
-    int32_t lowerMagnitude = std::max(scale, rOptPos);
+    int32_t lowerMagnitude = scale;
     if (includeTrailingZeros) {
         lowerMagnitude = std::min(lowerMagnitude, rReqPos);
     }
@@ -884,10 +888,8 @@ UnicodeString DecimalQuantity::toScientificString() const {
         result.append(u"0E+0", -1);
         return result;
     }
-    // NOTE: It is not safe to add to lOptPos (aka maxInt) or subtract from
-    // rOptPos (aka -maxFrac) due to overflow.
-    int32_t upperPos = std::min(precision + scale, lOptPos) - scale - 1;
-    int32_t lowerPos = std::max(scale, rOptPos) - scale;
+    int32_t upperPos = precision - 1;
+    int32_t lowerPos = 0;
     int32_t p = upperPos;
     result.append(u'0' + getDigitPos(p));
     if ((--p) >= lowerPos) {
@@ -982,6 +984,18 @@ void DecimalQuantity::shiftRight(int32_t numDigits) {
         fBCD.bcdLong >>= (numDigits * 4);
     }
     scale += numDigits;
+    precision -= numDigits;
+}
+
+void DecimalQuantity::popFromLeft(int32_t numDigits) {
+    if (usingBytes) {
+        int i = precision - 1;
+        for (; i >= precision - numDigits; i--) {
+            fBCD.bcdBytes.ptr[i] = 0;
+        }
+    } else {
+        fBCD.bcdLong &= (static_cast<uint64_t>(1) << ((precision - numDigits) * 4)) - 1;
+    }
     precision -= numDigits;
 }
 
@@ -1239,10 +1253,8 @@ bool DecimalQuantity::operator==(const DecimalQuantity& other) const {
             scale == other.scale
             && precision == other.precision
             && flags == other.flags
-            && lOptPos == other.lOptPos
             && lReqPos == other.lReqPos
             && rReqPos == other.rReqPos
-            && rOptPos == other.rOptPos
             && isApproximate == other.isApproximate;
     if (!basicEquals) {
         return false;
@@ -1272,11 +1284,9 @@ UnicodeString DecimalQuantity::toString() const {
     snprintf(
             buffer8,
             sizeof(buffer8),
-            "<DecimalQuantity %d:%d:%d:%d %s %s%s%s%d>",
-            (lOptPos > 999 ? 999 : lOptPos),
+            "<DecimalQuantity %d:%d %s %s%s%s%d>",
             lReqPos,
             rReqPos,
-            (rOptPos < -999 ? -999 : rOptPos),
             (usingBytes ? "bytes" : "long"),
             (isNegative() ? "-" : ""),
             (precision == 0 ? "0" : digits.getAlias()),
