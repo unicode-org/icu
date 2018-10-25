@@ -512,17 +512,18 @@ void TransliteratorAPITest::TestKeyboardTransliterator1(){
     logln("Testing transliterate(Replaceable, int32_t, UChar, UErrorCode)");
     for(i=10; i<UPRV_LENGTHOF(Data); i=i+2){
         UnicodeString log;
-         if (Data[i+0] != "") {
-           log = s + " + " + Data[i+0] + " -> ";
-           UChar c=Data[i+0].charAt(0);
-           t->transliterate(s, index, c, status);
-           if(U_FAILURE(status))
+        if (Data[i+0] != "") {
+            log = s + " + " + Data[i+0] + " -> ";
+            UChar c=Data[i+0].charAt(0);
+            t->transliterate(s, index, c, status);
+            if(U_FAILURE(status)) {
                errln("FAIL: " + t->getID()+ ".transliterate(Replaceable, int32_t[], UChar, UErrorCode)-->" + (UnicodeString)u_errorName(status));
                continue;
-         }else {
+            }
+        } else {
            log = s + " => ";
            t->finishTransliteration(s, index);
-         }
+        }
         // Show the start index '{' and the cursor '|'
         displayOutput(s, Data[i+1], log, index); 
     }

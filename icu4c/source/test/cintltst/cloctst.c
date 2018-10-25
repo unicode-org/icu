@@ -23,6 +23,7 @@
 #include "cstring.h"
 #include "uparse.h"
 #include "uresimp.h"
+#include "uassert.h"
 
 #include "unicode/putil.h"
 #include "unicode/ubrk.h"
@@ -1776,6 +1777,7 @@ static void TestKeywordVariants(void)
 
         status = U_ZERO_ERROR;
         resultLen = uloc_getName(testCases[i].localeID, buffer, 256, &status);
+        U_ASSERT(resultLen < 256);
         if (U_SUCCESS(status)) {
             if (testCases[i].expectedLocaleID == 0) {
                 log_err("Expected uloc_getName(\"%s\") to fail; got \"%s\"\n",
@@ -1793,6 +1795,7 @@ static void TestKeywordVariants(void)
 
         status = U_ZERO_ERROR;
         resultLen = uloc_getBaseName(testCases[i].localeID, buffer, 256, &status);
+        U_ASSERT(resultLen < 256);
         if (U_SUCCESS(status)) {
             if (testCases[i].expectedLocaleIDNoKeywords == 0) {
                 log_err("Expected uloc_getBaseName(\"%s\") to fail; got \"%s\"\n",
@@ -1810,6 +1813,7 @@ static void TestKeywordVariants(void)
 
         status = U_ZERO_ERROR;
         resultLen = uloc_canonicalize(testCases[i].localeID, buffer, 256, &status);
+        U_ASSERT(resultLen < 256);
         if (U_SUCCESS(status)) {
             if (testCases[i].expectedCanonicalID == 0) {
                 log_err("Expected uloc_canonicalize(\"%s\") to fail; got \"%s\"\n",

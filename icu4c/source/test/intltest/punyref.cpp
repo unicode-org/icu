@@ -65,7 +65,7 @@ U_CDECL_BEGIN
 static punycode_uint decode_digit(punycode_uint cp)
 {
   return  cp - 48 < 10 ? cp - 22 :  cp - 65 < 26 ? cp - 65 :
-          cp - 97 < 26 ? cp - 97 :  base;
+          cp - 97 < 26 ? cp - 97 :  static_cast<punycode_uint>(base);
 }
 
 /* encode_digit(d,flag) returns the basic code point whose value      */
@@ -191,8 +191,8 @@ enum punycode_status punycode_encode(
 
         for (q = delta, k = base;  ;  k += base) {
           if (out >= max_out) return punycode_big_output;
-          t = k <= bias /* + tmin */ ? tmin :     /* +tmin not needed */
-              k >= bias + tmax ? tmax : k - bias;
+          t = k <= bias /* + tmin */ ? static_cast<punycode_uint>(tmin) : /* +tmin not needed */
+              k >= bias + tmax ? static_cast<punycode_uint>(tmax) : k - bias;
           if (q < t) break;
           output[out++] = encode_digit(t + (q - t) % (base - t), 0);
           q = (q - t) / (base - t);
@@ -263,8 +263,8 @@ enum punycode_status punycode_decode(
       if (digit >= base) return punycode_bad_input;
       if (digit > (maxint - i) / w) return punycode_overflow;
       i += digit * w;
-      t = k <= bias /* + tmin */ ? tmin :     /* +tmin not needed */
-          k >= bias + tmax ? tmax : k - bias;
+      t = k <= bias /* + tmin */ ? static_cast<punycode_uint>(tmin) : /* +tmin not needed */
+          k >= bias + tmax ? static_cast<punycode_uint>(tmax) : k - bias;
       if (digit < t) break;
       if (w > maxint / (base - t)) return punycode_overflow;
       w *= (base - t);
