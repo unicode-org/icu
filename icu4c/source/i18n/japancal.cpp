@@ -18,6 +18,16 @@
 #if !UCONFIG_NO_FORMATTING
 #if U_PLATFORM_HAS_WINUWP_API == 0
 #include <stdlib.h> // getenv() is not available in UWP env
+#else
+#ifndef WIN32_LEAN_AND_MEAN
+#   define WIN32_LEAN_AND_MEAN
+#endif
+#   define VC_EXTRALEAN
+#   define NOUSER
+#   define NOSERVICE
+#   define NOIME
+#   define NOMCX
+#include <windows.h>
 #endif
 #include "cmemory.h"
 #include "erarules.h"
