@@ -1,8 +1,57 @@
-image:         Visual Studio 2017
-platform:      x64
-configuration: Release
-build:
-    project: icu4c/source/allinone/allinone.sln
+# AppVeyor configuration for CI Builds of ICU4C.
 
-test_script:
-    - icu4c/source/allinone/icucheck.bat x64 Release
+image: Visual Studio 2017
+platform: x64
+
+# Don't clone the entire repo.
+clone_depth: 3
+
+# Cache the Cygwin downloaded setup packages between builds to speed things up.
+cache:
+  - c:\cygwin-setup-cache
+
+environment:
+  CYG_URL: https://cygwin.com/setup-x86_64.exe
+  CYG_MIRROR: http://cygwin.mirror.constant.com
+  CYG_PACKAGES: automake,gcc-core,gcc-g++,make,pkg-config,perl,python3-devel
+  CYG_ROOT: c:\cygwin-root
+  CYG_CACHE: c:\cygwin-setup-cache
+
+  matrix:
+    - BUILDSYSTEM: VS2017
+      configuration: Release
+      APPVEYOR_CACHE_SKIP_RESTORE: true
+      APPVEYOR_CACHE_SKIP_SAVE: true
+
+    - BUILDSYSTEM: cygwin64-gcc
+      CC: gcc
+      CXX: g++
+
+for:
+  -
+    matrix:
+      only:
+        - BUILDSYSTEM: cygwin64-gcc
+
+    install:
+      - ps: Invoke-WebRequest $env:CYG_URL -OutFile c:\cygwin-setup.exe
+      - c:\cygwin-setup.exe --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --only-site --site "%CYG_MIRROR%" --root "%CYG_ROOT%"  --local-package-dir "%CYG_CACHE%" --packages "%CYG_PACKAGES%"
+
+    # Check that we have a working Cygwin environment before building.
+    before_build:
+      - "%CYG_ROOT%\\bin\\sh -lc 'echo Hello'"
+      - "%CYG_ROOT%\\bin\\sh -lc 'uname -a'"
+
+    build_script:
+      - '%CYG_ROOT%\\bin\\bash -lc "cd $(cygpath ${APPVEYOR_BUILD_FOLDER}) && cd icu4c/source && ./runConfigureICU Cygwin && make check"'
+
+  -
+    matrix:
+      only:
+        - BUILDSYSTEM: VS2017
+
+    build:
+      project: icu4c/source/allinone/allinone.sln
+
+    test_script:
+      - icu4c/source/allinone/icucheck.bat x64 Release
