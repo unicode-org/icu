@@ -22,6 +22,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
+import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
@@ -36,7 +37,7 @@ public class DecimalQuantityTest extends TestFmwk {
     public void testBehavior() throws ParseException {
 
         // Make a list of several formatters to test the behavior of DecimalQuantity.
-        List<LocalizedNumberFormatter> formats = new ArrayList<LocalizedNumberFormatter>();
+        List<LocalizedNumberFormatter> formats = new ArrayList<>();
 
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
 
@@ -120,7 +121,7 @@ public class DecimalQuantityTest extends TestFmwk {
             assertEquals("Double is not valid", Double.toString(Double.parseDouble(str)), str);
         }
 
-        List<DecimalQuantity> qs = new ArrayList<DecimalQuantity>();
+        List<DecimalQuantity> qs = new ArrayList<>();
         BigDecimal d = new BigDecimal(str);
         qs.add(new DecimalQuantity_SimpleStorage(d));
         if (mode == 0)
@@ -509,6 +510,82 @@ public class DecimalQuantityTest extends TestFmwk {
         if (!logKnownIssue("13701", "consider cleaning up")) {
             assertEquals("Should trim, toDouble", 76.54, dq.toDouble());
             assertEquals("Should trim, toBigDecimal", new BigDecimal("76.54"), dq.toBigDecimal());
+        }
+    }
+
+    @Test
+    public void testNickelRounding() {
+        Object[][] cases = new Object[][] {
+            {1.000, -2, RoundingMode.HALF_EVEN, "1."},
+            {1.001, -2, RoundingMode.HALF_EVEN, "1."},
+            {1.010, -2, RoundingMode.HALF_EVEN, "1."},
+            {1.020, -2, RoundingMode.HALF_EVEN, "1."},
+            {1.024, -2, RoundingMode.HALF_EVEN, "1."},
+            {1.025, -2, RoundingMode.HALF_EVEN, "1."},
+            {1.025, -2, RoundingMode.HALF_DOWN, "1."},
+            {1.025, -2, RoundingMode.HALF_UP,   "1.05"},
+            {1.026, -2, RoundingMode.HALF_EVEN, "1.05"},
+            {1.030, -2, RoundingMode.HALF_EVEN, "1.05"},
+            {1.040, -2, RoundingMode.HALF_EVEN, "1.05"},
+            {1.050, -2, RoundingMode.HALF_EVEN, "1.05"},
+            {1.060, -2, RoundingMode.HALF_EVEN, "1.05"},
+            {1.070, -2, RoundingMode.HALF_EVEN, "1.05"},
+            {1.074, -2, RoundingMode.HALF_EVEN, "1.05"},
+            {1.075, -2, RoundingMode.HALF_DOWN, "1.05"},
+            {1.075, -2, RoundingMode.HALF_UP,   "1.1"},
+            {1.075, -2, RoundingMode.HALF_EVEN, "1.1"},
+            {1.076, -2, RoundingMode.HALF_EVEN, "1.1"},
+            {1.080, -2, RoundingMode.HALF_EVEN, "1.1"},
+            {1.090, -2, RoundingMode.HALF_EVEN, "1.1"},
+            {1.099, -2, RoundingMode.HALF_EVEN, "1.1"},
+            {1.999, -2, RoundingMode.HALF_EVEN, "2."},
+            {2.25, -1, RoundingMode.HALF_EVEN, "2."},
+            {2.25, -1, RoundingMode.HALF_UP,   "2.5"},
+            {2.75, -1, RoundingMode.HALF_DOWN, "2.5"},
+            {2.75, -1, RoundingMode.HALF_EVEN, "3."},
+            {3.00, -1, RoundingMode.CEILING, "3."},
+            {3.25, -1, RoundingMode.CEILING, "3.5"},
+            {3.50, -1, RoundingMode.CEILING, "3.5"},
+            {3.75, -1, RoundingMode.CEILING, "4."},
+            {4.00, -1, RoundingMode.FLOOR, "4."},
+            {4.25, -1, RoundingMode.FLOOR, "4."},
+            {4.50, -1, RoundingMode.FLOOR, "4.5"},
+            {4.75, -1, RoundingMode.FLOOR, "4.5"},
+            {5.00, -1, RoundingMode.UP, "5."},
+            {5.25, -1, RoundingMode.UP, "5.5"},
+            {5.50, -1, RoundingMode.UP, "5.5"},
+            {5.75, -1, RoundingMode.UP, "6."},
+            {6.00, -1, RoundingMode.DOWN, "6."},
+            {6.25, -1, RoundingMode.DOWN, "6."},
+            {6.50, -1, RoundingMode.DOWN, "6.5"},
+            {6.75, -1, RoundingMode.DOWN, "6.5"},
+            {7.00, -1, RoundingMode.UNNECESSARY, "7."},
+            {7.50, -1, RoundingMode.UNNECESSARY, "7.5"},
+        };
+        for (Object[] cas : cases) {
+            double input = (Double) cas[0];
+            int magnitude = (Integer) cas[1];
+            RoundingMode roundingMode = (RoundingMode) cas[2];
+            String expected = (String) cas[3];
+            String message = input + " @ " + magnitude + " / " + roundingMode;
+            for (int i=0; i<2; i++) {
+                DecimalQuantity dq;
+                if (i == 0) {
+                    dq = new DecimalQuantity_DualStorageBCD(input);
+                } else {
+                    dq = new DecimalQuantity_SimpleStorage(input);
+                }
+                dq.roundToNickel(magnitude, RoundingUtils.mathContextUnlimited(roundingMode));
+                String actual = dq.toPlainString();
+                assertEquals(message, expected, actual);
+            }
+        }
+        try {
+            DecimalQuantity_DualStorageBCD dq = new DecimalQuantity_DualStorageBCD(7.1);
+            dq.roundToNickel(-1, RoundingUtils.mathContextUnlimited(RoundingMode.UNNECESSARY));
+            fail("Expected ArithmeticException");
+        } catch (ArithmeticException expected) {
+            // pass
         }
     }
 

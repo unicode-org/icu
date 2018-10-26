@@ -76,7 +76,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      * <p>If rounding to a power of ten, use the more efficient {@link #roundToMagnitude} instead.
      *
      * @param roundingIncrement The increment to which to round.
-     * @param mathContext The {@link RoundingMode} to use if rounding is necessary.
+     * @param roundingMode The {@link RoundingMode} to use if rounding is necessary.
      */
     void roundToIncrement(double roundingIncrement, RoundingMode roundingMode,
                           int32_t maxFrac, UErrorCode& status);
@@ -85,11 +85,20 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
     void truncate();
 
     /**
+     * Rounds the number to the nearest multiple of 5 at the specified magnitude.
+     * For example, when magnitude == -2, this performs rounding to the nearest 0.05.
+     *
+     * @param magnitude The magnitude at which the digit should become either 0 or 5.
+     * @param roundingMode Rounding strategy.
+     */
+    void roundToNickel(int32_t magnitude, RoundingMode roundingMode, UErrorCode& status);
+
+    /**
      * Rounds the number to a specified magnitude (power of ten).
      *
      * @param roundingMagnitude The power of ten to which to round. For example, a value of -2 will
      *     round to 2 decimal places.
-     * @param mathContext The {@link RoundingMode} to use if rounding is necessary.
+     * @param roundingMode The {@link RoundingMode} to use if rounding is necessary.
      */
     void roundToMagnitude(int32_t magnitude, RoundingMode roundingMode, UErrorCode& status);
 
@@ -381,6 +390,8 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      * Used for testing.
      */
     bool explicitExactDouble = false;
+
+    void roundToMagnitude(int32_t magnitude, RoundingMode roundingMode, bool nickel, UErrorCode& status);
 
     /**
      * Returns a single digit from the BCD list. No internal state is changed by calling this method.

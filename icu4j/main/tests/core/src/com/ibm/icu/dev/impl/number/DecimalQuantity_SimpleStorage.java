@@ -364,6 +364,12 @@ public class DecimalQuantity_SimpleStorage implements DecimalQuantity {
   }
 
   @Override
+  public void roundToNickel(int roundingMagnitude, MathContext mathContext) {
+    BigDecimal nickel = BigDecimal.valueOf(5).scaleByPowerOfTen(roundingMagnitude);
+    roundToIncrement(nickel, mathContext);
+  }
+
+  @Override
   public void roundToMagnitude(int roundingMagnitude, MathContext mathContext) {
     if (roundingMagnitude < -1000) {
       roundToInfinity();
