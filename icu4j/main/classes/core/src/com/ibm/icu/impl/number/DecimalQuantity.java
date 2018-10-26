@@ -62,6 +62,17 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
     public void roundToIncrement(BigDecimal roundingInterval, MathContext mathContext);
 
     /**
+     * Rounds the number to the nearest multiple of 5 at the specified magnitude.
+     * For example, when magnitude == -2, this performs rounding to the nearest 0.05.
+     *
+     * @param magnitude
+     *            The magnitude at which the digit should become either 0 or 5.
+     * @param mathContext
+     *            Rounding strategy.
+     */
+    public void roundToNickel(int magnitude, MathContext mathContext);
+
+    /**
      * Rounds the number to a specified magnitude (power of ten).
      *
      * @param roundingMagnitude

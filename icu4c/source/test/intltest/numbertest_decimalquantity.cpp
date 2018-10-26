@@ -26,6 +26,7 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
         TESTCASE_AUTO(testHardDoubleConversion);
         TESTCASE_AUTO(testToDouble);
         TESTCASE_AUTO(testMaxDigits);
+        TESTCASE_AUTO(testNickelRounding);
     TESTCASE_AUTO_END;
 }
 
@@ -378,6 +379,77 @@ void DecimalQuantityTest::testMaxDigits() {
     if (!logKnownIssue("13701")) {
         assertEquals("Should trim, toDecNum", "76.54", copy.toPlainString());
     }
+}
+
+void DecimalQuantityTest::testNickelRounding() {
+    IcuTestErrorCode status(*this, "testNickelRounding");
+    struct TestCase {
+        double input;
+        int32_t magnitude;
+        UNumberFormatRoundingMode roundingMode;
+        const char16_t* expected;
+    } cases[] = {
+        {1.000, -2, UNUM_ROUND_HALFEVEN, u"1"},
+        {1.001, -2, UNUM_ROUND_HALFEVEN, u"1"},
+        {1.010, -2, UNUM_ROUND_HALFEVEN, u"1"},
+        {1.020, -2, UNUM_ROUND_HALFEVEN, u"1"},
+        {1.024, -2, UNUM_ROUND_HALFEVEN, u"1"},
+        {1.025, -2, UNUM_ROUND_HALFEVEN, u"1"},
+        {1.025, -2, UNUM_ROUND_HALFDOWN, u"1"},
+        {1.025, -2, UNUM_ROUND_HALFUP,   u"1.05"},
+        {1.026, -2, UNUM_ROUND_HALFEVEN, u"1.05"},
+        {1.030, -2, UNUM_ROUND_HALFEVEN, u"1.05"},
+        {1.040, -2, UNUM_ROUND_HALFEVEN, u"1.05"},
+        {1.050, -2, UNUM_ROUND_HALFEVEN, u"1.05"},
+        {1.060, -2, UNUM_ROUND_HALFEVEN, u"1.05"},
+        {1.070, -2, UNUM_ROUND_HALFEVEN, u"1.05"},
+        {1.074, -2, UNUM_ROUND_HALFEVEN, u"1.05"},
+        {1.075, -2, UNUM_ROUND_HALFDOWN, u"1.05"},
+        {1.075, -2, UNUM_ROUND_HALFUP,   u"1.1"},
+        {1.075, -2, UNUM_ROUND_HALFEVEN, u"1.1"},
+        {1.076, -2, UNUM_ROUND_HALFEVEN, u"1.1"},
+        {1.080, -2, UNUM_ROUND_HALFEVEN, u"1.1"},
+        {1.090, -2, UNUM_ROUND_HALFEVEN, u"1.1"},
+        {1.099, -2, UNUM_ROUND_HALFEVEN, u"1.1"},
+        {1.999, -2, UNUM_ROUND_HALFEVEN, u"2"},
+        {2.25, -1, UNUM_ROUND_HALFEVEN, u"2"},
+        {2.25, -1, UNUM_ROUND_HALFUP,   u"2.5"},
+        {2.75, -1, UNUM_ROUND_HALFDOWN, u"2.5"},
+        {2.75, -1, UNUM_ROUND_HALFEVEN, u"3"},
+        {3.00, -1, UNUM_ROUND_CEILING, u"3"},
+        {3.25, -1, UNUM_ROUND_CEILING, u"3.5"},
+        {3.50, -1, UNUM_ROUND_CEILING, u"3.5"},
+        {3.75, -1, UNUM_ROUND_CEILING, u"4"},
+        {4.00, -1, UNUM_ROUND_FLOOR, u"4"},
+        {4.25, -1, UNUM_ROUND_FLOOR, u"4"},
+        {4.50, -1, UNUM_ROUND_FLOOR, u"4.5"},
+        {4.75, -1, UNUM_ROUND_FLOOR, u"4.5"},
+        {5.00, -1, UNUM_ROUND_UP, u"5"},
+        {5.25, -1, UNUM_ROUND_UP, u"5.5"},
+        {5.50, -1, UNUM_ROUND_UP, u"5.5"},
+        {5.75, -1, UNUM_ROUND_UP, u"6"},
+        {6.00, -1, UNUM_ROUND_DOWN, u"6"},
+        {6.25, -1, UNUM_ROUND_DOWN, u"6"},
+        {6.50, -1, UNUM_ROUND_DOWN, u"6.5"},
+        {6.75, -1, UNUM_ROUND_DOWN, u"6.5"},
+        {7.00, -1, UNUM_ROUND_UNNECESSARY, u"7"},
+        {7.50, -1, UNUM_ROUND_UNNECESSARY, u"7.5"},
+    };
+    for (const auto& cas : cases) {
+        UnicodeString message = DoubleToUnicodeString(cas.input) + u" @ " + Int64ToUnicodeString(cas.magnitude) + u" / " + Int64ToUnicodeString(cas.roundingMode);
+        status.setScope(message);
+        DecimalQuantity dq;
+        dq.setToDouble(cas.input);
+        dq.roundToNickel(cas.magnitude, cas.roundingMode, status);
+        status.errIfFailureAndReset();
+        UnicodeString actual = dq.toPlainString();
+        assertEquals(message, cas.expected, actual);
+    }
+    status.setScope("");
+    DecimalQuantity dq;
+    dq.setToDouble(7.1);
+    dq.roundToNickel(-1, UNUM_ROUND_UNNECESSARY, status);
+    status.expectErrorAndReset(U_FORMAT_INEXACT_ERROR);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

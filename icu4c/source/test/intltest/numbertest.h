@@ -128,6 +128,7 @@ class DecimalQuantityTest : public IntlTest {
     void testHardDoubleConversion();
     void testToDouble();
     void testMaxDigits();
+    void testNickelRounding();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
