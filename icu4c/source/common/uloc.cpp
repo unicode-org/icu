@@ -1591,7 +1591,7 @@ _canonicalize(const char* localeID,
         len = (int32_t)uprv_strlen(d);
 
         if (name != NULL) {
-            uprv_strncpy(name, d, len);
+            uprv_memcpy(name, d, len);
         }
     } else if(_isIDSeparator(*tmpLocaleID)) {
         const char *scriptID;
