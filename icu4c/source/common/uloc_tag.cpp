@@ -19,7 +19,6 @@
 #include "putilimp.h"
 #include "uinvchar.h"
 #include "ulocimp.h"
-#include "uvector.h"
 #include "uassert.h"
 
 
@@ -347,46 +346,6 @@ ultag_getPrivateUse(const ULanguageTag* langtag);
 static const char*
 ultag_getGrandfathered(const ULanguageTag* langtag);
 #endif
-
-namespace {
-
-// Helper class to memory manage CharString objects.
-// Only ever stack-allocated, does not need to inherit UMemory.
-class CharStringPool {
-public:
-    CharStringPool() : status(U_ZERO_ERROR), pool(&deleter, nullptr, status) {}
-    ~CharStringPool() = default;
-
-    CharStringPool(const CharStringPool&) = delete;
-    CharStringPool& operator=(const CharStringPool&) = delete;
-
-    icu::CharString* create() {
-        if (U_FAILURE(status)) {
-            return nullptr;
-        }
-        icu::CharString* const obj = new icu::CharString;
-        if (obj == nullptr) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return nullptr;
-        }
-        pool.addElement(obj, status);
-        if (U_FAILURE(status)) {
-            delete obj;
-            return nullptr;
-        }
-        return obj;
-    }
-
-private:
-    static void U_CALLCONV deleter(void* obj) {
-        delete static_cast<icu::CharString*>(obj);
-    }
-
-    UErrorCode status;
-    icu::UVector pool;
-};
-
-}  // namespace
 
 /*
 * -------------------------------------------------
@@ -1105,7 +1064,7 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
         AttributeListEntry *firstAttr = NULL;
         AttributeListEntry *attr;
         char *attrValue;
-        CharStringPool extBufPool;
+        icu::MemoryPool<icu::CharString> extBufPool;
         const char *bcpKey=nullptr, *bcpValue=nullptr;
         UErrorCode tmpStatus = U_ZERO_ERROR;
         int32_t keylen;
@@ -1285,12 +1244,12 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                     }
                 }
                 bcpKey = key;
-                icu::CharString* extBuf = extBufPool.create();
+                icu::CharString* extBuf =
+                    extBufPool.create(buf.data(), len, tmpStatus);
                 if (extBuf == nullptr) {
                     *status = U_MEMORY_ALLOCATION_ERROR;
                     break;
                 }
-                extBuf->append(buf.data(), len, tmpStatus);
                 if (U_FAILURE(tmpStatus)) {
                     *status = tmpStatus;
                     break;
