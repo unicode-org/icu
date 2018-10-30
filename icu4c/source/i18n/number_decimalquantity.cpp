@@ -820,7 +820,10 @@ UnicodeString DecimalQuantity::toScientificString() const {
     }
     result.append(u'E');
     int32_t _scale = upperPos + scale;
-    if (_scale < 0) {
+    if (_scale == INT32_MIN) {
+        result.append({u"-2147483648", -1});
+        return result;
+    } else if (_scale < 0) {
         _scale *= -1;
         result.append(u'-');
     } else {

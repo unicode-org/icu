@@ -996,7 +996,10 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         }
         result.append('E');
         int _scale = upperPos + scale;
-        if (_scale < 0) {
+        if (_scale == Integer.MIN_VALUE) {
+            result.append("-2147483648");
+            return;
+        } else if (_scale < 0) {
             _scale *= -1;
             result.append('-');
         } else {
