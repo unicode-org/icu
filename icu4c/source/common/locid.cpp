@@ -869,43 +869,16 @@ Locale::forLanguageTag(StringPiece tag, UErrorCode& status)
     // parsing. Therefore the code here explicitly calls uloc_forLanguageTag()
     // and then Locale::init(), instead of just calling the normal constructor.
 
-    // All simple language tags will have the exact same length as ICU locale
-    // ID strings as they have as BCP-47 strings (like "en_US" for "en-US").
     CharString localeID;
-    int32_t resultCapacity = tag.size();
-
-    char* buffer;
-    int32_t parsedLength, reslen;
-
-    for (;;) {
-        buffer = localeID.getAppendBuffer(
-                /*minCapacity=*/resultCapacity,
-                /*desiredCapacityHint=*/resultCapacity,
-                resultCapacity,
-                status);
-
-        if (U_FAILURE(status)) {
-            return result;
-        }
-
-        reslen = ulocimp_forLanguageTag(
+    int32_t parsedLength;
+    {
+        CharStringByteSink sink(&localeID);
+        ulocimp_forLanguageTag(
                 tag.data(),
                 tag.length(),
-                buffer,
-                resultCapacity,
+                sink,
                 &parsedLength,
                 &status);
-
-        if (status != U_BUFFER_OVERFLOW_ERROR) {
-            break;
-        }
-
-        // For all BCP-47 language tags that use extensions, the corresponding
-        // ICU locale ID will be longer but uloc_forLanguageTag() does compute
-        // the exact length needed so this memory reallocation will be done at
-        // most once.
-        resultCapacity = reslen;
-        status = U_ZERO_ERROR;
     }
 
     if (U_FAILURE(status)) {
@@ -914,15 +887,6 @@ Locale::forLanguageTag(StringPiece tag, UErrorCode& status)
 
     if (parsedLength != tag.size()) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return result;
-    }
-
-    localeID.append(buffer, reslen, status);
-    if (status == U_STRING_NOT_TERMINATED_WARNING) {
-        status = U_ZERO_ERROR;  // Terminators provided by CharString.
-    }
-
-    if (U_FAILURE(status)) {
         return result;
     }
 
