@@ -1348,7 +1348,7 @@ cleanup:
  * Note: char* buf is used for storing keywords
  */
 static void
-_appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendTo, char* buf, int32_t bufSize, UBool *posixVariant, UErrorCode *status) {
+_appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendTo, icu::MemoryPool<icu::CharString>& kwdBuf, UBool *posixVariant, UErrorCode *status) {
     const char *pTag;   /* beginning of current subtag */
     const char *pKwds;  /* beginning of key-type pairs */
     UBool variantExists = *posixVariant;
@@ -1360,7 +1360,6 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
     AttributeListEntry *attr, *nextAttr;
 
     int32_t len;
-    int32_t bufIdx = 0;
 
     char attrBuf[ULOC_KEYWORD_AND_VALUES_CAPACITY];
     int32_t attrBufIdx = 0;
@@ -1416,40 +1415,34 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
     if (attrFirst) {
         /* emit attributes as an LDML keyword, e.g. attribute=attr1-attr2 */
 
-        if (attrBufIdx > bufSize) {
-            /* attrBufIdx == <total length of attribute subtag> + 1 */
-            *status = U_ILLEGAL_ARGUMENT_ERROR;
-            goto cleanup;
-        }
-
         kwd = (ExtensionListEntry*)uprv_malloc(sizeof(ExtensionListEntry));
         if (kwd == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             goto cleanup;
         }
 
-        kwd->key = LOCALE_ATTRIBUTE_KEY;
-        kwd->value = buf;
+        icu::CharString* value = kwdBuf.create();
+        if (value == NULL) {
+            *status = U_MEMORY_ALLOCATION_ERROR;
+            goto cleanup;
+        }
 
         /* attribute subtags sorted in alphabetical order as type */
         attr = attrFirst;
         while (attr != NULL) {
             nextAttr = attr->next;
-
-            /* buffer size check is done above */
             if (attr != attrFirst) {
-                *(buf + bufIdx) = SEP;
-                bufIdx++;
+                value->append('-', *status);
             }
-
-            len = static_cast<int32_t>(uprv_strlen(attr->attribute));
-            uprv_memcpy(buf + bufIdx, attr->attribute, len);
-            bufIdx += len;
-
+            value->append(attr->attribute, *status);
             attr = nextAttr;
         }
-        *(buf + bufIdx) = 0;
-        bufIdx++;
+        if (U_FAILURE(*status)) {
+            goto cleanup;
+        }
+
+        kwd->key = LOCALE_ATTRIBUTE_KEY;
+        kwd->value = value->data();
 
         if (!_addExtensionToList(&kwdFirst, kwd, FALSE)) {
             *status = U_ILLEGAL_ARGUMENT_ERROR;
@@ -1546,16 +1539,15 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                     We normalize the result key to lower case.
                     */
                     T_CString_toLowerCase(bcpKeyBuf);
-                    if (bufSize - bufIdx - 1 >= bcpKeyLen) {
-                        uprv_memcpy(buf + bufIdx, bcpKeyBuf, bcpKeyLen);
-                        pKey = buf + bufIdx;
-                        bufIdx += bcpKeyLen;
-                        *(buf + bufIdx) = 0;
-                        bufIdx++;
-                    } else {
-                        *status = U_BUFFER_OVERFLOW_ERROR;
+                    icu::CharString* key = kwdBuf.create(bcpKeyBuf, bcpKeyLen, *status);
+                    if (key == NULL) {
+                        *status = U_MEMORY_ALLOCATION_ERROR;
                         goto cleanup;
                     }
+                    if (U_FAILURE(*status)) {
+                        goto cleanup;
+                    }
+                    pKey = key->data();
                 }
 
                 if (pBcpType) {
@@ -1582,16 +1574,15 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                         */
                         /* normalize to lower case */
                         T_CString_toLowerCase(bcpTypeBuf);
-                        if (bufSize - bufIdx - 1 >= bcpTypeLen) {
-                            uprv_memcpy(buf + bufIdx, bcpTypeBuf, bcpTypeLen);
-                            pType = buf + bufIdx;
-                            bufIdx += bcpTypeLen;
-                            *(buf + bufIdx) = 0;
-                            bufIdx++;
-                        } else {
-                            *status = U_BUFFER_OVERFLOW_ERROR;
+                        icu::CharString* type = kwdBuf.create(bcpTypeBuf, bcpTypeLen, *status);
+                        if (type == NULL) {
+                            *status = U_MEMORY_ALLOCATION_ERROR;
                             goto cleanup;
                         }
+                        if (U_FAILURE(*status)) {
+                            goto cleanup;
+                        }
+                        pType = type->data();
                     }
                 } else {
                     /* typeless - default type value is "yes" */
@@ -1662,17 +1653,10 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
     ExtensionListEntry *kwdFirst = NULL;
     ExtensionListEntry *kwd;
     const char *key, *type;
-    char *kwdBuf = NULL;
-    int32_t kwdBufLength = capacity;
+    icu::MemoryPool<icu::CharString> kwdBuf;
     UBool posixVariant = FALSE;
 
     if (U_FAILURE(*status)) {
-        return 0;
-    }
-
-    kwdBuf = (char*)uprv_malloc(kwdBufLength);
-    if (kwdBuf == NULL) {
-        *status = U_MEMORY_ALLOCATION_ERROR;
         return 0;
     }
 
@@ -1688,7 +1672,7 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
         key = ultag_getExtensionKey(langtag, i);
         type = ultag_getExtensionValue(langtag, i);
         if (*key == LDMLEXT) {
-            _appendLDMLExtensionAsKeywords(type, &kwdFirst, kwdBuf, kwdBufLength, &posixVariant, status);
+            _appendLDMLExtensionAsKeywords(type, &kwdFirst, kwdBuf, &posixVariant, status);
             if (U_FAILURE(*status)) {
                 break;
             }
@@ -1784,8 +1768,6 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
         uprv_free(kwd);
         kwd = tmpKwd;
     }
-
-    uprv_free(kwdBuf);
 
     if (U_FAILURE(*status)) {
         return 0;
