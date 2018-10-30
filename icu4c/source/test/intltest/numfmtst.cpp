@@ -9226,6 +9226,14 @@ void NumberFormatTest::Test20037_ScientificIntegerOverflow() {
     assertEquals(u"Should not overflow and should parse only the first exponent",
                  u"1E-2147483647",
                  {sp.data(), sp.length(), US_INV});
+
+    // Test edge case overflow of exponent
+    result = Formattable();
+    nf->parse(u".0003e-2147483644", result, status);
+    sp = result.getDecimalNumber(status);
+    assertEquals(u"Should not overflow",
+                 u"3E-2147483648",
+                 {sp.data(), sp.length(), US_INV});
 }
 
 void NumberFormatTest::Test13840_ParseLongStringCrash() {
