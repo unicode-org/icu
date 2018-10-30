@@ -101,21 +101,18 @@ ulocimp_toLanguageTag(const char* localeID,
  * the first paragraph, so some information might be lost.
  * @param langtag   the input BCP47 language tag.
  * @param tagLen    the length of langtag, or -1 to call uprv_strlen().
- * @param localeID  the output buffer receiving a locale ID for the
+ * @param sink      the output sink receiving a locale ID for the
  *                  specified BCP47 language tag.
- * @param localeIDCapacity  the size of the locale ID output buffer.
  * @param parsedLength  if not NULL, successfully parsed length
  *                      for the input language tag is set.
  * @param err       error information if receiving the locald ID
  *                  failed.
- * @return          the length of the locale ID.
  * @internal ICU 63
  */
-U_CAPI int32_t U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_forLanguageTag(const char* langtag,
                        int32_t tagLen,
-                       char* localeID,
-                       int32_t localeIDCapacity,
+                       icu::ByteSink& sink,
                        int32_t* parsedLength,
                        UErrorCode* err);
 

@@ -1645,9 +1645,8 @@ cleanup:
 }
 
 
-static int32_t
-_appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorCode* status) {
-    int32_t reslen = 0;
+static void
+_appendKeywords(ULanguageTag* langtag, icu::ByteSink& sink, UErrorCode* status) {
     int32_t i, n;
     int32_t len;
     ExtensionListEntry *kwdFirst = NULL;
@@ -1657,7 +1656,7 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
     UBool posixVariant = FALSE;
 
     if (U_FAILURE(*status)) {
-        return 0;
+        return;
     }
 
     /* Determine if variants already exists */
@@ -1714,10 +1713,7 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
 
     if (U_SUCCESS(*status) && posixVariant) {
         len = (int32_t) uprv_strlen(_POSIX);
-        if (reslen < capacity) {
-            uprv_memcpy(appendAt + reslen, _POSIX, uprv_min(len, capacity - reslen));
-        }
-        reslen += len;
+        sink.Append(_POSIX, len);
     }
 
     if (U_SUCCESS(*status) && kwdFirst != NULL) {
@@ -1725,37 +1721,21 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
         UBool firstValue = TRUE;
         kwd = kwdFirst;
         do {
-            if (reslen < capacity) {
-                if (firstValue) {
-                    /* '@' */
-                    *(appendAt + reslen) = LOCALE_EXT_SEP;
-                    firstValue = FALSE;
-                } else {
-                    /* ';' */
-                    *(appendAt + reslen) = LOCALE_KEYWORD_SEP;
-                }
+            if (firstValue) {
+                sink.Append("@", 1);
+                firstValue = FALSE;
+            } else {
+                sink.Append(";", 1);
             }
-            reslen++;
 
             /* key */
             len = (int32_t)uprv_strlen(kwd->key);
-            if (reslen < capacity) {
-                uprv_memcpy(appendAt + reslen, kwd->key, uprv_min(len, capacity - reslen));
-            }
-            reslen += len;
-
-            /* '=' */
-            if (reslen < capacity) {
-                *(appendAt + reslen) = LOCALE_KEY_TYPE_SEP;
-            }
-            reslen++;
+            sink.Append(kwd->key, len);
+            sink.Append("=", 1);
 
             /* type */
             len = (int32_t)uprv_strlen(kwd->value);
-            if (reslen < capacity) {
-                uprv_memcpy(appendAt + reslen, kwd->value, uprv_min(len, capacity - reslen));
-            }
-            reslen += len;
+            sink.Append(kwd->value, len);
 
             kwd = kwd->next;
         } while (kwd);
@@ -1770,10 +1750,8 @@ _appendKeywords(ULanguageTag* langtag, char* appendAt, int32_t capacity, UErrorC
     }
 
     if (U_FAILURE(*status)) {
-        return 0;
+        return;
     }
-
-    return u_terminateChars(appendAt, capacity, reslen, status);
 }
 
 static void
@@ -2638,25 +2616,37 @@ uloc_forLanguageTag(const char* langtag,
                     int32_t localeIDCapacity,
                     int32_t* parsedLength,
                     UErrorCode* status) {
-    return ulocimp_forLanguageTag(
-            langtag,
-            -1,
-            localeID,
-            localeIDCapacity,
-            parsedLength,
-            status);
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+
+    icu::CheckedArrayByteSink sink(localeID, localeIDCapacity);
+    ulocimp_forLanguageTag(langtag, -1, sink, parsedLength, status);
+
+    int32_t reslen = sink.NumberOfBytesAppended();
+
+    if (U_FAILURE(*status)) {
+        return reslen;
+    }
+
+    if (sink.Overflowed()) {
+        *status = U_BUFFER_OVERFLOW_ERROR;
+    } else {
+        u_terminateChars(localeID, localeIDCapacity, reslen, status);
+    }
+
+    return reslen;
 }
 
 
-U_CAPI int32_t U_EXPORT2
+U_CAPI void U_EXPORT2
 ulocimp_forLanguageTag(const char* langtag,
                        int32_t tagLen,
-                       char* localeID,
-                       int32_t localeIDCapacity,
+                       icu::ByteSink& sink,
                        int32_t* parsedLength,
                        UErrorCode* status) {
     ULanguageTag *lt;
-    int32_t reslen = 0;
+    UBool isEmpty = TRUE;
     const char *subtag, *p;
     int32_t len;
     int32_t i, n;
@@ -2664,7 +2654,7 @@ ulocimp_forLanguageTag(const char* langtag,
 
     lt = ultag_parse(langtag, tagLen, parsedLength, status);
     if (U_FAILURE(*status)) {
-        return 0;
+        return;
     }
 
     /* language */
@@ -2672,10 +2662,8 @@ ulocimp_forLanguageTag(const char* langtag,
     if (uprv_compareInvCharsAsAscii(subtag, LANG_UND) != 0) {
         len = (int32_t)uprv_strlen(subtag);
         if (len > 0) {
-            if (reslen < localeIDCapacity) {
-                uprv_memcpy(localeID, subtag, uprv_min(len, localeIDCapacity - reslen));
-            }
-            reslen += len;
+            sink.Append(subtag, len);
+            isEmpty = FALSE;
         }
     }
 
@@ -2683,41 +2671,27 @@ ulocimp_forLanguageTag(const char* langtag,
     subtag = ultag_getScript(lt);
     len = (int32_t)uprv_strlen(subtag);
     if (len > 0) {
-        if (reslen < localeIDCapacity) {
-            *(localeID + reslen) = LOCALE_SEP;
-        }
-        reslen++;
+        sink.Append("_", 1);
+        isEmpty = FALSE;
 
         /* write out the script in title case */
-        p = subtag;
-        while (*p) {
-            if (reslen < localeIDCapacity) {
-                if (p == subtag) {
-                    *(localeID + reslen) = uprv_toupper(*p);
-                } else {
-                    *(localeID + reslen) = *p;
-                }
-            }
-            reslen++;
-            p++;
-        }
+        char c = uprv_toupper(*subtag);
+        sink.Append(&c, 1);
+        sink.Append(subtag + 1, len - 1);
     }
 
     /* region */
     subtag = ultag_getRegion(lt);
     len = (int32_t)uprv_strlen(subtag);
     if (len > 0) {
-        if (reslen < localeIDCapacity) {
-            *(localeID + reslen) = LOCALE_SEP;
-        }
-        reslen++;
-        /* write out the retion in upper case */
+        sink.Append("_", 1);
+        isEmpty = FALSE;
+
+        /* write out the region in upper case */
         p = subtag;
         while (*p) {
-            if (reslen < localeIDCapacity) {
-                *(localeID + reslen) = uprv_toupper(*p);
-            }
-            reslen++;
+            char c = uprv_toupper(*p);
+            sink.Append(&c, 1);
             p++;
         }
         noRegion = FALSE;
@@ -2727,25 +2701,19 @@ ulocimp_forLanguageTag(const char* langtag,
     n = ultag_getVariantsSize(lt);
     if (n > 0) {
         if (noRegion) {
-            if (reslen < localeIDCapacity) {
-                *(localeID + reslen) = LOCALE_SEP;
-            }
-            reslen++;
+            sink.Append("_", 1);
+            isEmpty = FALSE;
         }
 
         for (i = 0; i < n; i++) {
             subtag = ultag_getVariant(lt, i);
-            if (reslen < localeIDCapacity) {
-                *(localeID + reslen) = LOCALE_SEP;
-            }
-            reslen++;
+            sink.Append("_", 1);
+
             /* write out the variant in upper case */
             p = subtag;
             while (*p) {
-                if (reslen < localeIDCapacity) {
-                    *(localeID + reslen) = uprv_toupper(*p);
-                }
-                reslen++;
+                char c = uprv_toupper(*p);
+                sink.Append(&c, 1);
                 p++;
             }
         }
@@ -2755,19 +2723,12 @@ ulocimp_forLanguageTag(const char* langtag,
     n = ultag_getExtensionsSize(lt);
     subtag = ultag_getPrivateUse(lt);
     if (n > 0 || uprv_strlen(subtag) > 0) {
-        if (reslen == 0 && n > 0) {
+        if (isEmpty && n > 0) {
             /* need a language */
-            if (reslen < localeIDCapacity) {
-                uprv_memcpy(localeID + reslen, LANG_UND, uprv_min(LANG_UND_LEN, localeIDCapacity - reslen));
-            }
-            reslen += LANG_UND_LEN;
+            sink.Append(LANG_UND, LANG_UND_LEN);
         }
-        len = _appendKeywords(lt, localeID + reslen, localeIDCapacity - reslen, status);
-        reslen += len;
+        _appendKeywords(lt, sink, status);
     }
 
     ultag_close(lt);
-    return u_terminateChars(localeID, localeIDCapacity, reslen, status);
 }
-
-
