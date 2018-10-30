@@ -6325,6 +6325,11 @@ public class NumberFormatTest extends TestFmwk {
         result = nf.parse("1E-547483647");
         assertEquals("Should *not* snap to zero",
                 "1E-547483647", result.toString());
+
+        // Test edge case overflow of exponent
+        result = nf.parse(".0003e-2147483644");
+        assertEquals("Should not overflow",
+                "0", result.toString());
     }
 
     @Test

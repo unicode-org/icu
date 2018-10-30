@@ -239,7 +239,15 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
                 tempLong = tempLong * 10 + getDigitPos(shift);
             }
             BigDecimal result = BigDecimal.valueOf(tempLong);
-            result = result.scaleByPowerOfTen(scale);
+            try {
+                result = result.scaleByPowerOfTen(scale);
+            } catch (ArithmeticException e) {
+                if (e.getMessage().contains("Underflow")) {
+                    result = BigDecimal.ZERO;
+                } else {
+                    throw e;
+                }
+            }
             if (isNegative())
                 result = result.negate();
             return result;
