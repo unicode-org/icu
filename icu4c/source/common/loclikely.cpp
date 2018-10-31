@@ -50,9 +50,9 @@ findLikelySubtags(const char* localeID,
         int32_t resLen = 0;
         const UChar* s = NULL;
         UErrorCode tmpErr = U_ZERO_ERROR;
-        UResourceBundle* subtags = ures_openDirect(NULL, "likelySubtags", &tmpErr);
+        icu::LocalUResourceBundlePointer subtags(ures_openDirect(NULL, "likelySubtags", &tmpErr));
         if (U_SUCCESS(tmpErr)) {
-            s = ures_getStringByKey(subtags, localeID, &resLen, &tmpErr);
+            s = ures_getStringByKey(subtags.getAlias(), localeID, &resLen, &tmpErr);
 
             if (U_FAILURE(tmpErr)) {
                 /*
@@ -71,8 +71,6 @@ findLikelySubtags(const char* localeID,
                 u_UCharsToChars(s, buffer, resLen + 1);
                 result = buffer;
             }
-
-            ures_close(subtags);
         } else {
             *err = tmpErr;
         }

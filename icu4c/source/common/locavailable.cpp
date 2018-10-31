@@ -125,7 +125,6 @@ static UBool U_CALLCONV uloc_cleanup(void) {
 //   via the initOnce mechanism.
 
 static void U_CALLCONV loadInstalledLocales() {
-    UResourceBundle *indexLocale = NULL;
     UResourceBundle installed;
     UErrorCode status = U_ZERO_ERROR;
     int32_t i = 0;
@@ -136,9 +135,14 @@ static void U_CALLCONV loadInstalledLocales() {
 
     _installedLocalesCount = 0;
     ures_initStackObject(&installed);
-    indexLocale = ures_openDirect(NULL, _kIndexLocaleName, &status);
-    ures_getByKey(indexLocale, _kIndexTag, &installed, &status);
-    
+
+    icu::LocalUResourceBundlePointer indexLocale(ures_openDirect(NULL, _kIndexLocaleName, &status));
+
+    // Automatically call ures_close() on this when it goes out of scope.
+    icu::LocalUResourceBundlePointer installedCloser(&installed);
+
+    ures_getByKey(indexLocale.getAlias(), _kIndexTag, &installed, &status);
+
     if(U_SUCCESS(status)) {
         localeCount = ures_getSize(&installed);
         _installedLocales = (char **) uprv_malloc(sizeof(char*) * (localeCount+1));
@@ -152,8 +156,6 @@ static void U_CALLCONV loadInstalledLocales() {
             ucln_common_registerCleanup(UCLN_COMMON_ULOC, uloc_cleanup);
         }
     }
-    ures_close(&installed);
-    ures_close(indexLocale);
 }
 
 static void _load_installedLocales()

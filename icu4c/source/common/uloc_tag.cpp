@@ -10,7 +10,9 @@
 #include "unicode/bytestream.h"
 #include "unicode/utypes.h"
 #include "unicode/ures.h"
+#include "unicode/localpointer.h"
 #include "unicode/putil.h"
+#include "unicode/uenum.h"
 #include "unicode/uloc.h"
 #include "ustr_imp.h"
 #include "charstr.h"
@@ -346,6 +348,21 @@ ultag_getPrivateUse(const ULanguageTag* langtag);
 static const char*
 ultag_getGrandfathered(const ULanguageTag* langtag);
 #endif
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalULanguageTagPointer
+ * "Smart pointer" class, closes a ULanguageTag via ultag_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @internal
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalULanguageTagPointer, ULanguageTag, ultag_close);
+
+U_NAMESPACE_END
 
 /*
 * -------------------------------------------------
@@ -1048,14 +1065,12 @@ static void
 _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool strict, UBool hadPosix, UErrorCode* status) {
     char attrBuf[ULOC_KEYWORD_AND_VALUES_CAPACITY] = { 0 };
     int32_t attrBufLength = 0;
-    UEnumeration *keywordEnum = NULL;
 
-    keywordEnum = uloc_openKeywords(localeID, status);
+    icu::LocalUEnumerationPointer keywordEnum(uloc_openKeywords(localeID, status));
     if (U_FAILURE(*status) && !hadPosix) {
-        uenum_close(keywordEnum);
         return;
     }
-    if (keywordEnum != NULL || hadPosix) {
+    if (keywordEnum.isValid() || hadPosix) {
         /* reorder extensions */
         int32_t len;
         const char *key;
@@ -1072,7 +1087,7 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
 
         while (TRUE) {
             icu::CharString buf;
-            key = uenum_next(keywordEnum, NULL, status);
+            key = uenum_next(keywordEnum.getAlias(), NULL, status);
             if (key == NULL) {
                 break;
             }
@@ -1333,8 +1348,6 @@ cleanup:
             uprv_free(attr);
             attr = tmpAttr;
         }
-
-        uenum_close(keywordEnum);
 
         if (U_FAILURE(*status)) {
             return;
@@ -2561,18 +2574,17 @@ ulocimp_toLanguageTag(const char* localeID,
     /* For handling special case - private use only tag */
     pKeywordStart = locale_getKeywordsStart(canonical.data());
     if (pKeywordStart == canonical.data()) {
-        UEnumeration *kwdEnum;
         int kwdCnt = 0;
         UBool done = FALSE;
 
-        kwdEnum = uloc_openKeywords(canonical.data(), &tmpStatus);
-        if (kwdEnum != NULL) {
-            kwdCnt = uenum_count(kwdEnum, &tmpStatus);
+        icu::LocalUEnumerationPointer kwdEnum(uloc_openKeywords(canonical.data(), &tmpStatus));
+        if (U_SUCCESS(tmpStatus)) {
+            kwdCnt = uenum_count(kwdEnum.getAlias(), &tmpStatus);
             if (kwdCnt == 1) {
                 const char *key;
                 int32_t len = 0;
 
-                key = uenum_next(kwdEnum, &len, &tmpStatus);
+                key = uenum_next(kwdEnum.getAlias(), &len, &tmpStatus);
                 if (len == 1 && *key == PRIVATEUSE) {
                     char buf[ULOC_KEYWORD_AND_VALUES_CAPACITY];
                     buf[0] = PRIVATEUSE;
@@ -2594,7 +2606,6 @@ ulocimp_toLanguageTag(const char* localeID,
                     }
                 }
             }
-            uenum_close(kwdEnum);
             if (done) {
                 return;
             }
@@ -2645,20 +2656,19 @@ ulocimp_forLanguageTag(const char* langtag,
                        icu::ByteSink& sink,
                        int32_t* parsedLength,
                        UErrorCode* status) {
-    ULanguageTag *lt;
     UBool isEmpty = TRUE;
     const char *subtag, *p;
     int32_t len;
     int32_t i, n;
     UBool noRegion = TRUE;
 
-    lt = ultag_parse(langtag, tagLen, parsedLength, status);
+    icu::LocalULanguageTagPointer lt(ultag_parse(langtag, tagLen, parsedLength, status));
     if (U_FAILURE(*status)) {
         return;
     }
 
     /* language */
-    subtag = ultag_getExtlangSize(lt) > 0 ? ultag_getExtlang(lt, 0) : ultag_getLanguage(lt);
+    subtag = ultag_getExtlangSize(lt.getAlias()) > 0 ? ultag_getExtlang(lt.getAlias(), 0) : ultag_getLanguage(lt.getAlias());
     if (uprv_compareInvCharsAsAscii(subtag, LANG_UND) != 0) {
         len = (int32_t)uprv_strlen(subtag);
         if (len > 0) {
@@ -2668,7 +2678,7 @@ ulocimp_forLanguageTag(const char* langtag,
     }
 
     /* script */
-    subtag = ultag_getScript(lt);
+    subtag = ultag_getScript(lt.getAlias());
     len = (int32_t)uprv_strlen(subtag);
     if (len > 0) {
         sink.Append("_", 1);
@@ -2681,7 +2691,7 @@ ulocimp_forLanguageTag(const char* langtag,
     }
 
     /* region */
-    subtag = ultag_getRegion(lt);
+    subtag = ultag_getRegion(lt.getAlias());
     len = (int32_t)uprv_strlen(subtag);
     if (len > 0) {
         sink.Append("_", 1);
@@ -2698,7 +2708,7 @@ ulocimp_forLanguageTag(const char* langtag,
     }
 
     /* variants */
-    n = ultag_getVariantsSize(lt);
+    n = ultag_getVariantsSize(lt.getAlias());
     if (n > 0) {
         if (noRegion) {
             sink.Append("_", 1);
@@ -2706,7 +2716,7 @@ ulocimp_forLanguageTag(const char* langtag,
         }
 
         for (i = 0; i < n; i++) {
-            subtag = ultag_getVariant(lt, i);
+            subtag = ultag_getVariant(lt.getAlias(), i);
             sink.Append("_", 1);
 
             /* write out the variant in upper case */
@@ -2720,15 +2730,13 @@ ulocimp_forLanguageTag(const char* langtag,
     }
 
     /* keywords */
-    n = ultag_getExtensionsSize(lt);
-    subtag = ultag_getPrivateUse(lt);
+    n = ultag_getExtensionsSize(lt.getAlias());
+    subtag = ultag_getPrivateUse(lt.getAlias());
     if (n > 0 || uprv_strlen(subtag) > 0) {
         if (isEmpty && n > 0) {
             /* need a language */
             sink.Append(LANG_UND, LANG_UND_LEN);
         }
-        _appendKeywords(lt, sink, status);
+        _appendKeywords(lt.getAlias(), sink, status);
     }
-
-    ultag_close(lt);
 }
