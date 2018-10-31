@@ -49,7 +49,6 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
                               UErrorCode *pErrorCode)
 {
 /*    char localeBuffer[ULOC_FULLNAME_CAPACITY*4];*/
-    UResourceBundle table, subTable;
     const UChar *item=NULL;
     UErrorCode errorCode;
     char explicitFallbackName[ULOC_FULLNAME_CAPACITY] = {0};
@@ -60,10 +59,6 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
      */
     errorCode=U_ZERO_ERROR;
     icu::LocalUResourceBundlePointer rb(ures_open(path, locale, &errorCode));
-
-    // Automatically call ures_close() on these when they go out of scope.
-    icu::LocalUResourceBundlePointer tableCloser(&table);
-    icu::LocalUResourceBundlePointer subTableCloser(&subTable);
 
     if(U_FAILURE(errorCode)) {
         /* total failure, not even root could be opened */
@@ -77,24 +72,24 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
     }
 
     for(;;){
-        ures_initStackObject(&table);
-        ures_initStackObject(&subTable);
-        ures_getByKeyWithFallback(rb.getAlias(), tableKey, &table, &errorCode);
+        icu::StackUResourceBundle table;
+        icu::StackUResourceBundle subTable;
+        ures_getByKeyWithFallback(rb.getAlias(), tableKey, table.getAlias(), &errorCode);
 
         if (subTableKey != NULL) {
             /*
-            ures_getByKeyWithFallback(&table,subTableKey, &subTable, &errorCode);
-            item = ures_getStringByKeyWithFallback(&subTable, itemKey, pLength, &errorCode);
+            ures_getByKeyWithFallback(table.getAlias(), subTableKey, subTable.getAlias(), &errorCode);
+            item = ures_getStringByKeyWithFallback(subTable.getAlias(), itemKey, pLength, &errorCode);
             if(U_FAILURE(errorCode)){
                 *pErrorCode = errorCode;
             }
             
             break;*/
             
-            ures_getByKeyWithFallback(&table,subTableKey, &table, &errorCode);
+            ures_getByKeyWithFallback(table.getAlias(), subTableKey, table.getAlias(), &errorCode);
         }
         if(U_SUCCESS(errorCode)){
-            item = ures_getStringByKeyWithFallback(&table, itemKey, pLength, &errorCode);
+            item = ures_getStringByKeyWithFallback(table.getAlias(), itemKey, pLength, &errorCode);
             if(U_FAILURE(errorCode)){
                 const char* replacement = NULL;
                 *pErrorCode = errorCode; /*save the errorCode*/
@@ -107,7 +102,7 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
                 }
                 /*pointer comparison is ok since uloc_getCurrentCountryID & uloc_getCurrentLanguageID return the key itself is replacement is not found*/
                 if(replacement!=NULL && itemKey != replacement){
-                    item = ures_getStringByKeyWithFallback(&table, replacement, pLength, &errorCode);
+                    item = ures_getStringByKeyWithFallback(table.getAlias(), replacement, pLength, &errorCode);
                     if(U_SUCCESS(errorCode)){
                         *pErrorCode = errorCode;
                         break;
@@ -126,7 +121,7 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
             *pErrorCode = errorCode;
             errorCode = U_ZERO_ERROR;
 
-            fallbackLocale = ures_getStringByKeyWithFallback(&table, "Fallback", &len, &errorCode);
+            fallbackLocale = ures_getStringByKeyWithFallback(table.getAlias(), "Fallback", &len, &errorCode);
             if(U_FAILURE(errorCode)){
                *pErrorCode = errorCode;
                 break;

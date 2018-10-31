@@ -125,7 +125,6 @@ static UBool U_CALLCONV uloc_cleanup(void) {
 //   via the initOnce mechanism.
 
 static void U_CALLCONV loadInstalledLocales() {
-    UResourceBundle installed;
     UErrorCode status = U_ZERO_ERROR;
     int32_t i = 0;
     int32_t localeCount;
@@ -134,22 +133,19 @@ static void U_CALLCONV loadInstalledLocales() {
     U_ASSERT(_installedLocalesCount == 0);
 
     _installedLocalesCount = 0;
-    ures_initStackObject(&installed);
 
     icu::LocalUResourceBundlePointer indexLocale(ures_openDirect(NULL, _kIndexLocaleName, &status));
+    icu::StackUResourceBundle installed;
 
-    // Automatically call ures_close() on this when it goes out of scope.
-    icu::LocalUResourceBundlePointer installedCloser(&installed);
-
-    ures_getByKey(indexLocale.getAlias(), _kIndexTag, &installed, &status);
+    ures_getByKey(indexLocale.getAlias(), _kIndexTag, installed.getAlias(), &status);
 
     if(U_SUCCESS(status)) {
-        localeCount = ures_getSize(&installed);
+        localeCount = ures_getSize(installed.getAlias());
         _installedLocales = (char **) uprv_malloc(sizeof(char*) * (localeCount+1));
         if (_installedLocales != NULL) {
-            ures_resetIterator(&installed);
-            while(ures_hasNext(&installed)) {
-                ures_getNextString(&installed, NULL, (const char **)&_installedLocales[i++], &status);
+            ures_resetIterator(installed.getAlias());
+            while(ures_hasNext(installed.getAlias())) {
+                ures_getNextString(installed.getAlias(), NULL, (const char **)&_installedLocales[i++], &status);
             }
             _installedLocales[i] = NULL;
             _installedLocalesCount = localeCount;
