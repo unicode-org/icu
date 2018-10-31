@@ -36,11 +36,12 @@ static UMutex   globalMutex = U_MUTEX_INITIALIZER;
  */
 
 #if defined(U_USER_MUTEX_CPP)
-// Build time user mutex hook: #include "U_USER_MUTEX_CPP"
-#include U_MUTEX_XSTR(U_USER_MUTEX_CPP)
+// Support for including an alternate implementation of mutexes has been withdrawn.
+// See issue ICU-20185.
+#error U_USER_MUTEX_CPP not supported
+#endif
 
-
-#elif U_HAVE_STD_MUTEX
+#if U_HAVE_STD_MUTEX
 
 // C++11 std::mutex based implementation of ICU mutex wrappers.
 //
