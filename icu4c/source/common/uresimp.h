@@ -11,6 +11,7 @@
 #define URESIMP_H
 
 #include "unicode/ures.h"
+#include "unicode/utypes.h"
 
 #include "uresdata.h"
 
@@ -81,6 +82,57 @@ struct UResourceBundle {
 };
 
 U_CAPI void U_EXPORT2 ures_initStackObject(UResourceBundle* resB);
+
+#ifdef __cplusplus
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class StackUResourceBundle
+ * "Smart pointer" like class, closes a UResourceBundle via ures_close().
+ *
+ * This code:
+ *
+ *   StackUResourceBundle bundle;
+ *   foo(bundle.getAlias());
+ *
+ * Is equivalent to this code:
+ *
+ *   UResourceBundle bundle;
+ *   ures_initStackObject(&bundle);
+ *   foo(&bundle);
+ *   ures_close(&bundle);
+ *
+ * @see LocalUResourceBundlePointer
+ * @internal
+ */
+class StackUResourceBundle {
+public:
+    StackUResourceBundle();
+    ~StackUResourceBundle();
+
+    UResourceBundle* getAlias() { return &bundle; }
+
+    StackUResourceBundle(const StackUResourceBundle&) = delete;
+    StackUResourceBundle& operator=(const StackUResourceBundle&) = delete;
+
+    StackUResourceBundle(StackUResourceBundle&&) = delete;
+    StackUResourceBundle& operator=(StackUResourceBundle&&) = delete;
+
+private:
+    UResourceBundle bundle;
+
+    // No heap allocation. Use only on the stack.
+    static void* U_EXPORT2 operator new(size_t);
+    static void* U_EXPORT2 operator new[](size_t);
+#if U_HAVE_PLACEMENT_NEW
+    static void* U_EXPORT2 operator new(size_t, void*);
+#endif
+};
+
+U_NAMESPACE_END
+
+#endif  /* __cplusplus */
 
 /**
  * Opens a resource bundle for the locale;

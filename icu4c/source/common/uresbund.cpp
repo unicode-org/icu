@@ -21,6 +21,7 @@
 ******************************************************************************
 */
 
+#include "unicode/ures.h"
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
 #include "charstr.h"
@@ -511,6 +512,18 @@ U_CFUNC void ures_initStackObject(UResourceBundle* resB) {
   uprv_memset(resB, 0, sizeof(UResourceBundle));
   ures_setIsStackObject(resB, TRUE);
 }
+
+U_NAMESPACE_BEGIN
+
+StackUResourceBundle::StackUResourceBundle() {
+    ures_initStackObject(&bundle);
+}
+
+StackUResourceBundle::~StackUResourceBundle() {
+    ures_close(&bundle);
+}
+
+U_NAMESPACE_END
 
 static UBool  // returns U_SUCCESS(*status)
 loadParentsExceptRoot(UResourceDataEntry *&t1,
