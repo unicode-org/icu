@@ -36,13 +36,8 @@ typedef enum {
 typedef struct LocExtKeyData {
     const char*     legacyId;
     const char*     bcpId;
-    UHashtable*     typeMap;
+    icu::LocalUHashtablePointer typeMap;
     uint32_t        specialTypes;
-    ~LocExtKeyData() {
-        if (typeMap != NULL) {
-            uhash_close(typeMap);
-        }
-    }
 } LocExtKeyData;
 
 typedef struct LocExtType {
@@ -340,7 +335,7 @@ initFromResourceBundle(UErrorCode& sts) {
         keyData->bcpId = bcpKeyId;
         keyData->legacyId = legacyKeyId;
         keyData->specialTypes = specialTypes;
-        keyData->typeMap = typeDataMap;
+        keyData->typeMap.adoptInstead(typeDataMap);
 
         uhash_put(gLocExtKeyMap, (void*)legacyKeyId, keyData, &sts);
         if (legacyKeyId != bcpKeyId) {
@@ -465,7 +460,7 @@ ulocimp_toBcpType(const char* key, const char* type, UBool* isKnownKey, UBool* i
         if (isKnownKey != NULL) {
             *isKnownKey = TRUE;
         }
-        LocExtType* t = (LocExtType*)uhash_get(keyData->typeMap, type);
+        LocExtType* t = (LocExtType*)uhash_get(keyData->typeMap.getAlias(), type);
         if (t != NULL) {
             return t->bcpId;
         }
@@ -510,7 +505,7 @@ ulocimp_toLegacyType(const char* key, const char* type, UBool* isKnownKey, UBool
         if (isKnownKey != NULL) {
             *isKnownKey = TRUE;
         }
-        LocExtType* t = (LocExtType*)uhash_get(keyData->typeMap, type);
+        LocExtType* t = (LocExtType*)uhash_get(keyData->typeMap.getAlias(), type);
         if (t != NULL) {
             return t->legacyId;
         }

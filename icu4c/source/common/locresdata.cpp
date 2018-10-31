@@ -49,7 +49,7 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
                               UErrorCode *pErrorCode)
 {
 /*    char localeBuffer[ULOC_FULLNAME_CAPACITY*4];*/
-    UResourceBundle *rb=NULL, table, subTable;
+    UResourceBundle table, subTable;
     const UChar *item=NULL;
     UErrorCode errorCode;
     char explicitFallbackName[ULOC_FULLNAME_CAPACITY] = {0};
@@ -59,7 +59,11 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
      * this falls back through the locale's chain to root
      */
     errorCode=U_ZERO_ERROR;
-    rb=ures_open(path, locale, &errorCode);
+    icu::LocalUResourceBundlePointer rb(ures_open(path, locale, &errorCode));
+
+    // Automatically call ures_close() on these when they go out of scope.
+    icu::LocalUResourceBundlePointer tableCloser(&table);
+    icu::LocalUResourceBundlePointer subTableCloser(&subTable);
 
     if(U_FAILURE(errorCode)) {
         /* total failure, not even root could be opened */
@@ -75,7 +79,7 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
     for(;;){
         ures_initStackObject(&table);
         ures_initStackObject(&subTable);
-        ures_getByKeyWithFallback(rb, tableKey, &table, &errorCode);
+        ures_getByKeyWithFallback(rb.getAlias(), tableKey, &table, &errorCode);
 
         if (subTableKey != NULL) {
             /*
@@ -135,8 +139,7 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
                 *pErrorCode = U_INTERNAL_PROGRAM_ERROR;
                 break;
             }
-            ures_close(rb);
-            rb = ures_open(path, explicitFallbackName, &errorCode);
+            rb.adoptInstead(ures_open(path, explicitFallbackName, &errorCode));
             if(U_FAILURE(errorCode)){
                 *pErrorCode = errorCode;
                 break;
@@ -146,10 +149,7 @@ uloc_getTableStringWithFallback(const char *path, const char *locale,
             break;
         }
     }
-    /* done with the locale string - ready to close table and rb */
-    ures_close(&subTable);
-    ures_close(&table);
-    ures_close(rb);
+
     return item;
 }
 
