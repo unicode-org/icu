@@ -35,24 +35,19 @@ U_NAMESPACE_BEGIN
 struct UInitOnce;
 U_NAMESPACE_END
 
-// Stringify macros, to allow #include of user supplied atomic & mutex files.
-#define U_MUTEX_STR(s) #s
-#define U_MUTEX_XSTR(s) U_MUTEX_STR(s)
-
 /****************************************************************************
  *
  *   Low Level Atomic Operations.
  *      Compiler dependent. Not operating system dependent.
  *
  ****************************************************************************/
-#if defined (U_USER_ATOMICS_H)
-#include U_MUTEX_XSTR(U_USER_ATOMICS_H)
+#if defined(U_USER_ATOMICS_H)
+// Support for including an alternate implementation of atomic operations has been withdrawn.
+// See issue ICU-20185.
+#error U_USER_ATOMICS not supported
+#endif
 
-// TODO: There is direct use of std::atomic<type *> from number__mapper, numberrangeformatter
-//       Either add ICU abstraction, or deprecate U_USER_ATOMICS_H.
-//       See Jira issu ICU-20185.
-
-#elif U_HAVE_STD_ATOMICS
+#if U_HAVE_STD_ATOMICS
 
 //  C++11 atomics are available.
 
@@ -336,10 +331,12 @@ U_NAMESPACE_END
  *************************************************************************************************/
 
 #if defined(U_USER_MUTEX_H)
-// #include "U_USER_MUTEX_H"
-#include U_MUTEX_XSTR(U_USER_MUTEX_H)
+// Support for including an alternate implementation of mutexes has been withdrawn.
+// See issue ICU-20185.
+#error U_USER_MUTEX_H not supported
+#endif
 
-#elif U_HAVE_STD_MUTEX
+#if U_HAVE_STD_MUTEX
 
 #include <mutex>
 #include <condition_variable>
