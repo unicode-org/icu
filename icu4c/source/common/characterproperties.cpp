@@ -45,7 +45,7 @@ UnicodeSet *sets[UCHAR_BINARY_LIMIT] = {};
 
 UCPMap *maps[UCHAR_INT_LIMIT - UCHAR_INT_START] = {};
 
-UMutex cpMutex = U_MUTEX_INITIALIZER;
+icu::UMutex cpMutex = U_MUTEX_INITIALIZER;
 
 //----------------------------------------------------------------
 // Inclusions list

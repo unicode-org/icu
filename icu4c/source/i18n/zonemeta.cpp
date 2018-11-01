@@ -30,7 +30,7 @@
 #include "olsontz.h"
 #include "uinvchar.h"
 
-static UMutex gZoneMetaLock = U_MUTEX_INITIALIZER;
+static icu::UMutex gZoneMetaLock = U_MUTEX_INITIALIZER;
 
 // CLDR Canonical ID mapping table
 static UHashtable *gCanonicalIDCache = NULL;

@@ -44,7 +44,7 @@
 
 // Copied from uscript_props.cpp
 
-static UMutex gBrkIterMutex = U_MUTEX_INITIALIZER;
+static icu::UMutex gBrkIterMutex = U_MUTEX_INITIALIZER;
 
 U_NAMESPACE_BEGIN
 
