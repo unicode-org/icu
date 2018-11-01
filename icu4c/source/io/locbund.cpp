@@ -45,7 +45,7 @@ static UBool U_CALLCONV locbund_cleanup(void) {
 }
 U_CDECL_END
 
-static UMutex gLock = U_MUTEX_INITIALIZER;
+static icu::UMutex gLock = U_MUTEX_INITIALIZER;
 static inline UNumberFormat * copyInvariantFormatter(ULocaleBundle *result, UNumberFormatStyle style) {
     U_NAMESPACE_USE
     Mutex lock(&gLock);
