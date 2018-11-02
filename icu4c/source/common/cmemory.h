@@ -32,6 +32,10 @@
 #include <string.h>
 #include "unicode/localpointer.h"
 
+#ifdef __cplusplus
+#include "unicode/uobject.h"
+#endif
+
 #if U_DEBUG && defined(UPRV_MALLOC_COUNT)
 #include <stdio.h>
 #endif
@@ -701,7 +705,7 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::orphanOrClone(int32_t l
  * It doesn't do anything more than that, and is intentionally kept minimalist.
  */
 template<typename T>
-class MemoryPool {
+class MemoryPool : public UMemory {
     enum { STACK_CAPACITY = 8 };
 public:
     MemoryPool() : count(0), pool() {}

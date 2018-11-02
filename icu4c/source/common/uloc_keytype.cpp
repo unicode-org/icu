@@ -10,6 +10,7 @@
 
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
+#include "unicode/uobject.h"
 
 #include "charstr.h"
 #include "cmemory.h"
@@ -33,17 +34,17 @@ typedef enum {
     SPECIALTYPE_RG_KEY_VALUE = 4
 } SpecialType;
 
-typedef struct LocExtKeyData {
+struct LocExtKeyData : public icu::UMemory {
     const char*     legacyId;
     const char*     bcpId;
     icu::LocalUHashtablePointer typeMap;
     uint32_t        specialTypes;
-} LocExtKeyData;
+};
 
-typedef struct LocExtType {
+struct LocExtType : public icu::UMemory {
     const char*     legacyId;
     const char*     bcpId;
-} LocExtType;
+};
 
 static icu::MemoryPool<icu::CharString>* gKeyTypeStringPool = NULL;
 static icu::MemoryPool<LocExtKeyData>* gLocExtKeyDataEntries = NULL;
