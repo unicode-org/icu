@@ -1909,7 +1909,6 @@ _appendPrivateuseToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool 
 
 static ULanguageTag*
 ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* status) {
-    ULanguageTag *t;
     char *tagBuf;
     int16_t next;
     char *pSubtag, *pNext, *pLastGoodPosition;
@@ -1943,18 +1942,19 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     *(tagBuf + tagLen) = 0;
 
     /* create a ULanguageTag */
-    t = (ULanguageTag*)uprv_malloc(sizeof(ULanguageTag));
-    if (t == NULL) {
+    icu::LocalULanguageTagPointer t(
+            (ULanguageTag*)uprv_malloc(sizeof(ULanguageTag)));
+    if (t.isNull()) {
         uprv_free(tagBuf);
         *status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    _initializeULanguageTag(t);
+    _initializeULanguageTag(t.getAlias());
     t->buf = tagBuf;
 
     if (tagLen < MINLEN) {
         /* the input tag is too short - return empty ULanguageTag */
-        return t;
+        return t.orphan();
     }
 
     /* check if the tag is grandfathered */
@@ -1969,7 +1969,6 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                 tagBuf = (char*)uprv_malloc(newTagLength + 1);
                 if (tagBuf == NULL) {
                     *status = U_MEMORY_ALLOCATION_ERROR;
-                    ultag_close(t);
                     return NULL;
                 }
                 t->buf = tagBuf;
@@ -2115,7 +2114,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                 var = (VariantListEntry*)uprv_malloc(sizeof(VariantListEntry));
                 if (var == NULL) {
                     *status = U_MEMORY_ALLOCATION_ERROR;
-                    goto error;
+                    return NULL;
                 }
                 *pSep = 0;
                 var->variant = T_CString_toUpperCase(pSubtag);
@@ -2159,7 +2158,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                 pExtension = (ExtensionListEntry*)uprv_malloc(sizeof(ExtensionListEntry));
                 if (pExtension == NULL) {
                     *status = U_MEMORY_ALLOCATION_ERROR;
-                    goto error;
+                    return NULL;
                 }
                 *pSep = 0;
                 pExtension->key = T_CString_toLowerCase(pSubtag);
@@ -2299,11 +2298,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
             (int32_t)(pLastGoodPosition - t->buf + parsedLenDelta);
     }
 
-    return t;
-
-error:
-    ultag_close(t);
-    return NULL;
+    return t.orphan();
 }
 
 /**
