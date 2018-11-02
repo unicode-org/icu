@@ -31,17 +31,17 @@ typedef struct VariantListEntry {
 } VariantListEntry;
 
 /* struct holding a single attribute value */
-typedef struct AttributeListEntry {
+struct AttributeListEntry : public icu::UMemory {
     const char              *attribute;
     struct AttributeListEntry *next;
-} AttributeListEntry;
+};
 
 /* struct holding a single extension */
-typedef struct ExtensionListEntry {
+struct ExtensionListEntry : public icu::UMemory {
     const char                  *key;
     const char                  *value;
     struct ExtensionListEntry   *next;
-} ExtensionListEntry;
+};
 
 #define MAXEXTLANG 3
 typedef struct ULanguageTag {
@@ -1066,6 +1066,10 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
     char attrBuf[ULOC_KEYWORD_AND_VALUES_CAPACITY] = { 0 };
     int32_t attrBufLength = 0;
 
+    icu::MemoryPool<AttributeListEntry> attrPool;
+    icu::MemoryPool<ExtensionListEntry> extPool;
+    icu::MemoryPool<icu::CharString> strPool;
+
     icu::LocalUEnumerationPointer keywordEnum(uloc_openKeywords(localeID, status));
     if (U_FAILURE(*status) && !hadPosix) {
         return;
@@ -1078,7 +1082,6 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
         ExtensionListEntry *ext;
         AttributeListEntry *firstAttr = NULL;
         AttributeListEntry *attr;
-        char *attrValue;
         icu::MemoryPool<icu::CharString> extBufPool;
         const char *bcpKey=nullptr, *bcpValue=nullptr;
         UErrorCode tmpStatus = U_ZERO_ERROR;
@@ -1160,22 +1163,23 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                         }
 
                         /* create AttributeListEntry */
-                        attr = (AttributeListEntry*)uprv_malloc(sizeof(AttributeListEntry));
+                        attr = attrPool.create();
                         if (attr == NULL) {
                             *status = U_MEMORY_ALLOCATION_ERROR;
                             break;
                         }
-                        attrValue = (char*)uprv_malloc(attrBufLength + 1);
+                        icu::CharString* attrValue =
+                                strPool.create(attrBuf, attrBufLength, *status);
                         if (attrValue == NULL) {
                             *status = U_MEMORY_ALLOCATION_ERROR;
                             break;
                         }
-                        uprv_strcpy(attrValue, attrBuf);
-                        attr->attribute = attrValue;
+                        if (U_FAILURE(*status)) {
+                            break;
+                        }
+                        attr->attribute = attrValue->data();
 
                         if (!_addAttributeToList(&firstAttr, attr)) {
-                            uprv_free(attr);
-                            uprv_free(attrValue);
                             if (strict) {
                                 *status = U_ILLEGAL_ARGUMENT_ERROR;
                                 break;
@@ -1273,7 +1277,7 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
             }
 
             /* create ExtensionListEntry */
-            ext = (ExtensionListEntry*)uprv_malloc(sizeof(ExtensionListEntry));
+            ext = extPool.create();
             if (ext == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 break;
@@ -1282,7 +1286,6 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
             ext->value = bcpValue;
 
             if (!_addExtensionToList(&firstExt, ext, TRUE)) {
-                uprv_free(ext);
                 if (strict) {
                     *status = U_ILLEGAL_ARGUMENT_ERROR;
                     break;
@@ -1293,16 +1296,16 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
         /* Special handling for POSIX variant - add the keywords for POSIX */
         if (hadPosix) {
             /* create ExtensionListEntry for POSIX */
-            ext = (ExtensionListEntry*)uprv_malloc(sizeof(ExtensionListEntry));
+            ext = extPool.create();
             if (ext == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
-                goto cleanup;
+                return;
             }
             ext->key = POSIX_KEY;
             ext->value = POSIX_VALUE;
 
             if (!_addExtensionToList(&firstExt, ext, TRUE)) {
-                uprv_free(ext);
+                // Silently ignore errors.
             }
         }
 
@@ -1331,27 +1334,6 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                 }
             }
         }
-cleanup:
-        /* clean up */
-        ext = firstExt;
-        while (ext != NULL) {
-            ExtensionListEntry *tmpExt = ext->next;
-            uprv_free(ext);
-            ext = tmpExt;
-        }
-
-        attr = firstAttr;
-        while (attr != NULL) {
-            AttributeListEntry *tmpAttr = attr->next;
-            char *pValue = (char *)attr->attribute;
-            uprv_free(pValue);
-            uprv_free(attr);
-            attr = tmpAttr;
-        }
-
-        if (U_FAILURE(*status)) {
-            return;
-        }
     }
 }
 
@@ -1361,7 +1343,7 @@ cleanup:
  * Note: char* buf is used for storing keywords
  */
 static void
-_appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendTo, icu::MemoryPool<icu::CharString>& kwdBuf, UBool *posixVariant, UErrorCode *status) {
+_appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendTo, icu::MemoryPool<ExtensionListEntry>& extPool, icu::MemoryPool<icu::CharString>& kwdBuf, UBool *posixVariant, UErrorCode *status) {
     const char *pTag;   /* beginning of current subtag */
     const char *pKwds;  /* beginning of key-type pairs */
     UBool variantExists = *posixVariant;
@@ -1369,13 +1351,7 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
     ExtensionListEntry *kwdFirst = NULL;    /* first LDML keyword */
     ExtensionListEntry *kwd, *nextKwd;
 
-    AttributeListEntry *attrFirst = NULL;   /* first attribute */
-    AttributeListEntry *attr, *nextAttr;
-
     int32_t len;
-
-    char attrBuf[ULOC_KEYWORD_AND_VALUES_CAPACITY];
-    int32_t attrBufIdx = 0;
 
     /* Reset the posixVariant value */
     *posixVariant = FALSE;
@@ -1383,94 +1359,92 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
     pTag = ldmlext;
     pKwds = NULL;
 
-    /* Iterate through u extension attributes */
-    while (*pTag) {
-        /* locate next separator char */
-        for (len = 0; *(pTag + len) && *(pTag + len) != SEP; len++);
+    {
+        AttributeListEntry *attrFirst = NULL;   /* first attribute */
+        AttributeListEntry *attr, *nextAttr;
 
-        if (ultag_isUnicodeLocaleKey(pTag, len)) {
-            pKwds = pTag;
-            break;
-        }
+        char attrBuf[ULOC_KEYWORD_AND_VALUES_CAPACITY];
+        int32_t attrBufIdx = 0;
 
-        /* add this attribute to the list */
-        attr = (AttributeListEntry*)uprv_malloc(sizeof(AttributeListEntry));
-        if (attr == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            goto cleanup;
-        }
+        icu::MemoryPool<AttributeListEntry> attrPool;
 
-        if (len < (int32_t)sizeof(attrBuf) - attrBufIdx) {
-            uprv_memcpy(&attrBuf[attrBufIdx], pTag, len);
-            attrBuf[attrBufIdx + len] = 0;
-            attr->attribute = &attrBuf[attrBufIdx];
-            attrBufIdx += (len + 1);
-        } else {
-            *status = U_ILLEGAL_ARGUMENT_ERROR;
-            uprv_free(attr);
-            goto cleanup;
-        }
+        /* Iterate through u extension attributes */
+        while (*pTag) {
+            /* locate next separator char */
+            for (len = 0; *(pTag + len) && *(pTag + len) != SEP; len++);
 
-        if (!_addAttributeToList(&attrFirst, attr)) {
-            *status = U_ILLEGAL_ARGUMENT_ERROR;
-            uprv_free(attr);
-            goto cleanup;
-        }
-
-        /* next tag */
-        pTag += len;
-        if (*pTag) {
-            /* next to the separator */
-            pTag++;
-        }
-    }
-
-    if (attrFirst) {
-        /* emit attributes as an LDML keyword, e.g. attribute=attr1-attr2 */
-
-        kwd = (ExtensionListEntry*)uprv_malloc(sizeof(ExtensionListEntry));
-        if (kwd == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            goto cleanup;
-        }
-
-        icu::CharString* value = kwdBuf.create();
-        if (value == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            goto cleanup;
-        }
-
-        /* attribute subtags sorted in alphabetical order as type */
-        attr = attrFirst;
-        while (attr != NULL) {
-            nextAttr = attr->next;
-            if (attr != attrFirst) {
-                value->append('-', *status);
+            if (ultag_isUnicodeLocaleKey(pTag, len)) {
+                pKwds = pTag;
+                break;
             }
-            value->append(attr->attribute, *status);
-            attr = nextAttr;
-        }
-        if (U_FAILURE(*status)) {
-            goto cleanup;
+
+            /* add this attribute to the list */
+            attr = attrPool.create();
+            if (attr == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+
+            if (len < (int32_t)sizeof(attrBuf) - attrBufIdx) {
+                uprv_memcpy(&attrBuf[attrBufIdx], pTag, len);
+                attrBuf[attrBufIdx + len] = 0;
+                attr->attribute = &attrBuf[attrBufIdx];
+                attrBufIdx += (len + 1);
+            } else {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+
+            if (!_addAttributeToList(&attrFirst, attr)) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
+
+            /* next tag */
+            pTag += len;
+            if (*pTag) {
+                /* next to the separator */
+                pTag++;
+            }
         }
 
-        kwd->key = LOCALE_ATTRIBUTE_KEY;
-        kwd->value = value->data();
+        if (attrFirst) {
+            /* emit attributes as an LDML keyword, e.g. attribute=attr1-attr2 */
 
-        if (!_addExtensionToList(&kwdFirst, kwd, FALSE)) {
-            *status = U_ILLEGAL_ARGUMENT_ERROR;
-            uprv_free(kwd);
-            goto cleanup;
-        }
+            kwd = extPool.create();
+            if (kwd == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
 
-        /* once keyword entry is created, delete the attribute list */
-        attr = attrFirst;
-        while (attr != NULL) {
-            nextAttr = attr->next;
-            uprv_free(attr);
-            attr = nextAttr;
+            icu::CharString* value = kwdBuf.create();
+            if (value == NULL) {
+                *status = U_MEMORY_ALLOCATION_ERROR;
+                return;
+            }
+
+            /* attribute subtags sorted in alphabetical order as type */
+            attr = attrFirst;
+            while (attr != NULL) {
+                nextAttr = attr->next;
+                if (attr != attrFirst) {
+                    value->append('-', *status);
+                }
+                value->append(attr->attribute, *status);
+                attr = nextAttr;
+            }
+            if (U_FAILURE(*status)) {
+                return;
+            }
+
+            kwd->key = LOCALE_ATTRIBUTE_KEY;
+            kwd->value = value->data();
+
+            if (!_addExtensionToList(&kwdFirst, kwd, FALSE)) {
+                *status = U_ILLEGAL_ARGUMENT_ERROR;
+                return;
+            }
         }
-        attrFirst = NULL;
     }
 
     if (pKwds) {
@@ -1534,7 +1508,7 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                 if (bcpKeyLen >= (int32_t)sizeof(bcpKeyBuf)) {
                     /* the BCP key is invalid */
                     *status = U_ILLEGAL_ARGUMENT_ERROR;
-                    goto cleanup;
+                    return;
                 }
 
                 uprv_strncpy(bcpKeyBuf, pBcpKey, bcpKeyLen);
@@ -1544,7 +1518,7 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                 pKey = uloc_toLegacyKey(bcpKeyBuf);
                 if (pKey == NULL) {
                     *status = U_ILLEGAL_ARGUMENT_ERROR;
-                    goto cleanup;
+                    return;
                 }
                 if (pKey == bcpKeyBuf) {
                     /*
@@ -1555,10 +1529,10 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                     icu::CharString* key = kwdBuf.create(bcpKeyBuf, bcpKeyLen, *status);
                     if (key == NULL) {
                         *status = U_MEMORY_ALLOCATION_ERROR;
-                        goto cleanup;
+                        return;
                     }
                     if (U_FAILURE(*status)) {
-                        goto cleanup;
+                        return;
                     }
                     pKey = key->data();
                 }
@@ -1568,7 +1542,7 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                     if (bcpTypeLen >= (int32_t)sizeof(bcpTypeBuf)) {
                         /* the BCP type is too long */
                         *status = U_ILLEGAL_ARGUMENT_ERROR;
-                        goto cleanup;
+                        return;
                     }
 
                     uprv_strncpy(bcpTypeBuf, pBcpType, bcpTypeLen);
@@ -1578,7 +1552,7 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                     pType = uloc_toLegacyType(pKey, bcpTypeBuf);
                     if (pType == NULL) {
                         *status = U_ILLEGAL_ARGUMENT_ERROR;
-                        goto cleanup;
+                        return;
                     }
                     if (pType == bcpTypeBuf) {
                         /*
@@ -1590,10 +1564,10 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                         icu::CharString* type = kwdBuf.create(bcpTypeBuf, bcpTypeLen, *status);
                         if (type == NULL) {
                             *status = U_MEMORY_ALLOCATION_ERROR;
-                            goto cleanup;
+                            return;
                         }
                         if (U_FAILURE(*status)) {
-                            goto cleanup;
+                            return;
                         }
                         pType = type->data();
                     }
@@ -1608,10 +1582,10 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                     *posixVariant = TRUE;
                 } else {
                     /* create an ExtensionListEntry for this keyword */
-                    kwd = (ExtensionListEntry*)uprv_malloc(sizeof(ExtensionListEntry));
+                    kwd = extPool.create();
                     if (kwd == NULL) {
                         *status = U_MEMORY_ALLOCATION_ERROR;
-                        goto cleanup;
+                        return;
                     }
 
                     kwd->key = pKey;
@@ -1620,7 +1594,6 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
                     if (!_addExtensionToList(&kwdFirst, kwd, FALSE)) {
                         // duplicate keyword is allowed, Only the first
                         // is honored.
-                        uprv_free(kwd);
                     }
                 }
 
@@ -1638,23 +1611,6 @@ _appendLDMLExtensionAsKeywords(const char* ldmlext, ExtensionListEntry** appendT
         _addExtensionToList(appendTo, kwd, FALSE);
         kwd = nextKwd;
     }
-
-    return;
-
-cleanup:
-    attr = attrFirst;
-    while (attr != NULL) {
-        nextAttr = attr->next;
-        uprv_free(attr);
-        attr = nextAttr;
-    }
-
-    kwd = kwdFirst;
-    while (kwd != NULL) {
-        nextKwd = kwd->next;
-        uprv_free(kwd);
-        kwd = nextKwd;
-    }
 }
 
 
@@ -1665,6 +1621,7 @@ _appendKeywords(ULanguageTag* langtag, icu::ByteSink& sink, UErrorCode* status) 
     ExtensionListEntry *kwdFirst = NULL;
     ExtensionListEntry *kwd;
     const char *key, *type;
+    icu::MemoryPool<ExtensionListEntry> extPool;
     icu::MemoryPool<icu::CharString> kwdBuf;
     UBool posixVariant = FALSE;
 
@@ -1684,12 +1641,12 @@ _appendKeywords(ULanguageTag* langtag, icu::ByteSink& sink, UErrorCode* status) 
         key = ultag_getExtensionKey(langtag, i);
         type = ultag_getExtensionValue(langtag, i);
         if (*key == LDMLEXT) {
-            _appendLDMLExtensionAsKeywords(type, &kwdFirst, kwdBuf, &posixVariant, status);
+            _appendLDMLExtensionAsKeywords(type, &kwdFirst, extPool, kwdBuf, &posixVariant, status);
             if (U_FAILURE(*status)) {
                 break;
             }
         } else {
-            kwd = (ExtensionListEntry*)uprv_malloc(sizeof(ExtensionListEntry));
+            kwd = extPool.create();
             if (kwd == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
                 break;
@@ -1697,7 +1654,6 @@ _appendKeywords(ULanguageTag* langtag, icu::ByteSink& sink, UErrorCode* status) 
             kwd->key = key;
             kwd->value = type;
             if (!_addExtensionToList(&kwdFirst, kwd, FALSE)) {
-                uprv_free(kwd);
                 *status = U_ILLEGAL_ARGUMENT_ERROR;
                 break;
             }
@@ -1708,14 +1664,13 @@ _appendKeywords(ULanguageTag* langtag, icu::ByteSink& sink, UErrorCode* status) 
         type = ultag_getPrivateUse(langtag);
         if ((int32_t)uprv_strlen(type) > 0) {
             /* add private use as a keyword */
-            kwd = (ExtensionListEntry*)uprv_malloc(sizeof(ExtensionListEntry));
+            kwd = extPool.create();
             if (kwd == NULL) {
                 *status = U_MEMORY_ALLOCATION_ERROR;
             } else {
                 kwd->key = PRIVATEUSE_KEY;
                 kwd->value = type;
                 if (!_addExtensionToList(&kwdFirst, kwd, FALSE)) {
-                    uprv_free(kwd);
                     *status = U_ILLEGAL_ARGUMENT_ERROR;
                 }
             }
@@ -1752,18 +1707,6 @@ _appendKeywords(ULanguageTag* langtag, icu::ByteSink& sink, UErrorCode* status) 
 
             kwd = kwd->next;
         } while (kwd);
-    }
-
-    /* clean up */
-    kwd = kwdFirst;
-    while (kwd != NULL) {
-        ExtensionListEntry *tmpKwd = kwd->next;
-        uprv_free(kwd);
-        kwd = tmpKwd;
-    }
-
-    if (U_FAILURE(*status)) {
-        return;
     }
 }
 
