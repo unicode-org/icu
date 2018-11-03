@@ -715,7 +715,18 @@ class U_I18N_API Precision : public UMemory {
         RND_FRACTION,
         RND_SIGNIFICANT,
         RND_FRACTION_SIGNIFICANT,
+
+        // Used for strange increments like 3.14.
         RND_INCREMENT,
+
+        // Used for increments with 1 as the only digit. This is different than fraction
+        // rounding because it supports having additional trailing zeros. For example, this
+        // class is used to round with the increment 0.010.
+        RND_INCREMENT_ONE,
+
+        // Used for increments with 5 as the only digit (nickel rounding).
+        RND_INCREMENT_FIVE,
+
         RND_CURRENCY,
         RND_ERROR
     } fType;
@@ -735,13 +746,14 @@ class U_I18N_API Precision : public UMemory {
         } fracSig;
         /** @internal */
         struct IncrementSettings {
+            // For RND_INCREMENT, RND_INCREMENT_ONE, and RND_INCREMENT_FIVE
             /** @internal */
             double fIncrement;
             /** @internal */
             impl::digits_t fMinFrac;
             /** @internal */
             impl::digits_t fMaxFrac;
-        } increment; // For RND_INCREMENT
+        } increment;
         UCurrencyUsage currencyUsage; // For RND_CURRENCY
         UErrorCode errorCode; // For RND_ERROR
     } fUnion;

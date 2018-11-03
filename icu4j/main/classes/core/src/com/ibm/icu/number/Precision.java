@@ -3,6 +3,7 @@
 package com.ibm.icu.number;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
@@ -445,7 +446,7 @@ public abstract class Precision implements Cloneable {
 
     static final FracSigRounderImpl COMPACT_STRATEGY = new FracSigRounderImpl(0, 0, 2, -1);
 
-    static final IncrementRounderImpl NICKEL = new IncrementRounderImpl(BigDecimal.valueOf(0.05));
+    static final IncrementFiveRounderImpl NICKEL = new IncrementFiveRounderImpl(new BigDecimal("0.05"), 2, 2);
 
     static final CurrencyRounderImpl MONETARY_STANDARD = new CurrencyRounderImpl(CurrencyUsage.STANDARD);
     static final CurrencyRounderImpl MONETARY_CASH = new CurrencyRounderImpl(CurrencyUsage.CASH);
@@ -495,9 +496,22 @@ public abstract class Precision implements Cloneable {
         // NOTE: .equals() is what we want, not .compareTo()
         if (increment.equals(NICKEL.increment)) {
             return NICKEL;
-        } else {
-            return new IncrementRounderImpl(increment);
         }
+        // Note: For number formatting, the BigDecimal increment is used for IncrementRounderImpl
+        // but not mIncrementOneRounderImpl or IncrementFiveRounderImpl. However, fIncrement is
+        // used in all three when constructing a skeleton.
+        BigDecimal reduced = increment.stripTrailingZeros();
+        if (reduced.precision() == 1) {
+            int minFrac = increment.scale();
+            int maxFrac = reduced.scale();
+            BigInteger digit = reduced.unscaledValue();
+            if (digit.intValue() == 1) {
+                return new IncrementOneRounderImpl(increment, minFrac, maxFrac);
+            } else if (digit.intValue() == 5) {
+                return new IncrementFiveRounderImpl(increment, minFrac, maxFrac);
+            }
+        }
+        return new IncrementRounderImpl(increment);
     }
 
     static CurrencyPrecision constructCurrency(CurrencyUsage usage) {
@@ -689,6 +703,9 @@ public abstract class Precision implements Cloneable {
         }
     }
 
+    /**
+     * Used for strange increments like 3.14.
+     */
     static class IncrementRounderImpl extends Precision {
         final BigDecimal increment;
 
@@ -700,6 +717,48 @@ public abstract class Precision implements Cloneable {
         public void apply(DecimalQuantity value) {
             value.roundToIncrement(increment, mathContext);
             value.setMinFraction(increment.scale());
+        }
+    }
+
+    /**
+     * Used for increments with 1 as the only digit. This is different than fraction
+     * rounding because it supports having additional trailing zeros. For example, this
+     * class is used to round with the increment 0.010.
+     */
+    static class IncrementOneRounderImpl extends IncrementRounderImpl {
+        final int minFrac;
+        final int maxFrac;
+
+        public IncrementOneRounderImpl(BigDecimal increment, int minFrac, int maxFrac) {
+            super(increment);
+            this.minFrac = minFrac;
+            this.maxFrac = maxFrac;
+        }
+
+        @Override
+        public void apply(DecimalQuantity value) {
+            value.roundToMagnitude(-maxFrac, mathContext);
+            value.setMinFraction(minFrac);
+        }
+    }
+
+    /**
+     * Used for increments with 5 as the only digit (nickel rounding).
+     */
+    static class IncrementFiveRounderImpl extends IncrementRounderImpl {
+        final int minFrac;
+        final int maxFrac;
+
+        public IncrementFiveRounderImpl(BigDecimal increment, int minFrac, int maxFrac) {
+            super(increment);
+            this.minFrac = minFrac;
+            this.maxFrac = maxFrac;
+        }
+
+        @Override
+        public void apply(DecimalQuantity value) {
+            value.roundToNickel(-maxFrac, mathContext);
+            value.setMinFraction(minFrac);
         }
     }
 

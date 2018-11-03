@@ -237,7 +237,9 @@ void DecNum::multiplyBy(const DecNum& rhs, UErrorCode& status) {
 
 void DecNum::divideBy(const DecNum& rhs, UErrorCode& status) {
     uprv_decNumberDivide(fData, fData, rhs.fData, &fContext);
-    if (fContext.status != 0) {
+    if ((fContext.status & DEC_Inexact) != 0) {
+        // Ignore.
+    } else if (fContext.status != 0) {
         status = U_INTERNAL_PROGRAM_ERROR;
     }
 }

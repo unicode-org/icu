@@ -158,15 +158,17 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
 
     @Override
     public void roundToIncrement(BigDecimal roundingIncrement, MathContext mathContext) {
-        // TODO(13701): Avoid this check on every call to roundToIncrement().
-        BigDecimal stripped = roundingIncrement.stripTrailingZeros();
-        if (stripped.unscaledValue().compareTo(BigInteger.valueOf(5)) == 0) {
-            roundToNickel(-stripped.scale(), mathContext);
-            return;
-        }
+        // Do not call this method with an increment having only a 1 or a 5 digit!
+        // Use a more efficient call to either roundToMagnitude() or roundToNickel().
+        // Note: The check, which is somewhat expensive, is performed in an assertion
+        // to disable it in production.
+        assert roundingIncrement.stripTrailingZeros().precision() != 1
+                || roundingIncrement.stripTrailingZeros().unscaledValue().intValue() != 5
+                || roundingIncrement.stripTrailingZeros().unscaledValue().intValue() != 1;
         BigDecimal temp = toBigDecimal();
         temp = temp.divide(roundingIncrement, 0, mathContext.getRoundingMode())
-                .multiply(roundingIncrement).round(mathContext);
+                .multiply(roundingIncrement)
+                .round(mathContext);
         if (temp.signum() == 0) {
             setBcdToZero(); // keeps negative flag for -0.0
         } else {

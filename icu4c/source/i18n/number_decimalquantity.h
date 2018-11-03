@@ -85,7 +85,7 @@ class U_I18N_API DecimalQuantity : public IFixedDecimal, public UMemory {
      * @param roundingMode The {@link RoundingMode} to use if rounding is necessary.
      */
     void roundToIncrement(double roundingIncrement, RoundingMode roundingMode,
-                          int32_t maxFrac, UErrorCode& status);
+                          UErrorCode& status);
 
     /** Removes all fraction digits. */
     void truncate();
