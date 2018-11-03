@@ -1389,7 +1389,9 @@ bool GeneratorHelpers::precision(const MacroProps& macros, UnicodeString& sb, UE
         } else {
             blueprint_helpers::generateDigitsStem(impl.fMinSig, -1, sb, status);
         }
-    } else if (macros.precision.fType == Precision::RND_INCREMENT) {
+    } else if (macros.precision.fType == Precision::RND_INCREMENT
+            || macros.precision.fType == Precision::RND_INCREMENT_ONE
+            || macros.precision.fType == Precision::RND_INCREMENT_FIVE) {
         const Precision::IncrementSettings& impl = macros.precision.fUnion.increment;
         sb.append(u"precision-increment/", -1);
         blueprint_helpers::generateIncrementOption(

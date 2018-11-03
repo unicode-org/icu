@@ -716,7 +716,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
         }
     } else if (roundingInterval != 0.0) {
         // Rounding Interval.
-        digitsStringScale = -roundingutils::doubleFractionLength(roundingInterval);
+        digitsStringScale = -roundingutils::doubleFractionLength(roundingInterval, nullptr);
         // TODO: Check for DoS here?
         DecimalQuantity incrementQuantity;
         incrementQuantity.setToDouble(roundingInterval);

@@ -1079,6 +1079,36 @@ public class NumberFormatterApiTest {
                 "0.00");
 
         assertFormatDescending(
+                "Strange Increment",
+                "precision-increment/3.140",
+                NumberFormatter.with().precision(Precision.increment(new BigDecimal("3.140"))),
+                ULocale.ENGLISH,
+                "87,649.960",
+                "8,763.740",
+                "876.060",
+                "87.920",
+                "9.420",
+                "0.000",
+                "0.000",
+                "0.000",
+                "0.000");
+
+        assertFormatDescending(
+                "Increment Resolving to Power of 10",
+                "precision-increment/0.010",
+                NumberFormatter.with().precision(Precision.increment(new BigDecimal("0.010"))),
+                ULocale.ENGLISH,
+                "87,650.000",
+                "8,765.000",
+                "876.500",
+                "87.650",
+                "8.760",
+                "0.880",
+                "0.090",
+                "0.010",
+                "0.000");
+
+        assertFormatDescending(
                 "Currency Standard",
                 "currency/CZK precision-currency-standard",
                 NumberFormatter.with().precision(Precision.currency(CurrencyUsage.STANDARD)).unit(CZK),

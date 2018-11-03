@@ -175,33 +175,28 @@ uint64_t DecimalQuantity::getPositionFingerprint() const {
 }
 
 void DecimalQuantity::roundToIncrement(double roundingIncrement, RoundingMode roundingMode,
-                                       int32_t maxFrac, UErrorCode& status) {
-    // TODO(13701): Move the nickel check into a higher-level API.
-    if (roundingIncrement == 0.05) {
-        roundToMagnitude(-2, roundingMode, true, status);
-        roundToMagnitude(-maxFrac, roundingMode, false, status);
-        return;
-    } else if (roundingIncrement == 0.5) {
-        roundToMagnitude(-1, roundingMode, true, status);
-        roundToMagnitude(-maxFrac, roundingMode, false, status);
-        return;
-    }
-    // TODO(13701): This is innefficient.  Improve?
-    // TODO(13701): Should we convert to decNumber instead?
-    roundToInfinity();
-    double temp = toDouble();
-    temp /= roundingIncrement;
-    // Use another DecimalQuantity to perform the actual rounding...
-    DecimalQuantity dq;
-    dq.setToDouble(temp);
-    dq.roundToMagnitude(0, roundingMode, status);
-    temp = dq.toDouble();
-    temp *= roundingIncrement;
-    setToDouble(temp);
-    // Since we reset the value to a double, we need to specify the rounding boundary
-    // in order to get the DecimalQuantity out of approximation mode.
-    // NOTE: In Java, we have minMaxFrac, but in C++, the two are differentiated.
-    roundToMagnitude(-maxFrac, roundingMode, status);
+                                       UErrorCode& status) {
+    // Do not call this method with an increment having only a 1 or a 5 digit!
+    // Use a more efficient call to either roundToMagnitude() or roundToNickel().
+    // Check a few popular rounding increments; a more thorough check is in Java.
+    U_ASSERT(roundingIncrement != 0.01);
+    U_ASSERT(roundingIncrement != 0.05);
+    U_ASSERT(roundingIncrement != 0.1);
+    U_ASSERT(roundingIncrement != 0.5);
+    U_ASSERT(roundingIncrement != 1);
+    U_ASSERT(roundingIncrement != 5);
+
+    DecNum incrementDN;
+    incrementDN.setTo(roundingIncrement, status);
+    if (U_FAILURE(status)) { return; }
+
+    // Divide this DecimalQuantity by the increment, round, then multiply back.
+    divideBy(incrementDN, status);
+    if (U_FAILURE(status)) { return; }
+    roundToMagnitude(0, roundingMode, status);
+    if (U_FAILURE(status)) { return; }
+    multiplyBy(incrementDN, status);
+    if (U_FAILURE(status)) { return; }
 }
 
 void DecimalQuantity::multiplyBy(const DecNum& multiplicand, UErrorCode& status) {

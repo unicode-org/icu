@@ -55,7 +55,7 @@ int32_t getDisplayMagnitudeSignificant(const DecimalQuantity &value, int minSig)
 MultiplierProducer::~MultiplierProducer() = default;
 
 
-digits_t roundingutils::doubleFractionLength(double input) {
+digits_t roundingutils::doubleFractionLength(double input, int8_t* singleDigit) {
     char buffer[DoubleToStringConverter::kBase10MaximalLength + 1];
     bool sign; // unused; always positive
     int32_t length;
@@ -70,6 +70,14 @@ digits_t roundingutils::doubleFractionLength(double input) {
             &length,
             &point
     );
+
+    if (singleDigit == nullptr) {
+        // no-op
+    } else if (length == 1) {
+        *singleDigit = buffer[0] - '0';
+    } else {
+        *singleDigit = -1;
+    }
 
     return static_cast<digits_t>(length - point);
 }
@@ -254,14 +262,27 @@ Precision::constructFractionSignificant(const FractionPrecision &base, int32_t m
 
 IncrementPrecision Precision::constructIncrement(double increment, int32_t minFrac) {
     IncrementSettings settings;
+    // Note: For number formatting, fIncrement is used for RND_INCREMENT but not
+    // RND_INCREMENT_ONE or RND_INCREMENT_FIVE. However, fIncrement is used in all
+    // three when constructing a skeleton.
     settings.fIncrement = increment;
     settings.fMinFrac = static_cast<digits_t>(minFrac);
     // One of the few pre-computed quantities:
     // Note: it is possible for minFrac to be more than maxFrac... (misleading)
-    settings.fMaxFrac = roundingutils::doubleFractionLength(increment);
+    int8_t singleDigit;
+    settings.fMaxFrac = roundingutils::doubleFractionLength(increment, &singleDigit);
     PrecisionUnion union_;
     union_.increment = settings;
-    return {RND_INCREMENT, union_, kDefaultMode};
+    if (singleDigit == 1) {
+        // NOTE: In C++, we must return the correct value type with the correct union.
+        // It would be invalid to return a RND_FRACTION here because the methods on the
+        // IncrementPrecision type assume that the union is backed by increment data.
+        return {RND_INCREMENT_ONE, union_, kDefaultMode};
+    } else if (singleDigit == 5) {
+        return {RND_INCREMENT_FIVE, union_, kDefaultMode};
+    } else {
+        return {RND_INCREMENT, union_, kDefaultMode};
+    }
 }
 
 CurrencyPrecision Precision::constructCurrency(UCurrencyUsage usage) {
@@ -390,13 +411,32 @@ void RoundingImpl::apply(impl::DecimalQuantity &value, UErrorCode& status) const
             value.roundToIncrement(
                     fPrecision.fUnion.increment.fIncrement,
                     fRoundingMode,
-                    fPrecision.fUnion.increment.fMaxFrac,
+                    status);
+            value.setMinFraction(fPrecision.fUnion.increment.fMinFrac);
+            break;
+
+        case Precision::RND_INCREMENT_ONE:
+            value.roundToMagnitude(
+                    -fPrecision.fUnion.increment.fMaxFrac,
+                    fRoundingMode,
+                    status);
+            value.setMinFraction(fPrecision.fUnion.increment.fMinFrac);
+            break;
+
+        case Precision::RND_INCREMENT_FIVE:
+            value.roundToNickel(
+                    -fPrecision.fUnion.increment.fMaxFrac,
+                    fRoundingMode,
                     status);
             value.setMinFraction(fPrecision.fUnion.increment.fMinFrac);
             break;
 
         case Precision::RND_CURRENCY:
             // Call .withCurrency() before .apply()!
+            U_ASSERT(false);
+            break;
+
+        default:
             U_ASSERT(false);
             break;
     }

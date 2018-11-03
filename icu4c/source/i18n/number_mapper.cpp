@@ -295,7 +295,9 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
         if (rounding_.fType == Precision::PrecisionType::RND_FRACTION) {
             minFrac_ = rounding_.fUnion.fracSig.fMinFrac;
             maxFrac_ = rounding_.fUnion.fracSig.fMaxFrac;
-        } else if (rounding_.fType == Precision::PrecisionType::RND_INCREMENT) {
+        } else if (rounding_.fType == Precision::PrecisionType::RND_INCREMENT
+                || rounding_.fType == Precision::PrecisionType::RND_INCREMENT_ONE
+                || rounding_.fType == Precision::PrecisionType::RND_INCREMENT_FIVE) {
             increment_ = rounding_.fUnion.increment.fIncrement;
             minFrac_ = rounding_.fUnion.increment.fMinFrac;
             maxFrac_ = rounding_.fUnion.increment.fMinFrac;

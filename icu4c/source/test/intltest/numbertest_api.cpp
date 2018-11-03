@@ -1079,6 +1079,36 @@ void NumberFormatterApiTest::roundingOther() {
             u"0.00");
 
     assertFormatDescending(
+            u"Strange Increment",
+            u"precision-increment/3.140",
+            NumberFormatter::with().precision(Precision::increment(3.14).withMinFraction(3)),
+            Locale::getEnglish(),
+            u"87,649.960",
+            u"8,763.740",
+            u"876.060",
+            u"87.920",
+            u"9.420",
+            u"0.000",
+            u"0.000",
+            u"0.000",
+            u"0.000");
+
+    assertFormatDescending(
+            u"Increment Resolving to Power of 10",
+            u"precision-increment/0.010",
+            NumberFormatter::with().precision(Precision::increment(0.01).withMinFraction(3)),
+            Locale::getEnglish(),
+            u"87,650.000",
+            u"8,765.000",
+            u"876.500",
+            u"87.650",
+            u"8.760",
+            u"0.880",
+            u"0.090",
+            u"0.010",
+            u"0.000");
+
+    assertFormatDescending(
             u"Currency Standard",
             u"currency/CZK precision-currency-standard",
             NumberFormatter::with().precision(Precision::currency(UCurrencyUsage::UCURR_USAGE_STANDARD))
