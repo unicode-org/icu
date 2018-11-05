@@ -10,6 +10,8 @@
 package com.ibm.icu.util;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
@@ -548,14 +550,20 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
     static {
         defaultULocale = forLocale(defaultLocale);
 
-        // On JRE 7+, Locale.getDefault() should reflect the
-        // property value to the Locale's default. So ICU just relies on
-        // Locale.getDefault().
-
-        for (Category cat: Category.values()) {
-            int idx = cat.ordinal();
-            defaultCategoryLocales[idx] = JDKLocaleHelper.getDefault(cat);
-            defaultCategoryULocales[idx] = forLocale(defaultCategoryLocales[idx]);
+        if (JDKLocaleHelper.hasLocaleCategories()) {
+            for (Category cat: Category.values()) {
+                int idx = cat.ordinal();
+                defaultCategoryLocales[idx] = JDKLocaleHelper.getDefault(cat);
+                defaultCategoryULocales[idx] = forLocale(defaultCategoryLocales[idx]);
+            }
+        } else {
+            // Android API level 21..23 does not have separate category locales,
+            // use the non-category default for all.
+            for (Category cat: Category.values()) {
+                int idx = cat.ordinal();
+                defaultCategoryLocales[idx] = defaultLocale;
+                defaultCategoryULocales[idx] = defaultULocale;
+            }
         }
     }
 
@@ -585,7 +593,17 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             if (!defaultLocale.equals(currentDefault)) {
                 defaultLocale = currentDefault;
                 defaultULocale = forLocale(currentDefault);
-            }
+
+                if (!JDKLocaleHelper.hasLocaleCategories()) {
+                    // Detected Java default Locale change.
+                    // We need to update category defaults to match
+                    // Java 7's behavior on Android API level 21..23.
+                    for (Category cat : Category.values()) {
+                        int idx = cat.ordinal();
+                        defaultCategoryLocales[idx] = currentDefault;
+                        defaultCategoryULocales[idx] = forLocale(currentDefault);
+                    }
+                }            }
             return defaultULocale;
         }
     }
@@ -633,13 +651,40 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
                 // cyclic dependency for category default.
                 return ULocale.ROOT;
             }
+            if (JDKLocaleHelper.hasLocaleCategories()) {
+                Locale currentCategoryDefault = JDKLocaleHelper.getDefault(category);
+                if (!defaultCategoryLocales[idx].equals(currentCategoryDefault)) {
+                    defaultCategoryLocales[idx] = currentCategoryDefault;
+                    defaultCategoryULocales[idx] = forLocale(currentCategoryDefault);
+                }
+            } else {
+                // java.util.Locale.setDefault(Locale) in Java 7 updates
+                // category locale defaults. On Android API level 21..23
+                // ICU4J checks if the default locale has changed and update
+                // category ULocales here if necessary.
 
-            Locale currentCategoryDefault = JDKLocaleHelper.getDefault(category);
-            if (!defaultCategoryLocales[idx].equals(currentCategoryDefault)) {
-                defaultCategoryLocales[idx] = currentCategoryDefault;
-                defaultCategoryULocales[idx] = forLocale(currentCategoryDefault);
+                // Note: When java.util.Locale.setDefault(Locale) is called
+                // with a Locale same with the previous one, Java 7 still
+                // updates category locale defaults. On Android API level 21..23
+                // there is no good way to detect the event, ICU4J simply
+                // checks if the default Java Locale has changed since last
+                // time.
+
+                Locale currentDefault = Locale.getDefault();
+                if (!defaultLocale.equals(currentDefault)) {
+                    defaultLocale = currentDefault;
+                    defaultULocale = forLocale(currentDefault);
+
+                    for (Category cat : Category.values()) {
+                        int tmpIdx = cat.ordinal();
+                        defaultCategoryLocales[tmpIdx] = currentDefault;
+                        defaultCategoryULocales[tmpIdx] = forLocale(currentDefault);
+                    }
+                }
+
+                // No synchronization with JDK Locale, because category default
+                // is not supported in Android API level 21..23.
             }
-
             return defaultCategoryULocales[idx];
         }
     }
@@ -3955,8 +4000,63 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
      * JDK Locale Helper
      */
     private static final class JDKLocaleHelper {
+        // Java 7 has java.util.Locale.Category.
+        // Android API level 21..23 do not yet have it; only API level 24 (Nougat) adds it.
+        // https://developer.android.com/reference/java/util/Locale.Category
+        private static boolean hasLocaleCategories = false;
+
+        private static Method mGetDefault;
+        private static Method mSetDefault;
+        private static Object eDISPLAY;
+        private static Object eFORMAT;
+
+        static {
+            do {
+                try {
+                    Class<?> cCategory = null;
+                    Class<?>[] classes = Locale.class.getDeclaredClasses();
+                    for (Class<?> c : classes) {
+                        if (c.getName().equals("java.util.Locale$Category")) {
+                            cCategory = c;
+                            break;
+                        }
+                    }
+                    if (cCategory == null) {
+                        break;
+                    }
+                    mGetDefault = Locale.class.getDeclaredMethod("getDefault", cCategory);
+                    mSetDefault = Locale.class.getDeclaredMethod("setDefault", cCategory, Locale.class);
+
+                    Method mName = cCategory.getMethod("name", (Class[]) null);
+                    Object[] enumConstants = cCategory.getEnumConstants();
+                    for (Object e : enumConstants) {
+                        String catVal = (String)mName.invoke(e, (Object[])null);
+                        if (catVal.equals("DISPLAY")) {
+                            eDISPLAY = e;
+                        } else if (catVal.equals("FORMAT")) {
+                            eFORMAT = e;
+                        }
+                    }
+                    if (eDISPLAY == null || eFORMAT == null) {
+                        break;
+                    }
+
+                    hasLocaleCategories = true;
+                } catch (NoSuchMethodException e) {
+                } catch (IllegalArgumentException e) {
+                } catch (IllegalAccessException e) {
+                } catch (InvocationTargetException e) {
+                } catch (SecurityException e) {
+                    // TODO : report?
+                }
+            } while (false);
+        }
 
         private JDKLocaleHelper() {
+        }
+
+        public static boolean hasLocaleCategories() {
+            return hasLocaleCategories;
         }
 
         public static ULocale toULocale(Locale loc) {
@@ -4123,39 +4223,53 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         }
 
         public static Locale getDefault(Category category) {
-            java.util.Locale.Category cat = null;
-            if (category != null) {
+            if (hasLocaleCategories) {
+                Object cat = null;
                 switch (category) {
                 case DISPLAY:
-                    cat = java.util.Locale.Category.DISPLAY;
+                    cat = eDISPLAY;
                     break;
                 case FORMAT:
-                    cat = java.util.Locale.Category.FORMAT;
+                    cat = eFORMAT;
                     break;
                 }
-            }
-            if (cat != null) {
-                return Locale.getDefault(cat);
+                if (cat != null) {
+                    try {
+                        return (Locale)mGetDefault.invoke(null, cat);
+                    } catch (InvocationTargetException e) {
+                        // fall through - use the base default
+                    } catch (IllegalArgumentException e) {
+                        // fall through - use the base default
+                    } catch (IllegalAccessException e) {
+                        // fall through - use the base default
+                    }
+                }
             }
             return Locale.getDefault();
         }
 
         public static void setDefault(Category category, Locale newLocale) {
-            java.util.Locale.Category cat = null;
-            if (category != null) {
+            if (hasLocaleCategories) {
+                Object cat = null;
                 switch (category) {
                 case DISPLAY:
-                    cat = java.util.Locale.Category.DISPLAY;
+                    cat = eDISPLAY;
                     break;
                 case FORMAT:
-                    cat = java.util.Locale.Category.FORMAT;
+                    cat = eFORMAT;
                     break;
                 }
-            }
-            if (cat != null) {
-                Locale.setDefault(cat, newLocale);
-            } else {
-                Locale.setDefault(newLocale);
+                if (cat != null) {
+                    try {
+                        mSetDefault.invoke(null, cat, newLocale);
+                    } catch (InvocationTargetException e) {
+                        // fall through - no effects
+                    } catch (IllegalArgumentException e) {
+                        // fall through - no effects
+                    } catch (IllegalAccessException e) {
+                        // fall through - no effects
+                    }
+                }
             }
         }
     }
