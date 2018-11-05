@@ -32,10 +32,6 @@
 #include <string.h>
 #include "unicode/localpointer.h"
 
-#ifdef __cplusplus
-#include "unicode/uobject.h"
-#endif
-
 #if U_DEBUG && defined(UPRV_MALLOC_COUNT)
 #include <stdio.h>
 #endif
@@ -127,6 +123,7 @@ uprv_deleteUObject(void *obj);
 #ifdef __cplusplus
 
 #include <utility>
+#include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
 
