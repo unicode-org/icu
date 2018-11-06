@@ -127,11 +127,11 @@ UnicodeString toString(UBool b);
         break; \
     }
 
-#define TEST_ASSERT_TRUE(x) \
-  assertTrue(#x, (x), FALSE, FALSE, __FILE__, __LINE__)
 
-#define TEST_ASSERT_STATUS(x) \
-  assertSuccess(#x, (x), FALSE, __FILE__, __LINE__)
+// WHERE Macro yields a literal string of the form "source_file_name:line number "
+#define WHERE __FILE__ ":" XLINE(__LINE__) " "
+#define XLINE(s) LINE(s)
+#define LINE(s) #s
 
 class IntlTest : public TestLog {
 public:

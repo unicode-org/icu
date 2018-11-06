@@ -4356,13 +4356,6 @@ void RBBITest::TestEmoji() {
 
 // TestBug12519  -  Correct handling of Locales by assignment / copy / clone
 
-// WHERE Macro yields a literal string of the form "source_file_name:line number "
-// TODO: propose something equivalent as a test framework addition.
-
-#define WHERE __FILE__ ":" XLINE(__LINE__) " "
-#define XLINE(s) LINE(s)
-#define LINE(s) #s
-
 void RBBITest::TestBug12519() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedBreakIterator> biEn((RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status));

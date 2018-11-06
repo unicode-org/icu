@@ -2204,7 +2204,7 @@ UnicodeStringTest::TestUInt16Pointers() {
 
     UErrorCode errorCode = U_ZERO_ERROR;
     int32_t length = UnicodeString(u"def").extract(arr, 4, errorCode);
-    TEST_ASSERT_STATUS(errorCode);
+    assertSuccess(WHERE, errorCode);
     assertEquals("def from extract()", UnicodeString(u"def"), UnicodeString(arr, length));
 }
 
@@ -2226,7 +2226,7 @@ UnicodeStringTest::TestWCharPointers() {
 
     UErrorCode errorCode = U_ZERO_ERROR;
     int32_t length = UnicodeString(u"def").extract(arr, 4, errorCode);
-    TEST_ASSERT_STATUS(errorCode);
+    assertSuccess(WHERE, errorCode);
     assertEquals("def from extract()", UnicodeString(u"def"), UnicodeString(arr, length));
 #endif
 }
