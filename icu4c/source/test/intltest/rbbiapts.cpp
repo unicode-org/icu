@@ -1389,9 +1389,9 @@ void RBBIAPITest::TestFilteredBreakIteratorBuilder() {
       prtbrks(filteredBI.getAlias(), frText, *this);
 
       // Verify ==
-      TEST_ASSERT_TRUE(*frenchBI   == *frenchBI);
-      TEST_ASSERT_TRUE(*filteredBI != *frenchBI);
-      TEST_ASSERT_TRUE(*frenchBI   != *filteredBI);
+      assertTrue(WHERE, *frenchBI   == *frenchBI);
+      assertTrue(WHERE, *filteredBI != *frenchBI);
+      assertTrue(WHERE, *frenchBI   != *filteredBI);
     } else {
       dataerrln("French BI: not valid.");
 	}

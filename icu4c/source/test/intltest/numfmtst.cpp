@@ -2195,7 +2195,7 @@ void NumberFormatTest::TestSymbolsWithBadLocale(void) {
     for (i = 0; i < UPRV_LENGTHOF(badLocales); i++) {
         const char *localeName = badLocales[i];
         Locale locBad(localeName);
-        TEST_ASSERT_TRUE(!locBad.isBogus());
+        assertTrue(WHERE, !locBad.isBogus());
         UErrorCode status = U_ZERO_ERROR;
         UnicodeString intlCurrencySymbol((UChar)0xa4);
 

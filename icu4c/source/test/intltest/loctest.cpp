@@ -2327,7 +2327,7 @@ void LocaleTest::checkRegisteredCollators(const char *expectExtra) {
     int32_t count1=0,count2=0;
     Hashtable oldHash(status);
     Hashtable newHash(status);
-    TEST_ASSERT_STATUS(status);
+    assertSuccess(WHERE, status);
 
     UnicodeString expectStr(expectExtra?expectExtra:"n/a", "");
 
