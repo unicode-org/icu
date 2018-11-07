@@ -84,7 +84,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(scale);
         TESTCASE_AUTO(locale);
         TESTCASE_AUTO(formatTypes);
-        TESTCASE_AUTO(fieldPosition);
+        TESTCASE_AUTO(fieldPositionLogic);
         TESTCASE_AUTO(toFormat);
         TESTCASE_AUTO(errors);
         TESTCASE_AUTO(validRanges);
@@ -2164,10 +2164,18 @@ void NumberFormatterApiTest::formatTypes() {
     assertEquals("Format decNumber to 40 digits", str, actual);
 }
 
-void NumberFormatterApiTest::fieldPosition() {
-    IcuTestErrorCode status(*this, "fieldPosition");
-    FormattedNumber fmtd = NumberFormatter::withLocale("en").formatDouble(-9876543210.12, status);
-    assertEquals("Should have expected format output", u"-9,876,543,210.12", fmtd.toString(status));
+void NumberFormatterApiTest::fieldPositionLogic() {
+    IcuTestErrorCode status(*this, "fieldPositionLogic");
+
+    const char16_t* message = u"Field position logic test";
+
+    FormattedNumber fmtd = assertFormatSingle(
+            message,
+            u"",
+            NumberFormatter::with(),
+            Locale::getEnglish(),
+            -9876543210.12,
+            u"-9,876,543,210.12");
 
     static const UFieldPosition expectedFieldPositions[] = {
             // field, begin index, end index
@@ -2179,56 +2187,15 @@ void NumberFormatterApiTest::fieldPosition() {
             {UNUM_DECIMAL_SEPARATOR_FIELD, 14, 15},
             {UNUM_FRACTION_FIELD, 15, 17}};
 
-    FieldPositionIterator fpi;
-    fmtd.getAllFieldPositions(fpi, status);
-    int32_t i = 0;
-    FieldPosition actual;
-    while (fpi.next(actual)) {
-        UFieldPosition expected = expectedFieldPositions[i++];
-        assertEquals(
-                UnicodeString(u"Field, case #") + Int64ToUnicodeString(i),
-                expected.field,
-                actual.getField());
-        assertEquals(
-                UnicodeString(u"Iterator, begin index, case #") + Int64ToUnicodeString(i),
-                expected.beginIndex,
-                actual.getBeginIndex());
-        assertEquals(
-                UnicodeString(u"Iterator, end index, case #") + Int64ToUnicodeString(i),
-                expected.endIndex,
-                actual.getEndIndex());
-
-        // Check for the first location of the field
-        if (expected.field != UNUM_GROUPING_SEPARATOR_FIELD) {
-            FieldPosition actual2(expected.field);
-            UBool found = fmtd.nextFieldPosition(actual2, status);
-            assertEquals(
-                    UnicodeString(u"Next, found first time, case #") + Int64ToUnicodeString(i),
-                    (UBool) TRUE,
-                    found);
-            assertEquals(
-                    UnicodeString(u"Next, begin index, case #") + Int64ToUnicodeString(i),
-                    expected.beginIndex,
-                    actual2.getBeginIndex());
-            assertEquals(
-                    UnicodeString(u"Next, end index, case #") + Int64ToUnicodeString(i),
-                    expected.endIndex,
-                    actual2.getEndIndex());
-            found = fmtd.nextFieldPosition(actual2, status);
-            assertEquals(
-                    UnicodeString(u"Next, found second time, case #") + Int64ToUnicodeString(i),
-                    (UBool) FALSE,
-                    found);
-        }
-    }
-    assertEquals(
-            "Should have seen every field position",
-            sizeof(expectedFieldPositions) / sizeof(*expectedFieldPositions),
-            i);
+    assertFieldPositions(
+            message,
+            fmtd,
+            expectedFieldPositions,
+            sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
 
     // Test the iteration functionality of nextFieldPosition
-    actual = {UNUM_GROUPING_SEPARATOR_FIELD};
-    i = 1;
+    FieldPosition actual = {UNUM_GROUPING_SEPARATOR_FIELD};
+    int32_t i = 1;
     while (fmtd.nextFieldPosition(actual, status)) {
         UFieldPosition expected = expectedFieldPositions[i++];
         assertEquals(
@@ -2614,15 +2581,17 @@ void NumberFormatterApiTest::assertFormatDescendingBig(const char16_t* umessage,
     }
 }
 
-void NumberFormatterApiTest::assertFormatSingle(const char16_t* umessage, const char16_t* uskeleton,
-                                                const UnlocalizedNumberFormatter& f, Locale locale,
-                                                double input, const UnicodeString& expected) {
+FormattedNumber
+NumberFormatterApiTest::assertFormatSingle(const char16_t* umessage, const char16_t* uskeleton,
+                                           const UnlocalizedNumberFormatter& f, Locale locale,
+                                           double input, const UnicodeString& expected) {
     UnicodeString message(TRUE, umessage, -1);
     const LocalizedNumberFormatter l1 = f.threshold(0).locale(locale); // no self-regulation
     const LocalizedNumberFormatter l2 = f.threshold(1).locale(locale); // all self-regulation
     IcuTestErrorCode status(*this, "assertFormatSingle");
     status.setScope(message);
-    UnicodeString actual1 = l1.formatDouble(input, status).toString();
+    FormattedNumber result1 = l1.formatDouble(input, status);
+    UnicodeString actual1 = result1.toString();
     assertSuccess(message + u": Unsafe Path", status);
     assertEquals(message + u": Unsafe Path", expected, actual1);
     UnicodeString actual2 = l2.formatDouble(input, status).toString();
@@ -2640,6 +2609,7 @@ void NumberFormatterApiTest::assertFormatSingle(const char16_t* umessage, const 
     } else {
         assertUndefinedSkeleton(f);
     }
+    return result1;
 }
 
 void NumberFormatterApiTest::assertUndefinedSkeleton(const UnlocalizedNumberFormatter& f) {
@@ -2650,5 +2620,68 @@ void NumberFormatterApiTest::assertUndefinedSkeleton(const UnlocalizedNumberForm
             U_UNSUPPORTED_ERROR,
             status);
 }
+
+void NumberFormatterApiTest::assertFieldPositions(
+        const char16_t* message, const FormattedNumber& formattedNumber,
+        const UFieldPosition* expectedFieldPositions, int32_t length) {
+    IcuTestErrorCode status(*this, "assertFieldPositions");
+    UnicodeString baseMessage = UnicodeString(message) + u": " + formattedNumber.toString(status) + u": ";
+    FieldPositionIterator fpi;
+    formattedNumber.getAllFieldPositions(fpi, status);
+    int32_t i = 0;
+    FieldPosition actual;
+    while (fpi.next(actual)) {
+        UFieldPosition expected = expectedFieldPositions[i++];
+        assertEquals(
+                baseMessage + UnicodeString(u"Field, case #") + Int64ToUnicodeString(i),
+                expected.field,
+                actual.getField());
+        assertEquals(
+                baseMessage + UnicodeString(u"Iterator, begin, case #") + Int64ToUnicodeString(i),
+                expected.beginIndex,
+                actual.getBeginIndex());
+        assertEquals(
+                baseMessage + UnicodeString(u"Iterator, end, case #") + Int64ToUnicodeString(i),
+                expected.endIndex,
+                actual.getEndIndex());
+
+        // Check for the first location of the field
+        FieldPosition actual2(expected.field);
+        // Fast-forward the field to skip previous occurrences of the field:
+        actual2.setBeginIndex(expected.beginIndex);
+        actual2.setEndIndex(expected.beginIndex);
+        UBool found = formattedNumber.nextFieldPosition(actual2, status);
+        assertEquals(
+                baseMessage + UnicodeString(u"Next, found first, case #") + Int64ToUnicodeString(i),
+                (UBool) TRUE,
+                found);
+        assertEquals(
+                baseMessage + UnicodeString(u"Next, begin, case #") + Int64ToUnicodeString(i),
+                expected.beginIndex,
+                actual2.getBeginIndex());
+        assertEquals(
+                baseMessage + UnicodeString(u"Next, end, case #") + Int64ToUnicodeString(i),
+                expected.endIndex,
+                actual2.getEndIndex());
+
+        // The next position should be empty unless the field occurs again
+        UBool occursAgain = false;
+        for (int32_t j=i; j<length; j++) {
+            if (expectedFieldPositions[j].field == expected.field) {
+                occursAgain = true;
+                break;
+            }
+        }
+        if (!occursAgain) {
+            found = formattedNumber.nextFieldPosition(actual2, status);
+            assertEquals(
+                    baseMessage + UnicodeString(u"Next, found second, case #") + Int64ToUnicodeString(i),
+                    (UBool) FALSE,
+                    found);
+        }
+    }
+    assertEquals(baseMessage + u"Should have seen every field position", length, i);
+}
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
