@@ -2114,9 +2114,16 @@ public class NumberFormatterApiTest {
     }
 
     @Test
-    public void fieldPosition() {
-        FormattedNumber fmtd = NumberFormatter.withLocale(ULocale.ENGLISH).format(-9876543210.12);
-        assertEquals("Should have expected format output", "-9,876,543,210.12", fmtd.toString());
+    public void fieldPositionLogic() {
+        String message = "Field position logic test";
+
+        FormattedNumber fmtd = assertFormatSingle(
+                message,
+                "",
+                NumberFormatter.with(),
+                ULocale.ENGLISH,
+                -9876543210.12,
+                "-9,876,543,210.12");
 
         Object[][] expectedFieldPositions = new Object[][]{
                 {NumberFormat.Field.SIGN, 0, 1},
@@ -2127,38 +2134,11 @@ public class NumberFormatterApiTest {
                 {NumberFormat.Field.DECIMAL_SEPARATOR, 14, 15},
                 {NumberFormat.Field.FRACTION, 15, 17}};
 
-        AttributedCharacterIterator fpi = fmtd.getFieldIterator();
-        Set<AttributedCharacterIterator.Attribute> allAttributes = fpi.getAllAttributeKeys();
-        assertEquals("All known fields should be in the iterator", 5, allAttributes.size());
-        assertEquals("Iterator should have length of string output", 17, fpi.getEndIndex());
-        int i = 0;
-        for (char c = fpi.first(); c != AttributedCharacterIterator.DONE; c = fpi.next(), i++) {
-            Set<AttributedCharacterIterator.Attribute> currentAttributes = fpi.getAttributes().keySet();
-            int attributesRemaining = currentAttributes.size();
-            for (Object[] cas : expectedFieldPositions) {
-                NumberFormat.Field expectedField = (NumberFormat.Field) cas[0];
-                int expectedBeginIndex = (Integer) cas[1];
-                int expectedEndIndex = (Integer) cas[2];
-                if (expectedBeginIndex > i || expectedEndIndex <= i) {
-                    // Field position does not overlap with the current character
-                    continue;
-                }
-
-                assertTrue("Current character should have expected field", currentAttributes.contains(expectedField));
-                assertTrue("Field should be a known attribute", allAttributes.contains(expectedField));
-                int actualBeginIndex = fpi.getRunStart(expectedField);
-                int actualEndIndex = fpi.getRunLimit(expectedField);
-                assertEquals(expectedField + " begin index @" + i, expectedBeginIndex, actualBeginIndex);
-                assertEquals(expectedField + " end index @" + i, expectedEndIndex, actualEndIndex);
-                attributesRemaining--;
-            }
-            assertEquals("Should have looked at every field", 0, attributesRemaining);
-        }
-        assertEquals("Should have looked at every character", 17, i);
+        assertFieldPositions(message, fmtd, expectedFieldPositions);
 
         // Test the iteration functionality of nextFieldPosition
         FieldPosition actual = new FieldPosition(NumberFormat.Field.GROUPING_SEPARATOR);
-        i = 1;
+        int i = 1;
         while (fmtd.nextFieldPosition(actual)) {
             Object[] cas = expectedFieldPositions[i++];
             NumberFormat.Field expectedField = (NumberFormat.Field) cas[0];
@@ -2414,7 +2394,7 @@ public class NumberFormatterApiTest {
         }
     }
 
-    static void assertFormatSingle(
+    static FormattedNumber assertFormatSingle(
             String message,
             String skeleton,
             UnlocalizedNumberFormatter f,
@@ -2423,7 +2403,8 @@ public class NumberFormatterApiTest {
             String expected) {
         LocalizedNumberFormatter l1 = f.threshold(0L).locale(locale); // no self-regulation
         LocalizedNumberFormatter l2 = f.threshold(1L).locale(locale); // all self-regulation
-        String actual1 = l1.format(input).toString();
+        FormattedNumber result1 = l1.format(input);
+        String actual1 = result1.toString();
         assertEquals(message + ": Unsafe Path: " + input, expected, actual1);
         String actual2 = l2.format(input).toString();
         assertEquals(message + ": Safe Path: " + input, expected, actual2);
@@ -2438,6 +2419,7 @@ public class NumberFormatterApiTest {
         } else {
             assertUndefinedSkeleton(f);
         }
+        return result1;
     }
 
     static void assertFormatSingleMeasure(
@@ -2471,5 +2453,45 @@ public class NumberFormatterApiTest {
             String skeleton = f.toSkeleton();
             fail("Expected toSkeleton to fail, but it passed, producing: " + skeleton);
         } catch (UnsupportedOperationException expected) {}
+    }
+
+    static void assertFieldPositions(String message, FormattedNumber formattedNumber, Object[][] expectedFieldPositions) {
+        // Calculate some initial expected values
+        int stringLength = formattedNumber.toString().length();
+        HashSet<Format.Field> uniqueFields = new HashSet<>();
+        for (int i=0; i<expectedFieldPositions.length; i++) {
+            uniqueFields.add((Format.Field) expectedFieldPositions[i][0]);
+        }
+        String baseMessage = message + ": " + formattedNumber.toString() + ": ";
+
+        // Check the AttributedCharacterIterator
+        AttributedCharacterIterator fpi = formattedNumber.getFieldIterator();
+        Set<AttributedCharacterIterator.Attribute> allAttributes = fpi.getAllAttributeKeys();
+        assertEquals(baseMessage + "All known fields should be in the iterator", uniqueFields.size(), allAttributes.size());
+        assertEquals(baseMessage + "Iterator should have length of string output", stringLength, fpi.getEndIndex());
+        int i = 0;
+        for (char c = fpi.first(); c != AttributedCharacterIterator.DONE; c = fpi.next(), i++) {
+            Set<AttributedCharacterIterator.Attribute> currentAttributes = fpi.getAttributes().keySet();
+            int attributesRemaining = currentAttributes.size();
+            for (Object[] cas : expectedFieldPositions) {
+                NumberFormat.Field expectedField = (NumberFormat.Field) cas[0];
+                int expectedBeginIndex = (Integer) cas[1];
+                int expectedEndIndex = (Integer) cas[2];
+                if (expectedBeginIndex > i || expectedEndIndex <= i) {
+                    // Field position does not overlap with the current character
+                    continue;
+                }
+
+                assertTrue(baseMessage + "Current character should have expected field", currentAttributes.contains(expectedField));
+                assertTrue(baseMessage + "Field should be a known attribute", allAttributes.contains(expectedField));
+                int actualBeginIndex = fpi.getRunStart(expectedField);
+                int actualEndIndex = fpi.getRunLimit(expectedField);
+                assertEquals(baseMessage + expectedField + " begin @" + i, expectedBeginIndex, actualBeginIndex);
+                assertEquals(baseMessage + expectedField + " end @" + i, expectedEndIndex, actualEndIndex);
+                attributesRemaining--;
+            }
+            assertEquals(baseMessage + "Should have looked at every field", 0, attributesRemaining);
+        }
+        assertEquals(baseMessage + "Should have looked at every character", stringLength, i);
     }
 }

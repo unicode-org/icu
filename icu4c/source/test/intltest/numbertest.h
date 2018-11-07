@@ -70,7 +70,7 @@ class NumberFormatterApiTest : public IntlTest {
     void scale();
     void locale();
     void formatTypes();
-    void fieldPosition();
+    void fieldPositionLogic();
     void toFormat();
     void errors();
     void validRanges();
@@ -111,11 +111,15 @@ class NumberFormatterApiTest : public IntlTest {
     void assertFormatDescendingBig(const char16_t* message, const char16_t* skeleton,
                                    const UnlocalizedNumberFormatter& f, Locale locale, ...);
 
-    void assertFormatSingle(const char16_t* message, const char16_t* skeleton,
-                            const UnlocalizedNumberFormatter& f, Locale locale, double input,
-                            const UnicodeString& expected);
+    FormattedNumber
+    assertFormatSingle(const char16_t* message, const char16_t* skeleton,
+                       const UnlocalizedNumberFormatter& f, Locale locale, double input,
+                       const UnicodeString& expected);
 
     void assertUndefinedSkeleton(const UnlocalizedNumberFormatter& f);
+
+    void assertFieldPositions(const char16_t* message, const FormattedNumber& formattedNumber,
+                              const UFieldPosition* expectedFieldPositions, int32_t length);
 };
 
 class DecimalQuantityTest : public IntlTest {
