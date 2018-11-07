@@ -1,5 +1,28 @@
 matrix:
   include:
+
+    # ICU4C Docs Build
+    #    TODO: publish the latest built docs from master on GitHub pages.
+    #          See https://gist.github.com/vidavidorra/548ffbcdae99d752da02 for ideas.
+    - name:     "c: docs"
+      dist:     xenial
+      language: cpp
+      addons:
+         apt:
+           update: true
+           packages:
+             - doxygen
+      before_script:
+        - cd icu4c/source
+        - ./runConfigureICU Linux --disable-renaming
+      script:
+        # fail if 'warning:' appears in doxygen's output, but ignore warnings from file Doxyfile.
+        # The Doxygen version from Travis is down-rev, and doesn't recognize some options
+        # in the Doxyfile config file.
+        # Regex note: (?! ... ) is a negative lookahead. Succeed if the pattern is not present.
+        - set +o pipefail && make doc 2>&1 | tee doxygen.log && ( ! grep -P 'warning:(?! .* file Doxyfile)' doxygen.log )
+
+
     - name: "j"
       language: java
       env:      BUILD=ICU4J
@@ -51,7 +74,9 @@ matrix:
     #        a Container on EC2 or Packet. Asan builds of ICU fail otherwise.
     - name: "c: linux asan"
       language: cpp
-      env:      BUILD=ICU4C_CLANG_ASAN
+      env:
+        - CPPFLAGS="-fsanitize=address"
+        - LDFLAGS="-fsanitize=address"
       os:       linux
       dist:     trusty
       sudo:     true
@@ -63,8 +88,12 @@ matrix:
                   - llvm-toolchain-trusty-5.0
               packages:
                   - clang-5.0
+      before_script:
+        - cd icu4c/source
+        - ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming
+        - make -j2
       script:
-          - cd icu4c/source && CPPFLAGS="-fsanitize=address" LDFLAGS="-fsanitize=address" ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming && make -j2 check
+        - make -j2 check
 
 
     # Clang Linux with thread sanitizer.
@@ -72,7 +101,6 @@ matrix:
     - name: "c: linux tsan"
       language: cpp
       env:
-          - BUILD=ICU4C_CLANG_THREAD_SAN
           - INTLTEST_OPTS="utility/MultithreadTest rbbi/RBBIMonkeyTest format/CalendarLimitTest"
           - CPPFLAGS="-fsanitize=thread"
           - LDFLAGS=-fsanitize=thread

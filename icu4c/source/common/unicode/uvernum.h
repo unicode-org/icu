@@ -103,7 +103,7 @@
  *  \def U_ICU_ENTRY_POINT_RENAME
  *  @stable ICU 4.2
  */
-/**
+/*
  * Disable the version suffix. Use the custom suffix if exists.
  * \def U_DISABLE_VERSION_SUFFIX
  * @internal
