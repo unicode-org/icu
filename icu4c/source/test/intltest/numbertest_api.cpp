@@ -2137,8 +2137,10 @@ void NumberFormatterApiTest::formatTypes() {
 void NumberFormatterApiTest::fieldPositionLogic() {
     IcuTestErrorCode status(*this, "fieldPositionLogic");
 
+    const char16_t* message = u"Field position logic test";
+
     FormattedNumber fmtd = assertFormatSingle(
-            u"Field position logic test",
+            message,
             u"",
             NumberFormatter::with(),
             Locale::getEnglish(),
@@ -2155,7 +2157,9 @@ void NumberFormatterApiTest::fieldPositionLogic() {
             {UNUM_DECIMAL_SEPARATOR_FIELD, 14, 15},
             {UNUM_FRACTION_FIELD, 15, 17}};
 
-    assertFieldPositions(fmtd,
+    assertFieldPositions(
+            message,
+            fmtd,
             expectedFieldPositions,
             sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
 
@@ -2588,10 +2592,10 @@ void NumberFormatterApiTest::assertUndefinedSkeleton(const UnlocalizedNumberForm
 }
 
 void NumberFormatterApiTest::assertFieldPositions(
-        const FormattedNumber& formattedNumber,
+        const char16_t* message, const FormattedNumber& formattedNumber,
         const UFieldPosition* expectedFieldPositions, int32_t length) {
     IcuTestErrorCode status(*this, "assertFieldPositions");
-    UnicodeString baseMessage = formattedNumber.toString(status) + u": ";
+    UnicodeString baseMessage = UnicodeString(message) + u": " + formattedNumber.toString(status) + u": ";
     FieldPositionIterator fpi;
     formattedNumber.getAllFieldPositions(fpi, status);
     int32_t i = 0;
@@ -2646,7 +2650,7 @@ void NumberFormatterApiTest::assertFieldPositions(
                     found);
         }
     }
-    assertEquals("Should have seen every field position", length, i);
+    assertEquals(baseMessage + u"Should have seen every field position", length, i);
 }
 
 

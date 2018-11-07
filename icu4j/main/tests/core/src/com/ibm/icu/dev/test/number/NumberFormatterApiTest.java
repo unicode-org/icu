@@ -2115,8 +2115,10 @@ public class NumberFormatterApiTest {
 
     @Test
     public void fieldPositionLogic() {
+        String message = "Field position logic test";
+
         FormattedNumber fmtd = assertFormatSingle(
-                "Field position logic test",
+                message,
                 "",
                 NumberFormatter.with(),
                 ULocale.ENGLISH,
@@ -2132,7 +2134,7 @@ public class NumberFormatterApiTest {
                 {NumberFormat.Field.DECIMAL_SEPARATOR, 14, 15},
                 {NumberFormat.Field.FRACTION, 15, 17}};
 
-        assertFieldPositions(fmtd, expectedFieldPositions);
+        assertFieldPositions(message, fmtd, expectedFieldPositions);
 
         // Test the iteration functionality of nextFieldPosition
         FieldPosition actual = new FieldPosition(NumberFormat.Field.GROUPING_SEPARATOR);
@@ -2453,19 +2455,20 @@ public class NumberFormatterApiTest {
         } catch (UnsupportedOperationException expected) {}
     }
 
-    static void assertFieldPositions(FormattedNumber formattedNumber, Object[][] expectedFieldPositions) {
+    static void assertFieldPositions(String message, FormattedNumber formattedNumber, Object[][] expectedFieldPositions) {
         // Calculate some initial expected values
         int stringLength = formattedNumber.toString().length();
         HashSet<Format.Field> uniqueFields = new HashSet<>();
         for (int i=0; i<expectedFieldPositions.length; i++) {
             uniqueFields.add((Format.Field) expectedFieldPositions[i][0]);
         }
+        String baseMessage = message + ": " + formattedNumber.toString() + ": ";
 
         // Check the AttributedCharacterIterator
         AttributedCharacterIterator fpi = formattedNumber.getFieldIterator();
         Set<AttributedCharacterIterator.Attribute> allAttributes = fpi.getAllAttributeKeys();
-        assertEquals("All known fields should be in the iterator", uniqueFields.size(), allAttributes.size());
-        assertEquals("Iterator should have length of string output", stringLength, fpi.getEndIndex());
+        assertEquals(baseMessage + "All known fields should be in the iterator", uniqueFields.size(), allAttributes.size());
+        assertEquals(baseMessage + "Iterator should have length of string output", stringLength, fpi.getEndIndex());
         int i = 0;
         for (char c = fpi.first(); c != AttributedCharacterIterator.DONE; c = fpi.next(), i++) {
             Set<AttributedCharacterIterator.Attribute> currentAttributes = fpi.getAttributes().keySet();
@@ -2479,16 +2482,16 @@ public class NumberFormatterApiTest {
                     continue;
                 }
 
-                assertTrue("Current character should have expected field", currentAttributes.contains(expectedField));
-                assertTrue("Field should be a known attribute", allAttributes.contains(expectedField));
+                assertTrue(baseMessage + "Current character should have expected field", currentAttributes.contains(expectedField));
+                assertTrue(baseMessage + "Field should be a known attribute", allAttributes.contains(expectedField));
                 int actualBeginIndex = fpi.getRunStart(expectedField);
                 int actualEndIndex = fpi.getRunLimit(expectedField);
-                assertEquals(expectedField + " begin index @" + i, expectedBeginIndex, actualBeginIndex);
-                assertEquals(expectedField + " end index @" + i, expectedEndIndex, actualEndIndex);
+                assertEquals(baseMessage + expectedField + " begin @" + i, expectedBeginIndex, actualBeginIndex);
+                assertEquals(baseMessage + expectedField + " end @" + i, expectedEndIndex, actualEndIndex);
                 attributesRemaining--;
             }
-            assertEquals("Should have looked at every field", 0, attributesRemaining);
+            assertEquals(baseMessage + "Should have looked at every field", 0, attributesRemaining);
         }
-        assertEquals("Should have looked at every character", stringLength, i);
+        assertEquals(baseMessage + "Should have looked at every character", stringLength, i);
     }
 }

@@ -118,7 +118,7 @@ class NumberFormatterApiTest : public IntlTest {
 
     void assertUndefinedSkeleton(const UnlocalizedNumberFormatter& f);
 
-    void assertFieldPositions(const FormattedNumber& formattedNumber,
+    void assertFieldPositions(const char16_t* message, const FormattedNumber& formattedNumber,
                               const UFieldPosition* expectedFieldPositions, int32_t length);
 };
 
