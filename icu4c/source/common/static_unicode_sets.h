@@ -1,7 +1,17 @@
 // © 2018 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+// This file contains utilities to deal with static-allocated UnicodeSets.
+//
+// Common use case: you write a "private static final" UnicodeSet in Java, and
+// want something similarly easy in C++.  Originally written for number
+// parsing, but this header can be used for other applications.
+//
+// Main entrypoint: `unisets::get(unisets::MY_SET_ID_HERE)`
+//
 // This file is in common instead of i18n because it is needed by ucurr.cpp.
+//
+// Author: sffc
 
 #include "unicode/utypes.h"
 
@@ -69,6 +79,13 @@ enum Key {
  *
  * Exported as U_COMMON_API for ucurr.cpp
  *
+ * This method is always safe and OK to chain: in the case of a memory or other
+ * error, it returns an empty set from static memory.
+ * 
+ * Example:
+ * 
+ *     UBool hasIgnorables = unisets::get(unisets::DEFAULT_IGNORABLES)->contains(...);
+ *
  * @param key The desired UnicodeSet according to the enum in this file.
  * @return The requested UnicodeSet. Guaranteed to be frozen and non-null, but
  *         may be empty if an error occurred during data loading.
@@ -99,6 +116,7 @@ U_COMMON_API Key chooseFrom(UnicodeString str, Key key1);
  */
 U_COMMON_API Key chooseFrom(UnicodeString str, Key key1, Key key2);
 
+// TODO: Load these from data: ICU-20108
 // Unused in C++:
 // Key chooseCurrency(UnicodeString str);
 // Used instead:
