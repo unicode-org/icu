@@ -2342,6 +2342,11 @@ void NumberFormatterApiTest::errors() {
 }
 
 void NumberFormatterApiTest::validRanges() {
+    if (quick) {
+        // Do not run this test except in exhaustive mode.
+        // (somewhat slow to check all permutations of settings)
+        return;
+    }
 
 #define EXPECTED_MAX_INT_FRAC_SIG 999
 
