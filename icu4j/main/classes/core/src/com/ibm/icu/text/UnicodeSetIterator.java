@@ -34,13 +34,13 @@ import java.util.Iterator;
  *   }
  * }
  * </pre>
- * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification. 
+ * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification.
  * Do not alter the UnicodeSet while iterating.
  * @author M. Davis
  * @stable ICU 2.0
  */
 public class UnicodeSetIterator {
-    
+
     /**
      * Value of <tt>codepoint</tt> if the iterator points to a string.
      * If <tt>codepoint == IS_STRING</tt>, then examine
@@ -48,7 +48,7 @@ public class UnicodeSetIterator {
      * @stable ICU 2.0
      */
     public static int IS_STRING = -1;
-    
+
     /**
      * Current code point, or the special value <tt>IS_STRING</tt>, if
      * the iterator points to a string.
@@ -83,7 +83,7 @@ public class UnicodeSetIterator {
     public UnicodeSetIterator(UnicodeSet set) {
         reset(set);
     }
-        
+
     /**
      * Create an iterator over nothing.  <tt>next()</tt> and
      * <tt>nextRange()</tt> return false. This is a convenience
@@ -93,14 +93,14 @@ public class UnicodeSetIterator {
     public UnicodeSetIterator() {
         reset(new UnicodeSet());
     }
-        
+
     /**
      * Returns the next element in the set, either a single code point
      * or a string.  If there are no more elements in the set, return
      * false.  If <tt>codepoint == IS_STRING</tt>, the value is a
      * string in the <tt>string</tt> field.  Otherwise the value is a
      * single code point in the <tt>codepoint</tt> field.
-     * 
+     *
      * <p>The order of iteration is all code points in sorted order,
      * followed by all strings sorted order.  <tt>codepointEnd</tt> is
      * undefined after calling this method.  <tt>string</tt> is
@@ -108,7 +108,7 @@ public class UnicodeSetIterator {
      * calls to <tt>next()</tt> and <tt>nextRange()</tt> without
      * calling <tt>reset()</tt> between them.  The results of doing so
      * are undefined.
-     * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification. 
+     * <p><b>Warning: </b>For speed, UnicodeSet iteration does not check for concurrent modification.
      * Do not alter the UnicodeSet while iterating.
      * @return true if there was another element in the set and this
      * object contains the element.
@@ -124,9 +124,9 @@ public class UnicodeSetIterator {
             codepoint = codepointEnd = nextElement++;
             return true;
         }
-        
+
         // stringIterator == null iff there are no string elements remaining
-        
+
         if (stringIterator == null) {
             return false;
         }
@@ -137,7 +137,7 @@ public class UnicodeSetIterator {
         }
         return true;
     }
-        
+
     /**
      * Returns the next element in the set, either a code point range
      * or a string.  If there are no more elements in the set, return
@@ -145,7 +145,7 @@ public class UnicodeSetIterator {
      * string in the <tt>string</tt> field.  Otherwise the value is a
      * range of one or more code points from <tt>codepoint</tt> to
      * <tt>codepointeEnd</tt> inclusive.
-     * 
+     *
      * <p>The order of iteration is all code points ranges in sorted
      * order, followed by all strings sorted order.  Ranges are
      * disjoint and non-contiguous.  <tt>string</tt> is undefined
@@ -172,9 +172,9 @@ public class UnicodeSetIterator {
             nextElement = endElement+1;
             return true;
         }
-        
+
         // stringIterator == null iff there are no string elements remaining
-        
+
         if (stringIterator == null) {
             return false;
         }
@@ -185,7 +185,7 @@ public class UnicodeSetIterator {
         }
         return true;
     }
-        
+
     /**
      * Sets this iterator to visit the elements of the given set and
      * resets it to the start of that set.  The iterator is valid only
@@ -197,7 +197,7 @@ public class UnicodeSetIterator {
         set = uset;
         reset();
     }
-        
+
     /**
      * Resets this iterator to the start of the set.
      * @stable ICU 2.0
@@ -206,19 +206,17 @@ public class UnicodeSetIterator {
         endRange = set.getRangeCount() - 1;
         range = 0;
         endElement = -1;
-        nextElement = 0;            
+        nextElement = 0;
         if (endRange >= 0) {
             loadRange(range);
         }
-        stringIterator = null;
-        if (set.strings != null) {
+        if (set.hasStrings()) {
             stringIterator = set.strings.iterator();
-            if (!stringIterator.hasNext()) {
-                stringIterator = null;
-            }
+        } else {
+            stringIterator = null;
         }
     }
-    
+
     /**
      * Gets the current string from the iterator. Only use after calling next(), not nextRange().
      * @stable ICU 4.0
@@ -229,13 +227,13 @@ public class UnicodeSetIterator {
         }
         return string;
     }
-    
+
     // ======================= PRIVATES ===========================
-    
+
     private UnicodeSet set;
     private int endRange = 0;
     private int range = 0;
-    
+
     /**
      * @internal
      * @deprecated This API is ICU internal only.
@@ -244,7 +242,7 @@ public class UnicodeSetIterator {
     public UnicodeSet getSet() {
         return set;
     }
-    
+
     /**
      * @internal
      * @deprecated This API is ICU internal only.
@@ -258,7 +256,7 @@ public class UnicodeSetIterator {
     @Deprecated
     protected int nextElement;
     private Iterator<String> stringIterator = null;
-    
+
     /**
      * Invariant: stringIterator is null when there are no (more) strings remaining
      */
