@@ -281,10 +281,10 @@ template<typename T, int32_t stackCapacity>
 class MaybeStackArray {
 public:
     // No heap allocation. Use only on the stack.
-    static void* U_EXPORT2 operator new(size_t) U_NO_THROW = delete;
-    static void* U_EXPORT2 operator new[](size_t) U_NO_THROW = delete;
+    static void* U_EXPORT2 operator new(size_t) U_NOEXCEPT = delete;
+    static void* U_EXPORT2 operator new[](size_t) U_NOEXCEPT = delete;
 #if U_HAVE_PLACEMENT_NEW
-    static void* U_EXPORT2 operator new(size_t, void*) U_NO_THROW = delete;
+    static void* U_EXPORT2 operator new(size_t, void*) U_NOEXCEPT = delete;
 #endif
 
     /**
@@ -496,10 +496,10 @@ template<typename H, typename T, int32_t stackCapacity>
 class MaybeStackHeaderAndArray {
 public:
     // No heap allocation. Use only on the stack.
-    static void* U_EXPORT2 operator new(size_t) U_NO_THROW = delete;
-    static void* U_EXPORT2 operator new[](size_t) U_NO_THROW = delete;
+    static void* U_EXPORT2 operator new(size_t) U_NOEXCEPT = delete;
+    static void* U_EXPORT2 operator new[](size_t) U_NOEXCEPT = delete;
 #if U_HAVE_PLACEMENT_NEW
-    static void* U_EXPORT2 operator new(size_t, void*) U_NO_THROW = delete;
+    static void* U_EXPORT2 operator new(size_t, void*) U_NOEXCEPT = delete;
 #endif
 
     /**
