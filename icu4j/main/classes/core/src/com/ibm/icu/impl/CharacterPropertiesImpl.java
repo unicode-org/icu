@@ -2,6 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl;
 
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -9,13 +11,16 @@ import com.ibm.icu.text.UnicodeSet;
  * but below class CharacterProperties and class UnicodeSet.
  */
 public final class CharacterPropertiesImpl {
+    private static final int NUM_INCLUSIONS = UCharacterProperty.SRC_COUNT +
+            UProperty.INT_LIMIT - UProperty.INT_START;
+
     /**
      * A set of all characters _except_ the second through last characters of
      * certain ranges. These ranges are ranges of characters whose
      * properties are all exactly alike, e.g. CJK Ideographs from
      * U+4E00 to U+9FA5.
      */
-    private static final UnicodeSet inclusions[] = new UnicodeSet[UCharacterProperty.SRC_COUNT];
+    private static final UnicodeSet inclusions[] = new UnicodeSet[NUM_INCLUSIONS];
 
     /** For {@link UnicodeSet#setDefaultXSymbolTable}. */
     public static synchronized void clear() {
@@ -24,7 +29,7 @@ public final class CharacterPropertiesImpl {
         }
     }
 
-    private static synchronized UnicodeSet getInclusionsForSource(int src) {
+    private static UnicodeSet getInclusionsForSource(int src) {
         if (inclusions[src] == null) {
             UnicodeSet incl = new UnicodeSet();
             switch(src) {
@@ -71,16 +76,48 @@ public final class CharacterPropertiesImpl {
             // We do not freeze() the set because we only iterate over it,
             // rather than testing contains(),
             // so the extra time and memory to optimize that are not necessary.
-            inclusions[src] = incl;
+            inclusions[src] = incl.compact();
         }
         return inclusions[src];
+    }
+
+    private static UnicodeSet getIntPropInclusions(int prop) {
+        assert(UProperty.INT_START <= prop && prop < UProperty.INT_LIMIT);
+        int inclIndex = UCharacterProperty.SRC_COUNT + prop - UProperty.INT_START;
+        if (inclusions[inclIndex] != null) {
+            return inclusions[inclIndex];
+        }
+        int src = UCharacterProperty.INSTANCE.getSource(prop);
+        UnicodeSet incl = getInclusionsForSource(src);
+
+        UnicodeSet intPropIncl = new UnicodeSet(0, 0);
+        int numRanges = incl.getRangeCount();
+        int prevValue = 0;
+        for (int i = 0; i < numRanges; ++i) {
+            int rangeEnd = incl.getRangeEnd(i);
+            for (int c = incl.getRangeStart(i); c <= rangeEnd; ++c) {
+                // TODO: Get a UCharacterProperty.IntProperty to avoid the property dispatch.
+                int value = UCharacter.getIntPropertyValue(c, prop);
+                if (value != prevValue) {
+                    intPropIncl.add(c);
+                    prevValue = value;
+                }
+            }
+        }
+
+        // Compact for caching.
+        return inclusions[inclIndex] = intPropIncl.compact();
     }
 
     /**
      * Returns a mutable UnicodeSet -- do not modify!
      */
-    public static UnicodeSet getInclusionsForProperty(int prop) {
-        int src = UCharacterProperty.INSTANCE.getSource(prop);
-        return getInclusionsForSource(src);
+    public static synchronized UnicodeSet getInclusionsForProperty(int prop) {
+        if (UProperty.INT_START <= prop && prop < UProperty.INT_LIMIT) {
+            return getIntPropInclusions(prop);
+        } else {
+            int src = UCharacterProperty.INSTANCE.getSource(prop);
+            return getInclusionsForSource(src);
+        }
     }
 }
