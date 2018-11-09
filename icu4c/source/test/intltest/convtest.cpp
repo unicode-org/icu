@@ -606,12 +606,7 @@ ConversionTest::TestGetUnicodeSet2() {
                 // First try to see if we have different sets because ucnv_getUnicodeSet()
                 // added strings: The above conversion method does not tell us what strings might be convertible.
                 // Remove strings from the set and compare again.
-                // Unfortunately, there are no good, direct set methods for finding out whether there are strings
-                // in the set, nor for enumerating or removing just them.
-                // Intersect all code points with the set. The intersection will not contain strings.
-                UnicodeSet temp(0, 0x10ffff);
-                temp.retainAll(set);
-                set=temp;
+                set.removeAllStrings();
             }
             if(set!=expected) {
                 UnicodeSet diffSet;

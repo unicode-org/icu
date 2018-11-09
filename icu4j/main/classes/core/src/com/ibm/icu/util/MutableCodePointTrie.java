@@ -178,39 +178,57 @@ public final class MutableCodePointTrie extends CodePointMap implements Cloneabl
         int nullValue = initialValue;
         if (filter != null) { nullValue = filter.apply(nullValue); }
         int c = start;
-        int value = 0;  // Initialize to make compiler happy. Real value when haveValue is true.
+        // Initialize to make compiler happy. Real value when haveValue is true.
+        int trieValue = 0, value = 0;
         boolean haveValue = false;
         int i = c >> CodePointTrie.SHIFT_3;
         do {
             if (flags[i] == ALL_SAME) {
-                int value2 = maybeFilterValue(index[i], initialValue, nullValue, filter);
+                int trieValue2 = index[i];
                 if (haveValue) {
-                    if (value2 != value) {
-                        range.set(start, c - 1, value);
-                        return true;
+                    if (trieValue2 != trieValue) {
+                        if (filter == null ||
+                                maybeFilterValue(trieValue2, initialValue, nullValue,
+                                        filter) != value) {
+                            range.set(start, c - 1, value);
+                            return true;
+                        }
+                        trieValue = trieValue2;  // may or may not help
                     }
                 } else {
-                    value = value2;
+                    trieValue = trieValue2;
+                    value = maybeFilterValue(trieValue2, initialValue, nullValue, filter);
                     haveValue = true;
                 }
                 c = (c + CodePointTrie.SMALL_DATA_BLOCK_LENGTH) & ~CodePointTrie.SMALL_DATA_MASK;
             } else /* MIXED */ {
                 int di = index[i] + (c & CodePointTrie.SMALL_DATA_MASK);
-                int value2 = maybeFilterValue(data[di], initialValue, nullValue, filter);
+                int trieValue2 = data[di];
                 if (haveValue) {
-                    if (value2 != value) {
-                        range.set(start, c - 1, value);
-                        return true;
+                    if (trieValue2 != trieValue) {
+                        if (filter == null ||
+                                maybeFilterValue(trieValue2, initialValue, nullValue,
+                                        filter) != value) {
+                            range.set(start, c - 1, value);
+                            return true;
+                        }
+                        trieValue = trieValue2;  // may or may not help
                     }
                 } else {
-                    value = value2;
+                    trieValue = trieValue2;
+                    value = maybeFilterValue(trieValue2, initialValue, nullValue, filter);
                     haveValue = true;
                 }
                 while ((++c & CodePointTrie.SMALL_DATA_MASK) != 0) {
-                    if (maybeFilterValue(data[++di], initialValue, nullValue,
-                                         filter) != value) {
-                        range.set(start, c - 1, value);
-                        return true;
+                    trieValue2 = data[++di];
+                    if (trieValue2 != trieValue) {
+                        if (filter == null ||
+                                maybeFilterValue(trieValue2, initialValue, nullValue,
+                                        filter) != value) {
+                            range.set(start, c - 1, value);
+                            return true;
+                        }
+                        trieValue = trieValue2;  // may or may not help
                     }
                 }
             }

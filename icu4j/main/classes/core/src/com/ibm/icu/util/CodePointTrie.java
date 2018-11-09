@@ -353,7 +353,8 @@ public abstract class CodePointTrie extends CodePointMap {
         int prevI3Block = -1;
         int prevBlock = -1;
         int c = start;
-        int value = 0;  // Initialize to make compiler happy. Real value when haveValue is true.
+        // Initialize to make compiler happy. Real value when haveValue is true.
+        int trieValue = 0, value = 0;
         boolean haveValue = false;
         do {
             int i3Block;
@@ -391,6 +392,7 @@ public abstract class CodePointTrie extends CodePointMap {
                             return true;
                         }
                     } else {
+                        trieValue = this.nullValue;
                         value = nullValue;
                         haveValue = true;
                     }
@@ -429,29 +431,39 @@ public abstract class CodePointTrie extends CodePointMap {
                                 return true;
                             }
                         } else {
+                            trieValue = this.nullValue;
                             value = nullValue;
                             haveValue = true;
                         }
                         c = (c + dataBlockLength) & ~dataMask;
                     } else {
                         int di = block + (c & dataMask);
-                        int value2 = data.getFromIndex(di);
-                        value2 = maybeFilterValue(value2, this.nullValue, nullValue, filter);
+                        int trieValue2 = data.getFromIndex(di);
                         if (haveValue) {
-                            if (value2 != value) {
-                                range.set(start, c - 1, value);
-                                return true;
+                            if (trieValue2 != trieValue) {
+                                if (filter == null ||
+                                        maybeFilterValue(trieValue2, this.nullValue, nullValue,
+                                                filter) != value) {
+                                    range.set(start, c - 1, value);
+                                    return true;
+                                }
+                                trieValue = trieValue2;  // may or may not help
                             }
                         } else {
-                            value = value2;
+                            trieValue = trieValue2;
+                            value = maybeFilterValue(trieValue2, this.nullValue, nullValue, filter);
                             haveValue = true;
                         }
                         while ((++c & dataMask) != 0) {
-                            if (maybeFilterValue(data.getFromIndex(++di),
-                                                 this.nullValue, nullValue,
-                                                 filter) != value) {
-                                range.set(start, c - 1, value);
-                                return true;
+                            trieValue2 = data.getFromIndex(++di);
+                            if (trieValue2 != trieValue) {
+                                if (filter == null ||
+                                        maybeFilterValue(trieValue2, this.nullValue, nullValue,
+                                                filter) != value) {
+                                    range.set(start, c - 1, value);
+                                    return true;
+                                }
+                                trieValue = trieValue2;  // may or may not help
                             }
                         }
                     }
