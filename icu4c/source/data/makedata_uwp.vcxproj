@@ -127,10 +127,10 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" Condition="'$(SkipUWP)'!='true'" />
   <Target Name="Build" Condition="'$(SkipUWP)'=='true'">
-    <Message Text="Skipping UWP project: $(MSBuildThisFile)" Importance="high" />
+    <Message Text="Skipping building the UWP project: $(MSBuildThisFile)" Importance="high" />
   </Target>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" Condition="'$(SkipUWP)'!='true'" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
 </Project>
