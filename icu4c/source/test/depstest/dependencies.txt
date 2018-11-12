@@ -24,6 +24,7 @@ system_symbols:
     stdio_input stdio_output file_io readlink_function dir_io mmap_functions dlfcn
     # C++
     cplusplus iostream
+    std_mutex
 
 group: PIC
     # Position-Independent Code (-fPIC) requires a Global Offset Table.
@@ -37,6 +38,15 @@ group: system_debug
 
 group: malloc_functions
     free malloc realloc
+
+group: std_mutex
+    std::condition_variable::notify_one()
+    std::condition_variable::wait(std::unique_lock<std::mutex>&)
+    std::condition_variable::notify_all()
+    std::condition_variable::condition_variable()
+    std::condition_variable::~condition_variable()
+    std::condition_variable_any::condition_variable_any()
+    std::condition_variable_any::~condition_variable_any()
 
 group: ubsan
     # UBSan=UndefinedBehaviorSanitizer, clang -fsanitize=bounds
@@ -819,6 +829,7 @@ group: platform
     stdio_input readlink_function dir_io
     dlfcn  # Move related code into icuplug.c?
     cplusplus
+    std_mutex
 
 # ICU i18n library ----------------------------------------------------------- #
 

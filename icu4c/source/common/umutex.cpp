@@ -64,6 +64,11 @@ umtx_unlock(UMutex* mutex)
     mutex->fMutex.unlock();
 }
 
+UConditionVar::UConditionVar() : fCV() {
+}
+
+UConditionVar::~UConditionVar() {
+}
 
 U_CAPI void U_EXPORT2
 umtx_condWait(UConditionVar *cond, UMutex *mutex) {

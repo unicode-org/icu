@@ -245,7 +245,7 @@ typedef size_t uintptr_t;
 #ifdef U_HAVE_STD_MUTEX
     /* Use the predefined value. */
 #else
-#    define U_HAVE_STD_MUTEX 0
+#    define U_HAVE_STD_MUTEX 1
 #endif
 
 /*===========================================================================*/
