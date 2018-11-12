@@ -16,8 +16,11 @@ This probably works only on Linux.
 
 The exit code is 0 if everything is fine, 1 for errors, 2 for only warnings.
 
-Sample invocation:
-  ~/svn.icu/trunk/src/source/test/depstest$ ./depstest.py ~/svn.icu/trunk/dbg
+Sample invocation with an in-source build:
+  ~/icu/icu4c/source/test/depstest$ ./depstest.py ../../
+
+Sample invocation with an out-of-source build:
+  ~/icu/icu4c/source/test/depstest$ ./depstest.py ~/build/
 """
 
 __author__ = "Markus W. Scherer"
@@ -87,6 +90,16 @@ def _ReadLibrary(root_path, library_name):
   for path in obj_paths:
     _ReadObjFile(root_path, library_name, os.path.basename(path))
 
+# Dependencies that would otherwise be errors, but that are to be allowed
+# in a limited (not transitive) context.  List of (file_name, symbol)
+# TODO: Move this data to dependencies.txt?
+allowed_errors = (
+  ("common/umutex.o", "operator new(unsigned long)"),
+  ("common/umutex.o", "std::__throw_bad_alloc()"),
+  ("common/umutex.o", "std::__throw_system_error(int)"),
+  ("common/umutex.o", "std::uncaught_exception()"),
+)
+
 def _Resolve(name, parents):
   global _ignored_symbols, _obj_files, _symbols_to_files, _return_value
   item = dependencies.items[name]
@@ -130,6 +143,9 @@ def _Resolve(name, parents):
   imports -= exports | system_symbols
   for symbol in imports:
     for file_name in files:
+      if (file_name, symbol) in allowed_errors:
+         sys.stderr.write("Info:  ignoring %s imports %s\n\n" % (file_name, symbol))
+         continue
       if symbol in _obj_files[file_name]["imports"]:
         neededFile = _symbols_to_files.get(symbol)
         if neededFile in dependencies.file_to_item:
@@ -138,7 +154,7 @@ def _Resolve(name, parents):
           neededItem = "- is this a new system symbol?"
         sys.stderr.write("Error: in %s %s: %s imports %s %s\n" %
                          (item_type, name, file_name, symbol, neededItem))
-    _return_value = 1
+        _return_value = 1
   del parents[-1]
   return item
 
