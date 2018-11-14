@@ -85,6 +85,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(locale);
         TESTCASE_AUTO(formatTypes);
         TESTCASE_AUTO(fieldPositionLogic);
+        TESTCASE_AUTO(fieldPositionCoverage);
         TESTCASE_AUTO(toFormat);
         TESTCASE_AUTO(errors);
         TESTCASE_AUTO(validRanges);
@@ -2217,6 +2218,137 @@ void NumberFormatterApiTest::fieldPositionLogic() {
     actual = {UNUM_FRACTION_FIELD};
     fmtd = NumberFormatter::withLocale("en").formatInt(5, status);
     assertFalse(u"No fraction part in an integer", fmtd.nextFieldPosition(actual, status));
+}
+
+void NumberFormatterApiTest::fieldPositionCoverage() {
+    IcuTestErrorCode status(*this, "fieldPositionCoverage");
+
+    {
+        const char16_t* message = u"Measure unit field position basic";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"measure-unit/temperature-fahrenheit",
+                NumberFormatter::with().unit(FAHRENHEIT),
+                Locale::getEnglish(),
+                68,
+                u"68°F");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_INTEGER_FIELD, 0, 2},
+                {UNUM_MEASURE_UNIT_FIELD, 2, 4}};
+        assertFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
+    }
+
+    {
+        const char16_t* message = u"Measure unit field position with compound unit";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"measure-unit/temperature-fahrenheit per-measure-unit/duration-day",
+                NumberFormatter::with().unit(FAHRENHEIT).perUnit(DAY),
+                Locale::getEnglish(),
+                68,
+                u"68°F/d");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_INTEGER_FIELD, 0, 2},
+                // coverage for old enum:
+                {DecimalFormat::kMeasureUnitField, 2, 6}};
+        assertFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
+    }
+
+    {
+        const char16_t* message = u"Measure unit field position with spaces";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"measure-unit/length-meter unit-width-full-name",
+                NumberFormatter::with().unit(METER).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+                Locale::getEnglish(),
+                68,
+                u"68 meters");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_INTEGER_FIELD, 0, 2},
+                // note: field starts after the space
+                {UNUM_MEASURE_UNIT_FIELD, 3, 9}};
+        assertFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
+    }
+
+    {
+        const char16_t* message = u"Measure unit field position with prefix and suffix";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"measure-unit/length-meter per-measure-unit/duration-second unit-width-full-name",
+                NumberFormatter::with().unit(METER).perUnit(SECOND).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+                "ky", // locale with the interesting data
+                68,
+                u"секундасына 68 метр");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_MEASURE_UNIT_FIELD, 0, 11},
+                {UNUM_INTEGER_FIELD, 12, 14},
+                {UNUM_MEASURE_UNIT_FIELD, 15, 19}};
+        assertFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
+    }
+
+    {
+        const char16_t* message = u"Measure unit field position with inner spaces";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"measure-unit/temperature-fahrenheit unit-width-full-name",
+                NumberFormatter::with().unit(FAHRENHEIT).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+                "vi", // locale with the interesting data
+                68,
+                u"68 độ F");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_INTEGER_FIELD, 0, 2},
+                // Should trim leading/trailing spaces, but not inner spaces:
+                {UNUM_MEASURE_UNIT_FIELD, 3, 7}};
+        assertFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
+    }
+
+    {
+        // Data: other{"‎{0} K"} == "\u200E{0} K"
+        // If that data changes, try to find another example of a non-empty unit prefix/suffix
+        // that is also all ignorables (whitespace and bidi control marks).
+        const char16_t* message = u"Measure unit field position with fully ignorable prefix";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"measure-unit/temperature-kelvin",
+                NumberFormatter::with().unit(KELVIN),
+                "fa", // locale with the interesting data
+                68,
+                u"‎۶۸ K");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_INTEGER_FIELD, 1, 3},
+                {UNUM_MEASURE_UNIT_FIELD, 4, 5}};
+        assertFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
+    }
 }
 
 void NumberFormatterApiTest::toFormat() {

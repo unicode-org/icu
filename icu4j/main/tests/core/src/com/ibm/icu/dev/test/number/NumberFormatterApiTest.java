@@ -2196,6 +2196,129 @@ public class NumberFormatterApiTest {
         assertFalse("No fraction part in an integer", fmtd.nextFieldPosition(actual));
     }
 
+    @Test
+    public void fieldPositionCoverage() {
+        {
+            String message = "Measure unit field position basic";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "measure-unit/temperature-fahrenheit",
+                    NumberFormatter.with().unit(MeasureUnit.FAHRENHEIT),
+                    ULocale.ENGLISH,
+                    68,
+                    "68°F");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.INTEGER, 0, 2},
+                    {NumberFormat.Field.MEASURE_UNIT, 2, 4}};
+            assertFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
+
+        {
+            String message = "Measure unit field position with compound unit";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "measure-unit/temperature-fahrenheit per-measure-unit/duration-day",
+                    NumberFormatter.with().unit(MeasureUnit.FAHRENHEIT).perUnit(MeasureUnit.DAY),
+                    ULocale.ENGLISH,
+                    68,
+                    "68°F/d");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.INTEGER, 0, 2},
+                    {NumberFormat.Field.MEASURE_UNIT, 2, 6}};
+            assertFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
+
+        {
+            String message = "Measure unit field position with spaces";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "measure-unit/length-meter unit-width-full-name",
+                    NumberFormatter.with().unit(MeasureUnit.METER).unitWidth(UnitWidth.FULL_NAME),
+                    ULocale.ENGLISH,
+                    68,
+                    "68 meters");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.INTEGER, 0, 2},
+                    // note: field starts after the space
+                    {NumberFormat.Field.MEASURE_UNIT, 3, 9}};
+            assertFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
+
+        {
+            String message = "Measure unit field position with prefix and suffix";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "measure-unit/length-meter per-measure-unit/duration-second unit-width-full-name",
+                    NumberFormatter.with().unit(MeasureUnit.METER).perUnit(MeasureUnit.SECOND).unitWidth(UnitWidth.FULL_NAME),
+                    new ULocale("ky"), // locale with the interesting data
+                    68,
+                    "секундасына 68 метр");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.MEASURE_UNIT, 0, 11},
+                    {NumberFormat.Field.INTEGER, 12, 14},
+                    {NumberFormat.Field.MEASURE_UNIT, 15, 19}};
+            assertFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
+
+        {
+            String message = "Measure unit field position with inner spaces";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "measure-unit/temperature-fahrenheit unit-width-full-name",
+                    NumberFormatter.with().unit(MeasureUnit.FAHRENHEIT).unitWidth(UnitWidth.FULL_NAME),
+                    new ULocale("vi"), // locale with the interesting data
+                    68,
+                    "68 độ F");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.INTEGER, 0, 2},
+                    // Should trim leading/trailing spaces, but not inner spaces:
+                    {NumberFormat.Field.MEASURE_UNIT, 3, 7}};
+            assertFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
+
+        {
+            // Data: other{"‎{0} K"} == "\u200E{0} K"
+            // If that data changes, try to find another example of a non-empty unit prefix/suffix
+            // that is also all ignorables (whitespace and bidi control marks).
+            String message = "Measure unit field position with fully ignorable prefix";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "measure-unit/temperature-kelvin",
+                    NumberFormatter.with().unit(MeasureUnit.KELVIN),
+                    new ULocale("fa"), // locale with the interesting data
+                    68,
+                    "‎۶۸ K");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.INTEGER, 1, 3},
+                    {NumberFormat.Field.MEASURE_UNIT, 4, 5}};
+            assertFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
+    }
+
     /** Handler for serialization compatibility test suite. */
     public static class FormatHandler implements SerializableTestUtility.Handler {
         @Override

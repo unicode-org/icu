@@ -140,6 +140,8 @@ class U_I18N_API NumberStringBuilder : public UMemory {
     int32_t prepareForInsertHelper(int32_t index, int32_t count, UErrorCode &status);
 
     int32_t remove(int32_t index, int32_t count);
+
+    bool trimFieldPosition(UFieldPosition& fpos) const;
 };
 
 } // namespace impl

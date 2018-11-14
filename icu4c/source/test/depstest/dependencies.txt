@@ -918,6 +918,8 @@ group: number_representation
     number_decimalquantity.o number_stringbuilder.o numparse_stringsegment.o number_utils.o
   deps
     decnumber double_conversion
+    # for trimming whitespace around fields
+    static_unicode_sets
     # for data loading; that could be split off
     resourcebundle
     int_functions

@@ -9,8 +9,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.ibm.icu.impl.StaticUnicodeSets;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.Field;
+import com.ibm.icu.text.UnicodeSet;
 
 /**
  * A StringBuilder optimized for number formatting. It implements the following key features beyond a
@@ -384,7 +386,7 @@ public class NumberStringBuilder implements CharSequence {
         return new String(chars, zero, length);
     }
 
-    private static final Map<Field, Character> fieldToDebugChar = new HashMap<Field, Character>();
+    private static final Map<Field, Character> fieldToDebugChar = new HashMap<>();
 
     static {
         fieldToDebugChar.put(NumberFormat.Field.SIGN, '-');
@@ -523,7 +525,12 @@ public class NumberStringBuilder implements CharSequence {
                     continue;
                 }
                 fp.setEndIndex(i - zero);
-                break;
+                // Trim ignorables (whitespace, etc.) from the edge of the field.
+                if (trimFieldPosition(fp)) {
+                    break;
+                }
+                // This position was all ignorables; continue to the next position.
+                seenStart = false;
             } else if (!seenStart && field == _field) {
                 fp.setBeginIndex(i - zero);
                 seenStart = true;
@@ -552,22 +559,51 @@ public class NumberStringBuilder implements CharSequence {
             if (current == NumberFormat.Field.INTEGER
                     && field == NumberFormat.Field.GROUPING_SEPARATOR) {
                 // Special case: GROUPING_SEPARATOR counts as an INTEGER.
+                // TODO(ICU-13064): Grouping separator can be more than 1 code unit.
                 as.addAttribute(NumberFormat.Field.GROUPING_SEPARATOR,
                         NumberFormat.Field.GROUPING_SEPARATOR,
                         i,
                         i + 1);
             } else if (current != field) {
                 if (current != null) {
-                    as.addAttribute(current, current, currentStart, i);
+                    FieldPosition fp = new FieldPosition(null);
+                    fp.setBeginIndex(currentStart);
+                    fp.setEndIndex(i);
+                    if (trimFieldPosition(fp)) {
+                        as.addAttribute(current, current, fp.getBeginIndex(), fp.getEndIndex());
+                    }
                 }
                 current = field;
                 currentStart = i;
             }
         }
         if (current != null) {
-            as.addAttribute(current, current, currentStart, length);
+            FieldPosition fp = new FieldPosition(null);
+            fp.setBeginIndex(currentStart);
+            fp.setEndIndex(length);
+            if (trimFieldPosition(fp)) {
+                as.addAttribute(current, current, fp.getBeginIndex(), fp.getEndIndex());
+            }
         }
 
         return as.getIterator();
+    }
+
+    private boolean trimFieldPosition(FieldPosition fp) {
+        // Trim ignorables from the back
+        int endIgnorablesIndex = StaticUnicodeSets.get(StaticUnicodeSets.Key.DEFAULT_IGNORABLES)
+                .spanBack(this, fp.getEndIndex(), UnicodeSet.SpanCondition.CONTAINED);
+
+        // Check if the entire segment is ignorables
+        if (endIgnorablesIndex <= fp.getBeginIndex()) {
+            return false;
+        }
+        fp.setEndIndex(endIgnorablesIndex);
+
+        // Trim ignorables from the front
+        int startIgnorablesIndex = StaticUnicodeSets.get(StaticUnicodeSets.Key.DEFAULT_IGNORABLES)
+                .span(this, fp.getBeginIndex(), UnicodeSet.SpanCondition.CONTAINED);
+        fp.setBeginIndex(startIgnorablesIndex);
+        return true;
     }
 }

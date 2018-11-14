@@ -181,8 +181,7 @@ LongNameHandler::forMeasureUnit(const Locale &loc, const MeasureUnit &unitRef, c
     UnicodeString simpleFormats[ARRAY_LENGTH];
     getMeasureData(loc, unit, width, simpleFormats, status);
     if (U_FAILURE(status)) { return result; }
-    // TODO: What field to use for units?
-    result->simpleFormatsToModifiers(simpleFormats, UNUM_FIELD_COUNT, status);
+    result->simpleFormatsToModifiers(simpleFormats, UNUM_MEASURE_UNIT_FIELD, status);
     return result;
 }
 
@@ -220,8 +219,7 @@ LongNameHandler::forCompoundUnit(const Locale &loc, const MeasureUnit &unit, con
         compiled.format(UnicodeString(u"{0}"), secondaryString, perUnitFormat, status);
         if (U_FAILURE(status)) { return result; }
     }
-    // TODO: What field to use for units?
-    result->multiSimpleFormatsToModifiers(primaryData, perUnitFormat, UNUM_FIELD_COUNT, status);
+    result->multiSimpleFormatsToModifiers(primaryData, perUnitFormat, UNUM_MEASURE_UNIT_FIELD, status);
     return result;
 }
 

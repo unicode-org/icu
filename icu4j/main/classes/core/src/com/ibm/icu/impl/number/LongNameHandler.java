@@ -202,12 +202,11 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
 
         String[] simpleFormats = new String[ARRAY_LENGTH];
         getMeasureData(locale, unit, width, simpleFormats);
-        // TODO: What field to use for units?
         // TODO(ICU4J): Reduce the number of object creations here?
         Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<>(
                 StandardPlural.class);
         LongNameHandler result = new LongNameHandler(modifiers, rules, parent);
-        result.simpleFormatsToModifiers(simpleFormats, null);
+        result.simpleFormatsToModifiers(simpleFormats, NumberFormat.Field.MEASURE_UNIT);
         return result;
     }
 
@@ -239,11 +238,10 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
                     .trim();
             perUnitFormat = SimpleFormatterImpl.formatCompiledPattern(compiled, "{0}", secondaryString);
         }
-        // TODO: What field to use for units?
         Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<>(
                 StandardPlural.class);
         LongNameHandler result = new LongNameHandler(modifiers, rules, parent);
-        result.multiSimpleFormatsToModifiers(primaryData, perUnitFormat, null);
+        result.multiSimpleFormatsToModifiers(primaryData, perUnitFormat, NumberFormat.Field.MEASURE_UNIT);
         return result;
     }
 
