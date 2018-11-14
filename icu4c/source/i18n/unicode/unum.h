@@ -375,6 +375,8 @@ typedef enum UNumberFormatFields {
     UNUM_PERMILL_FIELD,
     /** @stable ICU 49 */
     UNUM_SIGN_FIELD,
+    /** @draft ICU 64 */
+    UNUM_MEASURE_UNIT_FIELD,
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UNumberFormatFields value.

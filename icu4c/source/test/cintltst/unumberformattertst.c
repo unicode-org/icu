@@ -105,7 +105,8 @@ static void TestSkeletonFormatToFields() {
                 {UNUM_GROUPING_SEPARATOR_FIELD, 10, 11},
                 {UNUM_INTEGER_FIELD, 1, 14},
                 {UNUM_DECIMAL_SEPARATOR_FIELD, 14, 15},
-                {UNUM_FRACTION_FIELD, 15, 17}
+                {UNUM_FRACTION_FIELD, 15, 17},
+                {UNUM_MEASURE_UNIT_FIELD, 18, 19}
             };
             UFieldPosition actual;
             for (int32_t i = 0; i < sizeof(expectedFields) / sizeof(*expectedFields); i++) {

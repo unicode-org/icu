@@ -1962,6 +1962,11 @@ public abstract class NumberFormat extends UFormat {
         public static final Field CURRENCY = new Field("currency");
 
         /**
+         * @draft ICU 64
+         */
+        public static final Field MEASURE_UNIT = new Field("measure unit");
+
+        /**
          * Constructs a new instance of NumberFormat.Field with the given field
          * name.
          * @stable ICU 3.6

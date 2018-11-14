@@ -71,6 +71,7 @@ class NumberFormatterApiTest : public IntlTest {
     void locale();
     void formatTypes();
     void fieldPositionLogic();
+    void fieldPositionCoverage();
     void toFormat();
     void errors();
     void validRanges();
