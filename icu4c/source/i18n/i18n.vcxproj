@@ -238,6 +238,7 @@
     <ClCompile Include="fmtable.cpp" />
     <ClCompile Include="fmtable_cnv.cpp" />
     <ClCompile Include="format.cpp" />
+    <ClCompile Include="formattedvalue.cpp" />
     <ClCompile Include="fphdlimp.cpp" />
     <ClCompile Include="fpositer.cpp" />
     <ClCompile Include="gender.cpp" />

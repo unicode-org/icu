@@ -85,6 +85,8 @@ class U_I18N_API NumberStringBuilder : public UMemory {
 
     int32_t insert(int32_t index, const NumberStringBuilder &other, UErrorCode &status);
 
+    void writeTerminator(UErrorCode& status);
+
     /**
      * Gets a "safe" UnicodeString that can be used even after the NumberStringBuilder is destructed.
      * */
@@ -105,6 +107,8 @@ class U_I18N_API NumberStringBuilder : public UMemory {
     bool nextFieldPosition(FieldPosition& fp, UErrorCode& status) const;
 
     void getAllFieldPositions(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
+
+    bool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const;
 
     bool containsField(Field field) const;
 
@@ -141,7 +145,11 @@ class U_I18N_API NumberStringBuilder : public UMemory {
 
     int32_t remove(int32_t index, int32_t count);
 
-    bool trimFieldPosition(UFieldPosition& fpos) const;
+    static bool isIntOrGroup(Field field);
+
+    int32_t trimBack(int32_t limit) const;
+
+    int32_t trimFront(int32_t start) const;
 };
 
 } // namespace impl

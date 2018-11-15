@@ -935,6 +935,7 @@ group: number_representation
     resourcebundle
     int_functions
     ucase uniset_core
+    formatted_value
 
 group: numberformatter
     # ICU 60+ NumberFormatter API
@@ -1031,6 +1032,11 @@ group: formattable_cnv
     fmtable_cnv.o
   deps
     formattable unistr_cnv conversion
+
+group: formatted_value
+    formattedvalue.o
+  deps
+    platform
 
 group: format
     format.o fphdlimp.o fpositer.o ufieldpositer.o

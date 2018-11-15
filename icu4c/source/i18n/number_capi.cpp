@@ -20,6 +20,48 @@ using namespace icu::number;
 using namespace icu::number::impl;
 
 
+U_NAMESPACE_BEGIN
+namespace number {
+namespace impl {
+
+/**
+ * Implementation class for UNumberFormatter. Wraps a LocalizedNumberFormatter.
+ */
+struct UNumberFormatterData : public UMemory,
+        // Magic number as ASCII == "NFR" (NumberFormatteR)
+        public IcuCApiHelper<UNumberFormatter, UNumberFormatterData, 0x4E465200> {
+    LocalizedNumberFormatter fFormatter;
+};
+
+struct UFormattedNumberImpl;
+
+// Magic number as ASCII == "FDN" (FormatteDNumber)
+typedef IcuCApiHelper<UFormattedNumber, UFormattedNumberImpl, 0x46444E00> UFormattedNumberApiHelper;
+
+struct UFormattedNumberImpl : public UFormattedValueImpl, public UFormattedNumberApiHelper {
+    UFormattedNumberImpl();
+    ~UFormattedNumberImpl();
+
+    FormattedNumber fImpl;
+    UFormattedNumberData fData;
+};
+
+UFormattedNumberImpl::UFormattedNumberImpl()
+        : fImpl(&fData) {
+    fFormattedValue = &fImpl;
+}
+
+UFormattedNumberImpl::~UFormattedNumberImpl() {
+    // Disown the data from fImpl so it doesn't get deleted twice
+    fImpl.fResults = nullptr;
+}
+
+}
+}
+U_NAMESPACE_END
+
+
+
 U_CAPI UNumberFormatter* U_EXPORT2
 unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const char* locale,
                                UErrorCode* ec) {
@@ -36,55 +78,63 @@ unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const
 
 U_CAPI UFormattedNumber* U_EXPORT2
 unumf_openResult(UErrorCode* ec) {
-    auto* impl = new UFormattedNumberData();
+    auto* impl = new UFormattedNumberImpl();
     if (impl == nullptr) {
         *ec = U_MEMORY_ALLOCATION_ERROR;
         return nullptr;
     }
-    return impl->exportForC();
+    return static_cast<UFormattedNumberApiHelper*>(impl)->exportForC();
 }
 
 U_CAPI void U_EXPORT2
 unumf_formatInt(const UNumberFormatter* uformatter, int64_t value, UFormattedNumber* uresult,
                 UErrorCode* ec) {
     const UNumberFormatterData* formatter = UNumberFormatterData::validate(uformatter, *ec);
-    UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
+    auto* result = UFormattedNumberApiHelper::validate(uresult, *ec);
     if (U_FAILURE(*ec)) { return; }
 
-    result->string.clear();
-    result->quantity.setToLong(value);
-    formatter->fFormatter.formatImpl(result, *ec);
+    result->fData.string.clear();
+    result->fData.quantity.setToLong(value);
+    formatter->fFormatter.formatImpl(&result->fData, *ec);
 }
 
 U_CAPI void U_EXPORT2
 unumf_formatDouble(const UNumberFormatter* uformatter, double value, UFormattedNumber* uresult,
                    UErrorCode* ec) {
     const UNumberFormatterData* formatter = UNumberFormatterData::validate(uformatter, *ec);
-    UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
+    auto* result = UFormattedNumberApiHelper::validate(uresult, *ec);
     if (U_FAILURE(*ec)) { return; }
 
-    result->string.clear();
-    result->quantity.setToDouble(value);
-    formatter->fFormatter.formatImpl(result, *ec);
+    result->fData.string.clear();
+    result->fData.quantity.setToDouble(value);
+    formatter->fFormatter.formatImpl(&result->fData, *ec);
 }
 
 U_CAPI void U_EXPORT2
 unumf_formatDecimal(const UNumberFormatter* uformatter, const char* value, int32_t valueLen,
                     UFormattedNumber* uresult, UErrorCode* ec) {
     const UNumberFormatterData* formatter = UNumberFormatterData::validate(uformatter, *ec);
-    UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
+    auto* result = UFormattedNumberApiHelper::validate(uresult, *ec);
     if (U_FAILURE(*ec)) { return; }
 
-    result->string.clear();
-    result->quantity.setToDecNumber({value, valueLen}, *ec);
+    result->fData.string.clear();
+    result->fData.quantity.setToDecNumber({value, valueLen}, *ec);
     if (U_FAILURE(*ec)) { return; }
-    formatter->fFormatter.formatImpl(result, *ec);
+    formatter->fFormatter.formatImpl(&result->fData, *ec);
+}
+
+U_DRAFT const UFormattedValue* U_EXPORT2
+unumf_resultAsFormattedValue(const UFormattedNumber* uresult, UErrorCode* ec) {
+    const auto* result = UFormattedNumberApiHelper::validate(uresult, *ec);
+    if (U_FAILURE(*ec)) { return nullptr; }
+
+    return static_cast<const UFormattedValueApiHelper*>(result)->exportConstForC();
 }
 
 U_CAPI int32_t U_EXPORT2
 unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t bufferCapacity,
                      UErrorCode* ec) {
-    const UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
+    const auto* result = UFormattedNumberApiHelper::validate(uresult, *ec);
     if (U_FAILURE(*ec)) { return 0; }
 
     if (buffer == nullptr ? bufferCapacity != 0 : bufferCapacity < 0) {
@@ -92,12 +142,12 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
         return 0;
     }
 
-    return result->string.toTempUnicodeString().extract(buffer, bufferCapacity, *ec);
+    return result->fImpl.toTempString(*ec).extract(buffer, bufferCapacity, *ec);
 }
 
 U_CAPI UBool U_EXPORT2
 unumf_resultNextFieldPosition(const UFormattedNumber* uresult, UFieldPosition* ufpos, UErrorCode* ec) {
-    const UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
+    const auto* result = UFormattedNumberApiHelper::validate(uresult, *ec);
     if (U_FAILURE(*ec)) { return FALSE; }
 
     if (ufpos == nullptr) {
@@ -109,7 +159,7 @@ unumf_resultNextFieldPosition(const UFormattedNumber* uresult, UFieldPosition* u
     fp.setField(ufpos->field);
     fp.setBeginIndex(ufpos->beginIndex);
     fp.setEndIndex(ufpos->endIndex);
-    bool retval = result->string.nextFieldPosition(fp, *ec);
+    bool retval = result->fImpl.nextFieldPosition(fp, *ec);
     ufpos->beginIndex = fp.getBeginIndex();
     ufpos->endIndex = fp.getEndIndex();
     // NOTE: MSVC sometimes complains when implicitly converting between bool and UBool
@@ -119,7 +169,7 @@ unumf_resultNextFieldPosition(const UFormattedNumber* uresult, UFieldPosition* u
 U_CAPI void U_EXPORT2
 unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPositionIterator* ufpositer,
                                  UErrorCode* ec) {
-    const UFormattedNumberData* result = UFormattedNumberData::validate(uresult, *ec);
+    const auto* result = UFormattedNumberApiHelper::validate(uresult, *ec);
     if (U_FAILURE(*ec)) { return; }
 
     if (ufpositer == nullptr) {
@@ -128,14 +178,13 @@ unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPosition
     }
 
     auto* fpi = reinterpret_cast<FieldPositionIterator*>(ufpositer);
-    FieldPositionIteratorHandler fpih(fpi, *ec);
-    result->string.getAllFieldPositions(fpih, *ec);
+    result->fImpl.getAllFieldPositions(*fpi, *ec);
 }
 
 U_CAPI void U_EXPORT2
 unumf_closeResult(UFormattedNumber* uresult) {
     UErrorCode localStatus = U_ZERO_ERROR;
-    const UFormattedNumberData* impl = UFormattedNumberData::validate(uresult, localStatus);
+    const UFormattedNumberImpl* impl = UFormattedNumberApiHelper::validate(uresult, localStatus);
     delete impl;
 }
 

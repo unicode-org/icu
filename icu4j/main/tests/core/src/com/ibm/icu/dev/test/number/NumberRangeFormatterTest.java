@@ -8,6 +8,8 @@ import java.util.Locale;
 
 import org.junit.Test;
 
+import com.ibm.icu.dev.test.format.FormattedValueTest;
+import com.ibm.icu.number.FormattedNumberRange;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.LocalizedNumberRangeFormatter;
 import com.ibm.icu.number.Notation;
@@ -19,6 +21,7 @@ import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityFallback;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.number.UnlocalizedNumberRangeFormatter;
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
@@ -706,6 +709,50 @@ public class NumberRangeFormatterTest {
         }
     }
 
+    @Test
+    public void testFieldPositions() {
+        {
+            String message = "Field position test 1";
+            String expectedString = "3K – 5K m";
+            FormattedNumberRange fmtd = assertFormattedRangeEquals(
+                    message,
+                    NumberRangeFormatter.with()
+                        .numberFormatterBoth(NumberFormatter.with()
+                            .unit(MeasureUnit.METER)
+                            .notation(Notation.compactShort()))
+                        .locale(ULocale.US),
+                    3000,
+                    5000,
+                    expectedString);
+            Object[][] expectedFieldPositions = new Object[][]{
+                    {NumberFormat.Field.INTEGER, 0, 1},
+                    {NumberFormat.Field.COMPACT, 1, 2},
+                    {NumberFormat.Field.INTEGER, 5, 6},
+                    {NumberFormat.Field.COMPACT, 6, 7},
+                    {NumberFormat.Field.MEASURE_UNIT, 8, 9}};
+            FormattedValueTest.checkFormattedValue(message, fmtd, expectedString, expectedFieldPositions);
+        }
+
+        {
+            String message = "Field position test 2";
+            String expectedString = "87,654,321–98,765,432";
+            FormattedNumberRange fmtd = assertFormattedRangeEquals(
+                    message,
+                    NumberRangeFormatter.withLocale(ULocale.US),
+                    87654321,
+                    98765432,
+                    expectedString);
+            Object[][] expectedFieldPositions = new Object[][]{
+                    {NumberFormat.Field.GROUPING_SEPARATOR, 2, 3},
+                    {NumberFormat.Field.GROUPING_SEPARATOR, 6, 7},
+                    {NumberFormat.Field.INTEGER, 0, 10},
+                    {NumberFormat.Field.GROUPING_SEPARATOR, 13, 14},
+                    {NumberFormat.Field.GROUPING_SEPARATOR, 17, 18},
+                    {NumberFormat.Field.INTEGER, 11, 21}};
+            FormattedValueTest.checkFormattedValue(message, fmtd, expectedString, expectedFieldPositions);
+        }
+    }
+
     static void assertFormatRange(
             String message,
             UnlocalizedNumberRangeFormatter f,
@@ -733,10 +780,12 @@ public class NumberRangeFormatterTest {
         assertFormattedRangeEquals(message, l, 5e3, 5e6, expected_50K_50M);
     }
 
-    private static void assertFormattedRangeEquals(String message, LocalizedNumberRangeFormatter l, Number first,
+    private static FormattedNumberRange assertFormattedRangeEquals(String message, LocalizedNumberRangeFormatter l, Number first,
             Number second, String expected) {
-        String actual = l.formatRange(first, second).toString();
+        FormattedNumberRange fnr = l.formatRange(first, second);
+        String actual = fnr.toString();
         assertEquals(message + ": " + first + ", " + second, expected, actual);
+        return fnr;
     }
 
 }

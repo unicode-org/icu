@@ -538,6 +538,9 @@
     <ClCompile Include="erarulestest.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="formattedvaluetest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">

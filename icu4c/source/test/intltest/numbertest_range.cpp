@@ -48,6 +48,7 @@ void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const c
         TESTCASE_AUTO(testIdentity);
         TESTCASE_AUTO(testDifferentFormatters);
         TESTCASE_AUTO(testPlurals);
+        TESTCASE_AUTO(testFieldPositions);
         TESTCASE_AUTO(testCopyMove);
     TESTCASE_AUTO_END;
 }
@@ -723,6 +724,63 @@ void NumberRangeFormatterTest::testPlurals() {
     }
 }
 
+void NumberRangeFormatterTest::testFieldPositions() {
+    {
+        const char16_t* message = u"Field position test 1";
+        const char16_t* expectedString = u"3K – 5K m";
+        FormattedNumberRange result = assertFormattedRangeEquals(
+            message,
+            NumberRangeFormatter::with()
+                .numberFormatterBoth(NumberFormatter::with()
+                    .unit(METER)
+                    .notation(Notation::compactShort()))
+                .locale("en-us"),
+            3000,
+            5000,
+            expectedString);
+        static const UFieldPosition expectedFieldPositions[] = {
+            // field, begin index, end index
+            {UNUM_INTEGER_FIELD, 0, 1},
+            {UNUM_COMPACT_FIELD, 1, 2},
+            {UNUM_INTEGER_FIELD, 5, 6},
+            {UNUM_COMPACT_FIELD, 6, 7},
+            {UNUM_MEASURE_UNIT_FIELD, 8, 9}};
+        checkFormattedValue(
+            message,
+            result,
+            expectedString,
+            UFIELD_CATEGORY_NUMBER,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+
+    {
+        const char16_t* message = u"Field position test 2";
+        const char16_t* expectedString = u"87,654,321–98,765,432";
+        FormattedNumberRange result = assertFormattedRangeEquals(
+            message,
+            NumberRangeFormatter::withLocale("en-us"),
+            87654321,
+            98765432,
+            expectedString);
+        static const UFieldPosition expectedFieldPositions[] = {
+            // field, begin index, end index
+            {UNUM_GROUPING_SEPARATOR_FIELD, 2, 3},
+            {UNUM_GROUPING_SEPARATOR_FIELD, 6, 7},
+            {UNUM_INTEGER_FIELD, 0, 10},
+            {UNUM_GROUPING_SEPARATOR_FIELD, 13, 14},
+            {UNUM_GROUPING_SEPARATOR_FIELD, 17, 18},
+            {UNUM_INTEGER_FIELD, 11, 21}};
+        checkFormattedValue(
+            message,
+            result,
+            expectedString,
+            UFIELD_CATEGORY_NUMBER,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+}
+
 void NumberRangeFormatterTest::testCopyMove() {
     IcuTestErrorCode status(*this, "testCopyMove");
 
@@ -792,7 +850,7 @@ void  NumberRangeFormatterTest::assertFormatRange(
     assertFormattedRangeEquals(message, l, 5e3, 5e6, expected_50K_50M);
 }
 
-void NumberRangeFormatterTest::assertFormattedRangeEquals(
+FormattedNumberRange NumberRangeFormatterTest::assertFormattedRangeEquals(
       const char16_t* message,
       const LocalizedNumberRangeFormatter& l,
       double first,
@@ -801,8 +859,10 @@ void NumberRangeFormatterTest::assertFormattedRangeEquals(
     IcuTestErrorCode status(*this, "assertFormattedRangeEquals");
     UnicodeString fullMessage = UnicodeString(message) + u": " + DoubleToUnicodeString(first) + u", " + DoubleToUnicodeString(second);
     status.setScope(fullMessage);
-    UnicodeString actual = l.formatFormattableRange(first, second, status).toString(status);
+    FormattedNumberRange fnr = l.formatFormattableRange(first, second, status);
+    UnicodeString actual = fnr.toString(status);
     assertEquals(fullMessage, expected, actual);
+    return fnr;
 }
 
 

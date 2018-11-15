@@ -17,28 +17,26 @@ U_NAMESPACE_BEGIN namespace number {
 namespace impl {
 
 
-/**
- * Implementation class for UNumberFormatter. Wraps a LocalizedNumberFormatter.
- */
-struct UNumberFormatterData : public UMemory,
-        // Magic number as ASCII == "NFR" (NumberFormatteR)
-        public IcuCApiHelper<UNumberFormatter, UNumberFormatterData, 0x4E465200> {
-    LocalizedNumberFormatter fFormatter;
+struct UFormattedValueImpl;
+
+// Magic number as ASCII == "UFV"
+typedef IcuCApiHelper<UFormattedValue, UFormattedValueImpl, 0x55465600> UFormattedValueApiHelper;
+
+struct UFormattedValueImpl : public UMemory, public UFormattedValueApiHelper {
+    FormattedValue* fFormattedValue = nullptr;
 };
 
 
 /**
- * Implementation class for UFormattedNumber.
+ * Struct for data used by FormattedNumber.
  *
- * This struct is also held internally by the C++ version FormattedNumber since the member types are not
+ * This struct is held internally by the C++ version FormattedNumber since the member types are not
  * declared in the public header file.
  *
  * The DecimalQuantity is not currently being used by FormattedNumber, but at some point it could be used
  * to add a toDecNumber() or similar method.
  */
-struct UFormattedNumberData : public UMemory,
-        // Magic number as ASCII == "FDN" (FormatteDNumber)
-        public IcuCApiHelper<UFormattedNumber, UFormattedNumberData, 0x46444E00> {
+struct UFormattedNumberData : public UMemory {
     DecimalQuantity quantity;
     NumberStringBuilder string;
 };

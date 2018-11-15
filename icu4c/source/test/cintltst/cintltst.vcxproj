@@ -243,6 +243,7 @@
     <ClCompile Include="uregiontest.c" />
     <ClCompile Include="ulistfmttest.c" />
     <ClCompile Include="unumberformattertst.c" />
+    <ClCompile Include="uformattedvaluetst.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cbiditst.h" />

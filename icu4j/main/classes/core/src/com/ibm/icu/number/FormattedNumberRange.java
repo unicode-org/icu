@@ -11,6 +11,8 @@ import java.util.Arrays;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.number.NumberRangeFormatter.RangeIdentityResult;
+import com.ibm.icu.text.ConstrainedFieldPosition;
+import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.util.ICUUncheckedIOException;
 
 /**
@@ -22,7 +24,7 @@ import com.ibm.icu.util.ICUUncheckedIOException;
  * @provisional This API might change or be removed in a future release.
  * @see NumberRangeFormatter
  */
-public class FormattedNumberRange {
+public class FormattedNumberRange implements FormattedValue {
     final NumberStringBuilder string;
     final DecimalQuantity quantity1;
     final DecimalQuantity quantity2;
@@ -37,12 +39,10 @@ public class FormattedNumberRange {
     }
 
     /**
-     * Creates a String representation of the the formatted number range.
+     * {@inheritDoc}
      *
-     * @return a String containing the localized number range.
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
-     * @see NumberRangeFormatter
      */
     @Override
     public String toString() {
@@ -50,21 +50,12 @@ public class FormattedNumberRange {
     }
 
     /**
-     * Append the formatted number range to an Appendable, such as a StringBuilder. This may be slightly more efficient
-     * than creating a String.
+     * {@inheritDoc}
      *
-     * <p>
-     * If an IOException occurs when appending to the Appendable, an unchecked {@link ICUUncheckedIOException} is thrown
-     * instead.
-     *
-     * @param appendable
-     *            The Appendable to which to append the formatted number range string.
-     * @return The same Appendable, for chaining.
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
-     * @see Appendable
-     * @see NumberRangeFormatter
      */
+    @Override
     public <A extends Appendable> A appendTo(A appendable) {
         try {
             appendable.append(string);
@@ -73,6 +64,50 @@ public class FormattedNumberRange {
             throw new ICUUncheckedIOException(e);
         }
         return appendable;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public char charAt(int index) {
+        return string.charAt(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public int length() {
+        return string.length();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public CharSequence subSequence(int start, int end) {
+        return string.subString(start, end);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public boolean nextPosition(ConstrainedFieldPosition cfpos) {
+        return string.nextPosition(cfpos);
     }
 
     /**
@@ -109,20 +144,12 @@ public class FormattedNumberRange {
     }
 
     /**
-     * Export the formatted number range as an AttributedCharacterIterator. This allows you to determine which
-     * characters in the output string correspond to which <em>fields</em>, such as the integer part, fraction part, and
-     * sign.
-     * <p>
-     * If information on only one field is needed, use {@link #nextFieldPosition(FieldPosition)} instead.
+     * {@inheritDoc}
      *
-     * @return An AttributedCharacterIterator, containing information on the field attributes of the number range
-     *         string.
      * @draft ICU 63
      * @provisional This API might change or be removed in a future release.
-     * @see com.ibm.icu.text.NumberFormat.Field
-     * @see AttributedCharacterIterator
-     * @see NumberRangeFormatter
      */
+    @Override
     public AttributedCharacterIterator toCharacterIterator() {
         return string.toCharacterIterator();
     }

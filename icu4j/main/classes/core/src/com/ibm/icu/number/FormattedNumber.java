@@ -10,6 +10,8 @@ import java.util.Arrays;
 
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.NumberStringBuilder;
+import com.ibm.icu.text.ConstrainedFieldPosition;
+import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
 import com.ibm.icu.util.ICUUncheckedIOException;
 
@@ -21,7 +23,7 @@ import com.ibm.icu.util.ICUUncheckedIOException;
  * @provisional This API might change or be removed in a future release.
  * @see NumberFormatter
  */
-public class FormattedNumber {
+public class FormattedNumber implements FormattedValue {
     final NumberStringBuilder nsb;
     final DecimalQuantity fq;
 
@@ -31,12 +33,10 @@ public class FormattedNumber {
     }
 
     /**
-     * Creates a String representation of the the formatted number.
+     * {@inheritDoc}
      *
-     * @return a String containing the localized number.
      * @draft ICU 60
      * @provisional This API might change or be removed in a future release.
-     * @see NumberFormatter
      */
     @Override
     public String toString() {
@@ -44,21 +44,12 @@ public class FormattedNumber {
     }
 
     /**
-     * Append the formatted number to an Appendable, such as a StringBuilder. This may be slightly more
-     * efficient than creating a String.
+     * {@inheritDoc}
      *
-     * <p>
-     * If an IOException occurs when appending to the Appendable, an unchecked
-     * {@link ICUUncheckedIOException} is thrown instead.
-     *
-     * @param appendable
-     *            The Appendable to which to append the formatted number string.
      * @return The same Appendable, for chaining.
      * @draft ICU 60
-     * @provisional This API might change or be removed in a future release.
-     * @see Appendable
-     * @see NumberFormatter
      */
+    @Override
     public <A extends Appendable> A appendTo(A appendable) {
         try {
             appendable.append(nsb);
@@ -67,6 +58,50 @@ public class FormattedNumber {
             throw new ICUUncheckedIOException(e);
         }
         return appendable;
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public char charAt(int index) {
+        return nsb.charAt(index);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public int length() {
+        return nsb.length();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public CharSequence subSequence(int start, int end) {
+        return nsb.subString(start, end);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public boolean nextPosition(ConstrainedFieldPosition cfpos) {
+        return nsb.nextPosition(cfpos);
     }
 
     /**
@@ -155,20 +190,12 @@ public class FormattedNumber {
     }
 
     /**
-     * Export the formatted number as an AttributedCharacterIterator. This allows you to determine which
-     * characters in the output string correspond to which <em>fields</em>, such as the integer part,
-     * fraction part, and sign.
-     * <p>
-     * If information on only one field is needed, use {@link #nextFieldPosition(FieldPosition)} instead.
+     * {@inheritDoc}
      *
-     * @return An AttributedCharacterIterator, containing information on the field attributes of the
-     *         number string.
      * @draft ICU 62
      * @provisional This API might change or be removed in a future release.
-     * @see com.ibm.icu.text.NumberFormat.Field
-     * @see AttributedCharacterIterator
-     * @see NumberFormatter
      */
+    @Override
     public AttributedCharacterIterator toCharacterIterator() {
         return nsb.toCharacterIterator();
     }

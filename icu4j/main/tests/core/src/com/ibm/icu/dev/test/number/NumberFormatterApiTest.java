@@ -12,7 +12,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.Format;
 import java.util.HashMap;
@@ -24,6 +23,7 @@ import java.util.Set;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.ibm.icu.dev.test.format.FormattedValueTest;
 import com.ibm.icu.dev.test.serializable.SerializableTestUtility;
 import com.ibm.icu.impl.number.Grouper;
 import com.ibm.icu.impl.number.LocalizedNumberFormatterAsFormat;
@@ -2164,7 +2164,7 @@ public class NumberFormatterApiTest {
                 {NumberFormat.Field.DECIMAL_SEPARATOR, 14, 15},
                 {NumberFormat.Field.FRACTION, 15, 17}};
 
-        assertFieldPositions(message, fmtd, expectedFieldPositions);
+        assertNumberFieldPositions(message, fmtd, expectedFieldPositions);
 
         // Test the iteration functionality of nextFieldPosition
         FieldPosition actual = new FieldPosition(NumberFormat.Field.GROUPING_SEPARATOR);
@@ -2211,7 +2211,7 @@ public class NumberFormatterApiTest {
                     // field, begin index, end index
                     {NumberFormat.Field.INTEGER, 0, 2},
                     {NumberFormat.Field.MEASURE_UNIT, 2, 4}};
-            assertFieldPositions(
+            assertNumberFieldPositions(
                     message,
                     result,
                     expectedFieldPositions);
@@ -2230,7 +2230,7 @@ public class NumberFormatterApiTest {
                     // field, begin index, end index
                     {NumberFormat.Field.INTEGER, 0, 2},
                     {NumberFormat.Field.MEASURE_UNIT, 2, 6}};
-            assertFieldPositions(
+            assertNumberFieldPositions(
                     message,
                     result,
                     expectedFieldPositions);
@@ -2250,7 +2250,7 @@ public class NumberFormatterApiTest {
                     {NumberFormat.Field.INTEGER, 0, 2},
                     // note: field starts after the space
                     {NumberFormat.Field.MEASURE_UNIT, 3, 9}};
-            assertFieldPositions(
+            assertNumberFieldPositions(
                     message,
                     result,
                     expectedFieldPositions);
@@ -2270,7 +2270,7 @@ public class NumberFormatterApiTest {
                     {NumberFormat.Field.MEASURE_UNIT, 0, 11},
                     {NumberFormat.Field.INTEGER, 12, 14},
                     {NumberFormat.Field.MEASURE_UNIT, 15, 19}};
-            assertFieldPositions(
+            assertNumberFieldPositions(
                     message,
                     result,
                     expectedFieldPositions);
@@ -2290,7 +2290,7 @@ public class NumberFormatterApiTest {
                     {NumberFormat.Field.INTEGER, 0, 2},
                     // Should trim leading/trailing spaces, but not inner spaces:
                     {NumberFormat.Field.MEASURE_UNIT, 3, 7}};
-            assertFieldPositions(
+            assertNumberFieldPositions(
                     message,
                     result,
                     expectedFieldPositions);
@@ -2312,7 +2312,7 @@ public class NumberFormatterApiTest {
                     // field, begin index, end index
                     {NumberFormat.Field.INTEGER, 1, 3},
                     {NumberFormat.Field.MEASURE_UNIT, 4, 5}};
-            assertFieldPositions(
+            assertNumberFieldPositions(
                     message,
                     result,
                     expectedFieldPositions);
@@ -2331,7 +2331,7 @@ public class NumberFormatterApiTest {
                     // field, begin index, end index
                     {NumberFormat.Field.INTEGER, 0, 2},
                     {NumberFormat.Field.COMPACT, 2, 3}};
-            assertFieldPositions(
+            assertNumberFieldPositions(
                     message,
                     result,
                     expectedFieldPositions);
@@ -2350,7 +2350,7 @@ public class NumberFormatterApiTest {
                     // field, begin index, end index
                     {NumberFormat.Field.INTEGER, 0, 2},
                     {NumberFormat.Field.COMPACT, 3, 11}};
-            assertFieldPositions(
+            assertNumberFieldPositions(
                     message,
                     result,
                     expectedFieldPositions);
@@ -2369,7 +2369,7 @@ public class NumberFormatterApiTest {
                     // field, begin index, end index
                     {NumberFormat.Field.INTEGER, 0, 1},
                     {NumberFormat.Field.COMPACT, 2, 9}};
-            assertFieldPositions(
+            assertNumberFieldPositions(
                     message,
                     result,
                     expectedFieldPositions);
@@ -2388,7 +2388,7 @@ public class NumberFormatterApiTest {
                     // field, begin index, end index
                     {NumberFormat.Field.INTEGER, 1, 2},
                     {NumberFormat.Field.COMPACT, 3, 6}};
-            assertFieldPositions(
+            assertNumberFieldPositions(
                     message,
                     result,
                     expectedFieldPositions);
@@ -2408,7 +2408,7 @@ public class NumberFormatterApiTest {
                     {NumberFormat.Field.INTEGER, 0, 2},
                     {NumberFormat.Field.COMPACT, 3, 8},
                     {NumberFormat.Field.CURRENCY, 9, 12}};
-            assertFieldPositions(
+            assertNumberFieldPositions(
                     message,
                     result,
                     expectedFieldPositions);
@@ -2430,7 +2430,7 @@ public class NumberFormatterApiTest {
                     {NumberFormat.Field.INTEGER, 0, 2},
                     {NumberFormat.Field.COMPACT, 3, 11},
                     {NumberFormat.Field.MEASURE_UNIT, 12, 18}};
-            assertFieldPositions(
+            assertNumberFieldPositions(
                     message,
                     result,
                     expectedFieldPositions);
@@ -2726,43 +2726,7 @@ public class NumberFormatterApiTest {
         } catch (UnsupportedOperationException expected) {}
     }
 
-    static void assertFieldPositions(String message, FormattedNumber formattedNumber, Object[][] expectedFieldPositions) {
-        // Calculate some initial expected values
-        int stringLength = formattedNumber.toString().length();
-        HashSet<Format.Field> uniqueFields = new HashSet<>();
-        for (int i=0; i<expectedFieldPositions.length; i++) {
-            uniqueFields.add((Format.Field) expectedFieldPositions[i][0]);
-        }
-        String baseMessage = message + ": " + formattedNumber.toString() + ": ";
-
-        // Check the AttributedCharacterIterator
-        AttributedCharacterIterator fpi = formattedNumber.getFieldIterator();
-        Set<AttributedCharacterIterator.Attribute> allAttributes = fpi.getAllAttributeKeys();
-        assertEquals(baseMessage + "All known fields should be in the iterator", uniqueFields.size(), allAttributes.size());
-        assertEquals(baseMessage + "Iterator should have length of string output", stringLength, fpi.getEndIndex());
-        int i = 0;
-        for (char c = fpi.first(); c != AttributedCharacterIterator.DONE; c = fpi.next(), i++) {
-            Set<AttributedCharacterIterator.Attribute> currentAttributes = fpi.getAttributes().keySet();
-            int attributesRemaining = currentAttributes.size();
-            for (Object[] cas : expectedFieldPositions) {
-                NumberFormat.Field expectedField = (NumberFormat.Field) cas[0];
-                int expectedBeginIndex = (Integer) cas[1];
-                int expectedEndIndex = (Integer) cas[2];
-                if (expectedBeginIndex > i || expectedEndIndex <= i) {
-                    // Field position does not overlap with the current character
-                    continue;
-                }
-
-                assertTrue(baseMessage + "Current character should have expected field", currentAttributes.contains(expectedField));
-                assertTrue(baseMessage + "Field should be a known attribute", allAttributes.contains(expectedField));
-                int actualBeginIndex = fpi.getRunStart(expectedField);
-                int actualEndIndex = fpi.getRunLimit(expectedField);
-                assertEquals(baseMessage + expectedField + " begin @" + i, expectedBeginIndex, actualBeginIndex);
-                assertEquals(baseMessage + expectedField + " end @" + i, expectedEndIndex, actualEndIndex);
-                attributesRemaining--;
-            }
-            assertEquals(baseMessage + "Should have looked at every field", 0, attributesRemaining);
-        }
-        assertEquals(baseMessage + "Should have looked at every character", stringLength, i);
+    private void assertNumberFieldPositions(String message, FormattedNumber result, Object[][] expectedFieldPositions) {
+        FormattedValueTest.checkFormattedValue(message, result, result.toString(), expectedFieldPositions);
     }
 }

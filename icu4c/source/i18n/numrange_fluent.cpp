@@ -318,6 +318,10 @@ void LocalizedNumberRangeFormatter::formatImpl(
         return;
     }
     impl->format(results, equalBeforeRounding, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    results.string.writeTerminator(status);
 }
 
 const impl::NumberRangeFormatterImpl*
@@ -389,6 +393,17 @@ UnicodeString FormattedNumberRange::toString(UErrorCode& status) const {
     return fResults->string.toUnicodeString();
 }
 
+UnicodeString FormattedNumberRange::toTempString(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    if (fResults == nullptr) {
+        status = fErrorCode;
+        return ICU_Utility::makeBogusString();
+    }
+    return fResults->string.toTempUnicodeString();
+}
+
 Appendable& FormattedNumberRange::appendTo(Appendable& appendable, UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return appendable;
@@ -399,6 +414,18 @@ Appendable& FormattedNumberRange::appendTo(Appendable& appendable, UErrorCode& s
     }
     appendable.appendString(fResults->string.chars(), fResults->string.length());
     return appendable;
+}
+
+UBool FormattedNumberRange::nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    if (fResults == nullptr) {
+        status = fErrorCode;
+        return FALSE;
+    }
+    // NOTE: MSVC sometimes complains when implicitly converting between bool and UBool
+    return fResults->string.nextPosition(cfpos, status) ? TRUE : FALSE;
 }
 
 UBool FormattedNumberRange::nextFieldPosition(FieldPosition& fieldPosition, UErrorCode& status) const {
