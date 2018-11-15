@@ -11,6 +11,7 @@
 #include "unicode/dcfmtsym.h"
 #include "unicode/currunit.h"
 #include "unicode/fieldpos.h"
+#include "unicode/formattedvalue.h"
 #include "unicode/fpositer.h"
 #include "unicode/measunit.h"
 #include "unicode/nounit.h"
@@ -146,6 +147,7 @@ class GeneratorHelpers;
 class DecNum;
 class NumberRangeFormatterImpl;
 struct RangeMacroProps;
+struct UFormattedNumberImpl;
 
 /**
  * Used for NumberRangeFormatter and implemented in numrange_fluent.cpp.
@@ -2447,8 +2449,45 @@ class U_I18N_API LocalizedNumberFormatter
  *
  * @draft ICU 60
  */
-class U_I18N_API FormattedNumber : public UMemory {
+class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
   public:
+
+    /**
+     * Default constructor; makes an empty FormattedNumber.
+     */
+    FormattedNumber()
+        : fResults(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {};
+
+    /**
+     * Copying not supported; use move constructor instead.
+     */
+    FormattedNumber(const FormattedNumber&) = delete;
+
+    /**
+     * Move constructor:
+     * Leaves the source FormattedNumber in an undefined state.
+     * @draft ICU 62
+     */
+    FormattedNumber(FormattedNumber&& src) U_NOEXCEPT;
+
+    /**
+     * Destruct an instance of FormattedNumber, cleaning up any memory it might own.
+     * @draft ICU 60
+     */
+    virtual ~FormattedNumber() U_OVERRIDE;
+
+    /**
+     * Copying not supported; use move assignment instead.
+     */
+    FormattedNumber& operator=(const FormattedNumber&) = delete;
+
+    /**
+     * Move assignment:
+     * Leaves the source FormattedNumber in an undefined state.
+     * @draft ICU 62
+     */
+    FormattedNumber& operator=(FormattedNumber&& src) U_NOEXCEPT;
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * Returns a UnicodeString representation of the formatted number.
@@ -2462,14 +2501,14 @@ class U_I18N_API FormattedNumber : public UMemory {
 #endif  /* U_HIDE_DEPRECATED_API */
 
     /**
-     * Returns a UnicodeString representation of the formatted number.
-     *
-     * @param status
-     *            Set if an error occurs while formatting the number to the UnicodeString.
-     * @return a UnicodeString containing the localized number.
-     * @draft ICU 62
+     * @copydoc FormattedValue::toString()
      */
-    UnicodeString toString(UErrorCode& status) const;
+    UnicodeString toString(UErrorCode& status) const U_OVERRIDE;
+
+    /**
+     * @copydoc FormattedValue::toTempString()
+     */
+    UnicodeString toTempString(UErrorCode& status) const U_OVERRIDE;
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -2483,21 +2522,18 @@ class U_I18N_API FormattedNumber : public UMemory {
      *                See http://bugs.icu-project.org/trac/ticket/13746
      * @see Appendable
      */
-    Appendable &appendTo(Appendable &appendable);
+    Appendable &appendTo(Appendable& appendable);
 #endif  /* U_HIDE_DEPRECATED_API */
 
     /**
-     * Appends the formatted number to an Appendable.
-     *
-     * @param appendable
-     *            The Appendable to which to append the formatted number string.
-     * @param status
-     *            Set if an error occurs while formatting the number to the Appendable.
-     * @return The same Appendable, for chaining.
-     * @draft ICU 62
-     * @see Appendable
+     * @copydoc FormattedValue::appendTo()
      */
-    Appendable &appendTo(Appendable &appendable, UErrorCode& status) const;
+    Appendable &appendTo(Appendable& appendable, UErrorCode& status) const U_OVERRIDE;
+
+    /**
+     * @copydoc FormattedValue::nextPosition()
+     */
+    UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -2606,39 +2642,9 @@ class U_I18N_API FormattedNumber : public UMemory {
 
 #endif  /* U_HIDE_INTERNAL_API */
 
-    /**
-     * Copying not supported; use move constructor instead.
-     */
-    FormattedNumber(const FormattedNumber&) = delete;
-
-    /**
-     * Copying not supported; use move assignment instead.
-     */
-    FormattedNumber& operator=(const FormattedNumber&) = delete;
-
-    /**
-     * Move constructor:
-     * Leaves the source FormattedNumber in an undefined state.
-     * @draft ICU 62
-     */
-    FormattedNumber(FormattedNumber&& src) U_NOEXCEPT;
-
-    /**
-     * Move assignment:
-     * Leaves the source FormattedNumber in an undefined state.
-     * @draft ICU 62
-     */
-    FormattedNumber& operator=(FormattedNumber&& src) U_NOEXCEPT;
-
-    /**
-     * Destruct an instance of FormattedNumber, cleaning up any memory it might own.
-     * @draft ICU 60
-     */
-    ~FormattedNumber();
-
   private:
     // Can't use LocalPointer because UFormattedNumberData is forward-declared
-    const impl::UFormattedNumberData *fResults;
+    impl::UFormattedNumberData *fResults;
 
     // Error code for the terminal methods
     UErrorCode fErrorCode;
@@ -2655,6 +2661,9 @@ class U_I18N_API FormattedNumber : public UMemory {
 
     // To give LocalizedNumberFormatter format methods access to this class's constructor:
     friend class LocalizedNumberFormatter;
+
+    // To give C API access to internals
+    friend struct impl::UFormattedNumberImpl;
 };
 
 /**

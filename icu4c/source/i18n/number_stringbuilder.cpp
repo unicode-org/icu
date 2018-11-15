@@ -33,7 +33,15 @@ inline void uprv_memmove2(void* dest, const void* src, size_t len) {
 
 } // namespace
 
-NumberStringBuilder::NumberStringBuilder() = default;
+NumberStringBuilder::NumberStringBuilder() {
+#if U_DEBUG
+    // Initializing the memory to non-zero helps catch some bugs that involve
+    // reading from an improperly terminated string.
+    for (int32_t i=0; i<getCapacity(); i++) {
+        getCharPtr()[i] = 1;
+    }
+#endif
+};
 
 NumberStringBuilder::~NumberStringBuilder() {
     if (fUsingHeap) {
@@ -241,6 +249,16 @@ NumberStringBuilder::insert(int32_t index, const NumberStringBuilder &other, UEr
     return count;
 }
 
+void NumberStringBuilder::writeTerminator(UErrorCode& status) {
+    int32_t position = prepareForInsert(fLength, 1, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    getCharPtr()[position] = 0;
+    getFieldPtr()[position] = UNUM_FIELD_COUNT;
+    fLength--;
+}
+
 int32_t NumberStringBuilder::prepareForInsert(int32_t index, int32_t count, UErrorCode &status) {
     U_ASSERT(index >= 0);
     U_ASSERT(index <= fLength);
@@ -428,81 +446,107 @@ bool NumberStringBuilder::nextFieldPosition(FieldPosition& fp, UErrorCode& statu
         return FALSE;
     }
 
-    auto field = static_cast<Field>(rawField);
+    ConstrainedFieldPosition cfpos;
+    cfpos.constrainField(UFIELD_CATEGORY_NUMBER, rawField);
+    cfpos.setState(UFIELD_CATEGORY_NUMBER, rawField, fp.getBeginIndex(), fp.getEndIndex());
+    if (nextPosition(cfpos, status)) {
+        fp.setBeginIndex(cfpos.getStart());
+        fp.setEndIndex(cfpos.getLimit());
+        return true;
+    }
 
-    bool seenStart = false;
-    int32_t fractionStart = -1;
-    int32_t startIndex = fp.getEndIndex();
-    for (int32_t i = fZero + startIndex; i <= fZero + fLength; i++) {
-        Field _field = UNUM_FIELD_COUNT;
-        if (i < fZero + fLength) {
-            _field = getFieldPtr()[i];
-        }
-        if (seenStart && field != _field) {
-            // Special case: GROUPING_SEPARATOR counts as an INTEGER.
-            if (field == UNUM_INTEGER_FIELD && _field == UNUM_GROUPING_SEPARATOR_FIELD) {
-                continue;
-            }
-            fp.setEndIndex(i - fZero);
-            // Trim ignorables (whitespace, etc.) from the edge of the field.
-            UFieldPosition ufp = {0, fp.getBeginIndex(), fp.getEndIndex()};
-            if (trimFieldPosition(ufp)) {
-                fp.setBeginIndex(ufp.beginIndex);
-                fp.setEndIndex(ufp.endIndex);
+    // Special case: fraction should start after integer if fraction is not present
+    if (rawField == UNUM_FRACTION_FIELD && fp.getEndIndex() == 0) {
+        bool inside = false;
+        int32_t i = fZero;
+        for (; i < fZero + fLength; i++) {
+            if (isIntOrGroup(getFieldPtr()[i]) || getFieldPtr()[i] == UNUM_DECIMAL_SEPARATOR_FIELD) {
+                inside = true;
+            } else if (inside) {
                 break;
             }
-            // This position was all ignorables; continue to the next position.
-            fp.setEndIndex(fp.getBeginIndex());
-            seenStart = false;
-        } else if (!seenStart && field == _field) {
-            fp.setBeginIndex(i - fZero);
-            seenStart = true;
         }
-        if (_field == UNUM_INTEGER_FIELD || _field == UNUM_DECIMAL_SEPARATOR_FIELD) {
-            fractionStart = i - fZero + 1;
-        }
+        fp.setBeginIndex(i - fZero);
+        fp.setEndIndex(i - fZero);
     }
 
-    // Backwards compatibility: FRACTION needs to start after INTEGER if empty.
-    // Do not return that a field was found, though, since there is not actually a fraction part.
-    if (field == UNUM_FRACTION_FIELD && !seenStart && fractionStart != -1) {
-        fp.setBeginIndex(fractionStart);
-        fp.setEndIndex(fractionStart);
-    }
-
-    return seenStart;
+    return false;
 }
 
 void NumberStringBuilder::getAllFieldPositions(FieldPositionIteratorHandler& fpih,
                                                UErrorCode& status) const {
-    Field current = UNUM_FIELD_COUNT;
-    int32_t currentStart = -1;
-    for (int32_t i = 0; i < fLength; i++) {
-        Field field = fieldAt(i);
-        if (current == UNUM_INTEGER_FIELD && field == UNUM_GROUPING_SEPARATOR_FIELD) {
-            // Special case: GROUPING_SEPARATOR counts as an INTEGER.
-            // TODO(ICU-13064): Grouping separator can be more than 1 code unit.
-            fpih.addAttribute(UNUM_GROUPING_SEPARATOR_FIELD, i, i + 1);
-        } else if (current != field) {
-            if (current != UNUM_FIELD_COUNT) {
-                UFieldPosition fp = {0, currentStart, i};
-                if (trimFieldPosition(fp)) {
-                    fpih.addAttribute(current, fp.beginIndex, fp.endIndex);
+    ConstrainedFieldPosition cfpos;
+    while (nextPosition(cfpos, status)) {
+        fpih.addAttribute(cfpos.getField(), cfpos.getStart(), cfpos.getLimit());
+    }
+}
+
+bool NumberStringBuilder::nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& /*status*/) const {
+    bool isSearchingForField = false;
+    if (cfpos.getConstraintType() == UCFPOS_CONSTRAINT_CATEGORY) {
+        if (cfpos.getCategory() != UFIELD_CATEGORY_NUMBER) {
+            return false;
+        }
+    } else if (cfpos.getConstraintType() == UCFPOS_CONSTRAINT_FIELD) {
+        isSearchingForField = true;
+    }
+
+    int32_t fieldStart = -1;
+    int32_t currField = UNUM_FIELD_COUNT;
+    for (int32_t i = fZero + cfpos.getLimit(); i <= fZero + fLength; i++) {
+        Field _field = (i < fZero + fLength) ? getFieldPtr()[i] : UNUM_FIELD_COUNT;
+        // Case 1: currently scanning a field.
+        if (currField != UNUM_FIELD_COUNT) {
+            if (currField != _field) {
+                int32_t end = i - fZero;
+                // Grouping separators can be whitespace; don't throw them out!
+                if (currField != UNUM_GROUPING_SEPARATOR_FIELD) {
+                    end = trimBack(i - fZero);
                 }
+                if (end <= fieldStart) {
+                    // Entire field position is ignorable; skip.
+                    fieldStart = -1;
+                    currField = UNUM_FIELD_COUNT;
+                    i--;  // look at this index again
+                    continue;
+                }
+                int32_t start = fieldStart;
+                if (currField != UNUM_GROUPING_SEPARATOR_FIELD) {
+                    start = trimFront(start);
+                }
+                cfpos.setState(UFIELD_CATEGORY_NUMBER, currField, start, end);
+                return true;
             }
-            current = field;
-            currentStart = i;
+            continue;
         }
-        if (U_FAILURE(status)) {
-            return;
+        // Special case: coalesce the INTEGER if we are pointing at the end of the INTEGER.
+        if ((!isSearchingForField || cfpos.getField() == UNUM_INTEGER_FIELD)
+                && i > fZero
+                && i - fZero > cfpos.getLimit()  // don't return the same field twice in a row
+                && isIntOrGroup(getFieldPtr()[i - 1])
+                && !isIntOrGroup(_field)) {
+            int j = i - 1;
+            for (; j >= fZero && isIntOrGroup(getFieldPtr()[j]); j--) {}
+            cfpos.setState(UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, j - fZero + 1, i - fZero);
+            return true;
+        }
+        // Special case: skip over INTEGER; will be coalesced later.
+        if (_field == UNUM_INTEGER_FIELD) {
+            _field = UNUM_FIELD_COUNT;
+        }
+        // Case 2: no field starting at this position.
+        if (_field == UNUM_FIELD_COUNT) {
+            continue;
+        }
+        // Case 3: check for field starting at this position
+        if (!isSearchingForField || cfpos.getField() == _field) {
+            fieldStart = i - fZero;
+            currField = _field;
         }
     }
-    if (current != UNUM_FIELD_COUNT) {
-        UFieldPosition fp = {0, currentStart, fLength};
-        if (trimFieldPosition(fp)) {
-            fpih.addAttribute(current, fp.beginIndex, fp.endIndex);
-        }
-    }
+
+    U_ASSERT(currField == UNUM_FIELD_COUNT);
+    return false;
 }
 
 bool NumberStringBuilder::containsField(Field field) const {
@@ -514,26 +558,23 @@ bool NumberStringBuilder::containsField(Field field) const {
     return false;
 }
 
-bool NumberStringBuilder::trimFieldPosition(UFieldPosition& fp) const {
-    // Trim ignorables from the back
-    int32_t endIgnorablesRelPos = unisets::get(unisets::DEFAULT_IGNORABLES)->spanBack(
-        getCharPtr() + fZero + fp.beginIndex,
-        fp.endIndex - fp.beginIndex,
-        USET_SPAN_CONTAINED);
+bool NumberStringBuilder::isIntOrGroup(Field field) {
+    return field == UNUM_INTEGER_FIELD
+        || field ==UNUM_GROUPING_SEPARATOR_FIELD;
+}
 
-    // Check if the entire segment is ignorables
-    if (endIgnorablesRelPos == 0) {
-        return false;
-    }
-    fp.endIndex = fp.beginIndex + endIgnorablesRelPos;
-
-    // Trim ignorables from the front
-    int32_t startIgnorablesRelPos = unisets::get(unisets::DEFAULT_IGNORABLES)->span(
-        getCharPtr() + fZero + fp.beginIndex,
-        fp.endIndex - fp.beginIndex,
+int32_t NumberStringBuilder::trimBack(int32_t limit) const {
+    return unisets::get(unisets::DEFAULT_IGNORABLES)->spanBack(
+        getCharPtr() + fZero,
+        limit,
         USET_SPAN_CONTAINED);
-    fp.beginIndex = fp.beginIndex + startIgnorablesRelPos;
-    return true;
+}
+
+int32_t NumberStringBuilder::trimFront(int32_t start) const {
+    return start + unisets::get(unisets::DEFAULT_IGNORABLES)->span(
+        getCharPtr() + fZero + start,
+        fLength - start,
+        USET_SPAN_CONTAINED);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

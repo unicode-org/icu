@@ -9,6 +9,7 @@
 
 #include "unicode/ufieldpositer.h"
 #include "unicode/umisc.h"
+#include "unicode/uformattedvalue.h"
 
 
 /**
@@ -529,6 +530,22 @@ unumf_formatDouble(const UNumberFormatter* uformatter, double value, UFormattedN
 U_DRAFT void U_EXPORT2
 unumf_formatDecimal(const UNumberFormatter* uformatter, const char* value, int32_t valueLen,
                     UFormattedNumber* uresult, UErrorCode* ec);
+
+
+/**
+ * Returns a representation of a UFormattedNumber as a UFormattedValue, which can be
+ * subsequently passed to any API requiring that type.
+ *
+ * The returned object is owned by the UFormattedNumber and is valid only as long as the
+ * UFormattedNumber is present and unchanged in memory.
+ *
+ * @param uresult The object containing the formatted number.
+ * @param ec Set if an error occurs.
+ * @return A representation of the given UFormattedNumber as a UFormattedValue.
+ * @draft ICU 64
+ */
+U_DRAFT const UFormattedValue* U_EXPORT2
+unumf_resultAsFormattedValue(const UFormattedNumber* uresult, UErrorCode* ec);
 
 
 /**

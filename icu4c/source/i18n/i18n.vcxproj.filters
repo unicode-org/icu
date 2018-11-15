@@ -156,6 +156,9 @@
     <ClCompile Include="format.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="formattedvalue.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="fphdlimp.cpp">
       <Filter>formatting</Filter>
     </ClCompile>

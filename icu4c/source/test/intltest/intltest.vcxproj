@@ -363,6 +363,7 @@
     <ClCompile Include="csdetest.cpp" />
     <ClCompile Include="bidiconf.cpp" />
     <ClCompile Include="listformattertest.cpp" />
+    <ClCompile Include="formattedvaluetest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colldata.h" />

@@ -25,7 +25,12 @@ class IcuCApiHelper {
     static CPPType* validate(CType* input, UErrorCode& status);
 
     /**
-     * Convert from the C++ type to the C type.
+     * Convert from the C++ type to the C type (const version).
+     */
+    const CType* exportConstForC() const;
+
+    /**
+     * Convert from the C++ type to the C type (non-const version).
      */
     CType* exportForC();
 
@@ -53,7 +58,7 @@ IcuCApiHelper<CType, CPPType, kMagic>::validate(const CType* input, UErrorCode& 
         return nullptr;
     }
     auto* impl = reinterpret_cast<const CPPType*>(input);
-    if (impl->fMagic != kMagic) {
+    if (static_cast<const IcuCApiHelper<CType, CPPType, kMagic>*>(impl)->fMagic != kMagic) {
         status = U_INVALID_FORMAT_ERROR;
         return nullptr;
     }
@@ -66,6 +71,12 @@ IcuCApiHelper<CType, CPPType, kMagic>::validate(CType* input, UErrorCode& status
     auto* constInput = static_cast<const CType*>(input);
     auto* validated = validate(constInput, status);
     return const_cast<CPPType*>(validated);
+}
+
+template<typename CType, typename CPPType, int32_t kMagic>
+const CType*
+IcuCApiHelper<CType, CPPType, kMagic>::exportConstForC() const {
+    return reinterpret_cast<const CType*>(static_cast<const CPPType*>(this));
 }
 
 template<typename CType, typename CPPType, int32_t kMagic>

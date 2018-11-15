@@ -8,6 +8,7 @@
 
 #include "number_stringbuilder.h"
 #include "intltest.h"
+#include "itformat.h"
 #include "number_affixutils.h"
 #include "numparse_stringsegment.h"
 #include "numrange_impl.h"
@@ -43,7 +44,7 @@ class AffixUtilsTest : public IntlTest {
                                        UErrorCode &status);
 };
 
-class NumberFormatterApiTest : public IntlTest {
+class NumberFormatterApiTest : public IntlTestWithFieldPosition {
   public:
     NumberFormatterApiTest();
     NumberFormatterApiTest(UErrorCode &status);
@@ -119,8 +120,11 @@ class NumberFormatterApiTest : public IntlTest {
 
     void assertUndefinedSkeleton(const UnlocalizedNumberFormatter& f);
 
-    void assertFieldPositions(const char16_t* message, const FormattedNumber& formattedNumber,
-                              const UFieldPosition* expectedFieldPositions, int32_t length);
+    void assertNumberFieldPositions(
+      const char16_t* message,
+      const FormattedNumber& formattedNumber,
+      const UFieldPosition* expectedFieldPositions,
+      int32_t length);
 };
 
 class DecimalQuantityTest : public IntlTest {
@@ -253,7 +257,7 @@ class NumberSkeletonTest : public IntlTest {
     void expectedErrorSkeleton(const char16_t** cases, int32_t casesLen);
 };
 
-class NumberRangeFormatterTest : public IntlTest {
+class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
   public:
     NumberRangeFormatterTest();
     NumberRangeFormatterTest(UErrorCode &status);
@@ -264,6 +268,7 @@ class NumberRangeFormatterTest : public IntlTest {
     void testIdentity();
     void testDifferentFormatters();
     void testPlurals();
+    void testFieldPositions();
     void testCopyMove();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
@@ -293,7 +298,7 @@ class NumberRangeFormatterTest : public IntlTest {
       const char16_t* expected_50K_50K,
       const char16_t* expected_50K_50M);
     
-    void assertFormattedRangeEquals(
+    FormattedNumberRange assertFormattedRangeEquals(
       const char16_t* message,
       const LocalizedNumberRangeFormatter& l,
       double first,

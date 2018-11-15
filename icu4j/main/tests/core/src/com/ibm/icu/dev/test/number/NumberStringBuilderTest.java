@@ -262,6 +262,10 @@ public class NumberStringBuilderTest {
         int end = Math.min(12, a.length());
         if (start != end) {
             assertCharSequenceEquals(a.subSequence(start, end), b.subSequence(start, end));
+            if (b instanceof NumberStringBuilder) {
+                NumberStringBuilder bnsb = (NumberStringBuilder) b;
+                assertCharSequenceEquals(a.subSequence(start, end), bnsb.subString(start, end));
+            }
         }
     }
 }

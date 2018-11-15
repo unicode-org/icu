@@ -25,10 +25,23 @@
 
 #include "cintltst.h"
 #include "unicode/udat.h"
+#include "unicode/uformattedvalue.h"
 
 
 /* Internal fucntion used by all the test format files */
 UChar* myDateFormat(UDateFormat *dat, UDate d); 
+
+
+// The following is implemented in uformattedvaluetest.c
+// TODO: When needed, add overload with a different category for each position
+void checkFormattedValue(
+    const char* message,
+    const UFormattedValue* fv,
+    const UChar* expectedString,
+    UFieldCategory expectedCategory,
+    const UFieldPosition* expectedFieldPositions,
+    int32_t expectedFieldPositionsLength);
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
