@@ -62,8 +62,11 @@ class FieldPositionIteratorHandler : public FieldPositionHandler {
   // to be destroyed before status goes out of scope.  Easiest thing is to
   // allocate us on the stack in the same (or narrower) scope as status has.
   // This attempts to encourage that by blocking heap allocation.
-  void *operator new(size_t s);
-  void *operator new[](size_t s);
+  static void* U_EXPORT2 operator new(size_t) U_NO_THROW = delete;
+  static void* U_EXPORT2 operator new[](size_t) U_NO_THROW = delete;
+#if U_HAVE_PLACEMENT_NEW
+  static void* U_EXPORT2 operator new(size_t, void*) U_NO_THROW = delete;
+#endif
 
  public:
   FieldPositionIteratorHandler(FieldPositionIterator* posIter, UErrorCode& status);
