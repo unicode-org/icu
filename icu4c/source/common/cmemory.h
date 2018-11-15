@@ -290,6 +290,13 @@ inline T *LocalMemory<T>::allocateInsteadAndCopy(int32_t newCapacity, int32_t le
 template<typename T, int32_t stackCapacity>
 class MaybeStackArray {
 public:
+    // No heap allocation. Use only on the stack.
+    static void* U_EXPORT2 operator new(size_t) U_NO_THROW = delete;
+    static void* U_EXPORT2 operator new[](size_t) U_NO_THROW = delete;
+#if U_HAVE_PLACEMENT_NEW
+    static void* U_EXPORT2 operator new(size_t, void*) U_NO_THROW = delete;
+#endif
+
     /**
      * Default constructor initializes with internal T[stackCapacity] buffer.
      */
@@ -402,20 +409,6 @@ private:
     /* No ownership transfer: No copy constructor, no assignment operator. */
     MaybeStackArray(const MaybeStackArray & /*other*/) {}
     void operator=(const MaybeStackArray & /*other*/) {}
-
-    // No heap allocation. Use only on the stack.
-    //   (Declaring these functions private triggers a cascade of problems:
-    //      MSVC insists on exporting an instantiation of MaybeStackArray, which
-    //      requires that all functions be defined.
-    //      An empty implementation of new() is rejected, it must return a value.
-    //      Returning NULL is rejected by gcc for operator new.
-    //      The expedient thing is just not to override operator new.
-    //      While relatively pointless, heap allocated instances will function.
-    // static void * U_EXPORT2 operator new(size_t size); 
-    // static void * U_EXPORT2 operator new[](size_t size);
-#if U_HAVE_PLACEMENT_NEW
-    // static void * U_EXPORT2 operator new(size_t, void *ptr);
-#endif
 };
 
 template<typename T, int32_t stackCapacity>
@@ -512,6 +505,13 @@ inline T *MaybeStackArray<T, stackCapacity>::orphanOrClone(int32_t length, int32
 template<typename H, typename T, int32_t stackCapacity>
 class MaybeStackHeaderAndArray {
 public:
+    // No heap allocation. Use only on the stack.
+    static void* U_EXPORT2 operator new(size_t) U_NO_THROW = delete;
+    static void* U_EXPORT2 operator new[](size_t) U_NO_THROW = delete;
+#if U_HAVE_PLACEMENT_NEW
+    static void* U_EXPORT2 operator new(size_t, void*) U_NO_THROW = delete;
+#endif
+
     /**
      * Default constructor initializes with internal H+T[stackCapacity] buffer.
      */
@@ -608,15 +608,6 @@ private:
     /* No ownership transfer: No copy constructor, no assignment operator. */
     MaybeStackHeaderAndArray(const MaybeStackHeaderAndArray & /*other*/) {}
     void operator=(const MaybeStackHeaderAndArray & /*other*/) {}
-
-    // No heap allocation. Use only on the stack.
-    //   (Declaring these functions private triggers a cascade of problems;
-    //    see the MaybeStackArray class for details.)
-    // static void * U_EXPORT2 operator new(size_t size); 
-    // static void * U_EXPORT2 operator new[](size_t size);
-#if U_HAVE_PLACEMENT_NEW
-    // static void * U_EXPORT2 operator new(size_t, void *ptr);
-#endif
 };
 
 template<typename H, typename T, int32_t stackCapacity>

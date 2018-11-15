@@ -65,6 +65,13 @@ U_NAMESPACE_BEGIN
 template<typename T>
 class LocalPointerBase {
 public:
+    // No heap allocation. Use only on the stack.
+    static void* U_EXPORT2 operator new(size_t) = delete;
+    static void* U_EXPORT2 operator new[](size_t) = delete;
+#if U_HAVE_PLACEMENT_NEW
+    static void* U_EXPORT2 operator new(size_t, void*) = delete;
+#endif
+
     /**
      * Constructor takes ownership.
      * @param p simple pointer to an object that is adopted
@@ -158,12 +165,6 @@ private:
     // No ownership sharing: No copy constructor, no assignment operator.
     LocalPointerBase(const LocalPointerBase<T> &other);
     void operator=(const LocalPointerBase<T> &other);
-    // No heap allocation. Use only on the stack.
-    static void * U_EXPORT2 operator new(size_t size);
-    static void * U_EXPORT2 operator new[](size_t size);
-#if U_HAVE_PLACEMENT_NEW
-    static void * U_EXPORT2 operator new(size_t, void *ptr);
-#endif
 };
 
 /**

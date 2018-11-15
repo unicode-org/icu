@@ -108,6 +108,13 @@ U_NAMESPACE_BEGIN
  */
 class StackUResourceBundle {
 public:
+    // No heap allocation. Use only on the stack.
+    static void* U_EXPORT2 operator new(size_t) U_NO_THROW = delete;
+    static void* U_EXPORT2 operator new[](size_t) U_NO_THROW = delete;
+#if U_HAVE_PLACEMENT_NEW
+    static void* U_EXPORT2 operator new(size_t, void*) U_NO_THROW = delete;
+#endif
+
     StackUResourceBundle();
     ~StackUResourceBundle();
 
@@ -121,13 +128,6 @@ public:
 
 private:
     UResourceBundle bundle;
-
-    // No heap allocation. Use only on the stack.
-    static void* U_EXPORT2 operator new(size_t);
-    static void* U_EXPORT2 operator new[](size_t);
-#if U_HAVE_PLACEMENT_NEW
-    static void* U_EXPORT2 operator new(size_t, void*);
-#endif
 };
 
 U_NAMESPACE_END
