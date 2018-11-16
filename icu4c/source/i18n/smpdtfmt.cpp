@@ -845,7 +845,13 @@ Calendar*
 SimpleDateFormat::initializeCalendar(TimeZone* adoptZone, const Locale& locale, UErrorCode& status)
 {
     if(!U_FAILURE(status)) {
-        fCalendar = Calendar::createInstance(adoptZone?adoptZone:TimeZone::createDefault(), locale, status);
+        if (adoptZone) {
+          fCalendar = Calendar::createInstance(adoptZone, locale, status);
+        } else {
+          // Let the Calendar::createInstance to handle the timezone keyword in locale
+          // instead of calling TimeZone::createDefault() here.
+          fCalendar = Calendar::createInstance(locale, status);
+        }
     }
     return fCalendar;
 }

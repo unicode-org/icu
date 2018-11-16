@@ -569,9 +569,13 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
         variantBegin = length;
 
         /* after uloc_getName/canonicalize() we know that only '_' are separators */
+        /* But _ could also appeared in timezone such as "en@timezone=America/Los_Angeles" */
         separator = field[0] = fullName;
         fieldIdx = 1;
-        while ((separator = uprv_strchr(field[fieldIdx-1], SEP_CHAR)) != 0 && fieldIdx < UPRV_LENGTHOF(field)-1) {
+        char* at = uprv_strchr(fullName, '@');
+        while ((separator = uprv_strchr(field[fieldIdx-1], SEP_CHAR)) != 0 &&
+               fieldIdx < UPRV_LENGTHOF(field)-1 &&
+               (at == nullptr || separator < at)) {
             field[fieldIdx] = separator + 1;
             fieldLen[fieldIdx-1] = (int32_t)(separator - field[fieldIdx-1]);
             fieldIdx++;

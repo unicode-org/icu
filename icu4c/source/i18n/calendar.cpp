@@ -855,10 +855,19 @@ Calendar::createInstance(const TimeZone& zone, UErrorCode& success)
 
 // -------------------------------------
 
+#define ZID_KEY_MAX  128
 Calendar* U_EXPORT2
 Calendar::createInstance(const Locale& aLocale, UErrorCode& success)
 {
-    return createInstance(TimeZone::createDefault(), aLocale, success);
+    // Try to get @timezone= keyword from the locale. If exist, use that to
+    // create timezone. Otherwise, use the default.
+    char timezone[ZID_KEY_MAX];
+    UErrorCode tmpStatus = U_ZERO_ERROR;
+    int32_t len = aLocale.getKeywordValue("timezone", timezone, ZID_KEY_MAX, tmpStatus);
+    TimeZone* tz = (U_SUCCESS(tmpStatus) && len > 0) ?
+        TimeZone::createTimeZone(UnicodeString(timezone)) :
+        TimeZone::createDefault();
+    return createInstance(tz, aLocale, success);
 }
 
 // ------------------------------------- Adopting

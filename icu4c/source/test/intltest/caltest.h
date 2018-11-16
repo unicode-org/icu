@@ -255,6 +255,8 @@ public: // package
     void TestAddAcrossZoneTransition(void);
 
     void TestChineseCalendarMapping(void);
+
+    void TestLocaleTZExtension(void);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
