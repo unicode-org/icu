@@ -1969,6 +1969,19 @@ LocaleTest::TestSetUnicodeKeywordValueStringPiece(void) {
 
     static const char expected[] = "de@calendar=buddhist;collation=phonebook";
     assertEquals("", expected, l.getName());
+
+    l.setUnicodeKeywordValue("co", nullptr, status);
+    status.errIfFailureAndReset();
+
+    assertEquals("setUnicodeKeywordValue('co', nullptr') should remove collation value",
+                 "de@calendar=buddhist", l.getName());
+
+    l.setUnicodeKeywordValue("ca", "", status);
+    status.errIfFailureAndReset();
+
+    assertEquals("setUnicodeKeywordValue('ca', nullptr') should remove calendar value",
+                 "de", l.getName());
+
 }
 
 void
