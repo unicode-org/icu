@@ -26,7 +26,7 @@ void PatternModifierTest::testBasic() {
     ParsedPatternInfo patternInfo;
     PatternParser::parseToPatternInfo(u"a0b", patternInfo, status);
     assertSuccess("Spot 1", status);
-    mod.setPatternInfo(&patternInfo);
+    mod.setPatternInfo(&patternInfo, UNUM_FIELD_COUNT);
     mod.setPatternAttributes(UNUM_SIGN_AUTO, false);
     DecimalFormatSymbols symbols(Locale::getEnglish(), status);
     CurrencySymbols currencySymbols({u"USD", status}, "en", status);
@@ -58,7 +58,7 @@ void PatternModifierTest::testBasic() {
     ParsedPatternInfo patternInfo2;
     PatternParser::parseToPatternInfo(u"a0b;c-0d", patternInfo2, status);
     assertSuccess("Spot 4", status);
-    mod.setPatternInfo(&patternInfo2);
+    mod.setPatternInfo(&patternInfo2, UNUM_FIELD_COUNT);
     mod.setPatternAttributes(UNUM_SIGN_AUTO, false);
     mod.setNumberProperties(1, StandardPlural::Form::COUNT);
     assertEquals("Pattern a0b;c-0d", u"a", getPrefix(mod, status));
@@ -88,7 +88,7 @@ void PatternModifierTest::testPatternWithNoPlaceholder() {
     ParsedPatternInfo patternInfo;
     PatternParser::parseToPatternInfo(u"abc", patternInfo, status);
     assertSuccess("Spot 1", status);
-    mod.setPatternInfo(&patternInfo);
+    mod.setPatternInfo(&patternInfo, UNUM_FIELD_COUNT);
     mod.setPatternAttributes(UNUM_SIGN_AUTO, false);
     DecimalFormatSymbols symbols(Locale::getEnglish(), status);
     CurrencySymbols currencySymbols({u"USD", status}, "en", status);
@@ -131,7 +131,7 @@ void PatternModifierTest::testMutableEqualsImmutable() {
     ParsedPatternInfo patternInfo;
     PatternParser::parseToPatternInfo("a0b;c-0d", patternInfo, status);
     assertSuccess("Spot 1", status);
-    mod.setPatternInfo(&patternInfo);
+    mod.setPatternInfo(&patternInfo, UNUM_FIELD_COUNT);
     mod.setPatternAttributes(UNUM_SIGN_AUTO, false);
     DecimalFormatSymbols symbols(Locale::getEnglish(), status);
     CurrencySymbols currencySymbols({u"USD", status}, "en", status);

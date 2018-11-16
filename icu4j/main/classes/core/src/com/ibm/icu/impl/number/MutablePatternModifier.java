@@ -38,6 +38,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
 
     // Pattern details
     AffixPatternProvider patternInfo;
+    Field field;
     SignDisplay signDisplay;
     boolean perMilleReplacesPercent;
 
@@ -71,9 +72,13 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
      * Sets a reference to the parsed decimal format pattern, usually obtained from
      * {@link PatternStringParser#parseToPatternInfo(String)}, but any implementation of
      * {@link AffixPatternProvider} is accepted.
+     *
+     * @param field
+     *            Which field to use for literal characters in the pattern.
      */
-    public void setPatternInfo(AffixPatternProvider patternInfo) {
+    public void setPatternInfo(AffixPatternProvider patternInfo, Field field) {
         this.patternInfo = patternInfo;
+        this.field = field;
     }
 
     /**
@@ -343,13 +348,13 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
 
     private int insertPrefix(NumberStringBuilder sb, int position) {
         prepareAffix(true);
-        int length = AffixUtils.unescape(currentAffix, sb, position, this);
+        int length = AffixUtils.unescape(currentAffix, sb, position, this, field);
         return length;
     }
 
     private int insertSuffix(NumberStringBuilder sb, int position) {
         prepareAffix(false);
-        int length = AffixUtils.unescape(currentAffix, sb, position, this);
+        int length = AffixUtils.unescape(currentAffix, sb, position, this, field);
         return length;
     }
 

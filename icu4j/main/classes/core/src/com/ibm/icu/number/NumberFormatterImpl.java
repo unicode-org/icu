@@ -322,7 +322,7 @@ class NumberFormatterImpl {
         // Middle modifier (patterns, positive/negative, currency symbols, percent)
         // The default middle modifier is weak (thus the false argument).
         MutablePatternModifier patternMod = new MutablePatternModifier(false);
-        patternMod.setPatternInfo((macros.affixProvider != null) ? macros.affixProvider : patternInfo);
+        patternMod.setPatternInfo((macros.affixProvider != null) ? macros.affixProvider : patternInfo, null);
         patternMod.setPatternAttributes(micros.sign, isPermille);
         if (patternMod.needsPlurals()) {
             if (rules == null) {

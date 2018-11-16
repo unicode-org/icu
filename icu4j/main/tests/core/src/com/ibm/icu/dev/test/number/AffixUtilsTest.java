@@ -204,14 +204,14 @@ public class AffixUtilsTest {
             String input = cas[0];
             String expected = cas[1];
             sb.clear();
-            AffixUtils.unescape(input, sb, 0, provider);
+            AffixUtils.unescape(input, sb, 0, provider, null);
             assertEquals("With symbol provider on <" + input + ">", expected, sb.toString());
         }
 
         // Test insertion position
         sb.clear();
         sb.append("abcdefg", null);
-        AffixUtils.unescape("-+%", sb, 4, provider);
+        AffixUtils.unescape("-+%", sb, 4, provider, null);
         assertEquals("Symbol provider into middle", "abcd123efg", sb.toString());
     }
 
@@ -237,7 +237,7 @@ public class AffixUtilsTest {
 
     private static String unescapeWithDefaults(String input) {
         NumberStringBuilder nsb = new NumberStringBuilder();
-        int length = AffixUtils.unescape(input, nsb, 0, DEFAULT_SYMBOL_PROVIDER);
+        int length = AffixUtils.unescape(input, nsb, 0, DEFAULT_SYMBOL_PROVIDER, null);
         assertEquals("Return value of unescape", nsb.length(), length);
         return nsb.toString();
     }

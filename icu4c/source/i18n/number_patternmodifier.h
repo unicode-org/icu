@@ -95,8 +95,11 @@ class U_I18N_API MutablePatternModifier
      * Sets a reference to the parsed decimal format pattern, usually obtained from
      * {@link PatternStringParser#parseToPatternInfo(String)}, but any implementation of {@link AffixPatternProvider} is
      * accepted.
+     *
+     * @param field
+     *            Which field to use for literal characters in the pattern.
      */
-    void setPatternInfo(const AffixPatternProvider *patternInfo);
+    void setPatternInfo(const AffixPatternProvider *patternInfo, Field field);
 
     /**
      * Sets attributes that imply changes to the literal interpretation of the pattern string affixes.
@@ -203,8 +206,9 @@ class U_I18N_API MutablePatternModifier
 
     // Pattern details (initialized in setPatternInfo and setPatternAttributes)
     const AffixPatternProvider *fPatternInfo;
+    Field fField;
     UNumberSignDisplay fSignDisplay;
-    bool perMilleReplacesPercent;
+    bool fPerMilleReplacesPercent;
 
     // Symbol details (initialized in setSymbols)
     const DecimalFormatSymbols *fSymbols;

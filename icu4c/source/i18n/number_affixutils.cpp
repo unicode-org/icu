@@ -158,7 +158,7 @@ Field AffixUtils::getFieldForType(AffixPatternType type) {
 
 int32_t
 AffixUtils::unescape(const UnicodeString &affixPattern, NumberStringBuilder &output, int32_t position,
-                     const SymbolProvider &provider, UErrorCode &status) {
+                     const SymbolProvider &provider, Field field, UErrorCode &status) {
     int32_t length = 0;
     AffixTag tag;
     while (hasNext(tag, affixPattern)) {
@@ -171,7 +171,7 @@ AffixUtils::unescape(const UnicodeString &affixPattern, NumberStringBuilder &out
             length += output.insert(
                     position + length, provider.getSymbol(tag.type), getFieldForType(tag.type), status);
         } else {
-            length += output.insertCodePoint(position + length, tag.codePoint, UNUM_FIELD_COUNT, status);
+            length += output.insertCodePoint(position + length, tag.codePoint, field, status);
         }
     }
     return length;

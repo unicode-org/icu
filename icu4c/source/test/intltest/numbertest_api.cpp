@@ -2349,6 +2349,130 @@ void NumberFormatterApiTest::fieldPositionCoverage() {
                 expectedFieldPositions,
                 sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
     }
+
+    {
+        const char16_t* message = u"Compact field basic";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"compact-short",
+                NumberFormatter::with().notation(Notation::compactShort()),
+                Locale::getUS(),
+                65000,
+                u"65K");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_INTEGER_FIELD, 0, 2},
+                {UNUM_COMPACT_FIELD, 2, 3}};
+        assertFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
+    }
+
+    {
+        const char16_t* message = u"Compact field with spaces";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"compact-long",
+                NumberFormatter::with().notation(Notation::compactLong()),
+                Locale::getUS(),
+                65000,
+                u"65 thousand");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_INTEGER_FIELD, 0, 2},
+                {UNUM_COMPACT_FIELD, 3, 11}};
+        assertFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
+    }
+
+    {
+        const char16_t* message = u"Compact field with inner space";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"compact-long",
+                NumberFormatter::with().notation(Notation::compactLong()),
+                "fil",  // locale with interesting data
+                6000,
+                u"6 na libo");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_INTEGER_FIELD, 0, 1},
+                {UNUM_COMPACT_FIELD, 2, 9}};
+        assertFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
+    }
+
+    {
+        const char16_t* message = u"Compact field with bidi mark";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"compact-long",
+                NumberFormatter::with().notation(Notation::compactLong()),
+                "he",  // locale with interesting data
+                6000,
+                u"\u200F6 אלף");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_INTEGER_FIELD, 1, 2},
+                {UNUM_COMPACT_FIELD, 3, 6}};
+        assertFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
+    }
+
+    {
+        const char16_t* message = u"Compact with currency fields";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"compact-short currency/USD",
+                NumberFormatter::with().notation(Notation::compactShort()).unit(USD),
+                "sr_Latn",  // locale with interesting data
+                65000,
+                u"65 hilj. US$");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_INTEGER_FIELD, 0, 2},
+                {UNUM_COMPACT_FIELD, 3, 8},
+                {UNUM_CURRENCY_FIELD, 9, 12}};
+        assertFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
+    }
+
+    {
+        const char16_t* message = u"Compact with measure unit fields";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"compact-long measure-unit/length-meter unit-width-full-name",
+                NumberFormatter::with().notation(Notation::compactLong())
+                    .unit(METER)
+                    .unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+                Locale::getUS(),
+                65000,
+                u"65 thousand meters");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_INTEGER_FIELD, 0, 2},
+                {UNUM_COMPACT_FIELD, 3, 11},
+                {UNUM_MEASURE_UNIT_FIELD, 12, 18}};
+        assertFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                sizeof(expectedFieldPositions)/sizeof(*expectedFieldPositions));
+    }
 }
 
 void NumberFormatterApiTest::toFormat() {
