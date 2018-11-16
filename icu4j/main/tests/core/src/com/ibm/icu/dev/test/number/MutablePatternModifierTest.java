@@ -25,7 +25,7 @@ public class MutablePatternModifierTest {
     @Test
     public void basic() {
         MutablePatternModifier mod = new MutablePatternModifier(false);
-        mod.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b"));
+        mod.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b"), null);
         mod.setPatternAttributes(SignDisplay.AUTO, false);
         mod.setSymbols(DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
                 Currency.getInstance("USD"),
@@ -51,7 +51,7 @@ public class MutablePatternModifierTest {
         assertEquals("a", getPrefix(mod));
         assertEquals("b", getSuffix(mod));
 
-        mod.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b;c-0d"));
+        mod.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b;c-0d"), null);
         mod.setPatternAttributes(SignDisplay.AUTO, false);
         mod.setNumberProperties(1, null);
         assertEquals("a", getPrefix(mod));
@@ -76,7 +76,7 @@ public class MutablePatternModifierTest {
     @Test
     public void mutableEqualsImmutable() {
         MutablePatternModifier mod = new MutablePatternModifier(false);
-        mod.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b;c-0d"));
+        mod.setPatternInfo(PatternStringParser.parseToPatternInfo("a0b;c-0d"), null);
         mod.setPatternAttributes(SignDisplay.AUTO, false);
         mod.setSymbols(DecimalFormatSymbols.getInstance(ULocale.ENGLISH), null, UnitWidth.SHORT, null);
         DecimalQuantity fq = new DecimalQuantity_DualStorageBCD(1);
@@ -106,7 +106,7 @@ public class MutablePatternModifierTest {
     @Test
     public void patternWithNoPlaceholder() {
         MutablePatternModifier mod = new MutablePatternModifier(false);
-        mod.setPatternInfo(PatternStringParser.parseToPatternInfo("abc"));
+        mod.setPatternInfo(PatternStringParser.parseToPatternInfo("abc"), null);
         mod.setPatternAttributes(SignDisplay.AUTO, false);
         mod.setSymbols(DecimalFormatSymbols.getInstance(ULocale.ENGLISH),
                 Currency.getInstance("USD"),

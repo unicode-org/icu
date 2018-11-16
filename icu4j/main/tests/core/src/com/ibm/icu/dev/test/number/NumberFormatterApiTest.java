@@ -2317,6 +2317,124 @@ public class NumberFormatterApiTest {
                     result,
                     expectedFieldPositions);
         }
+
+        {
+            String message = "Compact field basic";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "compact-short",
+                    NumberFormatter.with().notation(Notation.compactShort()),
+                    ULocale.US,
+                    65000,
+                    "65K");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.INTEGER, 0, 2},
+                    {NumberFormat.Field.COMPACT, 2, 3}};
+            assertFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
+
+        {
+            String message = "Compact field with spaces";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "compact-long",
+                    NumberFormatter.with().notation(Notation.compactLong()),
+                    ULocale.US,
+                    65000,
+                    "65 thousand");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.INTEGER, 0, 2},
+                    {NumberFormat.Field.COMPACT, 3, 11}};
+            assertFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
+
+        {
+            String message = "Compact field with inner space";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "compact-long",
+                    NumberFormatter.with().notation(Notation.compactLong()),
+                    new ULocale("fil"),  // locale with interesting data
+                    6000,
+                    "6 na libo");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.INTEGER, 0, 1},
+                    {NumberFormat.Field.COMPACT, 2, 9}};
+            assertFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
+
+        {
+            String message = "Compact field with bidi mark";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "compact-long",
+                    NumberFormatter.with().notation(Notation.compactLong()),
+                    new ULocale("he"),  // locale with interesting data
+                    6000,
+                    "\u200F6 אלף");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.INTEGER, 1, 2},
+                    {NumberFormat.Field.COMPACT, 3, 6}};
+            assertFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
+
+        {
+            String message = "Compact with currency fields";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "compact-short currency/USD",
+                    NumberFormatter.with().notation(Notation.compactShort()).unit(USD),
+                    new ULocale("sr_Latn"),  // locale with interesting data
+                    65000,
+                    "65 hilj. US$");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.INTEGER, 0, 2},
+                    {NumberFormat.Field.COMPACT, 3, 8},
+                    {NumberFormat.Field.CURRENCY, 9, 12}};
+            assertFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
+
+        {
+            String message = "Compact with measure unit fields";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "compact-long measure-unit/length-meter unit-width-full-name",
+                    NumberFormatter.with().notation(Notation.compactLong())
+                        .unit(MeasureUnit.METER)
+                        .unitWidth(UnitWidth.FULL_NAME),
+                    ULocale.US,
+                    65000,
+                    "65 thousand meters");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.INTEGER, 0, 2},
+                    {NumberFormat.Field.COMPACT, 3, 11},
+                    {NumberFormat.Field.MEASURE_UNIT, 12, 18}};
+            assertFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
     }
 
     /** Handler for serialization compatibility test suite. */

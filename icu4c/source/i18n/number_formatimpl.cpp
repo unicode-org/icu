@@ -344,7 +344,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     fPatternModifier.adoptInstead(patternModifier);
     patternModifier->setPatternInfo(
             macros.affixProvider != nullptr ? macros.affixProvider
-                                            : static_cast<const AffixPatternProvider*>(fPatternInfo.getAlias()));
+                                            : static_cast<const AffixPatternProvider*>(fPatternInfo.getAlias()),
+            UNUM_FIELD_COUNT);
     patternModifier->setPatternAttributes(fMicros.sign, isPermille);
     if (patternModifier->needsPlurals()) {
         patternModifier->setSymbols(

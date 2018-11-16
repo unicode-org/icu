@@ -23,13 +23,14 @@ AffixPatternProvider::~AffixPatternProvider() = default;
 MutablePatternModifier::MutablePatternModifier(bool isStrong)
         : fStrong(isStrong) {}
 
-void MutablePatternModifier::setPatternInfo(const AffixPatternProvider* patternInfo) {
+void MutablePatternModifier::setPatternInfo(const AffixPatternProvider* patternInfo, Field field) {
     fPatternInfo = patternInfo;
+    fField = field;
 }
 
 void MutablePatternModifier::setPatternAttributes(UNumberSignDisplay signDisplay, bool perMille) {
     fSignDisplay = signDisplay;
-    this->perMilleReplacesPercent = perMille;
+    fPerMilleReplacesPercent = perMille;
 }
 
 void MutablePatternModifier::setSymbols(const DecimalFormatSymbols* symbols,
@@ -255,20 +256,20 @@ bool MutablePatternModifier::semanticallyEquivalent(const Modifier& other) const
 
 int32_t MutablePatternModifier::insertPrefix(NumberStringBuilder& sb, int position, UErrorCode& status) {
     prepareAffix(true);
-    int length = AffixUtils::unescape(currentAffix, sb, position, *this, status);
+    int32_t length = AffixUtils::unescape(currentAffix, sb, position, *this, fField, status);
     return length;
 }
 
 int32_t MutablePatternModifier::insertSuffix(NumberStringBuilder& sb, int position, UErrorCode& status) {
     prepareAffix(false);
-    int length = AffixUtils::unescape(currentAffix, sb, position, *this, status);
+    int32_t length = AffixUtils::unescape(currentAffix, sb, position, *this, fField, status);
     return length;
 }
 
 /** This method contains the heart of the logic for rendering LDML affix strings. */
 void MutablePatternModifier::prepareAffix(bool isPrefix) {
     PatternStringUtils::patternInfoToStringBuilder(
-            *fPatternInfo, isPrefix, fSignum, fSignDisplay, fPlural, perMilleReplacesPercent, currentAffix);
+            *fPatternInfo, isPrefix, fSignum, fSignDisplay, fPlural, fPerMilleReplacesPercent, currentAffix);
 }
 
 UnicodeString MutablePatternModifier::getSymbol(AffixPatternType type) const {

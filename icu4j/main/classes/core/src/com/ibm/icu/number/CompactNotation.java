@@ -19,6 +19,7 @@ import com.ibm.icu.impl.number.MutablePatternModifier.ImmutablePatternModifier;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
 import com.ibm.icu.text.CompactDecimalFormat.CompactStyle;
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.util.ULocale;
 
@@ -96,7 +97,7 @@ public class CompactNotation extends Notation {
             }
             if (buildReference != null) {
                 // Safe code path
-                precomputedMods = new HashMap<String, ImmutablePatternModifier>();
+                precomputedMods = new HashMap<>();
                 precomputeAllModifiers(buildReference);
             } else {
                 // Unsafe code path
@@ -106,12 +107,12 @@ public class CompactNotation extends Notation {
 
         /** Used by the safe code path */
         private void precomputeAllModifiers(MutablePatternModifier buildReference) {
-            Set<String> allPatterns = new HashSet<String>();
+            Set<String> allPatterns = new HashSet<>();
             data.getUniquePatterns(allPatterns);
 
             for (String patternString : allPatterns) {
                 ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(patternString);
-                buildReference.setPatternInfo(patternInfo);
+                buildReference.setPatternInfo(patternInfo, NumberFormat.Field.COMPACT);
                 precomputedMods.put(patternString, buildReference.createImmutable());
             }
         }
@@ -148,7 +149,7 @@ public class CompactNotation extends Notation {
                 // Overwrite the PatternInfo in the existing modMiddle.
                 assert micros.modMiddle instanceof MutablePatternModifier;
                 ParsedPatternInfo patternInfo = PatternStringParser.parseToPatternInfo(patternString);
-                ((MutablePatternModifier) micros.modMiddle).setPatternInfo(patternInfo);
+                ((MutablePatternModifier) micros.modMiddle).setPatternInfo(patternInfo, NumberFormat.Field.COMPACT);
             }
 
             // We already performed rounding. Do not perform it again.
