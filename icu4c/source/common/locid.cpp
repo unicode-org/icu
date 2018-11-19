@@ -1448,12 +1448,16 @@ Locale::setUnicodeKeywordValue(StringPiece keywordName,
         return;
     }
 
-    const char* legacy_value =
-        uloc_toLegacyType(keywordName_nul.data(), keywordValue_nul.data());
+    const char* legacy_value = nullptr;
 
-    if (legacy_value == nullptr) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
+    if (!keywordValue_nul.isEmpty()) {
+        legacy_value =
+            uloc_toLegacyType(keywordName_nul.data(), keywordValue_nul.data());
+
+        if (legacy_value == nullptr) {
+            status = U_ILLEGAL_ARGUMENT_ERROR;
+            return;
+        }
     }
 
     setKeywordValue(legacy_key, legacy_value, status);
