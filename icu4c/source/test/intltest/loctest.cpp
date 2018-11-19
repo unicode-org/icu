@@ -1969,6 +1969,26 @@ LocaleTest::TestSetUnicodeKeywordValueStringPiece(void) {
 
     static const char expected[] = "de@calendar=buddhist;collation=phonebook";
     assertEquals("", expected, l.getName());
+
+    l.setUnicodeKeywordValue("cu", nullptr, status);
+    status.errIfFailureAndReset();
+    assertEquals("", expected, l.getName());
+
+    l.setUnicodeKeywordValue("!!", nullptr, status);
+    assertEquals("status", U_ILLEGAL_ARGUMENT_ERROR, status.reset());
+    assertEquals("", expected, l.getName());
+
+    l.setUnicodeKeywordValue("co", "!!", status);
+    assertEquals("status", U_ILLEGAL_ARGUMENT_ERROR, status.reset());
+    assertEquals("", expected, l.getName());
+
+    l.setUnicodeKeywordValue("co", nullptr, status);
+    status.errIfFailureAndReset();
+
+    l.setUnicodeKeywordValue("ca", "", status);
+    status.errIfFailureAndReset();
+
+    assertEquals("", Locale::getGerman().getName(), l.getName());
 }
 
 void
