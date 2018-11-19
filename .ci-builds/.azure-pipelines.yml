@@ -81,25 +81,27 @@ jobs:
         filename: icu4c/source/allinone/icucheck.bat
         arguments: 'x86 Release'
 #-------------------------------------------------------------------------
-- job: ICU4C_MSVC_x64_Release_VS2015
-  displayName: 'C: MSVC 64-bit Release (VS 2015)'
-  timeoutInMinutes: 30
-  pool:
-    vmImage: 'vs2015-win2012r2'
-    demands: 
-      - msbuild
-      - visualstudio
-      - Cmd
-  steps:
-    - task: VSBuild@1
-      displayName: 'Build Solution'
-      inputs:
-        solution: icu4c/source/allinone/allinone.sln
-        platform: x64
-        configuration: Release
-        msbuildArgs: '/p:SkipUWP=true'
-    - task: BatchScript@1
-      displayName: 'Run Tests (icucheck.bat)'
-      inputs:
-        filename: icu4c/source/allinone/icucheck.bat
-        arguments: 'x64 Release'
+# Disabled until the VS2015 image has Python 3 working.
+#
+#- job: ICU4C_MSVC_x64_Release_VS2015
+#  displayName: 'C: MSVC 64-bit Release (VS 2015)'
+#  timeoutInMinutes: 30
+#  pool:
+#    vmImage: 'vs2015-win2012r2'
+#    demands: 
+#      - msbuild
+#      - visualstudio
+#      - Cmd
+#  steps:
+#    - task: VSBuild@1
+#      displayName: 'Build Solution'
+#      inputs:
+#        solution: icu4c/source/allinone/allinone.sln
+#        platform: x64
+#        configuration: Release
+#        msbuildArgs: '/p:SkipUWP=true'
+#    - task: BatchScript@1
+#      displayName: 'Run Tests (icucheck.bat)'
+#      inputs:
+#        filename: icu4c/source/allinone/icucheck.bat
+#        arguments: 'x64 Release'
