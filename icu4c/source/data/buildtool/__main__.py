@@ -1,6 +1,7 @@
 # Copyright (C) 2018 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
 
+from __future__ import print_function
 import argparse
 import glob as pyglob
 import sys
@@ -170,6 +171,8 @@ def main():
     else:
         print("Format not supported: %s" % args.format)
         return 1
+    if sys.version_info.major < 3:
+        print("Warning: Please upgrade to Python 3+, you have %s" % sys.version, file=sys.stderr)
     return 0
 
 if __name__ == "__main__":
