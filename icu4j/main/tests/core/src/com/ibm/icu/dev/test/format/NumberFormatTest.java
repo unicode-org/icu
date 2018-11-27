@@ -270,6 +270,10 @@ public class NumberFormatTest extends TestFmwk {
         df = new DecimalFormat("0.00;0.00");
         expect2(df, 1, "1.00");
         expect(df, -1, "1.00");  // parses as 1, not -1
+
+        df = new DecimalFormat(" 0.00 ; -0.00 ");
+        expect2(df, 1, " 1.00 ");
+        expect2(df, -1, " -1.00 ");
     }
 
     // Test exponential pattern

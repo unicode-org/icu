@@ -411,6 +411,10 @@ void NumberFormatTest::Test20186_SpacesAroundSemicolon() {
     df = DecimalFormat(u"0.00;0.00", {"en-us", status}, status);
     expect2(df, 1, u"1.00");
     expect(df, -1, u"1.00");  // parses as 1, not -1
+
+    df = DecimalFormat(u" 0.00 ; -0.00 ", {"en-us", status}, status);
+    expect2(df, 1, u" 1.00 ");
+    expect2(df, -1, u" -1.00 ");
 }
 
 /*
