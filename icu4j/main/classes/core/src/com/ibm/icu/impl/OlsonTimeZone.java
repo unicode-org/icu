@@ -481,10 +481,10 @@ public class OlsonTimeZone extends BasicTimeZone {
      */
     public OlsonTimeZone(UResourceBundle top, UResourceBundle res, String id){
         super(id);
-        construct(top, res);
+        construct(top, res, id);
     }
 
-    private void construct(UResourceBundle top, UResourceBundle res){
+    private void construct(UResourceBundle top, UResourceBundle res, String id){
 
         if ((top == null || res == null)) {
             throw new IllegalArgumentException();
@@ -594,7 +594,7 @@ public class OlsonTimeZone extends BasicTimeZone {
             if (ruleData == null || ruleData.length != 11) {
                 throw new IllegalArgumentException("Invalid Format");
             }
-            finalZone = new SimpleTimeZone(ruleRaw, "",
+            finalZone = new SimpleTimeZone(ruleRaw, id,
                     ruleData[0], ruleData[1], ruleData[2],
                     ruleData[3] * Grego.MILLIS_PER_SECOND,
                     ruleData[4],
@@ -638,10 +638,7 @@ public class OlsonTimeZone extends BasicTimeZone {
         UResourceBundle top = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
                 ZONEINFORES, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         UResourceBundle res = ZoneMeta.openOlsonResource(top, id);
-        construct(top, res);
-        if (finalZone != null){
-            finalZone.setID(id);
-        }
+        construct(top, res, id);
     }
 
     /* (non-Javadoc)
@@ -1243,10 +1240,7 @@ public class OlsonTimeZone extends BasicTimeZone {
                     UResourceBundle top = UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME,
                             ZONEINFORES, ICUResourceBundle.ICU_DATA_CLASS_LOADER);
                     UResourceBundle res = ZoneMeta.openOlsonResource(top, tzid);
-                    construct(top, res);
-                    if (finalZone != null){
-                        finalZone.setID(tzid);
-                    }
+                    construct(top, res, tzid);
                     initialized = true;
                 } catch (Exception ignored) {
                     // throw away
@@ -1289,8 +1283,6 @@ public class OlsonTimeZone extends BasicTimeZone {
     public TimeZone cloneAsThawed() {
         OlsonTimeZone tz = (OlsonTimeZone)super.cloneAsThawed();
         if (finalZone != null) {
-            // TODO Do we really need this?
-            finalZone.setID(getID());
             tz.finalZone = (SimpleTimeZone) finalZone.clone();
         }
 
