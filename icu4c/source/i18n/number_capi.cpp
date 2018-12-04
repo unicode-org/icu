@@ -20,69 +20,6 @@ using namespace icu::number;
 using namespace icu::number::impl;
 
 
-//////////////////////////////////
-/// C API CONVERSION FUNCTIONS ///
-//////////////////////////////////
-
-UNumberFormatterData* UNumberFormatterData::validate(UNumberFormatter* input, UErrorCode& status) {
-    auto* constInput = static_cast<const UNumberFormatter*>(input);
-    auto* validated = validate(constInput, status);
-    return const_cast<UNumberFormatterData*>(validated);
-}
-
-const UNumberFormatterData*
-UNumberFormatterData::validate(const UNumberFormatter* input, UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return nullptr;
-    }
-    if (input == nullptr) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return nullptr;
-    }
-    auto* impl = reinterpret_cast<const UNumberFormatterData*>(input);
-    if (impl->fMagic != UNumberFormatterData::kMagic) {
-        status = U_INVALID_FORMAT_ERROR;
-        return nullptr;
-    }
-    return impl;
-}
-
-UNumberFormatter* UNumberFormatterData::exportForC() {
-    return reinterpret_cast<UNumberFormatter*>(this);
-}
-
-UFormattedNumberData* UFormattedNumberData::validate(UFormattedNumber* input, UErrorCode& status) {
-    auto* constInput = static_cast<const UFormattedNumber*>(input);
-    auto* validated = validate(constInput, status);
-    return const_cast<UFormattedNumberData*>(validated);
-}
-
-const UFormattedNumberData*
-UFormattedNumberData::validate(const UFormattedNumber* input, UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return nullptr;
-    }
-    if (input == nullptr) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return nullptr;
-    }
-    auto* impl = reinterpret_cast<const UFormattedNumberData*>(input);
-    if (impl->fMagic != UFormattedNumberData::kMagic) {
-        status = U_INVALID_FORMAT_ERROR;
-        return nullptr;
-    }
-    return impl;
-}
-
-UFormattedNumber* UFormattedNumberData::exportForC() {
-    return reinterpret_cast<UFormattedNumber*>(this);
-}
-
-/////////////////////////////////////
-/// END CAPI CONVERSION FUNCTIONS ///
-/////////////////////////////////////
-
-
 U_CAPI UNumberFormatter* U_EXPORT2
 unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const char* locale,
                                UErrorCode* ec) {
