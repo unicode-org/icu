@@ -240,8 +240,7 @@
 <data>•aa\N{COMBINING GRAVE ACCENT}a<200> •</data>
 
 # fullwidth numeric, midletter characters etc should be treated like their halfwidth counterparts
-# <data>•ＩＳＮ'Ｔ<200> •１９<100>日<400></data>
-# why was this added with the dbbi stuff?
+<data>•ＩＳＮ'Ｔ<200> •１９<100>日<400></data>
 
 #      to test for bug #4098467
 #      What follows is a string of Korean characters (I found it in the Yellow Pages
