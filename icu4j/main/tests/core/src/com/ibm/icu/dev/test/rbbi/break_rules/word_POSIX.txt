@@ -29,7 +29,7 @@ Double_Quote       = [\p{Word_Break = Double_Quote}];
 MidNumLet          = [\p{Word_Break = MidNumLet} - [.]];
 MidLetter          = [\p{Word_Break = MidLetter} - [\:]];
 MidNum             = [\p{Word_Break = MidNum} [.]];
-Numeric            = [\p{Word_Break = Numeric}];
+Numeric            = [[\p{Word_Break = Numeric}] [\uFF10-\uff19]];  # Patch for ICU-12079;
 ExtendNumLet       = [\p{Word_Break = ExtendNumLet}];
 WSegSpace          = [\p{Word_Break = WSegSpace}];
 Extended_Pict      = [:ExtPict:];

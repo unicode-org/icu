@@ -330,7 +330,7 @@ public class RBBITestMonkey extends TestFmwk {
             fMidNumLetSet    = new UnicodeSet("[\\p{Word_Break = MidNumLet}]");
             fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter}]");
             fMidNumSet       = new UnicodeSet("[\\p{Word_Break = MidNum}]");
-            fNumericSet      = new UnicodeSet("[\\p{Word_Break = Numeric}]");
+            fNumericSet      = new UnicodeSet("[[\\p{Word_Break = Numeric}][\\uFF10-\\uff19]]");
             fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]");
             fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]");
             fExtendSet       = new UnicodeSet("[\\p{Word_Break = Extend}]");
