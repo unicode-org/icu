@@ -570,6 +570,7 @@
     <ClInclude Include="ustr_cnv.h" />
     <ClInclude Include="ustr_imp.h" />
     <ClInclude Include="static_unicode_sets.h" />
+    <ClInclude Include="capi_helper.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="common.rc" />
