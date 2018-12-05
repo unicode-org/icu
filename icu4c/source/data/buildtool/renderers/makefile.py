@@ -10,7 +10,7 @@ def get_gnumake_rules(build_dirs, requests, makefile_vars, **kwargs):
 
     # Common Variables
     common_vars = kwargs["common_vars"]
-    for key, value in makefile_vars.items():
+    for key, value in sorted(makefile_vars.items()):
         makefile_string += "{KEY} = {VALUE}\n".format(
             KEY = key,
             VALUE = value
@@ -137,6 +137,7 @@ def get_gnumake_rules_helper(request, common_vars, **kwargs):
 
     if isinstance(request, SingleExecutionRequest):
         cmd = utils.format_single_request_command(request, cmd_template, common_vars)
+        dep_files = utils.get_input_files(request)
 
         if len(request.output_files) > 1:
             # Special case for multiple output files: Makefile rules should have only one
@@ -152,7 +153,7 @@ def get_gnumake_rules_helper(request, common_vars, **kwargs):
                 MakeRule(
                     name = "%s_all" % request.name,
                     dep_literals = [],
-                    dep_files = request.input_files,
+                    dep_files = dep_files,
                     output_file = timestamp_file,
                     cmds = [
                         cmd,
@@ -174,13 +175,13 @@ def get_gnumake_rules_helper(request, common_vars, **kwargs):
                 ]
             return rules
 
-        elif len(request.input_files) > 5:
+        elif len(dep_files) > 5:
             # For nicer printing, for long input lists, use a helper variable.
             dep_var_name = "%s_DEPS" % request.name.upper()
             return [
                 MakeFilesVar(
                     name = dep_var_name,
-                    files = request.input_files
+                    files = dep_files
                 ),
                 MakeRule(
                     name = request.name,
@@ -196,7 +197,7 @@ def get_gnumake_rules_helper(request, common_vars, **kwargs):
                 MakeRule(
                     name = request.name,
                     dep_literals = [],
-                    dep_files = request.input_files,
+                    dep_files = dep_files,
                     output_file = request.output_files[0],
                     cmds = [cmd]
                 )

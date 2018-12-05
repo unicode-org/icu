@@ -16,18 +16,12 @@ def generate(config, glob, common_vars):
     requests += generate_other(config, glob, common_vars)
     requests += generate_copy(config, glob, common_vars)
 
-    all_output_files = list(sorted(utils.get_all_output_files(requests)))
-    all_output_files_with_tmp = list(sorted(utils.get_all_output_files(requests, include_tmp=True)))
-    testdata_list_file = TmpFile("testdata.lst")
     requests += [
-        PrintFileRequest(
+        ListRequest(
             name = "testdata_list",
-            output_file = testdata_list_file,
-            content = "\n".join(file.filename for file in all_output_files)
-        ),
-        VariableRequest(
-            name = "testdata_all_output_files",
-            input_files = all_output_files_with_tmp + [testdata_list_file]
+            variable_name = "testdata_all_output_files",
+            output_file = TmpFile("testdata.lst"),
+            include_tmp = True
         )
     ]
 
@@ -64,6 +58,7 @@ def generate_rb(config, glob, common_vars):
         # TODO: Use option -k?
         RepeatedExecutionRequest(
             name = "testrb",
+            category = "tests",
             dep_files = [],
             input_files = [InFile("%s.txt" % bn) for bn in basenames],
             output_files = [OutFile("%s.res" % bn) for bn in basenames],
@@ -75,6 +70,8 @@ def generate_rb(config, glob, common_vars):
         # Other standalone res files
         SingleExecutionRequest(
             name = "encoded",
+            category = "tests",
+            dep_files = [],
             input_files = [InFile("encoded.utf16be")],
             output_files = [OutFile("encoded.res")],
             tool = IcuTool("genrb"),
@@ -83,6 +80,8 @@ def generate_rb(config, glob, common_vars):
         ),
         SingleExecutionRequest(
             name = "idna_rules",
+            category = "tests",
+            dep_files = [],
             input_files = [InFile("idna_rules.txt")],
             output_files = [OutFile("idna_rules.res")],
             tool = IcuTool("genrb"),
@@ -91,6 +90,8 @@ def generate_rb(config, glob, common_vars):
         ),
         SingleExecutionRequest(
             name = "zoneinfo64",
+            category = "tests",
+            dep_files = [],
             input_files = [InFile("zoneinfo64.txt")],
             output_files = [TmpFile("zoneinfo64.res")],
             tool = IcuTool("genrb"),
@@ -104,6 +105,8 @@ def generate_sprep(config, glob, common_vars):
     return [
         SingleExecutionRequest(
             name = "nfscsi",
+            category = "tests",
+            dep_files = [],
             input_files = [InFile("nfs4_cs_prep_ci.txt")],
             output_files = [OutFile("nfscsi.spp")],
             tool = IcuTool("gensprep"),
@@ -112,6 +115,8 @@ def generate_sprep(config, glob, common_vars):
         ),
         SingleExecutionRequest(
             name = "nfscss",
+            category = "tests",
+            dep_files = [],
             input_files = [InFile("nfs4_cs_prep_cs.txt")],
             output_files = [OutFile("nfscss.spp")],
             tool = IcuTool("gensprep"),
@@ -120,6 +125,8 @@ def generate_sprep(config, glob, common_vars):
         ),
         SingleExecutionRequest(
             name = "nfscis",
+            category = "tests",
+            dep_files = [],
             input_files = [InFile("nfs4_cis_prep.txt")],
             output_files = [OutFile("nfscis.spp")],
             tool = IcuTool("gensprep"),
@@ -128,6 +135,8 @@ def generate_sprep(config, glob, common_vars):
         ),
         SingleExecutionRequest(
             name = "nfsmxs",
+            category = "tests",
+            dep_files = [],
             input_files = [InFile("nfs4_mixed_prep_s.txt")],
             output_files = [OutFile("nfsmxs.spp")],
             tool = IcuTool("gensprep"),
@@ -136,6 +145,8 @@ def generate_sprep(config, glob, common_vars):
         ),
         SingleExecutionRequest(
             name = "nfsmxp",
+            category = "tests",
+            dep_files = [],
             input_files = [InFile("nfs4_mixed_prep_p.txt")],
             output_files = [OutFile("nfsmxp.spp")],
             tool = IcuTool("gensprep"),
@@ -159,6 +170,7 @@ def generate_conv(config, glob, common_vars):
     return [
         RepeatedExecutionRequest(
             name = "test_conv",
+            category = "tests",
             dep_files = [],
             input_files = [InFile("%s.ucm" % bn) for bn in basenames],
             output_files = [OutFile("%s.cnv" % bn) for bn in basenames],
@@ -194,6 +206,8 @@ def generate_other(config, glob, common_vars):
     return [
         SingleExecutionRequest(
             name = "testnorm",
+            category = "tests",
+            dep_files = [],
             input_files = [InFile("testnorm.txt")],
             output_files = [OutFile("testnorm.nrm")],
             tool = IcuTool("gennorm2"),
@@ -202,6 +216,8 @@ def generate_other(config, glob, common_vars):
         ),
         SingleExecutionRequest(
             name = "test_icu",
+            category = "tests",
+            dep_files = [],
             input_files = [],
             output_files = [OutFile("test.icu")],
             tool = IcuTool("gentest"),
@@ -210,6 +226,8 @@ def generate_other(config, glob, common_vars):
         ),
         SingleExecutionRequest(
             name = "testtable32_txt",
+            category = "tests",
+            dep_files = [],
             input_files = [],
             output_files = [TmpFile("testtable32.txt")],
             tool = IcuTool("gentest"),
@@ -218,6 +236,8 @@ def generate_other(config, glob, common_vars):
         ),
         SingleExecutionRequest(
             name = "testtable32_res",
+            category = "tests",
+            dep_files = [],
             input_files = [TmpFile("testtable32.txt")],
             output_files = [OutFile("testtable32.res")],
             tool = IcuTool("genrb"),

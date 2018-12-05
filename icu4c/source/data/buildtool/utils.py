@@ -57,34 +57,73 @@ def format_repeated_request_command(request, cmd_template, loop_vars, common_var
     )
 
 
-def flatten(request, max_parallel):
-    """Flatten a RepeatedOrSingleExecutionRequest
+def flatten_requests(raw_requests, config, common_vars):
+    """Post-processes "meta" requests into normal requests.
 
-    Becomes either a SingleExecutionRequest or a RepeatedExecutionRequest.
+    Affected classes:
+    - RepeatedOrSingleExecutionRequest becomes either 
+      RepeatedExecutionRequest or SingleExecutionRequest
+    - ListRequest becomes PrintFileRequest and VariableRequest
+    - IndexTxtRequest becomes PrintFileRequest
     """
-    if max_parallel:
-        return RepeatedExecutionRequest(
-            name = request.name,
-            dep_files = request.dep_files,
-            input_files = request.input_files,
-            output_files = request.output_files,
-            tool = request.tool,
-            args = request.args,
-            format_with = request.format_with,
-            repeat_with = request.repeat_with
-        )
-    else:
-        return SingleExecutionRequest(
-            name = request.name,
-            input_files = request.dep_files + request.input_files,
-            output_files = request.output_files,
-            tool = request.tool,
-            args = request.args,
-            format_with = concat_dicts(request.format_with, request.flatten_with)
-        )
+    flattened_requests = []
+    for request in raw_requests:
+        if isinstance(request, RepeatedOrSingleExecutionRequest):
+            if config.max_parallel:
+                flattened_requests.append(RepeatedExecutionRequest(
+                    name = request.name,
+                    category = request.category,
+                    dep_files = request.dep_files,
+                    input_files = request.input_files,
+                    output_files = request.output_files,
+                    tool = request.tool,
+                    args = request.args,
+                    format_with = request.format_with,
+                    repeat_with = request.repeat_with
+                ))
+            else:
+                flattened_requests.append(SingleExecutionRequest(
+                    name = request.name,
+                    category = request.category,
+                    input_files = request.dep_files + request.input_files,
+                    output_files = request.output_files,
+                    tool = request.tool,
+                    args = request.args,
+                    format_with = concat_dicts(request.format_with, request.repeat_with)
+                ))
+        elif isinstance(request, ListRequest):
+            list_files = list(sorted(get_all_output_files(raw_requests)))
+            if request.include_tmp:
+                variable_files = list(sorted(get_all_output_files(raw_requests, include_tmp=True)))
+            else:
+                # Always include the list file itself
+                variable_files = list_files + [request.output_file]
+            flattened_requests += [
+                PrintFileRequest(
+                    name = request.name,
+                    output_file = request.output_file,
+                    content = "\n".join(file.filename for file in list_files)
+                ),
+                VariableRequest(
+                    name = request.variable_name,
+                    input_files = variable_files
+                )
+            ]
+        elif isinstance(request, IndexTxtRequest):
+            flattened_requests += [
+                PrintFileRequest(
+                    name = request.name,
+                    output_file = request.output_file,
+                    content = generate_index_file(request.input_files, request.cldr_version, common_vars)
+                )
+            ]
+        else:
+            flattened_requests.append(request)
+    return flattened_requests
 
 
-def generate_index_file(locales, cldr_version, common_vars):
+def generate_index_file(input_files, cldr_version, common_vars):
+    locales = [f.filename[f.filename.rfind("/")+1:-4] for f in input_files]
     formatted_version = "    CLDRVersion { \"%s\" }\n" % cldr_version if cldr_version else ""
     formatted_locales = "\n".join(["        %s {\"\"}" % v for v in locales])
     # TODO: CLDRVersion is required only in the base file
@@ -101,23 +140,52 @@ def generate_index_file(locales, cldr_version, common_vars):
             )
 
 
+def get_input_files(request):
+    if isinstance(request, SingleExecutionRequest):
+        return request.dep_files + request.input_files
+    elif isinstance(request, RepeatedExecutionRequest):
+        return request.dep_files + request.input_files
+    elif isinstance(request, RepeatedOrSingleExecutionRequest):
+        return request.dep_files + request.input_files
+    elif isinstance(request, PrintFileRequest):
+        return []
+    elif isinstance(request, CopyRequest):
+        return [request.input_file]
+    elif isinstance(request, VariableRequest):
+        return []
+    elif isinstance(request, ListRequest):
+        return []
+    elif isinstance(request, IndexTxtRequest):
+        return request.input_files
+    else:
+        assert False
+
+
+def get_output_files(request):
+    if isinstance(request, SingleExecutionRequest):
+        return request.output_files
+    elif isinstance(request, RepeatedExecutionRequest):
+        return request.output_files
+    elif isinstance(request, RepeatedOrSingleExecutionRequest):
+        return request.output_files
+    elif isinstance(request, PrintFileRequest):
+        return [request.output_file]
+    elif isinstance(request, CopyRequest):
+        return [request.output_file]
+    elif isinstance(request, VariableRequest):
+        return []
+    elif isinstance(request, ListRequest):
+        return [request.output_file]
+    elif isinstance(request, IndexTxtRequest):
+        return [request.output_file]
+    else:
+        assert False
+
+
 def get_all_output_files(requests, include_tmp=False):
     files = []
     for request in requests:
-        if isinstance(request, SingleExecutionRequest):
-            files += request.output_files
-        elif isinstance(request, RepeatedExecutionRequest):
-            files += request.output_files
-        elif isinstance(request, RepeatedOrSingleExecutionRequest):
-            files += request.output_files
-        elif isinstance(request, PrintFileRequest):
-            files += [request.output_file]
-        elif isinstance(request, CopyRequest):
-            files += [request.output_file]
-        elif isinstance(request, VariableRequest):
-            pass
-        else:
-            assert False
+        files += get_output_files(request)
 
     # Filter out all files but those in OUT_DIR if necessary.
     # It is also easy to filter for uniqueness; do it right now and return.
@@ -128,3 +196,9 @@ def get_all_output_files(requests, include_tmp=False):
     # Filter for unique values.  NOTE: Cannot use set() because we need to accept same filename as
     # OutFile and TmpFile as different, and by default they evaluate as equal.
     return [f for _, f in set((type(f), f) for f in files)]
+
+
+class SpaceSeparatedList(list):
+    """A list that joins itself with spaces when converted to a string."""
+    def __str__(self):
+        return " ".join(self)
