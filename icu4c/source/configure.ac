@@ -1290,13 +1290,13 @@ fi
 # Now that we're done using CPPFLAGS etc. for tests, we can change it
 # for build.
 
-if test "${CC}" == "clang"; then
+if test "${CC}" = "clang"; then
    CLANGCFLAGS="-Qunused-arguments -Wno-parentheses-equality"
 else
    CLANGCFLAGS=""
 fi
 
-if test "${CXX}" == "clang++"; then
+if test "${CXX}" = "clang++"; then
    CLANGCXXFLAGS="-Qunused-arguments -Wno-parentheses-equality"
 else
    CLANGCXXFLAGS=""
