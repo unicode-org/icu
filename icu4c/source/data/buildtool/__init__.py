@@ -33,16 +33,67 @@ IcuTool = namedtuple("IcuTool", ["name"])
 SystemTool = namedtuple("SystemTool", ["name"])
 
 SingleExecutionRequest = namedtuple("SingleExecutionRequest", [
+    # Used for identification purposes
     "name",
+
+    # The filter category that applies to this request
+    "category",
+
+    # Dependency files; usually generated
+    "dep_files",
+
+    # Primary input files
     "input_files",
+
+    # Output files
     "output_files",
+
+    # What tool to use
     "tool",
+
+    # Argument string to pass to the tool with optional placeholders
     "args",
+
+    # Placeholders to substitute into the argument string; if any of these
+    # have a list type, the list must be equal in length to input_files
     "format_with"
 ])
 
 RepeatedExecutionRequest = namedtuple("RepeatedExecutionRequest", [
+    # Used for identification purposes
     "name",
+
+    # The filter category that applies to this request
+    "category",
+
+    # Dependency files; usually generated
+    "dep_files",
+
+    # Primary input files
+    "input_files",
+
+    # Output files
+    "output_files",
+
+    # What tool to use
+    "tool",
+
+    # Argument string to pass to the tool with optional placeholders
+    "args",
+
+    # Placeholders to substitute into the argument string for all executions;
+    # if any of these have a list type, the list must be equal in length to
+    # input_files
+    "format_with",
+
+    # Placeholders to substitute into the argument string unique to each
+    # iteration; all values must be lists equal in length to input_files
+    "repeat_with"
+])
+
+RepeatedOrSingleExecutionRequest = namedtuple("RepeatedOrSingleExecutionRequest", [
+    "name",
+    "category",
     "dep_files",
     "input_files",
     "output_files",
@@ -50,18 +101,6 @@ RepeatedExecutionRequest = namedtuple("RepeatedExecutionRequest", [
     "args",
     "format_with",
     "repeat_with"
-])
-
-RepeatedOrSingleExecutionRequest = namedtuple("RepeatedOrSingleExecutionRequest", [
-    "name",
-    "dep_files",
-    "input_files",
-    "output_files",
-    "tool",
-    "args",
-    "format_with",
-    "repeat_with",
-    "flatten_with"
 ])
 
 PrintFileRequest = namedtuple("PrintFileRequest", [
@@ -79,4 +118,19 @@ CopyRequest = namedtuple("CopyRequest", [
 VariableRequest = namedtuple("VariableRequest", [
     "name",
     "input_files"
+])
+
+ListRequest = namedtuple("ListRequest", [
+    "name",
+    "variable_name",
+    "output_file",
+    "include_tmp"
+])
+
+IndexTxtRequest = namedtuple("IndexTxtRequest", [
+    "name",
+    "category",
+    "input_files",
+    "output_file",
+    "cldr_version"
 ])
