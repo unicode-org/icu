@@ -126,6 +126,8 @@ public:
 
     void TestBug13417VeryLongLanguageTag();
 
+    void TestBug11053UnderlineTimeZone();
+
 private:
     void _checklocs(const char* label,
                     const char* req,

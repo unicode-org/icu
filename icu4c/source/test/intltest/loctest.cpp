@@ -253,6 +253,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestMoveAssign);
     TESTCASE_AUTO(TestMoveCtor);
     TESTCASE_AUTO(TestBug13417VeryLongLanguageTag);
+    TESTCASE_AUTO(TestBug11053UnderlineTimeZone);
     TESTCASE_AUTO_END;
 }
 
@@ -3173,4 +3174,117 @@ void LocaleTest::TestBug13417VeryLongLanguageTag() {
     std::string result = l.toLanguageTag<std::string>(status);
     status.errIfFailureAndReset("\"%s\"", l.getName());
     assertEquals("equals", tag, result.c_str());
+}
+
+void LocaleTest::TestBug11053UnderlineTimeZone() {
+    static const char* const tz_in_ext[] = {
+        "etadd",
+        "tzdar",
+        "eheai",
+        "sttms",
+        "arirj",
+        "arrgl",
+        "aruaq",
+        "arluq",
+        "mxpvr",
+        "brbvb",
+        "arbue",
+        "caycb",
+        "brcgr",
+        "cayzs",
+        "crsjo",
+        "caydq",
+        "svsal",
+        "cafne",
+        "caglb",
+        "cagoo",
+        "tcgdt",
+        "ustel",
+        "bolpb",
+        "uslax",
+        "sxphi",
+        "mxmex",
+        "usnyc",
+        "usxul",
+        "usndcnt",
+        "usndnsl",
+        "ttpos",
+        "brpvh",
+        "prsju",
+        "clpuq",
+        "caffs",
+        "cayek",
+        "brrbr",
+        "mxstis",
+        "dosdq",
+        "brsao",
+        "gpsbh",
+        "casjf",
+        "knbas",
+        "lccas",
+        "vistt",
+        "vcsvd",
+        "cayyn",
+        "cathu",
+        "hkhkg",
+        "mykul",
+        "khpnh",
+        "cvrai",
+        "gsgrv",
+        "shshn",
+        "aubhq",
+        "auldh",
+        "imdgs",
+        "smsai",
+        "asppg",
+        "pgpom",
+    };
+    static const char* const tzname_with_underline[] = {
+        "America/Buenos_Aires",
+        "America/Coral_Harbour",
+        "America/Los_Angeles",
+        "America/Mexico_City",
+        "America/New_York",
+        "America/Rio_Branco",
+        "America/Sao_Paulo",
+        "America/St_Johns",
+        "America/St_Thomas",
+        "Australia/Broken_Hill",
+        "Australia/Lord_Howe",
+        "Pacific/Pago_Pago",
+    };
+    std::string locale_str;
+    for (int32_t i = 0; i < UPRV_LENGTHOF(tz_in_ext); i++) {
+        locale_str = "en-u-tz-";
+        locale_str += tz_in_ext[i];
+        Locale l(locale_str.c_str());
+        assertTrue((locale_str + " !l.isBogus()").c_str(), !l.isBogus());
+    }
+    for (int32_t i = 0; i < UPRV_LENGTHOF(tzname_with_underline); i++) {
+        locale_str = "en@timezone=";
+        locale_str +=  tzname_with_underline[i];
+        Locale l(locale_str.c_str());
+        assertTrue((locale_str + " !l.isBogus()").c_str(), !l.isBogus());
+    }
+    locale_str = "en_US@timezone=America/Coral_Harbour";
+    Locale l2(locale_str.c_str());
+    assertTrue((locale_str + " !l2.isBogus()").c_str(), !l2.isBogus());
+    locale_str = "en_Latn@timezone=America/New_York";
+    Locale l3(locale_str.c_str());
+    assertTrue((locale_str + " !l3.isBogus()").c_str(), !l3.isBogus());
+    locale_str = "en_Latn_US@timezone=Australia/Broken_Hill";
+    Locale l4(locale_str.c_str());
+    assertTrue((locale_str + " !l4.isBogus()").c_str(), !l4.isBogus());
+    locale_str = "en-u-tz-ciabj";
+    Locale l5(locale_str.c_str());
+    assertTrue((locale_str + " !l5.isBogus()").c_str(), !l5.isBogus());
+    locale_str = "en-US-u-tz-asppg";
+    Locale l6(locale_str.c_str());
+    assertTrue((locale_str + " !l6.isBogus()").c_str(), !l6.isBogus());
+    locale_str = "fil-Latn-u-tz-cvrai";
+    Locale l7(locale_str.c_str());
+    assertTrue((locale_str + " !l7.isBogus()").c_str(), !l7.isBogus());
+    locale_str = "fil-Latn-PH-u-tz-gsgrv";
+    Locale l8(locale_str.c_str());
+    assertTrue((locale_str + " !l8.isBogus()").c_str(), !l8.isBogus());
 }
