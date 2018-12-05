@@ -1310,6 +1310,23 @@ UBool RBBITest::testCaseIsKnownIssue(const UnicodeString &testCase, const char *
         {"8151",  "LineBreakTest.txt", u"\u002d\u0308\U00050005"},
         {"8151",  "LineBreakTest.txt", u"\u002d\u0e01"},
         {"8151",  "LineBreakTest.txt", u"\u002d\u0308\u0e01"},
+
+        // Issue ICU-12017 Improve line break around numbers
+        {"12017", "LineBreakTest.txt", u"\u002C\u0030"},   // ",0"
+        {"12017", "LineBreakTest.txt", u"\u002C\u0308\u0030"},
+        {"12017", "LineBreakTest.txt", u"find .com"},
+        {"12017", "LineBreakTest.txt", u"equals .35 cents"},
+        {"12017", "LineBreakTest.txt", u"a.2 "},
+        {"12017", "LineBreakTest.txt", u"a.2 \u0915"},
+        {"12017", "LineBreakTest.txt", u"a.2 \u672C"},
+        {"12017", "LineBreakTest.txt", u"a.2\u3000\u672C"},
+        {"12017", "LineBreakTest.txt", u"a.2\u3000\u307E"},
+        {"12017", "LineBreakTest.txt", u"a.2\u3000\u0033"},
+        {"12017", "LineBreakTest.txt", u"A.1 \uBABB"},
+        {"12017", "LineBreakTest.txt", u"\uBD24\uC5B4\u002E\u0020\u0041\u002E\u0032\u0020\uBCFC"},
+        {"12017", "LineBreakTest.txt", u"\uBD10\uC694\u002E\u0020\u0041\u002E\u0033\u0020\uBABB"},
+        {"12017", "LineBreakTest.txt", u"\uC694\u002E\u0020\u0041\u002E\u0034\u0020\uBABB"},
+        {"12017", "LineBreakTest.txt", u"a.2\u3000\u300C"},
     };
 
     for (int n=0; n<UPRV_LENGTHOF(badTestCases); n++) {
@@ -2684,6 +2701,7 @@ RBBILineMonkey::RBBILineMonkey() :
     const char *rules =
             "((\\p{Line_Break=PR}|\\p{Line_Break=PO})(\\p{Line_Break=CM}|\\u200d)*)?"
             "((\\p{Line_Break=OP}|\\p{Line_Break=HY})(\\p{Line_Break=CM}|\\u200d)*)?"
+            "((\\p{Line_Break=IS})(\\p{Line_Break=CM}|\\u200d)*)?"
             "\\p{Line_Break=NU}(\\p{Line_Break=CM}|\\u200d)*"
             "((\\p{Line_Break=NU}|\\p{Line_Break=IS}|\\p{Line_Break=SY})(\\p{Line_Break=CM}|\\u200d)*)*"
             "((\\p{Line_Break=CL}|\\p{Line_Break=CP})(\\p{Line_Break=CM}|\\u200d)*)?"
@@ -2936,17 +2954,12 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
-
-
         // LB 13  Don't break before closings.
-        //        NU x CL,  NU x CP  and NU x IS are not matched here so that they will
-        //        fall into LB 17 and the more general number regular expression.
         //
-        if ((!fNU->contains(prevChar) && fCL->contains(thisChar)) ||
-            (!fNU->contains(prevChar) && fCP->contains(thisChar)) ||
-                                         fEX->contains(thisChar)  ||
-            (!fNU->contains(prevChar) && fIS->contains(thisChar)) ||
-            (!fNU->contains(prevChar) && fSY->contains(thisChar)))    {
+        if (fCL->contains(thisChar) ||
+                fCP->contains(thisChar) ||
+                fEX->contains(thisChar) ||
+                fSY->contains(thisChar)) {
             continue;
         }
 
@@ -2954,7 +2967,7 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
         //       Scan backwards, checking for this sequence.
         //       The OP char could include combining marks, so we actually check for
         //           OP CM* SP*
-        //       Another Twist: The Rule 67 fixes may have changed a SP CM
+        //       Another Twist: The Rule 9 fixes may have changed a SP CM
         //       sequence into a ID char, so before scanning back through spaces,
         //       verify that prevChar is indeed a space.  The prevChar variable
         //       may differ from fText[prevPos]
@@ -2971,6 +2984,21 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
+
+        // LB 14a Break before an IS that begins a number and follows a space
+        if (nextPos < fText->length()) {
+            // note: UnicodeString::char32At(length) returns ffff, not distinguishable
+            //       from a legit ffff character. So test length separately.
+            UChar32 nextChar = fText->char32At(nextPos);
+            if (fSP->contains(prevChar) && fIS->contains(thisChar) && fNU->contains(nextChar)) {
+                break;
+            }
+        }
+
+        // LB14b Do not break before numeric separators, even after spaces.
+        if (fIS->contains(thisChar)) {
+            continue;
+        }
 
         // LB 15    QU SP* x OP
         if (fOP->contains(thisChar)) {

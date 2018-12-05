@@ -240,8 +240,7 @@
 <data>•aa\N{COMBINING GRAVE ACCENT}a<200> •</data>
 
 # fullwidth numeric, midletter characters etc should be treated like their halfwidth counterparts
-# <data>•ＩＳＮ'Ｔ<200> •１９<100>日<400></data>
-# why was this added with the dbbi stuff?
+<data>•ＩＳＮ'Ｔ<200> •１９<100>日<400></data>
 
 #      to test for bug #4098467
 #      What follows is a string of Korean characters (I found it in the Yellow Pages
@@ -629,9 +628,9 @@ Calls to xxx will return an implementor of this interface.  \u2029•</data>
 <data>•  •\u2014\u2028<100>\u2014•</data>
 <data>•  •\uFFFC\u2028<100>\uFFFC•</data>
 <data>•   \u0029\u2028<100>\u0029•</data>
-#<data>•   \u0301\u2028<100>\u0301•</data>    # TODO:  fix.
+<data>•  •\u0301\u2028<100>\u0301•</data>
 <data>•   \u0021\u2028<100>\u0021•</data>
-#<data>•   \u00A0\u2028<100>\u00A0•</data>    # TODO:  fix
+<data>•  •\u00A0\u2028<100>\u00A0•</data>
 <data>•  •\u002D\u2028<100>\u002D•</data>
 <data>•  •\u4E00\u2028<100>\u4E00•</data>
 <data>•  •\u2024\u2028<100>\u2024•</data>
@@ -650,7 +649,7 @@ Calls to xxx will return an implementor of this interface.  \u2029•</data>
 <data>•  •\uF8FF\u2028<100>\uF8FF•</data>
 <data>•   \u200B\u2028<100>\u200B•</data>
 
-# Regional Indicator sequences. They group in pairs. The reverse rules are tricky.
+# Regional Indicator sequences. They group in pairs.
 #    Sequences are long enough that the non-exaustive monkey test won't reliably pick up problems.
 
 <data>•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•\U0001F1E6\U0001F1E6•</data>
@@ -778,6 +777,20 @@ between •Mae •Hong •Son •and •the •Salween •River, •the •Thano
 the •Khun •Tan •Range •(ดอย•ขุน•ตาน), •the •Phi •Pan •Nam •Range •(ทิว•เขา•ผี•ปัน•น้ำ), •as •well •as •the •western •\
 part •of •the •Luang •Prabang •Range •(ทิว•เขา•หลวง•พระ•บาง).•</data>
 
+# Breaking around numbers that begin with a decimal point.
+# Bug ICU-12017
+
+<line>
+<data>•start •.789 •end•</data>
+<data>•start .abc •end•</data>
+<data>•start •( .789 •end)•</data>
+<data>•start •.\u0301789 •end•</data>     # \u0301 is a CM (COMBINING ACUTE ACCENT)
+<data>•start •.\u200D789 •end•</data>     # \u200D is ZWJ
+<data>•start •.\u200D\u0301789 •end•</data>
+<data>•start •.\u0301\u200D789 •end•</data>
+<data>•start .\u0301\u200D•</data>
+<data>•start .\u0301\u200D •</data>
+<data>•start ; •end •</data>
 
 ########################################################################################
 #
