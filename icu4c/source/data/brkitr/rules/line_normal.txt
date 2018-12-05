@@ -76,6 +76,7 @@ $ZWJ = [:LineBreak = ZWJ:];
 # By LB1, SA characters with general categor of Mn or Mc also resolve to CM.
 
 $CM = [[:LineBreak = Combining_Mark:] $ZWJ [$SA & [[:Mn:][:Mc:]]]];
+$CMX = [[$CM] - [$ZWJ]];
 
 #   Dictionary character set, for triggering language-based break engines. Currently
 #   limited to LineBreak=Complex_Context (SA).
@@ -175,8 +176,8 @@ $GL $CM* .;
 
 
 
-#
-# LB 13   Don't break before ']' or '!' or ';' or '/', even after spaces.
+
+# LB 13   Don't break before ']' or '!' or or '/', even after spaces.
 #
 $LB8NonBreaks $CL;
 $CAN_CM $CM*  $CL;
@@ -190,10 +191,6 @@ $LB8NonBreaks $EX;
 $CAN_CM $CM*  $EX;
 ^$CM+         $EX;              # by rule 10, stand-alone CM behaves as AL
 
-$LB8NonBreaks $IS;
-$CAN_CM $CM*  $IS;
-^$CM+         $IS;              # by rule 10, stand-alone CM behaves as AL
-
 $LB8NonBreaks $SY;
 $CAN_CM $CM*  $SY;
 ^$CM+         $SY;              # by rule 10, stand-alone CM behaves as AL
@@ -201,11 +198,35 @@ $CAN_CM $CM*  $SY;
 
 #
 # LB 14  Do not break after OP, even after spaces
+#        Note subtle interaction with "SP IS /" rules in LB14a.
+#        This rule consumes the SP, chaining happens on the IS, effectivley overriding the  SP IS rules,
+#        which is the desired behavior.
 #
 $OP $CM* $SP* .;
 
 $OP $CM* $SP+ $CM+ $AL_FOLLOW?;    # by rule 10, stand-alone CM behaves as AL
                                    # by rule 8, CM following a SP is stand-alone.
+
+
+# LB 14a Force a break before start of a number with a leading decimal pt, e.g. " .23"
+#        Note: would be simpler to express as "$SP / $IS $CM* $NU;", but ICU rules have limitations.
+#        See issue ICU-20303
+
+
+$CanFollowIS = [$BK $CR $LF $NL $SP $ZW $WJ $GL $CL $CP $EX $IS $SY $QU $BA $HY $NS $ALPlus $HL];
+$SP $IS           / [^ $CanFollowIS $NU $CM];
+$SP $IS $CM* $CMX / [^ $CanFollowIS $NU $CM];
+
+#
+# LB 14b Do not break before numeric separators (IS), even after spaces.
+
+[$LB8NonBreaks - $SP] $IS;
+$SP $IS $CM* [$CanFollowIS {eof}];
+$SP $IS $CM* $ZWJ [^$CM $NU];
+
+$CAN_CM $CM*  $IS;
+^$CM+         $IS;              # by rule 10, stand-alone CM behaves as AL
+
 
 # LB 15
 $QU $CM* $SP* $OP;
@@ -294,7 +315,7 @@ $PR $CM* ($ID | $EB | $EM);
 #
 # LB 25   Numbers.
 #
-(($PR | $PO) $CM*)? (($OP | $HY) $CM*)? $NU ($CM* ($NU | $SY | $IS))*
+(($PR | $PO) $CM*)? (($OP | $HY) $CM*)? ($IS $CM*)? $NU ($CM* ($NU | $SY | $IS))*
     ($CM* ($CL | $CP))? ($CM* ($PR | $PO))?;
 
 # LB 26  Do not break a Korean syllable

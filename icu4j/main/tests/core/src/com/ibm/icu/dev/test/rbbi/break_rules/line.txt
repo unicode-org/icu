@@ -78,19 +78,33 @@ LB5.3:      NL ÷;
 LB6:        . (BK | CR | LF | NL);
 LB6.1:      [^BK CR LF NL SP ZW] CM* (BK | CR | LF | NL);
 
+# LB8   break after ZW SP*.
+# Precedes LB7 because both rules will match the sequences like ZW SP,
+# and LB8 must take precedence.
+
+LB8:        ZW SP* ÷ [^ZW SP BK CR LF NL];
+
+# Numbers. Equivalent to Tailoring example 8 from UAX 14.
+# Moved up, before LB14, because it can match longer sequences which must take precedence.
+LB25:        ((PR | PO)CM*)? ((OP | HY)CM*)? (IS CM*)? NU (CM*(NU | SY | IS))* (CM*(CL | CP))? (CM*(PR | PO))?;
+
 # Rules LB14 - LB17.
-# Moved before LB7, because they can match a longer sequence that would also match LB7,
-# for example, the sequence "OP CM SP AL" matches LB14 while the prefix of it,
-#                           "while only the prefix "OP CM SP" matches LB7.1
+# Moved up, before LB7, because they can match a longer sequence that would also match LB7.
+# For example, the sequence "OP CM SP AL" matches LB14
+# while the prefix of it, "OP CM SP" matches LB7.1
 LB14:        OP CM* SP* .;
+
+# LB 14a Break before an IS that begins a number and follows a space.
+LB14a:       SP ÷ IS CM* NU;
+
+# LB14b       × IS
+LB14b.1:     [^SP] CM* IS;
+LB14b.2:     SP IS;
+
 LB15:        QU CM* SP* OP;
 LB16:        (CL | CP)CM* SP* NS;
 LB17:        B2 CM* SP* B2;
 
-# LB8, break after ZW SP*, precedes LB7 because they will both match the sequences like ZW SP,
-# and LB8 should take precedence.
-
-LB8:        ZW SP* ÷ [^ZW SP BK CR LF NL];
 
 # LB7 Do not break before spaces or zero width space.
 
@@ -118,15 +132,9 @@ LB12:        GL CM* [^CM];
 
 LB12a:       [^SP BA HY] CM* GL;
 
-# LB 13 ICU Tailoring, matches tailoring example 8 from UAX 14.
-#
-#   LB13.1   [^SP] CM* [CL CP EX IS SY]    # original UAX 14 rule.
-#   LB13.2   SP    CM* [CL CP EX IS SY]
-
-LB13.1: [^NU SP] CM* [CL CP IS SY];
-LB13.2: [^SP] CM* EX;
-LB13.2: SP [CL CP EX IS SY];
-
+# LB 13 Do not break before ‘]’ or ‘!’ or ‘/’, even after spaces.
+LB13.1: [^SP] CM* [CL CP EX SY];
+LB13.2: SP [CL CP EX SY];
 
 # LB 14-17 are moved above LB 7.
 
@@ -172,8 +180,6 @@ LB23a.2:     (ID | EB | EM) CM* PO;
 LB24.2:      (PR | PO) CM* (AL | HL);
 LB24.3:      (AL | HL | CM) CM* (PR | PO);
 
-# Numbers. Equivalent to Tailoring example 8 from UAX 14.
-LB25:        ((PR | PO)CM*)? ((OP | HY)CM*)? NU (CM*(NU | SY | IS))* (CM*(CL | CP))? (CM*(PR | PO))?;
 
 LB26.1:      JL CM* (JL | JV | H2 | H3);
 LB26.2:      (JV | H2) CM* (JV | JT);
