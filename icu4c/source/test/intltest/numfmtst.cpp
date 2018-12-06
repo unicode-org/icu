@@ -8335,6 +8335,9 @@ void NumberFormatTest::Test11739_ParseLongCurrency() {
     ParsePosition ppos(0);
     LocalPointer<CurrencyAmount> result(nf->parseCurrency(u"1.500 амерички долар", ppos));
     assertEquals("Should parse to 1500 USD", -1, ppos.getErrorIndex());
+    if (ppos.getErrorIndex() != -1) {
+        return;
+    }
     assertEquals("Should parse to 1500 USD", 1500LL, result->getNumber().getInt64(status));
     assertEquals("Should parse to 1500 USD", u"USD", result->getISOCurrency());
 }

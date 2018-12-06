@@ -1,6 +1,8 @@
 # Copyright (C) 2018 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
 
+import sys
+
 from . import *
 
 
@@ -57,6 +59,23 @@ def format_repeated_request_command(request, cmd_template, loop_vars, common_var
     )
 
 
+def dep_targets_to_files(this_request, all_requests):
+    if not this_request.dep_files:
+        return []
+    dep_files = []
+    for dep_target in this_request.dep_files:
+        for request in all_requests:
+            if request.name == dep_target.name:
+                dep_files += get_output_files(request)
+                break
+        else:
+            print("Warning: Unable to find target %s, a dependency of %s" % (
+                dep_target.name,
+                this_request.name
+            ), file=sys.stderr)
+    return dep_files
+
+
 def flatten_requests(raw_requests, config, common_vars):
     """Post-processes "meta" requests into normal requests.
 
@@ -73,7 +92,9 @@ def flatten_requests(raw_requests, config, common_vars):
                 flattened_requests.append(RepeatedExecutionRequest(
                     name = request.name,
                     category = request.category,
-                    dep_files = request.dep_files,
+                    dep_files = dep_targets_to_files(
+                        request, raw_requests
+                    ),
                     input_files = request.input_files,
                     output_files = request.output_files,
                     tool = request.tool,
@@ -85,12 +106,45 @@ def flatten_requests(raw_requests, config, common_vars):
                 flattened_requests.append(SingleExecutionRequest(
                     name = request.name,
                     category = request.category,
-                    input_files = request.dep_files + request.input_files,
+                    input_files = request.input_files + dep_targets_to_files(
+                        request, raw_requests
+                    ),
                     output_files = request.output_files,
                     tool = request.tool,
                     args = request.args,
                     format_with = concat_dicts(request.format_with, request.repeat_with)
                 ))
+        elif isinstance(request, SingleExecutionRequest):
+            flattened_requests += [
+                SingleExecutionRequest(
+                    name = request.name,
+                    category = request.category,
+                    dep_files = dep_targets_to_files(
+                        request, raw_requests
+                    ),
+                    input_files = request.input_files,
+                    output_files = request.output_files,
+                    tool = request.tool,
+                    args = request.args,
+                    format_with = request.format_with
+                )
+            ]
+        elif isinstance(request, RepeatedExecutionRequest):
+            flattened_requests += [
+                RepeatedExecutionRequest(
+                    name = request.name,
+                    category = request.category,
+                    dep_files = dep_targets_to_files(
+                        request, raw_requests
+                    ),
+                    input_files = request.input_files,
+                    output_files = request.output_files,
+                    tool = request.tool,
+                    args = request.args,
+                    format_with = request.format_with,
+                    repeat_with = request.repeat_with
+                )
+            ]
         elif isinstance(request, ListRequest):
             list_files = list(sorted(get_all_output_files(raw_requests)))
             if request.include_tmp:
@@ -180,6 +234,19 @@ def get_output_files(request):
         return [request.output_file]
     else:
         assert False
+
+
+def get_category(request):
+    if isinstance(request, SingleExecutionRequest):
+        return request.category
+    elif isinstance(request, RepeatedExecutionRequest):
+        return request.category
+    elif isinstance(request, RepeatedOrSingleExecutionRequest):
+        return request.category
+    elif isinstance(request, IndexTxtRequest):
+        return request.category
+    else:
+        return None
 
 
 def get_all_output_files(requests, include_tmp=False):

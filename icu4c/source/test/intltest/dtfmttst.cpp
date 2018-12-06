@@ -4758,6 +4758,10 @@ void DateFormatTest::TestNumberFormatOverride() {
         assertSuccess("SimpleDateFormat with pattern MM d", status);
         NumberFormat* overrideNF = NumberFormat::createInstance(Locale::createFromName("zh@numbers=hanidays"),status);
         assertSuccess("NumberFormat zh@numbers=hanidays", status);
+        if (U_FAILURE(status)) {
+            status = U_ZERO_ERROR;
+            continue;
+        }
 
         if (fields == (UnicodeString) "") { // use the one w/o fields
             fmt->adoptNumberFormat(overrideNF);

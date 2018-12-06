@@ -54,16 +54,6 @@ def generate(config, glob, common_vars):
     requests += generate_curr_supplemental(config, glob, common_vars)
     requests += generate_translit(config, glob, common_vars)
 
-    # FIXME: Clean this up (duplicated logic)
-    brkitr_brk_files = []
-    input_files = [InFile(filename) for filename in glob("brkitr/rules/*.txt")]
-    output_files = [OutFile("brkitr/%s.brk" % v.filename[13:-4]) for v in input_files]
-    brkitr_brk_files += output_files
-    dict_files = []
-    input_files = [InFile(filename) for filename in glob("brkitr/dictionaries/*.txt")]
-    output_files = [OutFile("brkitr/%s.dict" % v.filename[20:-4]) for v in input_files]
-    dict_files += output_files
-
     # Res Tree Files
     # (input dirname, output dirname, resfiles.mk path, mk version var, mk source var, use pool file, dep files)
     requests += generate_tree(config, glob, common_vars,
@@ -120,8 +110,6 @@ def generate(config, glob, common_vars):
         True,
         [])
 
-    # TODO: We should not need timezoneTypes.res to build collation resource bundles.
-    # TODO: Maybe keyTypeData.res should be baked into the common library.
     requests += generate_tree(config, glob, common_vars,
         "coll",
         "coll",
@@ -129,7 +117,10 @@ def generate(config, glob, common_vars):
         "COLLATION_CLDR_VERSION",
         "COLLATION_SOURCE",
         False,
-        [OutFile("coll/ucadata.icu"), OutFile("timezoneTypes.res"), OutFile("keyTypeData.res")])
+        # Depends on timezoneTypes.res and keyTypeData.res.
+        # TODO: We should not need this dependency to build collation.
+        # TODO: Bake keyTypeData.res into the common library?
+        [DepTarget("coll_ucadata"), DepTarget("misc")])
 
     requests += generate_tree(config, glob, common_vars,
         "brkitr",
@@ -138,7 +129,7 @@ def generate(config, glob, common_vars):
         "BRK_RES_CLDR_VERSION",
         "BRK_RES_SOURCE",
         False,
-        brkitr_brk_files + dict_files)
+        [DepTarget("brkitr_brk"), DepTarget("brkitr_dictionaries")])
 
     requests += generate_tree(config, glob, common_vars,
         "rbnf",
@@ -189,7 +180,7 @@ def generate_confusables(config, glob, common_vars):
         SingleExecutionRequest(
             name = "confusables",
             category = "confusables",
-            dep_files = [OutFile("cnvalias.icu")],
+            dep_files = [DepTarget("cnvalias")],
             input_files = [txt1, txt2],
             output_files = [cfu],
             tool = IcuTool("gencfu"),
@@ -231,7 +222,7 @@ def generate_brkitr_brk(config, glob, common_vars):
         RepeatedExecutionRequest(
             name = "brkitr_brk",
             category = "brkitr_rules",
-            dep_files = [OutFile("cnvalias.icu")],
+            dep_files = [DepTarget("cnvalias")],
             input_files = input_files,
             output_files = output_files,
             tool = IcuTool("genbrk"),
@@ -459,13 +450,14 @@ def generate_tree(
     # Generate Pool Bundle
     if use_pool_bundle:
         input_pool_files = [OutFile("%spool.res" % out_prefix)]
+        pool_target_name = "%s_pool_write" % sub_dir
         use_pool_bundle_option = "--usePoolBundle {OUT_DIR}/{OUT_PREFIX}".format(
             OUT_PREFIX = out_prefix,
             **common_vars
         )
         requests += [
             SingleExecutionRequest(
-                name = "%s_pool_write" % sub_dir,
+                name = pool_target_name,
                 category = category,
                 dep_files = dep_files,
                 input_files = input_files,
@@ -481,8 +473,8 @@ def generate_tree(
                 }
             ),
         ]
+        dep_files = dep_files + [DepTarget(pool_target_name)]
     else:
-        input_pool_files = []
         use_pool_bundle_option = ""
 
     # Generate Res File Tree
@@ -490,7 +482,7 @@ def generate_tree(
         RepeatedOrSingleExecutionRequest(
             name = "%s_res" % sub_dir,
             category = category,
-            dep_files = dep_files + input_pool_files,
+            dep_files = dep_files,
             input_files = input_files,
             output_files = output_files,
             tool = IcuTool("genrb"),
@@ -545,7 +537,7 @@ def generate_tree(
     requests += [
         SingleExecutionRequest(
             name = "%s_index_res" % sub_dir,
-            category = category,
+            category = "%s_index" % sub_dir,
             dep_files = [],
             input_files = [index_file_txt],
             output_files = [index_res_file],
