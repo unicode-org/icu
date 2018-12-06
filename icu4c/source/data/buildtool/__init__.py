@@ -32,6 +32,8 @@ PkgFile = namedtuple("PkgFile", ["filename"])
 IcuTool = namedtuple("IcuTool", ["name"])
 SystemTool = namedtuple("SystemTool", ["name"])
 
+DepTarget = namedtuple("DepTarget", ["name"])
+
 SingleExecutionRequest = namedtuple("SingleExecutionRequest", [
     # Used for identification purposes
     "name",
@@ -39,7 +41,8 @@ SingleExecutionRequest = namedtuple("SingleExecutionRequest", [
     # The filter category that applies to this request
     "category",
 
-    # Dependency files; usually generated
+    # Names of targets (requests) or files that this request depends on;
+    # targets are of type DepTarget
     "dep_files",
 
     # Primary input files
@@ -66,7 +69,8 @@ RepeatedExecutionRequest = namedtuple("RepeatedExecutionRequest", [
     # The filter category that applies to this request
     "category",
 
-    # Dependency files; usually generated
+    # Names of targets (requests) or files that this request depends on;
+    # targets are of type DepTarget
     "dep_files",
 
     # Primary input files

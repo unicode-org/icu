@@ -1634,6 +1634,7 @@ static void TestOverrideNumberFormat(void) {
 
     // loop 5 times to check getter/setter
     for (i = 0; i < 5; i++){
+        status = U_ZERO_ERROR;
         UNumberFormat* overrideFmt;
         overrideFmt = unum_open(UNUM_DEFAULT, NULL, 0, localeString, NULL, &status);
         assertSuccess("unum_open()", &status);
@@ -1647,15 +1648,19 @@ static void TestOverrideNumberFormat(void) {
         }
     }
     {
+      status = U_ZERO_ERROR;
       UNumberFormat* overrideFmt;
       overrideFmt = unum_open(UNUM_DEFAULT, NULL, 0, localeString, NULL, &status);
       assertSuccess("unum_open()", &status);
-      udat_setNumberFormat(fmt, overrideFmt); // test the same override NF will not crash
+      if (U_SUCCESS(status)) {
+        udat_setNumberFormat(fmt, overrideFmt); // test the same override NF will not crash
+      }
       unum_close(overrideFmt);
     }
     udat_close(fmt);
 
     for (i=0; i<UPRV_LENGTHOF(overrideNumberFormat); i++){
+        status = U_ZERO_ERROR;
         UChar ubuf[kUbufMax];
         UDateFormat* fmt2;
         UNumberFormat* overrideFmt2;
@@ -1665,6 +1670,10 @@ static void TestOverrideNumberFormat(void) {
 
         overrideFmt2 = unum_open(UNUM_DEFAULT, NULL, 0, localeString, NULL, &status);
         assertSuccess("unum_open() in loop", &status);
+
+        if (U_FAILURE(status)) {
+            continue;
+        }
 
         u_uastrcpy(fields, overrideNumberFormat[i][0]);
         u_unescape(overrideNumberFormat[i][1], expected, UPRV_LENGTHOF(expected));
