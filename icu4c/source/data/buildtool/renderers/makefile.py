@@ -1,6 +1,10 @@
 # Copyright (C) 2018 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
 
+# Python 2/3 Compatibility (ICU-20299)
+# TODO(ICU-20301): Remove this.
+from __future__ import print_function
+
 from . import *
 from .. import *
 from .. import utils

@@ -694,7 +694,7 @@ GREP
 DOXYGEN
 cross_buildroot
 U_MAKE
-PYTHON3
+PYTHON
 cross_compiling
 INSTALL_DATA
 INSTALL_SCRIPT
@@ -753,6 +753,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -857,6 +858,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -1109,6 +1111,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1246,7 +1257,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1399,6 +1410,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -4188,17 +4200,18 @@ fi
 #AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
 #AC_CHECK_PROG(STRIP, strip, strip, true)
 
-for ac_prog in python3 "py -3"
+# TODO(ICU-20301): Remove fallback to Python 2.
+for ac_prog in python3 "py -3" python "py"
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
 $as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_prog_PYTHON3+:} false; then :
+if ${ac_cv_prog_PYTHON+:} false; then :
   $as_echo_n "(cached) " >&6
 else
-  if test -n "$PYTHON3"; then
-  ac_cv_prog_PYTHON3="$PYTHON3" # Let the user override the test.
+  if test -n "$PYTHON"; then
+  ac_cv_prog_PYTHON="$PYTHON" # Let the user override the test.
 else
 as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
 for as_dir in $PATH
@@ -4207,7 +4220,7 @@ do
   test -z "$as_dir" && as_dir=.
     for ac_exec_ext in '' $ac_executable_extensions; do
   if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_PYTHON3="$ac_prog"
+    ac_cv_prog_PYTHON="$ac_prog"
     $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
     break 2
   fi
@@ -4217,17 +4230,17 @@ IFS=$as_save_IFS
 
 fi
 fi
-PYTHON3=$ac_cv_prog_PYTHON3
-if test -n "$PYTHON3"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PYTHON3" >&5
-$as_echo "$PYTHON3" >&6; }
+PYTHON=$ac_cv_prog_PYTHON
+if test -n "$PYTHON"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $PYTHON" >&5
+$as_echo "$PYTHON" >&6; }
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
 $as_echo "no" >&6; }
 fi
 
 
-  test -n "$PYTHON3" && break
+  test -n "$PYTHON" && break
 done
 
 
@@ -9109,19 +9122,19 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
-if test -z "$PYTHON3";
+if test -z "$PYTHON";
 then
     echo "" > data/rules.mk
 else
     echo "Spawning Python to generate data/rules.mk..."
-    PYTHONPATH="$srcdir/data" $PYTHON3 -m buildtool \
+    PYTHONPATH="$srcdir/data" $PYTHON -m buildtool \
         --format gnumake \
         --seqmode parallel \
         --glob_dir "$srcdir/data" \
         --filter_file "$ICU_DATA_FILTER_FILE" \
         > data/rules.mk
     echo "Spawning Python to generate test/testdata/rules.mk..."
-    PYTHONPATH="$srcdir/test/testdata:$srcdir/data" $PYTHON3 -m buildtool \
+    PYTHONPATH="$srcdir/test/testdata:$srcdir/data" $PYTHON -m buildtool \
         --format gnumake \
         --seqmode parallel \
         --glob_dir "$srcdir/test/testdata" \
@@ -9210,9 +9223,9 @@ then
         echo "## Expect build failures in the 'data', 'test', and other directories."
 fi
 
-if test -z "$PYTHON3";
+if test -z "$PYTHON";
 then
-    echo "** Note: Python 3 not found. You will not be able to build data from source."
+    echo "** Note: Python not found. You will not be able to build data from source."
 fi
 
 $as_unset _CXX_CXXSUFFIX
