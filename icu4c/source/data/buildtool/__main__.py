@@ -1,6 +1,10 @@
 # Copyright (C) 2018 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
 
+# Python 2/3 Compatibility (ICU-20299)
+# TODO(ICU-20301): Remove this.
+from __future__ import print_function
+
 import argparse
 import glob as pyglob
 import json
@@ -119,8 +123,8 @@ class Config(object):
                         self.filters_json_data = hjson.load(f)
                     except ImportError:
                         self.filters_json_data = json.load(f)
-            except FileNotFoundError:
-                print("Error: Filter file not found at %s." % args.filter_file, file=sys.stderr)
+            except IOError:
+                print("Error: Could not read filter file %s." % args.filter_file, file=sys.stderr)
                 exit(1)
 
     def has_feature(self, feature_name):

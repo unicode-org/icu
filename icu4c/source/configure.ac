@@ -195,7 +195,8 @@ fi
 #AC_CHECK_PROG(AUTOCONF, autoconf, autoconf, true)
 #AC_CHECK_PROG(STRIP, strip, strip, true)
 
-AC_CHECK_PROGS(PYTHON3, python3 "py -3")
+# TODO(ICU-20301): Remove fallback to Python 2.
+AC_CHECK_PROGS(PYTHON, python3 "py -3" python "py")
 
 # Check for the platform make
 AC_PATH_PROGS(U_MAKE, gmake gnumake, make)
@@ -1385,19 +1386,19 @@ AC_CONFIG_FILES([icudefs.mk \
 		samples/cal/Makefile samples/layout/Makefile])
 AC_OUTPUT
 
-if test -z "$PYTHON3";
+if test -z "$PYTHON";
 then
     echo "" > data/rules.mk
 else
     echo "Spawning Python to generate data/rules.mk..."
-    PYTHONPATH="$srcdir/data" $PYTHON3 -m buildtool \
+    PYTHONPATH="$srcdir/data" $PYTHON -m buildtool \
         --format gnumake \
         --seqmode parallel \
         --glob_dir "$srcdir/data" \
         --filter_file "$ICU_DATA_FILTER_FILE" \
         > data/rules.mk
     echo "Spawning Python to generate test/testdata/rules.mk..."
-    PYTHONPATH="$srcdir/test/testdata:$srcdir/data" $PYTHON3 -m buildtool \
+    PYTHONPATH="$srcdir/test/testdata:$srcdir/data" $PYTHON -m buildtool \
         --format gnumake \
         --seqmode parallel \
         --glob_dir "$srcdir/test/testdata" \
@@ -1483,9 +1484,9 @@ then
         echo "## Expect build failures in the 'data', 'test', and other directories."
 fi
 
-if test -z "$PYTHON3";
+if test -z "$PYTHON";
 then
-    echo "** Note: Python 3 not found. You will not be able to build data from source."
+    echo "** Note: Python not found. You will not be able to build data from source."
 fi
 
 $as_unset _CXX_CXXSUFFIX

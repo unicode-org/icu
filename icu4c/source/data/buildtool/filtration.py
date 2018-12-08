@@ -1,7 +1,11 @@
 # Copyright (C) 2018 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html
 
-from abc import ABC, abstractmethod
+# Python 2/3 Compatibility (ICU-20299)
+# TODO(ICU-20301): Remove this.
+from __future__ import print_function
+
+from abc import abstractmethod
 from collections import defaultdict
 import re
 import sys
@@ -10,7 +14,10 @@ from . import *
 from . import utils
 
 
-class Filter(ABC):
+# Note: for this to be a proper abstract class, it should extend abc.ABC.
+# There is no nice way to do this that works in both Python 2 and 3.
+# TODO(ICU-20301): Make this inherit from abc.ABC.
+class Filter(object):
     @staticmethod
     def create_from_json(json_data):
         if "filterType" in json_data:
@@ -216,7 +223,8 @@ class LanguageFilter(WhitelistBlacklistFilter):
 
 class RegexFilter(WhitelistBlacklistFilter):
     def __init__(self, *args):
-        super().__init__(*args)
+        # TODO(ICU-20301): Change this to: super().__init__(*args)
+        super(RegexFilter, self).__init__(*args)
         if self.is_whitelist:
             self.whitelist = [re.compile(pat) for pat in self.whitelist]
         else:
