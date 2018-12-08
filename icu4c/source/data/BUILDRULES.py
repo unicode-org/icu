@@ -120,7 +120,7 @@ def generate(config, glob, common_vars):
         # Depends on timezoneTypes.res and keyTypeData.res.
         # TODO: We should not need this dependency to build collation.
         # TODO: Bake keyTypeData.res into the common library?
-        [DepTarget("coll_ucadata"), DepTarget("misc")])
+        [DepTarget("coll_ucadata"), DepTarget("misc_res")])
 
     requests += generate_tree(config, glob, common_vars,
         "brkitr",
@@ -129,7 +129,7 @@ def generate(config, glob, common_vars):
         "BRK_RES_CLDR_VERSION",
         "BRK_RES_SOURCE",
         False,
-        [DepTarget("brkitr_brk"), DepTarget("brkitr_dictionaries")])
+        [DepTarget("brkitr_brk"), DepTarget("dictionaries")])
 
     requests += generate_tree(config, glob, common_vars,
         "rbnf",
