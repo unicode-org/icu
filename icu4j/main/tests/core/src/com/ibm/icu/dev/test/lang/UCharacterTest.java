@@ -1232,28 +1232,54 @@ public final class UCharacterTest extends TestFmwk
     @Test
     public void TestUCharFromNameUnderflow() {
         // Ticket #10889: Underflow crash when there is no dash.
-        int c = UCharacter.getCharFromExtendedName("<NO BREAK SPACE>");
+        String name = "<NO BREAK SPACE>";
+        int c = UCharacter.getCharFromExtendedName(name);
         if(c >= 0) {
-            errln("UCharacter.getCharFromExtendedName(<NO BREAK SPACE>) = U+" + hex(c) +
+            errln("UCharacter.getCharFromExtendedName(" + name + ") = U+" + hex(c) +
                     " but should fail (-1)");
         }
 
         // Test related edge cases.
-        c = UCharacter.getCharFromExtendedName("<-00a0>");
+        name = "<-00a0>";
+        c = UCharacter.getCharFromExtendedName(name);
         if(c >= 0) {
-            errln("UCharacter.getCharFromExtendedName(<-00a0>) = U+" + hex(c) +
+            errln("UCharacter.getCharFromExtendedName(" + name + ") = U+" + hex(c) +
                     " but should fail (-1)");
         }
 
-        c = UCharacter.getCharFromExtendedName("<control->");
+        name = "<control->";
+        c = UCharacter.getCharFromExtendedName(name);
         if(c >= 0) {
-            errln("UCharacter.getCharFromExtendedName(<control->) = U+" + hex(c) +
+            errln("UCharacter.getCharFromExtendedName(" + name + ") = U+" + hex(c) +
                     " but should fail (-1)");
         }
 
-        c = UCharacter.getCharFromExtendedName("<control-111111>");
+        name = "<control-111111>";
+        c = UCharacter.getCharFromExtendedName(name);
         if(c >= 0) {
-            errln("UCharacter.getCharFromExtendedName(<control-111111>) = U+" + hex(c) +
+            errln("UCharacter.getCharFromExtendedName(" + name + ") = U+" + hex(c) +
+                    " but should fail (-1)");
+        }
+
+        // ICU-20292: integer overflow
+        name = "<noncharacter-10010FFFF>";
+        c = UCharacter.getCharFromExtendedName(name);
+        if(c >= 0) {
+            errln("UCharacter.getCharFromExtendedName(" + name + ") = U+" + hex(c) +
+                    " but should fail (-1)");
+        }
+
+        name = "<noncharacter-00010FFFF>";  // too many digits even if only leading 0s
+        c = UCharacter.getCharFromExtendedName(name);
+        if(c >= 0) {
+            errln("UCharacter.getCharFromExtendedName(" + name + ") = U+" + hex(c) +
+                    " but should fail (-1)");
+        }
+
+        name = "<noncharacter-fFFf>>";
+        c = UCharacter.getCharFromExtendedName(name);
+        if(c >= 0) {
+            errln("UCharacter.getCharFromExtendedName(" + name + ") = U+" + hex(c) +
                     " but should fail (-1)");
         }
     }
