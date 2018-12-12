@@ -204,6 +204,9 @@ class NumberFormat;
  *       <td><i>argStyleText</i>
  *       <td><code>new SimpleDateFormat(argStyleText, getLocale(), status)</code>
  *    <tr>
+ *       <td><i>argSkeletonText</i>
+ *       <td><code>DateFormat::createInstanceForSkeleton(argSkeletonText, getLocale(), status)</code>
+ *    <tr>
  *       <td rowspan=6><code>time</code>
  *       <td><i>(none)</i>
  *       <td><code>DateFormat.createTimeInstance(kDefault, getLocale(), status)</code>
@@ -993,6 +996,8 @@ private:
     UBool argNameMatches(int32_t partIndex, const UnicodeString& argName, int32_t argNumber);
 
     void cacheExplicitFormats(UErrorCode& status);
+
+    int32_t skipLeadingSpaces(UnicodeString& style);
 
     Format* createAppropriateFormat(UnicodeString& type,
                                     UnicodeString& style,

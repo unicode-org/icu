@@ -122,9 +122,13 @@ public:
     void TestDecimals();
     void TestArgIsPrefixOfAnother();
     void TestMessageFormatNumberSkeleton();
+    void TestMessageFormatDateSkeleton();
+    void TestMessageFormatTimeSkeleton();
 
 private:
     UnicodeString GetPatternAndSkipSyntax(const MessagePattern& pattern);
+    void doTheRealDateTimeSkeletonTesting(
+            UDate testDate, const char16_t* cases[][3], size_t caseCount, IcuTestErrorCode& status);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

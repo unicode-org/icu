@@ -21,6 +21,7 @@
 
 #include "tmsgfmt.h"
 #include "cmemory.h"
+#include "loctest.h"
 
 #include "unicode/format.h"
 #include "unicode/decimfmt.h"
@@ -72,6 +73,8 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestDecimals);
     TESTCASE_AUTO(TestArgIsPrefixOfAnother);
     TESTCASE_AUTO(TestMessageFormatNumberSkeleton);
+    TESTCASE_AUTO(TestMessageFormatDateSkeleton);
+    TESTCASE_AUTO(TestMessageFormatTimeSkeleton);
     TESTCASE_AUTO_END;
 }
 
@@ -2027,6 +2030,62 @@ void TestMessageFormat::TestMessageFormatNumberSkeleton() {
 
         assertEquals(cas.messagePattern, cas.expected, sb);
     }
+}
+
+void TestMessageFormat::doTheRealDateTimeSkeletonTesting(
+        UDate testDate, const char16_t* cases[][3], size_t caseCount, IcuTestErrorCode& status) {
+
+    for (size_t i = 0; i < caseCount; i++) {
+        auto& cas = cases[i];
+
+        const char16_t* messagePattern = cas[0];
+        const char16_t* expected = cas[2];
+        std::string locale;
+        UnicodeString ulocale(cas[1]);
+        ulocale.toUTF8String(locale);
+
+        status.setScope(messagePattern);
+        MessageFormat msgf(messagePattern, locale.c_str(), status);
+        UnicodeString sb;
+        FieldPosition fpos(0);
+        Formattable argsArray[] = { Formattable(testDate, Formattable::kIsDate) };
+        Formattable args(argsArray, 1);
+        msgf.format(args, sb, status);
+
+        assertEquals(messagePattern, expected, sb);
+    }
+}
+
+void TestMessageFormat::TestMessageFormatDateSkeleton() {
+    IcuTestErrorCode status(*this, "TestMessageFormatDateSkeleton");
+
+    UDate date = LocaleTest::date(2021-1900, UCAL_NOVEMBER, 23, 16, 42, 55);
+    const char16_t* cases[][3] = {
+            { u"{0,date,::MMMMd}", u"en", u"November 23" },
+            { u"{0,date,::yMMMMdjm}", u"en", u"November 23, 2021, 4:42 PM" },
+            { u"{0,date,   ::   yMMMMd   }", u"en", u"November 23, 2021" },
+            { u"{0,date,::yMMMMd}", u"fr", u"23 novembre 2021" },
+            { u"Expiration: {0,date,::yMMM}!", u"en", u"Expiration: Nov 2021!" },
+            { u"{0,date,'::'yMMMMd}", u"en", u"::2021November23" }, // pattern literal
+    };
+
+    doTheRealDateTimeSkeletonTesting(date, cases, sizeof(cases) / sizeof(cases[0]), status);
+}
+
+void TestMessageFormat::TestMessageFormatTimeSkeleton() {
+    IcuTestErrorCode status(*this, "TestMessageFormatTimeSkeleton");
+
+    UDate date = LocaleTest::date(2021-1900, UCAL_NOVEMBER, 23, 16, 42, 55);
+    const char16_t* cases[][3] = {
+            { u"{0,time,::MMMMd}", u"en", u"November 23" },
+            { u"{0,time,::yMMMMdjm}", u"en", u"November 23, 2021, 4:42 PM" },
+            { u"{0,time,   ::   yMMMMd   }", u"en", u"November 23, 2021" },
+            { u"{0,time,::yMMMMd}", u"fr", u"23 novembre 2021" },
+            { u"Expiration: {0,time,::yMMM}!", u"en", u"Expiration: Nov 2021!" },
+            { u"{0,time,'::'yMMMMd}", u"en", u"::2021November23" }, // pattern literal
+    };
+
+    doTheRealDateTimeSkeletonTesting(date, cases, sizeof(cases) / sizeof(cases[0]), status);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

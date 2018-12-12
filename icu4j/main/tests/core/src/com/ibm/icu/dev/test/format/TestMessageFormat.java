@@ -40,6 +40,8 @@ import com.ibm.icu.text.MessagePattern;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.text.UFormat;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
@@ -2121,5 +2123,50 @@ public class TestMessageFormat extends TestFmwk {
 
             assertEquals(messagePattern, expected, sb.toString());
         }
+    }
+
+    private static void doTheRealDateTimeSkeletonTesting(Date date, Object[][] cases) {
+        for (Object[] cas : cases) {
+            String messagePattern = (String) cas[0];
+            ULocale locale = (ULocale) cas[1];
+            String expected = (String) cas[2];
+
+            MessageFormat msgf = new MessageFormat(messagePattern, locale);
+            StringBuffer sb = new StringBuffer();
+            FieldPosition fpos = new FieldPosition(0);
+            msgf.format(new Object[] { date }, sb, fpos);
+
+            assertEquals(messagePattern, expected, sb.toString());
+        }
+    }
+
+    @Test
+    public void TestMessageFormatDateSkeleton() {
+        Date date = new GregorianCalendar(2021, Calendar.NOVEMBER, 23, 16, 42, 55).getTime();
+        Object[][] cases = new Object[][] {
+                { "{0,date,::MMMMd}", ULocale.ENGLISH, "November 23" },
+                { "{0,date,::yMMMMdjm}", ULocale.ENGLISH, "November 23, 2021, 4:42 PM" },
+                { "{0,date,   ::   yMMMMd   }", ULocale.ENGLISH, "November 23, 2021" },
+                { "{0,date,::yMMMMd}", ULocale.FRENCH, "23 novembre 2021" },
+                { "Expiration: {0,date,::yMMM}!", ULocale.ENGLISH, "Expiration: Nov 2021!" },
+                { "{0,date,'::'yMMMMd}", ULocale.ENGLISH, "::2021November23" }, // pattern literal
+        };
+
+        doTheRealDateTimeSkeletonTesting(date, cases);
+    }
+
+    @Test
+    public void TestMessageFormatTimeSkeleton() {
+        Date date = new GregorianCalendar(2021, Calendar.NOVEMBER, 23, 16, 42, 55).getTime();
+        Object[][] cases = new Object[][] {
+                { "{0,time,::MMMMd}", ULocale.ENGLISH, "November 23" },
+                { "{0,time,::yMMMMdjm}", ULocale.ENGLISH, "November 23, 2021, 4:42 PM" },
+                { "{0,time,   ::   yMMMMd   }", ULocale.ENGLISH, "November 23, 2021" },
+                { "{0,time,::yMMMMd}", ULocale.FRENCH, "23 novembre 2021" },
+                { "Expiration: {0,time,::yMMM}!", ULocale.ENGLISH, "Expiration: Nov 2021!" },
+                { "{0,time,'::'yMMMMd}", ULocale.ENGLISH, "::2021November23" }, // pattern literal
+        };
+
+        doTheRealDateTimeSkeletonTesting(date, cases);
     }
 }
