@@ -1673,7 +1673,6 @@ void MessageFormat::cacheExplicitFormats(UErrorCode& status) {
     }
 }
 
-
 Format* MessageFormat::createAppropriateFormat(UnicodeString& type, UnicodeString& style,
                                                Formattable::Type& formattableType, UParseError& parseError,
                                                UErrorCode& ec) {
@@ -1683,6 +1682,7 @@ Format* MessageFormat::createAppropriateFormat(UnicodeString& type, UnicodeStrin
     Format* fmt = NULL;
     int32_t typeID, styleID;
     DateFormat::EStyle date_style;
+    int32_t firstNonSpace;
 
     switch (typeID = findKeyword(type, TYPE_IDS)) {
     case 0: // number
@@ -1702,11 +1702,10 @@ Format* MessageFormat::createAppropriateFormat(UnicodeString& type, UnicodeStrin
             fmt = createIntegerFormat(fLocale, ec);
             break;
         default: // pattern or skeleton
-            int32_t i = 0;
-            for (; PatternProps::isWhiteSpace(style.charAt(i)); i++);
-            if (style.compare(i, 2, u"::", 0, 2) == 0) {
+            firstNonSpace = PatternProps::skipWhiteSpace(style, 0);
+            if (style.compare(firstNonSpace, 2, u"::", 0, 2) == 0) {
                 // Skeleton
-                UnicodeString skeleton = style.tempSubString(i + 2);
+                UnicodeString skeleton = style.tempSubString(firstNonSpace + 2);
                 fmt = number::NumberFormatter::forSkeleton(skeleton, ec).locale(fLocale).toFormat(ec);
             } else {
                 // Pattern
@@ -1725,19 +1724,27 @@ Format* MessageFormat::createAppropriateFormat(UnicodeString& type, UnicodeStrin
     case 1: // date
     case 2: // time
         formattableType = Formattable::kDate;
-        styleID = findKeyword(style, DATE_STYLE_IDS);
-        date_style = (styleID >= 0) ? DATE_STYLES[styleID] : DateFormat::kDefault;
-
-        if (typeID == 1) {
-            fmt = DateFormat::createDateInstance(date_style, fLocale);
+        firstNonSpace = PatternProps::skipWhiteSpace(style, 0);
+        if (style.compare(firstNonSpace, 2, u"::", 0, 2) == 0) {
+            // Skeleton
+            UnicodeString skeleton = style.tempSubString(firstNonSpace + 2);
+            fmt = DateFormat::createInstanceForSkeleton(skeleton, fLocale, ec);
         } else {
-            fmt = DateFormat::createTimeInstance(date_style, fLocale);
-        }
+            // Pattern
+            styleID = findKeyword(style, DATE_STYLE_IDS);
+            date_style = (styleID >= 0) ? DATE_STYLES[styleID] : DateFormat::kDefault;
 
-        if (styleID < 0 && fmt != NULL) {
-            SimpleDateFormat* sdtfmt = dynamic_cast<SimpleDateFormat*>(fmt);
-            if (sdtfmt != NULL) {
-                sdtfmt->applyPattern(style);
+            if (typeID == 1) {
+                fmt = DateFormat::createDateInstance(date_style, fLocale);
+            } else {
+                fmt = DateFormat::createTimeInstance(date_style, fLocale);
+            }
+
+            if (styleID < 0 && fmt != NULL) {
+                SimpleDateFormat* sdtfmt = dynamic_cast<SimpleDateFormat*>(fmt);
+                if (sdtfmt != NULL) {
+                    sdtfmt->applyPattern(style);
+                }
             }
         }
         break;
