@@ -1,0 +1,20 @@
+// Copyright (C) 2018 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+
+filtertest {
+    alabama {
+        alaska {
+            arizona {"arkansas"}
+            california {"colorado"}
+        }
+        connecticut {
+            arizona {"delaware"}
+            california {"florida"}
+        }
+    }
+    // test suffixes
+    fornia {
+        hawaii {"idaho"}
+        illinois {"indiana"}
+    }
+}

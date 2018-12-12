@@ -97,6 +97,17 @@ def generate_rb(config, glob, common_vars):
             tool = IcuTool("genrb"),
             args = "-s {IN_DIR} -d {TMP_DIR} {INPUT_FILES[0]}",
             format_with = {}
+        ),
+        SingleExecutionRequest(
+            name = "filtertest",
+            category = "tests",
+            dep_files = [],
+            input_files = [InFile("filtertest.txt")],
+            output_files = [OutFile("filtertest.res")],
+            tool = IcuTool("genrb"),
+            args = "-s {IN_DIR} -d {OUT_DIR} -i {OUT_DIR} "
+                "--filterDir {IN_DIR}/filters filtertest.txt",
+            format_with = {}
         )
     ]
 
