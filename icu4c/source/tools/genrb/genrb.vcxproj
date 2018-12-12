@@ -226,6 +226,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="errmsg.c" />
+    <ClCompile Include="filterrb.cpp" />
     <ClCompile Include="genrb.cpp" />
     <ClCompile Include="parse.cpp">
       <DisableLanguageExtensions>false</DisableLanguageExtensions>
@@ -250,6 +251,7 @@
   <ItemGroup>
     <ClInclude Include="errmsg.h" />
     <ClInclude Include="genrb.h" />
+    <ClInclude Include="filterrb.h" />
     <ClInclude Include="parse.h" />
     <ClInclude Include="prscmnts.h" />
     <ClInclude Include="rbutil.h" />
