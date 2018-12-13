@@ -8,9 +8,11 @@ from __future__ import print_function
 import argparse
 import glob as pyglob
 import json
+import os
 import sys
 
 from . import *
+from .comment_stripper import CommentStripper
 from .renderers import makefile, windirect
 from . import filtration, utils
 import BUILDRULES
@@ -118,14 +120,37 @@ class Config(object):
             try:
                 with open(args.filter_file, "r") as f:
                     print("Note: Applying filters from %s." % args.filter_file, file=sys.stderr)
-                    try:
-                        import hjson
-                        self.filters_json_data = hjson.load(f)
-                    except ImportError:
-                        self.filters_json_data = json.load(f)
+                    self._parse_filter_file(f)
             except IOError:
                 print("Error: Could not read filter file %s." % args.filter_file, file=sys.stderr)
                 exit(1)
+
+    def _parse_filter_file(self, f):
+        # Use the Hjson parser if it is available; otherwise, use vanilla JSON.
+        try:
+            import hjson
+            self.filters_json_data = hjson.load(f)
+        except ImportError:
+            self.filters_json_data = json.load(CommentStripper(f))
+
+        # Optionally pre-validate the JSON schema before further processing.
+        # Some schema errors will be caught later, but this step ensures
+        # maximal validity.
+        try:
+            import jsonschema
+            schema_path = os.path.join(os.path.dirname(__file__), "filtration_schema.json")
+            with open(schema_path) as schema_f:
+                schema = json.load(CommentStripper(schema_f))
+            validator = jsonschema.Draft4Validator(schema)
+            for error in validator.iter_errors(self.filters_json_data, schema):
+                print("WARNING: ICU data filter JSON file:", error.message,
+                    "at", "".join(
+                        "[%d]" % part if isinstance(part, int) else ".%s" % part
+                        for part in error.absolute_path
+                    ),
+                    file=sys.stderr)
+        except ImportError:
+            pass
 
     def has_feature(self, feature_name):
         assert feature_name in AVAILABLE_FEATURES
@@ -166,9 +191,11 @@ def main():
         # For the purposes of buildtool, force Unix-style directory separators.
         return [v.replace("\\", "/")[len(args.glob_dir)+1:] for v in sorted(result_paths)]
 
-    build_dirs, requests = BUILDRULES.generate(config, glob, common)
+    requests = BUILDRULES.generate(config, glob, common)
     requests = filtration.apply_filters(requests, config)
     requests = utils.flatten_requests(requests, config, common)
+
+    build_dirs = utils.compute_directories(requests)
 
     if args.format == "gnumake":
         print(makefile.get_gnumake_rules(

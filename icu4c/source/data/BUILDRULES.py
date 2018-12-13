@@ -21,31 +21,6 @@ def generate(config, glob, common_vars):
         print("Error: Cannot find data directory; please specify --glob_dir", file=sys.stderr)
         exit(1)
 
-    # DIRECTORIES
-    build_dirs = [
-        "{OUT_DIR}",
-        "{OUT_DIR}/curr",
-        "{OUT_DIR}/lang",
-        "{OUT_DIR}/region",
-        "{OUT_DIR}/zone",
-        "{OUT_DIR}/unit",
-        "{OUT_DIR}/brkitr",
-        "{OUT_DIR}/coll",
-        "{OUT_DIR}/rbnf",
-        "{OUT_DIR}/translit",
-        "{TMP_DIR}",
-        "{TMP_DIR}/curr",
-        "{TMP_DIR}/lang",
-        "{TMP_DIR}/locales",
-        "{TMP_DIR}/region",
-        "{TMP_DIR}/zone",
-        "{TMP_DIR}/unit",
-        "{TMP_DIR}/coll",
-        "{TMP_DIR}/rbnf",
-        "{TMP_DIR}/translit",
-        "{TMP_DIR}/brkitr"
-    ]
-
     requests += generate_cnvalias(config, glob, common_vars)
     requests += generate_confusables(config, glob, common_vars)
     requests += generate_conversion_mappings(config, glob, common_vars)
@@ -154,7 +129,7 @@ def generate(config, glob, common_vars):
         )
     ]
 
-    return (build_dirs, requests)
+    return requests
 
 
 def generate_cnvalias(config, glob, common_vars):

@@ -86,6 +86,14 @@ def get_all_output_files(requests, include_tmp=False):
     return [f for _, f in set((type(f), f) for f in files)]
 
 
+def compute_directories(requests):
+    dirs = set()
+    for file in get_all_output_files(requests, include_tmp=True):
+        path = "%s/%s" % (dir_for(file), file.filename)
+        dirs.add(path[:path.rfind("/")])
+    return list(sorted(dirs))
+
+
 class SpaceSeparatedList(list):
     """A list that joins itself with spaces when converted to a string."""
     def __str__(self):

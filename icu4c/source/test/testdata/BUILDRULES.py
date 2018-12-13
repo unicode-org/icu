@@ -8,8 +8,6 @@ from buildtool.request_types import *
 
 
 def generate(config, glob, common_vars):
-    build_dirs = ["{OUT_DIR}", "{TMP_DIR}"]
-
     requests = []
     requests += generate_rb(config, glob, common_vars)
     requests += generate_sprep(config, glob, common_vars)
@@ -26,7 +24,7 @@ def generate(config, glob, common_vars):
         )
     ]
 
-    return (build_dirs, requests)
+    return requests
 
 
 def generate_rb(config, glob, common_vars):

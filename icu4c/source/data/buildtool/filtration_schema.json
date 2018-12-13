@@ -1,0 +1,85 @@
+// Copyright (C) 2018 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html
+
+{
+    "$id": "http://unicode.org/icu-filter-schema",
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "JSON Schema for an ICU data filter file",
+    "type": "object",
+    "properties": {
+        "localeFilter": { "$ref": "#/definitions/filter" },
+        "featureFilters": {
+            "type": "object",
+            "additionalProperties": { "$ref": "#/definitions/filter" }
+        },
+        "resourceFilters": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "categories": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                    },
+                    "files": { "$ref": "#/definitions/filter" },
+                    "rules": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "pattern": "^[+-]/(\\w+(/\\w+)*)?$"
+                        }
+                    }
+                },
+                "required": ["categories", "rules"],
+                "additionalProperties": false
+            }
+        }
+    },
+    "additionalProperties": false,
+    "definitions": {
+        "filter": {
+            "type": "object",
+            "oneOf": [
+                {
+                    "properties": {
+                        "filterType": { "$ref": "#/definitions/filterType" },
+                        "whitelist": { "$ref": "#/definitions/stringList" }
+                    },
+                    "required": ["whitelist"],
+                    "additionalProperties": false
+                },
+                {
+                    "properties": {
+                        "filterType": { "$ref": "#/definitions/filterType" },
+                        "blacklist": { "$ref": "#/definitions/stringList" }
+                    },
+                    "required": ["blacklist"],
+                    "additionalProperties": false
+                },
+                {
+                    "properties": {
+                        "filterType": { "$ref": "#/definitions/filterType" }
+                    },
+                    "additionalProperties": false
+                }
+            ]
+        },
+        "filterType": {
+            "type": "string",
+            "enum": [
+                "file-stem",
+                "language",
+                "regex",
+                "exclude"
+            ]
+        },
+        "stringList": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        }
+    }
+}
