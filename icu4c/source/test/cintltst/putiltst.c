@@ -214,8 +214,19 @@ static void TestPUtilAPI(void){
             log_info("Note: t_timezone offset of %ld (for %s : %s) is not a multiple of 30min.", tzoffset, uprv_tzname(0), uprv_tzname(1));
         }
         /*tzoffset=uprv_getUTCtime();*/
-
     }
+
+#if U_PLATFORM_USES_ONLY_WIN32_API 
+    log_verbose("Testing uprv_detectWindowsTimeZone() ....\n");
+    {
+        char* timezone = uprv_detectWindowsTimeZone();
+        if (timezone == NULL) {
+            log_err("ERROR: uprv_detectWindowsTimeZone failed (returned NULL).\n");
+        } else {
+            log_verbose("Detected TimeZone = %s\n", timezone);
+        }   
+    }
+#endif
 }
 
 static void TestVersion(void)
