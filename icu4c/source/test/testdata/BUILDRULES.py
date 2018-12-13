@@ -4,6 +4,7 @@
 from distutils.sysconfig import parse_makefile
 
 from buildtool import *
+from buildtool.request_types import *
 
 
 def generate(config, glob, common_vars):
