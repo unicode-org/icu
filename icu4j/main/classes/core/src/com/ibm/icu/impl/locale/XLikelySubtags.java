@@ -30,31 +30,12 @@ public class XLikelySubtags {
         return DEFAULT;
     }
 
-    @SuppressWarnings("unchecked")
-    static abstract class Maker {
-        abstract <V> V make();
-
-        public <K,V> V getSubtable(Map<K, V> langTable, final K language) {
-            V scriptTable = langTable.get(language);
-            if (scriptTable == null) {
-                langTable.put(language, scriptTable = (V) make());
-            }
-            return scriptTable;
+    private static <K, V, T> Map<V, T> getSubtable(Map<K, Map<V, T>> table, final K language) {
+        Map<V, T> subTable = table.get(language);
+        if (subTable == null) {
+            table.put(language, subTable = new TreeMap<>());
         }
-
-        static final Maker HASHMAP = new Maker() {
-            @Override
-            public Map<Object,Object> make() {
-                return new HashMap<>();
-            }
-        };
-
-        static final Maker TREEMAP = new Maker() {
-            @Override
-            public Map<Object,Object> make() {
-                return new TreeMap<>();
-            }
-        };
+        return subTable;
     }
 
     public static class Aliases {
@@ -157,7 +138,7 @@ public class XLikelySubtags {
             //        throw new ICUException("invalid language id");
         }
 
-        private static final HashMap<ULocale, LSR> pseudoReplacements = new HashMap<ULocale, LSR>(11);
+        private static final HashMap<ULocale, LSR> pseudoReplacements = new HashMap<>(11);
 
         // Note code in XLocaledistance.java handle pseudo-regions XA, XB, and XC, making them
         // very distant from any other locale. Similarly, it establishes that any of the
@@ -261,7 +242,7 @@ public class XLikelySubtags {
     final Map<String, Map<String, Map<String, LSR>>> langTable;
 
     public XLikelySubtags() {
-        this(getDefaultRawData(), true);
+        this(getDefaultRawData());
     }
 
     private static Map<String, String> getDefaultRawData() {
@@ -274,11 +255,11 @@ public class XLikelySubtags {
         return rawData;
     }
 
-    public XLikelySubtags(Map<String, String> rawData, boolean skipNoncanonical) {
-        this.langTable = init(rawData, skipNoncanonical);
+    public XLikelySubtags(Map<String, String> rawData) {
+        this.langTable = init(rawData);
     }
 
-    private Map<String, Map<String, Map<String, LSR>>> init(final Map<String, String> rawData, boolean skipNoncanonical) {
+    private Map<String, Map<String, Map<String, LSR>>> init(final Map<String, String> rawData) {
         // prepare alias info. We want a mapping from the canonical form to all aliases
 
         //Multimap<String,String> canonicalToAliasLanguage = HashMultimap.create();
@@ -289,8 +270,7 @@ public class XLikelySubtags {
         //Multimap<String,String> canonicalToAliasRegion = HashMultimap.create();
         //        getAliasInfo(REGION_ALIASES, canonicalToAliasRegion);
 
-        Maker maker = Maker.TREEMAP;
-        Map<String, Map<String, Map<String, LSR>>> result = maker.make();
+        Map<String, Map<String, Map<String, LSR>>> result = new TreeMap<>();
         //        Splitter bar = Splitter.on('_');
         //        int last = -1;
         // set the base data
@@ -405,8 +385,8 @@ public class XLikelySubtags {
     }
 
     private void set(Map<String, Map<String, Map<String, LSR>>> langTable, final String language, final String script, final String region, LSR newValue) {
-        Map<String, Map<String, LSR>> scriptTable = Maker.TREEMAP.getSubtable(langTable, language);
-        Map<String, LSR> regionTable = Maker.TREEMAP.getSubtable(scriptTable, script);
+        Map<String, Map<String, LSR>> scriptTable = getSubtable(langTable, language);
+        Map<String, LSR> regionTable = getSubtable(scriptTable, script);
         //        LSR oldValue = regionTable.get(region);
         //        if (oldValue != null) {
         //            int debug = 0;
