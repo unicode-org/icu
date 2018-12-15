@@ -6,16 +6,19 @@ platform: x64
 # Don't clone the entire repo.
 clone_depth: 3
 
-# Cache the Cygwin downloaded setup packages between builds to speed things up.
+# Cache things between builds to speed things up and save bandwidth.
 cache:
-  - c:\cygwin-setup-cache
+  - c:\icu-ci-cache
 
 environment:
-  CYG_URL: https://cygwin.com/setup-x86_64.exe
-  CYG_MIRROR: http://cygwin.mirror.constant.com
-  CYG_PACKAGES: automake,gcc-core,gcc-g++,make,pkg-config,perl,python3-devel
-  CYG_ROOT: c:\cygwin-root
-  CYG_CACHE: c:\cygwin-setup-cache
+  global:
+    ICU_CI_CACHE: c:\icu-ci-cache
+    CYG_URL: https://cygwin.com/setup-x86_64.exe
+    CYG_MIRROR: http://cygwin.mirror.constant.com
+    CYG_PACKAGES: automake,gcc-core,gcc-g++,make,pkg-config,perl,python3
+    CYG_ROOT: c:\cygwin-root
+    CYG_CACHE: '%ICU_CI_CACHE%\cygwin64'
+    CYG_CACHED_SETUP: '%CYG_CACHE%\setup.exe'
 
   matrix:
     - BUILDSYSTEM: VS2017
@@ -26,6 +29,7 @@ environment:
     - BUILDSYSTEM: cygwin64-gcc
       CC: gcc
       CXX: g++
+      APPVEYOR_SAVE_CACHE_ON_ERROR: true
 
 for:
   -
@@ -34,8 +38,15 @@ for:
         - BUILDSYSTEM: cygwin64-gcc
 
     install:
-      - ps: Invoke-WebRequest $env:CYG_URL -OutFile c:\cygwin-setup.exe
-      - c:\cygwin-setup.exe --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --only-site --site "%CYG_MIRROR%" --root "%CYG_ROOT%"  --local-package-dir "%CYG_CACHE%" --packages "%CYG_PACKAGES%"
+      - ps: >-
+          if ( !(Test-Path "${env:CYG_CACHED_SETUP}" -NewerThan (Get-Date).AddDays(-7)) )
+          {
+            Write-Host "Cached Cygwin setup does not exist or is older than 7 days, downloading from external site."
+            New-Item -Force -Type Directory $env:CYG_CACHE
+            Invoke-WebRequest $env:CYG_URL -OutFile $env:CYG_CACHED_SETUP
+          }
+      - cmd: >-
+          %CYG_CACHED_SETUP% --quiet-mode --no-shortcuts --no-startmenu --no-desktop --upgrade-also --only-site --site "%CYG_MIRROR%" --root "%CYG_ROOT%"  --local-package-dir "%CYG_CACHE%" --packages "%CYG_PACKAGES%"
 
     # Check that we have a working Cygwin environment before building.
     before_build:
