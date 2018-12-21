@@ -2977,12 +2977,14 @@ void LocaleTest::TestForLanguageTag() {
     static const char tag_af[] = "af-t-ar-i0-handwrit-u-ca-coptic-x-foo";
     static const char tag_ill[] = "!";
     static const char tag_no_nul[] = { 'e', 'n', '-', 'G', 'B' };
+    static const char tag_ext[] = "en-GB-1-abc-efg-a-xyz";
 
     static const Locale loc_en("en_US");
     static const Locale loc_oed("en_GB_OXENDICT");
     static const Locale loc_af("af@calendar=coptic;t=ar-i0-handwrit;x=foo");
     static const Locale loc_null("");
     static const Locale loc_gb("en_GB");
+    static const Locale loc_ext("en_GB@1=abc-efg;a=xyz");
 
     Locale result_en = Locale::forLanguageTag(tag_en, status);
     status.errIfFailureAndReset("\"%s\"", tag_en);
@@ -3015,6 +3017,10 @@ void LocaleTest::TestForLanguageTag() {
     status.errIfFailureAndReset("\"%.*s\"", sp_no_nul.size(), sp_no_nul.data());
     assertEquals(CharString(sp_no_nul, status).data(),
             loc_gb.getName(), result_no_nul.getName());
+
+    Locale result_ext = Locale::forLanguageTag(tag_ext, status);
+    status.errIfFailureAndReset("\"%s\"", tag_ext);
+    assertEquals(tag_ext, loc_ext.getName(), result_ext.getName());
 }
 
 void LocaleTest::TestToLanguageTag() {
@@ -3023,12 +3029,14 @@ void LocaleTest::TestToLanguageTag() {
     static const Locale loc_c("C");
     static const Locale loc_en("en_US");
     static const Locale loc_af("af@calendar=coptic;t=ar-i0-handwrit;x=foo");
+    static const Locale loc_ext("en@0=abc;a=xyz");
     static const Locale loc_empty("");
     static const Locale loc_ill("!");
 
     static const char tag_c[] = "en-US-u-va-posix";
     static const char tag_en[] = "en-US";
     static const char tag_af[] = "af-t-ar-i0-handwrit-u-ca-coptic-x-foo";
+    static const char tag_ext[] = "en-0-abc-a-xyz";
     static const char tag_und[] = "und";
 
     std::string result;
@@ -3048,6 +3056,10 @@ void LocaleTest::TestToLanguageTag() {
     std::string result_af = loc_af.toLanguageTag<std::string>(status);
     status.errIfFailureAndReset("\"%s\"", loc_af.getName());
     assertEquals(loc_af.getName(), tag_af, result_af.c_str());
+
+    std::string result_ext = loc_ext.toLanguageTag<std::string>(status);
+    status.errIfFailureAndReset("\"%s\"", loc_ext.getName());
+    assertEquals(loc_ext.getName(), tag_ext, result_ext.c_str());
 
     std::string result_empty = loc_empty.toLanguageTag<std::string>(status);
     status.errIfFailureAndReset("\"%s\"", loc_empty.getName());

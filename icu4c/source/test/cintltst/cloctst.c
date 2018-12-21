@@ -5966,6 +5966,7 @@ const char* const locale_to_langtag[][3] = {
     {"en@attribute=baz;calendar=islamic-civil", "en-u-baz-ca-islamic-civil",    "en-u-baz-ca-islamic-civil"},
     {"en@a=bar;calendar=islamic-civil;x=u-foo", "en-a-bar-u-ca-islamic-civil-x-u-foo",  "en-a-bar-u-ca-islamic-civil-x-u-foo"},
     {"en@a=bar;attribute=baz;calendar=islamic-civil;x=u-foo",   "en-a-bar-u-baz-ca-islamic-civil-x-u-foo",  "en-a-bar-u-baz-ca-islamic-civil-x-u-foo"},
+    {"en@9=efg;a=baz",    "en-9-efg-a-baz", "en-9-efg-a-baz"},
     {NULL,          NULL,           NULL}
 };
 
@@ -6152,6 +6153,7 @@ static const struct {
     {"sgn-br-u-co-phonebk", "bzs@collation=phonebook", FULL_LENGTH},
     {"ja-latn-hepburn-heploc", "ja_Latn__ALALC97", FULL_LENGTH},
     {"ja-latn-hepburn-heploc-u-ca-japanese", "ja_Latn__ALALC97@calendar=japanese", FULL_LENGTH},
+    {"en-a-bcde-0-fgh", "en@0=fgh;a=bcde", FULL_LENGTH},
 };
 
 static void TestForLanguageTag(void) {
