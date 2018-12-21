@@ -4068,6 +4068,8 @@ public class ULocaleTest extends TestFmwk {
                 {"en@attribute=baz;calendar=islamic-civil", "en-u-baz-ca-islamic-civil"},
                 {"en@a=bar;calendar=islamic-civil;x=u-foo", "en-a-bar-u-ca-islamic-civil-x-u-foo"},
                 {"en@a=bar;attribute=baz;calendar=islamic-civil;x=u-foo",   "en-a-bar-u-baz-ca-islamic-civil-x-u-foo"},
+                /* ICU-20320*/
+                {"en@9=efg;a=baz",   "en-9-efg-a-baz"},
         };
 
         for (int i = 0; i < locale_to_langtag.length; i++) {
@@ -4091,6 +4093,13 @@ public class ULocaleTest extends TestFmwk {
         } finally {
             Locale.setDefault(backupDefault);
         }
+    }
+
+    @Test
+    public void TestDigitSingletonExtensionBug20320() {
+        ULocale uloc = ULocale.forLanguageTag("en-0-abc-a-xyz");
+        assertEquals("getExtension(\'a\')", "xyz", uloc.getExtension('a'));
+        assertEquals("getExtension(\'0\')", "abc", uloc.getExtension('0'));
     }
 
     @Test

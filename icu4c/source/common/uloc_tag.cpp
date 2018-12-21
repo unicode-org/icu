@@ -507,11 +507,17 @@ static UBool
 _isExtensionSingleton(const char* s, int32_t len) {
     /*
      * extension     = singleton 1*("-" (2*8alphanum))
+     *
+     * singleton     = DIGIT               ; 0 - 9
+     *               / %x41-57             ; A - W
+     *               / %x59-5A             ; Y - Z
+     *               / %x61-77             ; a - w
+     *               / %x79-7A             ; y - z
      */
     if (len < 0) {
         len = (int32_t)uprv_strlen(s);
     }
-    if (len == 1 && ISALPHA(*s) && (uprv_tolower(*s) != PRIVATEUSE)) {
+    if (len == 1 && (ISALPHA(*s) || ISNUMERIC(*s)) && (uprv_tolower(*s) != PRIVATEUSE)) {
         return TRUE;
     }
     return FALSE;

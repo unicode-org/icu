@@ -622,7 +622,7 @@ public class LanguageTag {
         //               / %x79-7A             ; y - z
 
         return (s.length() == 1)
-                && AsciiUtil.isAlphaString(s)
+                && AsciiUtil.isAlphaNumericString(s)
                 && !AsciiUtil.caseIgnoreMatch(PRIVATEUSE, s);
     }
 
