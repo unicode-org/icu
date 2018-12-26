@@ -53,6 +53,7 @@ static void TestUnicodeDefines(void);
 static void TestIsRightToLeft(void);
 static void TestBadLocaleIDs(void);
 static void TestBug20370(void);
+static void TestBug20321UnicodeLocaleKey(void);
 
 void PrintDataTable();
 
@@ -268,6 +269,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestToLegacyType);
     TESTCASE(TestBadLocaleIDs);
     TESTCASE(TestBug20370);
+    TESTCASE(TestBug20321UnicodeLocaleKey);
 }
 
 
@@ -6283,6 +6285,39 @@ static void TestToUnicodeLocaleKey(void)
             }
         } else if (uprv_strcmp(bcpKey, expected) != 0) {
             log_err("toUnicodeLocaleKey: keyword=%s => %s, expected=%s\n", keyword, bcpKey, expected);
+        }
+    }
+}
+
+static void TestBug20321UnicodeLocaleKey(void)
+{
+    // key = alphanum alpha ;
+    static const char* invalid[] = {
+        "a0",
+        "00",
+        "a@",
+        "0@",
+        "@a",
+        "@a",
+        "abc",
+        "0bc",
+    };
+    for (int i = 0; i < UPRV_LENGTHOF(invalid); i++) {
+        const char* bcpKey = NULL;
+        bcpKey = uloc_toUnicodeLocaleKey(invalid[i]);
+        if (bcpKey != NULL) {
+            log_err("toUnicodeLocaleKey: keyword=%s => %s, expected=NULL\n", invalid[i], bcpKey);
+        }
+    }
+    static const char* valid[] = {
+        "aa",
+        "0a",
+    };
+    for (int i = 0; i < UPRV_LENGTHOF(valid); i++) {
+        const char* bcpKey = NULL;
+        bcpKey = uloc_toUnicodeLocaleKey(valid[i]);
+        if (bcpKey == NULL) {
+            log_err("toUnicodeLocaleKey: keyword=%s => NULL, expected!=NULL\n", valid[i]);
         }
     }
 }

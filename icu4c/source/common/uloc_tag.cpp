@@ -608,7 +608,7 @@ ultag_isUnicodeLocaleKey(const char* s, int32_t len) {
     if (len < 0) {
         len = (int32_t)uprv_strlen(s);
     }
-    if (len == 2 && _isAlphaNumericString(s, len)) {
+    if (len == 2 && (ISALPHA(*s) || ISNUMERIC(*s)) && ISALPHA(s[1])) {
         return TRUE;
     }
     return FALSE;

@@ -4697,6 +4697,36 @@ public class ULocaleTest extends TestFmwk {
     }
 
     @Test
+    public void TestBug20321UnicodeLocaleKey() {
+        // key = alphanum alpha ;
+        String[] INVALID = {
+            "a0",
+            "00",
+            "a@",
+            "0@",
+            "@a",
+            "@a",
+            "abc",
+            "0bc",
+        };
+
+        for (String invalid : INVALID) {
+            String bcpKey = ULocale.toUnicodeLocaleKey(invalid);
+            assertNull("keyword=" + invalid, bcpKey);
+        }
+
+        String[] VALID = {
+            "aa",
+            "0a",
+        };
+
+        for (String valid : VALID) {
+            String bcpKey = ULocale.toUnicodeLocaleKey(valid);
+            assertEquals("keyword=" + valid, valid, bcpKey);
+        };
+    }
+
+    @Test
     public void TestToLegacyKey() {
         String[][] DATA = {
                 {"kb",          "colbackwards"},

@@ -93,8 +93,9 @@ public class UnicodeLocaleExtension extends Extension {
     }
 
     public static boolean isKey(String s) {
-        // 2alphanum
-        return (s.length() == 2) && AsciiUtil.isAlphaNumericString(s);
+        // key = alphanum alpha ;
+        return (s.length() == 2) && AsciiUtil.isAlphaNumeric(s.charAt(0)) &&
+            AsciiUtil.isAlpha(s.charAt(1));
     }
 
     public static boolean isTypeSubtag(String s) {
