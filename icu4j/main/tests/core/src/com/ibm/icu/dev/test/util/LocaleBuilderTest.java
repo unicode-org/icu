@@ -82,12 +82,12 @@ public class LocaleBuilderTest extends TestFmwk {
                 {"E", "z", "ExtZ", "L", "en", "E", "z", null, "T", "en", "en"},
                 {"E", "a", "x", "X"},
                 {"E", "a", "abc_def", "T", "und-a-abc-def", "@a=abc-def"},
-                // Design limitation - typeless u extension keyword 00 below is interpreted as a boolean value true/yes.
+                // Design limitation - typeless u extension keyword 0a below is interpreted as a boolean value true/yes.
                 // With the legacy keyword syntax, "yes" is used for such boolean value instead of "true".
-                // However, once the legacy keyword is translated back to BCP 47 u extension, key "00" is unknown,
+                // However, once the legacy keyword is translated back to BCP 47 u extension, key "0a" is unknown,
                 // so "yes" is preserved - not mapped to "true". We could change the code to automatically transform
-                // "yes" to "true", but it will break roundtrip conversion if BCP 47 u extension has "00-yes".
-                {"L", "en", "E", "u", "bbb-aaa-00", "T", "en-u-aaa-bbb-00-yes", "en@00=yes;attribute=aaa-bbb"},
+                // "yes" to "true", but it will break roundtrip conversion if BCP 47 u extension has "0a-yes".
+                {"L", "en", "E", "u", "bbb-aaa-0a", "T", "en-u-aaa-bbb-0a-yes", "en@0a=yes;attribute=aaa-bbb"},
                 {"L", "fr", "R", "FR", "P", "Yoshito-ICU", "T", "fr-FR-x-yoshito-icu", "fr_FR@x=yoshito-icu"},
                 {"L", "ja", "R", "jp", "K", "ca", "japanese", "T", "ja-JP-u-ca-japanese", "ja_JP@calendar=japanese"},
                 {"K", "co", "PHONEBK", "K", "ca", "gregory", "L", "De", "T", "de-u-ca-gregory-co-phonebk", "de@calendar=gregorian;collation=phonebook"},
