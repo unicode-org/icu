@@ -20,6 +20,8 @@ Sample invocation:
   ~/svn.icu/trunk/src/source/test/depstest$ ./depstest.py ~/svn.icu/trunk/dbg
 """
 
+from __future__ import print_function
+
 __author__ = "Markus W. Scherer"
 
 import glob
@@ -45,7 +47,7 @@ def _ReadObjFile(root_path, library_name, obj_name):
   global _virtual_classes, _weak_destructors
   lib_obj_name = library_name + "/" + obj_name
   if lib_obj_name in _obj_files:
-    print "Warning: duplicate .o file " + lib_obj_name
+    print("Warning: duplicate .o file " + lib_obj_name)
     _return_value = 2
     return
 
@@ -120,7 +122,7 @@ def _Resolve(name, parents):
       dep_exports = dep_item["exports"]
       dep_system_symbols = dep_item["system_symbols"]
       if files and imports.isdisjoint(dep_exports) and imports.isdisjoint(dep_system_symbols):
-        print "Info:  %s %s  does not need to depend on  %s\n" % (item_type, name, dep)
+        print("Info:  %s %s  does not need to depend on  %s\n" % (item_type, name, dep))
       # We always include the dependency's exports, even if we do not need them
       # to satisfy local imports.
       exports |= dep_exports
@@ -189,11 +191,11 @@ def main():
              "need one argument with the root path to the built ICU libraries/*.o files."))
   Process(sys.argv[1])
   if _ignored_symbols:
-    print "Info: ignored symbols:\n%s" % sorted(_ignored_symbols)
+    print("Info: ignored symbols:\n%s" % sorted(_ignored_symbols))
   if not _return_value:
-    print "OK: Specified and actual dependencies match."
+    print("OK: Specified and actual dependencies match.")
   else:
-    print "Error: There were errors, please fix them and re-run. Processing may have terminated abnormally."
+    print("Error: There were errors, please fix them and re-run. Processing may have terminated abnormally.")
   return _return_value
 
 if __name__ == "__main__":
