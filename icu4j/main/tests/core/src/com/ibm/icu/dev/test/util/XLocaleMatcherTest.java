@@ -3,38 +3,38 @@
 package com.ibm.icu.dev.test.util;
 
 
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.regex.Pattern;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.locale.XCldrStub.Joiner;
-import com.ibm.icu.impl.locale.XCldrStub.Splitter;
+import com.ibm.icu.impl.locale.XCldrStub.FileUtilities;
 import com.ibm.icu.impl.locale.XLocaleDistance;
 import com.ibm.icu.impl.locale.XLocaleDistance.DistanceOption;
 import com.ibm.icu.impl.locale.XLocaleMatcher;
-import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.LocaleMatcher;
 import com.ibm.icu.util.LocalePriorityList;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
+
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 
 /**
  * Test the XLocaleMatcher.
  *
  * @author markdavis
  */
-@RunWith(JUnit4.class)
+@RunWith(JUnitParamsRunner.class)
 public class XLocaleMatcherTest extends TestFmwk {
-    private static final boolean REFORMAT = false; // set to true to get a reformatted data file listed
-
     private static final int REGION_DISTANCE = 4;
 
     private static final XLocaleDistance LANGUAGE_MATCHER_DATA = XLocaleDistance.getDefault();
@@ -54,15 +54,6 @@ public class XLocaleMatcherTest extends TestFmwk {
     @SuppressWarnings("unused")
     private XLocaleMatcher newXLocaleMatcher(LocalePriorityList string, int d) {
         return XLocaleMatcher.builder().setSupportedLocales(string).setThresholdDistance(d).build();
-    }
-
-    private XLocaleMatcher newXLocaleMatcher(LocalePriorityList string, int d, DistanceOption distanceOption) {
-        return XLocaleMatcher
-            .builder()
-            .setSupportedLocales(string)
-            .setThresholdDistance(d)
-            .setDistanceOption(distanceOption)
-            .build();
     }
 
     //    public void testParentLocales() {
@@ -125,7 +116,7 @@ public class XLocaleMatcherTest extends TestFmwk {
     @Test
     public void testExactMatches() {
         String lastBase = "";
-        TreeSet<ULocale> sorted = new TreeSet<ULocale>();
+        TreeSet<ULocale> sorted = new TreeSet<>();
         for (ULocale loc : ULocale.getAvailableLocales()) {
             String language = loc.getLanguage();
             if (!lastBase.equals(language)) {
@@ -264,75 +255,214 @@ public class XLocaleMatcherTest extends TestFmwk {
         return (delta / iterations);
     }
 
-    @Test
-    public void testDataDriven() throws IOException {
-        DataDrivenTestHelper tfh = new MyTestFileHandler()
-            .setFramework(this)
-            .run(XLocaleMatcherTest.class, "data/localeMatcherTest.txt");
-        if (REFORMAT) {
-            System.out.println(tfh.appendLines(new StringBuilder()));
+    private static final class TestCase implements Cloneable {
+        private static final String ENDL = System.getProperties().getProperty("line.separator");
+
+        int lineNr = 0;
+
+        String nameLine = "";
+        String supportedLine = "";
+        String defaultLine = "";
+        String distanceLine = "";
+        String thresholdLine = "";
+        String matchLine = "";
+
+        String supported = "";
+        String def = "";
+        String distance = "";
+        String threshold = "";
+        String desired = "";
+        String expMatch = "";
+        String expDesired = "";
+        String expCombined = "";
+
+        @Override
+        public TestCase clone() throws CloneNotSupportedException {
+            return (TestCase) super.clone();
+        }
+
+        void reset(String newNameLine) {
+            nameLine = newNameLine;
+            supportedLine = "";
+            defaultLine = "";
+            distanceLine = "";
+            thresholdLine = "";
+
+            supported = "";
+            def = "";
+            distance = "";
+            threshold = "";
+        }
+
+        String toInputsKey() {
+            return supported + '+' + def + '+' + distance + '+' + threshold + '+' + desired;
+        }
+
+        private static void appendLine(StringBuilder sb, String line) {
+            if (!line.isEmpty()) {
+                sb.append(ENDL).append(line);
+            }
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder(nameLine);
+            appendLine(sb, supportedLine);
+            appendLine(sb, defaultLine);
+            appendLine(sb, distanceLine);
+            appendLine(sb, thresholdLine);
+            sb.append(ENDL).append("line ").append(lineNr).append(':');
+            appendLine(sb, matchLine);
+            return sb.toString();
         }
     }
 
-    private static final Splitter COMMA_SPACE = Splitter.on(Pattern.compile(",\\s*|\\s+")).trimResults();
-    private static final Joiner JOIN_COMMA_SPACE = Joiner.on(", ");
-    @SuppressWarnings("unused")
-    private static final UnicodeSet DIGITS = new UnicodeSet("[0-9]").freeze();
+    private static String getSuffixAfterPrefix(String s, int limit, String prefix) {
+        if (prefix.length() <= limit && s.startsWith(prefix)) {
+            return s.substring(prefix.length(), limit);
+        } else {
+            return null;
+        }
+    }
 
-    class MyTestFileHandler extends DataDrivenTestHelper {
-
-        Output<ULocale> bestDesired = new Output<ULocale>();
-        DistanceOption distanceOption = DistanceOption.REGION_FIRST;
-        int threshold = -1;
-
-        @Override
-        public void handle(int lineNumber, boolean breakpoint, String commentBase, List<String> arguments) {
-            List<String> supported = COMMA_SPACE.splitToList(arguments.get(0));
-            final String supportedReformatted = JOIN_COMMA_SPACE.join(supported);
-            LocalePriorityList supportedList = LocalePriorityList.add(supportedReformatted).build();
-
-            Iterable<String> desired = COMMA_SPACE.split(arguments.get(1));
-            final String desiredReformatted = JOIN_COMMA_SPACE.join(desired);
-            LocalePriorityList desiredList = LocalePriorityList.add(desiredReformatted).build();
-
-            String expected = arguments.get(2);
-            String expectedLanguageTag = expected.equals("null") ? null : new ULocale(expected).toLanguageTag();
-
-            String expectedUi = arguments.size() < 4 ? null : arguments.get(3);
-            String expectedUiLanguageTag = expectedUi == null || expectedUi.equals("null") ? null
-                : new ULocale(expectedUi).toLanguageTag();
-
-            if (breakpoint) {
-                breakpoint = false; // put debugger breakpoint here to break at @debug in test file
+    // UsedReflectively, not private to avoid unused-warning
+    static List<TestCase> readTestCases() throws Exception {
+        List<TestCase> tests = new ArrayList<>();
+        Map<String, Integer> uniqueTests = new HashMap<>();
+        TestCase test = new TestCase();
+        String filename = "data/localeMatcherTest.txt";
+        try (BufferedReader in = FileUtilities.openFile(XLocaleMatcherTest.class, filename)) {
+            String line;
+            while ((line = in.readLine()) != null) {
+                ++test.lineNr;
+                // Start of comment, or end of line, minus trailing spaces.
+                int limit = line.indexOf('#');
+                if (limit < 0) {
+                    limit = line.length();
+                }
+                char c;
+                while (limit > 0 && ((c = line.charAt(limit - 1)) == ' ' || c == '\t')) {
+                    --limit;
+                }
+                if (limit == 0) {  // empty line
+                    continue;
+                }
+                String suffix;
+                if (line.startsWith("** test: ")) {
+                    test.reset(line);
+                } else if ((suffix = getSuffixAfterPrefix(line, limit, "@supported=")) != null) {
+                    test.supportedLine = line;
+                    test.supported = suffix;
+                } else if ((suffix = getSuffixAfterPrefix(line, limit, "@default=")) != null) {
+                    test.defaultLine = line;
+                    test.def = suffix;
+                } else if ((suffix = getSuffixAfterPrefix(line, limit, "@distance=")) != null) {
+                    test.distanceLine = line;
+                    test.distance = suffix;
+                } else if ((suffix = getSuffixAfterPrefix(line, limit, "@threshold=")) != null) {
+                    test.thresholdLine = line;
+                    test.threshold = suffix;
+                } else {
+                    int matchSep = line.indexOf(">>");
+                    // >> before an inline comment, and followed by more than white space.
+                    if (0 <= matchSep && (matchSep + 2) < limit) {
+                        test.matchLine = line;
+                        test.desired = line.substring(0, matchSep).trim();
+                        test.expDesired = test.expCombined = "";
+                        int start = matchSep + 2;
+                        int expLimit = line.indexOf('|', start);
+                        if (expLimit < 0) {
+                            test.expMatch = line.substring(start, limit).trim();
+                        } else {
+                            test.expMatch = line.substring(start, expLimit).trim();
+                            start = expLimit + 1;
+                            expLimit = line.indexOf('|', start);
+                            if (expLimit < 0) {
+                                test.expDesired = line.substring(start, limit).trim();
+                            } else {
+                                test.expDesired = line.substring(start, expLimit).trim();
+                                test.expCombined = line.substring(expLimit + 1, limit).trim();
+                            }
+                        }
+                        String inputs = test.toInputsKey();
+                        Integer prevIndex = uniqueTests.get(inputs);
+                        if (prevIndex == null) {
+                            uniqueTests.put(inputs, tests.size());
+                        } else {
+                            System.out.println("Locale matcher test case on line " + test.lineNr
+                                    + " is a duplicate of line " + tests.get(prevIndex).lineNr);
+                        }
+                        tests.add(test.clone());
+                    } else {
+                        throw new IllegalArgumentException("test data syntax error on line "
+                                + test.lineNr + "\n" + line);
+                    }
+                }
             }
-            XLocaleMatcher matcher = threshold < 0 && distanceOption == DistanceOption.REGION_FIRST
-                ? newXLocaleMatcher(supportedList)
-                : newXLocaleMatcher(supportedList, threshold, distanceOption);
-            commentBase = "(" + lineNumber + ") " + commentBase;
+        }
+        System.out.println("Number of duplicate locale matcher test cases: " + (tests.size() - uniqueTests.size()));
+        return tests;
+    }
 
-            ULocale bestSupported;
-            if (expectedUi != null) {
-                bestSupported = matcher.getBestMatch(desiredList, bestDesired);
-                ULocale bestUI = XLocaleMatcher.combine(bestSupported, bestDesired.value);
-                assertEquals(commentBase + " (UI)", expectedUiLanguageTag, bestUI == null ? null : bestUI.toLanguageTag());
-            } else {
-                bestSupported = matcher.getBestMatch(desiredList);
+    private static ULocale getULocaleOrNull(String s) {
+        if (s.equals("null")) {
+            return null;
+        } else {
+            return new ULocale(s);
+        }
+    }
+
+    @Test
+    @Parameters(method = "readTestCases")
+    public void dataDriven(TestCase test) {
+        XLocaleMatcher matcher;
+        if (test.def.isEmpty() && test.distance.isEmpty() && test.threshold.isEmpty()) {
+            matcher = new XLocaleMatcher(test.supported);
+        } else {
+            XLocaleMatcher.Builder builder = XLocaleMatcher.builder();
+            builder.setSupportedLocales(test.supported);
+            if (!test.def.isEmpty()) {
+                builder.setDefaultLanguage(new ULocale(test.def));
             }
-            String bestMatchLanguageTag = bestSupported == null ? null : bestSupported.toLanguageTag();
-            assertEquals(commentBase, expectedLanguageTag, bestMatchLanguageTag);
+            if (!test.distance.isEmpty()) {
+                DistanceOption distance;
+                switch (test.distance) {
+                case "normal":
+                    distance = DistanceOption.REGION_FIRST;
+                    break;
+                case "script":
+                    distance = DistanceOption.SCRIPT_FIRST;
+                    break;
+                default:
+                    throw new IllegalArgumentException("unsupported distance value " + test.distance);
+                }
+                builder.setDistanceOption(distance);
+            }
+            if (!test.threshold.isEmpty()) {
+                int threshold = Integer.valueOf(test.threshold);
+                builder.setThresholdDistance(threshold);
+            }
+            matcher = builder.build();
         }
 
-        @Override
-        public void handleParams(String comment, List<String> arguments) {
-            String switchItem = arguments.get(0);
-            if (switchItem.equals("@DistanceOption")) {
-                distanceOption = DistanceOption.valueOf(arguments.get(1));
-            } else if (switchItem.equals("@Threshold")) {
-                threshold = Integer.valueOf(arguments.get(1));
-            } else {
-                super.handleParams(comment, arguments);
+        ULocale expMatch = getULocaleOrNull(test.expMatch);
+        if (test.expDesired.isEmpty() && test.expCombined.isEmpty()) {
+            ULocale bestSupported = matcher.getBestMatch(test.desired);
+            assertEquals("bestSupported", expMatch, bestSupported);
+        } else {
+            LocalePriorityList desired = LocalePriorityList.add(test.desired).build();
+            Output<ULocale> bestDesired = new Output<>();
+            ULocale bestSupported = matcher.getBestMatch(desired, bestDesired);
+            assertEquals("bestSupported", expMatch, bestSupported);
+            if (!test.expDesired.isEmpty()) {
+                ULocale expDesired = getULocaleOrNull(test.expDesired);
+                assertEquals("bestDesired", expDesired, bestDesired.value);
             }
-            return;
+            if (!test.expCombined.isEmpty()) {
+                ULocale expCombined = getULocaleOrNull(test.expCombined);
+                ULocale combined = XLocaleMatcher.combine(bestSupported, bestDesired.value);
+                assertEquals("combined", expCombined, combined);
+            }
         }
     }
 }
