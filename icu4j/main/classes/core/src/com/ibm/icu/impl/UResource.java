@@ -290,16 +290,22 @@ public final class UResource {
      */
     public interface Table {
         /**
-         * @return The number of items in the array resource.
+         * @return The number of items in the table resource.
          */
         public int getSize();
         /**
-         * @param i Array item index.
+         * @param i Table item index.
          * @param key Output-only, receives the key of the i'th item.
          * @param value Output-only, receives the value of the i'th item.
          * @return true if i is non-negative and less than getSize().
          */
         public boolean getKeyAndValue(int i, Key key, Value value);
+        /**
+         * @param key Key string to find in the table.
+         * @param value Output-only, receives the value of the item with that key.
+         * @return true if the table contains the key.
+         */
+        public boolean findValue(CharSequence key, Value value);
     }
 
     /**

@@ -25,7 +25,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Relation;
 import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Row.R3;
-import com.ibm.icu.impl.locale.XLocaleDistance.DistanceOption;
+import com.ibm.icu.impl.locale.LocaleDistance.DistanceOption;
 import com.ibm.icu.impl.locale.XLocaleMatcher;
 import com.ibm.icu.impl.locale.XLocaleMatcher.Builder;
 
