@@ -1065,6 +1065,17 @@ public final class ICUResourceBundleReader {
             }
             return false;
         }
+        @Override
+        public boolean findValue(CharSequence key, UResource.Value value) {
+            ReaderValue readerValue = (ReaderValue)value;
+            int i = findTableItem(readerValue.reader, key);
+            if (i >= 0) {
+                readerValue.res = getContainerResource(readerValue.reader, i);
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
     private static final class Table1632 extends Table {
         @Override
