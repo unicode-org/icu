@@ -463,7 +463,7 @@ umsg_vformat(   const UMessageFormat *fmt,
 
         default:
             // Unknown/unsupported argument type.
-            U_ASSERT(FALSE);
+            UPRV_UNREACHABLE;
             *status=U_ILLEGAL_ARGUMENT_ERROR;
             break;
         }
@@ -592,12 +592,12 @@ umsg_vparse(const UMessageFormat *fmt,
             // support kObject.  When MessageFormat is changed to
             // understand MeasureFormats, modify this code to do the
             // right thing. [alan]
-            U_ASSERT(FALSE);
+            UPRV_UNREACHABLE;
             break;
 
         // better not happen!
         case Formattable::kArray:
-            U_ASSERT(FALSE);
+            UPRV_UNREACHABLE;
             break;
         }
     }

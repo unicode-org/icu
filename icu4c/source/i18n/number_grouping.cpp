@@ -47,7 +47,7 @@ Grouper Grouper::forStrategy(UGroupingStrategy grouping) {
     case UNUM_GROUPING_THOUSANDS:
         return {3, 3, 1, grouping};
     default:
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
         return {}; // return a value: silence compiler warning
     }
 }

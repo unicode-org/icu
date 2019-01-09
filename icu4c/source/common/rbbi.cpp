@@ -728,7 +728,7 @@ struct LookAheadResults {
                 return fPositions[i];
             }
         }
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
         return -1;
     }
 
@@ -741,7 +741,7 @@ struct LookAheadResults {
             }
         }
         if (i >= kMaxLookaheads) {
-            U_ASSERT(FALSE);
+            UPRV_UNREACHABLE;
             i = kMaxLookaheads - 1;
         }
         fKeys[i] = key;

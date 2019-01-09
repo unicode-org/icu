@@ -267,7 +267,7 @@ GMTOffsetField::isValid(FieldType type, int32_t width) {
     case SECOND:
         return (width == 2);
     default:
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
     }
     return (width > 0);
 }
@@ -589,7 +589,7 @@ TimeZoneFormat::setGMTOffsetPattern(UTimeZoneFormatGMTOffsetPatternType type, co
         required = FIELDS_HMS;
         break;
     default:
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
         break;
     }
 
@@ -1028,7 +1028,7 @@ TimeZoneFormat::parse(UTimeZoneFormatStyle style, const UnicodeString& text, Par
                 break;
 
             default:
-                U_ASSERT(FALSE);
+                UPRV_UNREACHABLE;
             }
 
             int32_t len = 0;

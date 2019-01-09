@@ -2047,7 +2047,7 @@ processPropertySeq(UBiDi *pBiDi, LevState *pLevState, uint8_t _prop,
             break;
 
         default:                        /* we should never get here */
-            U_ASSERT(FALSE);
+            UPRV_UNREACHABLE;
             break;
         }
     }
@@ -2251,7 +2251,7 @@ resolveImplicitLevels(UBiDi *pBiDi,
                 start2=i;
                 break;
             default:            /* we should never get here */
-                U_ASSERT(FALSE);
+                UPRV_UNREACHABLE;
                 break;
             }
         }
@@ -2726,7 +2726,7 @@ ubidi_setPara(UBiDi *pBiDi, const UChar *text, int32_t length,
             break;
         default:
             /* we should never get here */
-            U_ASSERT(FALSE);
+            UPRV_UNREACHABLE;
             break;
         }
         /*

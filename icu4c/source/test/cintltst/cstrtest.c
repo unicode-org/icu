@@ -215,7 +215,7 @@ TestInvariant() {
         log_err("u_charsToUChars(variantChars) failed\n");
     }
 
-#ifdef NDEBUG
+#ifndef U_DEBUG
     /*
      * Test u_UCharsToChars(variantUChars) only in release mode because it will
      * cause an assertion failure in debug builds.

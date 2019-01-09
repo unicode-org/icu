@@ -530,7 +530,7 @@ static int32_t getRunFromLogicalIndex(UBiDi *pBiDi, int32_t logicalIndex, UError
         visualStart+=length;
     }
     /* we should never get here */
-    U_ASSERT(FALSE);
+    UPRV_UNREACHABLE;
     *pErrorCode = U_INVALID_STATE_ERROR;
     return 0;
 }

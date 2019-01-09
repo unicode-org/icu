@@ -94,7 +94,7 @@ TimeUnit::TimeUnit(TimeUnit::UTimeUnitFields timeUnitField) {
         initTime("second");
         break;
     default:
-        U_ASSERT(false);
+        UPRV_UNREACHABLE;
         break;
     }
 }

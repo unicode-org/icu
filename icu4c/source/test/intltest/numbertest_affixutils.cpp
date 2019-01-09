@@ -42,7 +42,7 @@ class DefaultSymbolProvider : public SymbolProvider {
             case TYPE_CURRENCY_OVERFLOW:
                 return u"\uFFFD";
             default:
-                U_ASSERT(false);
+                UPRV_UNREACHABLE;
                 return {}; // silence compiler warnings
         }
     }

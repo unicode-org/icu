@@ -717,7 +717,7 @@ UBool RegexMatcher::find(UErrorCode &status) {
             if  (findProgressInterrupt(startPos, status))
                 return FALSE;
         }
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
 
     case START_START:
         // Matches are only possible at the start of the input string
@@ -765,7 +765,7 @@ UBool RegexMatcher::find(UErrorCode &status) {
                     return FALSE;
             }
         }
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
 
     case START_STRING:
     case START_CHAR:
@@ -797,7 +797,7 @@ UBool RegexMatcher::find(UErrorCode &status) {
                     return FALSE;
            }
         }
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
 
     case START_LINE:
         {
@@ -877,10 +877,10 @@ UBool RegexMatcher::find(UErrorCode &status) {
         }
 
     default:
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
     }
 
-    U_ASSERT(FALSE);
+    UPRV_UNREACHABLE;
     return FALSE;
 }
 
@@ -992,7 +992,7 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
             if  (findProgressInterrupt(startPos, status))
                 return FALSE;
         }
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
 
     case START_START:
         // Matches are only possible at the start of the input string
@@ -1034,7 +1034,7 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
                 return FALSE;
         }
     }
-    U_ASSERT(FALSE);
+    UPRV_UNREACHABLE;
 
     case START_STRING:
     case START_CHAR:
@@ -1063,7 +1063,7 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
                 return FALSE;
         }
     }
-    U_ASSERT(FALSE);
+    UPRV_UNREACHABLE;
 
     case START_LINE:
     {
@@ -1134,10 +1134,10 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
     }
 
     default:
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
     }
 
-    U_ASSERT(FALSE);
+    UPRV_UNREACHABLE;
     return FALSE;
 }
 
@@ -4278,7 +4278,7 @@ GC_Done:
         default:
             // Trouble.  The compiled pattern contains an entry with an
             //           unrecognized type tag.
-            U_ASSERT(FALSE);
+            UPRV_UNREACHABLE;
         }
 
         if (U_FAILURE(status)) {
@@ -5778,7 +5778,7 @@ GC_Done:
         default:
             // Trouble.  The compiled pattern contains an entry with an
             //           unrecognized type tag.
-            U_ASSERT(FALSE);
+            UPRV_UNREACHABLE;
         }
 
         if (U_FAILURE(status)) {

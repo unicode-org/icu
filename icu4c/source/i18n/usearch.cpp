@@ -3544,7 +3544,7 @@ const CEI *CEIBuffer::get(int32_t index) {
     //   Verify that it is the next one in sequence, which is all
     //   that is allowed.
     if (index != limitIx) {
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
 
         return NULL;
     }
@@ -3583,7 +3583,7 @@ const CEI *CEIBuffer::getPrevious(int32_t index) {
     //   Verify that it is the next one in sequence, which is all
     //   that is allowed.
     if (index != limitIx) {
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
 
         return NULL;
     }

@@ -77,7 +77,7 @@ UBool WholeStringBreakIterator::operator==(const BreakIterator&) const { return 
 BreakIterator *WholeStringBreakIterator::clone() const { return nullptr; }
 
 CharacterIterator &WholeStringBreakIterator::getText() const {
-    U_ASSERT(FALSE);  // really should not be called
+    UPRV_UNREACHABLE;  // really should not be called
     // Returns a null reference.
     // Otherwise we would have to define a dummy CharacterIterator,
     // and either have it as a field and const_cast it to a non-const reference,
@@ -106,7 +106,7 @@ void  WholeStringBreakIterator::setText(UText *text, UErrorCode &errorCode) {
     }
 }
 void  WholeStringBreakIterator::adoptText(CharacterIterator* it) {
-    U_ASSERT(FALSE);  // should not be called
+    UPRV_UNREACHABLE;  // should not be called
     length = it->getLength();
     delete it;
 }

@@ -67,7 +67,7 @@ utrace_exit(int32_t fnNumber, int32_t returnType, ...) {
             fmt = gExitFmtPtrStatus;
             break;
         default:
-            U_ASSERT(FALSE);
+            UPRV_UNREACHABLE;
             fmt = gExitFmt;
         }
 

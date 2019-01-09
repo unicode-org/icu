@@ -237,20 +237,20 @@ bool MutablePatternModifier::isStrong() const {
 bool MutablePatternModifier::containsField(UNumberFormatFields field) const {
     (void)field;
     // This method is not currently used.
-    U_ASSERT(false);
+    UPRV_UNREACHABLE;
     return false;
 }
 
 void MutablePatternModifier::getParameters(Parameters& output) const {
     (void)output;
     // This method is not currently used.
-    U_ASSERT(false);
+    UPRV_UNREACHABLE;
 }
 
 bool MutablePatternModifier::semanticallyEquivalent(const Modifier& other) const {
     (void)other;
     // This method is not currently used.
-    U_ASSERT(false);
+    UPRV_UNREACHABLE;
     return false;
 }
 
@@ -308,14 +308,14 @@ UnicodeString MutablePatternModifier::getSymbol(AffixPatternType type) const {
         case AffixPatternType::TYPE_CURRENCY_QUINT:
             return UnicodeString(u"\uFFFD");
         default:
-            U_ASSERT(false);
+            UPRV_UNREACHABLE;
             return UnicodeString();
     }
 }
 
 UnicodeString MutablePatternModifier::toUnicodeString() const {
     // Never called by AffixUtils
-    U_ASSERT(false);
+    UPRV_UNREACHABLE;
     return UnicodeString();
 }
 

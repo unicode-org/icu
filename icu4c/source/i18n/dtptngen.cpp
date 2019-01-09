@@ -1804,7 +1804,7 @@ PatternMap::copyFrom(const PatternMap& other, UErrorCode& status) {
                 if (prevElem != nullptr) {
                     prevElem->next.adoptInstead(curElem);
                 } else {
-                    U_ASSERT(false);
+                    UPRV_UNREACHABLE;
                 }
             }
             prevElem = curElem;
