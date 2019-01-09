@@ -112,3 +112,26 @@ jobs:
       inputs:
         filename: icu4c/source/allinone/icucheck.bat
         arguments: 'x64 Release'
+#-------------------------------------------------------------------------
+- job: ICU4C_MSYS2_GCC_x86_64_Release
+  displayName: 'C: MSYS2 GCC x86_64 Release'
+  timeoutInMinutes: 45
+  pool:
+    vmImage: 'vs2017-win2016'
+    demands:
+      - Cmd
+  steps:
+    - script: |
+       choco install -y msys2
+       rem refreshenv
+      displayName: 'Install MSYS2'
+    - script: |
+       c:\tools\msys64\usr\bin\bash.exe -lc "echo 'Hello World' && uname -a"
+       c:\tools\msys64\usr\bin\bash.exe -lc "pacman --noconfirm -S mingw-w64-x86_64-toolchain"
+       c:\tools\msys64\usr\bin\bash.exe -lc "pacman --noconfirm -S make"
+       exit
+      displayName: 'Install mingw-w64-x86_64-toolchain'
+    - script: |
+       set MSYSTEM=MINGW64
+       c:\tools\msys64\usr\bin\bash.exe -lc "cd $BUILD_SOURCESDIRECTORY && cd icu4c/source && ./runConfigureICU MinGW && make -j2 check"
+      displayName: 'Build and Test ICU4C'
