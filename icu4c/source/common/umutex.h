@@ -41,15 +41,20 @@
 // When building DLLs for Windows this is required as it is used as a data member of the exported SharedObject class.
 // See digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN && !defined(U_IN_DOXYGEN)
+#if defined(__clang__) || defined(_MSC_VER)
   #if defined(__clang__)
-  // Suppress the warning that the explicit instantiation after explicit specialization has no effect.
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Winstantiation-after-specialization"
+    // Suppress the warning that the explicit instantiation after explicit specialization has no effect.
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Winstantiation-after-specialization"
   #endif
 template struct U_COMMON_API std::atomic<int32_t>;
   #if defined(__clang__)
-  #pragma clang diagnostic pop
+    #pragma clang diagnostic pop
   #endif
+#elif defined(__GNUC__)
+// For GCC this class is already exported/visible, so no need for U_COMMON_API.
+template struct std::atomic<int32_t>;
+#endif
 #endif
 
 
