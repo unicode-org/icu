@@ -1221,7 +1221,7 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
             tzfmt->format(UTZFMT_STYLE_GENERIC_SHORT, *this, date, result, &timeType);
             break;
         default:
-            U_ASSERT(FALSE);
+            UPRV_UNREACHABLE;
         }
         // Generic format many use Localized GMT as the final fallback.
         // When Localized GMT format is used, the result might not be
@@ -1249,7 +1249,7 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
             tzfmt->formatOffsetISO8601Basic(offset, FALSE, FALSE, FALSE, result, status);
             break;
         default:
-            U_ASSERT(FALSE);
+            UPRV_UNREACHABLE;
         }
 
     } else {
@@ -1264,7 +1264,7 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
             nameType = daylight ? UTZNM_SHORT_DAYLIGHT : UTZNM_SHORT_STANDARD;
             break;
         default:
-            U_ASSERT(FALSE);
+            UPRV_UNREACHABLE;
         }
         LocalPointer<TimeZoneNames> tznames(TimeZoneNames::createInstance(locale, status));
         if (U_FAILURE(status)) {

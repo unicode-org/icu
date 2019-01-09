@@ -223,7 +223,7 @@ const char *IslamicCalendar::getType() const {
         sType = "islamic-umalqura";
         break;
     default:
-        U_ASSERT(false); // out of range
+        UPRV_UNREACHABLE; // out of range
         sType = "islamic";  // "islamic" is used as the generic type
         break;
     }
@@ -675,7 +675,7 @@ void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
                 month = m;
             }
     } else { // invalid 'civil'
-      U_ASSERT(false); // should not get here, out of range
+      UPRV_UNREACHABLE; // should not get here, out of range
       year=month=0;
     }
 

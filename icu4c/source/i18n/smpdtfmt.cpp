@@ -1778,7 +1778,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                     }
                 }
                 else {
-                    U_ASSERT(FALSE);
+                    UPRV_UNREACHABLE;
                 }
             }
             appendTo += zoneString;

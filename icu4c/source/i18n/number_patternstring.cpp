@@ -49,7 +49,7 @@ PatternParser::parseToExistingProperties(const UnicodeString& pattern, DecimalFo
 char16_t ParsedPatternInfo::charAt(int32_t flags, int32_t index) const {
     const Endpoints& endpoints = getEndpoints(flags);
     if (index < 0 || index >= endpoints.end - endpoints.start) {
-        U_ASSERT(false);
+        UPRV_UNREACHABLE;
     }
     return pattern.charAt(endpoints.start + index);
 }

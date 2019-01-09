@@ -729,7 +729,7 @@ void *SpoofData::reserveSpace(int32_t numBytes,  UErrorCode &status) {
         return NULL;
     }
     if (!fDataOwned) {
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
         status = U_INTERNAL_PROGRAM_ERROR;
         return NULL;
     }

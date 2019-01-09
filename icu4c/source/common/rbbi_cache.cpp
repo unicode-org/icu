@@ -74,7 +74,7 @@ UBool RuleBasedBreakIterator::DictionaryCache::following(int32_t fromPos, int32_
             return TRUE;
         }
     }
-    U_ASSERT(FALSE);
+    UPRV_UNREACHABLE;
     fPositionInCache = -1;
     return FALSE;
 }
@@ -116,7 +116,7 @@ UBool RuleBasedBreakIterator::DictionaryCache::preceding(int32_t fromPos, int32_
             return TRUE;
         }
     }
-    U_ASSERT(FALSE);
+    UPRV_UNREACHABLE;
     fPositionInCache = -1;
     return FALSE;
 }
@@ -388,7 +388,7 @@ UBool RuleBasedBreakIterator::BreakCache::populateNear(int32_t position, UErrorC
         // Add following position(s) to the cache.
         while (fBoundaries[fEndBufIdx] < position) {
             if (!populateFollowing()) {
-                U_ASSERT(false);
+                UPRV_UNREACHABLE;
                 return false;
             }
         }

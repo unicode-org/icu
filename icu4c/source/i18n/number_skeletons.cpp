@@ -159,7 +159,7 @@ Notation stem_to_object::notation(skeleton::StemEnum stem) {
         case STEM_NOTATION_SIMPLE:
             return Notation::simple();
         default:
-            U_ASSERT(false);
+            UPRV_UNREACHABLE;
             return Notation::simple(); // return a value: silence compiler warning
     }
 }
@@ -176,7 +176,7 @@ MeasureUnit stem_to_object::unit(skeleton::StemEnum stem) {
             // Slicing is okay
             return NoUnit::permille(); // NOLINT
         default:
-            U_ASSERT(false);
+            UPRV_UNREACHABLE;
             return {}; // return a value: silence compiler warning
     }
 }
@@ -192,7 +192,7 @@ Precision stem_to_object::precision(skeleton::StemEnum stem) {
         case STEM_PRECISION_CURRENCY_CASH:
             return Precision::currency(UCURR_USAGE_CASH);
         default:
-            U_ASSERT(false);
+            UPRV_UNREACHABLE;
             return Precision::integer(); // return a value: silence compiler warning
     }
 }
@@ -216,7 +216,7 @@ UNumberFormatRoundingMode stem_to_object::roundingMode(skeleton::StemEnum stem) 
         case STEM_ROUNDING_MODE_UNNECESSARY:
             return UNUM_ROUND_UNNECESSARY;
         default:
-            U_ASSERT(false);
+            UPRV_UNREACHABLE;
             return UNUM_ROUND_UNNECESSARY;
     }
 }
@@ -315,7 +315,7 @@ void enum_to_stem_string::roundingMode(UNumberFormatRoundingMode value, UnicodeS
             sb.append(u"rounding-mode-unnecessary", -1);
             break;
         default:
-            U_ASSERT(false);
+            UPRV_UNREACHABLE;
     }
 }
 
@@ -337,7 +337,7 @@ void enum_to_stem_string::groupingStrategy(UGroupingStrategy value, UnicodeStrin
             sb.append(u"group-thousands", -1);
             break;
         default:
-            U_ASSERT(false);
+            UPRV_UNREACHABLE;
     }
 }
 
@@ -359,7 +359,7 @@ void enum_to_stem_string::unitWidth(UNumberUnitWidth value, UnicodeString& sb) {
             sb.append(u"unit-width-hidden", -1);
             break;
         default:
-            U_ASSERT(false);
+            UPRV_UNREACHABLE;
     }
 }
 
@@ -387,7 +387,7 @@ void enum_to_stem_string::signDisplay(UNumberSignDisplay value, UnicodeString& s
             sb.append(u"sign-accounting-except-zero", -1);
             break;
         default:
-            U_ASSERT(false);
+            UPRV_UNREACHABLE;
     }
 }
 
@@ -401,7 +401,7 @@ enum_to_stem_string::decimalSeparatorDisplay(UNumberDecimalSeparatorDisplay valu
             sb.append(u"decimal-always", -1);
             break;
         default:
-            U_ASSERT(false);
+            UPRV_UNREACHABLE;
     }
 }
 
@@ -665,7 +665,7 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
             return STATE_SCALE;
 
         default:
-            U_ASSERT(false);
+            UPRV_UNREACHABLE;
             return STATE_NULL; // return a value: silence compiler warning
     }
 }

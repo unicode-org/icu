@@ -64,7 +64,7 @@ int32_t AffixUtils::estimateLength(const UnicodeString &patternString, UErrorCod
                 }
                 break;
             default:
-                U_ASSERT(false);
+                UPRV_UNREACHABLE;
         }
 
         offset += U16_LENGTH(cp);
@@ -151,7 +151,7 @@ Field AffixUtils::getFieldForType(AffixPatternType type) {
         case TYPE_CURRENCY_OVERFLOW:
             return Field::UNUM_CURRENCY_FIELD;
         default:
-            U_ASSERT(false);
+            UPRV_UNREACHABLE;
             return Field::UNUM_FIELD_COUNT; // suppress "control reaches end of non-void function"
     }
 }
@@ -382,7 +382,7 @@ AffixTag AffixUtils::nextToken(AffixTag tag, const UnicodeString &patternString,
                     return makeTag(offset, TYPE_CURRENCY_OVERFLOW, STATE_BASE, 0);
                 }
             default:
-                U_ASSERT(false);
+                UPRV_UNREACHABLE;
         }
     }
     // End of string
@@ -411,7 +411,7 @@ AffixTag AffixUtils::nextToken(AffixTag tag, const UnicodeString &patternString,
         case STATE_OVERFLOW_CURR:
             return makeTag(offset, TYPE_CURRENCY_OVERFLOW, STATE_BASE, 0);
         default:
-            U_ASSERT(false);
+            UPRV_UNREACHABLE;
             return {-1}; // suppress "control reaches end of non-void function"
     }
 }

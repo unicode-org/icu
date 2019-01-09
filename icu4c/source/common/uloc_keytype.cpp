@@ -172,7 +172,7 @@ initFromResourceBundle(UErrorCode& sts) {
         LocalUResourceBundlePointer typeMapResByKey(ures_getByKey(typeMapRes.getAlias(), legacyKeyId, NULL, &tmpSts));
         if (U_FAILURE(tmpSts)) {
             // type map for each key must exist
-            U_ASSERT(FALSE);
+            UPRV_UNREACHABLE;
         } else {
             LocalUResourceBundlePointer typeMapEntry;
 

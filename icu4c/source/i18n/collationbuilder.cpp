@@ -577,7 +577,7 @@ CollationBuilder::getSpecialResetPosition(const UnicodeString &str,
         parserErrorReason = "LDML forbids tailoring to U+FFFF";
         return 0;
     default:
-        U_ASSERT(FALSE);
+        UPRV_UNREACHABLE;
         return 0;
     }
 
