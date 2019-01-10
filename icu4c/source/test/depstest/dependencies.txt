@@ -959,6 +959,7 @@ group: formatting
     tzfmt.o tzgnames.o tznames.o tznames_impl.o
     datefmt.o dtfmtsym.o dtitvfmt.o dtitvinf.o dtptngen.o dtrule.o reldtfmt.o reldatefmt.o
     smpdtfmt.o smpdtfst.o udateintervalformat.o udatpg.o windtfmt.o
+    erarules.o  # mostly for Japanese eras
     udat.o
     tmunit.o tmutamt.o tmutfmt.o
     # messageformat
