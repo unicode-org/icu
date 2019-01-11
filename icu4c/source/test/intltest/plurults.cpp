@@ -644,7 +644,7 @@ void PluralRulesTest::checkSelect(const LocalPointer<PluralRules> &rules, UError
         }
         double numDbl = dl.toDouble();
         const char *decimalPoint = strchr(num, '.');
-        int fractionDigitCount = decimalPoint == NULL ? 0 : (num + strlen(num) - 1) - decimalPoint;
+        int fractionDigitCount = decimalPoint == NULL ? 0 : static_cast<int>((num + strlen(num) - 1) - decimalPoint);
         int fractionDigits = fractionDigitCount == 0 ? 0 : atoi(decimalPoint + 1);
         FixedDecimal ni(numDbl, fractionDigitCount, fractionDigits);
         

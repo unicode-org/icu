@@ -714,9 +714,9 @@ void NumberRangeFormatterTest::testPlurals() {
         {5, 5, u"5–5 britanskih funtov"}, // other + other -> other
     };
     for (auto& cas : cases) {
-        UnicodeString message = Int64ToUnicodeString(cas.first);
+        UnicodeString message = Int64ToUnicodeString(static_cast<int64_t>(cas.first));
         message += u" ";
-        message += Int64ToUnicodeString(cas.second);
+        message += Int64ToUnicodeString(static_cast<int64_t>(cas.second));
         status.setScope(message);
         UnicodeString actual = lnrf.formatFormattableRange(cas.first, cas.second, status).toString(status);
         assertEquals(message, cas.expected, actual);

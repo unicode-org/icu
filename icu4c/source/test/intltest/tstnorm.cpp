@@ -1577,7 +1577,7 @@ BasicNormalizerTest::TestNormalizeUTF8WithEdits() {
         u8"  AÄA\u0308A\u0308\u00ad\u0323Ä\u0323,\u00ad\u1100\u1161가\u11A8가\u3133  ";
     std::string expected = u8"  aääạ\u0308ạ\u0308,가각갃  ";
     std::string result;
-    StringByteSink<std::string> sink(&result, expected.length());
+    StringByteSink<std::string> sink(&result, static_cast<int32_t>(expected.length()));
     Edits edits;
     nfkc_cf->normalizeUTF8(0, src, sink, &edits, errorCode);
     assertSuccess("normalizeUTF8 with Edits", errorCode.get());
@@ -1780,7 +1780,7 @@ BasicNormalizerTest::TestComposeJamoTBase() {
     std::string s8(u8"\u1100\u1161\u11A7\u1100\u314F\u11A7가\u11A7");
     std::string expected8(u8"가\u11A7가\u11A7가\u11A7");
     std::string result8;
-    StringByteSink<std::string> sink(&result8, expected8.length());
+    StringByteSink<std::string> sink(&result8, static_cast<int32_t>(expected8.length()));
     nfkc->normalizeUTF8(0, s8, sink, nullptr, errorCode);
     assertSuccess("normalizeUTF8(LV+11A7)", errorCode.get());
     assertEquals("normalizeUTF8(LV+11A7)", expected8.c_str(), result8.c_str());

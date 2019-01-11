@@ -551,7 +551,7 @@ static void TestRelativeDateFormat()
 
                 strPtr = u_strstr(strDateTime, minutesStr);
                 if ( strPtr != NULL ) {
-                    int32_t beginIndex = strPtr - strDateTime;
+                    int32_t beginIndex = (int32_t)(strPtr - strDateTime);
                     if ( fp.beginIndex != beginIndex ) {
                         log_err("UFieldPosition beginIndex %d, expected %d, in udat_format timeStyle SHORT dateStyle (%d | UDAT_RELATIVE)\n", fp.beginIndex, beginIndex, *stylePtr );
                     }
@@ -1058,7 +1058,7 @@ static void VerifygetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, in
     UErrorCode status = U_ZERO_ERROR;
     UChar *result=NULL;
     int32_t resultlength, resultlengthout;
-    int32_t patternSize = strlen(expected) + 1;
+    int32_t patternSize = (int32_t)strlen(expected) + 1;
 
     pattern=(UChar*)malloc(sizeof(UChar) * patternSize);
     u_unescape(expected, pattern, patternSize);
@@ -1093,7 +1093,7 @@ static void VerifysetSymbols(UDateFormat* datfor, UDateFormatSymbolType type, in
     UChar *value=NULL;
     int32_t resultlength, resultlengthout;
     UErrorCode status = U_ZERO_ERROR;
-    int32_t valueLen, valueSize = strlen(expected) + 1;
+    int32_t valueLen, valueSize = (int32_t)strlen(expected) + 1;
 
     value=(UChar*)malloc(sizeof(UChar) * valueSize);
     valueLen = u_unescape(expected, value, valueSize);

@@ -341,7 +341,7 @@ void IntlTestSpoof::testConfData() {
     int32_t  fileSize = ftell(f.getAlias());
     LocalArray<char> fileBuf(new char[fileSize]);
     fseek(f.getAlias(), 0, SEEK_SET);
-    int32_t amt_read = fread(fileBuf.getAlias(), 1, fileSize, f.getAlias());
+    int32_t amt_read = static_cast<int32_t>(fread(fileBuf.getAlias(), 1, fileSize, f.getAlias()));
     TEST_ASSERT_EQ(amt_read, fileSize);
     TEST_ASSERT(fileSize>0);
     if (amt_read != fileSize || fileSize <=0) {

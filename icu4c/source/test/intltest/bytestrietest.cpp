@@ -691,7 +691,7 @@ void BytesTrieTest::checkNext(BytesTrie &trie,
                               const StringAndValue data[], int32_t dataLength) {
     BytesTrie::State state;
     for(int32_t i=0; i<dataLength; ++i) {
-        int32_t stringLength= (i&1) ? -1 : strlen(data[i].s);
+        int32_t stringLength= (i&1) ? -1 : static_cast<int32_t>(strlen(data[i].s));
         UStringTrieResult result;
         if( !USTRINGTRIE_HAS_VALUE(result=trie.next(data[i].s, stringLength)) ||
             result!=trie.current()
@@ -706,7 +706,7 @@ void BytesTrieTest::checkNext(BytesTrie &trie,
             errln("trie value for %s changes when repeating current()/getValue()", data[i].s);
         }
         trie.reset();
-        stringLength=strlen(data[i].s);
+        stringLength = static_cast<int32_t>(strlen(data[i].s));
         result=trie.current();
         for(int32_t j=0; j<stringLength; ++j) {
             if(!USTRINGTRIE_HAS_NEXT(result)) {
@@ -776,8 +776,8 @@ void BytesTrieTest::checkNextWithState(BytesTrie &trie,
             trie.resetToState(noState);
         }
         const char *expectedString=data[i].s;
-        int32_t stringLength=strlen(expectedString);
-        int32_t partialLength=stringLength/3;
+        int32_t stringLength= static_cast<int32_t>(strlen(expectedString));
+        int32_t partialLength = stringLength / 3;
         for(int32_t j=0; j<partialLength; ++j) {
             if(!USTRINGTRIE_MATCHES(trie.next(expectedString[j]))) {
                 errln("trie.next()=USTRINGTRIE_NO_MATCH for a prefix of %s", data[i].s);
@@ -831,7 +831,7 @@ void BytesTrieTest::checkNextString(BytesTrie &trie,
                                     const StringAndValue data[], int32_t dataLength) {
     for(int32_t i=0; i<dataLength; ++i) {
         const char *expectedString=data[i].s;
-        int32_t stringLength=strlen(expectedString);
+        int32_t stringLength = static_cast<int32_t>(strlen(expectedString));
         if(!trie.next(expectedString, stringLength/2)) {
             errln("trie.next(up to middle of string)=USTRINGTRIE_NO_MATCH for %s", data[i].s);
             continue;

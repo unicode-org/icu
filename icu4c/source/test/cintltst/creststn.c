@@ -2794,7 +2794,7 @@ static void TestCLDRStyleAliases(void) {
       /* instead of sprintf(resource, "a%i", i); */
       a = ures_getByKeyWithFallback(alias, resource, a, &status);
       result = tres_getString(a, -1, NULL, &len, &status);
-      u_charsToUChars(expects[i], expected, strlen(expects[i])+1);
+      u_charsToUChars(expects[i], expected, (int32_t)strlen(expects[i])+1);
       if(U_FAILURE(status) || !result || u_strcmp(result, expected)) {
         log_err("CLDR style aliases failed resource with name \"%s\" resource, exp %s, got %S (%s)\n", resource, expects[i], result, myErrorName(status)); 
         status = U_ZERO_ERROR;

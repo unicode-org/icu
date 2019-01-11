@@ -1123,7 +1123,7 @@ static void MessageLength(void)
     }
 }
 
-static void TestMessageWithUnusedArgNumber() {
+static void TestMessageWithUnusedArgNumber(void) {
     UErrorCode errorCode = U_ZERO_ERROR;
     U_STRING_DECL(pattern, "abc {1} def", 11);
     UChar x[2] = { 0x78, 0 };  // "x"

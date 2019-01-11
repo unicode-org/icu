@@ -1197,14 +1197,14 @@ TestInvalidRules(){
         UParseError parseError;
         UErrorCode status = U_ZERO_ERROR;
         UCollator* coll=0;
-        u_charsToUChars(rulesArr[i],rules,uprv_strlen(rulesArr[i])+1);
-        u_charsToUChars(preContextArr[i],preContextExp,uprv_strlen(preContextArr[i])+1);
-        u_charsToUChars(postContextArr[i],postContextExp,uprv_strlen(postContextArr[i])+1);
+        u_charsToUChars(rulesArr[i], rules, (int32_t)uprv_strlen(rulesArr[i]) + 1);
+        u_charsToUChars(preContextArr[i], preContextExp, (int32_t)uprv_strlen(preContextArr[i]) + 1);
+        u_charsToUChars(postContextArr[i], postContextExp, (int32_t)uprv_strlen(postContextArr[i]) + 1);
         /* clean up stuff in parseError */
-        u_memset(parseError.preContext,0x0000,U_PARSE_CONTEXT_LEN);      
-        u_memset(parseError.postContext,0x0000,U_PARSE_CONTEXT_LEN);
+        u_memset(parseError.preContext, 0x0000, U_PARSE_CONTEXT_LEN);
+        u_memset(parseError.postContext, 0x0000, U_PARSE_CONTEXT_LEN);
         /* open the rules and test */
-        coll = ucol_openRules(rules,u_strlen(rules),UCOL_OFF,UCOL_DEFAULT_STRENGTH,&parseError,&status);
+        coll = ucol_openRules(rules, u_strlen(rules), UCOL_OFF, UCOL_DEFAULT_STRENGTH, &parseError, &status);
         (void)coll;   /* Suppress set but not used warning. */
         if(u_strcmp(parseError.preContext,preContextExp)!=0){
             log_err_status(status, "preContext in UParseError for ucol_openRules does not match: \"%s\"\n",

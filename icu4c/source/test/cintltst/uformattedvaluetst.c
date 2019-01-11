@@ -139,7 +139,7 @@ static void AssertAllPartsEqual(
 
     char message[256];
     uprv_strncpy(message, messagePrefix, 256);
-    int32_t prefixEnd = uprv_strlen(messagePrefix);
+    int32_t prefixEnd = (int32_t)uprv_strlen(messagePrefix);
     message[prefixEnd++] = ':';
     message[prefixEnd++] = ' ';
     U_ASSERT(prefixEnd < 256);

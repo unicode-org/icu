@@ -954,8 +954,8 @@ void RBBIMonkeyTest::testMonkey() {
         }
         test->fDumpExpansions = dumpExpansions;
         test->fVerbose = verbose;
-        test->fRandomGenerator.seed((uint32_t)seed);
-        test->fLoopCount = loopCount;
+        test->fRandomGenerator.seed(static_cast<uint32_t>(seed));
+        test->fLoopCount = static_cast<int32_t>(loopCount);
         test->setup(tests[i], status);
         if (U_FAILURE(status)) {
             dataerrln("%s:%d: error %s while starting test %s.", __FILE__, __LINE__, u_errorName(status), tests[i]);

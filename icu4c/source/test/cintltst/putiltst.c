@@ -26,6 +26,9 @@
 #include "toolutil.h"
 #include "uinvchar.h"
 #include <stdio.h>
+#if U_PLATFORM_USES_ONLY_WIN32_API 
+#include "wintz.h"
+#endif
 
 /* See the comments on U_SIGNED_RIGHT_SHIFT_IS_ARITHMETIC. */
 static void TestSignedRightShiftIsArithmetic(void) {
@@ -219,7 +222,7 @@ static void TestPUtilAPI(void){
 #if U_PLATFORM_USES_ONLY_WIN32_API 
     log_verbose("Testing uprv_detectWindowsTimeZone() ....\n");
     {
-        char* timezone = uprv_detectWindowsTimeZone();
+        const char* timezone = uprv_detectWindowsTimeZone();
         if (timezone == NULL) {
             log_err("ERROR: uprv_detectWindowsTimeZone failed (returned NULL).\n");
         } else {

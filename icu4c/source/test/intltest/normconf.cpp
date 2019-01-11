@@ -482,7 +482,7 @@ UBool NormalizerConformanceTest::checkNorm(UNormalizationMode mode, int32_t opti
     std::string out8;
     Edits edits;
     Edits *editsPtr = (mode == UNORM_NFC || mode == UNORM_NFKC) ? &edits : nullptr;
-    StringByteSink<std::string> sink(&out8, exp8.length());
+    StringByteSink<std::string> sink(&out8, static_cast<int32_t>(exp8.length()));
     norm2->normalizeUTF8(0, s8, sink, editsPtr, errorCode);
     if (U_FAILURE(errorCode)) {
         errln("Normalizer2.%s.normalizeUTF8(%s) failed: %s",
@@ -505,8 +505,8 @@ UBool NormalizerConformanceTest::checkNorm(UNormalizationMode mode, int32_t opti
                          (int32_t)(out8.length() - s8.length()), edits.lengthDelta());
     Edits::Iterator iter = edits.getCoarseIterator();
     while (iter.next(errorCode)) {}
-    pass &= assertEquals("edits source length", s8.length(), iter.sourceIndex());
-    pass &= assertEquals("edits destination length", out8.length(), iter.destinationIndex());
+    pass &= assertEquals("edits source length", static_cast<int32_t>(s8.length()), iter.sourceIndex());
+    pass &= assertEquals("edits destination length", static_cast<int32_t>(out8.length()), iter.destinationIndex());
     return pass;
 }
 

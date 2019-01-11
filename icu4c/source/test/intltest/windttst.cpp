@@ -116,6 +116,7 @@ void Win32DateTimeTest::testLocales(DateFormatTest *log)
     for(int i = 0; i < lcidCount; i += 1) {
         UErrorCode status = U_ZERO_ERROR;
         WCHAR longDateFormat[81], longTimeFormat[81], wdBuffer[256], wtBuffer[256];
+        DWORD value = 0;
         int32_t calType = 0;
 
         // NULL localeID means ICU didn't recognize this locale
@@ -140,8 +141,9 @@ void Win32DateTimeTest::testLocales(DateFormatTest *log)
 
         GetLocaleInfoW(lcidRecords[i].lcid, LOCALE_SLONGDATE,   longDateFormat, 81);
         GetLocaleInfoW(lcidRecords[i].lcid, LOCALE_STIMEFORMAT, longTimeFormat, 81);
-        GetLocaleInfoW(lcidRecords[i].lcid, LOCALE_RETURN_NUMBER|LOCALE_ICALENDARTYPE, (LPWSTR) calType, sizeof(int32_t));
+        GetLocaleInfoW(lcidRecords[i].lcid, LOCALE_RETURN_NUMBER|LOCALE_ICALENDARTYPE, (LPWSTR)&value, sizeof(value)/sizeof(WCHAR));
 
+        calType = value;
         char localeID[64];
 
         uprv_strcpy(localeID, lcidRecords[i].localeID);

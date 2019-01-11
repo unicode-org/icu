@@ -2271,9 +2271,9 @@ static void TestCanonicalizationBuffer(void)
         "-foo-bar-baz-foo-bar-baz-foo-bar-baz-foo-bar-baz"
         "-foo-barz"
     ;
-    static const size_t len = sizeof name - 1;  // Without NUL terminator.
+    static const size_t len = sizeof(name) - 1;  // Without NUL terminator.
 
-    int32_t reslen = uloc_canonicalize(name, buffer, len, &status);
+    int32_t reslen = uloc_canonicalize(name, buffer, (int32_t)len, &status);
 
     if (U_FAILURE(status)) {
         log_err("FAIL: uloc_canonicalize(%s) => %s, expected !U_FAILURE()\n",
@@ -5709,7 +5709,7 @@ static int32_t getExpectedReturnValue(const errorData* data)
     if (data->uerror == U_BUFFER_OVERFLOW_ERROR ||
         data->uerror == U_STRING_NOT_TERMINATED_WARNING)
     {
-        return strlen(data->expected);
+        return (int32_t)strlen(data->expected);
     }
     else
     {
@@ -5725,7 +5725,7 @@ static int32_t getBufferSize(const errorData* data, int32_t actualSize)
     }
     else if (data->bufferSize < 0)
     {
-        return strlen(data->expected) + 1;
+        return (int32_t)strlen(data->expected) + 1;
     }
     else
     {
@@ -6030,7 +6030,7 @@ static void TestBug20132(void) {
 
     static const char inloc[] = "C";
     static const char expected[] = "en-US-u-va-posix";
-    const int32_t expected_len = uprv_strlen(expected);
+    const int32_t expected_len = (int32_t)uprv_strlen(expected);
 
     /* Before ICU-20132 was fixed, calling uloc_toLanguageTag() with a too small
      * buffer would not immediately return the buffer size actually needed, but
@@ -6164,7 +6164,7 @@ static void TestForLanguageTag(void) {
         locale[0] = 0;
         expParsedLen = langtag_to_locale[i].len;
         if (expParsedLen == FULL_LENGTH) {
-            expParsedLen = uprv_strlen(langtag_to_locale[i].bcpID);
+            expParsedLen = (int32_t)uprv_strlen(langtag_to_locale[i].bcpID);
         }
         uloc_forLanguageTag(langtag_to_locale[i].bcpID, locale, sizeof(locale), &parsedLen, &status);
         if (U_FAILURE(status)) {

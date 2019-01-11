@@ -852,7 +852,7 @@ static void TestConvert()
 
 
         /*Reads in the file*/
-        while(!feof(ucs_file_in)&&(i+=fread(ucs_file_buffer+i, sizeof(UChar), 1, ucs_file_in)))
+        while(!feof(ucs_file_in)&&(i+=(int32_t)fread(ucs_file_buffer+i, sizeof(UChar), 1, ucs_file_in)))
         {
             myUChar = ucs_file_buffer[i-1];
             
@@ -895,7 +895,7 @@ static void TestConvert()
                      NULL,
                      targetcapacity2,
                      output_cp_buffer,
-                     strlen(output_cp_buffer),
+                     (int32_t)strlen(output_cp_buffer),
                      &err);
         /*if there is an buffer overflow then trap the values and pass them and make the actual call*/
 
@@ -907,7 +907,7 @@ static void TestConvert()
                    uchar2,
                    targetsize+1,
                    output_cp_buffer,
-                   strlen(output_cp_buffer),
+                   (int32_t)strlen(output_cp_buffer),
                    &err);
 
             if(U_FAILURE(err))
@@ -947,12 +947,12 @@ static void TestConvert()
             log_err("\nFAILURE: ucnv_fromUChars with targetLength 0 is expected to fail and throw U_BUFFER_OVERFLOW_ERROR\n");
         }
         /*toUChars with error conditions*/
-        targetsize = ucnv_toUChars(myConverter, uchar2, targetsize, output_cp_buffer, strlen(output_cp_buffer), &err);
+        targetsize = ucnv_toUChars(myConverter, uchar2, targetsize, output_cp_buffer, (int32_t)strlen(output_cp_buffer), &err);
         if(targetsize != 0){
             log_err("\nFAILURE: ucnv_toUChars with err != U_ZERO_ERROR is expected to fail and return 0\n");
         }
         err=U_ZERO_ERROR;
-        targetsize = ucnv_toUChars(myConverter, uchar2, -1, output_cp_buffer, strlen(output_cp_buffer), &err);
+        targetsize = ucnv_toUChars(myConverter, uchar2, -1, output_cp_buffer, (int32_t)strlen(output_cp_buffer), &err);
         if(targetsize != 0 || err != U_ILLEGAL_ARGUMENT_ERROR){
             log_err("\nFAILURE: ucnv_toUChars with targetsize < 0 is expected to throw U_ILLEGAL_ARGUMENT_ERROR and return 0\n");
         }
@@ -962,7 +962,7 @@ static void TestConvert()
             log_err("\nFAILURE: ucnv_toUChars with sourceLength 0 is expected to return 0\n");
         }
         targetcapacity2=0; 
-        targetsize = ucnv_toUChars(myConverter, NULL, targetcapacity2, output_cp_buffer,  strlen(output_cp_buffer), &err);
+        targetsize = ucnv_toUChars(myConverter, NULL, targetcapacity2, output_cp_buffer, (int32_t)strlen(output_cp_buffer), &err);
         if (err != U_STRING_NOT_TERMINATED_WARNING) {
             log_err("\nFAILURE: ucnv_toUChars(targetLength)->%s instead of U_STRING_NOT_TERMINATED_WARNING\n",
                     u_errorName(err));
@@ -2545,7 +2545,7 @@ static void testFromTruncatedUTF8(UConverter *utf8Cnv, UConverter *cnv, const ch
 
     for(i=0; i<UPRV_LENGTHOF(badUTF8); ++i) {
         /* truncated sequence? */
-        int32_t length=strlen(badUTF8[i]);
+        int32_t length = (int32_t)strlen(badUTF8[i]);
         if(!isOneTruncatedUTF8(badUTF8[i], length)) {
             continue;
         }
@@ -2608,7 +2608,7 @@ static void testFromBadUTF8(UConverter *utf8Cnv, UConverter *cnv, const char *co
     expectLength=char0Length;
 
     for(i=0; i<UPRV_LENGTHOF(badUTF8); ++i) {
-        int32_t length=strlen(badUTF8[i]);
+        int32_t length = (int32_t)strlen(badUTF8[i]);
         memcpy(utf8+utf8Length, badUTF8[i], length);
         utf8Length+=length;
 

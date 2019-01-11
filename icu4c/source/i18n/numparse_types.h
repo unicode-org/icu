@@ -63,7 +63,7 @@ class CompactUnicodeString {
 
     CompactUnicodeString(const UnicodeString& text)
             : fBuffer(text.length() + 1) {
-        memcpy(fBuffer.getAlias(), text.getBuffer(), sizeof(UChar) * text.length());
+        uprv_memcpy(fBuffer.getAlias(), text.getBuffer(), sizeof(UChar) * text.length());
         fBuffer[text.length()] = 0;
     }
 

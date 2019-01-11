@@ -165,8 +165,8 @@ static FILE *fopenOrError(const char *filename) {
     int32_t needLen;
     FILE *f;
     char fnbuf[FILENAME_BUFFER];
-    const char* directory= ctest_dataSrcDir();
-    needLen = uprv_strlen(directory)+uprv_strlen(TDSRCPATH)+uprv_strlen(filename)+1;
+    const char* directory = ctest_dataSrcDir();
+    needLen = (int32_t)(uprv_strlen(directory) + uprv_strlen(TDSRCPATH) + uprv_strlen(filename) + 1);
     if(needLen > FILENAME_BUFFER) {
         log_err("FAIL: Could not load %s. Filename buffer overflow, needed %d but buffer is %d\n",
                 filename, needLen, FILENAME_BUFFER);

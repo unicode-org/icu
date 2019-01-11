@@ -501,7 +501,7 @@ UChar *DecimalFormatTest::ReadAndConvertFile(const char *fileName, int32_t &ulen
     fileSize = ftell(f);
     fileBuf = new char[fileSize];
     fseek(f, 0, SEEK_SET);
-    amtRead = fread(fileBuf, 1, fileSize, f);
+    amtRead = static_cast<int32_t>(fread(fileBuf, 1, fileSize, f));
     if (amtRead != fileSize || fileSize <= 0) {
         errln("Error reading test data file.");
         goto cleanUpAndReturn;
