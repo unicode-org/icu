@@ -747,7 +747,7 @@ StringCaseTest::assertGreekUpper(const char16_t *s, const char16_t *expected) {
     msg = UnicodeString("ucasemap_utf8ToUpper/Greek(\"") + s16 + "\")";
     char dest8[1000];
     length = ucasemap_utf8ToUpper(csm.getAlias(), dest8, UPRV_LENGTHOF(dest8),
-                                  s8.data(), s8.length(), &errorCode);
+                                  s8.data(), static_cast<int32_t>(s8.length()), &errorCode);
     assertSuccess("ucasemap_utf8ToUpper", errorCode);
     StringPiece result8(dest8, length);
     UnicodeString result16From8 = UnicodeString::fromUTF8(result8);
@@ -765,7 +765,7 @@ StringCaseTest::assertGreekUpper(const char16_t *s, const char16_t *expected) {
         memset(dest8b, 0x5A, UPRV_LENGTHOF(dest8b));
         UErrorCode errorCode = U_ZERO_ERROR;
         length = ucasemap_utf8ToUpper(csm.getAlias(), dest8b, cap,
-                                      s8.data(), s8.length(), &errorCode);
+                                      s8.data(), static_cast<int32_t>(s8.length()), &errorCode);
         assertEquals(msg + cap, expected8Length, length);
         UErrorCode expectedErrorCode;
         if (cap < expected8Length) {
@@ -910,7 +910,7 @@ void StringCaseTest::TestBufferOverflow() {
     std::string data_utf8;
     data.toUTF8String(data_utf8);
 #if !UCONFIG_NO_BREAK_ITERATION
-    result = ucasemap_utf8ToTitle(csm.getAlias(), NULL, 0, data_utf8.c_str(), data_utf8.length(), errorCode);
+    result = ucasemap_utf8ToTitle(csm.getAlias(), NULL, 0, data_utf8.c_str(), static_cast<int32_t>(data_utf8.length()), errorCode);
     if (errorCode.get() != U_BUFFER_OVERFLOW_ERROR || result != (int32_t)data_utf8.length()) {
         errln("%s:%d ucasemap_toTitle(\"hello world\") failed: "
               "expected (U_BUFFER_OVERFLOW_ERROR, %d), got (%s, %d)",

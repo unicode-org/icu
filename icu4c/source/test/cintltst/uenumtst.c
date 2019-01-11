@@ -369,7 +369,7 @@ static void verifyEnumeration(int line, UEnumeration *u, const char * const * co
       return;
     }
     if(compareToChar!=NULL) {
-      u_charsToUChars(compareToChar[i], buf, strlen(compareToChar[i])+1);
+      u_charsToUChars(compareToChar[i], buf, (int32_t)strlen(compareToChar[i])+1);
       if(u_strncmp(ustr,buf,len)) {
         int j;
         log_err("%s:%d: FAIL: ustring #%d expected '%s' got '%s'\n", __FILE__, line, i, compareToChar[i], austrdup(ustr));

@@ -28,7 +28,7 @@
 #include "uarrsort.h"
 
 static void
-SortTest() {
+SortTest(void) {
     uint16_t small[]={ 8, 1, 2, 5, 4, 3, 7, 6 };
     int32_t medium[]={ 10, 8, 1, 2, 5, 5, -1, 6, 4, 3, 9, 7, 5 };
     uint32_t large[]={ 21, 10, 20, 19, 11, 12, 13, 10, 10, 10, 10,
@@ -131,7 +131,7 @@ linesComparator(const void *context, const void *left, const void *right) {
     return ucol_strcoll(coll, leftLine->s, STR_LEN, rightLine->s, STR_LEN);
 }
 
-static void StableSortTest() {
+static void StableSortTest(void) {
     UErrorCode errorCode=U_ZERO_ERROR;
     UCollator *coll;
     Line *lines, *p;

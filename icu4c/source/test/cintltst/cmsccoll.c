@@ -1819,7 +1819,7 @@ static void TestVariableTopSetting(void) {
   }
 }
 
-static void TestMaxVariable() {
+static void TestMaxVariable(void) {
   UErrorCode status = U_ZERO_ERROR;
   UColReorderCode oldMax, max;
   UCollator *coll;
@@ -4102,11 +4102,11 @@ static void TestCroatianSortKey(void) {
         return;
     }
 
-    uiter_setString(&iter, text, length);
+    uiter_setString(&iter, text, (int32_t)length);
 
     actualSortKeyLen = ucol_nextSortKeyPart(
         ucol, &iter, (uint32_t*)uStateInfo,
-        textSortKey, lenSortKey, &status
+        textSortKey, (int32_t)lenSortKey, &status
         );
 
     if (actualSortKeyLen == lenSortKey) {

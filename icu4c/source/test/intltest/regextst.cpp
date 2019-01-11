@@ -1821,8 +1821,8 @@ void RegexTest::API_Match_UTF8() {
         REGEX_VERBOSE_TEXT(&input2);
         utext_openUChars(&empty, NULL, 0, &status);
 
-        int32_t input1Len = strlen("abcdef this is a test"); /* TODO: why not nativelen (input1) ? */
-        int32_t input2Len = strlen("not abc");
+        int32_t input1Len = static_cast<int32_t>(strlen("abcdef this is a test")); /* TODO: why not nativelen (input1) ? */
+        int32_t input2Len = static_cast<int32_t>(strlen("not abc"));
 
 
         //
@@ -3861,7 +3861,7 @@ UChar *RegexTest::ReadAndConvertFile(const char *fileName, int32_t &ulen,
     fileSize = ftell(f);
     fileBuf = new char[fileSize];
     fseek(f, 0, SEEK_SET);
-    amt_read = fread(fileBuf, 1, fileSize, f);
+    amt_read = static_cast<int32_t>(fread(fileBuf, 1, fileSize, f));
     if (amt_read != fileSize || fileSize <= 0) {
         errln("Error reading test data file.");
         goto cleanUpAndReturn;
@@ -5667,7 +5667,7 @@ void RegexTest::TestCase11049(const char *pattern, const char *data, UBool expec
     //   Size of the original char * data (invariant charset) will be <= than the equivalent UTF-8
     //   because string.unescape() will only shrink it.
     char * utf8Buffer = new char[uprv_strlen(data)+1];
-    u_strToUTF8(utf8Buffer, uprv_strlen(data)+1, NULL, dataString.getBuffer(), dataString.length(), &status);
+    u_strToUTF8(utf8Buffer, static_cast<int32_t>(uprv_strlen(data)+1), NULL, dataString.getBuffer(), dataString.length(), &status);
     REGEX_CHECK_STATUS;
     ut = utext_openUTF8(ut, utf8Buffer, -1, &status);
     REGEX_CHECK_STATUS;

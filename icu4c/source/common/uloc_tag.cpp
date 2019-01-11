@@ -1324,13 +1324,13 @@ _appendKeywordsToLanguageTag(const char* localeID, icu::ByteSink& sink, UBool st
                     for (attr = firstAttr; attr; attr = attr->next) {
                         sink.Append("-", 1);
                         sink.Append(
-                                attr->attribute, uprv_strlen(attr->attribute));
+                                attr->attribute, static_cast<int32_t>(uprv_strlen(attr->attribute)));
                     }
                 } else {
                     sink.Append("-", 1);
-                    sink.Append(ext->key, uprv_strlen(ext->key));
+                    sink.Append(ext->key, static_cast<int32_t>(uprv_strlen(ext->key)));
                     sink.Append("-", 1);
-                    sink.Append(ext->value, uprv_strlen(ext->value));
+                    sink.Append(ext->value, static_cast<int32_t>(uprv_strlen(ext->value)));
                 }
             }
         }

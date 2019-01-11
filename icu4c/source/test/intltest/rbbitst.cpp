@@ -139,7 +139,7 @@ static void printStringBreaks(UText *tstr, int expected[], int expectedCount) {
     printf("code    alpha extend alphanum type word sent line name\n");
     int nextExpectedIndex = 0;
     utext_setNativeIndex(tstr, 0);
-    for (int j = 0; j < utext_nativeLength(tstr); j=utext_getNativeIndex(tstr)) {
+    for (int j = 0; j < static_cast<int>(utext_nativeLength(tstr)); j=static_cast<int>(utext_getNativeIndex(tstr))) {
         if (nextExpectedIndex < expectedCount && j >= expected[nextExpectedIndex] ) {
             printf("------------------------------------------------ %d\n", j);
             ++nextExpectedIndex;
@@ -575,7 +575,7 @@ void RBBITest::executeTest(TestParams *t, UErrorCode &status) {
     //
     //  Run the iterator backwards, verify that the same breaks are found.
     //
-    prevBP = utext_nativeLength(t->textToBreak)+2;  // start with a phony value for the last break pos seen.
+    prevBP = static_cast<int32_t>(utext_nativeLength(t->textToBreak) + 2); // start with a phony value for the last break pos seen.
     bp = t->bi->last();
     while (bp != BreakIterator::DONE) {
         if (prevBP ==  bp) {
@@ -639,10 +639,10 @@ void RBBITest::executeTest(TestParams *t, UErrorCode &status) {
     }
 
     // Check following()
-    for (i=0; i < utext_nativeLength(t->textToBreak); i++) {
+    for (i=0; i < static_cast<int32_t>(utext_nativeLength(t->textToBreak)); i++) {
         int32_t actualBreak = t->bi->following(i);
         int32_t expectedBreak = BreakIterator::DONE;
-        for (int32_t j=i+1; j <= utext_nativeLength(t->textToBreak); j++) {
+        for (int32_t j=i+1; j <= static_cast<int32_t>(utext_nativeLength(t->textToBreak)); j++) {
             if (t->getExpectedBreak(j) != 0) {
                 expectedBreak = j;
                 break;
@@ -656,7 +656,7 @@ void RBBITest::executeTest(TestParams *t, UErrorCode &status) {
     }
 
     // Check preceding()
-    for (i=utext_nativeLength(t->textToBreak); i>=0; i--) {
+    for (i=static_cast<int32_t>(utext_nativeLength(t->textToBreak)); i>=0; i--) {
         int32_t actualBreak = t->bi->preceding(i);
         int32_t expectedBreak = BreakIterator::DONE;
 
@@ -666,7 +666,7 @@ void RBBITest::executeTest(TestParams *t, UErrorCode &status) {
         // Therefore, start looking at the expected break data not at i-1, but at
         // the start of code point index - 1.
         utext_setNativeIndex(t->textToBreak, i);
-        int32_t j = utext_getNativeIndex(t->textToBreak) - 1;
+        int32_t j = static_cast<int32_t>(utext_getNativeIndex(t->textToBreak) - 1);
         for (; j >= 0; j--) {
             if (t->getExpectedBreak(j) != 0) {
                 expectedBreak = j;
@@ -1175,7 +1175,7 @@ UChar *RBBITest::ReadAndConvertFile(const char *fileName, int &ulen, const char 
     fileSize = ftell(f);
     fileBuf = new char[fileSize];
     fseek(f, 0, SEEK_SET);
-    amt_read = fread(fileBuf, 1, fileSize, f);
+    amt_read = static_cast<int>(fread(fileBuf, 1, fileSize, f));
     if (amt_read != fileSize || fileSize <= 0) {
         errln("Error reading test data file.");
         goto cleanUpAndReturn;

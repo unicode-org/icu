@@ -1367,7 +1367,7 @@ SRBRoot::compactKeys(UErrorCode &errorCode) {
                 keysInUse.insert(key);
             }
         });
-        fKeysCount = keysInUse.size();
+        fKeysCount = static_cast<int32_t>(keysInUse.size());
     }
 
     int32_t keysCount = fUsePoolBundle->fKeysCount + fKeysCount;

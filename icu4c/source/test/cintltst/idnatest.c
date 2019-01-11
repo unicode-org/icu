@@ -825,7 +825,7 @@ static void TestLength(){
 static void TestJB5273(){
     static const char INVALID_DOMAIN_NAME[] = "xn--m\\u00FCller.de";
     UChar invalid_idn[25] = {'\0'};
-    int32_t len = u_unescape(INVALID_DOMAIN_NAME, invalid_idn, strlen(INVALID_DOMAIN_NAME));
+    int32_t len = u_unescape(INVALID_DOMAIN_NAME, invalid_idn, (int32_t)strlen(INVALID_DOMAIN_NAME));
     UChar output[50] = {'\0'};
     UErrorCode status = U_ZERO_ERROR;
     UParseError prsError;
@@ -923,7 +923,7 @@ static void TestUTS46() {
         log_err("uidna_labelToASCII_UTF8() failed: %s\n", u_errorName(errorCode));
     }
     errorCode = U_ZERO_ERROR;
-    length = uidna_labelToUnicodeUTF8(uts46, fA_sharps8, strlen(fA_sharps8),
+    length = uidna_labelToUnicodeUTF8(uts46, fA_sharps8, (int32_t)strlen(fA_sharps8),
                                       dest8, UPRV_LENGTHOF(dest8), &info, &errorCode);
     if( U_FAILURE(errorCode) || length != 4 || 0 != memcmp(dest8, fa_sharps8, 5) ||
         !info.isTransitionalDifferent || info.errors != 0
@@ -931,7 +931,7 @@ static void TestUTS46() {
         log_err("uidna_labelToUnicodeUTF8() failed: %s\n", u_errorName(errorCode));
     }
     errorCode = U_ZERO_ERROR;
-    length = uidna_nameToASCII_UTF8(uts46, fA_sharps8, strlen(fA_sharps8),
+    length = uidna_nameToASCII_UTF8(uts46, fA_sharps8, (int32_t)strlen(fA_sharps8),
                                     dest8, 4, &info, &errorCode);
     if( errorCode != U_STRING_NOT_TERMINATED_WARNING ||
         length != 4 || 0 != memcmp(dest8, fass8, 4) ||
@@ -1001,13 +1001,13 @@ static void TestUTS46() {
         log_err("uidna_labelToASCII_UTF8(dest=NULL) failed: %s\n", u_errorName(errorCode));
     }
     errorCode = U_ZERO_ERROR;
-    length = uidna_labelToUnicodeUTF8(uts46, fA_sharps8, strlen(fA_sharps8),
+    length = uidna_labelToUnicodeUTF8(uts46, fA_sharps8, (int32_t)strlen(fA_sharps8),
                                       dest8, -1, &info, &errorCode);
     if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("uidna_labelToUnicodeUTF8(capacity<0) failed: %s\n", u_errorName(errorCode));
     }
     errorCode = U_ZERO_ERROR;
-    length = uidna_nameToASCII_UTF8(uts46, dest8, strlen(fA_sharps8),
+    length = uidna_nameToASCII_UTF8(uts46, dest8, (int32_t)strlen(fA_sharps8),
                                     dest8, 4, &info, &errorCode);
     if(errorCode != U_ILLEGAL_ARGUMENT_ERROR) {
         log_err("uidna_nameToASCII_UTF8(src==dest!=NULL) failed: %s\n", u_errorName(errorCode));

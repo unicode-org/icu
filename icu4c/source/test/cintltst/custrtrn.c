@@ -702,7 +702,7 @@ static void Test_UChar_UTF8_API(void){
         out16[0]=0x55aa;
         uDestLen=0;
         u_strFromUTF8WithSub(out16, UPRV_LENGTHOF(out16), &uDestLen,
-                             (const char *)withTrail8, uprv_strlen((const char *)withTrail8),
+                             (const char *)withTrail8, (int32_t)uprv_strlen((const char *)withTrail8),
                              0x50005, &numSubstitutions,
                              &err);
         if(U_FAILURE(err) || uDestLen!=u_strlen(withTrail16Sub50005) ||
@@ -1023,7 +1023,7 @@ Test_FromUTF8Lenient(void) {
         *pb!=(char)0xff;
         pb+=srcLength+1, pu+=destLength0+1, ++number
     ) {
-        srcLength=uprv_strlen(pb);
+        srcLength=(int32_t)uprv_strlen(pb);
         destLength0=u_strlen(pu);
 
         /* preflighting with NUL-termination */

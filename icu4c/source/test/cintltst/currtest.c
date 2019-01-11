@@ -171,21 +171,21 @@ static void TestFractionDigitOverride(void) {
     }
     /* Make sure that you can format normal fraction digits. */
     unum_formatDouble(fmt, 123.456, buffer, UPRV_LENGTHOF(buffer), NULL, &status);
-    u_unescape(expectedFirst, expectedBuf, strlen(expectedFirst)+1);
+    u_unescape(expectedFirst, expectedBuf, (int32_t)strlen(expectedFirst)+1);
     if (u_strcmp(buffer, expectedBuf) != 0) {
        log_err("Error: unum_formatDouble didn't return %s\n", expectedFirst);
     }
     /* Make sure that you can format 2 fraction digits. */
     unum_setAttribute(fmt, UNUM_FRACTION_DIGITS, 2);
     unum_formatDouble(fmt, 123.456, buffer, UPRV_LENGTHOF(buffer), NULL, &status);
-    u_unescape(expectedSecond, expectedBuf, strlen(expectedSecond)+1);
+    u_unescape(expectedSecond, expectedBuf, (int32_t)strlen(expectedSecond)+1);
     if (u_strcmp(buffer, expectedBuf) != 0) {
        log_err("Error: unum_formatDouble didn't return %s\n", expectedSecond);
     }
     /* Make sure that you can format more fraction digits. */
     unum_setAttribute(fmt, UNUM_FRACTION_DIGITS, 3);
     unum_formatDouble(fmt, 123.456, buffer, UPRV_LENGTHOF(buffer), NULL, &status);
-    u_unescape(expectedThird, expectedBuf, strlen(expectedThird)+1);
+    u_unescape(expectedThird, expectedBuf, (int32_t)strlen(expectedThird)+1);
     if (u_strcmp(buffer, expectedBuf) != 0) {
        log_err("Error: unum_formatDouble didn't return %s\n", expectedThird);
     }
@@ -252,7 +252,7 @@ static void TestNumericCode(void) {
     int32_t numCode;
 
     for (i = 0; NUMCODE_TESTDATA[i].alphaCode; i++) {
-        int32_t length = uprv_strlen(NUMCODE_TESTDATA[i].alphaCode);
+        int32_t length = (int32_t)uprv_strlen(NUMCODE_TESTDATA[i].alphaCode);
         u_charsToUChars(NUMCODE_TESTDATA[i].alphaCode, code, length + 1);  // +1 includes the NUL
         numCode = ucurr_getNumericCode(code);
         if (numCode != NUMCODE_TESTDATA[i].numericCode) {

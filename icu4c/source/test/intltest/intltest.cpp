@@ -2188,7 +2188,7 @@ void IntlTest::setProperty(const char* propline) {
 const char* IntlTest::getProperty(const char* prop) {
     const char* val = NULL;
     for (int32_t i = 0; i < numProps; i++) {
-        int32_t plen = uprv_strlen(prop);
+        int32_t plen = static_cast<int32_t>(uprv_strlen(prop));
         if ((int32_t)uprv_strlen(proplines[i]) > plen + 1
                 && proplines[i][plen] == '='
                 && uprv_strncmp(proplines[i], prop, plen) == 0) {

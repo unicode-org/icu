@@ -514,7 +514,7 @@ static UBool matchingPair(UBiDi *bidi, int32_t i, char c1, char c2)
     if ((level & 1) == 0) {
         return FALSE;
     }
-    len = strlen(mates1Chars);
+    len = (int)strlen(mates1Chars);
     for (k = 0; k < len; k++) {
         if ((c1 == mates1Chars[k]) && (c2 == mates2Chars[k])) {
             return TRUE;
@@ -4126,7 +4126,7 @@ checkResultLength(UBiDi *pBiDi, const char *srcChars, const char *destChars,
                   const char* option, UBiDiLevel level) {
     int32_t actualLen;
     if (strcmp(mode, "UBIDI_REORDER_INVERSE_NUMBERS_AS_L") == 0)
-        actualLen = strlen(destChars);
+        actualLen = (int32_t)strlen(destChars);
     else
         actualLen = ubidi_getResultLength(pBiDi);
     if (actualLen != destLen) {
@@ -4206,7 +4206,7 @@ testReorderRunsOnly(void) {
         ubidi_setReorderingOptions(pBiDi, option==0 ? UBIDI_OPTION_REMOVE_CONTROLS
                                                     : UBIDI_OPTION_INSERT_MARKS);
         for (i = 0, nCases = UPRV_LENGTHOF(testCases); i < nCases; i++) {
-            srcLen = strlen(testCases[i].textIn);
+            srcLen = (int32_t)strlen(testCases[i].textIn);
             pseudoToU16(srcLen, testCases[i].textIn, src);
             for(j = 0; j < 2; j++) {
                 log_verbose("Now doing test for option %d, case %d, level %d\n",
@@ -4292,7 +4292,7 @@ testReorderingMode(void) {
 
     for (tc = 0; tc < TC_COUNT; tc++) {
         const char *srcChars = textIn[tc];
-        srcLen = strlen(srcChars);
+        srcLen = (int32_t)strlen(srcChars);
         pseudoToU16(srcLen, srcChars, src);
 
         for (mode = 0; mode < MODES_COUNT; mode++) {
@@ -4864,9 +4864,9 @@ testContext(void) {
 
     for (tc = 0; tc < CONTEXT_COUNT; tc++) {
         cc = contextData[tc];
-        proLength = strlen(cc.prologue);
+        proLength = (int32_t)strlen(cc.prologue);
         pseudoToU16(proLength, cc.prologue, prologue);
-        epiLength = strlen(cc.epilogue);
+        epiLength = (int32_t)strlen(cc.epilogue);
         pseudoToU16(epiLength, cc.epilogue, epilogue);
         /* in the call below, prologue and epilogue are swapped to show
            that the next call will override this call */
@@ -4875,7 +4875,7 @@ testContext(void) {
         testOK &= assertSuccessful("swapped ubidi_setContext", &rc);
         ubidi_setContext(pBiDi, prologue, -1, epilogue, -1, &rc);
         testOK &= assertSuccessful("regular ubidi_setContext", &rc);
-        srcLen = strlen(cc.source);
+        srcLen = (int32_t)strlen(cc.source);
         pseudoToU16(srcLen, cc.source, src);
         ubidi_setPara(pBiDi, src, srcLen, cc.paraLevel, NULL, &rc);
         testOK &= assertSuccessful("ubidi_setPara", &rc);
@@ -4917,7 +4917,7 @@ testBracketOverflow(void) {
     int32_t len;
 
     bidi = ubidi_open();
-    len = uprv_strlen(TEXT);
+    len = (int32_t)uprv_strlen(TEXT);
     pseudoToU16(len, TEXT, src);
     ubidi_setPara(bidi, src, len, UBIDI_DEFAULT_LTR , NULL, &status);
     if (U_FAILURE(status)) {

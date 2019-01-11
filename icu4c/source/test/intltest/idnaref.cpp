@@ -815,7 +815,7 @@ idnaref_IDNToASCII(  const UChar* src, int32_t srcLength,
             }
 
             labelStart = delimiter;
-            remainingLen = srcLength - (delimiter - src);
+            remainingLen = static_cast<int32_t>(srcLength - (delimiter - src));
         }
     }
 
@@ -972,7 +972,7 @@ idnaref_IDNToUnicode(  const UChar* src, int32_t srcLength,
             }
 
             labelStart = delimiter;
-            remainingLen = srcLength - (delimiter - src);
+            remainingLen = static_cast<int32_t>(srcLength - (delimiter - src));
         }
     }
 

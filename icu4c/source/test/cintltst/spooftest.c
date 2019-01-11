@@ -132,7 +132,7 @@ static void TestOpenFromSource() {
     TEST_ASSERT_NE(f, NULL);
     confusables = malloc(3000000);
     if (f != NULL) {
-        confusablesLength = fread(confusables, 1, 3000000, f);
+        confusablesLength = (int)fread(confusables, 1, 3000000, f);
         fclose(f);
     }
 
@@ -142,7 +142,7 @@ static void TestOpenFromSource() {
     TEST_ASSERT_NE(f, NULL);
     confusablesWholeScript = malloc(1000000);
     if (f != NULL) {
-        confusablesWholeScriptLength = fread(confusablesWholeScript, 1, 1000000, f);
+        confusablesWholeScriptLength = (int)fread(confusablesWholeScript, 1, 1000000, f);
         fclose(f);
     }
 

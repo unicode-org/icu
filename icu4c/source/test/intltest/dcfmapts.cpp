@@ -645,6 +645,12 @@ void IntlTestDecimalFormatAPI::TestScale()
     sprintf(tmp, "(%g==%g)", (double)lhs, (double)rhs); \
     assertTrue(tmp, (lhs==rhs), FALSE, TRUE, __FILE__, __LINE__); }
 
+#if defined(_MSC_VER)
+// Ignore the noisy warning 4805 (comparisons between int and bool) in the function below as we use the ICU TRUE/FALSE macros
+// which are int values, whereas some of the DecimalQuantity methods return C++ bools.
+#pragma warning(push)
+#pragma warning(disable: 4805)
+#endif
 void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     UErrorCode status = U_ZERO_ERROR;
 
@@ -957,6 +963,10 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     ASSERT_EQUAL(FALSE, fd.isNegative());
 
 }
+#if defined(_MSC_VER)
+// Re-enable 4805 warnings (comparisons between int and bool).
+#pragma warning(pop)
+#endif
 
 void IntlTestDecimalFormatAPI::TestBadFastpath() {
     UErrorCode status = U_ZERO_ERROR;

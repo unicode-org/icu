@@ -55,8 +55,9 @@ log_err("Test Failure at file %s:%d - ASSERT(%s) failed.\n", __FILE__, __LINE__,
     status = U_ZERO_ERROR; \
     re = uregex_openC(pattern, flags, NULL, &status);  \
     TEST_ASSERT_SUCCESS(status);   \
-    srcString = (UChar *)malloc((strlen(testString)+2)*sizeof(UChar)); \
-    u_uastrncpy(srcString, testString,  strlen(testString)+1); \
+    int32_t testStringLen = (int32_t)strlen(testString); \
+    srcString = (UChar *)malloc( (testStringLen + 2) * sizeof(UChar) ); \
+    u_uastrncpy(srcString, testString, testStringLen + 1); \
     uregex_setText(re, srcString, -1, &status); \
     TEST_ASSERT_SUCCESS(status);  \
     if (U_SUCCESS(status)) {
@@ -849,7 +850,7 @@ static void TestRegexCAPI(void) {
         status = U_ZERO_ERROR;
         uregex_setText(re, text1, -1, &status);
         memset(buf, -1, sizeof(buf));
-        resultSz = uregex_replaceFirst(re, replText, -1, buf, strlen("Replace <aa> x1x x...x."), &status);
+        resultSz = uregex_replaceFirst(re, replText, -1, buf, (int32_t)strlen("Replace <aa> x1x x...x."), &status);
         TEST_ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);
         TEST_ASSERT_STRING("Replace <aa> x1x x...x.", buf, FALSE);
         TEST_ASSERT(resultSz == (int32_t)strlen("Replace xaax x1x x...x."));
@@ -860,7 +861,7 @@ static void TestRegexCAPI(void) {
          */
         status = U_ZERO_ERROR;
         memset(buf, -1, sizeof(buf));
-        resultSz = uregex_replaceFirst(re, replText, -1, buf, strlen("Replace <aa> x1x x...x."), &status);
+        resultSz = uregex_replaceFirst(re, replText, -1, buf, (int32_t)strlen("Replace <aa> x1x x...x."), &status);
         TEST_ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);
         TEST_ASSERT_STRING("Replace <aa> x1x x...x.", buf, FALSE);
         TEST_ASSERT(resultSz == (int32_t)strlen("Replace xaax x1x x...x."));
@@ -875,7 +876,7 @@ static void TestRegexCAPI(void) {
         /* Buffer too small by one */
         status = U_ZERO_ERROR;
         memset(buf, -1, sizeof(buf));
-        resultSz = uregex_replaceFirst(re, replText, -1, buf, strlen("Replace <aa> x1x x...x.")-1, &status);
+        resultSz = uregex_replaceFirst(re, replText, -1, buf, (int32_t)strlen("Replace <aa> x1x x...x.")-1, &status);
         TEST_ASSERT(status == U_BUFFER_OVERFLOW_ERROR);
         TEST_ASSERT_STRING("Replace <aa> x1x x...x", buf, FALSE);
         TEST_ASSERT(resultSz == (int32_t)strlen("Replace xaax x1x x...x."));
@@ -906,8 +907,8 @@ static void TestRegexCAPI(void) {
         u_uastrncpy(text2, "No match here.",  UPRV_LENGTHOF(text2));
         u_uastrncpy(replText, "<$1>", UPRV_LENGTHOF(replText));
         u_uastrncpy(replText2, "<<$1>>", UPRV_LENGTHOF(replText2));
-        expectedResultSize = strlen(expectedResult);
-        expectedResultSize2 = strlen(expectedResult2);
+        expectedResultSize = (int32_t)strlen(expectedResult);
+        expectedResultSize2 = (int32_t)strlen(expectedResult2);
 
         status = U_ZERO_ERROR;
         re = uregex_openC(pattern, 0, NULL, &status);
@@ -943,7 +944,7 @@ static void TestRegexCAPI(void) {
          */
         status = U_ZERO_ERROR;
         memset(buf, -1, sizeof(buf));
-        resultSize = uregex_replaceAll(re, replText, -1, buf, strlen("Replace xaax x1x x...x."), &status);
+        resultSize = uregex_replaceAll(re, replText, -1, buf, (int32_t)strlen("Replace xaax x1x x...x."), &status);
         TEST_ASSERT(status == U_STRING_NOT_TERMINATED_WARNING);
         TEST_ASSERT_STRING("Replace <aa> <1> <...>.", buf, FALSE);
         TEST_ASSERT(resultSize == (int32_t)strlen("Replace <aa> <1> <...>."));
@@ -1190,7 +1191,7 @@ static void TestRegexCAPI(void) {
                 TEST_ASSERT_STRING("tag-b",   fields[3], TRUE);
                 TEST_ASSERT_STRING("  third", fields[4], TRUE);
                 TEST_ASSERT(fields[5] == NULL);
-                spaceNeeded = strlen("first .tag-a. second.tag-b.  third.");  /* "." at NUL positions */
+                spaceNeeded = (int32_t)strlen("first .tag-a. second.tag-b.  third.");  /* "." at NUL positions */
                 TEST_ASSERT(spaceNeeded == requiredCapacity);
             }
         }
@@ -1209,7 +1210,7 @@ static void TestRegexCAPI(void) {
             TEST_ASSERT_STRING(" second<tag-b>  third", fields[1], TRUE);
             TEST_ASSERT(!memcmp(&fields[2],&minus1,sizeof(UChar*)));
 
-            spaceNeeded = strlen("first . second<tag-b>  third.");  /* "." at NUL positions */
+            spaceNeeded = (int32_t)strlen("first . second<tag-b>  third.");  /* "." at NUL positions */
             TEST_ASSERT(spaceNeeded == requiredCapacity);
         }
 
@@ -1228,7 +1229,7 @@ static void TestRegexCAPI(void) {
             TEST_ASSERT_STRING(" second<tag-b>  third", fields[2], TRUE);
             TEST_ASSERT(!memcmp(&fields[3],&minus1,sizeof(UChar*)));
 
-            spaceNeeded = strlen("first .tag-a. second<tag-b>  third.");  /* "." at NUL positions */
+            spaceNeeded = (int32_t)strlen("first .tag-a. second<tag-b>  third.");  /* "." at NUL positions */
             TEST_ASSERT(spaceNeeded == requiredCapacity);
         }
 
@@ -1249,13 +1250,13 @@ static void TestRegexCAPI(void) {
             TEST_ASSERT_STRING("  third", fields[4], TRUE);
             TEST_ASSERT(!memcmp(&fields[5],&minus1,sizeof(UChar*)));
 
-            spaceNeeded = strlen("first .tag-a. second.tag-b.  third.");  /* "." at NUL positions */
+            spaceNeeded = (int32_t)strlen("first .tag-a. second.tag-b.  third.");  /* "." at NUL positions */
             TEST_ASSERT(spaceNeeded == requiredCapacity);
         }
 
         /* Split, end of text is a field delimiter.   */
         status = U_ZERO_ERROR;
-        sz = strlen("first <tag-a> second<tag-b>");
+        sz = (int32_t)strlen("first <tag-a> second<tag-b>");
         uregex_setText(re, textToSplit, sz, &status);
         TEST_ASSERT_SUCCESS(status);
 
@@ -1277,7 +1278,7 @@ static void TestRegexCAPI(void) {
                 TEST_ASSERT(fields[5] == NULL);
                 TEST_ASSERT(fields[8] == NULL);
                 TEST_ASSERT(!memcmp(&fields[9],&minus1,sizeof(UChar*)));
-                spaceNeeded = strlen("first .tag-a. second.tag-b..");  /* "." at NUL positions */
+                spaceNeeded = (int32_t)strlen("first .tag-a. second.tag-b..");  /* "." at NUL positions */
                 TEST_ASSERT(spaceNeeded == requiredCapacity);
             }
         }
@@ -2142,7 +2143,7 @@ static void TestUTextAPI(void) {
 
         /* Split, end of text is a field delimiter.   */
         status = U_ZERO_ERROR;
-        uregex_setText(re, textToSplit, strlen("first <tag-a> second<tag-b>"), &status);
+        uregex_setText(re, textToSplit, (int32_t)strlen("first <tag-a> second<tag-b>"), &status);
         TEST_ASSERT_SUCCESS(status);
 
         /* The TEST_ASSERT_SUCCESS call above should change too... */

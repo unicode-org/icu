@@ -1629,7 +1629,7 @@ static void TestGetKeywordValuesForLocale() {
                 ALLList = ulist_getListFromEnum(ALL);
                 for (j = 0; j < size; j++) {
                     if ((value = uenum_next(all, &valueLength, &status)) != NULL && U_SUCCESS(status)) {
-                        if (!ulist_containsString(ALLList, value, uprv_strlen(value))) {
+                        if (!ulist_containsString(ALLList, value, (int32_t)uprv_strlen(value))) {
                             log_err("Locale %s have %s not in ALL\n", loc, value);
                             matchAll = FALSE;
                             break;

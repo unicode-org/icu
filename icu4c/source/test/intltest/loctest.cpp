@@ -1854,7 +1854,7 @@ LocaleTest::TestCreateKeywordSet(void) {
             status);
     status.errIfFailureAndReset("\"%s\"", l.getName());
 
-    assertEquals("set::size()", 2, result.size());
+    assertEquals("set::size()", 2, static_cast<int32_t>(result.size()));
     assertTrue("set::find(\"calendar\")",
                result.find("calendar") != result.end());
     assertTrue("set::find(\"collation\")",
@@ -1873,7 +1873,7 @@ LocaleTest::TestCreateUnicodeKeywordSet(void) {
             status);
     status.errIfFailureAndReset("\"%s\"", l.getName());
 
-    assertEquals("set::size()", 2, result.size());
+    assertEquals("set::size()", 2, static_cast<int32_t>(result.size()));
     assertTrue("set::find(\"ca\")",
                result.find("ca") != result.end());
     assertTrue("set::find(\"co\")",
