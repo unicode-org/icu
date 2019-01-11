@@ -518,10 +518,8 @@ public class DecimalQuantityTest extends TestFmwk {
         assertEquals("Should trim, toScientificString", "7.654E+1", dq.toScientificString());
         assertEquals("Should trim, toLong", 76, dq.toLong(true));
         assertEquals("Should trim, toFractionLong", 54, dq.toFractionLong(false));
-        if (!logKnownIssue("13701", "consider cleaning up")) {
-            assertEquals("Should trim, toDouble", 76.54, dq.toDouble());
-            assertEquals("Should trim, toBigDecimal", new BigDecimal("76.54"), dq.toBigDecimal());
-        }
+        assertEquals("Should trim, toDouble", 76.54, dq.toDouble());
+        assertEquals("Should trim, toBigDecimal", new BigDecimal("76.54"), dq.toBigDecimal());
     }
 
     @Test
