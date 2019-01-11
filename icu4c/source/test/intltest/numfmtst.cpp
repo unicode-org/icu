@@ -2118,11 +2118,62 @@ void NumberFormatTest::TestCurrencyUnit(void){
     static const UChar BAD2[] = u"??A";
     static const UChar XXX[]  = u"XXX";
     static const char XXX8[]  =  "XXX";
+    static const UChar INV[]  = u"{$%";
+    static const char INV8[]  =  "{$%";
+    static const UChar ZZZ[]  = u"zz";
+    static const char ZZZ8[]  = "zz";
+
+    UChar* EUR = (UChar*) malloc(6);
+    EUR[0] = u'E';
+    EUR[1] = u'U';
+    EUR[2] = u'R';
+    char* EUR8 = (char*) malloc(3);
+    EUR8[0] = 'E';
+    EUR8[1] = 'U';
+    EUR8[2] = 'R';
+
     CurrencyUnit cu(USD, ec);
     assertSuccess("CurrencyUnit", ec);
 
     assertEquals("getISOCurrency()", USD, cu.getISOCurrency());
     assertEquals("getSubtype()", USD8, cu.getSubtype());
+
+    CurrencyUnit inv(INV, ec);
+    assertEquals("non-invariant", U_INVARIANT_CONVERSION_ERROR, ec);
+    assertEquals("non-invariant", XXX, inv.getISOCurrency());
+    ec = U_ZERO_ERROR;
+
+    CurrencyUnit zzz(ZZZ, ec);
+    assertEquals("too short", U_ILLEGAL_ARGUMENT_ERROR, ec);
+    assertEquals("too short", XXX, zzz.getISOCurrency());
+    ec = U_ZERO_ERROR;
+
+    CurrencyUnit eur(EUR, ec);
+    assertEquals("non-nul-terminated", u"EUR", eur.getISOCurrency());
+    assertEquals("non-nul-terminated", "EUR", eur.getSubtype());
+
+    // Test StringPiece constructor
+    CurrencyUnit cu8(USD8, ec);
+    assertEquals("StringPiece constructor", USD, cu8.getISOCurrency());
+
+    CurrencyUnit inv8(INV8, ec);
+    assertEquals("non-invariant 8", U_INVARIANT_CONVERSION_ERROR, ec);
+    assertEquals("non-invariant 8", XXX, inv8.getISOCurrency());
+    ec = U_ZERO_ERROR;
+
+    CurrencyUnit zzz8(ZZZ8, ec);
+    assertEquals("too short 8", U_ILLEGAL_ARGUMENT_ERROR, ec);
+    assertEquals("too short 8", XXX, zzz8.getISOCurrency());
+    ec = U_ZERO_ERROR;
+
+    CurrencyUnit zzz8b({ZZZ8, 3}, ec);
+    assertEquals("too short 8b", U_ILLEGAL_ARGUMENT_ERROR, ec);
+    assertEquals("too short 8b", XXX, zzz8b.getISOCurrency());
+    ec = U_ZERO_ERROR;
+
+    CurrencyUnit eur8({EUR8, 3}, ec);
+    assertEquals("non-nul-terminated 8", u"EUR", eur8.getISOCurrency());
+    assertEquals("non-nul-terminated 8", "EUR", eur8.getSubtype());
 
     CurrencyUnit cu2(cu);
     if (!(cu2 == cu)){
@@ -2176,6 +2227,9 @@ void NumberFormatTest::TestCurrencyUnit(void){
     CurrencyUnit failure(*meter, ec);
     assertEquals("Copying from meter should fail", ec, U_ILLEGAL_ARGUMENT_ERROR);
     assertEquals("Copying should not give uninitialized ISO code", u"", failure.getISOCurrency());
+
+    uprv_free(EUR);
+    uprv_free(EUR8);
 }
 
 void NumberFormatTest::TestCurrencyAmount(void){

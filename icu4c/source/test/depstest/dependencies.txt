@@ -57,7 +57,7 @@ group: c_strings
     __ctype_b_loc  # for <ctype.h>
     # We must not use tolower and toupper because they are system-locale-sensitive (Turkish i).
     strlen strchr strrchr strstr strcmp strncmp strcpy strncpy strcat strncat
-    memcmp memcpy memmove memset
+    memchr memcmp memcpy memmove memset
     # Additional symbols in an optimized build.
     __strcpy_chk __strncpy_chk __strcat_chk __strncat_chk
     __rawmemchr __memcpy_chk __memmove_chk __memset_chk
