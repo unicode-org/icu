@@ -446,6 +446,28 @@ class U_I18N_API NumberRangeFormatterSettings {
     Derived identityFallback(UNumberRangeIdentityFallback identityFallback) &&;
 
     /**
+     * Returns the current (Un)LocalizedNumberRangeFormatter as a LocalPointer
+     * wrapping a heap-allocated copy of the current object.
+     *
+     * This is equivalent to new-ing the move constructor with a value object
+     * as the argument.
+     *
+     * @return A wrapped (Un)LocalizedNumberRangeFormatter pointer, or a wrapped
+     *         nullptr on failure.
+     * @draft ICU 64
+     */
+    LocalPointer<Derived> clone() const &;
+
+    /**
+     * Overload of clone for use on an rvalue reference.
+     *
+     * @return A wrapped (Un)LocalizedNumberRangeFormatter pointer, or a wrapped
+     *         nullptr on failure.
+     * @draft ICU 64
+     */
+    LocalPointer<Derived> clone() &&;
+
+    /**
      * Sets the UErrorCode if an error occurred in the fluent chain.
      * Preserves older error codes in the outErrorCode.
      * @return TRUE if U_FAILURE(outErrorCode)

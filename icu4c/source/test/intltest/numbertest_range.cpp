@@ -50,6 +50,7 @@ void NumberRangeFormatterTest::runIndexedTest(int32_t index, UBool exec, const c
         TESTCASE_AUTO(testPlurals);
         TESTCASE_AUTO(testFieldPositions);
         TESTCASE_AUTO(testCopyMove);
+        TESTCASE_AUTO(toObject);
     TESTCASE_AUTO_END;
 }
 
@@ -821,6 +822,42 @@ void NumberRangeFormatterTest::testCopyMove() {
     assertEquals("FormattedNumberRange move constructor", u"1,00–5,00 $US", result.toString(status));
     result = l1.formatFormattableRange(3, 6, status);
     assertEquals("FormattedNumberRange move assignment", u"3,00–6,00 $US", result.toString(status));
+}
+
+void NumberRangeFormatterTest::toObject() {
+    IcuTestErrorCode status(*this, "toObject");
+
+    // const lvalue version
+    {
+        LocalizedNumberRangeFormatter lnf = NumberRangeFormatter::withLocale("en");
+        LocalPointer<LocalizedNumberRangeFormatter> lnf2(lnf.clone());
+        assertFalse("should create successfully, const lvalue", lnf2.isNull());
+        assertEquals("object API test, const lvalue", u"5–7",
+            lnf2->formatFormattableRange(5, 7, status).toString(status));
+    }
+
+    // rvalue reference version
+    {
+        LocalPointer<LocalizedNumberRangeFormatter> lnf(
+            NumberRangeFormatter::withLocale("en").clone());
+        assertFalse("should create successfully, rvalue reference", lnf.isNull());
+        assertEquals("object API test, rvalue reference", u"5–7",
+            lnf->formatFormattableRange(5, 7, status).toString(status));
+    }
+
+    // to std::unique_ptr via assignment
+    {
+        std::unique_ptr<LocalizedNumberRangeFormatter> lnf =
+            NumberRangeFormatter::withLocale("en").clone();
+        assertTrue("should create successfully, unique_ptr B", static_cast<bool>(lnf));
+        assertEquals("object API test, unique_ptr B", u"5–7",
+            lnf->formatFormattableRange(5, 7, status).toString(status));
+    }
+
+    // make sure no memory leaks
+    {
+        NumberRangeFormatter::with().clone();
+    }
 }
 
 void  NumberRangeFormatterTest::assertFormatRange(

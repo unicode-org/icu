@@ -8,6 +8,7 @@
 #include "charstr.h"
 #include <cstdarg>
 #include <cmath>
+#include <memory>
 #include "unicode/unum.h"
 #include "unicode/numberformatter.h"
 #include "number_asformat.h"
@@ -91,6 +92,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(validRanges);
         TESTCASE_AUTO(copyMove);
         TESTCASE_AUTO(localPointerCAPI);
+        TESTCASE_AUTO(toObject);
     TESTCASE_AUTO_END;
 }
 
@@ -2781,6 +2783,64 @@ void NumberFormatterApiTest::localPointerCAPI() {
     assertEquals("Percent sign location within '0.00987%'", 8, ufpos.endIndex);
 
     // No need to do any cleanup since we are using LocalPointer.
+}
+
+void NumberFormatterApiTest::toObject() {
+    IcuTestErrorCode status(*this, "toObject");
+
+    // const lvalue version
+    {
+        LocalizedNumberFormatter lnf = NumberFormatter::withLocale("en")
+                .precision(Precision::fixedFraction(2));
+        LocalPointer<LocalizedNumberFormatter> lnf2(lnf.clone());
+        assertFalse("should create successfully, const lvalue", lnf2.isNull());
+        assertEquals("object API test, const lvalue", u"1,000.00",
+            lnf2->formatDouble(1000, status).toString(status));
+    }
+
+    // rvalue reference version
+    {
+        LocalPointer<LocalizedNumberFormatter> lnf(
+            NumberFormatter::withLocale("en")
+                .precision(Precision::fixedFraction(2))
+                .clone());
+        assertFalse("should create successfully, rvalue reference", lnf.isNull());
+        assertEquals("object API test, rvalue reference", u"1,000.00",
+            lnf->formatDouble(1000, status).toString(status));
+    }
+
+    // to std::unique_ptr via constructor
+    {
+        std::unique_ptr<LocalizedNumberFormatter> lnf(
+            NumberFormatter::withLocale("en")
+                .precision(Precision::fixedFraction(2))
+                .clone());
+        assertTrue("should create successfully, unique_ptr", static_cast<bool>(lnf));
+        assertEquals("object API test, unique_ptr", u"1,000.00",
+            lnf->formatDouble(1000, status).toString(status));
+    }
+
+    // to std::unique_ptr via assignment
+    {
+        std::unique_ptr<LocalizedNumberFormatter> lnf =
+            NumberFormatter::withLocale("en")
+                .precision(Precision::fixedFraction(2))
+                .clone();
+        assertTrue("should create successfully, unique_ptr B", static_cast<bool>(lnf));
+        assertEquals("object API test, unique_ptr B", u"1,000.00",
+            lnf->formatDouble(1000, status).toString(status));
+    }
+
+    // to LocalPointer via assignment
+    {
+        LocalPointer<UnlocalizedNumberFormatter> f =
+            NumberFormatter::with().clone();
+    }
+
+    // make sure no memory leaks
+    {
+        NumberFormatter::with().clone();
+    }
 }
 
 
