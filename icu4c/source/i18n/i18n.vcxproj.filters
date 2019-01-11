@@ -561,6 +561,9 @@
     <ClCompile Include="number_notation.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="number_output.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="number_padding.cpp">
       <Filter>formatting</Filter>
     </ClCompile>

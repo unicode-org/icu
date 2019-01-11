@@ -840,7 +840,7 @@ library: i18n
     dayperiodrules
     listformatter
     formatting formattable_cnv regex regex_cnv translit
-    double_conversion number_representation numberformatter numberparser
+    double_conversion number_representation number_output numberformatter numberparser
     universal_time_scale
     uclean_i18n
 
@@ -937,6 +937,16 @@ group: number_representation
     ucase uniset_core
     formatted_value
 
+group: number_output
+    # PluralRules and FormattedNumber
+    number_output.o
+    standardplural.o plurrule.o
+  deps
+    # FormattedNumber internals:
+    number_representation format
+    # PluralRules internals:
+    unifiedcache
+
 group: numberformatter
     # ICU 60+ NumberFormatter API
     number_affixutils.o number_asformat.o
@@ -950,11 +960,9 @@ group: numberformatter
     number_scientific.o number_skeletons.o
     currpinf.o dcfmtsym.o numsys.o
     numrange_fluent.o numrange_impl.o
-    # pluralrules
-    standardplural.o plurrule.o
   deps
-    decnumber double_conversion formattable format units
-    number_representation
+    decnumber double_conversion formattable units
+    number_representation number_output
     uclean_i18n common
 
 group: numberparser
