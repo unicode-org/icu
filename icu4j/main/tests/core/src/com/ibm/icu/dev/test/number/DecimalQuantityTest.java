@@ -492,8 +492,7 @@ public class DecimalQuantityTest extends TestFmwk {
         Object[][] cases = new Object[][] {
             { "0", 0.0 },
             { "514.23", 514.23 },
-            // NOTE: This does not currently pass in Java. See DecimalFormat_AbstractBCD#toDecimal.
-            // { "-3.142E-271", -3.142e-271 }
+            { "-3.142E-271", -3.142e-271 }
         };
 
         for (Object[] cas : cases) {
