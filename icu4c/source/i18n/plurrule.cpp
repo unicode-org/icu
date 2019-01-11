@@ -35,6 +35,7 @@
 #include "sharedpluralrules.h"
 #include "unifiedcache.h"
 #include "number_decimalquantity.h"
+#include "util.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -262,6 +263,16 @@ PluralRules::select(int32_t number) const {
 UnicodeString
 PluralRules::select(double number) const {
     return select(FixedDecimal(number));
+}
+
+UnicodeString
+PluralRules::select(const number::FormattedNumber& number, UErrorCode& status) const {
+    DecimalQuantity dq;
+    number.getDecimalQuantity(dq, status);
+    if (U_FAILURE(status)) {
+        return ICU_Utility::makeBogusString();
+    }
+    return select(dq);
 }
 
 UnicodeString

@@ -61,6 +61,16 @@ UFormattedNumberImpl::~UFormattedNumberImpl() {
 U_NAMESPACE_END
 
 
+const DecimalQuantity* icu::number::impl::validateUFormattedNumberToDecimalQuantity(
+        const UFormattedNumber* uresult, UErrorCode& status) {
+    auto* result = UFormattedNumberApiHelper::validate(uresult, status);
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
+    return &result->fData.quantity;
+}
+
+
 
 U_CAPI UNumberFormatter* U_EXPORT2
 unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const char* locale,

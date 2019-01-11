@@ -270,6 +270,7 @@
     <ClCompile Include="number_longnames.cpp" />
     <ClCompile Include="number_modifiers.cpp" />
     <ClCompile Include="number_notation.cpp" />
+    <ClCompile Include="number_output.cpp" />
     <ClCompile Include="number_padding.cpp" />
     <ClCompile Include="number_patternmodifier.cpp" />
     <ClCompile Include="number_patternstring.cpp" />

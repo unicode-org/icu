@@ -27,6 +27,11 @@ struct UFormattedValueImpl : public UMemory, public UFormattedValueApiHelper {
 };
 
 
+/** Helper function used in upluralrules.cpp */
+const DecimalQuantity* validateUFormattedNumberToDecimalQuantity(
+    const UFormattedNumber* uresult, UErrorCode& status);
+
+
 /**
  * Struct for data used by FormattedNumber.
  *

@@ -29,6 +29,8 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.PluralRulesLoader;
+import com.ibm.icu.number.FormattedNumber;
+import com.ibm.icu.number.NumberFormatter;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
@@ -2026,9 +2028,10 @@ public class PluralRules implements Serializable {
     public int hashCode() {
         return rules.hashCode();
     }
+
     /**
-     * Given a number, returns the keyword of the first rule that applies to
-     * the number.
+     * Given a floating-point number, returns the keyword of the first rule
+     * that applies to the number.
      *
      * @param number The number for which the rule has to be determined.
      * @return The keyword of the selected rule.
@@ -2036,6 +2039,23 @@ public class PluralRules implements Serializable {
      */
     public String select(double number) {
         return rules.select(new FixedDecimal(number));
+    }
+
+    /**
+     * Given a formatted number, returns the keyword of the first rule that
+     * applies to the number.
+     *
+     * A FormattedNumber allows you to specify an exponent or trailing zeros,
+     * which can affect the plural category. To get a FormattedNumber, see
+     * {@link NumberFormatter}.
+     *
+     * @param number The number for which the rule has to be determined.
+     * @return The keyword of the selected rule.
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String select(FormattedNumber number) {
+        return rules.select(number.getFixedDecimal());
     }
 
     /**
