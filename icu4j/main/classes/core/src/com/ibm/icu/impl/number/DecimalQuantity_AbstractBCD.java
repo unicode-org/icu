@@ -657,45 +657,9 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             return isNegative() ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
         }
 
-        // TODO: Do like in C++ and use a library function to perform this conversion?
-        // This code is not as hot in Java because .parse() returns a BigDecimal, not a double.
-
-        long tempLong = 0L;
-        int lostDigits = precision - Math.min(precision, 17);
-        for (int shift = precision - 1; shift >= lostDigits; shift--) {
-            tempLong = tempLong * 10 + getDigitPos(shift);
-        }
-        double result = tempLong;
-        int _scale = scale + lostDigits;
-        if (_scale >= 0) {
-            // 1e22 is the largest exact double.
-            int i = _scale;
-            for (; i >= 22; i -= 22) {
-                result *= 1e22;
-                if (Double.isInfinite(result)) {
-                    // Further multiplications will not be productive.
-                    i = 0;
-                    break;
-                }
-            }
-            result *= DOUBLE_MULTIPLIERS[i];
-        } else {
-            // 1e22 is the largest exact double.
-            int i = _scale;
-            for (; i <= -22; i += 22) {
-                result /= 1e22;
-                if (result == 0.0) {
-                    // Further divisions will not be productive.
-                    i = 0;
-                    break;
-                }
-            }
-            result /= DOUBLE_MULTIPLIERS[-i];
-        }
-        if (isNegative()) {
-            result = -result;
-        }
-        return result;
+        StringBuilder sb = new StringBuilder();
+        toScientificString(sb);
+        return Double.valueOf(sb.toString());
     }
 
     @Override
