@@ -78,6 +78,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void validRanges();
     void copyMove();
     void localPointerCAPI();
+    void toObject();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
@@ -270,6 +271,7 @@ class NumberRangeFormatterTest : public IntlTestWithFieldPosition {
     void testPlurals();
     void testFieldPositions();
     void testCopyMove();
+    void toObject();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 

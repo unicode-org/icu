@@ -162,6 +162,16 @@ Derived NumberRangeFormatterSettings<Derived>::identityFallback(UNumberRangeIden
     return move;
 }
 
+template<typename Derived>
+LocalPointer<Derived> NumberRangeFormatterSettings<Derived>::clone() const & {
+    return LocalPointer<Derived>(new Derived(*this));
+}
+
+template<typename Derived>
+LocalPointer<Derived> NumberRangeFormatterSettings<Derived>::clone() && {
+    return LocalPointer<Derived>(new Derived(std::move(*this)));
+}
+
 // Declare all classes that implement NumberRangeFormatterSettings
 // See https://stackoverflow.com/a/495056/1407170
 template

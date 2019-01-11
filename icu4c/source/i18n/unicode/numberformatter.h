@@ -44,18 +44,19 @@
  *     .format(1234)
  *     .toString();  // €1.2K in en-US
  *
- * // Create a formatter in a singleton for use later:
+ * // Create a formatter in a singleton by value for use later:
  * static const LocalizedNumberFormatter formatter = NumberFormatter::withLocale(...)
  *     .unit(NoUnit::percent())
  *     .precision(Precision::fixedFraction(3));
  * formatter.format(5.9831).toString();  // 5.983% in en-US
  *
- * // Create a "template" in a singleton but without setting a locale until the call site:
- * static const UnlocalizedNumberFormatter template = NumberFormatter::with()
+ * // Create a "template" in a singleton unique_ptr but without setting a locale until the call site:
+ * std::unique_ptr<UnlocalizedNumberFormatter> template = NumberFormatter::with()
  *     .sign(UNumberSignDisplay::UNUM_SIGN_ALWAYS)
  *     .adoptUnit(MeasureUnit::createMeter(status))
- *     .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME);
- * template.locale(...).format(1234).toString();  // +1,234 meters in en-US
+ *     .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME)
+ *     .clone();
+ * template->locale(...).format(1234).toString();  // +1,234 meters in en-US
  * </pre>
  *
  * <p>
@@ -2077,6 +2078,28 @@ class U_I18N_API NumberFormatterSettings {
      * @draft ICU 62
      */
     UnicodeString toSkeleton(UErrorCode& status) const;
+
+    /**
+     * Returns the current (Un)LocalizedNumberFormatter as a LocalPointer
+     * wrapping a heap-allocated copy of the current object.
+     *
+     * This is equivalent to new-ing the move constructor with a value object
+     * as the argument.
+     *
+     * @return A wrapped (Un)LocalizedNumberFormatter pointer, or a wrapped
+     *         nullptr on failure.
+     * @draft ICU 64
+     */
+    LocalPointer<Derived> clone() const &;
+
+    /**
+     * Overload of clone for use on an rvalue reference.
+     *
+     * @return A wrapped (Un)LocalizedNumberFormatter pointer, or a wrapped
+     *         nullptr on failure.
+     * @draft ICU 64
+     */
+    LocalPointer<Derived> clone() &&;
 
     /**
      * Sets the UErrorCode if an error occurred in the fluent chain.
