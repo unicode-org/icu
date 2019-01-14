@@ -63,6 +63,7 @@ class PropertiesAffixPatternProvider : public AffixPatternProvider, public UMemo
     UnicodeString posSuffix;
     UnicodeString negPrefix;
     UnicodeString negSuffix;
+    bool isCurrencyPattern;
 
     const UnicodeString& getStringInternal(int32_t flags) const;
 

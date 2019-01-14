@@ -46,20 +46,10 @@ public class PatternStringUtils {
         boolean alwaysShowDecimal = properties.getDecimalSeparatorAlwaysShown();
         int exponentDigits = Math.min(properties.getMinimumExponentDigits(), dosMax);
         boolean exponentShowPlusSign = properties.getExponentSignAlwaysShown();
-        String pp = properties.getPositivePrefix();
-        String ppp = properties.getPositivePrefixPattern();
-        String ps = properties.getPositiveSuffix();
-        String psp = properties.getPositiveSuffixPattern();
-        String np = properties.getNegativePrefix();
-        String npp = properties.getNegativePrefixPattern();
-        String ns = properties.getNegativeSuffix();
-        String nsp = properties.getNegativeSuffixPattern();
+        PropertiesAffixPatternProvider affixes = new PropertiesAffixPatternProvider(properties);
 
         // Prefixes
-        if (ppp != null) {
-            sb.append(ppp);
-        }
-        AffixUtils.escape(pp, sb);
+        sb.append(affixes.getString(AffixPatternProvider.FLAG_POS_PREFIX));
         int afterPrefixPos = sb.length();
 
         // Figure out the grouping sizes.
@@ -150,10 +140,7 @@ public class PatternStringUtils {
 
         // Suffixes
         int beforeSuffixPos = sb.length();
-        if (psp != null) {
-            sb.append(psp);
-        }
-        AffixUtils.escape(ps, sb);
+        sb.append(affixes.getString(AffixPatternProvider.FLAG_POS_SUFFIX));
 
         // Resolve Padding
         if (paddingWidth != -1) {
@@ -188,20 +175,13 @@ public class PatternStringUtils {
 
         // Negative affixes
         // Ignore if the negative prefix pattern is "-" and the negative suffix is empty
-        if (np != null
-                || ns != null
-                || (npp == null && nsp != null)
-                || (npp != null && (npp.length() != 1 || npp.charAt(0) != '-' || nsp.length() != 0))) {
+        if (affixes.hasNegativeSubpattern()) {
             sb.append(';');
-            if (npp != null)
-                sb.append(npp);
-            AffixUtils.escape(np, sb);
+            sb.append(affixes.getString(AffixPatternProvider.FLAG_NEG_PREFIX));
             // Copy the positive digit format into the negative.
             // This is optional; the pattern is the same as if '#' were appended here instead.
             sb.append(sb, afterPrefixPos, beforeSuffixPos);
-            if (nsp != null)
-                sb.append(nsp);
-            AffixUtils.escape(ns, sb);
+            sb.append(affixes.getString(AffixPatternProvider.FLAG_NEG_SUFFIX));
         }
 
         return sb.toString();
