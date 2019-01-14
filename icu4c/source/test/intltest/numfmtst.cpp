@@ -220,6 +220,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test20037_ScientificIntegerOverflow);
   TESTCASE_AUTO(Test13840_ParseLongStringCrash);
   TESTCASE_AUTO(Test13850_EmptyStringCurrency);
+  TESTCASE_AUTO(Test20348_CurrencyPrefixOverride);
   TESTCASE_AUTO_END;
 }
 
@@ -9326,6 +9327,42 @@ void NumberFormatTest::Test13850_EmptyStringCurrency() {
         assertEquals(u"Should unset the currency " + message, u"\u00A41.00", actual);
         status.errIfFailureAndReset();
     }
+}
+
+void NumberFormatTest::Test20348_CurrencyPrefixOverride() {
+    IcuTestErrorCode status(*this, "Test20348_CurrencyPrefixOverride");
+    // LocalUNumberFormatPointer fmt(unum_open(UNUM_CURRENCY, NULL, 0, "en", NULL, status));
+    LocalPointer<DecimalFormat> fmt(static_cast<DecimalFormat*>(
+        NumberFormat::createCurrencyInstance("en", status)));
+    UnicodeString result;
+    assertEquals("Initial pattern",
+        u"¤#,##0.00", fmt->toPattern(result.remove()));
+    assertEquals("Initial prefix",
+        u"¤", fmt->getPositivePrefix(result.remove()));
+    assertEquals("Initial suffix",
+        u"-¤", fmt->getNegativePrefix(result.remove()));
+    assertEquals("Initial format",
+        u"\u00A4100.00", fmt->format(100, result.remove(), NULL, status));
+
+    fmt->setPositivePrefix(u"$");
+    assertEquals("Set positive prefix pattern",
+        u"$#,##0.00;-\u00A4#,##0.00", fmt->toPattern(result.remove()));
+    assertEquals("Set positive prefix prefix",
+        u"$", fmt->getPositivePrefix(result.remove()));
+    assertEquals("Set positive prefix suffix",
+        u"-¤", fmt->getNegativePrefix(result.remove()));
+    assertEquals("Set positive prefix format",
+        u"$100.00", fmt->format(100, result.remove(), NULL, status));
+
+    fmt->setNegativePrefix(u"-$");
+    assertEquals("Set negative prefix pattern",
+        u"$#,##0.00;'-'$#,##0.00", fmt->toPattern(result.remove()));
+    assertEquals("Set negative prefix prefix",
+        u"$", fmt->getPositivePrefix(result.remove()));
+    assertEquals("Set negative prefix suffix",
+        u"-$", fmt->getNegativePrefix(result.remove()));
+    assertEquals("Set negative prefix format",
+        u"$100.00", fmt->format(100, result.remove(), NULL, status));
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

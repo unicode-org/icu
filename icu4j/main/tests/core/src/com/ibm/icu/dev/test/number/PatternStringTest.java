@@ -72,19 +72,19 @@ public class PatternStringTest {
     @Test
     public void testToPatternWithProperties() {
         Object[][] cases = {
-                { new DecimalFormatProperties().setPositivePrefix("abc"), "abc#" },
-                { new DecimalFormatProperties().setPositiveSuffix("abc"), "#abc" },
+                { new DecimalFormatProperties().setPositivePrefix("abc"), "abc#;-#" },
+                { new DecimalFormatProperties().setPositiveSuffix("abc"), "#abc;-#" },
                 { new DecimalFormatProperties().setPositivePrefixPattern("abc"), "abc#" },
                 { new DecimalFormatProperties().setPositiveSuffixPattern("abc"), "#abc" },
                 { new DecimalFormatProperties().setNegativePrefix("abc"), "#;abc#" },
-                { new DecimalFormatProperties().setNegativeSuffix("abc"), "#;#abc" },
+                { new DecimalFormatProperties().setNegativeSuffix("abc"), "#;-#abc" },
                 { new DecimalFormatProperties().setNegativePrefixPattern("abc"), "#;abc#" },
-                { new DecimalFormatProperties().setNegativeSuffixPattern("abc"), "#;#abc" },
-                { new DecimalFormatProperties().setPositivePrefix("+"), "'+'#" },
+                { new DecimalFormatProperties().setNegativeSuffixPattern("abc"), "#;-#abc" },
+                { new DecimalFormatProperties().setPositivePrefix("+"), "'+'#;-#" },
                 { new DecimalFormatProperties().setPositivePrefixPattern("+"), "+#" },
-                { new DecimalFormatProperties().setPositivePrefix("+'"), "'+'''#" },
-                { new DecimalFormatProperties().setPositivePrefix("'+"), "'''+'#" },
-                { new DecimalFormatProperties().setPositivePrefix("'"), "''#" },
+                { new DecimalFormatProperties().setPositivePrefix("+'"), "'+'''#;-#" },
+                { new DecimalFormatProperties().setPositivePrefix("'+"), "'''+'#;-#" },
+                { new DecimalFormatProperties().setPositivePrefix("'"), "''#;-#" },
                 { new DecimalFormatProperties().setPositivePrefixPattern("+''"), "+''#" }, };
 
         for (Object[] cas : cases) {

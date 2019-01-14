@@ -80,8 +80,10 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     ///////////
 
     bool useCurrency = (
-            !properties.currency.isNull() || !properties.currencyPluralInfo.fPtr.isNull() ||
-            !properties.currencyUsage.isNull() || affixProvider->hasCurrencySign());
+            !properties.currency.isNull() ||
+            !properties.currencyPluralInfo.fPtr.isNull() ||
+            !properties.currencyUsage.isNull() ||
+            affixProvider->hasCurrencySign());
     CurrencyUnit currency = resolveCurrency(properties, locale, status);
     UCurrencyUsage currencyUsage = properties.currencyUsage.getOrDefault(UCURR_USAGE_STANDARD);
     if (useCurrency) {
@@ -317,7 +319,7 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
 }
 
 
-void PropertiesAffixPatternProvider::setTo(const DecimalFormatProperties& properties, UErrorCode&) {
+void PropertiesAffixPatternProvider::setTo(const DecimalFormatProperties& properties, UErrorCode& status) {
     fBogus = false;
 
     // There are two ways to set affixes in DecimalFormat: via the pattern string (applyPattern), and via the
@@ -327,9 +329,7 @@ void PropertiesAffixPatternProvider::setTo(const DecimalFormatProperties& proper
     // 2) Otherwise, follows UTS 35 rules based on the pattern string.
     //
     // Importantly, the explicit setters affect only the one field they override.  If you set the positive
-    // prefix, that should not affect the negative prefix.  Since it is impossible for the user of this class
-    // to know whether the origin for a string was the override or the pattern, we have to say that we always
-    // have a negative subpattern and perform all resolution logic here.
+    // prefix, that should not affect the negative prefix.
 
     // Convenience: Extract the properties into local variables.
     // Variables are named with three chars: [p/n][p/s][o/p]
@@ -381,6 +381,14 @@ void PropertiesAffixPatternProvider::setTo(const DecimalFormatProperties& proper
         // UTS 35: Default negative prefix is the positive prefix.
         negSuffix = psp.isBogus() ? u"" : psp;
     }
+
+    // For declaring if this is a currency pattern, we need to look at the
+    // original pattern, not at any user-specified overrides.
+    isCurrencyPattern = (
+        AffixUtils::hasCurrencySymbols(ppp, status) ||
+        AffixUtils::hasCurrencySymbols(psp, status) ||
+        AffixUtils::hasCurrencySymbols(npp, status) ||
+        AffixUtils::hasCurrencySymbols(nsp, status));
 }
 
 char16_t PropertiesAffixPatternProvider::charAt(int flags, int i) const {
@@ -417,8 +425,11 @@ bool PropertiesAffixPatternProvider::positiveHasPlusSign() const {
 }
 
 bool PropertiesAffixPatternProvider::hasNegativeSubpattern() const {
-    // See comments in the constructor for more information on why this is always true.
-    return true;
+    return (
+        (negSuffix != posSuffix) ||
+        negPrefix.tempSubString(1) != posPrefix ||
+        negPrefix.charAt(0) != u'-'
+    );
 }
 
 bool PropertiesAffixPatternProvider::negativeHasMinusSign() const {
@@ -428,11 +439,7 @@ bool PropertiesAffixPatternProvider::negativeHasMinusSign() const {
 }
 
 bool PropertiesAffixPatternProvider::hasCurrencySign() const {
-    ErrorCode localStatus;
-    return AffixUtils::hasCurrencySymbols(posPrefix, localStatus) ||
-           AffixUtils::hasCurrencySymbols(posSuffix, localStatus) ||
-           AffixUtils::hasCurrencySymbols(negPrefix, localStatus) ||
-           AffixUtils::hasCurrencySymbols(negSuffix, localStatus);
+    return isCurrencyPattern;
 }
 
 bool PropertiesAffixPatternProvider::containsSymbolType(AffixPatternType type, UErrorCode& status) const {

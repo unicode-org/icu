@@ -15,6 +15,7 @@
 #include "unicode/utf16.h"
 #include "number_utils.h"
 #include "number_roundingutils.h"
+#include "number_mapper.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -664,20 +665,11 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
     bool alwaysShowDecimal = properties.decimalSeparatorAlwaysShown;
     int exponentDigits = uprv_min(properties.minimumExponentDigits, dosMax);
     bool exponentShowPlusSign = properties.exponentSignAlwaysShown;
-    UnicodeString pp = properties.positivePrefix;
-    UnicodeString ppp = properties.positivePrefixPattern;
-    UnicodeString ps = properties.positiveSuffix;
-    UnicodeString psp = properties.positiveSuffixPattern;
-    UnicodeString np = properties.negativePrefix;
-    UnicodeString npp = properties.negativePrefixPattern;
-    UnicodeString ns = properties.negativeSuffix;
-    UnicodeString nsp = properties.negativeSuffixPattern;
+
+    PropertiesAffixPatternProvider affixes(properties, status);
 
     // Prefixes
-    if (!ppp.isBogus()) {
-        sb.append(ppp);
-    }
-    sb.append(AffixUtils::escape(pp));
+    sb.append(affixes.getString(AffixPatternProvider::AFFIX_POS_PREFIX));
     int afterPrefixPos = sb.length();
 
     // Figure out the grouping sizes.
@@ -771,10 +763,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
 
     // Suffixes
     int beforeSuffixPos = sb.length();
-    if (!psp.isBogus()) {
-        sb.append(psp);
-    }
-    sb.append(AffixUtils::escape(ps));
+    sb.append(affixes.getString(AffixPatternProvider::AFFIX_POS_SUFFIX));
 
     // Resolve Padding
     if (paddingWidth != -1 && !paddingLocation.isNull()) {
@@ -810,23 +799,16 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
 
     // Negative affixes
     // Ignore if the negative prefix pattern is "-" and the negative suffix is empty
-    if (!np.isBogus() || !ns.isBogus() || (npp.isBogus() && !nsp.isBogus()) ||
-        (!npp.isBogus() && (npp.length() != 1 || npp.charAt(0) != u'-' || nsp.length() != 0))) {
+    if (affixes.hasNegativeSubpattern()) {
         sb.append(u';');
-        if (!npp.isBogus()) {
-            sb.append(npp);
-        }
-        sb.append(AffixUtils::escape(np));
+        sb.append(affixes.getString(AffixPatternProvider::AFFIX_NEG_PREFIX));
         // Copy the positive digit format into the negative.
         // This is optional; the pattern is the same as if '#' were appended here instead.
         // NOTE: It is not safe to append the UnicodeString to itself, so we need to copy.
         // See http://bugs.icu-project.org/trac/ticket/13707
         UnicodeString copy(sb);
         sb.append(copy, afterPrefixPos, beforeSuffixPos - afterPrefixPos);
-        if (!nsp.isBogus()) {
-            sb.append(nsp);
-        }
-        sb.append(AffixUtils::escape(ns));
+        sb.append(affixes.getString(AffixPatternProvider::AFFIX_NEG_SUFFIX));
     }
 
     return sb;

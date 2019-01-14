@@ -6373,4 +6373,37 @@ public class NumberFormatTest extends TestFmwk {
 
         assertEquals("Should round-trip without crashing", expectedUString, actualUString);
     }
+
+    @Test
+    public void test20348_CurrencyPrefixOverride() {
+        DecimalFormat fmt = (DecimalFormat) NumberFormat.getCurrencyInstance(ULocale.ENGLISH);
+        assertEquals("Initial pattern",
+            "¤#,##0.00", fmt.toPattern());
+        assertEquals("Initial prefix",
+            "¤", fmt.getPositivePrefix());
+        assertEquals("Initial suffix",
+            "-¤", fmt.getNegativePrefix());
+        assertEquals("Initial format",
+            "\u00A4100.00", fmt.format(100));
+
+        fmt.setPositivePrefix("$");
+        assertEquals("Set positive prefix pattern",
+            "$#,##0.00;-\u00A4#,##0.00", fmt.toPattern());
+        assertEquals("Set positive prefix prefix",
+            "$", fmt.getPositivePrefix());
+        assertEquals("Set positive prefix suffix",
+            "-¤", fmt.getNegativePrefix());
+        assertEquals("Set positive prefix format",
+            "$100.00", fmt.format(100));
+
+        fmt.setNegativePrefix("-$");
+        assertEquals("Set negative prefix pattern",
+            "$#,##0.00;'-'$#,##0.00", fmt.toPattern());
+        assertEquals("Set negative prefix prefix",
+            "$", fmt.getPositivePrefix());
+        assertEquals("Set negative prefix suffix",
+            "-$", fmt.getNegativePrefix());
+        assertEquals("Set negative prefix format",
+            "$100.00", fmt.format(100));
+    }
 }

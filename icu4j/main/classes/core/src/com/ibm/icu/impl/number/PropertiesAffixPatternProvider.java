@@ -7,6 +7,7 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
     private final String posSuffix;
     private final String negPrefix;
     private final String negSuffix;
+    private final boolean isCurrencyPattern;
 
     public PropertiesAffixPatternProvider(DecimalFormatProperties properties) {
         // There are two ways to set affixes in DecimalFormat: via the pattern string (applyPattern), and via the
@@ -16,9 +17,7 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
         // 2) Otherwise, follows UTS 35 rules based on the pattern string.
         //
         // Importantly, the explicit setters affect only the one field they override.  If you set the positive
-        // prefix, that should not affect the negative prefix.  Since it is impossible for the user of this class
-        // to know whether the origin for a string was the override or the pattern, we have to say that we always
-        // have a negative subpattern and perform all resolution logic here.
+        // prefix, that should not affect the negative prefix.
 
         // Convenience: Extract the properties into local variables.
         // Variables are named with three chars: [p/n][p/s][o/p]
@@ -70,6 +69,14 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
             // UTS 35: Default negative prefix is the positive prefix.
             negSuffix = psp == null ? "" : psp;
         }
+
+        // For declaring if this is a currency pattern, we need to look at the
+        // original pattern, not at any user-specified overrides.
+        isCurrencyPattern = (
+            AffixUtils.hasCurrencySymbols(ppp) ||
+            AffixUtils.hasCurrencySymbols(psp) ||
+            AffixUtils.hasCurrencySymbols(npp) ||
+            AffixUtils.hasCurrencySymbols(nsp));
     }
 
     @Override
@@ -105,8 +112,12 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
 
     @Override
     public boolean hasNegativeSubpattern() {
-        // See comments in the constructor for more information on why this is always true.
-        return true;
+        return (
+            negSuffix != posSuffix ||
+            negPrefix.length() != posPrefix.length() + 1 ||
+            !negPrefix.regionMatches(1, posPrefix, 0, posPrefix.length()) ||
+            negPrefix.charAt(0) != '-'
+        );
     }
 
     @Override
@@ -117,8 +128,7 @@ public class PropertiesAffixPatternProvider implements AffixPatternProvider {
 
     @Override
     public boolean hasCurrencySign() {
-        return AffixUtils.hasCurrencySymbols(posPrefix) || AffixUtils.hasCurrencySymbols(posSuffix)
-                || AffixUtils.hasCurrencySymbols(negPrefix) || AffixUtils.hasCurrencySymbols(negSuffix);
+        return isCurrencyPattern;
     }
 
     @Override

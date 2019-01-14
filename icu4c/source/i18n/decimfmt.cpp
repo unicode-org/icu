@@ -74,7 +74,8 @@ DecimalFormat::DecimalFormat(const UnicodeString& pattern, DecimalFormatSymbols*
                              UNumberFormatStyle style, UErrorCode& status)
         : DecimalFormat(symbolsToAdopt, status) {
     // If choice is a currency type, ignore the rounding information.
-    if (style == UNumberFormatStyle::UNUM_CURRENCY || style == UNumberFormatStyle::UNUM_CURRENCY_ISO ||
+    if (style == UNumberFormatStyle::UNUM_CURRENCY ||
+        style == UNumberFormatStyle::UNUM_CURRENCY_ISO ||
         style == UNumberFormatStyle::UNUM_CURRENCY_ACCOUNTING ||
         style == UNumberFormatStyle::UNUM_CASH_CURRENCY ||
         style == UNumberFormatStyle::UNUM_CURRENCY_STANDARD ||
@@ -933,12 +934,14 @@ UnicodeString& DecimalFormat::toPattern(UnicodeString& result) const {
     // TODO: Consider putting this logic in number_patternstring.cpp instead.
     ErrorCode localStatus;
     DecimalFormatProperties tprops(*fields->properties);
-    bool useCurrency = ((!tprops.currency.isNull()) || !tprops.currencyPluralInfo.fPtr.isNull() ||
-                        !tprops.currencyUsage.isNull() || AffixUtils::hasCurrencySymbols(
-            tprops.positivePrefixPattern, localStatus) || AffixUtils::hasCurrencySymbols(
-            tprops.positiveSuffixPattern, localStatus) || AffixUtils::hasCurrencySymbols(
-            tprops.negativePrefixPattern, localStatus) || AffixUtils::hasCurrencySymbols(
-            tprops.negativeSuffixPattern, localStatus));
+    bool useCurrency = (
+        !tprops.currency.isNull() ||
+        !tprops.currencyPluralInfo.fPtr.isNull() ||
+        !tprops.currencyUsage.isNull() ||
+        AffixUtils::hasCurrencySymbols(tprops.positivePrefixPattern, localStatus) ||
+        AffixUtils::hasCurrencySymbols(tprops.positiveSuffixPattern, localStatus) ||
+        AffixUtils::hasCurrencySymbols(tprops.negativePrefixPattern, localStatus) ||
+        AffixUtils::hasCurrencySymbols(tprops.negativeSuffixPattern, localStatus));
     if (useCurrency) {
         tprops.minimumFractionDigits = fields->exportedProperties->minimumFractionDigits;
         tprops.maximumFractionDigits = fields->exportedProperties->maximumFractionDigits;
