@@ -986,7 +986,8 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
     /* Check each entry in the directory. */
     while((dirEntry = readdir(dirp)) != NULL) {
         const char* dirName = dirEntry->d_name;
-        if (uprv_strcmp(dirName, SKIP1) != 0 && uprv_strcmp(dirName, SKIP2) != 0) {
+        if (uprv_strcmp(dirName, SKIP1) != 0 && uprv_strcmp(dirName, SKIP2) != 0
+            && uprv_strcmp(TZFILE_SKIP, dirName) != 0 && uprv_strcmp(TZFILE_SKIP2, dirName) != 0) {
             /* Create a newpath with the new entry to test each entry in the directory. */
             CharString newpath(curpath, status);
             newpath.append(dirName, -1, status);
@@ -1013,7 +1014,7 @@ static char* searchForTZFile(const char* path, DefaultTZInfo* tzInfo) {
                 */
                 if (result != NULL)
                     break;
-            } else if (uprv_strcmp(TZFILE_SKIP, dirName) != 0 && uprv_strcmp(TZFILE_SKIP2, dirName) != 0) {
+            } else {
                 if(compareBinaryFiles(TZDEFAULT, newpath.data(), tzInfo)) {
                     int32_t amountToSkip = sizeof(TZZONEINFO) - 1;
                     if (amountToSkip > newpath.length()) {
