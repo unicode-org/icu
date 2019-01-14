@@ -16,9 +16,23 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
+
 #if U_PLATFORM_HAS_WINUWP_API == 0
 #include <stdlib.h> // getenv() is not available in UWP env
 #endif
+
+#if U_PLATFORM_HAS_WIN32_API == 1
+#ifndef WIN32_LEAN_AND_MEAN
+#   define WIN32_LEAN_AND_MEAN
+#endif
+#   define VC_EXTRALEAN
+#   define NOUSER
+#   define NOSERVICE
+#   define NOIME
+#   define NOMCX
+#include <windows.h>
+#endif
+
 #include "cmemory.h"
 #include "erarules.h"
 #include "japancal.h"
@@ -53,16 +67,57 @@ static const char* TENTATIVE_ERA_VAR_NAME = "ICU_ENABLE_TENTATIVE_ERA";
 
 // Initialize global Japanese era data
 static void U_CALLCONV initializeEras(UErrorCode &status) {
-    // Although start date of next Japanese era is planned ahead, a name of
-    // new era might not be available. This implementation allows tester to
-    // check a new era without era names by settings below (in priority order).
+    // Although the start date of the next Japanese era is planned ahead, the name of the
+    // new era might not be available. This implementation allows testers to
+    // check for new eras without era names by the setting(s) below.
     // By default, such tentative era is disabled.
 
-    // 1. Environment variable ICU_ENABLE_TENTATIVE_ERA=true or false
+    // ICU as an App component:
+    //  1. Environment variable ICU_ENABLE_TENTATIVE_ERA=true or false
+    // ICU as a Windows system component:
+    //  1. NLS registry key for new era. (Environment variable is ignored).
 
     UBool includeTentativeEra = FALSE;
 
-#if U_PLATFORM_HAS_WINUWP_API == 1
+// When ICU is used as a Windows system component, we want to use the NLS registry key, so that
+// enabling the tentative era for NLS also enables it for ICU.
+#ifdef ICU_DATA_DIR_WINDOWS
+    // Look in the registry key and enable tentative era if there are more than 4 era values.
+    HKEY hkeyJapaneseEras = nullptr;
+    if (RegOpenKeyExW(HKEY_LOCAL_MACHINE,
+        L"System\\CurrentControlSet\\Control\\Nls\\Calendars\\Japanese\\Eras",
+        0,
+        KEY_QUERY_VALUE,
+        &hkeyJapaneseEras) == ERROR_SUCCESS)
+    {
+        DWORD cValues; // number of values for key 
+
+        // Query number of values
+        DWORD retVal = RegQueryInfoKeyW(
+            hkeyJapaneseEras,
+            nullptr,         
+            nullptr,         
+            nullptr,         
+            nullptr,         
+            nullptr,         
+            nullptr,         
+            &cValues,         
+            nullptr,         
+            nullptr,         
+            nullptr,         
+            nullptr);        
+
+        if (retVal == ERROR_SUCCESS)
+        {
+            if (cValues > 4)
+            {
+                includeTentativeEra = TRUE;
+            }
+        }
+
+        RegCloseKey(hkeyJapaneseEras);
+    }
+#elif U_PLATFORM_HAS_WINUWP_API == 1
     // UWP doesn't allow access to getenv(), but we can call GetEnvironmentVariableW to do the same thing.
     UChar varName[26] = {};
     u_charsToUChars(TENTATIVE_ERA_VAR_NAME, varName, static_cast<int32_t>(uprv_strlen(TENTATIVE_ERA_VAR_NAME)));
@@ -77,6 +132,7 @@ static void U_CALLCONV initializeEras(UErrorCode &status) {
         includeTentativeEra = TRUE;
     }
 #endif
+
     gJapaneseEraRules = EraRules::createInstance("japanese", includeTentativeEra, status);
     if (U_FAILURE(status)) {
         return;
