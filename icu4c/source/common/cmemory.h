@@ -285,7 +285,7 @@ inline T *LocalMemory<T>::allocateInsteadAndCopy(int32_t newCapacity, int32_t le
  *
  * WARNING: MaybeStackArray only works with primitive (plain-old data) types.
  * It does NOT know how to call a destructor! If you work with classes with
- * destructors, consider LocalArray in localpointer.h.
+ * destructors, consider LocalArray in localpointer.h or MemoryPool.
  */
 template<typename T, int32_t stackCapacity>
 class MaybeStackArray {
@@ -692,9 +692,8 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::orphanOrClone(int32_t l
  *
  * It doesn't do anything more than that, and is intentionally kept minimalist.
  */
-template<typename T>
+template<typename T, int32_t stackCapacity = 8>
 class MemoryPool : public UMemory {
-    enum { STACK_CAPACITY = 8 };
 public:
     MemoryPool() : count(0), pool() {}
 
@@ -730,7 +729,7 @@ public:
     T* create(Args&&... args) {
         int32_t capacity = pool.getCapacity();
         if (count == capacity &&
-            pool.resize(capacity == STACK_CAPACITY ? 32 : 2 * capacity,
+            pool.resize(capacity == stackCapacity ? 4 * capacity : 2 * capacity,
                         capacity) == nullptr) {
             return nullptr;
         }
@@ -739,7 +738,7 @@ public:
 
 private:
     int32_t count;
-    MaybeStackArray<T*, STACK_CAPACITY> pool;
+    MaybeStackArray<T*, stackCapacity> pool;
 };
 
 U_NAMESPACE_END
