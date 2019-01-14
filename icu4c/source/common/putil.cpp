@@ -103,17 +103,6 @@
 #   include <windows.h>
 #   include "unicode/uloc.h"
 #   include "wintz.h"
-#if U_PLATFORM_HAS_WINUWP_API
-typedef PVOID LPMSG; // TODO: figure out how to get rid of this typedef
-#include <Windows.Globalization.h>
-#include <windows.system.userprofile.h>
-#include <wrl/wrappers/corewrappers.h>
-#include <wrl/client.h>
-
-using namespace ABI::Windows::Foundation;
-using namespace Microsoft::WRL;
-using namespace Microsoft::WRL::Wrappers;
-#endif
 #elif U_PLATFORM == U_PF_OS400
 #   include <float.h>
 #   include <qusec.h>       /* error code structure */
