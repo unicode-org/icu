@@ -178,7 +178,7 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
         Map<StandardPlural, SimpleModifier> modifiers = new EnumMap<>(
                 StandardPlural.class);
         LongNameHandler result = new LongNameHandler(modifiers, rules, parent);
-        result.simpleFormatsToModifiers(simpleFormats, null);
+        result.simpleFormatsToModifiers(simpleFormats, NumberFormat.Field.CURRENCY);
         return result;
     }
 
