@@ -2415,6 +2415,29 @@ public class NumberFormatterApiTest {
         }
 
         {
+            String message = "Currency long name fields";
+            FormattedNumber result = assertFormatSingle(
+                    message,
+                    "currency/USD unit-width-full-name",
+                    NumberFormatter.with().unit(USD)
+                        .unitWidth(UnitWidth.FULL_NAME),
+                    ULocale.ENGLISH,
+                    12345,
+                    "12,345.00 US dollars");
+            Object[][] expectedFieldPositions = new Object[][] {
+                    // field, begin index, end index
+                    {NumberFormat.Field.GROUPING_SEPARATOR, 2, 3},
+                    {NumberFormat.Field.INTEGER, 0, 6},
+                    {NumberFormat.Field.DECIMAL_SEPARATOR, 6, 7},
+                    {NumberFormat.Field.FRACTION, 7, 9},
+                    {NumberFormat.Field.CURRENCY, 10, 20}};
+            assertNumberFieldPositions(
+                    message,
+                    result,
+                    expectedFieldPositions);
+        }
+
+        {
             String message = "Compact with measure unit fields";
             FormattedNumber result = assertFormatSingle(
                     message,

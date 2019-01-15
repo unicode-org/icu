@@ -2452,6 +2452,30 @@ void NumberFormatterApiTest::fieldPositionCoverage() {
     }
 
     {
+        const char16_t* message = u"Currency long name fields";
+        FormattedNumber result = assertFormatSingle(
+                message,
+                u"currency/USD unit-width-full-name",
+                NumberFormatter::with().unit(USD)
+                    .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
+                "en",
+                12345,
+                u"12,345.00 US dollars");
+        static const UFieldPosition expectedFieldPositions[] = {
+                // field, begin index, end index
+                {UNUM_GROUPING_SEPARATOR_FIELD, 2, 3},
+                {UNUM_INTEGER_FIELD, 0, 6},
+                {UNUM_DECIMAL_SEPARATOR_FIELD, 6, 7},
+                {UNUM_FRACTION_FIELD, 7, 9},
+                {UNUM_CURRENCY_FIELD, 10, 20}};
+        assertNumberFieldPositions(
+                message,
+                result,
+                expectedFieldPositions,
+                UPRV_LENGTHOF(expectedFieldPositions));
+    }
+
+    {
         const char16_t* message = u"Compact with measure unit fields";
         FormattedNumber result = assertFormatSingle(
                 message,
