@@ -95,7 +95,6 @@ TimeUnit::TimeUnit(TimeUnit::UTimeUnitFields timeUnitField) {
         break;
     default:
         UPRV_UNREACHABLE;
-        break;
     }
 }
 

@@ -3545,8 +3545,6 @@ const CEI *CEIBuffer::get(int32_t index) {
     //   that is allowed.
     if (index != limitIx) {
         UPRV_UNREACHABLE;
-
-        return NULL;
     }
 
     // Manage the circular CE buffer indexing
@@ -3584,8 +3582,6 @@ const CEI *CEIBuffer::getPrevious(int32_t index) {
     //   that is allowed.
     if (index != limitIx) {
         UPRV_UNREACHABLE;
-
-        return NULL;
     }
 
     // Manage the circular CE buffer indexing

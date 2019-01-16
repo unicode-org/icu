@@ -270,7 +270,6 @@ void NumberRangeFormatterImpl::format(UFormattedNumberRangeData& data, bool equa
 
         default:
             UPRV_UNREACHABLE;
-            break;
     }
 }
 

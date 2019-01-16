@@ -48,7 +48,6 @@ Grouper Grouper::forStrategy(UGroupingStrategy grouping) {
         return {3, 3, 1, grouping};
     default:
         UPRV_UNREACHABLE;
-        return {}; // return a value: silence compiler warning
     }
 }
 

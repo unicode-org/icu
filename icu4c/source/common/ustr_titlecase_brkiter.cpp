@@ -78,12 +78,6 @@ BreakIterator *WholeStringBreakIterator::clone() const { return nullptr; }
 
 CharacterIterator &WholeStringBreakIterator::getText() const {
     UPRV_UNREACHABLE;  // really should not be called
-    // Returns a null reference.
-    // Otherwise we would have to define a dummy CharacterIterator,
-    // and either have it as a field and const_cast it to a non-const reference,
-    // or have it via a pointer and return a reference to that.
-    CharacterIterator *none = nullptr;
-    return *none;
 }
 UText *WholeStringBreakIterator::getUText(UText * /*fillIn*/, UErrorCode &errorCode) const {
     if (U_SUCCESS(errorCode)) {
@@ -107,8 +101,6 @@ void  WholeStringBreakIterator::setText(UText *text, UErrorCode &errorCode) {
 }
 void  WholeStringBreakIterator::adoptText(CharacterIterator* it) {
     UPRV_UNREACHABLE;  // should not be called
-    length = it->getLength();
-    delete it;
 }
 
 int32_t WholeStringBreakIterator::first() { return 0; }

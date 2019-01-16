@@ -1841,8 +1841,6 @@ UBool RegexCompile::doParseActions(int32_t action)
 
     default:
         UPRV_UNREACHABLE;
-        error(U_REGEX_INTERNAL_ERROR);
-        break;
     }
 
     if (U_FAILURE(*fStatus)) {
@@ -1950,24 +1948,16 @@ int32_t RegexCompile::buildOp(int32_t type, int32_t val) {
     }
     if (type < 0 || type > 255) {
         UPRV_UNREACHABLE;
-        error(U_REGEX_INTERNAL_ERROR);
-        type = URX_RESERVED_OP;
     }
     if (val > 0x00ffffff) {
         UPRV_UNREACHABLE;
-        error(U_REGEX_INTERNAL_ERROR);
-        val = 0;
     }
     if (val < 0) {
         if (!(type == URX_RESERVED_OP_N || type == URX_RESERVED_OP)) {
             UPRV_UNREACHABLE;
-            error(U_REGEX_INTERNAL_ERROR);
-            return -1;
         }
         if (URX_TYPE(val) != 0xff) {
             UPRV_UNREACHABLE;
-            error(U_REGEX_INTERNAL_ERROR);
-            return -1;
         }
         type = URX_RESERVED_OP_N;
     }
@@ -2609,7 +2599,6 @@ void  RegexCompile::findCaseInsensitiveStarters(UChar32 c, UnicodeSet *starterCh
     if (c < UCHAR_MIN_VALUE || c > UCHAR_MAX_VALUE) {
         // This function should never be called with an invalid input character.
         UPRV_UNREACHABLE;
-        starterChars->clear();
     } else if (u_hasBinaryProperty(c, UCHAR_CASE_SENSITIVE)) {
         UChar32 caseFoldedC  = u_foldCase(c, U_FOLD_CASE_DEFAULT);
         starterChars->set(caseFoldedC, caseFoldedC);
@@ -3105,9 +3094,6 @@ void   RegexCompile::matchStartType() {
         case URX_LBN_END:
             UPRV_UNREACHABLE;     // Shouldn't get here.  These ops should be
                                  //  consumed by the scan in URX_LA_START and LB_START
-
-            break;
-
         default:
             UPRV_UNREACHABLE;
             }
@@ -3674,7 +3660,6 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
             // These opcodes will be skipped over by code for URX_CRT_INIT.
             // We shouldn't encounter them here.
             UPRV_UNREACHABLE;
-            break;
 
         case URX_LOOP_SR_I:
         case URX_LOOP_DOT_I:
@@ -3695,7 +3680,6 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
             // End of look-ahead ops should always be consumed by the processing at
             //  the URX_LA_START op.
             // UPRV_UNREACHABLE;
-            // break;
 
         case URX_LB_START:
             {
@@ -3876,7 +3860,6 @@ void RegexCompile::stripNOPs() {
         default:
             // Some op is unaccounted for.
             UPRV_UNREACHABLE;
-            error(U_REGEX_INTERNAL_ERROR);
         }
     }
 
@@ -4623,7 +4606,6 @@ void RegexCompile::setEval(int32_t nextOp) {
                 break;
             default:
                 UPRV_UNREACHABLE;
-                break;
             }
         }
     }

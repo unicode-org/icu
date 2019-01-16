@@ -427,11 +427,9 @@ void RoundingImpl::apply(impl::DecimalQuantity &value, UErrorCode& status) const
         case Precision::RND_CURRENCY:
             // Call .withCurrency() before .apply()!
             UPRV_UNREACHABLE;
-            break;
 
         default:
             UPRV_UNREACHABLE;
-            break;
     }
 }
 

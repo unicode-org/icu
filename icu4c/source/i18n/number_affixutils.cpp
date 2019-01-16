@@ -152,7 +152,6 @@ Field AffixUtils::getFieldForType(AffixPatternType type) {
             return Field::UNUM_CURRENCY_FIELD;
         default:
             UPRV_UNREACHABLE;
-            return Field::UNUM_FIELD_COUNT; // suppress "control reaches end of non-void function"
     }
 }
 
@@ -412,7 +411,6 @@ AffixTag AffixUtils::nextToken(AffixTag tag, const UnicodeString &patternString,
             return makeTag(offset, TYPE_CURRENCY_OVERFLOW, STATE_BASE, 0);
         default:
             UPRV_UNREACHABLE;
-            return {-1}; // suppress "control reaches end of non-void function"
     }
 }
 

@@ -730,8 +730,6 @@ void *SpoofData::reserveSpace(int32_t numBytes,  UErrorCode &status) {
     }
     if (!fDataOwned) {
         UPRV_UNREACHABLE;
-        status = U_INTERNAL_PROGRAM_ERROR;
-        return NULL;
     }
 
     numBytes = (numBytes + 15) & ~15;   // Round up to a multiple of 16

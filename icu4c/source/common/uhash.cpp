@@ -377,7 +377,6 @@ _uhash_find(const UHashtable *hash, UHashTok key,
          * count is always < length.
          */
         UPRV_UNREACHABLE;
-        return NULL; /* Never happens if uhash_put() behaves */
     }
     return &(elements[theIndex]);
 }
