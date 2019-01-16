@@ -881,7 +881,6 @@ UBool RegexMatcher::find(UErrorCode &status) {
     }
 
     UPRV_UNREACHABLE;
-    return FALSE;
 }
 
 
@@ -1138,7 +1137,6 @@ UBool RegexMatcher::findUsingChunk(UErrorCode &status) {
     }
 
     UPRV_UNREACHABLE;
-    return FALSE;
 }
 
 

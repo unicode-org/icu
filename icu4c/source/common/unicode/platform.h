@@ -528,25 +528,6 @@ namespace std {
 #   define U_FALLTHROUGH
 #endif
 
-/**
- * \def UPRV_UNREACHABLE
- * Annotate unreachable code.
- * https://clang.llvm.org/docs/LanguageExtensions.html#builtin-unreachable
- * @internal
-*/
-#if defined(UPRV_UNREACHABLE)
-    // Use the predefined value.
-#elif U_DEBUG
-    // Assert on Debug builds to catch if "unreachable" code is reached.
-#   define UPRV_UNREACHABLE U_ASSERT(FALSE)
-#elif (defined(__GNUC__) && (U_GCC_MAJOR_MINOR >= 405)) || ( defined(__clang__))
-#   define UPRV_UNREACHABLE __builtin_unreachable()
-#elif defined(_MSC_VER)
-#   define UPRV_UNREACHABLE __assume(0)
-#else
-#   define UPRV_UNREACHABLE U_ASSERT(FALSE)
-#endif
-
 /** @} */
 
 /*===========================================================================*/

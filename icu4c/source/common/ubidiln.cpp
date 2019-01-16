@@ -517,7 +517,7 @@ reorderLine(UBiDi *pBiDi, UBiDiLevel minLevel, UBiDiLevel maxLevel) {
 
 /* compute the runs array --------------------------------------------------- */
 
-static int32_t getRunFromLogicalIndex(UBiDi *pBiDi, int32_t logicalIndex, UErrorCode *pErrorCode) {
+static int32_t getRunFromLogicalIndex(UBiDi *pBiDi, int32_t logicalIndex) {
     Run *runs=pBiDi->runs;
     int32_t runCount=pBiDi->runCount, visualStart=0, i, length, logicalStart;
 
@@ -531,8 +531,6 @@ static int32_t getRunFromLogicalIndex(UBiDi *pBiDi, int32_t logicalIndex, UError
     }
     /* we should never get here */
     UPRV_UNREACHABLE;
-    *pErrorCode = U_INVALID_STATE_ERROR;
-    return 0;
 }
 
 /*
@@ -688,7 +686,7 @@ ubidi_getRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
                       *limit=start+pBiDi->insertPoints.size;
         int32_t runIndex;
         for(point=start; point<limit; point++) {
-            runIndex=getRunFromLogicalIndex(pBiDi, point->pos, pErrorCode);
+            runIndex=getRunFromLogicalIndex(pBiDi, point->pos);
             pBiDi->runs[runIndex].insertRemove|=point->flag;
         }
     }
@@ -699,7 +697,7 @@ ubidi_getRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
         const UChar *start=pBiDi->text, *limit=start+pBiDi->length, *pu;
         for(pu=start; pu<limit; pu++) {
             if(IS_BIDI_CONTROL_CHAR(*pu)) {
-                runIndex=getRunFromLogicalIndex(pBiDi, (int32_t)(pu-start), pErrorCode);
+                runIndex=getRunFromLogicalIndex(pBiDi, (int32_t)(pu-start));
                 pBiDi->runs[runIndex].insertRemove--;
             }
         }

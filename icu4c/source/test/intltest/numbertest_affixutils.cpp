@@ -43,7 +43,6 @@ class DefaultSymbolProvider : public SymbolProvider {
                 return u"\uFFFD";
             default:
                 UPRV_UNREACHABLE;
-                return {}; // silence compiler warnings
         }
     }
 };

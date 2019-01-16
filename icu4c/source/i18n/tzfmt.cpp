@@ -590,7 +590,6 @@ TimeZoneFormat::setGMTOffsetPattern(UTimeZoneFormatGMTOffsetPatternType type, co
         break;
     default:
         UPRV_UNREACHABLE;
-        break;
     }
 
     UVector* patternItems = parseOffsetPattern(pattern, required, status);

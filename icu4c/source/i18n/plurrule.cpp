@@ -1472,7 +1472,6 @@ PluralOperand tokenTypeToPluralOperand(tokenType tt) {
         return PLURAL_OPERAND_T;
     default:
         UPRV_UNREACHABLE;  // unexpected.
-        return PLURAL_OPERAND_N;
     }
 }
 
@@ -1685,7 +1684,6 @@ double FixedDecimal::getPluralOperand(PluralOperand operand) const {
         case PLURAL_OPERAND_V: return visibleDecimalDigitCount;
         default:
              UPRV_UNREACHABLE;  // unexpected.
-             return source;
     }
 }
 

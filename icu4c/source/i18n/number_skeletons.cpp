@@ -160,7 +160,6 @@ Notation stem_to_object::notation(skeleton::StemEnum stem) {
             return Notation::simple();
         default:
             UPRV_UNREACHABLE;
-            return Notation::simple(); // return a value: silence compiler warning
     }
 }
 
@@ -177,7 +176,6 @@ MeasureUnit stem_to_object::unit(skeleton::StemEnum stem) {
             return NoUnit::permille(); // NOLINT
         default:
             UPRV_UNREACHABLE;
-            return {}; // return a value: silence compiler warning
     }
 }
 
@@ -193,7 +191,6 @@ Precision stem_to_object::precision(skeleton::StemEnum stem) {
             return Precision::currency(UCURR_USAGE_CASH);
         default:
             UPRV_UNREACHABLE;
-            return Precision::integer(); // return a value: silence compiler warning
     }
 }
 
@@ -217,7 +214,6 @@ UNumberFormatRoundingMode stem_to_object::roundingMode(skeleton::StemEnum stem) 
             return UNUM_ROUND_UNNECESSARY;
         default:
             UPRV_UNREACHABLE;
-            return UNUM_ROUND_UNNECESSARY;
     }
 }
 
@@ -666,7 +662,6 @@ skeleton::parseStem(const StringSegment& segment, const UCharsTrie& stemTrie, Se
 
         default:
             UPRV_UNREACHABLE;
-            return STATE_NULL; // return a value: silence compiler warning
     }
 }
 

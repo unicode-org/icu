@@ -208,7 +208,6 @@ u_UCharsToChars(const UChar *us, char *cs, int32_t length) {
         u=*us++;
         if(!UCHAR_IS_INVARIANT(u)) {
             UPRV_UNREACHABLE; /* Variant characters were used. These are not portable in ICU. */
-            u=0;
         }
         *cs++=(char)UCHAR_TO_CHAR(u);
         --length;

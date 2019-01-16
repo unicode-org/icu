@@ -93,7 +93,6 @@ bool ConstantAffixModifier::containsField(UNumberFormatFields field) const {
     (void)field;
     // This method is not currently used.
     UPRV_UNREACHABLE;
-    return false;
 }
 
 void ConstantAffixModifier::getParameters(Parameters& output) const {
@@ -183,7 +182,6 @@ bool SimpleModifier::containsField(UNumberFormatFields field) const {
     (void)field;
     // This method is not currently used.
     UPRV_UNREACHABLE;
-    return false;
 }
 
 void SimpleModifier::getParameters(Parameters& output) const {

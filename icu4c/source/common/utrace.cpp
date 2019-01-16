@@ -68,7 +68,6 @@ utrace_exit(int32_t fnNumber, int32_t returnType, ...) {
             break;
         default:
             UPRV_UNREACHABLE;
-            fmt = gExitFmt;
         }
 
         va_start(args, returnType);
