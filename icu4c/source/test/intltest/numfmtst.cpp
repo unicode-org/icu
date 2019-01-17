@@ -221,6 +221,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test13840_ParseLongStringCrash);
   TESTCASE_AUTO(Test13850_EmptyStringCurrency);
   TESTCASE_AUTO(Test20348_CurrencyPrefixOverride);
+  TESTCASE_AUTO(Test20358_GroupingInPattern);
   TESTCASE_AUTO_END;
 }
 
@@ -9385,7 +9386,6 @@ void NumberFormatTest::Test13850_EmptyStringCurrency() {
 
 void NumberFormatTest::Test20348_CurrencyPrefixOverride() {
     IcuTestErrorCode status(*this, "Test20348_CurrencyPrefixOverride");
-    // LocalUNumberFormatPointer fmt(unum_open(UNUM_CURRENCY, NULL, 0, "en", NULL, status));
     LocalPointer<DecimalFormat> fmt(static_cast<DecimalFormat*>(
         NumberFormat::createCurrencyInstance("en", status)));
     UnicodeString result;
@@ -9417,6 +9417,35 @@ void NumberFormatTest::Test20348_CurrencyPrefixOverride() {
         u"-$", fmt->getNegativePrefix(result.remove()));
     assertEquals("Set negative prefix format",
         u"$100.00", fmt->format(100, result.remove(), NULL, status));
+}
+
+void NumberFormatTest::Test20358_GroupingInPattern() {
+    IcuTestErrorCode status(*this, "Test20358_GroupingInPattern");
+    LocalPointer<DecimalFormat> fmt(static_cast<DecimalFormat*>(
+        NumberFormat::createInstance("en", status)));
+    UnicodeString result;
+    assertEquals("Initial pattern",
+        u"#,##0.###", fmt->toPattern(result.remove()));
+    assertTrue("Initial grouping",
+        fmt->isGroupingUsed());
+    assertEquals("Initial format",
+        u"54,321", fmt->format(54321, result.remove(), NULL, status));
+
+    fmt->setGroupingUsed(false);
+    assertEquals("Set grouping false",
+        u"0.###", fmt->toPattern(result.remove()));
+    assertFalse("Set grouping false grouping",
+        fmt->isGroupingUsed());
+    assertEquals("Set grouping false format",
+        u"54321", fmt->format(54321, result.remove(), NULL, status));
+
+    fmt->setGroupingUsed(true);
+    assertEquals("Set grouping true",
+        u"#,##0.###", fmt->toPattern(result.remove()));
+    assertTrue("Set grouping true grouping",
+        fmt->isGroupingUsed());
+    assertEquals("Set grouping true format",
+        u"54,321", fmt->format(54321, result.remove(), NULL, status));
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

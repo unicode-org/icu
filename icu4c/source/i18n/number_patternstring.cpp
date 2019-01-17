@@ -650,54 +650,42 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
 
     // Convenience references
     // The uprv_min() calls prevent DoS
-    int dosMax = 100;
-    int groupingSize = uprv_min(properties.secondaryGroupingSize, dosMax);
-    int firstGroupingSize = uprv_min(properties.groupingSize, dosMax);
-    int paddingWidth = uprv_min(properties.formatWidth, dosMax);
+    int32_t dosMax = 100;
+    int32_t grouping1 = uprv_max(0, uprv_min(properties.groupingSize, dosMax));
+    int32_t grouping2 = uprv_max(0, uprv_min(properties.secondaryGroupingSize, dosMax));
+    bool useGrouping = properties.groupingUsed;
+    int32_t paddingWidth = uprv_min(properties.formatWidth, dosMax);
     NullableValue<PadPosition> paddingLocation = properties.padPosition;
     UnicodeString paddingString = properties.padString;
-    int minInt = uprv_max(uprv_min(properties.minimumIntegerDigits, dosMax), 0);
-    int maxInt = uprv_min(properties.maximumIntegerDigits, dosMax);
-    int minFrac = uprv_max(uprv_min(properties.minimumFractionDigits, dosMax), 0);
-    int maxFrac = uprv_min(properties.maximumFractionDigits, dosMax);
-    int minSig = uprv_min(properties.minimumSignificantDigits, dosMax);
-    int maxSig = uprv_min(properties.maximumSignificantDigits, dosMax);
+    int32_t minInt = uprv_max(0, uprv_min(properties.minimumIntegerDigits, dosMax));
+    int32_t maxInt = uprv_min(properties.maximumIntegerDigits, dosMax);
+    int32_t minFrac = uprv_max(0, uprv_min(properties.minimumFractionDigits, dosMax));
+    int32_t maxFrac = uprv_min(properties.maximumFractionDigits, dosMax);
+    int32_t minSig = uprv_min(properties.minimumSignificantDigits, dosMax);
+    int32_t maxSig = uprv_min(properties.maximumSignificantDigits, dosMax);
     bool alwaysShowDecimal = properties.decimalSeparatorAlwaysShown;
-    int exponentDigits = uprv_min(properties.minimumExponentDigits, dosMax);
+    int32_t exponentDigits = uprv_min(properties.minimumExponentDigits, dosMax);
     bool exponentShowPlusSign = properties.exponentSignAlwaysShown;
 
     PropertiesAffixPatternProvider affixes(properties, status);
 
     // Prefixes
     sb.append(affixes.getString(AffixPatternProvider::AFFIX_POS_PREFIX));
-    int afterPrefixPos = sb.length();
+    int32_t afterPrefixPos = sb.length();
 
     // Figure out the grouping sizes.
-    int grouping1, grouping2, grouping;
-    if (groupingSize != uprv_min(dosMax, -1) && firstGroupingSize != uprv_min(dosMax, -1) &&
-        groupingSize != firstGroupingSize) {
-        grouping = groupingSize;
-        grouping1 = groupingSize;
-        grouping2 = firstGroupingSize;
-    } else if (groupingSize != uprv_min(dosMax, -1)) {
-        grouping = groupingSize;
-        grouping1 = 0;
-        grouping2 = groupingSize;
-    } else if (firstGroupingSize != uprv_min(dosMax, -1)) {
-        grouping = groupingSize;
-        grouping1 = 0;
-        grouping2 = firstGroupingSize;
-    } else {
-        grouping = 0;
+    if (!useGrouping) {
         grouping1 = 0;
         grouping2 = 0;
+    } else if (grouping1 == grouping2) {
+        grouping1 = 0;
     }
-    int groupingLength = grouping1 + grouping2 + 1;
+    int32_t groupingLength = grouping1 + grouping2 + 1;
 
     // Figure out the digits we need to put in the pattern.
     double roundingInterval = properties.roundingIncrement;
     UnicodeString digitsString;
-    int digitsStringScale = 0;
+    int32_t digitsStringScale = 0;
     if (maxSig != uprv_min(dosMax, -1)) {
         // Significant Digits.
         while (digitsString.length() < minSig) {
@@ -731,22 +719,30 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
     }
 
     // Write the digits to the string builder
-    int m0 = uprv_max(groupingLength, digitsString.length() + digitsStringScale);
+    int32_t m0 = uprv_max(groupingLength, digitsString.length() + digitsStringScale);
     m0 = (maxInt != dosMax) ? uprv_max(maxInt, m0) - 1 : m0 - 1;
-    int mN = (maxFrac != dosMax) ? uprv_min(-maxFrac, digitsStringScale) : digitsStringScale;
-    for (int magnitude = m0; magnitude >= mN; magnitude--) {
-        int di = digitsString.length() + digitsStringScale - magnitude - 1;
+    int32_t mN = (maxFrac != dosMax) ? uprv_min(-maxFrac, digitsStringScale) : digitsStringScale;
+    for (int32_t magnitude = m0; magnitude >= mN; magnitude--) {
+        int32_t di = digitsString.length() + digitsStringScale - magnitude - 1;
         if (di < 0 || di >= digitsString.length()) {
             sb.append(u'#');
         } else {
             sb.append(digitsString.charAt(di));
         }
-        if (magnitude > grouping2 && grouping > 0 && (magnitude - grouping2) % grouping == 0) {
-            sb.append(u',');
-        } else if (magnitude > 0 && magnitude == grouping2) {
-            sb.append(u',');
-        } else if (magnitude == 0 && (alwaysShowDecimal || mN < 0)) {
+        // Decimal separator
+        if (magnitude == 0 && (alwaysShowDecimal || mN < 0)) {
             sb.append(u'.');
+        }
+        if (!useGrouping) {
+            continue;
+        }
+        // Least-significant grouping separator
+        if (magnitude > 0 && magnitude == grouping1) {
+            sb.append(u',');
+        }
+        // All other grouping separators
+        if (magnitude > grouping1 && grouping2 > 0 && (magnitude - grouping1) % grouping2 == 0) {
+            sb.append(u',');
         }
     }
 
@@ -756,13 +752,13 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
         if (exponentShowPlusSign) {
             sb.append(u'+');
         }
-        for (int i = 0; i < exponentDigits; i++) {
+        for (int32_t i = 0; i < exponentDigits; i++) {
             sb.append(u'0');
         }
     }
 
     // Suffixes
-    int beforeSuffixPos = sb.length();
+    int32_t beforeSuffixPos = sb.length();
     sb.append(affixes.getString(AffixPatternProvider::AFFIX_POS_SUFFIX));
 
     // Resolve Padding
@@ -771,7 +767,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
             sb.insert(afterPrefixPos, u'#');
             beforeSuffixPos++;
         }
-        int addedLength;
+        int32_t addedLength;
         switch (paddingLocation.get(status)) {
             case PadPosition::UNUM_PAD_BEFORE_PREFIX:
                 addedLength = escapePaddingString(paddingString, sb, 0, status);

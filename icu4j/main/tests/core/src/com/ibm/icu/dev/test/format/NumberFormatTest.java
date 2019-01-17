@@ -6406,4 +6406,31 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("Set negative prefix format",
             "$100.00", fmt.format(100));
     }
+
+    @Test
+    public void test20358_GroupingInPattern() {
+        DecimalFormat fmt = (DecimalFormat) NumberFormat.getInstance(ULocale.ENGLISH);
+        assertEquals("Initial pattern",
+            "#,##0.###", fmt.toPattern());
+        assertTrue("Initial grouping",
+            fmt.isGroupingUsed());
+        assertEquals("Initial format",
+            "54,321", fmt.format(54321));
+
+        fmt.setGroupingUsed(false);
+        assertEquals("Set grouping false",
+            "0.###", fmt.toPattern());
+        assertFalse("Set grouping false grouping",
+            fmt.isGroupingUsed());
+        assertEquals("Set grouping false format",
+            "54321", fmt.format(54321));
+
+        fmt.setGroupingUsed(true);
+        assertEquals("Set grouping true",
+            "#,##0.###", fmt.toPattern());
+        assertTrue("Set grouping true grouping",
+            fmt.isGroupingUsed());
+        assertEquals("Set grouping true format",
+            "54,321", fmt.format(54321));
+    }
 }

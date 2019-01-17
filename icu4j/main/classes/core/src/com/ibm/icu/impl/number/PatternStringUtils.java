@@ -32,14 +32,15 @@ public class PatternStringUtils {
         // Convenience references
         // The Math.min() calls prevent DoS
         int dosMax = 100;
-        int groupingSize = Math.min(properties.getSecondaryGroupingSize(), dosMax);
-        int firstGroupingSize = Math.min(properties.getGroupingSize(), dosMax);
+        int grouping1 = Math.max(0, Math.min(properties.getGroupingSize(), dosMax));
+        int grouping2 = Math.max(0, Math.min(properties.getSecondaryGroupingSize(), dosMax));
+        boolean useGrouping = properties.getGroupingUsed();
         int paddingWidth = Math.min(properties.getFormatWidth(), dosMax);
         PadPosition paddingLocation = properties.getPadPosition();
         String paddingString = properties.getPadString();
-        int minInt = Math.max(Math.min(properties.getMinimumIntegerDigits(), dosMax), 0);
+        int minInt = Math.max(0, Math.min(properties.getMinimumIntegerDigits(), dosMax));
         int maxInt = Math.min(properties.getMaximumIntegerDigits(), dosMax);
-        int minFrac = Math.max(Math.min(properties.getMinimumFractionDigits(), dosMax), 0);
+        int minFrac = Math.max(0, Math.min(properties.getMinimumFractionDigits(), dosMax));
         int maxFrac = Math.min(properties.getMaximumFractionDigits(), dosMax);
         int minSig = Math.min(properties.getMinimumSignificantDigits(), dosMax);
         int maxSig = Math.min(properties.getMaximumSignificantDigits(), dosMax);
@@ -53,25 +54,11 @@ public class PatternStringUtils {
         int afterPrefixPos = sb.length();
 
         // Figure out the grouping sizes.
-        int grouping1, grouping2, grouping;
-        if (groupingSize != Math.min(dosMax, -1)
-                && firstGroupingSize != Math.min(dosMax, -1)
-                && groupingSize != firstGroupingSize) {
-            grouping = groupingSize;
-            grouping1 = groupingSize;
-            grouping2 = firstGroupingSize;
-        } else if (groupingSize != Math.min(dosMax, -1)) {
-            grouping = groupingSize;
-            grouping1 = 0;
-            grouping2 = groupingSize;
-        } else if (firstGroupingSize != Math.min(dosMax, -1)) {
-            grouping = groupingSize;
-            grouping1 = 0;
-            grouping2 = firstGroupingSize;
-        } else {
-            grouping = 0;
+        if (!useGrouping) {
             grouping1 = 0;
             grouping2 = 0;
+        } else if (grouping1 == grouping2) {
+            grouping1 = 0;
         }
         int groupingLength = grouping1 + grouping2 + 1;
 
@@ -118,12 +105,20 @@ public class PatternStringUtils {
             } else {
                 sb.append(digitsString.charAt(di));
             }
-            if (magnitude > grouping2 && grouping > 0 && (magnitude - grouping2) % grouping == 0) {
-                sb.append(',');
-            } else if (magnitude > 0 && magnitude == grouping2) {
-                sb.append(',');
-            } else if (magnitude == 0 && (alwaysShowDecimal || mN < 0)) {
+            // Decimal separator
+            if (magnitude == 0 && (alwaysShowDecimal || mN < 0)) {
                 sb.append('.');
+            }
+            if (!useGrouping) {
+                continue;
+            }
+            // Least-significant grouping separator
+            if (magnitude > 0 && magnitude == grouping1) {
+                sb.append(',');
+            }
+            // All other grouping separators
+            if (magnitude > grouping1 && grouping2 > 0 && (magnitude - grouping1) % grouping2 == 0) {
+                sb.append(',');
             }
         }
 
