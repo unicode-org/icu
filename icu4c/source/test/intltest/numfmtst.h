@@ -286,6 +286,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test13840_ParseLongStringCrash();
     void Test13850_EmptyStringCurrency();
     void Test20348_CurrencyPrefixOverride();
+    void Test20358_GroupingInPattern();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);
