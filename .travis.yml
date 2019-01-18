@@ -35,7 +35,7 @@ matrix:
         - make -j2
       script:
         - make -j2 check
-        - ( cd test/depstest && ./depstest.py ../../../source/ )
+        - ( cd test/depstest && python3 depstest.py ../../../source/ )
 
     - name: "c: osx clang"
       language: cpp
