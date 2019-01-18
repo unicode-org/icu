@@ -45,6 +45,15 @@ _virtual_classes = set()
 # nm shows a symbol class of "W" rather than "T".
 _weak_destructors = set()
 
+def iteritems(items):
+  """Python 2/3-compatible iteritems"""
+  try:
+    for v in items.iteritems():
+      yield v
+  except AttributeError:
+    for v in items.items():
+      yield v
+
 def _ReadObjFile(root_path, library_name, obj_name):
   global _ignored_symbols, _obj_files, _symbols_to_files
   global _virtual_classes, _weak_destructors
@@ -61,7 +70,7 @@ def _ReadObjFile(root_path, library_name, obj_name):
   obj_imports = set()
   obj_exports = set()
   for line in nm_result.splitlines():
-    fields = line.split("|")
+    fields = line.decode().split("|")
     if len(fields) == 1: continue
     name = fields[0].strip()
     # Ignore symbols like '__cxa_pure_virtual',
@@ -168,7 +177,7 @@ def Process(root_path):
   global _ignored_symbols, _obj_files, _return_value
   global _virtual_classes, _weak_destructors
   dependencies.Load()
-  for name_and_item in dependencies.items.iteritems():
+  for name_and_item in iteritems(dependencies.items):
     name = name_and_item[0]
     item = name_and_item[1]
     system_symbols = item.get("system_symbols")
