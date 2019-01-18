@@ -1182,9 +1182,9 @@ TimeZone::getDisplayName(const Locale& locale, UnicodeString& result) const
 }
 
 UnicodeString&
-TimeZone::getDisplayName(UBool daylight, EDisplayType style, UnicodeString& result)  const
+TimeZone::getDisplayName(UBool inDaylight, EDisplayType style, UnicodeString& result)  const
 {
-    return getDisplayName(daylight,style, Locale::getDefault(), result);
+    return getDisplayName(inDaylight,style, Locale::getDefault(), result);
 }
 //--------------------------------------
 int32_t
@@ -1196,7 +1196,7 @@ TimeZone::getDSTSavings()const {
 }
 //---------------------------------------
 UnicodeString&
-TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& locale, UnicodeString& result) const
+TimeZone::getDisplayName(UBool inDaylight, EDisplayType style, const Locale& locale, UnicodeString& result) const
 {
     UErrorCode status = U_ZERO_ERROR;
     UDate date = Calendar::getNow();
@@ -1226,8 +1226,8 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
         // Generic format many use Localized GMT as the final fallback.
         // When Localized GMT format is used, the result might not be
         // appropriate for the requested daylight value.
-        if ((daylight && timeType == UTZFMT_TIME_TYPE_STANDARD) || (!daylight && timeType == UTZFMT_TIME_TYPE_DAYLIGHT)) {
-            offset = daylight ? getRawOffset() + getDSTSavings() : getRawOffset();
+        if ((inDaylight && timeType == UTZFMT_TIME_TYPE_STANDARD) || (!inDaylight && timeType == UTZFMT_TIME_TYPE_DAYLIGHT)) {
+            offset = inDaylight ? getRawOffset() + getDSTSavings() : getRawOffset();
             if (style == SHORT_GENERIC) {
                 tzfmt->formatOffsetShortLocalizedGMT(offset, result, status);
             } else {
@@ -1240,7 +1240,7 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
             result.remove();
             return result;
         }
-        offset = daylight && useDaylightTime() ? getRawOffset() + getDSTSavings() : getRawOffset();
+        offset = inDaylight && useDaylightTime() ? getRawOffset() + getDSTSavings() : getRawOffset();
         switch (style) {
         case LONG_GMT:
             tzfmt->formatOffsetLocalizedGMT(offset, result, status);
@@ -1257,11 +1257,11 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
         UTimeZoneNameType nameType = UTZNM_UNKNOWN;
         switch (style) {
         case LONG:
-            nameType = daylight ? UTZNM_LONG_DAYLIGHT : UTZNM_LONG_STANDARD;
+            nameType = inDaylight ? UTZNM_LONG_DAYLIGHT : UTZNM_LONG_STANDARD;
             break;
         case SHORT:
         case SHORT_COMMONLY_USED:
-            nameType = daylight ? UTZNM_SHORT_DAYLIGHT : UTZNM_SHORT_STANDARD;
+            nameType = inDaylight ? UTZNM_SHORT_DAYLIGHT : UTZNM_SHORT_STANDARD;
             break;
         default:
             UPRV_UNREACHABLE;
@@ -1276,7 +1276,7 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
         if (result.isEmpty()) {
             // Fallback to localized GMT
             LocalPointer<TimeZoneFormat> tzfmt(TimeZoneFormat::createInstance(locale, status));
-            offset = daylight && useDaylightTime() ? getRawOffset() + getDSTSavings() : getRawOffset();
+            offset = inDaylight && useDaylightTime() ? getRawOffset() + getDSTSavings() : getRawOffset();
             if (style == LONG) {
                 tzfmt->formatOffsetLocalizedGMT(offset, result, status);
             } else {
