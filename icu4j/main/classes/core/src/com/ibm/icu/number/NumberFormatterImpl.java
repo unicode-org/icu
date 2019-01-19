@@ -20,6 +20,7 @@ import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.Padder;
 import com.ibm.icu.impl.number.PatternStringParser;
 import com.ibm.icu.impl.number.PatternStringParser.ParsedPatternInfo;
+import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.NumberFormatter.DecimalSeparatorDisplay;
 import com.ibm.icu.number.NumberFormatter.GroupingStrategy;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -263,7 +264,8 @@ class NumberFormatterImpl {
             micros.rounder = Precision.DEFAULT_MAX_FRAC_6;
         }
         if (macros.roundingMode != null) {
-            micros.rounder = micros.rounder.withMode(macros.roundingMode);
+            micros.rounder = micros.rounder.withMode(
+                    RoundingUtils.mathContextUnlimited(macros.roundingMode));
         }
         micros.rounder = micros.rounder.withLocaleData(currency);
 

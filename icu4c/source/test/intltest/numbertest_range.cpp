@@ -647,7 +647,7 @@ void NumberRangeFormatterTest::testDifferentFormatters() {
         u"Different rounding rules",
         NumberRangeFormatter::with()
             .numberFormatterFirst(NumberFormatter::with().precision(Precision::integer()))
-            .numberFormatterSecond(NumberFormatter::with().precision(Precision::fixedDigits(2))),
+            .numberFormatterSecond(NumberFormatter::with().precision(Precision::fixedSignificantDigits(2))),
         Locale("en-us"),
         u"1–5.0",
         u"5–5.0",

@@ -777,7 +777,7 @@ public class DecimalFormat extends NumberFormat {
     if (!(obj instanceof Number)) throw new IllegalArgumentException();
     Number number = (Number) obj;
     FormattedNumber output = formatter.format(number);
-    return output.getFieldIterator();
+    return output.toCharacterIterator();
   }
 
   /**

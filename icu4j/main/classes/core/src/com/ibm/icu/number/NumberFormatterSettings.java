@@ -213,15 +213,6 @@ public abstract class NumberFormatterSettings<T extends NumberFormatterSettings<
     }
 
     /**
-     * @deprecated ICU 62 Use precision() instead. This method is for backwards compatibility and will be
-     *             removed in ICU 64. See http://bugs.icu-project.org/trac/ticket/13746
-     */
-    @Deprecated
-    public T rounding(Precision rounder) {
-        return precision(rounder);
-    }
-
-    /**
      * Specifies how to determine the direction to round a number when it has more digits than fit in the
      * desired precision.  When formatting 1.235:
      *

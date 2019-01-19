@@ -169,13 +169,6 @@ CurrencyPrecision Precision::currency(UCurrencyUsage currencyUsage) {
     return constructCurrency(currencyUsage);
 }
 
-Precision Precision::withMode(RoundingMode roundingMode) const {
-    if (fType == RND_ERROR) { return *this; } // no-op in error state
-    Precision retval = *this;
-    retval.fRoundingMode = roundingMode;
-    return retval;
-}
-
 Precision FractionPrecision::withMinDigits(int32_t minSignificantDigits) const {
     if (fType == RND_ERROR) { return *this; } // no-op in error state
     if (minSignificantDigits >= 1 && minSignificantDigits <= kMaxIntFracSig) {

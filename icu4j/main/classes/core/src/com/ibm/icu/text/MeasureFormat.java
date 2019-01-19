@@ -36,6 +36,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.number.LongNameHandler;
+import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.FormattedNumber;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
@@ -320,7 +321,7 @@ public class MeasureFormat extends UFormat {
             formatMeasuresInternal(toAppendTo, fpos, (Measure[]) obj);
         } else if (obj instanceof Measure) {
             FormattedNumber result = formatMeasure((Measure) obj);
-            result.populateFieldPosition(fpos); // No offset: toAppendTo.length() is considered below
+            result.nextFieldPosition(fpos); // No offset: toAppendTo.length() is considered below
             result.appendTo(toAppendTo);
         } else {
             throw new IllegalArgumentException(obj.toString());
@@ -433,7 +434,7 @@ public class MeasureFormat extends UFormat {
         }
         if (measures.length == 1) {
             FormattedNumber result = formatMeasure(measures[0]);
-            result.populateFieldPosition(fieldPosition);
+            result.nextFieldPosition(fieldPosition);
             result.appendTo(appendTo);
             return;
         }
@@ -741,7 +742,8 @@ public class MeasureFormat extends UFormat {
         } else {
             assert type == NUMBER_FORMATTER_INTEGER;
             formatter = getNumberFormatter().unit(unit).perUnit(perUnit).unitWidth(formatWidth.unitWidth)
-                    .rounding(Precision.integer().withMode(RoundingMode.DOWN));
+                    .precision(Precision.integer().withMode(
+                            RoundingUtils.mathContextUnlimited(RoundingMode.DOWN)));
         }
         formatter3 = formatter2;
         formatter2 = formatter1;
@@ -802,7 +804,7 @@ public class MeasureFormat extends UFormat {
                 result = formatMeasureInteger(measures[i]);
             }
             if (fieldPositionFoundIndex == -1) {
-                result.populateFieldPosition(fpos);
+                result.nextFieldPosition(fpos);
                 if (fpos.getEndIndex() != 0) {
                     fieldPositionFoundIndex = i;
                 }
@@ -929,7 +931,7 @@ public class MeasureFormat extends UFormat {
         // when formatting 0 minutes 9 seconds, we may get "00:9" instead of "00:09"
         FieldPosition intFieldPosition = new FieldPosition(NumberFormat.INTEGER_FIELD);
         FormattedNumber result = getNumberFormatter().format(smallestAmount);
-        result.populateFieldPosition(intFieldPosition);
+        result.nextFieldPosition(intFieldPosition);
         smallestAmountFormatted = result.toString();
         // Give up if there is no integer field.
         if (intFieldPosition.getBeginIndex() == 0 && intFieldPosition.getEndIndex() == 0) {

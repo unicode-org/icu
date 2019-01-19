@@ -5,7 +5,6 @@ package com.ibm.icu.number;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
-import java.math.RoundingMode;
 
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.MultiplierProducer;
@@ -36,11 +35,11 @@ public abstract class Precision implements Cloneable {
      *
      * <p>
      * <strong>NOTE:</strong> When formatting a <em>double</em>, this method, along with
-     * {@link #minFraction} and {@link #minDigits}, will trigger complex algorithm similar to
+     * {@link #minFraction} and {@link #minSignificantDigits}, will trigger complex algorithm similar to
      * <em>Dragon4</em> to determine the low-order digits and the number of digits to display based on
      * the value of the double. If the number of fraction places or significant digits can be bounded,
-     * consider using {@link #maxFraction} or {@link #maxDigits} instead to maximize performance. For
-     * more information, read the following blog post.
+     * consider using {@link #maxFraction} or {@link #maxSignificantDigits} instead to maximize performance.
+     * For more information, read the following blog post.
      *
      * <p>
      * http://www.serpentine.com/blog/2011/06/29/here-be-dragons-advances-in-problems-you-didnt-even-know-you-had/
@@ -280,42 +279,6 @@ public abstract class Precision implements Cloneable {
     }
 
     /**
-     * @deprecated ICU 62 Use *SignificantDigits() instead. This method is for backwards compatibility
-     *             and will be removed in ICU 64. See http://bugs.icu-project.org/trac/ticket/13746
-     */
-    @Deprecated
-    public static Precision fixedDigits(int a) {
-        return fixedSignificantDigits(a);
-    }
-
-    /**
-     * @deprecated ICU 62 Use *SignificantDigits() instead. This method is for backwards compatibility
-     *             and will be removed in ICU 64. See http://bugs.icu-project.org/trac/ticket/13746
-     */
-    @Deprecated
-    public static Precision minDigits(int a) {
-        return minSignificantDigits(a);
-    }
-
-    /**
-     * @deprecated ICU 62 Use *SignificantDigits() instead. This method is for backwards compatibility
-     *             and will be removed in ICU 64. See http://bugs.icu-project.org/trac/ticket/13746
-     */
-    @Deprecated
-    public static Precision maxDigits(int a) {
-        return maxSignificantDigits(a);
-    }
-
-    /**
-     * @deprecated ICU 62 Use *SignificantDigits() instead. This method is for backwards compatibility
-     *             and will be removed in ICU 64. See http://bugs.icu-project.org/trac/ticket/13746
-     */
-    @Deprecated
-    public static Precision minMaxDigits(int a, int b) {
-        return minMaxSignificantDigits(a, b);
-    }
-
-    /**
      * Show numbers rounded if necessary to the closest multiple of a certain rounding increment. For
      * example, if the rounding increment is 0.5, then round 1.2 to 1 and round 1.3 to 1.5.
      *
@@ -376,24 +339,7 @@ public abstract class Precision implements Cloneable {
     }
 
     /**
-     * Sets the {@link java.math.RoundingMode} to use when picking the direction to round (up or down).
-     * Common values include HALF_EVEN, HALF_UP, and FLOOR. The default is HALF_EVEN.
-     *
-     * @param roundingMode
-     *            The RoundingMode to use.
-     * @return A Precision for chaining.
-     * @deprecated ICU 62 Use the top-level rounding mode setting instead. This method is for backwards
-     *             compatibility and will be removed in ICU 64. See
-     *             http://bugs.icu-project.org/trac/ticket/13746
-     * @see NumberFormatter
-     */
-    @Deprecated
-    public Precision withMode(RoundingMode roundingMode) {
-        return withMode(RoundingUtils.mathContextUnlimited(roundingMode));
-    }
-
-    /**
-     * Sets a MathContext directly instead of RoundingMode.
+     * Sets a MathContext to use on this Precision.
      *
      * @internal
      * @deprecated This API is ICU internal only.

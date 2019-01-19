@@ -435,7 +435,7 @@ UnicodeString& DecimalFormat::format(double number, UnicodeString& appendTo, Fie
     FormattedNumber output = fields->formatter->formatDouble(number, localStatus);
     fieldPositionHelper(output, pos, appendTo.length(), localStatus);
     auto appendable = UnicodeStringAppendable(appendTo);
-    output.appendTo(appendable);
+    output.appendTo(appendable, localStatus);
     return appendTo;
 }
 
@@ -447,7 +447,7 @@ UnicodeString& DecimalFormat::format(double number, UnicodeString& appendTo, Fie
     FormattedNumber output = fields->formatter->formatDouble(number, status);
     fieldPositionHelper(output, pos, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
-    output.appendTo(appendable);
+    output.appendTo(appendable, status);
     return appendTo;
 }
 
@@ -460,7 +460,7 @@ DecimalFormat::format(double number, UnicodeString& appendTo, FieldPositionItera
     FormattedNumber output = fields->formatter->formatDouble(number, status);
     fieldPositionIteratorHelper(output, posIter, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
-    output.appendTo(appendable);
+    output.appendTo(appendable, status);
     return appendTo;
 }
 
@@ -487,7 +487,7 @@ UnicodeString& DecimalFormat::format(int64_t number, UnicodeString& appendTo, Fi
     FormattedNumber output = fields->formatter->formatInt(number, localStatus);
     fieldPositionHelper(output, pos, appendTo.length(), localStatus);
     auto appendable = UnicodeStringAppendable(appendTo);
-    output.appendTo(appendable);
+    output.appendTo(appendable, localStatus);
     return appendTo;
 }
 
@@ -499,7 +499,7 @@ UnicodeString& DecimalFormat::format(int64_t number, UnicodeString& appendTo, Fi
     FormattedNumber output = fields->formatter->formatInt(number, status);
     fieldPositionHelper(output, pos, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
-    output.appendTo(appendable);
+    output.appendTo(appendable, status);
     return appendTo;
 }
 
@@ -512,7 +512,7 @@ DecimalFormat::format(int64_t number, UnicodeString& appendTo, FieldPositionIter
     FormattedNumber output = fields->formatter->formatInt(number, status);
     fieldPositionIteratorHelper(output, posIter, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
-    output.appendTo(appendable);
+    output.appendTo(appendable, status);
     return appendTo;
 }
 
@@ -522,7 +522,7 @@ DecimalFormat::format(StringPiece number, UnicodeString& appendTo, FieldPosition
     FormattedNumber output = fields->formatter->formatDecimal(number, status);
     fieldPositionIteratorHelper(output, posIter, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
-    output.appendTo(appendable);
+    output.appendTo(appendable, status);
     return appendTo;
 }
 
@@ -531,7 +531,7 @@ UnicodeString& DecimalFormat::format(const DecimalQuantity& number, UnicodeStrin
     FormattedNumber output = fields->formatter->formatDecimalQuantity(number, status);
     fieldPositionIteratorHelper(output, posIter, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
-    output.appendTo(appendable);
+    output.appendTo(appendable, status);
     return appendTo;
 }
 
@@ -541,7 +541,7 @@ DecimalFormat::format(const DecimalQuantity& number, UnicodeString& appendTo, Fi
     FormattedNumber output = fields->formatter->formatDecimalQuantity(number, status);
     fieldPositionHelper(output, pos, appendTo.length(), status);
     auto appendable = UnicodeStringAppendable(appendTo);
-    output.appendTo(appendable);
+    output.appendTo(appendable, status);
     return appendTo;
 }
 
