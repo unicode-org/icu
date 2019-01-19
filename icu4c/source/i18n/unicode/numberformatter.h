@@ -457,10 +457,11 @@ class U_I18N_API Precision : public UMemory {
      *
      * <p>
      * <strong>NOTE:</strong> When formatting a <em>double</em>, this method, along with {@link #minFraction} and
-     * {@link #minDigits}, will trigger complex algorithm similar to <em>Dragon4</em> to determine the low-order digits
-     * and the number of digits to display based on the value of the double. If the number of fraction places or
-     * significant digits can be bounded, consider using {@link #maxFraction} or {@link #maxDigits} instead to maximize
-     * performance. For more information, read the following blog post.
+     * {@link #minSignificantDigits}, will trigger complex algorithm similar to <em>Dragon4</em> to determine the
+     * low-order digits and the number of digits to display based on the value of the double.
+     * If the number of fraction places or significant digits can be bounded, consider using {@link #maxFraction}
+     * or {@link #maxSignificantDigits} instead to maximize performance.
+     * For more information, read the following blog post.
      *
      * <p>
      * http://www.serpentine.com/blog/2011/06/29/here-be-dragons-advances-in-problems-you-didnt-even-know-you-had/
@@ -554,7 +555,7 @@ class U_I18N_API Precision : public UMemory {
      * pad with zeros to ensure that this number of significant digits/figures are always shown.
      *
      * <p>
-     * This method is equivalent to {@link #minMaxDigits} with both arguments equal.
+     * This method is equivalent to {@link #minMaxSignificantDigits} with both arguments equal.
      *
      * @param minMaxSignificantDigits
      *            The minimum and maximum number of significant digits to display (rounding if too long or padding with
@@ -2435,6 +2436,8 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * <em>field</em> in the output string. This allows you to determine the locations of, for example,
      * the integer part, fraction part, or symbols.
      *
+     * This is a simpler but less powerful alternative to {@link #nextPosition}.
+     *
      * If a field occurs just once, calling this method will find that occurrence and return it. If a
      * field occurs multiple times, this method may be called repeatedly with the following pattern:
      *
@@ -2446,7 +2449,7 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * </pre>
      *
      * This method is useful if you know which field to query. If you want all available field position
-     * information, use #getAllFieldPositions().
+     * information, use {@link #nextPosition} or {@link #getAllFieldPositions}.
      *
      * @param fieldPosition
      *            Input+output variable. On input, the "field" property determines which field to look
@@ -2467,7 +2470,9 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * Export the formatted number to a FieldPositionIterator. This allows you to determine which characters in
      * the output string correspond to which <em>fields</em>, such as the integer part, fraction part, and sign.
      *
-     * If information on only one field is needed, use #nextFieldPosition() instead.
+     * This is an alternative to the more powerful #nextPosition() API.
+     *
+     * If information on only one field is needed, use #nextPosition() or #nextFieldPosition() instead.
      *
      * @param iterator
      *            The FieldPositionIterator to populate with all of the fields present in the formatted number.
