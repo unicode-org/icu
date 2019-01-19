@@ -266,7 +266,7 @@ class U_I18N_API StringSegment : public UMemory {
     bool operator==(const UnicodeString& other) const;
 
   private:
-    const UnicodeString fStr;
+    const UnicodeString& fStr;
     int32_t fStart;
     int32_t fEnd;
     bool fFoldCase;

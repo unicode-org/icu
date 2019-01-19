@@ -406,10 +406,41 @@ enum_to_stem_string::decimalSeparatorDisplay(UNumberDecimalSeparatorDisplay valu
 }
 
 
-UnlocalizedNumberFormatter skeleton::create(const UnicodeString& skeletonString, UErrorCode& status) {
+UnlocalizedNumberFormatter skeleton::create(
+        const UnicodeString& skeletonString, UParseError* perror, UErrorCode& status) {
+
+    // Initialize perror
+    if (perror != nullptr) {
+        perror->line = 0;
+        perror->offset = -1;
+        perror->preContext[0] = 0;
+        perror->postContext[0] = 0;
+    }
+
     umtx_initOnce(gNumberSkeletonsInitOnce, &initNumberSkeletons, status);
-    MacroProps macros = parseSkeleton(skeletonString, status);
-    return NumberFormatter::with().macros(macros);
+    if (U_FAILURE(status)) {
+        return {};
+    }
+
+    int32_t errOffset;
+    MacroProps macros = parseSkeleton(skeletonString, errOffset, status);
+    if (U_SUCCESS(status)) {
+        return NumberFormatter::with().macros(macros);
+    }
+
+    if (perror == nullptr) {
+        return {};
+    }
+
+    // Populate the UParseError with the error location
+    perror->offset = errOffset;
+    int32_t contextStart = uprv_max(0, errOffset - U_PARSE_CONTEXT_LEN + 1);
+    int32_t contextEnd = uprv_min(skeletonString.length(), errOffset + U_PARSE_CONTEXT_LEN - 1);
+    skeletonString.extract(contextStart, errOffset - contextStart, perror->preContext, 0);
+    perror->preContext[errOffset - contextStart] = 0;
+    skeletonString.extract(errOffset, contextEnd - errOffset, perror->postContext, 0);
+    perror->postContext[contextEnd - errOffset] = 0;
+    return {};
 }
 
 UnicodeString skeleton::generate(const MacroProps& macros, UErrorCode& status) {
@@ -419,8 +450,9 @@ UnicodeString skeleton::generate(const MacroProps& macros, UErrorCode& status) {
     return sb;
 }
 
-MacroProps skeleton::parseSkeleton(const UnicodeString& skeletonString, UErrorCode& status) {
-    if (U_FAILURE(status)) { return MacroProps(); }
+MacroProps skeleton::parseSkeleton(
+        const UnicodeString& skeletonString, int32_t& errOffset, UErrorCode& status) {
+    U_ASSERT(U_SUCCESS(status));
 
     // Add a trailing whitespace to the end of the skeleton string to make code cleaner.
     UnicodeString tempSkeletonString(skeletonString);
@@ -464,7 +496,10 @@ MacroProps skeleton::parseSkeleton(const UnicodeString& skeletonString, UErrorCo
                 stem = parseOption(stem, segment, macros, status);
             }
             segment.resetLength();
-            if (U_FAILURE(status)) { return macros; }
+            if (U_FAILURE(status)) {
+                errOffset = segment.getOffset();
+                return macros;
+            }
 
             // Consume the segment:
             segment.adjustOffset(offset);
@@ -475,6 +510,7 @@ MacroProps skeleton::parseSkeleton(const UnicodeString& skeletonString, UErrorCo
             // segment.setLength(U16_LENGTH(cp)); // for error message
             // throw new SkeletonSyntaxException("Unexpected separator character", segment);
             status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+            errOffset = segment.getOffset();
             return macros;
 
         } else {
@@ -486,6 +522,7 @@ MacroProps skeleton::parseSkeleton(const UnicodeString& skeletonString, UErrorCo
             // segment.setLength(U16_LENGTH(cp)); // for error message
             // throw new SkeletonSyntaxException("Unexpected option separator", segment);
             status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+            errOffset = segment.getOffset();
             return macros;
         }
 
@@ -502,6 +539,7 @@ MacroProps skeleton::parseSkeleton(const UnicodeString& skeletonString, UErrorCo
                     // segment.setLength(U16_LENGTH(cp)); // for error message
                     // throw new SkeletonSyntaxException("Stem requires an option", segment);
                     status = U_NUMBER_SKELETON_SYNTAX_ERROR;
+                    errOffset = segment.getOffset();
                     return macros;
                 default:
                     break;

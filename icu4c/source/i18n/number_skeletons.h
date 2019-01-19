@@ -122,7 +122,8 @@ enum StemEnum {
  *            A number skeleton string, possibly not in its shortest form.
  * @return An UnlocalizedNumberFormatter with behavior defined by the given skeleton string.
  */
-UnlocalizedNumberFormatter create(const UnicodeString& skeletonString, UErrorCode& status);
+UnlocalizedNumberFormatter create(
+    const UnicodeString& skeletonString, UParseError* perror, UErrorCode& status);
 
 /**
  * Create a skeleton string corresponding to the given NumberFormatter.
@@ -138,7 +139,7 @@ UnicodeString generate(const MacroProps& macros, UErrorCode& status);
  *
  * Internal: use the create() endpoint instead of this function.
  */
-MacroProps parseSkeleton(const UnicodeString& skeletonString, UErrorCode& status);
+MacroProps parseSkeleton(const UnicodeString& skeletonString, int32_t& errOffset, UErrorCode& status);
 
 /**
  * Given that the current segment represents a stem, parse it and save the result.
