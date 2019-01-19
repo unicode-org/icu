@@ -76,6 +76,20 @@ unumf_openForSkeletonAndLocale(const UChar* skeleton, int32_t skeletonLen, const
     return impl->exportForC();
 }
 
+U_CAPI UNumberFormatter* U_EXPORT2
+unumf_openForSkeletonAndLocaleWithError(const UChar* skeleton, int32_t skeletonLen, const char* locale,
+                                         UParseError* perror, UErrorCode* ec) {
+    auto* impl = new UNumberFormatterData();
+    if (impl == nullptr) {
+        *ec = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
+    }
+    // Readonly-alias constructor (first argument is whether we are NUL-terminated)
+    UnicodeString skeletonString(skeletonLen == -1, skeleton, skeletonLen);
+    impl->fFormatter = NumberFormatter::forSkeleton(skeletonString, *perror, *ec).locale(locale);
+    return impl->exportForC();
+}
+
 U_CAPI UFormattedNumber* U_EXPORT2
 unumf_openResult(UErrorCode* ec) {
     auto* impl = new UFormattedNumberImpl();

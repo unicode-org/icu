@@ -24,7 +24,9 @@ void StringSegmentTest::runIndexedTest(int32_t index, UBool exec, const char*&na
 }
 
 void StringSegmentTest::testOffset() {
-    StringSegment segment(SAMPLE_STRING, false);
+    // Note: sampleString needs function scope so it is valid while the StringSegment is valid
+    UnicodeString sampleString(SAMPLE_STRING);
+    StringSegment segment(sampleString, false);
     assertEquals("Initial Offset", 0, segment.getOffset());
     segment.adjustOffset(3);
     assertEquals("Adjust A", 3, segment.getOffset());
@@ -35,7 +37,9 @@ void StringSegmentTest::testOffset() {
 }
 
 void StringSegmentTest::testLength() {
-    StringSegment segment(SAMPLE_STRING, false);
+    // Note: sampleString needs function scope so it is valid while the StringSegment is valid
+    UnicodeString sampleString(SAMPLE_STRING);
+    StringSegment segment(sampleString, false);
     assertEquals("Initial length", 11, segment.length());
     segment.adjustOffset(3);
     assertEquals("Adjust", 8, segment.length());
@@ -48,7 +52,9 @@ void StringSegmentTest::testLength() {
 }
 
 void StringSegmentTest::testCharAt() {
-    StringSegment segment(SAMPLE_STRING, false);
+    // Note: sampleString needs function scope so it is valid while the StringSegment is valid
+    UnicodeString sampleString(SAMPLE_STRING);
+    StringSegment segment(sampleString, false);
     assertEquals("Initial", SAMPLE_STRING, segment.toUnicodeString());
     assertEquals("Initial", SAMPLE_STRING, segment.toTempUnicodeString());
     segment.adjustOffset(3);
@@ -60,7 +66,9 @@ void StringSegmentTest::testCharAt() {
 }
 
 void StringSegmentTest::testGetCodePoint() {
-    StringSegment segment(SAMPLE_STRING, false);
+    // Note: sampleString needs function scope so it is valid while the StringSegment is valid
+    UnicodeString sampleString(SAMPLE_STRING);
+    StringSegment segment(sampleString, false);
     assertEquals("Double-width code point", 0x1F4FB, segment.getCodePoint());
     segment.setLength(1);
     assertEquals("Inalid A", -1, segment.getCodePoint());
@@ -72,7 +80,9 @@ void StringSegmentTest::testGetCodePoint() {
 }
 
 void StringSegmentTest::testCommonPrefixLength() {
-    StringSegment segment(SAMPLE_STRING, false);
+    // Note: sampleString needs function scope so it is valid while the StringSegment is valid
+    UnicodeString sampleString(SAMPLE_STRING);
+    StringSegment segment(sampleString, false);
     assertEquals("", 11, segment.getCommonPrefixLength(SAMPLE_STRING));
     assertEquals("", 4, segment.getCommonPrefixLength(u"📻 r"));
     assertEquals("", 3, segment.getCommonPrefixLength(u"📻 x"));

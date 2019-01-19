@@ -347,7 +347,12 @@ LocalizedNumberFormatter NumberFormatter::withLocale(const Locale& locale) {
 
 UnlocalizedNumberFormatter
 NumberFormatter::forSkeleton(const UnicodeString& skeleton, UErrorCode& status) {
-    return skeleton::create(skeleton, status);
+    return skeleton::create(skeleton, nullptr, status);
+}
+
+UnlocalizedNumberFormatter
+NumberFormatter::forSkeleton(const UnicodeString& skeleton, UParseError& perror, UErrorCode& status) {
+    return skeleton::create(skeleton, &perror, status);
 }
 
 

@@ -15,6 +15,7 @@
 #include "unicode/fpositer.h"
 #include "unicode/measunit.h"
 #include "unicode/nounit.h"
+#include "unicode/parseerr.h"
 #include "unicode/plurrule.h"
 #include "unicode/ucurr.h"
 #include "unicode/unum.h"
@@ -2549,6 +2550,9 @@ class U_I18N_API NumberFormatter final {
      * Call this method at the beginning of a NumberFormatter fluent chain to create an instance based
      * on a given number skeleton string.
      *
+     * It is possible for an error to occur while parsing. See the overload of this method if you are
+     * interested in the location of a possible parse error.
+     *
      * @param skeleton
      *            The skeleton string off of which to base this NumberFormatter.
      * @param status
@@ -2557,6 +2561,26 @@ class U_I18N_API NumberFormatter final {
      * @draft ICU 62
      */
     static UnlocalizedNumberFormatter forSkeleton(const UnicodeString& skeleton, UErrorCode& status);
+
+    /**
+     * Call this method at the beginning of a NumberFormatter fluent chain to create an instance based
+     * on a given number skeleton string.
+     *
+     * If an error occurs while parsing the skeleton string, the offset into the skeleton string at
+     * which the error occurred will be saved into the UParseError, if provided.
+     *
+     * @param skeleton
+     *            The skeleton string off of which to base this NumberFormatter.
+     * @param perror
+     *            A parse error struct populated if an error occurs when parsing.
+ *                If no error occurs, perror.offset will be set to -1.
+     * @param status
+     *            Set to U_NUMBER_SKELETON_SYNTAX_ERROR if the skeleton was invalid.
+     * @return An UnlocalizedNumberFormatter, to be used for chaining.
+     * @draft ICU 64
+     */
+    static UnlocalizedNumberFormatter forSkeleton(const UnicodeString& skeleton,
+                                                  UParseError& perror, UErrorCode& status);
 
     /**
      * Use factory methods instead of the constructor to create a NumberFormatter.

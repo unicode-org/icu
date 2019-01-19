@@ -24,6 +24,8 @@ static void TestExampleCode(void);
 
 static void TestFormattedValue(void);
 
+static void TestSkeletonParseError(void);
+
 void addUNumberFormatterTest(TestNode** root);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/unumberformatter/" #x)
@@ -33,6 +35,7 @@ void addUNumberFormatterTest(TestNode** root) {
     TESTCASE(TestSkeletonFormatToFields);
     TESTCASE(TestExampleCode);
     TESTCASE(TestFormattedValue);
+    TESTCASE(TestSkeletonParseError);
 }
 
 
@@ -225,6 +228,31 @@ static void TestFormattedValue() {
 
     // cleanup:
     unumf_closeResult(uresult);
+    unumf_close(uformatter);
+}
+
+
+static void TestSkeletonParseError() {
+    UErrorCode ec = U_ZERO_ERROR;
+    UNumberFormatter* uformatter;
+    UParseError perror;
+
+    // The UParseError can be null. The following should not segfault.
+    uformatter = unumf_openForSkeletonAndLocaleWithError(
+            u".00 measure-unit/typo", -1, "en", NULL, &ec);
+    unumf_close(uformatter);
+
+    // Now test the behavior.
+    ec = U_ZERO_ERROR;
+    uformatter = unumf_openForSkeletonAndLocaleWithError(
+            u".00 measure-unit/typo", -1, "en", &perror, &ec);
+
+    assertIntEquals("Should have set error code", U_NUMBER_SKELETON_SYNTAX_ERROR, ec);
+    assertIntEquals("Should have correct skeleton error offset", 17, perror.offset);
+    assertUEquals("Should have correct pre context", u"0 measure-unit/", perror.preContext);
+    assertUEquals("Should have correct post context", u"typo", perror.postContext);
+
+    // cleanup:
     unumf_close(uformatter);
 }
 
