@@ -853,62 +853,64 @@ resolveAliases(uint16_t *uniqueAliasArr, uint16_t *uniqueAliasToConverterArr, ui
     uint16_t currConvNum, oldConvNum;
     const char *lastName;
 
-    resolveAliasToConverter(knownAliases[0], &oldTagNum, &currConvNum);
-    uniqueAliasToConverterArr[uniqueAliasIdx] = currConvNum;
-    oldConvNum = currConvNum;
-    uniqueAliasArr[uniqueAliasIdx] = knownAliases[0] + aliasOffset;
-    uniqueAliasIdx++;
-    lastName = GET_ALIAS_STR(knownAliases[0]);
+    if (knownAliasesCount != 0) {
+      resolveAliasToConverter(knownAliases[0], &oldTagNum, &currConvNum);
+      uniqueAliasToConverterArr[uniqueAliasIdx] = currConvNum;
+      oldConvNum = currConvNum;
+      uniqueAliasArr[uniqueAliasIdx] = knownAliases[0] + aliasOffset;
+      uniqueAliasIdx++;
+      lastName = GET_ALIAS_STR(knownAliases[0]);
 
-    for (idx = 1; idx < knownAliasesCount; idx++) {
-        resolveAliasToConverter(knownAliases[idx], &currTagNum, &currConvNum);
-        if (ucnv_compareNames(lastName, GET_ALIAS_STR(knownAliases[idx])) == 0) {
-            /* duplicate found */
-            if ((currTagNum < oldTagNum && currTagNum >= UCNV_NUM_RESERVED_TAGS)
-                || oldTagNum == 0) {
-                oldTagNum = currTagNum;
-                uniqueAliasToConverterArr[uniqueAliasIdx - 1] = currConvNum;
-                uniqueAliasArr[uniqueAliasIdx - 1] = knownAliases[idx] + aliasOffset;
-                if (verbose) {
-                    printf("using %s instead of %s -> %s", 
-                        GET_ALIAS_STR(knownAliases[idx]),
-                        lastName,
-                        GET_ALIAS_STR(converters[currConvNum].converter));
-                    if (oldConvNum != currConvNum) {
-                        printf(" (alias conflict)");
-                    }
-                    puts("");
-                }
-            }
-            else {
-                /* else ignore it */
-                if (verbose) {
-                    printf("folding %s into %s -> %s",
-                        GET_ALIAS_STR(knownAliases[idx]),
-                        lastName,
-                        GET_ALIAS_STR(converters[oldConvNum].converter));
-                    if (oldConvNum != currConvNum) {
-                        printf(" (alias conflict)");
-                    }
-                    puts("");
-                }
-            }
-            if (oldConvNum != currConvNum) {
-                uniqueAliasToConverterArr[uniqueAliasIdx - 1] |= UCNV_AMBIGUOUS_ALIAS_MAP_BIT;
-            }
-        }
-        else {
-            uniqueAliasToConverterArr[uniqueAliasIdx] = currConvNum;
-            oldConvNum = currConvNum;
-            uniqueAliasArr[uniqueAliasIdx] = knownAliases[idx] + aliasOffset;
-            uniqueAliasIdx++;
-            lastName = GET_ALIAS_STR(knownAliases[idx]);
-            oldTagNum = currTagNum;
-            /*printf("%s -> %s\n", GET_ALIAS_STR(knownAliases[idx]), GET_ALIAS_STR(converters[currConvNum].converter));*/
-        }
-        if (uprv_strchr(GET_ALIAS_STR(converters[currConvNum].converter), UCNV_OPTION_SEP_CHAR) != NULL) {
-            uniqueAliasToConverterArr[uniqueAliasIdx-1] |= UCNV_CONTAINS_OPTION_BIT;
-        }
+      for (idx = 1; idx < knownAliasesCount; idx++) {
+          resolveAliasToConverter(knownAliases[idx], &currTagNum, &currConvNum);
+          if (ucnv_compareNames(lastName, GET_ALIAS_STR(knownAliases[idx])) == 0) {
+              /* duplicate found */
+              if ((currTagNum < oldTagNum && currTagNum >= UCNV_NUM_RESERVED_TAGS)
+                  || oldTagNum == 0) {
+                  oldTagNum = currTagNum;
+                  uniqueAliasToConverterArr[uniqueAliasIdx - 1] = currConvNum;
+                  uniqueAliasArr[uniqueAliasIdx - 1] = knownAliases[idx] + aliasOffset;
+                  if (verbose) {
+                      printf("using %s instead of %s -> %s",
+                          GET_ALIAS_STR(knownAliases[idx]),
+                          lastName,
+                          GET_ALIAS_STR(converters[currConvNum].converter));
+                      if (oldConvNum != currConvNum) {
+                          printf(" (alias conflict)");
+                      }
+                      puts("");
+                  }
+              }
+              else {
+                  /* else ignore it */
+                  if (verbose) {
+                      printf("folding %s into %s -> %s",
+                          GET_ALIAS_STR(knownAliases[idx]),
+                          lastName,
+                          GET_ALIAS_STR(converters[oldConvNum].converter));
+                      if (oldConvNum != currConvNum) {
+                          printf(" (alias conflict)");
+                      }
+                      puts("");
+                  }
+              }
+              if (oldConvNum != currConvNum) {
+                  uniqueAliasToConverterArr[uniqueAliasIdx - 1] |= UCNV_AMBIGUOUS_ALIAS_MAP_BIT;
+              }
+          }
+          else {
+              uniqueAliasToConverterArr[uniqueAliasIdx] = currConvNum;
+              oldConvNum = currConvNum;
+              uniqueAliasArr[uniqueAliasIdx] = knownAliases[idx] + aliasOffset;
+              uniqueAliasIdx++;
+              lastName = GET_ALIAS_STR(knownAliases[idx]);
+              oldTagNum = currTagNum;
+              /*printf("%s -> %s\n", GET_ALIAS_STR(knownAliases[idx]), GET_ALIAS_STR(converters[currConvNum].converter));*/
+          }
+          if (uprv_strchr(GET_ALIAS_STR(converters[currConvNum].converter), UCNV_OPTION_SEP_CHAR) != NULL) {
+              uniqueAliasToConverterArr[uniqueAliasIdx-1] |= UCNV_CONTAINS_OPTION_BIT;
+          }
+      }
     }
     return uniqueAliasIdx;
 }
