@@ -2179,10 +2179,13 @@ uloc_getLCID(const char* localeID)
         return 0;
     }
 
-    // Attempt platform lookup if available
-    lcid = uprv_convertToLCIDPlatform(localeID);
-    if (lcid > 0)
-    {
+    // First, attempt Windows platform lookup if available, but fall
+    // through to catch any special cases (ICU vs Windows name differences).
+    lcid = uprv_convertToLCIDPlatform(localeID, &status);
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    if (lcid > 0) {
         // Windows found an LCID, return that
         return lcid;
     }
