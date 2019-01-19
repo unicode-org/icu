@@ -639,7 +639,7 @@ public class NumberRangeFormatterTest {
             "Different rounding rules",
             NumberRangeFormatter.with()
                 .numberFormatterFirst(NumberFormatter.with().precision(Precision.integer()))
-                .numberFormatterSecond(NumberFormatter.with().precision(Precision.fixedDigits(2))),
+                .numberFormatterSecond(NumberFormatter.with().precision(Precision.fixedSignificantDigits(2))),
             new ULocale("en-us"),
             "1–5.0",
             "5–5.0",

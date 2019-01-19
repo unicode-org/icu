@@ -1714,7 +1714,7 @@ void NumberFormatterApiTest::symbols() {
             NumberFormatter::withLocale(Locale("ar@numbers=arab")).adoptSymbols(new NumberingSystem(LATN))
                     .unit(USD)
                     .formatDouble(12345.67, status)
-                    .toString());
+                    .toString(status));
 
     DecimalFormatSymbols symbols = SWISS_SYMBOLS;
     UnlocalizedNumberFormatter f = NumberFormatter::with().symbols(symbols);
@@ -2139,7 +2139,7 @@ void NumberFormatterApiTest::locale() {
     // Coverage for the locale setters.
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString actual = NumberFormatter::withLocale(Locale::getFrench()).formatInt(1234, status)
-            .toString();
+            .toString(status);
     assertEquals("Locale withLocale()", u"1\u202f234", actual);
 }
 
@@ -2148,20 +2148,20 @@ void NumberFormatterApiTest::formatTypes() {
     LocalizedNumberFormatter formatter = NumberFormatter::withLocale(Locale::getEnglish());
 
     // Double
-    assertEquals("Format double", "514.23", formatter.formatDouble(514.23, status).toString());
+    assertEquals("Format double", "514.23", formatter.formatDouble(514.23, status).toString(status));
 
     // Int64
-    assertEquals("Format int64", "51,423", formatter.formatDouble(51423L, status).toString());
+    assertEquals("Format int64", "51,423", formatter.formatDouble(51423L, status).toString(status));
 
     // decNumber
-    UnicodeString actual = formatter.formatDecimal("98765432123456789E1", status).toString();
+    UnicodeString actual = formatter.formatDecimal("98765432123456789E1", status).toString(status);
     assertEquals("Format decNumber", u"987,654,321,234,567,890", actual);
 
     // Also test proper DecimalQuantity bytes storage when all digits are in the fraction.
     // The number needs to have exactly 40 digits, which is the size of the default buffer.
     // (issue discovered by the address sanitizer in C++)
     static const char* str = "0.009876543210987654321098765432109876543211";
-    actual = formatter.precision(Precision::unlimited()).formatDecimal(str, status).toString();
+    actual = formatter.precision(Precision::unlimited()).formatDecimal(str, status).toString(status);
     assertEquals("Format decNumber to 40 digits", str, actual);
 }
 
@@ -2550,7 +2550,7 @@ void NumberFormatterApiTest::errors() {
     // FieldPosition
     status = U_ZERO_ERROR;
     FieldPosition fp;
-    fn.populateFieldPosition(fp, status);
+    fn.nextFieldPosition(fp, status);
     assertEquals(
             "Should fail on FieldPosition terminal method with correct error code",
             U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
@@ -2559,7 +2559,7 @@ void NumberFormatterApiTest::errors() {
     // FieldPositionIterator
     status = U_ZERO_ERROR;
     FieldPositionIterator fpi;
-    fn.populateFieldPositionIterator(fpi, status);
+    fn.getAllFieldPositions(fpi, status);
     assertEquals(
             "Should fail on FieldPositoinIterator terminal method with correct error code",
             U_NUMBER_ARG_OUTOFBOUNDS_ERROR,
@@ -2640,16 +2640,16 @@ void NumberFormatterApiTest::validRanges() {
     } \
 }
 
-    VALID_RANGE_ONEARG(rounding, Precision::fixedFraction, 0);
-    VALID_RANGE_ONEARG(rounding, Precision::minFraction, 0);
-    VALID_RANGE_ONEARG(rounding, Precision::maxFraction, 0);
-    VALID_RANGE_TWOARGS(rounding, Precision::minMaxFraction, 0);
-    VALID_RANGE_ONEARG(rounding, Precision::fixedSignificantDigits, 1);
-    VALID_RANGE_ONEARG(rounding, Precision::minSignificantDigits, 1);
-    VALID_RANGE_ONEARG(rounding, Precision::maxSignificantDigits, 1);
-    VALID_RANGE_TWOARGS(rounding, Precision::minMaxSignificantDigits, 1);
-    VALID_RANGE_ONEARG(rounding, Precision::fixedFraction(1).withMinDigits, 1);
-    VALID_RANGE_ONEARG(rounding, Precision::fixedFraction(1).withMaxDigits, 1);
+    VALID_RANGE_ONEARG(precision, Precision::fixedFraction, 0);
+    VALID_RANGE_ONEARG(precision, Precision::minFraction, 0);
+    VALID_RANGE_ONEARG(precision, Precision::maxFraction, 0);
+    VALID_RANGE_TWOARGS(precision, Precision::minMaxFraction, 0);
+    VALID_RANGE_ONEARG(precision, Precision::fixedSignificantDigits, 1);
+    VALID_RANGE_ONEARG(precision, Precision::minSignificantDigits, 1);
+    VALID_RANGE_ONEARG(precision, Precision::maxSignificantDigits, 1);
+    VALID_RANGE_TWOARGS(precision, Precision::minMaxSignificantDigits, 1);
+    VALID_RANGE_ONEARG(precision, Precision::fixedFraction(1).withMinDigits, 1);
+    VALID_RANGE_ONEARG(precision, Precision::fixedFraction(1).withMaxDigits, 1);
     VALID_RANGE_ONEARG(notation, Notation::scientific().withMinExponentDigits, 1);
     VALID_RANGE_ONEARG(integerWidth, IntegerWidth::zeroFillTo, 0);
     VALID_RANGE_ONEARG(integerWidth, IntegerWidth::zeroFillTo(0).truncateAt, -1);
@@ -2660,33 +2660,33 @@ void NumberFormatterApiTest::copyMove() {
 
     // Default constructors
     LocalizedNumberFormatter l1;
-    assertEquals("Initial behavior", u"10", l1.formatInt(10, status).toString(), true);
+    assertEquals("Initial behavior", u"10", l1.formatInt(10, status).toString(status), true);
     if (status.errDataIfFailureAndReset()) { return; }
     assertEquals("Initial call count", 1, l1.getCallCount());
     assertTrue("Initial compiled", l1.getCompiled() == nullptr);
 
     // Setup
     l1 = NumberFormatter::withLocale("en").unit(NoUnit::percent()).threshold(3);
-    assertEquals("Initial behavior", u"10%", l1.formatInt(10, status).toString());
+    assertEquals("Initial behavior", u"10%", l1.formatInt(10, status).toString(status));
     assertEquals("Initial call count", 1, l1.getCallCount());
     assertTrue("Initial compiled", l1.getCompiled() == nullptr);
     l1.formatInt(123, status);
     assertEquals("Still not compiled", 2, l1.getCallCount());
     assertTrue("Still not compiled", l1.getCompiled() == nullptr);
     l1.formatInt(123, status);
-    assertEquals("Compiled", u"10%", l1.formatInt(10, status).toString());
+    assertEquals("Compiled", u"10%", l1.formatInt(10, status).toString(status));
     assertEquals("Compiled", INT32_MIN, l1.getCallCount());
     assertTrue("Compiled", l1.getCompiled() != nullptr);
 
     // Copy constructor
     LocalizedNumberFormatter l2 = l1;
-    assertEquals("[constructor] Copy behavior", u"10%", l2.formatInt(10, status).toString());
+    assertEquals("[constructor] Copy behavior", u"10%", l2.formatInt(10, status).toString(status));
     assertEquals("[constructor] Copy should not have compiled state", 1, l2.getCallCount());
     assertTrue("[constructor] Copy should not have compiled state", l2.getCompiled() == nullptr);
 
     // Move constructor
     LocalizedNumberFormatter l3 = std::move(l1);
-    assertEquals("[constructor] Move behavior", u"10%", l3.formatInt(10, status).toString());
+    assertEquals("[constructor] Move behavior", u"10%", l3.formatInt(10, status).toString(status));
     assertEquals("[constructor] Move *should* have compiled state", INT32_MIN, l3.getCallCount());
     assertTrue("[constructor] Move *should* have compiled state", l3.getCompiled() != nullptr);
     assertEquals("[constructor] Source should be reset after move", 0, l1.getCallCount());
@@ -2705,13 +2705,13 @@ void NumberFormatterApiTest::copyMove() {
 
     // Copy assignment
     l1 = l3;
-    assertEquals("[assignment] Copy behavior", u"10%", l1.formatInt(10, status).toString());
+    assertEquals("[assignment] Copy behavior", u"10%", l1.formatInt(10, status).toString(status));
     assertEquals("[assignment] Copy should not have compiled state", 1, l1.getCallCount());
     assertTrue("[assignment] Copy should not have compiled state", l1.getCompiled() == nullptr);
 
     // Move assignment
     l2 = std::move(l3);
-    assertEquals("[assignment] Move behavior", u"10%", l2.formatInt(10, status).toString());
+    assertEquals("[assignment] Move behavior", u"10%", l2.formatInt(10, status).toString(status));
     assertEquals("[assignment] Move *should* have compiled state", INT32_MIN, l2.getCallCount());
     assertTrue("[assignment] Move *should* have compiled state", l2.getCompiled() != nullptr);
     assertEquals("[assignment] Source should be reset after move", 0, l3.getCallCount());
@@ -2719,22 +2719,22 @@ void NumberFormatterApiTest::copyMove() {
 
     // Coverage tests for UnlocalizedNumberFormatter
     UnlocalizedNumberFormatter u1;
-    assertEquals("Default behavior", u"10", u1.locale("en").formatInt(10, status).toString());
+    assertEquals("Default behavior", u"10", u1.locale("en").formatInt(10, status).toString(status));
     u1 = u1.unit(NoUnit::percent());
-    assertEquals("Copy assignment", u"10%", u1.locale("en").formatInt(10, status).toString());
+    assertEquals("Copy assignment", u"10%", u1.locale("en").formatInt(10, status).toString(status));
     UnlocalizedNumberFormatter u2 = u1;
-    assertEquals("Copy constructor", u"10%", u2.locale("en").formatInt(10, status).toString());
+    assertEquals("Copy constructor", u"10%", u2.locale("en").formatInt(10, status).toString(status));
     UnlocalizedNumberFormatter u3 = std::move(u1);
-    assertEquals("Move constructor", u"10%", u3.locale("en").formatInt(10, status).toString());
+    assertEquals("Move constructor", u"10%", u3.locale("en").formatInt(10, status).toString(status));
     u1 = NumberFormatter::with();
     u1 = std::move(u2);
-    assertEquals("Move assignment", u"10%", u1.locale("en").formatInt(10, status).toString());
+    assertEquals("Move assignment", u"10%", u1.locale("en").formatInt(10, status).toString(status));
 
     // FormattedNumber move operators
     FormattedNumber result = l1.formatInt(10, status);
-    assertEquals("FormattedNumber move constructor", u"10%", result.toString());
+    assertEquals("FormattedNumber move constructor", u"10%", result.toString(status));
     result = l1.formatInt(20, status);
-    assertEquals("FormattedNumber move assignment", u"20%", result.toString());
+    assertEquals("FormattedNumber move assignment", u"20%", result.toString(status));
 }
 
 void NumberFormatterApiTest::localPointerCAPI() {
@@ -2777,10 +2777,10 @@ void NumberFormatterApiTest::assertFormatDescending(const char16_t* umessage, co
         double d = inputs[i];
         UnicodeString expected = va_arg(args, const char16_t*);
         expecteds[i] = expected;
-        UnicodeString actual1 = l1.formatDouble(d, status).toString();
+        UnicodeString actual1 = l1.formatDouble(d, status).toString(status);
         assertSuccess(message + u": Unsafe Path: " + caseNumber, status);
         assertEquals(message + u": Unsafe Path: " + caseNumber, expected, actual1);
-        UnicodeString actual2 = l2.formatDouble(d, status).toString();
+        UnicodeString actual2 = l2.formatDouble(d, status).toString(status);
         assertSuccess(message + u": Safe Path: " + caseNumber, status);
         assertEquals(message + u": Safe Path: " + caseNumber, expected, actual2);
     }
@@ -2793,7 +2793,7 @@ void NumberFormatterApiTest::assertFormatDescending(const char16_t* umessage, co
         LocalizedNumberFormatter l3 = NumberFormatter::forSkeleton(normalized, status).locale(locale);
         for (int32_t i = 0; i < 9; i++) {
             double d = inputs[i];
-            UnicodeString actual3 = l3.formatDouble(d, status).toString();
+            UnicodeString actual3 = l3.formatDouble(d, status).toString(status);
             assertEquals(message + ": Skeleton Path: '" + normalized + "': " + d, expecteds[i], actual3);
         }
     } else {
@@ -2818,10 +2818,10 @@ void NumberFormatterApiTest::assertFormatDescendingBig(const char16_t* umessage,
         double d = inputs[i];
         UnicodeString expected = va_arg(args, const char16_t*);
         expecteds[i] = expected;
-        UnicodeString actual1 = l1.formatDouble(d, status).toString();
+        UnicodeString actual1 = l1.formatDouble(d, status).toString(status);
         assertSuccess(message + u": Unsafe Path: " + caseNumber, status);
         assertEquals(message + u": Unsafe Path: " + caseNumber, expected, actual1);
-        UnicodeString actual2 = l2.formatDouble(d, status).toString();
+        UnicodeString actual2 = l2.formatDouble(d, status).toString(status);
         assertSuccess(message + u": Safe Path: " + caseNumber, status);
         assertEquals(message + u": Safe Path: " + caseNumber, expected, actual2);
     }
@@ -2834,7 +2834,7 @@ void NumberFormatterApiTest::assertFormatDescendingBig(const char16_t* umessage,
         LocalizedNumberFormatter l3 = NumberFormatter::forSkeleton(normalized, status).locale(locale);
         for (int32_t i = 0; i < 9; i++) {
             double d = inputs[i];
-            UnicodeString actual3 = l3.formatDouble(d, status).toString();
+            UnicodeString actual3 = l3.formatDouble(d, status).toString(status);
             assertEquals(message + ": Skeleton Path: '" + normalized + "': " + d, expecteds[i], actual3);
         }
     } else {
@@ -2852,10 +2852,10 @@ NumberFormatterApiTest::assertFormatSingle(const char16_t* umessage, const char1
     IcuTestErrorCode status(*this, "assertFormatSingle");
     status.setScope(message);
     FormattedNumber result1 = l1.formatDouble(input, status);
-    UnicodeString actual1 = result1.toString();
+    UnicodeString actual1 = result1.toString(status);
     assertSuccess(message + u": Unsafe Path", status);
     assertEquals(message + u": Unsafe Path", expected, actual1);
-    UnicodeString actual2 = l2.formatDouble(input, status).toString();
+    UnicodeString actual2 = l2.formatDouble(input, status).toString(status);
     assertSuccess(message + u": Safe Path", status);
     assertEquals(message + u": Safe Path", expected, actual2);
     if (uskeleton != nullptr) { // if null, skeleton is declared as undefined.
@@ -2865,7 +2865,7 @@ NumberFormatterApiTest::assertFormatSingle(const char16_t* umessage, const char1
         UnicodeString normalized = NumberFormatter::forSkeleton(skeleton, status).toSkeleton(status);
         assertEquals(message + ": Skeleton:", normalized, f.toSkeleton(status));
         LocalizedNumberFormatter l3 = NumberFormatter::forSkeleton(normalized, status).locale(locale);
-        UnicodeString actual3 = l3.formatDouble(input, status).toString();
+        UnicodeString actual3 = l3.formatDouble(input, status).toString(status);
         assertEquals(message + ": Skeleton Path: '" + normalized + "': " + input, expected, actual3);
     } else {
         assertUndefinedSkeleton(f);

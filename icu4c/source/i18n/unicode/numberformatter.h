@@ -441,34 +441,6 @@ class U_I18N_API ScientificNotation : public Notation {
  */
 typedef Precision SignificantDigitsPrecision;
 
-// Typedefs for ICU 60/61 compatibility.
-// These will be removed in ICU 64.
-// See http://bugs.icu-project.org/trac/ticket/13746
-
-/**
- * This will be removed in ICU 64.  See ICU-13746.
- * @deprecated ICU 63
- */
-typedef Precision Rounder;
-
-/**
- * This will be removed in ICU 64.  See ICU-13746.
- * @deprecated ICU 63
- */
-typedef FractionPrecision FractionRounder;
-
-/**
- * This will be removed in ICU 64.  See ICU-13746.
- * @deprecated ICU 63
- */
-typedef IncrementPrecision IncrementRounder;
-
-/**
- * This will be removed in ICU 64.  See ICU-13746.
- * @deprecated ICU 63
- */
-typedef CurrencyPrecision CurrencyRounder;
-
 /**
  * A class that defines the rounding precision to be used when formatting numbers in NumberFormatter.
  *
@@ -630,31 +602,6 @@ class U_I18N_API Precision : public UMemory {
     static SignificantDigitsPrecision minMaxSignificantDigits(int32_t minSignificantDigits,
                                                               int32_t maxSignificantDigits);
 
-#ifndef U_HIDE_DEPRECATED_API
-    // Compatiblity methods that will be removed in ICU 64.
-    // See http://bugs.icu-project.org/trac/ticket/13746
-
-    /** @deprecated ICU 62 */
-    static inline SignificantDigitsPrecision fixedDigits(int32_t a) {
-        return fixedSignificantDigits(a);
-    }
-
-    /** @deprecated ICU 62 */
-    static inline SignificantDigitsPrecision minDigits(int32_t a) {
-        return minSignificantDigits(a);
-    }
-
-    /** @deprecated ICU 62 */
-    static inline SignificantDigitsPrecision maxDigits(int32_t a) {
-        return maxSignificantDigits(a);
-    }
-
-    /** @deprecated ICU 62 */
-    static inline SignificantDigitsPrecision minMaxDigits(int32_t a, int32_t b) {
-        return minMaxSignificantDigits(a, b);
-    }
-#endif  /* U_HIDE_DEPRECATED_API */
-
     /**
      * Show numbers rounded if necessary to the closest multiple of a certain rounding increment. For example, if the
      * rounding increment is 0.5, then round 1.2 to 1 and round 1.3 to 1.5.
@@ -694,21 +641,6 @@ class U_I18N_API Precision : public UMemory {
      * @draft ICU 60
      */
     static CurrencyPrecision currency(UCurrencyUsage currencyUsage);
-
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * Sets the rounding mode to use when picking the direction to round (up or down). Common values
-     * include HALF_EVEN, HALF_UP, and FLOOR. The default is HALF_EVEN.
-     *
-     * @param roundingMode
-     *            The RoundingMode to use.
-     * @return A Precision for passing to the NumberFormatter precision() setter.
-     * @deprecated ICU 62 Use the top-level roundingMode() setting instead.
-     *            This method will be removed in ICU 64.
-     *            See http://bugs.icu-project.org/trac/ticket/13746
-     */
-    Precision withMode(UNumberFormatRoundingMode roundingMode) const;
-#endif  /* U_HIDE_DEPRECATED_API */
 
   private:
     enum PrecisionType {
@@ -1730,16 +1662,6 @@ class U_I18N_API NumberFormatterSettings {
      */
     Derived precision(const Precision& precision) &&;
 
-#ifndef U_HIDE_DEPRECATED_API
-    // Compatibility method that will be removed in ICU 64.
-    // Use precision() instead.
-    // See http://bugs.icu-project.org/trac/ticket/13746
-    /** @deprecated ICU 62 */
-    Derived rounding(const Rounder& rounder) const & {
-        return precision(rounder);
-    }
-#endif  /* U_HIDE_DEPRECATED_API */
-
     /**
      * Specifies how to determine the direction to round a number when it has more digits than fit in the
      * desired precision.  When formatting 1.235:
@@ -2488,18 +2410,6 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      */
     FormattedNumber& operator=(FormattedNumber&& src) U_NOEXCEPT;
 
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * Returns a UnicodeString representation of the formatted number.
-     *
-     * @return a UnicodeString containing the localized number.
-     * @deprecated ICU 62 Use the version of this method with an error code instead.
-     *                This method was never @stable and will be removed in a future release.
-     *                See http://bugs.icu-project.org/trac/ticket/13746
-     */
-    UnicodeString toString() const;
-#endif  /* U_HIDE_DEPRECATED_API */
-
     /**
      * @copydoc FormattedValue::toString()
      */
@@ -2510,21 +2420,6 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      */
     UnicodeString toTempString(UErrorCode& status) const U_OVERRIDE;
 
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * Appends the formatted number to an Appendable.
-     *
-     * @param appendable
-     *            The Appendable to which to append the formatted number string.
-     * @return The same Appendable, for chaining.
-     * @deprecated ICU 62 Use the version of this method with an error code instead.
-     *                This method was never @stable and will be removed in a future release.
-     *                See http://bugs.icu-project.org/trac/ticket/13746
-     * @see Appendable
-     */
-    Appendable &appendTo(Appendable& appendable);
-#endif  /* U_HIDE_DEPRECATED_API */
-
     /**
      * @copydoc FormattedValue::appendTo()
      */
@@ -2534,30 +2429,6 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * @copydoc FormattedValue::nextPosition()
      */
     UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
-
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * Determine the start and end indices of the first occurrence of the given <em>field</em> in the output string.
-     * This allows you to determine the locations of the integer part, fraction part, and sign.
-     *
-     * <p>
-     * If multiple different field attributes are needed, this method can be called repeatedly, or if <em>all</em> field
-     * attributes are needed, consider using populateFieldPositionIterator().
-     *
-     * <p>
-     * If a field occurs multiple times in an output string, such as a grouping separator, this method will only ever
-     * return the first occurrence. Use populateFieldPositionIterator() to access all occurrences of an attribute.
-     *
-     * @param fieldPosition
-     *            The FieldPosition to populate with the start and end indices of the desired field.
-     * @param status
-     *            Set if an error occurs while populating the FieldPosition.
-     * @deprecated ICU 62 Use {@link #nextFieldPosition} instead. This method will be removed in a future
-     *             release. See http://bugs.icu-project.org/trac/ticket/13746
-     * @see UNumberFormatFields
-     */
-    void populateFieldPosition(FieldPosition &fieldPosition, UErrorCode &status);
-#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Determines the start (inclusive) and end (exclusive) indices of the next occurrence of the given
@@ -2591,25 +2462,6 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * @see UNumberFormatFields
      */
     UBool nextFieldPosition(FieldPosition& fieldPosition, UErrorCode& status) const;
-
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * Export the formatted number to a FieldPositionIterator. This allows you to determine which characters in
-     * the output string correspond to which <em>fields</em>, such as the integer part, fraction part, and sign.
-     *
-     * <p>
-     * If information on only one field is needed, consider using populateFieldPosition() instead.
-     *
-     * @param iterator
-     *            The FieldPositionIterator to populate with all of the fields present in the formatted number.
-     * @param status
-     *            Set if an error occurs while populating the FieldPositionIterator.
-     * @deprecated ICU 62 Use {@link #getAllFieldPositions} instead. This method will be removed in a
-     *             future release. See http://bugs.icu-project.org/trac/ticket/13746
-     * @see UNumberFormatFields
-     */
-    void populateFieldPositionIterator(FieldPositionIterator &iterator, UErrorCode &status);
-#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Export the formatted number to a FieldPositionIterator. This allows you to determine which characters in

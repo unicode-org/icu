@@ -772,11 +772,6 @@ FormattedNumber& FormattedNumber::operator=(FormattedNumber&& src) U_NOEXCEPT {
     return *this;
 }
 
-UnicodeString FormattedNumber::toString() const {
-    UErrorCode localStatus = U_ZERO_ERROR;
-    return toString(localStatus);
-}
-
 UnicodeString FormattedNumber::toString(UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return ICU_Utility::makeBogusString();
@@ -797,11 +792,6 @@ UnicodeString FormattedNumber::toTempString(UErrorCode& status) const {
         return ICU_Utility::makeBogusString();
     }
     return fResults->string.toTempUnicodeString();
-}
-
-Appendable& FormattedNumber::appendTo(Appendable& appendable) {
-    UErrorCode localStatus = U_ZERO_ERROR;
-    return appendTo(appendable, localStatus);
 }
 
 Appendable& FormattedNumber::appendTo(Appendable& appendable, UErrorCode& status) const {
@@ -828,20 +818,6 @@ UBool FormattedNumber::nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode&
     return fResults->string.nextPosition(cfpos, status) ? TRUE : FALSE;
 }
 
-void FormattedNumber::populateFieldPosition(FieldPosition& fieldPosition, UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    if (fResults == nullptr) {
-        status = fErrorCode;
-        return;
-    }
-    // in case any users were depending on the old behavior:
-    fieldPosition.setBeginIndex(0);
-    fieldPosition.setEndIndex(0);
-    fResults->string.nextFieldPosition(fieldPosition, status);
-}
-
 UBool FormattedNumber::nextFieldPosition(FieldPosition& fieldPosition, UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return FALSE;
@@ -852,10 +828,6 @@ UBool FormattedNumber::nextFieldPosition(FieldPosition& fieldPosition, UErrorCod
     }
     // NOTE: MSVC sometimes complains when implicitly converting between bool and UBool
     return fResults->string.nextFieldPosition(fieldPosition, status) ? TRUE : FALSE;
-}
-
-void FormattedNumber::populateFieldPositionIterator(FieldPositionIterator& iterator, UErrorCode& status) {
-    getAllFieldPositions(iterator, status);
 }
 
 void FormattedNumber::getAllFieldPositions(FieldPositionIterator& iterator, UErrorCode& status) const {

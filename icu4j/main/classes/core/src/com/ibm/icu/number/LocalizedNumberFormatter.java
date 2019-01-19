@@ -161,8 +161,8 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
 
     /**
      * @internal
-     * @deprecated This API is ICU internal only. Use {@link FormattedNumber#populateFieldPosition} or
-     *             {@link FormattedNumber#getFieldIterator} for similar functionality.
+     * @deprecated This API is ICU internal only. Use {@link FormattedNumber#nextPosition}
+     *             for related functionality.
      */
     @Deprecated
     public String getAffixImpl(boolean isPrefix, boolean isNegative) {

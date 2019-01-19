@@ -2504,9 +2504,9 @@ public class NumberFormatterApiTest {
         Method[] methodsWithOneArgument = new Method[] { Precision.class.getDeclaredMethod("fixedFraction", Integer.TYPE),
                 Precision.class.getDeclaredMethod("minFraction", Integer.TYPE),
                 Precision.class.getDeclaredMethod("maxFraction", Integer.TYPE),
-                Precision.class.getDeclaredMethod("fixedDigits", Integer.TYPE),
-                Precision.class.getDeclaredMethod("minDigits", Integer.TYPE),
-                Precision.class.getDeclaredMethod("maxDigits", Integer.TYPE),
+                Precision.class.getDeclaredMethod("fixedSignificantDigits", Integer.TYPE),
+                Precision.class.getDeclaredMethod("minSignificantDigits", Integer.TYPE),
+                Precision.class.getDeclaredMethod("maxSignificantDigits", Integer.TYPE),
                 FractionPrecision.class.getDeclaredMethod("withMinDigits", Integer.TYPE),
                 FractionPrecision.class.getDeclaredMethod("withMaxDigits", Integer.TYPE),
                 ScientificNotation.class.getDeclaredMethod("withMinExponentDigits", Integer.TYPE),
@@ -2514,7 +2514,7 @@ public class NumberFormatterApiTest {
                 IntegerWidth.class.getDeclaredMethod("truncateAt", Integer.TYPE), };
         Method[] methodsWithTwoArguments = new Method[] {
                 Precision.class.getDeclaredMethod("minMaxFraction", Integer.TYPE, Integer.TYPE),
-                Precision.class.getDeclaredMethod("minMaxDigits", Integer.TYPE, Integer.TYPE), };
+                Precision.class.getDeclaredMethod("minMaxSignificantDigits", Integer.TYPE, Integer.TYPE), };
 
         final int EXPECTED_MAX_INT_FRAC_SIG = 999;
         final String expectedSubstring0 = "between 0 and 999 (inclusive)";
@@ -2524,10 +2524,10 @@ public class NumberFormatterApiTest {
         // We require that the upper bounds all be 999 inclusive.
         // The lower bound may be either -1, 0, or 1.
         Set<String> methodsWithLowerBound1 = new HashSet();
-        methodsWithLowerBound1.add("fixedDigits");
-        methodsWithLowerBound1.add("minDigits");
-        methodsWithLowerBound1.add("maxDigits");
-        methodsWithLowerBound1.add("minMaxDigits");
+        methodsWithLowerBound1.add("fixedSignificantDigits");
+        methodsWithLowerBound1.add("minSignificantDigits");
+        methodsWithLowerBound1.add("maxSignificantDigits");
+        methodsWithLowerBound1.add("minMaxSignificantDigits");
         methodsWithLowerBound1.add("withMinDigits");
         methodsWithLowerBound1.add("withMaxDigits");
         methodsWithLowerBound1.add("withMinExponentDigits");
@@ -2562,7 +2562,8 @@ public class NumberFormatterApiTest {
                     assertTrue(message, argument < lowerBound || argument > EXPECTED_MAX_INT_FRAC_SIG);
                     // Ensure the exception message contains the expected substring
                     String actualMessage = e.getCause().getMessage();
-                    assertNotEquals(message + ": " + actualMessage, -1, actualMessage.indexOf(expectedSubstring));
+                    assertNotEquals(message + ": " + actualMessage + "; " + expectedSubstring
+                            , -1, actualMessage.indexOf(expectedSubstring));
                 }
             }
             for (Method method : methodsWithTwoArguments) {

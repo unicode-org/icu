@@ -8790,7 +8790,7 @@ void NumberFormatTest::TestFastFormatInt32() {
             static_cast<double>(INT32_MIN) + 1};
 
     for (auto num : nums) {
-        UnicodeString expected = lnf.formatDouble(num, status).toString();
+        UnicodeString expected = lnf.formatDouble(num, status).toString(status);
         UnicodeString actual;
         df->format(num, actual);
         assertEquals(UnicodeString("d = ") + num, expected, actual);

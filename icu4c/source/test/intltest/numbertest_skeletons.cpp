@@ -250,7 +250,7 @@ void NumberSkeletonTest::flexibleSeparators() {
         status.setScope(skeletonString);
         UnicodeString actual = NumberFormatter::forSkeleton(skeletonString, status).locale("en")
                                .formatDouble(5142.3, status)
-                               .toString();
+                               .toString(status);
         if (!status.errDataIfFailureAndReset()) {
             assertEquals(skeletonString, expected, actual);
         }
