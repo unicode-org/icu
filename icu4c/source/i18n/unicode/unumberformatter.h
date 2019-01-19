@@ -571,6 +571,11 @@ unumf_resultAsFormattedValue(const UFormattedNumber* uresult, UErrorCode* ec);
  * If bufferCapacity is greater than the required length, a terminating NUL is written.
  * If bufferCapacity is less than the required length, an error code is set.
  *
+ * Also see ufmtval_getString, which returns a NUL-terminated string:
+ *
+ *     int32_t len;
+ *     const UChar* str = ufmtval_getString(unumf_resultAsFormattedValue(uresult, &ec), &len, &ec);
+ *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
  * @param uresult The object containing the formatted number.
@@ -589,6 +594,8 @@ unumf_resultToString(const UFormattedNumber* uresult, UChar* buffer, int32_t buf
  * Determines the start and end indices of the next occurrence of the given <em>field</em> in the
  * output string. This allows you to determine the locations of, for example, the integer part,
  * fraction part, or symbols.
+ *
+ * This is a simpler but less powerful alternative to {@link ufmtval_nextPosition}.
  *
  * If a field occurs just once, calling this method will find that occurrence and return it. If a
  * field occurs multiple times, this method may be called repeatedly with the following pattern:
@@ -624,7 +631,10 @@ unumf_resultNextFieldPosition(const UFormattedNumber* uresult, UFieldPosition* u
  * Populates the given iterator with all fields in the formatted output string. This allows you to
  * determine the locations of the integer part, fraction part, and sign.
  *
- * If you need information on only one field, use unumf_resultNextFieldPosition().
+ * This is an alternative to the more powerful {@link ufmtval_nextPosition} API.
+ *
+ * If you need information on only one field, use {@link ufmtval_nextPosition} or
+ * {@link unumf_resultNextFieldPosition}.
  *
  * @param uresult The object containing the formatted number.
  * @param ufpositer

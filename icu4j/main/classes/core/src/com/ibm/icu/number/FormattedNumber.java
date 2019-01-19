@@ -105,9 +105,11 @@ public class FormattedNumber implements FormattedValue {
     }
 
     /**
-     * Determines the start and end indices of the next occurrence of the given <em>field</em> in the
-     * output string. This allows you to determine the locations of, for example, the integer part,
-     * fraction part, or symbols.
+     * Determines the start (inclusive) and end (exclusive) indices of the next occurrence of the
+     * given <em>field</em> in the output string. This allows you to determine the locations of,
+     * for example, the integer part, fraction part, or symbols.
+     * <p>
+     * This is a simpler but less powerful alternative to {@link #nextPosition}.
      * <p>
      * If a field occurs just once, calling this method will find that occurrence and return it. If a
      * field occurs multiple times, this method may be called repeatedly with the following pattern:
@@ -120,7 +122,7 @@ public class FormattedNumber implements FormattedValue {
      * </pre>
      * <p>
      * This method is useful if you know which field to query. If you want all available field position
-     * information, use {@link #toCharacterIterator()}.
+     * information, use {@link #nextPosition} or {@link #toCharacterIterator()}.
      *
      * @param fieldPosition
      *            Input+output variable. On input, the "field" property determines which field to look
