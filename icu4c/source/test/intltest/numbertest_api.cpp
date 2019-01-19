@@ -430,7 +430,7 @@ void NumberFormatterApiTest::unitMeasure() {
     assertFormatDescending(
             u"Meters Short and unit() method",
             u"measure-unit/length-meter",
-            NumberFormatter::with().unit(METER),
+            NumberFormatter::with().unit(MeasureUnit::getMeter()),
             Locale::getEnglish(),
             u"87,650 m",
             u"8,765 m",

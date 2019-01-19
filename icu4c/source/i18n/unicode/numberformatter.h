@@ -53,7 +53,7 @@
  * // Create a "template" in a singleton unique_ptr but without setting a locale until the call site:
  * std::unique_ptr<UnlocalizedNumberFormatter> template = NumberFormatter::with()
  *     .sign(UNumberSignDisplay::UNUM_SIGN_ALWAYS)
- *     .adoptUnit(MeasureUnit::createMeter(status))
+ *     .unit(MeasureUnit::getMeter())
  *     .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME)
  *     .clone();
  * template->locale(...).format(1234).toString();  // +1,234 meters in en-US
@@ -1489,11 +1489,10 @@ class U_I18N_API NumberFormatterSettings {
      * All units will be properly localized with locale data, and all units are compatible with notation styles,
      * rounding precisions, and other number formatter settings.
      *
-     * Pass this method any instance of {@link MeasureUnit}. For units of measure (which often involve the
-     * factory methods that return a pointer):
+     * Pass this method any instance of {@link MeasureUnit}. For units of measure:
      *
      * <pre>
-     * NumberFormatter::with().adoptUnit(MeasureUnit::createMeter(status))
+     * NumberFormatter::with().unit(MeasureUnit::getMeter())
      * </pre>
      *
      * Currency:
@@ -1536,11 +1535,9 @@ class U_I18N_API NumberFormatterSettings {
 
     /**
      * Like unit(), but takes ownership of a pointer.  Convenient for use with the MeasureFormat factory
-     * methods, which return pointers that need ownership.  Example:
+     * methods that return pointers that need ownership.
      *
-     * <pre>
-     * NumberFormatter::with().adoptUnit(MeasureUnit::createMeter(status))
-     * </pre>
+     * Note: consider using the MeasureFormat factory methods that return by value.
      *
      * @param unit
      *            The unit to render.
@@ -1566,8 +1563,13 @@ class U_I18N_API NumberFormatterSettings {
      * Sets a unit to be used in the denominator. For example, to format "3 m/s", pass METER to the unit and SECOND to
      * the perUnit.
      *
-     * Pass this method any instance of {@link MeasureUnit}.  Since MeasureUnit factory methods return pointers, the
-     * {@link #adoptPerUnit} version of this method is often more useful.
+     * Pass this method any instance of {@link MeasureUnit}. Example:
+     *
+     * <pre>
+     * NumberFormatter::with()
+     *      .unit(MeasureUnit::getMeter())
+     *      .perUnit(MeasureUnit::getSecond())
+     * </pre>
      *
      * The default is not to display any unit in the denominator.
      *
@@ -1594,13 +1596,9 @@ class U_I18N_API NumberFormatterSettings {
 
     /**
      * Like perUnit(), but takes ownership of a pointer.  Convenient for use with the MeasureFormat factory
-     * methods, which return pointers that need ownership.  Example:
+     * methods that return pointers that need ownership.
      *
-     * <pre>
-     * NumberFormatter::with()
-     *      .adoptUnit(MeasureUnit::createMeter(status))
-     *      .adoptPerUnit(MeasureUnit::createSecond(status))
-     * </pre>
+     * Note: consider using the MeasureFormat factory methods that return by value.
      *
      * @param perUnit
      *            The unit to render in the denominator.
