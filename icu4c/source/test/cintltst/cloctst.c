@@ -52,6 +52,7 @@ static void TestUnicodeDefines(void);
 
 static void TestIsRightToLeft(void);
 static void TestBadLocaleIDs(void);
+static void TestBug20370(void);
 
 void PrintDataTable();
 
@@ -266,6 +267,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestToUnicodeLocaleType);
     TESTCASE(TestToLegacyType);
     TESTCASE(TestBadLocaleIDs);
+    TESTCASE(TestBug20370);
 }
 
 
@@ -6496,5 +6498,15 @@ static void TestBadLocaleIDs() {
                     u_errorName(itemPtr->expectedStatus), ulenExpect, bbufExpect,
                     u_errorName(status), ulenGet, bbufGet );
         }
+    }
+}
+
+// Test case for ICU-20370.
+// The issue shows as an Addresss Sanitizer failure.
+static void TestBug20370() {
+    const char *localeID = "x-privatebutreallylongtagfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobar";
+    uint32_t lcid = uloc_getLCID(localeID);
+    if (lcid != 0) {
+        log_err("FAIL: Expected LCID value of 0 for invalid localeID input.");
     }
 }

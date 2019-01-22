@@ -2191,7 +2191,7 @@ uloc_getLCID(const char* localeID)
     }
 
     uloc_getLanguage(localeID, langID, sizeof(langID), &status);
-    if (U_FAILURE(status)) {
+    if (U_FAILURE(status) || status == U_STRING_NOT_TERMINATED_WARNING) {
         return 0;
     }
 
