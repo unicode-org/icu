@@ -18,10 +18,10 @@ def run(build_dirs, requests, common_vars, **kwargs):
         if status != 0:
             print("!!! ERROR executing above command line: exit code %d" % status)
             return 1
-    print("windirect: All data build commands executed")
+    print("All data build commands executed")
     return 0
 
-def run_helper(request, common_vars, tool_dir, tool_cfg, **kwargs):
+def run_helper(request, common_vars, is_windows, tool_dir, tool_cfg=None, **kwargs):
     if isinstance(request, PrintFileRequest):
         output_path = "{DIRNAME}/{FILENAME}".format(
             DIRNAME = utils.dir_for(request.output_file).format(**common_vars),
@@ -48,12 +48,20 @@ def run_helper(request, common_vars, tool_dir, tool_cfg, **kwargs):
         return 0
 
     assert isinstance(request.tool, IcuTool)
-    cmd_template = "{TOOL_DIR}/{TOOL}/{TOOL_CFG}/{TOOL}.exe {{ARGS}}".format(
-        TOOL_DIR = tool_dir,
-        TOOL_CFG = tool_cfg,
-        TOOL = request.tool.name,
-        **common_vars
-    )
+    if is_windows:
+        cmd_template = "{TOOL_DIR}/{TOOL}/{TOOL_CFG}/{TOOL}.exe {{ARGS}}".format(
+            TOOL_DIR = tool_dir,
+            TOOL_CFG = tool_cfg,
+            TOOL = request.tool.name,
+            **common_vars
+        )
+    else:
+        cmd_template = "{TOOL_DIR}/{TOOL} {{ARGS}}".format(
+            TOOL_DIR = tool_dir,
+            TOOL = request.tool.name,
+            **common_vars
+        )
+
     if isinstance(request, RepeatedExecutionRequest):
         for loop_vars in utils.repeated_execution_request_looper(request):
             command_line = utils.format_repeated_request_command(
@@ -62,18 +70,24 @@ def run_helper(request, common_vars, tool_dir, tool_cfg, **kwargs):
                 loop_vars,
                 common_vars
             )
-            # TODO: Is this / to \ substitution too aggressive?
-            command_line = command_line.replace("/", "\\")
+            if is_windows:
+                # Note: this / to \ substitution may be too aggressive?
+                command_line = command_line.replace("/", "\\")
             print("Running: %s" % command_line)
-            res = subprocess.run(command_line)
+            res = subprocess.run(command_line, shell=True)
             if res.returncode != 0:
                 return res.returncode
         return 0
     if isinstance(request, SingleExecutionRequest):
-        command_line = utils.format_single_request_command(request, cmd_template, common_vars)
-        # TODO: Is this / to \ substitution too aggressive?
-        command_line = command_line.replace("/", "\\")
+        command_line = utils.format_single_request_command(
+            request,
+            cmd_template,
+            common_vars
+        )
+        if is_windows:
+            # Note: this / to \ substitution may be too aggressive?
+            command_line = command_line.replace("/", "\\")
         print("Running: %s" % command_line)
-        res = subprocess.run(command_line)
+        res = subprocess.run(command_line, shell=True)
         return res.returncode
     assert False

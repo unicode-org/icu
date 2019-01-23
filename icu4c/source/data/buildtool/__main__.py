@@ -13,7 +13,7 @@ import sys
 
 from . import *
 from .comment_stripper import CommentStripper
-from .renderers import makefile, windirect
+from .renderers import makefile, unix_exec, windows_exec
 from . import filtration, utils
 import BUILDRULES
 
@@ -21,54 +21,61 @@ flag_parser = argparse.ArgumentParser(
     description = """Generates rules for building ICU binary data files from text
 and other input files in source control.
 
-You can select features using either the --whitelist or --blacklist option.
-Available features include:
+Use the --mode option to declare how to execute those rules, either exporting
+the rules to a Makefile or spawning child processes to run them immediately:
 
-{AVAILABLE_FEATURES}
-""".format(AVAILABLE_FEATURES = "\n".join("    %s" % v for v in AVAILABLE_FEATURES)),
+  --mode=gnumake prints a Makefile to standard out.
+  --mode=unix-exec spawns child processes in a Unix-like environment.
+  --mode=windows-exec spawns child processes in a Windows-like environment.
+
+Tips for --mode=unix-exec
+=========================
+
+Create two empty directories for out_dir and tmp_dir. They will get filled
+with a lot of intermediate files.
+
+Set LD_LIBRARY_PATH to include the lib directory. e.g., from icu4c/source:
+
+  $ LD_LIBRARY_PATH=lib PYTHONPATH=data python3 -m buildtool ...
+
+Once buildtool finishes, you have compiled the data, but you have not packaged
+it into a .dat or .so file. This is done by the separate pkgdata tool in bin.
+Read the docs of pkgdata:
+
+  $ LD_LIBRARY_PATH=lib ./bin/pkgdata --help
+
+Example command line to call pkgdata:
+
+  $ LD_LIBRARY_PATH=lib ./bin/pkgdata -m common -p icudt63l -c \\
+      -O data/icupkg.inc -s $OUTDIR -d $TMPDIR $TMPDIR/icudata.lst
+
+where $OUTDIR and $TMPDIR are your out and tmp directories, respectively.
+The above command will create icudt63l.dat in the tmpdir.
+
+Command-Line Arguments
+======================
+""",
     formatter_class = argparse.RawDescriptionHelpFormatter
 )
-flag_parser.add_argument(
-    "--format",
-    help = "How to output the rules to run to build ICU data.",
-    choices = ["gnumake", "windirect"],
+
+arg_group_required = flag_parser.add_argument_group("required arguments")
+arg_group_required.add_argument(
+    "--mode",
+    help = "What to do with the generated rules.",
+    choices = ["gnumake", "unix-exec", "windows-exec"],
     required = True
 )
-flag_parser.add_argument(
-    "--glob_dir",
-    help = "Path to data input folder (icu4c/source/data) when this script is being run.",
-    default = "."
-)
+
 flag_parser.add_argument(
     "--in_dir",
-    help = "Path to data input folder (icu4c/source/data) for file processing. Not used in gnumake format.",
+    help = "Path to data input folder (icu4c/source/data).",
     default = "."
 )
 flag_parser.add_argument(
-    "--out_dir",
-    help = "Path to where to save output data files. Not used in gnumake format.",
-    default = "icudata"
-)
-flag_parser.add_argument(
-    "--tmp_dir",
-    help = "Path to where to save temporary files. Not used in gnumake format.",
-    default = "icutmp"
-)
-flag_parser.add_argument(
-    "--tool_dir",
-    help = "Path to where to find binary tools (genrb, genbrk, etc). Used for 'windirect' format only.",
-    default = "../tool"
-)
-flag_parser.add_argument(
-    "--tool_cfg",
-    help = "The build configuration of the tools. Used for 'windirect' format only.",
-    default = "x86/Debug"
-)
-flag_parser.add_argument(
-    "--seqmode",
-    help = "Whether to optimize rules to be run sequentially (fewer threads) or in parallel (many threads).",
-    choices = ["sequential", "parallel"],
-    default = "parallel"
+    "--filter_file",
+    metavar = "PATH",
+    help = "Path to an ICU data filter JSON file.",
+    default = None
 )
 flag_parser.add_argument(
     "--collation_ucadata",
@@ -76,25 +83,33 @@ flag_parser.add_argument(
     choices = ["unihan", "implicithan"],
     default = "unihan"
 )
-features_group = flag_parser.add_mutually_exclusive_group()
-features_group.add_argument(
-    "--blacklist",
-    metavar = "FEATURE",
-    help = "A list of one or more features to disable; all others will be enabled by default. New users should favor a blacklist to ensure important data is not left out.",
-    nargs = "+",
-    choices = AVAILABLE_FEATURES
+flag_parser.add_argument(
+    "--seqmode",
+    help = "Whether to optimize rules to be run sequentially (fewer threads) or in parallel (many threads). Defaults to 'sequential', which is better for unix-exec and windows-exec modes. 'parallel' is often better for massively parallel build systems.",
+    choices = ["sequential", "parallel"],
+    default = "sequential"
 )
-features_group.add_argument(
-    "--whitelist",
-    metavar = "FEATURE",
-    help = "A list of one or more features to enable; all others will be disabled by default.",
-    nargs = "+",
-    choices = AVAILABLE_FEATURES
+
+arg_group_exec = flag_parser.add_argument_group("arguments for unix-exec and windows-exec modes")
+arg_group_exec.add_argument(
+    "--out_dir",
+    help = "Path to where to save output data files.",
+    default = "icudata"
 )
-features_group.add_argument(
-    "--filter_file",
-    help = "A path to a filter file.",
-    default = None
+arg_group_exec.add_argument(
+    "--tmp_dir",
+    help = "Path to where to save temporary files.",
+    default = "icutmp"
+)
+arg_group_exec.add_argument(
+    "--tool_dir",
+    help = "Path to where to find binary tools (genrb, etc).",
+    default = "../bin"
+)
+arg_group_exec.add_argument(
+    "--tool_cfg",
+    help = "The build configuration of the tools. Used in 'windows-exec' mode only.",
+    default = "x86/Debug"
 )
 
 
@@ -102,12 +117,6 @@ class Config(object):
 
     def __init__(self, args):
         # Process arguments
-        if args.whitelist:
-            self._feature_set = set(args.whitelist)
-        elif args.blacklist:
-            self._feature_set = set(AVAILABLE_FEATURES) - set(args.blacklist)
-        else:
-            self._feature_set = set(AVAILABLE_FEATURES)
         self.max_parallel = (args.seqmode == "parallel")
         # Either "unihan" or "implicithan"
         self.coll_han_type = args.collation_ucadata
@@ -152,16 +161,12 @@ class Config(object):
         except ImportError:
             pass
 
-    def has_feature(self, feature_name):
-        assert feature_name in AVAILABLE_FEATURES
-        return feature_name in self._feature_set
-
 
 def main():
     args = flag_parser.parse_args()
     config = Config(args)
 
-    if args.format == "gnumake":
+    if args.mode == "gnumake":
         makefile_vars = {
             "IN_DIR": "$(srcdir)",
             "INDEX_NAME": "res_index"
@@ -171,10 +176,12 @@ def main():
             key: "$(%s)" % key
             for key in list(makefile_vars.keys()) + makefile_env
         }
-        common["GLOB_DIR"] = args.glob_dir
+        common["GLOB_DIR"] = args.in_dir
     else:
         common = {
-            "GLOB_DIR": args.glob_dir,
+            # GLOB_DIR is used now, whereas IN_DIR is used during execution phase.
+            # There is no useful distinction in unix-exec or windows-exec mode.
+            "GLOB_DIR": args.in_dir,
             "IN_DIR": args.in_dir,
             "OUT_DIR": args.out_dir,
             "TMP_DIR": args.tmp_dir,
@@ -185,11 +192,11 @@ def main():
 
     def glob(pattern):
         result_paths = pyglob.glob("{IN_DIR}/{PATTERN}".format(
-            IN_DIR = args.glob_dir,
+            IN_DIR = args.in_dir,
             PATTERN = pattern
         ))
         # For the purposes of buildtool, force Unix-style directory separators.
-        return [v.replace("\\", "/")[len(args.glob_dir)+1:] for v in sorted(result_paths)]
+        return [v.replace("\\", "/")[len(args.in_dir)+1:] for v in sorted(result_paths)]
 
     requests = BUILDRULES.generate(config, glob, common)
     requests = filtration.apply_filters(requests, config)
@@ -197,23 +204,30 @@ def main():
 
     build_dirs = utils.compute_directories(requests)
 
-    if args.format == "gnumake":
+    if args.mode == "gnumake":
         print(makefile.get_gnumake_rules(
             build_dirs,
             requests,
             makefile_vars,
             common_vars = common
         ))
-    elif args.format == "windirect":
-        return windirect.run(
-            build_dirs,
-            requests,
+    elif args.mode == "windows-exec":
+        return windows_exec.run(
+            build_dirs = build_dirs,
+            requests = requests,
             common_vars = common,
             tool_dir = args.tool_dir,
             tool_cfg = args.tool_cfg
         )
+    elif args.mode == "unix-exec":
+        return unix_exec.run(
+            build_dirs = build_dirs,
+            requests = requests,
+            common_vars = common,
+            tool_dir = args.tool_dir
+        )
     else:
-        print("Format not supported: %s" % args.format)
+        print("Mode not supported: %s" % args.mode)
         return 1
     return 0
 

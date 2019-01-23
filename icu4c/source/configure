@@ -9128,16 +9128,16 @@ then
 else
     echo "Spawning Python to generate data/rules.mk..."
     PYTHONPATH="$srcdir/data" $PYTHON -m buildtool \
-        --format gnumake \
+        --mode gnumake \
         --seqmode parallel \
-        --glob_dir "$srcdir/data" \
+        --in_dir "$srcdir/data" \
         --filter_file "$ICU_DATA_FILTER_FILE" \
         > data/rules.mk
     echo "Spawning Python to generate test/testdata/rules.mk..."
     PYTHONPATH="$srcdir/test/testdata:$srcdir/data" $PYTHON -m buildtool \
-        --format gnumake \
+        --mode gnumake \
         --seqmode parallel \
-        --glob_dir "$srcdir/test/testdata" \
+        --in_dir "$srcdir/test/testdata" \
         > test/testdata/rules.mk
 fi
 
