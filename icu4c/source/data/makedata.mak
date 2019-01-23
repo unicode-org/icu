@@ -234,7 +234,7 @@ $(TOOLS_TS): "$(ICUTOOLS)\genrb\$(CFGTOOLS)\genrb.exe" "$(ICUTOOLS)\gencnval\$(C
 $(COREDATA_TS):
 	@cd "$(ICUSRCDATA)"
 	py -3 -m buildtool \
-		--format windirect \
+		--mode windows-exec \
 		--in_dir "$(ICUSRCDATA)" \
 		--tool_dir "$(ICUTOOLS)" \
 		--tool_cfg "$(CFG)" \

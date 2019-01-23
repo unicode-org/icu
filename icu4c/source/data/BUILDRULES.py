@@ -18,7 +18,7 @@ def generate(config, glob, common_vars):
     requests = []
 
     if len(glob("misc/*")) == 0:
-        print("Error: Cannot find data directory; please specify --glob_dir", file=sys.stderr)
+        print("Error: Cannot find data directory; please specify --in_dir", file=sys.stderr)
         exit(1)
 
     requests += generate_cnvalias(config, glob, common_vars)

@@ -36,10 +36,9 @@ CREATE_DIRS :
 	@echo Building test data
 	set PYTHONPATH=$(ICUSRCDATA);%PYTHONPATH%
 	py -3 -m buildtool \
-		--format windirect \
+		--mode windows-exec \
 		--tool_dir "$(ICUTOOLS)" \
 		--tool_cfg "$(CFG)" \
-		--glob_dir "$(TESTDATA)" \
 		--in_dir "$(TESTDATA)" \
 		--tmp_dir "$(TESTDATATMP)" \
 		--out_dir "$(TESTDATABLD)"
