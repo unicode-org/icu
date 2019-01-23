@@ -259,6 +259,28 @@ import com.ibm.icu.util.ULocale.Category;
  * The JDK MessageFormat does create and use a ChoiceFormat object
  * (<code>new ChoiceFormat(argStyleText)</code>).
  * The JDK does not support plural and select arguments at all.
+
+ * <p>Both the ICU and the JDK <code>MessageFormat</code> can control the argument
+ * formats by using <code>argStyle</code>. But the JDK <code>MessageFormat</code> only
+ * supports predefined formats and number / date / time pattern strings (which would need
+ * to be localized).<br>
+ * ICU supports everything the JDK does, and also number / date / time <b>skeletons</b> using the
+ * <code>::</code> prefix (which automatically yield output appropriate for the
+ * <code>MessageFormat</code> locale).</p>
+ *
+ * <h4>Argument formatting</h4>
+ *
+ * <p>Arguments are formatted according to their type, using the default
+ * ICU formatters for those types, unless otherwise specified.
+ * For unknown types, <code>MessageFormat</code> will call <code>toString()</code>.</p>
+ *
+ * <p>There are also several ways to control the formatting.</p>
+ *
+ * <p>We recommend you use default styles, predefined style values, skeletons,
+ * or preformatted values, but not pattern strings or custom format objects.</p>
+ *
+ * <p>For more details, see the
+ * <a href="http://userguide.icu-project.org/formatparse/messages">ICU User Guide</a>.</p>
  *
  * <h4>Usage Information</h4>
  *
@@ -272,10 +294,10 @@ import com.ibm.icu.util.ULocale.Category;
  * };
  *
  * String result = MessageFormat.format(
- *     "At {1,time} on {1,date}, there was {2} on planet {0,number,integer}.",
+ *     "At {1,time,::jmm} on {1,date,::dMMMM}, there was {2} on planet {0,number,integer}.",
  *     arguments);
  *
- * <em>output</em>: At 12:30 PM on Jul 3, 2053, there was a disturbance
+ * <em>output</em>: At 4:34 PM on March 23, there was a disturbance
  *           in the Force on planet 7.
  *
  * </pre>
