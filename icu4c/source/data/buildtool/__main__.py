@@ -150,6 +150,7 @@ class Config(object):
                     ),
                     file=sys.stderr)
         except ImportError:
+            print("Tip: to validate your filter file, install the Pip package 'jsonschema'", file=sys.stderr)
             pass
 
     def has_feature(self, feature_name):

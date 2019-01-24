@@ -42,7 +42,9 @@
             "oneOf": [
                 {
                     "properties": {
-                        "filterType": { "$ref": "#/definitions/filterType" },
+                        "filterType": {
+                            "$ref": "#/definitions/blacklistWhitelistFilterTypes"
+                        },
                         "whitelist": { "$ref": "#/definitions/stringList" }
                     },
                     "required": ["whitelist"],
@@ -50,7 +52,9 @@
                 },
                 {
                     "properties": {
-                        "filterType": { "$ref": "#/definitions/filterType" },
+                        "filterType": {
+                            "$ref": "#/definitions/blacklistWhitelistFilterTypes"
+                        },
                         "blacklist": { "$ref": "#/definitions/stringList" }
                     },
                     "required": ["blacklist"],
@@ -58,19 +62,52 @@
                 },
                 {
                     "properties": {
-                        "filterType": { "$ref": "#/definitions/filterType" }
+                        "filterType": {
+                            "type": "string",
+                            "enum": ["exclude"]
+                        }
                     },
+                    "required": ["filterType"],
+                    "additionalProperties": false
+                },
+                {
+                    "properties": {
+                        "filterType": {
+                            "type": "string",
+                            "enum": ["locale"]
+                        },
+                        "includeChildren": {
+                            "type": "boolean"
+                        },
+                        "includeScripts": {
+                            "type": "boolean"
+                        },
+                        "whitelist": { "$ref": "#/definitions/stringList" }
+                    },
+                    "required": ["filterType", "whitelist"],
+                    "additionalProperties": false
+                },
+                {
+                    "properties": {
+                        "filterType": {
+                            "type": "string",
+                            "enum": ["union"]
+                        },
+                        "unionOf": {
+                            "type": "array",
+                            "items": { "$ref": "#/definitions/filter" }
+                        }
+                    },
+                    "required": ["filterType", "unionOf"],
                     "additionalProperties": false
                 }
             ]
         },
-        "filterType": {
+        "blacklistWhitelistFilterTypes": {
             "type": "string",
             "enum": [
-                "file-stem",
                 "language",
-                "regex",
-                "exclude"
+                "regex"
             ]
         },
         "stringList": {

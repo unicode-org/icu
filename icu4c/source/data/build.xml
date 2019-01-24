@@ -109,6 +109,7 @@
                     <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="--type" value="locales"/>
                     <arg name="--makefile" value="resfiles.mk"/>
+                    <arg name="--depgraphfile" value="../buildtool/locale_dependencies.py"/>
                 </args>
 		<remapper>
 		  <remap sourcePath="/Keys" targetDir="lang" />
@@ -372,6 +373,9 @@
             </fileset>
             <fileset id="resfiles" dir="${env.ICU4C_DIR}/source/data/locales">
                 <include name="resfiles.mk" />
+            </fileset>
+            <fileset id="dependencies_py" dir="${env.ICU4C_DIR}/source/data/buildtool">
+                <include name="locale_dependencies.py" />
             </fileset>
             <fileset id="locales_split" dir="${env.ICU4C_DIR}/source/data">
                <include name="curr/*.txt" /> 
