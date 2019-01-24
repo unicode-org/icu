@@ -12,6 +12,7 @@ import sys
 
 from . import *
 from . import utils
+from .locale_dependencies import data as DEPENDENCY_DATA
 from .request_types import *
 
 
@@ -34,6 +35,10 @@ class Filter(object):
             return RegexFilter(json_data)
         elif filter_type == "exclude":
             return ExclusionFilter()
+        elif filter_type == "union":
+            return UnionFilter(json_data)
+        elif filter_type == "locale":
+            return LocaleFilter(json_data)
         else:
             print("Error: Unknown filterType option: %s" % filter_type, file=sys.stderr)
             return None
@@ -44,6 +49,12 @@ class Filter(object):
         for file in request.all_input_files():
             assert self.match(file)
         return [request]
+
+    @classmethod
+    def _file_to_file_stem(cls, file):
+        start = file.filename.rfind("/")
+        limit = file.filename.rfind(".")
+        return file.filename[start+1:limit]
 
     @abstractmethod
     def match(self, file):
@@ -65,19 +76,14 @@ class WhitelistBlacklistFilter(Filter):
         if "whitelist" in json_data:
             self.is_whitelist = True
             self.whitelist = json_data["whitelist"]
-        elif "blacklist" in json_data:
+        else:
+            assert "blacklist" in json_data, "Need either whitelist or blacklist: %s" % str(json_data)
             self.is_whitelist = False
             self.blacklist = json_data["blacklist"]
 
     def match(self, file):
         file_stem = self._file_to_file_stem(file)
         return self._should_include(file_stem)
-
-    @classmethod
-    def _file_to_file_stem(cls, file):
-        start = file.filename.rfind("/")
-        limit = file.filename.rfind(".")
-        return file.filename[start+1:limit]
 
     @abstractmethod
     def _should_include(self, file_stem):
@@ -124,6 +130,92 @@ class RegexFilter(WhitelistBlacklistFilter):
                 if pattern.match(file_stem):
                     return False
             return True
+
+
+class UnionFilter(Filter):
+    def __init__(self, json_data):
+        # Collect the sub-filters.
+        self.sub_filters = []
+        for filter_json in json_data["unionOf"]:
+            self.sub_filters.append(Filter.create_from_json(filter_json))
+
+    def match(self, file):
+        """Match iff any of the sub-filters match."""
+        for filter in self.sub_filters:
+            if filter.match(file):
+                return True
+        return False
+
+
+LANGUAGE_SCRIPT_REGEX = re.compile(r"^([a-z]{2,3})_[A-Z][a-z]{3}$")
+LANGUAGE_ONLY_REGEX = re.compile(r"^[a-z]{2,3}$")
+
+class LocaleFilter(Filter):
+    def __init__(self, json_data):
+        self.locales_requested = set()
+        self.locales_required = set()
+        self.include_children = json_data.get("includeChildren", True)
+        self.include_scripts = json_data.get("includeScripts", False)
+
+        # Compute the requested and required locales.
+        for locale in json_data["whitelist"]:
+            self._add_locale_and_parents(locale)
+
+    def _add_locale_and_parents(self, locale):
+        # Store the locale as *requested*
+        self.locales_requested.add(locale)
+        # Store the locale and its dependencies as *required*
+        while locale is not None:
+            self.locales_required.add(locale)
+            locale = self._get_parent_locale(locale)
+
+    def match(self, file):
+        locale = self._file_to_file_stem(file)
+
+        # A locale is *required* if it is *requested* or an ancestor of a
+        # *requested* locale.
+        if locale in self.locales_required:
+            return True
+
+        # Resolve include_scripts and include_children.
+        return self._match_recursive(locale)
+
+    def _match_recursive(self, locale):
+        # Base case: return True if we reached a *requested* locale,
+        # or False if we ascend out of the locale tree.
+        if locale is None:
+            return False
+        if locale in self.locales_requested:
+            return True
+
+        # Check for alternative scripts.
+        # This causes sr_Latn to check sr instead of going directly to root.
+        if self.include_scripts:
+            match = LANGUAGE_SCRIPT_REGEX.match(locale)
+            if match and self._match_recursive(match.group(1)):
+                return True
+
+        # Check if we are a descendant of a *requested* locale.
+        if self.include_children:
+            parent = self._get_parent_locale(locale)
+            if self._match_recursive(parent):
+                return True
+
+        # No matches.
+        return False
+
+    @classmethod
+    def _get_parent_locale(cls, locale):
+        if locale in DEPENDENCY_DATA["parents"]:
+            return DEPENDENCY_DATA["parents"][locale]
+        if locale in DEPENDENCY_DATA["aliases"]:
+            return DEPENDENCY_DATA["aliases"][locale]
+        if LANGUAGE_ONLY_REGEX.match(locale):
+            return "root"
+        i = locale.rfind("_")
+        if i < 0:
+            return None
+        return locale[:i]
 
 
 def apply_filters(requests, config):

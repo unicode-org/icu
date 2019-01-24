@@ -135,7 +135,7 @@ install: all-local install-local
 clean: clean-local
 distclean : distclean-local
 dist: 
-check: all
+check: all check-local
 
 check-exhaustive: check
 
@@ -163,6 +163,7 @@ cleanpackage:
 	$(RMV) $(LIBDIR)/*$(LIB_ICUDATA_NAME)*.$(SO)* $(LIBDIR)/$(LIB_STATIC_ICUDATA_NAME).$(A)
 
 check-local:
+	@PYTHON@ -m buildtool.test
 
 # Find out if we have a source archive.
 # If we have that, then use that instead of building everything from scratch.
