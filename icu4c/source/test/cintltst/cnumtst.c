@@ -56,6 +56,9 @@ static void TestInt64Parse(void);
 static void TestParseCurrency(void);
 static void TestMaxInt(void);
 static void TestNoExponent(void);
+static void TestSignAlwaysShown(void);
+static void TestMinimumGroupingDigits(void);
+static void TestParseCaseSensitive(void);
 static void TestUFormattable(void);
 static void TestUNumberingSystem(void);
 static void TestCurrencyIsoPluralFormat(void);
@@ -90,6 +93,9 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestCloneWithRBNF);
     TESTCASE(TestMaxInt);
     TESTCASE(TestNoExponent);
+    TESTCASE(TestSignAlwaysShown);
+    TESTCASE(TestMinimumGroupingDigits);
+    TESTCASE(TestParseCaseSensitive);
     TESTCASE(TestUFormattable);
     TESTCASE(TestUNumberingSystem);
     TESTCASE(TestCurrencyIsoPluralFormat);
@@ -2259,6 +2265,67 @@ static void TestMaxInt(void) {
     }
 
 
+    unum_close(fmt);
+}
+
+static void TestSignAlwaysShown(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat *fmt = unum_open(
+                  UNUM_DECIMAL, /* style         */
+                  NULL,         /* pattern       */
+                  0,            /* patternLength */
+                  "en-US",
+                  NULL,         /* parseErr      */
+                  &status);
+    assertSuccess("Creating UNumberFormat", &status);
+    unum_setAttribute(fmt, UNUM_SIGN_ALWAYS_SHOWN, 1);
+    UChar result[100];
+    unum_formatDouble(fmt, 42, result, 100, NULL, &status);
+    assertSuccess("Formatting with UNumberFormat", &status);
+    assertUEquals("Result with sign always shown", u"+42", result);
+    unum_close(fmt);
+}
+
+static void TestMinimumGroupingDigits(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat *fmt = unum_open(
+                  UNUM_DECIMAL, /* style         */
+                  NULL,         /* pattern       */
+                  0,            /* patternLength */
+                  "en-US",
+                  NULL,         /* parseErr      */
+                  &status);
+    assertSuccess("Creating UNumberFormat", &status);
+    unum_setAttribute(fmt, UNUM_MINIMUM_GROUPING_DIGITS, 2);
+    UChar result[100];
+    unum_formatDouble(fmt, 1234, result, 100, NULL, &status);
+    assertSuccess("Formatting with UNumberFormat A", &status);
+    assertUEquals("Result with minimum grouping digits A", u"1234", result);
+    unum_formatDouble(fmt, 12345, result, 100, NULL, &status);
+    assertSuccess("Formatting with UNumberFormat B", &status);
+    assertUEquals("Result with minimum grouping digits B", u"12,345", result);
+    unum_close(fmt);
+}
+
+static void TestParseCaseSensitive(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat *fmt = unum_open(
+                  UNUM_DECIMAL, /* style         */
+                  NULL,         /* pattern       */
+                  0,            /* patternLength */
+                  "en-US",
+                  NULL,         /* parseErr      */
+                  &status);
+    assertSuccess("Creating UNumberFormat", &status);
+    double result = unum_parseDouble(fmt, u"1e2", -1, NULL, &status);
+    assertSuccess("Parsing with UNumberFormat, case insensitive", &status);
+    assertIntEquals("Result with case sensitive", 100, result);
+    unum_setAttribute(fmt, UNUM_PARSE_CASE_SENSITIVE, 1);
+    int32_t ppos = 0;
+    result = unum_parseDouble(fmt, u"1e2", -1, &ppos, &status);
+    assertSuccess("Parsing with UNumberFormat, case sensitive", &status);
+    assertIntEquals("Position with case sensitive", 1, ppos);
+    assertIntEquals("Result with case sensitive", 1, result);
     unum_close(fmt);
 }
 

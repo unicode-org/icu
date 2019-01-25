@@ -196,6 +196,11 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestFastFormatInt32);
   TESTCASE_AUTO(Test11646_Equality);
   TESTCASE_AUTO(TestParseNaN);
+  TESTCASE_AUTO(TestFormatFailIfMoreThanMaxDigits);
+  TESTCASE_AUTO(TestParseCaseSensitive);
+  TESTCASE_AUTO(TestParseNoExponent);
+  TESTCASE_AUTO(TestSignAlwaysShown);
+  TESTCASE_AUTO(TestMinimumGroupingDigits);
   TESTCASE_AUTO(Test11897_LocalizedPatternSeparator);
   TESTCASE_AUTO(Test13055_PercentageRounding);
   TESTCASE_AUTO(Test11839);
@@ -8848,6 +8853,91 @@ void NumberFormatTest::TestParseNaN() {
     UnicodeString formatResult;
     df.format(parseResult.getDouble(), formatResult);
     assertEquals("NaN should round-trip", u"NaN", formatResult);
+}
+
+void NumberFormatTest::TestFormatFailIfMoreThanMaxDigits() {
+    IcuTestErrorCode status(*this, "TestFormatFailIfMoreThanMaxDigits");
+
+    DecimalFormat df("0", {"en-US", status}, status);
+    if (status.errDataIfFailureAndReset()) {
+        return;
+    }
+    assertEquals("Coverage for getter 1", (UBool) FALSE, df.isFormatFailIfMoreThanMaxDigits());
+    df.setFormatFailIfMoreThanMaxDigits(TRUE);
+    assertEquals("Coverage for getter 2", (UBool) TRUE, df.isFormatFailIfMoreThanMaxDigits());
+    df.setMaximumIntegerDigits(2);
+    UnicodeString result;
+    df.format(1234, result, status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR);
+}
+
+void NumberFormatTest::TestParseCaseSensitive() {
+    IcuTestErrorCode status(*this, "TestParseCaseSensitive");
+
+    DecimalFormat df(u"0", {"en-US", status}, status);
+    if (status.errDataIfFailureAndReset()) {
+        return;
+    }
+    assertEquals("Coverage for getter 1", (UBool) FALSE, df.isParseCaseSensitive());
+    df.setParseCaseSensitive(TRUE);
+    assertEquals("Coverage for getter 1", (UBool) TRUE, df.isParseCaseSensitive());
+    Formattable result;
+    ParsePosition ppos;
+    df.parse(u"1e2", result, ppos);
+    assertEquals("Should parse only 1 digit", 1, ppos.getIndex());
+    assertEquals("Result should be 1", 1.0, result.getDouble(status));
+}
+
+void NumberFormatTest::TestParseNoExponent() {
+    IcuTestErrorCode status(*this, "TestParseNoExponent");
+
+    DecimalFormat df(u"0", {"en-US", status}, status);
+    if (status.errDataIfFailureAndReset()) {
+        return;
+    }
+    assertEquals("Coverage for getter 1", (UBool) FALSE, df.isParseNoExponent());
+    df.setParseNoExponent(TRUE);
+    assertEquals("Coverage for getter 1", (UBool) TRUE, df.isParseNoExponent());
+    Formattable result;
+    ParsePosition ppos;
+    df.parse(u"1E2", result, ppos);
+    assertEquals("Should parse only 1 digit", 1, ppos.getIndex());
+    assertEquals("Result should be 1", 1.0, result.getDouble(status));
+}
+
+void NumberFormatTest::TestSignAlwaysShown() {
+    IcuTestErrorCode status(*this, "TestSignAlwaysShown");
+
+    DecimalFormat df(u"0", {"en-US", status}, status);
+    if (status.errDataIfFailureAndReset()) {
+        return;
+    }
+    assertEquals("Coverage for getter 1", (UBool) FALSE, df.isSignAlwaysShown());
+    df.setSignAlwaysShown(TRUE);
+    assertEquals("Coverage for getter 1", (UBool) TRUE, df.isSignAlwaysShown());
+    UnicodeString result;
+    df.format(1234, result, status);
+    status.errIfFailureAndReset();
+    assertEquals("Should show sign on positive number", u"+1234", result);
+}
+
+void NumberFormatTest::TestMinimumGroupingDigits() {
+    IcuTestErrorCode status(*this, "TestMinimumGroupingDigits");
+
+    DecimalFormat df(u"#,##0", {"en-US", status}, status);
+    if (status.errDataIfFailureAndReset()) {
+        return;
+    }
+    assertEquals("Coverage for getter 1", -1, df.getMinimumGroupingDigits());
+    df.setMinimumGroupingDigits(2);
+    assertEquals("Coverage for getter 1", 2, df.getMinimumGroupingDigits());
+    UnicodeString result;
+    df.format(1234, result, status);
+    status.errIfFailureAndReset();
+    assertEquals("Should not have grouping", u"1234", result);
+    df.format(12345, result.remove(), status);
+    status.errIfFailureAndReset();
+    assertEquals("Should have grouping", u"12,345", result);
 }
 
 void NumberFormatTest::Test11897_LocalizedPatternSeparator() {

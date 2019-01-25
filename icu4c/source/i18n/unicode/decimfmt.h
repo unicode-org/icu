@@ -64,18 +64,6 @@ class NumberParserImpl;
 }
 
 /**
- * \cond
- * explicit template instantiation. see digitlst.h
- * (When building DLLs for Windows this is required.)
- */
-#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN && !defined(U_IN_DOXYGEN)
-template class U_I18N_API    EnumSet<UNumberFormatAttribute,
-            UNUM_MAX_NONBOOLEAN_ATTRIBUTE+1,
-            UNUM_LIMIT_BOOLEAN_ATTRIBUTE>;
-#endif
-/** \endcond */
-
-/**
  * **IMPORTANT:** New users are strongly encouraged to see if
  * numberformatter.h fits their use case.  Although not deprecated, this header
  * is provided for backwards compatibility only.
@@ -1292,20 +1280,27 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     virtual void setNegativeSuffix(const UnicodeString& newValue);
 
-#ifndef U_HIDE_INTERNAL_API
+#ifndef U_HIDE_DRAFT_API
     /**
      * Whether to show the plus sign on positive (non-negative) numbers; for example, "+12"
-     * @internal Technical Preview
+     *
+     * For more control over sign display, use NumberFormatter.
+     *
+     * @return Whether the sign is shown on positive numbers and zero.
+     * @draft ICU 64
      */
     UBool isSignAlwaysShown() const;
-#endif  /* U_HIDE_INTERNAL_API */
 
     /**
-     * Set whether to show the plus sign on positive (non-negative) numbers; for example, "+12"
-     * @param value The new setting for whether to show plus sign on positive numbers
-     * @internal Technical Preview
+     * Set whether to show the plus sign on positive (non-negative) numbers; for example, "+12".
+     *
+     * For more control over sign display, use NumberFormatter.
+     *
+     * @param value true to always show a sign; false to hide the sign on positive numbers and zero.
+     * @draft ICU 64
      */
-    virtual void setSignAlwaysShown(UBool value);
+    void setSignAlwaysShown(UBool value);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Get the multiplier for use in percent, permill, etc.
@@ -1350,7 +1345,6 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @draft ICU 62
      */
     int32_t getMultiplierScale(void) const;
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Sets a power of ten by which number should be multiplied before formatting, which
@@ -1371,7 +1365,8 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @param newValue    the new value of the power-of-ten multiplier.
      * @draft ICU 62
      */
-    virtual void setMultiplierScale(int32_t newValue);
+    void setMultiplierScale(int32_t newValue);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Get the rounding increment.
@@ -1654,8 +1649,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     virtual void setSecondaryGroupingSize(int32_t newValue);
 
-#ifndef U_HIDE_INTERNAL_API
-
+#ifndef U_HIDE_DRAFT_API
     /**
      * Returns the minimum number of grouping digits.
      * Grouping separators are output if there are at least this many
@@ -1666,31 +1660,33 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * For example, if this value is 2, and the grouping size is 3, then
      * 9999 -> "9999" and 10000 -> "10,000"
      *
-     * This is a technology preview. This API may change behavior or may be removed.
-     *
      * The default value for this attribute is 0.
      * A value of 1, 0, or lower, means that the use of grouping separators
      * only depends on the grouping size (and on isGroupingUsed()).
-     * Currently, the corresponding CLDR data is not used; this is likely to change.
+     *
+     * NOTE: The CLDR data is used in NumberFormatter but not in DecimalFormat.
+     * This is for backwards compatibility reasons.
+     *
+     * For more control over grouping strategies, use NumberFormatter.
      *
      * @see setMinimumGroupingDigits
      * @see getGroupingSize
-     * @internal technology preview
+     * @draft ICU 64
      */
     int32_t getMinimumGroupingDigits() const;
 
-#endif  /* U_HIDE_INTERNAL_API */
-
-    /* Cannot use #ifndef U_HIDE_INTERNAL_API for the following draft method since it is virtual. */
     /**
      * Sets the minimum grouping digits. Setting to a value less than or
      * equal to 1 turns off minimum grouping digits.
      *
+     * For more control over grouping strategies, use NumberFormatter.
+     *
      * @param newValue the new value of minimum grouping digits.
      * @see getMinimumGroupingDigits
-     * @internal technology preview
+     * @draft ICU 64
      */
-    virtual void setMinimumGroupingDigits(int32_t newValue);
+    void setMinimumGroupingDigits(int32_t newValue);
+#endif  /* U_HIDE_DRAFT_API */
 
 
     /**
@@ -1732,13 +1728,15 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      */
     virtual void setDecimalPatternMatchRequired(UBool newValue);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Returns whether to ignore exponents when parsing.
      *
+     * @return Whether to ignore exponents when parsing.
      * @see #setParseNoExponent
-     * @internal This API is a technical preview. It may change in an upcoming release.
+     * @draft ICU 64
      */
-    virtual UBool isParseNoExponent() const;
+    UBool isParseNoExponent() const;
 
     /**
      * Specifies whether to stop parsing when an exponent separator is encountered. For
@@ -1746,17 +1744,18 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * 5).
      *
      * @param value true to prevent exponents from being parsed; false to allow them to be parsed.
-     * @internal This API is a technical preview. It may change in an upcoming release.
+     * @draft ICU 64
      */
-    virtual void setParseNoExponent(UBool value);
+    void setParseNoExponent(UBool value);
 
     /**
      * Returns whether parsing is sensitive to case (lowercase/uppercase).
      *
+     * @return Whether parsing is case-sensitive.
      * @see #setParseCaseSensitive
-     * @internal This API is a technical preview. It may change in an upcoming release.
+     * @draft ICU 64
      */
-    virtual UBool isParseCaseSensitive() const;
+    UBool isParseCaseSensitive() const;
 
     /**
      * Whether to pay attention to case when parsing; default is to ignore case (perform
@@ -1765,26 +1764,31 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * Currency symbols are never case-folded. For example, "us$1.00" will not parse in case-insensitive
      * mode, even though "US$1.00" parses.
      *
-     * @internal This API is a technical preview. It may change in an upcoming release.
+     * @param value true to enable case-sensitive parsing (the default); false to force
+     *              case-sensitive parsing behavior.
+     * @draft ICU 64
      */
-    virtual void setParseCaseSensitive(UBool value);
+    void setParseCaseSensitive(UBool value);
 
     /**
      * Returns whether truncation of high-order integer digits should result in an error.
      * By default, setMaximumIntegerDigits truncates high-order digits silently.
      *
+     * @return Whether an error code is set if high-order digits are truncated.
      * @see setFormatFailIfMoreThanMaxDigits
-     * @internal This API is a technical preview. It may change in an upcoming release.
+     * @draft ICU 64
      */
-    virtual UBool isFormatFailIfMoreThanMaxDigits() const;
+    UBool isFormatFailIfMoreThanMaxDigits() const;
 
     /**
      * Sets whether truncation of high-order integer digits should result in an error.
      * By default, setMaximumIntegerDigits truncates high-order digits silently.
      *
-     * @internal This API is a technical preview. It may change in an upcoming release.
+     * @param value Whether to set an error code if high-order digits are truncated.
+     * @draft ICU 64
      */
-    virtual void setFormatFailIfMoreThanMaxDigits(UBool value);
+    void setFormatFailIfMoreThanMaxDigits(UBool value);
+#endif  /* U_HIDE_DRAFT_API */
 
 
     /**

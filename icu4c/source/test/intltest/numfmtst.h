@@ -261,6 +261,11 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestFastFormatInt32();
     void Test11646_Equality();
     void TestParseNaN();
+    void TestFormatFailIfMoreThanMaxDigits();
+    void TestParseCaseSensitive();
+    void TestParseNoExponent();
+    void TestSignAlwaysShown();
+    void TestMinimumGroupingDigits();
     void Test11897_LocalizedPatternSeparator();
     void Test13055_PercentageRounding();
     void Test11839();
