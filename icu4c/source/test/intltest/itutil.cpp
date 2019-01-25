@@ -385,8 +385,10 @@ public:
 
     void TestLocalPointer();
     void TestLocalPointerMoveSwap();
+    void TestLocalPointerStdUniquePtr();
     void TestLocalArray();
     void TestLocalArrayMoveSwap();
+    void TestLocalArrayStdUniquePtr();
     void TestLocalXyzPointer();
     void TestLocalXyzPointerMoveSwap();
     void TestLocalXyzPointerNull();
@@ -403,8 +405,10 @@ void LocalPointerTest::runIndexedTest(int32_t index, UBool exec, const char *&na
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(TestLocalPointer);
     TESTCASE_AUTO(TestLocalPointerMoveSwap);
+    TESTCASE_AUTO(TestLocalPointerStdUniquePtr);
     TESTCASE_AUTO(TestLocalArray);
     TESTCASE_AUTO(TestLocalArrayMoveSwap);
+    TESTCASE_AUTO(TestLocalArrayStdUniquePtr);
     TESTCASE_AUTO(TestLocalXyzPointer);
     TESTCASE_AUTO(TestLocalXyzPointerMoveSwap);
     TESTCASE_AUTO(TestLocalXyzPointerNull);
@@ -514,6 +518,17 @@ void LocalPointerTest::TestLocalPointerMoveSwap() {
     s3.moveFrom(s3);
 }
 
+void LocalPointerTest::TestLocalPointerStdUniquePtr() {
+    // Implicit conversion operator
+    std::unique_ptr<UnicodeString> s = LocalPointer<UnicodeString>(new UnicodeString((UChar32)0x50005));
+    // Explicit move constructor
+    LocalPointer<UnicodeString> s2(std::move(s));
+    // Conversion operator should also work with std::move
+    s = std::move(s2);
+    // Back again with move assignment
+    s2 = std::move(s);
+}
+
 // Exercise almost every LocalArray method (but not LocalPointerBase).
 void LocalPointerTest::TestLocalArray() {
     // constructor
@@ -605,6 +620,17 @@ void LocalPointerTest::TestLocalArrayMoveSwap() {
     // but do not check for any particular resulting value.
     a1.moveFrom(a1);
     a3.moveFrom(a3);
+}
+
+void LocalPointerTest::TestLocalArrayStdUniquePtr() {
+    // Implicit conversion operator
+    std::unique_ptr<UnicodeString[]> a = LocalArray<UnicodeString>(new UnicodeString[2]);
+    // Explicit move constructor
+    LocalArray<UnicodeString> a2(std::move(a));
+    // Conversion operator should also work with std::move
+    a = std::move(a2);
+    // Back again with move assignment
+    a2 = std::move(a);
 }
 
 #include "unicode/ucnvsel.h"
