@@ -1156,8 +1156,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             throw new IllegalArgumentException("unknown currency spacing: " + itemType);
         }
         if (beforeCurrency) {
+            currencySpcBeforeSym = currencySpcBeforeSym.clone();
             currencySpcBeforeSym[itemType] = pattern;
         } else {
+            currencySpcAfterSym = currencySpcAfterSym.clone();
             currencySpcAfterSym[itemType] = pattern;
         }
     }

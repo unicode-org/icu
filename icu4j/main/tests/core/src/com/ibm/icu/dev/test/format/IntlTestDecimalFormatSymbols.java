@@ -400,4 +400,25 @@ public class IntlTestDecimalFormatSymbols extends TestFmwk
             assertEquals("JDK Locale and ICU Locale should produce the same object", dfs, dfs2);
         }
     }
+
+    @Test
+    public void testSetPatternForCurrencySpacing_notSharedByInstances() {
+        for (int type = DecimalFormatSymbols.CURRENCY_SPC_CURRENCY_MATCH; type <= DecimalFormatSymbols.CURRENCY_SPC_INSERT; type++) {
+            DecimalFormatSymbols dfs1 = DecimalFormatSymbols.getInstance(Locale.US);
+            DecimalFormatSymbols dfs2 = DecimalFormatSymbols.getInstance(Locale.US);
+            final String pattern = "foobar";
+            // before
+            dfs1.setPatternForCurrencySpacing(type, false, pattern);
+            assertEquals("setPatternForCurrencySpacing() must set the pattern", pattern,
+                    dfs1.getPatternForCurrencySpacing(type, false));
+            assertNotEquals("DFS instances must not share same pattern", pattern,
+                    dfs2.getPatternForCurrencySpacing(type, false));
+            // after
+            dfs1.setPatternForCurrencySpacing(type, true, pattern);
+            assertEquals("setPatternForCurrencySpacing() must set the pattern", pattern,
+                    dfs1.getPatternForCurrencySpacing(type, true));
+            assertNotEquals("DFS instances must not share same pattern", pattern,
+                    dfs2.getPatternForCurrencySpacing(type, true));
+        }
+    }
 }
