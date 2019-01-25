@@ -5886,10 +5886,10 @@ public class NumberFormatTest extends TestFmwk {
     @Test
     public void testParseNoExponent() throws ParseException {
         DecimalFormat df = new DecimalFormat();
-        assertEquals("Parse no exponent has wrong default", false, df.getParseNoExponent());
+        assertEquals("Parse no exponent has wrong default", false, df.isParseNoExponent());
         Number result1 = df.parse("123E4");
         df.setParseNoExponent(true);
-        assertEquals("Parse no exponent getter is broken", true, df.getParseNoExponent());
+        assertEquals("Parse no exponent getter is broken", true, df.isParseNoExponent());
         Number result2 = df.parse("123E4");
         assertEquals("Exponent did not parse before setParseNoExponent", result1, new Long(1230000));
         assertEquals("Exponent parsed after setParseNoExponent", result2, new Long(123));
@@ -5933,17 +5933,17 @@ public class NumberFormatTest extends TestFmwk {
         for (int p = 0; p < patterns.length; p++) {
             String pat = patterns[p];
             DecimalFormat df = new DecimalFormat(pat);
-            assertEquals("parseCaseSensitive default is wrong", false, df.getParseCaseSensitive());
+            assertEquals("parseCaseSensitive default is wrong", false, df.isParseCaseSensitive());
             for (int i = 0; i < inputs.length; i++) {
                 String inp = inputs[i];
                 df.setParseCaseSensitive(false);
-                assertEquals("parseCaseSensitive getter is broken", false, df.getParseCaseSensitive());
+                assertEquals("parseCaseSensitive getter is broken", false, df.isParseCaseSensitive());
                 ParsePosition actualInsensitive = new ParsePosition(0);
                 df.parse(inp, actualInsensitive);
                 assertEquals("Insensitive, pattern "+p+", input "+i,
                         expectedParsePositions[p*2][i], actualInsensitive.getIndex());
                 df.setParseCaseSensitive(true);
-                assertEquals("parseCaseSensitive getter is broken", true, df.getParseCaseSensitive());
+                assertEquals("parseCaseSensitive getter is broken", true, df.isParseCaseSensitive());
                 ParsePosition actualSensitive = new ParsePosition(0);
                 df.parse(inp, actualSensitive);
                 assertEquals("Sensitive, pattern "+p+", input "+i,
@@ -5995,13 +5995,13 @@ public class NumberFormatTest extends TestFmwk {
         for (int i=0; i<locs.length; i++) {
             ULocale loc = locs[i];
             DecimalFormat df1 = (DecimalFormat) NumberFormat.getNumberInstance(loc);
-            assertFalse("Default should be false", df1.getSignAlwaysShown());
+            assertFalse("Default should be false", df1.isSignAlwaysShown());
             df1.setSignAlwaysShown(true);
-            assertTrue("Getter should now return true", df1.getSignAlwaysShown());
+            assertTrue("Getter should now return true", df1.isSignAlwaysShown());
             DecimalFormat df2 = (DecimalFormat) NumberFormat.getCurrencyInstance(loc);
-            assertFalse("Default should be false", df2.getSignAlwaysShown());
+            assertFalse("Default should be false", df2.isSignAlwaysShown());
             df2.setSignAlwaysShown(true);
-            assertTrue("Getter should now return true", df2.getSignAlwaysShown());
+            assertTrue("Getter should now return true", df2.isSignAlwaysShown());
             for (int j=0; j<2; j++) {
                 DecimalFormat df = (j == 0) ? df1 : df2;
                 for (int k=0; k<numbers.length; k++) {
