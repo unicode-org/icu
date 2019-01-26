@@ -18,4 +18,9 @@
   <PropertyGroup Label="PlatformToolset">
     <PlatformToolset>$(DefaultPlatformToolset)</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup>
+    <!-- Disable MSBuild warning about Linker OutputFile. -->
+    <!-- Ex: MSBuild complains that the common project creates "icuuc62.dll" rather than "common.dll". However, this is intentional. -->
+    <MSBuildWarningsAsMessages>MSB8012</MSBuildWarningsAsMessages>
+  </PropertyGroup>
 </Project>
