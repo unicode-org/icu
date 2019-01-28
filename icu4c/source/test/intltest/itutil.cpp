@@ -392,6 +392,7 @@ public:
     void TestLocalXyzPointer();
     void TestLocalXyzPointerMoveSwap();
     void TestLocalXyzPointerNull();
+    void TestLocalXyzStdUniquePtr();
 };
 
 static IntlTest *createLocalPointerTest() {
@@ -412,6 +413,7 @@ void LocalPointerTest::runIndexedTest(int32_t index, UBool exec, const char *&na
     TESTCASE_AUTO(TestLocalXyzPointer);
     TESTCASE_AUTO(TestLocalXyzPointerMoveSwap);
     TESTCASE_AUTO(TestLocalXyzPointerNull);
+    TESTCASE_AUTO(TestLocalXyzStdUniquePtr);
     TESTCASE_AUTO_END;
 }
 
@@ -519,14 +521,16 @@ void LocalPointerTest::TestLocalPointerMoveSwap() {
 }
 
 void LocalPointerTest::TestLocalPointerStdUniquePtr() {
+    auto* ptr = new UnicodeString((UChar32)0x50005);
     // Implicit conversion operator
-    std::unique_ptr<UnicodeString> s = LocalPointer<UnicodeString>(new UnicodeString((UChar32)0x50005));
+    std::unique_ptr<UnicodeString> s = LocalPointer<UnicodeString>(ptr);
     // Explicit move constructor
     LocalPointer<UnicodeString> s2(std::move(s));
     // Conversion operator should also work with std::move
     s = std::move(s2);
     // Back again with move assignment
     s2 = std::move(s);
+    assertTrue("Pointer should remain the same", ptr == s2.getAlias());
 }
 
 // Exercise almost every LocalArray method (but not LocalPointerBase).
@@ -623,14 +627,16 @@ void LocalPointerTest::TestLocalArrayMoveSwap() {
 }
 
 void LocalPointerTest::TestLocalArrayStdUniquePtr() {
+    auto* ptr = new UnicodeString[2];
     // Implicit conversion operator
-    std::unique_ptr<UnicodeString[]> a = LocalArray<UnicodeString>(new UnicodeString[2]);
+    std::unique_ptr<UnicodeString[]> a = LocalArray<UnicodeString>(ptr);
     // Explicit move constructor
     LocalArray<UnicodeString> a2(std::move(a));
     // Conversion operator should also work with std::move
     a = std::move(a2);
     // Back again with move assignment
     a2 = std::move(a);
+    assertTrue("Pointer should remain the same", ptr == a2.getAlias());
 }
 
 #include "unicode/ucnvsel.h"
@@ -642,6 +648,7 @@ void LocalPointerTest::TestLocalArrayStdUniquePtr() {
 #include "unicode/unorm2.h"
 #include "unicode/uregex.h"
 #include "unicode/utrans.h"
+#include "unicode/uformattedvalue.h"
 
 // Use LocalXyzPointer types that are not covered elsewhere in the intltest suite.
 void LocalPointerTest::TestLocalXyzPointer() {
@@ -862,6 +869,23 @@ void LocalPointerTest::TestLocalXyzPointerNull() {
     }
 #endif /* !UCONFIG_NO_TRANSLITERATION */
 
+}
+
+void LocalPointerTest::TestLocalXyzStdUniquePtr() {
+    IcuTestErrorCode status(*this, "TestLocalXyzStdUniquePtr");
+#if !UCONFIG_NO_FORMATTING
+    auto* ptr = ucfpos_open(status);
+    // Implicit conversion operator
+    std::unique_ptr<UConstrainedFieldPosition, void(*)(UConstrainedFieldPosition*)> a =
+        LocalUConstrainedFieldPositionPointer(ptr);
+    // Explicit move constructor
+    LocalUConstrainedFieldPositionPointer a2(std::move(a));
+    // Conversion operator should also work with std::move
+    a = std::move(a2);
+    // Back again with move assignment
+    a2 = std::move(a);
+    assertTrue("Pointer should remain the same", ptr == a2.getAlias());
+#endif // UCONFIG_NO_FORMATTING
 }
 
 /** EnumSet test **/

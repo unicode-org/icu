@@ -234,7 +234,8 @@ public:
      * @param p The std::unique_ptr from which the pointer will be stolen.
      * @draft ICU 64
      */
-    explicit LocalPointer(std::unique_ptr<T> &&p) : LocalPointerBase<T>(p.release()) {}
+    explicit LocalPointer(std::unique_ptr<T> &&p)
+        : LocalPointerBase<T>(p.release()) {}
     /**
      * Destructor deletes the object it owns.
      * @stable ICU 4.4
@@ -416,7 +417,8 @@ public:
      * @param p The std::unique_ptr from which the array will be stolen.
      * @draft ICU 64
      */
-    explicit LocalArray(std::unique_ptr<T[]> &&p) : LocalPointerBase<T>(p.release()) {}
+    explicit LocalArray(std::unique_ptr<T[]> &&p)
+        : LocalPointerBase<T>(p.release()) {}
     /**
      * Destructor deletes the array it owns.
      * @stable ICU 4.4
@@ -571,9 +573,17 @@ public:
                 : LocalPointerBase<Type>(src.ptr) { \
             src.ptr=NULL; \
         } \
+        /* TODO: Be agnostic of the deleter function signature from the user-provided std::unique_ptr? */ \
+        explicit LocalPointerClassName(std::unique_ptr<Type, decltype(&closeFunction)> &&p) \
+                : LocalPointerBase<Type>(p.release()) {} \
         ~LocalPointerClassName() { if (ptr != NULL) { closeFunction(ptr); } } \
         LocalPointerClassName &operator=(LocalPointerClassName &&src) U_NOEXCEPT { \
             return moveFrom(src); \
+        } \
+        /* TODO: Be agnostic of the deleter function signature from the user-provided std::unique_ptr? */ \
+        LocalPointerClassName &operator=(std::unique_ptr<Type, decltype(&closeFunction)> &&p) { \
+            adoptInstead(p.release()); \
+            return *this; \
         } \
         LocalPointerClassName &moveFrom(LocalPointerClassName &src) U_NOEXCEPT { \
             if (ptr != NULL) { closeFunction(ptr); } \
@@ -592,6 +602,9 @@ public:
         void adoptInstead(Type *p) { \
             if (ptr != NULL) { closeFunction(ptr); } \
             ptr=p; \
+        } \
+        operator std::unique_ptr<Type, decltype(&closeFunction)> () && { \
+            return std::unique_ptr<Type, decltype(&closeFunction)>(LocalPointerBase<Type>::orphan(), closeFunction); \
         } \
     }
 
