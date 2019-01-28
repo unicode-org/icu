@@ -83,7 +83,7 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
      * @param category The field category to fix when iterating.
      * @draft ICU 64
      */
-    void constrainCategory(UFieldCategory category);
+    void constrainCategory(int32_t category);
 
     /**
      * Sets a constraint on the category and field.
@@ -108,7 +108,7 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
      * @param field The field to fix when iterating.
      * @draft ICU 64
      */
-    void constrainField(UFieldCategory category, int32_t field);
+    void constrainField(int32_t category, int32_t field);
 
     /**
      * Gets the currently active constraint.
@@ -130,7 +130,7 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
      * @return The field category saved in the instance.
      * @draft ICU 64
      */
-    inline UFieldCategory getCategory() const {
+    inline int32_t getCategory() const {
         return fCategory;
     };
 
@@ -216,7 +216,7 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
      * @draft ICU 64
      */
     void setState(
-        UFieldCategory category,
+        int32_t category,
         int32_t field,
         int32_t start,
         int32_t limit);
@@ -230,7 +230,7 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
     int32_t fStart = 0;
     int32_t fLimit = 0;
     UCFPosConstraintType fConstraint = UCFPOS_CONSTRAINT_NONE;
-    UFieldCategory fCategory = UFIELD_CATEGORY_UNDEFINED;
+    int32_t fCategory = UFIELD_CATEGORY_UNDEFINED;
 };
 
 

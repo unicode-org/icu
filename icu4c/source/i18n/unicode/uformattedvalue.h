@@ -22,6 +22,12 @@
 /**
  * All possible field categories in ICU. Every entry in this enum corresponds
  * to another enum that exists in ICU.
+ * 
+ * In the APIs that take a UFieldCategory, an int32_t type is used. Field
+ * categories having any of the top four bits turned on are reserved as
+ * private-use for external APIs implementing FormattedValue. This means that
+ * categories 2^28 and higher or below zero (with the highest bit turned on)
+ * are private-use and will not be used by ICU in the future.
  *
  * @draft ICU 64
  */
@@ -192,7 +198,7 @@ ucfpos_close(UConstrainedFieldPosition* ucfpos);
 U_DRAFT void U_EXPORT2
 ucfpos_constrainCategory(
     UConstrainedFieldPosition* ucfpos,
-    UFieldCategory category,
+    int32_t category,
     UErrorCode* ec);
 
 
@@ -225,7 +231,7 @@ ucfpos_constrainCategory(
 U_DRAFT void U_EXPORT2
 ucfpos_constrainField(
     UConstrainedFieldPosition* ucfpos,
-    UFieldCategory category,
+    int32_t category,
     int32_t field,
     UErrorCode* ec);
 
@@ -256,7 +262,7 @@ ucfpos_getConstraintType(
  * @return The field category saved in the instance.
  * @draft ICU 64
  */
-U_DRAFT UFieldCategory U_EXPORT2
+U_DRAFT int32_t U_EXPORT2
 ucfpos_getCategory(
     const UConstrainedFieldPosition* ucfpos,
     UErrorCode* ec);
@@ -353,7 +359,7 @@ ucfpos_setInt64IterationContext(
 U_DRAFT void U_EXPORT2
 ucfpos_setState(
     UConstrainedFieldPosition* ucfpos,
-    UFieldCategory category,
+    int32_t category,
     int32_t field,
     int32_t start,
     int32_t limit,
