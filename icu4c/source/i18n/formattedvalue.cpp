@@ -25,12 +25,12 @@ void ConstrainedFieldPosition::reset() {
     fCategory = UFIELD_CATEGORY_UNDEFINED;
 }
 
-void ConstrainedFieldPosition::constrainCategory(UFieldCategory category) {
+void ConstrainedFieldPosition::constrainCategory(int32_t category) {
     fConstraint = UCFPOS_CONSTRAINT_CATEGORY;
     fCategory = category;
 }
 
-void ConstrainedFieldPosition::constrainField(UFieldCategory category, int32_t field) {
+void ConstrainedFieldPosition::constrainField(int32_t category, int32_t field) {
     fConstraint = UCFPOS_CONSTRAINT_FIELD;
     fCategory = category;
     fField = field;
@@ -41,7 +41,7 @@ void ConstrainedFieldPosition::setInt64IterationContext(int64_t context) {
 }
 
 void ConstrainedFieldPosition::setState(
-        UFieldCategory category,
+        int32_t category,
         int32_t field,
         int32_t start,
         int32_t limit) {
@@ -85,7 +85,7 @@ ucfpos_reset(UConstrainedFieldPosition* ptr, UErrorCode* ec) {
 }
 
 U_CAPI void U_EXPORT2
-ucfpos_constrainCategory(UConstrainedFieldPosition* ptr, UFieldCategory category, UErrorCode* ec) {
+ucfpos_constrainCategory(UConstrainedFieldPosition* ptr, int32_t category, UErrorCode* ec) {
     auto* impl = UConstrainedFieldPositionImpl::validate(ptr, *ec);
     if (U_FAILURE(*ec)) {
         return;
@@ -94,7 +94,7 @@ ucfpos_constrainCategory(UConstrainedFieldPosition* ptr, UFieldCategory category
 }
 
 U_CAPI void U_EXPORT2
-ucfpos_constrainField(UConstrainedFieldPosition* ptr, UFieldCategory category, int32_t field, UErrorCode* ec) {
+ucfpos_constrainField(UConstrainedFieldPosition* ptr, int32_t category, int32_t field, UErrorCode* ec) {
     auto* impl = UConstrainedFieldPositionImpl::validate(ptr, *ec);
     if (U_FAILURE(*ec)) {
         return;
@@ -111,7 +111,7 @@ ucfpos_getConstraintType(const UConstrainedFieldPosition* ptr, UErrorCode* ec) {
     return impl->fImpl.getConstraintType();
 }
 
-U_CAPI UFieldCategory U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 ucfpos_getCategory(const UConstrainedFieldPosition* ptr, UErrorCode* ec) {
     const auto* impl = UConstrainedFieldPositionImpl::validate(ptr, *ec);
     if (U_FAILURE(*ec)) {
@@ -160,7 +160,7 @@ ucfpos_setInt64IterationContext(UConstrainedFieldPosition* ptr, int64_t context,
 U_CAPI void U_EXPORT2
 ucfpos_setState(
         UConstrainedFieldPosition* ptr,
-        UFieldCategory category,
+        int32_t category,
         int32_t field,
         int32_t start,
         int32_t limit,
