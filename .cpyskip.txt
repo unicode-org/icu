@@ -69,6 +69,7 @@ icu4c/source/extra/uconv/samples/*
 icu4c/source/samples/layout/Sample.txt
 icu4c/source/samples/ucnv/data01.txt
 icu4c/source/samples/ufortune/resources/res-file-list.txt
+icu4c/source/test/fuzzer/*_seed_corpus.txt
 icu4c/source/test/testdata/ConverterSelectorTestUTF8.txt
 icu4c/source/test/testdata/encoded.utf16be
 icu4c/source/test/testdata/idna_conf.txt
