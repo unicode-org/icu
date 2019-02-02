@@ -2285,6 +2285,13 @@ void  RegexCompile::handleCloseParen() {
                 error(U_REGEX_LOOK_BEHIND_LIMIT);
                 break;
             }
+            if (minML == INT32_MAX && maxML == 0) {
+                // This condition happens when no match is possible, such as with a
+                // [set] expression containing no elements.
+                // In principle, the generated code to evaluate the expression could be deleted,
+                // but it's probably not worth the complication.
+                minML = 0;
+            }
             U_ASSERT(minML <= maxML);
 
             // Insert the min and max match len bounds into the URX_LB_CONT op that
@@ -2321,6 +2328,14 @@ void  RegexCompile::handleCloseParen() {
                 error(U_REGEX_LOOK_BEHIND_LIMIT);
                 break;
             }
+            if (minML == INT32_MAX && maxML == 0) {
+                // This condition happens when no match is possible, such as with a
+                // [set] expression containing no elements.
+                // In principle, the generated code to evaluate the expression could be deleted,
+                // but it's probably not worth the complication.
+                minML = 0;
+            }
+
             U_ASSERT(minML <= maxML);
 
             // Insert the min and max match len bounds into the URX_LB_CONT op that

@@ -1419,10 +1419,31 @@
 "[a-z]+"                   i       "<0>Aa</0>"   # Matches JDK behavior.
 "[^a-z]+"                  i       "Aa"          # (no match) which is JDK behavior. Case fold first, then negation.
 
+# Bug 20385.  Assertion failure while compiling a negative look-behind expression consisting of a set with
+#             no contents. Meaning the [set] can never match. There is no syntax to directly express
+#             an empty set, so generate it by negating (^) a set of all code points.
+#             Also check empty sets in other contexts.
+
+"(?<![^[^a]a])"                    "<0></0>abc"
+
+"(?<![^\u0000-\U0010ffff])"        "<0></0>abc"
+"x(?<![^\u0000-\U0010ffff])"       "<0>x</0>abc"
+"x(?<![^\u0000-\U0010ffff]{1,5})"  "<0>x</0>abc"
+"x(?<![^\u0000-\U0010ffff]{0,5})"  "xabc"
+
+"(?<=[^\u0000-\U0010ffff])"        "abc"
+"(x?<=[^\u0000-\U0010ffff])"       "abc"
+"x(?<=[^\u0000-\U0010ffff]{1,5})"  "xabc"
+"x(?<=[^\u0000-\U0010ffff]{0,5})"  "<0>x</0>abc"
+
+"[^\u0000-\U0010ffff]"             "a"
+"[^[^\u0000-\U0010ffff]]"          "<0>a</0>"
+
+
 #  Random debugging, Temporary
 #
 
-"This is a string with (?:one |two |three )endings"   "<0>This is a string with two endings</0>"
+
 
 
 #
