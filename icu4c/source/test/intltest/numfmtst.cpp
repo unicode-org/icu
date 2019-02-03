@@ -2230,8 +2230,8 @@ void NumberFormatTest::TestCurrencyUnit(void){
     assertEquals("Copying from meter should fail", ec, U_ILLEGAL_ARGUMENT_ERROR);
     assertEquals("Copying should not give uninitialized ISO code", u"", failure.getISOCurrency());
 
-    uprv_free(EUR);
-    uprv_free(EUR8);
+    free(EUR);
+    free(EUR8);
 }
 
 void NumberFormatTest::TestCurrencyAmount(void){
