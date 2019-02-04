@@ -32,8 +32,14 @@
 UChar* myDateFormat(UDateFormat *dat, UDate d); 
 
 
-// The following is implemented in uformattedvaluetest.c
-// TODO: When needed, add overload with a different category for each position
+typedef struct UFieldPositionWithCategory {
+    UFieldCategory category;
+    int32_t field;
+    int32_t beginIndex;
+    int32_t endIndex;
+} UFieldPositionWithCategory;
+
+// The following are implemented in uformattedvaluetest.c
 void checkFormattedValue(
     const char* message,
     const UFormattedValue* fv,
@@ -41,6 +47,13 @@ void checkFormattedValue(
     UFieldCategory expectedCategory,
     const UFieldPosition* expectedFieldPositions,
     int32_t expectedFieldPositionsLength);
+
+void checkMixedFormattedValue(
+    const char* message,
+    const UFormattedValue* fv,
+    const UChar* expectedString,
+    const UFieldPositionWithCategory* expectedFieldPositions,
+    int32_t length);
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

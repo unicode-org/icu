@@ -176,7 +176,8 @@ public class FormattedValueTest {
             assertEquals(baseMessage + "limit " + i, expectedLimit, cfpos.getLimit());
             i++;
         }
-        assertFalse(baseMessage + "after loop", fv.nextPosition(cfpos));
+        boolean afterLoopResult = fv.nextPosition(cfpos);
+        assertFalse(baseMessage + "after loop: " + cfpos, afterLoopResult);
 
         // Check nextPosition constrained over each class one at a time
         for (Class<?> classConstraint : uniqueFieldClasses) {
@@ -196,7 +197,8 @@ public class FormattedValueTest {
                 assertEquals(baseMessage + "limit " + i, expectedLimit, cfpos.getLimit());
                 i++;
             }
-            assertFalse(baseMessage + "after loop", fv.nextPosition(cfpos));
+            afterLoopResult = fv.nextPosition(cfpos);
+            assertFalse(baseMessage + "after loop: " + cfpos, afterLoopResult);
         }
 
         // Check nextPosition constrained over an unrelated class
@@ -222,7 +224,8 @@ public class FormattedValueTest {
                 assertEquals(baseMessage + "limit " + i, expectedLimit, cfpos.getLimit());
                 i++;
             }
-            assertFalse(baseMessage + "after loop", fv.nextPosition(cfpos));
+            afterLoopResult = fv.nextPosition(cfpos);
+            assertFalse(baseMessage + "after loop: " + cfpos, afterLoopResult);
         }
     }
 

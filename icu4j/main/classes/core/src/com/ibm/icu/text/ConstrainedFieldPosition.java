@@ -305,6 +305,22 @@ public class ConstrainedFieldPosition {
         fLimit = limit;
     }
 
+    /** @internal */
+    public boolean matchesField(Field field) {
+        // If this method ever becomes public, change assert to throw IllegalArgumentException
+        assert field != null;
+        switch (fConstraint) {
+        case NONE:
+            return true;
+        case CLASS:
+            return fClassConstraint.isAssignableFrom(field.getClass());
+        case FIELD:
+            return fField == field;
+        default:
+            throw new AssertionError();
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

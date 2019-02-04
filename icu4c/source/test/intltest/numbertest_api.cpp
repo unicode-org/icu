@@ -2980,15 +2980,6 @@ void NumberFormatterApiTest::assertNumberFieldPositions(
         expectedFieldPositions,
         length);
 
-    // Check no field positions in an unrelated category
-    checkFormattedValue(
-        message,
-        static_cast<const FormattedValue&>(formattedNumber),
-        formattedNumber.toString(status),
-        UFIELD_CATEGORY_DATE,
-        nullptr,
-        0);
-
     // Check FormattedNumber-specific functions
     UnicodeString baseMessage = UnicodeString(message) + u": " + formattedNumber.toString(status) + u": ";
     FieldPositionIterator fpi;

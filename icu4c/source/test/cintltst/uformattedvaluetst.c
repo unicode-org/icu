@@ -170,6 +170,20 @@ static void AssertAllPartsEqual(
 }
 
 
+static void checkFormattedValueString(
+        const char* message,
+        const UFormattedValue* fv,
+        const UChar* expectedString,
+        UErrorCode* ec) {
+    int32_t length;
+    const UChar* actualString = ufmtval_getString(fv, &length, ec);
+    assertSuccess(message, ec);
+    // The string is guaranteed to be NUL-terminated.
+    int32_t actualLength = u_strlen(actualString);
+    assertIntEquals(message, actualLength, length);
+    assertUEquals(message, expectedString, actualString);
+}
+
 // Declared in cformtst.h
 void checkFormattedValue(
         const char* message,
@@ -178,14 +192,60 @@ void checkFormattedValue(
         UFieldCategory expectedCategory,
         const UFieldPosition* expectedFieldPositions,
         int32_t expectedFieldPositionsLength) {
-    UErrorCode status = U_ZERO_ERROR;
-    int32_t length;
-    const UChar* actualString = ufmtval_getString(fv, &length, &status);
-    assertSuccess(message, &status);
-    // The string is guaranteed to be NUL-terminated.
-    int32_t actualLength = u_strlen(actualString);
-    assertIntEquals(message, actualLength, length);
-    assertUEquals(message, expectedString, actualString);
+    UErrorCode ec = U_ZERO_ERROR;
+    checkFormattedValueString(message, fv, expectedString, &ec);
+    if (U_FAILURE(ec)) { return; }
+
+    // Basic loop over the fields (more rigorous testing in C++)
+    UConstrainedFieldPosition* ucfpos = ucfpos_open(&ec);
+    int32_t i = 0;
+    while (ufmtval_nextPosition(fv, ucfpos, &ec)) {
+        assertIntEquals("category",
+            expectedCategory, ucfpos_getCategory(ucfpos, &ec));
+        assertIntEquals("field",
+            expectedFieldPositions[i].field, ucfpos_getField(ucfpos, &ec));
+        int32_t start, limit;
+        ucfpos_getIndexes(ucfpos, &start, &limit, &ec);
+        assertIntEquals("start",
+            expectedFieldPositions[i].beginIndex, start);
+        assertIntEquals("limit",
+            expectedFieldPositions[i].endIndex, limit);
+        i++;
+    }
+    assertTrue("After loop", !ufmtval_nextPosition(fv, ucfpos, &ec));
+    assertSuccess("After loop", &ec);
+    ucfpos_close(ucfpos);
+}
+
+void checkMixedFormattedValue(
+        const char* message,
+        const UFormattedValue* fv,
+        const UChar* expectedString,
+        const UFieldPositionWithCategory* expectedFieldPositions,
+        int32_t length) {
+    UErrorCode ec = U_ZERO_ERROR;
+    checkFormattedValueString(message, fv, expectedString, &ec);
+    if (U_FAILURE(ec)) { return; }
+
+    // Basic loop over the fields (more rigorous testing in C++)
+    UConstrainedFieldPosition* ucfpos = ucfpos_open(&ec);
+    int32_t i = 0;
+    while (ufmtval_nextPosition(fv, ucfpos, &ec)) {
+        assertIntEquals("category",
+            expectedFieldPositions[i].category, ucfpos_getCategory(ucfpos, &ec));
+        assertIntEquals("field",
+            expectedFieldPositions[i].field, ucfpos_getField(ucfpos, &ec));
+        int32_t start, limit;
+        ucfpos_getIndexes(ucfpos, &start, &limit, &ec);
+        assertIntEquals("start",
+            expectedFieldPositions[i].beginIndex, start);
+        assertIntEquals("limit",
+            expectedFieldPositions[i].endIndex, limit);
+        i++;
+    }
+    assertTrue("After loop", !ufmtval_nextPosition(fv, ucfpos, &ec));
+    assertSuccess("After loop", &ec);
+    ucfpos_close(ucfpos);
 }
 
 

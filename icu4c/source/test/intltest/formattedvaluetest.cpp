@@ -159,7 +159,39 @@ void IntlTestWithFieldPosition::checkFormattedValue(
         UFieldCategory expectedCategory,
         const UFieldPosition* expectedFieldPositions,
         int32_t length) {
-    IcuTestErrorCode status(*this, "checkFormattedValue");
+    LocalArray<UFieldPositionWithCategory> converted(new UFieldPositionWithCategory[length]);
+    for (int32_t i=0; i<length; i++) {
+        converted[i].category = expectedCategory;
+        converted[i].field = expectedFieldPositions[i].field;
+        converted[i].beginIndex = expectedFieldPositions[i].beginIndex;
+        converted[i].endIndex = expectedFieldPositions[i].endIndex;
+    }
+    checkMixedFormattedValue(message, fv, expectedString, converted.getAlias(), length);
+}
+
+
+UnicodeString CFPosToUnicodeString(const ConstrainedFieldPosition& cfpos) {
+    UnicodeString sb;
+    sb.append(u"CFPos[");
+    sb.append(Int64ToUnicodeString(cfpos.getStart()));
+    sb.append(u'-');
+    sb.append(Int64ToUnicodeString(cfpos.getLimit()));
+    sb.append(u' ');
+    sb.append(Int64ToUnicodeString(cfpos.getCategory()));
+    sb.append(u':');
+    sb.append(Int64ToUnicodeString(cfpos.getField()));
+    sb.append(u']');
+    return sb;
+}
+
+
+void IntlTestWithFieldPosition::checkMixedFormattedValue(
+        const char16_t* message,
+        const FormattedValue& fv,
+        UnicodeString expectedString,
+        const UFieldPositionWithCategory* expectedFieldPositions,
+        int32_t length) {
+    IcuTestErrorCode status(*this, "checkMixedFormattedValue");
     UnicodeString baseMessage = UnicodeString(message) + u": " + fv.toString(status) + u": ";
 
     // Check string values
@@ -173,49 +205,81 @@ void IntlTestWithFieldPosition::checkFormattedValue(
 
     // Check nextPosition over all fields
     ConstrainedFieldPosition cfpos;
-    cfpos.constrainCategory(expectedCategory);
     for (int32_t i = 0; i < length; i++) {
         assertTrue(baseMessage + i, fv.nextPosition(cfpos, status));
+        int32_t expectedCategory = expectedFieldPositions[i].category;
         int32_t expectedField = expectedFieldPositions[i].field;
         int32_t expectedStart = expectedFieldPositions[i].beginIndex;
         int32_t expectedLimit = expectedFieldPositions[i].endIndex;
-        assertEquals(baseMessage + u"category " + Int64ToUnicodeString(i),
+        assertEquals(baseMessage + u"A category " + Int64ToUnicodeString(i),
             expectedCategory, cfpos.getCategory());
-        assertEquals(baseMessage + u"field " + Int64ToUnicodeString(i),
+        assertEquals(baseMessage + u"A field " + Int64ToUnicodeString(i),
             expectedField, cfpos.getField());
-        assertEquals(baseMessage + u"start " + Int64ToUnicodeString(i),
+        assertEquals(baseMessage + u"A start " + Int64ToUnicodeString(i),
             expectedStart, cfpos.getStart());
-        assertEquals(baseMessage + u"limit " + Int64ToUnicodeString(i),
+        assertEquals(baseMessage + u"A limit " + Int64ToUnicodeString(i),
             expectedLimit, cfpos.getLimit());
     }
-    assertFalse(baseMessage + u"after loop", fv.nextPosition(cfpos, status));
+    UBool afterLoopResult = fv.nextPosition(cfpos, status);
+    assertFalse(baseMessage + u"A after loop: " + CFPosToUnicodeString(cfpos), afterLoopResult);
 
-    // Check nextPosition constrained over each field one at a time
-    std::set<int32_t> uniqueFields;
-    for (int32_t i = 0; i < length; i++) {
-        uniqueFields.insert(expectedFieldPositions[i].field);
-    }
-    for (int32_t field : uniqueFields) {
+    // Check nextPosition constrained over each category one at a time
+    for (int32_t category=0; category<UFIELD_CATEGORY_COUNT; category++) {
         cfpos.reset();
-        cfpos.constrainField(expectedCategory, field);
+        cfpos.constrainCategory(static_cast<UFieldCategory>(category));
         for (int32_t i = 0; i < length; i++) {
-            if (expectedFieldPositions[i].field != field) {
+            if (expectedFieldPositions[i].category != category) {
                 continue;
             }
             assertTrue(baseMessage + i, fv.nextPosition(cfpos, status));
+            int32_t expectedCategory = expectedFieldPositions[i].category;
             int32_t expectedField = expectedFieldPositions[i].field;
             int32_t expectedStart = expectedFieldPositions[i].beginIndex;
             int32_t expectedLimit = expectedFieldPositions[i].endIndex;
-            assertEquals(baseMessage + u"category " + Int64ToUnicodeString(i),
+            assertEquals(baseMessage + u"B category " + Int64ToUnicodeString(i),
                 expectedCategory, cfpos.getCategory());
-            assertEquals(baseMessage + u"field " + Int64ToUnicodeString(i),
+            assertEquals(baseMessage + u"B field " + Int64ToUnicodeString(i),
                 expectedField, cfpos.getField());
-            assertEquals(baseMessage + u"start " + Int64ToUnicodeString(i),
+            assertEquals(baseMessage + u"B start " + Int64ToUnicodeString(i),
                 expectedStart, cfpos.getStart());
-            assertEquals(baseMessage + u"limit " + Int64ToUnicodeString(i),
+            assertEquals(baseMessage + u"B limit " + Int64ToUnicodeString(i),
                 expectedLimit, cfpos.getLimit());
         }
-        assertFalse(baseMessage + u"after loop", fv.nextPosition(cfpos, status));
+        UBool afterLoopResult = fv.nextPosition(cfpos, status);
+        assertFalse(baseMessage + u"B after loop: " + CFPosToUnicodeString(cfpos), afterLoopResult);
+    }
+
+    // Check nextPosition constrained over each field one at a time
+    std::set<std::pair<UFieldCategory, int32_t>> uniqueFields;
+    for (int32_t i = 0; i < length; i++) {
+        uniqueFields.insert({expectedFieldPositions[i].category, expectedFieldPositions[i].field});
+    }
+    for (std::pair<UFieldCategory, int32_t> categoryAndField : uniqueFields) {
+        cfpos.reset();
+        cfpos.constrainField(categoryAndField.first, categoryAndField.second);
+        for (int32_t i = 0; i < length; i++) {
+            if (expectedFieldPositions[i].category != categoryAndField.first) {
+                continue;
+            }
+            if (expectedFieldPositions[i].field != categoryAndField.second) {
+                continue;
+            }
+            assertTrue(baseMessage + i, fv.nextPosition(cfpos, status));
+            int32_t expectedCategory = expectedFieldPositions[i].category;
+            int32_t expectedField = expectedFieldPositions[i].field;
+            int32_t expectedStart = expectedFieldPositions[i].beginIndex;
+            int32_t expectedLimit = expectedFieldPositions[i].endIndex;
+            assertEquals(baseMessage + u"C category " + Int64ToUnicodeString(i),
+                expectedCategory, cfpos.getCategory());
+            assertEquals(baseMessage + u"C field " + Int64ToUnicodeString(i),
+                expectedField, cfpos.getField());
+            assertEquals(baseMessage + u"C start " + Int64ToUnicodeString(i),
+                expectedStart, cfpos.getStart());
+            assertEquals(baseMessage + u"C limit " + Int64ToUnicodeString(i),
+                expectedLimit, cfpos.getLimit());
+        }
+        UBool afterLoopResult = fv.nextPosition(cfpos, status);
+        assertFalse(baseMessage + u"C after loop: " + CFPosToUnicodeString(cfpos), afterLoopResult);
     }
 }
 
