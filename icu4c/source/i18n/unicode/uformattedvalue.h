@@ -54,6 +54,11 @@ typedef enum UFieldCategory {
      */
     UFIELD_CATEGORY_LIST,
 
+#ifndef U_HIDE_INTERNAL_API
+    /** @internal */
+    UFIELD_CATEGORY_COUNT
+#endif
+
 } UFieldCategory;
 
 

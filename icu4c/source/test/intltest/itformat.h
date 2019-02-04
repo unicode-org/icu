@@ -26,15 +26,28 @@ class IntlTestFormat: public IntlTest {
 };
 
 
+typedef struct UFieldPositionWithCategory {
+    UFieldCategory category;
+    int32_t field;
+    int32_t beginIndex;
+    int32_t endIndex;
+} UFieldPositionWithCategory;
+
 class IntlTestWithFieldPosition : public IntlTest {
 public:
-    // TODO: When needed, add overload with a different category for each position
     void checkFormattedValue(
         const char16_t* message,
         const FormattedValue& fv,
         UnicodeString expectedString,
         UFieldCategory expectedCategory,
         const UFieldPosition* expectedFieldPositions,
+        int32_t length);
+
+    void checkMixedFormattedValue(
+        const char16_t* message,
+        const FormattedValue& fv,
+        UnicodeString expectedString,
+        const UFieldPositionWithCategory* expectedFieldPositions,
         int32_t length);
 };
 

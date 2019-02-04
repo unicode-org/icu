@@ -51,6 +51,19 @@ void ConstrainedFieldPosition::setState(
     fLimit = limit;
 }
 
+UBool ConstrainedFieldPosition::matchesField(UFieldCategory category, int32_t field) {
+    switch (fConstraint) {
+    case UCFPOS_CONSTRAINT_NONE:
+        return TRUE;
+    case UCFPOS_CONSTRAINT_CATEGORY:
+        return fCategory == category;
+    case UCFPOS_CONSTRAINT_FIELD:
+        return fCategory == category && fField == field;
+    default:
+        UPRV_UNREACHABLE;
+    }
+}
+
 
 FormattedValue::~FormattedValue() = default;
 
@@ -197,6 +210,20 @@ ufmtval_getString(
         *pLength = readOnlyAlias.length();
     }
     return readOnlyAlias.getBuffer();
+}
+
+
+U_DRAFT UBool U_EXPORT2
+ufmtval_nextPosition(
+        const UFormattedValue* ufmtval,
+        UConstrainedFieldPosition* ucfpos,
+        UErrorCode* ec) {
+    const auto* fmtval = number::impl::UFormattedValueApiHelper::validate(ufmtval, *ec);
+    auto* cfpos = UConstrainedFieldPositionImpl::validate(ucfpos, *ec);
+    if (U_FAILURE(*ec)) {
+        return FALSE;
+    }
+    return fmtval->fFormattedValue->nextPosition(cfpos->fImpl, *ec);
 }
 
 

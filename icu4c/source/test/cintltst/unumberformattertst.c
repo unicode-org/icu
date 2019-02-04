@@ -211,12 +211,10 @@ static void TestFormattedValue() {
         assertSuccess("Should convert without error", &ec);
         static const UFieldPosition expectedFieldPositions[] = {
             // field, begin index, end index
-            {UNUM_GROUPING_SEPARATOR_FIELD, 2, 3},
-            {UNUM_GROUPING_SEPARATOR_FIELD, 6, 7},
-            {UNUM_INTEGER_FIELD, 0, 10},
-            {UNUM_GROUPING_SEPARATOR_FIELD, 13, 14},
-            {UNUM_GROUPING_SEPARATOR_FIELD, 17, 18},
-            {UNUM_INTEGER_FIELD, 11, 21}};
+            {UNUM_INTEGER_FIELD, 0, 2},
+            {UNUM_DECIMAL_SEPARATOR_FIELD, 2, 3},
+            {UNUM_FRACTION_FIELD, 3, 5},
+            {UNUM_COMPACT_FIELD, 5, 6}};
         checkFormattedValue(
             "FormattedNumber as FormattedValue",
             fv,
