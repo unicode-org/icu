@@ -155,6 +155,11 @@ struct U_I18N_API DecimalFormatProperties : public UMemory {
      */
     bool equalsDefaultExceptFastFormat() const;
 
+    /**
+     * Returns the default DecimalFormatProperties instance.
+     */
+    static const DecimalFormatProperties& getDefault();
+
   private:
     bool _equals(const DecimalFormatProperties& other, bool ignoreForFastFormat) const;
 };
