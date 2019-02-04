@@ -720,7 +720,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     Map<CapitalizationContextUsage,boolean[]> capitalization = null;
 
     /**
-     * Returns era strings. For example: "AD" and "BC".
+     * Returns abbreviated era strings. For example: "AD" and "BC".
      * @return the era strings.
      * @stable ICU 2.0
      */
@@ -729,7 +729,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * Sets era strings. For example: "AD" and "BC".
+     * Sets abbreviated era strings. For example: "AD" and "BC".
      * @param newEras the new era strings.
      * @stable ICU 2.0
      */
@@ -738,7 +738,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * {@icu} Returns era name strings. For example: "Anno Domini" and "Before Christ".
+     * {@icu} Returns full era name strings. For example: "Anno Domini" and "Before Christ".
      * @return the era strings.
      * @stable ICU 3.4
      */
@@ -747,12 +747,32 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     }
 
     /**
-     * {@icu} Sets era name strings. For example: "Anno Domini" and "Before Christ".
+     * {@icu} Sets full era name strings. For example: "Anno Domini" and "Before Christ".
      * @param newEraNames the new era strings.
      * @stable ICU 3.8
      */
     public void setEraNames(String[] newEraNames) {
         eraNames = duplicate(newEraNames);
+    }
+
+    /**
+     * {@icu} Returns narrow era name strings. For example: "A" and "B".
+     * @return the narrow era strings.
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public String[] getNarrowEras() {
+        return duplicate(narrowEras);
+    }
+
+    /**
+     * {@icu} Sets narrow era name strings. For example: "A" and "B".
+     * @param newNarrowEras the new narrow era strings.
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public void setNarrowEras(String[] newNarrowEras) {
+        narrowEras = duplicate(newNarrowEras);
     }
 
     /**
@@ -1458,6 +1478,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         DateFormatSymbols that = (DateFormatSymbols) obj;
         return (Utility.arrayEquals(eras, that.eras)
                 && Utility.arrayEquals(eraNames, that.eraNames)
+                && Utility.arrayEquals(narrowEras, that.narrowEras)
                 && Utility.arrayEquals(months, that.months)
                 && Utility.arrayEquals(shortMonths, that.shortMonths)
                 && Utility.arrayEquals(narrowMonths, that.narrowMonths)

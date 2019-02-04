@@ -142,17 +142,32 @@ public class IntlTestDateFormatSymbols extends TestFmwk
         // just do some VERY basic tests to make sure that get/set work
 
         long count;
-        final String[] eras = en.getEras();
-        fr.setEras(eras);
-        final String[] eras1 = fr.getEras();
-        count = eras.length;
-        if( count != eras1.length) {
+        final String[] erasEn = en.getEras();
+        final String[] eraNamesEn = en.getEraNames();
+        final String[] erasNarrowEn = en.getNarrowEras();
+        fr.setEras(erasEn);
+        fr.setNarrowEras(erasNarrowEn);
+        final String[] erasFr = fr.getEras();
+        final String[] erasNarrowFr = fr.getNarrowEras();
+        count = erasEn.length;
+        if( count != erasFr.length || count != erasNarrowFr.length) {
             errln("ERROR: setEras() failed (different size array)");
         }
-        else {
+        else { // like the C++ tests
             for(int i = 0; i < count; i++) {
-                if(! eras[i].equals(eras1[i])) {
+                if(! erasEn[i].equals(erasFr[i])) {
                     errln("ERROR: setEras() failed (different string values)");
+                }
+                if(! erasNarrowEn[i].equals(erasNarrowFr[i])) {
+                    errln("ERROR: setNarrowEras() failed (different string values)");
+                }
+                if( eraNamesEn[i].length() <= erasEn[i].length() ) {
+                    // At least for English we know a wide eraName should be longer than an abbrev era
+                    errln("ERROR: english eraNames[i] not longer than eras[i]");
+                }
+                if( erasNarrowEn[i].length() >= erasEn[i].length() ) {
+                    // At least for English we know a narrowEra should be shorter than an abbrev era
+                    errln("ERROR: english erasNarrow[i] not shorter than eras[i]");
                 }
             }
         }
