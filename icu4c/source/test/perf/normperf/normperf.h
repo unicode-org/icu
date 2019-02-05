@@ -322,18 +322,18 @@ int32_t ICUIsNormalized(const UChar* src,int32_t srcLen, UNormalizationMode mode
 #if U_PLATFORM_HAS_WIN32_API
 
 int32_t WinNormNFD(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, int32_t options, UErrorCode* status) {
-    return FoldStringW(MAP_COMPOSITE,src,srcLen,dest,dstLen);
+    return FoldStringW(MAP_COMPOSITE, toOldUCharPtr(src),srcLen, toOldUCharPtr(dest),dstLen);
 }
 
 int32_t WinNormNFC(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, int32_t options, UErrorCode* status) {
-    return FoldStringW(MAP_PRECOMPOSED,src,srcLen,dest,dstLen);
+    return FoldStringW(MAP_PRECOMPOSED, toOldUCharPtr(src),srcLen, toOldUCharPtr(dest),dstLen);
 }
 
 int32_t WinNormNFKD(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, int32_t options, UErrorCode* status) {
-    return FoldStringW(MAP_COMPOSITE+MAP_FOLDCZONE,src,srcLen,dest,dstLen);
+    return FoldStringW(MAP_COMPOSITE+MAP_FOLDCZONE, toOldUCharPtr(src),srcLen, toOldUCharPtr(dest),dstLen);
 }
 int32_t WinNormNFKC(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, int32_t options, UErrorCode* status) {
-    return FoldStringW(MAP_FOLDCZONE,src,srcLen,dest,dstLen);
+    return FoldStringW(MAP_FOLDCZONE, toOldUCharPtr(src),srcLen, toOldUCharPtr(dest),dstLen);
 }
 #else
 int32_t WinNormNFD(const UChar* src, int32_t srcLen, UChar* dest, int32_t dstLen, int32_t options, UErrorCode* status) {
