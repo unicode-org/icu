@@ -6,7 +6,7 @@
 # Date: 2017-04-14
 #-------------------------
 #
-# This builds a zipfile containing the *64 bit* Windows binaries.
+# This builds a zipfile containing the 64-bit (x64) and/or 32-bit (x86) Windows binaries.
 # (Note: The zipfile does not include the UWP binaries.)
 #
 # Usage: (after building ICU using MSVC) 
@@ -35,8 +35,10 @@ Get-ChildItem -Path $source -ErrorAction SilentlyContinue | Remove-Item -Recurse
 New-Item -Path $source -ItemType "directory" -ErrorAction SilentlyContinue
 
 # copy required stuff
+Copy-Item -Path "$icuDir\lib" -Destination $source -Recurse
 Copy-Item -Path "$icuDir\lib64" -Destination $source -Recurse
 Copy-Item -Path "$icuDir\include" -Destination $source -Recurse
+Copy-Item -Path "$icuDir\bin" -Destination $source -Recurse
 Copy-Item -Path "$icuDir\bin64" -Destination $source -Recurse
 Copy-Item -Path "$icuDir\APIChangeReport.html" -Destination $source -Recurse
 Copy-Item -Path "$icuDir\icu4c.css" -Destination $source -Recurse
