@@ -3166,6 +3166,8 @@ static void TestParseCases(void) {
                     u_errorName(itemPtr->decStatus), itemPtr->decPos, itemPtr->decString,
                     u_errorName(status), parsePos, decstr);
         }
+
+        unum_close(unumDec);
     }
 }
 
