@@ -15,8 +15,10 @@
 #include "cintltst.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "cformtst.h"
 
 static void TestUListFmt(void);
+static void TestUListFmtToValue(void);
 
 void addUListFmtTest(TestNode** root);
 
@@ -25,6 +27,7 @@ void addUListFmtTest(TestNode** root);
 void addUListFmtTest(TestNode** root)
 {
     TESTCASE(TestUListFmt);
+    TESTCASE(TestUListFmtToValue);
 }
 
 static const UChar str0[] = { 0x41,0 }; /* "A" */
@@ -124,6 +127,77 @@ static void TestUListFmt() {
             ulistfmt_close(listfmt);
         }
     }
+}
+
+static void TestUListFmtToValue() {
+    UErrorCode ec = U_ZERO_ERROR;
+    UListFormatter* fmt = ulistfmt_open("en", &ec);
+    UFormattedList* fl = ulistfmt_openResult(&ec);
+    assertSuccess("Opening", &ec);
+
+    {
+        const char* message = "Field position test 1";
+        const UChar* expectedString = u"hello, wonderful, and world";
+        const UChar* inputs[] = {
+            u"hello",
+            u"wonderful",
+            u"world"
+        };
+        ulistfmt_formatStringsToValue(fmt, inputs, NULL, UPRV_LENGTHOF(inputs), fl, &ec);
+        assertSuccess("Formatting", &ec);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // field, begin index, end index
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 0, 5},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 7, 16},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 22, 27},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 5, 7},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 16, 22}};
+        checkMixedFormattedValue(
+            message,
+            ulistfmt_resultAsValue(fl, &ec),
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+    {
+        const char* message = "Field position test 1";
+        const UChar* expectedString = u"A, B, C, D, E, F, and G";
+        const UChar* inputs[] = {
+            u"A",
+            u"B",
+            u"C",
+            u"D",
+            u"E",
+            u"F",
+            u"G"
+        };
+        ulistfmt_formatStringsToValue(fmt, inputs, NULL, UPRV_LENGTHOF(inputs), fl, &ec);
+        assertSuccess("Formatting", &ec);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // field, begin index, end index
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 0,  1},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 3,  4},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 6,  7},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 9,  10},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 12, 13},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 15, 16},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 22, 23},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 1,  3},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 4,  6},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 7,  9},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 10, 12},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 13, 15},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 16, 22}};
+        checkMixedFormattedValue(
+            message,
+            ulistfmt_resultAsValue(fl, &ec),
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+
+    ulistfmt_close(fmt);
+    ulistfmt_closeResult(fl);
 }
 
 
