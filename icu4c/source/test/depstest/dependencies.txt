@@ -916,7 +916,7 @@ group: dayperiodrules
 group: listformatter
     listformatter.o ulistformatter.o
   deps
-    resourcebundle simpleformatter format uclean_i18n
+    resourcebundle simpleformatter format uclean_i18n formatted_value_iterimpl
 
 group: double_conversion
     double-conversion.o double-conversion-bignum.o double-conversion-bignum-dtoa.o
@@ -1045,6 +1045,11 @@ group: formatted_value
     formattedvalue.o
   deps
     platform
+
+group: formatted_value_iterimpl
+    formattedval_iterimpl.o
+  deps
+    formatted_value format uvector32
 
 group: format
     format.o fphdlimp.o fpositer.o ufieldpositer.o
