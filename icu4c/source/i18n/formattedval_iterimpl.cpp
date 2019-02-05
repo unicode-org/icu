@@ -29,9 +29,9 @@ UnicodeString FormattedValueFieldPositionIteratorImpl::toString(
 
 UnicodeString FormattedValueFieldPositionIteratorImpl::toTempString(
         UErrorCode&) const {
-    UnicodeString ret;
-    ret.fastCopyFrom(fString);
-    return ret;
+    // The alias must point to memory owned by this object;
+    // fastCopyFrom doesn't do this when using a stack buffer.
+    return UnicodeString(TRUE, fString.getBuffer(), fString.length());
 }
 
 Appendable& FormattedValueFieldPositionIteratorImpl::appendTo(

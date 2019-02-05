@@ -15,6 +15,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/localpointer.h"
+#include "unicode/uformattedvalue.h"
 
 /**
  * \file
@@ -32,6 +33,13 @@
  */
 struct UListFormatter;
 typedef struct UListFormatter UListFormatter;  /**< C typedef for struct UListFormatter. @stable ICU 55 */
+
+struct UFormattedList;
+/**
+ * Opaque struct to contain the results of a UListFormatter operation.
+ * @draft ICU 64
+ */
+typedef struct UFormattedList UFormattedList;
 
 #ifndef U_HIDE_DRAFT_API
 /**
@@ -82,6 +90,44 @@ ulistfmt_open(const char*  locale,
 U_CAPI void U_EXPORT2
 ulistfmt_close(UListFormatter *listfmt);
 
+/**
+ * Creates an object to hold the result of a UListFormatter
+ * operation. The object can be used repeatedly; it is cleared whenever
+ * passed to a format function.
+ *
+ * @param ec Set if an error occurs.
+ * @return A pointer needing ownership.
+ * @draft ICU 64
+ */
+U_CAPI UFormattedList* U_EXPORT2
+ulistfmt_openResult(UErrorCode* ec);
+
+/**
+ * Returns a representation of a UFormattedList as a UFormattedValue,
+ * which can be subsequently passed to any API requiring that type.
+ *
+ * The returned object is owned by the UFormattedList and is valid
+ * only as long as the UFormattedList is present and unchanged in memory.
+ *
+ * You can think of this method as a cast between types.
+ *
+ * @param uresult The object containing the formatted string.
+ * @param ec Set if an error occurs.
+ * @return A UFormattedValue owned by the input object.
+ * @draft ICU 64
+ */
+U_CAPI const UFormattedValue* U_EXPORT2
+ulistfmt_resultAsValue(const UFormattedList* uresult, UErrorCode* ec);
+
+/**
+ * Releases the UFormattedList created by ulistfmt_openResult().
+ *
+ * @param uresult The object to release.
+ * @draft ICU 64
+ */
+U_CAPI void U_EXPORT2
+ulistfmt_closeResult(UFormattedList* uresult);
+
 
 #if U_SHOW_CPLUSPLUS_API
 
@@ -97,6 +143,17 @@ U_NAMESPACE_BEGIN
  * @stable ICU 55
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUListFormatterPointer, UListFormatter, ulistfmt_close);
+
+/**
+ * \class LocalUFormattedListPointer
+ * "Smart pointer" class, closes a UFormattedList via ulistfmt_closeResult().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @stable ICU 55
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUFormattedListPointer, UFormattedList, ulistfmt_closeResult);
 
 U_NAMESPACE_END
 
@@ -143,6 +200,40 @@ ulistfmt_format(const UListFormatter* listfmt,
                 int32_t            stringCount,
                 UChar*             result,
                 int32_t            resultCapacity,
+                UErrorCode*        status);
+
+/**
+ * Formats a list of strings to a UFormattedList, which exposes more
+ * information than the string exported by ulistfmt_format().
+ *
+ * @param listfmt
+ *            The UListFormatter object specifying the list conventions.
+ * @param strings
+ *            An array of pointers to UChar strings; the array length is
+ *            specified by stringCount. Must be non-NULL if stringCount > 0.
+ * @param stringLengths
+ *            An array of string lengths corresponding to the strings[]
+ *            parameter; any individual length value may be negative to indicate
+ *            that the corresponding strings[] entry is 0-terminated, or
+ *            stringLengths itself may be NULL if all of the strings are
+ *            0-terminated. If non-NULL, the stringLengths array must have
+ *            stringCount entries.
+ * @param stringCount
+ *            the number of entries in strings[], and the number of entries
+ *            in the stringLengths array if it is not NULL. Must be >= 0.
+ * @param uresult
+ *            The object in which to store the result of the list formatting
+ *            operation. See ulistfmt_openResult().
+ * @param status
+ *            Error code set if an error occurred during formatting.
+ */
+U_CAPI void U_EXPORT2
+ulistfmt_formatStringsToValue(
+                const UListFormatter* listfmt,
+                const UChar* const strings[],
+                const int32_t *    stringLengths,
+                int32_t            stringCount,
+                UFormattedList*    uresult,
                 UErrorCode*        status);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
