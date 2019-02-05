@@ -6,7 +6,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/formattedvalue.h"
-#include "number_utypes.h"
+#include "formattedval_impl.h"
 #include "capi_helper.h"
 
 U_NAMESPACE_BEGIN
@@ -198,7 +198,7 @@ ufmtval_getString(
         const UFormattedValue* ufmtval,
         int32_t* pLength,
         UErrorCode* ec) {
-    const auto* impl = number::impl::UFormattedValueApiHelper::validate(ufmtval, *ec);
+    const auto* impl = UFormattedValueApiHelper::validate(ufmtval, *ec);
     if (U_FAILURE(*ec)) {
         return nullptr;
     }
@@ -218,7 +218,7 @@ ufmtval_nextPosition(
         const UFormattedValue* ufmtval,
         UConstrainedFieldPosition* ucfpos,
         UErrorCode* ec) {
-    const auto* fmtval = number::impl::UFormattedValueApiHelper::validate(ufmtval, *ec);
+    const auto* fmtval = UFormattedValueApiHelper::validate(ufmtval, *ec);
     auto* cfpos = UConstrainedFieldPositionImpl::validate(ucfpos, *ec);
     if (U_FAILURE(*ec)) {
         return FALSE;
