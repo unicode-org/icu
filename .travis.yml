@@ -1,30 +1,85 @@
 matrix:
   include:
-    - language: java
+
+    # ICU4C Docs Build
+    #    TODO: publish the latest built docs from master on GitHub pages.
+    #          See https://gist.github.com/vidavidorra/548ffbcdae99d752da02 for ideas.
+    - name:     "c: docs"
+      dist:     xenial
+      language: cpp
+      addons:
+         apt:
+           update: true
+           packages:
+             - doxygen
+      before_script:
+        - cd icu4c/source
+        - ./runConfigureICU Linux --disable-renaming
+      script:
+        # fail if 'warning:' appears in doxygen's output, but ignore warnings from file Doxyfile.
+        # The Doxygen version from Travis is down-rev, and doesn't recognize some options
+        # in the Doxyfile config file.
+        # Regex note: (?! ... ) is a negative lookahead. Succeed if the pattern is not present.
+        - set +o pipefail && make doc 2>&1 | tee doxygen.log && ( ! grep -P 'warning:(?! .* file Doxyfile)' doxygen.log )
+
+
+    - name: "j"
+      language: java
       env:      BUILD=ICU4J
-      script:   cd icu4j && ant init && ant check
+      before_script:
+        - cd icu4j
+        - ant init
+      script:
+        - ant check
       after_failure:
           -  cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`
 
-    - language: cpp
-      env:      BUILD=ICU4C_GCC
+    # gcc debug build.
+    # Includes dependency checker.
+    # Note - the dependency checker needs to be run on both a debug and an optimized build.
+    # This one (gcc) for debug, and linux clang (below) for optimized.
+    - name: "c: linux gcc"
+      language: cpp
       compiler: gcc
-      script:   cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+      before_script:
+        - cd icu4c/source
+        - ./runConfigureICU --enable-debug --disable-release Linux
+        - make -j2
+      script:
+        - make -j2 check
+        - ( cd test/depstest && ./depstest.py ../../../source/ )
 
-    - language: cpp
-      env:      BUILD=ICU4C_CLANG
+    - name: "c: linux clang"
+      language: cpp
       compiler: clang
-      script:   cd icu4c/source && ./runConfigureICU Linux && make -j2 check
+      before_script:
+        - cd icu4c/source
+        - ./runConfigureICU Linux
+        - make -j2
+      script:
+        - make -j2 check
+        - ( cd test/depstest && python3 depstest.py ../../../source/ )
 
-    - language: cpp
+    - name: "c: osx clang"
+      language: cpp
       env:      BUILD=MACINTOSH
       os:       osx
       compiler: clang
-      script:   cd icu4c/source && ./runConfigureICU MacOSX && make -j2 check
+      # Use the macOS target to test Python 2 in data build script.
+      # TODO(ICU-20301): Change this back to the default Python version 3.
+      script:   cd icu4c/source && PYTHON=python2 ./runConfigureICU MacOSX && make -j2 check
 
-    - language: cpp
+    # Clang Linux with address sanitizer.
+    # Note - the 'sudo: true' option forces Travis to use a Virtual machine on GCE instead of
+    #        a Container on EC2 or Packet. Asan builds of ICU fail otherwise.
+    - name: "c: linux asan"
+      language: cpp
+      env:
+        - CPPFLAGS="-fsanitize=address"
+        - LDFLAGS="-fsanitize=address"
       os:       linux
       dist:     trusty
+      sudo:     true
       compiler: clang
       addons:
           apt:
@@ -33,8 +88,41 @@ matrix:
                   - llvm-toolchain-trusty-5.0
               packages:
                   - clang-5.0
-      env:
-          - BUILD=ASAN
+      before_script:
+        - cd icu4c/source
+        - ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming
+        - make -j2
       script:
-          - echo not yet
-          # - cd icu4c/source && CPPFLAGS="-fsanitize=address" LDFLAGS="-fsanitize=address" ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming && make -j2 check
+        - make -j2 check
+
+
+    # Clang Linux with thread sanitizer.
+    #
+    - name: "c: linux tsan"
+      language: cpp
+      env:
+          - INTLTEST_OPTS="utility/MultithreadTest rbbi/RBBIMonkeyTest format/CalendarLimitTest"
+          - CPPFLAGS="-fsanitize=thread"
+          - LDFLAGS=-fsanitize=thread
+      os:       linux
+      dist:     trusty
+      sudo:     true
+      compiler: clang
+      addons:
+          apt:
+              update: true
+              sources:
+                  - llvm-toolchain-trusty-5.0
+              packages:
+                  - clang-5.0
+      script:
+          - cd icu4c/source &&
+            ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming &&
+            make -j2  &&
+            make -j2 -C test &&
+            make -j2 -C test/intltest check
+
+    # copyright scan / future linter
+    - name: "lint"
+      script:
+          - perl tools/scripts/cpysearch/cpyscan.pl
