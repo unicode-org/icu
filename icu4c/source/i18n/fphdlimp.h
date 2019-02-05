@@ -16,6 +16,7 @@
 
 #include "unicode/fieldpos.h"
 #include "unicode/fpositer.h"
+#include "unicode/formattedvalue.h"
 
 U_NAMESPACE_BEGIN
 
@@ -57,6 +58,7 @@ class FieldPositionIteratorHandler : public FieldPositionHandler {
   FieldPositionIterator* iter; // can be NULL
   UVector32* vec;
   UErrorCode status;
+  UFieldCategory fCategory;
 
   // Note, we keep a reference to status, so if status is on the stack, we have
   // to be destroyed before status goes out of scope.  Easiest thing is to
@@ -70,11 +72,24 @@ class FieldPositionIteratorHandler : public FieldPositionHandler {
 
  public:
   FieldPositionIteratorHandler(FieldPositionIterator* posIter, UErrorCode& status);
+  /** If using this constructor, you must call getError() when done formatting! */
+  FieldPositionIteratorHandler(UVector32* vec, UErrorCode& status);
   ~FieldPositionIteratorHandler();
 
   void addAttribute(int32_t id, int32_t start, int32_t limit) U_OVERRIDE;
   void shiftLast(int32_t delta) U_OVERRIDE;
   UBool isRecording(void) const U_OVERRIDE;
+
+  /** Copies a failed error code into _status. */
+  inline void getError(UErrorCode& _status) {
+    if (U_SUCCESS(_status) && U_FAILURE(status)) {
+      _status = status;
+    }
+  }
+
+  inline void setCategory(UFieldCategory category) {
+    fCategory = category;
+  }
 };
 
 U_NAMESPACE_END
