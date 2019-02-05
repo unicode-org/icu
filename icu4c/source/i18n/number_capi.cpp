@@ -12,6 +12,7 @@
 #include "fphdlimp.h"
 #include "number_utypes.h"
 #include "numparse_types.h"
+#include "formattedval_impl.h"
 #include "unicode/numberformatter.h"
 #include "unicode/unumberformatter.h"
 

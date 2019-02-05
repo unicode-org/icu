@@ -11,20 +11,9 @@
 #include "number_types.h"
 #include "number_decimalquantity.h"
 #include "number_stringbuilder.h"
-#include "capi_helper.h"
 
 U_NAMESPACE_BEGIN namespace number {
 namespace impl {
-
-
-struct UFormattedValueImpl;
-
-// Magic number as ASCII == "UFV"
-typedef IcuCApiHelper<UFormattedValue, UFormattedValueImpl, 0x55465600> UFormattedValueApiHelper;
-
-struct UFormattedValueImpl : public UMemory, public UFormattedValueApiHelper {
-    FormattedValue* fFormattedValue = nullptr;
-};
 
 
 /** Helper function used in upluralrules.cpp */
