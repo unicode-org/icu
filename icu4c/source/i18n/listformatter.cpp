@@ -31,6 +31,7 @@
 #include "ucln_in.h"
 #include "uresimp.h"
 #include "resource.h"
+#include "formattedval_impl.h"
 
 U_NAMESPACE_BEGIN
 
@@ -64,6 +65,16 @@ ListFormatInternal(const ListFormatInternal &other) :
     endPattern(other.endPattern) { }
 };
 
+
+class FormattedListData : public FormattedValueFieldPositionIteratorImpl {
+public:
+    FormattedListData(UErrorCode& status) : FormattedValueFieldPositionIteratorImpl(5, status) {}
+    virtual ~FormattedListData();
+};
+
+FormattedListData::~FormattedListData() = default;
+
+UPRV_FORMATTED_VALUE_SUBCLASS_AUTO_IMPL(FormattedList)
 
 
 static Hashtable* listPatternHash = nullptr;
@@ -389,6 +400,29 @@ UnicodeString& ListFormatter::format(
         UErrorCode& errorCode) const {
   return format_(items, nItems, appendTo, index, offset, nullptr, errorCode);
 }
+
+#if !UCONFIG_NO_FORMATTING
+FormattedList ListFormatter::formatStringsToValue(
+        const UnicodeString items[],
+        int32_t nItems,
+        UErrorCode& errorCode) const {
+    LocalPointer<FormattedListData> result(new FormattedListData(errorCode), errorCode);
+    if (U_FAILURE(errorCode)) {
+        return FormattedList(errorCode);
+    }
+    UnicodeString string;
+    int32_t offset;
+    auto handler = result->getHandler(errorCode);
+    handler.setCategory(UFIELD_CATEGORY_LIST);
+    format_(items, nItems, string, -1, offset, &handler, errorCode);
+    handler.getError(errorCode);
+    result->appendString(string, errorCode);
+    if (U_FAILURE(errorCode)) {
+        return FormattedList(errorCode);
+    }
+    return FormattedList(result.orphan());
+}
+#endif
 
 UnicodeString& ListFormatter::format_(
         const UnicodeString items[],

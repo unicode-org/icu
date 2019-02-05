@@ -18,6 +18,7 @@
 
 #include "listformattertest.h"
 #include "unicode/ulistformatter.h"
+#include "cmemory.h"
 #include <string.h>
 
 #if !UCONFIG_NO_FORMATTING
@@ -540,6 +541,36 @@ void ListFormatterTest::TestOutOfOrderPatterns() {
     CheckFormatting(&formatter, input4, 4, results[3], "TestOutOfOrderPatterns()");
 }
 
+void ListFormatterTest::TestFormattedValue() {
+    IcuTestErrorCode status(*this, "TestFormattedValue");
+    LocalPointer<ListFormatter> fmt(ListFormatter::createInstance("en", status));
+
+    {
+        const char16_t* message = u"Field position test 1";
+        const char16_t* expectedString = u"hello, wonderful, and world";
+        const UnicodeString inputs[] = {
+            u"hello",
+            u"wonderful",
+            u"world"
+        };
+        FormattedList result = fmt->formatStringsToValue(inputs, UPRV_LENGTHOF(inputs), status);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // field, begin index, end index
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 0, 5},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 7, 16},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 22, 27},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 5, 7},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 16, 22}};
+        checkMixedFormattedValue(
+            message,
+            result,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+}
+
+
 void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
                                        const char* &name, char* /*par */) {
     switch(index) {
@@ -581,6 +612,9 @@ void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
                  break;
         case 20: name = "TestFieldPositionIteratorWith3ItemsPatternShift";
                  if (exec) TestFieldPositionIteratorWith3ItemsPatternShift();
+                 break;
+        case 21: name = "TestFormattedValue";
+                 if (exec) TestFormattedValue();
                  break;
         default: name = ""; break;
     }
