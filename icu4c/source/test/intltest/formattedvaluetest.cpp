@@ -206,18 +206,19 @@ void IntlTestWithFieldPosition::checkMixedFormattedValue(
     // Check nextPosition over all fields
     ConstrainedFieldPosition cfpos;
     for (int32_t i = 0; i < length; i++) {
-        assertTrue(baseMessage + i, fv.nextPosition(cfpos, status));
+        assertTrue(baseMessage + u"A has next position @ " + Int64ToUnicodeString(i),
+            fv.nextPosition(cfpos, status));
         int32_t expectedCategory = expectedFieldPositions[i].category;
         int32_t expectedField = expectedFieldPositions[i].field;
         int32_t expectedStart = expectedFieldPositions[i].beginIndex;
         int32_t expectedLimit = expectedFieldPositions[i].endIndex;
-        assertEquals(baseMessage + u"A category " + Int64ToUnicodeString(i),
+        assertEquals(baseMessage + u"A category @ " + Int64ToUnicodeString(i),
             expectedCategory, cfpos.getCategory());
-        assertEquals(baseMessage + u"A field " + Int64ToUnicodeString(i),
+        assertEquals(baseMessage + u"A field @ " + Int64ToUnicodeString(i),
             expectedField, cfpos.getField());
-        assertEquals(baseMessage + u"A start " + Int64ToUnicodeString(i),
+        assertEquals(baseMessage + u"A start @ " + Int64ToUnicodeString(i),
             expectedStart, cfpos.getStart());
-        assertEquals(baseMessage + u"A limit " + Int64ToUnicodeString(i),
+        assertEquals(baseMessage + u"A limit @ " + Int64ToUnicodeString(i),
             expectedLimit, cfpos.getLimit());
     }
     UBool afterLoopResult = fv.nextPosition(cfpos, status);
@@ -231,22 +232,23 @@ void IntlTestWithFieldPosition::checkMixedFormattedValue(
             if (expectedFieldPositions[i].category != category) {
                 continue;
             }
-            assertTrue(baseMessage + i, fv.nextPosition(cfpos, status));
+            assertTrue(baseMessage + u"B has next position @ " + Int64ToUnicodeString(i),
+                fv.nextPosition(cfpos, status));
             int32_t expectedCategory = expectedFieldPositions[i].category;
             int32_t expectedField = expectedFieldPositions[i].field;
             int32_t expectedStart = expectedFieldPositions[i].beginIndex;
             int32_t expectedLimit = expectedFieldPositions[i].endIndex;
-            assertEquals(baseMessage + u"B category " + Int64ToUnicodeString(i),
+            assertEquals(baseMessage + u"B category @ " + Int64ToUnicodeString(i),
                 expectedCategory, cfpos.getCategory());
-            assertEquals(baseMessage + u"B field " + Int64ToUnicodeString(i),
+            assertEquals(baseMessage + u"B field @ " + Int64ToUnicodeString(i),
                 expectedField, cfpos.getField());
-            assertEquals(baseMessage + u"B start " + Int64ToUnicodeString(i),
+            assertEquals(baseMessage + u"B start @ " + Int64ToUnicodeString(i),
                 expectedStart, cfpos.getStart());
-            assertEquals(baseMessage + u"B limit " + Int64ToUnicodeString(i),
+            assertEquals(baseMessage + u"B limit @ " + Int64ToUnicodeString(i),
                 expectedLimit, cfpos.getLimit());
         }
         UBool afterLoopResult = fv.nextPosition(cfpos, status);
-        assertFalse(baseMessage + u"B after loop: " + CFPosToUnicodeString(cfpos), afterLoopResult);
+        assertFalse(baseMessage + u"B after loop @ " + CFPosToUnicodeString(cfpos), afterLoopResult);
     }
 
     // Check nextPosition constrained over each field one at a time
@@ -264,18 +266,19 @@ void IntlTestWithFieldPosition::checkMixedFormattedValue(
             if (expectedFieldPositions[i].field != categoryAndField.second) {
                 continue;
             }
-            assertTrue(baseMessage + i, fv.nextPosition(cfpos, status));
+            assertTrue(baseMessage + u"C has next position @ " + Int64ToUnicodeString(i),
+                fv.nextPosition(cfpos, status));
             int32_t expectedCategory = expectedFieldPositions[i].category;
             int32_t expectedField = expectedFieldPositions[i].field;
             int32_t expectedStart = expectedFieldPositions[i].beginIndex;
             int32_t expectedLimit = expectedFieldPositions[i].endIndex;
-            assertEquals(baseMessage + u"C category " + Int64ToUnicodeString(i),
+            assertEquals(baseMessage + u"C category @ " + Int64ToUnicodeString(i),
                 expectedCategory, cfpos.getCategory());
-            assertEquals(baseMessage + u"C field " + Int64ToUnicodeString(i),
+            assertEquals(baseMessage + u"C field @ " + Int64ToUnicodeString(i),
                 expectedField, cfpos.getField());
-            assertEquals(baseMessage + u"C start " + Int64ToUnicodeString(i),
+            assertEquals(baseMessage + u"C start @ " + Int64ToUnicodeString(i),
                 expectedStart, cfpos.getStart());
-            assertEquals(baseMessage + u"C limit " + Int64ToUnicodeString(i),
+            assertEquals(baseMessage + u"C limit @ " + Int64ToUnicodeString(i),
                 expectedLimit, cfpos.getLimit());
         }
         UBool afterLoopResult = fv.nextPosition(cfpos, status);

@@ -22,8 +22,9 @@
 #include "unicode/fpositer.h"
 #include "unicode/listformatter.h"
 #include "intltest.h"
+#include "itformat.h"
 
-class ListFormatterTest : public IntlTest {
+class ListFormatterTest : public IntlTestWithFieldPosition {
   public:
     ListFormatterTest();
     virtual ~ListFormatterTest() {}
@@ -51,6 +52,7 @@ class ListFormatterTest : public IntlTest {
     void TestFieldPositionIteratorWith3ItemsAndDataBefore();
     void TestFieldPositionIteratorWith2ItemsPatternShift();
     void TestFieldPositionIteratorWith3ItemsPatternShift();
+    void TestFormattedValue();
 
   private:
     void CheckFormatting(
