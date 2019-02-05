@@ -67,6 +67,7 @@ static void TestParseCurrPatternWithDecStyle(void);
 static void TestFormatForFields(void);
 static void TestRBNFRounding(void);
 static void Test12052_NullPointer(void);
+static void TestParseCases(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -100,6 +101,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestParseCurrPatternWithDecStyle);
     TESTCASE(TestFormatForFields);
     TESTCASE(Test12052_NullPointer);
+    TESTCASE(TestParseCases);
 }
 
 /* test Parse int 64 */
@@ -3080,6 +3082,91 @@ static void Test12052_NullPointer() {
     unum_parseDoubleCurrency(theFormatter, input, -1, &pos, currency, &status);
     assertEquals("should fail gracefully", "U_PARSE_ERROR", u_errorName(status));
     unum_close(theFormatter);
+}
+
+typedef struct {
+    const char*  locale;
+    const UChar* text;       // text to parse
+    UBool        lenient;    // leniency to use
+    UBool        intOnly;    // whether to set PARSE_INT_ONLY
+    UErrorCode   intStatus;  // expected status from parse
+    int32_t      intPos;     // expected final pos from parse
+    int32_t      intValue;   // expected value from parse
+    UErrorCode   doubStatus; // expected status from parseDouble
+    int32_t      doubPos;    // expected final pos from parseDouble
+    double       doubValue;  // expected value from parseDouble
+    UErrorCode   decStatus;  // expected status from parseDecimal
+    int32_t      decPos;     // expected final pos from parseDecimal
+    const char*  decString;  // expected output string from parseDecimal
+
+} ParseCaseItem;
+
+static const ParseCaseItem parseCaseItems[] = {
+    { "en", u"0,000",            FALSE, FALSE, U_ZERO_ERROR,            5,          0, U_ZERO_ERROR,  5,                0.0, U_ZERO_ERROR,  5, "0" },
+    { "en", u"0,000",            TRUE,  FALSE, U_ZERO_ERROR,            5,          0, U_ZERO_ERROR,  5,                0.0, U_ZERO_ERROR,  5, "0" },
+    { "en", u"1000,000",         FALSE, FALSE, U_PARSE_ERROR,           0,          0, U_PARSE_ERROR, 0,                0.0, U_PARSE_ERROR, 0, "" },
+    { "en", u"1000,000",         TRUE,  FALSE, U_ZERO_ERROR,            8,    1000000, U_ZERO_ERROR,  8,          1000000.0, U_ZERO_ERROR,  8, "1000000" },
+    { "en", u"9999990000503021", FALSE, FALSE, U_INVALID_FORMAT_ERROR, 16, 2147483647, U_ZERO_ERROR, 16, 9999990000503020.0, U_ZERO_ERROR, 16, "9999990000503021" },
+    { "en", u"9999990000503021", FALSE, TRUE,  U_INVALID_FORMAT_ERROR, 16, 2147483647, U_ZERO_ERROR, 16, 9999990000503020.0, U_ZERO_ERROR, 16, "9999990000503021" },
+    { "en", u"1000000.5",        FALSE, FALSE, U_ZERO_ERROR,            9,    1000000, U_ZERO_ERROR,  9,          1000000.5, U_ZERO_ERROR,  9, "1.0000005E+6"},
+    { "en", u"1000000.5",        FALSE, TRUE,  U_ZERO_ERROR,            7,    1000000, U_ZERO_ERROR,  7,          1000000.0, U_ZERO_ERROR,  7, "1000000" },
+    { "en", u"123.5",            FALSE, FALSE, U_ZERO_ERROR,            5,        123, U_ZERO_ERROR,  5,              123.5, U_ZERO_ERROR,  5, "123.5" },
+    { "en", u"123.5",            FALSE, TRUE,  U_ZERO_ERROR,            3,        123, U_ZERO_ERROR,  3,              123.0, U_ZERO_ERROR,  3, "123" },
+    { NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0.0, 0, 0, NULL }
+};
+
+static void TestParseCases(void) {
+    const ParseCaseItem* itemPtr;
+    for (itemPtr = parseCaseItems; itemPtr->locale != NULL; itemPtr++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UNumberFormat* unumDec = unum_open(UNUM_DECIMAL, NULL, 0, itemPtr->locale, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_data_err("unum_open UNUM_DECIMAL fails for locale %s: %s\n", itemPtr->locale, u_errorName(status));
+            continue;
+        }
+        int32_t intValue, parsePos, dclen;
+        double doubValue;
+        char decstr[32];
+        unum_setAttribute(unumDec, UNUM_LENIENT_PARSE, itemPtr->lenient);
+        unum_setAttribute(unumDec, UNUM_PARSE_INT_ONLY, itemPtr->intOnly);
+
+        parsePos = 0;
+        status = U_ZERO_ERROR;
+        intValue = unum_parse(unumDec, itemPtr->text, -1, &parsePos, &status);
+        if (status != itemPtr->intStatus || parsePos != itemPtr->intPos || intValue != itemPtr->intValue) {
+            char btext[32];
+            u_austrcpy(btext, itemPtr->text);
+            log_err("locale %s, text \"%s\", lenient %d, intOnly %d;\n      parse        expected status %s, pos %d, value %d;\n                   got   %s, %d, %d\n",
+                    itemPtr->locale, btext, itemPtr->lenient, itemPtr->intOnly,
+                    u_errorName(itemPtr->intStatus), itemPtr->intPos, itemPtr->intValue,
+                    u_errorName(status), parsePos, intValue);
+        }
+
+        parsePos = 0;
+        status = U_ZERO_ERROR;
+        doubValue = unum_parseDouble(unumDec, itemPtr->text, -1, &parsePos, &status);
+        if (status != itemPtr->doubStatus || parsePos != itemPtr->doubPos || doubValue != itemPtr->doubValue) {
+            char btext[32];
+            u_austrcpy(btext, itemPtr->text);
+            log_err("locale %s, text \"%s\", lenient %d, intOnly %d;\n      parseDouble  expected status %s, pos %d, value %.1f;\n                   got   %s, %d, %.1f\n",
+                    itemPtr->locale, btext, itemPtr->lenient, itemPtr->intOnly,
+                    u_errorName(itemPtr->doubStatus), itemPtr->doubPos, itemPtr->doubValue,
+                    u_errorName(status), parsePos, doubValue);
+        }
+
+        parsePos = 0;
+        status = U_ZERO_ERROR;
+        decstr[0] = 0;
+        dclen = unum_parseDecimal(unumDec, itemPtr->text, -1, &parsePos, decstr, 32, &status);
+        if (status != itemPtr->decStatus || parsePos != itemPtr->decPos || uprv_strcmp(decstr,itemPtr->decString) != 0) {
+            char btext[32];
+            u_austrcpy(btext, itemPtr->text);
+            log_err("locale %s, text \"%s\", lenient %d, intOnly %d;\n      parseDecimal expected status %s, pos %d, str \"%s\";\n                   got   %s, %d, \"%s\"\n",
+                    itemPtr->locale, btext, itemPtr->lenient, itemPtr->intOnly,
+                    u_errorName(itemPtr->decStatus), itemPtr->decPos, itemPtr->decString,
+                    u_errorName(status), parsePos, decstr);
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
