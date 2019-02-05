@@ -6770,7 +6770,7 @@ void NumberFormatTest::TestDecimal() {
         ASSERT_EQUALS(1234567890123LL, f.getInt64());
         ASSERT_EQUALS(1234567890123LL, f.getInt64(status));
         ASSERT_SUCCESS(status);
-        ASSERT_EQUALS("1.234567890123E+12", f.getDecimalNumber(status).data());
+        ASSERT_EQUALS("1234567890123", f.getDecimalNumber(status).data());
         ASSERT_SUCCESS(status);
     }
 
