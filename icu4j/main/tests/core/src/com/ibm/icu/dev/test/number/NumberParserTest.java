@@ -389,4 +389,52 @@ public class NumberParserTest {
                     result.charEnd);
         }
     }
+
+    @Test
+    public void test20360_BidiOverflow() {
+        StringBuilder inputString = new StringBuilder();
+        inputString.append('-');
+        for (int i=0; i<100000; i++) {
+            inputString.append('\u061C');
+        }
+        inputString.append('5');
+
+        NumberParserImpl parser = NumberParserImpl.createSimpleParser(ULocale.ENGLISH, "0", 0);
+
+        ParsedNumber resultObject = new ParsedNumber();
+        parser.parse(inputString.toString(), true, resultObject);
+        assertTrue("Greedy Parse, success", resultObject.success());
+        assertEquals("Greedy Parse, chars consumed", 100002, resultObject.charEnd);
+        assertEquals("Greedy Parse, expected double", -5, resultObject.getNumber().intValue());
+
+        resultObject.clear();
+        parser.parse(inputString.toString(), false, resultObject);
+        assertFalse("Non-Greedy Parse, success", resultObject.success());
+        assertEquals("Non-Greedy Parse, chars consumed", 1, resultObject.charEnd);
+    }
+
+    @Test
+    public void testInfiniteRecursion() {
+        StringBuilder inputString = new StringBuilder();
+        inputString.append('-');
+        for (int i=0; i<200; i++) {
+            inputString.append('\u061C');
+        }
+        inputString.append('5');
+
+        NumberParserImpl parser = NumberParserImpl.createSimpleParser(ULocale.ENGLISH, "0", 0);
+
+        ParsedNumber resultObject = new ParsedNumber();
+        parser.parse(inputString.toString(), false, resultObject);
+        assertFalse("Default recursion limit, success", resultObject.success());
+        assertEquals("Default recursion limit, chars consumed", 1, resultObject.charEnd);
+
+        parser = NumberParserImpl.createSimpleParser(
+                ULocale.ENGLISH, "0", ParsingUtils.PARSE_FLAG_ALLOW_INFINITE_RECURSION);
+        resultObject.clear();
+        parser.parse(inputString.toString(), false, resultObject);
+        assertTrue("Unlimited recursion, success", resultObject.success());
+        assertEquals("Unlimited recursion, chars consumed", 202, resultObject.charEnd);
+        assertEquals("Unlimited recursion, expected double", -5, resultObject.getNumber().intValue());
+    }
 }
