@@ -1731,6 +1731,21 @@ public class NumberFormatTest extends TestFmwk {
     }
 
     @Test
+    public void TestParseEmpty(){
+        String parsetxt = "";
+        NumberFormat numfmt = NumberFormat.getInstance(new ULocale("en_US"), NumberFormat.NUMBERSTYLE);
+        ParsePosition ppos = new ParsePosition(0);
+        Number value = null;
+        try {
+            value = numfmt.parse(parsetxt, ppos);
+            // Currently this succeeds (no exception) but returns null (for value).
+            logln("NumberFormat.parse empty string succeeds, ppos " + ppos.getIndex() + ", value " + value);
+        } catch (IllegalArgumentException e){
+            logln("NumberFormat.parse empty string sets IllegalArgumentException, ppos " + ppos.getIndex() + ", value " + value);
+        }
+     }
+
+    @Test
     public void TestParseNull() throws ParseException {
         DecimalFormat df = new DecimalFormat();
         try {
