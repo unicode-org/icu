@@ -21,6 +21,9 @@
 *   10/12/05    emmons      Added setters for eraNames, month/day by width/context
 *******************************************************************************
 */
+
+#include <utility>
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -1663,7 +1666,7 @@ struct CalendarDataSink : public ResourceSink {
 
         // Set the resources to visit on the next calendar
         if (!resourcesToVisitNext.isNull()) {
-            resourcesToVisit.moveFrom(resourcesToVisitNext);
+            resourcesToVisit = std::move(resourcesToVisitNext);
         }
     }
 

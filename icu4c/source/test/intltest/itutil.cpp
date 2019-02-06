@@ -6,6 +6,7 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <utility>
 
 /**
  * IntlTestUtilities is the medium level test class for everything in the directory "utility".
@@ -499,9 +500,9 @@ void LocalPointerTest::TestLocalPointerMoveSwap() {
         errln("swap(LocalPointer) did not swap back");
     }
     LocalPointer<UnicodeString> s3;
-    s3.moveFrom(s1);
+    s3 = std::move(s1);
     if(s3.getAlias() != p1 || s1.isValid()) {
-        errln("LocalPointer.moveFrom() did not move");
+        errln("LocalPointer = std::move() did not move");
     }
     infoln("TestLocalPointerMoveSwap() with rvalue references");
     s1 = static_cast<LocalPointer<UnicodeString> &&>(s3);
@@ -516,8 +517,8 @@ void LocalPointerTest::TestLocalPointerMoveSwap() {
     // Move self assignment leaves the object valid but in an undefined state.
     // Do it to make sure there is no crash,
     // but do not check for any particular resulting value.
-    s1.moveFrom(s1);
-    s3.moveFrom(s3);
+    s1 = std::move(s1);
+    s3 = std::move(s3);
 }
 
 void LocalPointerTest::TestLocalPointerStdUniquePtr() {
@@ -605,9 +606,9 @@ void LocalPointerTest::TestLocalArrayMoveSwap() {
         errln("swap(LocalArray) did not swap back");
     }
     LocalArray<UnicodeString> a3;
-    a3.moveFrom(a1);
+    a3 = std::move(a1);
     if(a3.getAlias() != p1 || a1.isValid()) {
-        errln("LocalArray.moveFrom() did not move");
+        errln("LocalArray = std::move() did not move");
     }
     infoln("TestLocalArrayMoveSwap() with rvalue references");
     a1 = static_cast<LocalArray<UnicodeString> &&>(a3);
@@ -622,8 +623,8 @@ void LocalPointerTest::TestLocalArrayMoveSwap() {
     // Move self assignment leaves the object valid but in an undefined state.
     // Do it to make sure there is no crash,
     // but do not check for any particular resulting value.
-    a1.moveFrom(a1);
-    a3.moveFrom(a3);
+    a1 = std::move(a1);
+    a3 = std::move(a3);
 }
 
 void LocalPointerTest::TestLocalArrayStdUniquePtr() {
@@ -787,9 +788,9 @@ void LocalPointerTest::TestLocalXyzPointerMoveSwap() {
         errln("swap(LocalUNormalizer2Pointer) did not swap back");
     }
     LocalUNormalizer2Pointer f3;
-    f3.moveFrom(f1);
+    f3 = std::move(f1);
     if(f3.getAlias() != p1 || f1.isValid()) {
-        errln("LocalUNormalizer2Pointer.moveFrom() did not move");
+        errln("LocalUNormalizer2Pointer = std::move() did not move");
     }
     infoln("TestLocalXyzPointerMoveSwap() with rvalue references");
     f1 = static_cast<LocalUNormalizer2Pointer &&>(f3);
@@ -803,8 +804,8 @@ void LocalPointerTest::TestLocalXyzPointerMoveSwap() {
     // Move self assignment leaves the object valid but in an undefined state.
     // Do it to make sure there is no crash,
     // but do not check for any particular resulting value.
-    f1.moveFrom(f1);
-    f3.moveFrom(f3);
+    f1 = std::move(f1);
+    f3 = std::move(f3);
 #endif /* !UCONFIG_NO_NORMALIZATION */
 }
 

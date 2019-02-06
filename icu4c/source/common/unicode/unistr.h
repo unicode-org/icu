@@ -1900,22 +1900,7 @@ public:
    * @return *this
    * @stable ICU 56
    */
-  UnicodeString &operator=(UnicodeString &&src) U_NOEXCEPT {
-    return moveFrom(src);
-  }
-
-  // do not use #ifndef U_HIDE_DRAFT_API for moveFrom, needed by non-draft API
-  /**
-   * Move assignment; might leave src in bogus state.
-   * This string will have the same contents and state that the source string had.
-   * The behavior is undefined if *this and src are the same object.
-   *
-   * Can be called explicitly, does not need C++11 support.
-   * @param src source string
-   * @return *this
-   * @draft ICU 56
-   */
-  UnicodeString &moveFrom(UnicodeString &src) U_NOEXCEPT;
+  UnicodeString &operator=(UnicodeString &&src) U_NOEXCEPT;
 
   /**
    * Swap strings.

@@ -251,7 +251,10 @@ public:
      * @stable ICU 56
      */
     LocalPointer<T> &operator=(LocalPointer<T> &&src) U_NOEXCEPT {
-        return moveFrom(src);
+        delete LocalPointerBase<T>::ptr;
+        LocalPointerBase<T>::ptr=src.ptr;
+        src.ptr=NULL;
+        return *this;
     }
     /**
      * Move-assign from an std::unique_ptr to this LocalPointer.
@@ -263,22 +266,6 @@ public:
      */
     LocalPointer<T> &operator=(std::unique_ptr<T> &&p) U_NOEXCEPT {
         adoptInstead(p.release());
-        return *this;
-    }
-    // do not use #ifndef U_HIDE_DRAFT_API for moveFrom, needed by non-draft API
-    /**
-     * Move assignment, leaves src with isNull().
-     * The behavior is undefined if *this and src are the same object.
-     *
-     * Can be called explicitly, does not need C++11 support.
-     * @param src source smart pointer
-     * @return *this
-     * @draft ICU 56
-     */
-    LocalPointer<T> &moveFrom(LocalPointer<T> &src) U_NOEXCEPT {
-        delete LocalPointerBase<T>::ptr;
-        LocalPointerBase<T>::ptr=src.ptr;
-        src.ptr=NULL;
         return *this;
     }
     /**
@@ -434,7 +421,10 @@ public:
      * @stable ICU 56
      */
     LocalArray<T> &operator=(LocalArray<T> &&src) U_NOEXCEPT {
-        return moveFrom(src);
+        delete[] LocalPointerBase<T>::ptr;
+        LocalPointerBase<T>::ptr=src.ptr;
+        src.ptr=NULL;
+        return *this;
     }
     /**
      * Move-assign from an std::unique_ptr to this LocalPointer.
@@ -446,22 +436,6 @@ public:
      */
     LocalArray<T> &operator=(std::unique_ptr<T[]> &&p) U_NOEXCEPT {
         adoptInstead(p.release());
-        return *this;
-    }
-    // do not use #ifndef U_HIDE_DRAFT_API for moveFrom, needed by non-draft API
-    /**
-     * Move assignment, leaves src with isNull().
-     * The behavior is undefined if *this and src are the same object.
-     *
-     * Can be called explicitly, does not need C++11 support.
-     * @param src source smart pointer
-     * @return *this
-     * @draft ICU 56
-     */
-    LocalArray<T> &moveFrom(LocalArray<T> &src) U_NOEXCEPT {
-        delete[] LocalPointerBase<T>::ptr;
-        LocalPointerBase<T>::ptr=src.ptr;
-        src.ptr=NULL;
         return *this;
     }
     /**
@@ -578,17 +552,14 @@ public:
                 : LocalPointerBase<Type>(p.release()) {} \
         ~LocalPointerClassName() { if (ptr != NULL) { closeFunction(ptr); } } \
         LocalPointerClassName &operator=(LocalPointerClassName &&src) U_NOEXCEPT { \
-            return moveFrom(src); \
+            if (ptr != NULL) { closeFunction(ptr); } \
+            LocalPointerBase<Type>::ptr=src.ptr; \
+            src.ptr=NULL; \
+            return *this; \
         } \
         /* TODO: Be agnostic of the deleter function signature from the user-provided std::unique_ptr? */ \
         LocalPointerClassName &operator=(std::unique_ptr<Type, decltype(&closeFunction)> &&p) { \
             adoptInstead(p.release()); \
-            return *this; \
-        } \
-        LocalPointerClassName &moveFrom(LocalPointerClassName &src) U_NOEXCEPT { \
-            if (ptr != NULL) { closeFunction(ptr); } \
-            LocalPointerBase<Type>::ptr=src.ptr; \
-            src.ptr=NULL; \
             return *this; \
         } \
         void swap(LocalPointerClassName &other) U_NOEXCEPT { \

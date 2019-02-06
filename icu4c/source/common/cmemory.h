@@ -165,17 +165,6 @@ public:
      * @return *this
      */
     LocalMemory<T> &operator=(LocalMemory<T> &&src) U_NOEXCEPT {
-        return moveFrom(src);
-    }
-    /**
-     * Move assignment, leaves src with isNull().
-     * The behavior is undefined if *this and src are the same object.
-     *
-     * Can be called explicitly, does not need C++11 support.
-     * @param src source smart pointer
-     * @return *this
-     */
-    LocalMemory<T> &moveFrom(LocalMemory<T> &src) U_NOEXCEPT {
         uprv_free(LocalPointerBase<T>::ptr);
         LocalPointerBase<T>::ptr=src.ptr;
         src.ptr=NULL;
