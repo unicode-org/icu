@@ -6,6 +6,8 @@
  * others. All Rights Reserved.
  ********************************************************************/
 
+#include <utility>
+
 #include "ustrtest.h"
 #include "unicode/appendable.h"
 #include "unicode/std_string.h"
@@ -2145,19 +2147,19 @@ UnicodeStringTest::TestMoveSwap() {
         errln("swap(UnicodeString) did not swap back");
     }
     UnicodeString s4;
-    s4.moveFrom(s1);
+    s4 = std::move(s1);
     if(s4.getBuffer() != p || s4.length() != 100 || !s1.isBogus()) {
-        errln("UnicodeString.moveFrom(heap) did not move");
+        errln("UnicodeString = std::move(heap) did not move");
     }
     UnicodeString s5;
-    s5.moveFrom(s2);
+    s5 = std::move(s2);
     if(s5 != UNICODE_STRING_SIMPLE("defg")) {
-        errln("UnicodeString.moveFrom(stack) did not move");
+        errln("UnicodeString = std::move(stack) did not move");
     }
     UnicodeString s6;
-    s6.moveFrom(s3);
+    s6 = std::move(s3);
     if(s6.getBuffer() != abc || s6.length() != 3) {
-        errln("UnicodeString.moveFrom(alias) did not move");
+        errln("UnicodeString = std::move(alias) did not move");
     }
     infoln("TestMoveSwap() with rvalue references");
     s1 = static_cast<UnicodeString &&>(s6);
@@ -2172,13 +2174,13 @@ UnicodeStringTest::TestMoveSwap() {
     // Move self assignment leaves the object valid but in an undefined state.
     // Do it to make sure there is no crash,
     // but do not check for any particular resulting value.
-    s1.moveFrom(s1);
-    s2.moveFrom(s2);
-    s3.moveFrom(s3);
-    s4.moveFrom(s4);
-    s5.moveFrom(s5);
-    s6.moveFrom(s6);
-    s7.moveFrom(s7);
+    s1 = std::move(s1);
+    s2 = std::move(s2);
+    s3 = std::move(s3);
+    s4 = std::move(s4);
+    s5 = std::move(s5);
+    s6 = std::move(s6);
+    s7 = std::move(s7);
     // Simple copy assignment must work.
     UnicodeString simple = UNICODE_STRING_SIMPLE("simple");
     s1 = s6 = s4 = s7 = simple;
