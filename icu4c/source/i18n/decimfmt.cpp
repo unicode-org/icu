@@ -715,6 +715,10 @@ void DecimalFormat::parse(const UnicodeString& text, Formattable& output,
         return;
     }
     if (parsePosition.getIndex() < 0 || parsePosition.getIndex() >= text.length()) {
+        if (parsePosition.getIndex() == text.length()) {
+            // If there is nothing to parse, it is an error
+            parsePosition.setErrorIndex(parsePosition.getIndex());
+        }
         return;
     }
 
