@@ -49,6 +49,7 @@ enum ParseFlags {
     // PARSE_FLAG_OPTIMIZE = 0x0800, // no longer used
     // PARSE_FLAG_FORCE_BIG_DECIMAL = 0x1000, // not used in ICU4C
     PARSE_FLAG_NO_FOREIGN_CURRENCY = 0x2000,
+    PARSE_FLAG_ALLOW_INFINITE_RECURSION = 0x4000,
 };
 
 
@@ -160,7 +161,7 @@ class U_I18N_API ParsedNumber {
 
     bool seenNumber() const;
 
-    double getDouble() const;
+    double getDouble(UErrorCode& status) const;
 
     void populateFormattable(Formattable& output, parse_flags_t parseFlags) const;
 

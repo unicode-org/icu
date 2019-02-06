@@ -237,6 +237,8 @@ class NumberParserTest : public IntlTest {
     void testAffixPatternMatcher();
     void testGroupingDisabled();
     void testCaseFolding();
+    void test20360_BidiOverflow();
+    void testInfiniteRecursion();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 };
