@@ -1738,10 +1738,13 @@ public class NumberFormatTest extends TestFmwk {
         Number value = null;
         try {
             value = numfmt.parse(parsetxt, ppos);
-            // Currently this succeeds (no exception) but returns null (for value).
-            logln("NumberFormat.parse empty string succeeds, ppos " + ppos.getIndex() + ", value " + value);
+            if (value==null) {
+                logln("NumberFormat.parse empty string succeeds (no exception) with null return as expected, ppos " + ppos.getIndex());
+            } else {
+                errln("NumberFormat.parse empty string succeeds (no exception) but returns non-null value " + value + ", ppos " + ppos.getIndex());
+            }
         } catch (IllegalArgumentException e){
-            logln("NumberFormat.parse empty string sets IllegalArgumentException, ppos " + ppos.getIndex() + ", value " + value);
+            errln("NumberFormat.parse empty string throws IllegalArgumentException");
         }
      }
 
