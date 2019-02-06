@@ -1909,7 +1909,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         String prefRegion = ULocale.getRegionForSupplementalData(locale, true);
 
         // Read preferred calendar values from supplementalData calendarPreferences
-        ArrayList<String> values = new ArrayList<>();
+        ArrayList<String> values = new ArrayList<String>();
 
         UResourceBundle rb = UResourceBundle.getBundleInstance(
                 ICUData.ICU_BASE_NAME,
@@ -3497,7 +3497,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     // date format pattern cache
     private static final ICUCache<String, PatternData> PATTERN_CACHE =
-            new SimpleCache<>();
+            new SimpleCache<String, PatternData>();
     // final fallback patterns
     private static final String[] DEFAULT_PATTERNS = {
         "HH:mm:ss z",
