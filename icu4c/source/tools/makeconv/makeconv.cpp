@@ -292,7 +292,7 @@ int main(int argc, char* argv[])
         const char *arg = getLongPathname(*argv);
 
         const char* sourcedir = options[OPT_SOURCEDIR].value;
-        if (sourcedir != NULL && *sourcedir != 0 && *sourcedir != '.') {
+        if (sourcedir != NULL && *sourcedir != 0 && uprv_strcmp(sourcedir, ".") != 0) {
             pathBuf.clear();
             pathBuf.appendPathPart(sourcedir, localError);
             pathBuf.appendPathPart(arg, localError);
