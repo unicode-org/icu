@@ -39,18 +39,14 @@
 #
 #----
 #
-# IP address whitelisting
-#
 # Parts of the build process (notably building the new ICU data files in step 4)
 # require http: access to files in the CLDR repository; for example, processing
 # the files in icu4c/source/data/xml/ may require access to
 # http://www.unicode.org/repos/cldr/trunk/common/dtd/ldml.dtd
 #
-# Unless you cache the dtds locally by e.g. setting -DCLDR_DTD_CACHE=/tmp, the
-# builds will repeatedly make such requests, which will likely result in the
-# Unicode server blocking access and consequent timeout failures. You can
-# prevent such blockage by having the external IP address of your build system
-# whitelisted with Unicode; contact Rick McGowan or Steven Loomis.
+# Unless you cache the dtds locally by e.g. setting -DCLDR_DTD_CACHE=/tmp,
+# your system will make excessive network requests, which will result in the
+# Unicode server blocking access.
 #
 #----
 #
