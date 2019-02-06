@@ -138,6 +138,35 @@ static const char* fr_decDef_long_midSent_day[kNumOffsets*2] = {
     "dans 5 jours",         "dans 5 jours"        /*  5   */
 };
 
+static const char* ak_decDef_long_stdAlon_sec[kNumOffsets*2] = { // falls back to root
+/*  text                    numeric */
+    "-5 s",                 "-5 s",               /* -5   */
+    "-2.2 s",               "-2.2 s",             /* -2.2 */
+    "-2 s",                 "-2 s",               /* -2   */
+    "-1 s",                 "-1 s",               /* -1   */
+    "-0.7 s",               "-0.7 s",             /* -0.7 */
+    "now",                  "-0 s",               /*  -0  */
+    "now",                  "+0 s",               /*  0   */
+    "+0.7 s",               "+0.7 s",             /*  0.7 */
+    "+1 s",                 "+1 s",               /*  1   */
+    "+2 s",                 "+2 s",               /*  2   */
+    "+5 s",                 "+5 s",               /*  5   */
+};
+
+static const char* enIN_decDef_short_midSent_weds[kNumOffsets*2] = {
+/*  text                    numeric */
+    "5 Wed. ago",           "5 Wed. ago",         /* -5   */
+    "2.2 Wed. ago",         "2.2 Wed. ago",       /* -2.2 */
+    "2 Wed. ago",           "2 Wed. ago",         /* -2   */
+    "last Wed",             "1 Wed. ago",         /* -1   */
+    "0.7 Wed. ago",         "0.7 Wed. ago",       /* -0.7 */
+    "this Wed",             "0 Wed. ago",         /*  -0  */
+    "this Wed",             "in 0 Wed.",          /*  0   */
+    "in 0.7 Wed.",          "in 0.7 Wed.",        /*  0.7 */
+    "next Wed",             "in 1 Wed",           /*  1   */ // in 1 Wed. missing in logical group
+    "in 2  Wed.",           "in 2 Wed.",          /*  2   */
+    "in 5  Wed.",           "in 5 Wed."           /*  5   */
+};
 
 typedef struct {
     const char*                         locale;
@@ -156,6 +185,8 @@ static const RelDateTimeFormatTestItem fmtTestItems[] = {
     { "en", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_MINUTE,  en_decDef_long_midSent_min   },
     { "en", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_TUESDAY, en_dec0_long_midSent_tues    },
     { "fr", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_DAY,     fr_decDef_long_midSent_day   },
+    { "ak", -1, UDAT_STYLE_LONG,  UDISPCTX_CAPITALIZATION_FOR_STANDALONE,         UDAT_REL_UNIT_SECOND,  ak_decDef_long_stdAlon_sec   },
+    { "en_IN", -1, UDAT_STYLE_SHORT, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, UDAT_REL_UNIT_WEDNESDAY, enIN_decDef_short_midSent_weds },
     { NULL,  0, (UDateRelativeDateTimeFormatterStyle)0, (UDisplayContext)0, (URelativeDateTimeUnit)0, NULL } /* terminator */
 };
 
