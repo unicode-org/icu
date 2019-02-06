@@ -510,6 +510,27 @@ public class BytesTrieTest extends TestFmwk {
             data);
     }
 
+    @Test
+    public void TestClone() throws CloneNotSupportedException {
+        final StringAndValue[] data={
+            new StringAndValue("a", 1),
+            new StringAndValue("ab", 100),
+            new StringAndValue("abc", 300),
+            new StringAndValue("az", 999)
+        };
+        BytesTrie trie = buildTrie(data, data.length, StringTrieBuilder.Option.SMALL);
+        assertEquals("a result", BytesTrie.Result.INTERMEDIATE_VALUE, trie.next('a'));
+        assertEquals("a value", 1, trie.getValue());
+        BytesTrie clone = trie.clone();
+        trie = null;
+        assertEquals("ab result", BytesTrie.Result.INTERMEDIATE_VALUE, clone.next('b'));
+        assertEquals("ab value", 100, clone.getValue());
+        BytesTrie copy = new BytesTrie(clone);
+        clone = null;
+        assertEquals("abc result", BytesTrie.Result.FINAL_VALUE, copy.next('c'));
+        assertEquals("abc value", 300, copy.getValue());
+    }
+
     private void checkData(StringAndValue data[]) {
         checkData(data, data.length);
     }
