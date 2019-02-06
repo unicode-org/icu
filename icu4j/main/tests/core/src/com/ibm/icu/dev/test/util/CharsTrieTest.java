@@ -637,6 +637,27 @@ public class CharsTrieTest extends TestFmwk {
         checkIterator(CharsTrie.iterator(trieChars, 0, 0), data);
     }
 
+    @Test
+    public void TestClone() throws CloneNotSupportedException {
+        final StringAndValue[] data={
+            new StringAndValue("a", 1),
+            new StringAndValue("ab", 100),
+            new StringAndValue("abc", 300),
+            new StringAndValue("az", 999)
+        };
+        CharsTrie trie = buildTrie(data, data.length, StringTrieBuilder.Option.SMALL);
+        assertEquals("a result", BytesTrie.Result.INTERMEDIATE_VALUE, trie.next('a'));
+        assertEquals("a value", 1, trie.getValue());
+        CharsTrie clone = trie.clone();
+        trie = null;
+        assertEquals("ab result", BytesTrie.Result.INTERMEDIATE_VALUE, clone.next('b'));
+        assertEquals("ab value", 100, clone.getValue());
+        CharsTrie copy = new CharsTrie(clone);
+        clone = null;
+        assertEquals("abc result", BytesTrie.Result.FINAL_VALUE, copy.next('c'));
+        assertEquals("abc value", 300, copy.getValue());
+    }
+
     private void checkData(StringAndValue data[]) {
         checkData(data, data.length);
     }

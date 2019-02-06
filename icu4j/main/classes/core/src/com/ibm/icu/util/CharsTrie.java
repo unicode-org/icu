@@ -52,14 +52,30 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
     }
 
     /**
+     * Copy constructor.
+     * Makes a shallow copy of the other trie reader object and its state.
+     * Does not copy the char array which will be shared.
+     * Same as clone() but without the throws clause.
+     *
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public CharsTrie(CharsTrie other) {
+        chars_ = other.chars_;
+        root_ = other.root_;
+        pos_ = other.pos_;
+        remainingMatchLength_ = other.remainingMatchLength_;
+    }
+
+    /**
      * Clones this trie reader object and its state,
      * but not the char array which will be shared.
      * @return A shallow clone of this trie.
      * @stable ICU 4.8
      */
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();  // A shallow copy is just what we need.
+    public CharsTrie clone() throws CloneNotSupportedException {
+        return (CharsTrie) super.clone();  // A shallow copy is just what we need.
     }
 
     /**
@@ -641,7 +657,7 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
         // and the remaining branch length in bits 31..16.
         // (We could store the remaining branch length minus 1 in bits 30..16 and not use bit 31,
         // but the code looks more confusing that way.)
-        private ArrayList<Long> stack_=new ArrayList<Long>();
+        private ArrayList<Long> stack_=new ArrayList<>();
     }
 
     private void stop() {
