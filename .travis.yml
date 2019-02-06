@@ -38,16 +38,21 @@ matrix:
     # Includes dependency checker.
     # Note - the dependency checker needs to be run on both a debug and an optimized build.
     # This one (gcc) for debug, and linux clang (below) for optimized.
+    #
+    # Test both out-of-source and in-source builds. This one (gcc) for out-of-source,
+    # and linux clang (below) for in-source.
+
     - name: "c: linux gcc"
       language: cpp
       compiler: gcc
       before_script:
-        - cd icu4c/source
-        - ./runConfigureICU --enable-debug --disable-release Linux
+        - mkdir build
+        - cd build
+        - ../icu4c/source/runConfigureICU --enable-debug --disable-release Linux
         - make -j2
       script:
         - make -j2 check
-        - ( cd test/depstest && ./depstest.py ../../../source/ )
+        - ( cd ../icu4c/source/test/depstest && ./depstest.py ../../../../build/ )
 
     - name: "c: linux clang"
       language: cpp
