@@ -765,6 +765,36 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
             "dans 5 jours",         "dans 5 jours"        /*  5   */
         };
 
+        String[] ak_decDef_long_stdAlon_sec = { // falls back to root
+        /*  text                    numeric */
+            "-5 s",                 "-5 s",               /* -5   */
+            "-2.2 s",               "-2.2 s",             /* -2.2 */
+            "-2 s",                 "-2 s",               /* -2   */
+            "-1 s",                 "-1 s",               /* -1   */
+            "-0.7 s",               "-0.7 s",             /* -0.7 */
+            "now",                  "-0 s",               /*  -0  */
+            "now",                  "+0 s",               /*  0   */
+            "+0.7 s",               "+0.7 s",             /*  0.7 */
+            "+1 s",                 "+1 s",               /*  1   */
+            "+2 s",                 "+2 s",               /*  2   */
+            "+5 s",                 "+5 s",               /*  5   */
+        };
+
+        String[] enIN_decDef_short_midSent_weds = {
+        /*  text                    numeric */
+            "5 Wed. ago",           "5 Wed. ago",         /* -5   */
+            "2.2 Wed. ago",         "2.2 Wed. ago",       /* -2.2 */
+            "2 Wed. ago",           "2 Wed. ago",         /* -2   */
+            "last Wed",             "1 Wed. ago",         /* -1   */
+            "0.7 Wed. ago",         "0.7 Wed. ago",       /* -0.7 */
+            "this Wed",             "0 Wed. ago",         /*  -0  */
+            "this Wed",             "in 0 Wed.",          /*  0   */
+            "in 0.7 Wed.",          "in 0.7 Wed.",        /*  0.7 */
+            "next Wed",             "in 1 Wed",           /*  1   */ // in 1 Wed. missing in logical group
+            "in 2  Wed.",           "in 2 Wed.",          /*  2   */
+            "in 5  Wed.",           "in 5 Wed."           /*  5   */
+        };
+
         class TestRelativeDateTimeUnitItem {
             public String               localeID;
             public int                  decPlaces; /* fixed decimal places; -1 to use default num formatter */
@@ -797,6 +827,11 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
                                                                     RelativeDateTimeUnit.TUESDAY, en_dec0_long_midSent_tues),
             new TestRelativeDateTimeUnitItem("fr", -1, Style.LONG,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
                                                                     RelativeDateTimeUnit.DAY, fr_decDef_long_midSent_day),
+            new TestRelativeDateTimeUnitItem("ak", -1, Style.LONG,  DisplayContext.CAPITALIZATION_FOR_STANDALONE,
+                                                                    RelativeDateTimeUnit.SECOND, ak_decDef_long_stdAlon_sec),
+            // ICU4J RelativeDateTimeFormatter does not currently support RelativeDateTimeUnit.WEDNESDAY
+            //new TestRelativeDateTimeUnitItem("en_IN", -1, Style.SHORT, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
+            //                                                        RelativeDateTimeUnit.WEDNESDAY, enIN_decDef_short_midSent_weds),
         };
         for (TestRelativeDateTimeUnitItem item: items) {
             ULocale uloc = new ULocale(item.localeID);
