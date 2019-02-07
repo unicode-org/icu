@@ -59,9 +59,9 @@ jobs:
         filename: icu4c/source/allinone/icucheck.bat
         arguments: 'x64 Release'
 #-------------------------------------------------------------------------
-- job: ICU4C_MSVC_x86_Release
-  displayName: 'C: MSVC 32-bit Release (VS 2017)'
-  timeoutInMinutes: 30
+- job: ICU4C_MSVC_x86_Debug
+  displayName: 'C: MSVC 32-bit Debug (VS 2017)'
+  timeoutInMinutes: 45
   pool:
     vmImage: 'vs2017-win2016'
     demands: 
@@ -74,12 +74,12 @@ jobs:
       inputs:
         solution: icu4c/source/allinone/allinone.sln
         platform: Win32
-        configuration: Release
+        configuration: Debug
     - task: BatchScript@1
       displayName: 'Run Tests (icucheck.bat)'
       inputs:
         filename: icu4c/source/allinone/icucheck.bat
-        arguments: 'x86 Release'
+        arguments: 'x86 Debug'
 #-------------------------------------------------------------------------
 # Using a manual install of Python 3, until the vs2015 image has it 
 # by default.
