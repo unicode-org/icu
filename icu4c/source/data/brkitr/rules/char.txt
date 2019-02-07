@@ -6,11 +6,9 @@
 #
 #   file:  char.txt
 #
-#   ICU Character Break Rules, also known as Grapheme Cluster Boundaries
-#      See Unicode Standard Annex #29.
-#      These rules are based on UAX #29 Revision 29 for Unicode Version 9.0
-#      Plus revisions to rule GB 11 from http://unicode.org/cldr/trac/ticket/10088
-#      Plus additional characters introduces with Emoji 5, http://www.unicode.org/reports/tr51/proposed.html
+#   ICU Character Break Rules
+#      These rules are based on the Extended Grapheme Cluster rules from
+#      Unicode UAX #29 Revision 34 for Unicode Version 12.0
 
 !!quoted_literals_only;
 
@@ -20,9 +18,6 @@
 $CR          = [\p{Grapheme_Cluster_Break = CR}];
 $LF          = [\p{Grapheme_Cluster_Break = LF}];
 $Control     = [[\p{Grapheme_Cluster_Break = Control}]];
-# TODO: Enable Virama & LinkingConsonant definitions once rule builder allows empty sets.
-#$Virama      = [[\p{Grapheme_Cluster_Break = Virama}]];
-#$LinkingConsonant = [[\p{Grapheme_Cluster_Break = LinkingConsonant}]];
 $Extend      = [[\p{Grapheme_Cluster_Break = Extend}]];
 $ZWJ         = [\p{Grapheme_Cluster_Break = ZWJ}];
 $Regional_Indicator = [\p{Grapheme_Cluster_Break = Regional_Indicator}];
@@ -56,7 +51,7 @@ $L ($L | $V | $LV | $LVT);
 # GB 9
 [^$Control $CR $LF] ($Extend | $ZWJ);
 
-# GB 9a (only for extended grapheme clusters)
+# GB 9a
 [^$Control $CR $LF] $SpacingMark;
 
 # GB 9b
