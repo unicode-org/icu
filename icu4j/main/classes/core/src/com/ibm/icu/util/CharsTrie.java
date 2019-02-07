@@ -90,6 +90,40 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
     }
 
     /**
+     * Returns the state of this trie as a 64-bit integer.
+     * The state value is never 0.
+     *
+     * @return opaque state value
+     * @see #resetToState64
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public long getState64() {
+        return ((long)remainingMatchLength_ << 32) | pos_;
+    }
+
+    /**
+     * Resets this trie to the saved state.
+     * Unlike {@link #resetToState(State)}, the 64-bit state value
+     * must be from {@link #getState64()} from the same trie object or
+     * from one initialized the exact same way.
+     * Because of no validation, this method is faster.
+     *
+     * @param state The opaque trie state value from getState64().
+     * @return this
+     * @see #getState64
+     * @see #resetToState
+     * @see #reset
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public CharsTrie resetToState64(long state) {
+        remainingMatchLength_ = (int)(state >> 32);
+        pos_ = (int)state;
+        return this;
+    }
+
+    /**
      * CharsTrie state object, for saving a trie's current state
      * and resetting the trie back to this state later.
      * @stable ICU 4.8
@@ -123,6 +157,8 @@ public final class CharsTrie implements Cloneable, Iterable<CharsTrie.Entry> {
 
     /**
      * Resets this trie to the saved state.
+     * Slower than {@link #resetToState64(long)} which does not validate the state value.
+     *
      * @param state The State object which holds a saved trie state.
      * @return this
      * @throws IllegalArgumentException if the state object contains no state,
