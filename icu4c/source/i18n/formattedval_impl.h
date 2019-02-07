@@ -63,9 +63,10 @@ struct UFormattedValueImpl : public UMemory, public UFormattedValueApiHelper {
 /** Implementation of the methods from U_FORMATTED_VALUE_SUBCLASS_AUTO. */
 #define UPRV_FORMATTED_VALUE_SUBCLASS_AUTO_IMPL(Name) \
     Name::Name(Name&& src) U_NOEXCEPT { \
-        delete fData; \
         fData = src.fData; \
         src.fData = nullptr; \
+        fErrorCode = src.fErrorCode; \
+        src.fErrorCode = U_INVALID_STATE_ERROR; \
     } \
     Name::~Name() { \
         delete fData; \
@@ -75,6 +76,8 @@ struct UFormattedValueImpl : public UMemory, public UFormattedValueApiHelper {
         delete fData; \
         fData = src.fData; \
         src.fData = nullptr; \
+        fErrorCode = src.fErrorCode; \
+        src.fErrorCode = U_INVALID_STATE_ERROR; \
         return *this; \
     } \
     UnicodeString Name::toString(UErrorCode& status) const { \
