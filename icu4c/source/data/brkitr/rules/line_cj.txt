@@ -7,7 +7,7 @@
 #
 #         Line Breaking Rules
 #         Implement default line breaking as defined by
-#         Unicode Standard Annex #14 Revision 40 for Unicode 11.0
+#         Unicode Standard Annex #14 Revision 42 for Unicode 12.0
 #         http://www.unicode.org/reports/tr14/, with the following modification:
 #
 #         Boundaries between hyphens and following letters are suppressed when

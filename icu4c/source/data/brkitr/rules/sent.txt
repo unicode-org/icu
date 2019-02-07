@@ -8,7 +8,7 @@
 #
 #   ICU Sentence Break Rules
 #      See Unicode Standard Annex #29.
-#      These rules are based on UAX #29 Revision 26 for Unicode Version 8.0
+#      These rules are based on UAX #29 Revision 34 for Unicode Version 12.0
 #
 
 !!quoted_literals_only;
@@ -34,7 +34,7 @@ $Close     = [\p{Sentence_Break = Close}];
 #
 # Define extended forms of the character classes,
 #   incorporate trailing Extend or Format chars.
-#   Rules 4 and 5.  
+#   Rules 4 and 5.
 
 $SpEx       = $Sp      ($Extend | $Format)*;
 $LowerEx    = $Lower   ($Extend | $Format)*;
@@ -78,6 +78,6 @@ $ATermEx $CloseEx* $SpEx* $NotLettersEx* $Lower;
 #Rule 9, 10, 11
 ($STermEx | $ATermEx) $CloseEx* $SpEx* ($Sep | $CR | $LF)?;
 
-#Rule 12
+#Rule 998
 [[^$STerm $ATerm $Close $Sp $Sep $LF $CR $Format $Extend]{bof}] ($Extend | $Format | $Close | $Sp)* .;
 [[^$STerm $ATerm $Close $Sp $Sep $LF $CR $Format $Extend]{bof}] ($Extend | $Format | $Close | $Sp)* ([$Sep $LF $CR {eof}] | $CR $LF){100};

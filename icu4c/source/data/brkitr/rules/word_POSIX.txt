@@ -8,9 +8,7 @@
 #
 # ICU Word Break Rules, POSIX locale.
 #      See Unicode Standard Annex #29.
-#      These rules are based on UAX #29 Revision 29 for Unicode Version 9.0
-#      with additions for Emoji Sequences from https://goo.gl/cluFCn
-#      Plus additional characters introduces with Emoji 5, http://www.unicode.org/reports/tr51/proposed.html
+#      These rules are based on UAX #29 Revision 34 for Unicode Version 12.0
 #
 # Note:  Updates to word.txt will usually need to be merged into
 #        word_POSIX.txt also.

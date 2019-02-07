@@ -8,9 +8,7 @@
 #
 # ICU Word Break Rules
 #      See Unicode Standard Annex #29.
-#      These rules are based on UAX #29 Revision 29 for Unicode Version 9.0
-#      with additions for Emoji Sequences from https://goo.gl/cluFCn
-#      Plus additional characters introduces with Emoji 5, http://www.unicode.org/reports/tr51/proposed.html
+#      These rules are based on UAX #29 Revision 34 for Unicode Version 12.0
 #
 # Note:  Updates to word.txt will usually need to be merged into
 #        word_POSIX.txt also.
@@ -58,7 +56,7 @@ $Hiragana           = [:Hiragana:];
 #   5.0 or later as the definition of Complex_Context was corrected to include all
 #   characters requiring dictionary break.
 
-$Control        = [\p{Grapheme_Cluster_Break = Control}]; 
+$Control        = [\p{Grapheme_Cluster_Break = Control}];
 $HangulSyllable = [\uac00-\ud7a3];
 $ComplexContext = [:LineBreak = Complex_Context:];
 $KanaKanji      = [$Han $Hiragana $Katakana];
@@ -70,7 +68,7 @@ $ALetterPlus  = [$ALetter-$dictionaryCJK [$ComplexContext-$Extend-$Control]];
 
 
 #
-#  Rules 4    Ignore Format and Extend characters, 
+#  Rules 4    Ignore Format and Extend characters,
 #             except when they appear at the beginning of a region of text.
 #
 # TODO: check if handling of katakana in dictionary makes rules incorrect/void
@@ -148,7 +146,7 @@ $NumericEx $NumericEx {100};
 
 $NumericEx ($ALetterEx | $Hebrew_LetterEx) {200};
 
-# rule 11 and 12 
+# rule 11 and 12
 
 $NumericEx ($MidNumEx | $MidNumLetEx | $Single_QuoteEx) $NumericEx {100};
 
@@ -180,7 +178,7 @@ $ExtendNumLetEx  $KatakanaEx     {400};    #  (13b)
 
 # special handling for CJK characters: chain for later dictionary segmentation
 $HangulSyllable $HangulSyllable {200};
-$KanaKanji $KanaKanji {400}; # different rule status if both kana and kanji found 
+$KanaKanji $KanaKanji {400}; # different rule status if both kana and kanji found
 
 # Rule 999
 #     Match a single code point if no other rule applies.
