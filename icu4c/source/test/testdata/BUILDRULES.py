@@ -78,16 +78,6 @@ def generate_rb(config, glob, common_vars):
             format_with = {}
         ),
         SingleExecutionRequest(
-            name = "idna_rules",
-            category = "tests",
-            dep_files = [],
-            input_files = [InFile("idna_rules.txt")],
-            output_files = [OutFile("idna_rules.res")],
-            tool = IcuTool("genrb"),
-            args = "-s {IN_DIR} -d {OUT_DIR} {INPUT_FILES[0]}",
-            format_with = {}
-        ),
-        SingleExecutionRequest(
             name = "zoneinfo64",
             category = "tests",
             dep_files = [],
