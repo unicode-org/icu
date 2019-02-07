@@ -486,6 +486,12 @@ void LocalPointerTest::TestLocalPointer() {
     // destructor
 }
 
+// Try to avoid clang -Wself-move warnings from s1 = std::move(s1);
+template<typename T>
+void moveFrom(T &dest, T &src) {
+    dest = std::move(src);
+}
+
 void LocalPointerTest::TestLocalPointerMoveSwap() {
     UnicodeString *p1 = new UnicodeString((UChar)0x61);
     UnicodeString *p2 = new UnicodeString((UChar)0x62);
@@ -517,8 +523,8 @@ void LocalPointerTest::TestLocalPointerMoveSwap() {
     // Move self assignment leaves the object valid but in an undefined state.
     // Do it to make sure there is no crash,
     // but do not check for any particular resulting value.
-    s1 = std::move(s1);
-    s3 = std::move(s3);
+    moveFrom(s1, s1);
+    moveFrom(s3, s3);
 }
 
 void LocalPointerTest::TestLocalPointerStdUniquePtr() {
@@ -623,8 +629,8 @@ void LocalPointerTest::TestLocalArrayMoveSwap() {
     // Move self assignment leaves the object valid but in an undefined state.
     // Do it to make sure there is no crash,
     // but do not check for any particular resulting value.
-    a1 = std::move(a1);
-    a3 = std::move(a3);
+    moveFrom(a1, a1);
+    moveFrom(a3, a3);
 }
 
 void LocalPointerTest::TestLocalArrayStdUniquePtr() {
@@ -804,8 +810,8 @@ void LocalPointerTest::TestLocalXyzPointerMoveSwap() {
     // Move self assignment leaves the object valid but in an undefined state.
     // Do it to make sure there is no crash,
     // but do not check for any particular resulting value.
-    f1 = std::move(f1);
-    f3 = std::move(f3);
+    moveFrom(f1, f1);
+    moveFrom(f3, f3);
 #endif /* !UCONFIG_NO_NORMALIZATION */
 }
 
