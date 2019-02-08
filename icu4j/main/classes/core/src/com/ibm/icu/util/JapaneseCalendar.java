@@ -231,6 +231,16 @@ public class JapaneseCalendar extends GregorianCalendar {
     private static final EraRules ERA_RULES;
 
     static {
+        ERA_RULES = EraRules.getInstance(CalType.JAPANESE, enableTentativeEra());
+    }
+
+    /**
+     * Check environment variable that enables use of future eras.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static boolean enableTentativeEra() {
         // Although start date of next Japanese era is planned ahead, a name of
         // new era might not be available. This implementation allows tester to
         // check a new era without era names by settings below (in priority order).
@@ -258,8 +268,7 @@ public class JapaneseCalendar extends GregorianCalendar {
             String jdkEraConf = System.getProperty("jdk.calendar.japanese.supplemental.era");
             includeTentativeEra = jdkEraConf != null;
         }
-
-        ERA_RULES = EraRules.getInstance(CalType.JAPANESE, includeTentativeEra);
+        return includeTentativeEra;
     }
 
     /**

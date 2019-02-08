@@ -1311,6 +1311,32 @@ public abstract class DateFormat extends UFormat {
     @Deprecated
     public static final String HOUR_TZ = "jz";
 
+    /**
+     * Constant for Unicode string name of new (in 2019) Japanese calendar era,
+     * root/English abbreviated version (ASCII-range characters).
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static final String JP_ERA_2019_ROOT = "Qqqq";
+
+    /**
+     * Constant for Unicode string name of new (in 2019) Japanese calendar era,
+     * Japanese abbreviated version (Han, or fullwidth Latin for testing).
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static final String JP_ERA_2019_JA = "\uFF31\uFF31";
+
+    /**
+     * Constant for Unicode string name of new (in 2019) Japanese calendar era,
+     * root and Japanese narrow version (ASCII-range characters).
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Deprecated
+    public static final String JP_ERA_2019_NARROW = "Q";
 
     /**
      * Gets the time formatter with the default formatting style
