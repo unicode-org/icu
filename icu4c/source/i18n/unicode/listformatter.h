@@ -65,6 +65,13 @@ struct ListFormatData : public UMemory {
 /**
  * An immutable class containing the result of a list formatting operation.
  *
+ * When calling nextPosition():
+ * The fields are returned from start to end. The special field category
+ * UFIELD_CATEGORY_LIST_SPAN is used to indicate which argument
+ * was inserted at the given position. The span category will
+ * always occur before the corresponding instance of UFIELD_CATEGORY_LIST
+ * in the nextPosition() iterator.
+ *
  * Not intended for public subclassing.
  *
  * @draft ICU 64

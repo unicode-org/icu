@@ -420,6 +420,21 @@ FormattedList ListFormatter::formatStringsToValue(
     if (U_FAILURE(errorCode)) {
         return FormattedList(errorCode);
     }
+
+    // Add span fields and sort
+    ConstrainedFieldPosition cfpos;
+    cfpos.constrainField(UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD);
+    int32_t i = 0;
+    handler.setCategory(UFIELD_CATEGORY_LIST_SPAN);
+    while (result->nextPosition(cfpos, errorCode)) {
+        handler.addAttribute(i++, cfpos.getStart(), cfpos.getLimit());
+    }
+    handler.getError(errorCode);
+    if (U_FAILURE(errorCode)) {
+        return FormattedList(errorCode);
+    }
+    result->sort();
+
     return FormattedList(result.orphan());
 }
 #endif

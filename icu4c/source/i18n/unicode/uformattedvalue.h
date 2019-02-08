@@ -80,6 +80,13 @@ typedef enum UFieldCategory {
 #endif
 
     /**
+     * Category for spans in a list.
+     *
+     * @draft ICU 64
+     */
+    UFIELD_CATEGORY_LIST_SPAN = 0x1000 + UFIELD_CATEGORY_LIST,
+
+    /**
      * Category for spans in a date interval.
      *
      * @draft ICU 64
