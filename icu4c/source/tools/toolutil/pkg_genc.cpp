@@ -680,23 +680,30 @@ getArchitecture(uint16_t *pCPU, uint16_t *pBits, UBool *pIsBigEndian, const char
         *pBits=32;
         *pIsBigEndian=(UBool)(U_IS_BIG_ENDIAN ? ELFDATA2MSB : ELFDATA2LSB);
 #elif U_PLATFORM_HAS_WIN32_API
-/* _M_IA64 should be defined in windows.h */
-#   if defined(_M_IA64)
-        *pCPU=IMAGE_FILE_MACHINE_IA64;
-        *pBits = 64;
-#   elif defined(_M_AMD64)
-// link.exe does not really care about the .obj machine type and this will
-// allow us to build a dll for both ARM & x64 with an amd64 built tool
-// ARM is same as x64 except for first 2 bytes of object file
-        *pCPU = IMAGE_FILE_MACHINE_UNKNOWN;
-        // *pCPU = IMAGE_FILE_MACHINE_ARMNT;   // If we wanted to be explicit
-        // *pCPU = IMAGE_FILE_MACHINE_AMD64;   // We would use one of these names
-        *pBits = 64;                           // Doesn't seem to be used for anything interesting?
+        // Windows always runs in little-endian mode.
+        *pIsBigEndian = FALSE;
+
+        // Note: The various _M_<arch> macros are predefined by the MSVC compiler based
+        // on the target compilation architecture.
+        // https://docs.microsoft.com/cpp/preprocessor/predefined-macros
+
+        // link.exe will link an IMAGE_FILE_MACHINE_UNKNOWN data-only .obj file
+        // no matter what architecture it is targeting (though other values are
+        // required to match). Unfortunately, the variable name decoration/mangling
+        // is slightly different on x86, which means we can't use the UNKNOWN type
+        // for all architectures though.
+#   if defined(_M_IX86)
+        *pCPU = IMAGE_FILE_MACHINE_I386;
 #   else
-        *pCPU=IMAGE_FILE_MACHINE_I386;    // We would use one of these names
-        *pBits = 32;
+        *pCPU = IMAGE_FILE_MACHINE_UNKNOWN;
 #   endif
-        *pIsBigEndian=FALSE;
+#   if defined(_M_IA64) || defined(_M_AMD64) || defined (_M_ARM64)
+        *pBits = 64; // Doesn't seem to be used for anything interesting though?
+#   elif defined(_M_IX86) || defined(_M_ARM)
+        *pBits = 32;
+#   else
+#      error "Unknown platform for CAN_GENERATE_OBJECTS."
+#   endif
 #else
 #   error "Unknown platform for CAN_GENERATE_OBJECTS."
 #endif
