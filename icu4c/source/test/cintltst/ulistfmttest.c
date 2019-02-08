@@ -143,7 +143,7 @@ static void TestUListFmtToValue() {
             u"wonderful",
             u"world"
         };
-        ulistfmt_formatStringsToValue(fmt, inputs, NULL, UPRV_LENGTHOF(inputs), fl, &ec);
+        ulistfmt_formatStringsToResult(fmt, inputs, NULL, UPRV_LENGTHOF(inputs), fl, &ec);
         assertSuccess("Formatting", &ec);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {
             // field, begin index, end index
@@ -171,7 +171,7 @@ static void TestUListFmtToValue() {
             u"F",
             u"G"
         };
-        ulistfmt_formatStringsToValue(fmt, inputs, NULL, UPRV_LENGTHOF(inputs), fl, &ec);
+        ulistfmt_formatStringsToResult(fmt, inputs, NULL, UPRV_LENGTHOF(inputs), fl, &ec);
         assertSuccess("Formatting", &ec);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {
             // field, begin index, end index
