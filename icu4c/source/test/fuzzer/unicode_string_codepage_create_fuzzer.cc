@@ -65,8 +65,20 @@ static const std::array<const char*, 45> kConverters = {
 IcuEnvironment* env = new IcuEnvironment();
 
 extern "C" int LLVMFuzzerTestOneInput(const uint8_t* data, size_t size) {
-  auto rng = CreateRng(data, size);
-  icu::UnicodeString str(reinterpret_cast<const char*>(data), size, 
-      kConverters[rng() % kConverters.size()]);
+  if (size < 1) {
+    return 0;
+  }
+
+  // First byte is used for random converter selection.
+  uint8_t rnd = *data;
+  data++;
+  size--;
+
+  std::unique_ptr<char[]> fuzzbuff(new char[size]);
+  std::memcpy(fuzzbuff.get(), data, size);
+
+  icu::UnicodeString str(fuzzbuff.get(), size,
+                         kConverters[rnd % kConverters.size()]);
+
   return 0;
 }
