@@ -611,6 +611,13 @@ public class MeasureUnit implements Serializable {
     public static final TimeUnit DAY = (TimeUnit) MeasureUnit.internalGetInstance("duration", "day");
 
     /**
+     * Constant for unit of duration: day-person
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit DAY_PERSON = MeasureUnit.internalGetInstance("duration", "day-person");
+
+    /**
      * Constant for unit of duration: hour
      * @stable ICU 4.0
      */
@@ -641,6 +648,13 @@ public class MeasureUnit implements Serializable {
     public static final TimeUnit MONTH = (TimeUnit) MeasureUnit.internalGetInstance("duration", "month");
 
     /**
+     * Constant for unit of duration: month-person
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit MONTH_PERSON = MeasureUnit.internalGetInstance("duration", "month-person");
+
+    /**
      * Constant for unit of duration: nanosecond
      * @stable ICU 54
      */
@@ -659,10 +673,24 @@ public class MeasureUnit implements Serializable {
     public static final TimeUnit WEEK = (TimeUnit) MeasureUnit.internalGetInstance("duration", "week");
 
     /**
+     * Constant for unit of duration: week-person
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit WEEK_PERSON = MeasureUnit.internalGetInstance("duration", "week-person");
+
+    /**
      * Constant for unit of duration: year
      * @stable ICU 4.0
      */
     public static final TimeUnit YEAR = (TimeUnit) MeasureUnit.internalGetInstance("duration", "year");
+
+    /**
+     * Constant for unit of duration: year-person
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final MeasureUnit YEAR_PERSON = MeasureUnit.internalGetInstance("duration", "year-person");
 
     /**
      * Constant for unit of electric: ampere

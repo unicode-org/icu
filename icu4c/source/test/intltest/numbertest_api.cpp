@@ -562,6 +562,15 @@ void NumberFormatterApiTest::unitMeasure() {
             Locale("es-MX"),
             1,
             u"kelvin");
+
+    assertFormatSingle(
+            u"Person unit not in short form",
+            u"measure-unit/duration-year-person unit-width-full-name",
+            NumberFormatter::with().unit(MeasureUnit::getYearPerson())
+                    .unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("es-MX"),
+            5,
+            u"5 a\u00F1os");
 }
 
 void NumberFormatterApiTest::unitCompoundMeasure() {

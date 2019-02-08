@@ -74,6 +74,7 @@ private:
     void TestDoubleZero();
     void TestUnitPerUnitResolution();
     void TestIndividualPluralFallback();
+    void Test20332_PersonUnits();
     void verifyFormat(
         const char *description,
         const MeasureFormat &fmt,
@@ -173,6 +174,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestDoubleZero);
     TESTCASE_AUTO(TestUnitPerUnitResolution);
     TESTCASE_AUTO(TestIndividualPluralFallback);
+    TESTCASE_AUTO(Test20332_PersonUnits);
     TESTCASE_AUTO_END;
 }
 
@@ -2614,6 +2616,38 @@ void MeasureFormatTest::TestIndividualPluralFallback() {
     UnicodeString actual;
     assertEquals("2 deg temp in fr_CA", expected, mf.format(twoDeg.orphan(), actual, errorCode), TRUE);
 }
+
+void MeasureFormatTest::Test20332_PersonUnits() {
+    if (logKnownIssue("ICU-20400")) {
+        return;
+    }
+    IcuTestErrorCode status(*this, "Test20332_PersonUnits");
+    const struct TestCase {
+        const char* locale;
+        MeasureUnit* unitToAdopt;
+        UMeasureFormatWidth width;
+        const char* expected;
+    } cases[] = {
+        {"en-us", MeasureUnit::createYearPerson(status), UMEASFMT_WIDTH_NARROW, "25y"},
+        {"en-us", MeasureUnit::createYearPerson(status), UMEASFMT_WIDTH_SHORT, "25 yrs"},
+        {"en-us", MeasureUnit::createYearPerson(status), UMEASFMT_WIDTH_WIDE, "25 years"},
+        {"en-us", MeasureUnit::createMonthPerson(status), UMEASFMT_WIDTH_NARROW, "25m"},
+        {"en-us", MeasureUnit::createMonthPerson(status), UMEASFMT_WIDTH_SHORT, "25 mths"},
+        {"en-us", MeasureUnit::createMonthPerson(status), UMEASFMT_WIDTH_WIDE, "25 months"},
+        {"en-us", MeasureUnit::createWeekPerson(status), UMEASFMT_WIDTH_NARROW, "25w"},
+        {"en-us", MeasureUnit::createWeekPerson(status), UMEASFMT_WIDTH_SHORT, "25 wks"},
+        {"en-us", MeasureUnit::createWeekPerson(status), UMEASFMT_WIDTH_WIDE, "25 weeks"},
+        {"en-us", MeasureUnit::createDayPerson(status), UMEASFMT_WIDTH_NARROW, "25d"},
+        {"en-us", MeasureUnit::createDayPerson(status), UMEASFMT_WIDTH_SHORT, "25 Days"},
+        {"en-us", MeasureUnit::createDayPerson(status), UMEASFMT_WIDTH_WIDE, "25 days"}
+    };
+    for (const auto& cas : cases) {
+        MeasureFormat mf(cas.locale, cas.width, status);
+        Measure measure(25, cas.unitToAdopt, status);
+        verifyFormat(cas.locale, mf, &measure, 1, cas.expected);
+    }
+}
+
 
 void MeasureFormatTest::verifyFieldPosition(
         const char *description,

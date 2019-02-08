@@ -27,7 +27,7 @@
     	<condition property="is.cldr.dir.set" >
             <isset property="env.CLDR_DIR" />
         </condition >
-        <fail unless="is.cldr.dir.set" message="Please set the CLDR_DIR environment variable to the top level ICU source dir (containing 'common')."/>
+        <fail unless="is.cldr.dir.set" message="Please set the CLDR_DIR environment variable to the top level CLDR source dir (containing 'common')."/>
 
         <available property="cldrtools.dir" value="${env.CLDR_DIR}/cldr-tools" file="${env.CLDR_DIR}/cldr-tools" type="dir"/>
         <available property="cldrtools.dir" value="${env.CLDR_DIR}/tools/java" file="${env.CLDR_DIR}/tools/java" type="dir"/>
@@ -47,8 +47,11 @@
         <echo message="java version: ${java.version}"/>
         <echo message="ant java version: ${ant.java.version}"/>
         <echo message="${ant.version}"/>
+        <echo message="cldr tools dir: ${cldrtools.dir}"/>
+        <echo message="cldr tools jar: ${cldrtools.jar}"/>
+        <echo message="cldr tools classes: ${env.CLDR_CLASSES}"/>
     </target>
-    <target name="setup">
+    <target name="setup" depends="init">
         <taskdef name="cldr-build" classname="org.unicode.cldr.ant.CLDRBuild">
             <classpath>
                 <pathelement path="${java.class.path}/"/>
