@@ -2193,6 +2193,34 @@ public class MeasureUnitTest extends TestFmwk {
         // Should not throw an exception.
     }
 
+    @Test
+    public void test20332_PersonUnits() {
+        Object[][] cases = new Object[][] {
+            {ULocale.US, MeasureUnit.YEAR_PERSON, MeasureFormat.FormatWidth.NARROW, "25y"},
+            {ULocale.US, MeasureUnit.YEAR_PERSON, MeasureFormat.FormatWidth.SHORT, "25 yrs"},
+            {ULocale.US, MeasureUnit.YEAR_PERSON, MeasureFormat.FormatWidth.WIDE, "25 years"},
+            {ULocale.US, MeasureUnit.MONTH_PERSON, MeasureFormat.FormatWidth.NARROW, "25m"},
+            {ULocale.US, MeasureUnit.MONTH_PERSON, MeasureFormat.FormatWidth.SHORT, "25 mths"},
+            {ULocale.US, MeasureUnit.MONTH_PERSON, MeasureFormat.FormatWidth.WIDE, "25 months"},
+            {ULocale.US, MeasureUnit.WEEK_PERSON, MeasureFormat.FormatWidth.NARROW, "25w"},
+            {ULocale.US, MeasureUnit.WEEK_PERSON, MeasureFormat.FormatWidth.SHORT, "25 wks"},
+            {ULocale.US, MeasureUnit.WEEK_PERSON, MeasureFormat.FormatWidth.WIDE, "25 weeks"},
+            {ULocale.US, MeasureUnit.DAY_PERSON, MeasureFormat.FormatWidth.NARROW, "25d"},
+            {ULocale.US, MeasureUnit.DAY_PERSON, MeasureFormat.FormatWidth.SHORT, "25 days"},
+            {ULocale.US, MeasureUnit.DAY_PERSON, MeasureFormat.FormatWidth.WIDE, "25 days"}
+        };
+        for (Object[] cas : cases) {
+            ULocale locale = (ULocale) cas[0];
+            MeasureUnit unit = (MeasureUnit) cas[1];
+            MeasureFormat.FormatWidth width = (MeasureFormat.FormatWidth) cas[2];
+            String expected = (String) cas[3];
+
+            MeasureFormat fmt = MeasureFormat.getInstance(locale, width);
+            String result = fmt.formatMeasures(new Measure(25, unit));
+            assertEquals("" + locale + " " + unit + " " + width, expected, result);
+        }
+    }
+
     // DO NOT DELETE THIS FUNCTION! It may appear as dead code, but we use this to generate code
     // for MeasureFormat during the release process.
     static Map<MeasureUnit, Pair<MeasureUnit, MeasureUnit>> getUnitsToPerParts() {

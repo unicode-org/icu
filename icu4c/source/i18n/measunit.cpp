@@ -43,19 +43,19 @@ static const int32_t gOffsets[] = {
     26,
     325,
     336,
-    347,
     351,
-    357,
+    355,
     361,
-    381,
-    382,
-    393,
-    396,
-    402,
-    408,
+    365,
+    385,
+    386,
+    397,
+    400,
+    406,
     412,
     416,
-    441
+    420,
+    445
 };
 
 static const int32_t gIndexes[] = {
@@ -67,19 +67,19 @@ static const int32_t gIndexes[] = {
     26,
     26,
     37,
-    48,
     52,
-    58,
+    56,
     62,
-    82,
-    83,
-    94,
-    97,
-    103,
-    109,
+    66,
+    86,
+    87,
+    98,
+    101,
+    107,
     113,
     117,
-    142
+    121,
+    146
 };
 
 // Must be sorted alphabetically.
@@ -446,15 +446,19 @@ static const char * const gSubTypes[] = {
     "terabyte",
     "century",
     "day",
+    "day-person",
     "hour",
     "microsecond",
     "millisecond",
     "minute",
     "month",
+    "month-person",
     "nanosecond",
     "second",
     "week",
+    "week-person",
     "year",
+    "year-person",
     "ampere",
     "milliampere",
     "ohm",
@@ -553,14 +557,14 @@ static const char * const gSubTypes[] = {
 
 // Must be sorted by first value and then second value.
 static int32_t unitPerUnitToSingleUnit[][4] = {
-        {368, 338, 17, 0},
-        {370, 344, 17, 2},
-        {372, 338, 17, 3},
-        {372, 430, 4, 2},
-        {372, 431, 4, 3},
-        {387, 428, 3, 1},
-        {390, 11, 16, 5},
-        {433, 368, 4, 1}
+        {372, 339, 17, 0},
+        {374, 346, 17, 2},
+        {376, 339, 17, 3},
+        {376, 434, 4, 2},
+        {376, 435, 4, 3},
+        {391, 432, 3, 1},
+        {394, 11, 16, 5},
+        {437, 372, 4, 1}
 };
 
 // Shortcuts to the base unit in order to make the default constructor fast
@@ -879,76 +883,108 @@ MeasureUnit MeasureUnit::getDay() {
     return MeasureUnit(7, 1);
 }
 
-MeasureUnit *MeasureUnit::createHour(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createDayPerson(UErrorCode &status) {
     return MeasureUnit::create(7, 2, status);
 }
 
-MeasureUnit MeasureUnit::getHour() {
+MeasureUnit MeasureUnit::getDayPerson() {
     return MeasureUnit(7, 2);
 }
 
-MeasureUnit *MeasureUnit::createMicrosecond(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createHour(UErrorCode &status) {
     return MeasureUnit::create(7, 3, status);
 }
 
-MeasureUnit MeasureUnit::getMicrosecond() {
+MeasureUnit MeasureUnit::getHour() {
     return MeasureUnit(7, 3);
 }
 
-MeasureUnit *MeasureUnit::createMillisecond(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createMicrosecond(UErrorCode &status) {
     return MeasureUnit::create(7, 4, status);
 }
 
-MeasureUnit MeasureUnit::getMillisecond() {
+MeasureUnit MeasureUnit::getMicrosecond() {
     return MeasureUnit(7, 4);
 }
 
-MeasureUnit *MeasureUnit::createMinute(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createMillisecond(UErrorCode &status) {
     return MeasureUnit::create(7, 5, status);
 }
 
-MeasureUnit MeasureUnit::getMinute() {
+MeasureUnit MeasureUnit::getMillisecond() {
     return MeasureUnit(7, 5);
 }
 
-MeasureUnit *MeasureUnit::createMonth(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createMinute(UErrorCode &status) {
     return MeasureUnit::create(7, 6, status);
 }
 
-MeasureUnit MeasureUnit::getMonth() {
+MeasureUnit MeasureUnit::getMinute() {
     return MeasureUnit(7, 6);
 }
 
-MeasureUnit *MeasureUnit::createNanosecond(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createMonth(UErrorCode &status) {
     return MeasureUnit::create(7, 7, status);
 }
 
-MeasureUnit MeasureUnit::getNanosecond() {
+MeasureUnit MeasureUnit::getMonth() {
     return MeasureUnit(7, 7);
 }
 
-MeasureUnit *MeasureUnit::createSecond(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createMonthPerson(UErrorCode &status) {
     return MeasureUnit::create(7, 8, status);
 }
 
-MeasureUnit MeasureUnit::getSecond() {
+MeasureUnit MeasureUnit::getMonthPerson() {
     return MeasureUnit(7, 8);
 }
 
-MeasureUnit *MeasureUnit::createWeek(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createNanosecond(UErrorCode &status) {
     return MeasureUnit::create(7, 9, status);
 }
 
-MeasureUnit MeasureUnit::getWeek() {
+MeasureUnit MeasureUnit::getNanosecond() {
     return MeasureUnit(7, 9);
 }
 
-MeasureUnit *MeasureUnit::createYear(UErrorCode &status) {
+MeasureUnit *MeasureUnit::createSecond(UErrorCode &status) {
     return MeasureUnit::create(7, 10, status);
 }
 
-MeasureUnit MeasureUnit::getYear() {
+MeasureUnit MeasureUnit::getSecond() {
     return MeasureUnit(7, 10);
+}
+
+MeasureUnit *MeasureUnit::createWeek(UErrorCode &status) {
+    return MeasureUnit::create(7, 11, status);
+}
+
+MeasureUnit MeasureUnit::getWeek() {
+    return MeasureUnit(7, 11);
+}
+
+MeasureUnit *MeasureUnit::createWeekPerson(UErrorCode &status) {
+    return MeasureUnit::create(7, 12, status);
+}
+
+MeasureUnit MeasureUnit::getWeekPerson() {
+    return MeasureUnit(7, 12);
+}
+
+MeasureUnit *MeasureUnit::createYear(UErrorCode &status) {
+    return MeasureUnit::create(7, 13, status);
+}
+
+MeasureUnit MeasureUnit::getYear() {
+    return MeasureUnit(7, 13);
+}
+
+MeasureUnit *MeasureUnit::createYearPerson(UErrorCode &status) {
+    return MeasureUnit::create(7, 14, status);
+}
+
+MeasureUnit MeasureUnit::getYearPerson() {
+    return MeasureUnit(7, 14);
 }
 
 MeasureUnit *MeasureUnit::createAmpere(UErrorCode &status) {

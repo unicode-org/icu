@@ -101,7 +101,16 @@ void getMeasureData(const Locale &locale, const MeasureUnit &unit, const UNumber
     key.append("/", status);
     key.append(unit.getType(), status);
     key.append("/", status);
-    key.append(unit.getSubtype(), status);
+
+    // Map duration-year-person, duration-week-person, etc. to duration-year, duration-week, ...
+    // TODO(ICU-20400): Get duration-*-person data properly with aliases.
+    int32_t subtypeLen = static_cast<int32_t>(uprv_strlen(unit.getSubtype()));
+    if (subtypeLen > 7 && uprv_strcmp(unit.getSubtype() + subtypeLen - 7, "-person") == 0) {
+        key.append({unit.getSubtype(), subtypeLen - 7}, status);
+    } else {
+        key.append(unit.getSubtype(), status);
+    }
+
     ures_getAllItemsWithFallback(unitsBundle.getAlias(), key.data(), sink, status);
 }
 

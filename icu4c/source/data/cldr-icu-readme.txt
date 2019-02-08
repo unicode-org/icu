@@ -69,9 +69,8 @@
 #
 # CLDR_DIR:      Path to root of CLDR sources, below which are the common and
 #                tools directories.
-# CLDR_CLASSES:  Defined relative to CLDR_DIR. It only needs to be set if you
-#                are not running ant jar for CLDR and have a non-default output
-#                folder for cldr-tools classes.
+# CLDR_CLASSES:  Path to the CLDR Tools classes directory. If not set, defaults
+#                to $CLDR_DIR/tools/java/classes
 #
 # c) ICU-related variables
 # These variables only need to be set if you're directly reusing the
@@ -140,7 +139,6 @@ export ANT_OPTS="-Xmx3072m -DCLDR_DTD_CACHE=/tmp"
 # CLDR_DIR=`cygpath -wp /build/cldr`
 
 export CLDR_DIR=$HOME/cldr/trunk
-#export CLDR_CLASSES=$CLDR_DIR/tools/java/classes
 
 # 1c. ICU variables
 
@@ -148,9 +146,11 @@ export ICU4C_DIR=$HOME/icu/trunk/icu4c
 export ICU4J_ROOT=$HOME/icu/trunk/icu4j
 
 # 2. Build the CLDR Java tools
+# Optionally build the jar, but ant will look inside the classes directory anyway
 
 cd $CLDR_DIR/tools/java
-ant jar
+ant all
+#ant jar
 
 # 3. Configure ICU4C, build and test without new data first, to verify that
 # there are no pre-existing errors (configure shown here for MacOSX, adjust
@@ -169,12 +169,16 @@ make check 2>&1 | tee /tmp/icu4c-oldData-makeCheck.txt
 # This process will take several minutes.
 # Keep a log so you can investigate anything that looks suspicious.
 #
+# Running "ant setup" is not required, but it will print useful errors to
+# debug issues with your path when it fails.
+#
 # If you see timeout errors when building the rbnf data, for example, then the
 # system you are building on likely does not have its IP address whitelisted with
 # Unicode for access to the CLDR repository, see note on "IP address whitelisting"
 # near the top of this file.
 
 cd $ICU4C_DIR/source/data
+ant setup
 ant clean
 ant all 2>&1 | tee /tmp/cldr-newData-buildLog.txt
 

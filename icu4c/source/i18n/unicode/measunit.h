@@ -838,6 +838,24 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getDay();
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns by pointer, unit of duration: day-person.
+     * Caller owns returned value and must free it.
+     * Also see {@link #getDayPerson()}.
+     * @param status ICU error code.
+     * @draft ICU 63
+     */
+    static MeasureUnit *createDayPerson(UErrorCode &status);
+
+    /**
+     * Returns by value, unit of duration: day-person.
+     * Also see {@link #createDayPerson()}.
+     * @draft ICU 64
+     */
+    static MeasureUnit getDayPerson();
+#endif /* U_HIDE_DRAFT_API */
+
     /**
      * Returns by pointer, unit of duration: hour.
      * Caller owns returned value and must free it.
@@ -918,6 +936,24 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getMonth();
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns by pointer, unit of duration: month-person.
+     * Caller owns returned value and must free it.
+     * Also see {@link #getMonthPerson()}.
+     * @param status ICU error code.
+     * @draft ICU 63
+     */
+    static MeasureUnit *createMonthPerson(UErrorCode &status);
+
+    /**
+     * Returns by value, unit of duration: month-person.
+     * Also see {@link #createMonthPerson()}.
+     * @draft ICU 64
+     */
+    static MeasureUnit getMonthPerson();
+#endif /* U_HIDE_DRAFT_API */
+
     /**
      * Returns by pointer, unit of duration: nanosecond.
      * Caller owns returned value and must free it.
@@ -966,6 +1002,24 @@ class U_I18N_API MeasureUnit: public UObject {
      */
     static MeasureUnit getWeek();
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns by pointer, unit of duration: week-person.
+     * Caller owns returned value and must free it.
+     * Also see {@link #getWeekPerson()}.
+     * @param status ICU error code.
+     * @draft ICU 63
+     */
+    static MeasureUnit *createWeekPerson(UErrorCode &status);
+
+    /**
+     * Returns by value, unit of duration: week-person.
+     * Also see {@link #createWeekPerson()}.
+     * @draft ICU 64
+     */
+    static MeasureUnit getWeekPerson();
+#endif /* U_HIDE_DRAFT_API */
+
     /**
      * Returns by pointer, unit of duration: year.
      * Caller owns returned value and must free it.
@@ -981,6 +1035,24 @@ class U_I18N_API MeasureUnit: public UObject {
      * @draft ICU 64
      */
     static MeasureUnit getYear();
+
+#ifndef U_HIDE_DRAFT_API
+    /**
+     * Returns by pointer, unit of duration: year-person.
+     * Caller owns returned value and must free it.
+     * Also see {@link #getYearPerson()}.
+     * @param status ICU error code.
+     * @draft ICU 63
+     */
+    static MeasureUnit *createYearPerson(UErrorCode &status);
+
+    /**
+     * Returns by value, unit of duration: year-person.
+     * Also see {@link #createYearPerson()}.
+     * @draft ICU 64
+     */
+    static MeasureUnit getYearPerson();
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns by pointer, unit of electric: ampere.

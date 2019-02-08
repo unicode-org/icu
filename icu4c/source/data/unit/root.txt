@@ -198,6 +198,7 @@ root{
                 other{"{0} d"}
                 per{"{0}/d"}
             }
+            day-person:alias{"/LOCALE/unitsShort/duration/day"}
             hour{
                 dnam{"hr"}
                 other{"{0} h"}
@@ -221,6 +222,7 @@ root{
                 other{"{0} m"}
                 per{"{0}/m"}
             }
+            month-person:alias{"/LOCALE/unitsShort/duration/month"}
             nanosecond{
                 dnam{"ns"}
                 other{"{0} ns"}
@@ -235,11 +237,13 @@ root{
                 other{"{0} w"}
                 per{"{0}/w"}
             }
+            week-person:alias{"/LOCALE/unitsShort/duration/week"}
             year{
                 dnam{"yr"}
                 other{"{0} y"}
                 per{"{0}/y"}
             }
+            year-person:alias{"/LOCALE/unitsShort/duration/year"}
         }
         electric{
             ampere{
