@@ -556,11 +556,14 @@ void ListFormatterTest::TestFormattedValue() {
         FormattedList result = fmt->formatStringsToValue(inputs, UPRV_LENGTHOF(inputs), status);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {
             // field, begin index, end index
+            {UFIELD_CATEGORY_LIST_SPAN, 0, 0, 5},
             {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 0, 5},
-            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 7, 16},
-            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 22, 27},
             {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 5, 7},
-            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 16, 22}};
+            {UFIELD_CATEGORY_LIST_SPAN, 1, 7, 16},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 7, 16},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 16, 22},
+            {UFIELD_CATEGORY_LIST_SPAN, 2, 22, 27},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 22, 27}};
         checkMixedFormattedValue(
             message,
             result,

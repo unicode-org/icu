@@ -147,11 +147,14 @@ static void TestUListFmtToValue() {
         assertSuccess("Formatting", &ec);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {
             // field, begin index, end index
+            {UFIELD_CATEGORY_LIST_SPAN, 0, 0, 5},
             {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 0, 5},
-            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 7, 16},
-            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 22, 27},
             {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 5, 7},
-            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 16, 22}};
+            {UFIELD_CATEGORY_LIST_SPAN, 1, 7, 16},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 7, 16},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 16, 22},
+            {UFIELD_CATEGORY_LIST_SPAN, 2, 22, 27},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 22, 27}};
         checkMixedFormattedValue(
             message,
             ulistfmt_resultAsValue(fl, &ec),
@@ -175,19 +178,26 @@ static void TestUListFmtToValue() {
         assertSuccess("Formatting", &ec);
         static const UFieldPositionWithCategory expectedFieldPositions[] = {
             // field, begin index, end index
+            {UFIELD_CATEGORY_LIST_SPAN, 0, 0,  1},
             {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 0,  1},
-            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 3,  4},
-            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 6,  7},
-            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 9,  10},
-            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 12, 13},
-            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 15, 16},
-            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 22, 23},
             {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 1,  3},
+            {UFIELD_CATEGORY_LIST_SPAN, 1, 3,  4},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 3,  4},
             {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 4,  6},
+            {UFIELD_CATEGORY_LIST_SPAN, 2, 6,  7},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 6,  7},
             {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 7,  9},
+            {UFIELD_CATEGORY_LIST_SPAN, 3, 9,  10},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 9,  10},
             {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 10, 12},
+            {UFIELD_CATEGORY_LIST_SPAN, 4, 12, 13},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 12, 13},
             {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 13, 15},
-            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 16, 22}};
+            {UFIELD_CATEGORY_LIST_SPAN, 5, 15, 16},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 15, 16},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_LITERAL_FIELD, 16, 22},
+            {UFIELD_CATEGORY_LIST_SPAN, 6, 22, 23},
+            {UFIELD_CATEGORY_LIST, ULISTFMT_ELEMENT_FIELD, 22, 23}};
         checkMixedFormattedValue(
             message,
             ulistfmt_resultAsValue(fl, &ec),

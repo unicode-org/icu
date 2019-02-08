@@ -114,6 +114,13 @@ ulistfmt_openResult(UErrorCode* ec);
  *
  * You can think of this method as a cast between types.
  *
+ * When calling ufmtval_nextPosition():
+ * The fields are returned from start to end. The special field category
+ * UFIELD_CATEGORY_LIST_SPAN is used to indicate which argument
+ * was inserted at the given position. The span category will
+ * always occur before the corresponding instance of UFIELD_CATEGORY_LIST
+ * in the ufmtval_nextPosition() iterator.
+ *
  * @param uresult The object containing the formatted string.
  * @param ec Set if an error occurs.
  * @return A UFormattedValue owned by the input object.
