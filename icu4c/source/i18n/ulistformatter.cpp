@@ -119,7 +119,7 @@ ulistfmt_format(const UListFormatter* listfmt,
 
 
 U_CAPI void U_EXPORT2
-ulistfmt_formatStringsToValue(
+ulistfmt_formatStringsToResult(
                 const UListFormatter* listfmt,
                 const UChar* const strings[],
                 const int32_t *    stringLengths,
