@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -16,12 +15,12 @@ import org.junit.runner.RunWith;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.locale.LocaleDistance;
-import com.ibm.icu.impl.locale.LocaleDistance.DistanceOption;
 import com.ibm.icu.impl.locale.XCldrStub.FileUtilities;
+import com.ibm.icu.impl.locale.XLikelySubtags;
 import com.ibm.icu.impl.locale.XLocaleMatcher;
+import com.ibm.icu.impl.locale.XLocaleMatcher.FavorSubtag;
 import com.ibm.icu.util.LocaleMatcher;
 import com.ibm.icu.util.LocalePriorityList;
-import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
 import junitparams.JUnitParamsRunner;
@@ -51,8 +50,9 @@ public class XLocaleMatcherTest extends TestFmwk {
     }
 
     @SuppressWarnings("unused")
-    private XLocaleMatcher newXLocaleMatcher(LocalePriorityList string, int d) {
-        return XLocaleMatcher.builder().setSupportedLocales(string).setThresholdDistance(d).build();
+    private XLocaleMatcher newXLocaleMatcher(LocalePriorityList list, int d) {
+        return XLocaleMatcher.builder().setSupportedULocales(list.getULocales()).
+                internalSetThresholdDistance(d).build();
     }
 
     //    public void testParentLocales() {
@@ -104,10 +104,6 @@ public class XLocaleMatcherTest extends TestFmwk {
 //    }
 
 
-    private void assertEquals(Object expected, Object string) {
-        assertEquals("", expected, string);
-    }
-
     /**
      * If all the base languages are the same, then each sublocale matches
      * itself most closely
@@ -139,40 +135,41 @@ public class XLocaleMatcherTest extends TestFmwk {
         check2(sorted);
     }
 
+    private static final ULocale posix = new ULocale("en_US_POSIX");
+
     /**
      * @param sorted
      */
     private void check2(Set<ULocale> sorted) {
-        // TODO Auto-generated method stub
         logln("Checking: " + sorted);
         XLocaleMatcher matcher = newXLocaleMatcher(
             LocalePriorityList.add(
                 sorted.toArray(new ULocale[sorted.size()]))
             .build());
         for (ULocale loc : sorted) {
-            String stringLoc = loc.toString();
-            assertEquals(stringLoc, matcher.getBestMatch(stringLoc).toString());
+            // The result may not be the exact same locale, but it must be equivalent.
+            // Variants and extensions are ignored.
+            if (loc.equals(posix)) { continue; }
+            ULocale max = ULocale.addLikelySubtags(loc);
+            ULocale best = matcher.getBestMatch(loc);
+            ULocale maxBest = ULocale.addLikelySubtags(best);
+            assertEquals(loc.toString(), max, maxBest);
         }
     }
 
     @Test
-    public void testComputeDistance_monkeyTest() {
-        String[] codes = ULocale.getISOCountries();
-        Random random = new Random();
-        XLocaleMatcher lm = newXLocaleMatcher();
-        for (int i = 0; i < 1000; ++i) {
-            String x = codes[random.nextInt(codes.length)];
-            String y = codes[random.nextInt(codes.length)];
-            double d = lm.distance(ULocale.forLanguageTag("xx-Xxxx-"+x), ULocale.forLanguageTag("xx-Xxxx-"+y));
-            if (x.equals("ZZ") || y.equals("ZZ")) {
-                assertEquals("dist(regionDistance," + x + ") = 0", REGION_DISTANCE, d);
-            } else if (x.equals(y)) {
-                assertEquals("dist(x,x) = 0", 0.0, d);
-            } else {
-                assertTrue("dist(" + x + "," + y + ") > 0", d > 0);
-                assertTrue("dist(" + x + "," + y + ") ≤ " + REGION_DISTANCE, d <= REGION_DISTANCE);
-            }
-        }
+    public void testDemotion() {
+        LocalePriorityList supported = LocalePriorityList.add("fr, de-CH, it").build();
+        LocalePriorityList desired = LocalePriorityList.add("fr-CH, de-CH, it").build();
+        XLocaleMatcher noDemotion = XLocaleMatcher.builder().
+                setSupportedULocales(supported.getULocales()).
+                setDemotionPerDesiredLocale(XLocaleMatcher.Demotion.NONE).build();
+        assertEquals("no demotion", new ULocale("de-CH"), noDemotion.getBestMatch(desired));
+
+        XLocaleMatcher regionDemotion = XLocaleMatcher.builder().
+                setSupportedULocales(supported.getULocales()).
+                setDemotionPerDesiredLocale(XLocaleMatcher.Demotion.REGION).build();
+        assertEquals("region demotion", ULocale.FRENCH, regionDemotion.getBestMatch(desired));
     }
 
     private static final class PerfCase {
@@ -304,9 +301,9 @@ public class XLocaleMatcherTest extends TestFmwk {
         for (PerfCase pc : pcs) {
             final ULocale desired = pc.desired;
 
-            assertEquals(pc.expectedShort, matcherShort.getBestMatch(desired));
-            assertEquals(pc.expectedLong, matcherLong.getBestMatch(desired));
-            assertEquals(pc.expectedVeryLong, matcherVeryLong.getBestMatch(desired));
+            assertEquals(desired.toString(), pc.expectedShort, matcherShort.getBestMatch(desired));
+            assertEquals(desired.toString(), pc.expectedLong, matcherLong.getBestMatch(desired));
+            assertEquals(desired.toString(), pc.expectedVeryLong, matcherVeryLong.getBestMatch(desired));
 
             timeXLocaleMatcher(desired, matcherShort, WARM_UP_ITERATIONS);
             timeXLocaleMatcher(desired, matcherLong, WARM_UP_ITERATIONS);
@@ -350,9 +347,11 @@ public class XLocaleMatcherTest extends TestFmwk {
                 String.format("timeLongNew=%d < %d%% of timeLongOld=%d",
                         timeLongNew, AVG_PCT_LONG_NEW_OLD, timeLongOld),
                 timeLongNew * 100 < timeLongOld * AVG_PCT_LONG_NEW_OLD);
+
+        maximizePerf();
     }
 
-    private long timeXLocaleMatcher(ULocale desired, XLocaleMatcher matcher, int iterations) {
+    private static long timeXLocaleMatcher(ULocale desired, XLocaleMatcher matcher, int iterations) {
         long start = System.nanoTime();
         for (int i = iterations; i > 0; --i) {
             matcher.getBestMatch(desired);
@@ -361,13 +360,44 @@ public class XLocaleMatcherTest extends TestFmwk {
         return (delta / iterations);
     }
 
-    private long timeLocaleMatcher(ULocale desired, LocaleMatcher matcher, int iterations) {
+    private static long timeLocaleMatcher(ULocale desired, LocaleMatcher matcher, int iterations) {
         long start = System.nanoTime();
         for (int i = iterations; i > 0; --i) {
             matcher.getBestMatch(desired);
         }
         long delta = System.nanoTime() - start;
         return (delta / iterations);
+    }
+
+    private void maximizePerf() {
+        final String tags = "af, am, ar, az, be, bg, bn, bs, ca, cs, cy, cy, da, de, " +
+                "el, en, en-GB, es, es-419, et, eu, fa, fi, fil, fr, ga, gl, gu, " +
+                "hi, hr, hu, hy, id, is, it, iw, ja, ka, kk, km, kn, ko, ky, lo, lt, lv, " +
+                "mk, ml, mn, mr, ms, my, ne, nl, no, pa, pl, pt, pt-PT, ro, ru, " +
+                "si, sk, sl, sq, sr, sr-Latn, sv, sw, ta, te, th, tr, uk, ur, uz, vi, " +
+                "zh-CN, zh-TW, zu";
+        LocalePriorityList list = LocalePriorityList.add(tags).build();
+        int few = 1000;
+        long t = timeMaximize(list, few);  // warm up
+        t = timeMaximize(list, few);  // measure for scale
+        long targetTime = 100000000L;  // 10^8 ns = 0.1s
+        int iterations = (int)((targetTime * few) / t);
+        t = timeMaximize(list, iterations);
+        int length = 0;
+        for (@SuppressWarnings("unused") ULocale locale : list) { ++length; }
+        System.out.println("maximize: " + (t / iterations / length) + " ns/locale: " +
+                t + " ns / " + iterations + " iterations / " + length + " locales");
+    }
+
+    // returns total ns not per iteration
+    private  static long timeMaximize(Iterable<ULocale> list, int iterations) {
+        long start = System.nanoTime();
+        for (int i = iterations; i > 0; --i) {
+            for (ULocale locale : list) {
+                XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(locale);
+            }
+        }
+        return System.nanoTime() - start;
     }
 
     private static final class TestCase implements Cloneable {
@@ -384,7 +414,7 @@ public class XLocaleMatcherTest extends TestFmwk {
 
         String supported = "";
         String def = "";
-        String distance = "";
+        String favor = "";
         String threshold = "";
         String desired = "";
         String expMatch = "";
@@ -405,12 +435,12 @@ public class XLocaleMatcherTest extends TestFmwk {
 
             supported = "";
             def = "";
-            distance = "";
+            favor = "";
             threshold = "";
         }
 
         String toInputsKey() {
-            return supported + '+' + def + '+' + distance + '+' + threshold + '+' + desired;
+            return supported + '+' + def + '+' + favor + '+' + threshold + '+' + desired;
         }
 
         private static void appendLine(StringBuilder sb, String line) {
@@ -471,9 +501,9 @@ public class XLocaleMatcherTest extends TestFmwk {
                 } else if ((suffix = getSuffixAfterPrefix(line, limit, "@default=")) != null) {
                     test.defaultLine = line;
                     test.def = suffix;
-                } else if ((suffix = getSuffixAfterPrefix(line, limit, "@distance=")) != null) {
+                } else if ((suffix = getSuffixAfterPrefix(line, limit, "@favor=")) != null) {
                     test.distanceLine = line;
-                    test.distance = suffix;
+                    test.favor = suffix;
                 } else if ((suffix = getSuffixAfterPrefix(line, limit, "@threshold=")) != null) {
                     test.thresholdLine = line;
                     test.threshold = suffix;
@@ -531,31 +561,31 @@ public class XLocaleMatcherTest extends TestFmwk {
     @Parameters(method = "readTestCases")
     public void dataDriven(TestCase test) {
         XLocaleMatcher matcher;
-        if (test.def.isEmpty() && test.distance.isEmpty() && test.threshold.isEmpty()) {
+        if (test.def.isEmpty() && test.favor.isEmpty() && test.threshold.isEmpty()) {
             matcher = new XLocaleMatcher(test.supported);
         } else {
             XLocaleMatcher.Builder builder = XLocaleMatcher.builder();
             builder.setSupportedLocales(test.supported);
             if (!test.def.isEmpty()) {
-                builder.setDefaultLanguage(new ULocale(test.def));
+                builder.setDefaultULocale(new ULocale(test.def));
             }
-            if (!test.distance.isEmpty()) {
-                DistanceOption distance;
-                switch (test.distance) {
+            if (!test.favor.isEmpty()) {
+                FavorSubtag favor;
+                switch (test.favor) {
                 case "normal":
-                    distance = DistanceOption.REGION_FIRST;
+                    favor = FavorSubtag.LANGUAGE;
                     break;
                 case "script":
-                    distance = DistanceOption.SCRIPT_FIRST;
+                    favor = FavorSubtag.SCRIPT;
                     break;
                 default:
-                    throw new IllegalArgumentException("unsupported distance value " + test.distance);
+                    throw new IllegalArgumentException("unsupported FavorSubtag value " + test.favor);
                 }
-                builder.setDistanceOption(distance);
+                builder.setFavorSubtag(favor);
             }
             if (!test.threshold.isEmpty()) {
                 int threshold = Integer.valueOf(test.threshold);
-                builder.setThresholdDistance(threshold);
+                builder.internalSetThresholdDistance(threshold);
             }
             matcher = builder.build();
         }
@@ -566,16 +596,15 @@ public class XLocaleMatcherTest extends TestFmwk {
             assertEquals("bestSupported", expMatch, bestSupported);
         } else {
             LocalePriorityList desired = LocalePriorityList.add(test.desired).build();
-            Output<ULocale> bestDesired = new Output<>();
-            ULocale bestSupported = matcher.getBestMatch(desired, bestDesired);
-            assertEquals("bestSupported", expMatch, bestSupported);
+            XLocaleMatcher.Result result = matcher.getBestMatchResult(desired);
+            assertEquals("bestSupported", expMatch, result.getSupportedULocale());
             if (!test.expDesired.isEmpty()) {
                 ULocale expDesired = getULocaleOrNull(test.expDesired);
-                assertEquals("bestDesired", expDesired, bestDesired.value);
+                assertEquals("bestDesired", expDesired, result.getDesiredULocale());
             }
             if (!test.expCombined.isEmpty()) {
                 ULocale expCombined = getULocaleOrNull(test.expCombined);
-                ULocale combined = XLocaleMatcher.combine(bestSupported, bestDesired.value);
+                ULocale combined = result.makeServiceULocale();
                 assertEquals("combined", expCombined, combined);
             }
         }

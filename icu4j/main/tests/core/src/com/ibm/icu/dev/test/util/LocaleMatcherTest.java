@@ -451,7 +451,7 @@ public class LocaleMatcherTest extends TestFmwk {
     @Test
     public void testExactMatches() {
         String lastBase = "";
-        TreeSet<ULocale> sorted = new TreeSet<ULocale>();
+        TreeSet<ULocale> sorted = new TreeSet<>();
         for (ULocale loc : ULocale.getAvailableLocales()) {
             String language = loc.getLanguage();
             if (!lastBase.equals(language)) {
@@ -650,10 +650,7 @@ public class LocaleMatcherTest extends TestFmwk {
         ULocale bulgarian = new ULocale("bg");
         ULocale russian = new ULocale("ru");
 
-        assertEquals("es-419/MX", 4, matcher.distance(new ULocale("es","419"), new ULocale("es","MX")));
-        assertEquals("es-ES/DE", 4, matcher.distance(new ULocale("es","DE"), new ULocale("es","ES")));
-
-        Output<ULocale> outputBestDesired = new Output<ULocale>();
+        Output<ULocale> outputBestDesired = new Output<>();
 
         ULocale best = matcher.getBestMatch(new LinkedHashSet(Arrays.asList(und, ULocale.GERMAN)), outputBestDesired);
         assertEquals(ULocale.ITALIAN, best);
