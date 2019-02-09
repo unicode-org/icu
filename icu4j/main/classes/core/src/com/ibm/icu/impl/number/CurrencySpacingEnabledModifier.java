@@ -2,6 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
+import java.text.Format.Field;
+
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.UnicodeSet;
@@ -122,7 +124,7 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
         // NOTE: For prefix, output.fieldAt(index-1) gets the last field type in the prefix.
         // This works even if the last code point in the prefix is 2 code units because the
         // field value gets populated to both indices in the field array.
-        NumberFormat.Field affixField = (affix == PREFIX) ? output.fieldAt(index - 1)
+        Field affixField = (affix == PREFIX) ? output.fieldAt(index - 1)
                 : output.fieldAt(index);
         if (affixField != NumberFormat.Field.CURRENCY) {
             return 0;

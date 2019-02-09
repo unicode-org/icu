@@ -34,6 +34,7 @@ import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralFormat;
 import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.text.RelativeDateTimeFormatter;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.text.SelectFormat;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -1791,6 +1792,21 @@ public class FormatHandler
         public Object[] getTestObjects()
         {
             return new Object[] {MessageFormat.Field.ARGUMENT};
+        }
+
+        @Override
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            return (a == b);
+        }
+    }
+
+    public static class RelativeDateTimeFormatterFieldHandler implements SerializableTestUtility.Handler
+    {
+        @Override
+        public Object[] getTestObjects()
+        {
+            return new Object[] {RelativeDateTimeFormatter.Field.LITERAL};
         }
 
         @Override

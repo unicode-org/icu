@@ -51,7 +51,7 @@ void ConstrainedFieldPosition::setState(
     fLimit = limit;
 }
 
-UBool ConstrainedFieldPosition::matchesField(UFieldCategory category, int32_t field) {
+UBool ConstrainedFieldPosition::matchesField(int32_t category, int32_t field) {
     switch (fConstraint) {
     case UCFPOS_CONSTRAINT_NONE:
         return TRUE;

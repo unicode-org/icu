@@ -5,15 +5,14 @@ package com.ibm.icu.impl.number;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
 import java.text.FieldPosition;
+import java.text.Format.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.ibm.icu.impl.StaticUnicodeSets;
 import com.ibm.icu.text.ConstrainedFieldPosition;
-import com.ibm.icu.text.ConstrainedFieldPosition.ConstraintType;
 import com.ibm.icu.text.NumberFormat;
-import com.ibm.icu.text.NumberFormat.Field;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
@@ -521,7 +520,7 @@ public class NumberStringBuilder implements CharSequence {
         ConstrainedFieldPosition cfpos = new ConstrainedFieldPosition();
         cfpos.constrainField(rawField);
         cfpos.setState(rawField, null, fp.getBeginIndex(), fp.getEndIndex());
-        if (nextPosition(cfpos)) {
+        if (nextPosition(cfpos, null)) {
             fp.setBeginIndex(cfpos.getStart());
             fp.setEndIndex(cfpos.getLimit());
             return true;
@@ -545,28 +544,38 @@ public class NumberStringBuilder implements CharSequence {
         return false;
     }
 
-    public AttributedCharacterIterator toCharacterIterator() {
+    public AttributedCharacterIterator toCharacterIterator(Field numericField) {
         ConstrainedFieldPosition cfpos = new ConstrainedFieldPosition();
         AttributedString as = new AttributedString(toString());
-        while (this.nextPosition(cfpos)) {
+        while (this.nextPosition(cfpos, numericField)) {
             // Backwards compatibility: field value = field
             as.addAttribute(cfpos.getField(), cfpos.getField(), cfpos.getStart(), cfpos.getLimit());
         }
         return as.getIterator();
     }
 
-    public boolean nextPosition(ConstrainedFieldPosition cfpos) {
-        if (cfpos.getConstraintType() == ConstraintType.CLASS
-                && !cfpos.getClassConstraint().isAssignableFrom(NumberFormat.Field.class)) {
-            return false;
+    static class NullField extends Field {
+        private static final long serialVersionUID = 1L;
+        static final NullField END = new NullField("end");
+        private NullField(String name) {
+            super(name);
         }
+    }
 
-        boolean isSearchingForField = (cfpos.getConstraintType() == ConstraintType.FIELD);
-
+    /**
+     * Implementation of nextPosition consistent with the contract of FormattedValue.
+     *
+     * @param cfpos
+     *            The argument passed to the public API.
+     * @param numericField
+     *            Optional. If non-null, apply this field to the entire numeric portion of the string.
+     * @return See FormattedValue#nextPosition.
+     */
+    public boolean nextPosition(ConstrainedFieldPosition cfpos, Field numericField) {
         int fieldStart = -1;
         Field currField = null;
         for (int i = zero + cfpos.getLimit(); i <= zero + length; i++) {
-            Field _field = (i < zero + length) ? fields[i] : null;
+            Field _field = (i < zero + length) ? fields[i] : NullField.END;
             // Case 1: currently scanning a field.
             if (currField != null) {
                 if (currField != _field) {
@@ -592,9 +601,10 @@ public class NumberStringBuilder implements CharSequence {
                 continue;
             }
             // Special case: coalesce the INTEGER if we are pointing at the end of the INTEGER.
-            if ((!isSearchingForField || cfpos.getField() == NumberFormat.Field.INTEGER)
+            if (cfpos.matchesField(NumberFormat.Field.INTEGER)
                     && i > zero
-                    && i - zero > cfpos.getLimit()  // don't return the same field twice in a row
+                    // don't return the same field twice in a row:
+                    && i - zero > cfpos.getLimit()
                     && isIntOrGroup(fields[i - 1])
                     && !isIntOrGroup(_field)) {
                 int j = i - 1;
@@ -602,16 +612,29 @@ public class NumberStringBuilder implements CharSequence {
                 cfpos.setState(NumberFormat.Field.INTEGER, null, j - zero + 1, i - zero);
                 return true;
             }
+            // Special case: coalesce NUMERIC if we are pointing at the end of the NUMERIC.
+            if (numericField != null
+                    && cfpos.matchesField(numericField)
+                    && i > zero
+                    // don't return the same field twice in a row:
+                    && (i - zero > cfpos.getLimit() || cfpos.getField() != numericField)
+                    && isNumericField(fields[i - 1])
+                    && !isNumericField(_field)) {
+                int j = i - 1;
+                for (; j >= zero && isNumericField(fields[j]); j--) {}
+                cfpos.setState(numericField, null, j - zero + 1, i - zero);
+                return true;
+            }
             // Special case: skip over INTEGER; will be coalesced later.
             if (_field == NumberFormat.Field.INTEGER) {
                 _field = null;
             }
             // Case 2: no field starting at this position.
-            if (_field == null) {
+            if (_field == null || _field == NullField.END) {
                 continue;
             }
             // Case 3: check for field starting at this position
-            if (!isSearchingForField || cfpos.getField() == _field) {
+            if (cfpos.matchesField(_field)) {
                 fieldStart = i - zero;
                 currField = _field;
             }
@@ -621,8 +644,12 @@ public class NumberStringBuilder implements CharSequence {
         return false;
     }
 
-    private static boolean isIntOrGroup(NumberFormat.Field field) {
+    private static boolean isIntOrGroup(Field field) {
         return field == NumberFormat.Field.INTEGER || field == NumberFormat.Field.GROUPING_SEPARATOR;
+    }
+
+    private static boolean isNumericField(Field field) {
+        return field == null || NumberFormat.Field.class.isAssignableFrom(field.getClass());
     }
 
     private int trimBack(int limit) {

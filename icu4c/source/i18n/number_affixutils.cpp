@@ -131,25 +131,25 @@ UnicodeString AffixUtils::escape(const UnicodeString &input) {
 Field AffixUtils::getFieldForType(AffixPatternType type) {
     switch (type) {
         case TYPE_MINUS_SIGN:
-            return Field::UNUM_SIGN_FIELD;
+            return UNUM_SIGN_FIELD;
         case TYPE_PLUS_SIGN:
-            return Field::UNUM_SIGN_FIELD;
+            return UNUM_SIGN_FIELD;
         case TYPE_PERCENT:
-            return Field::UNUM_PERCENT_FIELD;
+            return UNUM_PERCENT_FIELD;
         case TYPE_PERMILLE:
-            return Field::UNUM_PERMILL_FIELD;
+            return UNUM_PERMILL_FIELD;
         case TYPE_CURRENCY_SINGLE:
-            return Field::UNUM_CURRENCY_FIELD;
+            return UNUM_CURRENCY_FIELD;
         case TYPE_CURRENCY_DOUBLE:
-            return Field::UNUM_CURRENCY_FIELD;
+            return UNUM_CURRENCY_FIELD;
         case TYPE_CURRENCY_TRIPLE:
-            return Field::UNUM_CURRENCY_FIELD;
+            return UNUM_CURRENCY_FIELD;
         case TYPE_CURRENCY_QUAD:
-            return Field::UNUM_CURRENCY_FIELD;
+            return UNUM_CURRENCY_FIELD;
         case TYPE_CURRENCY_QUINT:
-            return Field::UNUM_CURRENCY_FIELD;
+            return UNUM_CURRENCY_FIELD;
         case TYPE_CURRENCY_OVERFLOW:
-            return Field::UNUM_CURRENCY_FIELD;
+            return UNUM_CURRENCY_FIELD;
         default:
             UPRV_UNREACHABLE;
     }

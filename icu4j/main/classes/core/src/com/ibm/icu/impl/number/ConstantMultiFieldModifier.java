@@ -2,9 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
+import java.text.Format.Field;
 import java.util.Arrays;
-
-import com.ibm.icu.text.NumberFormat.Field;
 
 /**
  * An implementation of {@link Modifier} that allows for multiple types of fields in the same modifier.

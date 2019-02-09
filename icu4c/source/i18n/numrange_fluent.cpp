@@ -435,7 +435,7 @@ UBool FormattedNumberRange::nextPosition(ConstrainedFieldPosition& cfpos, UError
         return FALSE;
     }
     // NOTE: MSVC sometimes complains when implicitly converting between bool and UBool
-    return fResults->string.nextPosition(cfpos, status) ? TRUE : FALSE;
+    return fResults->string.nextPosition(cfpos, 0, status) ? TRUE : FALSE;
 }
 
 UBool FormattedNumberRange::nextFieldPosition(FieldPosition& fieldPosition, UErrorCode& status) const {

@@ -133,6 +133,13 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
         return new LocalizedNumberFormatterAsFormat(this, resolve().loc);
     }
 
+    /** Helper method that creates a NumberStringBuilder and formats. */
+    private FormattedNumber format(DecimalQuantity fq) {
+        NumberStringBuilder string = new NumberStringBuilder();
+        formatImpl(fq, string);
+        return new FormattedNumber(string, fq);
+    }
+
     /**
      * This is the core entrypoint to the number formatting pipeline. It performs self-regulation: a
      * static code path for the first few calls, and compiling a more efficient data structure if called
@@ -143,20 +150,19 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      *
      * @param fq
      *            The quantity to be formatted.
-     * @return The formatted number result.
+     * @param string
+     *            The string builder into which to insert the result.
      *
      * @internal
      * @deprecated ICU 60 This API is ICU internal only.
      */
     @Deprecated
-    public FormattedNumber format(DecimalQuantity fq) {
-        NumberStringBuilder string = new NumberStringBuilder();
+    public void formatImpl(DecimalQuantity fq, NumberStringBuilder string) {
         if (computeCompiled()) {
             compiled.format(fq, string);
         } else {
             NumberFormatterImpl.formatStatic(resolve(), fq, string);
         }
-        return new FormattedNumber(string, fq);
     }
 
     /**

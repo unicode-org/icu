@@ -2009,6 +2009,10 @@ public abstract class NumberFormat extends UFormat {
                 return PERMILLE;
             if (this.getName().equals(SIGN.getName()))
                 return SIGN;
+            if (this.getName().equals(MEASURE_UNIT.getName()))
+                return MEASURE_UNIT;
+            if (this.getName().equals(COMPACT.getName()))
+                return COMPACT;
 
             throw new InvalidObjectException("An invalid object.");
         }

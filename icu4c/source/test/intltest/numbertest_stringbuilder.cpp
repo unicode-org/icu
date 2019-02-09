@@ -184,8 +184,8 @@ void NumberStringBuilderTest::testFields() {
         assertSuccess("Appending to sb", status);
         assertEquals("Reference string copied twice", str.length() * 2, sb.length());
         for (int32_t i = 0; i < str.length(); i++) {
-            assertEquals("Null field first", UNUM_FIELD_COUNT, sb.fieldAt(i));
-            assertEquals("Currency field second", UNUM_CURRENCY_FIELD, sb.fieldAt(i + str.length()));
+            assertEquals("Null field first", (Field) UNUM_FIELD_COUNT, sb.fieldAt(i));
+            assertEquals("Currency field second", (Field) UNUM_CURRENCY_FIELD, sb.fieldAt(i + str.length()));
         }
 
         // Very basic FieldPosition test. More robust tests happen in NumberFormatTest.
@@ -200,7 +200,7 @@ void NumberStringBuilderTest::testFields() {
             sb.insertCodePoint(2, 100, UNUM_INTEGER_FIELD, status);
             assertSuccess("Inserting code point into sb", status);
             assertEquals("New length", str.length() * 2 + 1, sb.length());
-            assertEquals("Integer field", UNUM_INTEGER_FIELD, sb.fieldAt(2));
+            assertEquals("Integer field", (Field) UNUM_INTEGER_FIELD, sb.fieldAt(2));
         }
 
         NumberStringBuilder old(sb);
@@ -210,7 +210,7 @@ void NumberStringBuilderTest::testFields() {
         int32_t numCurr = 0;
         int32_t numInt = 0;
         for (int32_t i = 0; i < sb.length(); i++) {
-            UNumberFormatFields field = sb.fieldAt(i);
+            Field field = sb.fieldAt(i);
             assertEquals("Field should equal location in old", old.fieldAt(i % old.length()), field);
             if (field == UNUM_FIELD_COUNT) {
                 numNull++;

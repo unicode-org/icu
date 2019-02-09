@@ -2,8 +2,9 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
+import java.text.Format.Field;
+
 import com.ibm.icu.impl.StandardPlural;
-import com.ibm.icu.text.NumberFormat.Field;
 
 /**
  * A Modifier is an object that can be passed through the formatting pipeline until it is finally applied

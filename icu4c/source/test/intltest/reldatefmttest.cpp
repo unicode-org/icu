@@ -22,7 +22,9 @@
 #include "unicode/localpointer.h"
 #include "unicode/numfmt.h"
 #include "unicode/reldatefmt.h"
+#include "unicode/rbnf.h"
 #include "cmemory.h"
+#include "itformat.h"
 
 static const char *DirectionStr(UDateDirection direction);
 static const char *RelativeUnitStr(UDateRelativeUnit unit);
@@ -741,7 +743,7 @@ static WithQuantityExpectedRelativeDateTimeUnit kEnglishFormat[] = {
 };
 
 
-class RelativeDateTimeFormatterTest : public IntlTest {
+class RelativeDateTimeFormatterTest : public IntlTestWithFieldPosition {
 public:
     RelativeDateTimeFormatterTest() {
     }
@@ -768,6 +770,9 @@ private:
     void TestFormat();
     void TestFormatNumeric();
     void TestLocales();
+    void TestFields();
+    void TestRBNF();
+
     void RunTest(
             const Locale& locale,
             const WithQuantityExpected* expectedResults,
@@ -858,6 +863,8 @@ void RelativeDateTimeFormatterTest::runIndexedTest(
     TESTCASE_AUTO(TestFormat);
     TESTCASE_AUTO(TestFormatNumeric);
     TESTCASE_AUTO(TestLocales);
+    TESTCASE_AUTO(TestFields);
+    TESTCASE_AUTO(TestRBNF);
     TESTCASE_AUTO_END;
 }
 
@@ -1310,6 +1317,137 @@ void RelativeDateTimeFormatterTest::TestLocales() {
         std::unique_ptr<RelativeDateTimeFormatter> rdtf(new RelativeDateTimeFormatter(loc, status));
         allFormatters.push_back(std::move(rdtf));
         assertSuccess(loc.getName(), status);
+    }
+}
+
+void RelativeDateTimeFormatterTest::TestFields() {
+    IcuTestErrorCode status(*this, "TestFields");
+
+    RelativeDateTimeFormatter fmt("en-US", status);
+
+    {
+        const char16_t* message = u"automatic absolute unit";
+        FormattedRelativeDateTime fv = fmt.formatToValue(1, UDAT_REL_UNIT_DAY, status);
+        const char16_t* expectedString = u"tomorrow";
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_LITERAL_FIELD, 0, 8}};
+        checkMixedFormattedValue(
+            message,
+            fv,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+    {
+        const char16_t* message = u"automatic numeric unit";
+        FormattedRelativeDateTime fv = fmt.formatToValue(3, UDAT_REL_UNIT_DAY, status);
+        const char16_t* expectedString = u"in 3 days";
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_LITERAL_FIELD, 0, 2},
+            {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, 3, 4},
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_NUMERIC_FIELD, 3, 4},
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_LITERAL_FIELD, 5, 9}};
+        checkMixedFormattedValue(
+            message,
+            fv,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+    {
+        const char16_t* message = u"manual absolute unit";
+        FormattedRelativeDateTime fv = fmt.formatToValue(UDAT_DIRECTION_NEXT, UDAT_ABSOLUTE_MONDAY, status);
+        const char16_t* expectedString = u"next Monday";
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_LITERAL_FIELD, 0, 11}};
+        checkMixedFormattedValue(
+            message,
+            fv,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+    {
+        const char16_t* message = u"manual numeric unit";
+        FormattedRelativeDateTime fv = fmt.formatNumericToValue(1.5, UDAT_REL_UNIT_WEEK, status);
+        const char16_t* expectedString = u"in 1.5 weeks";
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_LITERAL_FIELD, 0, 2},
+            {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, 3, 4},
+            {UFIELD_CATEGORY_NUMBER, UNUM_DECIMAL_SEPARATOR_FIELD, 4, 5},
+            {UFIELD_CATEGORY_NUMBER, UNUM_FRACTION_FIELD, 5, 6},
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_NUMERIC_FIELD, 3, 6},
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_LITERAL_FIELD, 7, 12}};
+        checkMixedFormattedValue(
+            message,
+            fv,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+    {
+        const char16_t* message = u"manual numeric resolved unit";
+        FormattedRelativeDateTime fv = fmt.formatToValue(12, UDAT_DIRECTION_LAST, UDAT_RELATIVE_HOURS, status);
+        const char16_t* expectedString = u"12 hours ago";
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, 0, 2},
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_NUMERIC_FIELD, 0, 2},
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_LITERAL_FIELD, 3, 12}};
+        checkMixedFormattedValue(
+            message,
+            fv,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+
+    // Test when the number field is at the end
+    fmt = RelativeDateTimeFormatter("sw", status);
+    {
+        const char16_t* message = u"numeric field at end";
+        FormattedRelativeDateTime fv = fmt.formatToValue(12, UDAT_REL_UNIT_HOUR, status);
+        const char16_t* expectedString = u"baada ya saa 12";
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_LITERAL_FIELD, 0, 12},
+            {UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, 13, 15},
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_NUMERIC_FIELD, 13, 15}};
+        checkMixedFormattedValue(
+            message,
+            fv,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+}
+
+void RelativeDateTimeFormatterTest::TestRBNF() {
+    IcuTestErrorCode status(*this, "TestRBNF");
+
+    LocalPointer<RuleBasedNumberFormat> rbnf(new RuleBasedNumberFormat(URBNF_SPELLOUT, "en-us", status));
+    RelativeDateTimeFormatter fmt("en-us", rbnf.orphan(), status);
+    UnicodeString result;
+    assertEquals("format (direction)", "in five seconds",
+        fmt.format(5, UDAT_DIRECTION_NEXT, UDAT_RELATIVE_SECONDS, result, status));
+    assertEquals("formatNumeric", "one week ago",
+        fmt.formatNumeric(-1, UDAT_REL_UNIT_WEEK, result.remove(), status));
+    assertEquals("format (absolute)", "yesterday",
+        fmt.format(UDAT_DIRECTION_LAST, UDAT_ABSOLUTE_DAY, result.remove(), status));
+    assertEquals("format (relative)", "in forty-two months",
+        fmt.format(42, UDAT_REL_UNIT_MONTH, result.remove(), status));
+
+    {
+        const char16_t* message = u"formatToValue (relative)";
+        FormattedRelativeDateTime fv = fmt.formatToValue(-100, UDAT_REL_UNIT_YEAR, status);
+        const char16_t* expectedString = u"one hundred years ago";
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_NUMERIC_FIELD, 0, 11},
+            {UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_LITERAL_FIELD, 12, 21}};
+        checkMixedFormattedValue(
+            message,
+            fv,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
     }
 }
 

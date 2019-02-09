@@ -222,7 +222,7 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
         int32_t limit);
 
     /** @internal */
-    UBool matchesField(UFieldCategory category, int32_t field);
+    UBool matchesField(int32_t category, int32_t field);
 
   private:
     int64_t fContext = 0LL;
