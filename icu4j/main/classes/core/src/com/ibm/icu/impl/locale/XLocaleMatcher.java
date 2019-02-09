@@ -3,198 +3,485 @@
 package com.ibm.icu.impl.locale;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
-import com.ibm.icu.impl.locale.LocaleDistance.DistanceOption;
 import com.ibm.icu.util.LocalePriorityList;
-import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
 /**
- * Immutable class that picks best match between user's desired locales and application's supported locales.
+ * Immutable class that picks the best match between a user's desired locales and
+ * and application's supported locales.
+ *
+ * <p>If there are multiple supported locales with the same (language, script, region)
+ * likely subtags, then the current implementation returns the first of those locales.
+ * It ignores variant subtags (except for pseudolocale variants) and extensions.
+ * This may change in future versions.
+ *
+ * <p>For example, the current implementation does not distinguish between
+ * de, de-DE, de-Latn, de-1901, de-u-co-phonebk.
+ *
+ * <p>If you prefer one equivalent locale over another, then provide only the preferred one,
+ * or place it earlier in the list of supported locales.
+ *
+ * <p>Otherwise, the order of supported locales may have no effect on the best-match results.
+ * The current implementation compares each desired locale with supported locales
+ * in the following order:
+ * 1. Default locale, if supported;
+ * 2. CLDR "paradigm locales" like en-GB and es-419;
+ * 3. other supported locales.
+ * This may change in future versions.
+ *
+ * <p>TODO: Migration notes.
+ *
  * @author markdavis
  */
 public final class XLocaleMatcher {
     private static final LSR UND_LSR = new LSR("und","","");
-    private static final ULocale UND_LOCALE = new ULocale("und");
-    private static final Iterator<ULocale> NULL_ITERATOR = null;
+    private static final ULocale UND_ULOCALE = new ULocale("und");
+    private static final Locale UND_LOCALE = new Locale("und");
 
     // Activates debugging output to stderr with details of GetBestMatch.
     private static final boolean TRACE_MATCHER = false;
 
-    // List of indexes, optimized for one or two.
-    private static final class Indexes {
-        // Some indexes without further object creation and auto-boxing.
-        int first, second = -1;
-        // We could turn the List into an int array + length and manage its growth.
-        List<Integer> remaining;
+    private static abstract class LsrIterator implements Iterator<LSR> {
+        int bestDesiredIndex = -1;
 
-        Indexes(int firstIndex) {
-            first = firstIndex;
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
         }
-        void add(int i) {
-            if (second < 0) {
-                second = i;
-            } else {
-                if (remaining == null) {
-                    remaining = new ArrayList<>();
-                }
-                remaining.add(i);
-            }
-        }
-        int getFirst() { return first; }
-        int get(int i) {  // returns -1 when i >= length
-            if (i == 0) {
-                return first;
-            } else if (i == 1) {
-                return second;
-            } else if (remaining != null && (i -= 2) < remaining.size()) {
-                return remaining.get(i);
-            } else {
-                return -1;
-            }
-        }
+
+        public abstract void rememberCurrent(int desiredIndex);
     }
 
-    // TODO: Make public, and add public methods that return it.
-    private static final class Result {
-        private Result(ULocale desired, ULocale supported,
-                /* Locale jdesired, */ Locale jsupported,
+    /**
+     * Builder option for whether the language subtag or the script subtag is most important.
+     *
+     * @see Builder#setFavorSubtag(FavorSubtag)
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public enum FavorSubtag {
+        /**
+         * Language differences are most important, then script differences, then region differences.
+         * (This is the default behavior.)
+         *
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        LANGUAGE,
+        /**
+         * Makes script differences matter relatively more than language differences.
+         *
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        SCRIPT
+    }
+
+    /**
+     * Builder option for whether all desired locales are treated equally or
+     * earlier ones are preferred.
+     *
+     * @see Builder#setDemotionPerDesiredLocale(Demotion)
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public enum Demotion {
+        /**
+         * All desired locales are treated equally.
+         *
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        NONE,
+        /**
+         * Earlier desired locales are preferred.
+         *
+         * <p>From each desired locale to the next,
+         * the distance to any supported locale is increased by an additional amount
+         * which is at least as large as most region mismatches.
+         * A later desired locale has to have a better match with some supported locale
+         * due to more than merely having the same region subtag.
+         *
+         * <p>For example: <code>Supported={en, sv}  desired=[en-GB, sv]</code>
+         * yields <code>Result(en-GB, en)</code> because
+         * with the demotion of sv its perfect match is no better than
+         * the region distance between the earlier desired locale en-GB and en=en-US.
+         *
+         * <p>Notes:
+         * <ul>
+         *   <li>In some cases, language and/or script differences can be as small as
+         *       the typical region difference. (Example: sr-Latn vs. sr-Cyrl)
+         *   <li>It is possible for certain region differences to be larger than usual,
+         *       and larger than the demotion.
+         *       (As of CLDR 35 there is no such case, but
+         *        this is possible in future versions of the data.)
+         * </ul>
+         *
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        REGION
+    }
+
+    /**
+     * Data for the best-matching pair of a desired and a supported locale.
+     *
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final class Result {
+        private final ULocale desiredULocale;
+        private final ULocale supportedULocale;
+        private final Locale desiredLocale;
+        private final Locale supportedLocale;
+        private final int desiredIndex;
+        private final int supportedIndex;
+
+        private Result(ULocale udesired, ULocale usupported,
+                Locale desired, Locale supported,
                 int desIndex, int suppIndex) {
+            desiredULocale = udesired;
+            supportedULocale = usupported;
             desiredLocale = desired;
             supportedLocale = supported;
-            // desiredJavaLocale = jdesired;
-            supportedJavaLocale = jsupported;
             desiredIndex = desIndex;
             supportedIndex = suppIndex;
         }
 
-        ULocale desiredLocale;
-        ULocale supportedLocale;
-        // Locale desiredJavaLocale;
-        Locale supportedJavaLocale;
-        int desiredIndex;
-        @SuppressWarnings("unused")  // unused until public, for other wrappers
-        int supportedIndex;
+        /**
+         * Returns the best-matching desired locale.
+         * null if the list of desired locales is empty or if none matched well enough.
+         *
+         * @return the best-matching desired locale, or null.
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public ULocale getDesiredULocale() {
+            return desiredULocale == null && desiredLocale != null ?
+                    ULocale.forLocale(desiredLocale) : desiredULocale;
+        }
+        /**
+         * Returns the best-matching desired locale.
+         * null if the list of desired locales is empty or if none matched well enough.
+         *
+         * @return the best-matching desired locale, or null.
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Locale getDesiredLocale() {
+            return desiredLocale == null && desiredULocale != null ?
+                    desiredULocale.toLocale() : desiredLocale;
+        }
+
+        /**
+         * Returns the best-matching supported locale.
+         * If none matched well enough, this is the default locale.
+         * The default locale is null if the list of supported locales is empty and
+         * no explicit default locale is set.
+         *
+         * @return the best-matching supported locale, or null.
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public ULocale getSupportedULocale() { return supportedULocale; }
+        /**
+         * Returns the best-matching supported locale.
+         * If none matched well enough, this is the default locale.
+         * The default locale is null if the list of supported locales is empty and
+         * no explicit default locale is set.
+         *
+         * @return the best-matching supported locale, or null.
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Locale getSupportedLocale() { return supportedLocale; }
+
+        /**
+         * Returns the index of the best-matching desired locale in the input Iterable order.
+         * -1 if the list of desired locales is empty or if none matched well enough.
+         *
+         * @return the index of the best-matching desired locale, or -1.
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public int getDesiredIndex() { return desiredIndex; }
+
+        /**
+         * Returns the index of the best-matching supported locale in the constructor’s or builder’s input order
+         * (“set” Collection plus “added” locales).
+         * If the matcher was built from a locale list string, then the iteration order is that
+         * of a LocalePriorityList built from the same string.
+         * -1 if the list of supported locales is empty or if none matched well enough.
+         *
+         * @return the index of the best-matching supported locale, or -1.
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public int getSupportedIndex() { return supportedIndex; }
+
+        /**
+         * Takes the best-matching supported locale and adds relevant fields of the
+         * best-matching desired locale, such as the -t- and -u- extensions.
+         * May replace some fields of the supported locale.
+         * The result is the locale that should be used for date and number formatting, collation, etc.
+         *
+         * <p>Example: desired=ar-SA-u-nu-latn, supported=ar-EG, service locale=ar-EG-u-nu-latn
+         *
+         * @return the service locale, combining the best-matching desired and supported locales.
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public ULocale makeServiceULocale() {
+            ULocale bestDesired = getDesiredULocale();
+            ULocale serviceLocale = supportedULocale;
+            if (!serviceLocale.equals(bestDesired) && bestDesired != null) {
+                ULocale.Builder b = new ULocale.Builder().setLocale(serviceLocale);
+
+                // Copy the region from bestDesired, if there is one.
+                // TODO: Seems wrong to clobber serviceLocale.getCountry() if that is not empty.
+                String region = bestDesired.getCountry();
+                if (!region.isEmpty()) {
+                    b.setRegion(region);
+                }
+
+                // Copy the variants from bestDesired, if there are any.
+                // Note that this will override any serviceLocale variants.
+                // For example, "sco-ulster-fonipa" + "...-fonupa" => "sco-fonupa" (replacing ulster).
+                // TODO: Why replace? Why not append?
+                String variants = bestDesired.getVariant();
+                if (!variants.isEmpty()) {
+                    b.setVariant(variants);
+                }
+
+                // Copy the extensions from bestDesired, if there are any.
+                // Note that this will override any serviceLocale extensions.
+                // For example, "th-u-nu-latn-ca-buddhist" + "...-u-nu-native" => "th-u-nu-native"
+                // (replacing calendar).
+                // TODO: Maybe enumerate -u- keys to not replace others in the serviceLocale??
+                //       (Unsure about this one.)
+                for (char extensionKey : bestDesired.getExtensionKeys()) {
+                    b.setExtension(extensionKey, bestDesired.getExtension(extensionKey));
+                }
+                serviceLocale = b.build();
+            }
+            return serviceLocale;
+        }
+
+        /**
+         * Takes the best-matching supported locale and adds relevant fields of the
+         * best-matching desired locale, such as the -t- and -u- extensions.
+         * May replace some fields of the supported locale.
+         * The result is the locale that should be used for date and number formatting, collation, etc.
+         *
+         * <p>Example: desired=ar-SA-u-nu-latn, supported=ar-EG, service locale=ar-EG-u-nu-latn
+         *
+         * @return the service locale, combining the best-matching desired and supported locales.
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Locale makeServiceLocale() {
+            return makeServiceULocale().toLocale();
+        }
     }
 
-    // normally the default values, but can be set via constructor
-
     private final int thresholdDistance;
-    private final int demotionPerAdditionalDesiredLocale;
-    private final DistanceOption distanceOption;
+    private final int demotionPerDesiredLocale;
+    private final FavorSubtag favorSubtag;
 
-    // built based on application's supported languages in constructor
-
-    private final ULocale[] supportedLocales;
-    private final Locale[] supportedJavaLocales;
-    private final Map<ULocale, Integer> supportedToIndex;
-    private final Map<LSR, Indexes> supportedLsrToIndexes;
-    // Array versions of the supportedLsrToIndexes keys and values.
+    // These are in input order.
+    private final ULocale[] supportedULocales;
+    private final Locale[] supportedLocales;
+    // These are in preference order: 1. Default locale 2. paradigm locales 3. others.
+    private final Map<LSR, Integer> supportedLsrToIndex;
+    // Array versions of the supportedLsrToIndex keys and values.
     // The distance lookup loops over the supportedLsrs and returns the index of the best match.
     private final LSR[] supportedLsrs;
-    private final Indexes[] supportedIndexes;
-    private final ULocale defaultLocale;
-    private final Locale defaultJavaLocale;
+    private final int[] supportedIndexes;
+    private final ULocale defaultULocale;
+    private final Locale defaultLocale;
     private final int defaultLocaleIndex;
 
+    /**
+     * LocaleMatcher Builder.
+     *
+     * @see XLocaleMatcher#builder()
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
     public static class Builder {
-        /**
-         * Supported locales. A Set, to avoid duplicates.
-         * Maintains iteration order for consistent matching behavior (first best match wins).
-         */
-        private Set<ULocale> supportedLocales;
+        private List<ULocale> supportedLocales;
         private int thresholdDistance = -1;
-        private int demotionPerAdditionalDesiredLocale = -1;;
+        private Demotion demotion;
         private ULocale defaultLocale;
-        private DistanceOption distanceOption;
+        private FavorSubtag favor;
+
         /**
+         * Parses the string like {@link LocalePriorityList} does and
+         * sets the supported locales accordingly.
+         * Clears any previously set/added supported locales first.
+         *
          * @param locales the languagePriorityList to set
          * @return this Builder object
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
          */
         public Builder setSupportedLocales(String locales) {
-            return setSupportedLocales(LocalePriorityList.add(locales).build());
+            return setSupportedULocales(LocalePriorityList.add(locales).build().getULocales());
         }
-        public Builder setSupportedLocales(Iterable<ULocale> locales) {
-            supportedLocales = new LinkedHashSet<>(); // maintain order
-            for (ULocale locale : locales) {
-                supportedLocales.add(locale);
-            }
+
+        /**
+         * Copies the supported locales, preserving iteration order.
+         * Clears any previously set/added supported locales first.
+         * Duplicates are allowed, and are not removed.
+         *
+         * @param locales the list of locale
+         * @return this Builder object
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder setSupportedULocales(Collection<ULocale> locales) {
+            supportedLocales = new ArrayList<>(locales);
             return this;
         }
-        public Builder setSupportedLocales(Collection<ULocale> locales) {
-            supportedLocales = new LinkedHashSet<>(locales); // maintain order
-            return this;
-        }
-        public Builder setSupportedJavaLocales(Collection<Locale> locales) {
-            supportedLocales = new LinkedHashSet<>(locales.size()); // maintain order
+
+        /**
+         * Copies the supported locales, preserving iteration order.
+         * Clears any previously set/added supported locales first.
+         * Duplicates are allowed, and are not removed.
+         *
+         * @param locales the list of locale
+         * @return this Builder object
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder setSupportedLocales(Collection<Locale> locales) {
+            supportedLocales = new ArrayList<>(locales.size());
             for (Locale locale : locales) {
                 supportedLocales.add(ULocale.forLocale(locale));
             }
             return this;
         }
-        public Builder addSupportedLocale(ULocale locale) {
+
+        /**
+         * Adds another supported locale.
+         * Duplicates are allowed, and are not removed.
+         *
+         * @param locale the list of locale
+         * @return this Builder object
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder addSupportedULocale(ULocale locale) {
             if (supportedLocales == null) {
-                supportedLocales = new LinkedHashSet<>();
+                supportedLocales = new ArrayList<>();
             }
             supportedLocales.add(locale);
             return this;
         }
+
+        /**
+         * Adds another supported locale.
+         * Duplicates are allowed, and are not removed.
+         *
+         * @param locale the list of locale
+         * @return this Builder object
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
         public Builder addSupportedLocale(Locale locale) {
-            return addSupportedLocale(ULocale.forLocale(locale));
+            return addSupportedULocale(ULocale.forLocale(locale));
         }
 
         /**
+         * Sets the default locale; if null, or if it is not set explicitly,
+         * then the first supported locale is used as the default locale.
+         *
+         * @param defaultLocale the default locale
+         * @return this Builder object
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder setDefaultULocale(ULocale defaultLocale) {
+            this.defaultLocale = defaultLocale;
+            return this;
+        }
+
+        /**
+         * Sets the default locale; if null, or if it is not set explicitly,
+         * then the first supported locale is used as the default locale.
+         *
+         * @param defaultLocale the default locale
+         * @return this Builder object
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder setDefaultLocale(Locale defaultLocale) {
+            this.defaultLocale = ULocale.forLocale(defaultLocale);
+            return this;
+        }
+
+        /**
+         * If SCRIPT, then the language differences are smaller than script differences.
+         * This is used in situations (such as maps) where
+         * it is better to fall back to the same script than a similar language.
+         *
+         * @param subtag the subtag to favor
+         * @return this Builder object
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder setFavorSubtag(FavorSubtag subtag) {
+            this.favor = subtag;
+            return this;
+        }
+
+        /**
+         * Option for whether all desired locales are treated equally or
+         * earlier ones are preferred (this is the default).
+         *
+         * @param demotion the demotion per desired locale to set.
+         * @return this Builder object
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        public Builder setDemotionPerDesiredLocale(Demotion demotion) {
+            this.demotion = demotion;
+            return this;
+        }
+
+        /**
+         * <i>Internal only!</i>
+         *
          * @param thresholdDistance the thresholdDistance to set, with -1 = default
          * @return this Builder object
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
-        public Builder setThresholdDistance(int thresholdDistance) {
+        @Deprecated
+        public Builder internalSetThresholdDistance(int thresholdDistance) {
             if (thresholdDistance > 100) {
                 thresholdDistance = 100;
             }
             this.thresholdDistance = thresholdDistance;
             return this;
         }
-        /**
-         * @param demotionPerAdditionalDesiredLocale the demotionPerAdditionalDesiredLocale to set, with -1 = default
-         * @return this Builder object
-         */
-        public Builder setDemotionPerAdditionalDesiredLocale(int demotionPerAdditionalDesiredLocale) {
-            this.demotionPerAdditionalDesiredLocale = demotionPerAdditionalDesiredLocale;
-            return this;
-        }
 
         /**
-         * Set the default language, with null = default = first supported language
-         * @param defaultLocale the default language
-         * @return this Builder object
+         * Builds and returns a new locale matcher.
+         * This builder can continue to be used.
+         *
+         * @return new XLocaleMatcher.
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
          */
-        public Builder setDefaultLanguage(ULocale defaultLocale) {
-            this.defaultLocale = defaultLocale;
-            return this;
-        }
-
-        /**
-         * If true, then the language differences are smaller than than script differences.
-         * This is used in situations (such as maps) where it is better to fall back to the same script than a similar language.
-         * @param distanceOption the distance option
-         * @return this Builder object
-         */
-        public Builder setDistanceOption(DistanceOption distanceOption) {
-            this.distanceOption = distanceOption;
-            return this;
-        }
-
         public XLocaleMatcher build() {
             return new XLocaleMatcher(this);
         }
@@ -208,22 +495,25 @@ public final class XLocaleMatcher {
             if (defaultLocale != null) {
                 s.append(" default=").append(defaultLocale.toString());
             }
-            if (distanceOption != null) {
-                s.append(" distance=").append(distanceOption.toString());
+            if (favor != null) {
+                s.append(" distance=").append(favor.toString());
             }
             if (thresholdDistance >= 0) {
                 s.append(String.format(" threshold=%d", thresholdDistance));
             }
-            if (demotionPerAdditionalDesiredLocale >= 0) {
-                s.append(String.format(" demotion=%d", demotionPerAdditionalDesiredLocale));
+            if (demotion != null) {
+                s.append(" demotion=").append(demotion.toString());
             }
             return s.append('}').toString();
         }
     }
 
     /**
-     * Returns a builder used in chaining parameters for building a Locale Matcher.
-     * @return this Builder object
+     * Returns a builder used in chaining parameters for building a LocaleMatcher.
+     *
+     * @return a new Builder object
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
      */
     public static Builder builder() {
         return new Builder();
@@ -235,16 +525,9 @@ public final class XLocaleMatcher {
     }
     /** Convenience method */
     public XLocaleMatcher(LocalePriorityList supportedLocales) {
-        this(builder().setSupportedLocales(supportedLocales));
-    }
-    /** Convenience method */
-    public XLocaleMatcher(Set<ULocale> supportedLocales) {
-        this(builder().setSupportedLocales(supportedLocales));
+        this(builder().setSupportedULocales(supportedLocales.getULocales()));
     }
 
-    /**
-     * Creates a locale matcher with the given Builder parameters.
-     */
     private XLocaleMatcher(Builder builder) {
         thresholdDistance = builder.thresholdDistance < 0 ?
                 LocaleDistance.INSTANCE.getDefaultScriptDistance() : builder.thresholdDistance;
@@ -252,82 +535,101 @@ public final class XLocaleMatcher {
         // so that when different types are used (e.g., java.util.Locale)
         // we can return those by parallel index.
         int supportedLocalesLength = builder.supportedLocales.size();
-        supportedLocales = new ULocale[supportedLocalesLength];
-        supportedJavaLocales = new Locale[supportedLocalesLength];
-        supportedToIndex = new HashMap<>(supportedLocalesLength);
+        supportedULocales = new ULocale[supportedLocalesLength];
+        supportedLocales = new Locale[supportedLocalesLength];
+        // Supported LRSs in input order.
+        LSR lsrs[] = new LSR[supportedLocalesLength];
+        // Also find the first supported locale whose LSR is
+        // the same as that for the default locale.
+        ULocale udef = builder.defaultLocale;
+        Locale def = null;
+        LSR defLSR = null;
+        int idef = -1;
+        if (udef != null) {
+            def = udef.toLocale();
+            defLSR = getMaximalLsrOrUnd(udef);
+        }
+        int i = 0;
+        for (ULocale locale : builder.supportedLocales) {
+            supportedULocales[i] = locale;
+            supportedLocales[i] = locale.toLocale();
+            LSR lsr = lsrs[i] = getMaximalLsrOrUnd(locale);
+            if (idef < 0 && defLSR != null && lsr.equals(defLSR)) {
+                idef = i;
+            }
+            ++i;
+        }
+
         // We need an unordered map from LSR to first supported locale with that LSR,
         // and an ordered list of (LSR, Indexes).
         // We use a LinkedHashMap for both,
         // and insert the supported locales in the following order:
-        // 1. First supported locale.
+        // 1. Default locale, if it is supported.
         // 2. Priority locales in builder order.
         // 3. Remaining locales in builder order.
-        supportedLsrToIndexes = new LinkedHashMap<>(supportedLocalesLength);
-        Map<LSR, Indexes> otherLsrToIndexes = null;
-        LSR firstLSR = null;
-        int i = 0;
-        for (ULocale locale : builder.supportedLocales) {
-            supportedLocales[i] = locale;
-            supportedJavaLocales[i] = locale.toLocale();
-            // supportedToIndex.putIfAbsent(locale, i)
-            Integer oldIndex = supportedToIndex.get(locale);
-            if (oldIndex == null) {
-                supportedToIndex.put(locale, i);
-            }
-            LSR lsr = getMaximalLsrOrUnd(locale);
-            if (i == 0) {
-                firstLSR = lsr;
-                supportedLsrToIndexes.put(lsr, new Indexes(0));
-            } else if (lsr.equals(firstLSR) || LocaleDistance.INSTANCE.isParadigmLSR(lsr)) {
-                addIndex(supportedLsrToIndexes, lsr, i);
+        supportedLsrToIndex = new LinkedHashMap<>(supportedLocalesLength);
+        Map<LSR, Integer> otherLsrToIndex = null;
+        if (idef >= 0) {
+            supportedLsrToIndex.put(defLSR, idef);
+        }
+        i = 0;
+        for (ULocale locale : supportedULocales) {
+            if (i == idef) { continue; }
+            LSR lsr = lsrs[i];
+            if (defLSR == null) {
+                assert i == 0;
+                udef = locale;
+                def = supportedLocales[0];
+                defLSR = lsr;
+                idef = 0;
+                supportedLsrToIndex.put(lsr, 0);
+            } else if (lsr.equals(defLSR) || LocaleDistance.INSTANCE.isParadigmLSR(lsr)) {
+                putIfAbsent(supportedLsrToIndex, lsr, i);
             } else {
-                if (otherLsrToIndexes == null) {
-                    otherLsrToIndexes = new LinkedHashMap<>(supportedLocalesLength);
+                if (otherLsrToIndex == null) {
+                    otherLsrToIndex = new LinkedHashMap<>(supportedLocalesLength);
                 }
-                addIndex(otherLsrToIndexes, lsr, i);
+                putIfAbsent(otherLsrToIndex, lsr, i);
             }
             ++i;
         }
-        if (otherLsrToIndexes != null) {
-            supportedLsrToIndexes.putAll(otherLsrToIndexes);
+        if (otherLsrToIndex != null) {
+            supportedLsrToIndex.putAll(otherLsrToIndex);
         }
-        int numSuppLsrs = supportedLsrToIndexes.size();
-        supportedLsrs = supportedLsrToIndexes.keySet().toArray(new LSR[numSuppLsrs]);
-        supportedIndexes = supportedLsrToIndexes.values().toArray(new Indexes[numSuppLsrs]);
-        ULocale def;
-        Locale jdef = null;
-        int idef = -1;
-        if (builder.defaultLocale != null) {
-            def = builder.defaultLocale;
-        } else if (supportedLocalesLength > 0) {
-            def = supportedLocales[0]; // first language
-            jdef = supportedJavaLocales[0];
-            idef = 0;
-        } else {
-            def = null;
+        int numSuppLsrs = supportedLsrToIndex.size();
+        supportedLsrs = new LSR[numSuppLsrs];
+        supportedIndexes = new int[numSuppLsrs];
+        i = 0;
+        for (Map.Entry<LSR, Integer> entry : supportedLsrToIndex.entrySet()) {
+            supportedLsrs[i] = entry.getKey();  // = lsrs[entry.getValue()]
+            supportedIndexes[i++] = entry.getValue();
         }
-        if (jdef == null && def != null) {
-            jdef = def.toLocale();
-        }
+
+        defaultULocale = udef;
         defaultLocale = def;
-        defaultJavaLocale = jdef;
         defaultLocaleIndex = idef;
-        demotionPerAdditionalDesiredLocale = builder.demotionPerAdditionalDesiredLocale < 0 ?
-                LocaleDistance.INSTANCE.getDefaultRegionDistance() + 1 :
-                    builder.demotionPerAdditionalDesiredLocale;
-        distanceOption = builder.distanceOption;
+        demotionPerDesiredLocale =
+                builder.demotion == Demotion.NONE ? 0 :
+                    LocaleDistance.INSTANCE.getDefaultDemotionPerDesiredLocale();  // null or REGION
+        favorSubtag = builder.favor;
     }
 
-    private static final void addIndex(Map<LSR, Indexes> lsrToIndexes, LSR lsr, int i) {
-        Indexes indexes = lsrToIndexes.get(lsr);
-        if (indexes == null) {
-            lsrToIndexes.put(lsr, new Indexes(i));
-        } else {
-            indexes.add(i);
+    private static final void putIfAbsent(Map<LSR, Integer> lsrToIndex, LSR lsr, int i) {
+        Integer index = lsrToIndex.get(lsr);
+        if (index == null) {
+            lsrToIndex.put(lsr, i);
         }
     }
 
     private static final LSR getMaximalLsrOrUnd(ULocale locale) {
+        if (locale.equals(UND_ULOCALE)) {
+            return UND_LSR;
+        } else {
+            return XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(locale);
+        }
+    }
+
+    private static final LSR getMaximalLsrOrUnd(Locale locale) {
         if (locale.equals(UND_LOCALE)) {
             return UND_LSR;
         } else {
@@ -335,161 +637,11 @@ public final class XLocaleMatcher {
         }
     }
 
-    /** Convenience method */
-    public ULocale getBestMatch(ULocale ulocale) {
-        return getBestMatch(ulocale, NULL_ITERATOR).supportedLocale;
-    }
-    /** Convenience method */
-    public ULocale getBestMatch(String languageList) {
-        return getBestMatch(LocalePriorityList.add(languageList).build(), null);
-    }
-    /** Convenience method */
-    public ULocale getBestMatch(ULocale... locales) {
-        return getBestMatch(Arrays.asList(locales), null);
-    }
-    /** Convenience method */
-    public ULocale getBestMatch(Iterable<ULocale> desiredLocales) {
-        return getBestMatch(desiredLocales, null);
-    }
+    private static final class ULocaleLsrIterator extends LsrIterator {
+        private Iterator<ULocale> locales;
+        private ULocale current, remembered;
 
-    /**
-     * Get the best match between the desired languages and supported languages
-     * @param desiredLocales Typically the supplied user's languages, in order of preference, with best first.
-     * @param outputBestDesired The one of the desired languages that matched best (can be null).
-     * Set to null if the best match was not below the threshold distance.
-     * @return the best match.
-     */
-    public ULocale getBestMatch(Iterable<ULocale> desiredLocales, Output<ULocale> outputBestDesired) {
-        Iterator<ULocale> desiredIter = desiredLocales.iterator();
-        if (!desiredIter.hasNext()) {
-            if (outputBestDesired != null) {
-                outputBestDesired.value = null;
-            }
-            if (TRACE_MATCHER) {
-                System.err.printf("Returning default %s: no desired languages\n", defaultLocale);
-            }
-            return defaultLocale;
-        }
-        ULocale desiredLocale = desiredIter.next();
-        return getBestMatch(desiredLocale, desiredIter, outputBestDesired);
-    }
-
-    /**
-     * @param desiredLocale First desired locale.
-     * @param remainingIter Remaining desired locales, null or empty if none.
-     * @param outputBestDesired If not null,
-     *     will be set to the desired locale that matches the best supported one.
-     * @return the best supported locale.
-     */
-    private ULocale getBestMatch(ULocale desiredLocale, Iterator<ULocale> remainingIter,
-            Output<ULocale> outputBestDesired) {
-        Result result = getBestMatch(desiredLocale, remainingIter);
-        if (outputBestDesired != null) {
-            outputBestDesired.value = result.desiredLocale;
-        }
-        return result.supportedLocale;
-    }
-
-    private Result getBestMatch(ULocale desiredLocale, Iterator<ULocale> remainingIter) {
-        int desiredIndex = 0;
-        int bestDesiredIndex = -1;
-        ULocale bestDesiredLocale = null;
-        int bestSupportedLsrIndex = 0;
-        for (int bestDistance = thresholdDistance; bestDistance > 0;
-                bestDistance -= demotionPerAdditionalDesiredLocale) {
-            // Quick check for exact locale match.
-            Integer supportedIndex = supportedToIndex.get(desiredLocale);
-            if (supportedIndex != null) {
-                if (TRACE_MATCHER) {
-                    System.err.printf("Returning %s: desired=supported\n", desiredLocale);
-                }
-                int suppIndex = supportedIndex;
-                return new Result(desiredLocale, supportedLocales[suppIndex],
-                        supportedJavaLocales[suppIndex], desiredIndex, suppIndex);
-            }
-            // Quick check for exact maximized LSR.
-            LSR desiredLSR = getMaximalLsrOrUnd(desiredLocale);
-            Indexes indexes = supportedLsrToIndexes.get(desiredLSR);
-            if (indexes != null) {
-                // If this is a supported LSR, return the first locale.
-                // We already know the exact locale isn't there.
-                int suppIndex = indexes.getFirst();
-                ULocale result = supportedLocales[suppIndex];
-                if (TRACE_MATCHER) {
-                    System.err.printf("Returning %s: desiredLSR=supportedLSR\n", result);
-                }
-                return new Result(desiredLocale, result,
-                        supportedJavaLocales[suppIndex], desiredIndex, suppIndex);
-            }
-            int bestIndexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
-                    desiredLSR, supportedLsrs, bestDistance, distanceOption);
-            if (bestIndexAndDistance >= 0) {
-                bestDistance = bestIndexAndDistance & 0xff;
-                bestDesiredIndex = desiredIndex;
-                bestDesiredLocale = desiredLocale;
-                bestSupportedLsrIndex = bestIndexAndDistance >> 8;
-                if (bestDistance == 0) {
-                    break;
-                }
-            }
-            if (remainingIter == null || !remainingIter.hasNext()) {
-                break;
-            }
-            desiredLocale = remainingIter.next();
-            ++desiredIndex;
-        }
-        if (bestDesiredIndex < 0) {
-            if (TRACE_MATCHER) {
-                System.err.printf("Returning default %s: no good match\n", defaultLocale);
-            }
-            return new Result(null, defaultLocale, defaultJavaLocale, -1, defaultLocaleIndex);
-        }
-        // Pick exact match if there is one.
-        // The length of the list is normally 1.
-        Indexes bestSupportedIndexes = supportedIndexes[bestSupportedLsrIndex];
-        int suppIndex;
-        for (int i = 0; (suppIndex = bestSupportedIndexes.get(i)) >= 0; ++i) {
-            ULocale locale = supportedLocales[suppIndex];
-            if (bestDesiredLocale.equals(locale)) {
-                if (TRACE_MATCHER) {
-                    System.err.printf("Returning %s: desired=best matching supported language\n",
-                            bestDesiredLocale);
-                }
-                return new Result(bestDesiredLocale, locale,
-                        supportedJavaLocales[suppIndex], bestDesiredIndex, suppIndex);
-            }
-        }
-        // Otherwise return the first of the supported languages that share the best-matching LSR.
-        suppIndex = bestSupportedIndexes.getFirst();
-        ULocale result = supportedLocales[suppIndex];
-        if (TRACE_MATCHER) {
-            System.err.printf("Returning %s: first best matching supported language\n", result);
-        }
-        return new Result(bestDesiredLocale, result,
-                supportedJavaLocales[suppIndex], bestDesiredIndex, suppIndex);
-    }
-
-    /**
-     * Get the best match between the desired languages and supported languages
-     * @param desiredLocale the supplied user's language.
-     * @param outputBestDesired The one of the desired languages that matched best.
-     * Set to null if the best match was not below the threshold distance.
-     * @return the best match.
-     */
-    public ULocale getBestMatch(ULocale desiredLocale, Output<ULocale> outputBestDesired) {
-        return getBestMatch(desiredLocale, null, outputBestDesired);
-    }
-
-    /**
-     * Converts Locales to ULocales on the fly.
-     */
-    private static final class LocalesWrapper implements Iterator<ULocale> {
-        private Iterator<Locale> locales;
-        // Cache locales to avoid conversion of the result.
-        private Locale first, second;
-        private List<Locale> remaining;
-
-        LocalesWrapper(Iterator<Locale> locales) {
+        ULocaleLsrIterator(Iterator<ULocale> locales) {
             this.locales = locales;
         }
 
@@ -499,146 +651,215 @@ public final class XLocaleMatcher {
         }
 
         @Override
-        public ULocale next() {
-            Locale locale = locales.next();
-            if (first == null) {
-                first = locale;
-            } else if (second == null) {
-                second = locale;
-            } else {
-                if (remaining == null) {
-                    remaining = new ArrayList<>();
-                }
-                remaining.add(locale);
-            }
-            return ULocale.forLocale(locale);
-        }
-
-        Locale getJavaLocale(int i) {
-            if (i == 0) {
-                return first;
-            } else if (i == 1) {
-                return second;
-            } else {
-                // TODO: test code coverage
-                return remaining.get(i - 2);
-            }
+        public LSR next() {
+            current = locales.next();
+            return getMaximalLsrOrUnd(current);
         }
 
         @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
+        public void rememberCurrent(int desiredIndex) {
+            bestDesiredIndex = desiredIndex;
+            remembered = current;
         }
     }
 
-    public Locale getBestJavaMatch(Iterable<Locale> desiredLocales, Output<Locale> outputBestDesired) {
+    private static final class LocaleLsrIterator extends LsrIterator {
+        private Iterator<Locale> locales;
+        private Locale current, remembered;
+
+        LocaleLsrIterator(Iterator<Locale> locales) {
+            this.locales = locales;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return locales.hasNext();
+        }
+
+        @Override
+        public LSR next() {
+            current = locales.next();
+            return getMaximalLsrOrUnd(current);
+        }
+
+        @Override
+        public void rememberCurrent(int desiredIndex) {
+            bestDesiredIndex = desiredIndex;
+            remembered = current;
+        }
+    }
+
+    public ULocale getBestMatch(ULocale desiredLocale) {
+        LSR desiredLSR = getMaximalLsrOrUnd(desiredLocale);
+        int suppIndex = getBestSuppIndex(desiredLSR, null);
+        return suppIndex >= 0 ? supportedULocales[suppIndex] : defaultULocale;
+    }
+
+    public ULocale getBestMatch(Iterable<ULocale> desiredLocales) {
+        Iterator<ULocale> desiredIter = desiredLocales.iterator();
+        if (!desiredIter.hasNext()) {
+            return defaultULocale;
+        }
+        ULocaleLsrIterator lsrIter = new ULocaleLsrIterator(desiredIter);
+        LSR desiredLSR = lsrIter.next();
+        int suppIndex = getBestSuppIndex(desiredLSR, lsrIter);
+        return suppIndex >= 0 ? supportedULocales[suppIndex] : defaultULocale;
+    }
+
+    public ULocale getBestMatch(String desiredLocaleList) {
+        return getBestMatch(LocalePriorityList.add(desiredLocaleList).build());
+    }
+
+    public Locale getBestLocale(Locale desiredLocale) {
+        LSR desiredLSR = getMaximalLsrOrUnd(desiredLocale);
+        int suppIndex = getBestSuppIndex(desiredLSR, null);
+        return suppIndex >= 0 ? supportedLocales[suppIndex] : defaultLocale;
+    }
+
+    public Locale getBestLocale(Iterable<Locale> desiredLocales) {
         Iterator<Locale> desiredIter = desiredLocales.iterator();
         if (!desiredIter.hasNext()) {
-            if (outputBestDesired != null) {
-                outputBestDesired.value = null;
-            }
-            if (TRACE_MATCHER) {
-                System.err.printf("Returning default %s: no desired languages\n", defaultLocale);
-            }
-            return defaultJavaLocale;
+            return defaultLocale;
         }
-        LocalesWrapper wrapper = new LocalesWrapper(desiredIter);
-        ULocale desiredLocale = wrapper.next();
-        Result result = getBestMatch(desiredLocale, NULL_ITERATOR);
-        if (outputBestDesired != null) {
-            outputBestDesired.value = result.desiredIndex >= 0 ?
-                    wrapper.getJavaLocale(result.desiredIndex) : null;
-        }
-        return result.supportedJavaLocale;
+        LocaleLsrIterator lsrIter = new LocaleLsrIterator(desiredIter);
+        LSR desiredLSR = lsrIter.next();
+        int suppIndex = getBestSuppIndex(desiredLSR, lsrIter);
+        return suppIndex >= 0 ? supportedLocales[suppIndex] : defaultLocale;
     }
 
-    public Locale getBestJavaMatch(Locale desiredLocale, Output<Locale> outputBestDesired) {
-        ULocale desiredULocale = ULocale.forLocale(desiredLocale);
-        Result result = getBestMatch(desiredULocale, NULL_ITERATOR);
-        if (outputBestDesired != null) {
-            outputBestDesired.value = result.desiredIndex >= 0 ? desiredLocale : null;
+    private Result makeResult(ULocale desiredLocale, ULocaleLsrIterator lsrIter, int suppIndex) {
+        if (suppIndex < 0) {
+            return new Result(null, defaultULocale, null, defaultLocale, -1, defaultLocaleIndex);
+        } else if (desiredLocale != null) {
+            return new Result(desiredLocale, supportedULocales[suppIndex],
+                    null, supportedLocales[suppIndex], 0, suppIndex);
+        } else {
+            return new Result(lsrIter.remembered, supportedULocales[suppIndex],
+                    null, supportedLocales[suppIndex], lsrIter.bestDesiredIndex, suppIndex);
         }
-        return result.supportedJavaLocale;
     }
 
-    /** Combine features of the desired locale into those of the supported, and return result. */
-    public static ULocale combine(ULocale bestSupported, ULocale bestDesired) {
-        // for examples of extensions, variants, see
-        //  http://unicode.org/repos/cldr/tags/latest/common/bcp47/
-        //  http://unicode.org/repos/cldr/tags/latest/common/validity/variant.xml
-
-        if (!bestSupported.equals(bestDesired) && bestDesired != null) {
-            // add region, variants, extensions
-            ULocale.Builder b = new ULocale.Builder().setLocale(bestSupported);
-
-            // copy the region from the desired, if there is one
-            String region = bestDesired.getCountry();
-            if (!region.isEmpty()) {
-                b.setRegion(region);
-            }
-
-            // copy the variants from desired, if there is one
-            // note that this will override any subvariants. Eg "sco-ulster-fonipa" + "…-fonupa" => "sco-fonupa" (nuking ulster)
-            String variants = bestDesired.getVariant();
-            if (!variants.isEmpty()) {
-                b.setVariant(variants);
-            }
-
-            // copy the extensions from desired, if there are any
-            // note that this will override any subkeys. Eg "th-u-nu-latn-ca-buddhist" + "…-u-nu-native" => "th-u-nu-native" (nuking calendar)
-            for (char extensionKey : bestDesired.getExtensionKeys()) {
-                b.setExtension(extensionKey, bestDesired.getExtension(extensionKey));
-            }
-            bestSupported = b.build();
+    private Result makeResult(Locale desiredLocale, LocaleLsrIterator lsrIter, int suppIndex) {
+        if (suppIndex < 0) {
+            return new Result(null, defaultULocale, null, defaultLocale, -1, defaultLocaleIndex);
+        } else if (desiredLocale != null) {
+            return new Result(null, supportedULocales[suppIndex],
+                    desiredLocale, supportedLocales[suppIndex], 0, suppIndex);
+        } else {
+            return new Result(null, supportedULocales[suppIndex],
+                    lsrIter.remembered, supportedLocales[suppIndex],
+                    lsrIter.bestDesiredIndex, suppIndex);
         }
-        return bestSupported;
     }
 
-    /** Returns the distance between the two languages. The values are not necessarily symmetric.
-     * @param desired A locale desired by the user
-     * @param supported A locale supported by a program.
-     * @return A return of 0 is a complete match, and 100 is a failure case (above the thresholdDistance).
-     * A language is first maximized with add likely subtags, then compared.
+    public Result getBestMatchResult(ULocale desiredLocale) {
+        LSR desiredLSR = getMaximalLsrOrUnd(desiredLocale);
+        int suppIndex = getBestSuppIndex(desiredLSR, null);
+        return makeResult(desiredLocale, null, suppIndex);
+    }
+
+    /**
+     * Returns the best match between the desired and supported locales.
+     *
+     * @param desiredLocales Typically a user's languages, in order of preference (descending).
+     * @return the best-matching pair of a desired and a supported locale.
      */
-    public int distance(ULocale desired, ULocale supported) {
-        return LocaleDistance.INSTANCE.getBestIndexAndDistance(
-            XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(desired),
-            new LSR[] { XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(supported) },
-            thresholdDistance, distanceOption) & 0xff;
+    public Result getBestMatchResult(Iterable<ULocale> desiredLocales) {
+        Iterator<ULocale> desiredIter = desiredLocales.iterator();
+        if (!desiredIter.hasNext()) {
+            return makeResult(UND_ULOCALE, null, -1);
+        }
+        ULocaleLsrIterator lsrIter = new ULocaleLsrIterator(desiredIter);
+        LSR desiredLSR = lsrIter.next();
+        int suppIndex = getBestSuppIndex(desiredLSR, lsrIter);
+        return makeResult(null, lsrIter, suppIndex);
     }
 
-    /** Convenience method */
-    public int distance(String desiredLanguage, String supportedLanguage) {
-        return LocaleDistance.INSTANCE.getBestIndexAndDistance(
-            XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(new ULocale(desiredLanguage)),
-            new LSR[] { XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(new ULocale(supportedLanguage)) },
-            thresholdDistance, distanceOption) & 0xff;
+    public Result getBestLocaleResult(Locale desiredLocale) {
+        LSR desiredLSR = getMaximalLsrOrUnd(desiredLocale);
+        int suppIndex = getBestSuppIndex(desiredLSR, null);
+        return makeResult(desiredLocale, null, suppIndex);
+    }
+
+    public Result getBestLocaleResult(Iterable<Locale> desiredLocales) {
+        Iterator<Locale> desiredIter = desiredLocales.iterator();
+        if (!desiredIter.hasNext()) {
+            return makeResult(UND_LOCALE, null, -1);
+        }
+        LocaleLsrIterator lsrIter = new LocaleLsrIterator(desiredIter);
+        LSR desiredLSR = lsrIter.next();
+        int suppIndex = getBestSuppIndex(desiredLSR, lsrIter);
+        return makeResult(null, lsrIter, suppIndex);
+    }
+
+    /**
+     * @param desiredLSR The first desired locale's LSR.
+     * @param remainingIter Remaining desired LSRs, null or empty if none.
+     * @return the index of the best-matching supported locale, or -1 if there is no good match.
+     */
+    private int getBestSuppIndex(LSR desiredLSR, LsrIterator remainingIter) {
+        int desiredIndex = 0;
+        int bestSupportedLsrIndex = -1;
+        for (int bestDistance = thresholdDistance;;) {
+            // Quick check for exact maximized LSR.
+            Integer index = supportedLsrToIndex.get(desiredLSR);
+            if (index != null) {
+                int suppIndex = index;
+                if (TRACE_MATCHER) {
+                    System.err.printf("Returning %s: desiredLSR=supportedLSR\n",
+                            supportedULocales[suppIndex]);
+                }
+                if (remainingIter != null) { remainingIter.rememberCurrent(desiredIndex); }
+                return suppIndex;
+            }
+            int bestIndexAndDistance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
+                    desiredLSR, supportedLsrs, bestDistance, favorSubtag);
+            if (bestIndexAndDistance >= 0) {
+                bestDistance = bestIndexAndDistance & 0xff;
+                if (remainingIter != null) { remainingIter.rememberCurrent(desiredIndex); }
+                bestSupportedLsrIndex = bestIndexAndDistance >> 8;
+            }
+            if ((bestDistance -= demotionPerDesiredLocale) <= 0) {
+                break;
+            }
+            if (remainingIter == null || !remainingIter.hasNext()) {
+                break;
+            }
+            desiredLSR = remainingIter.next();
+        }
+        if (bestSupportedLsrIndex < 0) {
+            if (TRACE_MATCHER) {
+                System.err.printf("Returning default %s: no good match\n", defaultULocale);
+            }
+            return -1;
+        }
+        int suppIndex = supportedIndexes[bestSupportedLsrIndex];
+        if (TRACE_MATCHER) {
+            System.err.printf("Returning %s: best matching supported locale\n",
+                    supportedULocales[suppIndex]);
+        }
+        return suppIndex;
     }
 
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder().append("{XLocaleMatcher");
-        if (supportedLocales.length > 0) {
-            s.append(" supported={").append(supportedLocales[0].toString());
-            for (int i = 1; i < supportedLocales.length; ++i) {
-                s.append(", ").append(supportedLocales[1].toString());
+        if (supportedULocales.length > 0) {
+            s.append(" supported={").append(supportedULocales[0].toString());
+            for (int i = 1; i < supportedULocales.length; ++i) {
+                s.append(", ").append(supportedULocales[i].toString());
             }
             s.append('}');
         }
-        s.append(" default=").append(Objects.toString(defaultLocale));
-        if (distanceOption != null) {
-            s.append(" distance=").append(distanceOption.toString());
+        s.append(" default=").append(Objects.toString(defaultULocale));
+        if (favorSubtag != null) {
+            s.append(" distance=").append(favorSubtag.toString());
         }
         if (thresholdDistance >= 0) {
             s.append(String.format(" threshold=%d", thresholdDistance));
         }
-        s.append(String.format(" demotion=%d", demotionPerAdditionalDesiredLocale));
+        s.append(String.format(" demotion=%d", demotionPerDesiredLocale));
         return s.append('}').toString();
-    }
-
-    /** Return the inverse of the distance: that is, 1-distance(desired, supported) */
-    public double match(ULocale desired, ULocale supported) {
-        return (100-distance(desired, supported))/100.0;
     }
 
     /**
@@ -652,11 +873,16 @@ public final class XLocaleMatcher {
      * @param supported Supported locale
      * @param supportedMax Maximized locale (using likely subtags)
      * @return value between 0 and 1, inclusive.
-     * @deprecated Use the form with 2 parameters instead.
+     * @deprecated ICU 65 Build and use a matcher rather than comparing pairs of locales.
      */
     @Deprecated
     public double match(ULocale desired, ULocale desiredMax, ULocale supported, ULocale supportedMax) {
-        return match(desired, supported);
+        // Returns the inverse of the distance: That is, 1-distance(desired, supported).
+        int distance = LocaleDistance.INSTANCE.getBestIndexAndDistance(
+                XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(desired),
+                new LSR[] { XLikelySubtags.INSTANCE.makeMaximizedLsrFrom(supported) },
+                thresholdDistance, favorSubtag) & 0xff;
+        return (100 - distance) / 100.0;
     }
 
     /**
@@ -670,12 +896,5 @@ public final class XLocaleMatcher {
     public ULocale canonicalize(ULocale ulocale) {
         // TODO
         return null;
-    }
-
-    /**
-     * @return the thresholdDistance. Any distance above this value is treated as a match failure.
-     */
-    public int getThresholdDistance() {
-        return thresholdDistance;
     }
 }

@@ -26,7 +26,7 @@ import com.ibm.icu.util.ICUException;
  * Reads source data from ICU resource bundles.
  */
 class LikelySubtagsBuilder {
-    private static final boolean DEBUG_OUTPUT = false;
+    private static final boolean DEBUG_OUTPUT = LSR.DEBUG_OUTPUT;
 
     private static ICUResourceBundle getSupplementalDataBundle(String name) {
         return ICUResourceBundle.getBundleInstance(
@@ -84,12 +84,33 @@ class LikelySubtagsBuilder {
 
     private static final class TrieBuilder {
         byte[] bytes = new byte[24];
+        int length = 0;
         BytesTrieBuilder tb = new BytesTrieBuilder();
 
-        void addMapping(String s, int value) {
-            // s contains only ASCII characters.
-            s.getBytes(0, s.length(), bytes, 0);
-            tb.add(bytes, s.length(), value);
+        void addValue(int value) {
+            assert value >= 0;
+            tb.add(bytes, length, value);
+        }
+
+        void addStar() {
+            bytes[length++] = '*';
+        }
+
+        void addSubtag(String s) {
+            assert !s.isEmpty();
+            assert !s.equals("*");
+            int end = s.length() - 1;
+            for (int i = 0;; ++i) {
+                char c = s.charAt(i);
+                assert c <= 0x7f;
+                if (i < end) {
+                    bytes[length++] = (byte) c;
+                } else {
+                    // Mark the last character as a terminator to avoid overlap matches.
+                    bytes[length++] = (byte) (c | 0x80);
+                    break;
+                }
+            }
         }
 
         BytesTrie build() {
@@ -114,44 +135,70 @@ class LikelySubtagsBuilder {
 
         TrieBuilder trieBuilder = new TrieBuilder();
         Map<LSR, Integer> lsrIndexes = new LinkedHashMap<>();
-        // Bogus LSR at index 0 for some code to easily distinguish between
-        // intermediate match points and real result values.
-        LSR bogus = new LSR("", "", "");
-        lsrIndexes.put(bogus, 0);
+        // Reserve index 0 as "no value":
+        // The runtime lookup returns 0 for an intermediate match with no value.
+        lsrIndexes.put(new LSR("", "", ""), 0);  // arbitrary LSR
+        // Reserve index 1 for SKIP_SCRIPT:
+        // The runtime lookup returns 1 for an intermediate match with a value.
+        lsrIndexes.put(new LSR("skip", "script", ""), 1);  // looks good when printing the data
         // We could prefill the lsrList with common locales to give them small indexes,
         // and see if that improves performance a little.
         for (Map.Entry<String, Map<String, Map<String, LSR>>> ls :  langTable.entrySet()) {
+            trieBuilder.length = 0;
             String lang = ls.getKey();
             if (lang.equals("und")) {
-                lang = "*";
+                trieBuilder.addStar();
+            } else {
+                trieBuilder.addSubtag(lang);
             }
-            // Create a match point for the language.
-            trieBuilder.addMapping(lang, 0);
             Map<String, Map<String, LSR>> scriptTable = ls.getValue();
-            for (Map.Entry<String, Map<String, LSR>> sr :  scriptTable.entrySet()) {
-                String script = sr.getKey();
-                if (script.isEmpty()) {
-                    script = "*";
+            boolean skipScript = false;
+            if (scriptTable.size() == 1) {
+                Map<String, LSR> regionTable = scriptTable.get("");
+                if (regionTable.size() == 1) {
+                    // Prune the script and region levels from language with
+                    // only * for scripts and regions.
+                    int i = uniqueIdForLsr(lsrIndexes, regionTable.get(""));
+                    trieBuilder.addValue(i);
+                    continue;
+                } else {
+                    // Prune the script level from language with only * for scripts
+                    // but with real regions.
+                    // Set an intermediate value as a signal to the lookup code.
+                    trieBuilder.addValue(XLikelySubtags.SKIP_SCRIPT);
+                    skipScript = true;
                 }
-                // Match point for lang+script.
-                trieBuilder.addMapping(lang + script, 0);
-                Map<String, LSR> regionTable = sr.getValue();
-                for (Map.Entry<String, LSR> r2lsr :  regionTable.entrySet()) {
-                    String region = r2lsr.getKey();
-                    if (region.isEmpty()) {
-                        region = "*";
-                    }
-                    // Map the whole lang+script+region to a unique, dense index of the LSR.
-                    LSR lsr = r2lsr.getValue();
-                    Integer index = lsrIndexes.get(lsr);
-                    int i;
-                    if (index != null) {
-                        i = index.intValue();
+            }
+            int scriptStartLength = trieBuilder.length;
+            for (Map.Entry<String, Map<String, LSR>> sr :  scriptTable.entrySet()) {
+                trieBuilder.length = scriptStartLength;
+                if (!skipScript) {
+                    String script = sr.getKey();
+                    if (script.isEmpty()) {
+                        trieBuilder.addStar();
                     } else {
-                        i = lsrIndexes.size();
-                        lsrIndexes.put(lsr, i);
+                        trieBuilder.addSubtag(script);
                     }
-                    trieBuilder.addMapping(lang + script + region, i);
+                }
+                Map<String, LSR> regionTable = sr.getValue();
+                if (regionTable.size() == 1) {
+                    // Prune the region level from language+script with only * for regions.
+                    int i = uniqueIdForLsr(lsrIndexes, regionTable.get(""));
+                    trieBuilder.addValue(i);
+                    continue;
+                }
+                int regionStartLength = trieBuilder.length;
+                for (Map.Entry<String, LSR> r2lsr :  regionTable.entrySet()) {
+                    trieBuilder.length = regionStartLength;
+                    String region = r2lsr.getKey();
+                    // Map the whole lang+script+region to a unique, dense index of the LSR.
+                    if (region.isEmpty()) {
+                        trieBuilder.addStar();
+                    } else {
+                        trieBuilder.addSubtag(region);
+                    }
+                    int i = uniqueIdForLsr(lsrIndexes, r2lsr.getValue());
+                    trieBuilder.addValue(i);
                 }
             }
         }
@@ -159,6 +206,17 @@ class LikelySubtagsBuilder {
         LSR[] lsrs = lsrIndexes.keySet().toArray(new LSR[lsrIndexes.size()]);
         return new XLikelySubtags.Data(
                 languageAliasesBuilder.toCanonical, regionAliasesBuilder.toCanonical, trie, lsrs);
+    }
+
+    private static int uniqueIdForLsr(Map<LSR, Integer> lsrIndexes, LSR lsr) {
+        Integer index = lsrIndexes.get(lsr);
+        if (index != null) {
+            return index.intValue();
+        } else {
+            int i = lsrIndexes.size();
+            lsrIndexes.put(lsr, i);
+            return i;
+        }
     }
 
     private static Map<String, Map<String, Map<String, LSR>>> makeTable(
@@ -176,11 +234,8 @@ class LikelySubtagsBuilder {
             final String region = ltp.region;
 
             ltp = lsrFromLocaleID(value.getString());  // target
-            String languageTarget = ltp.language;
-            final String scriptTarget = ltp.script;
-            final String regionTarget = ltp.region;
+            set(result, language, script, region, ltp);
 
-            set(result, language, script, region, languageTarget, scriptTarget, regionTarget);
             // now add aliases
             Collection<String> languageAliases = languageAliasesBuilder.getAliases(language);
             Collection<String> regionAliases = regionAliasesBuilder.getAliases(region);
@@ -189,13 +244,12 @@ class LikelySubtagsBuilder {
                     if (languageAlias.equals(language) && regionAlias.equals(region)) {
                         continue;
                     }
-                    set(result, languageAlias, script, regionAlias,
-                            languageTarget, scriptTarget, regionTarget);
+                    set(result, languageAlias, script, regionAlias, ltp);
                 }
             }
         }
         // hack
-        set(result, "und", "Latn", "", "en", "Latn", "US");
+        set(result, "und", "Latn", "", new LSR("en", "Latn", "US"));
 
         // hack, ensure that if und-YY => und-Xxxx-YY, then we add Xxxx=>YY to the table
         // <likelySubtag from="und_GH" to="ak_Latn_GH"/>
@@ -242,23 +296,16 @@ class LikelySubtagsBuilder {
     }
 
     private static void set(Map<String, Map<String, Map<String, LSR>>> langTable,
-            final String language, final String script, final String region,
-            final String languageTarget, final String scriptTarget, final String regionTarget) {
-        LSR target = new LSR(languageTarget, scriptTarget, regionTarget);
-        set(langTable, language, script, region, target);
-    }
-
-    private static void set(Map<String, Map<String, Map<String, LSR>>> langTable,
             final String language, final String script, final String region, LSR newValue) {
         Map<String, Map<String, LSR>> scriptTable = getSubtable(langTable, language);
         Map<String, LSR> regionTable = getSubtable(scriptTable, script);
         regionTable.put(region, newValue);
     }
 
-    private static <K, V, T> Map<V, T> getSubtable(Map<K, Map<V, T>> table, final K language) {
-        Map<V, T> subTable = table.get(language);
+    private static <K, V, T> Map<V, T> getSubtable(Map<K, Map<V, T>> table, final K subtag) {
+        Map<V, T> subTable = table.get(subtag);
         if (subTable == null) {
-            table.put(language, subTable = new TreeMap<>());
+            table.put(subtag, subTable = new TreeMap<>());
         }
         return subTable;
     }

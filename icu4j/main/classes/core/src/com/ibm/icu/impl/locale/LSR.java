@@ -5,7 +5,9 @@ package com.ibm.icu.impl.locale;
 import java.util.Objects;
 
 final class LSR {
-    static final int REGION_INDEX_LIMIT = 1000 + 26 * 26;
+    static final int REGION_INDEX_LIMIT = 1001 + 26 * 26;
+
+    static final boolean DEBUG_OUTPUT = false;
 
     final String language;
     final String script;
@@ -21,27 +23,27 @@ final class LSR {
     }
 
     /**
-     * Returns a non-negative index for a well-formed region code.
+     * Returns a positive index (>0) for a well-formed region code.
      * Do not rely on a particular region->index mapping; it may change.
-     * Returns -1 for ill-formed strings.
+     * Returns 0 for ill-formed strings.
      */
     static final int indexForRegion(String region) {
         if (region.length() == 2) {
             int a = region.charAt(0) - 'A';
-            if (a < 0 || 25 < a) { return -1; }
+            if (a < 0 || 25 < a) { return 0; }
             int b = region.charAt(1) - 'A';
-            if (b < 0 || 25 < b) { return -1; }
-            return 26 * a + b + 1000;
+            if (b < 0 || 25 < b) { return 0; }
+            return 26 * a + b + 1001;
         } else if (region.length() == 3) {
             int a = region.charAt(0) - '0';
-            if (a < 0 || 9 < a) { return -1; }
+            if (a < 0 || 9 < a) { return 0; }
             int b = region.charAt(1) - '0';
-            if (b < 0 || 9 < b) { return -1; }
+            if (b < 0 || 9 < b) { return 0; }
             int c = region.charAt(2) - '0';
-            if (c < 0 || 9 < c) { return -1; }
-            return (10 * a + b) * 10 + c;
+            if (c < 0 || 9 < c) { return 0; }
+            return (10 * a + b) * 10 + c + 1;
         }
-        return -1;
+        return 0;
     }
 
     @Override

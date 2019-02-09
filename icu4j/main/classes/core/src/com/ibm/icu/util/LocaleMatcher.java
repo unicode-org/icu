@@ -25,9 +25,9 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.Relation;
 import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Row.R3;
-import com.ibm.icu.impl.locale.LocaleDistance.DistanceOption;
 import com.ibm.icu.impl.locale.XLocaleMatcher;
 import com.ibm.icu.impl.locale.XLocaleMatcher.Builder;
+import com.ibm.icu.impl.locale.XLocaleMatcher.FavorSubtag;
 
 /**
  * Provides a way to match the languages (locales) supported by a product to the
@@ -864,30 +864,15 @@ public class LocaleMatcher {
     transient ULocale xDefaultLanguage = null;
     transient boolean xFavorScript = false;
 
-    /**
-     * Returns the distance between the two languages, using the new CLDR syntax (see getBestMatch).
-     * The values are not necessarily symmetric.
-     * @param desired A locale desired by the user
-     * @param supported A locale supported by a program.
-     * @return A return of 0 is a complete match, and 100 is a complete mismatch (above the thresholdDistance).
-     * A language is first maximized with add likely subtags, then compared.
-     * @internal
-     * @deprecated ICU 59: This API is a technical preview. It may change in an upcoming release.
-     */
-    @Deprecated
-    public int distance(ULocale desired, ULocale supported) {
-        return getLocaleMatcher().distance(desired, supported);
-    }
-
     private synchronized XLocaleMatcher getLocaleMatcher() {
         if (xLocaleMatcher == null) {
             Builder builder = XLocaleMatcher.builder();
-            builder.setSupportedLocales(languagePriorityList);
+            builder.setSupportedULocales(languagePriorityList.getULocales());
             if (xDefaultLanguage != null) {
-                builder.setDefaultLanguage(xDefaultLanguage);
+                builder.setDefaultULocale(xDefaultLanguage);
             }
             if (xFavorScript) {
-                builder.setDistanceOption(DistanceOption.SCRIPT_FIRST);
+                builder.setFavorSubtag(FavorSubtag.SCRIPT);
             }
             xLocaleMatcher = builder.build();
         }
@@ -908,7 +893,13 @@ public class LocaleMatcher {
      */
     @Deprecated
     public ULocale getBestMatch(LinkedHashSet<ULocale> desiredLanguages, Output<ULocale> outputBestDesired) {
-        return getLocaleMatcher().getBestMatch(desiredLanguages, outputBestDesired);
+        if (outputBestDesired == null) {
+            return getLocaleMatcher().getBestMatch(desiredLanguages);
+        } else {
+            XLocaleMatcher.Result result = getLocaleMatcher().getBestMatchResult(desiredLanguages);
+            outputBestDesired.value = result.getDesiredULocale();
+            return result.getSupportedULocale();
+        }
     }
 
     /**
