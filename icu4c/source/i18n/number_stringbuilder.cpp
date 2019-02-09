@@ -8,6 +8,7 @@
 #include "number_stringbuilder.h"
 #include "static_unicode_sets.h"
 #include "unicode/utf16.h"
+#include "number_utils.h"
 
 using namespace icu;
 using namespace icu::number;
@@ -41,7 +42,7 @@ NumberStringBuilder::NumberStringBuilder() {
         getCharPtr()[i] = 1;
     }
 #endif
-};
+}
 
 NumberStringBuilder::~NumberStringBuilder() {
     if (fUsingHeap) {
@@ -449,7 +450,7 @@ bool NumberStringBuilder::nextFieldPosition(FieldPosition& fp, UErrorCode& statu
     ConstrainedFieldPosition cfpos;
     cfpos.constrainField(UFIELD_CATEGORY_NUMBER, rawField);
     cfpos.setState(UFIELD_CATEGORY_NUMBER, rawField, fp.getBeginIndex(), fp.getEndIndex());
-    if (nextPosition(cfpos, status)) {
+    if (nextPosition(cfpos, 0, status)) {
         fp.setBeginIndex(cfpos.getStart());
         fp.setEndIndex(cfpos.getLimit());
         return true;
@@ -476,25 +477,21 @@ bool NumberStringBuilder::nextFieldPosition(FieldPosition& fp, UErrorCode& statu
 void NumberStringBuilder::getAllFieldPositions(FieldPositionIteratorHandler& fpih,
                                                UErrorCode& status) const {
     ConstrainedFieldPosition cfpos;
-    while (nextPosition(cfpos, status)) {
+    while (nextPosition(cfpos, 0, status)) {
         fpih.addAttribute(cfpos.getField(), cfpos.getStart(), cfpos.getLimit());
     }
 }
 
-bool NumberStringBuilder::nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& /*status*/) const {
-    bool isSearchingForField = false;
-    if (cfpos.getConstraintType() == UCFPOS_CONSTRAINT_CATEGORY) {
-        if (cfpos.getCategory() != UFIELD_CATEGORY_NUMBER) {
-            return false;
-        }
-    } else if (cfpos.getConstraintType() == UCFPOS_CONSTRAINT_FIELD) {
-        isSearchingForField = true;
-    }
+// Signal the end of the string using a field that doesn't exist and that is
+// different from UNUM_FIELD_COUNT, which is used for "null number field".
+static constexpr Field kEndField = 0xff;
 
+bool NumberStringBuilder::nextPosition(ConstrainedFieldPosition& cfpos, Field numericField, UErrorCode& /*status*/) const {
+    auto numericCAF = NumFieldUtils::expand(numericField);
     int32_t fieldStart = -1;
-    int32_t currField = UNUM_FIELD_COUNT;
+    Field currField = UNUM_FIELD_COUNT;
     for (int32_t i = fZero + cfpos.getLimit(); i <= fZero + fLength; i++) {
-        Field _field = (i < fZero + fLength) ? getFieldPtr()[i] : UNUM_FIELD_COUNT;
+        Field _field = (i < fZero + fLength) ? getFieldPtr()[i] : kEndField;
         // Case 1: currently scanning a field.
         if (currField != UNUM_FIELD_COUNT) {
             if (currField != _field) {
@@ -514,15 +511,17 @@ bool NumberStringBuilder::nextPosition(ConstrainedFieldPosition& cfpos, UErrorCo
                 if (currField != UNUM_GROUPING_SEPARATOR_FIELD) {
                     start = trimFront(start);
                 }
-                cfpos.setState(UFIELD_CATEGORY_NUMBER, currField, start, end);
+                auto caf = NumFieldUtils::expand(currField);
+                cfpos.setState(caf.category, caf.field, start, end);
                 return true;
             }
             continue;
         }
         // Special case: coalesce the INTEGER if we are pointing at the end of the INTEGER.
-        if ((!isSearchingForField || cfpos.getField() == UNUM_INTEGER_FIELD)
+        if (cfpos.matchesField(UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD)
                 && i > fZero
-                && i - fZero > cfpos.getLimit()  // don't return the same field twice in a row
+                // don't return the same field twice in a row:
+                && i - fZero > cfpos.getLimit()
                 && isIntOrGroup(getFieldPtr()[i - 1])
                 && !isIntOrGroup(_field)) {
             int j = i - 1;
@@ -530,16 +529,32 @@ bool NumberStringBuilder::nextPosition(ConstrainedFieldPosition& cfpos, UErrorCo
             cfpos.setState(UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, j - fZero + 1, i - fZero);
             return true;
         }
+        // Special case: coalesce NUMERIC if we are pointing at the end of the NUMERIC.
+        if (numericField != 0
+                && cfpos.matchesField(numericCAF.category, numericCAF.field)
+                && i > fZero
+                // don't return the same field twice in a row:
+                && (i - fZero > cfpos.getLimit()
+                    || cfpos.getCategory() != numericCAF.category
+                    || cfpos.getField() != numericCAF.field)
+                && isNumericField(getFieldPtr()[i - 1])
+                && !isNumericField(_field)) {
+            int j = i - 1;
+            for (; j >= fZero && isNumericField(getFieldPtr()[j]); j--) {}
+            cfpos.setState(numericCAF.category, numericCAF.field, j - fZero + 1, i - fZero);
+            return true;
+        }
         // Special case: skip over INTEGER; will be coalesced later.
         if (_field == UNUM_INTEGER_FIELD) {
             _field = UNUM_FIELD_COUNT;
         }
         // Case 2: no field starting at this position.
-        if (_field == UNUM_FIELD_COUNT) {
+        if (_field == UNUM_FIELD_COUNT || _field == kEndField) {
             continue;
         }
         // Case 3: check for field starting at this position
-        if (!isSearchingForField || cfpos.getField() == _field) {
+        auto caf = NumFieldUtils::expand(_field);
+        if (cfpos.matchesField(caf.category, caf.field)) {
             fieldStart = i - fZero;
             currField = _field;
         }
@@ -560,7 +575,11 @@ bool NumberStringBuilder::containsField(Field field) const {
 
 bool NumberStringBuilder::isIntOrGroup(Field field) {
     return field == UNUM_INTEGER_FIELD
-        || field ==UNUM_GROUPING_SEPARATOR_FIELD;
+        || field == UNUM_GROUPING_SEPARATOR_FIELD;
+}
+
+bool NumberStringBuilder::isNumericField(Field field) {
+    return NumFieldUtils::isNumericField(field);
 }
 
 int32_t NumberStringBuilder::trimBack(int32_t limit) const {

@@ -22,6 +22,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.number.DecimalFormatProperties;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
+import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.NumberFormatter;
@@ -235,8 +236,12 @@ public class DecimalQuantityTest extends TestFmwk {
         for (LocalizedNumberFormatter format : formats) {
             DecimalQuantity q0 = rq0.createCopy();
             DecimalQuantity q1 = rq1.createCopy();
-            String s1 = format.format(q0).toString();
-            String s2 = format.format(q1).toString();
+            NumberStringBuilder nsb1 = new NumberStringBuilder();
+            NumberStringBuilder nsb2 = new NumberStringBuilder();
+            format.formatImpl(q0, nsb1);
+            format.formatImpl(q1, nsb2);
+            String s1 = nsb1.toString();
+            String s2 = nsb2.toString();
             assertEquals("Different output from formatter (" + q0 + ", " + q1 + ")", s1, s2);
         }
     }

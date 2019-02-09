@@ -156,7 +156,7 @@ SimpleModifier::SimpleModifier()
 
 int32_t SimpleModifier::apply(NumberStringBuilder &output, int leftIndex, int rightIndex,
                               UErrorCode &status) const {
-    return formatAsPrefixSuffix(output, leftIndex, rightIndex, fField, status);
+    return formatAsPrefixSuffix(output, leftIndex, rightIndex, status);
 }
 
 int32_t SimpleModifier::getPrefixLength() const {
@@ -204,13 +204,13 @@ bool SimpleModifier::semanticallyEquivalent(const Modifier& other) const {
 
 int32_t
 SimpleModifier::formatAsPrefixSuffix(NumberStringBuilder &result, int32_t startIndex, int32_t endIndex,
-                                     Field field, UErrorCode &status) const {
+                                     UErrorCode &status) const {
     if (fSuffixOffset == -1 && fPrefixLength + fSuffixLength > 0) {
         // There is no argument for the inner number; overwrite the entire segment with our string.
-        return result.splice(startIndex, endIndex, fCompiledPattern, 2, 2 + fPrefixLength, field, status);
+        return result.splice(startIndex, endIndex, fCompiledPattern, 2, 2 + fPrefixLength, fField, status);
     } else {
         if (fPrefixLength > 0) {
-            result.insert(startIndex, fCompiledPattern, 2, 2 + fPrefixLength, field, status);
+            result.insert(startIndex, fCompiledPattern, 2, 2 + fPrefixLength, fField, status);
         }
         if (fSuffixLength > 0) {
             result.insert(
@@ -218,7 +218,7 @@ SimpleModifier::formatAsPrefixSuffix(NumberStringBuilder &result, int32_t startI
                     fCompiledPattern,
                     1 + fSuffixOffset,
                     1 + fSuffixOffset + fSuffixLength,
-                    field,
+                    fField,
                     status);
         }
         return fPrefixLength + fSuffixLength;

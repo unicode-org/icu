@@ -21,9 +21,11 @@ import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.RelativeDateTimeFormatter;
 import com.ibm.icu.text.RelativeDateTimeFormatter.AbsoluteUnit;
 import com.ibm.icu.text.RelativeDateTimeFormatter.Direction;
+import com.ibm.icu.text.RelativeDateTimeFormatter.FormattedRelativeDateTime;
 import com.ibm.icu.text.RelativeDateTimeFormatter.RelativeDateTimeUnit;
 import com.ibm.icu.text.RelativeDateTimeFormatter.RelativeUnit;
 import com.ibm.icu.text.RelativeDateTimeFormatter.Style;
+import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.util.ULocale;
 
 @RunWith(JUnit4.class)
@@ -1025,12 +1027,101 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
         assertEquals("narrow: in 6 qtr", "in 6 qtr", w);
     }
 
-@Test
-public void TestLocales() {
-    ULocale[] availableLocales = ULocale.getAvailableLocales();
-    for (ULocale loc: availableLocales) {
-        RelativeDateTimeFormatter.getInstance(loc);
+    @Test
+    public void TestLocales() {
+        ULocale[] availableLocales = ULocale.getAvailableLocales();
+        for (ULocale loc: availableLocales) {
+            RelativeDateTimeFormatter.getInstance(loc);
+        }
     }
-}
+
+    @Test
+    public void TestFields() {
+        RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(ULocale.US);
+
+        {
+            String message = "automatic absolute unit";
+            FormattedRelativeDateTime fv = fmt.formatToValue(1, RelativeDateTimeUnit.DAY);
+            String expectedString = "tomorrow";
+            Object[][] expectedFieldPositions = new Object[][]{
+                {RelativeDateTimeFormatter.Field.LITERAL, 0, 8}};
+            FormattedValueTest.checkFormattedValue(message, fv, expectedString, expectedFieldPositions);
+        }
+        {
+            String message = "automatic numeric unit";
+            FormattedRelativeDateTime fv = fmt.formatToValue(3, RelativeDateTimeUnit.DAY);
+            String expectedString = "in 3 days";
+            Object[][] expectedFieldPositions = new Object[][]{
+                {RelativeDateTimeFormatter.Field.LITERAL, 0, 2},
+                {NumberFormat.Field.INTEGER, 3, 4},
+                {RelativeDateTimeFormatter.Field.NUMERIC, 3, 4},
+                {RelativeDateTimeFormatter.Field.LITERAL, 5, 9}};
+            FormattedValueTest.checkFormattedValue(message, fv, expectedString, expectedFieldPositions);
+        }
+        {
+            String message = "manual absolute unit";
+            FormattedRelativeDateTime fv = fmt.formatToValue(Direction.NEXT, AbsoluteUnit.MONDAY);
+            String expectedString = "next Monday";
+            Object[][] expectedFieldPositions = new Object[][]{
+                {RelativeDateTimeFormatter.Field.LITERAL, 0, 11}};
+            FormattedValueTest.checkFormattedValue(message, fv, expectedString, expectedFieldPositions);
+        }
+        {
+            String message = "manual numeric unit";
+            FormattedRelativeDateTime fv = fmt.formatNumericToValue(1.5, RelativeDateTimeUnit.WEEK);
+            String expectedString = "in 1.5 weeks";
+            Object[][] expectedFieldPositions = new Object[][]{
+                {RelativeDateTimeFormatter.Field.LITERAL, 0, 2},
+                {NumberFormat.Field.INTEGER, 3, 4},
+                {NumberFormat.Field.DECIMAL_SEPARATOR, 4, 5},
+                {NumberFormat.Field.FRACTION, 5, 6},
+                {RelativeDateTimeFormatter.Field.NUMERIC, 3, 6},
+                {RelativeDateTimeFormatter.Field.LITERAL, 7, 12}};
+            FormattedValueTest.checkFormattedValue(message, fv, expectedString, expectedFieldPositions);
+        }
+        {
+            String message = "manual numeric resolved unit";
+            FormattedRelativeDateTime fv = fmt.formatToValue(12, Direction.LAST, RelativeUnit.HOURS);
+            String expectedString = "12 hours ago";
+            Object[][] expectedFieldPositions = new Object[][]{
+                {NumberFormat.Field.INTEGER, 0, 2},
+                {RelativeDateTimeFormatter.Field.NUMERIC, 0, 2},
+                {RelativeDateTimeFormatter.Field.LITERAL, 3, 12}};
+            FormattedValueTest.checkFormattedValue(message, fv, expectedString, expectedFieldPositions);
+        }
+
+        // Test when the number field is at the end
+        fmt = RelativeDateTimeFormatter.getInstance(new ULocale("sw"));
+        {
+            String message = "numeric field at end";
+            FormattedRelativeDateTime fv = fmt.formatToValue(12, RelativeDateTimeUnit.HOUR);
+            String expectedString = "baada ya saa 12";
+            Object[][] expectedFieldPositions = new Object[][]{
+                {RelativeDateTimeFormatter.Field.LITERAL, 0, 12},
+                {NumberFormat.Field.INTEGER, 13, 15},
+                {RelativeDateTimeFormatter.Field.NUMERIC, 13, 15}};
+            FormattedValueTest.checkFormattedValue(message, fv, expectedString, expectedFieldPositions);
+        }
+    }
+
+    @Test
+    public void TestRBNF() {
+        RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(ULocale.US, RuleBasedNumberFormat.SPELLOUT);
+        RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(ULocale.US, rbnf);
+        assertEquals("format (direction)", "in five seconds", fmt.format(5, Direction.NEXT, RelativeUnit.SECONDS));
+        assertEquals("formatNumeric", "one week ago", fmt.formatNumeric(-1, RelativeDateTimeUnit.WEEK));
+        assertEquals("format (absolute)", "yesterday", fmt.format(Direction.LAST, AbsoluteUnit.DAY));
+        assertEquals("format (relative)", "in forty-two months", fmt.format(42, RelativeDateTimeUnit.MONTH));
+
+        {
+            String message = "formatToValue (relative)";
+            FormattedRelativeDateTime fv = fmt.formatToValue(-100, RelativeDateTimeUnit.YEAR);
+            String expectedString = "one hundred years ago";
+            Object[][] expectedFieldPositions = new Object[][]{
+                {RelativeDateTimeFormatter.Field.NUMERIC, 0, 11},
+                {RelativeDateTimeFormatter.Field.LITERAL, 12, 21}};
+            FormattedValueTest.checkFormattedValue(message, fv, expectedString, expectedFieldPositions);
+        }
+    }
 
 }

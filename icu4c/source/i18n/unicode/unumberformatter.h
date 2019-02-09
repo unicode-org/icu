@@ -551,15 +551,17 @@ unumf_formatDecimal(const UNumberFormatter* uformatter, const char* value, int32
 
 
 /**
- * Returns a representation of a UFormattedNumber as a UFormattedValue, which can be
- * subsequently passed to any API requiring that type.
+ * Returns a representation of a UFormattedNumber as a UFormattedValue,
+ * which can be subsequently passed to any API requiring that type.
  *
- * The returned object is owned by the UFormattedNumber and is valid only as long as the
- * UFormattedNumber is present and unchanged in memory.
+ * The returned object is owned by the UFormattedNumber and is valid
+ * only as long as the UFormattedNumber is present and unchanged in memory.
  *
- * @param uresult The object containing the formatted number.
+ * You can think of this method as a cast between types.
+ *
+ * @param uresult The object containing the formatted string.
  * @param ec Set if an error occurs.
- * @return A representation of the given UFormattedNumber as a UFormattedValue.
+ * @return A UFormattedValue owned by the input object.
  * @draft ICU 64
  */
 U_DRAFT const UFormattedValue* U_EXPORT2

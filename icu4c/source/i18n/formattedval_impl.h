@@ -18,6 +18,7 @@
 #include "fphdlimp.h"
 #include "util.h"
 #include "uvectr32.h"
+#include "number_stringbuilder.h"
 
 U_NAMESPACE_BEGIN
 
@@ -44,9 +45,32 @@ public:
     void appendString(UnicodeString string, UErrorCode& status);
 
 private:
-    // Final data:
     UnicodeString fString;
     UVector32 fFields;
+};
+
+
+class FormattedValueNumberStringBuilderImpl : public UMemory, public FormattedValue {
+public:
+
+    FormattedValueNumberStringBuilderImpl(number::impl::Field numericField);
+
+    virtual ~FormattedValueNumberStringBuilderImpl();
+
+    // Implementation of FormattedValue (const):
+
+    UnicodeString toString(UErrorCode& status) const U_OVERRIDE;
+    UnicodeString toTempString(UErrorCode& status) const U_OVERRIDE;
+    Appendable& appendTo(Appendable& appendable, UErrorCode& status) const U_OVERRIDE;
+    UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
+
+    inline number::impl::NumberStringBuilder& getStringRef() {
+        return fString;
+    }
+
+private:
+    number::impl::NumberStringBuilder fString;
+    number::impl::Field fNumericField;
 };
 
 

@@ -1005,7 +1005,7 @@ group: formatting
     # messageformat
     choicfmt.o msgfmt.o plurfmt.o selfmt.o umsg.o
   deps
-    decnumber formattable format units numberformatter numberparser
+    decnumber formattable format units numberformatter numberparser formatted_value_sbimpl
     listformatter
     dayperiodrules
     collation collation_builder  # for rbnf
@@ -1050,6 +1050,11 @@ group: formatted_value_iterimpl
     formattedval_iterimpl.o
   deps
     formatted_value format uvector32
+
+group: formatted_value_sbimpl
+    formattedval_sbimpl.o
+  deps
+    number_representation
 
 group: format
     format.o fphdlimp.o fpositer.o ufieldpositer.o

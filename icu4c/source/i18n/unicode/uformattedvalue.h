@@ -60,6 +60,13 @@ typedef enum UFieldCategory {
      */
     UFIELD_CATEGORY_LIST,
 
+    /**
+     * For fields in URelativeDateTimeFormatterField (ureldatefmt.h), from ICU 64.
+     *
+     * @draft ICU 64
+     */
+    UFIELD_CATEGORY_RELATIVE_DATETIME,
+
 #ifndef U_HIDE_INTERNAL_API
     /** @internal */
     UFIELD_CATEGORY_COUNT

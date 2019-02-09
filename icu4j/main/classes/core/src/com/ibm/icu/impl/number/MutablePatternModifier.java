@@ -326,7 +326,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     }
 
     @Override
-    public boolean containsField(Field field) {
+    public boolean containsField(java.text.Format.Field field) {
         // This method is not currently used. (unsafe path not used in range formatting)
         assert false;
         return false;

@@ -107,7 +107,7 @@ public class FormattedNumberRange implements FormattedValue {
      */
     @Override
     public boolean nextPosition(ConstrainedFieldPosition cfpos) {
-        return string.nextPosition(cfpos);
+        return string.nextPosition(cfpos, null);
     }
 
     /**
@@ -151,7 +151,7 @@ public class FormattedNumberRange implements FormattedValue {
      */
     @Override
     public AttributedCharacterIterator toCharacterIterator() {
-        return string.toCharacterIterator();
+        return string.toCharacterIterator(null);
     }
 
     /**

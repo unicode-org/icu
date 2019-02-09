@@ -239,6 +239,7 @@
     <ClCompile Include="fmtable_cnv.cpp" />
     <ClCompile Include="format.cpp" />
     <ClCompile Include="formattedval_iterimpl.cpp" />
+    <ClCompile Include="formattedval_sbimpl.cpp" />
     <ClCompile Include="formattedvalue.cpp" />
     <ClCompile Include="fphdlimp.cpp" />
     <ClCompile Include="fpositer.cpp" />

@@ -128,7 +128,7 @@ public class FormattedValueTest {
         String baseMessage = message + ": " + fv.toString() + ": ";
 
         // Check the String and CharSequence
-        assertEquals(baseMessage + "string", expectedString, fv.toString());
+        assertEquals(baseMessage + " string", expectedString, fv.toString());
         assertCharSequenceEquals(expectedString, fv);
 
         // Check the AttributedCharacterIterator
@@ -159,7 +159,8 @@ public class FormattedValueTest {
                 assertEquals(baseMessage + expectedField + " end @" + i, expectedEndIndex, actualEndIndex);
                 attributesRemaining--;
             }
-            assertEquals(baseMessage + "Should have looked at every field", 0, attributesRemaining);
+            assertEquals(baseMessage + "Should have looked at every field: " + i + ": " + currentAttributes,
+                    0, attributesRemaining);
         }
         assertEquals(baseMessage + "Should have looked at every character", stringLength, i);
 

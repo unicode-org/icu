@@ -108,7 +108,7 @@ class U_I18N_API NumberStringBuilder : public UMemory {
 
     void getAllFieldPositions(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
 
-    bool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const;
+    bool nextPosition(ConstrainedFieldPosition& cfpos, Field numericField, UErrorCode& status) const;
 
     bool containsField(Field field) const;
 
@@ -146,6 +146,8 @@ class U_I18N_API NumberStringBuilder : public UMemory {
     int32_t remove(int32_t index, int32_t count);
 
     static bool isIntOrGroup(Field field);
+
+    static bool isNumericField(Field field);
 
     int32_t trimBack(int32_t limit) const;
 

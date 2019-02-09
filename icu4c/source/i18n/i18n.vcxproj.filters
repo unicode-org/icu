@@ -159,6 +159,9 @@
     <ClCompile Include="formattedval_iterimpl.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="formattedval_sbimpl.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="formattedvalue.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
