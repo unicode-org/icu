@@ -72,6 +72,7 @@ void TimeZoneTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     TESTCASE_AUTO(TestGetRegion);
     TESTCASE_AUTO(TestGetAvailableIDsNew);
     TESTCASE_AUTO(TestGetUnknown);
+    TESTCASE_AUTO(TestGetGMT);
     TESTCASE_AUTO(TestGetWindowsID);
     TESTCASE_AUTO(TestGetIDForWindowsID);
     TESTCASE_AUTO_END;
@@ -2418,6 +2419,15 @@ void TimeZoneTest::TestGetUnknown() {
     assertEquals("getUnknown() wrong ID", expectedID, unknown.getID(id));
     assertTrue("getUnknown() wrong offset", 0 == unknown.getRawOffset());
     assertFalse("getUnknown() uses DST", unknown.useDaylightTime());
+}
+
+void TimeZoneTest::TestGetGMT() {
+    const TimeZone *gmt = TimeZone::getGMT();
+    UnicodeString expectedID = UNICODE_STRING_SIMPLE("GMT");
+    UnicodeString id;
+    assertEquals("getGMT() wrong ID", expectedID, gmt->getID(id));
+    assertTrue("getGMT() wrong offset", 0 == gmt->getRawOffset());
+    assertFalse("getGMT() uses DST", gmt->useDaylightTime());
 }
 
 void TimeZoneTest::TestGetWindowsID(void) {
