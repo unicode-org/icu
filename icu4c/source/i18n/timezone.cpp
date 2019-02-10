@@ -115,9 +115,14 @@ static const int32_t       UNKNOWN_ZONE_ID_LENGTH = 11;
 static icu::TimeZone* DEFAULT_ZONE = NULL;
 static icu::UInitOnce gDefaultZoneInitOnce = U_INITONCE_INITIALIZER;
 
-static icu::TimeZone* _GMT = NULL;
-static icu::TimeZone* _UNKNOWN_ZONE = NULL;
+alignas(icu::SimpleTimeZone)
+static char gRawGMT[sizeof(icu::SimpleTimeZone)];
+
+alignas(icu::SimpleTimeZone)
+static char gRawUNKNOWN[sizeof(icu::SimpleTimeZone)];
+
 static icu::UInitOnce gStaticZonesInitOnce = U_INITONCE_INITIALIZER;
+static UBool gStaticZonesInitialized = FALSE; // Whether the static zones are initialized and ready to use.
 
 static char TZDATA_VERSION[16];
 static icu::UInitOnce gTZDataVersionInitOnce = U_INITONCE_INITIALIZER;
@@ -142,11 +147,12 @@ static UBool U_CALLCONV timeZone_cleanup(void)
     DEFAULT_ZONE = NULL;
     gDefaultZoneInitOnce.reset();
 
-    delete _GMT;
-    _GMT = NULL;
-    delete _UNKNOWN_ZONE;
-    _UNKNOWN_ZONE = NULL;
-    gStaticZonesInitOnce.reset();
+    if (gStaticZonesInitialized) {
+        reinterpret_cast<SimpleTimeZone*>(gRawGMT)->~SimpleTimeZone();
+        reinterpret_cast<SimpleTimeZone*>(gRawUNKNOWN)->~SimpleTimeZone();
+        gStaticZonesInitialized = FALSE;
+        gStaticZonesInitOnce.reset();
+    }
 
     uprv_memset(TZDATA_VERSION, 0, sizeof(TZDATA_VERSION));
     gTZDataVersionInitOnce.reset();
@@ -304,8 +310,12 @@ void U_CALLCONV initStaticTimeZones() {
     // Initialize _GMT independently of other static data; it should
     // be valid even if we can't load the time zone UDataMemory.
     ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
-    _UNKNOWN_ZONE = new SimpleTimeZone(0, UnicodeString(TRUE, UNKNOWN_ZONE_ID, UNKNOWN_ZONE_ID_LENGTH));
-    _GMT = new SimpleTimeZone(0, UnicodeString(TRUE, GMT_ID, GMT_ID_LENGTH));
+
+    // new can't fail below, as we use placement new into staticly allocated space.
+    new(gRawGMT) SimpleTimeZone(0, UnicodeString(TRUE, GMT_ID, GMT_ID_LENGTH));
+    new(gRawUNKNOWN) SimpleTimeZone(0, UnicodeString(TRUE, UNKNOWN_ZONE_ID, UNKNOWN_ZONE_ID_LENGTH));
+
+    gStaticZonesInitialized = TRUE;
 }
 
 }  // anonymous namespace
@@ -314,14 +324,14 @@ const TimeZone& U_EXPORT2
 TimeZone::getUnknown()
 {
     umtx_initOnce(gStaticZonesInitOnce, &initStaticTimeZones);
-    return *_UNKNOWN_ZONE;
+    return *reinterpret_cast<SimpleTimeZone*>(gRawUNKNOWN);
 }
 
 const TimeZone* U_EXPORT2
 TimeZone::getGMT(void)
 {
     umtx_initOnce(gStaticZonesInitOnce, &initStaticTimeZones);
-    return _GMT;
+    return reinterpret_cast<SimpleTimeZone*>(gRawGMT);
 }
 
 // *****************************************************************************
@@ -437,11 +447,8 @@ TimeZone::createTimeZone(const UnicodeString& ID)
     if (result == NULL) {
         U_DEBUG_TZ_MSG(("failed to load time zone with id - falling to Etc/Unknown(GMT)"));
         const TimeZone& unknown = getUnknown();
-        if (_UNKNOWN_ZONE == NULL) {                   // Cannot test (&unknown == NULL) because the
-          U_DEBUG_TZ_MSG(("failed to getUnknown()"));  // behavior of NULL references is undefined.
-        } else {
-          result = unknown.clone();
-        }
+        // Unknown zone uses staticly allocated memory, so creation of it can never fail due to OOM.
+        result = unknown.clone();
     }
     return result;
 }
@@ -508,10 +515,7 @@ TimeZone::detectHostTimeZone()
     // code may also fail.
     if (hostZone == NULL) {
         const TimeZone* temptz = TimeZone::getGMT();
-        // If we can't use GMT, get out.
-        if (temptz == NULL) {
-            return NULL;
-        }
+        // GMT zone uses staticly allocated memory, so creation of it can never fail due to OOM.
         hostZone = temptz->clone();
     }
 
