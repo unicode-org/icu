@@ -38,7 +38,8 @@ FieldPositionOnlyHandler::~FieldPositionOnlyHandler() {
 
 void
 FieldPositionOnlyHandler::addAttribute(int32_t id, int32_t start, int32_t limit) {
-  if (pos.getField() == id) {
+  if (pos.getField() == id && (!acceptFirstOnly || !seenFirst)) {
+    seenFirst = TRUE;
     pos.setBeginIndex(start + fShift);
     pos.setEndIndex(limit + fShift);
   }
@@ -55,6 +56,10 @@ FieldPositionOnlyHandler::shiftLast(int32_t delta) {
 UBool
 FieldPositionOnlyHandler::isRecording(void) const {
   return pos.getField() != FieldPosition::DONT_CARE;
+}
+
+void FieldPositionOnlyHandler::setAcceptFirstOnly(UBool acceptFirstOnly) {
+  this->acceptFirstOnly = acceptFirstOnly;
 }
 
 

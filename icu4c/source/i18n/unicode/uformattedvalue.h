@@ -67,10 +67,24 @@ typedef enum UFieldCategory {
      */
     UFIELD_CATEGORY_RELATIVE_DATETIME,
 
+    /**
+     * Reserved for possible future fields in UDateIntervalFormatField.
+     *
+     * @internal
+     */
+    UFIELD_CATEGORY_DATE_INTERVAL,
+
 #ifndef U_HIDE_INTERNAL_API
     /** @internal */
-    UFIELD_CATEGORY_COUNT
+    UFIELD_CATEGORY_COUNT,
 #endif
+
+    /**
+     * Category for spans in a date interval.
+     *
+     * @draft ICU 64
+     */
+    UFIELD_CATEGORY_DATE_INTERVAL_SPAN = 0x1000 + UFIELD_CATEGORY_DATE_INTERVAL,
 
 } UFieldCategory;
 

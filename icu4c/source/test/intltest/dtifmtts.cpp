@@ -55,6 +55,7 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
         TESTCASE(7, testTicket11985);
         TESTCASE(8, testTicket11669);
         TESTCASE(9, testTicket12065);
+        TESTCASE(10, testFormattedDateInterval);
         default: name = ""; break;
     }
 }
@@ -1616,6 +1617,69 @@ void DateIntervalFormatTest::testTicket12065() {
     }
     if (U_FAILURE(status)) {
         errln("%s:%d %s", __FILE__, __LINE__, u_errorName(status));
+    }
+}
+
+
+void DateIntervalFormatTest::testFormattedDateInterval() {
+    IcuTestErrorCode status(*this, "testFormattedDateInterval");
+    LocalPointer<DateIntervalFormat> fmt(DateIntervalFormat::createInstance(u"dMMMMy", "en-US", status), status);
+
+    {
+        const char16_t* message = u"FormattedDateInterval test 1";
+        const char16_t* expectedString = u"July 20 \u2013 25, 2018";
+        LocalPointer<Calendar> input1(Calendar::createInstance("en-GB", status));
+        LocalPointer<Calendar> input2(Calendar::createInstance("en-GB", status));
+        input1->set(2018, 6, 20);
+        input2->set(2018, 6, 25);
+        FormattedDateInterval result = fmt->formatToValue(*input1, *input2, status);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // field, begin index, end index
+            {UFIELD_CATEGORY_DATE, UDAT_MONTH_FIELD, 0, 4},
+            {UFIELD_CATEGORY_DATE_INTERVAL_SPAN, 0, 5, 7},
+            {UFIELD_CATEGORY_DATE, UDAT_DATE_FIELD, 5, 7},
+            {UFIELD_CATEGORY_DATE_INTERVAL_SPAN, 1, 10, 12},
+            {UFIELD_CATEGORY_DATE, UDAT_DATE_FIELD, 10, 12},
+            {UFIELD_CATEGORY_DATE, UDAT_YEAR_FIELD, 14, 18}};
+        checkMixedFormattedValue(
+            message,
+            result,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+
+    // To test the fallback pattern behavior, make a custom DateIntervalInfo.
+    DateIntervalInfo dtitvinf(status);
+    dtitvinf.setFallbackIntervalPattern("<< {1} --- {0} >>", status);
+    fmt.adoptInsteadAndCheckErrorCode(
+        DateIntervalFormat::createInstance(u"dMMMMy", "en-US", dtitvinf, status),
+        status);
+
+    {
+        const char16_t* message = u"FormattedDateInterval with fallback format test 1";
+        const char16_t* expectedString = u"<< July 25, 2018 --- July 20, 2018 >>";
+        LocalPointer<Calendar> input1(Calendar::createInstance("en-GB", status));
+        LocalPointer<Calendar> input2(Calendar::createInstance("en-GB", status));
+        input1->set(2018, 6, 20);
+        input2->set(2018, 6, 25);
+        FormattedDateInterval result = fmt->formatToValue(*input1, *input2, status);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // field, begin index, end index
+            {UFIELD_CATEGORY_DATE_INTERVAL_SPAN, 1, 3, 16},
+            {UFIELD_CATEGORY_DATE, UDAT_MONTH_FIELD, 3, 7},
+            {UFIELD_CATEGORY_DATE, UDAT_DATE_FIELD, 8, 10},
+            {UFIELD_CATEGORY_DATE, UDAT_YEAR_FIELD, 12, 16},
+            {UFIELD_CATEGORY_DATE_INTERVAL_SPAN, 0, 21, 34},
+            {UFIELD_CATEGORY_DATE, UDAT_MONTH_FIELD, 21, 25},
+            {UFIELD_CATEGORY_DATE, UDAT_DATE_FIELD, 26, 28},
+            {UFIELD_CATEGORY_DATE, UDAT_YEAR_FIELD, 30, 34}};
+        checkMixedFormattedValue(
+            message,
+            result,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
     }
 }
 
