@@ -41,6 +41,8 @@ class U_I18N_API FieldPositionHandler: public UMemory {
 
 class FieldPositionOnlyHandler : public FieldPositionHandler {
   FieldPosition& pos;
+  UBool acceptFirstOnly = FALSE;
+  UBool seenFirst = FALSE;
 
  public:
   FieldPositionOnlyHandler(FieldPosition& pos);
@@ -49,6 +51,13 @@ class FieldPositionOnlyHandler : public FieldPositionHandler {
   void addAttribute(int32_t id, int32_t start, int32_t limit) U_OVERRIDE;
   void shiftLast(int32_t delta) U_OVERRIDE;
   UBool isRecording(void) const U_OVERRIDE;
+
+  /**
+   * Enable this option to lock in the FieldPosition value after seeing the
+   * first occurrence of the field. The default behavior is to take the last
+   * occurrence.
+   */
+  void setAcceptFirstOnly(UBool acceptFirstOnly);
 };
 
 

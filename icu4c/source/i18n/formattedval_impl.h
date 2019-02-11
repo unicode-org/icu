@@ -44,6 +44,24 @@ public:
     FieldPositionIteratorHandler getHandler(UErrorCode& status);
     void appendString(UnicodeString string, UErrorCode& status);
 
+    /**
+     * Computes the spans for duplicated values.
+     * For example, if the string has fields:
+     * 
+     *     ...aa..[b.cc]..d.[bb.e.c]..a..
+     *
+     * then the spans will be the bracketed regions.
+     *
+     * Assumes that the currently known fields are sorted
+     * and all in the same category.
+     */
+    void addOverlapSpans(UFieldCategory spanCategory, int8_t firstIndex, UErrorCode& status);
+
+    /**
+     * Sorts the fields: start index first, length second.
+     */
+    void sort();
+
 private:
     UnicodeString fString;
     UVector32 fFields;

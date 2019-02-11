@@ -49,6 +49,7 @@ class FieldPositionHandler;
 class TimeZoneFormat;
 class SharedNumberFormat;
 class SimpleDateFormatMutableNFs;
+class DateIntervalFormat;
 
 namespace number {
 class LocalizedNumberFormatter;
@@ -1217,6 +1218,7 @@ public:
 
 private:
     friend class DateFormat;
+    friend class DateIntervalFormat;
 
     void initializeDefaultCentury(void);
 
