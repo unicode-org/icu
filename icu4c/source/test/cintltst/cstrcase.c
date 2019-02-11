@@ -748,9 +748,12 @@ TestUCaseMap(void) {
     /* overly long locale IDs may get truncated to their language code to avoid unnecessary allocation */
     ucasemap_setLocale(csm, "I-kLInGOn-the-quick-brown-fox-jumps-over-the-lazy-dog", &errorCode);
     locale=ucasemap_getLocale(csm);
-    if(0!=strncmp(locale, "i-klingon", 9)) {
+    // "I-kLInGOn-the-quick-brown-fox-jumps-over-the-lazy-dog" is canonicalized
+    // into "tlh-the-quick-brown-fox-jumps-over-the-lazy-dog"
+    // and "the" will be treated as an extlang which replaces "tlh".
+    if(0!=strncmp(locale, "the", 3)) {
         log_err("ucasemap_getLocale(ucasemap_setLocale(\"I-kLInGOn-the-quick-br...\"))==%s\n"
-                "    does not start with \"i-klingon\"\n", locale);
+                "    does not start with \"the\"\n", locale);
     }
 
     errorCode=U_ZERO_ERROR;

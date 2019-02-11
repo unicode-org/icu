@@ -2063,13 +2063,26 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
         return t.orphan();
     }
 
+    size_t parsedLenDelta = 0;
+    // Grandfathered tag will be consider together. Grandfathered tag with intervening
+    // script and region such as art-DE-lojban or art-Latn-lojban won't be
+    // matched.
     /* check if the tag is grandfathered */
     for (i = 0; i < UPRV_LENGTHOF(GRANDFATHERED); i += 2) {
-        if (uprv_stricmp(GRANDFATHERED[i], tagBuf) == 0) {
+        int32_t checkGrandfatheredLen = static_cast<int32_t>(uprv_strlen(GRANDFATHERED[i]));
+        if (tagLen < checkGrandfatheredLen) {
+            continue;
+        }
+        if (tagLen > checkGrandfatheredLen && tagBuf[checkGrandfatheredLen] != '-') {
+            // make sure next char is '-'.
+            continue;
+        }
+        if (uprv_strnicmp(GRANDFATHERED[i], tagBuf, checkGrandfatheredLen) == 0) {
             int32_t newTagLength;
 
-            grandfatheredLen = tagLen;  /* back up for output parsedLen */
-            newTagLength = static_cast<int32_t>(uprv_strlen(GRANDFATHERED[i+1]));
+            grandfatheredLen = checkGrandfatheredLen;  /* back up for output parsedLen */
+            int32_t replacementLen = static_cast<int32_t>(uprv_strlen(GRANDFATHERED[i+1]));
+            newTagLength = replacementLen + tagLen - checkGrandfatheredLen;
             if (tagLen < newTagLength) {
                 uprv_free(tagBuf);
                 tagBuf = (char*)uprv_malloc(newTagLength + 1);
@@ -2080,12 +2093,15 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
                 t->buf = tagBuf;
                 tagLen = newTagLength;
             }
+            parsedLenDelta = checkGrandfatheredLen - replacementLen;
             uprv_strcpy(t->buf, GRANDFATHERED[i + 1]);
+            if (checkGrandfatheredLen != tagLen) {
+                uprv_strcpy(t->buf + replacementLen, tag + checkGrandfatheredLen);
+            }
             break;
         }
     }
 
-    size_t parsedLenDelta = 0;
     if (grandfatheredLen == 0) {
         for (i = 0; i < UPRV_LENGTHOF(REDUNDANT); i += 2) {
             const char* redundantTag = REDUNDANT[i];
@@ -2400,8 +2416,7 @@ ultag_parse(const char* tag, int32_t tagLen, int32_t* parsedLen, UErrorCode* sta
     }
 
     if (parsedLen != NULL) {
-        *parsedLen = (grandfatheredLen > 0) ? grandfatheredLen :
-            (int32_t)(pLastGoodPosition - t->buf + parsedLenDelta);
+        *parsedLen = (int32_t)(pLastGoodPosition - t->buf + parsedLenDelta);
     }
 
     return t.orphan();

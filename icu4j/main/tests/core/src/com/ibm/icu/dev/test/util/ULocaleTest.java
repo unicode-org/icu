@@ -4179,6 +4179,9 @@ public class ULocaleTest extends TestFmwk {
                 {"zh-u-ca-gregory-co-pinyin-ca-chinese", "zh@calendar=gregorian;collation=pinyin", NOERROR},
                 {"de-latn-DE-1901-u-co-phonebk-co-pinyin-ca-gregory", "de_Latn_DE_1901@calendar=gregorian;collation=phonebook", NOERROR},
                 {"th-u-kf-nu-thai-kf-false", "th@colcasefirst=yes;numbers=thai", NOERROR},
+                /* #20410 */
+                {"art-lojban-x-0", "jbo@x=0", NOERROR},
+                {"zh-xiang-u-nu-thai-x-0", "hsn@numbers=thai;x=0", NOERROR},
         };
 
         for (int i = 0; i < langtag_to_locale.length; i++) {

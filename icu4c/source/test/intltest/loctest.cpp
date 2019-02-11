@@ -248,6 +248,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestIsRightToLeft);
     TESTCASE_AUTO(TestBug13277);
     TESTCASE_AUTO(TestBug13554);
+    TESTCASE_AUTO(TestBug20410);
     TESTCASE_AUTO(TestForLanguageTag);
     TESTCASE_AUTO(TestToLanguageTag);
     TESTCASE_AUTO(TestMoveAssign);
@@ -2962,6 +2963,32 @@ void LocaleTest::TestBug13554() {
         status = U_ZERO_ERROR;
         uprv_convertToPosix(hostid, posixID, BUFFER_SIZE, &status);
     }
+}
+
+void LocaleTest::TestBug20410() {
+    IcuTestErrorCode status(*this, "TestBug20410()");
+
+    static const char tag1[] = "art-lojban-x-0";
+    static const Locale expected1("jbo@x=0");
+    Locale result1 = Locale::forLanguageTag(tag1, status);
+    status.errIfFailureAndReset("\"%s\"", tag1);
+    assertEquals(tag1, expected1.getName(), result1.getName());
+
+    static const char tag2[] = "zh-xiang-u-nu-thai-x-0";
+    static const Locale expected2("hsn@numbers=thai;x=0");
+    Locale result2 = Locale::forLanguageTag(tag2, status);
+    status.errIfFailureAndReset("\"%s\"", tag2);
+    assertEquals(tag2, expected2.getName(), result2.getName());
+
+    static const char locid3[] = "art__lojban@x=0";
+    Locale result3 = Locale::createCanonical(locid3);
+    static const Locale expected3("art__LOJBAN@x=0");
+    assertEquals(locid3, expected3.getName(), result3.getName());
+
+    static const char locid4[] = "art-lojban-x-0";
+    Locale result4 = Locale::createCanonical(locid4);
+    static const Locale expected4("jbo@x=0");
+    assertEquals(locid4, expected4.getName(), result4.getName());
 }
 
 void LocaleTest::TestForLanguageTag() {

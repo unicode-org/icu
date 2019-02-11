@@ -169,9 +169,20 @@ public class LanguageTag {
 
         // Check if the tag is grandfathered
         String[] gfmap = GRANDFATHERED.get(new AsciiUtil.CaseInsensitiveKey(languageTag));
+        // Language tag is at least 2 alpha so we can skip searching the first 2 chars.
+        int dash = 2;
+        while (gfmap == null && (dash = languageTag.indexOf('-', dash + 1)) != -1) {
+            gfmap = GRANDFATHERED.get(new AsciiUtil.CaseInsensitiveKey(languageTag.substring(0, dash)));
+        }
+
         if (gfmap != null) {
-            // use preferred mapping
-            itr = new StringTokenIterator(gfmap[1], SEP);
+            if (gfmap[0].length() == languageTag.length()) {
+                // use preferred mapping
+                itr = new StringTokenIterator(gfmap[1], SEP);
+            } else {
+                // append the rest of the tag.
+                itr = new StringTokenIterator(gfmap[1] + languageTag.substring(dash), SEP);
+            }
             isGrandfathered = true;
         } else {
             itr = new StringTokenIterator(languageTag, SEP);

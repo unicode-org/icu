@@ -114,6 +114,7 @@ public:
     void TestBug11421();
     void TestBug13277();
     void TestBug13554();
+    void TestBug20410();
 
     void TestAddLikelySubtags();
     void TestMinimizeSubtags();
