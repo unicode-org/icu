@@ -6160,8 +6160,8 @@ static const struct {
     /* #9562 IANA language tag data update */
     {"en-gb-oed", "en_GB_OXENDICT", FULL_LENGTH},
     {"i-navajo", "nv", FULL_LENGTH},
-    {"i-navajo-a-foo", "", 0},
-    {"i-navajo-latn-us", "", 0},
+    {"i-navajo-a-foo", "nv@a=foo", FULL_LENGTH},
+    {"i-navajo-latn-us", "nv_Latn_US", FULL_LENGTH},
     {"sgn-br", "bzs", FULL_LENGTH},
     {"sgn-br-u-co-phonebk", "bzs@collation=phonebook", FULL_LENGTH},
     {"ja-latn-hepburn-heploc", "ja_Latn__ALALC97", FULL_LENGTH},
