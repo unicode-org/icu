@@ -1398,12 +1398,18 @@ else
         --in_dir "$srcdir/data" \
         --filter_file "$ICU_DATA_FILTER_FILE" \
         > data/rules.mk
+    if test "$?" != "0"; then
+        AC_MSG_ERROR(Python failed to run; see above error.)
+    fi
     echo "Spawning Python to generate test/testdata/rules.mk..."
     PYTHONPATH="$srcdir/test/testdata:$srcdir/data" $PYTHON -m buildtool \
         --mode gnumake \
         --seqmode parallel \
         --in_dir "$srcdir/test/testdata" \
         > test/testdata/rules.mk
+    if test "$?" != "0"; then
+        AC_MSG_ERROR(Python failed to run; see above error.)
+    fi
 fi
 
 echo
