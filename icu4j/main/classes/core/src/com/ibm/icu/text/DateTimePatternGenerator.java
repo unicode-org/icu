@@ -178,21 +178,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     private void consumeShortTimePattern(String shortTimePattern, PatternInfo returnInfo) {
         // keep this pattern to populate other time field
         // combination patterns by hackTimes later in this method.
-        // use hour style in SHORT time pattern as the default
-        // hour style for the locale
-        FormatParser fp = new FormatParser();
-        fp.set(shortTimePattern);
-        List<Object> items = fp.getItems();
-        for (int idx = 0; idx < items.size(); idx++) {
-            Object item = items.get(idx);
-            if (item instanceof VariableField) {
-                VariableField fld = (VariableField)item;
-                if (fld.getType() == HOUR) {
-                    defaultHourFormatChar = fld.toString().charAt(0);
-                    break;
-                }
-            }
-        }
+        // ICU-20383 No longer set defaultHourFormatChar to the hour format character from
+        // this pattern; instead it is set from LOCALE_TO_ALLOWED_HOUR which now
+        // includes entries for both preferred and allowed formats.
 
         // some languages didn't add mm:ss or HH:mm, so put in a hack to compute that from the short time.
         hackTimes(returnInfo, shortTimePattern);
@@ -359,11 +347,14 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         String[] list = LOCALE_TO_ALLOWED_HOUR.get(langCountry);
         if (list == null) {
             list = LOCALE_TO_ALLOWED_HOUR.get(country);
-            if (list == null) {
-                list = LAST_RESORT_ALLOWED_HOUR_FORMAT;
-            }
         }
-        allowedHourFormats = list;
+		if (list != null) {
+			defaultHourFormatChar = list[0].charAt(0);
+			allowedHourFormats = Arrays.copyOfRange(list, 1, list.length-1);
+		} else {
+			allowedHourFormats = LAST_RESORT_ALLOWED_HOUR_FORMAT;
+			defaultHourFormatChar = allowedHourFormats[0].charAt(0);
+		}
     }
 
     private static class DayPeriodAllowedHoursSink extends UResource.Sink {
@@ -379,11 +370,29 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             for (int i = 0; timeData.getKeyAndValue(i, key, value); ++i) {
                 String regionOrLocale = key.toString();
                 UResource.Table formatList = value.getTable();
+                String[] allowed = null;
+                String preferred = null;
                 for (int j = 0; formatList.getKeyAndValue(j, key, value); ++j) {
-                    if (key.contentEquals("allowed")) {  // Ignore "preferred" list.
-                        tempMap.put(regionOrLocale, value.getStringArrayOrStringAsArray());
+                    if (key.contentEquals("allowed")) {
+                        allowed = value.getStringArrayOrStringAsArray();
+                    } else if (key.contentEquals("preferred")) {
+                        preferred = value.getString();
                     }
                 }
+                // below we construct a list[] that has an entry for the "preferred" value at [0],
+                 // followed by 1 or more entries for the "allowed" values.
+                String[] list = null;
+                if (allowed!=null && allowed.length > 0) {
+                    list = new String[allowed.length + 1];
+                    list[0] = (preferred != null)? preferred:  allowed[0];
+                    System.arraycopy(allowed, 0, list, 1, allowed.length);
+                } else {
+                    // fallback handling for missing data
+                    list = new String[2];
+                    list[0] = (preferred != null)? preferred: LAST_RESORT_ALLOWED_HOUR_FORMAT[0];
+                    list[1] = list[0];
+                }
+                tempMap.put(regionOrLocale, list);
             }
         }
     }
@@ -623,10 +632,10 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     if (patChr == 'j') {
                         hourChar = defaultHourFormatChar;
                     } else { // patChr == 'C'
-                        String preferred = allowedHourFormats[0];
-                        hourChar = preferred.charAt(0);
+                        String bestAllowed = allowedHourFormats[0];
+                        hourChar = bestAllowed.charAt(0);
                         // in #13183 just add b/B to skeleton, no longer need to set special flags
-                        char last = preferred.charAt(preferred.length()-1);
+                        char last = bestAllowed.charAt(bestAllowed.length()-1);
                         if (last=='b' || last=='B') {
                             dayPeriodChar = last;
                         }

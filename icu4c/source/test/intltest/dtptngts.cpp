@@ -19,7 +19,9 @@
 #include "unicode/dtfmtsym.h"
 #include "unicode/dtptngen.h"
 #include "unicode/ustring.h"
+#include "unicode/datefmt.h"
 #include "cmemory.h"
+#include "cstring.h"
 #include "loctest.h"
 
 
@@ -38,6 +40,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(4, testC);
         TESTCASE(5, testSkeletonsWithDayPeriods);
         TESTCASE(6, testGetFieldDisplayNames);
+        TESTCASE(7, testJjMapping);
         default: name = ""; break;
     }
 }
@@ -1255,6 +1258,90 @@ void IntlTestDateTimePatternGeneratorAPI::testGetFieldDisplayNames() {
                       testDataPtr->locale, testDataPtr->field, testDataPtr->width, testDataPtr->expected);
             }
             delete dtpg;
+        }
+    }
+}
+
+static const UChar timeCycleChars[] = { (UChar)0x0048, (UChar)0x0068, (UChar)0x004B, (UChar)0x006B, (UChar)0 };
+
+void IntlTestDateTimePatternGeneratorAPI::testJjMapping() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString jSkeleton("j");
+    // First test that j maps correctly by region in a locale for which we do not have data.
+    {
+        const char* testLocaleID = "de_US"; // short patterns from fallback locale "de" have "HH"
+        Locale testLocale(testLocaleID);
+        LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(testLocale, status));
+        if (U_FAILURE(status)) {
+            dataerrln("FAIL: DateTimePatternGenerator::createInstance failed for locale %s: %s", testLocaleID, u_errorName(status));
+        } else {
+            UnicodeString jPattern = dtpg->getBestPattern(jSkeleton, UDATPG_MATCH_ALL_FIELDS_LENGTH, status); // get pattern with h e.g. "h 'Uhr' a"
+            if (U_FAILURE(status)) {
+                errln("FAIL: DateTimePatternGenerator::getBestPattern locale %s, pattern j: %s", testLocaleID, u_errorName(status));
+            } else {
+                UnicodeString jPatSkeleton = DateTimePatternGenerator::staticGetSkeleton(jPattern, status); // strip literals, get e.g. "ah"
+                if (U_FAILURE(status)) {
+                    errln("FAIL: DateTimePatternGenerator::staticGetSkeleton locale %s: %s", testLocaleID, u_errorName(status));
+                } else if (jPatSkeleton.indexOf(u'h') < 0) { // expect US preferred cycle 'h', not H or other cycle
+                    errln("ERROR: DateTimePatternGenerator::getBestPattern locale %s, pattern j did not use 'h'", testLocaleID);
+                }
+            }
+        }
+    }
+
+    // Next test that in all available Locales, the actual short time pattern uses the same cycle as produced by 'j'
+    int32_t locCount;
+    const Locale* localePtr = DateFormat::getAvailableLocales(locCount);
+    for (; locCount-- > 0; localePtr++) {
+        const char* localeID = localePtr->getName();
+        if ( logKnownIssue("cldrbug:11853", "locales with known timeData vs short time format mismatch") && ( uprv_strcmp(localeID,"af_NA")==0
+                || uprv_strcmp(localeID,"ar_001")==0 || uprv_strcmp(localeID,"ar_SA")==0 || uprv_strcmp(localeID,"ckb_IR")==0
+                || uprv_strcmp(localeID,"en_001")==0 || uprv_strcmp(localeID,"en_BI")==0 || uprv_strcmp(localeID,"en_NG")==0
+                || uprv_strcmp(localeID,"fr_CA")==0 || uprv_strcmp(localeID,"ha_GH")==0 || uprv_strncmp(localeID,"lkt",3)==0 ) ) {
+            continue;
+        }
+        status = U_ZERO_ERROR;
+        LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(*localePtr, status));
+        if (U_FAILURE(status)) {
+            dataerrln("FAIL: DateTimePatternGenerator::createInstance failed for locale %s: %s", localeID, u_errorName(status));
+            continue;
+        }
+        LocalPointer<DateFormat> dfmt(DateFormat::createTimeInstance(DateFormat::kShort, *localePtr));
+        if (U_FAILURE(status)) {
+            dataerrln("FAIL: DateFormat::createTimeInstance kShort failed for locale %s: %s", localeID, u_errorName(status));
+            continue;
+        }
+        const SimpleDateFormat* sdfmt;
+        if ((sdfmt = dynamic_cast<const SimpleDateFormat*>(reinterpret_cast<const DateFormat*>(dfmt.getAlias()))) == NULL) {
+            continue;
+        }
+        UnicodeString shortPattern;
+        shortPattern = sdfmt->toPattern(shortPattern);
+        UnicodeString jPattern = dtpg->getBestPattern(jSkeleton, status);
+        if (U_FAILURE(status)) {
+            errln("FAIL: DateTimePatternGenerator::getBestPattern locale %s, pattern j: %s", localeID, u_errorName(status));
+            continue;
+        }
+        // Now check that shortPattern and jPattern use the same hour cycle
+        UnicodeString jPatSkeleton = DateTimePatternGenerator::staticGetSkeleton(jPattern, status);
+        UnicodeString shortPatSkeleton = DateTimePatternGenerator::staticGetSkeleton(shortPattern, status);
+        if (U_FAILURE(status)) {
+            errln("FAIL: DateTimePatternGenerator::staticGetSkeleton locale %s: %s", localeID, u_errorName(status));
+            continue;
+        }
+        const UChar* charPtr = timeCycleChars;
+        for (; *charPtr != (UChar)0; charPtr++) {
+             if (jPatSkeleton.indexOf(*charPtr) >= 0) {
+                 if (shortPatSkeleton.indexOf(*charPtr) < 0) {
+                     char jcBuf[2], spBuf[32];
+                     u_austrncpy(jcBuf, charPtr, 1);
+                     jcBuf[1] = 0;
+                     shortPattern.extract(0, shortPattern.length(), spBuf, 32);
+                     const char* dfmtCalType = (dfmt->getCalendar())->getType();
+                     errln("ERROR: locale %s, expected j resolved char %s to occur in short time pattern %s for %s", localeID, jcBuf, spBuf, dfmtCalType);
+                 }
+                 break;
+             }
         }
     }
 }

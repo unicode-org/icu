@@ -1668,4 +1668,49 @@ public class DateTimeGeneratorTest extends TestFmwk {
             }
         }
     }
+
+    @Test
+    public void testJjMapping() {
+        final String jSkeleton = "j";
+        final char[] timeCycleChars = { 'H', 'h', 'K', 'k' };
+        // First test that j maps correctly by region in a locale for which we do not have data.
+        {
+            String testLocaleID = "de_US"; // short patterns from fallback locale "de" have "HH"
+            ULocale testLocale = new ULocale(testLocaleID);
+            DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(testLocale);
+            String jPattern = dtpg.getBestPattern(jSkeleton);
+            String jPatSkeleton = dtpg.getSkeleton(jPattern);
+            if (jPatSkeleton.indexOf('h') < 0) { // expect US preferred cycle 'h', not H or other cycle
+                errln("DateTimePatternGeneratorgetBestpattern locale " + testLocaleID + ", pattern j did not use 'h'");
+            }
+        }
+
+        // Next test that in all available Locales, the actual short time pattern uses the same cycle as produced by 'j'
+        ULocale[] locales = DateFormat.getAvailableULocales();
+        for (ULocale locale: locales) {
+            String localeID = locale.getName();
+            if ( logKnownIssue("cldrbug:11853", "locales with known timeData vs short time format mismatch") &&
+                    ( localeID.equals("af_NA") || localeID.equals("ar_001") || localeID.equals("ckb_IR") // ar_SA not a problem in J
+                    || localeID.equals("en_001") || localeID.equals("en_BI") || localeID.equals("en_NG")
+                    || localeID.equals("fr_CA") || localeID.equals("ha_GH") || localeID.startsWith("lkt") ) ) {
+                continue;
+            }
+            DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(locale);
+            DateFormat dfmt = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
+            String shortPattern = ((SimpleDateFormat)dfmt).toPattern();
+            String jPattern = dtpg.getBestPattern(jSkeleton);
+            // Now check that shortPattern and jPattern use the same hour cycle
+            String jPatSkeleton = dtpg.getSkeleton(jPattern);
+            String shortPatSkeleton = dtpg.getSkeleton(shortPattern);
+            for (char timeCycleChar: timeCycleChars) {
+                if (jPatSkeleton.indexOf(timeCycleChar) >= 0) {
+                    if (shortPatSkeleton.indexOf(timeCycleChar) < 0) {
+                        String dfmtCalType = dfmt.getCalendar().getType();
+                        errln("locale " + localeID + ", expected j resolved char " + timeCycleChar +
+                                " to occur in short time pattern " + shortPattern + " for " + dfmtCalType);
+                    }
+                }
+            }
+        }
+    }
 }
