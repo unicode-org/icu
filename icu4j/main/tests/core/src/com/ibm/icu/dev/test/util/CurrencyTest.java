@@ -626,7 +626,6 @@ public class CurrencyTest extends TestFmwk {
             { "eo_DE@currency=DEM", "2000-12-23", "EUR", "DEM" },
             { "eo-DE-u-cu-dem", "2000-12-23", "EUR", "DEM" },
             { "en_US", null, "USD", "USN" },
-            { "en_US_PREEURO", null, "USD", "USN" },
             { "en_US_Q", null, "USD", "USN" },
         };
 

@@ -877,15 +877,15 @@ NumberFormatTest::escape(UnicodeString& s)
 // -------------------------------------
 static const char* testCases[][2]= {
      /* locale ID */  /* expected */
-    {"ca_ES_PREEURO", "\\u20A7\\u00A01.150" },
-    {"de_LU_PREEURO", "1,150\\u00A0F" },
-    {"el_GR_PREEURO", "1.150,50\\u00A0\\u0394\\u03C1\\u03C7" },
-    {"en_BE_PREEURO", "1.150,50\\u00A0BEF" },
-    {"es_ES_PREEURO", "1.150\\u00A0\\u20A7" },
-    {"eu_ES_PREEURO", "\\u20A7\\u00A01.150" },
-    {"gl_ES_PREEURO", "1.150\\u00A0\\u20A7" },
-    {"it_IT_PREEURO", "ITL\\u00A01.150" },
-    {"pt_PT_PREEURO", "1,150$50\\u00A0\\u200B"}, // per cldrbug 7670
+    {"ca_ES@currency=ESP", "\\u20A7\\u00A01.150" },
+    {"de_LU@currency=LUF", "1,150\\u00A0F" },
+    {"el_GR@currency=GRD", "1.150,50\\u00A0\\u0394\\u03C1\\u03C7" },
+    {"en_BE@currency=BEF", "1.150,50\\u00A0BEF" },
+    {"es_ES@currency=ESP", "1.150\\u00A0\\u20A7" },
+    {"eu_ES@currency=ESP", "\\u20A7\\u00A01.150" },
+    {"gl_ES@currency=ESP", "1.150\\u00A0\\u20A7" },
+    {"it_IT@currency=ITL", "ITL\\u00A01.150" },
+    {"pt_PT@currency=PTE", "1,150$50\\u00A0\\u200B"}, // per cldrbug 7670
     {"en_US@currency=JPY", "\\u00A51,150"},
     {"en_US@currency=jpy", "\\u00A51,150"},
     {"en-US-u-cu-jpy", "\\u00A51,150"}
@@ -910,7 +910,7 @@ NumberFormatTest::TestCurrency(void)
     delete currencyFmt;
     s.truncate(0);
     char loc[256]={0};
-    int len = uloc_canonicalize("de_DE_PREEURO", loc, 256, &status);
+    int len = uloc_canonicalize("de_DE@currency=DEM", loc, 256, &status);
     (void)len;  // Suppress unused variable warning.
     currencyFmt = NumberFormat::createCurrencyInstance(Locale(loc),status);
     currencyFmt->format(1.50, s);
@@ -919,7 +919,7 @@ NumberFormatTest::TestCurrency(void)
         errln((UnicodeString)"FAIL: Expected 1,50<nbsp>DM but got " + s);
     delete currencyFmt;
     s.truncate(0);
-    len = uloc_canonicalize("fr_FR_PREEURO", loc, 256, &status);
+    len = uloc_canonicalize("fr_FR@currency=FRF", loc, 256, &status);
     currencyFmt = NumberFormat::createCurrencyInstance(Locale(loc), status);
     currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre en France a....." + s);
@@ -1929,23 +1929,17 @@ void NumberFormatTest::TestRegCurrency(void) {
     UChar YEN[4];
     ucurr_forLocale("ja_JP", YEN, 4, &status);
     UChar TMP[4];
-    static const UChar QQQ[] = {0x51, 0x51, 0x51, 0};
+
     if(U_FAILURE(status)) {
         errcheckln(status, "Unable to get currency for locale, error %s", u_errorName(status));
         return;
     }
 
     UCurrRegistryKey enkey = ucurr_register(YEN, "en_US", &status);
-    UCurrRegistryKey enUSEUROkey = ucurr_register(QQQ, "en_US_EURO", &status);
 
     ucurr_forLocale("en_US", TMP, 4, &status);
     if (u_strcmp(YEN, TMP) != 0) {
         errln("FAIL: didn't return YEN registered for en_US");
-    }
-
-    ucurr_forLocale("en_US_EURO", TMP, 4, &status);
-    if (u_strcmp(QQQ, TMP) != 0) {
-        errln("FAIL: didn't return QQQ for en_US_EURO");
     }
 
     int32_t fallbackLen = ucurr_forLocale("en_XX_BAR", TMP, 4, &status);
@@ -1964,24 +1958,9 @@ void NumberFormatTest::TestRegCurrency(void) {
     }
     status = U_ZERO_ERROR; // reset
 
-    ucurr_forLocale("en_US_EURO", TMP, 4, &status);
-    if (u_strcmp(QQQ, TMP) != 0) {
-        errln("FAIL: didn't return QQQ for en_US_EURO after unregister of en_US");
-    }
-
     ucurr_forLocale("en_US_BLAH", TMP, 4, &status);
     if (u_strcmp(USD, TMP) != 0) {
         errln("FAIL: could not find USD for en_US_BLAH after unregister of en");
-    }
-    status = U_ZERO_ERROR; // reset
-
-    if (!ucurr_unregister(enUSEUROkey, &status)) {
-        errln("FAIL: couldn't unregister enUSEUROkey");
-    }
-
-    ucurr_forLocale("en_US_EURO", TMP, 4, &status);
-    if (u_strcmp(EUR, TMP) != 0) {
-        errln("FAIL: didn't return EUR for en_US_EURO after unregister of en_US_EURO");
     }
     status = U_ZERO_ERROR; // reset
 #endif

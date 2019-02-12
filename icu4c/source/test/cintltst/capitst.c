@@ -2047,7 +2047,11 @@ static void TestShortString(void)
         {"LDE_RDE_KPHONEBOOK_T0024_ZLATN","KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
 
         {"LEN_RUS_NO_AS_S4","AS_LROOT_NO_S4", NULL, U_USING_DEFAULT_WARNING, 0, 0 },
-        {"LDE_VPHONEBOOK_EO_SI","EO_KPHONEBOOK_LDE_SI", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
+        // uloc_canonicalize("de__PHONEBOOK") used to return "de@collation=phonebook"
+        // and we got U_ZERO_ERROR.
+        // Since ICU-20187 "drop support for long-obsolete locale ID variants..."
+        // we actually load the "de__PHONEBOOK" bundle and fall back to "de".
+        {"LDE_VPHONEBOOK_EO_SI","EO_KPHONEBOOK_LDE_SI", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
         {"LDE_Kphonebook","KPHONEBOOK_LDE", "de@collation=phonebook", U_ZERO_ERROR, 0, 0 },
         {"Xqde_DE@collation=phonebookq_S3_EX","KPHONEBOOK_LDE", "de@collation=phonebook", U_USING_FALLBACK_WARNING, 0, 0 },
         {"LFR_FO", "FO_LROOT", NULL, U_USING_DEFAULT_WARNING, 0, 0 },

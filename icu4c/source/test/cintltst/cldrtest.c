@@ -706,7 +706,7 @@ TestConsistentCountryInfo(void) {
         }
         fromVariantLen = uloc_getVariant(fromLocale, fromVariant, ULOC_FULLNAME_CAPACITY, &errorCode);
         if (fromVariantLen > 0) {
-            /* Most variants are ignorable like PREEURO, or collation variants. */
+            /* Most variants are ignorable like collation variants. */
             continue;
         }
         /* Start comparing only after the current index.
@@ -728,7 +728,7 @@ TestConsistentCountryInfo(void) {
             }
             toVariantLen = uloc_getVariant(toLocale, toVariant, ULOC_FULLNAME_CAPACITY, &errorCode);
             if (toVariantLen > 0) {
-                /* Most variants are ignorable like PREEURO, or collation variants. */
+                /* Most variants are ignorable like collation variants. */
                 /* They're a variant for a reason. */
                 continue;
             }

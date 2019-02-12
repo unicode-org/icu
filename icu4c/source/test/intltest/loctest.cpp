@@ -1199,8 +1199,8 @@ LocaleTest::TestEuroSupport()
                             "el_GR",
                             "en_BE",
                             "en_IE",
-                            "en_GB_EURO",
-                            "en_US_EURO",
+                            "en_GB@currency=EUR",
+                            "en_US@currency=EUR",
                             "es_ES",
                             "eu_ES",
                             "fi_FI",
@@ -1259,20 +1259,15 @@ LocaleTest::TestEuroSupport()
     if (dollarStr != resultStr) {
         errcheckln(status, "Fail: en_US didn't return USD - %s", u_errorName(status));
     }
-    ucurr_forLocale("en_US_EURO", tmp, 4, &status);
+    ucurr_forLocale("en_US@currency=EUR", tmp, 4, &status);
     resultStr.setTo(tmp);
     if (euroStr != resultStr) {
-        errcheckln(status, "Fail: en_US_EURO didn't return EUR - %s", u_errorName(status));
+        errcheckln(status, "Fail: en_US@currency=EUR didn't return EUR - %s", u_errorName(status));
     }
-    ucurr_forLocale("en_GB_EURO", tmp, 4, &status);
+    ucurr_forLocale("en_GB@currency=EUR", tmp, 4, &status);
     resultStr.setTo(tmp);
     if (euroStr != resultStr) {
-        errcheckln(status, "Fail: en_GB_EURO didn't return EUR - %s", u_errorName(status));
-    }
-    ucurr_forLocale("en_US_PREEURO", tmp, 4, &status);
-    resultStr.setTo(tmp);
-    if (dollarStr != resultStr) {
-        errcheckln(status, "Fail: en_US_PREEURO didn't fallback to en_US - %s", u_errorName(status));
+        errcheckln(status, "Fail: en_GB@currency=EUR didn't return EUR - %s", u_errorName(status));
     }
     ucurr_forLocale("en_US_Q", tmp, 4, &status);
     resultStr.setTo(tmp);
@@ -2476,40 +2471,9 @@ void LocaleTest::TestCanonicalization(void)
         const char *getNameID;   /* expected getName() result */
         const char *canonicalID; /* expected canonicalize() result */
     } testCases[] = {
-        { "", "", "en_US_POSIX" },
-        { "C", "c", "en_US_POSIX" },
-        { "POSIX", "posix", "en_US_POSIX" },
-        { "ca_ES_PREEURO-with-extra-stuff-that really doesn't make any sense-unless-you're trying to increase code coverage",
-          "ca_ES_PREEURO_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE",
-          "ca_ES_PREEURO_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE"},
-        { "ca_ES_PREEURO", "ca_ES_PREEURO", "ca_ES@currency=ESP" },
-        { "de_AT_PREEURO", "de_AT_PREEURO", "de_AT@currency=ATS" },
-        { "de_DE_PREEURO", "de_DE_PREEURO", "de_DE@currency=DEM" },
-        { "de_LU_PREEURO", "de_LU_PREEURO", "de_LU@currency=LUF" },
-        { "el_GR_PREEURO", "el_GR_PREEURO", "el_GR@currency=GRD" },
-        { "en_BE_PREEURO", "en_BE_PREEURO", "en_BE@currency=BEF" },
-        { "en_IE_PREEURO", "en_IE_PREEURO", "en_IE@currency=IEP" },
-        { "es_ES_PREEURO", "es_ES_PREEURO", "es_ES@currency=ESP" },
-        { "eu_ES_PREEURO", "eu_ES_PREEURO", "eu_ES@currency=ESP" },
-        { "fi_FI_PREEURO", "fi_FI_PREEURO", "fi_FI@currency=FIM" },
-        { "fr_BE_PREEURO", "fr_BE_PREEURO", "fr_BE@currency=BEF" },
-        { "fr_FR_PREEURO", "fr_FR_PREEURO", "fr_FR@currency=FRF" },
-        { "fr_LU_PREEURO", "fr_LU_PREEURO", "fr_LU@currency=LUF" },
-        { "ga_IE_PREEURO", "ga_IE_PREEURO", "ga_IE@currency=IEP" },
-        { "gl_ES_PREEURO", "gl_ES_PREEURO", "gl_ES@currency=ESP" },
-        { "it_IT_PREEURO", "it_IT_PREEURO", "it_IT@currency=ITL" },
-        { "nl_BE_PREEURO", "nl_BE_PREEURO", "nl_BE@currency=BEF" },
-        { "nl_NL_PREEURO", "nl_NL_PREEURO", "nl_NL@currency=NLG" },
-        { "pt_PT_PREEURO", "pt_PT_PREEURO", "pt_PT@currency=PTE" },
-        { "de__PHONEBOOK", "de__PHONEBOOK", "de@collation=phonebook" },
-        { "en_GB_EURO", "en_GB_EURO", "en_GB@currency=EUR" },
-        { "en_GB@EURO", "en_GB@EURO", "en_GB@currency=EUR" }, /* POSIX ID */
-        { "es__TRADITIONAL", "es__TRADITIONAL", "es@collation=traditional" },
-        { "hi__DIRECT", "hi__DIRECT", "hi@collation=direct" },
-        { "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL", "ja_JP@calendar=japanese" },
-        { "th_TH_TRADITIONAL", "th_TH_TRADITIONAL", "th_TH@calendar=buddhist" },
-        { "zh_TW_STROKE", "zh_TW_STROKE", "zh_TW@collation=stroke" },
-        { "zh__PINYIN", "zh__PINYIN", "zh@collation=pinyin" },
+        { "ca_ES-with-extra-stuff-that really doesn't make any sense-unless-you're trying to increase code coverage",
+          "ca_ES_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE",
+          "ca_ES_WITH_EXTRA_STUFF_THAT REALLY DOESN'T MAKE ANY SENSE_UNLESS_YOU'RE TRYING TO INCREASE CODE COVERAGE"},
         { "zh@collation=pinyin", "zh@collation=pinyin", "zh@collation=pinyin" },
         { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
         { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
@@ -2518,19 +2482,12 @@ void LocaleTest::TestCanonicalization(void)
         { "no_NO_NY", "no_NO_NY", "no_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
         { "no@ny", "no@ny", "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
         { "no-no.utf32@B", "no_NO.utf32@B", "no_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
-        { "qz-qz@Euro", "qz_QZ@Euro", "qz_QZ@currency=EUR" }, /* qz-qz uses private use iso codes */
+        { "qz-qz@Euro", "qz_QZ@Euro", "qz_QZ_EURO" }, /* qz-qz uses private use iso codes */
         // NOTE: uloc_getName() works on en-BOONT, but Locale() parser considers it BOGUS
         // TODO: unify this behavior
         { "en-BOONT", "en__BOONT", "en__BOONT" }, /* registered name */
         { "de-1901", "de__1901", "de__1901" }, /* registered name */
         { "de-1906", "de__1906", "de__1906" }, /* registered name */
-        { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_Cyrl_RS" }, /* .NET name */
-        { "sr-SP-Latn", "sr_SP_LATN", "sr_Latn_RS" }, /* .NET name */
-        { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_Cyrl_RS" }, /* Linux name */
-        { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_Cyrl_UZ" }, /* .NET name */
-        { "uz-UZ-Latn", "uz_UZ_LATN", "uz_Latn_UZ" }, /* .NET name */
-        { "zh-CHS", "zh_CHS", "zh_Hans" }, /* .NET name */
-        { "zh-CHT", "zh_CHT", "zh_Hant" }, /* .NET name This may change back to zh_Hant */
 
         /* posix behavior that used to be performed by getName */
         { "mr.utf8", "mr.utf8", "mr" },
@@ -2545,19 +2502,61 @@ void LocaleTest::TestCanonicalization(void)
         { "en_Hant_IL_VALLEY_GIRL@ currency = EUR; calendar = Japanese ;", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
         /* already-canonical ids are not changed */
         { "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
-        /* PRE_EURO and EURO conversions don't affect other keywords */
-        { "es_ES_PREEURO@CALendar=Japanese", "es_ES_PREEURO@calendar=Japanese", "es_ES@calendar=Japanese;currency=ESP" },
-        { "es_ES_EURO@SHOUT=zipeedeedoodah", "es_ES_EURO@shout=zipeedeedoodah", "es_ES@currency=EUR;shout=zipeedeedoodah" },
-        /* currency keyword overrides PRE_EURO and EURO currency */
-        { "es_ES_PREEURO@currency=EUR", "es_ES_PREEURO@currency=EUR", "es_ES@currency=EUR" },
-        { "es_ES_EURO@currency=ESP", "es_ES_EURO@currency=ESP", "es_ES@currency=ESP" },
         /* norwegian is just too weird, if we handle things in their full generality */
         { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
 
         /* test cases reflecting internal resource bundle usage */
         { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
         { "@calendar=gregorian", "@calendar=gregorian", "@calendar=gregorian" },
-        { "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese" }
+        { "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese", "ja_JP@calendar=Japanese" },
+
+        // Before ICU 64, ICU locale canonicalization had some additional mappings.
+        // They were removed for ICU-20187 "drop support for long-obsolete locale ID variants".
+        // The following now use standard canonicalization.
+        { "", "", "" },
+        { "C", "c", "c" },
+        { "POSIX", "posix", "posix" },
+        { "ca_ES_PREEURO", "ca_ES_PREEURO", "ca_ES_PREEURO" },
+        { "de_AT_PREEURO", "de_AT_PREEURO", "de_AT_PREEURO" },
+        { "de_DE_PREEURO", "de_DE_PREEURO", "de_DE_PREEURO" },
+        { "de_LU_PREEURO", "de_LU_PREEURO", "de_LU_PREEURO" },
+        { "el_GR_PREEURO", "el_GR_PREEURO", "el_GR_PREEURO" },
+        { "en_BE_PREEURO", "en_BE_PREEURO", "en_BE_PREEURO" },
+        { "en_IE_PREEURO", "en_IE_PREEURO", "en_IE_PREEURO" },
+        { "es_ES_PREEURO", "es_ES_PREEURO", "es_ES_PREEURO" },
+        { "eu_ES_PREEURO", "eu_ES_PREEURO", "eu_ES_PREEURO" },
+        { "fi_FI_PREEURO", "fi_FI_PREEURO", "fi_FI_PREEURO" },
+        { "fr_BE_PREEURO", "fr_BE_PREEURO", "fr_BE_PREEURO" },
+        { "fr_FR_PREEURO", "fr_FR_PREEURO", "fr_FR_PREEURO" },
+        { "fr_LU_PREEURO", "fr_LU_PREEURO", "fr_LU_PREEURO" },
+        { "ga_IE_PREEURO", "ga_IE_PREEURO", "ga_IE_PREEURO" },
+        { "gl_ES_PREEURO", "gl_ES_PREEURO", "gl_ES_PREEURO" },
+        { "it_IT_PREEURO", "it_IT_PREEURO", "it_IT_PREEURO" },
+        { "nl_BE_PREEURO", "nl_BE_PREEURO", "nl_BE_PREEURO" },
+        { "nl_NL_PREEURO", "nl_NL_PREEURO", "nl_NL_PREEURO" },
+        { "pt_PT_PREEURO", "pt_PT_PREEURO", "pt_PT_PREEURO" },
+        { "de__PHONEBOOK", "de__PHONEBOOK", "de__PHONEBOOK" },
+        { "en_GB_EURO", "en_GB_EURO", "en_GB_EURO" },
+        { "en_GB@EURO", "en_GB@EURO", "en_GB_EURO" }, /* POSIX ID */
+        { "es__TRADITIONAL", "es__TRADITIONAL", "es__TRADITIONAL" },
+        { "hi__DIRECT", "hi__DIRECT", "hi__DIRECT" },
+        { "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL" },
+        { "th_TH_TRADITIONAL", "th_TH_TRADITIONAL", "th_TH_TRADITIONAL" },
+        { "zh_TW_STROKE", "zh_TW_STROKE", "zh_TW_STROKE" },
+        { "zh__PINYIN", "zh__PINYIN", "zh__PINYIN" },
+        { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_SP_CYRL" }, /* .NET name */
+        { "sr-SP-Latn", "sr_SP_LATN", "sr_SP_LATN" }, /* .NET name */
+        { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_YU_CYRILLIC" }, /* Linux name */
+        { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_UZ_CYRL" }, /* .NET name */
+        { "uz-UZ-Latn", "uz_UZ_LATN", "uz_UZ_LATN" }, /* .NET name */
+        { "zh-CHS", "zh_CHS", "zh_CHS" }, /* .NET name */
+        { "zh-CHT", "zh_CHT", "zh_CHT" }, /* .NET name This may change back to zh_Hant */
+        /* PRE_EURO and EURO conversions don't affect other keywords */
+        { "es_ES_PREEURO@CALendar=Japanese", "es_ES_PREEURO@calendar=Japanese", "es_ES_PREEURO@calendar=Japanese" },
+        { "es_ES_EURO@SHOUT=zipeedeedoodah", "es_ES_EURO@shout=zipeedeedoodah", "es_ES_EURO@shout=zipeedeedoodah" },
+        /* currency keyword overrides PRE_EURO and EURO currency */
+        { "es_ES_PREEURO@currency=EUR", "es_ES_PREEURO@currency=EUR", "es_ES_PREEURO@currency=EUR" },
+        { "es_ES_EURO@currency=ESP", "es_ES_EURO@currency=ESP", "es_ES_EURO@currency=ESP" },
     };
     
     static const char* label[] = { "createFromName", "createCanonical", "Locale" };
@@ -2886,10 +2885,6 @@ void LocaleTest::TestCurrencyByDate(void)
     if (u_strcmp(USD, TMP) != 0) {
         errcheckln(status, "Fail: en_US didn't return USD - %s", u_errorName(status));
     }
-    ucurr_forLocaleAndDate("en_US_PREEURO", date, 1, TMP, 4, &status);
-    if (u_strcmp(USD, TMP) != 0) {
-        errcheckln(status, "Fail: en_US_PREEURO didn't fallback to en_US - %s", u_errorName(status));
-    }
     ucurr_forLocaleAndDate("en_US_Q", date, 1, TMP, 4, &status);
     if (u_strcmp(USD, TMP) != 0) {
         errcheckln(status, "Fail: en_US_Q didn't fallback to en_US - %s", u_errorName(status));
@@ -3026,7 +3021,7 @@ void LocaleTest::TestForLanguageTag() {
 void LocaleTest::TestToLanguageTag() {
     IcuTestErrorCode status(*this, "TestToLanguageTag()");
 
-    static const Locale loc_c("C");
+    static const Locale loc_c("en_US_POSIX");
     static const Locale loc_en("en_US");
     static const Locale loc_af("af@calendar=coptic;t=ar-i0-handwrit;x=foo");
     static const Locale loc_ext("en@0=abc;a=xyz");

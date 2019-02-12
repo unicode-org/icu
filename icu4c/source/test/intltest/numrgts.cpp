@@ -850,7 +850,7 @@ void NumberFormatRegressionTest::Test4092480 (void)
 void NumberFormatRegressionTest::Test4087244 (void) {
     UErrorCode status = U_ZERO_ERROR;
     char loc[256] = {0};
-    uloc_canonicalize("pt_PT_PREEURO", loc, 256, &status);
+    uloc_canonicalize("pt_PT@currency=PTE", loc, 256, &status);
     Locale *de = new Locale(loc);
     NumberFormat *nf = NumberFormat::createCurrencyInstance(*de, status);
     if(U_FAILURE(status)) {
@@ -918,7 +918,7 @@ void NumberFormatRegressionTest::Test4070798 (void)
 
     UErrorCode status = U_ZERO_ERROR;
     char loc[256]={0};
-    int len = uloc_canonicalize("fr_FR_PREEURO", loc, 256, &status);
+    int len = uloc_canonicalize("fr_FR@currency=FRF", loc, 256, &status);
     (void)len;  // Suppress set but not used warning.
     formatter = NumberFormat::createInstance(Locale(loc), status);
     if(U_FAILURE(status)) {
@@ -937,7 +937,7 @@ void NumberFormatRegressionTest::Test4070798 (void)
         " Received " + tempString );
     }
     delete formatter;
-    len = uloc_canonicalize("fr_FR_PREEURO", loc, 256, &status);
+    len = uloc_canonicalize("fr_FR@currency=FRF", loc, 256, &status);
     formatter = NumberFormat::createCurrencyInstance(loc, status);
     failure(status, "NumberFormat::createCurrencyInstance", loc);
     tempString.remove();
@@ -952,7 +952,7 @@ void NumberFormatRegressionTest::Test4070798 (void)
     }
     delete formatter;
    
-    uloc_canonicalize("fr_FR_PREEURO", loc, 256, &status);
+    uloc_canonicalize("fr_FR@currency=FRF", loc, 256, &status);
     formatter = NumberFormat::createPercentInstance(Locale(loc), status);
     failure(status, "NumberFormat::createPercentInstance", loc);
     tempString.remove();
@@ -1061,7 +1061,7 @@ void NumberFormatRegressionTest::Test4071014 (void)
 
     UErrorCode status = U_ZERO_ERROR;
     char loc[256]={0};
-    uloc_canonicalize("de_DE_PREEURO", loc, 256, &status);
+    uloc_canonicalize("de_DE@currency=DEM", loc, 256, &status);
     formatter = NumberFormat::createInstance(Locale(loc), status);
     if (failure(status, "NumberFormat::createInstance", loc, TRUE)){
         delete formatter;
@@ -1078,7 +1078,7 @@ void NumberFormatRegressionTest::Test4071014 (void)
         " Received " + tempString );
     }
     delete formatter;
-    uloc_canonicalize("de_DE_PREEURO", loc, 256, &status);
+    uloc_canonicalize("de_DE@currency=DEM", loc, 256, &status);
     formatter = NumberFormat::createCurrencyInstance(Locale(loc), status);
     failure(status, "NumberFormat::createCurrencyInstance", loc);
     tempString.remove();
@@ -1127,7 +1127,7 @@ void NumberFormatRegressionTest::Test4071859 (void)
 
     UErrorCode status = U_ZERO_ERROR;
     char loc[256]={0};
-    uloc_canonicalize("it_IT_PREEURO", loc, 256, &status);
+    uloc_canonicalize("it_IT@currency=ITL", loc, 256, &status);
     formatter = NumberFormat::createInstance(Locale(loc), status);
     if (failure(status, "NumberFormat::createNumberInstance", TRUE)){
         delete formatter;
@@ -1143,7 +1143,7 @@ void NumberFormatRegressionTest::Test4071859 (void)
         " Received " + tempString );
     }
     delete formatter;
-    uloc_canonicalize("it_IT_PREEURO", loc, 256, &status);
+    uloc_canonicalize("it_IT@currency=ITL", loc, 256, &status);
     formatter = NumberFormat::createCurrencyInstance(Locale(loc), status);
     failure(status, "NumberFormat::createCurrencyInstance");
     tempString.remove();
@@ -1157,7 +1157,7 @@ void NumberFormatRegressionTest::Test4071859 (void)
         " Received " + tempString );
     }
     delete formatter;
-    uloc_canonicalize("it_IT_PREEURO", loc, 256, &status);
+    uloc_canonicalize("it_IT@currency=ITL", loc, 256, &status);
     formatter = NumberFormat::createPercentInstance(Locale(loc), status);
     failure(status, "NumberFormat::createPercentInstance");
     tempString.remove();

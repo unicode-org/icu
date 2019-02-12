@@ -1447,8 +1447,7 @@ public abstract class NumberFormat extends UFormat {
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(desiredLocale);
 
         // Here we assume that the locale passed in is in the canonical
-        // form, e.g: pt_PT_@currency=PTE not pt_PT_PREEURO
-        // This style wont work for currency plural format.
+        // form, e.g: pt_PT_@currency=PTE
         // For currency plural format, the pattern is get from
         // the locale (from CurrencyUnitPatterns) without override.
         if (choice == CURRENCYSTYLE || choice == ISOCURRENCYSTYLE || choice == ACCOUNTINGCURRENCYSTYLE
