@@ -1622,11 +1622,7 @@ The variant cannot have dots in it.
 The 'rightmost' variant (@xxx) wins.
 The leftmost codepage (.xxx) wins.
 */
-    char *correctedPOSIXLocale = 0;
     const char* posixID = uprv_getPOSIXIDForDefaultLocale();
-    const char *p;
-    const char *q;
-    int32_t len;
 
     /* Format: (no spaces)
     ll [ _CC ] [ . MM ] [ @ VV]
@@ -1634,38 +1630,29 @@ The leftmost codepage (.xxx) wins.
       l = lang, C = ctry, M = charmap, V = variant
     */
 
-    if (gCorrectedPOSIXLocale != NULL) {
+    if (gCorrectedPOSIXLocale != nullptr) {
         return gCorrectedPOSIXLocale;
     }
 
-    if ((p = uprv_strchr(posixID, '.')) != NULL) {
-        /* assume new locale can't be larger than old one? */
-        correctedPOSIXLocale = static_cast<char *>(uprv_malloc(uprv_strlen(posixID)+1));
-        /* Exit on memory allocation error. */
-        if (correctedPOSIXLocale == NULL) {
-            return NULL;
-        }
-        uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
-        correctedPOSIXLocale[p-posixID] = 0;
+    // Copy the ID into owned memory.
+    // Over-allocate in case we replace "@" with "__".
+    char *correctedPOSIXLocale = static_cast<char *>(uprv_malloc(uprv_strlen(posixID) + 1 + 1));
+    if (correctedPOSIXLocale == nullptr) {
+        return nullptr;
+    }
+    uprv_strcpy(correctedPOSIXLocale, posixID);
 
-        /* do not copy after the @ */
-        if ((p = uprv_strchr(correctedPOSIXLocale, '@')) != NULL) {
-            correctedPOSIXLocale[p-correctedPOSIXLocale] = 0;
+    char *limit;
+    if ((limit = uprv_strchr(correctedPOSIXLocale, '.')) != nullptr) {
+        *limit = 0;
+        if ((limit = uprv_strchr(correctedPOSIXLocale, '@')) != nullptr) {
+            *limit = 0;
         }
     }
 
     /* Note that we scan the *uncorrected* ID. */
-    if ((p = uprv_strrchr(posixID, '@')) != NULL) {
-        if (correctedPOSIXLocale == NULL) {
-            /* new locale can be 1 char longer than old one if @ -> __ */
-            correctedPOSIXLocale = static_cast<char *>(uprv_malloc(uprv_strlen(posixID)+2));
-            /* Exit on memory allocation error. */
-            if (correctedPOSIXLocale == NULL) {
-                return NULL;
-            }
-            uprv_strncpy(correctedPOSIXLocale, posixID, p-posixID);
-            correctedPOSIXLocale[p-posixID] = 0;
-        }
+    const char *p;
+    if ((p = uprv_strrchr(posixID, '@')) != nullptr) {
         p++;
 
         /* Take care of any special cases here.. */
@@ -1674,16 +1661,17 @@ The leftmost codepage (.xxx) wins.
             /* Don't worry about no__NY. In practice, it won't appear. */
         }
 
-        if (uprv_strchr(correctedPOSIXLocale,'_') == NULL) {
+        if (uprv_strchr(correctedPOSIXLocale,'_') == nullptr) {
             uprv_strcat(correctedPOSIXLocale, "__"); /* aa@b -> aa__b (note this can make the new locale 1 char longer) */
         }
         else {
             uprv_strcat(correctedPOSIXLocale, "_"); /* aa_CC@b -> aa_CC_b */
         }
 
-        if ((q = uprv_strchr(p, '.')) != NULL) {
+        const char *q;
+        if ((q = uprv_strchr(p, '.')) != nullptr) {
             /* How big will the resulting string be? */
-            len = (int32_t)(uprv_strlen(correctedPOSIXLocale) + (q-p));
+            int32_t len = (int32_t)(uprv_strlen(correctedPOSIXLocale) + (q-p));
             uprv_strncat(correctedPOSIXLocale, p, q-p);
             correctedPOSIXLocale[len] = 0;
         }
@@ -1699,28 +1687,15 @@ The leftmost codepage (.xxx) wins.
          */
     }
 
-    /* Was a correction made? */
-    if (correctedPOSIXLocale != NULL) {
-        posixID = correctedPOSIXLocale;
-    }
-    else {
-        /* copy it, just in case the original pointer goes away.  See j2395 */
-        correctedPOSIXLocale = (char *)uprv_malloc(uprv_strlen(posixID) + 1);
-        /* Exit on memory allocation error. */
-        if (correctedPOSIXLocale == NULL) {
-            return NULL;
-        }
-        posixID = uprv_strcpy(correctedPOSIXLocale, posixID);
-    }
-
-    if (gCorrectedPOSIXLocale == NULL) {
+    if (gCorrectedPOSIXLocale == nullptr) {
         gCorrectedPOSIXLocale = correctedPOSIXLocale;
         gCorrectedPOSIXLocaleHeapAllocated = true;
         ucln_common_registerCleanup(UCLN_COMMON_PUTIL, putil_cleanup);
-        correctedPOSIXLocale = NULL;
+        correctedPOSIXLocale = nullptr;
     }
+    posixID = gCorrectedPOSIXLocale;
 
-    if (correctedPOSIXLocale != NULL) {  /* Was already set - clean up. */
+    if (correctedPOSIXLocale != nullptr) {  /* Was already set - clean up. */
         uprv_free(correctedPOSIXLocale);
     }
 

@@ -678,28 +678,28 @@ public class NumberFormatTest extends TestFmwk {
     @Test
     public void TestCurrency() {
         String[] DATA = {
-                "fr", "CA", "", "1,50\u00a0$",
-                "de", "DE", "", "1,50\u00a0\u20AC",
-                "de", "DE", "PREEURO", "1,50\u00a0DM",
-                "fr", "FR", "", "1,50\u00a0\u20AC",
-                "fr", "FR", "PREEURO", "1,50\u00a0F",
+                "fr_CA", "1,50\u00a0$",
+                "de_DE", "1,50\u00a0\u20AC",
+                "de_DE@currency=DEM", "1,50\u00a0DM",
+                "fr_FR", "1,50\u00a0\u20AC",
+                "fr_FR@currency=FRF", "1,50\u00a0F",
         };
 
-        for (int i=0; i<DATA.length; i+=4) {
-            Locale locale = new Locale(DATA[i], DATA[i+1], DATA[i+2]);
+        for (int i=0; i<DATA.length; i+=2) {
+            Locale locale = new Locale(DATA[i]);
             NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
             String s = fmt.format(1.50);
-            if (s.equals(DATA[i+3])) {
+            if (s.equals(DATA[i+1])) {
                 logln("Ok: 1.50 x " + locale + " => " + s);
             } else {
                 logln("FAIL: 1.50 x " + locale + " => " + s +
-                        ", expected " + DATA[i+3]);
+                        ", expected " + DATA[i+1]);
             }
         }
 
         // format currency with CurrencyAmount
-        for (int i=0; i<DATA.length; i+=4) {
-            Locale locale = new Locale(DATA[i], DATA[i+1], DATA[i+2]);
+        for (int i=0; i<DATA.length; i+=2) {
+            Locale locale = new Locale(DATA[i]);
 
             Currency curr = Currency.getInstance(locale);
             logln("\nName of the currency is: " + curr.getName(locale, Currency.LONG_NAME, new boolean[] {false}));
@@ -708,11 +708,11 @@ public class NumberFormatTest extends TestFmwk {
 
             NumberFormat fmt = NumberFormat.getCurrencyInstance(locale);
             String sCurr = fmt.format(cAmt);
-            if (sCurr.equals(DATA[i+3])) {
+            if (sCurr.equals(DATA[i+1])) {
                 logln("Ok: 1.50 x " + locale + " => " + sCurr);
             } else {
                 errln("FAIL: 1.50 x " + locale + " => " + sCurr +
-                        ", expected " + DATA[i+3]);
+                        ", expected " + DATA[i+1]);
             }
         }
 

@@ -2747,7 +2747,7 @@ void CalendarRegressionTest::TestDeprecates(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     Calendar *c1 = Calendar::createInstance("ja_JP@calendar=japanese",status);
-    Calendar *c2 = Calendar::createInstance("ja_JP_TRADITIONAL",status);
+    Calendar *c2 = Calendar::createInstance("ja_JP@calendar=japanese",status);
 
     if(!c1 || !c2 || U_FAILURE(status)) {
         dataerrln("Couldn't create calendars for roll of HOUR: %s", u_errorName(status));
@@ -2782,7 +2782,7 @@ void CalendarRegressionTest::TestDeprecates(void)
 
     status = U_ZERO_ERROR;
 
-    c1 = Calendar::createInstance("th_TH_TRADITIONAL",status);
+    c1 = Calendar::createInstance("th_TH@calendar=buddhist",status);
     c2 = Calendar::createInstance("th_TH@calendar=buddhist",status);
 
     if(!c1 || !c2 || U_FAILURE(status)) {

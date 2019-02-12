@@ -677,9 +677,6 @@ public class ULocaleTest extends TestFmwk {
                 {"no", "", "",   "NY", "no@ny", "no@ny", "no__NY"},
                 {"el", "Latn", "", "", "el-latn", "el_Latn", null},
                 {"en", "Cyrl", "RU", "", "en-cyrl-ru", "en_Cyrl_RU", null},
-                {"zh", "Hant", "TW", "STROKE", "zh-hant_TW_STROKE", "zh_Hant_TW_STROKE", "zh_Hant_TW@collation=stroke"},
-                {"zh", "Hant", "CN", "STROKE", "zh-hant_CN_STROKE", "zh_Hant_CN_STROKE", "zh_Hant_CN@collation=stroke"},
-                {"zh", "Hant", "TW", "PINYIN", "zh-hant_TW_PINYIN", "zh_Hant_TW_PINYIN", "zh_Hant_TW@collation=pinyin"},
                 {"qq", "Qqqq", "QQ", "QQ", "qq_Qqqq_QQ_QQ", "qq_Qqqq_QQ_QQ", null},
                 {"qq", "Qqqq", "", "QQ", "qq_Qqqq__QQ", "qq_Qqqq__QQ", null},
                 {"ab", "Cdef", "GH", "IJ", "ab_cdef_gh_ij", "ab_Cdef_GH_IJ", null}, /* total garbage */
@@ -689,6 +686,13 @@ public class ULocaleTest extends TestFmwk {
                 {"", "", "", "", "_@FOO=bar", "@foo=bar", null},
                 {"", "", "", "", "__@FOO=bar", "@foo=bar", null},
                 {"", "", "", "FOO", "__foo@FOO=bar", "__FOO@foo=bar", null}, // we have some of these prefixes
+
+                // Before ICU 64, ICU locale canonicalization had some additional mappings.
+                // They were removed for ICU-20187 "drop support for long-obsolete locale ID variants".
+                // The following now use standard canonicalization.
+                {"zh", "Hant", "TW", "STROKE", "zh-hant_TW_STROKE", "zh_Hant_TW_STROKE", "zh_Hant_TW_STROKE"},
+                {"zh", "Hant", "CN", "STROKE", "zh-hant_CN_STROKE", "zh_Hant_CN_STROKE", "zh_Hant_CN_STROKE"},
+                {"zh", "Hant", "TW", "PINYIN", "zh-hant_TW_PINYIN", "zh_Hant_TW_PINYIN", "zh_Hant_TW_PINYIN"},
         };
 
         String loc, buf,buf1;
@@ -886,35 +890,6 @@ public class ULocaleTest extends TestFmwk {
     @Test
     public void TestCanonicalization(){
         final String[][]testCases = new String[][]{
-                { "ca_ES_PREEURO", "ca_ES_PREEURO", "ca_ES@currency=ESP" },
-                { "de_AT_PREEURO", "de_AT_PREEURO", "de_AT@currency=ATS" },
-                { "de_DE_PREEURO", "de_DE_PREEURO", "de_DE@currency=DEM" },
-                { "de_LU_PREEURO", "de_LU_PREEURO", "de_LU@currency=EUR" },
-                { "el_GR_PREEURO", "el_GR_PREEURO", "el_GR@currency=GRD" },
-                { "en_BE_PREEURO", "en_BE_PREEURO", "en_BE@currency=BEF" },
-                { "en_IE_PREEURO", "en_IE_PREEURO", "en_IE@currency=IEP" },
-                { "es_ES_PREEURO", "es_ES_PREEURO", "es_ES@currency=ESP" },
-                { "eu_ES_PREEURO", "eu_ES_PREEURO", "eu_ES@currency=ESP" },
-                { "fi_FI_PREEURO", "fi_FI_PREEURO", "fi_FI@currency=FIM" },
-                { "fr_BE_PREEURO", "fr_BE_PREEURO", "fr_BE@currency=BEF" },
-                { "fr_FR_PREEURO", "fr_FR_PREEURO", "fr_FR@currency=FRF" },
-                { "fr_LU_PREEURO", "fr_LU_PREEURO", "fr_LU@currency=LUF" },
-                { "ga_IE_PREEURO", "ga_IE_PREEURO", "ga_IE@currency=IEP" },
-                { "gl_ES_PREEURO", "gl_ES_PREEURO", "gl_ES@currency=ESP" },
-                { "it_IT_PREEURO", "it_IT_PREEURO", "it_IT@currency=ITL" },
-                { "nl_BE_PREEURO", "nl_BE_PREEURO", "nl_BE@currency=BEF" },
-                { "nl_NL_PREEURO", "nl_NL_PREEURO", "nl_NL@currency=NLG" },
-                { "pt_PT_PREEURO", "pt_PT_PREEURO", "pt_PT@currency=PTE" },
-                { "de__PHONEBOOK", "de__PHONEBOOK", "de@collation=phonebook" },
-                { "de_PHONEBOOK", "de__PHONEBOOK", "de@collation=phonebook" },
-                { "en_GB_EURO", "en_GB_EURO", "en_GB@currency=EUR" },
-                { "en_GB@EURO", null, "en_GB@currency=EUR" }, /* POSIX ID */
-                { "es__TRADITIONAL", "es__TRADITIONAL", "es@collation=traditional" },
-                { "hi__DIRECT", "hi__DIRECT", "hi@collation=direct" },
-                { "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL", "ja_JP@calendar=japanese" },
-                { "th_TH_TRADITIONAL", "th_TH_TRADITIONAL", "th_TH@calendar=buddhist" },
-                { "zh_TW_STROKE", "zh_TW_STROKE", "zh_TW@collation=stroke" },
-                { "zh__PINYIN", "zh__PINYIN", "zh@collation=pinyin" },
                 { "zh@collation=pinyin", "zh@collation=pinyin", "zh@collation=pinyin" },
                 { "zh_CN@collation=pinyin", "zh_CN@collation=pinyin", "zh_CN@collation=pinyin" },
                 { "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin", "zh_CN_CA@collation=pinyin" },
@@ -923,17 +898,9 @@ public class ULocaleTest extends TestFmwk {
                 { "no_NO_NY", "no_NO_NY", "no_NO_NY" /* not: "nn_NO" [alan ICU3.0] */ },
                 { "no@ny", null, "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
                 { "no-no.utf32@B", null, "no_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
-                { "qz-qz@Euro", null, "qz_QZ@currency=EUR" }, /* qz-qz uses private use iso codes */
                 { "en-BOONT", "en__BOONT", "en__BOONT" }, /* registered name */
                 { "de-1901", "de__1901", "de__1901" }, /* registered name */
                 { "de-1906", "de__1906", "de__1906" }, /* registered name */
-                { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_Cyrl_RS" }, /* .NET name */
-                { "sr-SP-Latn", "sr_SP_LATN", "sr_Latn_RS" }, /* .NET name */
-                { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_Cyrl_RS" }, /* Linux name */
-                { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_Cyrl_UZ" }, /* .NET name */
-                { "uz-UZ-Latn", "uz_UZ_LATN", "uz_Latn_UZ" }, /* .NET name */
-                { "zh-CHS", "zh_CHS", "zh_Hans" }, /* .NET name */
-                { "zh-CHT", "zh_CHT", "zh_Hant" }, /* .NET name This may change back to zh_Hant */
 
                 /* posix behavior that used to be performed by getName */
                 { "mr.utf8", null, "mr" },
@@ -948,6 +915,56 @@ public class ULocaleTest extends TestFmwk {
                 { "en_Hant_IL_VALLEY_GIRL@currency=EUR;calendar=Japanese;", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
                 /* already-canonical ids are not changed */
                 { "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR", "en_Hant_IL_VALLEY_GIRL@calendar=Japanese;currency=EUR" },
+                /* norwegian is just too weird, if we handle things in their full generality */
+                /* this is a negative test to show that we DO NOT handle 'lang=no,var=NY' specially. */
+                { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
+
+                /* test cases reflecting internal resource bundle usage */
+                /* root is just a language */
+                { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
+                /* level 2 canonicalization should not touch basename when there are keywords and it is null */
+                { "@calendar=gregorian", "@calendar=gregorian", "@calendar=gregorian" },
+
+                // Before ICU 64, ICU locale canonicalization had some additional mappings.
+                // They were removed for ICU-20187 "drop support for long-obsolete locale ID variants".
+                // The following now use standard canonicalization.
+                { "ca_ES_PREEURO", "ca_ES_PREEURO", "ca_ES_PREEURO" },
+                { "de_AT_PREEURO", "de_AT_PREEURO", "de_AT_PREEURO" },
+                { "de_DE_PREEURO", "de_DE_PREEURO", "de_DE_PREEURO" },
+                { "de_LU_PREEURO", "de_LU_PREEURO", "de_LU_PREEURO" },
+                { "el_GR_PREEURO", "el_GR_PREEURO", "el_GR_PREEURO" },
+                { "en_BE_PREEURO", "en_BE_PREEURO", "en_BE_PREEURO" },
+                { "en_IE_PREEURO", "en_IE_PREEURO", "en_IE_PREEURO" },
+                { "es_ES_PREEURO", "es_ES_PREEURO", "es_ES_PREEURO" },
+                { "eu_ES_PREEURO", "eu_ES_PREEURO", "eu_ES_PREEURO" },
+                { "fi_FI_PREEURO", "fi_FI_PREEURO", "fi_FI_PREEURO" },
+                { "fr_BE_PREEURO", "fr_BE_PREEURO", "fr_BE_PREEURO" },
+                { "fr_FR_PREEURO", "fr_FR_PREEURO", "fr_FR_PREEURO" },
+                { "fr_LU_PREEURO", "fr_LU_PREEURO", "fr_LU_PREEURO" },
+                { "ga_IE_PREEURO", "ga_IE_PREEURO", "ga_IE_PREEURO" },
+                { "gl_ES_PREEURO", "gl_ES_PREEURO", "gl_ES_PREEURO" },
+                { "it_IT_PREEURO", "it_IT_PREEURO", "it_IT_PREEURO" },
+                { "nl_BE_PREEURO", "nl_BE_PREEURO", "nl_BE_PREEURO" },
+                { "nl_NL_PREEURO", "nl_NL_PREEURO", "nl_NL_PREEURO" },
+                { "pt_PT_PREEURO", "pt_PT_PREEURO", "pt_PT_PREEURO" },
+                { "de__PHONEBOOK", "de__PHONEBOOK", "de__PHONEBOOK" },
+                { "de_PHONEBOOK", "de__PHONEBOOK", "de__PHONEBOOK" },
+                { "en_GB_EURO", "en_GB_EURO", "en_GB_EURO" },
+                { "en_GB@EURO", null, "en_GB_EURO" }, /* POSIX ID */
+                { "es__TRADITIONAL", "es__TRADITIONAL", "es__TRADITIONAL" },
+                { "hi__DIRECT", "hi__DIRECT", "hi__DIRECT" },
+                { "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL", "ja_JP_TRADITIONAL" },
+                { "th_TH_TRADITIONAL", "th_TH_TRADITIONAL", "th_TH_TRADITIONAL" },
+                { "zh_TW_STROKE", "zh_TW_STROKE", "zh_TW_STROKE" },
+                { "zh__PINYIN", "zh__PINYIN", "zh__PINYIN" },
+                { "qz-qz@Euro", null, "qz_QZ_EURO" }, /* qz-qz uses private use iso codes */
+                { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_SP_CYRL" }, /* .NET name */
+                { "sr-SP-Latn", "sr_SP_LATN", "sr_SP_LATN" }, /* .NET name */
+                { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_YU_CYRILLIC" }, /* Linux name */
+                { "uz-UZ-Cyrl", "uz_UZ_CYRL", "uz_UZ_CYRL" }, /* .NET name */
+                { "uz-UZ-Latn", "uz_UZ_LATN", "uz_UZ_LATN" }, /* .NET name */
+                { "zh-CHS", "zh_CHS", "zh_CHS" }, /* .NET name */
+                { "zh-CHT", "zh_CHT", "zh_CHT" }, /* .NET name This may change back to zh_Hant */
                 /* PRE_EURO and EURO conversions don't affect other keywords */
                 /* not in spec
                { "es_ES_PREEURO@CALendar=Japanese", "es_ES_PREEURO@calendar=Japanese", "es_ES@calendar=Japanese;currency=ESP" },
@@ -958,15 +975,6 @@ public class ULocaleTest extends TestFmwk {
                { "es_ES_PREEURO@currency=EUR", "es_ES_PREEURO@currency=EUR", "es_ES@currency=EUR" },
                { "es_ES_EURO@currency=ESP", "es_ES_EURO@currency=ESP", "es_ES@currency=ESP" },
                  */
-                /* norwegian is just too weird, if we handle things in their full generality */
-                /* this is a negative test to show that we DO NOT handle 'lang=no,var=NY' specially. */
-                { "no-Hant-GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$", "no_Hant_GB_NY@currency=$$$" /* not: "nn_Hant_GB@currency=$$$" [alan ICU3.0] */ },
-
-                /* test cases reflecting internal resource bundle usage */
-                /* root is just a language */
-                { "root@kw=foo", "root@kw=foo", "root@kw=foo" },
-                /* level 2 canonicalization should not touch basename when there are keywords and it is null */
-                { "@calendar=gregorian", "@calendar=gregorian", "@calendar=gregorian" },
         };
 
         for(int i = 0; i< testCases.length;i++){
@@ -4325,7 +4333,7 @@ public class ULocaleTest extends TestFmwk {
         for (String[] testcase : TESTCASES) {
             ULocale loc = ULocale.forLanguageTag(testcase[0]);
 
-            Set<String> expectedAttributes = new HashSet<String>();
+            Set<String> expectedAttributes = new HashSet<>();
             if (testcase[1] != null) {
                 String[] attrs = testcase[1].split(",");
                 for (String s : attrs) {
@@ -4333,7 +4341,7 @@ public class ULocaleTest extends TestFmwk {
                 }
             }
 
-            Map<String, String> expectedKeywords = new HashMap<String, String>();
+            Map<String, String> expectedKeywords = new HashMap<>();
             if (testcase[2] != null) {
                 String[] ukeys = testcase[2].split(",");
                 for (int i = 0; i < ukeys.length; i++) {
@@ -4665,7 +4673,7 @@ public class ULocaleTest extends TestFmwk {
                 "zh_Hant_TW",
         };
 
-        TreeSet<ULocale> sortedLocales = new TreeSet<ULocale>();
+        TreeSet<ULocale> sortedLocales = new TreeSet<>();
         for (ULocale locale : locales) {
             sortedLocales.add(locale);
         }

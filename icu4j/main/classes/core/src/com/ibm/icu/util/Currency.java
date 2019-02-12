@@ -249,40 +249,18 @@ public class Currency extends MeasureUnit {
      * Instantiate a currency from resource data.
      */
     /* package */ static Currency createCurrency(ULocale loc) {
-        String variant = loc.getVariant();
-        if ("EURO".equals(variant)) {
-            return getInstance(EUR_STR);
-        }
-
-        // Cache the currency by region, and whether variant=PREEURO.
+        // Cache the currency by region.
         // Minimizes the size of the cache compared with caching by ULocale.
         String key = ULocale.getRegionForSupplementalData(loc, false);
-        if ("PREEURO".equals(variant)) {
-            key = key + '-';
-        }
         return regionCurrencyCache.getInstance(key, null);
     }
 
     private static Currency loadCurrency(String key) {
-        String region;
-        boolean isPreEuro;
-        if (key.endsWith("-")) {
-            region = key.substring(0, key.length() - 1);
-            isPreEuro = true;
-        } else {
-            region = key;
-            isPreEuro = false;
-        }
+        String region = key;
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
         List<String> list = info.currencies(CurrencyFilter.onRegion(region));
         if (!list.isEmpty()) {
             String code = list.get(0);
-            if (isPreEuro && EUR_STR.equals(code)) {
-                if (list.size() < 2) {
-                    return null;
-                }
-                code = list.get(1);
-            }
             return getInstance(code);
         }
         return null;

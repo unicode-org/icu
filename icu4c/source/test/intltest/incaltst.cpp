@@ -100,7 +100,6 @@ IntlCalendarTest::TestTypes()
                             "en_US_VALLEYGIRL@collation=phonebook;calendar=gregorian",
                             "ja_JP@calendar=japanese",   
                             "th_TH@calendar=buddhist", 
-                            "ja_JP_TRADITIONAL",   
                             "th_TH_TRADITIONAL", 
                             "th_TH_TRADITIONAL@calendar=gregorian", 
                             "en_US",
@@ -114,7 +113,6 @@ IntlCalendarTest::TestTypes()
                             "gregorian",
                             "japanese",
                             "buddhist",
-                            "japanese",
                             "buddhist",           
                             "gregorian",
                             "gregorian",
@@ -490,8 +488,8 @@ void IntlCalendarTest::TestBuddhistFormat() {
 void IntlCalendarTest::TestJapaneseFormat() {
     Calendar *cal;
     UErrorCode status = U_ZERO_ERROR;
-    cal = Calendar::createInstance("ja_JP_TRADITIONAL", status);
-    CHECK(status, UnicodeString("Creating ja_JP_TRADITIONAL calendar"));
+    cal = Calendar::createInstance("ja_JP@calendar=japanese", status);
+    CHECK(status, UnicodeString("Creating ja_JP@calendar=japanese calendar"));
     
     Calendar *cal2 = cal->clone();
     delete cal;
@@ -577,7 +575,7 @@ void IntlCalendarTest::TestJapaneseFormat() {
     {
         UnicodeString expect = CharsToUnicodeString("\\u5e73\\u621013\\u5e749\\u67088\\u65e5\\u571f\\u66dc\\u65e5");
         UDate         expectDate = 999932400000.0; // Testing a recent date
-        Locale        loc("ja_JP_TRADITIONAL"); // legacy
+        Locale        loc("ja_JP@calendar=japanese");
         
         status = U_ZERO_ERROR;
         simpleTest(loc, expect, expectDate, status);
