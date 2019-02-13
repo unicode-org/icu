@@ -20,6 +20,50 @@
 #include "uvectr32.h"
 #include "number_stringbuilder.h"
 
+
+/**
+ * Represents the type of constraint for ConstrainedFieldPosition.
+ *
+ * Constraints are used to control the behavior of iteration in FormattedValue.
+ *
+ * @internal
+ */
+typedef enum UCFPosConstraintType {
+    /**
+     * Represents the lack of a constraint.
+     *
+     * This is the value of fConstraint if no "constrain" methods were called.
+     *
+     * @internal
+     */
+    UCFPOS_CONSTRAINT_NONE = 0,
+
+    /**
+     * Represents that the field category is constrained.
+     *
+     * This is the value of fConstraint if constraintCategory was called.
+     *
+     * FormattedValue implementations should not change the field category
+     * while this constraint is active.
+     *
+     * @internal
+     */
+    UCFPOS_CONSTRAINT_CATEGORY,
+
+    /**
+     * Represents that the field and field category are constrained.
+     *
+     * This is the value of fConstraint if constraintField was called.
+     *
+     * FormattedValue implementations should not change the field or field category
+     * while this constraint is active.
+     *
+     * @internal
+     */
+    UCFPOS_CONSTRAINT_FIELD
+} UCFPosConstraintType;
+
+
 U_NAMESPACE_BEGIN
 
 

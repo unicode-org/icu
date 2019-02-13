@@ -111,20 +111,9 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
     void constrainField(int32_t category, int32_t field);
 
     /**
-     * Gets the currently active constraint.
-     *
-     * @return The currently active constraint type.
-     * @draft ICU 64
-     */
-    inline UCFPosConstraintType getConstraintType() const {
-        return fConstraint;
-    }
-
-    /**
      * Gets the field category for the current position.
      *
-     * If a category or field constraint was set, this function returns the constrained
-     * category. Otherwise, the return value is well-defined only after
+     * The return value is well-defined only after
      * FormattedValue#nextPosition returns TRUE.
      *
      * @return The field category saved in the instance.
@@ -137,8 +126,7 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
     /**
      * Gets the field for the current position.
      *
-     * If a field constraint was set, this function returns the constrained
-     * field. Otherwise, the return value is well-defined only after
+     * The return value is well-defined only after
      * FormattedValue#nextPosition returns TRUE.
      *
      * @return The field saved in the instance.
@@ -202,6 +190,18 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
     void setInt64IterationContext(int64_t context);
 
     /**
+     * Determines whether a given field should be included given the
+     * constraints.
+     *
+     * Intended to be used by FormattedValue implementations.
+     *
+     * @param category The category to test.
+     * @param field The field to test.
+     * @draft ICU 64
+     */
+    UBool matchesField(int32_t category, int32_t field) const;
+
+    /**
      * Sets new values for the primary public getters.
      *
      * Intended to be used by FormattedValue implementations.
@@ -221,16 +221,13 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
         int32_t start,
         int32_t limit);
 
-    /** @internal */
-    UBool matchesField(int32_t category, int32_t field);
-
   private:
     int64_t fContext = 0LL;
     int32_t fField = 0;
     int32_t fStart = 0;
     int32_t fLimit = 0;
-    UCFPosConstraintType fConstraint = UCFPOS_CONSTRAINT_NONE;
     int32_t fCategory = UFIELD_CATEGORY_UNDEFINED;
+    int8_t fConstraint = 0;
 };
 
 

@@ -20,7 +20,7 @@ static void TestSetters(void);
 static void AssertAllPartsEqual(
     const char* messagePrefix,
     const UConstrainedFieldPosition* ucfpos,
-    UCFPosConstraintType constraint,
+    int32_t matching,
     UFieldCategory category,
     int32_t field,
     int32_t start,
@@ -46,7 +46,7 @@ static void TestBasic() {
     AssertAllPartsEqual(
         "basic",
         ucfpos,
-        UCFPOS_CONSTRAINT_NONE,
+        7,
         UFIELD_CATEGORY_UNDEFINED,
         0,
         0,
@@ -67,7 +67,7 @@ void TestSetters() {
     AssertAllPartsEqual(
         "setters 0",
         ucfpos,
-        UCFPOS_CONSTRAINT_CATEGORY,
+        4,
         UFIELD_CATEGORY_DATE,
         0,
         0,
@@ -79,7 +79,7 @@ void TestSetters() {
     AssertAllPartsEqual(
         "setters 1",
         ucfpos,
-        UCFPOS_CONSTRAINT_FIELD,
+        2,
         UFIELD_CATEGORY_NUMBER,
         UNUM_COMPACT_FIELD,
         0,
@@ -91,7 +91,7 @@ void TestSetters() {
     AssertAllPartsEqual(
         "setters 2",
         ucfpos,
-        UCFPOS_CONSTRAINT_FIELD,
+        2,
         UFIELD_CATEGORY_NUMBER,
         UNUM_COMPACT_FIELD,
         0,
@@ -103,7 +103,7 @@ void TestSetters() {
     AssertAllPartsEqual(
         "setters 3",
         ucfpos,
-        UCFPOS_CONSTRAINT_FIELD,
+        2,
         UFIELD_CATEGORY_NUMBER,
         UNUM_COMPACT_FIELD,
         5,
@@ -115,7 +115,7 @@ void TestSetters() {
     AssertAllPartsEqual(
         "setters 4",
         ucfpos,
-        UCFPOS_CONSTRAINT_NONE,
+        7,
         UFIELD_CATEGORY_UNDEFINED,
         0,
         0,
@@ -125,10 +125,16 @@ void TestSetters() {
     ucfpos_close(ucfpos);
 }
 
+/** For matching, turn on these bits:
+ *
+ * 1 = UNUM_INTEGER_FIELD
+ * 2 = UNUM_COMPACT_FIELD
+ * 4 = UDAT_AM_PM_FIELD
+ */
 static void AssertAllPartsEqual(
         const char* messagePrefix,
         const UConstrainedFieldPosition* ucfpos,
-        UCFPosConstraintType constraint,
+        int32_t matching,
         UFieldCategory category,
         int32_t field,
         int32_t start,
@@ -145,10 +151,6 @@ static void AssertAllPartsEqual(
     U_ASSERT(prefixEnd < 256);
 
 #define AAPE_MSG(suffix) (uprv_strncpy(message+prefixEnd, suffix, 256-prefixEnd)-prefixEnd)
-
-    UCFPosConstraintType _constraintType = ucfpos_getConstraintType(ucfpos, &status);
-    assertSuccess(AAPE_MSG("constraint"), &status);
-    assertIntEquals(AAPE_MSG("constraint"), constraint, _constraintType);
 
     UFieldCategory _category = ucfpos_getCategory(ucfpos, &status);
     assertSuccess(AAPE_MSG("_"), &status);
@@ -167,6 +169,21 @@ static void AssertAllPartsEqual(
     int64_t _context = ucfpos_getInt64IterationContext(ucfpos, &status);
     assertSuccess(AAPE_MSG("context"), &status);
     assertIntEquals(AAPE_MSG("context"), context, _context);
+
+    UBool _matchesInteger = ucfpos_matchesField(ucfpos, UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD, &status);
+    assertSuccess(AAPE_MSG("integer field"), &status);
+    assertTrue(AAPE_MSG("integer field"),
+        ((matching & 1) != 0) ? _matchesInteger : !_matchesInteger);
+
+    UBool _matchesCompact = ucfpos_matchesField(ucfpos, UFIELD_CATEGORY_NUMBER, UNUM_COMPACT_FIELD, &status);
+    assertSuccess(AAPE_MSG("compact field"), &status);
+    assertTrue(AAPE_MSG("compact field"),
+        ((matching & 2) != 0) ? _matchesCompact : !_matchesCompact);
+
+    UBool _matchesDate = ucfpos_matchesField(ucfpos, UFIELD_CATEGORY_DATE, UDAT_AM_PM_FIELD, &status);
+    assertSuccess(AAPE_MSG("date field"), &status);
+    assertTrue(AAPE_MSG("date field"),
+        ((matching & 4) != 0) ? _matchesDate : !_matchesDate);
 }
 
 
