@@ -68,7 +68,7 @@ public final class CharacterPropertiesImpl {
             case UCharacterProperty.SRC_INPC:
             case UCharacterProperty.SRC_INSC:
             case UCharacterProperty.SRC_VO:
-                UCharacterProperty.INSTANCE.ulayout_addPropertyStarts(src, incl);
+                UCharacterProperty.ulayout_addPropertyStarts(src, incl);
                 break;
             default:
                 throw new IllegalStateException("getInclusions(unknown src " + src + ")");

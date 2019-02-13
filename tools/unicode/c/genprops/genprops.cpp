@@ -204,8 +204,7 @@ main(int argc, char* argv[]) {
     casePropsBuilder->writeCSourceFile(sourceCommon.data(), errorCode);
     casePropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
     namesPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
-    layoutPropsBuilder->writeCSourceFile(sourceCommon.data(), errorCode);
-    layoutPropsBuilder->writeJavaSourceFile("", errorCode);
+    layoutPropsBuilder->writeBinaryData(sourceDataIn.data(), withCopyright, errorCode);
 
     return errorCode;
 }

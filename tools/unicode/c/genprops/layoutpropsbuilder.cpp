@@ -16,19 +16,74 @@
 #include "genprops.h"
 #include "ppucd.h"
 #include "uassert.h"
-#include "writesrc.h"
+#include "ulayout_props.h"
+#include "unewdata.h"
+
+/* Unicode layout properties file format ---------------------------------------
+
+The file format prepared and written here contains several data
+structures that store indexes or data.
+
+Before the data contents described below, there are the headers required by
+the udata API for loading ICU data. Especially, a UDataInfo structure
+precedes the actual data. It contains platform properties values and the
+file format version.
+
+The following is a description of format version 1.0 .
+
+The file contains the following structures:
+
+    const int32_t indexes[i0] with values i0, i1, ...:
+    (see ULAYOUT_IX_... constants for names of indexes)
+
+    i0 indexesLength; -- length of indexes[] (ULAYOUT_IX_COUNT)
+    i1 inpcTop; -- limit byte offset of the InPC trie
+    i2 inscTop; -- limit byte offset of the InSC trie
+    i3 voTop; -- limit byte offset of the vo trie
+    i4..i7 -- reserved, same as the last limit byte offset
+    i8 -- reserved, 0
+
+    i9 maxValues; -- max values of the InPC, InSC, vo properties
+        (8 bits each; lowest 8 bits reserved, 0)
+    i10..i11 -- reserved, 0
+
+    After the indexes array follow consecutive, serialized,
+    single-property code point tries for the following properties,
+    each built "small" or "fast",
+    each padded to a multiple of 16 bytes:
+    - InPC
+    - InSC
+    - vo
+
+----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
+
+// UDataInfo cf. udata.h
+static UDataInfo dataInfo = {
+    sizeof(UDataInfo),
+    0,
+
+    U_IS_BIG_ENDIAN,
+    U_CHARSET_FAMILY,
+    U_SIZEOF_UCHAR,
+    0,
+
+    // dataFormat="Layo"
+    { ULAYOUT_FMT_0, ULAYOUT_FMT_1, ULAYOUT_FMT_2, ULAYOUT_FMT_3 },
+    { 1, 0, 0, 0 },  // formatVersion
+    { 12, 0, 0, 0 }  // dataVersion
+};
 
 class LayoutPropsBuilder : public PropsBuilder {
 public:
     LayoutPropsBuilder(UErrorCode &errorCode);
     virtual ~LayoutPropsBuilder() U_OVERRIDE;
 
+    virtual void setUnicodeVersion(const UVersionInfo version) U_OVERRIDE;
     virtual void setProps(const UniProps &props, const UnicodeSet &newValues, UErrorCode &errorCode) U_OVERRIDE;
     virtual void build(UErrorCode &errorCode) U_OVERRIDE;
-    virtual void writeCSourceFile(const char *path, UErrorCode &errorCode) U_OVERRIDE;
-    virtual void writeJavaSourceFile(const char *path, UErrorCode &errorCode) U_OVERRIDE;
+    virtual void writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode) U_OVERRIDE;
 
 private:
     void setIntProp(const UniProps &, const UnicodeSet &newValues,
@@ -38,9 +93,6 @@ private:
         return maxIntValues[prop - UCHAR_INT_START];
     }
     void checkMaxIntValue(UProperty prop, int32_t maxMax, UErrorCode &errorCode) const;
-    void writeMaxIntValue(FILE *f, const char *name, UProperty prop) const {
-        fprintf(f, "static const int32_t max%sValue = %ld;\n\n", name, (long)getMaxIntValue(prop));
-    }
 
     int32_t maxIntValues[UCHAR_INT_LIMIT - UCHAR_INT_START];
     UMutableCPTrie *inpcMutableTrie;
@@ -71,6 +123,11 @@ LayoutPropsBuilder::~LayoutPropsBuilder() {
     ucptrie_close(inpcTrie);
     ucptrie_close(inscTrie);
     ucptrie_close(voTrie);
+}
+
+void
+LayoutPropsBuilder::setUnicodeVersion(const UVersionInfo version) {
+    uprv_memcpy(dataInfo.dataVersion, version, 4);
 }
 
 void
@@ -127,6 +184,24 @@ UCPTrie *buildUCPTrie(const char *name, UMutableCPTrie *mutableTrie,
     return trie;
 }
 
+constexpr int32_t TRIE_BLOCK_CAPACITY = 100000;
+
+uint8_t inpcBytes[TRIE_BLOCK_CAPACITY];
+uint8_t inscBytes[TRIE_BLOCK_CAPACITY];
+uint8_t voBytes[TRIE_BLOCK_CAPACITY];
+
+int32_t inpcLength = 0;
+int32_t inscLength = 0;
+int32_t voLength = 0;
+
+int32_t writeTrieBytes(const UCPTrie *trie, uint8_t block[], UErrorCode &errorCode) {
+    int32_t length = ucptrie_toBinary(trie, block, TRIE_BLOCK_CAPACITY, &errorCode);
+    while ((length & 0xf) != 0) {
+        block[length++] = 0xaa;
+    }
+    return length;
+}
+
 }  // namespace
 
 void
@@ -145,6 +220,15 @@ LayoutPropsBuilder::build(UErrorCode &errorCode) {
                             UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_8, errorCode);
     voTrie = buildUCPTrie("vo", voMutableTrie,
                           UCPTRIE_TYPE_SMALL, UCPTRIE_VALUE_BITS_8, errorCode);
+
+    inpcLength = writeTrieBytes(inpcTrie, inpcBytes, errorCode);
+    inscLength = writeTrieBytes(inscTrie, inscBytes, errorCode);
+    voLength = writeTrieBytes(voTrie, voBytes, errorCode);
+
+    if (!beQuiet) {
+        int32_t size = ULAYOUT_IX_COUNT * 4 + inpcLength + inscLength + voLength;
+        printf("data size:                             %5d\n", (int)size);
+    }
 }
 
 void LayoutPropsBuilder::checkMaxIntValue(UProperty prop, int32_t maxMax,
@@ -156,126 +240,62 @@ void LayoutPropsBuilder::checkMaxIntValue(UProperty prop, int32_t maxMax,
     }
 }
 
+// In ICU 63, we had functions writeCSourceFile() and writeJavaSourceFile().
+// For Java, each serialized trie was written as a String constant with
+// one byte per char and an optimization for byte 0,
+// to optimize for Java .class file size.
+// (See ICU 63 if we need to resurrect some of that code.)
+// Since ICU 64, we write a binary ulayout.icu file for use in both C++ & Java.
+
 void
-LayoutPropsBuilder::writeCSourceFile(const char *path, UErrorCode &errorCode) {
+LayoutPropsBuilder::writeBinaryData(const char *path, UBool withCopyright, UErrorCode &errorCode) {
     if (U_FAILURE(errorCode)) { return; }
 
-    FILE *f = usrc_create(path, "ulayout_props_data.h", 2018,
-                          "icu/tools/unicode/c/genprops/layoutpropsbuilder.cpp");
-    if (f == nullptr) {
-        errorCode = U_FILE_ACCESS_ERROR;
-        return;
-    }
-    fputs("#ifdef INCLUDED_FROM_UPROPS_CPP\n\n", f);
-
-    writeMaxIntValue(f, "InPC", UCHAR_INDIC_POSITIONAL_CATEGORY);
-    usrc_writeUCPTrie(f, "inpc", inpcTrie);
-
-    writeMaxIntValue(f, "InSC", UCHAR_INDIC_SYLLABIC_CATEGORY);
-    usrc_writeUCPTrie(f, "insc", inscTrie);
-
-    writeMaxIntValue(f, "Vo", UCHAR_VERTICAL_ORIENTATION);
-    usrc_writeUCPTrie(f, "vo", voTrie);
-
-    fputs("#endif  // INCLUDED_FROM_UPROPS_CPP\n", f);
-    fclose(f);
-}
-
-namespace {
-
-// Write one byte as one char in a Java String literal.
-// Java class file string literals use one byte per U+0001..U+007F,
-// and two bytes per U+0000 or U+0080..U+07FF.
-// This is reasonably compact if small byte values are more common, as usual.
-// Since 0 is very common but takes two bytes, we swap it with U+007A 'z'.
-int32_t appendByte(char *s, int32_t length, uint8_t b) {
-    if (b == 0) {
-        s[length++] = 'z';
-    } else if (b == 0x7a) {
-        s[length++] = '\\';
-        s[length++] = '0';
-    } else {
-        // Write all other bytes as octal escapes. (Java does not support \xhh.)
-        // We could make the source file smaller by writing ASCII characters
-        // directly where possible, but that would not make the class file any smaller,
-        // and we would have to be careful to still escape certain characters,
-        // and to escape digits after short octal escapes.
-        s[length++] = '\\';
-        if (b >= 0100) {
-            s[length++] = '0' + (b >> 6);
-        }
-        if (b >= 010) {
-            s[length++] = '0' + ((b >> 3) & 7);
-        }
-        s[length++] = '0' + (b & 7);
-    }
-    return length;
-}
-
-void writeBytesAsJavaString(FILE *f, const uint8_t *bytes, int32_t length) {
-    // Quotes, line feed, etc., with up to 16 bytes per line, up to 4 bytes "\377" each.
-    char line[80];
-    int32_t lineLength = 0;
-    for (int32_t i = 0;;) {
-        if ((i & 0xf) == 0) {  // start of a line of 16 bytes
-            line[0] = '"';
-            lineLength = 1;
-        }
-        if (i < length) {
-            lineLength = appendByte(line, lineLength, bytes[i++]);
-        }
-        if (i == length) {  // end of the string
-            line[lineLength++] = '"';
-            line[lineLength++] = '\n';
-            line[lineLength++] = '\n';
-            line[lineLength++] = 0;
-            fputs(line, f);
-            break;
-        }
-        if ((i & 0xf) == 0) {  // end of a line of 16 bytes
-            line[lineLength++] = '"';
-            line[lineLength++] = ' ';
-            line[lineLength++] = '+';
-            line[lineLength++] = '\n';
-            line[lineLength++] = 0;
-            fputs(line, f);
-        }
-    }
-}
-
-static uint8_t trieBlock[100000];
-
-void writeUCPTrieAsJavaString(FILE *f, const UCPTrie *trie, UErrorCode &errorCode) {
-    int32_t length = ucptrie_toBinary(trie, trieBlock, UPRV_LENGTHOF(trieBlock), &errorCode);
-    writeBytesAsJavaString(f, trieBlock, length);
-}
-
-}  // namespace
-
-// So far, this writes initializers to be copied into Java code, but not a complete Java file.
-// We should probably write a regular, binary ICU data file and read that into Java.
-void
-LayoutPropsBuilder::writeJavaSourceFile(const char * /*path*/, UErrorCode &errorCode) {
-    if (U_FAILURE(errorCode)) { return; }
-
-    FILE *f = usrc_create("/tmp", "ulayout_props_data.txt", 2018,
-                          "icu/tools/unicode/c/genprops/layoutpropsbuilder.cpp");
-    if (f == nullptr) {
-        errorCode = U_FILE_ACCESS_ERROR;
+    UNewDataMemory *pData = udata_create(
+        path, ULAYOUT_DATA_TYPE, ULAYOUT_DATA_NAME, &dataInfo,
+        withCopyright ? U_COPYRIGHT_STRING : NULL, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops: udata_create(%s, ulayout.icu) failed - %s\n",
+                path, u_errorName(errorCode));
         return;
     }
 
-    writeMaxIntValue(f, "InPC", UCHAR_INDIC_POSITIONAL_CATEGORY);
-    writeUCPTrieAsJavaString(f, inpcTrie, errorCode);
+    int32_t indexes[ULAYOUT_IX_COUNT] = { ULAYOUT_IX_COUNT };
+    int32_t top = ULAYOUT_IX_COUNT * 4;
 
-    writeMaxIntValue(f, "InSC", UCHAR_INDIC_SYLLABIC_CATEGORY);
-    writeUCPTrieAsJavaString(f, inscTrie, errorCode);
+    indexes[ULAYOUT_IX_INPC_TRIE_TOP] = (top += inpcLength);
+    indexes[ULAYOUT_IX_INSC_TRIE_TOP] = (top += inscLength);
+    indexes[ULAYOUT_IX_VO_TRIE_TOP] = (top += voLength);
 
-    writeMaxIntValue(f, "Vo", UCHAR_VERTICAL_ORIENTATION);
-    writeUCPTrieAsJavaString(f, voTrie, errorCode);
+    // Set reserved trie-top values to the top of the last trie
+    // so that they look empty until a later file format version
+    // uses one or more of these slots.
+    for (int32_t i = ULAYOUT_IX_RESERVED_TOP; i <= ULAYOUT_IX_TRIES_TOP; ++i) {
+        indexes[i] = top;
+    }
 
-    fclose(f);
-    puts("  ++ Java initializers written to /tmp/ulayout_props_data.txt");
+    indexes[ULAYOUT_IX_MAX_VALUES] =
+        ((getMaxIntValue(UCHAR_INDIC_POSITIONAL_CATEGORY)) << ULAYOUT_MAX_INPC_SHIFT) |
+        ((getMaxIntValue(UCHAR_INDIC_SYLLABIC_CATEGORY)) << ULAYOUT_MAX_INSC_SHIFT) |
+        ((getMaxIntValue(UCHAR_VERTICAL_ORIENTATION)) << ULAYOUT_MAX_VO_SHIFT);
+
+    udata_writeBlock(pData, indexes, sizeof(indexes));
+    udata_writeBlock(pData, inpcBytes, inpcLength);
+    udata_writeBlock(pData, inscBytes, inscLength);
+    udata_writeBlock(pData, voBytes, voLength);
+
+    long dataLength = udata_finish(pData, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        fprintf(stderr, "genprops: error %s writing the output file\n", u_errorName(errorCode));
+        return;
+    }
+
+    if (dataLength != (long)top) {
+        fprintf(stderr,
+                "udata_finish(ulayout.icu) reports %ld bytes written but should be %ld\n",
+                dataLength, (long)top);
+        errorCode = U_INTERNAL_PROGRAM_ERROR;
+    }
 }
 
 PropsBuilder *

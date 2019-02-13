@@ -855,6 +855,9 @@
     <ClInclude Include="ucase.h">
       <Filter>properties &amp; sets</Filter>
     </ClInclude>
+    <ClInclude Include="ulayout_props.h">
+      <Filter>properties &amp; sets</Filter>
+    </ClInclude>
     <ClInclude Include="unisetspan.h">
       <Filter>properties &amp; sets</Filter>
     </ClInclude>
