@@ -3,27 +3,6 @@
 
 from collections import namedtuple
 
-AVAILABLE_FEATURES = [
-    "confusables",
-    "cnvalias",
-    "uconv",
-    "brkitr",
-    "stringprep",
-    "dictionaries",
-    "normalization",
-    "coll",
-    "unames",
-    "misc",
-    "locales",
-    "curr",
-    "lang",
-    "region",
-    "zone",
-    "unit",
-    "rbnf",
-    "translit"
-]
-
 InFile = namedtuple("InFile", ["filename"])
 TmpFile = namedtuple("TmpFile", ["filename"])
 OutFile = namedtuple("OutFile", ["filename"])
