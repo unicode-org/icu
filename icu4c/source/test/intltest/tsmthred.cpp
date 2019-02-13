@@ -30,11 +30,6 @@
 #include "uassert.h"
 
 
-#define TSMTHREAD_FAIL(msg) errln("%s at file %s, line %d", msg, __FILE__, __LINE__)
-#define TSMTHREAD_ASSERT(expr) {if (!(expr)) {TSMTHREAD_FAIL("Fail");}}
-#define TSMTHREAD_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
-                  errln("file: %s:%d status = %s\n", __FILE__, __LINE__, u_errorName(status));}}
-
 MultithreadTest::MultithreadTest()
 {
 }
@@ -138,10 +133,7 @@ void MultithreadTest::TestThreads()
         logln(" Subthread started.");
     }
 
-    if (numThreadsStarted != THREADTEST_NRTHREADS) {
-        errln("Not all threads could be started for testing!");
-        return;
-    }
+    assertTrue(WHERE, THREADTEST_NRTHREADS == numThreadsStarted);
 
     logln("Waiting for threads to be set..");
     for(i=0; i<THREADTEST_NRTHREADS; i++) {
@@ -200,7 +192,7 @@ void TestArabicShapeThreads::doTailTest(void) {
         }
 
 
-        //"Trying new tail
+        // Trying new tail
         status = U_ZERO_ERROR;
         length = u_shapeArabic(src, -1, dst, UPRV_LENGTHOF(dst),
                 U_SHAPE_LETTERS_SHAPE|U_SHAPE_SEEN_TWOCELL_NEAR|U_SHAPE_TAIL_NEW_UNICODE, &status);
@@ -348,26 +340,26 @@ void MultithreadTest::TestMutex()
 UnicodeString showDifference(const UnicodeString& expected, const UnicodeString& result)
 {
     UnicodeString res;
-    res = expected + "<Expected\n";
+    res = expected + u"<Expected\n";
     if(expected.length() != result.length())
-        res += " [ Different lengths ] \n";
+        res += u" [ Different lengths ] \n";
     else
     {
         for(int32_t i=0;i<expected.length();i++)
         {
             if(expected[i] == result[i])
             {
-                res += " ";
+                res += u" ";
             }
             else
             {
-                res += "|";
+                res += u"|";
             }
         }
-        res += "<Differences";
-        res += "\n";
+        res += u"<Differences";
+        res += u"\n";
     }
-    res += result + "<Result\n";
+    res += result + u"<Result\n";
 
     return res;
 }
@@ -416,19 +408,15 @@ static void formatErrorMessage(UErrorCode &realStatus, const UnicodeString& patt
         Formattable(currency3)// currency3  {3,number,currency}
     };
 
-    MessageFormat *fmt = new MessageFormat("MessageFormat's API is broken!!!!!!!!!!!",realStatus);
+    LocalPointer<MessageFormat> fmt(new MessageFormat(u"MessageFormat's API is broken!!!!!!!!!!!",realStatus), realStatus);
+    if (U_FAILURE(realStatus)) {
+        return;
+    }
     fmt->setLocale(theLocale);
     fmt->applyPattern(pattern, realStatus);
 
-    if (U_FAILURE(realStatus)) {
-        delete fmt;
-        return;
-    }
-
     FieldPosition ignore = 0;
     fmt->format(myArgs,4,result,ignore,realStatus);
-
-    delete fmt;
 }
 
 /**
@@ -451,8 +439,8 @@ const ThreadSafeFormatSharedData *gSharedData = NULL;
 
 ThreadSafeFormatSharedData::ThreadSafeFormatSharedData(UErrorCode &status) {
     fFormat.adoptInstead(NumberFormat::createCurrencyInstance(Locale::getUS(), status));
-    static const UChar kYDD[] = { 0x59, 0x44, 0x44, 0x00 };
-    static const UChar kBBD[] = { 0x42, 0x42, 0x44, 0x00 };
+    static const UChar *kYDD = u"YDD";
+    static const UChar *kBBD = u"BBD";
     fYDDThing.adoptObject(new CurrencyAmount(123.456, kYDD, status));
     fBBDThing.adoptObject(new CurrencyAmount(987.654, kBBD, status));
     if (U_FAILURE(status)) {
@@ -488,26 +476,26 @@ ThreadSafeFormat::ThreadSafeFormat(UErrorCode &status) {
   fFormat.adoptInstead(NumberFormat::createCurrencyInstance(Locale::getUS(), status));
 }
 
-static const UChar kUSD[] = { 0x55, 0x53, 0x44, 0x00 };
+static const UChar *kUSD = u"USD";
 
 UBool ThreadSafeFormat::doStuff(int32_t offset, UnicodeString &appendErr, UErrorCode &status) const {
   UBool okay = TRUE;
 
   if(u_strcmp(fFormat->getCurrency(), kUSD)) {
-    appendErr.append("fFormat currency != ")
+    appendErr.append(u"fFormat currency != ")
       .append(kUSD)
-      .append(", =")
+      .append(u", =")
       .append(fFormat->getCurrency())
-      .append("! ");
+      .append(u"! ");
     okay = FALSE;
   }
 
   if(u_strcmp(gSharedData->fFormat->getCurrency(), kUSD)) {
-    appendErr.append("gFormat currency != ")
+    appendErr.append(u"gFormat currency != ")
       .append(kUSD)
-      .append(", =")
+      .append(u", =")
       .append(gSharedData->fFormat->getCurrency())
-      .append("! ");
+      .append(u"! ");
     okay = FALSE;
   }
   UnicodeString str;
@@ -698,38 +686,36 @@ public:
             default:
             case 0:
                 statusToCheck=                      U_FILE_ACCESS_ERROR;
-                patternToCheck=        "0:Someone from {2} is receiving a #{0}"
-                                       " error - {1}. Their telephone call is costing "
-                                       "{3,number,currency}."; // number,currency
+                patternToCheck=        u"0:Someone from {2} is receiving a #{0}"
+                                        " error - {1}. Their telephone call is costing "
+                                        "{3,number,currency}."; // number,currency
                 messageLocale=                      Locale("en","US");
                 countryToCheck=                     Locale("","HR");
                 currencyToCheck=                    8192.77;
-                expected=  "0:Someone from Croatia is receiving a #4 error - "
+                expected=  u"0:Someone from Croatia is receiving a #4 error - "
                             "U_FILE_ACCESS_ERROR. Their telephone call is costing $8,192.77.";
                 break;
             case 1:
                 statusToCheck=                      U_INDEX_OUTOFBOUNDS_ERROR;
-                patternToCheck=                     "1:A customer in {2} is receiving a #{0} error - {1}. "
-                                                    "Their telephone call is costing {3,number,currency}."; // number,currency
+                patternToCheck=                     u"1:A customer in {2} is receiving a #{0} error - {1}. "
+                                                     "Their telephone call is costing {3,number,currency}."; // number,currency
                 messageLocale=                      Locale("de","DE@currency=DEM");
                 countryToCheck=                     Locale("","BF");
                 currencyToCheck=                    2.32;
-                expected=                           CharsToUnicodeString(
-                                                    "1:A customer in Burkina Faso is receiving a #8 error - U_INDEX_OUTOFBOUNDS_ERROR. "
-                                                    "Their telephone call is costing 2,32\\u00A0DM.");
+                expected=                           u"1:A customer in Burkina Faso is receiving a #8 error - U_INDEX_OUTOFBOUNDS_ERROR. "
+                                                    u"Their telephone call is costing 2,32\u00A0DM.";
                 break;
             case 2:
                 statusToCheck=                      U_MEMORY_ALLOCATION_ERROR;
-                patternToCheck=   "2:user in {2} is receiving a #{0} error - {1}. "
+                patternToCheck=   u"2:user in {2} is receiving a #{0} error - {1}. "
                                   "They insist they just spent {3,number,currency} "
                                   "on memory."; // number,currency
                 messageLocale=                      Locale("de","AT@currency=ATS"); // Austrian German
                 countryToCheck=                     Locale("","US"); // hmm
                 currencyToCheck=                    40193.12;
-                expected=       CharsToUnicodeString(
-                            "2:user in Vereinigte Staaten is receiving a #7 error"
-                            " - U_MEMORY_ALLOCATION_ERROR. They insist they just spent"
-                            " \\u00f6S\\u00A040.193,12 on memory.");
+                expected=       u"2:user in Vereinigte Staaten is receiving a #7 error"
+                                u" - U_MEMORY_ALLOCATION_ERROR. They insist they just spent"
+                                u" \u00f6S\u00A040.193,12 on memory.";
                 break;
             }
 
@@ -740,14 +726,14 @@ public:
             if(U_FAILURE(status))
             {
                 UnicodeString tmp(u_errorName(status));
-                IntlTest::gTest->errln("Failure on message format, pattern=" + patternToCheck +
+                IntlTest::gTest->errln(u"Failure on message format, pattern=" + patternToCheck +
                         ", error = " + tmp);
                 goto cleanupAndReturn;
             }
 
             if(result != expected)
             {
-                IntlTest::gTest->errln("PatternFormat: \n" + showDifference(expected,result));
+                IntlTest::gTest->errln(u"PatternFormat: \n" + showDifference(expected,result));
                 goto cleanupAndReturn;
             }
             // test the Thread Safe Format
@@ -777,7 +763,7 @@ void MultithreadTest::TestThreadedIntl()
     UErrorCode threadSafeErr = U_ZERO_ERROR;
 
     ThreadSafeFormatSharedData sharedData(threadSafeErr);
-    assertSuccess("initializing ThreadSafeFormat", threadSafeErr, TRUE);
+    assertSuccess(WHERE, threadSafeErr, TRUE);
 
     //
     //  Create and start the test threads
@@ -823,17 +809,6 @@ struct Line {
     int32_t buflen;
 } ;
 
-static UBool
-skipLineBecauseOfBug(const UChar *s, int32_t length) {
-    // TODO: Fix ICU ticket #8052
-    if(length >= 3 &&
-            (s[0] == 0xfb2 || s[0] == 0xfb3) &&
-            s[1] == 0x334 &&
-            (s[2] == 0xf73 || s[2] == 0xf75 || s[2] == 0xf81)) {
-        return TRUE;
-    }
-    return FALSE;
-}
 
 static UCollationResult
 normalizeResult(int32_t result) {
@@ -872,8 +847,6 @@ public:
         for(i = 0; i < noLines; i++) {
             if(lines[i].buflen == 0) { continue; }
 
-            if(skipLineBecauseOfBug(lines[i].buff, lines[i].buflen)) { continue; }
-
             int32_t resLen = coll->getSortKey(lines[i].buff, lines[i].buflen, newSk, 1024);
 
             if(oldSk != NULL) {
@@ -882,12 +855,12 @@ public:
                 int32_t cmpres2 = coll->compare(lines[i].buff, lines[i].buflen, lines[prev].buff, lines[prev].buflen);
 
                 if(cmpres != -cmpres2) {
-                    IntlTest::gTest->errln(UnicodeString("Compare result not symmetrical on line ") + (i + 1));
+                    IntlTest::gTest->errln(UnicodeString(u"Compare result not symmetrical on line ") + (i + 1));
                     break;
                 }
 
                 if(cmpres != normalizeResult(skres)) {
-                    IntlTest::gTest->errln(UnicodeString("Difference between coll->compare and sortkey compare on line ") + (i + 1));
+                    IntlTest::gTest->errln(UnicodeString(u"Difference between coll->compare and sortkey compare on line ") + (i + 1));
                     break;
                 }
 
@@ -901,7 +874,7 @@ public:
                     // which we do via setting strength=identical.
                 }
                 if(res > 0) {
-                    IntlTest::gTest->errln(UnicodeString("Line is not greater or equal than previous line, for line ") + (i + 1));
+                    IntlTest::gTest->errln(UnicodeString(u"Line is not greater or equal than previous line, for line ") + (i + 1));
                     break;
                 }
             }
@@ -1020,7 +993,7 @@ void MultithreadTest::TestCollators()
     int32_t spawnResult = 0;
     LocalArray<CollatorThreadTest> tests(new CollatorThreadTest[kCollatorThreadThreads]);
 
-    logln(UnicodeString("Spawning: ") + kCollatorThreadThreads + " threads * " + kFormatThreadIterations + " iterations each.");
+    logln(UnicodeString(u"Spawning: ") + kCollatorThreadThreads + u" threads * " + kFormatThreadIterations + u" iterations each.");
     int32_t j = 0;
     for(j = 0; j < kCollatorThreadThreads; j++) {
         //logln("Setting collator %i", j);
@@ -1077,12 +1050,12 @@ public:
         int loopCount = 0;
 
         for (loopCount = 0; loopCount < kStringThreadIterations; loopCount++) {
-            if (*gSharedString != "This is the original test string.") {
+            if (*gSharedString != u"This is the original test string.") {
                 IntlTest::gTest->errln("%s:%d Original string is corrupt.", __FILE__, __LINE__);
                 break;
             }
             UnicodeString s1 = *gSharedString;
-            s1 += "cat this";
+            s1 += u"cat this";
             UnicodeString s2(s1);
             UnicodeString s3 = *gSharedString;
             s2 = s3;
@@ -1103,10 +1076,10 @@ const UnicodeString *StringThreadTest2::gSharedString = NULL;
 void MultithreadTest::TestString()
 {
     int     j;
-    StringThreadTest2::gSharedString = new UnicodeString("This is the original test string.");
+    StringThreadTest2::gSharedString = new UnicodeString(u"This is the original test string.");
     StringThreadTest2  tests[kStringThreadThreads];
 
-    logln(UnicodeString("Spawning: ") + kStringThreadThreads + " threads * " + kStringThreadIterations + " iterations each.");
+    logln(UnicodeString(u"Spawning: ") + kStringThreadThreads + u" threads * " + kStringThreadIterations + u" iterations each.");
     for(j = 0; j < kStringThreadThreads; j++) {
         int32_t threadStatus = tests[j].start();
         if (threadStatus != 0) {
@@ -1119,7 +1092,7 @@ void MultithreadTest::TestString()
 
     for(j=0; j<kStringThreadThreads; j++) {
         tests[j].join();
-        logln(UnicodeString("Test #") + j + " is complete.. ");
+        logln(UnicodeString(u"Test #") + j + u" is complete.. ");
     }
 
     delete StringThreadTest2::gSharedString;
@@ -1145,13 +1118,9 @@ class TxThread: public SimpleThread {
 
 TxThread::~TxThread() {}
 void TxThread::run() {
-    UnicodeString greekString("\\u03B4\\u03B9\\u03B1\\u03C6\\u03BF\\u03C1\\u03B5\\u03C4\\u03B9\\u03BA\\u03BF\\u03CD\\u03C2");
-    greekString = greekString.unescape();
+    UnicodeString greekString(u"διαφορετικούς");
     gSharedTranslit->transliterate(greekString);
-    if (greekString[0] != 0x64)      // 'd'. The whole transliterated string is "diaphoretikous" (accented u).
-    {
-        IntlTest::gTest->errln("%s:%d Transliteration failed.", __FILE__, __LINE__);
-    }
+    IntlTest::gTest->assertEquals(WHERE, UnicodeString(u"diaphoretikoús"), greekString);
 }
 #endif
 
@@ -1160,10 +1129,8 @@ void MultithreadTest::TestAnyTranslit() {
 #if !UCONFIG_NO_TRANSLITERATION
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<Transliterator> tx(Transliterator::createInstance("Any-Latin", UTRANS_FORWARD, status));
-    if (U_FAILURE(status)) {
-        dataerrln("File %s, Line %d: Error, status = %s", __FILE__, __LINE__, u_errorName(status));
-        return;
-    }
+    if (!assertSuccess(WHERE, status, true)) { return; }
+
     gSharedTranslit = tx.getAlias();
     TxThread  threads[4];
     int32_t i;
@@ -1255,9 +1222,7 @@ void MultithreadTest::TestConditionVariables() {
     umtx_unlock(&gCTMutex);
 
     for (i=0; i<NUMTHREADS; ++i) {
-        if (!threads[i]->fFinished) {
-            errln("File %s, Line %d: Error, threads[%d]->fFinished == false", __FILE__, __LINE__, i);
-        }
+        assertTrue(WHERE, threads[i]->fFinished);
     }
 
     for (i=0; i<NUMTHREADS; ++i) {
@@ -1373,12 +1338,7 @@ void UnifiedCacheThread::exerciseByLocale(const Locale &locale) {
     fCache->get(
             LocaleCacheKey<UCTMultiThreadItem>(locale), fCache, origItem, status);
     U_ASSERT(U_SUCCESS(status));
-    if (uprv_strcmp(locale.getLanguage(), origItem->value)) {
-      IntlTest::gTest->errln(
-              "%s:%d Expected %s, got %s", __FILE__, __LINE__,
-              locale.getLanguage(),
-              origItem->value);
-    }
+    IntlTest::gTest->assertEquals(WHERE, locale.getLanguage(), origItem->value);
 
     // Fetch the same item again many times. We should always get the same
     // pointer since this client is already holding onto it
@@ -1386,12 +1346,7 @@ void UnifiedCacheThread::exerciseByLocale(const Locale &locale) {
         const UCTMultiThreadItem *item = NULL;
         fCache->get(
                 LocaleCacheKey<UCTMultiThreadItem>(locale), fCache, item, status);
-        if (item != origItem) {
-            IntlTest::gTest->errln(
-                    "%s:%d Expected to get the same pointer",
-                     __FILE__,
-                     __LINE__);
-        }
+        IntlTest::gTest->assertTrue(WHERE, item == origItem);
         if (item != NULL) {
             item->removeRef();
         }
@@ -1452,7 +1407,7 @@ void MultithreadTest::TestUnifiedCache() {
 
     }
 
-    assertEquals("unused values", 2, cache.unusedCount());
+    assertEquals(WHERE, 2, cache.unusedCount());
 
     // clean up threads
     for (int32_t i=0; i<CACHE_LOAD; ++i) {
@@ -1493,16 +1448,16 @@ void BreakTranslitThread::run() {
 void MultithreadTest::TestBreakTranslit() {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString input(
-        "\\u0E42\\u0E14\\u0E22\\u0E1E\\u0E37\\u0E49\\u0E19\\u0E10\\u0E32\\u0E19\\u0E41\\u0E25\\u0E49\\u0E27,");
-    input = input.unescape();
+        u"\u0E42\u0E14\u0E22\u0E1E\u0E37\u0E49\u0E19\u0E10\u0E32\u0E19\u0E41\u0E25\u0E49\u0E27,");
+        // Thai script, โดยพื้นฐานแล้ว
     gTranslitInput = &input;
 
     gSharedTransliterator = Transliterator::createInstance(
-        UNICODE_STRING_SIMPLE("Any-Latin; Lower; NFD; [:Diacritic:]Remove; NFC; Latin-ASCII;"), UTRANS_FORWARD, status);
-    if (!gSharedTransliterator) {
-         return;
-     }
-    TSMTHREAD_ASSERT_SUCCESS(status); 
+        UnicodeString(u"Any-Latin; Lower; NFD; [:Diacritic:]Remove; NFC; Latin-ASCII;"), UTRANS_FORWARD, status);
+    assertSuccess(WHERE, status);
+    if (!assertTrue(WHERE, gSharedTransliterator != nullptr)) {
+        return;
+    }
 
     UnicodeString expected(*gTranslitInput);
     gSharedTransliterator->transliterate(expected);
@@ -1549,7 +1504,7 @@ void MultithreadTest::TestIncDec()
     for (auto &thread:threads) {
         thread.join();
     }
-    assertEquals("TestIncDec", NUM_THREADS, gIncDecCounter);
+    assertEquals(WHERE, NUM_THREADS, gIncDecCounter);
 }
 
 #if !UCONFIG_NO_FORMATTING
@@ -1569,7 +1524,7 @@ void MultithreadTest::Test20104() {
     UErrorCode status = U_ZERO_ERROR;
     Locale loc("hi_IN");
     gSharedCalendar = new IndianCalendar(loc, status);
-    assertSuccess("Test20104", status);
+    assertSuccess(WHERE, status);
 
     static constexpr int NUM_THREADS = 4;
     Test20104Thread threads[NUM_THREADS];
