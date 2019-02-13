@@ -34,12 +34,14 @@
 struct UListFormatter;
 typedef struct UListFormatter UListFormatter;  /**< C typedef for struct UListFormatter. @stable ICU 55 */
 
+#ifndef U_HIDE_DRAFT_API
 struct UFormattedList;
 /**
  * Opaque struct to contain the results of a UListFormatter operation.
  * @draft ICU 64
  */
 typedef struct UFormattedList UFormattedList;
+#endif /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DRAFT_API
 /**
@@ -90,6 +92,7 @@ ulistfmt_open(const char*  locale,
 U_CAPI void U_EXPORT2
 ulistfmt_close(UListFormatter *listfmt);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Creates an object to hold the result of a UListFormatter
  * operation. The object can be used repeatedly; it is cleared whenever
@@ -127,6 +130,7 @@ ulistfmt_resultAsValue(const UFormattedList* uresult, UErrorCode* ec);
  */
 U_CAPI void U_EXPORT2
 ulistfmt_closeResult(UFormattedList* uresult);
+#endif /* U_HIDE_DRAFT_API */
 
 
 #if U_SHOW_CPLUSPLUS_API
@@ -144,6 +148,7 @@ U_NAMESPACE_BEGIN
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUListFormatterPointer, UListFormatter, ulistfmt_close);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * \class LocalUFormattedListPointer
  * "Smart pointer" class, closes a UFormattedList via ulistfmt_closeResult().
@@ -151,9 +156,10 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalUListFormatterPointer, UListFormatter, ulistfmt
  *
  * @see LocalPointerBase
  * @see LocalPointer
- * @stable ICU 55
+ * @draft ICU 64
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUFormattedListPointer, UFormattedList, ulistfmt_closeResult);
+#endif /* U_HIDE_DRAFT_API */
 
 U_NAMESPACE_END
 
@@ -202,6 +208,7 @@ ulistfmt_format(const UListFormatter* listfmt,
                 int32_t            resultCapacity,
                 UErrorCode*        status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Formats a list of strings to a UFormattedList, which exposes more
  * information than the string exported by ulistfmt_format().
@@ -226,6 +233,7 @@ ulistfmt_format(const UListFormatter* listfmt,
  *            operation. See ulistfmt_openResult().
  * @param status
  *            Error code set if an error occurred during formatting.
+ * @draft ICU 64
  */
 U_CAPI void U_EXPORT2
 ulistfmt_formatStringsToResult(
@@ -235,6 +243,7 @@ ulistfmt_formatStringsToResult(
                 int32_t            stringCount,
                 UFormattedList*    uresult,
                 UErrorCode*        status);
+#endif /* U_HIDE_DRAFT_API */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
