@@ -106,7 +106,7 @@ matrix:
     - name: "c: linux tsan"
       language: cpp
       env:
-          - INTLTEST_OPTS="utility/MultithreadTest rbbi/RBBIMonkeyTest format/CalendarLimitTest"
+          - INTLTEST_OPTS="utility/MultithreadTest"
           - CPPFLAGS="-fsanitize=thread"
           - LDFLAGS=-fsanitize=thread
       os:       linux
