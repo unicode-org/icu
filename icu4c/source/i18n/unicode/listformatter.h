@@ -62,6 +62,7 @@ struct ListFormatData : public UMemory {
 
 
 #if !UCONFIG_NO_FORMATTING
+#ifndef U_HIDE_DRAFT_API
 /**
  * An immutable class containing the result of a list formatting operation.
  *
@@ -122,6 +123,7 @@ class U_I18N_API FormattedList : public UMemory, public FormattedValue {
         : fData(nullptr), fErrorCode(errorCode) {};
     friend class ListFormatter;
 };
+#endif /* U_HIDE_DRAFT_API */
 #endif // !UCONFIG_NO_FORMATTING
 
 
