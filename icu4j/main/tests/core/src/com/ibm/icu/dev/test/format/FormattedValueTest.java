@@ -5,6 +5,7 @@ package com.ibm.icu.dev.test.format;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.math.BigDecimal;
 import java.text.AttributedCharacterIterator;
@@ -16,7 +17,7 @@ import java.util.Set;
 import org.junit.Test;
 
 import com.ibm.icu.text.ConstrainedFieldPosition;
-import com.ibm.icu.text.ConstrainedFieldPosition.ConstraintType;
+import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.text.NumberFormat;
 
@@ -30,8 +31,7 @@ public class FormattedValueTest {
         assertAllPartsEqual(
             "basic",
             cfpos,
-            ConstraintType.NONE,
-            Object.class,
+            7,
             null,
             null,
             0,
@@ -47,8 +47,7 @@ public class FormattedValueTest {
         assertAllPartsEqual(
             "setters 1",
             cfpos,
-            ConstraintType.FIELD,
-            Object.class,
+            2,
             NumberFormat.Field.COMPACT,
             null,
             0,
@@ -59,8 +58,7 @@ public class FormattedValueTest {
         assertAllPartsEqual(
             "setters 1.5",
             cfpos,
-            ConstraintType.CLASS,
-            NumberFormat.Field.class,
+            3,
             null,
             null,
             0,
@@ -71,8 +69,7 @@ public class FormattedValueTest {
         assertAllPartsEqual(
             "setters 2",
             cfpos,
-            ConstraintType.CLASS,
-            NumberFormat.Field.class,
+            3,
             null,
             null,
             0,
@@ -83,8 +80,7 @@ public class FormattedValueTest {
         assertAllPartsEqual(
             "setters 3",
             cfpos,
-            ConstraintType.CLASS,
-            NumberFormat.Field.class,
+            3,
             NumberFormat.Field.COMPACT,
             BigDecimal.ONE,
             5,
@@ -95,8 +91,7 @@ public class FormattedValueTest {
         assertAllPartsEqual(
             "setters 4",
             cfpos,
-            ConstraintType.NONE,
-            Object.class,
+            7,
             null,
             null,
             0,
@@ -104,15 +99,38 @@ public class FormattedValueTest {
             0L);
     }
 
-    private void assertAllPartsEqual(String messagePrefix, ConstrainedFieldPosition cfpos, ConstraintType constraint,
-            Class<?> classConstraint, Field field, Object value, int start, int limit, long context) {
-        assertEquals(messagePrefix + ": constraint", constraint, cfpos.getConstraintType());
-        assertEquals(messagePrefix + ": class constraint", classConstraint, cfpos.getClassConstraint());
+    @Test
+    public void testIllegalArgumentException() {
+        ConstrainedFieldPosition cfpos = new ConstrainedFieldPosition();
+        try {
+            cfpos.matchesField(null);
+            fail("Expected an IllegalArgumentException");
+        } catch (IllegalArgumentException e) {
+            // pass
+        }
+    }
+
+    private void assertAllPartsEqual(
+            String messagePrefix,
+            ConstrainedFieldPosition cfpos,
+            int matching,
+            Field field,
+            Object value,
+            int start,
+            int limit,
+            long context) {
         assertEquals(messagePrefix + ": field", field, cfpos.getField());
         assertEquals(messagePrefix + ": field value", value, cfpos.getFieldValue());
         assertEquals(messagePrefix + ": start", start, cfpos.getStart());
         assertEquals(messagePrefix + ": limit", limit, cfpos.getLimit());
         assertEquals(messagePrefix + ": context", context, cfpos.getInt64IterationContext());
+
+        assertEquals(messagePrefix + ": integer field",
+            ((matching & 1) != 0), cfpos.matchesField(NumberFormat.Field.INTEGER));
+        assertEquals(messagePrefix + ": compact field",
+            ((matching & 2) != 0), cfpos.matchesField(NumberFormat.Field.COMPACT));
+        assertEquals(messagePrefix + ": date field",
+            ((matching & 4) != 0), cfpos.matchesField(DateFormat.Field.AM_PM));
     }
 
     public static void checkFormattedValue(String message, FormattedValue fv, String expectedString,

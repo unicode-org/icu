@@ -89,55 +89,6 @@ typedef enum UFieldCategory {
 } UFieldCategory;
 
 
-/**
- * Represents the type of constraint for ConstrainedFieldPosition.
- *
- * Constraints are used to control the behavior of iteration in FormattedValue.
- *
- * @draft ICU 64
- */
-typedef enum UCFPosConstraintType {
-    /**
-     * Represents the lack of a constraint.
-     *
-     * This is the return value of ConstrainedFieldPosition#getConstraintType or
-     * ucfpos_getConstraintType if no "constrain" methods were called.
-     *
-     * @draft ICU 64
-     */
-    UCFPOS_CONSTRAINT_NONE,
-
-    /**
-     * Represents that the field category is constrained.
-     *
-     * This is the return value of ConstrainedFieldPosition#getConstraintType or
-     * cfpos_getConstraintType after ConstrainedFieldPosition#constrainCategory or
-     * cfpos_constrainCategory is called.
-     *
-     * Use getCategory to access the category. FormattedValue implementations
-     * should not change that values while this constraint is active.
-     *
-     * @draft ICU 64
-     */
-    UCFPOS_CONSTRAINT_CATEGORY,
-
-    /**
-     * Represents that the field and field category are constrained.
-     *
-     * This is the return value of ConstrainedFieldPosition#getConstraintType or
-     * cfpos_getConstraintType after ConstrainedFieldPosition#constrainField or
-     * cfpos_constrainField is called.
-     *
-     * Use getCategory and getField to access the category and field.
-     * FormattedValue implementations should not change those values while
-     * this constraint is active.
-     *
-     * @draft ICU 64
-     */
-    UCFPOS_CONSTRAINT_FIELD
-} UCFPosConstraintType;
-
-
 struct UConstrainedFieldPosition;
 /**
  * Represents a span of a string containing a given field.
@@ -258,20 +209,6 @@ ucfpos_constrainField(
 
 
 /**
- * Gets the currently active constraint.
- *
- * @param ucfpos The instance of UConstrainedFieldPosition.
- * @param ec Set if an error occurs.
- * @return The currently active constraint type.
- * @draft ICU 64
- */
-U_DRAFT UCFPosConstraintType U_EXPORT2
-ucfpos_getConstraintType(
-    const UConstrainedFieldPosition* ucfpos,
-    UErrorCode* ec);
-
-
-/**
  * Gets the field category for the current position.
  *
  * If a category or field constraint was set, this function returns the constrained
@@ -358,6 +295,26 @@ U_DRAFT void U_EXPORT2
 ucfpos_setInt64IterationContext(
     UConstrainedFieldPosition* ucfpos,
     int64_t context,
+    UErrorCode* ec);
+
+
+/**
+ * Determines whether a given field should be included given the
+ * constraints.
+ *
+ * Intended to be used by FormattedValue implementations.
+ *
+ * @param ucfpos The instance of UConstrainedFieldPosition.
+ * @param category The category to test.
+ * @param field The field to test.
+ * @param ec Set if an error occurs.
+ * @draft ICU 64
+ */
+U_DRAFT UBool U_EXPORT2
+ucfpos_matchesField(
+    const UConstrainedFieldPosition* ucfpos,
+    int32_t category,
+    int32_t field,
     UErrorCode* ec);
 
 

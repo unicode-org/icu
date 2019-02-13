@@ -40,18 +40,7 @@ void ConstrainedFieldPosition::setInt64IterationContext(int64_t context) {
     fContext = context;
 }
 
-void ConstrainedFieldPosition::setState(
-        int32_t category,
-        int32_t field,
-        int32_t start,
-        int32_t limit) {
-    fCategory = category;
-    fField = field;
-    fStart = start;
-    fLimit = limit;
-}
-
-UBool ConstrainedFieldPosition::matchesField(int32_t category, int32_t field) {
+UBool ConstrainedFieldPosition::matchesField(int32_t category, int32_t field) const {
     switch (fConstraint) {
     case UCFPOS_CONSTRAINT_NONE:
         return TRUE;
@@ -62,6 +51,17 @@ UBool ConstrainedFieldPosition::matchesField(int32_t category, int32_t field) {
     default:
         UPRV_UNREACHABLE;
     }
+}
+
+void ConstrainedFieldPosition::setState(
+        int32_t category,
+        int32_t field,
+        int32_t start,
+        int32_t limit) {
+    fCategory = category;
+    fField = field;
+    fStart = start;
+    fLimit = limit;
 }
 
 
@@ -115,15 +115,6 @@ ucfpos_constrainField(UConstrainedFieldPosition* ptr, int32_t category, int32_t 
     impl->fImpl.constrainField(category, field);
 }
 
-U_CAPI UCFPosConstraintType U_EXPORT2
-ucfpos_getConstraintType(const UConstrainedFieldPosition* ptr, UErrorCode* ec) {
-    const auto* impl = UConstrainedFieldPositionImpl::validate(ptr, *ec);
-    if (U_FAILURE(*ec)) {
-        return UCFPOS_CONSTRAINT_NONE;
-    }
-    return impl->fImpl.getConstraintType();
-}
-
 U_CAPI int32_t U_EXPORT2
 ucfpos_getCategory(const UConstrainedFieldPosition* ptr, UErrorCode* ec) {
     const auto* impl = UConstrainedFieldPositionImpl::validate(ptr, *ec);
@@ -168,6 +159,15 @@ ucfpos_setInt64IterationContext(UConstrainedFieldPosition* ptr, int64_t context,
         return;
     }
     impl->fImpl.setInt64IterationContext(context);
+}
+
+U_CAPI UBool U_EXPORT2
+ucfpos_matchesField(const UConstrainedFieldPosition* ptr, int32_t category, int32_t field, UErrorCode* ec) {
+    const auto* impl = UConstrainedFieldPositionImpl::validate(ptr, *ec);
+    if (U_FAILURE(*ec)) {
+        return 0;
+    }
+    return impl->fImpl.matchesField(category, field);
 }
 
 U_CAPI void U_EXPORT2

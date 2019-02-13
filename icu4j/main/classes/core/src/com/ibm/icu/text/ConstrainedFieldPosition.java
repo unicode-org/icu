@@ -23,47 +23,33 @@ public class ConstrainedFieldPosition {
      * Represents the type of constraint for ConstrainedFieldPosition.
      *
      * Constraints are used to control the behavior of iteration in FormattedValue.
-     *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
      */
-    public enum ConstraintType {
+    private enum ConstraintType {
         /**
          * Represents the lack of a constraint.
          *
-         * This is the return value of {@link #getConstraintType}
+         * This is the value of fConstraint
          * if no "constrain" methods were called.
-         *
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
          */
         NONE,
 
         /**
          * Represents that the field class is constrained.
-         * Use {@link #getClassConstraint} to access the class.
          *
-         * This is the return value of @link #getConstraintType}
+         * This is the value of fConstraint
          * after {@link #constrainClass} is called.
          *
-         * FormattedValue implementations should not change the field when this constraint is active.
-         *
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
+         * FormattedValue implementations should not change the field class when this constraint is active.
          */
         CLASS,
 
         /**
          * Represents that the field is constrained.
-         * Use {@link #getField} to access the field.
          *
-         * This is the return value of @link #getConstraintType}
+         * This is the value of fConstraint
          * after {@link #constrainField} is called.
          *
          * FormattedValue implementations should not change the field when this constraint is active.
-         *
-         * @draft ICU 64
-         * @provisional This API might change or be removed in a future release.
          */
         FIELD
     };
@@ -175,32 +161,9 @@ public class ConstrainedFieldPosition {
     }
 
     /**
-     * Gets the currently active constraint.
-     *
-     * @return The currently active constraint type.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
-     */
-    public ConstraintType getConstraintType() {
-        return fConstraint;
-    }
-
-    /**
-     * Gets the class on which field positions are currently constrained.
-     *
-     * @return The class constraint from {@link #constrainClass}, or Object.class by default.
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
-     */
-    public Class<?> getClassConstraint() {
-        return fClassConstraint;
-    }
-
-    /**
      * Gets the field for the current position.
      *
-     * If a field constraint was set, this function returns the constrained
-     * field. Otherwise, the return value is well-defined and non-null only after
+     * The return value is well-defined and non-null only after
      * FormattedValue#nextPosition returns TRUE.
      *
      * @return The field saved in the instance. See above for null conditions.
@@ -299,16 +262,30 @@ public class ConstrainedFieldPosition {
      * @provisional This API might change or be removed in a future release.
      */
     public void setState(Field field, Object value, int start, int limit) {
+        // Check matchesField only as an assertion (debug build)
+        assert matchesField(field);
+
         fField = field;
         fValue = value;
         fStart = start;
         fLimit = limit;
     }
 
-    /** @internal */
+    /**
+     * Determines whether a given field should be included given the
+     * constraints.
+     *
+     * Intended to be used by FormattedValue implementations.
+     *
+     * @param field The field to test.
+     * @return Whether the field should be included given the constraints.
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
     public boolean matchesField(Field field) {
-        // If this method ever becomes public, change assert to throw IllegalArgumentException
-        assert field != null;
+        if (field == null) {
+            throw new IllegalArgumentException("field must not be null");
+        }
         switch (fConstraint) {
         case NONE:
             return true;

@@ -9,6 +9,7 @@
 
 #include "unicode/formattedvalue.h"
 #include "unicode/unum.h"
+#include "unicode/udat.h"
 #include "intltest.h"
 #include "itformat.h"
 
@@ -24,7 +25,7 @@ private:
     void assertAllPartsEqual(
         UnicodeString messagePrefix,
         const ConstrainedFieldPosition& cfpos,
-        UCFPosConstraintType constraint,
+        int32_t matching,
         UFieldCategory category,
         int32_t field,
         int32_t start,
@@ -50,7 +51,7 @@ void FormattedValueTest::testBasic() {
     assertAllPartsEqual(
         u"basic",
         cfpos,
-        UCFPOS_CONSTRAINT_NONE,
+        7,
         UFIELD_CATEGORY_UNDEFINED,
         0,
         0,
@@ -66,7 +67,7 @@ void FormattedValueTest::testSetters() {
     assertAllPartsEqual(
         u"setters 0",
         cfpos,
-        UCFPOS_CONSTRAINT_CATEGORY,
+        4,
         UFIELD_CATEGORY_DATE,
         0,
         0,
@@ -77,7 +78,7 @@ void FormattedValueTest::testSetters() {
     assertAllPartsEqual(
         u"setters 1",
         cfpos,
-        UCFPOS_CONSTRAINT_FIELD,
+        2,
         UFIELD_CATEGORY_NUMBER,
         UNUM_COMPACT_FIELD,
         0,
@@ -88,7 +89,7 @@ void FormattedValueTest::testSetters() {
     assertAllPartsEqual(
         u"setters 2",
         cfpos,
-        UCFPOS_CONSTRAINT_FIELD,
+        2,
         UFIELD_CATEGORY_NUMBER,
         UNUM_COMPACT_FIELD,
         0,
@@ -99,7 +100,7 @@ void FormattedValueTest::testSetters() {
     assertAllPartsEqual(
         u"setters 3",
         cfpos,
-        UCFPOS_CONSTRAINT_FIELD,
+        2,
         UFIELD_CATEGORY_NUMBER,
         UNUM_COMPACT_FIELD,
         5,
@@ -110,7 +111,7 @@ void FormattedValueTest::testSetters() {
     assertAllPartsEqual(
         u"setters 4",
         cfpos,
-        UCFPOS_CONSTRAINT_NONE,
+        7,
         UFIELD_CATEGORY_UNDEFINED,
         0,
         0,
@@ -123,22 +124,26 @@ void FormattedValueTest::testLocalPointer() {
     LocalUConstrainedFieldPositionPointer ucfpos(ucfpos_open(&status));
     assertSuccess("Openining LocalUConstrainedFieldPositionPointer", status);
     assertEquals(u"Test that object is valid",
-        UCFPOS_CONSTRAINT_NONE,
-        ucfpos_getConstraintType(ucfpos.getAlias(), &status));
+        0LL,
+        ucfpos_getInt64IterationContext(ucfpos.getAlias(), &status));
     assertSuccess("Using LocalUConstrainedFieldPositionPointer", status);
 }
 
+/** For matching, turn on these bits:
+ *
+ * 1 = UNUM_INTEGER_FIELD
+ * 2 = UNUM_COMPACT_FIELD
+ * 4 = UDAT_AM_PM_FIELD
+ */
 void FormattedValueTest::assertAllPartsEqual(
         UnicodeString messagePrefix,
         const ConstrainedFieldPosition& cfpos,
-        UCFPosConstraintType constraint,
+        int32_t matching,
         UFieldCategory category,
         int32_t field,
         int32_t start,
         int32_t limit,
         int64_t context) {
-    assertEquals(messagePrefix + u": constraint",
-        constraint, cfpos.getConstraintType());
     assertEquals(messagePrefix + u": category",
         category, cfpos.getCategory());
     assertEquals(messagePrefix + u": field",
@@ -149,6 +154,13 @@ void FormattedValueTest::assertAllPartsEqual(
         limit, cfpos.getLimit());
     assertEquals(messagePrefix + u": context",
         context, cfpos.getInt64IterationContext());
+
+    assertEquals(messagePrefix + u": integer field",
+        (UBool) ((matching & 1) != 0), cfpos.matchesField(UFIELD_CATEGORY_NUMBER, UNUM_INTEGER_FIELD));
+    assertEquals(messagePrefix + u": compact field",
+        (UBool) ((matching & 2) != 0), cfpos.matchesField(UFIELD_CATEGORY_NUMBER, UNUM_COMPACT_FIELD));
+    assertEquals(messagePrefix + u": date field",
+        (UBool) ((matching & 4) != 0), cfpos.matchesField(UFIELD_CATEGORY_DATE, UDAT_AM_PM_FIELD));
 }
 
 
