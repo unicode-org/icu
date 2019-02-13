@@ -553,6 +553,7 @@
     <ClInclude Include="propname.h" />
     <ClInclude Include="ruleiter.h" />
     <ClInclude Include="ucase.h" />
+    <ClInclude Include="ulayout_props.h" />
     <ClInclude Include="unisetspan.h" />
     <ClInclude Include="uprops.h" />
     <ClInclude Include="usc_impl.h" />

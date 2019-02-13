@@ -60,6 +60,9 @@ http://www.unicode.org/reports/tr44/tr44-23.html
 ICU-20203 Unicode 12
 https://github.com/markusicu/icu/tree/uni12
 
+ICU-20111 move text layout properties data into a data file
+https://github.com/markusicu/icu/tree/layout-props
+
 cldrbug 11478: Unicode 12
 Accidentally used ^/trunk instead of ^/branches/markus/uni12
 
@@ -200,13 +203,6 @@ set(ICU4C_SRC_DIR /usr/local/google/home/mscherer/icu/uni/src/icu4c)
 - grep IdnaMappingTable.txt or uts46.txt for "disallowed_STD3_valid" on non-ASCII characters
 - Unicode 6.0..12.0: U+2260, U+226E, U+226F
 - nothing new in this Unicode version, no test file to update
-
-* update Java hardcoded properties
-- genprops writes /tmp/ulayout_props_data.txt,
-    update UCharacterProperty.java:
-  + update the trie initializer strings for class InPCTrie etc.
-  + update the maxInPCValue values etc. in
-    new IntProperty(SRC_INPC)...getMaxValue() etc.
 
 * run & fix ICU4C tests
 - update test of default bidi classes:

@@ -30,6 +30,7 @@ def generate(config, glob, common_vars):
     requests += generate_normalization(config, glob, common_vars)
     requests += generate_coll_ucadata(config, glob, common_vars)
     requests += generate_unames(config, glob, common_vars)
+    requests += generate_ulayout(config, glob, common_vars)
     requests += generate_misc(config, glob, common_vars)
     requests += generate_curr_supplemental(config, glob, common_vars)
     requests += generate_translit(config, glob, common_vars)
@@ -315,6 +316,25 @@ def generate_unames(config, glob, common_vars):
         SingleExecutionRequest(
             name = "unames",
             category = "unames",
+            dep_targets = [],
+            input_files = [input_file],
+            output_files = [output_file],
+            tool = IcuTool("icupkg"),
+            args = "-t{ICUDATA_CHAR} {IN_DIR}/{INPUT_FILES[0]} {OUT_DIR}/{OUTPUT_FILES[0]}",
+            format_with = {}
+        )
+    ]
+
+
+def generate_ulayout(config, glob, common_vars):
+    # Unicode text layout properties
+    basename = "ulayout"
+    input_file = InFile("in/%s.icu" % basename)
+    output_file = OutFile("%s.icu" % basename)
+    return [
+        SingleExecutionRequest(
+            name = basename,
+            category = basename,
             dep_targets = [],
             input_files = [input_file],
             output_files = [output_file],

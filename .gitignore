@@ -76,7 +76,6 @@ icu4c/source/data/build-dir
 icu4c/source/data/build-local
 icu4c/source/data/data
 icu4c/source/data/icupkg.inc
-icu4c/source/data/in
 icu4c/source/data/makedata.vcproj.*.*.user
 icu4c/source/data/obj
 icu4c/source/data/out
