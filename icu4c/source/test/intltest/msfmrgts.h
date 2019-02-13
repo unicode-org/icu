@@ -1,25 +1,25 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-2009, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
 #ifndef _MESSAGEFORMATREGRESSIONTEST_
 #define _MESSAGEFORMATREGRESSIONTEST_
- 
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
 
 #include "intltest.h"
 
-/** 
+/**
  * Performs regression test for MessageFormat
  **/
-class MessageFormatRegressionTest: public IntlTest {    
-    
+class MessageFormatRegressionTest: public IntlTest {
+
     // IntlTest override
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
 public:
@@ -45,6 +45,7 @@ public:
     void Test4142938(void);
     void TestChoicePatternQuote(void);
     void Test4112104(void);
+    void TestICU12584(void);
     void TestAPI(void);
 
 protected:
@@ -53,6 +54,6 @@ protected:
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
- 
+
 #endif // _MESSAGEFORMATREGRESSIONTEST_
 //eof

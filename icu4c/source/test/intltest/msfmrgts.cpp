@@ -1,11 +1,11 @@
 // © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 /***********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-2016, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
- 
+
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -53,11 +53,12 @@ MessageFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const ch
     TESTCASE_AUTO(Test4142938)
     TESTCASE_AUTO(TestChoicePatternQuote)
     TESTCASE_AUTO(Test4112104)
+    TESTCASE_AUTO(TestICU12584)
     TESTCASE_AUTO(TestAPI)
     TESTCASE_AUTO_END;
 }
 
-UBool 
+UBool
 MessageFormatRegressionTest::failure(UErrorCode status, const char* msg, UBool possibleDataError)
 {
     if(U_FAILURE(status)) {
@@ -98,7 +99,7 @@ void MessageFormatRegressionTest::Test4074764() {
         failure(status, "messageFormat->applyPattern");
         //Object[] params = {new UnicodeString("BUG"), new Date()};
         Formattable params [] = {
-            Formattable(UnicodeString("BUG")), 
+            Formattable(UnicodeString("BUG")),
             Formattable(0, Formattable::kIsDate)
         };
         UnicodeString tempBuffer;
@@ -111,14 +112,14 @@ void MessageFormatRegressionTest::Test4074764() {
         //Apply pattern without param and print the result
         messageFormatter->applyPattern(pattern[0], status);
         failure(status, "messageFormatter->applyPattern");
-        
+
         // {sfb} how much does this apply in C++?
         // do we want to verify that the Formattable* array is not NULL,
         // or is that the user's responsibility?
         // additionally, what should be the item count?
         // for bug testing purposes, assume that something was set to
         // NULL by mistake, and that the length should be non-zero
-        
+
         //tempBuffer = messageFormatter->format(NULL, 1, tempBuffer, FieldPosition(FieldPosition::DONT_CARE), status);
         tempBuffer.remove();
         tempBuffer = messageFormatter->format(NULL, 0, tempBuffer, pos, status);
@@ -175,16 +176,16 @@ void MessageFormatRegressionTest::Test4058973()
 /* @bug 4031438
  * More robust message formats.
  */
-void MessageFormatRegressionTest::Test4031438() 
+void MessageFormatRegressionTest::Test4031438()
 {
     UErrorCode status = U_ZERO_ERROR;
-    
+
     UnicodeString pattern1("Impossible {1} has occurred -- status code is {0} and message is {2}.");
     UnicodeString pattern2("Double '' Quotes {0} test and quoted '{1}' test plus 'other {2} stuff'.");
 
     MessageFormat *messageFormatter = new MessageFormat("", status);
     failure(status, "new MessageFormat");
-    
+
     const UBool possibleDataError = TRUE;
 
     //try {
@@ -209,9 +210,9 @@ void MessageFormatRegressionTest::Test4031438()
 
         NumberFormat *fmt = 0;
         UnicodeString temp, temp1;
-        
+
         for (int i = 0; i < count; i++) {
-            
+
             // convert to string if not already
             Formattable obj = objs[i];
             temp.remove();
@@ -245,13 +246,13 @@ void MessageFormatRegressionTest::Test4031438()
             //if (objs[i] != NULL && objs[i].getString(temp1) != params[i].getString(temp2)) {
             if (temp != temp1) {
                 errln("Parse failed on object " + objs[i].getString(temp1) + " at index : " + i);
-            }       
+            }
         }
 
         delete fmt;
         delete [] objs;
 
-        // {sfb} does this apply?  no way to really pass a null Formattable, 
+        // {sfb} does this apply?  no way to really pass a null Formattable,
         // only a null array
 
         /*tempBuffer = messageFormatter->format(null, tempBuffer, FieldPosition(FieldPosition::DONT_CARE), status);
@@ -266,7 +267,7 @@ void MessageFormatRegressionTest::Test4031438()
         if (tempBuffer != "Double ' Quotes 7 test and quoted {1} test plus 'other {2} stuff'.")
             dataerrln("quote format test (w/ params) failed. - %s", u_errorName(status));
         logln("Formatted with params : " + tempBuffer);
-        
+
         /*tempBuffer = messageFormatter->format(null);
         if (!tempBuffer.equals("Double ' Quotes {0} test and quoted {1} test plus other {2} stuff."))
             errln("quote format test (w/ null) failed.");
@@ -290,7 +291,7 @@ void MessageFormatRegressionTest::Test4052223()
     MessageFormat *fmt = new MessageFormat("There are {0} apples growing on the {1} tree.", status);
     failure(status, "new MessageFormat");
     UnicodeString str("There is one apple growing on the peach tree.");
-    
+
     int32_t count = 0;
     fmt->parse(str, pos, count);
 
@@ -300,27 +301,27 @@ void MessageFormatRegressionTest::Test4052223()
     pos.setErrorIndex(4);
     if (pos.getErrorIndex() != 4)
         errln(UnicodeString("setErrorIndex failed, got ") + pos.getErrorIndex() + " instead of 4");
-    
+
     ChoiceFormat *f = new ChoiceFormat(
         "-1#are negative|0#are no or fraction|1#is one|1.0<is 1+|2#are two|2<are more than 2.", status);
     failure(status, "new ChoiceFormat");
-    pos.setIndex(0); 
+    pos.setIndex(0);
     pos.setErrorIndex(-1);
     Formattable obj;
     f->parse("are negative", obj, pos);
     if (pos.getErrorIndex() != -1 && obj.getDouble() == -1.0)
         errln(UnicodeString("Parse with \"are negative\" failed, at ") + pos.getErrorIndex());
-    pos.setIndex(0); 
+    pos.setIndex(0);
     pos.setErrorIndex(-1);
     f->parse("are no or fraction ", obj, pos);
     if (pos.getErrorIndex() != -1 && obj.getDouble() == 0.0)
         errln(UnicodeString("Parse with \"are no or fraction\" failed, at ") + pos.getErrorIndex());
-    pos.setIndex(0); 
+    pos.setIndex(0);
     pos.setErrorIndex(-1);
     f->parse("go postal", obj, pos);
     if (pos.getErrorIndex() == -1 && ! uprv_isNaN(obj.getDouble()))
         errln(UnicodeString("Parse with \"go postal\" failed, at ") + pos.getErrorIndex());
-    
+
     delete fmt;
     delete f;
 }
@@ -334,7 +335,7 @@ void MessageFormatRegressionTest::Test4104976()
 {
     double limits [] = {1, 20};
     UnicodeString formats [] = {
-        UnicodeString("xyz"), 
+        UnicodeString("xyz"),
         UnicodeString("abc")
     };
     int32_t formats_length = UPRV_LENGTHOF(formats);
@@ -374,7 +375,7 @@ void MessageFormatRegressionTest::Test4106659()
     //    logln("ChoiceFormat constructor should check for the array lengths");
     //    cf = null;
     //}
-    //if (cf != null) 
+    //if (cf != null)
     //    errln(cf->format(5));
     //
     delete cf;
@@ -390,8 +391,8 @@ void MessageFormatRegressionTest::Test4106660()
 {
     double limits [] = {3, 1, 2};
     UnicodeString formats [] = {
-        UnicodeString("Three"), 
-            UnicodeString("One"), 
+        UnicodeString("Three"),
+            UnicodeString("One"),
             UnicodeString("Two")
     };
     ChoiceFormat *cf = new ChoiceFormat(limits, formats, 3);
@@ -475,12 +476,12 @@ void MessageFormatRegressionTest::Test4114743()
 void MessageFormatRegressionTest::Test4116444()
 {
     UnicodeString patterns [] = {
-        (UnicodeString)"", 
-        (UnicodeString)"one", 
+        (UnicodeString)"",
+        (UnicodeString)"one",
         (UnicodeString) "{0,date,short}"
     };
-    
-    UErrorCode status = U_ZERO_ERROR;    
+
+    UErrorCode status = U_ZERO_ERROR;
     MessageFormat *mf = new MessageFormat("", status);
     failure(status, "new MessageFormat");
 
@@ -490,7 +491,7 @@ void MessageFormatRegressionTest::Test4116444()
         failure(status, "mf->applyPattern", TRUE);
 
         //try {
-        int32_t count = 0;    
+        int32_t count = 0;
         ParsePosition pp(0);
         Formattable *array = mf->parse(UnicodeString(""), pp, count);
             logln("pattern: \"" + pattern + "\"");
@@ -503,7 +504,7 @@ void MessageFormatRegressionTest::Test4116444()
                     dataerrln("\"" + array[j].getString(dummy) + "\"");
                     //else
                      //   log("null");
-                    if (j < count- 1) 
+                    if (j < count- 1)
                         log(",");
                 }
                 log("}") ;
@@ -528,7 +529,7 @@ void MessageFormatRegressionTest::Test4116444()
 void MessageFormatRegressionTest::Test4114739()
 {
 
-    UErrorCode status = U_ZERO_ERROR;    
+    UErrorCode status = U_ZERO_ERROR;
     MessageFormat *mf = new MessageFormat("<{0}>", status);
     failure(status, "new MessageFormat");
 
@@ -716,7 +717,7 @@ void MessageFormatRegressionTest::Test4118592()
         UnicodeString pat;
         logln(UnicodeString("") + i + ". pattern :\"" + mf->toPattern(pat) + "\"");
         log(" \"" + formatted + "\" parsed as ");
-        if (objs == NULL) 
+        if (objs == NULL)
             logln("  null");
         else {
             UnicodeString temp;
@@ -805,10 +806,10 @@ void MessageFormatRegressionTest::Test4105380()
     form2->setFormat(0, *fileform);
     //Object[] testArgs = {new Long(12373), "MyDisk"};
     Formattable testArgs [] = {
-        Formattable((int32_t)12373), 
+        Formattable((int32_t)12373),
             Formattable((UnicodeString)"MyDisk")
     };
-    
+
     FieldPosition bogus(FieldPosition::DONT_CARE);
 
     UnicodeString result;
@@ -831,8 +832,8 @@ void MessageFormatRegressionTest::Test4120552()
     MessageFormat *mf = new MessageFormat("pattern", status);
     failure(status, "new MessageFormat");
     UnicodeString texts[] = {
-        (UnicodeString)"pattern", 
-            (UnicodeString)"pat", 
+        (UnicodeString)"pattern",
+            (UnicodeString)"pat",
             (UnicodeString)"1234"
     };
     UnicodeString pat;
@@ -861,7 +862,7 @@ void MessageFormatRegressionTest::Test4120552()
  * This is actually a problem in ChoiceFormat; it doesn't
  * understand single quotes.
  */
-void MessageFormatRegressionTest::Test4142938() 
+void MessageFormatRegressionTest::Test4142938()
 {
     UnicodeString pat = CharsToUnicodeString("''Vous'' {0,choice,0#n''|1#}avez s\\u00E9lectionn\\u00E9 "
         "{0,choice,0#aucun|1#{0}} client{0,choice,0#s|1#|2#s} "
@@ -874,7 +875,7 @@ void MessageFormatRegressionTest::Test4142938()
         CharsToUnicodeString("'Vous' n'avez s\\u00E9lectionn\\u00E9 aucun clients personnels."),
         CharsToUnicodeString("'Vous' avez s\\u00E9lectionn\\u00E9 "),
         CharsToUnicodeString("'Vous' avez s\\u00E9lectionn\\u00E9 ")
-    };  
+    };
     UnicodeString SUFFIX [] = {
         UnicodeString(),
         UNICODE_STRING(" client personnel.", 18),
@@ -914,7 +915,7 @@ void MessageFormatRegressionTest::Test4142938()
  * pattern characters '|', '#', '<', and '\u2264'.  Two quotes in a row
  * is a quote literal.
  */
-void MessageFormatRegressionTest::TestChoicePatternQuote() 
+void MessageFormatRegressionTest::TestChoicePatternQuote()
 {
     // ICU 4.8 ChoiceFormat (like PluralFormat & SelectFormat)
     // returns the chosen string unmodified, so that it is usable in a MessageFormat.
@@ -958,7 +959,7 @@ void MessageFormatRegressionTest::TestChoicePatternQuote()
         catch (IllegalArgumentException e) {
             errln("Fail: Pattern \"" + DATA[i] + "\" -> " + e);
         }*/
-    
+
         delete cf;
         delete cf2;
     }
@@ -969,7 +970,7 @@ void MessageFormatRegressionTest::TestChoicePatternQuote()
  * MessageFormat.equals(null) throws a NullPointerException.  The JLS states
  * that it should return false.
  */
-void MessageFormatRegressionTest::Test4112104() 
+void MessageFormatRegressionTest::Test4112104()
 {
     UErrorCode status = U_ZERO_ERROR;
     MessageFormat *format = new MessageFormat("", status);
@@ -987,11 +988,37 @@ void MessageFormatRegressionTest::Test4112104()
     delete format;
 }
 
+void MessageFormatRegressionTest::TestICU12584() {
+    // We were able to handle only 10 due to the bug ICU-12584.
+     UnicodeString pattern(
+        u"{1}{2}{3}{1}{2}{3}{1}{2}{3}{1}{2}{3}{1}{2}{3}{1}{2}{3}{1}{2}{3}{1}"
+        u"{2}{3}{1}{2}{3}{1}{2}{3}{1}{2}{3}{1}{2}{3}{1}{2}{3}{1}{2}{3}");
+
+    UErrorCode status = U_ZERO_ERROR;
+
+    MessageFormat msg(pattern, status);
+    failure(status, "Flat message");
+
+    int32_t count;
+    msg.getFormats(count);
+    assertEquals("Plain placeholder match", 42, count);
+
+    // Make sure we iterate only over top level arguments (so we don't over allocate).
+    UnicodeString inner_pattern("{1}{1,select,fem {1} masc {2} other {3}}{2}");
+    status = U_ZERO_ERROR;
+    MessageFormat inner_msg(inner_pattern, status);
+    failure(status, "Inner message");
+
+    count = 0;
+    inner_msg.getFormats(count);
+    assertEquals("Inner placeholder match", 3, count);
+}
+
 void MessageFormatRegressionTest::TestAPI() {
     UErrorCode status = U_ZERO_ERROR;
     MessageFormat *format = new MessageFormat("", status);
     failure(status, "new MessageFormat");
-    
+
     // Test adoptFormat
     MessageFormat *fmt = new MessageFormat("",status);
     format->adoptFormat("some_name",fmt,status);  // Must at least pass a valid identifier.
