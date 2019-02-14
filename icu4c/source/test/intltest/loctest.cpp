@@ -252,6 +252,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestToLanguageTag);
     TESTCASE_AUTO(TestMoveAssign);
     TESTCASE_AUTO(TestMoveCtor);
+    TESTCASE_AUTO(TestBug20407iVariantPreferredValue);
     TESTCASE_AUTO(TestBug13417VeryLongLanguageTag);
     TESTCASE_AUTO(TestBug11053UnderlineTimeZone);
     TESTCASE_AUTO_END;
@@ -3161,6 +3162,24 @@ void LocaleTest::TestMoveCtor() {
     assertEquals("country", l7.getCountry(), l8.getCountry());
     assertEquals("variant", l7.getVariant(), l8.getVariant());
     assertEquals("bogus", l7.isBogus(), l8.isBogus());
+}
+
+void LocaleTest::TestBug20407iVariantPreferredValue() {
+    IcuTestErrorCode status(*this, "TestBug20407iVariantPreferredValue()");
+
+    Locale l = Locale::forLanguageTag("hy-arevela", status);
+    status.errIfFailureAndReset("hy-arevela fail");
+    assertTrue("!l.isBogus()", !l.isBogus());
+
+    std::string result = l.toLanguageTag<std::string>(status);
+    assertEquals(l.getName(), "hy", result.c_str());
+
+    l = Locale::forLanguageTag("hy-arevmda", status);
+    status.errIfFailureAndReset("hy-arevmda");
+    assertTrue("!l.isBogus()", !l.isBogus());
+
+    result = l.toLanguageTag<std::string>(status);
+    assertEquals(l.getName(), "hyw", result.c_str());
 }
 
 void LocaleTest::TestBug13417VeryLongLanguageTag() {

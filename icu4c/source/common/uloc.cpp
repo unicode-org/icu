@@ -465,6 +465,8 @@ typedef struct CanonicalizationMap {
  */
 static const CanonicalizationMap CANONICALIZE_MAP[] = {
     { "art_LOJBAN",     "jbo" }, /* registered name */
+    { "hy__AREVELA",    "hy" }, /* Registered IANA variant */
+    { "hy__AREVMDA",    "hyw" }, /* Registered IANA variant */
     { "zh_GAN",         "gan" }, /* registered name */
     { "zh_GUOYU",       "zh" }, /* registered name */
     { "zh_HAKKA",       "hak" }, /* registered name */

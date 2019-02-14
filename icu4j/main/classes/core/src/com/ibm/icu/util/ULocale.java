@@ -342,6 +342,8 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
         { "de_1906",        "de__1906" }, /* registered name */
         { "en_BOONT",       "en__BOONT" }, /* registered name */
         { "en_SCOUSE",      "en__SCOUSE" }, /* registered name */
+        { "hy__AREVELA",    "hy", null, null }, /* Registered IANA variant */
+        { "hy__AREVMDA",    "hyw", null, null }, /* Registered IANA variant */
         { "sl_ROZAJ",       "sl__ROZAJ" }, /* registered name */
         { "zh_GAN",         "zh__GAN" }, /* registered name */
         { "zh_GUOYU",       "zh" }, /* registered name */

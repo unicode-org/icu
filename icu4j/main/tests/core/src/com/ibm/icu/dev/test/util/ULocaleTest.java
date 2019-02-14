@@ -1489,6 +1489,14 @@ public class ULocaleTest extends TestFmwk {
         assertEquals("foobar", target, name);
     }
 
+    @Test
+    public void TestBug20407iVariantPreferredValue() {
+        ULocale uloc = ULocale.createCanonical("hy-arevela");
+        assertEquals("getName()", "hy", uloc.getName());
+        uloc = ULocale.createCanonical("hy-arevmda");
+        assertEquals("getName()", "hyw", uloc.getName());
+    }
+
     private void initHashtable() {
         h[0] = new HashMap<String, String>();
         h[1] = new HashMap<String, String>();

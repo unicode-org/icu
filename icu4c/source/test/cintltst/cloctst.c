@@ -423,9 +423,7 @@ static void TestPrefixes() {
         {"i-hakka", "", "CN", "", "i-hakka_CN", "i-hakka_CN", NULL},
         {"i-hakka", "", "MX", "", "I-hakka_MX", "i-hakka_MX", NULL},
         {"x-klingon", "", "US", "SANJOSE", "X-KLINGON_us_SANJOSE", "x-klingon_US_SANJOSE", NULL},
-        
-        {"hy", "", "", "AREVMDA", "hy_AREVMDA", "hy__AREVMDA", NULL},
-        
+        {"hy", "", "", "AREVMDA", "hy_AREVMDA", "hy__AREVMDA", "hyw"},
         {"de", "", "", "1901", "de-1901", "de__1901", NULL},
         {"mr", "", "", "", "mr.utf8", "mr.utf8", "mr"},
         {"de", "", "TV", "", "de-tv.koi8r", "de_TV.koi8r", "de_TV"},
