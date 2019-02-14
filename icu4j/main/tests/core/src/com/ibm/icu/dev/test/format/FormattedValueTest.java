@@ -31,7 +31,7 @@ public class FormattedValueTest {
         assertAllPartsEqual(
             "basic",
             cfpos,
-            7,
+            15,
             null,
             null,
             0,
@@ -47,9 +47,20 @@ public class FormattedValueTest {
         assertAllPartsEqual(
             "setters 1",
             cfpos,
-            2,
+            10,
             NumberFormat.Field.COMPACT,
             null,
+            0,
+            0,
+            0L);
+
+        cfpos.constrainFieldAndValue(NumberFormat.Field.COMPACT, 42);
+        assertAllPartsEqual(
+            "setters 1.2",
+            cfpos,
+            8,
+            NumberFormat.Field.COMPACT,
+            42,
             0,
             0,
             0L);
@@ -58,7 +69,7 @@ public class FormattedValueTest {
         assertAllPartsEqual(
             "setters 1.5",
             cfpos,
-            3,
+            11,
             null,
             null,
             0,
@@ -69,7 +80,7 @@ public class FormattedValueTest {
         assertAllPartsEqual(
             "setters 2",
             cfpos,
-            3,
+            11,
             null,
             null,
             0,
@@ -80,7 +91,7 @@ public class FormattedValueTest {
         assertAllPartsEqual(
             "setters 3",
             cfpos,
-            3,
+            11,
             NumberFormat.Field.COMPACT,
             BigDecimal.ONE,
             5,
@@ -91,7 +102,7 @@ public class FormattedValueTest {
         assertAllPartsEqual(
             "setters 4",
             cfpos,
-            7,
+            15,
             null,
             null,
             0,
@@ -103,7 +114,7 @@ public class FormattedValueTest {
     public void testIllegalArgumentException() {
         ConstrainedFieldPosition cfpos = new ConstrainedFieldPosition();
         try {
-            cfpos.matchesField(null);
+            cfpos.matchesField(null, null);
             fail("Expected an IllegalArgumentException");
         } catch (IllegalArgumentException e) {
             // pass
@@ -126,11 +137,13 @@ public class FormattedValueTest {
         assertEquals(messagePrefix + ": context", context, cfpos.getInt64IterationContext());
 
         assertEquals(messagePrefix + ": integer field",
-            ((matching & 1) != 0), cfpos.matchesField(NumberFormat.Field.INTEGER));
+            ((matching & 1) != 0), cfpos.matchesField(NumberFormat.Field.INTEGER, null));
         assertEquals(messagePrefix + ": compact field",
-            ((matching & 2) != 0), cfpos.matchesField(NumberFormat.Field.COMPACT));
+            ((matching & 2) != 0), cfpos.matchesField(NumberFormat.Field.COMPACT, null));
         assertEquals(messagePrefix + ": date field",
-            ((matching & 4) != 0), cfpos.matchesField(DateFormat.Field.AM_PM));
+            ((matching & 4) != 0), cfpos.matchesField(DateFormat.Field.AM_PM, null));
+        assertEquals(messagePrefix + ": compact field with value",
+            ((matching & 8) != 0), cfpos.matchesField(NumberFormat.Field.COMPACT, 42));
     }
 
     public static void checkFormattedValue(String message, FormattedValue fv, String expectedString,
