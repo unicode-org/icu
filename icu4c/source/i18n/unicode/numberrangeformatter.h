@@ -33,7 +33,8 @@
  * // => "750 m - 1.2 km"
  * </pre>
  * <p>
- * Like NumberFormatter, NumberRangeFormatter instances are immutable and thread-safe. This API is based on the
+ * Like NumberFormatter, NumberRangeFormatter instances (i.e., LocalizedNumberRangeFormatter
+ * and UnlocalizedNumberRangeFormatter) are immutable and thread-safe. This API is based on the
  * <em>fluent</em> design pattern popularized by libraries such as Google's Guava.
  *
  * @author Shane Carr
@@ -497,6 +498,8 @@ class U_I18N_API NumberRangeFormatterSettings {
 /**
  * A NumberRangeFormatter that does not yet have a locale. In order to format, a locale must be specified.
  *
+ * Instances of this class are immutable and thread-safe.
+ *
  * @see NumberRangeFormatter
  * @draft ICU 63
  */
@@ -575,6 +578,8 @@ class U_I18N_API UnlocalizedNumberRangeFormatter
 
 /**
  * A NumberRangeFormatter that has a locale associated with it; this means .formatRange() methods are available.
+ *
+ * Instances of this class are immutable and thread-safe.
  *
  * @see NumberFormatter
  * @draft ICU 63
@@ -682,6 +687,8 @@ class U_I18N_API LocalizedNumberRangeFormatter
 /**
  * The result of a number range formatting operation. This class allows the result to be exported in several data types,
  * including a UnicodeString and a FieldPositionIterator.
+ *
+ * Instances of this class are immutable and thread-safe.
  *
  * @draft ICU 63
  */

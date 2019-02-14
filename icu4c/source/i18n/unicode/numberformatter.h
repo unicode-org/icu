@@ -63,7 +63,8 @@
  * This API offers more features than DecimalFormat and is geared toward new users of ICU.
  *
  * <p>
- * NumberFormatter instances are immutable and thread safe. This means that invoking a configuration method has no
+ * NumberFormatter instances (i.e., LocalizedNumberFormatter and UnlocalizedNumberFormatter)
+ * are immutable and thread safe. This means that invoking a configuration method has no
  * effect on the receiving instance; you must store and use the new number formatter instance it returns instead.
  *
  * <pre>
@@ -2133,6 +2134,8 @@ class U_I18N_API NumberFormatterSettings {
 /**
  * A NumberFormatter that does not yet have a locale. In order to format numbers, a locale must be specified.
  *
+ * Instances of this class are immutable and thread-safe.
+ *
  * @see NumberFormatter
  * @draft ICU 60
  */
@@ -2210,6 +2213,8 @@ class U_I18N_API UnlocalizedNumberFormatter
 
 /**
  * A NumberFormatter that has a locale associated with it; this means .format() methods are available.
+ *
+ * Instances of this class are immutable and thread-safe.
  *
  * @see NumberFormatter
  * @draft ICU 60
@@ -2391,6 +2396,8 @@ class U_I18N_API LocalizedNumberFormatter
 /**
  * The result of a number formatting operation. This class allows the result to be exported in several data types,
  * including a UnicodeString and a FieldPositionIterator.
+ *
+ * Instances of this class are immutable and thread-safe.
  *
  * @draft ICU 60
  */

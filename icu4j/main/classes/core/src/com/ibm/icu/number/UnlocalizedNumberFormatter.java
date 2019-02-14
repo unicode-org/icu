@@ -10,6 +10,8 @@ import com.ibm.icu.util.ULocale;
  * A NumberFormatter that does not yet have a locale. In order to format numbers, a locale must be
  * specified.
  *
+ * Instances of this class are immutable and thread-safe.
+ *
  * @see NumberFormatter
  * @draft ICU 60
  * @provisional This API might change or be removed in a future release.
