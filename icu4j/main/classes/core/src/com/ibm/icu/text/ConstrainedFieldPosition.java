@@ -3,6 +3,7 @@
 package com.ibm.icu.text;
 
 import java.text.Format.Field;
+import java.util.Objects;
 
 /**
  * Represents a span of a string containing a given field.
@@ -51,7 +52,17 @@ public class ConstrainedFieldPosition {
          *
          * FormattedValue implementations should not change the field when this constraint is active.
          */
-        FIELD
+        FIELD,
+
+        /**
+         * Represents that the field value is constrained.
+         *
+         * This is the value of fConstraint
+         * after {@link #constrainField} is called.
+         *
+         * FormattedValue implementations should not change the field or value with this constraint.
+         */
+        VALUE
     };
 
     private ConstraintType fConstraint;
@@ -97,7 +108,7 @@ public class ConstrainedFieldPosition {
      * Sets a constraint on the field.
      *
      * When this instance of ConstrainedFieldPosition is passed to {@link FormattedValue#nextPosition}, positions are
-     * skipped unless they have the given category and field.
+     * skipped unless they have the given field.
      *
      * Any previously set constraints are cleared.
      *
@@ -126,6 +137,7 @@ public class ConstrainedFieldPosition {
         fConstraint = ConstraintType.FIELD;
         fClassConstraint = Object.class;
         fField = field;
+        fValue = null;
     }
 
     /**
@@ -158,6 +170,36 @@ public class ConstrainedFieldPosition {
         fConstraint = ConstraintType.CLASS;
         fClassConstraint = classConstraint;
         fField = null;
+        fValue = null;
+    }
+
+    /**
+     * Sets a constraint on field and field value.
+     *
+     * When this instance of ConstrainedFieldPosition is passed to {@link FormattedValue#nextPosition}, positions are
+     * skipped unless both the field and the field value are equal.
+     *
+     * Any previously set constraints are cleared.
+     *
+     * For example, to find the span a date interval corresponding to the first date:
+     *
+     * <pre>
+     * ConstrainedFieldPosition cfpos;
+     * cfpos.constrainFieldAndValue(DateIntervalFormat.SpanField.DATE_INTERVAL_SPAN, 0);
+     * while (fmtval.nextPosition(cfpos)) {
+     *   // handle the span of the first date in the date interval
+     * }
+     * </pre>
+     *
+     * @param field The field to fix when iterating.
+     * @param fieldValue The field value to fix when iterating.
+     * @internal ICU 64 Technical Preview
+     */
+    public void constrainFieldAndValue(Field field, Object fieldValue) {
+        fConstraint = ConstraintType.VALUE;
+        fClassConstraint = Object.class;
+        fField = field;
+        fValue = fieldValue;
     }
 
     /**
@@ -253,7 +295,7 @@ public class ConstrainedFieldPosition {
      * @param field
      *            The new field.
      * @param value
-     *            The new field value.
+     *            The new field value. Should be null if there is no value.
      * @param start
      *            The new inclusive start index.
      * @param limit
@@ -263,7 +305,7 @@ public class ConstrainedFieldPosition {
      */
     public void setState(Field field, Object value, int start, int limit) {
         // Check matchesField only as an assertion (debug build)
-        assert matchesField(field);
+        assert matchesField(field, value);
 
         fField = field;
         fValue = value;
@@ -272,17 +314,18 @@ public class ConstrainedFieldPosition {
     }
 
     /**
-     * Determines whether a given field should be included given the
+     * Determines whether a given field and value should be included given the
      * constraints.
      *
      * Intended to be used by FormattedValue implementations.
      *
      * @param field The field to test.
+     * @param fieldValue The field value to test. Should be null if there is no value.
      * @return Whether the field should be included given the constraints.
      * @draft ICU 64
      * @provisional This API might change or be removed in a future release.
      */
-    public boolean matchesField(Field field) {
+    public boolean matchesField(Field field, Object fieldValue) {
         if (field == null) {
             throw new IllegalArgumentException("field must not be null");
         }
@@ -293,6 +336,9 @@ public class ConstrainedFieldPosition {
             return fClassConstraint.isAssignableFrom(field.getClass());
         case FIELD:
             return fField == field;
+        case VALUE:
+            // Note: Objects.equals is Android API level 19 and Java 1.7
+            return fField == field && Objects.equals(fValue, fieldValue);
         default:
             throw new AssertionError();
         }

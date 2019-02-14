@@ -601,7 +601,7 @@ public class NumberStringBuilder implements CharSequence {
                 continue;
             }
             // Special case: coalesce the INTEGER if we are pointing at the end of the INTEGER.
-            if (cfpos.matchesField(NumberFormat.Field.INTEGER)
+            if (cfpos.matchesField(NumberFormat.Field.INTEGER, null)
                     && i > zero
                     // don't return the same field twice in a row:
                     && i - zero > cfpos.getLimit()
@@ -614,7 +614,7 @@ public class NumberStringBuilder implements CharSequence {
             }
             // Special case: coalesce NUMERIC if we are pointing at the end of the NUMERIC.
             if (numericField != null
-                    && cfpos.matchesField(numericField)
+                    && cfpos.matchesField(numericField, null)
                     && i > zero
                     // don't return the same field twice in a row:
                     && (i - zero > cfpos.getLimit() || cfpos.getField() != numericField)
@@ -634,7 +634,7 @@ public class NumberStringBuilder implements CharSequence {
                 continue;
             }
             // Case 3: check for field starting at this position
-            if (cfpos.matchesField(_field)) {
+            if (cfpos.matchesField(_field, null)) {
                 fieldStart = i - zero;
                 currField = _field;
             }
