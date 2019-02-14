@@ -322,6 +322,9 @@ Derived NumberFormatterSettings<Derived>::macros(impl::MacroProps&& macros)&& {
 
 template<typename Derived>
 UnicodeString NumberFormatterSettings<Derived>::toSkeleton(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return ICU_Utility::makeBogusString();
+    }
     if (fMacros.copyErrorTo(status)) {
         return ICU_Utility::makeBogusString();
     }
@@ -764,6 +767,9 @@ int32_t LocalizedNumberFormatter::getCallCount() const {
 }
 
 Format* LocalizedNumberFormatter::toFormat(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
     LocalPointer<LocalizedNumberFormatterAsFormat> retval(
             new LocalizedNumberFormatterAsFormat(*this, fMacros.locale), status);
     return retval.orphan();

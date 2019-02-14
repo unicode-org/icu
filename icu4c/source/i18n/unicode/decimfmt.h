@@ -2066,8 +2066,32 @@ class U_I18N_API DecimalFormat : public NumberFormat {
 
 #ifndef U_HIDE_DRAFT_API
     /**
-     * Converts this DecimalFormat to a NumberFormatter.  Starting in ICU 60,
-     * NumberFormatter is the recommended way to format numbers.
+     * Converts this DecimalFormat to a (Localized)NumberFormatter. Starting
+     * in ICU 60, NumberFormatter is the recommended way to format numbers.
+     * You can use the returned LocalizedNumberFormatter to format numbers and
+     * get a FormattedNumber, which contains a string as well as additional
+     * annotations about the formatted value.
+     * 
+     * If a memory allocation failure occurs, the return value of this method
+     * might be null. If you are concerned about correct recovery from
+     * out-of-memory situations, use this pattern:
+     *
+     * <pre>
+     * FormattedNumber result;
+     * if (auto* ptr = df->toNumberFormatter(status)) {
+     *     result = ptr->formatDouble(123, status);
+     * }
+     * </pre>
+     *
+     * If you are not concerned about out-of-memory situations, or if your
+     * environment throws exceptions when memory allocation failure occurs,
+     * you can chain the methods, like this:
+     *
+     * <pre>
+     * FormattedNumber result = df
+     *     ->toNumberFormatter(status)
+     *     ->formatDouble(123, status);
+     * </pre>
      *
      * NOTE: The returned LocalizedNumberFormatter is owned by this DecimalFormat.
      * If a non-const method is called on the DecimalFormat, or if the DecimalFormat
@@ -2075,17 +2099,30 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * beyond the lifetime of the DecimalFormat, copy it to a local variable:
      *
      * <pre>
-     * LocalizedNumberFormatter f = df->toNumberFormatter();
+     * LocalizedNumberFormatter lnf;
+     * if (auto* ptr = df->toNumberFormatter(status)) {
+     *     lnf = *ptr;
+     * }
      * </pre>
      *
-     * It is, however, safe to use the return value for chaining:
+     * @param status Set on failure, like U_MEMORY_ALLOCATION_ERROR.
+     * @return A pointer to an internal object, or nullptr on failure.
+     *         Do not delete the return value!
+     * @draft ICU 64
+     */
+    const number::LocalizedNumberFormatter* toNumberFormatter(UErrorCode& status) const;
+
+    /**
+     * Deprecated: Like {@link #toNumberFormatter(UErrorCode&) const},
+     * but does not take an error code.
      *
-     * <pre>
-     * FormattedNumber result = df->toNumberFormatter().formatDouble(123, status);
-     * </pre>
+     * The new signature should be used in case an error occurs while returning the
+     * LocalizedNumberFormatter.
      *
-     * @return The output variable, for chaining.
-     * @draft ICU 62
+     * This old signature will be removed in ICU 65.
+     *
+     * @return A reference to an internal object.
+     * @deprecated ICU 64
      */
     const number::LocalizedNumberFormatter& toNumberFormatter() const;
 #endif  /* U_HIDE_DRAFT_API */
