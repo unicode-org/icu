@@ -1568,17 +1568,20 @@ void DecimalFormat::formatToDecimalQuantity(const Formattable& number, DecimalQu
     output = std::move(obj.quantity);
 }
 
-const number::LocalizedNumberFormatter& DecimalFormat::toNumberFormatter() const {
-    // TODO: See ICU-20366 and ICU-20380. Currently there isn't really any good way to report an error here.
-    if (fields != nullptr) {
-        return *fields->formatter;
+const number::LocalizedNumberFormatter* DecimalFormat::toNumberFormatter(UErrorCode& status) const {
+    // We sometimes need to return nullptr here (see ICU-20380)
+    if (U_FAILURE(status)) { return nullptr; }
+    if (fields == nullptr) {
+        // We only get here if an OOM error happend during construction, copy construction, assignment, or modification.
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return nullptr;
     }
-    // The code below is undefined behavior and may crash anyways, but we don't really have any choice since
-    // this method returns a reference.
-    // TODO: Should we have a static-allocated LocalizedNumberFormatter (in a failed state) somewhere so that
-    // it could be used here?
-    number::LocalizedNumberFormatter *bad = nullptr;
-    return static_cast<const number::LocalizedNumberFormatter &>(*bad);
+    return &*fields->formatter;
+}
+
+const number::LocalizedNumberFormatter& DecimalFormat::toNumberFormatter() const {
+    UErrorCode localStatus = U_ZERO_ERROR;
+    return *toNumberFormatter(localStatus);
 }
 
 /** Rebuilds the formatter object from the property bag. */

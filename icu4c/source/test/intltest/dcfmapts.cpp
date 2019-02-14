@@ -1368,13 +1368,17 @@ void IntlTestDecimalFormatAPI::testInvalidObject() {
             
             df->getCurrencyUsage();
 
-            // TODO: See ICU-20366 and ICU-20380.
-            // This method should return a pointer, or at least have an error code parameter,
-            const number::LocalizedNumberFormatter& lnf = df->toNumberFormatter();
-            (void)lnf; // suppress unused variable warning.
-            // Note: The existance of a null reference is undefined behavior in C++.
-            // Attempting to touch/examine a null reference is also undefined. Doing
-            // so generally will cause a crash or segmentation fault.
+            const number::LocalizedNumberFormatter* lnf = df->toNumberFormatter(status);
+            assertEquals("toNumberFormatter should return nullptr",
+                (int64_t) nullptr, (int64_t) lnf);
+
+            // Should not crash when chaining to error code enabled methods on the LNF
+            lnf->formatInt(1, status);
+            lnf->formatDouble(1.0, status);
+            lnf->formatDecimal("1", status);
+            lnf->toFormat(status);
+            lnf->toSkeleton(status);
+            lnf->copyErrorTo(status);
         }
 
     }
