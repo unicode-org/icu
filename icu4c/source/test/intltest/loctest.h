@@ -124,6 +124,8 @@ public:
     void TestMoveAssign();
     void TestMoveCtor();
 
+    void TestBug20407iVariantPreferredValue();
+
     void TestBug13417VeryLongLanguageTag();
 
     void TestBug11053UnderlineTimeZone();
