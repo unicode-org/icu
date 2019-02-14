@@ -19,6 +19,8 @@ import com.ibm.icu.util.ICUUncheckedIOException;
  * The result of a number range formatting operation. This class allows the result to be exported in several data types,
  * including a String, an AttributedCharacterIterator, and a BigDecimal.
  *
+ * Instances of this class are immutable and thread-safe.
+ *
  * @author sffc
  * @draft ICU 63
  * @provisional This API might change or be removed in a future release.

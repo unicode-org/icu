@@ -8,6 +8,8 @@ import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 /**
  * A NumberRangeFormatter that has a locale associated with it; this means .formatRange() methods are available.
  *
+ * Instances of this class are immutable and thread-safe.
+ *
  * @author sffc
  * @draft ICU 63
  * @provisional This API might change or be removed in a future release.

@@ -19,6 +19,8 @@ import com.ibm.icu.util.ICUUncheckedIOException;
  * The result of a number formatting operation. This class allows the result to be exported in several
  * data types, including a String, an AttributedCharacterIterator, and a BigDecimal.
  *
+ * Instances of this class are immutable and thread-safe.
+ *
  * @draft ICU 60
  * @provisional This API might change or be removed in a future release.
  * @see NumberFormatter

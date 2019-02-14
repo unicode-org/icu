@@ -21,7 +21,8 @@ import com.ibm.icu.util.ULocale;
  * // => "750 m - 1.2 km"
  * </pre>
  * <p>
- * Like NumberFormatter, NumberRangeFormatter instances are immutable and thread-safe. This API is based on the
+ * Like NumberFormatter, NumberRangeFormatter instances (i.e., LocalizedNumberRangeFormatter
+ * and UnlocalizedNumberRangeFormatter) are immutable and thread-safe. This API is based on the
  * <em>fluent</em> design pattern popularized by libraries such as Google's Guava.
  *
  * @author sffc

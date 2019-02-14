@@ -21,6 +21,8 @@ import com.ibm.icu.util.MeasureUnit;
 /**
  * A NumberFormatter that has a locale associated with it; this means .format() methods are available.
  *
+ * Instances of this class are immutable and thread-safe.
+ *
  * @see NumberFormatter
  * @draft ICU 60
  * @provisional This API might change or be removed in a future release.
