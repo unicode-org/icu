@@ -15,6 +15,39 @@ import com.ibm.icu.text.DecimalFormatSymbols;
 public class PatternStringUtils {
 
     /**
+     * Determine whether a given roundingIncrement should be ignored for formatting
+     * based on the current maxFrac value (maximum fraction digits). For example a
+     * roundingIncrement of 0.01 should be ignored if maxFrac is 1, but not if maxFrac
+     * is 2 or more. Note that roundingIncrements are rounded up in significance, so
+     * a roundingIncrement of 0.006 is treated like 0.01 for this determination, i.e.
+     * it should not be ignored if maxFrac is 2 or more (but a roundingIncrement of
+     * 0.005 is treated like 0.001 for significance).
+     *
+     * This test is needed for both NumberPropertyMapper.oldToNew and 
+     * PatternStringUtils.propertiesToPatternString, but NumberPropertyMapper
+     * is package-private so we have it here.
+     *
+     * @param roundIncrDec
+     *            The roundingIncrement to be checked. Must be non-null.
+     * @param maxFrac
+     *            The current maximum fraction digits value.
+     * @return true if roundIncr should be ignored for formatting.
+     */
+    public static boolean ignoreRoundingIncrement(BigDecimal roundIncrDec, int maxFrac) {
+        double roundIncr = roundIncrDec.doubleValue();
+        if (roundIncr == 0.0) {
+            return true;
+        }
+        if (maxFrac < 0) {
+            return false;
+        }
+        int frac = 0;
+        roundIncr *= 2.0; // This handles the rounding up of values above e.g. 0.005 or 0.0005
+        for (frac = 0; frac <= maxFrac && roundIncr <= 1.0; frac++, roundIncr *= 10.0);
+        return (frac > maxFrac);
+    }
+
+    /**
      * Creates a pattern string from a property bag.
      *
      * <p>
@@ -74,7 +107,7 @@ public class PatternStringUtils {
             while (digitsString.length() < maxSig) {
                 digitsString.append('#');
             }
-        } else if (roundingInterval != null) {
+        } else if (roundingInterval != null && !ignoreRoundingIncrement(roundingInterval,maxFrac)) {
             // Rounding Interval.
             digitsStringScale = -roundingInterval.scale();
             // TODO: Check for DoS here?

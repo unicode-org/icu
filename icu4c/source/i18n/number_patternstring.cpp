@@ -644,6 +644,25 @@ PatternParser::patternInfoToProperties(DecimalFormatProperties& properties, Pars
 /// End PatternStringParser.java; begin PatternStringUtils.java ///
 ///////////////////////////////////////////////////////////////////
 
+// Determine whether a given roundingIncrement should be ignored for formatting
+// based on the current maxFrac value (maximum fraction digits). For example a
+// roundingIncrement of 0.01 should be ignored if maxFrac is 1, but not if maxFrac
+// is 2 or more. Note that roundingIncrements are rounded in significance, so
+// a roundingIncrement of 0.006 is treated like 0.01 for this determination, i.e.
+// it should not be ignored if maxFrac is 2 or more (but a roundingIncrement of
+// 0.005 is treated like 0.001 for significance). This is the reason for the
+// initial doubling below.
+// roundIncr must be non-zero.
+bool PatternStringUtils::ignoreRoundingIncrement(double roundIncr, int32_t maxFrac) {
+    if (maxFrac < 0) {
+        return false;
+    }
+    int32_t frac = 0;
+    roundIncr *= 2.0;
+    for (frac = 0; frac <= maxFrac && roundIncr <= 1.0; frac++, roundIncr *= 10.0);
+    return (frac > maxFrac);
+}
+
 UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatProperties& properties,
                                                             UErrorCode& status) {
     UnicodeString sb;
@@ -694,7 +713,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
         while (digitsString.length() < maxSig) {
             digitsString.append(u'#');
         }
-    } else if (roundingInterval != 0.0) {
+    } else if (roundingInterval != 0.0 && !ignoreRoundingIncrement(roundingInterval,maxFrac)) {
         // Rounding Interval.
         digitsStringScale = -roundingutils::doubleFractionLength(roundingInterval, nullptr);
         // TODO: Check for DoS here?
