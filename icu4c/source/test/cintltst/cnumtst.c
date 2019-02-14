@@ -68,6 +68,7 @@ static void TestFormatForFields(void);
 static void TestRBNFRounding(void);
 static void Test12052_NullPointer(void);
 static void TestParseCases(void);
+static void TestSetMaxFracAndRoundIncr(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -102,6 +103,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestFormatForFields);
     TESTCASE(Test12052_NullPointer);
     TESTCASE(TestParseCases);
+    TESTCASE(TestSetMaxFracAndRoundIncr);
 }
 
 /* test Parse int 64 */
@@ -1060,7 +1062,7 @@ static const ParseCurrencyItem parseCurrencyItems[] = {
     { "fr_FR", "euros8",   euros8Sym,   NULL,           U_PARSE_ERROR, 2, 0.0, U_PARSE_ERROR, 2, 0.0, ""    },
     { "fr_FR", "dollars2", dollars2Sym, NULL,           U_PARSE_ERROR, 0, 0.0, U_PARSE_ERROR, 0, 0.0, ""    },
     { "fr_FR", "dollars4", dollars4Sym, NULL,           U_PARSE_ERROR, 0, 0.0, U_PARSE_ERROR, 0, 0.0, ""    },
-    
+
     { NULL,    NULL,       NULL,        NULL,           0,             0, 0.0, 0,             0, 0.0, NULL  }
 };
 
@@ -2033,7 +2035,7 @@ static void TestNBSPInPattern(void) {
 
 
 }
-static void TestCloneWithRBNF(void) {   
+static void TestCloneWithRBNF(void) {
     UChar pattern[1024];
     UChar pat2[512];
     UErrorCode status = U_ZERO_ERROR;
@@ -2407,7 +2409,7 @@ static void TestUNumberingSystem(void) {
     UEnumeration * uenum;
     const char * numsys;
     UErrorCode status;
-    
+
     for (itemPtr = numSysTestItems; itemPtr->locale != NULL; itemPtr++) {
         status = U_ZERO_ERROR;
         unumsys = unumsys_open(itemPtr->locale, &status);
@@ -2430,7 +2432,7 @@ static void TestUNumberingSystem(void) {
             log_data_err("unumsys_open for locale %s fails with status %s\n", itemPtr->locale, myErrorName(status));
         }
     }
-    
+
     status = U_ZERO_ERROR;
     uenum = unumsys_openAvailableNames(&status);
     if ( U_SUCCESS(status) ) {
@@ -2512,8 +2514,8 @@ static void TestCurrencyIsoPluralFormat(void) {
     };
 
     int32_t i, sIndex;
-    
-    for (i=0; i<UPRV_LENGTHOF(DATA); ++i) {  
+
+    for (i=0; i<UPRV_LENGTHOF(DATA); ++i) {
       const char* localeString = DATA[i][0];
       double numberToBeFormat = atof(DATA[i][1]);
       const char* currencyISOCode = DATA[i][2];
@@ -2524,7 +2526,7 @@ static void TestCurrencyIsoPluralFormat(void) {
         UChar ubufResult[kUBufMax];
         UChar ubufExpected[kUBufMax];
         int32_t ulenRes;
-        
+
         UNumberFormat* unumFmt = unum_open(style, NULL, 0, localeString, NULL, &status);
         if (U_FAILURE(status)) {
             log_data_err("FAIL: unum_open, locale %s, style %d - %s\n", localeString, (int)style, myErrorName(status));
@@ -2547,7 +2549,7 @@ static void TestCurrencyIsoPluralFormat(void) {
         }
         unum_close(unumFmt);
       }
-    }  
+    }
 }
 
 typedef struct {
@@ -2573,7 +2575,7 @@ static const TestContextItem tcItems[] = { /* results for 123.45 */
 static void TestContext(void) {
     UErrorCode status = U_ZERO_ERROR;
     const TestContextItem* itemPtr;
-    
+
     UNumberFormat *unum = unum_open(UNUM_SPELLOUT, NULL, 0, "en", NULL, &status);
     if ( U_SUCCESS(status) ) {
         UDisplayContext context = unum_getContext(unum, UDISPCTX_TYPE_CAPITALIZATION, &status);
@@ -2594,7 +2596,7 @@ static void TestContext(void) {
     for (itemPtr = tcItems; itemPtr->locale != NULL; itemPtr++) {
         UChar ubufResult[kUBufMax];
         int32_t ulenRes;
-        
+
         status = U_ZERO_ERROR;
         unum = unum_open(itemPtr->style, NULL, 0, itemPtr->locale, NULL, &status);
         if (U_FAILURE(status)) {
@@ -2612,7 +2614,7 @@ static void TestContext(void) {
             int32_t ulenExp = u_unescape(itemPtr->expectedResult, ubufExpected, kUBufMax);
             if (ulenRes != ulenExp || u_strncmp(ubufResult, ubufExpected, ulenExp) != 0) {
                 char bbuf[kUBufMax*2];
-                u_austrncpy(bbuf, ubufResult, sizeof(bbuf)); 
+                u_austrncpy(bbuf, ubufResult, sizeof(bbuf));
                 log_err("FAIL: unum_formatDouble, locale %s, style %d, context %d, expected %d:\"%s\", got %d:\"%s\"\n",
                         itemPtr->locale, (int)itemPtr->style, (int)itemPtr->context, ulenExp,
                         itemPtr->expectedResult, ulenRes, bbuf);
@@ -2671,7 +2673,7 @@ static void TestCurrencyUsage(void) {
             log_err("FAIL: currency usage attribute is not UNUM_CURRENCY_CASH\n");
         }
 
-        for (j=0; j<UPRV_LENGTHOF(DATA); ++j) { 
+        for (j=0; j<UPRV_LENGTHOF(DATA); ++j) {
             UChar expect[64];
             int32_t expectLen;
             UChar currencyCode[4];
@@ -2695,7 +2697,7 @@ static void TestCurrencyUsage(void) {
             }
 
         }
-    
+
         unum_close(unumFmt);
     }
 }
@@ -2896,7 +2898,7 @@ static const LocStyleAttributeTest lsaTests[] = {
   { "en",   UNUM_DECIMAL_COMPACT_SHORT,     UNUM_MIN_SIGNIFICANT_DIGITS,    3,  enShortMin3 },
   { "ja",   UNUM_DECIMAL_COMPACT_SHORT,     UNUM_MAX_SIGNIFICANT_DIGITS,    2,  jaShortMax2 },
   { "sr",   UNUM_DECIMAL_COMPACT_LONG,      UNUM_MAX_SIGNIFICANT_DIGITS,    2,  srLongMax2  },
-  { NULL,   (UNumberFormatStyle)0,          -1,                             0,  NULL } 
+  { NULL,   (UNumberFormatStyle)0,          -1,                             0,  NULL }
 };
 
 static void TestVariousStylesAndAttributes(void) {
@@ -2919,7 +2921,7 @@ static void TestVariousStylesAndAttributes(void) {
                 UChar uexp[kUBufSize];
                 UChar uget[kUBufSize];
                 int32_t uexplen, ugetlen;
-               
+
                 status = U_ZERO_ERROR;
                 uexplen = u_unescape(veItemPtr->expected, uexp, kUBufSize);
                 ugetlen = unum_formatDouble(unum, veItemPtr->value, uget, kUBufSize, NULL, &status);
@@ -3170,6 +3172,146 @@ static void TestParseCases(void) {
         }
 
         unum_close(unumDec);
+    }
+}
+
+typedef struct {
+    const char*        descrip;
+    const char*        locale;
+    UNumberFormatStyle style;
+    int32_t            minInt;
+    int32_t            minFrac;
+    int32_t            maxFrac;
+    double             roundIncr;
+    const UChar*       expPattern;
+    double             valueToFmt;
+    const UChar*       expFormat;
+} SetMaxFracAndRoundIncrItem;
+
+static const SetMaxFracAndRoundIncrItem maxFracAndRoundIncrItems[] = {
+    // descrip                     locale   style         mnI mnF mxF rdInc   expPat         value  expFmt
+    { "01 en_US DEC 1/0/3/0.0",    "en_US", UNUM_DECIMAL,  1,  0,  3, 0.0,    u"#,##0.###",  0.128, u"0.128" },
+    { "02 en_US DEC 1/0/1/0.0",    "en_US", UNUM_DECIMAL,  1,  0,  1, 0.0,    u"#,##0.#",    0.128, u"0.1"   },
+    { "03 en_US DEC 1/0/1/0.01",   "en_US", UNUM_DECIMAL,  1,  0,  1, 0.01,   u"#,##0.#",    0.128, u"0.1"   },
+    { "04 en_US DEC 1/1/1/0.01",   "en_US", UNUM_DECIMAL,  1,  1,  1, 0.01,   u"#,##0.0",    0.128, u"0.1"   },
+    { "05 en_US DEC 1/0/1/0.1",    "en_US", UNUM_DECIMAL,  1,  0,  1, 0.1,    u"#,##0.1",    0.128, u"0.1"   }, // use incr
+    { "06 en_US DEC 1/1/1/0.1",    "en_US", UNUM_DECIMAL,  1,  1,  1, 0.1,    u"#,##0.1",    0.128, u"0.1"   }, // use incr
+
+    { "10 en_US DEC 1/0/1/0.02",   "en_US", UNUM_DECIMAL,  1,  0,  1, 0.02,   u"#,##0.#",    0.128, u"0.1"   },
+    { "11 en_US DEC 1/0/2/0.02",   "en_US", UNUM_DECIMAL,  1,  0,  2, 0.02,   u"#,##0.02",   0.128, u"0.12"  }, // use incr
+    { "12 en_US DEC 1/0/3/0.02",   "en_US", UNUM_DECIMAL,  1,  0,  3, 0.02,   u"#,##0.02#",  0.128, u"0.12"  }, // use incr
+    { "13 en_US DEC 1/1/1/0.02",   "en_US", UNUM_DECIMAL,  1,  1,  1, 0.02,   u"#,##0.0",    0.128, u"0.1"   },
+    { "14 en_US DEC 1/1/2/0.02",   "en_US", UNUM_DECIMAL,  1,  1,  2, 0.02,   u"#,##0.02",   0.128, u"0.12"  }, // use incr
+    { "15 en_US DEC 1/1/3/0.02",   "en_US", UNUM_DECIMAL,  1,  1,  3, 0.02,   u"#,##0.02#",  0.128, u"0.12"  }, // use incr
+    { "16 en_US DEC 1/2/2/0.02",   "en_US", UNUM_DECIMAL,  1,  2,  2, 0.02,   u"#,##0.02",   0.128, u"0.12"  }, // use incr
+    { "17 en_US DEC 1/2/3/0.02",   "en_US", UNUM_DECIMAL,  1,  2,  3, 0.02,   u"#,##0.02#",  0.128, u"0.12"  }, // use incr
+    { "18 en_US DEC 1/3/3/0.02",   "en_US", UNUM_DECIMAL,  1,  3,  3, 0.02,   u"#,##0.020",  0.128, u"0.120" }, // use incr
+
+    { "20 en_US DEC 1/1/1/0.0075", "en_US", UNUM_DECIMAL,  1,  1,  1, 0.0075, u"#,##0.0",    0.019, u"0.0"    },
+    { "21 en_US DEC 1/1/2/0.0075", "en_US", UNUM_DECIMAL,  1,  1,  2, 0.0075, u"#,##0.0075", 0.004, u"0.0075" }, // use incr
+    { "22 en_US DEC 1/1/2/0.0075", "en_US", UNUM_DECIMAL,  1,  1,  2, 0.0075, u"#,##0.0075", 0.019, u"0.0225" }, // use incr
+    { "23 en_US DEC 1/1/3/0.0075", "en_US", UNUM_DECIMAL,  1,  1,  3, 0.0075, u"#,##0.0075", 0.004, u"0.0075" }, // use incr
+    { "24 en_US DEC 1/1/3/0.0075", "en_US", UNUM_DECIMAL,  1,  1,  3, 0.0075, u"#,##0.0075", 0.019, u"0.0225" }, // use incr
+    { "25 en_US DEC 1/2/2/0.0075", "en_US", UNUM_DECIMAL,  1,  2,  2, 0.0075, u"#,##0.0075", 0.004, u"0.0075" }, // use incr
+    { "26 en_US DEC 1/2/2/0.0075", "en_US", UNUM_DECIMAL,  1,  2,  2, 0.0075, u"#,##0.0075", 0.019, u"0.0225" }, // use incr
+    { "27 en_US DEC 1/2/3/0.0075", "en_US", UNUM_DECIMAL,  1,  2,  3, 0.0075, u"#,##0.0075", 0.004, u"0.0075" }, // use incr
+    { "28 en_US DEC 1/2/3/0.0075", "en_US", UNUM_DECIMAL,  1,  2,  3, 0.0075, u"#,##0.0075", 0.019, u"0.0225" }, // use incr
+    { "29 en_US DEC 1/3/3/0.0075", "en_US", UNUM_DECIMAL,  1,  3,  3, 0.0075, u"#,##0.0075", 0.004, u"0.0075" }, // use incr
+    { "2A en_US DEC 1/3/3/0.0075", "en_US", UNUM_DECIMAL,  1,  3,  3, 0.0075, u"#,##0.0075", 0.019, u"0.0225" }, // use incr
+
+    { NULL, NULL, UNUM_IGNORE, 0, 0, 0, 0.0, NULL, 0.0, NULL }
+};
+
+// The following is copied from C++ number_patternstring.cpp for this C test.
+//
+// Determine whether a given roundingIncrement should be ignored for formatting
+// based on the current maxFrac value (maximum fraction digits). For example a
+// roundingIncrement of 0.01 should be ignored if maxFrac is 1, but not if maxFrac
+// is 2 or more. Note that roundingIncrements are rounded in significance, so
+// a roundingIncrement of 0.006 is treated like 0.01 for this determination, i.e.
+// it should not be ignored if maxFrac is 2 or more (but a roundingIncrement of
+// 0.005 is treated like 0.001 for significance). This is the reason for the
+// initial doubling below.
+// roundIncr must be non-zero
+static UBool ignoreRoundingIncrement(double roundIncr, int32_t maxFrac) {
+    if (maxFrac < 0) {
+        return FALSE;
+    }
+    int32_t frac = 0;
+    roundIncr *= 2.0;
+    for (frac = 0; frac <= maxFrac && roundIncr <= 1.0; frac++, roundIncr *= 10.0);
+    return (frac > maxFrac);
+}
+
+enum { kBBufMax = 128 };
+static void TestSetMaxFracAndRoundIncr(void) {
+    const SetMaxFracAndRoundIncrItem* itemPtr;
+    for (itemPtr = maxFracAndRoundIncrItems; itemPtr->descrip != NULL; itemPtr++) {
+        UChar ubuf[kUBufMax];
+        char  bbufe[kBBufMax];
+        char  bbufg[kBBufMax];
+        int32_t ulen;
+        UErrorCode status = U_ZERO_ERROR;
+        UNumberFormat* unf = unum_open(itemPtr->style, NULL, 0, itemPtr->locale, NULL, &status);
+        if (U_FAILURE(status)) {
+            log_data_err("locale %s: unum_open style %d fails with %s\n", itemPtr->locale, itemPtr->style, u_errorName(status));
+            continue;
+        }
+
+        unum_setAttribute(unf, UNUM_MIN_INTEGER_DIGITS, itemPtr->minInt);
+        unum_setAttribute(unf, UNUM_MIN_FRACTION_DIGITS, itemPtr->minFrac);
+        unum_setAttribute(unf, UNUM_MAX_FRACTION_DIGITS, itemPtr->maxFrac);
+        unum_setDoubleAttribute(unf, UNUM_ROUNDING_INCREMENT, itemPtr->roundIncr);
+
+        UBool roundIncrUsed = (itemPtr->roundIncr != 0.0 && !ignoreRoundingIncrement(itemPtr->roundIncr, itemPtr->maxFrac));
+
+        int32_t minInt = unum_getAttribute(unf, UNUM_MIN_INTEGER_DIGITS);
+        if (minInt != itemPtr->minInt) {
+            log_err("test %s: unum_getAttribute UNUM_MIN_INTEGER_DIGITS, expected %d, got %d\n",
+                    itemPtr->descrip, itemPtr->minInt, minInt);
+        }
+        int32_t minFrac = unum_getAttribute(unf, UNUM_MIN_FRACTION_DIGITS);
+        if (minFrac != itemPtr->minFrac) {
+            log_err("test %s: unum_getAttribute UNUM_MIN_FRACTION_DIGITS, expected %d, got %d\n",
+                    itemPtr->descrip, itemPtr->minFrac, minFrac);
+        }
+        // If incrementRounding is used, maxFrac is set equal to minFrac
+        int32_t maxFrac = unum_getAttribute(unf, UNUM_MAX_FRACTION_DIGITS);
+        // If incrementRounding is used, maxFrac is set equal to minFrac
+        int32_t expMaxFrac = (roundIncrUsed)? itemPtr->minFrac: itemPtr->maxFrac;
+        if (maxFrac != expMaxFrac) {
+            log_err("test %s: unum_getAttribute UNUM_MAX_FRACTION_DIGITS, expected %d, got %d\n",
+                    itemPtr->descrip, expMaxFrac, maxFrac);
+        }
+        double roundIncr = unum_getDoubleAttribute(unf, UNUM_ROUNDING_INCREMENT);
+        // If incrementRounding is not used, roundIncr is set to 0.0
+        double expRoundIncr = (roundIncrUsed)? itemPtr->roundIncr: 0.0;
+        if (roundIncr != expRoundIncr) {
+            log_err("test %s: unum_getDoubleAttribute UNUM_ROUNDING_INCREMENT, expected %f, got %f\n",
+                    itemPtr->descrip, expRoundIncr, roundIncr);
+        }
+
+        status = U_ZERO_ERROR;
+        ulen = unum_toPattern(unf, FALSE, ubuf, kUBufMax, &status);
+        if ( U_FAILURE(status) ) {
+            log_err("test %s: unum_toPattern fails with %s\n", itemPtr->descrip, u_errorName(status));
+        } else if (u_strcmp(ubuf,itemPtr->expPattern)!=0) {
+            u_austrcpy(bbufe, itemPtr->expPattern);
+            u_austrcpy(bbufg, ubuf);
+            log_err("test %s: unum_toPattern expect \"%s\", get \"%s\"\n", itemPtr->descrip, bbufe, bbufg);
+        }
+
+        status = U_ZERO_ERROR;
+        ulen = unum_formatDouble(unf, itemPtr->valueToFmt, ubuf, kUBufMax, NULL, &status);
+        if ( U_FAILURE(status) ) {
+            log_err("test %s: unum_formatDouble fails with %s\n", itemPtr->descrip, u_errorName(status));
+        } else if (u_strcmp(ubuf,itemPtr->expFormat)!=0) {
+            u_austrcpy(bbufe, itemPtr->expFormat);
+            u_austrcpy(bbufg, ubuf);
+            log_err("test %s: unum_formatDouble expect \"%s\", get \"%s\"\n", itemPtr->descrip, bbufe, bbufg);
+        }
+
+        unum_close(unf);
     }
 }
 

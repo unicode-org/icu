@@ -48,6 +48,7 @@ import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.data.TokenIterator;
+import com.ibm.icu.impl.number.PatternStringUtils;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
 import com.ibm.icu.text.CompactDecimalFormat;
@@ -4040,6 +4041,115 @@ public class NumberFormatTest extends TestFmwk {
             df.setSignificantDigitsUsed(true);
             expect(df, 9.87654321, "9.87654");
             expect(df, 9, "9.0");
+        }
+    }
+
+    @Test
+    public void TestSetMaxFracAndRoundIncr() {
+        class SetMxFrAndRndIncrItem {
+            String descrip;
+            String localeID;
+            int    style;
+            int    minInt;
+            int    minFrac;
+            int    maxFrac;
+            double roundIncr;
+            String expPattern;
+            double valueToFmt;
+            String expFormat;
+             // Simple constructor
+            public SetMxFrAndRndIncrItem(String desc, String loc, int stl, int mnI, int mnF, int mxF,
+                                                double rdIn, String ePat, double val, String eFmt) {
+                descrip = desc;
+                localeID = loc;
+                style = stl;
+                minInt = mnI;
+                minFrac = mnF;
+                maxFrac = mxF;
+                roundIncr = rdIn;
+                expPattern = ePat;
+                valueToFmt = val;
+                expFormat = eFmt ;
+            }
+        };
+
+        final SetMxFrAndRndIncrItem[] items = {
+            //                         descrip                     locale   style                      mnI mnF mxF rdInc   expPat        value  expFmt
+            new SetMxFrAndRndIncrItem( "01 en_US DEC 1/0/3/0.0",    "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  3, 0.0,    "#,##0.###",  0.128, "0.128" ),
+            new SetMxFrAndRndIncrItem( "02 en_US DEC 1/0/1/0.0",    "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  1, 0.0,    "#,##0.#",    0.128, "0.1"   ),
+            new SetMxFrAndRndIncrItem( "03 en_US DEC 1/0/1/0.01",   "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  1, 0.01,   "#,##0.#",    0.128, "0.1"   ),
+            new SetMxFrAndRndIncrItem( "04 en_US DEC 1/1/1/0.01",   "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  1, 0.01,   "#,##0.0",    0.128, "0.1"   ),
+            new SetMxFrAndRndIncrItem( "05 en_US DEC 1/0/1/0.1",    "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  1, 0.1,    "#,##0.1",    0.128, "0.1"   ), // use incr
+            new SetMxFrAndRndIncrItem( "06 en_US DEC 1/1/1/0.1",    "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  1, 0.1,    "#,##0.1",    0.128, "0.1"   ), // use incr
+
+            new SetMxFrAndRndIncrItem( "10 en_US DEC 1/0/1/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  1, 0.02,   "#,##0.#",    0.128, "0.1"   ),
+            new SetMxFrAndRndIncrItem( "11 en_US DEC 1/0/2/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  2, 0.02,   "#,##0.02",   0.128, "0.12"  ), // use incr
+            new SetMxFrAndRndIncrItem( "12 en_US DEC 1/0/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  0,  3, 0.02,   "#,##0.02#",  0.128, "0.12"  ), // use incr
+            new SetMxFrAndRndIncrItem( "13 en_US DEC 1/1/1/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  1, 0.02,   "#,##0.0",    0.128, "0.1"   ),
+            new SetMxFrAndRndIncrItem( "14 en_US DEC 1/1/2/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  2, 0.02,   "#,##0.02",   0.128, "0.12"  ), // use incr
+            new SetMxFrAndRndIncrItem( "15 en_US DEC 1/1/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  3, 0.02,   "#,##0.02#",  0.128, "0.12"  ), // use incr
+            new SetMxFrAndRndIncrItem( "16 en_US DEC 1/2/2/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  2, 0.02,   "#,##0.02",   0.128, "0.12"  ), // use incr
+            new SetMxFrAndRndIncrItem( "17 en_US DEC 1/2/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  3, 0.02,   "#,##0.02#",  0.128, "0.12"  ), // use incr
+            new SetMxFrAndRndIncrItem( "18 en_US DEC 1/3/3/0.02",   "en_US", NumberFormat.NUMBERSTYLE,  1,  3,  3, 0.02,   "#,##0.020",  0.128, "0.12"  ), // use incr; expFmt != ICU4C
+
+            new SetMxFrAndRndIncrItem( "20 en_US DEC 1/1/1/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  1, 0.0075, "#,##0.0",    0.019, "0.0"    ),
+            new SetMxFrAndRndIncrItem( "21 en_US DEC 1/1/2/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  2, 0.0075, "#,##0.0075", 0.004, "0.0075" ), // use incr
+            new SetMxFrAndRndIncrItem( "22 en_US DEC 1/1/2/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  2, 0.0075, "#,##0.0075", 0.019, "0.0225" ), // use incr
+            new SetMxFrAndRndIncrItem( "23 en_US DEC 1/1/3/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  3, 0.0075, "#,##0.0075", 0.004, "0.0075" ), // use incr
+            new SetMxFrAndRndIncrItem( "24 en_US DEC 1/1/3/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  1,  3, 0.0075, "#,##0.0075", 0.019, "0.0225" ), // use incr
+            new SetMxFrAndRndIncrItem( "25 en_US DEC 1/2/2/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  2, 0.0075, "#,##0.0075", 0.004, "0.0075" ), // use incr
+            new SetMxFrAndRndIncrItem( "26 en_US DEC 1/2/2/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  2, 0.0075, "#,##0.0075", 0.019, "0.0225" ), // use incr
+            new SetMxFrAndRndIncrItem( "27 en_US DEC 1/2/3/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  3, 0.0075, "#,##0.0075", 0.004, "0.0075" ), // use incr
+            new SetMxFrAndRndIncrItem( "28 en_US DEC 1/2/3/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  2,  3, 0.0075, "#,##0.0075", 0.019, "0.0225" ), // use incr
+            new SetMxFrAndRndIncrItem( "29 en_US DEC 1/3/3/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  3,  3, 0.0075, "#,##0.0075", 0.004, "0.0075" ), // use incr
+            new SetMxFrAndRndIncrItem( "2A en_US DEC 1/3/3/0.0075", "en_US", NumberFormat.NUMBERSTYLE,  1,  3,  3, 0.0075, "#,##0.0075", 0.019, "0.0225" ), // use incr
+        };
+
+        for (SetMxFrAndRndIncrItem item: items) {
+            ULocale locale = new ULocale(item.localeID);
+            DecimalFormat df = (DecimalFormat)NumberFormat.getInstance(locale, item.style);
+            df.setMinimumIntegerDigits(item.minInt);
+            df.setMinimumFractionDigits(item.minFrac);
+            df.setMaximumFractionDigits(item.maxFrac);
+            df.setRoundingIncrement(item.roundIncr);
+
+            boolean roundIncrUsed = (item.roundIncr != 0 &&
+                    !PatternStringUtils.ignoreRoundingIncrement(java.math.BigDecimal.valueOf(item.roundIncr),item.maxFrac));
+            int fracForRoundIncr = 0;
+            if (roundIncrUsed) {
+                double  testIncr = item.roundIncr;
+                for (; testIncr > (double)((int)testIncr); testIncr *= 10.0, fracForRoundIncr++);
+            }
+
+            int minInt = df.getMinimumIntegerDigits();
+            if (minInt != item.minInt) {
+                errln("test " + item.descrip + ": getMinimumIntegerDigits, expected " + item.minInt + ", got " + minInt);
+            }
+            int minFrac = df.getMinimumFractionDigits();
+            int expMinFrac = (roundIncrUsed)? fracForRoundIncr: item.minFrac;
+            if (minFrac != expMinFrac) {
+                errln("test " + item.descrip + ": getMinimumFractionDigits, expected " + expMinFrac + ", got " + minFrac);
+            }
+            int maxFrac = df.getMaximumFractionDigits();
+            int expMaxFrac = (roundIncrUsed)? fracForRoundIncr: item.maxFrac;
+            if (maxFrac != expMaxFrac) {
+                errln("test " + item.descrip + ": getMaximumFractionDigits, expected " + expMaxFrac + ", got " + maxFrac);
+            }
+            java.math.BigDecimal bigdec = df.getRoundingIncrement(); // why doesn't this return com.ibm.icu.math.BigDecimal?
+            double roundIncr = (bigdec != null)? bigdec.doubleValue(): 0.0;
+            double expRoundIncr = (roundIncrUsed)? item.roundIncr: 0.0;
+            if (roundIncr != expRoundIncr) {
+                errln("test " + item.descrip + ": getRoundingIncrement, expected " + expRoundIncr + ", got " + roundIncr);
+            }
+
+            String getPattern = df.toPattern();
+            if (!getPattern.equals(item.expPattern)) {
+                errln("test " + item.descrip + ": toPattern, expected " + item.expPattern + ", got " + getPattern);
+            }
+            String getFormat = df.format(item.valueToFmt);
+            if (!getFormat.equals(item.expFormat)) {
+                errln("test " + item.descrip + ": format, expected " + item.expFormat + ", got " + getFormat);
+            }
         }
     }
 

@@ -143,7 +143,11 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     if (!properties.currencyUsage.isNull()) {
         precision = Precision::constructCurrency(currencyUsage).withCurrency(currency);
     } else if (roundingIncrement != 0.0) {
-        precision = Precision::constructIncrement(roundingIncrement, minFrac);
+        if (PatternStringUtils::ignoreRoundingIncrement(roundingIncrement, maxFrac)) {
+            precision = Precision::constructFraction(minFrac, maxFrac);
+        } else {
+            precision = Precision::constructIncrement(roundingIncrement, minFrac);
+        }
     } else if (explicitMinMaxSig) {
         minSig = minSig < 1 ? 1 : minSig > kMaxIntFracSig ? kMaxIntFracSig : minSig;
         maxSig = maxSig < 0 ? kMaxIntFracSig : maxSig < minSig ? minSig : maxSig > kMaxIntFracSig
