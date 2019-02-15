@@ -1911,8 +1911,16 @@ public class NumberFormatTest extends TestFmwk {
         if (availableNames == null || availableNames.length <= 0) {
             errln("ERROR: NumberingSystem.getAvailableNames() returned a null or empty array.");
         } else {
+            // Check for alphabetical order
+            for (int i=0; i<availableNames.length-1; i++) {
+                assertTrue("Names should be in alphabetical order",
+                        availableNames[i].compareTo(availableNames[i+1]) < 0);
+            }
+
             boolean latnFound = false;
             for (String name : availableNames){
+                assertNotEquals("should not throw and should not be null",
+                        null, NumberingSystem.getInstanceByName(name));
                 if ("latn".equals(name)) {
                     latnFound = true;
                     break;
@@ -1923,6 +1931,9 @@ public class NumberFormatTest extends TestFmwk {
                 errln("ERROR: 'latn' numbering system not found on NumberingSystem.getAvailableNames().");
             }
         }
+
+        assertEquals("Non-existing numbering system should return null",
+                null, NumberingSystem.getInstanceByName("dummy"));
 
         // Test NumberingSystem.getInstance()
         NumberingSystem ns1 = NumberingSystem.getInstance();
