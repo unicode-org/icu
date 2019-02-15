@@ -6954,7 +6954,7 @@ void NumberFormatTest::TestExplicitParents() {
  * Test available numbering systems API.
  */
 void NumberFormatTest::TestAvailableNumberingSystems() {
-    UErrorCode status = U_ZERO_ERROR;
+    IcuTestErrorCode status(*this, "TestAvailableNumberingSystems");
     StringEnumeration *availableNumberingSystems = NumberingSystem::getAvailableNames(status);
     CHECK_DATA(status, "NumberingSystem::getAvailableNames()")
 
@@ -6969,6 +6969,7 @@ void NumberFormatTest::TestAvailableNumberingSystems() {
     /* one that we initially thought.                                                      */
 
     int32_t len;
+    const char* prevName = nullptr;
     for ( int32_t i = 0 ; i < nsCount ; i++ ) {
         const char *nsname = availableNumberingSystems->next(&len,status);
         NumberingSystem* ns = NumberingSystem::createInstanceByName(nsname,status);
@@ -6976,9 +6977,22 @@ void NumberFormatTest::TestAvailableNumberingSystems() {
         if ( uprv_strcmp(nsname,ns->getName()) ) {
             errln("FAIL: Numbering system name didn't match for name = %s\n",nsname);
         }
+        if (prevName != nullptr) {
+            int comp = uprv_strcmp(prevName, nsname);
+            assertTrue(
+                UnicodeString(u"NS names should be in alphabetical order: ")
+                    + prevName + u" vs " + nsname,
+                // TODO: Why are there duplicates? This doesn't work if comp < 0
+                comp <= 0);
+        }
+        prevName = nsname;
 
         delete ns;
     }
+
+    LocalPointer<NumberingSystem> dummy(NumberingSystem::createInstanceByName("dummy", status), status);
+    status.expectErrorAndReset(U_UNSUPPORTED_ERROR);
+    assertTrue("Non-existent numbering system should return null", dummy.isNull());
 
     delete availableNumberingSystems;
 }
