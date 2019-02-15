@@ -182,9 +182,8 @@ class NumberFormatterImpl {
         // Pre-compute a few values for efficiency.
         boolean isCurrency = unitIsCurrency(macros.unit);
         boolean isNoUnit = unitIsNoUnit(macros.unit);
-        boolean isPercent = isNoUnit && unitIsPercent(macros.unit);
-        boolean isPermille = isNoUnit && unitIsPermille(macros.unit);
-        boolean isCldrUnit = !isCurrency && !isNoUnit;
+        boolean isPercent = unitIsPercent(macros.unit);
+        boolean isPermille = unitIsPermille(macros.unit);
         boolean isAccounting = macros.sign == SignDisplay.ACCOUNTING
                 || macros.sign == SignDisplay.ACCOUNTING_ALWAYS
                 || macros.sign == SignDisplay.ACCOUNTING_EXCEPT_ZERO;
@@ -193,6 +192,8 @@ class NumberFormatterImpl {
         if (macros.unitWidth != null) {
             unitWidth = macros.unitWidth;
         }
+        boolean isCldrUnit = !isCurrency && !isNoUnit &&
+            (unitWidth == UnitWidth.FULL_NAME || !(isPercent || isPermille));
         PluralRules rules = macros.rules;
 
         // Select the numbering system.
@@ -228,7 +229,9 @@ class NumberFormatterImpl {
         }
         if (pattern == null) {
             int patternStyle;
-            if (isPercent || isPermille) {
+            if (isCldrUnit) {
+                patternStyle = NumberFormat.NUMBERSTYLE;
+            } else if (isPercent || isPermille) {
                 patternStyle = NumberFormat.PERCENTSTYLE;
             } else if (!isCurrency || unitWidth == UnitWidth.FULL_NAME) {
                 patternStyle = NumberFormat.NUMBERSTYLE;
