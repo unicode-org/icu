@@ -53,6 +53,8 @@ class ListFormatterTest : public IntlTestWithFieldPosition {
     void TestFieldPositionIteratorWith2ItemsPatternShift();
     void TestFieldPositionIteratorWith3ItemsPatternShift();
     void TestFormattedValue();
+    void TestDifferentStyles();
+    void TestBadStylesFail();
 
   private:
     void CheckFormatting(
@@ -106,6 +108,13 @@ class ListFormatterTest : public IntlTestWithFieldPosition {
         UnicodeString four,
         UnicodeString results[4],
         const char* testName);
+    void DoTheRealListStyleTesting(
+        Locale locale,
+        UnicodeString items[],
+        int32_t itemCount,
+        const char* style,
+        const char* expected,
+        IcuTestErrorCode status);
 
   private:
     // Reused test data.

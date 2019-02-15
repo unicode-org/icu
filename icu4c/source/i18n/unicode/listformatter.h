@@ -188,7 +188,7 @@ class U_I18N_API ListFormatter : public UObject{
      * Creates a ListFormatter appropriate for a locale and style.
      *
      * @param locale The locale.
-     * @param style the style, either "standard", "duration", or "duration-short"
+     * @param style the style, either "standard", "or", "unit", "unit-narrow", or "unit-short"
      * @param errorCode ICU error code, set if no data available for the given locale.
      * @return A ListFormatter object created from internal data derived from
      *     CLDR data.

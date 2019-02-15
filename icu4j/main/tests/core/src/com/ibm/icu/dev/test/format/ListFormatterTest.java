@@ -187,6 +187,24 @@ public class ListFormatterTest extends TestFmwk {
         assertEquals("bug 9946", "{0}, {1}, and {2}", listFormatter.format("{0}", "{1}", "{2}"));
     }
 
+
+    void DoTheRealListStyleTesting(ULocale locale, String items[], ListFormatter.Style style, String expected) {
+        ListFormatter listFormatter = ListFormatter.getInstance(locale, style);
+        assertEquals("Style \"" + style + "\"", expected, listFormatter.format(items));
+    }
+
+    @Test
+    public void TestDifferentStyles() {
+        ULocale locale = ULocale.FRENCH;
+        String[] input = { "rouge", "jaune", "bleu", "vert" };
+
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.STANDARD, "rouge, jaune, bleu et vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.OR, "rouge, jaune, bleu ou vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.UNIT, "rouge, jaune, bleu et vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.UNIT_NARROW, "rouge jaune bleu vert");
+        DoTheRealListStyleTesting(locale, input, ListFormatter.Style.UNIT_SHORT, "rouge, jaune, bleu et vert");
+    }
+
     private boolean isDefaultLocaleEnglishLike() {
         ULocale defaultLocale = ULocale.getDefault(ULocale.Category.FORMAT);
         return defaultLocale.equals(ULocale.ENGLISH) || defaultLocale.equals(ULocale.US);

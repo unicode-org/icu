@@ -573,6 +573,42 @@ void ListFormatterTest::TestFormattedValue() {
     }
 }
 
+void ListFormatterTest::DoTheRealListStyleTesting(Locale locale,
+        UnicodeString items[], int itemCount,
+        const char* style, const char* expected, IcuTestErrorCode status) {
+
+    LocalPointer<ListFormatter> formatter(
+            ListFormatter::createInstance(locale, style, status));
+
+    UnicodeString actualResult;
+    formatter->format(items, itemCount, actualResult, status);
+    assertEquals(style, UnicodeString(expected), actualResult);
+}
+
+void ListFormatterTest::TestDifferentStyles() {
+    Locale locale("fr");
+    UnicodeString input[4] = { u"rouge", u"jaune", u"bleu", u"vert" };
+    IcuTestErrorCode status(*this, "TestDifferentStyles()");
+
+    DoTheRealListStyleTesting(locale, input, 4, "standard", "rouge, jaune, bleu et vert", status);
+    DoTheRealListStyleTesting(locale, input, 4, "or", "rouge, jaune, bleu ou vert", status);
+    DoTheRealListStyleTesting(locale, input, 4, "unit", "rouge, jaune, bleu et vert", status);
+    DoTheRealListStyleTesting(locale, input, 4, "unit-narrow", "rouge jaune bleu vert", status);
+    DoTheRealListStyleTesting(locale, input, 4, "unit-short", "rouge, jaune, bleu et vert", status);
+}
+
+void ListFormatterTest::TestBadStylesFail() {
+    Locale locale("fr");
+    const char * badStyles[4] = { "", "duration", "duration-short", "something-clearly-wrong" };
+    IcuTestErrorCode status(*this, "TestBadStylesFail()");
+
+    for (int i = 0; i < 4; ++i) {
+      LocalPointer<ListFormatter> formatter(ListFormatter::createInstance(locale, badStyles[i], status));
+      if (!status.expectErrorAndReset(U_MISSING_RESOURCE_ERROR, "style \"%s\"", badStyles[i])) {
+        // Do nothing, expectErrorAndReset already reports the error
+      }
+    }
+}
 
 void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
                                        const char* &name, char* /*par */) {
@@ -618,6 +654,12 @@ void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
                  break;
         case 21: name = "TestFormattedValue";
                  if (exec) TestFormattedValue();
+                 break;
+        case 22: name = "TestDifferentStyles";
+                 if (exec) TestDifferentStyles();
+                 break;
+        case 23: name = "TestBadStylesFail";
+                 if (exec) TestBadStylesFail();
                  break;
         default: name = ""; break;
     }

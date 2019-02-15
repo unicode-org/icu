@@ -179,6 +179,7 @@ icu4c/source/samples/break/release
 icu4c/source/samples/break/x64
 icu4c/source/samples/break/x86
 icu4c/source/samples/cal/*.d
+icu4c/source/samples/cal/*.o
 icu4c/source/samples/cal/*.pdb
 icu4c/source/samples/cal/*.vcxproj.user
 icu4c/source/samples/cal/Debug
@@ -226,6 +227,7 @@ icu4c/source/samples/csdet/release
 icu4c/source/samples/csdet/x64
 icu4c/source/samples/csdet/x86
 icu4c/source/samples/date/*.d
+icu4c/source/samples/date/*.o
 icu4c/source/samples/date/*.pdb
 icu4c/source/samples/date/*.vcxproj.user
 icu4c/source/samples/date/Debug
@@ -656,6 +658,7 @@ icu4c/source/tools/ctestfw/release
 icu4c/source/tools/ctestfw/x64
 icu4c/source/tools/ctestfw/x86
 icu4c/source/tools/escapesrc/*.d
+icu4c/source/tools/escapesrc/*.o
 icu4c/source/tools/escapesrc/Makefile
 icu4c/source/tools/escapesrc/output-*.cpp
 icu4c/source/tools/genbrk/*.d

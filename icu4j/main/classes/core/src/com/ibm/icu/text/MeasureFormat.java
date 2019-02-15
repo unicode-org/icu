@@ -156,21 +156,21 @@ public class MeasureFormat extends UFormat {
          *
          * @stable ICU 53
          */
-        WIDE(ListFormatter.Style.DURATION, UnitWidth.FULL_NAME, UnitWidth.FULL_NAME),
+        WIDE(ListFormatter.Style.UNIT, UnitWidth.FULL_NAME, UnitWidth.FULL_NAME),
 
         /**
          * Abbreviate when possible.
          *
          * @stable ICU 53
          */
-        SHORT(ListFormatter.Style.DURATION_SHORT, UnitWidth.SHORT, UnitWidth.ISO_CODE),
+        SHORT(ListFormatter.Style.UNIT_SHORT, UnitWidth.SHORT, UnitWidth.ISO_CODE),
 
         /**
          * Brief. Use only a symbol for the unit when possible.
          *
          * @stable ICU 53
          */
-        NARROW(ListFormatter.Style.DURATION_NARROW, UnitWidth.NARROW, UnitWidth.SHORT),
+        NARROW(ListFormatter.Style.UNIT_NARROW, UnitWidth.NARROW, UnitWidth.SHORT),
 
         /**
          * Identical to NARROW except when formatMeasures is called with an hour and minute; minute and
@@ -179,7 +179,7 @@ public class MeasureFormat extends UFormat {
          *
          * @stable ICU 53
          */
-        NUMERIC(ListFormatter.Style.DURATION_NARROW, UnitWidth.NARROW, UnitWidth.SHORT),
+        NUMERIC(ListFormatter.Style.UNIT_NARROW, UnitWidth.NARROW, UnitWidth.SHORT),
 
         /**
          * The default format width for getCurrencyFormat(), which is to show the symbol for currency
@@ -189,7 +189,7 @@ public class MeasureFormat extends UFormat {
          * @deprecated ICU 61 This API is ICU internal only.
          */
         @Deprecated
-        DEFAULT_CURRENCY(ListFormatter.Style.DURATION, UnitWidth.FULL_NAME, UnitWidth.SHORT);
+        DEFAULT_CURRENCY(ListFormatter.Style.UNIT, UnitWidth.FULL_NAME, UnitWidth.SHORT);
 
         private final ListFormatter.Style listFormatterStyle;
 
