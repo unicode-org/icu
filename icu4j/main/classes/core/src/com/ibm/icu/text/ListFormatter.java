@@ -47,33 +47,40 @@ final public class ListFormatter {
     @Deprecated
     public enum Style {
         /**
-         * Standard style.
+         * Standard, conjunction style.
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
         STANDARD("standard"),
         /**
-         * Style for full durations
+         * Disjunction style.
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
-        DURATION("unit"),
+        OR("or"),
         /**
-         * Style for durations in abbrevated form
+         * Style for full units
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
-        DURATION_SHORT("unit-short"),
+        UNIT("unit"),
         /**
-         * Style for durations in narrow form
+         * Style for units in abbrevated form
          * @internal
          * @deprecated This API is ICU internal only.
          */
         @Deprecated
-        DURATION_NARROW("unit-narrow");
+        UNIT_SHORT("unit-short"),
+        /**
+         * Style for units in narrow form
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        @Deprecated
+        UNIT_NARROW("unit-narrow");
 
         private final String name;
 
