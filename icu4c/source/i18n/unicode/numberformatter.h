@@ -131,7 +131,7 @@ class Padder;
 struct MacroProps;
 struct MicroProps;
 class DecimalQuantity;
-struct UFormattedNumberData;
+class UFormattedNumberData;
 class NumberFormatterImpl;
 struct ParsedPatternInfo;
 class ScientificModifier;
@@ -2399,58 +2399,45 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
 
     /**
      * Default constructor; makes an empty FormattedNumber.
+     * @draft ICU 60
      */
     FormattedNumber()
-        : fResults(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {};
+        : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {};
 
     /**
-     * Copying not supported; use move constructor instead.
-     */
-    FormattedNumber(const FormattedNumber&) = delete;
-
-    /**
-     * Move constructor:
-     * Leaves the source FormattedNumber in an undefined state.
+     * Move constructor: Leaves the source FormattedNumber in an undefined state.
      * @draft ICU 62
      */
     FormattedNumber(FormattedNumber&& src) U_NOEXCEPT;
 
     /**
-     * Destruct an instance of FormattedNumber, cleaning up any memory it might own.
+     * Destruct an instance of FormattedNumber.
      * @draft ICU 60
      */
     virtual ~FormattedNumber() U_OVERRIDE;
 
-    /**
-     * Copying not supported; use move assignment instead.
-     */
+    /** Copying not supported; use move constructor instead. */
+    FormattedNumber(const FormattedNumber&) = delete;
+
+    /** Copying not supported; use move assignment instead. */
     FormattedNumber& operator=(const FormattedNumber&) = delete;
 
     /**
-     * Move assignment:
-     * Leaves the source FormattedNumber in an undefined state.
+     * Move assignment: Leaves the source FormattedNumber in an undefined state.
      * @draft ICU 62
      */
     FormattedNumber& operator=(FormattedNumber&& src) U_NOEXCEPT;
 
-    /**
-     * @copydoc FormattedValue::toString()
-     */
+    /** @copydoc FormattedValue::toString() */
     UnicodeString toString(UErrorCode& status) const U_OVERRIDE;
 
-    /**
-     * @copydoc FormattedValue::toTempString()
-     */
+    /** @copydoc FormattedValue::toTempString() */
     UnicodeString toTempString(UErrorCode& status) const U_OVERRIDE;
 
-    /**
-     * @copydoc FormattedValue::appendTo()
-     */
+    /** @copydoc FormattedValue::appendTo() */
     Appendable &appendTo(Appendable& appendable, UErrorCode& status) const U_OVERRIDE;
 
-    /**
-     * @copydoc FormattedValue::nextPosition()
-     */
+    /** @copydoc FormattedValue::nextPosition() */
     UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
 
     /**
@@ -2523,7 +2510,7 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
 
   private:
     // Can't use LocalPointer because UFormattedNumberData is forward-declared
-    impl::UFormattedNumberData *fResults;
+    const impl::UFormattedNumberData *fData;
 
     // Error code for the terminal methods
     UErrorCode fErrorCode;
@@ -2533,10 +2520,10 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * @internal
      */
     explicit FormattedNumber(impl::UFormattedNumberData *results)
-        : fResults(results), fErrorCode(U_ZERO_ERROR) {};
+        : fData(results), fErrorCode(U_ZERO_ERROR) {};
 
     explicit FormattedNumber(UErrorCode errorCode)
-        : fResults(nullptr), fErrorCode(errorCode) {};
+        : fData(nullptr), fErrorCode(errorCode) {};
 
     // To give LocalizedNumberFormatter format methods access to this class's constructor:
     friend class LocalizedNumberFormatter;

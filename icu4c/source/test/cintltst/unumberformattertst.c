@@ -207,7 +207,7 @@ static void TestFormattedValue() {
 
     unumf_formatInt(uformatter, 55000, uresult, &ec); // "55.00 K"
     if (assertSuccessCheck("Should format without error", &ec, TRUE)) {
-        const UFormattedValue* fv = unumf_resultAsFormattedValue(uresult, &ec);
+        const UFormattedValue* fv = unumf_resultAsValue(uresult, &ec);
         assertSuccess("Should convert without error", &ec);
         static const UFieldPosition expectedFieldPositions[] = {
             // field, begin index, end index

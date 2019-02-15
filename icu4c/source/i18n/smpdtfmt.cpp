@@ -2079,7 +2079,7 @@ SimpleDateFormat::zeroPaddingNumber(
         if (U_FAILURE(localStatus)) {
             return;
         }
-        appendTo.append(result.string.toTempUnicodeString());
+        appendTo.append(result.getStringRef().toTempUnicodeString());
         return;
     }
 

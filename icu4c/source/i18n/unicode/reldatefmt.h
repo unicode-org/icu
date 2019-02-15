@@ -252,6 +252,8 @@ class FormattedRelativeDateTimeData;
 /**
  * An immutable class containing the result of a relative datetime formatting operation.
  *
+ * Instances of this class are immutable and thread-safe.
+ *
  * Not intended for public subclassing.
  *
  * @draft ICU 64

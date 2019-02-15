@@ -473,11 +473,9 @@ unumf_openForSkeletonAndLocaleWithError(
 
 
 /**
- * Creates a new UFormattedNumber for holding the result of a number formatting operation.
- *
- * Objects of type UFormattedNumber are not guaranteed to be threadsafe.
- *
- * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
+ * Creates an object to hold the result of a UNumberFormatter
+ * operation. The object can be used repeatedly; it is cleared whenever
+ * passed to a format function.
  *
  * @param ec Set if an error occurs.
  * @draft ICU 62
@@ -565,7 +563,7 @@ unumf_formatDecimal(const UNumberFormatter* uformatter, const char* value, int32
  * @draft ICU 64
  */
 U_DRAFT const UFormattedValue* U_EXPORT2
-unumf_resultAsFormattedValue(const UFormattedNumber* uresult, UErrorCode* ec);
+unumf_resultAsValue(const UFormattedNumber* uresult, UErrorCode* ec);
 
 
 /**
@@ -576,7 +574,7 @@ unumf_resultAsFormattedValue(const UFormattedNumber* uresult, UErrorCode* ec);
  * Also see ufmtval_getString, which returns a NUL-terminated string:
  *
  *     int32_t len;
- *     const UChar* str = ufmtval_getString(unumf_resultAsFormattedValue(uresult, &ec), &len, &ec);
+ *     const UChar* str = ufmtval_getString(unumf_resultAsValue(uresult, &ec), &len, &ec);
  *
  * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
@@ -658,8 +656,6 @@ unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPosition
 /**
  * Releases the UNumberFormatter created by unumf_openForSkeletonAndLocale().
  *
- * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
- *
  * @param uformatter An object created by unumf_openForSkeletonAndLocale().
  * @draft ICU 62
  */
@@ -669,8 +665,6 @@ unumf_close(UNumberFormatter* uformatter);
 
 /**
  * Releases the UFormattedNumber created by unumf_openResult().
- *
- * NOTE: This is a C-compatible API; C++ users should build against numberformatter.h instead.
  *
  * @param uresult An object created by unumf_openResult().
  * @draft ICU 62

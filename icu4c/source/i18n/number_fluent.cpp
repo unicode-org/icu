@@ -681,14 +681,14 @@ LocalizedNumberFormatter::formatDecimalQuantity(const DecimalQuantity& dq, UErro
 
 void LocalizedNumberFormatter::formatImpl(impl::UFormattedNumberData* results, UErrorCode& status) const {
     if (computeCompiled(status)) {
-        fCompiled->format(results->quantity, results->string, status);
+        fCompiled->format(results->quantity, results->getStringRef(), status);
     } else {
-        NumberFormatterImpl::formatStatic(fMacros, results->quantity, results->string, status);
+        NumberFormatterImpl::formatStatic(fMacros, results->quantity, results->getStringRef(), status);
     }
     if (U_FAILURE(status)) {
         return;
     }
-    results->string.writeTerminator(status);
+    results->getStringRef().writeTerminator(status);
 }
 
 void LocalizedNumberFormatter::getAffixImpl(bool isPrefix, bool isNegative, UnicodeString& result,

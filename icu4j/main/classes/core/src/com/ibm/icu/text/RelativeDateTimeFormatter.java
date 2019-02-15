@@ -448,6 +448,10 @@ public final class RelativeDateTimeFormatter {
      * Represents the result of a formatting operation of a relative datetime.
      * Access the string value or field information.
      *
+     * Instances of this class are immutable and thread-safe.
+     *
+     * Not intended for public subclassing.
+     *
      * @author sffc
      * @draft ICU 64
      * @provisional This API might change or be removed in a future release.
