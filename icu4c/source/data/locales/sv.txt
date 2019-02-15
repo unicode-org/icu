@@ -27,7 +27,7 @@ sv{
                 infinity{"∞"}
                 list{"؛"}
                 minusSign{"؜−"}
-                nan{"¤¤¤"}
+                nan{"NaN"}
                 perMille{"؉‏"}
                 percentSign{"٪؜"}
                 plusSign{"؜+"}
@@ -43,7 +43,7 @@ sv{
                 infinity{"∞"}
                 list{"؛"}
                 minusSign{"‎−‎"}
-                nan{"¤¤¤"}
+                nan{"NaN"}
                 perMille{"؉"}
                 percentSign{"٪"}
                 plusSign{"‎+‎"}
@@ -232,7 +232,7 @@ sv{
                 infinity{"∞"}
                 list{";"}
                 minusSign{"−"}
-                nan{"¤¤¤"}
+                nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
                 plusSign{"+"}
