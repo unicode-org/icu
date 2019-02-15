@@ -227,6 +227,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test13850_EmptyStringCurrency);
   TESTCASE_AUTO(Test20348_CurrencyPrefixOverride);
   TESTCASE_AUTO(Test20358_GroupingInPattern);
+  TESTCASE_AUTO(Test13731_DefaultCurrency);
   TESTCASE_AUTO_END;
 }
 
@@ -9515,6 +9516,32 @@ void NumberFormatTest::Test20358_GroupingInPattern() {
         fmt->isGroupingUsed());
     assertEquals("Set grouping true format",
         u"54,321", fmt->format(54321, result.remove(), NULL, status));
+}
+
+void NumberFormatTest::Test13731_DefaultCurrency() {
+    IcuTestErrorCode status(*this, "Test13731_DefaultCurrency");
+    UnicodeString result;
+    {
+        LocalPointer<NumberFormat> nf(NumberFormat::createInstance(
+            "en", UNumberFormatStyle::UNUM_CURRENCY, status), status);
+        assertEquals("symbol", u"¤1.10",
+            nf->format(1.1, result.remove(), status));
+        assertEquals("currency", u"XXX", nf->getCurrency());
+    }
+    {
+        LocalPointer<NumberFormat> nf(NumberFormat::createInstance(
+            "en", UNumberFormatStyle::UNUM_CURRENCY_ISO, status), status);
+        assertEquals("iso_code", u"XXX 1.10",
+            nf->format(1.1, result.remove(), status));
+        assertEquals("currency", u"XXX", nf->getCurrency());
+    }
+    {
+        LocalPointer<NumberFormat> nf(NumberFormat::createInstance(
+            "en", UNumberFormatStyle::UNUM_CURRENCY_PLURAL, status), status);
+        assertEquals("plural", u"1.10 (unknown currency)",
+            nf->format(1.1, result.remove(), status));
+        assertEquals("currency", u"XXX", nf->getCurrency());
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
