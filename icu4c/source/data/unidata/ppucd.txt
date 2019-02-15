@@ -3769,8 +3769,8 @@ cp;0950;InSC=Other;na=DEVANAGARI OM
 cp;0951;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Top;InSC=Cantillation_Mark;jt=T;lb=CM;na=DEVANAGARI STRESS SIGN UDATTA;SB=EX;sc=Zinh;scx=Beng Deva Gran Gujr Guru Knda Latn Mlym Orya Shrd Taml Telu Tirh;WB=Extend;-XIDS
 cp;0952;-Alpha;bc=NSM;ccc=220;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Bottom;InSC=Cantillation_Mark;jt=T;lb=CM;na=DEVANAGARI STRESS SIGN ANUDATTA;SB=EX;sc=Zinh;scx=Beng Deva Gran Gujr Guru Knda Latn Mlym Orya Taml Telu Tirh;WB=Extend;-XIDS
 # Accent marks
-cp;0953;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Top;InSC=Other;jt=T;lb=CM;na=DEVANAGARI GRAVE ACCENT;SB=EX;WB=Extend;-XIDS
-cp;0954;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Top;InSC=Other;jt=T;lb=CM;na=DEVANAGARI ACUTE ACCENT;SB=EX;WB=Extend;-XIDS
+cp;0953;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Top;InSC=Other;jt=T;lb=CM;na=DEVANAGARI GRAVE ACCENT;SB=EX;sc=Zinh;WB=Extend;-XIDS
+cp;0954;-Alpha;bc=NSM;ccc=230;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Top;InSC=Other;jt=T;lb=CM;na=DEVANAGARI ACUTE ACCENT;SB=EX;sc=Zinh;WB=Extend;-XIDS
 # Dependent vowel sign
 cp;0955;age=5.2;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Top;InSC=Vowel_Dependent;jt=T;lb=CM;na=DEVANAGARI VOWEL SIGN CANDRA LONG E;SB=EX;WB=Extend;-XIDS
 # Dependent vowel signs for Kashmiri
@@ -3804,7 +3804,7 @@ cp;096C;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=DEVANAGARI DIGIT SIX;nt=De;nv=6;S
 cp;096D;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=DEVANAGARI DIGIT SEVEN;nt=De;nv=7;SB=NU;scx=Deva Dogr Kthi Mahj;WB=NU;-XIDS
 cp;096E;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=DEVANAGARI DIGIT EIGHT;nt=De;nv=8;SB=NU;scx=Deva Dogr Kthi Mahj;WB=NU;-XIDS
 cp;096F;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=DEVANAGARI DIGIT NINE;nt=De;nv=9;SB=NU;scx=Deva Dogr Kthi Mahj;WB=NU;-XIDS
-# Abbreviation sign
+# Additional signs
 cp;0970;-Alpha;gc=Po;-IDC;-IDS;InSC=Other;na=DEVANAGARI ABBREVIATION SIGN;SB=XX;WB=XX;-XIDC;-XIDS
 cp;0971;age=5.1;CI;Dia;gc=Lm;InSC=Other;na=DEVANAGARI SIGN HIGH SPACING DOT
 # Independent vowel for Marathi
@@ -7970,7 +7970,7 @@ cp;19D6;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=NEW TAI LUE DIGIT SIX;nt=De;nv=6;
 cp;19D7;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=NEW TAI LUE DIGIT SEVEN;nt=De;nv=7;SB=NU;WB=NU;-XIDS
 cp;19D8;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=NEW TAI LUE DIGIT EIGHT;nt=De;nv=8;SB=NU;WB=NU;-XIDS
 cp;19D9;-Alpha;gc=Nd;-IDS;InSC=Number;lb=NU;na=NEW TAI LUE DIGIT NINE;nt=De;nv=9;SB=NU;WB=NU;-XIDS
-cp;19DA;age=5.2;-Alpha;gc=No;-IDS;InSC=Other;na=NEW TAI LUE THAM DIGIT ONE;nt=Di;nv=1;SB=XX;-XIDS
+cp;19DA;age=5.2;-Alpha;gc=No;-IDS;InSC=Number;na=NEW TAI LUE THAM DIGIT ONE;nt=Di;nv=1;SB=XX;-XIDS
 unassigned;19DB..19DD
 # Various signs
 cp;19DE;-Alpha;bc=ON;gc=So;-IDC;-IDS;InSC=Other;na=NEW TAI LUE SIGN LAE;SB=XX;-XIDC;-XIDS
@@ -8770,7 +8770,7 @@ cp;1CEF;Alpha;bc=L;-CI;-Dia;gc=Lo;GCB=XX;Gr_Base;-Gr_Ext;IDS;InSC=Other;jt=U;lb=
 cp;1CF0;Alpha;bc=L;-CI;-Dia;gc=Lo;GCB=XX;Gr_Base;-Gr_Ext;IDS;InSC=Other;jt=U;lb=AL;na=VEDIC SIGN RTHANG LONG ANUSVARA;SB=LE;sc=Zyyy;WB=LE;XIDS
 cp;1CF1;Alpha;bc=L;-CI;-Dia;gc=Lo;GCB=XX;Gr_Base;-Gr_Ext;IDS;InSC=Other;jt=U;lb=AL;na=VEDIC SIGN ANUSVARA UBHAYATO MUKHA;SB=LE;sc=Zyyy;WB=LE;XIDS
 # Ardhavisarga
-cp;1CF2;Alpha;bc=L;-CI;-Dia;gc=Lo;GCB=XX;Gr_Base;-Gr_Ext;IDS;InSC=Consonant_Dead;jt=U;lb=AL;na=VEDIC SIGN ARDHAVISARGA;SB=LE;sc=Zyyy;scx=Beng Deva Gran Knda Nand Telu Tirh;WB=LE;XIDS
+cp;1CF2;Alpha;bc=L;-CI;-Dia;gc=Lo;GCB=XX;Gr_Base;-Gr_Ext;IDS;InSC=Consonant_Dead;jt=U;lb=AL;na=VEDIC SIGN ARDHAVISARGA;SB=LE;sc=Zyyy;scx=Beng Deva Gran Knda Nand Orya Telu Tirh;WB=LE;XIDS
 cp;1CF3;age=6.1;Alpha;bc=L;-CI;-Dia;gc=Lo;GCB=XX;Gr_Base;-Gr_Ext;IDS;InSC=Consonant_Dead;jt=U;lb=AL;na=VEDIC SIGN ROTATED ARDHAVISARGA;SB=LE;sc=Zyyy;scx=Deva Gran;WB=LE;XIDS
 # Sign for Yajurvedic
 cp;1CF4;age=6.1;ccc=230;InPC=Top;na=VEDIC TONE CANDRA ABOVE;scx=Deva Gran Knda
@@ -17317,7 +17317,7 @@ cp;A803;InSC=Vowel_Independent;na=SYLOTI NAGRI LETTER U
 cp;A804;InSC=Vowel_Independent;na=SYLOTI NAGRI LETTER E
 cp;A805;InSC=Vowel_Independent;na=SYLOTI NAGRI LETTER O
 # Sign
-cp;A806;-Alpha;bc=NSM;ccc=9;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;Gr_Link;-IDS;InPC=Top;InSC=Pure_Killer;jt=T;lb=CM;na=SYLOTI NAGRI SIGN HASANTA;SB=EX;WB=Extend;-XIDS
+cp;A806;-Alpha;bc=NSM;ccc=9;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;Gr_Link;-IDS;InPC=Top;InSC=Virama;jt=T;lb=CM;na=SYLOTI NAGRI SIGN HASANTA;SB=EX;WB=Extend;-XIDS
 # Consonants and consonant signs
 cp;A807;na=SYLOTI NAGRI LETTER KO
 cp;A808;na=SYLOTI NAGRI LETTER KHO
@@ -17790,7 +17790,7 @@ cp;A9BA;gc=Mc;GCB=SM;InPC=Left;InSC=Vowel_Dependent;lb=CM;na=JAVANESE VOWEL SIGN
 cp;A9BB;gc=Mc;GCB=SM;InPC=Left;InSC=Vowel_Dependent;lb=CM;na=JAVANESE VOWEL SIGN DIRGA MURE;SB=EX;WB=Extend
 cp;A9BC;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Top;InSC=Vowel_Dependent;jt=T;lb=CM;na=JAVANESE VOWEL SIGN PEPET;SB=EX;WB=Extend
 # Dependent consonant signs
-cp;A9BD;gc=Mc;GCB=SM;InPC=Right;InSC=Consonant_Subjoined;lb=CM;na=JAVANESE CONSONANT SIGN KERET;SB=EX;WB=Extend
+cp;A9BD;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;InPC=Bottom;InSC=Consonant_Medial;jt=T;lb=CM;na=JAVANESE CONSONANT SIGN KERET;SB=EX;WB=Extend
 cp;A9BE;gc=Mc;GCB=SM;InPC=Right;InSC=Consonant_Medial;lb=CM;na=JAVANESE CONSONANT SIGN PENGKAL;SB=EX;WB=Extend
 cp;A9BF;gc=Mc;GCB=SM;InPC=Bottom_And_Left;InSC=Consonant_Medial;lb=CM;na=JAVANESE CONSONANT SIGN CAKRA;SB=EX;WB=Extend
 # Sign
@@ -19263,13 +19263,13 @@ cp;D7FA;na=HANGUL JONGSEONG PHIEUPH-SIOS
 cp;D7FB;na=HANGUL JONGSEONG PHIEUPH-THIEUTH
 unassigned;D7FC..D7FF;vo=U
 
-block;D800..DB7F;age=2.0;blk=High_Surrogates;gc=Cs;GCB=CN;lb=SG
+block;D800..DB7F;age=2.0;blk=High_Surrogates;gc=Cs;lb=SG
 # D800..DB7F High Surrogates
 
-block;DB80..DBFF;age=2.0;blk=High_PU_Surrogates;gc=Cs;GCB=CN;lb=SG
+block;DB80..DBFF;age=2.0;blk=High_PU_Surrogates;gc=Cs;lb=SG
 # DB80..DBFF High Private Use Surrogates
 
-block;DC00..DFFF;age=2.0;blk=Low_Surrogates;gc=Cs;GCB=CN;lb=SG
+block;DC00..DFFF;age=2.0;blk=Low_Surrogates;gc=Cs;lb=SG
 # DC00..DFFF Low Surrogates
 
 block;E000..F8FF;age=1.1;blk=PUA;ea=A;gc=Co;vo=U
@@ -20761,16 +20761,16 @@ cp;FF0C;-Alpha;bc=CS;dm=002C;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=CL;na=FULLWIDTH COM
 cp;FF0D;-Alpha;bc=ES;Dash;dm=002D;dt=Wide;ea=F;gc=Pd;Hyphen;-IDC;-IDS;na=FULLWIDTH HYPHEN-MINUS;NFKC_CF=002D;SB=SC;WB=XX;-XIDC;-XIDS
 cp;FF0E;-Alpha;bc=CS;CI;dm=002E;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=CL;na=FULLWIDTH FULL STOP;NFKC_CF=002E;SB=AT;STerm;Term;vo=Tu;WB=MB;-XIDC;-XIDS
 cp;FF0F;-Alpha;bc=CS;dm=002F;dt=Wide;ea=F;gc=Po;-IDC;-IDS;na=FULLWIDTH SOLIDUS;NFKC_CF=002F;SB=XX;vo=U;WB=XX;-XIDC;-XIDS
-cp;FF10;-Alpha;bc=EN;dm=0030;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT ZERO;NFKC_CF=0030;nt=De;nv=0;SB=XX;vo=U;WB=XX;-XIDS
-cp;FF11;-Alpha;bc=EN;dm=0031;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT ONE;NFKC_CF=0031;nt=De;nv=1;SB=XX;vo=U;WB=XX;-XIDS
-cp;FF12;-Alpha;bc=EN;dm=0032;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT TWO;NFKC_CF=0032;nt=De;nv=2;SB=XX;vo=U;WB=XX;-XIDS
-cp;FF13;-Alpha;bc=EN;dm=0033;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT THREE;NFKC_CF=0033;nt=De;nv=3;SB=XX;vo=U;WB=XX;-XIDS
-cp;FF14;-Alpha;bc=EN;dm=0034;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT FOUR;NFKC_CF=0034;nt=De;nv=4;SB=XX;vo=U;WB=XX;-XIDS
-cp;FF15;-Alpha;bc=EN;dm=0035;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT FIVE;NFKC_CF=0035;nt=De;nv=5;SB=XX;vo=U;WB=XX;-XIDS
-cp;FF16;-Alpha;bc=EN;dm=0036;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT SIX;NFKC_CF=0036;nt=De;nv=6;SB=XX;vo=U;WB=XX;-XIDS
-cp;FF17;-Alpha;bc=EN;dm=0037;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT SEVEN;NFKC_CF=0037;nt=De;nv=7;SB=XX;vo=U;WB=XX;-XIDS
-cp;FF18;-Alpha;bc=EN;dm=0038;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT EIGHT;NFKC_CF=0038;nt=De;nv=8;SB=XX;vo=U;WB=XX;-XIDS
-cp;FF19;-Alpha;bc=EN;dm=0039;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT NINE;NFKC_CF=0039;nt=De;nv=9;SB=XX;vo=U;WB=XX;-XIDS
+cp;FF10;-Alpha;bc=EN;dm=0030;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT ZERO;NFKC_CF=0030;nt=De;nv=0;SB=NU;vo=U;WB=NU;-XIDS
+cp;FF11;-Alpha;bc=EN;dm=0031;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT ONE;NFKC_CF=0031;nt=De;nv=1;SB=NU;vo=U;WB=NU;-XIDS
+cp;FF12;-Alpha;bc=EN;dm=0032;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT TWO;NFKC_CF=0032;nt=De;nv=2;SB=NU;vo=U;WB=NU;-XIDS
+cp;FF13;-Alpha;bc=EN;dm=0033;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT THREE;NFKC_CF=0033;nt=De;nv=3;SB=NU;vo=U;WB=NU;-XIDS
+cp;FF14;-Alpha;bc=EN;dm=0034;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT FOUR;NFKC_CF=0034;nt=De;nv=4;SB=NU;vo=U;WB=NU;-XIDS
+cp;FF15;-Alpha;bc=EN;dm=0035;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT FIVE;NFKC_CF=0035;nt=De;nv=5;SB=NU;vo=U;WB=NU;-XIDS
+cp;FF16;-Alpha;bc=EN;dm=0036;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT SIX;NFKC_CF=0036;nt=De;nv=6;SB=NU;vo=U;WB=NU;-XIDS
+cp;FF17;-Alpha;bc=EN;dm=0037;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT SEVEN;NFKC_CF=0037;nt=De;nv=7;SB=NU;vo=U;WB=NU;-XIDS
+cp;FF18;-Alpha;bc=EN;dm=0038;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT EIGHT;NFKC_CF=0038;nt=De;nv=8;SB=NU;vo=U;WB=NU;-XIDS
+cp;FF19;-Alpha;bc=EN;dm=0039;dt=Wide;ea=F;gc=Nd;Hex;-IDS;na=FULLWIDTH DIGIT NINE;NFKC_CF=0039;nt=De;nv=9;SB=NU;vo=U;WB=NU;-XIDS
 cp;FF1A;-Alpha;bc=CS;CI;dm=003A;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=NS;na=FULLWIDTH COLON;NFKC_CF=003A;SB=SC;Term;vo=Tr;WB=ML;-XIDC;-XIDS
 cp;FF1B;-Alpha;bc=ON;dm=003B;dt=Wide;ea=F;gc=Po;-IDC;-IDS;lb=NS;na=FULLWIDTH SEMICOLON;NFKC_CF=003B;SB=XX;Term;vo=Tr;WB=MN;-XIDC;-XIDS
 cp;FF1C;-Alpha;bc=ON;Bidi_M;bmg=FF1E;dm=003C;dt=Wide;ea=F;gc=Sm;-IDC;-IDS;Math;na=FULLWIDTH LESS-THAN SIGN;NFKC_CF=003C;SB=XX;WB=XX;-XIDC;-XIDS
@@ -24269,7 +24269,7 @@ cp;111C8;-Alpha;gc=Po;-IDC;-IDS;InSC=Other;lb=BA;na=SHARADA SEPARATOR;SB=XX;WB=X
 # Sign
 cp;111C9;age=8.0;-Alpha;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Bottom;InSC=Syllable_Modifier;jt=T;lb=CM;na=SHARADA SANDHI MARK;SB=EX;WB=Extend;-XIDS
 # Signs for Kashmiri
-cp;111CA;age=8.0;-Alpha;bc=NSM;ccc=7;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InSC=Nukta;jt=T;lb=CM;na=SHARADA SIGN NUKTA;SB=EX;WB=Extend;-XIDS
+cp;111CA;age=8.0;-Alpha;bc=NSM;ccc=7;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Bottom;InSC=Nukta;jt=T;lb=CM;na=SHARADA SIGN NUKTA;SB=EX;WB=Extend;-XIDS
 cp;111CB;age=8.0;-Alpha;bc=NSM;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Top;InSC=Vowel_Dependent;jt=T;lb=CM;na=SHARADA VOWEL MODIFIER MARK;SB=EX;WB=Extend;-XIDS
 cp;111CC;age=8.0;-Alpha;bc=NSM;CI;Dia;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Bottom;InSC=Vowel_Dependent;jt=T;lb=CM;na=SHARADA EXTRA SHORT VOWEL MARK;SB=EX;WB=Extend;-XIDS
 # Punctuation
@@ -24527,7 +24527,7 @@ unassigned;112FA..112FF
 block;11300..1137F;age=7.0;Alpha;blk=Grantha;gc=Lo;Gr_Base;IDC;IDS;InSC=Consonant;lb=AL;SB=LE;sc=Gran;WB=Extend;XIDC;XIDS
 # 11300..1137F Grantha
 # Various signs
-cp;11300;age=8.0;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InSC=Bindu;jt=T;lb=CM;na=GRANTHA SIGN COMBINING ANUSVARA ABOVE;SB=EX;-XIDS
+cp;11300;age=8.0;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Top;InSC=Bindu;jt=T;lb=CM;na=GRANTHA SIGN COMBINING ANUSVARA ABOVE;SB=EX;-XIDS
 cp;11301;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Top;InSC=Bindu;jt=T;lb=CM;na=GRANTHA SIGN CANDRABINDU;SB=EX;scx=Gran Taml;-XIDS
 cp;11302;gc=Mc;GCB=SM;-IDS;InPC=Right;InSC=Bindu;lb=CM;na=GRANTHA SIGN ANUSVARA;SB=EX;-XIDS
 cp;11303;gc=Mc;GCB=SM;-IDS;InPC=Right;InSC=Visarga;lb=CM;na=GRANTHA SIGN VISARGA;SB=EX;scx=Gran Taml;-XIDS
@@ -25427,7 +25427,7 @@ cp;119CF;na=NANDINAGARI LETTER LLA
 cp;119D0;na=NANDINAGARI LETTER RRA
 # Dependent vowel signs
 cp;119D1;gc=Mc;GCB=SM;-IDS;InPC=Right;InSC=Vowel_Dependent;lb=CM;na=NANDINAGARI VOWEL SIGN AA;SB=EX;WB=Extend;-XIDS
-cp;119D2;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Top;InSC=Vowel_Dependent;jt=T;lb=CM;na=NANDINAGARI VOWEL SIGN I;SB=EX;WB=Extend;-XIDS
+cp;119D2;gc=Mc;GCB=SM;-IDS;InPC=Left;InSC=Vowel_Dependent;lb=CM;na=NANDINAGARI VOWEL SIGN I;SB=EX;WB=Extend;-XIDS
 cp;119D3;gc=Mc;GCB=SM;-IDS;InPC=Right;InSC=Vowel_Dependent;lb=CM;na=NANDINAGARI VOWEL SIGN II;SB=EX;WB=Extend;-XIDS
 cp;119D4;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Bottom;InSC=Vowel_Dependent;jt=T;lb=CM;na=NANDINAGARI VOWEL SIGN U;SB=EX;WB=Extend;-XIDS
 cp;119D5;bc=NSM;CI;gc=Mn;GCB=EX;-Gr_Base;Gr_Ext;-IDS;InPC=Bottom;InSC=Vowel_Dependent;jt=T;lb=CM;na=NANDINAGARI VOWEL SIGN UU;SB=EX;WB=Extend;-XIDS
@@ -26130,7 +26130,7 @@ cp;11FD4;bc=L;gc=No;na=TAMIL FRACTION DOWNSCALING FACTOR KIIZH;nt=Nu;nv=1/320
 cp;11FD5;na=TAMIL SIGN NEL
 cp;11FD6;na=TAMIL SIGN CEVITU
 cp;11FD7;na=TAMIL SIGN AAZHAAKKU
-cp;11FD8;na=TAMIL SIGN UZHAAKKU
+cp;11FD8;na=TAMIL SIGN UZHAKKU
 cp;11FD9;na=TAMIL SIGN MUUVUZHAKKU
 cp;11FDA;na=TAMIL SIGN KURUNI
 cp;11FDB;na=TAMIL SIGN PATHAKKU
@@ -34566,7 +34566,7 @@ cp;1E149;-Alpha;gc=Nd;-IDS;lb=NU;na=NYIAKENG PUACHUE HMONG DIGIT NINE;nt=De;nv=9
 unassigned;1E14A..1E14D
 # Symbols
 cp;1E14E;na=NYIAKENG PUACHUE HMONG LOGOGRAM NYAJ
-cp;1E14F;na=NYIAKENG PUACHUE HMONG CIRCLED CA
+cp;1E14F;-Alpha;gc=So;-IDC;-IDS;na=NYIAKENG PUACHUE HMONG CIRCLED CA;SB=XX;WB=XX;-XIDC;-XIDS
 
 block;1E2C0..1E2FF;age=12.0;Alpha;blk=Wancho;gc=Lo;Gr_Base;IDC;IDS;lb=AL;SB=LE;sc=Wcho;WB=LE;XIDC;XIDS
 # 1E2C0..1E2FF Wancho
@@ -37477,7 +37477,7 @@ cp;1F909;ea=N;-Emoji;-EPres;-ExtPict;lb=AL;na=DOWNWARD FACING NOTCHED HOOK
 cp;1F90A;ea=N;-Emoji;-EPres;-ExtPict;lb=AL;na=DOWNWARD FACING HOOK WITH DOT
 cp;1F90B;ea=N;-Emoji;-EPres;-ExtPict;lb=AL;na=DOWNWARD FACING NOTCHED HOOK WITH DOT
 unassigned;1F90C;ExtPict;lb=ID;vo=U
-# Heart symbols
+# Colored heart symbols
 cp;1F90D;age=12.0;na=WHITE HEART
 cp;1F90E;age=12.0;na=BROWN HEART
 # Hand symbol
@@ -37862,7 +37862,7 @@ cp;1FA71;na=ONE-PIECE SWIMSUIT
 cp;1FA72;na=BRIEFS
 cp;1FA73;na=SHORTS
 unassigned;1FA74..1FA77;ExtPict;lb=ID;vo=U
-# Role symbols
+# Medical symbols
 cp;1FA78;na=DROP OF BLOOD
 cp;1FA79;na=ADHESIVE BANDAGE
 cp;1FA7A;na=STETHOSCOPE

@@ -59,6 +59,7 @@ http://www.unicode.org/reports/tr44/tr44-23.html
 
 ICU-20203 Unicode 12
 https://github.com/markusicu/icu/tree/uni12
+https://github.com/markusicu/icu/tree/uni12b
 
 ICU-20111 move text layout properties data into a data file
 https://github.com/markusicu/icu/tree/layout-props
@@ -68,7 +69,7 @@ Accidentally used ^/trunk instead of ^/branches/markus/uni12
 
 * Command-line environment setup
 
-UNICODE_DATA=~/unidata/uni12/20181126
+UNICODE_DATA=~/unidata/uni12/20190214
 CLDR_SRC=~/svn.cldr/uni
 ICU_ROOT=~/icu/uni
 ICU_SRC=$ICU_ROOT/src
@@ -218,7 +219,7 @@ set(ICU4C_SRC_DIR /usr/local/google/home/mscherer/icu/uni/src/icu4c)
     https://sites.google.com/site/unicodetools/home#TOC-UCA
   diff the main mapping file, look for bad changes
   (for example, more bytes per weight for common characters)
-    ~/svn.unitools/trunk$ sed -r -f ~/svn.cldr/uni/tools/scripts/uca/blankweights.sed ../Generated/uca/12.0.0/CollationAuxiliary/FractionalUCA.txt > ../frac-12.txt
+    ~/svn.unitools/trunk$ sed -r -f ~/svn.cldr/uni/tools/scripts/uca/blankweights.sed ../Generated/UCA/12.0.0/CollationAuxiliary/FractionalUCA.txt > ../frac-12.txt
     ~/svn.unitools/trunk$ meld ../frac-11.txt ../frac-12.txt
 
 - CLDR root data files are checked into $CLDR_SRC/common/uca/
