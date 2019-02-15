@@ -99,7 +99,7 @@ class U_I18N_API AffixTokenMatcherWarehouse : public UMemory {
 
     IgnorablesMatcher& ignorables();
 
-    NumberParseMatcher& nextCodePointMatcher(UChar32 cp);
+    NumberParseMatcher* nextCodePointMatcher(UChar32 cp, UErrorCode& status);
 
   private:
     // NOTE: The following field may be unsafe to access after construction is done!

@@ -109,7 +109,12 @@ void AffixPatternMatcherBuilder::consumeToken(AffixPatternType type, UChar32 cp,
 
     } else {
         // Case 3: the token is a non-ignorable literal.
-        addMatcher(fWarehouse.nextCodePointMatcher(cp));
+        if (auto* ptr = fWarehouse.nextCodePointMatcher(cp, status)) {
+            addMatcher(*ptr);
+        } else {
+            // OOM; unwind the stack
+            return;
+        }
     }
     fLastTypeOrCp = type != TYPE_CODEPOINT ? type : cp;
 }
@@ -152,8 +157,15 @@ IgnorablesMatcher& AffixTokenMatcherWarehouse::ignorables() {
     return fSetupData->ignorables;
 }
 
-NumberParseMatcher& AffixTokenMatcherWarehouse::nextCodePointMatcher(UChar32 cp) {
-    return *fCodePoints.create(cp);
+NumberParseMatcher* AffixTokenMatcherWarehouse::nextCodePointMatcher(UChar32 cp, UErrorCode& status) {
+    if (U_FAILURE(status)) {
+        return nullptr;
+    }
+    auto* result = fCodePoints.create(cp);
+    if (result == nullptr) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    return result;
 }
 
 
