@@ -207,6 +207,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
         nsLocal.adoptInstead(ns);
     }
     const char* nsName = U_SUCCESS(status) ? ns->getName() : "latn";
+    uprv_strncpy(fMicros.nsName, nsName, 8);
+    fMicros.nsName[8] = 0; // guarantee NUL-terminated
 
     // Resolve the symbols. Do this here because currency may need to customize them.
     if (macros.symbols.isDecimalFormatSymbols()) {
