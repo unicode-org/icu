@@ -6572,4 +6572,23 @@ public class NumberFormatTest extends TestFmwk {
         assertEquals("Set grouping true format",
             "54,321", fmt.format(54321));
     }
+
+    @Test
+    public void test13731_DefaultCurrency() {
+        {
+            NumberFormat nf = NumberFormat.getInstance(ULocale.ENGLISH, NumberFormat.CURRENCYSTYLE);
+            assertEquals("symbol", "¤1.10", nf.format(1.1));
+            assertEquals("currency", "XXX", nf.getCurrency().getCurrencyCode());
+        }
+        {
+            NumberFormat nf = NumberFormat.getInstance(ULocale.ENGLISH, NumberFormat.ISOCURRENCYSTYLE);
+            assertEquals("iso_code", "XXX 1.10", nf.format(1.1));
+            assertEquals("currency", "XXX", nf.getCurrency().getCurrencyCode());
+        }
+        {
+            NumberFormat nf = NumberFormat.getInstance(ULocale.ENGLISH, NumberFormat.PLURALCURRENCYSTYLE);
+            assertEquals("plural", "1.10 (unknown currency)", nf.format(1.1));
+            assertEquals("currency", "XXX", nf.getCurrency().getCurrencyCode());
+        }
+    }
 }
