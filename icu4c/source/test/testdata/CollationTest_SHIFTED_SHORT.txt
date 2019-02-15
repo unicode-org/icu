@@ -1,6 +1,6 @@
 # CollationTest_CLDR_SHIFTED_SHORT.txt
-# Date: 2018-11-27, 01:45:53 GMT
-# © 2018 Unicode®, Inc.
+# Date: 2019-02-14, 21:26:49 GMT
+# © 2019 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 # UCA Version: 12.0.0
@@ -22289,6 +22289,12 @@ A4C6 0062
 16B45 0061
 16B45 0041
 16B45 0062
+1E14F 0021
+1E14F 003F
+1E14F 0334
+1E14F 0061
+1E14F 0041
+1E14F 0062
 1D000 0021
 1D000 003F
 1D000 0334
@@ -150332,12 +150338,6 @@ A4F7 0062
 1E14E 0061
 1E14E 0041
 1E14E 0062
-1E14F 0021
-1E14F 003F
-1E14F 0334
-1E14F 0061
-1E14F 0041
-1E14F 0062
 1E2C0 0021
 1E2C0 003F
 1E2C0 0334

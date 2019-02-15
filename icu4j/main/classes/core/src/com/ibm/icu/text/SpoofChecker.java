@@ -350,10 +350,9 @@ public class SpoofChecker {
             + "\\uA7C6\\uA7FA\\uA9E7-\\uA9FE\\uAA60-\\uAA76\\uAA7A-\\uAA7F\\uAB01-\\uAB06"
             + "\\uAB09-\\uAB0E\\uAB11-\\uAB16\\uAB20-\\uAB26\\uAB28-\\uAB2E\\uAB66\\uAB67"
             + "\\uAC00-\\uD7A3\\uFA0E\\uFA0F\\uFA11\\uFA13\\uFA14\\uFA1F\\uFA21\\uFA23"
-            + "\\uFA24\\uFA27-\\uFA29\\U0001133B\\U00016FE3\\U0001B002-\\U0001B11E"
-            + "\\U0001B150-\\U0001B152\\U0001B164-\\U0001B167\\U00020000-\\U0002A6D6"
-            + "\\U0002A700-\\U0002B734\\U0002B740-\\U0002B81D\\U0002B820-\\U0002CEA1"
-            + "\\U0002CEB0-\\U0002EBE0]"
+            + "\\uFA24\\uFA27-\\uFA29\\U0001133B\\U0001B150-\\U0001B152\\U0001B164-"
+            + "\\U0001B167\\U00020000-\\U0002A6D6\\U0002A700-\\U0002B734\\U0002B740-"
+            + "\\U0002B81D\\U0002B820-\\U0002CEA1\\U0002CEB0-\\U0002EBE0]"
             ).freeze();
     // Note: data from IdentifierStatus.txt & IdentifierType.txt
     // There is tooling to generate this constant in the unicodetools project:
