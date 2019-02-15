@@ -50,7 +50,7 @@ public class ExhaustiveNumberTest extends TestFmwk {
         UnicodeSet minusSign = get(Key.MINUS_SIGN);
         UnicodeSet percent = get(Key.PERCENT_SIGN);
         UnicodeSet permille = get(Key.PERMILLE_SIGN);
-        UnicodeSet infinity = get(Key.INFINITY);
+        UnicodeSet infinity = get(Key.INFINITY_SIGN);
 
         for (ULocale locale : ULocale.getAvailableLocales()) {
             DecimalFormatSymbols dfs = DecimalFormatSymbols.getInstance(locale);

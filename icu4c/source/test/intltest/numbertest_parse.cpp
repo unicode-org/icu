@@ -14,8 +14,6 @@
 #include <cmath>
 #include <numparse_affixes.h>
 
-using icu::unisets::get;
-
 void NumberParserTest::runIndexedTest(int32_t index, UBool exec, const char*& name, char*) {
     if (exec) {
         logln("TestSuite NumberParserTest: ");

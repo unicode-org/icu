@@ -30,7 +30,7 @@ public class InfinityMatcher extends SymbolMatcher {
     }
 
     private InfinityMatcher() {
-        super(StaticUnicodeSets.Key.INFINITY);
+        super(StaticUnicodeSets.Key.INFINITY_SIGN);
     }
 
     @Override

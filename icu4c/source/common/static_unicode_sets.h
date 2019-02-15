@@ -45,6 +45,7 @@ enum Key {
     PERIOD,
     STRICT_COMMA,
     STRICT_PERIOD,
+    APOSTROPHE_SIGN,
     OTHER_GROUPING_SEPARATORS,
     ALL_SEPARATORS,
     STRICT_ALL_SEPARATORS,
@@ -54,13 +55,14 @@ enum Key {
     PLUS_SIGN,
     PERCENT_SIGN,
     PERMILLE_SIGN,
-    INFINITY_KEY, // INFINITY is defined in cmath
+    INFINITY_SIGN,
 
     // Currency Symbols
     DOLLAR_SIGN,
     POUND_SIGN,
     RUPEE_SIGN,
-    YEN_SIGN, // not in CLDR data, but Currency.java wants it
+    YEN_SIGN,
+    WON_SIGN,
 
     // Other
     DIGITS,
@@ -70,7 +72,7 @@ enum Key {
     DIGITS_OR_STRICT_ALL_SEPARATORS,
 
     // The number of elements in the enum.
-    COUNT
+    UNISETS_KEY_COUNT
 };
 
 /**
@@ -126,8 +128,9 @@ static const struct {
 } kCurrencyEntries[] = {
     {DOLLAR_SIGN, u'$'},
     {POUND_SIGN, u'£'},
-    {RUPEE_SIGN, u'₨'},
+    {RUPEE_SIGN, u'₹'},
     {YEN_SIGN, u'¥'},
+    {WON_SIGN, u'₩'},
 };
 
 } // namespace unisets
