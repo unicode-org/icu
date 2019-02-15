@@ -4,11 +4,19 @@ package com.ibm.icu.dev.test.number;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Test;
 
 import com.ibm.icu.dev.test.format.FormattedValueTest;
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.UResource;
 import com.ibm.icu.number.FormattedNumberRange;
 import com.ibm.icu.number.LocalizedNumberFormatter;
 import com.ibm.icu.number.LocalizedNumberRangeFormatter;
@@ -22,9 +30,11 @@ import com.ibm.icu.number.Precision;
 import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.number.UnlocalizedNumberRangeFormatter;
 import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.NumberingSystem;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * @author sffc
@@ -750,6 +760,73 @@ public class NumberRangeFormatterTest {
                     {NumberFormat.Field.GROUPING_SEPARATOR, 17, 18},
                     {NumberFormat.Field.INTEGER, 11, 21}};
             FormattedValueTest.checkFormattedValue(message, fmtd, expectedString, expectedFieldPositions);
+        }
+    }
+
+    static final String[] allNSNames = NumberingSystem.getAvailableNames();
+
+    private class RangePatternSink extends UResource.Sink {
+        Map<String,String> rangePatterns = new HashMap<>();
+        Map<String,String> approxPatterns = new HashMap<>();
+
+        // NumberElements{ latn{ miscPatterns{ range{"{0}-{1}"} } } }
+        @Override
+        public void put(UResource.Key key, UResource.Value value, boolean noFallback) {
+            UResource.Table numberElementsTable = value.getTable();
+            for (int i = 0; numberElementsTable.getKeyAndValue(i, key, value); ++i) {
+                String nsName = key.toString();
+                if (Arrays.binarySearch(allNSNames, nsName) < 0) {
+                    continue;
+                }
+                UResource.Table nsTable = value.getTable();
+                for (int j = 0; nsTable.getKeyAndValue(j, key, value); ++j) {
+                    if (!key.contentEquals("miscPatterns")) {
+                        continue;
+                    }
+                    UResource.Table miscTable = value.getTable();
+                    for (int k = 0; miscTable.getKeyAndValue(k, key, value); ++k) {
+                        if (key.contentEquals("range") && !rangePatterns.containsKey(nsName)) {
+                            rangePatterns.put(nsName, value.getString());
+                        }
+                        if (key.contentEquals("approximately") && !approxPatterns.containsKey(nsName)) {
+                            approxPatterns.put(nsName, value.getString());
+                        }
+                    }
+                }
+            }
+        }
+
+        public void checkAndReset(ULocale locale) {
+            // NOTE: If this test ever starts failing, there might not need to
+            // be any changes made to NumberRangeFormatter.  Please add a new
+            // test demonstrating how different numbering systems in the same
+            // locale produce different results in NumberRangeFormatter, and
+            // then you can disable or delete this test.
+            // Additional context: ICU-20144
+
+            Set<String> allRangePatterns = new HashSet<>();
+            allRangePatterns.addAll(rangePatterns.values());
+            assertEquals("Should have only one unique range pattern: " + locale + ": " + rangePatterns,
+                    1, allRangePatterns.size());
+
+            Set<String> allApproxPatterns = new HashSet<>();
+            allApproxPatterns.addAll(approxPatterns.values());
+            assertEquals("Should have only one unique approximately pattern: " + locale + ": " + approxPatterns,
+                    1, allApproxPatterns.size());
+
+            rangePatterns.clear();
+            approxPatterns.clear();
+        }
+    }
+
+    @Test
+    public void testNumberingSystemRangeData() {
+        RangePatternSink sink = new RangePatternSink();
+        for (ULocale locale : ULocale.getAvailableLocales()) {
+            ICUResourceBundle resource = (ICUResourceBundle)
+                    UResourceBundle.getBundleInstance(ICUData.ICU_BASE_NAME, locale);
+            resource.getAllItemsWithFallback("NumberElements", sink);
+            sink.checkAndReset(locale);
         }
     }
 
