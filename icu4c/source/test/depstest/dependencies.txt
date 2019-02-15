@@ -949,7 +949,7 @@ group: number_output
     standardplural.o plurrule.o
   deps
     # FormattedNumber internals:
-    number_representation format
+    number_representation format formatted_value_sbimpl
     # PluralRules internals:
     unifiedcache
 

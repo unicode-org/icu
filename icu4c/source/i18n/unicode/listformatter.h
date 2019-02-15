@@ -66,6 +66,8 @@ struct ListFormatData : public UMemory {
 /**
  * An immutable class containing the result of a list formatting operation.
  *
+ * Instances of this class are immutable and thread-safe.
+ *
  * When calling nextPosition():
  * The fields are returned from start to end. The special field category
  * UFIELD_CATEGORY_LIST_SPAN is used to indicate which argument

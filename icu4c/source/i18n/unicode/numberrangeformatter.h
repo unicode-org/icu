@@ -176,7 +176,7 @@ namespace impl {
 // Forward declarations:
 struct RangeMacroProps;
 class DecimalQuantity;
-struct UFormattedNumberRangeData;
+class UFormattedNumberRangeData;
 class NumberRangeFormatterImpl;
 
 } // namespace impl
@@ -828,7 +828,7 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
 
   private:
     // Can't use LocalPointer because UFormattedNumberRangeData is forward-declared
-    const impl::UFormattedNumberRangeData *fResults;
+    const impl::UFormattedNumberRangeData *fData;
 
     // Error code for the terminal methods
     UErrorCode fErrorCode;
@@ -838,10 +838,10 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
      * @internal
      */
     explicit FormattedNumberRange(impl::UFormattedNumberRangeData *results)
-        : fResults(results), fErrorCode(U_ZERO_ERROR) {};
+        : fData(results), fErrorCode(U_ZERO_ERROR) {};
 
     explicit FormattedNumberRange(UErrorCode errorCode)
-        : fResults(nullptr), fErrorCode(errorCode) {};
+        : fData(nullptr), fErrorCode(errorCode) {};
 
     void getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
 

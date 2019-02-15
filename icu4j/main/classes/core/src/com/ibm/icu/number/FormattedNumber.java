@@ -2,18 +2,17 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.number;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.util.Arrays;
 
+import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.FormattedValue;
 import com.ibm.icu.text.PluralRules.IFixedDecimal;
-import com.ibm.icu.util.ICUUncheckedIOException;
 
 /**
  * The result of a number formatting operation. This class allows the result to be exported in several
@@ -24,11 +23,11 @@ import com.ibm.icu.util.ICUUncheckedIOException;
  * @see NumberFormatter
  */
 public class FormattedNumber implements FormattedValue {
-    final NumberStringBuilder nsb;
+    final NumberStringBuilder string;
     final DecimalQuantity fq;
 
     FormattedNumber(NumberStringBuilder nsb, DecimalQuantity fq) {
-        this.nsb = nsb;
+        this.string = nsb;
         this.fq = fq;
     }
 
@@ -40,35 +39,7 @@ public class FormattedNumber implements FormattedValue {
      */
     @Override
     public String toString() {
-        return nsb.toString();
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return The same Appendable, for chaining.
-     * @draft ICU 60
-     */
-    @Override
-    public <A extends Appendable> A appendTo(A appendable) {
-        try {
-            appendable.append(nsb);
-        } catch (IOException e) {
-            // Throw as an unchecked exception to avoid users needing try/catch
-            throw new ICUUncheckedIOException(e);
-        }
-        return appendable;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @draft ICU 64
-     * @provisional This API might change or be removed in a future release.
-     */
-    @Override
-    public char charAt(int index) {
-        return nsb.charAt(index);
+        return string.toString();
     }
 
     /**
@@ -79,7 +50,18 @@ public class FormattedNumber implements FormattedValue {
      */
     @Override
     public int length() {
-        return nsb.length();
+        return string.length();
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public char charAt(int index) {
+        return string.charAt(index);
     }
 
     /**
@@ -90,7 +72,18 @@ public class FormattedNumber implements FormattedValue {
      */
     @Override
     public CharSequence subSequence(int start, int end) {
-        return nsb.subString(start, end);
+        return string.subString(start, end);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 60
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public <A extends Appendable> A appendTo(A appendable) {
+        return Utility.appendTo(string, appendable);
     }
 
     /**
@@ -101,7 +94,18 @@ public class FormattedNumber implements FormattedValue {
      */
     @Override
     public boolean nextPosition(ConstrainedFieldPosition cfpos) {
-        return nsb.nextPosition(cfpos, null);
+        return string.nextPosition(cfpos, null);
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @draft ICU 62
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public AttributedCharacterIterator toCharacterIterator() {
+        return string.toCharacterIterator(null);
     }
 
     /**
@@ -139,18 +143,7 @@ public class FormattedNumber implements FormattedValue {
      */
     public boolean nextFieldPosition(FieldPosition fieldPosition) {
         fq.populateUFieldPosition(fieldPosition);
-        return nsb.nextFieldPosition(fieldPosition);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @draft ICU 62
-     * @provisional This API might change or be removed in a future release.
-     */
-    @Override
-    public AttributedCharacterIterator toCharacterIterator() {
-        return nsb.toCharacterIterator(null);
+        return string.nextFieldPosition(fieldPosition);
     }
 
     /**
@@ -186,8 +179,8 @@ public class FormattedNumber implements FormattedValue {
     public int hashCode() {
         // NumberStringBuilder and BigDecimal are mutable, so we can't call
         // #equals() or #hashCode() on them directly.
-        return Arrays.hashCode(nsb.toCharArray())
-                ^ Arrays.hashCode(nsb.toFieldArray())
+        return Arrays.hashCode(string.toCharArray())
+                ^ Arrays.hashCode(string.toFieldArray())
                 ^ fq.toBigDecimal().hashCode();
     }
 
@@ -208,8 +201,8 @@ public class FormattedNumber implements FormattedValue {
         // NumberStringBuilder and BigDecimal are mutable, so we can't call
         // #equals() or #hashCode() on them directly.
         FormattedNumber _other = (FormattedNumber) other;
-        return Arrays.equals(nsb.toCharArray(), _other.nsb.toCharArray())
-                && Arrays.equals(nsb.toFieldArray(), _other.nsb.toFieldArray())
+        return Arrays.equals(string.toCharArray(), _other.string.toCharArray())
+                && Arrays.equals(string.toFieldArray(), _other.string.toFieldArray())
                 && fq.toBigDecimal().equals(_other.fq.toBigDecimal());
     }
 }

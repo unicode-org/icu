@@ -130,6 +130,10 @@ public:
         return fString;
     }
 
+    inline const number::impl::NumberStringBuilder& getStringRef() const {
+        return fString;
+    }
+
 private:
     number::impl::NumberStringBuilder fString;
     number::impl::Field fNumericField;
@@ -146,12 +150,22 @@ struct UFormattedValueImpl : public UMemory, public UFormattedValueApiHelper {
 };
 
 
+/** Boilerplate to check for valid status before dereferencing the fData pointer. */
+#define UPRV_FORMATTED_VALUE_METHOD_GUARD(returnExpression) \
+    if (U_FAILURE(status)) { \
+        return returnExpression; \
+    } \
+    if (fData == nullptr) { \
+        status = fErrorCode; \
+        return returnExpression; \
+    } \
+
+
 /** Implementation of the methods from U_FORMATTED_VALUE_SUBCLASS_AUTO. */
 #define UPRV_FORMATTED_VALUE_SUBCLASS_AUTO_IMPL(Name) \
-    Name::Name(Name&& src) U_NOEXCEPT { \
-        fData = src.fData; \
+    Name::Name(Name&& src) U_NOEXCEPT \
+            : fData(src.fData), fErrorCode(src.fErrorCode) { \
         src.fData = nullptr; \
-        fErrorCode = src.fErrorCode; \
         src.fErrorCode = U_INVALID_STATE_ERROR; \
     } \
     Name::~Name() { \
@@ -167,44 +181,48 @@ struct UFormattedValueImpl : public UMemory, public UFormattedValueApiHelper {
         return *this; \
     } \
     UnicodeString Name::toString(UErrorCode& status) const { \
-        if (U_FAILURE(status)) { \
-            return ICU_Utility::makeBogusString(); \
-        } \
-        if (fData == nullptr) { \
-            status = fErrorCode; \
-            return ICU_Utility::makeBogusString(); \
-        } \
+        UPRV_FORMATTED_VALUE_METHOD_GUARD(ICU_Utility::makeBogusString()) \
         return fData->toString(status); \
     } \
     UnicodeString Name::toTempString(UErrorCode& status) const { \
-        if (U_FAILURE(status)) { \
-            return ICU_Utility::makeBogusString(); \
-        } \
-        if (fData == nullptr) { \
-            status = fErrorCode; \
-            return ICU_Utility::makeBogusString(); \
-        } \
+        UPRV_FORMATTED_VALUE_METHOD_GUARD(ICU_Utility::makeBogusString()) \
         return fData->toTempString(status); \
     } \
     Appendable& Name::appendTo(Appendable& appendable, UErrorCode& status) const { \
-        if (U_FAILURE(status)) { \
-            return appendable; \
-        } \
-        if (fData == nullptr) { \
-            status = fErrorCode; \
-            return appendable; \
-        } \
+        UPRV_FORMATTED_VALUE_METHOD_GUARD(appendable) \
         return fData->appendTo(appendable, status); \
     } \
     UBool Name::nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const { \
-        if (U_FAILURE(status)) { \
-            return FALSE; \
-        } \
-        if (fData == nullptr) { \
-            status = fErrorCode; \
-            return FALSE; \
-        } \
+        UPRV_FORMATTED_VALUE_METHOD_GUARD(FALSE) \
         return fData->nextPosition(cfpos, status); \
+    }
+
+
+/** Like UPRV_FORMATTED_VALUE_CAPI_AUTO_IMPL but without impl type declarations. */
+#define UPRV_FORMATTED_VALUE_CAPI_NO_IMPLTYPE_AUTO_IMPL(CType, ImplType, HelperType, Prefix) \
+    U_CAPI CType* U_EXPORT2 \
+    Prefix ## _openResult (UErrorCode* ec) { \
+        if (U_FAILURE(*ec)) { \
+            return nullptr; \
+        } \
+        ImplType* impl = new ImplType(); \
+        if (impl == nullptr) { \
+            *ec = U_MEMORY_ALLOCATION_ERROR; \
+            return nullptr; \
+        } \
+        return static_cast<HelperType*>(impl)->exportForC(); \
+    } \
+    U_DRAFT const UFormattedValue* U_EXPORT2 \
+    Prefix ## _resultAsValue (const CType* uresult, UErrorCode* ec) { \
+        const ImplType* result = HelperType::validate(uresult, *ec); \
+        if (U_FAILURE(*ec)) { return nullptr; } \
+        return static_cast<const UFormattedValueApiHelper*>(result)->exportConstForC(); \
+    } \
+    U_CAPI void U_EXPORT2 \
+    Prefix ## _closeResult (CType* uresult) { \
+        UErrorCode localStatus = U_ZERO_ERROR; \
+        const ImplType* impl = HelperType::validate(uresult, localStatus); \
+        delete impl; \
     }
 
 
@@ -232,30 +250,7 @@ struct UFormattedValueImpl : public UMemory, public UFormattedValueApiHelper {
     } \
     ImplType::~ImplType() {} \
     U_NAMESPACE_END \
-    U_CAPI CType* U_EXPORT2 \
-    Prefix ## _openResult (UErrorCode* ec) { \
-        if (U_FAILURE(*ec)) { \
-            return nullptr; \
-        } \
-        ImplType* impl = new ImplType(); \
-        if (impl == nullptr) { \
-            *ec = U_MEMORY_ALLOCATION_ERROR; \
-            return nullptr; \
-        } \
-        return static_cast<HelperType*>(impl)->exportForC(); \
-    } \
-    U_DRAFT const UFormattedValue* U_EXPORT2 \
-    Prefix ## _resultAsValue (const CType* uresult, UErrorCode* ec) { \
-        const ImplType* result = HelperType::validate(uresult, *ec); \
-        if (U_FAILURE(*ec)) { return nullptr; } \
-        return static_cast<const UFormattedValueApiHelper*>(result)->exportConstForC(); \
-    } \
-    U_CAPI void U_EXPORT2 \
-    Prefix ## _closeResult (CType* uresult) { \
-        UErrorCode localStatus = U_ZERO_ERROR; \
-        const ImplType* impl = HelperType::validate(uresult, localStatus); \
-        delete impl; \
-    }
+    UPRV_FORMATTED_VALUE_CAPI_NO_IMPLTYPE_AUTO_IMPL(CType, ImplType, HelperType, Prefix)
 
 
 U_NAMESPACE_END

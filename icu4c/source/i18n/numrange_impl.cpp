@@ -279,8 +279,8 @@ void NumberRangeFormatterImpl::formatSingleValue(UFormattedNumberRangeData& data
                                                  UErrorCode& status) const {
     if (U_FAILURE(status)) { return; }
     if (fSameFormatters) {
-        int32_t length = NumberFormatterImpl::writeNumber(micros1, data.quantity1, data.string, 0, status);
-        NumberFormatterImpl::writeAffixes(micros1, data.string, 0, length, status);
+        int32_t length = NumberFormatterImpl::writeNumber(micros1, data.quantity1, data.getStringRef(), 0, status);
+        NumberFormatterImpl::writeAffixes(micros1, data.getStringRef(), 0, length, status);
     } else {
         formatRange(data, micros1, micros2, status);
     }
@@ -292,12 +292,12 @@ void NumberRangeFormatterImpl::formatApproximately (UFormattedNumberRangeData& d
                                                     UErrorCode& status) const {
     if (U_FAILURE(status)) { return; }
     if (fSameFormatters) {
-        int32_t length = NumberFormatterImpl::writeNumber(micros1, data.quantity1, data.string, 0, status);
+        int32_t length = NumberFormatterImpl::writeNumber(micros1, data.quantity1, data.getStringRef(), 0, status);
         // HEURISTIC: Desired modifier order: inner, middle, approximately, outer.
-        length += micros1.modInner->apply(data.string, 0, length, status);
-        length += micros1.modMiddle->apply(data.string, 0, length, status);
-        length += fApproximatelyModifier.apply(data.string, 0, length, status);
-        micros1.modOuter->apply(data.string, 0, length, status);
+        length += micros1.modInner->apply(data.getStringRef(), 0, length, status);
+        length += micros1.modMiddle->apply(data.getStringRef(), 0, length, status);
+        length += fApproximatelyModifier.apply(data.getStringRef(), 0, length, status);
+        micros1.modOuter->apply(data.getStringRef(), 0, length, status);
     } else {
         formatRange(data, micros1, micros2, status);
     }
@@ -375,7 +375,7 @@ void NumberRangeFormatterImpl::formatRange(UFormattedNumberRangeData& data,
             break;
     }
 
-    NumberStringBuilder& string = data.string;
+    NumberStringBuilder& string = data.getStringRef();
     int32_t lengthPrefix = 0;
     int32_t length1 = 0;
     int32_t lengthInfix = 0;

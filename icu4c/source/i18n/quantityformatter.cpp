@@ -192,7 +192,7 @@ void QuantityFormatter::formatAndSelect(
         if (U_FAILURE(status)) {
             return;
         }
-        output = std::move(fn.string);
+        output = std::move(fn.getStringRef());
         pluralKeyword = rules.select(fn.quantity);
     } else {
         UnicodeString result;

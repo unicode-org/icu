@@ -40,7 +40,7 @@ class DateIntervalFormat;
 /**
  * An immutable class containing the result of a date interval formatting operation.
  *
- * Not intended for public subclassing.
+ * Instances of this class are immutable and thread-safe.
  *
  * When calling nextPosition():
  * The fields are returned from left to right. The special field category
@@ -49,6 +49,8 @@ class DateIntervalFormat;
  * toCalendar. The span category will always occur before the
  * corresponding fields in UFIELD_CATEGORY_DATE
  * in the nextPosition() iterator.
+ *
+ * Not intended for public subclassing.
  *
  * @draft ICU 64
  */
