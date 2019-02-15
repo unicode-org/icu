@@ -489,6 +489,9 @@ findFirstExisting(const char* path, char* name,
 
         /*Fallback data stuff*/
         *hasChopped = chopLocale(name);
+        if (*hasChopped && *name == '\0') {
+            uprv_strcpy(name, "und");
+        }
     }
     return r;
 }

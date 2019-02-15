@@ -1120,7 +1120,8 @@ void IntlTestDateTimePatternGeneratorAPI::testC() {
     UErrorCode status = U_ZERO_ERROR;
     int32_t numTests = UPRV_LENGTHOF(tests);
     for (int32_t i = 0; i < numTests; ++i) {
-        DateTimePatternGenerator *gen = DateTimePatternGenerator::createInstance(Locale(tests[i][0]), status);
+        DateTimePatternGenerator *gen = DateTimePatternGenerator::createInstance(
+                Locale::forLanguageTag(tests[i][0], status), status);
         if (gen == NULL) {
             dataerrln("FAIL: DateTimePatternGenerator::createInstance failed for %s", tests[i][0]);
             return;
