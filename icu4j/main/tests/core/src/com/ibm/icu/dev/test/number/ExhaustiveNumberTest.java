@@ -15,9 +15,12 @@ import com.ibm.icu.impl.StaticUnicodeSets.Key;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.number.NumberFormatter;
+import com.ibm.icu.number.UnlocalizedNumberFormatter;
 import com.ibm.icu.number.Precision;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.NoUnit;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -85,6 +88,24 @@ public class ExhaustiveNumberTest extends TestFmwk {
                         + ") should be in "
                         + set,
                 set.contains(cp));
+    }
+
+    @Test
+    public void test20417_PercentParity() {
+        UnlocalizedNumberFormatter uNoUnitPercent = NumberFormatter.with().unit(NoUnit.PERCENT);
+        UnlocalizedNumberFormatter uNoUnitPermille = NumberFormatter.with().unit(NoUnit.PERMILLE);
+        UnlocalizedNumberFormatter uMeasurePercent = NumberFormatter.with().unit(MeasureUnit.PERCENT);
+        UnlocalizedNumberFormatter uMeasurePermille = NumberFormatter.with().unit(MeasureUnit.PERMILLE);
+
+        for (ULocale locale : ULocale.getAvailableLocales()) {
+            String sNoUnitPercent = uNoUnitPercent.locale(locale).format(50).toString();
+            String sNoUnitPermille = uNoUnitPermille.locale(locale).format(50).toString();
+            String sMeasurePercent = uMeasurePercent.locale(locale).format(50).toString();
+            String sMeasurePermille = uMeasurePermille.locale(locale).format(50).toString();
+
+            assertEquals("Percent, locale " + locale, sNoUnitPercent, sMeasurePercent);
+            assertEquals("Permille, locale " + locale, sNoUnitPermille, sMeasurePermille);
+        }
     }
 
     @Test

@@ -172,9 +172,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     // Pre-compute a few values for efficiency.
     bool isCurrency = utils::unitIsCurrency(macros.unit);
     bool isNoUnit = utils::unitIsNoUnit(macros.unit);
-    bool isPercent = isNoUnit && utils::unitIsPercent(macros.unit);
-    bool isPermille = isNoUnit && utils::unitIsPermille(macros.unit);
-    bool isCldrUnit = !isCurrency && !isNoUnit;
+    bool isPercent = utils::unitIsPercent(macros.unit);
+    bool isPermille = utils::unitIsPermille(macros.unit);
     bool isAccounting =
             macros.sign == UNUM_SIGN_ACCOUNTING || macros.sign == UNUM_SIGN_ACCOUNTING_ALWAYS ||
             macros.sign == UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO;
@@ -194,6 +193,8 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     if (macros.unitWidth != UNUM_UNIT_WIDTH_COUNT) {
         unitWidth = macros.unitWidth;
     }
+    bool isCldrUnit = !isCurrency && !isNoUnit &&
+        (unitWidth == UNUM_UNIT_WIDTH_FULL_NAME || !(isPercent || isPermille));
 
     // Select the numbering system.
     LocalPointer<const NumberingSystem> nsLocal;
@@ -243,7 +244,9 @@ NumberFormatterImpl::macrosToMicroGenerator(const MacroProps& macros, bool safe,
     }
     if (pattern == nullptr) {
         CldrPatternStyle patternStyle;
-        if (isPercent || isPermille) {
+        if (isCldrUnit) {
+            patternStyle = CLDR_PATTERN_STYLE_DECIMAL;
+        } else if (isPercent || isPermille) {
             patternStyle = CLDR_PATTERN_STYLE_PERCENT;
         } else if (!isCurrency || unitWidth == UNUM_UNIT_WIDTH_FULL_NAME) {
             patternStyle = CLDR_PATTERN_STYLE_DECIMAL;

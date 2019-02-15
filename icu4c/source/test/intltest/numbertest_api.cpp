@@ -70,6 +70,10 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(unitCompoundMeasure);
         TESTCASE_AUTO(unitCurrency);
         TESTCASE_AUTO(unitPercent);
+        if (!quick) {
+            // Slow test: run in exhaustive mode only
+            TESTCASE_AUTO(percentParity);
+        }
         TESTCASE_AUTO(roundingFraction);
         TESTCASE_AUTO(roundingFigures);
         TESTCASE_AUTO(roundingFractionFigures);
@@ -89,7 +93,11 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(fieldPositionCoverage);
         TESTCASE_AUTO(toFormat);
         TESTCASE_AUTO(errors);
-        TESTCASE_AUTO(validRanges);
+        if (!quick) {
+            // Slow test: run in exhaustive mode only
+            // (somewhat slow to check all permutations of settings)
+            TESTCASE_AUTO(validRanges);
+        }
         TESTCASE_AUTO(copyMove);
         TESTCASE_AUTO(localPointerCAPI);
         TESTCASE_AUTO(toObject);
@@ -828,6 +836,33 @@ void NumberFormatterApiTest::unitPercent() {
             Locale::getEnglish(),
             -98.7654321,
             u"-98.765432%");
+}
+
+void NumberFormatterApiTest::percentParity() {
+    IcuTestErrorCode status(*this, "percentParity");
+    UnlocalizedNumberFormatter uNoUnitPercent = NumberFormatter::with().unit(NoUnit::percent());
+    UnlocalizedNumberFormatter uNoUnitPermille = NumberFormatter::with().unit(NoUnit::permille());
+    UnlocalizedNumberFormatter uMeasurePercent = NumberFormatter::with().unit(MeasureUnit::getPercent());
+    UnlocalizedNumberFormatter uMeasurePermille = NumberFormatter::with().unit(MeasureUnit::getPermille());
+
+    int32_t localeCount;
+    auto locales = Locale::getAvailableLocales(localeCount);
+    for (int32_t i=0; i<localeCount; i++) {
+        auto& locale = locales[i];
+        UnicodeString sNoUnitPercent = uNoUnitPercent.locale(locale)
+            .formatDouble(50, status).toString(status);
+        UnicodeString sNoUnitPermille = uNoUnitPermille.locale(locale)
+            .formatDouble(50, status).toString(status);
+        UnicodeString sMeasurePercent = uMeasurePercent.locale(locale)
+            .formatDouble(50, status).toString(status);
+        UnicodeString sMeasurePermille = uMeasurePermille.locale(locale)
+            .formatDouble(50, status).toString(status);
+
+        assertEquals(u"Percent, locale " + UnicodeString(locale.getName()),
+            sNoUnitPercent, sMeasurePercent);
+        assertEquals(u"Permille, locale " + UnicodeString(locale.getName()),
+            sNoUnitPermille, sMeasurePermille);
+    }
 }
 
 void NumberFormatterApiTest::roundingFraction() {
@@ -2639,11 +2674,6 @@ void NumberFormatterApiTest::errors() {
 }
 
 void NumberFormatterApiTest::validRanges() {
-    if (quick) {
-        // Do not run this test except in exhaustive mode.
-        // (somewhat slow to check all permutations of settings)
-        return;
-    }
 
 #define EXPECTED_MAX_INT_FRAC_SIG 999
 
