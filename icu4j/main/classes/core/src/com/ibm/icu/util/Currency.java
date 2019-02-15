@@ -840,6 +840,13 @@ public class Currency extends MeasureUnit {
      * Returns the number of the number of fraction digits that should
      * be displayed for this currency.
      * This is equivalent to getDefaultFractionDigits(CurrencyUsage.STANDARD);
+     *
+     * Important: The number of fraction digits for a given currency is NOT
+     * guaranteed to be constant across versions of ICU or CLDR. For example,
+     * do NOT use this value as a mechanism for deciding the magnitude used
+     * to store currency values in a database. You should use this value for
+     * display purposes only.
+     *
      * @return a non-negative number of fraction digits to be
      * displayed
      * @stable ICU 2.2
@@ -851,6 +858,13 @@ public class Currency extends MeasureUnit {
     /**
      * Returns the number of the number of fraction digits that should
      * be displayed for this currency with Usage.
+     *
+     * Important: The number of fraction digits for a given currency is NOT
+     * guaranteed to be constant across versions of ICU or CLDR. For example,
+     * do NOT use this value as a mechanism for deciding the magnitude used
+     * to store currency values in a database. You should use this value for
+     * display purposes only.
+     *
      * @param Usage the usage of currency(Standard or Cash)
      * @return a non-negative number of fraction digits to be
      * displayed
