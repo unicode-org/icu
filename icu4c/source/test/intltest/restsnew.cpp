@@ -1234,39 +1234,113 @@ void NewResourceBundleTest::TestFilter() {
     REQUIRE_SUCCESS(status);
     assertEquals("alabama", alabama.getType(), URES_TABLE);
 
-    ResourceBundle alaska = alabama.get("alaska", status);
-    REQUIRE_SUCCESS(status);
-    assertEquals("alaska", alaska.getType(), URES_TABLE);
+    {
+        ResourceBundle alaska = alabama.get("alaska", status);
+        REQUIRE_SUCCESS(status);
+        assertEquals("alaska", alaska.getType(), URES_TABLE);
 
-    ResourceBundle arizona = alaska.get("arizona", status);
-    REQUIRE_SUCCESS(status);
-    assertEquals("arizona", arizona.getType(), URES_STRING);
+        {
+            ResourceBundle arizona = alaska.get("arizona", status);
+            REQUIRE_SUCCESS(status);
+            assertEquals("arizona", arizona.getType(), URES_STRING);
+            assertEquals("arizona", u"arkansas", arizona.getString(status));
+            REQUIRE_SUCCESS(status);
 
-    assertEquals("arizona", u"arkansas", arizona.getString(status));
-    REQUIRE_SUCCESS(status);
+            // Filter: california should not be included
+            ResourceBundle california = alaska.get("california", status);
+            REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
+        }
 
-    // Filter: california should not be included
-    ResourceBundle california = alaska.get("california", status);
-    REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
-
-    // Filter: connecticut should not be included
-    ResourceBundle connecticut = alabama.get("connecticut", status);
-    REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
+        // Filter: connecticut should not be included
+        ResourceBundle connecticut = alabama.get("connecticut", status);
+        REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
+    }
 
     ResourceBundle fornia = rb.get("fornia", status);
     REQUIRE_SUCCESS(status);
     assertEquals("fornia", fornia.getType(), URES_TABLE);
 
-    ResourceBundle hawaii = fornia.get("hawaii", status);
-    REQUIRE_SUCCESS(status);
-    assertEquals("hawaii", hawaii.getType(), URES_STRING);
+    {
+        ResourceBundle hawaii = fornia.get("hawaii", status);
+        REQUIRE_SUCCESS(status);
+        assertEquals("hawaii", hawaii.getType(), URES_STRING);
+        assertEquals("hawaii", u"idaho", hawaii.getString(status));
+        REQUIRE_SUCCESS(status);
 
-    assertEquals("hawaii", u"idaho", hawaii.getString(status));
-    REQUIRE_SUCCESS(status);
+        // Filter: illinois should not be included
+        ResourceBundle illinois = fornia.get("illinois", status);
+        REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
+    }
 
-    // Filter: illinois should not be included
-    ResourceBundle illinois = fornia.get("illinois", status);
-    REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
+    ResourceBundle mississippi = rb.get("mississippi", status);
+    REQUIRE_SUCCESS(status);
+    assertEquals("mississippi", mississippi.getType(), URES_TABLE);
+
+    {
+        ResourceBundle louisiana = mississippi.get("louisiana", status);
+        REQUIRE_SUCCESS(status);
+        assertEquals("louisiana", louisiana.getType(), URES_TABLE);
+
+        {
+            ResourceBundle maine = louisiana.get("maine", status);
+            REQUIRE_SUCCESS(status);
+            assertEquals("maine", maine.getType(), URES_STRING);
+            assertEquals("maine", u"maryland", maine.getString(status));
+            REQUIRE_SUCCESS(status);
+
+            ResourceBundle iowa = louisiana.get("iowa", status);
+            REQUIRE_SUCCESS(status);
+            assertEquals("iowa", iowa.getType(), URES_STRING);
+            assertEquals("iowa", u"kansas", iowa.getString(status));
+            REQUIRE_SUCCESS(status);
+
+            // Filter: missouri should not be included
+            ResourceBundle missouri = louisiana.get("missouri", status);
+            REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
+        }
+
+        ResourceBundle michigan = mississippi.get("michigan", status);
+        REQUIRE_SUCCESS(status);
+        assertEquals("michigan", michigan.getType(), URES_TABLE);
+
+        {
+            ResourceBundle maine = michigan.get("maine", status);
+            REQUIRE_SUCCESS(status);
+            assertEquals("maine", maine.getType(), URES_STRING);
+            assertEquals("maine", u"minnesota", maine.getString(status));
+            REQUIRE_SUCCESS(status);
+
+            // Filter: iowa should not be included
+            ResourceBundle iowa = michigan.get("iowa", status);
+            REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
+
+            ResourceBundle missouri = michigan.get("missouri", status);
+            REQUIRE_SUCCESS(status);
+            assertEquals("missouri", missouri.getType(), URES_STRING);
+            assertEquals("missouri", u"nebraska", missouri.getString(status));
+            REQUIRE_SUCCESS(status);
+        }
+
+        ResourceBundle nevada = mississippi.get("nevada", status);
+        REQUIRE_SUCCESS(status);
+        assertEquals("nevada", nevada.getType(), URES_TABLE);
+
+        {
+            ResourceBundle maine = nevada.get("maine", status);
+            REQUIRE_SUCCESS(status);
+            assertEquals("maine", maine.getType(), URES_STRING);
+            assertEquals("maine", u"new-hampshire", maine.getString(status));
+            REQUIRE_SUCCESS(status);
+
+            // Filter: iowa should not be included
+            ResourceBundle iowa = nevada.get("iowa", status);
+            REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
+
+            // Filter: missouri should not be included
+            ResourceBundle missouri = nevada.get("missouri", status);
+            REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
+        }
+    }
 }
 
 //eof

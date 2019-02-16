@@ -585,9 +585,7 @@ processFile(const char *filename, const char *cp,
     CharString inputDirBuf;
 
     char outputFileName[256];
-
     int32_t dirlen  = 0;
-    int32_t filelen = 0;
 
     if (U_FAILURE(status)) {
         return;
@@ -595,8 +593,6 @@ processFile(const char *filename, const char *cp,
     if(filename==NULL){
         status=U_ILLEGAL_ARGUMENT_ERROR;
         return;
-    }else{
-        filelen = (int32_t)uprv_strlen(filename);
     }
 
     if(inputDir == NULL) {
