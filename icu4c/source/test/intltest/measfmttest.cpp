@@ -84,6 +84,7 @@ private:
     void TestCompoundUnitOperations();
     void TestDimensionlessBehaviour();
     void Test21060_AddressSanitizerProblem();
+    void Test21223_FrenchDuration();
 
     void verifyFormat(
         const char *description,
@@ -208,6 +209,7 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestCompoundUnitOperations);
     TESTCASE_AUTO(TestDimensionlessBehaviour);
     TESTCASE_AUTO(Test21060_AddressSanitizerProblem);
+    TESTCASE_AUTO(Test21223_FrenchDuration);
     TESTCASE_AUTO_END;
 }
 
@@ -3547,6 +3549,29 @@ void MeasureFormatTest::Test21060_AddressSanitizerProblem() {
     second = second.product(crux, status);
 
     status.errIfFailureAndReset();
+}
+
+void MeasureFormatTest::Test21223_FrenchDuration() {
+    IcuTestErrorCode status(*this, "Test21223_FrenchDuration");
+    MeasureFormat mf("fr-FR", UMEASFMT_WIDTH_NARROW, status);
+    Measure H5M10[] = {
+        {5, MeasureUnit::createHour(status), status},
+        {10, MeasureUnit::createMinute(status), status}
+    };
+    UnicodeString result;
+    FieldPosition pos;
+    mf.formatMeasures(H5M10, UPRV_LENGTHOF(H5M10), result, pos, status);
+    assertEquals("Should have consistent spacing", u"5h 10min", result);
+
+    // Test additional locales:
+    // int32_t localeCount;
+    // const Locale* locales = Locale::getAvailableLocales(localeCount);
+    // for (int32_t i=0; i<localeCount; i++) {
+    //     auto& loc = locales[i];
+    //     MeasureFormat mf1(loc, UMEASFMT_WIDTH_NARROW, status);
+    //     mf1.formatMeasures(H5M10, UPRV_LENGTHOF(H5M10), result.remove(), pos, status);
+    //     assertFalse(result + u" " + loc.getName(), TRUE);
+    // }
 }
 
 
