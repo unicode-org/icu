@@ -5,9 +5,10 @@
 #define __FILTERRB_H__
 
 #include <list>
-#include <string>
 #include <map>
+#include <memory>
 #include <ostream>
+#include <string>
 
 #include "unicode/utypes.h"
 
@@ -64,12 +65,20 @@ public:
 /**
  * Implementation of PathFilter for a list of inclusion/exclusion rules.
  *
+ * The wildcard pattern "*" means that the subsequent filters are applied to
+ * every other tree sharing the same parent.
+ *
  * For example, given this list of filter rules:
- *
- *     -/alabama
- *     +/alabama/alaska/arizona
- *     -/fornia/hawaii
- *
+ */
+//     -/alabama
+//     +/alabama/alaska/arizona
+//     -/fornia/hawaii
+//     -/mississippi
+//     +/mississippi/michigan
+//     +/mississippi/*/maine
+//     -/mississippi/*/iowa
+//     +/mississippi/louisiana/iowa
+/*
  * You get the following structure:
  *
  *     SimpleRuleBasedPathFilter {
@@ -89,6 +98,36 @@ public:
  *           included: EXCLUDE
  *         }
  *       }
+ *       mississippi: {
+ *         included: EXCLUDE
+ *         louisiana: {
+ *           included: PARTIAL
+ *           iowa: {
+ *             included: INCLUDE
+ *           }
+ *           maine: {
+ *             included: INCLUDE
+ *           }
+ *         }
+ *         michigan: {
+ *           included: INCLUDE
+ *           iowa: {
+ *             included: EXCLUDE
+ *           }
+ *           maine: {
+ *             included: INCLUDE
+ *           }
+ *         }
+ *         * {
+ *           included: PARTIAL
+ *           iowa: {
+ *             included: EXCLUDE
+ *           }
+ *           maine: {
+ *             included: INCLUDE
+ *           }
+ *         }
+ *       }
  *     }
  */
 class SimpleRuleBasedPathFilter : public PathFilter {
@@ -102,6 +141,12 @@ public:
 
 private:
     struct Tree {
+
+        Tree() = default;
+
+        /** Copy constructor */
+        Tree(const Tree& other);
+
         /**
          * Information on the USER-SPECIFIED inclusion/exclusion.
          *
@@ -111,6 +156,13 @@ private:
          */
         EInclusion fIncluded = PARTIAL;
         std::map<std::string, Tree> fChildren;
+        std::unique_ptr<Tree> fWildcard;
+
+        void applyRule(
+            const ResKeyPath& path,
+            std::list<std::string>::const_iterator it,
+            bool inclusionRule,
+            UErrorCode& status);
 
         void print(std::ostream& out, int32_t indent) const;
     };
