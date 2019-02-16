@@ -63,6 +63,7 @@ public final class SimpleFormatterImpl {
      * highest argument number plus one, not the number of occurrences of arguments.
      *
      * @param pattern The pattern string.
+     * @param sb A StringBuilder instance which may or may not be used.
      * @param min The pattern must have at least this many arguments.
      * @param max The pattern must have at most this many arguments.
      * @return The compiled-pattern string.
@@ -301,6 +302,30 @@ public final class SimpleFormatterImpl {
             }
         }
         return sb.toString();
+    }
+
+    /** Poor-man's iterator interface. See ICU-20406. */
+    public static class Int64Iterator {
+        public static final long DONE = -1;
+
+        public static long step(CharSequence compiledPattern, long state, StringBuffer output) {
+            int i = (int) (state >>> 32);
+            assert i < compiledPattern.length();
+            i++;
+            while (i < compiledPattern.length() && compiledPattern.charAt(i) > ARG_NUM_LIMIT) {
+                int limit = i + compiledPattern.charAt(i) + 1 - ARG_NUM_LIMIT;
+                output.append(compiledPattern, i + 1, limit);
+                i = limit;
+            }
+            if (i == compiledPattern.length()) {
+                return DONE;
+            }
+            return (((long) i) << 32) | compiledPattern.charAt(i);
+        }
+
+        public static int getArgIndex(long state) {
+            return (int) state;
+        }
     }
 
     private static StringBuilder format(

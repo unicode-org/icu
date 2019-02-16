@@ -1333,6 +1333,11 @@ public class SimpleDateFormat extends DateFormat {
     @Override
     public StringBuffer format(Calendar cal, StringBuffer toAppendTo,
                                FieldPosition pos) {
+        return format(cal, toAppendTo, pos, null);
+    }
+
+    /** Internal formatting method that accepts an attributes list. */
+    StringBuffer format(Calendar cal, StringBuffer toAppendTo, FieldPosition pos, List<FieldPosition> attributes) {
         TimeZone backupTZ = null;
         if (cal != calendar && !cal.getType().equals(calendar.getType())) {
             // Different calendar type
@@ -1343,7 +1348,7 @@ public class SimpleDateFormat extends DateFormat {
             calendar.setTimeZone(cal.getTimeZone());
             cal = calendar;
         }
-        StringBuffer result = format(cal, getContext(DisplayContext.Type.CAPITALIZATION), toAppendTo, pos, null);
+        StringBuffer result = format(cal, getContext(DisplayContext.Type.CAPITALIZATION), toAppendTo, pos, attributes);
         if (backupTZ != null) {
             // Restore the original time zone
             calendar.setTimeZone(backupTZ);
@@ -2111,7 +2116,7 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     private static ICUCache<String, Object[]> PARSED_PATTERN_CACHE =
-        new SimpleCache<String, Object[]>();
+        new SimpleCache<>();
     private transient Object[] patternItems;
 
     /*
@@ -2134,7 +2139,7 @@ public class SimpleDateFormat extends DateFormat {
         char itemType = 0;  // 0 for string literal, otherwise date/time pattern character
         int itemLength = 1;
 
-        List<Object> items = new ArrayList<Object>();
+        List<Object> items = new ArrayList<>();
 
         for (int i = 0; i < pattern.length(); i++) {
             char ch = pattern.charAt(i);
@@ -2375,9 +2380,9 @@ public class SimpleDateFormat extends DateFormat {
         // Hold the day period until everything else is parsed, because we need
         // the hour to interpret time correctly.
         // Using an one-element array for output parameter.
-        Output<DayPeriodRules.DayPeriod> dayPeriod = new Output<DayPeriodRules.DayPeriod>(null);
+        Output<DayPeriodRules.DayPeriod> dayPeriod = new Output<>(null);
 
-        Output<TimeType> tzTimeType = new Output<TimeType>(TimeType.UNKNOWN);
+        Output<TimeType> tzTimeType = new Output<>(TimeType.UNKNOWN);
         boolean[] ambiguousYear = { false };
 
         // item index for the first numeric field within a contiguous numeric run
@@ -3620,7 +3625,7 @@ public class SimpleDateFormat extends DateFormat {
                      // not get here but leave support in for future definition.
             {
                 // Try matching a time separator.
-                ArrayList<String> data = new ArrayList<String>(3);
+                ArrayList<String> data = new ArrayList<>(3);
                 data.add(formatData.getTimeSeparatorString());
 
                 // Add the default, if different from the locale.
@@ -4093,7 +4098,7 @@ public class SimpleDateFormat extends DateFormat {
         }
         StringBuffer toAppendTo = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
-        List<FieldPosition> attributes = new ArrayList<FieldPosition>();
+        List<FieldPosition> attributes = new ArrayList<>();
         format(cal, getContext(DisplayContext.Type.CAPITALIZATION), toAppendTo, pos, attributes);
 
         AttributedString as = new AttributedString(toAppendTo.toString());
@@ -4445,10 +4450,10 @@ public class SimpleDateFormat extends DateFormat {
 
         // initialize mapping if not there
         if (numberFormatters == null) {
-            numberFormatters = new HashMap<String, NumberFormat>();
+            numberFormatters = new HashMap<>();
         }
         if (overrideMap == null) {
-            overrideMap = new HashMap<Character, String>();
+            overrideMap = new HashMap<>();
         }
 
         // separate string into char and add to maps
@@ -4487,8 +4492,8 @@ public class SimpleDateFormat extends DateFormat {
 
     private void initNumberFormatters(ULocale loc) {
 
-       numberFormatters = new HashMap<String, NumberFormat>();
-       overrideMap = new HashMap<Character, String>();
+       numberFormatters = new HashMap<>();
+       overrideMap = new HashMap<>();
        processOverrideString(loc,override);
 
     }

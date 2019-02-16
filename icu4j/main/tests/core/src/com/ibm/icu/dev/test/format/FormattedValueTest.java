@@ -175,6 +175,7 @@ public class FormattedValueTest {
                 Format.Field expectedField = (Format.Field) cas[0];
                 int expectedBeginIndex = (Integer) cas[1];
                 int expectedEndIndex = (Integer) cas[2];
+                Object expectedValue = cas.length == 4 ? cas[3] : expectedField;
                 if (expectedBeginIndex > i || expectedEndIndex <= i) {
                     // Field position does not overlap with the current character
                     continue;
@@ -186,8 +187,10 @@ public class FormattedValueTest {
                         allAttributes.contains(expectedField));
                 int actualBeginIndex = fpi.getRunStart(expectedField);
                 int actualEndIndex = fpi.getRunLimit(expectedField);
+                Object actualValue = fpi.getAttribute(expectedField);
                 assertEquals(baseMessage + expectedField + " begin @" + i, expectedBeginIndex, actualBeginIndex);
                 assertEquals(baseMessage + expectedField + " end @" + i, expectedEndIndex, actualEndIndex);
+                assertEquals(baseMessage + expectedField + " value @" + i, expectedValue, actualValue);
                 attributesRemaining--;
             }
             assertEquals(baseMessage + "Should have looked at every field: " + i + ": " + currentAttributes,
@@ -203,9 +206,11 @@ public class FormattedValueTest {
             Format.Field expectedField = (Format.Field) cas[0];
             int expectedStart = (Integer) cas[1];
             int expectedLimit = (Integer) cas[2];
+            Object expectedValue = cas.length == 4 ? cas[3] : null;
             assertEquals(baseMessage + "field " + i, expectedField, cfpos.getField());
             assertEquals(baseMessage + "start " + i, expectedStart, cfpos.getStart());
             assertEquals(baseMessage + "limit " + i, expectedLimit, cfpos.getLimit());
+            assertEquals(baseMessage + "value " + i, expectedValue, cfpos.getFieldValue());
             i++;
         }
         boolean afterLoopResult = fv.nextPosition(cfpos);
@@ -224,9 +229,11 @@ public class FormattedValueTest {
                 Format.Field expectedField = (Format.Field) cas[0];
                 int expectedStart = (Integer) cas[1];
                 int expectedLimit = (Integer) cas[2];
+                Object expectedValue = cas.length == 4 ? cas[3] : null;
                 assertEquals(baseMessage + "field " + i, expectedField, cfpos.getField());
                 assertEquals(baseMessage + "start " + i, expectedStart, cfpos.getStart());
                 assertEquals(baseMessage + "limit " + i, expectedLimit, cfpos.getLimit());
+                assertEquals(baseMessage + "value " + i, expectedValue, cfpos.getFieldValue());
                 i++;
             }
             afterLoopResult = fv.nextPosition(cfpos);
@@ -251,9 +258,11 @@ public class FormattedValueTest {
                 Format.Field expectedField = (Format.Field) cas[0];
                 int expectedStart = (Integer) cas[1];
                 int expectedLimit = (Integer) cas[2];
+                Object expectedValue = cas.length == 4 ? cas[3] : null;
                 assertEquals(baseMessage + "field " + i, expectedField, cfpos.getField());
                 assertEquals(baseMessage + "start " + i, expectedStart, cfpos.getStart());
                 assertEquals(baseMessage + "limit " + i, expectedLimit, cfpos.getLimit());
+                assertEquals(baseMessage + "value " + i, expectedValue, cfpos.getFieldValue());
                 i++;
             }
             afterLoopResult = fv.nextPosition(cfpos);
