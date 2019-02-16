@@ -527,6 +527,15 @@ void NumberFormatterApiTest::unitMeasure() {
             5.43,
             u"5.43 m²");
 
+    // Try accessing a narrow unit directly from root.
+    assertFormatSingle(
+            u"Interesting Data Fallback 4",
+            u"measure-unit/area-square-meter unit-width-narrow",
+            NumberFormatter::with().unit(SQUARE_METER).unitWidth(UNumberUnitWidth::UNUM_UNIT_WIDTH_NARROW),
+            Locale::createFromName("root"),
+            5.43,
+            u"5.43 m²");
+
     // es_US has "{0}°" for unitsNarrow/temperature/FAHRENHEIT.
     // NOTE: This example is in the documentation.
     assertFormatSingle(

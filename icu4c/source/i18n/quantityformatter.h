@@ -150,6 +150,7 @@ public:
 
     /**
      * Formats the pattern with the value and adjusts the FieldPosition.
+     * TODO: Remove?
      */
     static UnicodeString &format(
             const SimpleFormatter &pattern,

@@ -499,6 +499,15 @@ public class NumberFormatterApiTest {
                 5.43,
                 "5.43 m²");
 
+        // Try accessing a narrow unit directly from root.
+        assertFormatSingle(
+                "Interesting Data Fallback 4",
+                "measure-unit/area-square-meter unit-width-narrow",
+                NumberFormatter.with().unit(MeasureUnit.SQUARE_METER).unitWidth(UnitWidth.NARROW),
+                ULocale.forLanguageTag("root"),
+                5.43,
+                "5.43 m²");
+
         // es_US has "{0}°" for unitsNarrow/temperature/FAHRENHEIT.
         // NOTE: This example is in the documentation.
         assertFormatSingle(

@@ -2205,6 +2205,9 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     // Allow child class CompactDecimalFormat to access fProperties:
     friend class CompactDecimalFormat;
 
+    // Allow MeasureFormat to use fieldPositionHelper:
+    friend class MeasureFormat;
+
 };
 
 U_NAMESPACE_END
