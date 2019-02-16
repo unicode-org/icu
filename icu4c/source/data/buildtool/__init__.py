@@ -3,6 +3,8 @@
 
 from collections import namedtuple
 
+LocalFile = namedtuple("LocalFile", ["dirname", "filename"])
+SrcFile = namedtuple("SrcFile", ["filename"])
 InFile = namedtuple("InFile", ["filename"])
 TmpFile = namedtuple("TmpFile", ["filename"])
 OutFile = namedtuple("OutFile", ["filename"])

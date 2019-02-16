@@ -39,7 +39,7 @@ CREATE_DIRS :
 		--mode windows-exec \
 		--tool_dir "$(ICUTOOLS)" \
 		--tool_cfg "$(CFG)" \
-		--in_dir "$(TESTDATA)" \
+		--src_dir "$(TESTDATA)" \
 		--tmp_dir "$(TESTDATATMP)" \
 		--out_dir "$(TESTDATABLD)"
 	"$(ICUPBIN)\pkgdata" -f -v -m common -c -p"$(TESTPKG)" -d "$(TESTDATAOUT)" -T "$(TESTDATABLD)" -s "$(TESTDATABLD)" $(TESTDATATMP)\testdata.lst

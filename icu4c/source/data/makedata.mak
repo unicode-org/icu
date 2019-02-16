@@ -235,7 +235,7 @@ $(COREDATA_TS):
 	@cd "$(ICUSRCDATA)"
 	py -3 -m buildtool \
 		--mode windows-exec \
-		--in_dir "$(ICUSRCDATA)" \
+		--src_dir "$(ICUSRCDATA)" \
 		--tool_dir "$(ICUTOOLS)" \
 		--tool_cfg "$(CFG)" \
 		--out_dir "$(ICUBLD_PKG)" \

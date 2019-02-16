@@ -11,6 +11,10 @@ from . import *
 
 
 def dir_for(file):
+    if isinstance(file, LocalFile):
+        return file.dirname
+    if isinstance(file, SrcFile):
+        return "{SRC_DIR}"
     if isinstance(file, InFile):
         return "{IN_DIR}"
     if isinstance(file, TmpFile):

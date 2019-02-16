@@ -13,6 +13,7 @@ import sys
 
 from . import *
 from .comment_stripper import CommentStripper
+from .request_types import CopyRequest
 from .renderers import makefile, unix_exec, windows_exec
 from . import filtration, utils
 import BUILDRULES
@@ -67,8 +68,8 @@ arg_group_required.add_argument(
 )
 
 flag_parser.add_argument(
-    "--in_dir",
-    help = "Path to data input folder (icu4c/source/data).",
+    "--src_dir",
+    help = "Path to data source folder (icu4c/source/data).",
     default = "."
 )
 flag_parser.add_argument(
@@ -163,12 +164,52 @@ class Config(object):
             pass
 
 
+def add_copy_input_requests(requests, config, common_vars):
+    files_to_copy = set()
+    for request in requests:
+        for f in request.all_input_files():
+            if isinstance(f, InFile):
+                files_to_copy.add(f)
+
+    result = []
+    id = 0
+
+    json_data = config.filters_json_data["fileReplacements"]
+    dirname = json_data["directory"]
+    for directive in json_data["replacements"]:
+        input_file = LocalFile(dirname, directive["src"])
+        output_file = InFile(directive["dest"])
+        result += [
+            CopyRequest(
+                name = "input_copy_%d" % id,
+                input_file = input_file,
+                output_file = output_file
+            )
+        ]
+        files_to_copy.remove(output_file)
+        id += 1
+
+    for f in files_to_copy:
+        result += [
+            CopyRequest(
+                name = "input_copy_%d" % id,
+                input_file = SrcFile(f.filename),
+                output_file = f
+            )
+        ]
+        id += 1
+
+    result += requests
+    return result
+
+
 def main():
     args = flag_parser.parse_args()
     config = Config(args)
 
     if args.mode == "gnumake":
         makefile_vars = {
+            "SRC_DIR": "$(srcdir)",
             "IN_DIR": "$(srcdir)",
             "INDEX_NAME": "res_index"
         }
@@ -177,13 +218,14 @@ def main():
             key: "$(%s)" % key
             for key in list(makefile_vars.keys()) + makefile_env
         }
-        common["GLOB_DIR"] = args.in_dir
+        common["GLOB_DIR"] = args.src_dir
     else:
         common = {
             # GLOB_DIR is used now, whereas IN_DIR is used during execution phase.
             # There is no useful distinction in unix-exec or windows-exec mode.
-            "GLOB_DIR": args.in_dir,
-            "IN_DIR": args.in_dir,
+            "GLOB_DIR": args.src_dir,
+            "SRC_DIR": args.src_dir,
+            "IN_DIR": args.src_dir,
             "OUT_DIR": args.out_dir,
             "TMP_DIR": args.tmp_dir,
             "INDEX_NAME": "res_index",
@@ -192,16 +234,24 @@ def main():
         }
 
     def glob(pattern):
-        result_paths = pyglob.glob("{IN_DIR}/{PATTERN}".format(
-            IN_DIR = args.in_dir,
+        result_paths = pyglob.glob("{GLOB_DIR}/{PATTERN}".format(
+            GLOB_DIR = args.src_dir,
             PATTERN = pattern
         ))
         # For the purposes of buildtool, force Unix-style directory separators.
-        return [v.replace("\\", "/")[len(args.in_dir)+1:] for v in sorted(result_paths)]
+        return [v.replace("\\", "/")[len(args.src_dir)+1:] for v in sorted(result_paths)]
 
     requests = BUILDRULES.generate(config, glob, common)
     requests = filtration.apply_filters(requests, config)
     requests = utils.flatten_requests(requests, config, common)
+
+    if "fileReplacements" in config.filters_json_data:
+        tmp_in_dir = "{TMP_DIR}/in".format(**common)
+        if makefile_vars:
+            makefile_vars["IN_DIR"] = tmp_in_dir
+        else:
+            common["IN_DIR"] = tmp_in_dir
+        requests = add_copy_input_requests(requests, config, common)
 
     build_dirs = utils.compute_directories(requests)
 
