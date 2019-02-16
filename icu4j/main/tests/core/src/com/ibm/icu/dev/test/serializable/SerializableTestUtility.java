@@ -819,6 +819,7 @@ public class SerializableTestUtility {
         map.put("com.ibm.icu.text.ChineseDateFormat$Field", new FormatHandler.ChineseDateFormatFieldHandler());
         map.put("com.ibm.icu.text.MessageFormat$Field", new FormatHandler.MessageFormatFieldHandler());
         map.put("com.ibm.icu.text.RelativeDateTimeFormatter$Field", new FormatHandler.RelativeDateTimeFormatterFieldHandler());
+        map.put("com.ibm.icu.text.DateIntervalFormat$SpanField", new FormatHandler.DateIntervalSpanFieldHandler());
 
         map.put("com.ibm.icu.impl.duration.BasicDurationFormat", new FormatHandler.BasicDurationFormatHandler());
         map.put("com.ibm.icu.impl.RelativeDateFormat", new FormatHandler.RelativeDateFormatHandler());

@@ -1816,6 +1816,21 @@ public class FormatHandler
         }
     }
 
+    public static class DateIntervalSpanFieldHandler implements SerializableTestUtility.Handler
+    {
+        @Override
+        public Object[] getTestObjects()
+        {
+            return new Object[] {DateIntervalFormat.SpanField.DATE_INTERVAL_SPAN};
+        }
+
+        @Override
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            return (a == b);
+        }
+    }
+
     public static class DateFormatHandler implements SerializableTestUtility.Handler
     {
         static HashMap cannedPatterns = new HashMap();

@@ -32,6 +32,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateIntervalFormat;
+import com.ibm.icu.text.DateIntervalFormat.FormattedDateInterval;
 import com.ibm.icu.text.DateIntervalInfo;
 import com.ibm.icu.text.DateIntervalInfo.PatternInfo;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -1423,7 +1424,7 @@ public class DateIntervalFormatTest extends TestFmwk {
         } catch (Exception e) { /* No op */ }
 
         // Check getPatterns()
-        Output<String> secondPart = new Output<String>();
+        Output<String> secondPart = new Output<>();
         Calendar fromCalendar = Calendar.getInstance(Locale.ENGLISH);
         fromCalendar.set(2016, 5, 22);
         Calendar toCalendar= Calendar.getInstance(Locale.ENGLISH);
@@ -1827,8 +1828,8 @@ public class DateIntervalFormatTest extends TestFmwk {
     public void TestTicket11669 () {
         // These final variables are accessed directly by the concurrent threads.
         final DateIntervalFormat formatter = DateIntervalFormat.getInstance(DateFormat.YEAR_MONTH_DAY, ULocale.US);
-        final ArrayList<DateInterval> testIntervals = new ArrayList<DateInterval>();
-        final ArrayList<String>expectedResults = new ArrayList<String>();
+        final ArrayList<DateInterval> testIntervals = new ArrayList<>();
+        final ArrayList<String>expectedResults = new ArrayList<>();
 
         // Create and save the input test data.
         TimeZone tz = TimeZone.getTimeZone("Americal/Los_Angeles");
@@ -1871,7 +1872,7 @@ public class DateIntervalFormatTest extends TestFmwk {
             }
         }
 
-        List<TestThread> threads = new ArrayList<TestThread>();
+        List<TestThread> threads = new ArrayList<>();
         for (int i=0; i<4; ++i) {
             threads.add(new TestThread());
         }
@@ -1887,6 +1888,89 @@ public class DateIntervalFormatTest extends TestFmwk {
             if (t.errorMessage != null) {
                 fail(t.errorMessage);
             }
+        }
+    }
+
+    @Test
+    public void testFormattedDateInterval() {
+        DateIntervalFormat fmt = DateIntervalFormat.getInstance("dMMMMy", ULocale.US);
+
+        {
+            String message = "FormattedDateInterval test 1";
+            String expectedString = "July 20 \u2013 25, 2018";
+            Calendar input1 = Calendar.getInstance(ULocale.UK);
+            Calendar input2 = Calendar.getInstance(ULocale.UK);
+            input1.set(2018, 6, 20);
+            input2.set(2018, 6, 25);
+            FormattedDateInterval result = fmt.formatToValue(input1, input2);
+            Object[][] expectedFieldPositions = new Object[][] {
+                // field, begin index, end index
+                {DateFormat.Field.MONTH, 0, 4},
+                {DateIntervalFormat.SpanField.DATE_INTERVAL_SPAN, 5, 7, 0},
+                {DateFormat.Field.DAY_OF_MONTH, 5, 7},
+                {DateIntervalFormat.SpanField.DATE_INTERVAL_SPAN, 10, 12, 1},
+                {DateFormat.Field.DAY_OF_MONTH, 10, 12},
+                {DateFormat.Field.YEAR, 14, 18}};
+            FormattedValueTest.checkFormattedValue(
+                message,
+                result,
+                expectedString,
+                expectedFieldPositions);
+        }
+
+        fmt = DateIntervalFormat.getInstance("dMMMha", ULocale.US);
+
+        {
+            String message = "FormattedDateInterval test 2";
+            String expectedString = "Feb 15, 11 AM \u2013 3 PM";
+            Calendar input1 = Calendar.getInstance(ULocale.US);
+            Calendar input2 = Calendar.getInstance(ULocale.US);
+            input1.set(2019, 1, 15, 11, 0, 0);
+            input2.set(2019, 1, 15, 15, 0, 0);
+            FormattedDateInterval result = fmt.formatToValue(input1, input2);
+            Object[][] expectedFieldPositions = new Object[][] {
+                // field, begin index, end index
+                {DateFormat.Field.MONTH, 0, 3},
+                {DateFormat.Field.DAY_OF_MONTH, 4, 6},
+                {DateIntervalFormat.SpanField.DATE_INTERVAL_SPAN, 8, 13, 0},
+                {DateFormat.Field.HOUR1, 8, 10},
+                {DateFormat.Field.AM_PM, 11, 13},
+                {DateIntervalFormat.SpanField.DATE_INTERVAL_SPAN, 16, 20, 1},
+                {DateFormat.Field.HOUR1, 16, 17},
+                {DateFormat.Field.AM_PM, 18, 20}};
+            FormattedValueTest.checkFormattedValue(
+                message,
+                result,
+                expectedString,
+                expectedFieldPositions);
+        }
+
+        // To test the fallback pattern behavior, make a custom DateIntervalInfo.
+        DateIntervalInfo dtitvinf = new DateIntervalInfo();
+        dtitvinf.setFallbackIntervalPattern("<< {1} --- {0} >>");
+        fmt = DateIntervalFormat.getInstance("dMMMMy", ULocale.US, dtitvinf);
+
+        {
+            String message = "FormattedDateInterval with fallback format test 1";
+            String expectedString = "<< July 25, 2018 --- July 20, 2018 >>";
+            Date input1 = new Date(2018 - 1900, 6, 20);
+            Date input2 = new Date(2018 - 1900, 6, 25);
+            DateInterval dtiv = new DateInterval(input1.getTime(), input2.getTime());
+            FormattedDateInterval result = fmt.formatToValue(dtiv);
+            Object[][] expectedFieldPositions = new Object[][] {
+                {DateIntervalFormat.SpanField.DATE_INTERVAL_SPAN, 3, 16, 1},
+                {DateFormat.Field.MONTH, 3, 7},
+                {DateFormat.Field.DAY_OF_MONTH, 8, 10},
+                {DateFormat.Field.YEAR, 12, 16},
+                {DateIntervalFormat.SpanField.DATE_INTERVAL_SPAN, 21, 34, 0},
+                {DateFormat.Field.MONTH, 21, 25},
+                {DateFormat.Field.DAY_OF_MONTH, 26, 28},
+                {DateFormat.Field.YEAR, 30, 34}};
+            FormattedValueTest.checkFormattedValue(
+                message,
+                result,
+                expectedString,
+                expectedFieldPositions);
         }
     }
 }

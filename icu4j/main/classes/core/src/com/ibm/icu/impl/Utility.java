@@ -17,6 +17,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.Replaceable;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeMatcher;
+import com.ibm.icu.util.ICUUncheckedIOException;
 
 public final class Utility {
 
@@ -1844,5 +1845,17 @@ public final class Utility {
             hash = hash * 31 + value.charAt(i);
         }
         return hash;
+    }
+
+    /**
+     * Appends a CharSequence to an Appendable, converting IOException to ICUUncheckedIOException.
+     */
+    public static <A extends Appendable> A appendTo(CharSequence string, A appendable) {
+        try {
+            appendable.append(string);
+            return appendable;
+        } catch (IOException e) {
+            throw new ICUUncheckedIOException(e);
+        }
     }
 }
