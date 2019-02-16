@@ -18,7 +18,7 @@ def generate(config, glob, common_vars):
     requests = []
 
     if len(glob("misc/*")) == 0:
-        print("Error: Cannot find data directory; please specify --in_dir", file=sys.stderr)
+        print("Error: Cannot find data directory; please specify --src_dir", file=sys.stderr)
         exit(1)
 
     requests += generate_cnvalias(config, glob, common_vars)
@@ -101,7 +101,7 @@ def generate(config, glob, common_vars):
         # Depends on timezoneTypes.res and keyTypeData.res.
         # TODO: We should not need this dependency to build collation.
         # TODO: Bake keyTypeData.res into the common library?
-        [DepTarget("coll_ucadata"), DepTarget("misc_res")])
+        [DepTarget("coll_ucadata"), DepTarget("misc_res"), InFile("unidata/UCARules.txt")])
 
     requests += generate_tree(config, glob, common_vars,
         "brkitr",
@@ -225,7 +225,7 @@ def generate_stringprep(config, glob, common_vars):
         RepeatedExecutionRequest(
             name = "stringprep",
             category = "stringprep",
-            dep_targets = [],
+            dep_targets = [InFile("unidata/NormalizationCorrections.txt")],
             input_files = input_files,
             output_files = output_files,
             tool = IcuTool("gensprep"),
@@ -398,6 +398,9 @@ def generate_translit(config, glob, common_vars):
         InFile("translit/en.txt"),
         InFile("translit/el.txt")
     ]
+    dep_files = set(InFile(filename) for filename in glob("translit/*.txt"))
+    dep_files -= set(input_files)
+    dep_files = list(dep_files)
     input_basenames = [v.filename[9:] for v in input_files]
     output_files = [
         OutFile("translit/%s.res" % v[:-4])
@@ -407,7 +410,7 @@ def generate_translit(config, glob, common_vars):
         RepeatedOrSingleExecutionRequest(
             name = "translit_res",
             category = "translit",
-            dep_targets = [],
+            dep_targets = dep_files,
             input_files = input_files,
             output_files = output_files,
             tool = IcuTool("genrb"),

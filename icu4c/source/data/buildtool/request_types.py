@@ -104,6 +104,9 @@ class AbstractExecutionRequest(AbstractRequest):
         if not self.dep_targets:
             return
         for dep_target in self.dep_targets:
+            if isinstance(dep_target, InFile):
+                self.dep_files.append(dep_target)
+                continue
             for request in all_requests:
                 if request.name == dep_target.name:
                     self.dep_files += request.all_output_files()
