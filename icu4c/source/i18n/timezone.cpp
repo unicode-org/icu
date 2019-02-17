@@ -1497,8 +1497,10 @@ TimeZone::hasSameRules(const TimeZone& other) const
 static void U_CALLCONV initTZDataVersion(UErrorCode &status) {
     ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
     int32_t len = 0;
-    UResourceBundle *bundle = ures_openDirect(NULL, kZONEINFO, &status);
-    const UChar *tzver = ures_getStringByKey(bundle, kTZVERSION, &len, &status);
+    UResourceBundle bundle;
+    ures_initStackObject(&bundle);
+    ures_openDirectFillIn(&bundle, NULL, kZONEINFO, &status);
+    const UChar *tzver = ures_getStringByKey(&bundle, kTZVERSION, &len, &status);
 
     if (U_SUCCESS(status)) {
         if (len >= (int32_t)sizeof(TZDATA_VERSION)) {
@@ -1507,8 +1509,7 @@ static void U_CALLCONV initTZDataVersion(UErrorCode &status) {
         }
         u_UCharsToChars(tzver, TZDATA_VERSION, len);
     }
-    ures_close(bundle);
-
+    ures_close(&bundle);
 }
 
 const char*

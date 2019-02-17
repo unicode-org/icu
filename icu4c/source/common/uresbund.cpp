@@ -2313,11 +2313,13 @@ ures_openDirect(const char* path, const char* localeID, UErrorCode* status) {
 }
 
 /**
- *  API: This function is used to open a resource bundle 
+ *  Internal API: This function is used to open a resource bundle 
  *  proper fallback chaining is executed while initialization. 
  *  The result is stored in cache for later fallback search.
+ * 
+ * Same as ures_open(), but uses the fill-in parameter and does not allocate a new bundle.
  */
-U_CAPI void U_EXPORT2
+U_INTERNAL void U_EXPORT2
 ures_openFillIn(UResourceBundle *r, const char* path,
                 const char* localeID, UErrorCode* status) {
     if(U_SUCCESS(*status) && r == NULL) {
@@ -2325,6 +2327,18 @@ ures_openFillIn(UResourceBundle *r, const char* path,
         return;
     }
     ures_openWithType(r, path, localeID, URES_OPEN_LOCALE_DEFAULT_ROOT, status);
+}
+
+/**
+ * Same as ures_openDirect(), but uses the fill-in parameter and does not allocate a new bundle.
+ */
+U_INTERNAL void U_EXPORT2
+ures_openDirectFillIn(UResourceBundle *r, const char* path, const char* localeID, UErrorCode* status) {
+    if(U_SUCCESS(*status) && r == NULL) {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    ures_openWithType(r, path, localeID, URES_OPEN_DIRECT, status);
 }
 
 /**

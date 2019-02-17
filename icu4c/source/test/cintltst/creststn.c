@@ -1178,12 +1178,20 @@ static void TestErrorConditions(){
         log_err("ERROR: ures_openU() is supposed to fail path =%s with status != U_ZERO_ERROR\n", austrdup(utestdatapath));
         ures_close(teRes);
     }
-    /*Test ures_openFillIn with UResourceBundle = NULL*/
+    /*Test ures_openFillIn fails when input UResourceBundle parameter is NULL*/
     log_verbose("Testing ures_openFillIn with UResourceBundle = NULL.....\n");
     status=U_ZERO_ERROR;
     ures_openFillIn(NULL, testdatapath, "te", &status);
     if(status != U_ILLEGAL_ARGUMENT_ERROR){
         log_err("ERROR: ures_openFillIn with UResourceBundle= NULL should fail.  Expected U_ILLEGAL_ARGUMENT_ERROR, Got: %s\n",
+                        myErrorName(status));
+    }
+    /*Test ures_openDirectFillIn fails when input UResourceBundle parameter is NULL*/
+    log_verbose("Testing ures_openDirectFillIn with UResourceBundle = NULL.....\n");
+    status=U_ZERO_ERROR;
+    ures_openDirectFillIn(NULL, testdatapath, "te", &status);
+    if(status != U_ILLEGAL_ARGUMENT_ERROR){
+        log_err("ERROR: ures_openDirectFillIn with UResourceBundle= NULL should fail.  Expected U_ILLEGAL_ARGUMENT_ERROR, Got: %s\n",
                         myErrorName(status));
     }
     /*Test ures_getLocale() with status != U_ZERO_ERROR*/
