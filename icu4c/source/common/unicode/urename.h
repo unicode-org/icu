@@ -1552,6 +1552,7 @@
 #define ures_open U_ICU_ENTRY_POINT_RENAME(ures_open)
 #define ures_openAvailableLocales U_ICU_ENTRY_POINT_RENAME(ures_openAvailableLocales)
 #define ures_openDirect U_ICU_ENTRY_POINT_RENAME(ures_openDirect)
+#define ures_openDirectFillIn U_ICU_ENTRY_POINT_RENAME(ures_openDirectFillIn)
 #define ures_openFillIn U_ICU_ENTRY_POINT_RENAME(ures_openFillIn)
 #define ures_openNoDefault U_ICU_ENTRY_POINT_RENAME(ures_openNoDefault)
 #define ures_openU U_ICU_ENTRY_POINT_RENAME(ures_openU)

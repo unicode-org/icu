@@ -327,4 +327,27 @@ U_CAPI const char* U_EXPORT2
 ures_getLocaleInternal(const UResourceBundle* resourceBundle, 
                UErrorCode* status);
 
+/**
+ * Same as ures_openDirect() but uses the fill-in parameter instead of allocating a new bundle.
+ * 
+ * @param r The existing UResourceBundle to fill in. If NULL then status will be
+ *          set to U_ILLEGAL_ARGUMENT_ERROR.
+ * @param packageName   The packageName and locale together point to an ICU udata object,
+ *                      as defined by <code> udata_open( packageName, "res", locale, err) </code>
+ *                      or equivalent.  Typically, packageName will refer to a (.dat) file, or to
+ *                      a package registered with udata_setAppData(). Using a full file or directory
+ *                      pathname for packageName is deprecated. If NULL, ICU data will be used.
+ * @param locale  specifies the locale for which we want to open the resource
+ *                if NULL, the default locale will be used. If strlen(locale) == 0
+ *                root locale will be used.
+ * @param status The error code.
+ * @see ures_openDirect
+ * @internal
+ */
+U_CAPI void U_EXPORT2
+ures_openDirectFillIn(UResourceBundle *r,
+                      const char *packageName,
+                      const char *locale,
+                      UErrorCode *status);
+
 #endif /*URESIMP_H*/
