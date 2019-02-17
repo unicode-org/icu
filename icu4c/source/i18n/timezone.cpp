@@ -382,19 +382,17 @@ createSystemTimeZone(const UnicodeString& id, UErrorCode& ec) {
         return NULL;
     }
     TimeZone* z = 0;
-    UResourceBundle res;
-    ures_initStackObject(&res);
+    StackUResourceBundle res;
     U_DEBUG_TZ_MSG(("pre-err=%s\n", u_errorName(ec)));
-    UResourceBundle *top = openOlsonResource(id, res, ec);
+    UResourceBundle *top = openOlsonResource(id, res.ref(), ec);
     U_DEBUG_TZ_MSG(("post-err=%s\n", u_errorName(ec)));
     if (U_SUCCESS(ec)) {
-        z = new OlsonTimeZone(top, &res, id, ec);
+        z = new OlsonTimeZone(top, res.getAlias(), id, ec);
         if (z == NULL) {
             ec = U_MEMORY_ALLOCATION_ERROR;
             U_DEBUG_TZ_MSG(("cstz: olson time zone failed to initialize - err %s\n", u_errorName(ec)));
         }
     }
-    ures_close(&res);
     ures_close(top);
     if (U_FAILURE(ec)) {
         U_DEBUG_TZ_MSG(("cstz: failed to create, err %s\n", u_errorName(ec)));
@@ -987,18 +985,14 @@ int32_t U_EXPORT2
 TimeZone::countEquivalentIDs(const UnicodeString& id) {
     int32_t result = 0;
     UErrorCode ec = U_ZERO_ERROR;
-    UResourceBundle res;
-    ures_initStackObject(&res);
+    StackUResourceBundle res;
     U_DEBUG_TZ_MSG(("countEquivalentIDs..\n"));
-    UResourceBundle *top = openOlsonResource(id, res, ec);
+    UResourceBundle *top = openOlsonResource(id, res.ref(), ec);
     if (U_SUCCESS(ec)) {
-        UResourceBundle r;
-        ures_initStackObject(&r);
-        ures_getByKey(&res, kLINKS, &r, &ec);
-        ures_getIntVector(&r, &result, &ec);
-        ures_close(&r);
+        StackUResourceBundle r;
+        ures_getByKey(res.getAlias(), kLINKS, r.getAlias(), &ec);
+        ures_getIntVector(r.getAlias(), &result, &ec);
     }
-    ures_close(&res);
     ures_close(top);
     return result;
 }
@@ -1010,24 +1004,20 @@ TimeZone::getEquivalentID(const UnicodeString& id, int32_t index) {
     U_DEBUG_TZ_MSG(("gEI(%d)\n", index));
     UnicodeString result;
     UErrorCode ec = U_ZERO_ERROR;
-    UResourceBundle res;
-    ures_initStackObject(&res);
-    UResourceBundle *top = openOlsonResource(id, res, ec);
+    StackUResourceBundle res;
+    UResourceBundle *top = openOlsonResource(id, res.ref(), ec);
     int32_t zone = -1;
     if (U_SUCCESS(ec)) {
-        UResourceBundle r;
-        ures_initStackObject(&r);
+        StackUResourceBundle r;
         int32_t size;
-        ures_getByKey(&res, kLINKS, &r, &ec);
-        const int32_t* v = ures_getIntVector(&r, &size, &ec);
+        ures_getByKey(res.getAlias(), kLINKS, r.getAlias(), &ec);
+        const int32_t *v = ures_getIntVector(r.getAlias(), &size, &ec);
         if (U_SUCCESS(ec)) {
             if (index >= 0 && index < size) {
                 zone = v[index];
             }
         }
-        ures_close(&r);
     }
-    ures_close(&res);
     if (zone >= 0) {
         UResourceBundle *ares = ures_getByKey(top, kNAMES, NULL, &ec); // dereference Zones section
         if (U_SUCCESS(ec)) {
@@ -1497,10 +1487,9 @@ TimeZone::hasSameRules(const TimeZone& other) const
 static void U_CALLCONV initTZDataVersion(UErrorCode &status) {
     ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONE, timeZone_cleanup);
     int32_t len = 0;
-    UResourceBundle bundle;
-    ures_initStackObject(&bundle);
-    ures_openDirectFillIn(&bundle, NULL, kZONEINFO, &status);
-    const UChar *tzver = ures_getStringByKey(&bundle, kTZVERSION, &len, &status);
+    StackUResourceBundle bundle;
+    ures_openDirectFillIn(bundle.getAlias(), NULL, kZONEINFO, &status);
+    const UChar *tzver = ures_getStringByKey(bundle.getAlias(), kTZVERSION, &len, &status);
 
     if (U_SUCCESS(status)) {
         if (len >= (int32_t)sizeof(TZDATA_VERSION)) {
@@ -1509,7 +1498,6 @@ static void U_CALLCONV initTZDataVersion(UErrorCode &status) {
         }
         u_UCharsToChars(tzver, TZDATA_VERSION, len);
     }
-    ures_close(&bundle);
 }
 
 const char*

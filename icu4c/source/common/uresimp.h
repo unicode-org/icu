@@ -106,7 +106,7 @@ U_NAMESPACE_BEGIN
  * @see LocalUResourceBundlePointer
  * @internal
  */
-class StackUResourceBundle {
+class U_COMMON_API StackUResourceBundle {
 public:
     // No heap allocation. Use only on the stack.
     static void* U_EXPORT2 operator new(size_t) U_NO_THROW = delete;
@@ -119,6 +119,9 @@ public:
     ~StackUResourceBundle();
 
     UResourceBundle* getAlias() { return &bundle; }
+
+    UResourceBundle& ref() { return bundle; }
+    const UResourceBundle& ref() const { return bundle; }
 
     StackUResourceBundle(const StackUResourceBundle&) = delete;
     StackUResourceBundle& operator=(const StackUResourceBundle&) = delete;
