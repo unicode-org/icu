@@ -55,6 +55,7 @@ public:
     void Test5554(void);
     void Test9237(void);
     void TestParsing(void);
+    void Test12902_yWithGregoCalInThaiLoc(void);
     void TestT10334(void);
     void TestT10619(void);
     void TestT10855(void);

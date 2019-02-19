@@ -2041,7 +2041,8 @@ public class SimpleDateFormat extends DateFormat {
             break;
         } // switch (patternCharIndex)
 
-        if (fieldNum == 0 && capitalizationContext != null && UCharacter.isLowerCase(buf.codePointAt(bufstart))) {
+        if (fieldNum == 0 && capitalizationContext != null && buf.length() > bufstart &&
+                UCharacter.isLowerCase(buf.codePointAt(bufstart))) {
             boolean titlecase = false;
             switch (capitalizationContext) {
                 case CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:

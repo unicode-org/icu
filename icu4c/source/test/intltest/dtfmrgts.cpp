@@ -59,11 +59,12 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char*
         CASE(26,Test5554)
         CASE(27,Test9237)
         CASE(28,TestParsing)
-        CASE(29,TestT10334)
-        CASE(30,TestT10619)
-        CASE(31,TestT10855)
-        CASE(32,TestT10906)
-        CASE(33,TestT13380)
+        CASE(29,Test12902_yWithGregoCalInThaiLoc)
+        CASE(30,TestT10334)
+        CASE(31,TestT10619)
+        CASE(32,TestT10855)
+        CASE(33,TestT10906)
+        CASE(34,TestT13380)
         default: name = ""; break;
     }
 }
@@ -1531,6 +1532,55 @@ void DateFormatRegressionTest::TestParsing(void) {
     }
 
     delete cal;
+}
+
+void DateFormatRegressionTest::Test12902_yWithGregoCalInThaiLoc(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UDate testDate = 43200000.0; // 1970-Jan-01 12:00 GMT
+    const char* skeleton = "y";
+    // Note that in locale "th", the availableFormats for skeleton "y" differ by calendar:
+    // for buddhist (default calendar): y{"G y"}
+    // for gregorian: y{"y"}
+    const char* expectFormat = "1970"; // format for skeleton y in Thai locale with Gregorian calendar
+    UnicodeString getFmtStr;
+
+    const TimeZone* gmtZone = TimeZone::getGMT();
+    LocalPointer<GregorianCalendar> pureGregoCal(new GregorianCalendar(*gmtZone, Locale::getEnglish(), status));
+    if (U_FAILURE(status)) {
+        dataerrln("Fail in new GregorianCalendar(GMT, en): %s", u_errorName(status));
+        return;
+    }
+    LocalPointer<DateFormat> df1(DateFormat::createInstanceForSkeleton(pureGregoCal.orphan(), skeleton, "th", status));
+    if (U_FAILURE(status)) {
+        dataerrln("Fail in DateFormat::createInstanceForSkeleton for th with Grego cal: %s", u_errorName(status));
+        return;
+    }
+    status = U_ZERO_ERROR;
+    getFmtStr.remove();
+    getFmtStr = df1->format(testDate, getFmtStr);
+    if (U_FAILURE(status)) {
+        errln("Fail in DateFormat::format for th with Grego cal: %s", u_errorName(status));
+    } else if (getFmtStr != expectFormat) {
+        char getFormat[32];
+        getFmtStr.extract(0, getFmtStr.length(), getFormat, 32);
+        errln("Error in DateFormat::format for th with Grego cal, expect: %s, get: %s", expectFormat, getFormat);
+    }
+
+    LocalPointer<DateFormat> df2(DateFormat::createInstanceForSkeleton(skeleton, "th-u-ca-gregory", status));
+    if (U_FAILURE(status)) {
+        dataerrln("Fail in DateFormat::createInstanceForSkeleton for th-u-ca-gregory: %s", u_errorName(status));
+        return;
+    }
+    status = U_ZERO_ERROR;
+    getFmtStr.remove();
+    getFmtStr = df2->format(testDate, getFmtStr);
+    if (U_FAILURE(status)) {
+        errln("Fail in DateFormat::format for th-u-ca-gregory: %s", u_errorName(status));
+    } else if (getFmtStr != expectFormat) {
+        char getFormat[32];
+        getFmtStr.extract(0, getFmtStr.length(), getFormat, 32);
+        errln("Error in DateFormat::format for th with Grego cal, expect: %s, get: %s", expectFormat, getFormat);
+    }
 }
 
 void DateFormatRegressionTest::TestT10334(void) {

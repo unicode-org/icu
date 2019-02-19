@@ -2196,6 +2196,9 @@ public abstract class DateFormat extends UFormat {
      */
     public final static DateFormat getInstanceForSkeleton(
         Calendar cal, String skeleton, ULocale locale) {
+        if (cal != null) {
+            locale = locale.setKeywordValue("calendar", cal.getType());
+        }
         DateTimePatternGenerator generator = DateTimePatternGenerator.getInstance(locale);
         final String bestPattern = generator.getBestPattern(skeleton);
         SimpleDateFormat format = new SimpleDateFormat(bestPattern, locale);
