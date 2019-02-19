@@ -1239,6 +1239,38 @@ public class DateFormatRegressionTest extends TestFmwk {
     }
 
     @Test
+    public void Test12902_yWithGregoCalInThaiLoc() {
+        final Date testDate = new Date(43200000); // 1970-Jan-01 12:00 GMT
+        final String skeleton = "y";
+        // Note that in locale "th", the availableFormats for skeleton "y" differ by calendar:
+        // for buddhist (default calendar): y{"G y"}
+        // for gregorian: y{"y"}
+        final String expectFormat = "1970"; // format for skeleton y in Thai locale with Gregorian calendar
+
+        GregorianCalendar pureGregorianCalendar = new GregorianCalendar(TimeZone.GMT_ZONE, ULocale.ENGLISH);
+        pureGregorianCalendar.setGregorianChange(new Date(Long.MIN_VALUE)); // Per original bug, but not relevant
+        DateFormat df1 = DateFormat.getPatternInstance(pureGregorianCalendar, skeleton, ULocale.forLanguageTag("th"));
+        try {
+            String getFormat = df1.format(testDate);
+            if (!getFormat.equals(expectFormat)) {
+                errln("Error in DateFormat.format for th with Grego cal, expect: " + expectFormat + ", get: " + getFormat);
+            }
+        } catch (Exception e) {
+            errln("Fail in DateFormat.format for th with Grego cal: " + e);
+        }
+
+        DateFormat df2 = DateFormat.getPatternInstance(skeleton, new ULocale("th-u-ca-gregory"));
+        try {
+            String getFormat = df2.format(testDate);
+            if (!getFormat.equals(expectFormat)) {
+                errln("Error in DateFormat.format for th-u-ca-gregory, expect: " + expectFormat + ", get: " + getFormat);
+            }
+        } catch (Exception e) {
+            errln("Fail in DateFormat.format for th-u-ca-gregory: " + e);
+        }
+    }
+
+    @Test
     public void TestT10110() {
         try {
             SimpleDateFormat formatter = new SimpleDateFormat("Gy年M月d日E", new Locale("zh_Hans"));

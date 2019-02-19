@@ -1950,7 +1950,8 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     }
 #if !UCONFIG_NO_BREAK_ITERATION
     // if first field, check to see whether we need to and are able to titlecase it
-    if (fieldNum == 0 && u_islower(appendTo.char32At(beginOffset)) && fCapitalizationBrkIter != NULL) {
+    if (fieldNum == 0 && fCapitalizationBrkIter != NULL && appendTo.length() > beginOffset &&
+            u_islower(appendTo.char32At(beginOffset))) {
         UBool titlecase = FALSE;
         switch (capitalizationContext) {
             case UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
