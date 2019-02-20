@@ -10,12 +10,9 @@ cpysearch.pl  searches for files modified this year that don't have the
 
 cpyscan.pl    searches for all files that don't have any copyright
 
-cpyskip.txt  is part of the ignore list. Download the latest from
-   http://source.icu-project.org/cpyskip.txt
+.cpyskip.txt  is part of the ignore list. It resides as hidden file on
+  the top level of the repsoitory. Download the latest from
+    https://raw.githubusercontent.com/unicode-org/icu/master/.cpyskip.txt
 
 more docs on copyright scan at:
    http://site.icu-project.org/processes/copyright-scan
-
-
-Have fun!
-weiv
