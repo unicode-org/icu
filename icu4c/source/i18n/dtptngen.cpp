@@ -615,16 +615,11 @@ U_CFUNC void U_CALLCONV DateTimePatternGenerator::loadAllowedHourFormatsData(UEr
 
 void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErrorCode &status) {
     if (U_FAILURE(status)) { return; }
-    const char *localeID = locale.getName();
-    char maxLocaleID[ULOC_FULLNAME_CAPACITY];
-    int32_t length = uloc_addLikelySubtags(localeID, maxLocaleID, ULOC_FULLNAME_CAPACITY, &status);
+    Locale maxLocale(locale);
+    maxLocale.addLikelySubtags(status);
     if (U_FAILURE(status)) {
         return;
-    } else if (length == ULOC_FULLNAME_CAPACITY) {  // no room for NUL
-        status = U_BUFFER_OVERFLOW_ERROR;
-        return;
     }
-    Locale maxLocale = Locale(maxLocaleID);
 
     const char *country = maxLocale.getCountry();
     if (*country == '\0') { country = "001"; }

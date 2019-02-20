@@ -740,46 +740,10 @@ Locale::addLikelySubtags(UErrorCode& status) {
         return;
     }
 
-    // The maximized locale ID string is often longer, but there is no good
-    // heuristic to estimate just how much longer. Leave that to CharString.
     CharString maximizedLocaleID;
-    int32_t maximizedLocaleIDCapacity = static_cast<int32_t>(uprv_strlen(fullName));
-
-    char* buffer;
-    int32_t reslen;
-
-    for (;;) {
-        buffer = maximizedLocaleID.getAppendBuffer(
-                /*minCapacity=*/maximizedLocaleIDCapacity,
-                /*desiredCapacityHint=*/maximizedLocaleIDCapacity,
-                maximizedLocaleIDCapacity,
-                status);
-
-        if (U_FAILURE(status)) {
-            return;
-        }
-
-        reslen = uloc_addLikelySubtags(
-                fullName,
-                buffer,
-                maximizedLocaleIDCapacity,
-                &status);
-
-        if (status != U_BUFFER_OVERFLOW_ERROR) {
-            break;
-        }
-
-        maximizedLocaleIDCapacity = reslen;
-        status = U_ZERO_ERROR;
-    }
-
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    maximizedLocaleID.append(buffer, reslen, status);
-    if (status == U_STRING_NOT_TERMINATED_WARNING) {
-        status = U_ZERO_ERROR;  // Terminators provided by CharString.
+    {
+        CharStringByteSink sink(&maximizedLocaleID);
+        ulocimp_addLikelySubtags(fullName, sink, &status);
     }
 
     if (U_FAILURE(status)) {
@@ -798,50 +762,10 @@ Locale::minimizeSubtags(UErrorCode& status) {
         return;
     }
 
-    // Except for a few edge cases (like the empty string, that is minimized to
-    // "en__POSIX"), minimized locale ID strings will be either the same length
-    // or shorter than their input.
     CharString minimizedLocaleID;
-    int32_t minimizedLocaleIDCapacity = static_cast<int32_t>(uprv_strlen(fullName));
-
-    char* buffer;
-    int32_t reslen;
-
-    for (;;) {
-        buffer = minimizedLocaleID.getAppendBuffer(
-                /*minCapacity=*/minimizedLocaleIDCapacity,
-                /*desiredCapacityHint=*/minimizedLocaleIDCapacity,
-                minimizedLocaleIDCapacity,
-                status);
-
-        if (U_FAILURE(status)) {
-            return;
-        }
-
-        reslen = uloc_minimizeSubtags(
-                fullName,
-                buffer,
-                minimizedLocaleIDCapacity,
-                &status);
-
-        if (status != U_BUFFER_OVERFLOW_ERROR) {
-            break;
-        }
-
-        // Because of the internal minimal buffer size of CharString, I can't
-        // think of any input data for which this could possibly ever happen.
-        // Maybe it would be better replaced with an assertion instead?
-        minimizedLocaleIDCapacity = reslen;
-        status = U_ZERO_ERROR;
-    }
-
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    minimizedLocaleID.append(buffer, reslen, status);
-    if (status == U_STRING_NOT_TERMINATED_WARNING) {
-        status = U_ZERO_ERROR;  // Terminators provided by CharString.
+    {
+        CharStringByteSink sink(&minimizedLocaleID);
+        ulocimp_minimizeSubtags(fullName, sink, &status);
     }
 
     if (U_FAILURE(status)) {
