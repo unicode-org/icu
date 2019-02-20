@@ -105,8 +105,8 @@ public class TestLocaleValidity extends TestFmwk {
 
                 {"OK", "en-u-ca-buddhist-ca-islamic-umalqura-cf-account-co-big5han-cu-adp-fw-fri-hc-h11-ka-noignore-kb-false-kc-false-kf-false-kk-false-kn-false-kr-latn-digit-symbol-ks-identic-kv-currency-nu-ahom-sd-usny-tz-adalv-va-posix"},
 
-                // bad case (for language tag)
-                {"{language, root}", "root"},
+                // root is canonicalized to the root locale (ICU-20273)
+                {"OK", "root"},
 
                 // deprecated, but turned into valid by ULocale.Builder()
                 {"OK", "en-u-ca-islamicc"}, // deprecated

@@ -1253,16 +1253,17 @@ uloc_isRightToLeft(const char *locale) {
         errorCode = U_ZERO_ERROR;
         char lang[8];
         int32_t langLength = uloc_getLanguage(locale, lang, UPRV_LENGTHOF(lang), &errorCode);
-        if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING ||
-                langLength == 0) {
+        if (U_FAILURE(errorCode) || errorCode == U_STRING_NOT_TERMINATED_WARNING) {
             return FALSE;
         }
-        const char* langPtr = uprv_strstr(LANG_DIR_STRING, lang);
-        if (langPtr != NULL) {
-            switch (langPtr[langLength]) {
-            case '-': return FALSE;
-            case '+': return TRUE;
-            default: break;  // partial match of a longer code
+        if (langLength > 0) {
+            const char* langPtr = uprv_strstr(LANG_DIR_STRING, lang);
+            if (langPtr != NULL) {
+                switch (langPtr[langLength]) {
+                case '-': return FALSE;
+                case '+': return TRUE;
+                default: break;  // partial match of a longer code
+                }
             }
         }
         // Otherwise, find the likely script.

@@ -26,6 +26,7 @@
 #include "unicode/uloc.h"
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "putilimp.h"
@@ -504,6 +505,22 @@ uloc_getDisplayName(const char *locale,
     if(destCapacity<0 || (destCapacity>0 && dest==NULL)) {
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
+    }
+
+    // For the display name, we treat this as unknown language (ICU-20273).
+    static const char UND[] = "und";
+    CharString und;
+    if (locale != NULL) {
+        if (*locale == '\0') {
+            locale = UND;
+        } else if (*locale == '_') {
+            und.append(UND, *pErrorCode);
+            und.append(locale, *pErrorCode);
+            if (U_FAILURE(*pErrorCode)) {
+                return 0;
+            }
+            locale = und.data();
+        }
     }
 
     {
