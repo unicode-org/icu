@@ -118,6 +118,7 @@ public:
 
     void TestAddLikelySubtags();
     void TestMinimizeSubtags();
+    void TestAddLikelyAndMinimizeSubtags();
 
     void TestForLanguageTag();
     void TestToLanguageTag();
@@ -130,6 +131,10 @@ public:
     void TestBug13417VeryLongLanguageTag();
 
     void TestBug11053UnderlineTimeZone();
+
+    void TestUnd();
+    void TestUndScript();
+    void TestUndRegion();
 
 private:
     void _checklocs(const char* label,

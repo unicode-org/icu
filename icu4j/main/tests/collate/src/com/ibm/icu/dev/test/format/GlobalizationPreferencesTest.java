@@ -868,8 +868,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp.setLocale(new ULocale("aar"));
         BreakIterator brk = gp.getBreakIterator(GlobalizationPreferences.BI_LINE);
         String locStr = brk.getLocale(ULocale.VALID_LOCALE).toString();
-        if (!locStr.equals("root")) {
-            errln("FAIL: Line break iterator locale is " + locStr + " Expected: root");
+        if (!locStr.isEmpty()) {
+            errln("FAIL: Line break iterator locale is " + locStr + " Expected: \"\"");
         }
 
         // Set locale - es

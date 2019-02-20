@@ -25,6 +25,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.regex.Pattern;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -3424,8 +3425,8 @@ public class ULocaleTest extends TestFmwk {
                     "zh_HK"
                 }, {
                     "und_AQ",
-                    "und_Latn_AQ",
-                    "und_AQ"
+                    "_Latn_AQ",
+                    "_AQ"
                 }, {
                     "und_Zzzz",
                     "en_Latn_US",
@@ -3448,8 +3449,8 @@ public class ULocaleTest extends TestFmwk {
                     "zh_HK"
                 }, {
                     "und_Zzzz_AQ",
-                    "und_Latn_AQ",
-                    "und_AQ"
+                    "_Latn_AQ",
+                    "_AQ"
                 }, {
                     "und_Latn",
                     "en_Latn_US",
@@ -3472,8 +3473,8 @@ public class ULocaleTest extends TestFmwk {
                     "zh_Latn_HK"
                 }, {
                     "und_Latn_AQ",
-                    "und_Latn_AQ",
-                    "und_AQ"
+                    "_Latn_AQ",
+                    "_AQ"
                 }, {
                     "und_Hans",
                     "zh_Hans_CN",
@@ -3544,8 +3545,8 @@ public class ULocaleTest extends TestFmwk {
                     "zh_Moon_HK"
                 }, {
                     "und_Moon_AQ",
-                    "und_Moon_AQ",
-                    "und_Moon_AQ"
+                    "_Moon_AQ",
+                    "_Moon_AQ"
                 }, {
                     "es",
                     "es_Latn_ES",
@@ -4272,7 +4273,7 @@ public class ULocaleTest extends TestFmwk {
                 {new ULocale("en__POSIX"), new ULocale("en"), ULocale.ROOT, null},
                 {new ULocale("de_DE@collation=phonebook"), new ULocale("de@collation=phonebook"), new ULocale("@collation=phonebook"), null},
                 {new ULocale("_US_POSIX"), new ULocale("_US"), ULocale.ROOT, null},
-                {new ULocale("root"), ULocale.ROOT, null},
+                {new ULocale("root"), null},
             };
 
         for(ULocale[] chain : TESTLOCALES) {
@@ -4676,7 +4677,6 @@ public class ULocaleTest extends TestFmwk {
                 "th_TH@calendar=gergorian",
                 "th_TH@numbers=latn",
                 "this is a bogus locale id",
-                "und",
                 "zh_CN",
                 "zh_TW",
                 "zh_Hans",
@@ -4889,5 +4889,149 @@ public class ULocaleTest extends TestFmwk {
                 errln("Error: " + pair[0] + " is not equal to " + pair[1]);
             }
         }
+    }
+
+    @Test
+    public void TestUnd() {
+        final String empty = "";
+        final String root = "root";
+        final String und = "und";
+
+        ULocale empty_new = new ULocale(empty);
+        ULocale empty_tag = ULocale.forLanguageTag(empty);
+
+        ULocale root_new = new ULocale(root);
+        ULocale root_tag = ULocale.forLanguageTag(root);
+        ULocale root_build = new Builder().setLanguageTag(root).build();
+
+        ULocale und_new = new ULocale(und);
+        ULocale und_tag = ULocale.forLanguageTag(und);
+        ULocale und_build = new Builder().setLanguageTag(und).build();
+
+        Assert.assertEquals(empty, empty_new.getName());
+        Assert.assertEquals(empty, root_new.getName());
+        Assert.assertEquals(empty, und_new.getName());
+
+        Assert.assertEquals(empty, empty_tag.getName());
+        Assert.assertEquals(empty, root_tag.getName());
+        Assert.assertEquals(empty, und_tag.getName());
+
+        Assert.assertEquals(empty, root_build.getName());
+        Assert.assertEquals(empty, und_build.getName());
+
+        Assert.assertEquals(und, empty_new.toLanguageTag());
+        Assert.assertEquals(und, root_new.toLanguageTag());
+        Assert.assertEquals(und, und_new.toLanguageTag());
+
+        Assert.assertEquals(und, empty_tag.toLanguageTag());
+        Assert.assertEquals(und, root_tag.toLanguageTag());
+        Assert.assertEquals(und, und_tag.toLanguageTag());
+
+        Assert.assertEquals(und, root_build.toLanguageTag());
+        Assert.assertEquals(und, und_build.toLanguageTag());
+
+        Assert.assertEquals(empty_new, empty_tag);
+
+        Assert.assertEquals(root_new, root_tag);
+        Assert.assertEquals(root_new, root_build);
+        Assert.assertEquals(root_tag, root_build);
+
+        Assert.assertEquals(und_new, und_tag);
+        Assert.assertEquals(und_new, und_build);
+        Assert.assertEquals(und_tag, und_build);
+
+        Assert.assertEquals(empty_new, root_new);
+        Assert.assertEquals(empty_new, und_new);
+        Assert.assertEquals(root_new, und_new);
+
+        Assert.assertEquals(empty_tag, root_tag);
+        Assert.assertEquals(empty_tag, und_tag);
+        Assert.assertEquals(root_tag, und_tag);
+
+        Assert.assertEquals(root_build, und_build);
+
+        final ULocale displayLocale = ULocale.ENGLISH;
+        final String displayName = "Unknown language";
+
+        Assert.assertEquals(displayName, empty_new.getDisplayName(displayLocale));
+        Assert.assertEquals(displayName, root_new.getDisplayName(displayLocale));
+        Assert.assertEquals(displayName, und_new.getDisplayName(displayLocale));
+
+        Assert.assertEquals(displayName, empty_tag.getDisplayName(displayLocale));
+        Assert.assertEquals(displayName, root_tag.getDisplayName(displayLocale));
+        Assert.assertEquals(displayName, und_tag.getDisplayName(displayLocale));
+
+        Assert.assertEquals(displayName, root_build.getDisplayName(displayLocale));
+        Assert.assertEquals(displayName, und_build.getDisplayName(displayLocale));
+    }
+
+    @Test
+    public void TestUndScript() {
+        final String id = "_Cyrl";
+        final String tag = "und-Cyrl";
+        final String script = "Cyrl";
+
+        ULocale locale_new = new ULocale(id);
+        ULocale locale_legacy = new ULocale(tag);
+        ULocale locale_tag = ULocale.forLanguageTag(tag);
+        ULocale locale_build = new Builder().setScript(script).build();
+
+        Assert.assertEquals(id, locale_new.getName());
+        Assert.assertEquals(id, locale_legacy.getName());
+        Assert.assertEquals(id, locale_tag.getName());
+        Assert.assertEquals(id, locale_build.getName());
+
+        Assert.assertEquals(tag, locale_new.toLanguageTag());
+        Assert.assertEquals(tag, locale_legacy.toLanguageTag());
+        Assert.assertEquals(tag, locale_tag.toLanguageTag());
+        Assert.assertEquals(tag, locale_build.toLanguageTag());
+
+        Assert.assertEquals(locale_new, locale_legacy);
+        Assert.assertEquals(locale_new, locale_tag);
+        Assert.assertEquals(locale_new, locale_build);
+        Assert.assertEquals(locale_tag, locale_build);
+
+        final ULocale displayLocale = ULocale.ENGLISH;
+        final String displayName = "Unknown language (Cyrillic)";
+
+        Assert.assertEquals(displayName, locale_new.getDisplayName(displayLocale));
+        Assert.assertEquals(displayName, locale_legacy.getDisplayName(displayLocale));
+        Assert.assertEquals(displayName, locale_tag.getDisplayName(displayLocale));
+        Assert.assertEquals(displayName, locale_build.getDisplayName(displayLocale));
+    }
+
+    @Test
+    public void TestUndRegion() {
+        final String id = "_AQ";
+        final String tag = "und-AQ";
+        final String region = "AQ";
+
+        ULocale locale_new = new ULocale(id);
+        ULocale locale_legacy = new ULocale(tag);
+        ULocale locale_tag = ULocale.forLanguageTag(tag);
+        ULocale locale_build = new Builder().setRegion(region).build();
+
+        Assert.assertEquals(id, locale_new.getName());
+        Assert.assertEquals(id, locale_legacy.getName());
+        Assert.assertEquals(id, locale_tag.getName());
+        Assert.assertEquals(id, locale_build.getName());
+
+        Assert.assertEquals(tag, locale_new.toLanguageTag());
+        Assert.assertEquals(tag, locale_legacy.toLanguageTag());
+        Assert.assertEquals(tag, locale_tag.toLanguageTag());
+        Assert.assertEquals(tag, locale_build.toLanguageTag());
+
+        Assert.assertEquals(locale_new, locale_legacy);
+        Assert.assertEquals(locale_new, locale_tag);
+        Assert.assertEquals(locale_new, locale_build);
+        Assert.assertEquals(locale_tag, locale_build);
+
+        final ULocale displayLocale = ULocale.ENGLISH;
+        final String displayName = "Unknown language (Antarctica)";
+
+        Assert.assertEquals(displayName, locale_new.getDisplayName(displayLocale));
+        Assert.assertEquals(displayName, locale_legacy.getDisplayName(displayLocale));
+        Assert.assertEquals(displayName, locale_tag.getDisplayName(displayLocale));
+        Assert.assertEquals(displayName, locale_build.getDisplayName(displayLocale));
     }
 }

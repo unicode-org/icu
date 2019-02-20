@@ -359,7 +359,7 @@ public class CollationServiceTest extends TestFmwk {
                                                          new ULocale("de"),
                                                          isAvailable);
         if (assertTrue("getFunctionalEquivalent(de)!=null", equiv!=null)) {
-            assertEquals("getFunctionalEquivalent(de)", "root", equiv.toString());
+            assertEquals("getFunctionalEquivalent(de)", "", equiv.toString());
         }
         assertTrue("getFunctionalEquivalent(de).isAvailable==true",
                    isAvailable[0] == true);
@@ -368,7 +368,7 @@ public class CollationServiceTest extends TestFmwk {
                                                  new ULocale("de_DE"),
                                                  isAvailable);
         if (assertTrue("getFunctionalEquivalent(de_DE)!=null", equiv!=null)) {
-            assertEquals("getFunctionalEquivalent(de_DE)", "root", equiv.toString());
+            assertEquals("getFunctionalEquivalent(de_DE)", "", equiv.toString());
         }
         assertTrue("getFunctionalEquivalent(de_DE).isAvailable==false",
                    isAvailable[0] == false);

@@ -763,7 +763,7 @@ fr-FR >> fr
 ja-JP >> fr
 # For a language that doesn't match anything, return the default.
 zu >> en-GB
-root >> fr
+zxx >> fr
 
 @distance=script
 en-GB >> en-GB
@@ -771,7 +771,7 @@ en-US >> en
 fr-FR >> fr
 ja-JP >> fr
 zu >> en-GB
-root >> en
+zxx >> en
 
 ** test: TestExactMatch
 @supported=fr, en-GB, ja, es-ES, es-MX

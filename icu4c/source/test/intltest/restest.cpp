@@ -581,8 +581,8 @@ ResourceBundleTest::TestGetLocaleByType(void)
     } test[] = {
         { "te_IN_BLAH", "string_only_in_te_IN", "te_IN", "te_IN" },
         { "te_IN_BLAH", "string_only_in_te", "te_IN", "te" },
-        { "te_IN_BLAH", "string_only_in_Root", "te_IN", "root" },
-        { "te_IN_BLAH_01234567890_01234567890_01234567890_01234567890_01234567890_01234567890", "array_2d_only_in_Root", "te_IN", "root" },
+        { "te_IN_BLAH", "string_only_in_Root", "te_IN", "" },
+        { "te_IN_BLAH_01234567890_01234567890_01234567890_01234567890_01234567890_01234567890", "array_2d_only_in_Root", "te_IN", "" },
         { "te_IN_BLAH@currency=euro", "array_2d_only_in_te_IN", "te_IN", "te_IN" },
         { "te_IN_BLAH@calendar=thai;collation=phonebook", "array_2d_only_in_te", "te_IN", "te" }
     };

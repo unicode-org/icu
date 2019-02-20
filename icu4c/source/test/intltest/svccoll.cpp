@@ -583,7 +583,7 @@ void CollationServiceTest::TestSeparateTree() {
                                                      Locale::createFromName("de"),
                                                      isAvailable, ec);
     assertSuccess("getFunctionalEquivalent", ec);
-    assertEquals("getFunctionalEquivalent(de)", "root", equiv.getName());
+    assertEquals("getFunctionalEquivalent(de)", "", equiv.getName());
     assertTrue("getFunctionalEquivalent(de).isAvailable==TRUE",
                isAvailable == TRUE);
 
@@ -591,7 +591,7 @@ void CollationServiceTest::TestSeparateTree() {
                                               Locale::createFromName("de_DE"),
                                               isAvailable, ec);
     assertSuccess("getFunctionalEquivalent", ec);
-    assertEquals("getFunctionalEquivalent(de_DE)", "root", equiv.getName());
+    assertEquals("getFunctionalEquivalent(de_DE)", "", equiv.getName());
     assertTrue("getFunctionalEquivalent(de_DE).isAvailable==FALSE",
                isAvailable == FALSE);
 

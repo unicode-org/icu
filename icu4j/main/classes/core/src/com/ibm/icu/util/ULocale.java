@@ -22,6 +22,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.CacheBase;
 import com.ibm.icu.impl.ICUData;
@@ -110,6 +111,8 @@ import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
 public final class ULocale implements Serializable, Comparable<ULocale> {
     // using serialver from jdk1.4.2_05
     private static final long serialVersionUID = 3715177670352309217L;
+
+    private static final Pattern UND_PATTERN = Pattern.compile("^und(?=$|[_-])", Pattern.CASE_INSENSITIVE);
 
     private static CacheBase<String, String, Void> nameCache = new SoftCache<String, String, Void>() {
         @Override
@@ -1061,8 +1064,10 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             if (tmpLocaleID.length() == 0) {
                 tmpLocaleID = localeID;
             }
+        } else if ("root".equalsIgnoreCase(localeID)) {
+            tmpLocaleID = EMPTY_STRING;
         } else {
-            tmpLocaleID = localeID;
+            tmpLocaleID = UND_PATTERN.matcher(localeID).replaceFirst(EMPTY_STRING);
         }
         return nameCache.getInstance(tmpLocaleID, null /* unused */);
     }
@@ -1292,15 +1297,14 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             // Fastpath: We know the likely scripts and their writing direction
             // for some common languages.
             String lang = getLanguage();
-            if (lang.length() == 0) {
-                return false;
-            }
-            int langIndex = LANG_DIR_STRING.indexOf(lang);
-            if (langIndex >= 0) {
-                switch (LANG_DIR_STRING.charAt(langIndex + lang.length())) {
-                case '-': return false;
-                case '+': return true;
-                default: break;  // partial match of a longer code
+            if (!lang.isEmpty()) {
+                int langIndex = LANG_DIR_STRING.indexOf(lang);
+                if (langIndex >= 0) {
+                    switch (LANG_DIR_STRING.charAt(langIndex + lang.length())) {
+                    case '-': return false;
+                    case '+': return true;
+                    default: break;  // partial match of a longer code
+                    }
                 }
             }
             // Otherwise, find the likely script.
