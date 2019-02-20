@@ -9,6 +9,15 @@ resources:
     lfs: true
     fetchDepth: 1
 
+# Only run the exhaustive tests on the master branch, and batch up
+# any pending changes so that we will only have at most one build
+# running at a given time.
+trigger:
+  batch: true
+  branches:
+    include:
+    - master
+
 jobs:
 #-------------------------------------------------------------------------
 # Note: The exhaustive tests for J take longer than the C tests. They 
