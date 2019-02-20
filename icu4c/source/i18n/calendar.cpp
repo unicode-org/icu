@@ -3796,18 +3796,16 @@ Calendar::setWeekData(const Locale& desiredLocale, const char *type, UErrorCode&
     // 2). If the locale has a script designation then we ignore it,
     //     then remove it ( i.e. "en_Latn_US" becomes "en_US" )
 
-    char minLocaleID[ULOC_FULLNAME_CAPACITY] = { 0 };
     UErrorCode myStatus = U_ZERO_ERROR;
 
-    uloc_minimizeSubtags(desiredLocale.getName(),minLocaleID,ULOC_FULLNAME_CAPACITY,&myStatus);
-    Locale min = Locale::createFromName(minLocaleID);
+    Locale min(desiredLocale);
+    min.minimizeSubtags(myStatus);
     Locale useLocale;
     if ( uprv_strlen(desiredLocale.getCountry()) == 0 ||
          (uprv_strlen(desiredLocale.getScript()) > 0 && uprv_strlen(min.getScript()) == 0) ) {
-        char maxLocaleID[ULOC_FULLNAME_CAPACITY] = { 0 };
         myStatus = U_ZERO_ERROR;
-        uloc_addLikelySubtags(desiredLocale.getName(),maxLocaleID,ULOC_FULLNAME_CAPACITY,&myStatus);
-        Locale max = Locale::createFromName(maxLocaleID);
+        Locale max(desiredLocale);
+        max.addLikelySubtags(myStatus);
         useLocale = Locale(max.getLanguage(),max.getCountry());
     } else {
         useLocale = desiredLocale;
