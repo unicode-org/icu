@@ -545,7 +545,7 @@ static int32_t getRunFromLogicalIndex(UBiDi *pBiDi, int32_t logicalIndex) {
  * negative number of BiDi control characters within this run.
  */
 U_CFUNC UBool
-ubidi_getRuns(UBiDi *pBiDi, UErrorCode *pErrorCode) {
+ubidi_getRuns(UBiDi *pBiDi, UErrorCode*) {
     /*
      * This method returns immediately if the runs are already set. This
      * includes the case of length==0 (handled in setPara)..

@@ -99,7 +99,7 @@ void  WholeStringBreakIterator::setText(UText *text, UErrorCode &errorCode) {
         }
     }
 }
-void  WholeStringBreakIterator::adoptText(CharacterIterator* it) {
+void  WholeStringBreakIterator::adoptText(CharacterIterator*) {
     UPRV_UNREACHABLE;  // should not be called
 }
 
