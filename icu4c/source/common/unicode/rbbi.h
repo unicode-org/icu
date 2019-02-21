@@ -260,7 +260,7 @@ public:
      * @return TRUE if both BreakIterators are not same.
      *  @stable ICU 2.0
      */
-    UBool operator!=(const BreakIterator& that) const;
+    inline UBool operator!=(const BreakIterator& that) const;
 
     /**
      * Returns a newly-constructed RuleBasedBreakIterator with the same
