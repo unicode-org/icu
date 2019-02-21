@@ -14,4 +14,5 @@ Bundle-Version: @IMPLVERSION@
 Bundle-Vendor: Unicode, Inc.
 Bundle-Copyright: @COPYRIGHT@
 Bundle-RequiredExecutionEnvironment: @EXECENV@
+Export-Package: com.ibm.icu.charset
 Automatic-Module-Name: com.ibm.icu.charset
