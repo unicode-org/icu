@@ -47,7 +47,6 @@
 
 U_NAMESPACE_BEGIN
 
-static constexpr int32_t MEAS_UNIT_COUNT = 146;  // see assertion in MeasureFormatCacheData constructor
 static constexpr int32_t WIDTH_INDEX_COUNT = UMEASFMT_WIDTH_NARROW + 1;
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MeasureFormat)
@@ -160,9 +159,6 @@ private:
 
 MeasureFormatCacheData::MeasureFormatCacheData()
         : integerFormat(nullptr), numericDateFormatters(nullptr) {
-    // Please update MEAS_UNIT_COUNT if it gets out of sync with the true count!
-    U_ASSERT(MEAS_UNIT_COUNT == MeasureUnit::getIndexCount());
-
     for (int32_t i = 0; i < WIDTH_INDEX_COUNT; ++i) {
         widthFallback[i] = UMEASFMT_WIDTH_COUNT;
     }
