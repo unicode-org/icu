@@ -47,7 +47,7 @@ UBool FormattedValueFieldPositionIteratorImpl::nextPosition(
         UErrorCode&) const {
     U_ASSERT(fFields.size() % 4 == 0);
     int32_t numFields = fFields.size() / 4;
-    int32_t i = cfpos.getInt64IterationContext();
+    int32_t i = static_cast<int32_t>(cfpos.getInt64IterationContext());
     for (; i < numFields; i++) {
         UFieldCategory category = static_cast<UFieldCategory>(fFields.elementAti(i * 4));
         int32_t field = fFields.elementAti(i * 4 + 1);
