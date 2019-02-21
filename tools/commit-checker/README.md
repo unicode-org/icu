@@ -31,9 +31,10 @@ This is required if you want to process sensitive tickets.
 Make sure you have updated your repository:
 
 	$ git pull upstream master
+	$ git fetch --tags upstream
 
 Run the tool and save the result into REPORT.md:
 
-	$ pipenv run python3 check.py > REPORT.md
+	$ pipenv run python3 check.py --jira-query "project=ICU AND fixVersion=63.1" > REPORT.md
 
 Open a pull request so others can view the report easilly.

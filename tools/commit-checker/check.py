@@ -70,7 +70,10 @@ def pretty_print_commit(commit, **kwargs):
 
 def pretty_print_issue(issue, **kwargs):
     print("- %s: `%s`" % (issue.issue_id, issue.issue.fields.summary))
-    print("\t- Assigned to %s" % issue.issue.fields.assignee.displayName)
+    if issue.issue.fields.assignee:
+        print("\t- Assigned to %s" % issue.issue.fields.assignee.displayName)
+    else:
+        print("\t- No assignee!")
     print("\t- Jira Link: %s" % issue_id_to_url(issue.issue_id, **kwargs))
 
 
@@ -164,6 +167,7 @@ def main():
         (issue_id, [commit for commit in commits if commit.issue_id == issue_id])
         for issue_id in sorted(commit_issue_ids)
     ]
+    jira_issue_map = {issue.issue_id: issue for issue in issues}
     jira_issue_ids = set(issue.issue_id for issue in issues)
     closed_jira_issue_ids = set(issue.issue_id for issue in issues if issue.is_closed)
 
@@ -273,7 +277,10 @@ def main():
             continue
         print("#### Issue %s" % issue_id)
         print()
-        jira_issue = get_single_jira_issue(issue_id, **vars(args))
+        if issue_id in jira_issue_map:
+            jira_issue = jira_issue_map[issue_id]
+        else:
+            jira_issue = get_single_jira_issue(issue_id, **vars(args))
         if jira_issue:
             pretty_print_issue(jira_issue, **vars(args))
         else:
