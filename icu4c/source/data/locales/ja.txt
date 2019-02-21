@@ -1162,8 +1162,8 @@ ja{
                 "H:mm",
                 "Gy年M月d日(EEEE)",
                 "Gy年M月d日",
-                "Gy/MM/dd",
-                "Gy/M/d",
+                "GGGGGy/MM/dd",
+                "GGGGGy/M/d",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -1207,33 +1207,50 @@ ja{
                 ms{"mm:ss"}
                 y{"Gy年"}
                 yyyy{"Gy年"}
-                yyyyM{"Gy/M"}
-                yyyyMEEEEd{"Gy/M/d(EEEE)"}
-                yyyyMEd{"Gy/M/d(E)"}
+                yyyyM{"GGGGGy/M"}
+                yyyyMEEEEd{"GGGGGy/M/d(EEEE)"}
+                yyyyMEd{"GGGGGy/M/d(E)"}
                 yyyyMMM{"Gy年M月"}
                 yyyyMMMEEEEd{"Gy年M月d日(EEEE)"}
                 yyyyMMMEd{"Gy年M月d日(E)"}
                 yyyyMMMM{"Gy年M月"}
                 yyyyMMMd{"Gy年M月d日"}
-                yyyyMd{"Gy/M/d"}
+                yyyyMd{"GGGGGy/M/d"}
                 yyyyQQQ{"Gy/QQQ"}
                 yyyyQQQQ{"Gy年QQQQ"}
             }
             intervalFormats{
+                GGGGGyM{
+                    G{"GGGGGy/MM～GGGGGy/MM"}
+                    M{"GGGGGy/MM～y/MM"}
+                    y{"GGGGGy/MM～y/MM"}
+                }
+                GGGGGyMEd{
+                    G{"GGGGGy/MM/dd(E)～GGGGGy/MM/dd(E)"}
+                    M{"GGGGGy/MM/dd(E)～y/MM/dd(E)"}
+                    d{"GGGGGy/MM/dd(E)～y/MM/dd(E)"}
+                    y{"GGGGGy/MM/dd(E)～y/MM/dd(E)"}
+                }
+                GGGGGyMd{
+                    G{"GGGGGy/MM/dd～GGGGGy/MM/dd"}
+                    M{"GGGGGy/MM/dd～y/MM/dd"}
+                    d{"GGGGGy/MM/dd～y/MM/dd"}
+                    y{"GGGGGy/MM/dd～y/MM/dd"}
+                }
                 Gy{
                     G{"Gy年～Gy年"}
                     y{"Gy年～y年"}
                 }
                 GyM{
-                    G{"Gy/MM～Gy/MM"}
-                    M{"Gy/MM～y/MM"}
-                    y{"Gy/MM～y/MM"}
+                    G{"GGGGGy/MM～GGGGGy/MM"}
+                    M{"GGGGGy/MM～y/MM"}
+                    y{"GGGGGy/MM～y/MM"}
                 }
                 GyMEd{
-                    G{"Gy/MM/dd(E)～Gy/MM/dd(E)"}
-                    M{"Gy/MM/dd(E)～y/MM/dd(E)"}
-                    d{"Gy/MM/dd(E)～y/MM/dd(E)"}
-                    y{"Gy/MM/dd(E)～y/MM/dd(E)"}
+                    G{"GGGGGy/MM/dd(E)～GGGGGy/MM/dd(E)"}
+                    M{"GGGGGy/MM/dd(E)～y/MM/dd(E)"}
+                    d{"GGGGGy/MM/dd(E)～y/MM/dd(E)"}
+                    y{"GGGGGy/MM/dd(E)～y/MM/dd(E)"}
                 }
                 GyMMM{
                     G{"Gy年M月～Gy年M月"}
@@ -1253,10 +1270,10 @@ ja{
                     y{"Gy年M月d日～y年M月d日"}
                 }
                 GyMd{
-                    G{"Gy/MM/dd～Gy/MM/dd"}
-                    M{"Gy/MM/dd～y/MM/dd"}
-                    d{"Gy/MM/dd～y/MM/dd"}
-                    y{"Gy/MM/dd～y/MM/dd"}
+                    G{"GGGGGy/MM/dd～GGGGGy/MM/dd"}
+                    M{"GGGGGy/MM/dd～y/MM/dd"}
+                    d{"GGGGGy/MM/dd～y/MM/dd"}
+                    y{"GGGGGy/MM/dd～y/MM/dd"}
                 }
                 H{
                     H{"H時～H時"}
@@ -1323,13 +1340,13 @@ ja{
                     y{"Gy年～y年"}
                 }
                 yM{
-                    M{"Gy/MM～y/MM"}
-                    y{"Gy/MM～y/MM"}
+                    M{"GGGGGy/MM～y/MM"}
+                    y{"GGGGGy/MM～y/MM"}
                 }
                 yMEd{
-                    M{"Gy/MM/dd(E)～y/MM/dd(E)"}
-                    d{"Gy/MM/dd(E)～y/MM/dd(E)"}
-                    y{"Gy/MM/dd(E)～y/MM/dd(E)"}
+                    M{"GGGGGy/MM/dd(E)～y/MM/dd(E)"}
+                    d{"GGGGGy/MM/dd(E)～y/MM/dd(E)"}
+                    y{"GGGGGy/MM/dd(E)～y/MM/dd(E)"}
                 }
                 yMMM{
                     M{"Gy年M月～M月"}
@@ -1350,9 +1367,9 @@ ja{
                     y{"Gy年M月d日～y年M月d日"}
                 }
                 yMd{
-                    M{"Gy/MM/dd～y/MM/dd"}
-                    d{"Gy/MM/dd～y/MM/dd"}
-                    y{"Gy/MM/dd～y/MM/dd"}
+                    M{"GGGGGy/MM/dd～y/MM/dd"}
+                    d{"GGGGGy/MM/dd～y/MM/dd"}
+                    y{"GGGGGy/MM/dd～y/MM/dd"}
                 }
             }
         }
@@ -2253,9 +2270,18 @@ ja{
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "Gy年M月d日EEEE",
-                "Gy年M月d日",
-                "Gy年M月d日",
+                {
+                    "Gy年M月d日EEEE",
+                    "y=jpanyear",
+                }
+                {
+                    "Gy年M月d日",
+                    "y=jpanyear",
+                }
+                {
+                    "Gy年M月d日",
+                    "y=jpanyear",
+                }
                 "GGGGGy/M/d",
                 "{1} {0}",
                 "{1} {0}",
@@ -2291,16 +2317,16 @@ ja{
                 ms{"mm:ss"}
                 y{"Gy年"}
                 yyyy{"Gy年"}
-                yyyyM{"Gy/M"}
-                yyyyMEEEEd{"Gy/M/dEEEE"}
-                yyyyMEd{"Gy/M/d(E)"}
-                yyyyMM{"Gy/MM"}
+                yyyyM{"GGGGGy/M"}
+                yyyyMEEEEd{"GGGGGy/M/dEEEE"}
+                yyyyMEd{"GGGGGy/M/d(E)"}
+                yyyyMM{"GGGGGy/MM"}
                 yyyyMMM{"Gy年M月"}
                 yyyyMMMEEEEd{"Gy年M月d日EEEE"}
                 yyyyMMMEd{"Gy年M月d日(E)"}
                 yyyyMMMM{"Gy年M月"}
                 yyyyMMMd{"Gy年M月d日"}
-                yyyyMd{"Gy/M/d"}
+                yyyyMd{"GGGGGy/M/d"}
                 yyyyQQQ{"Gy/QQQ"}
                 yyyyQQQQ{"Gy年QQQQ"}
             }

@@ -172,6 +172,11 @@ numberingSystems:table(nofallback){
             desc{"ja/SpelloutRules/%spellout-cardinal-financial"}
             radix:int{10}
         }
+        jpanyear{
+            algorithmic:int{1}
+            desc{"ja/SpelloutRules/%spellout-numbering-year-latn"}
+            radix:int{10}
+        }
         kali{
             algorithmic:int{0}
             desc{"꤀꤁꤂꤃꤄꤅꤆꤇꤈꤉"}

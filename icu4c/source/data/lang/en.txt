@@ -1117,6 +1117,7 @@ en{
             java{"Javanese Digits"}
             jpan{"Japanese Numerals"}
             jpanfin{"Japanese Financial Numerals"}
+            jpanyear{"Japanese Calendar Gannen Year Numerals"}
             kali{"Kayah Li Digits"}
             khmr{"Khmer Digits"}
             knda{"Kannada Digits"}

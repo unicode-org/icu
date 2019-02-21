@@ -851,6 +851,26 @@ public class RbnfTest extends TestFmwk {
     }
 
     @Test
+    public void TestJpanyear()
+    {
+        Locale locale = new Locale("ja");
+        RuleBasedNumberFormat formatter = new RuleBasedNumberFormat(locale,
+                RuleBasedNumberFormat.SPELLOUT);
+
+        String[][] testDataYear = {
+                { "0",  "0" },
+                { "1",  "\u5143" }, // 元
+                { "2",  "2" },
+                { "10", "10" },
+                { "31", "31" },
+        };
+
+        formatter.setDefaultRuleSet("%spellout-numbering-year-latn");
+        logln("testing year rules");
+        doTest(formatter, testDataYear, true);
+    }
+
+    @Test
     public void TestBigNumbers() {
         BigInteger bigI = new BigInteger("1234567890", 10);
         StringBuffer buf = new StringBuffer();

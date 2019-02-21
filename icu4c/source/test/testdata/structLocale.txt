@@ -24440,6 +24440,23 @@ structLocale:table(nofallback){
                 }
             }
             intervalFormats{
+                GGGGGyM{
+                    G{""}
+                    M{""}
+                    y{""}
+                }
+                GGGGGyMEd{
+                    G{""}
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                GGGGGyMd{
+                    G{""}
+                    M{""}
+                    d{""}
+                    y{""}
+                }
                 Gy{
                     G{""}
                     y{""}
@@ -26377,10 +26394,10 @@ structLocale:table(nofallback){
                 "",
                 "",
                 "",
-                "",
-                "",
-                "",
-                "",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
                 "",
                 "A4",
                 "A4",

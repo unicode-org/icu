@@ -483,9 +483,9 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"JJmm", "23:58"},
 
         new ULocale("ja@calendar=japanese"), // (new locale for testing ticket 6872<-5702)
-        new String[] {"yM", "\u5E73\u621011/1"},
+        new String[] {"yM", "H11/1"},
         new String[] {"yMMM", "\u5E73\u621011\u5E741\u6708"},
-        new String[] {"yMd", "\u5E73\u621011/1/13"},
+        new String[] {"yMd", "H11/1/13"},
         new String[] {"yMMMd", "\u5E73\u621011\u5E741\u670813\u65E5"},
         new String[] {"Md", "1/13"},
         new String[] {"MMMd", "1\u670813\u65E5"},
