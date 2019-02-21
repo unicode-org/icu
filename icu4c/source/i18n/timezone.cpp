@@ -456,10 +456,11 @@ TimeZone::createTimeZone(const UnicodeString& ID)
 TimeZone* U_EXPORT2
 TimeZone::detectHostTimeZone()
 {
-    // We access system timezone data through TPlatformUtilities,
-    // including tzset(), timezone, and tzname[].
+    // We access system timezone data through uprv_tzset(), uprv_tzname(), and others,
+    // which have platform specific implementations in putil.cpp
     int32_t rawOffset = 0;
     const char *hostID;
+    UBool hostDetectionSucceeded = TRUE;
 
     // First, try to create a system timezone, based
     // on the string ID in tzname[0].
@@ -470,8 +471,7 @@ TimeZone::detectHostTimeZone()
 
     // Get the timezone ID from the host.  This function should do
     // any required host-specific remapping; e.g., on Windows this
-    // function maps the Date and Time control panel setting to an
-    // ICU timezone ID.
+    // function maps the Windows Time Zone name to an ICU timezone ID.
     hostID = uprv_tzname(0);
 
     // Invert sign because UNIX semantics are backwards
@@ -479,10 +479,15 @@ TimeZone::detectHostTimeZone()
 
     TimeZone* hostZone = NULL;
 
-    /* Make sure that the string is NULL terminated to prevent BoundsChecker/Purify warnings. */
     UnicodeString hostStrID(hostID, -1, US_INV);
-    hostStrID.append((UChar)0);
-    hostStrID.truncate(hostStrID.length()-1);
+
+    if (hostStrID.length() == 0) {
+        // The host time zone detection (or remapping) above has failed and
+        // we have no name at all. Fallback to using the Unknown zone.
+        hostStrID = UnicodeString(TRUE, UNKNOWN_ZONE_ID, UNKNOWN_ZONE_ID_LENGTH);
+        hostDetectionSucceeded = FALSE;
+    }
+
     hostZone = createSystemTimeZone(hostStrID);
 
 #if U_PLATFORM_USES_ONLY_WIN32_API
@@ -502,19 +507,19 @@ TimeZone::detectHostTimeZone()
 
     // Construct a fixed standard zone with the host's ID
     // and raw offset.
-    if (hostZone == NULL) {
+    if (hostZone == NULL && hostDetectionSucceeded) {
         hostZone = new SimpleTimeZone(rawOffset, hostStrID);
     }
 
-    // If we _still_ don't have a time zone, use GMT.
+    // If we _still_ don't have a time zone, use the Unknown zone.
     //
     // Note: This is extremely unlikely situation. If
     // new SimpleTimeZone(...) above fails, the following
     // code may also fail.
     if (hostZone == NULL) {
-        const TimeZone* temptz = TimeZone::getGMT();
-        // GMT zone uses staticly allocated memory, so creation of it can never fail due to OOM.
-        hostZone = temptz->clone();
+        // Unknown zone uses static allocated memory, so it must always exist.
+        // However, clone() allocates memory and can fail.
+        hostZone = TimeZone::getUnknown().clone();
     }
 
     return hostZone;

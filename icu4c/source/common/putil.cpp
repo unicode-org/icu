@@ -1068,7 +1068,7 @@ uprv_tzname(int n)
     // the other code path returns a pointer to a heap location.
     // If we don't have a name already, then tzname wouldn't be any
     // better, so just fall back.
-    return uprv_strdup("Etc/UTC");
+    return uprv_strdup("");
 #endif // !U_TZNAME
 
 #else
