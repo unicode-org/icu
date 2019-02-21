@@ -140,6 +140,19 @@ public class RbnfRoundTripTest extends TestFmwk {
     }
 
     /**
+     * Perform an exhaustive round-trip test on the jpanyear spellout rules
+     */
+    @Test
+    public void TestJapaneseYearSpelloutRT() {
+        RuleBasedNumberFormat formatter
+                        = new RuleBasedNumberFormat(Locale.JAPAN,
+                        RuleBasedNumberFormat.SPELLOUT);
+        formatter.setDefaultRuleSet("%spellout-numbering-year-latn");
+
+        doTest(formatter, 0, 50);
+    }
+
+    /**
      * Perform an exhaustive round-trip test on the Russian spellout rules
      */
     @Test

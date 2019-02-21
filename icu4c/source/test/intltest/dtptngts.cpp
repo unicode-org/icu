@@ -204,9 +204,9 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("23:58"),                                           // 16: JJmm
 
         // ja@calendar=japanese                                           // 6 ja@calendar=japanese
-        CharsToUnicodeString("\\u5E73\\u621011/1"),                       // 00: yM    -> Gy/m
+        UnicodeString("H11/1"),                                           // 00: yM    -> GGGGGy/m
         CharsToUnicodeString("\\u5E73\\u621011\\u5E741\\u6708"),          // 01: yMMM  -> Gy\u5E74M\u6708
-        CharsToUnicodeString("\\u5E73\\u621011/1/13"),                    // 02: yMd   -> Gy/m/d
+        UnicodeString("H11/1/13"),                                        // 02: yMd   -> GGGGGy/m/d
         CharsToUnicodeString("\\u5E73\\u621011\\u5E741\\u670813\\u65E5"), // 03: yMMMd -> Gy\u5E74M\u6708d\u65E5
         UnicodeString("1/13"),                                            // 04: Md    -> M/d
         CharsToUnicodeString("1\\u670813\\u65E5"),                        // 05: MMMd  -> M\u6708d\u65E5

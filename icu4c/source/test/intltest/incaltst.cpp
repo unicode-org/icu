@@ -598,6 +598,15 @@ void IntlCalendarTest::TestJapaneseFormat() {
         simpleTest(loc, expect, expectDate, status);    
         
     }
+    {   // 1989 Jan 9 Monday = Heisei 1; full is Gy年M月d日EEEE => 平成元年1月9日月曜日
+        UnicodeString expect = CharsToUnicodeString("\\u5E73\\u6210\\u5143\\u5E741\\u67089\\u65E5\\u6708\\u66DC\\u65E5");
+        UDate         expectDate = 600336000000.0;
+        Locale        loc("ja_JP@calendar=japanese");
+        
+        status = U_ZERO_ERROR;
+        simpleTest(loc, expect, expectDate, status);    
+        
+    }
     {   // This Feb 29th falls on a leap year by gregorian year, but not by Japanese year.
         UnicodeString expect = CharsToUnicodeString("\\u5EB7\\u6B632\\u5e742\\u670829\\u65e5\\u65e5\\u66dc\\u65e5");
         UDate         expectDate =  -16214400422000.0;  // 1456-03-09T00:00Z-075258

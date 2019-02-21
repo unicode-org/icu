@@ -152,11 +152,11 @@ public class JapaneseTest extends CalendarTestFmwk {
     {
         ULocale loc = new ULocale("ja_JP@calendar=japanese");
         Calendar cal = new JapaneseCalendar(loc);
-        DateFormat enjformat = cal.getDateTimeFormat(0,0,new ULocale("en_JP@calendar=japanese"));
-        DateFormat format = cal.getDateTimeFormat(0,0,loc);
+        DateFormat enjformat = cal.getDateTimeFormat(DateFormat.FULL,DateFormat.FULL,new ULocale("en_JP@calendar=japanese"));
+        DateFormat format = cal.getDateTimeFormat(DateFormat.SHORT,DateFormat.SHORT,loc); // SHORT => no jpanyear since we apply "y.M.d" anyway
         ((SimpleDateFormat)format).applyPattern("y.M.d");  // Note: just 'y' doesn't work here.
         ParsePosition pos = new ParsePosition(0);
-        Date aDate = format.parse("1.1.9", pos); // after the start of heisei accession.  Jan 1, 1H wouldn't work  because it is actually showa 64
+        Date aDate = format.parse("1.5.9", pos); // after accession (Heisei or next). Before accession in the same year would format with the previous era.
         String inEn = enjformat.format(aDate);
 
         cal.clear();
@@ -203,6 +203,27 @@ public class JapaneseTest extends CalendarTestFmwk {
                 " and era " + expectEra + ", but got year " + gotYear + " and era " + gotEra + " (Gregorian:" + str +")");
         } else {
             logln(" year: " + gotYear + ", era: " + gotEra);
+        }
+
+        // Tests for formats with gannen numbering Gy年
+        pos.setIndex(0);
+        aDate = format.parse("1.5.9", pos); // reset
+        DateFormat fmtWithGannen = DateFormat.getDateInstance(cal, DateFormat.MEDIUM, loc);
+        String aString = fmtWithGannen.format(aDate);
+        if (aString.charAt(2) != '\u5143') { // 元
+            errln("Formatting year 1 as Gannen, got " + aString + " but expected 3rd char to be \u5143");
+        } else {
+            // Replace 元 with 1 and parse the result
+            String bString = aString.replace('\u5143', '1');
+            try {
+                Date bDate = fmtWithGannen.parse(bString);
+                bString = fmtWithGannen.format(bDate);
+                if (!bString.equals(aString)) {
+                    errln("Parsing 1 when expecting \u5143, formatting the result produced " + bString + " but expected " + aString);
+                }
+            } catch (ParseException pe) {
+                errln("Exception parsing 1 when expecting \u5143 in string " + bString);
+            }
         }
     }
 
