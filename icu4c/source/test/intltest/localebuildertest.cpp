@@ -1500,7 +1500,7 @@ void LocaleBuilderTest::TestSetExtensionValidateOthersWellFormed() {
     };
 
     const char * aToZ = "abcdefghijklmnopqrstuvwxyz";
-    const int32_t aToZLen = uprv_strlen(aToZ);
+    const int32_t aToZLen = static_cast<int32_t>(uprv_strlen(aToZ));
     int32_t i = 0;
     for (const char* extension : wellFormedExtensions) {
         char ch = aToZ[i];
@@ -1517,7 +1517,7 @@ void LocaleBuilderTest::TestSetExtensionValidateOthersWellFormed() {
 
     const char* someChars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789`~!@#$%^&*()-_=+;:,.<>?";
-    const int32_t someCharsLen = uprv_strlen(someChars);
+    const int32_t someCharsLen = static_cast<int32_t>(uprv_strlen(someChars));
     for (int32_t i = 0; i < someCharsLen; i++) {
         char ch = someChars[i];
         UErrorCode status = U_ZERO_ERROR;
@@ -1553,7 +1553,7 @@ void LocaleBuilderTest::TestSetExtensionValidateOthersIllFormed() {
         "87654321-a-0-3",  // First subtag too long
     };
     const char * aToZ = "abcdefghijklmnopqrstuvwxyz";
-    const int32_t aToZLen = uprv_strlen(aToZ);
+    const int32_t aToZLen = static_cast<int32_t>(uprv_strlen(aToZ));
     int32_t i = 0;
     for (const char* ill : illFormed) {
         char ch = aToZ[i];

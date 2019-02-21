@@ -2323,13 +2323,13 @@ static void TestParseCaseSensitive(void) {
     assertSuccess("Creating UNumberFormat", &status);
     double result = unum_parseDouble(fmt, u"1e2", -1, NULL, &status);
     assertSuccess("Parsing with UNumberFormat, case insensitive", &status);
-    assertIntEquals("Result with case sensitive", 100, result);
+    assertIntEquals("Result with case sensitive", 100, (int64_t)result);
     unum_setAttribute(fmt, UNUM_PARSE_CASE_SENSITIVE, 1);
     int32_t ppos = 0;
     result = unum_parseDouble(fmt, u"1e2", -1, &ppos, &status);
     assertSuccess("Parsing with UNumberFormat, case sensitive", &status);
     assertIntEquals("Position with case sensitive", 1, ppos);
-    assertIntEquals("Result with case sensitive", 1, result);
+    assertIntEquals("Result with case sensitive", 1, (int64_t)result);
     unum_close(fmt);
 }
 
