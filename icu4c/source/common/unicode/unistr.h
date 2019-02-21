@@ -1915,7 +1915,7 @@ public:
    * @param s2 will get s1's contents and state
    * @stable ICU 56
    */
-  friend U_COMMON_API inline void U_EXPORT2
+  friend inline void U_EXPORT2
   swap(UnicodeString &s1, UnicodeString &s2) U_NOEXCEPT {
     s1.swap(s2);
   }
@@ -1998,7 +1998,7 @@ public:
    * @return a reference to this
    * @stable ICU 2.0
    */
-  UnicodeString& setTo(char16_t srcChar);
+  inline UnicodeString& setTo(char16_t srcChar);
 
   /**
    * Set the characters in the UnicodeString object to the code point
@@ -2008,7 +2008,7 @@ public:
    * @return a reference to this
    * @stable ICU 2.0
    */
-  UnicodeString& setTo(UChar32 srcChar);
+  inline UnicodeString& setTo(UChar32 srcChar);
 
   /**
    * Aliasing setTo() function, analogous to the readonly-aliasing char16_t* constructor.
@@ -2319,7 +2319,7 @@ public:
    * @return a reference to this
    * @stable ICU 2.0
    */
-  UnicodeString& replace(int32_t start,
+  inline UnicodeString& replace(int32_t start,
              int32_t length,
              const UnicodeString& srcText,
              int32_t srcStart,
@@ -2337,7 +2337,7 @@ public:
    * @return a reference to this
    * @stable ICU 2.0
    */
-  UnicodeString& replace(int32_t start,
+  inline UnicodeString& replace(int32_t start,
              int32_t length,
              const UnicodeString& srcText);
 
@@ -2358,7 +2358,7 @@ public:
    * @return a reference to this
    * @stable ICU 2.0
    */
-  UnicodeString& replace(int32_t start,
+  inline UnicodeString& replace(int32_t start,
              int32_t length,
              const char16_t *srcChars,
              int32_t srcStart,
