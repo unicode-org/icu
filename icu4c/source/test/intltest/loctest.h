@@ -135,6 +135,7 @@ public:
     void TestUnd();
     void TestUndScript();
     void TestUndRegion();
+    void TestUndCAPI();
 
 private:
     void _checklocs(const char* label,
