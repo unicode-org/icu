@@ -626,19 +626,6 @@ Locale& Locale::init(const char* localeID, UBool canonicalize)
             variantBegin = (int32_t)(field[variantField] - fullName);
         }
 
-        if (length == 4 && uprv_stricmp(fullName, "root") == 0) {
-            length = 0;
-            variantBegin = 0;
-            language[0] = '\0';
-            fullName[0] = '\0';
-        } else if (length >= 3 && uprv_strnicmp(fullName, "und", 3) == 0 &&
-            (length == 3 || fullName[3] == '_' || fullName[3] == '@')) {
-            length -= 3;
-            variantBegin -= 3;
-            language[0] = '\0';
-            uprv_memmove(fullName, fullName + 3, length + 1);
-        }
-
         err = U_ZERO_ERROR;
         initBaseName(err);
         if (U_FAILURE(err)) {

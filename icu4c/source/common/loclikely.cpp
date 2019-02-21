@@ -35,6 +35,13 @@
 #include "ustr_imp.h"
 
 /**
+ * These are the canonical strings for unknown languages, scripts and regions.
+ **/
+static const char* const unknownLanguage = "und";
+static const char* const unknownScript = "Zzzz";
+static const char* const unknownRegion = "ZZ";
+
+/**
  * This function looks for the localeID in the likelySubtags resource.
  *
  * @param localeID The tag to find.
@@ -55,6 +62,19 @@ findLikelySubtags(const char* localeID,
         UErrorCode tmpErr = U_ZERO_ERROR;
         icu::LocalUResourceBundlePointer subtags(ures_openDirect(NULL, "likelySubtags", &tmpErr));
         if (U_SUCCESS(tmpErr)) {
+            icu::CharString und;
+            if (localeID != NULL) {
+                if (*localeID == '\0') {
+                    localeID = unknownLanguage;
+                } else if (*localeID == '_') {
+                    und.append(unknownLanguage, *err);
+                    und.append(localeID, *err);
+                    if (U_FAILURE(*err)) {
+                        return NULL;
+                    }
+                    localeID = und.data();
+                }
+            }
             s = ures_getStringByKey(subtags.getAlias(), localeID, &resLen, &tmpErr);
 
             if (U_FAILURE(tmpErr)) {
@@ -72,6 +92,11 @@ findLikelySubtags(const char* localeID,
             }
             else {
                 u_UCharsToChars(s, buffer, resLen + 1);
+                if (resLen >= 3 &&
+                    uprv_strnicmp(buffer, unknownLanguage, 3) == 0 &&
+                    (resLen == 3 || buffer[3] == '_')) {
+                    uprv_memmove(buffer, buffer + 3, resLen - 3 + 1);
+                }
                 result = buffer;
             }
         } else {
@@ -97,9 +122,10 @@ appendTag(
     const char* tag,
     int32_t tagLength,
     char* buffer,
-    int32_t* bufferLength) {
+    int32_t* bufferLength,
+    UBool withSeparator) {
 
-    if (*bufferLength > 0) {
+    if (withSeparator) {
         buffer[*bufferLength] = '_';
         ++(*bufferLength);
     }
@@ -111,13 +137,6 @@ appendTag(
 
     *bufferLength += tagLength;
 }
-
-/**
- * These are the canonical strings for unknown languages, scripts and regions.
- **/
-static const char* const unknownLanguage = "und";
-static const char* const unknownScript = "Zzzz";
-static const char* const unknownRegion = "ZZ";
 
 /**
  * Create a tag string from the supplied parameters.  The lang, script and region
@@ -189,18 +208,14 @@ createTagStringWithAlternates(
                 lang,
                 langLength,
                 tagBuffer,
-                &tagLength);
+                &tagLength,
+                /*withSeparator=*/FALSE);
         }
         else if (alternateTags == NULL) {
             /*
-             * Append the value for an unknown language, if
+             * Use the empty string for an unknown language, if
              * we found no language.
              */
-            appendTag(
-                unknownLanguage,
-                (int32_t)uprv_strlen(unknownLanguage),
-                tagBuffer,
-                &tagLength);
         }
         else {
             /*
@@ -221,21 +236,17 @@ createTagStringWithAlternates(
             }
             else if (alternateLangLength == 0) {
                 /*
-                 * Append the value for an unknown language, if
+                 * Use the empty string for an unknown language, if
                  * we found no language.
                  */
-                appendTag(
-                    unknownLanguage,
-                    (int32_t)uprv_strlen(unknownLanguage),
-                    tagBuffer,
-                    &tagLength);
             }
             else {
                 appendTag(
                     alternateLang,
                     alternateLangLength,
                     tagBuffer,
-                    &tagLength);
+                    &tagLength,
+                    /*withSeparator=*/FALSE);
             }
         }
 
@@ -244,7 +255,8 @@ createTagStringWithAlternates(
                 script,
                 scriptLength,
                 tagBuffer,
-                &tagLength);
+                &tagLength,
+                /*withSeparator=*/TRUE);
         }
         else if (alternateTags != NULL) {
             /*
@@ -268,7 +280,8 @@ createTagStringWithAlternates(
                     alternateScript,
                     alternateScriptLength,
                     tagBuffer,
-                    &tagLength);
+                    &tagLength,
+                    /*withSeparator=*/TRUE);
             }
         }
 
@@ -277,7 +290,8 @@ createTagStringWithAlternates(
                 region,
                 regionLength,
                 tagBuffer,
-                &tagLength);
+                &tagLength,
+                /*withSeparator=*/TRUE);
 
             regionAppended = TRUE;
         }
@@ -302,7 +316,8 @@ createTagStringWithAlternates(
                     alternateRegion,
                     alternateRegionLength,
                     tagBuffer,
-                    &tagLength);
+                    &tagLength,
+                    /*withSeparator=*/TRUE);
 
                 regionAppended = TRUE;
             }
@@ -464,15 +479,9 @@ parseTagString(
     *langLength = subtagLength;
 
     /*
-     * If no language was present, use the value of unknownLanguage
-     * instead.  Otherwise, move past any separator.
+     * If no language was present, use the empty string instead.
+     * Otherwise, move past any separator.
      */
-    if (*langLength == 0) {
-        uprv_strcpy(
-            lang,
-            unknownLanguage);
-        *langLength = (int32_t)uprv_strlen(lang);
-    }
     if (_isIDSeparator(*position)) {
         ++position;
     }
@@ -1003,7 +1012,7 @@ _uloc_minimizeSubtags(const char* localeID,
         if(U_FAILURE(*err)) {
             goto error;
         }
-        else if (uprv_strnicmp(
+        else if (!tagBuffer.isEmpty() && uprv_strnicmp(
                     maximizedTagBuffer.data(),
                     tagBuffer.data(),
                     tagBuffer.length()) == 0) {

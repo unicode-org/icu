@@ -3563,7 +3563,7 @@ const char* const basic_minimize_data[][2] = {
     "de_Latn_DE_POSIX_1901",
     "de__POSIX_1901"
   }, {
-    "und",
+    "",
     ""
   }, {
     "en_Latn_US@calendar=gregorian",
@@ -5098,8 +5098,8 @@ const char* const full_data[][3] = {
     "zh_HK"
   }, {
     "und_AQ",
-    "und_Latn_AQ",
-    "und_AQ"
+    "_Latn_AQ",
+    "_AQ"
   }, {
     "und_Zzzz",
     "en_Latn_US",
@@ -5122,8 +5122,8 @@ const char* const full_data[][3] = {
     "zh_HK"
   }, {
     "und_Zzzz_AQ",
-    "und_Latn_AQ",
-    "und_AQ"
+    "_Latn_AQ",
+    "_AQ"
   }, {
     "und_Latn",
     "en_Latn_US",
@@ -5146,8 +5146,8 @@ const char* const full_data[][3] = {
     "zh_Latn_HK"
   }, {
     "und_Latn_AQ",
-    "und_Latn_AQ",
-    "und_AQ"
+    "_Latn_AQ",
+    "_AQ"
   }, {
     "und_Hans",
     "zh_Hans_CN",
@@ -5218,8 +5218,8 @@ const char* const full_data[][3] = {
     "zh_Moon_HK"
   }, {
     "und_Moon_AQ",
-    "und_Moon_AQ",
-    "und_Moon_AQ"
+    "_Moon_AQ",
+    "_Moon_AQ"
   }, {
     "es",
     "es_Latn_ES",
@@ -6520,7 +6520,7 @@ typedef struct {
 } BadLocaleItem;
 
 static const BadLocaleItem badLocaleItems[] = {
-    { "-9223372036854775808", "en", "9223372036854775808", U_USING_DEFAULT_WARNING },
+    { "-9223372036854775808", "en", "Unknown language (9223372036854775808)", U_USING_DEFAULT_WARNING },
     /* add more in the future */
     { NULL, NULL, NULL, U_ZERO_ERROR } /* terminator */
 };
