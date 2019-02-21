@@ -55,6 +55,7 @@ void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     TESTCASE_AUTO(testParseErrors);
     TESTCASE_AUTO(testFixedDecimal);
     TESTCASE_AUTO(testSelectTrailingZeros);
+    TESTCASE_AUTO(testLocaleExtension);
     TESTCASE_AUTO_END;
 }
 
@@ -1036,6 +1037,12 @@ void PluralRulesTest::testSelectTrailingZeros() {
     }
 }
 
-
+void PluralRulesTest::testLocaleExtension() {
+    IcuTestErrorCode errorCode(*this, "testLocaleExtension");
+    LocalPointer<PluralRules> rules(PluralRules::forLocale("pt@calendar=gregorian", errorCode));
+    if (errorCode.errIfFailureAndReset("PluralRules::forLocale()")) { return; }
+    UnicodeString key = rules->select(1);
+    assertEquals("pt@calendar=gregorian select(1)", u"one", key);
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

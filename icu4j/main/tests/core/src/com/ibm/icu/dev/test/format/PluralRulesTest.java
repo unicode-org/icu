@@ -527,6 +527,13 @@ public class PluralRulesTest extends TestFmwk {
     }
 
     @Test
+    public void testLocaleExtension() {
+        PluralRules rules = PluralRules.forLocale(new ULocale("pt@calendar=gregorian"));
+        String key = rules.select(1);
+        assertEquals("pt@calendar=gregorian select(1)", "one", key);
+    }
+
+    @Test
     public void testFunctionalEquivalent() {
         // spot check
         ULocale unknown = ULocale.createCanonical("zz_ZZ");
