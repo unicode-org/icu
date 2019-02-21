@@ -703,14 +703,14 @@ PluralRules::getRuleFromResource(const Locale& locale, UPluralType type, UErrorC
         return emptyStr;
     }
     int32_t resLen=0;
-    const char *curLocaleName=locale.getName();
+    const char *curLocaleName=locale.getBaseName();
     const UChar* s = ures_getStringByKey(locRes.getAlias(), curLocaleName, &resLen, &errCode);
 
     if (s == nullptr) {
         // Check parent locales.
         UErrorCode status = U_ZERO_ERROR;
         char parentLocaleName[ULOC_FULLNAME_CAPACITY];
-        const char *curLocaleName2=locale.getName();
+        const char *curLocaleName2=locale.getBaseName();
         uprv_strcpy(parentLocaleName, curLocaleName2);
 
         while (uloc_getParent(parentLocaleName, parentLocaleName,
