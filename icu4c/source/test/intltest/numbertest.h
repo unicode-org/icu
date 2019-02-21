@@ -88,7 +88,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     CurrencyUnit GBP;
     CurrencyUnit CZK;
     CurrencyUnit CAD;
-    CurrencyUnit ESP;
+    CurrencyUnit __ESP;
     CurrencyUnit PTE;
 
     MeasureUnit METER;
