@@ -30,7 +30,7 @@ NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode& status)
           GBP(u"GBP", status),
           CZK(u"CZK", status),
           CAD(u"CAD", status),
-          ESP(u"ESP", status),
+          __ESP(u"ESP", status),
           PTE(u"PTE", status),
           FRENCH_SYMBOLS(Locale::getFrench(), status),
           SWISS_SYMBOLS(Locale("de-CH"), status),
@@ -750,7 +750,7 @@ void NumberFormatterApiTest::unitCurrency() {
     assertFormatSingle(
             u"Currency-dependent format (Test)",
             u"currency/ESP unit-width-short",
-            NumberFormatter::with().unit(ESP).unitWidth(UNUM_UNIT_WIDTH_SHORT),
+            NumberFormatter::with().unit(__ESP).unitWidth(UNUM_UNIT_WIDTH_SHORT),
             Locale("ca"),
             444444.55,
             u"₧ 444.445");
