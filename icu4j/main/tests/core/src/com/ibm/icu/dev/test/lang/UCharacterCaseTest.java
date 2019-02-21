@@ -960,8 +960,8 @@ public final class UCharacterCaseTest extends TestFmwk
         // Iterate once forward, once backward, to cover more runtime conditions.
         int srcLength = expSrcIndex;
         int destLength = expDestIndex;
-        List<Integer> srcIndexes = new ArrayList<Integer>();
-        List<Integer> destIndexes = new ArrayList<Integer>();
+        List<Integer> srcIndexes = new ArrayList<>();
+        List<Integer> destIndexes = new ArrayList<>();
         srcIndexes.add(-1);
         destIndexes.add(-1);
         int srcIndex = 0;
@@ -1503,6 +1503,18 @@ public final class UCharacterCaseTest extends TestFmwk
         assertEquals("title", "\u1F88\u1F80\u1FF3", result);
     }
 
+    @Test
+    public void TestFoldBug20316() {
+        String s = "廬ᾒ뻪ᣃइ垚Ⴡₓ렞체ꖲ갹ݖ䕷꾬쯎㊅ᦘᰄ㸜䡏遁럢豑黾奯㸀⊻줮끎蒹衤劔뽳趧熶撒쫃窩겨ཇ脌쵐嫑⟑겭㋋濜隣ᳰ봢ℼ櫩靛㉃炔鋳" +
+                "оे⳨ᦧྃ깢粣ᑤꇪ찃̹鵄ዤꛛᰙ⡝捣쯋톐蕩栭쥀뎊ᄯ৻恳〬昴껤룩列潱ᑮ煃鶖안꽊鹭宪帐❖ा쥈잔";
+        String result = CaseMap.fold().apply(s);
+        assertTrue("廬ᾒ...->廬ἢι...", result.startsWith("廬ἢι"));
+        s = "儊ẖ깸ᝓ恷ᇁ䜄쌼ꇸჃ䗑䘬䒥㈴槁蛚紆洔㖣믏亝醣黹Ά嶨䖕篕舀ꖧ₭ଯᒗ✧ԗ墖쁳㽎苊澎긁⾆⒞蠻왃囨ᡠ邏꾭⪐턣搤穳≠톲絋砖ሷ⠆" +
+                "瞏惢鵶剕듘ᅤ♟Ԡⴠ⊡鹔ጙ갑⣚堟ᣗ✸㕇絮䠎瘗⟡놥擢ꉭ佱ྪ飹痵⿑⨴츿璿僖㯷넴鋰膄釚겼ナ黪差";
+        result = CaseMap.fold().apply(s);
+        assertTrue("儊ẖ...->儊h\u0331...", result.startsWith("儊h\u0331"));
+    }
+
     // private data members - test data --------------------------------------
 
     private static final Locale TURKISH_LOCALE_ = new Locale("tr", "TR");
@@ -1747,7 +1759,7 @@ public final class UCharacterCaseTest extends TestFmwk
      */
     private String[] getUnicodeStrings(String str)
     {
-        List<String> v = new ArrayList<String>(10);
+        List<String> v = new ArrayList<>(10);
         int start = 0;
         for (int casecount = 4; casecount > 0; casecount --) {
             int end = str.indexOf("; ", start);
