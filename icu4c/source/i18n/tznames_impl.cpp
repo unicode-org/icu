@@ -21,11 +21,14 @@
 #include "unicode/utf16.h"
 
 #include "tznames_impl.h"
+#include "bytesinkutil.h"
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "uassert.h"
 #include "mutex.h"
 #include "resource.h"
+#include "ulocimp.h"
 #include "uresimp.h"
 #include "ureslocs.h"
 #include "zonemeta.h"
@@ -2135,9 +2138,12 @@ TZDBTimeZoneNames::TZDBTimeZoneNames(const Locale& locale)
     int32_t regionLen = static_cast<int32_t>(uprv_strlen(region));
     if (regionLen == 0) {
         UErrorCode status = U_ZERO_ERROR;
-        char loc[ULOC_FULLNAME_CAPACITY];
-        uloc_addLikelySubtags(fLocale.getName(), loc, sizeof(loc), &status);
-        regionLen = uloc_getCountry(loc, fRegion, sizeof(fRegion), &status);
+        CharString loc;
+        {
+            CharStringByteSink sink(&loc);
+            ulocimp_addLikelySubtags(fLocale.getName(), sink, &status);
+        }
+        regionLen = uloc_getCountry(loc.data(), fRegion, sizeof(fRegion), &status);
         if (U_SUCCESS(status) && regionLen < (int32_t)sizeof(fRegion)) {
             useWorld = FALSE;
         }
