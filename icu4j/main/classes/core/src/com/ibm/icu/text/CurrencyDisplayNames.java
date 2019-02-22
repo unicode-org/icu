@@ -127,8 +127,7 @@ public abstract class CurrencyDisplayNames {
      *
      * @param isoCode the three-letter ISO code.
      * @return the narrow symbol.
-     * @draft ICU 61
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 61
      */
     public abstract String getNarrowSymbol(String isoCode);
 

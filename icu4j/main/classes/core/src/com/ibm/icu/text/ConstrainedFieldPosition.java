@@ -193,8 +193,10 @@ public class ConstrainedFieldPosition {
      *
      * @param field The field to fix when iterating.
      * @param fieldValue The field value to fix when iterating.
-     * @internal ICU 64 Technical Preview
+     * @internal ICU 64 technology preview
+     * @deprecated This API is for technology preview and might be changed or removed in a future release.
      */
+    @Deprecated
     public void constrainFieldAndValue(Field field, Object fieldValue) {
         fConstraint = ConstraintType.VALUE;
         fClassConstraint = Object.class;
@@ -344,6 +346,11 @@ public class ConstrainedFieldPosition {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @draft ICU 64
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

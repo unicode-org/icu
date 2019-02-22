@@ -94,8 +94,7 @@ public class Currency extends MeasureUnit {
      * symbol, but it always takes the shortest form: for example,
      * "$" instead of "US$" for USD in en-CA.
      *
-     * @draft ICU 61
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 61
      */
     public static final int NARROW_SYMBOL_NAME = 3;
 
@@ -236,7 +235,6 @@ public class Currency extends MeasureUnit {
         return resultSet;
     }
 
-    private static final String EUR_STR = "EUR";
     private static final CacheBase<String, Currency, Void> regionCurrencyCache =
             new SoftCache<String, Currency, Void>() {
         @Override
