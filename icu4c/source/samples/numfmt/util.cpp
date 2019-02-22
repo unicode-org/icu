@@ -8,6 +8,9 @@
  * others. All Rights Reserved.
  *************************************************************************/
 
+#define __STDC_FORMAT_MACROS 1
+#include <inttypes.h>
+
 #include "unicode/unistr.h"
 #include "unicode/fmtable.h"
 #include <stdio.h>
@@ -95,10 +98,15 @@ UnicodeString formattableToString(const Formattable& f) {
             return UnicodeString(buf, "");
         }
     case Formattable::kLong:
+        {
+            char buf[256];
+            sprintf(buf, "%" PRId32 "L", f.getLong());
+            return UnicodeString(buf, "");
+        }
     case Formattable::kInt64:
         {
             char buf[256];
-            sprintf(buf, "%ldL", f.getLong());
+            sprintf(buf, "%" PRId64 "L", f.getInt64());
             return UnicodeString(buf, "");
         }
     case Formattable::kString:
