@@ -51,11 +51,9 @@ jobs:
         cd icu4c/source && ./runConfigureICU Linux && make -j2
       displayName: 'Build'
     - script: |
-        cd icu4c/source && make check
+        cd icu4c/source && make check-exhaustive
       displayName: 'Exhaustive Tests'
       env:
-        INTLTEST_OPTS: '-e'
-        CINTLTEST_OPTS: '-e'
         CC: clang
         CXX: clang++
 #-------------------------------------------------------------------------
