@@ -23,6 +23,9 @@
 *   for Unicode character properties.
 */
 
+#define __STDC_FORMAT_MACROS 1
+#include <inttypes.h>
+
 #include <stdio.h>
 #include "unicode/utypes.h"
 #include "unicode/uchar.h"
@@ -38,13 +41,13 @@ printProps(UChar32 codePoint) {
     u_charName(codePoint, U_UNICODE_CHAR_NAME, buffer, sizeof(buffer), &errorCode);
 
     /* print the code point and the character name */
-    printf("U+%04lx\t%s\n", codePoint, buffer);
+    printf("U+%04" PRId32 "\t%s\n", codePoint, buffer);
 
     /* print some properties */
     printf("  general category (numeric enum value): %u\n", u_charType(codePoint));
 
     /* note: these APIs do not provide the data from SpecialCasing.txt */
-    printf("  is lowercase: %d  uppercase: U+%04lx\n", u_islower(codePoint), u_toupper(codePoint));
+    printf("  is lowercase: %d  uppercase: U+%04" PRId32 "\n", u_islower(codePoint), u_toupper(codePoint));
 
     printf("  is digit: %d  decimal digit value: %d\n", u_isdigit(codePoint), u_charDigitValue(codePoint));
 
