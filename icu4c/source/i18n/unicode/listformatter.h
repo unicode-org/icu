@@ -127,9 +127,9 @@ class U_I18N_API FormattedList : public UMemory, public FormattedValue {
     FormattedListData *fData;
     UErrorCode fErrorCode;
     explicit FormattedList(FormattedListData *results)
-        : fData(results), fErrorCode(U_ZERO_ERROR) {};
+        : fData(results), fErrorCode(U_ZERO_ERROR) {}
     explicit FormattedList(UErrorCode errorCode)
-        : fData(nullptr), fErrorCode(errorCode) {};
+        : fData(nullptr), fErrorCode(errorCode) {}
     friend class ListFormatter;
 };
 #endif /* U_HIDE_DRAFT_API */

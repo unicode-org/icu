@@ -845,10 +845,10 @@ class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
      * @internal
      */
     explicit FormattedNumberRange(impl::UFormattedNumberRangeData *results)
-        : fData(results), fErrorCode(U_ZERO_ERROR) {};
+        : fData(results), fErrorCode(U_ZERO_ERROR) {}
 
     explicit FormattedNumberRange(UErrorCode errorCode)
-        : fData(nullptr), fErrorCode(errorCode) {};
+        : fData(nullptr), fErrorCode(errorCode) {}
 
     void getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
 
