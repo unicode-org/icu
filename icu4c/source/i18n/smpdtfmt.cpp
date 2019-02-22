@@ -4217,6 +4217,7 @@ SimpleDateFormat::tzFormat(UErrorCode &status) const {
 void SimpleDateFormat::parsePattern() {
     fHasMinute = FALSE;
     fHasSecond = FALSE;
+    fHasHanYearChar = FALSE;
 
     int len = fPattern.length();
     UBool inQuote = FALSE;
