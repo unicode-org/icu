@@ -1062,9 +1062,9 @@ void DateIntervalFormatTest::testFormat() {
 
         "ja-u-ca-japanese", "H 31 03 15 09:00:00", "H 31 04 15 09:00:00", "GGGGGyMd", "H31/03/15\\uFF5E31/04/15",
 
-        "ja-u-ca-japanese", "S 64 01 05 09:00:00", "H 1 01 15 09:00:00",  "GyMMMd", "\\u662D\\u548C64\\u5E741\\u67085\\u65E5\\uFF5E\\u5E73\\u62101\\u5E741\\u670815\\u65E5",
+        "ja-u-ca-japanese", "S 64 01 05 09:00:00", "H 1 01 15 09:00:00",  "GyMMMd", "\\u662D\\u548C64\\u5E741\\u67085\\u65E5\\uFF5E\\u5E73\\u6210\\u5143\\u5E741\\u670815\\u65E5",
 
-        "ja-u-ca-japanese", "S 64 01 05 09:00:00", "H 1 01 15 09:00:00",  "GGGGGyMd", "S64/1/5\\uFF5EH1/1/15", // The GGGGG/G forces inheritance from a different pattern, no padding
+        "ja-u-ca-japanese", "S 64 01 05 09:00:00", "H 1 01 15 09:00:00",  "GGGGGyMd", "S64/1/5\\uFF5EH\\u5143/1/15", // The GGGGG/G forces inheritance from a different pattern, no padding
 
         "ja-u-ca-japanese", "H 31 04 15 09:00:00", JP_ERA_2019_NARROW " 1 05 15 09:00:00", "GGGGGyMd", "H31/4/15\\uFF5E" JP_ERA_2019_NARROW "1/5/15",
 

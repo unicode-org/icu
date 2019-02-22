@@ -12,6 +12,10 @@
 #include "string.h"
 #include "unicode/locid.h"
 #include "japancal.h"
+#include "unicode/localpointer.h"
+#include "unicode/datefmt.h"
+#include "unicode/smpdtfmt.h"
+#include "unicode/dtptngen.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -74,9 +78,10 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     CASE(4,TestBuddhistFormat);
     CASE(5,TestJapaneseFormat);
     CASE(6,TestJapanese3860);
-    CASE(7,TestPersian);
-    CASE(8,TestPersianFormat);
-    CASE(9,TestTaiwan);
+    CASE(7,TestForceGannenNumbering);
+    CASE(8,TestPersian);
+    CASE(9,TestPersianFormat);
+    CASE(10,TestTaiwan);
     default: name = ""; break;
     }
 }
@@ -636,20 +641,20 @@ void IntlCalendarTest::TestJapanese3860()
         // Test parse with missing era (should default to current era, heisei)
         // Test parse with incomplete information
         logln("Testing parse w/ missing era...");
-        SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("y.M.d"), Locale("ja_JP@calendar=japanese"), status);
+        SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("y/M/d"), Locale("ja_JP@calendar=japanese"), status);
         CHECK(status, "creating date format instance");
         if(!fmt) { 
             errln("Couldn't create en_US instance");
         } else {
             UErrorCode s2 = U_ZERO_ERROR;
             cal2->clear();
-            UnicodeString samplestr("1.1.9");
+            UnicodeString samplestr("1/5/9");
             logln(UnicodeString() + "Test Year: " + samplestr);
             aDate = fmt->parse(samplestr, s2);
             ParsePosition pp=0;
             fmt->parse(samplestr, *cal2, pp);
-            CHECK(s2, "parsing the 1.1.9 string");
-            logln("*cal2 after 119 parse:");
+            CHECK(s2, "parsing the 1/5/9 string");
+            logln("*cal2 after 159 parse:");
             str.remove();
             fmt2->format(aDate, str);
             logln(UnicodeString() + "as Gregorian Calendar: " + str);
@@ -660,7 +665,7 @@ void IntlCalendarTest::TestJapanese3860()
             int32_t expectYear = 1;
             int32_t expectEra = JapaneseCalendar::getCurrentEra();
             if((gotYear!=1) || (gotEra != expectEra)) {
-                errln(UnicodeString("parse "+samplestr+" of 'y.m.d' as Japanese Calendar, expected year ") + expectYear + 
+                errln(UnicodeString("parse "+samplestr+" of 'y/M/d' as Japanese Calendar, expected year ") + expectYear + 
                     UnicodeString(" and era ") + expectEra +", but got year " + gotYear + " and era " + gotEra + " (Gregorian:" + str +")");
             } else {            
                 logln(UnicodeString() + " year: " + gotYear + ", era: " + gotEra);
@@ -714,8 +719,50 @@ void IntlCalendarTest::TestJapanese3860()
     delete fmt2;
 }
 
+void IntlCalendarTest::TestForceGannenNumbering()
+{
+    UErrorCode status;
+    const char* locID = "ja_JP@calendar=japanese";
+    Locale loc(locID);
+    UDate refDate = 600336000000.0; // 1989 Jan 9 Monday = Heisei 1
+    UnicodeString testSkeleton("yMMMd");
 
+    // Test Gannen year forcing
+    status = U_ZERO_ERROR;
+    LocalPointer<DateFormat> testFmt1(DateFormat::createInstanceForSkeleton(testSkeleton, loc, status));
+    if (U_FAILURE(status)) {
+        dataerrln("Fail in DateFormat::createInstanceForSkeleton locale %s: %s", locID, u_errorName(status));
+    } else {
+        UnicodeString testString1;
+        testString1 = testFmt1->format(refDate, testString1);
+        if (testString1.length() < 3 || testString1.charAt(2) != 0x5143) {
+            errln(UnicodeString("Formatting year 1 as Gannen, got " + testString1 + " but expected 3rd char to be 0x5143"));
+        }
+    }
 
+    // Test disabling of Gannen year forcing
+    status = U_ZERO_ERROR;
+    LocalPointer<DateTimePatternGenerator> dtpgen(DateTimePatternGenerator::createInstance(loc, status));
+    if (U_FAILURE(status)) {
+        dataerrln("Fail in DateTimePatternGenerator::createInstance locale %s: %s", locID, u_errorName(status));
+    } else {
+        UnicodeString pattern = dtpgen->getBestPattern(testSkeleton, status);
+        if (U_FAILURE(status)) {
+            dataerrln("Fail in DateTimePatternGenerator::getBestPattern locale %s: %s", locID, u_errorName(status));
+        } else  {
+            LocalPointer<SimpleDateFormat> testFmt2(new SimpleDateFormat(pattern, UnicodeString(""), loc, status));
+            if (U_FAILURE(status)) {
+                dataerrln("Fail in new SimpleDateFormat locale %s: %s", locID, u_errorName(status));
+            } else {
+                UnicodeString testString2;
+                testString2 = testFmt2->format(refDate, testString2);
+                if (testString2.length() < 3 || testString2.charAt(2) != 0x0031) {
+                    errln(UnicodeString("Formatting year 1 with Gannen disabled, got " + testString2 + " but expected 3rd char to be 1"));
+                }
+            }
+        }
+    }
+}
 
 /**
  * Verify the Persian Calendar.

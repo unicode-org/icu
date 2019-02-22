@@ -939,6 +939,11 @@ public class SimpleDateFormat extends DateFormat {
      */
     private transient boolean hasSecond;
 
+    /**
+     * DateFormat pattern contains the Han year character \u5E74=年, => non-numeric E Asian format.
+     */
+    private transient boolean hasHanYearChar;
+
     /*
      *  Capitalization setting, introduced in ICU 50
      *  Special serialization, see writeObject & readObject below
@@ -1136,11 +1141,20 @@ public class SimpleDateFormat extends DateFormat {
         setLocale(calendar.getLocale(ULocale.VALID_LOCALE ), calendar.getLocale(ULocale.ACTUAL_LOCALE));
         initLocalZeroPaddingNumberFormat();
 
+        parsePattern(); // Need this before initNumberFormatters(), to set hasHanYearChar
+
+        // Simple-minded hack to force Gannen year numbering for ja@calendar=japanese
+        // if format is non-numeric (includes 年) and overrides are not already specified.
+        // This does not update if applyPattern subsequently changes the pattern type.
+        if (override == null && hasHanYearChar &&
+                calendar != null && calendar.getType().equals("japanese") &&
+                locale != null && locale.getLanguage().equals("ja")) {
+            override = "y=jpanyear";
+        }
+
         if (override != null) {
            initNumberFormatters(locale);
         }
-
-        parsePattern();
     }
 
     /**
@@ -4555,12 +4569,16 @@ public class SimpleDateFormat extends DateFormat {
     private void parsePattern() {
         hasMinute = false;
         hasSecond = false;
+        hasHanYearChar = false;
 
         boolean inQuote = false;
         for (int i = 0; i < pattern.length(); ++i) {
             char ch = pattern.charAt(i);
             if (ch == '\'') {
                 inQuote = !inQuote;
+            }
+            if (ch == '\u5E74') { // don't care whether this is inside quotes
+                hasHanYearChar = true;
             }
             if (!inQuote) {
                 if (ch == 'm') {
