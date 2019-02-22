@@ -1599,6 +1599,7 @@ private:
 
     UBool                fHasMinute;
     UBool                fHasSecond;
+    UBool                fHasHanYearChar; // pattern contains the Han year character \u5E74
 
     /**
      * Sets fHasMinutes and fHasSeconds.

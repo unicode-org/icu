@@ -19,6 +19,7 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.impl.LocaleUtility;
 import com.ibm.icu.text.DateFormat;
+import com.ibm.icu.text.DateTimePatternGenerator;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.JapaneseCalendar;
@@ -150,13 +151,17 @@ public class JapaneseTest extends CalendarTestFmwk {
     @Test
     public void Test3860()
     {
+        final String jCalShortPattern = "y/M/d"; // Note: just 'y' doesn't work here.
+        final String jCalGannenDate = "1/5/9"; // A date in the above format after the accession date for Heisei era (Heisei year 1 Jan 8)
+                                               // or the new era in Gregorian 2019 (new era year 1 May 1). If before the accession date,
+                                               // the year will be in the previous era.
         ULocale loc = new ULocale("ja_JP@calendar=japanese");
         Calendar cal = new JapaneseCalendar(loc);
         DateFormat enjformat = cal.getDateTimeFormat(DateFormat.FULL,DateFormat.FULL,new ULocale("en_JP@calendar=japanese"));
-        DateFormat format = cal.getDateTimeFormat(DateFormat.SHORT,DateFormat.SHORT,loc); // SHORT => no jpanyear since we apply "y.M.d" anyway
-        ((SimpleDateFormat)format).applyPattern("y.M.d");  // Note: just 'y' doesn't work here.
+        DateFormat format = cal.getDateTimeFormat(DateFormat.SHORT,DateFormat.SHORT,loc); // SHORT => no jpanyear since we will apply a short pattern
+        ((SimpleDateFormat)format).applyPattern(jCalShortPattern);
         ParsePosition pos = new ParsePosition(0);
-        Date aDate = format.parse("1.5.9", pos); // after accession (Heisei or next). Before accession in the same year would format with the previous era.
+        Date aDate = format.parse(jCalGannenDate, pos);
         String inEn = enjformat.format(aDate);
 
         cal.clear();
@@ -207,7 +212,7 @@ public class JapaneseTest extends CalendarTestFmwk {
 
         // Tests for formats with gannen numbering Gy年
         pos.setIndex(0);
-        aDate = format.parse("1.5.9", pos); // reset
+        aDate = format.parse(jCalGannenDate, pos); // reset
         DateFormat fmtWithGannen = DateFormat.getDateInstance(cal, DateFormat.MEDIUM, loc);
         String aString = fmtWithGannen.format(aDate);
         if (aString.charAt(2) != '\u5143') { // 元
@@ -224,6 +229,36 @@ public class JapaneseTest extends CalendarTestFmwk {
             } catch (ParseException pe) {
                 errln("Exception parsing 1 when expecting \u5143 in string " + bString);
             }
+        }
+    }
+
+    @Test
+    public void TestForceGannenNumbering() {
+        final String jCalShortPattern = "y/M/d"; // Note: just 'y' doesn't work here.
+        final String jCalGannenDate = "1/5/9"; // A date in the above format after the accession date for Heisei era (Heisei year 1 Jan 8)
+                                               // or the new era in Gregorian 2019 (new era year 1 May 1). If before the accession date,
+                                               // the year will be in the previous era.
+        ULocale loc = new ULocale("ja_JP@calendar=japanese");
+        DateFormat refFmt = DateFormat.getDateInstance(DateFormat.SHORT, loc);
+        ((SimpleDateFormat)refFmt).applyPattern(jCalShortPattern);
+        ParsePosition pos = new ParsePosition(0);
+        Date refDate = refFmt.parse(jCalGannenDate, pos);
+        final String testSkeleton = "yMMMd";
+
+        // Test Gannen year forcing
+        DateFormat testFmt1 = DateFormat.getInstanceForSkeleton(testSkeleton, loc);
+        String testString1 = testFmt1.format(refDate);
+        if (testString1.length() < 3 || testString1.charAt(2) != '\u5143') { // 元
+            errln("Formatting year 1 as Gannen, got " + testString1 + " but expected 3rd char to be \u5143");
+        }
+
+        // Test disabling of Gannen year forcing
+        DateTimePatternGenerator dtpgen = DateTimePatternGenerator.getInstance(loc);
+        String pattern = dtpgen.getBestPattern(testSkeleton);
+        SimpleDateFormat testFmt2 = new SimpleDateFormat(pattern, "", loc); // empty override string to disable Gannen year numbering
+        String testString2 = testFmt2.format(refDate);
+        if (testString2.length() < 3 || testString2.charAt(2) != '1') {
+            errln("Formatting year 1 with Gannen disabled, got " + testString2 + " but expected 3rd char to be 1");
         }
     }
 

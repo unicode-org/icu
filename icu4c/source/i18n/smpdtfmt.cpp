@@ -856,6 +856,17 @@ SimpleDateFormat::initialize(const Locale& locale,
 {
     if (U_FAILURE(status)) return;
 
+    parsePattern(); // Need this before initNumberFormatters(), to set fHasHanYearChar
+
+    // Simple-minded hack to force Gannen year numbering for ja@calendar=japanese
+    // if format is non-numeric (includes 年) and fDateOverride is not already specified.
+    // This does not update if applyPattern subsequently changes the pattern type.
+    if (fDateOverride.isBogus() && fHasHanYearChar &&
+            fCalendar != nullptr && uprv_strcmp(fCalendar->getType(),"japanese") == 0 &&
+            uprv_strcmp(fLocale.getLanguage(),"ja") == 0) {
+        fDateOverride.setTo(u"y=jpanyear", -1);
+    }
+
     // We don't need to check that the row count is >= 1, since all 2d arrays have at
     // least one row
     fNumberFormat = NumberFormat::createInstance(locale, status);
@@ -872,8 +883,6 @@ SimpleDateFormat::initialize(const Locale& locale,
     {
         status = U_MISSING_RESOURCE_ERROR;
     }
-
-    parsePattern();
 }
 
 /* Initialize the fields we use to disambiguate ambiguous years. Separate
@@ -4215,6 +4224,9 @@ void SimpleDateFormat::parsePattern() {
         UChar ch = fPattern[i];
         if (ch == QUOTE) {
             inQuote = !inQuote;
+        }
+        if (ch == 0x5E74) { // don't care whether this is inside quotes
+            fHasHanYearChar = TRUE;
         }
         if (!inQuote) {
             if (ch == 0x6D) {  // 0x6D == 'm'
