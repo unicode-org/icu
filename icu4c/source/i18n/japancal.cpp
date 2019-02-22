@@ -81,6 +81,8 @@ static void U_CALLCONV initializeEras(UErrorCode &status) {
 
 // When ICU is used as a Windows system component, we want to use the NLS registry key, so that
 // enabling the tentative era for NLS also enables it for ICU.
+//
+// NOTE: The code inside the #ifdef below can be removed after the transition date.
 #ifdef ICU_DATA_DIR_WINDOWS
     // Look in the registry key and enable tentative era if there are more than 4 era values.
     HKEY hkeyJapaneseEras = nullptr;
@@ -90,28 +92,38 @@ static void U_CALLCONV initializeEras(UErrorCode &status) {
         KEY_QUERY_VALUE,
         &hkeyJapaneseEras) == ERROR_SUCCESS)
     {
-        DWORD cValues; // number of values for key 
+        DWORD cValues; // number of values for key
 
         // Query number of values
         DWORD retVal = RegQueryInfoKeyW(
             hkeyJapaneseEras,
-            nullptr,         
-            nullptr,         
-            nullptr,         
-            nullptr,         
-            nullptr,         
-            nullptr,         
-            &cValues,         
-            nullptr,         
-            nullptr,         
-            nullptr,         
-            nullptr);        
+            nullptr,
+            nullptr,
+            nullptr,
+            nullptr,
+            nullptr,
+            nullptr,
+            &cValues,
+            nullptr,
+            nullptr,
+            nullptr,
+            nullptr);
 
         if (retVal == ERROR_SUCCESS)
         {
             if (cValues > 4)
             {
-                includeTentativeEra = TRUE;
+                // The start date for the Eras comes from the ICU/CLDR data file.
+                // Currently there is only one 'new' era in the file with the start date of 2019-05-01.
+                //
+                // The check below ensures that even if the new era NLS registry key is present, we
+                // do not "enable" the new era until the actual date of the transition.
+                SYSTEMTIME time = {};
+                GetLocalTime(&time);
+                if ((time.wYear > 2019) || ((time.wYear == 2019) && (time.wMonth >= 5)))
+                {
+                    includeTentativeEra = TRUE;
+                }
             }
         }
 
@@ -185,7 +197,7 @@ const char *JapaneseCalendar::getType() const
     return "japanese";
 }
 
-int32_t JapaneseCalendar::getDefaultMonthInYear(int32_t eyear) 
+int32_t JapaneseCalendar::getDefaultMonthInYear(int32_t eyear)
 {
     int32_t era = internalGetEra();
     // TODO do we assume we can trust 'era'?  What if it is denormalized?
@@ -206,7 +218,7 @@ int32_t JapaneseCalendar::getDefaultMonthInYear(int32_t eyear)
     return month;
 }
 
-int32_t JapaneseCalendar::getDefaultDayInMonth(int32_t eyear, int32_t month) 
+int32_t JapaneseCalendar::getDefaultDayInMonth(int32_t eyear, int32_t month)
 {
     int32_t era = internalGetEra();
     int32_t day = 1;
@@ -265,7 +277,7 @@ void JapaneseCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status
 }
 
 /*
-Disable pivoting 
+Disable pivoting
 */
 UBool JapaneseCalendar::haveDefaultCentury() const
 {
