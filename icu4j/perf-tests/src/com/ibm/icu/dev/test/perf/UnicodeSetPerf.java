@@ -7,9 +7,11 @@
 **********************************************************************
 */
 package com.ibm.icu.dev.test.perf;
-import com.ibm.icu.text.*;
 import java.util.HashSet;
 import java.util.Iterator;
+
+import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.text.UnicodeSetIterator;
 
 /**
  * A class for testing UnicodeSet performance.

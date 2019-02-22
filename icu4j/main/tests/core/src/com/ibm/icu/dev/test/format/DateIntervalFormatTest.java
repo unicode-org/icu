@@ -38,10 +38,10 @@ import com.ibm.icu.text.DateIntervalInfo.PatternInfo;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
+import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.JapaneseCalendar;
 
 @RunWith(JUnit4.class)
 public class DateIntervalFormatTest extends TestFmwk {
