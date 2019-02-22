@@ -400,7 +400,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     // Get the data for dayperiod C.
     static final Map<String, String[]> LOCALE_TO_ALLOWED_HOUR;
     static {
-        HashMap<String, String[]> temp = new HashMap<String, String[]>();
+        HashMap<String, String[]> temp = new HashMap<>();
         ICUResourceBundle suppData = (ICUResourceBundle)ICUResourceBundle.getBundleInstance(
                 ICUData.ICU_BASE_NAME,
                 "supplementalData",
@@ -865,7 +865,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      */
     public Map<String, String> getSkeletons(Map<String, String> result) {
         if (result == null) {
-            result = new LinkedHashMap<String, String>();
+            result = new LinkedHashMap<>();
         }
         for (DateTimeMatcher item : skeleton2pattern.keySet()) {
             PatternWithSkeletonFlag patternWithSkelFlag = skeleton2pattern.get(item);
@@ -884,7 +884,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      */
     public Set<String> getBaseSkeletons(Set<String> result) {
         if (result == null) {
-            result = new HashSet<String>();
+            result = new HashSet<>();
         }
         result.addAll(basePattern_pattern.keySet());
         return result;
@@ -1002,7 +1002,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     public Collection<String> getRedundants(Collection<String> output) {
         synchronized (this) { // synchronized since a getter must be thread-safe
             if (output == null) {
-                output = new LinkedHashSet<String>();
+                output = new LinkedHashSet<>();
             }
             for (DateTimeMatcher cur : skeleton2pattern.keySet()) {
                 PatternWithSkeletonFlag patternWithSkelFlag = skeleton2pattern.get(cur);
@@ -1131,24 +1131,24 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     /**
      * Field display name width constants for getFieldDisplayName
-     * @draft ICU 61
+     * @stable ICU 61
      */
     public enum DisplayWidth {
         /**
          * The full field name
-         * @draft ICU 61
+         * @stable ICU 61
          */
         WIDE(""),
         /**
          * An abbreviated field name
          * (may be the same as the wide version, if short enough)
-         * @draft ICU 61
+         * @stable ICU 61
          */
         ABBREVIATED("-short"),
         /**
          * The shortest possible field name
          * (may be the same as the abbreviated version)
-         * @draft ICU 61
+         * @stable ICU 61
          */
         NARROW("-narrow");
         /**
@@ -1307,7 +1307,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @param field The field type, such as ERA.
      * @param width The desired DisplayWidth, such as DisplayWidth.ABBREVIATED.
      * @return.     The display name for the field
-     * @draft ICU 61
+     * @stable ICU 61
      */
     public String getFieldDisplayName(int field, DisplayWidth width) {
         if (field >= TYPE_LIMIT || field < 0) {
@@ -1548,7 +1548,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         .setSyntaxCharacters(SYNTAX_CHARS)
         .setExtraQuotingCharacters(QUOTING_CHARS)
         .setUsingQuote(true);
-        private List<Object> items = new ArrayList<Object>();
+        private List<Object> items = new ArrayList<>();
 
         /**
          * Construct an empty date format parser, to which strings and variables can be added with set(...).
@@ -1864,7 +1864,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     private TreeSet<String> getSet(String id) {
         final List<Object> items = fp.set(id).getItems();
-        TreeSet<String> result = new TreeSet<String>();
+        TreeSet<String> result = new TreeSet<>();
         for (Object obj : items) {
             final String item = obj.toString();
             if (item.startsWith("G") || item.startsWith("a")) {
@@ -1899,8 +1899,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             return pattern + "," + skeletonWasSpecified;
         }
     }
-    private TreeMap<DateTimeMatcher, PatternWithSkeletonFlag> skeleton2pattern = new TreeMap<DateTimeMatcher, PatternWithSkeletonFlag>(); // items are in priority order
-    private TreeMap<String, PatternWithSkeletonFlag> basePattern_pattern = new TreeMap<String, PatternWithSkeletonFlag>(); // items are in priority order
+    private TreeMap<DateTimeMatcher, PatternWithSkeletonFlag> skeleton2pattern = new TreeMap<>(); // items are in priority order
+    private TreeMap<String, PatternWithSkeletonFlag> basePattern_pattern = new TreeMap<>(); // items are in priority order
     private String decimal = "?";
     private String dateTimeFormat = "{1} {0}";
     private String[] appendItemFormats = new String[TYPE_LIMIT];
@@ -1920,7 +1920,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     private static final int SECOND_AND_FRACTIONAL_MASK = (1<<SECOND) | (1<<FRACTIONAL_SECOND);
 
     // Cache for DateTimePatternGenerator
-    private static ICUCache<String, DateTimePatternGenerator> DTPNG_CACHE = new SimpleCache<String, DateTimePatternGenerator>();
+    private static ICUCache<String, DateTimePatternGenerator> DTPNG_CACHE = new SimpleCache<>();
 
     private void checkFrozen() {
         if (isFrozen()) {
@@ -2219,8 +2219,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     // 'S', // 14 FRACTIONAL_SECOND
     // 'v', // 15 ZONE                  "zone"
 
-    private static final Set<String> CANONICAL_SET = new HashSet<String>(Arrays.asList(CANONICAL_ITEMS));
-    private Set<String> cldrAvailableFormatKeys = new HashSet<String>(20);
+    private static final Set<String> CANONICAL_SET = new HashSet<>(Arrays.asList(CANONICAL_ITEMS));
+    private Set<String> cldrAvailableFormatKeys = new HashSet<>(20);
 
     private static final int
     DATE_MASK = (1<<DAYPERIOD) - 1,
