@@ -102,9 +102,9 @@ class U_I18N_API FormattedDateInterval : public UMemory, public FormattedValue {
     FormattedDateIntervalData *fData;
     UErrorCode fErrorCode;
     explicit FormattedDateInterval(FormattedDateIntervalData *results)
-        : fData(results), fErrorCode(U_ZERO_ERROR) {};
+        : fData(results), fErrorCode(U_ZERO_ERROR) {}
     explicit FormattedDateInterval(UErrorCode errorCode)
-        : fData(nullptr), fErrorCode(errorCode) {};
+        : fData(nullptr), fErrorCode(errorCode) {}
     friend class DateIntervalFormat;
 };
 #endif /* U_HIDE_DRAFT_API */

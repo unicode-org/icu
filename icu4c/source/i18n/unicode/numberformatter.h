@@ -1264,7 +1264,7 @@ class U_I18N_API Grouper : public UMemory {
      */
     UNumberGroupingStrategy fStrategy;
 
-    Grouper() : fGrouping1(-3) {};
+    Grouper() : fGrouping1(-3) {}
 
     bool isBogus() const {
         return fGrouping1 == -3;
@@ -2113,7 +2113,7 @@ class U_I18N_API NumberFormatterSettings {
         }
         fMacros.copyErrorTo(outErrorCode);
         return U_FAILURE(outErrorCode);
-    };
+    }
 
     // NOTE: Uses default copy and move constructors.
 
@@ -2527,10 +2527,10 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * @internal
      */
     explicit FormattedNumber(impl::UFormattedNumberData *results)
-        : fData(results), fErrorCode(U_ZERO_ERROR) {};
+        : fData(results), fErrorCode(U_ZERO_ERROR) {}
 
     explicit FormattedNumber(UErrorCode errorCode)
-        : fData(nullptr), fErrorCode(errorCode) {};
+        : fData(nullptr), fErrorCode(errorCode) {}
 
     // To give LocalizedNumberFormatter format methods access to this class's constructor:
     friend class LocalizedNumberFormatter;

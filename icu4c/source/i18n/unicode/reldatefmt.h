@@ -306,9 +306,9 @@ class U_I18N_API FormattedRelativeDateTime : public UMemory, public FormattedVal
     FormattedRelativeDateTimeData *fData;
     UErrorCode fErrorCode;
     explicit FormattedRelativeDateTime(FormattedRelativeDateTimeData *results)
-        : fData(results), fErrorCode(U_ZERO_ERROR) {};
+        : fData(results), fErrorCode(U_ZERO_ERROR) {}
     explicit FormattedRelativeDateTime(UErrorCode errorCode)
-        : fData(nullptr), fErrorCode(errorCode) {};
+        : fData(nullptr), fErrorCode(errorCode) {}
     friend class RelativeDateTimeFormatter;
 };
 
