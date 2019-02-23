@@ -782,6 +782,7 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
             "+5 s",                 "+5 s",               /*  5   */
         };
 
+        @SuppressWarnings("unused")
         String[] enIN_decDef_short_midSent_weds = {
         /*  text                    numeric */
             "5 Wed. ago",           "5 Wed. ago",         /* -5   */

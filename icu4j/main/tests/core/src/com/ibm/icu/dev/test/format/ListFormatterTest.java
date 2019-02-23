@@ -148,7 +148,7 @@ public class ListFormatterTest extends TestFmwk {
     @Test
     public void TestFromList() {
         ListFormatter listFormatter = ListFormatter.getInstance(ULocale.ENGLISH);
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         list.add("A");
         list.add("B");
         list.add("C");
@@ -190,7 +190,7 @@ public class ListFormatterTest extends TestFmwk {
 
     void DoTheRealListStyleTesting(ULocale locale, String items[], ListFormatter.Style style, String expected) {
         ListFormatter listFormatter = ListFormatter.getInstance(locale, style);
-        assertEquals("Style \"" + style + "\"", expected, listFormatter.format(items));
+        assertEquals("Style \"" + style + "\"", expected, listFormatter.format((Object[])items));
     }
 
     @Test
