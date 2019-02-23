@@ -3,7 +3,7 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 63.1</title>
+    <title>ReadMe for ICU 64.1</title>
     <meta name="COPYRIGHT" content=
     "Copyright (C) 2016 and later: Unicode, Inc. and others. License &amp; terms of use: http://www.unicode.org/copyright.html"/>
     <!-- meta name="COPYRIGHT" content=
@@ -23,8 +23,8 @@
         milestone - if the release note is a milestone release
 -->
 
-  <body>
-  <!-- <body class="rc"> -->
+  <!-- <body> -->
+  <body class="rc">
     <p class="only-draft"><b>Note:</b> This is a draft readme.</p>
 
     <h1>
@@ -32,7 +32,7 @@
       International Components for Unicode<br/>
       <span class="only-rc">Release Candidate</span>
       <span class="only-milestone">(Milestone Release)</span>
-      <abbr title="International Components for Unicode">ICU</abbr> 63.1 ReadMe
+      <abbr title="International Components for Unicode">ICU</abbr> 64.1 ReadMe
     </h1>
 
     <!-- Shouldn't need to comment/uncomment this paragraph, just change the body class -->
@@ -44,7 +44,7 @@
     <p class="note only-rc">This is a release candidate version of ICU4C.
       It is not recommended for production use.</p>
 
-    <p>Last updated: 2018-Oct-05<br/>
+    <p>Last updated: 2019-Feb-22<br/>
       Copyright &copy; 2016 and later: Unicode, Inc. and others. License &amp; terms of use:
       <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a><br/>
       Copyright &copy; 1997-2016 International Business Machines Corporation and others.
@@ -233,7 +233,7 @@
 
     <h2><a name="News" href="#News" id="News">What Is New In This Release?</a></h2>
 
-    <p>See the <a href="http://site.icu-project.org/download/63">ICU 63 download page</a>
+    <p>See the <a href="http://site.icu-project.org/download/64">ICU 64 download page</a>
     for an overview of this release, important changes, new features, bug fixes, known issues,
     changes to supported platforms and build environments,
     and migration issues for existing applications migrating from previous ICU releases.</p>
@@ -366,8 +366,8 @@
 
           <p>If some of the following directories are missing, it's probably
           because you got an official download. If you need the data source files
-          for customization, then please download the ICU source code from <a
-          href="http://site.icu-project.org/repository">subversion</a>.</p>
+          for customization, then please download the complete ICU source code from <a
+          href="http://site.icu-project.org/repository">the ICU repository</a>.</p>
 
           <ul>
             <li><b>in/</b> A directory that contains a pre-built data library for
@@ -705,11 +705,11 @@
         source file tree clean and have build output files written to
         a different location. This is called an "out-of-source build".
         Simply invoke the configure script from the target location:
-<pre>~/icu$ svn export http://source.icu-project.org/repos/icu/trunk/icu4c
-~/icu$ mkdir trunk-dev
-~/icu$ cd trunk-dev
-~/icu/trunk-dev$ ../trunk/source/runConfigureICU Linux
-~/icu/trunk-dev$ make check</pre><br/>
+<pre>~/icu$ git clone export https://github.com/unicode-org/icu.git
+~/icu$ mkdir icu4c-build
+~/icu$ cd icu4c-build
+~/icu/icu4c-build$ ../icu/icu4c/source/runConfigureICU Linux
+~/icu/icu4c-build$ make check</pre><br/>
         (Note: this example shows a relative path to
          <code>runConfigureICU</code>. If you experience difficulty,
          try using an absolute path to <code>runConfigureICU</code>
@@ -1191,7 +1191,7 @@
     installation and uninstallation of files on the system, as well as the
     integrity of the system configuration. You may want to check if ICU can be
     packaged for your package management tools by looking into the "packaging"
-    directory. (Please note that if you are using a snapshot of ICU from Subversion, it
+    directory. (Please note that if you are using a snapshot of ICU from Git, it
     is probable that the packaging scripts or related files are not up to date
     with the contents of ICU at this time, so use them with caution).</p>
 
