@@ -1126,7 +1126,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                             UResourceDataEntry *dataEntry = mainRes->fData;
                             char stackPath[URES_MAX_BUFFER_SIZE];
                             char *pathBuf = stackPath, *myPath = pathBuf;
-                            if(uprv_strlen(keyPath) > URES_MAX_BUFFER_SIZE) {
+                            if(uprv_strlen(keyPath) >= UPRV_LENGTHOF(stackPath)) {
                                 pathBuf = (char *)uprv_malloc((uprv_strlen(keyPath)+1)*sizeof(char));
                                 if(pathBuf == NULL) {
                                     *status = U_MEMORY_ALLOCATION_ERROR;
