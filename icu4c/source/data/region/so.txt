@@ -193,7 +193,7 @@ so{
         MR{"Muritaaniya"}
         MS{"Montserrat"}
         MT{"Maalta"}
-        MU{"Murishiyoos"}
+        MU{"Mawrishiyaas"}
         MV{"Maaldiqeen"}
         MW{"Malaawi"}
         MX{"Meksiko"}
@@ -228,7 +228,7 @@ so{
         PY{"Baraguaay"}
         QA{"Qadar"}
         QO{"Dhulxeebeedka Osheeniya"}
-        RE{"Réunion"}
+        RE{"Riyuuniyon"}
         RO{"Rumaaniya"}
         RS{"Seerbiya"}
         RU{"Ruush"}
@@ -240,7 +240,7 @@ so{
         SE{"Iswidhan"}
         SG{"Singaboor"}
         SH{"Saint Helena"}
-        SI{"islofeeniya"}
+        SI{"Islofeeniya"}
         SJ{"Jasiiradda Sfaldbaad & Jaan Mayen"}
         SK{"Islofaakiya"}
         SL{"Siraaliyoon"}
@@ -253,7 +253,7 @@ so{
         SV{"El Salfadoor"}
         SX{"Siint Maarteen"}
         SY{"Suuriya"}
-        SZ{"Iswaasilaand"}
+        SZ{"Eswaatiini"}
         TA{"Tiristan da Kunha"}
         TC{"Turks & Kaikos Island"}
         TD{"Jaad"}
@@ -271,7 +271,7 @@ so{
         TV{"Tufaalu"}
         TW{"Taywaan"}
         TZ{"Tansaaniya"}
-        UA{"Ukrayn"}
+        UA{"Yukrayn"}
         UG{"Ugaanda"}
         UM{"Jasiiradaha ka baxsan Maraykanka"}
         UN{"Qaramada Midoobay"}
@@ -287,16 +287,18 @@ so{
         VU{"Fanuaatu"}
         WF{"Walis & Futuna"}
         WS{"Samoowa"}
+        XA{"XA"}
+        XB{"XB"}
         XK{"Koosofo"}
         YE{"Yaman"}
         YT{"Mayotte"}
         ZA{"Koonfur Afrika"}
         ZM{"Saambiya"}
         ZW{"Simbaabwe"}
-        ZZ{"Far aan la aqoon amase aan saxnayn"}
+        ZZ{"Gobol aan la aqoonin amase aan saxnayn"}
     }
     Countries%short{
-        GB{"GB"}
+        GB{"UK"}
         HK{"Hong Kong"}
         MO{"Makaaw"}
         PS{"Falastiin"}
@@ -305,9 +307,12 @@ so{
     Countries%variant{
         CD{"Jamhuuriyadda Dimuqaadiga Kongo"}
         CG{"Jamhuuriyadda Kongo"}
+        CI{"Aayforikoost"}
         CZ{"Jamhuuriyadda Jek"}
         FK{"Jasiiradaha Fookland"}
+        MK{"Masedooniya (FYROM)"}
+        SZ{"Iswaasilaan"}
         TL{"Timoor Bari"}
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.48.17"}
 }

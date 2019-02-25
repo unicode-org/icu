@@ -100,6 +100,7 @@ ca{
         car{"carib"}
         cay{"cayuga"}
         cch{"atsam"}
+        ccp{"chakma"}
         ce{"txetxè"}
         ceb{"cebuà"}
         cgg{"chiga"}
@@ -999,7 +1000,7 @@ ca{
         VALLADER{"baix engiadinès"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} — tot"}
         category-list{"{0}: {1}"}

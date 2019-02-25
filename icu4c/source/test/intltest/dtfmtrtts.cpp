@@ -340,8 +340,13 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
             for(loop = 0; loop < DEPTH; ++loop) {
                 if (loop > 0)  {
                     d[loop] = fmt->parse(s[loop-1], status);
-                    failure(status, "fmt->parse", s[loop-1]+" in locale: " + origLocale.getName() + " with pattern: " + pat);
-                    status = U_ZERO_ERROR; /* any error would have been reported */
+                    if(U_FAILURE(status)) {
+                        ParsePosition ppos;
+                        (void)fmt->parse(s[loop-1], ppos);
+                        failure(status, "fmt->parse", s[loop-1]+" in locale: " + origLocale.getName() +
+                                " with pattern: " + pat + " has errIndex: " + ppos.getErrorIndex());
+                        status = U_ZERO_ERROR; /* any error would have been reported */
+                    }
                 }
 
                 s[loop] = fmt->format(d[loop], s[loop]);

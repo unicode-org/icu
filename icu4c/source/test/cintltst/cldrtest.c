@@ -1028,6 +1028,11 @@ static void VerifyTranslation(void) {
                     end = ures_getSize(resArray);
                 }
 
+                if ((uprv_strcmp(currLoc,"sd") == 0 || uprv_strncmp(currLoc,"sd_",3) == 0) && 
+                        log_knownIssue("cldrbug:11491", "sd month 6 has char not in exemplars")) {
+                    end = 0;
+                }
+
                 for (idx = 0; idx < end; idx++) {
                     const UChar *fromBundleStr = ures_getStringByIndex(resArray, idx, &langSize, &errorCode);
                     if (U_FAILURE(errorCode)) {

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 my{
-    Version{"2.1.44.88"}
+    Version{"2.1.48.36"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -44,6 +44,10 @@ my{
             acre{
                 dnam{"ဧက"}
                 other{"{0} ဧက"}
+            }
+            dunam{
+                dnam{"dunams"}
+                other{"{0} dunam"}
             }
             hectare{
                 dnam{"ဟက်တာ"}
@@ -99,6 +103,10 @@ my{
                 dnam{"တစ်လီတာရှိ မီလီမိုးလ်"}
                 other{"တစ်လီတာရှိ {0} မီလီမိုးလ်"}
             }
+            mole{
+                dnam{"mol"}
+                other{"{0} mol"}
+            }
             part-per-million{
                 dnam{"တစ်သန်းပုံ တစ်ပုံ"}
                 other{"တစ်သန်းပုံ {0} ပုံ"}
@@ -110,6 +118,10 @@ my{
             permille{
                 dnam{"ထောင်လီစိတ်"}
                 other{"{0} ထောင်လီစိတ်"}
+            }
+            permyriad{
+                dnam{"ပါမီရိတ်"}
+                other{"{0} ပါမီရိတ်"}
             }
         }
         consumption{
@@ -255,9 +267,17 @@ my{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"ဗြိတိသျှ သာမယ်လ်ယူနစ်"}
+                other{"{0} ဗြိတိသျှ သာမယ်လ်ယူနစ်"}
+            }
             calorie{
                 dnam{"ကယ်လိုရီ"}
                 other{"{0} ကယ်လိုရီ"}
+            }
+            electronvolt{
+                dnam{"အီလက်ထရွန်ဗို့"}
+                other{"{0} အီလက်ထရွန်ဗို့"}
             }
             foodcalorie{
                 dnam{"ကယ်လိုရီ"}
@@ -278,6 +298,16 @@ my{
             kilowatt-hour{
                 dnam{"ကီလိုဝပ်-နာရီ"}
                 other{"{0} ကီလိုဝပ်-နာရီ"}
+            }
+        }
+        force{
+            newton{
+                dnam{"နယူတန်"}
+                other{"{0} နယူတန်"}
+            }
+            pound-force{
+                dnam{"lbf"}
+                other{"{0} lbf"}
             }
         }
         frequency{
@@ -372,6 +402,10 @@ my{
                 dnam{"ပွိုင့်"}
                 other{"{0} ပွိုင့်"}
             }
+            solar-radius{
+                dnam{"ဆိုလာ ရာဒီ"}
+                other{"{0} ဆိုလာ ရာဒီ"}
+            }
             yard{
                 dnam{"ကိုက်"}
                 other{"{0} ကိုက်"}
@@ -382,11 +416,23 @@ my{
                 dnam{"လတ်ခ်"}
                 other{"{0} လတ်ခ်"}
             }
+            solar-luminosity{
+                dnam{"ဆိုလာ လူမီနိုစီတီးစ်"}
+                other{"{0} ဆိုလာ လူမီနိုစီးတီးစ်"}
+            }
         }
         mass{
             carat{
                 dnam{"ကာရက်"}
                 other{"{0} ကာရက်"}
+            }
+            dalton{
+                dnam{"ဒဲလ်တန်စ်"}
+                other{"{0} ဒဲလ်တန်စ်"}
+            }
+            earth-mass{
+                dnam{"ကမ္ဘာ့ဒြပ်ထု"}
+                other{"{0} ကမ္ဘာ့ဒြပ်ထု"}
             }
             gram{
                 dnam{"ဂရမ်"}
@@ -423,6 +469,10 @@ my{
                 dnam{"ပေါင်"}
                 other{"{0} ပေါင်"}
                 per{"တစ်ပေါင်လျှင် {0}"}
+            }
+            solar-mass{
+                dnam{"နေရောင်ခြည် ဒြပ်ထု"}
+                other{"{0} နေရောင်ခြည် ဒြပ်ထု"}
             }
             ton{
                 dnam{"တန်"}
@@ -467,6 +517,14 @@ my{
             inch-hg{
                 dnam{"ပြဒါးလက်မ"}
                 other{"{0} ပြဒါးလက်မ"}
+            }
+            kilopascal{
+                dnam{"ကီလိုပါစကယ်"}
+                other{"{0} ကီလိုပါစကယ်"}
+            }
+            megapascal{
+                dnam{"မီဂါပါစကယ်"}
+                other{"{0} မီဂါပါစကယ်"}
             }
             millibar{
                 dnam{"မီလီဘား"}
@@ -517,10 +575,24 @@ my{
                 other{"{0} ကယ်လ်ဗင်"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"နယူတန်−မီတာ"}
+                other{"{0} နယူတန်−မီတာ"}
+            }
+            pound-foot{
+                dnam{"lbf.ft"}
+                other{"{0} lbf.ft"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"ဧက-ပေ"}
                 other{"{0} ဧက-ပေ"}
+            }
+            barrel{
+                dnam{"ဘယ်ရလ်စ်"}
+                other{"{0} ဘယ်ရလ်စ်"}
             }
             centiliter{
                 dnam{"စင်တီလီတာ"}
@@ -571,6 +643,10 @@ my{
             fluid-ounce{
                 dnam{"အရည်အောင်စ"}
                 other{"{0} အရည်အောင်စ"}
+            }
+            fluid-ounce-imperial{
+                dnam{"Imp. fl oz"}
+                other{"{0} Imp. fl oz"}
             }
             gallon{
                 dnam{"ဂါလံ"}
@@ -860,6 +936,10 @@ my{
                 dnam{"ဧက"}
                 other{"{0} ac"}
             }
+            dunam{
+                dnam{"dunams"}
+                other{"{0} dunam"}
+            }
             hectare{
                 dnam{"ဟက်တာ"}
                 other{"{0} ha"}
@@ -914,6 +994,10 @@ my{
                 dnam{"mmol/L"}
                 other{"{0} mmol/L"}
             }
+            mole{
+                dnam{"mol"}
+                other{"{0} mol"}
+            }
             part-per-million{
                 dnam{"တစ်သန်းပုံ တစ်ပုံ"}
                 other{"{0} ppm"}
@@ -925,6 +1009,10 @@ my{
             permille{
                 dnam{"‰"}
                 other{"{0}‰"}
+            }
+            permyriad{
+                dnam{"ပါမီရိတ်"}
+                other{"{0}‱"}
             }
         }
         consumption{
@@ -1070,9 +1158,17 @@ my{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"BTU"}
+                other{"{0} Btu"}
+            }
             calorie{
                 dnam{"ကယ်လိုရီ"}
                 other{"{0} cal"}
+            }
+            electronvolt{
+                dnam{"အီလက်ထရွန်ဗို့"}
+                other{"{0} eV"}
             }
             foodcalorie{
                 dnam{"ကယ်လိုရီ"}
@@ -1093,6 +1189,16 @@ my{
             kilowatt-hour{
                 dnam{"ကီလိုဝပ်-နာရီ"}
                 other{"{0} kWh"}
+            }
+        }
+        force{
+            newton{
+                dnam{"နယူတန်"}
+                other{"{0} N"}
+            }
+            pound-force{
+                dnam{"lbf"}
+                other{"{0} lbf"}
             }
         }
         frequency{
@@ -1187,6 +1293,10 @@ my{
                 dnam{"ပွိုင့်"}
                 other{"{0} ပွိုင့်"}
             }
+            solar-radius{
+                dnam{"ဆိုလာ ရာဒီ"}
+                other{"{0} R☉"}
+            }
             yard{
                 dnam{"ကိုက်"}
                 other{"{0} ကိုက်"}
@@ -1197,11 +1307,23 @@ my{
                 dnam{"လတ်ခ်"}
                 other{"{0} lx"}
             }
+            solar-luminosity{
+                dnam{"ဆိုလာ လူမီနိုစီးတီးစ်"}
+                other{"{0} L☉"}
+            }
         }
         mass{
             carat{
                 dnam{"ကာရက်"}
                 other{"{0} CD"}
+            }
+            dalton{
+                dnam{"ဒဲလ်တန်စ်"}
+                other{"{0} Da"}
+            }
+            earth-mass{
+                dnam{"ကမ္ဘာ့ဒြပ်ထု"}
+                other{"{0} M⊕"}
             }
             gram{
                 dnam{"ဂရမ်"}
@@ -1238,6 +1360,10 @@ my{
                 dnam{"ပေါင်"}
                 other{"{0} lb"}
                 per{"{0}/lb"}
+            }
+            solar-mass{
+                dnam{"နေရောင်ခြည် ဒြပ်ထု"}
+                other{"{0} M☉"}
             }
             ton{
                 dnam{"တန်"}
@@ -1282,6 +1408,14 @@ my{
             inch-hg{
                 dnam{"inHg"}
                 other{"{0} inHg"}
+            }
+            kilopascal{
+                dnam{"kPa"}
+                other{"{0} kPa"}
+            }
+            megapascal{
+                dnam{"MPa"}
+                other{"{0} MPa"}
             }
             millibar{
                 dnam{"မီလီဘား"}
@@ -1332,10 +1466,24 @@ my{
                 other{"{0} K"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"N.m"}
+                other{"{0} N.m"}
+            }
+            pound-foot{
+                dnam{"lbf.ft"}
+                other{"{0} lbf.ft"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"ဧက-ပေ"}
                 other{"{0} ac ft"}
+            }
+            barrel{
+                dnam{"ဘယ်ရလ်"}
+                other{"{0} bbl"}
             }
             centiliter{
                 dnam{"စင်တီလီတာ"}
@@ -1386,6 +1534,10 @@ my{
             fluid-ounce{
                 dnam{"အရည်အောင်စ"}
                 other{"{0} fl oz"}
+            }
+            fluid-ounce-imperial{
+                dnam{"Imp. fl oz"}
+                other{"{0} fl oz Imp."}
             }
             gallon{
                 dnam{"ဂါလံ"}

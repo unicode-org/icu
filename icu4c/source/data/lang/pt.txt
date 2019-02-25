@@ -93,6 +93,7 @@ pt{
         car{"caribe"}
         cay{"cayuga"}
         cch{"atsam"}
+        ccp{"Chakma"}
         ce{"checheno"}
         ceb{"cebuano"}
         cgg{"chiga"}
@@ -880,7 +881,7 @@ pt{
         VALENCIA{"valenciano"}
         WADEGILE{"romanização Wade-Giles"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} — todos"}
         category-list{"{0}: {1}"}

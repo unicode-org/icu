@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fo{
-    Version{"2.1.41.34"}
+    Version{"2.1.48.9"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -1092,9 +1092,9 @@ fo{
                 other{"{0} kb"}
             }
             kilobyte{
-                dnam{"KB"}
-                one{"{0} KB"}
-                other{"{0} KB"}
+                dnam{"kB"}
+                one{"{0} kB"}
+                other{"{0} kB"}
             }
             megabit{
                 dnam{"Mb"}

@@ -88,6 +88,7 @@ ms{
         byv{"Medumba"}
         ca{"Catalonia"}
         cay{"Cayuga"}
+        ccp{"Chakma"}
         ce{"Chechen"}
         ceb{"Cebuano"}
         cgg{"Chiga"}
@@ -479,12 +480,9 @@ ms{
     Scripts{
         Arab{"Arab"}
         Armn{"Armenia"}
-        Bali{"Bali"}
-        Bamu{"Bamu"}
         Beng{"Benggala"}
         Bopo{"Bopomofo"}
         Brai{"Braille"}
-        Cans{"Cans"}
         Cyrl{"Cyril"}
         Deva{"Devanagari"}
         Ethi{"Ethiopia"}
@@ -717,7 +715,7 @@ ms{
     Variants{
         POSIX{"Komputer"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} — Semua"}
         category-list{"{0}: {1}"}

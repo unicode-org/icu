@@ -253,7 +253,7 @@ da{
         SV{"El Salvador"}
         SX{"Sint Maarten"}
         SY{"Syrien"}
-        SZ{"Swaziland"}
+        SZ{"Eswatini"}
         TA{"Tristan da Cunha"}
         TC{"Turks- og Caicosøerne"}
         TD{"Tchad"}
@@ -309,7 +309,8 @@ da{
         CZ{"Den Tjekkiske Republik"}
         FK{"Falklandsøerne (Islas Malvinas)"}
         MK{"Den tidligere jugoslaviske republik Makedonien"}
+        SZ{"Swaziland"}
         TL{"Østtimor"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.17"}
 }

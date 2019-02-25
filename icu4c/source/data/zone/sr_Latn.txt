@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sr_Latn{
     %%Parent{"root"}
-    Version{"2.1.44.50"}
+    Version{"2.1.48.77"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -810,6 +810,9 @@ sr_Latn{
         }
         "Asia:Qatar"{
             ec{"Katar"}
+        }
+        "Asia:Qostanay"{
+            ec{"Qostanay"}
         }
         "Asia:Qyzylorda"{
             ec{"Kizilorda"}

@@ -107,6 +107,7 @@ et{
         car{"kariibi"}
         cay{"kajuka"}
         cch{"aitšami"}
+        ccp{"Chakma"}
         ce{"tšetšeeni"}
         ceb{"sebu"}
         cgg{"tšiga"}
@@ -799,6 +800,7 @@ et{
         Vaii{"vai"}
         Visp{"nähtava kõne"}
         Wara{"hoo"}
+        Wcho{"vantšo"}
         Wole{"voleai"}
         Xpeo{"vanapärsia"}
         Xsux{"sumeri-akadi kiilkiri"}
@@ -994,6 +996,7 @@ et{
             traditional{"traditsioonilised numbrid"}
             vaii{"vai numbrid"}
             wara{"hoo numbrid"}
+            wcho{"vantšo numbrid"}
         }
     }
     Variants{
@@ -1036,7 +1039,7 @@ et{
         VALENCIA{"valentsia"}
         WADEGILE{"Wade’i-Gilesi latinisatsioon"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} – kõik"}
         category-list{"{0}: {1}"}

@@ -183,7 +183,7 @@ tr{
         MF{"Saint Martin"}
         MG{"Madagaskar"}
         MH{"Marshall Adaları"}
-        MK{"Makedonya"}
+        MK{"Kuzey Makedonya"}
         ML{"Mali"}
         MM{"Myanmar (Burma)"}
         MN{"Moğolistan"}
@@ -253,7 +253,7 @@ tr{
         SV{"El Salvador"}
         SX{"Sint Maarten"}
         SY{"Suriye"}
-        SZ{"Svaziland"}
+        SZ{"Esvatini"}
         TA{"Tristan da Cunha"}
         TC{"Turks ve Caicos Adaları"}
         TD{"Çad"}
@@ -308,8 +308,8 @@ tr{
         CG{"Kongo Cumhuriyeti"}
         CZ{"Çek Cumhuriyeti"}
         FK{"Falkland Adaları (Malvinas Adaları)"}
-        MK{"Makedonya (EYMC)"}
+        SZ{"Svaziland"}
         TL{"Doğu Timor"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.42"}
 }

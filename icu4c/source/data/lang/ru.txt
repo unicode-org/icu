@@ -92,6 +92,7 @@ ru{
         car{"кариб"}
         cay{"кайюга"}
         cch{"атсам"}
+        ccp{"чакма"}
         ce{"чеченский"}
         ceb{"себуано"}
         cgg{"кига"}
@@ -917,7 +918,7 @@ ru{
         VALENCIA{"Валенсийский"}
         WADEGILE{"Система Уэйда – Джайлза"}
     }
-    Version{"2.1.45.15"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} — все"}
         category-list{"{0}: {1}"}

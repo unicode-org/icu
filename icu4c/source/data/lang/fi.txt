@@ -109,6 +109,7 @@ fi{
         car{"karibi"}
         cay{"cayuga"}
         cch{"atsam"}
+        ccp{"chakma"}
         ce{"tšetšeeni"}
         ceb{"cebuano"}
         cgg{"kiga"}
@@ -1118,7 +1119,7 @@ fi{
     Variants%secondary{
         FONUPA{"suomalais-ugrilainen tarkekirjoitus"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} – kaikki"}
         category-list{"{0}: {1}"}

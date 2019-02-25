@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 vi{
-    Version{"2.1.43.65"}
+    Version{"2.1.48.42"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -810,6 +810,9 @@ vi{
         "Asia:Qatar"{
             ec{"Qatar"}
         }
+        "Asia:Qostanay"{
+            ec{"Qostanay"}
+        }
         "Asia:Qyzylorda"{
             ec{"Qyzylorda"}
         }
@@ -953,6 +956,7 @@ vi{
         }
         "Etc:UTC"{
             ls{"Giờ Phối hợp Quốc tế"}
+            ss{"UTC"}
         }
         "Etc:Unknown"{
             ec{"Thành phố Không xác định"}
@@ -1216,6 +1220,9 @@ vi{
         }
         "Pacific:Honolulu"{
             ec{"Honolulu"}
+            sd{"HDT"}
+            sg{"Giờ HST"}
+            ss{"HST"}
         }
         "Pacific:Johnston"{
             ec{"Johnston"}
@@ -1315,6 +1322,9 @@ vi{
             ld{"Giờ Mùa Hè Alaska"}
             lg{"Giờ Alaska"}
             ls{"Giờ Chuẩn Alaska"}
+            sd{"AKDT"}
+            sg{"AKT"}
+            ss{"AKST"}
         }
         "meta:Almaty"{
             ld{"Giờ Mùa Hè Almaty"}
@@ -1330,21 +1340,33 @@ vi{
             ld{"Giờ mùa hè miền Trung"}
             lg{"Giờ miền Trung"}
             ls{"Giờ chuẩn miền Trung"}
+            sd{"CDT"}
+            sg{"CT"}
+            ss{"CST"}
         }
         "meta:America_Eastern"{
             ld{"Giờ mùa hè miền Đông"}
             lg{"Giờ miền Đông"}
             ls{"Giờ chuẩn miền Đông"}
+            sd{"EDT"}
+            sg{"ET"}
+            ss{"EST"}
         }
         "meta:America_Mountain"{
             ld{"Giờ mùa hè miền núi"}
             lg{"Giờ miền núi"}
             ls{"Giờ chuẩn miền núi"}
+            sd{"MDT"}
+            sg{"MT"}
+            ss{"MST"}
         }
         "meta:America_Pacific"{
             ld{"Giờ mùa hè Thái Bình Dương"}
             lg{"Giờ Thái Bình Dương"}
             ls{"Giờ chuẩn Thái Bình Dương"}
+            sd{"PDT"}
+            sg{"PT"}
+            ss{"PST"}
         }
         "meta:Anadyr"{
             ld{"Giờ mùa hè Anadyr"}
@@ -1390,6 +1412,9 @@ vi{
             ld{"Giờ mùa hè Đại Tây Dương"}
             lg{"Giờ Đại Tây Dương"}
             ls{"Giờ Chuẩn Đại Tây Dương"}
+            sd{"ADT"}
+            sg{"AT"}
+            ss{"AST"}
         }
         "meta:Australia_Central"{
             ld{"Giờ Mùa Hè Miền Trung Australia"}
@@ -1444,6 +1469,9 @@ vi{
             ld{"Giờ Mùa Hè Cape Verde"}
             lg{"Giờ Cape Verde"}
             ls{"Giờ Chuẩn Cape Verde"}
+        }
+        "meta:Casey"{
+            ls{"Giờ Casey"}
         }
         "meta:Chamorro"{
             ls{"Giờ Chamorro"}
@@ -1580,6 +1608,9 @@ vi{
             ld{"Giờ Mùa Hè Hawaii-Aleut"}
             lg{"Giờ Hawaii-Aleut"}
             ls{"Giờ Chuẩn Hawaii-Aleut"}
+            sd{"HADT"}
+            sg{"HAT"}
+            ss{"HAST"}
         }
         "meta:Hong_Kong"{
             ld{"Giờ Mùa Hè Hồng Kông"}

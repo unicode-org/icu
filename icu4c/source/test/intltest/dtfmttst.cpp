@@ -1856,10 +1856,10 @@ void DateFormatTest::TestNarrowNames()
         const char *CA_DATA[] = {
             "yyyy MM dd HH:mm:ss",
 
-            "h:mm a",     "2015 01 01 10:00:00", "10:00 a. m.",
-            "h:mm a",     "2015 01 01 22:00:00", "10:00 p. m.",
-            "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 a. m.",
-            "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 p. m.",
+            "h:mm a",     "2015 01 01 10:00:00", "10:00 a.\\u00A0m.",
+            "h:mm a",     "2015 01 01 22:00:00", "10:00 p.\\u00A0m.",
+            "h:mm aaaaa", "2015 01 01 10:00:00", "10:00 a.\\u00A0m.",
+            "h:mm aaaaa", "2015 01 01 22:00:00", "10:00 p.\\u00A0m.",
         };
 
       expectFormat(EN_DATA, UPRV_LENGTHOF(EN_DATA), Locale("en", "", ""));
@@ -5247,7 +5247,7 @@ void DateFormatTest::TestDayPeriodWithLocales() {
     sdf.setTimeZone(*tz);
 
     sdf.applyPattern(UnicodeString("hh:mm:ss BBBB"));
-    assertEquals("hh:mm:ss BBBB | 01:00:00 | es_CO", UnicodeString("01:00:00 de la ma\\u00F1ana").unescape(),
+    assertEquals("hh:mm:ss BBBB | 01:00:00 | es_CO", UnicodeString("01:00:00 a.\\u00A0m.").unescape(),
         sdf.format(k010000, out.remove()));
 
     sdf = SimpleDateFormat(UnicodeString(), Locale("es"), errorCode);

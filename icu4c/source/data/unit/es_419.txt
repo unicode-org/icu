@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 es_419{
-    Version{"2.1.43.65"}
+    Version{"2.1.47.86"}
     units{
         angle{
             revolution{
@@ -130,7 +130,6 @@ es_419{
         temperature{
             kelvin{
                 dnam{"kelvins"}
-                one{"{0} kelvin"}
                 other{"{0} kelvins"}
             }
         }
@@ -163,7 +162,6 @@ es_419{
                 dnam{"m."}
                 one{"{0}m."}
                 other{"{0}mm."}
-                per{"{0}/m."}
             }
             week{
                 dnam{"sem."}
@@ -267,12 +265,10 @@ es_419{
             }
             month{
                 dnam{"mm."}
-                one{"{0} m."}
                 other{"{0} mm."}
             }
             week{
                 dnam{"sems."}
-                one{"{0} sem."}
                 other{"{0} sems."}
             }
             year{

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ta{
-    Version{"2.1.43.50"}
+    Version{"2.1.48.17"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"அபிட்ஜான்"}
@@ -809,6 +809,9 @@ ta{
         }
         "Asia:Qatar"{
             ec{"கத்தார்"}
+        }
+        "Asia:Qostanay"{
+            ec{"கோஸ்டானே"}
         }
         "Asia:Qyzylorda"{
             ec{"கிஸிலோர்டா"}

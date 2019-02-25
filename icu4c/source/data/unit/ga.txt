@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ga{
-    Version{"2.1.44.91"}
+    Version{"2.1.48.17"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -76,6 +76,14 @@ ga{
                 one{"{0} acra"}
                 other{"{0} acra"}
                 two{"{0} acra"}
+            }
+            dunam{
+                dnam{"dunaim"}
+                few{"{0} dhunam"}
+                many{"{0} ndunam"}
+                one{"{0} dunam"}
+                other{"{0} dunam"}
+                two{"{0} dhunam"}
             }
             hectare{
                 dnam{"heicteáir"}
@@ -175,6 +183,14 @@ ga{
                 other{"{0} milleamól sa lítear"}
                 two{"{0} mhilleamól sa lítear"}
             }
+            mole{
+                dnam{"móil"}
+                few{"{0} mhól"}
+                many{"{0} mól"}
+                one{"{0} mhól"}
+                other{"{0} mól"}
+                two{"{0} mhól"}
+            }
             part-per-million{
                 dnam{"codanna sa mhilliún"}
                 few{"{0} sa mhilliún"}
@@ -198,6 +214,14 @@ ga{
                 one{"{0} faoin míle"}
                 other{"{0} faoin míle"}
                 two{"{0}‰"}
+            }
+            permyriad{
+                dnam{"permeiriad"}
+                few{"{0}‱"}
+                many{"{0}‱"}
+                one{"{0} permeiriad"}
+                other{"{0}‱"}
+                two{"{0}‱"}
             }
         }
         consumption{
@@ -463,6 +487,14 @@ ga{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"aonad teirmeach Briotanach"}
+                few{"{0} Btu"}
+                many{"{0} Btu"}
+                one{"{0} aonad teirmeach Briontanach"}
+                other{"{0} aonad teirmeach Briotanach"}
+                two{"{0} Btu"}
+            }
             calorie{
                 dnam{"calraí"}
                 few{"{0} chalra"}
@@ -470,6 +502,14 @@ ga{
                 one{"{0} chalra"}
                 other{"{0} calra"}
                 two{"{0} chalra"}
+            }
+            electronvolt{
+                dnam{"leictravoltaí"}
+                few{"{0} eV"}
+                many{"{0} eV"}
+                one{"{0} leictreavolta"}
+                other{"{0} leictreavoltaí"}
+                two{"{0} eV"}
             }
             foodcalorie{
                 dnam{"Calraí"}
@@ -510,6 +550,24 @@ ga{
                 one{"{0} chileavatuair"}
                 other{"{0} cileavatuair"}
                 two{"{0} chileavatuair"}
+            }
+        }
+        force{
+            newton{
+                dnam{"niútain"}
+                few{"{0} N"}
+                many{"{0} N"}
+                one{"{0} niútan"}
+                other{"{0} niútan"}
+                two{"{0} N"}
+            }
+            pound-force{
+                dnam{"puint fórsa"}
+                few{"{0} lbf"}
+                many{"{0} lbf"}
+                one{"{0} punt fórsa"}
+                other{"{0} lbf"}
+                two{"{0} lbf"}
             }
         }
         frequency{
@@ -704,6 +762,14 @@ ga{
                 other{"{0} pointe"}
                 two{"{0} phointe"}
             }
+            solar-radius{
+                dnam{"raonta gréine"}
+                few{"{0} R☉"}
+                many{"{0} R☉"}
+                one{"{0} raon gréine"}
+                other{"{0} raon gréine"}
+                two{"{0} R☉"}
+            }
             yard{
                 dnam{"slata"}
                 few{"{0} shlat"}
@@ -722,6 +788,14 @@ ga{
                 other{"{0} lucsa"}
                 two{"{0} lucsa"}
             }
+            solar-luminosity{
+                dnam{"lonrachtaí gréine"}
+                few{"{0} L☉"}
+                many{"{0} L☉"}
+                one{"{0} lonracht ghréine"}
+                other{"{0} lonracht ghréine"}
+                two{"{0} L☉"}
+            }
         }
         mass{
             carat{
@@ -731,6 +805,22 @@ ga{
                 one{"{0} charat"}
                 other{"{0} carat"}
                 two{"{0} charat"}
+            }
+            dalton{
+                dnam{"daltúin"}
+                few{"{0} Da"}
+                many{"{0} Da"}
+                one{"{0} daltún"}
+                other{"{0} daltún"}
+                two{"{0} Da"}
+            }
+            earth-mass{
+                dnam{"maiseanna an Domhain"}
+                few{"{0} M⊕"}
+                many{"{0} M⊕"}
+                one{"mais an Domhain"}
+                other{"{0} M⊕"}
+                two{"{0} M⊕"}
             }
             gram{
                 dnam{"graim"}
@@ -799,6 +889,14 @@ ga{
                 other{"{0} punt"}
                 per{"{0} sa phunt"}
                 two{"{0} phunt"}
+            }
+            solar-mass{
+                dnam{"maiseanna gréine"}
+                few{"{0} M☉"}
+                many{"{0} M☉"}
+                one{"{0} mais ghréine"}
+                other{"{0} maiseanna gréine"}
+                two{"{0} M☉"}
             }
             stone{
                 dnam{"clocha"}
@@ -891,6 +989,22 @@ ga{
                 one{"{0} orlach mearcair"}
                 other{"{0} orlach mearcair"}
                 two{"{0} orlach mearcair"}
+            }
+            kilopascal{
+                dnam{"cileapascail"}
+                few{"{0} kPa"}
+                many{"{0} kPa"}
+                one{"{0} cileapascal"}
+                other{"{0} kPa"}
+                two{"{0} kPa"}
+            }
+            megapascal{
+                dnam{"meigeapascail"}
+                few{"{0} MPa"}
+                many{"{0} MPa"}
+                one{"meigeapascal"}
+                other{"{0} meigeapascal"}
+                two{"{0} MPa"}
             }
             millibar{
                 dnam{"milleabair"}
@@ -985,6 +1099,24 @@ ga{
                 two{"{0} chéim cheilvin"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"méadar niútain"}
+                few{"{0} N⋅m"}
+                many{"{0} N⋅m"}
+                one{"{0} méadar niútain"}
+                other{"{0} méadar niútain"}
+                two{"{0} N⋅m"}
+            }
+            pound-foot{
+                dnam{"punt-troigh"}
+                few{"{0} lbf⋅ft"}
+                many{"{0} lbf⋅ft"}
+                one{"{0} punt-troigh"}
+                other{"{0} punt-troigh"}
+                two{"{0} lbf⋅ft"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"acra-troithe"}
@@ -993,6 +1125,14 @@ ga{
                 one{"{0} acra-troigh"}
                 other{"{0} acra-troigh"}
                 two{"{0} acra-troigh"}
+            }
+            barrel{
+                dnam{"bairillí"}
+                few{"{0} bbl"}
+                many{"{0} bbl"}
+                one{"{0} bairille"}
+                other{"{0} bbl"}
+                two{"{0} bbl"}
             }
             bushel{
                 dnam{"buiséil"}
@@ -1099,6 +1239,14 @@ ga{
                 one{"{0} unsa leachtach"}
                 other{"{0} unsa leachtach"}
                 two{"{0} unsa leachtacha"}
+            }
+            fluid-ounce-imperial{
+                dnam{"Unsaí leachtacha impiriúla"}
+                few{"{0} fl oz Imp."}
+                many{"{0} fl oz Imp."}
+                one{"{0} unsa leachtach impiriúil"}
+                other{"{0} fl oz Imp."}
+                two{"{0} unsa leachtach impiriúil"}
             }
             gallon{
                 dnam{"galúin"}
@@ -2425,6 +2573,14 @@ ga{
                 other{"{0} ac"}
                 two{"{0} ac"}
             }
+            dunam{
+                dnam{"dunaim"}
+                few{"{0} dhunam"}
+                many{"{0} ndunam"}
+                one{"{0} dunam"}
+                other{"{0} dunam"}
+                two{"{0} dhunam"}
+            }
             hectare{
                 dnam{"heicteáir"}
                 few{"{0} ha"}
@@ -2523,6 +2679,14 @@ ga{
                 other{"{0} mmol/L"}
                 two{"{0} mmol/L"}
             }
+            mole{
+                dnam{"mól"}
+                few{"{0} mhól"}
+                many{"{0} mól"}
+                one{"{0} mhól"}
+                other{"{0} mól"}
+                two{"{0} mhól"}
+            }
             part-per-million{
                 dnam{"codanna/milliún"}
                 few{"{0}/milliún"}
@@ -2546,6 +2710,14 @@ ga{
                 one{"{0}‰"}
                 other{"{0}‰"}
                 two{"{0}‰"}
+            }
+            permyriad{
+                dnam{"permeiriad"}
+                few{"{0}‱"}
+                many{"{0}‱"}
+                one{"{0}‱"}
+                other{"{0}‱"}
+                two{"{0}‱"}
             }
         }
         consumption{
@@ -2811,6 +2983,14 @@ ga{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"BTU"}
+                few{"{0} Btu"}
+                many{"{0} Btu"}
+                one{"{0} Btu"}
+                other{"{0} Btu"}
+                two{"{0} Btu"}
+            }
             calorie{
                 dnam{"cal"}
                 few{"{0} cal"}
@@ -2818,6 +2998,14 @@ ga{
                 one{"{0} cal"}
                 other{"{0} cal"}
                 two{"{0} cal"}
+            }
+            electronvolt{
+                dnam{"leictravolta"}
+                few{"{0} eV"}
+                many{"{0} eV"}
+                one{"{0} eV"}
+                other{"{0} eV"}
+                two{"{0} eV"}
             }
             foodcalorie{
                 dnam{"Cal"}
@@ -2858,6 +3046,24 @@ ga{
                 one{"{0} kWh"}
                 other{"{0} kWh"}
                 two{"{0} kWh"}
+            }
+        }
+        force{
+            newton{
+                dnam{"niútan"}
+                few{"{0} N"}
+                many{"{0} N"}
+                one{"{0} N"}
+                other{"{0} N"}
+                two{"{0} N"}
+            }
+            pound-force{
+                dnam{"punt-fhórsa"}
+                few{"{0} lbf"}
+                many{"{0} lbf"}
+                one{"{0} lbf"}
+                other{"{0} lbf"}
+                two{"{0} lbf"}
             }
         }
         frequency{
@@ -3052,6 +3258,14 @@ ga{
                 other{"{0} pt"}
                 two{"{0} pt"}
             }
+            solar-radius{
+                dnam{"raonta gréine"}
+                few{"{0} R☉"}
+                many{"{0} R☉"}
+                one{"{0} R☉"}
+                other{"{0} R☉"}
+                two{"{0} R☉"}
+            }
             yard{
                 dnam{"slata"}
                 few{"{0} shl."}
@@ -3070,6 +3284,14 @@ ga{
                 other{"{0} lx"}
                 two{"{0} lx"}
             }
+            solar-luminosity{
+                dnam{"lonrachtaí gréine"}
+                few{"{0} L☉"}
+                many{"{0} L☉"}
+                one{"{0} L☉"}
+                other{"{0} L☉"}
+                two{"{0} L☉"}
+            }
         }
         mass{
             carat{
@@ -3079,6 +3301,22 @@ ga{
                 one{"{0} CD"}
                 other{"{0} CD"}
                 two{"{0} CD"}
+            }
+            dalton{
+                dnam{"daltúin"}
+                few{"{0} Da"}
+                many{"{0} Da"}
+                one{"{0} Da"}
+                other{"{0} Da"}
+                two{"{0} Da"}
+            }
+            earth-mass{
+                dnam{"maiseanna an Domhain"}
+                few{"{0} M⊕"}
+                many{"{0} M⊕"}
+                one{"{0} M⊕"}
+                other{"{0} M⊕"}
+                two{"{0} M⊕"}
             }
             gram{
                 dnam{"graim"}
@@ -3147,6 +3385,14 @@ ga{
                 other{"{0} punt"}
                 per{"{0}/punt"}
                 two{"{0} phunt"}
+            }
+            solar-mass{
+                dnam{"maiseanna gréine"}
+                few{"{0} M☉"}
+                many{"{0} M☉"}
+                one{"{0} M☉"}
+                other{"{0} M☉"}
+                two{"{0} M☉"}
             }
             stone{
                 dnam{"clocha"}
@@ -3239,6 +3485,22 @@ ga{
                 one{"{0} or. Hg"}
                 other{"{0} or. Hg"}
                 two{"{0} or. Hg"}
+            }
+            kilopascal{
+                dnam{"kPa"}
+                few{"{0} kPa"}
+                many{"{0} kPa"}
+                one{"{0} kPa"}
+                other{"{0} kPa"}
+                two{"{0} kPa"}
+            }
+            megapascal{
+                dnam{"MPa"}
+                few{"{0} MPa"}
+                many{"{0} MPa"}
+                one{"{0} MPa"}
+                other{"{0} MPa"}
+                two{"{0} MPa"}
             }
             millibar{
                 dnam{"mbar"}
@@ -3333,6 +3595,24 @@ ga{
                 two{"{0} K"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"N⋅m"}
+                few{"{0} N⋅m"}
+                many{"{0} N⋅m"}
+                one{"{0} N⋅m"}
+                other{"{0} N⋅m"}
+                two{"{0} N⋅m"}
+            }
+            pound-foot{
+                dnam{"lbf⋅ft"}
+                few{"{0} lbf⋅ft"}
+                many{"{0} lbf⋅ft"}
+                one{"{0} lbf⋅ft"}
+                other{"{0} lbf⋅ft"}
+                two{"{0} lbf⋅ft"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"acra-tr"}
@@ -3341,6 +3621,14 @@ ga{
                 one{"{0} ac tr"}
                 other{"{0} ac tr"}
                 two{"{0} ac tr"}
+            }
+            barrel{
+                dnam{"bairille"}
+                few{"{0} bbl"}
+                many{"{0} bbl"}
+                one{"{0} bbl"}
+                other{"{0} bbl"}
+                two{"{0} bbl"}
             }
             bushel{
                 dnam{"buiséil"}
@@ -3447,6 +3735,14 @@ ga{
                 one{"{0} unsa l."}
                 other{"{0} unsa l."}
                 two{"{0} unsa l."}
+            }
+            fluid-ounce-imperial{
+                dnam{"Unsa leachtach impiriúil"}
+                few{"{0} fl oz Imp."}
+                many{"{0} fl oz Imp."}
+                one{"{0} fl oz Imp."}
+                other{"{0} fl oz Imp."}
+                two{"{0} fl oz Imp."}
             }
             gallon{
                 dnam{"galúin"}

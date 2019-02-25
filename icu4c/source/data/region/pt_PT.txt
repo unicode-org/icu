@@ -47,7 +47,6 @@ pt_PT{
         MD{"Moldávia"}
         MG{"Madagáscar"}
         MK{"Macedónia"}
-        MO{"Macau, RAE da China"}
         MS{"Monserrate"}
         MU{"Maurícia"}
         MW{"Maláui"}
@@ -61,6 +60,7 @@ pt_PT{
         SM{"São Marinho"}
         SV{"Salvador"}
         SX{"São Martinho (Sint Maarten)"}
+        SZ{"Essuatíni"}
         TJ{"Tajiquistão"}
         TK{"Toquelau"}
         TM{"Turquemenistão"}
@@ -83,5 +83,5 @@ pt_PT{
         FK{"Ilhas Falkland (Malvinas)"}
         MK{"Macedónia (ARJM)"}
     }
-    Version{"2.1.44.9"}
+    Version{"2.1.47.89"}
 }

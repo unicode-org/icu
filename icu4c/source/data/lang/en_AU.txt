@@ -11,8 +11,6 @@ en_AU{
     }
     Scripts{
         Beng{"Bengali"}
-        Cham{"Cham"}
-        Modi{"Modi"}
         Thai{"Thai"}
     }
     Types{
@@ -21,5 +19,5 @@ en_AU{
             ethiopic{"Ethiopian Calendar"}
         }
     }
-    Version{"2.1.44.18"}
+    Version{"2.1.48.43"}
 }

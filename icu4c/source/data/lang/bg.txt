@@ -828,7 +828,7 @@ bg{
         VALENCIA{"Валенсиански"}
         WADEGILE{"Уейд-Джайлс романизация"}
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} – всички"}
         category-list{"{0}: {1}"}

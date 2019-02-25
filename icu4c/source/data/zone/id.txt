@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 id{
-    Version{"2.1.44.20"}
+    Version{"2.1.48.42"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -1084,9 +1084,6 @@ id{
         }
         "Europe:Sarajevo"{
             ec{"Sarajevo"}
-        }
-        "Europe:Saratov"{
-            ec{"Saratov"}
         }
         "Europe:Simferopol"{
             ec{"Simferopol"}

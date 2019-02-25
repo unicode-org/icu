@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en_AU{
     %%Parent{"en_001"}
-    Version{"2.1.44.18"}
+    Version{"2.1.48.43"}
     units{
         concentr{
             percent{
@@ -77,18 +77,21 @@ en_AU{
         duration{
             millisecond{
                 dnam{"msec."}
-                one{"{0} ms"}
-                other{"{0} ms"}
+                one{"{0}ms"}
+                other{"{0}ms"}
             }
             minute{
                 dnam{"min."}
-                one{"{0} min."}
-                other{"{0} min."}
+                one{"{0}min."}
+                other{"{0}min."}
             }
             second{
                 dnam{"sec."}
-                one{"{0} s."}
-                other{"{0} s."}
+                one{"{0}s."}
+                other{"{0}s."}
+            }
+            year{
+                one{"{0}y"}
             }
         }
         speed{
@@ -160,6 +163,11 @@ en_AU{
             degree{
                 one{"{0} deg."}
                 other{"{0} deg."}
+            }
+        }
+        area{
+            square-meter{
+                other{"{0} m²"}
             }
         }
         concentr{
@@ -297,6 +305,9 @@ en_AU{
             }
             cubic-centimeter{
                 one{"{0} cm³"}
+            }
+            cubic-mile{
+                one{"{0} mi³"}
             }
             deciliter{
                 dnam{"dL"}

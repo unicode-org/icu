@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 kn{
-    Version{"2.1.44.88"}
+    Version{"2.1.48.17"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -52,6 +52,11 @@ kn{
                 dnam{"ಎಕರೆಗಳು"}
                 one{"{0} ಎಕರೆ"}
                 other{"{0} ಎಕರೆಗಳು"}
+            }
+            dunam{
+                dnam{"ಡುನಮ್ಸ್‌"}
+                one{"{0} ಡುನಮ್‌"}
+                other{"{0} ಡುನಮ್‌ಗಳು"}
             }
             hectare{
                 dnam{"ಹೆಕ್ಟೇರುಗಳು"}
@@ -118,6 +123,11 @@ kn{
                 one{"{0} ಪ್ರತಿ ಲೀಟರ್ ಮಿಲ್ಲಿಮೋಲ್ಸ್"}
                 other{"{0} ಪ್ರತಿ ಲೀಟರ್ ಮಿಲ್ಲಿಮೋಲ್ಸ್"}
             }
+            mole{
+                dnam{"mol"}
+                one{"{0} mol"}
+                other{"{0} mol"}
+            }
             part-per-million{
                 dnam{"ಪ್ರತಿ ಮಿಲಿಯನ್ ಭಾಗಗಳು"}
                 one{"{0} ಪ್ರತಿ ಮಿಲಿಯನ್ ಭಾಗ"}
@@ -132,6 +142,11 @@ kn{
                 dnam{"ಪ್ರತಿ ಸಾವಿರಕ್ಕೆ"}
                 one{"{0} ಪ್ರತಿ ಸಾವಿರಕ್ಕೆ"}
                 other{"{0} ಪ್ರತಿ ಸಾವಿರಕ್ಕೆ"}
+            }
+            permyriad{
+                dnam{"‱"}
+                one{"{0}‱"}
+                other{"{0}‱"}
             }
         }
         consumption{
@@ -307,10 +322,20 @@ kn{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"Btu"}
+                one{"{0} Btu"}
+                other{"{0} Btu"}
+            }
             calorie{
                 dnam{"ಕ್ಯಾಲೋರಿಗಳು"}
                 one{"{0} ಕ್ಯಾಲೋರಿ"}
                 other{"{0} ಕ್ಯಾಲೋರಿಗಳು"}
+            }
+            electronvolt{
+                dnam{"eV"}
+                one{"{0} eV"}
+                other{"{0} eV"}
             }
             foodcalorie{
                 dnam{"ಕ್ಯಾಲೋರಿಗಳು"}
@@ -336,6 +361,18 @@ kn{
                 dnam{"ಕಿಲೋವ್ಯಾಟ್‌-ಗಂಟೆಗಳು"}
                 one{"{0} ಕಿಲೋವ್ಯಾಟ್‌-ಗಂಟೆ"}
                 other{"{0} ಕಿಲೋವ್ಯಾಟ್‌-ಗಂಟೆಗಳು"}
+            }
+        }
+        force{
+            newton{
+                dnam{"N"}
+                one{"{0} N"}
+                other{"{0} N"}
+            }
+            pound-force{
+                dnam{"lbf"}
+                one{"{0} lbf"}
+                other{"{0} lbf"}
             }
         }
         frequency{
@@ -451,6 +488,11 @@ kn{
                 one{"{0} ಪಾಯಿಂಟ್"}
                 other{"{0} ಪಾಯಿಂಟ್‌ಗಳು"}
             }
+            solar-radius{
+                dnam{"ಸೋಲಾರ್‌ ರೇಡಿ"}
+                one{"{0} ಸೋಲಾರ್‌ ರೇಡಿಯಸ್‌"}
+                other{"{0} ಸೋಲಾರ್‌ ರೇಡಿ"}
+            }
             yard{
                 dnam{"ಗಜಗಳು"}
                 one{"{0} ಗಜ"}
@@ -463,12 +505,27 @@ kn{
                 one{"{0} ಲಕ್ಸ್‌‌"}
                 other{"{0} ಲಕ್ಸ್‌‌"}
             }
+            solar-luminosity{
+                dnam{"L☉"}
+                one{"{0} L☉"}
+                other{"{0} L☉"}
+            }
         }
         mass{
             carat{
                 dnam{"ಕ್ಯಾರೆಟ್‌ಗಳು"}
                 one{"{0} ಕ್ಯಾರೆಟ್‌"}
                 other{"{0} ಕ್ಯಾರೆಟ್‌ಗಳು"}
+            }
+            dalton{
+                dnam{"ಡಿಎ"}
+                one{"{0} ಡಿಎ"}
+                other{"{0} ಡಿಎ"}
+            }
+            earth-mass{
+                dnam{"M⊕"}
+                one{"{0} M⊕"}
+                other{"{0} M⊕"}
             }
             gram{
                 dnam{"ಗ್ರಾಂಗಳು"}
@@ -513,6 +570,11 @@ kn{
                 one{"{0} ಪೌಂಡ್"}
                 other{"{0} ಪೌಂಡ್‌ಗಳು"}
                 per{"{0} ಪ್ರತಿ ಪೌಂಡ್‌ಗೆ"}
+            }
+            solar-mass{
+                dnam{"ಸೋಲಾರ್‌ ಮಾಸ್‌"}
+                one{"{0} ಸೋಲಾರ್‌ ಮಾಸ್‌"}
+                other{"{0} ಸೋಲಾರ್‌ ಮಾಸಸ್‌"}
             }
             stone{
                 dnam{"ಕಲ್ಲುಗಳು"}
@@ -572,6 +634,16 @@ kn{
                 dnam{"ಮರ್ಕ್ಯುರಿ ಅಂಗುಲಗಳು"}
                 one{"{0} ಮರ್ಕ್ಯುರಿ ಅಂಗುಲ"}
                 other{"{0} ಮರ್ಕ್ಯುರಿ ಅಂಗುಲಗಳು"}
+            }
+            kilopascal{
+                dnam{"ಕಿಲೋಪಾಸ್ಕಲ್‌ಗಳು"}
+                one{"{0} ಕಿಲೋಪಾಸ್ಕಲ್‌"}
+                other{"{0} ಕಿಲೋಪಾಸ್ಕಲ್‌ಗಳು"}
+            }
+            megapascal{
+                dnam{"ಮೆಗಾಪಾಸ್ಕಲ್‌ಗಳು"}
+                one{"{0} ಮೆಗಾಪಾಸ್ಕಲ್‌"}
+                other{"{0} ಮೆಗಾಪಾಸ್ಕಲ್‌ಗಳು"}
             }
             millibar{
                 dnam{"ಮಿಲಿಬಾರ್‌ಗಳು"}
@@ -633,11 +705,28 @@ kn{
                 other{"{0} ಕೆಲ್ವಿನ್‍ಗಳು"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"N⋅m"}
+                one{"{0} N⋅m"}
+                other{"{0} N⋅m"}
+            }
+            pound-foot{
+                dnam{"lbf⋅ft"}
+                one{"{0} lbf⋅ft"}
+                other{"{0} lbf⋅ft"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"ಎಕರೆ-ಅಡಿ"}
                 one{"{0} ಎಕರೆ-ಅಡಿ"}
                 other{"{0} ಎಕರೆ-ಅಡಿ"}
+            }
+            barrel{
+                dnam{"bbl"}
+                one{"{0} bbl"}
+                other{"{0} bbl"}
             }
             centiliter{
                 dnam{"ಸೆಂಟಿಲೀಟರ್‌ಗಳು"}
@@ -700,6 +789,11 @@ kn{
                 dnam{"ಫ್ಲೂಡ್ ಔನ್ಸ್‌ಗಳು"}
                 one{"{0} ಫ್ಲೂಡ್ ಔನ್ಸ್‌"}
                 other{"{0} ಫ್ಲೂಡ್ ಔನ್ಸ್‌ಗಳು"}
+            }
+            fluid-ounce-imperial{
+                dnam{"Imp. fl oz"}
+                one{"{0} fl oz Imp."}
+                other{"{0} fl oz Imp."}
             }
             gallon{
                 dnam{"ಗ್ಯಾಲನ್‌‌ಗಳು"}
@@ -777,10 +871,6 @@ kn{
                 one{"{0}ಸೆಕೆಂ"}
                 other{"{0}ಸೆಕೆಂ"}
             }
-            degree{
-                one{"{0}°"}
-                other{"{0}°"}
-            }
         }
         area{
             acre{
@@ -810,13 +900,6 @@ kn{
         }
         compound{
             per{"{0}/{1}"}
-        }
-        concentr{
-            percent{
-                dnam{"%"}
-                one{"{0}%"}
-                other{"{0}%"}
-            }
         }
         consumption{
             liter-per-100kilometers{
@@ -1044,11 +1127,6 @@ kn{
                 one{"{0}°ಫ್ಯಾ"}
                 other{"{0}°ಫ್ಯಾ"}
             }
-            generic{
-                dnam{"°"}
-                one{"{0}°"}
-                other{"{0}°"}
-            }
             kelvin{
                 dnam{"ಕೆ"}
                 one{"{0} ಕೆ"}
@@ -1117,6 +1195,11 @@ kn{
                 one{"{0} ಎಕ."}
                 other{"{0} ಎಕ."}
             }
+            dunam{
+                dnam{"ಡುನಮ್‌"}
+                one{"{0} ಡುನಮ್"}
+                other{"{0} ಡುನಮ್"}
+            }
             hectare{
                 dnam{"ಹೆಕ್ಟೇರುಗಳು"}
                 one{"{0} ಹೆ."}
@@ -1182,6 +1265,11 @@ kn{
                 one{"{0} ಮಿಮೊಲ್/ಲೀ"}
                 other{"{0} ಮಿಮೋಲ್/ಲೀ"}
             }
+            mole{
+                dnam{"mol"}
+                one{"{0} mol"}
+                other{"{0} mol"}
+            }
             part-per-million{
                 dnam{"ಭಾಗಗಳು/ಮಿಲಿಯನ್"}
                 one{"{0} ಭಾಪ್ರಮಿ"}
@@ -1189,13 +1277,14 @@ kn{
             }
             percent{
                 dnam{"ಶೇಕಡಾ"}
-                one{"{0}%"}
-                other{"{0}%"}
             }
             permille{
                 dnam{"ಪ್ರತಿ ಸಾವಿರಕ್ಕೆ"}
-                one{"{0}‰"}
-                other{"{0}‰"}
+            }
+            permyriad{
+                dnam{"‱"}
+                one{"{0}‱"}
+                other{"{0}‱"}
             }
         }
         consumption{
@@ -1371,10 +1460,20 @@ kn{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"Btu"}
+                one{"{0} Btu"}
+                other{"{0} Btu"}
+            }
             calorie{
                 dnam{"ಕ್ಯಾಲೊ"}
                 one{"{0} ಕ್ಯಾಲೊ"}
                 other{"{0} ಕ್ಯಾಲೊ"}
+            }
+            electronvolt{
+                dnam{"eV"}
+                one{"{0} eV"}
+                other{"{0} eV"}
             }
             foodcalorie{
                 dnam{"ಕ್ಯಾ"}
@@ -1400,6 +1499,18 @@ kn{
                 dnam{"ಕಿ.ವ್ಯಾ-ಗಂ"}
                 one{"{0} ಕಿವ್ಯಾಗಂ"}
                 other{"{0} ಕಿವ್ಯಾಗಂ"}
+            }
+        }
+        force{
+            newton{
+                dnam{"N"}
+                one{"{0} N"}
+                other{"{0} N"}
+            }
+            pound-force{
+                dnam{"lbf"}
+                one{"{0} lbf"}
+                other{"{0} lbf"}
             }
         }
         frequency{
@@ -1515,6 +1626,11 @@ kn{
                 one{"{0} ಪಾಯಿಂಟ್"}
                 other{"{0} ಪಾಯಿಂಟ್‌ಗಳು"}
             }
+            solar-radius{
+                dnam{"ಸೋಲಾರ್‌ ರೇಡಿ"}
+                one{"{0} R☉"}
+                other{"{0} R☉"}
+            }
             yard{
                 dnam{"ಗಜಗಳು"}
                 one{"{0} ಗ"}
@@ -1527,12 +1643,27 @@ kn{
                 one{"{0} ಲ."}
                 other{"{0} ಲ."}
             }
+            solar-luminosity{
+                dnam{"L☉"}
+                one{"{0} L☉"}
+                other{"{0} L☉"}
+            }
         }
         mass{
             carat{
                 dnam{"ಕ್ಯಾರೆಟ್‌ಗಳು"}
                 one{"{0} ಕ್ಯಾರೆ"}
                 other{"{0} ಕ್ಯಾರೆ"}
+            }
+            dalton{
+                dnam{"ಡಿಎ"}
+                one{"{0} ಡಿಎ"}
+                other{"{0} Da"}
+            }
+            earth-mass{
+                dnam{"M⊕"}
+                one{"{0} M⊕"}
+                other{"{0} M⊕"}
             }
             gram{
                 dnam{"ಗ್ರಾಂಗಳು"}
@@ -1577,6 +1708,11 @@ kn{
                 one{"{0} ಪೌಂ"}
                 other{"{0} ಪೌಂ"}
                 per{"{0}/ಪೌಂ"}
+            }
+            solar-mass{
+                dnam{"ಸೋಲಾರ್‌ ಮಾಸ್‌ಗಳು"}
+                one{"{0} M☉"}
+                other{"{0} M☉"}
             }
             stone{
                 dnam{"ಕಲ್ಲುಗಳು"}
@@ -1636,6 +1772,16 @@ kn{
                 dnam{"ಮರ್ಕ್ಯು.ಅಂ."}
                 one{"{0} ಮರ್ಕ್ಯುಅಂ"}
                 other{"{0} ಮರ್ಕ್ಯುಅಂ"}
+            }
+            kilopascal{
+                dnam{"ಕೆಪಿಎ"}
+                one{"{0} ಕೆಪಿಎ"}
+                other{"{0} ಕೆಪಿಎ"}
+            }
+            megapascal{
+                dnam{"ಎಂಪಿಎ"}
+                one{"{0} ಎಂಪಿಎ"}
+                other{"{0} ಎಂಪಿಎ"}
             }
             millibar{
                 dnam{"ಮಿ.ಬಾರ್‌"}
@@ -1697,11 +1843,28 @@ kn{
                 other{"{0} ಕೆ"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"N⋅m"}
+                one{"{0} N⋅m"}
+                other{"{0} N⋅m"}
+            }
+            pound-foot{
+                dnam{"lbf⋅ft"}
+                one{"{0} lbf⋅ft"}
+                other{"{0} lbf⋅ft"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"ಎಕರೆ ಅಡಿ"}
                 one{"{0} ಎ. ಅ"}
                 other{"{0} ಎ. ಅ"}
+            }
+            barrel{
+                dnam{"bbl"}
+                one{"{0} bbl"}
+                other{"{0} bbl"}
             }
             centiliter{
                 dnam{"ಸೆಂ.ಲೀ"}
@@ -1764,6 +1927,11 @@ kn{
                 dnam{"ಫ್ಲೂ.ಔ"}
                 one{"{0} ಫ್ಲೂ.ಔ"}
                 other{"{0} ಫ್ಲೂ.ಔ"}
+            }
+            fluid-ounce-imperial{
+                dnam{"Imp. fl oz"}
+                one{"{0} fl oz Imp."}
+                other{"{0} fl oz Imp."}
             }
             gallon{
                 dnam{"ಗ್ಯಾ"}

@@ -1,7 +1,13 @@
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-COLLATION_CLDR_VERSION = 34
-# A list of txt's to build
+COLLATION_CLDR_VERSION = 35
+#
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# NOTE (January 2019): Please use ICU's new data filtering to select locale
+# files.  This makefile is no longer used to filter locale files.
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#
+# Old description: A list of txt's to build
 # Note:
 #
 #   If you are thinking of modifying this file, READ THIS.
@@ -49,26 +55,26 @@ COLLATION_EMPTY_SOURCE =
 # Ordinary resources
 COLLATION_SOURCE = $(COLLATION_EMPTY_SOURCE) af.txt am.txt ar.txt\
  as.txt az.txt be.txt bg.txt bn.txt\
- bo.txt bs.txt bs_Cyrl.txt ca.txt chr.txt\
- cs.txt cy.txt da.txt de.txt de_AT.txt\
- dsb.txt dz.txt ee.txt el.txt en.txt\
- en_US.txt en_US_POSIX.txt eo.txt es.txt et.txt\
- fa.txt fa_AF.txt fi.txt fil.txt fo.txt\
- fr.txt fr_CA.txt ga.txt gl.txt gu.txt\
- ha.txt haw.txt he.txt hi.txt hr.txt\
- hsb.txt hu.txt hy.txt id.txt ig.txt\
- is.txt it.txt ja.txt ka.txt kk.txt\
- kl.txt km.txt kn.txt ko.txt kok.txt\
- ku.txt ky.txt lb.txt lkt.txt ln.txt\
- lo.txt lt.txt lv.txt mk.txt ml.txt\
- mn.txt mr.txt ms.txt mt.txt my.txt\
- nb.txt ne.txt nl.txt nn.txt om.txt\
- or.txt pa.txt pl.txt ps.txt pt.txt\
- ro.txt ru.txt se.txt si.txt sk.txt\
- sl.txt smn.txt sq.txt sr.txt sr_Latn.txt\
- sv.txt sw.txt ta.txt te.txt th.txt\
- tk.txt to.txt tr.txt ug.txt uk.txt\
- ur.txt uz.txt vi.txt wae.txt wo.txt\
- xh.txt yi.txt yo.txt zh.txt zh_Hant.txt\
- zu.txt
+ bo.txt bs.txt bs_Cyrl.txt ca.txt ceb.txt\
+ chr.txt cs.txt cy.txt da.txt de.txt\
+ de_AT.txt dsb.txt dz.txt ee.txt el.txt\
+ en.txt en_US.txt en_US_POSIX.txt eo.txt es.txt\
+ et.txt fa.txt fa_AF.txt fi.txt fil.txt\
+ fo.txt fr.txt fr_CA.txt ga.txt gl.txt\
+ gu.txt ha.txt haw.txt he.txt hi.txt\
+ hr.txt hsb.txt hu.txt hy.txt id.txt\
+ ig.txt is.txt it.txt ja.txt ka.txt\
+ kk.txt kl.txt km.txt kn.txt ko.txt\
+ kok.txt ku.txt ky.txt lb.txt lkt.txt\
+ ln.txt lo.txt lt.txt lv.txt mk.txt\
+ ml.txt mn.txt mr.txt ms.txt mt.txt\
+ my.txt nb.txt ne.txt nl.txt nn.txt\
+ om.txt or.txt pa.txt pl.txt ps.txt\
+ pt.txt ro.txt ru.txt se.txt si.txt\
+ sk.txt sl.txt smn.txt sq.txt sr.txt\
+ sr_Latn.txt sv.txt sw.txt ta.txt te.txt\
+ th.txt tk.txt to.txt tr.txt ug.txt\
+ uk.txt ur.txt uz.txt vi.txt wae.txt\
+ wo.txt xh.txt yi.txt yo.txt zh.txt\
+ zh_Hant.txt zu.txt
 

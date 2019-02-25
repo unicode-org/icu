@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 es_MX{
     %%Parent{"es_419"}
-    Version{"2.1.44.5"}
+    Version{"2.1.47.96"}
     units{
         angle{
             arc-minute{
@@ -141,6 +141,11 @@ es_MX{
                 dnam{"kelvines"}
                 one{"kelvin"}
                 other{"{0} kelvines"}
+            }
+        }
+        torque{
+            newton-meter{
+                dnam{"newton metros"}
             }
         }
         volume{
@@ -286,11 +291,6 @@ es_MX{
             mile{
                 dnam{"millas"}
             }
-            nanometer{
-                dnam{"Nm"}
-                one{"{0} Nm"}
-                other{"{0} Nm"}
-            }
             nautical-mile{
                 dnam{"M"}
                 one{"{0} M"}
@@ -330,6 +330,13 @@ es_MX{
         temperature{
             celsius{
                 one{"{0} °C"}
+            }
+        }
+        torque{
+            newton-meter{
+                dnam{"N⋅m"}
+                one{"{0} N⋅m"}
+                other{"{0} N⋅m"}
             }
         }
         volume{

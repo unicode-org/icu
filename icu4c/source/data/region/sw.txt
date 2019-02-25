@@ -310,7 +310,8 @@ sw{
         CZ{"Jamhuri ya Cheki"}
         FK{"Visiwa vya Falkland (Islas Malvinas)"}
         MK{"Macedonia (FYROM)"}
+        SZ{"SZ"}
         TL{"Timor ya Mashariki"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.17"}
 }

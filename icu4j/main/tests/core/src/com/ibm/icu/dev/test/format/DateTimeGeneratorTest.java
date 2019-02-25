@@ -77,7 +77,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
                 {"en",     "CCCCCCm", "hh:mm aaaaa"},
                 {"en-BN",  "Cm",      "h:mm b"},
                 {"gu-IN",  "Cm",      "h:mm B"},
-                {"und-IN", "Cm",      "h:mm a"},
+                {"und-IN", "Cm",      "h:mm B"},
         };
         for (String[] test : tests) {
             DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(ULocale.forLanguageTag(test[0]));
@@ -453,7 +453,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"MMMd", "13 ene."},
         new String[] {"MMMMd", "13 de enero"},
         new String[] {"yQQQ", "T1 1999"},
-        new String[] {"hhmm", "11:58 p. m."},
+        new String[] {"hhmm", "11:58 p.\u00A0m."},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
@@ -1689,10 +1689,9 @@ public class DateTimeGeneratorTest extends TestFmwk {
         ULocale[] locales = DateFormat.getAvailableULocales();
         for (ULocale locale: locales) {
             String localeID = locale.getName();
-            if ( logKnownIssue("cldrbug:11853", "locales with known timeData vs short time format mismatch") &&
-                    ( localeID.equals("af_NA") || localeID.equals("ar_001") || localeID.equals("ckb_IR") // ar_SA not a problem in J
-                    || localeID.equals("en_001") || localeID.equals("en_BI") || localeID.equals("en_NG")
-                    || localeID.equals("fr_CA") || localeID.equals("ha_GH") || localeID.startsWith("lkt") ) ) {
+            if ( logKnownIssue("cldrbug:11894", "locales with known timeData vs short time format mismatch") &&
+                    ( localeID.equals("ps_PK") || localeID.equals("ff_Latn_GH") || localeID.equals("ff_Latn_GM")
+                    || localeID.equals("ff_Latn_LR") || localeID.equals("ff_Latn_SL") ) ) {
                 continue;
             }
             DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(locale);

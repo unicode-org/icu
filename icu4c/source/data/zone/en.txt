@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 en{
-    Version{"2.1.44.91"}
+    Version{"2.1.48.65"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -18,6 +18,9 @@ en{
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
         }
+        "Asia:Qostanay"{
+            ec{"Kostanay"}
+        }
         "Asia:Saigon"{
             ec{"Ho Chi Minh City"}
         }
@@ -29,6 +32,10 @@ en{
         }
         "Europe:Dublin"{
             ld{"Irish Standard Time"}
+        }
+        "Europe:Kiev"{
+            ec{"Kiev"}
+            ec%formal{"Kyiv"}
         }
         "Europe:London"{
             ld{"British Summer Time"}
@@ -448,9 +455,9 @@ en{
             ls{"Lord Howe Standard Time"}
         }
         "meta:Macau"{
-            ld{"Macau Summer Time"}
-            lg{"Macau Time"}
-            ls{"Macau Standard Time"}
+            ld{"Macao Summer Time"}
+            lg{"Macao Time"}
+            ls{"Macao Standard Time"}
         }
         "meta:Macquarie"{
             ls{"Macquarie Island Time"}

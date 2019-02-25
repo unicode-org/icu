@@ -1052,11 +1052,11 @@ public class PluralRulesTest extends TestFmwk {
             "ksh; zero: @integer 0; one: @integer 1; other: @integer 2~17, 100, 1000, 10000, 100000, 1000000, …",
 
             // [one, two, other]
-            "iu,kw,naq,se,sma,smi,smj,smn,sms; one: @integer 1; two: @integer 2; other: @integer 0, 3~17, 100, 1000, 10000, 100000, 1000000, …",
+            "iu,naq,se,sma,smi,smj,smn,sms; one: @integer 1; two: @integer 2; other: @integer 0, 3~17, 100, 1000, 10000, 100000, 1000000, …",
 
             // [one, few, other]
             "shi; one: @integer 0, 1; few: @integer 2~10; other: @integer 11~26, 100, 1000, 10000, 100000, 1000000, …",
-            "mo,ro; one: @integer 1; few: @integer 0, 2~16, 101, 1001, …; other: @integer 20~35, 100, 1000, 10000, 100000, 1000000, …",
+            "mo,ro; one: @integer 1; few: @integer 0, 2~16, 102, 1002, …; other: @integer 20~35, 100, 1000, 10000, 100000, 1000000, …",
             "bs,hr,sh,sr; one: @integer 1, 21, 31, 41, 51, 61, 71, 81, 101, 1001, …; few: @integer 2~4, 22~24, 32~34, 42~44, 52~54, 62, 102, 1002, …; other: @integer 0, 5~19, 100, 1000, 10000, 100000, 1000000, …",
 
             // [one, two, few, other]
@@ -1081,7 +1081,8 @@ public class PluralRulesTest extends TestFmwk {
 
             // [zero, one, two, few, many, other]
             "ar; zero: @integer 0; one: @integer 1; two: @integer 2; few: @integer 3~10, 103~110, 1003, …; many: @integer 11~26, 111, 1011, …; other: @integer 100~102, 200~202, 300~302, 400~402, 500~502, 600, 1000, 10000, 100000, 1000000, …",
-            "cy; zero: @integer 0; one: @integer 1; two: @integer 2; few: @integer 3; many: @integer 6; other: @integer 4, 5, 7~20, 100, 1000, 10000, 100000, 1000000, …", };
+            "cy; zero: @integer 0; one: @integer 1; two: @integer 2; few: @integer 3; many: @integer 6; other: @integer 4, 5, 7~20, 100, 1000, 10000, 100000, 1000000, …",
+            "kw; zero: @integer 0; one: @integer 1; two: @integer 2, 22, 42, 62, 82, 102, 122, 142, 1002, …; few: @integer 3, 23, 43, 63, 83, 103, 123, 143, 1003, …; many: @integer 21, 41, 61, 81, 101, 121, 141, 161, 1001, …; other: @integer 4~19, 100, 1000000, …", };
 
     private <T extends Serializable> T serializeAndDeserialize(T original, Output<Integer> size) {
         try {

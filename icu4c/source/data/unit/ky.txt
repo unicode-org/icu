@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ky{
-    Version{"2.1.43.65"}
+    Version{"2.1.48.17"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -52,6 +52,11 @@ ky{
                 dnam{"акр"}
                 one{"{0} акр"}
                 other{"{0} акр"}
+            }
+            dunam{
+                dnam{"dunam"}
+                one{"{0} dunam"}
+                other{"{0} dunam"}
             }
             hectare{
                 dnam{"гектар"}
@@ -118,6 +123,11 @@ ky{
                 one{"литрине {0} миллимоль"}
                 other{"литрине {0} миллимоль"}
             }
+            mole{
+                dnam{"мольдор"}
+                one{"{0} моль"}
+                other{"{0} мольдор"}
+            }
             part-per-million{
                 dnam{"миллионго бөлүктөр"}
                 one{"миллионго {0} бөлүк"}
@@ -132,6 +142,11 @@ ky{
                 dnam{"промилле"}
                 one{"{0} промилле"}
                 other{"{0} промилле"}
+            }
+            permyriad{
+                dnam{"‱"}
+                one{"{0}‱"}
+                other{"{0}‱"}
             }
         }
         consumption{
@@ -307,10 +322,20 @@ ky{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"Британдык жылуулук бирдиктери"}
+                one{"{0} Британдык жылуулук бирдиги"}
+                other{"{0} Британдык жылуулук бирдиги"}
+            }
             calorie{
                 dnam{"калория"}
                 one{"{0} калория"}
                 other{"{0} калория"}
+            }
+            electronvolt{
+                dnam{"eV"}
+                one{"{0} eV"}
+                other{"{0} eV"}
             }
             foodcalorie{
                 dnam{"Калория"}
@@ -336,6 +361,18 @@ ky{
                 dnam{"килловат-саат"}
                 one{"{0} килловат-саат"}
                 other{"{0} килловат-саат"}
+            }
+        }
+        force{
+            newton{
+                dnam{"N"}
+                one{"{0} N"}
+                other{"{0} N"}
+            }
+            pound-force{
+                dnam{"күч фунттары"}
+                one{"{0}күч фунту"}
+                other{"{0}күч фунттары"}
             }
         }
         frequency{
@@ -451,6 +488,11 @@ ky{
                 one{"{0} чекит"}
                 other{"{0} чекит"}
             }
+            solar-radius{
+                dnam{"күн радиустары"}
+                one{"{0} күн радиусу"}
+                other{"{0} күн радиустары"}
+            }
             yard{
                 dnam{"ярд"}
                 one{"{0} ярд"}
@@ -463,12 +505,27 @@ ky{
                 one{"{0} люкс"}
                 other{"{0} люкс"}
             }
+            solar-luminosity{
+                dnam{"күндүн жарык күчү"}
+                one{"{0} күндүн жарык күчү"}
+                other{"{0} күндүн жарык күчү"}
+            }
         }
         mass{
             carat{
                 dnam{"карат"}
                 one{"{0} карат"}
                 other{"{0} карат"}
+            }
+            dalton{
+                dnam{"Da"}
+                one{"{0} Da"}
+                other{"{0} Da"}
+            }
+            earth-mass{
+                dnam{"Жер массасы"}
+                one{"{0} Жер массасы"}
+                other{"{0} Жер массалары"}
             }
             gram{
                 dnam{"грамм"}
@@ -513,6 +570,11 @@ ky{
                 one{"{0} фунт"}
                 other{"{0} фунт"}
                 per{"фунтуна {0}"}
+            }
+            solar-mass{
+                dnam{"M☉"}
+                one{"{0} M☉"}
+                other{"{0} M☉"}
             }
             ton{
                 dnam{"тонна"}
@@ -567,6 +629,16 @@ ky{
                 dnam{"дюйм сымап мамычасы"}
                 one{"{0} дюйм сымап мамычасы"}
                 other{"{0} дюйм сымап мамычасы"}
+            }
+            kilopascal{
+                dnam{"kPa"}
+                one{"{0} kPa"}
+                other{"{0} kPa"}
+            }
+            megapascal{
+                dnam{"мегапаскалдар"}
+                one{"{0} MPa"}
+                other{"{0} MPa"}
             }
             millibar{
                 dnam{"миллибар"}
@@ -628,11 +700,28 @@ ky{
                 other{"{0} Келвин градусу"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"ньютон-метрлери"}
+                one{"ньютон-метри"}
+                other{"{0} ньютон-метрлери"}
+            }
+            pound-foot{
+                dnam{"lbf⋅ft"}
+                one{"{0} lbf⋅ft"}
+                other{"{0} lbf⋅ft"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"акр-фут"}
                 one{"{0} акр-фут"}
                 other{"{0} акр-фут"}
+            }
+            barrel{
+                dnam{"bbl"}
+                one{"{0} bbl"}
+                other{"{0} bbl"}
             }
             centiliter{
                 dnam{"сантилитр"}
@@ -695,6 +784,11 @@ ky{
                 dnam{"суюк унция"}
                 one{"{0} суюк унция"}
                 other{"{0} суюк унция"}
+            }
+            fluid-ounce-imperial{
+                dnam{"Имп. суюктук унциялары"}
+                one{"{0} Имп. суюктук унциялары"}
+                other{"{0} имп. суюктук унциялары"}
             }
             gallon{
                 dnam{"галлон"}
@@ -1051,6 +1145,11 @@ ky{
                 one{"{0} акр"}
                 other{"{0} акр"}
             }
+            dunam{
+                dnam{"dunam"}
+                one{"{0} dunam"}
+                other{"{0} dunam"}
+            }
             hectare{
                 dnam{"гектар"}
                 one{"{0} га"}
@@ -1116,6 +1215,11 @@ ky{
                 one{"{0} ммоль/л"}
                 other{"{0} ммоль/л"}
             }
+            mole{
+                dnam{"моль"}
+                one{"{0} моль"}
+                other{"{0} моль"}
+            }
             part-per-million{
                 dnam{"миллионго/бөлүк"}
                 one{"{0} ppm"}
@@ -1130,6 +1234,11 @@ ky{
                 dnam{"промилле"}
                 one{"{0}‰"}
                 other{"{0}‰"}
+            }
+            permyriad{
+                dnam{"‱"}
+                one{"{0}‱"}
+                other{"{0}‱"}
             }
         }
         consumption{
@@ -1305,10 +1414,20 @@ ky{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"Btu"}
+                one{"{0} Btu"}
+                other{"{0} Btu"}
+            }
             calorie{
                 dnam{"кал"}
                 one{"{0} кал"}
                 other{"{0} кал"}
+            }
+            electronvolt{
+                dnam{"eV"}
+                one{"{0} eV"}
+                other{"{0} eV"}
             }
             foodcalorie{
                 dnam{"Кал"}
@@ -1334,6 +1453,18 @@ ky{
                 dnam{"кВ-саат"}
                 one{"{0} кВ-саат"}
                 other{"{0} кВ-саат"}
+            }
+        }
+        force{
+            newton{
+                dnam{"N"}
+                one{"{0} N"}
+                other{"{0} N"}
+            }
+            pound-force{
+                dnam{"күч-фунттары"}
+                one{"{0} lbf"}
+                other{"{0} lbf"}
             }
         }
         frequency{
@@ -1449,6 +1580,11 @@ ky{
                 one{"{0} чкт"}
                 other{"{0} чкт"}
             }
+            solar-radius{
+                dnam{"күн радиустары"}
+                one{"{0} R☉"}
+                other{"{0} R☉"}
+            }
             yard{
                 dnam{"ярд"}
                 one{"{0} ярд"}
@@ -1461,12 +1597,27 @@ ky{
                 one{"{0} лк"}
                 other{"{0} лк"}
             }
+            solar-luminosity{
+                dnam{"күндүн жарык күчү"}
+                one{"{0} L☉"}
+                other{"{0} L☉"}
+            }
         }
         mass{
             carat{
                 dnam{"карат"}
                 one{"{0} кар."}
                 other{"{0} кар."}
+            }
+            dalton{
+                dnam{"Da"}
+                one{"{0} Da"}
+                other{"{0} Da"}
+            }
+            earth-mass{
+                dnam{"Жер массалары"}
+                one{"{0} M⊕"}
+                other{"{0} M⊕"}
             }
             gram{
                 dnam{"грамм"}
@@ -1511,6 +1662,11 @@ ky{
                 one{"{0} фунт"}
                 other{"{0} фунт"}
                 per{"фунт/{0}"}
+            }
+            solar-mass{
+                dnam{"M☉"}
+                one{"{0} M☉"}
+                other{"{0} M☉"}
             }
             ton{
                 dnam{"тонна"}
@@ -1565,6 +1721,16 @@ ky{
                 dnam{"дюйм сымап мамычасы"}
                 one{"{0} inHg"}
                 other{"{0} inHg"}
+            }
+            kilopascal{
+                dnam{"kPa"}
+                one{"{0} kPa"}
+                other{"{0} kPa"}
+            }
+            megapascal{
+                dnam{"MPa"}
+                one{"{0} MPa"}
+                other{"{0} MPa"}
             }
             millibar{
                 dnam{"миллибар"}
@@ -1626,11 +1792,28 @@ ky{
                 other{"{0} K"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"N m"}
+                one{"{0} N⋅m"}
+                other{"{0} N⋅m"}
+            }
+            pound-foot{
+                dnam{"lbf⋅ft"}
+                one{"{0} lbf⋅ft"}
+                other{"{0} lbf⋅ft"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"акр-фут"}
                 one{"{0} ак. фт."}
                 other{"{0} ак. фт."}
+            }
+            barrel{
+                dnam{"bbl"}
+                one{"{0} bbl"}
+                other{"{0} bbl"}
             }
             centiliter{
                 dnam{"сЛ"}
@@ -1693,6 +1876,11 @@ ky{
                 dnam{"с. унц."}
                 one{"{0} с. унц."}
                 other{"{0} с. унц."}
+            }
+            fluid-ounce-imperial{
+                dnam{"Имп.суюк.унц"}
+                one{"{0} fl oz Imp."}
+                other{"{0} fl oz Imp."}
             }
             gallon{
                 dnam{"гал"}

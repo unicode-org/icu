@@ -184,7 +184,7 @@ sr_Latn{
         MF{"Sveti Martin (Francuska)"}
         MG{"Madagaskar"}
         MH{"Maršalska Ostrva"}
-        MK{"Makedonija"}
+        MK{"Severna Makedonija"}
         ML{"Mali"}
         MM{"Mijanmar (Burma)"}
         MN{"Mongolija"}
@@ -288,6 +288,8 @@ sr_Latn{
         VU{"Vanuatu"}
         WF{"Valis i Futuna"}
         WS{"Samoa"}
+        XA{"XA"}
+        XB{"XB"}
         XK{"Kosovo"}
         YE{"Jemen"}
         YT{"Majot"}
@@ -310,8 +312,7 @@ sr_Latn{
         CI{"Obala Slonovače"}
         CZ{"Češka Republika"}
         FK{"Foklandska (Malvinska) ostrva"}
-        MK{"Makedonija (BJRM)"}
         TL{"Istočni Timor"}
     }
-    Version{"2.1.44.50"}
+    Version{"2.1.48.77"}
 }

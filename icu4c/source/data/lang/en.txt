@@ -17,7 +17,7 @@ en{
         d0{"Transform Destination"}
         em{"Emoji Presentation Style"}
         fw{"First day of week"}
-        h0{"Mixed-in Language"}
+        h0{"Mixed-in"}
         hc{"Hour Cycle (12 vs 24)"}
         i0{"Input Method"}
         k0{"Keyboard"}
@@ -31,6 +31,7 @@ en{
         s0{"Transform Source"}
         sd{"Region Subdivision"}
         ss{"Sentence Break Suppressions Type"}
+        t{"Transform"}
         t0{"Machine Translated"}
         timezone{"Time Zone"}
         va{"Locale Variant"}
@@ -711,6 +712,7 @@ en{
         Egyh{"Egyptian hieratic"}
         Egyp{"Egyptian hieroglyphs"}
         Elba{"Elbasan"}
+        Elym{"Elymaic"}
         Ethi{"Ethiopic"}
         Geok{"Georgian Khutsuri"}
         Geor{"Georgian"}
@@ -733,6 +735,7 @@ en{
         Hira{"Hiragana"}
         Hluw{"Anatolian Hieroglyphs"}
         Hmng{"Pahawh Hmong"}
+        Hmnp{"Nyiakeng Puachue Hmong"}
         Hrkt{"Japanese syllabaries"}
         Hung{"Old Hungarian"}
         Inds{"Indus"}
@@ -781,6 +784,7 @@ en{
         Mtei{"Meitei Mayek"}
         Mult{"Multani"}
         Mymr{"Myanmar"}
+        Nand{"Nandinagari"}
         Narb{"Old North Arabian"}
         Nbat{"Nabataean"}
         Newa{"Newa"}
@@ -846,6 +850,7 @@ en{
         Vaii{"Vai"}
         Visp{"Visible Speech"}
         Wara{"Varang Kshiti"}
+        Wcho{"Wancho"}
         Wole{"Woleai"}
         Xpeo{"Old Persian"}
         Xsux{"Sumero-Akkadian Cuneiform"}
@@ -986,7 +991,7 @@ en{
             wed{"First Day of Week Is Wednesday"}
         }
         h0{
-            hybrid{"Hybrid Language"}
+            hybrid{"Hybrid"}
         }
         hc{
             h11{"12 Hour System (0–11)"}
@@ -1058,23 +1063,25 @@ en{
             alaloc{"US ALA-LOC Transliteration"}
             bgn{"US BGN Transliteration"}
             buckwalt{"Buckwalter Arabic Transliteration"}
-            c11{"Hex Transforms Using C11 Syntax"}
-            css{"Hex Transforms Using CSS Syntax"}
+            c11{"Hex transform using C11 syntax"}
+            css{"Hex transform using CSS syntax"}
             din{"German DIN Transliteration"}
+            ewts{"Extended Wylie Transliteration Scheme"}
             gost{"CIS GOST Transliteration"}
+            iast{"International Alphabet of Sanskrit Transliteration"}
             iso{"ISO Transliteration"}
-            java{"Hex Transforms Using Java Syntax"}
+            java{"Hex transform using Java syntax"}
             mcst{"Korean MCST Transliteration"}
             mns{"Mongolian National Standard Transliteration"}
-            percent{"Hex Transforms Using Percent Syntax"}
-            perl{"Hex Transforms Using Perl Syntax"}
-            plain{"Hex Transforms With No Surrounding Syntax"}
-            prprname{"Personal Name Transliteration Variant"}
+            percent{"Hex transform using percent syntax"}
+            perl{"Hex transform using Perl syntax"}
+            plain{"Hex transform with no surrounding syntax"}
+            prprname{"Personal name transliteration variant"}
             satts{"Standard Arabic Technical Transliteration"}
             ungegn{"UN GEGN Transliteration"}
-            unicode{"Hex Transforms Using Unicode Syntax"}
-            xml{"Hex Transforms Using XML Syntax"}
-            xml10{"Hex Transforms Using XML Decimal Syntax"}
+            unicode{"Hex transform using Unicode syntax"}
+            xml{"Hex transform using XML syntax"}
+            xml10{"Hex transform using XML decimal syntax"}
         }
         ms{
             metric{"Metric System"}
@@ -1114,6 +1121,7 @@ en{
             hantfin{"Traditional Chinese Financial Numerals"}
             hebr{"Hebrew Numerals"}
             hmng{"Pahawh Hmong Digits"}
+            hmnp{"Nyiakeng Puachue Hmong Digits"}
             java{"Javanese Digits"}
             jpan{"Japanese Numerals"}
             jpanfin{"Japanese Financial Numerals"}
@@ -1166,6 +1174,7 @@ en{
             traditional{"Traditional Numerals"}
             vaii{"Vai Digits"}
             wara{"Warang Citi Digits"}
+            wcho{"Wancho Digits"}
         }
         s0{
             accents{"From Accented Characters To ASCII Sequence"}
@@ -1248,7 +1257,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.65"}
     characterLabelPattern{
         all{"{0} — all"}
         category-list{"{0}: {1}"}

@@ -74,7 +74,6 @@ ja{
     }
     MoreInformation{"?"}
     NumberElements{
-        default{"latn"}
         finance{"jpanfin"}
         latn{
             miscPatterns{
@@ -86,7 +85,6 @@ ja{
             patterns{
                 accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
-                decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
@@ -209,16 +207,11 @@ ja{
                 }
             }
             symbols{
-                decimal{"."}
                 exponential{"E"}
-                group{","}
                 infinity{"∞"}
-                list{";"}
-                minusSign{"-"}
                 nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
-                plusSign{"+"}
                 superscriptingExponent{"×"}
                 timeSeparator{":"}
             }
@@ -232,10 +225,9 @@ ja{
             }
         }
         minimumGroupingDigits{"1"}
-        native{"latn"}
         traditional{"jpan"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.42"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -293,12 +285,6 @@ ja{
                 yyyyMd{"Gy/M/d"}
             }
             eras{
-                abbreviated{
-                    "BE",
-                }
-                narrow{
-                    "BE",
-                }
                 wide{
                     "仏暦",
                 }
@@ -720,20 +706,6 @@ ja{
             }
         }
         coptic{
-            eras{
-                abbreviated{
-                    "ERA0",
-                    "ERA1",
-                }
-                narrow{
-                    "ERA0",
-                    "ERA1",
-                }
-                wide{
-                    "ERA0",
-                    "ERA1",
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -750,21 +722,6 @@ ja{
                         "エペープ",
                         "メスラ",
                         "ナシエ",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
                     }
                     wide{
                         "トウト",
@@ -797,21 +754,6 @@ ja{
                         "エペープ",
                         "メスラ",
                         "ナシエ",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
                     }
                     wide{
                         "トウト",
@@ -1043,20 +985,6 @@ ja{
             }
         }
         ethiopic{
-            eras{
-                abbreviated{
-                    "ERA0",
-                    "ERA1",
-                }
-                narrow{
-                    "ERA0",
-                    "ERA1",
-                }
-                wide{
-                    "ERA0",
-                    "ERA1",
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -1073,21 +1001,6 @@ ja{
                         "ハムレ",
                         "ネハッセ",
                         "パグメン",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
                     }
                     wide{
                         "メスケレム",
@@ -1120,21 +1033,6 @@ ja{
                         "ハムレ",
                         "ネハッセ",
                         "パグメン",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
                     }
                     wide{
                         "メスケレム",
@@ -1220,6 +1118,15 @@ ja{
                 yyyyQQQQ{"Gy年QQQQ"}
             }
             intervalFormats{
+                Bh{
+                    B{"BK時～BK時"}
+                    h{"BK時～K時"}
+                }
+                Bhm{
+                    B{"BK:mm～BK:mm"}
+                    h{"BK:mm～K:mm"}
+                    m{"BK:mm～K:mm"}
+                }
                 GGGGGyM{
                     G{"GGGGGy/MM～GGGGGy/MM"}
                     M{"GGGGGy/MM～y/MM"}
@@ -1620,10 +1527,6 @@ ja{
                     "BC",
                     "AD",
                 }
-                narrow%variant{
-                    "BCE",
-                    "CE",
-                }
                 wide{
                     "紀元前",
                     "西暦",
@@ -1634,6 +1537,15 @@ ja{
                 }
             }
             intervalFormats{
+                Bh{
+                    B{"BK時～BK時"}
+                    h{"BK時～K時"}
+                }
+                Bhm{
+                    B{"BK:mm～BK:mm"}
+                    h{"BK:mm～K:mm"}
+                    m{"BK:mm～K:mm"}
+                }
                 Gy{
                     G{"Gy年～Gy年"}
                     y{"Gy年～y年"}
@@ -1785,20 +1697,6 @@ ja{
                         "11月",
                         "12月",
                     }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
                     wide{
                         "1月",
                         "2月",
@@ -1828,20 +1726,6 @@ ja{
                         "10月",
                         "11月",
                         "12月",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
                     }
                     wide{
                         "1月",
@@ -1918,17 +1802,6 @@ ja{
                 "{1} {0}",
                 "{1} {0}",
             }
-            eras{
-                abbreviated{
-                    "AM",
-                }
-                narrow{
-                    "AM",
-                }
-                wide{
-                    "AM",
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -1946,22 +1819,6 @@ ja{
                         "アヴ",
                         "エルル",
                         "アダル II",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
-                        "7",
                     }
                     wide{
                         "ティスレ",
@@ -1996,22 +1853,6 @@ ja{
                         "アヴ",
                         "エルル",
                         "アダル II",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                        "13",
-                        "7",
                     }
                     wide{
                         "ティスレ",
@@ -2060,20 +1901,6 @@ ja{
                         "マーガ",
                         "パルグナ",
                     }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
-                    }
                     wide{
                         "カイトラ",
                         "ヴァイサカ",
@@ -2103,20 +1930,6 @@ ja{
                         "パウサ",
                         "マーガ",
                         "パルグナ",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
                     }
                     wide{
                         "カイトラ",
@@ -2162,17 +1975,6 @@ ja{
                 d{"d日"}
                 y{"Gy年"}
             }
-            eras{
-                abbreviated{
-                    "AH",
-                }
-                narrow{
-                    "AH",
-                }
-                wide{
-                    "AH",
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -2188,20 +1990,6 @@ ja{
                         "シャウワール",
                         "ズル・カイダ",
                         "ズル・ヒッジャ",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
                     }
                     wide{
                         "ムハッラム",
@@ -2232,20 +2020,6 @@ ja{
                         "シャウワール",
                         "ズル・カイダ",
                         "ズル・ヒッジャ",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
                     }
                     wide{
                         "ムハッラム",
@@ -2812,17 +2586,6 @@ ja{
             }
         }
         persian{
-            eras{
-                abbreviated{
-                    "AP",
-                }
-                narrow{
-                    "AP",
-                }
-                wide{
-                    "AP",
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -2838,20 +2601,6 @@ ja{
                         "デイ",
                         "バフマン",
                         "エスファンド",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
                     }
                     wide{
                         "ファルヴァルディーン",
@@ -2882,20 +2631,6 @@ ja{
                         "デイ",
                         "バフマン",
                         "エスファンド",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
                     }
                     wide{
                         "ファルヴァルディーン",
@@ -3796,6 +3531,12 @@ ja{
             start{"{0}、{1}"}
         }
         standard{
+            2{"{0}、{1}"}
+            end{"{0}、{1}"}
+            middle{"{0}、{1}"}
+            start{"{0}、{1}"}
+        }
+        standard-narrow{
             2{"{0}、{1}"}
             end{"{0}、{1}"}
             middle{"{0}、{1}"}

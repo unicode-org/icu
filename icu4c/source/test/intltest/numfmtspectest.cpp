@@ -148,9 +148,7 @@ void NumberFormatSpecificationTest::TestScientificNotation() {
     assertPatternFr("12,300E3", 12300.1, "##0.0000E0", TRUE);
     assertPatternFr("12,30E3", 12300.1, "##0.000#E0", TRUE);
     assertPatternFr("12,301E3", 12301.0, "##0.000#E0", TRUE);
-    if (!logKnownIssue("11020")) {
-        assertPatternFr("1,25E4", 12301.2, "0.05E0");
-    }
+    assertPatternFr("1,25E4", 12301.2, "0.05E0");
     assertPatternFr("170,0E-3", 0.17, "##0.000#E0", TRUE);
 
 }
@@ -185,10 +183,8 @@ void NumberFormatSpecificationTest::TestPadding() {
     assertPatternFr("ne1\\u202F234nx", -1234, "####,##0$*x;ne#n", TRUE);
     assertPatternFr("n1\\u202F234*xx", -1234, "####,##0$*x;n#'*'", TRUE);
     assertPatternFr("yyyy%432,6", 4.33, "*y%4.2######",  TRUE);
-    if (!logKnownIssue("11025")) {
-        assertPatternFr("EUR *433,00", 433.0, "\\u00a4\\u00a4 **####0.00");
-        assertPatternFr("EUR *433,00", 433.0, "\\u00a4\\u00a4 **#######0");
-    }
+    assertPatternFr("EUR *433,00", 433.0, "\\u00a4\\u00a4 **####0.00");
+    assertPatternFr("EUR *433,00", 433.0, "\\u00a4\\u00a4 **#######0");
     {
         UnicodeString upattern("\\u00a4\\u00a4 **#######0", -1, US_INV);
         upattern = upattern.unescape();

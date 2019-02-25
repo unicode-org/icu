@@ -6,10 +6,6 @@ ps{
         cf{"اسعارو بڼه"}
         collation{"ترتيب"}
         currency{"اسعارو"}
-        hc{"hc"}
-        lb{"lb"}
-        ms{"ms"}
-        numbers{"numbers"}
     }
     Languages{
         aa{"افري"}
@@ -58,6 +54,7 @@ ps{
         bug{"بگنيايي"}
         byn{"بلین"}
         ca{"کټلاني"}
+        ccp{"چکما"}
         ce{"چيچيني"}
         ceb{"سیبوانوي"}
         cgg{"چيگايي"}
@@ -79,6 +76,7 @@ ps{
         dar{"درگوا"}
         dav{"ټایټا"}
         de{"الماني"}
+        de_AT{"اتريشي آلماني"}
         de_CH{"سوئس لوی جرمن"}
         dgr{"داگرب"}
         dje{"زرما"}
@@ -114,6 +112,8 @@ ps{
         fo{"فاروئې"}
         fon{"فان"}
         fr{"فرانسوي"}
+        fr_CA{"کاناډايي فرانسوي"}
+        fr_CH{"سويسي فرانسوي"}
         fur{"فرائیلیین"}
         fy{"فريزي"}
         ga{"ائيرلېنډي"}
@@ -253,6 +253,7 @@ ps{
         naq{"ناما"}
         nb{"ناروې بوکمال"}
         nd{"شمالي نديبل"}
+        nds{"کښته آلماني"}
         ne{"نېپالي"}
         new{"نيواري"}
         ng{"ندونگا"}
@@ -300,7 +301,6 @@ ps{
         ru{"روسي"}
         rup{"اروماني"}
         rw{"کینیارونډا"}
-        rwk{"Rwa"}
         sa{"سنسکریټ"}
         sad{"سنډاوی"}
         sah{"سخا"}
@@ -480,61 +480,13 @@ ps{
             search{"عمومي موخو د لټون"}
             standard{"معياري د لټې ترتيب"}
         }
-        hc{
-            h11{"h11"}
-            h12{"h12"}
-            h23{"h23"}
-            h24{"h24"}
-        }
-        lb{
-            loose{"loose"}
-            normal{"normal"}
-            strict{"strict"}
-        }
-        ms{
-            metric{"metric"}
-            uksystem{"uksystem"}
-            ussystem{"ussystem"}
-        }
         numbers{
             arab{"عربي - انډیک عددونه"}
             arabext{"غځېدلې عربي ۔ اينډيک عدد"}
-            armn{"armn"}
-            armnlow{"armnlow"}
-            beng{"beng"}
-            deva{"deva"}
-            ethi{"ethi"}
-            fullwide{"fullwide"}
-            geor{"geor"}
-            grek{"grek"}
-            greklow{"greklow"}
-            gujr{"gujr"}
-            guru{"guru"}
-            hanidec{"hanidec"}
-            hans{"hans"}
-            hansfin{"hansfin"}
-            hant{"hant"}
-            hantfin{"hantfin"}
-            hebr{"hebr"}
-            jpan{"jpan"}
-            jpanfin{"jpanfin"}
-            khmr{"khmr"}
-            knda{"knda"}
-            laoo{"laoo"}
             latn{"لويديځ عددونه"}
-            mlym{"mlym"}
-            mymr{"mymr"}
-            orya{"orya"}
-            roman{"roman"}
-            romanlow{"romanlow"}
-            taml{"taml"}
-            tamldec{"tamldec"}
-            telu{"telu"}
-            thai{"thai"}
-            tibt{"tibt"}
         }
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.48.17"}
     characterLabelPattern{
         all{"{0} - ټول"}
         category-list{"{0}: {1}"}

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ko{
-    Version{"2.1.44.91"}
+    Version{"2.1.48.17"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}
@@ -809,6 +809,9 @@ ko{
         }
         "Asia:Qatar"{
             ec{"카타르"}
+        }
+        "Asia:Qostanay"{
+            ec{"코스타나이"}
         }
         "Asia:Qyzylorda"{
             ec{"키질로르다"}

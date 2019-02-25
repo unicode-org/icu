@@ -305,9 +305,11 @@ eu{
     Countries%variant{
         CD{"Kongo (DR)"}
         CG{"Kongoko Errepublika"}
+        CI{"CI"}
         CZ{"Txekiar Errepublika"}
         FK{"Falklandak (Malvinak)"}
         MK{"Mazedoniako Jugoslaviar Errepublika Ohia"}
+        TL{"TL"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.17"}
 }

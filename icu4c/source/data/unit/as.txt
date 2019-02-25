@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 as{
-    Version{"2.1.43.94"}
+    Version{"2.1.48.17"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -52,6 +52,11 @@ as{
                 dnam{"একৰ"}
                 one{"{0} একৰ"}
                 other{"{0} একৰ"}
+            }
+            dunam{
+                dnam{"ডুনাম"}
+                one{"{0} ডুনাম"}
+                other{"{0} ডুনাম"}
             }
             hectare{
                 dnam{"হেক্টৰ"}
@@ -118,6 +123,11 @@ as{
                 one{"প্ৰতি লিটাৰত {0} মিলিমোল"}
                 other{"প্ৰতি লিটাৰত {0} মিলিমোল"}
             }
+            mole{
+                dnam{"ম’ল"}
+                one{"{0} ম’ল"}
+                other{"{0} ম’ল"}
+            }
             part-per-million{
                 dnam{"প্ৰতি মিলিয়নত ভাগ"}
                 one{"প্ৰতি মিলিয়নত {0} ভাগ"}
@@ -132,6 +142,11 @@ as{
                 dnam{"প্ৰতিমাইল"}
                 one{"{0} প্ৰতিমাইল"}
                 other{"{0} প্ৰতিমাইল"}
+            }
+            permyriad{
+                dnam{"পাৰমিৰেইড"}
+                one{"{0} পাৰমিৰেইড"}
+                other{"{0} পাৰমিৰেইড"}
             }
         }
         consumption{
@@ -307,10 +322,20 @@ as{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"ব্ৰিটিশ্ব থাৰ্মেল ইউনিট"}
+                one{"{0} ব্ৰিটিশ্ব থাৰ্মেল ইউনিট"}
+                other{"{0} ব্ৰিটিশ্ব থাৰ্মেল ইউনিট"}
+            }
             calorie{
                 dnam{"কেলৰি"}
                 one{"{0} কেলৰি"}
                 other{"{0} কেলৰি"}
+            }
+            electronvolt{
+                dnam{"ইলেক্ট্ৰ’নভ’ল্ট"}
+                one{"{0} ইলেক্ট্ৰ’নভ’ল্ট"}
+                other{"{0} ইলেক্ট্ৰ’নভ’ল্ট"}
             }
             foodcalorie{
                 dnam{"কেলৰি"}
@@ -336,6 +361,18 @@ as{
                 dnam{"কিলোৱাট-ঘণ্টা"}
                 one{"{0} কিলোৱাট ঘণ্টা"}
                 other{"{0} কিলোৱাট ঘণ্টা"}
+            }
+        }
+        force{
+            newton{
+                dnam{"নিউটন"}
+                one{"{0} নিউটন"}
+                other{"{0} নিউটন"}
+            }
+            pound-force{
+                dnam{"পাউণ্ড-বল"}
+                one{"{0} পাউণ্ড-বল"}
+                other{"{0} পাউণ্ড-বল"}
             }
         }
         frequency{
@@ -451,6 +488,11 @@ as{
                 one{"{0} পইণ্ট"}
                 other{"{0} পইণ্ট"}
             }
+            solar-radius{
+                dnam{"সৌৰ ৰেডিয়াছ"}
+                one{"{0} সৌৰ ৰেডিয়াছ"}
+                other{"{0} সৌৰ ৰেডিয়াছ"}
+            }
             yard{
                 dnam{"গজ"}
                 one{"{0} গজ"}
@@ -463,12 +505,27 @@ as{
                 one{"{0} লাক্স"}
                 other{"{0} লাক্স"}
             }
+            solar-luminosity{
+                dnam{"ছ’লাৰ লুমিন’ছিটী"}
+                one{"{0} ছ’লাৰ লুমিন’ছিটী"}
+                other{"{0} ছ’লাৰ লুমিন’ছিটী"}
+            }
         }
         mass{
             carat{
                 dnam{"কেৰেট"}
                 one{"{0} কেৰেট"}
                 other{"{0} কেৰেট"}
+            }
+            dalton{
+                dnam{"ডলট’ন"}
+                one{"{0} ডলট’ন"}
+                other{"{0} ডলট’ন"}
+            }
+            earth-mass{
+                dnam{"আৰ্থ মাছ"}
+                one{"{0} আৰ্থ মাছ"}
+                other{"{0} আৰ্থ মাছ"}
             }
             gram{
                 dnam{"গ্ৰাম"}
@@ -513,6 +570,11 @@ as{
                 one{"{0} পাউণ্ড"}
                 other{"{0} পাউণ্ড"}
                 per{"{0} প্ৰতি পাউণ্ড"}
+            }
+            solar-mass{
+                dnam{"সৌৰ ভৰ"}
+                one{"{0} সৌৰ ভৰ"}
+                other{"{0} সৌৰ ভৰ"}
             }
             ton{
                 dnam{"টন"}
@@ -567,6 +629,16 @@ as{
                 dnam{"ইঞ্চি মাৰ্কিউৰী"}
                 one{"{0} ইঞ্চি মাৰ্কিউৰী"}
                 other{"{0} ইঞ্চি মাৰ্কিউৰী"}
+            }
+            kilopascal{
+                dnam{"কিল’পাস্কেল"}
+                one{"{0} কিল’পাস্কেল"}
+                other{"{0} কি. পা."}
+            }
+            megapascal{
+                dnam{"মেগাপাস্কেল"}
+                one{"{0} মেগাপাস্কেল"}
+                other{"{0} মেগাপাস্কেল"}
             }
             millibar{
                 dnam{"মিলিবাৰ"}
@@ -628,11 +700,28 @@ as{
                 other{"{0} কেলভিন"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"নিউটন-মিটাৰ"}
+                one{"{0} নিউটন-মিটাৰ"}
+                other{"{0} নিউটন-মিটাৰ"}
+            }
+            pound-foot{
+                dnam{"পাউণ্ড-ফুট"}
+                one{"{0} পাউণ্ড-ফুট"}
+                other{"{0} পাউণ্ড-ফুট"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"একৰ-ফুট"}
                 one{"{0} একৰ-ফুট"}
                 other{"{0} একৰ-ফুট"}
+            }
+            barrel{
+                dnam{"বেৰেল"}
+                one{"{0} বেৰেল"}
+                other{"{0} বেৰেল"}
             }
             centiliter{
                 dnam{"ছেণ্টিলিটাৰ"}
@@ -695,6 +784,11 @@ as{
                 dnam{"ফ্লুইড আউন্স"}
                 one{"{0} ফ্লুইড আউন্স"}
                 other{"{0} ফ্লুইড আউন্স"}
+            }
+            fluid-ounce-imperial{
+                dnam{"ইম্পেৰিয়েল ফ্লুইড আউন্স"}
+                one{"{0} ইম্পেৰিয়েল ফ্লুইড আউন্স"}
+                other{"{0} ইম্পেৰিয়েল ফ্লুইড আউন্স"}
             }
             gallon{
                 dnam{"গেলন"}
@@ -925,6 +1019,11 @@ as{
                 one{"{0} একৰ"}
                 other{"{0} একৰ"}
             }
+            dunam{
+                dnam{"ডুনাম"}
+                one{"{0} ডুনাম"}
+                other{"{0} ডুনাম"}
+            }
             hectare{
                 dnam{"হেক্টৰ"}
                 one{"{0} হেক্টৰ"}
@@ -990,6 +1089,11 @@ as{
                 one{"{0} mmol/L"}
                 other{"{0} mmol/L"}
             }
+            mole{
+                dnam{"ম’ল"}
+                one{"{0} ম’ল"}
+                other{"{0} ম’ল"}
+            }
             part-per-million{
                 dnam{"ভাগ/মিলিয়ন"}
                 one{"{0} ppm"}
@@ -1004,6 +1108,11 @@ as{
                 dnam{"প্ৰতিমাইল"}
                 one{"{0}‰"}
                 other{"{0}‰"}
+            }
+            permyriad{
+                dnam{"পাৰমিৰেইড"}
+                one{"{0}‱"}
+                other{"{0}‱"}
             }
         }
         consumption{
@@ -1179,10 +1288,20 @@ as{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"BTU"}
+                one{"{0} Btu"}
+                other{"{0} Btu"}
+            }
             calorie{
                 dnam{"কেলৰি"}
                 one{"{0} কেলৰি"}
                 other{"{0} কেলৰি"}
+            }
+            electronvolt{
+                dnam{"ইলেক্ট্ৰ’নভ’ল্ট"}
+                one{"{0} eV"}
+                other{"{0} eV"}
             }
             foodcalorie{
                 dnam{"কেলৰি"}
@@ -1208,6 +1327,18 @@ as{
                 dnam{"কিঃ ৱাঃ-ঘঃ"}
                 one{"{0} কিঃ ৱাঃ-ঘঃ"}
                 other{"{0} কিঃ ৱাঃ-ঘঃ"}
+            }
+        }
+        force{
+            newton{
+                dnam{"নিউটন"}
+                one{"{0} N"}
+                other{"{0} N"}
+            }
+            pound-force{
+                dnam{"পাউণ্ড-বল"}
+                one{"{0} lbf"}
+                other{"{0} lbf"}
             }
         }
         frequency{
@@ -1323,6 +1454,11 @@ as{
                 one{"{0} পইণ্ট"}
                 other{"{0} পইণ্ট"}
             }
+            solar-radius{
+                dnam{"সৌৰ ৰেডিয়াছ"}
+                one{"{0} R☉"}
+                other{"{0} R☉"}
+            }
             yard{
                 dnam{"গজ"}
                 one{"{0} গজ"}
@@ -1335,12 +1471,27 @@ as{
                 one{"{0} লাক্স"}
                 other{"{0} লাক্স"}
             }
+            solar-luminosity{
+                dnam{"ছ’লাৰ লুমিন’ছিটী"}
+                one{"{0} L☉"}
+                other{"{0} L☉"}
+            }
         }
         mass{
             carat{
                 dnam{"কেৰেট"}
                 one{"{0} কেৰেট"}
                 other{"{0} কেৰেট"}
+            }
+            dalton{
+                dnam{"ডলট’ন"}
+                one{"{0} ডলট’ন"}
+                other{"{0} ডলট’ন"}
+            }
+            earth-mass{
+                dnam{"আৰ্থ মাছ"}
+                one{"{0} M⊕"}
+                other{"{0} M⊕"}
             }
             gram{
                 dnam{"গ্ৰাম"}
@@ -1385,6 +1536,11 @@ as{
                 one{"{0} পাউণ্ড"}
                 other{"{0} পাউণ্ড"}
                 per{"{0}/পাউণ্ড"}
+            }
+            solar-mass{
+                dnam{"সৌৰ ভৰ"}
+                one{"{0} M☉"}
+                other{"{0} M☉"}
             }
             ton{
                 dnam{"টন"}
@@ -1439,6 +1595,16 @@ as{
                 dnam{"inHg"}
                 one{"{0} inHg"}
                 other{"{0} inHg"}
+            }
+            kilopascal{
+                dnam{"কি. পা."}
+                one{"{0} কি. পা."}
+                other{"{0} কি. পা."}
+            }
+            megapascal{
+                dnam{"মেগাপাস্কেল"}
+                one{"{0} মে. পা."}
+                other{"{0} মে. পা."}
             }
             millibar{
                 dnam{"mbar"}
@@ -1500,11 +1666,28 @@ as{
                 other{"{0} কেলভিন"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"নি. মি."}
+                one{"{0} নি. মি."}
+                other{"{0} নি. মি."}
+            }
+            pound-foot{
+                dnam{"lbf⋅ft"}
+                one{"{0} lbf⋅ft"}
+                other{"{0} lbf⋅ft"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"একৰ-ফুট"}
                 one{"{0} এঃ-ফুঃ"}
                 other{"{0} এঃ-ফুঃ"}
+            }
+            barrel{
+                dnam{"বেৰেল"}
+                one{"{0} bbl"}
+                other{"{0} bbl"}
             }
             centiliter{
                 dnam{"ছেঃ লিঃ"}
@@ -1567,6 +1750,11 @@ as{
                 dnam{"ফ্লুঃ আঃ"}
                 one{"{0} ফ্লুঃ আঃ"}
                 other{"{0} ফ্লুঃ আঃ"}
+            }
+            fluid-ounce-imperial{
+                dnam{"ইম্পে. ফ্লু. আ."}
+                one{"{0} ইম্পে. ফ্লু. আ."}
+                other{"{0} ইম্পে. ফ্লু. আ."}
             }
             gallon{
                 dnam{"গেলন"}

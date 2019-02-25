@@ -16,5 +16,5 @@ en_GB{
     Countries%short{
         US{"US"}
     }
-    Version{"2.1.44.18"}
+    Version{"2.1.47.86"}
 }

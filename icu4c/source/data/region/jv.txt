@@ -9,6 +9,7 @@ jv{
         011{"Afrika Kulon"}
         013{"Amérika Tengah"}
         014{"Afrika Wétan"}
+        017{"Afrika Sisih Tengah"}
         018{"Afrika Sisih Kidul"}
         019{"Amérika"}
         021{"Amérika Sisih Lor"}
@@ -67,6 +68,7 @@ jv{
         BY{"Bélarus"}
         BZ{"Bélisé"}
         CA{"Kanada"}
+        CC{"Kapuloan Cocos (Keeling)"}
         CD{"Kongo - Kinshasa"}
         CF{"Républik Afrika Tengah"}
         CG{"Kongo - Brassaville"}
@@ -115,13 +117,17 @@ jv{
         GG{"Guernsei"}
         GH{"Ghana"}
         GI{"Gibraltar"}
+        GL{"Greenland"}
         GM{"Gambia"}
+        GN{"Guinea"}
         GP{"Guadélup"}
         GS{"Georgia Kidul lan Kapuloan Sandwich Kidul"}
         GT{"Guatémala"}
         GU{"Guam"}
+        GW{"Guinea-Bissau"}
         GY{"Guyana"}
         HK{"Laladan Administratif Astamiwa Hong Kong"}
+        HM{"Kapuloan Heard lan McDonald"}
         HN{"Honduras"}
         HR{"Kroasia"}
         HT{"Haiti"}
@@ -211,6 +217,7 @@ jv{
         QO{"Oseania Paling Njaba"}
         RE{"Réunion"}
         RO{"Ruméni"}
+        RU{"Rusia"}
         RW{"Rwanda"}
         SA{"Arab Saudi"}
         SB{"Kapuloan Suleman"}
@@ -251,11 +258,14 @@ jv{
         TZ{"Tansania"}
         UA{"Ukrania"}
         UG{"Uganda"}
+        UM{"Kapuloan AS Paling Njaba"}
         UN{"Pasarékatan Bangsa-Bangsa"}
         US{"Amérika Sarékat"}
         UY{"Uruguay"}
         UZ{"Usbèkistan"}
+        VA{"Kutha Vatikan"}
         VE{"Vénésuéla"}
+        VG{"Kapuloan Virgin Britania"}
         VI{"Kapuloan Virgin Amérika"}
         VN{"Viètnam"}
         VU{"Vanuatu"}
@@ -282,5 +292,5 @@ jv{
         FK{"Kapuloan Falkland (Islas Malvinas)"}
         TL{"Timor Wétan"}
     }
-    Version{"2.1.44.15"}
+    Version{"2.1.48.44"}
 }

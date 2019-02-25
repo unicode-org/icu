@@ -74,5 +74,5 @@ sw_KE{
     Countries%variant{
         MK{"Masedonia (FYROM)"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.47.71"}
 }
