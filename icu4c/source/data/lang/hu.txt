@@ -92,6 +92,7 @@ hu{
         car{"karib"}
         cay{"kajuga"}
         cch{"atszam"}
+        ccp{"csakma"}
         ce{"csecsen"}
         ceb{"szebuano"}
         cgg{"kiga"}
@@ -900,7 +901,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} – összes"}
         category-list{"{0}: {1}"}

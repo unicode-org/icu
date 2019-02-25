@@ -109,6 +109,7 @@ it{
         car{"caribico"}
         cay{"cayuga"}
         cch{"atsam"}
+        ccp{"chakma"}
         ce{"ceceno"}
         ceb{"cebuano"}
         cgg{"chiga"}
@@ -870,7 +871,6 @@ it{
             compat{"Ordinamento compatto"}
             dictionary{"Ordinamento dizionario"}
             ducet{"Ordinamento Unicode predefinito"}
-            eor{"eor"}
             gb2312han{"cinese semplificato"}
             phonebook{"ordine elenco telefonico"}
             phonetic{"Ordinamento fonetico"}
@@ -985,8 +985,6 @@ it{
         AREVELA{"armeno orientale"}
         AREVMDA{"armeno occidentale"}
         BAKU1926{"alfabeto latino altaico unificato"}
-        BAUDDHA{"BAUDDHA"}
-        BISCAYAN{"BISCAYAN"}
         BISKE{"dialetto San Giorgio/Bila"}
         BOHORIC{"alfabeto bohorič"}
         BOONT{"boontling"}
@@ -994,17 +992,10 @@ it{
         EMODENG{"primo inglese moderno"}
         FONIPA{"alfabeto fonetico internazionale IPA"}
         FONUPA{"alfabeto fonetico uralico UPA"}
-        FONXSAMP{"FONXSAMP"}
         HEPBURN{"romanizzazione Hepburn"}
-        HOGNORSK{"HOGNORSK"}
-        ITIHASA{"ITIHASA"}
-        JAUER{"JAUER"}
-        JYUTPING{"JYUTPING"}
         KKCOR{"ortografia comune"}
         KSCOR{"ortografia standard"}
-        LAUKIKA{"LAUKIKA"}
         LIPAW{"dialetto resiano di Lipovaz"}
-        LUNA1918{"LUNA1918"}
         METELKO{"alfabeto Metelko"}
         MONOTON{"monotonico"}
         NDYUKA{"dialetto Ndyuka"}
@@ -1013,32 +1004,23 @@ it{
         NULIK{"volapük moderno"}
         OSOJS{"dialetto Oseacco/Osojane"}
         PAMAKA{"dialetto Pamaka"}
-        PETR1708{"PETR1708"}
         PINYIN{"romanizzazione Pinyin"}
         POLYTON{"politonico"}
         POSIX{"computer"}
-        PUTER{"PUTER"}
         REVISED{"ortografia revisionata"}
         RIGIK{"Volapük classico"}
         ROZAJ{"resiano"}
-        RUMGR{"RUMGR"}
         SAAHO{"saho"}
         SCOTLAND{"inglese scozzese standard"}
         SCOUSE{"scouse"}
         SOLBA{"dialetto Stolvizza/Solbica"}
-        SURMIRAN{"SURMIRAN"}
-        SURSILV{"SURSILV"}
-        SUTSILV{"SUTSILV"}
         TARASK{"ortografia taraskievica"}
         UCCOR{"ortografia unificata"}
         UCRCOR{"ortografia rivista unificata"}
-        ULSTER{"ULSTER"}
-        VAIDIKA{"VAIDIKA"}
         VALENCIA{"valenziano"}
-        VALLADER{"VALLADER"}
         WADEGILE{"romanizzazione Wade-Giles"}
     }
-    Version{"2.1.44.86"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} — Tutto"}
         category-list{"{0}: {1}"}

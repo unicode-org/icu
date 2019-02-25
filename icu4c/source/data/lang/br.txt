@@ -844,7 +844,7 @@ br{
         WADEGILE{"romanekadur Wade-Giles"}
         XSISTEMO{"esperanteg sistem X"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.86"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 hy{
-    Version{"2.1.43.50"}
+    Version{"2.1.48.17"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -52,6 +52,11 @@ hy{
                 dnam{"ակրեր"}
                 one{"{0} ակր"}
                 other{"{0} ակր"}
+            }
+            dunam{
+                dnam{"դունամներ"}
+                one{"{0} դունամ"}
+                other{"{0} դունամ"}
             }
             hectare{
                 dnam{"հեկտարներ"}
@@ -118,6 +123,11 @@ hy{
                 one{"{0} միլիմոլ լիտրի վրա"}
                 other{"{0} միլիմոլ լիտրի վրա"}
             }
+            mole{
+                dnam{"մոլեր"}
+                one{"{0} մոլ"}
+                other{"{0} մոլ"}
+            }
             part-per-million{
                 dnam{"մասնիկներ միլիոնի վրա"}
                 one{"{0} մասնիկ միլիոնի վրա"}
@@ -132,6 +142,11 @@ hy{
                 dnam{"պրոմիլ"}
                 one{"{0} պրոմիլ"}
                 other{"{0} պրոմիլ"}
+            }
+            permyriad{
+                dnam{"պերմիրիադ"}
+                one{"{0} պերմիրիադ"}
+                other{"{0} պերմիրիադ"}
             }
         }
         consumption{
@@ -307,10 +322,20 @@ hy{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"բրիտանական ջերմային միավորներ"}
+                one{"{0} բրիտանական ջերմային միավոր"}
+                other{"{0} բրիտանական ջերմային միավոր"}
+            }
             calorie{
                 dnam{"կալորիաներ"}
                 one{"{0} կալորիա"}
                 other{"{0} կալորիա"}
+            }
+            electronvolt{
+                dnam{"էլեկտրոն-վոլտեր"}
+                one{"{0} էլեկտրոն-վոլտ"}
+                other{"{0} էլեկտրոն-վոլտ"}
             }
             foodcalorie{
                 dnam{"կալորիաներ"}
@@ -336,6 +361,18 @@ hy{
                 dnam{"կիլովատտեր-ժամեր"}
                 one{"{0} կիլովատտ-ժամ"}
                 other{"{0} կիլովատտ-ժամ"}
+            }
+        }
+        force{
+            newton{
+                dnam{"նյուտոններ"}
+                one{"{0} նյուտոն"}
+                other{"{0} նյուտոն"}
+            }
+            pound-force{
+                dnam{"ֆունտ-ուժեր"}
+                one{"{0} ֆունտ-ուժ"}
+                other{"{0} ֆունտ-ուժ"}
             }
         }
         frequency{
@@ -451,6 +488,11 @@ hy{
                 one{"{0} կետ"}
                 other{"{0} կետ"}
             }
+            solar-radius{
+                dnam{"արեգակնային շառավիղներ"}
+                one{"{0} արեգակնային շառավիղ"}
+                other{"{0} արեգակնային շառավիղ"}
+            }
             yard{
                 dnam{"յարդեր"}
                 one{"{0} յարդ"}
@@ -463,12 +505,27 @@ hy{
                 one{"{0} լյուքս"}
                 other{"{0} լյուքս"}
             }
+            solar-luminosity{
+                dnam{"արեգակնային լուսատվություններ"}
+                one{"{0} արեգակնային լուսատվություն"}
+                other{"{0} արեգակնային լուսատվություն"}
+            }
         }
         mass{
             carat{
                 dnam{"կարատներ"}
                 one{"{0} կարատ"}
                 other{"{0} կարատ"}
+            }
+            dalton{
+                dnam{"դալտոններ"}
+                one{"{0} դալտոն"}
+                other{"{0} դալտոն"}
+            }
+            earth-mass{
+                dnam{"երկրային զանգվածներ"}
+                one{"{0} երկրային զանգված"}
+                other{"{0} արևային զանգված"}
             }
             gram{
                 dnam{"գրամներ"}
@@ -513,6 +570,11 @@ hy{
                 one{"{0} ֆունտ"}
                 other{"{0} ֆունտ"}
                 per{"{0} ֆունտի վրա"}
+            }
+            solar-mass{
+                dnam{"արեգակնային զանգվածներ"}
+                one{"{0} արեգակնային զանգված"}
+                other{"{0} արեգակնային զանգված"}
             }
             ton{
                 dnam{"ամերիկյան տոննաներ"}
@@ -567,6 +629,16 @@ hy{
                 dnam{"սնդիկի սյան դյույմեր"}
                 one{"{0} դյույմ սնդիկի սյուն"}
                 other{"{0} դյույմ սնդիկի սյուն"}
+            }
+            kilopascal{
+                dnam{"կիլոպասկալներ"}
+                one{"{0} կիլոպասկալ"}
+                other{"{0} կիլոպասկալ"}
+            }
+            megapascal{
+                dnam{"մեգապասկալներ"}
+                one{"{0} ՄՊա"}
+                other{"{0} մեգապասկալ"}
             }
             millibar{
                 dnam{"միլիբարեր"}
@@ -628,11 +700,28 @@ hy{
                 other{"{0} կելվին"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"նյուտոն-մետրեր"}
+                one{"{0} նյուտոն-մետր"}
+                other{"{0} նյուտոն-մետր"}
+            }
+            pound-foot{
+                dnam{"ֆունտ-ֆուտեր"}
+                one{"{0} ֆունտ-ֆուտ"}
+                other{"{0} ֆունտ-ֆուտ"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"ակրոֆուտեր"}
                 one{"{0} ակրոֆուտ"}
                 other{"{0} ակրոֆուտ"}
+            }
+            barrel{
+                dnam{"բարելներ"}
+                one{"{0} բարել"}
+                other{"{0} բարել"}
             }
             centiliter{
                 dnam{"սանտիլիտրեր"}
@@ -695,6 +784,11 @@ hy{
                 dnam{"հեղուկ ունցիաներ"}
                 one{"{0} հեղուկ ունցիա"}
                 other{"{0} հեղուկ ունցիա"}
+            }
+            fluid-ounce-imperial{
+                dnam{"անգլիական հեղուկ ունցիաներ"}
+                one{"{0} անգլիական հեղուկ ունցիա"}
+                other{"{0} անգլիական հեղուկ ունցիա"}
             }
             gallon{
                 dnam{"գալոններ"}
@@ -1051,6 +1145,11 @@ hy{
                 one{"{0} ակր"}
                 other{"{0} ակր"}
             }
+            dunam{
+                dnam{"դունամ"}
+                one{"{0} դունամ"}
+                other{"{0} դունամ"}
+            }
             hectare{
                 dnam{"հա"}
                 one{"{0} հա"}
@@ -1116,6 +1215,11 @@ hy{
                 one{"{0} մմոլ/լ"}
                 other{"{0} մմոլ/լ"}
             }
+            mole{
+                dnam{"մոլ"}
+                one{"{0} մոլ"}
+                other{"{0} մոլ"}
+            }
             part-per-million{
                 dnam{"մասնիկ/միլիոն"}
                 one{"{0} մասնիկ/միլիոն"}
@@ -1130,6 +1234,11 @@ hy{
                 dnam{"պրոմիլ"}
                 one{"{0}‰"}
                 other{"{0}‰"}
+            }
+            permyriad{
+                dnam{"‱"}
+                one{"{0}‱"}
+                other{"{0}‱"}
             }
         }
         consumption{
@@ -1305,10 +1414,20 @@ hy{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"Btu"}
+                one{"{0} Btu"}
+                other{"{0} Btu"}
+            }
             calorie{
                 dnam{"կալ"}
                 one{"{0} կալ"}
                 other{"{0} կալ"}
+            }
+            electronvolt{
+                dnam{"էՎ"}
+                one{"{0} էՎ"}
+                other{"{0} էՎ"}
             }
             foodcalorie{
                 dnam{"կալ"}
@@ -1334,6 +1453,18 @@ hy{
                 dnam{"կՎտ·ժ"}
                 one{"{0} կՎտ·ժ"}
                 other{"{0} կՎտ·ժ"}
+            }
+        }
+        force{
+            newton{
+                dnam{"Ն"}
+                one{"{0} Ն"}
+                other{"{0} Ն"}
+            }
+            pound-force{
+                dnam{"ֆնտ․ ու․"}
+                one{"{0} ֆնտ․ ու․"}
+                other{"{0} ֆնտ․ ու․"}
             }
         }
         frequency{
@@ -1449,6 +1580,11 @@ hy{
                 one{"{0} կտ"}
                 other{"{0} կտ"}
             }
+            solar-radius{
+                dnam{"R☉"}
+                one{"{0} R☉"}
+                other{"{0} R☉"}
+            }
             yard{
                 dnam{"յրդ"}
                 one{"{0} յրդ"}
@@ -1461,12 +1597,27 @@ hy{
                 one{"{0} լք"}
                 other{"{0} լք"}
             }
+            solar-luminosity{
+                dnam{"L☉"}
+                one{"{0} L☉"}
+                other{"{0} L☉"}
+            }
         }
         mass{
             carat{
                 dnam{"կար"}
                 one{"{0} կար"}
                 other{"{0} կար"}
+            }
+            dalton{
+                dnam{"դա"}
+                one{"{0} դա"}
+                other{"{0} դա"}
+            }
+            earth-mass{
+                dnam{"M⊕"}
+                one{"{0} M⊕"}
+                other{"{0} M⊕"}
             }
             gram{
                 dnam{"գ"}
@@ -1511,6 +1662,11 @@ hy{
                 one{"{0} ֆունտ"}
                 other{"{0} ֆունտ"}
                 per{"{0}/ֆունտ"}
+            }
+            solar-mass{
+                dnam{"M☉"}
+                one{"{0} M☉"}
+                other{"{0} M☉"}
             }
             ton{
                 dnam{"ամեր․ տ"}
@@ -1565,6 +1721,16 @@ hy{
                 dnam{"դյույմ ս.ս."}
                 one{"{0} դյմ. ս.ս."}
                 other{"{0} դյմ. ս.ս."}
+            }
+            kilopascal{
+                dnam{"կՊա"}
+                one{"{0} կՊա"}
+                other{"{0} կՊա"}
+            }
+            megapascal{
+                dnam{"ՄՊա"}
+                one{"{0} ՄՊա"}
+                other{"{0} ՄՊա"}
             }
             millibar{
                 dnam{"մբար"}
@@ -1626,11 +1792,28 @@ hy{
                 other{"{0} Կ"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"Ն·մ"}
+                one{"{0} Ն·մ"}
+                other{"{0} Ն·մ"}
+            }
+            pound-foot{
+                dnam{"ֆնտ-ֆտ"}
+                one{"{0} ֆնտ-ֆտ"}
+                other{"{0} ֆնտ-ֆտ"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"ակր ֆտ"}
                 one{"{0} ակր ֆտ"}
                 other{"{0} ակր ֆտ"}
+            }
+            barrel{
+                dnam{"բարել"}
+                one{"{0} բարել"}
+                other{"{0} բարել"}
             }
             centiliter{
                 dnam{"սլ"}
@@ -1693,6 +1876,11 @@ hy{
                 dnam{"հղ․ ունց․"}
                 one{"{0} հղ. ունց․"}
                 other{"{0} հղ. ունց․"}
+            }
+            fluid-ounce-imperial{
+                dnam{"ա․ հ․ ու․"}
+                one{"{0} ա․ հ․ ու․"}
+                other{"{0} ա․ հ․ ու․"}
             }
             gallon{
                 dnam{"գալ"}

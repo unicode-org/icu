@@ -47,6 +47,7 @@ public class ValidIdentifiers {
         special,
         unknown,
         macroregion,
+        reserved,
     }
 
     public static class ValiditySet {

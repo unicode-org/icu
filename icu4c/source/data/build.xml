@@ -137,6 +137,7 @@
 		  <remap sourcePath="/Countries%variant" targetDir="region" />
 		  <remap sourcePath="/Countries%short" targetDir="region" />
 		  <remap sourcePath="/Currencies" targetDir="curr" />
+		  <remap sourcePath="/Currencies%formal" targetDir="curr" />
 		  <remap sourcePath="/Currencies%narrow" targetDir="curr" />
 		  <remap sourcePath="/Currencies%variant" targetDir="curr" />
 		  <remap sourcePath="/CurrencyPlurals" targetDir="curr" />

@@ -69,6 +69,7 @@ fil{
         bug{"Buginese"}
         byn{"Blin"}
         ca{"Catalan"}
+        ccp{"Chakma"}
         ce{"Chechen"}
         ceb{"Cebuano"}
         cgg{"Chiga"}
@@ -664,7 +665,7 @@ fil{
         PINYIN{"Pinyin Romanization"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.20"}
     characterLabelPattern{
         all{"{0} — lahat"}
         category-list{"{0}: {1}"}

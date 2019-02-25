@@ -58,6 +58,7 @@ chr{
         byn{"ᏟᏂ"}
         ca{"ᎨᏔᎳᏂ"}
         cay{"ᎧᏳᎦ"}
+        ccp{"ᏣᎧᎹ"}
         ce{"ᏤᏤᏂ"}
         ceb{"ᏎᏆᏃ"}
         cgg{"ᏥᎦ"}
@@ -256,6 +257,7 @@ chr{
         naq{"ᎾᎹ"}
         nb{"ᏃᎵᏪᏥᏂ ᏉᎧᎹᎵ"}
         nd{"ᏧᏴᏢ ᏂᏕᏇᎴ"}
+        nds{"ᎡᎳᏗ ᎠᏂᏓᏥ"}
         nds_NL{"ᎡᎳᏗ ᏁᏛᎳᏂ"}
         ne{"ᏁᏆᎵ"}
         new{"ᏁᏩᎵ"}
@@ -538,7 +540,7 @@ chr{
             tibt{"ᏘᏇᏔᏂ ᏗᏎᏍᏗ"}
         }
     }
-    Version{"2.1.43.2"}
+    Version{"2.1.48.17"}
     characterLabelPattern{
         all{"{0} — ᏂᎦᏓ"}
         category-list{"{0}: {1}"}

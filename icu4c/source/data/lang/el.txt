@@ -92,6 +92,7 @@ el{
         car{"Καρίμπ"}
         cay{"Καγιούγκα"}
         cch{"Ατσάμ"}
+        ccp{"Τσάκμα"}
         ce{"Τσετσενικά"}
         ceb{"Σεμπουάνο"}
         cgg{"Τσίγκα"}
@@ -882,7 +883,7 @@ el{
         VALENCIA{"Βαλενθιανά"}
         WADEGILE{"Εκλατινισμένα Γουάντ-Γκιλς"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.27"}
     characterLabelPattern{
         all{"{0} — όλα"}
         category-list{"{0}: {1}"}

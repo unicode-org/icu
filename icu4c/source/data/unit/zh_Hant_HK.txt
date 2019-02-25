@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh_Hant_HK{
-    Version{"2.1.43.65"}
+    Version{"2.1.47.86"}
     units{
         acceleration{
             meter-per-second-squared{
@@ -49,6 +49,10 @@ zh_Hant_HK{
             per{"{0}每{1}"}
         }
         concentr{
+            millimole-per-liter{
+                dnam{"每公升毫摩爾"}
+                other{"每公升 {0} 毫摩爾"}
+            }
             part-per-million{
                 other{"{0} ppm"}
             }
@@ -114,6 +118,10 @@ zh_Hant_HK{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"英制熱量單位"}
+                other{"{0} 英制熱量單位"}
+            }
             foodcalorie{
                 other{"{0} 卡路里"}
             }
@@ -163,6 +171,10 @@ zh_Hant_HK{
             }
         }
         mass{
+            dalton{
+                dnam{"道爾頓"}
+                other{"{0} 道爾頓"}
+            }
             gram{
                 per{"{0} 每克"}
             }
@@ -209,6 +221,10 @@ zh_Hant_HK{
                 dnam{"英吋汞柱"}
                 other{"{0} 英吋汞柱"}
             }
+            megapascal{
+                dnam{"兆帕斯卡"}
+                other{"{0} 兆帕斯卡"}
+            }
             pound-per-square-inch{
                 dnam{"磅/平方吋"}
                 other{"{0} 磅/平方吋"}
@@ -236,6 +252,12 @@ zh_Hant_HK{
             kelvin{
                 dnam{"開爾文"}
                 other{"{0} 開爾文"}
+            }
+        }
+        torque{
+            pound-foot{
+                dnam{"磅尺"}
+                other{"{0} 磅尺"}
             }
         }
         volume{
@@ -274,6 +296,10 @@ zh_Hant_HK{
             fluid-ounce{
                 dnam{"液安士"}
                 other{"{0} 液安士"}
+            }
+            fluid-ounce-imperial{
+                dnam{"英制液安士"}
+                other{"{0} 英制液安士"}
             }
             gallon{
                 per{"{0} 每加侖"}
@@ -324,6 +350,9 @@ zh_Hant_HK{
             }
         }
         concentr{
+            millimole-per-liter{
+                dnam{"毫摩爾/公升"}
+            }
             part-per-million{
                 other{"{0} ppm"}
             }
@@ -372,6 +401,7 @@ zh_Hant_HK{
             }
             week{
                 other{"{0}週"}
+                per{"{0} 每星期"}
             }
             year{
                 other{"{0}年"}
@@ -569,6 +599,10 @@ zh_Hant_HK{
             }
         }
         concentr{
+            millimole-per-liter{
+                dnam{"毫摩爾/公升"}
+                other{"{0} 毫摩爾/公升"}
+            }
             part-per-million{
                 other{"{0} ppm"}
             }
@@ -774,6 +808,10 @@ zh_Hant_HK{
             fluid-ounce{
                 dnam{"液安士"}
                 other{"{0} 液安士"}
+            }
+            fluid-ounce-imperial{
+                dnam{"英制液安士"}
+                other{"{0} 英制液安士"}
             }
             gallon{
                 per{"{0} 每加侖"}

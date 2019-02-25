@@ -253,7 +253,7 @@ es{
         SV{"El Salvador"}
         SX{"Sint Maarten"}
         SY{"Siria"}
-        SZ{"Suazilandia"}
+        SZ{"Esuatini"}
         TA{"Tristán de Acuña"}
         TC{"Islas Turcas y Caicos"}
         TD{"Chad"}
@@ -309,7 +309,8 @@ es{
         CZ{"República Checa"}
         FK{"Islas Malvinas (Islas Falkland)"}
         MK{"Macedonia (ERYM)"}
+        SZ{"Suazilandia"}
         TL{"Timor Oriental"}
     }
-    Version{"2.1.44.88"}
+    Version{"2.1.48.20"}
 }

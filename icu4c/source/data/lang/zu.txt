@@ -69,6 +69,7 @@ zu{
         bug{"isi-Buginese"}
         byn{"isi-Blin"}
         ca{"isi-Catalan"}
+        ccp{"i-Chakma"}
         ce{"isi-Chechen"}
         ceb{"isi-Cebuano"}
         cgg{"isi-Chiga"}
@@ -629,7 +630,7 @@ zu{
             vaii{"Izinhlazu Zezinombolo ze-Vai"}
         }
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.17"}
     characterLabelPattern{
         all{"{0} — All"}
         category-list{"{0}: {1}"}

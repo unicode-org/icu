@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ar{
-    Version{"2.1.43.50"}
+    Version{"2.1.48.22"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -84,6 +84,15 @@ ar{
                 other{"{0} فدان"}
                 two{"{0} فدان"}
                 zero{"{0} فدان"}
+            }
+            dunam{
+                dnam{"دونم"}
+                few{"{0} دونم"}
+                many{"{0} دونم"}
+                one{"{0} دونم"}
+                other{"{0} دونم"}
+                two{"{0} دونم"}
+                zero{"دونم"}
             }
             hectare{
                 dnam{"هكتار"}
@@ -194,6 +203,15 @@ ar{
                 two{"{0} ملي مول/لتر"}
                 zero{"{0} ملي مول/لتر"}
             }
+            mole{
+                dnam{"مول"}
+                few{"{0} مول"}
+                many{"{0} مول"}
+                one{"{0} مول"}
+                other{"{0} مول"}
+                two{"{0} مول"}
+                zero{"{0} مول"}
+            }
             part-per-million{
                 dnam{"جزء في المليون"}
                 few{"{0} جزء في المليون"}
@@ -214,12 +232,21 @@ ar{
             }
             permille{
                 dnam{"في الألف"}
-                few{"{0}‰"}
-                many{"{0}‰"}
+                few{"{0} في الألف"}
+                many{"{0} في الألف"}
                 one{"{0} في الألف"}
                 other{"{0} في الألف"}
-                two{"{0}‰"}
-                zero{"{0}‰"}
+                two{"{0} في الألف"}
+                zero{"{0} في الألف"}
+            }
+            permyriad{
+                dnam{"‱"}
+                few{"{0}‱"}
+                many{"{0}‱"}
+                one{"{0}‱"}
+                other{"{0}‱"}
+                two{"{0}‱"}
+                zero{"{0}‱"}
             }
         }
         consumption{
@@ -261,6 +288,7 @@ ar{
             }
         }
         coordinate{
+            dnam{"اتجاه أساسي"}
             east{"{0} شرقًا"}
             north{"{0} شمالاً"}
             south{"{0} جنوبًا"}
@@ -514,6 +542,15 @@ ar{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"وحدة حرارية بريطانية"}
+                few{"{0} وحدة حرارية بريطانية"}
+                many{"{0} وحدة حرارية بريطانية"}
+                one{"{0} وحدة حرارية بريطانية"}
+                other{"{0} وحدة حرارية بريطانية"}
+                two{"{0} وحدة حرارية بريطانية"}
+                zero{"{0} وحدة حرارية بريطانية"}
+            }
             calorie{
                 dnam{"سعرة"}
                 few{"{0} سعرة"}
@@ -522,6 +559,15 @@ ar{
                 other{"{0} سعرة"}
                 two{"{0} سعرة"}
                 zero{"{0} سعرة"}
+            }
+            electronvolt{
+                dnam{"إلكترون فولت"}
+                few{"{0} إلكترون فولت"}
+                many{"{0} إلكترون فولت"}
+                one{"{0} إلكترون فولت"}
+                other{"{0} إلكترون فولت"}
+                two{"{0} إلكترون فولت"}
+                zero{"{0} إلكترون فولت"}
             }
             foodcalorie{
                 dnam{"سعرة"}
@@ -567,6 +613,26 @@ ar{
                 other{"{0} كيلو واط/ساعة"}
                 two{"{0} كيلو واط/ساعة"}
                 zero{"{0} كيلو واط/ساعة"}
+            }
+        }
+        force{
+            newton{
+                dnam{"نيوتن"}
+                few{"{0} نيوتن"}
+                many{"{0} نيوتن"}
+                one{"{0} نيوتن"}
+                other{"{0} نيوتن"}
+                two{"{0} نيوتن"}
+                zero{"{0} نيوتن"}
+            }
+            pound-force{
+                dnam{"باوند قوة"}
+                few{"{0} باوند قوة"}
+                many{"{0} باوند قوة"}
+                one{"{0} باوند قوة"}
+                other{"{0} باوند قوة"}
+                two{"{0} باوند قوة"}
+                zero{"{0} باوند قوة"}
             }
         }
         frequency{
@@ -766,6 +832,15 @@ ar{
                 two{"نقطتان"}
                 zero{"{0} نقطة"}
             }
+            solar-radius{
+                dnam{"نصف قطر الشمس"}
+                few{"{0} نصف قطر الشمس"}
+                many{"{0} نصف قطر الشمس"}
+                one{"{0} نصف قطر الشمس"}
+                other{"{0} نصف قطر الشمس"}
+                two{"{0} نصف قطر الشمس"}
+                zero{"{0} نصف قطر الشمس"}
+            }
             yard{
                 dnam{"ياردة"}
                 few{"{0} ياردة"}
@@ -786,6 +861,15 @@ ar{
                 two{"{0} لكس"}
                 zero{"{0} لكس"}
             }
+            solar-luminosity{
+                dnam{"ضياء شمسي"}
+                few{"{0} ضياء شمسي"}
+                many{"{0} ضياء شمسي"}
+                one{"{0} ضياء شمسي"}
+                other{"{0} ضياء شمسي"}
+                two{"{0} ضياء شمسي"}
+                zero{"{0} L☉"}
+            }
         }
         mass{
             carat{
@@ -796,6 +880,24 @@ ar{
                 other{"{0} قيراط"}
                 two{"{0} قيراط"}
                 zero{"{0} قيراط"}
+            }
+            dalton{
+                dnam{"دالتون"}
+                few{"{0} Da"}
+                many{"{0} Da"}
+                one{"{0} دالتون"}
+                other{"{0} دالتون"}
+                two{"{0} Da"}
+                zero{"{0} Da"}
+            }
+            earth-mass{
+                dnam{"كتلة الأرض"}
+                few{"{0} كتلة الأرض"}
+                many{"{0} كتلة الأرض"}
+                one{"{0} كتلة الأرض"}
+                other{"{0} كتلة الأرض"}
+                two{"{0} كتلة الأرض"}
+                zero{"{0} كتلة الأرض"}
             }
             gram{
                 dnam{"غرام"}
@@ -872,6 +974,15 @@ ar{
                 per{"{0}/رطل"}
                 two{"{0} رطل"}
                 zero{"{0} رطل"}
+            }
+            solar-mass{
+                dnam{"كتلة شمسية"}
+                few{"{0} كتلة شمسية"}
+                many{"{0} كتلة شمسية"}
+                one{"{0} كتلة شمسية"}
+                other{"{0} كتلة شمسية"}
+                two{"{0} كتلة شمسية"}
+                zero{"{0} كتلة شمسية"}
             }
             ton{
                 dnam{"طن"}
@@ -966,6 +1077,24 @@ ar{
                 other{"{0} بوصة زئبقية"}
                 two{"{0} بوصة زئبقية"}
                 zero{"{0} بوصة زئبقية"}
+            }
+            kilopascal{
+                dnam{"كيلوباسكال"}
+                few{"{0} كيلوباسكال"}
+                many{"{0} كيلوباسكال"}
+                one{"{0} كيلوباسكال"}
+                other{"{0} كيلوباسكال"}
+                two{"{0} كيلوباسكال"}
+                zero{"{0} كيلوباسكال"}
+            }
+            megapascal{
+                dnam{"ميغاباسكال"}
+                few{"{0} ميغاباسكال"}
+                many{"{0} ميغاباسكال"}
+                one{"{0} ميغاباسكال"}
+                other{"{0} ميغاباسكال"}
+                two{"{0} ميغاباسكال"}
+                zero{"{0} ميغاباسكال"}
             }
             millibar{
                 dnam{"ملي بار"}
@@ -1071,6 +1200,26 @@ ar{
                 zero{"{0} درجة كلفن"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"نيوتن متر"}
+                few{"{0} نيوتن متر"}
+                many{"{0} نيوتن متر"}
+                one{"{0} نيوتن متر"}
+                other{"{0} نيوتن متر"}
+                two{"{0} نيوتن متر"}
+                zero{"{0} نيوتن متر"}
+            }
+            pound-foot{
+                dnam{"باوند قدم"}
+                few{"{0} باوند قدم"}
+                many{"{0} باوند قدم"}
+                one{"{0} باوند قدم"}
+                other{"{0} باوند قدم"}
+                two{"{0} باوند قدم"}
+                zero{"{0} باوند قدم"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"فدان قدم"}
@@ -1080,6 +1229,15 @@ ar{
                 other{"{0} فدان قدم"}
                 two{"{0} فدان قدم"}
                 zero{"{0} فدان قدم"}
+            }
+            barrel{
+                dnam{"برميل"}
+                few{"{0} برميل"}
+                many{"{0} برميل"}
+                one{"{0} برميل"}
+                other{"{0} برميل"}
+                two{"{0} برميل"}
+                zero{"{0} برميل"}
             }
             centiliter{
                 dnam{"سنتيلتر"}
@@ -1190,6 +1348,15 @@ ar{
                 other{"{0} أونصة سائلة"}
                 two{"أونصتان سائلتان"}
                 zero{"{0} أونصة سائلة"}
+            }
+            fluid-ounce-imperial{
+                dnam{"Imp. fl oz"}
+                few{"{0} fl oz Imp."}
+                many{"{0} fl oz Imp."}
+                one{"{0} fl oz Imp."}
+                other{"{0} fl oz Imp."}
+                two{"{0} fl oz Imp."}
+                zero{"{0} fl oz Imp."}
             }
             gallon{
                 dnam{"غالون"}
@@ -1816,6 +1983,15 @@ ar{
                 two{"{0} فدان"}
                 zero{"{0} فدان"}
             }
+            dunam{
+                dnam{"دونم"}
+                few{"{0} دونم"}
+                many{"{0} دونم"}
+                one{"{0} دونم"}
+                other{"{0} دونم"}
+                two{"{0} دونم"}
+                zero{"{0} دونم"}
+            }
             hectare{
                 dnam{"هكتار"}
                 few{"{0} هكتار"}
@@ -1925,6 +2101,15 @@ ar{
                 two{"{0} م.مول/ل"}
                 zero{"{0} م.مول/ل"}
             }
+            mole{
+                dnam{"مول"}
+                few{"{0} mol"}
+                many{"{0} mol"}
+                one{"{0} mol"}
+                other{"{0} mol"}
+                two{"{0} mol"}
+                zero{"{0} mol"}
+            }
             part-per-million{
                 dnam{"جزء/مليون"}
                 few{"{0} جزء/مليون"}
@@ -1945,12 +2130,15 @@ ar{
             }
             permille{
                 dnam{"في الألف"}
-                few{"{0}‰"}
-                many{"{0}‰"}
-                one{"{0}‰"}
-                other{"{0}‰"}
-                two{"{0}‰"}
-                zero{"{0}‰"}
+            }
+            permyriad{
+                dnam{"‱"}
+                few{"{0}‱"}
+                many{"{0}‱"}
+                one{"{0}‱"}
+                other{"{0}‱"}
+                two{"{0}‱"}
+                zero{"{0}‱"}
             }
         }
         consumption{
@@ -2246,6 +2434,15 @@ ar{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"Btu"}
+                few{"{0} Btu"}
+                many{"{0} Btu"}
+                one{"{0} Btu"}
+                other{"{0} Btu"}
+                two{"{0} Btu"}
+                zero{"{0} Btu"}
+            }
             calorie{
                 dnam{"سع"}
                 few{"{0} سع"}
@@ -2254,6 +2451,15 @@ ar{
                 other{"{0} سع"}
                 two{"{0} سع"}
                 zero{"{0} سع"}
+            }
+            electronvolt{
+                dnam{"إلكترون فولت"}
+                few{"{0} eV"}
+                many{"{0} eV"}
+                one{"{0} eV"}
+                other{"{0} eV"}
+                two{"{0} eV"}
+                zero{"{0} eV"}
             }
             foodcalorie{
                 dnam{"سع"}
@@ -2299,6 +2505,26 @@ ar{
                 other{"{0} ك.و.س"}
                 two{"{0} ك.و.س"}
                 zero{"{0} ك.و.س"}
+            }
+        }
+        force{
+            newton{
+                dnam{"نيوتن"}
+                few{"{0} N"}
+                many{"{0} N"}
+                one{"{0} N"}
+                other{"{0} N"}
+                two{"{0} N"}
+                zero{"{0} N"}
+            }
+            pound-force{
+                dnam{"باوند قوة"}
+                few{"{0} lbf"}
+                many{"{0} lbf"}
+                one{"{0} lbf"}
+                other{"{0} lbf"}
+                two{"{0} lbf"}
+                zero{"{0} lbf"}
             }
         }
         frequency{
@@ -2498,6 +2724,15 @@ ar{
                 two{"{0} ن"}
                 zero{"{0} ن"}
             }
+            solar-radius{
+                dnam{"R☉"}
+                few{"{0} R☉"}
+                many{"{0} R☉"}
+                one{"{0} R☉"}
+                other{"{0} R☉"}
+                two{"{0} R☉"}
+                zero{"{0} R☉"}
+            }
             yard{
                 dnam{"ياردة"}
                 few{"{0} ياردة"}
@@ -2518,6 +2753,15 @@ ar{
                 two{"{0} لكس"}
                 zero{"{0} لكس"}
             }
+            solar-luminosity{
+                dnam{"ضياء شمسي"}
+                few{"{0} L☉"}
+                many{"{0} L☉"}
+                one{"{0} L☉"}
+                other{"{0} L☉"}
+                two{"{0} L☉"}
+                zero{"{0} L☉"}
+            }
         }
         mass{
             carat{
@@ -2528,6 +2772,24 @@ ar{
                 other{"{0} قيراط"}
                 two{"{0} قيراط"}
                 zero{"{0} قيراط"}
+            }
+            dalton{
+                dnam{"Da"}
+                few{"{0} Da"}
+                many{"{0} Da"}
+                one{"{0} Da"}
+                other{"{0} Da"}
+                two{"{0} Da"}
+                zero{"{0} Da"}
+            }
+            earth-mass{
+                dnam{"M⊕"}
+                few{"{0} M⊕"}
+                many{"{0} M⊕"}
+                one{"{0} M⊕"}
+                other{"{0} M⊕"}
+                two{"{0} M⊕"}
+                zero{"{0} M⊕"}
             }
             gram{
                 dnam{"غرام"}
@@ -2604,6 +2866,15 @@ ar{
                 per{"{0}/رطل"}
                 two{"{0} رطل"}
                 zero{"{0} رطل"}
+            }
+            solar-mass{
+                dnam{"M☉"}
+                few{"{0} M☉"}
+                many{"{0} M☉"}
+                one{"{0} M☉"}
+                other{"{0} M☉"}
+                two{"{0} M☉"}
+                zero{"{0} M☉"}
             }
             ton{
                 dnam{"طن"}
@@ -2698,6 +2969,24 @@ ar{
                 other{"{0} ب. زئبقية"}
                 two{"{0} ب. زئبقية"}
                 zero{"{0} ب. زئبقية"}
+            }
+            kilopascal{
+                dnam{"kPa"}
+                few{"{0} kPa"}
+                many{"{0} kPa"}
+                one{"{0} kPa"}
+                other{"{0} kPa"}
+                two{"{0} kPa"}
+                zero{"{0} kPa"}
+            }
+            megapascal{
+                dnam{"MPa"}
+                few{"{0} MPa"}
+                many{"{0} MPa"}
+                one{"{0} MPa"}
+                other{"{0} MPa"}
+                two{"{0} MPa"}
+                zero{"{0} MPa"}
             }
             millibar{
                 dnam{"م. بار"}
@@ -2803,6 +3092,26 @@ ar{
                 zero{"{0} د كلفن"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"N⋅m"}
+                few{"{0} N⋅m"}
+                many{"{0} N⋅m"}
+                one{"{0} N⋅m"}
+                other{"{0} N⋅m"}
+                two{"{0} N⋅m"}
+                zero{"{0} N⋅m"}
+            }
+            pound-foot{
+                dnam{"lbf⋅ft"}
+                few{"{0} lbf⋅ft"}
+                many{"{0} lbf⋅ft"}
+                one{"{0} lbf⋅ft"}
+                other{"{0} lbf⋅ft"}
+                two{"{0} lbf⋅ft"}
+                zero{"{0} lbf⋅ft"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"فدان قدم"}
@@ -2812,6 +3121,15 @@ ar{
                 other{"{0} فدان قدم"}
                 two{"{0} فدان قدم"}
                 zero{"{0} فدان قدم"}
+            }
+            barrel{
+                dnam{"bbl"}
+                few{"{0} bbl"}
+                many{"{0} bbl"}
+                one{"{0} bbl"}
+                other{"{0} bbl"}
+                two{"{0} bbl"}
+                zero{"{0} bbl"}
             }
             centiliter{
                 dnam{"سنتيلتر"}
@@ -2922,6 +3240,15 @@ ar{
                 other{"{0} أونصة س"}
                 two{"{0} أونصة س"}
                 zero{"{0} أونصة س"}
+            }
+            fluid-ounce-imperial{
+                dnam{"Imp. fl oz"}
+                few{"{0} fl oz Imp."}
+                many{"{0} fl oz Imp."}
+                one{"{0} fl oz Imp."}
+                other{"{0} fl oz Imp."}
+                two{"{0} fl oz Imp."}
+                zero{"{0} fl oz Imp."}
             }
             gallon{
                 dnam{"غالون"}

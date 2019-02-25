@@ -20,10 +20,6 @@
 # ICU is the version number and/or a CLDR svn tag name for the revision of CLDR
 # that was the source of the data for that release of ICU.
 #
-# Note: Some versions of the OpenJDK will not build the CLDR java utilities.
-#   If you see compilation errors complaining about type incompatibilities with
-#   functions on generic classes, try switching to the Sun JDK.
-#
 # Besides a standard JDK, the process also requires ant
 # (http://ant.apache.org/),
 # plus the xml-apis.jar from the Apache xalan package
@@ -39,12 +35,16 @@
 #
 #----
 #
+# CLDR dtd caching
+#
 # Parts of the build process (notably building the new ICU data files in step 4)
 # require http: access to files in the CLDR repository; for example, processing
 # the files in icu4c/source/data/xml/ may require access to
 # http://www.unicode.org/repos/cldr/trunk/common/dtd/ldml.dtd
 #
-# Unless you cache the dtds locally by e.g. setting -DCLDR_DTD_CACHE=/tmp,
+# Unless you cache the dtds locally by
+# 1. creating a temp directory e.g. /tmp/cldrdtd
+# 2. setting CLDR_DTD_CACHE to it e.g. -DCLDR_DTD_CACHE=/tmp/cldrdtd
 # your system will make excessive network requests, which will result in the
 # Unicode server blocking access.
 #
@@ -60,9 +60,10 @@
 #
 # ANT_OPTS:      You may want to set:
 #
-#                -Xmx3072m, to give Java more memory; otherwise it may run out
+#                -Xmx4096m, to give Java more memory; otherwise it may run out
 #                 of heap.
-#                -DCLDR_DTD_CACHE=/tmp, to reduce frequent http: access to dtds
+#                -DCLDR_DTD_CACHE=/tmp/cldrdtd (or some other temp directory
+#                 that already exists), to reduce frequent http: access to dtds
 #                 and consequent blockage by Unicode server.
 #
 # b) CLDR-related variables
@@ -102,6 +103,10 @@
 #                iterators, you need to update  <fileset id="brkitr" ...> under
 #                <target name="clean" ...> to clean the correct set of files.
 #
+#                If there are new CLDR resource bundle types, you may need to
+#                updated the <remapper> sections to put these in the correct
+#                data subfolder for ICU.
+#
 #    icu4c/source/data/xml/      - If you are adding a new locale, break
 #                iterator, collation tailoring, or rule-based number formatter,
 #                you may need to add a corresponding xml file in (respectively)
@@ -122,6 +127,8 @@
 #    common/dtd/ldml.dtd                            - update cldrVersion
 #    common/dtd/ldmlBCP47.dtd                       - update cldrVersion
 #    common/dtd/ldmlSupplemental.dtd                - update cldrVersion
+#    common/dtd/ldmlSupplemental.dtd                - updateunicodeVersion
+#    keyboards/dtd/ldmlKeyboard.dtd                 - update cldrVersion
 #    tools/java/org/unicode/cldr/util/CLDRFile.java - update GEN_VERSION
 #
 # c) After everything is committed, you will need to tag the CLDR, ICU4J, and
@@ -133,7 +140,7 @@
 # 1a. Java and ant variables, adjust for your system
 
 export JAVA_HOME=`/usr/libexec/java_home`
-export ANT_OPTS="-Xmx3072m -DCLDR_DTD_CACHE=/tmp"
+export ANT_OPTS="-Xmx4096m -DCLDR_DTD_CACHE=/tmp/cldrdtd"
 
 # 1b. CLDR variables, adjust for your setup; with cygwin it might be e.g.
 # CLDR_DIR=`cygpath -wp /build/cldr`
@@ -142,8 +149,8 @@ export CLDR_DIR=$HOME/cldr/trunk
 
 # 1c. ICU variables
 
-export ICU4C_DIR=$HOME/icu/trunk/icu4c
-export ICU4J_ROOT=$HOME/icu/trunk/icu4j
+export ICU4C_DIR=$HOME/icu/icu4c
+export ICU4J_ROOT=$HOME/icu/icu4j
 
 # 2. Build the CLDR Java tools
 # Optionally build the jar, but ant will look inside the classes directory anyway
@@ -172,10 +179,11 @@ make check 2>&1 | tee /tmp/icu4c-oldData-makeCheck.txt
 # Running "ant setup" is not required, but it will print useful errors to
 # debug issues with your path when it fails.
 #
-# If you see timeout errors when building the rbnf data, for example, then the
-# system you are building on likely does not have its IP address whitelisted with
-# Unicode for access to the CLDR repository, see note on "IP address whitelisting"
-# near the top of this file.
+# If you see timeout errors when building the rbnf data, for example, then you are
+# likely not using a CLDR dtd cache; see "CLDR dtd caching" above. If you are using
+# a dtd cache and are still having timeout problems, the IP address of your system
+# may have been blocked due to previous excessive access. In this case you may need
+# to contact a Unicode sysadmin to restore access.
 
 cd $ICU4C_DIR/source/data
 ant setup
@@ -188,14 +196,9 @@ ant all 2>&1 | tee /tmp/cldr-newData-buildLog.txt
 
 git status
 
-# 6. Fix any errors, investigate any warnings. Some warnings are expected,
-# including  warnings for missing versions in locale names which specify some
-# collationvariants, e.g.
-#   [cldr-build] WARNING (ja_JP_TRADITIONAL): No version #??
-#   [cldr-build] WARNING (zh_TW_STROKE): No version #??
-# and warnings for some empty collation bundles, e.g.
-#   [cldr-build] WARNING (en):  warning: No collations found. Bundle will ...
-#   [cldr-build] WARNING (to):  warning: No collations found. Bundle will ...
+# 6. Fix any errors, investigate any warnings. Currently for example there are
+# a few warnings of the following form in rbnf files:
+#   [cldr-build] Warning: no version match with: $Revision☹$
 #
 # Fixing may entail modifying CLDR source data or tools - for example,
 # updating the validSubLocales for collation data (file a bug if appropriate).
@@ -252,22 +255,17 @@ cd $ICU4J_ROOT
 ant check 2>&1 | tee /tmp/icu4j-newData-antCheck.txt
 
 # 14. Investigate test case failures; fix test cases and repeat from step 12,
-# or fix CLDR data and repeat from step 4, as appropriate, until; there are no
+# or fix CLDR data and repeat from step 4, as appropriate, until there are no
 # more failures in ICU4C or ICU4J (except failures that were present before you
 # began testing the new CLDR data).
 
-# 15. Check the file changes; then svn add or svn remove as necessary, and
+# 15. Check the file changes; then git add or git rm as necessary, and
 # commit the changes.
 
-cd $ICU4C_DIR/source
+cd $HOME/icu/
+cd ..
 git status
 # add or remove as necessary
-
-cd $ICU4J_ROOT
-git status
-# add or remove as necessary
-
-cd $HOME/icu/trunk/
 # commit
 
 # 16. For an official CLDR data integration into ICU, now tag the CLDR and
@@ -278,7 +276,7 @@ svn copy svn+ssh://unicode.org/repos/cldr/trunk \
 svn+ssh://unicode.org/repos/cldr/tags/release-NNN \
 --parents -m "cldrbug nnnn: tag cldr sources for NNN"
 
-svn copy svn+ssh://source.icu-project.org/repos/icu/trunk \
-svn+ssh://source.icu-project.org/repos/icu/tags/cldr-NNN \
---parents -m 'ticket:mmmm: tag the version used for integrating CLDR NNN'
+cd $HOME/icu/
+git tag ...
+
 

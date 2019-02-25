@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 sv{
-    Version{"2.1.43.94"}
+    Version{"2.1.48.90"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidjan"}
@@ -809,6 +809,9 @@ sv{
         }
         "Asia:Qatar"{
             ec{"Qatar"}
+        }
+        "Asia:Qostanay"{
+            ec{"Kostanaj"}
         }
         "Asia:Qyzylorda"{
             ec{"Qyzylorda"}
@@ -1685,9 +1688,9 @@ sv{
             ls{"Lord Howe, normaltid"}
         }
         "meta:Macau"{
-            ld{"Macausommartid"}
-            lg{"Macautid"}
-            ls{"Macaunormaltid"}
+            ld{"Macaosommartid"}
+            lg{"Macaotid"}
+            ls{"Macaonormaltid"}
         }
         "meta:Macquarie"{
             ls{"Macquarietid"}

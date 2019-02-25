@@ -1,7 +1,13 @@
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-BRK_RES_CLDR_VERSION = 34
-# A list of txt's to build
+BRK_RES_CLDR_VERSION = 35
+#
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# NOTE (January 2019): Please use ICU's new data filtering to select locale
+# files.  This makefile is no longer used to filter locale files.
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#
+# Old description: A list of txt's to build
 # Note:
 #
 #   If you are thinking of modifying this file, READ THIS.
@@ -39,9 +45,9 @@ BRK_DICT_SOURCE = burmesedict.txt cjdict.txt khmerdict.txt laodict.txt\
 
 
 # List of break iterator files (brk).
-BRK_SOURCE = char.txt line.txt line_cj.txt line_loose.txt line_loose_cj.txt\
- line_normal.txt line_normal_cj.txt sent.txt sent_el.txt title.txt\
- word.txt word_POSIX.txt
+BRK_SOURCE = char.txt line.txt line_cj.txt line_loose.txt\
+ line_loose_cj.txt line_normal.txt line_normal_cj.txt sent.txt sent_el.txt\
+ title.txt word.txt word_POSIX.txt
 
 
 # Ordinary resources

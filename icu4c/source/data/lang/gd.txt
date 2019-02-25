@@ -1032,7 +1032,7 @@ gd{
         WADEGILE{"Ròmanachadh Wade-Giles"}
         XSISTEMO{"XSISTEMO"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.86"}
     characterLabelPattern{
         all{"{0} – na h-uile"}
         category-list{"{0}: {1}"}

@@ -87,6 +87,7 @@ cy{
         cad{"Cado"}
         car{"Caribeg"}
         cch{"Atsameg"}
+        ccp{"Tsiacma"}
         ce{"Tsietsieneg"}
         ceb{"Cebuano"}
         cgg{"Tsiga"}
@@ -732,7 +733,7 @@ cy{
         VAIDIKA{"VAIDIKA"}
         VALLADER{"VALLADER"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.17"}
     characterLabelPattern{
         all{"{0} — y cwbl"}
         category-list{"{0}: {1}"}

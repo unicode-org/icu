@@ -82,6 +82,7 @@ sl{
         ca{"katalonščina"}
         cad{"kadoščina"}
         car{"karibski jezik"}
+        ccp{"chakma"}
         ce{"čečenščina"}
         ceb{"sebuanščina"}
         cgg{"čigajščina"}
@@ -879,7 +880,7 @@ sl{
         VALENCIA{"valencijski pravopis"}
         WADEGILE{"romanizacija Wade-Giles"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} – vse"}
         category-list{"{0}: {1}"}

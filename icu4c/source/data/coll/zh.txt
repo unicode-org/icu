@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh{
-    Version{"2.1.41.30"}
+    Version{"2.1.46.97"}
     collations{
         big5han{
             Sequence{

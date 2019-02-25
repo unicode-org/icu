@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 es_US{
     %%Parent{"es_419"}
-    Version{"2.1.43.65"}
+    Version{"2.1.47.86"}
     units{
         angle{
             revolution{
@@ -72,6 +72,11 @@ es_US{
                 other{"{0} pt"}
             }
         }
+        mass{
+            microgram{
+                other{"{0} microgramos"}
+            }
+        }
         power{
             gigawatt{
                 dnam{"gigavatios"}
@@ -106,7 +111,6 @@ es_US{
         temperature{
             kelvin{
                 dnam{"kelvin"}
-                one{"{0} kelvin"}
                 other{"{0} kelvin"}
             }
         }
@@ -165,7 +169,6 @@ es_US{
                 other{"{0} au"}
             }
             light-year{
-                one{"{0} a. l."}
                 other{"{0} a. l."}
             }
             point{
@@ -191,6 +194,11 @@ es_US{
                 dnam{"CV"}
                 one{"{0} CV"}
                 other{"{0} CV"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0} °C"}
             }
         }
         volume{

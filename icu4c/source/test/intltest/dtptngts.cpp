@@ -174,7 +174,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("13 ene."),                             // 05: MMMd  -> "d 'de' MMM"
         UnicodeString("13 de enero"),                         // 06: MMMMd -> "d 'de' MMMM"
         UnicodeString("T1 1999"),                             // 07: yQQQ  -> "QQQ y"
-        UnicodeString("11:58 p. m."),                         // 08: hhmm  -> "hh:mm a"
+        CharsToUnicodeString("11:58 p.\\u00A0m."),            // 08: hhmm  -> "hh:mm a"
         UnicodeString("23:58"),                               // 09: HHmm  -> "HH:mm"
         UnicodeString("23:58"),                               // 10: jjmm  -> "HH:mm"
         UnicodeString("58:59"),                               // 11: mmss  -> "mm:ss"
@@ -1114,7 +1114,7 @@ void IntlTestDateTimePatternGeneratorAPI::testC() {
             {"en",     "CCCCCCm", "hh:mm aaaaa"},
             {"en-BN",  "Cm",      "h:mm b"},
             {"gu-IN",  "Cm",      "h:mm B"},
-            {"und-IN", "Cm",      "h:mm a"}
+            {"und-IN", "Cm",      "h:mm B"}
     };
 
     UErrorCode status = U_ZERO_ERROR;
@@ -1295,10 +1295,9 @@ void IntlTestDateTimePatternGeneratorAPI::testJjMapping() {
     const Locale* localePtr = DateFormat::getAvailableLocales(locCount);
     for (; locCount-- > 0; localePtr++) {
         const char* localeID = localePtr->getName();
-        if ( logKnownIssue("cldrbug:11853", "locales with known timeData vs short time format mismatch") && ( uprv_strcmp(localeID,"af_NA")==0
-                || uprv_strcmp(localeID,"ar_001")==0 || uprv_strcmp(localeID,"ar_SA")==0 || uprv_strcmp(localeID,"ckb_IR")==0
-                || uprv_strcmp(localeID,"en_001")==0 || uprv_strcmp(localeID,"en_BI")==0 || uprv_strcmp(localeID,"en_NG")==0
-                || uprv_strcmp(localeID,"fr_CA")==0 || uprv_strcmp(localeID,"ha_GH")==0 || uprv_strncmp(localeID,"lkt",3)==0 ) ) {
+        if ( logKnownIssue("cldrbug:11894", "locales with known timeData vs short time format mismatch") && ( uprv_strcmp(localeID,"ps_PK")==0
+                || uprv_strcmp(localeID,"ff_Latn_GH")==0 || uprv_strcmp(localeID,"ff_Latn_GM")==0 || uprv_strcmp(localeID,"ff_Latn_LR")==0
+                || uprv_strcmp(localeID,"ff_Latn_SL")==0 ) ) {
             continue;
         }
         status = U_ZERO_ERROR;

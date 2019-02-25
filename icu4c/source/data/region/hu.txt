@@ -183,7 +183,7 @@ hu{
         MF{"Saint Martin"}
         MG{"Madagaszkár"}
         MH{"Marshall-szigetek"}
-        MK{"Macedónia"}
+        MK{"Észak-Macedónia"}
         ML{"Mali"}
         MM{"Mianmar (Burma)"}
         MN{"Mongólia"}
@@ -287,6 +287,8 @@ hu{
         VU{"Vanuatu"}
         WF{"Wallis és Futuna"}
         WS{"Szamoa"}
+        XA{"Pszeudo-nyelvjárások"}
+        XB{"Pszeudo-kétirányú"}
         XK{"Koszovó"}
         YE{"Jemen"}
         YT{"Mayotte"}
@@ -306,10 +308,10 @@ hu{
     Countries%variant{
         CD{"Kongó (KDK)"}
         CG{"Kongó (Köztársaság)"}
+        CI{"CI"}
         CZ{"Cseh Köztársaság"}
         FK{"Falkland-szigetek (Malvin-szigetek)"}
-        MK{"Macedónia (MVJK)"}
         TL{"Timor-Leste"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.42"}
 }

@@ -1029,7 +1029,7 @@ ast{
         VALLADER{"VALLADER"}
         WADEGILE{"romanización de Wade-Giles"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.47.82"}
     characterLabelPattern{
         all{"{0} — too"}
         category-list{"{0}: {1}"}

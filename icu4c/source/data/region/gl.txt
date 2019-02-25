@@ -310,7 +310,8 @@ gl{
         CZ{"República Checa"}
         FK{"Illas Malvinas (Falkland)"}
         MK{"Macedonia (ARIM)"}
+        SZ{"Suacilandia"}
         TL{"TL"}
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.48.17"}
 }

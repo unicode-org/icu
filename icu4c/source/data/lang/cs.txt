@@ -109,6 +109,7 @@ cs{
         car{"karibština"}
         cay{"kajugština"}
         cch{"atsam"}
+        ccp{"čakma"}
         ce{"čečenština"}
         ceb{"cebuánština"}
         cgg{"kiga"}
@@ -961,7 +962,7 @@ cs{
         SCOTLAND{"angličtina (Skotsko)"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.44"}
     characterLabelPattern{
         all{"{0} – vše"}
         category-list{"{0}: {1}"}

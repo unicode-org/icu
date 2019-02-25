@@ -117,7 +117,7 @@ es_MX{
             tibt{"Dígitos en tibetano"}
         }
     }
-    Version{"2.1.44.5"}
+    Version{"2.1.47.96"}
     characterLabelPattern{
         historic{"{0} — Históricos"}
         miscellaneous{"{0} — Varios"}

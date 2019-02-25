@@ -310,5 +310,5 @@ mt{
         MK{"l-Eks Repubblika Jugoslava tal-Maċedonia"}
         TL{"Timor tal-Lvant"}
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.47.72"}
 }

@@ -23,6 +23,7 @@ es_419{
         GG{"Guernesey"}
         IC{"Islas Canarias"}
         QO{"Islas Ultramarinas"}
+        SZ{"Suazilandia"}
         TA{"Tristán da Cunha"}
         TL{"Timor Oriental"}
         UM{"Islas Ultramarinas de EE.UU."}
@@ -34,5 +35,5 @@ es_419{
     Countries%variant{
         CD{"Congo (República Democrática del Congo)"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.47.86"}
 }

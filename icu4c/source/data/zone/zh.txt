@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh{
-    Version{"2.1.44.76"}
+    Version{"2.1.48.42"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比让"}
@@ -810,6 +810,9 @@ zh{
         "Asia:Qatar"{
             ec{"卡塔尔"}
         }
+        "Asia:Qostanay"{
+            ec{"库斯塔奈"}
+        }
         "Asia:Qyzylorda"{
             ec{"克孜洛尔达"}
         }
@@ -953,6 +956,7 @@ zh{
         }
         "Etc:UTC"{
             ls{"协调世界时"}
+            ss{"UTC"}
         }
         "Etc:Unknown"{
             ec{"未知城市"}

@@ -310,7 +310,8 @@ bs{
         CZ{"Češka Republika"}
         FK{"Folklandska (Malvinska) ostrva"}
         MK{"Makedonija (BJR)"}
+        SZ{"Svazi"}
         TL{"TL"}
     }
-    Version{"2.1.44.88"}
+    Version{"2.1.48.17"}
 }

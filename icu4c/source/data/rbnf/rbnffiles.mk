@@ -1,7 +1,13 @@
 # © 2016 and later: Unicode, Inc. and others.
 # License & terms of use: http://www.unicode.org/copyright.html#License
-RBNF_CLDR_VERSION = 34
-# A list of txt's to build
+RBNF_CLDR_VERSION = 35
+#
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# NOTE (January 2019): Please use ICU's new data filtering to select locale
+# files.  This makefile is no longer used to filter locale files.
+# !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#
+# Old description: A list of txt's to build
 # Note:
 #
 #   If you are thinking of modifying this file, READ THIS.

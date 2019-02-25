@@ -99,5 +99,5 @@ fa_AF{
     Countries%variant{
         CZ{"جمهوری چک"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.47.86"}
 }

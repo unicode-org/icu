@@ -109,6 +109,7 @@ pl{
         car{"karaibski"}
         cay{"kajuga"}
         cch{"atsam"}
+        ccp{"czakma"}
         ce{"czeczeński"}
         ceb{"cebuano"}
         cgg{"chiga"}
@@ -966,7 +967,7 @@ pl{
         VALENCIA{"walencki"}
         WADEGILE{"latynizacja Wade’a i Gilesa"}
     }
-    Version{"2.1.43.50"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} — wszystko"}
         category-list{"{0}: {1}"}
@@ -988,10 +989,5 @@ pl{
         language{"Język: {0}"}
         script{"Pismo: {0}"}
         territory{"Region: {0}"}
-    }
-    localeDisplayPattern{
-        keyTypePattern{"{0}: {1}"}
-        pattern{"{0} ({1})"}
-        separator{"{0}, {1}"}
     }
 }

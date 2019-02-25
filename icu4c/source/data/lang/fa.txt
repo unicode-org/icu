@@ -92,6 +92,7 @@ fa{
         ca{"کاتالان"}
         cad{"کادویی"}
         car{"کاریبی"}
+        ccp{"چاکما"}
         ce{"چچنی"}
         ceb{"سبویی"}
         cgg{"چیگا"}
@@ -855,7 +856,7 @@ fa{
         SAAHO{"ساهویی"}
         SCOTLAND{"انگلیسی معیار اسکاتلند"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} — همه"}
         category-list{"{0}: {1}"}

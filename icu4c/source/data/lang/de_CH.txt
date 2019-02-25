@@ -35,5 +35,5 @@ de_CH{
             ussystem{"US Mass-System"}
         }
     }
-    Version{"2.1.44.50"}
+    Version{"2.1.47.86"}
 }

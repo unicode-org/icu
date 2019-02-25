@@ -648,7 +648,7 @@ sw{
             vaii{"Dijiti za Vai"}
         }
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.17"}
     characterLabelPattern{
         all{"{0} — zote"}
         category-list{"{0}: {1}"}

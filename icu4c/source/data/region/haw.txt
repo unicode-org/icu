@@ -23,5 +23,5 @@ haw{
         RU{"Lūkia"}
         US{"ʻAmelika Hui Pū ʻIa"}
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.48.4"}
 }

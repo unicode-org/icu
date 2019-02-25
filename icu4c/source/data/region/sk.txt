@@ -183,7 +183,7 @@ sk{
         MF{"Svätý Martin (fr.)"}
         MG{"Madagaskar"}
         MH{"Marshallove ostrovy"}
-        MK{"Macedónsko"}
+        MK{"Severné Macedónsko"}
         ML{"Mali"}
         MM{"Mjanmarsko"}
         MN{"Mongolsko"}
@@ -306,7 +306,6 @@ sk{
     Countries%variant{
         CZ{"Česká republika"}
         FK{"Falklandy (Malvíny)"}
-        MK{"Macedónsko (BJRM)"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.42"}
 }

@@ -183,7 +183,7 @@ pl{
         MF{"Saint-Martin"}
         MG{"Madagaskar"}
         MH{"Wyspy Marshalla"}
-        MK{"Macedonia"}
+        MK{"Macedonia Północna"}
         ML{"Mali"}
         MM{"Mjanma (Birma)"}
         MN{"Mongolia"}
@@ -253,7 +253,7 @@ pl{
         SV{"Salwador"}
         SX{"Sint Maarten"}
         SY{"Syria"}
-        SZ{"Suazi"}
+        SZ{"Eswatini"}
         TA{"Tristan da Cunha"}
         TC{"Turks i Caicos"}
         TD{"Czad"}
@@ -287,6 +287,8 @@ pl{
         VU{"Vanuatu"}
         WF{"Wallis i Futuna"}
         WS{"Samoa"}
+        XA{"Pseudoakcenty"}
+        XB{"Pseudodwukierunkowe"}
         XK{"Kosowo"}
         YE{"Jemen"}
         YT{"Majotta"}
@@ -309,8 +311,8 @@ pl{
         CI{"Wybrzeże Kości Słoniowej"}
         CZ{"Republika Czeska"}
         FK{"Falklandy (Malwiny)"}
-        MK{"Była Jugosłowiańska Republika Macedonii"}
+        SZ{"Suazi"}
         TL{"Timor-Leste"}
     }
-    Version{"2.1.43.50"}
+    Version{"2.1.48.42"}
 }

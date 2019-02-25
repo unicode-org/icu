@@ -710,6 +710,11 @@ public final class ICUResourceBundleTest extends TestFmwk {
             localCountryExceptions.add("ti_ER");
             localCountryExceptions.add("ti_ET");
         }
+        if (logKnownIssue("cldrbug:11895",
+                "No localized region name for ceb_PH, eo_001")) {
+            localCountryExceptions.add("ceb_PH");
+            localCountryExceptions.add("eo_001");
+        }
 
         Set<String> localLangExceptions = new HashSet<String>();
         if (logKnownIssue("cldrbug:8903", "No localized language name for nmg, nds")) {

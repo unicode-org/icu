@@ -11,5 +11,5 @@ es_PY{
     Countries%short{
         GB{"RU"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.47.70"}
 }

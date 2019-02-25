@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 te{
-    Version{"2.1.43.50"}
+    Version{"2.1.48.17"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"అబిడ్జాన్"}
@@ -809,6 +809,9 @@ te{
         }
         "Asia:Qatar"{
             ec{"ఖతార్"}
+        }
+        "Asia:Qostanay"{
+            ec{"కోస్తానే"}
         }
         "Asia:Qyzylorda"{
             ec{"క్విజిలోర్డా"}

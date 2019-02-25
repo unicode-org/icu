@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 uz{
-    Version{"2.1.44.88"}
+    Version{"2.1.48.17"}
     durationUnits{
         hm{"h:mm"}
         hms{"h:mm:ss"}
@@ -52,6 +52,11 @@ uz{
                 dnam{"akr"}
                 one{"{0} akr"}
                 other{"{0} akr"}
+            }
+            dunam{
+                dnam{"dunam"}
+                one{"{0} dunam"}
+                other{"{0} dunam"}
             }
             hectare{
                 dnam{"gektar"}
@@ -118,6 +123,11 @@ uz{
                 one{"{0} millimol/litr"}
                 other{"{0} millimol/litr"}
             }
+            mole{
+                dnam{"mol"}
+                one{"{0} mol"}
+                other{"{0} mol"}
+            }
             part-per-million{
                 dnam{"millionning ulushi"}
                 one{"milliondan {0}"}
@@ -132,6 +142,11 @@ uz{
                 dnam{"promille"}
                 one{"{0} promille"}
                 other{"{0} promille"}
+            }
+            permyriad{
+                dnam{"promiriada"}
+                one{"{0} promiriada"}
+                other{"{0} promiriada"}
             }
         }
         consumption{
@@ -307,10 +322,20 @@ uz{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"Britaniya issiqlik birligi"}
+                one{"{0} Britaniya issiqlik birligi"}
+                other{"{0} Britaniya issiqlik birligi"}
+            }
             calorie{
                 dnam{"kaloriya"}
                 one{"kaloriya"}
                 other{"{0} kaloriya"}
+            }
+            electronvolt{
+                dnam{"elektronvolt"}
+                one{"{0} elektronvolt"}
+                other{"{0} elektronvolt"}
             }
             foodcalorie{
                 dnam{"kaloriya"}
@@ -336,6 +361,18 @@ uz{
                 dnam{"kilovatt-soat"}
                 one{"{0} kilovatt-soat"}
                 other{"{0} kilovatt-soat"}
+            }
+        }
+        force{
+            newton{
+                dnam{"nyuton"}
+                one{"{0} nyuton"}
+                other{"{0} nyuton"}
+            }
+            pound-force{
+                dnam{"funt-kuch"}
+                one{"{0} funt-kuch"}
+                other{"{0} funt-kuch"}
             }
         }
         frequency{
@@ -451,6 +488,11 @@ uz{
                 one{"{0} nuqta"}
                 other{"{0} nuqta"}
             }
+            solar-radius{
+                dnam{"quyosh radiusi"}
+                one{"{0} quyosh radiusi"}
+                other{"{0} quyosh radiusi"}
+            }
             yard{
                 dnam{"yard"}
                 one{"{0} yard"}
@@ -463,12 +505,27 @@ uz{
                 one{"{0} lyuks"}
                 other{"{0} lyuks"}
             }
+            solar-luminosity{
+                dnam{"quyosh nuri kuchi"}
+                one{"{0} quyosh nuri kuchi"}
+                other{"{0} quyosh nuri kuchi"}
+            }
         }
         mass{
             carat{
                 dnam{"karat"}
                 one{"{0} karat"}
                 other{"{0} karat"}
+            }
+            dalton{
+                dnam{"dalton"}
+                one{"{0} dalton"}
+                other{"{0} dalton"}
+            }
+            earth-mass{
+                dnam{"Yer massasi"}
+                one{"{0} Yer massasi"}
+                other{"{0} Yer massasi"}
             }
             gram{
                 dnam{"gramm"}
@@ -513,6 +570,11 @@ uz{
                 one{"{0} funt"}
                 other{"{0} funt"}
                 per{"{0}/funt"}
+            }
+            solar-mass{
+                dnam{"quyosh massasi"}
+                one{"{0} quyosh massasi"}
+                other{"{0} quyosh massasi"}
             }
             ton{
                 dnam{"amerika tonnasi"}
@@ -567,6 +629,16 @@ uz{
                 dnam{"duym simob ustuni"}
                 one{"{0} duym simob ustuni"}
                 other{"{0} duym simob ustuni"}
+            }
+            kilopascal{
+                dnam{"kilopaskal"}
+                one{"{0} kilopaskal"}
+                other{"{0} kilopaskal"}
+            }
+            megapascal{
+                dnam{"megapaskal"}
+                one{"{0} megapaskal"}
+                other{"{0} megapaskal"}
             }
             millibar{
                 dnam{"millibar"}
@@ -628,11 +700,28 @@ uz{
                 other{"{0} kelvin"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"nyuton-metr"}
+                one{"{0} nyuton-metr"}
+                other{"{0} nyuton-metr"}
+            }
+            pound-foot{
+                dnam{"funt-fut"}
+                one{"{0} funt-fut"}
+                other{"{0} funt-fut"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"akrofut"}
                 one{"{0} akrofut"}
                 other{"{0} akrofut"}
+            }
+            barrel{
+                dnam{"barrel"}
+                one{"{0} barrel"}
+                other{"{0} barrel"}
             }
             centiliter{
                 dnam{"santilitr"}
@@ -695,6 +784,11 @@ uz{
                 dnam{"suyuq unsiya"}
                 one{"{0} suyuq unsiya"}
                 other{"{0} suyuq unsiya"}
+            }
+            fluid-ounce-imperial{
+                dnam{"ingliz suyuq unsiyasi"}
+                one{"{0} ingliz suyuq unsiyasi"}
+                other{"{0} ingliz suyuq unsiyasi"}
             }
             gallon{
                 dnam{"gallon"}
@@ -1051,6 +1145,11 @@ uz{
                 one{"{0} akr"}
                 other{"{0} akr"}
             }
+            dunam{
+                dnam{"dunam"}
+                one{"{0} dunam"}
+                other{"{0} dunam"}
+            }
             hectare{
                 dnam{"gektar"}
                 one{"{0} ga"}
@@ -1116,6 +1215,11 @@ uz{
                 one{"{0} mmol/L"}
                 other{"{0} mmol/L"}
             }
+            mole{
+                dnam{"mol"}
+                one{"{0} mol"}
+                other{"{0} mol"}
+            }
             part-per-million{
                 dnam{"ppm"}
                 one{"{0} ppm"}
@@ -1130,6 +1234,11 @@ uz{
                 dnam{"promille"}
                 one{"{0}‰"}
                 other{"{0}‰"}
+            }
+            permyriad{
+                dnam{"promiriada"}
+                one{"{0}‱"}
+                other{"{0}‱"}
             }
         }
         consumption{
@@ -1188,9 +1297,9 @@ uz{
                 other{"{0} kbit"}
             }
             kilobyte{
-                dnam{"KB"}
-                one{"{0} KB"}
-                other{"{0} KB"}
+                dnam{"kB"}
+                one{"{0} kB"}
+                other{"{0} kB"}
             }
             megabit{
                 dnam{"Mbit"}
@@ -1305,10 +1414,20 @@ uz{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"BTU"}
+                one{"{0} BTU"}
+                other{"{0} BTU"}
+            }
             calorie{
                 dnam{"kal"}
                 one{"{0} kal"}
                 other{"{0} kal"}
+            }
+            electronvolt{
+                dnam{"elektronvolt"}
+                one{"{0} eV"}
+                other{"{0} eV"}
             }
             foodcalorie{
                 dnam{"kal"}
@@ -1334,6 +1453,18 @@ uz{
                 dnam{"kVt-soat"}
                 one{"{0} kVt-soat"}
                 other{"{0} kVt-soat"}
+            }
+        }
+        force{
+            newton{
+                dnam{"nyuton"}
+                one{"{0} N"}
+                other{"{0} N"}
+            }
+            pound-force{
+                dnam{"funt-kuch"}
+                one{"{0} funt-kuch"}
+                other{"{0} funt-kuch"}
             }
         }
         frequency{
@@ -1449,6 +1580,11 @@ uz{
                 one{"{0} nuqta"}
                 other{"{0} nuqta"}
             }
+            solar-radius{
+                dnam{"quyosh radiusi"}
+                one{"{0} R☉"}
+                other{"{0} R☉"}
+            }
             yard{
                 dnam{"yard"}
                 one{"{0} yard"}
@@ -1461,12 +1597,27 @@ uz{
                 one{"{0} lk"}
                 other{"{0} lk"}
             }
+            solar-luminosity{
+                dnam{"quyosh nuri kuchi"}
+                one{"{0} L☉"}
+                other{"{0} L☉"}
+            }
         }
         mass{
             carat{
                 dnam{"karat"}
                 one{"{0} kar"}
                 other{"{0} kar"}
+            }
+            dalton{
+                dnam{"dalton"}
+                one{"{0} Da"}
+                other{"{0} Da"}
+            }
+            earth-mass{
+                dnam{"Yer massasi"}
+                one{"{0} M⊕"}
+                other{"{0} M⊕"}
             }
             gram{
                 dnam{"gramm"}
@@ -1511,6 +1662,11 @@ uz{
                 one{"{0} funt"}
                 other{"{0} funt"}
                 per{"{0}/funt"}
+            }
+            solar-mass{
+                dnam{"quyosh massasi"}
+                one{"{0} M☉"}
+                other{"{0} M☉"}
             }
             ton{
                 dnam{"amer. t"}
@@ -1565,6 +1721,16 @@ uz{
                 dnam{"dy sim.ust"}
                 one{"{0} dy sim.ust"}
                 other{"{0} dy sim.ust"}
+            }
+            kilopascal{
+                dnam{"kPa"}
+                one{"{0} kPa"}
+                other{"{0} kPa"}
+            }
+            megapascal{
+                dnam{"MPa"}
+                one{"{0} MPa"}
+                other{"{0} MPa"}
             }
             millibar{
                 dnam{"mbar"}
@@ -1626,11 +1792,28 @@ uz{
                 other{"{0} K"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"N⋅m"}
+                one{"{0} N⋅m"}
+                other{"{0} N⋅m"}
+            }
+            pound-foot{
+                dnam{"funt-fut"}
+                one{"{0} funt-fut"}
+                other{"{0} funt-fut"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"akrofut"}
                 one{"{0} akrofut"}
                 other{"{0} akrofut"}
+            }
+            barrel{
+                dnam{"barrel"}
+                one{"{0} barrel"}
+                other{"{0} barrel"}
             }
             centiliter{
                 dnam{"sL"}
@@ -1693,6 +1876,11 @@ uz{
                 dnam{"suyuq unsiya"}
                 one{"{0} suyuq unsiya"}
                 other{"{0} suyuq unsiya"}
+            }
+            fluid-ounce-imperial{
+                dnam{"ingliz suyuq unsiyasi"}
+                one{"{0} ing. suyuq uns."}
+                other{"{0} ing. suyuq uns."}
             }
             gallon{
                 dnam{"gal"}

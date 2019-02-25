@@ -93,6 +93,7 @@ hr{
         car{"karipski"}
         cay{"cayuga"}
         cch{"atsam"}
+        ccp{"chakma"}
         ce{"čečenski"}
         ceb{"cebuano"}
         cgg{"chiga"}
@@ -916,7 +917,7 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.1.43.50"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} – sve"}
         category-list{"{0}: {1}"}
@@ -937,10 +938,5 @@ hr{
         language{"Jezik: {0}"}
         script{"Pismo: {0}"}
         territory{"Regija: {0}"}
-    }
-    localeDisplayPattern{
-        keyTypePattern{"{0}: {1}"}
-        pattern{"{0} ({1})"}
-        separator{"{0}, {1}"}
     }
 }

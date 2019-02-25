@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 lt{
-    Version{"2.1.44.91"}
+    Version{"2.1.48.42"}
     durationUnits{
         hm{"hh:mm"}
         hms{"hh:mm:ss"}
@@ -68,6 +68,13 @@ lt{
                 many{"{0} akro"}
                 one{"{0} akras"}
                 other{"{0} akrų"}
+            }
+            dunam{
+                dnam{"dunamai"}
+                few{"{0} dunamai"}
+                many{"{0} dunamo"}
+                one{"{0} dunamas"}
+                other{"{0} dunamų"}
             }
             hectare{
                 dnam{"hektarai"}
@@ -156,6 +163,13 @@ lt{
                 one{"{0} milimolis litre"}
                 other{"{0} milimolių litre"}
             }
+            mole{
+                dnam{"moliai"}
+                few{"{0} moliai"}
+                many{"{0} molio"}
+                one{"{0} molis"}
+                other{"{0} molių"}
+            }
             part-per-million{
                 dnam{"milijoninės dalys"}
                 few{"{0} milijoninės dalys"}
@@ -176,6 +190,13 @@ lt{
                 many{"{0} ‰"}
                 one{"{0} promilė"}
                 other{"{0} promilė"}
+            }
+            permyriad{
+                dnam{"‱"}
+                few{"{0}‱"}
+                many{"{0}‱"}
+                one{"{0}‱"}
+                other{"{0}‱"}
             }
         }
         consumption{
@@ -411,12 +432,26 @@ lt{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"britiškieji šilumos vienetai"}
+                few{"{0} Btu"}
+                many{"{0} Btu"}
+                one{"{0} Btu"}
+                other{"{0} Btu"}
+            }
             calorie{
                 dnam{"kalorijos"}
                 few{"{0} kalorijos"}
                 many{"{0} kalorijos"}
                 one{"{0} kalorija"}
                 other{"{0} kalorijų"}
+            }
+            electronvolt{
+                dnam{"elektronvoltai"}
+                few{"{0} elektronvoltai"}
+                many{"{0} elektronvolto"}
+                one{"{0} elektronvoltas"}
+                other{"{0} elektronvoltų"}
             }
             foodcalorie{
                 dnam{"kalorijos"}
@@ -452,6 +487,22 @@ lt{
                 many{"{0} kilovatvalandės"}
                 one{"{0} kilovatvalandė"}
                 other{"{0} kilovatvalandžių"}
+            }
+        }
+        force{
+            newton{
+                dnam{"niutonai"}
+                few{"{0} niutonai"}
+                many{"{0} niutono"}
+                one{"{0} niutonas"}
+                other{"{0} niutonų"}
+            }
+            pound-force{
+                dnam{"jėgos svarai"}
+                few{"{0} jėgos svarai"}
+                many{"{0} jėgos svaro"}
+                one{"{0} jėgos svaras"}
+                other{"{0} jėgos svarų"}
             }
         }
         frequency{
@@ -623,6 +674,13 @@ lt{
                 one{"{0} punktas"}
                 other{"{0} punkto"}
             }
+            solar-radius{
+                dnam{"saulės spinduliuotė"}
+                few{"{0} R☉"}
+                many{"{0} R☉"}
+                one{"{0} R☉"}
+                other{"{0} R☉"}
+            }
             yard{
                 dnam{"jardai"}
                 few{"{0} jardai"}
@@ -639,6 +697,13 @@ lt{
                 one{"{0} liuksas"}
                 other{"{0} liuksų"}
             }
+            solar-luminosity{
+                dnam{"saulės šviesis"}
+                few{"{0} L☉"}
+                many{"{0} L☉"}
+                one{"{0} L☉"}
+                other{"{0} L☉"}
+            }
         }
         mass{
             carat{
@@ -647,6 +712,20 @@ lt{
                 many{"{0} karato"}
                 one{"{0} karatas"}
                 other{"{0} karatų"}
+            }
+            dalton{
+                dnam{"daltonai"}
+                few{"{0} daltonai"}
+                many{"{0} daltono"}
+                one{"{0} daltonas"}
+                other{"{0} daltonų"}
+            }
+            earth-mass{
+                dnam{"žemės masė"}
+                few{"{0} M⊕"}
+                many{"{0} M⊕"}
+                one{"{0} M⊕"}
+                other{"{0} M⊕"}
             }
             gram{
                 dnam{"gramai"}
@@ -707,6 +786,13 @@ lt{
                 one{"{0} svaras"}
                 other{"{0} svarų"}
                 per{"{0}/lb"}
+            }
+            solar-mass{
+                dnam{"saulės masė"}
+                few{"{0} M☉"}
+                many{"{0} M☉"}
+                one{"{0} M☉"}
+                other{"{0} M☉"}
             }
             stone{
                 dnam{"stonai"}
@@ -788,6 +874,20 @@ lt{
                 many{"{0} gyvsidabrio stulpelio colio"}
                 one{"{0} gyvsidabrio stulpelio colis"}
                 other{"{0} gyvsidabrio stulpelio colių"}
+            }
+            kilopascal{
+                dnam{"kilopaskaliai"}
+                few{"{0} kilopaskaliai"}
+                many{"{0} kilopaskalio"}
+                one{"{0} kilopaskalis"}
+                other{"{0} kilopaskalių"}
+            }
+            megapascal{
+                dnam{"megapaskaliai"}
+                few{"{0} megapaskaliai"}
+                many{"{0} megapaskalio"}
+                one{"{0} megapaskalis"}
+                other{"{0} megapaskalių"}
             }
             millibar{
                 dnam{"milibarai"}
@@ -871,6 +971,22 @@ lt{
                 other{"{0} kelvinų"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"niutonmetrai"}
+                few{"{0} niutonmetrai"}
+                many{"{0} niutonmetro"}
+                one{"{0} niutonmetras"}
+                other{"{0} niutonmetrų"}
+            }
+            pound-foot{
+                dnam{"svarų pėdos"}
+                few{"{0} lbf⋅ft"}
+                many{"{0} lbf⋅ft"}
+                one{"{0} lbf⋅ft"}
+                other{"{0} lbf⋅ft"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"pėdos akre"}
@@ -878,6 +994,13 @@ lt{
                 many{"{0} pėdos akre"}
                 one{"{0} pėda akre"}
                 other{"{0} pėdų akre"}
+            }
+            barrel{
+                dnam{"bareliai"}
+                few{"{0} bareliai"}
+                many{"{0} barelio"}
+                one{"{0} barelis"}
+                other{"{0} barelių"}
             }
             bushel{
                 dnam{"bušeliai"}
@@ -971,6 +1094,13 @@ lt{
                 many{"{0} skysčio uncijos"}
                 one{"{0} skysčio uncija"}
                 other{"{0} skysčio uncijų"}
+            }
+            fluid-ounce-imperial{
+                dnam{"imperatoriškosios skysčio uncijos"}
+                few{"{0} imp. skysčio uncijos"}
+                many{"{0} imp. skysčio uncijos"}
+                one{"{0} imp. skysčio uncija"}
+                other{"{0} imp. skysčio uncijų"}
             }
             gallon{
                 dnam{"galonai"}
@@ -1187,13 +1317,6 @@ lt{
                 other{"{0} h"}
                 per{"{0}/h"}
             }
-            microsecond{
-                dnam{"μs"}
-                few{"{0} μs"}
-                many{"{0} μs"}
-                one{"{0} μs"}
-                other{"{0} μs"}
-            }
             millisecond{
                 dnam{"milisek."}
                 few{"{0} ms"}
@@ -1219,10 +1342,6 @@ lt{
             }
             nanosecond{
                 dnam{"nanosek."}
-                few{"{0} ns"}
-                many{"{0} ns"}
-                one{"{0} ns"}
-                other{"{0} ns"}
             }
             second{
                 dnam{"sek."}
@@ -1230,7 +1349,6 @@ lt{
                 many{"{0} s"}
                 one{"{0} s"}
                 other{"{0} s"}
-                per{"{0}/s"}
             }
             week{
                 dnam{"sav."}
@@ -1279,13 +1397,6 @@ lt{
                 one{"{0} ft"}
                 other{"{0} ft"}
                 per{"{0}/ft"}
-            }
-            furlong{
-                dnam{"fur"}
-                few{"{0} fur"}
-                many{"{0} fur"}
-                one{"{0} fur"}
-                other{"{0} fur"}
             }
             inch{
                 dnam{"coliai"}
@@ -1518,13 +1629,6 @@ lt{
                 one{"{0} ft akre"}
                 other{"{0} ft akre"}
             }
-            bushel{
-                dnam{"bu"}
-                few{"{0} bu"}
-                many{"{0} bu"}
-                one{"{0} bu"}
-                other{"{0} bu"}
-            }
             cubic-kilometer{
                 few{"{0} km³"}
                 many{"{0} km³"}
@@ -1620,6 +1724,13 @@ lt{
                 one{"{0} a."}
                 other{"{0} a."}
             }
+            dunam{
+                dnam{"dunamai"}
+                few{"{0} dunamai"}
+                many{"{0} dunamo"}
+                one{"{0} dunamas"}
+                other{"{0} dunamų"}
+            }
             hectare{
                 dnam{"hektarai"}
                 few{"{0} ha"}
@@ -1707,6 +1818,13 @@ lt{
                 one{"{0} mmol/l"}
                 other{"{0} mmol/l"}
             }
+            mole{
+                dnam{"mol"}
+                few{"{0} mol"}
+                many{"{0} mol"}
+                one{"{0} mol"}
+                other{"{0} mol"}
+            }
             part-per-million{
                 dnam{"ppm"}
                 few{"{0} ppm"}
@@ -1727,6 +1845,13 @@ lt{
                 many{"{0} ‰"}
                 one{"{0} ‰"}
                 other{"{0} ‰"}
+            }
+            permyriad{
+                dnam{"‱"}
+                few{"{0}‱"}
+                many{"{0}‱"}
+                one{"{0}‱"}
+                other{"{0}‱"}
             }
         }
         consumption{
@@ -1962,12 +2087,26 @@ lt{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"Btu"}
+                few{"{0} Btu"}
+                many{"{0} Btu"}
+                one{"{0} Btu"}
+                other{"{0} Btu"}
+            }
             calorie{
                 dnam{"cal"}
                 few{"{0} cal"}
                 many{"{0} cal"}
                 one{"{0} cal"}
                 other{"{0} cal"}
+            }
+            electronvolt{
+                dnam{"eV"}
+                few{"{0} eV"}
+                many{"{0} eV"}
+                one{"{0} eV"}
+                other{"{0} eV"}
             }
             foodcalorie{
                 dnam{"cal"}
@@ -2003,6 +2142,22 @@ lt{
                 many{"{0} kWh"}
                 one{"{0} kWh"}
                 other{"{0} kWh"}
+            }
+        }
+        force{
+            newton{
+                dnam{"N"}
+                few{"{0} N"}
+                many{"{0} N"}
+                one{"{0} N"}
+                other{"{0} N"}
+            }
+            pound-force{
+                dnam{"lbf"}
+                few{"{0} lbf"}
+                many{"{0} lbf"}
+                one{"{0} lbf"}
+                other{"{0} lbf"}
             }
         }
         frequency{
@@ -2072,13 +2227,6 @@ lt{
                 one{"{0} ft"}
                 other{"{0} ft"}
                 per{"{0}/ft"}
-            }
-            furlong{
-                dnam{"fur"}
-                few{"{0} fur"}
-                many{"{0} fur"}
-                one{"{0} fur"}
-                other{"{0} fur"}
             }
             inch{
                 dnam{"coliai"}
@@ -2174,6 +2322,13 @@ lt{
                 one{"{0} pt"}
                 other{"{0} pt"}
             }
+            solar-radius{
+                dnam{"R☉"}
+                few{"{0} R☉"}
+                many{"{0} R☉"}
+                one{"{0} R☉"}
+                other{"{0} R☉"}
+            }
             yard{
                 dnam{"yd"}
                 few{"{0} yd"}
@@ -2190,6 +2345,13 @@ lt{
                 one{"{0} lx"}
                 other{"{0} lx"}
             }
+            solar-luminosity{
+                dnam{"L☉"}
+                few{"{0} L☉"}
+                many{"{0} L☉"}
+                one{"{0} L☉"}
+                other{"{0} L☉"}
+            }
         }
         mass{
             carat{
@@ -2198,6 +2360,20 @@ lt{
                 many{"{0} ct"}
                 one{"{0} ct"}
                 other{"{0} ct"}
+            }
+            dalton{
+                dnam{"Da"}
+                few{"{0} Da"}
+                many{"{0} Da"}
+                one{"{0} Da"}
+                other{"{0} Da"}
+            }
+            earth-mass{
+                dnam{"M⊕"}
+                few{"{0} M⊕"}
+                many{"{0} M⊕"}
+                one{"{0} M⊕"}
+                other{"{0} M⊕"}
             }
             gram{
                 dnam{"g"}
@@ -2258,6 +2434,13 @@ lt{
                 one{"{0} lb"}
                 other{"{0} lb"}
                 per{"{0}/lb"}
+            }
+            solar-mass{
+                dnam{"M☉"}
+                few{"{0} M☉"}
+                many{"{0} M☉"}
+                one{"{0} M☉"}
+                other{"{0} M☉"}
             }
             stone{
                 dnam{"st"}
@@ -2339,6 +2522,20 @@ lt{
                 many{"{0} inHg"}
                 one{"{0} inHg"}
                 other{"{0} inHg"}
+            }
+            kilopascal{
+                dnam{"kPa"}
+                few{"{0} kPa"}
+                many{"{0} kPa"}
+                one{"{0} kPa"}
+                other{"{0} kPa"}
+            }
+            megapascal{
+                dnam{"MPa"}
+                few{"{0} MPa"}
+                many{"{0} MPa"}
+                one{"{0} MPa"}
+                other{"{0} MPa"}
             }
             millibar{
                 dnam{"mbar"}
@@ -2422,6 +2619,22 @@ lt{
                 other{"{0} K"}
             }
         }
+        torque{
+            newton-meter{
+                dnam{"N-m"}
+                few{"{0} N-m"}
+                many{"{0} N-m"}
+                one{"{0} N-m"}
+                other{"{0} N-m"}
+            }
+            pound-foot{
+                dnam{"lbf⋅ft"}
+                few{"{0} lbf⋅ft"}
+                many{"{0} lbf⋅ft"}
+                one{"{0} lbf⋅ft"}
+                other{"{0} lbf⋅ft"}
+            }
+        }
         volume{
             acre-foot{
                 dnam{"pėda akre"}
@@ -2430,12 +2643,12 @@ lt{
                 one{"{0} ft akre"}
                 other{"{0} ft akre"}
             }
-            bushel{
-                dnam{"bu"}
-                few{"{0} bu"}
-                many{"{0} bu"}
-                one{"{0} bu"}
-                other{"{0} bu"}
+            barrel{
+                dnam{"bbl"}
+                few{"{0} bbl"}
+                many{"{0} bbl"}
+                one{"{0} bbl"}
+                other{"{0} bbl"}
             }
             centiliter{
                 dnam{"cl"}
@@ -2522,6 +2735,13 @@ lt{
                 many{"{0} skysčio oz"}
                 one{"{0} skysčio oz"}
                 other{"{0} skysčio oz"}
+            }
+            fluid-ounce-imperial{
+                dnam{"imp. skysčio uncija"}
+                few{"{0} imp. fl oz"}
+                many{"{0} imp. fl oz"}
+                one{"{0} imp. fl oz"}
+                other{"{0} imp. fl oz"}
             }
             gallon{
                 dnam{"gal"}

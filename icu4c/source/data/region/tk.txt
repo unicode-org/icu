@@ -287,6 +287,8 @@ tk{
         VU{"Wanuatu"}
         WF{"Uollis we Futuna"}
         WS{"Samoa"}
+        XA{"psewdo-şiweler"}
+        XB{"psewdo-bidi"}
         XK{"Kosowo"}
         YE{"Ýemen"}
         YT{"Maýotta"}
@@ -311,5 +313,5 @@ tk{
         MK{"Makedoniýa (ÖÝR)"}
         TL{"Gündogar Timor"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.86"}
 }

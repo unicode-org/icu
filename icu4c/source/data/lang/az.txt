@@ -74,6 +74,7 @@ az{
         cad{"keddo"}
         car{"karib"}
         cch{"atsam"}
+        ccp{"Çakma"}
         ce{"çeçen"}
         ceb{"sebuan"}
         cgg{"çiqa"}
@@ -745,7 +746,7 @@ az{
             tibt{"Tibet Rəqəmləri"}
         }
     }
-    Version{"2.1.44.53"}
+    Version{"2.1.48.17"}
     characterLabelPattern{
         all{"{0} — Bütün"}
         category-list{"{0}: {1}"}

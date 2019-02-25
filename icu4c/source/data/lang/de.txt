@@ -654,7 +654,6 @@ de{
         Cakm{"Chakma"}
         Cans{"UCAS"}
         Cari{"Karisch"}
-        Cham{"Cham"}
         Cher{"Cherokee"}
         Cirt{"Cirth"}
         Copt{"Koptisch"}
@@ -725,7 +724,6 @@ de{
         Merc{"Meroitisch kursiv"}
         Mero{"Meroitisch"}
         Mlym{"Malayalam"}
-        Modi{"Modi"}
         Mong{"Mongolisch"}
         Moon{"Moon"}
         Mroo{"Mro"}
@@ -1008,7 +1006,7 @@ de{
         VALENCIA{"Valencianisch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.42"}
     characterLabelPattern{
         all{"{0} — Alle"}
         category-list{"{0}: {1}"}

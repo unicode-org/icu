@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 ar{
-    Version{"2.1.43.50"}
+    Version{"2.1.48.22"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"أبيدجان"}
@@ -810,6 +810,9 @@ ar{
         "Asia:Qatar"{
             ec{"قطر"}
         }
+        "Asia:Qostanay"{
+            ec{"قوستاناي"}
+        }
         "Asia:Qyzylorda"{
             ec{"كيزيلوردا"}
         }
@@ -1552,6 +1555,7 @@ ar{
         }
         "meta:Gulf"{
             ls{"توقيت الخليج"}
+            ss{"GST"}
         }
         "meta:Guyana"{
             ls{"توقيت غيانا"}

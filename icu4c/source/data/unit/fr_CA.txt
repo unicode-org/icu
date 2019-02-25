@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 fr_CA{
-    Version{"2.1.43.65"}
+    Version{"2.1.47.86"}
     units{
         acceleration{
             g-force{
@@ -151,8 +151,38 @@ fr_CA{
             }
         }
         duration{
+            day{
+                one{"{0} jour"}
+                other{"{0} jours"}
+            }
+            hour{
+                one{"{0} heure"}
+                other{"{0} heures"}
+            }
+            microsecond{
+                one{"{0} microseconde"}
+                other{"{0} microsecondes"}
+            }
+            millisecond{
+                one{"{0} milliseconde"}
+                other{"{0} millisecondes"}
+            }
+            month{
+                one{"{0} mois"}
+                other{"{0} mois"}
+            }
+            nanosecond{
+                one{"{0} nanoseconde"}
+                other{"{0} nanosecondes"}
+            }
             second{
+                one{"{0} seconde"}
+                other{"{0} secondes"}
                 per{"{0} à la seconde"}
+            }
+            week{
+                one{"{0} semaine"}
+                other{"{0} semaines"}
             }
             year{
                 one{"{0} an"}
@@ -178,6 +208,11 @@ fr_CA{
             }
         }
         energy{
+            british-thermal-unit{
+                dnam{"Unités thermiques britanniques"}
+                one{"{0} unité thermique britannique"}
+                other{"{0} unités thermiques britanniques"}
+            }
             calorie{
                 one{"{0} calorie"}
                 other{"{0} calories"}
@@ -230,17 +265,28 @@ fr_CA{
                 one{"{0} centimètre"}
                 other{"{0} centimètres"}
             }
+            decimeter{
+                one{"{0} décimètre"}
+                other{"{0} décimètres"}
+            }
             foot{
                 one{"{0} pied"}
-                other{"{0} pieds"}
             }
             inch{
                 one{"{0} pouce"}
                 other{"{0} pouces"}
             }
+            kilometer{
+                one{"{0} kilomètre"}
+                other{"{0} kilomètres"}
+            }
             light-year{
                 one{"{0} année-lumière"}
                 other{"{0} années-lumière"}
+            }
+            meter{
+                one{"{0} mètre"}
+                other{"{0} mètres"}
             }
             micrometer{
                 one{"{0} micromètre"}
@@ -288,6 +334,10 @@ fr_CA{
                 one{"{0} carat"}
                 other{"{0} carats"}
             }
+            gram{
+                one{"{0} gramme"}
+                other{"{0} grammes"}
+            }
             kilogram{
                 one{"{0} kilogramme"}
                 other{"{0} kilogrammes"}
@@ -296,6 +346,22 @@ fr_CA{
             metric-ton{
                 one{"{0} tonne"}
                 other{"{0} tonnes"}
+            }
+            milligram{
+                one{"{0} milligramme"}
+                other{"{0} milligrammes"}
+            }
+            ounce{
+                one{"{0} once"}
+                other{"{0} onces"}
+            }
+            ounce-troy{
+                one{"{0} once troy"}
+                other{"{0} onces troy"}
+            }
+            pound{
+                one{"{0} livre"}
+                other{"{0} livres"}
             }
             stone{
                 other{"{0} stone"}
@@ -335,6 +401,10 @@ fr_CA{
             atmosphere{
                 one{"{0} atmosphère"}
                 other{"{0} atmosphères"}
+            }
+            hectopascal{
+                one{"{0} hectopascal"}
+                other{"{0} hectopascals"}
             }
             inch-hg{
                 one{"{0} pouce de mercure"}
@@ -377,9 +447,25 @@ fr_CA{
             }
         }
         volume{
+            cubic-centimeter{
+                one{"{0} centimètre cube"}
+                other{"{0} centimètres cubes"}
+            }
+            cubic-foot{
+                one{"{0} pied cube"}
+                other{"{0} pieds cubes"}
+            }
+            cubic-inch{
+                one{"{0} pouce cube"}
+                other{"{0} pouces cubes"}
+            }
             cubic-kilometer{
                 one{"{0} kilomètre cube"}
                 other{"{0} kilomètres cubes"}
+            }
+            cubic-meter{
+                one{"{0} mètre cube"}
+                other{"{0} mètres cubes"}
             }
             cubic-mile{
                 one{"{0} mille cube"}
@@ -396,6 +482,14 @@ fr_CA{
             hectoliter{
                 one{"{0} hectolitre"}
                 other{"{0} hectolitres"}
+            }
+            liter{
+                one{"{0} litre"}
+                other{"{0} litres"}
+            }
+            megaliter{
+                one{"{0} mégalitre"}
+                other{"{0} mégalitres"}
             }
             pint{
                 dnam{"chopine"}
@@ -711,9 +805,32 @@ fr_CA{
             }
         }
         duration{
+            century{
+                dnam{"si"}
+            }
+            day{
+                one{"{0} j"}
+                other{"{0} j"}
+            }
+            hour{
+                one{"{0} h"}
+                other{"{0} h"}
+            }
             microsecond{
                 one{"{0} μs"}
                 other{"{0} μs"}
+            }
+            millisecond{
+                one{"{0} ms"}
+                other{"{0} ms"}
+            }
+            minute{
+                one{"{0} min"}
+                other{"{0} min"}
+            }
+            month{
+                one{"{0} m."}
+                other{"{0} m."}
             }
             nanosecond{
                 one{"{0} ns"}
@@ -722,6 +839,10 @@ fr_CA{
             second{
                 one{"{0} s"}
                 other{"{0} s"}
+            }
+            week{
+                one{"{0} sem."}
+                other{"{0} sem."}
             }
             year{
                 one{"{0} an"}
@@ -747,6 +868,10 @@ fr_CA{
             }
         }
         energy{
+            british-thermal-unit{
+                one{"{0} BTU"}
+                other{"{0} BTU"}
+            }
             calorie{
                 one{"{0} cal"}
                 other{"{0} cal"}
@@ -811,9 +936,17 @@ fr_CA{
                 one{"{0} po"}
                 other{"{0} po"}
             }
+            kilometer{
+                one{"{0} km"}
+                other{"{0} km"}
+            }
             light-year{
                 one{"{0} al"}
                 other{"{0} al"}
+            }
+            meter{
+                one{"{0} m"}
+                other{"{0} m"}
             }
             micrometer{
                 one{"{0} µm"}
@@ -857,13 +990,41 @@ fr_CA{
             }
         }
         mass{
+            carat{
+                one{"{0} ct"}
+                other{"{0} ct"}
+            }
             gram{
                 one{"{0} g"}
                 other{"{0} g"}
             }
+            kilogram{
+                one{"{0} kg"}
+                other{"{0} kg"}
+            }
+            metric-ton{
+                one{"{0} t"}
+                other{"{0} t"}
+            }
+            microgram{
+                one{"{0} µg"}
+                other{"{0} µg"}
+            }
             milligram{
                 one{"{0} mg"}
                 other{"{0} mg"}
+            }
+            ounce{
+                one{"{0} oz"}
+                other{"{0} oz"}
+            }
+            ounce-troy{
+                one{"{0} oz t"}
+                other{"{0} oz t"}
+            }
+            pound{
+                one{"{0} lb"}
+                other{"{0} lb"}
             }
             ton{
                 dnam{"tc"}
@@ -898,6 +1059,10 @@ fr_CA{
             }
         }
         pressure{
+            hectopascal{
+                one{"{0} hPa"}
+                other{"{0} hPa"}
+            }
             inch-hg{
                 dnam{"po Hg"}
                 one{"{0} po Hg"}
@@ -919,6 +1084,10 @@ fr_CA{
             }
         }
         speed{
+            kilometer-per-hour{
+                one{"{0} km/h"}
+                other{"{0} km/h"}
+            }
             meter-per-second{
                 one{"{0} m/s"}
                 other{"{0} m/s"}
@@ -945,11 +1114,22 @@ fr_CA{
                 other{"{0} K"}
             }
         }
+        torque{
+            pound-foot{
+                dnam{"lb-pi"}
+                one{"{0} lb-pi"}
+                other{"{0} lb-pi"}
+            }
+        }
         volume{
             centiliter{
                 dnam{"cL"}
                 one{"{0} cL"}
                 other{"{0} cL"}
+            }
+            cubic-centimeter{
+                one{"{0} cm³"}
+                other{"{0} cm³"}
             }
             cubic-foot{
                 one{"{0} pi³"}
@@ -962,6 +1142,14 @@ fr_CA{
             cubic-kilometer{
                 one{"{0} km³"}
                 other{"{0} km³"}
+            }
+            cubic-meter{
+                one{"{0} m³"}
+                other{"{0} m³"}
+            }
+            cubic-mile{
+                one{"{0} mi³"}
+                other{"{0} mi³"}
             }
             cubic-yard{
                 dnam{"vg³"}
@@ -977,6 +1165,11 @@ fr_CA{
                 dnam{"oz liq."}
                 one{"{0} oz liq."}
                 other{"{0} oz liq."}
+            }
+            fluid-ounce-imperial{
+                dnam{"oz liq imp."}
+                one{"{0} oz liq imp."}
+                other{"{0} oz liq imp."}
             }
             gallon-imperial{
                 dnam{"gal Imp"}

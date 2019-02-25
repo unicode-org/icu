@@ -1,7 +1,7 @@
 ﻿// © 2016 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zu{
-    Version{"2.1.43.65"}
+    Version{"2.1.48.17"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"i-Abidjan"}
@@ -506,6 +506,9 @@ zu{
         }
         "America:Puerto_Rico"{
             ec{"i-Puerto Rico"}
+        }
+        "America:Punta_Arenas"{
+            ec{"i-Punta Arenas"}
         }
         "America:Rainy_River"{
             ec{"i-Rainy River"}
@@ -1081,6 +1084,9 @@ zu{
         }
         "Europe:Sarajevo"{
             ec{"i-Sarajevo"}
+        }
+        "Europe:Saratov"{
+            ec{"i-Saratov"}
         }
         "Europe:Simferopol"{
             ec{"i-Simferopol"}

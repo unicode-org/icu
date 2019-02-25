@@ -109,6 +109,7 @@ sv{
         car{"karibiska"}
         cay{"cayuga"}
         cch{"atsam"}
+        ccp{"chakma"}
         ce{"tjetjenska"}
         ceb{"cebuano"}
         cgg{"chiga"}
@@ -684,6 +685,7 @@ sv{
         Egyh{"hieratiska"}
         Egyp{"egyptiska hieroglyfer"}
         Elba{"elbasiska"}
+        Elym{"elymaiska"}
         Ethi{"etiopiska"}
         Geok{"kutsuri"}
         Geor{"georgiska"}
@@ -706,6 +708,7 @@ sv{
         Hira{"hiragana"}
         Hluw{"hittitiska hieroglyfer"}
         Hmng{"pahaw mong"}
+        Hmnp{"nyiakeng puachue hmong"}
         Hrkt{"katakana/hiragana"}
         Hung{"fornungerska"}
         Inds{"indus"}
@@ -752,6 +755,7 @@ sv{
         Mtei{"meitei-mayek"}
         Mult{"multaniska"}
         Mymr{"burmesiska"}
+        Nand{"nandinagari"}
         Narb{"fornnordarabiska"}
         Nbat{"nabateiska"}
         Newa{"newariska"}
@@ -817,6 +821,7 @@ sv{
         Vaii{"vaj"}
         Visp{"synligt tal"}
         Wara{"varang kshiti"}
+        Wcho{"wancho"}
         Wole{"woleai"}
         Xpeo{"fornpersiska"}
         Xsux{"sumero-akkadisk kilskrift"}
@@ -966,6 +971,7 @@ sv{
             hantfin{"traditionellt kinesiskt finansiellt stavade tal"}
             hebr{"hebreiska taltecken"}
             hmng{"pahawh hmong-siffror"}
+            hmnp{"nyiakeng puachue hmong-siffror"}
             java{"javanesiska siffror"}
             jpan{"japanskt stavade tal"}
             jpanfin{"japanskt finansiellt stavade tal"}
@@ -1016,6 +1022,7 @@ sv{
             traditional{"Traditionella siffror"}
             vaii{"vai-siffror"}
             wara{"varang kshiti-siffror"}
+            wcho{"wanchosiffror"}
         }
     }
     Variants{
@@ -1105,7 +1112,7 @@ sv{
         WADEGILE{"Wade-Giles"}
         XSISTEMO{"x-system"}
     }
-    Version{"2.1.43.94"}
+    Version{"2.1.48.90"}
     characterLabelPattern{
         all{"{0} – alla"}
         category-list{"{0}: {1}"}

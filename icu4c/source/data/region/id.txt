@@ -183,7 +183,7 @@ id{
         MF{"Saint Martin"}
         MG{"Madagaskar"}
         MH{"Kepulauan Marshall"}
-        MK{"Makedonia"}
+        MK{"Makedonia Utara"}
         ML{"Mali"}
         MM{"Myanmar (Burma)"}
         MN{"Mongolia"}
@@ -253,7 +253,7 @@ id{
         SV{"El Salvador"}
         SX{"Sint Maarten"}
         SY{"Suriah"}
-        SZ{"Swaziland"}
+        SZ{"eSwatini"}
         TA{"Tristan da Cunha"}
         TC{"Kepulauan Turks dan Caicos"}
         TD{"Cad"}
@@ -287,6 +287,8 @@ id{
         VU{"Vanuatu"}
         WF{"Kepulauan Wallis dan Futuna"}
         WS{"Samoa"}
+        XA{"Aksen Asing"}
+        XB{"Pseudo-Bidi"}
         XK{"Kosovo"}
         YE{"Yaman"}
         YT{"Mayotte"}
@@ -306,9 +308,11 @@ id{
     Countries%variant{
         CD{"Kongo (RDK)"}
         CG{"Kongo (Republik)"}
+        CI{"Pantai Gading (Ivory Coast)"}
         CZ{"Republik Ceko"}
         FK{"Kepulauan Malvinas (Falkland)"}
-        MK{"Makedonia (BRY)"}
+        SZ{"Swaziland"}
+        TL{"TL"}
     }
-    Version{"2.1.44.20"}
+    Version{"2.1.48.42"}
 }

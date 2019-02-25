@@ -287,6 +287,8 @@ zu{
         VU{"i-Vanuatu"}
         WF{"i-Wallis ne-Futuna"}
         WS{"i-Samoa"}
+        XA{"Pseudo-Accents"}
+        XB{"Pseudo-Bidi"}
         XK{"i-Kosovo"}
         YE{"i-Yemen"}
         YT{"i-Mayotte"}
@@ -310,7 +312,8 @@ zu{
         CZ{"i-Czech Republic"}
         FK{"i-Falkland Islands (Islas Malvinas)"}
         MK{"i-Macedonia (FYROM)"}
+        SZ{"SZ"}
         TL{"i-East Timor"}
     }
-    Version{"2.1.43.65"}
+    Version{"2.1.48.17"}
 }

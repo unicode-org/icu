@@ -2,7 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 zh_Hant{
     %%Parent{"root"}
-    Version{"2.1.44.91"}
+    Version{"2.1.48.42"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比讓"}
@@ -811,6 +811,9 @@ zh_Hant{
         "Asia:Qatar"{
             ec{"卡達"}
         }
+        "Asia:Qostanay"{
+            ec{"庫斯塔奈"}
+        }
         "Asia:Qyzylorda"{
             ec{"克孜勒奧爾達"}
         }
@@ -954,6 +957,7 @@ zh_Hant{
         }
         "Etc:UTC"{
             ls{"世界標準時間"}
+            ss{"UTC"}
         }
         "Etc:Unknown"{
             ec{"未知城市"}

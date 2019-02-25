@@ -253,7 +253,7 @@ cy{
         SV{"El Salvador"}
         SX{"Sint Maarten"}
         SY{"Syria"}
-        SZ{"Gwlad Swazi"}
+        SZ{"Eswatini"}
         TA{"Tristan da Cunha"}
         TC{"Ynysoedd Turks a Caicos"}
         TD{"Tchad"}
@@ -287,6 +287,8 @@ cy{
         VU{"Vanuatu"}
         WF{"Wallis a Futuna"}
         WS{"Samoa"}
+        XA{"Acenion Ffug"}
+        XB{"Bidi Ffug"}
         XK{"Kosovo"}
         YE{"Yemen"}
         YT{"Mayotte"}
@@ -310,7 +312,8 @@ cy{
         CZ{"Gweriniaeth Tsiec"}
         FK{"Ynysoedd y Falkland (Ynysoedd y Malfinas)"}
         MK{"Macedonia (CWIM)"}
+        SZ{"Gwlad Swazi"}
         TL{"Dwyrain Timor"}
     }
-    Version{"2.1.44.91"}
+    Version{"2.1.48.17"}
 }

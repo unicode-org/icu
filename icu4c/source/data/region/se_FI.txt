@@ -26,5 +26,5 @@ se_FI{
     Countries%variant{
         CI{"Côte d’Ivoire"}
     }
-    Version{"2.1.44.88"}
+    Version{"2.1.47.83"}
 }
