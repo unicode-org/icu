@@ -32,9 +32,9 @@
         <javac includeantruntime="false" includes="**/*.java"
             srcdir="${src.dir}"
             destdir="${build.dir}"
-            source="1.5"
+            source="1.7"
             debug="on" deprecation="off"
-            encoding="ascii"/>
+            encoding="utf8"/>
     </target>
 
     <target name="clean" depends="init" description="remove all build targets">

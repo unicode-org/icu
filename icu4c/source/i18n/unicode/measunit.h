@@ -976,7 +976,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * Caller owns returned value and must free it.
      * Also see {@link #getDayPerson()}.
      * @param status ICU error code.
-     * @draft ICU 63
+     * @draft ICU 64
      */
     static MeasureUnit *createDayPerson(UErrorCode &status);
 #endif  /* U_HIDE_DRAFT_API */
@@ -1086,7 +1086,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * Caller owns returned value and must free it.
      * Also see {@link #getMonthPerson()}.
      * @param status ICU error code.
-     * @draft ICU 63
+     * @draft ICU 64
      */
     static MeasureUnit *createMonthPerson(UErrorCode &status);
 #endif  /* U_HIDE_DRAFT_API */
@@ -1160,7 +1160,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * Caller owns returned value and must free it.
      * Also see {@link #getWeekPerson()}.
      * @param status ICU error code.
-     * @draft ICU 63
+     * @draft ICU 64
      */
     static MeasureUnit *createWeekPerson(UErrorCode &status);
 #endif  /* U_HIDE_DRAFT_API */
@@ -1198,7 +1198,7 @@ class U_I18N_API MeasureUnit: public UObject {
      * Caller owns returned value and must free it.
      * Also see {@link #getYearPerson()}.
      * @param status ICU error code.
-     * @draft ICU 63
+     * @draft ICU 64
      */
     static MeasureUnit *createYearPerson(UErrorCode &status);
 #endif  /* U_HIDE_DRAFT_API */

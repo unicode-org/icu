@@ -2408,7 +2408,7 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
 
     /**
      * Default constructor; makes an empty FormattedNumber.
-     * @draft ICU 60
+     * @draft ICU 64
      */
     FormattedNumber()
         : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {};

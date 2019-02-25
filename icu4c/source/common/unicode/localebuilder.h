@@ -67,6 +67,10 @@ public:
      */
     LocaleBuilder();
 
+    /**
+     * Destructor
+     * @draft ICU 64
+     */
     virtual ~LocaleBuilder();
 
     /**

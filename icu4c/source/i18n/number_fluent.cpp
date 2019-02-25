@@ -151,7 +151,7 @@ Derived NumberFormatterSettings<Derived>::roundingMode(UNumberFormatRoundingMode
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::grouping(UGroupingStrategy strategy) const& {
+Derived NumberFormatterSettings<Derived>::grouping(UNumberGroupingStrategy strategy) const& {
     Derived copy(*this);
     // NOTE: This is slightly different than how the setting is stored in Java
     // because we want to put it on the stack.
@@ -160,7 +160,7 @@ Derived NumberFormatterSettings<Derived>::grouping(UGroupingStrategy strategy) c
 }
 
 template<typename Derived>
-Derived NumberFormatterSettings<Derived>::grouping(UGroupingStrategy strategy)&& {
+Derived NumberFormatterSettings<Derived>::grouping(UNumberGroupingStrategy strategy)&& {
     Derived move(std::move(*this));
     move.fMacros.grouper = Grouper::forStrategy(strategy);
     return move;

@@ -103,20 +103,17 @@ typedef enum UCurrNameStyle {
      * currency, such as "US Dollar" for USD.
      * @stable ICU 2.6
      */
-    UCURR_LONG_NAME
+    UCURR_LONG_NAME,
 
-#ifndef U_HIDE_DRAFT_API
-    ,
     /**
      * Selector for getName() indicating the narrow currency symbol.
      * The narrow currency symbol is similar to the regular currency
      * symbol, but it always takes the shortest form: for example,
      * "$" instead of "US$" for USD in en-CA.
      *
-     * @draft ICU 61
+     * @stable ICU 61
      */
     UCURR_NARROW_SYMBOL_NAME
-#endif  // U_HIDE_DRAFT_API
 } UCurrNameStyle;
 
 #if !UCONFIG_NO_SERVICE

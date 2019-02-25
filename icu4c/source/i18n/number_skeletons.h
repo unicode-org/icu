@@ -175,7 +175,7 @@ Precision precision(skeleton::StemEnum stem);
 
 UNumberFormatRoundingMode roundingMode(skeleton::StemEnum stem);
 
-UGroupingStrategy groupingStrategy(skeleton::StemEnum stem);
+UNumberGroupingStrategy groupingStrategy(skeleton::StemEnum stem);
 
 UNumberUnitWidth unitWidth(skeleton::StemEnum stem);
 
@@ -193,7 +193,7 @@ namespace enum_to_stem_string {
 
 void roundingMode(UNumberFormatRoundingMode value, UnicodeString& sb);
 
-void groupingStrategy(UGroupingStrategy value, UnicodeString& sb);
+void groupingStrategy(UNumberGroupingStrategy value, UnicodeString& sb);
 
 void unitWidth(UNumberUnitWidth value, UnicodeString& sb);
 

@@ -240,6 +240,7 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
  */
 class U_I18N_API FormattedValue /* not : public UObject because this is an interface/mixin class */ {
   public:
+    /** @draft ICU 64 */
     virtual ~FormattedValue();
 
     /**
