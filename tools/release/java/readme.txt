@@ -10,9 +10,9 @@ A tool to generate a report of API status changes between two ICU4C releases.
 Requirements:
   - Everything needed to build ICU4C from a command line (UNIX) environment
   - Doxygen (for generating docs).
-     Doxygen 1.7.5.1 is recommended for ICU API docs, 
+     Doxygen 1.8.13 or newer is recommended for ICU API docs, 
      but an older Doxygen may work for the API Change Report.
-  - Java JDK 1.5+
+  - Java JDK 1.7+
   - Apache Ant
   - Note: if you have trouble with null output, put xalan.jar and xercesImpl.jar from <http://xalan.apache.org/xalan-j/downloads.html#latest-release> into ./lib/
 

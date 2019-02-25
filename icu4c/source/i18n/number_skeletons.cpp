@@ -217,7 +217,7 @@ UNumberFormatRoundingMode stem_to_object::roundingMode(skeleton::StemEnum stem) 
     }
 }
 
-UGroupingStrategy stem_to_object::groupingStrategy(skeleton::StemEnum stem) {
+UNumberGroupingStrategy stem_to_object::groupingStrategy(skeleton::StemEnum stem) {
     switch (stem) {
         case STEM_GROUP_OFF:
             return UNUM_GROUPING_OFF;
@@ -315,7 +315,7 @@ void enum_to_stem_string::roundingMode(UNumberFormatRoundingMode value, UnicodeS
     }
 }
 
-void enum_to_stem_string::groupingStrategy(UGroupingStrategy value, UnicodeString& sb) {
+void enum_to_stem_string::groupingStrategy(UNumberGroupingStrategy value, UnicodeString& sb) {
     switch (value) {
         case UNUM_GROUPING_OFF:
             sb.append(u"group-off", -1);
