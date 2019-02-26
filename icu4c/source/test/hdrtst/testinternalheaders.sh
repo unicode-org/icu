@@ -85,7 +85,7 @@ for file in `ls test/cintltst/*.h`; do
     $CC -c -std=c11 -I common -I i18n -I io -I tools/toolutil -I tools/ctestfw -I test/cintltst -O0 ht_temp.c ;
 done ;
 
-for test in intltest iotest testmap thaitest; do
+for test in intltest iotest testmap thaitest fuzzer; do
     for file in `ls test/$test/*.h`; do
         echo $file
         echo '#include "'$file'"' > ht_temp.cpp ;
@@ -105,4 +105,4 @@ done ;
 
 # TODO: perf/*/*.h
 
-rm ht_temp.cpp ht_temp.o
+rm ht_temp.cpp ht_temp.c ht_temp.o
