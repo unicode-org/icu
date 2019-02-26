@@ -25,10 +25,10 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <math.h>
+#include <cmath>
 
-#include "fixed-dtoa.h"
-#include "ieee.h"
+#include <double-conversion/fixed-dtoa.h>
+#include <double-conversion/ieee.h>
 
 namespace double_conversion {
 

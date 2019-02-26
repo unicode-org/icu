@@ -1,6 +1,23 @@
+2018-09-15:
+  Update version numbers. This also updates the shared-library version number.
+
+2018-09-09:
+  Fix bug where large hex literals would lose their minus sign.
+  Added support for separator characters (which adds a new optional
+  argument). Thus increasing the version number to 3.1.0
+  Added support for hexadecimal float literals.
+  Support for more architectures.
+
+2017-12-06:
+  Renamed `DISALLOW_COPY_AND_ASSIGN` and `DISALLOW_IMPLICIT_CONSTRUCTORS`
+  macros to `DC_DISALLOW_COPY_AND_ASSIGN` and
+  `DC_DISALLOW_IMPLICIT_CONSTRUCTORS` to make it easier to integrate the
+  library with other libraries that have similar macros.
+
 2017-08-05:
   Tagged v3.0.0.
   Due to the directory rename switching to a new version number.
+  The API for the library itself hasn't changed.
 
 2017-03-04:
   Avoid negative shift. Fixes #41.

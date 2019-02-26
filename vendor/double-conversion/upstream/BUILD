@@ -2,6 +2,8 @@
 
 licenses(["notice"])
 
+exports_files(["LICENSE"])
+
 cc_library(
     name = "double-conversion",
     srcs = [
