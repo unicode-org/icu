@@ -691,6 +691,10 @@ processFile(const char *filename, const char *cp,
             }
         }
 
+        if (isVerbose()) {
+            filter.print(std::cout);
+        }
+
         // Apply the filter to the data
         ResKeyPath path;
         data->fRoot->applyFilter(filter, path, data.getAlias());

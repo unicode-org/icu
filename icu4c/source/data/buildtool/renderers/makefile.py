@@ -212,18 +212,18 @@ def get_gnumake_rules_helper(request, common_vars, **kwargs):
         rules = []
         dep_literals = []
         # To keep from repeating the same dep files many times, make a variable.
-        if len(request.dep_files) > 0:
+        if len(request.common_dep_files) > 0:
             dep_var_name = "%s_DEPS" % request.name.upper()
             dep_literals = ["$(%s)" % dep_var_name]
             rules += [
                 MakeFilesVar(
                     name = dep_var_name,
-                    files = request.dep_files
+                    files = request.common_dep_files
                 )
             ]
         # Add a rule for each individual file.
         for loop_vars in utils.repeated_execution_request_looper(request):
-            (_, input_file, output_file) = loop_vars
+            (_, specific_dep_files, input_file, output_file) = loop_vars
             name_suffix = input_file[input_file.filename.rfind("/")+1:input_file.filename.rfind(".")]
             cmd = utils.format_repeated_request_command(
                 request,
@@ -235,7 +235,7 @@ def get_gnumake_rules_helper(request, common_vars, **kwargs):
                 MakeRule(
                     name = "%s_%s" % (request.name, name_suffix),
                     dep_literals = dep_literals,
-                    dep_files = [input_file],
+                    dep_files = specific_dep_files + [input_file],
                     output_file = output_file,
                     cmds = [cmd]
                 )

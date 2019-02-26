@@ -43,7 +43,7 @@ def repeated_execution_request_looper(request):
     if not ld:
         # No special options given in repeat_with
         ld = [{} for _ in range(len(request.input_files))]
-    return zip(ld, request.input_files, request.output_files)
+    return zip(ld, request.specific_dep_files, request.input_files, request.output_files)
 
 
 def format_single_request_command(request, cmd_template, common_vars):
@@ -57,7 +57,7 @@ def format_single_request_command(request, cmd_template, common_vars):
 
 
 def format_repeated_request_command(request, cmd_template, loop_vars, common_vars):
-    (iter_vars, input_file, output_file) = loop_vars
+    (iter_vars, _, input_file, output_file) = loop_vars
     return cmd_template.format(
         ARGS = request.args.format(
             INPUT_FILE = input_file.filename,

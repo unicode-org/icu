@@ -1755,11 +1755,14 @@ void TableResource::applyFilter(
         if (inclusion == PathFilter::EInclusion::INCLUDE) {
             // Include whole subtree
             // no-op
+            if (isVerbose()) {
+                std::cout << "genrb subtree: " << bundle->fLocale << ": INCLUDE: " << path << std::endl;
+            }
         } else if (inclusion == PathFilter::EInclusion::EXCLUDE) {
             // Reject the whole subtree
             // Remove it from the linked list
             if (isVerbose()) {
-                std::cout << "genrb removing subtree: " << bundle->fLocale << ": " << path << std::endl;
+                std::cout << "genrb subtree: " << bundle->fLocale << ": DELETE:  " << path << std::endl;
             }
             if (prev == nullptr) {
                 fFirst = curr->fNext;

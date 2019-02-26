@@ -56,11 +56,21 @@ class AbstractRequest(object):
 class AbstractExecutionRequest(AbstractRequest):
     def __init__(self, **kwargs):
 
-        # Names of targets (requests) or files that this request depends on;
-        # targets are of type DepTarget
+        # Names of targets (requests) or files that this request depends on.
+        # The entries of dep_targets may be any of the following types:
+        #
+        #   1. DepTarget, for the output of an execution request.
+        #   2. InFile, TmpFile, etc., for a specific file.
+        #   3. A list of InFile, TmpFile, etc., where the list is the same
+        #      length as self.input_files and self.output_files.
+        #
+        # In cases 1 and 2, the dependency is added to all rules that the
+        # request generates. In case 3, the dependency is added only to the
+        # rule that generates the output file at the same array index.
         self.dep_targets = []
 
-        self.dep_files = []
+        # Computed during self.flatten(); don't edit directly.
+        self.common_dep_files = []
 
         # Primary input files
         self.input_files = []
@@ -104,12 +114,24 @@ class AbstractExecutionRequest(AbstractRequest):
         if not self.dep_targets:
             return
         for dep_target in self.dep_targets:
-            if isinstance(dep_target, InFile):
-                self.dep_files.append(dep_target)
+            if isinstance(dep_target, list):
+                if hasattr(self, "specific_dep_files"):
+                    assert len(dep_target) == len(self.specific_dep_files)
+                    for file, out_list in zip(dep_target, self.specific_dep_files):
+                        assert hasattr(file, "filename")
+                        out_list.append(file)
+                else:
+                    self.common_dep_files += dep_target
                 continue
+            if not isinstance(dep_target, DepTarget):
+                # Copy file entries directly to dep_files.
+                assert hasattr(dep_target, "filename")
+                self.common_dep_files.append(dep_target)
+                continue
+            # For DepTarget entries, search for the target.
             for request in all_requests:
                 if request.name == dep_target.name:
-                    self.dep_files += request.all_output_files()
+                    self.common_dep_files += request.all_output_files()
                     break
             else:
                 print("Warning: Unable to find target %s, a dependency of %s" % (
@@ -118,7 +140,7 @@ class AbstractExecutionRequest(AbstractRequest):
                 ), file=sys.stderr)
 
     def all_input_files(self):
-        return self.dep_files + self.input_files
+        return self.common_dep_files + self.input_files
 
     def all_output_files(self):
         return self.output_files
@@ -136,6 +158,9 @@ class RepeatedExecutionRequest(AbstractExecutionRequest):
         # iteration; all values must be lists equal in length to input_files
         self.repeat_with = {}
 
+        # Lists for dep files that are specific to individual resource bundle files
+        self.specific_dep_files = [[] for _ in range(len(kwargs["input_files"]))]
+
         super(RepeatedExecutionRequest, self).__init__(**kwargs)
 
     def _del_at(self, i):
@@ -144,6 +169,12 @@ class RepeatedExecutionRequest(AbstractExecutionRequest):
         for _, v in self.repeat_with.items():
             if isinstance(v, list):
                 del v[i]
+
+    def all_input_files(self):
+        files = super(RepeatedExecutionRequest, self).all_input_files()
+        for specific_file_list in self.specific_dep_files:
+            files += specific_file_list
+        return files
 
 
 class RepeatedOrSingleExecutionRequest(AbstractExecutionRequest):

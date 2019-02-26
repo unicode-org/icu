@@ -164,6 +164,8 @@ private:
             bool inclusionRule,
             UErrorCode& status);
 
+        bool isLeaf() const;
+
         void print(std::ostream& out, int32_t indent) const;
     };
 

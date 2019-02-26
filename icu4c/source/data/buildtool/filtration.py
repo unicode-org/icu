@@ -282,8 +282,7 @@ class ResourceFilterInfo(object):
             if request.tool != IcuTool("genrb"):
                 continue
             self._set_files(request.input_files)
-            # Add dependencies directly to dep_files
-            request.dep_files += self.filter_files
+            request.dep_targets += [self.filter_files]
             arg_str = "--filterDir {TMP_DIR}/%s" % self.filter_tmp_dir
             request.args = "%s %s" % (arg_str, request.args)
 
