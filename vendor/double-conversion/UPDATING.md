@@ -3,18 +3,22 @@ License & terms of use: http://www.unicode.org/copyright.html
 
 ## Updating double-conversion from Github to Vendor
 
-Go to https://github.com/google/double-conversion/releases/latest/ to determine the latest version number; for the examples below, suppose it is `v3.0.0`.
+IMPORTANT: Please start with a clean working directory before continuing (no uncommitted changes).
+
+Go to https://github.com/google/double-conversion/releases/latest/ to determine the latest version number. You can also pull from a branch instead of a tag.
 
 Run `pull-from-upstream.sh` as below:
 
-	./pull-from-upstream.sh v3.0.0
+	./pull-from-upstream.sh <tag/branch>
+
+You will be prompted to download the tarball. If confirmed, the script will overwrite the contents of the upstream directory.
 
 ## Updating double-conversion from Vendor to ICU4C
 
-The relevant files from double-conversion are copied (svn cp) from Vendor to icu4c/source/i18n.  In order to integrate changes from a new version of double-conversion, the changes in Vendor after updating from Github should be merged into their corresponding copies in ICU4C.
+After completing the first step, the script will stop again and ask you whether to copy the diffs into icu4c. If you say yes, the *diff between the git index and the working copy* (i.e., the output of `git diff`) will be applied to the corresponding files in icu4c.
 
-Instructions on how to do this should be written by the first person who performs such an update.
+Make note of the output of the command. If there are any merge conflicts, you will need to resolve them manually.
 
-For reference, the original commit including all of the svn copies is here:
+## Next Steps
 
-http://bugs.icu-project.org/trac/changeset/40929
+Build and test icu4c, and send the PR for review.
