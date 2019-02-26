@@ -375,17 +375,19 @@ typedef enum UNumberFormatFields {
     UNUM_PERMILL_FIELD,
     /** @stable ICU 49 */
     UNUM_SIGN_FIELD,
+#ifndef U_HIDE_DRAFT_API
     /** @draft ICU 64 */
     UNUM_MEASURE_UNIT_FIELD,
     /** @draft ICU 64 */
     UNUM_COMPACT_FIELD,
+#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal UNumberFormatFields value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    UNUM_FIELD_COUNT
+    UNUM_FIELD_COUNT = UNUM_SIGN_FIELD + 3
 #endif  /* U_HIDE_DEPRECATED_API */
 } UNumberFormatFields;
 
@@ -1097,19 +1099,14 @@ typedef enum UNumberFormatAttribute {
    */
   UNUM_SIGN_ALWAYS_SHOWN = 0x1004,
 
-  /** Limit of boolean attributes.
+#endif /* U_HIDE_DRAFT_API */
+
+#ifndef U_HIDE_INTERNAL_API
+  /** Limit of boolean attributes. (value should
+   * not depend on U_HIDE conditionals)
    * @internal */
   UNUM_LIMIT_BOOLEAN_ATTRIBUTE = 0x1005,
-
-#else /* U_HIDE_DRAFT_API */
-#ifndef U_HIDE_INTERNAL_API
-
-  /** Limit of boolean attributes.
-   * @internal */
-  UNUM_LIMIT_BOOLEAN_ATTRIBUTE = 0x1003,
-
 #endif /* U_HIDE_INTERNAL_API */
-#endif /* U_HIDE_DRAFT_API */
 
 } UNumberFormatAttribute;
 

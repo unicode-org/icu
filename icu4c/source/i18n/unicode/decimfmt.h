@@ -2111,7 +2111,9 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @draft ICU 64
      */
     const number::LocalizedNumberFormatter* toNumberFormatter(UErrorCode& status) const;
+#endif  /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_DEPRECATED_API
     /**
      * Deprecated: Like {@link #toNumberFormatter(UErrorCode&) const},
      * but does not take an error code.
@@ -2125,7 +2127,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @deprecated ICU 64
      */
     const number::LocalizedNumberFormatter& toNumberFormatter() const;
-#endif  /* U_HIDE_DRAFT_API */
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Return the class ID for this class.  This is useful only for

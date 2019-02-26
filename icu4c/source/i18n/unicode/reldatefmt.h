@@ -248,7 +248,7 @@ class NumberFormat;
 class UnicodeString;
 class FormattedRelativeDateTimeData;
 
-
+#ifndef U_HIDE_DRAFT_API
 /**
  * An immutable class containing the result of a relative datetime formatting operation.
  *
@@ -311,7 +311,7 @@ class U_I18N_API FormattedRelativeDateTime : public UMemory, public FormattedVal
         : fData(nullptr), fErrorCode(errorCode) {}
     friend class RelativeDateTimeFormatter;
 };
-
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Formats simple relative dates. There are two types of relative dates that
@@ -476,6 +476,7 @@ public:
             UnicodeString& appendTo,
             UErrorCode& status) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Formats a relative date with a quantity such as "in 5 days" or
      * "3 months ago"
@@ -498,6 +499,7 @@ public:
             UDateDirection direction,
             UDateRelativeUnit unit,
             UErrorCode& status) const;
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Formats a relative date without a quantity.
@@ -521,6 +523,7 @@ public:
             UnicodeString& appendTo,
             UErrorCode& status) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Formats a relative date without a quantity.
      *
@@ -540,6 +543,7 @@ public:
             UDateDirection direction,
             UDateAbsoluteUnit unit,
             UErrorCode& status) const;
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Format a combination of URelativeDateTimeUnit and numeric offset
@@ -567,6 +571,7 @@ public:
             UnicodeString& appendTo,
             UErrorCode& status) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Format a combination of URelativeDateTimeUnit and numeric offset
      * using a numeric style, e.g. "1 week ago", "in 1 week",
@@ -589,6 +594,7 @@ public:
             double offset,
             URelativeDateTimeUnit unit,
             UErrorCode& status) const;
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Format a combination of URelativeDateTimeUnit and numeric offset
@@ -616,6 +622,7 @@ public:
             UnicodeString& appendTo,
             UErrorCode& status) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Format a combination of URelativeDateTimeUnit and numeric offset
      * using a text style if possible, e.g. "last week", "this week",
@@ -638,6 +645,7 @@ public:
             double offset,
             URelativeDateTimeUnit unit,
             UErrorCode& status) const;
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Combines a relative date string and a time string in this object's

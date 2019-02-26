@@ -9,6 +9,7 @@
 #include "unicode/utypes.h"
 
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * \file
  * \brief C++ API: Builder API for Locale
@@ -17,7 +18,6 @@
 U_NAMESPACE_BEGIN
 class CharString;
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * <code>LocaleBuilder</code> is used to build instances of <code>Locale</code>
  * from values configured by the setters.  Unlike the <code>Locale</code>
@@ -281,8 +281,8 @@ private:
     icu::Locale *extensions_;  // Pointer not object. Storage for all other fields.
 
 };
-#endif  // U_HIDE_DRAFT_API
 
 U_NAMESPACE_END
 
+#endif  // U_HIDE_DRAFT_API
 #endif  // __LOCALEBUILDER_H__

@@ -224,6 +224,8 @@ public:
     LocalPointer(LocalPointer<T> &&src) U_NOEXCEPT : LocalPointerBase<T>(src.ptr) {
         src.ptr=NULL;
     }
+
+#ifndef U_HIDE_DRAFT_API
     /**
      * Constructs a LocalPointer from a C++11 std::unique_ptr.
      * The LocalPointer steals the object owned by the std::unique_ptr.
@@ -236,6 +238,8 @@ public:
      */
     explicit LocalPointer(std::unique_ptr<T> &&p)
         : LocalPointerBase<T>(p.release()) {}
+#endif  /* U_HIDE_DRAFT_API */
+
     /**
      * Destructor deletes the object it owns.
      * @stable ICU 4.4
@@ -256,6 +260,8 @@ public:
         src.ptr=NULL;
         return *this;
     }
+
+#ifndef U_HIDE_DRAFT_API
     /**
      * Move-assign from an std::unique_ptr to this LocalPointer.
      * Steals the pointer from the std::unique_ptr.
@@ -268,6 +274,8 @@ public:
         adoptInstead(p.release());
         return *this;
     }
+#endif  /* U_HIDE_DRAFT_API */
+
     /**
      * Swap pointers.
      * @param other other smart pointer
@@ -323,6 +331,8 @@ public:
             delete p;
         }
     }
+
+#ifndef U_HIDE_DRAFT_API
     /**
      * Conversion operator to a C++11 std::unique_ptr.
      * Disowns the object and gives it to the returned std::unique_ptr.
@@ -337,6 +347,7 @@ public:
     operator std::unique_ptr<T> () && {
         return std::unique_ptr<T>(LocalPointerBase<T>::orphan());
     }
+#endif  /* U_HIDE_DRAFT_API */
 };
 
 /**
@@ -394,6 +405,8 @@ public:
     LocalArray(LocalArray<T> &&src) U_NOEXCEPT : LocalPointerBase<T>(src.ptr) {
         src.ptr=NULL;
     }
+
+#ifndef U_HIDE_DRAFT_API
     /**
      * Constructs a LocalArray from a C++11 std::unique_ptr of an array type.
      * The LocalPointer steals the array owned by the std::unique_ptr.
@@ -406,6 +419,8 @@ public:
      */
     explicit LocalArray(std::unique_ptr<T[]> &&p)
         : LocalPointerBase<T>(p.release()) {}
+#endif  /* U_HIDE_DRAFT_API */
+
     /**
      * Destructor deletes the array it owns.
      * @stable ICU 4.4
@@ -426,6 +441,8 @@ public:
         src.ptr=NULL;
         return *this;
     }
+
+#ifndef U_HIDE_DRAFT_API
     /**
      * Move-assign from an std::unique_ptr to this LocalPointer.
      * Steals the array from the std::unique_ptr.
@@ -438,6 +455,8 @@ public:
         adoptInstead(p.release());
         return *this;
     }
+#endif  /* U_HIDE_DRAFT_API */
+
     /**
      * Swap pointers.
      * @param other other smart pointer
@@ -501,6 +520,8 @@ public:
      * @stable ICU 4.4
      */
     T &operator[](ptrdiff_t i) const { return LocalPointerBase<T>::ptr[i]; }
+
+#ifndef U_HIDE_DRAFT_API
     /**
      * Conversion operator to a C++11 std::unique_ptr.
      * Disowns the object and gives it to the returned std::unique_ptr.
@@ -515,6 +536,7 @@ public:
     operator std::unique_ptr<T[]> () && {
         return std::unique_ptr<T[]>(LocalPointerBase<T>::orphan());
     }
+#endif  /* U_HIDE_DRAFT_API */
 };
 
 /**

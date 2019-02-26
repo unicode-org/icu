@@ -252,7 +252,7 @@ ureldatefmt_open( const char*          locale,
 U_STABLE void U_EXPORT2
 ureldatefmt_close(URelativeDateTimeFormatter *reldatefmt);
 
-
+#ifndef U_HIDE_DRAFT_API
 struct UFormattedRelativeDateTime;
 /**
  * Opaque struct to contain the results of a URelativeDateTimeFormatter operation.
@@ -297,6 +297,7 @@ ureldatefmt_resultAsValue(const UFormattedRelativeDateTime* ufrdt, UErrorCode* e
  */
 U_DRAFT void U_EXPORT2
 ureldatefmt_closeResult(UFormattedRelativeDateTime* ufrdt);
+#endif  /* U_HIDE_DRAFT_API */
 
 
 #if U_SHOW_CPLUSPLUS_API
@@ -314,6 +315,7 @@ U_NAMESPACE_BEGIN
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalURelativeDateTimeFormatterPointer, URelativeDateTimeFormatter, ureldatefmt_close);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * \class LocalUFormattedRelativeDateTimePointer
  * "Smart pointer" class, closes a UFormattedRelativeDateTime via ureldatefmt_closeResult().
@@ -324,6 +326,7 @@ U_DEFINE_LOCAL_OPEN_POINTER(LocalURelativeDateTimeFormatterPointer, URelativeDat
  * @draft ICU 64
  */
 U_DEFINE_LOCAL_OPEN_POINTER(LocalUFormattedRelativeDateTimePointer, UFormattedRelativeDateTime, ureldatefmt_closeResult);
+#endif  /* U_HIDE_DRAFT_API */
 
 U_NAMESPACE_END
 
@@ -365,6 +368,7 @@ ureldatefmt_formatNumeric( const URelativeDateTimeFormatter* reldatefmt,
                     int32_t               resultCapacity,
                     UErrorCode*           status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Format a combination of URelativeDateTimeUnit and numeric
  * offset using a numeric style, e.g. "1 week ago", "in 1 week",
@@ -395,6 +399,7 @@ ureldatefmt_formatNumericToResult(
     URelativeDateTimeUnit             unit,
     UFormattedRelativeDateTime*       result,
     UErrorCode*                       status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Format a combination of URelativeDateTimeUnit and numeric offset
@@ -432,6 +437,7 @@ ureldatefmt_format( const URelativeDateTimeFormatter* reldatefmt,
                     int32_t               resultCapacity,
                     UErrorCode*           status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Format a combination of URelativeDateTimeUnit and numeric offset
  * using a text style if possible, e.g. "last week", "this week",
@@ -465,6 +471,7 @@ ureldatefmt_formatToResult(
     URelativeDateTimeUnit             unit,
     UFormattedRelativeDateTime*       result,
     UErrorCode*                       status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Combines a relative date string and a time string in this object's
