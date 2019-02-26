@@ -2662,9 +2662,6 @@ void MeasureFormatTest::TestIndividualPluralFallback() {
 }
 
 void MeasureFormatTest::Test20332_PersonUnits() {
-    if (logKnownIssue("ICU-20400")) {
-        return;
-    }
     IcuTestErrorCode status(*this, "Test20332_PersonUnits");
     const struct TestCase {
         const char* locale;
@@ -2682,7 +2679,7 @@ void MeasureFormatTest::Test20332_PersonUnits() {
         {"en-us", MeasureUnit::createWeekPerson(status), UMEASFMT_WIDTH_SHORT, "25 wks"},
         {"en-us", MeasureUnit::createWeekPerson(status), UMEASFMT_WIDTH_WIDE, "25 weeks"},
         {"en-us", MeasureUnit::createDayPerson(status), UMEASFMT_WIDTH_NARROW, "25d"},
-        {"en-us", MeasureUnit::createDayPerson(status), UMEASFMT_WIDTH_SHORT, "25 Days"},
+        {"en-us", MeasureUnit::createDayPerson(status), UMEASFMT_WIDTH_SHORT, "25 days"},
         {"en-us", MeasureUnit::createDayPerson(status), UMEASFMT_WIDTH_WIDE, "25 days"}
     };
     for (const auto& cas : cases) {
