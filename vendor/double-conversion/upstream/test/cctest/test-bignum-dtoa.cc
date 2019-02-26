@@ -191,6 +191,11 @@ TEST(BignumDtoaVariousDoubles) {
   CHECK_EQ("35844466", buffer.start());
   CHECK_EQ(299, point);
 
+  BignumDtoa(1e-23, BIGNUM_DTOA_SHORTEST, 0,
+             buffer, &length, &point);
+  CHECK_EQ("1", buffer.start());
+  CHECK_EQ(-22, point);
+
   uint64_t smallest_normal64 = UINT64_2PART_C(0x00100000, 00000000);
   double v = Double(smallest_normal64).value();
   BignumDtoa(v, BIGNUM_DTOA_SHORTEST, 0, buffer, &length, &point);
