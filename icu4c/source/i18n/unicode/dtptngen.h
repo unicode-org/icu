@@ -564,6 +564,7 @@ private:
     void setDecimalSymbols(const Locale& locale, UErrorCode& status);
     UDateTimePatternField getAppendFormatNumber(const char* field) const;
 #ifndef U_HIDE_DRAFT_API
+    // The following three have to be U_HIDE_DRAFT_API (though private) because UDateTimePGDisplayWidth is
     UDateTimePatternField getFieldAndWidthIndices(const char* key, UDateTimePGDisplayWidth* widthP) const;
     void setFieldDisplayName(UDateTimePatternField field, UDateTimePGDisplayWidth width, const UnicodeString& value);
     UnicodeString& getMutableFieldDisplayName(UDateTimePatternField field, UDateTimePGDisplayWidth width);

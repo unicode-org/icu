@@ -7,6 +7,7 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
+#ifndef U_HIDE_DRAFT_API
 
 #include "unicode/ufieldpositer.h"
 
@@ -77,7 +78,7 @@ typedef enum UFieldCategory {
 #ifndef U_HIDE_INTERNAL_API
     /** @internal */
     UFIELD_CATEGORY_COUNT,
-#endif
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Category for spans in a list.
@@ -434,5 +435,6 @@ U_NAMESPACE_END
 #endif // U_SHOW_CPLUSPLUS_API
 
 
+#endif  /* U_HIDE_DRAFT_API */
 #endif /* #if !UCONFIG_NO_FORMATTING */
 #endif // __UFORMATTEDVALUE_H__

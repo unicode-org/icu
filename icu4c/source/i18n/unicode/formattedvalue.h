@@ -6,6 +6,7 @@
 
 #include "unicode/utypes.h"
 #if !UCONFIG_NO_FORMATTING
+#ifndef U_HIDE_DRAFT_API
 
 #include "unicode/appendable.h"
 #include "unicode/fpositer.h"
@@ -310,5 +311,6 @@ class U_I18N_API FormattedValue /* not : public UObject because this is an inter
 
 U_NAMESPACE_END
 
+#endif  /* U_HIDE_DRAFT_API */
 #endif /* #if !UCONFIG_NO_FORMATTING */
 #endif // __FORMATTEDVALUE_H__
