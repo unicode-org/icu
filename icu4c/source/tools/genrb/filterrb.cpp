@@ -86,9 +86,6 @@ void SimpleRuleBasedPathFilter::addRule(const ResKeyPath& path, bool inclusionRu
         return;
     }
     fRoot.applyRule(path, path.pieces().begin(), inclusionRule, status);
-
-    // DEBUG TIP: Enable the following line to view the inclusion tree:
-    //print(std::cout);
 }
 
 PathFilter::EInclusion SimpleRuleBasedPathFilter::match(const ResKeyPath& path) const {
@@ -125,7 +122,7 @@ PathFilter::EInclusion SimpleRuleBasedPathFilter::match(const ResKeyPath& path) 
     }
 
     // Leaf case 2: input path exactly matches a filter leaf
-    if (node->fChildren.empty()) {
+    if (node->isLeaf()) {
         isLeaf = true;
     }
 
@@ -151,6 +148,10 @@ SimpleRuleBasedPathFilter::Tree::Tree(const Tree& other)
     }
 }
 
+bool SimpleRuleBasedPathFilter::Tree::isLeaf() const {
+    return fChildren.empty() && !fWildcard;
+}
+
 void SimpleRuleBasedPathFilter::Tree::applyRule(
         const ResKeyPath& path,
         std::list<std::string>::const_iterator it,
@@ -159,7 +160,7 @@ void SimpleRuleBasedPathFilter::Tree::applyRule(
 
     // Base Case
     if (it == path.pieces().end()) {
-        if (isVerbose() && (fIncluded != PARTIAL || !fChildren.empty())) {
+        if (isVerbose() && (fIncluded != PARTIAL || !isLeaf())) {
             std::cout << "genrb info: rule on path " << path
                 << " overrides previous rules" << std::endl;
         }
@@ -223,7 +224,7 @@ void SimpleRuleBasedPathFilter::Tree::print(std::ostream& out, int32_t indent) c
 void SimpleRuleBasedPathFilter::print(std::ostream& out) const {
     out << "SimpleRuleBasedPathFilter {" << std::endl;
     fRoot.print(out, 1);
-    out << "}";
+    out << "}" << std::endl;
 }
 
 std::ostream& operator<<(std::ostream& out, const SimpleRuleBasedPathFilter& value) {
