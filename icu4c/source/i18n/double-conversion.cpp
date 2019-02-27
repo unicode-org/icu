@@ -34,8 +34,10 @@
 #include "unicode/utypes.h"
 #if !UCONFIG_NO_FORMATTING
 
+// ICU PATCH: Do not include std::locale.
+
 #include <climits>
-#include <locale>
+//#include <locale>
 #include <cmath>
 
 // ICU PATCH: Customize header file paths for ICU.
@@ -436,9 +438,14 @@ void DoubleToStringConverter::DoubleToAscii(double v,
 namespace {
 
 inline char ToLower(char ch) {
+#if 0  // do not include std::locale in ICU
   static const std::ctype<char>& cType =
       std::use_facet<std::ctype<char> >(std::locale::classic());
   return cType.tolower(ch);
+#else
+  (void)ch;
+  UNREACHABLE();
+#endif
 }
 
 inline char Pass(char ch) {

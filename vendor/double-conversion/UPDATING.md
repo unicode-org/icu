@@ -19,6 +19,10 @@ After completing the first step, the script will stop again and ask you whether 
 
 Make note of the output of the command. If there are any merge conflicts, you will need to resolve them manually.
 
+## Checking ICU Patches
+
+Look over any ICU patches in the icu4c/i18n version of the code files; they should be marked clearly with "ICU PATCH" comments.  Make sure that the patches are still needed and remove them if possible.
+
 ## Next Steps
 
 Build and test icu4c, and send the PR for review.
