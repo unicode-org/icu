@@ -544,7 +544,9 @@ class StringToDoubleConverter {
         junk_string_value_(junk_string_value),
         infinity_symbol_(infinity_symbol),
         nan_symbol_(nan_symbol),
-        separator_(separator) {
+        // ICU PATCH: Convert the u16 to a char.
+        // This patch should be removed when upstream #89 is fixed.
+        separator_(static_cast<char>(separator)) {
   }
 
   // Performs the conversion.
@@ -579,7 +581,10 @@ class StringToDoubleConverter {
   const double junk_string_value_;
   const char* const infinity_symbol_;
   const char* const nan_symbol_;
-  const uc16 separator_;
+
+  // ICU PATCH: Avoid warnings by making this a char instead of a u16.
+  // This patch should be removed when upstream #89 is fixed.
+  const char separator_;
 
   template <class Iterator>
   double StringToIeee(Iterator start_pointer,
