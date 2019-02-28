@@ -13,16 +13,16 @@ Author: Shane Carr
 
 Install `pipenv` globally:
 
-	$ sudo pip3 install pipenv
+    $ sudo pip3 install pipenv
 
 Install this project's dependencies locally:
 
-	$ pipenv install
+    $ pipenv install
 
 Optional: save your Jira credentials in a `.env` file in this directory:
 
-	JIRA_USERNAME=hello
-	JIRA_PASSWORD=world
+    JIRA_USERNAME=hello
+    JIRA_PASSWORD=world
 
 This is required if you want to process sensitive tickets.
 
@@ -30,11 +30,17 @@ This is required if you want to process sensitive tickets.
 
 Make sure you have updated your repository:
 
-	$ git pull upstream master
-	$ git fetch --tags upstream
+    $ git checkout master
+    $ git pull upstream master
+    $ git fetch --tags upstream
 
-Run the tool and save the result into REPORT.md:
+Sanity check: ensure that the "latest" tag is correct (points to the latest release).  You may need to force-fetch the tags.
 
-	$ pipenv run python3 check.py --jira-query "project=ICU AND fixVersion=63.1" > REPORT.md
+    $ git show latest
+    # should show a commit with both "latest" and the previous version number
 
-Open a pull request so others can view the report easilly.
+Run the tool and save the result into REPORT.md; set fixVersion to the *upcoming* ICU version:
+
+    $ pipenv run python3 check.py --jira-query "project=ICU AND fixVersion=64.1" > REPORT.md
+
+Create a branch and open a pull request so others can view the report easily.
