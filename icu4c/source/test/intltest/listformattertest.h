@@ -24,6 +24,8 @@
 #include "intltest.h"
 #include "itformat.h"
 
+#if !UCONFIG_NO_FORMATTING
+
 class ListFormatterTest : public IntlTestWithFieldPosition {
   public:
     ListFormatterTest();
@@ -124,5 +126,7 @@ class ListFormatterTest : public IntlTestWithFieldPosition {
     const UnicodeString three;
     const UnicodeString four;
 };
+
+#endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

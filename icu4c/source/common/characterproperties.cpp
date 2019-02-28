@@ -24,8 +24,10 @@
 #include "uprops.h"
 
 using icu::LocalPointer;
+#if !UCONFIG_NO_NORMALIZATION
 using icu::Normalizer2Factory;
 using icu::Normalizer2Impl;
+#endif
 using icu::UInitOnce;
 using icu::UnicodeSet;
 

@@ -66,6 +66,7 @@ ListFormatInternal(const ListFormatInternal &other) :
 };
 
 
+#if !UCONFIG_NO_FORMATTING
 class FormattedListData : public FormattedValueFieldPositionIteratorImpl {
 public:
     FormattedListData(UErrorCode& status) : FormattedValueFieldPositionIteratorImpl(5, status) {}
@@ -75,6 +76,7 @@ public:
 FormattedListData::~FormattedListData() = default;
 
 UPRV_FORMATTED_VALUE_SUBCLASS_AUTO_IMPL(FormattedList)
+#endif
 
 
 static Hashtable* listPatternHash = nullptr;
