@@ -17,9 +17,15 @@ In the following,
         $icu4j_root is the ICU4J root directory
         $jdk_bin is the JDK bin directory (for the jar tool)
 
-1. Download and build ICU4C. For more instructions on downloading and building
-        ICU4C, see the ICU4C readme at:
-        http://source.icu-project.org/repos/icu/trunk/icu4c/readme.html#HowToBuild
+1. Download, configure, and build ICU4C. When you configure ICU4C, you must
+   set the environment variable ICU_DATA_BUILDTOOL_OPTS to
+   "--include_uni_core_data" to build additional required ICU4J data:
+
+        ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ./runConfigureICU Linux
+
+   For more instructions on downloading and building ICU4C,
+   see the ICU4C readme at:
+        https://htmlpreview.github.io/?https://github.com/unicode-org/icu/blob/master/icu4c/readme.html#HowToBuild
         (Windows: build as 'x86, Release' otherwise you will have to set 'CFG' differently below.)
 
     *NOTE* You should do a full rebuild after any data changes.

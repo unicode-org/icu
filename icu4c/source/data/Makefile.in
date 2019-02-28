@@ -82,35 +82,8 @@ endif
 OUTTMPDIR=$(OUTDIR)/tmp
 MAINBUILDDIR=$(OUTDIR)/build
 BUILDDIR=$(MAINBUILDDIR)/$(ICUDATA_PLATFORM_NAME)
-UNICODEDATADIR=$(SRCDATADIR)/unidata
-LOCSRCDIR=$(SRCDATADIR)/locales
-CURRSRCDIR=$(SRCDATADIR)/curr
-CURRBLDDIR=$(BUILDDIR)/curr
-LANGSRCDIR=$(SRCDATADIR)/lang
-LANGBLDDIR=$(BUILDDIR)/lang
-REGIONSRCDIR=$(SRCDATADIR)/region
-REGIONBLDDIR=$(BUILDDIR)/region
-ZONESRCDIR=$(SRCDATADIR)/zone
-ZONEBLDDIR=$(BUILDDIR)/zone
-UNITSRCDIR=$(SRCDATADIR)/unit
-UNITBLDDIR=$(BUILDDIR)/unit
-COLSRCDIR=$(SRCDATADIR)/coll
-COLBLDDIR=$(BUILDDIR)/coll
-RBNFSRCDIR=$(SRCDATADIR)/rbnf
-RBNFBLDDIR=$(BUILDDIR)/rbnf
-TRANSLITSRCDIR=$(SRCDATADIR)/translit
-TRANSLITBLDDIR=$(BUILDDIR)/translit
 MISCSRCDIR=$(SRCDATADIR)/misc
-BRKSRCDIR=$(SRCDATADIR)/brkitr
-BRKBLDDIR=$(BUILDDIR)/brkitr
-DICTSRCDIR=$(BRKSRCDIR)/dictionaries
-BRKRULESRCDIR=$(BRKSRCDIR)/rules
-MISCSRCDIR=$(SRCDATADIR)/misc
-UCMSRCDIR=$(SRCDATADIR)/mappings
-SPREPSRCDIR=$(SRCDATADIR)/sprep
-COMINCDIR=$(top_srcdir)/common/unicode
 SRCLISTDEPS=Makefile $(srcdir)/Makefile.in
-BUILD_DIRS=$(OUTDIR) $(MAINBUILDDIR) $(BUILDDIR) $(CURRBLDDIR) $(LANGBLDDIR) $(REGIONBLDDIR) $(ZONEBLDDIR) $(UNITBLDDIR) $(BRKBLDDIR) $(COLBLDDIR) $(RBNFBLDDIR) $(TRANSLITBLDDIR) $(OUTTMPDIR) $(OUTTMPDIR_390STUB) $(OUTTMPDIR)/$(CURR_TREE) $(OUTTMPDIR)/$(LANG_TREE) $(OUTTMPDIR)/$(REGION_TREE) $(OUTTMPDIR)/$(ZONE_TREE) $(OUTTMPDIR)/$(UNIT_TREE) $(OUTTMPDIR)/$(COLLATION_TREE) $(OUTTMPDIR)/$(RBNF_TREE) $(OUTTMPDIR)/$(TRANSLIT_TREE) $(OUTTMPDIR)/$(BREAK_TREE)
 
 # Variable names for rules.mk
 OUT_DIR=$(BUILDDIR)
@@ -145,7 +118,7 @@ check-exhaustive: check
 distclean-local: clean
 	$(RMV) Makefile
 
-all-local: build-dir icupkg.inc build-local packagedata $(POST_DATA_BUILD) $(OS390PKG)
+all-local: icupkg.inc build-local packagedata $(POST_DATA_BUILD) $(OS390PKG)
 
 dist-local:
 
@@ -153,7 +126,7 @@ clean-map:
 	-test -z *.map || $(RMV) *.map
 
 clean-local: cleanpackage cleanfiles clean-map
-	$(RMV) build-dir* build-local packagedata uni-core-data
+	$(RMV) $(OUTDIR) build-local packagedata uni-core-data
 
 cleanfiles:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
@@ -252,7 +225,7 @@ include $(top_builddir)/$(subdir)/rules.mk
 ifeq ($(ENABLE_SO_VERSION_DATA),1)
 ifeq ($(PKGDATA_MODE),dll)
 SO_VERSION_DATA = $(OUTTMPDIR)/icudata.res
-$(SO_VERSION_DATA) : $(MISCSRCDIR)/icudata.rc | build-dir
+$(SO_VERSION_DATA) : $(MISCSRCDIR)/icudata.rc
 ifeq ($(MSYS_RC_MODE),1)
 	rc.exe -i$(srcdir)/../common -i$(top_builddir)/common -fo$@ $(CPPFLAGS) $<
 else
@@ -264,36 +237,6 @@ endif
 PKGDATA_LIST = $(TMP_DIR)/icudata.lst
 
 
-##### Define all the data files. the build rule that depends on them is below.
-# X_FILES_SHORT = just the base names (for lists)
-# X_FILES = full paths (for dependency)
-
-## DAT files - Misc. data files.
-#  2005-may-05 Removed Unicode properties files (unorm.icu, uprops.icu, ucase.icu, ubidi.icu)
-#  from data build. See Jitterbug 4497. (makedata.mak revision 1.117)
-#  2010-dec Removed pnames.icu.
-# These are now hardcoded in ICU4C and only loaded in ICU4J.
-#
-DAT_FILES_SHORT=unames.icu cnvalias.icu coll/ucadata.icu nfkc.nrm nfkc_cf.nrm uts46.nrm
-DAT_FILES=$(DAT_FILES_SHORT:%=$(BUILDDIR)/%)
-
-## All generated files
-ALL_FILES = $(DAT_FILES) $(CNV_FILES) $(CNV_FILES_SPECIAL) $(BRK_FILES) $(DICT_FILES) $(RES_FILES) $(INDEX_RES_FILE) $(CURR_FILES) $(LANG_FILES) $(REGION_FILES) $(ZONE_FILES) $(UNIT_FILES) $(COLLATION_FILES) $(BRK_RES_FILES) $(RBNF_FILES) $(TRANSLIT_FILES) $(SPREP_FILES) $(CFU_FILES)
-ALL_INDEX_SRC_FILES = $(PKGDATA_LIST) $(INDEX_FILE) $(CURR_INDEX_FILE) $(LANG_INDEX_FILE) $(REGION_INDEX_FILE) $(ZONE_INDEX_FILE) $(UNIT_INDEX_FILE) $(COLLATION_INDEX_FILE) $(BRK_RES_INDEX_FILE) $(RBNF_INDEX_FILE)
-# a list to use in the .lst files (package-relative)
-COLL_FILES_LIST=$(COLLATION_FILES_SHORT) $(COLLATION_INDEX_RES_SHORT)
-BRK_FILES_LIST=$(BRK_FILES_SHORT) $(BRK_RES_FILES_SHORT) $(BRK_RES_INDEX_RES_SHORT) $(DICT_FILES_SHORT)
-LOCALE_FILES_LIST= $(RES_FILES_SHORT) $(LANG_FILES_SHORT) $(REGION_FILES_SHORT) $(ZONE_FILES_SHORT) $(UNIT_FILES_SHORT)
-MISC_FILES_LIST=$(DAT_FILES_SHORT) $(CNV_FILES_SHORT) $(CNV_FILES_SHORT_SPECIAL) $(CURR_FILES_SHORT) $(RBNF_FILES_SHORT) $(RBNF_INDEX_RES_SHORT) $(TRANSLIT_FILES_SHORT) $(SPREP_FILES_SHORT) $(CFU_FILES_SHORT)
-UNI_CORE_DATA=pnames.icu uprops.icu ucase.icu ubidi.icu nfc.nrm
-UNI_CORE_TARGET_DATA=$(UNI_CORE_DATA:%=$(BUILDDIR)/%)
-
-ifneq ($(INCLUDE_UNI_CORE_DATA),)
-MISC_FILES_LIST+=$(UNI_CORE_DATA)
-build-local: uni-core-data
-	echo timestamp > $@
-endif
-
 #####################################################
 # General data build rules
 
@@ -301,10 +244,10 @@ endif
 CLEANFILES = *~ icupkg.inc *.x
 
 ifeq ($(ICUDATA_SOURCE_ARCHIVE),)
-build-local: build-dir $(SO_VERSION_DATA) $(ICUDATA_ALL_OUTPUT_FILES) $(PKGDATA_LIST) $(OS390LIST)
+build-local: $(SO_VERSION_DATA) $(ICUDATA_ALL_OUTPUT_FILES) $(PKGDATA_LIST) $(OS390LIST)
 	echo timestamp > $@
 else
-build-local: build-dir $(SO_VERSION_DATA) $(PKGDATA_LIST) $(OS390LIST)
+build-local: $(SO_VERSION_DATA) $(PKGDATA_LIST) $(OS390LIST)
 	echo timestamp > $@
 $(PKGDATA_LIST): $(SRCLISTDEPS) $(ICUDATA_SOURCE_ARCHIVE)
 ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
@@ -317,32 +260,12 @@ endif
 endif
 
 
-$(BUILD_DIRS): build-dir
-
-build-dir:
-	@-$(RMV) $@
-	echo timestamp > $@.tmp
-	@list='$(BUILD_DIRS)'; \
-	for dir in $$list; do \
-	  if ! test -d $$dir; then \
-	    echo $(MKINSTALLDIRS) $(BUILD_DIRS); \
-	    $(MKINSTALLDIRS) $(BUILD_DIRS); \
-	  fi; \
-	done
-	mv $@.tmp $@
-
-# The | is an order-only prerequisite. This helps when the -j option is used,
-# and we don't want the files to be built before the directories are built.
-ifneq ($(filter order-only,$(.FEATURES)),)
-$(ALL_FILES) $(ALL_INDEX_SRC_FILES): | build-dir
-endif
-
 # if the tzcode directory contains a new tzdata*.tar.gz file, use it for zoneinfo
 ifeq ($(TZDATA),)
 TZDATA = $(firstword $(wildcard $(top_builddir)/tools/tzcode/tzdata*.tar.gz) $(wildcard $(top_srcdir)/tools/tzcode/tzdata*.tar.gz))
 endif
 
-# TODO: Make the TZDATA override part of Python buildtool
+# TODO(ICU-20466): Make the TZDATA override part of Python buildtool
 ifneq ($(TZDATA),)
 
 TZCODE_DIR=$(top_builddir)/tools/tzcode
@@ -362,14 +285,6 @@ $(ZONEINFO): $(TZDATA)
 # end of zoneinfo-generation
 endif
 
-# The core Unicode properties files (pnames.icu, uprops.icu, ucase.icu, ubidi.icu)
-# are hardcoded in the common DLL and therefore not included in the data package any more.
-# They are not built by default but need to be built for ICU4J data and for getting the .c source files
-# when updating the Unicode data.
-uni-core-data: build-dir $(UNI_CORE_TARGET_DATA)
-	@echo Unicode .icu files built to $(BUILDDIR)
-	echo timestamp > $@
-
 # Build the ICU4J icudata.jar.
 # Command line:
 #   (Run this from the output data folder which may not be .../source/data in an out-of-source build.)
@@ -385,19 +300,11 @@ ICU4J_TZDATA_FILES=zoneinfo64 metaZones timezoneTypes windowsZones
 ICU4J_DATA_DIRNAME=com/ibm/icu/impl/data/$(ICUDATA_BASENAME_VERSION)b
 ICU4J_TZDATA_PATHS=$(ICU4J_TZDATA_FILES:%="$(ICU4J_DATA_DIRNAME)/%.res")
 
-# Targets for prebuilt Unicode data
-$(BUILDDIR)/%.icu: $(SRCDATADIR)/in/%.icu | $(DIRS)
-	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $< $@
-
-$(BUILDDIR)/nfc.nrm: $(SRCDATADIR)/in/nfc.nrm | $(DIRS)
-	$(INVOKE) $(TOOLBINDIR)/icupkg -t$(ICUDATA_CHAR) $< $@
-
 # generate icu4j-related data to $(OUTDIR)/icu4j/com/ibm/icu/impl/data/...
-generate-data: build-dir packagedata $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat uni-core-data
+generate-data: packagedata $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat
 	mkdir -p $(OUTDIR)/icu4j/$(ICU4J_DATA_DIRNAME)
 	mkdir -p $(OUTDIR)/icu4j/tzdata/$(ICU4J_DATA_DIRNAME)
-	echo $(UNI_CORE_DATA) > $(OUTDIR)/icu4j/add.txt
-	$(INVOKE) $(TOOLBINDIR)/icupkg $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat $(OUTDIR)/icu4j/$(ICUDATA_BASENAME_VERSION)b.dat -a $(OUTDIR)/icu4j/add.txt -s $(BUILDDIR) -x '*' -tb -d $(OUTDIR)/icu4j/$(ICU4J_DATA_DIRNAME)
+	$(INVOKE) $(TOOLBINDIR)/icupkg $(OUTTMPDIR)/$(ICUDATA_PLATFORM_NAME).dat $(OUTDIR)/icu4j/$(ICUDATA_BASENAME_VERSION)b.dat -s $(BUILDDIR) -x '*' -tb -d $(OUTDIR)/icu4j/$(ICU4J_DATA_DIRNAME)
 	mv $(ICU4J_TZDATA_PATHS:%=$(OUTDIR)/icu4j/%) "$(OUTDIR)/icu4j/tzdata/$(ICU4J_DATA_DIRNAME)"
 
 $(OUTDIR)/icu4j/icutzdata.jar: generate-data
@@ -408,6 +315,7 @@ $(OUTDIR)/icu4j/icutzdata.jar: generate-data
 # - swap the ICU data
 # - extract all data items
 # - package them into the .jar file
+# TODO(ICU-20466): Move this to Python
 $(OUTDIR)/icu4j/icudata.jar: generate-data
 	$(JAR) cf $(OUTDIR)/icu4j/icudata.jar -C $(OUTDIR)/icu4j $(ICU4J_DATA_DIRNAME)/
 

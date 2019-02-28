@@ -29,6 +29,7 @@ def generate(config, glob, common_vars):
     requests += generate_brkitr_dictionaries(config, glob, common_vars)
     requests += generate_normalization(config, glob, common_vars)
     requests += generate_coll_ucadata(config, glob, common_vars)
+    requests += generate_full_unicore_data(config, glob, common_vars)
     requests += generate_unames(config, glob, common_vars)
     requests += generate_ulayout(config, glob, common_vars)
     requests += generate_misc(config, glob, common_vars)
@@ -273,7 +274,8 @@ def generate_brkitr_dictionaries(config, glob, common_vars):
 def generate_normalization(config, glob, common_vars):
     # NRM Files
     input_files = [InFile(filename) for filename in glob("in/*.nrm")]
-    input_files.remove(InFile("in/nfc.nrm"))  # nfc.nrm is pre-compiled into C++
+    # nfc.nrm is pre-compiled into C++; see generate_full_unicore_data
+    input_files.remove(InFile("in/nfc.nrm"))
     output_files = [OutFile(v.filename[3:]) for v in input_files]
     return [
         RepeatedExecutionRequest(
@@ -304,6 +306,36 @@ def generate_coll_ucadata(config, glob, common_vars):
             tool = IcuTool("icupkg"),
             args = "-t{ICUDATA_CHAR} {IN_DIR}/{INPUT_FILES[0]} {OUT_DIR}/{OUTPUT_FILES[0]}",
             format_with = {}
+        )
+    ]
+
+
+def generate_full_unicore_data(config, glob, common_vars):
+    # The core Unicode properties files (pnames.icu, uprops.icu, ucase.icu, ubidi.icu)
+    # are hardcoded in the common DLL and therefore not included in the data package any more.
+    # They are not built by default but need to be built for ICU4J data,
+    # both in the .jar and in the .dat file (if ICU4J uses the .dat file).
+    # See ICU-4497.
+    if not config.include_uni_core_data:
+        return []
+
+    basenames = [
+        "pnames.icu",
+        "uprops.icu",
+        "ucase.icu",
+        "ubidi.icu",
+        "nfc.nrm"
+    ]
+    input_files = [InFile("in/%s" % bn) for bn in basenames]
+    output_files = [OutFile(bn) for bn in basenames]
+    return [
+        RepeatedExecutionRequest(
+            name = "unicore",
+            category = "unicore",
+            input_files = input_files,
+            output_files = output_files,
+            tool = IcuTool("icupkg"),
+            args = "-t{ICUDATA_CHAR} {IN_DIR}/{INPUT_FILE} {OUT_DIR}/{OUTPUT_FILE}"
         )
     ]
 

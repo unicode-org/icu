@@ -85,6 +85,12 @@ flag_parser.add_argument(
     default = "unihan"
 )
 flag_parser.add_argument(
+    "--include_uni_core_data",
+    help = "Include the full Unicode core data in the dat file.",
+    default = False,
+    action = "store_true"
+)
+flag_parser.add_argument(
     "--seqmode",
     help = "Whether to optimize rules to be run sequentially (fewer threads) or in parallel (many threads). Defaults to 'sequential', which is better for unix-exec and windows-exec modes. 'parallel' is often better for massively parallel build systems.",
     choices = ["sequential", "parallel"],
@@ -119,8 +125,12 @@ class Config(object):
     def __init__(self, args):
         # Process arguments
         self.max_parallel = (args.seqmode == "parallel")
+
         # Either "unihan" or "implicithan"
         self.coll_han_type = args.collation_ucadata
+
+        # Boolean: Whether to include core Unicode data files in the .dat file
+        self.include_uni_core_data = args.include_uni_core_data
 
         # Default fields before processing filter file
         self.filters_json_data = {}
