@@ -240,6 +240,8 @@ $(COREDATA_TS):
 		--tool_cfg "$(CFG)" \
 		--out_dir "$(ICUBLD_PKG)" \
 		--tmp_dir "$(ICUTMP)"
+		--filter_file "$(ICU_DATA_FILTER_FILE)" \
+		$(ICU_DATA_BUILDTOOL_OPTS) \
 	@echo "timestamp" > $(COREDATA_TS)
 
 	

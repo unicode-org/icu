@@ -9133,6 +9133,7 @@ else
         --seqmode parallel \
         --src_dir "$srcdir/data" \
         --filter_file "$ICU_DATA_FILTER_FILE" \
+        $BUILDTOOL_OPTS \
         > data/rules.mk
     if test "$?" != "0"; then
         as_fn_error $? "Python failed to run; see above error." "$LINENO" 5

@@ -1397,6 +1397,7 @@ else
         --seqmode parallel \
         --src_dir "$srcdir/data" \
         --filter_file "$ICU_DATA_FILTER_FILE" \
+        $ICU_DATA_BUILDTOOL_OPTS \
         > data/rules.mk
     if test "$?" != "0"; then
         AC_MSG_ERROR(Python failed to run; see above error.)
