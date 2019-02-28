@@ -544,6 +544,7 @@ void ListFormatterTest::TestOutOfOrderPatterns() {
 void ListFormatterTest::TestFormattedValue() {
     IcuTestErrorCode status(*this, "TestFormattedValue");
     LocalPointer<ListFormatter> fmt(ListFormatter::createInstance("en", status));
+    if (status.errIfFailureAndReset()) { return; }
 
     {
         const char16_t* message = u"Field position test 1";

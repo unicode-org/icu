@@ -1424,6 +1424,7 @@ void RelativeDateTimeFormatterTest::TestRBNF() {
     IcuTestErrorCode status(*this, "TestRBNF");
 
     LocalPointer<RuleBasedNumberFormat> rbnf(new RuleBasedNumberFormat(URBNF_SPELLOUT, "en-us", status));
+    if (status.errIfFailureAndReset()) { return; }
     RelativeDateTimeFormatter fmt("en-us", rbnf.orphan(), status);
     UnicodeString result;
     assertEquals("format (direction)", "in five seconds",

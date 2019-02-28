@@ -9472,6 +9472,7 @@ void NumberFormatTest::Test20348_CurrencyPrefixOverride() {
     IcuTestErrorCode status(*this, "Test20348_CurrencyPrefixOverride");
     LocalPointer<DecimalFormat> fmt(static_cast<DecimalFormat*>(
         NumberFormat::createCurrencyInstance("en", status)));
+    if (status.errIfFailureAndReset()) { return; }
     UnicodeString result;
     assertEquals("Initial pattern",
         u"¤#,##0.00", fmt->toPattern(result.remove()));
@@ -9507,6 +9508,7 @@ void NumberFormatTest::Test20358_GroupingInPattern() {
     IcuTestErrorCode status(*this, "Test20358_GroupingInPattern");
     LocalPointer<DecimalFormat> fmt(static_cast<DecimalFormat*>(
         NumberFormat::createInstance("en", status)));
+    if (status.errIfFailureAndReset()) { return; }
     UnicodeString result;
     assertEquals("Initial pattern",
         u"#,##0.###", fmt->toPattern(result.remove()));
@@ -9538,6 +9540,7 @@ void NumberFormatTest::Test13731_DefaultCurrency() {
     {
         LocalPointer<NumberFormat> nf(NumberFormat::createInstance(
             "en", UNumberFormatStyle::UNUM_CURRENCY, status), status);
+        if (status.errIfFailureAndReset()) { return; }
         assertEquals("symbol", u"¤1.10",
             nf->format(1.1, result.remove(), status));
         assertEquals("currency", u"XXX", nf->getCurrency());
@@ -9545,6 +9548,7 @@ void NumberFormatTest::Test13731_DefaultCurrency() {
     {
         LocalPointer<NumberFormat> nf(NumberFormat::createInstance(
             "en", UNumberFormatStyle::UNUM_CURRENCY_ISO, status), status);
+        if (status.errIfFailureAndReset()) { return; }
         assertEquals("iso_code", u"XXX 1.10",
             nf->format(1.1, result.remove(), status));
         assertEquals("currency", u"XXX", nf->getCurrency());
@@ -9552,6 +9556,7 @@ void NumberFormatTest::Test13731_DefaultCurrency() {
     {
         LocalPointer<NumberFormat> nf(NumberFormat::createInstance(
             "en", UNumberFormatStyle::UNUM_CURRENCY_PLURAL, status), status);
+        if (status.errIfFailureAndReset()) { return; }
         assertEquals("plural", u"1.10 (unknown currency)",
             nf->format(1.1, result.remove(), status));
         assertEquals("currency", u"XXX", nf->getCurrency());
