@@ -52,8 +52,8 @@ flag_parser.add_argument(
 )
 flag_parser.add_argument(
     "--jira-query",
-    help = "JQL query to match with tickets.",
-    default = "project=ICU AND fixVersion=63.1"
+    help = "JQL query load tickets; this should match tickets expected to correspond to the commits being checked. Example: 'project=ICU and fixVersion=63.1'; set fixVersion to the upcoming version.",
+    required = True
 )
 
 
