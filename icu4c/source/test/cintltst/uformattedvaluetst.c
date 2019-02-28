@@ -194,6 +194,10 @@ static void checkFormattedValueString(
         UErrorCode* ec) {
     int32_t length;
     const UChar* actualString = ufmtval_getString(fv, &length, ec);
+    if (U_FAILURE(*ec)) {
+        assertIntEquals(message, 0, length);
+        return;
+    }
     assertSuccess(message, ec);
     // The string is guaranteed to be NUL-terminated.
     int32_t actualLength = u_strlen(actualString);

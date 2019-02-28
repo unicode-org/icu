@@ -212,8 +212,10 @@ void IntlTestWithFieldPosition::checkMixedFormattedValue(
 
     // The temp string is guaranteed to be NUL-terminated
     UnicodeString readOnlyAlias = fv.toTempString(status);
-    assertEquals(baseMessage + u"NUL-terminated",
-        0, readOnlyAlias.getBuffer()[readOnlyAlias.length()]);
+    if (!status.errIfFailureAndReset()) {
+        assertEquals(baseMessage + u"NUL-terminated",
+            0, readOnlyAlias.getBuffer()[readOnlyAlias.length()]);
+    }
 
     // Check nextPosition over all fields
     ConstrainedFieldPosition cfpos;

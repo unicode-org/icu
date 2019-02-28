@@ -1673,7 +1673,9 @@ void DateIntervalFormatTest::testFormattedDateInterval() {
         const char16_t* message = u"FormattedDateInterval test 1";
         const char16_t* expectedString = u"July 20 \u2013 25, 2018";
         LocalPointer<Calendar> input1(Calendar::createInstance("en-GB", status));
+        if (status.errIfFailureAndReset()) { return; }
         LocalPointer<Calendar> input2(Calendar::createInstance("en-GB", status));
+        if (status.errIfFailureAndReset()) { return; }
         input1->set(2018, 6, 20);
         input2->set(2018, 6, 25);
         FormattedDateInterval result = fmt->formatToValue(*input1, *input2, status);
@@ -1704,7 +1706,9 @@ void DateIntervalFormatTest::testFormattedDateInterval() {
         const char16_t* message = u"FormattedDateInterval with fallback format test 1";
         const char16_t* expectedString = u"<< July 25, 2018 --- July 20, 2018 >>";
         LocalPointer<Calendar> input1(Calendar::createInstance("en-GB", status));
+        if (status.errIfFailureAndReset()) { return; }
         LocalPointer<Calendar> input2(Calendar::createInstance("en-GB", status));
+        if (status.errIfFailureAndReset()) { return; }
         input1->set(2018, 6, 20);
         input2->set(2018, 6, 25);
         FormattedDateInterval result = fmt->formatToValue(*input1, *input2, status);

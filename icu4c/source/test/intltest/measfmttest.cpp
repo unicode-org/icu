@@ -2684,7 +2684,9 @@ void MeasureFormatTest::Test20332_PersonUnits() {
     };
     for (const auto& cas : cases) {
         MeasureFormat mf(cas.locale, cas.width, status);
+        if (status.errIfFailureAndReset()) { return; }
         Measure measure(25, cas.unitToAdopt, status);
+        if (status.errIfFailureAndReset()) { return; }
         verifyFormat(cas.locale, mf, &measure, 1, cas.expected);
     }
 }
