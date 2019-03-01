@@ -251,6 +251,7 @@ build-local: $(SO_VERSION_DATA) $(PKGDATA_LIST) $(OS390LIST)
 	echo timestamp > $@
 $(PKGDATA_LIST): $(SRCLISTDEPS) $(ICUDATA_SOURCE_ARCHIVE)
 ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
+	$(MKINSTALLDIRS) $(OUTTMPDIR) $(BUILDDIR)
 	@echo "Unpacking $(ICUDATA_SOURCE_ARCHIVE) and generating $@ (list of data files)"
 	@-$(RMV) $@
 	$(INVOKE) $(TOOLBINDIR)/icupkg -d $(BUILDDIR) --list -x \* $(ICUDATA_SOURCE_ARCHIVE) -o $@
