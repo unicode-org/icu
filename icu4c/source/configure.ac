@@ -1391,16 +1391,22 @@ if test -z "$PYTHON";
 then
     echo "" > data/rules.mk
 else
-    echo "Spawning Python to generate data/rules.mk..."
-    PYTHONPATH="$srcdir/data" $PYTHON -m buildtool \
-        --mode gnumake \
-        --seqmode parallel \
-        --src_dir "$srcdir/data" \
-        --filter_file "$ICU_DATA_FILTER_FILE" \
-        $ICU_DATA_BUILDTOOL_OPTS \
-        > data/rules.mk
-    if test "$?" != "0"; then
-        AC_MSG_ERROR(Python failed to run; see above error.)
+    if test -f "$srcdir/data/locales/root.txt";
+    then
+        echo "Spawning Python to generate data/rules.mk..."
+        PYTHONPATH="$srcdir/data" $PYTHON -m buildtool \
+            --mode gnumake \
+            --seqmode parallel \
+            --src_dir "$srcdir/data" \
+            --filter_file "$ICU_DATA_FILTER_FILE" \
+            $ICU_DATA_BUILDTOOL_OPTS \
+            > data/rules.mk
+        if test "$?" != "0"; then
+            AC_MSG_ERROR(Python failed to run; see above error.)
+        fi
+    else
+      echo "Not rebuilding data/rules.mk, assuming prebuilt data in data/in"
+      touch data/rules.mk
     fi
     echo "Spawning Python to generate test/testdata/rules.mk..."
     PYTHONPATH="$srcdir/test/testdata:$srcdir/data" $PYTHON -m buildtool \
