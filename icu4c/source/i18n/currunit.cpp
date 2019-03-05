@@ -20,7 +20,7 @@
 #include "uinvchar.h"
 #include "charstr.h"
 
-static constexpr char16_t kDefaultCurrency[] = u"XXX";
+static constexpr const char16_t* kDefaultCurrency = u"XXX";
 static constexpr char kDefaultCurrency8[] = "XXX";
 
 U_NAMESPACE_BEGIN
