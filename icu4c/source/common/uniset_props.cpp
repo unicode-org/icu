@@ -105,13 +105,7 @@ static UBool U_CALLCONV uset_cleanup(void) {
     return TRUE;
 }
 
-U_CDECL_END
-
-U_NAMESPACE_BEGIN
-
-namespace {
-
-// Cache some sets for other services -------------------------------------- ***
+#ifdef __SUNPRO_CC
 void U_CALLCONV createUni32Set(UErrorCode &errorCode) {
     U_ASSERT(uni32Singleton == NULL);
     uni32Singleton = new UnicodeSet(UNICODE_STRING_SIMPLE("[:age=3.2:]"), errorCode);
@@ -129,7 +123,34 @@ uniset_getUnicode32Instance(UErrorCode &errorCode) {
     umtx_initOnce(uni32InitOnce, &createUni32Set, errorCode);
     return uni32Singleton;
 }
+#endif
 
+U_CDECL_END
+
+U_NAMESPACE_BEGIN
+
+namespace {
+
+// Cache some sets for other services -------------------------------------- ***
+#ifndef __SUNPRO_CC
+void U_CALLCONV createUni32Set(UErrorCode &errorCode) {
+    U_ASSERT(uni32Singleton == NULL);
+    uni32Singleton = new UnicodeSet(UNICODE_STRING_SIMPLE("[:age=3.2:]"), errorCode);
+    if(uni32Singleton==NULL) {
+        errorCode=U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        uni32Singleton->freeze();
+    }
+    ucln_common_registerCleanup(UCLN_COMMON_USET, uset_cleanup);
+}
+
+
+U_CFUNC UnicodeSet *
+uniset_getUnicode32Instance(UErrorCode &errorCode) {
+    umtx_initOnce(uni32InitOnce, &createUni32Set, errorCode);
+    return uni32Singleton;
+}
+#endif
 // helper functions for matching of pattern syntax pieces ------------------ ***
 // these functions are parallel to the PERL_OPEN etc. strings above
 
