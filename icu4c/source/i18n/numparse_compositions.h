@@ -31,10 +31,18 @@ class U_I18N_API CompositionMatcher : public NumberParseMatcher {
     CompositionMatcher() = default;
 
     // To be overridden by subclasses (used for iteration):
+#ifndef __SUNPRO_CC
     virtual const NumberParseMatcher* const* begin() const = 0;
+#else
+    virtual const NumberParseMatcher* const* begin() const {return nullptr;};
+#endif
 
     // To be overridden by subclasses (used for iteration):
+#ifndef __SUNPRO_CC
     virtual const NumberParseMatcher* const* end() const = 0;
+#else
+    virtual const NumberParseMatcher* const* end() const {return nullptr;};
+#endif
 };
 
 
