@@ -16,6 +16,10 @@ AC_INIT([ICU],
         [International Components for Unicode],
         [http://icu-project.org])
 
+# Instruct Python to never write any byte code to the ICU source tree.
+PYTHONDONTWRITEBYTECODE=1
+export PYTHONDONTWRITEBYTECODE
+
 AC_CONFIG_MACRO_DIR([config/m4])
 AC_CONFIG_SRCDIR([common/unicode/utypes.h])
 

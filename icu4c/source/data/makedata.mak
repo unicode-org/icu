@@ -233,7 +233,7 @@ $(TOOLS_TS): "$(ICUTOOLS)\genrb\$(CFGTOOLS)\genrb.exe" "$(ICUTOOLS)\gencnval\$(C
 
 $(COREDATA_TS):
 	@cd "$(ICUSRCDATA)"
-	py -3 -m buildtool \
+	py -3 -B -m buildtool \
 		--mode windows-exec \
 		--src_dir "$(ICUSRCDATA)" \
 		--tool_dir "$(ICUTOOLS)" \
