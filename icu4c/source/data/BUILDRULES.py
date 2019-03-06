@@ -432,7 +432,7 @@ def generate_translit(config, glob, common_vars):
     ]
     dep_files = set(InFile(filename) for filename in glob("translit/*.txt"))
     dep_files -= set(input_files)
-    dep_files = list(dep_files)
+    dep_files = list(sorted(dep_files))
     input_basenames = [v.filename[9:] for v in input_files]
     output_files = [
         OutFile("translit/%s.res" % v[:-4])
@@ -554,9 +554,10 @@ def generate_tree(
         IN_SUB_DIR = sub_dir,
         **common_vars
     ))
+    index_file_target_name = "%s_index_txt" % sub_dir
     requests += [
         IndexTxtRequest(
-            name = "%s_index_txt" % sub_dir,
+            name = index_file_target_name,
             category = category,
             input_files = index_input_files,
             output_file = index_file_txt,
@@ -572,9 +573,9 @@ def generate_tree(
     requests += [
         SingleExecutionRequest(
             name = "%s_index_res" % sub_dir,
-            category = "%s_index" % sub_dir,
-            dep_targets = [],
-            input_files = [index_file_txt],
+            category = category,
+            dep_targets = [DepTarget(index_file_target_name)],
+            input_files = [],
             output_files = [index_res_file],
             tool = IcuTool("genrb"),
             args = "-s {TMP_DIR}/{IN_SUB_DIR} -d {OUT_DIR}/{OUT_PREFIX} -i {OUT_DIR} "

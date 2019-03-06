@@ -41,6 +41,10 @@ class AbstractRequest(object):
                 raise ValueError("Unknown argument: %s" % key)
 
     def apply_file_filter(self, filter):
+        """
+        Returns True if this request still has input files after filtering,
+        or False if the request is "empty" after filtering.
+        """
         return True
 
     def flatten(self, config, all_requests, common_vars):
@@ -104,6 +108,11 @@ class AbstractExecutionRequest(AbstractRequest):
         del self.input_files[i]
         for _, v in self.format_with.items():
             if isinstance(v, list):
+                assert len(v) == len(self.input_files) + 1
+                del v[i]
+        for v in self.dep_targets:
+            if isinstance(v, list):
+                assert len(v) == len(self.input_files) + 1
                 del v[i]
 
     def flatten(self, config, all_requests, common_vars):
