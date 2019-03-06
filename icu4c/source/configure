@@ -2603,6 +2603,10 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+# Instruct Python to never write any byte code to the ICU source tree.
+PYTHONDONTWRITEBYTECODE=1
+export PYTHONDONTWRITEBYTECODE
+
 
 
 
