@@ -4866,8 +4866,17 @@ $as_echo_n "checking how to build 64-bit executables... " >&6; }
             #    *FLAGS are assumed to be trashed, and will be reset from *FLAGS_OLD
 
             if test "$GCC" = yes; then
-                CFLAGS="${CFLAGS} -m64"
-                CXXFLAGS="${CXXFLAGS} -m64"
+                # even for GCC, this varies
+                case "${host}" in
+                *-*-aix*)
+                  CFLAGS="${CFLAGS} -maix64"
+                  CXXFLAGS="${CXXFLAGS} -maix64"
+                  ;;
+                *)
+                  CFLAGS="${CFLAGS} -m64"
+                  CXXFLAGS="${CXXFLAGS} -m64"
+                  ;;
+                esac
                 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 int main(void) {return (sizeof(void*)*8==64)?0:1;}
@@ -5087,8 +5096,17 @@ $as_echo "$BITS_RUN_64" >&6; };
             { $as_echo "$as_me:${as_lineno-$LINENO}: checking how to build 32-bit executables" >&5
 $as_echo_n "checking how to build 32-bit executables... " >&6; }
             if test "$GCC" = yes; then
-                CFLAGS="${CFLAGS} -m32"
-                CXXFLAGS="${CXXFLAGS} -m32"
+                # even for GCC, this varies
+                case "${host}" in
+                *-*-aix*)
+                  CFLAGS="${CFLAGS} -maix32"
+                  CXXFLAGS="${CXXFLAGS} -maix32"
+                  ;;
+                *)
+                  CFLAGS="${CFLAGS} -m32"
+                  CXXFLAGS="${CXXFLAGS} -m32"
+                  ;;
+                esac
                 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 int main(void) {return (sizeof(void*)*8==32)?0:1;}

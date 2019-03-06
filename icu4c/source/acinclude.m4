@@ -253,10 +253,19 @@ AC_DEFUN([AC_CHECK_64BIT_LIBS],
             #    *FLAGS are assumed to be trashed, and will be reset from *FLAGS_OLD
             
             if test "$GCC" = yes; then
-                CFLAGS="${CFLAGS} -m64"
-                CXXFLAGS="${CXXFLAGS} -m64"
+                # even for GCC, this varies
+                case "${host}" in
+                *-*-aix*)
+                  CFLAGS="${CFLAGS} -maix64"
+                  CXXFLAGS="${CXXFLAGS} -maix64"
+                  ;;
+                *)
+                  CFLAGS="${CFLAGS} -m64"
+                  CXXFLAGS="${CXXFLAGS} -m64"
+                  ;;
+                esac
                 AC_COMPILE_IFELSE([AC_LANG_SOURCE([int main(void) {return (sizeof(void*)*8==64)?0:1;}])],
-                   CAN_BUILD_64=yes, CAN_BUILD_64=no)
+                CAN_BUILD_64=yes, CAN_BUILD_64=no)
             else
                 case "${host}" in
                 sparc*-*-solaris*)
@@ -388,8 +397,17 @@ AC_DEFUN([AC_CHECK_64BIT_LIBS],
             # see comment under 'if BITS_CHECK_64', above.
             AC_MSG_CHECKING([how to build 32-bit executables])
             if test "$GCC" = yes; then
-                CFLAGS="${CFLAGS} -m32"
-                CXXFLAGS="${CXXFLAGS} -m32"
+                # even for GCC, this varies
+                case "${host}" in
+                *-*-aix*)
+                  CFLAGS="${CFLAGS} -maix32"
+                  CXXFLAGS="${CXXFLAGS} -maix32"
+                  ;;
+                *)
+                  CFLAGS="${CFLAGS} -m32"
+                  CXXFLAGS="${CXXFLAGS} -m32"
+                  ;;
+                esac
                 AC_COMPILE_IFELSE([AC_LANG_SOURCE([int main(void) {return (sizeof(void*)*8==32)?0:1;}])],
                    CAN_BUILD_32=yes, CAN_BUILD_32=no)
             fi
