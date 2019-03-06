@@ -281,8 +281,10 @@ class ResourceFilterInfo(object):
                 continue
             if request.tool != IcuTool("genrb"):
                 continue
+            if not request.input_files:
+                continue
             self._set_files(request.input_files)
-            request.dep_targets += [self.filter_files]
+            request.dep_targets += [self.filter_files[:]]
             arg_str = "--filterDir {TMP_DIR}/%s" % self.filter_tmp_dir
             request.args = "%s %s" % (arg_str, request.args)
 
