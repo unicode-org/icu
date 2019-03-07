@@ -2500,33 +2500,37 @@ static void TestUNumberingSystem(void) {
         }
     }
 
-    status = U_ZERO_ERROR;
-    uenum = unumsys_openAvailableNames(&status);
-    if ( U_SUCCESS(status) ) {
-        int32_t numsysCount = 0;
-        // sanity check for a couple of number systems that must be in the enumeration
-        UBool foundLatn = FALSE;
-        UBool foundArab = FALSE;
-        while ( (numsys = uenum_next(uenum, NULL, &status)) != NULL && U_SUCCESS(status) ) {
-            status = U_ZERO_ERROR;
-            unumsys = unumsys_openByName(numsys, &status);
-            if ( U_SUCCESS(status) ) {
-                numsysCount++;
-                if ( uprv_strcmp(numsys, "latn") ) foundLatn = TRUE;
-                if ( uprv_strcmp(numsys, "arab") ) foundArab = TRUE;
-                unumsys_close(unumsys);
-            } else {
-                log_err("unumsys_openAvailableNames includes %s but unumsys_openByName on it fails with status %s\n",
-                        numsys, myErrorName(status));
+    for (int i=0; i<3; ++i) {
+        // Run the test of unumsys_openAvailableNames() multiple times.
+        // Helps verify the management of the internal cache of the names.
+        status = U_ZERO_ERROR;
+        uenum = unumsys_openAvailableNames(&status);
+        if ( U_SUCCESS(status) ) {
+            int32_t numsysCount = 0;
+            // sanity check for a couple of number systems that must be in the enumeration
+            UBool foundLatn = FALSE;
+            UBool foundArab = FALSE;
+            while ( (numsys = uenum_next(uenum, NULL, &status)) != NULL && U_SUCCESS(status) ) {
+                status = U_ZERO_ERROR;
+                unumsys = unumsys_openByName(numsys, &status);
+                if ( U_SUCCESS(status) ) {
+                    numsysCount++;
+                    if ( uprv_strcmp(numsys, "latn") ) foundLatn = TRUE;
+                    if ( uprv_strcmp(numsys, "arab") ) foundArab = TRUE;
+                    unumsys_close(unumsys);
+                } else {
+                    log_err("unumsys_openAvailableNames includes %s but unumsys_openByName on it fails with status %s\n",
+                            numsys, myErrorName(status));
+                }
             }
+            uenum_close(uenum);
+            if ( numsysCount < 40 || !foundLatn || !foundArab ) {
+                log_err("unumsys_openAvailableNames results incomplete: numsysCount %d, foundLatn %d, foundArab %d\n",
+                        numsysCount, foundLatn, foundArab);
+            }
+        } else {
+            log_data_err("unumsys_openAvailableNames fails with status %s\n", myErrorName(status));
         }
-        uenum_close(uenum);
-        if ( numsysCount < 40 || !foundLatn || !foundArab ) {
-            log_err("unumsys_openAvailableNames results incomplete: numsysCount %d, foundLatn %d, foundArab %d\n",
-                    numsysCount, foundLatn, foundArab);
-        }
-    } else {
-        log_data_err("unumsys_openAvailableNames fails with status %s\n", myErrorName(status));
     }
 }
 
