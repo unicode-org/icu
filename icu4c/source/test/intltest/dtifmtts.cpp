@@ -1695,6 +1695,49 @@ void DateIntervalFormatTest::testFormattedDateInterval() {
             UPRV_LENGTHOF(expectedFieldPositions));
     }
 
+    {
+        const char16_t* message = u"FormattedDateInterval identical dates test: no span field";
+        const char16_t* expectedString = u"July 20, 2018";
+        LocalPointer<Calendar> input1(Calendar::createInstance("en-GB", status));
+        input1->set(2018, 6, 20);
+        FormattedDateInterval result = fmt->formatToValue(*input1, *input1, status);
+        static const UFieldPositionWithCategory expectedFieldPositions[] = {
+            // field, begin index, end index
+            {UFIELD_CATEGORY_DATE, UDAT_MONTH_FIELD, 0, 4},
+            {UFIELD_CATEGORY_DATE, UDAT_DATE_FIELD, 5, 7},
+            {UFIELD_CATEGORY_DATE, UDAT_YEAR_FIELD, 9, 13}};
+        checkMixedFormattedValue(
+            message,
+            result,
+            expectedString,
+            expectedFieldPositions,
+            UPRV_LENGTHOF(expectedFieldPositions));
+    }
+
+    // Test sample code
+    {
+        LocalPointer<Calendar> input1(Calendar::createInstance("en-GB", status));
+        LocalPointer<Calendar> input2(Calendar::createInstance("en-GB", status));
+        input1->set(2018, 6, 20);
+        input2->set(2018, 7, 3);
+
+        // Let fmt be a DateIntervalFormat for locale en-US and skeleton dMMMMy
+        // Let input1 be July 20, 2018 and input2 be August 3, 2018:
+        FormattedDateInterval result = fmt->formatToValue(*input1, *input2, status);
+        assertEquals("Expected output from format",
+            u"July 20 \u2013 August 3, 2018", result.toString(status));
+        ConstrainedFieldPosition cfpos;
+        cfpos.constrainField(UFIELD_CATEGORY_DATE_INTERVAL_SPAN, 0);
+        if (result.nextPosition(cfpos, status)) {
+            assertEquals("Expect start index", 0, cfpos.getStart());
+            assertEquals("Expect end index", 7, cfpos.getLimit());
+        } else {
+            // No such span: can happen if input dates are equal.
+        }
+        assertFalse("No more than one occurrence of the field",
+            result.nextPosition(cfpos, status));
+    }
+
     // To test the fallback pattern behavior, make a custom DateIntervalInfo.
     DateIntervalInfo dtitvinf(status);
     dtitvinf.setFallbackIntervalPattern("<< {1} --- {0} >>", status);
