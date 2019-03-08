@@ -149,6 +149,8 @@ void NumberSkeletonTest::invalidTokens() {
             u"integer-width/xxx",
             u"integer-width/0+",
             u"integer-width/+0#",
+            u"integer-width/+#",
+            u"integer-width/+#0",
             u"scientific/foo"};
 
     expectedErrorSkeleton(cases, UPRV_LENGTHOF(cases));

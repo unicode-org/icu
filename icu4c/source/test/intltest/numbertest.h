@@ -71,6 +71,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void decimal();
     void scale();
     void locale();
+    void skeletonUserGuideExamples();
     void formatTypes();
     void fieldPositionLogic();
     void fieldPositionCoverage();

@@ -1163,7 +1163,7 @@ class NumberSkeletonImpl {
                 maxInt = 0;
             }
             for (; offset < segment.length(); offset++) {
-                if (segment.charAt(offset) == '#') {
+                if (maxInt != -1 && segment.charAt(offset) == '#') {
                     maxInt++;
                 } else {
                     break;
