@@ -123,6 +123,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestCases);
 
   TESTCASE_AUTO(TestCurrencyNames);
+  TESTCASE_AUTO(Test20484_NarrowSymbolFallback);
   TESTCASE_AUTO(TestCurrencyAmount);
   TESTCASE_AUTO(TestCurrencyUnit);
   TESTCASE_AUTO(TestCoverage);
@@ -2095,6 +2096,50 @@ void NumberFormatTest::TestCurrencyNames(void) {
                     U_USING_DEFAULT_WARNING == ec, TRUE);
 
     // TODO add more tests later
+}
+
+void NumberFormatTest::Test20484_NarrowSymbolFallback(){
+    IcuTestErrorCode status(*this, "Test20484_NarrowSymbolFallback");
+
+    struct TestCase {
+        const char* locale;
+        const char16_t* isoCode;
+        const char16_t* expectedShort;
+        const char16_t* expectedNarrow;
+        UErrorCode expectedNarrowError;
+    } cases[] = {
+        {"en-US", u"CAD", u"CA$", u"$", U_USING_DEFAULT_WARNING}, // narrow: fallback to root
+        {"en-US", u"CDF", u"CDF", u"CDF", U_USING_FALLBACK_WARNING}, // narrow: fallback to short
+        {"sw-CD", u"CDF", u"FC", u"FC", U_USING_FALLBACK_WARNING}, // narrow: fallback to short
+        {"en-US", u"GEL", u"GEL", u"₾", U_USING_DEFAULT_WARNING}, // narrow: fallback to root
+        {"ka-GE", u"GEL", u"₾", u"₾", U_USING_FALLBACK_WARNING}, // narrow: fallback to ka
+        {"ka", u"GEL", u"₾", u"₾", U_ZERO_ERROR}, // no fallback on narrow
+    };
+    for (const auto& cas : cases) {
+        status.setScope(cas.isoCode);
+        UBool choiceFormatIgnored;
+        int32_t lengthIgnored;
+        const UChar* actualShort = ucurr_getName(
+            cas.isoCode,
+            cas.locale,
+            UCURR_SYMBOL_NAME,
+            &choiceFormatIgnored,
+            &lengthIgnored,
+            status);
+        status.errIfFailureAndReset();
+        const UChar* actualNarrow = ucurr_getName(
+            cas.isoCode,
+            cas.locale,
+            UCURR_NARROW_SYMBOL_NAME,
+            &choiceFormatIgnored,
+            &lengthIgnored,
+            status);
+        status.expectErrorAndReset(cas.expectedNarrowError);
+        assertEquals(UnicodeString("Short symbol: ") + cas.locale + u": " + cas.isoCode,
+                cas.expectedShort, actualShort);
+        assertEquals(UnicodeString("Narrow symbol: ") + cas.locale + ": " + cas.isoCode,
+                cas.expectedNarrow, actualNarrow);
+    }
 }
 
 void NumberFormatTest::TestCurrencyUnit(void){
