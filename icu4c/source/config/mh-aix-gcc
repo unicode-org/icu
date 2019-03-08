@@ -89,11 +89,11 @@ STATIC_O = o
 ## Build archive from shared object
 %.a : %.so
 	ln -f $< $(SHARED_OBJECT_NO_VERSION)
-	$(AIX_PREDELETE) $(AR) $(ARFLAGS) $@ $(SHARED_OBJECT_NO_VERSION)
+	$(AR) $(ARFLAGS) $@ $(SHARED_OBJECT_NO_VERSION)
 	rm -f $(SHARED_OBJECT_NO_VERSION)
 $(LIBDIR)/%.a : %.so
 	ln -f $< $(SHARED_OBJECT_NO_VERSION)
-	$(AIX_PREDELETE) $(AR) $(ARFLAGS) $@ $(SHARED_OBJECT_NO_VERSION)
+	$(AR) $(ARFLAGS) $@ $(SHARED_OBJECT_NO_VERSION)
 	rm -f $(SHARED_OBJECT_NO_VERSION)
 
 ## Build import list from export list
