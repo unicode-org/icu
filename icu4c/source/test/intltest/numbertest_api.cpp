@@ -88,6 +88,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(decimal);
         TESTCASE_AUTO(scale);
         TESTCASE_AUTO(locale);
+        TESTCASE_AUTO(skeletonUserGuideExamples);
         TESTCASE_AUTO(formatTypes);
         TESTCASE_AUTO(fieldPositionLogic);
         TESTCASE_AUTO(fieldPositionCoverage);
@@ -2196,6 +2197,47 @@ void NumberFormatterApiTest::locale() {
     UnicodeString actual = NumberFormatter::withLocale(Locale::getFrench()).formatInt(1234, status)
             .toString(status);
     assertEquals("Locale withLocale()", u"1\u202f234", actual);
+}
+
+void NumberFormatterApiTest::skeletonUserGuideExamples() {
+    IcuTestErrorCode status(*this, "skeletonUserGuideExamples");
+
+    // Test the skeleton examples in userguide/format_parse/numbers/skeletons.md
+    struct TestCase {
+        const char16_t* skeleton;
+        double input;
+        const char16_t* expected;
+    } cases[] = {
+        {u"percent", 25, u"25%"},
+        {u".00", 25, u"25.00"},
+        {u"percent .00", 25, u"25.00%"},
+        {u"scale/100", 0.3, u"30"},
+        {u"percent scale/100", 0.3, u"30%"},
+        {u"measure-unit/length-meter", 5, u"5 m"},
+        {u"measure-unit/length-meter unit-width-full-name", 5, u"5 meters"},
+        {u"currency/CAD", 10, u"CA$10.00"},
+        {u"currency/CAD unit-width-narrow", 10, u"$10.00"},
+        {u"compact-short", 5000, u"5K"},
+        {u"compact-long", 5000, u"5 thousand"},
+        {u"compact-short currency/CAD", 5000, u"CA$5K"},
+        {u"", 5000, u"5,000"},
+        {u"group-min2", 5000, u"5000"},
+        {u"group-min2", 15000, u"15,000"},
+        {u"sign-always", 60, u"+60"},
+        {u"sign-always", 0, u"+0"},
+        {u"sign-except-zero", 60, u"+60"},
+        {u"sign-except-zero", 0, u"0"},
+        {u"sign-accounting currency/CAD", -40, u"(CA$40.00)"}
+    };
+
+    for (const auto& cas : cases) {
+        status.setScope(cas.skeleton);
+        FormattedNumber actual = NumberFormatter::forSkeleton(cas.skeleton, status)
+            .locale("en-US")
+            .formatDouble(cas.input, status);
+        assertEquals(cas.skeleton, cas.expected, actual.toTempString(status));
+        status.errIfFailureAndReset();
+    }
 }
 
 void NumberFormatterApiTest::formatTypes() {
