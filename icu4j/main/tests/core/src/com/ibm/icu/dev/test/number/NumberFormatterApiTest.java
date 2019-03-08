@@ -741,7 +741,7 @@ public class NumberFormatterApiTest {
                 NumberFormatter.with().unit(PTE).unitWidth(UnitWidth.NARROW),
                 ULocale.forLanguageTag("pt-PT"),
                 444444.55,
-                "444,444$55 PTE");
+                "444,444$55 \u200B");
 
         assertFormatSingle(
                 "Currency-dependent symbols (Test)",

@@ -690,7 +690,13 @@ ucurr_getName(const UChar* currency,
         key.append("/", ec2);
         key.append(buf, ec2);
         s = ures_getStringByKeyWithFallback(rb.getAlias(), key.data(), len, &ec2);
-    } else {
+        if (ec2 == U_MISSING_RESOURCE_ERROR) {
+            *ec = U_USING_FALLBACK_WARNING;
+            ec2 = U_ZERO_ERROR;
+            choice = UCURR_SYMBOL_NAME;
+        }
+    }
+    if (s == NULL) {
         ures_getByKey(rb.getAlias(), CURRENCIES, rb.getAlias(), &ec2);
         ures_getByKeyWithFallback(rb.getAlias(), buf, rb.getAlias(), &ec2);
         s = ures_getStringByIndex(rb.getAlias(), choice, len, &ec2);

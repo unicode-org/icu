@@ -239,6 +239,30 @@ public class CurrencyTest extends TestFmwk {
     }
 
     @Test
+    public void test20484_NarrowSymbolFallback() {
+        Object[][] cases = new Object[][] {
+            {"en-US", "CAD", "CA$", "$"},
+            {"en-US", "CDF", "CDF", "CDF"},
+            {"sw-CD", "CDF", "FC", "FC"},
+            {"en-US", "GEL", "GEL", "₾"},
+            {"ka-GE", "GEL", "₾", "₾"},
+            {"ka", "GEL", "₾", "₾"},
+        };
+        for (Object[] cas : cases) {
+            ULocale locale = new ULocale((String) cas[0]);
+            String isoCode = (String) cas[1];
+            String expectedShort = (String) cas[2];
+            String expectedNarrow = (String) cas[3];
+
+            CurrencyDisplayNames cdn = CurrencyDisplayNames.getInstance(locale);
+            assertEquals("Short symbol: " + locale + ": " + isoCode,
+                    expectedShort, cdn.getSymbol(isoCode));
+            assertEquals("Narrow symbol: " + locale + ": " + isoCode,
+                    expectedNarrow, cdn.getNarrowSymbol(isoCode));
+        }
+    }
+
+    @Test
     public void testGetName_Locale_Int_String_BooleanArray() {
         Currency currency = Currency.getInstance(ULocale.CHINA);
         boolean[] isChoiceFormat = new boolean[1];

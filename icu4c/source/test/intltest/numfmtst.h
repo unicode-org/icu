@@ -153,6 +153,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
 
     void TestCurrencyNames(void);
 
+    void Test20484_NarrowSymbolFallback(void);
+
     void TestCurrencyAmount(void);
 
     void TestCurrencyUnit(void);

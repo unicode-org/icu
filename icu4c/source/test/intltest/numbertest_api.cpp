@@ -779,7 +779,7 @@ void NumberFormatterApiTest::unitCurrency() {
             NumberFormatter::with().unit(PTE).unitWidth(UNUM_UNIT_WIDTH_NARROW),
             Locale("pt-PT"),
             444444.55,
-            u"444,444$55 PTE");
+            u"444,444$55 \u200B");
 
     assertFormatSingle(
             u"Currency-dependent symbols (Test ISO Code)",
