@@ -2437,15 +2437,31 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      */
     FormattedNumber& operator=(FormattedNumber&& src) U_NOEXCEPT;
 
-    /** @copydoc FormattedValue::toString() */
+    // Copybrief: this method is older than the parent method
+    /**
+     * @copybrief FormattedValue::toString()
+     *
+     * For more information, see FormattedValue::toString()
+     *
+     * @draft ICU 62
+     */
     UnicodeString toString(UErrorCode& status) const U_OVERRIDE;
 
+    // Copydoc: this method is new in ICU 64
     /** @copydoc FormattedValue::toTempString() */
     UnicodeString toTempString(UErrorCode& status) const U_OVERRIDE;
 
-    /** @copydoc FormattedValue::appendTo() */
+    // Copybrief: this method is older than the parent method
+    /**
+     * @copybrief FormattedValue::appendTo()
+     *
+     * For more information, see FormattedValue::appendTo()
+     *
+     * @draft ICU 62
+     */
     Appendable &appendTo(Appendable& appendable, UErrorCode& status) const U_OVERRIDE;
 
+    // Copydoc: this method is new in ICU 64
     /** @copydoc FormattedValue::nextPosition() */
     UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
 
