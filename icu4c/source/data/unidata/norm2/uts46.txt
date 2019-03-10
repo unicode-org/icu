@@ -1,7 +1,7 @@
 # Original file:
 # IdnaMappingTable-12.0.0.txt
-# Date: 2018-11-05, 14:37:00 GMT
-# © 2018 Unicode®, Inc.
+# Date: 2019-03-02, 13:45:26 GMT
+# © 2019 Unicode®, Inc.
 # Unicode and the Unicode Logo are registered trademarks of Unicode, Inc. in the U.S. and other countries.
 # For terms of use, see http://www.unicode.org/terms_of_use.html
 #
@@ -7508,7 +7508,8 @@ FFFE..FFFF    >FFFD                     # 1.1  <noncharacter-FFFE>..<noncharacte
 1E13E..1E13F  >FFFD                     # NA   <reserved-1E13E>..<reserved-1E13F>
 # 1E140..1E149valid                     # 12.0 NYIAKENG PUACHUE HMONG DIGIT ZERO..NYIAKENG PUACHUE HMONG DIGIT NINE
 1E14A..1E14D  >FFFD                     # NA   <reserved-1E14A>..<reserved-1E14D>
-# 1E14E..1E14Fvalid                     # 12.0 NYIAKENG PUACHUE HMONG LOGOGRAM NYAJ..NYIAKENG PUACHUE HMONG CIRCLED CA
+# 1E14E       valid                     # 12.0 NYIAKENG PUACHUE HMONG LOGOGRAM NYAJ
+# 1E14F       valid                     # 12.0 NYIAKENG PUACHUE HMONG CIRCLED CA
 1E150..1E2BF  >FFFD                     # NA   <reserved-1E150>..<reserved-1E2BF>
 # 1E2C0..1E2F9valid                     # 12.0 WANCHO LETTER AA..WANCHO DIGIT NINE
 1E2FA..1E2FE  >FFFD                     # NA   <reserved-1E2FA>..<reserved-1E2FE>
