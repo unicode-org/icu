@@ -427,6 +427,19 @@ public final class UCharacterCaseTest extends TestFmwk
     }
 
     @Test
+    public void TestLithuanianTitle() {
+        ULocale LOC_LITHUANIAN = new ULocale("lt");
+
+        assertEquals("Lithuanian titlecase check in Lithuanian",
+                "\u0058\u0069\u0307\u0308",
+                UCharacter.toTitleCase(LOC_LITHUANIAN, "\u0058\u0049\u0308", null));
+
+        assertEquals("Lithuanian titlecase check in Lithuanian",
+                "\u0058\u0069\u0307\u0308",
+                UCharacter.toTitleCase(LITHUANIAN_LOCALE_, "\u0058\u0049\u0308", null));
+    }
+
+    @Test
     public void TestDutchTitle() {
         ULocale LOC_DUTCH = new ULocale("nl");
         int options = 0;
