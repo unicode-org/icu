@@ -80,7 +80,6 @@ UPRV_FORMATTED_VALUE_SUBCLASS_AUTO_IMPL(FormattedList)
 
 
 static Hashtable* listPatternHash = nullptr;
-static UMutex listFormatterMutex = U_MUTEX_INITIALIZER;
 static const char STANDARD_STYLE[] = "standard";
 
 U_CDECL_BEGIN
@@ -145,6 +144,7 @@ const ListFormatInternal* ListFormatter::getListFormatInternal(
     keyBuffer.append(':', errorCode).append(style, errorCode);
     UnicodeString key(keyBuffer.data(), -1, US_INV);
     ListFormatInternal* result = nullptr;
+    static UMutex listFormatterMutex = U_MUTEX_INITIALIZER;
     {
         Mutex m(&listFormatterMutex);
         if (listPatternHash == nullptr) {

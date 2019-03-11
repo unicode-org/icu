@@ -230,7 +230,10 @@ static const int32_t gFieldRangeBias[] = {
 static const int32_t HEBREW_CAL_CUR_MILLENIUM_START_YEAR = 5000;
 static const int32_t HEBREW_CAL_CUR_MILLENIUM_END_YEAR = 6000;
 
-static UMutex LOCK = U_MUTEX_INITIALIZER;
+static UMutex *LOCK() {
+    static UMutex m = U_MUTEX_INITIALIZER;
+    return &m;
+}
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SimpleDateFormat)
 
@@ -1263,14 +1266,14 @@ SimpleDateFormat::initNumberFormatters(const Locale &locale,UErrorCode &status) 
     if ( fDateOverride.isBogus() && fTimeOverride.isBogus() ) {
         return;
     }
-    umtx_lock(&LOCK);
+    umtx_lock(LOCK());
     if (fSharedNumberFormatters == NULL) {
         fSharedNumberFormatters = allocSharedNumberFormatters();
         if (fSharedNumberFormatters == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
         }
     }
-    umtx_unlock(&LOCK);
+    umtx_unlock(LOCK());
 
     if (U_FAILURE(status)) {
         return;
@@ -4198,7 +4201,7 @@ SimpleDateFormat::skipUWhiteSpace(const UnicodeString& text, int32_t pos) const 
 TimeZoneFormat *
 SimpleDateFormat::tzFormat(UErrorCode &status) const {
     if (fTimeZoneFormat == NULL) {
-        umtx_lock(&LOCK);
+        umtx_lock(LOCK());
         {
             if (fTimeZoneFormat == NULL) {
                 TimeZoneFormat *tzfmt = TimeZoneFormat::createInstance(fLocale, status);
@@ -4209,7 +4212,7 @@ SimpleDateFormat::tzFormat(UErrorCode &status) const {
                 const_cast<SimpleDateFormat *>(this)->fTimeZoneFormat = tzfmt;
             }
         }
-        umtx_unlock(&LOCK);
+        umtx_unlock(LOCK());
     }
     return fTimeZoneFormat;
 }
