@@ -140,6 +140,7 @@
 # 1a. Java and ant variables, adjust for your system
 
 export JAVA_HOME=`/usr/libexec/java_home`
+mkdir -p /tmp/cldrdtd
 export ANT_OPTS="-Xmx4096m -DCLDR_DTD_CACHE=/tmp/cldrdtd"
 
 # 1b. CLDR variables, adjust for your setup; with cygwin it might be e.g.
