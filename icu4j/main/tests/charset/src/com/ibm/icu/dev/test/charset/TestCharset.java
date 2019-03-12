@@ -21,6 +21,7 @@ import java.nio.charset.CodingErrorAction;
 import java.nio.charset.UnsupportedCharsetException;
 import java.nio.charset.spi.CharsetProvider;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -3215,6 +3216,28 @@ public class TestCharset extends TestFmwk {
             errln("Overflow buffer while encoding UTF-7 should have occurred.");
         }
         //end of charset encoder code coverage code
+    }
+
+    @Test
+    public void TestBug12956() {
+        final CharsetProvider provider = new CharsetProviderICU();
+        final Charset cs_utf7 = provider.charsetForName("UTF-7");
+        final Charset cs_imap = provider.charsetForName("IMAP-mailbox-name");
+        final String test = "新";
+        final byte[] expected_utf7 = {0x2b, 0x5a, 0x62, 0x41, 0x2d};
+        final byte[] expected_imap = {0x26, 0x5a, 0x62, 0x41, 0x2d};
+
+        byte[] bytes = test.getBytes(cs_utf7);
+        if (!Arrays.equals(bytes, expected_utf7)) {
+            errln("Incorrect UTF-7 conversion. Got " + new String(bytes) + " but expect " +
+                  new String(expected_utf7));
+        }
+
+        bytes = test.getBytes(cs_imap);
+        if (!Arrays.equals(bytes, expected_imap)) {
+            errln("Incorrect IMAP-mailbox-name conversion. Got " + new String(bytes) +
+                  " but expect " + new String(expected_imap));
+        }
     }
 
     //Test Charset ISCII
