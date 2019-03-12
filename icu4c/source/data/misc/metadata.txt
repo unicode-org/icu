@@ -195,6 +195,10 @@ metadata:table(nofallback){
                 reason{"deprecated"}
                 replacement{"rki"}
             }
+            cel-gaulish{
+                reason{"legacy"}
+                replacement{"xtg-x-cel-gaulish"}
+            }
             ces{
                 reason{"overlong"}
                 replacement{"cs"}
@@ -538,6 +542,18 @@ metadata:table(nofallback){
             hye{
                 reason{"overlong"}
                 replacement{"hy"}
+            }
+            i-default{
+                reason{"legacy"}
+                replacement{"en-x-i-default"}
+            }
+            i-enochian{
+                reason{"legacy"}
+                replacement{"und-x-i-enochian"}
+            }
+            i-mingo{
+                reason{"legacy"}
+                replacement{"see-x-i-mingo"}
             }
             i_ami{
                 reason{"deprecated"}
@@ -1587,6 +1603,10 @@ metadata:table(nofallback){
                 reason{"macrolanguage"}
                 replacement{"zap"}
             }
+            zh-min{
+                reason{"legacy"}
+                replacement{"nan-x-zh-min"}
+            }
             zh_CN{
                 reason{"legacy"}
                 replacement{"zh_Hans_CN"}
@@ -1669,7 +1689,7 @@ metadata:table(nofallback){
             }
             cn15{
                 reason{"deprecated"}
-                replacement{"cnnm"}
+                replacement{"cnmn"}
             }
             cn21{
                 reason{"deprecated"}
@@ -1810,6 +1830,10 @@ metadata:table(nofallback){
             cz10f{
                 reason{"deprecated"}
                 replacement{"cz115"}
+            }
+            cz611{
+                reason{"deprecated"}
+                replacement{"cz663"}
             }
             cz612{
                 reason{"deprecated"}
@@ -2102,6 +2126,70 @@ metadata:table(nofallback){
             omsh{
                 reason{"deprecated"}
                 replacement{"omsj omss"}
+            }
+            plds{
+                reason{"deprecated"}
+                replacement{"pl02"}
+            }
+            plkp{
+                reason{"deprecated"}
+                replacement{"pl04"}
+            }
+            pllb{
+                reason{"deprecated"}
+                replacement{"pl08"}
+            }
+            plld{
+                reason{"deprecated"}
+                replacement{"pl10"}
+            }
+            pllu{
+                reason{"deprecated"}
+                replacement{"pl06"}
+            }
+            plma{
+                reason{"deprecated"}
+                replacement{"pl12"}
+            }
+            plmz{
+                reason{"deprecated"}
+                replacement{"pl14"}
+            }
+            plop{
+                reason{"deprecated"}
+                replacement{"pl16"}
+            }
+            plpd{
+                reason{"deprecated"}
+                replacement{"pl20"}
+            }
+            plpk{
+                reason{"deprecated"}
+                replacement{"pl18"}
+            }
+            plpm{
+                reason{"deprecated"}
+                replacement{"pl22"}
+            }
+            plsk{
+                reason{"deprecated"}
+                replacement{"pl26"}
+            }
+            plsl{
+                reason{"deprecated"}
+                replacement{"pl24"}
+            }
+            plwn{
+                reason{"deprecated"}
+                replacement{"pl28"}
+            }
+            plwp{
+                reason{"deprecated"}
+                replacement{"pl30"}
+            }
+            plzp{
+                reason{"deprecated"}
+                replacement{"pl32"}
             }
             shta{
                 reason{"overlong"}

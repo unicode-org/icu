@@ -7,8 +7,25 @@ ps_PK{
         " ء ب پ ت ټ ث ج ځ چ څ ح خ د ډ ذ ر ړ ز ژ ږ س ش ښ ص ض ط ظ ع غ ف ق ک ګ گ ل م ن ڼ"
         " ه ة و ؤ ی ے ي ې ۍ ئ]"
     }
-    Version{"2.1.48.67"}
+    Version{"2.1.49.34"}
     calendar{
+        gregorian{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE د y د MMMM d",
+                "د y د MMMM d",
+                "y MMM d",
+                "y/M/d",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+        }
         islamic{
             monthNames{
                 format{

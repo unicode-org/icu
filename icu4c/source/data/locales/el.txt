@@ -211,7 +211,7 @@ el{
         minimumGroupingDigits{"1"}
         traditional{"grek"}
     }
-    Version{"2.1.48.27"}
+    Version{"2.1.49.26"}
     calendar{
         buddhist{
             DateTimePatterns{

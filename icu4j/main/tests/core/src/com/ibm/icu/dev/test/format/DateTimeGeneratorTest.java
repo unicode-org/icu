@@ -1689,11 +1689,6 @@ public class DateTimeGeneratorTest extends TestFmwk {
         ULocale[] locales = DateFormat.getAvailableULocales();
         for (ULocale locale: locales) {
             String localeID = locale.getName();
-            if ( logKnownIssue("cldrbug:11894", "locales with known timeData vs short time format mismatch") &&
-                    ( localeID.equals("ps_PK") || localeID.equals("ff_Latn_GH") || localeID.equals("ff_Latn_GM")
-                    || localeID.equals("ff_Latn_LR") || localeID.equals("ff_Latn_SL") ) ) {
-                continue;
-            }
             DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(locale);
             DateFormat dfmt = DateFormat.getTimeInstance(DateFormat.SHORT, locale);
             String shortPattern = ((SimpleDateFormat)dfmt).toPattern();
