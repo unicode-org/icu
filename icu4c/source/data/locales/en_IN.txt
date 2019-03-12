@@ -23,6 +23,10 @@ en_IN{
                         one{"¤0L"}
                         other{"¤0L"}
                     }
+                    1000000{
+                        one{"¤00L"}
+                        other{"¤00L"}
+                    }
                     10000000{
                         one{"¤0Cr"}
                         other{"¤0Cr"}
@@ -30,6 +34,10 @@ en_IN{
                     100000000{
                         one{"¤00Cr"}
                         other{"¤00Cr"}
+                    }
+                    1000000000{
+                        one{"¤000Cr"}
+                        other{"¤000Cr"}
                     }
                     10000000000{
                         one{"¤0TCr"}
@@ -39,11 +47,23 @@ en_IN{
                         one{"¤00TCr"}
                         other{"¤00TCr"}
                     }
+                    1000000000000{
+                        one{"¤0LCr"}
+                        other{"¤0LCr"}
+                    }
+                    10000000000000{
+                        one{"¤00LCr"}
+                        other{"¤00LCr"}
+                    }
+                    100000000000000{
+                        one{"¤000LCr"}
+                        other{"¤000LCr"}
+                    }
                 }
             }
         }
     }
-    Version{"2.1.47.86"}
+    Version{"2.1.49.14"}
     calendar{
         generic{
             DateTimePatterns{
