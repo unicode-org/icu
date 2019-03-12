@@ -72,6 +72,7 @@ static void TestRBNFRounding(void);
 static void Test12052_NullPointer(void);
 static void TestParseCases(void);
 static void TestSetMaxFracAndRoundIncr(void);
+static void TestIgnorePadding(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -110,6 +111,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(Test12052_NullPointer);
     TESTCASE(TestParseCases);
     TESTCASE(TestSetMaxFracAndRoundIncr);
+    TESTCASE(TestIgnorePadding);
 }
 
 /* test Parse int 64 */
@@ -3383,6 +3385,54 @@ static void TestSetMaxFracAndRoundIncr(void) {
         }
 
         unum_close(unf);
+    }
+}
+
+static void TestIgnorePadding(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UNumberFormat* unum = unum_open(UNUM_PATTERN_DECIMAL, NULL, 0, "en_US", NULL, &status);
+    if (U_FAILURE(status)) {
+        log_data_err("unum_open UNUM_PATTERN_DECIMAL for en_US and NULL pattern fails:%s\n", u_errorName(status));
+    } else {
+        unum_setAttribute(unum, UNUM_GROUPING_USED, 0);
+        unum_setAttribute(unum, UNUM_FORMAT_WIDTH, 0);
+        unum_setTextAttribute(unum, UNUM_PADDING_CHARACTER, u"*", 1, &status);
+        if (U_FAILURE(status)) {
+            log_err("unum_setTextAttribute UNUM_PADDING_CHARACTER to '*' fails: %s\n", u_errorName(status));
+        } else {
+            unum_setAttribute(unum, UNUM_PADDING_POSITION, 0);
+            unum_setAttribute(unum, UNUM_MIN_INTEGER_DIGITS, 0);
+            unum_setAttribute(unum, UNUM_MAX_INTEGER_DIGITS, 8);
+            unum_setAttribute(unum, UNUM_MIN_FRACTION_DIGITS, 0);
+            unum_setAttribute(unum, UNUM_MAX_FRACTION_DIGITS, 0);
+
+            UChar ubuf[kUBufMax];
+            int32_t ulen = unum_toPattern(unum, FALSE, ubuf, kUBufMax, &status);
+            if (U_FAILURE(status)) {
+                log_err("unum_toPattern fails: %s\n", u_errorName(status));
+            } else {
+                char bbuf[kBBufMax];
+                if (ulen > 0 && ubuf[0]==u'*') {
+                    ubuf[kUBufMax-1] = 0; // ensure zero termination
+                    u_austrncpy(bbuf, ubuf, kBBufMax);
+                    log_err("unum_toPattern result should ignore padding but get %s\n", bbuf);
+                }
+                unum_applyPattern(unum, FALSE, ubuf, ulen, NULL, &status);
+                if (U_FAILURE(status)) {
+                    log_err("unum_applyPattern fails: %s\n", u_errorName(status));
+                } else {
+                    ulen = unum_formatDecimal(unum, "24", -1, ubuf, kUBufMax, NULL, &status);
+                    if (U_FAILURE(status)) {
+                        log_err("unum_formatDecimal fails: %s\n", u_errorName(status));
+                    } else if (u_strcmp(ubuf, u"24") != 0) {
+                        ubuf[kUBufMax-1] = 0; // ensure zero termination
+                        u_austrncpy(bbuf, ubuf, kBBufMax);
+                        log_err("unum_formatDecimal result expect 24 but get %s\n", bbuf);
+                    }
+                }
+            }
+        }
+        unum_close(unum);
     }
 }
 

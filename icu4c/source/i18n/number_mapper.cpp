@@ -182,7 +182,7 @@ MacroProps NumberPropertyMapper::oldToNew(const DecimalFormatProperties& propert
     // PADDING //
     /////////////
 
-    if (properties.formatWidth != -1) {
+    if (properties.formatWidth > 0) {
         macros.padder = Padder::forProperties(properties);
     }
 

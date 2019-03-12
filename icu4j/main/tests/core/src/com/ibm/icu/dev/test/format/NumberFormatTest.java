@@ -1418,6 +1418,29 @@ public class NumberFormatTest extends TestFmwk {
         expect2(new DecimalFormat("*'😃'####.00", US), 1.1, "😃😃😃1.10");
     }
 
+    @Test
+    public void TestIgnorePadding() {
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.US);
+        DecimalFormat fmt = new DecimalFormat("", dfs);
+        fmt.setGroupingUsed(false);
+        fmt.setFormatWidth(0);
+        fmt.setPadCharacter('*');
+        fmt.setPadPosition(0);
+        fmt.setMinimumIntegerDigits(0);
+        fmt.setMaximumIntegerDigits(8);
+        fmt.setMinimumFractionDigits(0);
+        fmt.setMaximumFractionDigits(0);
+        String pattern = fmt.toPattern();
+        if (pattern.startsWith("*")) {
+            errln("ERROR toPattern result should ignore padding but get \"" + pattern + "\"");
+        }
+        fmt.applyPattern(pattern);
+        String format = fmt.format(24);
+        if (!format.equals("24")) {
+             errln("ERROR format result expect 24 but get \"" + format + "\"");
+       }
+    }
+
     /**
      * Upgrade to alphaWorks
      */
