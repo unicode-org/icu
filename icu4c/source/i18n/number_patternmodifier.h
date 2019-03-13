@@ -46,7 +46,7 @@ class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator, public U
 
     void processQuantity(DecimalQuantity&, MicroProps& micros, UErrorCode& status) const U_OVERRIDE;
 
-    void applyToMicros(MicroProps& micros, DecimalQuantity& quantity) const;
+    void applyToMicros(MicroProps& micros, const DecimalQuantity& quantity, UErrorCode& status) const;
 
     const Modifier* getModifier(int8_t signum, StandardPlural::Form plural) const;
 

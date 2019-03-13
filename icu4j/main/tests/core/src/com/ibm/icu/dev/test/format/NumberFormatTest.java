@@ -4152,7 +4152,7 @@ public class NumberFormatTest extends TestFmwk {
             int fracForRoundIncr = 0;
             if (roundIncrUsed) {
                 double  testIncr = item.roundIncr;
-                for (; testIncr > (double)((int)testIncr); testIncr *= 10.0, fracForRoundIncr++);
+                for (; testIncr > ((int)testIncr); testIncr *= 10.0, fracForRoundIncr++);
             }
 
             int minInt = df.getMinimumIntegerDigits();
@@ -6612,6 +6612,17 @@ public class NumberFormatTest extends TestFmwk {
             NumberFormat nf = NumberFormat.getInstance(ULocale.ENGLISH, NumberFormat.PLURALCURRENCYSTYLE);
             assertEquals("plural", "1.10 (unknown currency)", nf.format(1.1));
             assertEquals("currency", "XXX", nf.getCurrency().getCurrencyCode());
+        }
+    }
+
+    @Test
+    public void test20499_CurrencyVisibleDigitsPlural() {
+        ULocale locale = new ULocale("ro-RO");
+        NumberFormat nf = NumberFormat.getInstance(locale, NumberFormat.PLURALCURRENCYSTYLE);
+        String expected = "24,00 lei românești";
+        for (int i=0; i<5; i++) {
+            String actual = nf.format(24);
+            assertEquals("iteration " + i, expected, actual);
         }
     }
 }

@@ -128,7 +128,6 @@ public class CompactNotation extends Notation {
                 magnitude = 0;
                 micros.rounder.apply(quantity);
             } else {
-                // TODO: Revisit chooseMultiplierAndApply
                 int multiplier = micros.rounder.chooseMultiplierAndApply(quantity, data);
                 magnitude = quantity.isZero() ? 0 : quantity.getMagnitude();
                 magnitude -= multiplier;

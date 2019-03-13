@@ -65,6 +65,7 @@ public class NumberFormatterApiTest {
     private static final Currency CAD = Currency.getInstance("CAD");
     private static final Currency ESP = Currency.getInstance("ESP");
     private static final Currency PTE = Currency.getInstance("PTE");
+    private static final Currency RON = Currency.getInstance("RON");
 
     @Test
     public void notationSimple() {
@@ -728,7 +729,7 @@ public class NumberFormatterApiTest {
         // NOTE: This is a bit of a hack on CLDR's part. They set the currency symbol to U+200B (zero-
         // width space), and they set the decimal separator to the $ symbol.
         assertFormatSingle(
-                "Currency-dependent symbols (Test)",
+                "Currency-dependent symbols (Test Short)",
                 "currency/PTE unit-width-short",
                 NumberFormatter.with().unit(PTE).unitWidth(UnitWidth.SHORT),
                 ULocale.forLanguageTag("pt-PT"),
@@ -736,7 +737,7 @@ public class NumberFormatterApiTest {
                 "444,444$55 \u200B");
 
         assertFormatSingle(
-                "Currency-dependent symbols (Test)",
+                "Currency-dependent symbols (Test Narrow)",
                 "currency/PTE unit-width-narrow",
                 NumberFormatter.with().unit(PTE).unitWidth(UnitWidth.NARROW),
                 ULocale.forLanguageTag("pt-PT"),
@@ -744,12 +745,20 @@ public class NumberFormatterApiTest {
                 "444,444$55 \u200B");
 
         assertFormatSingle(
-                "Currency-dependent symbols (Test)",
+                "Currency-dependent symbols (Test ISO Code)",
                 "currency/PTE unit-width-iso-code",
                 NumberFormatter.with().unit(PTE).unitWidth(UnitWidth.ISO_CODE),
                 ULocale.forLanguageTag("pt-PT"),
                 444444.55,
                 "444,444$55 PTE");
+
+        assertFormatSingle(
+                "Plural form depending on visible digits (ICU-20499)",
+                "currency/RON unit-width-full-name",
+                NumberFormatter.with().unit(RON).unitWidth(UnitWidth.FULL_NAME),
+                ULocale.forLanguageTag("ro-RO"),
+                24,
+                "24,00 lei românești");
     }
 
     @Test

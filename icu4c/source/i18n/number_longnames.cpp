@@ -313,10 +313,8 @@ void LongNameHandler::multiSimpleFormatsToModifiers(const UnicodeString *leadFor
 void LongNameHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micros,
                                       UErrorCode &status) const {
     parent->processQuantity(quantity, micros, status);
-    // TODO: Avoid the copy here?
-    DecimalQuantity copy(quantity);
-    micros.rounder.apply(copy, status);
-    micros.modOuter = &fModifiers[utils::getStandardPlural(rules, copy)];
+    StandardPlural::Form pluralForm = utils::getPluralSafe(micros.rounder, rules, quantity, status);
+    micros.modOuter = &fModifiers[pluralForm];
 }
 
 const Modifier* LongNameHandler::getModifier(int8_t /*signum*/, StandardPlural::Form plural) const {
