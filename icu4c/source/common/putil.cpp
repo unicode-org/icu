@@ -1420,12 +1420,7 @@ static void U_CALLCONV dataDirectoryInitFn() {
 
     if(path==NULL) {
         /* It looks really bad, set it to something. */
-#if U_PLATFORM_HAS_WIN32_API
-        // Windows UWP will require icudtl.dat file in same directory as icuuc.dll
-        path = ".\\";
-#else
         path = "";
-#endif
     }
 
     u_setDataDirectory(path);
