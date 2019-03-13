@@ -297,7 +297,7 @@ void CompactHandler::processQuantity(DecimalQuantity &quantity, MicroProps &micr
         for (; i < precomputedModsLength; i++) {
             const CompactModInfo &info = precomputedMods[i];
             if (u_strcmp(patternString, info.patternString) == 0) {
-                info.mod->applyToMicros(micros, quantity);
+                info.mod->applyToMicros(micros, quantity, status);
                 break;
             }
         }

@@ -90,6 +90,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     CurrencyUnit CAD;
     CurrencyUnit ESP;
     CurrencyUnit PTE;
+    CurrencyUnit RON;
 
     MeasureUnit METER;
     MeasureUnit DAY;

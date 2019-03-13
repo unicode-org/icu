@@ -127,18 +127,16 @@ ImmutablePatternModifier::ImmutablePatternModifier(AdoptingModifierStore* pm, co
 void ImmutablePatternModifier::processQuantity(DecimalQuantity& quantity, MicroProps& micros,
                                                UErrorCode& status) const {
     parent->processQuantity(quantity, micros, status);
-    applyToMicros(micros, quantity);
+    applyToMicros(micros, quantity, status);
 }
 
-void ImmutablePatternModifier::applyToMicros(MicroProps& micros, DecimalQuantity& quantity) const {
+void ImmutablePatternModifier::applyToMicros(
+        MicroProps& micros, const DecimalQuantity& quantity, UErrorCode& status) const {
     if (rules == nullptr) {
         micros.modMiddle = pm->getModifierWithoutPlural(quantity.signum());
     } else {
-        // TODO: Fix this. Avoid the copy.
-        DecimalQuantity copy(quantity);
-        copy.roundToInfinity();
-        StandardPlural::Form plural = utils::getStandardPlural(rules, copy);
-        micros.modMiddle = pm->getModifier(quantity.signum(), plural);
+        StandardPlural::Form pluralForm = utils::getPluralSafe(micros.rounder, rules, quantity, status);
+        micros.modMiddle = pm->getModifier(quantity.signum(), pluralForm);
     }
 }
 
@@ -164,10 +162,8 @@ void MutablePatternModifier::processQuantity(DecimalQuantity& fq, MicroProps& mi
     // This method needs to be const because it overrides a const method in the parent class.
     auto nonConstThis = const_cast<MutablePatternModifier*>(this);
     if (needsPlurals()) {
-        // TODO: Fix this. Avoid the copy.
-        DecimalQuantity copy(fq);
-        micros.rounder.apply(copy, status);
-        nonConstThis->setNumberProperties(fq.signum(), utils::getStandardPlural(fRules, copy));
+        StandardPlural::Form pluralForm = utils::getPluralSafe(micros.rounder, fRules, fq, status);
+        nonConstThis->setNumberProperties(fq.signum(), pluralForm);
     } else {
         nonConstThis->setNumberProperties(fq.signum(), StandardPlural::Form::COUNT);
     }

@@ -32,6 +32,7 @@ NumberFormatterApiTest::NumberFormatterApiTest(UErrorCode& status)
           CAD(u"CAD", status),
           ESP(u"ESP", status),
           PTE(u"PTE", status),
+          RON(u"RON", status),
           FRENCH_SYMBOLS(Locale::getFrench(), status),
           SWISS_SYMBOLS(Locale("de-CH"), status),
           MYANMAR_SYMBOLS(Locale("my"), status) {
@@ -788,6 +789,14 @@ void NumberFormatterApiTest::unitCurrency() {
             Locale("pt-PT"),
             444444.55,
             u"444,444$55 PTE");
+
+    assertFormatSingle(
+            u"Plural form depending on visible digits (ICU-20499)",
+            u"currency/RON unit-width-full-name",
+            NumberFormatter::with().unit(RON).unitWidth(UNUM_UNIT_WIDTH_FULL_NAME),
+            Locale("ro-RO"),
+            24,
+            u"24,00 lei românești");
 }
 
 void NumberFormatterApiTest::unitPercent() {

@@ -119,7 +119,7 @@ void PatternModifierTest::testPatternWithNoPlaceholder() {
       return;
     }
     DecimalQuantity quantity;
-    imod->applyToMicros(micros, quantity);
+    imod->applyToMicros(micros, quantity, status);
     micros.modMiddle->apply(nsb, 1, 4, status);
     assertSuccess("Spot 7", status);
     assertEquals("Safe Path", u"xabcy", nsb.toUnicodeString());
@@ -151,7 +151,7 @@ void PatternModifierTest::testMutableEqualsImmutable() {
     NumberStringBuilder nsb2;
     MicroProps micros2;
     LocalPointer<ImmutablePatternModifier> immutable(mod.createImmutable(status));
-    immutable->applyToMicros(micros2, fq);
+    immutable->applyToMicros(micros2, fq, status);
     micros2.modMiddle->apply(nsb2, 0, 0, status);
     assertSuccess("Spot 4", status);
 

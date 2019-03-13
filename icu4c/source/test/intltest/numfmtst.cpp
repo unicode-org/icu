@@ -229,6 +229,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(Test20348_CurrencyPrefixOverride);
   TESTCASE_AUTO(Test20358_GroupingInPattern);
   TESTCASE_AUTO(Test13731_DefaultCurrency);
+  TESTCASE_AUTO(Test20499_CurrencyVisibleDigitsPlural);
   TESTCASE_AUTO_END;
 }
 
@@ -9605,6 +9606,19 @@ void NumberFormatTest::Test13731_DefaultCurrency() {
         assertEquals("plural", u"1.10 (unknown currency)",
             nf->format(1.1, result.remove(), status));
         assertEquals("currency", u"XXX", nf->getCurrency());
+    }
+}
+
+void NumberFormatTest::Test20499_CurrencyVisibleDigitsPlural() {
+    IcuTestErrorCode status(*this, "Test20499_CurrencyVisibleDigitsPlural");
+    LocalPointer<NumberFormat> nf(NumberFormat::createInstance(
+        "ro-RO", UNumberFormatStyle::UNUM_CURRENCY_PLURAL, status), status);
+    const char16_t* expected = u"24,00 lei românești";
+    for (int32_t i=0; i<5; i++) {
+        UnicodeString actual;
+        nf->format(24, actual, status);
+        assertEquals(UnicodeString(u"iteration ") + Int64ToUnicodeString(i),
+            expected, actual);
     }
 }
 

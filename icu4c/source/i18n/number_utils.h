@@ -124,6 +124,23 @@ inline StandardPlural::Form getStandardPlural(const PluralRules *rules,
     }
 }
 
+/**
+ * Computes the plural form after copying the number and applying rounding rules.
+ */
+inline StandardPlural::Form getPluralSafe(
+        const RoundingImpl& rounder,
+        const PluralRules* rules,
+        const DecimalQuantity& dq,
+        UErrorCode& status) {
+    // TODO(ICU-20500): Avoid the copy?
+    DecimalQuantity copy(dq);
+    rounder.apply(copy, status);
+    if (U_FAILURE(status)) {
+        return StandardPlural::Form::OTHER;
+    }
+    return getStandardPlural(rules, copy);
+}
+
 } // namespace utils
 
 } // namespace impl
