@@ -1295,11 +1295,6 @@ void IntlTestDateTimePatternGeneratorAPI::testJjMapping() {
     const Locale* localePtr = DateFormat::getAvailableLocales(locCount);
     for (; locCount-- > 0; localePtr++) {
         const char* localeID = localePtr->getName();
-        if ( logKnownIssue("cldrbug:11894", "locales with known timeData vs short time format mismatch") && ( uprv_strcmp(localeID,"ps_PK")==0
-                || uprv_strcmp(localeID,"ff_Latn_GH")==0 || uprv_strcmp(localeID,"ff_Latn_GM")==0 || uprv_strcmp(localeID,"ff_Latn_LR")==0
-                || uprv_strcmp(localeID,"ff_Latn_SL")==0 ) ) {
-            continue;
-        }
         status = U_ZERO_ERROR;
         LocalPointer<DateTimePatternGenerator> dtpg(DateTimePatternGenerator::createInstance(*localePtr, status));
         if (U_FAILURE(status)) {

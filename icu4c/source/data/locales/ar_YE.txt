@@ -8,6 +8,7 @@ ar_YE{
                 group{"٬"}
             }
         }
+        default{"arab"}
         latn{
             symbols{
                 decimal{"."}
@@ -15,5 +16,5 @@ ar_YE{
             }
         }
     }
-    Version{"2.1.47.86"}
+    Version{"2.1.49.36"}
 }
