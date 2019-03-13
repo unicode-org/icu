@@ -241,11 +241,21 @@ cd $ICU4J_ROOT
 ant all 2>&1 | tee /tmp/icu4j-oldData-antAll.txt
 ant check 2>&1 | tee /tmp/icu4j-oldData-antCheck.txt
 
-# 12. Now build the new data and test data for ICU4J
+# 12. Transfer the data to ICU4J.
+# 12a. You must first configure ICU in order to add the unicore data.
+
+cd $ICU4C_DIR/source
+ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ./runConfigureICU Linux
+
+# 12b. Now buil the jar files.
 
 cd $ICU4C_DIR/source/data
+make clean
+make -j6
 make icu4j-data-install
 cd $ICU4C_DIR/source/test/testdata
+make clean
+make -j6
 make icu4j-data-install
 
 # 13. Now rebuild ICU4J with the new data and run tests:
