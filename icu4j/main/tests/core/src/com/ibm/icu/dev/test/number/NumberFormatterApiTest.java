@@ -1591,6 +1591,31 @@ public class NumberFormatterApiTest {
                 "00.08765",
                 "00.008765",
                 "00");
+
+        assertFormatSingle(
+                "Integer Width Remove All A",
+                "integer-width/00",
+                NumberFormatter.with().integerWidth(IntegerWidth.zeroFillTo(2).truncateAt(2)),
+                ULocale.ENGLISH,
+                2500,
+                "00");
+
+        assertFormatSingle(
+                "Integer Width Remove All B",
+                "integer-width/00",
+                NumberFormatter.with().integerWidth(IntegerWidth.zeroFillTo(2).truncateAt(2)),
+                ULocale.ENGLISH,
+                25000,
+                "00");
+
+        assertFormatSingle(
+                "Integer Width Remove All B, Bytes Mode",
+                "integer-width/00",
+                NumberFormatter.with().integerWidth(IntegerWidth.zeroFillTo(2).truncateAt(2)),
+                ULocale.ENGLISH,
+                // Note: this double produces all 17 significant digits
+                10000000000000002000.0,
+                "00");
     }
 
     @Test

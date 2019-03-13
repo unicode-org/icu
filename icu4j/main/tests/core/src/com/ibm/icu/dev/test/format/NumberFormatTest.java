@@ -6511,6 +6511,32 @@ public class NumberFormatTest extends TestFmwk {
         result = nf.parse(".0003e-2147483644");
         assertEquals("Should not overflow",
                 "0", result.toString());
+
+        // Test largest parseable exponent
+        // This is limited by ICU's BigDecimal implementation
+        result = nf.parse("1e999999999");
+        assertEquals("Should not overflow",
+                "1E+999999999", result.toString());
+
+        // Test max value as well
+        String[] infinityInputs = {
+                "9876e1000000000",
+                "9876e2147483640",
+                "9876e2147483641",
+                "9876e2147483642",
+                "9876e2147483643",
+                "9876e2147483644",
+                "9876e2147483645",
+                "9876e2147483646",
+                "9876e2147483647",
+                "9876e2147483648",
+                "9876e2147483649",
+        };
+        for (String input : infinityInputs) {
+            result = nf.parse(input);
+            assertEquals("Should become Infinity: " + input,
+                    "Infinity", result.toString());
+        }
     }
 
     @Test
