@@ -160,6 +160,11 @@ void DecimalQuantity::applyMaxInteger(int32_t maxInt) {
         return;
     }
 
+    if (maxInt <= scale) {
+        setBcdToZero();
+        return;
+    }
+
     int32_t magnitude = getMagnitude();
     if (maxInt <= magnitude) {
         popFromLeft(magnitude - maxInt + 1);
@@ -983,6 +988,7 @@ void DecimalQuantity::shiftRight(int32_t numDigits) {
 }
 
 void DecimalQuantity::popFromLeft(int32_t numDigits) {
+    U_ASSERT(numDigits <= precision);
     if (usingBytes) {
         int i = precision - 1;
         for (; i >= precision - numDigits; i--) {

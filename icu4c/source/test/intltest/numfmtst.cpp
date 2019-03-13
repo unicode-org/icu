@@ -9442,6 +9442,32 @@ void NumberFormatTest::Test20037_ScientificIntegerOverflow() {
     assertEquals(u"Should not overflow",
                  u"3E-2147483648",
                  {sp.data(), sp.length(), US_INV});
+
+    // Test largest parseable exponent
+    result = Formattable();
+    nf->parse(u"9876e2147483643", result, status);
+    sp = result.getDecimalNumber(status);
+    assertEquals(u"Should not overflow",
+                 u"9.876E+2147483646",
+                 {sp.data(), sp.length(), US_INV});
+
+    // Test max value as well
+    const char16_t* infinityInputs[] = {
+            u"9876e2147483644",
+            u"9876e2147483645",
+            u"9876e2147483646",
+            u"9876e2147483647",
+            u"9876e2147483648",
+            u"9876e2147483649",
+    };
+    for (const auto& input : infinityInputs) {
+        result = Formattable();
+        nf->parse(input, result, status);
+        sp = result.getDecimalNumber(status);
+        assertEquals(UnicodeString("Should become Infinity: ") + input,
+                    u"Infinity",
+                    {sp.data(), sp.length(), US_INV});
+    }
 }
 
 void NumberFormatTest::Test13840_ParseLongStringCrash() {
