@@ -798,7 +798,7 @@ public class DateIntervalFormat extends UFormat {
      * @draft ICU 64
      * @provisional This API might change or be removed in a future release.
      */
-    public final FormattedDateInterval formatToValue(DateInterval dtInterval) {
+    public FormattedDateInterval formatToValue(DateInterval dtInterval) {
         StringBuffer sb = new StringBuffer();
         FieldPosition ignore = new FieldPosition(0);
         FormatOutput output = new FormatOutput();
@@ -883,7 +883,7 @@ public class DateIntervalFormat extends UFormat {
      * @throws    IllegalArgumentException  if the two calendars are not equivalent.
      * @stable ICU 4.0
      */
-    public StringBuffer format(Calendar fromCalendar,
+    public final StringBuffer format(Calendar fromCalendar,
             Calendar toCalendar,
             StringBuffer appendTo,
             FieldPosition pos) {
