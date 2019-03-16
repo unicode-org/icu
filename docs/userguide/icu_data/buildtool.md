@@ -191,7 +191,7 @@ summarizes the ICU data files and their corresponding features and categories:
 | Confusables | `"confusables"` | unidata/confusables\*.txt | 45 KiB |
 | Currencies | `"misc"` <br/> `"curr_supplemental"` <br/> `"curr_tree"` | misc/currencyNumericCodes.txt <br/> curr/supplementalData.txt <br/> curr/\*.txt | 3.1 KiB <br/> 27 KiB <br/> **2.5 MiB** |
 | Language Display <br/> Names | `"lang_tree"` | lang/\*.txt | **2.1 MiB** |
-| Language Tags | `"misc"` | misc/keyTypeData.txt <br/> misc/likelySubtags.txt <br/> misc/metadata.txt | 6.8 KiB <br/> 53 KiB <br/> 33 KiB |
+| Language Tags | `"misc"` | misc/keyTypeData.txt <br/> misc/langInfo.txt <br/> misc/likelySubtags.txt <br/> misc/metadata.txt | 6.8 KiB <br/> 37 KiB <br/> 53 KiB <br/> 33 KiB |
 | Normalization | `"normalization"` | in/\*.nrm except in/nfc.nrm | 160 KiB |
 | Plural Rules | `"misc"` | misc/pluralRanges.txt <br/> misc/plurals.txt | 3.3 KiB <br/> 33 KiB |
 | Region Display <br/> Names | `"region_tree"` | region/\*.txt | **1.1 MiB** |

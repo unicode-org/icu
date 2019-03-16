@@ -4,18 +4,18 @@ package com.ibm.icu.impl.locale;
 
 import java.util.Objects;
 
-final class LSR {
-    static final int REGION_INDEX_LIMIT = 1001 + 26 * 26;
+public final class LSR {
+    public static final int REGION_INDEX_LIMIT = 1001 + 26 * 26;
 
-    static final boolean DEBUG_OUTPUT = false;
+    public static final boolean DEBUG_OUTPUT = false;
 
-    final String language;
-    final String script;
-    final String region;
+    public final String language;
+    public final String script;
+    public final String region;
     /** Index for region, negative if ill-formed. @see indexForRegion */
     final int regionIndex;
 
-    LSR(String language, String script, String region) {
+    public LSR(String language, String script, String region) {
         this.language = language;
         this.script = script;
         this.region = region;
@@ -27,7 +27,7 @@ final class LSR {
      * Do not rely on a particular region->index mapping; it may change.
      * Returns 0 for ill-formed strings.
      */
-    static final int indexForRegion(String region) {
+    public static final int indexForRegion(String region) {
         if (region.length() == 2) {
             int a = region.charAt(0) - 'A';
             if (a < 0 || 25 < a) { return 0; }

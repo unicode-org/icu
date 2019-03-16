@@ -2,12 +2,20 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.locale;
 
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
 
-import com.ibm.icu.impl.locale.XLocaleMatcher.FavorSubtag;
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.BytesTrie;
+import com.ibm.icu.util.LocaleMatcher.FavorSubtag;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -16,17 +24,17 @@ import com.ibm.icu.util.ULocale;
  */
 public class LocaleDistance {
     /** Distance value bit flag, set by the builder. */
-    static final int DISTANCE_SKIP_SCRIPT = 0x80;
+    public static final int DISTANCE_SKIP_SCRIPT = 0x80;
     /** Distance value bit flag, set by trieNext(). */
     private static final int DISTANCE_IS_FINAL = 0x100;
     private static final int DISTANCE_IS_FINAL_OR_SKIP_SCRIPT =
             DISTANCE_IS_FINAL | DISTANCE_SKIP_SCRIPT;
     // Indexes into array of distances.
-    static final int IX_DEF_LANG_DISTANCE = 0;
-    static final int IX_DEF_SCRIPT_DISTANCE = 1;
-    static final int IX_DEF_REGION_DISTANCE = 2;
-    static final int IX_MIN_REGION_DISTANCE = 3;
-    static final int IX_LIMIT = 4;
+    public static final int IX_DEF_LANG_DISTANCE = 0;
+    public static final int IX_DEF_SCRIPT_DISTANCE = 1;
+    public static final int IX_DEF_REGION_DISTANCE = 2;
+    public static final int IX_MIN_REGION_DISTANCE = 3;
+    public static final int IX_LIMIT = 4;
     private static final int ABOVE_THRESHOLD = 100;
 
     private static final boolean DEBUG_OUTPUT = LSR.DEBUG_OUTPUT;
@@ -54,22 +62,100 @@ public class LocaleDistance {
     private final int minRegionDistance;
     private final int defaultDemotionPerDesiredLocale;
 
-    // TODO: Load prebuilt data from a resource bundle
-    // to avoid the dependency on the builder code.
     // VisibleForTesting
-    public static final LocaleDistance INSTANCE = LocaleDistanceBuilder.build();
+    public static final class Data {
+        public byte[] trie;
+        public byte[] regionToPartitionsIndex;
+        public String[] partitionArrays;
+        public Set<LSR> paradigmLSRs;
+        public int[] distances;
 
-    LocaleDistance(BytesTrie trie,
-            byte[] regionToPartitionsIndex, String[] partitionArrays,
-            Set<LSR> paradigmLSRs, int[] distances) {
-        this.trie = trie;
-        this.regionToPartitionsIndex = regionToPartitionsIndex;
-        this.partitionArrays = partitionArrays;
-        this.paradigmLSRs = paradigmLSRs;
-        defaultLanguageDistance = distances[IX_DEF_LANG_DISTANCE];
-        defaultScriptDistance = distances[IX_DEF_SCRIPT_DISTANCE];
-        defaultRegionDistance = distances[IX_DEF_REGION_DISTANCE];
-        this.minRegionDistance = distances[IX_MIN_REGION_DISTANCE];
+        public Data(byte[] trie,
+                byte[] regionToPartitionsIndex, String[] partitionArrays,
+                Set<LSR> paradigmLSRs, int[] distances) {
+            this.trie = trie;
+            this.regionToPartitionsIndex = regionToPartitionsIndex;
+            this.partitionArrays = partitionArrays;
+            this.paradigmLSRs = paradigmLSRs;
+            this.distances = distances;
+        }
+
+        private static UResource.Value getValue(UResource.Table table,
+                String key, UResource.Value value) {
+            if (!table.findValue(key, value)) {
+                throw new MissingResourceException(
+                        "langInfo.res missing data", "", "match/" + key);
+            }
+            return value;
+        }
+
+        // VisibleForTesting
+        public static Data load() throws MissingResourceException {
+            ICUResourceBundle langInfo = ICUResourceBundle.getBundleInstance(
+                    ICUData.ICU_BASE_NAME, "langInfo",
+                    ICUResourceBundle.ICU_DATA_CLASS_LOADER, ICUResourceBundle.OpenType.DIRECT);
+            UResource.Value value = langInfo.getValueWithFallback("match");
+            UResource.Table matchTable = value.getTable();
+
+            ByteBuffer buffer = getValue(matchTable, "trie", value).getBinary();
+            byte[] trie = new byte[buffer.remaining()];
+            buffer.get(trie);
+
+            buffer = getValue(matchTable, "regionToPartitions", value).getBinary();
+            byte[] regionToPartitions = new byte[buffer.remaining()];
+            buffer.get(regionToPartitions);
+            if (regionToPartitions.length < LSR.REGION_INDEX_LIMIT) {
+                throw new MissingResourceException(
+                        "langInfo.res binary data too short", "", "match/regionToPartitions");
+            }
+
+            String[] partitions = getValue(matchTable, "partitions", value).getStringArray();
+
+            Set<LSR> paradigmLSRs;
+            if (matchTable.findValue("paradigms", value)) {
+                String[] paradigms = value.getStringArray();
+                paradigmLSRs = new HashSet<>(paradigms.length / 3);
+                for (int i = 0; i < paradigms.length; i += 3) {
+                    paradigmLSRs.add(new LSR(paradigms[i], paradigms[i + 1], paradigms[i + 2]));
+                }
+            } else {
+                paradigmLSRs = Collections.emptySet();
+            }
+
+            int[] distances = getValue(matchTable, "distances", value).getIntVector();
+            if (distances.length < IX_LIMIT) {
+                throw new MissingResourceException(
+                        "langInfo.res intvector too short", "", "match/distances");
+            }
+
+            return new Data(trie, regionToPartitions, partitions, paradigmLSRs, distances);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) { return true; }
+            if (!getClass().equals(other.getClass())) { return false; }
+            Data od = (Data)other;
+            return Arrays.equals(trie, od.trie) &&
+                    Arrays.equals(regionToPartitionsIndex, od.regionToPartitionsIndex) &&
+                    Arrays.equals(partitionArrays, od.partitionArrays) &&
+                    paradigmLSRs.equals(od.paradigmLSRs) &&
+                    Arrays.equals(distances, od.distances);
+        }
+    }
+
+    // VisibleForTesting
+    public static final LocaleDistance INSTANCE = new LocaleDistance(Data.load());
+
+    private LocaleDistance(Data data) {
+        this.trie = new BytesTrie(data.trie, 0);
+        this.regionToPartitionsIndex = data.regionToPartitionsIndex;
+        this.partitionArrays = data.partitionArrays;
+        this.paradigmLSRs = data.paradigmLSRs;
+        defaultLanguageDistance = data.distances[IX_DEF_LANG_DISTANCE];
+        defaultScriptDistance = data.distances[IX_DEF_SCRIPT_DISTANCE];
+        defaultRegionDistance = data.distances[IX_DEF_REGION_DISTANCE];
+        this.minRegionDistance = data.distances[IX_MIN_REGION_DISTANCE];
 
         LSR en = new LSR("en", "Latn", "US");
         LSR enGB = new LSR("en", "Latn", "GB");
@@ -102,7 +188,7 @@ public class LocaleDistance {
      * (negative if none has a distance below the threshold),
      * and its distance (0..ABOVE_THRESHOLD) in bits 7..0.
      */
-    int getBestIndexAndDistance(LSR desired, LSR[] supportedLsrs,
+    public int getBestIndexAndDistance(LSR desired, LSR[] supportedLsrs,
             int threshold, FavorSubtag favorSubtag) {
         BytesTrie iter = new BytesTrie(trie);
         // Look up the desired language only once for all supported LSRs.
@@ -335,7 +421,7 @@ public class LocaleDistance {
         return partitionArrays[pIndex];
     }
 
-    boolean isParadigmLSR(LSR lsr) {
+    public boolean isParadigmLSR(LSR lsr) {
         return paradigmLSRs.contains(lsr);
     }
 
@@ -348,7 +434,7 @@ public class LocaleDistance {
         return defaultRegionDistance;
     }
 
-    int getDefaultDemotionPerDesiredLocale() {
+    public int getDefaultDemotionPerDesiredLocale() {
         return defaultDemotionPerDesiredLocale;
     }
 

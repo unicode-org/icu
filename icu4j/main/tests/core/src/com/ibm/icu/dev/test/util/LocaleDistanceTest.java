@@ -12,9 +12,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.tool.locale.LocaleDistanceBuilder;
 import com.ibm.icu.impl.locale.LocaleDistance;
-import com.ibm.icu.impl.locale.XLocaleMatcher.FavorSubtag;
 import com.ibm.icu.util.LocaleMatcher;
+import com.ibm.icu.util.LocaleMatcher.FavorSubtag;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
@@ -25,13 +26,13 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis
  */
 @RunWith(JUnit4.class)
-public class XLocaleDistanceTest extends TestFmwk {
+public class LocaleDistanceTest extends TestFmwk {
     private static final boolean REFORMAT = false; // set to true to get a reformatted data file listed
 
     private LocaleDistance localeDistance = LocaleDistance.INSTANCE;
     DataDrivenTestHelper tfh = new MyTestFileHandler()
             .setFramework(this)
-            .load(XLocaleDistanceTest.class, "data/localeDistanceTest.txt");
+            .load(LocaleDistanceTest.class, "data/localeDistanceTest.txt");
 
     static class Arguments {
         final ULocale desired;
@@ -45,6 +46,13 @@ public class XLocaleDistanceTest extends TestFmwk {
             this.desiredToSupported = Integer.parseInt(args.get(2));
             this.supportedToDesired = args.size() > 3 ? Integer.parseInt(args.get(3)) : this.desiredToSupported;
         }
+    }
+
+    @Test
+    public void testLoadedDataSameAsBuiltFromScratch() {
+        LocaleDistance.Data built = LocaleDistanceBuilder.build();
+        LocaleDistance.Data loaded = LocaleDistance.Data.load();
+        assertEquals("run LocaleDistanceBuilder and update ICU4C langInfo.txt", built, loaded);
     }
 
     @SuppressWarnings("unused")

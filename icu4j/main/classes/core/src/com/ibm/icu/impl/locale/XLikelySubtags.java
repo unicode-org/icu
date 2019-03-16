@@ -2,10 +2,18 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.locale;
 
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.TreeMap;
 
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.ULocale;
 
@@ -14,29 +22,92 @@ public final class XLikelySubtags {
     private static final String PSEUDO_BIDI_PREFIX = "+";  // -XB, -PSBIDI
     private static final String PSEUDO_CRACKED_PREFIX = ",";  // -XC, -PSCRACK
 
-    static final int SKIP_SCRIPT = 1;
+    public static final int SKIP_SCRIPT = 1;
 
     private static final boolean DEBUG_OUTPUT = LSR.DEBUG_OUTPUT;
 
-    // TODO: Load prebuilt data from a resource bundle
-    // to avoid the dependency on the builder code.
     // VisibleForTesting
-    public static final XLikelySubtags INSTANCE = new XLikelySubtags(LikelySubtagsBuilder.build());
+    public static final class Data {
+        public final Map<String, String> languageAliases;
+        public final Map<String, String> regionAliases;
+        public final byte[] trie;
+        public final LSR[] lsrs;
 
-    static final class Data {
-        private final Map<String, String> languageAliases;
-        private final Map<String, String> regionAliases;
-        private final BytesTrie trie;
-        private final LSR[] lsrs;
-
-        Data(Map<String, String> languageAliases, Map<String, String> regionAliases,
-                BytesTrie trie, LSR[] lsrs) {
+        public Data(Map<String, String> languageAliases, Map<String, String> regionAliases,
+                byte[] trie, LSR[] lsrs) {
             this.languageAliases = languageAliases;
             this.regionAliases = regionAliases;
             this.trie = trie;
             this.lsrs = lsrs;
         }
+
+        private static UResource.Value getValue(UResource.Table table,
+                String key, UResource.Value value) {
+            if (!table.findValue(key, value)) {
+                throw new MissingResourceException(
+                        "langInfo.res missing data", "", "likely/" + key);
+            }
+            return value;
+        }
+
+        // VisibleForTesting
+        public static Data load() throws MissingResourceException {
+            ICUResourceBundle langInfo = ICUResourceBundle.getBundleInstance(
+                    ICUData.ICU_BASE_NAME, "langInfo",
+                    ICUResourceBundle.ICU_DATA_CLASS_LOADER, ICUResourceBundle.OpenType.DIRECT);
+            UResource.Value value = langInfo.getValueWithFallback("likely");
+            UResource.Table likelyTable = value.getTable();
+
+            Map<String, String> languageAliases;
+            if (likelyTable.findValue("languageAliases", value)) {
+                String[] pairs = value.getStringArray();
+                languageAliases = new HashMap<>(pairs.length / 2);
+                for (int i = 0; i < pairs.length; i += 2) {
+                    languageAliases.put(pairs[i], pairs[i + 1]);
+                }
+            } else {
+                languageAliases = Collections.emptyMap();
+            }
+
+            Map<String, String> regionAliases;
+            if (likelyTable.findValue("regionAliases", value)) {
+                String[] pairs = value.getStringArray();
+                regionAliases = new HashMap<>(pairs.length / 2);
+                for (int i = 0; i < pairs.length; i += 2) {
+                    regionAliases.put(pairs[i], pairs[i + 1]);
+                }
+            } else {
+                regionAliases = Collections.emptyMap();
+            }
+
+            ByteBuffer buffer = getValue(likelyTable, "trie", value).getBinary();
+            byte[] trie = new byte[buffer.remaining()];
+            buffer.get(trie);
+
+            String[] lsrSubtags = getValue(likelyTable, "lsrs", value).getStringArray();
+            LSR[] lsrs = new LSR[lsrSubtags.length / 3];
+            for (int i = 0, j = 0; i < lsrSubtags.length; i += 3, ++j) {
+                lsrs[j] = new LSR(lsrSubtags[i], lsrSubtags[i + 1], lsrSubtags[i + 2]);
+            }
+
+            return new Data(languageAliases, regionAliases, trie, lsrs);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) { return true; }
+            if (!getClass().equals(other.getClass())) { return false; }
+            Data od = (Data)other;
+            return
+                    languageAliases.equals(od.languageAliases) &&
+                    regionAliases.equals(od.regionAliases) &&
+                    Arrays.equals(trie, od.trie) &&
+                    Arrays.equals(lsrs, od.lsrs);
+        }
     }
+
+    // VisibleForTesting
+    public static final XLikelySubtags INSTANCE = new XLikelySubtags(Data.load());
 
     private final Map<String, String> languageAliases;
     private final Map<String, String> regionAliases;
@@ -54,7 +125,7 @@ public final class XLikelySubtags {
     private XLikelySubtags(XLikelySubtags.Data data) {
         languageAliases = data.languageAliases;
         regionAliases = data.regionAliases;
-        trie = data.trie;
+        trie = new BytesTrie(data.trie, 0);
         lsrs = data.lsrs;
 
         // Cache the result of looking up language="und" encoded as "*", and "und-Zzzz" ("**").
@@ -85,6 +156,23 @@ public final class XLikelySubtags {
         }
     }
 
+    /**
+     * Implementation of LocaleMatcher.canonicalize(ULocale).
+     */
+    public ULocale canonicalize(ULocale locale) {
+        String lang = locale.getLanguage();
+        String lang2 = languageAliases.get(lang);
+        String region = locale.getCountry();
+        String region2 = regionAliases.get(region);
+        if (lang2 != null || region2 != null) {
+            return new ULocale(
+                lang2 == null ? lang : lang2,
+                locale.getScript(),
+                region2 == null ? region : region2);
+        }
+        return locale;
+    }
+
     private static String getCanonical(Map<String, String> aliases, String alias) {
         String canonical = aliases.get(alias);
         return canonical == null ? alias : canonical;
@@ -101,7 +189,7 @@ public final class XLikelySubtags {
                 locale.getVariant());
     }
 
-    LSR makeMaximizedLsrFrom(Locale locale) {
+    public LSR makeMaximizedLsrFrom(Locale locale) {
         String tag = locale.toLanguageTag();
         if (tag.startsWith("x-")) {
             // Private use language tag x-subtag-subtag...
