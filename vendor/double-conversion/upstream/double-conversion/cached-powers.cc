@@ -29,9 +29,9 @@
 #include <cmath>
 #include <cstdarg>
 
-#include <double-conversion/utils.h>
+#include "utils.h"
 
-#include <double-conversion/cached-powers.h>
+#include "cached-powers.h"
 
 namespace double_conversion {
 

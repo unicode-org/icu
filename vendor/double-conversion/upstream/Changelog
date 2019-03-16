@@ -1,3 +1,25 @@
+2019-03-11:
+  Use relative includes in the library. This shouldn't have any visible effect
+  for consumers of the library.
+
+  Update version number.
+
+2019-03-06:
+  Fix typo in test.
+  Update version number.
+
+2019-03-03:
+  Fix separator characters when they they don't fit into 8 bits.
+  Update version number.
+
+2019-02-16:
+  Check correctly for _MSC_VER.
+  Patch by Ben Boeckel
+
+2019-01-17:
+  Allow the library to be compiled for Emscripten.
+  Patch by Tim Paine.
+
 2018-09-15:
   Update version numbers. This also updates the shared-library version number.
 

@@ -28,10 +28,10 @@
 #include <climits>
 #include <cstdarg>
 
-#include <double-conversion/bignum.h>
-#include <double-conversion/cached-powers.h>
-#include <double-conversion/ieee.h>
-#include <double-conversion/strtod.h>
+#include "bignum.h"
+#include "cached-powers.h"
+#include "ieee.h"
+#include "strtod.h"
 
 namespace double_conversion {
 
