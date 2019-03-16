@@ -18,5 +18,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/external-libraries/JUnitParams-1.0.5-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="src" path="/icu4j-tools"/>
 	<classpathentry kind="output" path="out/bin"/>
 </classpath>

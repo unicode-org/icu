@@ -1,6 +1,6 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
-package com.ibm.icu.impl.locale;
+package com.ibm.icu.dev.tool.locale;
 
 import java.nio.ByteBuffer;
 import java.util.Collection;
@@ -14,10 +14,11 @@ import java.util.TreeMap;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.UResource;
+import com.ibm.icu.impl.locale.LSR;
 import com.ibm.icu.impl.locale.XCldrStub.HashMultimap;
 import com.ibm.icu.impl.locale.XCldrStub.Multimap;
 import com.ibm.icu.impl.locale.XCldrStub.Multimaps;
-import com.ibm.icu.util.BytesTrie;
+import com.ibm.icu.impl.locale.XLikelySubtags;
 import com.ibm.icu.util.BytesTrieBuilder;
 import com.ibm.icu.util.ICUException;
 
@@ -25,7 +26,7 @@ import com.ibm.icu.util.ICUException;
  * Builds data for XLikelySubtags.
  * Reads source data from ICU resource bundles.
  */
-class LikelySubtagsBuilder {
+public class LikelySubtagsBuilder {
     private static final boolean DEBUG_OUTPUT = LSR.DEBUG_OUTPUT;
 
     private static ICUResourceBundle getSupplementalDataBundle(String name) {
@@ -50,7 +51,7 @@ class LikelySubtagsBuilder {
             UResource.Key key = new UResource.Key();
             for (int i = 0; aliases.getKeyAndValue(i, key, value); ++i) {
                 String aliasFrom = key.toString();
-                if (aliasFrom.contains("_")) {
+                if (aliasFrom.contains("_") || aliasFrom.contains("-")) {
                     continue; // only simple aliasing
                 }
                 UResource.Table table = value.getTable();
@@ -113,7 +114,7 @@ class LikelySubtagsBuilder {
             }
         }
 
-        BytesTrie build() {
+        byte[] build() {
             ByteBuffer buffer = tb.buildByteBuffer(BytesTrieBuilder.Option.SMALL);
             // Allocate an array with just the necessary capacity,
             // so that we do not hold on to a larger array for a long time.
@@ -122,11 +123,12 @@ class LikelySubtagsBuilder {
             if (DEBUG_OUTPUT) {
                 System.out.println("likely subtags trie size: " + bytes.length + " bytes");
             }
-            return new BytesTrie(bytes, 0);
+            return bytes;
         }
     }
 
-    static XLikelySubtags.Data build() {
+    // VisibleForTesting
+    public static XLikelySubtags.Data build() {
         AliasesBuilder languageAliasesBuilder = new AliasesBuilder("language");
         AliasesBuilder regionAliasesBuilder = new AliasesBuilder("territory");
 
@@ -202,7 +204,7 @@ class LikelySubtagsBuilder {
                 }
             }
         }
-        BytesTrie trie = trieBuilder.build();
+        byte[] trie = trieBuilder.build();
         LSR[] lsrs = lsrIndexes.keySet().toArray(new LSR[lsrIndexes.size()]);
         return new XLikelySubtags.Data(
                 languageAliasesBuilder.toCanonical, regionAliasesBuilder.toCanonical, trie, lsrs);
