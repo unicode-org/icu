@@ -28,7 +28,7 @@
 #ifndef DOUBLE_CONVERSION_DOUBLE_CONVERSION_H_
 #define DOUBLE_CONVERSION_DOUBLE_CONVERSION_H_
 
-#include <double-conversion/utils.h>
+#include "utils.h"
 
 namespace double_conversion {
 
