@@ -457,6 +457,120 @@ from the parent locale:
     +/*/length/mile
     +/*/length/kilometer
 
+## Debugging Tips
+
+**Run Python directly:** If you do not want to wait for ./runConfigureICU to
+finish, you can directly re-generate the rules using your filter file with the
+following command line run from *iuc4c/source/data*.
+
+    $ python3 -m buildtool --mode=gnumake --seqmode=parallel --filter_file=filters.json > rules.mk
+
+**Install jsonschema:** Install the `jsonschema` pip package to get warnings
+about problems with your filter file.
+
+**Inspect data/rules.mk:** The Python script outputs the file *rules.mk*
+inside *iuc4c/source/data*. To see what is going to get built, you can inspect
+that file. First build ICU normally, and copy *rules.mk* to
+*rules_default.mk*. Then build ICU with your filter file. Now you can take the
+diff between *rules_default.mk* and *rules.mk* to see exactly what your filter
+file is removing.
+
+**Inspect the output:** After a `make clean` and `make` with a new *rules.mk*,
+you can look inside the directory *icu4c/source/data/out* to see the files
+that got built.
+
+**Inspect the compiled resource filter rules:** If you are using a resource
+filter, the resource filter rules get compiled for each individual locale
+inside *icu4c/source/data/out/tmp/filters*. You can look at those files to see
+what filter rules are being applied to each individual locale.
+
+**Run genrb in verbose mode:** For debugging a resource filter, you can run
+genrb in verbose mode to see which resources got stripped. To do this, first
+inspect the make output and find a command line like this:
+
+    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/genrb --filterDir ./out/tmp/filters/unit_tree -s ./unit -d ./out/build/icudt64l/unit/ -i ./out/build/icudt64l --usePoolBundle ./out/build/icudt64l/unit/ -k en.txt
+
+Copy that command line and re-run it from *icu4c/source/data* with the `-v`
+flag added to the end. The command will print out exactly which resource paths
+are being included and excluded as well as a model of the filter rules applied
+to this file.
+
+**Inspect .res files with derb:** The `derb` tool can convert .res files back
+to .txt files after filtering. For example, to convert the above unit res file
+back to a txt file, you can run this command from *icu4c/source*:
+
+    LD_LIBRARY_PATH=lib bin/derb data/out/build/icudt64l/unit/en.res
+
+That will produce a file *en.txt* in your current directory, which is the
+original *data/unit/en.txt* but after resource filters were applied.
+
+**Put complex rules first** and **use the wildcard `*` sparingly:** The order
+of the filter rules matters a great deal in how effective your data size
+reduction can be, and the wildcard `*` can sometimes produce behavior that is
+tricky to reason about. For example, these three lists of filter rules look
+similar on first glance but acutally produce different output:
+
+<table>
+<tr>
+<th>Unit Resource Filter Rules</th>
+<th>Unit Resource Size</th>
+<th>Commentary</th>
+<th>Result</th>
+</tr>
+<tr><td><pre>
+-/*/*
++/*/digital
+-/*/digital/*/dnam
+-/durationUnits
+-/units
+-/unitsNarrow
+</pre></td><td>77 KiB</td><td>
+First, remove all unit types. Then, add back digital units across all unit
+widths. Then, remove display names from digital units. Then, remove duration
+unit patterns and long and narrow forms.
+</td><td>
+Digital units in short form are included; all other units are removed.
+</td></tr>
+<tr><td><pre>
+-/durationUnits
+-/units
+-/unitsNarrow
+-/*/*
++/*/digital
+-/*/digital/*/dnam
+</pre></td><td>125 KiB</td><td>
+First, remove duration unit patterns and long and narrow forms. Then, remove
+all unit types. Then, add back digital units across all unit widths. Then,
+remove display names from digital units.
+</td><td>
+Digital units are included <em>in all widths</em>; all other units are removed.
+</td></tr>
+<tr><td><pre>
+-/*/*
++/*/digital
+-/*/*/*/dnam
+-/durationUnits
+-/units
+-/unitsNarrow
+</pre></td><td>191 KiB</td><td>
+First, remove all unit types. Then, add back digital units across all unit
+widths. Then, remove display names from all units. Then, remove duration unit
+patterns and long and narrow forms.
+</td><td>
+Digital units in short form are included, as is the <em>tree structure</em>
+for all other units, even though the other units have no real data.
+</td></tr>
+</table>
+
+By design, empty tree structure is retained in the unit bundle. This is
+because there are numerous instances in ICU data where the presence of an
+empty tree carries meaning. However, it means that you must be careful when
+building resource filter rules in order to achieve the optimal data bundle
+size.
+
+Using the `-v` option in genrb (described above) is helpful when debugging
+these types of issues.
+
 ## Other Features of the ICU Data Build Tool
 
 While data filtering is the primary reason the ICU Data Build Tool was
