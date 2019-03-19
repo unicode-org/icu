@@ -161,11 +161,14 @@ ant all
 #ant jar
 
 # 3. Configure ICU4C, build and test without new data first, to verify that
-# there are no pre-existing errors (configure shown here for MacOSX, adjust
-# for your platform).
+# there are no pre-existing errors.
+# If you do not want to re-run configure and make in step 12 below, then define
+# ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data here in order to generate the
+# unicore data needed for the ICU4J jars. Here <platform> is the runConfigureICU
+# code for the platform you are building, e.g. Linux, MacOSX, Cygwin.
 
 cd $ICU4C_DIR/source
-./runConfigureICU MacOSX
+ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ./runConfigureICU <platform>
 make all 2>&1 | tee /tmp/icu4c-oldData-makeAll.txt
 make check 2>&1 | tee /tmp/icu4c-oldData-makeCheck.txt
 
@@ -208,8 +211,12 @@ git status
 
 # 7. Now rebuild ICU4C with the new data and run make check tests.
 # Again, keep a log so you can investigate the errors.
-
 cd $ICU4C_DIR/source
+
+# 7a. NEW: This now requires re-doing runConfigureICU
+ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ./runConfigureICU <platform>
+
+# 7b. Now do the rebuild.
 make check 2>&1 | tee /tmp/icu4c-newData-makeCheck.txt
 
 # 8. Investigate each test case failure. The first run processing new CLDR data
@@ -242,21 +249,22 @@ cd $ICU4J_ROOT
 ant all 2>&1 | tee /tmp/icu4j-oldData-antAll.txt
 ant check 2>&1 | tee /tmp/icu4j-oldData-antCheck.txt
 
-# 12. Transfer the data to ICU4J.
-# 12a. You must first configure ICU in order to add the unicore data.
-
+# 12. Transfer the data to ICU4J:
 cd $ICU4C_DIR/source
-ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ./runConfigureICU Linux
 
-# 12b. Now buil the jar files.
+# 12a. If you did not do configure ICU4C this way in step 3, do it now:
+ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ./runConfigureICU <platform>
 
+# 12b. Now build the jar files.
 cd $ICU4C_DIR/source/data
-make clean
-make -j6
+# The following 2 lines are optional for a clean rebuild:
+  make clean
+  make -j6
 make icu4j-data-install
 cd $ICU4C_DIR/source/test/testdata
-make clean
-make -j6
+# The following 2 lines are optional for a clean rebuild:
+  make clean
+  make -j6
 make icu4j-data-install
 
 # 13. Now rebuild ICU4J with the new data and run tests:
