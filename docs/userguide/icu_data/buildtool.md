@@ -202,7 +202,7 @@ summarizes the ICU data files and their corresponding features and categories:
 | Unicode Character <br/> Names | `"unames"` | in/unames.icu | 269 KiB |
 | Unicode Text Layout | `"ulayout"` | in/ulayout.icu | 14 KiB |
 | Units | `"unit_tree"` | unit/\*.txt | **1.7 MiB** |
-| **OTHER** | `"cnvalias"` <br/> `"misc"` <br/> `"locale_tree"` | mappings/convrtrs.txt <br/> misc/dayPeriods.txt <br/> misc/genderList.txt <br/> misc/numberingSystems.txt <br/> misc/supplementalData.txt <br/> locales/\*.txt | 63 KiB <br/> 19 KiB <br/> 0.5 KiB <br/> 5.6 KiB <br/> 228 KiB <br/> **2.4 MiB** |
+| **OTHER** | `"cnvalias"` <br/> `"misc"` <br/> `"locales_tree"` | mappings/convrtrs.txt <br/> misc/dayPeriods.txt <br/> misc/genderList.txt <br/> misc/numberingSystems.txt <br/> misc/supplementalData.txt <br/> locales/\*.txt | 63 KiB <br/> 19 KiB <br/> 0.5 KiB <br/> 5.6 KiB <br/> 228 KiB <br/> **2.4 MiB** |
 
 #### Filter Types
 
