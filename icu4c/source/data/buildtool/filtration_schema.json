@@ -53,6 +53,10 @@
             },
             "additionalProperties": false,
             "required": ["directory", "replacements"]
+        },
+        "collationUCAData": {
+            "type": "string",
+            "enum": ["unihan", "implicithan"]
         }
     },
     "additionalProperties": false,

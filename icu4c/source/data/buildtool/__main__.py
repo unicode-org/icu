@@ -79,12 +79,6 @@ flag_parser.add_argument(
     default = None
 )
 flag_parser.add_argument(
-    "--collation_ucadata",
-    help = "Which data set to use for ucadata in collation.",
-    choices = ["unihan", "implicithan"],
-    default = "unihan"
-)
-flag_parser.add_argument(
     "--include_uni_core_data",
     help = "Include the full Unicode core data in the dat file.",
     default = False,
@@ -126,9 +120,6 @@ class Config(object):
         # Process arguments
         self.max_parallel = (args.seqmode == "parallel")
 
-        # Either "unihan" or "implicithan"
-        self.coll_han_type = args.collation_ucadata
-
         # Boolean: Whether to include core Unicode data files in the .dat file
         self.include_uni_core_data = args.include_uni_core_data
 
@@ -144,6 +135,11 @@ class Config(object):
             except IOError:
                 print("Error: Could not read filter file %s." % args.filter_file, file=sys.stderr)
                 exit(1)
+
+        # Either "unihan" or "implicithan"
+        self.coll_han_type = "unihan"
+        if "collationUCAData" in self.filters_json_data:
+            self.coll_han_type = self.filters_json_data["collationUCAData"]
 
     def _parse_filter_file(self, f):
         # Use the Hjson parser if it is available; otherwise, use vanilla JSON.
