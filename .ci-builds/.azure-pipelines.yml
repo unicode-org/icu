@@ -94,9 +94,12 @@ jobs:
       - visualstudio
       - Cmd
   steps:
-    - powershell: 'Invoke-WebRequest https://www.python.org/ftp/python/3.7.1/python-3.7.1-amd64-webinstall.exe -OutFile c:\py3-setup.exe'
+    - powershell: 'Invoke-WebRequest https://www.python.org/ftp/python/3.7.2/python-3.7.2-amd64-webinstall.exe -OutFile c:\py3-setup.exe'
     - script: |
         c:\py3-setup.exe /quiet PrependPath=1 InstallAllUsers=1 Include_launcher=1 InstallLauncherAllUsers=1 Include_test=0 Include_doc=0 Include_dev=0 Include_debug=0 Include_tcltk=0 TargetDir=c:\py3
+    - script: |
+        @echo ##vso[task.prependpath]C:\py3
+        @echo ##vso[task.prependpath]C:\py3\Scripts
     - script: |
         python --version
         py -3 --version
