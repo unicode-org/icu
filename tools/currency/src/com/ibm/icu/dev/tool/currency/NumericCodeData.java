@@ -401,7 +401,7 @@ public class NumericCodeData {
         {"XXX", "999"},
         {"YDD", "720"},
         {"YER", "886"},
-        {"YUD", "891"},
+        {"YUD", "890"},
         {"YUM", "891"},
         {"YUN", "890"},
         {"ZAL", "991"},

@@ -22,7 +22,7 @@
 <target name="classes" description="Build the Java tool">
     <mkdir dir="${classes.dir}"/>
     <javac srcdir="${src.dir}" destdir="${classes.dir}"
-            target="1.6" encoding="UTF-8" includeAntRuntime="false"/>
+            target="1.7" encoding="UTF-8" includeAntRuntime="false"/>
 </target>
 
 <target name="_checkLocalXml">
