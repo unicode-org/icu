@@ -606,14 +606,11 @@ for common characters but arbitrary for others.  For more information, see
 By default, the unihan version is used.  The unihan version of the data file
 is much larger than that for implicithan, so if you need collation but also
 small data, then you may want to select the implicithan version.  To use the
-implicithan version, pass the following command line argument to buildtool:
+implicithan version, put the following setting in your *filters.json* file:
 
-    --collation_ucadata=implicithan
-
-To pass this argument when using configure/make or Windows makedata.mak, set
-it in the `ICU_DATA_BUILDTOOL_OPTS` environment variable:
-
-    ICU_DATA_BUILDTOOL_OPTS="--collation_ucadata=implicithan"
+    {
+      "collationUCAData": "implicithan"
+    }
 
 ### File Substitution
 
