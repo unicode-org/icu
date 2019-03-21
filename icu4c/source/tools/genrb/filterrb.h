@@ -51,6 +51,8 @@ public:
 
     static const char* kEInclusionNames[];
 
+    virtual ~PathFilter();
+
     /**
      * Returns an EInclusion on whether or not the given path should be included.
      *

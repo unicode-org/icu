@@ -63,6 +63,9 @@ std::ostream& operator<<(std::ostream& out, const ResKeyPath& value) {
 }
 
 
+PathFilter::~PathFilter() = default;
+
+
 void SimpleRuleBasedPathFilter::addRule(const std::string& ruleLine, UErrorCode& status) {
     if (ruleLine.empty()) {
         std::cerr << "genrb error: empty filter rules are not allowed" << std::endl;
