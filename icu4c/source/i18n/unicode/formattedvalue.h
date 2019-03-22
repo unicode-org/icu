@@ -122,7 +122,7 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
      */
     inline int32_t getCategory() const {
         return fCategory;
-    };
+    }
 
     /**
      * Gets the field for the current position.
@@ -135,7 +135,7 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
      */
     inline int32_t getField() const {
         return fField;
-    };
+    }
 
     /**
      * Gets the INCLUSIVE start index for the current position.
@@ -147,7 +147,7 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
      */
     inline int32_t getStart() const {
         return fStart;
-    };
+    }
 
     /**
      * Gets the EXCLUSIVE end index stored for the current position.
@@ -159,7 +159,7 @@ class U_I18N_API ConstrainedFieldPosition : public UMemory {
      */
     inline int32_t getLimit() const {
         return fLimit;
-    };
+    }
 
     ////////////////////////////////////////////////////////////////////
     //// The following methods are for FormattedValue implementers; ////

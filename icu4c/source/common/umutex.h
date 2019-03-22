@@ -95,8 +95,8 @@ inline int32_t umtx_atomic_dec(u_atomic_int32_t *var) {
 struct UInitOnce {
     u_atomic_int32_t   fState;
     UErrorCode       fErrCode;
-    void reset() {fState = 0;};
-    UBool isReset() {return umtx_loadAcquire(fState) == 0;};
+    void reset() {fState = 0;}
+    UBool isReset() {return umtx_loadAcquire(fState) == 0;}
 // Note: isReset() is used by service registration code.
 //                 Thread safety of this usage needs review.
 };

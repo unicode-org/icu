@@ -347,7 +347,7 @@ class U_I18N_API NumberParseMatcher {
      */
     virtual void postProcess(ParsedNumber&) const {
         // Default implementation: no-op
-    };
+    }
 
     // String for debugging
     virtual UnicodeString toString() const = 0;

@@ -98,7 +98,7 @@ struct U_I18N_API ParsedPatternInfo : public AffixPatternProvider, public UMemor
         int32_t offset = 0;
 
         explicit ParserState(const UnicodeString& _pattern)
-                : pattern(_pattern) {};
+                : pattern(_pattern) {}
 
         ParserState& operator=(ParserState&& src) U_NOEXCEPT {
             // Leave pattern reference alone; it will continue to point to the same place in memory,

@@ -2411,7 +2411,7 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * @draft ICU 64
      */
     FormattedNumber()
-        : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {};
+        : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {}
 
     /**
      * Move constructor: Leaves the source FormattedNumber in an undefined state.
