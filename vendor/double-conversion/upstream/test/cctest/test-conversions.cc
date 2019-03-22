@@ -1735,6 +1735,33 @@ static double StrToD16(const uc16* str16, int length, int flags,
 }
 
 
+static double StrToD16(const char* str, int flags,
+                       double empty_string_value,
+                       int* processed_characters_count, bool* processed_all,
+                       char char_separator, uc16 separator) {
+  uc16 str16[256];
+  int length = -1;
+  for (int i = 0;; i++) {
+    if (str[i] == char_separator) {
+            str16[i] = separator;
+    } else {
+            str16[i] = str[i];
+    }
+    if (str[i] == '\0') {
+      length = i;
+      break;
+    }
+  }
+  ASSERT(length < 256);
+  StringToDoubleConverter converter(flags, empty_string_value, Double::NaN(),
+                                    NULL, NULL, separator);
+  double result =
+      converter.StringToDouble(str16, length, processed_characters_count);
+  *processed_all = (length == *processed_characters_count);
+  return result;
+}
+
+
 static double StrToD(const char* str, int flags, double empty_string_value,
                      int* processed_characters_count, bool* processed_all,
                      uc16 separator = StringToDoubleConverter::kNoSeparator) {
@@ -3207,7 +3234,7 @@ TEST(StringToDoubleSeparator) {
   int flags;
   int processed;
   bool all_used;
-  char separator;
+  uc16 separator;
 
   separator = '\'';
   flags = StringToDoubleConverter::NO_FLAGS;
@@ -3518,6 +3545,71 @@ TEST(StringToDoubleSeparator) {
   CHECK_EQ(Double::NaN(),
            StrToD("0x0 3.p -0", flags, 0.0, &processed, &all_used));
   CHECK_EQ(0, processed);
+
+  separator = 0x202F;
+  char char_separator = '@';
+  flags = StringToDoubleConverter::ALLOW_HEX |
+      StringToDoubleConverter::ALLOW_HEX_FLOATS |
+      StringToDoubleConverter::ALLOW_LEADING_SPACES |
+      StringToDoubleConverter::ALLOW_TRAILING_SPACES;
+
+  CHECK_EQ(18.0,
+           StrToD16("0x1@2", flags, 0.0, &processed, &all_used,
+                    char_separator, separator));
+  CHECK(all_used);
+
+  CHECK_EQ(0.0, StrToD16("0x0@0", flags, 1.0, &processed, &all_used,
+                         char_separator, separator));
+  CHECK(all_used);
+
+  CHECK_EQ(static_cast<double>(0x123456789),
+           StrToD16("0x1@2@3@4@5@6@7@8@9", flags, Double::NaN(),
+                    &processed, &all_used, char_separator, separator));
+  CHECK(all_used);
+
+  CHECK_EQ(18.0, StrToD16(" 0x1@2 ", flags, 0.0,
+                          &processed, &all_used, char_separator, separator));
+  CHECK(all_used);
+
+  CHECK_EQ(static_cast<double>(0xabcdef),
+           StrToD16("0xa@b@c@d@e@f", flags, 0.0,
+                    &processed, &all_used, char_separator, separator));
+  CHECK(all_used);
+
+  CHECK_EQ(Double::NaN(),
+           StrToD16("0x@1@2", flags, 0.0,
+                    &processed, &all_used, char_separator, separator));
+  CHECK_EQ(0, processed);
+
+  CHECK_EQ(Double::NaN(),
+           StrToD16("0@x0", flags, 1.0,
+                    &processed, &all_used, char_separator, separator));
+  CHECK_EQ(0, processed);
+
+  CHECK_EQ(Double::NaN(),
+           StrToD16("0x1@2@@3@4@5@6@7@8@9", flags, Double::NaN(),
+                  &processed, &all_used, char_separator, separator));
+  CHECK_EQ(0, processed);
+
+  CHECK_EQ(3.0,
+           StrToD16("0x0@3p0", flags, 0.0, &processed, &all_used,
+                    char_separator, separator));
+  CHECK(all_used);
+
+  CHECK_EQ(0.0,
+           StrToD16("0x.0@0p0", flags, 0.0, &processed, &all_used,
+                    char_separator, separator));
+  CHECK(all_used);
+
+  CHECK_EQ(3.0,
+           StrToD16("0x3.0@0p0", flags, 0.0, &processed, &all_used,
+                    char_separator, separator));
+  CHECK(all_used);
+
+  CHECK_EQ(3.0,
+           StrToD16("0x0@3.p0", flags, 0.0, &processed, &all_used,
+                    char_separator, separator));
+  CHECK(all_used);
 }
 
 TEST(StringToDoubleSpecialValues) {

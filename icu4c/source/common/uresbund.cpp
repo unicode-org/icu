@@ -49,7 +49,10 @@ TODO: This cache should probably be removed when the deprecated code is
 static UHashtable *cache = NULL;
 static icu::UInitOnce gCacheInitOnce;
 
-static UMutex resbMutex = U_MUTEX_INITIALIZER;
+static UMutex *resbMutex() {
+    static UMutex m = U_MUTEX_INITIALIZER;
+    return &m;
+}
 
 /* INTERNAL: hashes an entry  */
 static int32_t U_CALLCONV hashEntry(const UHashTok parm) {
@@ -93,13 +96,13 @@ static UBool chopLocale(char *name) {
  *  Internal function
  */
 static void entryIncrease(UResourceDataEntry *entry) {
-    umtx_lock(&resbMutex);
+    umtx_lock(resbMutex());
     entry->fCountExisting++;
     while(entry->fParent != NULL) {
       entry = entry->fParent;
       entry->fCountExisting++;
     }
-    umtx_unlock(&resbMutex);
+    umtx_unlock(resbMutex());
 }
 
 /**
@@ -181,9 +184,9 @@ static int32_t ures_flushCache()
     /*if shared data hasn't even been lazy evaluated yet
     * return 0
     */
-    umtx_lock(&resbMutex);
+    umtx_lock(resbMutex());
     if (cache == NULL) {
-        umtx_unlock(&resbMutex);
+        umtx_unlock(resbMutex());
         return 0;
     }
 
@@ -215,7 +218,7 @@ static int32_t ures_flushCache()
          * got decremented by free_entry().
          */
     } while(deletedMore);
-    umtx_unlock(&resbMutex);
+    umtx_unlock(resbMutex());
 
     return rbDeletedNum;
 }
@@ -229,9 +232,9 @@ U_CAPI UBool U_EXPORT2 ures_dumpCacheContents(void) {
   const UHashElement *e;
   UResourceDataEntry *resB;
   
-    umtx_lock(&resbMutex);
+    umtx_lock(resbMutex());
     if (cache == NULL) {
-      umtx_unlock(&resbMutex);
+      umtx_unlock(resbMutex());
       fprintf(stderr,"%s:%d: RB Cache is NULL.\n", __FILE__, __LINE__);
       return FALSE;
     }
@@ -251,7 +254,7 @@ U_CAPI UBool U_EXPORT2 ures_dumpCacheContents(void) {
     
     fprintf(stderr,"%s:%d: RB Cache still contains %d items.\n", __FILE__, __LINE__, uhash_count(cache));
 
-    umtx_unlock(&resbMutex);
+    umtx_unlock(resbMutex());
     
     return cacheNotEmpty;
 }
@@ -663,7 +666,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
         }
     }
  
-    umtx_lock(&resbMutex);
+    umtx_lock(resbMutex());
     { /* umtx_lock */
         /* We're going to skip all the locales that do not have any data */
         r = findFirstExisting(path, name, &isRoot, &hasChopped, &isDefault, &intStatus);
@@ -762,7 +765,7 @@ static UResourceDataEntry *entryOpen(const char* path, const char* localeID,
         }
     } /* umtx_lock */
 finishUnlock:
-    umtx_unlock(&resbMutex);
+    umtx_unlock(resbMutex());
 
     if(U_SUCCESS(*status)) {
         if(intStatus != U_ZERO_ERROR) {
@@ -787,7 +790,7 @@ entryOpenDirect(const char* path, const char* localeID, UErrorCode* status) {
         return NULL;
     }
 
-    umtx_lock(&resbMutex);
+    umtx_lock(resbMutex());
     // findFirstExisting() without fallbacks.
     UResourceDataEntry *r = init_entry(localeID, path, status);
     if(U_SUCCESS(*status)) {
@@ -825,7 +828,7 @@ entryOpenDirect(const char* path, const char* localeID, UErrorCode* status) {
             t1 = t1->fParent;
         }
     }
-    umtx_unlock(&resbMutex);
+    umtx_unlock(resbMutex());
     return r;
 }
 
@@ -868,9 +871,9 @@ static void entryCloseInt(UResourceDataEntry *resB) {
  */
 
 static void entryClose(UResourceDataEntry *resB) {
-  umtx_lock(&resbMutex);
+  umtx_lock(resbMutex());
   entryCloseInt(resB);
-  umtx_unlock(&resbMutex);
+  umtx_unlock(resbMutex());
 }
 
 /*

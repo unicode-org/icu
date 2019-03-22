@@ -781,7 +781,7 @@ UnicodeString PatternStringUtils::propertiesToPatternString(const DecimalFormatP
     sb.append(affixes.getString(AffixPatternProvider::AFFIX_POS_SUFFIX));
 
     // Resolve Padding
-    if (paddingWidth != -1 && !paddingLocation.isNull()) {
+    if (paddingWidth > 0 && !paddingLocation.isNull()) {
         while (paddingWidth - sb.length() > 0) {
             sb.insert(afterPrefixPos, u'#');
             beforeSuffixPos++;

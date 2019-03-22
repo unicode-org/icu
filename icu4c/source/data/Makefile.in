@@ -317,7 +317,9 @@ $(OUTDIR)/icu4j/icutzdata.jar: generate-data
 # - extract all data items
 # - package them into the .jar file
 # TODO(ICU-20466): Move this to Python
-$(OUTDIR)/icu4j/icudata.jar: generate-data
+# NOTE: If you get the error "No rule to make target 'out/build/icudt64l/uprops.icu'",
+# you need to reconfigure with unicore data.  See icu4j-readme.txt
+$(OUTDIR)/icu4j/icudata.jar: generate-data | $(OUT_DIR)/uprops.icu
 	$(JAR) cf $(OUTDIR)/icu4j/icudata.jar -C $(OUTDIR)/icu4j $(ICU4J_DATA_DIRNAME)/
 
 ICU4J_DATA=$(OUTDIR)/icu4j/icudata.jar

@@ -9,14 +9,15 @@ resources:
     lfs: true
     fetchDepth: 1
 
-# Only run the exhaustive tests on the master branch, and batch up
-# any pending changes so that we will only have at most one build
-# running at a given time.
+# Only run the exhaustive tests on the master and maint branches, and
+# also batch up any pending changes so that we will only have at most
+# one build running at a given time (since they take a long time).
 trigger:
   batch: true
   branches:
     include:
     - master
+    - maint/*
 
 jobs:
 #-------------------------------------------------------------------------

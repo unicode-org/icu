@@ -3,17 +3,22 @@
 # License & terms of use: http://www.unicode.org/copyright.html#License
 
 data = {
+    "cldrVersion": "35",
     "aliases": {
         "ars": "ar_SA",
         "az_AZ": "az_Latn_AZ",
         "bs_BA": "bs_Latn_BA",
         "en_NH": "en_VU",
         "en_RH": "en_ZW",
+        "ff_CM": "ff_Latn_CM",
+        "ff_GN": "ff_Latn_GN",
+        "ff_MR": "ff_Latn_MR",
+        "ff_SN": "ff_Latn_SN",
         "in": "id",
         "in_ID": "id_ID",
         "iw": "he",
         "iw_IL": "he_IL",
-        "mo": "ro_MD",
+        "mo": "ro",
         "no_NO": "nb_NO",
         "no_NO_NY": "nn_NO",
         "no": "nb",

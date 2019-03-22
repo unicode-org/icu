@@ -8,6 +8,7 @@ ar_JO{
                 group{"٬"}
             }
         }
+        default{"arab"}
         latn{
             symbols{
                 decimal{"."}
@@ -15,7 +16,7 @@ ar_JO{
             }
         }
     }
-    Version{"2.1.47.86"}
+    Version{"2.1.49.36"}
     calendar{
         gregorian{
             monthNames{

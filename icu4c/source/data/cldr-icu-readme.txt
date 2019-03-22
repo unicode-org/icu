@@ -43,8 +43,8 @@
 # http://www.unicode.org/repos/cldr/trunk/common/dtd/ldml.dtd
 #
 # Unless you cache the dtds locally by
-# 1. creating a temp directory e.g. /tmp/cldrdtd
-# 2. setting CLDR_DTD_CACHE to it e.g. -DCLDR_DTD_CACHE=/tmp/cldrdtd
+# 1. creating a temp directory e.g. ~/.cldrdtd
+# 2. setting CLDR_DTD_CACHE to it e.g. -DCLDR_DTD_CACHE=~/.cldrdtd
 # your system will make excessive network requests, which will result in the
 # Unicode server blocking access.
 #
@@ -62,7 +62,7 @@
 #
 #                -Xmx4096m, to give Java more memory; otherwise it may run out
 #                 of heap.
-#                -DCLDR_DTD_CACHE=/tmp/cldrdtd (or some other temp directory
+#                -DCLDR_DTD_CACHE=~/.cldrdtd (or some other temp directory
 #                 that already exists), to reduce frequent http: access to dtds
 #                 and consequent blockage by Unicode server.
 #
@@ -140,7 +140,7 @@
 # 1a. Java and ant variables, adjust for your system
 
 export JAVA_HOME=`/usr/libexec/java_home`
-export ANT_OPTS="-Xmx4096m -DCLDR_DTD_CACHE=/tmp/cldrdtd"
+export ANT_OPTS="-Xmx4096m -DCLDR_DTD_CACHE=~/.cldrdtd"
 
 # 1b. CLDR variables, adjust for your setup; with cygwin it might be e.g.
 # CLDR_DIR=`cygpath -wp /build/cldr`
@@ -152,6 +152,20 @@ export CLDR_DIR=$HOME/cldr/trunk
 export ICU4C_DIR=$HOME/icu/icu4c
 export ICU4J_ROOT=$HOME/icu/icu4j
 
+# 1d. Pre-populate your CLDR DTD cache. You need to do this only once.
+
+mkdir ~/.cldrdtd
+cd ~/.cldrdtd
+curl http://www.unicode.org/repos/cldr/trunk/common/dtd/ldml.dtd \
+    -o http___www.unicode.org_repos_cldr_trunk_common_dtd_ldml.dtd
+# WAIT before hitting the server again; it WILL NOT give you a second chance!
+sleep 5
+curl http://www.unicode.org/repos/cldr/trunk/common/dtd/ldmlICU.dtd \
+    -o http___www.unicode.org_repos_cldr_trunk_common_dtd_ldmlICU.dtd
+sleep 5
+curl http://www.unicode.org/repos/cldr/trunk/common/dtd/ldmlSupplemental.dtd \
+    -o http___www.unicode.org_repos_cldr_trunk_common_dtd_ldmlSupplemental.dtd
+
 # 2. Build the CLDR Java tools
 # Optionally build the jar, but ant will look inside the classes directory anyway
 
@@ -160,11 +174,11 @@ ant all
 #ant jar
 
 # 3. Configure ICU4C, build and test without new data first, to verify that
-# there are no pre-existing errors (configure shown here for MacOSX, adjust
-# for your platform).
+# there are no pre-existing errors. Here <platform> is the runConfigureICU
+# code for the platform you are building, e.g. Linux, MacOSX, Cygwin.
 
 cd $ICU4C_DIR/source
-./runConfigureICU MacOSX
+./runConfigureICU <platform>
 make all 2>&1 | tee /tmp/icu4c-oldData-makeAll.txt
 make check 2>&1 | tee /tmp/icu4c-oldData-makeCheck.txt
 
@@ -184,6 +198,11 @@ make check 2>&1 | tee /tmp/icu4c-oldData-makeCheck.txt
 # a dtd cache and are still having timeout problems, the IP address of your system
 # may have been blocked due to previous excessive access. In this case you may need
 # to contact a Unicode sysadmin to restore access.
+#
+# Unfortunately, even if you have your DTD cache variable enabled, you may still
+# get blocked and unable to populate your cache because of multiple successive
+# requests to download the required DTD files. It is recommended that you
+# pre-populate your cache as shown above in step 1d.
 
 cd $ICU4C_DIR/source/data
 ant setup
@@ -207,8 +226,13 @@ git status
 
 # 7. Now rebuild ICU4C with the new data and run make check tests.
 # Again, keep a log so you can investigate the errors.
-
 cd $ICU4C_DIR/source
+
+# 7a. If any files were added or removed (likely), re-run configure:
+./runConfigureICU <platform>
+make clean
+
+# 7b. Now do the rebuild.
 make check 2>&1 | tee /tmp/icu4c-newData-makeCheck.txt
 
 # 8. Investigate each test case failure. The first run processing new CLDR data
@@ -241,9 +265,17 @@ cd $ICU4J_ROOT
 ant all 2>&1 | tee /tmp/icu4j-oldData-antAll.txt
 ant check 2>&1 | tee /tmp/icu4j-oldData-antCheck.txt
 
-# 12. Now build the new data and test data for ICU4J
+# 12. Transfer the data to ICU4J:
+cd $ICU4C_DIR/source
 
+# 12a. You need to reconfigure ICU4C to include the unicore data.
+ICU_DATA_BUILDTOOL_OPTS=--include_uni_core_data ./runConfigureICU <platform>
+
+# 12b. Now build the jar files.
 cd $ICU4C_DIR/source/data
+# The following 2 lines are required to include the unicore data:
+  make clean
+  make -j6
 make icu4j-data-install
 cd $ICU4C_DIR/source/test/testdata
 make icu4j-data-install

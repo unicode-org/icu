@@ -42,12 +42,15 @@ U_NAMESPACE_BEGIN
  *************************************************************************************************/
 
 // The ICU global mutex. Used when ICU implementation code passes NULL for the mutex pointer.
-static UMutex   globalMutex = U_MUTEX_INITIALIZER;
+static UMutex *globalMutex() {
+    static UMutex m = U_MUTEX_INITIALIZER;
+    return &m;
+}
 
 U_CAPI void  U_EXPORT2
 umtx_lock(UMutex *mutex) {
     if (mutex == nullptr) {
-        mutex = &globalMutex;
+        mutex = globalMutex();
     }
     mutex->fMutex.lock();
 }
@@ -57,7 +60,7 @@ U_CAPI void  U_EXPORT2
 umtx_unlock(UMutex* mutex)
 {
     if (mutex == nullptr) {
-        mutex = &globalMutex;
+        mutex = globalMutex();
     }
     mutex->fMutex.unlock();
 }
@@ -71,7 +74,7 @@ UConditionVar::~UConditionVar() {
 U_CAPI void U_EXPORT2
 umtx_condWait(UConditionVar *cond, UMutex *mutex) {
     if (mutex == nullptr) {
-        mutex = &globalMutex;
+        mutex = globalMutex();
     }
     cond->fCV.wait(mutex->fMutex);
 }
@@ -95,8 +98,15 @@ umtx_condSignal(UConditionVar *cond) {
  *
  *************************************************************************************************/
 
-static std::mutex initMutex;
-static std::condition_variable initCondition;
+static std::mutex &initMutex() {
+    static std::mutex m;
+    return m;
+}
+
+static std::condition_variable &initCondition() {
+    static std::condition_variable cv;
+    return cv;
+}
 
 
 // This function is called when a test of a UInitOnce::fState reveals that
@@ -109,7 +119,7 @@ static std::condition_variable initCondition;
 //
 U_COMMON_API UBool U_EXPORT2
 umtx_initImplPreInit(UInitOnce &uio) {
-    std::unique_lock<std::mutex> lock(initMutex);
+    std::unique_lock<std::mutex> lock(initMutex());
 
     if (umtx_loadAcquire(uio.fState) == 0) {
         umtx_storeRelease(uio.fState, 1);
@@ -118,7 +128,7 @@ umtx_initImplPreInit(UInitOnce &uio) {
         while (umtx_loadAcquire(uio.fState) == 1) {
             // Another thread is currently running the initialization.
             // Wait until it completes.
-            initCondition.wait(lock);
+            initCondition().wait(lock);
         }
         U_ASSERT(uio.fState == 2);
         return false;
@@ -135,10 +145,10 @@ umtx_initImplPreInit(UInitOnce &uio) {
 U_COMMON_API void U_EXPORT2
 umtx_initImplPostInit(UInitOnce &uio) {
     {
-        std::unique_lock<std::mutex> lock(initMutex);
+        std::unique_lock<std::mutex> lock(initMutex());
         umtx_storeRelease(uio.fState, 2);
     }
-    initCondition.notify_all();
+    initCondition().notify_all();
 }
 
 U_NAMESPACE_END

@@ -4010,7 +4010,7 @@ UChar32  RegexCompile::peekCharLL() {
 //
 //------------------------------------------------------------------------------
 void RegexCompile::nextChar(RegexPatternChar &c) {
-
+  tailRecursion:
     fScanIndex = UTEXT_GETNATIVEINDEX(fRXPat->fPattern);
     c.fChar    = nextCharLL();
     c.fQuoted  = FALSE;
@@ -4021,7 +4021,9 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
             c.fChar == (UChar32)-1) {
             fQuoteMode = FALSE;  //  Exit quote mode,
             nextCharLL();        // discard the E
-            nextChar(c);         // recurse to get the real next char
+            // nextChar(c);      // recurse to get the real next char
+            goto tailRecursion;  // Note: fuzz testing produced testcases that
+                                 //       resulted in stack overflow here.
         }
     }
     else if (fInBackslashQuote) {
@@ -4139,8 +4141,10 @@ void RegexCompile::nextChar(RegexPatternChar &c) {
             else if (peekCharLL() == chQ) {
                 //  "\Q"  enter quote mode, which will continue until "\E"
                 fQuoteMode = TRUE;
-                nextCharLL();       // discard the 'Q'.
-                nextChar(c);        // recurse to get the real next char.
+                nextCharLL();        // discard the 'Q'.
+                // nextChar(c);      // recurse to get the real next char.
+                goto tailRecursion;  // Note: fuzz testing produced test cases that
+                //                            resulted in stack overflow here.
             }
             else
             {

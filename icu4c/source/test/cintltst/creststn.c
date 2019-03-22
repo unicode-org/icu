@@ -2632,29 +2632,30 @@ static void TestGetFunctionalEquivalent(void) {
 #if !UCONFIG_NO_COLLATION
     static const char * const collCases[] = {
         /*   avail   locale          equiv   */
+        /* note: in ICU 64, empty locales are shown as available for collation */
         "f",    "sv_US_CALIFORNIA",               "sv",
         "f",    "zh_TW@collation=stroke",         "zh@collation=stroke", /* alias of zh_Hant_TW */
-        "f",    "zh_Hant_TW@collation=stroke",    "zh@collation=stroke",
+        "t",    "zh_Hant_TW@collation=stroke",    "zh@collation=stroke",
         "f",    "sv_CN@collation=pinyin",         "sv",
         "t",    "zh@collation=pinyin",            "zh",
         "f",    "zh_CN@collation=pinyin",         "zh", /* alias of zh_Hans_CN */
-        "f",    "zh_Hans_CN@collation=pinyin",    "zh",
+        "t",    "zh_Hans_CN@collation=pinyin",    "zh",
         "f",    "zh_HK@collation=pinyin",         "zh", /* alias of zh_Hant_HK */
-        "f",    "zh_Hant_HK@collation=pinyin",    "zh",
+        "t",    "zh_Hant_HK@collation=pinyin",    "zh",
         "f",    "zh_HK@collation=stroke",         "zh@collation=stroke", /* alias of zh_Hant_HK */
-        "f",    "zh_Hant_HK@collation=stroke",    "zh@collation=stroke",
+        "t",    "zh_Hant_HK@collation=stroke",    "zh@collation=stroke",
         "f",    "zh_HK",                          "zh@collation=stroke", /* alias of zh_Hant_HK */
-        "f",    "zh_Hant_HK",                     "zh@collation=stroke",
+        "t",    "zh_Hant_HK",                     "zh@collation=stroke",
         "f",    "zh_MO",                          "zh@collation=stroke", /* alias of zh_Hant_MO */
-        "f",    "zh_Hant_MO",                     "zh@collation=stroke",
+        "t",    "zh_Hant_MO",                     "zh@collation=stroke",
         "f",    "zh_TW_STROKE",                   "zh@collation=stroke",
         "f",    "zh_TW_STROKE@collation=pinyin",  "zh",
         "f",    "sv_CN@calendar=japanese",        "sv",
         "t",    "sv@calendar=japanese",           "sv",
         "f",    "zh_TW@collation=pinyin",         "zh", /* alias of zh_Hant_TW */
-        "f",    "zh_Hant_TW@collation=pinyin",    "zh",
+        "t",    "zh_Hant_TW@collation=pinyin",    "zh",
         "f",    "zh_CN@collation=stroke",         "zh@collation=stroke", /* alias of zh_Hans_CN */
-        "f",    "zh_Hans_CN@collation=stroke",    "zh@collation=stroke",
+        "t",    "zh_Hans_CN@collation=stroke",    "zh@collation=stroke",
         "t",    "de@collation=phonebook",         "de@collation=phonebook",
         "t",    "hi@collation=standard",          "hi",
         "f",    "hi_AU@collation=standard;currency=CHF;calendar=buddhist",    "hi",

@@ -1418,6 +1418,29 @@ public class NumberFormatTest extends TestFmwk {
         expect2(new DecimalFormat("*'😃'####.00", US), 1.1, "😃😃😃1.10");
     }
 
+    @Test
+    public void TestIgnorePadding() {
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.US);
+        DecimalFormat fmt = new DecimalFormat("", dfs);
+        fmt.setGroupingUsed(false);
+        fmt.setFormatWidth(0);
+        fmt.setPadCharacter('*');
+        fmt.setPadPosition(0);
+        fmt.setMinimumIntegerDigits(0);
+        fmt.setMaximumIntegerDigits(8);
+        fmt.setMinimumFractionDigits(0);
+        fmt.setMaximumFractionDigits(0);
+        String pattern = fmt.toPattern();
+        if (pattern.startsWith("*")) {
+            errln("ERROR toPattern result should ignore padding but get \"" + pattern + "\"");
+        }
+        fmt.applyPattern(pattern);
+        String format = fmt.format(24);
+        if (!format.equals("24")) {
+             errln("ERROR format result expect 24 but get \"" + format + "\"");
+       }
+    }
+
     /**
      * Upgrade to alphaWorks
      */
@@ -4129,7 +4152,7 @@ public class NumberFormatTest extends TestFmwk {
             int fracForRoundIncr = 0;
             if (roundIncrUsed) {
                 double  testIncr = item.roundIncr;
-                for (; testIncr > (double)((int)testIncr); testIncr *= 10.0, fracForRoundIncr++);
+                for (; testIncr > ((int)testIncr); testIncr *= 10.0, fracForRoundIncr++);
             }
 
             int minInt = df.getMinimumIntegerDigits();
@@ -6589,6 +6612,17 @@ public class NumberFormatTest extends TestFmwk {
             NumberFormat nf = NumberFormat.getInstance(ULocale.ENGLISH, NumberFormat.PLURALCURRENCYSTYLE);
             assertEquals("plural", "1.10 (unknown currency)", nf.format(1.1));
             assertEquals("currency", "XXX", nf.getCurrency().getCurrencyCode());
+        }
+    }
+
+    @Test
+    public void test20499_CurrencyVisibleDigitsPlural() {
+        ULocale locale = new ULocale("ro-RO");
+        NumberFormat nf = NumberFormat.getInstance(locale, NumberFormat.PLURALCURRENCYSTYLE);
+        String expected = "24,00 lei românești";
+        for (int i=0; i<5; i++) {
+            String actual = nf.format(24);
+            assertEquals("iteration " + i, expected, actual);
         }
     }
 }

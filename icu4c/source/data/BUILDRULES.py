@@ -5,13 +5,14 @@
 # TODO(ICU-20301): Remove this.
 from __future__ import print_function
 
-from distutils.sysconfig import parse_makefile
-
 from buildtool import *
+from buildtool import locale_dependencies
 from buildtool import utils
 from buildtool.request_types import *
 
+import os
 import sys
+import xml.etree.ElementTree as ET
 
 
 def generate(config, glob, common_vars):
@@ -41,63 +42,49 @@ def generate(config, glob, common_vars):
     requests += generate_tree(config, glob, common_vars,
         "locales",
         None,
-        "resfiles.mk",
-        "GENRB_CLDR_VERSION",
-        "GENRB_SOURCE",
+        "icu-locale-deprecates.xml",
         True,
         [])
 
     requests += generate_tree(config, glob, common_vars,
         "curr",
         "curr",
-        "resfiles.mk",
-        "CURR_CLDR_VERSION",
-        "CURR_SOURCE",
+        "icu-locale-deprecates.xml",
         True,
         [])
 
     requests += generate_tree(config, glob, common_vars,
         "lang",
         "lang",
-        "resfiles.mk",
-        "LANG_CLDR_VERSION",
-        "LANG_SOURCE",
+        "icu-locale-deprecates.xml",
         True,
         [])
 
     requests += generate_tree(config, glob, common_vars,
         "region",
         "region",
-        "resfiles.mk",
-        "REGION_CLDR_VERSION",
-        "REGION_SOURCE",
+        "icu-locale-deprecates.xml",
         True,
         [])
 
     requests += generate_tree(config, glob, common_vars,
         "zone",
         "zone",
-        "resfiles.mk",
-        "ZONE_CLDR_VERSION",
-        "ZONE_SOURCE",
+        "icu-locale-deprecates.xml",
         True,
         [])
 
     requests += generate_tree(config, glob, common_vars,
         "unit",
         "unit",
-        "resfiles.mk",
-        "UNIT_CLDR_VERSION",
-        "UNIT_SOURCE",
+        "icu-locale-deprecates.xml",
         True,
         [])
 
     requests += generate_tree(config, glob, common_vars,
         "coll",
         "coll",
-        "colfiles.mk",
-        "COLLATION_CLDR_VERSION",
-        "COLLATION_SOURCE",
+        "icu-coll-deprecates.xml",
         False,
         # Depends on timezoneTypes.res and keyTypeData.res.
         # TODO: We should not need this dependency to build collation.
@@ -107,18 +94,14 @@ def generate(config, glob, common_vars):
     requests += generate_tree(config, glob, common_vars,
         "brkitr",
         "brkitr",
-        "brkfiles.mk",
-        "BRK_RES_CLDR_VERSION",
-        "BRK_RES_SOURCE",
+        "icu-locale-deprecates.xml",
         False,
         [DepTarget("brkitr_brk"), DepTarget("dictionaries")])
 
     requests += generate_tree(config, glob, common_vars,
         "rbnf",
         "rbnf",
-        "rbnffiles.mk",
-        "RBNF_CLDR_VERSION",
-        "RBNF_SOURCE",
+        "icu-rbnf-deprecates.xml",
         False,
         [])
 
@@ -432,7 +415,7 @@ def generate_translit(config, glob, common_vars):
     ]
     dep_files = set(InFile(filename) for filename in glob("translit/*.txt"))
     dep_files -= set(input_files)
-    dep_files = list(dep_files)
+    dep_files = list(sorted(dep_files))
     input_basenames = [v.filename[9:] for v in input_files]
     output_files = [
         OutFile("translit/%s.res" % v[:-4])
@@ -464,9 +447,7 @@ def generate_tree(
         common_vars,
         sub_dir,
         out_sub_dir,
-        resfile_name,
-        version_var,
-        source_var,
+        xml_filename,
         use_pool_bundle,
         dep_targets):
     requests = []
@@ -536,27 +517,33 @@ def generate_tree(
     ]
 
     # Generate index txt file
-    # TODO: Change .mk files to .py files so they can be loaded directly.
-    # Alternatively, figure out a way to not require reading this file altogether.
-    # Right now, it is required for the index list file.
-    # Reading these files as .py will be required for Bazel.
-    mk_values = parse_makefile("{GLOB_DIR}/{IN_SUB_DIR}/{RESFILE_NAME}".format(
-        IN_SUB_DIR = sub_dir,
-        RESFILE_NAME = resfile_name,
-        **common_vars
-    ))
-    cldr_version = mk_values[version_var] if version_var and sub_dir == "locales" else None
-    index_input_files = [
-        InFile("%s/%s" % (sub_dir, basename))
-        for basename in mk_values[source_var].split()
-    ]
+    synthetic_locales = set()
+    deprecates_xml_path = os.path.join(os.path.dirname(__file__), xml_filename)
+    deprecates_xml = ET.parse(deprecates_xml_path)
+    for child in deprecates_xml.getroot():
+        if child.tag == "alias":
+            synthetic_locales.add(child.attrib["from"])
+        elif child.tag == "emptyLocale":
+            synthetic_locales.add(child.attrib["locale"])
+        else:
+            raise ValueError("Unknown tag in deprecates XML: %s" % child.tag)
+    index_input_files = []
+    for f in input_files:
+        file_stem = f.filename[f.filename.rfind("/")+1:-4]
+        if file_stem == "root":
+            continue
+        if file_stem in synthetic_locales:
+            continue
+        index_input_files.append(f)
+    cldr_version = locale_dependencies.data["cldrVersion"] if sub_dir == "locales" else None
     index_file_txt = TmpFile("{IN_SUB_DIR}/{INDEX_NAME}.txt".format(
         IN_SUB_DIR = sub_dir,
         **common_vars
     ))
+    index_file_target_name = "%s_index_txt" % sub_dir
     requests += [
         IndexTxtRequest(
-            name = "%s_index_txt" % sub_dir,
+            name = index_file_target_name,
             category = category,
             input_files = index_input_files,
             output_file = index_file_txt,
@@ -572,9 +559,9 @@ def generate_tree(
     requests += [
         SingleExecutionRequest(
             name = "%s_index_res" % sub_dir,
-            category = "%s_index" % sub_dir,
-            dep_targets = [],
-            input_files = [index_file_txt],
+            category = category,
+            dep_targets = [DepTarget(index_file_target_name)],
+            input_files = [],
             output_files = [index_res_file],
             tool = IcuTool("genrb"),
             args = "-s {TMP_DIR}/{IN_SUB_DIR} -d {OUT_DIR}/{OUT_PREFIX} -i {OUT_DIR} "

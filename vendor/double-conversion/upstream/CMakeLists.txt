@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0)
-project(double-conversion VERSION 3.1.1)
+project(double-conversion VERSION 3.1.4)
 
 set(headers
     double-conversion/bignum.h

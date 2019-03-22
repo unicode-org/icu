@@ -694,24 +694,32 @@ class U_I18N_API LocalizedNumberRangeFormatter
  */
 class U_I18N_API FormattedNumberRange : public UMemory, public FormattedValue {
   public:
+    // Copybrief: this method is older than the parent method
     /**
-     * @copydoc FormattedValue::toString()
+     * @copybrief FormattedValue::toString()
+     *
+     * For more information, see FormattedValue::toString()
+     *
+     * @draft ICU 63
      */
     UnicodeString toString(UErrorCode& status) const U_OVERRIDE;
 
-    /**
-     * @copydoc FormattedValue::toTempString()
-     */
+    // Copydoc: this method is new in ICU 64
+    /** @copydoc FormattedValue::toTempString() */
     UnicodeString toTempString(UErrorCode& status) const U_OVERRIDE;
 
+    // Copybrief: this method is older than the parent method
     /**
-     * @copydoc FormattedValue::appendTo()
+     * @copybrief FormattedValue::appendTo()
+     *
+     * For more information, see FormattedValue::appendTo()
+     *
+     * @draft ICU 63
      */
     Appendable &appendTo(Appendable &appendable, UErrorCode& status) const U_OVERRIDE;
 
-    /**
-     * @copydoc FormattedValue::nextPosition()
-     */
+    // Copydoc: this method is new in ICU 64
+    /** @copydoc FormattedValue::nextPosition() */
     UBool nextPosition(ConstrainedFieldPosition& cfpos, UErrorCode& status) const U_OVERRIDE;
 
     /**

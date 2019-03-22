@@ -29,14 +29,14 @@
 #include <locale>
 #include <cmath>
 
-#include <double-conversion/double-conversion.h>
+#include "double-conversion.h"
 
-#include <double-conversion/bignum-dtoa.h>
-#include <double-conversion/fast-dtoa.h>
-#include <double-conversion/fixed-dtoa.h>
-#include <double-conversion/ieee.h>
-#include <double-conversion/strtod.h>
-#include <double-conversion/utils.h>
+#include "bignum-dtoa.h"
+#include "fast-dtoa.h"
+#include "fixed-dtoa.h"
+#include "ieee.h"
+#include "strtod.h"
+#include "utils.h"
 
 namespace double_conversion {
 
@@ -553,7 +553,7 @@ static bool IsCharacterDigitForRadix(int c, int radix, char a_character) {
 
 // Returns true, when the iterator is equal to end.
 template<class Iterator>
-static bool Advance (Iterator* it, char separator, int base, Iterator& end) {
+static bool Advance (Iterator* it, uc16 separator, int base, Iterator& end) {
   if (separator == StringToDoubleConverter::kNoSeparator) {
     ++(*it);
     return *it == end;
@@ -581,7 +581,7 @@ static bool Advance (Iterator* it, char separator, int base, Iterator& end) {
 template<class Iterator>
 static bool IsHexFloatString(Iterator start,
                              Iterator end,
-                             char separator,
+                             uc16 separator,
                              bool allow_trailing_junk) {
   ASSERT(start != end);
 
@@ -622,7 +622,7 @@ template <int radix_log_2, class Iterator>
 static double RadixStringToIeee(Iterator* current,
                                 Iterator end,
                                 bool sign,
-                                char separator,
+                                uc16 separator,
                                 bool parse_as_hex_float,
                                 bool allow_trailing_junk,
                                 double junk_string_value,

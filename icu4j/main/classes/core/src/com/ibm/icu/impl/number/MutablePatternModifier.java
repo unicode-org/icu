@@ -243,11 +243,8 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
             if (rules == null) {
                 micros.modMiddle = pm.getModifierWithoutPlural(quantity.signum());
             } else {
-                // TODO: Fix this. Avoid the copy.
-                DecimalQuantity copy = quantity.createCopy();
-                copy.roundToInfinity();
-                StandardPlural plural = copy.getStandardPlural(rules);
-                micros.modMiddle = pm.getModifier(quantity.signum(), plural);
+                StandardPlural pluralForm = RoundingUtils.getPluralSafe(micros.rounder, rules, quantity);
+                micros.modMiddle = pm.getModifier(quantity.signum(), pluralForm);
             }
         }
 
@@ -273,10 +270,8 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     public MicroProps processQuantity(DecimalQuantity fq) {
         MicroProps micros = parent.processQuantity(fq);
         if (needsPlurals()) {
-            // TODO: Fix this. Avoid the copy.
-            DecimalQuantity copy = fq.createCopy();
-            micros.rounder.apply(copy);
-            setNumberProperties(fq.signum(), copy.getStandardPlural(rules));
+            StandardPlural pluralForm = RoundingUtils.getPluralSafe(micros.rounder, rules, fq);
+            setNumberProperties(fq.signum(), pluralForm);
         } else {
             setNumberProperties(fq.signum(), null);
         }

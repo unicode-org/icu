@@ -171,7 +171,7 @@ public class PatternStringUtils {
         sb.append(affixes.getString(AffixPatternProvider.FLAG_POS_SUFFIX));
 
         // Resolve Padding
-        if (paddingWidth != -1) {
+        if (paddingWidth > 0) {
             while (paddingWidth - sb.length() > 0) {
                 sb.insert(afterPrefixPos, '#');
                 beforeSuffixPos++;

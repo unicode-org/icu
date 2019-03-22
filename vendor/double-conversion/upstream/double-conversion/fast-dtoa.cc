@@ -25,11 +25,11 @@
 // (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 // OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-#include <double-conversion/fast-dtoa.h>
+#include "fast-dtoa.h"
 
-#include <double-conversion/cached-powers.h>
-#include <double-conversion/diy-fp.h>
-#include <double-conversion/ieee.h>
+#include "cached-powers.h"
+#include "diy-fp.h"
+#include "ieee.h"
 
 namespace double_conversion {
 

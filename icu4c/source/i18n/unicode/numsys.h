@@ -109,6 +109,10 @@ public:
     /**
      * Return a StringEnumeration over all the names of numbering systems known to ICU.
      * The numbering system names will be in alphabetical (invariant) order.
+     *
+     * The returned StringEnumeration is owned by the caller, who must delete it when
+     * finished with it.
+     *
      * @stable ICU 4.2
      */
      static StringEnumeration * U_EXPORT2 getAvailableNames(UErrorCode& status);

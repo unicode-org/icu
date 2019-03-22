@@ -47,7 +47,10 @@ UnicodeSet *sets[UCHAR_BINARY_LIMIT] = {};
 
 UCPMap *maps[UCHAR_INT_LIMIT - UCHAR_INT_START] = {};
 
-icu::UMutex cpMutex = U_MUTEX_INITIALIZER;
+icu::UMutex *cpMutex() {
+    static icu::UMutex m = U_MUTEX_INITIALIZER;
+    return &m;
+}
 
 //----------------------------------------------------------------
 // Inclusions list
@@ -358,7 +361,7 @@ u_getBinaryPropertySet(UProperty property, UErrorCode *pErrorCode) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
-    Mutex m(&cpMutex);
+    Mutex m(cpMutex());
     UnicodeSet *set = sets[property];
     if (set == nullptr) {
         sets[property] = set = makeSet(property, *pErrorCode);
@@ -374,7 +377,7 @@ u_getIntPropertyMap(UProperty property, UErrorCode *pErrorCode) {
         *pErrorCode = U_ILLEGAL_ARGUMENT_ERROR;
         return nullptr;
     }
-    Mutex m(&cpMutex);
+    Mutex m(cpMutex());
     UCPMap *map = maps[property - UCHAR_INT_START];
     if (map == nullptr) {
         maps[property - UCHAR_INT_START] = map = makeMap(property, *pErrorCode);

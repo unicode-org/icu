@@ -31,34 +31,35 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
     @Test
     public void TestFunctionalEquivalent(){
        String[] collCases = {
+       // note: in ICU 64, empty locales are shown as available for collation
        //  avail   locale                               equiv
            "f",     "sv_US_CALIFORNIA",                 "sv",
            "f",     "zh_TW@collation=stroke",           "zh@collation=stroke", /* alias of zh_Hant_TW */
-           "f",     "zh_Hant_TW@collation=stroke",      "zh@collation=stroke",
+           "t",     "zh_Hant_TW@collation=stroke",      "zh@collation=stroke",
            "f",     "sv_CN@collation=pinyin",           "sv",
            "t",     "zh@collation=pinyin",              "zh",
            "f",     "zh_CN@collation=pinyin",           "zh", /* alias of zh_Hans_CN */
-           "f",     "zh_Hans_CN@collation=pinyin",      "zh",
+           "t",     "zh_Hans_CN@collation=pinyin",      "zh",
            "f",     "zh_HK@collation=pinyin",           "zh", /* alias of zh_Hant_HK */
-           "f",     "zh_Hant_HK@collation=pinyin",      "zh",
+           "t",     "zh_Hant_HK@collation=pinyin",      "zh",
            "f",     "zh_HK@collation=stroke",           "zh@collation=stroke", /* alias of zh_Hant_HK */
-           "f",     "zh_Hant_HK@collation=stroke",      "zh@collation=stroke",
+           "t",     "zh_Hant_HK@collation=stroke",      "zh@collation=stroke",
            "f",     "zh_HK",                            "zh@collation=stroke", /* alias of zh_Hant_HK */
-           "f",     "zh_Hant_HK",                       "zh@collation=stroke",
+           "t",     "zh_Hant_HK",                       "zh@collation=stroke",
            "f",     "zh_MO",                            "zh@collation=stroke", /* alias of zh_Hant_MO */
-           "f",     "zh_Hant_MO",                       "zh@collation=stroke",
+           "t",     "zh_Hant_MO",                       "zh@collation=stroke",
            "f",     "zh_TW_STROKE",                     "zh@collation=stroke",
            "f",     "zh_TW_STROKE@collation=big5han",   "zh@collation=big5han",
            "f",     "sv_CN@calendar=japanese",          "sv",
            "t",     "sv@calendar=japanese",             "sv",
            "f",     "zh_TW@collation=big5han",          "zh@collation=big5han", /* alias of zh_Hant_TW */
-           "f",     "zh_Hant_TW@collation=big5han",     "zh@collation=big5han",
+           "t",     "zh_Hant_TW@collation=big5han",     "zh@collation=big5han",
            "f",     "zh_TW@collation=gb2312han",        "zh@collation=gb2312han", /* alias of zh_Hant_TW */
-           "f",     "zh_Hant_TW@collation=gb2312han",   "zh@collation=gb2312han",
+           "t",     "zh_Hant_TW@collation=gb2312han",   "zh@collation=gb2312han",
            "f",     "zh_CN@collation=big5han",          "zh@collation=big5han", /* alias of zh_Hans_CN */
-           "f",     "zh_Hans_CN@collation=big5han",     "zh@collation=big5han",
+           "t",     "zh_Hans_CN@collation=big5han",     "zh@collation=big5han",
            "f",     "zh_CN@collation=gb2312han",        "zh@collation=gb2312han", /* alias of zh_Hans_CN */
-           "f",     "zh_Hans_CN@collation=gb2312han",   "zh@collation=gb2312han",
+           "t",     "zh_Hans_CN@collation=gb2312han",   "zh@collation=gb2312han",
            "t",     "zh@collation=big5han",             "zh@collation=big5han",
            "t",     "zh@collation=gb2312han",           "zh@collation=gb2312han",
            "t",     "hi@collation=standard",            "hi",

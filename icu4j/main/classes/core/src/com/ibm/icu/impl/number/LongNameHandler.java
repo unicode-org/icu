@@ -290,10 +290,8 @@ public class LongNameHandler implements MicroPropsGenerator, ModifierStore {
     @Override
     public MicroProps processQuantity(DecimalQuantity quantity) {
         MicroProps micros = parent.processQuantity(quantity);
-        // TODO: Avoid the copy here?
-        DecimalQuantity copy = quantity.createCopy();
-        micros.rounder.apply(copy);
-        micros.modOuter = modifiers.get(copy.getStandardPlural(rules));
+        StandardPlural pluralForm = RoundingUtils.getPluralSafe(micros.rounder, rules, quantity);
+        micros.modOuter = modifiers.get(pluralForm);
         return micros;
     }
 

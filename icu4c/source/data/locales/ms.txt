@@ -174,7 +174,7 @@ ms{
         minimumGroupingDigits{"1"}
         native{"latn"}
     }
-    Version{"2.1.48.42"}
+    Version{"2.1.49.2"}
     calendar{
         chinese{
             DateTimePatterns{

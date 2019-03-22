@@ -53,23 +53,20 @@ Unicode 12.0 update for ICU 64
 
 http://www.unicode.org/versions/Unicode12.0.0/
 http://unicode.org/versions/beta-12.0.0.html
-TODO https://www.unicode.org/review/pri372/
+https://www.unicode.org/review/pri389/
 http://www.unicode.org/reports/uax-proposed-updates.html
 http://www.unicode.org/reports/tr44/tr44-23.html
 
 ICU-20203 Unicode 12
-https://github.com/markusicu/icu/tree/uni12
-https://github.com/markusicu/icu/tree/uni12b
 
 ICU-20111 move text layout properties data into a data file
-https://github.com/markusicu/icu/tree/layout-props
 
 cldrbug 11478: Unicode 12
 Accidentally used ^/trunk instead of ^/branches/markus/uni12
 
 * Command-line environment setup
 
-UNICODE_DATA=~/unidata/uni12/20190214
+UNICODE_DATA=~/unidata/uni12/20190309
 CLDR_SRC=~/svn.cldr/uni
 ICU_ROOT=~/icu/uni
 ICU_SRC=$ICU_ROOT/src
@@ -112,7 +109,7 @@ export LD_LIBRARY_PATH=$ICU_ROOT/dbg/icu4c/lib
 * build ICU (make install)
   so that the tools build can pick up the new definitions from the installed header files.
 
-  $ICU_ROOT/dbg/icu4c$ echo;echo; make -j7 install &> out.txt ; tail -n 30 out.txt ; date
+  $ICU_ROOT/dbg/icu4c$ echo;echo; date; make -j7 install &> out.txt ; tail -n 30 out.txt ; date
 
 * new constants for new property values
 - preparseucd.py error:

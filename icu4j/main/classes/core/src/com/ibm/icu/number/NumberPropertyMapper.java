@@ -219,7 +219,7 @@ final class NumberPropertyMapper {
         // PADDING //
         /////////////
 
-        if (properties.getFormatWidth() != -1) {
+        if (properties.getFormatWidth() > 0) {
             macros.padder = Padder.forProperties(properties);
         }
 
