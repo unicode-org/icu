@@ -15,11 +15,11 @@ U_NAMESPACE_BEGIN
 
 #define DECNUM_INITIAL_CAPACITY 34
 
-// Export an explicit template instantiation of the MaybeStackHeaderAndArray that is used as a data member of DecNum.
-// When building DLLs for Windows this is required even though no direct access to the MaybeStackHeaderAndArray leaks out of the i18n library.
-// (See digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.)
-#if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN
-template class U_I18N_API MaybeStackHeaderAndArray<decNumber, char, DECNUM_INITIAL_CAPACITY>;
+// An explicit template instantiation of MaybeStackHeaderAndArray that is
+// used as a data member below is defined in number_decimalquantity.cpp.
+// (MSVC treats imports/exports of explicit instantiations differently.)
+#ifndef _MSC_VER
+extern template class MaybeStackHeaderAndArray<decNumber, char, DECNUM_INITIAL_CAPACITY>;
 #endif
 
 namespace number {
