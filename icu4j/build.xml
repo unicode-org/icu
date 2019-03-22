@@ -570,7 +570,7 @@
         </icu-junit>
     </target>
 
-    <target name="packagingCheck" depends="info, core, packaging-tests" description="Run packaging tests">
+    <target name="packagingCheck" depends="info, core, langdata, regiondata, packaging-tests" description="Run packaging tests">
         <antcall target="_packagingCheckNoLangData"/>
         <antcall target="_packagingCheckNoRegionData"/>
         <antcall target="_packagingCheckNoLangNorRegionData"/>
