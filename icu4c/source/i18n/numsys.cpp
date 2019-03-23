@@ -260,8 +260,8 @@ void NumberingSystem::setName(const char *n) {
     if ( n == nullptr ) {
         name[0] = (char) 0;
     } else {
-        uprv_strncpy(name,n,NUMSYS_NAME_CAPACITY);
-        name[NUMSYS_NAME_CAPACITY] = '\0'; // Make sure it is null terminated.
+        uprv_strncpy(name,n,kInternalNumSysNameCapacity);
+        name[kInternalNumSysNameCapacity] = '\0'; // Make sure it is null terminated.
     }
 }
 UBool NumberingSystem::isAlgorithmic() const {

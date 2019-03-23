@@ -20,16 +20,6 @@
 
 #include "unicode/utypes.h"
 
-#ifndef U_HIDE_INTERNAL_API
-/**
- * \def NUMSYS_NAME_CAPACITY
- * Size of a numbering system name.
- * @internal
- */
-#define NUMSYS_NAME_CAPACITY 8
-#endif  /* U_HIDE_INTERNAL_API */
-
-
 /**
  * \file
  * \brief C++ API: NumberingSystem object
@@ -37,11 +27,17 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-
 #include "unicode/format.h"
 #include "unicode/uobject.h"
 
 U_NAMESPACE_BEGIN
+
+// can't be #ifndef U_HIDE_INTERNAL_API; needed for char[] field size
+/**
+ * Size of a numbering system name.
+ * @internal
+ */
+constexpr const size_t kInternalNumSysNameCapacity = 8;
 
 /**
  * Defines numbering systems. A numbering system describes the scheme by which 
@@ -195,7 +191,7 @@ private:
     UnicodeString   desc;
     int32_t         radix;
     UBool           algorithmic;
-    char            name[NUMSYS_NAME_CAPACITY+1];
+    char            name[kInternalNumSysNameCapacity+1];
 
     void setRadix(int32_t radix);
 

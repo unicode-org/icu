@@ -53,11 +53,13 @@ fieldpos.h
 filteredbrk.h
 fmtable.h
 format.h
+formattedvalue.h
 fpositer.h
 gender.h
 gregocal.h
 idna.h
 listformatter.h
+localebuilder.h
 locdspnm.h
 locid.h
 measfmt.h
