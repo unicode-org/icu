@@ -708,11 +708,13 @@ private:
             UErrorCode& status,
             Args... args) const;
 
+#ifndef U_HIDE_DRAFT_API  // for FormattedRelativeDateTime
     template<typename F, typename... Args>
     FormattedRelativeDateTime doFormatToValue(
             F callback,
             UErrorCode& status,
             Args... args) const;
+#endif  // U_HIDE_DRAFT_API
 
     void formatImpl(
             double quantity,
