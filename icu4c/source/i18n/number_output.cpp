@@ -16,6 +16,7 @@ namespace number {
 
 UPRV_FORMATTED_VALUE_SUBCLASS_AUTO_IMPL(FormattedNumber)
 
+#define UPRV_NOARG
 
 UBool FormattedNumber::nextFieldPosition(FieldPosition& fieldPosition, UErrorCode& status) const {
     UPRV_FORMATTED_VALUE_METHOD_GUARD(FALSE)
@@ -30,12 +31,12 @@ void FormattedNumber::getAllFieldPositions(FieldPositionIterator& iterator, UErr
 
 void FormattedNumber::getAllFieldPositionsImpl(FieldPositionIteratorHandler& fpih,
                                                UErrorCode& status) const {
-    UPRV_FORMATTED_VALUE_METHOD_GUARD()
+    UPRV_FORMATTED_VALUE_METHOD_GUARD(UPRV_NOARG)
     fData->getStringRef().getAllFieldPositions(fpih, status);
 }
 
 void FormattedNumber::getDecimalQuantity(impl::DecimalQuantity& output, UErrorCode& status) const {
-    UPRV_FORMATTED_VALUE_METHOD_GUARD()
+    UPRV_FORMATTED_VALUE_METHOD_GUARD(UPRV_NOARG)
     output = fData->quantity;
 }
 

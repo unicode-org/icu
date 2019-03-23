@@ -377,6 +377,7 @@ LocalizedNumberRangeFormatter::getFormatter(UErrorCode& status) const {
 
 UPRV_FORMATTED_VALUE_SUBCLASS_AUTO_IMPL(FormattedNumberRange)
 
+#define UPRV_NOARG
 
 UBool FormattedNumberRange::nextFieldPosition(FieldPosition& fieldPosition, UErrorCode& status) const {
     UPRV_FORMATTED_VALUE_METHOD_GUARD(FALSE)
@@ -391,7 +392,7 @@ void FormattedNumberRange::getAllFieldPositions(FieldPositionIterator& iterator,
 
 void FormattedNumberRange::getAllFieldPositionsImpl(
         FieldPositionIteratorHandler& fpih, UErrorCode& status) const {
-    UPRV_FORMATTED_VALUE_METHOD_GUARD()
+    UPRV_FORMATTED_VALUE_METHOD_GUARD(UPRV_NOARG)
     fData->getStringRef().getAllFieldPositions(fpih, status);
 }
 
