@@ -22,8 +22,8 @@ EventListener::~EventListener() {}
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(EventListener)
 
 static UMutex *notifyLock() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = new UMutex();
+    return m;
 }
 
 ICUNotifier::ICUNotifier(void) 

@@ -48,8 +48,8 @@ UnicodeSet *sets[UCHAR_BINARY_LIMIT] = {};
 UCPMap *maps[UCHAR_INT_LIMIT - UCHAR_INT_START] = {};
 
 icu::UMutex *cpMutex() {
-    static icu::UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static icu::UMutex *m = new icu::UMutex();
+    return m;
 }
 
 //----------------------------------------------------------------

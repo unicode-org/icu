@@ -1184,8 +1184,8 @@ UnicodeString& RelativeDateTimeFormatter::adjustForContext(UnicodeString &str) c
 
     // Must guarantee that one thread at a time accesses the shared break
     // iterator.
-    static icu::UMutex gBrkIterMutex = U_MUTEX_INITIALIZER;
-    Mutex lock(&gBrkIterMutex);
+    static icu::UMutex *gBrkIterMutex = new icu::UMutex();
+    Mutex lock(gBrkIterMutex);
     str.toTitle(
             fOptBreakIterator->get(),
             fLocale,

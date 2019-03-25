@@ -66,8 +66,8 @@ static inline UBool isINVALID(double d) {
 }
 
 static icu::UMutex *ccLock() {
-    static icu::UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static icu::UMutex *m = new icu::UMutex();
+    return m;
 }
 
 U_CDECL_BEGIN

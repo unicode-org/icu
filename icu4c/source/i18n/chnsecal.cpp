@@ -52,8 +52,8 @@ static void debug_chnsecal_msg(const char *pat, ...)
 
 // --- The cache --
 static icu::UMutex *astroLock() {  // Protects access to gChineseCalendarAstro.
-    static icu::UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static icu::UMutex *m = new icu::UMutex();
+    return m;
 }
 static icu::CalendarAstronomer *gChineseCalendarAstro = NULL;
 

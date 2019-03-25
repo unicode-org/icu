@@ -144,9 +144,9 @@ const ListFormatInternal* ListFormatter::getListFormatInternal(
     keyBuffer.append(':', errorCode).append(style, errorCode);
     UnicodeString key(keyBuffer.data(), -1, US_INV);
     ListFormatInternal* result = nullptr;
-    static UMutex listFormatterMutex = U_MUTEX_INITIALIZER;
+    static UMutex *listFormatterMutex = new UMutex();
     {
-        Mutex m(&listFormatterMutex);
+        Mutex m(listFormatterMutex);
         if (listPatternHash == nullptr) {
             initializeHash(errorCode);
             if (U_FAILURE(errorCode)) {
@@ -164,7 +164,7 @@ const ListFormatInternal* ListFormatter::getListFormatInternal(
     }
 
     {
-        Mutex m(&listFormatterMutex);
+        Mutex m(listFormatterMutex);
         ListFormatInternal* temp = static_cast<ListFormatInternal*>(listPatternHash->get(key));
         if (temp != nullptr) {
             delete result;

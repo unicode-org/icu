@@ -43,8 +43,8 @@ U_NAMESPACE_BEGIN
 
 // The ICU global mutex. Used when ICU implementation code passes NULL for the mutex pointer.
 static UMutex *globalMutex() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = new UMutex();
+    return m;
 }
 
 U_CAPI void  U_EXPORT2

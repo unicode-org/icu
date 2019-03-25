@@ -50,8 +50,8 @@ static UHashtable *cache = NULL;
 static icu::UInitOnce gCacheInitOnce;
 
 static UMutex *resbMutex() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = new UMutex();
+    return m;
 }
 
 /* INTERNAL: hashes an entry  */

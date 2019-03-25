@@ -334,8 +334,8 @@ U_CDECL_END
 */
 
 static UMutex *lock() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = new UMutex();
+    return m;
 }
 
 ICUService::ICUService()

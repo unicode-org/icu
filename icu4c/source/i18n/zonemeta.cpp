@@ -31,8 +31,8 @@
 #include "uinvchar.h"
 
 static icu::UMutex *gZoneMetaLock() {
-    static icu::UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static icu::UMutex *m = new icu::UMutex();
+    return m;
 }
 
 // CLDR Canonical ID mapping table

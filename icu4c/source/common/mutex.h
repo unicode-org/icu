@@ -35,12 +35,12 @@ U_NAMESPACE_BEGIN
 
 // For example:
 //
-// UMutex myMutex = U_MUTEX_INITIALIZER;
+// static UMutex *myMutex = new UMutex();
 //
 // void Function(int arg1, int arg2)
 // {
 //    static Object* foo;     // Shared read-write object
-//    Mutex mutex(&myMutex);  // or no args for the global lock
+//    Mutex mutex(myMutex);  // or no args for the global lock
 //    foo->Method();
 //    // When 'mutex' goes out of scope and gets destroyed here, the lock is released
 // }

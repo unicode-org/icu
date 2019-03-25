@@ -270,8 +270,8 @@ GNameSearchHandler::getMatches(int32_t& maxMatchLen) {
 }
 
 static UMutex *gLock() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = new UMutex();
+    return m;
 }
 
 class TZGNCore : public UMemory {
@@ -1116,8 +1116,8 @@ typedef struct TZGNCoreRef {
 
 // TZGNCore object cache handling
 static UMutex *gTZGNLock() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = new UMutex();
+    return m;
 }
 static UHashtable *gTZGNCoreCache = NULL;
 static UBool gTZGNCoreCacheInitialized = FALSE;

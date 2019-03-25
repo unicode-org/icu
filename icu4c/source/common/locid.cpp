@@ -63,8 +63,8 @@ static UInitOnce gLocaleCacheInitOnce = U_INITONCE_INITIALIZER;
 
 // gDefaultLocaleMutex protects all access to gDefaultLocalesHashT and gDefaultLocale.
 static UMutex *gDefaultLocaleMutex() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = new UMutex();
+    return m;
 }
 static UHashtable *gDefaultLocalesHashT = NULL;
 static Locale *gDefaultLocale = NULL;

@@ -22,8 +22,8 @@
 
 static icu::UnifiedCache *gCache = NULL;
 static icu::UMutex *gCacheMutex() {
-    static icu::UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static icu::UMutex *m = new icu::UMutex();
+    return m;
 }
 static icu::UConditionVar *gInProgressValueAddedCond() {
     static icu::UConditionVar cv = U_CONDITION_INITIALIZER;
