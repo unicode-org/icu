@@ -516,7 +516,7 @@ def generate_tree(
         )
     ]
 
-    # Generate index txt file
+    # Generate res_index file
     synthetic_locales = set()
     deprecates_xml_path = os.path.join(os.path.dirname(__file__), xml_filename)
     deprecates_xml = ET.parse(deprecates_xml_path)
@@ -540,30 +540,19 @@ def generate_tree(
         IN_SUB_DIR = sub_dir,
         **common_vars
     ))
-    index_file_target_name = "%s_index_txt" % sub_dir
-    requests += [
-        IndexTxtRequest(
-            name = index_file_target_name,
-            category = category,
-            input_files = index_input_files,
-            output_file = index_file_txt,
-            cldr_version = cldr_version
-        )
-    ]
-
-    # Generate index res file
     index_res_file = OutFile("{OUT_PREFIX}{INDEX_NAME}.res".format(
         OUT_PREFIX = out_prefix,
         **common_vars
     ))
+    index_file_target_name = "%s_index_txt" % sub_dir
     requests += [
-        SingleExecutionRequest(
-            name = "%s_index_res" % sub_dir,
+        IndexRequest(
+            name = index_file_target_name,
             category = category,
-            dep_targets = [DepTarget(index_file_target_name)],
-            input_files = [],
-            output_files = [index_res_file],
-            tool = IcuTool("genrb"),
+            input_files = index_input_files,
+            txt_file = index_file_txt,
+            output_file = index_res_file,
+            cldr_version = cldr_version,
             args = "-s {TMP_DIR}/{IN_SUB_DIR} -d {OUT_DIR}/{OUT_PREFIX} -i {OUT_DIR} "
                 "-k "
                 "{INDEX_NAME}.txt",
