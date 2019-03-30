@@ -75,14 +75,39 @@
  * @stable ICU 2.4
  */
 
+/**
+ * \def U_CXX_BEGIN
+ * This is used to begin a C++ block.
+ * When not compiling for C++, it does nothing.
+ * When compiling for C++, it begins an extern "C++" linkage block (to protect
+ * against cases in which an external client includes ICU header files inside
+ * an extern "C" linkage block).
+ *
+ * @draft ICU 65
+ */
+
+/**
+ * \def U_CXX_END
+ * This is used to end a declaration of a C++ API.
+ * When not compiling for C++, it does nothing.
+ * When compiling for C++, it ends the extern "C++" block begun by
+ * U_CXX_BEGIN.
+ *
+ * @draft ICU 65
+ */
+
 #ifdef __cplusplus
 #   define U_CFUNC extern "C"
 #   define U_CDECL_BEGIN extern "C" {
 #   define U_CDECL_END   }
+#   define U_CXX_BEGIN extern "C++" {
+#   define U_CXX_END }
 #else
 #   define U_CFUNC extern
 #   define U_CDECL_BEGIN
 #   define U_CDECL_END
+#   define U_CXX_BEGIN
+#   define U_CXX_END
 #endif
 
 #ifndef U_ATTRIBUTE_DEPRECATED

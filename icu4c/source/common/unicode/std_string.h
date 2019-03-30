@@ -32,6 +32,9 @@
 #if defined(__GLIBCXX__)
 namespace std { class type_info; }
 #endif
+
+U_CXX_BEGIN
 #include <string>
+U_CXX_END
 
 #endif  // __STD_STRING_H__

@@ -42,7 +42,9 @@
 
 #if U_SHOW_CPLUSPLUS_API
 
+U_CXX_BEGIN
 #include <memory>
+U_CXX_END
 
 U_NAMESPACE_BEGIN
 

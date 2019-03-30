@@ -5,12 +5,15 @@
 #ifndef __NUMBERRANGEFORMATTER_H__
 #define __NUMBERRANGEFORMATTER_H__
 
-#include <atomic>
 #include "unicode/appendable.h"
 #include "unicode/fieldpos.h"
 #include "unicode/formattedvalue.h"
 #include "unicode/fpositer.h"
 #include "unicode/numberformatter.h"
+
+U_CXX_BEGIN
+#include <atomic>
+U_CXX_END
 
 #ifndef U_HIDE_DRAFT_API
 

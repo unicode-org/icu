@@ -64,13 +64,10 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
 
 /**
  * \def U_NAMESPACE_BEGIN
- * This is used to begin a declaration of a public ICU C++ API.
+ * This is used to begin a declaration of a public ICU C++ API within
+ * versioned-ICU-namespace block.
  * When not compiling for C++, it does nothing.
- * When compiling for C++, it begins an extern "C++" linkage block (to protect
- * against cases in which an external client includes ICU header files inside
- * an extern "C" linkage block).
  *
- * It also begins a versioned-ICU-namespace block.
  * @stable ICU 2.4
  */
 
@@ -78,10 +75,8 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
  * \def U_NAMESPACE_END
  * This is used to end a declaration of a public ICU C++ API.
  * When not compiling for C++, it does nothing.
- * When compiling for C++, it ends the extern "C++" block begun by
- * U_NAMESPACE_BEGIN.
+ * It ends the versioned-ICU-namespace block begun by U_NAMESPACE_BEGIN.
  *
- * It also ends the versioned-ICU-namespace block begun by U_NAMESPACE_BEGIN.
  * @stable ICU 2.4
  */
 
@@ -116,8 +111,8 @@ typedef uint8_t UVersionInfo[U_MAX_VERSION_LENGTH];
         namespace icu = U_ICU_NAMESPACE;
 #   endif
 
-#   define U_NAMESPACE_BEGIN extern "C++" { namespace U_ICU_NAMESPACE {
-#   define U_NAMESPACE_END } }
+#   define U_NAMESPACE_BEGIN U_CXX_BEGIN namespace U_ICU_NAMESPACE {
+#   define U_NAMESPACE_END } U_CXX_END
 #   define U_NAMESPACE_USE using namespace U_ICU_NAMESPACE;
 #   define U_NAMESPACE_QUALIFIER U_ICU_NAMESPACE::
 

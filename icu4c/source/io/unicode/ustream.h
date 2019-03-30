@@ -34,7 +34,9 @@
 namespace std { class type_info; } // WORKAROUND: http://llvm.org/bugs/show_bug.cgi?id=13364
 #endif
 
+U_CXX_BEGIN
 #include <iostream>
+U_CXX_END
 
 U_NAMESPACE_BEGIN
 

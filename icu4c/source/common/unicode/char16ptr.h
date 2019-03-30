@@ -7,8 +7,11 @@
 #ifndef __CHAR16PTR_H__
 #define __CHAR16PTR_H__
 
-#include <cstddef>
 #include "unicode/utypes.h"
+
+U_CXX_BEGIN
+#include <cstddef>
+U_CXX_END
 
 /**
  * \file
