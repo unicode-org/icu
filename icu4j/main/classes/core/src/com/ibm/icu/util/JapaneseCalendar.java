@@ -386,6 +386,12 @@ public class JapaneseCalendar extends GregorianCalendar {
      */
     static public final int HEISEI;
 
+    /**
+     * Constant for the era starting on May 1, 2019 AD.
+     * @stable ICU 64
+     */
+    static public final int REIWA;
+
     // We want to make these era constants initialized in a static initializer
     // block to prevent javac to inline these values in a consumer code.
     // By doing so, we can keep better binary compatibility across versions even
@@ -395,6 +401,7 @@ public class JapaneseCalendar extends GregorianCalendar {
         TAISHO = 233;
         SHOWA = 234;
         HEISEI = 235;
+        REIWA = 236;
         CURRENT_ERA = ERA_RULES.getCurrentEraIndex();
     }
 
