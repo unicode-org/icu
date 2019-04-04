@@ -2242,10 +2242,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             errln("FAIL: Max week in 2009 in ISO calendar is 53, but got " + maxWeeks);
         }
     }
-}
 
-
-    @Test
     public void TestPersianCalOverflow() {
         String localeID = "bs_Cyrl@calendar=persian";
         Calendar cal = Calendar.getInstance(new ULocale(localeID));
