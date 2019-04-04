@@ -1225,6 +1225,7 @@ sv{
                     "Taishō",
                     "Shōwa",
                     "Heisei",
+                    "Reiwa",
                 }
             }
         }
