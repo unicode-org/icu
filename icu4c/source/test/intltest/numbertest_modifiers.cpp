@@ -7,7 +7,7 @@
 
 #include "putilimp.h"
 #include "intltest.h"
-#include "number_stringbuilder.h"
+#include "formatted_string_builder.h"
 #include "number_modifiers.h"
 #include "numbertest.h"
 
@@ -36,8 +36,8 @@ void ModifiersTest::testConstantAffixModifier() {
 
 void ModifiersTest::testConstantMultiFieldModifier() {
     UErrorCode status = U_ZERO_ERROR;
-    NumberStringBuilder prefix;
-    NumberStringBuilder suffix;
+    FormattedStringBuilder prefix;
+    FormattedStringBuilder suffix;
     ConstantMultiFieldModifier mod1(prefix, suffix, false, true);
     assertModifierEquals(mod1, 0, true, u"|", u"n", status);
     assertSuccess("Spot 1", status);
@@ -87,7 +87,7 @@ void ModifiersTest::testSimpleModifier() {
 
         // Test strange insertion positions
         for (int32_t j = 0; j < NUM_OUTPUTS; j++) {
-            NumberStringBuilder output;
+            FormattedStringBuilder output;
             output.append(outputs[j].baseString, UNUM_FIELD_COUNT, status);
             mod.apply(output, outputs[j].leftIndex, outputs[j].rightIndex, status);
             UnicodeString expected = expecteds[j][i];
@@ -105,8 +105,8 @@ void ModifiersTest::testCurrencySpacingEnabledModifier() {
         return;
     }
 
-    NumberStringBuilder prefix;
-    NumberStringBuilder suffix;
+    FormattedStringBuilder prefix;
+    FormattedStringBuilder suffix;
     CurrencySpacingEnabledModifier mod1(prefix, suffix, false, true, symbols, status);
     assertSuccess("Spot 2", status);
     assertModifierEquals(mod1, 0, true, u"|", u"n", status);
@@ -120,15 +120,15 @@ void ModifiersTest::testCurrencySpacingEnabledModifier() {
     assertSuccess("Spot 6", status);
 
     // Test the default currency spacing rules
-    NumberStringBuilder sb;
+    FormattedStringBuilder sb;
     sb.append("123", UNUM_INTEGER_FIELD, status);
     assertSuccess("Spot 7", status);
-    NumberStringBuilder sb1(sb);
+    FormattedStringBuilder sb1(sb);
     assertModifierEquals(mod2, sb1, 3, true, u"USD\u00A0123", u"$$$niii", status);
     assertSuccess("Spot 8", status);
 
     // Compare with the unsafe code path
-    NumberStringBuilder sb2(sb);
+    FormattedStringBuilder sb2(sb);
     sb2.insert(0, "USD", UNUM_CURRENCY_FIELD, status);
     assertSuccess("Spot 9", status);
     CurrencySpacingEnabledModifier::applyCurrencySpacing(sb2, 0, 3, 6, 0, symbols, status);
@@ -149,14 +149,14 @@ void ModifiersTest::testCurrencySpacingEnabledModifier() {
 void ModifiersTest::assertModifierEquals(const Modifier &mod, int32_t expectedPrefixLength,
                                          bool expectedStrong, UnicodeString expectedChars,
                                          UnicodeString expectedFields, UErrorCode &status) {
-    NumberStringBuilder sb;
+    FormattedStringBuilder sb;
     sb.appendCodePoint('|', UNUM_FIELD_COUNT, status);
     assertModifierEquals(
             mod, sb, expectedPrefixLength, expectedStrong, expectedChars, expectedFields, status);
 
 }
 
-void ModifiersTest::assertModifierEquals(const Modifier &mod, NumberStringBuilder &sb,
+void ModifiersTest::assertModifierEquals(const Modifier &mod, FormattedStringBuilder &sb,
                                          int32_t expectedPrefixLength, bool expectedStrong,
                                          UnicodeString expectedChars, UnicodeString expectedFields,
                                          UErrorCode &status) {
@@ -171,7 +171,7 @@ void ModifiersTest::assertModifierEquals(const Modifier &mod, NumberStringBuilde
     }
 
     UnicodeString debugString;
-    debugString.append(u"<NumberStringBuilder [");
+    debugString.append(u"<FormattedStringBuilder [");
     debugString.append(expectedChars);
     debugString.append(u"] [");
     debugString.append(expectedFields);

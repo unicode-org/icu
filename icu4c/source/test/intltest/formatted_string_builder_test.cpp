@@ -6,7 +6,26 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "putilimp.h"
-#include "numbertest.h"
+#include "intltest.h"
+#include "formatted_string_builder.h"
+#include "formattedval_impl.h"
+
+
+class FormattedStringBuilderTest : public IntlTest {
+  public:
+    void testInsertAppendUnicodeString();
+    void testSplice();
+    void testInsertAppendCodePoint();
+    void testCopy();
+    void testFields();
+    void testUnlimitedCapacity();
+    void testCodePoints();
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+
+  private:
+    void assertEqualsImpl(const UnicodeString &a, const FormattedStringBuilder &b);
+};
 
 static const char16_t *EXAMPLE_STRINGS[] = {
         u"",
@@ -17,9 +36,9 @@ static const char16_t *EXAMPLE_STRINGS[] = {
         u"with combining characters like 🇦🇧🇨🇩",
         u"A very very very very very very very very very very long string to force heap"};
 
-void NumberStringBuilderTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *) {
+void FormattedStringBuilderTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *) {
     if (exec) {
-        logln("TestSuite NumberStringBuilderTest: ");
+        logln("TestSuite FormattedStringBuilderTest: ");
     }
     TESTCASE_AUTO_BEGIN;
         TESTCASE_AUTO(testInsertAppendUnicodeString);
@@ -32,14 +51,14 @@ void NumberStringBuilderTest::runIndexedTest(int32_t index, UBool exec, const ch
     TESTCASE_AUTO_END;
 }
 
-void NumberStringBuilderTest::testInsertAppendUnicodeString() {
+void FormattedStringBuilderTest::testInsertAppendUnicodeString() {
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString sb1;
-    NumberStringBuilder sb2;
+    FormattedStringBuilder sb2;
     for (const char16_t* strPtr : EXAMPLE_STRINGS) {
         UnicodeString str(strPtr);
 
-        NumberStringBuilder sb3;
+        FormattedStringBuilder sb3;
         sb1.append(str);
         // Note: UNUM_FIELD_COUNT is like passing null in Java
         sb2.append(str, UNUM_FIELD_COUNT, status);
@@ -50,7 +69,7 @@ void NumberStringBuilderTest::testInsertAppendUnicodeString() {
         assertEqualsImpl(str, sb3);
 
         UnicodeString sb4;
-        NumberStringBuilder sb5;
+        FormattedStringBuilder sb5;
         sb4.append(u"😇");
         sb4.append(str);
         sb4.append(u"xx");
@@ -68,7 +87,7 @@ void NumberStringBuilderTest::testInsertAppendUnicodeString() {
         assertEqualsImpl(sb4, sb5);
 
         UnicodeString sb4cp(sb4);
-        NumberStringBuilder sb5cp(sb5);
+        FormattedStringBuilder sb5cp(sb5);
         sb4.append(sb4cp);
         sb5.append(sb5cp, status);
         assertSuccess("Appending again to sb5", status);
@@ -76,7 +95,7 @@ void NumberStringBuilderTest::testInsertAppendUnicodeString() {
     }
 }
 
-void NumberStringBuilderTest::testSplice() {
+void FormattedStringBuilderTest::testSplice() {
     static const struct TestCase {
         const char16_t* input;
         const int32_t startThis;
@@ -94,7 +113,7 @@ void NumberStringBuilderTest::testSplice() {
 
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString sb1;
-    NumberStringBuilder sb2;
+    FormattedStringBuilder sb2;
     for (auto cas : cases) {
         for (const char16_t* replacementPtr : EXAMPLE_STRINGS) {
             UnicodeString replacement(replacementPtr);
@@ -125,14 +144,14 @@ void NumberStringBuilderTest::testSplice() {
     }
 }
 
-void NumberStringBuilderTest::testInsertAppendCodePoint() {
+void FormattedStringBuilderTest::testInsertAppendCodePoint() {
     static const UChar32 cases[] = {
             0, 1, 60, 127, 128, 0x7fff, 0x8000, 0xffff, 0x10000, 0x1f000, 0x10ffff};
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString sb1;
-    NumberStringBuilder sb2;
+    FormattedStringBuilder sb2;
     for (UChar32 cas : cases) {
-        NumberStringBuilder sb3;
+        FormattedStringBuilder sb3;
         sb1.append(cas);
         sb2.appendCodePoint(cas, UNUM_FIELD_COUNT, status);
         assertSuccess("Appending to sb2", status);
@@ -147,7 +166,7 @@ void NumberStringBuilderTest::testInsertAppendCodePoint() {
                 sb3.charAt(0));
 
         UnicodeString sb4;
-        NumberStringBuilder sb5;
+        FormattedStringBuilder sb5;
         sb4.append(u"😇xx");
         sb4.insert(2, cas);
         sb5.append(u"😇xx", UNUM_FIELD_COUNT, status);
@@ -158,13 +177,13 @@ void NumberStringBuilderTest::testInsertAppendCodePoint() {
     }
 }
 
-void NumberStringBuilderTest::testCopy() {
+void FormattedStringBuilderTest::testCopy() {
     UErrorCode status = U_ZERO_ERROR;
     for (UnicodeString str : EXAMPLE_STRINGS) {
-        NumberStringBuilder sb1;
+        FormattedStringBuilder sb1;
         sb1.append(str, UNUM_FIELD_COUNT, status);
         assertSuccess("Appending to sb1 first time", status);
-        NumberStringBuilder sb2(sb1);
+        FormattedStringBuilder sb2(sb1);
         assertTrue("Content should equal itself", sb1.contentEquals(sb2));
 
         sb1.append("12345", UNUM_FIELD_COUNT, status);
@@ -173,25 +192,28 @@ void NumberStringBuilderTest::testCopy() {
     }
 }
 
-void NumberStringBuilderTest::testFields() {
+void FormattedStringBuilderTest::testFields() {
     UErrorCode status = U_ZERO_ERROR;
     // Note: This is a C++11 for loop that calls the UnicodeString constructor on each iteration.
     for (UnicodeString str : EXAMPLE_STRINGS) {
-        NumberStringBuilder sb;
+        FormattedValueStringBuilderImpl sbi(0);
+        FormattedStringBuilder& sb = sbi.getStringRef();
         sb.append(str, UNUM_FIELD_COUNT, status);
         assertSuccess("Appending to sb", status);
         sb.append(str, UNUM_CURRENCY_FIELD, status);
         assertSuccess("Appending to sb", status);
         assertEquals("Reference string copied twice", str.length() * 2, sb.length());
         for (int32_t i = 0; i < str.length(); i++) {
-            assertEquals("Null field first", (Field) UNUM_FIELD_COUNT, sb.fieldAt(i));
-            assertEquals("Currency field second", (Field) UNUM_CURRENCY_FIELD, sb.fieldAt(i + str.length()));
+            assertEquals("Null field first",
+                (FormattedStringBuilder::Field) UNUM_FIELD_COUNT, sb.fieldAt(i));
+            assertEquals("Currency field second",
+                (FormattedStringBuilder::Field) UNUM_CURRENCY_FIELD, sb.fieldAt(i + str.length()));
         }
 
         // Very basic FieldPosition test. More robust tests happen in NumberFormatTest.
         // Let NumberFormatTest also take care of FieldPositionIterator material.
         FieldPosition fp(UNUM_CURRENCY_FIELD);
-        sb.nextFieldPosition(fp, status);
+        sbi.nextFieldPosition(fp, status);
         assertSuccess("Populating the FieldPosition", status);
         assertEquals("Currency start position", str.length(), fp.getBeginIndex());
         assertEquals("Currency end position", str.length() * 2, fp.getEndIndex());
@@ -200,17 +222,17 @@ void NumberStringBuilderTest::testFields() {
             sb.insertCodePoint(2, 100, UNUM_INTEGER_FIELD, status);
             assertSuccess("Inserting code point into sb", status);
             assertEquals("New length", str.length() * 2 + 1, sb.length());
-            assertEquals("Integer field", (Field) UNUM_INTEGER_FIELD, sb.fieldAt(2));
+            assertEquals("Integer field", (FormattedStringBuilder::Field) UNUM_INTEGER_FIELD, sb.fieldAt(2));
         }
 
-        NumberStringBuilder old(sb);
+        FormattedStringBuilder old(sb);
         sb.append(old, status);
         assertSuccess("Appending to myself", status);
         int32_t numNull = 0;
         int32_t numCurr = 0;
         int32_t numInt = 0;
         for (int32_t i = 0; i < sb.length(); i++) {
-            Field field = sb.fieldAt(i);
+            FormattedStringBuilder::Field field = sb.fieldAt(i);
             assertEquals("Field should equal location in old", old.fieldAt(i % old.length()), field);
             if (field == UNUM_FIELD_COUNT) {
                 numNull++;
@@ -228,9 +250,9 @@ void NumberStringBuilderTest::testFields() {
     }
 }
 
-void NumberStringBuilderTest::testUnlimitedCapacity() {
+void FormattedStringBuilderTest::testUnlimitedCapacity() {
     UErrorCode status = U_ZERO_ERROR;
-    NumberStringBuilder builder;
+    FormattedStringBuilder builder;
     // The builder should never fail upon repeated appends.
     for (int i = 0; i < 1000; i++) {
         UnicodeString message("Iteration #");
@@ -242,9 +264,9 @@ void NumberStringBuilderTest::testUnlimitedCapacity() {
     }
 }
 
-void NumberStringBuilderTest::testCodePoints() {
+void FormattedStringBuilderTest::testCodePoints() {
     UErrorCode status = U_ZERO_ERROR;
-    NumberStringBuilder nsb;
+    FormattedStringBuilder nsb;
     assertEquals("First is -1 on empty string", -1, nsb.getFirstCodePoint());
     assertEquals("Last is -1 on empty string", -1, nsb.getLastCodePoint());
     assertEquals("Length is 0 on empty string", 0, nsb.codePointCount());
@@ -268,7 +290,7 @@ void NumberStringBuilderTest::testCodePoints() {
     assertEquals("Code point count is 2", 2, nsb.codePointCount());
 }
 
-void NumberStringBuilderTest::assertEqualsImpl(const UnicodeString &a, const NumberStringBuilder &b) {
+void FormattedStringBuilderTest::assertEqualsImpl(const UnicodeString &a, const FormattedStringBuilder &b) {
     // TODO: Why won't this compile without the IntlTest:: qualifier?
     IntlTest::assertEquals("Lengths should be the same", a.length(), b.length());
     IntlTest::assertEquals("Code point counts should be the same", a.countChar32(), b.codePointCount());
@@ -283,6 +305,11 @@ void NumberStringBuilderTest::assertEqualsImpl(const UnicodeString &a, const Num
                 UnicodeString(u" in \"") + a + UnicodeString("\" versus \"") +
                 b.toUnicodeString() + UnicodeString("\""), a.charAt(i), b.charAt(i));
     }
+}
+
+
+extern IntlTest *createFormattedStringBuilderTest() {
+    return new FormattedStringBuilderTest();
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

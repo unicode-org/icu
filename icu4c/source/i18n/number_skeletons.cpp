@@ -20,6 +20,7 @@
 #include "unicode/numberformatter.h"
 #include "uinvchar.h"
 #include "charstr.h"
+#include "string_segment.h"
 
 using namespace icu;
 using namespace icu::number;

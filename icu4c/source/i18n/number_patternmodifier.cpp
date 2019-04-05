@@ -108,8 +108,8 @@ MutablePatternModifier::createImmutableAndChain(const MicroPropsGenerator* paren
 }
 
 ConstantMultiFieldModifier* MutablePatternModifier::createConstantModifier(UErrorCode& status) {
-    NumberStringBuilder a;
-    NumberStringBuilder b;
+    FormattedStringBuilder a;
+    FormattedStringBuilder b;
     insertPrefix(a, 0, status);
     insertSuffix(b, 0, status);
     if (fPatternInfo->hasCurrencySign()) {
@@ -174,7 +174,7 @@ void MutablePatternModifier::processQuantity(DecimalQuantity& fq, MicroProps& mi
     micros.modMiddle = this;
 }
 
-int32_t MutablePatternModifier::apply(NumberStringBuilder& output, int32_t leftIndex, int32_t rightIndex,
+int32_t MutablePatternModifier::apply(FormattedStringBuilder& output, int32_t leftIndex, int32_t rightIndex,
                                       UErrorCode& status) const {
     // The unsafe code path performs self-mutation, so we need a const_cast.
     // This method needs to be const because it overrides a const method in the parent class.
@@ -252,13 +252,13 @@ bool MutablePatternModifier::semanticallyEquivalent(const Modifier& other) const
     UPRV_UNREACHABLE;
 }
 
-int32_t MutablePatternModifier::insertPrefix(NumberStringBuilder& sb, int position, UErrorCode& status) {
+int32_t MutablePatternModifier::insertPrefix(FormattedStringBuilder& sb, int position, UErrorCode& status) {
     prepareAffix(true);
     int32_t length = AffixUtils::unescape(currentAffix, sb, position, *this, fField, status);
     return length;
 }
 
-int32_t MutablePatternModifier::insertSuffix(NumberStringBuilder& sb, int position, UErrorCode& status) {
+int32_t MutablePatternModifier::insertSuffix(FormattedStringBuilder& sb, int position, UErrorCode& status) {
     prepareAffix(false);
     int32_t length = AffixUtils::unescape(currentAffix, sb, position, *this, fField, status);
     return length;

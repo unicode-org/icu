@@ -5,14 +5,16 @@ package com.ibm.icu.impl.number;
 import java.text.Format.Field;
 import java.util.Arrays;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
+
 /**
  * An implementation of {@link Modifier} that allows for multiple types of fields in the same modifier.
- * Constructed based on the contents of two {@link NumberStringBuilder} instances (one for the prefix,
+ * Constructed based on the contents of two {@link FormattedStringBuilder} instances (one for the prefix,
  * one for the suffix).
  */
 public class ConstantMultiFieldModifier implements Modifier {
 
-    // NOTE: In Java, these are stored as array pointers. In C++, the NumberStringBuilder is stored by
+    // NOTE: In Java, these are stored as array pointers. In C++, the FormattedStringBuilder is stored by
     // value and is treated internally as immutable.
     protected final char[] prefixChars;
     protected final char[] suffixChars;
@@ -25,16 +27,16 @@ public class ConstantMultiFieldModifier implements Modifier {
     private final Parameters parameters;
 
     public ConstantMultiFieldModifier(
-            NumberStringBuilder prefix,
-            NumberStringBuilder suffix,
+            FormattedStringBuilder prefix,
+            FormattedStringBuilder suffix,
             boolean overwrite,
             boolean strong) {
         this(prefix, suffix, overwrite, strong, null);
     }
 
     public ConstantMultiFieldModifier(
-            NumberStringBuilder prefix,
-            NumberStringBuilder suffix,
+            FormattedStringBuilder prefix,
+            FormattedStringBuilder suffix,
             boolean overwrite,
             boolean strong,
             Parameters parameters) {
@@ -48,7 +50,7 @@ public class ConstantMultiFieldModifier implements Modifier {
     }
 
     @Override
-    public int apply(NumberStringBuilder output, int leftIndex, int rightIndex) {
+    public int apply(FormattedStringBuilder output, int leftIndex, int rightIndex) {
         int length = output.insert(leftIndex, prefixChars, prefixFields);
         if (overwrite) {
             length += output.splice(leftIndex + length, rightIndex + length, "", 0, 0, null);
@@ -109,7 +111,7 @@ public class ConstantMultiFieldModifier implements Modifier {
 
     @Override
     public String toString() {
-        NumberStringBuilder temp = new NumberStringBuilder();
+        FormattedStringBuilder temp = new FormattedStringBuilder();
         apply(temp, 0, 0);
         int prefixLength = getPrefixLength();
         return String.format("<ConstantMultiFieldModifier prefix:'%s' suffix:'%s'>",

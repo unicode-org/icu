@@ -932,7 +932,9 @@ group: double_conversion
     platform
 
 group: number_representation
-    number_decimalquantity.o number_stringbuilder.o numparse_stringsegment.o number_utils.o
+    number_decimalquantity.o string_segment.o number_utils.o
+    # TODO(ICU-20429) Move formatted_string_builder to its own unit.
+    formatted_string_builder.o
   deps
     decnumber double_conversion
     # for trimming whitespace around fields

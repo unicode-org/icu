@@ -585,7 +585,7 @@
     <ClCompile Include="number_scientific.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="number_stringbuilder.cpp">
+    <ClCompile Include="formatted_string_builder.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="number_utils.cpp">
@@ -606,7 +606,7 @@
     <ClCompile Include="number_capi.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="numparse_stringsegment.cpp">
+    <ClCompile Include="string_segment.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="numparse_parsednumber.cpp">
@@ -878,7 +878,7 @@
     <ClInclude Include="number_scientific.h">
       <Filter>formatting</Filter>
     </ClInclude>
-    <ClInclude Include="number_stringbuilder.h">
+    <ClInclude Include="formatted_string_builder.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="number_types.h">
@@ -902,7 +902,7 @@
     <ClInclude Include="number_skeletons.h">
       <Filter>formatting</Filter>
     </ClInclude>
-    <ClInclude Include="numparse_stringsegment.h">
+    <ClInclude Include="string_segment.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="numparse_impl.h">

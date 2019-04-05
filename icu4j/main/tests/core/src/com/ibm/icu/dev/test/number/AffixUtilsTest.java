@@ -7,9 +7,9 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.number.AffixUtils;
 import com.ibm.icu.impl.number.AffixUtils.SymbolProvider;
-import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.text.UnicodeSet;
 
 public class AffixUtilsTest {
@@ -199,7 +199,7 @@ public class AffixUtilsTest {
             }
         };
 
-        NumberStringBuilder sb = new NumberStringBuilder();
+        FormattedStringBuilder sb = new FormattedStringBuilder();
         for (String[] cas : cases) {
             String input = cas[0];
             String expected = cas[1];
@@ -236,7 +236,7 @@ public class AffixUtilsTest {
     }
 
     private static String unescapeWithDefaults(String input) {
-        NumberStringBuilder nsb = new NumberStringBuilder();
+        FormattedStringBuilder nsb = new FormattedStringBuilder();
         int length = AffixUtils.unescape(input, nsb, 0, DEFAULT_SYMBOL_PROVIDER, null);
         assertEquals("Return value of unescape", nsb.length(), length);
         return nsb.toString();

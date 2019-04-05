@@ -232,6 +232,7 @@
     </ClCompile>
     <ClCompile Include="dtptngts.cpp" />
     <ClCompile Include="fldset.cpp" />
+    <ClCompile Include="formatted_string_builder_test.cpp" />
     <ClCompile Include="genderinfotest.cpp" />
     <ClCompile Include="incaltst.cpp" />
     <ClCompile Include="itformat.cpp" />
@@ -251,8 +252,7 @@
     <ClCompile Include="numbertest_modifiers.cpp" />
     <ClCompile Include="numbertest_patternmodifier.cpp" />
     <ClCompile Include="numbertest_patternstring.cpp" />
-    <ClCompile Include="numbertest_stringbuilder.cpp" />
-    <ClCompile Include="numbertest_stringsegment.cpp" />
+    <ClCompile Include="string_segment_test.cpp" />
     <ClCompile Include="numbertest_parse.cpp" />
     <ClCompile Include="numbertest_doubleconversion.cpp" />
     <ClCompile Include="numbertest_skeletons.cpp" />

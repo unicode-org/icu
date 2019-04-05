@@ -85,6 +85,7 @@ U_NAMESPACE_BEGIN
 // Forward declarations:
 class IFixedDecimal;
 class FieldPositionIteratorHandler;
+class FormattedStringBuilder;
 
 namespace numparse {
 namespace impl {
@@ -140,7 +141,6 @@ class MultiplierProducer;
 class RoundingImpl;
 class ScientificHandler;
 class Modifier;
-class NumberStringBuilder;
 class AffixPatternProvider;
 class NumberPropertyMapper;
 struct DecimalFormatProperties;
@@ -1341,7 +1341,7 @@ class U_I18N_API Padder : public UMemory {
     }
 
     int32_t padAndApply(const impl::Modifier &mod1, const impl::Modifier &mod2,
-                        impl::NumberStringBuilder &string, int32_t leftIndex, int32_t rightIndex,
+                        FormattedStringBuilder &string, int32_t leftIndex, int32_t rightIndex,
                         UErrorCode &status) const;
 
     // To allow MacroProps/MicroProps to initialize empty instances:

@@ -12,6 +12,7 @@
 #include "numparse_types.h"
 #include "numparse_scientific.h"
 #include "static_unicode_sets.h"
+#include "string_segment.h"
 
 using namespace icu;
 using namespace icu::numparse;

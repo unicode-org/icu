@@ -7,12 +7,12 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.number.ConstantAffixModifier;
 import com.ibm.icu.impl.number.ConstantMultiFieldModifier;
 import com.ibm.icu.impl.number.CurrencySpacingEnabledModifier;
 import com.ibm.icu.impl.number.Modifier;
-import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.SimpleModifier;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
@@ -29,8 +29,8 @@ public class ModifierTest {
 
     @Test
     public void testConstantMultiFieldModifier() {
-        NumberStringBuilder prefix = new NumberStringBuilder();
-        NumberStringBuilder suffix = new NumberStringBuilder();
+        FormattedStringBuilder prefix = new FormattedStringBuilder();
+        FormattedStringBuilder suffix = new FormattedStringBuilder();
         Modifier mod1 = new ConstantMultiFieldModifier(prefix, suffix, false, true);
         assertModifierEquals(mod1, 0, true, "|", "n");
 
@@ -76,7 +76,7 @@ public class ModifierTest {
 
             // Test strange insertion positions
             for (int j = 0; j < outputs.length; j++) {
-                NumberStringBuilder output = new NumberStringBuilder();
+                FormattedStringBuilder output = new FormattedStringBuilder();
                 output.append((String) outputs[j][0], null);
                 mod.apply(output, (Integer) outputs[j][1], (Integer) outputs[j][2]);
                 String expected = expecteds[j][i];
@@ -89,8 +89,8 @@ public class ModifierTest {
     @Test
     public void testCurrencySpacingEnabledModifier() {
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(ULocale.ENGLISH);
-        NumberStringBuilder prefix = new NumberStringBuilder();
-        NumberStringBuilder suffix = new NumberStringBuilder();
+        FormattedStringBuilder prefix = new FormattedStringBuilder();
+        FormattedStringBuilder suffix = new FormattedStringBuilder();
         Modifier mod1 = new CurrencySpacingEnabledModifier(prefix, suffix, false, true, symbols);
         assertModifierEquals(mod1, 0, true, "|", "n");
 
@@ -99,13 +99,13 @@ public class ModifierTest {
         assertModifierEquals(mod2, 3, true, "USD|", "$$$n");
 
         // Test the default currency spacing rules
-        NumberStringBuilder sb = new NumberStringBuilder();
+        FormattedStringBuilder sb = new FormattedStringBuilder();
         sb.append("123", NumberFormat.Field.INTEGER);
-        NumberStringBuilder sb1 = new NumberStringBuilder(sb);
+        FormattedStringBuilder sb1 = new FormattedStringBuilder(sb);
         assertModifierEquals(mod2, sb1, 3, true, "USD\u00A0123", "$$$niii");
 
         // Compare with the unsafe code path
-        NumberStringBuilder sb2 = new NumberStringBuilder(sb);
+        FormattedStringBuilder sb2 = new FormattedStringBuilder(sb);
         sb2.insert(0, "USD", NumberFormat.Field.CURRENCY);
         CurrencySpacingEnabledModifier.applyCurrencySpacing(sb2, 0, 3, 6, 0, symbols);
         assertTrue(sb1.toDebugString() + " vs " + sb2.toDebugString(), sb1.contentEquals(sb2));
@@ -147,7 +147,7 @@ public class ModifierTest {
             boolean expectedStrong,
             String expectedChars,
             String expectedFields) {
-        NumberStringBuilder sb = new NumberStringBuilder();
+        FormattedStringBuilder sb = new FormattedStringBuilder();
         sb.appendCodePoint('|', null);
         assertModifierEquals(mod,
                 sb,
@@ -159,7 +159,7 @@ public class ModifierTest {
 
     private void assertModifierEquals(
             Modifier mod,
-            NumberStringBuilder sb,
+            FormattedStringBuilder sb,
             int expectedPrefixLength,
             boolean expectedStrong,
             String expectedChars,
@@ -173,7 +173,7 @@ public class ModifierTest {
                     sb.codePointCount() - oldCount,
                     mod.getCodePointCount());
         }
-        assertEquals("<NumberStringBuilder [" + expectedChars + "] [" + expectedFields + "]>",
+        assertEquals("<FormattedStringBuilder [" + expectedChars + "] [" + expectedFields + "]>",
                 sb.toDebugString());
     }
 }

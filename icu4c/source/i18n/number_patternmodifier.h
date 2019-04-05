@@ -184,7 +184,7 @@ class U_I18N_API MutablePatternModifier
 
     void processQuantity(DecimalQuantity &, MicroProps &micros, UErrorCode &status) const U_OVERRIDE;
 
-    int32_t apply(NumberStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
+    int32_t apply(FormattedStringBuilder &output, int32_t leftIndex, int32_t rightIndex,
                   UErrorCode &status) const U_OVERRIDE;
 
     int32_t getPrefixLength() const U_OVERRIDE;
@@ -240,17 +240,17 @@ class U_I18N_API MutablePatternModifier
      * CREATES A NEW HEAP OBJECT; THE CALLER GETS OWNERSHIP.
      *
      * @param a
-     *            A working NumberStringBuilder object; passed from the outside to prevent the need to create many new
+     *            A working FormattedStringBuilder object; passed from the outside to prevent the need to create many new
      *            instances if this method is called in a loop.
      * @param b
-     *            Another working NumberStringBuilder object.
+     *            Another working FormattedStringBuilder object.
      * @return The constant modifier object.
      */
     ConstantMultiFieldModifier *createConstantModifier(UErrorCode &status);
 
-    int32_t insertPrefix(NumberStringBuilder &sb, int position, UErrorCode &status);
+    int32_t insertPrefix(FormattedStringBuilder &sb, int position, UErrorCode &status);
 
-    int32_t insertSuffix(NumberStringBuilder &sb, int position, UErrorCode &status);
+    int32_t insertSuffix(FormattedStringBuilder &sb, int position, UErrorCode &status);
 
     void prepareAffix(bool isPrefix);
 };
