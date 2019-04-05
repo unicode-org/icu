@@ -1170,6 +1170,7 @@ sr_Latn{
                     "Taišo",
                     "Šova",
                     "Haisei",
+                    "Reiva",
                 }
             }
         }
