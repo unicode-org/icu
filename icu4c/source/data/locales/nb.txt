@@ -2018,6 +2018,7 @@ nb{
                     "Taishō",
                     "Shōwa",
                     "Heisei",
+                    "Reiwa",
                 }
                 narrow{
                     "Taika (645–650)",
@@ -2256,6 +2257,7 @@ nb{
                     "T",
                     "S",
                     "H",
+                    "R",
                 }
             }
         }

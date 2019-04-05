@@ -34,7 +34,8 @@ public:
     void TestJapanese(void);
     void TestJapaneseFormat(void);
     void TestJapanese3860(void);
-    
+    void TestJapaneseHeiseiToReiwa(void);
+
     void TestPersian(void);
     void TestPersianFormat(void);
 
