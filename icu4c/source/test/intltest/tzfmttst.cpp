@@ -607,6 +607,12 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
                 continue;
             }
 
+            if (*tzid == "America/Metlakatla"
+                    && (uprv_strcmp(PATTERNS[patidx], "z") == 0 || uprv_strcmp(PATTERNS[patidx], "zzzz") == 0)
+                    && logKnownIssue("cldrbug:11992", "Roundtrip failure for America/Metlakatla with z,zzzz")) {
+                continue;
+            }
+
             BasicTimeZone *tz = (BasicTimeZone*) TimeZone::createTimeZone(*tzid);
             sdf->setTimeZone(*tz);
 
