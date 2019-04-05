@@ -424,6 +424,12 @@ public class TimeZoneFormatTest extends TestFmwk {
                         continue;
                     }
 
+                    if (id.equals("America/Metlakatla")
+                            && (PATTERNS[patidx].equals("z") || PATTERNS[patidx].equals("zzzz"))
+                            && logKnownIssue("cldrbug:11992", "Roundtrip failure for America/Metlakatla with z,zzzz")) {
+                        continue;
+                    }
+
                     BasicTimeZone btz = (BasicTimeZone)TimeZone.getTimeZone(id, TimeZone.TIMEZONE_ICU);
                     TimeZone tz = TimeZone.getTimeZone(id);
                     sdf.setTimeZone(tz);
