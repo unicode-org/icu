@@ -26,7 +26,7 @@
 #include "uassert.h"
 #include "number_decimalquantity.h"
 #include "number_utypes.h"
-#include "number_stringbuilder.h"
+#include "formatted_string_builder.h"
 
 U_NAMESPACE_BEGIN
 
@@ -180,7 +180,7 @@ void QuantityFormatter::formatAndSelect(
         double quantity,
         const NumberFormat& fmt,
         const PluralRules& rules,
-        number::impl::NumberStringBuilder& output,
+        FormattedStringBuilder& output,
         StandardPlural::Form& pluralForm,
         UErrorCode& status) {
     UnicodeString pluralKeyword;

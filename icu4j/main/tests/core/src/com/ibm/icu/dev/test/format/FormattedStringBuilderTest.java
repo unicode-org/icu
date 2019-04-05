@@ -1,6 +1,6 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html#License
-package com.ibm.icu.dev.test.number;
+package com.ibm.icu.dev.test.format;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -12,11 +12,12 @@ import java.text.Format.Field;
 
 import org.junit.Test;
 
-import com.ibm.icu.impl.number.NumberStringBuilder;
+import com.ibm.icu.impl.FormattedValueStringBuilderImpl;
+import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.text.NumberFormat;
 
 /** @author sffc */
-public class NumberStringBuilderTest {
+public class FormattedStringBuilderTest {
     private static final String[] EXAMPLE_STRINGS = {
             "",
             "xyz",
@@ -30,9 +31,9 @@ public class NumberStringBuilderTest {
     public void testInsertAppendCharSequence() {
 
         StringBuilder sb1 = new StringBuilder();
-        NumberStringBuilder sb2 = new NumberStringBuilder();
+        FormattedStringBuilder sb2 = new FormattedStringBuilder();
         for (String str : EXAMPLE_STRINGS) {
-            NumberStringBuilder sb3 = new NumberStringBuilder();
+            FormattedStringBuilder sb3 = new FormattedStringBuilder();
             sb1.append(str);
             sb2.append(str, null);
             sb3.append(str, null);
@@ -40,7 +41,7 @@ public class NumberStringBuilderTest {
             assertCharSequenceEquals(sb3, str);
 
             StringBuilder sb4 = new StringBuilder();
-            NumberStringBuilder sb5 = new NumberStringBuilder();
+            FormattedStringBuilder sb5 = new FormattedStringBuilder();
             sb4.append("😇");
             sb4.append(str);
             sb4.append("xx");
@@ -63,7 +64,7 @@ public class NumberStringBuilderTest {
             assertCharSequenceEquals(sb4, sb5);
 
             sb4.append(sb4.toString());
-            sb5.append(new NumberStringBuilder(sb5));
+            sb5.append(new FormattedStringBuilder(sb5));
             assertCharSequenceEquals(sb4, sb5);
         }
     }
@@ -82,7 +83,7 @@ public class NumberStringBuilderTest {
                 { "lorem ipsum dolor sit amet", 8, 18 } }; // 10 chars, larger than several replacements
 
         StringBuilder sb1 = new StringBuilder();
-        NumberStringBuilder sb2 = new NumberStringBuilder();
+        FormattedStringBuilder sb2 = new FormattedStringBuilder();
         for (Object[] cas : cases) {
             String input = (String) cas[0];
             int startThis = (Integer) cas[1];
@@ -117,9 +118,9 @@ public class NumberStringBuilderTest {
         int[] cases = { 0, 1, 60, 127, 128, 0x7fff, 0x8000, 0xffff, 0x10000, 0x1f000, 0x10ffff };
 
         StringBuilder sb1 = new StringBuilder();
-        NumberStringBuilder sb2 = new NumberStringBuilder();
+        FormattedStringBuilder sb2 = new FormattedStringBuilder();
         for (int cas : cases) {
-            NumberStringBuilder sb3 = new NumberStringBuilder();
+            FormattedStringBuilder sb3 = new FormattedStringBuilder();
             sb1.appendCodePoint(cas);
             sb2.appendCodePoint(cas, null);
             sb3.appendCodePoint(cas, null);
@@ -127,7 +128,7 @@ public class NumberStringBuilderTest {
             assertEquals(Character.codePointAt(sb3, 0), cas);
 
             StringBuilder sb4 = new StringBuilder();
-            NumberStringBuilder sb5 = new NumberStringBuilder();
+            FormattedStringBuilder sb5 = new FormattedStringBuilder();
             sb4.append("😇");
             sb4.appendCodePoint(cas); // Java StringBuilder has no insertCodePoint()
             sb4.append("xx");
@@ -140,9 +141,9 @@ public class NumberStringBuilderTest {
     @Test
     public void testCopy() {
         for (String str : EXAMPLE_STRINGS) {
-            NumberStringBuilder sb1 = new NumberStringBuilder();
+            FormattedStringBuilder sb1 = new FormattedStringBuilder();
             sb1.append(str, null);
-            NumberStringBuilder sb2 = new NumberStringBuilder(sb1);
+            FormattedStringBuilder sb2 = new FormattedStringBuilder(sb1);
             assertCharSequenceEquals(sb1, sb2);
             assertTrue(sb1.contentEquals(sb2));
 
@@ -155,7 +156,7 @@ public class NumberStringBuilderTest {
     @Test
     public void testFields() {
         for (String str : EXAMPLE_STRINGS) {
-            NumberStringBuilder sb = new NumberStringBuilder();
+            FormattedStringBuilder sb = new FormattedStringBuilder();
             sb.append(str, null);
             sb.append(str, NumberFormat.Field.CURRENCY);
             Field[] fields = sb.toFieldArray();
@@ -170,7 +171,7 @@ public class NumberStringBuilderTest {
             // Very basic FieldPosition test. More robust tests happen in NumberFormatTest.
             // Let NumberFormatTest also take care of AttributedCharacterIterator material.
             FieldPosition fp = new FieldPosition(NumberFormat.Field.CURRENCY);
-            sb.nextFieldPosition(fp);
+            FormattedValueStringBuilderImpl.nextFieldPosition(sb, fp);
             assertEquals(str.length(), fp.getBeginIndex());
             assertEquals(str.length() * 2, fp.getEndIndex());
 
@@ -181,7 +182,7 @@ public class NumberStringBuilderTest {
                 assertEquals(fields[2], NumberFormat.Field.INTEGER);
             }
 
-            sb.append(new NumberStringBuilder(sb));
+            sb.append(new FormattedStringBuilder(sb));
             sb.append(sb.toCharArray(), sb.toFieldArray());
             int numNull = 0;
             int numCurr = 0;
@@ -204,7 +205,7 @@ public class NumberStringBuilderTest {
             assertEquals(numNull, numCurr);
             assertEquals(str.length() > 0 ? 4 : 0, numInt);
 
-            NumberStringBuilder sb2 = new NumberStringBuilder();
+            FormattedStringBuilder sb2 = new FormattedStringBuilder();
             sb2.append(sb);
             assertTrue(sb.contentEquals(sb2));
             assertTrue(sb.contentEquals(sb2.toCharArray(), sb2.toFieldArray()));
@@ -217,7 +218,7 @@ public class NumberStringBuilderTest {
 
     @Test
     public void testUnlimitedCapacity() {
-        NumberStringBuilder builder = new NumberStringBuilder();
+        FormattedStringBuilder builder = new FormattedStringBuilder();
         // The builder should never fail upon repeated appends.
         for (int i = 0; i < 1000; i++) {
             assertEquals(builder.length(), i);
@@ -228,7 +229,7 @@ public class NumberStringBuilderTest {
 
     @Test
     public void testCodePoints() {
-        NumberStringBuilder nsb = new NumberStringBuilder();
+        FormattedStringBuilder nsb = new FormattedStringBuilder();
         assertEquals("First is -1 on empty string", -1, nsb.getFirstCodePoint());
         assertEquals("Last is -1 on empty string", -1, nsb.getLastCodePoint());
         assertEquals("Length is 0 on empty string", 0, nsb.codePointCount());
@@ -262,8 +263,8 @@ public class NumberStringBuilderTest {
         int end = Math.min(12, a.length());
         if (start != end) {
             assertCharSequenceEquals(a.subSequence(start, end), b.subSequence(start, end));
-            if (b instanceof NumberStringBuilder) {
-                NumberStringBuilder bnsb = (NumberStringBuilder) b;
+            if (b instanceof FormattedStringBuilder) {
+                FormattedStringBuilder bnsb = (FormattedStringBuilder) b;
                 assertCharSequenceEquals(a.subSequence(start, end), bnsb.subString(start, end));
             }
         }

@@ -43,7 +43,7 @@
 #include "standardplural.h"
 #include "unifiedcache.h"
 #include "util.h"
-#include "number_stringbuilder.h"
+#include "formatted_string_builder.h"
 #include "number_utypes.h"
 #include "number_modifiers.h"
 #include "formattedval_impl.h"
@@ -725,14 +725,14 @@ const RelativeDateTimeCacheData *LocaleCacheKey<RelativeDateTimeCacheData>::crea
 
 
 static constexpr number::impl::Field kRDTNumericField
-    = number::impl::NumFieldUtils::compress<UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_NUMERIC_FIELD>();
+    = StringBuilderFieldUtils::compress<UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_NUMERIC_FIELD>();
 
 static constexpr number::impl::Field kRDTLiteralField
-    = number::impl::NumFieldUtils::compress<UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_LITERAL_FIELD>();
+    = StringBuilderFieldUtils::compress<UFIELD_CATEGORY_RELATIVE_DATETIME, UDAT_REL_LITERAL_FIELD>();
 
-class FormattedRelativeDateTimeData : public FormattedValueNumberStringBuilderImpl {
+class FormattedRelativeDateTimeData : public FormattedValueStringBuilderImpl {
 public:
-    FormattedRelativeDateTimeData() : FormattedValueNumberStringBuilderImpl(kRDTNumericField) {}
+    FormattedRelativeDateTimeData() : FormattedValueStringBuilderImpl(kRDTNumericField) {}
     virtual ~FormattedRelativeDateTimeData();
 };
 

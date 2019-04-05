@@ -7,12 +7,12 @@ import java.text.Format;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLongFieldUpdater;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.DecimalQuantity_DualStorageBCD;
 import com.ibm.icu.impl.number.LocalizedNumberFormatterAsFormat;
 import com.ibm.icu.impl.number.MacroProps;
-import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
@@ -135,9 +135,9 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
         return new LocalizedNumberFormatterAsFormat(this, resolve().loc);
     }
 
-    /** Helper method that creates a NumberStringBuilder and formats. */
+    /** Helper method that creates a FormattedStringBuilder and formats. */
     private FormattedNumber format(DecimalQuantity fq) {
-        NumberStringBuilder string = new NumberStringBuilder();
+        FormattedStringBuilder string = new FormattedStringBuilder();
         formatImpl(fq, string);
         return new FormattedNumber(string, fq);
     }
@@ -159,7 +159,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      * @deprecated ICU 60 This API is ICU internal only.
      */
     @Deprecated
-    public void formatImpl(DecimalQuantity fq, NumberStringBuilder string) {
+    public void formatImpl(DecimalQuantity fq, FormattedStringBuilder string) {
         if (computeCompiled()) {
             compiled.format(fq, string);
         } else {
@@ -174,7 +174,7 @@ public class LocalizedNumberFormatter extends NumberFormatterSettings<LocalizedN
      */
     @Deprecated
     public String getAffixImpl(boolean isPrefix, boolean isNegative) {
-        NumberStringBuilder string = new NumberStringBuilder();
+        FormattedStringBuilder string = new FormattedStringBuilder();
         byte signum = (byte) (isNegative ? -1 : 1);
         // Always return affixes for plural form OTHER.
         StandardPlural plural = StandardPlural.OTHER;

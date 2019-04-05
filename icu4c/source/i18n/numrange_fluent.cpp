@@ -381,7 +381,7 @@ UPRV_FORMATTED_VALUE_SUBCLASS_AUTO_IMPL(FormattedNumberRange)
 UBool FormattedNumberRange::nextFieldPosition(FieldPosition& fieldPosition, UErrorCode& status) const {
     UPRV_FORMATTED_VALUE_METHOD_GUARD(FALSE)
     // NOTE: MSVC sometimes complains when implicitly converting between bool and UBool
-    return fData->getStringRef().nextFieldPosition(fieldPosition, status) ? TRUE : FALSE;
+    return fData->nextFieldPosition(fieldPosition, status);
 }
 
 void FormattedNumberRange::getAllFieldPositions(FieldPositionIterator& iterator, UErrorCode& status) const {
@@ -392,7 +392,7 @@ void FormattedNumberRange::getAllFieldPositions(FieldPositionIterator& iterator,
 void FormattedNumberRange::getAllFieldPositionsImpl(
         FieldPositionIteratorHandler& fpih, UErrorCode& status) const {
     UPRV_FORMATTED_VALUE_METHOD_GUARD()
-    fData->getStringRef().getAllFieldPositions(fpih, status);
+    fData->getAllFieldPositions(fpih, status);
 }
 
 UnicodeString FormattedNumberRange::getFirstDecimal(UErrorCode& status) const {

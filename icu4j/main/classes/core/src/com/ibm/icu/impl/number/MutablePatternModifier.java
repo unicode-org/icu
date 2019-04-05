@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.StandardPlural;
 import com.ibm.icu.impl.number.AffixUtils.SymbolProvider;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
@@ -167,8 +168,8 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
      * @return An immutable that supports both positive and negative numbers.
      */
     public ImmutablePatternModifier createImmutableAndChain(MicroPropsGenerator parent) {
-        NumberStringBuilder a = new NumberStringBuilder();
-        NumberStringBuilder b = new NumberStringBuilder();
+        FormattedStringBuilder a = new FormattedStringBuilder();
+        FormattedStringBuilder b = new FormattedStringBuilder();
         if (needsPlurals()) {
             // Slower path when we require the plural keyword.
             AdoptingModifierStore pm = new AdoptingModifierStore();
@@ -200,15 +201,15 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
      * spacing support if required.
      *
      * @param a
-     *            A working NumberStringBuilder object; passed from the outside to prevent the need to
+     *            A working FormattedStringBuilder object; passed from the outside to prevent the need to
      *            create many new instances if this method is called in a loop.
      * @param b
-     *            Another working NumberStringBuilder object.
+     *            Another working FormattedStringBuilder object.
      * @return The constant modifier object.
      */
     private ConstantMultiFieldModifier createConstantModifier(
-            NumberStringBuilder a,
-            NumberStringBuilder b) {
+            FormattedStringBuilder a,
+            FormattedStringBuilder b) {
         insertPrefix(a.clear(), 0);
         insertSuffix(b.clear(), 0);
         if (patternInfo.hasCurrencySign()) {
@@ -280,7 +281,7 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
     }
 
     @Override
-    public int apply(NumberStringBuilder output, int leftIndex, int rightIndex) {
+    public int apply(FormattedStringBuilder output, int leftIndex, int rightIndex) {
         int prefixLen = insertPrefix(output, leftIndex);
         int suffixLen = insertSuffix(output, rightIndex + prefixLen);
         // If the pattern had no decimal stem body (like #,##0.00), overwrite the value.
@@ -341,13 +342,13 @@ public class MutablePatternModifier implements Modifier, SymbolProvider, MicroPr
         return false;
     }
 
-    private int insertPrefix(NumberStringBuilder sb, int position) {
+    private int insertPrefix(FormattedStringBuilder sb, int position) {
         prepareAffix(true);
         int length = AffixUtils.unescape(currentAffix, sb, position, this, field);
         return length;
     }
 
-    private int insertSuffix(NumberStringBuilder sb, int position) {
+    private int insertSuffix(FormattedStringBuilder sb, int position) {
         prepareAffix(false);
         int length = AffixUtils.unescape(currentAffix, sb, position, this, field);
         return length;
