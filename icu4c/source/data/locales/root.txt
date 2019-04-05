@@ -1834,6 +1834,7 @@ root{
                     "Taishō",
                     "Shōwa",
                     "Heisei",
+                    "Reiwa",
                 }
                 narrow{
                     "Taika (645-650)",
@@ -2072,6 +2073,7 @@ root{
                     "T",
                     "S",
                     "H",
+                    "R",
                 }
                 wide:alias{"/LOCALE/calendar/japanese/eras/abbreviated"}
             }

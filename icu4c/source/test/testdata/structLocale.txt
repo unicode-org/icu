@@ -17986,6 +17986,7 @@ structLocale:table(nofallback){
                     "",
                     "",
                     "",
+                    "",
                 }
                 wide{
                     "",
@@ -18224,8 +18225,10 @@ structLocale:table(nofallback){
                     "",
                     "",
                     "",
+                    "",
                 }
                 narrow{
+                    "",
                     "",
                     "",
                     "",
