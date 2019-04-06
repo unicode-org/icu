@@ -30,8 +30,8 @@ U_NAMESPACE_BEGIN
 
 // TimeZoneNames object cache handling
 static UMutex *gTimeZoneNamesLock() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = STATIC_NEW(UMutex);
+    return m;
 }
 static UHashtable *gTimeZoneNamesCache = NULL;
 static UBool gTimeZoneNamesCacheInitialized = FALSE;

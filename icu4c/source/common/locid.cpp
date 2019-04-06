@@ -38,19 +38,19 @@
 #include "unicode/strenum.h"
 #include "unicode/stringpiece.h"
 #include "unicode/uloc.h"
-#include "putilimp.h"
-#include "mutex.h"
-#include "umutex.h"
-#include "uassert.h"
+
+#include "bytesinkutil.h"
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "mutex.h"
+#include "putilimp.h"
 #include "uassert.h"
+#include "ucln_cmn.h"
 #include "uhash.h"
 #include "ulocimp.h"
-#include "ucln_cmn.h"
+#include "umutex.h"
 #include "ustr_imp.h"
-#include "charstr.h"
-#include "bytesinkutil.h"
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV locale_cleanup(void);
@@ -63,8 +63,8 @@ static UInitOnce gLocaleCacheInitOnce = U_INITONCE_INITIALIZER;
 
 // gDefaultLocaleMutex protects all access to gDefaultLocalesHashT and gDefaultLocale.
 static UMutex *gDefaultLocaleMutex() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = STATIC_NEW(UMutex);
+    return m;
 }
 static UHashtable *gDefaultLocalesHashT = NULL;
 static Locale *gDefaultLocale = NULL;

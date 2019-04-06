@@ -48,8 +48,8 @@ static UHashtable *SHARED_DATA_HASHTABLE = NULL;
 static icu::UInitOnce gSharedDataInitOnce = U_INITONCE_INITIALIZER;
 
 static UMutex *usprepMutex() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = STATIC_NEW(UMutex);
+    return m;
 }
 
 /* format version of spp file */

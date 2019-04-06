@@ -231,8 +231,8 @@ static const int32_t HEBREW_CAL_CUR_MILLENIUM_START_YEAR = 5000;
 static const int32_t HEBREW_CAL_CUR_MILLENIUM_END_YEAR = 6000;
 
 static UMutex *LOCK() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = STATIC_NEW(UMutex);
+    return m;
 }
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SimpleDateFormat)

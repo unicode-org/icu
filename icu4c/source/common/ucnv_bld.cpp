@@ -195,8 +195,8 @@ static struct {
 /*initializes some global variables */
 static UHashtable *SHARED_DATA_HASHTABLE = NULL;
 static icu::UMutex *cnvCacheMutex() {                 /* Mutex for synchronizing cnv cache access. */
-    static icu::UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static icu::UMutex *m = STATIC_NEW(icu::UMutex);
+    return m;
 }
 /*  Note:  the global mutex is used for      */
 /*         reference count updates.          */

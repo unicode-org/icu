@@ -53,8 +53,8 @@ static const char* TZDBNAMES_KEYS[]               = {"ss", "sd"};
 static const int32_t TZDBNAMES_KEYS_SIZE = UPRV_LENGTHOF(TZDBNAMES_KEYS);
 
 static UMutex *gDataMutex() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = STATIC_NEW(UMutex);
+    return m;
 }
 
 static UHashtable* gTZDBNamesMap = NULL;
@@ -391,9 +391,9 @@ TextTrieMap::search(const UnicodeString &text, int32_t start,
         //       Don't do unless it's really required.
 
         // Mutex for protecting the lazy creation of the Trie node structure on the first call to search().
-        static UMutex TextTrieMutex = U_MUTEX_INITIALIZER;
+        static UMutex *TextTrieMutex = STATIC_NEW(UMutex);
 
-        Mutex lock(&TextTrieMutex);
+        Mutex lock(TextTrieMutex);
         if (fLazyContents != NULL) {
             TextTrieMap *nonConstThis = const_cast<TextTrieMap *>(this);
             nonConstThis->buildTrie(status);
@@ -2253,8 +2253,8 @@ TZDBTimeZoneNames::getMetaZoneNames(const UnicodeString& mzID, UErrorCode& statu
     U_ASSERT(status == U_ZERO_ERROR);   // already checked length above
     mzIDKey[mzID.length()] = 0;
 
-    static UMutex gTZDBNamesMapLock = U_MUTEX_INITIALIZER;
-    umtx_lock(&gTZDBNamesMapLock);
+    static UMutex *gTZDBNamesMapLock = STATIC_NEW(UMutex);
+    umtx_lock(gTZDBNamesMapLock);
     {
         void *cacheVal = uhash_get(gTZDBNamesMap, mzIDKey);
         if (cacheVal == NULL) {
@@ -2297,7 +2297,7 @@ TZDBTimeZoneNames::getMetaZoneNames(const UnicodeString& mzID, UErrorCode& statu
             tzdbNames = (TZDBNames *)cacheVal;
         }
     }
-    umtx_unlock(&gTZDBNamesMapLock);
+    umtx_unlock(gTZDBNamesMapLock);
 
     return tzdbNames;
 }

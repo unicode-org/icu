@@ -151,8 +151,8 @@ static TextTrieMap *gShortZoneIdTrie = NULL;
 static icu::UInitOnce gShortZoneIdTrieInitOnce = U_INITONCE_INITIALIZER;
 
 static UMutex *gLock() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = STATIC_NEW(UMutex);
+    return m;
 }
 
 U_CDECL_BEGIN

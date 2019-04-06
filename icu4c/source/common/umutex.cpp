@@ -43,8 +43,8 @@ U_NAMESPACE_BEGIN
 
 // The ICU global mutex. Used when ICU implementation code passes NULL for the mutex pointer.
 static UMutex *globalMutex() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = STATIC_NEW(UMutex);
+    return m;
 }
 
 U_CAPI void  U_EXPORT2
@@ -65,32 +65,6 @@ umtx_unlock(UMutex* mutex)
     mutex->fMutex.unlock();
 }
 
-UConditionVar::UConditionVar() : fCV() {
-}
-
-UConditionVar::~UConditionVar() {
-}
-
-U_CAPI void U_EXPORT2
-umtx_condWait(UConditionVar *cond, UMutex *mutex) {
-    if (mutex == nullptr) {
-        mutex = globalMutex();
-    }
-    cond->fCV.wait(mutex->fMutex);
-}
-
-
-U_CAPI void U_EXPORT2
-umtx_condBroadcast(UConditionVar *cond) {
-    cond->fCV.notify_all();
-}
-
-
-U_CAPI void U_EXPORT2
-umtx_condSignal(UConditionVar *cond) {
-    cond->fCV.notify_one();
-}
-
 
 /*************************************************************************************************
  *
@@ -99,13 +73,13 @@ umtx_condSignal(UConditionVar *cond) {
  *************************************************************************************************/
 
 static std::mutex &initMutex() {
-    static std::mutex m;
-    return m;
+    static std::mutex *m = STATIC_NEW(std::mutex);
+    return *m;
 }
 
 static std::condition_variable &initCondition() {
-    static std::condition_variable cv;
-    return cv;
+    static std::condition_variable *cv = STATIC_NEW(std::condition_variable);
+    return *cv;
 }
 
 
