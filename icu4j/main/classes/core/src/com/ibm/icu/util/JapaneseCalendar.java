@@ -562,6 +562,7 @@ public class JapaneseCalendar extends GregorianCalendar {
         1912,    7, 30,     // Taisho
         1926,   12, 25,     // Showa
         1989,    1,  8,     // Heisei
+        2019,    5,  1,     // Reiwa
     };
 
     //-------------------------------------------------------------------------
@@ -578,25 +579,25 @@ public class JapaneseCalendar extends GregorianCalendar {
      * Constant for the era starting on Sept. 8, 1868 AD.
      * @stable  ICU 2.8 
      */
-    static public final int MEIJI = CURRENT_ERA - 3;
+    static public final int MEIJI = CURRENT_ERA - 4;
 
     /** 
      * Constant for the era starting on July 30, 1912 AD. 
      * @stable ICU 2.8 
      */
-    static public final int TAISHO = CURRENT_ERA - 2;
+    static public final int TAISHO = CURRENT_ERA - 3;
     
     /** 
      * Constant for the era starting on Dec. 25, 1926 AD. 
      * @stable ICU 2.8 
      */
-    static public final int SHOWA = CURRENT_ERA - 1;
+    static public final int SHOWA = CURRENT_ERA - 2;
 
     /** 
      * Constant for the era starting on Jan. 7, 1989 AD. 
      * @stable ICU 2.8 
      */
-    static public final int HEISEI = CURRENT_ERA;
+    static public final int HEISEI = CURRENT_ERA - 1;
 
     /**
      * Override GregorianCalendar.  We should really handle YEAR_WOY and
