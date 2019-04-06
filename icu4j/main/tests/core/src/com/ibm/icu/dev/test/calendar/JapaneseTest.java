@@ -154,9 +154,9 @@ public class JapaneseTest extends CalendarTestFmwk {
         Calendar cal = new JapaneseCalendar(loc);
         DateFormat enjformat = cal.getDateTimeFormat(0,0,new ULocale("en_JP@calendar=japanese"));
         DateFormat format = cal.getDateTimeFormat(0,0,loc);
-        ((SimpleDateFormat)format).applyPattern("y.M.d");  // Note: just 'y' doesn't work here.
+        ((SimpleDateFormat)format).applyPattern("y/M/d");  // Note: just 'y' doesn't work here.
         ParsePosition pos = new ParsePosition(0);
-        Date aDate = format.parse("1.1.9", pos); // after the start of heisei accession.  Jan 1, 1H wouldn't work  because it is actually showa 64
+        Date aDate = format.parse("1/5/9", pos); // after the start of Reiwa accession.  Jan 1, R1 wouldn't work  because it is actually Heisei 31
         String inEn = enjformat.format(aDate);
 
         cal.clear();
@@ -165,7 +165,7 @@ public class JapaneseTest extends CalendarTestFmwk {
         int gotEra = cal.get(Calendar.ERA);
 
         int expectYear = 1;
-        int expectEra = JapaneseCalendar.CURRENT_ERA;
+        int expectEra = JapaneseCalendar.CURRENT_ERA;   // Reiwa
 
         if((gotYear != expectYear) || (gotEra != expectEra)) {
             errln("Expected year " + expectYear + ", era " + expectEra +", but got year " + gotYear + " and era " + gotEra + ", == " + inEn);
@@ -173,7 +173,7 @@ public class JapaneseTest extends CalendarTestFmwk {
             logln("Got year " + gotYear + " and era " + gotEra + ", == " + inEn);
         }
 
-        // Test parse with missing era (should default to current era, heisei)
+        // Test parse with missing era (should default to current era)
         // Test parse with incomplete information
         logln("Testing parse w/ just year...");
         Calendar cal2 = new JapaneseCalendar(loc);
@@ -197,7 +197,7 @@ public class JapaneseTest extends CalendarTestFmwk {
         gotYear = cal2.get(Calendar.YEAR);
         gotEra = cal2.get(Calendar.ERA);
         expectYear = 1;
-        expectEra = JapaneseCalendar.CURRENT_ERA;
+        expectEra = JapaneseCalendar.CURRENT_ERA;   // Reiwa
         if((gotYear != 1) || (gotEra != expectEra)) {
             errln("parse "+ samplestr + " of 'y' as Japanese Calendar, expected year " + expectYear +
                 " and era " + expectEra + ", but got year " + gotYear + " and era " + gotEra + " (Gregorian:" + str +")");
@@ -378,6 +378,31 @@ public class JapaneseTest extends CalendarTestFmwk {
         JapaneseCalendar jcal = new JapaneseCalendar();
         doLimitsTest(jcal, null, cal.getTime());
         doTheoreticalLimitsTest(jcal, true);
+    }
+
+    public void TestHeiseiToReiwa() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(2019, Calendar.APRIL, 29);
+
+        DateFormat jfmt = DateFormat.getDateInstance(DateFormat.LONG, new ULocale("ja@calendar=japanese"));
+
+        final String[] EXPECTED_FORMAT = {
+                "\u5E73\u621031\u5E744\u670829\u65E5",  // Heisei 31 April 29
+                "\u5E73\u621031\u5E744\u670830\u65E5",  // Heisei 31 April 30
+                "\u4EE4\u548C1\u5E745\u67081\u65E5",    // Reiwa 1 May 1
+                "\u4EE4\u548C1\u5E745\u67082\u65E5",    // Reiwa 1 May 2
+        };
+
+        for (int i = 0; i < EXPECTED_FORMAT.length; i++) {
+            Date d = cal.getTime();
+            String dateStr = jfmt.format(d);
+            if (!EXPECTED_FORMAT[i].equals(dateStr)) {
+                errln("Formatting year:" + cal.get(Calendar.YEAR) + " month:" + (cal.get(Calendar.MONTH) + 1)
+                        + " day:" + cal.get(Calendar.DATE) + " - expected: " + EXPECTED_FORMAT[i]
+                        + " / actual: " + dateStr);
+            }
+            cal.add(Calendar.DATE, 1);
+        }
     }
 }
 
