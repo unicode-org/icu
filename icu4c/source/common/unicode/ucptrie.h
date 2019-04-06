@@ -216,25 +216,6 @@ ucptrie_openFromBinary(UCPTrieType type, UCPTrieValueWidth valueWidth,
 U_CAPI void U_EXPORT2
 ucptrie_close(UCPTrie *trie);
 
-#if U_SHOW_CPLUSPLUS_API
-
-U_NAMESPACE_BEGIN
-
-/**
- * \class LocalUCPTriePointer
- * "Smart pointer" class, closes a UCPTrie via ucptrie_close().
- * For most methods see the LocalPointerBase base class.
- *
- * @see LocalPointerBase
- * @see LocalPointer
- * @draft ICU 63
- */
-U_DEFINE_LOCAL_OPEN_POINTER(LocalUCPTriePointer, UCPTrie, ucptrie_close);
-
-U_NAMESPACE_END
-
-#endif
-
 /**
  * Returns the trie type.
  *
@@ -642,5 +623,25 @@ ucptrie_internalU8PrevIndex(const UCPTrie *trie, UChar32 c,
 U_CDECL_END
 
 #endif  // U_IN_DOXYGEN
+
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
+
+/**
+ * \class LocalUCPTriePointer
+ * "Smart pointer" class, closes a UCPTrie via ucptrie_close().
+ * For most methods see the LocalPointerBase base class.
+ *
+ * @see LocalPointerBase
+ * @see LocalPointer
+ * @draft ICU 63
+ */
+U_DEFINE_LOCAL_OPEN_POINTER(LocalUCPTriePointer, UCPTrie, ucptrie_close);
+
+U_NAMESPACE_END
+
+#endif  // U_SHOW_CPLUSPLUS_API
+
 #endif  // U_HIDE_DRAFT_API
 #endif
