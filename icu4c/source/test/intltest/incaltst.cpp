@@ -77,6 +77,7 @@ void IntlCalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     CASE(7,TestPersian);
     CASE(8,TestPersianFormat);
     CASE(9,TestTaiwan);
+    CASE(10,TestJapaneseHeiseiToReiwa);
     default: name = ""; break;
     }
 }
@@ -626,23 +627,23 @@ void IntlCalendarTest::TestJapanese3860()
         // Test simple parse/format with adopt
         UDate aDate = 0; 
         
-        // Test parse with missing era (should default to current era, heisei)
+        // Test parse with missing era (should default to current era)
         // Test parse with incomplete information
         logln("Testing parse w/ missing era...");
-        SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("y.M.d"), Locale("ja_JP@calendar=japanese"), status);
+        SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("y/M/d"), Locale("ja_JP@calendar=japanese"), status);
         CHECK(status, "creating date format instance");
         if(!fmt) { 
             errln("Couldn't create en_US instance");
         } else {
             UErrorCode s2 = U_ZERO_ERROR;
             cal2->clear();
-            UnicodeString samplestr("1.1.9");
+            UnicodeString samplestr("1/5/9");
             logln(UnicodeString() + "Test Year: " + samplestr);
             aDate = fmt->parse(samplestr, s2);
             ParsePosition pp=0;
             fmt->parse(samplestr, *cal2, pp);
-            CHECK(s2, "parsing the 1.1.9 string");
-            logln("*cal2 after 119 parse:");
+            CHECK(s2, "parsing the 1/5/9 string");
+            logln("*cal2 after 159 parse:");
             str.remove();
             fmt2->format(aDate, str);
             logln(UnicodeString() + "as Gregorian Calendar: " + str);
@@ -653,7 +654,7 @@ void IntlCalendarTest::TestJapanese3860()
             int32_t expectYear = 1;
             int32_t expectEra = JapaneseCalendar::getCurrentEra();
             if((gotYear!=1) || (gotEra != expectEra)) {
-                errln(UnicodeString("parse "+samplestr+" of 'y.m.d' as Japanese Calendar, expected year ") + expectYear + 
+                errln(UnicodeString("parse "+samplestr+" of 'y/m/d' as Japanese Calendar, expected year ") + expectYear + 
                     UnicodeString(" and era ") + expectEra +", but got year " + gotYear + " and era " + gotEra + " (Gregorian:" + str +")");
             } else {            
                 logln(UnicodeString() + " year: " + gotYear + ", era: " + gotEra);
@@ -666,7 +667,7 @@ void IntlCalendarTest::TestJapanese3860()
         // Test simple parse/format with adopt
         UDate aDate = 0; 
         
-        // Test parse with missing era (should default to current era, heisei)
+        // Test parse with missing era (should default to current era)
         // Test parse with incomplete information
         logln("Testing parse w/ just year...");
         SimpleDateFormat *fmt = new SimpleDateFormat(UnicodeString("y"), Locale("ja_JP@calendar=japanese"), status);
@@ -678,7 +679,7 @@ void IntlCalendarTest::TestJapanese3860()
             cal2->clear();
             UnicodeString samplestr("1");
             logln(UnicodeString() + "Test Year: " + samplestr);
-            aDate = fmt->parse(samplestr, s2);
+            aDate = fmt->parse(samplestr, s2);  // Should be parsed as the first day of the current era
             ParsePosition pp=0;
             fmt->parse(samplestr, *cal2, pp);
             CHECK(s2, "parsing the 1 string");
@@ -691,7 +692,7 @@ void IntlCalendarTest::TestJapanese3860()
             int32_t gotYear = cal2->get(UCAL_YEAR, s2);
             int32_t gotEra = cal2->get(UCAL_ERA, s2);
             int32_t expectYear = 1;
-            int32_t expectEra = 235; //JapaneseCalendar::kCurrentEra;
+            int32_t expectEra = JapaneseCalendar::getCurrentEra();
             if((gotYear!=1) || (gotEra != expectEra)) {
                 errln(UnicodeString("parse "+samplestr+" of 'y' as Japanese Calendar, expected year ") + expectYear + 
                     UnicodeString(" and era ") + expectEra +", but got year " + gotYear + " and era " + gotEra + " (Gregorian:" + str +")");
@@ -700,13 +701,47 @@ void IntlCalendarTest::TestJapanese3860()
             }
             delete fmt;
         }
-    }    
+    }
 
     delete cal2;
     delete cal;
     delete fmt2;
 }
 
+void IntlCalendarTest::TestJapaneseHeiseiToReiwa() {
+    Calendar *cal;
+    UErrorCode status = U_ZERO_ERROR;
+    cal = Calendar::createInstance(status);
+    CHECK(status, UnicodeString("Creating default Gregorian Calendar"));
+    cal->set(2019, UCAL_APRIL, 29);
+
+    DateFormat *jfmt = DateFormat::createDateInstance(DateFormat::LONG, "ja@calendar=japanese");
+    CHECK(status, UnicodeString("Creating date format ja@calendar=japanese"))
+
+    const char* EXPECTED_FORMAT[4] = {
+        "\\u5E73\\u621031\\u5E744\\u670829\\u65E5", // Heisei 31 April 29
+        "\\u5E73\\u621031\\u5E744\\u670830\\u65E5", // Heisei 31 April 30
+        "\\u4EE4\\u548c1\\u5E745\\u67081\\u65E5",   // Reiwa 1 May 1
+        "\\u4EE4\\u548c1\\u5E745\\u67082\\u65E5"    // Reiwa 1 May 2
+    };
+
+    for (int32_t i = 0; i < 4; i++) {
+        UnicodeString dateStr;
+        UDate d = cal->getTime(status);
+        CHECK(status, UnicodeString("Get test date"));
+        jfmt->format(d, dateStr);
+        UnicodeString expected(UnicodeString(EXPECTED_FORMAT[i], -1, US_INV).unescape());
+        if (expected.compare(dateStr) != 0) {
+            errln(UnicodeString("Formatting year:") + cal->get(UCAL_YEAR, status) + " month:"
+                + cal->get(UCAL_MONTH, status) + " day:" + (cal->get(UCAL_DATE, status) + 1)
+                + " - expected: " + expected + " / actual: " + dateStr);
+        }
+        cal->add(UCAL_DATE, 1, status);
+        CHECK(status, UnicodeString("Add 1 day"));
+    }
+    delete jfmt;
+    delete cal;
+}
 
 
 
