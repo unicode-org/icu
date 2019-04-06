@@ -366,8 +366,8 @@ U_CDECL_END
 struct CReg;
 
 static UMutex *gCRegLock() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = STATIC_NEW(UMutex);
+    return m;
 }
 static CReg* gCRegHead = 0;
 
@@ -1357,8 +1357,8 @@ static CurrencyNameCacheEntry* currCache[CURRENCY_NAME_CACHE_NUM] = {NULL};
 static int8_t currentCacheEntryIndex = 0;
 
 static UMutex *gCurrencyCacheMutex() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = STATIC_NEW(UMutex);
+    return m;
 }
 
 // Cache deletion

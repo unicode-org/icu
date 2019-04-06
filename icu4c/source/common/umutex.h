@@ -181,13 +181,24 @@ template<class T> void umtx_initOnce(UInitOnce &uio, void (U_CALLCONV *fp)(T, UE
 }
 
 
-/*************************************************************************************************
- *
+/**
  * ICU Mutex wrappers.  Originally wrapped operating system mutexes, giving the rest of ICU a
  * platform independent set of mutex operations.  Now vestigial, wrapping std::mutex only.
  * For internal ICU use only.
  *
- *************************************************************************************************/
+ * Caution: do not directly declare static or global instances of UMutex. Doing so can introduce
+ * static initializers, which are disallowed in ICU library code. Instead, use the following
+ * idiom, which avoids static init and also avoids ordering issues on destruction
+ * (use after delete) by avoiding destruction altogether.
+ *
+ *  UMutex *myMutex() {
+ *      static UMutex *m = STATIC_NEW(UMutex);
+ *      return m;
+ *  }
+ *  ...
+ *
+ *  Mutex lock(myMutex());   // hold myMutex until the variable "lock" goes out of scope.
+ */
 
 struct UMutex : public icu::UMemory {
     UMutex() = default;
@@ -198,31 +209,6 @@ struct UMutex : public icu::UMemory {
     std::mutex   fMutex = {};    // Note: struct - pubic members - because most access is from
     //                           //       plain C style functions (umtx_lock(), etc.)
 };
-
-
-struct UConditionVar : public icu::UMemory {
-	U_COMMON_API UConditionVar();
-	U_COMMON_API ~UConditionVar();
-    UConditionVar(const UConditionVar &other) = delete;
-    UConditionVar &operator =(const UConditionVar &other) = delete;
-
-    std::condition_variable_any fCV;
-};
-
-#define U_MUTEX_INITIALIZER {}
-#define U_CONDITION_INITIALIZER {}
-
-// Implementation notes for UConditionVar:
-//
-// Use an out-of-line constructor to reduce problems with the ICU dependency checker.
-// On Linux, the default constructor of std::condition_variable_any
-// produces an in-line reference to global operator new(), which the
-// dependency checker flags for any file that declares a UConditionVar. With
-// an out-of-line constructor, the dependency is constrained to umutex.o
-//
-// Do not export (U_COMMON_API) the entire class, but only the constructor
-// and destructor, to avoid Windows build problems with attempting to export the
-// std::condition_variable_any.
 
 /* Lock a mutex.
  * @param mutex The given mutex to be locked.  Pass NULL to specify
@@ -236,30 +222,6 @@ U_INTERNAL void U_EXPORT2 umtx_lock(UMutex* mutex);
  *              the global ICU mutex.
  */
 U_INTERNAL void U_EXPORT2 umtx_unlock (UMutex* mutex);
-
-/*
- * Wait on a condition variable.
- * The calling thread will unlock the mutex and wait on the condition variable.
- * The mutex must be locked by the calling thread when invoking this function.
- *
- * @param cond the condition variable to wait on.
- * @param mutex the associated mutex.
- */
-
-U_INTERNAL void U_EXPORT2 umtx_condWait(UConditionVar *cond, UMutex *mutex);
-
-
-/*
- * Broadcast wakeup of all threads waiting on a Condition.
- *
- * @param cond the condition variable.
- */
-U_INTERNAL void U_EXPORT2 umtx_condBroadcast(UConditionVar *cond);
-
-/*
- * Signal a condition variable, waking up one waiting thread.
- */
-U_INTERNAL void U_EXPORT2 umtx_condSignal(UConditionVar *cond);
 
 
 U_NAMESPACE_END

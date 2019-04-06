@@ -83,8 +83,8 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(DateIntervalFormat)
 //        Needed because these data members are modified by const methods of DateIntervalFormat.
 
 static UMutex *gFormatterMutex() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
+    static UMutex *m = STATIC_NEW(UMutex);
+    return m;
 }
 
 DateIntervalFormat* U_EXPORT2
