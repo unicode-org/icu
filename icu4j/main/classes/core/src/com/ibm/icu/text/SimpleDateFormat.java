@@ -1902,7 +1902,7 @@ public class SimpleDateFormat extends DateFormat {
                 // century, for parsed strings from "00" to "99".  Any other string
                 // is treated literally:  "2250", "-1", "1", "002".
                 /* 'yy' is the only special case, 'y' is interpreted as number. [Richard/GCL]*/
-                if (count == 2 && (pos.getIndex() - start) == 2
+                if (count == 2 && (pos.getIndex() - start) == 2 && cal.haveDefaultCentury()
                     && UCharacter.isDigit(text.charAt(start))
                     && UCharacter.isDigit(text.charAt(start+1)))
                     {

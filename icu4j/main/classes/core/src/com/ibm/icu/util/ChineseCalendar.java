@@ -1027,6 +1027,15 @@ public class ChineseCalendar extends Calendar {
     }
 
     /**
+     * {@inheritDoc}
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public boolean haveDefaultCentury() {
+        return false;
+    }
+
+    /**
      * Override readObject.
      */
     private void readObject(ObjectInputStream stream)
