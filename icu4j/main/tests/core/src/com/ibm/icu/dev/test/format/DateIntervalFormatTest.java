@@ -712,9 +712,9 @@ public class DateIntervalFormatTest extends TestFmwk {
 
                 "ja-u-ca-japanese", "S 64 01 05 09:00:00", "H 1 01 15 09:00:00",  "GyMMMd", "\u662D\u548C64\u5E741\u67085\u65E5\uFF5E\u5E73\u6210\u5143\u5E741\u670815\u65E5",
 
-                "ja-u-ca-japanese", "S 64 01 05 09:00:00", "H 1 01 15 09:00:00",  "GGGGGyMd", "S64\u5E741\u67085\u65E5\uFF5EH\u5143\u5E741\u670815\u65E5", // The GGGGG/G forces inheritance from a different pattern, non-numeric-only
+                "ja-u-ca-japanese", "S 64 01 05 09:00:00", "H 1 01 15 09:00:00",  "GGGGGyMd", "S64/01/05\uFF5EH1/01/15",
 
-                "ja-u-ca-japanese", "H 31 04 15 09:00:00", DateFormat.JP_ERA_2019_NARROW+" 1 05 15 09:00:00", "GGGGGyMd", "H31\u5E744\u670815\u65E5\uFF5E"+DateFormat.JP_ERA_2019_NARROW+"\u5143\u5E745\u670815\u65E5",
+                "ja-u-ca-japanese", "H 31 04 15 09:00:00", DateFormat.JP_ERA_2019_NARROW+" 1 05 15 09:00:00", "GGGGGyMd", "H31/04/15\uFF5E"+DateFormat.JP_ERA_2019_NARROW+"1/05/15",
 
         };
         expect(DATA, DATA.length);
@@ -723,7 +723,6 @@ public class DateIntervalFormatTest extends TestFmwk {
 
     private void expect(String[] data, int data_length) {
         int i = 0;
-        boolean testNewJpanEra = JapaneseCalendar.enableTentativeEra();
         String pattern = data[i++];
  
         while (i<data_length) {
@@ -734,11 +733,6 @@ public class DateIntervalFormatTest extends TestFmwk {
             ULocale loc = new ULocale(locName);
             Calendar defCal = Calendar.getInstance(loc);
             String calType = defCal.getType();
-
-            if (!testNewJpanEra && calType.equals("japanese") && datestr_2.startsWith(DateFormat.JP_ERA_2019_NARROW)) {
-                i += 2; // skip the rest of the strings for this item
-                continue; // skip tests involving future japanese eras if not enabled by environment variable
-            }
 
             ULocale refLoc = ULocale.ROOT.setKeywordValue("calendar", calType);
             SimpleDateFormat ref = new SimpleDateFormat(pattern, refLoc);

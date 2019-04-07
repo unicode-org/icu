@@ -1318,7 +1318,7 @@ public abstract class DateFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public static final String JP_ERA_2019_ROOT = "Qqqq";
+    public static final String JP_ERA_2019_ROOT = "Reiwa";
 
     /**
      * Constant for Unicode string name of new (in 2019) Japanese calendar era,
@@ -1327,7 +1327,7 @@ public abstract class DateFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public static final String JP_ERA_2019_JA = "\uFF31\uFF31";
+    public static final String JP_ERA_2019_JA = "\u4EE4\u548C";
 
     /**
      * Constant for Unicode string name of new (in 2019) Japanese calendar era,
@@ -1336,7 +1336,7 @@ public abstract class DateFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     @Deprecated
-    public static final String JP_ERA_2019_NARROW = "Q";
+    public static final String JP_ERA_2019_NARROW = "R";
 
     /**
      * Gets the time formatter with the default formatting style

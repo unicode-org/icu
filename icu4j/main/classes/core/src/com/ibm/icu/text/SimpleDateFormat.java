@@ -1145,7 +1145,7 @@ public class SimpleDateFormat extends DateFormat {
 
         // Simple-minded hack to force Gannen year numbering for ja@calendar=japanese
         // if format is non-numeric (includes 年) and overrides are not already specified.
-        // This does not update if applyPattern subsequently changes the pattern type.
+        // Now this does get updated if applyPattern subsequently changes the pattern type.
         if (override == null && hasHanYearChar &&
                 calendar != null && calendar.getType().equals("japanese") &&
                 locale != null && locale.getLanguage().equals("ja")) {
@@ -3916,6 +3916,31 @@ public class SimpleDateFormat extends DateFormat {
         setLocale(null, null);
         // reset parsed pattern items
         patternItems = null;
+
+        // Hack to update use of Gannen year numbering for ja@calendar=japanese -
+        // use only if format is non-numeric (includes 年) and no other fDateOverride.
+        if (calendar != null && calendar.getType().equals("japanese") &&
+                locale != null && locale.getLanguage().equals("ja")) {
+            if (override != null && override.equals("y=jpanyear") && !hasHanYearChar) {
+                // Gannen numbering is set but new pattern should not use it, unset;
+                // use procedure from setNumberFormat(NUmberFormat) to clear overrides
+                numberFormatters = null;
+                overrideMap = null;
+                override = null; // record status
+            } else if (override == null && hasHanYearChar) {
+                // No current override (=> no Gannen numbering) but new pattern needs it;
+                // use procedures from initNumberFormatters / setNumberFormat(String,NumberFormat)
+                numberFormatters = new HashMap<>();
+                overrideMap = new HashMap<>();
+                overrideMap.put('y',"jpanyear");
+                ULocale ovrLoc = new ULocale(locale.getBaseName()+"@numbers=jpanyear");
+                NumberFormat nf = NumberFormat.createInstance(ovrLoc,NumberFormat.NUMBERSTYLE);
+                nf.setGroupingUsed(false);
+                useLocalZeroPaddingNumberFormat = false;
+                numberFormatters.put("jpanyear",nf);
+                override = "y=jpanyear"; // record status
+            }
+        }
     }
 
     /**
