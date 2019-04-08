@@ -2466,7 +2466,7 @@ lt{
                     "Taišo",
                     "Šova",
                     "Heisei",
-                    "Qqqq",
+                    "Reiwa",
                 }
             }
         }
