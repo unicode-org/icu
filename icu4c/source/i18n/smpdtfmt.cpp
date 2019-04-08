@@ -3909,13 +3909,13 @@ SimpleDateFormat::applyPattern(const UnicodeString& pattern)
             if (fSharedNumberFormatters != NULL) {
                 Locale ovrLoc(fLocale.getLanguage(),fLocale.getCountry(),fLocale.getVariant(),"numbers=jpanyear");
                 UErrorCode status = U_ZERO_ERROR;
-                const SharedNumberFormat *snf = NULL;
-                SharedObject::copyPtr(createSharedNumberFormat(ovrLoc, status), snf);
+                const SharedNumberFormat *snf = createSharedNumberFormat(ovrLoc, status);
                 if (U_SUCCESS(status)) {
                     // Now that we have an appropriate number formatter, fill in the
                     // appropriate slot in the number formatters table.
                     UDateFormatField patternCharIndex = DateFormatSymbols::getPatternCharIndex(u'y');
                     SharedObject::copyPtr(snf, fSharedNumberFormatters[patternCharIndex]);
+                    snf->deleteIfZeroRefCount();
                     fDateOverride.setTo(u"y=jpanyear", -1); // record status
                 }
             }
