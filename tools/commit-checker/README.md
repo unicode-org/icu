@@ -30,17 +30,13 @@ This is required if you want to process sensitive tickets.
 
 Make sure you have updated your repository:
 
-    $ git checkout master
-    $ git pull upstream master
     $ git fetch --tags upstream
 
-Sanity check: ensure that the "latest" tag is correct (points to the latest release).  You may need to force-fetch the tags.
+Run the tool and save the result into REPORT.md; set fixVersion to the upcoming ICU version, and take the revision range between the previous release and the tip for the upcoming release:
 
-    $ git show latest
-    # should show a commit with both "latest" and the previous version number
-
-Run the tool and save the result into REPORT.md; set fixVersion to the *upcoming* ICU version:
-
-    $ pipenv run python3 check.py --jira-query "project=ICU AND fixVersion=64.1" > REPORT.md
+    $ pipenv run python3 check.py \
+        --jira-query "project=ICU AND fixVersion=64.1" \
+        --rev-range "release-63-1..upstream/maint/maint-64"
+        > REPORT.md
 
 Create a branch and open a pull request so others can view the report easily.
