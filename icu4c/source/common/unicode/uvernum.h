@@ -103,11 +103,14 @@
  *  \def U_ICU_ENTRY_POINT_RENAME
  *  @stable ICU 4.2
  */
-/*
+/**
  * Disable the version suffix. Use the custom suffix if exists.
  * \def U_DISABLE_VERSION_SUFFIX
  * @internal
  */
+#ifndef U_DISABLE_VERSION_SUFFIX
+#define U_DISABLE_VERSION_SUFFIX 0
+#endif
 
 #ifndef U_ICU_ENTRY_POINT_RENAME
 #ifdef U_HAVE_LIB_SUFFIX
@@ -120,12 +123,14 @@
 #       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)
 #       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_LIB_SUFFIX_C_NAME)
 #   endif
-#elif !U_DISABLE_VERSION_SUFFIX
-#   define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y
-#   define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)
-#   define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)
 #else
-#   define U_ICU_ENTRY_POINT_RENAME(x)    x
+#   if !U_DISABLE_VERSION_SUFFIX
+#       define U_DEF_ICU_ENTRY_POINT_RENAME(x,y) x ## y
+#       define U_DEF2_ICU_ENTRY_POINT_RENAME(x,y) U_DEF_ICU_ENTRY_POINT_RENAME(x,y)
+#       define U_ICU_ENTRY_POINT_RENAME(x)    U_DEF2_ICU_ENTRY_POINT_RENAME(x,U_ICU_VERSION_SUFFIX)
+#   else
+#       define U_ICU_ENTRY_POINT_RENAME(x)    x
+#   endif
 #endif
 #endif
 
