@@ -1439,11 +1439,14 @@
 "[^\u0000-\U0010ffff]"             "a"
 "[^[^\u0000-\U0010ffff]]"          "<0>a</0>"
 
+# Bug ICU-20544. Similar to 20385, above. Assertion failure with a negative look-behind assertion containing
+#                a set with no contents. Look-behind pattern includes more than just the empty set.
+
+"(?<![ⰿ&&m]c)"                     "<0></0>abc"   # note: first 'ⰿ' is \u2c3f, hence empty set.
+"(?<![^\u0000-\U0010ffff]c)"       "<0></0>abc"
 
 #  Random debugging, Temporary
 #
-
-
 
 
 #
