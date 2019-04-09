@@ -2328,7 +2328,7 @@ void  RegexCompile::handleCloseParen() {
                 error(U_REGEX_LOOK_BEHIND_LIMIT);
                 break;
             }
-            if (minML == INT32_MAX && maxML == 0) {
+            if (minML == INT32_MAX) {
                 // This condition happens when no match is possible, such as with a
                 // [set] expression containing no elements.
                 // In principle, the generated code to evaluate the expression could be deleted,
