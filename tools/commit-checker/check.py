@@ -32,8 +32,8 @@ flag_parser = argparse.ArgumentParser(
 )
 flag_parser.add_argument(
     "--rev-range",
-    help = "A git revision range; see https://git-scm.com/docs/gitrevisions",
-    default = "latest..master"
+    help = "A git revision range; see https://git-scm.com/docs/gitrevisions. Should be the two-dot range between the previous release and the current tip.",
+    required = True
 )
 flag_parser.add_argument(
     "--jira-hostname",
@@ -183,6 +183,7 @@ def main():
     print("Environment:")
     print("- Latest Commit: %s" % commits[0].commit.hexsha)
     print("- Jira Query: %s" % args.jira_query)
+    print("- Rev Range: %s" % args.rev_range)
     print("- Authenticated: %s" % "Yes" if authenticated else "No (sensitive tickets not shown)")
     print()
     print("## Problem Categories")
