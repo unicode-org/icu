@@ -53,7 +53,7 @@
     <property name="icu4j.api.doc.title" value="ICU4J ${api.doc.version} API Specification"/>
     <property name="icu4j.api.doc.window.title" value="ICU4J ${api.doc.version}"/>
     <property name="icu4j.api.doc.header" value="ICU4J ${api.doc.version}"/>
-    <property name="icu4j.api.doc.jdk.link" value="http://docs.oracle.com/javase/8/docs/api/"/>
+    <property name="icu4j.api.doc.jdk.link" value="https://docs.oracle.com/javase/8/docs/api/"/>
 
     <!-- directories -->
     <property name="release.dir" value="release"/>
