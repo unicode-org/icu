@@ -335,7 +335,8 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                         .append(", time=").append(testTimes[testidx])
                                         .append(", restime=").append(restime)
                                         .append(", diff=").append(restime - testTimes[testidx]);
-                                    if (expectedRoundTrip[testidx]) {
+                                    if (expectedRoundTrip[testidx]
+                                        && !isSpecialTimeRoundTripCase(LOCALES[locidx], id, PATTERNS[patidx], testTimes[testidx])) {
                                         errln("FAIL: " + msg.toString());
                                     } else if (REALLY_VERBOSE_LOG) {
                                         logln(msg.toString());
@@ -371,6 +372,31 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
         logln("Total: " + total + "ms");
         logln("Iteration: " + testCounts);
+    }
+
+    // Special exclusions in TestTimeZoneRoundTrip.
+    // These special cases do not round trip time as designed.
+    private boolean isSpecialTimeRoundTripCase(ULocale loc, String id, String pattern, long time) {
+        final Object[][] EXCLUSIONS = {
+            {null, "Asia/Chita", "zzzz", Long.valueOf(1414252800000L)},
+            {null, "Asia/Chita", "vvvv", Long.valueOf(1414252800000L)},
+            {null, "Asia/Srednekolymsk", "zzzz", Long.valueOf(1414241999999L)},
+            {null, "Asia/Srednekolymsk", "vvvv", Long.valueOf(1414241999999L)},
+        };
+        boolean isExcluded = false;
+        for (Object[] excl : EXCLUSIONS) {
+            if (excl[0] == null || loc.equals((ULocale)excl[0])) {
+                if (id.equals(excl[1])) {
+                    if (excl[2] == null || pattern.equals((String)excl[2])) {
+                        if (excl[3] == null || ((Long)excl[3]).compareTo(time) == 0) {
+                            isExcluded = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return isExcluded;
     }
 
     public void TestParse() {
