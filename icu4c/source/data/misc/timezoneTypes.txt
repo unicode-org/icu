@@ -1,12 +1,15 @@
-﻿// ***************************************************************************
-// *
-// * Copyright (C) 2014 International Business Machines
-// * Corporation and others. All Rights Reserved.
-// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/common/bcp47/timezone.xml
-// *
-// ***************************************************************************
+﻿// © 2016 and later: Unicode, Inc. and others.
+// License & terms of use: http://www.unicode.org/copyright.html#License
 timezoneTypes:table(nofallback){
+    bcpTypeAlias{
+        tz{
+            aqams{"nzakl"}
+            cnckg{"cnsha"}
+            cnhrb{"cnsha"}
+            cnkhg{"cnurc"}
+            usnavajo{"usden"}
+        }
+    }
     typeAlias{
         timezone{
             "Africa:Asmara"{"Africa/Asmera"}
@@ -30,10 +33,13 @@ timezoneTypes:table(nofallback){
             "America:Virgin"{"America/St_Thomas"}
             "Antarctica:South_Pole"{"Pacific/Auckland"}
             "Asia:Ashkhabad"{"Asia/Ashgabat"}
-            "Asia:Chungking"{"Asia/Chongqing"}
+            "Asia:Chongqing"{"Asia/Shanghai"}
+            "Asia:Chungking"{"Asia/Shanghai"}
             "Asia:Dacca"{"Asia/Dhaka"}
+            "Asia:Harbin"{"Asia/Shanghai"}
             "Asia:Ho_Chi_Minh"{"Asia/Saigon"}
             "Asia:Istanbul"{"Europe/Istanbul"}
+            "Asia:Kashgar"{"Asia/Urumqi"}
             "Asia:Kathmandu"{"Asia/Katmandu"}
             "Asia:Kolkata"{"Asia/Calcutta"}
             "Asia:Macao"{"Asia/Macau"}
@@ -41,6 +47,7 @@ timezoneTypes:table(nofallback){
             "Asia:Thimbu"{"Asia/Thimphu"}
             "Asia:Ujung_Pandang"{"Asia/Makassar"}
             "Asia:Ulan_Bator"{"Asia/Ulaanbaatar"}
+            "Asia:Yangon"{"Asia/Rangoon"}
             "Atlantic:Faroe"{"Atlantic/Faeroe"}
             "Atlantic:Jan_Mayen"{"Arctic/Longyearbyen"}
             "Australia:ACT"{"Australia/Sydney"}
@@ -73,10 +80,9 @@ timezoneTypes:table(nofallback){
             "Etc:GMT-0"{"Etc/GMT"}
             "Etc:GMT0"{"Etc/GMT"}
             "Etc:Greenwich"{"Etc/GMT"}
-            "Etc:UCT"{"Etc/GMT"}
-            "Etc:UTC"{"Etc/GMT"}
-            "Etc:Universal"{"Etc/GMT"}
-            "Etc:Zulu"{"Etc/GMT"}
+            "Etc:UCT"{"Etc/UTC"}
+            "Etc:Universal"{"Etc/UTC"}
+            "Etc:Zulu"{"Etc/UTC"}
             "Europe:Belfast"{"Europe/London"}
             "Europe:Nicosia"{"Asia/Nicosia"}
             "Europe:Tiraspol"{"Europe/Chisinau"}
@@ -131,11 +137,11 @@ timezoneTypes:table(nofallback){
             ROK{"Asia/Seoul"}
             Singapore{"Asia/Singapore"}
             Turkey{"Europe/Istanbul"}
-            UCT{"Etc/GMT"}
-            UTC{"Etc/GMT"}
-            Universal{"Etc/GMT"}
+            UCT{"Etc/UTC"}
+            UTC{"Etc/UTC"}
+            Universal{"Etc/UTC"}
             W-SU{"Europe/Moscow"}
-            Zulu{"Etc/GMT"}
+            Zulu{"Etc/UTC"}
         }
     }
     typeMap{
@@ -240,6 +246,7 @@ timezoneTypes:table(nofallback){
             "America:Edmonton"{"caedm"}
             "America:Eirunepe"{"brern"}
             "America:El_Salvador"{"svsal"}
+            "America:Fort_Nelson"{"cafne"}
             "America:Fortaleza"{"brfor"}
             "America:Glace_Bay"{"caglb"}
             "America:Godthab"{"glgoh"}
@@ -308,6 +315,7 @@ timezoneTypes:table(nofallback){
             "America:Port_of_Spain"{"ttpos"}
             "America:Porto_Velho"{"brpvh"}
             "America:Puerto_Rico"{"prsju"}
+            "America:Punta_Arenas"{"clpuq"}
             "America:Rainy_River"{"caffs"}
             "America:Rankin_Inlet"{"cayek"}
             "America:Recife"{"brrec"}
@@ -358,24 +366,26 @@ timezoneTypes:table(nofallback){
             "Asia:Aqtau"{"kzaau"}
             "Asia:Aqtobe"{"kzakx"}
             "Asia:Ashgabat"{"tmasb"}
+            "Asia:Atyrau"{"kzguw"}
             "Asia:Baghdad"{"iqbgw"}
             "Asia:Bahrain"{"bhbah"}
             "Asia:Baku"{"azbak"}
             "Asia:Bangkok"{"thbkk"}
+            "Asia:Barnaul"{"rubax"}
             "Asia:Beirut"{"lbbey"}
             "Asia:Bishkek"{"kgfru"}
             "Asia:Brunei"{"bnbwn"}
             "Asia:Calcutta"{"inccu"}
+            "Asia:Chita"{"ruchita"}
             "Asia:Choibalsan"{"mncoq"}
-            "Asia:Chongqing"{"cnckg"}
             "Asia:Colombo"{"lkcmb"}
             "Asia:Damascus"{"sydam"}
             "Asia:Dhaka"{"bddac"}
             "Asia:Dili"{"tldil"}
             "Asia:Dubai"{"aedxb"}
             "Asia:Dushanbe"{"tjdyu"}
+            "Asia:Famagusta"{"cyfmg"}
             "Asia:Gaza"{"gaza"}
-            "Asia:Harbin"{"cnhrb"}
             "Asia:Hebron"{"hebron"}
             "Asia:Hong_Kong"{"hkhkg"}
             "Asia:Hovd"{"mnhvd"}
@@ -386,7 +396,6 @@ timezoneTypes:table(nofallback){
             "Asia:Kabul"{"afkbl"}
             "Asia:Kamchatka"{"rupkc"}
             "Asia:Karachi"{"pkkhi"}
-            "Asia:Kashgar"{"cnkhg"}
             "Asia:Katmandu"{"npktm"}
             "Asia:Khandyga"{"rukhndg"}
             "Asia:Krasnoyarsk"{"rukra"}
@@ -407,6 +416,7 @@ timezoneTypes:table(nofallback){
             "Asia:Pontianak"{"idpnk"}
             "Asia:Pyongyang"{"kpfnj"}
             "Asia:Qatar"{"qadoh"}
+            "Asia:Qostanay"{"kzksn"}
             "Asia:Qyzylorda"{"kzkzo"}
             "Asia:Rangoon"{"mmrgn"}
             "Asia:Riyadh"{"saruh"}
@@ -416,12 +426,14 @@ timezoneTypes:table(nofallback){
             "Asia:Seoul"{"krsel"}
             "Asia:Shanghai"{"cnsha"}
             "Asia:Singapore"{"sgsin"}
+            "Asia:Srednekolymsk"{"rusred"}
             "Asia:Taipei"{"twtpe"}
             "Asia:Tashkent"{"uztas"}
             "Asia:Tbilisi"{"getbs"}
             "Asia:Tehran"{"irthr"}
             "Asia:Thimphu"{"btthi"}
             "Asia:Tokyo"{"jptyo"}
+            "Asia:Tomsk"{"rutof"}
             "Asia:Ulaanbaatar"{"mnuln"}
             "Asia:Urumqi"{"cnurc"}
             "Asia:Ust-Nera"{"ruunera"}
@@ -452,7 +464,7 @@ timezoneTypes:table(nofallback){
             "Australia:Melbourne"{"aumel"}
             "Australia:Perth"{"auper"}
             "Australia:Sydney"{"ausyd"}
-            "Etc:GMT"{"utc"}
+            "Etc:GMT"{"gmt"}
             "Etc:GMT+1"{"utcw01"}
             "Etc:GMT+10"{"utcw10"}
             "Etc:GMT+11"{"utcw11"}
@@ -479,9 +491,11 @@ timezoneTypes:table(nofallback){
             "Etc:GMT-7"{"utce07"}
             "Etc:GMT-8"{"utce08"}
             "Etc:GMT-9"{"utce09"}
+            "Etc:UTC"{"utc"}
             "Etc:Unknown"{"unk"}
             "Europe:Amsterdam"{"nlams"}
             "Europe:Andorra"{"adalv"}
+            "Europe:Astrakhan"{"ruasf"}
             "Europe:Athens"{"grath"}
             "Europe:Belgrade"{"rsbeg"}
             "Europe:Berlin"{"deber"}
@@ -501,6 +515,7 @@ timezoneTypes:table(nofallback){
             "Europe:Jersey"{"jesth"}
             "Europe:Kaliningrad"{"rukgd"}
             "Europe:Kiev"{"uaiev"}
+            "Europe:Kirov"{"rukvx"}
             "Europe:Lisbon"{"ptlis"}
             "Europe:Ljubljana"{"silju"}
             "Europe:London"{"gblon"}
@@ -520,12 +535,14 @@ timezoneTypes:table(nofallback){
             "Europe:Samara"{"rukuf"}
             "Europe:San_Marino"{"smsai"}
             "Europe:Sarajevo"{"basjj"}
+            "Europe:Saratov"{"rurtw"}
             "Europe:Simferopol"{"uasip"}
             "Europe:Skopje"{"mkskp"}
             "Europe:Sofia"{"bgsof"}
             "Europe:Stockholm"{"sesto"}
             "Europe:Tallinn"{"eetll"}
             "Europe:Tirane"{"altia"}
+            "Europe:Ulyanovsk"{"ruuly"}
             "Europe:Uzhgorod"{"uauzh"}
             "Europe:Vaduz"{"livdz"}
             "Europe:Vatican"{"vavat"}
@@ -549,6 +566,7 @@ timezoneTypes:table(nofallback){
             "Indian:Reunion"{"rereu"}
             "Pacific:Apia"{"wsapw"}
             "Pacific:Auckland"{"nzakl"}
+            "Pacific:Bougainville"{"pgraw"}
             "Pacific:Chatham"{"nzcht"}
             "Pacific:Easter"{"clipc"}
             "Pacific:Efate"{"vuvli"}
