@@ -1520,6 +1520,7 @@ public class TimeZoneTest extends TestFmwk
                 {"America/Marigot", "America/Port_of_Spain"},
                 {"America/Montserrat", "America/Port_of_Spain"},
                 {"America/Panama", "America/Cayman"},
+                {"America/Santa_Isabel", "America/Tijuana"},
                 {"America/Shiprock", "America/Denver"},
                 {"America/St_Barthelemy", "America/Port_of_Spain"},
                 {"America/St_Kitts", "America/Port_of_Spain"},
@@ -2236,7 +2237,7 @@ public class TimeZoneTest extends TestFmwk
             {"America/Indianapolis",    "US Eastern Standard Time"},            // CLDR canonical name
             {"America/Indiana/Indianapolis",    "US Eastern Standard Time"},    // tzdb canonical name
             {"Asia/Khandyga",           "Yakutsk Standard Time"},
-            {"Australia/Eucla",         null}, // No Windows ID mapping
+            {"Australia/Eucla",         "Aus Central W. Standard Time"}, // Now Windows does have a mapping
             {"Bogus",                   null},
         };
 
