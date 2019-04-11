@@ -60,7 +60,7 @@ class U_I18N_API FormattedDateInterval : public UMemory, public FormattedValue {
      * Default constructor; makes an empty FormattedDateInterval.
      * @draft ICU 64
      */
-    FormattedDateInterval() : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {};
+    FormattedDateInterval() : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {}
 
     /**
      * Move constructor: Leaves the source FormattedDateInterval in an undefined state.

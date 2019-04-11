@@ -141,6 +141,11 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
             return;
         }
 
+        if (maxInt <= scale) {
+            setBcdToZero();
+            return;
+        }
+
         int magnitude = getMagnitude();
         if (maxInt <= magnitude) {
             popFromLeft(magnitude - maxInt + 1);
@@ -205,6 +210,8 @@ public abstract class DecimalQuantity_AbstractBCD implements DecimalQuantity {
         if (precision != 0) {
             scale = Utility.addExact(scale, delta);
             origDelta = Utility.addExact(origDelta, delta);
+            // Make sure that precision + scale won't overflow, either
+            Utility.addExact(scale, precision);
         }
     }
 

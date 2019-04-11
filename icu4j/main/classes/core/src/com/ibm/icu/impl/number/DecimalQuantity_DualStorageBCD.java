@@ -156,6 +156,7 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
 
     @Override
     protected void popFromLeft(int numDigits) {
+        assert numDigits <= precision;
         if (usingBytes) {
             int i = precision - 1;
             for (; i >= precision - numDigits; i--) {
@@ -252,17 +253,16 @@ public final class DecimalQuantity_DualStorageBCD extends DecimalQuantity_Abstra
                 tempLong = tempLong * 10 + getDigitPos(shift);
             }
             BigDecimal result = BigDecimal.valueOf(tempLong);
-            try {
+            // Test that the new scale fits inside the BigDecimal
+            long newScale = result.scale() + scale;
+            if (newScale <= Integer.MIN_VALUE) {
+                result = BigDecimal.ZERO;
+            } else {
                 result = result.scaleByPowerOfTen(scale);
-            } catch (ArithmeticException e) {
-                if (e.getMessage().contains("Underflow")) {
-                    result = BigDecimal.ZERO;
-                } else {
-                    throw e;
-                }
             }
-            if (isNegative())
+            if (isNegative()) {
                 result = result.negate();
+            }
             return result;
         }
     }

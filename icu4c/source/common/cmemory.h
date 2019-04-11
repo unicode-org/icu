@@ -298,7 +298,7 @@ public:
      */
     MaybeStackArray(int32_t newCapacity) : MaybeStackArray() {
         if (capacity < newCapacity) { resize(newCapacity); }
-    };
+    }
     /**
      * Destructor deletes the array (if owned).
      */

@@ -1658,6 +1658,31 @@ void NumberFormatterApiTest::integerWidth() {
             u"00.08765",
             u"00.008765",
             u"00");
+
+    assertFormatSingle(
+            u"Integer Width Remove All A",
+            u"integer-width/00",
+            NumberFormatter::with().integerWidth(IntegerWidth::zeroFillTo(2).truncateAt(2)),
+            "en",
+            2500,
+            u"00");
+
+    assertFormatSingle(
+            u"Integer Width Remove All B",
+            u"integer-width/00",
+            NumberFormatter::with().integerWidth(IntegerWidth::zeroFillTo(2).truncateAt(2)),
+            "en",
+            25000,
+            u"00");
+
+    assertFormatSingle(
+            u"Integer Width Remove All B, Bytes Mode",
+            u"integer-width/00",
+            NumberFormatter::with().integerWidth(IntegerWidth::zeroFillTo(2).truncateAt(2)),
+            "en",
+            // Note: this double produces all 17 significant digits
+            10000000000000002000.0,
+            u"00");
 }
 
 void NumberFormatterApiTest::symbols() {

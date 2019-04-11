@@ -85,7 +85,7 @@ class U_I18N_API FormattedList : public UMemory, public FormattedValue {
      * Default constructor; makes an empty FormattedList.
      * @draft ICU 64
      */
-    FormattedList() : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {};
+    FormattedList() : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {}
 
     /**
      * Move constructor: Leaves the source FormattedList in an undefined state.

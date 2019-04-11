@@ -481,7 +481,7 @@ class U_I18N_API NumberRangeFormatterSettings {
         }
         fMacros.copyErrorTo(outErrorCode);
         return U_FAILURE(outErrorCode);
-    };
+    }
 
     // NOTE: Uses default copy and move constructors.
 

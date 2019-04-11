@@ -264,7 +264,7 @@ class U_I18N_API FormattedRelativeDateTime : public UMemory, public FormattedVal
      * Default constructor; makes an empty FormattedRelativeDateTime.
      * @draft ICU 64
      */
-    FormattedRelativeDateTime() : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {};
+    FormattedRelativeDateTime() : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {}
 
     /**
      * Move constructor: Leaves the source FormattedRelativeDateTime in an undefined state.
@@ -708,11 +708,13 @@ private:
             UErrorCode& status,
             Args... args) const;
 
+#ifndef U_HIDE_DRAFT_API  // for FormattedRelativeDateTime
     template<typename F, typename... Args>
     FormattedRelativeDateTime doFormatToValue(
             F callback,
             UErrorCode& status,
             Args... args) const;
+#endif  // U_HIDE_DRAFT_API
 
     void formatImpl(
             double quantity,

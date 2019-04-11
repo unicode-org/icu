@@ -720,7 +720,7 @@ struct LookAheadResults {
     int32_t    fPositions[8];
     int16_t    fKeys[8];
 
-    LookAheadResults() : fUsedSlotLimit(0), fPositions(), fKeys() {};
+    LookAheadResults() : fUsedSlotLimit(0), fPositions(), fKeys() {}
 
     int32_t getPosition(int16_t key) {
         for (int32_t i=0; i<fUsedSlotLimit; ++i) {

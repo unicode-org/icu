@@ -108,7 +108,7 @@ public:
     virtual ~TimeZoneNamesDelegate();
 
     virtual UBool operator==(const TimeZoneNames& other) const;
-    virtual UBool operator!=(const TimeZoneNames& other) const {return !operator==(other);};
+    virtual UBool operator!=(const TimeZoneNames& other) const {return !operator==(other);}
     virtual TimeZoneNames* clone() const;
 
     StringEnumeration* getAvailableMetaZoneIDs(UErrorCode& status) const;

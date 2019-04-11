@@ -113,7 +113,7 @@ class IntegerWidth;
 
 namespace impl {
 
-#ifndef U_HIDE_INTERNAL_API
+// can't be #ifndef U_HIDE_INTERNAL_API; referenced throughout this file in public classes
 /**
  * Datatype for minimum/maximum fraction digits. Must be able to hold kMaxIntFracSig.
  *
@@ -121,14 +121,14 @@ namespace impl {
  */
 typedef int16_t digits_t;
 
+// can't be #ifndef U_HIDE_INTERNAL_API; needed for struct initialization
 /**
  * Use a default threshold of 3. This means that the third time .format() is called, the data structures get built
  * using the "safe" code path. The first two calls to .format() will trigger the unsafe code path.
  *
  * @internal
  */
-static constexpr int32_t DEFAULT_THRESHOLD = 3;
-#endif  /* U_HIDE_INTERNAL_API */
+static constexpr int32_t kInternalDefaultThreshold = 3;
 
 // Forward declarations:
 class Padder;
@@ -1411,7 +1411,7 @@ struct U_I18N_API MacroProps : public UMemory {
     const CurrencySymbols* currencySymbols = nullptr;  // no ownership
 
     /** @internal */
-    int32_t threshold = DEFAULT_THRESHOLD;
+    int32_t threshold = kInternalDefaultThreshold;
 
     /** @internal */
     Locale locale;
@@ -2411,7 +2411,7 @@ class U_I18N_API FormattedNumber : public UMemory, public FormattedValue {
      * @draft ICU 64
      */
     FormattedNumber()
-        : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {};
+        : fData(nullptr), fErrorCode(U_INVALID_STATE_ERROR) {}
 
     /**
      * Move constructor: Leaves the source FormattedNumber in an undefined state.
