@@ -4,12 +4,12 @@ package com.ibm.icu.number;
 
 import java.text.Format.Field;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.impl.number.MicroPropsGenerator;
 import com.ibm.icu.impl.number.Modifier;
 import com.ibm.icu.impl.number.MultiplierProducer;
-import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.RoundingUtils;
 import com.ibm.icu.number.NumberFormatter.SignDisplay;
 import com.ibm.icu.number.Precision.SignificantRounderImpl;
@@ -256,11 +256,11 @@ public class ScientificNotation extends Notation implements Cloneable {
         }
 
         @Override
-        public int apply(NumberStringBuilder output, int leftIndex, int rightIndex) {
+        public int apply(FormattedStringBuilder output, int leftIndex, int rightIndex) {
             return doApply(exponent, output, rightIndex);
         }
 
-        private int doApply(int exponent, NumberStringBuilder output, int rightIndex) {
+        private int doApply(int exponent, FormattedStringBuilder output, int rightIndex) {
             // FIXME: Localized exponent separator location.
             int i = rightIndex;
             // Append the exponent separator and sign
@@ -291,7 +291,7 @@ public class ScientificNotation extends Notation implements Cloneable {
         }
 
         @Override
-        public int apply(NumberStringBuilder output, int leftIndex, int rightIndex) {
+        public int apply(FormattedStringBuilder output, int leftIndex, int rightIndex) {
             return handler.doApply(exponent, output, rightIndex);
         }
 

@@ -72,7 +72,7 @@ NumberFormatterImpl::NumberFormatterImpl(const MacroProps& macros, UErrorCode& s
 }
 
 int32_t NumberFormatterImpl::formatStatic(const MacroProps& macros, DecimalQuantity& inValue,
-                                       NumberStringBuilder& outString, UErrorCode& status) {
+                                       FormattedStringBuilder& outString, UErrorCode& status) {
     NumberFormatterImpl impl(macros, false, status);
     MicroProps& micros = impl.preProcessUnsafe(inValue, status);
     if (U_FAILURE(status)) { return 0; }
@@ -83,7 +83,7 @@ int32_t NumberFormatterImpl::formatStatic(const MacroProps& macros, DecimalQuant
 
 int32_t NumberFormatterImpl::getPrefixSuffixStatic(const MacroProps& macros, int8_t signum,
                                                    StandardPlural::Form plural,
-                                                   NumberStringBuilder& outString, UErrorCode& status) {
+                                                   FormattedStringBuilder& outString, UErrorCode& status) {
     NumberFormatterImpl impl(macros, false, status);
     return impl.getPrefixSuffixUnsafe(signum, plural, outString, status);
 }
@@ -93,7 +93,7 @@ int32_t NumberFormatterImpl::getPrefixSuffixStatic(const MacroProps& macros, int
 // The "unsafe" method simply re-uses fMicros, eliminating the extra copy operation.
 // See MicroProps::processQuantity() for details.
 
-int32_t NumberFormatterImpl::format(DecimalQuantity& inValue, NumberStringBuilder& outString,
+int32_t NumberFormatterImpl::format(DecimalQuantity& inValue, FormattedStringBuilder& outString,
                                 UErrorCode& status) const {
     MicroProps micros;
     preProcess(inValue, micros, status);
@@ -130,7 +130,7 @@ MicroProps& NumberFormatterImpl::preProcessUnsafe(DecimalQuantity& inValue, UErr
 }
 
 int32_t NumberFormatterImpl::getPrefixSuffix(int8_t signum, StandardPlural::Form plural,
-                                             NumberStringBuilder& outString, UErrorCode& status) const {
+                                             FormattedStringBuilder& outString, UErrorCode& status) const {
     if (U_FAILURE(status)) { return 0; }
     // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle, aka pattern modifier).
     // Safe path: use fImmutablePatternModifier.
@@ -141,7 +141,7 @@ int32_t NumberFormatterImpl::getPrefixSuffix(int8_t signum, StandardPlural::Form
 }
 
 int32_t NumberFormatterImpl::getPrefixSuffixUnsafe(int8_t signum, StandardPlural::Form plural,
-                                                   NumberStringBuilder& outString, UErrorCode& status) {
+                                                   FormattedStringBuilder& outString, UErrorCode& status) {
     if (U_FAILURE(status)) { return 0; }
     // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle, aka pattern modifier).
     // Unsafe path: use fPatternModifier.
@@ -430,7 +430,7 @@ NumberFormatterImpl::resolvePluralRules(const PluralRules* rulesPtr, const Local
     return fRules.getAlias();
 }
 
-int32_t NumberFormatterImpl::writeAffixes(const MicroProps& micros, NumberStringBuilder& string,
+int32_t NumberFormatterImpl::writeAffixes(const MicroProps& micros, FormattedStringBuilder& string,
                                           int32_t start, int32_t end, UErrorCode& status) {
     // Always apply the inner modifier (which is "strong").
     int32_t length = micros.modInner->apply(string, start, end, status);
@@ -445,7 +445,7 @@ int32_t NumberFormatterImpl::writeAffixes(const MicroProps& micros, NumberString
 }
 
 int32_t NumberFormatterImpl::writeNumber(const MicroProps& micros, DecimalQuantity& quantity,
-                                         NumberStringBuilder& string, int32_t index,
+                                         FormattedStringBuilder& string, int32_t index,
                                          UErrorCode& status) {
     int32_t length = 0;
     if (quantity.isInfinite()) {
@@ -487,7 +487,7 @@ int32_t NumberFormatterImpl::writeNumber(const MicroProps& micros, DecimalQuanti
 }
 
 int32_t NumberFormatterImpl::writeIntegerDigits(const MicroProps& micros, DecimalQuantity& quantity,
-                                                NumberStringBuilder& string, int32_t index,
+                                                FormattedStringBuilder& string, int32_t index,
                                                 UErrorCode& status) {
     int length = 0;
     int integerCount = quantity.getUpperDisplayMagnitude() + 1;
@@ -513,7 +513,7 @@ int32_t NumberFormatterImpl::writeIntegerDigits(const MicroProps& micros, Decima
 }
 
 int32_t NumberFormatterImpl::writeFractionDigits(const MicroProps& micros, DecimalQuantity& quantity,
-                                                 NumberStringBuilder& string, int32_t index,
+                                                 FormattedStringBuilder& string, int32_t index,
                                                  UErrorCode& status) {
     int length = 0;
     int fractionCount = -quantity.getLowerDisplayMagnitude();

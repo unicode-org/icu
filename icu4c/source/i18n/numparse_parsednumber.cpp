@@ -11,6 +11,7 @@
 
 #include "numparse_types.h"
 #include "number_decimalquantity.h"
+#include "string_segment.h"
 #include "putilimp.h"
 #include <cmath>
 

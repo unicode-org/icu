@@ -6,6 +6,7 @@ import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.SimpleFormatterImpl;
 import com.ibm.icu.impl.StandardPlural;
@@ -13,7 +14,6 @@ import com.ibm.icu.impl.UResource;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.impl.number.Modifier;
-import com.ibm.icu.impl.number.NumberStringBuilder;
 import com.ibm.icu.impl.number.SimpleModifier;
 import com.ibm.icu.impl.number.range.PrefixInfixSuffixLengthHelper;
 import com.ibm.icu.impl.number.range.RangeMacroProps;
@@ -152,7 +152,7 @@ class NumberRangeFormatterImpl {
     }
 
     public FormattedNumberRange format(DecimalQuantity quantity1, DecimalQuantity quantity2, boolean equalBeforeRounding) {
-        NumberStringBuilder string = new NumberStringBuilder();
+        FormattedStringBuilder string = new FormattedStringBuilder();
         MicroProps micros1 = formatterImpl1.preProcess(quantity1);
         MicroProps micros2;
         if (fSameFormatters) {
@@ -215,7 +215,7 @@ class NumberRangeFormatterImpl {
         return new FormattedNumberRange(string, quantity1, quantity2, identityResult);
     }
 
-    private void formatSingleValue(DecimalQuantity quantity1, DecimalQuantity quantity2, NumberStringBuilder string,
+    private void formatSingleValue(DecimalQuantity quantity1, DecimalQuantity quantity2, FormattedStringBuilder string,
             MicroProps micros1, MicroProps micros2) {
         if (fSameFormatters) {
             int length = NumberFormatterImpl.writeNumber(micros1, quantity1, string, 0);
@@ -226,7 +226,7 @@ class NumberRangeFormatterImpl {
 
     }
 
-    private void formatApproximately(DecimalQuantity quantity1, DecimalQuantity quantity2, NumberStringBuilder string,
+    private void formatApproximately(DecimalQuantity quantity1, DecimalQuantity quantity2, FormattedStringBuilder string,
             MicroProps micros1, MicroProps micros2) {
         if (fSameFormatters) {
             int length = NumberFormatterImpl.writeNumber(micros1, quantity1, string, 0);
@@ -240,7 +240,7 @@ class NumberRangeFormatterImpl {
         }
     }
 
-    private void formatRange(DecimalQuantity quantity1, DecimalQuantity quantity2, NumberStringBuilder string,
+    private void formatRange(DecimalQuantity quantity1, DecimalQuantity quantity2, FormattedStringBuilder string,
             MicroProps micros1, MicroProps micros2) {
         // modInner is always notation (scientific); collapsable in ALL.
         // modOuter is always units; collapsable in ALL, AUTO, and UNIT.

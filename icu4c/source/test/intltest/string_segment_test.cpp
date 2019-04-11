@@ -5,8 +5,19 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "numbertest.h"
-#include "numparse_stringsegment.h"
+#include "string_segment.h"
+#include "intltest.h"
+
+class StringSegmentTest : public IntlTest {
+  public:
+    void testOffset();
+    void testLength();
+    void testCharAt();
+    void testGetCodePoint();
+    void testCommonPrefixLength();
+
+    void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
+};
 
 static const char16_t* SAMPLE_STRING = u"📻 radio 📻";
 
@@ -99,6 +110,11 @@ void StringSegmentTest::testCommonPrefixLength() {
     segment.resetLength();
     segment.setOffset(11); // end of string
     assertEquals("", 0, segment.getCommonPrefixLength(u"foo"));
+}
+
+
+extern IntlTest *createStringSegmentTest() {
+    return new StringSegmentTest();
 }
 
 #endif

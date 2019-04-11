@@ -882,7 +882,7 @@ public class PluralRules implements Serializable {
         @Deprecated
         @Override
         public String toString() {
-            return String.format("%." + visibleDecimalDigitCount + "f", source);
+            return String.format(Locale.ROOT, "%." + visibleDecimalDigitCount + "f", source);
         }
 
         /**

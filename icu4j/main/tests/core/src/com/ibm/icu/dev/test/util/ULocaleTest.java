@@ -4100,6 +4100,25 @@ public class ULocaleTest extends TestFmwk {
     }
 
     @Test
+    public void TestForLanguageTagBug20148() {
+        ULocale uloc = ULocale.forLanguageTag("de-DE-1901-1901");
+        assertEquals("ULocale.forLanguageTag(\"de-DE-1901-1901\") ",
+                     "de_DE_1901", uloc.getName());
+
+        uloc = ULocale.forLanguageTag("de-DE-1aBc-1AbC");
+        assertEquals("ULocale.forLanguageTag(\"de-DE-1aBc-1AbC\") ",
+                     "de_DE_1ABC", uloc.getName());
+
+        uloc = ULocale.forLanguageTag("en-a-bbb-a-ccc");
+        assertEquals("ULocale.forLanguageTag(\"en-a-bbb-a-ccc\") ",
+                     "en@a=bbb", uloc.getName());
+
+        uloc = ULocale.forLanguageTag("en-A-bbb-a-ccc");
+        assertEquals("ULocale.forLanguageTag(\"en-A-bbb-a-ccc\") ",
+                     "en@a=bbb", uloc.getName());
+    }
+
+    @Test
     public void TestForLanguageTagBug13776() {
         final Locale backupDefault = Locale.getDefault();
         try {

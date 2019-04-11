@@ -1186,4 +1186,15 @@ public class PluralRulesTest extends TestFmwk {
         PluralRules rulesJ1 = PluralRules.forLocale(Locale.FRANCE, PluralType.ORDINAL);
         assertEquals("forLocale() with type", rulesU1, rulesJ1);
     }
+
+    @Test
+    public void testBug20264() {
+        String expected = "1.23400";
+        FixedDecimal fd = new FixedDecimal(1.234, 5, 2);
+        assertEquals("FixedDecimal toString", expected, fd.toString());
+        Locale.setDefault(Locale.FRENCH);
+        assertEquals("FixedDecimal toString", expected, fd.toString());
+        Locale.setDefault(Locale.GERMAN);
+        assertEquals("FixedDecimal toString", expected, fd.toString());
+    }
 }

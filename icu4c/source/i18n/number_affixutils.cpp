@@ -156,7 +156,7 @@ Field AffixUtils::getFieldForType(AffixPatternType type) {
 }
 
 int32_t
-AffixUtils::unescape(const UnicodeString &affixPattern, NumberStringBuilder &output, int32_t position,
+AffixUtils::unescape(const UnicodeString &affixPattern, FormattedStringBuilder &output, int32_t position,
                      const SymbolProvider &provider, Field field, UErrorCode &status) {
     int32_t length = 0;
     AffixTag tag;

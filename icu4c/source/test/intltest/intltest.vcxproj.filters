@@ -217,6 +217,9 @@
     <ClCompile Include="fldset.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="formatted_string_builder_test.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="genderinfotest.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -274,10 +277,7 @@
     <ClCompile Include="numbertest_patternstring.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="numbertest_stringbuilder.cpp">
-      <Filter>formatting</Filter>
-    </ClCompile>
-    <ClCompile Include="numbertest_stringsegment.cpp">
+    <ClCompile Include="string_segment_test.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="numbertest_parse.cpp">

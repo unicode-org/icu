@@ -2,6 +2,8 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
+
 public class Padder {
     public static final String FALLBACK_PADDING_STRING = "\u0020"; // i.e. a space
 
@@ -79,7 +81,7 @@ public class Padder {
     public int padAndApply(
             Modifier mod1,
             Modifier mod2,
-            NumberStringBuilder string,
+            FormattedStringBuilder string,
             int leftIndex,
             int rightIndex) {
         int modLength = mod1.getCodePointCount() + mod2.getCodePointCount();
@@ -114,7 +116,7 @@ public class Padder {
     private static int addPaddingHelper(
             String paddingString,
             int requiredPadding,
-            NumberStringBuilder string,
+            FormattedStringBuilder string,
             int index) {
         for (int i = 0; i < requiredPadding; i++) {
             // TODO: If appending to the end, this will cause actual insertion operations. Improve.

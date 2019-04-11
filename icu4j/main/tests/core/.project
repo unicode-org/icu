@@ -9,6 +9,7 @@
 		<project>icu4j-regiondata</project>
 		<project>icu4j-shared</project>
 		<project>icu4j-test-framework</project>
+		<project>icu4j-tools</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
