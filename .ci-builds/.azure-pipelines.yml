@@ -20,7 +20,7 @@ jobs:
       env:
         BUILD: ICU4J
     - script: |
-        cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`
+        cd icu4j && cat `find out/junit-results -name "*.txt" -exec grep -l FAILED {} \;`
       condition: failed() # only run if the build fails.
       displayName: 'List failures (if any)'
 #-------------------------------------------------------------------------
@@ -58,6 +58,18 @@ jobs:
       inputs:
         filename: icu4c/source/allinone/icucheck.bat
         arguments: 'x64 Release'
+    - task: PowerShell@2
+      displayName: 'PowerShell: Distrelease script'
+      inputs:
+        targetType: filePath
+        filePath: 'icu4c/packaging/distrelease.ps1'
+        arguments: '-arch x64'
+        workingDirectory: icu4c
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Artifacts: icu-windows.zip'
+      inputs:
+        PathtoPublish: 'icu4c/source/dist/icu-windows.zip'
+        ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x64_Release'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x86_Debug
   displayName: 'C: MSVC 32-bit Debug (VS 2017)'
