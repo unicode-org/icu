@@ -450,5 +450,33 @@ public class JapaneseTest extends CalendarTestFmwk {
         doLimitsTest(jcal, null, cal.getTime());
         doTheoreticalLimitsTest(jcal, true);
     }
+
+    // The following currently assumes that Reiwa is the last known/valid era.
+    // Filed ICU-20551 to generalize this when we have more time...
+    @Test
+    public void TestJpnCalAddSetNextEra() {
+        final JapaneseCalendar jCal = new JapaneseCalendar();
+        jCal.clear();   // This sets to 1970 in Showa
+
+        final int sEra = jCal.get(Calendar.ERA);  // Don't assume era number for Showa
+        final int[] startYears = { 1926, 1989, 2019, 0 };    // start years for Show, Heisei, Reiwa; 0 marks invalid era beyond
+
+        for (int iEra = 1; iEra < 3; iEra++) {
+            jCal.clear();
+            jCal.set(Calendar.ERA, sEra + iEra);
+            int eYear = jCal.get(Calendar.EXTENDED_YEAR);
+            if (eYear != startYears[iEra]) {
+                errln("ERROR: set " + iEra + ", expected start year " + startYears[iEra] + " but get " + eYear);
+            } else {
+                jCal.add(Calendar.ERA, 1);
+                eYear = jCal.get(Calendar.EXTENDED_YEAR);
+                int nextEraStart = (startYears[iEra + 1] == 0) ? startYears[iEra] : startYears[iEra + 1];
+                if (eYear != nextEraStart) {
+                    errln("ERROR: set " + iEra + " then add ERA 1, expected start year " + nextEraStart
+                            + " but get " + eYear);
+                }
+            }
+        }
+    }
 }
 

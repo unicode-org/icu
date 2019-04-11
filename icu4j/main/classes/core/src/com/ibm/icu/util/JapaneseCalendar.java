@@ -419,7 +419,7 @@ public class JapaneseCalendar extends GregorianCalendar {
             if (limitType == MINIMUM || limitType == GREATEST_MINIMUM) {
                 return 0;
             }
-            return CURRENT_ERA;
+            return ERA_RULES.getNumberOfEras() - 1; // max known era, not always CURRENT_ERA
         case YEAR:
         {
             switch (limitType) {
@@ -466,7 +466,7 @@ public class JapaneseCalendar extends GregorianCalendar {
     public int getActualMaximum(int field) {
         if (field == YEAR) {
             int era = get(Calendar.ERA);
-            if (era == CURRENT_ERA) {
+            if (era == ERA_RULES.getNumberOfEras() - 1) {
                 // TODO: Investigate what value should be used here - revisit after 4.0.
                 return handleGetLimit(YEAR, MAXIMUM);
             } else {
