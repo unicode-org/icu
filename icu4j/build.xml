@@ -368,6 +368,7 @@
         <pathelement location="${icu4j.regiondata.jar}"/>
         <pathelement location="${icu4j.translit.jar}"/>
         <pathelement location="${icu4j.test-framework.jar}"/>
+        <pathelement location="${icu4j.tools.jar}"/>
         <pathelement location="${icu4j.core-tests.jar}"/>
         <pathelement location="${icu4j.collate-tests.jar}"/>
         <pathelement location="${icu4j.charset-tests.jar}"/>
@@ -570,7 +571,7 @@
         </icu-junit>
     </target>
 
-    <target name="packagingCheck" depends="info, core, packaging-tests" description="Run packaging tests">
+    <target name="packagingCheck" depends="info, core, langdata, regiondata, packaging-tests" description="Run packaging tests">
         <antcall target="_packagingCheckNoLangData"/>
         <antcall target="_packagingCheckNoRegionData"/>
         <antcall target="_packagingCheckNoLangNorRegionData"/>
@@ -1201,7 +1202,7 @@
         </ant>
     </target>
 
-    <target name="core-tests" depends="core, test-framework" description="Build core tests">
+    <target name="core-tests" depends="core, test-framework, tools" description="Build core tests">
         <ant dir="${icu4j.core-tests.dir}" inheritAll="false">
             <reference refid="junit.jars"/>
         </ant>
@@ -1249,7 +1250,7 @@
         <ant dir="${icu4j.build-tools.dir}" inheritAll="false"/>
     </target>
 
-    <target name="tools" depends="core, core-tests, collate, translit, translit-tests" description="Build tool classes">
+    <target name="tools" depends="core, collate, translit" description="Build tool classes">
         <ant dir="${icu4j.tools.dir}" inheritAll="false"/>
     </target>
 

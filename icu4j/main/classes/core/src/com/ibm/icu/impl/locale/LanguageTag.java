@@ -324,7 +324,11 @@ public class LanguageTag {
             if (_variants.isEmpty()) {
                 _variants = new ArrayList<String>(3);
             }
-            _variants.add(s);
+            // Ignore repeated variant
+            s = s.toUpperCase();
+            if (!_variants.contains(s)) {
+                _variants.add(s);
+            }
             sts._parseLength = itr.currentEnd();
             itr.next();
         }
@@ -343,7 +347,7 @@ public class LanguageTag {
             String s = itr.current();
             if (isExtensionSingleton(s)) {
                 int start = itr.currentStart();
-                String singleton = s;
+                String singleton = s.toLowerCase();
                 StringBuilder sb = new StringBuilder(singleton);
 
                 itr.next();
@@ -367,7 +371,14 @@ public class LanguageTag {
                 if (_extensions.size() == 0) {
                     _extensions = new ArrayList<String>(4);
                 }
-                _extensions.add(sb.toString());
+                // Ignore the extension if it is already in _extensions.
+                boolean alreadyHas = false;
+                for (String extension : _extensions) {
+                    alreadyHas |= extension.charAt(0) == sb.charAt(0);
+                }
+                if (!alreadyHas) {
+                  _extensions.add(sb.toString());
+                }
                 found = true;
             } else {
                 break;

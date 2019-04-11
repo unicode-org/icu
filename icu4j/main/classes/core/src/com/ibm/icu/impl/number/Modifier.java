@@ -4,6 +4,7 @@ package com.ibm.icu.impl.number;
 
 import java.text.Format.Field;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.impl.StandardPlural;
 
 /**
@@ -29,7 +30,7 @@ public interface Modifier {
      *            number is being formatted.
      * @return The number of characters (UTF-16 code units) that were added to the string builder.
      */
-    public int apply(NumberStringBuilder output, int leftIndex, int rightIndex);
+    public int apply(FormattedStringBuilder output, int leftIndex, int rightIndex);
 
     /**
      * Gets the length of the prefix. This information can be used in combination with {@link #apply} to

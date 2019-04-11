@@ -2,11 +2,18 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.locale;
 
-import java.util.HashSet;
-import java.util.LinkedHashMap;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Set;
+import java.util.MissingResourceException;
+import java.util.TreeMap;
 
+import com.ibm.icu.impl.ICUData;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.BytesTrie;
 import com.ibm.icu.util.ULocale;
 
@@ -15,26 +22,92 @@ public final class XLikelySubtags {
     private static final String PSEUDO_BIDI_PREFIX = "+";  // -XB, -PSBIDI
     private static final String PSEUDO_CRACKED_PREFIX = ",";  // -XC, -PSCRACK
 
-    private static final boolean DEBUG_OUTPUT = false;
+    public static final int SKIP_SCRIPT = 1;
 
-    // TODO: Load prebuilt data from a resource bundle
-    // to avoid the dependency on the builder code.
-    static final XLikelySubtags INSTANCE = new XLikelySubtags(LikelySubtagsBuilder.build());
+    private static final boolean DEBUG_OUTPUT = LSR.DEBUG_OUTPUT;
 
-    static final class Data {
-        private final Map<String, String> languageAliases;
-        private final Map<String, String> regionAliases;
-        private final BytesTrie trie;
-        private final LSR[] lsrs;
+    // VisibleForTesting
+    public static final class Data {
+        public final Map<String, String> languageAliases;
+        public final Map<String, String> regionAliases;
+        public final byte[] trie;
+        public final LSR[] lsrs;
 
-        Data(Map<String, String> languageAliases, Map<String, String> regionAliases,
-                BytesTrie trie, LSR[] lsrs) {
+        public Data(Map<String, String> languageAliases, Map<String, String> regionAliases,
+                byte[] trie, LSR[] lsrs) {
             this.languageAliases = languageAliases;
             this.regionAliases = regionAliases;
             this.trie = trie;
             this.lsrs = lsrs;
         }
+
+        private static UResource.Value getValue(UResource.Table table,
+                String key, UResource.Value value) {
+            if (!table.findValue(key, value)) {
+                throw new MissingResourceException(
+                        "langInfo.res missing data", "", "likely/" + key);
+            }
+            return value;
+        }
+
+        // VisibleForTesting
+        public static Data load() throws MissingResourceException {
+            ICUResourceBundle langInfo = ICUResourceBundle.getBundleInstance(
+                    ICUData.ICU_BASE_NAME, "langInfo",
+                    ICUResourceBundle.ICU_DATA_CLASS_LOADER, ICUResourceBundle.OpenType.DIRECT);
+            UResource.Value value = langInfo.getValueWithFallback("likely");
+            UResource.Table likelyTable = value.getTable();
+
+            Map<String, String> languageAliases;
+            if (likelyTable.findValue("languageAliases", value)) {
+                String[] pairs = value.getStringArray();
+                languageAliases = new HashMap<>(pairs.length / 2);
+                for (int i = 0; i < pairs.length; i += 2) {
+                    languageAliases.put(pairs[i], pairs[i + 1]);
+                }
+            } else {
+                languageAliases = Collections.emptyMap();
+            }
+
+            Map<String, String> regionAliases;
+            if (likelyTable.findValue("regionAliases", value)) {
+                String[] pairs = value.getStringArray();
+                regionAliases = new HashMap<>(pairs.length / 2);
+                for (int i = 0; i < pairs.length; i += 2) {
+                    regionAliases.put(pairs[i], pairs[i + 1]);
+                }
+            } else {
+                regionAliases = Collections.emptyMap();
+            }
+
+            ByteBuffer buffer = getValue(likelyTable, "trie", value).getBinary();
+            byte[] trie = new byte[buffer.remaining()];
+            buffer.get(trie);
+
+            String[] lsrSubtags = getValue(likelyTable, "lsrs", value).getStringArray();
+            LSR[] lsrs = new LSR[lsrSubtags.length / 3];
+            for (int i = 0, j = 0; i < lsrSubtags.length; i += 3, ++j) {
+                lsrs[j] = new LSR(lsrSubtags[i], lsrSubtags[i + 1], lsrSubtags[i + 2]);
+            }
+
+            return new Data(languageAliases, regionAliases, trie, lsrs);
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) { return true; }
+            if (!getClass().equals(other.getClass())) { return false; }
+            Data od = (Data)other;
+            return
+                    languageAliases.equals(od.languageAliases) &&
+                    regionAliases.equals(od.regionAliases) &&
+                    Arrays.equals(trie, od.trie) &&
+                    Arrays.equals(lsrs, od.lsrs);
+        }
     }
+
+    // VisibleForTesting
+    public static final XLikelySubtags INSTANCE = new XLikelySubtags(Data.load());
 
     private final Map<String, String> languageAliases;
     private final Map<String, String> regionAliases;
@@ -46,29 +119,34 @@ public final class XLikelySubtags {
     private final long trieUndState;
     private final long trieUndZzzzState;
     private final int defaultLsrIndex;
+    private final long[] trieFirstLetterStates = new long[26];
     private final LSR[] lsrs;
 
     private XLikelySubtags(XLikelySubtags.Data data) {
         languageAliases = data.languageAliases;
         regionAliases = data.regionAliases;
-        trie = data.trie;
+        trie = new BytesTrie(data.trie, 0);
         lsrs = data.lsrs;
 
         // Cache the result of looking up language="und" encoded as "*", and "und-Zzzz" ("**").
         BytesTrie.Result result = trie.next('*');
-        assert result == BytesTrie.Result.INTERMEDIATE_VALUE;
-        int value = trie.getValue();
-        assert value == 0;
+        assert result.hasNext();
         trieUndState = trie.getState64();
         result = trie.next('*');
-        assert result == BytesTrie.Result.INTERMEDIATE_VALUE;
-        value = trie.getValue();
-        assert value == 0;
+        assert result.hasNext();
         trieUndZzzzState = trie.getState64();
         result = trie.next('*');
         assert result.hasValue();
         defaultLsrIndex = trie.getValue();
         trie.reset();
+
+        for (char c = 'a'; c <= 'z'; ++c) {
+            result = trie.next(c);
+            if (result == BytesTrie.Result.NO_VALUE) {
+                trieFirstLetterStates[c - 'a'] = trie.getState64();
+            }
+            trie.reset();
+        }
 
         if (DEBUG_OUTPUT) {
             System.out.println("*** likely subtags");
@@ -78,24 +156,53 @@ public final class XLikelySubtags {
         }
     }
 
+    /**
+     * Implementation of LocaleMatcher.canonicalize(ULocale).
+     */
+    public ULocale canonicalize(ULocale locale) {
+        String lang = locale.getLanguage();
+        String lang2 = languageAliases.get(lang);
+        String region = locale.getCountry();
+        String region2 = regionAliases.get(region);
+        if (lang2 != null || region2 != null) {
+            return new ULocale(
+                lang2 == null ? lang : lang2,
+                locale.getScript(),
+                region2 == null ? region : region2);
+        }
+        return locale;
+    }
+
     private static String getCanonical(Map<String, String> aliases, String alias) {
         String canonical = aliases.get(alias);
         return canonical == null ? alias : canonical;
     }
 
-    LSR makeMaximizedLsrFrom(ULocale locale) {
+    // VisibleForTesting
+    public LSR makeMaximizedLsrFrom(ULocale locale) {
         String name = locale.getName();
         if (name.startsWith("@x=")) {
             // Private use language tag x-subtag-subtag...
             return new LSR(name, "", "");
         }
+        return makeMaximizedLsr(locale.getLanguage(), locale.getScript(), locale.getCountry(),
+                locale.getVariant());
+    }
 
+    public LSR makeMaximizedLsrFrom(Locale locale) {
+        String tag = locale.toLanguageTag();
+        if (tag.startsWith("x-")) {
+            // Private use language tag x-subtag-subtag...
+            return new LSR(tag, "", "");
+        }
+        return makeMaximizedLsr(locale.getLanguage(), locale.getScript(), locale.getCountry(),
+                locale.getVariant());
+    }
+
+    private LSR makeMaximizedLsr(String language, String script, String region, String variant) {
         // Handle pseudolocales like en-XA, ar-XB, fr-PSCRACK.
         // They should match only themselves,
         // not other locales with what looks like the same language and script subtags.
-        String language = locale.getLanguage();
-        String script = locale.getScript();
-        String region = locale.getCountry();
         if (region.length() == 2 && region.charAt(0) == 'X') {
             switch (region.charAt(1)) {
             case 'A':
@@ -112,7 +219,6 @@ public final class XLikelySubtags {
             }
         }
 
-        String variant = locale.getVariant();
         if (variant.startsWith("PS")) {
             switch (variant) {
             case "PSACCENT":
@@ -130,7 +236,7 @@ public final class XLikelySubtags {
         }
 
         language = getCanonical(languageAliases, language);
-        // script is ok
+        // (We have no script mappings.)
         region = getCanonical(regionAliases, region);
         return INSTANCE.maximize(language, script, region);
     }
@@ -139,14 +245,31 @@ public final class XLikelySubtags {
      * Raw access to addLikelySubtags. Input must be in canonical format, eg "en", not "eng" or "EN".
      */
     private LSR maximize(String language, String script, String region) {
-        int retainOldMask = 0;
-        BytesTrie iter = new BytesTrie(trie);
-        // language lookup
         if (language.equals("und")) {
             language = "";
         }
+        if (script.equals("Zzzz")) {
+            script = "";
+        }
+        if (region.equals("ZZ")) {
+            region = "";
+        }
+        if (!script.isEmpty() && !region.isEmpty() && !language.isEmpty()) {
+            return new LSR(language, script, region);  // already maximized
+        }
+
+        int retainOldMask = 0;
+        BytesTrie iter = new BytesTrie(trie);
         long state;
-        int value = trieNext(iter, language, false);
+        int value;
+        // Small optimization: Array lookup for first language letter.
+        int c0;
+        if (language.length() >= 2 && 0 <= (c0 = language.charAt(0) - 'a') && c0 <= 25 &&
+                (state = trieFirstLetterStates[c0]) != 0) {
+            value = trieNext(iter.resetToState64(state), language, 1);
+        } else {
+            value = trieNext(iter, language, 0);
+        }
         if (value >= 0) {
             if (!language.isEmpty()) {
                 retainOldMask |= 4;
@@ -157,45 +280,54 @@ public final class XLikelySubtags {
             iter.resetToState64(trieUndState);  // "und" ("*")
             state = 0;
         }
-        // script lookup
-        if (script.equals("Zzzz")) {
-            script = "";
-        }
-        value = trieNext(iter, script, false);
-        if (value >= 0) {
+
+        if (value > 0) {
+            // Intermediate or final value from just language.
+            if (value == SKIP_SCRIPT) {
+                value = 0;
+            }
             if (!script.isEmpty()) {
                 retainOldMask |= 2;
             }
-            state = iter.getState64();
         } else {
-            retainOldMask |= 2;
-            if (state == 0) {
-                iter.resetToState64(trieUndZzzzState);  // "und-Zzzz" ("**")
-            } else {
-                iter.resetToState64(state);
-                value = trieNext(iter, "", false);
-                assert value == 0;
+            value = trieNext(iter, script, 0);
+            if (value >= 0) {
+                if (!script.isEmpty()) {
+                    retainOldMask |= 2;
+                }
                 state = iter.getState64();
+            } else {
+                retainOldMask |= 2;
+                if (state == 0) {
+                    iter.resetToState64(trieUndZzzzState);  // "und-Zzzz" ("**")
+                } else {
+                    iter.resetToState64(state);
+                    value = trieNext(iter, "", 0);
+                    assert value >= 0;
+                    state = iter.getState64();
+                }
             }
         }
-        // region lookup
-        if (region.equals("ZZ")) {
-            region = "";
-        }
-        value = trieNext(iter, region, true);
-        if (value >= 0) {
+
+        if (value > 0) {
+            // Final value from just language or language+script.
             if (!region.isEmpty()) {
                 retainOldMask |= 1;
             }
         } else {
-            retainOldMask |= 1;
-            if (state == 0) {
-                value = defaultLsrIndex;
+            value = trieNext(iter, region, 0);
+            if (value >= 0) {
+                if (!region.isEmpty()) {
+                    retainOldMask |= 1;
+                }
             } else {
-                iter.resetToState64(state);
-                value = trieNext(iter, "", true);
-                if (value < 0) {  // TODO: should never happen?! just assert value >= 0?
-                    return null;
+                retainOldMask |= 1;
+                if (state == 0) {
+                    value = defaultLsrIndex;
+                } else {
+                    iter.resetToState64(state);
+                    value = trieNext(iter, "", 0);
+                    assert value > 0;
                 }
             }
         }
@@ -220,34 +352,34 @@ public final class XLikelySubtags {
         return new LSR(language, script, region);
     }
 
-    private static final int trieNext(BytesTrie iter, String s, boolean finalSubtag) {
+    private static final int trieNext(BytesTrie iter, String s, int i) {
         BytesTrie.Result result;
         if (s.isEmpty()) {
             result = iter.next('*');
         } else {
             int end = s.length() - 1;
-            for (int i = 0;; ++i) {
-                result = iter.next(s.charAt(i));
+            for (;; ++i) {
+                int c = s.charAt(i);
                 if (i < end) {
-                    if (!result.hasNext()) {
+                    if (!iter.next(c).hasNext()) {
                         return -1;
                     }
                 } else {
                     // last character of this subtag
+                    result = iter.next(c | 0x80);
                     break;
                 }
             }
         }
-        if (!finalSubtag) {
-            if (result == BytesTrie.Result.INTERMEDIATE_VALUE) {
-                return 0;  // value should be 0, don't care
-            }
-        } else {
-            if (result.hasValue()) {
-                return iter.getValue();
-            }
+        switch (result) {
+        case NO_MATCH: return -1;
+        case NO_VALUE: return 0;
+        case INTERMEDIATE_VALUE:
+            assert iter.getValue() == SKIP_SCRIPT;
+            return SKIP_SCRIPT;
+        case FINAL_VALUE: return iter.getValue();
+        default: return -1;
         }
-        return -1;
     }
 
     LSR minimizeSubtags(String languageIn, String scriptIn, String regionIn,
@@ -263,11 +395,16 @@ public final class XLikelySubtags {
 
         // value00 = lookup(result.language, "", "")
         BytesTrie iter = new BytesTrie(trie);
-        int value = trieNext(iter, result.language, false);
+        int value = trieNext(iter, result.language, 0);
         assert value >= 0;
-        value = trieNext(iter, "", false);
-        assert value >= 0;
-        value = trieNext(iter, "", true);
+        if (value == 0) {
+            value = trieNext(iter, "", 0);
+            assert value >= 0;
+            if (value == 0) {
+                value = trieNext(iter, "", 0);
+            }
+        }
+        assert value > 0;
         LSR value00 = lsrs[value];
         boolean favorRegionOk = false;
         if (result.script.equals(value00.script)) { //script is default
@@ -292,26 +429,24 @@ public final class XLikelySubtags {
     }
 
     private Map<String, LSR> getTable() {
-        Map<String, LSR> map = new LinkedHashMap<>();
-        Set<String> prefixes = new HashSet<>();
+        Map<String, LSR> map = new TreeMap<>();
         StringBuilder sb = new StringBuilder();
         for (BytesTrie.Entry entry : trie) {
             sb.setLength(0);
             int length = entry.bytesLength();
             for (int i = 0; i < length;) {
                 byte b = entry.byteAt(i++);
-                sb.append((char) b);
-                if (i < length && prefixes.contains(sb.toString())) {
-                    sb.append('-');
+                if (b == '*') {
+                    sb.append("*-");
+                } else if (b >= 0) {
+                    sb.append((char) b);
+                } else {  // end of subtag
+                    sb.append((char) (b & 0x7f)).append('-');
                 }
             }
-            String s = sb.toString();
-            if (entry.value == 0) {
-                // intermediate match point
-                prefixes.add(s);
-            } else {
-                map.put(s, lsrs[entry.value]);
-            }
+            assert sb.length() > 0 && sb.charAt(sb.length() - 1) == '-';
+            sb.setLength(sb.length() - 1);
+            map.put(sb.toString(), lsrs[entry.value]);
         }
         return map;
     }

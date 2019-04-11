@@ -205,10 +205,10 @@ main(int argc,
                 "\t-c or --copyright        include copyright notice\n");
         fprintf(stderr,
                 "\t-e or --encoding         encoding of source files\n"
-                "\t-d of --destdir          destination directory, followed by the path, defaults to %s\n"
-                "\t-s or --sourcedir        source directory for files followed by path, defaults to %s\n"
+                "\t-d or --destdir          destination directory, followed by the path, defaults to '%s'\n"
+                "\t-s or --sourcedir        source directory for files followed by path, defaults to '%s'\n"
                 "\t-i or --icudatadir       directory for locating any needed intermediate data files,\n"
-                "\t                         followed by path, defaults to %s\n",
+                "\t                         followed by path, defaults to '%s'\n",
                 u_getDataDirectory(), u_getDataDirectory(), u_getDataDirectory());
         fprintf(stderr,
                 "\t-j or --write-java       write a Java ListResourceBundle for ICU4J, followed by optional encoding\n"

@@ -99,7 +99,7 @@ void PatternModifierTest::testPatternWithNoPlaceholder() {
     mod.setNumberProperties(1, StandardPlural::Form::COUNT);
 
     // Unsafe Code Path
-    NumberStringBuilder nsb;
+    FormattedStringBuilder nsb;
     nsb.append(u"x123y", UNUM_FIELD_COUNT, status);
     assertSuccess("Spot 3", status);
     mod.apply(nsb, 1, 4, status);
@@ -141,21 +141,21 @@ void PatternModifierTest::testMutableEqualsImmutable() {
     DecimalQuantity fq;
     fq.setToInt(1);
 
-    NumberStringBuilder nsb1;
+    FormattedStringBuilder nsb1;
     MicroProps micros1;
     mod.addToChain(&micros1);
     mod.processQuantity(fq, micros1, status);
     micros1.modMiddle->apply(nsb1, 0, 0, status);
     assertSuccess("Spot 3", status);
 
-    NumberStringBuilder nsb2;
+    FormattedStringBuilder nsb2;
     MicroProps micros2;
     LocalPointer<ImmutablePatternModifier> immutable(mod.createImmutable(status));
     immutable->applyToMicros(micros2, fq, status);
     micros2.modMiddle->apply(nsb2, 0, 0, status);
     assertSuccess("Spot 4", status);
 
-    NumberStringBuilder nsb3;
+    FormattedStringBuilder nsb3;
     MicroProps micros3;
     mod.addToChain(&micros3);
     mod.setPatternAttributes(UNUM_SIGN_ALWAYS, false);
@@ -168,14 +168,14 @@ void PatternModifierTest::testMutableEqualsImmutable() {
 }
 
 UnicodeString PatternModifierTest::getPrefix(const MutablePatternModifier &mod, UErrorCode &status) {
-    NumberStringBuilder nsb;
+    FormattedStringBuilder nsb;
     mod.apply(nsb, 0, 0, status);
     int32_t prefixLength = mod.getPrefixLength();
     return UnicodeString(nsb.toUnicodeString(), 0, prefixLength);
 }
 
 UnicodeString PatternModifierTest::getSuffix(const MutablePatternModifier &mod, UErrorCode &status) {
-    NumberStringBuilder nsb;
+    FormattedStringBuilder nsb;
     mod.apply(nsb, 0, 0, status);
     int32_t prefixLength = mod.getPrefixLength();
     return UnicodeString(nsb.toUnicodeString(), prefixLength, nsb.length() - prefixLength);

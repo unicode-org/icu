@@ -10,7 +10,7 @@
 # Lines starting with an '@' sign provide matcher parameters.
 # @supported=<comma-separated supported languages>
 # @default=<default language>  # no value = no explicit default
-# @distance=[normal|script]  # no value = no explicit setting
+# @favor=[normal|script]  # no value = no explicit setting
 # @threshold=<number 0..100>  # no value = no explicit setting
 #
 # A line with ">>" is a getBestMatch() test case:
@@ -93,7 +93,7 @@ zh-HK >> zh-MO
 @supported=zh, zh-MO
 zh-HK >> zh-MO
 
-@distance=script
+@favor=script
 @supported=es-419, es-ES
 es-AR >> es-419
 @supported=es-ES, es-419
@@ -153,7 +153,7 @@ zh-Hans-CN >> zh-CN
 zh-CN >> zh-CN
 zh >> zh-CN
 
-@distance=script
+@favor=script
 zh-Hant-TW >> zh-TW
 zh-Hant >> zh-TW
 zh-TW >> zh-TW
@@ -169,7 +169,7 @@ es-ES >> es
 es-AR >> es-419
 es-MX >> es-MX
 
-@distance=script
+@favor=script
 en-NZ >> en-GB
 es-ES >> es
 es-AR >> es-419
@@ -180,7 +180,7 @@ es-MX >> es-MX
 @supported=91, en, hi
 sa >> hi
 
-@distance=script
+@favor=script
 sa >> hi
 
 ** test: testBasics
@@ -191,7 +191,7 @@ en >> en
 fr >> fr
 ja >> fr # return first if no match
 
-@distance=script
+@favor=script
 en-GB >> en-GB
 en >> en
 fr >> fr
@@ -208,7 +208,7 @@ zh-Hans-CN >> zh-CN
 zh-Hant-HK >> zh-TW
 he-IT >> iw
 
-@distance=script
+@favor=script
 zh-Hant >> zh-TW
 zh >> zh-CN
 zh-Hans-CN >> zh-CN
@@ -228,7 +228,7 @@ nb >> nn
 
 ja >> en
 
-@distance=script
+@favor=script
 tl >> fil
 mo >> ro
 nb >> nn
@@ -243,7 +243,7 @@ es-MX >> es-419
 en-AU >> en-GB
 es-ES >> es
 
-@distance=script
+@favor=script
 es-MX >> es-419
 en-AU >> en-GB
 es-ES >> es
@@ -257,7 +257,7 @@ zh-HK >> zh-MO
 @supported=zh, zh-TW, zh-HK
 zh-MO >> zh-HK
 
-@distance=script
+@favor=script
 @supported=zh, zh-TW, zh-MO
 zh-HK >> zh-MO
 @supported=zh, zh-TW, zh-HK
@@ -272,7 +272,7 @@ und-TW >> zh-Hant # und-TW should be closer to zh-Hant than to zh
 zh-Hant >> und-TW # zh-Hant should be closer to und-TW than to en-Hant-TW
 zh >> und-TW # zh should be closer to und-TW than to en-Hant-TW
 
-@distance=script
+@favor=script
 @supported=zh, zh-Hant
 und-TW >> zh-Hant
 @supported=en-Hant-TW, und-TW
@@ -284,14 +284,14 @@ zh >> und-TW
 @supported=fr, i-klingon, en-Latn-US
 en-GB-oed >> en-Latn-US
 
-@distance=script
+@favor=script
 en-GB-oed >> en-Latn-US
 
 ** test: testGetBestMatchForList-exactMatch
 @supported=fr, en-GB, ja, es-ES, es-MX
 ja, de >> ja
 
-@distance=script
+@favor=script
 ja, de >> ja
 
 ** test: testGetBestMatchForList-simpleVariantMatch
@@ -302,7 +302,7 @@ de, en-US >> en-GB # Intentionally avoiding a perfect-match or two candidates fo
 
 de, zh >> fr
 
-@distance=script
+@favor=script
 de, en-US >> en-GB
 de, zh >> fr
 
@@ -320,7 +320,7 @@ ja-JP, en-US >> ja # Match for ja-Jpan-JP (maximized already)
 
 ja-Jpan-JP, en-US >> ja # Match for ja-Jpan-JP (maximized already)
 
-@distance=script
+@favor=script
 ja-Jpan-JP, en-AU >> ja
 ja-JP, en-US >> ja
 ja-Jpan-JP, en-US >> ja
@@ -331,7 +331,7 @@ ja-Jpan-JP, en-US >> ja
 @supported=en, de, fr, ja
 de-CH, fr >> de
 
-@distance=script
+@favor=script
 de-CH, fr >> de
 
 ** test: testBestMatchForTraditionalChinese
@@ -357,7 +357,7 @@ zh-TW, en >> en-US
 zh-Hant-CN, en >> en-US
 zh-Hans, en >> zh-Hans-CN
 
-@distance=script
+@favor=script
 zh-TW >> zh-Hans-CN
 zh-Hant >> zh-Hans-CN
 zh-TW, en >> en-US
@@ -389,7 +389,7 @@ und >> it
 @supported=it, und
 en >> it
 
-@distance=script
+@favor=script
 @supported=it, fr
 und >> it
 @supported=it, und
@@ -408,7 +408,7 @@ en-CA >> en-GB
 @supported=de-AT, de-DE, de-CH
 de >> de-DE
 
-@distance=script
+@favor=script
 @supported=es-AR, es
 es-MX >> es-AR
 @supported=fr, en, en-GB
@@ -423,7 +423,7 @@ af >> nl # af => nl
 @supported=mul, af
 nl >> mul # but nl !=> af
 
-@distance=script
+@favor=script
 @supported=mul, nl
 af >> nl
 @supported=mul, af
@@ -440,7 +440,7 @@ ja-JP, en-GB >> ja # Match for ja-JP, with likely region subtag
 
 ja-Jpan-JP, en-GB >> ja # Match for ja-Jpan-JP (maximized already)
 
-@distance=script
+@favor=script
 ja-JP, en-GB >> ja
 ja-Jpan-JP, en-GB >> ja
 
@@ -450,7 +450,7 @@ ja-Jpan-JP, en-GB >> ja
 de-CH, fr >> de
 en-US, ar, nl, de, ja >> en
 
-@distance=script
+@favor=script
 de-CH, fr >> de
 en-US, ar, nl, de, ja >> en
 
@@ -487,7 +487,7 @@ pt-US, pt-PT >> pt-BR
 @supported=pt-PT, pt, es, es-419
 pt-US, pt-PT, pt >> pt # pt-BR implicit
 
-@distance=script
+@favor=script
 @supported=pt-PT, pt-BR, es, es-419
 pt-PT, es, pt >> pt-PT
 @supported=pt-PT, pt, es, es-419
@@ -515,7 +515,7 @@ en-GB >> en
 @supported=en, sv
 en-GB, sv >> en
 
-@distance=script
+@favor=script
 @supported=fr, en, sv
 en-GB >> en
 @supported=en, sv
@@ -532,7 +532,7 @@ sv >> sv
 @supported=af, af-NA, af-ZA, agq, agq-CM, ak, ak-GH, am, am-ET, ar, ar-001, ar-AE, ar-BH, ar-DJ, ar-DZ, ar-EG, ar-EH, ar-ER, ar-IL, ar-IQ, ar-JO, ar-KM, ar-KW, ar-LB, ar-LY, ar-MA, ar-MR, ar-OM, ar-PS, ar-QA, ar-SA, ar-SD, ar-SO, ar-SS, ar-SY, ar-TD, ar-TN, ar-YE, as, as-IN, asa, asa-TZ, ast, ast-ES, az, az-Cyrl, az-Cyrl-AZ, az-Latn, az-Latn-AZ, bas, bas-CM, be, be-BY, bem, bem-ZM, bez, bez-TZ, bg, bg-BG, bm, bm-ML, bn, bn-BD, bn-IN, bo, bo-CN, bo-IN, br, br-FR, brx, brx-IN, bs, bs-Cyrl, bs-Cyrl-BA, bs-Latn, bs-Latn-BA, ca, ca-AD, ca-ES, ca-ES-VALENCIA, ca-FR, ca-IT, ce, ce-RU, cgg, cgg-UG, chr, chr-US, ckb, ckb-IQ, ckb-IR, cs, cs-CZ, cu, cu-RU, cy, cy-GB, da, da-DK, da-GL, dav, dav-KE, de, de-AT, de-BE, de-CH, de-DE, de-LI, de-LU, dje, dje-NE, dsb, dsb-DE, dua, dua-CM, dyo, dyo-SN, dz, dz-BT, ebu, ebu-KE, ee, ee-GH, ee-TG, el, el-CY, el-GR, en, en-001, en-150, en-AG, en-AI, en-AS, en-AT, en-AU, en-BB, en-BE, en-BI, en-BM, en-BS, en-BW, en-BZ, en-CA, en-CC, en-CH, en-CK, en-CM, en-CX, en-CY, en-DE, en-DG, en-DK, en-DM, en-ER, en-FI, en-FJ, en-FK, en-FM, en-GB, en-GD, en-GG, en-GH, en-GI, en-GM, en-GU, en-GY, en-HK, en-IE, en-IL, en-IM, en-IN, en-IO, en-JE, en-JM, en-KE, en-KI, en-KN, en-KY, en-LC, en-LR, en-LS, en-MG, en-MH, en-MO, en-MP, en-MS, en-MT, en-MU, en-MW, en-MY, en-NA, en-NF, en-NG, en-NL, en-NR, en-NU, en-NZ, en-PG, en-PH, en-PK, en-PN, en-PR, en-PW, en-RW, en-SB, en-SC, en-SD, en-SE, en-SG, en-SH, en-SI, en-SL, en-SS, en-SX, en-SZ, en-TC, en-TK, en-TO, en-TT, en-TV, en-TZ, en-UG, en-UM, en-US, en-US-POSIX, en-VC, en-VG, en-VI, en-VU, en-WS, en-ZA, en-ZM, en-ZW, eo, eo-001, es, es-419, es-AR, es-BO, es-CL, es-CO, es-CR, es-CU, es-DO, es-EA, es-EC, es-ES, es-GQ, es-GT, es-HN, es-IC, es-MX, es-NI, es-PA, es-PE, es-PH, es-PR, es-PY, es-SV, es-US, es-UY, es-VE, et, et-EE, eu, eu-ES, ewo, ewo-CM, fa, fa-AF, fa-IR, ff, ff-CM, ff-GN, ff-MR, ff-SN, fi, fi-FI, fil, fil-PH, fo, fo-DK, fo-FO, fr, fr-BE, fr-BF, fr-BI, fr-BJ, fr-BL, fr-CA, fr-CD, fr-CF, fr-CG, fr-CH, fr-CI, fr-CM, fr-DJ, fr-DZ, fr-FR, fr-GA, fr-GF, fr-GN, fr-GP, fr-GQ, fr-HT, fr-KM, fr-LU, fr-MA, fr-MC, fr-MF, fr-MG, fr-ML, fr-MQ, fr-MR, fr-MU, fr-NC, fr-NE, fr-PF, fr-PM, fr-RE, fr-RW, fr-SC, fr-SN, fr-SY, fr-TD, fr-TG, fr-TN, fr-VU, fr-WF, fr-YT, fur, fur-IT, fy, fy-NL, ga, ga-IE, gd, gd-GB, gl, gl-ES, gsw, gsw-CH, gsw-FR, gsw-LI, gu, gu-IN, guz, guz-KE, gv, gv-IM, ha, ha-GH, ha-NE, ha-NG, haw, haw-US, he, he-IL, hi, hi-IN, hr, hr-BA, hr-HR, hsb, hsb-DE, hu, hu-HU, hy, hy-AM, id, id-ID, ig, ig-NG, ii, ii-CN, is, is-IS, it, it-CH, it-IT, it-SM, ja, ja-JP, jgo, jgo-CM, jmc, jmc-TZ, ka, ka-GE, kab, kab-DZ, kam, kam-KE, kde, kde-TZ, kea, kea-CV, khq, khq-ML, ki, ki-KE, kk, kk-KZ, kkj, kkj-CM, kl, kl-GL, kln, kln-KE, km, km-KH, kn, kn-IN, ko, ko-KP, ko-KR, kok, kok-IN, ks, ks-IN, ksb, ksb-TZ, ksf, ksf-CM, ksh, ksh-DE, kw, kw-GB, ky, ky-KG, lag, lag-TZ, lb, lb-LU, lg, lg-UG, lkt, lkt-US, ln, ln-AO, ln-CD, ln-CF, ln-CG, lo, lo-LA, lrc, lrc-IQ, lrc-IR, lt, lt-LT, lu, lu-CD, luo, luo-KE, luy, luy-KE, lv, lv-LV, mas, mas-KE, mas-TZ, mer, mer-KE, mfe, mfe-MU, mg, mg-MG, mgh, mgh-MZ, mgo, mgo-CM, mk, mk-MK, ml, ml-IN, mn, mn-MN, mr, mr-IN, ms, ms-BN, ms-MY, ms-SG, mt, mt-MT, mua, mua-CM, my, my-MM, mzn, mzn-IR, naq, naq-NA, nb, nb-NO, nb-SJ, nd, nd-ZW, ne, ne-IN, ne-NP, nl, nl-AW, nl-BE, nl-BQ, nl-CW, nl-NL, nl-SR, nl-SX, nmg, nmg-CM, nn, nn-NO, nnh, nnh-CM, nus, nus-SS, nyn, nyn-UG, om, om-ET, om-KE, or, or-IN, os, os-GE, os-RU, pa, pa-Arab, pa-Arab-PK, pa-Guru, pa-Guru-IN, pl, pl-PL, prg, prg-001, ps, ps-AF, pt, pt-AO, pt-BR, pt-CV, pt-GW, pt-MO, pt-MZ, pt-PT, pt-ST, pt-TL, qu, qu-BO, qu-EC, qu-PE, rm, rm-CH, rn, rn-BI, ro, ro-MD, ro-RO, rof, rof-TZ, root, ru, ru-BY, ru-KG, ru-KZ, ru-MD, ru-RU, ru-UA, rw, rw-RW, rwk, rwk-TZ, sah, sah-RU, saq, saq-KE, sbp, sbp-TZ, se, se-FI, se-NO, se-SE, seh, seh-MZ, ses, ses-ML, sg, sg-CF, shi, shi-Latn, shi-Latn-MA, shi-Tfng, shi-Tfng-MA, si, si-LK, sk, sk-SK, sl, sl-SI, smn, smn-FI, sn, sn-ZW, so, so-DJ, so-ET, so-KE, so-SO, sq, sq-AL, sq-MK, sq-XK, sr, sr-Cyrl, sr-Cyrl-BA, sr-Cyrl-ME, sr-Cyrl-RS, sr-Cyrl-XK, sr-Latn, sr-Latn-BA, sr-Latn-ME, sr-Latn-RS, sr-Latn-XK, sv, sv-AX, sv-FI, sv-SE, sw, sw-CD, sw-KE, sw-TZ, sw-UG, ta, ta-IN, ta-LK, ta-MY, ta-SG, te, te-IN, teo, teo-KE, teo-UG, th, th-TH, ti, ti-ER, ti-ET, tk, tk-TM, to, to-TO, tr, tr-CY, tr-TR, twq, twq-NE, tzm, tzm-MA, ug, ug-CN, uk, uk-UA, ur, ur-IN, ur-PK, uz, uz-Arab, uz-Arab-AF, uz-Cyrl, uz-Cyrl-UZ, uz-Latn, uz-Latn-UZ, vai, vai-Latn, vai-Latn-LR, vai-Vaii, vai-Vaii-LR, vi, vi-VN, vo, vo-001, vun, vun-TZ, wae, wae-CH, xog, xog-UG, yav, yav-CM, yi, yi-001, yo, yo-BJ, yo-NG, zgh, zgh-MA, zh, zh-Hans, zh-Hans-CN, zh-Hans-HK, zh-Hans-MO, zh-Hans-SG, zh-Hant, zh-Hant-HK, zh-Hant-MO, zh-Hant-TW, zu, zu-ZA
 sv >> sv
 
-@distance=script
+@favor=script
 @supported=en, sv
 sv >> sv
 
@@ -552,7 +552,7 @@ und, en >> en
 # http://unicode.org/repos/cldr/tags/latest/common/bcp47/
 # http://unicode.org/repos/cldr/tags/latest/common/validity/variant.xml
 
-@distance=script
+@favor=script
 und >> it
 und, en >> en
 
@@ -561,7 +561,7 @@ und, en >> en
 @supported=en-NZ, en-IT
 en-US >> en-NZ
 
-@distance=script
+@favor=script
 en-US >> en-NZ
 
 ** test: testEmptySupported => null
@@ -587,7 +587,7 @@ fr-PSCRACK >> fr-PSCRACK
 fr >> en-PSCRACK
 de-CH >> en-PSCRACK
 
-@distance=script
+@favor=script
 @supported=und, fr
 fr-BE-fonipa >> fr
 @supported=und, fr-CA
@@ -649,7 +649,7 @@ en-VI >> en-GU
 @supported=und, en-GU, en-GB, en-IN
 en-VI >> en-GU
 
-@distance=script
+@favor=script
 @supported=und, es, es-MA, es-MX, es-419
 es-AR >> es-419
 @supported=und, es-MA, es, es-419, es-MX
@@ -695,12 +695,12 @@ fr-BE-fonipa >> fr-Cyrl-CA-fonupa | | fr-Cyrl-BE-fonipa
 @threshold=50
 fr-BE-fonipa >> und
 
-@distance=script
+@favor=script
 @supported=50, und, fr-CA-fonupa
 @threshold=
 fr-BE-fonipa >> fr-CA-fonupa | | fr-BE-fonipa
 @supported=und, fr-Cyrl-CA-fonupa
-fr-BE-fonipa >> fr-Cyrl-CA-fonupa | fr-BE-fonipa
+fr-BE-fonipa >> und
 
 ** test: testScriptFirst
 @supported=ru, fr
@@ -711,7 +711,7 @@ sr >> hr
 @supported=da, ru, hr
 sr >> da
 
-@distance=script
+@favor=script
 @supported=ru, fr
 zh, pl >> fr
 zh-Cyrl, pl >> ru
@@ -730,11 +730,11 @@ en-US >> en
 fr >> fr
 ja >> fr
 
-@distance=script
+@favor=script
 en-GB >> en-GB
 en-US >> en
 fr >> en-GB
-ja >> en-GB
+ja >> fr
 
 ** test: testEmptyWithDefault
 @default=en
@@ -765,7 +765,7 @@ ja-JP >> fr
 zu >> en-GB
 zxx >> fr
 
-@distance=script
+@favor=script
 en-GB >> en-GB
 en-US >> en
 fr-FR >> fr
@@ -792,7 +792,7 @@ ja-Jpan-JP, en-GB >> ja
 @supported=fr, zh-Hant, en
 zh, en >> en
 
-@distance=script
+@favor=script
 zh, en >> en
 
 ** test: TestCloseEnoughMatchOnMaximized
@@ -829,7 +829,7 @@ pt-US, pt-PT >> pt-BR
 @supported=pt-PT, pt, es, es-419
 pt-US, pt-PT >> pt
 
-@distance=script
+@favor=script
 @supported=pt-BR, es, es-419
 pt-PT, es, pt >> pt-BR
 @supported=pt-PT, pt, es, es-419
@@ -844,7 +844,7 @@ fr-CA, en-CA >> fr
 @supported=zh-Hant, zh-TW
 zh-HK >> zh-Hant
 
-@distance=script
+@favor=script
 @supported=en-GB, en
 en-CA >> en-GB
 @supported=fr, en-GB, en
@@ -871,7 +871,7 @@ zh-Hans-CN >> zh-CN
 zh-Hant-HK >> zh-TW
 he-IT >> iw
 
-@distance=script
+@favor=script
 zh-Hant >> zh-TW
 zh >> zh-CN
 zh-Hans-CN >> zh-CN
@@ -894,7 +894,7 @@ en-AU >> en-GB
 es-MX >> es-419
 es-PT >> es-ES
 
-@distance=script
+@favor=script
 en-AU >> en-GB
 es-MX >> es-419
 es-PT >> es-ES
@@ -930,7 +930,7 @@ en >> it
 en-GB >> en
 en-GB, sv >> en
 
-@distance=script
+@favor=script
 en-GB, sv >> en
 
 ** test: Serbian
@@ -951,7 +951,7 @@ sr >> sr-Latn
 @supported=und, sr
 sr-Latn >> sr
 
-@distance=script
+@favor=script
 sr-ME >> sr
 @supported=und, sr-ME
 sr >> sr-ME
@@ -976,7 +976,7 @@ x-bork >> x-bork
 x-piglatin >> fr
 x-bork >> x-bork
 
-@distance=script
+@favor=script
 @supported=fr, x-bork, en-Latn-US
 x-piglatin >> x-bork
 x-bork >> x-bork
@@ -989,7 +989,7 @@ x-bork >> x-bork
 en-GB-oed >> en-Latn-US
 i-klingon >> tlh
 
-@distance=script
+@favor=script
 en-GB-oed >> en-Latn-US
 i-klingon >> tlh
 
@@ -1007,7 +1007,7 @@ pt-BR >> pt
 pt-PT-PSCRACK >> pt-PT-PSCRACK
 zh-Hans-PSCRACK >> zh-Hans-PSCRACK
 
-@distance=script
+@favor=script
 de >> fr
 en-US >> fr
 en >> fr
@@ -1030,7 +1030,7 @@ en-XC >> en-XC
 pt-BR >> pt
 zh-Hans-XC >> zh-Hans-XC
 
-@distance=script
+@favor=script
 de >> fr
 en-US >> fr
 en >> fr
@@ -1052,20 +1052,20 @@ en >> en-DE
 ar-EG >> ar-SY
 pt-BR >> pt
 ar-XB >> ar-XB
-ar-PSBIDI >> ar-PSBIDI
+ar-PSBIDI >> ar-XB  # These are equivalent.
 en-XA >> en-XA
-en-PSACCENT >> en-PSACCENT
+en-PSACCENT >> en-XA  # These are equivalent.
 ar-PSCRACK >> ar-PSCRACK
 
-@distance=script
+@favor=script
 de >> en-DE
 en >> en-DE
 ar-EG >> ar-SY
 pt-BR >> pt
 ar-XB >> ar-XB
-ar-PSBIDI >> ar-PSBIDI
+ar-PSBIDI >> ar-XB  # These are equivalent.
 en-XA >> en-XA
-en-PSACCENT >> en-PSACCENT
+en-PSACCENT >> en-XA  # These are equivalent.
 ar-PSCRACK >> ar-PSCRACK
 
 ** test: BestMatchForTraditionalChinese
@@ -1095,7 +1095,7 @@ zh-Hans, en >> zh-Hans-CN
 @supported=en, fr-CA
 en-US, fr-CA >> en
 
-@distance=script
+@favor=script
 en-US, fr-CA >> en
 
 ** test: SiblingDefaultRegion
@@ -1111,15 +1111,15 @@ de >> und
 @default=und
 hi >> und
 
-@distance=script
-hi >> de
+@favor=script
+hi >> und
 
 ** test: MatchedLanguageIgnoresDefault
 @supported=de, en, fr
 @default=und
 fr >> fr
 
-@distance=script
+@favor=script
 fr >> fr
 
 ## GenX
@@ -1168,9 +1168,9 @@ es-US >> es-MX
 es-UY >> es-MX
 es-VE >> es-MX
 
-@distance=script
+@favor=script
 es-001 >> es
-und >> es
+und >> und
 ca >> es
 gl-ES >> es
 es >> es
@@ -1254,9 +1254,9 @@ es-US >> es-419
 es-UY >> es-419
 es-VE >> es-419
 
-@distance=script
+@favor=script
 es-001 >> es
-und >> es
+und >> und
 ca >> es
 gl-ES >> es
 es >> es
@@ -1319,9 +1319,9 @@ en-ZA >> en-GB
 en-US >> en-US
 en >> en-US
 
-@distance=script
-und >> en-GB
-ja >> en-GB
+@favor=script
+und >> und
+ja >> und
 fr-CA >> en-GB
 en-AU >> en-GB
 en-BZ >> en-GB
@@ -1355,10 +1355,10 @@ fr >> und
 @supported=pl, ja, ca
 fr >> und
 
-@distance=script
+@favor=script
 @supported=en-GB, en-US, en, en-AU
-und >> en-GB
-ja >> en-GB
+und >> und
+ja >> und
 fr-CA >> en-GB
 fr >> en-GB
 @supported=en-AU, ja, ca
@@ -1384,7 +1384,7 @@ zh-Hant-HK >> zh-TW
 @default=iw
 he-IT >> iw
 
-@distance=script
+@favor=script
 he-IT >> iw
 
 ** test: language-specific script fallbacks 1
@@ -1395,7 +1395,7 @@ hr >> en
 bs >> en
 nl-Cyrl >> en # Mark: Expected value should be en not sr. Script difference exceeds threshold, so can't be nl
 
-@distance=script
+@favor=script
 sr-Latn >> sr
 hr >> en
 bs >> en
@@ -1408,7 +1408,7 @@ sr-Cyrl >> sr-Latn
 @default=und
 hr >> und
 
-@distance=script
+@favor=script
 @default=
 sr >> sr-Latn
 sr-Cyrl >> sr-Latn
@@ -1419,45 +1419,45 @@ hr >> en
 @supported=en, sr-Latn
 hr >> en
 
-@distance=script
+@favor=script
 hr >> en
 
 ** test: both deprecated and not
 @supported=fil, tl, iw, he
 he-IT >> iw
-he >> he
+he >> iw
 iw >> iw
 fil-IT >> fil
 fil >> fil
-tl >> tl
+tl >> fil
 
-@distance=script
+@favor=script
 he-IT >> iw
-he >> he
+he >> iw
 iw >> iw
 fil-IT >> fil
 fil >> fil
-tl >> tl
+tl >> fil
 
 ** test: nearby languages: Nynorsk to Bokmål
 @supported=en, nb
 nn >> nb
 
-@distance=script
+@favor=script
 nn >> nb
 
 ** test: nearby languages: Danish does not match nn
 @supported=en, nn
 da >> en
 
-@distance=script
+@favor=script
 da >> en
 
 ** test: nearby languages: Danish matches no
 @supported=en, no
 da >> no
 
-@distance=script
+@favor=script
 da >> no
 
 ** test: nearby languages: Danish matches nb
@@ -1469,7 +1469,7 @@ da >> nb
 no, en-US >> nn
 nb, en-US >> nn
 
-@distance=script
+@favor=script
 no, en-US >> nn
 nb, en-US >> nn
 
@@ -1477,7 +1477,7 @@ nb, en-US >> nn
 @supported=nl, he, en-GB
 iw, en-US >> he
 
-@distance=script
+@favor=script
 iw, en-US >> he
 
 ** test: macro equivalent is closer than same language with other differences
@@ -1485,7 +1485,7 @@ iw, en-US >> he
 cmn, en-US >> zh
 nb, en-US >> no
 
-@distance=script
+@favor=script
 cmn, en-US >> zh
 nb, en-US >> no
 
@@ -1493,18 +1493,18 @@ nb, en-US >> no
 @supported=nl, fil, en-GB
 tl, en-US >> fil
 
-@distance=script
+@favor=script
 tl, en-US >> fil
 
 ** test: distinguish near equivalents
 @supported=en, ro, mo, ro-MD
 ro >> ro
-mo >> mo
+mo >> ro # ro=mo for the locale matcher
 ro-MD >> ro-MD
 
-@distance=script
+@favor=script
 ro >> ro
-mo >> mo
+mo >> ro # ro=mo for the locale matcher
 ro-MD >> ro-MD
 
 ** test: maximization of legacy
@@ -1512,7 +1512,7 @@ ro-MD >> ro-MD
 sh >> sr-Latn
 mo >> ro
 
-@distance=script
+@favor=script
 sh >> sr-Latn
 mo >> ro
 
@@ -1544,31 +1544,50 @@ zh-TW, en >> en-US
 zh-Hant-CN, en >> en-US
 zh-Hans, en >> zh-Hans-CN
 
-** test: more specific script should win in case regions are identical
+** test: return first among likely-subtags equivalent locales
+# Was: more specific script should win in case regions are identical
+# with some different results.
 @supported=af, af-Latn, af-Arab
 af >> af
 af-ZA >> af
 af-Latn-ZA >> af
-af-Latn >> af-Latn
+af-Latn >> af
 
-@distance=script
+@favor=script
 af >> af
 af-ZA >> af
 af-Latn-ZA >> af
-af-Latn >> af-Latn
+af-Latn >> af
 
-** test: more specific region should win
+# Was: more specific region should win
+# with some different results.
 @supported=nl, nl-NL, nl-BE
+@favor=
 nl >> nl
 nl-Latn >> nl
 nl-Latn-NL >> nl
-nl-NL >> nl-NL
+nl-NL >> nl
 
-@distance=script
+@favor=script
 nl >> nl
 nl-Latn >> nl
 nl-Latn-NL >> nl
-nl-NL >> nl-NL
+nl-NL >> nl
+
+# Was: more specific region wins over more specific script
+# with some different results.
+@supported=nl, nl-Latn, nl-NL, nl-BE
+@favor=
+nl >> nl
+nl-Latn >> nl
+nl-NL >> nl
+nl-Latn-NL >> nl
+
+@favor=script
+nl >> nl
+nl-Latn >> nl
+nl-NL >> nl
+nl-Latn-NL >> nl
 
 ** test: region may replace matched if matched is enclosing
 @supported=es-419, es
@@ -1577,37 +1596,24 @@ es-MX >> es-419
 @default=
 es-SG >> es
 
-@distance=script
+@favor=script
 @default=es-MX
 es-MX >> es-419
 @default=
 es-SG >> es
 
-** test: more specific region wins over more specific script
-@supported=nl, nl-Latn, nl-NL, nl-BE
-nl >> nl
-nl-Latn >> nl-Latn
-nl-NL >> nl-NL
-nl-Latn-NL >> nl
-
-@distance=script
-nl >> nl
-nl-Latn >> nl-Latn
-nl-NL >> nl-NL
-nl-Latn-NL >> nl
-
 ** test: region distance Portuguese
 @supported=pt, pt-PT
 pt-ES >> pt-PT
 
-@distance=script
+@favor=script
 pt-ES >> pt-PT
 
 ** test: if no preferred locale specified, pick top language, not regional
 @supported=en, fr, fr-CA, fr-CH
 fr-US >> fr
 
-@distance=script
+@favor=script
 fr-US >> fr
 
 ** test: region distance German
@@ -1622,7 +1628,7 @@ es-MX >> es-419
 @default=
 es-PT >> es-ES
 
-@distance=script
+@favor=script
 en-AU >> en-GB
 es-MX >> es-419
 @default=
@@ -1649,7 +1655,7 @@ und-Hans >> zh
 und-Hant >> zh
 und-Latn >> it
 
-@distance=script
+@favor=script
 und-FR >> fr
 und-CN >> zh
 und-Hans >> zh
@@ -1664,22 +1670,22 @@ ja-Jpan-JP, en-GB >> ja
 ** test: pick best maximized tag
 @supported=ja, ja-Jpan-US, ja-JP, en, ru
 ja-Jpan, ru >> ja
-ja-JP, ru >> ja-JP
+ja-JP, ru >> ja
 ja-US, ru >> ja-Jpan-US
 
-@distance=script
+@favor=script
 ja-Jpan, ru >> ja
-ja-JP, ru >> ja-JP
+ja-JP, ru >> ja
 ja-US, ru >> ja-Jpan-US
 
 ** test: termination: pick best maximized match
 @supported=ja, ja-Jpan, ja-JP, en, ru
 ja-Jpan-JP, ru >> ja
-ja-Jpan, ru >> ja-Jpan
+ja-Jpan, ru >> ja
 
-@distance=script
+@favor=script
 ja-Jpan-JP, ru >> ja
-ja-Jpan, ru >> ja-Jpan
+ja-Jpan, ru >> ja
 
 ** test: same language over exact, but distinguish when user is explicit
 @supported=fr, en-GB, ja, es-ES, es-MX
@@ -1690,7 +1696,7 @@ de-CH, fr >> de
 en, nl >> en-GB
 en, nl, en-GB >> en-GB
 
-@distance=script
+@favor=script
 @supported=fr, en-GB, ja, es-ES, es-MX
 ja, de >> ja
 @supported=en, de, fr, ja
@@ -1767,7 +1773,7 @@ pt-MZ >> pt-PT
 pt-ST >> pt-PT
 pt-TL >> pt-PT
 
-@distance=script
+@favor=script
 en-150 >> en-GB
 en-AU >> en-GB
 en-BE >> en-GB
@@ -1845,7 +1851,7 @@ sl-HR-NEDIS-u-cu-eur >> sl-NEDIS
 @default=de-t-m0-iso-i0-pinyin
 de-t-m0-iso-i0-pinyin >> de
 
-@distance=script
+@favor=script
 @default=de-u-co-phonebk
 de-FR-u-co-phonebk >> de
 @default=sl-NEDIS-u-cu-eur
@@ -1865,28 +1871,28 @@ de-t-m0-iso-i0-pinyin >> de
 @supported=de
 fr >> de
 
-@distance=script
+@favor=script
 fr >> de
 
 ** test: testLooseMatchForGeneral_getBestMatches
 @supported=es-419
 es-MX >> es-419
 
-@distance=script
+@favor=script
 es-MX >> es-419
 
 ** test: testLooseMatchForEnglish_getBestMatches
 @supported=en, en-GB
 en-CA >> en-GB
 
-@distance=script
+@favor=script
 en-CA >> en-GB
 
 ** test: testLooseMatchForChinese_getBestMatches
 @supported=zh
 zh-TW >> zh
 
-@distance=script
+@favor=script
 zh-TW >> zh
 
 ## Geo
@@ -1894,7 +1900,7 @@ zh-TW >> zh
 ** test: testGetBestMatchWithMinMatchScore
 @supported=fr-FR, fr, fr-CA, en
 @default=und
-fr >> fr # Exact match is chosen.
+fr >> fr-FR # First likely-subtags equivalent match is chosen.
 @supported=en, fr, fr-CA
 fr-FR >> fr # Parent match is chosen.
 @supported=en, fr-CA
@@ -1922,9 +1928,9 @@ zh-CN >> zh-TW
 @supported=ja
 ru >> und
 
-@distance=script
+@favor=script
 @supported=fr-FR, fr, fr-CA, en
-fr >> fr
+fr >> fr-FR
 @supported=en, fr, fr-CA
 fr-FR >> fr
 @supported=en, fr-CA
@@ -1935,19 +1941,19 @@ fr-SN >> fr-CA
 @supported=en, fr-FR
 fr >> fr-FR
 @supported=de, en, it
-fr >> de
+fr >> en
 @supported=iw, en
 iw-Latn >> en
 @supported=iw, no
-ru >> iw
+ru >> und
 @supported=iw-Latn, iw-Cyrl, iw
 ru >> iw-Cyrl
 @supported=iw, iw-Latn
-ru >> iw
+ru >> und
 en >> iw-Latn
 @supported=en, uk
 ru >> uk
 @supported=zh-TW, en
 zh-CN >> zh-TW
 @supported=ja
-ru >> ja
+ru >> und

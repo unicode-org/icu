@@ -9,17 +9,29 @@
 
 
 #include <cstdint>
-#include "unicode/numfmt.h"
-#include "unicode/ustring.h"
+#include "unicode/unum.h" // for UNUM_FIELD_COUNT
 #include "cstring.h"
 #include "uassert.h"
-#include "number_types.h"
 #include "fphdlimp.h"
 
-U_NAMESPACE_BEGIN namespace number {
-namespace impl {
+U_NAMESPACE_BEGIN
 
-class U_I18N_API NumberStringBuilder : public UMemory {
+class FormattedValueStringBuilderImpl;
+
+/**
+ * A StringBuilder optimized for formatting. It implements the following key
+ * features beyond a UnicodeString:
+ *
+ * <ol>
+ * <li>Efficient prepend as well as append.
+ * <li>Keeps tracks of Fields in an efficient manner.
+ * </ol>
+ *
+ * See also FormattedValueStringBuilderImpl.
+ *
+ * @author sffc (Shane Carr)
+ */
+class U_I18N_API FormattedStringBuilder : public UMemory {
   private:
     static const int32_t DEFAULT_CAPACITY = 40;
 
@@ -33,13 +45,19 @@ class U_I18N_API NumberStringBuilder : public UMemory {
     };
 
   public:
-    NumberStringBuilder();
+    FormattedStringBuilder();
 
-    ~NumberStringBuilder();
+    ~FormattedStringBuilder();
 
-    NumberStringBuilder(const NumberStringBuilder &other);
+    FormattedStringBuilder(const FormattedStringBuilder &other);
 
-    NumberStringBuilder &operator=(const NumberStringBuilder &other);
+    // Convention: bottom 4 bits for field, top 4 bits for field category.
+    // Field category 0 implies the number category so that the number field
+    // literals can be directly passed as a Field type.
+    // See the helper functions in "StringBuilderFieldUtils" below.
+    typedef uint8_t Field;
+
+    FormattedStringBuilder &operator=(const FormattedStringBuilder &other);
 
     int32_t length() const;
 
@@ -65,7 +83,7 @@ class U_I18N_API NumberStringBuilder : public UMemory {
 
     UChar32 codePointBefore(int32_t index) const;
 
-    NumberStringBuilder &clear();
+    FormattedStringBuilder &clear();
 
     int32_t appendCodePoint(UChar32 codePoint, Field field, UErrorCode &status);
 
@@ -81,19 +99,19 @@ class U_I18N_API NumberStringBuilder : public UMemory {
     int32_t splice(int32_t startThis, int32_t endThis,  const UnicodeString &unistr,
                    int32_t startOther, int32_t endOther, Field field, UErrorCode& status);
 
-    int32_t append(const NumberStringBuilder &other, UErrorCode &status);
+    int32_t append(const FormattedStringBuilder &other, UErrorCode &status);
 
-    int32_t insert(int32_t index, const NumberStringBuilder &other, UErrorCode &status);
+    int32_t insert(int32_t index, const FormattedStringBuilder &other, UErrorCode &status);
 
     void writeTerminator(UErrorCode& status);
 
     /**
-     * Gets a "safe" UnicodeString that can be used even after the NumberStringBuilder is destructed.
+     * Gets a "safe" UnicodeString that can be used even after the FormattedStringBuilder is destructed.
      * */
     UnicodeString toUnicodeString() const;
 
     /**
-     * Gets an "unsafe" UnicodeString that is valid only as long as the NumberStringBuilder is alive and
+     * Gets an "unsafe" UnicodeString that is valid only as long as the FormattedStringBuilder is alive and
      * unchanged. Slightly faster than toUnicodeString().
      */
     const UnicodeString toTempUnicodeString() const;
@@ -102,13 +120,7 @@ class U_I18N_API NumberStringBuilder : public UMemory {
 
     const char16_t *chars() const;
 
-    bool contentEquals(const NumberStringBuilder &other) const;
-
-    bool nextFieldPosition(FieldPosition& fp, UErrorCode& status) const;
-
-    void getAllFieldPositions(FieldPositionIteratorHandler& fpih, UErrorCode& status) const;
-
-    bool nextPosition(ConstrainedFieldPosition& cfpos, Field numericField, UErrorCode& status) const;
+    bool contentEquals(const FormattedStringBuilder &other) const;
 
     bool containsField(Field field) const;
 
@@ -145,17 +157,50 @@ class U_I18N_API NumberStringBuilder : public UMemory {
 
     int32_t remove(int32_t index, int32_t count);
 
-    static bool isIntOrGroup(Field field);
-
-    static bool isNumericField(Field field);
-
-    int32_t trimBack(int32_t limit) const;
-
-    int32_t trimFront(int32_t start) const;
+    friend class FormattedValueStringBuilderImpl;
 };
 
-} // namespace impl
-} // namespace number
+/**
+ * Helper functions for dealing with the Field typedef, which stores fields
+ * in a compressed format.
+ */
+class StringBuilderFieldUtils {
+public:
+    struct CategoryFieldPair {
+        int32_t category;
+        int32_t field;
+    };
+
+    /** Compile-time function to construct a Field from a category and a field */
+    template <int32_t category, int32_t field>
+    static constexpr FormattedStringBuilder::Field compress() {
+        static_assert(category != 0, "cannot use Undefined category in FieldUtils");
+        static_assert(category <= 0xf, "only 4 bits for category");
+        static_assert(field <= 0xf, "only 4 bits for field");
+        return static_cast<int8_t>((category << 4) | field);
+    }
+
+    /** Runtime inline function to unpack the category and field from the Field */
+    static inline CategoryFieldPair expand(FormattedStringBuilder::Field field) {
+        if (field == UNUM_FIELD_COUNT) {
+            return {UFIELD_CATEGORY_UNDEFINED, 0};
+        }
+        CategoryFieldPair ret = {
+            (field >> 4),
+            (field & 0xf)
+        };
+        if (ret.category == 0) {
+            ret.category = UFIELD_CATEGORY_NUMBER;
+        }
+        return ret;
+    }
+
+    static inline bool isNumericField(FormattedStringBuilder::Field field) {
+        int8_t category = field >> 4;
+        return category == 0 || category == UFIELD_CATEGORY_NUMBER;
+    }
+};
+
 U_NAMESPACE_END
 
 

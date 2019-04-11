@@ -4,6 +4,7 @@ package com.ibm.icu.impl.number;
 
 import java.text.Format.Field;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.UnicodeSet;
@@ -30,8 +31,8 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
 
     /** Safe code path */
     public CurrencySpacingEnabledModifier(
-            NumberStringBuilder prefix,
-            NumberStringBuilder suffix,
+            FormattedStringBuilder prefix,
+            FormattedStringBuilder suffix,
             boolean overwrite,
             boolean strong,
             DecimalFormatSymbols symbols) {
@@ -73,7 +74,7 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
 
     /** Safe code path */
     @Override
-    public int apply(NumberStringBuilder output, int leftIndex, int rightIndex) {
+    public int apply(FormattedStringBuilder output, int leftIndex, int rightIndex) {
         // Currency spacing logic
         int length = 0;
         if (rightIndex - leftIndex > 0
@@ -96,7 +97,7 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
 
     /** Unsafe code path */
     public static int applyCurrencySpacing(
-            NumberStringBuilder output,
+            FormattedStringBuilder output,
             int prefixStart,
             int prefixLen,
             int suffixStart,
@@ -117,7 +118,7 @@ public class CurrencySpacingEnabledModifier extends ConstantMultiFieldModifier {
 
     /** Unsafe code path */
     private static int applyCurrencySpacingAffix(
-            NumberStringBuilder output,
+            FormattedStringBuilder output,
             int index,
             byte affix,
             DecimalFormatSymbols symbols) {

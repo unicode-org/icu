@@ -2,6 +2,7 @@
 // License & terms of use: http://www.unicode.org/copyright.html#License
 package com.ibm.icu.impl.number;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.UnicodeSet;
 
@@ -290,7 +291,7 @@ public class AffixUtils {
     /**
      * Executes the unescape state machine. Replaces the unquoted characters "-", "+", "%", "‰", and "¤"
      * with the corresponding symbols provided by the {@link SymbolProvider}, and inserts the result into
-     * the NumberStringBuilder at the requested location.
+     * the FormattedStringBuilder at the requested location.
      *
      * <p>
      * Example input: "'-'¤x"; example output: "-$x"
@@ -298,16 +299,16 @@ public class AffixUtils {
      * @param affixPattern
      *            The original string to be unescaped.
      * @param output
-     *            The NumberStringBuilder to mutate with the result.
+     *            The FormattedStringBuilder to mutate with the result.
      * @param position
-     *            The index into the NumberStringBuilder to insert the the string.
+     *            The index into the FormattedStringBuilder to insert the the string.
      * @param provider
      *            An object to generate locale symbols.
      * @return The length of the string added to affixPattern.
      */
     public static int unescape(
             CharSequence affixPattern,
-            NumberStringBuilder output,
+            FormattedStringBuilder output,
             int position,
             SymbolProvider provider,
             NumberFormat.Field field) {

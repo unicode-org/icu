@@ -30,6 +30,7 @@ import org.junit.runners.JUnit4;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.ConstrainedFieldPosition;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateIntervalFormat;
 import com.ibm.icu.text.DateIntervalFormat.FormattedDateInterval;
@@ -700,12 +701,12 @@ public class DateIntervalFormatTest extends TestFmwk {
                 "en-u-ca-japanese", "S 64 01 05 09:00:00", "H 1 01 15 09:00:00",  "GyMMMd", "Jan 5, 64 Sh\u014Dwa \u2013 Jan 15, 1 Heisei",
 
                 "en-u-ca-japanese", "S 64 01 05 09:00:00", "H 1 01 15 09:00:00",  "GGGGGyMd", "1/5/64 S \u2013 1/15/1 H",
- 
+
                 "en-u-ca-japanese", "H 31 04 15 09:00:00", DateFormat.JP_ERA_2019_NARROW+" 1 05 15 09:00:00",  "GyMMMd", "Apr 15, 31 Heisei \u2013 May 15, 1 "+DateFormat.JP_ERA_2019_ROOT,
 
                 "en-u-ca-japanese", "H 31 04 15 09:00:00", DateFormat.JP_ERA_2019_NARROW+" 1 05 15 09:00:00",  "GGGGGyMd", "4/15/31 H \u2013 5/15/1 "+DateFormat.JP_ERA_2019_NARROW,
- 
- 
+
+
                 "ja-u-ca-japanese", "H 31 03 15 09:00:00", "H 31 04 15 09:00:00", "GyMMMd", "\u5E73\u621031\u5E743\u670815\u65E5\uFF5E4\u670815\u65E5",
 
                 "ja-u-ca-japanese", "H 31 03 15 09:00:00", "H 31 04 15 09:00:00", "GGGGGyMd", "H31/03/15\uFF5E31/04/15",
@@ -725,7 +726,7 @@ public class DateIntervalFormatTest extends TestFmwk {
         int i = 0;
         boolean testNewJpanEra = JapaneseCalendar.enableTentativeEra();
         String pattern = data[i++];
- 
+
         while (i<data_length) {
             String locName = data[i++];
             String datestr = data[i++];
@@ -1957,6 +1958,30 @@ public class DateIntervalFormatTest extends TestFmwk {
                 result,
                 expectedString,
                 expectedFieldPositions);
+        }
+
+        // Test sample code
+        {
+            Calendar input1 = Calendar.getInstance(ULocale.UK);
+            Calendar input2 = Calendar.getInstance(ULocale.UK);
+            input1.set(2018, 6, 20);
+            input2.set(2018, 7, 3);
+
+            // Let fmt be a DateIntervalFormat for locale en-US and skeleton dMMMMy
+            // Let input1 be July 20, 2018 and input2 be August 3, 2018:
+            FormattedDateInterval result = fmt.formatToValue(input1, input2);
+            assertEquals("Expected output from format",
+                "July 20 \u2013 August 3, 2018", result.toString());
+            ConstrainedFieldPosition cfpos = new ConstrainedFieldPosition();
+            cfpos.constrainFieldAndValue(DateIntervalFormat.SpanField.DATE_INTERVAL_SPAN, 0);
+            if (result.nextPosition(cfpos)) {
+                assertEquals("Expect start index", 0, cfpos.getStart());
+                assertEquals("Expect end index", 7, cfpos.getLimit());
+            } else {
+                // No such span: can happen if input dates are equal.
+            }
+            assertFalse("No more than one occurrence of the field",
+                result.nextPosition(cfpos));
         }
 
         fmt = DateIntervalFormat.getInstance("dMMMha", ULocale.US);

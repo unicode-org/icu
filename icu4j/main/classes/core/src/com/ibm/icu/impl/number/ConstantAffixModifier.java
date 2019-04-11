@@ -4,6 +4,8 @@ package com.ibm.icu.impl.number;
 
 import java.text.Format.Field;
 
+import com.ibm.icu.impl.FormattedStringBuilder;
+
 /**
  * The canonical implementation of {@link Modifier}, containing a prefix and suffix string.
  */
@@ -52,7 +54,7 @@ public class ConstantAffixModifier implements Modifier {
     }
 
     @Override
-    public int apply(NumberStringBuilder output, int leftIndex, int rightIndex) {
+    public int apply(FormattedStringBuilder output, int leftIndex, int rightIndex) {
         // Insert the suffix first since inserting the prefix will change the rightIndex
         int length = output.insert(rightIndex, suffix, field);
         length += output.insert(leftIndex, prefix, field);
