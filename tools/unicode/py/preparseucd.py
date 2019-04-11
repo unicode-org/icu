@@ -1443,7 +1443,7 @@ def IdnaToUTS46TextFile(s, t):
       out_file.write("# Original file:\n")
       for line in in_file:
         orig_line = line
-        if line.startswith("# For documentation, see"):
+        if line.startswith("# For documentation"):
           out_file.write(line)
           out_file.write(r"""
 # ================================================

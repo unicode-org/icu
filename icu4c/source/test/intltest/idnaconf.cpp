@@ -12,12 +12,13 @@
  *   created by: Raymond Yang
  */
 
-#if !UCONFIG_NO_IDNA 
+#include "unicode/utypes.h"
+
+#if !UCONFIG_NO_IDNA
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "unicode/utypes.h"
 #include "unicode/ucnv.h"
 #include "unicode/ustring.h"
 #include "unicode/uidna.h"
