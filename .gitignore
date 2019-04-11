@@ -922,6 +922,7 @@ icu4c/source/tools/tzcode/zoneinfo
 icu4c/source/tools/tzcode/zoneinfo.txt
 icu4j/*.jar
 icu4j/.project
+icu4j/build-local.properties
 icu4j/demos/out
 icu4j/doc
 icu4j/main/classes/charset/out

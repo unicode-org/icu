@@ -202,13 +202,18 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
 
                     } else {
                         // Check if localized GMT format or RFC format is used.
-                        int32_t numDigits = 0;
-                        for (int n = 0; n < tzstr.length(); n++) {
-                            if (u_isdigit(tzstr.charAt(n))) {
-                                numDigits++;
+                        UBool isOffsetFormat = (*PATTERNS[patidx] == 'Z');
+                        if (!isOffsetFormat) {
+                            // Check if localized GMT format is used as a fallback of name styles
+                            int32_t numDigits = 0;
+                            for (int n = 0; n < tzstr.length(); n++) {
+                                if (u_isdigit(tzstr.charAt(n))) {
+                                    numDigits++;
+                                }
                             }
+                            isOffsetFormat = (numDigits >= 3);
                         }
-                        if (tzstr == localGMTString || numDigits >= 3) {
+                        if (isOffsetFormat || tzstr == localGMTString) {
                             // Localized GMT or RFC: total offset (raw + dst) must be preserved.
                             int32_t inOffset = inRaw + inDst;
                             int32_t outOffset = outRaw + outDst;
@@ -237,6 +242,40 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
     }
     delete cal;
     delete tzids;
+}
+
+// Special exclusions in TestTimeZoneRoundTrip.
+// These special cases do not round trip time as designed.
+static UBool isSpecialTimeRoundTripCase(const char* loc,
+                                        const UnicodeString& id,
+                                        const char* pattern,
+                                        UDate time) {
+    struct {
+        const char* loc;
+        const char* id;
+        const char* pattern;
+        UDate time;
+    } EXCLUSIONS[] = {
+        {NULL, "Asia/Chita", "zzzz", 1414252800000.0},
+        {NULL, "Asia/Chita", "vvvv", 1414252800000.0},
+        {NULL, "Asia/Srednekolymsk", "zzzz", 1414241999999.0},
+        {NULL, "Asia/Srednekolymsk", "vvvv", 1414241999999.0},
+        {NULL, NULL, NULL, U_DATE_MIN}
+    };
+
+    UBool isExcluded = FALSE;
+    for (int32_t i = 0; EXCLUSIONS[i].id != NULL; i++) {
+        if (EXCLUSIONS[i].loc == NULL || uprv_strcmp(loc, EXCLUSIONS[i].loc) == 0) {
+            if (id.compare(EXCLUSIONS[i].id) == 0) {
+                if (EXCLUSIONS[i].pattern == NULL || uprv_strcmp(pattern, EXCLUSIONS[i].pattern) == 0) {
+                    if (EXCLUSIONS[i].time == U_DATE_MIN || EXCLUSIONS[i].time == time) {
+                        isExcluded = TRUE;
+                    }
+                }
+            }
+        }
+    }
+    return isExcluded;
 }
 
 struct LocaleData {
@@ -398,7 +437,10 @@ public:
                             if (parsedDate != testTimes[testidx]) {
                                 UnicodeString msg = (UnicodeString) "Time round trip failed for " + "tzid=" + *tzid + ", locale=" + data.locales[locidx].getName() + ", pattern=" + PATTERNS[patidx]
                                         + ", text=" + text + ", time=" + testTimes[testidx] + ", restime=" + parsedDate + ", diff=" + (parsedDate - testTimes[testidx]);
-                                if (expectedRoundTrip[testidx]) {
+                                // Timebomb for TZData update
+                                if (expectedRoundTrip[testidx]
+                                        && !isSpecialTimeRoundTripCase(data.locales[locidx].getName(), *tzid,
+                                                PATTERNS[patidx], testTimes[testidx])) {
                                     log.errln((UnicodeString) "FAIL: " + msg);
                                 } else if (REALLY_VERBOSE) {
                                     log.logln(msg);

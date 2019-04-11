@@ -576,7 +576,7 @@
                 docencoding="UTF-8"
                 bottom="&lt;font size=-1&gt;Copyright (c) ${current.year} IBM Corporation and others.&lt;/font&gt;"
                 additionalparam="-breakiterator -use -tagletpath ${icu4j.build-tools.jar} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet"
-                link="http://java.sun.com/javase/6/docs/api/"
+                link="https://docs.oracle.com/javase/6/docs/api/"
                 source="1.5">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
