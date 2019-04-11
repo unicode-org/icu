@@ -2632,7 +2632,8 @@ ures_getFunctionalEquivalent(char *result, int32_t resultCapacity,
 #endif
         if(U_FAILURE(subStatus)) {
             *status = subStatus;
-        } else if(subStatus == U_ZERO_ERROR) {
+        } else if(subStatus == U_ZERO_ERROR || subStatus == U_USING_DEFAULT_WARNING) {
+            subStatus = U_ZERO_ERROR;
             ures_getByKey(res,resName,&bund1, &subStatus);
             if(subStatus == U_ZERO_ERROR) {
                 const UChar *defUstr;
