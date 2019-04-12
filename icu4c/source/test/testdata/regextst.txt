@@ -1444,10 +1444,10 @@
 
 "(?<![ⰿ&&m]c)"                     "<0></0>abc"   # note: first 'ⰿ' is \u2c3f, hence empty set.
 "(?<![^\u0000-\U0010ffff]c)"       "<0></0>abc"
+"(?<=[^[^]]†)"                 "abc"          # Problem also exists w positive look-behind
 
 #  Random debugging, Temporary
 #
-
 
 #
 #  Regexps from http://www.regexlib.com
