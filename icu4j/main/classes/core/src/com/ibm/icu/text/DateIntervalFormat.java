@@ -1804,6 +1804,7 @@ public class DateIntervalFormat extends UFormat {
                 skeleton = skeletons.bestMatchSkeleton;
             }
             genIntervalPattern(Calendar.YEAR, skeleton, bestSkeleton, differenceInfo, intervalPatterns);
+            genIntervalPattern(Calendar.ERA, skeleton, bestSkeleton, differenceInfo, intervalPatterns);
         } else {
             genIntervalPattern(Calendar.MINUTE, skeleton, bestSkeleton, differenceInfo, intervalPatterns);
             genIntervalPattern(Calendar.HOUR, skeleton, bestSkeleton, differenceInfo, intervalPatterns);

@@ -495,7 +495,7 @@ void UObjectTest::testIDs()
     TESTCLASSID_NONE_CTOR(AlphabeticIndex, (Locale::getEnglish(), status));
 #endif
 
-#if UOBJTEST_DUMP_IDS
+#ifdef UOBJTEST_DUMP_IDS
     int i;
     for(i=0;i<ids_count;i++) {
         char junk[800];

@@ -703,7 +703,7 @@ void IntlCalendarTest::TestJapanese3860()
             int32_t gotYear = cal2->get(UCAL_YEAR, s2);
             int32_t gotEra = cal2->get(UCAL_ERA, s2);
             int32_t expectYear = 1;
-            int32_t expectEra = 235; //JapaneseCalendar::kCurrentEra;
+            int32_t expectEra = JapaneseCalendar::getCurrentEra();
             if((gotYear!=1) || (gotEra != expectEra)) {
                 errln(UnicodeString("parse "+samplestr+" of 'y' as Japanese Calendar, expected year ") + expectYear + 
                     UnicodeString(" and era ") + expectEra +", but got year " + gotYear + " and era " + gotEra + " (Gregorian:" + str +")");
@@ -725,18 +725,38 @@ void IntlCalendarTest::TestForceGannenNumbering()
     const char* locID = "ja_JP@calendar=japanese";
     Locale loc(locID);
     UDate refDate = 600336000000.0; // 1989 Jan 9 Monday = Heisei 1
-    UnicodeString testSkeleton("yMMMd");
+    UnicodeString patText(u"Gy年M月d日",-1);
+    UnicodeString patNumr(u"GGGGGy/MM/dd",-1);
+    UnicodeString skelText(u"yMMMM",-1);
 
     // Test Gannen year forcing
     status = U_ZERO_ERROR;
-    LocalPointer<DateFormat> testFmt1(DateFormat::createInstanceForSkeleton(testSkeleton, loc, status));
+    LocalPointer<SimpleDateFormat> testFmt1(new SimpleDateFormat(patText, loc, status));
+    LocalPointer<SimpleDateFormat> testFmt2(new SimpleDateFormat(patNumr, loc, status));
     if (U_FAILURE(status)) {
-        dataerrln("Fail in DateFormat::createInstanceForSkeleton locale %s: %s", locID, u_errorName(status));
+        dataerrln("Fail in new SimpleDateFormat locale %s: %s", locID, u_errorName(status));
     } else {
-        UnicodeString testString1;
+        UnicodeString testString1, testString2;
         testString1 = testFmt1->format(refDate, testString1);
         if (testString1.length() < 3 || testString1.charAt(2) != 0x5143) {
-            errln(UnicodeString("Formatting year 1 as Gannen, got " + testString1 + " but expected 3rd char to be 0x5143"));
+            errln(UnicodeString("Formatting year 1 in created text style, got " + testString1 + " but expected 3rd char to be 0x5143"));
+        }
+        testString2 = testFmt2->format(refDate, testString2);
+        if (testString2.length() < 2 || testString2.charAt(1) != 0x0031) {
+            errln(UnicodeString("Formatting year 1 in created numeric style, got " + testString2 + " but expected 2nd char to be 1"));
+        }
+        // Now switch the patterns and verify that Gannen use follows the pattern
+        testFmt1->applyPattern(patNumr);
+        testString1.remove();
+        testString1 = testFmt1->format(refDate, testString1);
+        if (testString1.length() < 2 || testString1.charAt(1) != 0x0031) {
+            errln(UnicodeString("Formatting year 1 in applied numeric style, got " + testString1 + " but expected 2nd char to be 1"));
+        }
+        testFmt2->applyPattern(patText);
+        testString2.remove();
+        testString2 = testFmt2->format(refDate, testString2);
+        if (testString2.length() < 3 || testString2.charAt(2) != 0x5143) {
+            errln(UnicodeString("Formatting year 1 in applied text style, got " + testString2 + " but expected 3rd char to be 0x5143"));
         }
     }
 
@@ -746,18 +766,19 @@ void IntlCalendarTest::TestForceGannenNumbering()
     if (U_FAILURE(status)) {
         dataerrln("Fail in DateTimePatternGenerator::createInstance locale %s: %s", locID, u_errorName(status));
     } else {
-        UnicodeString pattern = dtpgen->getBestPattern(testSkeleton, status);
+        UnicodeString pattern = dtpgen->getBestPattern(skelText, status);
         if (U_FAILURE(status)) {
             dataerrln("Fail in DateTimePatternGenerator::getBestPattern locale %s: %s", locID, u_errorName(status));
         } else  {
-            LocalPointer<SimpleDateFormat> testFmt2(new SimpleDateFormat(pattern, UnicodeString(""), loc, status));
+            // Use override string of ""
+            LocalPointer<SimpleDateFormat> testFmt3(new SimpleDateFormat(pattern, UnicodeString(""), loc, status));
             if (U_FAILURE(status)) {
                 dataerrln("Fail in new SimpleDateFormat locale %s: %s", locID, u_errorName(status));
             } else {
-                UnicodeString testString2;
-                testString2 = testFmt2->format(refDate, testString2);
-                if (testString2.length() < 3 || testString2.charAt(2) != 0x0031) {
-                    errln(UnicodeString("Formatting year 1 with Gannen disabled, got " + testString2 + " but expected 3rd char to be 1"));
+                UnicodeString testString3;
+                testString3 = testFmt3->format(refDate, testString3);
+                if (testString3.length() < 3 || testString3.charAt(2) != 0x0031) {
+                    errln(UnicodeString("Formatting year 1 with Gannen disabled, got " + testString3 + " but expected 3rd char to be 1"));
                 }
             }
         }

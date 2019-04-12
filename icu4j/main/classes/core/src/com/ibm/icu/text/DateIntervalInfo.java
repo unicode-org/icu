@@ -426,7 +426,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
          * Calendar.MINUTE
          * Calendar.SECOND
          */
-        private static final String ACCEPTED_PATTERN_LETTERS = "yMdahHms";
+        private static final String ACCEPTED_PATTERN_LETTERS = "GyMdahHms";
 
         // Output data
         DateIntervalInfo dateIntervalInfo;

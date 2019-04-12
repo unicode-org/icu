@@ -1064,9 +1064,9 @@ void DateIntervalFormatTest::testFormat() {
 
         "ja-u-ca-japanese", "S 64 01 05 09:00:00", "H 1 01 15 09:00:00",  "GyMMMd", "\\u662D\\u548C64\\u5E741\\u67085\\u65E5\\uFF5E\\u5E73\\u6210\\u5143\\u5E741\\u670815\\u65E5",
 
-        "ja-u-ca-japanese", "S 64 01 05 09:00:00", "H 1 01 15 09:00:00",  "GGGGGyMd", "S64/1/5\\uFF5EH1/1/15", // The GGGGG/G forces inheritance from a different pattern, no padding
+        "ja-u-ca-japanese", "S 64 01 05 09:00:00", "H 1 01 15 09:00:00",  "GGGGGyMd", "S64/01/05\\uFF5EH1/01/15",
 
-        "ja-u-ca-japanese", "H 31 04 15 09:00:00", JP_ERA_2019_NARROW " 1 05 15 09:00:00", "GGGGGyMd", "H31/4/15\\uFF5E" JP_ERA_2019_NARROW "1/5/15",
+        "ja-u-ca-japanese", "H 31 04 15 09:00:00", JP_ERA_2019_NARROW " 1 05 15 09:00:00", "GGGGGyMd", "H31/04/15\\uFF5E" JP_ERA_2019_NARROW "1/05/15",
 
     };
     expect(DATA, UPRV_LENGTHOF(DATA));
@@ -1077,7 +1077,6 @@ void DateIntervalFormatTest::expect(const char** data, int32_t data_length) {
     int32_t i = 0;
     UErrorCode ec = U_ZERO_ERROR;
     UnicodeString str, str2;
-    UBool testNewJpanEra = JapaneseCalendar::enableTentativeEra();
     const char* pattern = data[i++];
 
     while (i<data_length) {
@@ -1093,11 +1092,6 @@ void DateIntervalFormatTest::expect(const char** data, int32_t data_length) {
         }
         const char* calType = defCal->getType();
  
-        if (!testNewJpanEra && uprv_strcmp(calType,"japanese")==0 && uprv_strncmp(datestr_2,JP_ERA_2019_NARROW,1)==0) {
-            i += 2; // skip the rest of the strings for this item
-            continue; // skip tests involving future japanese eras if not enabled by environment variable
-        }
-
         Locale refLoc("root");
         if (calType) {
             refLoc.setKeywordValue("calendar", calType, ec);

@@ -386,6 +386,12 @@ public class JapaneseCalendar extends GregorianCalendar {
      */
     static public final int HEISEI;
 
+    /**
+     * Constant for the era starting on May 1, 2019 AD.
+     * @stable ICU 64
+     */
+    static public final int REIWA;
+
     // We want to make these era constants initialized in a static initializer
     // block to prevent javac to inline these values in a consumer code.
     // By doing so, we can keep better binary compatibility across versions even
@@ -395,6 +401,7 @@ public class JapaneseCalendar extends GregorianCalendar {
         TAISHO = 233;
         SHOWA = 234;
         HEISEI = 235;
+        REIWA = 236;
         CURRENT_ERA = ERA_RULES.getCurrentEraIndex();
     }
 
@@ -412,7 +419,7 @@ public class JapaneseCalendar extends GregorianCalendar {
             if (limitType == MINIMUM || limitType == GREATEST_MINIMUM) {
                 return 0;
             }
-            return CURRENT_ERA;
+            return ERA_RULES.getNumberOfEras() - 1; // max known era, not always CURRENT_ERA
         case YEAR:
         {
             switch (limitType) {
@@ -459,7 +466,7 @@ public class JapaneseCalendar extends GregorianCalendar {
     public int getActualMaximum(int field) {
         if (field == YEAR) {
             int era = get(Calendar.ERA);
-            if (era == CURRENT_ERA) {
+            if (era == ERA_RULES.getNumberOfEras() - 1) {
                 // TODO: Investigate what value should be used here - revisit after 4.0.
                 return handleGetLimit(YEAR, MAXIMUM);
             } else {
