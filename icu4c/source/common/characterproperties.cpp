@@ -38,8 +38,8 @@ UBool U_CALLCONV characterproperties_cleanup();
 constexpr int32_t NUM_INCLUSIONS = UPROPS_SRC_COUNT + UCHAR_INT_LIMIT - UCHAR_INT_START;
 
 struct Inclusion {
-    UnicodeSet  *fSet;
-    UInitOnce    fInitOnce;
+    UnicodeSet  *fSet = nullptr;
+    UInitOnce    fInitOnce = U_INITONCE_INITIALIZER;
 };
 Inclusion gInclusions[NUM_INCLUSIONS]; // cached getInclusions()
 
