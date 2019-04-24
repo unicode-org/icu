@@ -756,6 +756,7 @@ void
 DateTimePatternGenerator::getCalendarTypeToUse(const Locale& locale, CharString& destination, UErrorCode& err) {
     destination.clear().append(DT_DateTimeGregorianTag, -1, err); // initial default
     if ( U_SUCCESS(err) ) {
+        UErrorCode localStatus = U_ZERO_ERROR;
         char localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY];
         // obtain a locale that always has the calendar key value that should be used
         ures_getFunctionalEquivalent(
@@ -767,8 +768,7 @@ DateTimePatternGenerator::getCalendarTypeToUse(const Locale& locale, CharString&
             locale.getName(),
             nullptr,
             FALSE,
-            &err);
-        if (U_FAILURE(err)) { return; }
+            &localStatus);
         localeWithCalendarKey[ULOC_LOCALE_IDENTIFIER_CAPACITY-1] = 0; // ensure null termination
         // now get the calendar key value from that locale
         char calendarType[ULOC_KEYWORDS_CAPACITY];
@@ -777,13 +777,17 @@ DateTimePatternGenerator::getCalendarTypeToUse(const Locale& locale, CharString&
             "calendar",
             calendarType,
             ULOC_KEYWORDS_CAPACITY,
-            &err);
-        if (U_FAILURE(err)) { return; }
+            &localStatus);
+        // If the input locale was invalid, don't fail with missing resource error, instead
+        // continue with default of Gregorian.
+        if (U_FAILURE(localStatus) && localStatus != U_MISSING_RESOURCE_ERROR) {
+            err = localStatus;
+            return;
+        }
         if (calendarTypeLen < ULOC_KEYWORDS_CAPACITY) {
             destination.clear().append(calendarType, -1, err);
             if (U_FAILURE(err)) { return; }
         }
-        err = U_ZERO_ERROR;
     }
 }
 

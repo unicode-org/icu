@@ -32,6 +32,7 @@ private:
     void testC();
     void testSkeletonsWithDayPeriods();
     void testGetFieldDisplayNames();
+    void testFallbackWithDefaultRootLocale();
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
