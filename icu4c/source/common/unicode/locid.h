@@ -1121,7 +1121,7 @@ template<typename StringClass, typename OutputIterator> inline void
 Locale::getKeywords(OutputIterator iterator, UErrorCode& status) const
 {
     LocalPointer<StringEnumeration> keys(createKeywords(status));
-    if (U_FAILURE(status)) {
+    if (U_FAILURE(status) || keys.isNull()) {
         return;
     }
     for (;;) {
@@ -1138,7 +1138,7 @@ template<typename StringClass, typename OutputIterator> inline void
 Locale::getUnicodeKeywords(OutputIterator iterator, UErrorCode& status) const
 {
     LocalPointer<StringEnumeration> keys(createUnicodeKeywords(status));
-    if (U_FAILURE(status)) {
+    if (U_FAILURE(status) || keys.isNull()) {
         return;
     }
     for (;;) {

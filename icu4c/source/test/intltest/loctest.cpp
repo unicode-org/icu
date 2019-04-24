@@ -233,7 +233,9 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestCreateUnicodeKeywords);
     TESTCASE_AUTO(TestKeywordVariantParsing);
     TESTCASE_AUTO(TestCreateKeywordSet);
+    TESTCASE_AUTO(TestCreateKeywordSetEmpty);
     TESTCASE_AUTO(TestCreateUnicodeKeywordSet);
+    TESTCASE_AUTO(TestCreateUnicodeKeywordSetEmpty);
     TESTCASE_AUTO(TestGetKeywordValueStdString);
     TESTCASE_AUTO(TestGetUnicodeKeywordValueStdString);
     TESTCASE_AUTO(TestSetKeywordValue);
@@ -1913,6 +1915,21 @@ LocaleTest::TestCreateKeywordSet(void) {
 }
 
 void
+LocaleTest::TestCreateKeywordSetEmpty(void) {
+    IcuTestErrorCode status(*this, "TestCreateKeywordSetEmpty()");
+
+    static const Locale l("de");
+
+    std::set<std::string> result;
+    l.getKeywords<std::string>(
+            std::insert_iterator<decltype(result)>(result, result.begin()),
+            status);
+    status.errIfFailureAndReset("\"%s\"", l.getName());
+
+    assertEquals("set::size()", 0, static_cast<int32_t>(result.size()));
+}
+
+void
 LocaleTest::TestCreateUnicodeKeywordSet(void) {
     IcuTestErrorCode status(*this, "TestCreateUnicodeKeywordSet()");
 
@@ -1929,6 +1946,21 @@ LocaleTest::TestCreateUnicodeKeywordSet(void) {
                result.find("ca") != result.end());
     assertTrue("set::find(\"co\")",
                result.find("co") != result.end());
+}
+
+void
+LocaleTest::TestCreateUnicodeKeywordSetEmpty(void) {
+    IcuTestErrorCode status(*this, "TestCreateUnicodeKeywordSetEmpty()");
+
+    static const Locale l("de");
+
+    std::set<std::string> result;
+    l.getUnicodeKeywords<std::string>(
+            std::insert_iterator<decltype(result)>(result, result.begin()),
+            status);
+    status.errIfFailureAndReset("\"%s\"", l.getName());
+
+    assertEquals("set::size()", 0, static_cast<int32_t>(result.size()));
 }
 
 void

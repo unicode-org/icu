@@ -79,7 +79,9 @@ public:
    /* Test getting keyword values */
    void TestKeywordVariantParsing(void);
    void TestCreateKeywordSet(void);
+   void TestCreateKeywordSetEmpty(void);
    void TestCreateUnicodeKeywordSet(void);
+   void TestCreateUnicodeKeywordSetEmpty(void);
    void TestGetKeywordValueStdString(void);
    void TestGetUnicodeKeywordValueStdString(void);
 
