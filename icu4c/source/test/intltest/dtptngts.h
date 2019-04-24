@@ -33,6 +33,7 @@ private:
     void testSkeletonsWithDayPeriods();
     void testGetFieldDisplayNames();
     void testJjMapping();
+    void testFallbackWithDefaultRootLocale();
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
