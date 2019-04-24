@@ -41,6 +41,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
         TESTCASE(5, testSkeletonsWithDayPeriods);
         TESTCASE(6, testGetFieldDisplayNames);
         TESTCASE(7, testJjMapping);
+        TESTCASE(8, testFallbackWithDefaultRootLocale);
         default: name = ""; break;
     }
 }
@@ -1338,6 +1339,33 @@ void IntlTestDateTimePatternGeneratorAPI::testJjMapping() {
                  break;
              }
         }
+    }
+}
+
+void IntlTestDateTimePatternGeneratorAPI::testFallbackWithDefaultRootLocale() {
+    UErrorCode status = U_ZERO_ERROR;
+    char original[ULOC_FULLNAME_CAPACITY];
+    
+    uprv_strcpy(original, uloc_getDefault());
+    uloc_setDefault("root", &status);
+    if (U_FAILURE(status)) {
+        errln("ERROR: Failed to change the default locale to root! Default is: %s\n", uloc_getDefault());
+    }
+ 
+    DateTimePatternGenerator* dtpg = icu::DateTimePatternGenerator::createInstance("abcdedf", status);
+
+    if (U_FAILURE(status)) {
+        errln("ERROR: expected createInstance with invalid locale to succeed. Status: %s", u_errorName(status));
+    }
+    if (status != U_USING_DEFAULT_WARNING) {
+        errln("ERROR: expected createInstance to return U_USING_DEFAULT_WARNING for invalid locale and default root locale. Status: %s", u_errorName(status));
+    }
+
+    delete dtpg;
+
+    uloc_setDefault(original, &status);
+    if (U_FAILURE(status)) {
+        errln("ERROR: Failed to change the default locale back to %s\n", original);
     }
 }
 
