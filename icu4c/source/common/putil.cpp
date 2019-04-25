@@ -1560,6 +1560,10 @@ static const char *uprv_getPOSIXIDForCategory(int category)
     {
         /* Nothing worked.  Give it a nice POSIX default value. */
         posixID = "en_US_POSIX";
+        // Note: this test will not catch 'C.UTF-8',
+        // that will be handled in uprv_getDefaultLocaleID().
+        // Leave this mapping here for the uprv_getPOSIXIDForDefaultCodepage()
+        // caller which expects to see "en_US_POSIX" in many branches.
     }
     return posixID;
 }
@@ -1631,8 +1635,8 @@ The leftmost codepage (.xxx) wins.
     }
 
     // Copy the ID into owned memory.
-    // Over-allocate in case we replace "@" with "__".
-    char *correctedPOSIXLocale = static_cast<char *>(uprv_malloc(uprv_strlen(posixID) + 1 + 1));
+    // Over-allocate in case we replace "C" with "en_US_POSIX" (+10), + null termination
+    char *correctedPOSIXLocale = static_cast<char *>(uprv_malloc(uprv_strlen(posixID) + 10 + 1));
     if (correctedPOSIXLocale == nullptr) {
         return nullptr;
     }
@@ -1641,11 +1645,18 @@ The leftmost codepage (.xxx) wins.
     char *limit;
     if ((limit = uprv_strchr(correctedPOSIXLocale, '.')) != nullptr) {
         *limit = 0;
-        if ((limit = uprv_strchr(correctedPOSIXLocale, '@')) != nullptr) {
-            *limit = 0;
-        }
+    }
+    if ((limit = uprv_strchr(correctedPOSIXLocale, '@')) != nullptr) {
+        *limit = 0;
     }
 
+    if ((uprv_strcmp("C", correctedPOSIXLocale) == 0) // no @ variant
+        || (uprv_strcmp("POSIX", correctedPOSIXLocale) == 0)) {
+      // Raw input was C.* or POSIX.*, Give it a nice POSIX default value.
+      // (The "C"/"POSIX" case is handled in uprv_getPOSIXIDForCategory())
+      uprv_strcpy(correctedPOSIXLocale, "en_US_POSIX");
+    }
+ 
     /* Note that we scan the *uncorrected* ID. */
     const char *p;
     if ((p = uprv_strrchr(posixID, '@')) != nullptr) {
@@ -1668,7 +1679,7 @@ The leftmost codepage (.xxx) wins.
         if ((q = uprv_strchr(p, '.')) != nullptr) {
             /* How big will the resulting string be? */
             int32_t len = (int32_t)(uprv_strlen(correctedPOSIXLocale) + (q-p));
-            uprv_strncat(correctedPOSIXLocale, p, q-p);
+            uprv_strncat(correctedPOSIXLocale, p, q-p); // do not include charset
             correctedPOSIXLocale[len] = 0;
         }
         else {
