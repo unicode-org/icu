@@ -11,6 +11,8 @@
 
 #include "unicode/utypes.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
 /**
  * \file 
  * \brief C++ API: RFC2445 VTIMEZONE support
@@ -452,6 +454,8 @@ public:
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif // VTZONE_H
 //eof

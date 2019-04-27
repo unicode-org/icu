@@ -16,6 +16,10 @@
 #ifndef REP_H
 #define REP_H
 
+#include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/uobject.h"
 
 /**
@@ -259,5 +263,7 @@ Replaceable::char32At(int32_t offset) const {
 // There is no rep.cpp, see unistr.cpp for Replaceable function implementations.
 
 U_NAMESPACE_END
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif

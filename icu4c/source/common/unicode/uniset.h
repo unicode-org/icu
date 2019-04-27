@@ -13,6 +13,10 @@
 #ifndef UNICODESET_H
 #define UNICODESET_H
 
+#include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/ucpmap.h"
 #include "unicode/unifilt.h"
 #include "unicode/unistr.h"
@@ -1735,5 +1739,7 @@ inline int32_t UnicodeSet::spanBack(const UnicodeString &s, int32_t limit, USetS
 }
 
 U_NAMESPACE_END
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif

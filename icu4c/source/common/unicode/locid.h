@@ -31,11 +31,14 @@
 #ifndef LOCID_H
 #define LOCID_H
 
+#include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/bytestream.h"
 #include "unicode/localpointer.h"
 #include "unicode/strenum.h"
 #include "unicode/stringpiece.h"
-#include "unicode/utypes.h"
 #include "unicode/uobject.h"
 #include "unicode/putil.h"
 #include "unicode/uloc.h"
@@ -1177,5 +1180,7 @@ Locale::isBogus(void) const {
 }
 
 U_NAMESPACE_END
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif

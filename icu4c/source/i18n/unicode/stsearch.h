@@ -14,6 +14,8 @@
 
 #include "unicode/utypes.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
 /**
  * \file 
  * \brief C++ API: Service for searching text based on RuleBasedCollator.
@@ -501,6 +503,8 @@ private :
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_COLLATION */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif
 

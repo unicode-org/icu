@@ -15,6 +15,8 @@
 
 #include "unicode/utypes.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/measunit.h"
@@ -140,4 +142,7 @@ inline const char16_t* CurrencyUnit::getISOCurrency() const {
 U_NAMESPACE_END
 
 #endif // !UCONFIG_NO_FORMATTING
+
+#endif /* U_SHOW_CPLUSPLUS_API */
+
 #endif // __CURRENCYUNIT_H__

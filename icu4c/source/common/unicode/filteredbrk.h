@@ -11,6 +11,9 @@
 #define FILTEREDBRK_H
 
 #include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/brkiter.h"
 
 #if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILTERED_BREAK_ITERATION
@@ -141,5 +144,7 @@ class U_COMMON_API FilteredBreakIteratorBuilder : public UObject {
 U_NAMESPACE_END
 
 #endif // #if !UCONFIG_NO_BREAK_ITERATION && !UCONFIG_NO_FILTERED_BREAK_ITERATION
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif // #ifndef FILTEREDBRK_H

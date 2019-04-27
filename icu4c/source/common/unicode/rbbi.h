@@ -18,6 +18,8 @@
 
 #include "unicode/utypes.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
 /**
  * \file
  * \brief C++ API: Rule Based Break Iterator
@@ -695,5 +697,7 @@ inline UBool RuleBasedBreakIterator::operator!=(const BreakIterator& that) const
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif

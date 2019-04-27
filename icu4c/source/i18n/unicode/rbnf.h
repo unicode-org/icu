@@ -12,6 +12,8 @@
 
 #include "unicode/utypes.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
 /**
  * \file
  * \brief C++ API: Rule Based Number Format
@@ -1134,6 +1136,8 @@ U_NAMESPACE_END
 
 /* U_HAVE_RBNF */
 #endif
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 /* RBNF_H */
 #endif

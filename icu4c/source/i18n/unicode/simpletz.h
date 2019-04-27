@@ -28,6 +28,8 @@
 
 #include "unicode/utypes.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
 /**
  * \file 
  * \brief C++ API: SimpleTimeZone is a concrete subclass of TimeZone.
@@ -928,5 +930,7 @@ SimpleTimeZone::getOffset(UDate date, UBool local, int32_t& rawOffsetRef,
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif // _SIMPLETZ

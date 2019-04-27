@@ -13,6 +13,9 @@
 #define CHARITER_H
 
 #include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 /**
@@ -725,4 +728,7 @@ CharacterIterator::getLength(void) const {
 }
 
 U_NAMESPACE_END
+
+#endif /* U_SHOW_CPLUSPLUS_API */
+
 #endif

@@ -18,6 +18,8 @@
 #ifndef PLURRULE
 #define PLURRULE
 
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/utypes.h"
 
 /**
@@ -532,6 +534,8 @@ private:
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif // _PLURRULE
 //eof

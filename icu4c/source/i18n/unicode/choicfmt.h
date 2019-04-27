@@ -26,6 +26,8 @@
 
 #include "unicode/utypes.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
 /**
  * \file
  * \brief C++ API: Choice Format.
@@ -591,6 +593,8 @@ U_NAMESPACE_END
 
 #endif  // U_HIDE_DEPRECATED_API
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif // CHOICFMT_H
 //eof

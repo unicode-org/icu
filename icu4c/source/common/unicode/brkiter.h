@@ -29,6 +29,10 @@
  * \brief C++ API: Break Iterator.
  */
 
+#include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #if UCONFIG_NO_BREAK_ITERATION
 
 U_NAMESPACE_BEGIN
@@ -657,6 +661,8 @@ inline UBool BreakIterator::isBufferClone()
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif // BRKITER_H
 //eof

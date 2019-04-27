@@ -20,6 +20,9 @@
 #define __UOBJECT_H__
 
 #include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/platform.h"
 
 /**
@@ -318,5 +321,7 @@ protected:
 #endif  /* U_HIDE_INTERNAL_API */
 
 U_NAMESPACE_END
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif

@@ -21,6 +21,8 @@
 
 #include "unicode/utypes.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
 /**
  * \file
  * \brief C++ API: Formats messages in a language-neutral way.
@@ -1110,6 +1112,8 @@ private:
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif // _MSGFMT
 //eof

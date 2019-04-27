@@ -28,10 +28,12 @@
 #define DCFMTSYM_H
 
 #include "unicode/utypes.h"
-#include "unicode/uchar.h"
+
+#if U_SHOW_CPLUSPLUS_API
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/uchar.h"
 #include "unicode/uobject.h"
 #include "unicode/locid.h"
 #include "unicode/numsys.h"
@@ -581,6 +583,8 @@ DecimalFormatSymbols::getCurrencyPattern() const {
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif // _DCFMTSYM
 //eof
