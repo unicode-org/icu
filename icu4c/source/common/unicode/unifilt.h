@@ -12,6 +12,10 @@
 #ifndef UNIFILT_H
 #define UNIFILT_H
 
+#include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/unifunct.h"
 #include "unicode/unimatch.h"
 
@@ -118,5 +122,7 @@ protected:
 /*inline UnicodeFilter::UnicodeFilter() {}*/
 
 U_NAMESPACE_END
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif

@@ -15,6 +15,9 @@
 #define __RELDATEFMT_H
 
 #include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/uobject.h"
 #include "unicode/udisplaycontext.h"
 #include "unicode/ureldatefmt.h"
@@ -744,4 +747,7 @@ U_NAMESPACE_END
 
 #endif /* !UCONFIG_NO_BREAK_ITERATION */
 #endif /* !UCONFIG_NO_FORMATTING */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
+
 #endif /* __RELDATEFMT_H */

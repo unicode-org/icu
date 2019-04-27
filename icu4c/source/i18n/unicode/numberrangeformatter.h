@@ -1,9 +1,14 @@
 // © 2018 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#if !UCONFIG_NO_FORMATTING
 #ifndef __NUMBERRANGEFORMATTER_H__
 #define __NUMBERRANGEFORMATTER_H__
+
+#include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
+#if !UCONFIG_NO_FORMATTING
 
 #include <atomic>
 #include "unicode/appendable.h"
@@ -902,6 +907,9 @@ U_NAMESPACE_END
 
 #endif  // U_HIDE_DRAFT_API
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
+
 #endif // __NUMBERRANGEFORMATTER_H__
 
-#endif /* #if !UCONFIG_NO_FORMATTING */

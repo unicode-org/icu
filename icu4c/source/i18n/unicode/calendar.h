@@ -29,6 +29,8 @@
 
 #include "unicode/utypes.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
 /**
  * \file
  * \brief C++ API: Calendar object
@@ -2528,5 +2530,7 @@ inline int32_t  Calendar::weekNumber(int32_t dayOfPeriod, int32_t dayOfWeek)
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif // _CALENDAR

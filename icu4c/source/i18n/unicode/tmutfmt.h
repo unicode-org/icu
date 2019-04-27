@@ -18,6 +18,8 @@
  */
 
 
+#if U_SHOW_CPLUSPLUS_API
+
 #if !UCONFIG_NO_FORMATTING
 #ifndef U_HIDE_DEPRECATED_API
 
@@ -243,6 +245,8 @@ U_NAMESPACE_END
 
 #endif /* U_HIDE_DEPRECATED_API */
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif // __TMUTFMT_H__
 //eof

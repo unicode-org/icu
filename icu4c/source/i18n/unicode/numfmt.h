@@ -26,6 +26,8 @@
 
 #include "unicode/utypes.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
 /**
  * \file
  * \brief C++ API: Compatibility APIs for number formatting.
@@ -1254,6 +1256,8 @@ NumberFormat::isLenient() const
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif // _NUMFMT
 //eof

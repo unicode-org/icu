@@ -21,6 +21,9 @@
 #define SCHRITER_H
 
 #include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/chariter.h"
 #include "unicode/uchriter.h"
 
@@ -186,4 +189,7 @@ protected:
 };
 
 U_NAMESPACE_END
+
+#endif /* U_SHOW_CPLUSPLUS_API */
+
 #endif

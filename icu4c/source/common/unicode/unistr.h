@@ -28,8 +28,11 @@
  * \brief C++ API: Unicode String
  */
 
-#include <cstddef>
 #include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
+#include <cstddef>
 #include "unicode/char16ptr.h"
 #include "unicode/rep.h"
 #include "unicode/std_string.h"
@@ -4747,5 +4750,7 @@ UnicodeString::reverse(int32_t start,
 { return doReverse(start, _length); }
 
 U_NAMESPACE_END
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif

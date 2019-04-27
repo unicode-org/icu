@@ -5,6 +5,9 @@
 #define __FORMATTEDVALUE_H__
 
 #include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #if !UCONFIG_NO_FORMATTING
 #ifndef U_HIDE_DRAFT_API
 
@@ -314,4 +317,7 @@ U_NAMESPACE_END
 
 #endif  /* U_HIDE_DRAFT_API */
 #endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
+
 #endif // __FORMATTEDVALUE_H__

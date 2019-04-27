@@ -14,6 +14,10 @@
 #ifndef __DTPTNGEN_H__
 #define __DTPTNGEN_H__
 
+#include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/datefmt.h"
 #include "unicode/locid.h"
 #include "unicode/udat.h"
@@ -586,5 +590,7 @@ private:
 } ;// end class DateTimePatternGenerator
 
 U_NAMESPACE_END
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif

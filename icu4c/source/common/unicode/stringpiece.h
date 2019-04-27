@@ -28,6 +28,9 @@
  */
 
 #include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/uobject.h"
 #include "unicode/std_string.h"
 
@@ -220,5 +223,7 @@ inline UBool operator!=(const StringPiece& x, const StringPiece& y) {
 }
 
 U_NAMESPACE_END
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif  // __STRINGPIECE_H__

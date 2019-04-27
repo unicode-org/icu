@@ -21,6 +21,8 @@
 
 #include "unicode/utypes.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
 #include "unicode/formattedvalue.h"
@@ -297,5 +299,7 @@ class U_I18N_API ListFormatter : public UObject{
 };
 
 U_NAMESPACE_END
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif // __LISTFORMATTER_H__

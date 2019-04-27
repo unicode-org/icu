@@ -8,6 +8,9 @@
 #define __EDITS_H__
 
 #include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
 #include "unicode/uobject.h"
 
 /**
@@ -522,5 +525,7 @@ private:
 };
 
 U_NAMESPACE_END
+
+#endif /* U_SHOW_CPLUSPLUS_API */
 
 #endif  // __EDITS_H__

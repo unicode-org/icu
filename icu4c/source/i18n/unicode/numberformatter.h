@@ -1,11 +1,14 @@
 // © 2017 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
-#include "unicode/utypes.h"
-
-#if !UCONFIG_NO_FORMATTING
 #ifndef __NUMBERFORMATTER_H__
 #define __NUMBERFORMATTER_H__
+
+#include "unicode/utypes.h"
+
+#if U_SHOW_CPLUSPLUS_API
+
+#if !UCONFIG_NO_FORMATTING
 
 #include "unicode/appendable.h"
 #include "unicode/dcfmtsym.h"
@@ -2631,6 +2634,9 @@ U_NAMESPACE_END
 
 #endif  // U_HIDE_DRAFT_API
 
+#endif /* #if !UCONFIG_NO_FORMATTING */
+
+#endif /* U_SHOW_CPLUSPLUS_API */
+
 #endif // __NUMBERFORMATTER_H__
 
-#endif /* #if !UCONFIG_NO_FORMATTING */

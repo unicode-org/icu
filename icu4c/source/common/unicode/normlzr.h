@@ -13,6 +13,8 @@
 
 #include "unicode/utypes.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
 /**
  * \file 
  * \brief C++ API: Unicode Normalization
@@ -807,3 +809,5 @@ U_NAMESPACE_END
 #endif /* #if !UCONFIG_NO_NORMALIZATION */
 
 #endif // NORMLZR_H
+
+#endif /* U_SHOW_CPLUSPLUS_API */
