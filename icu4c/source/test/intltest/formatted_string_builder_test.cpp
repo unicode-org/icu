@@ -5,6 +5,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/utf16.h"
 #include "putilimp.h"
 #include "intltest.h"
 #include "formatted_string_builder.h"
