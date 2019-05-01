@@ -59,8 +59,13 @@ matrix:
         - make install
         - PATH="${PREFIX}/bin:$PATH" make -C test/hdrtst check
 
+    # clang release build with some options to enforce useful constraints.
     - name: "c: linux clang"
       language: cpp
+      env:
+        - CPPFLAGS="-DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1"
+        - CFLAGS="-Wimplicit-fallthrough"
+        - CXXFLAGS="-Wimplicit-fallthrough"
       compiler: clang
       before_script:
         - cd icu4c/source
