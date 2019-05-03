@@ -42,6 +42,10 @@ private:
     void Test_UTF8_COUNT_TRAIL_BYTES();
     void TestStringPiece();
     void TestStringPieceComparisons();
+    void TestStringPieceOther();
+#if U_HAVE_STRING_VIEW
+    void TestStringPieceStringView();
+#endif
     void TestByteSink();
     void TestCheckedArrayByteSink();
     void TestStringByteSink();

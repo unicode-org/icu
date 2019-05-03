@@ -14,6 +14,11 @@
 *   created by: Markus W. Scherer
 */
 
+#if U_HAVE_STRING_VIEW
+#include <string_view>
+#endif
+
+#include <cstddef>
 #include <string.h>
 
 #include "unicode/utypes.h"
@@ -177,6 +182,10 @@ void StringTest::runIndexedTest(int32_t index, UBool exec, const char *&name, ch
     TESTCASE_AUTO(TestSTLCompatibility);
     TESTCASE_AUTO(TestStringPiece);
     TESTCASE_AUTO(TestStringPieceComparisons);
+    TESTCASE_AUTO(TestStringPieceOther);
+#if U_HAVE_STRING_VIEW
+    TESTCASE_AUTO(TestStringPieceStringView);
+#endif
     TESTCASE_AUTO(TestByteSink);
     TESTCASE_AUTO(TestCheckedArrayByteSink);
     TESTCASE_AUTO(TestStringByteSink);
@@ -345,6 +354,36 @@ StringTest::TestStringPieceComparisons() {
         errln("abc==abx");
     }
 }
+
+void
+StringTest::TestStringPieceOther() {
+    static constexpr char msg[] = "Kapow!";
+
+    // Another string piece implementation.
+    struct Other {
+        const char* data() { return msg; }
+        size_t size() { return sizeof msg - 1; }
+    };
+
+    Other other;
+    StringPiece piece(other);
+
+    assertEquals("size()", piece.size(), other.size());
+    assertEquals("data()", piece.data(), other.data());
+}
+
+#if U_HAVE_STRING_VIEW
+void
+StringTest::TestStringPieceStringView() {
+    static constexpr char msg[] = "Kapow!";
+
+    std::string_view view(msg);  // C++17
+    StringPiece piece(view);
+
+    assertEquals("size()", piece.size(), view.size());
+    assertEquals("data()", piece.data(), view.data());
+}
+#endif
 
 // Verify that ByteSink is subclassable and Flush() overridable.
 class SimpleByteSink : public ByteSink {
