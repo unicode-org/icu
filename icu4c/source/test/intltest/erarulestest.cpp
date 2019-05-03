@@ -8,6 +8,7 @@
 #include "unicode/calendar.h"
 #include "unicode/localpointer.h"
 #include "unicode/unistr.h"
+#include "unicode/timezone.h"
 #include "erarules.h"
 #include "erarulestest.h"
 
@@ -73,7 +74,7 @@ void EraRulesTest::testAPIs() {
                     + calId);
         }
 
-        LocalPointer<Calendar> cal(Calendar::createInstance("en", status));
+        LocalPointer<Calendar> cal(Calendar::createInstance(*TimeZone::getGMT(), "en", status));
         if (U_FAILURE(status)) {
             errln("Failed to create a Calendar instance.");
             continue;
