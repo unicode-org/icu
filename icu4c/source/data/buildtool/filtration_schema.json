@@ -7,10 +7,22 @@
     "description": "JSON Schema for an ICU data filter file",
     "type": "object",
     "properties": {
+        "strategy": {
+            "type": "string",
+            "enum": ["additive", "subtractive"]
+        },
         "localeFilter": { "$ref": "#/definitions/filter" },
         "featureFilters": {
             "type": "object",
-            "additionalProperties": { "$ref": "#/definitions/filter" }
+            "additionalProperties": {
+                "oneOf": [
+                    { "$ref": "#/definitions/filter" },
+                    {
+                        "type": "string",
+                        "enum": ["include", "exclude"]
+                    }
+                ]
+            }
         },
         "resourceFilters": {
             "type": "array",

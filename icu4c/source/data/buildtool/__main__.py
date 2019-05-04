@@ -156,6 +156,11 @@ class Config(object):
         if "collationUCAData" in self.filters_json_data:
             self.coll_han_type = self.filters_json_data["collationUCAData"]
 
+        # Either "additive" or "subtractive"
+        self.strategy = "subtractive"
+        if "strategy" in self.filters_json_data:
+            self.strategy = self.filters_json_data["strategy"]
+
     def _parse_filter_file(self, f):
         # Use the Hjson parser if it is available; otherwise, use vanilla JSON.
         try:
