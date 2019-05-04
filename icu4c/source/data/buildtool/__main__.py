@@ -14,7 +14,7 @@ import sys
 from . import *
 from .comment_stripper import CommentStripper
 from .request_types import CopyRequest
-from .renderers import makefile, unix_exec, windows_exec
+from .renderers import makefile, common_exec
 from . import filtration, utils
 import BUILDRULES
 
@@ -63,7 +63,7 @@ arg_group_required = flag_parser.add_argument_group("required arguments")
 arg_group_required.add_argument(
     "--mode",
     help = "What to do with the generated rules.",
-    choices = ["gnumake", "unix-exec", "windows-exec"],
+    choices = ["gnumake", "unix-exec", "windows-exec", "bazel-exec"],
     required = True
 )
 
@@ -85,10 +85,22 @@ flag_parser.add_argument(
     action = "store_true"
 )
 flag_parser.add_argument(
+    "--ignore_xml_deprecates",
+    help = "Whether to ignore XML deprecates files for building res_index.",
+    default = False,
+    action = "store_true"
+)
+flag_parser.add_argument(
     "--seqmode",
     help = "Whether to optimize rules to be run sequentially (fewer threads) or in parallel (many threads). Defaults to 'sequential', which is better for unix-exec and windows-exec modes. 'parallel' is often better for massively parallel build systems.",
     choices = ["sequential", "parallel"],
     default = "sequential"
+)
+flag_parser.add_argument(
+    "--verbose",
+    help = "Print more verbose output (default false).",
+    default = False,
+    action = "store_true"
 )
 
 arg_group_exec = flag_parser.add_argument_group("arguments for unix-exec and windows-exec modes")
@@ -122,6 +134,9 @@ class Config(object):
 
         # Boolean: Whether to include core Unicode data files in the .dat file
         self.include_uni_core_data = args.include_uni_core_data
+
+        # Boolean: Whether to ignore the XML files
+        self.ignore_xml_deprecates = args.ignore_xml_deprecates
 
         # Default fields before processing filter file
         self.filters_json_data = {}
@@ -209,8 +224,8 @@ def add_copy_input_requests(requests, config, common_vars):
     return result
 
 
-def main():
-    args = flag_parser.parse_args()
+def main(argv):
+    args = flag_parser.parse_args(argv)
     config = Config(args)
 
     if args.mode == "gnumake":
@@ -269,19 +284,32 @@ def main():
             common_vars = common
         ))
     elif args.mode == "windows-exec":
-        return windows_exec.run(
+        return common_exec.run(
+            platform = "windows",
             build_dirs = build_dirs,
             requests = requests,
             common_vars = common,
             tool_dir = args.tool_dir,
-            tool_cfg = args.tool_cfg
+            tool_cfg = args.tool_cfg,
+            verbose = args.verbose,
         )
     elif args.mode == "unix-exec":
-        return unix_exec.run(
+        return common_exec.run(
+            platform = "unix",
             build_dirs = build_dirs,
             requests = requests,
             common_vars = common,
-            tool_dir = args.tool_dir
+            tool_dir = args.tool_dir,
+            verbose = args.verbose,
+        )
+    elif args.mode == "bazel-exec":
+        return common_exec.run(
+            platform = "bazel",
+            build_dirs = build_dirs,
+            requests = requests,
+            common_vars = common,
+            tool_dir = args.tool_dir,
+            verbose = args.verbose,
         )
     else:
         print("Mode not supported: %s" % args.mode)
@@ -289,4 +317,4 @@ def main():
     return 0
 
 if __name__ == "__main__":
-    exit(main())
+    exit(main(sys.argv[1:]))
