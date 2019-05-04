@@ -247,15 +247,21 @@ def _preprocess_file_filters(requests, config):
     all_categories = list(sorted(all_categories))
     json_data = config.filters_json_data
     filters = {}
+    default_filter_json = "exclude" if config.strategy == "additive" else "include"
     for category in all_categories:
+        filter_json = default_filter_json
+        # Figure out the correct filter to create
         if "featureFilters" in json_data and category in json_data["featureFilters"]:
-            filters[category] = Filter.create_from_json(
-                json_data["featureFilters"][category]
-            )
-        elif "localeFilter" in json_data and category[-5:] == "_tree":
-            filters[category] = Filter.create_from_json(
-                json_data["localeFilter"]
-            )
+            filter_json = json_data["featureFilters"][category]
+        if filter_json == "include" and "localeFilter" in json_data and category.endswith("_tree"):
+            filter_json = json_data["localeFilter"]
+        # Resolve the filter JSON into a filter object
+        if filter_json == "exclude":
+            filters[category] = ExclusionFilter()
+        elif filter_json == "include":
+            pass  # no-op
+        else:
+            filters[category] = Filter.create_from_json(filter_json)
     if "featureFilters" in json_data:
         for category in json_data["featureFilters"]:
             if category not in all_categories:
@@ -264,8 +270,9 @@ def _preprocess_file_filters(requests, config):
 
 
 class ResourceFilterInfo(object):
-    def __init__(self, category):
+    def __init__(self, category, strategy):
         self.category = category
+        self.strategy = strategy
         self.filter_tmp_dir = "filters/%s" % category
         self.input_files = None
         self.filter_files = None
@@ -311,7 +318,10 @@ class ResourceFilterInfo(object):
                 for file in files
             )
         ]
-        self.rules_by_file = [[] for _ in range(len(files))]
+        if self.strategy == "additive":
+            self.rules_by_file = [["-/*"] for _ in range(len(files))]
+        else:
+            self.rules_by_file = [["+/*"] for _ in range(len(files))]
 
     def add_rules(self, file_filter, rules):
         for file, rule_list in zip(self.input_files, self.rules_by_file):
@@ -369,7 +379,7 @@ def _apply_resource_filters(all_requests, config):
         for category in entry["categories"]:
             # not defaultdict because we need to pass arguments to the constructor
             if category not in collected:
-                filter_info = ResourceFilterInfo(category)
+                filter_info = ResourceFilterInfo(category, config.strategy)
                 filter_info.apply_to_requests(all_requests)
                 collected[category] = filter_info
             else:
