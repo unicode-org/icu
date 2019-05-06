@@ -5,10 +5,10 @@
 # TODO(ICU-20301): Remove this.
 from __future__ import print_function
 
-from buildtool import *
-from buildtool import locale_dependencies
-from buildtool import utils
-from buildtool.request_types import *
+from icutools.databuilder import *
+from icutools.databuilder import locale_dependencies
+from icutools.databuilder import utils
+from icutools.databuilder.request_types import *
 
 import os
 import sys
