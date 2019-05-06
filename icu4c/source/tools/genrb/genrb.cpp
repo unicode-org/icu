@@ -240,7 +240,7 @@ main(int argc,
                 "\t                           (--writePoolBundle and --usePoolBundle cannot be combined)\n");
         fprintf(stderr,
                 "\t      --filterDir          Input directory where filter files are available.\n"
-                "\t                           For more on filter files, see Python buildtool.\n");
+                "\t                           For more on filter files, see ICU Data Build Tool.\n");
 
         return illegalArg ? U_ILLEGAL_ARGUMENT_ERROR : U_ZERO_ERROR;
     }

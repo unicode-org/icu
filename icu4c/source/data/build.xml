@@ -111,7 +111,7 @@
                     <arg name="--specialsdir"     value="${env.ICU4C_DIR}/source/data/xml/main"/>
                     <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="--type" value="locales"/>
-                    <arg name="--depgraphfile" value="../buildtool/locale_dependencies.py"/>
+                    <arg name="--depgraphfile" value="../../python/icutools/databuilder/locale_dependencies.py"/>
                 </args>
 		<remapper>
 		  <remap sourcePath="/Keys" targetDir="lang" />
@@ -374,7 +374,7 @@
             <fileset id="resfiles" dir="${env.ICU4C_DIR}/source/data/locales">
                 <include name="resfiles.mk" />
             </fileset>
-            <fileset id="dependencies_py" dir="${env.ICU4C_DIR}/source/data/buildtool">
+            <fileset id="dependencies_py" dir="${env.ICU4C_DIR}/source/python/icutools/databuilder">
                 <include name="locale_dependencies.py" />
             </fileset>
             <fileset id="locales_split" dir="${env.ICU4C_DIR}/source/data">

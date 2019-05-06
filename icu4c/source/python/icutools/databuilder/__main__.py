@@ -16,7 +16,6 @@ from .comment_stripper import CommentStripper
 from .request_types import CopyRequest
 from .renderers import makefile, common_exec
 from . import filtration, utils
-import BUILDRULES
 
 flag_parser = argparse.ArgumentParser(
     description = """Generates rules for building ICU binary data files from text
@@ -37,11 +36,11 @@ with a lot of intermediate files.
 
 Set LD_LIBRARY_PATH to include the lib directory. e.g., from icu4c/source:
 
-  $ LD_LIBRARY_PATH=lib PYTHONPATH=data python3 -m buildtool ...
+  $ LD_LIBRARY_PATH=lib PYTHONPATH=python python3 -m icutools.databuilder ...
 
-Once buildtool finishes, you have compiled the data, but you have not packaged
-it into a .dat or .so file. This is done by the separate pkgdata tool in bin.
-Read the docs of pkgdata:
+Once icutools.databuilder finishes, you have compiled the data, but you have
+not packaged it into a .dat or .so file. This is done by the separate pkgdata
+tool in bin. Read the docs of pkgdata:
 
   $ LD_LIBRARY_PATH=lib ./bin/pkgdata --help
 
@@ -264,8 +263,12 @@ def main(argv):
             GLOB_DIR = args.src_dir,
             PATTERN = pattern
         ))
-        # For the purposes of buildtool, force Unix-style directory separators.
+        # For the purposes of icutools.databuilder, force Unix-style directory separators.
         return [v.replace("\\", "/")[len(args.src_dir)+1:] for v in sorted(result_paths)]
+
+    # Automatically load BUILDRULES from the src_dir
+    sys.path.append(args.src_dir)
+    import BUILDRULES
 
     requests = BUILDRULES.generate(config, glob, common)
     requests = filtration.apply_filters(requests, config)
