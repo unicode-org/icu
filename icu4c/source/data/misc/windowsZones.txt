@@ -500,7 +500,7 @@ windowsZones:table(nofallback){
         }
         "Russian Standard Time"{
             001{"Europe/Moscow"}
-            RU{"Europe/Moscow Europe/Kirov Europe/Volgograd"}
+            RU{"Europe/Moscow Europe/Kirov"}
             UA{"Europe/Simferopol"}
         }
         "SA Eastern Standard Time"{
@@ -730,6 +730,10 @@ windowsZones:table(nofallback){
         "Vladivostok Standard Time"{
             001{"Asia/Vladivostok"}
             RU{"Asia/Vladivostok Asia/Ust-Nera"}
+        }
+        "Volgograd Standard Time"{
+            001{"Europe/Volgograd"}
+            RU{"Europe/Volgograd"}
         }
         "W. Australia Standard Time"{
             001{"Australia/Perth"}
