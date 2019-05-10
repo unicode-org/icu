@@ -1362,8 +1362,8 @@ NumberFormat::makeInstance(const Locale& desiredLocale,
         // TODO: Bad hash key usage, see ticket #8504.
         int32_t hashKey = desiredLocale.hashCode();
 
-        static UMutex *nscacheMutex = STATIC_NEW(UMutex);
-        Mutex lock(nscacheMutex);
+        static UMutex nscacheMutex;
+        Mutex lock(&nscacheMutex);
         ns = (NumberingSystem *)uhash_iget(NumberingSystem_cache, hashKey);
         if (ns == NULL) {
             ns = NumberingSystem::createInstance(desiredLocale,status);

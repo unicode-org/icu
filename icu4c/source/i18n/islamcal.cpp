@@ -470,8 +470,8 @@ double IslamicCalendar::moonAge(UDate time, UErrorCode &status)
 {
     double age = 0;
 
-    static UMutex *astroLock = STATIC_NEW(UMutex);      // pod bay door lock
-    umtx_lock(astroLock);
+    static UMutex astroLock;      // pod bay door lock
+    umtx_lock(&astroLock);
     if(gIslamicCalendarAstro == NULL) {
         gIslamicCalendarAstro = new CalendarAstronomer();
         if (gIslamicCalendarAstro == NULL) {
@@ -482,7 +482,7 @@ double IslamicCalendar::moonAge(UDate time, UErrorCode &status)
     }
     gIslamicCalendarAstro->setTime(time);
     age = gIslamicCalendarAstro->getMoonAge();
-    umtx_unlock(astroLock);
+    umtx_unlock(&astroLock);
 
     // Convert to degrees and normalize...
     age = age * 180 / CalendarAstronomer::PI;

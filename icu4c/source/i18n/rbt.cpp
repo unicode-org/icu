@@ -253,14 +253,14 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
     //
     // TODO(andy): Need a better scheme for handling this.
 
-    static UMutex *transliteratorDataMutex = STATIC_NEW(UMutex);
+    static UMutex transliteratorDataMutex;
     UBool needToLock;
     {
         Mutex m;
         needToLock = (&text != gLockedText);
     }
     if (needToLock) {
-        umtx_lock(transliteratorDataMutex);  // Contention, longish waits possible here.
+        umtx_lock(&transliteratorDataMutex);  // Contention, longish waits possible here.
         Mutex m;
         gLockedText = &text;
         lockedMutexAtThisLevel = TRUE;
@@ -279,7 +279,7 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
             Mutex m;
             gLockedText = NULL;
         }
-        umtx_unlock(transliteratorDataMutex);
+        umtx_unlock(&transliteratorDataMutex);
     }
 }
 

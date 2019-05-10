@@ -107,6 +107,10 @@ def _ReadLibrary(root_path, library_name):
 allowed_errors = (
   ("common/umutex.o", "std::__throw_system_error(int)"),
   ("common/umutex.o", "std::uncaught_exception()"),
+  ("common/umutex.o", "std::__once_callable"),
+  ("common/umutex.o", "std::__once_call"),
+  ("common/umutex.o", "__once_proxy"),
+  ("common/umutex.o", "__tls_get_addr"),
   ("common/unifiedcache.o", "std::__throw_system_error(int)"),
 )
 

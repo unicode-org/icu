@@ -47,8 +47,8 @@ U_CDECL_END
 
 static inline UNumberFormat * copyInvariantFormatter(ULocaleBundle *result, UNumberFormatStyle style) {
     U_NAMESPACE_USE
-    static UMutex *gLock = STATIC_NEW(UMutex);
-    Mutex lock(gLock);
+    static UMutex gLock;
+    Mutex lock(&gLock);
     if (result->fNumberFormat[style-1] == NULL) {
         if (gPosixNumberFormat[style-1] == NULL) {
             UErrorCode status = U_ZERO_ERROR;

@@ -249,8 +249,8 @@ static UDate getUTCtime_real() {
 }
 
 static UDate getUTCtime_fake() {
-    static UMutex *fakeClockMutex = STATIC_NEW(UMutex);
-    umtx_lock(fakeClockMutex);
+    static UMutex fakeClockMutex;
+    umtx_lock(&fakeClockMutex);
     if(!fakeClock_set) {
         UDate real = getUTCtime_real();
         const char *fake_start = getenv("U_FAKETIME_START");
@@ -267,7 +267,7 @@ static UDate getUTCtime_fake() {
         }
         fakeClock_set = TRUE;
     }
-    umtx_unlock(fakeClockMutex);
+    umtx_unlock(&fakeClockMutex);
 
     return getUTCtime_real() + fakeClock_dt;
 }

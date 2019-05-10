@@ -98,11 +98,11 @@ const GenderInfo* GenderInfo::getInstance(const Locale& locale, UErrorCode& stat
     return NULL;
   }
 
-  static UMutex *gGenderMetaLock = STATIC_NEW(UMutex);
+  static UMutex gGenderMetaLock;
   const GenderInfo* result = NULL;
   const char* key = locale.getName();
   {
-    Mutex lock(gGenderMetaLock);
+    Mutex lock(&gGenderMetaLock);
     result = (const GenderInfo*) uhash_get(gGenderInfoCache, key);
   }
   if (result) {
@@ -118,7 +118,7 @@ const GenderInfo* GenderInfo::getInstance(const Locale& locale, UErrorCode& stat
   // Try to put our GenderInfo object in cache. If there is a race condition,
   // favor the GenderInfo object that is already in the cache.
   {
-    Mutex lock(gGenderMetaLock);
+    Mutex lock(&gGenderMetaLock);
     GenderInfo* temp = (GenderInfo*) uhash_get(gGenderInfoCache, key);
     if (temp) {
       result = temp;
