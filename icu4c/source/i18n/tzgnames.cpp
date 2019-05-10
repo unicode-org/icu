@@ -272,10 +272,7 @@ GNameSearchHandler::getMatches(int32_t& maxMatchLen) {
     return results;
 }
 
-static UMutex *gLock() {
-    static UMutex *m = STATIC_NEW(UMutex);
-    return m;
-}
+static UMutex gLock;
 
 class TZGNCore : public UMemory {
 public:
@@ -494,11 +491,11 @@ TZGNCore::getGenericLocationName(const UnicodeString& tzCanonicalID, UnicodeStri
 
     const UChar *locname = NULL;
     TZGNCore *nonConstThis = const_cast<TZGNCore *>(this);
-    umtx_lock(gLock());
+    umtx_lock(&gLock);
     {
         locname = nonConstThis->getGenericLocationName(tzCanonicalID);
     }
-    umtx_unlock(gLock());
+    umtx_unlock(&gLock);
 
     if (locname == NULL) {
         name.setToBogus();
@@ -749,11 +746,11 @@ TZGNCore::getPartialLocationName(const UnicodeString& tzCanonicalID,
 
     const UChar *uplname = NULL;
     TZGNCore *nonConstThis = const_cast<TZGNCore *>(this);
-    umtx_lock(gLock());
+    umtx_lock(&gLock);
     {
         uplname = nonConstThis->getPartialLocationName(tzCanonicalID, mzID, isLong, mzDisplayName);
     }
-    umtx_unlock(gLock());
+    umtx_unlock(&gLock);
 
     if (uplname == NULL) {
         name.setToBogus();
@@ -1016,11 +1013,11 @@ TZGNCore::findLocal(const UnicodeString& text, int32_t start, uint32_t types, UE
 
     TZGNCore *nonConstThis = const_cast<TZGNCore *>(this);
 
-    umtx_lock(gLock());
+    umtx_lock(&gLock);
     {
         fGNamesTrie.search(text, start, (TextTrieMapSearchResultHandler *)&handler, status);
     }
-    umtx_unlock(gLock());
+    umtx_unlock(&gLock);
 
     if (U_FAILURE(status)) {
         return NULL;
@@ -1047,7 +1044,7 @@ TZGNCore::findLocal(const UnicodeString& text, int32_t start, uint32_t types, UE
 
     // All names are not yet loaded into the local trie.
     // Load all available names into the trie. This could be very heavy.
-    umtx_lock(gLock());
+    umtx_lock(&gLock);
     {
         if (!fGNamesTrieFullyLoaded) {
             StringEnumeration *tzIDs = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL, NULL, NULL, status);
@@ -1069,18 +1066,18 @@ TZGNCore::findLocal(const UnicodeString& text, int32_t start, uint32_t types, UE
             }
         }
     }
-    umtx_unlock(gLock());
+    umtx_unlock(&gLock);
 
     if (U_FAILURE(status)) {
         return NULL;
     }
 
-    umtx_lock(gLock());
+    umtx_lock(&gLock);
     {
         // now try it again
         fGNamesTrie.search(text, start, (TextTrieMapSearchResultHandler *)&handler, status);
     }
-    umtx_unlock(gLock());
+    umtx_unlock(&gLock);
 
     results = handler.getMatches(maxLen);
     if (results != NULL && maxLen > 0) {
@@ -1121,10 +1118,7 @@ typedef struct TZGNCoreRef {
 } TZGNCoreRef;
 
 // TZGNCore object cache handling
-static UMutex *gTZGNLock() {
-    static UMutex *m = STATIC_NEW(UMutex);
-    return m;
-}
+static UMutex gTZGNLock;
 static UHashtable *gTZGNCoreCache = NULL;
 static UBool gTZGNCoreCacheInitialized = FALSE;
 
@@ -1190,13 +1184,13 @@ TimeZoneGenericNames::TimeZoneGenericNames()
 }
 
 TimeZoneGenericNames::~TimeZoneGenericNames() {
-    umtx_lock(gTZGNLock());
+    umtx_lock(&gTZGNLock);
     {
         U_ASSERT(fRef->refCount > 0);
         // Just decrement the reference count
         fRef->refCount--;
     }
-    umtx_unlock(gTZGNLock());
+    umtx_unlock(&gTZGNLock);
 }
 
 TimeZoneGenericNames*
@@ -1212,7 +1206,7 @@ TimeZoneGenericNames::createInstance(const Locale& locale, UErrorCode& status) {
 
     TZGNCoreRef *cacheEntry = NULL;
     {
-        Mutex lock(gTZGNLock());
+        Mutex lock(&gTZGNLock);
 
         if (!gTZGNCoreCacheInitialized) {
             // Create empty hashtable
@@ -1304,13 +1298,13 @@ TimeZoneGenericNames*
 TimeZoneGenericNames::clone() const {
     TimeZoneGenericNames* other = new TimeZoneGenericNames();
     if (other) {
-        umtx_lock(gTZGNLock());
+        umtx_lock(&gTZGNLock);
         {
             // Just increments the reference count
             fRef->refCount++;
             other->fRef = fRef;
         }
-        umtx_unlock(gTZGNLock());
+        umtx_unlock(&gTZGNLock);
     }
     return other;
 }

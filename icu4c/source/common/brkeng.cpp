@@ -129,8 +129,8 @@ ICULanguageBreakFactory::getEngineFor(UChar32 c) {
     const LanguageBreakEngine *lbe = NULL;
     UErrorCode  status = U_ZERO_ERROR;
 
-    static UMutex *gBreakEngineMutex = STATIC_NEW(UMutex);
-    Mutex m(gBreakEngineMutex);
+    static UMutex gBreakEngineMutex;
+    Mutex m(&gBreakEngineMutex);
 
     if (fEngines == NULL) {
         UStack  *engines = new UStack(_deleteEngine, NULL, status);

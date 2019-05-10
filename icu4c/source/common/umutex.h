@@ -23,6 +23,7 @@
 #include <atomic>
 #include <condition_variable>
 #include <mutex>
+#include <type_traits>
 
 #include "unicode/utypes.h"
 #include "unicode/uclean.h"
@@ -36,10 +37,11 @@
 #error U_USER_ATOMICS and U_USER_MUTEX_H are not supported
 #endif
 
-
 // Export an explicit template instantiation of std::atomic<int32_t>. 
 // When building DLLs for Windows this is required as it is used as a data member of the exported SharedObject class.
 // See digitlst.h, pluralaffix.h, datefmt.h, and others for similar examples.
+//
+// Similar story for std::atomic<std::mutex *>, and the exported UMutex class.
 #if U_PF_WINDOWS <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN && !defined(U_IN_DOXYGEN)
 #if defined(__clang__) || defined(_MSC_VER)
   #if defined(__clang__)
@@ -48,12 +50,14 @@
     #pragma clang diagnostic ignored "-Winstantiation-after-specialization"
   #endif
 template struct U_COMMON_API std::atomic<int32_t>;
+template struct U_COMMON_API std::atomic<std::mutex *>;
   #if defined(__clang__)
     #pragma clang diagnostic pop
   #endif
 #elif defined(__GNUC__)
 // For GCC this class is already exported/visible, so no need for U_COMMON_API.
 template struct std::atomic<int32_t>;
+template struct std::atomic<std::mutex *>;
 #endif
 #endif
 
@@ -182,33 +186,65 @@ template<class T> void umtx_initOnce(UInitOnce &uio, void (U_CALLCONV *fp)(T, UE
 
 
 /**
- * ICU Mutex wrappers.  Originally wrapped operating system mutexes, giving the rest of ICU a
- * platform independent set of mutex operations.  Now vestigial, wrapping std::mutex only.
- * For internal ICU use only.
+ * UMutex - ICU Mutex class.
  *
- * Caution: do not directly declare static or global instances of UMutex. Doing so can introduce
- * static initializers, which are disallowed in ICU library code. Instead, use the following
- * idiom, which avoids static init and also avoids ordering issues on destruction
- * (use after delete) by avoiding destruction altogether.
+ * This is the preferred Mutex class for use within ICU implementation code.
+ * It is a thin wrapper over C++ std::mutex, with these additions:
+ *    - Static instances are safe, not triggering static construction or destruction,
+ *      and the associated order of construction or destruction issues.
+ *    - Plumbed into u_cleanup() for destructing the underlying std::mutex,
+ *      which frees any OS level resources they may be holding.
  *
- *  UMutex *myMutex() {
- *      static UMutex *m = STATIC_NEW(UMutex);
- *      return m;
- *  }
- *  ...
+ * Limitations:
+ *    - Static or global instances only. Cannot be heap allocated. Cannot appear as a
+ *      member of another class.
+ *    - No condition variables or other advanced features. If needed, you will need to use
+ *      std::mutex and std::condition_variable directly. For an example, see unifiedcache.cpp
  *
- *  Mutex lock(myMutex());   // hold myMutex until the variable "lock" goes out of scope.
+ * Typical Usage:
+ *    static UMutex myMutex;
+ *
+ *    {
+ *       Mutex lock(myMutex);
+ *       ...    // Do stuff that is protected by myMutex;
+ *    }         // myMutex is released when lock goes out of scope.
  */
 
-struct UMutex : public icu::UMemory {
+class U_COMMON_API UMutex {
+public:
     UMutex() = default;
     ~UMutex() = default;
+
     UMutex(const UMutex &other) = delete;
     UMutex &operator =(const UMutex &other) = delete;
+    void *operator new(size_t) = delete;
 
-    std::mutex   fMutex = {};    // Note: struct - pubic members - because most access is from
-    //                           //       plain C style functions (umtx_lock(), etc.)
+    // requirements for C++ BasicLockable, allows UMutex to work with std::lock_guard
+    void lock() {
+        std::mutex *m = fMutex.load(std::memory_order_acquire);
+        if (m == nullptr) { m = getMutex(); }
+        m->lock();
+    }
+    void unlock() { fMutex.load(std::memory_order_relaxed)->unlock(); };
+
+    static void cleanup();
+
+private:
+    alignas(std::mutex) char fStorage[sizeof(std::mutex)];
+    std::atomic<std::mutex *> fMutex;
+
+    /** All initialized UMutexes are kept in a linked list, so that they can be found,
+     * and the underlying std::mutex destructed, by u_cleanup().
+     */
+    UMutex *fListLink;
+    static UMutex *gListHead;
+
+    /** Out-of-line function to lazily initialize a UMutex on first use.
+     * Initial fast check is inline, in lock().
+     */
+    std::mutex *getMutex();
 };
+
 
 /* Lock a mutex.
  * @param mutex The given mutex to be locked.  Pass NULL to specify

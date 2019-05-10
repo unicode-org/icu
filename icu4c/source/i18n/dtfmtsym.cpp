@@ -1246,9 +1246,9 @@ const UnicodeString**
 DateFormatSymbols::getZoneStrings(int32_t& rowCount, int32_t& columnCount) const
 {
     const UnicodeString **result = NULL;
-    static UMutex *LOCK = STATIC_NEW(UMutex);
+    static UMutex LOCK;
 
-    umtx_lock(LOCK);
+    umtx_lock(&LOCK);
     if (fZoneStrings == NULL) {
         if (fLocaleZoneStrings == NULL) {
             ((DateFormatSymbols*)this)->initZoneStringsArray();
@@ -1259,7 +1259,7 @@ DateFormatSymbols::getZoneStrings(int32_t& rowCount, int32_t& columnCount) const
     }
     rowCount = fZoneStringsRowCount;
     columnCount = fZoneStringsColCount;
-    umtx_unlock(LOCK);
+    umtx_unlock(&LOCK);
 
     return result;
 }

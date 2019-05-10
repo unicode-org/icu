@@ -831,8 +831,8 @@ static UBool extendICUData(UErrorCode *pErr)
      * Use a specific mutex to avoid nested locks of the global mutex.
      */
 #if MAP_IMPLEMENTATION==MAP_STDIO
-    static UMutex *extendICUDataMutex = STATIC_NEW(UMutex);
-    umtx_lock(extendICUDataMutex);
+    static UMutex extendICUDataMutex;
+    umtx_lock(&extendICUDataMutex);
 #endif
     if(!umtx_loadAcquire(gHaveTriedToLoadCommonData)) {
         /* See if we can explicitly open a .dat file for the ICUData. */
@@ -868,7 +868,7 @@ static UBool extendICUData(UErrorCode *pErr)
                                                           /* Also handles a race through here before gHaveTriedToLoadCommonData is set. */
 
 #if MAP_IMPLEMENTATION==MAP_STDIO
-    umtx_unlock(extendICUDataMutex);
+    umtx_unlock(&extendICUDataMutex);
 #endif
     return didUpdate;               /* Return true if ICUData pointer was updated.   */
                                     /*   (Could potentially have been done by another thread racing */
