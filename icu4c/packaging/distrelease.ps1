@@ -65,9 +65,14 @@ Copy-Item -Path "$icuDir\readme.html" -Destination $source -Recurse
 
 $destination = "$icuDir\source\dist\icu-windows.zip"
 Remove-Item -Path $destination -ErrorAction Continue
-Add-Type -assembly "system.io.compression.filesystem"
 Echo $source
 Echo $destination
-[io.compression.zipfile]::CreateFromDirectory($source, $destination)
+
+# Use 7Zip to build zip file to avoid backslash path separator errors when unzipping on CygWin
+if (-not (Get-Module -ListAvailable -Name 7Zip4PowerShell)) 
+{
+    Install-Module 7Zip4PowerShell -Force -Verbose
+} 
+Compress-7Zip $source -ArchiveFileName $destination -Format Zip
 
 echo $destination
