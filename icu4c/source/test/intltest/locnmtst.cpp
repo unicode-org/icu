@@ -82,6 +82,7 @@ void LocaleDisplayNamesTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE(11, TestPrivateUse);
         TESTCASE(12, TestUldnDisplayContext);
         TESTCASE(13, TestUldnWithGarbage);
+        TESTCASE(14, TestSubstituteHandling);
 #endif
         default:
             name = "";
@@ -420,6 +421,163 @@ void LocaleDisplayNamesTest::TestRootEtc() {
   test_assert_equal("en_GB", temp);
 
   delete ldn;
+}
+
+static const char unknown_region[] = "wx";
+static const char unknown_lang[] = "xy";
+static const char unknown_script[] = "wxyz";
+static const char unknown_variant[] = "abc";
+static const char unknown_key[] = "efg";
+static const char unknown_ca_value[] = "ijk";
+static const char known_lang_unknown_script[] = "en-wxyz";
+static const char unknown_lang_unknown_script[] = "xy-wxyz";
+static const char unknown_lang_known_script[] = "xy-Latn";
+static const char unknown_lang_unknown_region[] = "xy-wx";
+static const char known_lang_unknown_region[] = "en-wx";
+static const char unknown_lang_known_region[] = "xy-US";
+static const char unknown_lang_unknown_script_unknown_region[] = "xy-wxyz-wx";
+static const char known_lang_unknown_script_unknown_region[] = "en-wxyz-wx";
+static const char unknown_lang_known_script_unknown_region[] = "xy-Latn-wx";
+static const char unknown_lang_known_script_known_region[] = "xy-wxyz-US";
+static const char known_lang[] = "en";
+static const char known_lang_known_script[] = "en-Latn";
+static const char known_lang_known_region[] = "en-US";
+static const char known_lang_known_script_known_region[] = "en-Latn-US";
+
+void LocaleDisplayNamesTest::VerifySubstitute(LocaleDisplayNames* ldn) {
+  UnicodeString temp;
+  // Ensure the default is UDISPCTX_SUBSTITUTE
+  UDisplayContext context = ldn->getContext(UDISPCTX_TYPE_SUBSTITUTE_HANDLING);
+  test_assert(UDISPCTX_SUBSTITUTE == context);
+
+  ldn->regionDisplayName(unknown_region, temp);
+  test_assert_equal(unknown_region, temp);
+  ldn->languageDisplayName(unknown_lang, temp);
+  test_assert_equal(unknown_lang, temp);
+  ldn->scriptDisplayName(unknown_script, temp);
+  test_assert_equal(unknown_script, temp);
+  ldn->variantDisplayName(unknown_variant, temp);
+  test_assert_equal(unknown_variant, temp);
+  ldn->keyDisplayName(unknown_key, temp);
+  test_assert_equal(unknown_key, temp);
+  ldn->keyValueDisplayName("ca", unknown_ca_value, temp);
+  test_assert_equal(unknown_ca_value, temp);
+
+  ldn->localeDisplayName(unknown_lang, temp);
+  test_assert_equal(unknown_lang, temp);
+  ldn->localeDisplayName(known_lang_unknown_script, temp);
+  test_assert_equal("Englisch (Wxyz)", temp);
+  ldn->localeDisplayName(unknown_lang_unknown_script, temp);
+  test_assert_equal("xy (Wxyz)", temp);
+  ldn->localeDisplayName(unknown_lang_known_script, temp);
+  test_assert_equal("xy (Lateinisch)", temp);
+  ldn->localeDisplayName(unknown_lang_unknown_region, temp);
+  test_assert_equal("xy (WX)", temp);
+  ldn->localeDisplayName(known_lang_unknown_region, temp);
+  test_assert_equal("Englisch (WX)", temp);
+  ldn->localeDisplayName(unknown_lang_known_region, temp);
+  test_assert_equal("xy (Vereinigte Staaten)", temp);
+  ldn->localeDisplayName(unknown_lang_unknown_script_unknown_region, temp);
+  test_assert_equal("xy (Wxyz, WX)", temp);
+  ldn->localeDisplayName(known_lang_unknown_script_unknown_region, temp);
+  test_assert_equal("Englisch (Wxyz, WX)", temp);
+  ldn->localeDisplayName(unknown_lang_known_script_unknown_region, temp);
+  test_assert_equal("xy (Lateinisch, WX)", temp);
+  ldn->localeDisplayName(unknown_lang_known_script_known_region, temp);
+  test_assert_equal("xy (Wxyz, Vereinigte Staaten)", temp);
+
+  ldn->localeDisplayName(known_lang, temp);
+  test_assert_equal("Englisch", temp);
+  ldn->localeDisplayName(known_lang_known_script, temp);
+  test_assert_equal("Englisch (Lateinisch)", temp);
+  ldn->localeDisplayName(known_lang_known_region, temp);
+  test_assert_equal("Englisch (Vereinigte Staaten)", temp);
+  ldn->localeDisplayName(known_lang_known_script_known_region, temp);
+  test_assert_equal("Englisch (Lateinisch, Vereinigte Staaten)", temp);
+}
+
+void LocaleDisplayNamesTest::VerifyNoSubstitute(LocaleDisplayNames* ldn) {
+  UnicodeString temp("");
+  std::string utf8;
+  // Ensure the default is UDISPCTX_SUBSTITUTE
+  UDisplayContext context = ldn->getContext(UDISPCTX_TYPE_SUBSTITUTE_HANDLING);
+  test_assert(UDISPCTX_NO_SUBSTITUTE == context);
+
+  ldn->regionDisplayName(unknown_region, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->languageDisplayName(unknown_lang, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->scriptDisplayName(unknown_script, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->variantDisplayName(unknown_variant, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->keyDisplayName(unknown_key, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->keyValueDisplayName("ca", unknown_ca_value, temp);
+  test_assert(TRUE == temp.isBogus());
+
+  ldn->localeDisplayName(unknown_lang, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->localeDisplayName(known_lang_unknown_script, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->localeDisplayName(unknown_lang_unknown_script, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->localeDisplayName(unknown_lang_known_script, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->localeDisplayName(unknown_lang_unknown_region, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->localeDisplayName(known_lang_unknown_region, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->localeDisplayName(unknown_lang_known_region, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->localeDisplayName(unknown_lang_unknown_script_unknown_region, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->localeDisplayName(known_lang_unknown_script_unknown_region, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->localeDisplayName(unknown_lang_known_script_unknown_region, temp);
+  test_assert(TRUE == temp.isBogus());
+  ldn->localeDisplayName(unknown_lang_known_script_known_region, temp);
+  test_assert(TRUE == temp.isBogus());
+
+  ldn->localeDisplayName(known_lang, temp);
+  test_assert_equal("Englisch", temp);
+  ldn->localeDisplayName(known_lang_known_script, temp);
+  test_assert_equal("Englisch (Lateinisch)", temp);
+  ldn->localeDisplayName(known_lang_known_region, temp);
+  test_assert_equal("Englisch (Vereinigte Staaten)", temp);
+  ldn->localeDisplayName(known_lang_known_script_known_region, temp);
+  test_assert_equal("Englisch (Lateinisch, Vereinigte Staaten)", temp);
+}
+
+void LocaleDisplayNamesTest::TestSubstituteHandling() {
+  // With substitute as default
+  logln("Context: none\n");
+  std::unique_ptr<LocaleDisplayNames> ldn(LocaleDisplayNames::createInstance(Locale::getGermany()));
+  VerifySubstitute(ldn.get());
+
+  // With explicit set substitute, and standard names
+  logln("Context: UDISPCTX_SUBSTITUTE, UDISPCTX_STANDARD_NAMES\n");
+  UDisplayContext context_1[] = { UDISPCTX_SUBSTITUTE, UDISPCTX_STANDARD_NAMES };
+  ldn.reset(LocaleDisplayNames::createInstance(Locale::getGermany(), context_1, 2));
+  VerifySubstitute(ldn.get());
+
+  // With explicit set substitute and dialect names
+  logln("Context: UDISPCTX_SUBSTITUTE, UDISPCTX_DIALECT_NAMES\n");
+  UDisplayContext context_2[] = { UDISPCTX_SUBSTITUTE, UDISPCTX_DIALECT_NAMES };
+  ldn.reset(LocaleDisplayNames::createInstance(Locale::getGermany(), context_2, 2));
+  VerifySubstitute(ldn.get());
+
+  // With explicit set no_substitute, and standard names
+  logln("Context: UDISPCTX_NO_SUBSTITUTE, UDISPCTX_STANDARD_NAMES\n");
+  UDisplayContext context_3[] = { UDISPCTX_NO_SUBSTITUTE, UDISPCTX_STANDARD_NAMES };
+  ldn.reset(LocaleDisplayNames::createInstance(Locale::getGermany(), context_3, 2));
+  VerifyNoSubstitute(ldn.get());
+
+  // With explicit set no_substitute and dialect names
+  logln("Context: UDISPCTX_NO_SUBSTITUTE, UDISPCTX_DIALECT_NAMES\n");
+  UDisplayContext context_4[] = { UDISPCTX_NO_SUBSTITUTE, UDISPCTX_DIALECT_NAMES };
+  ldn.reset(LocaleDisplayNames::createInstance(Locale::getGermany(), context_4, 2));
+  VerifyNoSubstitute(ldn.get());
 }
 
 #endif   /*  UCONFIG_NO_FORMATTING */
