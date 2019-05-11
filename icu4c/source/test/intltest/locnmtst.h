@@ -37,5 +37,10 @@ public:
     void TestPrivateUse(void);
     void TestUldnDisplayContext(void);
     void TestUldnWithGarbage(void);
+    void TestSubstituteHandling(void);
+
+    void VerifySubstitute(LocaleDisplayNames* ldn);
+    void VerifyNoSubstitute(LocaleDisplayNames* ldn);
 #endif
+
 };
