@@ -55,8 +55,19 @@ void LocaleBuilderTest::runIndexedTest( int32_t index, UBool exec, const char* &
 
 void LocaleBuilderTest::Verify(LocaleBuilder& bld, const char* expected, const char* msg) {
     UErrorCode status = U_ZERO_ERROR;
+    UErrorCode copyStatus = U_ZERO_ERROR;
+    UErrorCode errorStatus = U_ILLEGAL_ARGUMENT_ERROR;
+    if (bld.copyErrorTo(copyStatus)) {
+        errln(msg, u_errorName(copyStatus));
+    }
+    if (!bld.copyErrorTo(errorStatus) || errorStatus != U_ILLEGAL_ARGUMENT_ERROR) {
+        errln("Should always get the previous error and return FALSE");
+    }
     Locale loc = bld.build(status);
     if (U_FAILURE(status)) {
+        errln(msg, u_errorName(status));
+    }
+    if (status != copyStatus) {
         errln(msg, u_errorName(status));
     }
     std::string tag = loc.toLanguageTag<std::string>(status);
@@ -190,39 +201,67 @@ void LocaleBuilderTest::TestLocaleBuilder() {
         status = U_ZERO_ERROR;
         bld.clear();
         while (true) {
+            status = U_ZERO_ERROR;
+            UErrorCode copyStatus = U_ZERO_ERROR;
             method = testCase[i++];
             if (strcmp("L", method) == 0) {
-                bld.setLanguage(testCase[i++]).build(status);
+                bld.setLanguage(testCase[i++]);
+                bld.copyErrorTo(copyStatus);
+                bld.build(status);
             } else if (strcmp("S", method) == 0) {
-                bld.setScript(testCase[i++]).build(status);
+                bld.setScript(testCase[i++]);
+                bld.copyErrorTo(copyStatus);
+                bld.build(status);
             } else if (strcmp("R", method) == 0) {
-                bld.setRegion(testCase[i++]).build(status);
+                bld.setRegion(testCase[i++]);
+                bld.copyErrorTo(copyStatus);
+                bld.build(status);
             } else if (strcmp("V", method) == 0) {
-                bld.setVariant(testCase[i++]).build(status);
+                bld.setVariant(testCase[i++]);
+                bld.copyErrorTo(copyStatus);
+                bld.build(status);
             } else if (strcmp("K", method) == 0) {
                 const char* key = testCase[i++];
                 const char* type = testCase[i++];
-                bld.setUnicodeLocaleKeyword(key, type).build(status);
+                bld.setUnicodeLocaleKeyword(key, type);
+                bld.copyErrorTo(copyStatus);
+                bld.build(status);
             } else if (strcmp("A", method) == 0) {
-                bld.addUnicodeLocaleAttribute(testCase[i++]).build(status);
+                bld.addUnicodeLocaleAttribute(testCase[i++]);
+                bld.copyErrorTo(copyStatus);
+                bld.build(status);
             } else if (strcmp("E", method) == 0) {
                 const char* key = testCase[i++];
                 const char* value = testCase[i++];
-                bld.setExtension(key[0], value).build(status);
+                bld.setExtension(key[0], value);
+                bld.copyErrorTo(copyStatus);
+                bld.build(status);
             } else if (strcmp("P", method) == 0) {
-                bld.setExtension('x', testCase[i++]).build(status);
+                bld.setExtension('x', testCase[i++]);
+                bld.copyErrorTo(copyStatus);
+                bld.build(status);
             } else if (strcmp("U", method) == 0) {
-                bld.setLocale(Locale(testCase[i++])).build(status);
+                bld.setLocale(Locale(testCase[i++]));
+                bld.copyErrorTo(copyStatus);
+                bld.build(status);
             } else if (strcmp("B", method) == 0) {
-                bld.setLanguageTag(testCase[i++]).build(status);
+                bld.setLanguageTag(testCase[i++]);
+                bld.copyErrorTo(copyStatus);
+                bld.build(status);
             }
             // clear / remove
             else if (strcmp("C", method) == 0) {
-                bld.clear().build(status);
+                bld.clear();
+                bld.copyErrorTo(copyStatus);
+                bld.build(status);
             } else if (strcmp("N", method) == 0) {
-                bld.clearExtensions().build(status);
+                bld.clearExtensions();
+                bld.copyErrorTo(copyStatus);
+                bld.build(status);
             } else if (strcmp("D", method) == 0) {
-                bld.removeUnicodeLocaleAttribute(testCase[i++]).build(status);
+                bld.removeUnicodeLocaleAttribute(testCase[i++]);
+                bld.copyErrorTo(copyStatus);
+                bld.build(status);
             }
             // result
             else if (strcmp("X", method) == 0) {
@@ -232,6 +271,9 @@ void LocaleBuilderTest::TestLocaleBuilder() {
             } else if (strcmp("T", method) == 0) {
                 status = U_ZERO_ERROR;
                 Locale loc = bld.build(status);
+                if (status != copyStatus) {
+                    errln("copyErrorTo not matching");
+                }
                 if (U_FAILURE(status) ||
                     strcmp(loc.getName(), testCase[i + 1]) != 0) {
                     errln("FAIL: Wrong locale ID - %s %s %s", loc.getName(),
@@ -247,6 +289,9 @@ void LocaleBuilderTest::TestLocaleBuilder() {
                 // Unknow test method
                 errln("Unknown test case method: There is an error in the test case data.");
                 break;
+            }
+            if (status != copyStatus) {
+                errln("copyErrorTo not matching");
             }
             if (U_FAILURE(status)) {
                 if (strcmp("X", testCase[i]) == 0) {
