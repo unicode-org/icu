@@ -540,6 +540,7 @@
     </ClCompile>
     <ClCompile Include="formattedvaluetest.cpp">
       <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="localebuildertest.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
