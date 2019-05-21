@@ -69,8 +69,12 @@ UnicodeString SymbolMatcher::toString() const {
 }
 
 
-IgnorablesMatcher::IgnorablesMatcher(unisets::Key key)
-        : SymbolMatcher({}, key) {
+IgnorablesMatcher::IgnorablesMatcher(parse_flags_t parseFlags) :
+        SymbolMatcher(
+            {},
+            (0 != (parseFlags & PARSE_FLAG_STRICT_IGNORABLES)) ?
+                unisets::STRICT_IGNORABLES :
+                unisets::DEFAULT_IGNORABLES) {
 }
 
 bool IgnorablesMatcher::isFlexible() const {
