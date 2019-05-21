@@ -42,7 +42,7 @@ public class NumberParserImpl {
         NumberParserImpl parser = new NumberParserImpl(parseFlags);
         Currency currency = Currency.getInstance("USD");
         DecimalFormatSymbols symbols = DecimalFormatSymbols.getInstance(locale);
-        IgnorablesMatcher ignorables = IgnorablesMatcher.DEFAULT;
+        IgnorablesMatcher ignorables = IgnorablesMatcher.getInstance(parseFlags);
 
         AffixTokenMatcherFactory factory = new AffixTokenMatcherFactory();
         factory.currency = currency;
@@ -165,6 +165,7 @@ public class NumberParserImpl {
             parseFlags |= ParsingUtils.PARSE_FLAG_STRICT_SEPARATORS;
             parseFlags |= ParsingUtils.PARSE_FLAG_USE_FULL_AFFIXES;
             parseFlags |= ParsingUtils.PARSE_FLAG_EXACT_AFFIX;
+            parseFlags |= ParsingUtils.PARSE_FLAG_STRICT_IGNORABLES;
         } else {
             parseFlags |= ParsingUtils.PARSE_FLAG_INCLUDE_UNPAIRED_AFFIXES;
         }
@@ -177,9 +178,9 @@ public class NumberParserImpl {
         if (!parseCurrency) {
             parseFlags |= ParsingUtils.PARSE_FLAG_NO_FOREIGN_CURRENCIES;
         }
-        IgnorablesMatcher ignorables = isStrict ? IgnorablesMatcher.STRICT : IgnorablesMatcher.DEFAULT;
 
         NumberParserImpl parser = new NumberParserImpl(parseFlags);
+        IgnorablesMatcher ignorables = IgnorablesMatcher.getInstance(parseFlags);
 
         AffixTokenMatcherFactory factory = new AffixTokenMatcherFactory();
         factory.currency = currency;

@@ -1749,7 +1749,13 @@ gbp123	123	GBP	C
 British pounds 123	123	GBP	H
 british POUNDS 123	123	GBP	H
 
-
+test parse scientific with bidi marks
+begin
+locale	parse	output	breaks
+en	4E\u200E+02	400	HK
+en	4E+02	400	K
+he	4E\u200E+02	400	K
+he	4E+02	400	HK
 
 
 
