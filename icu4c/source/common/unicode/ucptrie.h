@@ -384,7 +384,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @param result (out) variable for the trie lookup result
  * @draft ICU 63
  */
-#define UCPTRIE_FAST_U16_NEXT(trie, dataAccess, src, limit, c, result) { \
+#define UCPTRIE_FAST_U16_NEXT(trie, dataAccess, src, limit, c, result) UPRV_BLOCK_MACRO_BEGIN { \
     (c) = *(src)++; \
     int32_t __index; \
     if (!U16_IS_SURROGATE(c)) { \
@@ -400,7 +400,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
         } \
     } \
     (result) = dataAccess(trie, __index); \
-}
+} UPRV_BLOCK_MACRO_END
 
 /**
  * UTF-16: Reads the previous code point (UChar32 c, out), pre-decrements src,
@@ -415,7 +415,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @param result (out) variable for the trie lookup result
  * @draft ICU 63
  */
-#define UCPTRIE_FAST_U16_PREV(trie, dataAccess, start, src, c, result) { \
+#define UCPTRIE_FAST_U16_PREV(trie, dataAccess, start, src, c, result) UPRV_BLOCK_MACRO_BEGIN { \
     (c) = *--(src); \
     int32_t __index; \
     if (!U16_IS_SURROGATE(c)) { \
@@ -431,7 +431,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
         } \
     } \
     (result) = dataAccess(trie, __index); \
-}
+} UPRV_BLOCK_MACRO_END
 
 /**
  * UTF-8: Post-increments src and gets a value from the trie.
@@ -449,7 +449,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @param result (out) variable for the trie lookup result
  * @draft ICU 63
  */
-#define UCPTRIE_FAST_U8_NEXT(trie, dataAccess, src, limit, result) { \
+#define UCPTRIE_FAST_U8_NEXT(trie, dataAccess, src, limit, result) UPRV_BLOCK_MACRO_BEGIN { \
     int32_t __lead = (uint8_t)*(src)++; \
     if (!U8_IS_SINGLE(__lead)) { \
         uint8_t __t1, __t2, __t3; \
@@ -477,7 +477,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
         } \
     } \
     (result) = dataAccess(trie, __lead); \
-}
+} UPRV_BLOCK_MACRO_END
 
 /**
  * UTF-8: Pre-decrements src and gets a value from the trie.
@@ -495,7 +495,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
  * @param result (out) variable for the trie lookup result
  * @draft ICU 63
  */
-#define UCPTRIE_FAST_U8_PREV(trie, dataAccess, start, src, result) { \
+#define UCPTRIE_FAST_U8_PREV(trie, dataAccess, start, src, result) UPRV_BLOCK_MACRO_BEGIN { \
     int32_t __index = (uint8_t)*--(src); \
     if (!U8_IS_SINGLE(__index)) { \
         __index = ucptrie_internalU8PrevIndex((trie), __index, (const uint8_t *)(start), \
@@ -504,7 +504,7 @@ ucptrie_toBinary(const UCPTrie *trie, void *data, int32_t capacity, UErrorCode *
         __index >>= 3; \
     } \
     (result) = dataAccess(trie, __index); \
-}
+} UPRV_BLOCK_MACRO_END
 
 /**
  * Returns a trie value for an ASCII code point, without range checking.
