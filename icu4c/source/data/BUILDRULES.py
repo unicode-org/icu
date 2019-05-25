@@ -517,24 +517,10 @@ def generate_tree(
     ]
 
     # Generate res_index file
-    synthetic_locales = set()
-    if not config.ignore_xml_deprecates:
-        deprecates_xml_path = os.path.join(
-            os.path.dirname(__file__), xml_filename)
-        deprecates_xml = ET.parse(deprecates_xml_path)
-        for child in deprecates_xml.getroot():
-            if child.tag == "alias":
-                synthetic_locales.add(child.attrib["from"])
-            elif child.tag == "emptyLocale":
-                synthetic_locales.add(child.attrib["locale"])
-            else:
-                raise ValueError("Unknown tag in deprecates XML: %s" % child.tag)
     index_input_files = []
     for f in input_files:
         file_stem = f.filename[f.filename.rfind("/")+1:-4]
         if file_stem == "root":
-            continue
-        if file_stem in synthetic_locales:
             continue
         index_input_files.append(f)
     cldr_version = locale_dependencies.data["cldrVersion"] if sub_dir == "locales" else None
