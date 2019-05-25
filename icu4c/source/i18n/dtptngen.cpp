@@ -2547,7 +2547,8 @@ UChar SkeletonFields::getFirstChar() const {
 }
 
 
-PtnSkeleton::PtnSkeleton() {
+PtnSkeleton::PtnSkeleton()
+    : addedDefaultDayPeriod(FALSE) {
 }
 
 PtnSkeleton::PtnSkeleton(const PtnSkeleton& other) {
@@ -2558,6 +2559,7 @@ void PtnSkeleton::copyFrom(const PtnSkeleton& other) {
     uprv_memcpy(type, other.type, sizeof(type));
     original.copyFrom(other.original);
     baseOriginal.copyFrom(other.baseOriginal);
+    addedDefaultDayPeriod = other.addedDefaultDayPeriod;
 }
 
 void PtnSkeleton::clear() {
