@@ -384,14 +384,6 @@ class U_I18N_API MeasureFormat : public Format {
         int32_t bitMap,   // 1=hour set, 2=minute set, 4=second set
         UnicodeString &appendTo,
         UErrorCode &status) const;
-
-    UnicodeString &formatNumeric(
-        UDate date,
-        const DateFormat &dateFmt,
-        UDateFormatField smallestField,
-        const Formattable &smallestAmount,
-        UnicodeString &appendTo,
-        UErrorCode &status) const;
 };
 
 U_NAMESPACE_END

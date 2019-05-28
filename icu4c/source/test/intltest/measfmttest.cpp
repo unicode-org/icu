@@ -75,6 +75,8 @@ private:
     void TestUnitPerUnitResolution();
     void TestIndividualPluralFallback();
     void Test20332_PersonUnits();
+    void TestNumericTime();
+    void TestNumericTimeSomeSpecialFormats();
     void verifyFormat(
         const char *description,
         const MeasureFormat &fmt,
@@ -175,6 +177,8 @@ void MeasureFormatTest::runIndexedTest(
     TESTCASE_AUTO(TestUnitPerUnitResolution);
     TESTCASE_AUTO(TestIndividualPluralFallback);
     TESTCASE_AUTO(Test20332_PersonUnits);
+    TESTCASE_AUTO(TestNumericTime);
+    TESTCASE_AUTO(TestNumericTimeSomeSpecialFormats);
     TESTCASE_AUTO_END;
 }
 
@@ -1837,6 +1841,32 @@ void MeasureFormatTest::TestFormatPeriodEn() {
             {t_6h_56_92m, UPRV_LENGTHOF(t_6h_56_92m), "6:56,92"},
             {t_3h_5h, UPRV_LENGTHOF(t_3h_5h), "3 Std., 5 Std."}};
 
+    ExpectedResult numericDataBn[] = {
+            {t_1m_59_9996s, UPRV_LENGTHOF(t_1m_59_9996s), "\\u09E7:\\u09EB\\u09EF.\\u09EF\\u09EF\\u09EF\\u09EC"},
+            {t_19m, UPRV_LENGTHOF(t_19m), "\\u09E7\\u09EF \\u09AE\\u09BF\\u0983"},
+            {t_1h_23_5s, UPRV_LENGTHOF(t_1h_23_5s), "\\u09E7:\\u09E6\\u09E6:\\u09E8\\u09E9.\\u09EB"},
+            {t_1h_0m_23s, UPRV_LENGTHOF(t_1h_0m_23s), "\\u09E7:\\u09E6\\u09E6:\\u09E8\\u09E9"},
+            {t_1h_23_5m, UPRV_LENGTHOF(t_1h_23_5m), "\\u09E7:\\u09E8\\u09E9.\\u09EB"},
+            {t_5h_17m, UPRV_LENGTHOF(t_5h_17m), "\\u09EB:\\u09E7\\u09ED"},
+            {t_19m_28s, UPRV_LENGTHOF(t_19m_28s), "\\u09E7\\u09EF:\\u09E8\\u09EE"},
+            {t_2y_5M_3w_4d, UPRV_LENGTHOF(t_2y_5M_3w_4d), "\\u09E8 \\u09AC\\u099B\\u09B0, \\u09EB \\u09AE\\u09BE\\u09B8, \\u09E9 \\u09B8\\u09AA\\u09CD\\u09A4\\u09BE\\u09B9, \\u09EA \\u09A6\\u09BF\\u09A8"},
+            {t_0h_0m_17s, UPRV_LENGTHOF(t_0h_0m_17s), "\\u09E6:\\u09E6\\u09E6:\\u09E7\\u09ED"},
+            {t_6h_56_92m, UPRV_LENGTHOF(t_6h_56_92m), "\\u09EC:\\u09EB\\u09EC.\\u09EF\\u09E8"},
+            {t_3h_5h, UPRV_LENGTHOF(t_3h_5h), "\\u09E9 \\u0998\\u0983, \\u09EB \\u0998\\u0983"}};
+
+    ExpectedResult numericDataBnLatn[] = {
+            {t_1m_59_9996s, UPRV_LENGTHOF(t_1m_59_9996s), "1:59.9996"},
+            {t_19m, UPRV_LENGTHOF(t_19m), "19 \\u09AE\\u09BF\\u0983"},
+            {t_1h_23_5s, UPRV_LENGTHOF(t_1h_23_5s), "1:00:23.5"},
+            {t_1h_0m_23s, UPRV_LENGTHOF(t_1h_0m_23s), "1:00:23"},
+            {t_1h_23_5m, UPRV_LENGTHOF(t_1h_23_5m), "1:23.5"},
+            {t_5h_17m, UPRV_LENGTHOF(t_5h_17m), "5:17"},
+            {t_19m_28s, UPRV_LENGTHOF(t_19m_28s), "19:28"},
+            {t_2y_5M_3w_4d, UPRV_LENGTHOF(t_2y_5M_3w_4d), "2 \\u09AC\\u099B\\u09B0, 5 \\u09AE\\u09BE\\u09B8, 3 \\u09B8\\u09AA\\u09CD\\u09A4\\u09BE\\u09B9, 4 \\u09A6\\u09BF\\u09A8"},
+            {t_0h_0m_17s, UPRV_LENGTHOF(t_0h_0m_17s), "0:00:17"},
+            {t_6h_56_92m, UPRV_LENGTHOF(t_6h_56_92m), "6:56.92"},
+            {t_3h_5h, UPRV_LENGTHOF(t_3h_5h), "3 \\u0998\\u0983, 5 \\u0998\\u0983"}};
+
     Locale en(Locale::getEnglish());
     LocalPointer<NumberFormat> nf(NumberFormat::createInstance(en, status));
     if (U_FAILURE(status)) {
@@ -1893,6 +1923,30 @@ void MeasureFormatTest::TestFormatPeriodEn() {
         return;
     }
     verifyFormat("de NUMERIC", mf, numericDataDe, UPRV_LENGTHOF(numericDataDe));
+
+    Locale bengali("bn");
+    nf.adoptInstead(NumberFormat::createInstance(bengali, status));
+    if (!assertSuccess("Error creating number format de object", status)) {
+        return;
+    }
+    nf->setMaximumFractionDigits(4);
+    mf = MeasureFormat(bengali, UMEASFMT_WIDTH_NUMERIC, (NumberFormat *) nf->clone(), status);
+    if (!assertSuccess("Error creating measure format bn NUMERIC", status)) {
+        return;
+    }
+    verifyFormat("bn NUMERIC", mf, numericDataBn, UPRV_LENGTHOF(numericDataBn));
+
+    Locale bengaliLatin("bn-u-nu-latn");
+    nf.adoptInstead(NumberFormat::createInstance(bengaliLatin, status));
+    if (!assertSuccess("Error creating number format de object", status)) {
+        return;
+    }
+    nf->setMaximumFractionDigits(4);
+    mf = MeasureFormat(bengaliLatin, UMEASFMT_WIDTH_NUMERIC, (NumberFormat *) nf->clone(), status);
+    if (!assertSuccess("Error creating measure format bn-u-nu-latn NUMERIC", status)) {
+        return;
+    }
+    verifyFormat("bn-u-nu-latn NUMERIC", mf, numericDataBnLatn, UPRV_LENGTHOF(numericDataBnLatn));
 }
 
 void MeasureFormatTest::Test10219FractionalPlurals() {
@@ -1967,7 +2021,7 @@ void MeasureFormatTest::TestGreek() {
         "1 \\u03B7\\u03BC\\u03AD\\u03C1\\u03B1",
         "1 \\u03B5\\u03B2\\u03B4.",
         "1 \\u03BC\\u03AE\\u03BD.",
-        "1 \\u03AD\\u03C4.",	        // year (one)
+        "1 \\u03AD\\u03C4.",            // year (one)
         // "el_GR" 7 wide
         "7 \\u03B4\\u03B5\\u03C5\\u03C4\\u03B5\\u03C1\\u03CC\\u03BB\\u03B5\\u03C0\\u03C4\\u03B1",
         "7 \\u03BB\\u03B5\\u03C0\\u03C4\\u03AC",
@@ -1979,7 +2033,7 @@ void MeasureFormatTest::TestGreek() {
         // "el_GR" 7 short
         "7 \\u03B4\\u03B5\\u03C5\\u03C4.",
         "7 \\u03BB\\u03B5\\u03C0.",
-        "7 \\u03CE\\u03C1.",		    // hour (other)
+        "7 \\u03CE\\u03C1.",            // hour (other)
         "7 \\u03B7\\u03BC\\u03AD\\u03C1\\u03B5\\u03C2",
         "7 \\u03B5\\u03B2\\u03B4.",
         "7 \\u03BC\\u03AE\\u03BD.",
@@ -2000,7 +2054,7 @@ void MeasureFormatTest::TestGreek() {
         "1 \\u03B7\\u03BC\\u03AD\\u03C1\\u03B1",
         "1 \\u03B5\\u03B2\\u03B4.",
         "1 \\u03BC\\u03AE\\u03BD.",
-        "1 \\u03AD\\u03C4.",	        // year (one)
+        "1 \\u03AD\\u03C4.",            // year (one)
         // "el" 7 wide
         "7 \\u03B4\\u03B5\\u03C5\\u03C4\\u03B5\\u03C1\\u03CC\\u03BB\\u03B5\\u03C0\\u03C4\\u03B1",
         "7 \\u03BB\\u03B5\\u03C0\\u03C4\\u03AC",
@@ -2012,7 +2066,7 @@ void MeasureFormatTest::TestGreek() {
         // "el" 7 short
         "7 \\u03B4\\u03B5\\u03C5\\u03C4.",
         "7 \\u03BB\\u03B5\\u03C0.",
-        "7 \\u03CE\\u03C1.",		    // hour (other)
+        "7 \\u03CE\\u03C1.",            // hour (other)
         "7 \\u03B7\\u03BC\\u03AD\\u03C1\\u03B5\\u03C2",
         "7 \\u03B5\\u03B2\\u03B4.",
         "7 \\u03BC\\u03AE\\u03BD.",
@@ -2689,6 +2743,79 @@ void MeasureFormatTest::Test20332_PersonUnits() {
         if (status.errIfFailureAndReset()) { return; }
         verifyFormat(cas.locale, mf, &measure, 1, cas.expected);
     }
+}
+
+void MeasureFormatTest::TestNumericTime() {
+    IcuTestErrorCode status(*this, "TestNumericTime");
+
+    MeasureFormat fmt("en", UMEASFMT_WIDTH_NUMERIC, status);
+
+    Measure hours(112, MeasureUnit::createHour(status), status);
+    Measure minutes(113, MeasureUnit::createMinute(status), status);
+    Measure seconds(114, MeasureUnit::createSecond(status), status);
+    Measure fhours(112.8765, MeasureUnit::createHour(status), status);
+    Measure fminutes(113.8765, MeasureUnit::createMinute(status), status);
+    Measure fseconds(114.8765, MeasureUnit::createSecond(status), status);
+    assertSuccess("", status);
+
+    verifyFormat("hours", fmt, &hours, 1, "112h");
+    verifyFormat("minutes", fmt, &minutes, 1, "113m");
+    verifyFormat("seconds", fmt, &seconds, 1, "114s");
+
+    verifyFormat("fhours", fmt, &fhours, 1, "112.876h");
+    verifyFormat("fminutes", fmt, &fminutes, 1, "113.876m");
+    verifyFormat("fseconds", fmt, &fseconds, 1, "114.876s");
+
+    Measure hoursMinutes[2] = {hours, minutes};
+    verifyFormat("hoursMinutes", fmt, hoursMinutes, 2, "112:113");
+    Measure hoursSeconds[2] = {hours, seconds};
+    verifyFormat("hoursSeconds", fmt, hoursSeconds, 2, "112:00:114");
+    Measure minutesSeconds[2] = {minutes, seconds};
+    verifyFormat("minutesSeconds", fmt, minutesSeconds, 2, "113:114");
+
+    Measure hoursFminutes[2] = {hours, fminutes};
+    verifyFormat("hoursFminutes", fmt, hoursFminutes, 2, "112:113.876");
+    Measure hoursFseconds[2] = {hours, fseconds};
+    verifyFormat("hoursFseconds", fmt, hoursFseconds, 2, "112:00:114.876");
+    Measure minutesFseconds[2] = {minutes, fseconds};
+    verifyFormat("hoursMminutesFsecondsinutes", fmt, minutesFseconds, 2, "113:114.876");
+
+    Measure fhoursMinutes[2] = {fhours, minutes};
+    verifyFormat("fhoursMinutes", fmt, fhoursMinutes, 2, "112:113");
+    Measure fhoursSeconds[2] = {fhours, seconds};
+    verifyFormat("fhoursSeconds", fmt, fhoursSeconds, 2, "112:00:114");
+    Measure fminutesSeconds[2] = {fminutes, seconds};
+    verifyFormat("fminutesSeconds", fmt, fminutesSeconds, 2, "113:114");
+
+    Measure fhoursFminutes[2] = {fhours, fminutes};
+    verifyFormat("fhoursFminutes", fmt, fhoursFminutes, 2, "112:113.876");
+    Measure fhoursFseconds[2] = {fhours, fseconds};
+    verifyFormat("fhoursFseconds", fmt, fhoursFseconds, 2, "112:00:114.876");
+    Measure fminutesFseconds[2] = {fminutes, fseconds};
+    verifyFormat("fminutesFseconds", fmt, fminutesFseconds, 2, "113:114.876");
+
+    Measure hoursMinutesSeconds[3] = {hours, minutes, seconds};
+    verifyFormat("hoursMinutesSeconds", fmt, hoursMinutesSeconds, 3, "112:113:114");
+    Measure fhoursFminutesFseconds[3] = {fhours, fminutes, fseconds};
+    verifyFormat("fhoursFminutesFseconds", fmt, fhoursFminutesFseconds, 3, "112:113:114.876");
+}
+
+void MeasureFormatTest::TestNumericTimeSomeSpecialFormats() {
+    IcuTestErrorCode status(*this, "TestNumericTimeSomeSpecialFormats");
+
+    Measure fhours(2.8765432, MeasureUnit::createHour(status), status);
+    Measure fminutes(3.8765432, MeasureUnit::createMinute(status), status);
+    assertSuccess("", status);
+
+    Measure fhoursFminutes[2] = {fhours, fminutes};
+
+    // Latvian is one of the very few locales 0-padding the hour
+    MeasureFormat fmtLt("lt", UMEASFMT_WIDTH_NUMERIC, status);
+    verifyFormat("Latvian fhoursFminutes", fmtLt, fhoursFminutes, 2, "02:03,877");
+
+    // Danish is one of the very few locales using '.' as separator
+    MeasureFormat fmtDa("da", UMEASFMT_WIDTH_NUMERIC, status);
+    verifyFormat("Danish fhoursFminutes", fmtDa, fhoursFminutes, 2, "2.03,877");
 }
 
 
