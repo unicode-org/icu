@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -1623,6 +1624,30 @@ public class MeasureUnitTest extends TestFmwk {
                 {_0h_0m_17s, "0:00:17"},
                 {_6h_56_92m, "6:56,92"},
                 {_3h_5h, "3 Std., 5 Std."}};
+        Object[][] numericDataBn = {
+                {_1m_59_9996s, "১:৫৯.৯৯৯৬"},
+                {_19m, "১৯ মিঃ"},
+                {_1h_23_5s, "১:০০:২৩.৫"},
+                {_1h_0m_23s, "১:০০:২৩"},
+                {_1h_23_5m, "১:২৩.৫"},
+                {_5h_17m, "৫:১৭"},
+                {_19m_28s, "১৯:২৮"},
+                {_2y_5M_3w_4d, "২ বছর, ৫ মাস, ৩ সপ্তাহ, ৪ দিন"},
+                {_0h_0m_17s, "০:০০:১৭"},
+                {_6h_56_92m, "৬:৫৬.৯২"},
+                {_3h_5h, "৩ ঘঃ, ৫ ঘঃ"}};
+        Object[][] numericDataBnLatn = {
+                {_1m_59_9996s, "1:59.9996"},
+                {_19m, "19 মিঃ"},
+                {_1h_23_5s, "1:00:23.5"},
+                {_1h_0m_23s, "1:00:23"},
+                {_1h_23_5m, "1:23.5"},
+                {_5h_17m, "5:17"},
+                {_19m_28s, "19:28"},
+                {_2y_5M_3w_4d, "2 বছর, 5 মাস, 3 সপ্তাহ, 4 দিন"},
+                {_0h_0m_17s, "0:00:17"},
+                {_6h_56_92m, "6:56.92"},
+                {_3h_5h, "3 ঘঃ, 5 ঘঃ"}};
 
         NumberFormat nf = NumberFormat.getNumberInstance(ULocale.ENGLISH);
         nf.setMaximumFractionDigits(4);
@@ -1650,6 +1675,17 @@ public class MeasureUnitTest extends TestFmwk {
         mf = MeasureFormat.getInstance(Locale.GERMAN, FormatWidth.NUMERIC, nf);
         verifyFormatPeriod("de NUMERIC(Java Locale)", mf, numericDataDe);
 
+        ULocale bengali = ULocale.forLanguageTag("bn");
+        nf = NumberFormat.getNumberInstance(bengali);
+        nf.setMaximumFractionDigits(4);
+        mf = MeasureFormat.getInstance(bengali, FormatWidth.NUMERIC, nf);
+        verifyFormatPeriod("bn NUMERIC(Java Locale)", mf, numericDataBn);
+
+        bengali = ULocale.forLanguageTag("bn-u-nu-latn");
+        nf = NumberFormat.getNumberInstance(bengali);
+        nf.setMaximumFractionDigits(4);
+        mf = MeasureFormat.getInstance(bengali, FormatWidth.NUMERIC, nf);
+        verifyFormatPeriod("bn NUMERIC(Java Locale)", mf, numericDataBnLatn);
     }
 
     private void verifyFormatPeriod(String desc, MeasureFormat mf, Object[][] testData) {
@@ -2978,5 +3014,66 @@ public class MeasureUnitTest extends TestFmwk {
             }
             return false;
         }
+    }
+
+    @Test
+    public void TestNumericTimeNonLatin() {
+        ULocale ulocale = ULocale.forLanguageTag("bn");
+        MeasureFormat fmt = MeasureFormat.getInstance(ulocale, FormatWidth.NUMERIC);
+        String actual = fmt.formatMeasures(new Measure(12, MeasureUnit.MINUTE), new Measure(39.12345, MeasureUnit.SECOND));
+        assertEquals("Incorect digits", "১২:৩৯.১২৩", actual);
+    }
+
+    @Test
+    public void TestNumericTime() {
+        MeasureFormat fmt = MeasureFormat.getInstance(ULocale.forLanguageTag("en"), FormatWidth.NUMERIC);
+
+        Measure hours = new Measure(112, MeasureUnit.HOUR);
+        Measure minutes = new Measure(113, MeasureUnit.MINUTE);
+        Measure seconds = new Measure(114, MeasureUnit.SECOND);
+        Measure fhours = new Measure(112.8765, MeasureUnit.HOUR);
+        Measure fminutes = new Measure(113.8765, MeasureUnit.MINUTE);
+        Measure fseconds = new Measure(114.8765, MeasureUnit.SECOND);
+
+        Assert.assertEquals("112h", fmt.formatMeasures(hours));
+        Assert.assertEquals("113m", fmt.formatMeasures(minutes));
+        Assert.assertEquals("114s", fmt.formatMeasures(seconds));
+
+        Assert.assertEquals("112.876h", fmt.formatMeasures(fhours));
+        Assert.assertEquals("113.876m", fmt.formatMeasures(fminutes));
+        Assert.assertEquals("114.876s", fmt.formatMeasures(fseconds));
+
+        Assert.assertEquals("112:113", fmt.formatMeasures(hours, minutes));
+        Assert.assertEquals("112:00:114", fmt.formatMeasures(hours, seconds));
+        Assert.assertEquals("113:114", fmt.formatMeasures(minutes, seconds));
+
+        Assert.assertEquals("112:113.876", fmt.formatMeasures(hours, fminutes));
+        Assert.assertEquals("112:00:114.876", fmt.formatMeasures(hours, fseconds));
+        Assert.assertEquals("113:114.876", fmt.formatMeasures(minutes, fseconds));
+
+        Assert.assertEquals("112:113", fmt.formatMeasures(fhours, minutes));
+        Assert.assertEquals("112:00:114", fmt.formatMeasures(fhours, seconds));
+        Assert.assertEquals("113:114", fmt.formatMeasures(fminutes, seconds));
+
+        Assert.assertEquals("112:113.876", fmt.formatMeasures(fhours, fminutes));
+        Assert.assertEquals("112:00:114.876", fmt.formatMeasures(fhours, fseconds));
+        Assert.assertEquals("113:114.876", fmt.formatMeasures(fminutes, fseconds));
+
+        Assert.assertEquals("112:113:114", fmt.formatMeasures(hours, minutes, seconds));
+        Assert.assertEquals("112:113:114.876", fmt.formatMeasures(fhours, fminutes, fseconds));
+    }
+
+    @Test
+    public void TestNumericTimeSomeSpecialFormats() {
+        Measure fhours = new Measure(2.8765432, MeasureUnit.HOUR);
+        Measure fminutes = new Measure(3.8765432, MeasureUnit.MINUTE);
+
+        // Latvian is one of the very few locales 0-padding the hour
+        MeasureFormat fmt = MeasureFormat.getInstance(ULocale.forLanguageTag("lt"), FormatWidth.NUMERIC);
+        Assert.assertEquals("02:03,877", fmt.formatMeasures(fhours, fminutes));
+
+        // Danish is one of the very few locales using '.' as separator
+        fmt = MeasureFormat.getInstance(ULocale.forLanguageTag("da"), FormatWidth.NUMERIC);
+        Assert.assertEquals("2.03,877", fmt.formatMeasures(fhours, fminutes));
     }
 }
