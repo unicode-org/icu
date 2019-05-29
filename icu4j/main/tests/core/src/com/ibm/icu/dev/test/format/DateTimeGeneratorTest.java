@@ -576,6 +576,26 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"Ed", "26\u65E5\u5468\u4E09"},
         new String[] {"jmmssSSS", "\u4E0B\u534811:58:59.123"},
         new String[] {"JJmm", "11:58"},
+
+        new ULocale("ja_JP_TRADITIONAL"),
+        // TODO: This is different in C++ and Java.
+        new String[] {"yM", "1999/1",},
+        new String[] {"yMMM", "1999年1月"},
+        new String[] {"yMd", "1999/1/13"},
+        new String[] {"yMMMd", "1999年1月13日"},
+        new String[] {"Md", "1/13"},
+        new String[] {"MMMd", "1月13日"},
+        new String[] {"MMMMd", "1月13日"},
+        new String[] {"yQQQ", "1999/Q1"},
+        new String[] {"hhmm", "午後11:58"},
+        new String[] {"HHmm", "23:58"},
+        new String[] {"jjmm", "23:58"},
+        new String[] {"mmss", "58:59"},
+        new String[] {"yyyyMMMM", "1999年1月"},
+        new String[] {"MMMEd", "1月13日(水)"},
+        new String[] {"Ed", "13日(水)"},
+        new String[] {"jmmssSSS", "23:58:59.123"},
+        new String[] {"JJmm", "23:58"}
     };
 
     @Test
@@ -1705,6 +1725,31 @@ public class DateTimeGeneratorTest extends TestFmwk {
                     }
                 }
             }
+        }
+    }
+
+    @Test
+    public void test20640_HourCyclArsEnNH() {
+        String[][] cases = new String[][]{
+            // ars is interesting because it does not have a region, but it aliases
+            // to ar_SA, which has a region.
+            {"ars", "h a", "h:mm a"},
+            // en_NH is interesting because NH is a depregated region code.
+            {"en_NH", "h a", "h:mm a"},
+        };
+
+        for (String[] cas : cases) {
+            ULocale loc = new ULocale(cas[0]);
+            DateFormat dtf = DateFormat.getTimeInstance(DateFormat.SHORT, loc);
+            DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance(loc);
+
+            String timePattern = ((SimpleDateFormat)dtf).toPattern();
+            String dtpgPattern = dtpg.getBestPattern("j");
+
+            assertEquals("dtpgPattern " + cas[0],
+                cas[1], dtpgPattern);
+            assertEquals("timePattern " + cas[1],
+                cas[2], timePattern);
         }
     }
 }

@@ -268,6 +268,8 @@ static ECalType getCalendarTypeForLocale(const char *locid) {
 
     // canonicalize, so grandfathered variant will be transformed to keywords
     // e.g ja_JP_TRADITIONAL -> ja_JP@calendar=japanese
+    // NOTE: Since ICU-20187, ja_JP_TRADITIONAL no longer canonicalizes, and
+    // the Gregorian calendar is returned instead.
     int32_t canonicalLen = uloc_canonicalize(locid, canonicalName, sizeof(canonicalName) - 1, &status);
     if (U_FAILURE(status)) {
         return CALTYPE_GREGORIAN;

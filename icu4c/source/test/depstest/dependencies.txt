@@ -849,7 +849,7 @@ library: i18n
 group: region
     region.o uregion.o
   deps
-    formatting  # Temporary, TODO: Ticket #9982 class Region should use low-level ASCII-integer functions, and probably be moved to the common library.
+    icu_utility
     resourcebundle
     uvector uclean_i18n
 
@@ -1018,6 +1018,7 @@ group: formatting
     trigonometry  # for astro.o
     sharedbreakiterator # for reldatefmt.o
     uclean_i18n
+    region
 
 group: sharedbreakiterator
     sharedbreakiterator.o
