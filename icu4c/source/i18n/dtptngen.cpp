@@ -28,6 +28,7 @@
 #include "unicode/ures.h"
 #include "unicode/ustring.h"
 #include "unicode/rep.h"
+#include "unicode/region.h"
 #include "cpputils.h"
 #include "mutex.h"
 #include "umutex.h"
@@ -613,27 +614,54 @@ U_CFUNC void U_CALLCONV DateTimePatternGenerator::loadAllowedHourFormatsData(UEr
     ures_getAllItemsWithFallback(rb.getAlias(), "timeData", sink, status);    
 }
 
-void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErrorCode &status) {
-    if (U_FAILURE(status)) { return; }
-    Locale maxLocale(locale);
-    maxLocale.addLikelySubtags(status);
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    const char *country = maxLocale.getCountry();
-    if (*country == '\0') { country = "001"; }
-    const char *language = maxLocale.getLanguage();
-
+static int32_t* getAllowedHourFormatsLangCountry(const char* language, const char* country, UErrorCode& status) {
     CharString langCountry;
-    langCountry.append(language, static_cast<int32_t>(uprv_strlen(language)), status);
+    langCountry.append(language, status);
     langCountry.append('_', status);
-    langCountry.append(country, static_cast<int32_t>(uprv_strlen(country)), status);
+    langCountry.append(country, status);
 
-    int32_t *allowedFormats;
+    int32_t* allowedFormats;
     allowedFormats = (int32_t *)uhash_get(localeToAllowedHourFormatsMap, langCountry.data());
     if (allowedFormats == nullptr) {
         allowedFormats = (int32_t *)uhash_get(localeToAllowedHourFormatsMap, const_cast<char *>(country));
+    }
+
+    return allowedFormats;
+}
+
+void DateTimePatternGenerator::getAllowedHourFormats(const Locale &locale, UErrorCode &status) {
+    if (U_FAILURE(status)) { return; }
+
+    const char *language = locale.getLanguage();
+    const char *country = locale.getCountry();
+    Locale maxLocale;  // must be here for correct lifetime
+    if (*language == '\0' || *country == '\0') {
+        maxLocale = locale;
+        UErrorCode localStatus = U_ZERO_ERROR;
+        maxLocale.addLikelySubtags(localStatus);
+        if (U_SUCCESS(localStatus)) {
+            language = maxLocale.getLanguage();
+            country = maxLocale.getCountry();
+        }
+    }
+    if (*language == '\0') {
+        // Unexpected, but fail gracefully
+        language = "und";
+    }
+    if (*country == '\0') {
+        country = "001";
+    }
+
+    int32_t* allowedFormats = getAllowedHourFormatsLangCountry(language, country, status);
+
+    // Check if the region has an alias
+    if (allowedFormats == nullptr) {
+        UErrorCode localStatus = U_ZERO_ERROR;
+        const Region* region = Region::getInstance(country, localStatus);
+        if (U_SUCCESS(localStatus)) {
+            country = region->getRegionCode(); // the real region code
+            allowedFormats = getAllowedHourFormatsLangCountry(language, country, status);
+        }
     }
 
     if (allowedFormats != nullptr) {  // Lookup is successful

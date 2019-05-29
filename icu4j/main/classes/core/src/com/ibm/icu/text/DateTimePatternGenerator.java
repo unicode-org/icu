@@ -37,6 +37,7 @@ import com.ibm.icu.impl.UResource;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
 import com.ibm.icu.util.ICUCloneNotSupportedException;
+import com.ibm.icu.util.Region;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
@@ -319,6 +320,15 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     private static final String[] LAST_RESORT_ALLOWED_HOUR_FORMAT = {"H"};
 
+    private String[] getAllowedHourFormatsLangCountry(String language, String country) {
+        String langCountry = language + "_" + country;
+        String[] list = LOCALE_TO_ALLOWED_HOUR.get(langCountry);
+        if (list == null) {
+            list = LOCALE_TO_ALLOWED_HOUR.get(country);
+        }
+        return list;
+    }
+
     private void getAllowedHourFormats(ULocale uLocale) {
         // key can be either region or locale (lang_region)
         //        ZW{
@@ -338,23 +348,38 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         //            preferred{"h"}
         //        }
 
-        ULocale max = ULocale.addLikelySubtags(uLocale);
-        String country = max.getCountry();
+        String language = uLocale.getLanguage();
+        String country = uLocale.getCountry();
+        if (language.isEmpty() || country.isEmpty()) {
+            ULocale max = ULocale.addLikelySubtags(uLocale);
+            language = max.getLanguage();
+            country = max.getCountry();
+        }
+
+        if (language.isEmpty()) {
+            // Unexpected, but fail gracefully
+            language = "und";
+        }
         if (country.isEmpty()) {
             country = "001";
         }
-        String langCountry = max.getLanguage() + "_" + country;
-        String[] list = LOCALE_TO_ALLOWED_HOUR.get(langCountry);
+
+        String[] list = getAllowedHourFormatsLangCountry(language, country);
+
+        // Check if the region has an alias
         if (list == null) {
-            list = LOCALE_TO_ALLOWED_HOUR.get(country);
+            Region region = Region.getInstance(country);
+            country = region.toString();
+            list = getAllowedHourFormatsLangCountry(language, country);
         }
-		if (list != null) {
-			defaultHourFormatChar = list[0].charAt(0);
-			allowedHourFormats = Arrays.copyOfRange(list, 1, list.length-1);
-		} else {
-			allowedHourFormats = LAST_RESORT_ALLOWED_HOUR_FORMAT;
-			defaultHourFormatChar = allowedHourFormats[0].charAt(0);
-		}
+
+        if (list != null) {
+            defaultHourFormatChar = list[0].charAt(0);
+            allowedHourFormats = Arrays.copyOfRange(list, 1, list.length - 1);
+        } else {
+            allowedHourFormats = LAST_RESORT_ALLOWED_HOUR_FORMAT;
+            defaultHourFormatChar = allowedHourFormats[0].charAt(0);
+        }
     }
 
     private static class DayPeriodAllowedHoursSink extends UResource.Sink {

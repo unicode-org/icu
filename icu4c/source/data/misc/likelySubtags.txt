@@ -65,6 +65,7 @@ likelySubtags:table(nofallback){
     arn{"arn_Latn_CL"}
     aro{"aro_Latn_BO"}
     arq{"arq_Arab_DZ"}
+    ars{"ars_Arab_SA"}
     ary{"ary_Arab_MA"}
     arz{"arz_Arab_EG"}
     as{"as_Beng_IN"}
