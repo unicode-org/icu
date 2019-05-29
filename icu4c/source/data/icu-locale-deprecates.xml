@@ -22,7 +22,6 @@
     <alias from="in_ID" to="id_ID"/>
     <alias from="iw" to="he"/>
     <alias from="iw_IL" to="he_IL"/>
-    <alias from="ja_JP_TRADITIONAL" to="ja_JP" rbpath="/calendar/default" value="japanese"/>
     <alias from="mo" to="ro"/>
     <alias from="no_NO" to="nb_NO"/>
     <alias from="no_NO_NY" to="nn_NO"/>
@@ -44,7 +43,6 @@
     <alias from="sr_Cyrl_CS" to="sr_Cyrl_RS"/>
     <alias from="sr_Latn_YU" to="sr_Latn_RS"/>
     <alias from="sr_Latn_CS" to="sr_Latn_RS"/>
-    <alias from="th_TH_TRADITIONAL" to="th_TH" rbpath="/calendar/default" value="buddhist"/>
     <alias from="tl" to="fil"/>
     <alias from="tl_PH" to="fil_PH"/>
     <alias from="uz_AF" to="uz_Arab_AF"/>
