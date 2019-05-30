@@ -433,7 +433,7 @@ Locale LocaleBuilder::build(UErrorCode& errorCode)
     return product;
 }
 
-UBool LocaleBuilder::copyErrorTo(UErrorCode &outErrorCode) {
+UBool LocaleBuilder::copyErrorTo(UErrorCode &outErrorCode) const {
     if (U_FAILURE(outErrorCode)) {
         // Do not overwrite the older error code
         return TRUE;

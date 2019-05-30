@@ -288,7 +288,7 @@ public:
      * @return TRUE if U_FAILURE(outErrorCode)
      * @draft ICU 65
      */
-    UBool copyErrorTo(UErrorCode &outErrorCode);
+    UBool copyErrorTo(UErrorCode &outErrorCode) const;
 
 private:
     UErrorCode status_;
