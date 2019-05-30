@@ -135,13 +135,13 @@ CharClass *BreakRules::addCharClass(const UnicodeString &name, const UnicodeStri
         printf("epandedDef: %s\n", CStr(expandedDef)());
     }
 
-    UnicodeSet *s = new UnicodeSet(expandedDef, USET_IGNORE_SPACE, NULL, status);
+    LocalPointer<UnicodeSet> s(new UnicodeSet(expandedDef, USET_IGNORE_SPACE, NULL, status), status);
     if (U_FAILURE(status)) {
-        IntlTest::gTest->errln("%s:%d: error %s creating UnicodeSet %s", __FILE__, __LINE__,
-                               u_errorName(status), CStr(name)());
-        return NULL;
+        IntlTest::gTest->errln("%s:%d: error %s creating UnicodeSet %s\n    Expanded set definition: %s",
+                               __FILE__, __LINE__, u_errorName(status), CStr(name)(), CStr(expandedDef)());
+        return nullptr;
     }
-    CharClass *cclass = new CharClass(name, definition, expandedDef, s);
+    CharClass *cclass = new CharClass(name, definition, expandedDef, s.orphan());
     CharClass *previousClass = static_cast<CharClass *>(uhash_put(fCharClasses.getAlias(),
                                                         new UnicodeString(name),   // Key, owned by hash table.
                                                         cclass,                    // Value, owned by hash table.
