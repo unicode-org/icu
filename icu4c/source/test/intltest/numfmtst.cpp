@@ -169,6 +169,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestRoundingScientific10542);
   TESTCASE_AUTO(TestZeroScientific10547);
   TESTCASE_AUTO(TestAccountingCurrency);
+  TESTCASE_AUTO(TestCurrencyFormatForMissingLocale);
   TESTCASE_AUTO(TestEquality);
   TESTCASE_AUTO(TestCurrencyUsage);
   TESTCASE_AUTO(TestDoubleLimit11439);
@@ -8014,6 +8015,50 @@ void NumberFormatTest::TestAccountingCurrency() {
         (Formattable)(double)-1000.5, UnicodeString("(\\uFFE51,000)").unescape(), FALSE, status);
     expect(NumberFormat::createInstance("de_DE", style, status),
         (Formattable)(double)-23456.7, UnicodeString("-23.456,70\\u00A0\\u20AC").unescape(), TRUE, status);
+    expect(NumberFormat::createInstance("en_ID", style, status),
+        (Formattable)(double)0, UnicodeString("IDR\\u00A00.00").unescape(), TRUE, status);
+    expect(NumberFormat::createInstance("en_ID", style, status),
+        (Formattable)(double)-0.2, UnicodeString("(IDR\\u00A00.20)").unescape(), TRUE, status);
+    expect(NumberFormat::createInstance("sh_ME", style, status),
+        (Formattable)(double)0, UnicodeString("0,00\\u00A0\\u20AC").unescape(), TRUE, status);
+    expect(NumberFormat::createInstance("sh_ME", style, status),
+        (Formattable)(double)-0.2, UnicodeString("(0,20\\u00A0\\u20AC)").unescape(), TRUE, status);
+}
+
+/**
+ * ICU4J has the behavior explained below, but ICU4C is not affected. Test is added to prevent regression.
+ *
+ * en_ID/sh_ME uses language only locales en/sh which requires NumberFormatServiceShim to fill in the currency, but
+ * prior to ICU-20631, currency was not filled in for accounting, cash and standard, so currency placeholder was
+ * used instead of the desired locale's currency.
+ */
+void NumberFormatTest::TestCurrencyFormatForMissingLocale() {
+    IcuTestErrorCode status(*this, "TestCurrencyFormatForMissingLocale");
+    Locale locale = Locale::createCanonical("sh_ME");
+
+    LocalPointer<NumberFormat> curFmt(NumberFormat::createInstance(locale, UNUM_CURRENCY, status));
+    assertEquals("Currency instance is not for the desired locale for CURRENCYSTYLE", curFmt->getCurrency(), "EUR");
+    UnicodeString currBuf;
+    curFmt->format(-1234.5, currBuf);
+    assertEquals("NumberFormat format outputs wrong value for CURRENCYSTYLE", u"-1.234,50\u00A0\u20AC", currBuf);
+
+    LocalPointer<NumberFormat> accFmt(NumberFormat::createInstance(locale, UNUM_CURRENCY_ACCOUNTING, status));
+    assertEquals("Currency instance is not for the desired locale for ACCOUNTINGCURRENCYSTYLE", accFmt->getCurrency(), "EUR");
+    UnicodeString accBuf;
+    accFmt->format(-1234.5, accBuf);
+    assertEquals("NumberFormat format outputs wrong value for ACCOUNTINGCURRENCYSTYLE", u"(1.234,50\u00A0\u20AC)", accBuf);
+
+    LocalPointer<NumberFormat> cashFmt(NumberFormat::createInstance(locale, UNUM_CASH_CURRENCY, status));
+    assertEquals("Currency instance is not for the desired locale for CASHCURRENCYSTYLE", cashFmt->getCurrency(), "EUR");
+    UnicodeString cashBuf;
+    cashFmt->format(-1234.5, cashBuf);
+    assertEquals("NumberFormat format outputs wrong value for CASHCURRENCYSTYLE", u"-1.234,50\u00A0\u20AC", cashBuf);
+
+    LocalPointer<NumberFormat> stdFmt(NumberFormat::createInstance(locale, UNUM_CURRENCY_STANDARD, status));
+    assertEquals("Currency instance is not for the desired locale for STANDARDCURRENCYSTYLE", stdFmt->getCurrency(), "EUR");
+    UnicodeString stdBuf;
+    stdFmt->format(-1234.5, stdBuf);
+    assertEquals("NumberFormat format outputs wrong value for STANDARDCURRENCYSTYLE", u"-1.234,50\u00A0\u20AC", stdBuf);
 }
 
 // for #5186

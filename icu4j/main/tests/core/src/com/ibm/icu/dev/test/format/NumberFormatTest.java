@@ -4416,6 +4416,18 @@ public class NumberFormatTest extends TestFmwk {
                 {"ja_JP",             "-1000.5",  "-￥1,000",          "-￥1,000",          "(￥1,000)",         "false"},
                 {"ja_JP@cf=account",  "-1000.5",  "(￥1,000)",         "-￥1,000",          "(￥1,000)",         "false"},
                 {"de_DE",             "-23456.7", "-23.456,70\u00A0€", "-23.456,70\u00A0€", "-23.456,70\u00A0€", "true" },
+                {"en_ID",             "1234.5",   "IDR 1,234.50",      "IDR 1,234.50",      "IDR 1,234.50",      "true"},
+                {"en_ID@cf=account",  "1234.5",   "IDR 1,234.50",      "IDR 1,234.50",      "IDR 1,234.50",      "true"},
+                {"en_ID@cf=standard", "1234.5",   "IDR 1,234.50",      "IDR 1,234.50",      "IDR 1,234.50",      "true"},
+                {"en_ID",             "-1234.5",  "-IDR 1,234.50",     "-IDR 1,234.50",     "(IDR 1,234.50)",    "true"},
+                {"en_ID@cf=account",  "-1234.5",  "(IDR 1,234.50)",    "-IDR 1,234.50",     "(IDR 1,234.50)",    "true"},
+                {"en_ID@cf=standard", "-1234.5",  "-IDR 1,234.50",     "-IDR 1,234.50",     "(IDR 1,234.50)",    "true"},
+                {"sh_ME",             "1234.5",   "1.234,50 €",        "1.234,50 €",        "1.234,50 €",        "true"},
+                {"sh_ME@cf=account",  "1234.5",   "1.234,50 €",        "1.234,50 €",        "1.234,50 €",        "true"},
+                {"sh_ME@cf=standard", "1234.5",   "1.234,50 €",        "1.234,50 €",        "1.234,50 €",        "true"},
+                {"sh_ME",             "-1234.5",  "-1.234,50 €",       "-1.234,50 €",       "(1.234,50 €)",      "true"},
+                {"sh_ME@cf=account",  "-1234.5",  "(1.234,50 €)",      "-1.234,50 €",       "(1.234,50 €)",      "true"},
+                {"sh_ME@cf=standard", "-1234.5",  "-1.234,50 €",       "-1.234,50 €",       "(1.234,50 €)",      "true"},
         };
         for (String[] data : tests) {
             ULocale loc = new ULocale(data[0]);
@@ -4434,6 +4446,33 @@ public class NumberFormatTest extends TestFmwk {
             NumberFormat fmtAccount = NumberFormat.getInstance(loc, NumberFormat.ACCOUNTINGCURRENCYSTYLE);
             expect(fmtAccount, num, fmtAccountExpected, rt);
         }
+    }
+
+    /**
+     * en_ID/sh_ME uses language only locales en/sh which requires NumberFormatServiceShim to fill in the currency, but
+     * prior to ICU-20631, currency was not filled in for accounting, cash and standard, so currency placeholder was
+     * used instead of the desired locale's currency.
+     */
+    @Test
+    public void TestCurrencyFormatForMissingLocale() {
+        ULocale loc = new ULocale("sh_ME");
+        Currency cur = Currency.getInstance(loc);
+        NumberFormat curFmt = NumberFormat.getInstance(loc, NumberFormat.CURRENCYSTYLE);
+        assertNotNull("NumberFormat is missing currency instance for CURRENCYSTYLE", curFmt.getCurrency());
+        assertEquals("Currency instance is not for the desired locale for CURRENCYSTYLE", cur, curFmt.getCurrency());
+        assertEquals("NumberFormat format outputs wrong value for CURRENCYSTYLE", "-1.234,50 €", curFmt.format(-1234.5d));
+        NumberFormat accFmt = NumberFormat.getInstance(loc, NumberFormat.ACCOUNTINGCURRENCYSTYLE);
+        assertNotNull("NumberFormat is missing currency instance for ACCOUNTINGCURRENCYSTYLE", accFmt.getCurrency());
+        assertEquals("Currency instance is not for the desired locale for ACCOUNTINGCURRENCYSTYLE", cur, accFmt.getCurrency());
+        assertEquals("NumberFormat format outputs wrong value for ACCOUNTINGCURRENCYSTYLE", "(1.234,50 €)", accFmt.format(-1234.5d));
+        NumberFormat cashFmt = NumberFormat.getInstance(loc, NumberFormat.CASHCURRENCYSTYLE);
+        assertNotNull("NumberFormat is missing currency instance for CASHCURRENCYSTYLE", cashFmt.getCurrency());
+        assertEquals("Currency instance is not for the desired locale for CASHCURRENCYSTYLE", cur, cashFmt.getCurrency());
+        assertEquals("NumberFormat format outputs wrong value for CASHCURRENCYSTYLE", "-1.234,50 €", cashFmt.format(-1234.5d));
+        NumberFormat stdFmt = NumberFormat.getInstance(loc, NumberFormat.STANDARDCURRENCYSTYLE);
+        assertNotNull("NumberFormat is missing currency instance for STANDARDCURRENCYSTYLE", stdFmt.getCurrency());
+        assertEquals("Currency instance is not for the desired locale for STANDARDCURRENCYSTYLE", cur, stdFmt.getCurrency());
+        assertEquals("NumberFormat format outputs wrong value for STANDARDCURRENCYSTYLE", "-1.234,50 €", stdFmt.format(-1234.5d));
     }
 
     @Test
