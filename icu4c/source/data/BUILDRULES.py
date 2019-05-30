@@ -22,6 +22,7 @@ def generate(config, glob, common_vars):
         exit(1)
 
     requests += generate_cnvalias(config, glob, common_vars)
+    requests += generate_ulayout(config, glob, common_vars)
     requests += generate_confusables(config, glob, common_vars)
     requests += generate_conversion_mappings(config, glob, common_vars)
     requests += generate_brkitr_brk(config, glob, common_vars)
@@ -31,7 +32,6 @@ def generate(config, glob, common_vars):
     requests += generate_coll_ucadata(config, glob, common_vars)
     requests += generate_full_unicore_data(config, glob, common_vars)
     requests += generate_unames(config, glob, common_vars)
-    requests += generate_ulayout(config, glob, common_vars)
     requests += generate_misc(config, glob, common_vars)
     requests += generate_curr_supplemental(config, glob, common_vars)
     requests += generate_translit(config, glob, common_vars)
@@ -189,7 +189,7 @@ def generate_brkitr_brk(config, glob, common_vars):
         RepeatedExecutionRequest(
             name = "brkitr_brk",
             category = "brkitr_rules",
-            dep_targets = [DepTarget("cnvalias")],
+            dep_targets = [DepTarget("cnvalias"), DepTarget("ulayout")],
             input_files = input_files,
             output_files = output_files,
             tool = IcuTool("genbrk"),

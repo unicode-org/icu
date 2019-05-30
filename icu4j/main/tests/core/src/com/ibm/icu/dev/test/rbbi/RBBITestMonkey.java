@@ -93,6 +93,9 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet                fHangulSet;
         UnicodeSet                fZWJSet;
         UnicodeSet                fExtendedPictSet;
+        UnicodeSet                fViramaSet;
+        UnicodeSet                fLinkingConsonantSet;
+        UnicodeSet                fExtCccZwjSet;
         UnicodeSet                fAnySet;
 
 
@@ -122,6 +125,11 @@ public class RBBITestMonkey extends TestFmwk {
             fHangulSet.addAll(fLVTSet);
 
             fExtendedPictSet  = new UnicodeSet("[:Extended_Pictographic:]");
+            fViramaSet        = new UnicodeSet("[\\p{Gujr}\\p{sc=Telu}\\p{sc=Mlym}\\p{sc=Orya}\\p{sc=Beng}\\p{sc=Deva}&"
+                                               + "\\p{Indic_Syllabic_Category=Virama}]");
+            fLinkingConsonantSet = new UnicodeSet("[\\p{Gujr}\\p{sc=Telu}\\p{sc=Mlym}\\p{sc=Orya}\\p{sc=Beng}\\p{sc=Deva}&"
+                                                  + "\\p{Indic_Syllabic_Category=Consonant}]");
+            fExtCccZwjSet     = new UnicodeSet("[[\\p{gcb=Extend}-\\p{ccc=0}] \\p{gcb=ZWJ}]");
             fAnySet           = new UnicodeSet("[\\u0000-\\U0010ffff]");
 
 
@@ -138,6 +146,9 @@ public class RBBITestMonkey extends TestFmwk {
             fSets.add(fAnySet);
             fSets.add(fZWJSet);
             fSets.add(fExtendedPictSet);
+            fSets.add(fViramaSet);
+            fSets.add(fLinkingConsonantSet);
+            fSets.add(fExtCccZwjSet);
         }
 
 
@@ -251,6 +262,22 @@ public class RBBITestMonkey extends TestFmwk {
                 // Rule (GB9b)   Prepend x
                 if (fPrependSet.contains(c1)) {
                     continue;
+                }
+
+                // Rule (GB9.3)  LinkingConsonant ExtCccZwj* Virama ExtCccZwj* × LinkingConsonant
+                //   Note: Viramas are also included in the ExtCccZwj class.
+                if (fLinkingConsonantSet.contains(c2)) {
+                    int pi = p1;
+                    boolean sawVirama = false;
+                    while (pi > 0 && fExtCccZwjSet.contains(fText.codePointAt(pi))) {
+                        if (fViramaSet.contains(fText.codePointAt(pi))) {
+                            sawVirama = true;
+                        }
+                        pi = fText.offsetByCodePoints(pi, -1);
+                    }
+                    if (sawVirama && fLinkingConsonantSet.contains(fText.codePointAt(pi))) {
+                        continue;
+                    }
                 }
 
                 // Rule (GB11)   Extended_Pictographic ZWJ x Extended_Pictographic
