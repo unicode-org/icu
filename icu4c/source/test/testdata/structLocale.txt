@@ -5806,6 +5806,7 @@ structLocale:table(nofallback){
         mn{""}
         mnc{""}
         mni{""}
+        mo{""}
         moh{""}
         mos{""}
         mr{""}
