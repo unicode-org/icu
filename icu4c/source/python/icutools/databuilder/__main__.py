@@ -268,7 +268,11 @@ def main(argv):
 
     # Automatically load BUILDRULES from the src_dir
     sys.path.append(args.src_dir)
-    import BUILDRULES
+    try:
+        import BUILDRULES
+    except ImportError:
+        print("Cannot find BUILDRULES! Did you set your --src_dir?", file=sys.stderr)
+        sys.exit(1)
 
     requests = BUILDRULES.generate(config, glob, common)
     requests = filtration.apply_filters(requests, config)
