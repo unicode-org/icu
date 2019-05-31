@@ -204,10 +204,47 @@ summarizes the ICU data files and their corresponding features and categories:
 | Units | `"unit_tree"` | unit/\*.txt | **1.7 MiB** |
 | **OTHER** | `"cnvalias"` <br/> `"misc"` <br/> `"locales_tree"` | mappings/convrtrs.txt <br/> misc/dayPeriods.txt <br/> misc/genderList.txt <br/> misc/numberingSystems.txt <br/> misc/supplementalData.txt <br/> locales/\*.txt | 63 KiB <br/> 19 KiB <br/> 0.5 KiB <br/> 5.6 KiB <br/> 228 KiB <br/> **2.4 MiB** |
 
+#### Additive and Subtractive Modes
+
+The ICU Data Build Tool allows two strategies for selecting features:
+*additive* mode and *subtractive* mode.
+
+The default is to use subtractive mode. This means that all ICU data is
+included, and your configurations can remove or change data from that baseline.
+Additive mode means that you start with an *empty* ICU data file, and you must
+explicitly add the data required for your application.
+
+There are two concrete differences between additive and subtractive mode:
+
+|                         | Additive    | Subtractive |
+|-------------------------|-------------|-------------|
+| Default Feature Filter  | `"exclude"` | `"include"` |
+| Default Resource Filter | `"-/*"`     | `"+/*"`     |
+
+To enable additive mode, add the following setting to your filter file:
+
+    strategy: "additive"
+
 #### Filter Types
 
 You may list *filters* for each category in the *featureFilters* section of
 your config file.  What follows are examples of the possible types of filters.
+
+##### Inclusion Filter
+
+To include a category, use the string `"include"` as your filter.
+
+    featureFilters: {
+      locales_tree: include
+    }
+
+If the category is a locale tree (ends with `_tree`), the inclusion filter
+resolves to the `localeFilter`; for more information, see the section
+"Locale-Tree Categories." Otherwise, the inclusion filter causes all files in
+the category to be included.
+
+**NOTE:** When subtractive mode is used (default), all categories implicitly
+start with `"include"` as their filter.
 
 ##### Exclusion Filter
 
@@ -219,6 +256,15 @@ exclude all confusables data:
         filterType: exclude
       }
     }
+
+Since ICU 65, you can also write simply:
+
+    featureFilters: {
+      confusables: exclude
+    }
+
+**NOTE:** When additive mode is used, all categories implicitly start with
+`"exclude"` as their filter.
 
 ##### File Name Filter
 
@@ -354,6 +400,9 @@ Conceptually, the rules are applied from top to bottom.  First, all data for
 all three styes of units are removed, and then the short length units are
 added back.
 
+**NOTE:** In subtractive mode, resource paths are *included* by default. In
+additive mode, resource paths are *excluded* by default.
+
 #### Wildcard Character
 
 You can use the wildcard character (`*`) to match a piece of the resource
@@ -461,9 +510,10 @@ from the parent locale:
 
 **Run Python directly:** If you do not want to wait for ./runConfigureICU to
 finish, you can directly re-generate the rules using your filter file with the
-following command line run from *iuc4c/source/data*.
+following command line run from *iuc4c/source*.
 
-    $ python3 -m buildtool --mode=gnumake --seqmode=parallel --filter_file=filters.json > rules.mk
+    $ PYTHONPATH=python python3 -m icutools.databuilder \
+      --mode=gnumake --src_dir=data > data/rules.mk
 
 **Install jsonschema:** Install the `jsonschema` pip package to get warnings
 about problems with your filter file.
@@ -579,10 +629,10 @@ developed, there are there are additional use cases.
 ### Running Data Build without Configure/Make
 
 You can build the dat file outside of the ICU build system by directly
-invoking the Python buildtool.  Run the following command to see the help text
-for the CLI tool:
+invoking the Python icutools.databuilder.  Run the following command to see the
+help text for the CLI tool:
 
-    $ PYTHONPATH=path/to/icu4c/source/data python3 -m buildtool --help
+    $ PYTHONPATH=path/to/icu4c/source/python python3 -m icutools.databuilder --help
 
 ### Collation UCAData
 
