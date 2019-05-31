@@ -140,8 +140,8 @@ ucal_open(  const UChar*  zoneID,
 
   if(U_FAILURE(*status)) return 0;
   
-  TimeZone* zone = (zoneID==NULL) ? TimeZone::createDefault()
-      : _createTimeZone(zoneID, len, status);
+  LocalPointer<TimeZone> zone( (zoneID==NULL) ? TimeZone::createDefault() 
+      : _createTimeZone(zoneID, len, status), *status);
 
   if (U_FAILURE(*status)) {
       return NULL;
@@ -157,9 +157,9 @@ ucal_open(  const UChar*  zoneID,
       if (U_FAILURE(*status)) {
           return NULL;
       }
-      return (UCalendar*)Calendar::createInstance(zone, Locale(localeBuf), *status);
+      return (UCalendar*)Calendar::createInstance(zone.orphan(), Locale(localeBuf), *status);
   }
-  return (UCalendar*)Calendar::createInstance(zone, Locale(locale), *status);
+  return (UCalendar*)Calendar::createInstance(zone.orphan(), Locale(locale), *status);
 }
 
 U_CAPI void U_EXPORT2
