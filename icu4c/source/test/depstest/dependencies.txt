@@ -90,7 +90,7 @@ group: system_locale
 group: stdio_input
     fopen fclose fgets fread fseek ftell rewind feof fileno
     # Additional symbols in an optimized build.
-    __fgets_chk __fread_chk
+    __fgets_chk __fread_chk fread_unlocked
 
 group: stdio_output
     fflush fwrite

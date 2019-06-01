@@ -134,7 +134,7 @@ doInsertionSort(char *array, int32_t length, int32_t itemSize,
 static void
 insertionSort(char *array, int32_t length, int32_t itemSize,
               UComparator *cmp, const void *context, UErrorCode *pErrorCode) {
-    UAlignedMemory v[STACK_ITEM_SIZE/sizeof(UAlignedMemory)+1];
+    alignas(max_align_t) char v[STACK_ITEM_SIZE];
     void *pv;
 
     /* allocate an intermediate item variable (v) */
@@ -238,7 +238,7 @@ subQuickSort(char *array, int32_t start, int32_t limit, int32_t itemSize,
 static void
 quickSort(char *array, int32_t length, int32_t itemSize,
             UComparator *cmp, const void *context, UErrorCode *pErrorCode) {
-    UAlignedMemory xw[(2*STACK_ITEM_SIZE)/sizeof(UAlignedMemory)+1];
+    alignas(max_align_t) char xw[2*STACK_ITEM_SIZE];
     void *p;
 
     /* allocate two intermediate item variables (x and w) */
@@ -252,6 +252,7 @@ quickSort(char *array, int32_t length, int32_t itemSize,
         }
     }
 
+    // TODO ICU-20650 check alignment of 2nd ptr.
     subQuickSort(array, 0, length, itemSize,
                  cmp, context, p, (char *)p+itemSize);
 

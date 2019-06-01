@@ -35,6 +35,9 @@
 #define MAX_FILE_LEN 1024*20
 #define UCS_FILE_NAME_SIZE 512
 
+/* Similar to C++ alignof(type)  */
+#define ALIGNOF(type) offsetof (struct { char c; type member; }, member)
+
 /*returns an action other than the one provided*/
 #if !UCONFIG_NO_LEGACY_CONVERSION
 static UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA);
@@ -1821,7 +1824,7 @@ static void TestConvertSafeClone()
             /* close the original immediately to make sure that the clone works by itself */
             ucnv_close(cnv);
 
-            if( actualSizes[idx] <= (bufferSizes[j] - (int32_t)sizeof(UAlignedMemory)) &&
+            if( actualSizes[idx] <= (bufferSizes[j] - (int32_t)ALIGNOF(UConverter)) &&
                 err == U_SAFECLONE_ALLOCATED_WARNING
             ) {
                 log_err("ucnv_safeClone(%s) did a heap clone although the buffer was large enough\n", names[idx]);
