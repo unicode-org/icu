@@ -509,19 +509,15 @@ void UObjectTest::testIDs()
 void UObjectTest::testUMemory() {
     // additional tests for code coverage
 #if U_OVERRIDE_CXX_ALLOCATION && U_HAVE_PLACEMENT_NEW
-    union {
-        UAlignedMemory   align_;
-        char             bytes_[sizeof(UnicodeString)];
-    } stackMemory;
-    char *bytes = stackMemory.bytes_;
+    alignas(UnicodeString) char bytes[sizeof(UnicodeString)];
     UnicodeString *p;
     enum { len=20 };
 
-    p=new(bytes) UnicodeString(len, (UChar32)0x20ac, len);
+    p=new(bytes) UnicodeString(len, (UChar32)U'€', len);
     if((void *)p!=(void *)bytes) {
         errln("placement new did not place the object at the expected address");
     }
-    if(p->length()!=len || p->charAt(0)!=0x20ac || p->charAt(len-1)!=0x20ac) {
+    if(p->length()!=len || p->charAt(0)!=u'€' || p->charAt(len-1)!=u'€') {
         errln("constructor used with placement new did not work right");
     }
 

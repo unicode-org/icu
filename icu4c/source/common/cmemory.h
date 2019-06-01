@@ -65,37 +65,13 @@ U_CAPI void * U_EXPORT2
 uprv_calloc(size_t num, size_t size) U_MALLOC_ATTR U_ALLOC_SIZE_ATTR2(1,2);
 
 /**
- * This should align the memory properly on any machine.
- * This is very useful for the safeClone functions.
- */
-typedef union {
-    long    t1;
-    double  t2;
-    void   *t3;
-} UAlignedMemory;
-
-/**
  * Get the least significant bits of a pointer (a memory address).
  * For example, with a mask of 3, the macro gets the 2 least significant bits,
  * which will be 0 if the pointer is 32-bit (4-byte) aligned.
  *
- * ptrdiff_t is the most appropriate integer type to cast to.
- * size_t should work too, since on most (or all?) platforms it has the same
- * width as ptrdiff_t.
+ * uintptr_t is the most appropriate integer type to cast to.
  */
-#define U_POINTER_MASK_LSB(ptr, mask) (((ptrdiff_t)(char *)(ptr)) & (mask))
-
-/**
- * Get the amount of bytes that a pointer is off by from
- * the previous UAlignedMemory-aligned pointer.
- */
-#define U_ALIGNMENT_OFFSET(ptr) U_POINTER_MASK_LSB(ptr, sizeof(UAlignedMemory) - 1)
-
-/**
- * Get the amount of bytes to add to a pointer
- * in order to get the next UAlignedMemory-aligned address.
- */
-#define U_ALIGNMENT_OFFSET_UP(ptr) (sizeof(UAlignedMemory) - U_ALIGNMENT_OFFSET(ptr))
+#define U_POINTER_MASK_LSB(ptr, mask) ((uintptr_t)(ptr) & (mask))
 
 /**
  * Create & return an instance of "type" in statically allocated storage.

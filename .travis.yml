@@ -45,6 +45,7 @@ matrix:
     # Invokes test/hdrtst to check public headers compliance.
 
     - name: "c: linux gcc"
+      dist:     xenial
       language: cpp
       compiler: gcc
       env:      PREFIX=/tmp/icu-prefix
@@ -61,6 +62,7 @@ matrix:
 
     # clang release build with some options to enforce useful constraints.
     - name: "c: linux clang"
+      dist:     xenial
       language: cpp
       env:
         - CPPFLAGS="-DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1"
@@ -93,16 +95,9 @@ matrix:
         - CPPFLAGS="-fsanitize=address"
         - LDFLAGS="-fsanitize=address"
       os:       linux
-      dist:     trusty
+      dist:     xenial
       sudo:     true
       compiler: clang
-      addons:
-          apt:
-              update: true
-              sources:
-                  - llvm-toolchain-trusty-5.0
-              packages:
-                  - clang-5.0
       before_script:
         - cd icu4c/source
         - ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming --enable-tracing
@@ -120,16 +115,9 @@ matrix:
           - CPPFLAGS="-fsanitize=thread"
           - LDFLAGS=-fsanitize=thread
       os:       linux
-      dist:     trusty
+      dist:     xenial
       sudo:     true
       compiler: clang
-      addons:
-          apt:
-              update: true
-              sources:
-                  - llvm-toolchain-trusty-5.0
-              packages:
-                  - clang-5.0
       script:
           - cd icu4c/source
           - ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming
