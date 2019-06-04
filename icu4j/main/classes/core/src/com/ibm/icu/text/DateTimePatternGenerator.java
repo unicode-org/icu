@@ -351,6 +351,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         String language = uLocale.getLanguage();
         String country = uLocale.getCountry();
         if (language.isEmpty() || country.isEmpty()) {
+            // Note: addLikelySubtags is documented not to throw in Java,
+            // unlike in C++.
             ULocale max = ULocale.addLikelySubtags(uLocale);
             language = max.getLanguage();
             country = max.getCountry();
@@ -368,9 +370,13 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
         // Check if the region has an alias
         if (list == null) {
-            Region region = Region.getInstance(country);
-            country = region.toString();
-            list = getAllowedHourFormatsLangCountry(language, country);
+            try {
+                Region region = Region.getInstance(country);
+                country = region.toString();
+                list = getAllowedHourFormatsLangCountry(language, country);
+            } catch (IllegalArgumentException e) {
+                // invalid region; fall through
+            }
         }
 
         if (list != null) {

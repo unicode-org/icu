@@ -1736,6 +1736,11 @@ public class DateTimeGeneratorTest extends TestFmwk {
             {"ars", "h a", "h:mm a"},
             // en_NH is interesting because NH is a depregated region code.
             {"en_NH", "h a", "h:mm a"},
+            // ch_ZH is a typo (should be zh_CN), but we should fail gracefully.
+            // {"cn_ZH", "HH", "H:mm"}, // TODO(ICU-20653): Desired behavior
+            {"cn_ZH", "HH", "h:mm a"}, // Actual behavior
+            // a non-BCP47 locale without a country code should not fail
+            {"ja_TRADITIONAL", "H時", "H:mm"},
         };
 
         for (String[] cas : cases) {
