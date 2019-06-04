@@ -1416,6 +1416,11 @@ void IntlTestDateTimePatternGeneratorAPI::test20640_HourCyclArsEnNH() {
         {"ars", u"h a", u"h:mm a"},
         // en_NH is interesting because NH is a depregated region code.
         {"en_NH", u"h a", u"h:mm a"},
+        // ch_ZH is a typo (should be zh_CN), but we should fail gracefully.
+        // {"cn_ZH", u"HH", u"H:mm"}, // TODO(ICU-20653): Desired behavior
+        {"cn_ZH", u"HH", u"h:mm a"}, // Actual behavior
+        // a non-BCP47 locale without a country code should not fail
+        {"ja_TRADITIONAL", u"H時", u"H:mm"},
     };
 
     for (auto& cas : cases) {
