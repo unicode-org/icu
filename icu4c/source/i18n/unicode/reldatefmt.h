@@ -175,6 +175,18 @@ typedef enum UDateAbsoluteUnit {
      * @draft ICU 63
      */
     UDAT_ABSOLUTE_QUARTER,
+
+    /**
+     * Hour
+     * @draft ICU 65
+     */
+    UDAT_ABSOLUTE_HOUR,
+
+    /**
+     * Minute
+     * @draft ICU 65
+     */
+    UDAT_ABSOLUTE_MINUTE,
 #endif // U_HIDE_DRAFT_API
 
 #ifndef U_HIDE_DEPRECATED_API
@@ -182,7 +194,7 @@ typedef enum UDateAbsoluteUnit {
      * One more than the highest normal UDateAbsoluteUnit value.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    UDAT_ABSOLUTE_UNIT_COUNT = UDAT_ABSOLUTE_NOW + 2
+    UDAT_ABSOLUTE_UNIT_COUNT = UDAT_ABSOLUTE_NOW + 4
 #endif  // U_HIDE_DEPRECATED_API
 } UDateAbsoluteUnit;
 

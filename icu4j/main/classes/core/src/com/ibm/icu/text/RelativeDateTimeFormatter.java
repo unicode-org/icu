@@ -252,6 +252,20 @@ public final class RelativeDateTimeFormatter {
          * @provisional This API might change or be removed in a future release.
          */
         QUARTER,
+
+        /**
+         * Hour
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        HOUR,
+
+        /**
+         * Minute
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        MINUTE,
     }
 
     /**
@@ -953,6 +967,8 @@ public final class RelativeDateTimeFormatter {
             case THURSDAY:  absunit = AbsoluteUnit.THURSDAY; break;
             case FRIDAY:    absunit = AbsoluteUnit.FRIDAY;  break;
             case SATURDAY:  absunit = AbsoluteUnit.SATURDAY; break;
+            case HOUR:      absunit = AbsoluteUnit.HOUR;    break;
+            case MINUTE:    absunit = AbsoluteUnit.MINUTE;  break;
             case SECOND:
                 if (direction == Direction.THIS) {
                     // absunit = AbsoluteUnit.NOW was set above
@@ -962,7 +978,6 @@ public final class RelativeDateTimeFormatter {
                 // could just fall through here but that produces warnings
                 useNumeric = true;
                 break;
-            case HOUR:
             default:
                 useNumeric = true;
                 break;
@@ -1203,8 +1218,8 @@ public final class RelativeDateTimeFormatter {
         // For white list of units to handle in RelativeDateTimeFormatter.
         private enum DateTimeUnit {
             SECOND(RelativeUnit.SECONDS, null),
-            MINUTE(RelativeUnit.MINUTES, null),
-            HOUR(RelativeUnit.HOURS, null),
+            MINUTE(RelativeUnit.MINUTES, AbsoluteUnit.MINUTE),
+            HOUR(RelativeUnit.HOURS, AbsoluteUnit.HOUR),
             DAY(RelativeUnit.DAYS, AbsoluteUnit.DAY),
             WEEK(RelativeUnit.WEEKS, AbsoluteUnit.WEEK),
             MONTH(RelativeUnit.MONTHS, AbsoluteUnit.MONTH),
