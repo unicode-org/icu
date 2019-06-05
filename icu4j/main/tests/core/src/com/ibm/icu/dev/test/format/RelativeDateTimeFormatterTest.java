@@ -405,6 +405,8 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
                 {Direction.THIS, AbsoluteUnit.FRIDAY, "this Friday"},
                 {Direction.THIS, AbsoluteUnit.SATURDAY, "this Saturday"},
                 {Direction.THIS, AbsoluteUnit.SUNDAY, "this Sunday"},
+                {Direction.THIS, AbsoluteUnit.HOUR, "this hour"},
+                {Direction.THIS, AbsoluteUnit.MINUTE, "this minute"},
 
                 {Direction.PLAIN, AbsoluteUnit.DAY, "day"},
                 {Direction.PLAIN, AbsoluteUnit.WEEK, "week"},
@@ -729,8 +731,8 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
             "2 minutes ago",        "2 minutes ago",      /* -2   */
             "1 minute ago",         "1 minute ago",       /* -1   */
             "0.7 minutes ago",      "0.7 minutes ago",    /* -0.7 */
-            "0 minutes ago",        "0 minutes ago",      /* -0   */
-            "in 0 minutes",         "in 0 minutes",       /*  0   */
+            "this minute",          "0 minutes ago",      /* -0   */
+            "this minute",          "in 0 minutes",       /*  0   */
             "in 0.7 minutes",       "in 0.7 minutes",     /*  0.7 */
             "in 1 minute",          "in 1 minute",        /*  1   */
             "in 2 minutes",         "in 2 minutes",       /*  2   */
