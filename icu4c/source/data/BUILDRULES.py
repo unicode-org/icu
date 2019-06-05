@@ -12,7 +12,6 @@ from icutools.databuilder.request_types import *
 
 import os
 import sys
-import xml.etree.ElementTree as ET
 
 
 def generate(config, glob, common_vars):
@@ -517,26 +516,28 @@ def generate_tree(
     ]
 
     # Generate res_index file
-    synthetic_locales = set()
-    if not config.ignore_xml_deprecates:
-        deprecates_xml_path = os.path.join(
-            os.path.dirname(__file__), xml_filename)
-        deprecates_xml = ET.parse(deprecates_xml_path)
-        for child in deprecates_xml.getroot():
-            if child.tag == "alias":
-                synthetic_locales.add(child.attrib["from"])
-            elif child.tag == "emptyLocale":
-                synthetic_locales.add(child.attrib["locale"])
-            else:
-                raise ValueError("Unknown tag in deprecates XML: %s" % child.tag)
-    index_input_files = []
+    # Exclude the deprecated locale variants and root; see ICU-20628. This
+    # could be data-driven, but we do not want to perform I/O in this script
+    # (for example, we do not want to read from an XML file).
+    excluded_locales = set([
+        "ja_JP_TRADITIONAL",
+        "th_TH_TRADITIONAL",
+        "de_",
+        "de__PHONEBOOK",
+        "es_",
+        "es__TRADITIONAL",
+        "root",
+    ])
+    # Put alias locales in a separate structure; see ICU-20627
+    alias_locales = set(locale_dependencies.data["aliases"].keys())
+    alias_files = []
+    installed_files = []
     for f in input_files:
-        file_stem = f.filename[f.filename.rfind("/")+1:-4]
-        if file_stem == "root":
+        file_stem = IndexRequest.locale_file_stem(f)
+        if file_stem in excluded_locales:
             continue
-        if file_stem in synthetic_locales:
-            continue
-        index_input_files.append(f)
+        destination = alias_files if file_stem in alias_locales else installed_files
+        destination.append(f)
     cldr_version = locale_dependencies.data["cldrVersion"] if sub_dir == "locales" else None
     index_file_txt = TmpFile("{IN_SUB_DIR}/{INDEX_NAME}.txt".format(
         IN_SUB_DIR = sub_dir,
@@ -551,7 +552,8 @@ def generate_tree(
         IndexRequest(
             name = index_file_target_name,
             category = category,
-            input_files = index_input_files,
+            installed_files = installed_files,
+            alias_files = alias_files,
             txt_file = index_file_txt,
             output_file = index_res_file,
             cldr_version = cldr_version,

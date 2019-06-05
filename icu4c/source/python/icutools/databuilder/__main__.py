@@ -84,12 +84,6 @@ flag_parser.add_argument(
     action = "store_true"
 )
 flag_parser.add_argument(
-    "--ignore_xml_deprecates",
-    help = "Whether to ignore XML deprecates files for building res_index.",
-    default = False,
-    action = "store_true"
-)
-flag_parser.add_argument(
     "--seqmode",
     help = "Whether to optimize rules to be run sequentially (fewer threads) or in parallel (many threads). Defaults to 'sequential', which is better for unix-exec and windows-exec modes. 'parallel' is often better for massively parallel build systems.",
     choices = ["sequential", "parallel"],
@@ -133,9 +127,6 @@ class Config(object):
 
         # Boolean: Whether to include core Unicode data files in the .dat file
         self.include_uni_core_data = args.include_uni_core_data
-
-        # Boolean: Whether to ignore the XML files
-        self.ignore_xml_deprecates = args.ignore_xml_deprecates
 
         # Default fields before processing filter file
         self.filters_json_data = {}
