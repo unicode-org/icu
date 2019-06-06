@@ -3,9 +3,11 @@
 
 // Fuzzer for ucasemap.
 
+#include <cstring>
+#include <functional>
+#include <memory>
 #include <stddef.h>
 #include <stdint.h>
-#include <memory>
 #include "fuzzer_utils.h"
 #include "unicode/ucasemap.h"
 

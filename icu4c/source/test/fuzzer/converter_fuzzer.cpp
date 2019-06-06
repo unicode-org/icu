@@ -6,6 +6,8 @@
 
 #include <algorithm>
 #include <array>
+#include <cstring>
+#include <functional>
 #include <memory>
 #include <vector>
 
