@@ -1,6 +1,7 @@
 // © 2019 and later: Unicode, Inc. and others.
 // License & terms of use: http://www.unicode.org/copyright.html
 
+#include <cstring>
 #include <stddef.h>
 #include <stdint.h>
 #include <string.h>

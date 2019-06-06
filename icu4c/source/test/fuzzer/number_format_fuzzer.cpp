@@ -3,8 +3,10 @@
 
 // Fuzzer for NumberFormat::parse.
 
+#include <cstring>
 #include <stddef.h>
 #include <stdint.h>
+#include <string>
 #include <memory>
 #include "fuzzer_utils.h"
 #include "unicode/numfmt.h"

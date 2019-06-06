@@ -1124,6 +1124,17 @@ AC_ARG_ENABLE(tools,
 	tools=true)
 ICU_CONDITIONAL(TOOLS, test "$tools" = true)
 
+# Enable/disable fuzzer target tests.
+AC_ARG_ENABLE(fuzzer,
+	[  --enable-fuzzer        build ICU's fuzzer test targets [default=no]],
+	[case "${enableval}" in
+		yes) fuzzer=true ;;
+		no)  fuzzer=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-fuzzer) ;;
+		esac],
+	fuzzer=false)
+ICU_CONDITIONAL(FUZZER, test "$fuzzer" = true)
+
 AC_ARG_WITH(data-packaging,
 	[  --with-data-packaging     specify how to package ICU data. Possible values:
         files    raw files (.res, etc)
@@ -1387,6 +1398,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		test/perf/utfperf/Makefile \
 		test/perf/utrie2perf/Makefile \
 		test/perf/leperf/Makefile \
+		test/fuzzer/Makefile \
 		samples/Makefile samples/date/Makefile \
 		samples/cal/Makefile samples/layout/Makefile])
 AC_OUTPUT
