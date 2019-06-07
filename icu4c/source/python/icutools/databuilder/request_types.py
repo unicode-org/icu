@@ -304,7 +304,7 @@ class IndexRequest(AbstractRequest):
                 del self.installed_files[i]
         j = 0
         while j < len(self.alias_files):
-            if filter.match(self.alias_files[i]):
+            if filter.match(self.alias_files[j]):
                 j += 1
             else:
                 del self.alias_files[j]
