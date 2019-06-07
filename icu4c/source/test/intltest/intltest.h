@@ -18,6 +18,9 @@
 #include "unicode/testlog.h"
 #include "unicode/uniset.h"
 
+#include <vector>
+#include <string>
+
 U_NAMESPACE_USE
 
 #if U_PLATFORM == U_PF_OS390
@@ -297,6 +300,8 @@ public:
     UBool assertEquals(const char* message, double expected, double actual);
     UBool assertEquals(const char* message, UErrorCode expected, UErrorCode actual);
     UBool assertEquals(const char* message, const UnicodeSet& expected, const UnicodeSet& actual);
+    UBool assertEquals(const char* message,
+        const std::vector<std::string>& expected, const std::vector<std::string>& actual);
 #if !UCONFIG_NO_FORMATTING
     UBool assertEquals(const char* message, const Formattable& expected,
                        const Formattable& actual, UBool possibleDataError=FALSE);
@@ -315,6 +320,8 @@ public:
     UBool assertEquals(const UnicodeString& message, double expected, double actual);
     UBool assertEquals(const UnicodeString& message, UErrorCode expected, UErrorCode actual);
     UBool assertEquals(const UnicodeString& message, const UnicodeSet& expected, const UnicodeSet& actual);
+    UBool assertEquals(const UnicodeString& message,
+        const std::vector<std::string>& expected, const std::vector<std::string>& actual);
 
     virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ); // overide !
 

@@ -465,6 +465,7 @@
     <ClCompile Include="utext.cpp" />
     <ClCompile Include="utf_impl.cpp" />
     <ClCompile Include="static_unicode_sets.cpp" />
+    <ClCompile Include="restrace.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="localsvc.h" />
@@ -575,6 +576,7 @@
     <ClInclude Include="static_unicode_sets.h" />
     <ClInclude Include="capi_helper.h" />
     <ClInclude Include="unicode\localebuilder.h" />
+    <ClInclude Include="restrace.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="common.rc" />

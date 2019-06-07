@@ -33,6 +33,7 @@ might have to #include some other header
 #include "cstring.h"
 #include "mutex.h"
 #include "putilimp.h"
+#include "restrace.h"
 #include "uassert.h"
 #include "ucln_cmn.h"
 #include "ucmndata.h"
@@ -1166,6 +1167,9 @@ doOpenChoice(const char *path, const char *type, const char *name,
     const char         *treeChar;
 
     UBool               isICUData = FALSE;
+
+
+    FileTracer::traceOpen(path, type, name);
 
 
     /* Is this path ICU data? */

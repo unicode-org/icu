@@ -28,6 +28,7 @@
 #include "unicode/utypes.h"
 #include "unicode/unistr.h"
 #include "unicode/ures.h"
+#include "restrace.h"
 
 struct ResourceData;
 
@@ -47,8 +48,10 @@ public:
     ResourceArray() : items16(NULL), items32(NULL), length(0) {}
 
     /** Only for implementation use. @internal */
-    ResourceArray(const uint16_t *i16, const uint32_t *i32, int32_t len) :
-            items16(i16), items32(i32), length(len) {}
+    ResourceArray(const uint16_t *i16, const uint32_t *i32, int32_t len,
+                  const ResourceTracer& traceInfo) :
+            items16(i16), items32(i32), length(len),
+            fTraceInfo(traceInfo) {}
 
     /**
      * @return The number of items in the array resource.
@@ -68,6 +71,7 @@ private:
     const uint16_t *items16;
     const uint32_t *items32;
     int32_t length;
+    ResourceTracer fTraceInfo;
 };
 
 /**
@@ -80,8 +84,10 @@ public:
 
     /** Only for implementation use. @internal */
     ResourceTable(const uint16_t *k16, const int32_t *k32,
-                  const uint16_t *i16, const uint32_t *i32, int32_t len) :
-            keys16(k16), keys32(k32), items16(i16), items32(i32), length(len) {}
+                  const uint16_t *i16, const uint32_t *i32, int32_t len,
+                  const ResourceTracer& traceInfo) :
+            keys16(k16), keys32(k32), items16(i16), items32(i32), length(len),
+            fTraceInfo(traceInfo) {}
 
     /**
      * @return The number of items in the array resource.
@@ -101,6 +107,7 @@ private:
     const uint16_t *items16;
     const uint32_t *items32;
     int32_t length;
+    ResourceTracer fTraceInfo;
 };
 
 /**

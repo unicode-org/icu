@@ -66,6 +66,7 @@ typedef enum UTraceFunctionNumber {
     UTRACE_FUNCTION_START=0,
     UTRACE_U_INIT=UTRACE_FUNCTION_START,
     UTRACE_U_CLEANUP,
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal collation trace location.
@@ -83,6 +84,7 @@ typedef enum UTraceFunctionNumber {
     UTRACE_UCNV_FLUSH_CACHE,
     UTRACE_UCNV_LOAD,
     UTRACE_UCNV_UNLOAD,
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal collation trace location.
@@ -101,13 +103,55 @@ typedef enum UTraceFunctionNumber {
     UTRACE_UCOL_STRCOLLITER,
     UTRACE_UCOL_OPEN_FROM_SHORT_STRING,
     UTRACE_UCOL_STRCOLLUTF8, /**< @stable ICU 50 */
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * One more than the highest normal collation trace location.
      * @deprecated ICU 58 The numeric value may change over time, see ICU ticket #12420.
      */
-    UTRACE_COLLATION_LIMIT
+    UTRACE_COLLATION_LIMIT,
 #endif  // U_HIDE_DEPRECATED_API
+
+#ifndef U_HIDE_DRAFT_API
+
+    /**
+     * The lowest resource/data location.
+     * @draft ICU 65
+     */
+    UTRACE_RES_DATA_START=0x3000,
+
+    /**
+     * Indicates that a value was read from a resource bundle. Provides three
+     * C-style strings to UTraceData: type, file name, and resource path. The
+     * type is "string", "binary", "intvector", "int", or "uint".
+     * @draft ICU 65
+     */
+    UTRACE_UDATA_RESOURCE=UTRACE_RES_DATA_START,
+
+    /**
+     * Indicates that a value was read from a resource bundle. Provides one
+     * C-style string to UTraceData: file name.
+     * @draft ICU 65
+     */
+    UTRACE_UDATA_DATA_FILE,
+
+    /**
+     * Indicates that a value was read from a resource bundle. Provides one
+     * C-style string to UTraceData: file name.
+     * @draft ICU 65
+     */
+    UTRACE_UDATA_RES_FILE,
+
+#endif  // U_HIDE_DRAFT_API
+
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * One more than the highest normal resource/data trace location.
+     * @internal The numeric value may change over time, see ICU ticket #12420.
+     */
+    UTRACE_RES_DATA_LIMIT,
+#endif  // U_HIDE_INTERNAL_API
+
 } UTraceFunctionNumber;
 
 /**
