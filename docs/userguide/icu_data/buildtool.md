@@ -518,6 +518,10 @@ following command line run from *iuc4c/source*.
 **Install jsonschema:** Install the `jsonschema` pip package to get warnings
 about problems with your filter file.
 
+**See what data is being used:** ICU is instrumented to allow you to trace
+which resources are used at runtime. This can help you determine what data you
+need to include. For more information, see [tracing.md](tracing.md).
+
 **Inspect data/rules.mk:** The Python script outputs the file *rules.mk*
 inside *iuc4c/source/data*. To see what is going to get built, you can inspect
 that file. First build ICU normally, and copy *rules.mk* to

@@ -2105,6 +2105,42 @@ UBool IntlTest::assertEquals(const char* message,
 }
 #endif
 
+std::string vectorToString(const std::vector<std::string>& strings) {
+    std::string result = "{";
+    bool first = true;
+    for (auto element : strings) {
+        if (first) {
+            first = false;
+        } else {
+            result += ", ";
+        }
+        result += "\"";
+        result += element;
+        result += "\"";
+    }
+    result += "}";
+    return result;
+}
+
+UBool IntlTest::assertEquals(const char* message,
+                             const std::vector<std::string>& expected,
+                             const std::vector<std::string>& actual) {
+    if (expected != actual) {
+        std::string expectedAsString = vectorToString(expected);
+        std::string actualAsString = vectorToString(actual);
+        errln((UnicodeString)"FAIL: " + message +
+            "; got " + actualAsString.c_str() +
+            "; expected " + expectedAsString.c_str());
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString)"Ok: " + message + "; got " + vectorToString(actual).c_str());
+    }
+#endif
+    return TRUE;
+}
+
 static char ASSERT_BUF[256];
 
 static const char* extractToAssertBuf(const UnicodeString& message) {
@@ -2167,6 +2203,11 @@ UBool IntlTest::assertEquals(const UnicodeString& message,
 UBool IntlTest::assertEquals(const UnicodeString& message,
                              const UnicodeSet& expected,
                              const UnicodeSet& actual) {
+    return assertEquals(extractToAssertBuf(message), expected, actual);
+}
+UBool IntlTest::assertEquals(const UnicodeString& message,
+                             const std::vector<std::string>& expected,
+                             const std::vector<std::string>& actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
 }
 

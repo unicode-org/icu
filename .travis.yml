@@ -51,7 +51,7 @@ matrix:
       before_script:
         - mkdir build
         - cd build
-        - ../icu4c/source/runConfigureICU --enable-debug --disable-release Linux --prefix="${PREFIX}"
+        - ../icu4c/source/runConfigureICU --enable-debug --disable-release Linux --prefix="${PREFIX}" --enable-tracing
         - make -j2
       script:
         - make -j2 check
@@ -105,7 +105,7 @@ matrix:
                   - clang-5.0
       before_script:
         - cd icu4c/source
-        - ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming
+        - ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming --enable-tracing
         - make -j2
       script:
         - make -j2 check
@@ -131,11 +131,11 @@ matrix:
               packages:
                   - clang-5.0
       script:
-          - cd icu4c/source &&
-            ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming &&
-            make -j2  &&
-            make -j2 -C test &&
-            make -j2 -C test/intltest check
+          - cd icu4c/source
+          - ./runConfigureICU --enable-debug --disable-release Linux --disable-renaming
+          - make -j2
+          - make -j2 -C test
+          - make -j2 -C test/intltest check
 
     # copyright scan / future linter
     - name: "lint"

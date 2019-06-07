@@ -646,11 +646,12 @@ group: localebuilder
     resourcebundle
 
 group: udata
-    udata.o ucmndata.o udatamem.o
+    udata.o ucmndata.o udatamem.o restrace.o
     umapfile.o
   deps
     uhash platform stubdata
     file_io mmap_functions
+    icu_utility
 
 group: unifiedcache
     unifiedcache.o

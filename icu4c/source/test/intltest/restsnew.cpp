@@ -11,12 +11,42 @@
 #include "cstring.h"
 #include "unicode/unistr.h"
 #include "unicode/resbund.h"
+#include "unicode/brkiter.h"
+#include "unicode/utrace.h"
+#include "unicode/ucurr.h"
 #include "restsnew.h"
 
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
 #include <limits.h>
+#include <vector>
+#include <string>
+
+//***************************************************************************************
+
+void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
+{
+    if (exec) logln("TestSuite ResourceBundleTest: ");
+    TESTCASE_AUTO_BEGIN;
+
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
+    TESTCASE_AUTO(TestResourceBundles);
+    TESTCASE_AUTO(TestConstruction);
+    TESTCASE_AUTO(TestIteration);
+    TESTCASE_AUTO(TestOtherAPI);
+    TESTCASE_AUTO(TestNewTypes);
+#endif
+
+    TESTCASE_AUTO(TestGetByFallback);
+    TESTCASE_AUTO(TestFilter);
+
+#if U_ENABLE_TRACING
+    TESTCASE_AUTO(TestTrace);
+#endif
+
+    TESTCASE_AUTO_END;
+}
 
 //***************************************************************************************
 
@@ -177,27 +207,6 @@ NewResourceBundleTest::~NewResourceBundleTest()
             delete param[idx].locale;
             param[idx].locale = NULL;
         }
-    }
-}
-
-void NewResourceBundleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
-{
-    if (exec) logln("TestSuite ResourceBundleTest: ");
-    switch (index) {
-#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
-    case 0: name = "TestResourceBundles"; if (exec) TestResourceBundles(); break;
-    case 1: name = "TestConstruction"; if (exec) TestConstruction(); break;
-    case 2: name = "TestIteration"; if (exec) TestIteration(); break;
-    case 3: name = "TestOtherAPI";  if(exec) TestOtherAPI(); break;
-    case 4: name = "TestNewTypes";  if(exec) TestNewTypes(); break;
-#else
-    case 0: case 1: case 2: case 3: case 4: name = "skip"; break;
-#endif
-
-    case 5: name = "TestGetByFallback";  if(exec) TestGetByFallback(); break;
-    case 6: name = "TestFilter";  if(exec) TestFilter(); break;
-
-        default: name = ""; break; //needed to end loop
     }
 }
 
@@ -1342,6 +1351,87 @@ void NewResourceBundleTest::TestFilter() {
         }
     }
 }
+
+#if U_ENABLE_TRACING
+
+static std::vector<std::string> gResourcePathsTraced;
+static std::vector<std::string> gDataFilesTraced;
+static std::vector<std::string> gResFilesTraced;
+
+static void U_CALLCONV traceData(
+        const void*,
+        int32_t fnNumber,
+        int32_t,
+        const char *,
+        va_list args) {
+
+    if (fnNumber == UTRACE_UDATA_RESOURCE) {
+        va_arg(args, const char*); // type
+        va_arg(args, const char*); // file
+        const char* resourcePath = va_arg(args, const char*);
+        gResourcePathsTraced.push_back(resourcePath);
+    } else if (fnNumber == UTRACE_UDATA_DATA_FILE) {
+        const char* filePath = va_arg(args, const char*);
+        gDataFilesTraced.push_back(filePath);
+    } else if (fnNumber == UTRACE_UDATA_RES_FILE) {
+        const char* filePath = va_arg(args, const char*);
+        gResFilesTraced.push_back(filePath);
+    }
+}
+
+void NewResourceBundleTest::TestTrace() {
+    IcuTestErrorCode status(*this, "TestTrace");
+
+    const void* context;
+    utrace_setFunctions(context, nullptr, nullptr, traceData);
+    utrace_setLevel(UTRACE_VERBOSE);
+
+    {
+        LocalPointer<BreakIterator> brkitr(BreakIterator::createWordInstance("zh-CN", status));
+
+        assertEquals("Should touch expected resource paths",
+            { "/boundaries/word" },
+            gResourcePathsTraced);
+        assertEquals("Should touch expected data files",
+            { U_ICUDATA_NAME "-brkitr/word.brk" },
+            gDataFilesTraced);
+        // NOTE: The following passes only when this test is run in isolation.
+        // If run in "make check", these files were already open.
+        // assertEquals("Should touch expected resource files",
+        //     {
+        //         U_ICUDATA_NAME "-brkitr/zh_CN.res",
+        //         U_ICUDATA_NAME "-brkitr/zh.res",
+        //         U_ICUDATA_NAME "-brkitr/root.res"
+        //     },
+        //     gResFilesTraced);
+        gResourcePathsTraced.clear();
+        gDataFilesTraced.clear();
+        gResFilesTraced.clear();
+    }
+
+    {
+        ucurr_getDefaultFractionDigits(u"USD", status);
+
+        assertEquals("Should touch expected resource paths",
+            { "/CurrencyMeta/DEFAULT" },
+            gResourcePathsTraced);
+        assertEquals("Should touch expected data files",
+            { },
+            gDataFilesTraced);
+        // NOTE: The following passes only when this test is run in isolation.
+        // If run in "make check", these files were already open.
+        // assertEquals("Should touch expected resource files",
+        //     { U_ICUDATA_NAME "-curr/supplementalData.res" },
+        //     gResFilesTraced);
+        gResourcePathsTraced.clear();
+        gDataFilesTraced.clear();
+        gResFilesTraced.clear();
+    }
+
+    utrace_setFunctions(context, nullptr, nullptr, nullptr);
+}
+
+#endif
 
 //eof
 

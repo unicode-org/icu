@@ -33,6 +33,7 @@
 #include "uinvchar.h"
 #include "uresdata.h"
 #include "uresimp.h"
+#include "utracimp.h"
 
 /*
  * Resource access helpers
@@ -307,7 +308,7 @@ res_getPublicType(Resource res) {
 }
 
 U_CAPI const UChar * U_EXPORT2
-res_getString(const ResourceData *pResData, Resource res, int32_t *pLength) {
+res_getStringNoTrace(const ResourceData *pResData, Resource res, int32_t *pLength) {
     const UChar *p;
     uint32_t offset=RES_GET_OFFSET(res);
     int32_t length;
@@ -402,7 +403,8 @@ int32_t getStringArray(const ResourceData *pResData, const icu::ResourceArray &a
     }
     for(int32_t i = 0; i < length; ++i) {
         int32_t sLength;
-        const UChar *s = res_getString(pResData, array.internalGetResource(pResData, i), &sLength);
+        // No tracing: handled by the caller
+        const UChar *s = res_getStringNoTrace(pResData, array.internalGetResource(pResData, i), &sLength);
         if(s == NULL) {
             errorCode = U_RESOURCE_TYPE_MISMATCH;
             return 0;
@@ -434,7 +436,7 @@ res_getAlias(const ResourceData *pResData, Resource res, int32_t *pLength) {
 }
 
 U_CAPI const uint8_t * U_EXPORT2
-res_getBinary(const ResourceData *pResData, Resource res, int32_t *pLength) {
+res_getBinaryNoTrace(const ResourceData *pResData, Resource res, int32_t *pLength) {
     const uint8_t *p;
     uint32_t offset=RES_GET_OFFSET(res);
     int32_t length;
@@ -454,7 +456,7 @@ res_getBinary(const ResourceData *pResData, Resource res, int32_t *pLength) {
 
 
 U_CAPI const int32_t * U_EXPORT2
-res_getIntVector(const ResourceData *pResData, Resource res, int32_t *pLength) {
+res_getIntVectorNoTrace(const ResourceData *pResData, Resource res, int32_t *pLength) {
     const int32_t *p;
     uint32_t offset=RES_GET_OFFSET(res);
     int32_t length;
@@ -507,7 +509,7 @@ const UChar *ResourceDataValue::getString(int32_t &length, UErrorCode &errorCode
     if(U_FAILURE(errorCode)) {
         return NULL;
     }
-    const UChar *s = res_getString(pResData, res, &length);
+    const UChar *s = res_getString(fTraceInfo, pResData, res, &length);
     if(s == NULL) {
         errorCode = U_RESOURCE_TYPE_MISMATCH;
     }
@@ -532,7 +534,7 @@ int32_t ResourceDataValue::getInt(UErrorCode &errorCode) const {
     if(RES_GET_TYPE(res) != URES_INT) {
         errorCode = U_RESOURCE_TYPE_MISMATCH;
     }
-    return RES_GET_INT(res);
+    return res_getInt(fTraceInfo, res);
 }
 
 uint32_t ResourceDataValue::getUInt(UErrorCode &errorCode) const {
@@ -542,14 +544,14 @@ uint32_t ResourceDataValue::getUInt(UErrorCode &errorCode) const {
     if(RES_GET_TYPE(res) != URES_INT) {
         errorCode = U_RESOURCE_TYPE_MISMATCH;
     }
-    return RES_GET_UINT(res);
+    return res_getUInt(fTraceInfo, res);
 }
 
 const int32_t *ResourceDataValue::getIntVector(int32_t &length, UErrorCode &errorCode) const {
     if(U_FAILURE(errorCode)) {
         return NULL;
     }
-    const int32_t *iv = res_getIntVector(pResData, res, &length);
+    const int32_t *iv = res_getIntVector(fTraceInfo, pResData, res, &length);
     if(iv == NULL) {
         errorCode = U_RESOURCE_TYPE_MISMATCH;
     }
@@ -560,7 +562,7 @@ const uint8_t *ResourceDataValue::getBinary(int32_t &length, UErrorCode &errorCo
     if(U_FAILURE(errorCode)) {
         return NULL;
     }
-    const uint8_t *b = res_getBinary(pResData, res, &length);
+    const uint8_t *b = res_getBinary(fTraceInfo, pResData, res, &length);
     if(b == NULL) {
         errorCode = U_RESOURCE_TYPE_MISMATCH;
     }
@@ -590,7 +592,7 @@ ResourceArray ResourceDataValue::getArray(UErrorCode &errorCode) const {
         errorCode = U_RESOURCE_TYPE_MISMATCH;
         return ResourceArray();
     }
-    return ResourceArray(items16, items32, length);
+    return ResourceArray(items16, items32, length, fTraceInfo);
 }
 
 ResourceTable ResourceDataValue::getTable(UErrorCode &errorCode) const {
@@ -627,7 +629,7 @@ ResourceTable ResourceDataValue::getTable(UErrorCode &errorCode) const {
         errorCode = U_RESOURCE_TYPE_MISMATCH;
         return ResourceTable();
     }
-    return ResourceTable(keys16, keys32, items16, items32, length);
+    return ResourceTable(keys16, keys32, items16, items32, length, fTraceInfo);
 }
 
 UBool ResourceDataValue::isNoInheritanceMarker() const {
@@ -656,7 +658,7 @@ int32_t ResourceDataValue::getStringArrayOrStringAsArray(UnicodeString *dest, in
         return 1;
     }
     int32_t sLength;
-    const UChar *s = res_getString(pResData, res, &sLength);
+    const UChar *s = res_getString(fTraceInfo, pResData, res, &sLength);
     if(s != NULL) {
         dest[0].setTo(TRUE, s, sLength);
         return 1;
@@ -671,7 +673,7 @@ UnicodeString ResourceDataValue::getStringOrFirstOfArray(UErrorCode &errorCode) 
         return us;
     }
     int32_t sLength;
-    const UChar *s = res_getString(pResData, res, &sLength);
+    const UChar *s = res_getString(fTraceInfo, pResData, res, &sLength);
     if(s != NULL) {
         us.setTo(TRUE, s, sLength);
         return us;
@@ -681,7 +683,8 @@ UnicodeString ResourceDataValue::getStringOrFirstOfArray(UErrorCode &errorCode) 
         return us;
     }
     if(array.getSize() > 0) {
-        s = res_getString(pResData, array.internalGetResource(pResData, 0), &sLength);
+        // Tracing is already performed above (unimportant for trace that this is an array)
+        s = res_getStringNoTrace(pResData, array.internalGetResource(pResData, 0), &sLength);
         if(s != NULL) {
             us.setTo(TRUE, s, sLength);
             return us;
@@ -829,7 +832,11 @@ UBool icu::ResourceTable::getKeyAndValue(int32_t i,
         } else {
             res = items32[i];
         }
-        rdValue.setResource(res);
+        // Note: the ResourceTracer keeps a reference to the field of this
+        // ResourceTable. This is OK because the ResourceTable should remain
+        // alive for the duration that fields are being read from it
+        // (including nested fields).
+        rdValue.setResource(res, ResourceTracer(fTraceInfo, key));
         return TRUE;
     }
     return FALSE;
@@ -875,7 +882,13 @@ uint32_t icu::ResourceArray::internalGetResource(const ResourceData *pResData, i
 UBool icu::ResourceArray::getValue(int32_t i, icu::ResourceValue &value) const {
     if(0 <= i && i < length) {
         icu::ResourceDataValue &rdValue = static_cast<icu::ResourceDataValue &>(value);
-        rdValue.setResource(internalGetResource(rdValue.pResData, i));
+        // Note: the ResourceTracer keeps a reference to the field of this
+        // ResourceArray. This is OK because the ResourceArray should remain
+        // alive for the duration that fields are being read from it
+        // (including nested fields).
+        rdValue.setResource(
+            internalGetResource(rdValue.pResData, i),
+            ResourceTracer(fTraceInfo, i));
         return TRUE;
     }
     return FALSE;
