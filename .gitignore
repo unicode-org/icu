@@ -49,7 +49,6 @@ icu4c/source/common/icucfg.h
 icu4c/source/common/libicu*.*
 icu4c/source/common/release
 icu4c/source/common/svchook.mk
-icu4c/source/common/unicode/platform.h
 icu4c/source/common/x64
 icu4c/source/common/x86
 icu4c/source/config.cache
@@ -218,7 +217,6 @@ icu4c/source/samples/coll/x64
 icu4c/source/samples/coll/x86
 icu4c/source/samples/csdet/*.vcxproj.user
 icu4c/source/samples/csdet/Debug
-icu4c/source/samples/csdet/Makefile
 icu4c/source/samples/csdet/csdet
 icu4c/source/samples/csdet/csdet.exe
 icu4c/source/samples/csdet/csdet.out
@@ -836,6 +834,7 @@ icu4c/source/tools/icuinfo/Makefile.local
 icu4c/source/tools/icuinfo/icuinfo
 icu4c/source/tools/icuinfo/icuinfo.exe
 icu4c/source/tools/icuinfo/icuplugins*.txt
+!icu4c/source/tools/icuinfo/icuplugins_windows_sample.txt
 icu4c/source/tools/icuinfo/x64
 icu4c/source/tools/icuinfo/x86
 icu4c/source/tools/icupkg/*.8
