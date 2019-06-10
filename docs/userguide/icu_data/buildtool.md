@@ -673,6 +673,21 @@ implicithan version, put the following setting in your *filters.json* file:
       "collationUCAData": "implicithan"
     }
 
+### Disable Pool Bundle
+
+By default, ICU uses a "pool bundle" to store strings shared between locales.
+This saves space and is recommended for most users. However, when developing
+a system where locale data files may be added "on the fly" and not included in
+the original ICU distribution, those additional data files may not be able to
+use a pool bundle due to name collisions with the existing pool bundle.
+
+To disable the pool bundle in the current ICU build, put the following setting
+in your *filters.json* file:
+
+    {
+      "usePoolBundle": false
+    }
+
 ### File Substitution
 
 Using the configuration file, you can perform whole-file substitutions.  For

@@ -151,6 +151,11 @@ class Config(object):
         if "strategy" in self.filters_json_data:
             self.strategy = self.filters_json_data["strategy"]
 
+        # True or False (could be extended later to support enum/list)
+        self.use_pool_bundle = True
+        if "usePoolBundle" in self.filters_json_data:
+            self.use_pool_bundle = self.filters_json_data["usePoolBundle"]
+
     def _parse_filter_file(self, f):
         # Use the Hjson parser if it is available; otherwise, use vanilla JSON.
         try:
