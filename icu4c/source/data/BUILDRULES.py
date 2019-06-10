@@ -42,48 +42,49 @@ def generate(config, glob, common_vars):
         "locales",
         None,
         "icu-locale-deprecates.xml",
-        True,
+        config.use_pool_bundle,
         [])
 
     requests += generate_tree(config, glob, common_vars,
         "curr",
         "curr",
         "icu-locale-deprecates.xml",
-        True,
+        config.use_pool_bundle,
         [])
 
     requests += generate_tree(config, glob, common_vars,
         "lang",
         "lang",
         "icu-locale-deprecates.xml",
-        True,
+        config.use_pool_bundle,
         [])
 
     requests += generate_tree(config, glob, common_vars,
         "region",
         "region",
         "icu-locale-deprecates.xml",
-        True,
+        config.use_pool_bundle,
         [])
 
     requests += generate_tree(config, glob, common_vars,
         "zone",
         "zone",
         "icu-locale-deprecates.xml",
-        True,
+        config.use_pool_bundle,
         [])
 
     requests += generate_tree(config, glob, common_vars,
         "unit",
         "unit",
         "icu-locale-deprecates.xml",
-        True,
+        config.use_pool_bundle,
         [])
 
     requests += generate_tree(config, glob, common_vars,
         "coll",
         "coll",
         "icu-coll-deprecates.xml",
+        # Never use pool bundle for coll, brkitr, or rbnf
         False,
         # Depends on timezoneTypes.res and keyTypeData.res.
         # TODO: We should not need this dependency to build collation.
@@ -94,6 +95,7 @@ def generate(config, glob, common_vars):
         "brkitr",
         "brkitr",
         "icu-locale-deprecates.xml",
+        # Never use pool bundle for coll, brkitr, or rbnf
         False,
         [DepTarget("brkitr_brk"), DepTarget("dictionaries")])
 
@@ -101,6 +103,7 @@ def generate(config, glob, common_vars):
         "rbnf",
         "rbnf",
         "icu-rbnf-deprecates.xml",
+        # Never use pool bundle for coll, brkitr, or rbnf
         False,
         [])
 
