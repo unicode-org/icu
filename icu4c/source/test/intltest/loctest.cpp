@@ -253,6 +253,7 @@ void LocaleTest::runIndexedTest( int32_t index, UBool exec, const char* &name, c
     TESTCASE_AUTO(TestBug13277);
     TESTCASE_AUTO(TestBug13554);
     TESTCASE_AUTO(TestBug20410);
+    TESTCASE_AUTO(TestConstructorAcceptsBCP47);
     TESTCASE_AUTO(TestForLanguageTag);
     TESTCASE_AUTO(TestToLanguageTag);
     TESTCASE_AUTO(TestMoveAssign);
@@ -3076,6 +3077,45 @@ void LocaleTest::TestBug20410() {
     Locale result4 = Locale::createCanonical(locid4);
     static const Locale expected4("jbo@x=0");
     assertEquals(locid4, expected4.getName(), result4.getName());
+}
+
+void LocaleTest::TestConstructorAcceptsBCP47() {
+    IcuTestErrorCode status(*this, "TestConstructorAcceptsBCP47");
+
+    Locale loc1("ar-EG-u-nu-latn");
+    Locale loc2("ar-EG@numbers=latn");
+    Locale loc3("ar-EG");
+    std::string val;
+
+    // Check getKeywordValue "numbers"
+    val = loc1.getKeywordValue<std::string>("numbers", status);
+    assertEquals("BCP47 syntax has ICU keyword value", "latn", val.c_str());
+
+    val = loc2.getKeywordValue<std::string>("numbers", status);
+    assertEquals("ICU syntax has ICU keyword value", "latn", val.c_str());
+
+    val = loc3.getKeywordValue<std::string>("numbers", status);
+    assertEquals("Default, ICU keyword", "", val.c_str());
+
+    // Check getUnicodeKeywordValue "nu"
+    val = loc1.getUnicodeKeywordValue<std::string>("nu", status);
+    assertEquals("BCP47 syntax has short unicode keyword value", "latn", val.c_str());
+
+    val = loc2.getUnicodeKeywordValue<std::string>("nu", status);
+    assertEquals("ICU syntax has short unicode keyword value", "latn", val.c_str());
+
+    val = loc3.getUnicodeKeywordValue<std::string>("nu", status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR, "Default, short unicode keyword");
+
+    // Check getUnicodeKeywordValue "numbers"
+    val = loc1.getUnicodeKeywordValue<std::string>("numbers", status);
+    assertEquals("BCP47 syntax has long unicode keyword value", "latn", val.c_str());
+
+    val = loc2.getUnicodeKeywordValue<std::string>("numbers", status);
+    assertEquals("ICU syntax has long unicode keyword value", "latn", val.c_str());
+
+    val = loc3.getUnicodeKeywordValue<std::string>("numbers", status);
+    status.expectErrorAndReset(U_ILLEGAL_ARGUMENT_ERROR, "Default, long unicode keyword");
 }
 
 void LocaleTest::TestForLanguageTag() {
