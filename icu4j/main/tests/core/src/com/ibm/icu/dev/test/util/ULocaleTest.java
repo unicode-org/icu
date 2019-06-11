@@ -4139,6 +4139,26 @@ public class ULocaleTest extends TestFmwk {
     }
 
     @Test
+    public void TestConstructorAcceptsBCP47() {
+        ULocale loc1 = new ULocale("ar-EG-u-nu-latn");
+        ULocale loc2 = new ULocale("ar-EG@numbers=latn");
+        ULocale loc3 = new ULocale("ar-EG");
+        String val;
+
+        // Check getKeywordValue "numbers"
+        val = loc1.getKeywordValue("numbers");
+        assertEquals("BCP47 syntax has ICU keyword value", "latn", val);
+
+        val = loc2.getKeywordValue("numbers");
+        assertEquals("ICU syntax has ICU keyword value", "latn", val);
+
+        val = loc3.getKeywordValue("numbers");
+        assertEquals("Default, ICU keyword", null, val);
+        
+        // Note: ICU does not have getUnicodeKeywordValue()
+    }
+
+    @Test
     public void TestForLanguageTag() {
         final Integer NOERROR = Integer.valueOf(-1);
 
