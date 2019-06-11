@@ -45,11 +45,14 @@ Unix or when building the data package on Windows.  For example:
 
     ICU_DATA_FILTER_FILE=filters.json path/to/icu4c/source/runConfigureICU Linux
 
-The ICU Data Build Tool will work out of the box with a default Python
-installation.  In order to use Hjson syntax, the `hjson` pip module must be
-installed on your system.  You should also consider installing the
-`jsonschema` module to print messages when errors are found in your config
-file.
+You must have the data sources in order to use the ICU Data Build Tool.
+Check for the file icu4c/source/data/locales/root.txt. If that file is
+missing, you need to download "icu4c-*-data.zip" and replace the contents of
+icu4c/source/data with the data directory from the zip file.
+
+In order to use Hjson syntax, the `hjson` pip module must be installed on
+your system.  You should also consider installing the `jsonschema` module to
+print messages when errors are found in your config file.
 
     $ pip3 install --user hjson jsonschema
 
@@ -557,6 +560,10 @@ back to a txt file, you can run this command from *icu4c/source*:
 
 That will produce a file *en.txt* in your current directory, which is the
 original *data/unit/en.txt* but after resource filters were applied.
+
+*Tip:* derb expects your res files to be rooted in a directory named
+`icudt64l` (corresponding to your current ICU version and endianness). If your
+files are not in such a directory, derb fails with U_MISSING_RESOURCE_ERROR.
 
 **Put complex rules first** and **use the wildcard `*` sparingly:** The order
 of the filter rules matters a great deal in how effective your data size
