@@ -1,0 +1,10 @@
+{
+  "localeFilter": {
+    "filterType": "language",
+    "whitelist": [
+      "en",
+      "de",
+      "zh"
+    ]
+  }
+}
