@@ -37,6 +37,19 @@ jobs:
         CC: clang
         CXX: clang++
 #-------------------------------------------------------------------------
+- job: ICU4C_Clang_Ubuntu_DataFilter_1604
+  displayName: 'C: Linux Clang DataFilter (Ubuntu 16.04)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  steps:
+    - script: |
+        cd icu4c/source && ICU_DATA_FILTER_FILE=../../.ci-builds/data-filter.json ./runConfigureICU Linux && make -j2
+      displayName: 'Build with Data Filter'
+      env:
+        CC: clang
+        CXX: clang++
+#-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_Release
   displayName: 'C: MSVC 64-bit Release (VS 2017)'
   timeoutInMinutes: 30
@@ -70,6 +83,28 @@ jobs:
       inputs:
         PathtoPublish: 'icu4c/source/dist/icu-windows.zip'
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x64_Release'
+#-------------------------------------------------------------------------
+- job: ICU4C_MSVC_x64_Release_DataFilter
+  displayName: 'C: MSVC 64-bit Release DataFilter (VS 2017)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'vs2017-win2016'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - powershell: |
+        $filterPath = $Env:BUILD_SOURCESDIRECTORY + "\.ci-builds\data-filter.json"
+        $vstsCommandString = "vso[task.setvariable variable=ICU_DATA_FILTER_FILE]" + $filterPath
+        Write-Host "##$vstsCommandString"
+    - task: VSBuild@1
+      displayName: 'Build Solution with Data Filter'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Release
+        msbuildArgs: '/p:SkipUWP=true'
 #-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x86_Debug
   displayName: 'C: MSVC 32-bit Debug (VS 2017)'
