@@ -700,21 +700,6 @@ UnicodeString &MeasureFormat::formatMeasure(
     return appendTo;
 }
 
-static void appendRange(
-        const UnicodeString &src,
-        int32_t start,
-        int32_t end,
-        UnicodeString &dest) {
-    dest.append(src, start, end - start);
-}
-
-static void appendRange(
-        const UnicodeString &src,
-        int32_t end,
-        UnicodeString &dest) {
-    dest.append(src, end, src.length() - end);
-}
-
 
 // Formats numeric time duration as 5:00:47 or 3:54.
 UnicodeString &MeasureFormat::formatNumeric(
