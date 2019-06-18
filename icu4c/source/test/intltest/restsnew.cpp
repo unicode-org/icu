@@ -1356,7 +1356,7 @@ void NewResourceBundleTest::TestFilter() {
 
 static std::vector<std::string> gResourcePathsTraced;
 static std::vector<std::string> gDataFilesTraced;
-static std::vector<std::string> gResFilesTraced;
+static std::vector<std::string> gBundlesTraced;
 
 static void U_CALLCONV traceData(
         const void*,
@@ -1365,22 +1365,29 @@ static void U_CALLCONV traceData(
         const char *,
         va_list args) {
 
+    // NOTE: Whether this test is run in isolation affects whether or not
+    // *.res files are opened. For stability, ignore *.res file opens.
+
     if (fnNumber == UTRACE_UDATA_RESOURCE) {
         va_arg(args, const char*); // type
         va_arg(args, const char*); // file
         const char* resourcePath = va_arg(args, const char*);
         gResourcePathsTraced.push_back(resourcePath);
+    } else if (fnNumber == UTRACE_UDATA_BUNDLE) {
+        const char* filePath = va_arg(args, const char*);
+        gBundlesTraced.push_back(filePath);
     } else if (fnNumber == UTRACE_UDATA_DATA_FILE) {
         const char* filePath = va_arg(args, const char*);
         gDataFilesTraced.push_back(filePath);
     } else if (fnNumber == UTRACE_UDATA_RES_FILE) {
-        const char* filePath = va_arg(args, const char*);
-        gResFilesTraced.push_back(filePath);
+        // ignore
     }
 }
 
 void NewResourceBundleTest::TestTrace() {
     IcuTestErrorCode status(*this, "TestTrace");
+
+    assertEquals("Start position stability coverage", 0x3000, UTRACE_UDATA_START);
 
     const void* context;
     utrace_setFunctions(context, nullptr, nullptr, traceData);
@@ -1390,42 +1397,34 @@ void NewResourceBundleTest::TestTrace() {
         LocalPointer<BreakIterator> brkitr(BreakIterator::createWordInstance("zh-CN", status));
 
         assertEquals("Should touch expected resource paths",
-            { "/boundaries/word" },
+            { "/boundaries", "/boundaries/word", "/boundaries/word" },
             gResourcePathsTraced);
+        assertEquals("Should touch expected resource bundles",
+            { U_ICUDATA_NAME "-brkitr/zh.res" },
+            gBundlesTraced);
         assertEquals("Should touch expected data files",
             { U_ICUDATA_NAME "-brkitr/word.brk" },
             gDataFilesTraced);
-        // NOTE: The following passes only when this test is run in isolation.
-        // If run in "make check", these files were already open.
-        // assertEquals("Should touch expected resource files",
-        //     {
-        //         U_ICUDATA_NAME "-brkitr/zh_CN.res",
-        //         U_ICUDATA_NAME "-brkitr/zh.res",
-        //         U_ICUDATA_NAME "-brkitr/root.res"
-        //     },
-        //     gResFilesTraced);
         gResourcePathsTraced.clear();
         gDataFilesTraced.clear();
-        gResFilesTraced.clear();
+        gBundlesTraced.clear();
     }
 
     {
         ucurr_getDefaultFractionDigits(u"USD", status);
 
         assertEquals("Should touch expected resource paths",
-            { "/CurrencyMeta/DEFAULT" },
+            { "/CurrencyMeta", "/CurrencyMeta/DEFAULT", "/CurrencyMeta/DEFAULT" },
             gResourcePathsTraced);
+        assertEquals("Should touch expected resource bundles",
+            { U_ICUDATA_NAME "-curr/supplementalData.res" },
+            gBundlesTraced);
         assertEquals("Should touch expected data files",
             { },
             gDataFilesTraced);
-        // NOTE: The following passes only when this test is run in isolation.
-        // If run in "make check", these files were already open.
-        // assertEquals("Should touch expected resource files",
-        //     { U_ICUDATA_NAME "-curr/supplementalData.res" },
-        //     gResFilesTraced);
         gResourcePathsTraced.clear();
         gDataFilesTraced.clear();
-        gResFilesTraced.clear();
+        gBundlesTraced.clear();
     }
 
     utrace_setFunctions(context, nullptr, nullptr, nullptr);

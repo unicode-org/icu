@@ -479,9 +479,10 @@ trCollNames[] = {
 
 static const char* const
 trResDataNames[] = {
-    "ResourceTracer::trace",
-    "FileTracer::traceOpenDataFile",
-    "FileTracer::traceOpenResFile",
+    "resc",
+    "bundle-open",
+    "file-open",
+    "res-open",
     NULL
 };
 
@@ -494,8 +495,8 @@ utrace_functionName(int32_t fnNumber) {
         return trConvNames[fnNumber - UTRACE_CONVERSION_START];
     } else if(UTRACE_COLLATION_START <= fnNumber && fnNumber < UTRACE_COLLATION_LIMIT){
         return trCollNames[fnNumber - UTRACE_COLLATION_START];
-    } else if(UTRACE_RES_DATA_START <= fnNumber && fnNumber < UTRACE_RES_DATA_LIMIT){
-        return trResDataNames[fnNumber - UTRACE_RES_DATA_START];
+    } else if(UTRACE_UDATA_START <= fnNumber && fnNumber < UTRACE_RES_DATA_LIMIT){
+        return trResDataNames[fnNumber - UTRACE_UDATA_START];
     } else {
         return "[BOGUS Trace Function Number]";
     }

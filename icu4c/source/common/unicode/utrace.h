@@ -118,26 +118,50 @@ typedef enum UTraceFunctionNumber {
      * The lowest resource/data location.
      * @draft ICU 65
      */
-    UTRACE_RES_DATA_START=0x3000,
+    UTRACE_UDATA_START=0x3000,
 
     /**
      * Indicates that a value was read from a resource bundle. Provides three
      * C-style strings to UTraceData: type, file name, and resource path. The
-     * type is "string", "binary", "intvector", "int", or "uint".
+     * possible types are:
+     *
+     * - "string" (a string value was accessed)
+     * - "binary" (a binary value was accessed)
+     * - "intvector" (a integer vector value was accessed)
+     * - "int" (a signed integer value was accessed)
+     * - "uint" (a unsigned integer value was accessed)
+     * - "get" (a path was loaded, but the value was not accessed)
+     * - "getalias" (a path was loaded, and an alias was resolved)
+     *
      * @draft ICU 65
      */
-    UTRACE_UDATA_RESOURCE=UTRACE_RES_DATA_START,
+    UTRACE_UDATA_RESOURCE=UTRACE_UDATA_START,
 
     /**
-     * Indicates that a value was read from a resource bundle. Provides one
-     * C-style string to UTraceData: file name.
+     * Indicates that a resource bundle was opened.
+     *
+     * Provides one C-style string to UTraceData: file name.
+     */
+    UTRACE_UDATA_BUNDLE,
+
+    /**
+     * Indicates that a data file was opened, but not *.res files.
+     *
+     * Provides one C-style string to UTraceData: file name.
+     *
      * @draft ICU 65
      */
     UTRACE_UDATA_DATA_FILE,
 
     /**
-     * Indicates that a value was read from a resource bundle. Provides one
-     * C-style string to UTraceData: file name.
+     * Indicates that a *.res file was opened.
+     *
+     * This differs from UTRACE_UDATA_BUNDLE because a res file is typically
+     * opened only once per application runtime, but the bundle corresponding
+     * to that res file may be opened many times.
+     *
+     * Provides one C-style string to UTraceData: file name.
+     *
      * @draft ICU 65
      */
     UTRACE_UDATA_RES_FILE,

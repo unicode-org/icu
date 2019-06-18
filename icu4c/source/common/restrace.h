@@ -66,6 +66,17 @@ public:
     ~ResourceTracer();
 
     void trace(const char* type) const;
+    void traceOpen() const;
+
+    /**
+     * Calls trace() if the resB or parent provided to the constructor was
+     * non-null; otherwise, does nothing.
+     */
+    void maybeTrace(const char* type) const {
+        if (fResB || fParent) {
+            trace(type);
+        }
+    }
 
 private:
     const UResourceBundle* fResB;
@@ -73,9 +84,9 @@ private:
     const char* fKey;
     int32_t fIndex;
 
-    void getFilePath(CharString& output, UErrorCode& status) const;
+    CharString& getFilePath(CharString& output, UErrorCode& status) const;
 
-    void getResPath(CharString& output, UErrorCode& status) const;
+    CharString& getResPath(CharString& output, UErrorCode& status) const;
 };
 
 /**
@@ -115,6 +126,10 @@ public:
     ResourceTracer(const ResourceTracer&, int32_t) {}
 
     void trace(const char*) const {}
+
+    void traceOpen() const {}
+
+    void maybeTrace(const char*) const {}
 };
 
 /**

@@ -22,20 +22,37 @@ void ResourceTracer::trace(const char* resType) const {
     UTRACE_ENTRY(UTRACE_UDATA_RESOURCE);
     UErrorCode status = U_ZERO_ERROR;
 
-    icu::CharString filePath;
+    CharString filePath;
     getFilePath(filePath, status);
 
-    icu::CharString resPath;
+    CharString resPath;
     getResPath(resPath, status);
 
-    UTRACE_DATA3(UTRACE_VERBOSE, "(%s) %s @ %s",
+    // The longest type ("intvector") is 9 chars
+    const char kSpaces[] = "         ";
+    CharString format;
+    format.append(kSpaces, sizeof(kSpaces) - 1 - uprv_strlen(resType), status);
+    format.append("(%s) %s @ %s", status);
+
+    UTRACE_DATA3(UTRACE_VERBOSE,
+        format.data(),
         resType,
         filePath.data(),
         resPath.data());
     UTRACE_EXIT_STATUS(status);
 }
 
-void ResourceTracer::getFilePath(CharString& output, UErrorCode& status) const {
+void ResourceTracer::traceOpen() const {
+    U_ASSERT(fResB);
+    UTRACE_ENTRY(UTRACE_UDATA_BUNDLE);
+    UErrorCode status = U_ZERO_ERROR;
+
+    CharString filePath;
+    UTRACE_DATA1(UTRACE_VERBOSE, "%s", getFilePath(filePath, status).data());
+    UTRACE_EXIT_STATUS(status);
+}
+
+CharString& ResourceTracer::getFilePath(CharString& output, UErrorCode& status) const {
     if (fResB) {
         output.append(fResB->fData->fPath, status);
         output.append('/', status);
@@ -44,9 +61,10 @@ void ResourceTracer::getFilePath(CharString& output, UErrorCode& status) const {
     } else {
         fParent->getFilePath(output, status);
     }
+    return output;
 }
 
-void ResourceTracer::getResPath(CharString& output, UErrorCode& status) const {
+CharString& ResourceTracer::getResPath(CharString& output, UErrorCode& status) const {
     if (fResB) {
         output.append('/', status);
         output.append(fResB->fResPath, status);
@@ -67,6 +85,7 @@ void ResourceTracer::getResPath(CharString& output, UErrorCode& status) const {
         output.appendInvariantChars(indexString, status);
         output.append(']', status);
     }
+    return output;
 }
 
 void FileTracer::traceOpen(const char* path, const char* type, const char* name) {
@@ -81,7 +100,7 @@ void FileTracer::traceOpenDataFile(const char* path, const char* type, const cha
     UTRACE_ENTRY(UTRACE_UDATA_DATA_FILE);
     UErrorCode status = U_ZERO_ERROR;
 
-    icu::CharString filePath;
+    CharString filePath;
     filePath.append(path, status);
     filePath.append('/', status);
     filePath.append(name, status);
@@ -96,7 +115,7 @@ void FileTracer::traceOpenResFile(const char* path, const char* name) {
     UTRACE_ENTRY(UTRACE_UDATA_RES_FILE);
     UErrorCode status = U_ZERO_ERROR;
 
-    icu::CharString filePath;
+    CharString filePath;
     filePath.append(path, status);
     filePath.append('/', status);
     filePath.append(name, status);
