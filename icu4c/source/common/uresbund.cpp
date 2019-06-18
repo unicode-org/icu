@@ -1166,6 +1166,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
                     if(mainRes != result) {
                         ures_close(mainRes);
                     }
+                    ResourceTracer(resB).maybeTrace("getalias");
                     return result;
                 }
             } else {
@@ -1245,6 +1246,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     /*resB->fParent = parent->fRes;*/
     uprv_memmove(&resB->fResData, rdata, sizeof(ResourceData));
     resB->fSize = res_countArrayItems(&(resB->fResData), resB->fRes);
+    ResourceTracer(resB).trace("get");
     return resB;
 }
 
@@ -2293,6 +2295,8 @@ ures_openWithType(UResourceBundle *r, const char* path, const char* localeID,
     r->fRes = r->fResData.rootRes;
     r->fSize = res_countArrayItems(&(r->fResData), r->fRes);
     r->fIndex = -1;
+
+    ResourceTracer(r).traceOpen();
 
     return r;
 }
