@@ -1110,7 +1110,11 @@ CalendarTest::TestAddRollExtensive()
         status = U_ZERO_ERROR;
         for (i = 0; i < limit; i++) {
             temp->add(e, 1, status);
-            if (U_FAILURE(status)) { limit = i; status = U_ZERO_ERROR; }
+            if (U_FAILURE(status)) {
+                limit = i;
+                status = U_ZERO_ERROR;
+                break;      // Suppress compile warning. Shouldn't be necessary, but it is.
+            }
         }
         for (i = 0; i < limit; i++) {
             temp->add(e, -1, status);

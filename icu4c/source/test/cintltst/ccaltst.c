@@ -40,7 +40,7 @@ void TestGetTZTransition(void);
 
 void TestGetWindowsTimeZoneID(void);
 void TestGetTimeZoneIDByWindowsID(void);
-void TestJpnCalAddSetNextEra();
+void TestJpnCalAddSetNextEra(void);
 
 void addCalTest(TestNode** root);
 
