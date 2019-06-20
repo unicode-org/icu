@@ -736,7 +736,7 @@ void RBBITest::TestExtended() {
     int32_t    tagValue = 0;             // The numeric value of a <nnn> tag.
 
     UnicodeString       rules;           // Holds rules from a <rules> ... </rules> block
-    int32_t             rulesFirstLine;  // Line number of the start of current <rules> block
+    int32_t             rulesFirstLine = 0;  // Line number of the start of current <rules> block
 
     for (charIdx = 0; charIdx < len; ) {
         status = U_ZERO_ERROR;

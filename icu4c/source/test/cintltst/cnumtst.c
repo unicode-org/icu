@@ -1836,6 +1836,7 @@ static void TestRBNFRounding() {
     }
     len = unum_formatDouble(fmt, 10.123456789, fmtbuf, FORMAT_BUF_CAPACITY, NULL, &status);
     U_ASSERT(len < FORMAT_BUF_CAPACITY);
+    (void)len;
     if (U_FAILURE(status)) {
         log_err_status(status, "unum_formatDouble 10.123456789 failed with %s\n", u_errorName(status));
     }
@@ -3235,6 +3236,7 @@ static void TestParseCases(void) {
         status = U_ZERO_ERROR;
         decstr[0] = 0;
         dclen = unum_parseDecimal(unumDec, itemPtr->text, -1, &parsePos, decstr, 32, &status);
+        (void)dclen;
         if (status != itemPtr->decStatus || parsePos != itemPtr->decPos || uprv_strcmp(decstr,itemPtr->decString) != 0) {
             char btext[32];
             u_austrcpy(btext, itemPtr->text);
@@ -3366,6 +3368,7 @@ static void TestSetMaxFracAndRoundIncr(void) {
 
         status = U_ZERO_ERROR;
         ulen = unum_toPattern(unf, FALSE, ubuf, kUBufMax, &status);
+        (void)ulen;
         if ( U_FAILURE(status) ) {
             log_err("test %s: unum_toPattern fails with %s\n", itemPtr->descrip, u_errorName(status));
         } else if (u_strcmp(ubuf,itemPtr->expPattern)!=0) {
