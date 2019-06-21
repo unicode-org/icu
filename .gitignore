@@ -427,6 +427,9 @@ icu4c/source/test/cintltst/release
 icu4c/source/test/cintltst/x64
 icu4c/source/test/cintltst/x86
 icu4c/source/test/compat/Makefile
+icu4c/source/test/fuzzer/Makefile
+icu4c/source/test/fuzzer/*.d
+icu4c/source/test/fuzzer/*.o
 icu4c/source/test/hdrtst/Makefile
 icu4c/source/test/hdrtst/ht_*
 icu4c/source/test/intltest/*.d
