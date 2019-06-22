@@ -175,6 +175,18 @@ void FormattedStringBuilderTest::testInsertAppendCodePoint() {
         sb5.insertCodePoint(2, cas, UNUM_FIELD_COUNT, status);
         assertSuccess("Inserting into sb5", status);
         assertEqualsImpl(sb4, sb5);
+
+        UnicodeString sb6;
+        FormattedStringBuilder sb7;
+        sb6.append(cas);
+        if (U_IS_SUPPLEMENTARY(cas)) {
+            sb7.appendChar16(U16_TRAIL(cas), UNUM_FIELD_COUNT, status);
+            sb7.insertChar16(0, U16_LEAD(cas), UNUM_FIELD_COUNT, status);
+        } else {
+            sb7.insertChar16(0, cas, UNUM_FIELD_COUNT, status);
+        }
+        assertSuccess("Insert/append into sb7", status);
+        assertEqualsImpl(sb6, sb7);
     }
 }
 

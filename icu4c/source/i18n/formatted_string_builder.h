@@ -85,29 +85,73 @@ class U_I18N_API FormattedStringBuilder : public UMemory {
 
     FormattedStringBuilder &clear();
 
-    int32_t appendCodePoint(UChar32 codePoint, Field field, UErrorCode &status);
+    /** Appends a UTF-16 code unit. */
+    inline int32_t appendChar16(char16_t codeUnit, Field field, UErrorCode& status) {
+        // appendCodePoint handles both code units and code points.
+        return insertCodePoint(fLength, codeUnit, field, status);
+    }
 
+    /** Inserts a UTF-16 code unit. Note: insert at index 0 is very efficient. */
+    inline int32_t insertChar16(int32_t index, char16_t codeUnit, Field field, UErrorCode& status) {
+        // insertCodePoint handles both code units and code points.
+        return insertCodePoint(index, codeUnit, field, status);
+    }
+
+    /** Appends a Unicode code point. */
+    inline int32_t appendCodePoint(UChar32 codePoint, Field field, UErrorCode &status) {
+        return insertCodePoint(fLength, codePoint, field, status);
+    }
+
+    /** Inserts a Unicode code point. Note: insert at index 0 is very efficient. */
     int32_t insertCodePoint(int32_t index, UChar32 codePoint, Field field, UErrorCode &status);
 
-    int32_t append(const UnicodeString &unistr, Field field, UErrorCode &status);
+    /** Appends a string. */
+    inline int32_t append(const UnicodeString &unistr, Field field, UErrorCode &status) {
+        return insert(fLength, unistr, field, status);
+    }
 
+    /** Inserts a string. Note: insert at index 0 is very efficient. */
     int32_t insert(int32_t index, const UnicodeString &unistr, Field field, UErrorCode &status);
 
+    /** Inserts a substring. Note: insert at index 0 is very efficient.
+     *
+     * @param start Start index of the substring of unistr to be inserted.
+     * @param end End index of the substring of unistr to be inserted (exclusive).
+     */
     int32_t insert(int32_t index, const UnicodeString &unistr, int32_t start, int32_t end, Field field,
                    UErrorCode &status);
 
+    /** Deletes a substring and then inserts a string at that same position.
+     * Similar to JavaScript Array.prototype.splice().
+     *
+     * @param startThis Start of the span to delete.
+     * @param endThis End of the span to delete (exclusive).
+     * @param unistr The string to insert at the deletion position.
+     * @param startOther Start index of the substring of unistr to be inserted.
+     * @param endOther End index of the substring of unistr to be inserted (exclusive).
+     */
     int32_t splice(int32_t startThis, int32_t endThis,  const UnicodeString &unistr,
                    int32_t startOther, int32_t endOther, Field field, UErrorCode& status);
 
+    /** Appends a formatted string. */
     int32_t append(const FormattedStringBuilder &other, UErrorCode &status);
 
+    /** Inserts a formatted string. Note: insert at index 0 is very efficient. */
     int32_t insert(int32_t index, const FormattedStringBuilder &other, UErrorCode &status);
 
+    /**
+     * Ensures that the string buffer contains a NUL terminator. The NUL terminator does
+     * not count toward the string length. Any further changes to the string (insert or
+     * append) may invalidate the NUL terminator.
+     *
+     * You should call this method after the formatted string is completely built if you
+     * plan to return a pointer to the string from a C API.
+     */
     void writeTerminator(UErrorCode& status);
 
     /**
      * Gets a "safe" UnicodeString that can be used even after the FormattedStringBuilder is destructed.
-     * */
+     */
     UnicodeString toUnicodeString() const;
 
     /**

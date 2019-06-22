@@ -777,7 +777,7 @@ UnicodeString &MeasureFormat::formatNumeric(
             case u'm':
             case u's':
                 if (protect) {
-                    fsb.appendCodePoint(c, undefinedField, status);
+                    fsb.appendChar16(c, undefinedField, status);
                 } else {
                     UnicodeString tmp;
                     if ((i + 1 < patternLength) && pattern[i + 1] == c) { // doubled
@@ -793,14 +793,14 @@ UnicodeString &MeasureFormat::formatNumeric(
             case u'\'':
                 // '' is escaped apostrophe
                 if ((i + 1 < patternLength) && pattern[i + 1] == c) {
-                    fsb.appendCodePoint(c, undefinedField, status);
+                    fsb.appendChar16(c, undefinedField, status);
                     i++;
                 } else {
                     protect = !protect;
                 }
                 break;
             default:
-                fsb.appendCodePoint(c, undefinedField, status);
+                fsb.appendChar16(c, undefinedField, status);
         }
     }
 

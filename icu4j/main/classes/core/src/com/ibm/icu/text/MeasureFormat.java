@@ -904,7 +904,7 @@ public class MeasureFormat extends UFormat {
                 case 'm':
                 case 's':
                     if (protect) {
-                        fsb.appendCodePoint(c, null);
+                        fsb.appendChar16(c, null);
                     } else {
                         if ((i + 1 < pattern.length()) && pattern.charAt(i + 1) == c) { // doubled
                             fsb.append(numberFormatter2.format(value), null); // TODO: Use proper Field
@@ -917,14 +917,14 @@ public class MeasureFormat extends UFormat {
                 case '\'':
                     // '' is escaped apostrophe
                     if ((i + 1 < pattern.length()) && pattern.charAt(i + 1) == c) {
-                        fsb.appendCodePoint(c, null);
+                        fsb.appendChar16(c, null);
                         i++;
                     } else {
                         protect = !protect;
                     }
                     break;
                 default:
-                    fsb.appendCodePoint(c, null);
+                    fsb.appendChar16(c, null);
             }
         }
 

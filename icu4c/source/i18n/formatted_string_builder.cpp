@@ -144,10 +144,6 @@ FormattedStringBuilder &FormattedStringBuilder::clear() {
     return *this;
 }
 
-int32_t FormattedStringBuilder::appendCodePoint(UChar32 codePoint, Field field, UErrorCode &status) {
-    return insertCodePoint(fLength, codePoint, field, status);
-}
-
 int32_t
 FormattedStringBuilder::insertCodePoint(int32_t index, UChar32 codePoint, Field field, UErrorCode &status) {
     int32_t count = U16_LENGTH(codePoint);
@@ -164,10 +160,6 @@ FormattedStringBuilder::insertCodePoint(int32_t index, UChar32 codePoint, Field 
         getFieldPtr()[position] = getFieldPtr()[position + 1] = field;
     }
     return count;
-}
-
-int32_t FormattedStringBuilder::append(const UnicodeString &unistr, Field field, UErrorCode &status) {
-    return insert(fLength, unistr, field, status);
 }
 
 int32_t FormattedStringBuilder::insert(int32_t index, const UnicodeString &unistr, Field field,

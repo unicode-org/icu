@@ -106,6 +106,18 @@ public class FormattedStringBuilder implements CharSequence {
         return this;
     }
 
+    public int appendChar16(char codeUnit, Field field) {
+        return insertChar16(length, codeUnit, field);
+    }
+
+    public int insertChar16(int index, char codeUnit, Field field) {
+        int count = 1;
+        int position = prepareForInsert(index, count);
+        chars[position] = codeUnit;
+        fields[position] = field;
+        return count;
+    }
+
     /**
      * Appends the specified codePoint to the end of the string.
      *
