@@ -37,8 +37,8 @@ public class FormattedStringBuilderTest {
             sb1.append(str);
             sb2.append(str, null);
             sb3.append(str, null);
-            assertCharSequenceEquals(sb1, sb2);
-            assertCharSequenceEquals(sb3, str);
+            assertCharSequenceEquals(str, sb1, sb2);
+            assertCharSequenceEquals(str, sb3, str);
 
             StringBuilder sb4 = new StringBuilder();
             FormattedStringBuilder sb5 = new FormattedStringBuilder();
@@ -47,25 +47,25 @@ public class FormattedStringBuilderTest {
             sb4.append("xx");
             sb5.append("😇xx", null);
             sb5.insert(2, str, null);
-            assertCharSequenceEquals(sb4, sb5);
+            assertCharSequenceEquals(str, sb4, sb5);
 
             int start = Math.min(1, str.length());
             int end = Math.min(10, str.length());
             sb4.insert(3, str, start, end);
             sb5.insert(3, str, start, end, null);
-            assertCharSequenceEquals(sb4, sb5);
+            assertCharSequenceEquals(str, sb4, sb5);
 
             sb4.append(str.toCharArray());
             sb5.append(str.toCharArray(), null);
-            assertCharSequenceEquals(sb4, sb5);
+            assertCharSequenceEquals(str, sb4, sb5);
 
             sb4.insert(4, str.toCharArray());
             sb5.insert(4, str.toCharArray(), null);
-            assertCharSequenceEquals(sb4, sb5);
+            assertCharSequenceEquals(str, sb4, sb5);
 
             sb4.append(sb4.toString());
             sb5.append(new FormattedStringBuilder(sb5));
-            assertCharSequenceEquals(sb4, sb5);
+            assertCharSequenceEquals(str, sb4, sb5);
         }
     }
 
@@ -96,7 +96,7 @@ public class FormattedStringBuilderTest {
                 sb2.clear();
                 sb2.append(input, null);
                 sb2.splice(startThis, endThis, replacement, 0, replacement.length(), null);
-                assertCharSequenceEquals(sb1, sb2);
+                assertCharSequenceEquals(input, sb1, sb2);
 
                 // Test replacement with partial string
                 if (replacement.length() <= 2) {
@@ -108,7 +108,7 @@ public class FormattedStringBuilderTest {
                 sb2.clear();
                 sb2.append(input, null);
                 sb2.splice(startThis, endThis, replacement, 1, 3, null);
-                assertCharSequenceEquals(sb1, sb2);
+                assertCharSequenceEquals(input, sb1, sb2);
             }
         }
     }
@@ -124,7 +124,7 @@ public class FormattedStringBuilderTest {
             sb1.appendCodePoint(cas);
             sb2.appendCodePoint(cas, null);
             sb3.appendCodePoint(cas, null);
-            assertCharSequenceEquals(sb1, sb2);
+            assertCharSequenceEquals(Integer.toString(cas), sb1, sb2);
             assertEquals(Character.codePointAt(sb3, 0), cas);
 
             StringBuilder sb4 = new StringBuilder();
@@ -134,7 +134,18 @@ public class FormattedStringBuilderTest {
             sb4.append("xx");
             sb5.append("😇xx", null);
             sb5.insertCodePoint(2, cas, null);
-            assertCharSequenceEquals(sb4, sb5);
+            assertCharSequenceEquals(Integer.toString(cas), sb4, sb5);
+
+            StringBuilder sb6 = new StringBuilder();
+            FormattedStringBuilder sb7 = new FormattedStringBuilder();
+            sb6.appendCodePoint(cas);
+            if (Character.charCount(cas) == 2) {
+                sb7.appendChar16(Character.lowSurrogate(cas), null);
+                sb7.insertChar16(0, Character.highSurrogate(cas), null);
+            } else {
+                sb7.insertChar16(0, (char) cas, null);
+            }
+            assertCharSequenceEquals(Integer.toString(cas), sb6, sb7);
         }
     }
 
@@ -144,7 +155,7 @@ public class FormattedStringBuilderTest {
             FormattedStringBuilder sb1 = new FormattedStringBuilder();
             sb1.append(str, null);
             FormattedStringBuilder sb2 = new FormattedStringBuilder(sb1);
-            assertCharSequenceEquals(sb1, sb2);
+            assertCharSequenceEquals(str, sb1, sb2);
             assertTrue(sb1.contentEquals(sb2));
 
             sb1.append("12345", null);
@@ -251,21 +262,21 @@ public class FormattedStringBuilderTest {
         assertEquals("Code point count is 2", 2, nsb.codePointCount());
     }
 
-    private static void assertCharSequenceEquals(CharSequence a, CharSequence b) {
-        assertEquals(a.toString(), b.toString());
+    private static void assertCharSequenceEquals(String msg, CharSequence a, CharSequence b) {
+        assertEquals(msg, a.toString(), b.toString());
 
-        assertEquals(a.length(), b.length());
+        assertEquals(msg, a.length(), b.length());
         for (int i = 0; i < a.length(); i++) {
-            assertEquals(a.charAt(i), b.charAt(i));
+            assertEquals(msg, a.charAt(i), b.charAt(i));
         }
 
         int start = Math.min(2, a.length());
         int end = Math.min(12, a.length());
         if (start != end) {
-            assertCharSequenceEquals(a.subSequence(start, end), b.subSequence(start, end));
+            assertCharSequenceEquals(msg, a.subSequence(start, end), b.subSequence(start, end));
             if (b instanceof FormattedStringBuilder) {
                 FormattedStringBuilder bnsb = (FormattedStringBuilder) b;
-                assertCharSequenceEquals(a.subSequence(start, end), bnsb.subString(start, end));
+                assertCharSequenceEquals(msg, a.subSequence(start, end), bnsb.subString(start, end));
             }
         }
     }
