@@ -801,7 +801,7 @@ UnicodeString &MeasureFormat::formatNumeric(
     // #13606: DateFormat is not thread-safe, but MeasureFormat advertises itself as thread-safe.
     FieldPosition smallestFieldPosition(smallestField);
     UnicodeString draft;
-    static UMutex dateFmtMutex = U_MUTEX_INITIALIZER;
+    static UMutex dateFmtMutex;
     umtx_lock(&dateFmtMutex);
     dateFmt.format(date, draft, smallestFieldPosition, status);
     umtx_unlock(&dateFmtMutex);

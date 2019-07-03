@@ -249,7 +249,7 @@ static UDate getUTCtime_real() {
 }
 
 static UDate getUTCtime_fake() {
-    static UMutex fakeClockMutex = U_MUTEX_INTIALIZER;
+    static UMutex fakeClockMutex;
     umtx_lock(&fakeClockMutex);
     if(!fakeClock_set) {
         UDate real = getUTCtime_real();

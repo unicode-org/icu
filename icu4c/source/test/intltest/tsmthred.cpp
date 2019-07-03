@@ -62,7 +62,6 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
 
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(TestThreads);
-    TESTCASE_AUTO(TestMutex);
 #if !UCONFIG_NO_FORMATTING
     TESTCASE_AUTO(TestThreadedIntl);
 #endif
@@ -72,7 +71,6 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
     TESTCASE_AUTO(TestString);
     TESTCASE_AUTO(TestArabicShapingThreads);
     TESTCASE_AUTO(TestAnyTranslit);
-    TESTCASE_AUTO(TestConditionVariables);
     TESTCASE_AUTO(TestUnifiedCache);
 #if !UCONFIG_NO_TRANSLITERATION
     TESTCASE_AUTO(TestBreakTranslit);
@@ -229,109 +227,6 @@ void MultithreadTest::TestArabicShapingThreads()
         threads[i].join();
     }
     logln("->TestArabicShapingThreads <- Got all threads! cya");
-}
-
-
-//-----------------------------------------------------------------------
-//
-//  TestMutex  - a simple (non-stress) test to verify that ICU mutexes
-//               and condition variables are functioning.  Does not test the use of
-//               mutexes within ICU services, but rather that the
-//               platform's mutex support is at least superficially there.
-//
-//----------------------------------------------------------------------
-static UMutex *gTestMutexA() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
-}
-static UConditionVar *gThreadsCountChanged() {
-    static UConditionVar cv = U_CONDITION_INITIALIZER;
-    return &cv;
-}
-
-static int     gThreadsStarted = 0;
-static int     gThreadsInMiddle = 0;
-static int     gThreadsDone = 0;
-
-static const int TESTMUTEX_THREAD_COUNT = 40;
-
-class TestMutexThread : public SimpleThread
-{
-public:
-    virtual void run() {
-        // This is the code that each of the spawned threads runs.
-        // All threads move together throught the started - middle - done sequence together,
-        // waiting for all other threads to reach each point before advancing.
-        umtx_lock(gTestMutexA());
-        gThreadsStarted += 1;
-        umtx_condBroadcast(gThreadsCountChanged());
-        while (gThreadsStarted < TESTMUTEX_THREAD_COUNT) {
-            if (gThreadsInMiddle != 0) {
-                IntlTest::gTest->errln(
-                    "%s:%d gThreadsInMiddle = %d. Expected 0.", __FILE__, __LINE__, gThreadsInMiddle);
-                return;
-            }
-            umtx_condWait(gThreadsCountChanged(), gTestMutexA());
-        }
-
-        gThreadsInMiddle += 1;
-        umtx_condBroadcast(gThreadsCountChanged());
-        while (gThreadsInMiddle < TESTMUTEX_THREAD_COUNT) {
-            if (gThreadsDone != 0) {
-                IntlTest::gTest->errln(
-                    "%s:%d gThreadsDone = %d. Expected 0.", __FILE__, __LINE__, gThreadsDone);
-                return;
-            }
-            umtx_condWait(gThreadsCountChanged(), gTestMutexA());
-        }
-
-        gThreadsDone += 1;
-        umtx_condBroadcast(gThreadsCountChanged());
-        while (gThreadsDone < TESTMUTEX_THREAD_COUNT) {
-            umtx_condWait(gThreadsCountChanged(), gTestMutexA());
-        }
-        umtx_unlock(gTestMutexA());
-    }
-};
-
-void MultithreadTest::TestMutex()
-{
-    gThreadsStarted = 0;
-    gThreadsInMiddle = 0;
-    gThreadsDone = 0;
-    int32_t i = 0;
-    TestMutexThread  threads[TESTMUTEX_THREAD_COUNT];
-    umtx_lock(gTestMutexA());
-    for (i=0; i<TESTMUTEX_THREAD_COUNT; i++) {
-        if (threads[i].start() != 0) {
-            errln("%s:%d Error starting thread %d", __FILE__, __LINE__, i);
-            return;
-        }
-    }
-
-    // Because we are holding gTestMutexA, all of the threads should be blocked
-    // at the start of their run() function.
-    if (gThreadsStarted != 0) {
-        errln("%s:%d gThreadsStarted=%d. Expected 0.", __FILE__, __LINE__, gThreadsStarted);
-        return;
-    }
-
-    while (gThreadsInMiddle < TESTMUTEX_THREAD_COUNT) {
-        if (gThreadsDone != 0) {
-            errln("%s:%d gThreadsDone=%d. Expected 0.", __FILE__, __LINE__, gThreadsStarted);
-            return;
-        }
-        umtx_condWait(gThreadsCountChanged(), gTestMutexA());
-    }
-
-    while (gThreadsDone < TESTMUTEX_THREAD_COUNT) {
-        umtx_condWait(gThreadsCountChanged(), gTestMutexA());
-    }
-    umtx_unlock(gTestMutexA());
-
-    for (i=0; i<TESTMUTEX_THREAD_COUNT; i++) {
-        threads[i].join();
-    }
 }
 
 
@@ -1152,97 +1047,6 @@ void MultithreadTest::TestAnyTranslit() {
 }
 
 
-//
-// Condition Variables Test
-//   Create a swarm of threads.
-//   Using a mutex and a condition variables each thread
-//     Increments a global count of started threads.
-//     Broadcasts that it has started.
-//     Waits on the condition that all threads have started.
-//     Increments a global count of finished threads.
-//     Waits on the condition that all threads have finished.
-//     Exits.
-//
-
-class CondThread: public SimpleThread {
-  public:
-    CondThread() :fFinished(false)  {};
-    ~CondThread() {};
-    void run();
-    bool  fFinished;
-};
-
-static UMutex *gCTMutex() {
-    static UMutex m = U_MUTEX_INITIALIZER;
-    return &m;
-}
-static UConditionVar *gCTConditionVar() {
-    static UConditionVar cv = U_CONDITION_INITIALIZER;
-    return &cv;
-}
-int gConditionTestOne = 1;   // Value one. Non-const, extern linkage to inhibit
-                             //   compiler assuming a known value.
-int gStartedThreads;
-int gFinishedThreads;
-static const int NUMTHREADS = 10;
-
-
-// Worker thread function.
-void CondThread::run() {
-    umtx_lock(gCTMutex());
-    gStartedThreads += gConditionTestOne;
-    umtx_condBroadcast(gCTConditionVar());
-
-    while (gStartedThreads < NUMTHREADS) {
-        if (gFinishedThreads != 0) {
-            IntlTest::gTest->errln("File %s, Line %d: Error, gStartedThreads = %d, gFinishedThreads = %d",
-                             __FILE__, __LINE__, gStartedThreads, gFinishedThreads);
-        }
-        umtx_condWait(gCTConditionVar(), gCTMutex());
-    }
-
-    gFinishedThreads += gConditionTestOne;
-    fFinished = true;
-    umtx_condBroadcast(gCTConditionVar());
-
-    while (gFinishedThreads < NUMTHREADS) {
-        umtx_condWait(gCTConditionVar(), gCTMutex());
-    }
-    umtx_unlock(gCTMutex());
-}
-
-void MultithreadTest::TestConditionVariables() {
-    gStartedThreads = 0;
-    gFinishedThreads = 0;
-    int i;
-
-    umtx_lock(gCTMutex());
-    CondThread *threads[NUMTHREADS];
-    for (i=0; i<NUMTHREADS; ++i) {
-        threads[i] = new CondThread;
-        threads[i]->start();
-    }
-
-    while (gStartedThreads < NUMTHREADS) {
-        umtx_condWait(gCTConditionVar(), gCTMutex());
-    }
-
-    while (gFinishedThreads < NUMTHREADS) {
-        umtx_condWait(gCTConditionVar(), gCTMutex());
-    }
-
-    umtx_unlock(gCTMutex());
-
-    for (i=0; i<NUMTHREADS; ++i) {
-        assertTrue(WHERE, threads[i]->fFinished);
-    }
-
-    for (i=0; i<NUMTHREADS; ++i) {
-        threads[i]->join();
-        delete threads[i];
-    }
-}
-
 
 //
 // Unified Cache Test
@@ -1277,6 +1081,9 @@ class UCTMultiThreadItem : public SharedObject {
 
 U_NAMESPACE_BEGIN
 
+static std::mutex *gCTMutex = nullptr;
+static std::condition_variable *gCTConditionVar = nullptr;
+
 template<> U_EXPORT
 const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
         const void *context, UErrorCode &status) const {
@@ -1292,21 +1099,23 @@ const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
         return result;
     }
 
-    umtx_lock(gCTMutex());
-    bool firstObject = (gObjectsCreated == 0);
-    if (firstObject) {
-        // Force the first object creation that comes through to wait
-        // until other have completed. Verifies that cache doesn't
-        // deadlock when a creation is slow.
+    bool firstObject = false;
+    {
+        std::unique_lock<std::mutex> lock(*gCTMutex);
+        firstObject = (gObjectsCreated == 0);
+        if (firstObject) {
+            // Force the first object creation that comes through to wait
+            // until other have completed. Verifies that cache doesn't
+            // deadlock when a creation is slow.
 
-        // Note that gObjectsCreated needs to be incremeneted from 0 to 1
-        // early, to keep subsequent threads from entering this path.
-        gObjectsCreated = 1;
-        while (gObjectsCreated < 3) {
-            umtx_condWait(gCTConditionVar(), gCTMutex());
+            // Note that gObjectsCreated needs to be incremeneted from 0 to 1
+            // early, to keep subsequent threads from entering this path.
+            gObjectsCreated = 1;
+            while (gObjectsCreated < 3) {
+                gCTConditionVar->wait(lock);
+            }
         }
     }
-    umtx_unlock(gCTMutex());
 
     const UCTMultiThreadItem *result =
         new UCTMultiThreadItem(fLoc.getLanguage());
@@ -1318,12 +1127,13 @@ const UCTMultiThreadItem *LocaleCacheKey<UCTMultiThreadItem>::createObject(
  
     // Log that we created an object. The first object was already counted,
     //    don't do it again.
-    umtx_lock(gCTMutex());
-    if (!firstObject) {
-        gObjectsCreated += 1;
+    {
+        std::unique_lock<std::mutex> lock(*gCTMutex);
+        if (!firstObject) {
+            gObjectsCreated += 1;
+        }
+        gCTConditionVar->notify_all();
     }
-    umtx_condBroadcast(gCTConditionVar());
-    umtx_unlock(gCTMutex());
 
     return result;
 }
@@ -1385,7 +1195,9 @@ void MultithreadTest::TestUnifiedCache() {
     cache.setEvictionPolicy(2, 0, status);
     U_ASSERT(U_SUCCESS(status));
 
-    gFinishedThreads = 0;
+    gCTMutex = new std::mutex();
+    gCTConditionVar = new std::condition_variable();
+
     gObjectsCreated = 0;
 
     UnifiedCacheThread *threads[CACHE_LOAD][UPRV_LENGTHOF(gCacheLocales)];
@@ -1427,6 +1239,8 @@ void MultithreadTest::TestUnifiedCache() {
             delete threads[i][j];
         }
     }
+    delete gCTMutex;
+    delete gCTConditionVar;
 }
 
 #if !UCONFIG_NO_TRANSLITERATION

@@ -105,10 +105,13 @@ def _ReadLibrary(root_path, library_name):
 # in a limited (not transitive) context.  List of (file_name, symbol)
 # TODO: Move this data to dependencies.txt?
 allowed_errors = (
-  ("common/umutex.o", "operator new(unsigned long)"),
-  ("common/umutex.o", "std::__throw_bad_alloc()"),
   ("common/umutex.o", "std::__throw_system_error(int)"),
   ("common/umutex.o", "std::uncaught_exception()"),
+  ("common/umutex.o", "std::__once_callable"),
+  ("common/umutex.o", "std::__once_call"),
+  ("common/umutex.o", "__once_proxy"),
+  ("common/umutex.o", "__tls_get_addr"),
+  ("common/unifiedcache.o", "std::__throw_system_error(int)"),
 )
 
 def _Resolve(name, parents):

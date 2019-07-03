@@ -253,7 +253,7 @@ RuleBasedTransliterator::handleTransliterate(Replaceable& text, UTransPosition& 
     //
     // TODO(andy): Need a better scheme for handling this.
 
-    static UMutex transliteratorDataMutex = U_MUTEX_INITIALIZER;
+    static UMutex transliteratorDataMutex;
     UBool needToLock;
     {
         Mutex m;
