@@ -22,8 +22,6 @@
 
 /* These are the cleanup functions for various APIs. */
 /* @return true if cleanup complete successfully.*/
-U_CFUNC UBool umtx_cleanup(void);
-
 U_CFUNC UBool utrace_cleanup(void);
 
 U_CFUNC UBool ucln_lib_cleanup(void);
@@ -62,6 +60,7 @@ typedef enum ECleanupCommonType {
     */
     UCLN_COMMON_UNIFIED_CACHE,
     UCLN_COMMON_URES,
+    UCLN_COMMON_MUTEX,    // Mutexes should be the last to be cleaned up.
     UCLN_COMMON_COUNT /* This must be last */
 } ECleanupCommonType;
 

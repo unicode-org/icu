@@ -98,6 +98,29 @@ typedef union {
 #define U_ALIGNMENT_OFFSET_UP(ptr) (sizeof(UAlignedMemory) - U_ALIGNMENT_OFFSET(ptr))
 
 /**
+ * Create & return an instance of "type" in statically allocated storage.
+ * e.g.
+ *    static std::mutex *myMutex = STATIC_NEW(std::mutex);
+ * To destroy an object created in this way, invoke the destructor explicitly, e.g.
+ *    myMutex->~mutex();
+ * DO NOT use delete.
+ * DO NOT use with class UMutex, which has specific support for static instances.
+ *
+ * STATIC_NEW is intended for use when
+ *   - We want a static (or global) object.
+ *   - We don't want it to ever be destructed, or to explicitly control destruction,
+ *     to avoid use-after-destruction problems.
+ *   - We want to avoid an ordinary heap allocated object,
+ *     to avoid the possibility of memory allocation failures, and
+ *     to avoid memory leak reports, from valgrind, for example.
+ * This is defined as a macro rather than a template function because each invocation
+ * must define distinct static storage for the object being returned.
+ */
+#define STATIC_NEW(type) [] () { \
+    alignas(type) static char storage[sizeof(type)]; \
+    return new(storage) type();} ();
+
+/**
   *  Heap clean up function, called from u_cleanup()
   *    Clears any user heap functions from u_setMemoryFunctions()
   *    Does NOT deallocate any remaining allocated memory.

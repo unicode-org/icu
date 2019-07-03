@@ -85,6 +85,7 @@ TimeZoneFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name
         TESTCASE(5, TestFormatTZDBNames);
         TESTCASE(6, TestFormatCustomZone);
         TESTCASE(7, TestFormatTZDBNamesAllZoneCoverage);
+        TESTCASE(8, TestAdoptDefaultThreadSafe);
     default: name = ""; break;
     }
 }
@@ -711,6 +712,42 @@ void TimeZoneFormatTest::RunTimeRoundTripTests(int32_t threadNumber) {
     delete tzids;
 }
 
+void
+TimeZoneFormatTest::TestAdoptDefaultThreadSafe(void) {
+    ThreadPool<TimeZoneFormatTest> threads(this, threadCount, &TimeZoneFormatTest::RunAdoptDefaultThreadSafeTests);
+    threads.start();   // Start all threads.
+    threads.join();    // Wait for all threads to finish.
+}
+
+static const int32_t kAdoptDefaultIteration = 10;
+static const int32_t kCreateDefaultIteration = 5000;
+static const int64_t kStartTime = 1557288964845;
+
+void TimeZoneFormatTest::RunAdoptDefaultThreadSafeTests(int32_t threadNumber) {
+    UErrorCode status = U_ZERO_ERROR;
+    if (threadNumber % 2 == 0) {
+        for (int32_t i = 0; i < kAdoptDefaultIteration; i++) {
+            std::unique_ptr<icu::StringEnumeration> timezones(
+            icu::TimeZone::createEnumeration());
+            while (const icu::UnicodeString* timezone = timezones->snext(status)) {
+                status = U_ZERO_ERROR;
+                icu::TimeZone::adoptDefault(icu::TimeZone::createTimeZone(*timezone));
+            }
+        }
+    } else {
+        int32_t rawOffset;
+        int32_t dstOffset;
+        int64_t date = kStartTime;
+        for (int32_t i = 0; i < kCreateDefaultIteration; i++) {
+            date += 6000 * i;
+            std::unique_ptr<icu::TimeZone> tz(icu::TimeZone::createDefault());
+            status = U_ZERO_ERROR;
+            tz->getOffset(date, TRUE, rawOffset, dstOffset, status);
+            status = U_ZERO_ERROR;
+            tz->getOffset(date, FALSE, rawOffset, dstOffset, status);
+        }
+    }
+}
 
 typedef struct {
     const char*     text;
@@ -1301,5 +1338,4 @@ TimeZoneFormatTest::TestFormatTZDBNamesAllZoneCoverage(void) {
         }
     }
 }
-
 #endif /* #if !UCONFIG_NO_FORMATTING */

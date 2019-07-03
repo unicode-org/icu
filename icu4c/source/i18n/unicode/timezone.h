@@ -321,10 +321,6 @@ public:
      * zone is set to the default host time zone.  This call adopts the TimeZone object
      * passed in; the client is no longer responsible for deleting it.
      *
-     * <p>This function is not thread safe. It is an error for multiple threads
-     * to concurrently attempt to set the default time zone, or for any thread
-     * to attempt to reference the default zone while another thread is setting it.
-     *
      * @param zone  A pointer to the new TimeZone object to use as the default.
      * @stable ICU 2.0
      */
@@ -334,8 +330,6 @@ public:
     /**
      * Same as adoptDefault(), except that the TimeZone object passed in is NOT adopted;
      * the caller remains responsible for deleting it.
-     *
-     * <p>See the thread safety note under adoptDefault().
      *
      * @param zone  The given timezone.
      * @system

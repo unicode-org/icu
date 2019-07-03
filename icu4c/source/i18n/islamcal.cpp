@@ -470,7 +470,7 @@ double IslamicCalendar::moonAge(UDate time, UErrorCode &status)
 {
     double age = 0;
 
-    static UMutex astroLock = U_MUTEX_INITIALIZER;      // pod bay door lock
+    static UMutex astroLock;      // pod bay door lock
     umtx_lock(&astroLock);
     if(gIslamicCalendarAstro == NULL) {
         gIslamicCalendarAstro = new CalendarAstronomer();

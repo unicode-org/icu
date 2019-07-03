@@ -20,7 +20,7 @@ system_symbols:
     c_strings c_string_formatting
     int_functions floating_point trigonometry
     stdlib_qsort
-    pthread system_locale
+    system_locale
     stdio_input stdio_output file_io readlink_function dir_io mmap_functions dlfcn
     # C++
     cplusplus iostream
@@ -81,10 +81,6 @@ group: trigonometry
 
 group: stdlib_qsort
     qsort
-
-group: pthread
-    pthread_mutex_init pthread_mutex_destroy pthread_mutex_lock pthread_mutex_unlock
-    pthread_cond_wait pthread_cond_broadcast pthread_cond_signal
 
 group: system_locale
     getenv
@@ -831,7 +827,7 @@ group: platform
     # The "platform" group has no ICU dependencies.
     PIC system_misc system_debug malloc_functions ubsan
     c_strings c_string_formatting
-    floating_point pthread system_locale
+    floating_point system_locale
     stdio_input readlink_function dir_io
     dlfcn  # Move related code into icuplug.c?
     cplusplus
