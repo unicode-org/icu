@@ -90,7 +90,8 @@ std::mutex *UMutex::getMutex() {
     if (retPtr == nullptr) {
         std::call_once(*pInitFlag, umtx_init);
         std::lock_guard<std::mutex> guard(*initMutex);
-        if (fMutex.load() == nullptr) {
+        retPtr = fMutex.load(std::memory_order_acquire);
+        if (retPtr == nullptr) {
             fMutex = new(fStorage) std::mutex();
             retPtr = fMutex;
             fListLink = gListHead;
