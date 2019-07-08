@@ -175,6 +175,7 @@ class RepeatedExecutionRequest(AbstractExecutionRequest):
     def _del_at(self, i):
         super(RepeatedExecutionRequest, self)._del_at(i)
         del self.output_files[i]
+        del self.specific_dep_files[i]
         for _, v in self.repeat_with.items():
             if isinstance(v, list):
                 del v[i]
