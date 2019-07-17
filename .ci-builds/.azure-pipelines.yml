@@ -84,6 +84,35 @@ jobs:
         PathtoPublish: 'icu4c/source/dist/icu-windows.zip'
         ArtifactName: '$(Build.BuildNumber)_ICU4C_MSVC_x64_Release'
 #-------------------------------------------------------------------------
+- job: ICU4C_MSVC_x64_ARM32_ARM64_Release
+  displayName: 'C: MSVC x64 ARM32 ARM64 Release (VS 2017)'
+  timeoutInMinutes: 30
+  pool:
+    vmImage: 'vs2017-win2016'
+    demands: 
+      - msbuild
+      - visualstudio
+      - Cmd
+  steps:
+    - task: VSBuild@1
+      displayName: 'Build Solution'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: x64
+        configuration: Release
+    - task: VSBuild@1
+      displayName: 'Build ARM32'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: ARM
+        configuration: Release
+    - task: VSBuild@1
+      displayName: 'Build ARM64'
+      inputs:
+        solution: icu4c/source/allinone/allinone.sln
+        platform: ARM64
+        configuration: Release
+#-------------------------------------------------------------------------
 - job: ICU4C_MSVC_x64_Release_DataFilter
   displayName: 'C: MSVC 64-bit Release DataFilter (VS 2017)'
   timeoutInMinutes: 30
