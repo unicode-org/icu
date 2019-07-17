@@ -13,6 +13,10 @@
       <Configuration>Debug</Configuration>
       <Platform>ARM</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
@@ -24,6 +28,10 @@
     <ProjectConfiguration Include="Release|ARM">
       <Configuration>Release</Configuration>
       <Platform>ARM</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -63,6 +71,10 @@
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">.\arm\ReleaseUWP\</IntDir>
     <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">.\arm\DebugUWP\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">.\arm\DebugUWP\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">.\arm64\ReleaseUWP\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">.\arm64\ReleaseUWP\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">.\arm64\DebugUWP\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">.\arm64\DebugUWP\</IntDir>
     <LinkIncremental Condition="'$(Configuration)'=='Release'">false</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)'=='Debug'">true</LinkIncremental>
   </PropertyGroup>
@@ -176,6 +188,18 @@
       <TargetMachine>MachineARM</TargetMachine>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Platform)'=='ARM64'">
+    <!-- Options that are common to all ARM64 configurations -->
+    <Midl>
+      <TargetEnvironment>ARM64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <PreprocessorDefinitions>ARM64;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineARM64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
   <!-- Options that are specific to a particular configuration -->
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
@@ -271,6 +295,38 @@
       <OutputFile>..\..\binARMuwp\icuuc64d.dll</OutputFile>
       <ProgramDatabaseFile>.\..\..\libARMuwp\icuucd.pdb</ProgramDatabaseFile>
       <ImportLibrary>..\..\libARMuwp\icuucd.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <Midl>
+      <TypeLibraryName>.\..\..\libARM64uwp\icuuc.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <PrecompiledHeaderOutputFile>.\ARM64\ReleaseUWP/common.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\ARM64\ReleaseUWP/</AssemblerListingLocation>
+      <ObjectFileName>.\ARM64\ReleaseUWP/</ObjectFileName>
+      <ProgramDataBaseFileName>.\ARM64\ReleaseUWP/</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <OutputFile>..\..\binARM64uwp\icuuc62.dll</OutputFile>
+      <ProgramDatabaseFile>.\..\..\libARM64uwp\icuuc.pdb</ProgramDatabaseFile>
+      <ImportLibrary>..\..\libARM64uwp\icuuc.lib</ImportLibrary>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <Midl>
+      <TypeLibraryName>.\..\..\libARM64uwp\icuucd.tlb</TypeLibraryName>
+    </Midl>
+    <ClCompile>
+      <PrecompiledHeaderOutputFile>.\ARM64\DebugUWP/common.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\ARM64\DebugUWP/</AssemblerListingLocation>
+      <ObjectFileName>.\ARM64\DebugUWP/</ObjectFileName>
+      <ProgramDataBaseFileName>.\ARM64\DebugUWP/</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <OutputFile>..\..\binARM64uwp\icuuc62d.dll</OutputFile>
+      <ProgramDatabaseFile>.\..\..\libARM64uwp\icuucd.pdb</ProgramDatabaseFile>
+      <ImportLibrary>..\..\libARM64uwp\icuucd.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
