@@ -718,7 +718,13 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 if (genccodeAssembly &&
                     (uprv_strlen(genccodeAssembly)>3) &&
                     checkAssemblyHeaderName(genccodeAssembly+3)) {
-                    writeAssemblyCode(datFileNamePath, o->tmpDir, o->entryName, NULL, gencFilePath);
+                    writeAssemblyCode(
+                        datFileNamePath,
+                        o->tmpDir,
+                        o->entryName,
+                        NULL,
+                        gencFilePath,
+                        sizeof(gencFilePath));
 
                     result = pkg_createWithAssemblyCode(targetDir, mode, gencFilePath);
                     if (result != 0) {
@@ -753,7 +759,14 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                     /* Try to detect the arch type, use NULL if unsuccessful */
                     char optMatchArch[10] = { 0 };
                     pkg_createOptMatchArch(optMatchArch);
-                    writeObjectCode(datFileNamePath, o->tmpDir, o->entryName, (optMatchArch[0] == 0 ? NULL : optMatchArch), NULL, gencFilePath);
+                    writeObjectCode(
+                        datFileNamePath,
+                        o->tmpDir,
+                        o->entryName,
+                        (optMatchArch[0] == 0 ? NULL : optMatchArch),
+                        NULL,
+                        gencFilePath,
+                        sizeof(gencFilePath));
                     pkg_destroyOptMatchArch(optMatchArch);
 #if U_PLATFORM_IS_LINUX_BASED
                     result = pkg_generateLibraryFile(targetDir, mode, gencFilePath);
@@ -1685,7 +1698,13 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
               printf("# Generating %s \n", gencmnFile);
             }
 
-            writeCCode(file, o->tmpDir, dataName[0] != 0 ? dataName : o->shortName, newName[0] != 0 ? newName : NULL, gencmnFile);
+            writeCCode(
+                file,
+                o->tmpDir,
+                dataName[0] != 0 ? dataName : o->shortName,
+                newName[0] != 0 ? newName : NULL,
+                gencmnFile,
+                sizeof(gencmnFile));
 
 #ifdef USE_SINGLE_CCODE_FILE
             sprintf(cmd, "#include \"%s\"\n", gencmnFile);
