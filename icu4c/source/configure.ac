@@ -1315,6 +1315,7 @@ fi
 
 if test "${CXX}" = "clang++"; then
    CLANGCXXFLAGS="-Qunused-arguments -Wno-parentheses-equality"
+   LIBCXXFLAGS="$LIBCXXFLAGS -Wglobal-constructors"
 else
    CLANGCXXFLAGS=""
 fi
