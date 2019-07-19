@@ -106,6 +106,8 @@ ICUDATA=$(ICUP)\source\data
 #
 !IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
 DLL_OUTPUT=$(ICUP)\binARM$(UWP)
+!ELSE IF "$(CFG)" == "ARM64\Release" || "$(CFG)" == "ARM64\Debug"
+DLL_OUTPUT=$(ICUP)\binARM64$(UWP)
 !ELSE IF "$(CFG)" == "x64\Release" || "$(CFG)" == "x64\Debug"
 DLL_OUTPUT=$(ICUP)\bin64$(UWP)
 !ELSE IF "$(UWP)" == "UWP"
@@ -140,18 +142,19 @@ ICUTOOLS=$(ICUP)\source\tools
 
 #
 #  TOOLS CFG PATH
-#      ARM needs to use one of the other tools, so make sure to get an usable cfg path
+#      Generally the tools want to run on the same architechure as is being built.
+#      Thus ARM and ARM64 need to use another build of the other tools, so make sure to get an usable cfg path.
 #      Since tools, particularly pkggen, have architecture built-in, we made x64 on
 #      Windows be machine-independent and use those tools.
 #
 CFGTOOLS=$(CFG)
-!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
+!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug" || "$(CFG)" == "ARM64\Release"  || "$(CFG)" == "ARM64\Debug"
 CFGTOOLS=x64\Release
 !ENDIF
 !MESSAGE ICU tools CFG subpath is $(CFGTOOLS)
 
 # The current ICU tools need to be in the path first.
-# x86 uses x86, x64 and arm use x64
+# x86 uses x86; x64, arm, and arm64 use x64
 !IF "$(CFG)" == "x86\Release" || "$(CFG)" == "x86\Debug"
 PATH = $(ICUP)\bin;$(PATH)
 ICUPBIN=$(ICUP)\bin
@@ -190,9 +193,12 @@ COMMON_ICUDATA_DEPENDENCIES="$(ICUPBIN)\pkgdata.exe" "$(ICUTMP)\icudata.res" "$(
 COMMON_ICUDATA_ARGUMENTS=-f -e $(U_ICUDATA_NAME) -v $(ICU_PACKAGE_MODE) -c -p $(ICUPKG) -T "$(ICUTMP)" -L $(U_ICUDATA_NAME) -d "$(ICUBLD_PKG)" -s .
 !IF "$(UWP)" == "UWP"
 COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -u
-!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
-COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -a
 !ENDIF
+!IF "$(CFG)" == "ARM\Release" || "$(CFG)" == "ARM\Debug"
+COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -a ARM
+!ENDIF
+!IF "$(CFG)" == "ARM64\Release" || "$(CFG)" == "ARM64\Debug"
+COMMON_ICUDATA_ARGUMENTS=$(COMMON_ICUDATA_ARGUMENTS) -a ARM64
 !ENDIF
 
 #############################################################################
