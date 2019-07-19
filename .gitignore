@@ -6,17 +6,23 @@ __pycache__/
 /.git
 .vscode
 icu4c/bin
+icu4c/binARM
 icu4c/bin32uwp
 icu4c/bin64
+icu4c/binARM64
 icu4c/bin64uwp
 icu4c/binARMUWP
+icu4c/binARM64UWP
 icu4c/commondata
 icu4c/include
 icu4c/lib
+icu4c/libARM
 icu4c/lib32uwp
 icu4c/lib64
+icu4c/libARM64
 icu4c/lib64uwp
 icu4c/libARMuwp
+icu4c/libARM64uwp
 icu4c/source/Doxyfile
 icu4c/source/Makefile
 icu4c/source/README
@@ -43,6 +49,7 @@ icu4c/source/common/Makefile
 icu4c/source/common/Makefile.local
 icu4c/source/common/Release
 icu4c/source/common/arm
+icu4c/source/common/arm64
 icu4c/source/common/common.res
 icu4c/source/common/common.vcproj.*.*.user
 icu4c/source/common/debug
@@ -85,6 +92,8 @@ icu4c/source/data/rules.mk
 icu4c/source/data/uni-core-data
 icu4c/source/data/x64
 icu4c/source/data/x86
+icu4c/source/data/arm
+icu4c/source/data/arm64
 icu4c/source/dist
 icu4c/source/doc
 icu4c/source/extra/Makefile
@@ -123,6 +132,7 @@ icu4c/source/i18n/Makefile
 icu4c/source/i18n/Makefile.local
 icu4c/source/i18n/Release
 icu4c/source/i18n/arm
+icu4c/source/i18n/arm64
 icu4c/source/i18n/debug
 icu4c/source/i18n/i18n.res
 icu4c/source/i18n/i18n.vcproj.*.*.user
@@ -409,6 +419,8 @@ icu4c/source/stubdata/stubdata.vcproj.*.*.user
 icu4c/source/stubdata/stubdatabuilt.txt
 icu4c/source/stubdata/x64
 icu4c/source/stubdata/x86
+icu4c/source/stubdata/ARM
+icu4c/source/stubdata/ARM64
 icu4c/source/test-*.xml
 icu4c/source/test/Makefile
 icu4c/source/test/cintltst/*.d

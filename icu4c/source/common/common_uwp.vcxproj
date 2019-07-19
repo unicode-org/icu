@@ -114,7 +114,8 @@
       </DataExecutionPrevention>
       <TurnOffAssemblyGeneration>true</TurnOffAssemblyGeneration>
       <IgnoreSpecificDefaultLibraries>vccorlib.lib;msvcrt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalDependencies>onecore.lib</AdditionalDependencies>
+      <!-- The icudt.lib is for U_ICUDATA_ENTRY_POINT -->
+      <AdditionalDependencies>icudt.lib;onecore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
@@ -131,7 +132,7 @@
     </ResourceCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <AdditionalDependencies>vccorlib.lib;WindowsApp.lib;msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vccorlib.lib;msvcrt.lib;vcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
@@ -152,7 +153,7 @@
     </ResourceCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>vccorlibd.lib;WindowsApp.lib;msvcrtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>vccorlibd.lib;msvcrtd.lib;vcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
@@ -163,6 +164,10 @@
     <ClCompile>
       <PreprocessorDefinitions>WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <!-- This is so that we can use the existing stubdata icudt.lib and not need a UWP version. -->
+      <AdditionalLibraryDirectories>.\..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='x64'">
     <!-- Options that are common to all 64-bit configurations -->
@@ -174,6 +179,8 @@
     </ClCompile>
     <Link>
       <TargetMachine>MachineX64</TargetMachine>
+      <!-- This is so that we can use the existing stubdata icudt.lib and not need a UWP version. -->
+      <AdditionalLibraryDirectories>.\..\..\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='ARM'">
@@ -186,6 +193,8 @@
     </ClCompile>
     <Link>
       <TargetMachine>MachineARM</TargetMachine>
+      <!-- This is so that we can use the existing stubdata icudt.lib and not need a UWP version. -->
+      <AdditionalLibraryDirectories>.\..\..\libARM;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='ARM64'">
@@ -198,6 +207,8 @@
     </ClCompile>
     <Link>
       <TargetMachine>MachineARM64</TargetMachine>
+      <!-- This is so that we can use the existing stubdata icudt.lib and not need a UWP version. -->
+      <AdditionalLibraryDirectories>.\..\..\libARM64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <!-- Options that are specific to a particular configuration -->
@@ -373,9 +384,7 @@
     <ClCompile Include="errorcode.cpp" />
     <ClCompile Include="icudataver.cpp" />
     <ClCompile Include="locmap.cpp" />
-    <ClCompile Include="putil.cpp">
-      <CompileAsWinRT>true</CompileAsWinRT>
-    </ClCompile>
+    <ClCompile Include="putil.cpp" />
     <ClCompile Include="umath.cpp" />
     <ClCompile Include="umutex.cpp" />
     <ClCompile Include="utrace.cpp" />

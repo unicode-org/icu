@@ -84,6 +84,12 @@
     <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=ARM\Debug UWP=UWP</NMakeBuildCommandLine>
     <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=ARM\Debug UWP=UWP clean all</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=ARM\Debug UWP=UWP clean</NMakeCleanCommandLine>
+    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=ARM64\Release UWP=UWP</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=ARM64\Release UWP=UWP clean all</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=ARM64\Release UWP=UWP clean</NMakeCleanCommandLine>
+    <NMakeBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=ARM64\Debug UWP=UWP</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=ARM64\Debug UWP=UWP clean all</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">NMAKE /f makedata.mak ICUMAKE="$(ProjectDir)\" CFG=ARM64\Debug UWP=UWP clean</NMakeCleanCommandLine>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <BuildLog>
@@ -113,6 +119,16 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <BuildLog>
       <Path>.\out\tmp\arm\DebugUWPBuildLog.html</Path>
+    </BuildLog>
+  </ItemDefinitionGroup>
+    <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
+    <BuildLog>
+      <Path>.\out\tmp\arm64\ReleaseUWPBuildLog.html</Path>
+    </BuildLog>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
+    <BuildLog>
+      <Path>.\out\tmp\arm64\DebugUWPBuildLog.html</Path>
     </BuildLog>
   </ItemDefinitionGroup>
   <ItemGroup>
