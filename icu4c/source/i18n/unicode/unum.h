@@ -409,7 +409,7 @@ typedef enum UNumberFormatFields {
  * respectively.
  *
  * <p><strong>NOTE::</strong> New users with are strongly encouraged to
- * use unumf_openWithSkeletonAndLocale instead of unum_open.
+ * use unumf_openForSkeletonAndLocale instead of unum_open.
  *
  * @param pattern A pattern specifying the format to use. 
  * This parameter is ignored unless the style is
