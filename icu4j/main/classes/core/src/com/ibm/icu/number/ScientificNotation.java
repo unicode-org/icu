@@ -5,6 +5,7 @@ package com.ibm.icu.number;
 import java.text.Format.Field;
 
 import com.ibm.icu.impl.FormattedStringBuilder;
+import com.ibm.icu.impl.number.ConstantAffixModifier;
 import com.ibm.icu.impl.number.DecimalQuantity;
 import com.ibm.icu.impl.number.MicroProps;
 import com.ibm.icu.impl.number.MicroPropsGenerator;
@@ -162,9 +163,15 @@ public class ScientificNotation extends Notation implements Cloneable {
             MicroProps micros = parent.processQuantity(quantity);
             assert micros.rounder != null;
 
+            // Do not apply scientific notation to special doubles
+            if (quantity.isInfinite() || quantity.isNaN()) {
+                micros.modInner = ConstantAffixModifier.EMPTY;
+                return micros;
+            }
+
             // Treat zero as if it had magnitude 0
             int exponent;
-            if (quantity.isZero()) {
+            if (quantity.isZeroish()) {
                 if (notation.requireMinInt && micros.rounder instanceof SignificantRounderImpl) {
                     // Show "00.000E0" on pattern "00.000E0"
                     ((SignificantRounderImpl) micros.rounder).apply(quantity,

@@ -81,7 +81,7 @@ int32_t NumberFormatterImpl::formatStatic(const MacroProps& macros, DecimalQuant
     return length;
 }
 
-int32_t NumberFormatterImpl::getPrefixSuffixStatic(const MacroProps& macros, int8_t signum,
+int32_t NumberFormatterImpl::getPrefixSuffixStatic(const MacroProps& macros, Signum signum,
                                                    StandardPlural::Form plural,
                                                    FormattedStringBuilder& outString, UErrorCode& status) {
     NumberFormatterImpl impl(macros, false, status);
@@ -129,7 +129,7 @@ MicroProps& NumberFormatterImpl::preProcessUnsafe(DecimalQuantity& inValue, UErr
     return fMicros;
 }
 
-int32_t NumberFormatterImpl::getPrefixSuffix(int8_t signum, StandardPlural::Form plural,
+int32_t NumberFormatterImpl::getPrefixSuffix(Signum signum, StandardPlural::Form plural,
                                              FormattedStringBuilder& outString, UErrorCode& status) const {
     if (U_FAILURE(status)) { return 0; }
     // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle, aka pattern modifier).
@@ -140,7 +140,7 @@ int32_t NumberFormatterImpl::getPrefixSuffix(int8_t signum, StandardPlural::Form
     return modifier->getPrefixLength();
 }
 
-int32_t NumberFormatterImpl::getPrefixSuffixUnsafe(int8_t signum, StandardPlural::Form plural,
+int32_t NumberFormatterImpl::getPrefixSuffixUnsafe(Signum signum, StandardPlural::Form plural,
                                                    FormattedStringBuilder& outString, UErrorCode& status) {
     if (U_FAILURE(status)) { return 0; }
     // #13453: DecimalFormat wants the affixes from the pattern only (modMiddle, aka pattern modifier).

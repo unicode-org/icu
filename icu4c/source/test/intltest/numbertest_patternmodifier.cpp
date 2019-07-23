@@ -35,19 +35,19 @@ void PatternModifierTest::testBasic() {
     }
     mod.setSymbols(&symbols, &currencySymbols, UNUM_UNIT_WIDTH_SHORT, nullptr);
 
-    mod.setNumberProperties(1, StandardPlural::Form::COUNT);
+    mod.setNumberProperties(SIGNUM_POS, StandardPlural::Form::COUNT);
     assertEquals("Pattern a0b", u"a", getPrefix(mod, status));
     assertEquals("Pattern a0b", u"b", getSuffix(mod, status));
     mod.setPatternAttributes(UNUM_SIGN_ALWAYS, false);
     assertEquals("Pattern a0b", u"+a", getPrefix(mod, status));
     assertEquals("Pattern a0b", u"b", getSuffix(mod, status));
-    mod.setNumberProperties(0, StandardPlural::Form::COUNT);
+    mod.setNumberProperties(SIGNUM_ZERO, StandardPlural::Form::COUNT);
     assertEquals("Pattern a0b", u"+a", getPrefix(mod, status));
     assertEquals("Pattern a0b", u"b", getSuffix(mod, status));
     mod.setPatternAttributes(UNUM_SIGN_EXCEPT_ZERO, false);
     assertEquals("Pattern a0b", u"a", getPrefix(mod, status));
     assertEquals("Pattern a0b", u"b", getSuffix(mod, status));
-    mod.setNumberProperties(-1, StandardPlural::Form::COUNT);
+    mod.setNumberProperties(SIGNUM_NEG, StandardPlural::Form::COUNT);
     assertEquals("Pattern a0b", u"-a", getPrefix(mod, status));
     assertEquals("Pattern a0b", u"b", getSuffix(mod, status));
     mod.setPatternAttributes(UNUM_SIGN_NEVER, false);
@@ -60,19 +60,19 @@ void PatternModifierTest::testBasic() {
     assertSuccess("Spot 4", status);
     mod.setPatternInfo(&patternInfo2, UNUM_FIELD_COUNT);
     mod.setPatternAttributes(UNUM_SIGN_AUTO, false);
-    mod.setNumberProperties(1, StandardPlural::Form::COUNT);
+    mod.setNumberProperties(SIGNUM_POS, StandardPlural::Form::COUNT);
     assertEquals("Pattern a0b;c-0d", u"a", getPrefix(mod, status));
     assertEquals("Pattern a0b;c-0d", u"b", getSuffix(mod, status));
     mod.setPatternAttributes(UNUM_SIGN_ALWAYS, false);
     assertEquals("Pattern a0b;c-0d", u"c+", getPrefix(mod, status));
     assertEquals("Pattern a0b;c-0d", u"d", getSuffix(mod, status));
-    mod.setNumberProperties(0, StandardPlural::Form::COUNT);
+    mod.setNumberProperties(SIGNUM_ZERO, StandardPlural::Form::COUNT);
     assertEquals("Pattern a0b;c-0d", u"c+", getPrefix(mod, status));
     assertEquals("Pattern a0b;c-0d", u"d", getSuffix(mod, status));
     mod.setPatternAttributes(UNUM_SIGN_EXCEPT_ZERO, false);
     assertEquals("Pattern a0b;c-0d", u"a", getPrefix(mod, status));
     assertEquals("Pattern a0b;c-0d", u"b", getSuffix(mod, status));
-    mod.setNumberProperties(-1, StandardPlural::Form::COUNT);
+    mod.setNumberProperties(SIGNUM_NEG, StandardPlural::Form::COUNT);
     assertEquals("Pattern a0b;c-0d", u"c-", getPrefix(mod, status));
     assertEquals("Pattern a0b;c-0d", u"d", getSuffix(mod, status));
     mod.setPatternAttributes(UNUM_SIGN_NEVER, false);
@@ -96,7 +96,7 @@ void PatternModifierTest::testPatternWithNoPlaceholder() {
         return;
     }
     mod.setSymbols(&symbols, &currencySymbols, UNUM_UNIT_WIDTH_SHORT, nullptr);
-    mod.setNumberProperties(1, StandardPlural::Form::COUNT);
+    mod.setNumberProperties(SIGNUM_POS, StandardPlural::Form::COUNT);
 
     // Unsafe Code Path
     FormattedStringBuilder nsb;

@@ -91,6 +91,12 @@ enum CompactType {
     TYPE_DECIMAL, TYPE_CURRENCY
 };
 
+enum Signum {
+    SIGNUM_NEG = -1,
+    SIGNUM_ZERO = 0,
+    SIGNUM_POS = 1
+};
+
 
 class U_I18N_API AffixPatternProvider {
   public:
@@ -194,11 +200,11 @@ class U_I18N_API Modifier {
      */
     struct U_I18N_API Parameters {
         const ModifierStore* obj = nullptr;
-        int8_t signum;
+        Signum signum;
         StandardPlural::Form plural;
 
         Parameters();
-        Parameters(const ModifierStore* _obj, int8_t _signum, StandardPlural::Form _plural);
+        Parameters(const ModifierStore* _obj, Signum _signum, StandardPlural::Form _plural);
     };
 
     /**
@@ -229,7 +235,7 @@ class U_I18N_API ModifierStore {
     /**
      * Returns a Modifier with the given parameters (best-effort).
      */
-    virtual const Modifier* getModifier(int8_t signum, StandardPlural::Form plural) const = 0;
+    virtual const Modifier* getModifier(Signum signum, StandardPlural::Form plural) const = 0;
 };
 
 

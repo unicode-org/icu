@@ -68,6 +68,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     // TODO: Add this method if currency symbols override support is added.
     //void symbolsOverride();
     void sign();
+    void signCoverage();
     void decimal();
     void scale();
     void locale();

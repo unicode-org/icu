@@ -123,9 +123,15 @@ void ScientificHandler::processQuantity(DecimalQuantity &quantity, MicroProps &m
     fParent->processQuantity(quantity, micros, status);
     if (U_FAILURE(status)) { return; }
 
+    // Do not apply scientific notation to special doubles
+    if (quantity.isInfinite() || quantity.isNaN()) {
+        micros.modInner = &micros.helpers.emptyStrongModifier;
+        return;
+    }
+
     // Treat zero as if it had magnitude 0
     int32_t exponent;
-    if (quantity.isZero()) {
+    if (quantity.isZeroish()) {
         if (fSettings.fRequireMinInt && micros.rounder.isSignificantDigits()) {
             // Show "00.000E0" on pattern "00.000E0"
             micros.rounder.apply(quantity, fSettings.fEngineeringInterval, status);
