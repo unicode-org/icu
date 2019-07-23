@@ -346,7 +346,7 @@ public final class NumberFormatter {
 
         /**
          * Show the minus sign on negative numbers and the plus sign on positive numbers. Do not show a
-         * sign on zero.
+         * sign on zero or NaN, unless the sign bit is set (-0.0 gets a sign).
          *
          * @draft ICU 61
          * @provisional This API might change or be removed in a future release.
@@ -356,8 +356,9 @@ public final class NumberFormatter {
 
         /**
          * Use the locale-dependent accounting format on negative numbers, and show the plus sign on
-         * positive numbers. Do not show a sign on zero. For more information on the accounting format,
-         * see the ACCOUNTING sign display strategy.
+         * positive numbers. Do not show a sign on zero or NaN, unless the sign bit is set (-0.0 gets a
+         * sign). For more information on the accounting format, see the ACCOUNTING sign display
+         * strategy.
          *
          * @draft ICU 61
          * @provisional This API might change or be removed in a future release.

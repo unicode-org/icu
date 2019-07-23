@@ -48,7 +48,7 @@ class U_I18N_API ImmutablePatternModifier : public MicroPropsGenerator, public U
 
     void applyToMicros(MicroProps& micros, const DecimalQuantity& quantity, UErrorCode& status) const;
 
-    const Modifier* getModifier(int8_t signum, StandardPlural::Form plural) const;
+    const Modifier* getModifier(Signum signum, StandardPlural::Form plural) const;
 
   private:
     ImmutablePatternModifier(AdoptingModifierStore* pm, const PluralRules* rules,
@@ -142,7 +142,7 @@ class U_I18N_API MutablePatternModifier
      *            The plural form of the number, required only if the pattern contains the triple
      *            currency sign, "¤¤¤" (and as indicated by {@link #needsPlurals()}).
      */
-    void setNumberProperties(int8_t signum, StandardPlural::Form plural);
+    void setNumberProperties(Signum signum, StandardPlural::Form plural);
 
     /**
      * Returns true if the pattern represented by this MurkyModifier requires a plural keyword in order to localize.
@@ -223,7 +223,7 @@ class U_I18N_API MutablePatternModifier
     const PluralRules *fRules;
 
     // Number details (initialized in setNumberProperties)
-    int8_t fSignum;
+    Signum fSignum;
     StandardPlural::Form fPlural;
 
     // QuantityChain details (initialized in addToChain)

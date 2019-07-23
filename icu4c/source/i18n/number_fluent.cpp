@@ -697,7 +697,7 @@ void LocalizedNumberFormatter::formatImpl(impl::UFormattedNumberData* results, U
 void LocalizedNumberFormatter::getAffixImpl(bool isPrefix, bool isNegative, UnicodeString& result,
                                             UErrorCode& status) const {
     FormattedStringBuilder string;
-    auto signum = static_cast<int8_t>(isNegative ? -1 : 1);
+    auto signum = static_cast<Signum>(isNegative ? SIGNUM_NEG : SIGNUM_POS);
     // Always return affixes for plural form OTHER.
     static const StandardPlural::Form plural = StandardPlural::OTHER;
     int32_t prefixLength;

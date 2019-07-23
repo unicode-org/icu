@@ -289,7 +289,7 @@ class U_I18N_API AdoptingModifierStore : public ModifierStore, public UMemory {
     /**
      * Sets the Modifier with the specified signum and plural form.
      */
-    void adoptModifier(int8_t signum, StandardPlural::Form plural, const Modifier *mod) {
+    void adoptModifier(Signum signum, StandardPlural::Form plural, const Modifier *mod) {
         U_ASSERT(mods[getModIndex(signum, plural)] == nullptr);
         mods[getModIndex(signum, plural)] = mod;
     }
@@ -298,13 +298,13 @@ class U_I18N_API AdoptingModifierStore : public ModifierStore, public UMemory {
      * Sets the Modifier with the specified signum.
      * The modifier will apply to all plural forms.
      */
-    void adoptModifierWithoutPlural(int8_t signum, const Modifier *mod) {
+    void adoptModifierWithoutPlural(Signum signum, const Modifier *mod) {
         U_ASSERT(mods[getModIndex(signum, DEFAULT_STANDARD_PLURAL)] == nullptr);
         mods[getModIndex(signum, DEFAULT_STANDARD_PLURAL)] = mod;
     }
 
     /** Returns a reference to the modifier; no ownership change. */
-    const Modifier *getModifier(int8_t signum, StandardPlural::Form plural) const U_OVERRIDE {
+    const Modifier *getModifier(Signum signum, StandardPlural::Form plural) const U_OVERRIDE {
         const Modifier* modifier = mods[getModIndex(signum, plural)];
         if (modifier == nullptr && plural != DEFAULT_STANDARD_PLURAL) {
             modifier = mods[getModIndex(signum, DEFAULT_STANDARD_PLURAL)];
@@ -313,7 +313,7 @@ class U_I18N_API AdoptingModifierStore : public ModifierStore, public UMemory {
     }
 
     /** Returns a reference to the modifier; no ownership change. */
-    const Modifier *getModifierWithoutPlural(int8_t signum) const {
+    const Modifier *getModifierWithoutPlural(Signum signum) const {
         return mods[getModIndex(signum, DEFAULT_STANDARD_PLURAL)];
     }
 
@@ -321,7 +321,7 @@ class U_I18N_API AdoptingModifierStore : public ModifierStore, public UMemory {
     // NOTE: mods is zero-initialized (to nullptr)
     const Modifier *mods[3 * StandardPlural::COUNT] = {};
 
-    inline static int32_t getModIndex(int8_t signum, StandardPlural::Form plural) {
+    inline static int32_t getModIndex(Signum signum, StandardPlural::Form plural) {
         U_ASSERT(signum >= -1 && signum <= 1);
         U_ASSERT(plural >= 0 && plural < StandardPlural::COUNT);
         return static_cast<int32_t>(plural) * 3 + (signum + 1);

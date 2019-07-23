@@ -177,6 +177,22 @@ public class NumberFormatterApiTest {
                 ULocale.ENGLISH,
                 -1000000,
                 "-1E6");
+
+        assertFormatSingle(
+                "Scientific Infinity",
+                "scientific",
+                NumberFormatter.with().notation(Notation.scientific()),
+                ULocale.ENGLISH,
+                Double.NEGATIVE_INFINITY,
+                "-∞");
+
+        assertFormatSingle(
+                "Scientific NaN",
+                "scientific",
+                NumberFormatter.with().notation(Notation.scientific()),
+                ULocale.ENGLISH,
+                Double.NaN,
+                "NaN");
     }
 
     @Test
@@ -385,6 +401,22 @@ public class NumberFormatterApiTest {
                 new ULocale("zh-Hant"),
                 1e7,
                 "1000\u842C");
+
+        assertFormatSingle(
+                "Compact Infinity",
+                "compact-short",
+                NumberFormatter.with().notation(Notation.compactShort()),
+                ULocale.ENGLISH,
+                Double.NEGATIVE_INFINITY,
+                "-∞");
+
+        assertFormatSingle(
+                "Compact NaN",
+                "compact-short",
+                NumberFormatter.with().notation(Notation.compactShort()),
+                ULocale.ENGLISH,
+                Double.NaN,
+                "NaN");
 
         Map<String, Map<String, String>> compactCustomData = new HashMap<>();
         Map<String, String> entry = new HashMap<>();
@@ -1994,6 +2026,36 @@ public class NumberFormatterApiTest {
                 ULocale.CANADA,
                 -444444,
                 "-444,444.00 US dollars");
+    }
+
+    @Test
+    public void signCoverage() {
+        // https://unicode-org.atlassian.net/browse/ICU-20708
+        Object[][][] cases = new Object[][][] {
+            { {SignDisplay.AUTO}, { "-∞", "-1", "-0", "0", "1", "∞", "NaN", "-NaN" } },
+            { {SignDisplay.ALWAYS}, { "-∞", "-1", "-0", "+0", "+1", "+∞", "+NaN", "-NaN" } },
+            { {SignDisplay.NEVER}, { "∞", "1", "0", "0", "1", "∞", "NaN", "NaN" } },
+            { {SignDisplay.EXCEPT_ZERO}, { "-∞", "-1", "-0", "0", "+1", "+∞", "NaN", "-NaN" } },
+        };
+        double negNaN = Math.copySign(Double.NaN, -0.0);
+        double inputs[] = new double[] {
+            Double.NEGATIVE_INFINITY, -1, -0.0, 0, 1, Double.POSITIVE_INFINITY, Double.NaN, negNaN
+        };
+        for (Object[][] cas : cases) {
+            SignDisplay sign = (SignDisplay) cas[0][0];
+            for (int i = 0; i < inputs.length; i++) {
+                double input = inputs[i];
+                String expected = (String) cas[1][i];
+                String actual = NumberFormatter.with()
+                    .sign(sign)
+                    .locale(Locale.US)
+                    .format(input)
+                    .toString();
+                assertEquals(
+                    input + " " + sign,
+                    expected, actual);
+            }
+        }
     }
 
     @Test

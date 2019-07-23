@@ -86,6 +86,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         // TODO: Add this method if currency symbols override support is added.
         //TESTCASE_AUTO(symbolsOverride);
         TESTCASE_AUTO(sign);
+        TESTCASE_AUTO(signCoverage);
         TESTCASE_AUTO(decimal);
         TESTCASE_AUTO(scale);
         TESTCASE_AUTO(locale);
@@ -216,6 +217,22 @@ void NumberFormatterApiTest::notationScientific() {
             Locale::getEnglish(),
             -1000000,
             u"-1E6");
+
+    assertFormatSingle(
+            u"Scientific Infinity",
+            u"scientific",
+            NumberFormatter::with().notation(Notation::scientific()),
+            Locale::getEnglish(),
+            -uprv_getInfinity(),
+            u"-∞");
+
+    assertFormatSingle(
+            u"Scientific NaN",
+            u"scientific",
+            NumberFormatter::with().notation(Notation::scientific()),
+            Locale::getEnglish(),
+            uprv_getNaN(),
+            u"NaN");
 }
 
 void NumberFormatterApiTest::notationCompact() {
@@ -431,6 +448,22 @@ void NumberFormatterApiTest::notationCompact() {
             Locale("zh-Hant"),
             1e7,
             u"1000\u842C");
+
+    assertFormatSingle(
+            u"Compact Infinity",
+            u"compact-short",
+            NumberFormatter::with().notation(Notation::compactShort()),
+            Locale::getEnglish(),
+            -uprv_getInfinity(),
+            u"-∞");
+
+    assertFormatSingle(
+            u"Compact NaN",
+            u"compact-short",
+            NumberFormatter::with().notation(Notation::compactShort()),
+            Locale::getEnglish(),
+            uprv_getNaN(),
+            u"NaN");
 
     // NOTE: There is no API for compact custom data in C++
     // and thus no "Compact Somali No Figure" test
@@ -2067,6 +2100,39 @@ void NumberFormatterApiTest::sign() {
             Locale::getCanada(),
             -444444,
             u"-444,444.00 US dollars");
+}
+
+void NumberFormatterApiTest::signCoverage() {
+    // https://unicode-org.atlassian.net/browse/ICU-20708
+    IcuTestErrorCode status(*this, "signCoverage");
+    const struct TestCase {
+        UNumberSignDisplay sign;
+        const char16_t* expectedStrings[8];
+    } cases[] = {
+        { UNUM_SIGN_AUTO, {        u"-∞", u"-1", u"-0",  u"0",  u"1",  u"∞",  u"NaN", u"-NaN" } },
+        { UNUM_SIGN_ALWAYS, {      u"-∞", u"-1", u"-0", u"+0", u"+1", u"+∞", u"+NaN", u"-NaN" } },
+        { UNUM_SIGN_NEVER, {        u"∞",  u"1",  u"0",  u"0",  u"1",  u"∞",  u"NaN",  u"NaN" } },
+        { UNUM_SIGN_EXCEPT_ZERO, { u"-∞", u"-1", u"-0",  u"0", u"+1", u"+∞",  u"NaN", u"-NaN" } },
+    };
+    double negNaN = std::copysign(uprv_getNaN(), -0.0);
+    const double inputs[] = {
+        -uprv_getInfinity(), -1, -0.0, 0, 1, uprv_getInfinity(), uprv_getNaN(), negNaN
+    };
+    for (auto& cas : cases) {
+        auto sign = cas.sign;
+        for (int32_t i = 0; i < UPRV_LENGTHOF(inputs); i++) {
+            auto input = inputs[i];
+            auto expected = cas.expectedStrings[i];
+            auto actual = NumberFormatter::with()
+                .sign(sign)
+                .locale(Locale::getUS())
+                .formatDouble(input, status)
+                .toString(status);
+            assertEquals(
+                DoubleToUnicodeString(input) + " " + Int64ToUnicodeString(sign),
+                expected, actual);
+        }
+    }
 }
 
 void NumberFormatterApiTest::decimal() {

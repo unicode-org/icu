@@ -121,8 +121,11 @@ public interface DecimalQuantity extends PluralRules.IFixedDecimal {
      */
     public int getMagnitude() throws ArithmeticException;
 
-    /** @return Whether the value represented by this {@link DecimalQuantity} is zero. */
-    public boolean isZero();
+    /**
+     * @return Whether the value represented by this {@link DecimalQuantity} is
+     * zero, infinity, or NaN.
+     */
+    public boolean isZeroish();
 
     /** @return Whether the value represented by this {@link DecimalQuantity} is less than zero. */
     public boolean isNegative();

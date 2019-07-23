@@ -281,7 +281,9 @@ void AffixMatcherWarehouse::createAffixMatchers(const AffixPatternProvider& patt
     AffixPatternMatcher* posSuffix = nullptr;
 
     // Pre-process the affix strings to resolve LDML rules like sign display.
-    for (int8_t signum = 1; signum >= -1; signum--) {
+    for (int8_t signumInt = 1; signumInt >= -1; signumInt--) {
+        auto signum = static_cast<Signum>(signumInt);
+
         // Generate Prefix
         bool hasPrefix = false;
         PatternStringUtils::patternInfoToStringBuilder(

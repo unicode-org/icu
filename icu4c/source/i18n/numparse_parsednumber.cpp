@@ -74,7 +74,7 @@ double ParsedNumber::getDouble(UErrorCode& status) const {
         status = U_INVALID_STATE_ERROR;
         return 0.0;
     }
-    if (quantity.isZero() && quantity.isNegative()) {
+    if (quantity.isZeroish() && quantity.isNegative()) {
         return -0.0;
     }
 
@@ -107,7 +107,7 @@ void ParsedNumber::populateFormattable(Formattable& output, parse_flags_t parseF
         }
     }
     U_ASSERT(!quantity.bogus);
-    if (quantity.isZero() && quantity.isNegative() && !integerOnly) {
+    if (quantity.isZeroish() && quantity.isNegative() && !integerOnly) {
         output.setDouble(-0.0);
         return;
     }

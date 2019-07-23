@@ -522,8 +522,8 @@ public abstract class Precision implements Cloneable {
      * @return The number of orders of magnitude the input was adjusted by this method.
      */
     int chooseMultiplierAndApply(DecimalQuantity input, MultiplierProducer producer) {
-        // Do not call this method with zero.
-        assert !input.isZero();
+        // Do not call this method with zero, NaN, or infinity.
+        assert !input.isZeroish();
 
         // Perform the first attempt at rounding.
         int magnitude = input.getMagnitude();
@@ -532,7 +532,7 @@ public abstract class Precision implements Cloneable {
         apply(input);
 
         // If the number rounded to zero, exit.
-        if (input.isZero()) {
+        if (input.isZeroish()) {
             return multiplier;
         }
 
@@ -603,7 +603,7 @@ public abstract class Precision implements Cloneable {
             value.roundToMagnitude(getRoundingMagnitudeSignificant(value, maxSig), mathContext);
             value.setMinFraction(Math.max(0, -getDisplayMagnitudeSignificant(value, minSig)));
             // Make sure that digits are displayed on zero.
-            if (value.isZero() && minSig > 0) {
+            if (value.isZeroish() && minSig > 0) {
                 value.setMinInteger(1);
             }
         }
@@ -613,7 +613,7 @@ public abstract class Precision implements Cloneable {
          * compatibility mode.
          */
         public void apply(DecimalQuantity quantity, int minInt) {
-            assert quantity.isZero();
+            assert quantity.isZeroish();
             quantity.setMinFraction(minSig - minInt);
         }
     }
@@ -744,7 +744,7 @@ public abstract class Precision implements Cloneable {
         if (maxSig == -1) {
             return Integer.MIN_VALUE;
         }
-        int magnitude = value.isZero() ? 0 : value.getMagnitude();
+        int magnitude = value.isZeroish() ? 0 : value.getMagnitude();
         return magnitude - maxSig + 1;
     }
 
@@ -756,7 +756,7 @@ public abstract class Precision implements Cloneable {
     }
 
     private static int getDisplayMagnitudeSignificant(DecimalQuantity value, int minSig) {
-        int magnitude = value.isZero() ? 0 : value.getMagnitude();
+        int magnitude = value.isZeroish() ? 0 : value.getMagnitude();
         return magnitude - minSig + 1;
     }
 }

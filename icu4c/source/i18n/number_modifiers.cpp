@@ -57,7 +57,7 @@ Modifier::Parameters::Parameters()
         : obj(nullptr) {}
 
 Modifier::Parameters::Parameters(
-    const ModifierStore* _obj, int8_t _signum, StandardPlural::Form _plural)
+    const ModifierStore* _obj, Signum _signum, StandardPlural::Form _plural)
         : obj(_obj), signum(_signum), plural(_plural) {}
 
 ModifierStore::~ModifierStore() = default;

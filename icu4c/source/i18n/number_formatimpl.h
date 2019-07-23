@@ -44,7 +44,7 @@ class NumberFormatterImpl : public UMemory {
      * @return The index into the output at which the prefix ends and the suffix starts; in other words,
      *         the prefix length.
      */
-    static int32_t getPrefixSuffixStatic(const MacroProps& macros, int8_t signum,
+    static int32_t getPrefixSuffixStatic(const MacroProps& macros, Signum signum,
                                          StandardPlural::Form plural, FormattedStringBuilder& outString,
                                          UErrorCode& status);
 
@@ -61,7 +61,7 @@ class NumberFormatterImpl : public UMemory {
     /**
      * Like getPrefixSuffixStatic() but uses the safe compiled object.
      */
-    int32_t getPrefixSuffix(int8_t signum, StandardPlural::Form plural, FormattedStringBuilder& outString,
+    int32_t getPrefixSuffix(Signum signum, StandardPlural::Form plural, FormattedStringBuilder& outString,
                             UErrorCode& status) const;
 
     const MicroProps& getRawMicroProps() const {
@@ -109,7 +109,7 @@ class NumberFormatterImpl : public UMemory {
 
     MicroProps& preProcessUnsafe(DecimalQuantity &inValue, UErrorCode &status);
 
-    int32_t getPrefixSuffixUnsafe(int8_t signum, StandardPlural::Form plural,
+    int32_t getPrefixSuffixUnsafe(Signum signum, StandardPlural::Form plural,
                                   FormattedStringBuilder& outString, UErrorCode& status);
 
     /**
