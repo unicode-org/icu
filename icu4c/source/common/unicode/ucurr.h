@@ -320,7 +320,7 @@ typedef enum UCurrCurrencyType {
  * Provides a UEnumeration object for listing ISO-4217 codes.
  * @param currType You can use one of several UCurrCurrencyType values for this
  *      variable. You can also | (or) them together to get a specific list of
- *      currencies. Most people will want to use the (UCURR_CURRENCY|UCURR_NON_DEPRECATED) value to
+ *      currencies. Most people will want to use the (UCURR_COMMON|UCURR_NON_DEPRECATED) value to
  *      get a list of current currencies.
  * @param pErrorCode Error code
  * @stable ICU 3.2
