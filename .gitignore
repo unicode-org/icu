@@ -4,6 +4,7 @@ __pycache__/
 
 # Specific file name ignores
 /.git
+.vscode
 icu4c/bin
 icu4c/bin32uwp
 icu4c/bin64
