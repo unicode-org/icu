@@ -225,13 +225,16 @@ ucnv_safeClone(const UConverter* cnv, void *stackBuffer, int32_t *pBufferSize, U
         }
     }
 
-
     /* Adjust (if necessary) the stackBuffer pointer to be aligned correctly for a UConverter.
+     * TODO(Jira ICU-20736) Redo this using std::align() once g++4.9 compatibility is no longer needed.
      */
-    size_t altStackBufferSize = stackBufferSize;  // Incompatible types for passing by reference.
     if (stackBuffer) {
-        if (std::align(alignof(UConverter), bufferSizeNeeded, stackBuffer, altStackBufferSize)) {
-            stackBufferSize = static_cast<int32_t>(altStackBufferSize);
+        uintptr_t p = reinterpret_cast<uintptr_t>(stackBuffer);
+        uintptr_t aligned_p = (p + alignof(UConverter) - 1) & ~(alignof(UConverter) - 1);
+        ptrdiff_t pointerAdjustment = aligned_p - p;
+        if (bufferSizeNeeded + pointerAdjustment <= stackBufferSize) {
+            stackBuffer = reinterpret_cast<void *>(aligned_p);
+            stackBufferSize -= pointerAdjustment;
         } else {
             /* prevent using the stack buffer but keep the size > 0 so that we do not just preflight */
             stackBufferSize = 1;
