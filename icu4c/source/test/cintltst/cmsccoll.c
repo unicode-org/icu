@@ -1454,14 +1454,14 @@ static void TestContraction(void) {
             UCollationElements *iter2 = ucol_openElements(coll,
                                                          &(testdata[i][j]),
                                                          1, &status);
-            uint32_t ce;
+            int32_t ce;
             if (U_FAILURE(status)) {
                 log_err("Collation iterator creation failed\n");
                 return;
             }
             ce = ucol_next(iter2, &status);
             while (ce != UCOL_NULLORDER) {
-                if ((uint32_t)ucol_next(iter1, &status) != ce) {
+                if (ucol_next(iter1, &status) != ce) {
                     log_err("Collation elements in contraction split does not match\n");
                     return;
                 }

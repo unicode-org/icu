@@ -57,10 +57,10 @@ class U_COMMON_API Mutex : public UMemory {
 public:
     Mutex(UMutex *mutex = nullptr) : fMutex(mutex) {
         umtx_lock(fMutex);
-    };
+    }
     ~Mutex() {
         umtx_unlock(fMutex);
-    };
+    }
 
     Mutex(const Mutex &other) = delete; // forbid assigning of this class
     Mutex &operator=(const Mutex &other) = delete; // forbid copying of this class

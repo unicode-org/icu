@@ -96,7 +96,7 @@ static void TestSkeletonFormatToFields() {
     if (assertSuccessCheck("unumf_formatInt() failed", &ec, TRUE)) {
 
         // field position test:
-        UFieldPosition ufpos = {UNUM_DECIMAL_SEPARATOR_FIELD};
+        UFieldPosition ufpos = {UNUM_DECIMAL_SEPARATOR_FIELD, 0, 0};
         unumf_resultNextFieldPosition(uresult, &ufpos, &ec);
         assertIntEquals("Field position should be correct", 14, ufpos.beginIndex);
         assertIntEquals("Field position should be correct", 15, ufpos.endIndex);
@@ -118,7 +118,7 @@ static void TestSkeletonFormatToFields() {
                 {UNUM_MEASURE_UNIT_FIELD, 18, 19}
             };
             UFieldPosition actual;
-            for (int32_t i = 0; i < sizeof(expectedFields) / sizeof(*expectedFields); i++) {
+            for (int32_t i = 0; i < (int32_t)(sizeof(expectedFields) / sizeof(*expectedFields)); i++) {
                 // Iterate using the UFieldPosition to hold state...
                 UFieldPosition expected = expectedFields[i];
                 actual.field = ufieldpositer_next(ufpositer, &actual.beginIndex, &actual.endIndex);

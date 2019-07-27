@@ -2048,9 +2048,9 @@ public:
     virtual UBool operator==(const Collator& other) const;
     // Collator::operator!= calls !Collator::operator== which works for all subclasses.
     virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale, const Locale& actualLocale);
-    TestCollator() : Collator() {};
+    TestCollator() : Collator() {}
     TestCollator(UCollationStrength collationStrength, 
-           UNormalizationMode decompositionMode) : Collator(collationStrength, decompositionMode) {};
+           UNormalizationMode decompositionMode) : Collator(collationStrength, decompositionMode) {}
 };
 
 inline UBool TestCollator::operator==(const Collator& other) const {

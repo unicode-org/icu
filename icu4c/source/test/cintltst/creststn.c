@@ -62,7 +62,7 @@ randul()
     }
     /* Assume rand has at least 12 bits of precision */
     
-    for (i=0; i<sizeof(l); ++i)
+    for (i=0; i<(int32_t)sizeof(l); ++i)
         ((char*)&l)[i] = (char)((rand() & 0x0FF0) >> 4);
     return l;
 }
@@ -2946,7 +2946,7 @@ tres_getString(const UResourceBundle *resB,
         }
 
         /* verify NUL-termination */
-        if((p8 != buffer8 || length8 < sizeof(buffer8)) && s8[length8] != 0) {
+        if((p8 != buffer8 || length8 < (int32_t)sizeof(buffer8)) && s8[length8] != 0) {
             log_err("ures_getUTF8String(%p, %ld, '%s') did not NUL-terminate\n",
                     resB, (long)idx, key);
         }

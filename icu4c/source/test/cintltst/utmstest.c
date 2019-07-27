@@ -52,7 +52,7 @@ static uint64_t randomInt64(void)
     }
 
     /* Assume rand has at least 12 bits of precision */
-    for (i = 0; i < sizeof(ran); i += 1) {
+    for (i = 0; i < (int32_t)sizeof(ran); i += 1) {
         ((char*)&ran)[i] = (char)((rand() & 0x0FF0) >> 4);
     }
 

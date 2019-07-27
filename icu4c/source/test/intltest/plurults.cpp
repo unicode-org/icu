@@ -69,9 +69,9 @@ class US {
     US(const UnicodeString &us) {
        int32_t bufLen = us.extract((int32_t)0, us.length(), (char *)NULL, (uint32_t)0) + 1;
        buf = (char *)uprv_malloc(bufLen);
-       us.extract(0, us.length(), buf, bufLen); };
-    const char *cstr() {return buf;};
-    ~US() { uprv_free(buf);};
+       us.extract(0, us.length(), buf, bufLen); }
+    const char *cstr() {return buf;}
+    ~US() { uprv_free(buf);}
 };
 
 

@@ -884,13 +884,13 @@ static void TestSetChar() {
         }
 #if !U_HIDE_OBSOLETE_UTF_OLD_H
         setOffset=offset;
-        UTF8_SET_CHAR_LIMIT_SAFE(input,0, setOffset, sizeof(input));
+        UTF8_SET_CHAR_LIMIT_SAFE(input,0, setOffset, (int32_t)sizeof(input));
         if(setOffset != limit_safe[i]){
             log_err("ERROR: UTF8_SET_CHAR_LIMIT_SAFE failed for offset=%ld. Expected:%ld Got:%ld\n", offset, limit_safe[i], setOffset);
         }
 #endif
         setOffset=offset;
-        U8_SET_CP_LIMIT(input,0, setOffset, sizeof(input));
+        U8_SET_CP_LIMIT(input,0, setOffset, (int32_t)sizeof(input));
         if(setOffset != limit_safe[i]){
             log_err("ERROR: U8_SET_CP_LIMIT failed for offset=%ld. Expected:%ld Got:%ld\n", offset, limit_safe[i], setOffset);
         }

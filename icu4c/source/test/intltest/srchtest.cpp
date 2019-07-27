@@ -2452,11 +2452,11 @@ void StringSearchTest::TestSubclass()
 class StubSearchIterator:public SearchIterator{
 public:
     StubSearchIterator(){}
-    virtual void setOffset(int32_t , UErrorCode &) {};
-    virtual int32_t getOffset(void) const {return 0;};
-    virtual SearchIterator* safeClone(void) const {return NULL;};
-    virtual int32_t handleNext(int32_t , UErrorCode &){return 0;};
-    virtual int32_t handlePrev(int32_t , UErrorCode &) {return 0;};
+    virtual void setOffset(int32_t , UErrorCode &) {}
+    virtual int32_t getOffset(void) const {return 0;}
+    virtual SearchIterator* safeClone(void) const {return NULL;}
+    virtual int32_t handleNext(int32_t , UErrorCode &){return 0;}
+    virtual int32_t handlePrev(int32_t , UErrorCode &) {return 0;}
     virtual UClassID getDynamicClassID() const {
         static char classID = 0;
         return (UClassID)&classID; 

@@ -288,7 +288,7 @@ NumberFormatTest::TestAPI(void)
 
 class StubNumberFormat :public NumberFormat{
 public:
-    StubNumberFormat(){};
+    StubNumberFormat(){}
     virtual UnicodeString& format(double ,UnicodeString& appendTo,FieldPosition& ) const {
         return appendTo;
     }

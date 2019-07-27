@@ -213,6 +213,7 @@ void checkFormattedValue(
         UFieldCategory expectedCategory,
         const UFieldPosition* expectedFieldPositions,
         int32_t expectedFieldPositionsLength) {
+    (void)expectedFieldPositionsLength; // suppress compiler warnings about unused variable
     UErrorCode ec = U_ZERO_ERROR;
     checkFormattedValueString(message, fv, expectedString, &ec);
     if (U_FAILURE(ec)) { return; }
@@ -244,6 +245,7 @@ void checkMixedFormattedValue(
         const UChar* expectedString,
         const UFieldPositionWithCategory* expectedFieldPositions,
         int32_t length) {
+    (void)length; // suppress compiler warnings about unused variable
     UErrorCode ec = U_ZERO_ERROR;
     checkFormattedValueString(message, fv, expectedString, &ec);
     if (U_FAILURE(ec)) { return; }

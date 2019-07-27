@@ -36,7 +36,7 @@ static void TestSignedRightShiftIsArithmetic(void) {
     int32_t m=-1;
     int32_t x4=x>>4;
     int32_t m1=m>>1;
-    UBool signedRightShiftIsArithmetic= x4==0xffff5fff && m1==-1;
+    UBool signedRightShiftIsArithmetic= (x4==(int32_t)0xffff5fff && m1==-1);
     if(signedRightShiftIsArithmetic==U_SIGNED_RIGHT_SHIFT_IS_ARITHMETIC) {
         log_info("signed right shift is Arithmetic Shift Right: %d\n",
                  signedRightShiftIsArithmetic);

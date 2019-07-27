@@ -76,8 +76,8 @@ class ThreadPool : public ThreadPoolBase {
     void (TestClass::*fRunFnPtr)(int32_t);
   public:
     ThreadPool(TestClass *test, int howMany, void (TestClass::*runFnPtr)(int32_t threadNumber)) :
-        ThreadPoolBase(test, howMany), fRunFnPtr(runFnPtr) {};
-    virtual ~ThreadPool() {};
+        ThreadPoolBase(test, howMany), fRunFnPtr(runFnPtr) {}
+    virtual ~ThreadPool() {}
   private:
     virtual void callFn(int32_t param) {
         TestClass *test = dynamic_cast<TestClass *>(fIntlTest);

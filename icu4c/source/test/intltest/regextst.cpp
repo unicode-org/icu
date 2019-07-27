@@ -4755,7 +4755,7 @@ struct callBackContext {
     int32_t          maxCalls;
     int32_t          numCalls;
     int32_t          lastSteps;
-    void reset(int32_t max) {maxCalls=max; numCalls=0; lastSteps=0;};
+    void reset(int32_t max) {maxCalls=max; numCalls=0; lastSteps=0;}
 };
 
 U_CDECL_BEGIN
@@ -4858,7 +4858,7 @@ struct progressCallBackContext {
     int64_t          lastIndex;
     int32_t          maxCalls;
     int32_t          numCalls;
-    void reset(int32_t max) {maxCalls=max; numCalls=0;lastIndex=0;};
+    void reset(int32_t max) {maxCalls=max; numCalls=0;lastIndex=0;}
 };
 
 // call-back function for find().

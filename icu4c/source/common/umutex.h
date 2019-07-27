@@ -225,7 +225,7 @@ public:
         if (m == nullptr) { m = getMutex(); }
         m->lock();
     }
-    void unlock() { fMutex.load(std::memory_order_relaxed)->unlock(); };
+    void unlock() { fMutex.load(std::memory_order_relaxed)->unlock(); }
 
     static void cleanup();
 

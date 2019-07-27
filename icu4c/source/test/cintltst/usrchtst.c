@@ -362,7 +362,7 @@ static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
         matchlength = search.size[count];
         usearch_next(strsrch, &status);
         if (matchindex != usearch_getMatchedStart(strsrch) || 
-            matchlength != (uint32_t)usearch_getMatchedLength(strsrch)) {
+            matchlength != usearch_getMatchedLength(strsrch)) {
             char *str = toCharString(usearch_getText(strsrch, &textlength));
             log_err("Text: %s\n", str);
             str = toCharString(usearch_getPattern(strsrch, &textlength));
@@ -375,7 +375,7 @@ static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
         count ++;
         
         if (usearch_getMatchedText(strsrch, matchtext, 128, &status) !=
-            (int32_t) matchlength || U_FAILURE(status) ||
+             matchlength || U_FAILURE(status) ||
             memcmp(matchtext, 
                    usearch_getText(strsrch, &textlength) + matchindex,
                    matchlength * sizeof(UChar)) != 0) {
@@ -404,7 +404,7 @@ static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
         matchlength = search.size[count];
         usearch_previous(strsrch, &status);
         if (matchindex != usearch_getMatchedStart(strsrch) || 
-            matchlength != (uint32_t)usearch_getMatchedLength(strsrch)) {
+            matchlength != usearch_getMatchedLength(strsrch)) {
             char *str = toCharString(usearch_getText(strsrch, &textlength));
             log_err("Text: %s\n", str);
             str = toCharString(usearch_getPattern(strsrch, &textlength));
@@ -416,7 +416,7 @@ static UBool assertEqualWithUStringSearch(      UStringSearch *strsrch,
         }
         
         if (usearch_getMatchedText(strsrch, matchtext, 128, &status) !=
-            (int32_t) matchlength || U_FAILURE(status) ||
+             matchlength || U_FAILURE(status) ||
             memcmp(matchtext, 
                    usearch_getText(strsrch, &textlength) + matchindex,
                    matchlength * sizeof(UChar)) != 0) {
@@ -1255,10 +1255,10 @@ static void TestGetSetOffset(void)
         ucol_setStrength(usearch_getCollator(strsrch), search.strength);
         usearch_reset(strsrch);
         while (U_SUCCESS(status) && matchindex >= 0) {
-            uint32_t matchlength = search.size[count];
+            int32_t matchlength = search.size[count];
             usearch_next(strsrch, &status);
             if (matchindex != usearch_getMatchedStart(strsrch) || 
-                matchlength != (uint32_t)usearch_getMatchedLength(strsrch)) {
+                matchlength != usearch_getMatchedLength(strsrch)) {
                 char *str = toCharString(usearch_getText(strsrch, 
                                                          &textlength));
                 log_err("Text: %s\n", str);
@@ -1272,7 +1272,7 @@ static void TestGetSetOffset(void)
             usearch_setOffset(strsrch, matchindex + matchlength, &status);
             usearch_previous(strsrch, &status);
             if (matchindex != usearch_getMatchedStart(strsrch) || 
-                matchlength != (uint32_t)usearch_getMatchedLength(strsrch)) {
+                matchlength != usearch_getMatchedLength(strsrch)) {
                 char *str = toCharString(usearch_getText(strsrch, 
                                                          &textlength));
                 log_err("Text: %s\n", str);
@@ -1459,23 +1459,23 @@ static void TestGetMatch(void)
         }
         status = U_ZERO_ERROR;
         if (usearch_getMatchedText(strsrch, NULL, 0, &status) != 
-            (int32_t)matchlength || U_SUCCESS(status)){
+            matchlength || U_SUCCESS(status)){
             log_err("Error pre-flighting match length\n");
         }
         status = U_ZERO_ERROR;
         if (usearch_getMatchedText(strsrch, matchtext, 0, &status) != 
-            (int32_t)matchlength || U_SUCCESS(status)){
+            matchlength || U_SUCCESS(status)){
             log_err("Error getting match text with buffer size 0\n");
         }
         status = U_ZERO_ERROR;
         if (usearch_getMatchedText(strsrch, matchtext, matchlength, &status) 
-            != (int32_t)matchlength || matchtext[matchlength - 1] == 0 ||
+            != matchlength || matchtext[matchlength - 1] == 0 ||
             U_FAILURE(status)){
             log_err("Error getting match text with exact size\n");
         }
         status = U_ZERO_ERROR;
         if (usearch_getMatchedText(strsrch, matchtext, 128, &status) !=
-            (int32_t) matchlength || U_FAILURE(status) ||
+            matchlength || U_FAILURE(status) ||
             memcmp(matchtext, 
                    usearch_getText(strsrch, &textlength) + matchindex,
                    matchlength * sizeof(UChar)) != 0 ||
@@ -2313,10 +2313,10 @@ static void TestGetSetOffsetCanonical(void)
         usearch_setText(strsrch, text, -1, &status);
         usearch_setPattern(strsrch, pattern, -1, &status);
         while (U_SUCCESS(status) && matchindex >= 0) {
-            uint32_t matchlength = search.size[count];
+            int32_t matchlength = search.size[count];
             usearch_next(strsrch, &status);
             if (matchindex != usearch_getMatchedStart(strsrch) || 
-                matchlength != (uint32_t)usearch_getMatchedLength(strsrch)) {
+                matchlength != usearch_getMatchedLength(strsrch)) {
                 char *str = toCharString(usearch_getText(strsrch, 
                                                          &textlength));
                 log_err("Text: %s\n", str);

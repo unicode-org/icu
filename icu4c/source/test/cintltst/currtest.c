@@ -122,7 +122,7 @@ static int32_t checkItemCount(uint32_t currencyType) {
     originalCount = uenum_count(en, &status);
     for (count=0;;count++) {
         const char *str = uenum_next(en, &len, &status);
-        if (str == NULL || len != expectedLen || strlen(str) != expectedLen) {
+        if (str == NULL || len != expectedLen || (int32_t)strlen(str) != expectedLen) {
             break;
         }
     }

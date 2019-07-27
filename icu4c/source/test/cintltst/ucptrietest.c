@@ -67,6 +67,7 @@ getSpecialValues(const CheckRange checkRanges[], int32_t countCheckRanges,
 /* ucptrie_enum() callback, modifies a value */
 static uint32_t U_CALLCONV
 testFilter(const void *context, uint32_t value) {
+    (void)context; // suppress compiler warnings about unused variable
     return value ^ 0x5555;
 }
 
@@ -568,7 +569,7 @@ testTrieUTF8(const char *testName,
             values[countValues++]=value;
         }
         /* write an illegal byte sequence */
-        if(i8<sizeof(illegal)) {
+        if(i8<(int32_t)sizeof(illegal)) {
             U8_FWD_1(illegal, i8, sizeof(illegal));
             while(prev8<i8) {
                 s[length++]=illegal[prev8++];
@@ -577,7 +578,7 @@ testTrieUTF8(const char *testName,
         }
     }
     /* write the remaining illegal byte sequences */
-    while(i8<sizeof(illegal)) {
+    while(i8<(int32_t)sizeof(illegal)) {
         U8_FWD_1(illegal, i8, sizeof(illegal));
         while(prev8<i8) {
             s[length++]=illegal[prev8++];

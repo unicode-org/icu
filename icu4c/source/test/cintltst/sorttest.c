@@ -109,6 +109,7 @@ typedef struct Line {
 
 static void
 printLines(const Line *lines) {
+    (void)lines; // suppress compiler warnings about unused variable
 #if 0
     int32_t i, j;
     for(i=0; i<NUM_LINES; ++i) {
