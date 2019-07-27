@@ -687,6 +687,7 @@ static void TestSScanset(void) {
 
 static void TestBadSScanfFormat(const char *format, const UChar *uValue, const char *cValue) {
 #if !UCONFIG_NO_FORMATTING
+    (void)cValue; // suppress compiler warnings about unused variable
     UChar uBuffer[256];
     int32_t uNumScanned;
 

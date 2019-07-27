@@ -49,6 +49,7 @@ static void U_CALLCONV
 strprepProfileLineFn(void *context,
               char *fields[][2], int32_t fieldCount,
               UErrorCode *pErrorCode) {
+    (void)fieldCount; // suppress compiler warnings about unused variable
     uint32_t mapping[40];
     char *end, *map;
     uint32_t code;
@@ -273,7 +274,7 @@ compareFlagsForRange(UStringPrepProfile* data,
 
 void
 doStringPrepTest(const char* binFileName, const char* txtFileName, int32_t options, UErrorCode* errorCode){
-
+    (void)options; // suppress compiler warnings about unused variable
     const char *testdatapath = loadTestData(errorCode);
     const char *srcdatapath = NULL;
     const char *relativepath = NULL;

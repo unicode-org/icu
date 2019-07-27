@@ -1282,7 +1282,7 @@ class LegalIndic :public Legal{
 public:
     LegalIndic();
     virtual UBool is(const UnicodeString& sourceString) const;
-    virtual ~LegalIndic() {};
+    virtual ~LegalIndic() {}
 };
 UBool LegalIndic::is(const UnicodeString& sourceString) const{
     int cp=sourceString.charAt(0);

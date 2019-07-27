@@ -1076,7 +1076,7 @@ static void TestDiscontiguos() {
         log_verbose("count %d\n", count);
 
         for (;;) {
-            uint32_t  ce;
+            int32_t  ce;
             UChar    *e = u_strchr(s, 0x20);
             if (e == 0) {
                 e = u_strchr(s, 0);
@@ -1088,7 +1088,7 @@ static void TestDiscontiguos() {
                 return;
             }
             while (ce != UCOL_NULLORDER) {
-                if (ce != (uint32_t)ucol_next(iter, &status) ||
+                if (ce != ucol_next(iter, &status) ||
                     U_FAILURE(status)) {
                     log_err("Discontiguos contraction test mismatch\n");
                     return;

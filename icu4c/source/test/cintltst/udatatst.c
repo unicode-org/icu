@@ -558,6 +558,7 @@ static UBool U_CALLCONV
 isAcceptable1(void *context,
              const char *type, const char *name,
              const UDataInfo *pInfo) {
+    (void)context; // suppress compiler warnings about unused variable
 
     if( pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
@@ -590,6 +591,7 @@ static UBool U_CALLCONV
 isAcceptable2(void *context, 
              const char *type, const char *name,
       const UDataInfo *pInfo){
+    (void)context; // suppress compiler warnings about unused variable
     UVersionInfo unicodeVersion;
 
     u_getUnicodeVersion(unicodeVersion);
@@ -618,6 +620,7 @@ static UBool U_CALLCONV
 isAcceptable3(void *context, 
              const char *type, const char *name,
              const UDataInfo *pInfo){
+    (void)context; // suppress compiler warnings about unused variable
 
     if( pInfo->size>=20 &&
         pInfo->isBigEndian==U_IS_BIG_ENDIAN &&
@@ -1233,7 +1236,8 @@ static const struct {
 
     {0x31, 0x31, 0x31, 0x31},     /* dataFormat="1111" */
     {0, 0, 0, 0},                 /* formatVersion */
-    {0, 0, 0, 0}}                 /* dataVersion */
+    {0, 0, 0, 0}},                /* dataVersion */
+    0
 };
 #endif
 
@@ -1395,6 +1399,7 @@ static const struct {
 
 static void U_CALLCONV
 printError(void *context, const char *fmt, va_list args) {
+    (void)context; // suppress compiler warnings about unused variable
     vlog_info("[swap] ", fmt, args);
     log_err("\n");  /* Register error */
 }

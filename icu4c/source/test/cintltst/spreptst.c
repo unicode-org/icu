@@ -295,6 +295,7 @@ static int32_t
 unescapeData(const char* src, int32_t srcLen, 
              char* dest, int32_t destCapacity, 
              UErrorCode* status){
+    (void)srcLen; // suppress compiler warnings about unused variable
 
     UChar b1Stack[MAX_BUFFER_SIZE];
     int32_t b1Capacity = MAX_BUFFER_SIZE,

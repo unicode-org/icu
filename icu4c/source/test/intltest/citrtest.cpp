@@ -36,7 +36,7 @@ public:
 
     }
 
-    virtual ~SCharacterIterator(){};
+    virtual ~SCharacterIterator(){}
 
                                 
     void setText(const UnicodeString& newText){
@@ -65,19 +65,19 @@ public:
     }
     virtual UChar nextPostInc(void){ return text.charAt(pos++);}
     virtual UChar32 next32PostInc(void){return text.char32At(pos++);}
-    virtual UBool hasNext() { return TRUE;};
-    virtual UChar first(){return DONE;};
-    virtual UChar32 first32(){return DONE;};
-    virtual UChar last(){return DONE;};
-    virtual UChar32 last32(){return DONE;};
-    virtual UChar setIndex(int32_t /*pos*/){return DONE;};
-    virtual UChar32 setIndex32(int32_t /*pos*/){return DONE;};
-    virtual UChar current() const{return DONE;};
-    virtual UChar32 current32() const{return DONE;};
-    virtual UChar next(){return DONE;};
-    virtual UChar32 next32(){return DONE;};
-    virtual UChar previous(){return DONE;};
-    virtual UChar32 previous32(){return DONE;};
+    virtual UBool hasNext() { return TRUE;}
+    virtual UChar first(){return DONE;}
+    virtual UChar32 first32(){return DONE;}
+    virtual UChar last(){return DONE;}
+    virtual UChar32 last32(){return DONE;}
+    virtual UChar setIndex(int32_t /*pos*/){return DONE;}
+    virtual UChar32 setIndex32(int32_t /*pos*/){return DONE;}
+    virtual UChar current() const{return DONE;}
+    virtual UChar32 current32() const{return DONE;}
+    virtual UChar next(){return DONE;}
+    virtual UChar32 next32(){return DONE;}
+    virtual UChar previous(){return DONE;}
+    virtual UChar32 previous32(){return DONE;}
     virtual int32_t move(int32_t delta,CharacterIterator::EOrigin origin){    
         switch(origin) {
         case kStart:
@@ -100,7 +100,7 @@ public:
         }
 
         return pos;
-    };
+    }
     virtual int32_t move32(int32_t delta, CharacterIterator::EOrigin origin){    
         switch(origin) {
         case kStart:
@@ -127,8 +127,8 @@ public:
         }
 
         return pos;
-    };
-    virtual UBool hasPrevious() {return TRUE;};
+    }
+    virtual UBool hasPrevious() {return TRUE;}
 
   SCharacterIterator&  operator=(const SCharacterIterator&    that){
      text = that.text;

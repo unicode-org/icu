@@ -83,6 +83,7 @@ int    gBlockCount = 0;
 const void  *gContext;
 
 static void * U_CALLCONV myMemAlloc(const void *context, size_t size) {
+    (void)context; // suppress compiler warnings about unused variable
     char *retPtr = (char *)malloc(size+sizeof(ctest_AlignedMemory));
     if (retPtr != NULL) {
         retPtr += sizeof(ctest_AlignedMemory);
@@ -92,6 +93,7 @@ static void * U_CALLCONV myMemAlloc(const void *context, size_t size) {
 }
 
 static void U_CALLCONV myMemFree(const void *context, void *mem) {
+    (void)context; // suppress compiler warnings about unused variable
     char *freePtr = (char *)mem;
     if (freePtr != NULL) {
         freePtr -= sizeof(ctest_AlignedMemory);
@@ -102,6 +104,7 @@ static void U_CALLCONV myMemFree(const void *context, void *mem) {
 
 
 static void * U_CALLCONV myMemRealloc(const void *context, void *mem, size_t size) {
+    (void)context; // suppress compiler warnings about unused variable
     char *p = (char *)mem;
     char *retPtr;
 

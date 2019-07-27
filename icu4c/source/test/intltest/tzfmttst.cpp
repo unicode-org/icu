@@ -410,7 +410,7 @@ struct LocaleData {
         for (int i=0; i<UPRV_LENGTHOF(times); i++) {
             times[i] = 0;
         }
-    };
+    }
 
     void resetTestIteration() {
         localeIndex = -1;

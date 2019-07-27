@@ -77,7 +77,7 @@ static void test_format(const char *format, int32_t bufCap, int32_t indent,
     char  expectedResult[300];
 
     /* check that local buffers are big enough for the test case */
-    if (sizeof(buf) <= bufCap) {
+    if ((int32_t)sizeof(buf) <= bufCap) {
         log_err("At file:line %s:%d, requested bufCap too large.\n");
         return;
     }
@@ -115,6 +115,7 @@ static UBool  gFnNameError   = FALSE;
 static UBool  gFnFormatError = FALSE;
 
 static void U_CALLCONV testTraceEntry(const void *context, int32_t fnNumber) {
+    (void)context; // suppress compiler warnings about unused variable
     const char *fnName;
     const char *bogusFnName;
 
@@ -132,6 +133,7 @@ static void U_CALLCONV testTraceEntry(const void *context, int32_t fnNumber) {
 
 static void U_CALLCONV testTraceExit(const void *context, int32_t fnNumber,
                    const char *fmt, va_list args) {
+    (void)context; // suppress compiler warnings about unused variable
     char        buf[1000];
     const char *fnName;
     const char *bogusFnName;
@@ -158,6 +160,9 @@ static void U_CALLCONV testTraceExit(const void *context, int32_t fnNumber,
 
 static void U_CALLCONV testTraceData(const void *context, int32_t fnNumber, int32_t level,
                    const char *fmt, va_list args) {
+    // suppress compiler warnings about unused variables
+    (void)context;
+    (void)level;
     char        buf[1000];
     const char *fnName;
     const char *bogusFnName;

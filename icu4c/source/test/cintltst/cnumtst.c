@@ -881,9 +881,9 @@ free(result);
             log_err("File %s, Line %d, (expected, acutal) =  (\"%s\", \"%s\")\n",
                     __FILE__, __LINE__, numFormatted, desta);
         }
-        if (strlen(numFormatted) != resultSize) {
+        if ((int32_t)strlen(numFormatted) != resultSize) {
             log_err("File %s, Line %d, (expected, actual) = (%d, %d)\n",
-                     __FILE__, __LINE__, strlen(numFormatted), resultSize);
+                     __FILE__, __LINE__, (int32_t)strlen(numFormatted), resultSize);
         }
 
         /* Format with a FieldPosition parameter */
@@ -922,9 +922,9 @@ free(result);
             log_verbose("File %s, Line %d, got expected = \"%s\"\n",
                     __FILE__, __LINE__, desta);
         }
-        if (strlen(parseExpected) != resultSize) {
+        if ((int32_t)strlen(parseExpected) != resultSize) {
             log_err("File %s, Line %d, (expected, actual) = (%d, %d)\n",
-                    __FILE__, __LINE__, strlen(parseExpected), resultSize);
+                    __FILE__, __LINE__, (int32_t)strlen(parseExpected), resultSize);
         }
 
         /* Parse with a parsePos parameter */
@@ -944,9 +944,9 @@ free(result);
             log_verbose("File %s, Line %d, got expected = \"%s\"\n",
                     __FILE__, __LINE__, desta);
         }
-        if (strlen(numFormatted) != parsePos) {
+        if ((int32_t)strlen(numFormatted) != parsePos) {
             log_err("File %s, Line %d, parsePos (expected, actual) = (\"%d\", \"%d\")\n",
-                    __FILE__, __LINE__, strlen(parseExpected), parsePos);
+                    __FILE__, __LINE__, (int32_t)strlen(parseExpected), parsePos);
         }
 
         unum_close(fmt);

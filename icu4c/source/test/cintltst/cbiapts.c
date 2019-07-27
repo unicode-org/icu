@@ -566,7 +566,7 @@ static void TestBreakIteratorRules() {
     ubrk_setText(bi,  uData, -1, &status);
 
     pos = ubrk_first(bi);
-    for (i=0; i<sizeof(breaks); i++) {
+    for (i=0; i<(int)sizeof(breaks); i++) {
         if (pos == i && breaks[i] != '*') {
             log_err("FAIL: unexpected break at position %d found\n", pos);
             break;
@@ -1031,7 +1031,7 @@ static const TestBISuppressionsItem testBISuppressionsItems[] = {
     { "de",             testSentenceSuppressionsDe, testSentFwdOffsetsDe,     testSentRevOffsetsDe     },
     { "es@ss=standard", testSentenceSuppressionsEs, testSentSuppFwdOffsetsEs, testSentSuppRevOffsetsEs },
     { "es",             testSentenceSuppressionsEs, testSentFwdOffsetsEs,     testSentRevOffsetsEs     },
-    { NULL, NULL, NULL }
+    { NULL, NULL, NULL, NULL }
 };
 
 static void TestBreakIteratorSuppressions(void) {

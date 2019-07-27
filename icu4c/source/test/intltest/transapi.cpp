@@ -970,7 +970,7 @@ class MyUnicodeFunctorTestClass : public UnicodeFunctor {
 public:
     virtual UnicodeFunctor* clone() const {return NULL;}
     static UClassID getStaticClassID(void) {return (UClassID)&MyUnicodeFunctorTestClassID;}
-    virtual UClassID getDynamicClassID(void) const {return getStaticClassID();};
+    virtual UClassID getDynamicClassID(void) const {return getStaticClassID();}
     virtual void setData(const TransliterationRuleData*) {}
 };
 

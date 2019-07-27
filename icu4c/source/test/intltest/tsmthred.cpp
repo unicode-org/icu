@@ -158,8 +158,8 @@ void MultithreadTest::TestThreads()
 class TestArabicShapeThreads : public SimpleThread
 {
 public:
-    TestArabicShapeThreads() {};
-    virtual void run() { doTailTest(); };
+    TestArabicShapeThreads() {}
+    virtual void run() { doTailTest(); }
 private:
 	void doTailTest();
 };
@@ -730,7 +730,7 @@ public:
         noLines(0),
         isAtLeastUCA62(TRUE)
     {
-    };
+    }
     void setCollator(Collator *c, Line *l, int32_t nl, UBool atLeastUCA62)
     {
         coll = c;
@@ -942,7 +942,7 @@ public:
         : SimpleThread(),
         fTraceInfo(0)
     {
-    };
+    }
 
 
     virtual void run()
@@ -1012,7 +1012,7 @@ void MultithreadTest::TestString()
 Transliterator *gSharedTranslit = NULL;
 class TxThread: public SimpleThread {
   public:
-    TxThread() {};
+    TxThread() {}
     ~TxThread();
     void run();
 };
@@ -1145,8 +1145,8 @@ class UnifiedCacheThread: public SimpleThread {
     UnifiedCacheThread(
             const UnifiedCache *cache,
             const char *loc,
-            const char *loc2) : fCache(cache), fLoc(loc), fLoc2(loc2) {};
-    ~UnifiedCacheThread() {};
+            const char *loc2) : fCache(cache), fLoc(loc), fLoc2(loc2) {}
+    ~UnifiedCacheThread() {}
     void run();
     void exerciseByLocale(const Locale &);
     const UnifiedCache *fCache;
@@ -1255,8 +1255,8 @@ static const UnicodeString *gTranslitExpected;
 
 class BreakTranslitThread: public SimpleThread {
   public:
-    BreakTranslitThread() {};
-    ~BreakTranslitThread() {};
+    BreakTranslitThread() {}
+    ~BreakTranslitThread() {}
     void run();
 };
 
@@ -1305,7 +1305,7 @@ void MultithreadTest::TestBreakTranslit() {
 
 class TestIncDecThread : public SimpleThread {
 public:
-    TestIncDecThread() { };
+    TestIncDecThread() {}
     virtual void run();
 };
 
@@ -1338,7 +1338,7 @@ static Calendar  *gSharedCalendar = {};
 
 class Test20104Thread : public SimpleThread {
 public:
-    Test20104Thread() { };
+    Test20104Thread() {}
     virtual void run();
 };
 

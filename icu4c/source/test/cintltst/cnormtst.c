@@ -661,7 +661,7 @@ void TestCheckFCD()
   for (count = 0; count < 50; count ++)
   {
     int size = 0;
-    UBool testresult = UNORM_YES;
+    UNormalizationCheckResult testresult = UNORM_YES;
     UChar data[20];
     UChar norm[100];
     UChar nfd[100];

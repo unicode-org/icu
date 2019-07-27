@@ -454,6 +454,7 @@ static void
 testLCID(UResourceBundle *currentBundle,
          const char *localeName)
 {
+    (void)currentBundle; // suppress compiler warnings about unused variables
     UErrorCode status = U_ZERO_ERROR;
     uint32_t expectedLCID;
     char lcidStringC[64] = {0};

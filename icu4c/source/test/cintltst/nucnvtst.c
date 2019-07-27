@@ -4581,6 +4581,10 @@ typedef struct {
 /* Callback for TestJitterbug6175, should only get called for empty segment errors */
 static void UCNV_TO_U_CALLBACK_EMPTYSEGMENT( const void *context, UConverterToUnicodeArgs *toArgs, const char* codeUnits,
                                              int32_t length, UConverterCallbackReason reason, UErrorCode * err ) {
+    // suppress compiler warnings about unused variables
+    (void)context;
+    (void)codeUnits;
+    (void)length;
     if (reason > UCNV_IRREGULAR) {
         return;
     }

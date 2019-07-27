@@ -699,7 +699,7 @@ static void TestRegressionUTF8(){
         offset16 = 0;
         offset8 = 0;
         while(currCh <= UNICODE_LIMIT
-            && offset16 < (MAX_LENGTH/sizeof(UChar) - MAX_UTF16_LEN)
+            && offset16 < ((int32_t)(MAX_LENGTH/sizeof(UChar) - MAX_UTF16_LEN))
             && offset8 < (MAX_LENGTH - MAX_UTF8_LEN))
         {
             if (currCh == SURROGATE_HIGH_START) {
@@ -770,8 +770,8 @@ static void TestRegressionUTF32(){
         offset16 = 0;
         offset32 = 0;
         while(currCh <= UNICODE_LIMIT
-            && offset16 < (MAX_LENGTH/sizeof(UChar) - MAX_UTF16_LEN)
-            && offset32 < (MAX_LENGTH/sizeof(UChar32) - MAX_UTF32_LEN))
+            && offset16 < ((int32_t)(MAX_LENGTH/sizeof(UChar) - MAX_UTF16_LEN))
+            && offset32 < ((int32_t)(MAX_LENGTH/sizeof(UChar32) - MAX_UTF32_LEN)))
         {
             if (currCh == SURROGATE_HIGH_START) {
                 currCh = SURROGATE_LOW_END + 1; /* Skip surrogate range */

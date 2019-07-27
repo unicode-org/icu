@@ -1370,6 +1370,11 @@ static void TSCC_fromU(const void *context,
                         UConverterCallbackReason reason,
                         UErrorCode * err)
 {
+    // suppress compiler warnings about unused variables
+    (void)codeUnits;
+    (void)length;
+    (void)codePoint;
+
     TSCCContext *ctx = (TSCCContext*)context;
     UConverterFromUCallback junkFrom;
     
@@ -1416,6 +1421,10 @@ static void TSCC_toU(const void *context,
                         UConverterCallbackReason reason,
                         UErrorCode * err)
 {
+    // suppress compiler warnings about unused variables
+    (void)codeUnits;
+    (void)length;
+
     TSCCContext *ctx = (TSCCContext*)context;
     UConverterToUCallback junkFrom;
     
@@ -2197,10 +2206,10 @@ convertExStreaming(UConverter *srcCnv, UConverter *targetCnv,
         if(errorCode==U_BUFFER_OVERFLOW_ERROR) {
             /* continue converting another chunk */
             errorCode=U_ZERO_ERROR;
-            if(targetLength+chunkSize<=sizeof(targetBuffer)) {
+            if(targetLength+chunkSize<=(int32_t)sizeof(targetBuffer)) {
                 targetLimit=target+chunkSize;
             } else {
-                targetLimit=targetBuffer+sizeof(targetBuffer);
+                targetLimit=targetBuffer+(int32_t)sizeof(targetBuffer);
             }
         } else if(U_FAILURE(errorCode)) {
             /* failure */
@@ -2522,6 +2531,12 @@ static void testFromTruncatedUTF8(UConverter *utf8Cnv, UConverter *cnv, const ch
                                   char charUTF8[4], int32_t charUTF8Length,
                                   char char0[8], int32_t char0Length,
                                   char char1[8], int32_t char1Length) {
+    // suppress compiler warnings about unused variables
+    (void)char0;
+    (void)char0Length;
+    (void)char1;
+    (void)char1Length;
+
     char utf8[16];
     int32_t utf8Length;
 

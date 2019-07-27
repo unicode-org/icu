@@ -106,7 +106,7 @@ if (status!=errcode) {dataerrln("DecimalFormatTest failure at line %d.  Expected
 class InvariantStringPiece: public StringPiece {
   public:
     InvariantStringPiece(const UnicodeString &s);
-    ~InvariantStringPiece() {};
+    ~InvariantStringPiece() {}
   private:
     MaybeStackArray<char, 20>  buf;
 };
@@ -130,7 +130,7 @@ InvariantStringPiece::InvariantStringPiece(const UnicodeString &s) {
 class UnicodeStringPiece: public StringPiece {
   public:
     UnicodeStringPiece(const UnicodeString &s);
-    ~UnicodeStringPiece() {};
+    ~UnicodeStringPiece() {}
   private:
     MaybeStackArray<char, 20>  buf;
 };

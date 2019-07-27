@@ -2253,10 +2253,16 @@ static void TestBug8421(void) {
 }
 
 static UBool U_CALLCONV FindCallback(const void* context , int64_t matchIndex) {
+    // suppress compiler warnings about unused variables
+    (void)context;
+    (void)matchIndex;
     return FALSE;
 }
 
 static UBool U_CALLCONV MatchCallback(const void *context, int32_t steps) {
+    // suppress compiler warnings about unused variables
+    (void)context;
+    (void)steps;
     return FALSE;
 }
 

@@ -120,6 +120,7 @@ _testFoldingOffset16(uint32_t data) {
 
 static uint32_t U_CALLCONV
 _testEnumValue(const void *context, uint32_t value) {
+    (void)context; // suppress compiler warnings about unused variable
     return value^0x5555;
 }
 
@@ -815,6 +816,7 @@ TrieTest(void) {
 
 static int32_t U_CALLCONV
 dummyGetFoldingOffset(uint32_t data) {
+    (void)data; // suppress compiler warnings about unused variable
     return -1; /* never get non-initialValue data for supplementary code points */
 }
 

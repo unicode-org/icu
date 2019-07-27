@@ -271,7 +271,7 @@ TestInvariant() {
         log_err("uprv_isInvariantString(\"\\0\") failed\n");
     }
 
-    for(i=0; i<(sizeof(variantChars)-1); ++i) {
+    for(i=0; i<(int32_t)(sizeof(variantChars)-1); ++i) {
         if(uprv_isInvariantString(variantChars+i, 1)) {
             log_err("uprv_isInvariantString(variantChars[%d]) failed\n", i);
         }
