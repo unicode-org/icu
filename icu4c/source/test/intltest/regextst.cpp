@@ -3525,11 +3525,16 @@ void RegexTest::regex_find(const UnicodeString &pattern,
         }
     }
     parseMatcher->appendTail(deTaggedInput);
-    REGEX_ASSERT_L(groupStarts.size() == groupEnds.size(), line);
+
+    if (groupStarts.size() != groupEnds.size()) {
+        errln("Error at line %d: mismatched <n> group tags in expected results.", line);
+        failed = true;
+        goto cleanupAndReturn;
+    }
     if ((regionStart>=0 || regionEnd>=0) && (regionStart<0 || regionStart>regionEnd)) {
-      errln("mismatched <r> tags");
-      failed = TRUE;
-      goto cleanupAndReturn;
+        errln("mismatched <r> tags");
+        failed = TRUE;
+        goto cleanupAndReturn;
     }
 
     //
