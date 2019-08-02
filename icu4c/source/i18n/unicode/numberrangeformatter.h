@@ -185,28 +185,6 @@ class DecimalQuantity;
 class UFormattedNumberRangeData;
 class NumberRangeFormatterImpl;
 
-} // namespace impl
-
-/**
- * \cond
- * Export an explicit template instantiation. See datefmt.h
- * (When building DLLs for Windows this is required.)
- */
-#if U_PLATFORM == U_PF_WINDOWS && !defined(U_IN_DOXYGEN)
-} // namespace icu::number
-U_NAMESPACE_END
-
-template struct U_I18N_API std::atomic< U_NAMESPACE_QUALIFIER number::impl::NumberRangeFormatterImpl*>;
-
-U_NAMESPACE_BEGIN
-namespace number {  // icu::number
-#endif
-/** \endcond */
-
-// Other helper classes would go here, but there are none.
-
-namespace impl {  // icu::number::impl
-
 // Do not enclose entire MacroProps with #ifndef U_HIDE_INTERNAL_API, needed for a protected field
 /** @internal */
 struct U_I18N_API RangeMacroProps : public UMemory {
@@ -589,7 +567,7 @@ class U_I18N_API UnlocalizedNumberRangeFormatter
  * @see NumberFormatter
  * @draft ICU 63
  */
-class U_I18N_API LocalizedNumberRangeFormatter
+class LocalizedNumberRangeFormatter
         : public NumberRangeFormatterSettings<LocalizedNumberRangeFormatter>, public UMemory {
   public:
     /**
@@ -605,7 +583,7 @@ class U_I18N_API LocalizedNumberRangeFormatter
      * @return A FormattedNumberRange object; call .toString() to get the string.
      * @draft ICU 63
      */
-    FormattedNumberRange formatFormattableRange(
+    U_I18N_API FormattedNumberRange formatFormattableRange(
         const Formattable& first, const Formattable& second, UErrorCode& status) const;
 
     /**
@@ -613,33 +591,33 @@ class U_I18N_API LocalizedNumberRangeFormatter
      *
      * @draft ICU 63
      */
-    LocalizedNumberRangeFormatter() = default;
+    U_I18N_API LocalizedNumberRangeFormatter() = default;
 
     /**
      * Returns a copy of this LocalizedNumberRangeFormatter.
      * @draft ICU 63
      */
-    LocalizedNumberRangeFormatter(const LocalizedNumberRangeFormatter &other);
+    U_I18N_API LocalizedNumberRangeFormatter(const LocalizedNumberRangeFormatter &other);
 
     /**
      * Move constructor:
      * The source LocalizedNumberRangeFormatter will be left in a valid but undefined state.
      * @draft ICU 63
      */
-    LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&& src) U_NOEXCEPT;
+    U_I18N_API LocalizedNumberRangeFormatter(LocalizedNumberRangeFormatter&& src) U_NOEXCEPT;
 
     /**
      * Copy assignment operator.
      * @draft ICU 63
      */
-    LocalizedNumberRangeFormatter& operator=(const LocalizedNumberRangeFormatter& other);
+    U_I18N_API LocalizedNumberRangeFormatter& operator=(const LocalizedNumberRangeFormatter& other);
 
     /**
      * Move assignment operator:
      * The source LocalizedNumberRangeFormatter will be left in a valid but undefined state.
      * @draft ICU 63
      */
-    LocalizedNumberRangeFormatter& operator=(LocalizedNumberRangeFormatter&& src) U_NOEXCEPT;
+    U_I18N_API LocalizedNumberRangeFormatter& operator=(LocalizedNumberRangeFormatter&& src) U_NOEXCEPT;
 
 #ifndef U_HIDE_INTERNAL_API
 
@@ -653,8 +631,8 @@ class U_I18N_API LocalizedNumberRangeFormatter
      *            Set if an error occurs while formatting.
      * @internal
      */
-    void formatImpl(impl::UFormattedNumberRangeData& results, bool equalBeforeRounding,
-                    UErrorCode& status) const;
+    U_I18N_API void formatImpl(impl::UFormattedNumberRangeData& results, bool equalBeforeRounding,
+        UErrorCode& status) const;
 
 #endif
 
@@ -662,7 +640,7 @@ class U_I18N_API LocalizedNumberRangeFormatter
      * Destruct this LocalizedNumberRangeFormatter, cleaning up any memory it might own.
      * @draft ICU 63
      */
-    ~LocalizedNumberRangeFormatter();
+    U_I18N_API ~LocalizedNumberRangeFormatter();
 
   private:
     std::atomic<impl::NumberRangeFormatterImpl*> fAtomicFormatter = {};
