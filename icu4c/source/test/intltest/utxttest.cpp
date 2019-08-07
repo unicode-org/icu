@@ -266,7 +266,7 @@ void UTextTest::TestString(const UnicodeString &s) {
     i = 0;   // native utf-8 index
     for (j=0; j<cpCount ; j++) {  // code point number
         u8Map[j].nativeIdx = i;
-        U8_NEXT(u8String, i, u8Len, c)
+        U8_NEXT(u8String, i, u8Len, c);
         u8Map[j].cp = c;
     }
     u8Map[cpCount].nativeIdx = u8Len;   // position following the last char in utf-8 string.
