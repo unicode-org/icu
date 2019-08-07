@@ -935,7 +935,7 @@ static void TestAddRollExtensive()
     
     u_uastrcpy(tzID, "PST");
     /*open the calendar used */
-    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);;
+    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);
     if (U_FAILURE(status)) {
         log_data_err("ucal_open() failed : %s - (Are you missing data?)\n", u_errorName(status)); 
         return; 
@@ -1123,7 +1123,7 @@ static void TestGetLimits()
     
     u_uastrcpy(tzID, "PST");
     /*open the calendar used */
-    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);;
+    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);
     if (U_FAILURE(status)) {
         log_data_err("ucal_open() for gregorian calendar failed in TestGetLimits: %s - (Are you missing data?)\n", u_errorName(status));
         return; 
@@ -1221,7 +1221,7 @@ static void TestDOWProgression()
     char tempMsgBuf[256];
     u_strcpy(tzID, fgGMTID);
     /*open the calendar used */
-    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);;
+    cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     if (U_FAILURE(status)) {
         log_data_err("ucal_open failed: %s - (Are you missing data?)\n", u_errorName(status));
         return; 
@@ -1294,7 +1294,7 @@ static void testZones(int32_t yr, int32_t mo, int32_t dt, int32_t hr, int32_t mn
     char tempMsgBuf[256];
 
     u_strcpy(tzID, fgGMTID);
-    gmtcal=ucal_open(tzID, 3, "en_US", UCAL_TRADITIONAL, &status);;
+    gmtcal=ucal_open(tzID, 3, "en_US", UCAL_TRADITIONAL, &status);
     if (U_FAILURE(status)) {
         log_data_err("ucal_open failed: %s - (Are you missing data?)\n", u_errorName(status)); 
         return; 
