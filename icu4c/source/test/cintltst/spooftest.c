@@ -319,7 +319,7 @@ static void TestUSpoofCAPI(void) {
          result = uspoof_check(sc, scMixed, -1, NULL, &status);
          TEST_ASSERT_SUCCESS(status);
          TEST_ASSERT_EQ(USPOOF_SINGLE_SCRIPT, result);
-     TEST_TEARDOWN
+     TEST_TEARDOWN;
 
 
     /*
@@ -358,7 +358,7 @@ static void TestUSpoofCAPI(void) {
         /* Default allowed locales list should be empty */
         allowedLocales = uspoof_getAllowedLocales(sc, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT(strcmp("", allowedLocales) == 0)
+        TEST_ASSERT(strcmp("", allowedLocales) == 0);
 
         /* Allow en and ru, which should enable Latin and Cyrillic only to pass */
         uspoof_setAllowedLocales(sc, "en, ru_RU", &status);

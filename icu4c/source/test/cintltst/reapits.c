@@ -691,7 +691,7 @@ static void TestRegexCAPI(void) {
         
         
         /* SetRegion(), getRegion() do something  */
-        TEST_SETUP(".*", "0123456789ABCDEF", 0)
+        TEST_SETUP(".*", "0123456789ABCDEF", 0);
         UChar resultString[40];
         TEST_ASSERT(uregex_regionStart(re, &status) == 0);
         TEST_ASSERT(uregex_regionEnd(re, &status) == 16);
@@ -699,7 +699,7 @@ static void TestRegexCAPI(void) {
         TEST_ASSERT(uregex_regionStart(re, &status) == 3);
         TEST_ASSERT(uregex_regionEnd(re, &status) == 6);
         TEST_ASSERT(uregex_findNext(re, &status));
-        TEST_ASSERT(uregex_group(re, 0, resultString, UPRV_LENGTHOF(resultString), &status) == 3)
+        TEST_ASSERT(uregex_group(re, 0, resultString, UPRV_LENGTHOF(resultString), &status) == 3);
         TEST_ASSERT_STRING("345", resultString, TRUE);
         TEST_TEARDOWN;
         
@@ -1322,7 +1322,7 @@ static void TestRegexCAPI(void) {
       *       to be invoked.  The nested '+' operators give exponential time
       *       behavior with increasing string length.
       */
-     TEST_SETUP("((.)+\\2)+x", "aaaaaaaaaaaaaaaaaaab", 0)
+     TEST_SETUP("((.)+\\2)+x", "aaaaaaaaaaaaaaaaaaab", 0);
      callBackContext cbInfo = {4, 0, 0};
      const void     *pContext   = &cbInfo;
      URegexMatchCallback    *returnedFn = &TestCallbackFn;

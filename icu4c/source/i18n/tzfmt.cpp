@@ -1878,7 +1878,7 @@ TimeZoneFormat::parseOffsetFieldsWithPattern(const UnicodeString& text, int32_t 
                     while (len > 0) {
                         UChar32 ch;
                         int32_t chLen;
-                        U16_GET(patStr, 0, 0, len, ch)
+                        U16_GET(patStr, 0, 0, len, ch);
                         if (PatternProps::isWhiteSpace(ch)) {
                             chLen = U16_LENGTH(ch);
                             len -= chLen;
