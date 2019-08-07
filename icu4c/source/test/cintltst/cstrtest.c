@@ -117,10 +117,10 @@ static void TestAPI(void)
         log_err("FAIL: uprv_stricmp() where the second string is null failed. Expected: 1, returned %d\n", intValue);
     }
     if((intValue=uprv_stricmp(NULL, NULL)) != 0){
-        log_err("FAIL: uprv_stricmp(NULL, NULL) failed.  Expected:  0, returned %d\n", intValue);;
+        log_err("FAIL: uprv_stricmp(NULL, NULL) failed.  Expected:  0, returned %d\n", intValue);
     }
     if((intValue=uprv_stricmp("", "")) != 0){
-        log_err("FAIL: uprv_stricmp(\"\", \"\") failed.  Expected:  0, returned %d\n", intValue);;
+        log_err("FAIL: uprv_stricmp(\"\", \"\") failed.  Expected:  0, returned %d\n", intValue);
     }
     if((intValue=uprv_stricmp("", "abc")) != -1){
         log_err("FAIL: uprv_stricmp(\"\", \"abc\") failed.  Expected: -1, returned %d\n", intValue);
@@ -146,10 +146,10 @@ static void TestAPI(void)
         log_err("FAIL: uprv_strnicmp() where the second string is null failed. Expected: 1, returned %d\n", intValue);
     }
     if((intValue=uprv_strnicmp(NULL, NULL, 10)) != 0){
-        log_err("FAIL: uprv_strnicmp(NULL, NULL, 10) failed.  Expected:  0, returned %d\n", intValue);;
+        log_err("FAIL: uprv_strnicmp(NULL, NULL, 10) failed.  Expected:  0, returned %d\n", intValue);
     }
     if((intValue=uprv_strnicmp("", "", 10)) != 0){
-        log_err("FAIL: uprv_strnicmp(\"\", \"\") failed.  Expected:  0, returned %d\n", intValue);;
+        log_err("FAIL: uprv_strnicmp(\"\", \"\") failed.  Expected:  0, returned %d\n", intValue);
     }
     if((intValue=uprv_strnicmp("", "abc", 10)) != -1){
         log_err("FAIL: uprv_stricmp(\"\", \"abc\", 10) failed.  Expected: -1, returned %d\n", intValue);

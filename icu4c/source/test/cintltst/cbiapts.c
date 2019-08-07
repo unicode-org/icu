@@ -99,7 +99,7 @@ static UChar* toUChar(const char *src, void **freeHook) {
     UErrorCode status = U_ZERO_ERROR;
     if (src == NULL) {
         return NULL;
-    };
+    }
 
     cnv = ucnv_open(NULL, &status);
     if(U_FAILURE(status) || cnv == NULL) {
@@ -532,7 +532,7 @@ static UBreakIterator * testOpenRules(char *rules) {
     if (U_FAILURE(status)) {
         log_data_err("FAIL: ubrk_openRules: ICU Error \"%s\" (Are you missing data?)\n", u_errorName(status));
         bi = 0;
-    };
+    }
     freeToUCharStrings(&strCleanUp);
     return bi;
 

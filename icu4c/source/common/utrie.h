@@ -199,7 +199,7 @@ typedef struct UTrie UTrie;
 
 /** Internal trie getter from a BMP code point, treating a lead surrogate as a normal code point */
 #define _UTRIE_GET_FROM_BMP(trie, data, c16) \
-    _UTRIE_GET_RAW(trie, data, 0xd800<=(c16) && (c16)<=0xdbff ? UTRIE_LEAD_INDEX_DISP : 0, c16);
+    _UTRIE_GET_RAW(trie, data, 0xd800<=(c16) && (c16)<=0xdbff ? UTRIE_LEAD_INDEX_DISP : 0, c16)
 
 /**
  * Internal trie getter from a code point.
