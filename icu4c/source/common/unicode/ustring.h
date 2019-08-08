@@ -1277,6 +1277,10 @@ u_strToUTF8(char *dest,
  * @param destCapacity  The size of the buffer (number of UChars). If it is 0, then
  *                      dest may be NULL and the function will only return the length of the 
  *                      result without writing any of the result string (pre-flighting).
+ *                      Note that in the pre-flighting case, passing in a buffer
+ *                      with insufficient capacity will still be flagged as an
+ *                      error, which must then be ignored. The pDestLength will
+ *                      be filled out properly despite the reported error.
  * @param pDestLength   A pointer to receive the number of units written to the destination. If 
  *                      pDestLength!=NULL then *pDestLength is always set to the 
  *                      number of output units corresponding to the transformation of 
