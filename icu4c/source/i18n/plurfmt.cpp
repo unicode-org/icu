@@ -277,7 +277,14 @@ PluralFormat::format(const Formattable& numberObject, double number,
     UnicodeString numberString;
     auto *decFmt = dynamic_cast<DecimalFormat *>(numberFormat);
     if(decFmt != nullptr) {
-        decFmt->toNumberFormatter().formatImpl(&data, status); // mutates &data
+        const number::LocalizedNumberFormatter* lnf = decFmt->toNumberFormatter(status);
+        if (U_FAILURE(status)) {
+            return appendTo;
+        }
+        lnf->formatImpl(&data, status); // mutates &data
+        if (U_FAILURE(status)) {
+            return appendTo;
+        }
         numberString = data.getStringRef().toUnicodeString();
     } else {
         if (offset == 0) {

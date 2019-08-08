@@ -1569,11 +1569,6 @@ const number::LocalizedNumberFormatter* DecimalFormat::toNumberFormatter(UErrorC
     return &fields->formatter;
 }
 
-const number::LocalizedNumberFormatter& DecimalFormat::toNumberFormatter() const {
-    UErrorCode localStatus = U_ZERO_ERROR;
-    return *toNumberFormatter(localStatus);
-}
-
 /** Rebuilds the formatter object from the property bag. */
 void DecimalFormat::touch(UErrorCode& status) {
     if (U_FAILURE(status)) {
