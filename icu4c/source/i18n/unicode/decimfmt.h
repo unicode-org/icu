@@ -2116,22 +2116,6 @@ class U_I18N_API DecimalFormat : public NumberFormat {
     const number::LocalizedNumberFormatter* toNumberFormatter(UErrorCode& status) const;
 #endif  /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_DEPRECATED_API
-    /**
-     * Deprecated: Like {@link #toNumberFormatter(UErrorCode&) const},
-     * but does not take an error code.
-     *
-     * The new signature should be used in case an error occurs while returning the
-     * LocalizedNumberFormatter.
-     *
-     * This old signature will be removed in ICU 65.
-     *
-     * @return A reference to an internal object.
-     * @deprecated ICU 64
-     */
-    const number::LocalizedNumberFormatter& toNumberFormatter() const;
-#endif  /* U_HIDE_DEPRECATED_API */
-
     /**
      * Return the class ID for this class.  This is useful only for
      * comparing to a return value from getDynamicClassID().  For example:
