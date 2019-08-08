@@ -1112,45 +1112,6 @@ RuleBasedNumberFormat::findRuleSet(const UnicodeString& name, UErrorCode& status
 
 UnicodeString&
 RuleBasedNumberFormat::format(const DecimalQuantity &number,
-                      UnicodeString &appendTo,
-                      FieldPositionIterator *posIter,
-                      UErrorCode &status) const {
-    if (U_FAILURE(status)) {
-        return appendTo;
-    }
-    DecimalQuantity copy(number);
-    if (copy.fitsInLong()) {
-        format(number.toLong(), appendTo, posIter, status);
-    }
-    else {
-        copy.roundToMagnitude(0, number::impl::RoundingMode::UNUM_ROUND_HALFEVEN, status);
-        if (copy.fitsInLong()) {
-            format(number.toDouble(), appendTo, posIter, status);
-        }
-        else {
-            // We're outside of our normal range that this framework can handle.
-            // The DecimalFormat will provide more accurate results.
-
-            // TODO this section should probably be optimized. The DecimalFormat is shared in ICU4J.
-            LocalPointer<NumberFormat> decimalFormat(NumberFormat::createInstance(locale, UNUM_DECIMAL, status), status);
-            if (decimalFormat.isNull()) {
-                return appendTo;
-            }
-            Formattable f;
-            LocalPointer<DecimalQuantity> decimalQuantity(new DecimalQuantity(number), status);
-            if (decimalQuantity.isNull()) {
-                return appendTo;
-            }
-            f.adoptDecimalQuantity(decimalQuantity.orphan()); // f now owns decimalQuantity.
-            decimalFormat->format(f, appendTo, posIter, status);
-        }
-    }
-    return appendTo;
-}
-
-
-UnicodeString&
-RuleBasedNumberFormat::format(const DecimalQuantity &number,
                      UnicodeString& appendTo,
                      FieldPosition& pos,
                      UErrorCode &status) const {
