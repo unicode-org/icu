@@ -46,7 +46,7 @@
  * @stable ICU 4.2. Since ICU 64, Use U_NOEXCEPT instead. See ICU-20422.
  */
 #ifndef U_NO_THROW
-#define U_NO_THROW throw()
+#define U_NO_THROW U_NOEXCEPT
 #endif
 
 /*===========================================================================*/
