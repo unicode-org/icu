@@ -482,7 +482,6 @@ UBool Edits::Iterator::next(UBool onlyChanges, UErrorCode &errorCode) {
     int32_t u = array[index++];
     if (u <= MAX_UNCHANGED) {
         // Combine adjacent unchanged ranges.
-        changed = FALSE;
         oldLength_ = u + 1;
         while (index < length && (u = array[index]) <= MAX_UNCHANGED) {
             ++index;
