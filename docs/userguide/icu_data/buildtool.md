@@ -222,7 +222,7 @@ There are two concrete differences between additive and subtractive mode:
 |                         | Additive    | Subtractive |
 |-------------------------|-------------|-------------|
 | Default Feature Filter  | `"exclude"` | `"include"` |
-| Default Resource Filter | `"-/*"`     | `"+/*"`     |
+| Default Resource Filter | `"-/"`      | `"+/"`      |
 
 To enable additive mode, add the following setting to your filter file:
 

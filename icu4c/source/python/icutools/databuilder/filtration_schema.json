@@ -38,7 +38,7 @@
                         "type": "array",
                         "items": {
                             "type": "string",
-                            "pattern": "^[+-]/[\\S]+$"
+                            "pattern": "^[+-]/[\\S]*$"
                         }
                     }
                 },
