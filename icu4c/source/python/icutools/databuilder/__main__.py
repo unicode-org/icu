@@ -130,6 +130,7 @@ class Config(object):
 
         # Default fields before processing filter file
         self.filters_json_data = {}
+        self.filter_dir = "ERROR_NO_FILTER_FILE"
 
         # Process filter file
         if args.filter_file:
@@ -140,6 +141,7 @@ class Config(object):
             except IOError:
                 print("Error: Could not read filter file %s." % args.filter_file, file=sys.stderr)
                 exit(1)
+            self.filter_dir = os.path.abspath(os.path.dirname(args.filter_file))
 
         # Either "unihan" or "implicithan"
         self.coll_han_type = "unihan"
@@ -188,7 +190,14 @@ class Config(object):
 def add_copy_input_requests(requests, config, common_vars):
     files_to_copy = set()
     for request in requests:
-        for f in request.all_input_files():
+        request_files = request.all_input_files()
+        # Also add known dependency txt files as possible inputs.
+        # This is required for translit rule files.
+        if hasattr(request, "dep_targets"):
+            request_files += [
+                f for f in request.dep_targets if isinstance(f, InFile)
+            ]
+        for f in request_files:
             if isinstance(f, InFile):
                 files_to_copy.add(f)
 
@@ -198,8 +207,12 @@ def add_copy_input_requests(requests, config, common_vars):
     json_data = config.filters_json_data["fileReplacements"]
     dirname = json_data["directory"]
     for directive in json_data["replacements"]:
-        input_file = LocalFile(dirname, directive["src"])
-        output_file = InFile(directive["dest"])
+        if type(directive) == str:
+            input_file = LocalFile(dirname, directive)
+            output_file = InFile(directive)
+        else:
+            input_file = LocalFile(dirname, directive["src"])
+            output_file = InFile(directive["dest"])
         result += [
             CopyRequest(
                 name = "input_copy_%d" % id,
@@ -240,7 +253,10 @@ def main(argv):
             for key in list(makefile_vars.keys()) + makefile_env
         }
         common["GLOB_DIR"] = args.src_dir
+        common["FILTERS_DIR"] = config.filter_dir
+        common["CWD_DIR"] = os.getcwd()
     else:
+        makefile_vars = None
         common = {
             # GLOB_DIR is used now, whereas IN_DIR is used during execution phase.
             # There is no useful distinction in unix-exec or windows-exec mode.
@@ -249,6 +265,8 @@ def main(argv):
             "IN_DIR": args.src_dir,
             "OUT_DIR": args.out_dir,
             "TMP_DIR": args.tmp_dir,
+            "FILTERS_DIR": config.filter_dir,
+            "CWD_DIR": os.getcwd(),
             "INDEX_NAME": "res_index",
             # TODO: Pull this from configure script:
             "ICUDATA_CHAR": "l"
@@ -271,8 +289,6 @@ def main(argv):
         sys.exit(1)
 
     requests = BUILDRULES.generate(config, glob, common)
-    requests = filtration.apply_filters(requests, config)
-    requests = utils.flatten_requests(requests, config, common)
 
     if "fileReplacements" in config.filters_json_data:
         tmp_in_dir = "{TMP_DIR}/in".format(**common)
@@ -281,6 +297,9 @@ def main(argv):
         else:
             common["IN_DIR"] = tmp_in_dir
         requests = add_copy_input_requests(requests, config, common)
+
+    requests = filtration.apply_filters(requests, config)
+    requests = utils.flatten_requests(requests, config, common)
 
     build_dirs = utils.compute_directories(requests)
 

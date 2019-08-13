@@ -147,6 +147,7 @@ class AbstractExecutionRequest(AbstractRequest):
                     dep_target.name,
                     self.name
                 ), file=sys.stderr)
+        self.dep_targets = []
 
     def all_input_files(self):
         return self.common_dep_files + self.input_files
