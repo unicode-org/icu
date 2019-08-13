@@ -593,6 +593,7 @@ void IntlTest::setCaller( IntlTest* callingTest )
         quick = caller->quick;
         threadCount = caller->threadCount;
         testoutfp = caller->testoutfp;
+        write_golden_data = caller->write_golden_data;
         LL_indentlevel = caller->LL_indentlevel + indentLevel_offset;
         numProps = caller->numProps;
         for (int32_t i = 0; i < numProps; i++) {
@@ -634,6 +635,13 @@ UBool IntlTest::setWarnOnMissingData( UBool warn_on_missing_dataVal )
 {
     UBool rval = this->warn_on_missing_data;
     this->warn_on_missing_data = warn_on_missing_dataVal;
+    return rval;
+}
+
+UBool IntlTest::setWriteGoldenData( UBool write_golden_data )
+{
+    UBool rval = this->write_golden_data;
+    this->write_golden_data = write_golden_data;
     return rval;
 }
 
@@ -1224,6 +1232,7 @@ main(int argc, char* argv[])
     UBool utf8 = FALSE;
     const char *summary_file = NULL;
     UBool warnOnMissingData = FALSE;
+    UBool writeGoldenData = FALSE;
     UBool defaultDataFound = FALSE;
     int32_t threadCount = 12;
     UErrorCode errorCode = U_ZERO_ERROR;
@@ -1265,6 +1274,9 @@ main(int argc, char* argv[])
             else if (strcmp("notime", str) == 0 ||
                      strcmp("T", str) == 0)
                 no_time = TRUE;
+            else if (strcmp("goldens", str) == 0 ||
+                     strcmp("G", str) == 0)
+                writeGoldenData = TRUE;
             else if (strncmp("E", str, 1) == 0)
                 summary_file = str+1;
             else if (strcmp("x", str)==0) {
@@ -1338,6 +1350,7 @@ main(int argc, char* argv[])
     major.setLeaks( leaks );
     major.setThreadCount( threadCount );
     major.setWarnOnMissingData( warnOnMissingData );
+    major.setWriteGoldenData( writeGoldenData );
     major.setNotime (no_time);
     for (int32_t i = 0; i < nProps; i++) {
         major.setProperty(props[i]);
@@ -1371,9 +1384,10 @@ main(int argc, char* argv[])
     fprintf(stdout, "   Exhaustive (e)           : %s\n", (!quick?            "On" : "Off"));
     fprintf(stdout, "   Leaks (l)                : %s\n", (leaks?             "On" : "Off"));
     fprintf(stdout, "   utf-8 (u)                : %s\n", (utf8?              "On" : "Off"));
-    fprintf(stdout, "   notime (T)               : %s\n", (no_time?             "On" : "Off"));
-    fprintf(stdout, "   noknownissues (K)        : %s\n", (noKnownIssues?      "On" : "Off"));
+    fprintf(stdout, "   notime (T)               : %s\n", (no_time?           "On" : "Off"));
+    fprintf(stdout, "   noknownissues (K)        : %s\n", (noKnownIssues?     "On" : "Off"));
     fprintf(stdout, "   Warn on missing data (w) : %s\n", (warnOnMissingData? "On" : "Off"));
+    fprintf(stdout, "   Write golden data (G)    : %s\n", (writeGoldenData?   "On" : "Off"));
     fprintf(stdout, "   Threads                  : %d\n", threadCount);
     for (int32_t i = 0; i < nProps; i++) {
         fprintf(stdout, "   Custom property (prop:)  : %s\n", props[i]);
