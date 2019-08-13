@@ -1270,13 +1270,11 @@ void NewResourceBundleTest::TestFilter() {
     assertEquals("fornia", fornia.getType(), URES_TABLE);
 
     {
+        // Filter: hawaii should not be included based on parent inheritance
         ResourceBundle hawaii = fornia.get("hawaii", status);
-        REQUIRE_SUCCESS(status);
-        assertEquals("hawaii", hawaii.getType(), URES_STRING);
-        assertEquals("hawaii", u"idaho", hawaii.getString(status));
-        REQUIRE_SUCCESS(status);
+        REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
 
-        // Filter: illinois should not be included
+        // Filter: illinois should not be included based on direct rule
         ResourceBundle illinois = fornia.get("illinois", status);
         REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
     }
@@ -1349,6 +1347,20 @@ void NewResourceBundleTest::TestFilter() {
             ResourceBundle missouri = nevada.get("missouri", status);
             REQUIRE_ERROR(U_MISSING_RESOURCE_ERROR, status);
         }
+    }
+
+    // Filter: northCarolina should be included based on direct rule,
+    // and so should its child, northDakota
+    ResourceBundle northCarolina = rb.get("northCarolina", status);
+    REQUIRE_SUCCESS(status);
+    assertEquals("northCarolina", northCarolina.getType(), URES_TABLE);
+
+    {
+        ResourceBundle northDakota = northCarolina.get("northDakota", status);
+        REQUIRE_SUCCESS(status);
+        assertEquals("northDakota", northDakota.getType(), URES_STRING);
+        assertEquals("northDakota", u"west-virginia", northDakota.getString(status));
+        REQUIRE_SUCCESS(status);
     }
 }
 
