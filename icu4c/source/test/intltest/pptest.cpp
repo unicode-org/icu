@@ -182,7 +182,7 @@ void ParsePositionTest::TestFieldPosition_example()
     if (failure(status, "NumberFormat::createInstance", TRUE)){
         delete nf;
         return;
-    };
+    }
 
     DecimalFormat *fmt = dynamic_cast<DecimalFormat *>(nf);
     if(fmt == NULL) {

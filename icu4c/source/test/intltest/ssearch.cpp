@@ -201,7 +201,7 @@ void SSearchTest::searchTest()
         const UnicodeString *locale   = testCase->getAttribute("locale");
         if (locale == NULL || locale->length()==0) {
             locale = &defLocale;
-        };
+        }
         locale->extract(0, locale->length(), clocale, sizeof(clocale), NULL);
 
 

@@ -83,11 +83,11 @@ void DecimalFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &
     {dataerrln("DecimalFormatTest failure at line %d.  status=%s", \
     __LINE__, u_errorName(status)); return 0;}}
 
-#define DF_ASSERT(expr) {if ((expr)==FALSE) {errln("DecimalFormatTest failure at line %d.\n", __LINE__);};}
+#define DF_ASSERT(expr) {if ((expr)==FALSE) {errln("DecimalFormatTest failure at line %d.\n", __LINE__);}}
 
 #define DF_ASSERT_FAIL(expr, errcode) {UErrorCode status=U_ZERO_ERROR; (expr);\
 if (status!=errcode) {dataerrln("DecimalFormatTest failure at line %d.  Expected status=%s, got %s", \
-    __LINE__, u_errorName(errcode), u_errorName(status));};}
+    __LINE__, u_errorName(errcode), u_errorName(status));}}
 
 #define DF_CHECK_STATUS_L(line) {if (U_FAILURE(status)) {errln( \
     "DecimalFormatTest failure at line %d, from %d.  status=%d\n",__LINE__, (line), status); }}
@@ -546,7 +546,7 @@ cleanUpAndReturn:
         errln("ICU Error \"%s\"\n", u_errorName(status));
         delete retPtr;
         retPtr = NULL;
-    };
+    }
     return retPtr;
 }
 

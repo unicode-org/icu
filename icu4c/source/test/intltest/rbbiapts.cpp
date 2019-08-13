@@ -38,7 +38,7 @@
 dataerrln("Failure at file %s, line %d, error = %s", __FILE__, __LINE__, u_errorName(status));}}
 
 #define TEST_ASSERT(expr) {if ((expr) == FALSE) { \
-    errln("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr);};}
+    errln("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr);}}
 
 void RBBIAPITest::TestCloneEquals()
 {
@@ -1041,7 +1041,7 @@ void RBBIAPITest::RoundtripRule(const char *dataFile) {
                 __FILE__, __LINE__, u_errorName(status), parseError.line, parseError.offset);
         errln(UnicodeString(builtSource));
         return;
-    };
+    }
     rbbiRules = brkItr->getBinaryRules(length);
     logln("Comparing \"%s\" len=%d", dataFile, length);
     if (memcmp(builtRules, rbbiRules, (int32_t)length) != 0) {

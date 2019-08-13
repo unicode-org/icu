@@ -182,11 +182,11 @@ const char* RegexTest::extractToAssertBuf(const UnicodeString& message) {
 #define REGEX_CHECK_STATUS {if (U_FAILURE(status)) {dataerrln("%s:%d: RegexTest failure.  status=%s", \
                                                               __FILE__, __LINE__, u_errorName(status)); return;}}
 
-#define REGEX_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: RegexTest failure: REGEX_ASSERT(%s) failed \n", __FILE__, __LINE__, #expr);};}
+#define REGEX_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: RegexTest failure: REGEX_ASSERT(%s) failed \n", __FILE__, __LINE__, #expr);}}
 
 #define REGEX_ASSERT_FAIL(expr, errcode) {UErrorCode status=U_ZERO_ERROR; (expr);\
 if (status!=errcode) {dataerrln("RegexTest failure at line %d.  Expected status=%s, got %s", \
-    __LINE__, u_errorName(errcode), u_errorName(status));};}
+    __LINE__, u_errorName(errcode), u_errorName(status));}}
 
 #define REGEX_CHECK_STATUS_L(line) {if (U_FAILURE(status)) {errln( \
     "RegexTest failure at line %d, from %d.  status=%d\n",__LINE__, (line), status); }}
@@ -199,7 +199,7 @@ if (status!=errcode) {dataerrln("RegexTest failure at line %d.  Expected status=
 #define REGEX_ASSERT_UNISTR(expected, actual) { \
     if (UnicodeString(expected, -1, US_INV) != (actual)) { \
         errln("%s:%d: RegexTest failure: REGEX_ASSERT_UNISTR(%s, %s) failed \n",  \
-                __FILE__, __LINE__, expected, extractToAssertBuf(actual));};}
+                __FILE__, __LINE__, expected, extractToAssertBuf(actual));}}
 
 
 static UBool testUTextEqual(UText *uta, UText *utb) {
@@ -481,7 +481,7 @@ UBool RegexTest::doRegexLMTestUTF8(const char *pat, const char *text, UBool look
 //          REGEX_ERR("pattern",   expected error line, column, expected status);
 //
 //---------------------------------------------------------------------------
-#define REGEX_ERR(pat, line, col, status) regex_err(pat, line, col, status, __LINE__);
+#define REGEX_ERR(pat, line, col, status) regex_err(pat, line, col, status, __LINE__)
 
 void RegexTest::regex_err(const char *pat, int32_t errLine, int32_t errCol,
                           UErrorCode expectedStatus, int32_t line) {
@@ -3928,7 +3928,7 @@ cleanUpAndReturn:
         delete []retPtr;
         retPtr = 0;
         ulen   = 0;
-    };
+    }
     return retPtr;
 }
 

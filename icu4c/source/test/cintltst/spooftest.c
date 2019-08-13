@@ -35,7 +35,7 @@
     log_err_status(status, "Failure at file %s, line %d, error = %s\n", __FILE__, __LINE__, u_errorName(status));}}
 
 #define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
-log_err("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr);};}
+log_err("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr);}}
 
 #define TEST_ASSERT_EQ(a, b) { if ((a) != (b)) { \
     log_err("Test Failure at file %s, line %d: \"%s\" (%d) != \"%s\" (%d) \n", \

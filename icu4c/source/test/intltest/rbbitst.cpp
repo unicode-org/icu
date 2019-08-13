@@ -1237,7 +1237,7 @@ cleanUpAndReturn:
         delete []retPtr;
         retPtr = 0;
         ulen   = 0;
-    };
+    }
     return retPtr;
 }
 
@@ -2033,7 +2033,7 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
             c3 = fText->char32At(p3);
             if (fCRSet->contains(c2) || fLFSet->contains(c2) || fNewlineSet->contains(c2)) {
                break;
-            };
+            }
         }
         while (fFormatSet->contains(c3) || fExtendSet->contains(c3) || fZWJSet->contains(c3));
 
@@ -2059,10 +2059,10 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
         //
         if (fCRSet->contains(c1) || fLFSet->contains(c1) || fNewlineSet->contains(c1)) {
             break;
-        };
+        }
         if (fCRSet->contains(c2) || fLFSet->contains(c2) || fNewlineSet->contains(c2)) {
             break;
-        };
+        }
 
         // Rule (3c)    ZWJ x Extended_Pictographic
         //              Not ignoring extend chars, so peek into input text to

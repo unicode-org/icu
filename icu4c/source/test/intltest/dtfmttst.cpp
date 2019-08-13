@@ -4789,7 +4789,7 @@ void DateFormatTest::TestNumberFormatOverride() {
         FieldPosition pos(FieldPosition::DONT_CARE);
         fmt->format(test_date,result, pos);
 
-        UnicodeString expected = ((UnicodeString)DATA[i][1]).unescape();;
+        UnicodeString expected = ((UnicodeString)DATA[i][1]).unescape();
 
         if (result != expected)
             errln("FAIL: Expected " + expected + " get: " + result);

@@ -813,7 +813,7 @@ MessageFormat::getFormats(int32_t& cnt) const
 
     // Get total required capacity first (it's refreshed on each call).
     int32_t totalCapacity = 0;
-    for (int32_t partIndex = 0; (partIndex = nextTopLevelArgStart(partIndex)) >= 0; ++totalCapacity) {};
+    for (int32_t partIndex = 0; (partIndex = nextTopLevelArgStart(partIndex)) >= 0; ++totalCapacity) {}
 
     MessageFormat* t = const_cast<MessageFormat*> (this);
     cnt = 0;

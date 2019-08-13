@@ -2069,7 +2069,7 @@ int32_t  RegexMatcher::split(UText *input,
     //
     if (U_FAILURE(status)) {
         return 0;
-    };
+    }
 
     if (destCapacity < 1) {
         status = U_ILLEGAL_ARGUMENT_ERROR;

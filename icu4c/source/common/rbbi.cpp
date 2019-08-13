@@ -352,7 +352,7 @@ RuleBasedBreakIterator::operator==(const BreakIterator& that) const {
         //   or have a different iteration position.
         //   Note that fText's position is always the same as the break iterator's position.
         return FALSE;
-    };
+    }
 
     if (!(fPosition == that2.fPosition &&
             fRuleStatusIndex == that2.fRuleStatusIndex &&
