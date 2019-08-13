@@ -641,7 +641,9 @@ public:
      * @param result        Formattable to be set to the parse result.
      *                      If parse fails, return contents are undefined.
      * @param status        Output parameter set to a failure error code
-     *                      when a failure occurs.
+     *                      when a failure occurs. The error code when the
+     *                      string fails to parse is U_INVALID_FORMAT_ERROR,
+     *                      unless overridden by a subclass.
      * @see                 NumberFormat::isParseIntegerOnly
      * @stable ICU 2.0
      */
