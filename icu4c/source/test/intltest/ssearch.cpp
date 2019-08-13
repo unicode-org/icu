@@ -173,7 +173,7 @@ void SSearchTest::searchTest()
             //  This assert is a little deceiving in that strength can be
             //   any of the allowed values, not just TERTIARY, but it will
             //   do the job of getting the error output.
-            TEST_ASSERT(*strength=="TERTIARY")
+            TEST_ASSERT(*strength=="TERTIARY");
         }
 
         //

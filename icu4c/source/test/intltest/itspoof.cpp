@@ -639,7 +639,7 @@ void IntlTestSpoof::testMixedNumbers() {
             TEST_ASSERT_MSG((expectedSet.size() > 1) == mixedNumberFailure, msgBuf);
             const UnicodeSet* actualSet = UnicodeSet::fromUSet(uspoof_getCheckResultNumerics(checkResult, &status));
             TEST_ASSERT_MSG(expectedSet == *actualSet, msgBuf);
-        TEST_TEARDOWN
+        TEST_TEARDOWN;
     }
 }
 

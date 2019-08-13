@@ -7004,7 +7004,7 @@ void NumberFormatTest::TestExplicitParents() {
 void NumberFormatTest::TestAvailableNumberingSystems() {
     IcuTestErrorCode status(*this, "TestAvailableNumberingSystems");
     StringEnumeration *availableNumberingSystems = NumberingSystem::getAvailableNames(status);
-    CHECK_DATA(status, "NumberingSystem::getAvailableNames()")
+    CHECK_DATA(status, "NumberingSystem::getAvailableNames()");
 
     int32_t nsCount = availableNumberingSystems->count(status);
     if ( nsCount < 74 ) {
@@ -7474,7 +7474,7 @@ void NumberFormatTest::TestSignificantDigits(void) {
     Locale locale("en_US");
     LocalPointer<DecimalFormat> numberFormat(static_cast<DecimalFormat*>(
             NumberFormat::createInstance(locale, status)));
-    CHECK_DATA(status,"NumberFormat::createInstance")
+    CHECK_DATA(status,"NumberFormat::createInstance");
 
     numberFormat->setSignificantDigitsUsed(TRUE);
     numberFormat->setMinimumSignificantDigits(3);
@@ -7527,7 +7527,7 @@ void NumberFormatTest::TestShowZero() {
     Locale locale("en_US");
     LocalPointer<DecimalFormat> numberFormat(static_cast<DecimalFormat*>(
             NumberFormat::createInstance(locale, status)));
-    CHECK_DATA(status, "NumberFormat::createInstance")
+    CHECK_DATA(status, "NumberFormat::createInstance");
 
     numberFormat->setSignificantDigitsUsed(TRUE);
     numberFormat->setMaximumSignificantDigits(3);
@@ -7578,7 +7578,7 @@ void NumberFormatTest::TestBug9936() {
 void NumberFormatTest::TestParseNegativeWithFaLocale() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *test = (DecimalFormat *) NumberFormat::createInstance("fa", status);
-    CHECK_DATA(status, "NumberFormat::createInstance")
+    CHECK_DATA(status, "NumberFormat::createInstance");
     test->setLenient(TRUE);
     Formattable af;
     ParsePosition ppos;
@@ -7594,7 +7594,7 @@ void NumberFormatTest::TestParseNegativeWithFaLocale() {
 void NumberFormatTest::TestParseNegativeWithAlternateMinusSign() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *test = (DecimalFormat *) NumberFormat::createInstance("en", status);
-    CHECK_DATA(status, "NumberFormat::createInstance")
+    CHECK_DATA(status, "NumberFormat::createInstance");
     test->setLenient(TRUE);
     Formattable af;
     ParsePosition ppos;
