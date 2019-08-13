@@ -41,7 +41,7 @@
             errln("%s:%d: Test failure, locale %s.  status=%s", __FILE__, __LINE__, testlocale, u_errorName(status)); \
         } return;}}
 
-#define TEST_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: Test failure \n", __FILE__, __LINE__);};}
+#define TEST_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: Test failure \n", __FILE__, __LINE__);}}
 
 // *****************************************************************************
 // class CalendarTest
@@ -2173,7 +2173,7 @@ int32_t CalendarTest::testLocaleCount()
   if(gLocaleCount < 0) {
     int32_t i;
     for(i=0;testLocaleID(i) != NULL;i++) {
-      ;
+      // do nothing
     }
     gLocaleCount = i;
   }

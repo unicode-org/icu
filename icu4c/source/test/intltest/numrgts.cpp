@@ -998,7 +998,7 @@ void NumberFormatRegressionTest::Test4071005 (void)
     if (failure(status, "NumberFormat::createInstance", Locale::getCanadaFrench(), TRUE)){
         delete formatter;
         return;
-    };
+    }
     tempString = formatter->format (-5789.9876, tempString);
 
     if (tempString == expectedDefault) {
@@ -1132,7 +1132,7 @@ void NumberFormatRegressionTest::Test4071859 (void)
     if (failure(status, "NumberFormat::createNumberInstance", TRUE)){
         delete formatter;
         return;
-    };
+    }
     tempString = formatter->format (-5789.9876, tempString);
 
     if (tempString == expectedDefault) {
@@ -1942,7 +1942,7 @@ void NumberFormatRegressionTest::Test4145457() {
     if (failure(status, "NumberFormat::createInstance", TRUE)){
         delete nff;
         return;
-    };
+    }
     DecimalFormat *nf = dynamic_cast<DecimalFormat *>(nff);
     if(nf == NULL) {
         errln("DecimalFormat needed to continue");
@@ -2185,7 +2185,7 @@ void NumberFormatRegressionTest::Test4167494(void) {
     if (failure(status, "NumberFormat::createInstance", TRUE)){
         delete fmt;
         return;
-    };
+    }
 
     double a = DBL_MAX * 0.99; // DBL_MAX itself overflows to +Inf
     UnicodeString s;
@@ -2515,7 +2515,7 @@ void NumberFormatRegressionTest::Test4216742(void) {
     if (failure(status, "createInstance", Locale::getUS(), TRUE)){
         delete fmt;
         return;
-    };
+    }
     int32_t DATA[] = { INT32_MIN, INT32_MAX, -100000000, 100000000 };
     int DATA_length = UPRV_LENGTHOF(DATA);
     for (int i=0; i<DATA_length; ++i) {
@@ -2557,7 +2557,7 @@ void NumberFormatRegressionTest::Test4217661(void) {
     if (failure(status, "createInstance", Locale::getUS(), TRUE)){
         delete fmt;
         return;
-    };
+    }
     fmt->setMaximumFractionDigits(2);
     for (int i=0; i<D_length; i++) {
         UnicodeString s;
@@ -2578,7 +2578,7 @@ void NumberFormatRegressionTest::Test4161100(void) {
     if (failure(status, "createInstance", Locale::getUS(), TRUE)){
         delete nf;
         return;
-    };
+    }
     nf->setMinimumFractionDigits(1);
     nf->setMaximumFractionDigits(1);
     double a = -0.09;
@@ -2911,7 +2911,7 @@ void NumberFormatRegressionTest::Test9780(void) {
     if (failure(status, "NumberFormat::createInstance", TRUE)){
         delete nf;
         return;
-    };
+    }
     DecimalFormat *df = dynamic_cast<DecimalFormat *>(nf);
     if(df == NULL) {
         errln("DecimalFormat needed to continue");
@@ -3025,7 +3025,6 @@ void NumberFormatRegressionTest::Test9677(void) {
         errln("FAIL: with different neg prefix , parse error %s\n", u_errorName(status));
         status = U_ZERO_ERROR;
     } else {
-;
         if(n!=-123456789) {
           errln("FAIL: with different neg prefix , unum_parse status %s, result %d expected -123456789\n", u_errorName(status), n);
         } else {

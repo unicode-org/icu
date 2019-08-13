@@ -3381,7 +3381,7 @@ int32_t   RegexCompile::minMatchLength(int32_t start, int32_t end) {
                 //   it assumes that the look-ahead match might be zero-length.
                 //   TODO:  Positive lookahead could recursively do the block, then continue
                 //          with the longer of the block or the value coming in.  Ticket 6060
-                int32_t  depth = (opType == URX_LA_START? 2: 1);;
+                int32_t  depth = (opType == URX_LA_START? 2: 1);
                 for (;;) {
                     loc++;
                     op = (int32_t)fRXPat->fCompiledPat->elementAti(loc);

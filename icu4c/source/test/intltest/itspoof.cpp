@@ -33,10 +33,10 @@
     errcheckln(status, "Failure at file %s, line %d, error = %s", __FILE__, __LINE__, u_errorName(status));}}
 
 #define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
-    errln("Test Failure at file %s, line %d: \"%s\" is false.", __FILE__, __LINE__, #expr);};}
+    errln("Test Failure at file %s, line %d: \"%s\" is false.", __FILE__, __LINE__, #expr);}}
 
 #define TEST_ASSERT_MSG(expr, msg) {if ((expr)==FALSE) { \
-    dataerrln("Test Failure at file %s, line %d, %s: \"%s\" is false.", __FILE__, __LINE__, msg, #expr);};}
+    dataerrln("Test Failure at file %s, line %d, %s: \"%s\" is false.", __FILE__, __LINE__, msg, #expr);}}
 
 #define TEST_ASSERT_EQ(a, b) { if ((a) != (b)) { \
     errln("Test Failure at file %s, line %d: \"%s\" (%d) != \"%s\" (%d)", \

@@ -958,7 +958,7 @@ collatorComparator(const void *context, const void *left, const void *right) {
     }
     if (leftString == NULL) {
         return 1;
-    };
+    }
     if (rightString == NULL) {
         return -1;
     }

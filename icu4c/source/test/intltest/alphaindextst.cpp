@@ -74,7 +74,7 @@ void AlphabeticIndexTest::runIndexedTest( int32_t index, UBool exec, const char*
 #define TEST_CHECK_STATUS {if (U_FAILURE(status)) {dataerrln("%s:%d: Test failure.  status=%s", \
                                                               __FILE__, __LINE__, u_errorName(status)); return;}}
 
-#define TEST_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: Test failure \n", __FILE__, __LINE__);};}
+#define TEST_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: Test failure \n", __FILE__, __LINE__);}}
 
 //
 //  APITest.   Invoke every function at least once, and check that it does something.

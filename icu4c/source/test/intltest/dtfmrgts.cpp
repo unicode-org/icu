@@ -1461,7 +1461,7 @@ void DateFormatRegressionTest::Test5554(void)
   if (U_FAILURE(status)) {
     errln("Error getting time to format");
     return;
-  };
+  }
   sdf->adoptCalendar(cal);
   UnicodeString result;
   UnicodeString correct("-0330", "");

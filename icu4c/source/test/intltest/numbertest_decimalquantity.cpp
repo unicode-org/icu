@@ -18,7 +18,7 @@ void DecimalQuantityTest::runIndexedTest(int32_t index, UBool exec, const char *
     }
     TESTCASE_AUTO_BEGIN;
         TESTCASE_AUTO(testDecimalQuantityBehaviorStandalone);
-        TESTCASE_AUTO(testSwitchStorage);;
+        TESTCASE_AUTO(testSwitchStorage);
         TESTCASE_AUTO(testCopyMove);
         TESTCASE_AUTO(testAppend);
         if (!quick) {
