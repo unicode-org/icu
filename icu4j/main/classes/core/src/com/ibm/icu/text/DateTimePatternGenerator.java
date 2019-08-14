@@ -1337,7 +1337,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      *
      * @param field The field type, such as ERA.
      * @param width The desired DisplayWidth, such as DisplayWidth.ABBREVIATED.
-     * @return.     The display name for the field
+     * @return      The display name for the field
      * @stable ICU 61
      */
     public String getFieldDisplayName(int field, DisplayWidth width) {
