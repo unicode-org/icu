@@ -81,8 +81,18 @@ static const UChar ISO_CURRENCY_USD[] = {0x55, 0x53, 0x44, 0}; // "USD"
 // class NumberFormatTest
 // *****************************************************************************
 
-#define CHECK(status,str) if (U_FAILURE(status)) { errcheckln(status, UnicodeString("FAIL: ") + str + " - " + u_errorName(status)); return; }
-#define CHECK_DATA(status,str) if (U_FAILURE(status)) { dataerrln(UnicodeString("FAIL: ") + str + " - " + u_errorName(status)); return; }
+#define CHECK(status,str) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        errcheckln(status, UnicodeString("FAIL: ") + str + " - " + u_errorName(status)); \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
+#define CHECK_DATA(status,str) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        dataerrln(UnicodeString("FAIL: ") + str + " - " + u_errorName(status)); \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
@@ -6744,12 +6754,12 @@ const char* attrString(int32_t attrId) {
 //      API test, not a comprehensive test.
 //      See DecimalFormatTest/DataDrivenTests
 //
-#define ASSERT_SUCCESS(status) { \
+#define ASSERT_SUCCESS(status) UPRV_BLOCK_MACRO_BEGIN { \
     assertSuccess(UnicodeString("file ") + __FILE__ + ", line " + __LINE__, (status)); \
-}
-#define ASSERT_EQUALS(expected, actual) { \
+} UPRV_BLOCK_MACRO_END
+#define ASSERT_EQUALS(expected, actual) UPRV_BLOCK_MACRO_BEGIN { \
     assertEquals(UnicodeString("file ") + __FILE__ + ", line " + __LINE__, (expected), (actual)); \
-}
+} UPRV_BLOCK_MACRO_END
 
 void NumberFormatTest::TestDecimal() {
     {

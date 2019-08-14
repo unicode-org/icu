@@ -34,11 +34,17 @@
  */
 
 
-#define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) {\
-dataerrln("Failure at file %s, line %d, error = %s", __FILE__, __LINE__, u_errorName(status));}}
+#define TEST_ASSERT_SUCCESS(status) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        dataerrln("Failure at file %s, line %d, error = %s", __FILE__, __LINE__, u_errorName(status)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT(expr) {if ((expr) == FALSE) { \
-    errln("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr);}}
+#define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expr) == FALSE) { \
+        errln("Test Failure at file %s, line %d: \"%s\" is false.\n", __FILE__, __LINE__, #expr); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 void RBBIAPITest::TestCloneEquals()
 {

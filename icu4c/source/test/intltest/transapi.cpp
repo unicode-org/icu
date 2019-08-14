@@ -915,8 +915,12 @@ void TransliteratorAPITest::doTest(const UnicodeString& message, const UnicodeSt
 //                    transliterator, just to verify that they don't fail in some
 //                    destructive way.
 //
-#define CEASSERT(a) {if (!(a)) { \
-errln("FAIL at line %d from line %d: %s", __LINE__, line, #a);  return; }}
+#define CEASSERT(a) UPRV_BLOCK_MACRO_BEGIN { \
+    if (!(a)) { \
+        errln("FAIL at line %d from line %d: %s", __LINE__, line, #a); \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 void TransliteratorAPITest::callEverything(const Transliterator *tr, int line) {
     Transliterator *clonedTR = tr->clone();

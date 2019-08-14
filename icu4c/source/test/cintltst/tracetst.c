@@ -49,10 +49,11 @@ addUTraceTest(TestNode** root)
 /*
  * Macro for assert style tests.
  */
-#define TEST_ASSERT(expr) \
-if (!(expr)) { \
-    log_err("FAILED Assertion \"" #expr "\" at  %s:%d.\n", __FILE__, __LINE__); \
-}
+#define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
+    if (!(expr)) { \
+        log_err("FAILED Assertion \"" #expr "\" at  %s:%d.\n", __FILE__, __LINE__); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 
 /*

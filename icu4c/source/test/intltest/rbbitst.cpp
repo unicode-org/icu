@@ -51,11 +51,17 @@
 #include "unicode/filteredbrk.h"
 #endif // !UCONFIG_NO_FILTERED_BREAK_ITERATION
 
-#define TEST_ASSERT(x) {if (!(x)) { \
-    errln("Failure in file %s, line %d", __FILE__, __LINE__);}}
+#define TEST_ASSERT(x) UPRV_BLOCK_MACRO_BEGIN { \
+    if (!(x)) { \
+        errln("Failure in file %s, line %d", __FILE__, __LINE__); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT_SUCCESS(errcode) { if (U_FAILURE(errcode)) { \
-    errcheckln(errcode, "Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(errcode));}}
+#define TEST_ASSERT_SUCCESS(errcode) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(errcode)) { \
+        errcheckln(errcode, "Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(errcode)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 //---------------------------------------------
 // runIndexedTest

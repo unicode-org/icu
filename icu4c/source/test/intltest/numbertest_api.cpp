@@ -2820,7 +2820,7 @@ void NumberFormatterApiTest::validRanges() {
 
 #define EXPECTED_MAX_INT_FRAC_SIG 999
 
-#define VALID_RANGE_ASSERT(status, method, lowerBound, argument) { \
+#define VALID_RANGE_ASSERT(status, method, lowerBound, argument) UPRV_BLOCK_MACRO_BEGIN { \
     UErrorCode expectedStatus = ((lowerBound <= argument) && (argument <= EXPECTED_MAX_INT_FRAC_SIG)) \
         ? U_ZERO_ERROR \
         : U_NUMBER_ARG_OUTOFBOUNDS_ERROR; \
@@ -2829,17 +2829,17 @@ void NumberFormatterApiTest::validRanges() {
             + Int64ToUnicodeString(argument), \
         expectedStatus, \
         status); \
-}
+} UPRV_BLOCK_MACRO_END
 
-#define VALID_RANGE_ONEARG(setting, method, lowerBound) { \
+#define VALID_RANGE_ONEARG(setting, method, lowerBound) UPRV_BLOCK_MACRO_BEGIN { \
     for (int32_t argument = -2; argument <= EXPECTED_MAX_INT_FRAC_SIG + 2; argument++) { \
         UErrorCode status = U_ZERO_ERROR; \
         NumberFormatter::with().setting(method(argument)).copyErrorTo(status); \
         VALID_RANGE_ASSERT(status, method, lowerBound, argument); \
     } \
-}
+} UPRV_BLOCK_MACRO_END
 
-#define VALID_RANGE_TWOARGS(setting, method, lowerBound) { \
+#define VALID_RANGE_TWOARGS(setting, method, lowerBound) UPRV_BLOCK_MACRO_BEGIN { \
     for (int32_t argument = -2; argument <= EXPECTED_MAX_INT_FRAC_SIG + 2; argument++) { \
         UErrorCode status = U_ZERO_ERROR; \
         /* Pass EXPECTED_MAX_INT_FRAC_SIG as the second argument so arg1 <= arg2 in expected cases */ \
@@ -2855,7 +2855,7 @@ void NumberFormatterApiTest::validRanges() {
             U_NUMBER_ARG_OUTOFBOUNDS_ERROR, \
             status); \
     } \
-}
+} UPRV_BLOCK_MACRO_END
 
     VALID_RANGE_ONEARG(precision, Precision::fixedFraction, 0);
     VALID_RANGE_ONEARG(precision, Precision::minFraction, 0);

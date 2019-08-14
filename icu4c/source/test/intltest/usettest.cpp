@@ -29,12 +29,18 @@
 #include "cmemory.h"
 #include "hash.h"
 
-#define TEST_ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
-    dataerrln("fail in file \"%s\", line %d: \"%s\"", __FILE__, __LINE__, \
-    u_errorName(status));}}
+#define TEST_ASSERT_SUCCESS(status) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        dataerrln("fail in file \"%s\", line %d: \"%s\"", __FILE__, __LINE__, \
+                  u_errorName(status)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT(expr) {if (!(expr)) { \
-    dataerrln("fail in file \"%s\", line %d", __FILE__, __LINE__); }}
+#define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
+    if (!(expr)) { \
+        dataerrln("fail in file \"%s\", line %d", __FILE__, __LINE__); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 UnicodeString operator+(const UnicodeString& left, const UnicodeSet& set) {
     UnicodeString pat;

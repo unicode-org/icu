@@ -313,7 +313,7 @@ static void TestLocalizedString(void) {
 }
 
 #if !UCONFIG_NO_FORMATTING
-#define Test_u_snprintf(limit, format, value, expectedSize, expectedStr) \
+#define Test_u_snprintf(limit, format, value, expectedSize, expectedStr) UPRV_BLOCK_MACRO_BEGIN { \
     u_uastrncpy(testStr, "xxxxxxxxxxxxxx", UPRV_LENGTHOF(testStr));\
     size = u_snprintf(testStr, limit, format, value);\
     u_austrncpy(cTestResult, testStr, UPRV_LENGTHOF(cTestResult));\
@@ -324,6 +324,7 @@ static void TestLocalizedString(void) {
     else {\
         log_verbose("Got: %s\n", cTestResult);\
     }\
+} UPRV_BLOCK_MACRO_END
 
 #endif
 
@@ -358,7 +359,7 @@ static void TestSnprintf(void) {
 #endif
 }
 
-#define TestSPrintFormat(uFormat, uValue, cFormat, cValue) \
+#define TestSPrintFormat(uFormat, uValue, cFormat, cValue) UPRV_BLOCK_MACRO_BEGIN { \
     /* Reinitialize the buffer to verify null termination works. */\
     u_memset(uBuffer, 0x2a, UPRV_LENGTHOF(uBuffer));\
     memset(buffer, '*', UPRV_LENGTHOF(buffer));\
@@ -375,6 +376,7 @@ static void TestSnprintf(void) {
     if (buffer[uNumPrinted+1] != '*') {\
         log_err("%" uFormat " too much stored\n");\
     }\
+} UPRV_BLOCK_MACRO_END
 
 static void TestSprintfFormat(void) {
 #if !UCONFIG_NO_FORMATTING

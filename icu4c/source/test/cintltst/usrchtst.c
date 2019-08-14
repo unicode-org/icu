@@ -2506,9 +2506,11 @@ exitTestForwardBackward :
     }
 }
 
-#define TEST_ASSERT(x) \
-   {if (U_FAILURE(x)) {log_err_status(x, "%s:%d: FAIL: test assertion failure \n", __FILE__, __LINE__);\
-   }}
+#define TEST_ASSERT(x) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(x)) { \
+        log_err_status(x, "%s:%d: FAIL: test assertion failure \n", __FILE__, __LINE__); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 static void TestSearchForNull(void) {
     UCollator *coll;

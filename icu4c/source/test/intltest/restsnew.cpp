@@ -66,11 +66,39 @@ enum E_Where
 
 //***************************************************************************************
 
-#define CONFIRM_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of " + (expected)); }
-#define CONFIRM_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x >= " + (expected)); }
-#define CONFIRM_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x != " + (expected)); }
+#define CONFIRM_EQ(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expected)==(actual)) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of " + (expected)); \
+    } \
+} UPRV_BLOCK_MACRO_END
+#define CONFIRM_GE(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((actual)>=(expected)) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x >= " + (expected)); \
+    } \
+} UPRV_BLOCK_MACRO_END
+#define CONFIRM_NE(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expected)!=(actual)) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        errln(action + (UnicodeString)" returned " + (actual) + (UnicodeString)" instead of x != " + (expected)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define CONFIRM_UErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); errln(action + (UnicodeString)" returned " + (UnicodeString)u_errorName(actual) + (UnicodeString)" instead of " + (UnicodeString)u_errorName(expected)); }
+#define CONFIRM_UErrorCode(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expected)==(actual)) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        errln(action + (UnicodeString)" returned " + (UnicodeString)u_errorName(actual) + (UnicodeString)" instead of " + (UnicodeString)u_errorName(expected)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 //***************************************************************************************
 
@@ -1211,17 +1239,17 @@ NewResourceBundleTest::TestGetByFallback() {
 }
 
 
-#define REQUIRE_SUCCESS(status) { \
+#define REQUIRE_SUCCESS(status) UPRV_BLOCK_MACRO_BEGIN { \
     if (status.errIfFailureAndReset("line %d", __LINE__)) { \
         return; \
     } \
-}
+} UPRV_BLOCK_MACRO_END
 
-#define REQUIRE_ERROR(expected, status) { \
+#define REQUIRE_ERROR(expected, status) UPRV_BLOCK_MACRO_BEGIN { \
     if (!status.expectErrorAndReset(expected, "line %d", __LINE__)) { \
         return; \
     } \
-}
+} UPRV_BLOCK_MACRO_END
 
 /**
  * Tests the --filterDir option in genrb.

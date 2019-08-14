@@ -132,10 +132,38 @@ enum E_Where
 typedef enum E_Where E_Where;
 /*****************************************************************************/
 
-#define CONFIRM_EQ(actual,expected) if (u_strcmp(expected,actual)==0){ record_pass(); } else { record_fail(); log_err("%s  returned  %s  instead of %s\n", action, austrdup(actual), austrdup(expected)); }
-#define CONFIRM_INT_EQ(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail(); log_err("%s returned %d instead of %d\n",  action, actual, expected); }
-#define CONFIRM_INT_GE(actual,expected) if ((actual)>=(expected)) { record_pass(); } else { record_fail(); log_err("%s returned %d instead of x >= %d\n",  action, actual, expected); }
-#define CONFIRM_INT_NE(actual,expected) if ((expected)!=(actual)) { record_pass(); } else { record_fail(); log_err("%s returned %d instead of x != %d\n",  action, actual, expected); }
+#define CONFIRM_EQ(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if (u_strcmp(expected,actual)==0) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        log_err("%s  returned  %s  instead of %s\n", action, austrdup(actual), austrdup(expected)); \
+    } \
+} UPRV_BLOCK_MACRO_END
+#define CONFIRM_INT_EQ(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expected)==(actual)) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        log_err("%s returned %d instead of %d\n",  action, actual, expected); \
+    } \
+} UPRV_BLOCK_MACRO_END
+#define CONFIRM_INT_GE(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((actual)>=(expected)) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        log_err("%s returned %d instead of x >= %d\n",  action, actual, expected); \
+    } \
+} UPRV_BLOCK_MACRO_END
+#define CONFIRM_INT_NE(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expected)!=(actual)) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        log_err("%s returned %d instead of x != %d\n",  action, actual, expected); \
+    } \
+} UPRV_BLOCK_MACRO_END
 /*#define CONFIRM_ErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail();  log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); } */
 static void 
 CONFIRM_ErrorCode(UErrorCode actual,UErrorCode expected) 
