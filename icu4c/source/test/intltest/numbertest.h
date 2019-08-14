@@ -82,6 +82,7 @@ class NumberFormatterApiTest : public IntlTestWithFieldPosition {
     void copyMove();
     void localPointerCAPI();
     void toObject();
+    void toDecimalNumber();
 
     void runIndexedTest(int32_t index, UBool exec, const char *&name, char *par = 0);
 
