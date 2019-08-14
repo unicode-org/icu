@@ -2021,6 +2021,14 @@ void NumberFormatterApiTest::sign() {
             u"0");
 
     assertFormatSingle(
+            u"Sign Except-Zero Small Positive",
+            u"sign-except-zero",
+            NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO),
+            Locale::getEnglish(),
+            0.0000001,
+            u"0");
+
+    assertFormatSingle(
             u"Sign Accounting-Except-Zero Positive",
             u"currency/USD sign-accounting-except-zero",
             NumberFormatter::with().sign(UNumberSignDisplay::UNUM_SIGN_ACCOUNTING_EXCEPT_ZERO).unit(USD),
