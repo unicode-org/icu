@@ -104,6 +104,7 @@ void NumberFormatterApiTest::runIndexedTest(int32_t index, UBool exec, const cha
         TESTCASE_AUTO(copyMove);
         TESTCASE_AUTO(localPointerCAPI);
         TESTCASE_AUTO(toObject);
+        TESTCASE_AUTO(toDecimalNumber);
     TESTCASE_AUTO_END;
 }
 
@@ -3031,6 +3032,18 @@ void NumberFormatterApiTest::toObject() {
     {
         NumberFormatter::with().clone();
     }
+}
+
+void NumberFormatterApiTest::toDecimalNumber() {
+    IcuTestErrorCode status(*this, "toDecimalNumber");
+    FormattedNumber fn = NumberFormatter::withLocale("bn-BD")
+        .scale(Scale::powerOfTen(2))
+        .precision(Precision::maxSignificantDigits(5))
+        .formatDouble(9.87654321e12, status);
+    assertEquals("Should have expected localized string result",
+        u"৯৮,৭৬,৫০,০০,০০,০০,০০০", fn.toString(status));
+    assertEquals(u"Should have expected toDecimalNumber string result",
+        "9.8765E+14", fn.toDecimalNumber<std::string>(status).c_str());
 }
 
 

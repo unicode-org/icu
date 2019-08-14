@@ -650,6 +650,13 @@ unumf_resultGetAllFieldPositions(const UFormattedNumber* uresult, UFieldPosition
                                  UErrorCode* ec);
 
 
+// TODO(ICU-20775): Propose this as API.
+// NOTE: This is not currently implemented.
+// U_DRAFT int32_t U_EXPORT2
+// unumf_resultToDecimalNumber(const UFormattedNumber* uresult, char* buffer, int32_t bufferCapacity,
+//                             UErrorCode* ec);
+
+
 /**
  * Releases the UNumberFormatter created by unumf_openForSkeletonAndLocale().
  *
