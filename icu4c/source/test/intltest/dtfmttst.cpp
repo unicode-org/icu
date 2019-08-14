@@ -29,7 +29,12 @@
 #include "windttst.h"
 #endif
 
-#define ASSERT_OK(status)  if(U_FAILURE(status)) {errcheckln(status, #status " = %s @ %s:%d", u_errorName(status), __FILE__, __LINE__); return; }
+#define ASSERT_OK(status) UPRV_BLOCK_MACRO_BEGIN { \
+    if(U_FAILURE(status)) { \
+        errcheckln(status, #status " = %s @ %s:%d", u_errorName(status), __FILE__, __LINE__); \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 // *****************************************************************************
 // class DateFormatTest

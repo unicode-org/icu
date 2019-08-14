@@ -4066,7 +4066,7 @@ void TransliteratorTest::TestAllCodepoints(){
 
 } 
 
-#define TEST_TRANSLIT_ID(id, cls) { \
+#define TEST_TRANSLIT_ID(id, cls) UPRV_BLOCK_MACRO_BEGIN { \
   UErrorCode ec = U_ZERO_ERROR; \
   Transliterator* t = Transliterator::createInstance(id, UTRANS_FORWARD, ec); \
   if (U_FAILURE(ec)) { \
@@ -4078,9 +4078,9 @@ void TransliteratorTest::TestAllCodepoints(){
     /* *t = *t; */ /*can't do this: coverage test for assignment op*/ \
   } \
   delete t; \
-}
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_TRANSLIT_RULE(rule, cls) { \
+#define TEST_TRANSLIT_RULE(rule, cls) UPRV_BLOCK_MACRO_BEGIN { \
   UErrorCode ec = U_ZERO_ERROR; \
   UParseError pe; \
   Transliterator* t = Transliterator::createFromRules("_", rule, UTRANS_FORWARD, pe, ec); \
@@ -4093,7 +4093,7 @@ void TransliteratorTest::TestAllCodepoints(){
     /* *t = *t; */ /*can't do this: coverage test for assignment op*/ \
   } \
   delete t; \
-}
+} UPRV_BLOCK_MACRO_END
 
 void TransliteratorTest::TestBoilerplate() {
     TEST_TRANSLIT_ID("Any-Latin", AnyTransliterator);

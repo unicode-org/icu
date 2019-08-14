@@ -1120,7 +1120,7 @@ static void TestFilePrintCompatibility(void) {
 }
 #endif
 
-#define TestFPrintFormat(uFormat, uValue, cFormat, cValue) \
+#define TestFPrintFormat(uFormat, uValue, cFormat, cValue) UPRV_BLOCK_MACRO_BEGIN { \
     myFile = u_fopen(STANDARD_TEST_FILE, "w", STANDARD_TEST_LOCALE, NULL);\
     if (myFile == NULL) {\
         log_err("Can't write test file for %s.\n", uFormat);\
@@ -1146,6 +1146,7 @@ static void TestFilePrintCompatibility(void) {
     if (buffer[uNumPrinted+1] != '*') {\
         log_err("%" uFormat " too much stored\n");\
     }\
+} UPRV_BLOCK_MACRO_END
 
 #if !UCONFIG_NO_FORMATTING
 static void TestFprintfFormat(void) {

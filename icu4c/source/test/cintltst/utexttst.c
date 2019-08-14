@@ -34,17 +34,21 @@ addUTextTest(TestNode** root)
 }
 
 
-#define TEST_ASSERT(x) \
-   {if ((x)==FALSE) {log_err("Test failure in file %s at line %d\n", __FILE__, __LINE__);\
-                     gFailed = TRUE;\
-   }}
+#define TEST_ASSERT(x) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((x)==FALSE) { \
+        log_err("Test failure in file %s at line %d\n", __FILE__, __LINE__); \
+        gFailed = TRUE; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 
-#define TEST_SUCCESS(status) \
-   {if (U_FAILURE(status)) {log_err("Test failure in file %s at line %d. Error = \"%s\"\n", \
-       __FILE__, __LINE__, u_errorName(status)); \
-       gFailed = TRUE;\
-   }}
+#define TEST_SUCCESS(status) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        log_err("Test failure in file %s at line %d. Error = \"%s\"\n", \
+                __FILE__, __LINE__, u_errorName(status)); \
+        gFailed = TRUE; \
+   } \
+} UPRV_BLOCK_MACRO_END
 
 
 

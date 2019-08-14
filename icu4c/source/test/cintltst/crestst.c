@@ -55,9 +55,23 @@ enum E_Where
 typedef enum E_Where E_Where;
 /*****************************************************************************/
 
-#define CONFIRM_EQ(actual,expected) if (u_strcmp(expected,actual)==0){ record_pass(); } else { record_fail(); log_err("%s  returned  %s  instead of %s\n", action, austrdup(actual), austrdup(expected)); }
+#define CONFIRM_EQ(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if (u_strcmp(expected,actual)==0) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        log_err("%s  returned  %s  instead of %s\n", action, austrdup(actual), austrdup(expected)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define CONFIRM_ErrorCode(actual,expected) if ((expected)==(actual)) { record_pass(); } else { record_fail();  log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); }
+#define CONFIRM_ErrorCode(actual,expected) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expected)==(actual)) { \
+        record_pass(); \
+    } else { \
+        record_fail(); \
+        log_err("%s returned  %s  instead of %s\n", action, myErrorName(actual), myErrorName(expected)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 
 /* Array of our test objects */

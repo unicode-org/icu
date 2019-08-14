@@ -212,14 +212,14 @@ bocu1TrailToByte[BOCU1_TRAIL_CONTROLS_COUNT]={
  * @param d Divisor.
  * @param m Output variable for the rest (modulo result).
  */
-#define NEGDIVMOD(n, d, m) { \
+#define NEGDIVMOD(n, d, m) UPRV_BLOCK_MACRO_BEGIN { \
     (m)=(n)%(d); \
     (n)/=(d); \
     if((m)<0) { \
         --(n); \
         (m)+=(d); \
     } \
-}
+} UPRV_BLOCK_MACRO_END
 
 /* State for BOCU-1 decoder function. */
 struct Bocu1Rx {

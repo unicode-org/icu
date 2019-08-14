@@ -1034,11 +1034,14 @@ void TransliteratorRoundTripTest::TestHangul() {
 }
 
 
-#define ASSERT_SUCCESS(status) {if (U_FAILURE(status)) { \
-     errcheckln(status, "error at file %s, line %d, status = %s", __FILE__, __LINE__, \
-         u_errorName(status)); \
-         return;}}
-    
+#define ASSERT_SUCCESS(status) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        errcheckln(status, "error at file %s, line %d, status = %s", __FILE__, __LINE__, \
+                   u_errorName(status)); \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
+
 
 static void writeStringInU8(FILE *out, const UnicodeString &s) {
     int i;

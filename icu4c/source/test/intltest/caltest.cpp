@@ -25,23 +25,33 @@
 
 #define mkcstr(U) u_austrcpy(calloc(8, u_strlen(U) + 1), U)
 
-#define TEST_CHECK_STATUS { \
+#define TEST_CHECK_STATUS UPRV_BLOCK_MACRO_BEGIN { \
     if (U_FAILURE(status)) { \
         if (status == U_MISSING_RESOURCE_ERROR) { \
             dataerrln("%s:%d: Test failure.  status=%s", __FILE__, __LINE__, u_errorName(status)); \
         } else { \
             errln("%s:%d: Test failure.  status=%s", __FILE__, __LINE__, u_errorName(status)); \
-        } return;}}
+        } \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_CHECK_STATUS_LOCALE(testlocale) { \
+#define TEST_CHECK_STATUS_LOCALE(testlocale) UPRV_BLOCK_MACRO_BEGIN { \
     if (U_FAILURE(status)) { \
         if (status == U_MISSING_RESOURCE_ERROR) { \
             dataerrln("%s:%d: Test failure, locale %s.  status=%s", __FILE__, __LINE__, testlocale, u_errorName(status)); \
         } else { \
             errln("%s:%d: Test failure, locale %s.  status=%s", __FILE__, __LINE__, testlocale, u_errorName(status)); \
-        } return;}}
+        } \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: Test failure \n", __FILE__, __LINE__);}}
+#define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expr)==FALSE) { \
+        errln("%s:%d: Test failure \n", __FILE__, __LINE__); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 // *****************************************************************************
 // class CalendarTest
@@ -1747,11 +1757,12 @@ CalendarTest::marchByDelta(Calendar* cal, int32_t delta)
     delete cur;
 }
 
-#define CHECK(status, msg) \
+#define CHECK(status, msg) UPRV_BLOCK_MACRO_BEGIN { \
     if (U_FAILURE(status)) { \
         errcheckln(status, msg); \
         return; \
-    }
+    } \
+} UPRV_BLOCK_MACRO_END
 
 void CalendarTest::TestWOY(void) {
     /*

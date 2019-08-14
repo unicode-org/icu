@@ -22,11 +22,12 @@
 #include <stdio.h>
 #include "caltest.h"
 
-#define CHECK(status, msg) \
+#define CHECK(status, msg) UPRV_BLOCK_MACRO_BEGIN { \
     if (U_FAILURE(status)) { \
-      dataerrln((UnicodeString(u_errorName(status)) + UnicodeString(" : " ) )+ msg); \
+        dataerrln((UnicodeString(u_errorName(status)) + UnicodeString(" : " ) )+ msg); \
         return; \
-    }
+    } \
+} UPRV_BLOCK_MACRO_END
 
 
 static UnicodeString escape( const UnicodeString&src)

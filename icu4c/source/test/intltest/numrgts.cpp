@@ -2734,27 +2734,28 @@ void NumberFormatRegressionTest::TestJ691(void) {
 //   Error Checking / Reporting macros
 //
 //---------------------------------------------------------------------------
-#define TEST_CHECK_STATUS(status) { \
+#define TEST_CHECK_STATUS(status) UPRV_BLOCK_MACRO_BEGIN { \
     if (U_FAILURE(status)) { \
         if (status == U_MISSING_RESOURCE_ERROR) { \
             dataerrln("File %s, Line %d: status=%s", __FILE__, __LINE__, u_errorName(status)); \
         } else { \
             errln("File %s, Line %d: status=%s", __FILE__, __LINE__, u_errorName(status)); \
         } return; \
-    }}
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define TEST_ASSERT(expr) \
+#define TEST_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
     if ((expr)==FALSE) {\
         errln("File %s, line %d: Assertion Failed: " #expr "\n", __FILE__, __LINE__);\
-    }
-#define TEST_ASSERT_EQUALS(x,y)                  \
-    {                                                                     \
+    } \
+} UPRV_BLOCK_MACRO_END
+#define TEST_ASSERT_EQUALS(x,y) UPRV_BLOCK_MACRO_BEGIN { \
       char _msg[1000]; \
       int32_t len = sprintf (_msg,"File %s, line %d: " #x "==" #y, __FILE__, __LINE__); \
       (void)len;                                                         \
       U_ASSERT(len < (int32_t) sizeof(_msg));                            \
       assertEquals((const char*) _msg, x,y);                             \
-    }
+} UPRV_BLOCK_MACRO_END
 
 
 // Ticket 8199:  Parse failure for numbers in the range of 1E10 - 1E18

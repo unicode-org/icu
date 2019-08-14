@@ -177,29 +177,56 @@ const char* RegexTest::extractToAssertBuf(const UnicodeString& message) {
   return ASSERT_BUF;
 }
 
-#define REGEX_VERBOSE_TEXT(text) {char buf[200];utextToPrintable(buf,UPRV_LENGTHOF(buf),text);logln("%s:%d: UText %s=\"%s\"", __FILE__, __LINE__, #text, buf);}
+#define REGEX_VERBOSE_TEXT(text) UPRV_BLOCK_MACRO_BEGIN { \
+    char buf[200]; \
+    utextToPrintable(buf,UPRV_LENGTHOF(buf),text); \
+    logln("%s:%d: UText %s=\"%s\"", __FILE__, __LINE__, #text, buf); \
+} UPRV_BLOCK_MACRO_END
 
-#define REGEX_CHECK_STATUS {if (U_FAILURE(status)) {dataerrln("%s:%d: RegexTest failure.  status=%s", \
-                                                              __FILE__, __LINE__, u_errorName(status)); return;}}
+#define REGEX_CHECK_STATUS UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        dataerrln("%s:%d: RegexTest failure.  status=%s", \
+                  __FILE__, __LINE__, u_errorName(status)); \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define REGEX_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: RegexTest failure: REGEX_ASSERT(%s) failed \n", __FILE__, __LINE__, #expr);}}
+#define REGEX_ASSERT(expr) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expr)==FALSE) { \
+        errln("%s:%d: RegexTest failure: REGEX_ASSERT(%s) failed \n", __FILE__, __LINE__, #expr); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define REGEX_ASSERT_FAIL(expr, errcode) {UErrorCode status=U_ZERO_ERROR; (expr);\
-if (status!=errcode) {dataerrln("RegexTest failure at line %d.  Expected status=%s, got %s", \
-    __LINE__, u_errorName(errcode), u_errorName(status));}}
+#define REGEX_ASSERT_FAIL(expr, errcode) UPRV_BLOCK_MACRO_BEGIN { \
+    UErrorCode status=U_ZERO_ERROR; \
+    (expr); \
+    if (status!=errcode) { \
+        dataerrln("RegexTest failure at line %d.  Expected status=%s, got %s", \
+                  __LINE__, u_errorName(errcode), u_errorName(status)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define REGEX_CHECK_STATUS_L(line) {if (U_FAILURE(status)) {errln( \
-    "RegexTest failure at line %d, from %d.  status=%d\n",__LINE__, (line), status); }}
+#define REGEX_CHECK_STATUS_L(line) UPRV_BLOCK_MACRO_BEGIN { \
+    if (U_FAILURE(status)) { \
+        errln("RegexTest failure at line %d, from %d.  status=%d\n",__LINE__, (line), status); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
-#define REGEX_ASSERT_L(expr, line) {if ((expr)==FALSE) { \
-    errln("RegexTest failure at line %d, from %d.", __LINE__, (line)); return;}}
+#define REGEX_ASSERT_L(expr, line) UPRV_BLOCK_MACRO_BEGIN { \
+    if ((expr)==FALSE) { \
+        errln("RegexTest failure at line %d, from %d.", __LINE__, (line)); \
+        return; \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 // expected: const char * , restricted to invariant characters.
 // actual: const UnicodeString &
-#define REGEX_ASSERT_UNISTR(expected, actual) { \
+#define REGEX_ASSERT_UNISTR(expected, actual) UPRV_BLOCK_MACRO_BEGIN { \
     if (UnicodeString(expected, -1, US_INV) != (actual)) { \
         errln("%s:%d: RegexTest failure: REGEX_ASSERT_UNISTR(%s, %s) failed \n",  \
-                __FILE__, __LINE__, expected, extractToAssertBuf(actual));}}
+              __FILE__, __LINE__, expected, extractToAssertBuf(actual)); \
+    } \
+} UPRV_BLOCK_MACRO_END
 
 
 static UBool testUTextEqual(UText *uta, UText *utb) {
@@ -329,7 +356,10 @@ static UText* regextst_openUTF8FromInvariant(UText *ut, const char *inv, int64_t
 //
 //---------------------------------------------------------------------------
 
-#define REGEX_TESTLM(pat, text, looking, match) {doRegexLMTest(pat, text, looking, match, __LINE__);doRegexLMTestUTF8(pat, text, looking, match, __LINE__);}
+#define REGEX_TESTLM(pat, text, looking, match) UPRV_BLOCK_MACRO_BEGIN { \
+    doRegexLMTest(pat, text, looking, match, __LINE__); \
+    doRegexLMTestUTF8(pat, text, looking, match, __LINE__); \
+} UPRV_BLOCK_MACRO_END
 
 UBool RegexTest::doRegexLMTest(const char *pat, const char *text, UBool looking, UBool match, int32_t line) {
     const UnicodeString pattern(pat, -1, US_INV);
