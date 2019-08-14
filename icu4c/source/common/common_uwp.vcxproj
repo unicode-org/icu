@@ -59,30 +59,21 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\x86\ReleaseUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\x86\ReleaseUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\x86\DebugUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.\x86\DebugUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\x64\ReleaseUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.\x64\ReleaseUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\x64\DebugUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.\x64\DebugUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">.\arm\ReleaseUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">.\arm\ReleaseUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">.\arm\DebugUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">.\arm\DebugUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">.\arm64\ReleaseUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">.\arm64\ReleaseUWP\</IntDir>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">.\arm64\DebugUWP\</OutDir>
-    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">.\arm64\DebugUWP\</IntDir>
-    <LinkIncremental Condition="'$(Configuration)'=='Release'">false</LinkIncremental>
+    <OutDir>.\$(Platform)\$(Configuration)UWP\</OutDir>
+    <IntDir>.\$(Platform)\$(Configuration)UWP\</IntDir>
+    <!-- The ICU projects use "Win32" to mean "x86", so we need to special case it. -->
+    <OutDir Condition="'$(Platform)'=='Win32'">.\x86\$(Configuration)UWP\</OutDir>
+    <IntDir Condition="'$(Platform)'=='Win32'">.\x86\$(Configuration)UWP\</IntDir>
+    <!-- Disable Incremental Linking for Release builds as it prevents Link-time Code Generation -->
     <LinkIncremental Condition="'$(Configuration)'=='Debug'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)'=='Release'">false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <!-- Options that are common to *all* configurations -->
     <Midl>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TypeLibraryName>$(OutDir)\icuuc.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
       <AdditionalIncludeDirectories>..\..\include;..\common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -101,6 +92,11 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <AdditionalOptions>/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeaderOutputFile>$(OutDir)/icuuc.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>$(OutDir)/</AssemblerListingLocation>
+      <ObjectFileName>$(OutDir)/</ObjectFileName>
+      <ProgramDataBaseFileName>$(OutDir)/icuuc.pdb</ProgramDataBaseFileName>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <Culture>0x0409</Culture>
@@ -133,6 +129,9 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <AdditionalDependencies>vccorlib.lib;msvcrt.lib;vcruntime.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\$(IcuBinOutputDir)\icuuc64.dll</OutputFile>
+      <ProgramDatabaseFile>.\..\..\$(IcuLibOutputDir)\icuuc.pdb</ProgramDatabaseFile>
+      <ImportLibrary>..\..\$(IcuLibOutputDir)\icuuc.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
@@ -146,7 +145,6 @@
       <Optimization>Disabled</Optimization>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <BufferSecurityCheck>true</BufferSecurityCheck>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -154,6 +152,9 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>vccorlibd.lib;msvcrtd.lib;vcruntimed.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>..\..\$(IcuBinOutputDir)\icuuc64d.dll</OutputFile>
+      <ProgramDatabaseFile>.\..\..\$(IcuLibOutputDir)\icuucd.pdb</ProgramDatabaseFile>
+      <ImportLibrary>..\..\$(IcuLibOutputDir)\icuucd.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Platform)'=='Win32'">
@@ -209,135 +210,6 @@
       <TargetMachine>MachineARM64</TargetMachine>
       <!-- This is so that we can use the existing stubdata icudt.lib and not need a UWP version. -->
       <AdditionalLibraryDirectories>.\..\..\libARM64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
-  </ItemDefinitionGroup>
-  <!-- Options that are specific to a particular configuration -->
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <Midl>
-      <TypeLibraryName>.\..\..\lib32uwp\icuuc.tlb</TypeLibraryName>
-    </Midl>
-    <ClCompile>
-      <PrecompiledHeaderOutputFile>.\x86\ReleaseUWP/common.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\x86\ReleaseUWP/</AssemblerListingLocation>
-      <ObjectFileName>.\x86\ReleaseUWP/</ObjectFileName>
-      <ProgramDataBaseFileName>.\x86\ReleaseUWP/</ProgramDataBaseFileName>
-    </ClCompile>
-    <Link>
-      <OutputFile>..\..\bin32uwp\icuuc64.dll</OutputFile>
-      <ProgramDatabaseFile>.\..\..\lib32uwp\icuuc.pdb</ProgramDatabaseFile>
-      <ImportLibrary>..\..\lib32uwp\icuuc.lib</ImportLibrary>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <Midl>
-      <TypeLibraryName>.\..\..\lib32uwp\icuucd.tlb</TypeLibraryName>
-    </Midl>
-    <ClCompile>
-      <PrecompiledHeaderOutputFile>.\x86\DebugUWP/common.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\x86\DebugUWP/</AssemblerListingLocation>
-      <ObjectFileName>.\x86\DebugUWP/</ObjectFileName>
-      <ProgramDataBaseFileName>.\x86\DebugUWP/</ProgramDataBaseFileName>
-    </ClCompile>
-    <Link>
-      <OutputFile>..\..\bin32uwp\icuuc64d.dll</OutputFile>
-      <ProgramDatabaseFile>.\..\..\lib32uwp\icuucd.pdb</ProgramDatabaseFile>
-      <ImportLibrary>..\..\lib32uwp\icuucd.lib</ImportLibrary>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <Midl>
-      <TypeLibraryName>.\..\..\lib64uwp\icuuc.tlb</TypeLibraryName>
-    </Midl>
-    <ClCompile>
-      <PrecompiledHeaderOutputFile>.\x64\ReleaseUWP/common.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\x64\ReleaseUWP/</AssemblerListingLocation>
-      <ObjectFileName>.\x64\ReleaseUWP/</ObjectFileName>
-      <ProgramDataBaseFileName>.\x64\ReleaseUWP/</ProgramDataBaseFileName>
-    </ClCompile>
-    <Link>
-      <OutputFile>..\..\bin64uwp\icuuc64.dll</OutputFile>
-      <ProgramDatabaseFile>.\..\..\lib64uwp\icuuc.pdb</ProgramDatabaseFile>
-      <ImportLibrary>..\..\lib64uwp\icuuc.lib</ImportLibrary>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Midl>
-      <TypeLibraryName>.\..\..\lib64uwp\icuucd.tlb</TypeLibraryName>
-    </Midl>
-    <ClCompile>
-      <PrecompiledHeaderOutputFile>.\x64\DebugUWP/common.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\x64\DebugUWP/</AssemblerListingLocation>
-      <ObjectFileName>.\x64\DebugUWP/</ObjectFileName>
-      <ProgramDataBaseFileName>.\x64\DebugUWP/</ProgramDataBaseFileName>
-    </ClCompile>
-    <Link>
-      <OutputFile>..\..\bin64uwp\icuuc64d.dll</OutputFile>
-      <ProgramDatabaseFile>.\..\..\lib64uwp\icuucd.pdb</ProgramDatabaseFile>
-      <ImportLibrary>..\..\lib64uwp\icuucd.lib</ImportLibrary>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
-    <Midl>
-      <TypeLibraryName>.\..\..\libARMuwp\icuuc.tlb</TypeLibraryName>
-    </Midl>
-    <ClCompile>
-      <PrecompiledHeaderOutputFile>.\ARM\ReleaseUWP/common.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\ARM\ReleaseUWP/</AssemblerListingLocation>
-      <ObjectFileName>.\ARM\ReleaseUWP/</ObjectFileName>
-      <ProgramDataBaseFileName>.\ARM\ReleaseUWP/</ProgramDataBaseFileName>
-    </ClCompile>
-    <Link>
-      <OutputFile>..\..\binARMuwp\icuuc64.dll</OutputFile>
-      <ProgramDatabaseFile>.\..\..\libARMuwp\icuuc.pdb</ProgramDatabaseFile>
-      <ImportLibrary>..\..\libARMuwp\icuuc.lib</ImportLibrary>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
-    <Midl>
-      <TypeLibraryName>.\..\..\libARMuwp\icuucd.tlb</TypeLibraryName>
-    </Midl>
-    <ClCompile>
-      <PrecompiledHeaderOutputFile>.\ARM\DebugUWP/common.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\ARM\DebugUWP/</AssemblerListingLocation>
-      <ObjectFileName>.\ARM\DebugUWP/</ObjectFileName>
-      <ProgramDataBaseFileName>.\ARM\DebugUWP/</ProgramDataBaseFileName>
-    </ClCompile>
-    <Link>
-      <OutputFile>..\..\binARMuwp\icuuc64d.dll</OutputFile>
-      <ProgramDatabaseFile>.\..\..\libARMuwp\icuucd.pdb</ProgramDatabaseFile>
-      <ImportLibrary>..\..\libARMuwp\icuucd.lib</ImportLibrary>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">
-    <Midl>
-      <TypeLibraryName>.\..\..\libARM64uwp\icuuc.tlb</TypeLibraryName>
-    </Midl>
-    <ClCompile>
-      <PrecompiledHeaderOutputFile>.\ARM64\ReleaseUWP/common.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\ARM64\ReleaseUWP/</AssemblerListingLocation>
-      <ObjectFileName>.\ARM64\ReleaseUWP/</ObjectFileName>
-      <ProgramDataBaseFileName>.\ARM64\ReleaseUWP/</ProgramDataBaseFileName>
-    </ClCompile>
-    <Link>
-      <OutputFile>..\..\binARM64uwp\icuuc62.dll</OutputFile>
-      <ProgramDatabaseFile>.\..\..\libARM64uwp\icuuc.pdb</ProgramDatabaseFile>
-      <ImportLibrary>..\..\libARM64uwp\icuuc.lib</ImportLibrary>
-    </Link>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
-    <Midl>
-      <TypeLibraryName>.\..\..\libARM64uwp\icuucd.tlb</TypeLibraryName>
-    </Midl>
-    <ClCompile>
-      <PrecompiledHeaderOutputFile>.\ARM64\DebugUWP/common.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\ARM64\DebugUWP/</AssemblerListingLocation>
-      <ObjectFileName>.\ARM64\DebugUWP/</ObjectFileName>
-      <ProgramDataBaseFileName>.\ARM64\DebugUWP/</ProgramDataBaseFileName>
-    </ClCompile>
-    <Link>
-      <OutputFile>..\..\binARM64uwp\icuuc62d.dll</OutputFile>
-      <ProgramDatabaseFile>.\..\..\libARM64uwp\icuucd.pdb</ProgramDatabaseFile>
-      <ImportLibrary>..\..\libARM64uwp\icuucd.lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
