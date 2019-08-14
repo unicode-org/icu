@@ -355,10 +355,16 @@ private:
 };
 
 #ifdef RBNF_DEBUG
-#define ERROR(msg) parseError(msg); return NULL;
+#define ERROR(msg) UPRV_BLOCK_MACRO_BEGIN { \
+    parseError(msg); \
+    return NULL; \
+} UPRV_BLOCK_MACRO_END
 #define EXPLANATION_ARG explanationArg
 #else
-#define ERROR(msg) parseError(NULL); return NULL;
+#define ERROR(msg) UPRV_BLOCK_MACRO_BEGIN { \
+    parseError(NULL); \
+    return NULL; \
+} UPRV_BLOCK_MACRO_END
 #define EXPLANATION_ARG
 #endif
         
