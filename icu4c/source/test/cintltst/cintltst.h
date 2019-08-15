@@ -147,6 +147,12 @@ U_CFUNC UBool assertUEquals(const char* msg, const UChar* expectedString,
  */
 U_CFUNC UBool assertIntEquals(const char* msg, int64_t expected, int64_t actual);
 
+/**
+ * Assert that the addresses of the two pointers are the same, returning
+ * TRUE if they are equal.
+ */
+U_CFUNC UBool assertPtrEquals(const char* msg, const void* expected, const void* actual);
+
 /*
  * note - isICUVersionBefore and isICUVersionAtLeast have been removed.
  * use log_knownIssue() instead.

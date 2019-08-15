@@ -13,6 +13,10 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -120,6 +124,52 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             return new LocaleIDParser(tmpLocaleID).getName();
         }
     };
+
+    /**
+     * Types for {@link ULocale#getAvailableLocalesByType}
+     *
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static enum AvailableType {
+        /**
+         * Locales that return data when passed to ICU APIs,
+         * but not including legacy or alias locales.
+         *
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        DEFAULT,
+
+        /**
+         * Legacy or alias locales that return data when passed to ICU APIs.
+         * Examples of supported legacy or alias locales:
+         *
+         * <ul>
+         * <li>iw (alias to he)
+         * <li>mo (alias to ro)
+         * <li>zh_CN (alias to zh_Hans_CN)
+         * <li>sr_BA (alias to sr_Cyrl_BA)
+         * <li>ars (alias to ar_SA)
+         * </ul>
+         *
+         * The locales in this set are disjoint from the ones in
+         * DEFAULT. To get both sets at the same time, use
+         * WITH_LEGACY_ALIASES.
+         *
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        ONLY_LEGACY_ALIASES,
+
+        /**
+         * The union of the locales in DEFAULT and ONLY_LEGACY_ALIASES.
+         *
+         * @draft ICU 65
+         * @provisional This API might change or be removed in a future release.
+         */
+        WITH_LEGACY_ALIASES,
+    }
 
     /**
      * Useful constant for language.
@@ -786,11 +836,38 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
 
     /**
      * {@icunote} Unlike the Locale API, this returns an array of <code>ULocale</code>,
-     * not <code>Locale</code>.  Returns a list of all installed locales.
+     * not <code>Locale</code>.
+     *
+     * <p>Returns a list of all installed locales. This is equivalent to calling
+     * {@link #getAvailableLocalesByType} with AvialableType.DEFAULT.
+     *
      * @stable ICU 3.0
      */
     public static ULocale[] getAvailableLocales() {
-        return ICUResourceBundle.getAvailableULocales();
+        return ICUResourceBundle.getAvailableULocales().clone();
+    }
+
+    /**
+     * Returns a list of all installed locales according to the specified type.
+     *
+     * @draft ICU 65
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static Collection<ULocale> getAvailableLocalesByType(AvailableType type) {
+        if (type == null) {
+            throw new IllegalArgumentException();
+        }
+        List<ULocale> result;
+        if (type == ULocale.AvailableType.WITH_LEGACY_ALIASES) {
+            result = new ArrayList<>();
+            Collections.addAll(result,
+                    ICUResourceBundle.getAvailableULocales(ULocale.AvailableType.DEFAULT));
+            Collections.addAll(result,
+                    ICUResourceBundle.getAvailableULocales(ULocale.AvailableType.ONLY_LEGACY_ALIASES));
+        } else {
+            result = Arrays.asList(ICUResourceBundle.getAvailableULocales(type));
+        }
+        return Collections.unmodifiableList(result);
     }
 
     /**

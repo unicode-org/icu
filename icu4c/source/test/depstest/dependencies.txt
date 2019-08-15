@@ -639,6 +639,7 @@ group: resourcebundle
     sort stringenumeration uhash uvector
     uscript_props propname
     bytesinkutil
+    errorcode
 
 group: localebuilder
     localebuilder.o
