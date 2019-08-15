@@ -15,6 +15,7 @@ package com.ibm.icu.dev.test.util;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -1022,6 +1023,49 @@ public class ULocaleTest extends TestFmwk {
                 errln("Got impossible locale from getAvailableLocales: " + locale.getName());
             }
         }
+    }
+
+    @Test
+    public void TestGetAvailableByType() {
+        assertEquals("countAvailable() should be same in old and new methods",
+            ULocale.getAvailableLocales().length,
+            ULocale.getAvailableLocalesByType(ULocale.AvailableType.DEFAULT).size());
+
+        assertEquals("getAvailable() should return same in old and new methods",
+            Arrays.asList(ULocale.getAvailableLocales()),
+            ULocale.getAvailableLocalesByType(ULocale.AvailableType.DEFAULT));
+
+        Collection<ULocale> legacyLocales = ULocale
+                .getAvailableLocalesByType(ULocale.AvailableType.ONLY_LEGACY_ALIASES);
+        assertTrue("getAvailable() legacy/alias should return nonempty", legacyLocales.size() > 0);
+
+        boolean found_he = false;
+        boolean found_iw = false;
+        for (ULocale loc : legacyLocales) {
+            if (loc.getName().equals("he")) {
+                found_he = true;
+            }
+            if (loc.getName().equals("iw")) {
+                found_iw = true;
+            }
+        }
+        assertFalse("Should NOT have found he amongst the legacy/alias locales", found_he);
+        assertTrue("Should have found iw amongst the legacy/alias locales", found_iw);
+
+        Collection<ULocale> allLocales = ULocale
+                .getAvailableLocalesByType(ULocale.AvailableType.WITH_LEGACY_ALIASES);
+        found_he = false;
+        found_iw = false;
+        for (ULocale loc : allLocales) {
+            if (loc.getName().equals("he")) {
+                found_he = true;
+            }
+            if (loc.getName().equals("iw")) {
+                found_iw = true;
+            }
+        }
+        assertTrue("Should have found he amongst the legacy/alias locales", found_he);
+        assertTrue("Should have found iw amongst the legacy/alias locales", found_iw);
     }
 
     @Test
@@ -4154,7 +4198,7 @@ public class ULocaleTest extends TestFmwk {
 
         val = loc3.getKeywordValue("numbers");
         assertEquals("Default, ICU keyword", null, val);
-        
+
         // Note: ICU does not have getUnicodeKeywordValue()
     }
 
