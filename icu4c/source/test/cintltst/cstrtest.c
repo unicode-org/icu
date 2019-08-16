@@ -27,11 +27,17 @@ void addCStringTest(TestNode** root);
 
 static void TestInvariant(void);
 static void TestCompareInvEbcdicAsAscii(void);
+static void TestLocaleAtSign(void);
+static void TestNoInvariantAtSign(void);
+static void TestInvCharToAscii(void);
 
 void addCStringTest(TestNode** root) {
-    addTest(root, &TestAPI,   "tsutil/cstrtest/TestAPI");
-    addTest(root, &TestInvariant,   "tsutil/cstrtest/TestInvariant");
+    addTest(root, &TestAPI, "tsutil/cstrtest/TestAPI");
+    addTest(root, &TestInvariant, "tsutil/cstrtest/TestInvariant");
     addTest(root, &TestCompareInvEbcdicAsAscii, "tsutil/cstrtest/TestCompareInvEbcdicAsAscii");
+    addTest(root, &TestLocaleAtSign, "tsutil/cstrtest/TestLocaleAtSign");
+    addTest(root, &TestNoInvariantAtSign, "tsutil/cstrtest/TestNoInvariantAtSign");
+    addTest(root, &TestInvCharToAscii, "tsutil/cstrtest/TestInvCharToAscii");
 }
 
 static void TestAPI(void)
@@ -337,5 +343,55 @@ TestCompareInvEbcdicAsAscii() {
             log_err("uprv_compareInvEbcdicAsAscii(%s, %s)=%hd is wrong\n",
                     invStrings[i][1], invStrings[i-1][1], (short)diff2);
         }
+    }
+}
+
+// See U_CHARSET_FAMILY in unicode/platform.h.
+static const char *nativeInvChars =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    "abcdefghijklmnopqrstuvwxyz"
+    "0123456789 \"%&'()*+,-./:;<=>?_";
+static const UChar *asciiInvChars =
+    u"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    u"abcdefghijklmnopqrstuvwxyz"
+    u"0123456789 \"%&'()*+,-./:;<=>?_";
+
+static void
+TestLocaleAtSign() {
+    static const char *invLocale = "de-Latn_DE@PHONEBOOK";
+    for (int32_t i = 0;; ++i) {
+        char ic = invLocale[i];
+        if (ic == 0) { break; }
+        UBool expected = i == 10;
+        UBool actual = uprv_isAtSign(ic);
+        if (actual != expected) {
+            log_err("uprv_isAtSign('%c')=%d is wrong\n", ic, (int)actual);
+        }
+    }
+}
+
+// The at sign is not an invariant character.
+static void
+TestNoInvariantAtSign() {
+    for (int32_t i = 0;; ++i) {
+        char ic = nativeInvChars[i];
+        UBool actual = uprv_isAtSign(ic);
+        if (actual) {
+            log_err("uprv_isAtSign(invariant '%c')=TRUE is wrong\n", ic);
+        }
+        if (ic == 0) { break; }
+    }
+}
+
+static void
+TestInvCharToAscii() {
+    for (int32_t i = 0;; ++i) {
+        char ic = nativeInvChars[i];
+        uint8_t ac = asciiInvChars[i];
+        uint8_t actual = uprv_invCharToAscii(ic);
+        if (actual != ac) {
+            log_err("uprv_invCharToAscii('%c') did not convert to ASCII 0x%02x\n", ic, (int)ac);
+        }
+        if (ic == 0) { break; }
     }
 }

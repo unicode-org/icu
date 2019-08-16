@@ -365,6 +365,7 @@
     <ClCompile Include="listformattertest.cpp" />
     <ClCompile Include="formattedvaluetest.cpp" />
     <ClCompile Include="localebuildertest.cpp" />
+    <ClCompile Include="localematchertest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="colldata.h" />
