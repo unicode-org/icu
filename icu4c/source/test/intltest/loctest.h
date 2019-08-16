@@ -141,6 +141,10 @@ public:
     void TestUndScript();
     void TestUndRegion();
     void TestUndCAPI();
+    void TestRangeIterator();
+    void TestPointerConvertingIterator();
+    void TestTagConvertingIterator();
+    void TestCapturingTagConvertingIterator();
 
 private:
     void _checklocs(const char* label,

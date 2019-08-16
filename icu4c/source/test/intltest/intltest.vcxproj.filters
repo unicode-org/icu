@@ -547,6 +547,9 @@
     <ClCompile Include="localebuildertest.cpp">
       <Filter>locales &amp; resources</Filter>
     </ClCompile>
+    <ClCompile Include="localematchertest.cpp">
+      <Filter>locales &amp; resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">

@@ -153,7 +153,7 @@ public final class LocaleDistanceBuilder {
                     bytes[length++] = (byte) c;
                 } else {
                     // Mark the last character as a terminator to avoid overlap matches.
-                    bytes[length++] = (byte) (c | 0x80);
+                    bytes[length++] = (byte) (c | LocaleDistance.END_OF_SUBTAG);
                     break;
                 }
             }

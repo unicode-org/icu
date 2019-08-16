@@ -44,7 +44,8 @@ caltztst.o canittst.o citrtest.o colldata.o convtest.o currcoll.o collationtest.
 fldset.o dadrfmt.o dadrcal.o dcfmapts.o decoll.o dtfmapts.o dtfmrgts.o dtfmtrtts.o dtfmttst.o	\
 dtptngts.o encoll.o escoll.o ficoll.o frcoll.o g7coll.o intltest.o	\
 itercoll.o itformat.o itmajor.o itutil.o jacoll.o lcukocol.o	\
-loctest.o localebuildertest.o miscdtfm.o mnkytst.o msfmrgts.o nmfmapts.o nmfmtrt.o		\
+loctest.o localebuildertest.o localematchertest.o \
+miscdtfm.o mnkytst.o msfmrgts.o nmfmapts.o nmfmtrt.o		\
 numfmtst.o numrgts.o  plurults.o plurfmts.o pptest.o regcoll.o restest.o restsnew.o \
 sdtfmtts.o svccoll.o tchcfmt.o	selfmts.o \
 tfsmalls.o tmsgfmt.o trcoll.o tscoll.o tsdate.o tsdcfmsy.o tsdtfmsy.o	\

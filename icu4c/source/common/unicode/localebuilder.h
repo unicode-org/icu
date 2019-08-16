@@ -8,9 +8,9 @@
 #if U_SHOW_CPLUSPLUS_API
 
 #include "unicode/locid.h"
+#include "unicode/localematcher.h"
 #include "unicode/stringpiece.h"
 #include "unicode/uobject.h"
-
 
 #ifndef U_HIDE_DRAFT_API
 /**
@@ -291,6 +291,10 @@ public:
     UBool copyErrorTo(UErrorCode &outErrorCode) const;
 
 private:
+    friend class LocaleMatcher::Result;
+
+    void copyExtensionsFrom(const Locale& src, UErrorCode& errorCode);
+
     UErrorCode status_;
     char language_[9];
     char script_[5];
