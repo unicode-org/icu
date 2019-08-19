@@ -42,10 +42,12 @@
     <property name="icu4j.jar.versioned.file" value="icu4j-${release.file.ver}.jar"/>
     <property name="icu4j-charset.jar.versioned.file" value="icu4j-charset-${release.file.ver}.jar"/>
     <property name="icu4j-localespi.jar.versioned.file" value="icu4j-localespi-${release.file.ver}.jar"/>
+    <property name="icu4j-cldrUtil.jar.versioned.file" value="icu4j-cldrUtil-${release.file.ver}.jar"/>
 
     <property name="icu4j-src.jar.versioned.file" value="icu4j-${release.file.ver}-src.jar"/>
     <property name="icu4j-charset-src.jar.versioned.file" value="icu4j-charset-${release.file.ver}-src.jar"/>
     <property name="icu4j-localespi-src.jar.versioned.file" value="icu4j-localespi-${release.file.ver}-src.jar"/>
+    <property name="icu4j-cldrUtil-src.jar.versioned.file" value="icu4j-cldrUtil-${release.file.ver}-src.jar"/>
 
     <property name="icu4jdocs.jar.versioned.file" value="icu4j-${release.file.ver}-docs.jar"/>
 
@@ -822,6 +824,7 @@
         <property name="maven.icu4j.release.dir" value="${release.dir}/maven/icu4j"/>
         <property name="maven.charset.release.dir" value="${release.dir}/maven/icu4j-charset"/>
         <property name="maven.localespi.release.dir" value="${release.dir}/maven/icu4j-localespi"/>
+        <property name="maven.cldrUtil.release.dir" value="${release.dir}/maven/icu4j-cldrUtil"/>
 
         <property name="maven.icu4j.jar.file" value="icu4j-${maven.pom.ver}.jar"/>
         <property name="maven.icu4j.src.jar.file" value="icu4j-${maven.pom.ver}-sources.jar"/>
@@ -835,11 +838,16 @@
         <property name="maven.localespi.src.jar.file" value="icu4j-localespi-${maven.pom.ver}-sources.jar"/>
         <property name="maven.localespi.doc.jar.file" value="icu4j-localespi-${maven.pom.ver}-javadoc.jar"/>
 
+        <property name="maven.cldrUtil.jar.file" value="icu4j-cldrUtil-${maven.pom.ver}.jar"/>
+        <property name="maven.cldrUtil.src.jar.file" value="icu4j-cldrUtil-${maven.pom.ver}-sources.jar"/>
+        <!-- <property name="maven.cldrUtil.doc.jar.file" value="icu4j-cldrUtil-${maven.pom.ver}-javadoc.jar"/> -->
+
 
         <delete dir="${release.dir}/maven"/>
         <mkdir dir="${maven.icu4j.release.dir}"/>
         <mkdir dir="${maven.charset.release.dir}"/>
         <mkdir dir="${maven.localespi.release.dir}"/>
+        <mkdir dir="${maven.cldrUtil.release.dir}"/>
 
 
         <!-- copy pom.xml with version -->
@@ -858,6 +866,11 @@
                 <filter token="POMVERSION" value="${maven.pom.ver}"/>
             </filterset>
         </copy>
+        <copy file="${maven.pom.dir}/icu4j-cldrUtil/pom.xml" todir="${maven.cldrUtil.release.dir}">
+            <filterset>
+                <filter token="POMVERSION" value="${maven.pom.ver}"/>
+            </filterset>
+        </copy>
 
         <!-- copy ICU release binaries and source archive to the maven release directory -->
         <copy file="${release.dir}/${icu4j.jar.versioned.file}"
@@ -866,6 +879,8 @@
             tofile="${maven.charset.release.dir}/${maven.charset.jar.file}"/>
         <copy file="${release.dir}/${icu4j-localespi.jar.versioned.file}"
             tofile="${maven.localespi.release.dir}/${maven.localespi.jar.file}"/>
+        <copy file="${release.dir}/${icu4j-cldrUtil.jar.versioned.file}"
+            tofile="${maven.cldrUtil.release.dir}/${maven.cldrUtil.jar.file}"/>
 
         <copy file="${release.dir}/${icu4j-src.jar.versioned.file}"
             tofile="${maven.icu4j.release.dir}/${maven.icu4j.src.jar.file}"/>
@@ -873,6 +888,8 @@
             tofile="${maven.charset.release.dir}/${maven.charset.src.jar.file}"/>
         <copy file="${release.dir}/${icu4j-localespi-src.jar.versioned.file}"
             tofile="${maven.localespi.release.dir}/${maven.localespi.src.jar.file}"/>
+        <copy file="${release.dir}/${icu4j-cldrUtil-src.jar.versioned.file}"
+            tofile="${maven.cldrUtil.release.dir}/${maven.cldrUtil.src.jar.file}"/>
 
         <!-- javadoc jar for maven release -->
         <jar jarfile="${maven.icu4j.release.dir}/${maven.icu4j.doc.jar.file}"
@@ -884,6 +901,9 @@
         <jar jarfile="${maven.localespi.release.dir}/${maven.localespi.doc.jar.file}"
             compress="true"
             basedir="${maven.doc.base.dir}/localespi"/>
+        <!-- <jar jarfile="${maven.cldrUtil.release.dir}/${maven.cldrUtil.doc.jar.file}"
+            compress="true"
+            basedir="${maven.doc.base.dir}/cldrUtil"/> -->
 
         <!-- sign release files-->
         <macrodef name="gpg">
@@ -915,6 +935,11 @@
         <gpg file="${maven.localespi.release.dir}/${maven.localespi.jar.file}"/>
         <gpg file="${maven.localespi.release.dir}/${maven.localespi.src.jar.file}"/>
         <gpg file="${maven.localespi.release.dir}/${maven.localespi.doc.jar.file}"/>
+
+        <gpg file="${maven.cldrUtil.release.dir}/pom.xml"/>
+        <gpg file="${maven.cldrUtil.release.dir}/${maven.cldrUtil.jar.file}"/>
+        <gpg file="${maven.cldrUtil.release.dir}/${maven.cldrUtil.src.jar.file}"/>
+        <!-- <gpg file="${maven.cldrUtil.release.dir}/${maven.cldrUtil.doc.jar.file}"/> -->
 
         <!-- deploy ICU4J artifacts to the OSSRH staging repository -->
         <path id="maven-ant-tasks.classpath" path="${maven-ant-tasks.jar}"/>
@@ -950,20 +975,32 @@
             <attach file="${maven.localespi.release.dir}/${maven.localespi.doc.jar.file}" classifier="javadoc"/>
             <attach file="${maven.localespi.release.dir}/${maven.localespi.doc.jar.file}.asc" classifier="javadoc" type="jar.asc"/>
         </deploy>
+
+        <deploy xmlns="urn:maven-artifact-ant" file="${maven.cldrUtil.release.dir}/${maven.cldrUtil.jar.file}">
+            <pom file="${maven.cldrUtil.release.dir}/pom.xml"/>
+            <attach file="${maven.cldrUtil.release.dir}/pom.xml.asc" type="pom.asc"/>
+            <attach file="${maven.cldrUtil.release.dir}/${maven.cldrUtil.jar.file}.asc" type="jar.asc"/>
+            <attach file="${maven.cldrUtil.release.dir}/${maven.cldrUtil.src.jar.file}" classifier="sources"/>
+            <attach file="${maven.cldrUtil.release.dir}/${maven.cldrUtil.src.jar.file}.asc" classifier="sources" type="jar.asc"/>
+            <!-- <attach file="${maven.cldrUtil.release.dir}/${maven.cldrUtil.doc.jar.file}" classifier="javadoc"/> -->
+            <!-- <attach file="${maven.cldrUtil.release.dir}/${maven.cldrUtil.doc.jar.file}.asc" classifier="javadoc" type="jar.asc"/> -->
+        </deploy>
     </target>
 
-    <target name="releaseVer" depends="info, releaseBinaries, releaseJarCheck, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz"
+    <target name="releaseVer" depends="info, releaseBinaries, releaseJarCheck, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz, releaseCLDR"
             description="Build all ICU4J release files for distribution with versioned file names">
         <!-- binaries -->
         <move file="${release.dir}/${icu4j.jar.file}" tofile="${release.dir}/${icu4j.jar.versioned.file}"/>
         <move file="${release.dir}/${icu4j-charset.jar.file}" tofile="${release.dir}/${icu4j-charset.jar.versioned.file}"/>
         <move file="${release.dir}/${icu4j-localespi.jar.file}" tofile="${release.dir}/${icu4j-localespi.jar.versioned.file}"/>
+        <move file="${cldr.util.out.dir}/lib/utilities.jar" tofile="${release.dir}/${icu4j-cldrUtil.jar.versioned.file}"/>
 
         <!-- source jars -->
         <move file="${release.dir}/${icu4j-src.jar.file}" tofile="${release.dir}/${icu4j-src.jar.versioned.file}"/>
         <move file="${release.dir}/${icu4j-charset-src.jar.file}" tofile="${release.dir}/${icu4j-charset-src.jar.versioned.file}"/>
         <move file="${release.dir}/${icu4j-localespi-src.jar.file}" tofile="${release.dir}/${icu4j-localespi-src.jar.versioned.file}"/>
-
+        <move file="${cldr.release.dir}/utilities-src.jar" tofile="${release.dir}/${icu4j-cldrUtil-src.jar.versioned.file}"/>
+        
         <!-- docs -->
         <move file="${release.dir}/${icu4jdocs.jar.file}" tofile="${release.dir}/${icu4jdocs.jar.versioned.file}"/>
 
