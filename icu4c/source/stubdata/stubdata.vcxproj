@@ -96,10 +96,8 @@
       <Command>echo "File with stubdata build time, used as a dependency to trigger fresh data build, since stubdata dll will overwrite the real one." &gt; "$(ProjectDir)stubdatabuilt.txt"</Command>
     </PreLinkEvent>
     <Link>
-      <BaseAddress>0x4ad00000</BaseAddress>
       <NoEntryPoint>true</NoEntryPoint>
       <SetChecksum>true</SetChecksum>
-      <RandomizedBaseAddress>true</RandomizedBaseAddress>
       <TurnOffAssemblyGeneration>true</TurnOffAssemblyGeneration>
     </Link>
   </ItemDefinitionGroup>
@@ -203,8 +201,6 @@
       <TargetMachine>MachineARM</TargetMachine>
       <ImportLibrary>..\..\libARM\icudt.lib</ImportLibrary>
       <AdditionalDependencies>kernel32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <BaseAddress></BaseAddress>
-      <RandomizedBaseAddress>true</RandomizedBaseAddress>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
@@ -251,8 +247,6 @@
       <ImportLibrary>..\..\libARM64\icudt.lib</ImportLibrary>
       <AdditionalDependencies>kernel32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>C:\Program Files (x86)\Windows Kits\10\Lib\10.0.16299.0\um\arm64</AdditionalLibraryDirectories>
-      <BaseAddress></BaseAddress>
-      <RandomizedBaseAddress>true</RandomizedBaseAddress>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">

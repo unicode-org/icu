@@ -261,7 +261,7 @@ const char options_help[][320]={
     "Build PDS dataset (zOS build only)",
     "Build for Universal Windows Platform (Windows build only)",
     "Specify the DLL machine architecture for LINK.exe (Windows build only)",
-    "Set DYNAMICBASE on for the DLL (Windows build only)",
+    "Ignored. Enable DYNAMICBASE on the DLL. This is now the default. (Windows build only)",
 };
 
 const char  *progname = "PKGDATA";
@@ -469,6 +469,10 @@ main(int argc, char* argv[]) {
 #else
         o.withoutAssembly = TRUE;
 #endif
+    }
+
+    if (options[WIN_DYNAMICBASE].doesOccur) {
+        fprintf(stdout, "Note: Ignoring option -b (windows-dynamicbase).\n");
     }
 
     /* OK options are set up. Now the file lists. */
@@ -1780,15 +1784,12 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
 
 #ifdef WINDOWS_WITH_MSVC
 #define LINK_CMD "link.exe /nologo /release /out:"
-#define LINK_FLAGS "/DLL /NOENTRY /MANIFEST:NO /implib:"
+#define LINK_FLAGS "/NXCOMPAT /DYNAMICBASE /DLL /NOENTRY /MANIFEST:NO /implib:"
 
-#define LINK_EXTRA_UWP_FLAGS "/NXCOMPAT /DYNAMICBASE /APPCONTAINER "
+#define LINK_EXTRA_UWP_FLAGS "/APPCONTAINER "
 #define LINK_EXTRA_UWP_FLAGS_X86_ONLY "/SAFESEH "
 
-#define LINK_EXTRA_NO_DYNAMICBASE "/base:0x4ad00000 "
-#define LINK_EXTRA_DYNAMICBASE "/DYNAMICBASE "
 #define LINK_EXTRA_FLAGS_MACHINE "/MACHINE:"
-
 #define LIB_CMD "LIB.exe /nologo /out:"
 #define LIB_FILE "icudt.lib"
 #define LIB_EXT UDATA_LIB_SUFFIX
@@ -1877,12 +1878,6 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
                 if (uprv_strcmp(options[WIN_DLL_ARCH].value, "X86") == 0) {
                     uprv_strcat(extraFlags, LINK_EXTRA_UWP_FLAGS_X86_ONLY);
                 }
-            }
-        } else {
-            if (options[WIN_DYNAMICBASE].doesOccur) {
-                uprv_strcat(extraFlags, LINK_EXTRA_DYNAMICBASE);
-            } else {
-                uprv_strcat(extraFlags, LINK_EXTRA_NO_DYNAMICBASE);
             }
         }
 

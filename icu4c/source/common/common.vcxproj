@@ -58,7 +58,6 @@
     <Link>
       <!-- The icudt.lib is for U_ICUDATA_ENTRY_POINT -->
       <AdditionalDependencies>icudt.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <BaseAddress>0x4a800000</BaseAddress>
     </Link>
   </ItemDefinitionGroup>
   <!-- Options that are common to all 'Debug' project configurations -->
