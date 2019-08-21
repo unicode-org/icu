@@ -42,15 +42,15 @@ the application (instead of relying on the Java API's conversion routines), then
 ICU's classes provide methods to instantiate converter objects and to perform
 the conversion. The following example shows this conversion:
 
-try{
-CharToByteConverter cbConv =
-CharToByteConverterICU.createConverter("gb-18030");
-char\[\] source = { '\\u9001','\\u3005','\\u6458'} ;
-byte\[\] result = new byte\[source.length \* cbConv.getMaxBytesPerChar()\];
-cbConv.convert(source, 0, source.length,result,0,result.length);
-}catch(Exception e){
-... //do something interesting
-}
+    try{
+        CharToByteConverter cbConv =
+        CharToByteConverterICU.createConverter("gb-18030");
+        char\[\] source = { '\\u9001','\\u3005','\\u6458'} ;
+        byte\[\] result = new byte\[source.length \* cbConv.getMaxBytesPerChar()\];
+        cbConv.convert(source, 0, source.length,result,0,result.length);
+    }catch(Exception e){
+        ... //do something interesting
+    }
 
 The Charset, CharsetEncoderICU, CharsetDecoderICU, and CharsetProviderICU
 classes in the com.ibm.icu4jni.charset package. In Java 1.4, a new public API
@@ -59,28 +59,28 @@ implementers to plug in their converters and enable the other public APIs to use
 them as well. ICU4JNI's classes are based on this new character conversion API.
 The following example uses ICU4JNI's classes:
 
-try{
-Charset cs = Charset.forName("gb-18030");
-char\[\] source = { '\\u9001','\\u3005','\\u6458'} ;
-CharBuffer cb = CharBuffer.wrap(source);
-ByteBuffer result = cs.encode(cb)
-}catch(Exception e){
-... //do something interesting
-}
-ByteBuffer bb = ByteBuffer.allocate(cs.newEncoder().maxBytesPerChar()));
-try{
-Charset cs = Charset.forName("gb-18030");
-CharsetEncoder encoder = cs.newEncoder();
-char\[\] source = { '\\u9001','\\u3005','\\u6458'} ;
-CharBuffer cb = CharBuffer.wrap(source);
-ByteBuffer bb = ByteBuffer.allocate(cs.newEncoder().maxBytesPerChar()));
-for (i=0; i<=temp.length; i++) {
-cb.limit(i);
-CoderResult result = encoder.encode(cb,bb,false);
-}
-}catch(Exception e){
-... //do something interesting
-}
+    try{
+        Charset cs = Charset.forName("gb-18030");
+        char\[\] source = { '\\u9001','\\u3005','\\u6458'} ;
+        CharBuffer cb = CharBuffer.wrap(source);
+        ByteBuffer result = cs.encode(cb)
+    }catch(Exception e){
+        ... //do something interesting
+    }
+    ByteBuffer bb = ByteBuffer.allocate(cs.newEncoder().maxBytesPerChar()));
+    try{
+        Charset cs = Charset.forName("gb-18030");
+        CharsetEncoder encoder = cs.newEncoder();
+        char\[\] source = { '\\u9001','\\u3005','\\u6458'} ;
+        CharBuffer cb = CharBuffer.wrap(source);
+        ByteBuffer bb = ByteBuffer.allocate(cs.newEncoder().maxBytesPerChar()));
+        for (i=0; i<=temp.length; i++) {
+            cb.limit(i);
+            CoderResult result = encoder.encode(cb,bb,false);
+        }
+    }catch(Exception e){
+        ... //do something interesting
+    }
 
 For more information on character conversion, see the ICU
 [Conversion](../conversion/index.md) chapter.
@@ -93,26 +93,26 @@ the advantages of the ICU collation service over Java:
 
 The following demonstrates how to create a collator:
 
-try{
-Collator coll = Collator.createInstance(Locale("en", "US"));
-}catch(ParseException e){
-... //do something interesting
-}
+    try{
+        Collator coll = Collator.createInstance(Locale("en", "US"));
+    }catch(ParseException e){
+        ... //do something interesting
+    }
 
 The following demonstrates how to compare strings:
 
-try{
-Collator coll = Collator.createInstance(Locale("th", "TH"));
-String jp1 = new String("\\u0e01");
-String jp2 = new String("\\u0e01\\u0e01");
-if(coll.compare(jp1,jp2)==Collator.RESULT_LESS){
-...//compare succeeded do something
-}else{
-...//failed do something
-}
-}catch(ParseException e){
-... //do something interesting
-}
+    try{
+        Collator coll = Collator.createInstance(Locale("th", "TH"));
+        String jp1 = new String("\\u0e01");
+        String jp2 = new String("\\u0e01\\u0e01");
+        if(coll.compare(jp1,jp2)==Collator.RESULT_LESS){
+            ...//compare succeeded do something
+        }else{
+            ...//failed do something
+        }
+    }catch(ParseException e){
+        ... //do something interesting
+    }
 
 ## Normalization
 
@@ -124,16 +124,16 @@ functionality.
 
 The following demonstrates how to use a normalizer:
 
-try{
-String source = "\\u00e0ardvark";
-String decomposed = "a\\u0300ardvark";
-String composed = "\\u00e0ardvark";
-If(Normalizer.normalize(source,Normalizer.UNORM_NFC).equals(composed){
-...// do something interesting
-}
-if(Normalizer.normalize(source,Normalizer.UNORM_NFD).equals(decomposed){
-...// do something interesting
-}
-}catch(ParseException e){
-... //do something interesting
-}
+    try{
+        String source = "\\u00e0ardvark";
+        String decomposed = "a\\u0300ardvark";
+        String composed = "\\u00e0ardvark";
+        If(Normalizer.normalize(source,Normalizer.UNORM_NFC).equals(composed){
+            ...// do something interesting
+        }
+        if(Normalizer.normalize(source,Normalizer.UNORM_NFD).equals(decomposed){
+            ...// do something interesting
+        }
+    }catch(ParseException e){
+        ... //do something interesting
+    }
