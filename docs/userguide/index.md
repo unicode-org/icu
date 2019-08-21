@@ -97,4 +97,4 @@ included, building, installing, etc.
 
 Current license: <http://source.icu-project.org/repos/icu/trunk/icu4c/LICENSE>
 
-See also <http://userguide.icu-project.org/icufaq#TOC-How-is-the-ICU-licensed->
+See also <https://github.com/unicode-org/icu/blob/userguide-migration/docs/userguide/icufaq/index.md#how-is-the-icu-licensed>
