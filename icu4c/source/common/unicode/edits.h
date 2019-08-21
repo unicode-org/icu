@@ -162,7 +162,7 @@ public:
      * @return TRUE if U_FAILURE(outErrorCode)
      * @stable ICU 59
      */
-    UBool copyErrorTo(UErrorCode &outErrorCode);
+    UBool copyErrorTo(UErrorCode &outErrorCode) const;
 
     /**
      * How much longer is the new text compared with the old text?
