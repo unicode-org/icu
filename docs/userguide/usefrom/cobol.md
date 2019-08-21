@@ -90,46 +90,46 @@ possible ways to simulate these enumerations.
 
 #### C example
 
-typedef enum {
-/\*\* No decomposition/composition. @draft ICU 1.8 \*/
-UNORM_NONE = 1,
-/\*\* Canonical decomposition. @draft ICU 1.8 \*/
-UNORM_NFD = 2,
-. . .
-} UNormalizationMode;
+    typedef enum {
+        /** No decomposition/composition. @draft ICU 1.8 */
+        UNORM_NONE = 1,
+        /** Canonical decomposition. @draft ICU 1.8 */
+        UNORM_NFD = 2,
+        . . .
+    } UNormalizationMode;
 
 #### COBOL example
 
-WORKING-STORAGE section.
-\*--------------- Ported from unorm.h ------------
-\* enum UNormalizationMode {
-77 UNORM-NONE PIC
-S9(9) Binary value 1.
-77 UNORM-NFD PIC
-S9(9) Binary value 2.
-…
+    WORKING-STORAGE section.
+    *--------------- Ported from unorm.h ------------
+    * enum UNormalizationMode {
+    77 UNORM-NONE PIC
+    S9(9) Binary value 1.
+    77 UNORM-NFD PIC
+    S9(9) Binary value 2.
+        …
 
 ### Enumerations (second possibility)
 
 #### C example
 
-/\*==== utypes.h ========\*/
-typedef enum UErrorCode {
-U_USING_FALLBACK_WARNING = -128, /\* (not an error) \*/
-U_USING_DEFAULT_WARNING = -127, /\* (not an error) \*/
-. . .
-} UErrorCode;
+    /*==== utypes.h ========*/
+    typedef enum UErrorCode {
+        U_USING_FALLBACK_WARNING = -128, /* (not an error) */
+        U_USING_DEFAULT_WARNING = -127, /* (not an error) */
+        . . .
+    } UErrorCode;
 
 #### COBOL example
 
-\*==== utypes.h ========
-01 UerrorCode PIC S9(9) Binary value 0.
-\* A resource bundle lookup returned a fallback
-\* (not an error)
-88 U-USING-FALLBACK-WARNING value -128.
-\* (not an error)
-88 U-USING-DEFAULT-WARNING value -127.
-. . .
+    *==== utypes.h ========
+    01 UerrorCode PIC S9(9) Binary value 0.
+    * A resource bundle lookup returned a fallback
+    * (not an error)
+        88 U-USING-FALLBACK-WARNING value -128.
+    * (not an error)
+        88 U-USING-DEFAULT-WARNING value -127.
+        . . .
 
 ## Call statement, calling by value or by reference
 
@@ -145,26 +145,26 @@ conversion APIs.
 
 #### C (API definition in \*.h file)
 
-/\*--------------------- UCNV.H ---------------------------\*/
-U_CAPI int32_t U_EXPORT2
-ucnv_toUChars(UConverter \* cnv,
-UChar \* dest,
-int32_t destCapacity,
-const char \* src,
-int32_t srcLength,
-UErrorCode \* pErrorCode);
+    /*--------------------- UCNV.H ---------------------------*/
+    U_CAPI int32_t U_EXPORT2
+    ucnv_toUChars(UConverter * cnv,
+        UChar * dest,
+        int32_t destCapacity,
+        const char * src,
+        int32_t srcLength,
+        UErrorCode * pErrorCode);
 
 #### COBOL
 
-PROCEDURE DIVISION.
-Call API-Pointer using
-by value Converter-toU-Pointer
-by reference Unicode-Input-Buffer
-by value destCapacity
-by reference Input-Buffer
-by value srcLength
-by reference UErrorCode
-Returning Text-Length.
+    PROCEDURE DIVISION.
+        Call API-Pointer using
+            by value Converter-toU-Pointer
+            by reference Unicode-Input-Buffer
+            by value destCapacity
+            by reference Input-Buffer
+            by value srcLength
+            by reference UErrorCode
+            Returning Text-Length.
 
 ## Call statement, Returning clause
 
@@ -172,21 +172,21 @@ Returning Text-Length.
 
 #### C (API definition in \*.h file)
 
-U_CAPI UConverter \* U_EXPORT2
-ucnv_open(const char \* converterName,
-UErrorCode \* err);
+    U_CAPI UConverter * U_EXPORT2
+    ucnv_open(const char * converterName,
+        UErrorCode * err);
 
 #### COBOL
 
-WORKING-STORAGE section.
-01 Converter-Pointer PIC S9(9) BINARY.
-PROCEDURE DIVISION
-Move Z"iso-8859-8" to converterNameSource.
-. . .
-Call API-Pointer using
-by reference converterNameSource
-by reference UErrorCode
-Returning Converter-Pointer.
+    WORKING-STORAGE section.
+        01 Converter-Pointer PIC S9(9) BINARY.
+    PROCEDURE DIVISION
+        Move Z"iso-8859-8" to converterNameSource.
+    . . .
+        Call API-Pointer using
+            by reference converterNameSource
+            by reference UErrorCode
+            Returning Converter-Pointer.
 
 ### Returned value is a Pointer to string
 
@@ -195,24 +195,24 @@ must use a pointer to string defined in the Linkage section.
 
 #### C ( API definition in \*.h file)
 
-U_CAPI const char \* U_EXPORT2
-ucnv_getAvailableName(int32_t n);
+    U_CAPI const char * U_EXPORT2
+    ucnv_getAvailableName(int32_t n);
 
 #### COBOL
 
-DATA DIVISION.
-WORKING-STORAGE section.
-01 Converter-Name-Link-Pointer Usage is Pointer.
-LINKAGE section.
-01 Converter-Name-Link.
-03 Converter-Name-String pic X(80).
-PROCEDURE DIVISION using Converter-Name-Link.
-Call API-Pointer using by value Converters-Index
-Returning Converter-Name-Link-Pointer.
-SET Address of Converter-Name-Link
-to Converter-Name-Link-Pointer.
-. . .
-Move Converter-Name-String to Debug-Value.
+    DATA DIVISION.
+    WORKING-STORAGE section.
+        01 Converter-Name-Link-Pointer Usage is Pointer.
+    LINKAGE section.
+        01 Converter-Name-Link.
+            03 Converter-Name-String pic X(80).
+    PROCEDURE DIVISION using Converter-Name-Link.
+        Call API-Pointer using by value Converters-Index
+            Returning Converter-Name-Link-Pointer.
+        SET Address of Converter-Name-Link
+            to Converter-Name-Link-Pointer.
+    . . .
+        Move Converter-Name-String to Debug-Value.
 
 ## How to invoke ICU APIs
 
@@ -234,7 +234,7 @@ dynamic loading of the DLLs at execution time (load on call).
 
 The COBOL program must be compiled with the following compiler options:
 
-\* options CBL PGMNAME(MIXED) CALLINT(SYSTEM) NODYNAM
+    \* options CBL PGMNAME(MIXED) CALLINT(SYSTEM) NODYNAM
 
 In order to call an ICU API, two preparation steps are needed:
 
@@ -255,10 +255,10 @@ free the associated memory.
 
 This is done as follows:
 
-Call "LoadLibraryA" using by reference DLL-Name
-Returning DLL-Handle.
-IF DLL-Handle = ZEROS
-Perform error handling. . .
+    Call "LoadLibraryA" using by reference DLL-Name
+        Returning DLL-Handle.
+    IF DLL-Handle = ZEROS
+        Perform error handling. . .
 
 Return value: DLL Handle, defined as PIC S9(9) BINARY
 Input Value: DLL Name (null-terminated string)
@@ -271,11 +271,11 @@ in a directory included in the PATH system variable).
 
 This is done as follows:
 
-Call "GetProcAddress" using by value DLL-Handle
-by reference API-Name
-Returning API-Pointer.
-IF API-Pointer = NULL
-Perform error handling. . .
+    Call "GetProcAddress" using by value DLL-Handle
+        by reference API-Name
+        Returning API-Pointer.
+    IF API-Pointer = NULL
+        Perform error handling. . .
 
 Return value: API address, defined as PROCEDURE-POINTER
 Input Value: DLL Handle (returned by call to LoadLibraryA)
@@ -287,7 +287,7 @@ included in the specified DLL. If the API pointer is not null, the call to the
 API is done with following according to the arguments and return value of the
 API.
 
-Call API-Pointer using . . . returning . . .
+    Call API-Pointer using . . . returning . . .
 
 After calling an API, the returned error code should be checked when relevant.
 Code to check for error conditions is illustrated in the sample programs.
@@ -296,7 +296,7 @@ Code to check for error conditions is illustrated in the sample programs.
 
 This is done as follows:
 
-Call "FreeLibrary" using DLL-Handle.
+    Call "FreeLibrary" using DLL-Handle.
 
 Return value: none
 Input Value: DLL Handle (returned by call to LoadLibraryA)
@@ -334,92 +334,92 @@ The three sample programs focus each on a certain ICU area of functionality:
 
 ### Conversion sample program
 
-\* The sample program includes the following steps:
-\* - Display the names of the converters from a list of all
-\* converters contained in the alias file.
-\* - Display the current default converter name.
-\* - Set new default converter name.
-\*
-\* - Read a string from Input file "ICU_Conv_Input_8.txt"
-\* (File in UTF-8 Format)
-\* - Convert this string from UTF-8 to code page iso-8859-8
-\* - Write the result to output file "ICU_Conv_Output.txt"
-\*
-\* - Read a line from Input file "ICU_Conv_Input.txt"
-\* (File in ANSI Format, code page 862)
-\* - Convert this string from code page ibm-862 to UTF-16
-\* - Convert the resulting string from UTF-16 to code page windows-1255
-\* - Write the result to output file "ICU_ Conv_Output.txt"
-\* - Write debugging information to Display and
-\* log file "ICU_Conv_Log.txt" (File in ANSI Format)
-\* - Repeat for all lines in Input file
-\*\*
-\* The following ICU APIs are used:
-\* ucnv_countAvailable
-\* ucnv_getAvailableName
-\* ucnv_getDefaultName
-\* ucnv_setDefaultName
-\* ucnv_convert
-\* ucnv_open
-\* ucnv_toUChars
-\* ucnv_fromUChars
-\* ucnv_close
+    * The sample program includes the following steps:
+    * - Display the names of the converters from a list of all
+    * converters contained in the alias file.
+    * - Display the current default converter name.
+    * - Set new default converter name.
+    *
+    * - Read a string from Input file "ICU_Conv_Input_8.txt"
+    * (File in UTF-8 Format)
+    * - Convert this string from UTF-8 to code page iso-8859-8
+    * - Write the result to output file "ICU_Conv_Output.txt"
+    *
+    * - Read a line from Input file "ICU_Conv_Input.txt"
+    * (File in ANSI Format, code page 862)
+    * - Convert this string from code page ibm-862 to UTF-16
+    * - Convert the resulting string from UTF-16 to code page windows-1255
+    * - Write the result to output file "ICU_ Conv_Output.txt"
+    * - Write debugging information to Display and
+    * log file "ICU_Conv_Log.txt" (File in ANSI Format)
+    * - Repeat for all lines in Input file
+    **
+    * The following ICU APIs are used:
+    * ucnv_countAvailable
+    * ucnv_getAvailableName
+    * ucnv_getDefaultName
+    * ucnv_setDefaultName
+    * ucnv_convert
+    * ucnv_open
+    * ucnv_toUChars
+    * ucnv_fromUChars
+    * ucnv_close
 
 The ucnv_xxx APIs are documented in file "UCNV.H".
 
 ### Collation sample program
 
-\* The sample program includes the following steps:
-\* - Read a string array from Input file "ICU_Coll_Input.txt"
-\* (file in ANSI format)
-\* - Convert string array from code page into UTF-16 format
-\* - Compare the string array into the canonical composed
-\* - Perform bubble sort of string array, according
-\* to Unicode string equivalence comparisons
-\* - Convert string array from Unicode into code page format
-\* - Write the result to output file "ICU_Coll_Output.txt"
-\* (file in ANSI format)
-\* - Write debugging information to Display and
-\* log file "ICU_Coll_Log.txt" (file in ANSI format)
-\*\*
-\* The following ICU APIs are used:
-\* ucol_open
-\* ucol_strcoll
-\* ucol_close
-\* ucnv_open
-\* ucnv_toUChars
-\* ucnv_fromUChars
-\* ucnv_close
+    * The sample program includes the following steps:
+    * - Read a string array from Input file "ICU_Coll_Input.txt"
+    * (file in ANSI format)
+    * - Convert string array from code page into UTF-16 format
+    * - Compare the string array into the canonical composed
+    * - Perform bubble sort of string array, according
+    * to Unicode string equivalence comparisons
+    * - Convert string array from Unicode into code page format
+    * - Write the result to output file "ICU_Coll_Output.txt"
+    * (file in ANSI format)
+    * - Write debugging information to Display and
+    * log file "ICU_Coll_Log.txt" (file in ANSI format)
+    **
+    * The following ICU APIs are used:
+    * ucol_open
+    * ucol_strcoll
+    * ucol_close
+    * ucnv_open
+    * ucnv_toUChars
+    * ucnv_fromUChars
+    * ucnv_close
 
 The ucol_xxx APIs are documented in file "UCOL.H".
 The ucnv_xxx APIs are documented in file "UCNV.H".
 
 ### Normalization sample program
 
-\* The sample includes the following steps:
-\* - Read a string from input file "ICU_NORM_Input.txt"
-\* (file in ANSI format)
-\* - Convert the string from code page into UTF-16 format
-\* - Perform quick check on the string, to determine if the
-\* string is in NFD (Canonical decomposition)
-\* normalization format.
-\* - Normalize the string into canonical composed form
-\* (FCD and decomposed)
-\* - Perform quick check on the result string, to determine
-\* if the string is in NFD normalization form
-\* - Convert the string from Unicode into the code page format
-\* - Write the result to output file "ICU_NORM_Output.txt"
-\* (file in ANSI format)
-\* - Write debugging information to Display and
-\* log file "ICU_NORM_Log.txt" (file in ANSI format)
-\*\*
-\* The following ICU APIs are used:
-\* ucnv_open
-\* ucnv_toUChars
-\* unorm_normalize
-\* unorm_quickCheck
-\* ucnv_fromUChars
-\* ucnv_close
+    * The sample includes the following steps:
+    * - Read a string from input file "ICU_NORM_Input.txt"
+    * (file in ANSI format)
+    * - Convert the string from code page into UTF-16 format
+    * - Perform quick check on the string, to determine if the
+    * string is in NFD (Canonical decomposition)
+    * normalization format.
+    * - Normalize the string into canonical composed form
+    * (FCD and decomposed)
+    * - Perform quick check on the result string, to determine
+    * if the string is in NFD normalization form
+    * - Convert the string from Unicode into the code page format
+    * - Write the result to output file "ICU_NORM_Output.txt"
+    * (file in ANSI format)
+    * - Write debugging information to Display and
+    * log file "ICU_NORM_Log.txt" (file in ANSI format)
+    **
+    * The following ICU APIs are used:
+    * ucnv_open
+    * ucnv_toUChars
+    * unorm_normalize
+    * unorm_quickCheck
+    * ucnv_fromUChars
+    * ucnv_close
 
 The unorm_xxx APIs are documented in file "UNORM.H".
 The ucnv_xxx APIs are documented in file "UCNV.H".
