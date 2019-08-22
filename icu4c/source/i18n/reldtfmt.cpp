@@ -131,7 +131,7 @@ RelativeDateFormat::~RelativeDateFormat() {
 }
 
 
-Format* RelativeDateFormat::clone(void) const {
+RelativeDateFormat* RelativeDateFormat::clone() const {
     return new RelativeDateFormat(*this);
 }
 

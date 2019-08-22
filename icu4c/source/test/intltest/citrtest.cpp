@@ -57,7 +57,7 @@ public:
         return TRUE;
     }
 
-    virtual CharacterIterator* clone(void) const {
+    virtual SCharacterIterator* clone(void) const {
         return NULL;
     }
     virtual int32_t hashCode(void) const{

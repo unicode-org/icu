@@ -323,8 +323,8 @@ void RuleBasedBreakIterator::init(UErrorCode &status) {
 //            Virtual function: does the right thing with subclasses.
 //
 //-----------------------------------------------------------------------------
-BreakIterator*
-RuleBasedBreakIterator::clone(void) const {
+RuleBasedBreakIterator*
+RuleBasedBreakIterator::clone() const {
     return new RuleBasedBreakIterator(*this);
 }
 
@@ -1079,10 +1079,8 @@ const uint8_t  *RuleBasedBreakIterator::getBinaryRules(uint32_t &length) {
 }
 
 
-BreakIterator *  RuleBasedBreakIterator::createBufferClone(void * /*stackBuffer*/,
-                                   int32_t &bufferSize,
-                                   UErrorCode &status)
-{
+RuleBasedBreakIterator *RuleBasedBreakIterator::createBufferClone(
+        void * /*stackBuffer*/, int32_t &bufferSize, UErrorCode &status) {
     if (U_FAILURE(status)){
         return NULL;
     }

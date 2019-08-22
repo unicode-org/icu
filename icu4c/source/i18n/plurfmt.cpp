@@ -362,7 +362,7 @@ PluralFormat::setNumberFormat(const NumberFormat* format, UErrorCode& status) {
     }
 }
 
-Format*
+PluralFormat*
 PluralFormat::clone() const
 {
     return new PluralFormat(*this);

@@ -930,8 +930,8 @@ RuleBasedNumberFormat::~RuleBasedNumberFormat()
     dispose();
 }
 
-Format*
-RuleBasedNumberFormat::clone(void) const
+RuleBasedNumberFormat*
+RuleBasedNumberFormat::clone() const
 {
     return new RuleBasedNumberFormat(*this);
 }

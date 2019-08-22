@@ -53,7 +53,7 @@ BuddhistCalendar& BuddhistCalendar::operator= ( const BuddhistCalendar& right)
     return *this;
 }
 
-Calendar* BuddhistCalendar::clone(void) const
+BuddhistCalendar* BuddhistCalendar::clone() const
 {
     return new BuddhistCalendar(*this);
 }

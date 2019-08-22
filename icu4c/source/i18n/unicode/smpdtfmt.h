@@ -867,7 +867,7 @@ public:
      * @return    A copy of the object.
      * @stable ICU 2.0
      */
-    virtual Format* clone(void) const;
+    virtual SimpleDateFormat* clone() const;
 
     /**
      * Return true if the given Format objects are semantically equal. Objects

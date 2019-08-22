@@ -1177,8 +1177,8 @@ VTimeZone::writeSimple(UDate time, UnicodeString& result, UErrorCode& status) co
     writeSimple(time, writer, status);
 }
 
-TimeZone*
-VTimeZone::clone(void) const {
+VTimeZone*
+VTimeZone::clone() const {
     return new VTimeZone(*this);
 }
 

@@ -698,7 +698,7 @@ public:
    * @return  A copy of the object.
    * @stable ICU 2.6
    */
-  virtual Format* clone(void) const;
+  virtual RuleBasedNumberFormat* clone() const;
 
   /**
    * Return true if the given Format objects are semantically equal.

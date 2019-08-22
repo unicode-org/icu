@@ -275,7 +275,7 @@ public:
      * result and should delete it when done.
      * @stable ICU 4.4
      */
-    virtual Format* clone(void) const;
+    virtual SelectFormat* clone() const;
 
     /**
      * Format an object to produce a string.

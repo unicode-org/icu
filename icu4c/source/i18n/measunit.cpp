@@ -1923,7 +1923,7 @@ MeasureUnit &MeasureUnit::operator=(const MeasureUnit &other) {
     return *this;
 }
 
-UObject *MeasureUnit::clone() const {
+MeasureUnit *MeasureUnit::clone() const {
     return new MeasureUnit(*this);
 }
 

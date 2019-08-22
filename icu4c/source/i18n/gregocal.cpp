@@ -286,7 +286,7 @@ fIsGregorian(source.fIsGregorian), fInvertGregorian(source.fInvertGregorian)
 
 // -------------------------------------
 
-Calendar* GregorianCalendar::clone() const
+GregorianCalendar* GregorianCalendar::clone() const
 {
     return new GregorianCalendar(*this);
 }

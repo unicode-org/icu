@@ -126,7 +126,7 @@ public:
      * @return    A copy of the object.
      * @deprecated ICU 53
      */
-    virtual Format* clone(void) const;
+    virtual TimeUnitFormat* clone() const;
 
     /**
      * Assignment operator

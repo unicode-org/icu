@@ -754,7 +754,7 @@ public:
      * @return   A new copy of this TimeZone object.
      * @stable ICU 2.0
      */
-    virtual TimeZone* clone(void) const = 0;
+    virtual TimeZone* clone() const = 0;
 
     /**
      * Return the class ID for this class.  This is useful only for

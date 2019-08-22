@@ -230,7 +230,7 @@ public:
      * @return a copy of this object, owned by the caller
      * @stable ICU 2.0
      */
-    virtual Collator* clone(void) const;
+    virtual RuleBasedCollator* clone() const;
 
     /**
      * Creates a collation element iterator for the source string. The caller of

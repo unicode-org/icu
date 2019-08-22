@@ -48,7 +48,7 @@ Measure& Measure::operator=(const Measure& other) {
     return *this;
 }
 
-UObject *Measure::clone() const {
+Measure *Measure::clone() const {
     return new Measure(*this);
 }
 

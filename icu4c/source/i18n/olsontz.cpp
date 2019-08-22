@@ -319,7 +319,7 @@ UBool OlsonTimeZone::operator==(const TimeZone& other) const {
 /**
  * TimeZone API.
  */
-TimeZone* OlsonTimeZone::clone() const {
+OlsonTimeZone* OlsonTimeZone::clone() const {
     return new OlsonTimeZone(*this);
 }
 

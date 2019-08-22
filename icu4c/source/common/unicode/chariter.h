@@ -380,7 +380,7 @@ public:
      * @return a pointer to a new CharacterIterator
      * @stable ICU 2.0
      */
-    virtual CharacterIterator* clone(void) const = 0;
+    virtual CharacterIterator* clone() const = 0;
 
     /**
      * Sets the iterator to refer to the first code unit in its

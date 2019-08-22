@@ -2000,7 +2000,7 @@ void CollationAPITest::TestUClassID()
 class TestCollator  : public Collator
 {
 public:
-    virtual Collator* clone(void) const;
+    virtual TestCollator* clone() const;
 
     using Collator::compare;
 
@@ -2065,7 +2065,7 @@ inline UBool TestCollator::operator==(const Collator& other) const {
     //    (compare this vs. o's subclass fields)
 }
 
-Collator* TestCollator::clone() const
+TestCollator* TestCollator::clone() const
 {
     return new TestCollator();
 }

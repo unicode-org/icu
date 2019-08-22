@@ -45,7 +45,7 @@ CompactDecimalFormat& CompactDecimalFormat::operator=(const CompactDecimalFormat
     return *this;
 }
 
-Format* CompactDecimalFormat::clone() const {
+CompactDecimalFormat* CompactDecimalFormat::clone() const {
     return new CompactDecimalFormat(*this);
 }
 
