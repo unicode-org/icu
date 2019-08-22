@@ -50,38 +50,42 @@ The following table (extracted from IBM VisualAge COBOL documentation) shows the
 correspondence between the data types available in COBOL and C/C++.
 
 *Parts of identifier names in Cobol are separated by ‘-’, not by ‘_’ like in C.
-* C/C++ data types COBOL data types wchar_t DISPLAY-1 (PICTURE N, G)
-wchar_t is the processing code whereas DISPLAY-1 is the file code. char PIC X.
-signed char No appropriate COBOL equivalent. unsigned char No appropriate COBOL
-equivalent. short signed int PIC S9-S9(4) COMP-5. Can beCOMP, COMP-4, or BINARY
-if you use the TRUNC(BIN) compiler option. short unsigned int PIC 9-9(4) COMP-5.
-Can be COMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option. long
-int PIC 9(5)-9(9) COMP-5. Can be COMP, COMP-4, or BINARY if you use the
-TRUNC(BIN) compiler option. long long int PIC 9(10)-9(18) COMP-5. Can be COMP,
-COMP-4, or BINARY if you use the TRUNC(BIN) compiler option. float COMP-1.
-double COMP-2. enumeration Equivalent to level 88, but not identical. char(n)
-PICTURE X(n). array pointer (\*) to type No appropriate COBOL equivalent.
-pointer(\*) to function PROCEDURE-POINTER.
+
+| C/C++ data types          	| COBOL data types                                                                                  	|
+|---------------------------	|---------------------------------------------------------------------------------------------------	|
+| wchar_t                   	| "DISPLAY-1 (PICTURE N, G) wchar_t is the processing code whereas DISPLAY-1 is the file code."     	|
+| char                      	| PIC X.                                                                                            	|
+| signed char               	| No appropriate COBOL equivalent.                                                                  	|
+| unsigned char             	| No appropriate COBOL equivalent.                                                                  	|
+| short signed int          	| PIC S9-S9(4) COMP-5. Can beCOMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option.     	|
+| short unsigned int        	| PIC 9-9(4) COMP-5. Can be COMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option.      	|
+| long int                  	| PIC 9(5)-9(9) COMP-5. Can be COMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option.   	|
+| long long int             	| PIC 9(10)-9(18) COMP-5. Can be COMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option. 	|
+| float                     	| COMP-1.                                                                                           	|
+| double                    	| COMP-2.                                                                                           	|
+| enumeration               	| Equivalent to level 88, but not identical.                                                        	|
+| char(n)                   	| PICTURE X(n).                                                                                     	|
+| array pointer (*) to type 	| No appropriate COBOL equivalent.                                                                  	|
+| pointer(*) to function    	| PROCEDURE-POINTER.                                                                                	|
 
 A number of C definitions specific to ICU (and many other compilers on POSIX
 platforms) that are not presented in the table above can also be translated into
 COBOL definitions.
 
-C/C++ data types COBOL data types int8_t PIC X. Not really equivalent. uint8_t
-PIC X. Not really equivalent. int16_t PIC S9(4) BINARY. Can beCOMP, COMP-4, or
-BINARY if you use the TRUNC(BIN) compiler option. uint16_t PIC 9(4) BINARY. Can
-beCOMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option. int32_t PIC
-S9(9) COMP-5. Can be COMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler
-option. uint32_t PIC 9(9) COMP-5. Can be COMP, COMP-4, or BINARY if you use the
-TRUNC(BIN) compiler option. Uchar PIC 9(4) BINARY. Can beCOMP, COMP-4, or BINARY
-if you use the TRUNC(BIN) compiler option. Uchar32 PIC 9(9) COMP-5. Can be COMP,
-COMP-4, or BINARY if you use the TRUNC(BIN) compiler option. UNormalizationMode
-PIC S9(9) COMP-5. Can be COMP, COMP-4, or BINARY if you use the TRUNC(BIN)
-compiler option. UerrorCode PIC S9(9) COMP-5. Can be COMP, COMP-4, or BINARY if
-you use the TRUNC(BIN) compiler option. pointer(\*) to object
-(e.g. Uconverter \*) PIC S9(9) COMP-5. Can be COMP, COMP-4, or BINARY if you use
-the TRUNC(BIN) compiler option. Windows Handle PIC S9(9) COMP-5. Can be COMP,
-COMP-4, or BINARY if you use the TRUNC(BIN) compiler option.
+| C/C++ data types                         | COBOL data types                                                                            |
+|------------------------------------------|---------------------------------------------------------------------------------------------|
+| int8_t                                   | PIC X. Not really equivalent.                                                               |
+| uint8_t                                  | PIC X. Not really equivalent.                                                               |
+| int16_t                                  | PIC S9(4) BINARY. Can beCOMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option.  |
+| uint16_t                                 | PIC 9(4) BINARY. Can beCOMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option.   |
+| int32_t                                  | PIC S9(9) COMP-5. Can be COMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option. |
+| uint32_t                                 | PIC 9(9) COMP-5. Can be COMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option.  |
+| Uchar                                    | PIC 9(4) BINARY. Can beCOMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option.   |
+| Uchar32                                  | PIC 9(9) COMP-5. Can be COMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option.  |
+| UNormalizationMode                       | PIC S9(9) COMP-5. Can be COMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option. |
+| UerrorCode                               | PIC S9(9) COMP-5. Can be COMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option. |
+| pointer(*) to object (e.g. Uconverter *) | PIC S9(9) COMP-5. Can be COMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option. |
+| Windows Handle                           | PIC S9(9) COMP-5. Can be COMP, COMP-4, or BINARY if you use the TRUNC(BIN) compiler option. |
 
 ### Enumerations (first possibility)
 
