@@ -1113,7 +1113,7 @@ TimeZoneNamesImpl::operator==(const TimeZoneNames& other) const {
     return FALSE;
 }
 
-TimeZoneNames*
+TimeZoneNamesImpl*
 TimeZoneNamesImpl::clone() const {
     UErrorCode status = U_ZERO_ERROR;
     return new TimeZoneNamesImpl(fLocale, status);
@@ -2165,7 +2165,7 @@ TZDBTimeZoneNames::operator==(const TimeZoneNames& other) const {
     return FALSE;
 }
 
-TimeZoneNames*
+TZDBTimeZoneNames*
 TZDBTimeZoneNames::clone() const {
     return new TZDBTimeZoneNames(fLocale);
 }

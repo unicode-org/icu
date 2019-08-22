@@ -74,7 +74,7 @@ public:
      * have the same class as returned by getDynamicClassID().
      * @draft ICU 60
      */
-    virtual UObject* clone() const;
+    virtual NoUnit* clone() const;
 
     /**
      * Returns a unique class ID for this object POLYMORPHICALLY.

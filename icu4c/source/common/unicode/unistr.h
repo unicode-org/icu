@@ -3326,9 +3326,6 @@ public:
    * Clones can be used concurrently in multiple threads.
    * If a subclass does not implement clone(), or if an error occurs,
    * then NULL is returned.
-   * The clone functions in all subclasses return a pointer to a Replaceable
-   * because some compilers do not support covariant (same-as-this)
-   * return types; cast to the appropriate subclass if necessary.
    * The caller must delete the clone.
    *
    * @return a clone of this object
@@ -3337,7 +3334,7 @@ public:
    * @see getDynamicClassID
    * @stable ICU 2.6
    */
-  virtual Replaceable *clone() const;
+  virtual UnicodeString *clone() const;
 
   /** Destructor.
    * @stable ICU 2.0

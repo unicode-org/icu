@@ -485,7 +485,7 @@ DecimalFormat::~DecimalFormat() {
     delete fields;
 }
 
-Format* DecimalFormat::clone() const {
+DecimalFormat* DecimalFormat::clone() const {
     // can only clone valid objects.
     if (fields == nullptr) {
         return nullptr;

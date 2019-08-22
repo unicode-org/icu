@@ -289,7 +289,7 @@ public:
      * @return    a polymorphic copy of this calendar.
      * @stable ICU 2.0
      */
-    virtual Calendar* clone(void) const = 0;
+    virtual Calendar* clone() const = 0;
 
     /**
      * Creates a Calendar using the default timezone and locale. Clients are responsible

@@ -505,7 +505,7 @@ TimeZoneFormat::operator==(const Format& other) const {
     return isEqual;
 }
 
-Format*
+TimeZoneFormat*
 TimeZoneFormat::clone() const {
     return new TimeZoneFormat(*this);
 }

@@ -899,7 +899,7 @@ class U_I18N_API DecimalFormat : public NumberFormat {
      * @return    a polymorphic copy of this DecimalFormat.
      * @stable ICU 2.0
      */
-    Format* clone(void) const U_OVERRIDE;
+    DecimalFormat* clone() const U_OVERRIDE;
 
     /**
      * Return true if the given Format objects are semantically equal.

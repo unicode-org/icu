@@ -414,7 +414,7 @@ public:
      * @return cloned object
      * @stable ICU 2.0
      */
-    virtual SearchIterator * safeClone(void) const;
+    virtual StringSearch * safeClone() const;
     
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.

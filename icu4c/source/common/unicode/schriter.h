@@ -133,7 +133,7 @@ public:
    * @return the newly cloned object.
    * @stable ICU 2.0
    */
-  virtual CharacterIterator* clone(void) const;
+  virtual StringCharacterIterator* clone() const;
 
   /**
    * Sets the iterator to iterate over the provided string.

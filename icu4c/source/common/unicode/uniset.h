@@ -505,7 +505,7 @@ public:
      * @see cloneAsThawed
      * @stable ICU 2.0
      */
-    virtual UnicodeFunctor* clone() const;
+    virtual UnicodeSet* clone() const;
 
     /**
      * Returns the hash code value for this set.
@@ -583,7 +583,7 @@ public:
      * @see cloneAsThawed
      * @stable ICU 3.8
      */
-    UnicodeFunctor *freeze();
+    UnicodeSet *freeze();
 
     /**
      * Clone the set and make the clone mutable.
@@ -593,7 +593,7 @@ public:
      * @see isFrozen
      * @stable ICU 3.8
      */
-    UnicodeFunctor *cloneAsThawed() const;
+    UnicodeSet *cloneAsThawed() const;
 
     //----------------------------------------------------------------
     // Public API

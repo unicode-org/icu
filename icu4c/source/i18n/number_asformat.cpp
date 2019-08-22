@@ -43,7 +43,7 @@ UBool LocalizedNumberFormatterAsFormat::operator==(const Format& other) const {
     return fFormatter.toSkeleton(localStatus) == _other->fFormatter.toSkeleton(localStatus);
 }
 
-Format* LocalizedNumberFormatterAsFormat::clone() const {
+LocalizedNumberFormatterAsFormat* LocalizedNumberFormatterAsFormat::clone() const {
     return new LocalizedNumberFormatterAsFormat(*this);
 }
 

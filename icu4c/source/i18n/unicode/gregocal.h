@@ -303,7 +303,7 @@ public:
      * @return    return a polymorphic copy of this calendar.
      * @stable ICU 2.0
      */
-    virtual Calendar* clone(void) const;
+    virtual GregorianCalendar* clone() const;
 
     /**
      * Sets the GregorianCalendar change date. This is the point when the switch from

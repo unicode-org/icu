@@ -153,7 +153,7 @@ class U_I18N_API MeasureFormat : public Format {
      * Clones this object polymorphically.
      * @stable ICU 53
      */
-    virtual Format *clone() const;
+    virtual MeasureFormat *clone() const;
 
     /**
      * Formats object to produce a string.

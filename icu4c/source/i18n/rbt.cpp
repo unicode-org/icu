@@ -191,8 +191,8 @@ RuleBasedTransliterator::~RuleBasedTransliterator() {
     }
 }
 
-Transliterator* // Covariant return NOT ALLOWED (for portability)
-RuleBasedTransliterator::clone(void) const {
+RuleBasedTransliterator*
+RuleBasedTransliterator::clone() const {
     return new RuleBasedTransliterator(*this);
 }
 

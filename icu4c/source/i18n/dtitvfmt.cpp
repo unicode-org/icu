@@ -215,8 +215,8 @@ DateIntervalFormat::~DateIntervalFormat() {
 }
 
 
-Format*
-DateIntervalFormat::clone(void) const {
+DateIntervalFormat*
+DateIntervalFormat::clone() const {
     return new DateIntervalFormat(*this);
 }
 

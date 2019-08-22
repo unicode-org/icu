@@ -250,7 +250,7 @@ public:
      * @return a copy of this object
      * @deprecated ICU 49 Use MessageFormat instead, with plural and select arguments.
      */
-    virtual Format* clone(void) const;
+    virtual ChoiceFormat* clone() const;
 
     /**
      * Returns true if the given Format objects are semantically equal.

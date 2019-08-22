@@ -307,7 +307,7 @@ public:
      * @return A copy of the object
      * @stable ICU 50
      */
-    virtual Format* clone() const;
+    virtual TimeZoneFormat* clone() const;
 
     /**
      * Creates an instance of <code>TimeZoneFormat</code> for the given locale.

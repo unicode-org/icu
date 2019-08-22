@@ -81,7 +81,7 @@ class U_I18N_API CurrencyAmount: public Measure {
      * have the same class as returned by getDynamicClassID().
      * @stable ICU 3.0
      */
-    virtual UObject* clone() const;
+    virtual CurrencyAmount* clone() const;
 
     /**
      * Destructor

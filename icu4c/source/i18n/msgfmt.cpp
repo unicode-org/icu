@@ -436,7 +436,7 @@ MessageFormat::operator==(const Format& rhs) const
 // -------------------------------------
 // Creates a copy of this MessageFormat, the caller owns the copy.
 
-Format*
+MessageFormat*
 MessageFormat::clone() const
 {
     return new MessageFormat(*this);
@@ -1873,7 +1873,7 @@ UBool MessageFormat::DummyFormat::operator==(const Format&) const {
     return TRUE;
 }
 
-Format* MessageFormat::DummyFormat::clone() const {
+MessageFormat::DummyFormat* MessageFormat::DummyFormat::clone() const {
     return new DummyFormat();
 }
 

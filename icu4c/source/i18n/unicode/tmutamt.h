@@ -87,7 +87,7 @@ public:
      * @return a polymorphic clone of this object. The result will have the same               class as returned by getDynamicClassID().
      * @stable ICU 4.2
      */
-    virtual UObject* clone() const;
+    virtual TimeUnitAmount* clone() const;
 
     
     /**
