@@ -937,9 +937,14 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 }
             }
 
+            // If we are at the position of the '/' in a look-ahead (hard break) rule;
+            // record the current position, to be returned later, if the full rule matches.
+            // TODO: Move this check before the previous check of fAccepting.
+            //       This would enable hard-break rules with no following context.
+            //       But there are line break test failures when trying this. Investigate.
+            //       Issue ICU-20837
             int rule =  stateTable[row + RBBIDataWrapper.LOOKAHEAD];
             if (rule != 0) {
-                // At the position of a '/' in a look-ahead match. Record it.
                 int  pos = text.getIndex();
                 if (c >= UTF16.SUPPLEMENTARY_MIN_VALUE && c <= UTF16.CODEPOINT_MAX_VALUE) {
                     // The iterator has been left in the middle of a surrogate pair.
