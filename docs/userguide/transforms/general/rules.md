@@ -134,19 +134,19 @@ Using context, we have the same number of rules. But, by using range, we can
 collapse the first four rules into one. The following shows how we can use
 range:
 
-    {γ}\[γκξχ\] > n;
+    {γ}[γκξχ] > n;
     γ > g;
 
 Any list of characters within square braces will match any one of the
 characters. We can then add the uppercase variants for completeness, to get:
 
-    γ } \[ΓΚΞΧγκξχ\] > n;
+    γ } [ΓΚΞΧγκξχ] > n;
     γ > g;
 
 Remember that we can use spaces for clarity. We can also write this rule as the
 following:
 
-    γ } \[ Γ Κ Ξ Χ γ κ ξ χ \] > n ;
+    γ } [ Γ Κ Ξ Χ γ κ ξ χ ] > n ;
     γ > g ;
 
 If a range of characters happens to have adjacent code numbers, we can just use
@@ -186,14 +186,14 @@ are a bit arcane, we can specify common sets of characters such as all the
 uppercase letters. The following example shows how case and range can be used
 together:
 
-    Θ } \[:LowercaseLetter:\] <> Th;
+    Θ } [:LowercaseLetter:] <> Th;
     Θ <> TH;
 
 The example allows words like Θεολογικές‚ to map to Theologikés and not
 THeologikés
 
 *You either can specify properties with the POSIX-style syntax, such as
-\[:LowercaseLetter:\], or with the Perl-style syntax, such as
+[:LowercaseLetter:], or with the Perl-style syntax, such as
 \\p{LowercaseLetter}.*
 
 ## Properties and Values
@@ -208,21 +208,21 @@ letters, we really want all the characters that aren't letters. To accomplish
 this, we can use a negated range: \[:^Letter:\]. The following shows a negated
 range:
 
-    σ < \[:^Letter:\] { s } \[:^Letter:\] ;
-    ς < s } \[:^Letter:\] ;
+    σ < [:^Letter:] { s } [:^Letter:] ;
+    ς < s } [:^Letter:] ;
     σ < s ;
 
 These rules state that if an "s" is surrounded by non-letters, convert it to
 "σ". Otherwise, if the "s" is followed by a non-letter, convert it to "ς". If
 all else fails, convert it to "σ"
 
-*Negated ranges \[^...\] will match at the beginning and the end of a string.
+*Negated ranges [^...] will match at the beginning and the end of a string.
 This makes the rules much easier to write. *
 
 To make the rules clearer, you can use variables. Instead of the example above,
 we can write the following:
 
-    $nonletter = \[:^Letter:\] ;
+    $nonletter = [:^Letter:] ;
     σ < $nonletter { s } $nonletter ;
     ς < s } $nonletter ;
     σ < s ;
@@ -247,14 +247,14 @@ transform converts an iota-subscript into a capital I if the preceding base
 letter is an uppercase character. Otherwise, the transform converts the
 iota-subscript into a lowercase character.
 
-    \[:Uppercase Letter:\] { ͅ } > I;
+    [:Uppercase Letter:] { ͅ } > I;
     ͅ > i;
 
 However, this is not sufficient, since the base letter may be optionally
 followed by non-spacing marks. To capture that, we can use the \* syntax, which
 means repeat zero or more times. The following shows this syntax:
 
-    \[:Uppercase Letter:\] \[:Nonspacing Mark:\] \* { ͅ } > I ;
+    [:Uppercase Letter:] [:Nonspacing Mark:] \* { ͅ } > I ;
     ͅ > i ;
 
 The following operators can be used for repetition:
