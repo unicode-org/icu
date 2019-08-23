@@ -125,6 +125,7 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     TESTCASE_AUTO(TestBug13447);
     TESTCASE_AUTO(TestReverse);
     TESTCASE_AUTO(TestBug13692);
+    TESTCASE_AUTO(TestDebugRules);
     TESTCASE_AUTO_END;
 }
 
@@ -4778,6 +4779,19 @@ void RBBITest::TestBug13692() {
     assertSuccess(WHERE, status);
 }
 
+
+void RBBITest::TestProperties() {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    UnicodeSet prependSet(UNICODE_STRING_SIMPLE("[:GCB=Prepend:]"), errorCode);
+    if (!prependSet.isEmpty()) {
+        errln(
+            "[:GCB=Prepend:] is not empty any more. "
+            "Uncomment relevant lines in source/data/brkitr/char.txt and "
+            "change this test to the opposite condition.");
+    }
+}
+
+
 //
 //  TestDebug    -  A place-holder test for debugging purposes.
 //                  For putting in fragments of other tests that can be invoked
@@ -4796,15 +4810,56 @@ void RBBITest::TestDebug(void) {
     assertSuccess(WHERE, status);
 }
 
-void RBBITest::TestProperties() {
-    UErrorCode errorCode = U_ZERO_ERROR;
-    UnicodeSet prependSet(UNICODE_STRING_SIMPLE("[:GCB=Prepend:]"), errorCode);
-    if (!prependSet.isEmpty()) {
-        errln(
-            "[:GCB=Prepend:] is not empty any more. "
-            "Uncomment relevant lines in source/data/brkitr/char.txt and "
-            "change this test to the opposite condition.");
+
+//
+//  TestDebugRules   A stub test for use in debugging rule compilation problems.
+//                   Can be freely altered as needed or convenient.
+//                   Leave disabled - #ifdef'ed out - when not activley debugging. The rule source
+//                   data files may not be available in all environments.
+//                   Any permanent test cases should be moved to rbbitst.txt
+//                   (see Bug 20303 in that file, for example), or to another test function in this file.
+//
+void RBBITest::TestDebugRules() {
+#if 0
+    const char16_t *rules = u""
+        "!!quoted_literals_only; \n"
+        "!!chain; \n"
+        "!!lookAheadHardBreak; \n"
+        " \n"
+        // "[a] / ; \n"
+        "[a] [b] / [c] [d]; \n"
+        "[a] [b] / [c] [d] {100}; \n"
+        "[x] [a] [b] / [c] [d] {100}; \n"
+        "[a] [b] [c] / [d] {100}; \n"
+        //" [c] [d] / [e] [f]; \n"
+        //"[a] [b] / [c]; \n"
+        ;
+
+    UErrorCode status = U_ZERO_ERROR;
+    CharString path(pathToDataDirectory(), status);
+    path.appendPathPart("brkitr", status);
+    path.appendPathPart("rules", status);
+    path.appendPathPart("line.txt", status);
+    int    len;
+    std::unique_ptr<UChar []> testFile(ReadAndConvertFile(path.data(), len, "UTF-8", status));
+    if (!assertSuccess(WHERE, status)) {
+        return;
     }
+
+    UParseError pe;
+    // rules = testFile.get();
+    RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(rules, pe, status);
+
+    if (!assertSuccess(WHERE, status)) {
+        delete bi;
+        return;
+    }
+    // bi->dumpTables();
+
+    delete bi;
+#endif
 }
+
+
 
 #endif // #if !UCONFIG_NO_BREAK_ITERATION
