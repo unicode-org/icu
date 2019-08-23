@@ -311,7 +311,7 @@ TestChoiceFormat::TestComplexExample( void )
             it_errln("***  operator!=");
         }
 
-        ChoiceFormat* form_A3 = (ChoiceFormat*) form_A->clone();
+        ChoiceFormat* form_A3 = form_A->clone();
         if (!form_A3) {
             it_errln("***  ChoiceFormat->clone is nil.");
         }else{

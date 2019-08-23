@@ -569,7 +569,7 @@ NumberFormat::format(const Formattable& obj,
     if(arg.wasCurrency() && u_strcmp(iso, getCurrency())) {
       // trying to format a different currency.
       // Right now, we clone.
-      LocalPointer<NumberFormat> cloneFmt((NumberFormat*)this->clone());
+      LocalPointer<NumberFormat> cloneFmt(this->clone());
       cloneFmt->setCurrency(iso, status);
       // next line should NOT recurse, because n is numeric whereas obj was a wrapper around currency amount.
       return cloneFmt->format(*n, appendTo, pos, status);
@@ -624,7 +624,7 @@ NumberFormat::format(const Formattable& obj,
     if(arg.wasCurrency() && u_strcmp(iso, getCurrency())) {
       // trying to format a different currency.
       // Right now, we clone.
-      LocalPointer<NumberFormat> cloneFmt((NumberFormat*)this->clone());
+      LocalPointer<NumberFormat> cloneFmt(this->clone());
       cloneFmt->setCurrency(iso, status);
       // next line should NOT recurse, because n is numeric whereas obj was a wrapper around currency amount.
       return cloneFmt->format(*n, appendTo, posIter, status);
@@ -1059,7 +1059,7 @@ NumberFormat::createInstance(const Locale& loc, UNumberFormatStyle kind, UErrorC
     if (U_FAILURE(status)) {
         return NULL;
     }
-    NumberFormat *result = static_cast<NumberFormat *>((*shared)->clone());
+    NumberFormat *result = (*shared)->clone();
     shared->removeRef();
     if (result == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;

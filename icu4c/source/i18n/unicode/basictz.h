@@ -44,6 +44,14 @@ public:
     virtual ~BasicTimeZone();
 
     /**
+     * Clones this object polymorphically.
+     * The caller owns the result and should delete it when done.
+     * @return clone, or nullptr if an error occurred
+     * @stable ICU 3.8
+     */
+    virtual BasicTimeZone* clone() const = 0;
+
+    /**
      * Gets the first time zone transition after the base time.
      * @param base      The base time.
      * @param inclusive Whether the base time is inclusive or not.

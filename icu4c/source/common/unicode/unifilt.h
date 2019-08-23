@@ -72,6 +72,14 @@ public:
     virtual ~UnicodeFilter();
 
     /**
+     * Clones this object polymorphically.
+     * The caller owns the result and should delete it when done.
+     * @return clone, or nullptr if an error occurred
+     * @stable ICU 2.4
+     */
+    virtual UnicodeFilter* clone() const = 0;
+
+    /**
      * Returns <tt>true</tt> for characters that are in the selected
      * subset.  In other words, if a character is <b>to be
      * filtered</b>, then <tt>contains()</tt> returns

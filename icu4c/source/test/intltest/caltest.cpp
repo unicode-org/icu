@@ -750,7 +750,7 @@ CalendarTest::TestClonesUnique908()
     UErrorCode status = U_ZERO_ERROR;
     Calendar *c = Calendar::createInstance(status);
     if (failure(status, "Calendar::createInstance", TRUE)) return;
-    Calendar *d = (Calendar*) c->clone();
+    Calendar *d = c->clone();
     c->set(UCAL_MILLISECOND, 123);
     d->set(UCAL_MILLISECOND, 456);
     if (c->get(UCAL_MILLISECOND, status) != 123 ||
@@ -1732,7 +1732,7 @@ void
 CalendarTest::marchByDelta(Calendar* cal, int32_t delta)
 {
     UErrorCode status = U_ZERO_ERROR;
-    Calendar *cur = (Calendar*) cal->clone();
+    Calendar *cur = cal->clone();
     int32_t initialDOW = cur->get(UCAL_DAY_OF_WEEK, status);
     if (U_FAILURE(status)) { errln("Calendar::get failed"); return; }
     int32_t DOW, newDOW = initialDOW;

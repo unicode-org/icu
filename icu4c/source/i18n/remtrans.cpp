@@ -51,7 +51,7 @@ RemoveTransliterator::~RemoveTransliterator() {}
 RemoveTransliterator* RemoveTransliterator::clone() const {
     RemoveTransliterator* result = new RemoveTransliterator();
     if (result != NULL && getFilter() != 0) {
-        result->adoptFilter((UnicodeFilter*)(getFilter()->clone()));
+        result->adoptFilter(getFilter()->clone());
     }
     return result;
 }

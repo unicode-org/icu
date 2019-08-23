@@ -712,7 +712,7 @@ int gTestFilter3ClassID = 0;
  */
 class TestFilter1 : public UnicodeFilter {
     UClassID getDynamicClassID()const { return &gTestFilter1ClassID; }
-    virtual UnicodeFunctor* clone() const {
+    virtual TestFilter1* clone() const {
         return new TestFilter1(*this);
     }
     virtual UBool contains(UChar32 c) const {
@@ -733,7 +733,7 @@ class TestFilter1 : public UnicodeFilter {
 };
 class TestFilter2 : public UnicodeFilter {
     UClassID getDynamicClassID()const { return &gTestFilter2ClassID; }
-    virtual UnicodeFunctor* clone() const {
+    virtual TestFilter2* clone() const {
         return new TestFilter2(*this);
     }
     virtual UBool contains(UChar32 c) const {
@@ -754,7 +754,7 @@ class TestFilter2 : public UnicodeFilter {
 };
 class TestFilter3 : public UnicodeFilter {
     UClassID getDynamicClassID()const { return &gTestFilter3ClassID; }
-    virtual UnicodeFunctor* clone() const {
+    virtual TestFilter3* clone() const {
         return new TestFilter3(*this);
     }
     virtual UBool contains(UChar32 c) const {

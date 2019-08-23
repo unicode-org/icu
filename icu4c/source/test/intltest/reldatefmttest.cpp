@@ -988,7 +988,7 @@ void RelativeDateTimeFormatterTest::TestCustomNumberFormat() {
                     "Failure creating format object - %s", u_errorName(status));
             return;
         }
-        nf = (NumberFormat *) fmt.getNumberFormat().clone();
+        nf = fmt.getNumberFormat().clone();
     }
     nf->setMinimumFractionDigits(1);
     nf->setMaximumFractionDigits(1);

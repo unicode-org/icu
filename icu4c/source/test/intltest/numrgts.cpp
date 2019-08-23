@@ -78,7 +78,7 @@ public:
     {
         NumberFormat::parse(text, result, status);
     }
-    virtual Format* clone() const 
+    virtual MyNumberFormatTest* clone() const 
     { return NULL; }
 
     virtual UnicodeString& format(int32_t, 

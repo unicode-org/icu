@@ -124,7 +124,7 @@ void PluralFormatTest::pluralFormatBasicTest(/*char *par*/)
     }
 
     if ( U_SUCCESS(status[1]) ) {
-        plFmt[2] = (PluralFormat*) plFmt[1]->clone();
+        plFmt[2] = plFmt[1]->clone();
 
         if (plFmt[1]!=NULL) {
             if ( *plFmt[1] != *plFmt[2] ) {

@@ -769,7 +769,7 @@ void StringSearchTest::TestInitialization()
     }
     delete copy;
 
-    copy = (StringSearch *)result->safeClone();
+    copy = result->safeClone();
     if (*(copy->getCollator()) != *(result->getCollator()) ||
         copy->getBreakIterator() != result->getBreakIterator() ||
         copy->getMatchedLength() != result->getMatchedLength() ||

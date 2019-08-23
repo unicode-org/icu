@@ -921,7 +921,7 @@ void TestMessageFormat::testClone()
     MessageFormat *x = new MessageFormat("There are {0} files on {1}", success);
     MessageFormat *z = new MessageFormat("There are {0} files on {1} created", success);
     MessageFormat *y = 0;
-    y = (MessageFormat*)x->clone();
+    y = x->clone();
     if ( (*x == *y) && 
          (*x != *z) && 
          (*y != *z) )
@@ -1433,8 +1433,8 @@ static void _testCopyConstructor2()
         goto cleanup;
     }
 
-    fmt3 = (MessageFormat*) fmt1->clone();
-    fmt4 = (MessageFormat*) fmt2->clone();
+    fmt3 = fmt1->clone();
+    fmt4 = fmt2->clone();
 
     if (fmt3 == NULL) {
         it_err("testCopyConstructor2: (fmt3 != NULL)");

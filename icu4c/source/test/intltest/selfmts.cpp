@@ -235,7 +235,7 @@ void SelectFormatTest::selectFormatAPITest(/*char *par*/)
     // ======= Test clone && == operator.
     logln("SelectFormat API test: Testing clone and == operator ...");
     if ( U_SUCCESS(status[0])  ) {
-        selFmt[1] = (SelectFormat*)selFmt[0]->clone();
+        selFmt[1] = selFmt[0]->clone();
         if (selFmt[1]!=NULL) {
             if ( *selFmt[1] != *selFmt[0] ) {
                 errln("ERROR: SelectFormat API test clone test failed!");

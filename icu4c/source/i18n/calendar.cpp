@@ -2595,7 +2595,7 @@ Calendar::isWeekend(UDate date, UErrorCode &status) const
         return FALSE;
     }
     // clone the calendar so we don't mess with the real one.
-    Calendar *work = (Calendar*)this->clone();
+    Calendar *work = this->clone();
     if (work == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return FALSE;
@@ -2755,7 +2755,7 @@ Calendar::getActualMinimum(UCalendarDateFields field, UErrorCode& status) const
 
     // clone the calendar so we don't mess with the real one, and set it to
     // accept anything for the field values
-    Calendar *work = (Calendar*)this->clone();
+    Calendar *work = this->clone();
     if (work == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return 0;

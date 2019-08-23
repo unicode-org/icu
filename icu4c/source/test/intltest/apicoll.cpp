@@ -2345,7 +2345,7 @@ void CollationAPITest::TestClone() {
     dump("c1", c1, status);
     
     logln("\ninit c2");
-    RuleBasedCollator* c2 = (RuleBasedCollator*)c1->clone();
+    RuleBasedCollator* c2 = c1->clone();
     val = c2->getAttribute(UCOL_CASE_FIRST, status);
     if(val == UCOL_LOWER_FIRST){
         c2->setAttribute(UCOL_CASE_FIRST, UCOL_UPPER_FIRST, status);

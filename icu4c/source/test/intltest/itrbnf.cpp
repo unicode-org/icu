@@ -166,7 +166,7 @@ IntlTestRBNF::TestAPI() {
   // test clone
   {
     logln("Testing Clone");
-    RuleBasedNumberFormat* rbnfClone = (RuleBasedNumberFormat *)formatter->clone();
+    RuleBasedNumberFormat* rbnfClone = formatter->clone();
     if(rbnfClone != NULL) {
       if(!(*rbnfClone == *formatter)) {
         errln("Clone should be semantically equivalent to the original!");

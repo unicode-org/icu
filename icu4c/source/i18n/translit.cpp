@@ -158,7 +158,7 @@ Transliterator::Transliterator(const Transliterator& other) :
 
     if (other.filter != 0) {
         // We own the filter, so we must have our own copy
-        filter = (UnicodeFilter*) other.filter->clone();
+        filter = other.filter->clone();
     }
 }
 
@@ -175,7 +175,7 @@ Transliterator& Transliterator::operator=(const Transliterator& other) {
     ID.getTerminatedBuffer();
 
     maximumContextLength = other.maximumContextLength;
-    adoptFilter((other.filter == 0) ? 0 : (UnicodeFilter*) other.filter->clone());
+    adoptFilter((other.filter == 0) ? 0 : other.filter->clone());
     return *this;
 }
 
