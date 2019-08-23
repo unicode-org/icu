@@ -171,7 +171,7 @@ void TimeUnitTest::testAPI() {
     TimeUnit* tmunit = TimeUnit::createInstance(TimeUnit::UTIMEUNIT_YEAR, status);
     if (!assertSuccess("TimeUnit::createInstance", status)) return;
 
-    TimeUnit* another = (TimeUnit*)tmunit->clone();
+    TimeUnit* another = tmunit->clone();
     TimeUnit third(*tmunit);
     TimeUnit fourth = third;
 
@@ -239,7 +239,7 @@ void TimeUnitTest::testAPI() {
 
     TimeUnitAmount second(tma);
     TimeUnitAmount third_tma = tma;
-    TimeUnitAmount* fourth_tma = (TimeUnitAmount*)tma.clone();
+    TimeUnitAmount* fourth_tma = tma.clone();
 
     assertTrue("orig and copy are equal", (second == tma));
     assertTrue("clone and assigned are equal", (third_tma == *fourth_tma));
@@ -266,7 +266,7 @@ void TimeUnitTest::testAPI() {
     TimeUnitFormat tmf_copy(tmf_fr);
     assertTrue("TimeUnitFormat: orig and copy are equal", (tmf_fr == tmf_copy));
 
-    TimeUnitFormat* tmf_clone = (TimeUnitFormat*)tmf_en->clone();
+    TimeUnitFormat* tmf_clone = tmf_en->clone();
     assertTrue("TimeUnitFormat: orig and clone are equal", (*tmf_en == *tmf_clone));
     delete tmf_clone;
 

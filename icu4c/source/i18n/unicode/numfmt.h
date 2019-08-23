@@ -263,6 +263,14 @@ public:
     virtual ~NumberFormat();
 
     /**
+     * Clones this object polymorphically.
+     * The caller owns the result and should delete it when done.
+     * @return clone, or nullptr if an error occurred
+     * @stable ICU 2.0
+     */
+    virtual NumberFormat* clone() const = 0;
+
+    /**
      * Return true if the given Format objects are semantically equal.
      * Objects of different subclasses are considered unequal.
      * @return    true if the given Format objects are semantically equal.

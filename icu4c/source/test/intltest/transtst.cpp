@@ -657,7 +657,7 @@ int gTestFilterClassID = 0;
  * Used by TestFiltering().
  */
 class TestFilter : public UnicodeFilter {
-    virtual UnicodeFunctor* clone() const {
+    virtual TestFilter* clone() const {
         return new TestFilter(*this);
     }
     virtual UBool contains(UChar32 c) const {

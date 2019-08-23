@@ -352,7 +352,7 @@ UBool
 TimeZoneRegressionTest::checkCalendar314(GregorianCalendar *testCal, TimeZone *testTZ) 
 {
     UErrorCode status = U_ZERO_ERROR;
-    // GregorianCalendar testCal = (GregorianCalendar)aCal.clone(); 
+    // GregorianCalendar testCal = aCal.clone(); 
 
     int32_t tzOffset, tzRawOffset; 
     float tzOffsetFloat,tzRawOffsetFloat; 

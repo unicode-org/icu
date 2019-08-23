@@ -364,8 +364,8 @@ UnicodeSetTest::TestCloneEqualHash(void) {
     }
 
     logln("Testing clone()");
-    UnicodeSet *set1clone=(UnicodeSet*)set1->clone();
-    UnicodeSet *set2clone=(UnicodeSet*)set2->clone();
+    UnicodeSet *set1clone=set1->clone();
+    UnicodeSet *set2clone=set2->clone();
     if(*set1clone != *set1 || *set1clone != *set1copy || *set1clone != set1equal || 
         *set2clone != *set2 || *set2clone == *set1copy || *set2clone != set2equal || 
         *set2clone == *set1 || *set2clone == set1equal || *set2clone == *set1clone){
@@ -2255,7 +2255,7 @@ void UnicodeSetTest::TestFreezable() {
         errln("FAIL: copying a frozen set results in a thawed one");
     }
 
-    UnicodeSet *cloned=(UnicodeSet *)frozen.clone();
+    UnicodeSet *cloned=frozen.clone();
     if(!cloned->isFrozen() || *cloned!=frozen || cloned->containsSome(0xd802, 0xd805)) {
         errln("FAIL: clone() failed");
     }
@@ -2265,7 +2265,7 @@ void UnicodeSetTest::TestFreezable() {
     }
     delete cloned;
 
-    UnicodeSet *thawed=(UnicodeSet *)frozen.cloneAsThawed();
+    UnicodeSet *thawed=frozen.cloneAsThawed();
     if(thawed->isFrozen() || *thawed!=frozen || thawed->containsSome(0xd802, 0xd805)) {
         errln("FAIL: cloneAsThawed() failed");
     }
@@ -3692,11 +3692,11 @@ void UnicodeSetTest::TestSpan() {
             // Intermediate set: Test cloning of a frozen set.
             UnicodeSet *fast=new UnicodeSet(*sets[SLOW]);
             fast->freeze();
-            sets[FAST]=(UnicodeSet *)fast->clone();
+            sets[FAST]=fast->clone();
             delete fast;
             UnicodeSet *fastNot=new UnicodeSet(*sets[SLOW_NOT]);
             fastNot->freeze();
-            sets[FAST_NOT]=(UnicodeSet *)fastNot->clone();
+            sets[FAST_NOT]=fastNot->clone();
             delete fastNot;
 
             for(j=0; j<SET_COUNT; ++j) {

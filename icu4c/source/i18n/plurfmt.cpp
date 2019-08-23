@@ -159,7 +159,7 @@ PluralFormat::copyObjects(const PluralFormat& other) {
     if (other.numberFormat == NULL) {
         numberFormat = NumberFormat::createInstance(locale, status);
     } else {
-        numberFormat = (NumberFormat*)other.numberFormat->clone();
+        numberFormat = other.numberFormat->clone();
     }
     if (other.pluralRulesWrapper.pluralRules == NULL) {
         pluralRulesWrapper.pluralRules = PluralRules::forLocale(locale, status);
@@ -353,7 +353,7 @@ PluralFormat::setNumberFormat(const NumberFormat* format, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
-    NumberFormat* nf = (NumberFormat*)format->clone();
+    NumberFormat* nf = format->clone();
     if (nf != NULL) {
         delete numberFormat;
         numberFormat = nf;

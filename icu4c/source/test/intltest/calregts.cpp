@@ -193,7 +193,7 @@ CalendarRegressionTest::test4028518()
       return;
     }
     failure(status, "new GregorianCalendar");
-    GregorianCalendar *cal2 = (GregorianCalendar*) cal1->clone() ;
+    GregorianCalendar *cal2 = cal1->clone() ;
 
     printdate(cal1, "cal1: ") ;
     printdate(cal2, "cal2 - cloned(): ") ;
@@ -1521,7 +1521,7 @@ void CalendarRegressionTest::test4141665()
       delete cal;
       return;
     }
-    GregorianCalendar *cal2 = (GregorianCalendar*)cal->clone();
+    GregorianCalendar *cal2 = cal->clone();
     UDate cut = cal->getGregorianChange();
     UDate cut2 = cut + 100*24*60*60*1000.0; // 100 days later
     if (*cal != *cal2) {
@@ -1937,7 +1937,7 @@ CalendarRegressionTest::Test4167060()
 
             if(U_FAILURE(status))
                 errln("setGregorianChange() failed");
-            format->adoptCalendar((Calendar*)calendar->clone());
+            format->adoptCalendar(calendar->clone());
 
             UDate dateBefore = calendar->getTime(status);
             if(U_FAILURE(status))

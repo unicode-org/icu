@@ -43,7 +43,7 @@ Measure& Measure::operator=(const Measure& other) {
     if (this != &other) {
         delete unit;
         number = other.number;
-        unit = (MeasureUnit*) other.unit->clone();
+        unit = other.unit->clone();
     }
     return *this;
 }

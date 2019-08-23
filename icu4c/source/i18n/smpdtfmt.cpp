@@ -2108,7 +2108,7 @@ SimpleDateFormat::zeroPaddingNumber(
     // Fall back to slow path (clone and mutate the NumberFormat)
     if (currentNumberFormat != nullptr) {
         FieldPosition pos(FieldPosition::DONT_CARE);
-        LocalPointer<NumberFormat> nf(dynamic_cast<NumberFormat*>(currentNumberFormat->clone()));
+        LocalPointer<NumberFormat> nf(currentNumberFormat->clone());
         nf->setMinimumIntegerDigits(minDigits);
         nf->setMaximumIntegerDigits(maxDigits);
         nf->format(value, appendTo, pos);  // 3rd arg is there to speed up processing
@@ -3771,7 +3771,7 @@ void SimpleDateFormat::parseInt(const UnicodeString& text,
     auto* fmtAsDF = dynamic_cast<const DecimalFormat*>(fmt);
     LocalPointer<DecimalFormat> df;
     if (!allowNegative && fmtAsDF != nullptr) {
-        df.adoptInstead(dynamic_cast<DecimalFormat*>(fmtAsDF->clone()));
+        df.adoptInstead(fmtAsDF->clone());
         if (df.isNull()) {
             // Memory allocation error
             return;

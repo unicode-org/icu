@@ -132,7 +132,7 @@ void DateIntervalFormatTest::testAPI() {
     status = U_ZERO_ERROR;
     logln("Testing DateIntervalFormat clone");
 
-    DateIntervalFormat* another = (DateIntervalFormat*)dtitvfmt->clone();
+    DateIntervalFormat* another = dtitvfmt->clone();
     if ( (*another) != (*dtitvfmt) ) {
         dataerrln("%s:%d ERROR: clone failed", __FILE__, __LINE__);
     }
@@ -224,7 +224,7 @@ void DateIntervalFormatTest::testAPI() {
     }
 
     status = U_ZERO_ERROR;
-    DateFormat* nonConstFmt = (DateFormat*)fmt->clone();
+    DateFormat* nonConstFmt = fmt->clone();
     dtitvfmt->adoptDateFormat(nonConstFmt, status);
     anotherFmt = dtitvfmt->getDateFormat();
     if ( (*fmt) != (*anotherFmt) || U_FAILURE(status) ) {
@@ -250,7 +250,7 @@ void DateIntervalFormatTest::testAPI() {
     logln("Testing DateIntervalFormat constructor and assigment operator");
     status = U_ZERO_ERROR;
 
-    DateFormat* constFmt = (constFmt*)dtitvfmt->getDateFormat()->clone();
+    DateFormat* constFmt = dtitvfmt->getDateFormat()->clone();
     inf = dtitvfmt->getDateIntervalInfo()->clone();
 
 
@@ -1483,7 +1483,7 @@ void DateIntervalFormatTest::stress(const char** data, int32_t data_length,
                 GregorianCalendar* gregCal = new GregorianCalendar(loc, ec);
                 if (!assertSuccess("GregorianCalendar()", ec)) return;
                 const DateFormat* dformat = dtitvfmt->getDateFormat();
-                DateFormat* newOne = (DateFormat*)dformat->clone();
+                DateFormat* newOne = dformat->clone();
                 newOne->adoptCalendar(gregCal);
                 //dtitvfmt->adoptDateFormat(newOne, ec);
                 dtitvfmt->setDateFormat(*newOne, ec);
@@ -1640,7 +1640,7 @@ void DateIntervalFormatTest::testTicket12065() {
         dataerrln("FAIL: DateIntervalFormat::createInstance failed for Locale::getEnglish()");
         return;
     }
-    LocalPointer<DateIntervalFormat> clone(dynamic_cast<DateIntervalFormat *>(formatter->clone()));
+    LocalPointer<DateIntervalFormat> clone(formatter->clone());
     if (*formatter != *clone) {
         errln("%s:%d DateIntervalFormat and clone are not equal.", __FILE__, __LINE__);
         return;
