@@ -47,8 +47,12 @@ that when we reverse the transliteration that the process can handle all the
 Latin letters.
 
 *This direction is not reversible. The following table illustrates this
-situation:* Source→Target Reversibleφ → ph → φTarget→Source Not (Necessarily)
-Reversible f → φ → ph
+situation:* 
+
+| Source→Target | Reversible | φ → ph → φ |
+|---------------|------------------------------|------------|
+| Target→Source | Not (Necessarily) Reversible | f → φ → ph |
+
 
 ## Basics
 
@@ -65,13 +69,21 @@ We will start by adding a whole batch of simple mappings. These mappings will
 not work yet, but we will start with them. For now, we will not use the
 uppercase versions of characters.
 
-One to One Mappingsα <> a;β <> b;γ <> g;δ <> d;ε <> e;
+
+    One to One Mappings
+    α <> a;
+    β <> b;
+    γ <> g;
+    δ <> d;
+    ε <> e;
 
 We will also add rules for completeness. These provide fallback mappings for
 Latin characters that do not normally result from transliterating Greek
 characters.
 
-Completeness Mappingsκ < c;κ < q;
+    Completeness Mappings
+    κ < c;
+    κ < q;
 
 ## Context and Range
 
@@ -81,11 +93,11 @@ the transform converts a "γ" to an "n" if it is before any of the following
 characters: γ, κ, ξ, or χ. Otherwise the transform converts it to a "g". The
 following list a all of the possibilities:
 
-γγ > ng;
-γκ > nk;
-γξ > nx;
-γχ > nch;
-γ > g;
+    γγ > ng;
+    γκ > nk;
+    γξ > nx;
+    γχ > nch;
+    γ > g;
 
 All the rules are evaluated in the order they are listed. The transform will
 first try to match the first four rules. If all of these rules fail, it will use
@@ -103,11 +115,11 @@ character when it is followed by ³, Îº, Î¾, and Ï‡. Otherwise we must pe
 those characters to be converted using their specific rules. This is done with
 the following:
 
-γ } γ > n;
-γ } κ > n;
-γ } ξ > n;
-γ } χ > n;
-γ > g;
+    γ } γ > n;
+    γ } κ > n;
+    γ } ξ > n;
+    γ } χ > n;
+    γ > g;
 
 A left curly brace marks the start of a context rule. The context rule will be
 followed when the transform matches the rules against the source text, but
@@ -122,20 +134,20 @@ Using context, we have the same number of rules. But, by using range, we can
 collapse the first four rules into one. The following shows how we can use
 range:
 
-{γ}\[γκξχ\] > n;
-γ > g;
+    {γ}\[γκξχ\] > n;
+    γ > g;
 
 Any list of characters within square braces will match any one of the
 characters. We can then add the uppercase variants for completeness, to get:
 
-γ } \[ΓΚΞΧγκξχ\] > n;
-γ > g;
+    γ } \[ΓΚΞΧγκξχ\] > n;
+    γ > g;
 
 Remember that we can use spaces for clarity. We can also write this rule as the
 following:
 
-γ } \[ Γ Κ Ξ Χ γ κ ξ χ \] > n ;
-γ > g ;
+    γ } \[ Γ Κ Ξ Χ γ κ ξ χ \] > n ;
+    γ > g ;
 
 If a range of characters happens to have adjacent code numbers, we can just use
 a hyphen to abbreviate it. For example, instead of writing \[a b c d e f g m n
@@ -174,8 +186,8 @@ are a bit arcane, we can specify common sets of characters such as all the
 uppercase letters. The following example shows how case and range can be used
 together:
 
-Θ } \[:LowercaseLetter:\] <> Th;
-Θ <> TH;
+    Θ } \[:LowercaseLetter:\] <> Th;
+    Θ <> TH;
 
 The example allows words like Θεολογικές‚ to map to Theologikés and not
 THeologikés
@@ -196,9 +208,9 @@ letters, we really want all the characters that aren't letters. To accomplish
 this, we can use a negated range: \[:^Letter:\]. The following shows a negated
 range:
 
-σ < \[:^Letter:\] { s } \[:^Letter:\] ;
-ς < s } \[:^Letter:\] ;
-σ < s ;
+    σ < \[:^Letter:\] { s } \[:^Letter:\] ;
+    ς < s } \[:^Letter:\] ;
+    σ < s ;
 
 These rules state that if an "s" is surrounded by non-letters, convert it to
 "σ". Otherwise, if the "s" is followed by a non-letter, convert it to "ς". If
@@ -210,19 +222,20 @@ This makes the rules much easier to write. *
 To make the rules clearer, you can use variables. Instead of the example above,
 we can write the following:
 
-$nonletter = \[:^Letter:\] ;
-σ < $nonletter { s } $nonletter ;
-ς < s } $nonletter ;
-σ < s ;
+    $nonletter = \[:^Letter:\] ;
+    σ < $nonletter { s } $nonletter ;
+    ς < s } $nonletter ;
+    σ < s ;
 
 There are many more properties available that can be used in combination. For
 following table lists some examples:
 
-CombinationExampleDescription: All code points that are:Union\[\[:Greek:\]
-\[:letter:\]\] either in the Greek script, or are letters
-Intersection\[\[:Greek:\] & \[:letter:\]\] are both Greek and lettersSet
-Difference\[\[:Greek:\] - \[:letter:\]\]are Greek but not
-lettersComplement\[^\[:Greek:\] \[:letter:\]\] are neither Greek nor letters
+| Combination | Example | Description: All code points that are: |
+|----------------|--------------------------|--------------------------------------------|
+| Union | [[:Greek:] [:letter:]] | either in the Greek script, or are letters |
+| Intersection | [[:Greek:] & [:letter:]] | are both Greek and letters |
+| Set Difference | [[:Greek:] - [:letter:]] | are Greek but not letters |
+| Complement | [^[:Greek:] [:letter:]] | are neither Greek nor letters |
 
 For more on properties, see the [UnicodeSet](../../strings/unicodeset.md) and
 [Properties](../../strings/properties.md) chapters.
@@ -234,20 +247,23 @@ transform converts an iota-subscript into a capital I if the preceding base
 letter is an uppercase character. Otherwise, the transform converts the
 iota-subscript into a lowercase character.
 
-\[:Uppercase Letter:\] { ͅ } > I;
-ͅ > i;
+    \[:Uppercase Letter:\] { ͅ } > I;
+    ͅ > i;
 
 However, this is not sufficient, since the base letter may be optionally
 followed by non-spacing marks. To capture that, we can use the \* syntax, which
 means repeat zero or more times. The following shows this syntax:
 
-\[:Uppercase Letter:\] \[:Nonspacing Mark:\] \* { ͅ } > I ;
-ͅ > i ;
+    \[:Uppercase Letter:\] \[:Nonspacing Mark:\] \* { ͅ } > I ;
+    ͅ > i ;
 
 The following operators can be used for repetition:
 
-Repetition Operators
-X\*zero or more X'sX+one or more X'sX?Zero or one X
+| Repetition Operators |  |
+|----------------------|------------------|
+| X* | zero or more X's |
+| X+ | one or more X's |
+| X? | Zero or one X |
 
 We can also use these operators as sequences with parentheses for grouping. For
 example, "a ( b c ) \* d" will match against "ad" or "abcd" or "abcbcd".
@@ -265,14 +281,19 @@ against the start/end of a string. For example, the following rule will execute
 on the first **a** in a string, as well as an **a** that is actually preceded by
 a non-letter.
 
-Rule\[:^L:\] { a > b ;Sourcea xa aResultsb xa b
+| Rule | [:^L:] { a > b ; |
+|---------|------------------|
+| Source | a xa a |
+| Results | b xa b |
 
 This is because \\uFFFF is an element of \[:^L:\], which includes all codepoints
 that do not represent letters. To refer explicitly to æther, you can use a **$**
 at the end of a range, such as in the following rules:
 
-Rules\[0-9$\] { a > b ;
-a } \[0-9$\] > b ;Sourcea 5a aResultsb 5b a
+| Rules | [0-9$] { a > b ; a } [0-9$] > b ;|
+|------------------|------------------|
+| Source | a 5a a |
+| Results | b 5b a |
 
 In these rules, an **a** before or after a number -- or at the start or end of a
 string -- will be matched. (You could also use \\uFFFF explicitly, but the $ is
@@ -282,14 +303,20 @@ Thus to disallow a match against æther in a negation, you need to add the $ to
 the list of negated items. For example, the first rule and results from above
 would change to the following (notice that the first a is not replaced):
 
-Rule\[^\[:L:\]$\] { a > b ;Sourcea xa aResults**a** xa b *Characters that are
-outside the context limits -- contextStart to contextEnd -- are also treated as
+| Rule | [^[:L:]$] { a > b ; |
+|---------|---------------------|
+| Source | a xa a |
+| Results | a xa b |
+
+*Characters that are outside the context limits -- contextStart to contextEnd -- are also treated as
 æther.*
 
 The property \[:any:\] can be used to match all code points, including æther.
 Thus the following are equivalent:
 
-Rule1\[\\u0000-\\U0010FFFF\] { a > A ;Rule2\[:any:\] { a > A ;
+| Rule1 | [\u0000-\U0010FFFF] { a > A ; |
+|-------|-------------------------------|
+| Rule2 | [:any:] { a > A ; |
 
 However, since the transform is always greedy with no backup, this property is
 not very useful in practice. What is more often required is dealing with the end
@@ -297,10 +324,10 @@ of lines. If you want to match the start or end of a line, then you can define a
 variable that includes all the line separator characters, and then use it in the
 context of your rules. For example:
 
-Rules$break = \[\[:Zp:\]\[:Zl:\] \\u000A-\\u000D \\u0085 $\] ;
-$break { a > A ;Sourcea a
-a aResultsA a
-A a
+| Rules | $break = [[:Zp:][:Zl:] \u000A-\u000D \u0085 $] ; $break { a > A ;|
+|------------------|--------------------------------------------------|
+| Source | a a a a |
+| Results | A a A a |
 
 There is also a special character, the period (.), that is equivalent to the
 **negation** of the $break variable we defined above. It can be used to match
@@ -312,28 +339,33 @@ instead of the period.
 *There are a few other special escapes, that can be used in ranges. These are
 listed in the table below. However, instead of the latter two it is safest to
 use the above $break definition since it works for line endings across different
-platforms.* EscapeMeaningCode\\tTab\\u0009\\nLinefeed\\u000A\\rCarriage
-Return\\u000D
+platforms.* 
+
+| Escape | Meaning | Code |
+|--------|-----------------|--------|
+| \t | Tab | \u0009 |
+| \n | Linefeed | \u000A |
+| \r | Carriage Return | \u000D |
 
 ## Accents
 
 We could handle each accented character by itself with rules such as the
 following:
 
-ά > á;
-έ > é;
-...
+    ά > á;
+    έ > é;
+    ...
 
 This procedure is very complicated when we consider all the possible
 combinations of accents and the fact that the text might not be normalized. In
 ICU 1.8, we can add other transforms as rules either before or after all the
 other rules. We then can modify the rules to the following:
 
-:: NFD (NFC) ;
-α <> a;
-...
-ω <> ō;
-:: NFC (NFD);
+    :: NFD (NFC) ;
+    α <> a;
+    ...
+    ω <> ō;
+    :: NFC (NFD);
 
 These modified rules first separate accents from their base characters and then
 put them in a canonical order. We can then deal with the individual components,
@@ -344,13 +376,13 @@ so the (NFD) goes at the bottom and (NFC) at the top.
 A global filter can also be used with the transform rules. The following example
 shows a filter used in the rules:
 
-:: \[\[:Greek:\]\[:Inherited:\]\];
-:: NFD (NFC) ;
-α <> a;
-...
-ω <> ō;
-:: NFC (NFD);
-:: (\[\[:Latin:\]\[:Inherited:\]\]);
+    :: \[\[:Greek:\]\[:Inherited:\]\];
+    :: NFD (NFC) ;
+    α <> a;
+    ...
+    ω <> ō;
+    :: NFC (NFD);
+    :: (\[\[:Latin:\]\[:Inherited:\]\]);
 
 The global filter will cause any other characters to be unaffected. In
 particular, the NFD then only applies to Greek characters and accents, leaving
@@ -369,7 +401,8 @@ To resolve this ambiguity, use the mechanism recommended by the Japanese and
 Korean transliteration standards by inserting an apostrophe or hyphen to
 disambiguate the results. We can add a rule like the following that inserts an
 apostrophe after an "n" if we need to reverse the transliteration process:
-ν } \[ΓΚΞΧγκξχ\] > n\\';
+
+    ν } \[ΓΚΞΧγκξχ\] > n\\';
 
 In ICU, there are several of these mechanisms for the Greek rules. The ICU rules
 undergo some fairly rigorous mechanical testing to ensure reversibility. Adding
@@ -392,11 +425,11 @@ bar means that the character will be revisited, so that the "S" or "K" in a
 Greek transform will be applied to the result and will eventually produce a
 sigma (Σ, σ, or ς) or kappa (Κ or κ).
 
-$softener = \[eiyEIY\] ;
-| S < C } $softener ;
-| K < C ;
-| s < c } $softener ;
-| k < c ;
+    $softener = \[eiyEIY\] ;
+    | S < C } $softener ;
+    | K < C ;
+    | s < c } $softener ;
+    | k < c ;
 
 The ability to revisit is particularly useful in reducing the number of rules
 required for a given language. For example, in Japanese there are a large number
@@ -408,24 +441,24 @@ First, the ASCII punctuation mark, tilde "~", represents characters that never
 normally occur in isolation. This is a general convention for anomalous
 characters within the ICU rules in any event.
 
-'~yu' > ゅ;
-'~ye' > ぇ;
-'~yo' > ょ;
+    '~yu' > ゅ;
+    '~ye' > ぇ;
+    '~yo' > ょ;
 
 Second, any syllables that use this pattern are broken into the first hiragana
 and are followed by letters that will form the small hiragana.
 
-by > び|'~y';
-ch > ち|'~y';
-dj > ぢ|'~y';
-gy > ぎ|'~y';
-j > じ|'~y';
-ky > き|'~y';
-my > み|'~y';
-ny > に|'~y';
-py > ぴ|'~y';
-ry > り|'~y';
-sh > し|'~y';
+    by > び|'~y';
+    ch > ち|'~y';
+    dj > ぢ|'~y';
+    gy > ぎ|'~y';
+    j > じ|'~y';
+    ky > き|'~y';
+    my > み|'~y';
+    ny > に|'~y';
+    py > ぴ|'~y';
+    ry > り|'~y';
+    sh > し|'~y';
 
 Using these rules, "kyo" is first converted into "き~yo". Since the "~yo" is then
 revisited, this produces the desired final result, "きょ". Thus, a small number of
@@ -437,8 +470,8 @@ replacement text. You can even set the revisit point before or after the target
 text. The at-sign, as in the following example, is used as a filler to indicate
 the position, for those cases:
 
-\[aeiou\] { x > | @ ks ;
-ak > ack ;
+    \[aeiou\] { x > | @ ks ;
+    ak > ack ;
 
 The first rule will convert "x", when preceded by a vowel, into "ks". The
 transform will then backup to the position before the vowel and continue. In the
@@ -460,13 +493,13 @@ indicate which group. For example, in Korean, any vowel that does not have a
 consonant before it gets the null consonant (?) inserted before it. The
 following example shows this rule:
 
-(\[aeiouwy\]) > ?| $1 ;
+    (\[aeiouwy\]) > ?| $1 ;
 
 To revisit the vowel again, insert the null consonant, insert the vowel, and
 then backup before the vowel to reconsider it. Similarly, we have a following
 rule that inserts a null vowel (?), if no real vowel is found after a consonant:
 
-(\[b-dg-hj-km-npr-t\]) > | $1 eu;
+    (\[b-dg-hj-km-npr-t\]) > | $1 eu;
 
 In this case, since we are going to reconsider the text again, we put in the
 Latin equivalent of the Korean null vowel, which is "eu".
@@ -477,25 +510,25 @@ Two rules overlap when there is a string that both rules could match at the
 start. For example, the first part of the following rule does not overlap, but
 the last two parts do overlap:
 
-β > b;
-γ } \[ Γ Κ Ξ Χ γ κ ξ χ \] > n ;
-γ > g ;
+    β > b;
+    γ } \[ Γ Κ Ξ Χ γ κ ξ χ \] > n ;
+    γ > g ;
 
 When rules do not overlap, they will produce the same result no matter what
 order they are in. It does not matter whether we have either of the following:
 
-β > b;
-γ > g ;
-or
-γ > g ;
-β > b;
+    β > b;
+    γ > g ;
+    or
+    γ > g ;
+    β > b;
 
 When rules do overlap, order is important. In fact, a rule could be rendered
 completely useless. Suppose we have:
 
-β } \[aeiou\] > b;
-β } \[^aeiou\] > v;
-β > p;
+    β } \[aeiou\] > b;
+    β } \[^aeiou\] > v;
+    β > p;
 
 In this case, the last rule is masked as none of the text that will match the
 rule will already be matched by previous rules. If a rule is masked, then a
@@ -510,18 +543,18 @@ vowel (with perhaps other accents following). So, we will start with the
 following variables and rule. The rule transforms a rough breathing mark into an
 "H", and moves it to before the vowels.
 
-$gvowel = \[ΑΕΗΙΟΥΩαεηιουω\];
-($gvowel + ) ̔ > H | $1;
+    $gvowel = \[ΑΕΗΙΟΥΩαεηιουω\];
+    ($gvowel + ) ̔ > H | $1;
 
 A word like ὍΤΑΝ" is transformed into "HOTAN". This transformation does not work
 with a lowercase word like "ὅταν". To handle lowercase words, we insert another
 rule that moves the "H" over lowercase vowels and changes it to lowercase. The
 following shows this rule:
 
-$gvowel = \[ΑΕΗΙΟΥΩαεηιουω\];
-$lcgvowel = \[αεηιουω\];
-($lcgvowel +) ̔ > h | $1; # fix lowercase
-($gvowel + ) ̔ > H | $1;
+    $gvowel = \[ΑΕΗΙΟΥΩαεηιουω\];
+    $lcgvowel = \[αεηιουω\];
+    ($lcgvowel +) ̔ > h | $1; # fix lowercase
+    ($gvowel + ) ̔ > H | $1;
 
 This rule provides the correct results as the lowercase word "ὅταν" is
 transformed into "hotan".
@@ -532,12 +565,12 @@ that in two circumstances: (a) the breathing mark is on a capital letter
 followed by a lowercase, or (b) the breathing mark is on a lowercase vowel. The
 following shows how to write a rule for this situation:
 
-$gvowel = \[ΑΕΗΙΟΥΩαεηιουω\];
-$lcgvowel = \[αεηιουω\];
-{Ο ̔ } \[:Nonspacing Mark:\]\* \[:Ll:\] > H | ο; # fix Titlecase
-{Ο ( $lcgvowel \* ) ̔ } > H | ο $1; # fix Titlecase
-( $lcgvowel + ) ̔ > h | $1 ; # fix lowercase
-($gvowel + ) ̔ > H | $1 ;
+    $gvowel = \[ΑΕΗΙΟΥΩαεηιουω\];
+    $lcgvowel = \[αεηιουω\];
+    {Ο ̔ } \[:Nonspacing Mark:\]\* \[:Ll:\] > H | ο; # fix Titlecase
+    {Ο ( $lcgvowel \* ) ̔ } > H | ο $1; # fix Titlecase
+    ( $lcgvowel + ) ̔ > h | $1 ; # fix lowercase
+    ($gvowel + ) ̔ > H | $1 ;
 
 This rule gives the correct results for lowercase as "Ὅταν" is transformed into
 "Hotan". We must copy the above insertion and modify it for each of the vowels
@@ -601,10 +634,12 @@ punctuation and space (watch out for combining marks).
     Left-Right Mark, or a Non-Joiner. Because of that, it is even safer to use
     the following:
 
-TODO: this code should be part of the preceding list item #4.
-$ignore = \[ \[:mark:\] \[:format:\] \] \* ; # define at the top of your file
-...
-\[:letter:\] $ignore } z > s ; # convert z after letters into sh
+    TODO: this code should be part of the preceding list item #4.
+    $ignore = \[ \[:mark:\] \[:format:\] \] \* ; # define at the top of your file
+    ...
+    \[:letter:\] $ignore } z > s ; # convert z after letters into sh
+
+
 *Remember that the rules themselves must be in the same normalization format.
 Otherwise, nothing will match. To do this, run NFD on the rules themselves. In
 some cases, we must rearrange the order of the rules because of masking. For
