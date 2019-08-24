@@ -38,7 +38,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <BuildLog>
-      <Path>$(OutDir)$(Configuration)BuildLog.html</Path>
+      <Path>.\data\log\$(Platform)\$(Configuration)BuildLog.html</Path>
     </BuildLog>
   </ItemDefinitionGroup>
   <ItemGroup>
