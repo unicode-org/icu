@@ -25,6 +25,11 @@ matrix:
 
     - name: "j"
       language: java
+      addons:
+        apt:
+          packages:
+            - ant
+            - ant-optional
       env:      BUILD=ICU4J
       before_script:
         - cd icu4j
