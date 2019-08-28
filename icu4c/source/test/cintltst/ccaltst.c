@@ -2403,6 +2403,9 @@ static const UChar tzTronto[] = /* America/Toronto */
 static const UChar sBogus[] = /* Bogus */
     {0x42,0x6F,0x67,0x75,0x73,0x00};
 
+static const UChar sBogusWithVariantCharacters[] = /* Bogus with Variant characters: Hèℓℓô Wôřℓδ */
+    {0x48,0xE8,0x2113,0x2113,0xF4,0x20,0x57,0xF4,0x159,0x2113,0x3B4,0x00};
+ 
 void TestGetWindowsTimeZoneID() {
     UErrorCode status;
     UChar winID[64];
@@ -2478,6 +2481,12 @@ void TestGetTimeZoneIDByWindowsID() {
         } else if (len != 0) {
             log_err("FAIL: TZ ID for Bogus\n");
         }
+    }
+
+    {
+        status = U_ZERO_ERROR;
+        len = ucal_getTimeZoneIDForWindowsID(sBogusWithVariantCharacters, -1, NULL, tzID, UPRV_LENGTHOF(tzID), &status);
+        // The purpose of this test is to simply not crash.
     }
 }
 

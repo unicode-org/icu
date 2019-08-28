@@ -207,7 +207,16 @@ u_UCharsToChars(const UChar *us, char *cs, int32_t length) {
     while(length>0) {
         u=*us++;
         if(!UCHAR_IS_INVARIANT(u)) {
-            UPRV_UNREACHABLE; /* Variant characters were used. These are not portable in ICU. */
+            /* Variant characters were used. These are not portable in ICU. */
+
+            // Previously this function would call assert() in Debug mode, but would quietly
+            // fall-through in Release mode. This changed in ICU 64 to use the macro
+            // UPRV_UNREACHABLE instead which unconditionally calls abort().
+            // However, there are places in ICU that call u_UCharsToChars without checking
+            // beforehand if the string contains only invariant characters, leading to abort()
+            // being called unintentionally. This change is reverted here for now, restoring the
+            // existing behavior. ICU-20791 tracks the follow-up work/further investigation on this.
+            U_ASSERT(FALSE);
         }
         *cs++=(char)UCHAR_TO_CHAR(u);
         --length;
