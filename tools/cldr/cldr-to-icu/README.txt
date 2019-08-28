@@ -6,25 +6,10 @@
 Basic instructions for running the LdmlConverter via Maven
 ==========================================================
 
-Note that these instructions do not currently support configuration of the converter for things
-such as limiting the set of files produced. That is supported in code and could be easily added
-to the binary, or encapsulated via an Ant task, but currently it is not directly supported.
-See the IcuConverterConfig class for the API by which this can be supported.
-
-
 Important directories
 ---------------------
 
 <CLDR_DIR>  = The root directory of the CLDR release.
-
-<ICU_DIR>   = The root directory of the ICU release (probably a parent directory of where
-              this README file is located). This is an optional property and defaults to
-              the parent directory of the release from which it is run.
-
-<DTD_CACHE> = The temporary cache directory in which DTD files are downloaded (this is the
-              same directory as would be used when running tools from the CLDR project).
-              Note that the need to specify this directory is scheduled to be removed after
-              ICU release 65.
 
 <OUT_DIR>   = The output directory into which ICU data files should be written.
 
@@ -32,10 +17,9 @@ Important directories
 Generating all ICU data
 -----------------------
 
-$ mvn exec:java \
-  -DCLDR_DIR='<CLDR_DIR>' \
-  -DCLDR_DTD_CACHE='<DTD_CACHE>' \
-  -Dexec.args='<OUT_DIR>'
+First edit the Ant build file to
+
+$ CLDR_DIR=<CLDR_DIR> ant -f build-icu-data.xml
 
 
 Running unit tests

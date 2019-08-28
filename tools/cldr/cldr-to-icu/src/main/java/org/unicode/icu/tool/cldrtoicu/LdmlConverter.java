@@ -4,6 +4,10 @@ package org.unicode.icu.tool.cldrtoicu;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
+import static java.util.stream.Collectors.toList;
+import static org.unicode.cldr.api.CldrDataType.BCP47;
+import static org.unicode.cldr.api.CldrDataType.LDML;
+import static org.unicode.cldr.api.CldrDataType.SUPPLEMENTAL;
 import static org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir.BRKITR;
 import static org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir.COLL;
 import static org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir.CURR;
@@ -13,10 +17,6 @@ import static org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir.RB
 import static org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir.REGION;
 import static org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir.UNIT;
 import static org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir.ZONE;
-import static java.util.stream.Collectors.toList;
-import static org.unicode.cldr.api.CldrDataType.BCP47;
-import static org.unicode.cldr.api.CldrDataType.LDML;
-import static org.unicode.cldr.api.CldrDataType.SUPPLEMENTAL;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,17 +42,6 @@ import java.util.stream.Stream;
 import org.unicode.cldr.api.CldrData;
 import org.unicode.cldr.api.CldrDataSupplier;
 import org.unicode.cldr.api.CldrDataType;
-
-import com.google.common.base.CharMatcher;
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.ListMultimap;
-import com.google.common.collect.SetMultimap;
-import com.google.common.collect.Sets;
-import com.google.common.io.CharStreams;
 import org.unicode.icu.tool.cldrtoicu.LdmlConverterConfig.IcuLocaleDir;
 import org.unicode.icu.tool.cldrtoicu.mapper.Bcp47Mapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.BreakIteratorMapper;
@@ -65,6 +54,17 @@ import org.unicode.icu.tool.cldrtoicu.mapper.RbnfMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.SupplementalMapper;
 import org.unicode.icu.tool.cldrtoicu.mapper.TransformsMapper;
 import org.unicode.icu.tool.cldrtoicu.regex.RegexTransformer;
+
+import com.google.common.base.CharMatcher;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.ListMultimap;
+import com.google.common.collect.SetMultimap;
+import com.google.common.collect.Sets;
+import com.google.common.io.CharStreams;
 
 /**
  * The main converter tool for CLDR to ICU data. To run this tool, you need to supply a suitable
@@ -168,7 +168,7 @@ public final class LdmlConverter {
 
         DAY_PERIODS(
             SUPPLEMENTAL,
-            c -> c.processDayPeriods("misc")),
+            LdmlConverter::processDayPeriods),
         GENDER_LIST(
             SUPPLEMENTAL,
             c -> c.processSupplemental("genderList", GENDER_LIST_PATHS, "misc", false)),
@@ -192,19 +192,19 @@ public final class LdmlConverter {
             c -> c.processSupplemental("numberingSystems", NUMBERING_SYSTEMS_PATHS, "misc", false)),
         PLURALS(
             SUPPLEMENTAL,
-            c -> c.processPlurals("misc")),
+            LdmlConverter::processPlurals),
         PLURAL_RANGES(
             SUPPLEMENTAL,
-            c -> c.processPluralRanges("misc")),
+            LdmlConverter::processPluralRanges),
         WINDOWS_ZONES(
             SUPPLEMENTAL,
             c -> c.processSupplemental("windowsZones", WINDOWS_ZONES_PATHS, "misc", false)),
         TRANSFORMS(
             SUPPLEMENTAL,
-            c -> c.processTransforms("translit")),
+            LdmlConverter::processTransforms),
         KEY_TYPE_DATA(
             BCP47,
-            c -> c.processKeyTypeData("misc")),
+            LdmlConverter::processKeyTypeData),
 
         // Batching by type.
         DTD_LDML(LDML, c -> c.processAll(LDML)),
@@ -231,7 +231,8 @@ public final class LdmlConverter {
         }
     }
 
-    private static void convert(LdmlConverterConfig config) {
+    /** Converts CLDR data according to the given configuration. */
+    public static void convert(LdmlConverterConfig config) {
         CldrDataSupplier src = CldrDataSupplier
             .forCldrFilesIn(config.getCldrDirectory())
             .withDraftStatusAtLeast(config.getMinimumDraftStatus());
@@ -480,24 +481,24 @@ public final class LdmlConverter {
         return idx == -1 ? segment : segment.substring(0, idx);
     }
 
-    private void processDayPeriods(String dir) {
-        write(DayPeriodsMapper.process(src), dir);
+    private void processDayPeriods() {
+        write(DayPeriodsMapper.process(src), "misc");
     }
 
-    private void processPlurals(String dir) {
-        write(PluralsMapper.process(src), dir);
+    private void processPlurals() {
+        write(PluralsMapper.process(src), "misc");
     }
 
-    private void processPluralRanges(String dir) {
-        write(PluralRangesMapper.process(src), dir);
+    private void processPluralRanges() {
+        write(PluralRangesMapper.process(src), "misc");
     }
 
-    private void processKeyTypeData(String dir) {
-        Bcp47Mapper.process(src).forEach(d -> write(d, dir));
+    private void processKeyTypeData() {
+        Bcp47Mapper.process(src).forEach(d -> write(d, "misc"));
     }
 
-    private void processTransforms(String dir) {
-        Path transformDir = createDirectory(config.getOutputDir().resolve(dir));
+    private void processTransforms() {
+        Path transformDir = createDirectory(config.getOutputDir().resolve("translit"));
         write(TransformsMapper.process(src, transformDir), transformDir);
     }
 
